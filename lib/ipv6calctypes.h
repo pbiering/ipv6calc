@@ -1,19 +1,16 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.9 2002/04/20 17:11:29 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.10 2002/04/21 11:24:08 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for ipv6calctypes.c
  */ 
 
-#include <getopt.h> 
-#if defined(__NetBSD__) || defined (__OpenBSD__) || defined (__FreeBSD__)
-#include <inttypes.h>
-#else
-#include <stdint.h>
-#endif
+#include "ipv6calc_inttypes.h"
+#include <getopt.h>
+
 
 /* prototypes */
 extern uint32_t ipv6calctypes_checktype(const char *string);

@@ -1,19 +1,14 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.8 2002/04/20 17:11:29 peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.9 2002/04/21 11:24:08 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Header file for libipv4addr.c
  */ 
 
-#if defined(__NetBSD__) || defined (__OpenBSD__) || defined (__FreeBSD__)
-#include <inttypes.h>
-#include <sys/types.h>
-#else
-#include <stdint.h>
-#endif
+#include "ipv6calc_inttypes.h"
 #include <netinet/in.h>
 
 /* typedefs */

@@ -1,24 +1,22 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.h
- * Version    : $Id: libmac.h,v 1.5 2002/04/20 17:11:29 peter Exp $
+ * Version    : $Id: libmac.h,v 1.6 2002/04/21 11:24:08 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libmac.c
  */ 
 
-/* typedefs */
 
-#if defined(__NetBSD__) || defined (__OpenBSD__) || defined (__FreeBSD__)
-#include <inttypes.h>
-#else
-#include <stdint.h>
-#endif
+#include "ipv6calc_inttypes.h"
+
 
 #ifndef _libmac_h
 
 #define _libmac_h
+
+/* typedefs */
 
 typedef struct {
 	uint8_t addr[6];	/* MAC address in 6x 8 bit */
