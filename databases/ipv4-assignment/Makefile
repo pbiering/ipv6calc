@@ -1,7 +1,7 @@
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.12 2002/04/04 22:01:37 peter Exp $
-# Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile,v 1.13 2004/10/30 12:55:19 peter Exp $
+# Copyright  : 2002-2004 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv4-assignment
@@ -16,7 +16,7 @@ update:
 		echo "Download new version of files"
 		./update-ipv4-assignment.sh
 		echo "Generate new header file, if necessary"
-		./check-run-create.sh || ./create-registry-list.pl
+		./check-run-create.sh && ./create-registry-list.pl
 
 distclean:
 		echo "Delete data files"

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : update-ipv4-assignment.sh
-# Version    : $Id: update-ipv4-assignment.sh,v 1.3 2004/08/30 19:44:14 peter Exp $
+# Version    : $Id: update-ipv4-assignment.sh,v 1.4 2004/10/30 12:55:19 peter Exp $
 # Copyright  : 2002-2004 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -45,7 +45,7 @@ get_urls | while read subdir url filename format; do
 		;;
 	    'bz2')
 		# decompress
-		bzip2 -d -k $filename || exit 1
+		bzip2 -f -d -k $filename || exit 1
 		;;
 	    *)
 		echo "ERROR: unsupported format: $format - fix it"
