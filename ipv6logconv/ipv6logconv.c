@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.11 2005/02/13 11:37:35 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.12 2005/02/13 11:50:30 peter Exp $
  * Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -59,7 +59,7 @@ static void lineparser(const long int outputtype);
 
 static int      cache_lru_max = 0;
 static int      cache_lru_last = 0;
-static int      cache_lru_limit = 20; /* optimum */
+int      cache_lru_limit = 20; /* optimum */
 static char     cache_lru_key_token[CACHE_LRU_SIZE][NI_MAXHOST];
 static long int cache_lru_key_outputtype[CACHE_LRU_SIZE];
 static char     cache_lru_value[CACHE_LRU_SIZE][NI_MAXHOST];

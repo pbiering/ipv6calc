@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconvhelp.c
- * Version    : $Id: ipv6logconvhelp.c,v 1.6 2005/02/13 11:37:35 peter Exp $
+ * Version    : $Id: ipv6logconvhelp.c,v 1.7 2005/02/13 11:50:30 peter Exp $
  * Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
@@ -44,6 +44,8 @@ void ipv6logconv_printhelp(void) {
 	fprintf(stderr, "  [-q|--quiet] : be more quiet\n");
 	fprintf(stderr, "  [-n|--nocache] : disable caching\n");
 	fprintf(stderr, "  [-c|--cachelimit <value>] : set cache limit\n");
+	fprintf(stderr, "                               default: %d\n", cache_lru_limit);
+	fprintf(stderr, "                               maximum: %d\n", CACHE_LRU_SIZE);
 	fprintf(stderr, " Output:\n");
 	fprintf(stderr, "  [--out <output type>] : specify output type\n");
 	fprintf(stderr, "   addrtype       : Address type\n");
