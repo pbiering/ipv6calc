@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.15 2003/11/21 10:39:01 peter Exp $
-# Copyright  : 2002-2003 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: create-registry-list.pl,v 1.16 2004/08/30 19:55:41 peter Exp $
+# Copyright  : 2002-2004 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Perl program which creates IPv4 address assignement header
@@ -30,7 +30,7 @@ $year = 1900 + $year;
 $mon = sprintf "%02d", $mon + 1;
 $mday = sprintf "%02d", $mday;
 
-my @files = ( "arin/arin." . $year . $mon . "01", "ripencc/ripencc." . $year . $mon . $mday, "apnic/apnic-" . $year . "-" . $mon . "-01", "lacnic/lacnic." . $year . $mon . "01" );
+my @files = ( "arin/delegated-arin-" . $year . $mon . $mday, "ripencc/delegated-ripencc-" . $year . $mon . $mday, "apnic/delegated-apnic-" . $year . $mon . $mday, "lacnic/delegated-lacnic-" . $year . $mon . $mday );
 #my @files = ( "lacnic/lacnic." . $year . $mon . "01" );
 
 my (@arin, @apnic, @ripencc, @iana, @lacnic);
