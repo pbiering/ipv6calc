@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1924.c
- * Version    : $Id: librfc1924.c,v 1.4 2002/04/04 21:58:22 peter Exp $
+ * Version    : $Id: librfc1924.c,v 1.5 2002/04/05 20:55:10 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -23,7 +23,7 @@
  */
 
 typedef struct {
-	uint8_t b[128];		/* never anything but 0 or 1 */
+	unsigned char b[128];		/* never anything but 0 or 1 */
 } bitvec;
 
 
@@ -37,7 +37,7 @@ static char librfc1924_charset[] = {
 	'y', 'z', '!', '#', '$', '%', '&', '(', ')', '*',
 	'+', '-', ';', '<', '=', '>', '?', '@', '^', '_',
 	'`', '{', '|', '}', '~',
-	'\0'
+	0
 };
 
 
@@ -85,11 +85,11 @@ static bitvec asr(bitvec bv, int n) {
 };
 */ 
 
-static uint8_t topbit(bitvec bv) {
+static int topbit(bitvec bv) {
 	return bv.b[0];
 }
 
-static uint8_t botbit(bitvec bv) {
+static int botbit(bitvec bv) {
 	return bv.b[127];
 };
 
@@ -99,7 +99,7 @@ static void settop(bitvec *bv, int v) {
 };
 */
 
-static void setbot(bitvec *bv, uint8_t v) {
+static void setbot(bitvec *bv, int v) {
 	bv->b[127] = v;
 };
 
@@ -114,8 +114,7 @@ static bitvec zbv() {
 };
 
 static bitvec addbv(bitvec a, bitvec b) {
-	register int i;
-	register uint8_t j;
+	register int i, j;
 	bitvec r;
 
 	j = 0;
@@ -129,8 +128,8 @@ static bitvec addbv(bitvec a, bitvec b) {
 
 static bitvec subbv(bitvec a, bitvec b) {
 	register int i;
-	register uint8_t j;
-	register uint8_t k;
+	register unsigned j;
+	register unsigned k;
 	bitvec r;
 
 	j = 0;
@@ -158,12 +157,11 @@ static bitvec bvx85(bitvec bv) {
 	return addbv(lsl(bv, 6), addbv(lsl(bv, 4), addbv(lsl(bv, 2), bv)));
 };
 
-static bitvec bvdiv85(bitvec bv, uint8_t *rem) {
+static bitvec bvdiv85(bitvec bv, int *rem) {
 	bitvec e5;
 	bitvec div;
 	bitvec r;
-	register int i;
-	register uint8_t j;
+	register int i, j;
 
 	r = zbv();
 	setbot(&r, 1);
@@ -199,7 +197,7 @@ static bitvec bvdiv85(bitvec bv, uint8_t *rem) {
 	return r;
 };
 
-static bitvec smallbv(register uint8_t n) {
+static bitvec smallbv(register int n) {
 	bitvec r, t;
 	register int i;
 
@@ -230,17 +228,17 @@ static bitvec unpk85(register char *str) {
 	r = zbv();
 	for (i = 0; i < 20; i++) {
 		c = *str++;
-		if (c == '\0' || (p = strchr(librfc1924_charset, c)) == 0)
+		if (c == 0 || (p = strchr(librfc1924_charset, c)) == 0)
 			return zbv();
 		r = addbv(bvx85(r), smallbv(p - librfc1924_charset));
 	};
 	return (r);
 };
 
-static void pk85(bitvec bv, char *resultstring) {
-	uint8_t vals[20];
+static char *pk85(bitvec bv) {
+	int vals[20];
 	register int i;
-	char str[21];
+	static char str[21];
 	register char *p;
 
 	for (i = 0; i < 20; i++) {
@@ -252,12 +250,12 @@ static void pk85(bitvec bv, char *resultstring) {
 		*p++ = librfc1924_charset[vals[i]];
 	*p = '\0';
 
-	snprintf(resultstring, NI_MAXHOST, str);
-	return;
+	return str;
 };
 
 
-/* function IPv6addr_structure to base85 format
+/*
+ * IPv6addr_structure to base85 format
  *
  * in : *addrstring = IPv6 address
  * out: *resultstring = result
@@ -265,9 +263,8 @@ static void pk85(bitvec bv, char *resultstring) {
  */
 
 int ipv6addrstruct_to_base85(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
-	int retval = 1;
-	unsigned int nbit, ndword;
-	uint32_t mask;
+	int retval = 1, nbit, ndword;
+	unsigned int mask;
 	bitvec bv;
 
 	/* fill bitvector */
@@ -278,7 +275,7 @@ int ipv6addrstruct_to_base85(const ipv6calc_ipv6addr *ipv6addrp, char *resultstr
 		ndword = (nbit & 0x60) >> 5;
 		
 		/* calculate mask */
-		mask = (uint32_t) 0x80000000u >> (((uint32_t) nbit & (uint32_t) 0x01fu));
+		mask = 0x80000000 >> ((nbit & 0x01f));
 		
 		if ( (ipv6addr_getdword(ipv6addrp, ndword) & mask) != 0) {
 			bv.b[nbit] = 1;
@@ -286,7 +283,7 @@ int ipv6addrstruct_to_base85(const ipv6calc_ipv6addr *ipv6addrp, char *resultstr
 	};
 
 	/* convert */	
-	pk85(bv, resultstring);	
+	snprintf(resultstring, NI_MAXHOST, "%s", pk85(bv) );	
 
    	retval = 0;	
 	return (retval);
@@ -301,9 +298,8 @@ int ipv6addrstruct_to_base85(const ipv6calc_ipv6addr *ipv6addrp, char *resultstr
  */
 
 int base85_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
-	int retval = 1;
-	unsigned int nbit, ndword;
-	uint32_t mask;
+	int retval = 1, nbit, ndword;
+	unsigned int mask;
 	bitvec bv;
 	char tempstring[NI_MAXHOST];
 
@@ -332,10 +328,10 @@ int base85_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6cal
 		ndword = (nbit & 0x60) >> 5;
 		
 		/* calculate mask */
-		mask = (uint32_t) 0x80000000u >> (((uint32_t) nbit & (uint32_t) 0x1fu));
+		mask = 0x80000000 >> ((nbit & 0x1f));
 	
 		if ( bv.b[nbit] == 1 ) {
-			ipv6addr_setdword(ipv6addrp, ndword, (unsigned int) ipv6addr_getdword(ipv6addrp, ndword) | mask);
+			ipv6addr_setdword(ipv6addrp, ndword, ipv6addr_getdword(ipv6addrp, ndword) | mask);
 		};
 	};
 	
