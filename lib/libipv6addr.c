@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.7 2002/04/04 21:58:21 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.8 2002/04/08 19:04:30 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -645,26 +645,30 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 
 
 /*
- * function stores the ipv6addr structure in an uncompressed IPv6 format string
+ * stores the ipv6addr structure in an uncompressed IPv6 format string
  *
  * in:  ipv6addr = IPv6 address structure
  * out: *resultstring = IPv6 address (modified)
  * ret: ==0: ok, !=0: error
  */
-int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+static int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
 	int retval = 1;
 	char tempstring[NI_MAXHOST];
 	
 	/* print array */
 	if ( (ipv6addrp->scope & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)) != 0 ) {
-		snprintf(tempstring, sizeof(tempstring), "%x:%x:%x:%x:%x:%x:%u.%u.%u.%u", (unsigned int) ipv6addr_getword(ipv6addrp, 0), (unsigned int) ipv6addr_getword(ipv6addrp, 1), (unsigned int) ipv6addr_getword(ipv6addrp, 2), (unsigned int) ipv6addr_getword(ipv6addrp, 3), (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addrp->in6_addr.s6_addr[12], (unsigned int) ipv6addrp->in6_addr.s6_addr[13], (unsigned int) ipv6addrp->in6_addr.s6_addr[14], (unsigned int) ipv6addrp->in6_addr.s6_addr[15]);
+		if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
+			snprintf(tempstring, sizeof(tempstring), "%04x:%04x:%04x:%04x:%04x:%04x:%u.%u.%u.%u", ipv6addr_getword(ipv6addrp, 0), ipv6addr_getword(ipv6addrp, 1), ipv6addr_getword(ipv6addrp, 2), ipv6addr_getword(ipv6addrp, 3), ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
+		} else {
+			snprintf(tempstring, sizeof(tempstring), "%x:%x:%x:%x:%x:%x:%u.%u.%u.%u", (unsigned int) ipv6addr_getword(ipv6addrp, 0), (unsigned int) ipv6addr_getword(ipv6addrp, 1), (unsigned int) ipv6addr_getword(ipv6addrp, 2), (unsigned int) ipv6addr_getword(ipv6addrp, 3), (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addrp->in6_addr.s6_addr[12], (unsigned int) ipv6addrp->in6_addr.s6_addr[13], (unsigned int) ipv6addrp->in6_addr.s6_addr[14], (unsigned int) ipv6addrp->in6_addr.s6_addr[15]);
+		};
 	} else {
-		snprintf(tempstring, sizeof(tempstring), "%x:%x:%x:%x:%x:%x:%x:%x", (unsigned int) ipv6addr_getword(ipv6addrp, 0), (unsigned int) ipv6addr_getword(ipv6addrp, 1), (unsigned int) ipv6addr_getword(ipv6addrp, 2), (unsigned int) ipv6addr_getword(ipv6addrp, 3), (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addr_getword(ipv6addrp, 6), (unsigned int) ipv6addr_getword(ipv6addrp, 7));
+		if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
+			snprintf(tempstring, sizeof(tempstring), "%04x:%04x:%04x:%04x:%04x:%04x:%04x:%04x", ipv6addr_getword(ipv6addrp, 0), ipv6addr_getword(ipv6addrp, 1), ipv6addr_getword(ipv6addrp, 2), ipv6addr_getword(ipv6addrp, 3), ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addr_getword(ipv6addrp, 6), ipv6addr_getword(ipv6addrp, 7));
+		} else {
+			snprintf(tempstring, sizeof(tempstring), "%x:%x:%x:%x:%x:%x:%x:%x", (unsigned int) ipv6addr_getword(ipv6addrp, 0), (unsigned int) ipv6addr_getword(ipv6addrp, 1), (unsigned int) ipv6addr_getword(ipv6addrp, 2), (unsigned int) ipv6addr_getword(ipv6addrp, 3), (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addr_getword(ipv6addrp, 6), (unsigned int) ipv6addr_getword(ipv6addrp, 7));
+		};
 	};
-
-	if (retval <= 0) {
-
-	};	
 
 	if (ipv6addrp->flag_prefixuse == 1) {
 		/* append prefix length */
@@ -677,50 +681,16 @@ int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resul
 	return (retval);
 };
 
-#define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddr"
-int libipv6addr_ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
-	int retval = 1;
-	
-	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s: get format option: %08x\n", DEBUG_function_name, (unsigned int) formatoptions);
-	};
-
-	if ( (formatoptions & FORMATOPTION_printprefix) != 0 ) {
-		retval = ipv6addrstruct_to_uncompaddrprefix(ipv6addrp, resultstring);
-	} else if ( (formatoptions & FORMATOPTION_printsuffix) != 0 ) {
-		retval = ipv6addrstruct_to_uncompaddrsuffix(ipv6addrp, resultstring);		
-	} else {
-		retval = ipv6addrstruct_to_uncompaddr(ipv6addrp, resultstring);		
-	};
-
-	if (retval == 0) {
-		/* don't modify case on error messages */
-		if ( (formatoptions & FORMATOPTION_printlowercase) != 0 ) {
-			/* nothing to do */
-		} else if ( (formatoptions & FORMATOPTION_printuppercase) != 0 ) {
-			string_to_upcase(resultstring);
-		};
-	};
-
-	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s: result string: %s\n", DEBUG_function_name, resultstring);
-	};
-	
-	retval = 0;	
-	return (retval);
-};
-#undef DEBUG_function_name
-
 
 /*
- * function stores the prefix of an ipv6addr structure in an uncompressed IPv6 format string
+ * stores the prefix of an ipv6addr structure in an uncompressed IPv6 format string
  *
  * in:  ipv6addr = IPv6 address structure, formatoptions
  * out: *resultstring = IPv6 address (modified)
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddrprefix"
-int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+static int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
 	int retval = 1;
 	unsigned int max, i;
 	char tempstring1[NI_MAXHOST], tempstring2[NI_MAXHOST];
@@ -746,9 +716,17 @@ int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp, char 
 	tempstring1[0] = '\0';
 	while (i <= max ) {
 		if ( i < max ) {
-			snprintf(tempstring2, sizeof(tempstring2), "%s%x:", tempstring1, ipv6addr_getword(ipv6addrp, i));
+			if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
+				snprintf(tempstring2, sizeof(tempstring2), "%s%04x:", tempstring1, ipv6addr_getword(ipv6addrp, i));
+			} else {
+				snprintf(tempstring2, sizeof(tempstring2), "%s%x:", tempstring1, ipv6addr_getword(ipv6addrp, i));
+			};
 		} else {
-			snprintf(tempstring2, sizeof(tempstring2), "%s%x", tempstring1, ipv6addr_getword(ipv6addrp, i));
+			if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
+				snprintf(tempstring2, sizeof(tempstring2), "%s%04x", tempstring1, ipv6addr_getword(ipv6addrp, i));
+			} else {
+				snprintf(tempstring2, sizeof(tempstring2), "%s%x", tempstring1, ipv6addr_getword(ipv6addrp, i));
+			};
 		};
 		i++;
 		snprintf(tempstring1, sizeof(tempstring1), "%s", tempstring2);
@@ -773,7 +751,7 @@ int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp, char 
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddrsuffix"
-int ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+static int ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
 	int retval = 1;
 	unsigned int max, i;
 	char tempstring1[NI_MAXHOST], tempstring2[NI_MAXHOST];
@@ -802,9 +780,17 @@ int ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp, char 
 			snprintf(tempstring2, sizeof(tempstring2), "%s%u.%u.%u.%u", tempstring1, ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
 			i = max;
 		} else if ( i < max ) {
-			snprintf(tempstring2, sizeof(tempstring2), "%s%x:", tempstring1, ipv6addr_getword(ipv6addrp, i));
+			if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
+				snprintf(tempstring2, sizeof(tempstring2), "%s%04x:", tempstring1, ipv6addr_getword(ipv6addrp, i));
+			} else {
+				snprintf(tempstring2, sizeof(tempstring2), "%s%x:", tempstring1, ipv6addr_getword(ipv6addrp, i));
+			};
 		} else {
-			snprintf(tempstring2, sizeof(tempstring2), "%s%x", tempstring1, ipv6addr_getword(ipv6addrp, i));
+			if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
+				snprintf(tempstring2, sizeof(tempstring2), "%s%04x", tempstring1, ipv6addr_getword(ipv6addrp, i));
+			} else {
+				snprintf(tempstring2, sizeof(tempstring2), "%s%x", tempstring1, ipv6addr_getword(ipv6addrp, i));
+			};
 		};
 		i++;
 		snprintf(tempstring1, sizeof(tempstring1), "%s", tempstring2);
@@ -821,45 +807,29 @@ int ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp, char 
 #undef DEBUG_function_name
 
 
-/*
- * function stores the ipv6addr structure in an full uncompressed IPv6 format string
- *
- * in:  ipv6addr = IPv6 address structure
- * out: *resultstring = IPv6 address (modified)
- * ret: ==0: ok, !=0: error
- */
-int ipv6addrstruct_to_fulluncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+#define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddr"
+int libipv6addr_ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
 	int retval = 1;
-	/* old style compatibility */
-	uint32_t formatoptions = FORMATOPTION_printlowercase;
 	
-	retval = libipv6addr_ipv6addrstruct_to_fulluncompaddr(ipv6addrp, resultstring, formatoptions);
-	return (retval);
-};
-
-#define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_fulluncompaddr"
-int libipv6addr_ipv6addrstruct_to_fulluncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
-	int retval = 1, result;
-	char tempstring[NI_MAXHOST];
-
-	/* print array */
-	if ( ( ipv6addrp->scope & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED) ) != 0 ) {
-		result = snprintf(tempstring, sizeof(tempstring), "%04x:%04x:%04x:%04x:%04x:%04x:%u.%u.%u.%u", ipv6addr_getword(ipv6addrp, 0), ipv6addr_getword(ipv6addrp, 1), ipv6addr_getword(ipv6addrp, 2), ipv6addr_getword(ipv6addrp, 3), ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
-	} else {
-		result = snprintf(tempstring, sizeof(tempstring), "%04x:%04x:%04x:%04x:%04x:%04x:%04x:%04x", ipv6addr_getword(ipv6addrp, 0), ipv6addr_getword(ipv6addrp, 1), ipv6addr_getword(ipv6addrp, 2), ipv6addr_getword(ipv6addrp, 3), ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addr_getword(ipv6addrp, 6), ipv6addr_getword(ipv6addrp, 7));
+	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		fprintf(stderr, "%s: get format option: %08x\n", DEBUG_function_name, (unsigned int) formatoptions);
 	};
 
-	if (ipv6addrp->flag_prefixuse == 1) {
-		/* append prefix length */
-		result = snprintf(resultstring, NI_MAXHOST, "%s/%u", tempstring, ipv6addrp->prefixlength);
+	if ( (formatoptions & FORMATOPTION_printprefix) != 0 ) {
+		retval = ipv6addrstruct_to_uncompaddrprefix(ipv6addrp, resultstring, formatoptions);
+	} else if ( (formatoptions & FORMATOPTION_printsuffix) != 0 ) {
+		retval = ipv6addrstruct_to_uncompaddrsuffix(ipv6addrp, resultstring, formatoptions);		
 	} else {
-		result = snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
+		retval = ipv6addrstruct_to_uncompaddr(ipv6addrp, resultstring, formatoptions);		
 	};
 
-	if ( (formatoptions & FORMATOPTION_printlowercase) != 0 ) {
-		/* nothing to do */
-	} else if ( (formatoptions & FORMATOPTION_printuppercase) != 0 ) {
-		string_to_upcase(resultstring);
+	if (retval == 0) {
+		/* don't modify case on error messages */
+		if ( (formatoptions & FORMATOPTION_printlowercase) != 0 ) {
+			/* nothing to do */
+		} else if ( (formatoptions & FORMATOPTION_printuppercase) != 0 ) {
+			string_to_upcase(resultstring);
+		};
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {

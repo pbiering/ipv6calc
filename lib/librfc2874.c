@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.c
- * Version    : $Id: librfc2874.c,v 1.6 2002/04/05 19:11:13 peter Exp $
+ * Version    : $Id: librfc2874.c,v 1.7 2002/04/08 19:04:31 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -29,15 +29,10 @@
  */
 #define DEBUG_function_name "librfc2874/addr_to_bitstring"
 int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
-	int retval = 1, result;
+	int retval = 1;
 	unsigned int nibble;
 	unsigned int noctett, nbit, nnibble, prefixlength, bit_start, bit_end;
 	char tempstring[NI_MAXHOST];
-
-	if ( (ipv6calc_debug & DEBUG_librfc2874) != 0 ) {
-		result = ipv6addrstruct_to_uncompaddr(ipv6addrp, tempstring);
-		fprintf(stderr, "%s: got address '%s'\n",  DEBUG_function_name, tempstring);
-	};
 
 	if ( (*ipv6addrp).flag_startend_use != 0 ) {
 		/* check start and end */

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.6 2002/04/05 21:31:51 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.7 2002/04/08 19:04:30 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -142,14 +142,9 @@ extern int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, c
 extern int  addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
 
 
-extern int  libipv6addr_ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions); /* going obsolete */
-extern int  ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring); 
+extern int  libipv6addr_ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions);
 
-extern int  ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring);
-extern int  ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring);
-
-extern int  libipv6addr_ipv6addrstruct_to_fulluncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions);
-extern int  ipv6addrstruct_to_fulluncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring); /* going obsolete */
+/* extern int  ipv6addrstruct_to_fulluncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring);*/ /* going obsolete */
 
 extern void ipv6addrstruct_maskprefix(ipv6calc_ipv6addr *ipv6addrp);
 extern void ipv6addrstruct_masksuffix(ipv6calc_ipv6addr *ipv6addrp);
