@@ -6,7 +6,13 @@ use IPC::Open2;
 
 my $OUTFILE = "dbipv4addr_assignement.h";
 
-my @files = ( "arin/arin.20020301", "ripencc/ripencc.20020320", "apnic/apnic-2002-03-01" );
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time - 24*60*60);
+
+$year = 1900 + $year;
+$month = sprintf "%02d", $month;
+$day = sprintf "%02d", $day;
+
+my @files = ( "arin/arin.$year$month01", "ripencc/ripencc.$year$month$day", "apnic/apnic-$year-$month-01" );
 #my @files = ( "ripencc/ripencc.20020320" );
 
 my (@arin, @apnic, @ripencc, @iana);
