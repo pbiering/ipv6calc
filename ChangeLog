@@ -1,10 +1,18 @@
 /*
- *  $Id: ChangeLog,v 1.63 2002/11/04 20:39:59 peter Exp $ 
+ *  $Id: ChangeLog,v 1.64 2002/11/12 19:14:23 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20021112/PB:
+	fix not proper handling of option "-q|--quiet" in some cases
+	enhance help options (-h|--help now also valid) on --out|action|in
+	ipv6logconf: "make test" can be now also executed by root (su to nobody)
+
+20021104/PB:
+	minor cosmetics in IEEE/OUI database
+
 20021104/PB:
 	update IPv6 address allocation for 2001::/16
 	update IPv4 databases
