@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi,v 1.16 2002/11/04 19:55:38 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi,v 1.17 2002/11/04 20:38:37 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -104,6 +104,10 @@ my %text = (
 	'EUI48_SCOPE' => {
 		'de' => "EUI-48 Art",
 		'en' => "EUI-48 scope",
+	},
+	'EUI48_TYPE' => {
+		'de' => "EUI-48 Adresstyp",
+		'en' => "EUI-48 address type",
 	},
 	'EUI64' => {
 		'de' => "EUI-64 Identifizierungsnummer",
