@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.5 2002/03/16 23:30:02 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.6 2002/03/16 23:49:38 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -60,9 +60,6 @@ int main(int argc,char *argv[]) {
 	
 	/* convert storage */
 	long int action = -1;
-
-	/* format options storage */
-	int formatoptions = 0;
 
 	/* check for UID */
 	if (getuid() == 0) {
@@ -137,7 +134,7 @@ int main(int argc,char *argv[]) {
 	};
 
 	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "Debug value:%lx  command:%lx  inputtype:%lx   outputtype:%lx  action:%lx  formatoptions:%x\n", (unsigned long) ipv6calc_debug, command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, formatoptions); 
+		fprintf(stderr, "Debug value:%lx  command:%lx  inputtype:%lx   outputtype:%lx  action:%lx\n", (unsigned long) ipv6calc_debug, command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action); 
 	};
 	
 	/* do work depending on selection */
@@ -252,9 +249,6 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 	int retval = 1, i;
 	int typeinfo;
 	char tempstring[NI_MAXHOST];
-
-	/* format options storage */
-	int formatoptions = 0;
 
 	/* used structures */
 	ipv6calc_ipv6addr ipv6addr;

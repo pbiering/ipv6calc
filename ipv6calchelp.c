@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.7 2002/03/16 23:30:02 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.8 2002/03/16 23:49:38 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -160,18 +160,16 @@ void printhelp_outputtypes(const int inputtype) {
 		};
 
 		for (i = 0; i < (int) (sizeof(ipv6calc_formatmatrix) / sizeof(ipv6calc_formatmatrix[0])); i++) {
-			if (inputtype > 0) {
-				if (ipv6calc_formatmatrix[i][0] != inputtype) {
-					/* skip */
-					continue;
-				};
+			if (ipv6calc_formatmatrix[i][0] != inputtype) {
+				/* skip */
+				continue;
 			};
 		
 			if (ipv6calc_debug != 0) {
 				fprintf(stderr, "Row %d: %04x - %04x\n", i, ipv6calc_formatmatrix[i][0], ipv6calc_formatmatrix[i][1]);
 			};
 			if ((ipv6calc_formatmatrix[i][1] & ipv6calc_formatstrings[j].number) != 0) {
-				/* available for input, look for name now */
+				/* available for output, look for name now */
 				fprintf(stderr, printformatstring, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
 				break;
 			};

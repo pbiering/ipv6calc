@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.14 2002/03/16 23:30:02 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.15 2002/03/16 23:49:38 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -62,20 +62,20 @@ static const s_format ipv6calc_formatstrings[] = {
 	{ FORMAT_eui64          , "eui64"          , "EUI-64 identifier (64 bits)", "" },
 	{ FORMAT_base85         , "base85"         , "Base-85 string", "" },
 	{ FORMAT_ifinet6        , "ifinet6"        , "Like line in /proc/net/if_inet6", "" },
-	{ FORMAT_iid            , "iid"            , "Interface identifiers", "" },
+	{ FORMAT_iid            , "iid"            , "Interface identifier", "" },
 	{ FORMAT_iid_token      , "iid+token"      , "Interface identifier and token", "" },
 	{ FORMAT_addrtype       , "addrtype"       , "Address type", "" },
 	{ FORMAT_ouitype        , "ouitype"        , "OUI (IEEE) type", "" },
 	{ FORMAT_ipv6addrtype   , "ipv6addrtype"   , "IPv6 address type", "" },
-	{ FORMAT_ipv6logconv    , "ipv6logconv"    , "ipv6logconv", "" },
+	{ FORMAT_ipv6logconv    , "ipv6logconv"    , "ipv6logconv (currently not supported)", "" },
 };
 
 /* Format conversion matrix */
 static const int ipv6calc_formatmatrix[][2] = {
-	{ FORMAT_auto           , 0 },
-	{ FORMAT_revnibbles_int , 0 },
-	{ FORMAT_revnibbles_arpa, 0 },
-	{ FORMAT_bitstring      , 0 },
+	{ FORMAT_auto           , 0x5ff },
+	{ FORMAT_revnibbles_int , 0x5ff },
+	{ FORMAT_revnibbles_arpa, 0x5ff },
+	{ FORMAT_bitstring      , 0x5ff },
 	{ FORMAT_ipv6addr       , FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ipv6addr | FORMAT_base85 | FORMAT_ifinet6 },
 	{ FORMAT_ipv4addr       , FORMAT_ipv6addr },
 	{ FORMAT_mac            , FORMAT_eui64 },

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.22 2002/03/16 19:40:29 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.23 2002/03/16 23:49:38 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -316,6 +316,9 @@ int main(int argc,char *argv[]) {
 	/* print help handling */
 	if (command == CMD_printhelp) {
 		if (outputtype == -2) {
+			if (inputtype < 0) {
+				inputtype = 0;
+			};
 			printhelp_outputtypes(inputtype);
 			exit(EXIT_FAILURE);
 		} else if (inputtype == -2) {
