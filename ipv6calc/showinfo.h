@@ -1,19 +1,14 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.h
- * Version    : $Id: showinfo.h,v 1.7 2002/04/20 17:11:16 peter Exp $
+ * Version    : $Id: showinfo.h,v 1.8 2002/04/21 11:23:23 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for showinfo.c
  */ 
 
-#if defined(__NetBSD__) || defined (__OpenBSD__) || defined (__FreeBSD__)
-#include <inttypes.h>
-#else
-#include <stdint.h>
-#endif
-
+#include "ipv6calc_inttypes.h"
 #include "libipv6addr.h"
 #include "libipv4addr.h"
 #include "libmac.h"
