@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.12 2002/04/10 07:00:34 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.13 2002/11/12 19:03:29 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -50,7 +50,7 @@ void printinfo(void)  {
 	printversion();
 	printcopyright();
 	fprintf(stderr, "This program formats and calculates IPv6 addresses\n");
-	fprintf(stderr, "See '%s -?' for more details\n\n", PROGRAM_NAME);
+	fprintf(stderr, "See '%s -?|-h|--help' for more details\n\n", PROGRAM_NAME);
 };
 
 
@@ -294,8 +294,7 @@ int main(int argc,char *argv[]) {
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "%s: Got input string: %s\n", DEBUG_function_name, optarg);
 				};
-
-				if (strcmp(optarg, "-?") == 0) {
+				if ((strcmp(optarg, "-?") == 0) || (strcmp(optarg, "-h") == 0) || (strcmp(optarg, "--help") == 0) ) {
 					inputtype = FORMAT_auto;
 					command = CMD_printhelp;
 					break;
@@ -313,7 +312,7 @@ int main(int argc,char *argv[]) {
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "%s: Got output string: %s\n", DEBUG_function_name, optarg);
 				};
-				if (strcmp(optarg, "-?") == 0) {
+				if ((strcmp(optarg, "-?") == 0) || (strcmp(optarg, "-h") == 0) || (strcmp(optarg, "--help") == 0) ) {
 					outputtype = FORMAT_auto;
 					command = CMD_printhelp;
 					break;
@@ -330,7 +329,7 @@ int main(int argc,char *argv[]) {
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "%s: Got action string: %s\n", DEBUG_function_name, optarg);
 				};
-				if (strcmp(optarg, "-?") == 0) {
+				if ((strcmp(optarg, "-?") == 0) || (strcmp(optarg, "-h") == 0) || (strcmp(optarg, "--help") == 0) ) {
 					action = ACTION_auto;
 					command = CMD_printhelp;
 					break;
@@ -343,7 +342,7 @@ int main(int argc,char *argv[]) {
 				break;
 				
 			default:
-				fprintf(stderr, "Usage: (see '%s --command -?' for more help)\n", PROGRAM_NAME);
+				fprintf(stderr, "Usage: (see '%s --command -?|-h|--help' for more help)\n", PROGRAM_NAME);
 				printhelp();
 				break;
 		};
@@ -481,13 +480,13 @@ int main(int argc,char *argv[]) {
 		};
 	};
 
-	/* check formatoptions whether valid */
+	/* check formatoptions for validity */
 	for (i = 0; i < (int) (sizeof(ipv6calc_outputformatoptionmap) / sizeof(ipv6calc_outputformatoptionmap[0])); i++) {
 		if (outputtype != ipv6calc_outputformatoptionmap[i][0]) {
 			continue;
 		};
 		
-		if ((ipv6calc_outputformatoptionmap[i][1] & formatoptions) == formatoptions) {
+		if ( (ipv6calc_outputformatoptionmap[i][1] & (formatoptions & ~ FORMATOPTION_quiet) ) == (formatoptions & ~ FORMATOPTION_quiet ) ) {
 			/* all options valid */
 			break;
 		};
@@ -496,6 +495,10 @@ int main(int argc,char *argv[]) {
 
 		/* run through format options */
 		for (j = 0; j < (int) (sizeof(ipv6calc_formatoptionstrings) / sizeof (ipv6calc_formatoptionstrings[0])); j++) {
+			if ( (ipv6calc_formatoptionstrings[j].number & FORMATOPTION_quiet) != 0 ) {
+				/* skip format option "quiet" on check */
+				continue;
+			};
 			if ((((~ ipv6calc_outputformatoptionmap[i][1]) & formatoptions) & ipv6calc_formatoptionstrings[j].number) != 0) {
 				fprintf(stderr, "  %s: %s\n", ipv6calc_formatoptionstrings[j].token, ipv6calc_formatoptionstrings[j].explanation);
 			};
