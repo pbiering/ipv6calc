@@ -1,14 +1,14 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.h
- * Version    : $Id: ipv6calchelp.h,v 1.5 2002/04/20 15:38:14 peter Exp $
+ * Version    : $Id: ipv6calchelp.h,v 1.6 2002/04/20 17:11:29 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for ipv6calchelp.c
  */
 
-#if defined(__NetBSD__) || defined (__OpenBSD) || defined (__FreeBSD__)
+#if defined(__NetBSD__) || defined (__OpenBSD__) || defined (__FreeBSD__)
 #include <inttypes.h>
 #else
 #include <stdint.h>

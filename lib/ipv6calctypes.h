@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.8 2002/04/20 15:38:14 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.9 2002/04/20 17:11:29 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -9,7 +9,7 @@
  */ 
 
 #include <getopt.h> 
-#if defined(__NetBSD__) || defined (__OpenBSD) || defined (__FreeBSD__)
+#if defined(__NetBSD__) || defined (__OpenBSD__) || defined (__FreeBSD__)
 #include <inttypes.h>
 #else
 #include <stdint.h>
