@@ -1,7 +1,7 @@
-# Project    : ipv6calc/ipv6logconf
+# Project    : ipv6calc/ipv6logconv
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.7 2002/11/12 18:58:10 peter Exp $
-# Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile,v 1.8 2003/06/15 12:15:57 peter Exp $
+# Copyright  : 2002-2003 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6logconv
@@ -27,7 +27,7 @@ all:		ipv6logconv
 .c.o:
 		$(CC) $(CFLAGS) -c $<
 
-$(OBJS):	ipv6logconvoptions.h ipv6logconvhelp.h
+$(OBJS):	ipv6logconvoptions.h ipv6logconvhelp.h ipv6logconv.h
 
 ipv6logconv:	$(OBJS)
 		echo "Compile: ipv6logconv"
