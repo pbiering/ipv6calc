@@ -1,7 +1,7 @@
 /*
  * libipv6addr: Function libary for IPv6 storage
  *
- * Version:		$Id: libipv6addr.c,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Version:		$Id: libipv6addr.c,v 1.2 2001/10/09 07:03:10 peter Exp $
  * 
  * Author:		Peter Bieringer <pb@bieringer.de>
  *
@@ -212,6 +212,9 @@ void ipv6addr_clear(ipv6calc_ipv6addr *ipv6addrp) {
 	for (i = 0; i <= 15; i++) {
 		ipv6addrp->in6_addr.s6_addr[i] = 0;
 	};
+	
+	/* Clear IPv6 address scope */
+	ipv6addrp->scope = 0;
 	
 	return;
 };

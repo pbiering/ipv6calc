@@ -1,7 +1,7 @@
 /*
  * libipv6calc: Function libary for conversions
  *
- * Version:		$Id: libipv6calc.c,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Version:		$Id: libipv6calc.c,v 1.2 2001/10/09 07:03:10 peter Exp $
  * 
  * Author:		Peter Bieringer <pb@bieringer.de>
  *
@@ -52,11 +52,11 @@ int addr_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6ad
 		fprintf(stderr, "%s: got input %s\n", DEBUG_function_name,  addrstring);
 	};
 	
-    /* save prefix length first, if available */
+	/* save prefix length first, if available */
 	ipv6addrp->flag_prefixuse = 0; /* reset flag first */
-    addronlystring = strtok (addrstring, "/");
+	addronlystring = strtok (addrstring, "/");
 	cp = strtok (NULL, "/");
-    if ( cp != NULL ) {
+	if ( cp != NULL ) {
 		i = atol(cp);
 		if (i < 0 || i > 128 ) {
 			sprintf(resultstring, "Illegal prefix length: '%s'", cp);

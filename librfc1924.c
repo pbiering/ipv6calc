@@ -2,7 +2,7 @@
  * librfc1924: Function libary for conversions
  *               defined in RFC 1924
  *
- * Version:		$Id: librfc1924.c,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Version:		$Id: librfc1924.c,v 1.2 2001/10/09 07:03:10 peter Exp $
  * 
  * Author:		Peter Bieringer <pb@bieringer.de>
  *
@@ -332,6 +332,9 @@ int base85_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6
 			ipv6addr_setdword(ipv6addrp, ndword, ipv6addr_getdword(ipv6addrp, ndword) | mask);
 		};
 	};
+	
+	/* Get scope */
+	ipv6addrp->scope = ipv6addr_gettype(ipv6addrp);
 
    	retval = 0;	
 	return (retval);

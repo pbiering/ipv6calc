@@ -1,3 +1,20 @@
+/*
+ * Version:             $Id: ChangeLog,v 1.2 2001/10/09 07:03:10 peter Exp $ 
+ */
+
+Info:
+	PB = Peter Bieringer <pb@bieringer.de>
+
+20011009/PB:
+	Fix missing scope initialization "base85_to_ipv6addr" 
+	 bug found by Greg Daley <greg.daley # eng.monash.edu.au>
+	 changed:
+		libipv6addr.c/ipv6addr_clear
+		librfc1924.c/base85_to_ipv6addrstruct
+
+20011007/PB:
+	Push source into local CVS system	
+
 0.28: Peter Bieringer <pb@bieringer.de>
 	Refixing compiling on BSD
 	Add a forgotten include in "eui64_to_privacy.c"
