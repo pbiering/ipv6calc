@@ -1,8 +1,9 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.12 2003/06/15 12:12:54 peter Exp $
- * Copyright  : 2002-2003 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv4addr.h,v 1.13 2005/02/12 16:28:48 peter Exp $
+ * Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * License    : GNU GPL v2
  *
  * Information:
  *  Header file for libipv4addr.c
@@ -32,6 +33,13 @@ typedef struct {
 	const uint32_t ipv4mask;
 	const char *string_registry;
 } s_ipv4addr_assignment;
+
+/* IPv4 address assignment hint structure */
+typedef struct {
+	const uint8_t  octet_msb;
+	const unsigned int start;
+	const unsigned int end;
+} s_ipv4addr_assignment_hint;
 
 /* Registries */
 #define IPV4_ADDR_REGISTRY_IANA		0x02

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.11 2003/06/15 12:12:54 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.12 2005/02/12 16:28:48 peter Exp $
  * Copyright  : 2002-2003 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -480,8 +480,10 @@ int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, cha
  */
 #define DEBUG_function_name "libipv4calc/get_registry_string"
 int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring) {
-	int i, match = -1;
+	int i;
+	int match = -1;
 	uint32_t match_mask = 0;
+	uint8_t  octet_msb;
 
 	uint32_t ipv4 = ipv4addr_getdword(ipv4addrp);
 	
@@ -489,34 +491,46 @@ int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *re
 		fprintf(stderr, "%s: Given IPv4 address: %08x\n", DEBUG_function_name, (unsigned int) ipv4);
 	};
 
-	/* run through database array */
-	for (i = 0; i < (int) ( sizeof(dbipv4addr_assignment) / sizeof(dbipv4addr_assignment[0])); i++) {
-		if ( (ipv4 & dbipv4addr_assignment[i].ipv4mask) == dbipv4addr_assignment[i].ipv4addr ) {
-			/* ok, entry matches */
-			if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-				fprintf(stderr, "%s: Found match number: %d\n", DEBUG_function_name, i);
-			};
+#define OPTIMIZED_LOOKUP 1
+#ifdef OPTIMIZED_LOOKUP
+	/* lookup in hint table for faster start */
+	octet_msb = ipv4addr_getoctett(ipv4addrp, 0);
 
-			/* have already found one */
-			if ( match != -1 ) {
-				if ( dbipv4addr_assignment[i].ipv4mask > match_mask ) {
-					/* wins */
-					if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-						fprintf(stderr, "%s: Overwrite match number: %d (old: %d)\n", DEBUG_function_name, i, match);
+	if (dbipv4addr_assignment_hint[octet_msb].start != - 1) {
+		for (i = dbipv4addr_assignment_hint[octet_msb].start; i <= dbipv4addr_assignment_hint[octet_msb].end; i++) {
+#else
+		for (i = 0; i < (int) ( sizeof(dbipv4addr_assignment) / sizeof(dbipv4addr_assignment[0])); i++) {
+#endif
+			/* run through database array */
+			if ( (ipv4 & dbipv4addr_assignment[i].ipv4mask) == dbipv4addr_assignment[i].ipv4addr ) {
+				/* ok, entry matches */
+				if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+					fprintf(stderr, "%s: Found match number: %d\n", DEBUG_function_name, i);
+				};
+
+				/* have already found one */
+				if ( match != -1 ) {
+					if ( dbipv4addr_assignment[i].ipv4mask > match_mask ) {
+						/* this entry wins */
+						if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+							fprintf(stderr, "%s: Overwrite match number: %d (old: %d)\n", DEBUG_function_name, i, match);
+						};
+						match = i;
+						match_mask = dbipv4addr_assignment[i].ipv4mask;
+					} else {
+						if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+							fprintf(stderr, "%s: No overwriting of match number: %d (candidate: %d)\n", DEBUG_function_name, match, i);
+						};
 					};
+				} else {
 					match = i;
 					match_mask = dbipv4addr_assignment[i].ipv4mask;
-				} else {
-					if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-						fprintf(stderr, "%s: Overwrite match number: %d (old: %d)\n", DEBUG_function_name, i, match);
-					};
 				};
-			} else {
-				match = i;
-				match_mask = dbipv4addr_assignment[i].ipv4mask;
 			};
 		};
+#ifdef OPTIMIZED_LOOKUP
 	};
+#endif
 
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
 		fprintf(stderr, "%s: Final match number: %d\n", DEBUG_function_name, match);
