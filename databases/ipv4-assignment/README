@@ -1,0 +1,19 @@
+$ Id: $
+
+"aggregate" can be found at
+ http://freshmeat.net/projects/aggregate/
+ http://buffoon.automagic.org/dist/aggregate-1.6.tar.gz
+
+IPv4 assignment databases:
+ ftp://ftp.ripe.net/ripe/stats/ripencc.%Y%m%d
+ ftp://ftp.arin.net/pub/stats/arin/arin.%Y%m01
+ http://ftp.apnic.net/stats/apnic/apnic-%Y-%m-01
+ http://www.iana.org/assignments/ipv4-address-space
+
+Because of unknown license issues, the database files aren't
+included in source tarball (cleanup by "make distclean"), but
+will be retrieved on "make"
+
+See e.g.:
+ ftp://ftp.ripe.net/ripe/
+ http://ftp.apnic.net/stats/apnic/_README-apnic-stats.txt
