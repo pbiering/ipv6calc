@@ -1,6 +1,6 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.10 2002/03/16 18:19:35 peter Exp $
+# Version: $Id: TODO,v 1.11 2002/03/16 18:20:59 peter Exp $
 
 TODO list
 
@@ -17,6 +17,9 @@ Format features
 
 Makefile.in:
 * fix double running compilations
+
+IEEE/OUI library:
+* perhaps more filtering of unnecessary information
 
 
 Features requested from others:
