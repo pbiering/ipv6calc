@@ -1,6 +1,6 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.21 2002/08/17 08:33:32 peter Exp $
+# Version: $Id: TODO,v 1.22 2003/08/15 17:11:24 peter Exp $
 
 TODO list
 =========
@@ -21,6 +21,10 @@ Features:
 * showinfo/machinereadable:
     should be able to switch between multiline and single line mode (source is already prepared)
     should be able to print a prefix on tokens (source is already prepared)A
+
+Format:
+* octal:
+    should also be understandable by input (currently, only output is supported)
 
 Data libraries
 * print date of last update in version information
