@@ -1,7 +1,7 @@
 #
 # Makefile for ipv6calc
 #
-# Version:     $Id: Makefile.in,v 1.6 2002/02/23 11:35:16 peter Exp $
+# Version:     $Id: Makefile.in,v 1.7 2002/02/23 11:38:10 peter Exp $
 #
 # Author:      Peter Bieringer <pb@bieringer.de>
 #
@@ -28,16 +28,17 @@ ipv6calc:	$(OBJS)
 
 distclean:
 		make clean
-		rm config.cache config.status config.log
+		rm -f config.cache config.status config.log
 
 autoclean:
 		make distclean
-		rm Makefile
-		rm contrib/ipv6calc.spec
+		rm -f Makefile
+		rm -f contrib/ipv6calc.spec
 		rm config.h
 
 clean:
-		rm -rf ipv6calc *.o
+		rm -f ipv6calc ipv6calc-static *.o
+		cd getopt/; make clean
 
 install:
 		make test
@@ -51,10 +52,3 @@ installonly:
 test:
 		make
 		./test_ipv6calc.sh || exit 1
-
-getopt1.o: getopt1.c
-		${CC} ${CFLAGS} -fPIC -o getopt1.o -c -s getopt1.c
-
-getopt.o: getopt.c
-		${CC} ${CFLAGS} -fPIC -o getopt.o -c -s getopt.c
-
