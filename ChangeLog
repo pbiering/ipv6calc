@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.75 2003/09/07 14:05:58 peter Exp $ 
+ *  $Id: ChangeLog,v 1.76 2003/09/07 14:25:42 peter Exp $ 
  */
 
 Info:
@@ -7,7 +7,10 @@ Info:
 --------------------------------------------------------------------
 20030907/PB
 	untag version 0.46
-	ipv6calcweb.cgi: replace deprecated hash reference code with proper one, add lacnic support
+	ipv6calcweb.cgi:
+	 - replace deprecated hash reference code with proper one
+         - add forgotten lacnic support
+	 - allow ":" in SERVER_NAME to allow IPv6 addresses here also
 	tag version 0.46
 
 20030906/PB

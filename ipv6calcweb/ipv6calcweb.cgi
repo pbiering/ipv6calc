@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi,v 1.23 2003/09/07 14:05:58 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi,v 1.24 2003/09/07 14:25:42 peter Exp $
 # Copyright  : 2002-2003 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -452,7 +452,7 @@ if ( defined $ENV{'SERVER_ADDR'} ) {
 };
 
 if ( defined $ENV{'SERVER_NAME'} ) {
-	$ENV{'SERVER_NAME'} =~ /^([[:alnum:]\.\-_]*)$/;
+	$ENV{'SERVER_NAME'} =~ /^([[:alnum:]\.\-\:_]*)$/;
 	if ( ! defined $1 || (length($1) > $maxenvlength)) {
 		&print_error("Error: problem with data");
 	};
