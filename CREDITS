@@ -13,7 +13,12 @@ Credits to
    (recycling of some code)
    
 * Arkadiusz Miskiewicz <misieki at pld dot ORG dot PL>
+   - for previously used RFC 1884 compress example code
+   - for hints how to use AC_CHECK_* in configure.in
+
 * Jun-ichiro itojun Hagino <itojun at iijlab dot net>
+   for previously used RFC 1884 compress example code
+
 * Horacio J. Peña <horape at compendium dot com dot ar>
    for previously used RFC 1884 compress example code
 

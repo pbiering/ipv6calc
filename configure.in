@@ -1,6 +1,6 @@
 dnl Project: ipv6calc
 dnl File   : configure.in
-dnl Version: $Id: configure.in,v 1.2 2002/03/18 20:03:32 peter Exp $
+dnl Version: $Id: configure.in,v 1.3 2002/08/17 08:33:32 peter Exp $
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(ipv6calc/ipv6calc.c)
@@ -17,12 +17,14 @@ AC_PROG_CC
 dnl AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 
-dnl Checks for libraries.
-AC_CHECK_LIB(crypto)
-
 dnl Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS(md5.h)
+AC_CHECK_HEADERS(openssl/md5.h, [], [echo "*** Problem: md5 is needed for RFC 3041 conversions"; exit 1])
+
+dnl Checks for libraries.
+AC_CHECK_LIB(crypto, MD5_Init, [], [echo "*** Problem: md5 is needed for RFC 3041 conversions"; exit 1])
+AC_CHECK_LIB(crypto, MD5_Update, [], [echo "*** Problem: md5 is needed for RFC 3041 conversions"; exit 1])
+AC_CHECK_LIB(crypto, MD5_Final, [], [echo "*** Problem: md5 is needed for RFC 3041 conversions"; exit 1])
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
