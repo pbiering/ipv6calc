@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.3 2002/04/07 10:55:08 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.4 2002/04/21 11:12:30 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -17,7 +17,7 @@
 #include "ipv6logconv.h"
 #include "libipv6calcdebug.h"
 #include "libipv6calc.h"
-#include "ipv6calcoptions.h"
+#include "ipv6calccommands.h"
 #include "ipv6calctypes.h"
 #include "ipv6logconvoptions.h"
 #include "ipv6calchelp.h"
