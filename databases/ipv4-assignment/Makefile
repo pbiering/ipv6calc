@@ -1,6 +1,6 @@
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.4 2002/03/24 21:37:49 peter Exp $
+# Version    : $Id: Makefile,v 1.5 2002/03/24 21:43:22 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -24,7 +24,7 @@ update:
 
 distclean:
 		echo "Delete data files"
-		cd iana    && rm -f ipv4-address-spac
+		cd iana    && rm -f ipv4-address-space
 		cd ripencc && rm -f ripencc.*
 		cd apnic   && rm -f apnic-*
 		cd arin    && rm -f arin.*
