@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.h[.in]
- * Version    : $Id: ipv6calc.h.in,v 1.2 2002/01/20 09:48:25 peter Exp $
+ * Version    : $Id: ipv6calc.h.in,v 1.3 2002/02/19 07:48:22 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
  *
  * Information:
@@ -51,18 +51,21 @@
 #define CMD_maskprefix        	0x00040l
 #define CMD_masksuffix         	0x00080l
 
-#define CMD_MAJOR_MASK               0xFFF00l
-#define CMD_addr_to_ip6int           0x00100l
-#define CMD_addr_to_compressed       0x00200l
-#define CMD_addr_to_uncompressed     0x00400l
-#define CMD_addr_to_fulluncompressed 0x00800l
-#define CMD_addr_to_ifinet6          0x01000l
-#define CMD_ifinet6_to_compressed    0x02000l
-#define CMD_addr_to_base85           0x04000l
-#define CMD_base85_to_addr           0x08000l
-#define CMD_mac_to_eui64             0x10000l
-#define CMD_eui64_to_privacy         0x20000l
-#define CMD_showinfo                 0x40000l
+#define CMD_MAJOR_MASK               0xFFFF00l
+#define CMD_addr_to_ip6int           0x000100l
+#define CMD_addr_to_compressed       0x000200l
+#define CMD_addr_to_uncompressed     0x000400l
+#define CMD_addr_to_fulluncompressed 0x000800l
+#define CMD_addr_to_ifinet6          0x001000l
+#define CMD_ifinet6_to_compressed    0x002000l
+#define CMD_addr_to_base85           0x004000l
+#define CMD_base85_to_addr           0x008000l
+#define CMD_mac_to_eui64             0x010000l
+#define CMD_eui64_to_privacy         0x020000l
+#define CMD_showinfo                 0x040000l
+#define CMD_addr_to_ip6arpa          0x080000l
+#define CMD_addr_to_bitstring        0x100000l
+
 
 /* debug values */
 #define DEBUG_eui64_to_privacy		CMD_eui64_to_privacy
@@ -93,7 +96,7 @@ typedef struct {
 extern long int ipv6calc_debug;
 
 /* external functions */
-extern int  addr_to_ip6int(char *addrstring, char *resultstring);
+extern int  addr_to_ip6int(char *addrstring, char *resultstring, long int command);
 extern void addr_to_ip6int_printhelp();
 extern void addr_to_ip6int_printhelplong();
 

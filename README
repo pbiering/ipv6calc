@@ -1,6 +1,6 @@
 ipv6calc will do some format changes and calculations for you
 
-(P) & (C) 2001 by Peter Bieringer <pb@bieringer.de>
+(P) & (C) 2001-2002 by Peter Bieringer <pb@bieringer.de>
                    published under GNU GPL
 
 For suggestions and bug report please contact author
@@ -15,4 +15,4 @@ address detection on setup of IPv6 addresses
 * Also migrate "ip6_int" of Keith Owens <kaos@ocs.com.au> into this utility
 
 Known bugs:
-* Utility use several dangerous standard C functions like sscanf and does normally no tests to prevent buffer overflows
+* Utility use several dangerous standard C functions like sscanf, sprintf and does normally no tests to prevent buffer overflows
