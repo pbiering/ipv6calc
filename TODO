@@ -1,6 +1,6 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.18 2002/04/08 19:50:21 peter Exp $
+# Version: $Id: TODO,v 1.19 2002/04/09 20:30:45 peter Exp $
 
 TODO list
 =========
@@ -25,7 +25,10 @@ Documentation:
 Features:
 * showinfo/machinereadable:
     should be able to switch between multiline and single line mode (source is already prepared)
-    should be able to print a prefix on tokens (source is already prepared)
+    should be able to print a prefix on tokens (source is already prepared)A
+
+Data libraries
+* print date of last update in version information
 
 IEEE/OUI library:
 * perhaps more filtering of unnecessary information
@@ -33,10 +36,13 @@ IEEE/OUI library:
 Creating a dedicated output library
 
 Code cleanup:
- * finish splint
+* finish splint
+
+Help:
+* add more examples in inline help
 
 ipv6calcweb.cgi:
- * add alarm wrapper around call of ipv6calc
+* add alarm wrapper around call of ipv6calc
 
 
 
