@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.4 2002/04/21 11:12:30 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.5 2002/11/12 19:14:59 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -99,7 +99,7 @@ int main(int argc,char *argv[]) {
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "%s: Got output string: %s\n", DEBUG_function_name, optarg);
 				};
-				if (strcmp(optarg, "-?") == 0) {
+				if ( (strcmp(optarg, "-?") == 0) || (strcmp(optarg, "-h") == 0) || (strcmp(optarg, "--help") == 0) ) {
 					outputtype = -2;
 					command = CMD_printhelp;
 					break;
@@ -117,7 +117,7 @@ int main(int argc,char *argv[]) {
 				break;
 
 			default:
-				fprintf(stderr, "Usage: (see '%s --command -?' for more help)\n", PROGRAM_NAME);
+				fprintf(stderr, "Usage: (see '%s --command -?|-h|--help' for more help)\n", PROGRAM_NAME);
 				printhelp();
 				break;
 		};
