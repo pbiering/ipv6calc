@@ -1,8 +1,8 @@
 /*
- * Project    : ipv6calc
+ * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.8 2003/02/02 16:41:42 peter Exp $
- * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calc.c,v 1.9 2003/06/15 12:40:53 peter Exp $
+ * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for some tools
@@ -14,6 +14,7 @@
 #include <ctype.h>
 
 #include "ipv6calctypes.h"
+#include "libipv6calcdebug.h"
 #include "librfc1924.h"
 #include "librfc2874.h"
 #include "librfc1886.h"
@@ -161,6 +162,17 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		if (isxdigit(string[i])) { numxdigits++; };
 	};
 
+	if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
+		fprintf(stderr, "%s: Autodetection source:\n", DEBUG_function_name);
+		fprintf(stderr, "%s:  numdots   :%d\n", DEBUG_function_name, numdots);
+		fprintf(stderr, "%s:  numcolons :%d\n", DEBUG_function_name, numcolons);
+		fprintf(stderr, "%s:  numdashes :%d\n", DEBUG_function_name, numdashes);
+		fprintf(stderr, "%s:  numspaces :%d\n", DEBUG_function_name, numspaces);
+		fprintf(stderr, "%s:  numdigits :%d\n", DEBUG_function_name, numdigits);
+		fprintf(stderr, "%s:  numxdigits:%d\n", DEBUG_function_name, numxdigits);
+		fprintf(stderr, "%s:  length    :%d\n", DEBUG_function_name, length);
+	};
+
 	if ( length == 20 && numdots == 0 && numcolons == 0 ) {
 	        /* probably a base85 one */
 		result = librfc1924_formatcheck(string, resultstring);	
@@ -229,14 +241,11 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 
 		if ( j != -1 ) {
 			type = FORMAT_mac;
+			if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
+				fprintf(stderr, "%s: Autodetection found type: mac\n", DEBUG_function_name);
+			};
 			goto END_libipv6calc_autodetectinput;
 		};
-	};
-	
-	if (length >= 15 && length <= 23 && numxdigits >= 8 && numxdigits <= 16 && numdots == 0 && numcolons == 7) {
-		/* EUI-64 00:00:00:00:00:00:00:00 */
-		type = FORMAT_mac;
-		goto END_libipv6calc_autodetectinput;
 	};
 	
 	if (numcolons == 0 && numdots > 0) {
@@ -256,6 +265,9 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 	};
 	
 END_libipv6calc_autodetectinput:	
+	if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
+		fprintf(stderr, "%s: Autodetection found type: %d\n", DEBUG_function_name, type);
+	};
 	return (type);
 };
 #undef DEBUG_function_name
