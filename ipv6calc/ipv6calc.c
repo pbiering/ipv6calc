@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.7 2002/04/07 10:32:35 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.8 2002/04/08 19:04:11 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -68,9 +68,7 @@ int main(int argc,char *argv[]) {
 	/* new option style storage */	
 	uint32_t inputtype  = FORMAT_undefined;
 	uint32_t outputtype = FORMAT_undefined;
-	
-	/* convert storage */
-	uint32_t action = ACTION_undefined;
+	uint32_t action     = ACTION_undefined;
 
 	/* format options storage */
 	uint32_t formatoptions = 0;
@@ -292,7 +290,7 @@ int main(int argc,char *argv[]) {
 				};
 
 				if (strcmp(optarg, "-?") == 0) {
-					inputtype = FORMAT_undefined;
+					inputtype = FORMAT_auto;
 					command = CMD_printhelp;
 					break;
 				};
@@ -310,7 +308,7 @@ int main(int argc,char *argv[]) {
 					fprintf(stderr, "%s: Got output string: %s\n", DEBUG_function_name, optarg);
 				};
 				if (strcmp(optarg, "-?") == 0) {
-					outputtype = FORMAT_undefined;
+					outputtype = FORMAT_auto;
 					command = CMD_printhelp;
 					break;
 				};
@@ -327,7 +325,7 @@ int main(int argc,char *argv[]) {
 					fprintf(stderr, "%s: Got action string: %s\n", DEBUG_function_name, optarg);
 				};
 				if (strcmp(optarg, "-?") == 0) {
-					action = ACTION_undefined;
+					action = ACTION_auto;
 					command = CMD_printhelp;
 					break;
 				};
@@ -349,16 +347,19 @@ int main(int argc,char *argv[]) {
 
 	/* print help handling */
 	if (command == CMD_printhelp) {
-		if (outputtype == FORMAT_undefined) {
+		if ( (outputtype == FORMAT_undefined) && (inputtype == FORMAT_undefined) && (action == ACTION_undefined)) {
+			printhelp();
+			exit(EXIT_FAILURE);
+		} else if (outputtype == FORMAT_auto) {
 			if (inputtype == FORMAT_undefined) {
-				inputtype = FORMAT_any;
+				inputtype = FORMAT_auto;
 			};
 			printhelp_outputtypes(inputtype);
 			exit(EXIT_FAILURE);
-		} else if (inputtype == FORMAT_undefined) {
+		} else if (inputtype == FORMAT_auto) {
 			printhelp_inputtypes();
 			exit(EXIT_FAILURE);
-		} else if (action == ACTION_undefined) {
+		} else if (action == ACTION_auto) {
 			printhelp_actiontypes();
 			exit(EXIT_FAILURE);
 		};
@@ -381,11 +382,6 @@ int main(int argc,char *argv[]) {
 		exit(EXIT_FAILURE);
 	};
 
-	if (command == CMD_printhelp) {
-		printhelp();
-		exit(EXIT_FAILURE);
-	};
-	
 	if (command == CMD_printoldoptions) {
 		printhelp_oldoptions();
 		exit(EXIT_FAILURE);
@@ -396,14 +392,16 @@ int main(int argc,char *argv[]) {
 	};
 
 	/***** automatic action handling *****/
-	if ( (inputtype == FORMAT_mac) && (outputtype ==FORMAT_eui64) ) {
-		action = ACTION_mac_to_eui64;
-	} else if ( (inputtype == FORMAT_iid_token) && (outputtype ==FORMAT_iid_token) ) {;
-		action = ACTION_iid_token_to_privacy;
-	} else if ( inputtype == FORMAT_prefix_mac ) {
-		action = ACTION_prefix_mac_to_ipv6;
-		if ( outputtype == FORMAT_undefined ) {
-			outputtype = FORMAT_ipv6addr;
+	if ( action == ACTION_undefined ) {
+		if ( (inputtype == FORMAT_mac) && (outputtype ==FORMAT_eui64) ) {
+			action = ACTION_mac_to_eui64;
+		} else if ( (inputtype == FORMAT_iid_token) && (outputtype ==FORMAT_iid_token) ) {
+			action = ACTION_iid_token_to_privacy;
+		} else if ( inputtype == FORMAT_prefix_mac ) {
+			action = ACTION_prefix_mac_to_ipv6;
+			if ( outputtype == FORMAT_undefined ) {
+				outputtype = FORMAT_ipv6addr;
+			};
 		};
 	};
 
@@ -684,6 +682,17 @@ int main(int argc,char *argv[]) {
 		fprintf(stderr, "%s: Start of action\n", DEBUG_function_name);
 	};
 
+	/***** automatic output handling *****/
+	if ( outputtype == FORMAT_undefined ) {
+		if ( (inputtype == FORMAT_ipv4addr) && (action == ACTION_ipv4_to_6to4addr) ) {
+			outputtype = FORMAT_ipv6addr;
+		} else if ( (inputtype == FORMAT_mac) && (action == ACTION_mac_to_eui64) ) {
+			outputtype = FORMAT_eui64;
+			formatoptions |= FORMATOPTION_printfulluncompressed;
+		};
+	};
+
+	
 	/* clear resultstring */
 	snprintf(resultstring, sizeof(resultstring), "%s", "");
 	
@@ -839,10 +848,8 @@ int main(int argc,char *argv[]) {
 
 		case FORMAT_ipv6addr:
 			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
-			if ((formatoptions & FORMATOPTION_printuncompressed) != 0) {
+			if ((formatoptions & (FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed)) != 0) {
 				retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, formatoptions);
-			} else if ((formatoptions & FORMATOPTION_printfulluncompressed) != 0) {
-				retval = libipv6addr_ipv6addrstruct_to_fulluncompaddr(&ipv6addr, resultstring, formatoptions);
 			} else {
 				retval = librfc1884_ipv6addrstruct_to_compaddr(&ipv6addr, resultstring, formatoptions);
 			};

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.8 2002/04/04 19:40:10 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.9 2002/04/08 19:04:11 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -282,7 +282,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	/* get full uncompressed IPv6 address */
 	flag_prefixuse = ipv6addrp->flag_prefixuse;
 	ipv6addrp->flag_prefixuse = 0;
-	retval = ipv6addrstruct_to_fulluncompaddr(ipv6addrp, helpstring);
+	retval = libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6addrp, helpstring, FORMATOPTION_printfulluncompressed);
 	if ( retval != 0 ) {
 		fprintf(stderr, "Error uncompressing IPv6 address: %s\n", helpstring);
 		retval = 1;
