@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi,v 1.3 2002/03/18 22:07:02 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi,v 1.4 2002/03/18 22:54:35 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -31,7 +31,8 @@ use strict;
 my $debug = 0x0;
 
 # Location of binary
-my $bin_ipv6calc = "/bin/ipv6calc";
+#my $bin_ipv6calc = "/bin/ipv6calc";
+my $bin_ipv6calc = "../ipv6calc/ipv6calc";
 my $options_ipv6calc = "-m -i -q";
 
 # Whois server url
@@ -50,7 +51,7 @@ my $outputformat = "htmlfull"; # switched to "html", if called by SSI
 ## Output type
 # full = with description
 # simple = without description
-#my $outputtype = "full"
+#my $outputtype = "full";
 my $outputtype = "simple";
 
 ## Text
@@ -240,10 +241,10 @@ sub print_infohash ($) {
 		print $key;
 		&print_textonly (' ' x ($length_max_key - length($key)) );
 		&print_textonly (" | ");
+		&print_tagoutput ( "</b></td>\n" );
 
 		# print description
 		if ($outputtype ne "simple") {
-			&print_tagoutput ( "</b></td>\n" );
 			&print_tagoutput ( "        <td>" );
 			if (defined %text->{$key}->{$lang}) {
 				print %text->{$key}->{$lang};
@@ -316,7 +317,7 @@ if ( defined $ENV{'REMOTE_HOST'} ) {
 };
 
 if ( defined $ENV{'HTTP_USER_AGENT'} ) {
-	$ENV{'HTTP_USER_AGENT'} =~ /^([[:alnum:]\[\]\/\(\)\\\.\-+\;\:]*)$/;
+	$ENV{'HTTP_USER_AGENT'} =~ /^([[:alnum:]\[\]\/\(\)\\\.\-+\;\: ]*)$/;
 	if ( ! defined $1 || (length($1) > $maxenvlength)) {
 		# not a problem, skip it
 	} else {
