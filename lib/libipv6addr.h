@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.10 2002/04/21 11:24:08 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.11 2002/09/04 06:34:51 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -98,7 +98,7 @@ typedef struct {
 	{ IPV6_ADDR_RESERVED		, "reserved" },
 	{ IPV6_NEW_ADDR_6TO4		, "6to4" },
 	{ IPV6_NEW_ADDR_6BONE		, "6bone" },
-	{ IPV6_NEW_ADDR_AGU		, "aggregatable-global-unicast" },
+	{ IPV6_NEW_ADDR_AGU		, "global-unicast" },
 	{ IPV6_NEW_ADDR_UNSPECIFIED	, "unspecified" },
 	{ IPV6_NEW_ADDR_SOLICITED_NODE	, "solicited-node" },
 	{ IPV6_NEW_ADDR_ISATAP		, "ISATAP" },
