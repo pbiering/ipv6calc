@@ -364,7 +364,8 @@ print OUT qq|
 /*
  * Project       : ipv6calc
  * File          : dbipv4_assignment.h
- * Version       : Generated $now_string
+ * Version       : $Id:
+ * Generated     : $now_string
  * Data copyright: RIPE NCC, APNIC, ARIN
  *
  * Information:
