@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.18 2005/02/12 16:28:35 peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.19 2005/02/13 11:57:15 peter Exp $
 # Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -450,7 +450,7 @@ foreach my $ipv4_hex (sort keys %data) {
 	# Get hint range
 	if (($data{$ipv4_hex}->{'mask'} & 0xff000000) == 0xff000000) {
 		# Mask is between /8 and /32 
-		printf " hint: mask >= /8" if ($debug_hinttable) if ($debug_hinttable);
+		printf " hint: mask >= /8" if ($debug_hinttable);
 		my $octet_leading = substr($ipv4_hex, 0, 2);
 		if (! defined $data_hint{$octet_leading}->{'start'}) {
 			# set start and end
