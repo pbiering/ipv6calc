@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.5 2003/06/15 15:59:09 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.6 2003/06/27 20:32:19 peter Exp $
  * Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -25,15 +25,7 @@
 
 #include "libipv4addr.h"
 #include "libipv6addr.h"
-//#include "libmac.h"
-
-//#include "librfc1884.h"
-//#include "librfc1886.h"
-//#include "librfc1924.h"
 #include "libifinet6.h"
-//#include "librfc2874.h"
-//#include "librfc3056.h"
-//#include "libeui64.h"
 
 #define LINEBUFFER	16384
 
@@ -381,6 +373,9 @@ static void lineparser(void) {
 	/* print result */
 	if (opt_printdirection == 0) {
 		/* print in rows */
+		printf("%-20s %d.%d\n", "Version", STATS_VERSION_MAJOR, STATS_VERSION_MINOR);
+
+		/* print version number */
 		if (strlen(opt_token) > 0) {
 			printf("%-20s %s\n", "Token", opt_token);
 		};
