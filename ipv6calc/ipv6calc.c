@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.11 2002/04/09 20:30:57 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.12 2002/04/10 07:00:34 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -283,6 +283,10 @@ int main(int argc,char *argv[]) {
 			case 'q':	
 			case FORMATOPTION_NUM_quiet + FORMATOPTION_NUM_HEAD:
 				formatoptions |= FORMATOPTION_quiet;
+				break;
+				
+			case FORMATOPTION_NUM_printmirrored + FORMATOPTION_NUM_HEAD:
+				formatoptions |= FORMATOPTION_printmirrored;
 				break;
 
 			/* new options */
