@@ -1,13 +1,15 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -w -T
 #
 # Project    : ipv6calc
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi,v 1.1 2002/03/17 10:13:51 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi,v 1.2 2002/03/17 10:28:46 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
-# Perl web interface and security wrapper
+# Simple Perl web interface and security wrapper
 #  It's too dangerous to call the binary 'ipv6calc' directly...
+#
+# Todo: more functions by query string...
 
 ### Uses environment variables:
 ## Created by http server before invoking CGI:
@@ -15,6 +17,8 @@
 #  REMOTE_HOST: remote client name (DNS resolved)
 #  SERVER_ADDR: local server address
 #  SERVER_NAME: local server name (by http server config)
+#  QUERY_STRING: for language setting
+#    Currently supported: "lang=$lang" with $lang in @supported_languages
 
 use strict;
 
@@ -113,7 +117,15 @@ my %text = (
 	}
 );
 
-###### Nothing to change here
+###### Normally nothing to change here
+
+## Cleanup environment
+# Please report, if more cleanup is needed on other systems
+
+# Hardwire path to well known
+if ( defined %ENV->{'PATH'} ) { %ENV->{'PATH'}="/bin:/usr/bin:/usr/local/bin"; };
+# Clear shell environment
+if ( defined %ENV->{'BASH_ENV'} ) { %ENV->{'BASH_ENV'}=""; };
 
 ## Fallbacks
 if (! defined $outputformat) { $outputformat = "text" };
@@ -132,6 +144,9 @@ my %infoh_remote;
 my %infoh_server;
 my $length_max_key = 0;
 my $length_max_description = 0;
+my $query_string;
+
+my $maxenvlength = 256;
 
 
 ############### Functions
@@ -232,36 +247,52 @@ sub print_infohash ($) {
 ############### Main
 
 ## Get variables
-if ( defined $ENV{REMOTE_ADDR} ) {
-	$ENV{REMOTE_ADDR} =~ /^([[:xdigit:]\.:]*)$/;
-	if ( ! defined $1 ) {
+if ( defined $ENV{'REMOTE_ADDR'} ) {
+	$ENV{'REMOTE_ADDR'} =~ /^([[:xdigit:]\.:]*)$/;
+	if ( ! defined $1 || (length($1) > $maxenvlength)) {
 		&print_error("Error: problem with data");
 	};
 	$addr_remote = $1;
 };
 
-if ( defined $ENV{REMOTE_HOST} ) {
-	$ENV{REMOTE_HOST} =~ /^([[:alnum:]\.-_]*)$/;
-	if ( ! defined $1 ) {
+if ( defined $ENV{'REMOTE_HOST'} ) {
+	$ENV{'REMOTE_HOST'} =~ /^([[:alnum:]\.-_]*)$/;
+	if ( ! defined $1 || (length($1) > $maxenvlength)) {
 		&print_error("Error: problem with data");
 	};
 	$name_remote = $1;
 };
 
-if ( defined $ENV{SERVER_ADDR} ) {
-	$ENV{SERVER_ADDR} =~ /^([[:xdigit:]\.:]*)$/;
-	if ( ! defined $1 ) {
+if ( defined $ENV{'SERVER_ADDR'} ) {
+	$ENV{'SERVER_ADDR'} =~ /^([[:xdigit:]\.:]*)$/;
+	if ( ! defined $1 || (length($1) > $maxenvlength)) {
 		&print_error("Error: problem with data");
 	};
 	$addr_server = $1;
 };
 
-if ( defined $ENV{SERVER_NAME} ) {
-	$ENV{SERVER_NAME} =~ /^([[:alnum:]\.-_]*)$/;
-	if ( ! defined $1 ) {
+if ( defined $ENV{'SERVER_NAME'} ) {
+	$ENV{'SERVER_NAME'} =~ /^([[:alnum:]\.-_]*)$/;
+	if ( ! defined $1 || (length($1) > $maxenvlength)) {
 		&print_error("Error: problem with data");
 	};
 	$name_server = $1;
+};
+
+if ( defined $ENV{'QUERY_STRING'} ) {
+	$ENV{'QUERY_STRING'} =~ /^([[:alnum:]=]*)$/;
+	if ( ! defined $1 || (length($1) > $maxenvlength)) {
+		&print_error("Error: problem with data");
+	};
+	$query_string = $1;
+
+	## Check for language in query string
+	for my $langtest (@supported_languages) {
+		if ($query_string eq "lang=" . $langtest) {
+			$lang = $langtest;
+			last;
+		};
+	};
 };
 
 
