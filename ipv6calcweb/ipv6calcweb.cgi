@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi,v 1.4 2002/03/18 22:54:35 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi,v 1.5 2002/03/20 08:19:50 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -35,8 +35,29 @@ my $debug = 0x0;
 my $bin_ipv6calc = "../ipv6calc/ipv6calc";
 my $options_ipv6calc = "-m -i -q";
 
-# Whois server url
-my $url_ipv4_whoisserver="http://uwhois.com/cgi/whois.cgi?query=";
+# Whois server urls
+my %url_whoisservers = (
+	'ripe-ncc' => {
+		'ipv4'	=> "http://www.ripe.net/perl/whois?searchtext=",
+		'ipv6'	=> "http://www.ripe.net/perl/whois?searchtext=",
+	},
+	'arin'	=> {
+		'ipv4'	=> "http://www.arin.net/cgi-bin/whois.pl?queryinput=",
+		'ipv6'	=> "http://www.arin.net/cgi-bin/whois.pl?queryinput=",
+	},
+	'apnic'	=> {
+		'ipv4'	=> "http://www.apnic.net/apnic-bin/whois2.pl?search=",
+		'ipv6'	=> "http://www.apnic.net/apnic-bin/whois2.pl?search=",
+	},
+	'6bone'	=> {
+		'ipv4'	=> "",
+		'ipv6'	=> "http://www-ntd.lbl.gov/cgi-bin/whois.pl?",
+	},
+	'unknown'	=> {
+		'ipv4'	=> "http://uwhois.com/cgi/whois.cgi?query=",
+		'ipv6'	=> "",
+	}
+);
 
 #my $lang_default = "de";
 my $lang_default = "en";
