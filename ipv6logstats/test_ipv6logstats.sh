@@ -1,14 +1,12 @@
 #!/bin/sh
 #
-# Project    : ipv6calc
+# Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
-# Version    : $Id: test_ipv6logstats.sh,v 1.1 2003/06/15 12:17:49 peter Exp $
+# Version    : $Id: test_ipv6logstats.sh,v 1.2 2003/06/15 13:33:41 peter Exp $
 # Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"
 
-echo "currently broken!!"
-#exit 1
 
 testscenarios() {
 # Requests
@@ -23,8 +21,8 @@ END
 ## main ##
 echo "Run 'ipv6logstats' function tests..."
 
-testscenarios
-#testscenarios | ./ipv6logstats
+#testscenarios
+testscenarios | ./ipv6logstats
 retval=$?
 if [ $retval -ne 0 ]; then
 	echo "Error executing 'ipv6logstats'!"

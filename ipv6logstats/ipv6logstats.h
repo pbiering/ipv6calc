@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.1 2003/06/15 12:17:49 peter Exp $
+ * Version    : $Id: ipv6logstats.h,v 1.2 2003/06/15 13:33:41 peter Exp $
  * Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -14,6 +14,7 @@
 
 #define STATS_IPV4		0x00
 #define STATS_IPV6		0x01
+#define STATS_UNKNOWN		0x02
 
 #define STATS_IPV4_IANA		0x12
 #define STATS_IPV4_APNIC	0x13
@@ -49,12 +50,13 @@ typedef struct {
 
 /*@unused@*/ static stat_entries ipv6logstats_statentries[] = {
 	{ STATS_IPV4		, 0, "IPv4" },
+	{ STATS_IPV6		, 0, "IPv6" },
+	{ STATS_UNKNOWN		, 0, "UNKNOWN" },
 	{ STATS_IPV4_APNIC	, 0, "IPv4/APNIC" },
 	{ STATS_IPV4_ARIN	, 0, "IPv4/ARIN" },
 	{ STATS_IPV4_RIPE	, 0, "IPv4/RIPE" },
 	{ STATS_IPV4_LACNIC	, 0, "IPv4/LACNIC" },
 	{ STATS_IPV4_UNKNOWN	, 0, "IPv4/UNKNOWN" },
-	{ STATS_IPV6		, 0, "IPv6" },
 	{ STATS_IPV6_6BONE	, 0, "IPv6/6bone" },
 	{ STATS_IPV6_IANA	, 0, "IPv6/IANA" },
 	{ STATS_IPV6_APNIC	, 0, "IPv6/APNIC" },

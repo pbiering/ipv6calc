@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.1 2003/06/15 12:17:49 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.2 2003/06/15 13:33:41 peter Exp $
  * Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -25,19 +25,25 @@
 
 #include "libipv4addr.h"
 #include "libipv6addr.h"
-#include "libmac.h"
+//#include "libmac.h"
 
-#include "librfc1884.h"
-#include "librfc1886.h"
-#include "librfc1924.h"
+//#include "librfc1884.h"
+//#include "librfc1886.h"
+//#include "librfc1924.h"
 #include "libifinet6.h"
-#include "librfc2874.h"
-#include "librfc3056.h"
-#include "libeui64.h"
+//#include "librfc2874.h"
+//#include "librfc3056.h"
+//#include "libeui64.h"
 
 #define LINEBUFFER	16384
 
 long int ipv6calc_debug = 0;
+
+static int opt_unknown = 0;
+static int opt_noheader = 0;
+static int opt_onlyheader = 0;
+static int opt_printdirection = 0; /* rows */
+static char opt_token[NI_MAXHOST] = "";
 
 /* prototypes */
 static void lineparser(void);
@@ -75,9 +81,31 @@ int main(int argc,char *argv[]) {
 				ipv6calc_debug = atol(optarg);
 				break;
 
+			case 'p':
+				strncpy(opt_token, optarg, NI_MAXHOST - 1);
+				opt_token[NI_MAXHOST - 1] = '\0';
+				break;
+
+			case 'u':
+				opt_unknown = 1;
+				break;
+
+			case 'n':
+				opt_noheader = 1;
+				opt_printdirection = 1;
+				break;
+
+			case 'o':
+				opt_onlyheader = 1;
+				opt_printdirection = 1;
+				break;
+
+			case 'c':
+				opt_printdirection = 1;
+				break;
+
 			default:
 				fprintf(stderr, "Usage: (see '%s --command -?|-h|--help' for more help)\n", PROGRAM_NAME);
-				printhelp();
 				break;
 		};
 	};
@@ -139,9 +167,11 @@ static void lineparser(void) {
 
 	ptrptr = &cptr;
 	
-	fprintf(stderr, "Expecting log lines on stdin\n");
+	if (opt_onlyheader == 0) {
+		fprintf(stderr, "Expecting log lines on stdin\n");
+	};
 
-	while (1 == 1) {
+	while (opt_onlyheader == 0) {
 		/* read line from stdin */
 		charptr = fgets(linebuffer, LINEBUFFER, stdin);
 		
@@ -199,6 +229,7 @@ static void lineparser(void) {
 		/* check for proper type */
 		if ((inputtype != FORMAT_ipv4addr) && (inputtype != FORMAT_ipv6addr)) {
 			fprintf(stderr, "Token 1 (address) is not an IP address in line: %d\n", linecounter);
+			stat_inc(STATS_UNKNOWN);
 			continue;
 		};
 
@@ -261,7 +292,9 @@ static void lineparser(void) {
 							break;
 						default:
 							stat_inc(STATS_IPV6_6TO4_UNKNOWN);
-							/* fprintf(stderr, "Unknown address: %s\n", token); */
+							if (opt_unknown == 1) {
+								fprintf(stderr, "Unknown address: %s\n", token);
+							};
 							break;
 					};
 				} else {
@@ -293,7 +326,9 @@ static void lineparser(void) {
 							break;
 						default:
 							stat_inc(STATS_IPV6_UNKNOWN);
-							/* fprintf(stderr, "Unknown address: %s\n", token); */
+							if (opt_unknown == 1) {
+								fprintf(stderr, "Unknown address: %s\n", token);
+							};
 							break;
 					};
 				};
@@ -327,69 +362,59 @@ static void lineparser(void) {
 						break;
 					default:
 						stat_inc(STATS_IPV4_UNKNOWN);
-						fprintf(stderr, "Unknown address: %s\n", token); 
+						if (opt_unknown == 1) {
+							fprintf(stderr, "Unknown address: %s\n", token);
+						};
 						break;
 				};
 				
 				break;
 		};
-
-
-		if ( 1 == 0 ) {
-			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "%s: Format is 'any', so look for next tokens\n", DEBUG_function_name);
-			};
-			
-			/* look for next token */
-			charptr = strtok_r(NULL, " \t\n", ptrptr);
-
-			if ( charptr == NULL ) {
-				fprintf(stderr, "Line contains no 2nd token: %d\n", linecounter);
-				continue;
-			};
-			if ( strlen(charptr) >=  LINEBUFFER) {
-				fprintf(stderr, "Line too strange: %d\n", linecounter);
-				continue;
-			};
-
-			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "%s: Token 2: '%s'\n", DEBUG_function_name, charptr);
-			};
-		
-			/* 	
-			retval = converttoken(resultstring, token, FORMAT_addrtype, 0);
-			printf(" %s", resultstring);
-			*/
-
-			/* skip this token */
-			printf(" %s", charptr);
-			
-			/* look for next token */
-			charptr = strtok_r(NULL, " \t\n", ptrptr);
-
-			if ( charptr == NULL ) {
-				fprintf(stderr, "Line contains no 3rd token: %d\n", linecounter);
-				continue;
-			};
-			if ( strlen(charptr) >=  LINEBUFFER) {
-				fprintf(stderr, "Line too strange: %d\n", linecounter);
-				continue;
-			};
-			
-			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "%s: Token 3: '%s'\n", DEBUG_function_name, charptr);
-			};
-			/* print result */
-			printf(" %s", resultstring);
-		};
-
 	};
 
-	fprintf(stderr, "...finished\n");
+	if (opt_onlyheader == 0) {
+		fprintf(stderr, "...finished\n");
+	};
 
 	/* print result */
-	for (i = 0; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
-		printf("%-20s %lu\n", ipv6logstats_statentries[i].token, ipv6logstats_statentries[i].counter);
+	if (opt_printdirection == 0) {
+		/* print in rows */
+		if (strlen(opt_token) > 0) {
+			printf("%-20s %s\n", "Token", opt_token);
+		};
+		for (i = 0; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
+			printf("%-20s %lu\n", ipv6logstats_statentries[i].token, ipv6logstats_statentries[i].counter);
+		};
+	} else {
+		/* print in columns */
+		if (opt_noheader == 0) {
+			if (strlen(opt_token) > 0) {
+				if (opt_onlyheader == 0) {
+					printf("Token,");
+				} else {
+					printf("%s,", opt_token);
+				};
+			};
+			for (i = 0; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
+				if (i > 0) {
+					printf(",");
+				};
+				printf("%s", ipv6logstats_statentries[i].token);
+			};
+			printf("\n");
+		};
+		if (opt_onlyheader == 0) {
+			if (strlen(opt_token) > 0) {
+				printf("%s,", opt_token);
+			};
+			for (i = 0; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
+				if (i > 0) {
+					printf(",");
+				};
+				printf("%lu", ipv6logstats_statentries[i].counter);
+			};
+			printf("\n");
+		};
 	};
 
 	return;

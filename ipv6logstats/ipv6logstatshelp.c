@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstatshelp.c
- * Version    : $Id: ipv6logstatshelp.c,v 1.1 2003/06/15 12:17:49 peter Exp $
+ * Version    : $Id: ipv6logstatshelp.c,v 1.2 2003/06/15 13:33:41 peter Exp $
  * Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -41,7 +41,13 @@ void ipv6logstats_printhelp(void) {
 	fprintf(stderr, " General:\n");
 	fprintf(stderr, "  [-d|--debug <debug value>] : debug value (bitwise like)\n");
 	fprintf(stderr, "\n");
-	fprintf(stderr, " Takes data from stdin, proceed it to stdout\n");
+	fprintf(stderr, "  [-u|--unknown]             : print unknown IP addresses to stderr\n");
+	fprintf(stderr, "  [-c|--colums]              : print statistics in colums\n");
+	fprintf(stderr, "  [-n|--noheader]            : don't print header in colums mode\n");
+	fprintf(stderr, "  [-o|--onlyheader]          : print only header in colums mode\n");
+	fprintf(stderr, "  [-p|--prefix <token>]      : print token as prefix\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr, " Takes http log data from stdin and print a table on output\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "\n");
 
