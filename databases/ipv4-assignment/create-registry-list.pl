@@ -4,7 +4,7 @@ use IPC::Open2;
 #use strict;
 
 
-my $OUTFILE = "dbipv4addr_assignement.h";
+my $OUTFILE = "dbipv4addr_assignment.h";
 
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time - 24*60*60);
 
