@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.5 2002/04/05 19:11:13 peter Exp $
+ * Version    : $Id: libmac.c,v 1.6 2002/08/30 20:43:57 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -14,7 +14,7 @@
 #include "libipv6calc.h"
 #include "libmac.h"
 
-static char ChSet[] = "0123456789abcdefABCDEF:";
+static char ChSet[] = "0123456789abcdefABCDEF:-";
 
 /* function 48-bit MAC address to MACaddr_structure
  *
@@ -24,7 +24,7 @@ static char ChSet[] = "0123456789abcdefABCDEF:";
  */
 #define DEBUG_function_name "libmac/mac_to_macaddrstruct"
 int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp) {
-	int retval = 1, result, i, ccolons = 0;
+	int retval = 1, result, i, ccolons = 0, cdashes = 0;
 	size_t cnt;
 	int temp[6];
 
@@ -35,7 +35,7 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 		return (retval);
 	};
 
-	/* check for hex chars and ":" only content */
+	/* check for hex chars and ":"/"-" only content */
 	cnt = strspn(addrstring, ChSet);
 	if ( cnt < strlen(addrstring) ) {
 		snprintf(resultstring, NI_MAXHOST, "Illegal character in given MAC address '%s' on position %d (%c)!", addrstring, (int) cnt+1, addrstring[cnt]);
@@ -48,17 +48,27 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 	for (i = 0; i < (int) strlen(addrstring); i++) {
 		if (addrstring[i] == ':') {
 			ccolons++;
+		} else if (addrstring[i] == '-') {
+			cdashes++;
 		};
 	};
 
-	if ( ccolons != 5 ) {
-		snprintf(resultstring, NI_MAXHOST, "Error, given MAC address '%s' is not valid (number of colons is not 5)!", addrstring);
+	if ( ! ( ( ccolons == 5 && cdashes == 0) || ( ccolons == 0 && cdashes == 5) ) ) {
+		snprintf(resultstring, NI_MAXHOST, "Error, given MAC address '%s' is not valid (number of colons/dashes is not 5)!", addrstring);
 		retval = 1;
 		return (retval);
 	};
 
 	/* scan address into array */
-	result = sscanf(addrstring, "%x:%x:%x:%x:%x:%x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5]);
+	if ( ccolons == 5 ) {
+		result = sscanf(addrstring, "%x:%x:%x:%x:%x:%x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5]);
+	} else if ( cdashes == 5 ) {
+		result = sscanf(addrstring, "%x-%x-%x-%x-%x-%x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5]);
+	} else {
+		snprintf(resultstring, NI_MAXHOST, "Error, unexpected failure on scanning MAC address '%s'!", addrstring);
+		retval = 1;
+		return (retval);
+	};
 
 	if ( result != 6 ) {
 		snprintf(resultstring, NI_MAXHOST, "Error splitting address %s, got %d items instead of 6!", addrstring, result);

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.5 2002/07/30 17:24:45 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.6 2002/08/30 20:43:57 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -140,7 +140,8 @@ void string_to_reverse_dotted(char *string) {
 #define DEBUG_function_name "libipv6calc/autodetectinput"
 uint32_t libipv6calc_autodetectinput(const char *string) {
 	uint32_t type = FORMAT_undefined;
-	int i, j, numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, result;
+	int i, j, result;
+	int numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, numdashes = 0;
 	char resultstring[NI_MAXHOST];
 	size_t length;
 
@@ -154,6 +155,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 	for (i = 0; i < (int) length; i++) {
 		if (string[i] == '.') { numdots++; };
 		if (string[i] == ':') { numcolons++; };
+		if (string[i] == '-') { numdashes++; };
 		if (isdigit(string[i])) { numdigits++; };
 		if (isxdigit(string[i])) { numxdigits++; };
 	};
@@ -190,8 +192,8 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		goto END_libipv6calc_autodetectinput;
 	};
 	
-	if (length >= 11 && length <= 17 && numxdigits >= 6 && numxdigits <= 12 && numdots == 0 && numcolons == 5) {
-		/* MAC 00:00:00:00:00:00 */
+	if (length >= 11 && length <= 17 && numxdigits >= 6 && numxdigits <= 12 && numdots == 0 && ( ( numcolons == 5 && numdashes == 0) || ( numcolons == 0 && numdashes == 5) ) ) {
+		/* MAC 00:00:00:00:00:00 or 00-00-00-00-00-00 */
 
 		/* Check whether minimum 1 xdigit is between colons */
 		j = 0;
@@ -204,9 +206,9 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 					break;
 				};
 				continue;
-		       	} else if (string[i] == ':') {
+		       	} else if ( string[i] == ':' || string[i] == '-' ) {
 				if ( j == 0 ) {
-					/* colon follows colon */
+					/* colon/dash follows colon/dash */
 					j = -1;
 					break;
 				};
