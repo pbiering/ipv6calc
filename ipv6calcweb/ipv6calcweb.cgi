@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi,v 1.20 2003/06/15 16:23:55 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi,v 1.21 2003/08/26 06:11:21 peter Exp $
 # Copyright  : 2002-2003 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -593,7 +593,7 @@ if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 	print "          <font size=-2>" . %text->{'powered'}->{$lang} . " <a href=\"http://www.deepspace6.net/projects/ipv6calc.html\">" . $ipv6calc_name . "</a> " . $ipv6calc_version . ", " . $ipv6calc_copyright . "</font>\n";
 } else {
 	print %text->{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "\n";
-	print %text->{'powered'}->{$lang} . " " . $ipv6calc_name . " " . $ipv6calc_version . ", " . $ipv6calc_copyright . " (http://www.bieringer.de/linux/IPv6/ipv6calc/)" . "\n";
+	print %text->{'powered'}->{$lang} . " " . $ipv6calc_name . " " . $ipv6calc_version . ", " . $ipv6calc_copyright . " (http://www.deepspace6.net/projects/ipv6calc.html)" . "\n";
 };
 
 &print_tagoutput ( "        </td>\n" );
