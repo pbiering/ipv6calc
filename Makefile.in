@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.30 2003/11/21 11:52:14 peter Exp $
+# Version    : $Id: Makefile.in,v 1.31 2004/08/30 20:27:32 peter Exp $
 # Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -86,6 +86,11 @@ db-ipv4-assignment-make:
 update:
 		for dir in databases/ieee-oui databases/ipv4-assignment; do \
 			pushd $$dir && make update; popd; \
+		done
+
+static:		ipv6logconv-make ipv6logstats-make ipv6calc-make	
+		for dir in ipv6logconv ipv6logstats ipv6calc; do \
+			pushd $$dir && make static; popd; \
 		done
 
 test:

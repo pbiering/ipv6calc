@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6logstats
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.1 2003/11/21 10:31:21 peter Exp $
+# Version    : $Id: Makefile.in,v 1.2 2004/08/30 20:27:32 peter Exp $
 # Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -30,8 +30,10 @@ all:		ipv6logstats
 $(OBJS):	ipv6logstatsoptions.h ipv6logstatshelp.h ipv6logstats.h
 
 ipv6logstats:	$(OBJS)
-		echo "Compile: ipv6logstats"
 		$(CC) -o ipv6logstats $(OBJS) $(GETOBJS) -lipv6calc -L../lib/
+
+static:		ipv6logstats
+		$(CC) -o ipv6logstats-static $(OBJS) $(GETOBJS) -lipv6calc -L../lib/ -static
 
 distclean:
 		make clean
