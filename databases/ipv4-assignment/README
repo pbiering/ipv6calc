@@ -1,4 +1,4 @@
-$ Id: $
+$Id: README,v 1.2 2002/04/04 21:50:23 peter Exp $
 
 "aggregate" can be found at
  http://freshmeat.net/projects/aggregate/
@@ -17,3 +17,5 @@ will be retrieved on "make"
 See e.g.:
  ftp://ftp.ripe.net/ripe/
  http://ftp.apnic.net/stats/apnic/_README-apnic-stats.txt
+
+Use "make update" to refresh data files
