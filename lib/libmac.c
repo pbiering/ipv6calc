@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.4 2002/04/04 21:58:21 peter Exp $
+ * Version    : $Id: libmac.c,v 1.5 2002/04/05 19:11:13 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -11,7 +11,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <stdint.h>
 #include "libipv6calc.h"
 #include "libmac.h"
 

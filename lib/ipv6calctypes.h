@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.4 2002/04/04 21:58:21 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.5 2002/04/05 19:11:13 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -9,7 +9,11 @@
  */ 
 
 #include <getopt.h> 
-#include <stdint.h> 
+#if defined(__NetBSD__)
+#include <inttypes.h>
+#else
+#include <stdint.h>
+#endif
 
 /* prototypes */
 extern uint32_t ipv6calctypes_checktype(const char *string);

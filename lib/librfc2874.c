@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.c
- * Version    : $Id: librfc2874.c,v 1.5 2002/04/04 21:58:22 peter Exp $
+ * Version    : $Id: librfc2874.c,v 1.6 2002/04/05 19:11:13 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -12,7 +12,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-#include <stdint.h>
 
 #include "libipv6addr.h"
 #include "libipv6calc.h"

@@ -1,13 +1,17 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.h
- * Version    : $Id: libieee.h,v 1.1 2002/03/18 19:59:23 peter Exp $
+ * Version    : $Id: libieee.h,v 1.2 2002/04/05 19:11:13 peter Exp $
  *
  * Information:
  *  Header file for libieee.c
  */
 
+#if defined(__NetBSD__)
+#include <inttypes.h>
+#else
 #include <stdint.h>
+#endif
 
 #ifndef _libieee_h
 

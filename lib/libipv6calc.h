@@ -1,14 +1,19 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.2 2002/04/04 19:40:27 peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.3 2002/04/05 19:11:13 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc.c
  */ 
 
+#if defined(__NetBSD__)
+#include <inttypes.h>
+#else
 #include <stdint.h>
+#endif
+
 #define NI_MAXHOST	1024
 
 /* prototypes */

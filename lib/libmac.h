@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.h
- * Version    : $Id: libmac.h,v 1.2 2002/04/04 19:40:27 peter Exp $
+ * Version    : $Id: libmac.h,v 1.3 2002/04/05 19:11:13 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -9,6 +9,12 @@
  */ 
 
 /* typedefs */
+
+#if defined(__NetBSD__)
+#include <inttypes.h>
+#else
+#include <stdint.h>
+#endif
 
 #ifndef _libmac_h
 
