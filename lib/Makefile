@@ -1,6 +1,6 @@
 # Project    : ipv6calc/lib
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.12 2003/11/22 16:12:31 peter Exp $
+# Version    : $Id: Makefile,v 1.13 2004/10/30 12:36:50 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -10,7 +10,7 @@
 # Compiler and Linker Options
 COPTS = -O2 -Wall
 
-CFLAGS	= $(COPTS) -I../ -I../getopt/
+CFLAGS	= $(COPTS) -I../ -I../getopt/ -I../md5/
 
 CC	= gcc
 AR	= ar
