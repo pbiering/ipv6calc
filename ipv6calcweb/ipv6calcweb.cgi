@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi,v 1.9 2002/03/25 07:20:29 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi,v 1.10 2002/04/05 21:31:39 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -124,6 +124,10 @@ my %text = (
 	'IPV4_REGISTRY' => {
 		'de' => "Registry der IPv4 Adresse",
 		'en' => "Registry of IPv4 address",
+	},
+	'IPV6_REGISTRY' => {
+		'de' => "Registry der IPv6 Adresse",
+		'en' => "Registry of IPv6 address",
 	},
 	'IPV4_6TO4' => {
 		'de' => "6to4 IPv4 Adresse",
@@ -360,6 +364,9 @@ sub print_infohash ($) {
 					$flag_whoisurl = 0;
 				};
 			} else {
+				if ($debug & 0x08) {
+					print STDERR "whoisserver is not defined\n";
+				};
 				$flag_whoisurl = 0;
 			};
 		};
@@ -575,17 +582,17 @@ if ( $skip_server == 0 ) {
 # Footer
 &print_textonly ("\n");
 &print_tagoutput ( "      <tr>\n" );
-&print_tagoutput ( "        <td colspan=\"3\">" );
+&print_tagoutput ( "        <td colspan=\"3\">\n" );
 
 if ($outputformat eq "html" || $outputformat eq "htmlfull") {
-	print "<font size=-2>" . %text->{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "</font><br>\n";
-	print "<font size=-2>" . %text->{'powered'}->{$lang} . " <a href=\"http://www.bieringer.de/linux/IPv6/ipv6calc/\">" . $ipv6calc_name . "</a> " . $ipv6calc_version . ", " . $ipv6calc_copyright . "</font>";
+	print "          <font size=-2>" . %text->{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "</font><br>\n";
+	print "          <font size=-2>" . %text->{'powered'}->{$lang} . " <a href=\"http://www.bieringer.de/linux/IPv6/ipv6calc/\">" . $ipv6calc_name . "</a> " . $ipv6calc_version . ", " . $ipv6calc_copyright . "</font>\n";
 } else {
 	print %text->{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "\n";
 	print %text->{'powered'}->{$lang} . " " . $ipv6calc_name . " " . $ipv6calc_version . ", " . $ipv6calc_copyright . " (http://www.bieringer.de/linux/IPv6/ipv6calc/)" . "\n";
 };
 
-&print_tagoutput ( "</td>\n" );
+&print_tagoutput ( "        </td>\n" );
 &print_tagoutput ( "      </tr>\n" );
 &print_tagoutput ( "    </table>\n" );
 
