@@ -1,0 +1,25 @@
+set color black
+set x name "Year/Month"
+set y name "Requests"
+#set y type log
+#set y axis 1 1000000
+draw title  "Requests over Time"
+# Open file
+open examples-data/data-simple.txt
+
+# Read data (x=date, y=all)
+read columns x y
+set color red
+draw curve filled to 0 y 
+draw label for last curve "IPv4+IPv6"
+
+# Draw axes
+set color black
+draw axes
+rewind
+
+# Read data (x=date, y=IPv6)
+read columns x * * y
+set color blue
+draw curve filled to 0 y 
+draw label for last curve "IPv6" 
