@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.c
- * Version    : $Id: librfc1884.c,v 1.1 2002/03/18 19:59:24 peter Exp $
+ * Version    : $Id: librfc1884.c,v 1.2 2002/03/26 23:11:15 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -38,7 +38,7 @@ int compaddr_to_uncompaddr(const char *addrstring, char *resultstring) {
 		fprintf(stderr, "%s: got input: %s\n", DEBUG_function_name, addrstring);
 	};
 
-	sprintf(tempstring, "%s", addrstring);
+	snprintf(tempstring, sizeof(tempstring), "%s", addrstring);
 
 	strp = strstr(tempstring, "::");
 	if (strp) {
@@ -49,7 +49,7 @@ int compaddr_to_uncompaddr(const char *addrstring, char *resultstring) {
 
 		/* check for additional "::" occurance - not allowed! */
 		if (strstr(strp+1, "::")) {
-			sprintf(resultstring, "%s", "More than 2 colons in address are not allowed!");
+			snprintf(resultstring, NI_MAXHOST, "%s", "More than 2 colons in address are not allowed!");
 			retval = 1;
 			return (retval);
 		};
@@ -132,7 +132,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 			fprintf(stderr, "%s: IPV6_ADDR_COMPATv4 type - fast conversion\n", DEBUG_function_name);
 		};
 		
-		result = sprintf(tempstring, "::%u.%u.%u.%u", ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
+		result = snprintf(tempstring, sizeof(tempstring), "::%u.%u.%u.%u", ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
 		retval = 0;
 	} else if ( ipv6addrp->scope & IPV6_ADDR_MAPPED ) {
 		/* mapped address */
@@ -141,7 +141,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 			fprintf(stderr, "%s: IPV6_ADDR_MAPPED type - fast conversion\n", DEBUG_function_name);
 		};
 		
-		result = sprintf(tempstring, "::%x:%u.%u.%u.%u", ipv6addr_getword(ipv6addrp, 5), ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
+		result = snprintf(tempstring, sizeof(tempstring), "::%x:%u.%u.%u.%u", ipv6addr_getword(ipv6addrp, 5), ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
 		retval = 0;
 	} else if ( (ipv6addr_getdword(ipv6addrp, 0) == 0) && (ipv6addr_getdword(ipv6addrp, 1) == 0) && (ipv6addr_getdword(ipv6addrp, 2) == 0) && (ipv6addr_getdword(ipv6addrp, 3) == 0) ) {
 		/* unspecified address */
@@ -150,7 +150,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 			fprintf(stderr, "%s: unspecified address - fast conversion\n", DEBUG_function_name);
 		};
 		
-		result = sprintf(tempstring, "::");
+		result = snprintf(tempstring, sizeof(tempstring), "::");
 		retval = 0;
 	} else if ( (ipv6addr_getdword(ipv6addrp, 0) == 0) && (ipv6addr_getdword(ipv6addrp, 1) == 0) && (ipv6addr_getdword(ipv6addrp, 2) == 0) && (ipv6addr_getdword(ipv6addrp, 3) == 1) ) {
 		/* loopback address */
@@ -159,7 +159,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 			fprintf(stderr, "%s: loopback - fast conversion\n",  DEBUG_function_name);
 		};
 		
-		result = sprintf(tempstring, "::1");
+		result = snprintf(tempstring, sizeof(tempstring), "::1");
 		retval = 0;
 	} else {
 		/* normal address */
@@ -259,7 +259,8 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 		};
 
 		/* create string */
-		sprintf(tempstring, "%s", "");
+		tempstring[0] = '\0';
+
 		for ( i = 0; i <= 7; i++ ) {
 			if ( i == zstart ) {
 		
@@ -267,19 +268,19 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 					fprintf(stderr, "%s: start of '0' at '%d'\n",  DEBUG_function_name, i);
 				};
 				
-				sprintf(temp2string, "%s:", tempstring);
+				snprintf(temp2string, sizeof(temp2string), "%s:", tempstring);
 			} else if ( i == 0 ) {
 				if ( ipv6calc_debug & DEBUG_librfc1884 ) {
 					fprintf(stderr, "%s: normal start value at '%d' (%x)\n",  DEBUG_function_name, i, ipv6addr_getword(ipv6addrp, i));
 				};
 				
-				sprintf(temp2string, "%x", ipv6addr_getword(ipv6addrp, i));
+				snprintf(temp2string, sizeof(temp2string), "%x", ipv6addr_getword(ipv6addrp, i));
 			} else if ( ( i > zend ) || ( i < zstart ) ) {
-				sprintf(temp2string, "%s:%x", tempstring, ipv6addr_getword(ipv6addrp, i));
+				snprintf(temp2string, sizeof(temp2string), "%s:%x", tempstring, ipv6addr_getword(ipv6addrp, i));
 			} else if ( ( i == 7 ) && ( zend == i )) {
-				sprintf(temp2string, "%s:", tempstring);
+				snprintf(temp2string, sizeof(temp2string), "%s:", tempstring);
 			};
-			sprintf(tempstring, "%s", temp2string);
+			snprintf(tempstring, sizeof(tempstring), "%s", temp2string);
 		};
 		
 		if ( ipv6calc_debug & DEBUG_librfc1884 ) {
@@ -291,9 +292,9 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 
 
 	if ( ( retval == 0 ) && ( ipv6addrp->flag_prefixuse == 1 ) ) {
-		sprintf(resultstring, "%s/%u", tempstring, ipv6addrp->prefixlength);
+		snprintf(resultstring, NI_MAXHOST, "%s/%u", tempstring, ipv6addrp->prefixlength);
 	} else {
-		sprintf(resultstring, "%s", tempstring);
+		snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
 	};
 
 	if (formatoptions & FORMATOPTION_printlowercase) {

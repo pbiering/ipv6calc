@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.3 2002/03/24 21:45:38 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.4 2002/03/26 23:11:15 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -219,7 +219,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 
 	ptrptr = &cptr;
 
-	sprintf(resultstring, "%s", ""); /* clear result string */
+	resultstring[0] = '\0'; /* clear result string */
 
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
 		fprintf(stderr, "%s: got input %s\n", DEBUG_function_name,  addrstring);
@@ -240,7 +240,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	if ( cp != NULL ) {
 		i = atoi(cp);
 		if (i < 0 || i > 32 ) {
-			sprintf(resultstring, "Illegal prefix length: '%s'", cp);
+			snprintf(resultstring, NI_MAXHOST, "Illegal prefix length: '%s'", cp);
 			retval = 1;
 			return (retval);
 		};
@@ -260,7 +260,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 		};
 	};
 	if ( cpoints != 3 ) {
-		sprintf(resultstring, "Error, given address '%s' is not valid (only %d dots)!", addronlystring, cpoints);
+		snprintf(resultstring, NI_MAXHOST, "Error, given address '%s' is not valid (only %d dots)!", addronlystring, cpoints);
 		retval = 1;
 		return (retval);
 	};
@@ -275,7 +275,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	
 	for ( i = 0; i <= 3; i++ ) {
 		if ( ( compat[i] < 0 ) || ( compat[i] > 255 ) )	{
-			sprintf(resultstring, "Error, given IPv4 address '%s' is not valid (%d on position %d)!", addronlystring, compat[i], i+1);
+			snprintf(resultstring, NI_MAXHOST, "Error, given IPv4 address '%s' is not valid (%d on position %d)!", addronlystring, compat[i], i+1);
 			retval = 1;
 			return (retval);
 		};
@@ -286,7 +286,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	};
 
 	if ( result != expecteditems ) {
-		sprintf(resultstring, "Error splitting address %s, got %d items instead of %d!", addronlystring, result, expecteditems);
+		snprintf(resultstring, NI_MAXHOST, "Error splitting address %s, got %d items instead of %d!", addronlystring, result, expecteditems);
 		retval = 1;
 		return (retval);
 	};
@@ -330,12 +330,12 @@ int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, cha
 	char tempstring[NI_MAXHOST];
 
 	/* address */
-	sprintf(tempstring, "%u.%u.%u.%u", (unsigned int) ipv4addr_getoctett(ipv4addrp, 0), (unsigned int) ipv4addr_getoctett(ipv4addrp, 1), (unsigned int) ipv4addr_getoctett(ipv4addrp, 2), (unsigned int) ipv4addr_getoctett(ipv4addrp, 3));
+	snprintf(tempstring, sizeof(tempstring), "%u.%u.%u.%u", (unsigned int) ipv4addr_getoctett(ipv4addrp, 0), (unsigned int) ipv4addr_getoctett(ipv4addrp, 1), (unsigned int) ipv4addr_getoctett(ipv4addrp, 2), (unsigned int) ipv4addr_getoctett(ipv4addrp, 3));
 
 	if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
-		sprintf(resultstring, "IPV4=%s", tempstring);
+		snprintf(resultstring, NI_MAXHOST, "IPV4=%s", tempstring);
 	} else {
-		sprintf(resultstring, "%s", tempstring);
+		snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
 	};
 
 	/* netmaks */

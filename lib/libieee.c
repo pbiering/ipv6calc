@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.2 2002/03/24 17:30:44 peter Exp $
+ * Version    : $Id: libieee.c,v 1.3 2002/03/26 23:11:15 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -35,7 +35,7 @@ int libieee_get_vendor_string(char *resultstring, const uint8_t o1,  const uint8
 	/* catch special ones */
 	if ((o1 == 0xfc && o2 == 0xfc)) {
 		/* Linux special OUI for ISDN-NET or PLIP interfaces */
-		sprintf(resultstring, "Linux ISDN-NET/PLIP");
+		snprintf(resultstring, NI_MAXHOST, "Linux ISDN-NET/PLIP");
 		return (0);
 	};
 	
@@ -55,7 +55,7 @@ int libieee_get_vendor_string(char *resultstring, const uint8_t o1,  const uint8
 	for (i = 0; i < (int) (sizeof(libieee_oui) / sizeof(libieee_oui[0])); i++) {
 		if (libieee_oui[i].id == idval) {
 			/* match */
-			sprintf(resultstring, "%s", libieee_oui[i].string_owner);
+			snprintf(resultstring, NI_MAXHOST, "%s", libieee_oui[i].string_owner);
 			return (0);
 		};
 	};
@@ -85,7 +85,7 @@ int libieee_get_short_vendor_string(char *resultstring, const uint8_t o1, const 
 	/* catch special ones */
 	if ((o1 == 0xfc && o2 == 0xfc)) {
 		/* Linux special OUI for ISDN-NET or PLIP interfaces */
-		sprintf(resultstring, "Linux-ISDN-NET+PLIP");
+		snprintf(resultstring, NI_MAXHOST, "Linux-ISDN-NET+PLIP");
 		return (0);
 	};
 	
@@ -105,7 +105,7 @@ int libieee_get_short_vendor_string(char *resultstring, const uint8_t o1, const 
 	for (i = 0; i < (int) (sizeof(libieee_oui) / sizeof(libieee_oui[0])); i++) {
 		if (libieee_oui[i].id == idval) {
 			/* match */
-			sprintf(resultstring, "%s", libieee_oui[i].shortstring_owner);
+			snprintf(resultstring, NI_MAXHOST, "%s", libieee_oui[i].shortstring_owner);
 			return (0);
 		};
 	};

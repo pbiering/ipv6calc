@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.2 2002/03/24 21:38:27 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.3 2002/03/26 23:11:14 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -76,7 +76,7 @@ void printhelp_inputtypes(void) {
 		exit(EXIT_FAILURE);
 	};
 
-	sprintf(printformatstring, "  %%-%ds: %%s\n", (int) maxlen);
+	snprintf(printformatstring, sizeof(printformatstring), "  %%-%ds: %%s\n", (int) maxlen);
 
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "Format string: %s\n", printformatstring);
@@ -126,7 +126,7 @@ void printhelp_outputtypes(const int inputtype) {
 		exit(EXIT_FAILURE);
 	};
 
-	sprintf(printformatstring, "  %%-%ds: %%s\n", (int) maxlen);
+	snprintf(printformatstring, sizeof(printformatstring), "  %%-%ds: %%s\n", (int) maxlen);
 
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "Format string: %s\n", printformatstring);
@@ -187,7 +187,7 @@ void printhelp_actiontypes(void) {
 		exit (EXIT_FAILURE);
 	};
 
-	sprintf(printformatstring, "  %%-%ds: %%s\n", (int) maxlen);
+	snprintf(printformatstring, sizeof(printformatstring), "  %%-%ds: %%s\n", (int) maxlen);
 
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "Format string: %s\n", printformatstring);

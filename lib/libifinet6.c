@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libifinet6.c
- * Version    : $Id: libifinet6.c,v 1.1 2002/03/18 19:59:23 peter Exp $
+ * Version    : $Id: libifinet6.c,v 1.2 2002/03/26 23:11:15 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -37,7 +37,7 @@ int libifinet6_ifinet6_to_ipv6addrstruct(char *addrstring, char *resultstring, i
 	
 	/* simple test */
 	if ( strlen(addrstring) != 32 ) {
-		sprintf(resultstring, "Given hex string '%s' has not 32 chars!", addrstring);
+		snprintf(resultstring, NI_MAXHOST, "Given hex string '%s' has not 32 chars!", addrstring);
 		retval = 1;
 		return (retval);
 	};
@@ -45,13 +45,13 @@ int libifinet6_ifinet6_to_ipv6addrstruct(char *addrstring, char *resultstring, i
 	/* scan address into array */
 	retval = sscanf(addrstring, "%4s%4s%4s%4s%4s%4s%4s%4s\n", addr6p[0], addr6p[1], addr6p[2], addr6p[3], addr6p[4], addr6p[5], addr6p[6], addr6p[7]);
 	if ( retval != 8 ) {
-		sprintf(resultstring, "Error splitting string %s, got only %d items!", addrstring, retval);
+		snprintf(resultstring, NI_MAXHOST, "Error splitting string %s, got only %d items!", addrstring, retval);
 		retval = 1;
 		return (retval);
 	};
 
 	/* print out into temp string */
-	sprintf(tempstring, "%s:%s:%s:%s:%s:%s:%s:%s", addr6p[0], addr6p[1], addr6p[2], addr6p[3], addr6p[4], addr6p[5], addr6p[6], addr6p[7]); 
+	snprintf(tempstring, sizeof(tempstring), "%s:%s:%s:%s:%s:%s:%s:%s", addr6p[0], addr6p[1], addr6p[2], addr6p[3], addr6p[4], addr6p[5], addr6p[6], addr6p[7]); 
 					 
 	if ( (ipv6calc_debug & DEBUG_libifinet6) != 0 ) {
 		fprintf(stderr, "%s: Filled: %s\n", DEBUG_function_name, tempstring);
@@ -83,7 +83,7 @@ int libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(char *addrstring, char
 
 	/* simple test on prefix length string*/
 	if ( strlen(prefixlengthstring) != 2 ) {
-		sprintf(resultstring, "Given prefixlength hex string '%s' has not 2 chars!", prefixlengthstring);
+		snprintf(resultstring, NI_MAXHOST, "Given prefixlength hex string '%s' has not 2 chars!", prefixlengthstring);
 		retval = 1;
 		return (retval);
 	};
@@ -91,13 +91,13 @@ int libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(char *addrstring, char
 	/* scan prefix length */
 	result = sscanf(prefixlengthstring, "%2x\n", &tempint);
 	if ( result != 1 ) {
-		sprintf(resultstring, "error splitting string %s, got only %d items!", prefixlengthstring, result);
+		snprintf(resultstring, NI_MAXHOST, "error splitting string %s, got only %d items!", prefixlengthstring, result);
 		retval = 1;
 		return (retval);
 	};
 	
 	if ( (tempint < 0) || (tempint > 128) ) {
-		sprintf(resultstring, "decimal prefixlength '%d' out of range!", tempint);
+		snprintf(resultstring, NI_MAXHOST, "decimal prefixlength '%d' out of range!", tempint);
 		retval = 1;
 		return (retval);
 	};
@@ -106,7 +106,7 @@ int libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(char *addrstring, char
 	/* convert plain address */
 	result = libifinet6_ifinet6_to_ipv6addrstruct(addrstring, tempstring, ipv6addrp);
 	if ( result != 0 ) {
-		sprintf(resultstring, "%s", tempstring);
+		snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
 		retval = 1;
 		return (retval);
 	};
@@ -136,12 +136,12 @@ int libifinet6_ipv6addrstruct_to_ifinet6(ipv6calc_ipv6addr *ipv6addrp, char *res
 	char tempstring[NI_MAXHOST];
 
 	/* print out array */	
-	sprintf(tempstring, "%08x%08x%08x%08x %02x", (unsigned int) ipv6addr_getdword(ipv6addrp, 0), (unsigned int) ipv6addr_getdword(ipv6addrp, 1), (unsigned int) ipv6addr_getdword(ipv6addrp, 2), (unsigned int) ipv6addr_getdword(ipv6addrp, 3), (*ipv6addrp).scope & IPV6_ADDR_SCOPE_MASK);
+	snprintf(tempstring, sizeof(tempstring), "%08x%08x%08x%08x %02x", (unsigned int) ipv6addr_getdword(ipv6addrp, 0), (unsigned int) ipv6addr_getdword(ipv6addrp, 1), (unsigned int) ipv6addr_getdword(ipv6addrp, 2), (unsigned int) ipv6addr_getdword(ipv6addrp, 3), (*ipv6addrp).scope & IPV6_ADDR_SCOPE_MASK);
 	
 	if ( (*ipv6addrp).flag_prefixuse == 1 ) {
-		sprintf(resultstring, "%s %02x", tempstring, (unsigned int) (*ipv6addrp).prefixlength);
+		snprintf(resultstring, NI_MAXHOST, "%s %02x", tempstring, (unsigned int) (*ipv6addrp).prefixlength);
 	} else {
-		sprintf(resultstring, "%s", tempstring);
+		snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libifinet6) != 0 ) {
