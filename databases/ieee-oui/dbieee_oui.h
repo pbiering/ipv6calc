@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui.h
- * Version       : $Id: dbieee_oui.h,v 1.7 2002/07/17 20:41:48 peter Exp $
- * Generated     : Wed Jul 17 20:49:50 2002
+ * Version       : $Id: dbieee_oui.h,v 1.8 2002/07/30 17:24:00 peter Exp $
+ * Generated     : Tue Jul 30 19:16:17 2002
  * Data copyright: IEEE
  *
  * Information:
@@ -2721,6 +2721,37 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x000AB8, "Cisco Systems", "CISCO" },
 	{ 0x000AB9, "Astera Technologies Corp.", "ASTERA-TECHNOLOGIES" },
 	{ 0x000ABA, "Arcon Technology Limited", "ARCON" },
+	{ 0x000ABB, "Taiwan Secom Co,. Ltd", "TAIWAN-SECOM" },
+	{ 0x000ABC, "Seabridge Ltd.", "SEABRIDGE" },
+	{ 0x000ABD, "PRIVATE", "PRIVATE" },
+	{ 0x000ABE, "OPNET Technologies CO., LTD.", "OPNET-TECHNOLOGIES" },
+	{ 0x000ABF, "HIROTA SS", "HIROTA-SS" },
+	{ 0x000AC0, "Fuyoh Video Industry CO., LTD.", "FUYOH-VIDEO-INDUSTRY" },
+	{ 0x000AC1, "Futuretel", "FUTURETEL" },
+	{ 0x000AC2, "FiberHome Telecommunication Technologies CO.,LTD", "FIBERHOME-TELECOMMUNICATION-TECHNOLOGIES" },
+	{ 0x000AC3, "eM Technics Co., Ltd.", "EM-TECHNICS" },
+	{ 0x000AC4, "Daewoo Teletech Co., Ltd", "DAEWOO-TELETECH" },
+	{ 0x000AC5, "Color Kinetics", "COLOR-KINETICS" },
+	{ 0x000AC6, "PRIVATE", "PRIVATE" },
+	{ 0x000AC7, "Unication Group", "UNICATION-GROUP" },
+	{ 0x000AC8, "ZPSYS CO.,LTD. (Planning&Management)", "ZPSYS-PLANNING-MANAGEMENT" },
+	{ 0x000AC9, "Zambeel Inc", "ZAMBEEL" },
+	{ 0x000ACA, "YOKOYAMA SHOKAI CO.,Ltd.", "YOKOYAMA-SHOKAI" },
+	{ 0x000ACB, "XPAK MSA Group", "XPAK-MSA-GROUP" },
+	{ 0x000ACC, "Winnow Networks, Inc.", "WINNOW-NETWORKS" },
+	{ 0x000ACD, "Sunrich Technology Limited", "SUNRICH" },
+	{ 0x000ACE, "RADIANTECH, INC.", "RADIANTECH" },
+	{ 0x000ACF, "PROVIDEO Multimedia Co. Ltd.", "PROVIDEO-MULTIMEDIA" },
+	{ 0x000AD0, "Niigata Develoment Center, F.I.T. Co., Ltd.", "NIIGATA-DEVELOMENT-CENTER-F-I-T" },
+	{ 0x000AD1, "MWS", "MWS" },
+	{ 0x000AD2, "JEPICO Corporation", "JEPICO" },
+	{ 0x000AD3, "INITECH Co., Ltd", "INITECH" },
+	{ 0x000AD4, "CoreBell Systems Inc.", "COREBELL" },
+	{ 0x000AD5, "Brainchild Electronic Co., Ltd.", "BRAINCHILD" },
+	{ 0x000AD6, "BeamReach Networks", "BEAMREACH-NETWORKS" },
+	{ 0x000AD7, "PRIVATE", "PRIVATE" },
+	{ 0x000AD8, "IPCserv Technology Corp.", "IPCSERV" },
+	{ 0x000AD9, "Sony Ericsson Mobile Communications AB", "SONY-ERICSSON-MOBILE-COMMUNICATION-AB" },
 	{ 0x001000, "CABLE TELEVISION LABORATIES, INC.", "CABLE-TELEVISION-LABORATIES" },
 	{ 0x001001, "MCK COMMUNICATIONS", "MCK-COMMUNICATION" },
 	{ 0x001002, "ACTIA", "ACTIA" },
