@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6calc
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.8 2002/04/10 06:35:59 peter Exp $
+# Version    : $Id: Makefile,v 1.9 2002/04/20 15:48:51 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -11,6 +11,8 @@
 COPTS = -O2 -Wall -g
 
 CFLAGS	= $(COPTS) -I../getopt/ -I../ -I../lib/
+
+GETOBJS = getopt/getopt.o getopt/getopt1.o
 
 CC	= gcc
 
