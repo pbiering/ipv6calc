@@ -1,0 +1,6 @@
+$Id: README,v 1.1 2004/10/30 12:00:01 peter Exp $
+
+IAB database:
+URL: http://standards.ieee.org/regauth/oui/iab.txt
+
+File will be retrieved on-the-fly during "make"
