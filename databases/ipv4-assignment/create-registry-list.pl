@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.17 2005/02/12 14:19:47 peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.18 2005/02/12 16:28:35 peter Exp $
 # Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -21,6 +21,8 @@ if (! -x "/usr/bin/aggregate") {
 
 	exit 1;
 };
+
+my $debug_hinttable = 0;
 
 
 my $OUTFILE = "dbipv4addr_assignment.h";
@@ -343,37 +345,39 @@ print "Aggregate IANA\n";
 print "Aggregate LACNIC\n";
 &proceed_array(\@lacnic, \@lacnic_agg);
 
-# Look for maximum used prefix length
-my ($net, $length);
-for my $entry (@ripencc_agg, @apnic_agg, @iana_agg) {
-	my ($net, $length) = split /\//, $entry;
-	if ($length > $max_prefixlength_not_arin) {
-		$max_prefixlength_not_arin = $length;
+if (1 == 0) {
+	# Look for maximum used prefix length
+	my ($net, $length);
+	for my $entry (@ripencc_agg, @apnic_agg, @iana_agg) {
+		my ($net, $length) = split /\//, $entry;
+		if ($length > $max_prefixlength_not_arin) {
+			$max_prefixlength_not_arin = $length;
+		};
 	};
-};
 
-print "Maximum used prefix length by not ARIN: " . $max_prefixlength_not_arin . "\n";
+	print "Maximum used prefix length by not ARIN: " . $max_prefixlength_not_arin . "\n";
 
-## Run filter of ARIN entries
-print "Run filter on ARIN entries\n";
-# 1. overwrite prefix length and network
-for (my $i = 0; $i < $#arin; $i++) {
-	my ($net, $length) = split /\//, $arin[$i];
-	if ($length > $max_prefixlength_not_arin) {
-		$arin[$i] = &dec_to_ipv4(&ipv4_to_dec($net) & $subnet_powers{$max_prefixlength_not_arin}->{'mask'}) . "\/" . $max_prefixlength_not_arin;
+	## Run filter of ARIN entries
+	print "Run filter on ARIN entries\n";
+	# 1. overwrite prefix length and network
+	for (my $i = 0; $i < $#arin; $i++) {
+		my ($net, $length) = split /\//, $arin[$i];
+		if ($length > $max_prefixlength_not_arin) {
+			$arin[$i] = &dec_to_ipv4(&ipv4_to_dec($net) & $subnet_powers{$max_prefixlength_not_arin}->{'mask'}) . "\/" . $max_prefixlength_not_arin;
+		};
 	};
-};
-# 2. remove duplicates
-my @arin_new;
-push @arin_new, $arin[0];	
-for (my $i = 1; $i < $#arin; $i++) {
-	if ($arin[$i] eq $arin[$i - 1]) {
-		next;
-	} else {
-		push @arin_new, $arin[$i];	
+	# 2. remove duplicates
+	my @arin_new;
+	push @arin_new, $arin[0];	
+	for (my $i = 1; $i < $#arin; $i++) {
+		if ($arin[$i] eq $arin[$i - 1]) {
+			next;
+		} else {
+			push @arin_new, $arin[$i];	
+		};
 	};
+	print "End of filter on ARIN entries\n";
 };
-print "End of filter on ARIN entries\n";
 
 print "Aggregate ARIN (this can take some time...)\n";
 &proceed_array(\@arin, \@arin_agg);
@@ -416,7 +420,9 @@ sub fill_data($$) {
 		my $ipv4_hex = sprintf("%08x", &ipv4_to_dec($ipv4));
 		my $mask_hex = sprintf("%08x", &length_to_dec($length));
 		
-		$data{$ipv4_hex}->{'mask'} = $mask_hex;
+		$data{$ipv4_hex}->{'ipv4'} = &ipv4_to_dec($ipv4);
+		$data{$ipv4_hex}->{'mask'} = &length_to_dec($length);
+		$data{$ipv4_hex}->{'mask_hex'} = $mask_hex;
 		$data{$ipv4_hex}->{'reg'} = $reg;
 	};
 };
@@ -437,13 +443,46 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 
 my $i = 0;
 foreach my $ipv4_hex (sort keys %data) {
-	printf OUT "\t{ 0x%s, 0x%s, \"%s\" },\n", $ipv4_hex, $data{$ipv4_hex}->{'mask'}, $data{$ipv4_hex}->{'reg'};
+	printf OUT "\t{ 0x%s, 0x%s, \"%s\" },\n", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'reg'};
 
-	# Get hint
-	my $octet_leading = substr($ipv4_hex, 0, 2);
-	if (! defined $data_hint{$octet_leading}) {
-		$data_hint{$octet_leading} = $i;
+	printf "ipv4_hex=0x%s, mask_hex=0x%s, reg=\"%s\"", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'reg'} if ($debug_hinttable);
+
+	# Get hint range
+	if (($data{$ipv4_hex}->{'mask'} & 0xff000000) == 0xff000000) {
+		# Mask is between /8 and /32 
+		printf " hint: mask >= /8" if ($debug_hinttable) if ($debug_hinttable);
+		my $octet_leading = substr($ipv4_hex, 0, 2);
+		if (! defined $data_hint{$octet_leading}->{'start'}) {
+			# set start and end
+			$data_hint{$octet_leading}->{'start'} = $i;
+			$data_hint{$octet_leading}->{'end'} = $i;
+			printf " new to: 0x%s\n", $octet_leading if ($debug_hinttable);
+		} else {
+			# extend end
+			$data_hint{$octet_leading}->{'end'} = $i;
+			printf " append to: 0x%s\n", $octet_leading if ($debug_hinttable);
+		};
+	} else {
+		# Mask is between /1 and /7, more work...
+		printf " hint: mask < /8" if ($debug_hinttable);
+		my $count = (($data{$ipv4_hex}->{'mask'} & 0xff000000) >> 24) ^ 0xff;
+		printf " count: %d", $count if ($debug_hinttable);
+		for (my $j = 0; $j <= $count; $j++) {
+			my $octet_leading = sprintf("%02x", ($data{$ipv4_hex}->{'ipv4'} >> 24) +  $j);
+			if (! defined $data_hint{$octet_leading}->{'start'}) {
+				# set start and end
+				$data_hint{$octet_leading}->{'start'} = $i;
+				$data_hint{$octet_leading}->{'end'} = $i;
+				printf " hint: new to 0x%s", $octet_leading if ($debug_hinttable);
+			} else {
+				# extend end
+				$data_hint{$octet_leading}->{'end'} = $i;
+				printf " hint: append to 0x%s", $octet_leading if ($debug_hinttable);
+			};
+		};
+		printf "\n" if ($debug_hinttable);
 	};
+
 	$i++;
 };
 
@@ -458,15 +497,18 @@ static const s_ipv4addr_assignment_hint dbipv4addr_assignment_hint[256] = {
 
 for (my $j = 0; $j < 256; $j++) {
 	my $string = sprintf("%02x", $j);
-	my $value;
+	my $value_start;
+	my $value_end;
 
 	if (defined $data_hint{$string}) {
-		$value = $data_hint{$string};
+		$value_start = $data_hint{$string}->{'start'};
+		$value_end = $data_hint{$string}->{'end'};
 	} else {
-		$value = -1;
+		$value_start = -1;
+		$value_end = -1;
 	};
 
-	printf OUT "\t{ 0x%02x, %d },\n", $j, $value;
+	printf OUT "\t{ 0x%s, %d , %d },\n", $string, $value_start, $value_end;
 };
 
 print OUT qq|
