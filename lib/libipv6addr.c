@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.4 2002/03/27 07:20:51 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.5 2002/03/27 07:21:20 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -500,7 +500,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
 			fprintf(stderr, "%s: Copy string: '%s'\n", DEBUG_function_name, addronlystring);
 		};
-		strncpy(tempstring, addronlystring, sizeof(tempstring));
+		strncpy(tempstring, addronlystring, sizeof(tempstring) - 1);
 	};
 	
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
