@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.8 2004/08/31 20:14:19 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.9 2004/10/30 12:39:59 peter Exp $
  * Copyright  : 2002-2004 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -319,6 +319,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 	int retval = 1, i;
 	uint32_t typeinfo, typeinfo_test;
 	char tempstring[NI_MAXHOST], temp2string[NI_MAXHOST];
+	ipv6calc_macaddr macaddr;
 
 	/* used structures */
 	ipv6calc_ipv6addr ipv6addr;
@@ -495,7 +496,14 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 		       	};
 
 			if ((ipv6addr_getoctett(&ipv6addr, 8) & 0x02) != 0) {
-				retval = libieee_get_short_vendor_string(resultstring, ipv6addr_getoctett(&ipv6addr, 8) ^0x02, ipv6addr_getoctett(&ipv6addr, 9), ipv6addr_getoctett(&ipv6addr, 10) );
+				macaddr.addr[0] = ipv6addr_getoctett(&ipv6addr, 8) ^0x02;
+				macaddr.addr[1] = ipv6addr_getoctett(&ipv6addr, 9);
+				macaddr.addr[2] = ipv6addr_getoctett(&ipv6addr, 10);
+				macaddr.addr[3] = ipv6addr_getoctett(&ipv6addr, 13);
+				macaddr.addr[4] = ipv6addr_getoctett(&ipv6addr, 14);
+				macaddr.addr[5] = ipv6addr_getoctett(&ipv6addr, 15);
+
+				retval = libieee_get_short_vendor_string(resultstring, &macaddr);
 				if (retval != 0) {
 					if (flag_skipunknown != 0) {
 						return (1);
