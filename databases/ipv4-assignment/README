@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2002/04/04 21:50:23 peter Exp $
+$Id: README,v 1.3 2003/06/15 14:27:54 peter Exp $
 
 "aggregate" can be found at
  http://freshmeat.net/projects/aggregate/
@@ -9,6 +9,7 @@ IPv4 assignment databases:
  ftp://ftp.arin.net/pub/stats/arin/arin.%Y%m01
  http://ftp.apnic.net/stats/apnic/apnic-%Y-%m-01
  http://www.iana.org/assignments/ipv4-address-space
+ ftp://lacnic.net/pub/stats/lacnic/lacnic.%Y%m01
 
 Because of unknown license issues, the database files aren't
 included in source tarball (cleanup by "make distclean"), but
