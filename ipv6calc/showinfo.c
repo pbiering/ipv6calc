@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.2 2002/03/18 20:54:01 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.3 2002/03/18 22:06:46 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -55,6 +55,19 @@ static void printout(const char *string) {
 	const char *suffix = "\n";
 	
 	fprintf(stdout, "%s%s%s", prefix, string, suffix);
+};
+
+static void printfooter(const unsigned long formatoptions) {
+	char tempstring[NI_MAXHOST];
+
+	if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
+		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_NAME=%s", PROGRAM_NAME);
+		printout(tempstring);
+		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_VERSION=%s", PROGRAM_VERSION);
+		printout(tempstring);
+		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_COPYRIGHT=\"%s\"", PROGRAM_COPYRIGHT);
+		printout(tempstring);
+	};
 };
 
 /*
@@ -268,14 +281,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long f
 		};
 	};
 END:	
-	if (formatoptions & FORMATOPTION_machinereadable) {
-		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_NAME=%s", PROGRAM_NAME);
-		printout(tempstring);
-		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_VERSION=%s", PROGRAM_VERSION);
-		printout(tempstring);
-		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_COPYRIGHT=\"%s\"", PROGRAM_COPYRIGHT);
-		printout(tempstring);
-	};
+	printfooter(formatoptions);
 	retval = 0;
 	return (retval);
 };
@@ -302,16 +308,18 @@ int showinfo_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const unsigned long fo
 	libipv4addr_ipv4addrstruct_to_string(ipv4addrp, helpstring, 0);
 	
 	if (formatoptions & FORMATOPTION_machinereadable) {
-		sprintf(tempstring, "IPV4=%s", helpstring);
+		snprintf(tempstring, sizeof(tempstring), "IPV4=%s", helpstring);
 		printout(tempstring);
 	
 		if (ipv4addrp->flag_prefixuse == 1) {	
-			sprintf(tempstring, "PREFIXLENGTH=%d", ipv4addrp->prefixlength);
+			snprintf(tempstring, sizeof(tempstring), "PREFIXLENGTH=%d", ipv4addrp->prefixlength);
 			printout(tempstring);
 		};
 	} else {
 		fprintf(stderr, "This printout is currently not supported\n");
 	};	
+
+	printfooter(formatoptions);
 	retval = 0;
 	return (retval);
 };
