@@ -1,12 +1,11 @@
 #!/bin/sh
 #
-# Testfile for ipv6calc
+# Project    : ipv6calc
+# File       : test_ipv6calc.sh
+# Version    : $Id: test_ipv6calc.sh,v 1.2 2002/02/18 22:50:40 peter Exp $
+# Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
 #
-# Version:     $Id: test_ipv6calc.sh,v 1.1 2001/10/07 14:47:40 peter Exp $
-#
-# Author:      Peter Bieringer <pb@bieringer.de>
-#
-# Best view with tabsize 4
+# Best view with tabsize 4 (historic...)
 #
 
 
@@ -56,6 +55,8 @@ cat <<END
 --addr_to_uncompressed --printprefix 3ffe:400:100:f101::1/64		=3ffe:400:100:f101
 --addr_to_uncompressed --printprefix 3ffe:400:100:f101::1/65		=3ffe:400:100:f101:0
 --eui64_to_privacy 0123456789abcdef 0123456789abcdef				=4462bdea8654776d 486072ff7074945e
+--addr_to_ip6arpa 3ffe::1/64						=0.0.0.0.0.0.0.0.0.0.0.0.e.f.f.3.ip6.arpa
+-a --uppercase 3ffe::1/64						=0.0.0.0.0.0.0.0.0.0.0.0.E.F.F.3.IP6.ARPA
 END
 }
 

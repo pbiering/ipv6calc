@@ -1,13 +1,13 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.2 2001/12/18 11:22:56 peter Exp $
- * Copyright  : 2001 by Peter Bieringer <pb@bieringer.de>
+ * Version    : $Id: ipv6calc.c,v 1.3 2002/02/18 22:50:40 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
  * 
  * Information:
  *  Central program (main)
  *  This program print out different formats of an given IPv6 address
- * 
+   
  */
 
 #include <stdio.h>
@@ -65,7 +65,7 @@ int main(int argc,char *argv[]) {
 	unsigned long int command = 0;
 
 	/* defined options */
-	char *shortopts = "vh?rd:iul";
+	char *shortopts = "vh?rad:iul";
 
     struct option longopts[] = {
 		{"version", 0, 0, 'v'},
@@ -74,7 +74,9 @@ int main(int argc,char *argv[]) {
 		
 		/* command options */
 		{"addr2ip6_int", 0, 0, CMD_addr_to_ip6int },
+		{"addr2ip6_arpa", 0, 0, CMD_addr_to_ip6arpa },
 		{"addr_to_ip6int", 0, 0, CMD_addr_to_ip6int },
+		{"addr_to_ip6arpa", 0, 0, CMD_addr_to_ip6arpa },
 		{"addr2compaddr", 0, 0, CMD_addr_to_compressed },
 		{"addr_to_compressed", 0, 0, CMD_addr_to_compressed },
 		{"addr2uncompaddr", 0, 0, CMD_addr_to_uncompressed },
@@ -132,6 +134,10 @@ int main(int argc,char *argv[]) {
 			case 'r':
 			case CMD_addr_to_ip6int:
 				command |= CMD_addr_to_ip6int;
+				break;
+			case 'a':
+			case CMD_addr_to_ip6arpa:
+				command |= CMD_addr_to_ip6arpa;
 				break;
 			case CMD_addr_to_compressed:
 				command |= CMD_addr_to_compressed;
@@ -221,6 +227,7 @@ int main(int argc,char *argv[]) {
 	if (command & CMD_MAJOR_MASK) {	
 		switch (command & CMD_MAJOR_MASK) {
 			case CMD_addr_to_ip6int:
+			case CMD_addr_to_ip6arpa:
 				if ((argc < 1) || (command & CMD_printhelp)) {
 					if ((argc < 1) && ! (command & CMD_printhelp)) {
 						fprintf(stderr, "missing argument!\n\n");
@@ -228,7 +235,7 @@ int main(int argc,char *argv[]) {
 					addr_to_ip6int_printhelplong();
 					exit(1);
 				};
-				retval = addr_to_ip6int(argv[0], resultstring);
+				retval = addr_to_ip6int(argv[0], resultstring, command);
 				fprintf(stdout, "%s\n", resultstring);
 				break;
 				
