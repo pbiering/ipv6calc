@@ -1,12 +1,18 @@
 /*
- *  $Id: ChangeLog,v 1.68 2003/04/04 20:23:31 peter Exp $ 
+ *  $Id: ChangeLog,v 1.69 2003/06/15 14:30:41 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20030615/PB
+	add support for new registry LACNIC
+	add new program "ipv6logstats" to create historic address distribution statistics of webservers
+	 for use e.g. with gnuplot (add an example cmd script also)
+	remove autodetection code for EUI-64 (can misinterpret a proper IPv6 address)
+
 20030404/PB
-	add new output format "octal" as requested from Lionel Elie Mamane <lionel at mamane dotlu>
+	add new output format "octal" as requested from Lionel Elie Mamane <lionel at mamane dot lu>
 	 to create proper input for tinydns
 
 20030202/PB:
