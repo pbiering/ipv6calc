@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.7 2003/06/27 20:34:27 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.8 2003/06/27 20:38:08 peter Exp $
  * Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -373,11 +373,11 @@ static void lineparser(void) {
 	/* print result */
 	if (opt_printdirection == 0) {
 		/* print in rows */
-		printf("%-20s %d.%d\n", "#Version", STATS_VERSION_MAJOR, STATS_VERSION_MINOR);
+		printf("%-20s %d.%d\n", "*Version", STATS_VERSION_MAJOR, STATS_VERSION_MINOR);
 
 		/* print version number */
 		if (strlen(opt_token) > 0) {
-			printf("%-20s %s\n", "#Token", opt_token);
+			printf("%-20s %s\n", "*Token", opt_token);
 		};
 		for (i = 0; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
 			printf("%-20s %lu\n", ipv6logstats_statentries[i].token, ipv6logstats_statentries[i].counter);
