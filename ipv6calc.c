@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.8 2002/02/27 23:07:15 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.9 2002/03/01 23:26:45 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -16,20 +16,27 @@
 #include <unistd.h> 
 #include "ipv6calc.h"
 #include "libipv6calc.h"
+#include "ipv6calctypes.h"
 
 #include "addr_to_ip6int.h"
-#include "addr_to_bitstring.h"
 #include "addr_to_compressed.h"
 #include "addr_to_uncompressed.h"
 #include "addr_to_fulluncompressed.h"
 #include "addr_to_ifinet6.h"
 #include "addr_to_base85.h"
-#include "base85_to_addr.h"
-#include "ifinet6_to_compressed.h"
 #include "eui64_to_privacy.h"
 #include "mac_to_eui64.h"
 #include "ipv4_to_6to4addr.h"
 #include "showinfo.h"
+
+#include "librfc1924.h"
+#include "base85_to_addr.h" /* going obsolete */
+
+#include "libifinet6.h"
+#include "ifinet6_to_compressed.h" /* going obsolete */
+
+#include "librfc2874.h"
+#include "addr_to_bitstring.h" /* going obsolete */
 
 long int ipv6calc_debug = 0;
 
@@ -78,10 +85,13 @@ void printhelp() {
 #define DEBUG_function_name "ipv6calc/main"
 int main(int argc,char *argv[]) {
 	char resultstring[NI_MAXHOST] = "";
+	char tempstring[NI_MAXHOST] = "";
 	int retval = 1, i, lop;
 	unsigned long int command = 0;
 	unsigned short bit_start = 0, bit_end = 0;
 	ipv6calc_ipv6addr ipv6addr;
+	int inputtype = -1, outputtype = -1;
+	int flag_typesused = 0;
 
 	/* define short options */
 	char *shortopts = "vh?rmabd:iul";
@@ -135,6 +145,12 @@ int main(int argc,char *argv[]) {
 		{ "printstart",  1, 0, CMD_printstart },
 		{ "printend",    1, 0, CMD_printend },
 
+		/* type options */
+		{ "inputtype" , 1, 0, CMD_inputtype  },
+		{ "intype"    , 1, 0, CMD_inputtype  },
+		{ "outputtype", 1, 0, CMD_outputtype },
+		{ "outtype"   , 1, 0, CMD_outputtype },
+
 		{NULL, 0, 0, 0}
 	};                
 
@@ -163,17 +179,26 @@ int main(int argc,char *argv[]) {
 			/* command options */
 			case 'r':
 			case CMD_addr_to_ip6int:
-				command |= CMD_addr_to_ip6int;
+				/* backward compatibility */
+				inputtype  = FORMAT_ipv6addr;
+				outputtype = FORMAT_revnibbles_int;
+				flag_typesused = 1;
 				break;
 
 			case 'a':
 			case CMD_addr_to_ip6arpa:
-				command |= CMD_addr_to_ip6arpa;
+				/* backward compatibility */
+				inputtype  = FORMAT_ipv6addr;
+				outputtype = FORMAT_revnibbles_arpa;
+				flag_typesused = 1;
 				break;
 
 			case 'b':
 			case CMD_addr_to_bitstring:
-				command |= CMD_addr_to_bitstring;
+				/* backward compatibility */
+				inputtype  = FORMAT_ipv6addr;
+				outputtype = FORMAT_bitstring;
+				flag_typesused = 1;
 				break;
 				
 			case CMD_addr_to_compressed:
@@ -185,7 +210,10 @@ int main(int argc,char *argv[]) {
 				break;
 				
 			case CMD_addr_to_base85:
-				command |= CMD_addr_to_base85;
+				/* backward compatibility */
+				inputtype  = FORMAT_ipv6addr;
+				outputtype = FORMAT_base85;
+				flag_typesused = 1;
 				break;
 				
 			case CMD_base85_to_addr:
@@ -201,7 +229,10 @@ int main(int argc,char *argv[]) {
 				break;
 				
 			case CMD_addr_to_ifinet6:
-				command |= CMD_addr_to_ifinet6;
+				/* backward compatibility */
+				inputtype  = FORMAT_ipv6addr;
+				outputtype = FORMAT_ifinet6;
+				flag_typesused = 1;
 				break;
 
 			case CMD_ifinet6_to_compressed:
@@ -276,6 +307,33 @@ int main(int argc,char *argv[]) {
 					exit (1);
 				};
 				break;
+
+			/* type options */
+			case CMD_inputtype:
+				if (ipv6calc_debug) {
+					fprintf(stderr, "%s: Got input type: %s\n", DEBUG_function_name, optarg);
+				};
+
+				inputtype = ipv6calctypes_checktype(optarg);
+				
+				if (inputtype < 0) {
+					fprintf(stderr, " Input type is unknown: %s\n", optarg);
+					exit (1);
+				};
+				flag_typesused = 1;
+				break;	
+				
+			case CMD_outputtype:
+				if (ipv6calc_debug) {
+					fprintf(stderr, "%s: Got output type: %s\n", DEBUG_function_name, optarg);
+				};
+				outputtype = ipv6calctypes_checktype(optarg);
+				if (outputtype < 0) {
+					fprintf(stderr, " Output type is unknown: %s\n", optarg);
+					exit (1);
+				};
+				flag_typesused = 1;
+				break;	
 				
 			default:
 				fprintf(stderr, "Usage: (see '%s --command -?' for more help)\n", PROGRAM_NAME);
@@ -288,7 +346,7 @@ int main(int argc,char *argv[]) {
 
 /*	fprintf(stderr, "Command value: %lx\n", command); */
 	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "Debug value: %lx\n", ipv6calc_debug); 
+		fprintf(stderr, "Debug value: %lx  command: %lx\n", ipv6calc_debug, command); 
 	};
 	
 	/* do work depending on selection */
@@ -297,8 +355,15 @@ int main(int argc,char *argv[]) {
 		exit(1);
 	};
 
-	if (command & CMD_MAJOR_MASK) {	
-		if (command & CMD_MAJOR_ADDR_INPUT) {
+	if ( ! ( (command & CMD_MAJOR_MASK) || (flag_typesused == 1) ) ) {	
+		if (command & CMD_printhelp) {
+			printhelp();
+		};
+		exit (1);
+	};
+
+	/* <-- */
+		if ( (command & CMD_MAJOR_ADDR_INPUT) || (inputtype == FORMAT_ipv6addr) ) {
 			/* normal IPv6 address needed as argument */
 			if (argc >= 1) {
 				if (ipv6calc_debug) {
@@ -410,25 +475,99 @@ int main(int argc,char *argv[]) {
 				};
 			};
 		};
-		
-		switch (command & CMD_MAJOR_MASK) {
-			case CMD_addr_to_ip6int:
-			case CMD_addr_to_ip6arpa:
-				if ((argc < 1) || (command & CMD_printhelp)) {
-					addr_to_ip6int_printhelplong();
-					exit(1);
-				};
-				retval = addr_to_ip6int(&ipv6addr, resultstring, command);
-				break;
 
-			case CMD_addr_to_bitstring:
-				if ((argc < 1) || (command & CMD_printhelp)) {
-					addr_to_bitstring_printhelplong();
-					exit(1);
-				};
-				retval = addr_to_bitstring(&ipv6addr, resultstring, command);
-				break;
+	/* input type */
+	switch (inputtype) {
+		case -1:
+			/* old implementation */
+			goto OUTPUT_type;
+			break;
+
+		case FORMAT_ipv6addr:
+			/* old implementation still in use */
+			goto OUTPUT_type;
+			break;
+
+		case FORMAT_base85:
+			retval = base85_to_ipv6addrstruct(argv[0], resultstring, &ipv6addr);
+			break;
+
+		case FORMAT_ifinet6:
+			retval = libifinet6_ifinet6_to_ipv6addrstruct(argv[0], resultstring, &ipv6addr);
+			break;
+			
+		default:
+			fprintf(stderr, " Inputtype isn't implemented\n");
+			exit (1);
+			break;
+	};
+	
+	if (ipv6calc_debug) {
+		fprintf(stderr, "%s: result of 'inputtype': %d\n", DEBUG_function_name, retval);
+	};
+
+	if (retval != 0) {
+		fprintf(stderr, "%s\n", resultstring);
+		exit (1);
+	};
+
+OUTPUT_type: /* temporary solutions */
+
+	if ( ipv6calc_debug & DEBUG_librfc2874 ) {
+		retval = ipv6addrstruct_to_uncompaddr(&ipv6addr, tempstring);
+		fprintf(stderr, "%s: got address '%s'\n",  DEBUG_function_name, tempstring);
+	};
+	
+	/* output type */
+	switch (outputtype) {
+		case -1:
+			/* old implementation */
+			break;
+
+		case FORMAT_base85:
+			retval = addr_to_base85(&ipv6addr, resultstring);
+			break;
 				
+		case FORMAT_bitstring:
+			if (ipv6calc_debug) {
+				fprintf(stderr, "%s: Call 'librfc2874_addr_to_bitstring'\n", DEBUG_function_name);
+			};
+			retval = librfc2874_addr_to_bitstring(&ipv6addr, resultstring, command);
+			break;
+				
+		case FORMAT_revnibbles_int:
+		case FORMAT_revnibbles_arpa:
+			/* temporary workaround for different formats */
+			switch (outputtype) {
+				case FORMAT_revnibbles_int:
+					command |= CMD_addr_to_ip6int;
+					break;
+				case FORMAT_revnibbles_arpa:
+					command |= CMD_addr_to_ip6arpa;
+					break;
+			};
+			retval = addr_to_ip6int(&ipv6addr, resultstring, command);
+			break;
+			
+		case FORMAT_ifinet6:
+			if ((argc < 1) || (command & CMD_printhelp)) {
+				addr_to_ifinet6_printhelplong();
+				exit(1);
+			};
+			retval = addr_to_ifinet6(&ipv6addr, resultstring);
+			break;
+
+		default:
+			fprintf(stderr, " Outputtype isn't implemented\n");
+			exit (1);
+			break;
+	};
+	if (outputtype != -1 ) {
+		goto RESULT_print;
+	};
+
+	/* <- old behavior */	
+		switch (command & CMD_MAJOR_MASK) {
 			case CMD_addr_to_compressed:
 				if ((argc < 1) || (command & CMD_printhelp)) {
 					addr_to_compressed_printhelplong();
@@ -453,14 +592,6 @@ int main(int argc,char *argv[]) {
 				retval = addr_to_fulluncompressed(&ipv6addr, resultstring, command);
 				break;
 				
-			case CMD_addr_to_base85:
-				if ((argc < 1) || (command & CMD_printhelp)) {
-					addr_to_base85_printhelplong();
-					exit(1);
-				};
-				retval = addr_to_base85(&ipv6addr, resultstring);
-				break;
-				
 			case CMD_base85_to_addr:
 				if ((argc < 1) || (command & CMD_printhelp)) {
 					if ((argc < 1) && ! (command & CMD_printhelp)) {
@@ -481,14 +612,6 @@ int main(int argc,char *argv[]) {
 					exit(1);
 				};
 				retval = mac_to_eui64(argv[0], resultstring);
-				break;
-				
-			case CMD_addr_to_ifinet6:
-				if ((argc < 1) || (command & CMD_printhelp)) {
-					addr_to_ifinet6_printhelplong();
-					exit(1);
-				};
-				retval = addr_to_ifinet6(&ipv6addr, resultstring);
 				break;
 				
 			case CMD_ifinet6_to_compressed:
@@ -538,19 +661,13 @@ int main(int argc,char *argv[]) {
 				retval = showinfo(&ipv6addr, command);
 				break;
 		}; /* end switch */
-
+RESULT_print:
 		/* print result */
 		if (retval == 0) {
 			fprintf(stdout, "%s\n", resultstring);
 		} else {
 			fprintf(stderr, "%s\n", resultstring);
 		};
-	} else {
-		if (command & CMD_printhelp) {
-			printhelp();
-		};
-	}; /* end else */
-	
 	exit(retval);
 };
 #undef DEBUG_function_name

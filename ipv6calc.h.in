@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.h[.in]
- * Version    : $Id: ipv6calc.h.in,v 1.7 2002/02/27 23:07:15 peter Exp $
+ * Version    : $Id: ipv6calc.h.in,v 1.8 2002/03/01 23:26:45 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -67,6 +67,9 @@
 #define CMD_addr_to_bitstring		0x0080000l
 #define CMD_showinfo			0x0100000l
 
+#define CMD_inputtype			0x0200000l
+#define CMD_outputtype			0x0400000l
+
 #define CMD_ipv4_to_6to4addr		0x0800000l
 #define CMD_base85_to_addr		0x1000000l
 #define CMD_mac_to_eui64		0x2000000l
@@ -98,5 +101,6 @@
 
 /* global debug value */
 extern long int ipv6calc_debug;
+
 
 #endif
