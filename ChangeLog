@@ -1,10 +1,14 @@
 /*
- *  $Id: ChangeLog,v 1.51 2002/04/20 17:24:51 peter Exp $ 
+ *  $Id: ChangeLog,v 1.52 2002/04/21 11:23:05 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+200204021/PB:
+	review inttypes definitions, create new header file
+	minor fixes to suppress compiler warnings
+
 200204020/PB:
 	fix defines for FreeBSD and OpenBSD
 	minor fixes
