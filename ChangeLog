@@ -1,10 +1,14 @@
 /*
- *  $Id: ChangeLog,v 1.7 2002/01/20 09:44:15 peter Exp $ 
+ *  $Id: ChangeLog,v 1.8 2002/01/21 08:16:15 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb@bieringer.de>
 --------------------------------------------------------------------
+20020121/PB:
+	update "COPYING" to current GPLv2, add "LICENSE" with some comments to make Debian people happy
+        add both in spec file
+
 20020120/PB:
 	showinfo now understands "solicited-node link-local multicast", "ISATAP", SLA on 6bone addresses
 	input now understands also "ISATAP" addresses

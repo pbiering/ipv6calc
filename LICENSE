@@ -1,0 +1,20 @@
+0. The program "ipv6calc" is produced and copyright 2001-2002 by Peter Bieringer <pb@bieringer.de>, except
+   * some codelines regarding address type resolving, which were directly copied from Linux kernel source (also GPL license)
+	related files are:
+	- libipv6addr.c
+	- libipv6addr.h
+
+   * code for base85 en-/decoding, which was copied from ftp://munnari.oz.au/ipv6imp/rfc1924-encode.c (has neither a license nor an author specified...file was published at or before 09. April 1996)
+	related file is
+	- librfc1924.c
+ 
+   -> see directory "samplecode" in the source file for original versions
+
+1. The program "ipv6calc" is distributed under the GNU GPL version 2
+    (see COPYING file for more)
+
+2. I allow to link OpenSSL library used by SSLeay license
+    (md5 hash function is used from this libary)
+
+
+2002-01-21, Peter Bieringer <pb@bieringer.de>
