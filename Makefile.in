@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.32 2004/10/30 12:58:40 peter Exp $
+# Version    : $Id: Makefile.in,v 1.33 2004/11/01 13:25:01 peter Exp $
 # Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -16,7 +16,7 @@ CC	= gcc
 
 GETOBJS	= getopt/getopt.o getopt/getopt1.o md5/md5.o
 
-all:		ipv6calc ipv6logconv ipv6logstats
+all:		md5-make getopt-make ipv6calc ipv6logconv ipv6logstats
 
 .c.o:
 		$(CC) $(CFLAGS) -c $<
@@ -31,7 +31,7 @@ ipv6calc:	getopt-make lib-make ipv6calc-make ipv6calcweb-make
 distclean:
 		make clean
 		rm -f config.cache config.status config.log
-		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib databases/ieee-oui databases/ipv4-assignment; do \
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt databases/ieee-oui databases/ipv4-assignment; do \
 			pushd $$dir && make distclean; popd; \
 		done
 
@@ -41,12 +41,12 @@ autoclean:
 		rm -f version.h
 		rm -f contrib/ipv6calc.spec
 		rm config.h
-		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do \
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt; do \
 			pushd $$dir && make autoclean; popd;\
 		done
 
 clean:
-		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do \
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt; do \
 			pushd $$dir && make clean; popd; \
 		done
 
@@ -55,7 +55,7 @@ install:
 		make installonly
 
 installonly:
-		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do \
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt; do \
 			pushd $$dir && make install; popd; \
 		done
 
