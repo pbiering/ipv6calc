@@ -1,9 +1,12 @@
-$Id: README,v 1.1 2002/02/23 11:32:43 peter Exp $
+$Id: README,v 1.2 2002/02/26 19:38:09 peter Exp $
 
 getopt was added because of OpenBSD don't support this out-of-the box
 
 Credits to Vladimir Kotal <vlada at openbsd dot cz> for the patch
 
-2002-02-23, Peter Bieringer
+Original code is located at
+ ftp://ftp.FreeBSD.org/pub/FreeBSD/ports/local-distfiles/obrien/libgnugetopt-1.1.tar.gz
+and a local copy is at
+ ../samplecode/getopt/
 
-
+	Peter Bieringer
