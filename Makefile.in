@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.33 2004/11/01 13:25:01 peter Exp $
+# Version    : $Id: Makefile.in,v 1.34 2004/12/05 10:40:53 peter Exp $
 # Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -32,7 +32,10 @@ distclean:
 		make clean
 		rm -f config.cache config.status config.log
 		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt databases/ieee-oui databases/ipv4-assignment; do \
-			pushd $$dir && make distclean; popd; \
+			ocwd=`pwd`; \
+			cd $$dir; \
+			make $@ ; \
+			cd $$ocwd ; \
 		done
 
 autoclean:
@@ -42,12 +45,18 @@ autoclean:
 		rm -f contrib/ipv6calc.spec
 		rm config.h
 		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt; do \
-			pushd $$dir && make autoclean; popd;\
+			ocwd=`pwd`; \
+			cd $$dir; \
+			make $@ ; \
+			cd $$ocwd ; \
 		done
 
 clean:
 		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt; do \
-			pushd $$dir && make clean; popd; \
+			ocwd=`pwd`; \
+			cd $$dir; \
+			make $@ ; \
+			cd $$ocwd ; \
 		done
 
 install:
@@ -56,7 +65,10 @@ install:
 
 installonly:
 		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt; do \
-			pushd $$dir && make install; popd; \
+			ocwd=`pwd`; \
+			cd $$dir; \
+			make install; \
+			cd $$ocwd ; \
 		done
 
 getopt-make:
@@ -91,15 +103,24 @@ db-ipv4-assignment-make:
 
 update:
 		for dir in databases/ieee-oui databases/ieee-iab databases/ipv4-assignment; do \
-			pushd $$dir && make update; popd; \
+			ocwd=`pwd`; \
+			cd $$dir; \
+			make $@ ; \
+			cd $$ocwd ; \
 		done
 
 static:		ipv6logconv-make ipv6logstats-make ipv6calc-make	
 		for dir in ipv6logconv ipv6logstats ipv6calc; do \
-			pushd $$dir && make static; popd; \
+			ocwd=`pwd`; \
+			cd $$dir; \
+			make $@ ; \
+			cd $$ocwd ; \
 		done
 
 test:
 		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do \
-			pushd $$dir && make test; popd; \
+			ocwd=`pwd`; \
+			cd $$dir; \
+			make $@ ; \
+			cd $$ocwd ; \
 		done
