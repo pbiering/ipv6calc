@@ -1,16 +1,16 @@
 /*
- * librfc3041: Function libary for host identifier
- *              privacy extension defined in RFC 3041
+ * Project    : ipv6calc
+ * File       : librfc3041.c
+ * Version    : $Id: librfc3041.c,v 1.2 2002/02/25 21:18:51 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
- * Version:		$Id: librfc3041.c,v 1.1 2001/10/07 14:47:40 peter Exp $
- * 
- * Author:		Peter Bieringer <pb@bieringer.de>
+ * Information:
+ *  Function libary for host identifier privacy extension defined in RFC 3041
  *
- * Credits to YOSHIFUJI Hideaki <yoshfuji@linux-ipv6.org>
+ * Credits to YOSHIFUJI Hideaki <yoshfuji at linux-ipv6 dot org>
  *  for hints and sample code in Perl:
  *  % perl -e '@a=(0x01,0x23,0x45,0x67,0x89,0xab,0xcd,0xef); foreach (@a){ print pack("C",$_); } foreach (@a){ print pack("C",$_); }' | md5sum 
  *  4662bdea8654776d486072ff7074945e
- *
  */
 
 #include <stdio.h>

@@ -1,14 +1,14 @@
 /*
- * librfc1924: Function libary for conversions
- *               defined in RFC 1924
+ * Project    : ipv6calc
+ * File       : librfc1924.c
+ * Version    : $Id: librfc1924.c,v 1.3 2002/02/25 21:18:51 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
- * Version:		$Id: librfc1924.c,v 1.2 2001/10/09 07:03:10 peter Exp $
- * 
- * Author:		Peter Bieringer <pb@bieringer.de>
+ * Information:
+ *  Function libary for conversions defined in RFC 1924
  *
  * Based on ftp://munnari.oz.au/ipv6imp/rfc1924-encode.c
- *  by * Robert Elz <kre@munnari.OZ.AU>
- *
+ *  by * Robert Elz <kre at munnari dot OZ dot AU>
  */
 
 #include <stdio.h>

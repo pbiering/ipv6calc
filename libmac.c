@@ -1,17 +1,18 @@
 /*
- * libmac: Function libary for conversions
- *          of MAC addresses
- * 
- * Version:		$Id: libmac.c,v 1.1 2001/10/07 14:47:40 peter Exp $
- * 
- * Author:		Peter Bieringer <pb@bieringer.de>
+ * Project    : ipv6calc
+ * File       : libmac.c
+ * Version    : $Id: libmac.c,v 1.2 2002/02/25 21:18:51 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
+ * Information:
+ *  Function libary for conversions of MAC addresses
  */
 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include "ipv6calc.h"
+#include "libmac.h"
 
 static char ChSet[] = "0123456789abcdefABCDEF:";
 

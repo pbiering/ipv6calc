@@ -1,24 +1,26 @@
 /*
- * base85_to_addr:
+ * Project    : ipv6calc
+ * File       : base85_to_addr.c
+ * Version    : $Id: base85_to_addr.c,v 1.2 2002/02/25 21:18:50 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+ *
+ * Information:
  *  A function to format a given base85 formatted IPv6 address to a
  *   normal one (reverse RFC 1924)
- *
- * Version:		$Id: base85_to_addr.c,v 1.1 2001/10/07 14:47:40 peter Exp $
- * 
- * Author:		Peter Bieringer <pb@bieringer.de>
- *
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "ipv6calc.h"
+#include "libipv6calc.h"
 #include "librfc1924.h"
+#include "base85_to_addr.h"
 
-void base85_to_addr_printhelp() {
-	fprintf(stderr, " %s --base85_to_addr base85_formatted_ipv6addr\n", PROGRAM_NAME);
+void base85_to_addr_printhelp(void) {
+	fprintf(stderr, " %s --base85_to_addr <base85_formatted_ipv6addr>\n", PROGRAM_NAME);
 };
 
-void base85_to_addr_printhelplong() {
+void base85_to_addr_printhelplong(void) {
 	base85_to_addr_printhelp();
 	fprintf(stderr, "  Converts base85 formatted IPv6 address to a normal one (reverse RFC 1924)\n");
 	fprintf(stderr, "   e.g. 4)+k&C#VzJ4br>0wv%%Yp -> 1080:0:0:0:8:800:200c:417a\n");

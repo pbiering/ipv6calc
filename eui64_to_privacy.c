@@ -1,12 +1,12 @@
 /*
- * eui64_to_privacy:
+ * Project    : ipv6calc
+ * File       : eui_to_privacy.c
+ * Version    : $Id: eui64_to_privacy.c,v 1.2 2002/02/25 21:18:50 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+ * 
+ * Information:
  *  A function to calculate a new host identifier for privacy
  *   defined in (RFC 3041)
- *
- * Version:		$Id: eui64_to_privacy.c,v 1.1 2001/10/07 14:47:40 peter Exp $
- * 
- * Author:		Peter Bieringer <pb@bieringer.de>
- *
  */
 
 #include <stdio.h>
@@ -15,13 +15,16 @@
 #include "ipv6calc.h"
 #include "librfc3041.h"
 #include "libipv6addr.h"
+#include "libipv6calc.h"
+#include "libeui64.h"
+#include "eui64_to_privacy.h"
 
-void eui64_to_privacy_printhelp() {
-	fprintf(stderr, " %s --eui64_to_privacy eui64 token\n", PROGRAM_NAME);
+void eui64_to_privacy_printhelp(void) {
+	fprintf(stderr, " %s --eui64_to_privacy <eui64 token>\n", PROGRAM_NAME);
 };
 
-void eui64_to_privacy_printhelplong() {
-	addr_to_base85_printhelp();
+void eui64_to_privacy_printhelplong(void) {
+	eui64_to_privacy_printhelp();
 	fprintf(stderr, "  Calculate a new host identifier from a given one and a token (RFC 3041)\n");
 	fprintf(stderr, "   also the next token (for history) is displayed\n");
 	fprintf(stderr, "   --eui64_to_privacy 0123456789abcdef 0123456789abcdef -> 4462bdea8654776d 486072ff7074945e\n");

@@ -1,11 +1,11 @@
 /*
- * librfc1884: Function libary for conversions
- *              defined in RFC 1884
+ * Project    : ipv6calc
+ * File       : lib1884.c
+ * Version    : $Id: librfc1884.c,v 1.2 2002/02/25 21:18:51 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
- * Version:		$Id: librfc1884.c,v 1.1 2001/10/07 14:47:40 peter Exp $
- * 
- * Author:		Peter Bieringer <pb@bieringer.de>
- *
+ * Information:
+ * Function libary for conversions defined in RFC 1884
  */
 
 #include <stdio.h>

@@ -1,20 +1,23 @@
 /*
- * mac_to_eui64:
- *  A function to format a given MAC address to a
- *   EUI-64 identifier
+ * Project    : ipv6calc
+ * File       : mac_to_eui64.c
+ * Version    : $Id: mac_to_eui64.c,v 1.2 2002/02/25 21:18:51 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
- * Version:		$Id: mac_to_eui64.c,v 1.1 2001/10/07 14:47:40 peter Exp $
- * 
- * Author:		Peter Bieringer <pb@bieringer.de>
- *
+ * Information:
+ *  A function to format a given MAC address to a EUI-64 identifier
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "ipv6calc.h"
+#include "libipv6calc.h"
+#include "libmac.h"
+#include "libeui64.h"
+#include "mac_to_eui64.h"
 
 void mac_to_eui64_printhelp() {
-	fprintf(stderr, " %s --mac_to_eui64 MAC_address\n", PROGRAM_NAME);
+	fprintf(stderr, " %s --mac_to_eui64 <MAC_address>\n", PROGRAM_NAME);
 };
 
 void mac_to_eui64_printhelplong() {

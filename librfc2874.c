@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.c
- * Version    : $Id: librfc2874.c,v 1.2 2002/02/23 11:07:44 peter Exp $
- * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
+ * Version    : $Id: librfc2874.c,v 1.3 2002/02/25 21:18:51 peter Exp $
+ * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  RFC 2874 conform addresses (A6/DNAME) bitstring labels
@@ -14,6 +14,8 @@
 
 #include "ipv6calc.h"
 #include "libipv6addr.h"
+#include "libipv6calc.h"
+#include "librfc2874.h"
 
 
 /*
@@ -27,7 +29,7 @@
 int librfc2874_addr_to_bitstring(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, long int command) {
 	int retval = 1, result;
 	unsigned int nibble;
-	int noctett, nbit, nnibble, prefixlength;
+	int noctett, nbit, nnibble, prefixlength, bit_start, bit_end;
 	char tempstring[NI_MAXHOST];
 
 	if ( ipv6calc_debug & DEBUG_librfc2874 ) {
@@ -35,42 +37,34 @@ int librfc2874_addr_to_bitstring(ipv6calc_ipv6addr *ipv6addrp, char *resultstrin
 		fprintf(stderr, "%s: got address '%s'\n",  DEBUG_function_name, tempstring);
 	};
 
-	/* mask bits if selected */
-	if ( (*ipv6addrp).flag_prefixuse == 1 ) {
-		/* check for supported prefix length */
-		if ((*ipv6addrp).prefixlength & 0x03) {
-			sprintf(resultstring, "Prefix length not dividable by 4 aren't supported because of non unique representation");
+	if ( (*ipv6addrp).flag_startend_use != 0 ) {
+		/* check start and end */
+		if ( ((*ipv6addrp).bit_start - 1) & 0x03 ) {
+			sprintf(resultstring, "Start bit number '%d' not dividable by 4 aren't supported because of non unique representation", ((*ipv6addrp).bit_start));
 			retval = 1;
 			return (retval);
 		};
-		
-		if (command & CMD_printsuffix) {
-			ipv6addrstruct_masksuffix(ipv6addrp);
-		} else {
-			ipv6addrstruct_maskprefix(ipv6addrp);
+		if ( (*ipv6addrp).bit_end & 0x03 ) {
+			sprintf(resultstring, "End bit number '%d' not dividable by 4 aren't supported because of non unique representation", (*ipv6addrp).bit_end);
+			retval = 1;
+			return (retval);
 		};
+
+		bit_start = (*ipv6addrp).bit_start;
+		bit_end = (*ipv6addrp).bit_end;
+	} else {
+		bit_start = 1;
+		bit_end = 128;
+	};
+
+	if ( ipv6calc_debug & DEBUG_addr_to_bitstring ) {
+		fprintf(stderr, "%s: print from start bit to end bit: %d - %d\n", DEBUG_function_name, bit_start, bit_end);
 	};
 
 	/* print out hex string format */
 	/* 127 is lowest bit, 0 is highest bit */
 	sprintf(resultstring, "%s", "");
-	for (nbit = 0; nbit <= 127; nbit = nbit + 4) {
-		if ( (*ipv6addrp).flag_prefixuse == 1 ) {
-			if (command & CMD_printsuffix) {
-				/* must test for prefix length match */
-				if ( (nbit + 3) < (*ipv6addrp).prefixlength ) {
-					/* skip nibble */
-					continue;
-		   		};
-			} else {
-				/* must test for prefix length match */
-				if ( (nbit + 1) > (*ipv6addrp).prefixlength ) {
-					/* skip nibble */
-					continue;
-		   		};
-			};
-		};
-		
+	for (nbit = bit_start - 1; nbit <= bit_end - 1; nbit = nbit + 4) {
 		/* calculate octett (8 bit) */
 		noctett = (nbit & 0x78) >> 3;
 		
@@ -83,36 +77,29 @@ int librfc2874_addr_to_bitstring(ipv6calc_ipv6addr *ipv6addrp, char *resultstrin
 		if ( ipv6calc_debug & DEBUG_addr_to_bitstring ) {
 			fprintf(stderr, "%s: bit: %d = noctett: %d, nnibble: %d, octett: %02x, value: %x\n", DEBUG_function_name, nbit, noctett, nnibble, (*ipv6addrp).in6_addr.s6_addr[noctett], nibble);
 		};
-		if (command & CMD_printuppercase) {
-			sprintf(tempstring, "%s%X", resultstring, nibble);
-		} else {
-			sprintf(tempstring, "%s%x", resultstring, nibble);
-		};
+
+		sprintf(tempstring, "%s%x", resultstring, nibble);
 		sprintf(resultstring, "%s", tempstring);
 	};
 
 	/* add begin and end of label */
-	if ( (*ipv6addrp).flag_prefixuse == 1 ) {
-		if (command & CMD_printsuffix) {
-			prefixlength = 128 - (*ipv6addrp).prefixlength;
-		} else {
-			prefixlength = (*ipv6addrp).prefixlength;
-		};
+	if ((*ipv6addrp).flag_startend_use) {
+		prefixlength = bit_end - bit_start + 1;
 	} else {
 		prefixlength = 128;
 	};
 	
-	sprintf(tempstring, "\\[x%s/%d]", resultstring, prefixlength);
-
-	if (command & CMD_printsuffix) {
-		sprintf(resultstring, "%s", tempstring);
+	if ( bit_start != 1 ) {
+		sprintf(tempstring, "%s/%d]", resultstring, prefixlength);
 	} else {
-		if (command & CMD_printuppercase) {
-			sprintf(resultstring, "%s.IP6.ARPA.", tempstring);
-		} else {
-			sprintf(resultstring, "%s.ip6.arpa.", tempstring);
-		};
+		sprintf(tempstring, "%s/%d].ip6.arpa.", resultstring, prefixlength);
 	};
+	
+	if ( command & CMD_printuppercase ) {
+		string_to_upcase(tempstring);
+	};
+
+	sprintf(resultstring, "\\[x%s", tempstring);
 
 	retval = 0;
 

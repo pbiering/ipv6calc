@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : addr_to_uncompressed.c
- * Version    : $Id: addr_to_uncompressed.c,v 1.2 2002/02/23 11:07:44 peter Exp $
+ * Version    : $Id: addr_to_uncompressed.c,v 1.3 2002/02/25 21:18:50 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
  *
  * Information:
@@ -12,18 +12,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ipv6calc.h"
+#include "libhelp.h"
+#include "addr_to_uncompressed.h"
+#include "libipv6calc.h"
 
-void addr_to_uncompressed_printhelp() {
-	fprintf(stderr, " %s --addr_to_uncompressed [--maskprefix|--masksuffix] [--printprefix|printsuffix] ipv6addr[/prefixlength]\n", PROGRAM_NAME);
+void addr_to_uncompressed_printhelp(void) {
+	fprintf(stderr, " %s --addr_to_uncompressed [<additional options>] <ipv6addr>[/<prefixlength>]>\n", PROGRAM_NAME);
 };
 
-void addr_to_uncompressed_printhelplong() {
+void addr_to_uncompressed_printhelplong(void) {
 	addr_to_uncompressed_printhelp();
 	fprintf(stderr, "  Converts given IPv6 address to an uncompressed one, e.g.\n");
 	fprintf(stderr, "   3ffe:ffff:100:f101::1 -> 3ffe:ffff:100:f101:0:0:0:1\n");
-	fprintf(stderr, "   3ffe:ffff:100:f101::1/64 -> 3ffe:ffff:100:f101:0:0:0:1/64\n\n");
-	fprintf(stderr, "  Also it's possible to mask prefix or suffix bits or\n");
-	fprintf(stderr, "   print prefix or suffix only\n");
+	fprintf(stderr, "   3ffe:ffff:100:f101::1/64 -> 3ffe:ffff:100:f101:0:0:0:1/64\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr, "  Additional usable options:\n");
+	printhelp_mask();
+	printhelp_case();
+	fprintf(stderr, "\n");
 };
 
 /* function formats an given IPv6 address to an uncompressed format
@@ -33,38 +39,20 @@ void addr_to_uncompressed_printhelplong() {
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */
-int addr_to_uncompressed(char *addrstring, char *resultstring, unsigned int formatselector) {
-	int retval = 1, result;
-	ipv6calc_ipv6addr ipv6addr;
+int addr_to_uncompressed(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned long command) {
+	int retval = 1;
 
-#ifdef DEBUG_addr_to_uncompressed
-	fprintf(stderr, "addr_to_uncompressed(: Got input %s\n", addrstring);
-#endif
-
-	result = addr_to_ipv6addrstruct(addrstring, resultstring, &ipv6addr);
-#ifdef DEBUG_addr_to_uncompressed
-	fprintf(stderr, "addr_to_uncompressed: result of 'addr_to_ipv6addrstruct': %d\n", result);
-#endif
-
-	if ( result != 0 ) {
-		retval = 1;
-		return (retval);
-	};
-
-	if (formatselector & CMD_maskprefix) {
-		ipv6addrstruct_maskprefix(&ipv6addr);
-	} else if (formatselector & CMD_masksuffix) {
-		ipv6addrstruct_masksuffix(&ipv6addr);
-	};
-
-	if (formatselector & CMD_printprefix) { 	
-		result = ipv6addrstruct_to_uncompaddrprefix(&ipv6addr, resultstring);
-	} else if (formatselector & CMD_printsuffix) {
-		result = ipv6addrstruct_to_uncompaddrsuffix(&ipv6addr, resultstring);
+	if ( command & CMD_printprefix ) { 	
+		retval = ipv6addrstruct_to_uncompaddrprefix(ipv6addrp, resultstring);
+	} else if ( command & CMD_printsuffix ) {
+		retval = ipv6addrstruct_to_uncompaddrsuffix(ipv6addrp, resultstring);
 	} else {
-		result = ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring);
+		retval = ipv6addrstruct_to_uncompaddr(ipv6addrp, resultstring);
+	};
+
+	if ((command & CMD_printuppercase) && (retval == 0)) {
+		string_to_upcase(resultstring);
 	};
    
-	retval = 0;
 	return (retval);
 };

@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.h[.in]
- * Version    : $Id: ipv6calc.h.in,v 1.4 2002/02/19 21:41:17 peter Exp $
- * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
+ * Version    : $Id: ipv6calc.h.in,v 1.5 2002/02/25 21:18:50 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Main header file
@@ -16,7 +16,7 @@
 /* global program related definitions */
 #define PROGRAM_NAME "ipv6calc"
 #define PROGRAM_VERSION "@IPV6CALC_VERSION@"
-#define PROGRAM_COPYRIGHT "(P) & (C) 2001-2002 by Peter Bieringer <pb@bieringer.de>\n published under GNU GPL"
+#define PROGRAM_COPYRIGHT "(P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.de>\n published under GNU GPL"
 
 /* global includes */
 #include <netinet/in.h>
@@ -40,7 +40,7 @@
 
 /* command values */
 #define CMD_MINOR_MASK          0x0000Fl
-#define CMD_FORMAT_MASK         0x000F0l
+#define CMD_FORMAT_MASK         0x00FF0l
 #define CMD_printhelp           0x00001l
 #define CMD_printversion        0x00002l
 #define CMD_printlowercase      0x00004l
@@ -49,21 +49,29 @@
 #define CMD_printsuffix         0x00020l
 #define CMD_maskprefix        	0x00040l
 #define CMD_masksuffix         	0x00080l
+#define CMD_printstart     	0x00100l
+#define CMD_printend     	0x00200l
+#define CMD_showtypes   	0x00400l
+#define CMD_machinereadable   	0x00800l
 
-#define CMD_MAJOR_MASK               0xFFFF00l
-#define CMD_addr_to_ip6int           0x000100l
-#define CMD_addr_to_compressed       0x000200l
-#define CMD_addr_to_uncompressed     0x000400l
-#define CMD_addr_to_fulluncompressed 0x000800l
-#define CMD_addr_to_ifinet6          0x001000l
-#define CMD_ifinet6_to_compressed    0x002000l
-#define CMD_addr_to_base85           0x004000l
-#define CMD_base85_to_addr           0x008000l
-#define CMD_mac_to_eui64             0x010000l
-#define CMD_eui64_to_privacy         0x020000l
-#define CMD_showinfo                 0x040000l
-#define CMD_addr_to_ip6arpa          0x080000l
-#define CMD_addr_to_bitstring        0x100000l
+#define CMD_MAJOR_MASK			0xFFFF000l
+
+#define CMD_MAJOR_ADDR_INPUT		0x0FFF000l		
+#define CMD_addr_to_ip6int		0x0001000l
+#define CMD_addr_to_compressed		0x0002000l
+#define CMD_addr_to_uncompressed	0x0004000l
+#define CMD_addr_to_fulluncompressed	0x0008000l
+#define CMD_addr_to_ifinet6		0x0010000l
+#define CMD_addr_to_base85		0x0020000l
+#define CMD_addr_to_ip6arpa		0x0040000l
+#define CMD_addr_to_bitstring		0x0080000l
+#define CMD_showinfo			0x0100000l
+
+#define CMD_base85_to_addr		0x1000000l
+#define CMD_mac_to_eui64		0x2000000l
+#define CMD_eui64_to_privacy		0x4000000l
+#define CMD_ifinet6_to_compressed	0x8000000l
+
 
 
 /* debug values */
@@ -75,6 +83,7 @@
 #define DEBUG_addr_to_ip6int 		CMD_addr_to_ip6int
 #define DEBUG_addr_to_bitstring		CMD_addr_to_bitstring
 #define DEBUG_mac_to_eui64		CMD_mac_to_eui64 
+#define DEBUG_ifinet6_to_compressed	CMD_ifinet6_to_compressed
 
 #define DEBUG_libipv6calc		0x000001l
 #define DEBUG_librfc3041		0x000002l
@@ -89,83 +98,14 @@ typedef struct {
 typedef struct {
 	struct in6_addr in6_addr;	/* in6_addr structure */
 	unsigned short prefixlength;	/* prefix length (0-128) 8 bit*/
-	int flag_prefixuse;				/* =1 prefix length in use */
-	unsigned int scope;				/* address scope value 16 bit*/
+	int flag_prefixuse;		/* =1 prefix length in use */
+	unsigned int scope;		/* address scope value 16 bit*/
+	unsigned short bit_start;	/* start of bit */
+	unsigned short bit_end;		/* end of bit */
+	int flag_startend_use;		/* =1 start or end of bit in use */
 } ipv6calc_ipv6addr;
 
 /* global debug value */
 extern long int ipv6calc_debug;
-
-/* external functions */
-extern int  addr_to_ip6int(char *addrstring, char *resultstring, long int command);
-extern void addr_to_ip6int_printhelp();
-extern void addr_to_ip6int_printhelplong();
-
-extern int  addr_to_compressed(char *addrstring, char *resultstring);
-extern void addr_to_compressed_printhelp();
-extern void addr_to_compressed_printhelplong();
-
-extern int  addr_to_uncompressed(char *addrstring, char *resultstring, unsigned int formatselector);
-extern void addr_to_uncompressed_printhelp();
-extern void addr_to_uncompressed_printhelplong();
-
-extern int  addr_to_fulluncompressed(char *addrstring, char *resultstring, unsigned int formatselector);
-extern void addr_to_fulluncompressed_printhelp();
-extern void addr_to_fulluncompressed_printhelplong();
-
-extern int  addr_to_ifinet6(char *addrstring, char *resultstring);
-extern void addr_to_ifinet6_printhelp();
-extern void addr_to_ifinet6_printhelplong();
-
-extern int  ifinet6_to_compressed(char *addrstring, char *resultstring);
-extern int  ifinet6_to_compressedwithprefixlength(char *addrstring, char *prefixlengthstring, char *resultstring);
-extern void ifinet6_to_compressed_printhelp();
-extern void ifinet6_to_compressed_printhelplong();
-
-extern int eui64_to_privacy(char *hostidentifier, char *token, char *resultstring);
-extern void eui64_to_privacy_printhelp();
-extern void eui64_to_privacy_printhelplong();
-
-extern int  addr_to_base85(char *addrstring, char *resultstring);
-extern void addr_to_base85_printhelp();
-extern void addr_to_base85_printhelplong();
-
-extern int  base85_to_addr(char *addrstring, char *resultstring);
-extern void base85_to_addr_printhelp();
-extern void base85_to_addr_printhelplong();
-
-extern int  mac_to_eui64(char *addrstring, char *resultstring);
-extern void mac_to_eui64_printhelp();
-extern void mac_to_eui64_printhelplong();
-
-extern int showinfo(char *addrstring, char *resultstring);
-extern void showinfo_printhelp();
-extern void showinfo_printhelplong();
-
-
-/* libipv6calc */
-extern int addr_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
-
-extern int ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring);
-extern int ipv6addrstruct_to_uncompaddrprefix(ipv6calc_ipv6addr *ipv6addrp, char *resultstring);
-extern int ipv6addrstruct_to_uncompaddrsuffix(ipv6calc_ipv6addr *ipv6addrp, char *resultstring);
-
-extern int ipv6addrstruct_to_fulluncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring);
-
-extern void ipv6addrstruct_maskprefix(ipv6calc_ipv6addr *ipv6addrp);
-extern void ipv6addrstruct_masksuffix(ipv6calc_ipv6addr *ipv6addrp);
-
-extern int identifier_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
-
-/* libmac */
-extern int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp);
-
-/* libeui64 */
-extern int create_eui64_from_mac(ipv6calc_ipv6addr *ipv6addrp, ipv6calc_macaddr *macaddrp);
-
-
-#include "addr_to_bitstring.h"
-
-#include "librfc2874.h"
 
 #endif

@@ -1,16 +1,32 @@
 /*
- *  $Id: ChangeLog,v 1.14 2002/02/23 11:32:26 peter Exp $ 
+ *  $Id: ChangeLog,v 1.15 2002/02/25 21:18:49 peter Exp $ 
  */
 
 Info:
-	PB = Peter Bieringer <pb@bieringer.de>
+	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20020224/PB:
+	minor Makefile fixes
+	fix getopt Makefile
+	minor cosmetic fix in test script
+	cosmetic cleanups
+	some code cleanup and minor redesign, some optimizing
+	fixes stupid help call bugs
+	format options can be used now in more functions
+	add support of "printstart" and "printend" in "ip6int", "bitstring"
+	extend "showinfo", add "machine_readable" for easier postprocessing
+
 20020223/PB:
 	complete limited support of bistring labels
 	change examples to 6bone dummy address (3ffe:ffff:...)
 	add a trailling dot on ip6.[int|arpa] output
 	migrate getopt patch for OpenBSD submitted by Vladimir Kotal <vlada at openbsd dot cz>
 	minor Makefile fixes
+	tag release 0.37pre1
+
+20020219/PB:
+	fix a minor bug
+	tag release 0.36
 	
 20020218/PB:
 	fix bug relating to ipv6calc.h (changes now in ipv6calc.h.in)

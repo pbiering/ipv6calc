@@ -1,11 +1,11 @@
 /*
- * libeui64: Function libary for conversions
- *            defined in EUI-64
- * 
- * Version:		$Id: libeui64.c,v 1.1 2001/10/07 14:47:40 peter Exp $
- * 
- * Author:		Peter Bieringer <pb@bieringer.de>
+ * Project    : ipv6calc
+ * File       : libeui64.c
+ * Version    : $Id: libeui64.c,v 1.2 2002/02/25 21:18:50 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
+ * Information:
+ *  Function libary for conversions defined in EUI-64
  */
 
 #include <stdio.h>
@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include "ipv6calc.h"
 #include "libipv6addr.h"
+#include "libeui64.h"
 
 /* function MAC address to EUI format
  *

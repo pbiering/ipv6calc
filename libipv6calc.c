@@ -1,17 +1,18 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.3 2002/01/20 09:44:15 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.4 2002/02/25 21:18:51 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function libary for conversions
- *
  */
 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
+
 /*
 #if defined(__NetBSD__)
 */
@@ -31,6 +32,7 @@
 #include "ipv6calc.h"
 #include "libipv6addr.h"
 #include "librfc1884.h"
+#include "libipv6calc.h"
 
 
 /* function stores an IPv6 address string into a structure
@@ -216,7 +218,8 @@ int ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstrin
 	if ( ipv6calc_debug & DEBUG_libipv6calc ) {
 		fprintf(stderr, "%s: result string: %s\n", DEBUG_function_name, resultstring);
 	};
-		
+	
+	retval = 0;	
 	return (retval);
 };
 #undef DEBUG_function_name
@@ -350,6 +353,7 @@ int ipv6addrstruct_to_fulluncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *results
 		fprintf(stderr, "%s: result string: %s\n", DEBUG_function_name, resultstring);
 	};
 	
+	retval = 0;	
 	return (retval);
 };
 #undef DEBUG_function_name
@@ -496,5 +500,24 @@ int identifier_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_
 
 	retval = 0;
 	return (retval);
+};
+#undef DEBUG_function_name
+
+
+/*
+ * function converts chars in a string to upcase
+ * in : pointer to a string
+ */
+#define DEBUG_function_name "libipv6calc/string_to_upcase"
+void string_to_upcase(char *string) {
+	int i;
+
+	if (strlen(string) > 0) {
+		for (i = 0; i < strlen(string); i++) {
+			string[i] = toupper(string[i]);
+		};
+	};
+
+	return;
 };
 #undef DEBUG_function_name
