@@ -1,14 +1,14 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.h
- * Version    : $Id: showinfo.h,v 1.6 2002/04/20 15:45:48 peter Exp $
+ * Version    : $Id: showinfo.h,v 1.7 2002/04/20 17:11:16 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for showinfo.c
  */ 
 
-#if defined(__NetBSD__) || defined (__OpenBSD) || defined (__FreeBSD__)
+#if defined(__NetBSD__) || defined (__OpenBSD__) || defined (__FreeBSD__)
 #include <inttypes.h>
 #else
 #include <stdint.h>
