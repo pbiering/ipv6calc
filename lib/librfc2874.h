@@ -1,14 +1,14 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.h
- * Version    : $Id: librfc2874.h,v 1.3 2002/04/05 19:11:13 peter Exp $
+ * Version    : $Id: librfc2874.h,v 1.4 2002/04/20 15:38:15 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for librfc2874.c
  */ 
 
-#if defined(__NetBSD__)
+#if defined(__NetBSD__) || defined (__OpenBSD) || defined (__FreeBSD__)
 #include <inttypes.h>
 #else
 #include <stdint.h>
