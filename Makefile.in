@@ -1,7 +1,7 @@
 #
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.11 2002/03/01 23:26:45 peter Exp $
+# Version    : $Id: Makefile.in,v 1.12 2002/03/02 17:27:27 peter Exp $
 # Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -15,7 +15,8 @@ CFLAGS	= $(COPTS) -Igetopt/
 
 CC	= gcc
 
-OBJS = ipv6calc.o addr_to_compressed.o addr_to_uncompressed.o addr_to_fulluncompressed.o addr_to_ifinet6.o addr_to_ip6int.o addr_to_bitstring.o ifinet6_to_compressed.o  libipv6calc.o addr_to_base85.o librfc1924.o base85_to_addr.o librfc1884.o libmac.o libeui64.o mac_to_eui64.o eui64_to_privacy.o librfc3041.o showinfo.o libipv6addr.o librfc2874.o libhelp.o librfc1886.o librfc3056.o libipv4addr.o ipv4_to_6to4addr.o ipv6calctypes.o libifinet6.o
+OBJS = ipv6calc.o addr_to_compressed.o addr_to_uncompressed.o addr_to_fulluncompressed.o addr_to_ifinet6.o addr_to_bitstring.o ifinet6_to_compressed.o  libipv6calc.o addr_to_base85.o librfc1924.o base85_to_addr.o librfc1884.o libmac.o libeui64.o mac_to_eui64.o eui64_to_privacy.o librfc3041.o showinfo.o libipv6addr.o librfc2874.o libhelp.o librfc1886.o librfc3056.o libipv4addr.o ipv4_to_6to4addr.o ipv6calctypes.o libifinet6.o
+# addr_to_ip6int.o
 
 GETOBJS = getopt/getopt.o getopt/getopt1.o
 
@@ -24,7 +25,8 @@ all:		ipv6calc
 .c.o:
 		$(CC) $(CFLAGS) -c $<
 
-$(OBJS):	ipv6calc.h libipv6addr.h librfc1884.h librfc2874.h addr_to_fulluncompressed.h base85_to_addr.h addr_to_base85.h addr_to_ifinet6.h libeui64.h libmac.h librfc3041.h addr_to_bitstring.h addr_to_ip6int.h eui64_to_privacy.h libhelp.h mac_to_eui64.h addr_to_compressed.h addr_to_uncompressed.h ifinet6_to_compressed.h libipv6addr.h librfc1924.h showinfo.h librfc1886.h librfc3056.h libipv4addr.h ipv4_to_6to4addr.h ipv6calctypes.h libifinet6.h
+$(OBJS):	ipv6calc.h libipv6addr.h librfc1884.h librfc2874.h addr_to_fulluncompressed.h base85_to_addr.h addr_to_base85.h addr_to_ifinet6.h libeui64.h libmac.h librfc3041.h addr_to_bitstring.h eui64_to_privacy.h libhelp.h mac_to_eui64.h addr_to_compressed.h addr_to_uncompressed.h ifinet6_to_compressed.h libipv6addr.h librfc1924.h showinfo.h librfc1886.h librfc3056.h libipv4addr.h ipv4_to_6to4addr.h ipv6calctypes.h libifinet6.h
+# addr_to_ip6int.h
 
 ipv6calc:	$(OBJS) getopt-make
 		$(CC) -o ipv6calc $(OBJS) $(GETOBJS) -lcrypto

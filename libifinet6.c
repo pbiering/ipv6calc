@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libifinet6.c
- * Version    : $Id: libifinet6.c,v 1.1 2002/03/01 23:27:25 peter Exp $
+ * Version    : $Id: libifinet6.c,v 1.2 2002/03/02 17:27:27 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -59,5 +59,63 @@ int libifinet6_ifinet6_to_ipv6addrstruct(char *addrstring, char *resultstring, i
 	/* fill structure */
 	retval = addr_to_ipv6addrstruct(tempstring, resultstring, ipv6addrp);
 
+	return (retval);
+};
+#undef DEBUG_function_name
+
+/*
+ * function formats an given /proc/net/if_inet6 format to normal one with prefixlength
+ *
+ * in : *addrstring = IPv6 address
+ * out: *resultstring = result
+ * ret: ==0: ok, !=0: error
+ */
+#define DEBUG_function_name "libifinet6/ifinet6_withprefixlength_to_ipv6addrstruct"
+int libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(char *addrstring, char *prefixlengthstring, char *resultstring) {
+	int retval = 1, result;
+	char tempstring[NI_MAXHOST];
+	unsigned int prefixlength = 0;
+
+	if (ipv6calc_debug) {
+		fprintf(stderr, "%s: Got input addressstring: '%s', prefixlengthstring: '%s'\n", DEBUG_function_name, addrstring, prefixlengthstring);
+	};
+
+	/* simple test on prefix length string*/
+	if ( strlen(prefixlengthstring) != 2 ) {
+		sprintf(resultstring, "Given prefixlength hex string '%s' has not 2 chars!", prefixlengthstring);
+		retval = 1;
+		return (retval);
+	};
+
+	/* scan prefix length */
+	result = sscanf(prefixlengthstring, "%2x\n", &prefixlength);
+	if ( result != 1 ) {
+		sprintf(resultstring, "error splitting string %s, got only %d items!", prefixlengthstring, result);
+		retval = 1;
+		return (retval);
+	};
+	
+	if ( ( prefixlength < 0 ) || ( prefixlength > 128 ) ) {
+		sprintf(resultstring, "decimal prefixlength '%d' out of range!", prefixlength);
+		retval = 1;
+		return (retval);
+	}
+
+	/* convert address */
+	result = ifinet6_to_compressed(addrstring, tempstring, command);
+	if ( result != 0 ) {
+		sprintf(resultstring, "%s", tempstring);
+		retval = 1;
+		return (retval);
+	};
+
+	/* final */
+	sprintf(resultstring, "%s/%d", tempstring, prefixlength);
+	
+	if (ipv6calc_debug & DEBUG_ifinet6_to_compressed) {
+		fprintf(stderr, "ifinet6_to_compressedwithprefixlength: Print: '%s'\n", resultstring);
+	};
+			
+	retval = 0;
 	return (retval);
 };

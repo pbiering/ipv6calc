@@ -29,4 +29,10 @@ Credits to
 * Vladimir Kotal <vlada at openbsd dot cz>
    for getopt patch for compiling on OpenBSD
 
+* Peter A. Darnell and Philip E. Margolis
+   C - A software engineering approach
+  [one of the best books about programming language C around the world,
+    forget Kerningham/Ritchie, use this book instead like me for over
+    8 years ]
+
 	Peter Bieringer, 2001-2002

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.c
- * Version    : $Id: ipv6calctypes.c,v 1.1 2002/03/01 23:27:25 peter Exp $
+ * Version    : $Id: ipv6calctypes.c,v 1.2 2002/03/02 17:27:27 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -18,54 +18,62 @@
  */
 #define DEBUG_function_name "ipv6calctypes/checktype"
 int ipv6calctypes_checktype(char *string) {
-	int i, num = -1, retval = -1;
+	int i;
+	long int number = -1;
+	char tokenlist[100];
+	char *token;
 	
 	if (ipv6calc_debug) {
 		fprintf(stderr, "%s: Got string: %s\n", DEBUG_function_name, string);
 	};
 
-	for (i = 0; i < FORMAT_STRING_MAXNUM; i++) {
+	for (i = 0; i < sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0]); i++) {
 		if (ipv6calc_debug) {
-			fprintf(stderr, "%s: Compare against: %s\n", DEBUG_function_name, ipv6calc_formatstrings[i]);
-		};
-		if (strlen(string) != strlen(ipv6calc_formatstrings[i])) {
-			/* length not equal */
-			continue;
+			fprintf(stderr, "%s: Compare against: %s\n", DEBUG_function_name, ipv6calc_formatstrings[i].token);
 		};
 
-		if (strcmp(string, ipv6calc_formatstrings[i]) != 0) {
-			/* strings not equal */
-			continue;
-		};
-
-		/* strings equal */
-		num = i;
-		break;
-	};
-
-	if (num == -1) {
-		if (ipv6calc_debug) {
-			fprintf(stderr, "%s: Found no proper string\n", DEBUG_function_name);
-		};
-		goto END_ipv6calctypes_checktype;
-	};
-	
-	if (ipv6calc_debug) {
-		fprintf(stderr, "%s: Look for number: %d\n", DEBUG_function_name, num);
-	};
-
-	/* look for proper number */
-	for (i = 0; i < FORMAT_STRING_MAXNUM; i++) {
-		if (num == ipv6calc_formatstringaliasmap[i][0]) {
-			retval = ipv6calc_formatstringaliasmap[i][1];
+		/* check main token */
+		if (strcmp(string, ipv6calc_formatstrings[i].token) == 0) {
+			number = ipv6calc_formatstrings[i].number;
 			break;
 		};
+
+		if (strlen(ipv6calc_formatstrings[i].aliases) == 0) {
+			/* no aliases defined */
+			continue;
+		};
+
+		if (ipv6calc_debug) {
+			fprintf(stderr, "%s: Compare against aliases in string: %s\n", DEBUG_function_name, ipv6calc_formatstrings[i].aliases);
+		};
+
+		strncpy(tokenlist, ipv6calc_formatstrings[i].aliases, sizeof(tokenlist) - 1);
+
+		token = strtok(tokenlist, " ");
+
+		while (token != NULL) {
+			if (ipv6calc_debug) {
+				fprintf(stderr, "%s: Compare against alias token: %s\n", DEBUG_function_name, token);
+			};
+			
+			/* compare alias */
+			if (strcmp(string, token) == 0) {
+				number = ipv6calc_formatstrings[i].number;
+				break;
+			};
+
+			/* get next token */
+			token = strtok(NULL, " ");
+		};
 	};
 
-END_ipv6calctypes_checktype:
 	if (ipv6calc_debug) {
-		fprintf(stderr, "%s: Found format number: %d\n", DEBUG_function_name, retval);
+		if (number < 0) {
+			fprintf(stderr, "%s: Found no proper string\n", DEBUG_function_name);
+		} else {
+			fprintf(stderr, "%s: Found format number: %04lx\n", DEBUG_function_name, number);
+		};
 	};
 
-	return(retval);
+	return(number);
 };

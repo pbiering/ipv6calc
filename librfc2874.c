@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.c
- * Version    : $Id: librfc2874.c,v 1.3 2002/02/25 21:18:51 peter Exp $
+ * Version    : $Id: librfc2874.c,v 1.4 2002/03/02 17:27:28 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -16,6 +16,7 @@
 #include "libipv6addr.h"
 #include "libipv6calc.h"
 #include "librfc2874.h"
+#include "ipv6calctypes.h"
 
 
 /*
@@ -26,7 +27,7 @@
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "librfc2874/addr_to_bitstring"
-int librfc2874_addr_to_bitstring(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, long int command) {
+int librfc2874_addr_to_bitstring(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned long int formatoptions) {
 	int retval = 1, result;
 	unsigned int nibble;
 	int noctett, nbit, nnibble, prefixlength, bit_start, bit_end;
@@ -95,7 +96,7 @@ int librfc2874_addr_to_bitstring(ipv6calc_ipv6addr *ipv6addrp, char *resultstrin
 		sprintf(tempstring, "%s/%d].ip6.arpa.", resultstring, prefixlength);
 	};
 	
-	if ( command & CMD_printuppercase ) {
+	if (formatoptions & FORMATOPTION_printuppercase ) {
 		string_to_upcase(tempstring);
 	};
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.4 2002/02/25 21:18:51 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.5 2002/03/02 17:27:28 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -39,7 +39,7 @@ int showinfo(ipv6calc_ipv6addr *ipv6addrp, unsigned long command) {
 		showinfo_printhelplong();
 		fprintf(stderr, "\nAvailable tokens for machine-readable output (printed in one line):\n");
 		fprintf(stderr, " TYPE (commata separated):\n");
-		for (i = 0; i < IPV6INFO_NUM; i++ ) {
+		for (i = 0; i < sizeof(ipv6addr_typesnum) / sizeof(ipv6addr_typesnum[0]); i++ ) {
 			fprintf(stderr, "  %s\n", ipv6addr_typesstring[i]);
 		};
 		fprintf(stderr, " IPV6=...                      : given IPv6 address full uncompressed\n");
@@ -58,7 +58,7 @@ int showinfo(ipv6calc_ipv6addr *ipv6addrp, unsigned long command) {
 		fprintf(stderr, "%s: result of 'ipv6addr_gettype': %x\n", DEBUG_function_name, typeinfo);
 	};
 
-	for (i = 0; i < IPV6INFO_NUM; i++ ) {
+	for (i = 0; i < sizeof(ipv6addr_typesnum) / sizeof(ipv6addr_typesnum[0]); i++ ) {
 		if (ipv6calc_debug & DEBUG_showinfo) {
 			fprintf(stderr, "%s: test: %x : %s\n", DEBUG_function_name, ipv6addr_typesnum[i], ipv6addr_typesstring[i]);
 		};
@@ -73,7 +73,7 @@ int showinfo(ipv6calc_ipv6addr *ipv6addrp, unsigned long command) {
 
 		j = 0;
 		fprintf(stdout, " TYPE=");
-		for (i = 0; i < IPV6INFO_NUM; i++ ) {
+		for (i = 0; i < sizeof(ipv6addr_typesnum) / sizeof(ipv6addr_typesnum[0]); i++ ) {
 			if (typeinfo & ipv6addr_typesnum[i]) {
 				if (j != 0) {
 					fprintf(stdout, ",");
@@ -84,7 +84,7 @@ int showinfo(ipv6calc_ipv6addr *ipv6addrp, unsigned long command) {
 		};
 	} else {
 		fprintf(stdout, "Address type: ");
-		for (i = 0; i < IPV6INFO_NUM; i++ ) {
+		for (i = 0; i < sizeof(ipv6addr_typesnum) / sizeof(ipv6addr_typesnum[0]); i++ ) {
 			if (typeinfo & ipv6addr_typesnum[i]) {
 				fprintf(stdout, " %s", ipv6addr_typesstring[i]);
 			};

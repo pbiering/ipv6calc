@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.7 2002/03/02 10:46:03 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.8 2002/03/02 17:27:28 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -19,43 +19,6 @@
 #include "libipv6addr.h"
 #include "ipv6calctypes.h"
 #include "libipv6calc.h"
-
-/* array of numerical types */
-unsigned int ipv6addr_typesnum[IPV6INFO_NUM] = {
-	IPV6_ADDR_UNICAST,
-	IPV6_ADDR_MULTICAST,
-	IPV6_ADDR_ANYCAST,
-	IPV6_ADDR_LOOPBACK,
-	IPV6_ADDR_LINKLOCAL,
-	IPV6_ADDR_SITELOCAL,
-	IPV6_ADDR_COMPATv4,
-	IPV6_ADDR_MAPPED,
-	IPV6_ADDR_RESERVED,
-	IPV6_NEW_ADDR_6TO4,
-	IPV6_NEW_ADDR_6BONE, 
-	IPV6_NEW_ADDR_AGU,
-	IPV6_NEW_ADDR_UNSPECIFIED,
-	IPV6_NEW_ADDR_SOLICITED_NODE,
-	IPV6_NEW_ADDR_ISATAP
-};
-
-char *ipv6addr_typesstring[IPV6INFO_NUM] = {
-	TXT_IPV6_ADDR_UNICAST,
-	TXT_IPV6_ADDR_MULTICAST,
-	TXT_IPV6_ADDR_ANYCAST,
-	TXT_IPV6_ADDR_LOOPBACK,
-	TXT_IPV6_ADDR_LINKLOCAL,
-	TXT_IPV6_ADDR_SITELOCAL,
-	TXT_IPV6_ADDR_COMPATv4,
-	TXT_IPV6_ADDR_MAPPED,
-	TXT_IPV6_ADDR_RESERVED,
-	TXT_IPV6_NEW_ADDR_6TO4,
-	TXT_IPV6_NEW_ADDR_6BONE,
-	TXT_IPV6_NEW_ADDR_AGU,
-	TXT_IPV6_NEW_ADDR_UNSPECIFIED,
-	TXT_IPV6_NEW_ADDR_SOLICITED_NODE,
-	TXT_IPV6_NEW_ADDR_ISATAP
-};
 
 
 /*
@@ -235,6 +198,9 @@ void ipv6addr_clear(ipv6calc_ipv6addr *ipv6addrp) {
 	/* Clear IPv6 address scope */
 	ipv6addrp->scope = 0;
 
+	/* Clear valid flag */
+	ipv6addrp->flag_valid = 0;
+
 	return;
 };
 #undef DEBUG_function_name
@@ -255,6 +221,7 @@ void ipv6addr_clearall(ipv6calc_ipv6addr *ipv6addrp) {
 	ipv6addrp->flag_startend_use = 0;
 	ipv6addrp->flag_prefixuse = 0;
 	ipv6addrp->prefixlength = 0;
+	ipv6addrp->flag_valid = 0;
 	
 	return;
 };
@@ -528,6 +495,7 @@ int addr_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6ad
 		fprintf(stderr, "%s: flag_prefixuse %d\n", DEBUG_function_name, ipv6addrp->flag_prefixuse);
 	};
 	
+	ipv6addrp->flag_valid = 1;
 	retval = 0;
 	return (retval);
 };
@@ -543,38 +511,50 @@ int addr_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6ad
  */
 int ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 	int retval = 1;
-	/* old style compatibility */
-	unsigned int formatoptions = FORMATOPTION_printlowercase;
-	
-	retval = libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6addrp, resultstring, formatoptions);
-	return (retval);
-};
-
-#define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddr"
-int libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned int formatoptions) {
-	int retval = 1, result;
 	char tempstring[NI_MAXHOST];
-
+	
 	/* print array */
 	if ( ( ipv6addrp->scope & IPV6_ADDR_COMPATv4 ) || ( ipv6addrp->scope & IPV6_ADDR_MAPPED ) ) {
-		result = sprintf(tempstring, "%x:%x:%x:%x:%x:%x:%u.%u.%u.%u", ipv6addr_getword(ipv6addrp, 0), ipv6addr_getword(ipv6addrp, 1), ipv6addr_getword(ipv6addrp, 2), ipv6addr_getword(ipv6addrp, 3), ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
+		sprintf(tempstring, "%x:%x:%x:%x:%x:%x:%u.%u.%u.%u", ipv6addr_getword(ipv6addrp, 0), ipv6addr_getword(ipv6addrp, 1), ipv6addr_getword(ipv6addrp, 2), ipv6addr_getword(ipv6addrp, 3), ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
 	} else {
-		result = sprintf(tempstring, "%x:%x:%x:%x:%x:%x:%x:%x", ipv6addr_getword(ipv6addrp, 0), ipv6addr_getword(ipv6addrp, 1), ipv6addr_getword(ipv6addrp, 2), ipv6addr_getword(ipv6addrp, 3), ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addr_getword(ipv6addrp, 6), ipv6addr_getword(ipv6addrp, 7));
+		sprintf(tempstring, "%x:%x:%x:%x:%x:%x:%x:%x", ipv6addr_getword(ipv6addrp, 0), ipv6addr_getword(ipv6addrp, 1), ipv6addr_getword(ipv6addrp, 2), ipv6addr_getword(ipv6addrp, 3), ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addr_getword(ipv6addrp, 6), ipv6addr_getword(ipv6addrp, 7));
 	};
+
+	if (retval <= 0) {
+
+	};	
 
 	if (ipv6addrp->flag_prefixuse == 1) {
 		/* append prefix length */
-		result = sprintf(resultstring, "%s/%u", tempstring, ipv6addrp->prefixlength);
+		sprintf(resultstring, "%s/%u", tempstring, ipv6addrp->prefixlength);
 	} else {
-		result = sprintf(resultstring, "%s", tempstring);
+		sprintf(resultstring, "%s", tempstring);
 	};
 
-	if (formatoptions & FORMATOPTION_printlowercase) {
-		/* nothing to do */
-	} else if (formatoptions & FORMATOPTION_printuppercase) {
-		string_to_upcase(resultstring);
+	retval = 0;	
+	return (retval);
+};
+
+#define DEBUG_function_name "libipv6addr/libipv6addr_ipv6addrstruct_to_uncompaddr"
+int libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned int formatoptions) {
+	int retval = 1;
+
+	if ( formatoptions & FORMATOPTION_printprefix ) {
+		retval = ipv6addrstruct_to_uncompaddrprefix(ipv6addrp, resultstring);
+	} else if ( formatoptions & FORMATOPTION_printsuffix ) {
+		retval = ipv6addrstruct_to_uncompaddrsuffix(ipv6addrp, resultstring);		
+	} else {
+		retval = ipv6addrstruct_to_uncompaddr(ipv6addrp, resultstring);		
 	};
 
+	if (retval == 0) {
+		/* don't modify case on error messages */
+		if ( formatoptions & FORMATOPTION_printlowercase ) {
+			/* nothing to do */
+		} else if ( formatoptions & FORMATOPTION_printuppercase ) {
+			string_to_upcase(resultstring);
+		};
+	};
 
 	if ( ipv6calc_debug & DEBUG_libipv6addr ) {
 		fprintf(stderr, "%s: result string: %s\n", DEBUG_function_name, resultstring);

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.6 2002/03/02 10:46:03 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.7 2002/03/02 17:27:28 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -25,6 +25,7 @@ typedef struct {
 	unsigned short bit_start;	/* start of bit */
 	unsigned short bit_end;		/* end of bit */
 	int flag_startend_use;		/* =1 start or end of bit in use */
+	int flag_valid;			/* address structure filled */
 } ipv6calc_ipv6addr;
 
 /* IPv6 address type definitions 
@@ -85,7 +86,43 @@ typedef struct {
 #define TXT_IPV6_NEW_ADDR_SOLICITED_NODE	"solicited-node"
 #define TXT_IPV6_NEW_ADDR_ISATAP		"ISATAP"
 
-#define IPV6INFO_NUM 15
+/* array of numerical types */
+static unsigned int ipv6addr_typesnum[] = {
+	IPV6_ADDR_UNICAST,
+	IPV6_ADDR_MULTICAST,
+	IPV6_ADDR_ANYCAST,
+	IPV6_ADDR_LOOPBACK,
+	IPV6_ADDR_LINKLOCAL,
+	IPV6_ADDR_SITELOCAL,
+	IPV6_ADDR_COMPATv4,
+	IPV6_ADDR_MAPPED,
+	IPV6_ADDR_RESERVED,
+	IPV6_NEW_ADDR_6TO4,
+	IPV6_NEW_ADDR_6BONE, 
+	IPV6_NEW_ADDR_AGU,
+	IPV6_NEW_ADDR_UNSPECIFIED,
+	IPV6_NEW_ADDR_SOLICITED_NODE,
+	IPV6_NEW_ADDR_ISATAP
+};
+
+static char *ipv6addr_typesstring[] = {
+	TXT_IPV6_ADDR_UNICAST,
+	TXT_IPV6_ADDR_MULTICAST,
+	TXT_IPV6_ADDR_ANYCAST,
+	TXT_IPV6_ADDR_LOOPBACK,
+	TXT_IPV6_ADDR_LINKLOCAL,
+	TXT_IPV6_ADDR_SITELOCAL,
+	TXT_IPV6_ADDR_COMPATv4,
+	TXT_IPV6_ADDR_MAPPED,
+	TXT_IPV6_ADDR_RESERVED,
+	TXT_IPV6_NEW_ADDR_6TO4,
+	TXT_IPV6_NEW_ADDR_6BONE,
+	TXT_IPV6_NEW_ADDR_AGU,
+	TXT_IPV6_NEW_ADDR_UNSPECIFIED,
+	TXT_IPV6_NEW_ADDR_SOLICITED_NODE,
+	TXT_IPV6_NEW_ADDR_ISATAP
+};
+
 
 #endif
 

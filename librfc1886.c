@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.2 2002/02/25 22:55:54 peter Exp $
+ * Version    : $Id: librfc1886.c,v 1.3 2002/03/02 17:27:28 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -22,6 +22,7 @@
 #include <stdlib.h>
 
 #include "ipv6calc.h"
+#include "ipv6calctypes.h"
 #include "libipv6addr.h"
 #include "libipv6calc.h"
 #include "librfc1886.h"
@@ -35,18 +36,17 @@
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "librfc1886/addr_to_nibblestring"
-int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, long int command) {
+int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned long int formatoptions, char* domain) {
 	int retval = 1;
 	unsigned int nibble;
 	int noctett, nbit, nnibble, bit_start, bit_end;
 	char tempstring[NI_MAXHOST];
 	
 	if (ipv6calc_debug & DEBUG_librfc1886) {
-		fprintf(stderr, "%s: command value %lx\n", DEBUG_function_name, command);
 		fprintf(stderr, "%s: flag_prefixuse %d\n", DEBUG_function_name, (*ipv6addrp).flag_prefixuse);
 	};
 
-	if ( !(command & (CMD_printprefix | CMD_printsuffix | CMD_printstart | CMD_printend)) && (*ipv6addrp).flag_prefixuse ) {
+	if ( !(formatoptions & (FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_printstart | FORMATOPTION_printend)) && (*ipv6addrp).flag_prefixuse ) {
 		/* simulate old behavior */
 		bit_start = 1;
 		bit_end = (*ipv6addrp).prefixlength;
@@ -103,19 +103,12 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 	};
 
 	if (bit_start == 1) {
-		switch(command & CMD_MAJOR_MASK) {
-		    case CMD_addr_to_ip6int:
-			sprintf(tempstring, "%sip6.int.", resultstring);
-			break;
-		    case CMD_addr_to_ip6arpa:
-			sprintf(tempstring, "%sip6.arpa.", resultstring);
-			break;
-		};
+		sprintf(tempstring, "%s%s", resultstring, domain);
 	};
 
 	sprintf(resultstring, "%s", tempstring);
 
-	if (command & CMD_printuppercase) {
+	if (formatoptions & FORMATOPTION_printuppercase) {
 		string_to_upcase(resultstring);
 	};
 		
