@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/lib
 # File       : create_ieee_oui_headerfile.pl
-# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.2 2002/03/27 22:58:39 peter Exp $
+# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.3 2002/04/05 18:47:22 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE/oui.txt
@@ -20,11 +20,13 @@ open(OUT, ">$OUTFILE") || die "Cannot open outfile: $OUTFILE";
 
 # Header
 my $now_string = localtime;
-print OUT qq|
-/*
+print OUT qq|/*
  * Project       : ipv6calc
  * File          : dbieee_oui.h
- * Version       : Generated $now_string
+|;
+print OUT " * Version       : \$Id";
+print OUT ":\$\n";
+print OUT qq| * Generated     : $now_string
  * Data copyright: IEEE
  *
  * Information:
