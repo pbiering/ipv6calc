@@ -11,6 +11,7 @@
    * code for getopt (needed by OpenBSD)
 	related files are:
 	- getopt/getopt.c
+	- getopt/getopt.h
 	- getopt/getopt1.c
 
    -> see directory "samplecode" in the source file for original versions
