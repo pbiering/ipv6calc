@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.14 2002/03/03 11:01:53 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.15 2002/03/03 12:55:42 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -108,8 +108,7 @@ int main(int argc,char *argv[]) {
 		{ "ipv4_to_6to4addr", 0, 0, CMD_ipv4_to_6to4addr },
 		
 		{ "showinfo", 0, 0, CMD_showinfo },
-		{ "machine_readable", 0, 0, CMD_machinereadable },
-		{ "show_types", 0, 0, CMD_showtypes },
+		{ "show_types", 0, 0, CMD_showinfotypes },
 
 		/* format options */
 		{ "maskprefix"           , 0, 0, FORMATOPTION_maskprefix + FORMATOPTION_HEAD },
@@ -127,6 +126,8 @@ int main(int argc,char *argv[]) {
 		{ "printcompressed"      , 0, 0, FORMATOPTION_printcompressed       + FORMATOPTION_HEAD },
 		{ "printuncompressed"    , 0, 0, FORMATOPTION_printuncompressed     + FORMATOPTION_HEAD },
 		{ "printfulluncompressed", 0, 0, FORMATOPTION_printfulluncompressed + FORMATOPTION_HEAD },
+		
+		{ "machine_readable"     , 0, 0, FORMATOPTION_machinereadable + FORMATOPTION_HEAD },
 
 		/* new options */
 		{ "inputtype" , 1, 0, CMD_inputtype  },
@@ -254,21 +255,14 @@ int main(int argc,char *argv[]) {
 				outputtype = FORMAT_iid_token;
 				break;
 
-			/* still special handled commands */
 			case 'i':
 			case CMD_showinfo:
 				inputtype  = FORMAT_ipv6addr;
-				command |= CMD_showinfo;
+				command = CMD_showinfo;
 				break;
 
-			/* format options - old style */
-			case 'm':	
-			case CMD_machinereadable:
-				command |= CMD_machinereadable;
-				break;
-
-			case CMD_showtypes:
-				command |= CMD_showtypes;
+			case CMD_showinfotypes:
+				command = CMD_showinfotypes;
 				break;
 
 			/* format options */
@@ -329,7 +323,11 @@ int main(int argc,char *argv[]) {
 					exit (1);
 				};
 				break;
-
+				
+			case 'm':	
+			case FORMATOPTION_machinereadable + FORMATOPTION_HEAD:
+				formatoptions |= FORMATOPTION_machinereadable;
+				break;
 
 			/* new options */
 			case CMD_inputtype:
@@ -338,8 +336,8 @@ int main(int argc,char *argv[]) {
 				};
 
 				if (strcmp(optarg, "-?") == 0) {
-					command |= CMD_printhelp;
 					inputtype = -2;
+					command = CMD_printhelp;
 					break;
 				};
 				
@@ -357,7 +355,7 @@ int main(int argc,char *argv[]) {
 				};
 				if (strcmp(optarg, "-?") == 0) {
 					outputtype = -2;
-					command |= CMD_printhelp;
+					command = CMD_printhelp;
 					break;
 				};
 				
@@ -374,7 +372,7 @@ int main(int argc,char *argv[]) {
 				};
 				if (strcmp(optarg, "-?") == 0) {
 					action = -2;
-					command |= CMD_printhelp;
+					command = CMD_printhelp;
 					break;
 				};
 				action = ipv6calctypes_checkaction(optarg);
@@ -394,7 +392,7 @@ int main(int argc,char *argv[]) {
 	argc -= optind;
 
 	/* print help handling */
-	if (command & CMD_printhelp) {
+	if (command == CMD_printhelp) {
 		if (outputtype == -2) {
 			printhelp_outputtypes(inputtype);
 			exit(1);
@@ -417,12 +415,12 @@ int main(int argc,char *argv[]) {
 	};
 	
 	/* do work depending on selection */
-	if (command & CMD_printversion) {
+	if (command == CMD_printversion) {
 		printversion();
 		exit(1);
 	};
 
-	if (command & CMD_printhelp) {
+	if (command == CMD_printhelp) {
 		printhelp();
 		exit (1);
 	};
@@ -678,6 +676,31 @@ OUTPUT_type: /* temporary solutions */
 	if (ipv6calc_debug) {
 		fprintf(stderr, "%s: Start of output handling\n", DEBUG_function_name);
 	};
+	
+	/* catch showinfo */	
+	if (command == CMD_showinfo) {
+		if (ipv6addr.flag_valid == 1) {
+			retval = showinfo_ipv6addr(&ipv6addr, formatoptions);
+	       	} else if (ipv4addr.flag_valid == 1) {
+		       	fprintf(stderr, "Showinfo of IPv4 address currently not implemented!\n");
+			retval = 1;
+	       	} else if (macaddr.flag_valid == 1) {
+		       	fprintf(stderr, "Showinfo of MAC address currently not implemented!\n");
+			retval = 1;
+		} else {
+		       	fprintf(stderr, "No valid IPv6 address given!\n");
+			retval = 1;
+		};
+		if (retval != 0) {
+			fprintf(stderr, "Problem occurs during selection of showinfo\n");
+			exit (1);
+		};
+		goto RESULT_print;
+	} else if (command == CMD_showinfotypes) {
+		showinfo_availabletypes();
+			exit (1);
+	};
+
 
 	switch (outputtype) {
 		case -1:
@@ -756,26 +779,13 @@ OUTPUT_type: /* temporary solutions */
 		fprintf(stderr, "%s: End of output handling\n", DEBUG_function_name);
 	};
 
-	if (outputtype != -1 ) {
-		goto RESULT_print;
-	};
-
-	/* <- old behavior */	
-		if (command & CMD_showinfo) {
-			if ( (command & CMD_showtypes) || (command & CMD_printhelp)) {
-				showinfo_printhelplong();
-				exit(1);
-			};
-			retval = showinfo(&ipv6addr, command);
-		}; 
-
 RESULT_print:
-		/* print result */
-		if (retval == 0) {
-			fprintf(stdout, "%s\n", resultstring);
-		} else {
-			fprintf(stderr, "%s\n", resultstring);
-		};
+	/* print result */
+	if (retval == 0) {
+		fprintf(stdout, "%s\n", resultstring);
+	} else {
+		fprintf(stderr, "%s\n", resultstring);
+	};
 	exit(retval);
 };
 #undef DEBUG_function_name

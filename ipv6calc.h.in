@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.h[.in]
- * Version    : $Id: ipv6calc.h.in,v 1.11 2002/03/03 11:01:53 peter Exp $
+ * Version    : $Id: ipv6calc.h.in,v 1.12 2002/03/03 12:55:43 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -44,9 +44,6 @@
 
 #define CMD_printexamples       0x00004l
 
-#define CMD_showtypes   	0x00400l
-#define CMD_machinereadable   	0x00800l
-
 /* new style options */
 #define CMD_inputtype			0x0200000l
 #define CMD_outputtype			0x0400000l
@@ -69,6 +66,7 @@
 #define CMD_ifinet6_to_compressed	0x00010dl
 
 #define CMD_showinfo			0x001001l
+#define CMD_showinfotypes		0x001002l
 
 
 /* debug values */

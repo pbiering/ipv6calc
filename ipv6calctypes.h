@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.5 2002/03/03 11:01:53 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.6 2002/03/03 12:55:43 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -25,18 +25,18 @@ extern int ipv6calctypes_checkaction(char *string);
 
 
 /* Format number definitions, each possible format has one number */
-#define FORMAT_auto		0x0000
-#define FORMAT_revnibbles_int	0x0001		
-#define FORMAT_revnibbles_arpa	0x0002		
-#define FORMAT_bitstring	0x0004
-#define FORMAT_ipv6addr		0x0008
-#define FORMAT_ipv4addr		0x0010
-#define FORMAT_mac		0x0020
-#define FORMAT_eui64		0x0040
-#define FORMAT_base85		0x0080
-#define FORMAT_ifinet6		0x0100
-#define FORMAT_iid		0x0200
-#define FORMAT_iid_token	0x0400
+#define FORMAT_auto		0x0000l
+#define FORMAT_revnibbles_int	0x0001l		
+#define FORMAT_revnibbles_arpa	0x0002l		
+#define FORMAT_bitstring	0x0004l
+#define FORMAT_ipv6addr		0x0008l
+#define FORMAT_ipv4addr		0x0010l
+#define FORMAT_mac		0x0020l
+#define FORMAT_eui64		0x0040l
+#define FORMAT_base85		0x0080l
+#define FORMAT_ifinet6		0x0100l
+#define FORMAT_iid		0x0200l
+#define FORMAT_iid_token	0x0400l
 
 /* Primary label of format number, keeping also an explanation */
 typedef struct {
@@ -78,18 +78,19 @@ static const long int ipv6calc_formatmatrix[][2] = {
 
 
 /* Format options */
-#define FORMATOPTION_HEAD			0xf000
-#define FORMATOPTION_printlowercase		0x0001
-#define FORMATOPTION_printuppercase		0x0002
-#define FORMATOPTION_printprefix		0x0004
-#define FORMATOPTION_printsuffix		0x0008
-#define FORMATOPTION_maskprefix			0x0010
-#define FORMATOPTION_masksuffix			0x0020
-#define FORMATOPTION_printstart			0x0040
-#define FORMATOPTION_printend			0x0080
-#define FORMATOPTION_printcompressed		0x0100
-#define FORMATOPTION_printuncompressed		0x0200
-#define FORMATOPTION_printfulluncompressed	0x0400
+#define FORMATOPTION_HEAD			0xf000l
+#define FORMATOPTION_printlowercase		0x0001l
+#define FORMATOPTION_printuppercase		0x0002l
+#define FORMATOPTION_printprefix		0x0004l
+#define FORMATOPTION_printsuffix		0x0008l
+#define FORMATOPTION_maskprefix			0x0010l
+#define FORMATOPTION_masksuffix			0x0020l
+#define FORMATOPTION_printstart			0x0040l
+#define FORMATOPTION_printend			0x0080l
+#define FORMATOPTION_printcompressed		0x0100l
+#define FORMATOPTION_printuncompressed		0x0200l
+#define FORMATOPTION_printfulluncompressed	0x0400l
+#define FORMATOPTION_machinereadable		0x0800l
 
 typedef struct {
 	unsigned long int number;
@@ -109,7 +110,8 @@ static const s_formatoption ipv6calc_formatoptionstrings[] = {
 	{ FORMATOPTION_printcompressed  , "--printcompressed"  , "Print in compressed format" },
 	{ FORMATOPTION_printuncompressed  , "--printuncompressed"  , "Print in uncompressed format" },
 	{ FORMATOPTION_printfulluncompressed  , "--printfulluncompressed"  , "Print in full uncompressed format" },
-	{ FORMATOPTION_printsuffix      , "--printsuffix"     , "Print only suffix" }
+	{ FORMATOPTION_printsuffix      , "--printsuffix"     , "Print only suffix" },
+	{ FORMATOPTION_machinereadable  , "--machinereadable|-m" , "Print output machine readable" },
 };
 
 /* Possible format option map */
