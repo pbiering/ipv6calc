@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.9 2003/06/15 12:40:53 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.10 2003/06/15 16:15:07 peter Exp $
  * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -183,7 +183,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		};
 	};
 	
-	if (length >= 7 && length <= 15 && numdots == 3 && numcolons == 0 && numdigits == numxdigits) {
+	if (length >= 7 && length <= 15 && numdots == 3 && numcolons == 0 && numdigits == numxdigits && numdigits >= 4 && numdigits <= 12) {
 		/* IPv4: ddd.ddd.ddd.ddd */
 		type = FORMAT_ipv4addr;
 		goto END_libipv6calc_autodetectinput;
