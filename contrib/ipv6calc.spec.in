@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Version    : $Id: ipv6calc.spec.in,v 1.1 2001/12/27 22:08:11 peter Exp $
+# Version    : $Id: ipv6calc.spec.in,v 1.2 2001/12/27 22:19:25 peter Exp $
 # Copyright  : 2001 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
@@ -30,6 +30,7 @@ See also here for more details: http://www.bieringer.de/linux/IPv6/
 %setup -q -n ipv6calc-%{version}
 
 %build
+./configure
 make clean
 make
 make test
@@ -58,6 +59,7 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Thu Dec 27 2001 Peter Bieringer <pb@bieringer.de>
 - Add comment header
+- Add call to configure on build
 
 * Tue Dec 18 2001 Peter Bieringer <pb@bieringer.de>
 - Replace hardwired version number with autoconf/configure variable

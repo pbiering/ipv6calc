@@ -1,10 +1,13 @@
 /*
- *  $Id: ChangeLog,v 1.5 2001/12/18 11:22:55 peter Exp $ 
+ *  $Id: ChangeLog,v 1.6 2001/12/27 22:19:22 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb@bieringer.de>
 --------------------------------------------------------------------
+
+20011227/PB:
+	Make tarball ready to use
 
 20011218/PB:
 	Change version numbering to autoconf/configure
