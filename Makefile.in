@@ -1,7 +1,7 @@
 #
 # Makefile for ipv6calc
 #
-# Version:     $Id: Makefile.in,v 1.4 2002/02/19 21:41:17 peter Exp $
+# Version:     $Id: Makefile.in,v 1.5 2002/02/23 11:32:26 peter Exp $
 #
 # Author:      Peter Bieringer <pb@bieringer.de>
 #
@@ -10,7 +10,7 @@
 #COPTS = -O2 -Wall -g		# old one
 COPTS = -O2 -Wall -g -ansi	# ANSI compatible
 
-CFLAGS	= $(COPTS)
+CFLAGS	= $(COPTS) -I.
 
 CC	= gcc
 
@@ -51,3 +51,10 @@ installonly:
 test:
 		make
 		./test_ipv6calc.sh || exit 1
+
+getopt1.o: getopt1.c
+		${CC} ${CFLAGS} -fPIC -o getopt1.o -c -s getopt1.c
+
+getopt.o: getopt.c
+		${CC} ${CFLAGS} -fPIC -o getopt.o -c -s getopt.c
+

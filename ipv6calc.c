@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.4 2002/02/19 21:41:17 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.5 2002/02/23 11:32:26 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
  * 
  * Information:
@@ -13,6 +13,7 @@
 #include <string.h>
 #include <stdlib.h> 
 #include <getopt.h> 
+#include <unistd.h> 
 #include "ipv6calc.h"
 
 long int ipv6calc_debug = 0;

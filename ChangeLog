@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.13 2002/02/23 11:07:44 peter Exp $ 
+ *  $Id: ChangeLog,v 1.14 2002/02/23 11:32:26 peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,8 @@ Info:
 	complete limited support of bistring labels
 	change examples to 6bone dummy address (3ffe:ffff:...)
 	add a trailling dot on ip6.[int|arpa] output
+	migrate getopt patch for OpenBSD submitted by Vladimir Kotal <vlada at openbsd dot cz>
+	minor Makefile fixes
 	
 20020218/PB:
 	fix bug relating to ipv6calc.h (changes now in ipv6calc.h.in)

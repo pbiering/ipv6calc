@@ -1,6 +1,6 @@
 Credits to
 
-* Robert Elz <kre@munnari.OZ.AU>
+* Robert Elz <kre at munnari dot OZ dot AU>
    for RFC 1924 conversion source
 
 * Authors of ircd
@@ -12,18 +12,21 @@ Credits to
 * Authors of Linux kernel
    (recycling of some code)
    
-* Arkadiusz Miskiewicz <misiek@pld.ORG.PL>
-* Jun-ichiro itojun Hagino <itojun@iijlab.net>
-* Horacio J. Peña <horape@compendium.com.ar>
+* Arkadiusz Miskiewicz <misieki at pld dot ORG dot PL>
+* Jun-ichiro itojun Hagino <itojun at iijlab dot net>
+* Horacio J. Peña <horape at compendium dot com dot ar>
    for previously used RFC 1884 compress example code
 
-* Hubert Feyrer <hubertf@netbsd.org>
+* Hubert Feyrer <hubertf at netbsd dot org>
    for BSD enabling patches, BSD testbed and other help
 
-* Pekka Savola <pekkas@netcore.fi>
+* Pekka Savola <pekkas at netcore dot fi>
    for bug reporting
 
-* YOSHIFUJI Hideaki <yoshfuji@linux-ipv6.org>
+* YOSHIFUJI Hideaki <yoshfuji at linux-ipv6 dot org>
    for MD5 hints
 
-	Peter Bieringer, 2001
+* Vladimir Kotal <vlada at openbsd dot cz>
+   for getopt patch for compiling on OpenBSD
+
+	Peter Bieringer, 2001-2002
