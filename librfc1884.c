@@ -1,11 +1,11 @@
 /*
  * Project    : ipv6calc
- * File       : lib1884.c
- * Version    : $Id: librfc1884.c,v 1.2 2002/02/25 21:18:51 peter Exp $
+ * File       : librfc1884.c
+ * Version    : $Id: librfc1884.c,v 1.3 2002/02/27 23:07:15 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
- * Function libary for conversions defined in RFC 1884
+ *  Function library for conversions defined in RFC 1884
  */
 
 #include <stdio.h>
@@ -17,7 +17,8 @@
 #include "librfc1884.h"
 
 
-/* function decompress a given IPv6 address (reverse RFC 1884)
+/*
+ * function decompress a given IPv6 address (reverse RFC 1884)
  *  
  * in : *addrstring = IPv6 address
  * out: *resultstring = result
@@ -93,7 +94,8 @@ int compaddr_to_uncompaddr(char *addrstring, char *resultstring) {
 #undef DEBUG_function_name
 
 
-/* function IPv6addrstruct to compressed format (RFC 1884)
+/*
+ * function IPv6addrstruct to compressed format (RFC 1884)
  *
  *  compress the biggest '0' block, leading has precedence
  *

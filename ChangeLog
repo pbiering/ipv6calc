@@ -1,10 +1,20 @@
 /*
- *  $Id: ChangeLog,v 1.18 2002/02/26 22:14:52 peter Exp $ 
+ *  $Id: ChangeLog,v 1.19 2002/02/27 23:07:14 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20020227/PB:
+	libipv6addr.c: fixed a bug in ipv6addr_setoctett.c regarding num limit (oops..)
+	ipv6calc.c: move structure definitions to...
+	libmac.h: add related structure definition ipv6calc.c
+	libipv6addr.h: add related structure definition from ipv6calc.c
+	libipv4addr.*: new for handling IPv4 addresses
+	ipv4_to_6to4addr.*: new for handling conversion IPv4 -> IPv6to4
+	librfc3056.*: library for conversion IPv4 -> IPv6to4
+	libipv6calc.c: fix array index bug of compat[] (oops..)
+
 20020226/PB:
 	add original getopt tarball into samplecode, fill related READMEs
 	tag release 0.38

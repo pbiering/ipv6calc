@@ -1,15 +1,15 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1924.h
- * Version    : $Id: librfc1924.h,v 1.2 2002/02/25 21:18:51 peter Exp $
+ * Version    : $Id: librfc1924.h,v 1.3 2002/02/27 23:07:15 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
- *  Header file for librfc1924.c libary
+ *  Header file for librfc1924.c
  */ 
 
-/* prototypes */
-#include "ipv6calc.h"
+#include "libipv6addr.h"
 
+/* prototypes */
 extern int ipv6addrstruct_to_base85(ipv6calc_ipv6addr *ipv6addrp, char *resultstring);
 extern int base85_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);

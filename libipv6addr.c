@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.4 2002/02/25 22:55:54 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.5 2002/02/27 23:07:15 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -52,7 +52,8 @@ char *ipv6addr_typesstring[IPV6INFO_NUM] = {
 };
 
 
-/* function returns an octett of an IPv6 address
+/*
+ * function returns an octett of an IPv6 address
  *
  * in: ipv6addrp = pointer to IPv6 address structure
  * in: numoctett  = number of octett (0 = MSB, 15 = LSB)
@@ -74,7 +75,8 @@ unsigned int ipv6addr_getoctett(ipv6calc_ipv6addr *ipv6addrp, int numoctett) {
 #undef DEBUG_function_name
 
 
-/* function returns a word of an IPv6 address
+/*
+ * function returns a word of an IPv6 address
  *
  * in: ipv6addrp = pointer to IPv6 address structure
  * in: numword   = number of word (0 = MSB, 7 = LSB)
@@ -97,7 +99,8 @@ unsigned int ipv6addr_getword(ipv6calc_ipv6addr *ipv6addrp, int numword) {
 #undef DEBUG_function_name
 
 
-/* function returns a dword of an IPv6 address
+/*
+ * function returns a dword of an IPv6 address
  *
  * in: ipv6addrp = pointer to IPv6 address structure
  * in: numdword  = number of word (0 = MSB, 3 = LSB)
@@ -122,7 +125,8 @@ unsigned int ipv6addr_getdword(ipv6calc_ipv6addr *ipv6addrp, int numdword) {
 #undef DEBUG_function_name
 
 
-/* function sets an octett of an IPv6 address
+/*
+ * function sets an octett of an IPv6 address
  *
  * mod: ipv6addrp = pointer to IPv6 address structure
  * in: numoctett   = number of word (0 = MSB, 15 = LSB)
@@ -132,7 +136,7 @@ unsigned int ipv6addr_getdword(ipv6calc_ipv6addr *ipv6addrp, int numdword) {
 #define DEBUG_function_name "libipv6addr/ipv6addr_setoctett"
 void ipv6addr_setoctett(ipv6calc_ipv6addr *ipv6addrp, int numoctett, unsigned int value) {
 	
-	if ( ( numoctett < 0 ) || ( numoctett > 7 ) ) {
+	if ( ( numoctett < 0 ) || ( numoctett > 15 ) ) {
 		fprintf(stderr, "%s: given octett number '%d' is out of range!\n", DEBUG_function_name, numoctett);
 		exit(2);
 	};
@@ -146,10 +150,11 @@ void ipv6addr_setoctett(ipv6calc_ipv6addr *ipv6addrp, int numoctett, unsigned in
 
 	return;
 };
-
-
 #undef DEBUG_function_name
-/* function sets a word of an IPv6 address
+
+
+/*
+ * function sets a word of an IPv6 address
  *
  * mod: ipv6addrp = pointer to IPv6 address structure
  * in: numword   = number of word (0 = MSB, 7 = LSB)
@@ -177,7 +182,8 @@ void ipv6addr_setword(ipv6calc_ipv6addr *ipv6addrp, int numword, unsigned int va
 #undef DEBUG_function_name
 
 
-/* function sets a dword of an IPv6 address
+/*
+ * function sets a dword of an IPv6 address
  *
  * mod: ipv6addrp = pointer to IPv6 address structure
  * in: numdword  = number of word (0 = MSB, 3 = LSB)
@@ -248,7 +254,8 @@ void ipv6addr_clearall(ipv6calc_ipv6addr *ipv6addrp) {
 };
 #undef DEBUG_function_name
 
-/* function gets type of an IPv6 address
+/*
+ * function gets type of an IPv6 address
  *
  * with credits to kernel and USAGI developer team
  * basic code was taken from "kernel/net/ipv6/addrconf.c"

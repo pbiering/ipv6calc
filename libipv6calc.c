@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.5 2002/02/25 22:55:54 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.6 2002/02/27 23:07:15 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -110,7 +110,7 @@ int addr_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6ad
 	};
 
 	/* clear variables */
-	for ( i = 0; i <= 7; i++ ) {
+	for ( i = 0; i <= 3; i++ ) {
 		compat[i] = 0;
 	};
 

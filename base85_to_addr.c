@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : base85_to_addr.c
- * Version    : $Id: base85_to_addr.c,v 1.2 2002/02/25 21:18:50 peter Exp $
+ * Version    : $Id: base85_to_addr.c,v 1.3 2002/02/27 23:07:14 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -22,8 +22,8 @@ void base85_to_addr_printhelp(void) {
 
 void base85_to_addr_printhelplong(void) {
 	base85_to_addr_printhelp();
-	fprintf(stderr, "  Converts base85 formatted IPv6 address to a normal one (reverse RFC 1924)\n");
-	fprintf(stderr, "   e.g. 4)+k&C#VzJ4br>0wv%%Yp -> 1080:0:0:0:8:800:200c:417a\n");
+	fprintf(stderr, "  Converts base85 formatted IPv6 address to a normal one (reverse RFC 1924), e.g.\n");
+	fprintf(stderr, "   4)+k&C#VzJ4br>0wv%%Yp -> 1080:0:0:0:8:800:200c:417a\n");
 };
 
 /* Function converts a base85 formatted IPv6 address to a normal one

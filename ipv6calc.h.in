@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.h[.in]
- * Version    : $Id: ipv6calc.h.in,v 1.6 2002/02/25 22:55:54 peter Exp $
+ * Version    : $Id: ipv6calc.h.in,v 1.7 2002/02/27 23:07:15 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -56,7 +56,7 @@
 
 #define CMD_MAJOR_MASK			0xFFFF000l
 
-#define CMD_MAJOR_ADDR_INPUT		0x0FFF000l		
+#define CMD_MAJOR_ADDR_INPUT		0x07FF000l		
 #define CMD_addr_to_ip6int		0x0001000l
 #define CMD_addr_to_compressed		0x0002000l
 #define CMD_addr_to_uncompressed	0x0004000l
@@ -67,6 +67,7 @@
 #define CMD_addr_to_bitstring		0x0080000l
 #define CMD_showinfo			0x0100000l
 
+#define CMD_ipv4_to_6to4addr		0x0800000l
 #define CMD_base85_to_addr		0x1000000l
 #define CMD_mac_to_eui64		0x2000000l
 #define CMD_eui64_to_privacy		0x4000000l
@@ -84,27 +85,16 @@
 #define DEBUG_addr_to_bitstring		CMD_addr_to_bitstring
 #define DEBUG_mac_to_eui64		CMD_mac_to_eui64 
 #define DEBUG_ifinet6_to_compressed	CMD_ifinet6_to_compressed
+#define DEBUG_ipv4_to_6to4addr		CMD_ipv4_to_6to4addr
 
 #define DEBUG_libipv6calc		0x000001l
-#define DEBUG_librfc3041		0x000002l
-#define DEBUG_librfc1884		0x000004l
-#define DEBUG_librfc2874		0x000008l
-#define DEBUG_librfc1886		0x000010l
-
-/* structures */
-typedef struct {
-	unsigned int addr[6];		/* MAC address in 6x 8 bit */
-} ipv6calc_macaddr;
-
-typedef struct {
-	struct in6_addr in6_addr;	/* in6_addr structure */
-	unsigned short prefixlength;	/* prefix length (0-128) 8 bit*/
-	int flag_prefixuse;		/* =1 prefix length in use */
-	unsigned int scope;		/* address scope value 16 bit*/
-	unsigned short bit_start;	/* start of bit */
-	unsigned short bit_end;		/* end of bit */
-	int flag_startend_use;		/* =1 start or end of bit in use */
-} ipv6calc_ipv6addr;
+#define DEBUG_libipv6addr		0x000002l
+#define DEBUG_libipv4addr		0x000004l
+#define DEBUG_librfc3041		0x000010l
+#define DEBUG_librfc1884		0x000020l
+#define DEBUG_librfc2874		0x000040l
+#define DEBUG_librfc1886		0x000080l
+#define DEBUG_librfc3056		0x000100l
 
 /* global debug value */
 extern long int ipv6calc_debug;

@@ -1,12 +1,14 @@
 /*
  * Project    : ipv6calc
  * File       : ifinet6_to_compressed.h
- * Version    : $Id: ifinet6_to_compressed.h,v 1.1 2002/02/25 21:18:50 peter Exp $
+ * Version    : $Id: ifinet6_to_compressed.h,v 1.2 2002/02/27 23:07:14 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
- *  Main header file
+ *  Header file for ifinet6_to_compressed.c
  */ 
+
+#include "libipv6addr.h"
 
 /* prototypes */
 extern int  ifinet6_to_compressed(char *addrstring, char *resultstring, unsigned long command);

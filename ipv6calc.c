@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.7 2002/02/27 08:07:59 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.8 2002/02/27 23:07:15 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -28,6 +28,7 @@
 #include "ifinet6_to_compressed.h"
 #include "eui64_to_privacy.h"
 #include "mac_to_eui64.h"
+#include "ipv4_to_6to4addr.h"
 #include "showinfo.h"
 
 long int ipv6calc_debug = 0;
@@ -66,6 +67,7 @@ void printhelp() {
 	base85_to_addr_printhelp();
 	mac_to_eui64_printhelp();
 	eui64_to_privacy_printhelp();
+	ipv4_to_6to4addr_printhelp();
 	showinfo_printhelp();
 
 	return;
@@ -116,6 +118,9 @@ int main(int argc,char *argv[]) {
 		{ "ifinet6_to_compressed", 0, 0, CMD_ifinet6_to_compressed },
 
 		{ "eui64_to_privacy", 0, 0, CMD_eui64_to_privacy },
+		
+		{ "ipv4_to_6to4addr", 0, 0, CMD_ipv4_to_6to4addr },
+		
 		{ "showinfo", 0, 0, CMD_showinfo },
 		{ "machine_readable", 0, 0, CMD_machinereadable },
 		{ "show_types", 0, 0, CMD_showtypes },
@@ -205,6 +210,10 @@ int main(int argc,char *argv[]) {
 
 			case CMD_eui64_to_privacy:
 				command |= CMD_eui64_to_privacy;
+				break;
+				
+			case CMD_ipv4_to_6to4addr:
+				command |= CMD_ipv4_to_6to4addr;
 				break;
 
 			case 'i':
@@ -508,6 +517,18 @@ int main(int argc,char *argv[]) {
 				};
 				retval = eui64_to_privacy(argv[0], argv[1], resultstring);
 				break;
+				
+			case CMD_ipv4_to_6to4addr:
+				if ((argc < 1) || (command & CMD_printhelp)) {
+					if ((argc < 2) && ! (command & CMD_printhelp)) {
+						fprintf(stderr, "missing argument!\n\n");
+					};
+					ipv4_to_6to4addr_printhelplong();
+					exit(1);
+				};
+				retval = ipv4_to_6to4addr(argv[0], resultstring);
+				break;
+				
 				
 			case CMD_showinfo:
 				if ((argc < 1 && ! (command & CMD_showtypes)) || (command & CMD_printhelp)) {

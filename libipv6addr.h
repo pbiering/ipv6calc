@@ -1,33 +1,31 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.3 2002/02/25 22:55:54 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.4 2002/02/27 23:07:15 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
- *  Header file for libipv6addr.c libary
- *
+ *  Header file for libipv6addr.c
  */ 
 
-/* prototypes */
 #include "ipv6calc.h"
 
-extern unsigned int ipv6addr_getoctett(ipv6calc_ipv6addr *ipv6addrp, int numoctett);
-extern unsigned int ipv6addr_getword(ipv6calc_ipv6addr *ipv6addrp, int numword);
-extern unsigned int ipv6addr_getdword(ipv6calc_ipv6addr *ipv6addrp, int numdword);
 
-extern void ipv6addr_setoctett(ipv6calc_ipv6addr *ipv6addrp, int numocett, unsigned int value);
-extern void ipv6addr_setword(ipv6calc_ipv6addr *ipv6addrp, int numword, unsigned int value);
-extern void ipv6addr_setdword(ipv6calc_ipv6addr *ipv6addrp, int numdword, unsigned int value);
+/* typedefs */
 
-extern void ipv6addr_clear(ipv6calc_ipv6addr *ipv6addrp);
-extern void ipv6addr_clearall(ipv6calc_ipv6addr *ipv6addrp);
+#ifndef _libipv6addr_h
 
-extern unsigned int ipv6addr_gettype(ipv6calc_ipv6addr *ipv6addrp);
+#define _libipv6addr_h 1
 
-extern unsigned int ipv6addr_typesnum[];
-extern char *ipv6addr_typesstring[];
-
+typedef struct {
+	struct in6_addr in6_addr;	/* in6_addr structure */
+	unsigned short prefixlength;	/* prefix length (0-128) 8 bit*/
+	int flag_prefixuse;		/* =1 prefix length in use */
+	unsigned int scope;		/* address scope value 16 bit*/
+	unsigned short bit_start;	/* start of bit */
+	unsigned short bit_end;		/* end of bit */
+	int flag_startend_use;		/* =1 start or end of bit in use */
+} ipv6calc_ipv6addr;
 
 /* IPv6 address type definitions 
  * with credits to kernel and USAGI developer team
@@ -44,11 +42,6 @@ extern char *ipv6addr_typesstring[];
  *	any
  *	loopback
  */
-
-
-#ifndef _libipv6addr_h
-
-#define _libipv6addr_h 1
 
 #define IPV6_ADDR_ANY				0x0000U
 
@@ -95,3 +88,22 @@ extern char *ipv6addr_typesstring[];
 #define IPV6INFO_NUM 15
 
 #endif
+
+
+/* prototypes */
+extern unsigned int ipv6addr_getoctett(ipv6calc_ipv6addr *ipv6addrp, int numoctett);
+extern unsigned int ipv6addr_getword(ipv6calc_ipv6addr *ipv6addrp, int numword);
+extern unsigned int ipv6addr_getdword(ipv6calc_ipv6addr *ipv6addrp, int numdword);
+
+extern void ipv6addr_setoctett(ipv6calc_ipv6addr *ipv6addrp, int numocett, unsigned int value);
+extern void ipv6addr_setword(ipv6calc_ipv6addr *ipv6addrp, int numword, unsigned int value);
+extern void ipv6addr_setdword(ipv6calc_ipv6addr *ipv6addrp, int numdword, unsigned int value);
+
+extern void ipv6addr_clear(ipv6calc_ipv6addr *ipv6addrp);
+extern void ipv6addr_clearall(ipv6calc_ipv6addr *ipv6addrp);
+
+extern unsigned int ipv6addr_gettype(ipv6calc_ipv6addr *ipv6addrp);
+
+extern unsigned int ipv6addr_typesnum[];
+extern char *ipv6addr_typesstring[];
+

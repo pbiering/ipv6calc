@@ -1,11 +1,11 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.h
- * Version    : $Id: librfc1884.h,v 1.2 2002/02/25 21:18:51 peter Exp $
+ * Version    : $Id: librfc1884.h,v 1.3 2002/02/27 23:07:15 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
- *  Header file for librfc1884.c libary
+ *  Header file for librfc1884.c
  */ 
 
 /* prototypes */
