@@ -1,12 +1,12 @@
 /*
- * addr_to_compressed:
- * Support a function to format a given address to the compressed one
+ * Project    : ipv6calc
+ * File       : addr_to_compressed.c
+ * Version    : $Id: addr_to_compressed.c,v 1.2 2002/02/23 11:07:44 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
+ *
+ * Information:
+ *  Support a function to format a given address to the compressed one
  * 	(RFC 1884)
- *
- * Version:		$Id: addr_to_compressed.c,v 1.1 2001/10/07 14:47:40 peter Exp $
- * 
- * Author:		Peter Bieringer <pb@bieringer.de>
- *
  */
 
 #include <stdio.h>
@@ -20,8 +20,8 @@ void addr_to_compressed_printhelp() {
 
 void addr_to_compressed_printhelplong() {
 	addr_to_compressed_printhelp();
-	fprintf(stderr, "  Converts given IPv6 address to a compressed one\n");
-	fprintf(stderr, "   e.g. 3ffe:0400:0100:f101:0000:0000:0000:0001 -> 3ffe:400:100:f101::1\n\n");
+	fprintf(stderr, "  Converts given IPv6 address to a compressed one, e.g.\n");
+	fprintf(stderr, "   3ffe:ffff:0100:f101:0000:0000:0000:0001 -> 3ffe:ffff:100:f101::1\n\n");
 };
                              
 /* function IPv6addr to compressed format

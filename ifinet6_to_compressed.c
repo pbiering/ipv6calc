@@ -1,11 +1,12 @@
 /*
- * ifinet6_to_compressed:
+ * Project    : ipv6calc
+ * File       : ifinet6_to_compressed.c
+ * Version    : $Id: ifinet6_to_compressed.c,v 1.2 2002/02/23 11:07:44 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
+ *
+ * Information:
  *  Function to format an address string like shown in 
  *   Linux /proc/net/if_inet6 to a normal compressed one
- *
- * Version:		$Id: ifinet6_to_compressed.c,v 1.1 2001/10/07 14:47:40 peter Exp $
- * 
- * Author:		Peter Bieringer <pb@bieringer.de>
  *
  * some hints taken from ifconfig.c (net-tools)
  * 
@@ -22,9 +23,9 @@ void ifinet6_to_compressed_printhelp() {
 
 void ifinet6_to_compressed_printhelplong() {
 	ifinet6_to_compressed_printhelp();
-	fprintf(stderr, "  Converts given if_inet6 formatted IPv6 address to normal one\n");
-	fprintf(stderr, "   e.g. 3ffe04000100f1010000000000000001 -> 3ffe:400:100::1\n");
-	fprintf(stderr, "   e.g. 3ffe04000100f1010000000000000001 40 -> 3ffe:400:100::1/64\n\n");
+	fprintf(stderr, "  Converts given if_inet6 formatted IPv6 address to normal one, e.g.\n");
+	fprintf(stderr, "   3ffeffff0100f1010000000000000001 -> 3ffe:ffff:100::1\n");
+	fprintf(stderr, "   3ffeffff0100f1010000000000000001 40 -> 3ffe:ffff:100::1/64\n\n");
 };
 
 /* function formats an given Linux /proc/net/if_inet6 format to normal one

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : addr_to_ip6int.c
- * Version    : $Id: addr_to_ip6int.c,v 1.2 2002/02/18 22:50:39 peter Exp $
+ * Version    : $Id: addr_to_ip6int.c,v 1.3 2002/02/23 11:07:44 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
  *
  * Information:
@@ -11,7 +11,7 @@
  * some hints taken from ifconfig.c (net-tools)
  * 
  * Credits to:
- *  Keith Owens <kaos@ocs.com.au>
+ *  Keith Owens <kaos at ocs dot com dot au>
  *	net-tools authors
  *
  */
@@ -26,11 +26,11 @@ void addr_to_ip6int_printhelp() {
 
 void addr_to_ip6int_printhelplong() {
 	addr_to_ip6int_printhelp();
-	fprintf(stderr, "  Converts given IPv6 address to a dot separated reverse nibble format for use with DNS\n");
-	fprintf(stderr, "   e.g. 3ffe:400:100:f101::1\n    -> 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.0.0.4.0.e.f.f.3.ip6.int\n");
-	fprintf(stderr, "   e.g. 3ffe:400:100:f101::1/64 -> 1.0.1.f.0.0.1.0.0.0.4.0.e.f.f.3.ip6.int\n\n");
+	fprintf(stderr, "  Converts given IPv6 address to a dot separated reverse nibble format for use with DNS, e.g.\n");
+	fprintf(stderr, "   3ffe:ffff:100:f101::1\n    -> 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.0.0.4.0.e.f.f.3.ip6.int.\n");
+	fprintf(stderr, "   3ffe:ffff:100:f101::1/64 -> 1.0.1.f.0.0.1.0.0.0.4.0.e.f.f.3.ip6.int.\n\n");
 	fprintf(stderr, "  or if ip6.arpa was selected:\n");
-	fprintf(stderr, "   e.g. 3ffe:400:100:f101::1/64 -> 1.0.1.f.0.0.1.0.0.0.4.0.e.f.f.3.ip6.arpa\n\n");
+	fprintf(stderr, "   3ffe:ffff:100:f101::1/64 -> 1.0.1.f.0.0.1.0.0.0.4.0.e.f.f.3.ip6.arpa.\n\n");
 };
 
 /* function formats an given IPv6 address to the reverse nibble format used by DNS zone files
@@ -97,16 +97,16 @@ int addr_to_ip6int(char *addrstring, char *resultstring, long int command) {
 	switch(command & CMD_MAJOR_MASK) {
 	    case CMD_addr_to_ip6int:
 		if (command & CMD_printuppercase) {
-			sprintf(tempstring, "%sIP6.INT", resultstring);
+			sprintf(tempstring, "%sIP6.INT.", resultstring);
 		} else {
-			sprintf(tempstring, "%sip6.int", resultstring);
+			sprintf(tempstring, "%sip6.int.", resultstring);
 		};
 		break;
 	    case CMD_addr_to_ip6arpa:
 		if (command & CMD_printuppercase) {
-			sprintf(tempstring, "%sIP6.ARPA", resultstring);
+			sprintf(tempstring, "%sIP6.ARPA.", resultstring);
 		} else {
-			sprintf(tempstring, "%sip6.arpa", resultstring);
+			sprintf(tempstring, "%sip6.arpa.", resultstring);
 		};
 		break;
 	    default:

@@ -1,13 +1,13 @@
 /*
- * addr_to_ifinet6:
+ * Project    : ipv6calc
+ * File       : addr_to_ifinet6.c
+ * Version    : $Id: addr_to_ifinet6.c,v 1.2 2002/02/23 11:07:44 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
+ *
+ * Information:
  *  Function to format a given address to a Linux /proc/net/if_inet6 format
  *
- * Version:		$Id: addr_to_ifinet6.c,v 1.1 2001/10/07 14:47:40 peter Exp $
- * 
- * Author:		Peter Bieringer <pb@bieringer.de>
- *
  * some hints taken from ifconfig.c (net-tools)
- * 
  */
 
 #include <stdio.h>
@@ -21,9 +21,9 @@ void addr_to_ifinet6_printhelp() {
 
 void addr_to_ifinet6_printhelplong() {
 	addr_to_ifinet6_printhelp();
-	fprintf(stderr, "  Converts given IPv6 address to similar format shown in Linux /proc/net/if_inet6:\n    addr scope [prefixlength]\n");
-	fprintf(stderr, "   e.g. 3ffe:400:100:f101::1 -> 3ffe04000100f1010000000000000001 00\n");
-	fprintf(stderr, "   e.g. 3ffe:400:100:f101::1/64 -> 3ffe04000100f1010000000000000001 00 40\n\n");
+	fprintf(stderr, "  Converts given IPv6 address to similar format shown in Linux /proc/net/if_inet6:\n    addr scope [prefixlength], e.g.\n");
+	fprintf(stderr, "   3ffe:ffff:100:f101::1 -> 3ffeffff0100f1010000000000000001 00\n");
+	fprintf(stderr, "   3ffe:ffff:100:f101::1/64 -> 3ffeffff0100f1010000000000000001 00 40\n\n");
 }; 
 
 /* function formats an given IPv6 address to Linux /proc/net/if_inet6 format

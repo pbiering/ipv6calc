@@ -1,12 +1,12 @@
 /*
- * addr_to_uncompressed:
+ * Project    : ipv6calc
+ * File       : addr_to_uncompressed.c
+ * Version    : $Id: addr_to_uncompressed.c,v 1.2 2002/02/23 11:07:44 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
+ *
+ * Information:
  *  Support a function to format a given address to an
  *   uncompressed one (reverse RFC 1884)
- *
- * Version:		$Id: addr_to_uncompressed.c,v 1.1 2001/10/07 14:47:40 peter Exp $
- * 
- * Author:		Peter Bieringer <pb@bieringer.de>
- *
  */
 
 #include <stdio.h>
@@ -19,9 +19,9 @@ void addr_to_uncompressed_printhelp() {
 
 void addr_to_uncompressed_printhelplong() {
 	addr_to_uncompressed_printhelp();
-	fprintf(stderr, "  Converts given IPv6 address to an uncompressed one\n");
-	fprintf(stderr, "   e.g. 3ffe:400:100:f101::1 -> 3ffe:400:100:f101:0:0:0:1\n");
-	fprintf(stderr, "   e.g. 3ffe:400:100:f101::1/64 -> 3ffe:400:100:f101:0:0:0:1/64\n\n");
+	fprintf(stderr, "  Converts given IPv6 address to an uncompressed one, e.g.\n");
+	fprintf(stderr, "   3ffe:ffff:100:f101::1 -> 3ffe:ffff:100:f101:0:0:0:1\n");
+	fprintf(stderr, "   3ffe:ffff:100:f101::1/64 -> 3ffe:ffff:100:f101:0:0:0:1/64\n\n");
 	fprintf(stderr, "  Also it's possible to mask prefix or suffix bits or\n");
 	fprintf(stderr, "   print prefix or suffix only\n");
 };

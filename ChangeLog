@@ -1,10 +1,15 @@
 /*
- *  $Id: ChangeLog,v 1.12 2002/02/19 07:48:22 peter Exp $ 
+ *  $Id: ChangeLog,v 1.13 2002/02/23 11:07:44 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb@bieringer.de>
 --------------------------------------------------------------------
+20020223/PB:
+	complete limited support of bistring labels
+	change examples to 6bone dummy address (3ffe:ffff:...)
+	add a trailling dot on ip6.[int|arpa] output
+	
 20020218/PB:
 	fix bug relating to ipv6calc.h (changes now in ipv6calc.h.in)
 	start preparation for implementing bitstring conversions

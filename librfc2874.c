@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.c
- * Version    : $Id: librfc2874.c,v 1.1 2002/02/19 21:41:18 peter Exp $
+ * Version    : $Id: librfc2874.c,v 1.2 2002/02/23 11:07:44 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
  *
  * Information:
@@ -27,7 +27,7 @@
 int librfc2874_addr_to_bitstring(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, long int command) {
 	int retval = 1, result;
 	unsigned int nibble;
-	int noctett, nbit, nnibble;
+	int noctett, nbit, nnibble, prefixlength;
 	char tempstring[NI_MAXHOST];
 
 	if ( ipv6calc_debug & DEBUG_librfc2874 ) {
@@ -37,6 +37,13 @@ int librfc2874_addr_to_bitstring(ipv6calc_ipv6addr *ipv6addrp, char *resultstrin
 
 	/* mask bits if selected */
 	if ( (*ipv6addrp).flag_prefixuse == 1 ) {
+		/* check for supported prefix length */
+		if ((*ipv6addrp).prefixlength & 0x03) {
+			sprintf(resultstring, "Prefix length not dividable by 4 aren't supported because of non unique representation");
+			retval = 1;
+			return (retval);
+		};
+		
 		if (command & CMD_printsuffix) {
 			ipv6addrstruct_masksuffix(ipv6addrp);
 		} else {
@@ -87,17 +94,27 @@ int librfc2874_addr_to_bitstring(ipv6calc_ipv6addr *ipv6addrp, char *resultstrin
 	/* add begin and end of label */
 	if ( (*ipv6addrp).flag_prefixuse == 1 ) {
 		if (command & CMD_printsuffix) {
-			sprintf(tempstring, "\\[x%s/%d]", resultstring, 128 - (*ipv6addrp).prefixlength);
+			prefixlength = 128 - (*ipv6addrp).prefixlength;
 		} else {
-			sprintf(tempstring, "\\[x%s/%d]", resultstring, (*ipv6addrp).prefixlength);
+			prefixlength = (*ipv6addrp).prefixlength;
+		};
+	} else {
+		prefixlength = 128;
+	};
+	
+	sprintf(tempstring, "\\[x%s/%d]", resultstring, prefixlength);
+
+	if (command & CMD_printsuffix) {
+		sprintf(resultstring, "%s", tempstring);
+	} else {
+		if (command & CMD_printuppercase) {
+			sprintf(resultstring, "%s.IP6.ARPA.", tempstring);
+		} else {
+			sprintf(resultstring, "%s.ip6.arpa.", tempstring);
 		};
 	};
 
-	if (command & CMD_printuppercase) {
-		sprintf(resultstring, "%s.IP6.ARPA", tempstring);
-	} else {
-		sprintf(resultstring, "%s.ip6.arpa", tempstring);
-	};
+	retval = 0;
 
 	return (retval);
 };

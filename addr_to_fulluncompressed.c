@@ -1,12 +1,12 @@
 /*
- * addr_to_fulluncompressed:
+ * Project    : ipv6calc
+ * File       : addr_to_fulluncompressed.c
+ * Version    : $Id: addr_to_fulluncompressed.c,v 1.2 2002/02/23 11:07:44 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
+ *
+ * Information:
  *  Support a function to format a given address to a
  *   full uncompressed one (reverse RFC 1884)
- *
- * Version:		$Id: addr_to_fulluncompressed.c,v 1.1 2001/10/07 14:47:40 peter Exp $
- * 
- * Author:		Peter Bieringer <pb@bieringer.de>
- *
  */
 
 #include <stdio.h>
@@ -19,8 +19,8 @@ void addr_to_fulluncompressed_printhelp() {
 
 void addr_to_fulluncompressed_printhelplong() {
 	addr_to_fulluncompressed_printhelp();
-	fprintf(stderr, "  Converts given IPv6 address to a full uncompressed one\n");
-	fprintf(stderr, "   e.g. 3ffe:400:100:f101::1 -> 3ffe:0400:0100:f101:0000:0000:0000:0001\n\n");
+	fprintf(stderr, "  Converts given IPv6 address to a full uncompressed one, e.g.\n");
+	fprintf(stderr, "   3ffe:ffff:100:f101::1 -> 3ffe:ffff:0100:f101:0000:0000:0000:0001\n\n");
 };
 
 /* function formats an given IPv6 address to a full uncompressed format

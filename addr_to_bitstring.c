@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : addr_to_bitstring.c
- * Version    : $Id: addr_to_bitstring.c,v 1.1 2002/02/19 21:41:17 peter Exp $
- * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
+ * Version    : $Id: addr_to_bitstring.c,v 1.2 2002/02/23 11:07:44 peter Exp $
+ * Copyright  : 2002 by Peter Bieringer <pb@bieringer.de>
  *
  * Information:
  *  Function to format a given address to bitstring labels
@@ -13,16 +13,15 @@
 #include "ipv6calc.h"
 
 void addr_to_bitstring_printhelp() {
-	fprintf(stderr, " %s --addr_to_bitstring|-b [--uppercase|--lowercase] ipv6addr[/prefixlength]\n", PROGRAM_NAME);
+	fprintf(stderr, " %s --addr_to_bitstring|-b [--printsuffix] [--uppercase|--lowercase] ipv6addr[/prefixlength]\n", PROGRAM_NAME);
 }; 
 
 void addr_to_bitstring_printhelplong() {
 	addr_to_bitstring_printhelp();
-	fprintf(stderr, "  Converts given IPv6 address to a bitstring label for use with DNS\n");
-/*	fprintf(stderr, "   e.g. 3ffe:400:100:f101::1\n    -> 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.0.0.4.0.e.f.f.3.ip6.int\n");
-	fprintf(stderr, "   e.g. 3ffe:400:100:f101::1/64 -> 1.0.1.f.0.0.1.0.0.0.4.0.e.f.f.3.ip6.int\n\n");
-	fprintf(stderr, "  or if ip6.arpa was selected:\n");
-	fprintf(stderr, "   e.g. 3ffe:400:100:f101::1/64 -> 1.0.1.f.0.0.1.0.0.0.4.0.e.f.f.3.ip6.arpa\n\n");*/
+	fprintf(stderr, "  Converts given IPv6 address to a bitstring label for use with DNS, e.g.\n");
+	fprintf(stderr, "   3ffe:ffff::1    -> \\[x3ffeffff000000000000000000000001/128].ip6.arpa.\n");
+	fprintf(stderr, "   3ffe:ffff::1/64 -> \\[x3ffeffff00000000/64].ip6.arpa.\n");
+	fprintf(stderr, "   --printsuffix 3ffe:ffff::1/64 -> \\[x0000000000000001/64]\n\n");
 };
 
 /* function formats an given IPv6 address to the reverse nibble format used by DNS zone files
@@ -50,12 +49,13 @@ int addr_to_bitstring(char *addrstring, char *resultstring, long int command) {
 		return (retval);
 	};
 
+	/* get native bitstring */
 	result = librfc2874_addr_to_bitstring(&ipv6addr, resultstring, command);
 	if ( result != 0 ) {
 		retval = 1;
 		return (retval);
 	};
-		
+
 	if ( ipv6calc_debug & DEBUG_addr_to_bitstring ) {
 		fprintf(stderr, "%s: Print out: %s\n", DEBUG_function_name, resultstring);
 	};
