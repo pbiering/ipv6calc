@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.14 2004/08/31 20:21:25 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.15 2004/10/30 12:38:59 peter Exp $
  * Copyright  : 2001-2004 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -193,7 +193,7 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 	};
 	
 	/* vendor string */
-	result = libieee_get_vendor_string(helpstring, macaddrp->addr[0], macaddrp->addr[1], macaddrp->addr[2]);
+	result = libieee_get_vendor_string(helpstring, macaddrp);
 	if (result == 0) {
 		if ( machinereadable != 0 ) {
 			snprintf(tempstring, sizeof(tempstring), "OUI=\"%s\"", helpstring);
@@ -230,7 +230,8 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST], helpstring[NI_MAXHOST];
 	uint32_t machinereadable = ( formatoptions & FORMATOPTION_machinereadable);
-	int result;
+	int result, i;
+	ipv6calc_macaddr macaddr;
 
 	/* EUI-64 address */
 	snprintf(helpstring, sizeof(helpstring), "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x", (unsigned int) eui64addrp->addr[0], (unsigned int) eui64addrp->addr[1], (unsigned int) eui64addrp->addr[2], (unsigned int) eui64addrp->addr[3], (unsigned int) eui64addrp->addr[4], (unsigned int) eui64addrp->addr[5], (unsigned int) eui64addrp->addr[6], (unsigned int) eui64addrp->addr[7]);
@@ -258,7 +259,11 @@ static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t for
 	};
 
 	/* get vendor string */
-	result = libieee_get_vendor_string(helpstring, eui64addrp->addr[0], eui64addrp->addr[1], eui64addrp->addr[2]);
+	for (i = 0; i < 6; i++) {	
+		macaddr.addr[i] = eui64addrp->addr[i];
+	};
+
+	result = libieee_get_vendor_string(helpstring, &macaddr);
 	if (result == 0) {
 		if ( machinereadable != 0 ) {
 			snprintf(tempstring, sizeof(tempstring), "OUI=\"%s\"", helpstring);
