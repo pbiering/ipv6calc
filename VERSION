@@ -1,7 +1,7 @@
 # File   : VERSION
 #
-# Version: $Id: VERSION,v 1.13 2002/02/26 19:38:00 peter Exp $ 
+# Version: $Id: VERSION,v 1.14 2002/02/26 22:15:11 peter Exp $ 
 #
 # This is the current version number, processed by autoconf/configure
 
-VERSION	0.38pre1
+VERSION	0.38
