@@ -1,10 +1,14 @@
 /*
- *  $Id: ChangeLog,v 1.77 2003/10/26 20:07:53 peter Exp $ 
+ *  $Id: ChangeLog,v 1.78 2003/11/21 10:31:21 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20031121/PB
+	ipv6logconv:
+	 - add option "-q|--quiet" for be more quiet
+
 20031026/PB
 	add contributed man page: ipv6logstats.8
 
