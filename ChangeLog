@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.44 2002/04/07 10:54:59 peter Exp $ 
+ *  $Id: ChangeLog,v 1.45 2002/04/07 10:55:42 peter Exp $ 
  */
 
 Info:
@@ -7,6 +7,7 @@ Info:
 --------------------------------------------------------------------
 20020407/PB:
 	minor cosmetic fixes, import forgotten ipv6logconv changes
+	tag version 0.40rc2
 
 20020405/PB:
 	fix some database dependencies
