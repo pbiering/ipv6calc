@@ -1,6 +1,6 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.16 2002/04/05 21:11:48 peter Exp $
+# Version: $Id: TODO,v 1.17 2002/04/05 22:14:26 peter Exp $
 
 TODO list
 =========
@@ -36,8 +36,10 @@ IEEE/OUI library:
 Creating a dedicated output library
 
 Code cleanup:
- * replace sprintf with snprintf
- * splint
+ * finish splint
+
+pv6calcweb.cgi:
+ * add alarm wrapper around call of ipv6calc
 
 
 
