@@ -360,15 +360,13 @@ open(OUT, ">$OUTFILE") || die "Cannot open outfile: $OUTFILE";
 
 # Header
 my $now_string = localtime;
-print OUT qq|
-/*
+print OUT qq| /*
  * Project       : ipv6calc
  * File          : dbipv4_assignment.h
 |;
 print OUT " * Version       : \$I";
-print OUT "d:\$";
-print OUT qq|
- * Generated     : $now_string
+print OUT "d:\$\n";
+print OUT qq| * Generated     : $now_string
  * Data copyright: RIPE NCC, APNIC, ARIN
  *
  * Information:
