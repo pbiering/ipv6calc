@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6calc
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.1 2002/03/18 20:00:20 peter Exp $
+# Version    : $Id: Makefile,v 1.2 2002/03/20 23:35:12 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -23,7 +23,7 @@ all:		ipv6calc
 
 $(OBJS):	ipv6calc.h showinfo.h
 
-ipv6calc:	$(OBJS)
+ipv6calc:	$(OBJS) 
 		echo "Compile: ipv6calc"
 		$(CC) -o ipv6calc $(OBJS) $(GETOBJS) -lipv6calc -L../lib/ -lcrypto
 

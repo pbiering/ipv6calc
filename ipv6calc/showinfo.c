@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.5 2002/03/20 08:19:35 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.6 2002/03/20 23:35:12 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -95,8 +95,9 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long f
 	typeinfo = ipv6addr_gettype(ipv6addrp);
 	registry = ipv6addr_getregistry(ipv6addrp);
 
-	if ( (ipv6calc_debug & DEBUG_showinfo)  != 0) {
-		fprintf(stderr, "%s: result of 'ipv6addr_gettype': %x\n", DEBUG_function_name, typeinfo);
+	if ( (ipv6calc_debug & DEBUG_showinfo) != 0) {
+		fprintf(stderr, "%s: result of 'ipv6addr_gettype'    : %x\n", DEBUG_function_name, typeinfo);
+		fprintf(stderr, "%s: result of 'ipv6addr_getregistry': %x\n", DEBUG_function_name, registry);
 	};
 
 	for (i = 0; i < sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0]); i++ ) {
@@ -168,8 +169,14 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long f
 	};
 	
 	/* IPv6 Registry? */
+	if ( (ipv6calc_debug & DEBUG_showinfo) != 0) {
+		fprintf(stderr, "%s: Check registry: %d\n", DEBUG_function_name, registry);
+	};
 	if ( registry != -1 ) {
 		for ( i = 0; i < (int) (sizeof(ipv6calc_ipv6addrregistry) / sizeof(ipv6calc_ipv6addrregistry[0])); i++ ){
+			if ( (ipv6calc_debug & DEBUG_showinfo) != 0) {
+				fprintf(stderr, "%s: Registry type check: %d\n", DEBUG_function_name, i);
+			};
 			if ( ipv6calc_ipv6addrregistry[i].number == registry ) {
 				if ( machinereadable != 0 ) {
 					snprintf(tempstring, sizeof(tempstring), "IPV6_REGISTRY=%s", ipv6calc_ipv6addrregistry[i].tokensimple);
@@ -177,8 +184,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long f
 				} else {
 					fprintf(stdout, "Registry for address: %s\n", ipv6calc_ipv6addrregistry[i].token);
 				};
+				break;
 			};
-			break;
 		};
 	};
 	
