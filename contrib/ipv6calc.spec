@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Version    : $Id: ipv6calc.spec,v 1.17 2003/09/06 13:12:26 peter Exp $
+# Version    : $Id: ipv6calc.spec,v 1.18 2003/09/06 13:36:02 peter Exp $
 # Copyright  : 2001-2003 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
@@ -59,7 +59,7 @@ rm -rf $RPM_BUILD_ROOT
 /bin/ipv6calc
 /usr/bin/ipv6logconv
 %doc ChangeLog README CREDITS TODO COPYING LICENSE USAGE
-%doc examples/analog/analog-dist.cfgexamples/analog/run_analog.sh examples/analog/ipv6calc.tab examples/analog/analog-ipv6calc-descriptions.txt examples/analog/analog-dist-combined.cfg
+%doc examples/analog/analog-dist.cfg examples/analog/run_analog.sh examples/analog/ipv6calc.tab examples/analog/analog-ipv6calc-descriptions.txt examples/analog/analog-dist-combined.cfg
 
 %doc ipv6calcweb/ipv6calcweb.cgi doc/ipv6calc.lyx doc/ipv6calc.sgml
 
