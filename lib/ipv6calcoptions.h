@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.1 2002/03/18 19:59:23 peter Exp $
+ * Version    : $Id: ipv6calcoptions.h,v 1.2 2002/03/24 21:38:27 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -22,6 +22,7 @@
 #define CMD_printversion		0x00002
 
 #define CMD_printexamples		0x00004
+#define CMD_printoldoptions		0x00008
 
 /* new style options */
 #define CMD_inputtype			0x0200000
@@ -73,8 +74,10 @@ static struct option ipv6calc_longopts[] = {
 
 	/* help options */
 	{"help", 0, 0, (int) 'h'},
-	{"examples"     , 0, 0, CMD_printexamples },
-	{"printexamples", 0, 0, CMD_printexamples },
+	{"examples"       , 0, 0, CMD_printexamples   },
+	{"printexamples"  , 0, 0, CMD_printexamples   },
+	{"printoldoptions", 0, 0, CMD_printoldoptions },
+	{"old"            , 0, 0, CMD_printoldoptions },
 
 	
 	/* backward compatibility/shortcut commands */

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.1 2002/03/18 19:59:22 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.2 2002/03/24 21:38:27 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -207,8 +207,6 @@ void printhelp_actiontypes(void) {
 
 /* print global help */
 void printhelp(void) {
-	int i;
-	
 	printversion();
 	printcopyright();
 	fprintf(stderr, "\n");
@@ -234,7 +232,16 @@ void printhelp(void) {
 	fprintf(stderr, "  --showinfo|-i [--machine_readable|-m] : show information about input data\n");
 	fprintf(stderr, "  --showinfo|-i --show_types            : show available types on '-m'\n");
 	fprintf(stderr, "\n");
+	fprintf(stderr, " To see old-style option use: --printoldoptions\n");
 
+	return;
+};
+
+void printhelp_oldoptions(void) {
+	int i;
+	
+	printversion();
+	printcopyright();
 	fprintf(stderr, " Usage with old style (shortcut) options (going obsolete):\n");
 	fprintf(stderr, "  <shortcut option> [<format option> ...] <input data> [...]\n");
 	fprintf(stderr, "\n");
@@ -245,7 +252,6 @@ void printhelp(void) {
 	};
 	
 	fprintf(stderr, "\n");
-
 	return;
 };
 
