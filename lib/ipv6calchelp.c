@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.5 2002/04/04 21:58:21 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.6 2002/04/08 19:50:59 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -212,6 +212,7 @@ void printhelp(void) {
 	fprintf(stderr, "\n");
 	fprintf(stderr, " General:\n");
 	fprintf(stderr, "  [-d|--debug <debug value>] : debug value (bitwise like)\n");
+	fprintf(stderr, "  [-q|--quiet]               : be more quiet\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, " Usage with new style options:\n");
 	fprintf(stderr, "  [--in <input type>]   : specify input  type\n");
@@ -233,6 +234,7 @@ void printhelp(void) {
 	fprintf(stderr, "  --showinfo|-i --show_types            : show available types on '-m'\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, " To see old-style option use: --printoldoptions\n");
+	fprintf(stderr, "\n");
 
 	return;
 };
@@ -395,7 +397,7 @@ void printhelp_output_dispatcher(const uint32_t outputtype) {
 			break;
 			
 		default:
-			fprintf(stderr, " Help currently missing...!\n");
+			fprintf(stderr, " Examples currently missing...!\n");
 			break;
 	};
 	
