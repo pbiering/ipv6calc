@@ -1,6 +1,6 @@
 dnl Project: ipv6calc
 dnl File   : configure.in
-dnl Version: $Id: configure.in,v 1.4 2003/11/21 10:31:21 peter Exp $
+dnl Version: $Id: configure.in,v 1.5 2003/11/21 11:07:10 peter Exp $
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(ipv6calc/ipv6calc.c)
@@ -41,4 +41,4 @@ AC_DEFINE_UNQUOTED(IPV6CALC_VERSION, "${IPV6CALC_VERSION}")
 dnl Substitute version
 AC_SUBST(IPV6CALC_VERSION)
 
-AC_OUTPUT([Makefile ipv6calc/Makefile man/Makefile ipv6logconv/Makefile ipv6logstats/Makefile version.h contrib/ipv6calc.spec])
+AC_OUTPUT([Makefile ipv6calc/Makefile man/Makefile ipv6logconv/Makefile ipv6logstats/Makefile version.h contrib/ipv6calc.spec ipv6calcweb/ipv6calcweb.cgi ])

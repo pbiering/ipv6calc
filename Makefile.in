@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.27 2003/11/21 10:31:21 peter Exp $
+# Version    : $Id: Makefile.in,v 1.28 2003/11/21 11:07:10 peter Exp $
 # Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -30,10 +30,10 @@ ipv6calc:	getopt-make lib-make ipv6calc-make ipv6calcweb-make db-ieee-oui-make d
 
 distclean:
 		make clean
-		cd ipv6calc && make distclean
-		cd databases/ieee-oui && make distclean
-		cd databases/ipv4-assignment && make distclean
 		rm -f config.cache config.status config.log
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib databases/ieee-oui databases/ipv4-assignment; do
+			cd $dir && make distclean
+		done
 
 autoclean:
 		make distclean
@@ -41,24 +41,23 @@ autoclean:
 		rm -f version.h
 		rm -f contrib/ipv6calc.spec
 		rm config.h
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do
+			cd $dir && make autoclean
+		done
 
 clean:
-		cd getopt && make clean
-		cd ipv6logconv && make clean
-		cd ipv6calc && make clean
-		cd lib/ && make clean
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do
+			cd $dir && make clean
+		done
 
 install:
 		make test
-		cd ipv6logconv && make test
-		cd ipv6calc && make test
 		make installonly
 
 installonly:
-		cd ipv6calc && make install
-		cd man && make install
-		cd ipv6logconv && make install
-		cd ipv6logstats && make install
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do
+			cd $dir && make install
+		done
 
 getopt-make:
 		cd getopt && make
@@ -91,5 +90,6 @@ update:
 
 
 test:
-		cd ipv6logconv && make test
-		cd ipv6calc && make test
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do
+			cd $dir && make test
+		done

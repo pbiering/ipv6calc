@@ -3394,7 +3394,7 @@ _ACEOF
 
 
 
-                                                                      ac_config_files="$ac_config_files Makefile ipv6calc/Makefile man/Makefile ipv6logconv/Makefile ipv6logstats/Makefile version.h contrib/ipv6calc.spec"
+                                                                                ac_config_files="$ac_config_files Makefile ipv6calc/Makefile man/Makefile ipv6logconv/Makefile ipv6logstats/Makefile version.h contrib/ipv6calc.spec ipv6calcweb/ipv6calcweb.cgi"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -3925,6 +3925,7 @@ do
   "ipv6logstats/Makefile" ) CONFIG_FILES="$CONFIG_FILES ipv6logstats/Makefile" ;;
   "version.h" ) CONFIG_FILES="$CONFIG_FILES version.h" ;;
   "contrib/ipv6calc.spec" ) CONFIG_FILES="$CONFIG_FILES contrib/ipv6calc.spec" ;;
+  "ipv6calcweb/ipv6calcweb.cgi" ) CONFIG_FILES="$CONFIG_FILES ipv6calcweb/ipv6calcweb.cgi" ;;
   "config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
