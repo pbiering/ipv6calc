@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.42 2002/04/05 21:11:48 peter Exp $ 
+ *  $Id: ChangeLog,v 1.43 2002/04/05 21:49:36 peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,8 @@ Info:
 	fix some database dependencies
 	fix NetBSD has inttypes.h instead of stdint.h 
 	change back to not splint'ed librfc1924.c because of a self made not easy to find bug :-(
+	some minor fixes
+	tag version 0.40rc1
 
 20020403/PB:
 	more splint'ing, some type review
