@@ -1,24 +1,28 @@
 /*
- *  $Id: ChangeLog,v 1.53 2002/04/21 16:30:25 peter Exp $ 
+ *  $Id: ChangeLog,v 1.54 2002/05/11 09:12:04 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
-200204021/PB:
+20020511/PB:
+	bugfix not showing OUI on showinfo "-i"
+	update CIDR and OUI data
+
+20020421/PB:
 	review inttypes definitions, create new header file
 	minor fixes to suppress compiler warnings
 	tag version 0.40rc5
 	tag version 0.40
 
-200204020/PB:
+20020420/PB:
 	fix defines for FreeBSD and OpenBSD
 	minor fixes
 
-200204010/PB:
+20020410/PB:
 	tag version 0.40rc4
 
-200204010/PB:
+20020410/PB:
 	new format feature: printmirrored for reverse dot separated format
 	minor fixes
 
