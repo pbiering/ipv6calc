@@ -1,0 +1,45 @@
+#!/bin/bash
+# dig6 v0.2 by mikolas bingemer
+# http://netfreaks.org/dig6
+#
+# little dig/ipv6calc wrapper for easy digging
+#
+IPV6CALC=/bin/ipv6calc
+DIG=/usr/bin/dig
+#
+if [ ! -x "$IPV6CALC" ]; then
+	echo "Can't exceute $IPV6CALC"; exit 1
+fi;
+if [ ! -x "$DIG" ]; then
+	echo "Can't exceute $DIG"; exit 1
+fi;
+if [ ! $# -gt 0 ]; then
+	echo "Usage: dig6 <ipv6addr> [options]"; exit 1
+fi;
+
+echo "; <<>> dig6 0.1 <<>> "$@""
+
+IPV6ADDR=$1;shift
+if [ `echo "$IPV6ADDR" | grep "/"` ]; then
+	echo ";; object: ipv6 network"
+	echo ";; query: ns"
+	echo ""
+	MODE=ns
+elif [ `echo "$IPV6ADDR" | grep ":"` ]; then
+	echo ";; object: ipv6 address"
+	echo ";; query: ptr"
+	echo ""
+	MODE=ptr
+elif [ ! $MODE ]; then
+	echo ";; object: hostname"
+	echo ";; query: aaaa"
+	MODE=aaaa
+fi;
+if [ $MODE!="aaaa" ]; then
+	IP6INT=`"$IPV6CALC" --out revnibbles.int --in ipv6addr $IPV6ADDR` || exit 1
+	echo ";; CALCULATED:"
+	echo ";$IP6INT"
+fi;
+
+"$DIG" $MODE $IP6INT "$@"
+exit 0
