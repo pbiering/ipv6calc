@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3041.c
- * Version    : $Id: librfc3041.c,v 1.6 2004/08/31 20:16:26 peter Exp $
+ * Version    : $Id: librfc3041.c,v 1.7 2004/10/30 12:35:52 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <openssl/md5.h>
+#include "../md5/md5.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
 #include "librfc3041.h"
@@ -33,7 +33,7 @@
 int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv6calc_ipv6addr *newidentifier, ipv6calc_ipv6addr *newtoken) {
 #define DEBUG_function_name "librfc3041/librfc3041_calc"
 	int retval = 1, i;
-	MD5_CTX md5hash;
+	struct md5_ctx md5hash;
 	char tempstring[NI_MAXHOST],  tempstring2[NI_MAXHOST];
 	unsigned char digest[MD5_DIGEST_LENGTH];
 
@@ -41,12 +41,12 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 		fprintf(stderr, "%s: Got identifier '%08x-%08x' and token '%08x-%08x'\n", DEBUG_function_name, (unsigned int) ipv6addr_getdword(identifier, 2), (unsigned int) ipv6addr_getdword(identifier, 3), (unsigned int) ipv6addr_getdword(token, 2), (unsigned int) ipv6addr_getdword(token, 3)); 
 	};
 
-	MD5_Init(&md5hash);
+	md5_init_ctx(&md5hash);
 
-	MD5_Update(&md5hash, &identifier->in6_addr.s6_addr[8], 8);
-	MD5_Update(&md5hash, &token->in6_addr.s6_addr[8], 8);
+	md5_process_bytes(&identifier->in6_addr.s6_addr[8], 8, &md5hash);
+	md5_process_bytes(&token->in6_addr.s6_addr[8], 8, &md5hash);
 
-	MD5_Final(digest, &md5hash);
+	md5_finish_ctx(&md5hash, digest);
 
 	tempstring[0] = '\0';
 
