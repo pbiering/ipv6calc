@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.11 2002/08/30 21:04:15 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.12 2002/10/05 21:54:55 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -87,6 +87,7 @@ static void printfooter(const uint32_t formatoptions) {
 #define DEBUG_function_name "showinfo/print_ipv4addr"
 static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
+	char tempipv4string[NI_MAXHOST] = "";
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable);
 	int retval;
 	uint32_t typeinfo;
@@ -97,13 +98,13 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		fprintf(stderr, "%s: result of 'ipv4addr_gettype': %x\n", DEBUG_function_name, (unsigned int) typeinfo);
 	};
 
-	retval = libipv4addr_ipv4addrstruct_to_string(ipv4addrp, helpstring, 0);
+	retval = libipv4addr_ipv4addrstruct_to_string(ipv4addrp, tempipv4string, 0);
 	if ( retval != 0 ) {
-		fprintf(stderr, "Error converting IPv4 address: %s\n", helpstring);
+		fprintf(stderr, "Error converting IPv4 address: %s\n", tempipv4string);
 	};	
 	
 	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring), "IPV4=%s", helpstring);
+		snprintf(tempstring, sizeof(tempstring), "IPV4=%s", tempipv4string);
 		printout(tempstring);
 	
 		if (ipv4addrp->flag_prefixuse == 1) {	
@@ -111,13 +112,13 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 			printout(tempstring);
 		};
 	} else {
-		fprintf(stderr, "IPv4 address: %s\n", helpstring);
+		fprintf(stderr, "IPv4 address: %s\n", tempipv4string);
 	};	
 
 	/* get registry string */
 	retval = libipv4addr_get_registry_string(ipv4addrp, helpstring);
-	if ( retval != 0 ) {
-		fprintf(stderr, "Error getting registry string for IPv4 address: %s\n", helpstring);
+	if ( retval != 0  && machinereadable == 0 ) {
+		fprintf(stderr, "Error getting registry string for IPv4 address: %s (%s)\n", helpstring, tempipv4string);
 		return;
 	};
 	if ( machinereadable != 0 ) {
