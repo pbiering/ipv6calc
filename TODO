@@ -1,6 +1,6 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.13 2002/03/18 20:58:13 peter Exp $
+# Version: $Id: TODO,v 1.14 2002/03/25 07:21:07 peter Exp $
 
 TODO list
 
@@ -14,9 +14,6 @@ Features:
 
 Format features
 * printprefix, printsuffix for full
-
-Makefile.in:
-* fix double running compilations
 
 IEEE/OUI library:
 * perhaps more filtering of unnecessary information
