@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.10 2003/04/04 20:23:31 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.11 2003/07/17 20:14:54 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -410,11 +410,16 @@ int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
 		
 		if ( (st & 0xFFFFFE00u) == 0x20010600u ||
 		     (st & 0xFFFFFE00u) == 0x20010800u || 
-		     (st & 0xFFFFFE00u) == 0x20010A00u )  {
+		     (st & 0xFFFFFE00u) == 0x20010A00u ) {
 			/* 2001:0600::/23 -> RIPE NCC */
 			/* 2001:0800::/23 -> RIPE NCC */
 			/* 2001:0A00::/23 -> RIPE NCC */
 			return(IPV6_ADDR_REGISTRY_RIPE);
+		};
+
+		if ( (st & 0xFFFFFE00u) == 0x20011200u ) {
+			/* 2001:1200::/23 -> LACNIC */
+			return(IPV6_ADDR_REGISTRY_LACNIC);
 		};
 
 		return (IPV6_ADDR_REGISTRY_RESERVED);
