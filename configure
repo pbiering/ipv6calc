@@ -451,7 +451,7 @@ echo > confdefs.h
 
 # A filename unique to this package, relative to the directory that
 # configure is in, which we can look for to find out if srcdir is correct.
-ac_unique_file=ipv6calc.c
+ac_unique_file=ipv6calc/ipv6calc.c
 
 # Find the source files, if location was not specified.
 if test -z "$srcdir"; then
@@ -1424,7 +1424,7 @@ done
 
 ac_given_srcdir=$srcdir
 
-trap 'rm -fr `echo "Makefile ipv6calc.h contrib/ipv6calc.spec config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+trap 'rm -fr `echo "Makefile version.h contrib/ipv6calc.spec config.h" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
@@ -1503,7 +1503,7 @@ EOF
 
 cat >> $CONFIG_STATUS <<EOF
 
-CONFIG_FILES=\${CONFIG_FILES-"Makefile ipv6calc.h contrib/ipv6calc.spec"}
+CONFIG_FILES=\${CONFIG_FILES-"Makefile version.h contrib/ipv6calc.spec"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
