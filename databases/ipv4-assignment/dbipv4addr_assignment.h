@@ -1,9 +1,8 @@
-
-/*
+ /*
  * Project       : ipv6calc
  * File          : dbipv4_assignment.h
- * Version       : $Id: dbipv4addr_assignment.h,v 1.1 2002/04/05 17:55:22 peter Exp $
- * Generated     : Fri Apr  5 19:23:59 2002
+ * Version       : $Id: dbipv4addr_assignment.h,v 1.2 2002/04/08 19:50:37 peter Exp $
+ * Generated     : Mon Apr  8 21:42:33 2002
  * Data copyright: RIPE NCC, APNIC, ARIN
  *
  * Information:
