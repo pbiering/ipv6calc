@@ -1,14 +1,14 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Version    : $Id: ipv6calc.spec,v 1.15 2003/02/02 12:55:07 peter Exp $
-# Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
+# Version    : $Id: ipv6calc.spec,v 1.16 2003/09/06 13:04:15 peter Exp $
+# Copyright  : 2001-2003 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
 Name: ipv6calc
-Version: 0.45
+Version: 0.46
 Release: 1
 Group: System Environment/Base
-URL: http://www.bieringer.de/linux/IPv6/ipv6calc/
+URL: http://www.deepspace6.net/projects/ipv6calc.html
 License: GNU GPL version 2
 
 Source: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/ipv6calc-%{version}.tar.gz
@@ -25,7 +25,7 @@ Install this package, if you want to extend the existing address detection
 on IPv6 initscript setup or make life easier in adding reverse IPv6 zones to DNS
 or using in DNS queries like
  dig -t ANY `ipv6calc -r 3ffe:ffff:100::1/48`
-See also here for more details: http://www.bieringer.de/linux/IPv6/
+Many more format conversions are supported, see given URL for more.
 
 %prep
 %setup -q -n ipv6calc-%{version}
@@ -58,10 +58,15 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 /bin/ipv6calc
 /usr/bin/ipv6logconv
-%doc ChangeLog README CREDITS TODO COPYING LICENSE
-%doc examples/analog/analog-dist.cfg %doc examples/analog/run_analog.sh examples/analog/ipv6calc.tab ipv6calcweb/ipv6calcweb.cgi examples/analog/analog-ipv6calc-descriptions.txt examples/analog/analog-dist-combined.cfg
+%doc ChangeLog README CREDITS TODO COPYING LICENSE USAGE
+%doc examples/analog/analog-dist.cfgexamples/analog/run_analog.sh examples/analog/ipv6calc.tab examples/analog/analog-ipv6calc-descriptions.txt examples/analog/analog-dist-combined.cfg
+
+%doc ipv6calcweb/ipv6calcweb.cgi doc/ipv6calc.lyx doc/ipv6calc.sgml
 
 %changelog
+* Sun Jun 15 2003 Peter Bieringer <pb@bieringer.de>
+- add ipv6logstats
+
 * Tue Nov 11 2002 Peter Bieringer <pb@bieringer.de>
 - change IPv6 address in %description
 
