@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/lib
 # File       : create_ieee_oui_headerfile.pl
-# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.7 2002/11/04 20:58:36 peter Exp $
+# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.8 2004/10/30 12:00:48 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE/oui.txt
@@ -71,7 +71,7 @@ while (<IN>) {
 		# replace '(' ')' '&'
 		$oui =~ s/[\(\)\&\',]/ /ig;
 
-		# remove unimportand information
+		# remove unimportant information
 		$oui =~ s/\bINC[\.]*\b//ig;
 		$oui =~ s/\bLTD[\.]*\b//ig;
 		$oui =~ s/\bLIMITED\b//ig;

@@ -1,8 +1,6 @@
-# Generated automatically from Makefile.in by configure.
-#
 # Project    : ipv6calc/databases/ieee-oui
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.6 2002/07/17 20:41:48 peter Exp $
+# Version    : $Id: Makefile,v 1.7 2004/10/30 12:00:48 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
