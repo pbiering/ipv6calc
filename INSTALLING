@@ -25,17 +25,19 @@ For deinstalling use
 HACKERS WAY
 -----------
 cd /usr/src ; tar xvzf ipv6calc*.tar.gz
-less Makefile ; make config ; make ; make test; make -n install ; make install
+
+./configure && make && make test && make -n install
+
+make install
 
 
 
 CONFIGURE
 ---------
-There are neither configure options nor a configure script available.
-Hopefully never needed because this tool should only use simple functions.
+There is a configure script available, but currently using no extended
+options.
 
-If you have trouble in strange calculation results, you can enable some debug switches in "ipv6calc.h"
-
+Execute "./configure".
 
 
 COMPILE
@@ -43,7 +45,6 @@ COMPILE
 To compile simply use "make".
 
 There should be no warnings or errors.
-
 
 
 INSTALLATION
@@ -55,4 +56,4 @@ If you want to install the binary use "make install".
 Peter Bieringer
 <pb (at) bieringer.de>
 
-$Id: INSTALLING,v 1.3 2002/03/18 20:03:32 peter Exp $
+$Id: INSTALLING,v 1.4 2002/09/02 20:56:24 peter Exp $
