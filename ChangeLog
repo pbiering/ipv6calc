@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.32 2002/03/16 18:27:11 peter Exp $ 
+ *  $Id: ChangeLog,v 1.31 2002/03/16 23:37:36 peter Exp $ 
  */
 
 Info:
@@ -8,7 +8,7 @@ Info:
 20020316/PB:
 	new: ipv6logconv is able to convert addresses of webserver logs into special domain names
 	new: analog example for creating stats from converted logfiles
-	some fixes and enhancements
+	some fixes and enhacements
 
 20020311/PB:
 	new: add vendor database for global EUI-64/48 identifiers
