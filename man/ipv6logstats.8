@@ -1,0 +1,22 @@
+.TH "ipv6logstats" "October 18, 2003" "0.0.1" "Masamichi Goudge M.D. <Matanuki@Goudge.org>" "system administration"
+.SH "Name"
+ipv6logstats \- Takes http log data from stdin and print a table on output
+.SH "SYNTAX"
+ipv6logstats [logfile]
+.SH "DESCRIPTION"
+Takes http log data from stdin and print a table on output
+.SH "OPTIONS"
+.TP 
+[\-d|\-\-debug <debug value>] : debug value (bitwise like)
+.TP 
+[\-u|\-\-unknown] : print unknown IP addresses to stderr
+.TP 
+[\-c|\-\-colums] : print statistics in colums
+.TP 
+[\-n|\-\-noheader] : don't print header in colums mode
+.TP 
+[\-o|\-\-onlyheader] : print only header in colums mode
+.TP 
+[\-p|\-\-prefix <token>] : print token as prefix
+.SH "AUTHORS"
+Peter Bieringer <pb@bieringer.de>
