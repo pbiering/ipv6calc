@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.2 2004/10/30 12:58:40 peter Exp $
- * Generated     : Sat Oct 30 14:37:09 2004
+ * Version       : $Id: dbieee_iab.h,v 1.3 2004/11/21 15:47:57 peter Exp $
+ * Generated     : Sun Nov 21 16:38:14 2004
  * Data copyright: IEEE
  *
  * Information:
@@ -1037,5 +1037,30 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x400000, 0x400FFF, "SmartMotor AS", "SMARTMOTOR-AS" },
 	{ 0x0050C2, 0x401000, 0x401FFF, "Promess Incorporated", "PROMESS-INCORPORATED" },
 	{ 0x0050C2, 0x402000, 0x402FFF, "Numeron Sp. z o.o.", "NUMERON-SP-Z-O-O" },
+	{ 0x0050C2, 0x403000, 0x403FFF, "TOPEX PUBLIC SWITCHING S.A.", "TOPEX-PUBLIC-SWITCHING" },
+	{ 0x0050C2, 0x404000, 0x404FFF, "NanShanBridge Co.Ltd", "NANSHANBRIDGE" },
+	{ 0x0050C2, 0x405000, 0x405FFF, "Guralp Systems Limited", "GURALP" },
+	{ 0x0050C2, 0x406000, 0x406FFF, "CoreStreet, Ltd", "CORESTREET" },
+	{ 0x0050C2, 0x407000, 0x407FFF, "AIE Etudes", "AIE-ETUDES" },
+	{ 0x0050C2, 0x408000, 0x408FFF, "TERN, Inc.", "TERN" },
+	{ 0x0050C2, 0x409000, 0x409FFF, "KTEC LTD", "KTEC" },
+	{ 0x0050C2, 0x40A000, 0x40AFFF, "Contec Steuerungstechnik & Automation GmbH", "CONTEC-STEUERUNGSTECHNIK-AUTOMATION" },
+	{ 0x0050C2, 0x40B000, 0x40BFFF, "Center VOSPI JSC", "CENTER-VOSPI-JSC" },
+	{ 0x0050C2, 0x40C000, 0x40CFFF, "Applied Materials UK Ltd", "APPLIED-MATERIALS-UK" },
+	{ 0x0050C2, 0x40D000, 0x40DFFF, "Afonics Fibreoptics Ltd", "AFONICS-FIBREOPTICS" },
+	{ 0x0050C2, 0x40E000, 0x40EFFF, "ads-tec GmbH", "ADS-TEC" },
+	{ 0x0050C2, 0x40F000, 0x40FFFF, "BIR,INC.", "BIR" },
+	{ 0x0050C2, 0x410000, 0x410FFF, "Grossenbacher Systeme AG", "GROSSENBACHER-SYSTEME" },
+	{ 0x0050C2, 0x411000, 0x411FFF, "Multimessage Systems Ltd.", "MULTIMESSAGE" },
+	{ 0x0050C2, 0x412000, 0x412FFF, "TSB Solutions Inc.", "TSB-SOLUTIONS" },
+	{ 0x0050C2, 0x413000, 0x413FFF, "Goodrich", "GOODRICH" },
+	{ 0x0050C2, 0x414000, 0x414FFF, "Talleres de Escoriaza SA", "TALLERES-DE-ESCORIAZA" },
+	{ 0x0050C2, 0x415000, 0x415FFF, "SensoTech GmbH", "SENSOTECH" },
+	{ 0x0050C2, 0x416000, 0x416FFF, "SELCO s.r.l.", "SELCO-S-R-L" },
+	{ 0x0050C2, 0x417000, 0x417FFF, "QT systems ab", "QT-AB" },
+	{ 0x0050C2, 0x418000, 0x418FFF, "Planea Oy", "PLANEA-OY" },
+	{ 0x0050C2, 0x419000, 0x419FFF, "Mecsel Oy", "MECSEL-OY" },
+	{ 0x0050C2, 0x41A000, 0x41AFFF, "Bluewater Systems Ltd", "BLUEWATER" },
+	{ 0x0050C2, 0x41B000, 0x41BFFF, "LogiM GmbH Software und Entwicklung", "LOGIM-SOFTWARE-UND-ENTWICKLUNG" },
 
 };
