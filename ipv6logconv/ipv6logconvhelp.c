@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconvhelp.c
- * Version    : $Id: ipv6logconvhelp.c,v 1.1 2002/03/18 19:59:54 peter Exp $
+ * Version    : $Id: ipv6logconvhelp.c,v 1.2 2002/04/07 10:32:42 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -19,7 +19,6 @@
 
 /* display info */
 void printversion(void) {
-	fprintf(stderr, "\n");
 	fprintf(stderr, "%s: version %s\n", PROGRAM_NAME, PROGRAM_VERSION);
 };
 
