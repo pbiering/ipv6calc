@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.8 2002/04/08 19:04:30 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.9 2002/11/04 19:49:45 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -272,7 +272,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 
 	/* address space information  */
 	if ((st & 0xE0000000u) == 0x20000000u) {
-		/* 2000::/3 -> aggregatable global unicast */
+		/* 2000::/3 -> global unicast */
 		type |= IPV6_NEW_ADDR_AGU;
 	};
 	
@@ -396,8 +396,10 @@ int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
 			return(IPV6_ADDR_REGISTRY_IANA);
 		};
 		
-		if ( (st & 0xFFFFFE00u) == 0x20010200u) {
+		if ( (st & 0xFFFFFE00u) == 0x20010200u ||
+		     (st & 0xFFFFFE00u) == 0x20010C00u ) {
 			/* 2001:0200::/23 -> APNIC */
+			/* 2001:0C00::/23 -> APNIC */
 			return(IPV6_ADDR_REGISTRY_APNIC);
 		};
 		
@@ -406,8 +408,12 @@ int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
 			return(IPV6_ADDR_REGISTRY_ARIN);
 		};
 		
-		if ( (st & 0xFFFFFE00u) == 0x20010600u) {
+		if ( (st & 0xFFFFFE00u) == 0x20010600u ||
+		     (st & 0xFFFFFE00u) == 0x20010800u || 
+		     (st & 0xFFFFFE00u) == 0x20010A00u )  {
 			/* 2001:0600::/23 -> RIPE NCC */
+			/* 2001:0800::/23 -> RIPE NCC */
+			/* 2001:0A00::/23 -> RIPE NCC */
 			return(IPV6_ADDR_REGISTRY_RIPE);
 		};
 
