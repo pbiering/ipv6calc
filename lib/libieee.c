@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.1 2002/03/18 19:59:23 peter Exp $
+ * Version    : $Id: libieee.c,v 1.2 2002/03/24 17:30:44 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -14,7 +14,7 @@
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
 #include "libieee.h"
-#include "libieeeoui.h"
+#include "../databases/ieee-oui/dbieee_oui.h"
 
 /*
  * Get vendor string

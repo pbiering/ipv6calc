@@ -1,6 +1,6 @@
 # Project    : ipv6calc/lib
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.3 2002/03/24 16:58:21 peter Exp $
+# Version    : $Id: Makefile,v 1.4 2002/03/24 17:30:44 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -21,14 +21,15 @@ OBJS	= libipv6calc.o librfc1924.o librfc1884.o libmac.o libeui64.o librfc3041.o 
 all:		libipv6calc.a
 
 .c.o:
+		cd ../ && make db-ieee-oui-make
+		cd ../ && make db-ipv4-assignment-make
 		$(CC) $(CFLAGS) -c $<
 
-libieeeoui.h:
-		./create_ieee_oui_headerfile.pl
-
-$(OBJS):	libipv6calcdebug.h libipv6addr.h librfc1884.h librfc2874.h libeui64.h libmac.h librfc3041.h libipv6addr.h librfc1924.h librfc1886.h librfc3056.h libipv4addr.h libifinet6.h libieee.h libieeeoui.h ipv6calchelp.h ipv6calctypes.h
+$(OBJS):	libipv6calcdebug.h libipv6addr.h librfc1884.h librfc2874.h libeui64.h libmac.h librfc3041.h libipv6addr.h librfc1924.h librfc1886.h librfc3056.h libipv4addr.h libifinet6.h libieee.h ipv6calchelp.h ipv6calctypes.h
 
 libipv6calc.a:	$(OBJS)
+		cd ../ && make db-ieee-oui-make
+		cd ../ && make db-ipv4-assignment-make
 		echo "Create library"
 		$(AR) rs libipv6calc.a $(OBJS)
 		$(RANLIB) libipv6calc.a
