@@ -1,10 +1,13 @@
 /*
- *  $Id: ChangeLog,v 1.8 2002/01/21 08:16:15 peter Exp $ 
+ *  $Id: ChangeLog,v 1.9 2002/01/24 22:01:10 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb@bieringer.de>
 --------------------------------------------------------------------
+20020124/PB:
+	use now "-lcrypto" instead of full defined lib name	
+
 20020121/PB:
 	update "COPYING" to current GPLv2, add "LICENSE" with some comments to make Debian people happy
         add both in spec file
