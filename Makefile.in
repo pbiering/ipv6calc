@@ -1,7 +1,7 @@
 #
 # Makefile for ipv6calc
 #
-# Version:     $Id: Makefile.in,v 1.5 2002/02/23 11:32:26 peter Exp $
+# Version:     $Id: Makefile.in,v 1.6 2002/02/23 11:35:16 peter Exp $
 #
 # Author:      Peter Bieringer <pb@bieringer.de>
 #
@@ -10,7 +10,7 @@
 #COPTS = -O2 -Wall -g		# old one
 COPTS = -O2 -Wall -g -ansi	# ANSI compatible
 
-CFLAGS	= $(COPTS) -I.
+CFLAGS	= $(COPTS) -Igetopt/
 
 CC	= gcc
 
