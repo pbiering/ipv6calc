@@ -25,6 +25,10 @@ Where to get:
  Latest version of sources:
   ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/
 
+ CVS access:
+  http://www.deepspace6.net/sections/cvs.html
+  http://cvs.deepspace6.net/view/ipv6calc/
+
  Available formats:
   tar.gz
   spec-file is included, so you can build an RPM from source tarball using rpm -ta ipv6calc-version.tar.gz
@@ -60,4 +64,4 @@ Mailing lists:
   Subscription: http://lists.deepspace6.net/listinfo/ipv6calc
 
 
-$Id: README,v 1.7 2003/02/24 20:15:45 peter Exp $
+$Id: README,v 1.8 2003/02/24 20:18:33 peter Exp $
