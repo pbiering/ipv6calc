@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.13 2004/08/30 19:56:29 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.14 2004/08/31 20:21:25 peter Exp $
  * Copyright  : 2001-2004 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -108,7 +108,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		printout(tempstring);
 	
 		if (ipv4addrp->flag_prefixuse == 1) {	
-			snprintf(tempstring, sizeof(tempstring), "IPV4_PREFIXLENGTH=%d", ipv4addrp->prefixlength);
+			snprintf(tempstring, sizeof(tempstring), "IPV4_PREFIXLENGTH=%d", (int) ipv4addrp->prefixlength);
 			printout(tempstring);
 		};
 	} else {
@@ -144,7 +144,7 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 	ipv6calc_ipv4addr ipv4addr;
 
 	/* EUI-48/MAC address */
-	snprintf(helpstring, sizeof(helpstring), "%02x:%02x:%02x:%02x:%02x:%02x", macaddrp->addr[0], macaddrp->addr[1], macaddrp->addr[2], macaddrp->addr[3], macaddrp->addr[4], macaddrp->addr[5]);
+	snprintf(helpstring, sizeof(helpstring), "%02x:%02x:%02x:%02x:%02x:%02x", (unsigned int) macaddrp->addr[0], (unsigned int) macaddrp->addr[1], (unsigned int) macaddrp->addr[2], (unsigned int) macaddrp->addr[3], (unsigned int) macaddrp->addr[4], (unsigned int) macaddrp->addr[5]);
 
 	if ( machinereadable != 0 ) {
 		snprintf(tempstring, sizeof(tempstring), "EUI48=%s", helpstring);
@@ -233,7 +233,7 @@ static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t for
 	int result;
 
 	/* EUI-64 address */
-	snprintf(helpstring, sizeof(helpstring), "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x", eui64addrp->addr[0], eui64addrp->addr[1], eui64addrp->addr[2], eui64addrp->addr[3], eui64addrp->addr[4], eui64addrp->addr[5], eui64addrp->addr[6], eui64addrp->addr[7]);
+	snprintf(helpstring, sizeof(helpstring), "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x", (unsigned int) eui64addrp->addr[0], (unsigned int) eui64addrp->addr[1], (unsigned int) eui64addrp->addr[2], (unsigned int) eui64addrp->addr[3], (unsigned int) eui64addrp->addr[4], (unsigned int) eui64addrp->addr[5], (unsigned int) eui64addrp->addr[6], (unsigned int) eui64addrp->addr[7]);
 
 	if ( machinereadable != 0 ) {
 		snprintf(tempstring, sizeof(tempstring), "EUI64=%s", helpstring);
@@ -324,7 +324,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		printout(tempstring);
 	
 		if (ipv6addrp->flag_prefixuse == 1) {	
-			snprintf(tempstring, sizeof(tempstring), "IPV6_PREFIXLENGTH=%d", ipv6addrp->prefixlength);
+			snprintf(tempstring, sizeof(tempstring), "IPV6_PREFIXLENGTH=%d", (int) ipv6addrp->prefixlength);
 			printout(tempstring);
 		};
 
@@ -393,7 +393,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	/* SLA prefix included? */
 	if ( (typeinfo & ( IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU ) ) != 0 ) {
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "SLA=%04x", ipv6addr_getword(ipv6addrp, 3));
+			snprintf(tempstring, sizeof(tempstring), "SLA=%04x", (unsigned int) ipv6addr_getword(ipv6addrp, 3));
 			printout(tempstring);
 		} else {
 			fprintf(stdout, "Address type has SLA: %04x\n", (unsigned int) ipv6addr_getword(ipv6addrp, 3));
@@ -450,7 +450,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	/* Interface identifier included */
 	if ( ((typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU )) != 0) || ((typeinfo & (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) == (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) ) {
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "IID=%04x:%04x:%04x:%04x", ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addr_getword(ipv6addrp, 6), ipv6addr_getword(ipv6addrp, 7));
+			snprintf(tempstring, sizeof(tempstring), "IID=%04x:%04x:%04x:%04x", (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addr_getword(ipv6addrp, 6), (unsigned int) ipv6addr_getword(ipv6addrp, 7));
 			printout(tempstring);
 		} else {
 			fprintf(stdout, "Interface identifier: %04x:%04x:%04x:%04x\n", (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addr_getword(ipv6addrp, 6), (unsigned int) ipv6addr_getword(ipv6addrp, 7));
@@ -480,7 +480,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			} else {
 				if ( (typeinfo & IPV6_NEW_ADDR_SOLICITED_NODE) != 0 ) {
 					if ( machinereadable != 0 ) {
-						snprintf(tempstring, sizeof(tempstring), "EUI64=??:??:??:??:??:%02x:%02x:%02x", ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
+						snprintf(tempstring, sizeof(tempstring), "EUI64=??:??:??:??:??:%02x:%02x:%02x", (unsigned int) ipv6addr_getoctett(ipv6addrp, 13), (unsigned int) ipv6addr_getoctett(ipv6addrp, 14), (unsigned int) ipv6addr_getoctett(ipv6addrp, 15));
 						printout(tempstring);
 					} else {
 						fprintf(stdout, "Generated from the extension identifier of an EUI-48 (MAC): ...:%02x:%02x:%02x\n", (unsigned int) ipv6addr_getoctett(ipv6addrp, 13), (unsigned int) ipv6addr_getoctett(ipv6addrp, 14), (unsigned int) ipv6addr_getoctett(ipv6addrp, 15));
