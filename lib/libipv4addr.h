@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.6 2002/04/20 15:38:15 peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.7 2002/04/20 15:44:05 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -10,6 +10,7 @@
 
 #if defined(__NetBSD__) || defined (__OpenBSD) || defined (__FreeBSD__)
 #include <inttypes.h>
+#include <sys/types.h>
 #else
 #include <stdint.h>
 #endif
