@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.9 2002/04/08 19:50:46 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.10 2002/04/09 17:32:58 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -444,7 +444,7 @@ int main(int argc,char *argv[]) {
 			if ( argv[i] != NULL ) {
 				if ( strlen(argv[i]) >= NI_MAXHOST ) {
 					/* that's not good for size limited buffers...*/
-					fprintf(stderr, "Argument %d is too long\n", i);
+					fprintf(stderr, "Argument %d is too long\n", i + 1);
 					exit(EXIT_FAILURE);
 				};
 			};
