@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.46 2002/04/08 19:50:21 peter Exp $ 
+ *  $Id: ChangeLog,v 1.47 2002/04/08 20:00:20 peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,7 @@ Info:
 	add some autodetection
 	printprefix|suffix now works also for fulluncompressed
 	some cleanups
+	tag version 0.40rc3
 
 20020407/PB:
 	minor cosmetic fixes, import forgotten ipv6logconv changes
