@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.4 2002/03/19 23:14:42 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.5 2002/03/20 08:19:35 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -35,8 +35,12 @@ void showinfo_availabletypes(void) {
 	};
 	fprintf(stderr, "\n");
 	fprintf(stderr, " IPV6=...                      : given IPv6 address full uncompressed\n");
+	fprintf(stderr, " IPV6_REGISTRY=...             : registry token of given IPv6 address\n");
 	fprintf(stderr, " PREFIXLENGTH=ddd              : given prefix length\n");
-	fprintf(stderr, " IPV4=ddd.ddd.ddd.ddd          : an included IPv4 address\n");
+	fprintf(stderr, " IPV4_6TO4=ddd.ddd.ddd.ddd     : 6to4 IPv4 address\n");
+	fprintf(stderr, " IPV4_6TO4_REGISTRY=...        : registry token of 6to4 IPv4 address\n");
+	fprintf(stderr, " IPV4=ddd.ddd.ddd.ddd          : an included IPv4 address in IID\n");
+	fprintf(stderr, " IPV4_REGISTRY=...             : registry token of IPv4 address in IID\n");
 	fprintf(stderr, " SLA=xxxx                      : an included SLA\n");
 	fprintf(stderr, " IID=xxxx:xxxx:xxxx:xxxx       : an included interface identifier\n");
 	fprintf(stderr, " IIDSCOPE=local|global         : scope of IID\n");
@@ -163,12 +167,12 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long f
 		};
 	};
 	
-	/* Registry? */
+	/* IPv6 Registry? */
 	if ( registry != -1 ) {
 		for ( i = 0; i < (int) (sizeof(ipv6calc_ipv6addrregistry) / sizeof(ipv6calc_ipv6addrregistry[0])); i++ ){
 			if ( ipv6calc_ipv6addrregistry[i].number == registry ) {
 				if ( machinereadable != 0 ) {
-					snprintf(tempstring, sizeof(tempstring), "REGISTRY=%s", ipv6calc_ipv6addrregistry[i].tokensimple);
+					snprintf(tempstring, sizeof(tempstring), "IPV6_REGISTRY=%s", ipv6calc_ipv6addrregistry[i].tokensimple);
 					printout(tempstring);
 				} else {
 					fprintf(stdout, "Registry for address: %s\n", ipv6calc_ipv6addrregistry[i].token);
