@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2002/03/11 19:27:09 peter Exp $
+$Id: README,v 1.6 2002/04/20 17:24:51 peter Exp $
 
 ipv6calc will do some format changes and calculations for you
 
@@ -17,13 +17,16 @@ address detection on setup of IPv6 addresses
 * Also migrate "ip6_int" of Keith Owens <kaos@ocs.com.au> into this utility
 
 Known bugs:
-* Utility use several dangerous standard C functions like sscanf, sprintf and does normally no tests to prevent buffer overflows
-
+* ipv6calc is sure not the securest C program around the world
 
 
 Where to get:
+ Homepage:
+  http://www.bieringer.de/linux/IPv6/ipv6calc/
+
  Latest version of sources:
   ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/
+
  Available formats:
   tar.gz
   spec-file is included, so you can build an RPM from source tarball using rpm -ta ipv6calc-version.tar.gz
@@ -36,6 +39,7 @@ Where to get:
     similar to Red Hat, rebuild should work, too
    Debian:
     maintained package at http://packages.debian.org/ipv6calc
+
   BSD:
    NetBSD:
     http://www.netbsd.org/packages/net/ipv6calc/
@@ -50,6 +54,3 @@ Maillists:
   Traffic: very low
   Postings: only moderators are allowed to post, others are rejected automatically
   Subscription: mailto:ipv6calc-announce-subscribe@maillists.bieringer.de
-
-MAC/OUI:
- http://standards.ieee.org/regauth/oui/oui.txt

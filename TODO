@@ -1,6 +1,6 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.19 2002/04/09 20:30:45 peter Exp $
+# Version: $Id: TODO,v 1.20 2002/04/20 17:24:51 peter Exp $
 
 TODO list
 =========
@@ -8,9 +8,6 @@ TODO list
 Short term
 ----------
 Fix configure script message "checking for  in -lcrypto... no"
-	-> help needed from outside
-
-Check compiling on (*BSD && ! NetBSD)
 	-> help needed from outside
 
 Convert version script for ipv6calcweb.cgi from Perl to Shell or autoconf, because some systems have no Perl available
