@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ieee-oui
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.1 2002/03/24 17:44:35 peter Exp $
+# Version    : $Id: Makefile,v 1.2 2002/03/25 06:53:57 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -12,7 +12,7 @@ FILE = "oui.txt"
 BASEURL = "http://standards.ieee.org/regauth/oui/"
 
 all:
-		make update
+		#make update
 		test $(FILE) -ot dbieee_oui.h || ./create_ieee_oui_headerfile.pl
 
 install:
