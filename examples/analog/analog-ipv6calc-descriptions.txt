@@ -1,0 +1,92 @@
+# Report descriptions file for analog 5.22.
+#
+# This file contains descriptions of each report. Lines starting with a
+# hash (#) are comments. Otherwise, each report must take EXACTLY ONE LINE.
+# Yearly Report
+This report lists the activity in each year.
+# Quarterly Report
+This report lists the activity in each quarter.
+# Monthly Report
+This report lists the activity in each month.
+# Weekly Report
+This report lists the activity in each week.
+# Daily Report
+This report lists the activity in each day.
+# Hourly Report
+This report lists the activity in each hour.
+# Quarter-Hour Report
+This report lists the activity in each quarter-hour period.
+# Five-Minute Report
+This report lists the activity in each five-minute period.
+# Daily Summary
+This report lists the total activity for each day of the week, summed over all the weeks in the report.
+# Hourly Summary
+This report lists the total activity for each hour of the day, summed over all the days in the report.
+# Hour of the Week Summary
+This report lists the total activity for each hour of the week, summed over all the weeks in the report.
+# Quarter-Hour Summary
+This report lists the total activity for each quarter-hour period of the day, summed over all the days in the report.
+# Five-Minute Summary
+This report lists the total activity for each five-minute period of the day, summed over all the days in the report.
+# General Summary
+This report contains overall statistics.
+# Request Report
+This report lists the files on the site.
+# Redirection Report
+This report lists the files that caused requests to be redirected to another file. (Usually directories with the final slash missing, or CGI scripts that forced redirections.)
+# Failure Report
+This report lists the files that caused failures, for example files not found.
+# File Type Report
+This report lists the extensions of requested files.
+# Directory Report
+This report lists the directories from which files were requested. (The figures for each directory include all of its subdirectories.)
+# Host Report
+This report lists the registries of addresses of the computers which requested files. 
+# Host Redirection Report
+This report lists the computers which were redirected to another file.
+# Host Failure Report
+This report lists the computers which encountered failed requests.
+# Domain Report
+This report lists the major address type of the computers which requested files.
+# Referrer Report
+This report lists the referrers (where people followed links from, or pages which included this site's images).
+# Referring Site Report
+This report lists which servers people followed links from.
+# Redirected Referrer Report
+This report lists the referrers that caused redirected requests.
+# Failed Referrer Report
+This report lists the referrers containing broken links to the site.
+# Browser Report
+This report lists the browsers used by visitors.
+# Virtual Host Report
+This report lists the activity on each of the virtual domains at the site.
+# Virtual Host Redirection Report
+This report lists the redirected requests to each of the virtual domains.
+# Virtual Host Failure Report
+This report lists the failed requests to each of the virtual domains.
+# User Report
+This report lists the OUI of the NICs of the computers which requested files.
+# User Redirection Report
+This report lists the users who were redirected to another file.
+# User Failure Report
+This report lists the users who encountered failed requests.
+# Organisation Report
+This report lists the minor address types of the computers which requested files.
+# Search Query Report
+This report lists which queries people used in search engines to find the site.
+# Search Word Report
+This report lists which words people used in search engines to find the site.
+# Internal Search Query Report
+This report lists which queries people used on scripts within the site.
+# Internal Search Word Report
+This report lists which words people used on scripts within the site.
+# Browser Summary
+This report lists the vendors of visitors' browsers.
+# Operating System Report
+This report lists the operating systems used by visitors.
+# File Size Report
+This report lists the sizes of files.
+# Status Code Report
+This report lists the HTTP status codes of all requests.
+# Processing Time Report
+This report lists the times taken to process successful requests.
