@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.1 2002/03/18 19:59:23 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.2 2002/03/24 16:58:21 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -24,23 +24,24 @@ extern int ipv6calctypes_checkaction(const char *string);
  */
 
 /* Format number definitions, each possible format has one number */
-#define FORMAT_auto		0x0000
-#define FORMAT_revnibbles_int	0x0001
-#define FORMAT_revnibbles_arpa	0x0002
-#define FORMAT_bitstring	0x0004
-#define FORMAT_ipv6addr		0x0008
-#define FORMAT_ipv4addr		0x0010
-#define FORMAT_mac		0x0020
-#define FORMAT_eui64		0x0040
-#define FORMAT_base85		0x0080
-#define FORMAT_ifinet6		0x0100
-#define FORMAT_iid		0x0200
-#define FORMAT_iid_token	0x0400
-#define FORMAT_addrtype 	0x0800
-#define FORMAT_ouitype	 	0x1000
-#define FORMAT_ipv6addrtype 	0x2000
-#define FORMAT_ipv6logconv 	0x4000
-#define FORMAT_any	 	0x8000
+#define FORMAT_auto		0x00000
+#define FORMAT_revnibbles_int	0x00001
+#define FORMAT_revnibbles_arpa	0x00002
+#define FORMAT_bitstring	0x00004
+#define FORMAT_ipv6addr		0x00008
+#define FORMAT_ipv4addr		0x00010
+#define FORMAT_mac		0x00020
+#define FORMAT_eui64		0x00040
+#define FORMAT_base85		0x00080
+#define FORMAT_ifinet6		0x00100
+#define FORMAT_iid		0x00200
+#define FORMAT_iid_token	0x00400
+#define FORMAT_addrtype 	0x00800
+#define FORMAT_ouitype	 	0x01000
+#define FORMAT_ipv6addrtype 	0x02000
+#define FORMAT_ipv6logconv 	0x04000
+#define FORMAT_any	 	0x08000
+#define FORMAT_prefix_mac	0x10000
 
 /* Primary label of format number, keeping also an explanation */
 typedef struct {
@@ -68,10 +69,11 @@ typedef struct {
 	{ FORMAT_ipv6addrtype   , "ipv6addrtype"   , "IPv6 address type", "" },
 	{ FORMAT_ipv6logconv    , "ipv6logconv"    , "ipv6logconv (currently not supported)", "" },
 	{ FORMAT_any            , "any"            , "any type (currently not supported)", "" },
+	{ FORMAT_prefix_mac     , "prefix+mac"     , "IPv6 prefix and a MAC address", "" },
 };
 
 /* Format conversion matrix */
-/*@unused@*/ static const int ipv6calc_formatmatrix[12][2] = {
+/*@unused@*/ static const int ipv6calc_formatmatrix[13][2] = {
 	{ FORMAT_auto           , 0x5ff },
 	{ FORMAT_revnibbles_int , 0x5ff },
 	{ FORMAT_revnibbles_arpa, 0x5ff },
@@ -83,7 +85,8 @@ typedef struct {
 	{ FORMAT_base85         , FORMAT_base85 | FORMAT_ipv6addr | FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ifinet6 },
 	{ FORMAT_ifinet6        , FORMAT_base85 | FORMAT_ipv6addr | FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ifinet6 },
 	{ FORMAT_iid_token      , FORMAT_iid_token },
-	{ FORMAT_ipv6logconv    , FORMAT_ipv6addrtype | FORMAT_addrtype | FORMAT_ouitype | FORMAT_any }
+	{ FORMAT_ipv6logconv    , FORMAT_ipv6addrtype | FORMAT_addrtype | FORMAT_ouitype | FORMAT_any },
+	{ FORMAT_prefix_mac     , FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ipv6addr | FORMAT_base85 | FORMAT_ifinet6 }
 };
 
 
@@ -126,7 +129,7 @@ typedef struct {
 };
 
 /* Possible format option map */
-/*@unused@*/ static const int ipv6calc_outputformatoptionmap[10][2]  = {
+/*@unused@*/ static const int ipv6calc_outputformatoptionmap[11][2]  = {
 	{ FORMAT_revnibbles_int , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
 	{ FORMAT_revnibbles_arpa, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
 	{ FORMAT_bitstring      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
@@ -136,7 +139,8 @@ typedef struct {
 	{ FORMAT_base85         , 0 },
 	{ FORMAT_ifinet6        , 0 },
 	{ FORMAT_ipv4addr       , FORMATOPTION_machinereadable },
-	{ FORMAT_iid_token      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase }
+	{ FORMAT_iid_token      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
+	{ FORMAT_prefix_mac     , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase }
 };
 
 
@@ -145,6 +149,7 @@ typedef struct {
 #define ACTION_mac_to_eui64		0x0000001
 #define ACTION_ipv4_to_6to4addr		0x0000002
 #define ACTION_iid_token_to_privacy	0x0000004
+#define ACTION_prefix_mac_to_ipv6	0x0000008
 
 typedef struct {
 	int number;
@@ -154,10 +159,11 @@ typedef struct {
 } s_action;
 
 /*@unused@*/ static const s_action ipv6calc_actionstrings[] = {
-	{ ACTION_auto                   , "auto"           , "Automatic selection of action (default)", "" },
-	{ ACTION_mac_to_eui64           , "geneui64"       , "Converts a MAC address to an EUI-64 address", "" },
-	{ ACTION_ipv4_to_6to4addr       , "conv6to4"       , "Converts IPv4 address <-> 6to4 IPv6 address (prefix)", "" },
-	{ ACTION_iid_token_to_privacy   , "genprivacyiid"  , "Generates a privacy interface ID out of a given one and a token", "" },
+	{ ACTION_auto                 , "auto"           , "Automatic selection of action (default)", "" },
+	{ ACTION_mac_to_eui64         , "geneui64"       , "Converts a MAC address to an EUI-64 address", "" },
+	{ ACTION_ipv4_to_6to4addr     , "conv6to4"       , "Converts IPv4 address <-> 6to4 IPv6 address (prefix)", "" },
+	{ ACTION_iid_token_to_privacy , "genprivacyiid"  , "Generates a privacy interface ID out of a given one and a token", "" },
+	{ ACTION_prefix_mac_to_ipv6   , "prefixmac2ipv6" , "Generates an IPv6 address out of a prefix and a MAC address", "" }
 };
 
 

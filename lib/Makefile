@@ -1,6 +1,6 @@
 # Project    : ipv6calc/lib
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.2 2002/03/19 23:15:09 peter Exp $
+# Version    : $Id: Makefile,v 1.3 2002/03/24 16:58:21 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -26,13 +26,11 @@ all:		libipv6calc.a
 libieeeoui.h:
 		./create_ieee_oui_headerfile.pl
 
-$(OBJS):	libipv6calcdebug.h libipv6addr.h librfc1884.h librfc2874.h libeui64.h libmac.h librfc3041.h libipv6addr.h librfc1924.h librfc1886.h librfc3056.h libipv4addr.h libifinet6.h libieee.h libieeeoui.h
+$(OBJS):	libipv6calcdebug.h libipv6addr.h librfc1884.h librfc2874.h libeui64.h libmac.h librfc3041.h libipv6addr.h librfc1924.h librfc1886.h librfc3056.h libipv4addr.h libifinet6.h libieee.h libieeeoui.h ipv6calchelp.h ipv6calctypes.h
 
-$(OBJSAPP):	ipv6calchelp.h ipv6calctypes.h
-
-libipv6calc.a:	$(OBJS) $(OBJSAPP)
+libipv6calc.a:	$(OBJS)
 		echo "Create library"
-		$(AR) rs libipv6calc.a $(OBJS) $(OBJSAPP)
+		$(AR) rs libipv6calc.a $(OBJS)
 		$(RANLIB) libipv6calc.a
 
 distclean:

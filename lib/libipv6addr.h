@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.3 2002/03/20 23:35:51 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.4 2002/03/24 16:58:21 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -112,11 +112,11 @@ typedef struct {
 } s_type2;
 
 /*@unused@*/ static const s_type2 ipv6calc_ipv6addrregistry[] = {
-	{ IPV6_ADDR_REGISTRY_6BONE	, "6BONE"	, "6bone" 	},
-	{ IPV6_ADDR_REGISTRY_IANA	, "IANA"	, "iana" 	},
-	{ IPV6_ADDR_REGISTRY_APNIC	, "APNIC"	, "apnic" 	},
-	{ IPV6_ADDR_REGISTRY_ARIN	, "ARIN" 	, "arin"	},
-	{ IPV6_ADDR_REGISTRY_RIPE	, "RIPE NCC"	, "ripe"	},
+	{ IPV6_ADDR_REGISTRY_6BONE	, "6BONE"	, "6BONE" 	},
+	{ IPV6_ADDR_REGISTRY_IANA	, "IANA"	, "IANA" 	},
+	{ IPV6_ADDR_REGISTRY_APNIC	, "APNIC"	, "APNIC" 	},
+	{ IPV6_ADDR_REGISTRY_ARIN	, "ARIN" 	, "ARIN"	},
+	{ IPV6_ADDR_REGISTRY_RIPE	, "RIPE NCC"	, "RIPE"	},
 	{ IPV6_ADDR_REGISTRY_RESERVED	, "reserved"	, "reserved"	}
 };
 #endif

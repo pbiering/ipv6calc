@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.1 2002/03/18 19:59:24 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.2 2002/03/24 16:58:21 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -16,6 +16,7 @@
 #include "ipv6calctypes.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
+#include "../databases/ipv4-assignment/dbipv4addr_assignement.h"
 
 
 /*
@@ -57,7 +58,7 @@ uint16_t ipv4addr_getword(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int
 		exit(EXIT_FAILURE);
 	};
 
-	retval = (uint16_t) ( (ipv4addrp->in_addr.s_addr >> (numword << 3) & 0xffff) );
+	retval = (uint16_t) ( (ipv4addr_getoctett(ipv4addrp, (numword << 1)) << 8 ) | ipv4addr_getoctett(ipv4addrp, (numword << 1) + 1) );
 
 	return (retval);
 };
@@ -74,7 +75,7 @@ uint16_t ipv4addr_getword(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int
 uint32_t ipv4addr_getdword(const ipv6calc_ipv4addr *ipv4addrp) {
 	uint32_t retval;
 	
-	retval = ipv4addrp->in_addr.s_addr;
+	retval = (uint32_t) ( (ipv4addr_getword(ipv4addrp, 0) << 16) | ipv4addr_getword(ipv4addrp, 1) );
 
 	return (retval);
 };
@@ -131,8 +132,8 @@ void ipv4addr_setword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword, 
 		exit(EXIT_FAILURE);
 	}; 
 
-	ipv4addrp->in_addr.s_addr &= ~ (0xffff  << (numword << 3) );
-	ipv4addrp->in_addr.s_addr |= (value &0xffff)  << (numword << 3);
+	ipv4addr_setoctett(ipv4addrp, numword << 1, (value & 0xff00  >> 8) );
+	ipv4addr_setoctett(ipv4addrp, (numword << 1) + 1, (value & 0xff) );
 	
 	return;
 };
@@ -154,7 +155,8 @@ void ipv4addr_setdword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int value) {
 		exit(EXIT_FAILURE);
 	}; 
 
-	ipv4addrp->in_addr.s_addr = (uint32_t) value;
+	ipv4addr_setword(ipv4addrp, 0, (value & 0xffff0000 >> 16) );
+	ipv4addr_setword(ipv4addrp, 1, (value & 0xffff) );
 
 	return;
 };
@@ -317,12 +319,13 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 #undef DEBUG_function_name
 
 /*
- * function stores the ipv4addr in structure in a string
+ * stores the ipv4addr structure in a string
  *
  * in:  ipv4addr = IPv4 address structure
  * out: *resultstring = IPv4 address string
  * ret: ==0: ok, !=0: error
  */
+#define DEBUG_function_name "libipv4calc/ipv4addrstruct_to_string"
 int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const unsigned long formatoptions) {
 	char tempstring[NI_MAXHOST];
 
@@ -343,3 +346,67 @@ int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, cha
 	
 	return(0);
 };
+#undef DEBUG_function_name
+
+
+/*
+ * get registry string of an IPv4 address
+ *
+ * in:  ipv4addr = IPv4 address structure
+ * out: *resultstring = Registry string
+ * ret: ==0: ok, !=0: error
+ */
+#define DEBUG_function_name "libipv4calc/get_registry_string"
+int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring) {
+	int i, match = -1;
+	uint32_t match_mask = 0;
+
+	uint32_t ipv4 = ipv4addr_getdword(ipv4addrp);
+	
+	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+		fprintf(stderr, "%s: Given IPv4 address: %08x\n", DEBUG_function_name, ipv4);
+	};
+
+	/* run through database array */
+	for (i = 0; i < (int) ( sizeof(dbipv4addr_assignment) / sizeof(dbipv4addr_assignment[0])); i++) {
+		if ( (ipv4 & dbipv4addr_assignment[i].ipv4mask) == dbipv4addr_assignment[i].ipv4addr ) {
+			/* ok, entry matches */
+			if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+				fprintf(stderr, "%s: Found match number: %d\n", DEBUG_function_name, i);
+			};
+
+			/* have already found one */
+			if ( match != -1 ) {
+				if ( dbipv4addr_assignment[i].ipv4mask > match_mask ) {
+					/* wins */
+					if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+						fprintf(stderr, "%s: Overwrite match number: %d (old: %d)\n", DEBUG_function_name, i, match);
+					};
+					match = i;
+					match_mask = dbipv4addr_assignment[i].ipv4mask;
+				} else {
+					if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+						fprintf(stderr, "%s: Overwrite match number: %d (old: %d)\n", DEBUG_function_name, i, match);
+					};
+				};
+			} else {
+				match = i;
+				match_mask = dbipv4addr_assignment[i].ipv4mask;
+			};
+		};
+	};
+
+	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+		fprintf(stderr, "%s: Final match number: %d\n", DEBUG_function_name, match);
+	};
+	
+	/* result */
+	if ( match > -1 ) {
+		snprintf(resultstring, NI_MAXHOST, "%s", dbipv4addr_assignment[match].string_registry);
+		return(0);
+	} else {
+		snprintf(resultstring, NI_MAXHOST, "%s", "unknown");
+		return(1);
+	};
+};
+#undef DEBUG_function_name
