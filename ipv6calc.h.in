@@ -1,12 +1,11 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.h[.in]
- * Version    : $Id: ipv6calc.h.in,v 1.3 2002/02/19 07:48:22 peter Exp $
+ * Version    : $Id: ipv6calc.h.in,v 1.4 2002/02/19 21:41:17 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
  *
  * Information:
  *  Main header file
- *
  */ 
 
 
@@ -69,16 +68,18 @@
 
 /* debug values */
 #define DEBUG_eui64_to_privacy		CMD_eui64_to_privacy
-#define DEBUG_showinfo              CMD_showinfo
+#define DEBUG_showinfo			CMD_showinfo
 #define DEBUG_addr_to_ifinet6		CMD_addr_to_ifinet6
 #define DEBUG_base85_to_addr		CMD_base85_to_addr
 #define DEBUG_addr_to_base85		CMD_addr_to_base85
 #define DEBUG_addr_to_ip6int 		CMD_addr_to_ip6int
-#define DEBUG_mac_to_eui64			CMD_mac_to_eui64 
+#define DEBUG_addr_to_bitstring		CMD_addr_to_bitstring
+#define DEBUG_mac_to_eui64		CMD_mac_to_eui64 
 
-#define DEBUG_libipv6calc			0x000001l
-#define DEBUG_librfc3041			0x000002l
-#define DEBUG_librfc1884			0x000004l
+#define DEBUG_libipv6calc		0x000001l
+#define DEBUG_librfc3041		0x000002l
+#define DEBUG_librfc1884		0x000004l
+#define DEBUG_librfc2874		0x000008l
 
 /* structures */
 typedef struct {
@@ -161,5 +162,10 @@ extern int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_m
 
 /* libeui64 */
 extern int create_eui64_from_mac(ipv6calc_ipv6addr *ipv6addrp, ipv6calc_macaddr *macaddrp);
+
+
+#include "addr_to_bitstring.h"
+
+#include "librfc2874.h"
 
 #endif

@@ -1,13 +1,12 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.3 2002/02/18 22:50:40 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.4 2002/02/19 21:41:17 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
  * 
  * Information:
  *  Central program (main)
  *  This program print out different formats of an given IPv6 address
-   
  */
 
 #include <stdio.h>
@@ -42,6 +41,7 @@ void printhelp() {
 	fprintf(stderr, " [-d|--debug debugvalue)\n");
 
 	addr_to_ip6int_printhelp();
+	addr_to_bitstring_printhelp();
 	addr_to_compressed_printhelp();
 	addr_to_uncompressed_printhelp();
 	addr_to_fulluncompressed_printhelp();
@@ -65,7 +65,7 @@ int main(int argc,char *argv[]) {
 	unsigned long int command = 0;
 
 	/* defined options */
-	char *shortopts = "vh?rad:iul";
+	char *shortopts = "vh?rabd:iul";
 
     struct option longopts[] = {
 		{"version", 0, 0, 'v'},
@@ -74,9 +74,13 @@ int main(int argc,char *argv[]) {
 		
 		/* command options */
 		{"addr2ip6_int", 0, 0, CMD_addr_to_ip6int },
-		{"addr2ip6_arpa", 0, 0, CMD_addr_to_ip6arpa },
 		{"addr_to_ip6int", 0, 0, CMD_addr_to_ip6int },
+
+		{"addr2ip6_arpa", 0, 0, CMD_addr_to_ip6arpa },
 		{"addr_to_ip6arpa", 0, 0, CMD_addr_to_ip6arpa },
+		
+		{"addr_to_bitstring", 0, 0, CMD_addr_to_bitstring },
+
 		{"addr2compaddr", 0, 0, CMD_addr_to_compressed },
 		{"addr_to_compressed", 0, 0, CMD_addr_to_compressed },
 		{"addr2uncompaddr", 0, 0, CMD_addr_to_uncompressed },
@@ -135,13 +139,21 @@ int main(int argc,char *argv[]) {
 			case CMD_addr_to_ip6int:
 				command |= CMD_addr_to_ip6int;
 				break;
+
 			case 'a':
 			case CMD_addr_to_ip6arpa:
 				command |= CMD_addr_to_ip6arpa;
 				break;
+
+			case 'b':
+			case CMD_addr_to_bitstring:
+				command |= CMD_addr_to_bitstring;
+				break;
+				
 			case CMD_addr_to_compressed:
 				command |= CMD_addr_to_compressed;
 				break;
+				
 			case CMD_addr_to_uncompressed:
 				command |= CMD_addr_to_uncompressed;
 				break;
@@ -149,6 +161,7 @@ int main(int argc,char *argv[]) {
 			case CMD_addr_to_base85:
 				command |= CMD_addr_to_base85;
 				break;
+				
 			case CMD_base85_to_addr:
 				command |= CMD_base85_to_addr;
 				break;
@@ -160,6 +173,7 @@ int main(int argc,char *argv[]) {
 			case CMD_addr_to_fulluncompressed:
 				command |= CMD_addr_to_fulluncompressed;
 				break;
+				
 			case CMD_addr_to_ifinet6:
 				command |= CMD_addr_to_ifinet6;
 				break;
@@ -176,7 +190,7 @@ int main(int argc,char *argv[]) {
 			case CMD_showinfo:
 				command |= CMD_showinfo;
 				break;
-				
+
 			/* format options */
 			case CMD_printprefix:
 				command |= CMD_printprefix;
@@ -236,6 +250,18 @@ int main(int argc,char *argv[]) {
 					exit(1);
 				};
 				retval = addr_to_ip6int(argv[0], resultstring, command);
+				fprintf(stdout, "%s\n", resultstring);
+				break;
+
+			case CMD_addr_to_bitstring:
+				if ((argc < 1) || (command & CMD_printhelp)) {
+					if ((argc < 1) && ! (command & CMD_printhelp)) {
+						fprintf(stderr, "missing argument!\n\n");
+					};
+					addr_to_bitstring_printhelplong();
+					exit(1);
+				};
+				retval = addr_to_bitstring(argv[0], resultstring, command);
 				fprintf(stdout, "%s\n", resultstring);
 				break;
 				

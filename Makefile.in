@@ -1,7 +1,7 @@
 #
 # Makefile for ipv6calc
 #
-# Version:     $Id: Makefile.in,v 1.3 2002/01/24 22:01:10 peter Exp $
+# Version:     $Id: Makefile.in,v 1.4 2002/02/19 21:41:17 peter Exp $
 #
 # Author:      Peter Bieringer <pb@bieringer.de>
 #
@@ -14,15 +14,14 @@ CFLAGS	= $(COPTS)
 
 CC	= gcc
 
-#OBJS = ipv6calc.o addr_to_compressed.o addr_to_uncompressed.o addr_to_fulluncompressed.o addr_to_ifinet6.o addr_to_ip6int.o ifinet6_to_compressed.o  libipv6calc.o addr_to_base85.o librfc1924.o base85_to_addr.o librfc1884.o libmac.o libeui64.o mac_to_eui64.o eui64_to_privacy.o librfc3041.o showinfo.o ipv6types.o
-OBJS = ipv6calc.o addr_to_compressed.o addr_to_uncompressed.o addr_to_fulluncompressed.o addr_to_ifinet6.o addr_to_ip6int.o ifinet6_to_compressed.o  libipv6calc.o addr_to_base85.o librfc1924.o base85_to_addr.o librfc1884.o libmac.o libeui64.o mac_to_eui64.o eui64_to_privacy.o librfc3041.o showinfo.o libipv6addr.o
+OBJS = ipv6calc.o addr_to_compressed.o addr_to_uncompressed.o addr_to_fulluncompressed.o addr_to_ifinet6.o addr_to_ip6int.o addr_to_bitstring.o ifinet6_to_compressed.o  libipv6calc.o addr_to_base85.o librfc1924.o base85_to_addr.o librfc1884.o libmac.o libeui64.o mac_to_eui64.o eui64_to_privacy.o librfc3041.o showinfo.o libipv6addr.o librfc2874.o
 
 all:		ipv6calc
 
 .c.o:
 		$(CC) $(CFLAGS) -c $<
 
-$(OBJS):	ipv6calc.h libipv6addr.h librfc1884.h
+$(OBJS):	ipv6calc.h libipv6addr.h librfc1884.h librfc2874.h
 
 ipv6calc:	$(OBJS)
 		$(CC) -o ipv6calc $(OBJS) -lcrypto
