@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6calc
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.5 2002/04/04 19:40:10 peter Exp $
+# Version    : $Id: Makefile,v 1.6 2002/04/04 21:58:10 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -17,7 +17,7 @@ CC	= gcc
 OBJS	= ipv6calc.o showinfo.o
 
 # splint
-SPLINT_OPT_OUTSIDE = -warnposix -nullassign -uniondef -compdef -usedef -formatconst
+SPLINT_OPT_OUTSIDE = -warnposix -nullassign -uniondef -compdef -usedef -formatconst -exportlocal
 #SPLINT_OPT_OUTSIDE = -uniondef +matchanyintegral --nullassign +ignoresigns -compdef -usedef -modobserver -formatconst -warnposix -exportlocal
 SPLINT_TODO_LATER = -unrecog
 

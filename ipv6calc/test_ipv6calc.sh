@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.4 2002/03/27 07:20:34 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.5 2002/04/04 21:58:10 peter Exp $
 # Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -13,8 +13,8 @@ if [ ! -x ./ipv6calc ]; then
 fi
 
 testscenarios() {
-# Command													Expected result (no space between "=" and result)
-cat << END | grep -v "^#"
+# Command								Expected result (no space between "=" and result)
+cat <<END | grep -v '^#'
 ## ip6.int.
 --addr_to_ip6int 3ffe:ffff:100:f101::1					=1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
 --in ipv6 --out revnibbles.int 3ffe:ffff:100:f101::1			=1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
@@ -114,26 +114,31 @@ END
 echo "Run 'ipv6calc' function tests..."
 
 testscenarios | while read line; do
+	if [ -z "$line" ]; then
+		# end
+		break
+	fi
+
 	# extract result
 	command="`echo $line | awk -F= '{ print $1 }' | sed 's/\W*$//g'`"
 	result="`echo $line | awk -F= '{ print $2 }'`"
 	if [ -z "$result" -o -z "$command" ]; then
 		echo "Something is wrong in line '$line'"
-		exit 1
-		#continue
+		break
 	fi
 	echo "Test './ipv6calc $command' for '$result'"
+	#continue
 	# get result
 	output="`./ipv6calc $command`"
 	retval=$?
 	if [ $retval -ne 0 ]; then
 		echo "Error executing 'ipv6calc'!"
-		exit 1
+		break
 	fi
 	# Check result
 	if [ "$output" != "$result" ]; then
 		echo "Result '$output' doesn't match!"
-		exit 1
+		break
 	fi	
 done
 

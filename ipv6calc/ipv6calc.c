@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.5 2002/04/04 19:40:10 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.6 2002/04/04 21:58:10 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -87,7 +87,7 @@ int main(int argc,char *argv[]) {
 	ipv6addr_clearall(&ipv6addr3);
 	ipv6addr_clearall(&ipv6addr4);
 	ipv4addr_clearall(&ipv4addr);
-	macp_clearall(&macaddr);
+	mac_clearall(&macaddr);
 
 	if (argc <= 1) {
 		printinfo();
@@ -333,7 +333,7 @@ int main(int argc,char *argv[]) {
 					break;
 				};
 				action = ipv6calctypes_checkaction(optarg);
-				if (action == FORMAT_action) {
+				if (action == ACTION_undefined) {
 					fprintf(stderr, " Action option is unknown: %s\n", optarg);
 					exit(EXIT_FAILURE);
 				};
@@ -758,7 +758,7 @@ int main(int argc,char *argv[]) {
 			};
 			break;
 
-		case -1:
+		case ACTION_undefined:
 			/* no action selected */
 			break;
 
