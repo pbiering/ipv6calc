@@ -1,0 +1,123 @@
+0.28: Peter Bieringer <pb@bieringer.de>
+	Refixing compiling on BSD
+	Add a forgotten include in "eui64_to_privacy.c"
+
+0.27: Peter Bieringer <pb@bieringer.de>
+	Migrate files used from Linux kernel for address type resolution to libipv6addr.*
+	 add some extended tests (still not catch all)
+	"--showinfo" now rudimentary works
+
+0.26: Peter Bieringer <pb@bieringer.de>
+	Create wrapper functions to be independend of byte order storage in
+	 structure "in6_addr"
+	"--eui64_to_privacy" now calculate expected results
+	Begin of splitting "ipv6calc.h" into several smaller header files
+	Some code cleanup
+
+0.25: Peter Bieringer <pb@bieringer.de>
+	Restructure central address structure to use "in6_addr" struct
+	Some code cleanup
+
+0.24: Peter Bieringer <pb@bieringer.de>
+	Add option "--eui64_to_privacy" to calculate pseudo random suffices
+	 (experimental, result is not verified)
+	Add option "--showinfo"
+	 (experimental, not finnished)	
+	Add option "-d|--debug value"
+	Partially new debug code
+
+0.23: Peter Bieringer <pb@bieringer.de>
+	Fix permissions of doc files in spec file
+
+0.22: Peter Bieringer <pb@bieringer.de>
+	ANSI compiling cleanup
+	Cleanup special types to ANSI types
+
+0.21: Peter Bieringer <pb@bieringer.de>
+	Fix typo (strings.h -> string.h) at ifinet6_to_compressed.c
+
+0.20: Peter Bieringer <pb@bieringer.de>
+	Activate "--printsuffix" + "--printprefix" for "--addr_to_uncompressed"
+	Change format of "--mac_to_eui64" to described one (now without prefix)
+
+0.19: Peter Bieringer <pb@bieringer.de>
+	Extend "TODO" list
+	Print also info on "-?"
+	Fixes in spec file, see changelog at the end of that file
+	Add "COPYING" and "INSTALLING"
+	Add "installonly" on "Makefile" to support changes in spec file
+
+0.18: Peter Bieringer <pb@bieringer.de>
+	Add "make test" after "make" in spec file to stop build process, if
+	 compiling do not result in working code
+	Add samplecode directory	
+
+0.17: Peter Bieringer <pb@bieringer.de>
+	Fix "addr_to_ip6int" (sprintf)
+	Minor reviews
+
+0.16: Peter Bieringer <pb@bieringer.de>
+	Review "Makefile" to make it usable on BSD systems
+	Minor reviews to enable a clean make on BSD systems
+
+0.15: Peter Bieringer <pb@bieringer.de>
+	Create TODO
+	Some review
+	New option: mac_to_eui64
+
+0.14: Peter Bieringer <pb@bieringer.de>
+	Review CREDITS
+
+0.13: Peter Bieringer <pb@bieringer.de>
+	Add base85 support
+	Add compatv4/mapped support
+	Split away some RFC depended libaries
+	Rename internal used functions
+	Rename options (old ones still work)
+	Change IPv6 address compression method from getaddrinfo to
+     native calculation (hopefully bugless)
+	Some review
+
+0.12: Peter Bieringer <pb@bieringer.de>
+	Add some format checks
+
+0.11: Peter Bieringer <pb@bieringer.de>
+	Add code for successful compiling under BSD, credits to Hubert Feyrer <hubertf@netbsd.org>
+	Cosmetic cleanups
+
+0.10: Peter Bieringer <pb@bieringer.de>
+	redesigned to use a central libary for most of the functions
+	moved option handling to getopts
+	add option --maskprefix, --masksuffix for [full]uncompressed format
+
+0.09: Peter Bieringer <pb@bieringer.de>
+	fix in 0.07 (addr2uncompaddr) won't work, refix now
+
+0.08: Peter Bieringer <pb@bieringer.de>
+	fix Makefile and spec-file for RedHat 7.0.91
+
+0.07: Peter Bieringer <pb@bieringer.de>
+	fix addr2uncompaddr, now ::/prefixlength is well converted
+
+0.06: Peter Bieringer <pb@bieringer.de>
+	fix glibc-2.2.2 compilation problems, credits to Pekka Savola <pekkas@netcore.fi> in
+	 addr2if_inet6.c, ipv6calc.c
+
+0.05: Peter Bieringer <pb@bieringer.de> 
+	if_inet62addr added, printhelp_function moved into related source file
+
+0.04: Peter Bieringer <pb@bieringer.de> 
+	addr2if_inet6 will now display scope value in hex
+	 (use some sources of kernel files to get scope rather than writing my own)
+	cosmetic cleanups
+
+0.03: Peter Bieringer <pb@bieringer.de>
+	Splitt away each function in a seperate file
+	Working: addr2compaddr, addr2uncompaddr, addr2fulluncompaddr, addr2if_inet6
+	 addr2ip6_int
+
+0.02: Peter Bieringer <pb@bieringer.de>
+	Never published release, "addr2compaddr" is working
+
+0.01: Peter Bieringer <pb@bieringer.de>
+	Initial start

@@ -1,0 +1,40 @@
+TODO list (2001-04-29)
+
+Documentation:
+* manpage (never wrote one, therefore need help)
+
+Features:
+* ip6int_to_addr
+* IPv4 address extraction of autoconfigured link local addresses
+* 6to4addr -> IPv4, IPv4 -> 6to4addr
+
+Format features
+* printprefix, printsuffix for full
+
+Cosmetics:
+* less major options, more format options 
+
+Portability:
+* configure (never wrote one, therefore need help)
+
+Finnish 0.24 adds
+
+
+
+Features requested from others:
+
+-call no kernel-specific or userland-specific functions, just C.
+
+ipv6calc C library would contain routines to represent  the
+following forms (and convert between them):
+  -x:x:x:x:x:x:x:x                       
+  -::                                    
+  -x:x:x:x:x:x:d.d.d.d
+  -ipv6-address/prefix-length
+  -scoped_address%scope_id
+  -base 85 (compact notation)
+  -URL's
+  -binary labels
+  -comparing addresses, v4/v4, v4/v6
+  -not use malloc or strxxx functions.
+

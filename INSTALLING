@@ -1,0 +1,56 @@
+ipv6calc
+
+                               INSTALLING
+
+Please read the file `README' before you start with the installation of the
+ipv6calc.
+
+
+USING RPM
+---------
+This tar-ball provides a spec file for building an source and binary RPM using
+	rpm -ta ipv6calc-$version.tar.gz
+After successful build you got two packages:
+	one source RPM ipv6calc-$version-$release.src.rpm
+	and one binary RPM ipv6calc-$version-$release.$arch.rpm
+
+For installing use
+	rpm -ihv ipv6calc-$version-$release.$arch.rpm
+For updating use
+	rpm -Fhv ipv6calc-$version-$release.$arch.rpm
+For deinstalling use
+	rpm -e ipv6calc
+
+
+HACKERS WAY
+-----------
+cd /usr/src ; tar xvzf ipv6calc*.tar.gz
+less Makefile ; make config ; make ; make test; make -n install ; make install
+
+
+
+CONFIGURE
+---------
+There are neither configure options nor a configure script available.
+Hopefully never needed because this tool should only use simple functions.
+
+If you have trouble in strange calculation results, you can enable some debug switches in "ipv6calc.h"
+
+
+
+COMPILE
+-------  
+To compile simply use "make".
+
+There should be no warnings or errors.
+
+
+
+INSTALLATION
+------------
+If you want to install the binary use "make install".
+
+
+
+Peter Bieringer
+<pb@bieringer.de>
