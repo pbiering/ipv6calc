@@ -1,11 +1,11 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.1 2002/03/11 21:58:35 peter Exp $
+ * Version    : $Id: ipv6calcoptions.h,v 1.2 2002/03/16 23:30:02 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
- *  Header file for ipv6calctypes.h
+ *  Header file containing options for ipv6calc.c
  */ 
 
 #include <getopt.h> 

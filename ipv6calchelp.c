@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.6 2002/03/11 22:10:17 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.7 2002/03/16 23:30:02 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -326,6 +326,28 @@ static void printhelp_output_ipv4addr(void) {
 	fprintf(stderr, " Print an IPv4 address\n");
 };
 
+static void printhelp_output_addrtype(void) {
+	fprintf(stderr, " Print type of a given IPv4/IPv6 address:\n");
+	fprintf(stderr, "  IPv4 address  -> ipv4-addr.addrtype.ipv6calc\n");
+	fprintf(stderr, "  IPv6 address  -> ipv6-addr.addrtype.ipv6calc\n");
+};
+
+static void printhelp_output_ipv6addrtype(void) {
+	fprintf(stderr, " Print type of a given IPv6 address:\n");
+	fprintf(stderr, "  3ffe::/16         -> 6bone-global.ipv6addrtype.ipv6calc\n");
+	fprintf(stderr, "  2002::/16         -> 6to4-global.ipv6addrtype.ipv6calc\n");
+	fprintf(stderr, "  2001::/16         -> productive-global.ipv6addrtype.ipv6calc\n");
+	fprintf(stderr, "  fe80::/10         -> link-local.ipv6addrtype.ipv6calc\n");
+	fprintf(stderr, "  fec0::/10         -> site-local.ipv6addrtype.ipv6calc\n");
+	fprintf(stderr, "  ::ffff:0:0:0:0/96 -> mapped-ipv4.ipv6addrtype.ipv6calc\n");
+	fprintf(stderr, "  ::0:0:0:0/96      -> compat-ipv4.ipv6addrtype.ipv6calc\n");
+};
+
+static void printhelp_output_ouitype(void) {
+	fprintf(stderr, " Print OUI name of a given IPv6 address:\n");
+	fprintf(stderr, "  IID local scope   -> local-scoppe.ouitype.ipv6calc\n");
+	fprintf(stderr, "  IID global scope  -> vendorname.ouitype.ipv6calc\n");
+};
 
 void printhelp_output_dispatcher(const int outputtype) {
 	int i, j;
@@ -371,6 +393,18 @@ void printhelp_output_dispatcher(const int outputtype) {
 			printhelp_output_ipv4addr();
 			break;
 
+		case FORMAT_addrtype:
+			printhelp_output_addrtype();
+			break;
+
+		case FORMAT_ipv6addrtype:
+			printhelp_output_ipv6addrtype();
+			break;
+			
+		case FORMAT_ouitype:
+			printhelp_output_ouitype();
+			break;
+			
 		default:
 			fprintf(stderr, " Help currently missing...!\n");
 			break;

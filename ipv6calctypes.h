@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.13 2002/03/16 20:50:06 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.14 2002/03/16 23:30:02 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -41,6 +41,7 @@ extern int ipv6calctypes_checkaction(const char *string);
 #define FORMAT_addrtype 	0x0800
 #define FORMAT_ouitype	 	0x1000
 #define FORMAT_ipv6addrtype 	0x2000
+#define FORMAT_ipv6logconv 	0x4000
 
 /* Primary label of format number, keeping also an explanation */
 typedef struct {
@@ -66,6 +67,7 @@ static const s_format ipv6calc_formatstrings[] = {
 	{ FORMAT_addrtype       , "addrtype"       , "Address type", "" },
 	{ FORMAT_ouitype        , "ouitype"        , "OUI (IEEE) type", "" },
 	{ FORMAT_ipv6addrtype   , "ipv6addrtype"   , "IPv6 address type", "" },
+	{ FORMAT_ipv6logconv    , "ipv6logconv"    , "ipv6logconv", "" },
 };
 
 /* Format conversion matrix */
@@ -81,6 +83,7 @@ static const int ipv6calc_formatmatrix[][2] = {
 	{ FORMAT_base85         , FORMAT_base85 | FORMAT_ipv6addr | FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ifinet6 },
 	{ FORMAT_ifinet6        , FORMAT_base85 | FORMAT_ipv6addr | FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ifinet6 },
 	{ FORMAT_iid_token      , FORMAT_iid_token },
+	{ FORMAT_ipv6logconv    , FORMAT_ipv6addrtype | FORMAT_addrtype | FORMAT_ouitype },
 };
 
 
