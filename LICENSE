@@ -8,6 +8,10 @@
 	related file is
 	- librfc1924.c
 
+   * code for uncompressing IPv6 addresses, which was copied from "ircd"
+	related file is
+	- librfc1884.c
+
    * code for getopt (needed by OpenBSD)
 	related files are:
 	- getopt/getopt.c
@@ -16,6 +20,10 @@
 
    -> see directory "samplecode" in the source file for original versions
 
+   * source data of databases
+	OUI data is taken from IEEE
+	IPv4 assignment data is taken from registries RIPE NCC, APNIC, ARIN
+
 1. The program "ipv6calc" is distributed under the GNU GPL version 2
     (see COPYING file for more)
 
@@ -23,4 +31,4 @@
     (md5 hash function is used from this libary)
 
 
-2002-01-21, Peter Bieringer <pb@bieringer.de>
+2002-03-27, Peter Bieringer <pb@bieringer.de>
