@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Version    : $Id: ipv6calc.spec,v 1.28 2004/10/30 12:59:39 peter Exp $
-# Copyright  : 2001-2003 by Peter Bieringer <pb@bieringer.de>
+# Version    : $Id: ipv6calc.spec,v 1.29 2004/10/30 13:17:49 peter Exp $
+# Copyright  : 2001-2004 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
 Name: ipv6calc
@@ -14,8 +14,6 @@ License: GNU GPL version 2
 Source: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/ipv6calc-%{version}.tar.gz
 
 BuildRoot: %{_tmppath}/ipv6calc-root
-Requires: openssl
-BuildRequires: openssl-devel 
 
 %description
 ipv6calc is a small utility which formats and calculates IPv6 addresses in
@@ -97,6 +95,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Oct 30 2004 Peter Bieringer <pb@bieringer.de> 0.49-1
+- remove openssl(-devel) from requirements, no longer needed
+
 * Fri Nov 22 2003 Peter Bieringer <pb@bieringer.de>
 - adjustments
 
