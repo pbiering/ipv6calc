@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.61 2002/11/04 19:50:55 peter Exp $ 
+ *  $Id: ChangeLog,v 1.62 2002/11/04 20:07:49 peter Exp $ 
  */
 
 Info:
@@ -7,7 +7,7 @@ Info:
 --------------------------------------------------------------------
 20021104/PB:
 	update IPv6 address allocation for 2001::/16
-	update IPv6 databases
+	update IPv4 databases
 	remove user/group on "make install" to enable non-root RPM build
 	minor reviews
 
