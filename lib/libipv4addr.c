@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.2 2002/03/24 16:58:21 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.3 2002/03/24 21:45:38 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -16,7 +16,7 @@
 #include "ipv6calctypes.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
-#include "../databases/ipv4-assignment/dbipv4addr_assignement.h"
+#include "../databases/ipv4-assignment/dbipv4addr_assignment.h"
 
 
 /*
