@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.9 2002/04/08 19:04:11 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.10 2002/05/11 09:13:06 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -171,7 +171,7 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 			snprintf(tempstring, sizeof(tempstring), "OUI=\"%s\"", helpstring);
 			printout(tempstring);
 		} else {
-			fprintf(stdout, "OUI is: %s\n", tempstring);
+			fprintf(stdout, "OUI is: %s\n", helpstring);
 		};
 	};
 
