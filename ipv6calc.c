@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.23 2002/03/16 23:49:38 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.24 2002/03/17 10:13:51 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -250,6 +250,11 @@ int main(int argc,char *argv[]) {
 			case FORMATOPTION_machinereadable + FORMATOPTION_HEAD:
 				formatoptions |= FORMATOPTION_machinereadable;
 				break;
+				
+			case 'q':	
+			case FORMATOPTION_quiet + FORMATOPTION_HEAD:
+				formatoptions |= FORMATOPTION_quiet;
+				break;
 
 			/* new options */
 			case CMD_inputtype:
@@ -332,6 +337,9 @@ int main(int argc,char *argv[]) {
 	} else if (command == CMD_printexamples) {
 		printhelp_output_dispatcher(outputtype);
 		exit(EXIT_FAILURE);
+	} else if (command == CMD_showinfotypes) {
+		showinfo_availabletypes();
+		exit(EXIT_FAILURE);
 	};
 
 	if (ipv6calc_debug != 0) {
@@ -368,14 +376,18 @@ int main(int argc,char *argv[]) {
 	/* autodetection */
 	if ((inputtype == -1 || inputtype == FORMAT_auto) && argc > 0) {
 		/* no input type specified or automatic selected */
-		fprintf(stderr, "No input type specified, try autodetection...");
+		if ((formatoptions & FORMATOPTION_quiet) == 0) {
+			fprintf(stderr, "No input type specified, try autodetection...");
+		};
 		
 		inputtype = libipv6calc_autodetectinput(argv[0]);
 
 		if (inputtype >= 0) {
 			for (i = 0; i < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); i++) {
 				if (inputtype == ipv6calc_formatstrings[i].number) {
-					fprintf(stderr, "found type: %s\n", ipv6calc_formatstrings[i].token);
+					if ((formatoptions & FORMATOPTION_quiet) == 0) {
+						fprintf(stderr, "found type: %s\n", ipv6calc_formatstrings[i].token);
+					};
 					break;
 				};
 			};
@@ -684,9 +696,6 @@ int main(int argc,char *argv[]) {
 			exit(EXIT_FAILURE);
 		};
 		goto RESULT_print;
-	} else if (command == CMD_showinfotypes) {
-		showinfo_availabletypes();
-			exit(EXIT_FAILURE);
 	};
 
 
@@ -773,10 +782,12 @@ int main(int argc,char *argv[]) {
 
 RESULT_print:
 	/* print result */
-	if (retval == 0) {
-		fprintf(stdout, "%s\n", resultstring);
-	} else {
-		fprintf(stderr, "%s\n", resultstring);
+	if ( strlen(resultstring) > 0 ) {
+		if ( retval == 0 ) {
+			fprintf(stdout, "%s\n", resultstring);
+		} else {
+			fprintf(stderr, "%s\n", resultstring);
+		};
 	};
 	exit(retval);
 };

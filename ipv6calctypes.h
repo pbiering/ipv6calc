@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.15 2002/03/16 23:49:38 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.16 2002/03/17 10:13:51 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -88,19 +88,20 @@ static const int ipv6calc_formatmatrix[][2] = {
 
 
 /* Format options */
-#define FORMATOPTION_HEAD			0xf000
-#define FORMATOPTION_printlowercase		0x0001
-#define FORMATOPTION_printuppercase		0x0002
-#define FORMATOPTION_printprefix		0x0004
-#define FORMATOPTION_printsuffix		0x0008
-#define FORMATOPTION_maskprefix			0x0010
-#define FORMATOPTION_masksuffix			0x0020
-#define FORMATOPTION_printstart			0x0040
-#define FORMATOPTION_printend			0x0080
-#define FORMATOPTION_printcompressed		0x0100
-#define FORMATOPTION_printuncompressed		0x0200
-#define FORMATOPTION_printfulluncompressed	0x0400
-#define FORMATOPTION_machinereadable		0x0800
+#define FORMATOPTION_HEAD			0xf0000
+#define FORMATOPTION_printlowercase		0x00001
+#define FORMATOPTION_printuppercase		0x00002
+#define FORMATOPTION_printprefix		0x00004
+#define FORMATOPTION_printsuffix		0x00008
+#define FORMATOPTION_maskprefix			0x00010
+#define FORMATOPTION_masksuffix			0x00020
+#define FORMATOPTION_printstart			0x00040
+#define FORMATOPTION_printend			0x00080
+#define FORMATOPTION_printcompressed		0x00100
+#define FORMATOPTION_printuncompressed		0x00200
+#define FORMATOPTION_printfulluncompressed	0x00400
+#define FORMATOPTION_machinereadable		0x00800
+#define FORMATOPTION_quiet			0x01000
 
 typedef struct {
 	int number;
@@ -121,6 +122,7 @@ static const s_formatoption ipv6calc_formatoptionstrings[] = {
 	{ FORMATOPTION_printuncompressed  , "--printuncompressed"  , "Print in uncompressed format" },
 	{ FORMATOPTION_printfulluncompressed  , "--printfulluncompressed"  , "Print in full uncompressed format" },
 	{ FORMATOPTION_machinereadable  , "--machinereadable|-m" , "Print output machine readable" },
+	{ FORMATOPTION_quiet            , "--quiet|-q"         , "Be more quiet" },
 };
 
 /* Possible format option map */

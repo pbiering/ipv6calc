@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.2 2002/03/16 23:30:02 peter Exp $
+ * Version    : $Id: ipv6calcoptions.h,v 1.3 2002/03/17 10:13:51 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -20,7 +20,19 @@
 /* Options */
 
 /* define short options */
-static char *ipv6calc_shortopts = "vh?rmabd:iul";
+/*  v = version
+ *  h|? = help
+ *  d <debugvalue> = debug value
+ *  l = lower case
+ *  u = upper case
+ *  r = reverse nibble (ip6.int)
+ *  a = reverse nibble (ip6.arpa)
+ *  b = bitstring label
+ *  m = output machine readable
+ *  i = showinfo
+ *  q = be more quiet
+ */
+static char *ipv6calc_shortopts = "vh?rmabd:iulq";
 
 /* define long options */
 static struct option ipv6calc_longopts[] = {
@@ -84,6 +96,7 @@ static struct option ipv6calc_longopts[] = {
 	{ "printfulluncompressed", 0, 0, FORMATOPTION_printfulluncompressed + FORMATOPTION_HEAD },
 	
 	{ "machine_readable"     , 0, 0, FORMATOPTION_machinereadable + FORMATOPTION_HEAD },
+	{ "quiet"                , 0, 0, FORMATOPTION_quiet + FORMATOPTION_HEAD },
 
 	/* new options */
 	{ "in"        , 1, 0, CMD_inputtype  },
