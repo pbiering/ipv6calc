@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.11 2003/07/17 20:14:54 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.12 2003/08/15 11:58:28 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -1067,7 +1067,11 @@ int libipv6addr_to_octal(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring,
 	int retval = 1;
 	char tempstring[NI_MAXHOST];
 
-	snprintf(tempstring, sizeof(tempstring), "\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o", ipv6addrp->in6_addr.s6_addr[0], ipv6addrp->in6_addr.s6_addr[1], ipv6addrp->in6_addr.s6_addr[2], ipv6addrp->in6_addr.s6_addr[3], ipv6addrp->in6_addr.s6_addr[4], ipv6addrp->in6_addr.s6_addr[5], ipv6addrp->in6_addr.s6_addr[6], ipv6addrp->in6_addr.s6_addr[7], ipv6addrp->in6_addr.s6_addr[8], ipv6addrp->in6_addr.s6_addr[9], ipv6addrp->in6_addr.s6_addr[10], ipv6addrp->in6_addr.s6_addr[11], ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
+	if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
+		snprintf(tempstring, sizeof(tempstring), "\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o", ipv6addrp->in6_addr.s6_addr[0], ipv6addrp->in6_addr.s6_addr[1], ipv6addrp->in6_addr.s6_addr[2], ipv6addrp->in6_addr.s6_addr[3], ipv6addrp->in6_addr.s6_addr[4], ipv6addrp->in6_addr.s6_addr[5], ipv6addrp->in6_addr.s6_addr[6], ipv6addrp->in6_addr.s6_addr[7], ipv6addrp->in6_addr.s6_addr[8], ipv6addrp->in6_addr.s6_addr[9], ipv6addrp->in6_addr.s6_addr[10], ipv6addrp->in6_addr.s6_addr[11], ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
+	} else {
+		snprintf(tempstring, sizeof(tempstring), "\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o", ipv6addrp->in6_addr.s6_addr[0], ipv6addrp->in6_addr.s6_addr[1], ipv6addrp->in6_addr.s6_addr[2], ipv6addrp->in6_addr.s6_addr[3], ipv6addrp->in6_addr.s6_addr[4], ipv6addrp->in6_addr.s6_addr[5], ipv6addrp->in6_addr.s6_addr[6], ipv6addrp->in6_addr.s6_addr[7], ipv6addrp->in6_addr.s6_addr[8], ipv6addrp->in6_addr.s6_addr[9], ipv6addrp->in6_addr.s6_addr[10], ipv6addrp->in6_addr.s6_addr[11], ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
+	};
 
 	snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
 	retval = 0;	

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.13 2003/04/04 20:23:31 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.14 2003/08/15 11:58:28 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -186,7 +186,7 @@ typedef struct {
 };
 
 /* Possible format option map */
-/*@unused@*/ static const uint32_t ipv6calc_outputformatoptionmap[12][2]  = {
+/*@unused@*/ static const uint32_t ipv6calc_outputformatoptionmap[13][2]  = {
 	{ FORMAT_revnibbles_int , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend | FORMATOPTION_printmirrored },
 	{ FORMAT_revnibbles_arpa, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend | FORMATOPTION_printmirrored },
 	{ FORMAT_revipv4, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printmirrored },
@@ -198,6 +198,7 @@ typedef struct {
 	{ FORMAT_ifinet6        , 0 },
 	{ FORMAT_ipv4addr       , FORMATOPTION_machinereadable },
 	{ FORMAT_iid_token      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
+	{ FORMAT_octal          , FORMATOPTION_printfulluncompressed },
 	{ FORMAT_prefix_mac     , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase }
 };
 

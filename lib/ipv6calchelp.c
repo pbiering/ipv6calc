@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.9 2002/11/12 19:16:03 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.10 2003/08/15 11:58:28 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -351,6 +351,13 @@ static void printhelp_output_ouitype(void) {
 	fprintf(stderr, "  IID global scope  -> vendorname.ouitype.ipv6calc\n");
 };
 
+static void printhelp_output_octal(void) {
+	fprintf(stderr, " Print octal representation of a given IPv6 address:\n");
+	fprintf(stderr, "  (useful for djbdns/tinydns)\n");
+	fprintf(stderr, "  3ffe:ffff::1 ->\n    \\77\\376\\377\\377\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\1\n");
+	fprintf(stderr, "  --printfulluncompressed 3ffe:ffff::1 ->\n    \\077\\376\\377\\377\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\001\n");
+};
+
 void printhelp_output_dispatcher(const uint32_t outputtype) {
 	int i, j;
 
@@ -409,6 +416,10 @@ void printhelp_output_dispatcher(const uint32_t outputtype) {
 			
 		case FORMAT_revipv4:
 			printhelp_output_revipv4();
+			break;
+			
+		case FORMAT_octal:
+			printhelp_output_octal();
 			break;
 			
 		default:

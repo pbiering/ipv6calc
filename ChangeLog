@@ -1,10 +1,14 @@
 /*
- *  $Id: ChangeLog,v 1.72 2003/07/22 21:37:07 peter Exp $ 
+ *  $Id: ChangeLog,v 1.73 2003/08/15 11:58:28 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20030815/PB
+	enable option "printfulluncompressed" on output format octal
+	add example for output format octal
+
 20030722/PB
 	enable "printprefix", "printsuffix" for normal IPv6 addresses (autoswitch to uncompressed format)
 	prefix length of 6to4 addresses changed from 16 to 48 for proper support of format "printprefix"
