@@ -1,10 +1,14 @@
 /*
- *  $Id: ChangeLog,v 1.86 2005/02/12 16:33:53 peter Exp $ 
+ *  $Id: ChangeLog,v 1.87 2005/02/13 11:37:35 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20050214/PB
+	ipv6logconv:
+	 - fix online help
+
 20050212/PB
 	Update databases
 	ipv6logconv:

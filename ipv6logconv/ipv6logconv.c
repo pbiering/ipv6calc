@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.10 2005/02/12 16:33:54 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.11 2005/02/13 11:37:35 peter Exp $
  * Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -138,7 +138,7 @@ int main(int argc,char *argv[]) {
 					fprintf(stderr, "%s: Got output string: %s\n", DEBUG_function_name, optarg);
 				};
 				if ( (strcmp(optarg, "-?") == 0) || (strcmp(optarg, "-h") == 0) || (strcmp(optarg, "--help") == 0) ) {
-					command = CMD_printhelp;
+					command = CMD_printexamples;
 					break;
 				};
 				
@@ -164,7 +164,7 @@ int main(int argc,char *argv[]) {
 
 	/* print help handling */
 	if (command == CMD_printhelp) {
-		printhelp_outputtypes(FORMAT_ipv6logconv);
+		ipv6logconv_printhelp();
 		exit(EXIT_FAILURE);
         } else if (command == CMD_printexamples) {
 		printhelp_output_dispatcher(outputtype);
@@ -180,12 +180,6 @@ int main(int argc,char *argv[]) {
 		printversion();
 		exit(EXIT_FAILURE);
 	};
-
-	if (command == CMD_printhelp) {
-		ipv6logconv_printhelp();
-		exit(EXIT_FAILURE);
-	};
-	
 
 	/* call lineparser */
 	lineparser(outputtype);
