@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.3 2002/03/16 19:40:29 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.4 2002/03/16 20:50:07 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -252,6 +252,10 @@ static int lineparser(const long int outputtype) {
 		};
 
 		linecounter++;
+		
+		if (ipv6calc_debug == 1) {
+			fprintf(stderr, "Line: %d\r", linecounter);
+		};
 
 		if (strlen(linebuffer) >= LINEBUFFER) {
 			fprintf(stderr, "Line too long: %d\n", linecounter);
@@ -311,6 +315,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 	int retval = 1, i;
 	int bit_start = 0, bit_end = 0;
 	int typeinfo;
+	char tempstring[NI_MAXHOST];
 
 	/* format options storage */
 	int formatoptions = 0;
@@ -465,11 +470,11 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 	switch (outputtype) {
 		case FORMAT_addrtype:
 			if (ipv6addr.flag_valid == 1) {
-				sprintf(resultstring, "ipv6-addr");
+				sprintf(resultstring, "ipv6-addr.net");
 			} else if (ipv4addr.flag_valid == 1) {
-				sprintf(resultstring, "ipv4-addr");
+				sprintf(resultstring, "ipv4-addr.net");
 			} else {
-				sprintf(resultstring, "reverse-lookup-succesful");
+				sprintf(resultstring, "reverse-lookup-succesful.net");
 			};
 			break;
 
@@ -491,7 +496,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 			retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, resultstring, formatoptions);
 			break;
 			
-		case FORMAT_oui:
+		case FORMAT_ouitype:
 			if (ipv6addr.flag_valid != 1) { return(1); };
 
 			/* check whether address has a OUI ID */
@@ -503,10 +508,13 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 					return (1);
 				};
 				if (strlen(resultstring) == 0) {
-					sprintf(resultstring, "unknown");
+					sprintf(resultstring, "unknown.net");
+				} else {
+					sprintf(tempstring, "%s.net", resultstring);
+					sprintf(resultstring, "%s", tempstring);
 				};
 			} else {
-				sprintf(resultstring, "local-scope");
+				sprintf(resultstring, "local-scope.net");
 			};
 			break;
 			
@@ -516,21 +524,21 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 			typeinfo = ipv6addr_gettype(&ipv6addr);
 
 		       	if ( (typeinfo & IPV6_ADDR_LINKLOCAL) != 0 ) {
-				sprintf(resultstring, "link-local");
+				sprintf(resultstring, "link-local.net");
 			} else if ( (typeinfo & IPV6_ADDR_SITELOCAL) != 0 ) {
-				sprintf(resultstring, "site-local");
+				sprintf(resultstring, "site-local.net");
 			} else if ( (typeinfo & IPV6_NEW_ADDR_6BONE) != 0 ) {
-				sprintf(resultstring, "6bone-global");
+				sprintf(resultstring, "6bone-global.net");
 			} else if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
-				sprintf(resultstring, "6to4-global");
+				sprintf(resultstring, "6to4-global.net");
 			} else if ( (typeinfo & IPV6_NEW_ADDR_PRODUCTIVE) != 0 ) {
-				sprintf(resultstring, "productive-global");
+				sprintf(resultstring, "productive-global.net");
 			} else if ( (typeinfo & IPV6_ADDR_MAPPED) ) {
-				sprintf(resultstring, "mapped-ipv4");
+				sprintf(resultstring, "mapped-ipv4.net");
 			} else if ( (typeinfo & IPV6_ADDR_COMPATv4) ) {
-				sprintf(resultstring, "compat-ipv4");
+				sprintf(resultstring, "compat-ipv4.net");
 			} else {
-				sprintf(resultstring, "unknown-ipv6");
+				sprintf(resultstring, "unknown-ipv6.net");
 			};
 			break;
 
