@@ -1,14 +1,14 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Version    : $Id: ipv6calc.spec,v 1.6 2002/04/20 18:19:34 peter Exp $
+# Version    : $Id: ipv6calc.spec,v 1.7 2002/04/21 12:31:58 peter Exp $
 # Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
 Name: ipv6calc
-Version: 0.40rc2
+Version: 0.40rc5
 Release: 1
 Group: System Environment/Base
-URL: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/
+URL: http://www.bieringer.de/linux/IPv6/ipv6calc/
 License: GNU GPL version 2
 
 Source: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/ipv6calc-%{version}.tar.gz
@@ -63,6 +63,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples/analog/analog-dist.cfg %doc examples/analog/run_analog.sh examples/analog/ipv6calc.tab ipv6calcweb/ipv6calcweb.cgi examples/analog/analog-ipv6calc-descriptions.txt examples/analog/analog-dist-combined.cfg
 
 %changelog
+* Sat Apr 20 2002 Peter Bieringer <pb@bieringer.de>
+- Change URL
+
 * Mon Apr 07 2002 Peter Bieringer <pb@bieringer.de>
 - add more analog example files
 
