@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.64 2002/11/12 19:14:23 peter Exp $ 
+ *  $Id: ChangeLog,v 1.65 2002/11/12 19:16:44 peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,7 @@ Info:
 	fix not proper handling of option "-q|--quiet" in some cases
 	enhance help options (-h|--help now also valid) on --out|action|in
 	ipv6logconf: "make test" can be now also executed by root (su to nobody)
+	tag version 0.45
 
 20021104/PB:
 	minor cosmetics in IEEE/OUI database
