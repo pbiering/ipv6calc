@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.6 2002/04/05 21:12:16 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.7 2002/04/09 20:30:57 peter Exp $
 # Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -106,6 +106,8 @@ cat <<END | grep -v '^#'
 --in ipv6 --out ipv4 --action conv6to4 2002:102:304::1			=1.2.3.4
 ## Prefix + MAC -> IPv6
 --in prefix+mac fec0:0:0:1:: 01:23:45:67:89:01				=fec0::1:323:45ff:fe67:8901
+## IPv4 -> reverse
+--in ipv4addr --out revipv4 1.2.3.4					=4.3.2.1.in-addr.arpa.
 END
 }
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.10 2002/04/09 17:32:58 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.11 2002/04/09 20:30:57 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -121,14 +121,14 @@ int main(int argc,char *argv[]) {
 			case 'r':
 			case CMD_addr_to_ip6int:
 				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
-				inputtype  = FORMAT_ipv6addr;
+				inputtype  = FORMAT_auto;
 				outputtype = FORMAT_revnibbles_int;
 				break;
 
 			case 'a':
 			case CMD_addr_to_ip6arpa:
 				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
-				inputtype  = FORMAT_ipv6addr;
+				inputtype  = FORMAT_auto;
 				outputtype = FORMAT_revnibbles_arpa;
 				break;
 
@@ -740,6 +740,14 @@ int main(int argc,char *argv[]) {
 			};
 		};
 	};
+
+	if ( (outputtype & (FORMAT_revnibbles_int | FORMAT_revnibbles_arpa)) != 0 ) {
+		/* workaround for reverse IPv4 */
+		if (ipv4addr.flag_valid == 1) {
+			outputtype = FORMAT_revipv4;
+		};
+	};
+
 	
 	/* clear resultstring */
 	snprintf(resultstring, sizeof(resultstring), "%s", "");
@@ -878,15 +886,26 @@ int main(int argc,char *argv[]) {
 				
 		case FORMAT_revnibbles_int:
 		case FORMAT_revnibbles_arpa:
-			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
-			switch (outputtype) {
-				case FORMAT_revnibbles_int:
-					retval = librfc1886_addr_to_nibblestring(&ipv6addr, resultstring, formatoptions, "ip6.int.");
-					break;
-				case FORMAT_revnibbles_arpa:
-					retval = librfc1886_addr_to_nibblestring(&ipv6addr, resultstring, formatoptions, "ip6.arpa.");
-					break;
+			if (ipv6addr.flag_valid == 1) {
+				switch (outputtype) {
+					case FORMAT_revnibbles_int:
+						retval = librfc1886_addr_to_nibblestring(&ipv6addr, resultstring, formatoptions, "ip6.int.");
+						break;
+					case FORMAT_revnibbles_arpa:
+						retval = librfc1886_addr_to_nibblestring(&ipv6addr, resultstring, formatoptions, "ip6.arpa.");
+						break;
+				};
+			} else {
+			       fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE);
 			};
+			break;
+				
+		case FORMAT_revipv4:
+			if (ipv4addr.flag_valid == 1) {
+				retval = libipv4addr_to_reversestring(&ipv4addr, resultstring, formatoptions);
+			} else {
+			       fprintf(stderr, "No valid IPv4 address given!\n"); exit(EXIT_FAILURE);
+		       	};
 			break;
 			
 		case FORMAT_ifinet6:
