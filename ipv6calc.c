@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.16 2002/03/03 18:21:34 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.17 2002/03/03 20:14:53 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -524,6 +524,13 @@ int main(int argc,char *argv[]) {
 			/* Get second token */
 			if (argc < 1) { printhelp_missinginputdata(); exit(1); };
 			retval = tokenlsb64_to_ipv6addrstruct(argv[1], resultstring, &ipv6addr2);
+			argc--;
+			break;
+
+		case FORMAT_revnibbles_int:
+		case FORMAT_revnibbles_arpa:
+			if (argc < 1) { printhelp_missinginputdata(); exit(1); };
+			retval = librfc1886_nibblestring_to_ipv6addrstruct(argv[0], &ipv6addr, resultstring);
 			argc--;
 			break;
 			

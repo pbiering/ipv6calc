@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.4 2002/03/03 11:01:54 peter Exp $
+ * Version    : $Id: librfc1886.c,v 1.5 2002/03/03 20:14:53 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "ipv6calc.h"
 #include "ipv6calctypes.h"
@@ -116,6 +117,115 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 		fprintf(stderr, "%s: Print out: %s\n", DEBUG_function_name, resultstring);
 	};
 
+	retval = 0;
+	return (retval);
+};
+#undef DEBUG_function_name
+
+
+/*
+ * function a reverse nibble format string into IPv6addr_structure
+ *
+ * in : inputstring
+ * mod: *ipv6addrp = IPv6 address structure
+ * ret: ==0: ok, !=0: error
+ */
+#define DEBUG_function_name "librfc1886/nibblestring_to_ipv6addrstruct"
+int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+	int retval = 1;
+	char tempstring[NI_MAXHOST], *token;
+	int flag_tld = 0, flag_nld = 0, tokencounter = 0, nibblecounter = 0;
+	int noctet, xdigit;
+
+	/* clear output structure */
+	ipv6addr_clearall(ipv6addrp);
+
+	/* reverse copy of string */
+	sprintf(tempstring, "%s", inputstring);
+	string_to_lowcase(tempstring);
+
+	string_to_reverse(tempstring);	
+	
+	if ( ipv6calc_debug & DEBUG_librfc1886 ) {
+		fprintf(stderr, "%s: reverse copied string: %s\n", DEBUG_function_name, tempstring);
+	};
+	
+	/* run through nibbles */
+	token = strtok(tempstring, ".");
+
+	while(token != NULL) {
+		if (strcmp(token, "apra") == 0) {
+			if (flag_tld == 0) {
+				flag_tld = 1;
+				goto NEXT_token_nibblestring_to_ipv6addrstruct;
+			} else {
+				sprintf(resultstring, "Top level domain 'arpa' is in wrong place");
+				return (1);
+			};
+		};
+		if (strcmp(token, "tni") == 0) {
+			if (flag_tld == 0) {
+				flag_tld = 1;
+				goto NEXT_token_nibblestring_to_ipv6addrstruct;
+			} else {
+				sprintf(resultstring, "Top level domain 'int' is in wrong place");
+				return (1);
+			};
+		};
+		if (tokencounter == 1 && flag_tld == 1 && flag_nld == 0) {
+			if (strcmp(token, "6pi") == 0) {
+				flag_nld = 1;
+				goto NEXT_token_nibblestring_to_ipv6addrstruct;
+			} else {
+				sprintf(resultstring, "Next level domain 'ip6' is in wrong place or missing");
+				return (1);
+			};
+		};
+
+		/* now proceed nibbles */
+		if (strlen(token) > 1) {
+			string_to_reverse(token);
+			sprintf(resultstring, "Nibble '%s' on dot position %d (from right side) is longer than one char", token, tokencounter + 1);
+			return (1);
+		};
+		
+		if (! isxdigit(token[0])) {
+			sprintf(resultstring, "Nibble '%s' on dot position %d (from right side) is not a valid hexdigit", token, tokencounter + 1);
+			return (1);
+		};
+
+		retval = sscanf(token, "%x", &xdigit);
+		if (retval != 1) {
+			sprintf(resultstring, "Nibble '%s' on dot position %d (from right side) cannot be parsed", token, tokencounter + 1);
+			return (1);
+		};
+
+		if (xdigit < 0 || xdigit > 0xf) {
+			sprintf(resultstring, "Nibble '%s' on dot position %d (from right side) is out of range", token, tokencounter + 1);
+			return (1);
+		};
+
+		noctet = nibblecounter >> 1; /* divided by 2 */
+
+		if (nibblecounter & 0x01) {
+			/* most significant bits */
+			(*ipv6addrp).in6_addr.s6_addr[noctet] = ((*ipv6addrp).in6_addr.s6_addr[noctet] & 0xf0) | xdigit;
+		} else {
+			/* least significant bits */
+			(*ipv6addrp).in6_addr.s6_addr[noctet] = ((*ipv6addrp).in6_addr.s6_addr[noctet] & 0x0f) | (xdigit << 4);
+		};
+
+		nibblecounter++;
+		
+NEXT_token_nibblestring_to_ipv6addrstruct:
+		token = strtok(NULL, ".");
+		tokencounter++;
+	};
+
+	ipv6addrp->flag_valid = 1;
+	ipv6addrp->flag_prefixuse = 1;
+	ipv6addrp->prefixlength = nibblecounter << 2;
+	
 	retval = 0;
 	return (retval);
 };
