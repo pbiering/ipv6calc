@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6logconf
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.2 2002/03/18 20:54:14 peter Exp $
+# Version    : $Id: Makefile,v 1.3 2002/04/07 10:55:08 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -15,6 +15,10 @@ CFLAGS	= $(COPTS) -I../getopt/ -I../ -I../lib/
 CC	= gcc
 
 OBJS	= ipv6logconv.o ipv6logconvhelp.o
+
+# splint
+SPLINT_OPT_OUTSIDE = -uniondef +matchanyintegral --nullassign +ignoresigns -compdef -usedef -modobserver -formatconst -warnposix -exportlocal
+SPLINT_TODO_LATER = -unrecog
 
 all:		ipv6logconv
 
@@ -34,3 +38,6 @@ clean:
 		rm -f ipv6logconv *.o
 
 test:
+
+splint:
+		splint *.c ../lib/*.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)

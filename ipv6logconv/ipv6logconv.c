@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.2 2002/03/26 23:11:07 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.3 2002/04/07 10:55:08 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -54,7 +54,7 @@ static void lineparser(const long int outputtype);
 /* main */
 #define DEBUG_function_name "ipv6logconv/main"
 int main(int argc,char *argv[]) {
-	int retval = 1, i, lop;
+	int i, lop;
 	unsigned long int command = 0;
 
 
@@ -155,7 +155,7 @@ int main(int argc,char *argv[]) {
 	/* call lineparser */
 	lineparser(outputtype);
 
-	exit(retval);
+	exit(EXIT_SUCCESS);
 };
 #undef DEBUG_function_name
 
@@ -229,7 +229,7 @@ static void lineparser(const long int outputtype) {
 		
 		/* call converter now */
 		if ( outputtype == FORMAT_any ) {
-			retval = converttoken(resultstring, charptr, FORMAT_ipv6addrtype, 0);
+			retval = converttoken(resultstring, charptr, FORMAT_addrtype, 0);
 		} else {
 			retval = converttoken(resultstring, charptr, outputtype, 1);
 		};
@@ -261,10 +261,14 @@ static void lineparser(const long int outputtype) {
 			if (ipv6calc_debug != 0) {
 				fprintf(stderr, "%s: Token 2: '%s'\n", DEBUG_function_name, charptr);
 			};
-			
+		
+			/* 	
 			retval = converttoken(resultstring, token, FORMAT_addrtype, 0);
-			/* print result */
 			printf(" %s", resultstring);
+			*/
+
+			/* skip this token */
+			printf(" %s", charptr);
 			
 			/* look for next token */
 			charptr = strtok_r(NULL, " \t\n", ptrptr);
@@ -303,8 +307,8 @@ static void lineparser(const long int outputtype) {
 static int converttoken(char *resultstring, const char *token, const long int outputtype, const int flag_skipunknown) {
 	long int inputtype = -1;
 	int retval = 1, i;
-	int typeinfo;
-	char tempstring[NI_MAXHOST];
+	int typeinfo, typeinfo_test;
+	char tempstring[NI_MAXHOST], temp2string[NI_MAXHOST];
 
 	/* used structures */
 	ipv6calc_ipv6addr ipv6addr;
@@ -368,8 +372,91 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 		case FORMAT_addrtype:
 			if (ipv6addr.flag_valid == 1) {
 				snprintf(resultstring, NI_MAXHOST, "ipv6-addr.addrtype.ipv6calc");
+
+				/* check for registry */
+				typeinfo = ipv6addr_gettype(&ipv6addr);
+
+				/* scope of IPv6 address */
+				/* init retval */
+				for (i = 0; i < (size_t) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++) {
+					if ( ipv6calc_ipv6addrtypestrings[i].number == IPV6_ADDR_ANY ) {
+						retval = i;
+						break;
+					};
+				};
+				typeinfo_test = typeinfo & (IPV6_NEW_ADDR_AGU | IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_ADDR_MAPPED | IPV6_ADDR_COMPATv4);
+				if ( typeinfo_test != 0 ) {
+					/* get string */
+					for (i = 0; i < (size_t) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++) {
+						if ( (typeinfo_test & ipv6calc_ipv6addrtypestrings[i].number) != 0 ) {
+							retval = i;
+							break;
+						};
+					};
+				};
+				snprintf(tempstring, sizeof(tempstring), "%s.%s", ipv6calc_ipv6addrtypestrings[retval].token, resultstring);
+				snprintf(resultstring, NI_MAXHOST,"%s", tempstring);
+
+				/* type of global IPv6 address */
+				/* init retval */
+				for (i = 0; i < (size_t) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++) {
+					if ( ipv6calc_ipv6addrtypestrings[i].number == IPV6_ADDR_ANY ) {
+						retval = i;
+						break;
+					};
+				};
+				typeinfo_test = typeinfo & (IPV6_NEW_ADDR_6TO4 | IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_PRODUCTIVE);
+				if ( typeinfo_test != 0 ) {
+					/* get string */
+					for (i = 0; i < (size_t) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++) {
+						if ( (typeinfo_test & ipv6calc_ipv6addrtypestrings[i].number) != 0 ) {
+							retval = i;
+							break;
+						};
+					};
+					snprintf(tempstring, sizeof(tempstring), "%s.%s", ipv6calc_ipv6addrtypestrings[retval].token, resultstring);
+					snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
+				};
+
+				/* registry of IPv6 address */
+				if ( (typeinfo & (IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_PRODUCTIVE) ) != 0 ) {
+					retval = libipv6addr_get_registry_string(&ipv6addr, temp2string);
+					if ( retval == 0 ) {
+						snprintf(tempstring, sizeof(tempstring), "%s.%s", temp2string, resultstring);
+						snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
+					};
+				} else if ( (typeinfo & (IPV6_NEW_ADDR_6TO4 | IPV6_ADDR_MAPPED | IPV6_ADDR_COMPATv4)) != 0 ) {
+					/* fill IPv4 address */
+					if ( (typeinfo & (IPV6_ADDR_MAPPED | IPV6_ADDR_COMPATv4)) != 0 ) {
+						for (i = 0; i <= 3; i++) {
+							ipv4addr_setoctett(&ipv4addr, i, ipv6addr_getoctett(&ipv6addr, i + 12));
+						};
+					} else if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
+						for (i = 0; i <= 3; i++) {
+							ipv4addr_setoctett(&ipv4addr, i, ipv6addr_getoctett(&ipv6addr, i + 2));
+						};
+					} else {
+						/* normally never happen */
+						fprintf(stderr, "%s: Error occurs at IPv6->IPv4 address extraction!\n", DEBUG_function_name);
+						exit(EXIT_FAILURE);
+					};
+
+					retval = libipv4addr_get_registry_string(&ipv4addr, temp2string);
+					if ( retval == 0 ) {
+						/* IPv4 registry */
+						snprintf(tempstring, sizeof(tempstring), "%s.%s", temp2string, resultstring);
+						snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
+					};
+				};
 			} else if (ipv4addr.flag_valid == 1) {
 				snprintf(resultstring, NI_MAXHOST, "ipv4-addr.addrtype.ipv6calc");
+
+				retval = libipv4addr_get_registry_string(&ipv4addr, temp2string);
+				if ( retval == 0 ) {
+					/* IPv4 registry */
+					snprintf(tempstring, sizeof(tempstring), "%s.%s", temp2string, resultstring);
+					snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
+				};
 			} else {
 				snprintf(resultstring, NI_MAXHOST, "reverse-lookup-successful.addrtype.ipv6calc");
 			};
@@ -380,7 +467,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 				if (flag_skipunknown != 0) {
 					return (1);
 				} else {
-					snprintf(resultstring, NI_MAXHOST, "unresolvable.ouitype.ipv6calc");
+					snprintf(resultstring, NI_MAXHOST, "not-ipv6.ouitype.ipv6calc");
 					return (0);
 				};
 		       	};
@@ -421,7 +508,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 				if (flag_skipunknown != 0) {
 					return (1);
 				} else {
-					snprintf(resultstring, NI_MAXHOST, "unresolvable.ipv6addrtype.ipv6calc");
+					snprintf(resultstring, NI_MAXHOST, "not-ipv6.ipv6addrtype.ipv6calc");
 					return (0);
 				};
 		       	};
