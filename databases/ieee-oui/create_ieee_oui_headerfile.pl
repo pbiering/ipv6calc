@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/lib
 # File       : create_ieee_oui_headerfile.pl
-# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.4 2002/07/17 18:25:36 peter Exp $
+# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.5 2002/07/17 18:38:52 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE/oui.txt
@@ -65,7 +65,7 @@ while (<IN>) {
 		my $oui = uc($t3);
 
 		# replace '(' ')' '&'
-		$oui =~ s/[\(\)\&\']/ /ig;
+		$oui =~ s/[\(\)\&\',]/ /ig;
 
 		# remove unimportand information
 		$oui =~ s/\bINC[\.]*\b//ig;
@@ -80,7 +80,10 @@ while (<IN>) {
 		$oui =~ s/\bAG\b/ELECTRONIC/ig;
 		$oui =~ s/\bKG\b//ig;
 		$oui =~ s/\bBV\b//ig;
-		$oui =~ s/\bINT'L\b/INTERNATIONAL/ig;
+
+		# Replace some text
+		$oui =~ s/\b3 Com\b/3COM/ig;
+		$oui =~ s/\b3Com Europe\b/3COM/ig;
 		$oui =~ s/\bCOMMUNICATIONS\b/COMMUNICATION/ig;
 		$oui =~ s/\bCORPOTATION\b/CORPORATION/ig;
 		$oui =~ s/\bINTERNAIONAL\b/INTERNATIONAL/ig;
@@ -104,6 +107,10 @@ while (<IN>) {
 
 		# convert spaces to '-'
 		$oui =~ s/\s+/-/ig;
+
+		# Some final cleanup
+		$oui =~ s/-INT-L//ig;
+		$oui =~ s/-B-V//ig;
 	
 		#print $oui . "\n";
 	
