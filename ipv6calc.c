@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.20 2002/03/11 19:27:09 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.21 2002/03/16 00:39:03 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -735,6 +735,7 @@ int main(int argc,char *argv[]) {
 			break;
 			
 		case FORMAT_ipv4addr:
+			if (ipv4addr.flag_valid != 1) { fprintf(stderr, "No valid IPv4 address given!\n"); exit(EXIT_FAILURE); };
 			retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, resultstring, formatoptions);
 			break;
 			

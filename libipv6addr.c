@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.10 2002/03/11 19:27:09 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.11 2002/03/16 00:39:03 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -283,6 +283,11 @@ unsigned int ipv6addr_gettype(ipv6calc_ipv6addr *ipv6addrp) {
 	if ((st & (0xFFFF0000)) == (0x20020000)) {
 		/* 2002:... 6to4 tunneling */
 		type |= IPV6_NEW_ADDR_6TO4;
+	};
+	
+	if ((st & (0xFFFF0000)) == (0x20010000)) {
+		/* 2001:... productive IPv6 address space */
+		type |= IPV6_NEW_ADDR_PRODUCTIVE;
 	};
 	
 	if ((st2 == 0x00000001) && (st3 & (0xFF000000)) == (0xFF000000)) {

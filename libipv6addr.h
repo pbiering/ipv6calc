@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.11 2002/03/11 19:27:09 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.12 2002/03/16 00:39:03 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -68,6 +68,7 @@ typedef struct {
 #define IPV6_NEW_ADDR_UNSPECIFIED		0x80000U
 #define IPV6_NEW_ADDR_SOLICITED_NODE		0x100000U
 #define IPV6_NEW_ADDR_ISATAP			0x200000U
+#define IPV6_NEW_ADDR_PRODUCTIVE		0x400000U
 
 /* text representations */
 typedef struct {

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.1 2002/03/15 13:27:37 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.2 2002/03/16 00:39:03 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -32,6 +32,12 @@
 #include "libeui64.h"
 
 #define LINEBUFFER	16384
+
+/* supported output types:
+ *  ipv6addr
+ *  ipv4addr
+ *  addrtype : IPv4 | IPv6
+ */
 
 long int ipv6calc_debug = 0;
 
@@ -302,6 +308,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 	int retval = 1, i, j, lop;
 	unsigned long int command = 0;
 	int bit_start = 0, bit_end = 0;
+	int typeinfo;
 
 	char resultstring2[NI_MAXHOST] = "";
 	char resultstring3[NI_MAXHOST] = "";
@@ -454,8 +461,17 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 	};
 
 	switch (outputtype) {
+		case FORMAT_addrtype:
+			if (ipv6addr.flag_valid == 1) {
+				sprintf(resultstring, "IPv6");
+			} else if (ipv4addr.flag_valid == 1) {
+				sprintf(resultstring, "IPv4");
+			};
+			break;
+
 		case FORMAT_ipv6addr:
-			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
+			if (ipv6addr.flag_valid != 1) { return(1); };
+
 			if ((formatoptions & FORMATOPTION_printuncompressed) != 0) {
 				retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, formatoptions);
 			} else if ((formatoptions & FORMATOPTION_printfulluncompressed) != 0) {
@@ -466,28 +482,37 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 			break;
 			
 		case FORMAT_ipv4addr:
+			if (ipv4addr.flag_valid != 1) { return(1); };
+
 			retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, resultstring, formatoptions);
 			break;
 			
-		case FORMAT_eui64:
-			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
-			formatoptions |= FORMATOPTION_printsuffix;
-			retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, formatoptions);
-			break;
-			
-		case FORMAT_iid_token:
-			if (ipv6addr.flag_valid != 1 || ipv6addr2.flag_valid != 1) { fprintf(stderr, "No valid IPv6 addresses given!\n"); exit(EXIT_FAILURE); };
-			/* get interface identifier */
-			retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring2, formatoptions | FORMATOPTION_printsuffix);
-			if (retval != 0) { break; };
-			
-			/* get token */
-			retval = libipv6addr_ipv6addrstruct_to_tokenlsb64(&ipv6addr2, resultstring3, formatoptions);
-			
-			/* cat together */
-			sprintf(resultstring, "%s %s", resultstring2, resultstring3);
-			break;
+		case FORMAT_oui:
+			if (ipv6addr.flag_valid != 1) { return(1); };
 
+			/* check whether address has a OUI ID */
+			if ( ipv6addr_gettype(&ipv6addr) & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4) == 0 )  { return (1); };
+
+
+			retval = libieee_get_vendor_string(resultstring, ipv6addr_getoctett(&ipv6addr, 8) ^0x02, ipv6addr_getoctett(&ipv6addr, 9), ipv6addr_getoctett(&ipv6addr, 10) );
+			break;
+			
+		case FORMAT_ipv6addrtype:
+			if (ipv6addr.flag_valid != 1) { return(1); };
+
+			typeinfo = ipv6addr_gettype(&ipv6addr);
+		       	if ( typeinfo & IPV6_ADDR_LINKLOCAL != 0 ) {
+				sprintf(resultstring, "link-local");
+			} else if ( typeinfo & IPV6_ADDR_SITELOCAL != 0 ) {
+				sprintf(resultstring, "site-local");
+			} else if ( typeinfo & IPV6_NEW_ADDR_6BONE != 0 ) {
+				sprintf(resultstring, "6bone-global");
+			} else if ( typeinfo & IPV6_NEW_ADDR_6TO4 != 0 ) {
+				sprintf(resultstring, "6to4-global");
+			} else if ( typeinfo & IPV6_NEW_ADDR_PRODUCTIVE != 0 ) {
+				sprintf(resultstring, "productive-global");
+			};
+			break;
 
 		default:
 			fprintf(stderr, " Outputtype isn't implemented\n");

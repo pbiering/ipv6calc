@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.11 2002/03/15 13:27:37 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.12 2002/03/16 00:39:03 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -38,6 +38,9 @@ extern int ipv6calctypes_checkaction(const char *string);
 #define FORMAT_ifinet6		0x0100
 #define FORMAT_iid		0x0200
 #define FORMAT_iid_token	0x0400
+#define FORMAT_addrtype 	0x0800
+#define FORMAT_oui	 	0x1000
+#define FORMAT_ipv6addrtype 	0x2000
 
 /* Primary label of format number, keeping also an explanation */
 typedef struct {
@@ -60,6 +63,9 @@ static const s_format ipv6calc_formatstrings[] = {
 	{ FORMAT_ifinet6        , "ifinet6"        , "Like line in /proc/net/if_inet6", "" },
 	{ FORMAT_iid            , "iid"            , "Interface identifiers", "" },
 	{ FORMAT_iid_token      , "iid+token"      , "Interface identifier and token", "" },
+	{ FORMAT_addrtype       , "addrtype"       , "Address type", "" },
+	{ FORMAT_oui            , "oui"            , "OUI (IEEE)", "" },
+	{ FORMAT_ipv6addrtype   , "ipv6addrtype"   , "IPv6 address type", "" },
 };
 
 /* Format conversion matrix */
