@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.4 2002/04/10 07:00:43 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.5 2002/07/30 17:24:45 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -140,7 +140,7 @@ void string_to_reverse_dotted(char *string) {
 #define DEBUG_function_name "libipv6calc/autodetectinput"
 uint32_t libipv6calc_autodetectinput(const char *string) {
 	uint32_t type = FORMAT_undefined;
-	int i, numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, result;
+	int i, j, numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, result;
 	char resultstring[NI_MAXHOST];
 	size_t length;
 
@@ -192,8 +192,36 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 	
 	if (length >= 11 && length <= 17 && numxdigits >= 6 && numxdigits <= 12 && numdots == 0 && numcolons == 5) {
 		/* MAC 00:00:00:00:00:00 */
-		type = FORMAT_mac;
-		goto END_libipv6calc_autodetectinput;
+
+		/* Check whether minimum 1 xdigit is between colons */
+		j = 0;
+		for (i = 0; i < (int) length; i++) {
+			if (isxdigit(string[i])) {
+				j++;
+				if ( j > 2 ) {
+					/* more than 2 xdigits */
+					j = -1;
+					break;
+				};
+				continue;
+		       	} else if (string[i] == ':') {
+				if ( j == 0 ) {
+					/* colon follows colon */
+					j = -1;
+					break;
+				};
+				j = 0;
+				continue;
+		       	};
+			/* normally not reached */
+			j = -1;
+			break;
+		};
+
+		if ( j != -1 ) {
+			type = FORMAT_mac;
+			goto END_libipv6calc_autodetectinput;
+		};
 	};
 	
 	if (length >= 15 && length <= 23 && numxdigits >= 8 && numxdigits <= 16 && numdots == 0 && numcolons == 7) {
