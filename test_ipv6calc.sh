@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.4 2002/02/25 21:18:51 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.5 2002/02/27 23:14:15 peter Exp $
 # Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Best view with tabsize 4 (historic...)
@@ -66,6 +66,7 @@ cat <<END
 --addr_to_bitstring --printprefix 3ffe:ffff::1/64			=\\\\[x3ffeffff00000000/64].ip6.arpa.
 --addr_to_bitstring --printprefix --printstart 17 3ffe:ffff:0100:e100:0123:4567:89ab:cdef/64	=\\\\[xffff0100e100/48]
 --addr_to_bitstring --uppercase 3ffe:ffff::1				=\\\\[x3FFEFFFF000000000000000000000001/128].IP6.ARPA.
+--ipv4_to_6to4addr 11.12.13.14				=2002:b0c:d0e::
 END
 }
 
