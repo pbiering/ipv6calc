@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.7 2004/08/30 19:56:29 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.8 2004/08/31 20:14:19 peter Exp $
  * Copyright  : 2002-2004 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -60,7 +60,7 @@ int main(int argc,char *argv[]) {
 
 
 	/* new option style storage */	
-	int inputtype = -1, outputtype = -1;
+	uint32_t inputtype  = FORMAT_undefined, outputtype = FORMAT_undefined;
 	
 	/* convert storage */
 	long int action = -1;
@@ -107,13 +107,12 @@ int main(int argc,char *argv[]) {
 					fprintf(stderr, "%s: Got output string: %s\n", DEBUG_function_name, optarg);
 				};
 				if ( (strcmp(optarg, "-?") == 0) || (strcmp(optarg, "-h") == 0) || (strcmp(optarg, "--help") == 0) ) {
-					outputtype = -2;
 					command = CMD_printhelp;
 					break;
 				};
 				
 				outputtype = ipv6calctypes_checktype(optarg);
-				if (outputtype < 0) {
+				if (outputtype == FORMAT_undefined) {
 					fprintf(stderr, " Output option is unknown: %s\n", optarg);
 					exit(EXIT_FAILURE);
 				};
@@ -134,10 +133,8 @@ int main(int argc,char *argv[]) {
 
 	/* print help handling */
 	if (command == CMD_printhelp) {
-		if (outputtype == -2) {
-			printhelp_outputtypes(FORMAT_ipv6logconv);
-			exit(EXIT_FAILURE);
-		};
+		printhelp_outputtypes(FORMAT_ipv6logconv);
+		exit(EXIT_FAILURE);
         } else if (command == CMD_printexamples) {
 		printhelp_output_dispatcher(outputtype);
 		exit(EXIT_FAILURE);

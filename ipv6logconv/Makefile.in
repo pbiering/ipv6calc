@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6logconv
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.3 2004/08/30 20:27:32 peter Exp $
+# Version    : $Id: Makefile.in,v 1.4 2004/08/31 20:14:19 peter Exp $
 # Copyright  : 2002-2003 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -20,7 +20,7 @@ OBJS	= ipv6logconv.o ipv6logconvhelp.o
 
 # splint
 SPLINT_OPT_OUTSIDE = -uniondef +matchanyintegral --nullassign +ignoresigns -compdef -usedef -modobserver -formatconst -warnposix -exportlocal
-SPLINT_TODO_LATER = -unrecog
+SPLINT_TODO_LATER = -unrecog -retvalint
 
 all:		ipv6logconv
 
