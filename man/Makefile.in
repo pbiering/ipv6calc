@@ -1,0 +1,28 @@
+# Project    : ipv6calc/ipv6logconv
+# File       : Makefile
+# Version    : $Id: Makefile.in,v 1.1 2003/11/21 10:36:57 peter Exp $
+# Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
+#
+# Information:
+#  Makefile for man pages
+#
+
+all:		man
+
+man:
+		echo "Currently nothing to do"
+
+distclean:
+		make clean
+
+clean:
+		echo "Currently nothing to do"
+
+test:		
+		echo "Currently nothing to do"
+
+install:
+		mkdir -p $(root)@mandir@/man{1}
+		for f in *.1; do
+			install -m 644 $f $(root)@mandir@/man1
+		done
