@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6calcweb
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.1 2002/03/25 06:57:54 peter Exp $
+# Version    : $Id: Makefile,v 1.2 2002/04/05 19:43:11 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -10,6 +10,8 @@
 all:		ipv6calcweb
 
 ipv6calcweb:
+
+update:
 		echo "Update version: ipv6calcweb.cgi"
 		make clean
 		./create_version.pl >ipv6calcweb.cgi.version

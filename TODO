@@ -1,8 +1,21 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.14 2002/03/25 07:21:07 peter Exp $
+# Version: $Id: TODO,v 1.15 2002/04/05 19:43:09 peter Exp $
 
 TODO list
+=========
+
+Short term
+----------
+Fix configure script message "checking for  in -lcrypto... no"
+	-> help needed from outside
+
+Check compiling on (*BSD && ! NetBSD)
+	-> help needed from outside
+
+
+Middle term
+-----------
 
 Documentation:
 * manpage (never wrote one, therefore need help)
