@@ -1,11 +1,11 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Version    : $Id: ipv6calc.spec,v 1.23 2003/11/22 15:36:25 peter Exp $
+# Version    : $Id: ipv6calc.spec,v 1.24 2003/11/22 16:12:31 peter Exp $
 # Copyright  : 2001-2003 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
 Name: ipv6calc
-Version: 0.47cvs
+Version: 0.47
 Release: 1
 Group: System Environment/Base
 URL: http://www.deepspace6.net/projects/ipv6calc.html
@@ -61,7 +61,9 @@ popd
 
 # ipv6calcweb
 mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6calcweb
-cp ipv6calcweb/ipv6calcweb.cgi $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6calcweb
+pushd ipv6calcweb
+cp USAGE ipv6calcweb.cgi $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6calcweb
+popd
 
 # Docs
 for f in ChangeLog README CREDITS TODO COPYING LICENSE USAGE doc/ipv6calc.lyx doc/ipv6calc.sgml doc/ipv6calc.html; do

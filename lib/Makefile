@@ -1,6 +1,6 @@
 # Project    : ipv6calc/lib
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.11 2002/04/21 11:24:08 peter Exp $
+# Version    : $Id: Makefile,v 1.12 2003/11/22 16:12:31 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -51,4 +51,5 @@ clean:
 		rm -f *.o *.a
 
 install:
-		echo "Nothing to install here"
+
+test:
