@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6logconf
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.5 2002/04/21 11:12:30 peter Exp $
+# Version    : $Id: Makefile,v 1.6 2002/04/21 11:47:22 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -39,7 +39,8 @@ distclean:
 clean:
 		rm -f ipv6logconv *.o
 
-test:
+test:		
+		make all
 		./test_ipv6logconv.sh
 
 splint:
