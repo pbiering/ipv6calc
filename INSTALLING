@@ -9,7 +9,7 @@ ipv6calc.
 USING RPM
 ---------
 This tar-ball provides a spec file for building an source and binary RPM using
-	rpm -ta ipv6calc-$version.tar.gz
+	rpmbuild -ta ipv6calc-$version.tar.gz
 After successful build you got two packages:
 	one source RPM ipv6calc-$version-$release.src.rpm
 	and one binary RPM ipv6calc-$version-$release.$arch.rpm
@@ -71,4 +71,4 @@ If you want to install the binary use "make install".
 Peter Bieringer
 <pb (at) bieringer.de>
 
-$Id: INSTALLING,v 1.6 2003/11/21 10:31:21 peter Exp $
+$Id: INSTALLING,v 1.7 2003/11/22 15:53:52 peter Exp $
