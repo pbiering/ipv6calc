@@ -1,6 +1,6 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.23 2003/11/21 10:54:41 peter Exp $
+# Version: $Id: TODO,v 1.24 2003/11/22 15:48:04 peter Exp $
 
 TODO list
 =========
@@ -23,6 +23,7 @@ Format:
 
 Data libraries
 * print date of last update in version information
+* optional usage of GeoIP library
 
 IEEE/OUI library:
 * perhaps more filtering of unnecessary information
@@ -41,6 +42,8 @@ ipv6calcweb.cgi:
 Creating a dedicated library: libipv6calc.so
  (if someone requires it)
 
+Documentation:
+* add more information to USAGE docs
 
 
 Features requested from others:

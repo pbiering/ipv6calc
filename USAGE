@@ -1,15 +1,13 @@
-$Id: USAGE,v 1.1 2003/08/27 17:37:43 peter Exp $
+$Id: USAGE,v 1.2 2003/11/22 15:48:04 peter Exp $
+
+File: ipv6calc/ipv6calc
+	see docs/ipv6calc.html for more
 
 File: ipv6calcweb/ipv6calcweb.cgi
+	see ipv6calcweb/USAGE for more
 
-1) Enable SSI on your web server
+File: ipv6logconv/ipv6logconv
+	see examples/analog/run_analog.sh for more
 
-2) Copy file to /cgi-bin directory
-
-3) Adjust file settings
-
-4) Include the CGI script like 
-
-<!--#include virtual="/cgi-bin/ipv6calcweb.cgi" -->
-
-in a SHTML page.
+File: ipv6logstats/ipv6logstats
+	see ipv6logstats/example* for more

@@ -1,0 +1,15 @@
+$Id: USAGE,v 1.3 2003/11/22 15:48:04 peter Exp $
+
+File: ipv6calcweb/ipv6calcweb.cgi
+
+1) Enable SSI on your web server
+
+2) Copy file to /cgi-bin directory
+
+3) Adjust file settings
+
+4) Include the CGI script like 
+
+<!--#include virtual="/cgi-bin/ipv6calcweb.cgi" -->
+
+in a SHTML page.
