@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.10 2002/03/11 21:52:25 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.11 2002/03/11 22:14:50 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -39,7 +39,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IIDSCOPE=local|global         : scope of IID\n");
 	fprintf(stderr, " EUI48=xx:xx:xx:xx:xx:xx       : an included EUI-48 (MAC) identifier\n");
 	fprintf(stderr, " EUI64=xx:xx:xx:xx:xx:xx:xx:xx : an included EUI-64 identifier\n");
-	fprintf(stderr, " OUI='...'                     : OUI string, if available\n");
+	fprintf(stderr, " OUI=\"...\"                     : OUI string, if available\n");
 };
 
 /*
@@ -195,7 +195,7 @@ int showinfo_ipv6addr(ipv6calc_ipv6addr *ipv6addrp, unsigned long formatoptions)
 			result = libieee_get_vendor_string(helpstring, ipv6addr_getoctett(ipv6addrp, 8) ^ 0x02, ipv6addr_getoctett(ipv6addrp, 9), ipv6addr_getoctett(ipv6addrp, 10));
 			if (result == 0) {
 				if (formatoptions & FORMATOPTION_machinereadable) {
-					sprintf(tempstring, "OUI='%s'", helpstring);
+					sprintf(tempstring, "OUI=\"%s\"", helpstring);
 					printout(tempstring);
 				} else {
 					fprintf(stdout, "OUI is: %s\n", tempstring);
@@ -227,7 +227,7 @@ int showinfo_ipv6addr(ipv6calc_ipv6addr *ipv6addrp, unsigned long formatoptions)
 				result = libieee_get_vendor_string(helpstring, ipv6addr_getoctett(ipv6addrp, 8) ^ 0x02, ipv6addr_getoctett(ipv6addrp, 9), ipv6addr_getoctett(ipv6addrp, 10));
 				if (result == 0) {
 					if (formatoptions & FORMATOPTION_machinereadable) {
-						sprintf(tempstring, "OUI='%s'", helpstring);
+						sprintf(tempstring, "OUI=\"%s\"", helpstring);
 						printout(tempstring);
 					} else {
 						fprintf(stdout, "OUI is: %s\n", tempstring);
@@ -244,7 +244,7 @@ int showinfo_ipv6addr(ipv6calc_ipv6addr *ipv6addrp, unsigned long formatoptions)
 					};
 				} else if (typeinfo & IPV6_NEW_ADDR_ISATAP || (typeinfo & IPV6_ADDR_LINKLOCAL && ipv6addr_getdword(ipv6addrp, 2) == 0) ) {
 					if (formatoptions & FORMATOPTION_machinereadable) {
-						sprintf(tempstring, " IPV4=%d.%d.%d.%d", ipv6addr_getoctett(ipv6addrp, 12), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
+						sprintf(tempstring, "IPV4=%d.%d.%d.%d", ipv6addr_getoctett(ipv6addrp, 12), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
 						printout(tempstring);
 					} else {
 						fprintf(stdout, "Address type contains IPv4 address: %d.%d.%d.%d\n", ipv6addr_getoctett(ipv6addrp, 12), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
