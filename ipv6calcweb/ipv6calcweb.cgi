@@ -1,9 +1,9 @@
 #!/usr/bin/perl -w -T
 #
-# Project    : ipv6calc
+# Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi,v 1.18 2003/02/02 12:55:07 peter Exp $
-# Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: ipv6calcweb.cgi,v 1.19 2003/06/15 12:44:44 peter Exp $
+# Copyright  : 2002-2003 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
 # Simple Perl web interface and security wrapper
@@ -27,7 +27,7 @@ use strict;
 ## Defines
 # Program information
 my $program_name = "ipv6calcweb.cgi";
-my $program_copyright = "(P) & (C) 2002 by Peter Bieringer";
+my $program_copyright = "(P) & (C) 2002-2003 by Peter Bieringer";
 my $program_version = "0.45";       # automatic generated line, don't remove this token: @@VERSION@@
 
 
@@ -590,7 +590,7 @@ if ( $skip_server == 0 ) {
 
 if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 	print "          <font size=-2>" . %text->{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "</font><br>\n";
-	print "          <font size=-2>" . %text->{'powered'}->{$lang} . " <a href=\"http://www.bieringer.de/linux/IPv6/ipv6calc/\">" . $ipv6calc_name . "</a> " . $ipv6calc_version . ", " . $ipv6calc_copyright . "</font>\n";
+	print "          <font size=-2>" . %text->{'powered'}->{$lang} . " <a href=\"http://www.deepspace6.net/projects/ipv6calc.html\">" . $ipv6calc_name . "</a> " . $ipv6calc_version . ", " . $ipv6calc_copyright . "</font>\n";
 } else {
 	print %text->{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "\n";
 	print %text->{'powered'}->{$lang} . " " . $ipv6calc_name . " " . $ipv6calc_version . ", " . $ipv6calc_copyright . " (http://www.bieringer.de/linux/IPv6/ipv6calc/)" . "\n";
