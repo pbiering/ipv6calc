@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3041.c
- * Version    : $Id: librfc3041.c,v 1.5 2002/04/20 14:27:55 peter Exp $
+ * Version    : $Id: librfc3041.c,v 1.6 2004/08/31 20:16:26 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -51,7 +51,7 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 	tempstring[0] = '\0';
 
 	for (i = 0; i < MD5_DIGEST_LENGTH; i++) {
-		snprintf(tempstring2, sizeof(tempstring2), "%s%02x", tempstring, digest[i]);
+		snprintf(tempstring2, sizeof(tempstring2), "%s%02x", tempstring, (int) digest[i]);
 		snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
 	};
 	
