@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6logconf
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.1 2002/03/18 19:59:54 peter Exp $
+# Version    : $Id: Makefile,v 1.2 2002/03/18 20:54:14 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -32,3 +32,5 @@ distclean:
 
 clean:
 		rm -f ipv6logconv *.o
+
+test:
