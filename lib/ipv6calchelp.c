@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.6 2002/04/08 19:50:59 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.7 2002/04/09 20:31:10 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -132,7 +132,7 @@ void printhelp_outputtypes(const uint32_t inputtype) {
 		fprintf(stderr, "Format string: %s\n", printformatstring);
 	};
 
-	if (inputtype > 0) {
+	if ( (inputtype & ~ (FORMAT_auto | FORMAT_any) ) != 0 ) {
 		fprintf(stderr, "\n Available output types filtered by input type:\n");
 	} else {
 		fprintf(stderr, "\n Available output types:\n");
@@ -145,9 +145,11 @@ void printhelp_outputtypes(const uint32_t inputtype) {
 		};
 
 		for (i = 0; i < (int) (sizeof(ipv6calc_formatmatrix) / sizeof(ipv6calc_formatmatrix[0])); i++) {
-			if (ipv6calc_formatmatrix[i][0] != inputtype) {
-				/* skip */
-				continue;
+			if ( (inputtype & ~ (FORMAT_auto | FORMAT_any) ) != 0 ) {
+				if (ipv6calc_formatmatrix[i][0] != inputtype) {
+					/* skip */
+					continue;
+				};
 			};
 		
 			if (ipv6calc_debug != 0) {
@@ -317,6 +319,11 @@ static void printhelp_output_ipv4addr(void) {
 	fprintf(stderr, " Print an IPv4 address\n");
 };
 
+static void printhelp_output_revipv4(void) {
+	fprintf(stderr, " Print an IPv4 address in reverse format for PTR/DNS\n");
+	fprintf(stderr, "  1.2.3.4  -> 4.3.2.1.in-addr.arpa\n");
+};
+
 static void printhelp_output_addrtype(void) {
 	fprintf(stderr, " Print type of a given IPv4/IPv6 address:\n");
 	fprintf(stderr, "  IPv4 address  -> ipv4-addr.addrtype.ipv6calc\n");
@@ -394,6 +401,10 @@ void printhelp_output_dispatcher(const uint32_t outputtype) {
 			
 		case FORMAT_ouitype:
 			printhelp_output_ouitype();
+			break;
+			
+		case FORMAT_revipv4:
+			printhelp_output_revipv4();
 			break;
 			
 		default:

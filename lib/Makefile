@@ -1,6 +1,6 @@
 # Project    : ipv6calc/lib
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.7 2002/04/05 18:55:18 peter Exp $
+# Version    : $Id: Makefile,v 1.8 2002/04/09 20:31:10 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -20,11 +20,11 @@ OBJS	= libipv6calc.o librfc1924.o librfc1884.o libmac.o libeui64.o librfc3041.o 
 
 all:		libipv6calc.a
 
-libieee.o:	../databases/ieee-oui/dbieee_oui.h
+libieee.o:	../databases/ieee-oui/dbieee_oui.h libieee.c libieee.h
 		cd ../ && make db-ieee-oui-make
 		$(CC) $(CFLAGS) -c libieee.c
 
-libipv4addr.o:	../databases/ipv4-assignment/dbipv4addr_assignment.h
+libipv4addr.o:	../databases/ipv4-assignment/dbipv4addr_assignment.h libipv4addr.c libipv4addr.h
 		cd ../ && make db-ipv4-assignment-make
 		$(CC) $(CFLAGS) -c libipv4addr.c
 

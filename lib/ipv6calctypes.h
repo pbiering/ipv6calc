@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.5 2002/04/05 19:11:13 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.6 2002/04/09 20:31:10 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -49,6 +49,7 @@ extern uint32_t ipv6calctypes_checkaction(const char *string);
 #define FORMAT_NUM_ipv6logconv 		15
 #define FORMAT_NUM_any	 		16
 #define FORMAT_NUM_prefix_mac		17
+#define FORMAT_NUM_revipv4		18
 #define FORMAT_NUM_undefined		31
 
 #define FORMAT_auto		(uint32_t) 0x00000u
@@ -69,6 +70,7 @@ extern uint32_t ipv6calctypes_checkaction(const char *string);
 #define FORMAT_ipv6logconv 	(uint32_t) (1 << FORMAT_NUM_ipv6logconv)
 #define FORMAT_any	 	(uint32_t) (1 << FORMAT_NUM_any)
 #define FORMAT_prefix_mac	(uint32_t) (1 << FORMAT_NUM_prefix_mac)
+#define FORMAT_revipv4		(uint32_t) (1 << FORMAT_NUM_revipv4)
 #define FORMAT_undefined	(uint32_t) (1 << FORMAT_NUM_undefined)
 
 /* Primary label of format number, keeping also an explanation */
@@ -97,6 +99,7 @@ typedef struct {
 	{ FORMAT_ipv6addrtype   , "ipv6addrtype"   , "IPv6 address type", "" },
 	{ FORMAT_ipv6logconv    , "ipv6logconv"    , "ipv6logconv (currently not supported)", "" },
 	{ FORMAT_any            , "any"            , "any type (currently not supported)", "" },
+	{ FORMAT_revipv4	, "revipv4"        , "reverse IPv4, ending with in-addr.arpa", "" },
 	{ FORMAT_prefix_mac     , "prefix+mac"     , "IPv6 prefix and a MAC address", "" },
 };
 
@@ -107,7 +110,7 @@ typedef struct {
 	{ FORMAT_revnibbles_arpa, 0x5ff },
 	{ FORMAT_bitstring      , 0x5ff },
 	{ FORMAT_ipv6addr       , FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ipv6addr | FORMAT_base85 | FORMAT_ifinet6 },
-	{ FORMAT_ipv4addr       , FORMAT_ipv6addr },
+	{ FORMAT_ipv4addr       , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 },
 	{ FORMAT_mac            , FORMAT_eui64 },
 	{ FORMAT_eui64          , 0 },
 	{ FORMAT_base85         , FORMAT_base85 | FORMAT_ipv6addr | FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ifinet6 },
@@ -172,9 +175,10 @@ typedef struct {
 };
 
 /* Possible format option map */
-/*@unused@*/ static const uint32_t ipv6calc_outputformatoptionmap[11][2]  = {
+/*@unused@*/ static const uint32_t ipv6calc_outputformatoptionmap[12][2]  = {
 	{ FORMAT_revnibbles_int , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
 	{ FORMAT_revnibbles_arpa, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
+	{ FORMAT_revipv4, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_bitstring      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
 	{ FORMAT_ipv6addr       , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed },
 	{ FORMAT_mac            , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.4 2002/04/04 21:58:21 peter Exp $
+ * Version    : $Id: librfc1886.c,v 1.5 2002/04/09 20:31:10 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -30,7 +30,7 @@
 
 
 /*
- * function converts IPv6addr_structure to a reverse nibble format string
+ * converts IPv6addr_structure to a reverse nibble format string
  *
  * in : *ipv6addrp = IPv6 address structure
  * out: *resultstring = result

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.6 2002/04/04 21:58:21 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.7 2002/04/09 20:31:10 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -185,6 +185,8 @@ void ipv4addr_clear(ipv6calc_ipv4addr *ipv4addrp) {
 #define DEBUG_function_name "libipv4addr/ipv4addr_clearall"
 void ipv4addr_clearall(ipv6calc_ipv4addr *ipv4addrp) {
 	ipv4addr_clear(ipv4addrp);
+	(*ipv4addrp).prefixlength = 0;
+	(*ipv4addrp).flag_prefixuse = 0;
 
 	return;
 };
@@ -411,3 +413,70 @@ int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *re
 	};
 };
 #undef DEBUG_function_name
+
+
+/*
+ * converts IPv4addr_structure to a reverse decimal format string
+ *
+ * in : *ipv4addrp = IPv4 address structure
+ * out: *resultstring = result
+ * ret: ==0: ok, !=0: error
+ */
+#define DEBUG_function_name "libipv4addr/addr_to_reversestring"
+int libipv4addr_to_reversestring(ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions) {
+	int retval = 1;
+	unsigned int octett;
+	int bit_start, bit_end, nbit;
+	char tempstring[NI_MAXHOST];
+	unsigned int noctett;
+	
+	if ( ((formatoptions & (FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_printstart | FORMATOPTION_printend)) == 0 ) && ((*ipv4addrp).flag_prefixuse != 0) ) {
+		bit_start = 1;
+		bit_end = (int) (*ipv4addrp).prefixlength;
+	} else {
+		bit_start = 1;
+		bit_end = 32;
+	};
+	
+	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+		fprintf(stderr, "%s: start bit %d  end bit %d\n", DEBUG_function_name, bit_start, bit_end);
+	};
+
+	/* print out nibble format */
+	/* 31 is lowest bit, 0 is highest bit */
+	resultstring[0] = '\0';
+
+	for (nbit = bit_end - 1; nbit >= bit_start - 1; nbit = nbit - 8) {
+		/* calculate octett (8 bit) */
+		noctett = ( ((unsigned int) nbit) & 0x78) >> 3;
+		
+		/* extract octett */
+		octett = ipv4addr_getoctett(ipv4addrp, noctett);
+		
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s: bit: %d = noctett: %u, value: %x\n", DEBUG_function_name, nbit, noctett, octett);
+		};
+
+		snprintf(tempstring, sizeof(tempstring), "%s%u", resultstring, octett);
+		snprintf(resultstring, NI_MAXHOST, "%s.", tempstring);
+	};
+
+	if (bit_start == 1) {
+		snprintf(tempstring, sizeof(tempstring), "%sin-addr.arpa.", resultstring);
+	};
+
+	snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
+
+	if ( (formatoptions & FORMATOPTION_printuppercase) != 0 ) {
+		string_to_upcase(resultstring);
+	};
+		
+	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+		fprintf(stderr, "%s: Print out: %s\n", DEBUG_function_name, resultstring);
+	};
+
+	retval = 0;
+	return (retval);
+};
+#undef DEBUG_function_name
+
