@@ -1,8 +1,8 @@
  /*
  * Project       : ipv6calc
  * File          : dbipv4_assignment.h
- * Version       : $Id: dbipv4addr_assignment.h,v 1.4 2002/05/11 09:12:27 peter Exp $
- * Generated     : Sat May 11 11:10:02 2002
+ * Version       : $Id: dbipv4addr_assignment.h,v 1.5 2002/07/17 20:42:08 peter Exp $
+ * Generated     : Wed Jul 17 20:54:17 2002
  * Data copyright: RIPE NCC, APNIC, ARIN
  *
  * Information:
@@ -17,7 +17,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xca000000, 0xfe000000, "APNIC" },
 	{ 0xd2000000, 0xfe000000, "APNIC" },
 	{ 0xda000000, 0xfe000000, "APNIC" },
-	{ 0xdc000000, 0xff000000, "APNIC" },
+	{ 0xdc000000, 0xfe000000, "APNIC" },
 	{ 0x18840000, 0xffff0000, "RIPENCC" },
 	{ 0x3e000000, 0xff000000, "RIPENCC" },
 	{ 0x50000000, 0xfe000000, "RIPENCC" },
@@ -102,7 +102,6 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x807e0000, 0xfffe0000, "ARIN" },
 	{ 0x80800000, 0xfff80000, "ARIN" },
 	{ 0x80880000, 0xfffc0000, "ARIN" },
-	{ 0x808d0000, 0xffff0000, "ARIN" },
 	{ 0x808f0000, 0xffff0000, "ARIN" },
 	{ 0x80900000, 0xfff00000, "ARIN" },
 	{ 0x80a00000, 0xffe00000, "ARIN" },
@@ -377,7 +376,11 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x895b0000, 0xffff0000, "ARIN" },
 	{ 0x895c0000, 0xfffc0000, "ARIN" },
 	{ 0x89600000, 0xffe00000, "ARIN" },
-	{ 0x89800000, 0xffe00000, "ARIN" },
+	{ 0x89800000, 0xfff80000, "ARIN" },
+	{ 0x89880000, 0xfffe0000, "ARIN" },
+	{ 0x898b0000, 0xffff0000, "ARIN" },
+	{ 0x898c0000, 0xfffc0000, "ARIN" },
+	{ 0x89900000, 0xfff00000, "ARIN" },
 	{ 0x89a00000, 0xfff00000, "ARIN" },
 	{ 0x89b00000, 0xfff80000, "ARIN" },
 	{ 0x89ba0000, 0xfffe0000, "ARIN" },
@@ -584,10 +587,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x8e080000, 0xfffe0000, "ARIN" },
 	{ 0x8e0a0000, 0xffff0000, "ARIN" },
 	{ 0x8e0c0000, 0xfffc0000, "ARIN" },
-	{ 0x8e110000, 0xffff0000, "ARIN" },
-	{ 0x8e120000, 0xfffe0000, "ARIN" },
-	{ 0x8e140000, 0xfffc0000, "ARIN" },
-	{ 0x8e180000, 0xfff80000, "ARIN" },
+	{ 0x8e100000, 0xfff00000, "ARIN" },
 	{ 0x8e200000, 0xfff80000, "ARIN" },
 	{ 0x8e280000, 0xfffc0000, "ARIN" },
 	{ 0x8e2c0000, 0xfffe0000, "ARIN" },
@@ -1596,7 +1596,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc09d4000, 0xffffe000, "ARIN" },
 	{ 0xc09d8000, 0xffffc000, "ARIN" },
 	{ 0xc09e0000, 0xffff8000, "ARIN" },
-	{ 0xc09ee000, 0xffffe000, "ARIN" },
+	{ 0xc09ec000, 0xffffc000, "ARIN" },
 	{ 0xc09f0000, 0xffff8000, "ARIN" },
 	{ 0xc09f8000, 0xffffe000, "ARIN" },
 	{ 0xc0a00000, 0xffff0000, "ARIN" },
@@ -1649,7 +1649,10 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc0d34000, 0xffffe000, "ARIN" },
 	{ 0xc0d40000, 0xfffe0000, "ARIN" },
 	{ 0xc0d70000, 0xffff0000, "ARIN" },
-	{ 0xc0d80000, 0xfffc0000, "ARIN" },
+	{ 0xc0d80000, 0xfffe0000, "ARIN" },
+	{ 0xc0da0000, 0xffff0000, "ARIN" },
+	{ 0xc0db0000, 0xffff8000, "ARIN" },
+	{ 0xc0dbc000, 0xffffc000, "ARIN" },
 	{ 0xc0dc0000, 0xfffe0000, "ARIN" },
 	{ 0xc0de0000, 0xffff8000, "ARIN" },
 	{ 0xc0df0000, 0xffff0000, "ARIN" },
@@ -1735,7 +1738,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc429c000, 0xffffe000, "ARIN" },
 	{ 0xc42a0000, 0xffffc000, "ARIN" },
 	{ 0xc42b0000, 0xffffc000, "ARIN" },
-	{ 0xc42c0000, 0xffffe000, "ARIN" },
+	{ 0xc42c0000, 0xffffc000, "ARIN" },
 	{ 0xc42c4000, 0xffffe000, "ARIN" },
 	{ 0xc42c8000, 0xffff8000, "ARIN" },
 	{ 0xc4d80000, 0xffffe000, "ARIN" },
@@ -2006,7 +2009,6 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xac100000, 0xfff00000, "IANA" },
 	{ 0xc0a80000, 0xffff0000, "IANA" },
 	{ 0xc5000000, 0xff000000, "IANA" },
-	{ 0xdd000000, 0xff000000, "IANA" },
 	{ 0xde000000, 0xfe000000, "IANA" },
 	{ 0xe0000000, 0xe0000000, "IANA" },
 
