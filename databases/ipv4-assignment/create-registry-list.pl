@@ -362,9 +362,10 @@ open(OUT, ">$OUTFILE") || die "Cannot open outfile: $OUTFILE";
 my $now_string = localtime;
 print OUT qq|
 /*
- * Project    : ipv6calc
- * File       : dbipv4_assignment.h
- * Version    : Generated $now_string
+ * Project       : ipv6calc
+ * File          : dbipv4_assignment.h
+ * Version       : Generated $now_string
+ * Data copyright: RIPE NCC, APNIC, ARIN
  *
  * Information:
  *  Additional header file for libipv4addr.c
