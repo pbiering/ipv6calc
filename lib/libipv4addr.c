@@ -1,8 +1,8 @@
 /*
- * Project    : ipv6calc
+ * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.10 2003/02/02 16:41:42 peter Exp $
- * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv4addr.c,v 1.11 2003/06/15 12:12:54 peter Exp $
+ * Copyright  : 2002-2003 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Function library for IPv4 storage
@@ -533,6 +533,38 @@ int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *re
 };
 #undef DEBUG_function_name
 
+/*
+ * get registry number of an IPv4 address
+ *
+ * in:  ipv4addr = IPv4 address structure
+ * out: assignment number (-1 = no result)
+ */
+#define DEBUG_function_name "libipv4calc/getregistry"
+int ipv4addr_getregistry(const ipv6calc_ipv4addr *ipv4addrp) {
+	char resultstring[NI_MAXHOST];
+	int i;
+
+	i = libipv4addr_get_registry_string(ipv4addrp, resultstring);
+
+	if (i != 0) {
+		return(IPV4_ADDR_REGISTRY_UNKNOWN);
+	};
+
+	if (strcmp(resultstring, "IANA") == 0) {
+		return(IPV4_ADDR_REGISTRY_IANA);
+	} else if (strcmp(resultstring, "APNIC") == 0) {
+		return(IPV4_ADDR_REGISTRY_APNIC);
+	} else if (strcmp(resultstring, "ARIN") == 0) {
+		return(IPV4_ADDR_REGISTRY_ARIN);
+	} else if (strcmp(resultstring, "RIPENCC") == 0) {
+		return(IPV4_ADDR_REGISTRY_RIPE);
+	} else if (strcmp(resultstring, "LACNIC") == 0) {
+		return(IPV4_ADDR_REGISTRY_LACNIC);
+	} else {
+		return(IPV4_ADDR_REGISTRY_UNKNOWN);
+	};
+};
+#undef DEBUG_function_name
 
 /*
  * converts IPv4addr_structure to a reverse decimal format string

@@ -1,8 +1,8 @@
 /*
- * Project    : ipv6calc
+ * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.11 2003/02/02 16:41:42 peter Exp $
- * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv4addr.h,v 1.12 2003/06/15 12:12:54 peter Exp $
+ * Copyright  : 2002-2003 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Header file for libipv4addr.c
@@ -33,6 +33,14 @@ typedef struct {
 	const char *string_registry;
 } s_ipv4addr_assignment;
 
+/* Registries */
+#define IPV4_ADDR_REGISTRY_IANA		0x02
+#define IPV4_ADDR_REGISTRY_APNIC	0x03
+#define IPV4_ADDR_REGISTRY_ARIN		0x04
+#define IPV4_ADDR_REGISTRY_RIPE		0x05
+#define IPV4_ADDR_REGISTRY_LACNIC	0x06
+#define IPV4_ADDR_REGISTRY_RESERVED	0x0e
+#define IPV4_ADDR_REGISTRY_UNKNOWN	0x0f
 
 #endif
 
@@ -50,6 +58,8 @@ extern void ipv4addr_clear(ipv6calc_ipv4addr *ipv4addrp);
 extern void ipv4addr_clearall(ipv6calc_ipv4addr *ipv4addrp);
 
 extern uint32_t ipv4addr_gettype(const ipv6calc_ipv4addr *ipv4addrp);
+
+extern int ipv4addr_getregistry(const ipv6calc_ipv4addr *ipv4addrp);
 
 extern int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv4addr *ipv4addrp);
 extern int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv4addr *ipv4addrp, int flag_reverse);
