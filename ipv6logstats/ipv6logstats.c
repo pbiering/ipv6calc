@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.9 2003/11/22 12:42:44 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.10 2003/11/22 12:44:39 peter Exp $
  * Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -402,7 +402,7 @@ static void lineparser(void) {
 				if (opt_onlyheader == 0) {
 					printf("Token ");
 				} else {
-					printf("%s,", opt_token);
+					printf("%s ", opt_token);
 				};
 			};
 			for (i = 0; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
