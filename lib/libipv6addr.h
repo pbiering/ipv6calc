@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.5 2002/04/04 19:40:27 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.6 2002/04/05 21:31:51 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -116,7 +116,7 @@ typedef struct {
 	{ IPV6_ADDR_REGISTRY_IANA	, "IANA"	, "IANA" 	},
 	{ IPV6_ADDR_REGISTRY_APNIC	, "APNIC"	, "APNIC" 	},
 	{ IPV6_ADDR_REGISTRY_ARIN	, "ARIN" 	, "ARIN"	},
-	{ IPV6_ADDR_REGISTRY_RIPE	, "RIPE NCC"	, "RIPE"	},
+	{ IPV6_ADDR_REGISTRY_RIPE	, "RIPE NCC"	, "RIPENCC"	},
 	{ IPV6_ADDR_REGISTRY_RESERVED	, "reserved"	, "reserved"	}
 };
 #endif
