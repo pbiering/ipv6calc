@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconvoptions.h
- * Version    : $Id: ipv6logconvoptions.h,v 1.1 2002/03/18 19:59:54 peter Exp $
+ * Version    : $Id: ipv6logconvoptions.h,v 1.2 2003/11/21 09:36:58 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -20,12 +20,13 @@
 /* Options */
 
 /* define short options */
-static char *ipv6logconv_shortopts = "vh?d:";
+static char *ipv6logconv_shortopts = "vqh?d:";
 
 /* define long options */
 static struct option ipv6logconv_longopts[] = {
 	{"version", 0, 0, (int) 'v'},
 	{"debug", 1, 0, (int) 'd'},
+	{"quiet", 1, 0, (int) 'q'},
 
 	/* help options */
 	{"help", 0, 0, (int) 'h'},

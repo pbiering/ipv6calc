@@ -2,13 +2,10 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6logconv.sh
-# Version    : $Id: test_ipv6logconv.sh,v 1.1 2002/04/21 11:33:10 peter Exp $
+# Version    : $Id: test_ipv6logconv.sh,v 1.2 2003/11/21 09:36:58 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logconv"
-
-echo "currently broken!!"
-#exit 1
 
 testscenarios() {
 # Address
@@ -41,7 +38,7 @@ echo "Run 'ipv6logconv' function tests..."
 testscenarios | grep -v "^#" | while read line; do
 	echo
 	echo "INPUT: $line"
-	echo "$line" | ./ipv6logconv --out any
+	echo "$line" | ./ipv6logconv --out any -q
 	retval=$?
 	if [ $retval -ne 0 ]; then
 		echo "Error executing 'ipv6logconv'!"

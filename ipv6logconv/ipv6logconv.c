@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.5 2002/11/12 19:14:59 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.6 2003/11/21 09:36:57 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -39,6 +39,7 @@
 #define LINEBUFFER	16384
 
 long int ipv6calc_debug = 0;
+int flag_quiet = 0;
 
 /* supported output types:
  *  ipv6addr
@@ -83,9 +84,15 @@ int main(int argc,char *argv[]) {
 		switch (i) {
 			case -1:
 				break;
+
 			case 'v':
 				command |= CMD_printversion;
 				break;
+
+			case 'q':
+				flag_quiet = 1;
+				break;
+
 			case 'h':
 			case '?':
 				command |= CMD_printhelp;
@@ -173,7 +180,9 @@ static void lineparser(const long int outputtype) {
 
 	ptrptr = &cptr;
 	
-	fprintf(stderr, "Expecting log lines on stdin\n");
+	if (flag_quiet == 0) {
+		fprintf(stderr, "Expecting log lines on stdin\n");
+	};
 
 	while (1 == 1) {
 		/* read line from stdin */
@@ -187,7 +196,9 @@ static void lineparser(const long int outputtype) {
 		linecounter++;
 
 		if (linecounter == 1) {
-			fprintf(stderr, "Ok, proceeding stdin...\n");
+			if (flag_quiet == 0) {
+				fprintf(stderr, "Ok, proceeding stdin...\n");
+			};
 		};
 		
 		if (ipv6calc_debug == 1) {
@@ -294,7 +305,9 @@ static void lineparser(const long int outputtype) {
 		printf(" %s", *ptrptr);
 	};
 
-	fprintf(stderr, "...finished\n");
+	if (flag_quiet == 0) {
+		fprintf(stderr, "...finished\n");
+	};
 	return;
 };
 #undef DEBUG_function_name

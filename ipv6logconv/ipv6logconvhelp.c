@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconvhelp.c
- * Version    : $Id: ipv6logconvhelp.c,v 1.3 2002/04/21 11:23:35 peter Exp $
+ * Version    : $Id: ipv6logconvhelp.c,v 1.4 2003/11/21 09:36:58 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -40,6 +40,7 @@ void ipv6logconv_printhelp(void) {
 	fprintf(stderr, "\n");
 	fprintf(stderr, " General:\n");
 	fprintf(stderr, "  [-d|--debug <debug value>] : debug value (bitwise like)\n");
+	fprintf(stderr, "  [-q|--quiet] : be more quiet\n");
 	fprintf(stderr, " Output:\n");
 	fprintf(stderr, "  [--out <output type>] : specify output type\n");
 	fprintf(stderr, "  Available output types:  --out -?\n");
