@@ -1,15 +1,19 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.1 2002/03/01 23:27:25 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.2 2002/03/02 10:46:03 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for ipv6calctypes.h
  */ 
 
+#include "ipv6calc.h"
+
+/* prototypes */
 extern int ipv6calctypes_checktype(char *string);
 
+/* defines */
 #ifndef _ipv6calctypes_h_
 
 #define _ipv6calctypes_h_
@@ -64,6 +68,32 @@ static const int ipv6calc_formatstringaliasmap[FORMAT_STRING_MAXNUM][2]  = {
 	{  9, FORMAT_base85    },
 	{ 10, FORMAT_ifinet6   },
 	{ 11, FORMAT_ipv4addr  }
+};
+
+/* Format options */
+#define FORMATOPTION_printlowercase		0x001
+#define FORMATOPTION_printuppercase		0x002
+#define FORMATOPTION_printprefix		0x004
+#define FORMATOPTION_printsuffix		0x008
+#define FORMATOPTION_maskprefix			0x010
+#define FORMATOPTION_masksuffix			0x020
+#define FORMATOPTION_printstart			0x040
+#define FORMATOPTION_printend			0x080
+#define FORMATOPTION_printcompressed		0x100
+#define FORMATOPTION_printuncompressed		0x200
+#define FORMATOPTION_printfulluncompressed	0x400
+
+/* Possible format option map */
+static const int ipv6calc_outputformatoptionmap[FORMAT_MAXNUM][2]  = {
+	{ FORMAT_revnibbles_int , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
+	{ FORMAT_revnibbles_arpa, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
+	{ FORMAT_bitstring      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
+	{ FORMAT_ipv6addr       , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed },
+	{ FORMAT_mac            , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
+	{ FORMAT_eui64          , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
+	{ FORMAT_base85         , 0 },
+	{ FORMAT_ifinet6        , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
+	{ FORMAT_ipv4addr       , 0 }
 };
 
 /*

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.c
- * Version    : $Id: librfc1884.c,v 1.3 2002/02/27 23:07:15 peter Exp $
+ * Version    : $Id: librfc1884.c,v 1.4 2002/03/02 10:46:03 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -15,6 +15,7 @@
 #include "ipv6calc.h"
 #include "libipv6addr.h"
 #include "librfc1884.h"
+#include "ipv6calctypes.h"
 
 
 /*
@@ -103,8 +104,19 @@ int compaddr_to_uncompaddr(char *addrstring, char *resultstring) {
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "librfc1884/ipv6addrstruct_to_compaddr"
 int ipv6addrstruct_to_compaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+	int retval = -1;
+
+	unsigned int formatoptions = FORMATOPTION_printlowercase;
+
+	/* old style compatibility */
+	retval = librfc1884_ipv6addrstruct_to_compaddr(ipv6addrp, resultstring, formatoptions);
+
+	return (retval);
+};
+	
+#define DEBUG_function_name "librfc1884/ipv6addrstruct_to_compaddr"
+int librfc1884_ipv6addrstruct_to_compaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned int formatoptions) {
 	char tempstring[NI_MAXHOST], temp2string[NI_MAXHOST];
 	int retval = 1, result;
 	int zstart = -1, zend = -1, tstart = -1, tend = -1, i;
@@ -273,13 +285,19 @@ int ipv6addrstruct_to_compaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring)
 		retval = 0;
 	};
 
-	         
+
 	if ( ( retval == 0 ) && ( ipv6addrp->flag_prefixuse == 1 ) ) {
 		sprintf(resultstring, "%s/%u", tempstring, ipv6addrp->prefixlength);
 	} else {
 		sprintf(resultstring, "%s", tempstring);
 	};
-	
+
+	if (formatoptions & FORMATOPTION_printlowercase) {
+		/* nothing to do */
+	} else if (formatoptions & FORMATOPTION_printuppercase) {
+		string_to_upcase(resultstring);
+	};
+
 	return (retval);
 };
 #undef DEBUG_function_name

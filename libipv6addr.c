@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.6 2002/03/01 23:26:45 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.7 2002/03/02 10:46:03 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -13,26 +13,12 @@
 #include <string.h>
 #include <ctype.h>
 
-/*
-#if defined(__NetBSD__)
-*/
-/* work around incompatibilities between Linux and KAME */
-/*
-#define s6_addr32              __u6_addr.__u6_addr32
-#define in6_u                  __u6_addr
-#define u6_addr32              __u6_addr32
-#include <netinet/in.h>
-#else
-#ifndef _NETINET_IN_H
-#include <linux/ipv6.h>
-#endif
-#endif 
-*/
-
 #include "ipv6calc.h"
 #include "libipv6addr.h"
 #include "librfc1884.h"
 #include "libipv6addr.h"
+#include "ipv6calctypes.h"
+#include "libipv6calc.h"
 
 /* array of numerical types */
 unsigned int ipv6addr_typesnum[IPV6INFO_NUM] = {
@@ -555,8 +541,17 @@ int addr_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6ad
  * out: *resultstring = IPv6 address (modified)
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddr"
 int ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+	int retval = 1;
+	/* old style compatibility */
+	unsigned int formatoptions = FORMATOPTION_printlowercase;
+	
+	retval = libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6addrp, resultstring, formatoptions);
+	return (retval);
+};
+
+#define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddr"
+int libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned int formatoptions) {
 	int retval = 1, result;
 	char tempstring[NI_MAXHOST];
 
@@ -574,6 +569,13 @@ int ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstrin
 		result = sprintf(resultstring, "%s", tempstring);
 	};
 
+	if (formatoptions & FORMATOPTION_printlowercase) {
+		/* nothing to do */
+	} else if (formatoptions & FORMATOPTION_printuppercase) {
+		string_to_upcase(resultstring);
+	};
+
+
 	if ( ipv6calc_debug & DEBUG_libipv6addr ) {
 		fprintf(stderr, "%s: result string: %s\n", DEBUG_function_name, resultstring);
 	};
@@ -587,7 +589,7 @@ int ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstrin
 /*
  * function stores the prefix of an ipv6addr structure in an uncompressed IPv6 format string
  *
- * in:  ipv6addr = IPv6 address structure
+ * in:  ipv6addr = IPv6 address structure, formatoptions
  * out: *resultstring = IPv6 address (modified)
  * ret: ==0: ok, !=0: error
  */
@@ -692,8 +694,17 @@ int ipv6addrstruct_to_uncompaddrsuffix(ipv6calc_ipv6addr *ipv6addrp, char *resul
  * out: *resultstring = IPv6 address (modified)
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_fulluncompaddr"
 int ipv6addrstruct_to_fulluncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+	int retval = 1;
+	/* old style compatibility */
+	unsigned int formatoptions = FORMATOPTION_printlowercase;
+	
+	retval = libipv6addr_ipv6addrstruct_to_fulluncompaddr(ipv6addrp, resultstring, formatoptions);
+	return (retval);
+};
+
+#define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_fulluncompaddr"
+int libipv6addr_ipv6addrstruct_to_fulluncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned int formatoptions) {
 	int retval = 1, result;
 	char tempstring[NI_MAXHOST];
 
@@ -709,6 +720,12 @@ int ipv6addrstruct_to_fulluncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *results
 		result = sprintf(resultstring, "%s/%u", tempstring, ipv6addrp->prefixlength);
 	} else {
 		result = sprintf(resultstring, "%s", tempstring);
+	};
+
+	if (formatoptions & FORMATOPTION_printlowercase) {
+		/* nothing to do */
+	} else if (formatoptions & FORMATOPTION_printuppercase) {
+		string_to_upcase(resultstring);
 	};
 
 	if ( ipv6calc_debug & DEBUG_libipv6addr ) {

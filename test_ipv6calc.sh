@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.6 2002/03/01 23:26:45 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.7 2002/03/02 10:46:03 peter Exp $
 # Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Best view with tabsize 4 (historic...)
@@ -16,6 +16,7 @@ cat <<END
 --intype ipv6 --outtype revnibbles.int 3ffe:ffff:100:f101::1		=1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
 --addr_to_ip6int 3ffe:ffff:100:f101::1/64				=1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
 --addr_to_compressed 3ffe:ffff:0100:f101:0000:0000:0000:0001		=3ffe:ffff:100:f101::1
+--intype ipv6 --outtype ipv6 --printcompressed 3ffe:ffff:0100:f101:0000:0000:0000:0001 =3ffe:ffff:100:f101::1
 --addr_to_compressed 3ffe:ffff:0100:f101:0000:0000:0000:0001/64		=3ffe:ffff:100:f101::1/64
 --addr_to_compressed 0:0:1:2:3:4:0:0					=::1:2:3:4:0:0
 --addr_to_compressed 0:0:1:0:0:1:0:0					=::1:0:0:1:0:0
@@ -33,6 +34,7 @@ cat <<END
 --addr_to_compressed 0:0:0:0:0:ffff:129.144.52.38			=::ffff:129.144.52.38
 --addr_to_compressed --uppercase 0:0:0:0:0:ffff:129.144.52.38		=::FFFF:129.144.52.38
 --addr_to_uncompressed 3ffe:ffff:100:f101::1				=3ffe:ffff:100:f101:0:0:0:1
+--intype ipv6 --outtype ipv6 --printuncompressed 3ffe:ffff:100:f101::1	=3ffe:ffff:100:f101:0:0:0:1
 --addr_to_uncompressed 3ffe:ffff:100:f101::1/64				=3ffe:ffff:100:f101:0:0:0:1/64
 --addr_to_uncompressed ::13.1.68.3					=0:0:0:0:0:0:13.1.68.3
 --addr_to_uncompressed ::013.01.068.0003				=0:0:0:0:0:0:13.1.68.3
@@ -41,6 +43,7 @@ cat <<END
 --addr_to_uncompressed --masksuffix 3ffe:ffff:100:f101:c000::1/64	=0:0:0:0:c000:0:0:1/64
 --addr_to_uncompressed --uppercase ::ffff:13.1.68.3			=0:0:0:0:0:FFFF:13.1.68.3
 --addr_to_fulluncompressed 3ffe:ffff:100:f101::1			=3ffe:ffff:0100:f101:0000:0000:0000:0001
+--intype ipv6 --outtype ipv6 --printfulluncompressed 3ffe:ffff:100:f101::1 =3ffe:ffff:0100:f101:0000:0000:0000:0001
 --addr_to_fulluncompressed 3ffe:ffff:100:f101::1/64			=3ffe:ffff:0100:f101:0000:0000:0000:0001/64
 --addr_to_fulluncompressed ::13.1.68.3					=0000:0000:0000:0000:0000:0000:13.1.68.3
 --addr_to_fulluncompressed ::ffff:13.1.68.3				=0000:0000:0000:0000:0000:ffff:13.1.68.3
