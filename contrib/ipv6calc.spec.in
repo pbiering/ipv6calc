@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Version    : $Id: ipv6calc.spec.in,v 1.14 2002/03/24 17:14:38 peter Exp $
+# Version    : $Id: ipv6calc.spec.in,v 1.15 2002/04/05 21:12:01 peter Exp $
 # Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
@@ -15,7 +15,8 @@ Source: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/ipv6calc-%{version}.tar.g
 
 BuildRoot: %{_tmppath}/ipv6calc-root
 Requires: openssl
-BuildRequires: openssl-devel perl /usr/bin/aggregate wget
+BuildRequires: openssl-devel 
+#BuildRequires: openssl-devel perl /usr/bin/aggregate wget
 
 %description
 ipv6calc is a small utility which formats and calculates IPv6 addresses in
@@ -62,6 +63,12 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples/analog/analog-dist.cfg %doc examples/analog/run_analog.sh examples/analog/ipv6calc.tab ipv6calcweb/ipv6calcweb.cgi
 
 %changelog
+* Mon Apr 05 2002 Peter Bieringer <pb@bieringer.de>
+- remove BuildRequires extension, not needed for normal build
+
+* Mon Mar 24 2002 Peter Bieringer <pb@bieringer.de>
+- extend BuildRequires for perl /usr/bin/aggregate wget
+
 * Mon Mar 18 2002 Peter Bieringer <pb@bieringer.de>
 - add ipv6calcweb.cgi
 
