@@ -1,6 +1,11 @@
 #!/bin/sh
 
-$Id: autogen.sh,v 1.3 2003/11/21 10:57:33 peter Exp $
+$Id: autogen.sh,v 1.4 2004/11/21 15:56:28 peter Exp $
+
+if [ -f Makefile ]; then
+	echo "*** cleanup"
+	make autoclean
+fi
 
 echo "*** run: autoconf"
 autoconf || exit 1
