@@ -1,0 +1,42 @@
+dnl Project: ipv6calc
+dnl File   : configure.in
+dnl Version: $Id: configure.in,v 1.1 2001/12/18 11:22:55 peter Exp $
+
+dnl Process this file with autoconf to produce a configure script.
+AC_INIT(ipv6calc.c)
+
+dnl Get version
+IPV6CALC_VERSION=`cat VERSION | grep '^VERSION' | head -1 | awk '{ print $2 }'`
+
+dnl Define version header
+AC_CONFIG_HEADER(config.h)
+
+dnl Checks for programs.
+AC_PROG_AWK
+AC_PROG_CC
+dnl AC_PROG_INSTALL
+AC_PROG_MAKE_SET
+
+dnl Checks for libraries.
+AC_CHECK_LIB(crypto)
+
+dnl Checks for header files.
+AC_HEADER_STDC
+AC_CHECK_HEADERS(md5.h)
+
+dnl Checks for typedefs, structures, and compiler characteristics.
+AC_C_CONST
+AC_TYPE_OFF_T
+AC_TYPE_SIZE_T
+
+dnl Checks for library functions.
+AC_FUNC_MEMCMP
+AC_CHECK_FUNCS(strspn strstr)
+
+dnl Define version
+AC_DEFINE_UNQUOTED(IPV6CALC_VERSION, "${IPV6CALC_VERSION}")
+
+dnl Substitute version
+AC_SUBST(IPV6CALC_VERSION)
+
+AC_OUTPUT([Makefile ipv6calc.h contrib/ipv6calc.spec])

@@ -1,11 +1,14 @@
 /*
- *  $Id: ChangeLog,v 1.4 2001/10/09 07:07:59 peter Exp $ 
+ *  $Id: ChangeLog,v 1.5 2001/12/18 11:22:55 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb@bieringer.de>
 --------------------------------------------------------------------
 
+20011218/PB:
+	Change version numbering to autoconf/configure
+	Extend "showinfo" a little bit
 
 20011009/PB: release 0.30
 

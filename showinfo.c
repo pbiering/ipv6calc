@@ -1,10 +1,11 @@
 /*
- * showinfo:
- *  Function to show information about a given IPv6 address
- *
- * Version:		$Id: showinfo.c,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Project    : ipv6calc
+ * File       : showinfo.c
+ * Version    : $Id: showinfo.c,v 1.2 2001/12/18 11:22:56 peter Exp $
+ * Copyright  : 2001 by Peter Bieringer <pb@bieringer.de>
  * 
- * Author:		Peter Bieringer <pb@bieringer.de>
+ * Information:
+ *  Function to show information about a given IPv6 address
  *
  */
 
@@ -73,7 +74,33 @@ int showinfo(char *addrstring, char *resultstring) {
 
 	fprintf(stdout, "\n");
 	if (typeinfo & IPV6_NEW_ADDR_6TO4 ) {
-		fprintf(stdout, "Address type is 6to4, included IPv4 address is '%d.%d.%d.%d'\n", ipv6addr_getoctett(&ipv6addr, 2), ipv6addr_getoctett(&ipv6addr, 3), ipv6addr_getoctett(&ipv6addr, 4), ipv6addr_getoctett(&ipv6addr, 5));
+		fprintf(stdout, "Address type is 6to4 and included IPv4 address is: %d.%d.%d.%d\n", ipv6addr_getoctett(&ipv6addr, 2), ipv6addr_getoctett(&ipv6addr, 3), ipv6addr_getoctett(&ipv6addr, 4), ipv6addr_getoctett(&ipv6addr, 5));
+	};
+
+	/* SLA prefix included? */
+	if (typeinfo & IPV6_NEW_ADDR_6TO4 || typeinfo & IPV6_ADDR_SITELOCAL || typeinfo & IPV6_NEW_ADDR_AGU) {
+		fprintf(stdout, "Address type has SLA: %04x\n", ipv6addr_getword(&ipv6addr, 3));
+	};
+	
+	/* Interface identifier included */
+	if (typeinfo & IPV6_ADDR_LINKLOCAL || typeinfo & IPV6_ADDR_SITELOCAL || typeinfo & IPV6_NEW_ADDR_AGU || typeinfo & IPV6_NEW_ADDR_6BONE || typeinfo & IPV6_NEW_ADDR_6TO4) {
+		fprintf(stdout, "Interface identifier: %04x:%04x:%04x:%04x\n", ipv6addr_getword(&ipv6addr, 4), ipv6addr_getword(&ipv6addr, 5), ipv6addr_getword(&ipv6addr, 6), ipv6addr_getword(&ipv6addr, 7));
+		if (ipv6addr_getoctett(&ipv6addr, 11) == 0xff && ipv6addr_getoctett(&ipv6addr, 12) == 0xfe) {
+			/* EUI-48 */
+			fprintf(stdout, "Interface identifier is an EUI-64 generated from EUI-48 (MAC): %02x:%02x:%02x:%02x:%02x:%02x\n", ipv6addr_getoctett(&ipv6addr, 8) ^ 0x02, ipv6addr_getoctett(&ipv6addr, 9), ipv6addr_getoctett(&ipv6addr, 10), ipv6addr_getoctett(&ipv6addr, 13), ipv6addr_getoctett(&ipv6addr, 14), ipv6addr_getoctett(&ipv6addr, 15));
+			if (ipv6addr_getoctett(&ipv6addr, 8) & 0x02) {
+				fprintf(stdout, "MAC is a global unique one\n");
+			} else {
+				fprintf(stdout, "MAC is a local one\n");
+			};
+		} else {
+			/* Check for global EUI-64 */
+			if (ipv6addr_getoctett(&ipv6addr, 8) & 0x02) {
+				fprintf(stdout, "Interface identifier is probably EUI-64 based: %02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x\n", ipv6addr_getoctett(&ipv6addr, 8) ^ 0x02, ipv6addr_getoctett(&ipv6addr, 9), ipv6addr_getoctett(&ipv6addr, 10), ipv6addr_getoctett(&ipv6addr, 11), ipv6addr_getoctett(&ipv6addr, 12), ipv6addr_getoctett(&ipv6addr, 13), ipv6addr_getoctett(&ipv6addr, 14), ipv6addr_getoctett(&ipv6addr, 15));
+			} else {
+				fprintf(stdout, "Interface identifier is probably manual set or based on a local EUI-64 identifier");
+			};
+		};
 	};
 	
 	retval = 0;

@@ -1,5 +1,5 @@
 /*
- * Version:     $Id: ipv6calc.h,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Version:     $Id: ipv6calc.h,v 1.2 2001/12/18 11:22:56 peter Exp $
  *
  * Author:      Peter Bieringer <pb@bieringer.de>
  *
@@ -12,7 +12,7 @@
 
 /* global program related definitions */
 #define PROGRAM_NAME "ipv6calc"
-#define PROGRAM_VERSION "0.29"
+#define PROGRAM_VERSION "0.31"
 #define PROGRAM_COPYRIGHT "(P) & (C) 2001 by Peter Bieringer <pb@bieringer.de>\n published under GNU GPL"
 
 /* global includes */

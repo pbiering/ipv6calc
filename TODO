@@ -1,4 +1,8 @@
-TODO list (2001-04-29)
+# Project: ipv6calc
+# File   : TODO
+# Version: $Id $
+
+TODO list
 
 Documentation:
 * manpage (never wrote one, therefore need help)
@@ -7,17 +11,13 @@ Features:
 * ip6int_to_addr
 * IPv4 address extraction of autoconfigured link local addresses
 * 6to4addr -> IPv4, IPv4 -> 6to4addr
+* showinfo: add vendor database for global EUI-64/48 identifiers
 
 Format features
 * printprefix, printsuffix for full
 
 Cosmetics:
 * less major options, more format options 
-
-Portability:
-* configure (never wrote one, therefore need help)
-
-Finnish 0.24 adds
 
 
 

@@ -1,0 +1,6 @@
+# File   : VERSION
+# Version: $Id $ 
+#
+# This is the current version number, processed by autoconf/configure
+
+VERSION	0.31

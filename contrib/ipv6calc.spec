@@ -1,6 +1,6 @@
 Summary: IPv6 address format change and calculation utility
 Name: ipv6calc
-Version: 0.30
+Version: 0.31
 Release: 1
 Group: System Environment/Base
 URL: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/
@@ -9,6 +9,7 @@ License: GPL
 Source: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/ipv6calc-%{version}.tar.gz
 
 BuildRoot: %{_tmppath}/ipv6calc-root
+BuildRequires: openssl-devel
 
 %description
 ipv6calc is a small utility which formats and calculates IPv6 addresses in

@@ -1,9 +1,12 @@
 /*
- * ipv6calc	This program print out different formats of an given IPv6 address
- *
- * Version:     $Id: ipv6calc.c,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Project    : ipv6calc
+ * File       : ipv6calc.c
+ * Version    : $Id: ipv6calc.c,v 1.2 2001/12/18 11:22:56 peter Exp $
+ * Copyright  : 2001 by Peter Bieringer <pb@bieringer.de>
  * 
- * Author:      Peter Bieringer <pb@bieringer.de>
+ * Information:
+ *  Central program (main)
+ *  This program print out different formats of an given IPv6 address
  * 
  */
 

@@ -1,7 +1,8 @@
+# Generated automatically from Makefile.in by configure.
 #
 # Makefile for ipv6calc
 #
-# Version:     $Id: Makefile,v 1.1 2001/10/07 14:47:40 peter Exp $
+# Version:     $Id: Makefile,v 1.2 2001/12/18 11:22:55 peter Exp $
 #
 # Author:      Peter Bieringer <pb@bieringer.de>
 #
