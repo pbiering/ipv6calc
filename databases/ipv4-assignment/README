@@ -1,15 +1,15 @@
-$Id: README,v 1.3 2003/06/15 14:27:54 peter Exp $
+$Id: README,v 1.4 2004/08/30 19:44:14 peter Exp $
 
 "aggregate" can be found at
  http://freshmeat.net/projects/aggregate/
  http://buffoon.automagic.org/dist/aggregate-1.6.tar.gz
 
 IPv4 assignment databases:
- ftp://ftp.ripe.net/ripe/stats/ripencc.%Y%m%d
- ftp://ftp.arin.net/pub/stats/arin/arin.%Y%m01
- http://ftp.apnic.net/stats/apnic/apnic-%Y-%m-01
  http://www.iana.org/assignments/ipv4-address-space
- ftp://lacnic.net/pub/stats/lacnic/lacnic.%Y%m01
+ ftp://ftp.ripe.net/pub/stats/ripencc/%Y/delegated-ripencc-%Y%m%d.bz2
+ ftp://ftp.arin.net/pub/stats/arin/delegated-arin-%Y%m%d
+ http://ftp.apnic.net/stats/apnic/delegated-apnic-%Y%m%d
+ ftp://lacnic.net/pub/stats/lacnic/delegated-lacnic-%Y%m%d
 
 Because of unknown license issues, the database files aren't
 included in source tarball (cleanup by "make distclean"), but
