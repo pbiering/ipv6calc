@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.h
- * Version    : $Id: libmac.h,v 1.1 2002/03/18 19:59:24 peter Exp $
+ * Version    : $Id: libmac.h,v 1.2 2002/04/04 19:40:27 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -23,3 +23,4 @@ typedef struct {
 
 /* prototypes */
 extern int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp);
+extern void mac_clearall(ipv6calc_macaddr *macaddrp);

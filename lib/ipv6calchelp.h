@@ -1,23 +1,31 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.h
- * Version    : $Id: ipv6calchelp.h,v 1.2 2002/03/24 21:38:27 peter Exp $
+ * Version    : $Id: ipv6calchelp.h,v 1.3 2002/04/04 19:40:26 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for ipv6calchelp.c
  */
 
-extern void printhelp_print(void);
-extern void printhelp_mask(void);
-extern void printhelp_case(void);
-extern void printhelp_printstartend(void);
+#include <stdint.h>
+
+/* defined in each main program */
+extern void printhelp_info(void);
+extern void printhelp_copyright(void);
+extern void printhelp_version(void);
+
+/* defined in ipv6calchelp.c */
+/* extern void printhelp_print(void); */
+/* extern void printhelp_mask(void); */
+/* extern void printhelp_case(void); */
+/* extern void printhelp_printstartend(void); */
 
 extern void printhelp_doublecommands(void);
 extern void printhelp_missinginputdata(void);
 extern void printhelp_inputtypes(void);
-extern void printhelp_outputtypes(const int inputtype);
+extern void printhelp_outputtypes(const uint32_t inputtype);
 extern void printhelp_actiontypes(void);
 extern void printhelp(void);
 extern void printhelp_oldoptions(void);
-extern void printhelp_output_dispatcher(const int outputtype);
+extern void printhelp_output_dispatcher(const uint32_t outputtype);

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.c
- * Version    : $Id: librfc2874.c,v 1.3 2002/03/20 23:35:51 peter Exp $
+ * Version    : $Id: librfc2874.c,v 1.4 2002/04/04 19:40:27 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -12,6 +12,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <stdint.h>
 
 #include "libipv6addr.h"
 #include "libipv6calc.h"
@@ -28,25 +29,25 @@
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "librfc2874/addr_to_bitstring"
-int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const unsigned long int formatoptions) {
+int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
 	int retval = 1, result;
 	unsigned int nibble;
-	int noctett, nbit, nnibble, prefixlength, bit_start, bit_end;
+	unsigned int noctett, nbit, nnibble, prefixlength, bit_start, bit_end;
 	char tempstring[NI_MAXHOST];
 
-	if ( ipv6calc_debug & DEBUG_librfc2874 ) {
+	if ( (ipv6calc_debug & DEBUG_librfc2874) != 0 ) {
 		result = ipv6addrstruct_to_uncompaddr(ipv6addrp, tempstring);
 		fprintf(stderr, "%s: got address '%s'\n",  DEBUG_function_name, tempstring);
 	};
 
 	if ( (*ipv6addrp).flag_startend_use != 0 ) {
 		/* check start and end */
-		if ( ((*ipv6addrp).bit_start - 1) & 0x03 ) {
+		if ( (((*ipv6addrp).bit_start - 1) & 0x03) != 0 ) {
 			snprintf(resultstring, NI_MAXHOST, "Start bit number '%d' not dividable by 4 aren't supported because of non unique representation", ((*ipv6addrp).bit_start));
 			retval = 1;
 			return (retval);
 		};
-		if ( (*ipv6addrp).bit_end & 0x03 ) {
+		if ( ((*ipv6addrp).bit_end & 0x03 ) != 0 ) {
 			snprintf(resultstring, NI_MAXHOST, "End bit number '%d' not dividable by 4 aren't supported because of non unique representation", (*ipv6addrp).bit_end);
 			retval = 1;
 			return (retval);
@@ -88,7 +89,7 @@ int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resul
 	};
 
 	/* add begin and end of label */
-	if ((*ipv6addrp).flag_startend_use) {
+	if ( (*ipv6addrp).flag_startend_use != 0 ) {
 		prefixlength = bit_end - bit_start + 1;
 	} else {
 		prefixlength = 128;
@@ -104,7 +105,7 @@ int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resul
 		snprintf(tempstring, sizeof(tempstring), "%s/%d].ip6.arpa.", resultstring, prefixlength);
 	};
 	
-	if (formatoptions & FORMATOPTION_printuppercase ) {
+	if ( (formatoptions & FORMATOPTION_printuppercase) != 0 ) {
 		string_to_upcase(tempstring);
 	};
 
@@ -128,8 +129,8 @@ int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resul
 int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 	int retval = 1;
 	char tempstring[NI_MAXHOST], tempstring2[NI_MAXHOST];
-	int nibblecounter = 0;
-	int noctet, xdigit, startprefixlength, endprefixlength;
+	unsigned int nibblecounter = 0;
+	unsigned int noctet, xdigit, startprefixlength, endprefixlength;
 	int length, index = 0, prefixlength;
 
 	/* clear output structure */
@@ -165,7 +166,7 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 			return (1);
 		};
 
-		if (xdigit < 0 || xdigit > 0xf) {
+		if (xdigit > 0xf) {
 			snprintf(resultstring, NI_MAXHOST, "Nibble '%s' at dot position %d is out of range", tempstring2, index + 1);
 			return (1);
 		};
@@ -177,7 +178,7 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 			return (1);
 		};
 
-		if (nibblecounter & 0x01) {
+		if ( (nibblecounter & 0x01) != 0 ) {
 			/* most significant bits */
 			(*ipv6addrp).in6_addr.s6_addr[noctet] = ((*ipv6addrp).in6_addr.s6_addr[noctet] & 0xf0) | xdigit;
 		} else {
@@ -301,7 +302,7 @@ int librfc2874_formatcheck(const char *string, char *infostring) {
 	};
 	index++;
 	
-	if (tolower(string[index]) != 'x') {
+	if ( (char) tolower(string[index]) != 'x') {
 		snprintf(infostring, sizeof(infostring), "Char '%c' not expected on position %d", string[index], index + 1);
 		return (1);
 	};

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.1 2002/03/18 19:59:24 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.2 2002/04/04 19:40:27 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -63,8 +63,9 @@ void string_to_lowcase(char *string) {
  */
 #define DEBUG_function_name "libipv6calc/string_to_reverse"
 void string_to_reverse(char *string) {
-	int i, length;
+	int i;
 	char helpchar;
+	size_t length;
 
 	length = strlen(string);
 
@@ -86,10 +87,11 @@ void string_to_reverse(char *string) {
 /*
  * function converts chars in a string to upcase
  * in : pointer to a string
+ * ret: format number
  */
 #define DEBUG_function_name "libipv6calc/autodetectinput"
-int libipv6calc_autodetectinput(const char *string) {
-	long type = -1;
+uint32_t libipv6calc_autodetectinput(const char *string) {
+	uint32_t type = FORMAT_undefined;
 	int i, length, numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, result;
 	char resultstring[NI_MAXHOST];
 

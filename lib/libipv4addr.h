@@ -1,13 +1,14 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.2 2002/03/24 16:58:21 peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.3 2002/04/04 19:40:27 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Header file for libipv4addr.c
  */ 
 
+#include <stdint.h>
 #include <netinet/in.h>
 
 /* typedefs */
@@ -20,7 +21,7 @@ typedef struct {
 	struct in_addr in_addr;		/* in_addr structure */
 	uint8_t prefixlength;		/* prefix length (0-32) 8 bit */
 	int flag_prefixuse;		/* =1 prefix length in use (CIDR notation) */
-	unsigned int scope;		/* address scope value 16 bit*/
+	uint32_t scope;			/* address typeinfo/scope */
 	int flag_valid;			/* address structure filled */
 } ipv6calc_ipv4addr;
 
@@ -48,9 +49,9 @@ extern void ipv4addr_setdword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int v
 extern void ipv4addr_clear(ipv6calc_ipv4addr *ipv4addrp);
 extern void ipv4addr_clearall(ipv6calc_ipv4addr *ipv4addrp);
 
-extern unsigned int ipv4addr_gettype(const ipv6calc_ipv4addr *ipv4addrp);
+extern uint32_t ipv4addr_gettype(const ipv6calc_ipv4addr *ipv4addrp);
 
 extern int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv4addr *ipv4addrp);
-extern int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const unsigned long formatoptions);
+extern int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions);
 
 extern int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring);

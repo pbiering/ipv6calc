@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calcdebug.h
- * Version    : $Id: libipv6calcdebug.h,v 1.1 2002/03/18 19:59:24 peter Exp $
+ * Version    : $Id: libipv6calcdebug.h,v 1.2 2002/04/04 19:40:27 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -26,6 +26,6 @@
 #define DEBUG_libifinet6		0x002000l
 
 /* global debug value */
-long int ipv6calc_debug;
+extern long int ipv6calc_debug;
 
 #endif

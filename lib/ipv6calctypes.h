@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.2 2002/03/24 16:58:21 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.3 2002/04/04 19:40:26 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -9,10 +9,11 @@
  */ 
 
 #include <getopt.h> 
+#include <stdint.h> 
 
 /* prototypes */
-extern int ipv6calctypes_checktype(const char *string);
-extern int ipv6calctypes_checkaction(const char *string);
+extern uint32_t ipv6calctypes_checktype(const char *string);
+extern uint32_t ipv6calctypes_checkaction(const char *string);
 
 /* defines */
 #ifndef _ipv6calctypes_h_
@@ -24,28 +25,51 @@ extern int ipv6calctypes_checkaction(const char *string);
  */
 
 /* Format number definitions, each possible format has one number */
-#define FORMAT_auto		0x00000
-#define FORMAT_revnibbles_int	0x00001
-#define FORMAT_revnibbles_arpa	0x00002
-#define FORMAT_bitstring	0x00004
-#define FORMAT_ipv6addr		0x00008
-#define FORMAT_ipv4addr		0x00010
-#define FORMAT_mac		0x00020
-#define FORMAT_eui64		0x00040
-#define FORMAT_base85		0x00080
-#define FORMAT_ifinet6		0x00100
-#define FORMAT_iid		0x00200
-#define FORMAT_iid_token	0x00400
-#define FORMAT_addrtype 	0x00800
-#define FORMAT_ouitype	 	0x01000
-#define FORMAT_ipv6addrtype 	0x02000
-#define FORMAT_ipv6logconv 	0x04000
-#define FORMAT_any	 	0x08000
-#define FORMAT_prefix_mac	0x10000
+#define FORMAT_NUM_HEAD			0x200
+
+#define FORMAT_NUM_auto			0
+#define FORMAT_NUM_revnibbles_int	1
+#define FORMAT_NUM_revnibbles_arpa	2
+#define FORMAT_NUM_bitstring		3
+#define FORMAT_NUM_ipv6addr		4
+#define FORMAT_NUM_ipv4addr		5
+#define FORMAT_NUM_mac			6
+#define FORMAT_NUM_eui64		7
+#define FORMAT_NUM_base85		8
+#define FORMAT_NUM_ifinet6		9
+#define FORMAT_NUM_iid			10
+#define FORMAT_NUM_iid_token		11
+#define FORMAT_NUM_addrtype 		12
+#define FORMAT_NUM_ouitype	 	13
+#define FORMAT_NUM_ipv6addrtype 	14
+#define FORMAT_NUM_ipv6logconv 		15
+#define FORMAT_NUM_any	 		16
+#define FORMAT_NUM_prefix_mac		17
+#define FORMAT_NUM_undefined		31
+
+#define FORMAT_auto		(uint32_t) 0x00000u
+#define FORMAT_revnibbles_int	(uint32_t) (1 << FORMAT_NUM_revnibbles_int)
+#define FORMAT_revnibbles_arpa	(uint32_t) (1 << FORMAT_NUM_revnibbles_arpa)
+#define FORMAT_bitstring	(uint32_t) (1 << FORMAT_NUM_bitstring)
+#define FORMAT_ipv6addr		(uint32_t) (1 << FORMAT_NUM_ipv6addr)
+#define FORMAT_ipv4addr		(uint32_t) (1 << FORMAT_NUM_ipv4addr)
+#define FORMAT_mac		(uint32_t) (1 << FORMAT_NUM_mac)
+#define FORMAT_eui64		(uint32_t) (1 << FORMAT_NUM_eui64)
+#define FORMAT_base85		(uint32_t) (1 << FORMAT_NUM_base85)
+#define FORMAT_ifinet6		(uint32_t) (1 << FORMAT_NUM_ifinet6)
+#define FORMAT_iid		(uint32_t) (1 << FORMAT_NUM_iid)
+#define FORMAT_iid_token	(uint32_t) (1 << FORMAT_NUM_iid_token)
+#define FORMAT_addrtype 	(uint32_t) (1 << FORMAT_NUM_addrtype)
+#define FORMAT_ouitype	 	(uint32_t) (1 << FORMAT_NUM_ouitype)
+#define FORMAT_ipv6addrtype 	(uint32_t) (1 << FORMAT_NUM_ipv6addrtype)
+#define FORMAT_ipv6logconv 	(uint32_t) (1 << FORMAT_NUM_ipv6logconv)
+#define FORMAT_any	 	(uint32_t) (1 << FORMAT_NUM_any)
+#define FORMAT_prefix_mac	(uint32_t) (1 << FORMAT_NUM_prefix_mac)
+#define FORMAT_undefined	(uint32_t) (1 << FORMAT_NUM_undefined)
 
 /* Primary label of format number, keeping also an explanation */
 typedef struct {
-	const int number;
+	const uint32_t number;
 	const char *token;
 	const char *explanation;
 	const char *aliases;
@@ -73,7 +97,7 @@ typedef struct {
 };
 
 /* Format conversion matrix */
-/*@unused@*/ static const int ipv6calc_formatmatrix[13][2] = {
+/*@unused@*/ static const uint32_t ipv6calc_formatmatrix[13][2] = {
 	{ FORMAT_auto           , 0x5ff },
 	{ FORMAT_revnibbles_int , 0x5ff },
 	{ FORMAT_revnibbles_arpa, 0x5ff },
@@ -91,25 +115,40 @@ typedef struct {
 
 
 /* Format options */
-#define FORMATOPTION_HEAD			0xf0000
-#define FORMATOPTION_printlowercase		0x00001
-#define FORMATOPTION_printuppercase		0x00002
-#define FORMATOPTION_printprefix		0x00004
-#define FORMATOPTION_printsuffix		0x00008
-#define FORMATOPTION_maskprefix			0x00010
-#define FORMATOPTION_masksuffix			0x00020
-#define FORMATOPTION_printstart			0x00040
-#define FORMATOPTION_printend			0x00080
-#define FORMATOPTION_printcompressed		0x00100
-#define FORMATOPTION_printuncompressed		0x00200
-#define FORMATOPTION_printfulluncompressed	0x00400
-#define FORMATOPTION_machinereadable		0x00800
-#define FORMATOPTION_quiet			0x01000
+#define FORMATOPTION_NUM_HEAD			0x100
+
+#define FORMATOPTION_NUM_printlowercase		1
+#define FORMATOPTION_NUM_printuppercase		2
+#define FORMATOPTION_NUM_printprefix		3
+#define FORMATOPTION_NUM_printsuffix		4
+#define FORMATOPTION_NUM_maskprefix		5
+#define FORMATOPTION_NUM_masksuffix		6
+#define FORMATOPTION_NUM_printstart		7
+#define FORMATOPTION_NUM_printend		8
+#define FORMATOPTION_NUM_printcompressed	9
+#define FORMATOPTION_NUM_printuncompressed	10
+#define FORMATOPTION_NUM_printfulluncompressed	11
+#define FORMATOPTION_NUM_machinereadable	12
+#define FORMATOPTION_NUM_quiet			13
+
+#define FORMATOPTION_printlowercase		(uint32_t) (1 << FORMATOPTION_NUM_printlowercase)
+#define FORMATOPTION_printuppercase		(uint32_t) (1 << FORMATOPTION_NUM_printuppercase)
+#define FORMATOPTION_printprefix		(uint32_t) (1 << FORMATOPTION_NUM_printprefix)
+#define FORMATOPTION_printsuffix		(uint32_t) (1 << FORMATOPTION_NUM_printsuffix)
+#define FORMATOPTION_maskprefix			(uint32_t) (1 << FORMATOPTION_NUM_maskprefix)
+#define FORMATOPTION_masksuffix			(uint32_t) (1 << FORMATOPTION_NUM_masksuffix)
+#define FORMATOPTION_printstart			(uint32_t) (1 << FORMATOPTION_NUM_printstart)
+#define FORMATOPTION_printend			(uint32_t) (1 << FORMATOPTION_NUM_printend)
+#define FORMATOPTION_printcompressed		(uint32_t) (1 << FORMATOPTION_NUM_printcompressed)
+#define FORMATOPTION_printuncompressed		(uint32_t) (1 << FORMATOPTION_NUM_printuncompressed)
+#define FORMATOPTION_printfulluncompressed	(uint32_t) (1 << FORMATOPTION_NUM_printfulluncompressed)
+#define FORMATOPTION_machinereadable		(uint32_t) (1 << FORMATOPTION_NUM_machinereadable)
+#define FORMATOPTION_quiet			(uint32_t) (1 << FORMATOPTION_NUM_quiet)
 
 typedef struct {
-	int number;
-	char *token;
-	char *explanation;
+	const uint32_t number;
+	const char *token;
+	const char *explanation;
 } s_formatoption;
 
 /*@unused@*/ static const s_formatoption ipv6calc_formatoptionstrings[] = {
@@ -129,7 +168,7 @@ typedef struct {
 };
 
 /* Possible format option map */
-/*@unused@*/ static const int ipv6calc_outputformatoptionmap[11][2]  = {
+/*@unused@*/ static const uint32_t ipv6calc_outputformatoptionmap[11][2]  = {
 	{ FORMAT_revnibbles_int , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
 	{ FORMAT_revnibbles_arpa, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
 	{ FORMAT_bitstring      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
@@ -145,17 +184,25 @@ typedef struct {
 
 
 /* Actions */
-#define ACTION_auto			0x0000000
-#define ACTION_mac_to_eui64		0x0000001
-#define ACTION_ipv4_to_6to4addr		0x0000002
-#define ACTION_iid_token_to_privacy	0x0000004
-#define ACTION_prefix_mac_to_ipv6	0x0000008
+#define ACTION_NUM_auto			0
+#define ACTION_NUM_mac_to_eui64		1
+#define ACTION_NUM_ipv4_to_6to4addr	2
+#define ACTION_NUM_iid_token_to_privacy	3
+#define ACTION_NUM_prefix_mac_to_ipv6	4
+#define ACTION_NUM_undefined		31
+
+#define ACTION_auto			(uint32_t) 0x0
+#define ACTION_mac_to_eui64		(uint32_t) (1 << ACTION_NUM_mac_to_eui64)
+#define ACTION_ipv4_to_6to4addr		(uint32_t) (1 << ACTION_NUM_ipv4_to_6to4addr)
+#define ACTION_iid_token_to_privacy	(uint32_t) (1 << ACTION_NUM_iid_token_to_privacy)
+#define ACTION_prefix_mac_to_ipv6	(uint32_t) (1 << ACTION_NUM_prefix_mac_to_ipv6)
+#define ACTION_undefined		(uint32_t) (1 << ACTION_NUM_undefined)
 
 typedef struct {
-	int number;
-	char *token;
-	char *explanation;
-	char *aliases;
+	const uint32_t number;
+	const char *token;
+	const char *explanation;
+	const char *aliases;
 } s_action;
 
 /*@unused@*/ static const s_action ipv6calc_actionstrings[] = {

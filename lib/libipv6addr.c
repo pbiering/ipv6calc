@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.5 2002/03/27 07:21:20 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.6 2002/04/04 19:40:27 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -33,7 +33,7 @@ uint8_t ipv6addr_getoctett(const ipv6calc_ipv6addr *ipv6addrp, const unsigned in
 	uint8_t retval;
 	
 	if ( numoctett > 15 ) {
-		fprintf(stderr, "%s: given ocett number '%d' is out of range!\n", DEBUG_function_name, numoctett);
+		fprintf(stderr, "%s: given ocett number '%u' is out of range!\n", DEBUG_function_name, numoctett);
 		exit(EXIT_FAILURE);
 	};
 
@@ -56,7 +56,7 @@ uint16_t ipv6addr_getword(const ipv6calc_ipv6addr *ipv6addrp, const unsigned int
 	uint16_t retval;
 	
 	if ( numword > 7 ) {
-		fprintf(stderr, "%s: given word number '%d' is out of range!\n", DEBUG_function_name, numword);
+		fprintf(stderr, "%s: given word number '%u' is out of range!\n", DEBUG_function_name, numword);
 		exit(EXIT_FAILURE);
 	};
 
@@ -80,7 +80,7 @@ uint32_t ipv6addr_getdword(const ipv6calc_ipv6addr *ipv6addrp, const unsigned in
 	uint32_t retval;
 	
 	if ( numdword > 3 ) {
-		fprintf(stderr, "%s: given dword number '%d' is out of range!\n", DEBUG_function_name, numdword);
+		fprintf(stderr, "%s: given dword number '%u' is out of range!\n", DEBUG_function_name, numdword);
 		exit(EXIT_FAILURE);
 	};
 
@@ -106,7 +106,7 @@ uint32_t ipv6addr_getdword(const ipv6calc_ipv6addr *ipv6addrp, const unsigned in
 void ipv6addr_setoctett(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numoctett, const unsigned int value) {
 	
 	if ( numoctett > 15 ) {
-		fprintf(stderr, "%s: given octett number '%d' is out of range!\n", DEBUG_function_name, numoctett);
+		fprintf(stderr, "%s: given octett number '%u' is out of range!\n", DEBUG_function_name, numoctett);
 		exit(EXIT_FAILURE);
 	};
 	
@@ -133,7 +133,7 @@ void ipv6addr_setoctett(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numocte
 #define DEBUG_function_name "libipv6addr/ipv6addr_setword"
 void ipv6addr_setword(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numword, const unsigned int value) {
 	if ( numword > 7 ) {
-		fprintf(stderr, "%s: given word number '%d' is out of range!\n", DEBUG_function_name, numword);
+		fprintf(stderr, "%s: given word number '%u' is out of range!\n", DEBUG_function_name, numword);
 		exit(EXIT_FAILURE);
 	};
 	
@@ -162,11 +162,11 @@ void ipv6addr_setword(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numword, 
 void ipv6addr_setdword(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numdword, const unsigned int value) {
 	
 	if ( numdword > 3 ) {
-		fprintf(stderr, "%s: given dword number '%d' is out of range!\n", DEBUG_function_name, numdword);
+		fprintf(stderr, "%s: given dword number '%u' is out of range!\n", DEBUG_function_name, numdword);
 		exit(EXIT_FAILURE);
 	};
 
-	if ( value > 0xffffffff ) {
+	if ( value > 0xffffffffu ) {
 		fprintf(stderr, "%s: given value '%x' is out of range!\n", DEBUG_function_name, value);
 		exit(EXIT_FAILURE);
 	}; 
@@ -255,8 +255,8 @@ void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6addr *ip
  * in: ipv6addrp = pointer to IPv6 address structure
  */
 
-unsigned int ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
-	unsigned int type = 0;
+uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
+	uint32_t type = 0;
 	uint32_t st, st1, st2, st3;
 
 	st =  ipv6addr_getdword(ipv6addrp, 0); /* 32 MSB */
@@ -292,12 +292,12 @@ unsigned int ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 		type |= IPV6_NEW_ADDR_PRODUCTIVE;
 	};
 	
-	if ((st2 == 0x00000001u) && (st3 & 0xFF000000u) == 0xFF000000u) {
+	if ((st2 == (uint32_t) 0x00000001u) && (st3 & 0xFF000000u) == 0xFF000000u) {
 		/* ..:0000:0001:ffxx:xxxx solicited node suffix */
 		type |= IPV6_NEW_ADDR_SOLICITED_NODE;
 	};
 
-	if (st2 == 0x00005EFEu) {
+	if (st2 == (uint32_t) 0x00005EFEu) {
 		/* ..:0000:5EFE:xx.xx.xx.xx ISATAP suffix */
 		type |= IPV6_NEW_ADDR_ISATAP;
 	};
@@ -348,7 +348,7 @@ unsigned int ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 				return (type);
 			};
 
-			if (st3 == 0x00000001u) {
+			if (st3 == (uint32_t) 0x00000001u) {
 				type |= IPV6_ADDR_LOOPBACK | IPV6_ADDR_UNICAST;
 				return (type);
 			};
@@ -357,7 +357,7 @@ unsigned int ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 			return (type);
 		}
 
-		if (st2 == 0x0000ffffu)
+		if (st2 == (uint32_t) 0x0000ffffu)
 			type |= IPV6_ADDR_MAPPED;
 			return (type);
 	};
@@ -365,6 +365,7 @@ unsigned int ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 	type |= IPV6_ADDR_RESERVED;
 	return (type);
 };
+
 
 /*
  * Get IPv6 address assignement information
@@ -418,6 +419,31 @@ int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
 
 
 /*
+ * Get IPv6 address assignement information as string
+ *
+ * in : ipv6addrp = pointer to IPv6 address structure
+ * mod: resultstring
+ * ret: 1=not found, 0=ok
+ */
+int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+	int i, registry;
+
+	registry = ipv6addr_getregistry(ipv6addrp);
+
+	if ( registry != -1 ) {
+		for ( i = 0; i < (int) (sizeof(ipv6calc_ipv6addrregistry) / sizeof(ipv6calc_ipv6addrregistry[0])); i++ ) {
+			if ( ipv6calc_ipv6addrregistry[i].number == registry ) {
+				snprintf(resultstring, NI_MAXHOST, "%s", ipv6calc_ipv6addrregistry[i].tokensimple);
+				return (0);
+			};
+		};
+	};
+
+	return (1);
+};
+
+
+/*
  * function stores an IPv6 address string into a structure
  *
  * in : *addrstring = IPv6 address
@@ -429,9 +455,10 @@ int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
 int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1, result, i, cpoints = 0, ccolons = 0;
 	char *addronlystring, *cp, tempstring[NI_MAXHOST], *cptr, **ptrptr;
-	int scope = 0, expecteditems = 0;
-	unsigned int temp[8];
+	int expecteditems = 0;
+	int temp[8];
 	unsigned int compat[4];
+	uint32_t scope = 0;
 
 	ptrptr = &cptr;
 
@@ -545,8 +572,8 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 				return (retval);
 			};
 		};
-		temp[6] = ( compat[0] << 8 ) | compat[1];
-		temp[7] = ( compat[2] << 8 ) | compat[3];
+		temp[6] = (int) (( compat[0] << 8 ) | compat[1]);
+		temp[7] = (int) (( compat[2] << 8 ) | compat[3]);
 		scope = IPV6_ADDR_COMPATv4;
 	} else {
 		/* normal format */
@@ -566,7 +593,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 
 	/* check address words range */
 	for ( i = 0; i <= 7; i++ ) {
-		if ( temp[i] > 0xffff )	{
+		if ( (temp[i] < 0) || (temp[i] > 0xffff) )	{
 			snprintf(resultstring, NI_MAXHOST, "Error, given address '%s' is not valid on position %d (%x)!", addronlystring, i, temp[i]);
 			retval = 1;
 			return (retval);
@@ -576,20 +603,20 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	/* copy into structure */
 	for ( i = 0; i <= 7; i++ ) {
 		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-			fprintf(stderr, "%s: Push word %d: %08x\n", DEBUG_function_name, i, temp[i]);
+			fprintf(stderr, "%s: Push word %u: %08x\n", DEBUG_function_name, (unsigned int) i, (unsigned int) temp[i]);
 		};
-		ipv6addr_setword(ipv6addrp, i, temp[i]);
+		ipv6addr_setword(ipv6addrp, (unsigned int) i, (unsigned int) temp[i]);
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s: In structure %08x %08x %08x %08x\n", DEBUG_function_name, ipv6addr_getdword(ipv6addrp, 0), ipv6addr_getdword(ipv6addrp, 1), ipv6addr_getdword(ipv6addrp, 2), ipv6addr_getdword(ipv6addrp, 3));
-		fprintf(stderr, "%s: In structure %04x %04x %04x %04x %04x %04x %04x %04x\n", DEBUG_function_name, ipv6addr_getword(ipv6addrp, 0), ipv6addr_getword(ipv6addrp, 1), ipv6addr_getword(ipv6addrp, 2), ipv6addr_getword(ipv6addrp, 3), ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addr_getword(ipv6addrp, 6), ipv6addr_getword(ipv6addrp, 7));
+		fprintf(stderr, "%s: In structure %08x %08x %08x %08x\n", DEBUG_function_name, (unsigned int) ipv6addr_getdword(ipv6addrp, 0), (unsigned int) ipv6addr_getdword(ipv6addrp, 1), (unsigned int) ipv6addr_getdword(ipv6addrp, 2), (unsigned int) ipv6addr_getdword(ipv6addrp, 3));
+		fprintf(stderr, "%s: In structure %04x %04x %04x %04x %04x %04x %04x %04x\n", DEBUG_function_name, (unsigned int) ipv6addr_getword(ipv6addrp, 0), (unsigned int) ipv6addr_getword(ipv6addrp, 1), (unsigned int) ipv6addr_getword(ipv6addrp, 2), (unsigned int) ipv6addr_getword(ipv6addrp, 3), (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addr_getword(ipv6addrp, 6), (unsigned int) ipv6addr_getword(ipv6addrp, 7));
 	};
 	
-	result = ipv6addr_gettype(ipv6addrp); 
+	scope = ipv6addr_gettype(ipv6addrp); 
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s: Got scope %02x\n", DEBUG_function_name, result);
+		fprintf(stderr, "%s: Got scope %02x\n", DEBUG_function_name, scope);
 	};
 
 	ipv6addrp->scope = result;
@@ -649,7 +676,7 @@ int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resul
 };
 
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddr"
-int libipv6addr_ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const int formatoptions) {
+int libipv6addr_ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
 	int retval = 1;
 	
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
@@ -809,7 +836,7 @@ int ipv6addrstruct_to_fulluncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *r
 };
 
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_fulluncompaddr"
-int libipv6addr_ipv6addrstruct_to_fulluncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const int formatoptions) {
+int libipv6addr_ipv6addrstruct_to_fulluncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
 	int retval = 1, result;
 	char tempstring[NI_MAXHOST];
 

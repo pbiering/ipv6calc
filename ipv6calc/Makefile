@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6calc
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.4 2002/03/24 17:30:24 peter Exp $
+# Version    : $Id: Makefile,v 1.5 2002/04/04 19:40:10 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -15,6 +15,12 @@ CFLAGS	= $(COPTS) -I../getopt/ -I../ -I../lib/
 CC	= gcc
 
 OBJS	= ipv6calc.o showinfo.o
+
+# splint
+SPLINT_OPT_OUTSIDE = -warnposix -nullassign -uniondef -compdef -usedef -formatconst
+#SPLINT_OPT_OUTSIDE = -uniondef +matchanyintegral --nullassign +ignoresigns -compdef -usedef -modobserver -formatconst -warnposix -exportlocal
+SPLINT_TODO_LATER = -unrecog
+
 
 all:		ipv6calc
 
@@ -42,3 +48,6 @@ clean:
 test:
 		make
 		./test_ipv6calc.sh || exit 1
+
+splint:		
+		splint *.c ../lib/*.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)

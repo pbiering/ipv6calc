@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.3 2002/03/26 23:11:14 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.4 2002/04/04 19:40:26 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -87,13 +87,13 @@ void printhelp_inputtypes(void) {
 	/* run through matrix */
 	for (i = 0; i < (int) (sizeof(ipv6calc_formatmatrix) / sizeof(ipv6calc_formatmatrix[0])); i++) {
 		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "Row %d: %04x - %04x\n", i, ipv6calc_formatmatrix[i][0], ipv6calc_formatmatrix[i][1]);
+			fprintf(stderr, "Row %d: %08x - %08x\n", i, (unsigned int) iv6calc_formatmatrix[i][0], (unsigned int) ipv6calc_formatmatrix[i][1]);
 		};
 		if (ipv6calc_formatmatrix[i][1] != 0) {
 			/* available for input, look for name now */
 			for (j = 0; j < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); j++) {
 				if (ipv6calc_debug != 0) {
-					fprintf(stderr, "Format-Row %d: %04x - %s - %s\n", j, ipv6calc_formatstrings[j].number, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
+					fprintf(stderr, "Format-Row %d: %08x - %s - %s\n", j, (unsigned int) ipv6calc_formatstrings[j].number, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
 				};
 				if (ipv6calc_formatstrings[j].number == ipv6calc_formatmatrix[i][0]) {
 					fprintf(stderr, printformatstring, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
@@ -106,7 +106,7 @@ void printhelp_inputtypes(void) {
 
 
 /* list of output types */
-void printhelp_outputtypes(const int inputtype) {
+void printhelp_outputtypes(const uint32_t inputtype) {
 	int i, j;
 	size_t maxlen = 0;
 	char printformatstring[20];
@@ -141,7 +141,7 @@ void printhelp_outputtypes(const int inputtype) {
 	/* run through matrix */
 	for (j = 0; j < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); j++) {
 		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "Format-Row %d: %04x - %s - %s\n", j, ipv6calc_formatstrings[j].number, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
+			fprintf(stderr, "Format-Row %d: %08x - %s - %s\n", j, (unsigned int) ipv6calc_formatstrings[j].number, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
 		};
 
 		for (i = 0; i < (int) (sizeof(ipv6calc_formatmatrix) / sizeof(ipv6calc_formatmatrix[0])); i++) {
@@ -151,7 +151,7 @@ void printhelp_outputtypes(const int inputtype) {
 			};
 		
 			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "Row %d: %04x - %04x\n", i, ipv6calc_formatmatrix[i][0], ipv6calc_formatmatrix[i][1]);
+				fprintf(stderr, "Row %d: %08x - %08x\n", i, (unsigned int) ipv6calc_formatmatrix[i][0], (unsigned int) ipv6calc_formatmatrix[i][1]);
 			};
 			if ((ipv6calc_formatmatrix[i][1] & ipv6calc_formatstrings[j].number) != 0) {
 				/* available for output, look for name now */
@@ -197,7 +197,7 @@ void printhelp_actiontypes(void) {
 
 	for (j = 0; j < (int) (sizeof(ipv6calc_actionstrings) / sizeof(ipv6calc_actionstrings[0])); j++) {
 		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "Format-Row %d: %04x - %s - %s\n", j, ipv6calc_actionstrings[j].number, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
+			fprintf(stderr, "Format-Row %d: %08x - %s - %s\n", j, (unsigned int) ipv6calc_actionstrings[j].number, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
 		};
 		fprintf(stderr, printformatstring, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
 	};
@@ -338,7 +338,7 @@ static void printhelp_output_ouitype(void) {
 	fprintf(stderr, "  IID global scope  -> vendorname.ouitype.ipv6calc\n");
 };
 
-void printhelp_output_dispatcher(const int outputtype) {
+void printhelp_output_dispatcher(const uint32_t outputtype) {
 	int i, j;
 
 	printversion();
@@ -408,7 +408,7 @@ void printhelp_output_dispatcher(const int outputtype) {
 			};
 			
 			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "Format value: %x\n", ipv6calc_outputformatoptionmap[i][1]);
+				fprintf(stderr, "Format value: %08x\n", (unsigned int) ipv6calc_outputformatoptionmap[i][1]);
 			};
 			
 			fprintf(stderr, "\n");

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.4 2002/03/24 21:38:08 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.5 2002/04/04 19:40:10 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -67,18 +67,27 @@ int main(int argc,char *argv[]) {
 	int bit_start = 0, bit_end = 0;
 
 	/* new option style storage */	
-	int inputtype = -1, outputtype = -1;
+	uint32_t inputtype  = FORMAT_undefined;
+	uint32_t outputtype = FORMAT_undefined;
 	
 	/* convert storage */
-	int action = -1;
+	uint32_t action = ACTION_undefined;
 
 	/* format options storage */
-	int formatoptions = 0;
+	uint32_t formatoptions = 0;
 
 	/* used structures */
 	ipv6calc_ipv6addr ipv6addr, ipv6addr2, ipv6addr3, ipv6addr4;
 	ipv6calc_ipv4addr ipv4addr;
 	ipv6calc_macaddr  macaddr;
+
+	/* clear address structures */
+	ipv6addr_clearall(&ipv6addr);
+	ipv6addr_clearall(&ipv6addr2);
+	ipv6addr_clearall(&ipv6addr3);
+	ipv6addr_clearall(&ipv6addr4);
+	ipv4addr_clearall(&ipv4addr);
+	macp_clearall(&macaddr);
 
 	if (argc <= 1) {
 		printinfo();
@@ -114,87 +123,87 @@ int main(int argc,char *argv[]) {
 			/* backward compatibility/shortcut commands */
 			case 'r':
 			case CMD_addr_to_ip6int:
-				if (inputtype >= 0 || outputtype >= 0) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
+				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_ipv6addr;
 				outputtype = FORMAT_revnibbles_int;
 				break;
 
 			case 'a':
 			case CMD_addr_to_ip6arpa:
-				if (inputtype >= 0 || outputtype >= 0) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
+				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_ipv6addr;
 				outputtype = FORMAT_revnibbles_arpa;
 				break;
 
 			case 'b':
 			case CMD_addr_to_bitstring:
-				if (inputtype >= 0 || outputtype >= 0) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
+				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_ipv6addr;
 				outputtype = FORMAT_bitstring;
 				break;
 				
 			case CMD_addr_to_compressed:
-				if (inputtype >= 0 || outputtype >= 0) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
+				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_ipv6addr;
 				outputtype = FORMAT_ipv6addr;
 				formatoptions |= FORMATOPTION_printcompressed;
 				break;
 				
 			case CMD_addr_to_uncompressed:
-				if (inputtype >= 0 || outputtype >= 0) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
+				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_ipv6addr;
 				outputtype = FORMAT_ipv6addr;
 				formatoptions |= FORMATOPTION_printuncompressed;
 				break;
 				
 			case CMD_addr_to_base85:
-				if (inputtype >= 0 || outputtype >= 0) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
+				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_ipv6addr;
 				outputtype = FORMAT_base85;
 				break;
 				
 			case CMD_base85_to_addr:
-				if (inputtype >= 0 || outputtype >= 0) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
+				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_base85;
 				outputtype = FORMAT_ipv6addr;
 				formatoptions |= FORMATOPTION_printuncompressed;
 				break;
 
 			case CMD_mac_to_eui64:
-				if (inputtype >= 0 || outputtype >= 0) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
+				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_mac;
 				outputtype = FORMAT_eui64;
 				break;
 				
 			case CMD_addr_to_fulluncompressed:
-				if (inputtype >= 0 || outputtype >= 0) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
+				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_ipv6addr;
 				outputtype = FORMAT_ipv6addr;
 				formatoptions |= FORMATOPTION_printfulluncompressed;
 				break;
 				
 			case CMD_addr_to_ifinet6:
-				if (inputtype >= 0 || outputtype >= 0) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
+				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_ipv6addr;
 				outputtype = FORMAT_ifinet6;
 				break;
 
 			case CMD_ifinet6_to_compressed:
-				if (inputtype >= 0 || outputtype >= 0) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
+				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype = FORMAT_ifinet6;
 				outputtype = FORMAT_ipv6addr;
 				formatoptions |= FORMATOPTION_printcompressed;
 				break;
 				
 			case CMD_ipv4_to_6to4addr:
-				if (inputtype >= 0 || outputtype >= 0) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
+				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype = FORMAT_ipv4addr;
 				outputtype = FORMAT_ipv6addr;
 				action = ACTION_ipv4_to_6to4addr;
 				break;
 				
 			case CMD_eui64_to_privacy:
-				if (inputtype >= 0 || outputtype >= 0) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
+				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype = FORMAT_iid_token;
 				outputtype = FORMAT_iid_token;
 				break;
@@ -209,45 +218,45 @@ int main(int argc,char *argv[]) {
 				break;
 
 			/* format options */
-			case FORMATOPTION_printcompressed + FORMATOPTION_HEAD:
+			case FORMATOPTION_NUM_printcompressed + FORMATOPTION_NUM_HEAD:
 	       			formatoptions |= FORMATOPTION_printcompressed;
 				break;
 				
-			case FORMATOPTION_printuncompressed + FORMATOPTION_HEAD:
+			case FORMATOPTION_NUM_printuncompressed + FORMATOPTION_NUM_HEAD:
 	       			formatoptions |= FORMATOPTION_printuncompressed;
 				break;
 				
-			case FORMATOPTION_printfulluncompressed + FORMATOPTION_HEAD:
+			case FORMATOPTION_NUM_printfulluncompressed + FORMATOPTION_NUM_HEAD:
 	       			formatoptions |= FORMATOPTION_printfulluncompressed;
 				break;
 				
-			case FORMATOPTION_printprefix + FORMATOPTION_HEAD:
+			case FORMATOPTION_NUM_printprefix + FORMATOPTION_NUM_HEAD:
 				formatoptions |= FORMATOPTION_printprefix;
 				break;
 				
-			case FORMATOPTION_printsuffix + FORMATOPTION_HEAD:
+			case FORMATOPTION_NUM_printsuffix + FORMATOPTION_NUM_HEAD:
 				formatoptions |= FORMATOPTION_printsuffix;
 				break;
 				
-			case FORMATOPTION_maskprefix + FORMATOPTION_HEAD:
+			case FORMATOPTION_NUM_maskprefix + FORMATOPTION_NUM_HEAD:
 				formatoptions |= FORMATOPTION_maskprefix;
 				break;
 				
-			case FORMATOPTION_masksuffix + FORMATOPTION_HEAD:
+			case FORMATOPTION_NUM_masksuffix + FORMATOPTION_NUM_HEAD:
 				formatoptions |= FORMATOPTION_masksuffix;
 				break;
 				
 			case 'l':	
-			case FORMATOPTION_printlowercase + FORMATOPTION_HEAD:
+			case FORMATOPTION_NUM_printlowercase + FORMATOPTION_NUM_HEAD:
 				formatoptions |= FORMATOPTION_printlowercase;
 				break;
 				
 			case 'u':	
-			case FORMATOPTION_printuppercase + FORMATOPTION_HEAD:
+			case FORMATOPTION_NUM_printuppercase + FORMATOPTION_NUM_HEAD:
 				formatoptions |= FORMATOPTION_printuppercase;
 				break;
 				
-			case FORMATOPTION_printstart + FORMATOPTION_HEAD:
+			case FORMATOPTION_NUM_printstart + FORMATOPTION_NUM_HEAD:
 				if ((atoi(optarg) >= 1) && (atoi(optarg) <= 128)) {
 					bit_start = atoi(optarg);
 					formatoptions |= FORMATOPTION_printstart;
@@ -257,7 +266,7 @@ int main(int argc,char *argv[]) {
 				};
 				break;
 				
-			case FORMATOPTION_printend + FORMATOPTION_HEAD:
+			case FORMATOPTION_NUM_printend + FORMATOPTION_NUM_HEAD:
 				if ((atoi(optarg) >= 1) && (atoi(optarg) <= 128)) {
 					bit_end = atoi(optarg);
 					formatoptions |= FORMATOPTION_printend;
@@ -268,12 +277,12 @@ int main(int argc,char *argv[]) {
 				break;
 				
 			case 'm':	
-			case FORMATOPTION_machinereadable + FORMATOPTION_HEAD:
+			case FORMATOPTION_NUM_machinereadable + FORMATOPTION_NUM_HEAD:
 				formatoptions |= FORMATOPTION_machinereadable;
 				break;
 				
 			case 'q':	
-			case FORMATOPTION_quiet + FORMATOPTION_HEAD:
+			case FORMATOPTION_NUM_quiet + FORMATOPTION_NUM_HEAD:
 				formatoptions |= FORMATOPTION_quiet;
 				break;
 
@@ -284,14 +293,14 @@ int main(int argc,char *argv[]) {
 				};
 
 				if (strcmp(optarg, "-?") == 0) {
-					inputtype = -2;
+					inputtype = FORMAT_undefined;
 					command = CMD_printhelp;
 					break;
 				};
 				
 				inputtype = ipv6calctypes_checktype(optarg);
 				
-				if (inputtype < 0) {
+				if (inputtype == FORMAT_undefined) {
 					fprintf(stderr, " Input option is unknown: %s\n", optarg);
 					exit(EXIT_FAILURE);
 				};
@@ -302,13 +311,13 @@ int main(int argc,char *argv[]) {
 					fprintf(stderr, "%s: Got output string: %s\n", DEBUG_function_name, optarg);
 				};
 				if (strcmp(optarg, "-?") == 0) {
-					outputtype = -2;
+					outputtype = FORMAT_undefined;
 					command = CMD_printhelp;
 					break;
 				};
 				
 				outputtype = ipv6calctypes_checktype(optarg);
-				if (outputtype < 0) {
+				if (outputtype == FORMAT_undefined) {
 					fprintf(stderr, " Output option is unknown: %s\n", optarg);
 					exit(EXIT_FAILURE);
 				};
@@ -319,12 +328,12 @@ int main(int argc,char *argv[]) {
 					fprintf(stderr, "%s: Got action string: %s\n", DEBUG_function_name, optarg);
 				};
 				if (strcmp(optarg, "-?") == 0) {
-					action = -2;
+					action = ACTION_undefined;
 					command = CMD_printhelp;
 					break;
 				};
 				action = ipv6calctypes_checkaction(optarg);
-				if (action < 0) {
+				if (action == FORMAT_action) {
 					fprintf(stderr, " Action option is unknown: %s\n", optarg);
 					exit(EXIT_FAILURE);
 				};
@@ -341,16 +350,16 @@ int main(int argc,char *argv[]) {
 
 	/* print help handling */
 	if (command == CMD_printhelp) {
-		if (outputtype == -2) {
-			if (inputtype < 0) {
-				inputtype = 0;
+		if (outputtype == FORMAT_undefined) {
+			if (inputtype == FORMAT_undefined) {
+				inputtype = FORMAT_any;
 			};
 			printhelp_outputtypes(inputtype);
 			exit(EXIT_FAILURE);
-		} else if (inputtype == -2) {
+		} else if (inputtype == FORMAT_undefined) {
 			printhelp_inputtypes();
 			exit(EXIT_FAILURE);
-		} else if (action == -2) {
+		} else if (action == ACTION_undefined) {
 			printhelp_actiontypes();
 			exit(EXIT_FAILURE);
 		};
@@ -364,7 +373,7 @@ int main(int argc,char *argv[]) {
 	};
 
 	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "Debug value:%lx  command:%lx  inputtype:%lx   outputtype:%lx  action:%lx  formatoptions:%x\n", (unsigned long) ipv6calc_debug, command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, formatoptions); 
+		fprintf(stderr, "Debug value:%lx  command:%lx  inputtype:%lx   outputtype:%lx  action:%lx  formatoptions:%x\n", (unsigned long) ipv6calc_debug, command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, (unsigned) formatoptions); 
 	};
 	
 	/* do work depending on selection */
@@ -394,7 +403,7 @@ int main(int argc,char *argv[]) {
 		action = ACTION_iid_token_to_privacy;
 	} else if ( inputtype == FORMAT_prefix_mac ) {
 		action = ACTION_prefix_mac_to_ipv6;
-		if ( outputtype < 0 ) {
+		if ( outputtype == FORMAT_undefined ) {
 			outputtype = FORMAT_ipv6addr;
 		};
 	};
@@ -418,7 +427,7 @@ int main(int argc,char *argv[]) {
 	};
 	
 	/* autodetection */
-	if ((inputtype == -1 || inputtype == FORMAT_auto) && argc > 0) {
+	if ((inputtype == FORMAT_undefined || inputtype == FORMAT_auto) && argc > 0) {
 		if (ipv6calc_debug != 0) {
 			fprintf(stderr, "%s: Call input type autodetection\n", DEBUG_function_name);
 		};
@@ -429,7 +438,7 @@ int main(int argc,char *argv[]) {
 		
 		inputtype = libipv6calc_autodetectinput(argv[0]);
 
-		if (inputtype >= 0) {
+		if ( inputtype != FORMAT_undefined ) {
 			for (i = 0; i < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); i++) {
 				if (inputtype == ipv6calc_formatstrings[i].number) {
 					if ((formatoptions & FORMATOPTION_quiet) == 0) {
@@ -677,7 +686,7 @@ int main(int argc,char *argv[]) {
 	};
 
 	/* clear resultstring */
-	resultstring[0] = '\0';
+	snprintf(resultstring, sizeof(resultstring), "%s", "");
 	
 	switch (action) {
 		case ACTION_mac_to_eui64:
@@ -756,7 +765,7 @@ int main(int argc,char *argv[]) {
 		default:
 			fprintf(stderr, " Action-type isn't implemented\n");
 			exit(EXIT_FAILURE);
-			break;
+			/* break; */
 	};
 
 	if (retval != 0) {

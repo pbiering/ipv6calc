@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.c
- * Version    : $Id: ipv6calctypes.c,v 1.1 2002/03/18 19:59:23 peter Exp $
+ * Version    : $Id: ipv6calctypes.c,v 1.2 2002/04/04 19:40:26 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -16,11 +16,13 @@
 
 /*
  * check given type string
+ * in : format string
+ * ret: format type
  */
 #define DEBUG_function_name "ipv6calctypes/checktype"
-int ipv6calctypes_checktype(const char *string) {
+uint32_t ipv6calctypes_checktype(const char *string) {
 	int i;
-	int number = -1;
+	uint32_t number = FORMAT_undefined;
 	char tokenlist[100];
 	char *token, *cptr, **ptrptr;
 
@@ -71,10 +73,10 @@ int ipv6calctypes_checktype(const char *string) {
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv6calctypes) != 0 ) {
-		if (number < 0) {
+		if ( number == FORMAT_undefined ) {
 			fprintf(stderr, "%s: Found no proper string\n", DEBUG_function_name);
 		} else {
-			fprintf(stderr, "%s: Found format number: %04x\n", DEBUG_function_name, number);
+			fprintf(stderr, "%s: Found format number: %08x\n", DEBUG_function_name, (unsigned int) number);
 		};
 	};
 
@@ -85,11 +87,13 @@ int ipv6calctypes_checktype(const char *string) {
 
 /*
  * check given type string
+ * in : action string
+ * ret: action type
  */
 #define DEBUG_function_name "ipv6calctypes/checkaction"
-int ipv6calctypes_checkaction(const char *string) {
+uint32_t ipv6calctypes_checkaction(const char *string) {
 	int i;
-	int number = -1;
+	uint32_t number = ACTION_undefined;
 	char tokenlist[100];
 	char *token, *cptr, **ptrptr;
 
@@ -140,10 +144,10 @@ int ipv6calctypes_checkaction(const char *string) {
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv6calctypes) != 0 ) {
-		if (number < 0) {
+		if ( number == FORMAT_undefined ) {
 			fprintf(stderr, "%s: Found no proper string\n", DEBUG_function_name);
 		} else {
-			fprintf(stderr, "%s: Found action number: %04x\n", DEBUG_function_name, number);
+			fprintf(stderr, "%s: Found action number: %08x\n", DEBUG_function_name, (unsigned int)  number);
 		};
 	};
 

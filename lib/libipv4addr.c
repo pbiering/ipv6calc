@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.4 2002/03/26 23:11:15 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.5 2002/04/04 19:40:27 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -31,11 +31,11 @@ uint8_t ipv4addr_getoctett(const ipv6calc_ipv4addr *ipv4addrp, const unsigned in
 	uint8_t retval;
 	
 	if ( numoctett > 3 ) {
-		fprintf(stderr, "%s: given ocett number '%d' is out of range!\n", DEBUG_function_name, numoctett);
+		fprintf(stderr, "%s: given ocett number '%u' is out of range!\n", DEBUG_function_name, numoctett);
 		exit(EXIT_FAILURE);
 	};
 
-	retval = (uint8_t) ( (ipv4addrp->in_addr.s_addr >> ( numoctett << 3)) & 0xff );
+	retval = (uint8_t) ( (ipv4addrp->in_addr.s_addr >> ( (3 - numoctett) << 3)) & 0xff );
 
 	return (retval);
 };
@@ -54,7 +54,7 @@ uint16_t ipv4addr_getword(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int
 	uint16_t retval;
 	
 	if ( numword > 1 ) {
-		fprintf(stderr, "%s: given word number '%d' is out of range!\n", DEBUG_function_name, numword);
+		fprintf(stderr, "%s: given word number '%u' is out of range!\n", DEBUG_function_name, numword);
 		exit(EXIT_FAILURE);
 	};
 
@@ -94,7 +94,7 @@ uint32_t ipv4addr_getdword(const ipv6calc_ipv4addr *ipv4addrp) {
 void ipv4addr_setoctett(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numoctett, const unsigned int value) {
 	
 	if ( numoctett > 3 ) {
-		fprintf(stderr, "%s: given octett number '%d' is out of range!\n", DEBUG_function_name, numoctett);
+		fprintf(stderr, "%s: given octett number '%u' is out of range!\n", DEBUG_function_name, numoctett);
 		exit(EXIT_FAILURE);
 	};
 	
@@ -103,8 +103,8 @@ void ipv4addr_setoctett(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numocte
 		exit(EXIT_FAILURE);
 	}; 
 
-	ipv4addrp->in_addr.s_addr &= ~ (0xff  << (numoctett << 3) );
-	ipv4addrp->in_addr.s_addr |= (value & 0xff) << (numoctett << 3);
+	ipv4addrp->in_addr.s_addr &= ~ (0xff  << ((3 - numoctett) << 3) );
+	ipv4addrp->in_addr.s_addr |= (value & 0xff) << ((3 - numoctett) << 3);
 
 	return;
 };
@@ -123,7 +123,7 @@ void ipv4addr_setoctett(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numocte
 void ipv4addr_setword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword, const unsigned int value) {
 	
 	if ( numword > 1 ) {
-		fprintf(stderr, "%s: given word number '%d' is out of range!\n", DEBUG_function_name, numword);
+		fprintf(stderr, "%s: given word number '%u' is out of range!\n", DEBUG_function_name, numword);
 		exit(EXIT_FAILURE);
 	};
 	
@@ -150,13 +150,13 @@ void ipv4addr_setword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword, 
 #define DEBUG_function_name "libipv4addr/ipv4addr_setdword"
 void ipv4addr_setdword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int value) {
 	
-	if ( value > 0xffffffff ) {
+	if ( value > 0xffffffffu ) {
 		fprintf(stderr, "%s: given value '%x' is out of range!\n", DEBUG_function_name, value);
 		exit(EXIT_FAILURE);
 	}; 
 
-	ipv4addr_setword(ipv4addrp, 0, (value & 0xffff0000 >> 16) );
-	ipv4addr_setword(ipv4addrp, 1, (value & 0xffff) );
+	ipv4addr_setword(ipv4addrp, 0, (value & 0xffff0000u > 16) );
+	ipv4addr_setword(ipv4addrp, 1, (value & 0xffffu) );
 
 	return;
 };
@@ -197,7 +197,7 @@ void ipv4addr_clearall(ipv6calc_ipv4addr *ipv4addrp) {
  *   to be implemented...
  */
 
-unsigned int ipv4addr_gettype(/*@unused@*/ const ipv6calc_ipv4addr *ipv4addrp) {
+uint32_t ipv4addr_gettype(/*@unused@*/ const ipv6calc_ipv4addr *ipv4addrp) {
 	return (0);
 };
 
@@ -216,6 +216,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	int expecteditems = 0;
 	int compat[4];
 	char tempstring[NI_MAXHOST], *cptr, **ptrptr;
+	uint32_t typeinfo;
 
 	ptrptr = &cptr;
 
@@ -296,7 +297,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
 			fprintf(stderr, "%s: Octett %d = %d\n", DEBUG_function_name, i, compat[i]);
 		};
-		ipv4addr_setoctett(ipv4addrp, i, compat[i]);
+		ipv4addr_setoctett(ipv4addrp, (unsigned int) i, (unsigned int) compat[i]);
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
@@ -304,13 +305,13 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 		fprintf(stderr, "%s: In structure %8x\n", DEBUG_function_name, (unsigned int) ipv4addr_getdword(ipv4addrp));
 	};
 	
-	result = ipv4addr_gettype(ipv4addrp); 
+	typeinfo = ipv4addr_gettype(ipv4addrp); 
 
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: Got scope %02x\n", DEBUG_function_name, result);
+		fprintf(stderr, "%s: Got scope %02x\n", DEBUG_function_name, (unsigned int) typeinfo);
 	};
 
-	ipv4addrp->scope = result;
+	ipv4addrp->scope = typeinfo;
 	ipv4addrp->flag_valid = 1;
 
 	retval = 0;
@@ -326,7 +327,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "libipv4calc/ipv4addrstruct_to_string"
-int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const unsigned long formatoptions) {
+int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST];
 
 	/* address */
@@ -364,7 +365,7 @@ int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *re
 	uint32_t ipv4 = ipv4addr_getdword(ipv4addrp);
 	
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: Given IPv4 address: %08x\n", DEBUG_function_name, ipv4);
+		fprintf(stderr, "%s: Given IPv4 address: %08x\n", DEBUG_function_name, (unsigned int) ipv4);
 	};
 
 	/* run through database array */

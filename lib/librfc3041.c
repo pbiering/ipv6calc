@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3041.c
- * Version    : $Id: librfc3041.c,v 1.2 2002/03/19 23:15:09 peter Exp $
+ * Version    : $Id: librfc3041.c,v 1.3 2002/04/04 19:40:27 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -37,7 +37,7 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 	char tempstring[NI_MAXHOST],  tempstring2[NI_MAXHOST];
 	unsigned char digest[MD5_DIGEST_LENGTH];
 
-	if (ipv6calc_debug & DEBUG_librfc3041) {
+	if ( (ipv6calc_debug & DEBUG_librfc3041) != 0 ) {
 		fprintf(stderr, "%s: Got identifier '%08x-%08x' and token '%08x-%08x'\n", DEBUG_function_name, ipv6addr_getdword(identifier, 2), ipv6addr_getdword(identifier, 3), ipv6addr_getdword(token, 2), ipv6addr_getdword(token, 3)); 
 	};
 
@@ -55,7 +55,7 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 		strcpy(tempstring, tempstring2);
 	};
 	
-	if (ipv6calc_debug & DEBUG_librfc3041) {
+	if ( (ipv6calc_debug & DEBUG_librfc3041) != 0 ) {
 		fprintf(stderr, "%s: MD5 hash '%s'\n", DEBUG_function_name, tempstring);
 	};
 
@@ -64,8 +64,8 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 	
 	for (i = 0; i < sizeof(newidentifier->in6_addr.s6_addr) / sizeof(newidentifier->in6_addr.s6_addr[0]); i++) {
 		/* copy into */	
-		newidentifier->in6_addr.s6_addr[i + 8] = digest[i];
-		newtoken->in6_addr.s6_addr[i + 8] = digest[i + 8];
+		newidentifier->in6_addr.s6_addr[i + 8] = (uint8_t) digest[i];
+		newtoken->in6_addr.s6_addr[i + 8] = (uint8_t) digest[i + 8];
 	};
 	
 	newidentifier->flag_valid = 1;

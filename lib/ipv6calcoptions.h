@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.2 2002/03/24 21:38:27 peter Exp $
+ * Version    : $Id: ipv6calcoptions.h,v 1.3 2002/04/04 19:40:26 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -68,7 +68,7 @@
 /*@unused@*/ static char *ipv6calc_shortopts = "vh?rmabd:iulq";
 
 /* define long options */
-static struct option ipv6calc_longopts[] = {
+/*@unused@*/ static struct option ipv6calc_longopts[] = {
 	{"version", 0, 0, (int) 'v'},
 	{"debug", 1, 0, (int) 'd'},
 
