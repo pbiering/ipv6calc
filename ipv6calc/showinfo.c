@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.10 2002/05/11 09:13:06 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.11 2002/08/30 21:04:15 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -31,9 +31,10 @@ void showinfo_availabletypes(void) {
 	int i;
 
 	fprintf(stderr, "\nAvailable tokens for machine-readable output (printed in one line):\n");
-	fprintf(stderr, " TYPE (commata separated):\n");
+	fprintf(stderr, " TYPE=...                      : type of IPv6 address (commata separated)\n");
+	fprintf(stderr, " ");
 	for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
-		fprintf(stderr, "  %s", ipv6calc_ipv6addrtypestrings[i].token);
+		fprintf(stderr, " %s", ipv6calc_ipv6addrtypestrings[i].token);
 	};
 	fprintf(stderr, "\n");
 	fprintf(stderr, " IPV6=...                      : given IPv6 address full uncompressed\n");
@@ -48,11 +49,13 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IID=xxxx:xxxx:xxxx:xxxx       : an included interface identifier\n");
 	fprintf(stderr, " EUI48=xx:xx:xx:xx:xx:xx       : an included EUI-48 (MAC) identifier\n");
 	fprintf(stderr, " EUI48_SCOPE=local|global      : scope of EUI-48 identifier\n");
+	fprintf(stderr, " EUI48_TYPE=...                : type of EUI-48 identifier\n");
+	fprintf(stderr, "  unicast|multicast|broadcast\n");
 	fprintf(stderr, " EUI64=xx:xx:xx:xx:xx:xx:xx:xx : an included EUI-64 identifier\n");
 	fprintf(stderr, " EUI64_SCOPE=local|global      : scope of EUI-64 identifier\n");
-	fprintf(stderr, " OUI=\"...\"                   : OUI string, if available\n");
+	fprintf(stderr, " OUI=\"...\"                     : OUI string, if available\n");
 	fprintf(stderr, " IPV6CALC_VERSION=x.y          : Version of ipv6calc\n");
-	fprintf(stderr, " IPV6CALC_COPYRIGHT=\"...\"    : Copyright string\n");
+	fprintf(stderr, " IPV6CALC_COPYRIGHT=\"...\"      : Copyright string\n");
 };
 
 /*
@@ -163,7 +166,31 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 			fprintf(stdout, "MAC is a local one\n");
 		};
 	};
+	
+	/* unicast/multicast/broadcast */	
+	if ( (macaddrp->addr[0] & 0x01) == 0 ) {
+		if ( machinereadable != 0 ) {
+			printout("EUI48_TYPE=unicast");
+		} else {
+			fprintf(stdout, "MAC is an unicast one\n");
+		};
+	} else {
+		if ( (macaddrp->addr[0] == 0xff) && (macaddrp->addr[1] == 0xff) && (macaddrp->addr[2] == 0xff) && (macaddrp->addr[3] == 0xff) && (macaddrp->addr[4] == 0xff) && (macaddrp->addr[5] == 0xff) ) {
+			if ( machinereadable != 0 ) {
+				printout("EUI48_TYPE=broadcast");
+			} else {
+				fprintf(stdout, "MAC is a broadcast one\n");
+			};
+		} else {
+			if ( machinereadable != 0 ) {
+				printout("EUI48_TYPE=multicast");
+			} else {
+				fprintf(stdout, "MAC is a multicast one\n");
+			};
 
+		};
+	};
+	
 	/* vendor string */
 	result = libieee_get_vendor_string(helpstring, macaddrp->addr[0], macaddrp->addr[1], macaddrp->addr[2]);
 	if (result == 0) {
