@@ -1,5 +1,5 @@
-#LyX 1.2 created this file. For more info see http://www.lyx.org/
-\lyxformat 220
+#LyX 1.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 221
 \textclass docbook
 \language english
 \inputencoding auto
@@ -27,6 +27,9 @@
 \layout Title
 \added_space_top vfill \added_space_bottom vfill 
 The ipv6calc Homepage
+\layout Revision
+
+Last update: 2003-08-28
 \layout Section
 
 General
@@ -87,7 +90,7 @@ The author of ipv6calc is
  with some minor contribution by others
 \layout Section
 
-Where to get sources or binaries:
+Where to get sources or binaries
 \layout Subsection
 
 Latest version of sources:
@@ -125,7 +128,7 @@ Via FTP at
 \end_inset 
 
 : 
-\begin_inset LatexCommand \url[DeepSpace6 / anonymous FTP]{ftp://ftp.deepspace6.net/pub/sources/ipv6calc/}
+\begin_inset LatexCommand \url[DeepSpace6 / anonymous FTP]{ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/}
 
 \end_inset 
 
@@ -174,8 +177,8 @@ Ready to use packages for several operating systems:
 Red Hat Linux
 \layout Standard
 
-Red Hat Linux is the developing platform, so use given hints above to create
- a RPM.
+Red Hat Linux (currently version 7.3) is the developing platform, so use
+ given hints above to create a RPM.
 \layout Subsubsection
 
 Mandrake:
@@ -269,7 +272,7 @@ ipv6calc
 Reason: discussions
 \layout Description
 
-Traffic: currently very low, this list is new (started at Dec 2002)
+Traffic: low
 \layout Description
 
 Postings: subscribers
@@ -419,10 +422,10 @@ Main online help:
 $ ./ipv6calc -?
 \layout Code
 
-ipv6calc: version 0.45
+ipv6calc: version 0.46
 \layout Code
 
-(P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
 \layout Code
 
 \layout Code
@@ -500,10 +503,10 @@ Input-type options
 $ ./ipv6calc --in -?
 \layout Code
 
-ipv6calc: version 0.45 
+ipv6calc: version 0.46
 \layout Code
 
-(P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
 \layout Code
 
 \layout Code
@@ -553,7 +556,7 @@ Output-type options:
 $ ./ipv6calc --out -?
 \layout Code
 
-ipv6calc: version 0.45 (P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.d
+ipv6calc: version 0.46 (P) & (C) 2001-2003 by Peter Bieringer <pb (at) bieringer.d
 e>
 \layout Code
 
@@ -606,6 +609,9 @@ e>
 \layout Code
 
   revipv4        : reverse IPv4, ending with in-addr.arpa
+\layout Code
+
+  octal          : IP address in escaped octal format
 \layout Code
 
 \layout Code
@@ -769,7 +775,7 @@ A demonstration about which kind of output is possible to produce is shown
 \layout Itemize
 
 
-\begin_inset LatexCommand \url[http://ipv6to4.aerasec.de/index2.html]{http://ipv6to4.aerasec.de/index2.html}
+\begin_inset LatexCommand \url[http://ipv6.aerasec.de/index2.html]{http://ipv6.aerasec.de/index2.html}
 
 \end_inset 
 
@@ -781,5 +787,26 @@ A demonstration about which kind of output is possible to produce is shown
 
 \end_inset 
 
-(IPv4/IPv6)
+ (IPv4/IPv6)
+\layout Itemize
+
+
+\begin_inset LatexCommand \url[http://ipv6-info.internet2.edu/]{http://ipv6-info.internet2.edu/}
+
+\end_inset 
+
+
+\layout Section
+
+Webserver log statistics helper program "ipv6logstats"
+\layout Standard
+
+This program parses a given webserver logfile and count addresses, useful
+ for time period statistics.
+\layout Subsection
+
+Examples
+\layout Standard
+
+A demonstration about which kind of statistics is currently not public online.
 \the_end
