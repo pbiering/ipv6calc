@@ -6,7 +6,7 @@
 #
 # Project    : ipv6calc/ipv6logconv
 # File       : run_analog.sh
-# Version    : $Id: run_analog.sh,v 1.2 2002/03/16 22:57:24 peter Exp $
+# Version    : $Id: run_analog.sh,v 1.3 2002/03/16 23:30:33 peter Exp $
 # Copyright  : none
 # Procuded   : 2002 by Peter Bieringer <pb (at) bieringer.de>
 
@@ -26,17 +26,21 @@ case "$type" in
     "dedicated")
 	## dedicated files version
 	# Create address type statistics
+	echo "addrtype..."
 	cat $LOGFILE | $BIN_IPV6LOGCON --out addrtype | analog +ganalog-dist.cfg +C'HOSTNAME Address_type_distribution' +O./distribution-addrtype/analog.html 
 
+	echo "ipv6addrtype..."
 	# Create IPv6 address type statistics
 	cat $LOGFILE | $BIN_IPV6LOGCON --out ipv6addrtype | analog +ganalog-dist.cfg +C'HOSTNAME IPv6_address_type_distribution' +O./distribution-ipv6addrtype/analog.html 
 	# Create OUI statistics
+	echo "ouitype..."
 	cat $LOGFILE | $BIN_IPV6LOGCON --out ouitype | analog +ganalog-dist.cfg +C'HOSTNAME OUI_type_distribution' +O./distribution-oui/analog.html 
 	;;
 
     "combined")
-	echo "Not supported by analog - exit"
+	echo "Multible pie chars not supported by analog - exit"
 	exit 1
+
 	if [ ! -f $FILE_TMP ]; then
 		# create combined file
 		echo "Create combined logfile..."
