@@ -1,11 +1,12 @@
 /*
- *  $Id: ChangeLog,v 1.28 2002/03/11 21:52:25 peter Exp $ 
+ *  $Id: ChangeLog,v 1.29 2002/03/11 22:10:17 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
 20020311/PB:
+	new: add vendor database for global EUI-64/48 identifiers
 	new: libieee to display an OUI, if available
 	showinfo: machinereadable now printout one info per line (switchable later)
 	minor fixes

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.9 2002/03/11 19:27:09 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.10 2002/03/11 22:10:17 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -111,7 +111,6 @@ static const s_formatoption ipv6calc_formatoptionstrings[] = {
 	{ FORMATOPTION_printcompressed  , "--printcompressed"  , "Print in compressed format" },
 	{ FORMATOPTION_printuncompressed  , "--printuncompressed"  , "Print in uncompressed format" },
 	{ FORMATOPTION_printfulluncompressed  , "--printfulluncompressed"  , "Print in full uncompressed format" },
-	{ FORMATOPTION_printsuffix      , "--printsuffix"     , "Print only suffix" },
 	{ FORMATOPTION_machinereadable  , "--machinereadable|-m" , "Print output machine readable" },
 };
 

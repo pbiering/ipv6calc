@@ -1,6 +1,6 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.8 2002/03/03 21:39:01 peter Exp $
+# Version: $Id: TODO,v 1.9 2002/03/11 22:10:17 peter Exp $
 
 TODO list
 
@@ -8,7 +8,9 @@ Documentation:
 * manpage (never wrote one, therefore need help)
 
 Features:
-* showinfo: add vendor database for global EUI-64/48 identifiers
+* showinfo/machinereadable:
+    should be able to switch between multiline and single line mode (source is already prepared)
+    should be able to print a prefix on tokens (source is already prepared)
 
 Format features
 * printprefix, printsuffix for full

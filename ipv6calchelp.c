@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.5 2002/03/11 19:27:09 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.6 2002/03/11 22:10:17 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -382,6 +382,10 @@ void printhelp_output_dispatcher(const int outputtype) {
 			if (ipv6calc_outputformatoptionmap[i][1] == 0) {
 				fprintf(stderr, " No format options supported\n");
 				break;
+			};
+			
+			if (ipv6calc_debug != 0) {
+				fprintf(stderr, "Format value: %x\n", ipv6calc_outputformatoptionmap[i][1]);
 			};
 			
 			fprintf(stderr, "\n");
