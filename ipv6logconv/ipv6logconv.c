@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.1 2002/03/18 19:59:54 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.2 2002/03/26 23:11:07 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -221,7 +221,7 @@ static void lineparser(const long int outputtype) {
 			continue;
 		};
 
-		sprintf(token, "%s", charptr);
+		snprintf(token, sizeof(token), "%s", charptr);
 		
 		if (ipv6calc_debug != 0) {
 			fprintf(stderr, "%s: Token 1: '%s'\n", DEBUG_function_name, token);
@@ -367,11 +367,11 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 	switch (outputtype) {
 		case FORMAT_addrtype:
 			if (ipv6addr.flag_valid == 1) {
-				sprintf(resultstring, "ipv6-addr.addrtype.ipv6calc");
+				snprintf(resultstring, NI_MAXHOST, "ipv6-addr.addrtype.ipv6calc");
 			} else if (ipv4addr.flag_valid == 1) {
-				sprintf(resultstring, "ipv4-addr.addrtype.ipv6calc");
+				snprintf(resultstring, NI_MAXHOST, "ipv4-addr.addrtype.ipv6calc");
 			} else {
-				sprintf(resultstring, "reverse-lookup-successful.addrtype.ipv6calc");
+				snprintf(resultstring, NI_MAXHOST, "reverse-lookup-successful.addrtype.ipv6calc");
 			};
 			break;
 
@@ -380,7 +380,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 				if (flag_skipunknown != 0) {
 					return (1);
 				} else {
-					sprintf(resultstring, "unresolvable.ouitype.ipv6calc");
+					snprintf(resultstring, NI_MAXHOST, "unresolvable.ouitype.ipv6calc");
 					return (0);
 				};
 		       	};
@@ -390,7 +390,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 				if (flag_skipunknown != 0) {
 					return (1);
 				} else {
-					sprintf(resultstring, "unresolvable.ouitype.ipv6calc");
+					snprintf(resultstring, NI_MAXHOST, "unresolvable.ouitype.ipv6calc");
 					return (0);
 				};
 		       	};
@@ -401,18 +401,18 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 					if (flag_skipunknown != 0) {
 						return (1);
 					} else {
-						sprintf(resultstring, "unresolvable.ouitype.ipv6calc");
+						snprintf(resultstring, NI_MAXHOST, "unresolvable.ouitype.ipv6calc");
 						return (0);
 					};
 				};
 				if (strlen(resultstring) == 0) {
-					sprintf(resultstring, "unknown.ouitype.ipv6calc");
+					snprintf(resultstring, NI_MAXHOST, "unknown.ouitype.ipv6calc");
 				} else {
-					sprintf(tempstring, "%s.ouitype.ipv6calc", resultstring);
-					sprintf(resultstring, "%s", tempstring);
+					snprintf(tempstring, sizeof(tempstring), "%s.ouitype.ipv6calc", resultstring);
+					snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
 				};
 			} else {
-				sprintf(resultstring, "local-scope.ouitype.ipv6calc");
+				snprintf(resultstring, NI_MAXHOST, "local-scope.ouitype.ipv6calc");
 			};
 			break;
 			
@@ -421,7 +421,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 				if (flag_skipunknown != 0) {
 					return (1);
 				} else {
-					sprintf(resultstring, "unresolvable.ipv6addrtype.ipv6calc");
+					snprintf(resultstring, NI_MAXHOST, "unresolvable.ipv6addrtype.ipv6calc");
 					return (0);
 				};
 		       	};
@@ -429,21 +429,21 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 			typeinfo = ipv6addr_gettype(&ipv6addr);
 
 		       	if ( (typeinfo & IPV6_ADDR_LINKLOCAL) != 0 ) {
-				sprintf(resultstring, "link-local.ipv6addrtype.ipv6calc");
+				snprintf(resultstring, NI_MAXHOST, "link-local.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_ADDR_SITELOCAL) != 0 ) {
-				sprintf(resultstring, "site-local.ipv6addrtype.ipv6calc");
+				snprintf(resultstring, NI_MAXHOST, "site-local.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_NEW_ADDR_6BONE) != 0 ) {
-				sprintf(resultstring, "6bone-global.ipv6addrtype.ipv6calc");
+				snprintf(resultstring, NI_MAXHOST, "6bone-global.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
-				sprintf(resultstring, "6to4-global.ipv6addrtype.ipv6calc");
+				snprintf(resultstring, NI_MAXHOST, "6to4-global.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_NEW_ADDR_PRODUCTIVE) != 0 ) {
-				sprintf(resultstring, "productive-global.ipv6addrtype.ipv6calc");
+				snprintf(resultstring, NI_MAXHOST, "productive-global.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_ADDR_MAPPED) != 0 ) {
-				sprintf(resultstring, "mapped-ipv4.ipv6addrtype.ipv6calc");
+				snprintf(resultstring, NI_MAXHOST, "mapped-ipv4.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_ADDR_COMPATv4) != 0 ) {
-				sprintf(resultstring, "compat-ipv4.ipv6addrtype.ipv6calc");
+				snprintf(resultstring, NI_MAXHOST, "compat-ipv4.ipv6addrtype.ipv6calc");
 			} else {
-				sprintf(resultstring, "unknown-ipv6.ipv6addrtype.ipv6calc");
+				snprintf(resultstring, NI_MAXHOST, "unknown-ipv6.ipv6addrtype.ipv6calc");
 			};
 			break;
 
