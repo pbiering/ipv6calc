@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libeui64.c
- * Version    : $Id: libeui64.c,v 1.2 2002/02/25 21:18:50 peter Exp $
+ * Version    : $Id: libeui64.c,v 1.3 2002/03/02 19:02:27 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -11,9 +11,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
+#include "libeui64.h"
+
 #include "ipv6calc.h"
 #include "libipv6addr.h"
-#include "libeui64.h"
 
 /* function MAC address to EUI format
  *
@@ -21,9 +23,13 @@
  * out: ipv6addrp
  * ret: ==0: ok, !=0: error
  */
-
+#define DEBUG_function_name "libeui64/create_eui64_from_mac"
 int create_eui64_from_mac(ipv6calc_ipv6addr *ipv6addrp, ipv6calc_macaddr *macaddrp) {
 	int retval = 1;
+
+	if (ipv6calc_debug) {
+		fprintf(stderr, "%s: Called\n", DEBUG_function_name);
+	};
 
 	/* clear IPv6 structure */
 	ipv6addr_clear(ipv6addrp);
@@ -42,6 +48,9 @@ int create_eui64_from_mac(ipv6calc_ipv6addr *ipv6addrp, ipv6calc_macaddr *macadd
 	ipv6addrp->flag_prefixuse = 0;
 	ipv6addrp->scope = 0;
 	
+	ipv6addrp->flag_valid = 1;
+	
    	retval = 0;	
 	return (retval);
 };
+#undef DEBUG_function_name

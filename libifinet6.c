@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libifinet6.c
- * Version    : $Id: libifinet6.c,v 1.2 2002/03/02 17:27:27 peter Exp $
+ * Version    : $Id: libifinet6.c,v 1.3 2002/03/02 19:02:27 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -71,7 +71,7 @@ int libifinet6_ifinet6_to_ipv6addrstruct(char *addrstring, char *resultstring, i
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "libifinet6/ifinet6_withprefixlength_to_ipv6addrstruct"
-int libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(char *addrstring, char *prefixlengthstring, char *resultstring) {
+int libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(char *addrstring, char *prefixlengthstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1, result;
 	char tempstring[NI_MAXHOST];
 	unsigned int prefixlength = 0;
@@ -101,19 +101,20 @@ int libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(char *addrstring, char
 		return (retval);
 	}
 
-	/* convert address */
-	result = ifinet6_to_compressed(addrstring, tempstring, command);
+	/* convert plain address */
+	result = libifinet6_ifinet6_to_ipv6addrstruct(addrstring, tempstring, ipv6addrp);
 	if ( result != 0 ) {
 		sprintf(resultstring, "%s", tempstring);
 		retval = 1;
 		return (retval);
 	};
 
-	/* final */
-	sprintf(resultstring, "%s/%d", tempstring, prefixlength);
+	/* set prefix length */
+	ipv6addrp->prefixlength = prefixlength;
+	ipv6addrp->flag_prefixuse = 1;
 	
-	if (ipv6calc_debug & DEBUG_ifinet6_to_compressed) {
-		fprintf(stderr, "ifinet6_to_compressedwithprefixlength: Print: '%s'\n", resultstring);
+	if (ipv6calc_debug) {
+		fprintf(stderr, "%s: Print: '%s'\n", DEBUG_function_name, resultstring);
 	};
 			
 	retval = 0;

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.h
- * Version    : $Id: libmac.h,v 1.2 2002/02/27 23:07:15 peter Exp $
+ * Version    : $Id: libmac.h,v 1.3 2002/03/02 19:02:28 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -16,6 +16,7 @@
 
 typedef struct {
 	unsigned int addr[6];	/* MAC address in 6x 8 bit */
+	int flag_valid;		/* address structure filled */
 } ipv6calc_macaddr;
 
 #endif

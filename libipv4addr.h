@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.1 2002/02/27 23:07:15 peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.2 2002/03/02 19:02:28 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -21,6 +21,7 @@ typedef struct {
 	unsigned short prefixlength;    /* prefix length (0-32) 8 bit */
 	int flag_prefixuse;		/* =1 prefix length in use (CIDR notation) */
 	unsigned int scope;		/* address scope value 16 bit*/
+	int flag_valid;			/* address structure filled */
 } ipv6calc_ipv4addr;
 
 #endif

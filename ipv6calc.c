@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.11 2002/03/02 17:27:27 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.12 2002/03/02 19:02:27 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -14,9 +14,15 @@
 #include <stdlib.h> 
 #include <getopt.h> 
 #include <unistd.h> 
+
+
 #include "ipv6calc.h"
 #include "libipv6calc.h"
 #include "ipv6calctypes.h"
+
+#include "libipv4addr.h"
+#include "libipv6addr.h"
+#include "libmac.h"
 
 #include "addr_to_ip6int.h"
 #include "addr_to_compressed.h"
@@ -52,9 +58,20 @@ int main(int argc,char *argv[]) {
 	int retval = 1, i, lop;
 	unsigned long int command = 0;
 	unsigned short bit_start = 0, bit_end = 0;
-	ipv6calc_ipv6addr ipv6addr;
+
+	/* type info storage */	
 	long int inputtype = -1, outputtype = -1;
+	
+	/* convert storage */
+	long int action = -1;
+
+	/* format options storage */
 	unsigned int formatoptions = 0;
+
+	/* used structures */
+	ipv6calc_ipv6addr ipv6addr;
+	ipv6calc_ipv4addr ipv4addr;
+	ipv6calc_macaddr  macaddr;
 
 	/* define short options */
 	char *shortopts = "vh?rmabd:iul";
@@ -199,6 +216,7 @@ int main(int argc,char *argv[]) {
 				if (inputtype >= 0 || outputtype >= 0) { printhelp_doublecommands(); exit(1); };
 				inputtype  = FORMAT_mac;
 				outputtype = FORMAT_eui64;
+				action = ACTION_mac_to_eui64;
 				break;
 				
 			case CMD_addr_to_fulluncompressed:
@@ -220,15 +238,17 @@ int main(int argc,char *argv[]) {
 				outputtype = FORMAT_ipv6addr;
 				formatoptions |= FORMATOPTION_printcompressed;
 				break;
-
+				
+			case CMD_ipv4_to_6to4addr:
+				if (inputtype >= 0 || outputtype >= 0) { printhelp_doublecommands(); exit(1); };
+				inputtype = FORMAT_ipv4addr;
+				outputtype = FORMAT_ipv6addr;
+				action = ACTION_ipv4_to_6to4addr;
+				break;
 
 			/* still special handled commands */
 			case CMD_eui64_to_privacy:
 				command |= CMD_eui64_to_privacy;
-				break;
-
-			case CMD_ipv4_to_6to4addr:
-				command |= CMD_ipv4_to_6to4addr;
 				break;
 
 			case 'i':
@@ -363,9 +383,8 @@ int main(int argc,char *argv[]) {
 		};
 	};
 
-/*	fprintf(stderr, "Command value: %lx\n", command); */
 	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "Debug value: %lx  command: %lx\n  inputtype: %lx   outputtype: %lx", ipv6calc_debug, command, inputtype, outputtype); 
+		fprintf(stderr, "Debug value: %lx  command: %lx  inputtype: %lx   outputtype: %lx  action: %lx\n", ipv6calc_debug, command, inputtype, outputtype, action); 
 	};
 	
 	/* do work depending on selection */
@@ -383,7 +402,7 @@ int main(int argc,char *argv[]) {
 		fprintf(stderr, "%s: Got input %s\n", DEBUG_function_name, argv[0]);
 	};
 
-	/**************** input type handling ************/
+	/***** input type handling *****/
 	switch (inputtype) {
 		case -1:
 			/* old implementation */
@@ -396,9 +415,21 @@ int main(int argc,char *argv[]) {
 			argc--;
 			break;
 
+		case FORMAT_ipv4addr:
+			if (argc < 1) { printhelp_missinginputdata(); exit(1); };
+			retval = addr_to_ipv4addrstruct(argv[0], resultstring, &ipv4addr);
+			argc--;
+			break;
+
 		case FORMAT_base85:
 			if (argc < 1) { printhelp_missinginputdata(); exit(1); };
 			retval = base85_to_ipv6addrstruct(argv[0], resultstring, &ipv6addr);
+			argc--;
+			break;
+			
+		case FORMAT_mac:
+			if (argc < 1) { printhelp_missinginputdata(); exit(1); };
+			retval = mac_to_macaddrstruct(argv[0], resultstring, &macaddr);
 			argc--;
 			break;
 
@@ -414,13 +445,18 @@ int main(int argc,char *argv[]) {
 			break;
 			
 		default:
-			fprintf(stderr, " Inputtype isn't implemented\n");
+			fprintf(stderr, " Input-type isn't implemented\n");
 			exit (1);
 			break;
 	};
 
+	if (retval != 0) {
+		fprintf(stderr, "%s\n", resultstring);
+		exit (1);
+	};
+	
 
-	/* postprocessing input */
+	/***** postprocessing input *****/
 
 	if (ipv6addr.flag_valid == 1) {
 		/* mask bits */
@@ -525,25 +561,50 @@ int main(int argc,char *argv[]) {
 		fprintf(stderr, "%s\n", resultstring);
 		exit (1);
 	};
+	
+	/***** action *****/
+	switch (action) {
+		case ACTION_mac_to_eui64:
+			if (macaddr.flag_valid != 1) {
+				fprintf(stderr, "No valid MAC address given!\n");
+				exit(1);
+			};
+			retval = create_eui64_from_mac(&ipv6addr, &macaddr);
+			break;
+			
+		case ACTION_ipv4_to_6to4addr:
+			if (ipv4addr.flag_valid != 1) {
+				fprintf(stderr, "No valid IPv4 address given!\n");
+				exit(1);
+			};
+			retval = ipv4addr_to_ipv6to4addr(&ipv6addr, &ipv4addr);
+			break;
+
+		default:
+			/* no action */
+			break;
+	};
+
+	if (retval != 0) {
+		fprintf(stderr, "Problem occurs during action\n");
+		exit (1);
+	};
 
 OUTPUT_type: /* temporary solutions */
 
-	if ( ipv6calc_debug & DEBUG_librfc2874 ) {
-		retval = ipv6addrstruct_to_uncompaddr(&ipv6addr, tempstring);
-		fprintf(stderr, "%s: got address '%s' (formatoptions: %04lx)\n",  DEBUG_function_name, tempstring, formatoptions);
-	};
-	
-	/* output type */
+	/***** output type *****/
 	switch (outputtype) {
 		case -1:
 			/* old implementation */
 			break;
 
 		case FORMAT_base85:
+			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(1); };
 			retval = addr_to_base85(&ipv6addr, resultstring);
 			break;
 				
 		case FORMAT_bitstring:
+			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(1); };
 			if (ipv6calc_debug) {
 				fprintf(stderr, "%s: Call 'librfc2874_addr_to_bitstring'\n", DEBUG_function_name);
 			};
@@ -552,7 +613,7 @@ OUTPUT_type: /* temporary solutions */
 				
 		case FORMAT_revnibbles_int:
 		case FORMAT_revnibbles_arpa:
-			/* temporary workaround for different formats */
+			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(1); };
 			switch (outputtype) {
 				case FORMAT_revnibbles_int:
 					retval = librfc1886_addr_to_nibblestring(&ipv6addr, resultstring, formatoptions, "ip6.int.");
@@ -564,10 +625,12 @@ OUTPUT_type: /* temporary solutions */
 			break;
 			
 		case FORMAT_ifinet6:
+			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(1); };
 			retval = addr_to_ifinet6(&ipv6addr, resultstring);
 			break;
 
 		case FORMAT_ipv6addr:
+			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(1); };
 			if (formatoptions & FORMATOPTION_printuncompressed) {
 				retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, formatoptions);
 			} else if (formatoptions & FORMATOPTION_printfulluncompressed) {
@@ -576,10 +639,16 @@ OUTPUT_type: /* temporary solutions */
 				retval = librfc1884_ipv6addrstruct_to_compaddr(&ipv6addr, resultstring, formatoptions);
 			};
 			break;
+			
+		case FORMAT_eui64:
+			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(1); };
+			formatoptions |= FORMATOPTION_printsuffix;
+			retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, formatoptions);
+			break;
 
 		default:
 			fprintf(stderr, " Outputtype isn't implemented\n");
-			exit (1);
+			exit(1);
 			break;
 	};
 	if (outputtype != -1 ) {
@@ -588,33 +657,7 @@ OUTPUT_type: /* temporary solutions */
 
 	/* <- old behavior */	
 		switch (command & CMD_MAJOR_MASK) {
-			case CMD_mac_to_eui64:
-				if ((argc < 1) || (command & CMD_printhelp)) {
-					if ((argc < 1) && ! (command & CMD_printhelp)) {
-						fprintf(stderr, "missing argument!\n\n");
-					};
-					mac_to_eui64_printhelplong();
-					exit(1);
-				};
-				retval = mac_to_eui64(argv[0], resultstring);
-				break;
-				
-			case CMD_ifinet6_to_compressed:
-				if ((argc < 1) || (command & CMD_printhelp)) {
-					if ((argc < 1) && ! (command & CMD_printhelp)) {
-						fprintf(stderr, "missing argument!\n\n");
-					};
-					ifinet6_to_compressed_printhelplong();
-					exit(1);
-				};
-				if (argc < 2) {
-					retval = ifinet6_to_compressed(argv[0], resultstring, command);
-				} else {
-					/* additional prefixlength conversion */
-					retval = ifinet6_to_compressedwithprefixlength(argv[0], argv[1], resultstring, command);
-				};	
-				break;
-
+			
 			case CMD_eui64_to_privacy:
 				if ((argc < 2) || (command & CMD_printhelp)) {
 					if ((argc < 2) && ! (command & CMD_printhelp)) {
@@ -624,17 +667,6 @@ OUTPUT_type: /* temporary solutions */
 					exit(1);
 				};
 				retval = eui64_to_privacy(argv[0], argv[1], resultstring);
-				break;
-				
-			case CMD_ipv4_to_6to4addr:
-				if ((argc < 1) || (command & CMD_printhelp)) {
-					if ((argc < 2) && ! (command & CMD_printhelp)) {
-						fprintf(stderr, "missing argument!\n\n");
-					};
-					ipv4_to_6to4addr_printhelplong();
-					exit(1);
-				};
-				retval = ipv4_to_6to4addr(argv[0], resultstring);
 				break;
 				
 				

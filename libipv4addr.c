@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.1 2002/02/27 23:07:15 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.2 2002/03/02 19:02:27 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -297,6 +297,7 @@ int addr_to_ipv4addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv4ad
 	};
 
 	ipv4addrp->scope = result;
+	ipv4addrp->flag_valid = 1;
 
 	retval = 0;
 	return (retval);

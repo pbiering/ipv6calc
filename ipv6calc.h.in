@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.h[.in]
- * Version    : $Id: ipv6calc.h.in,v 1.8 2002/03/01 23:26:45 peter Exp $
+ * Version    : $Id: ipv6calc.h.in,v 1.9 2002/03/02 19:02:27 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -75,6 +75,11 @@
 #define CMD_mac_to_eui64		0x2000000l
 #define CMD_eui64_to_privacy		0x4000000l
 #define CMD_ifinet6_to_compressed	0x8000000l
+
+/* Action */
+#define ACTION_mac_to_eui64		0x0000001
+#define ACTION_ipv4_to_6to4addr		0x0000002
+
 
 
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.2 2002/02/25 21:18:51 peter Exp $
+ * Version    : $Id: libmac.c,v 1.3 2002/03/02 19:02:28 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -79,6 +79,8 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 	for ( i = 0; i <= 5; i++ ) {
 		macaddrp->addr[i] = temp[i];
 	};  
+
+	macaddrp->flag_valid = 1;
 
    	retval = 0;	
 	return (retval);
