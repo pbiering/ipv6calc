@@ -1,10 +1,15 @@
 /*
- *  $Id: ChangeLog,v 1.30 2002/03/11 22:17:26 peter Exp $ 
+ *  $Id: ChangeLog,v 1.32 2002/03/16 18:27:11 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20020316/PB:
+	new: ipv6logconv is able to convert addresses of webserver logs into special domain names
+	new: analog example for creating stats from converted logfiles
+	some fixes and enhancements
+
 20020311/PB:
 	new: add vendor database for global EUI-64/48 identifiers
 	new: libieee to display an OUI, if available
