@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.8 2003/06/27 20:38:08 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.9 2003/11/22 12:42:44 peter Exp $
  * Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -30,6 +30,7 @@
 #define LINEBUFFER	16384
 
 long int ipv6calc_debug = 0;
+int flag_quiet = 0;
 
 static int opt_unknown = 0;
 static int opt_noheader = 0;
@@ -61,12 +62,18 @@ int main(int argc,char *argv[]) {
 		switch (i) {
 			case -1:
 				break;
+
 			case 'v':
 				command |= CMD_printversion;
 				break;
+
 			case 'h':
 			case '?':
 				command |= CMD_printhelp;
+				break;
+
+			case 'q':
+				flag_quiet = 1;
 				break;
 				
 			case 'd':
@@ -160,7 +167,9 @@ static void lineparser(void) {
 	ptrptr = &cptr;
 	
 	if (opt_onlyheader == 0) {
-		fprintf(stderr, "Expecting log lines on stdin\n");
+		if (flag_quiet == 0) {
+			fprintf(stderr, "Expecting log lines on stdin\n");
+		};
 	};
 
 	while (opt_onlyheader == 0) {
@@ -175,7 +184,9 @@ static void lineparser(void) {
 		linecounter++;
 
 		if (linecounter == 1) {
-			fprintf(stderr, "Ok, proceeding stdin...\n");
+			if (flag_quiet == 0) {
+				fprintf(stderr, "Ok, proceeding stdin...\n");
+			};
 		};
 		
 		if (ipv6calc_debug == 1) {
@@ -367,7 +378,9 @@ static void lineparser(void) {
 	};
 
 	if (opt_onlyheader == 0) {
-		fprintf(stderr, "...finished\n");
+		if (flag_quiet == 0) {
+			fprintf(stderr, "...finished\n");
+		};
 	};
 
 	/* print result */
