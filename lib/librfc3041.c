@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3041.c
- * Version    : $Id: librfc3041.c,v 1.7 2004/10/30 12:35:52 peter Exp $
- * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc3041.c,v 1.8 2004/10/30 12:44:35 peter Exp $
+ * Copyright  : 2001-2004 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function libary for host identifier privacy extension defined in RFC 3041

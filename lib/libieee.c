@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.4 2004/10/30 12:36:17 peter Exp $
- * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libieee.c,v 1.5 2004/10/30 12:44:35 peter Exp $
+ * Copyright  : 2002-2004 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function libary for IEEE information
