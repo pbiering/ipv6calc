@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.25 2002/03/03 21:39:01 peter Exp $ 
+ *  $Id: ChangeLog,v 1.26 2002/03/03 21:43:16 peter Exp $ 
  */
 
 Info:
@@ -14,6 +14,7 @@ Info:
 	showinfo now understands IPv4 address extraction of autoconfigured link local addresses
 	check format options against matrix
 	understand now input of revnibble (limited support) and bitstring labels
+	tag release 0.40pre3
 
 20020302/PB:
 	major work of redesign is done, test script runs well, unused files removed
