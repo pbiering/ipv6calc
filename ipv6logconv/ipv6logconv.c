@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.9 2004/10/30 12:39:59 peter Exp $
- * Copyright  : 2002-2004 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logconv.c,v 1.10 2005/02/12 16:33:54 peter Exp $
+ * Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile conversions
@@ -40,6 +40,7 @@
 
 long int ipv6calc_debug = 0;
 int flag_quiet = 0;
+int flag_nocache = 0;
 
 /* supported output types:
  *  ipv6addr
@@ -50,6 +51,20 @@ int flag_quiet = 0;
 /* prototypes */
 static int converttoken(char *result, const char *token, const long int outputtype, const int flag_skipunknown);
 static void lineparser(const long int outputtype);
+
+
+/* LRU cache */
+
+#define CACHE_LRU_SIZE 200
+
+static int      cache_lru_max = 0;
+static int      cache_lru_last = 0;
+static int      cache_lru_limit = 20; /* optimum */
+static char     cache_lru_key_token[CACHE_LRU_SIZE][NI_MAXHOST];
+static long int cache_lru_key_outputtype[CACHE_LRU_SIZE];
+static char     cache_lru_value[CACHE_LRU_SIZE][NI_MAXHOST];
+static long int cache_lru_statistics[CACHE_LRU_SIZE];
+
 
 /**************************************************/
 /* main */
@@ -100,6 +115,22 @@ int main(int argc,char *argv[]) {
 				
 			case 'd':
 				ipv6calc_debug = atol(optarg);
+				break;
+
+			case 'c':
+				cache_lru_limit = atoi(optarg);
+				if (cache_lru_limit > CACHE_LRU_SIZE) {
+					cache_lru_limit = CACHE_LRU_SIZE;
+					fprintf(stderr, " Cache limit too big, built-in limit: %d\n", cache_lru_limit);
+				};
+				if (cache_lru_limit < 1) {
+					cache_lru_limit = 1;
+					fprintf(stderr, " Cache limit too small, take minimum: %d\n", cache_lru_limit);
+				};
+				break;
+
+			case 'n':
+				flag_nocache = 1;
 				break;
 
 			case CMD_outputtype:
@@ -173,7 +204,7 @@ static void lineparser(const long int outputtype) {
 	char token[LINEBUFFER];
 	char resultstring[LINEBUFFER];
 	char *charptr, *cptr, **ptrptr;
-	int linecounter = 0, retval;
+	int linecounter = 0, retval, i;
 
 	ptrptr = &cptr;
 	
@@ -304,6 +335,13 @@ static void lineparser(const long int outputtype) {
 
 	if (flag_quiet == 0) {
 		fprintf(stderr, "...finished\n");
+
+		if (flag_nocache == 0) {
+			fprintf(stderr, "Cache statistics:\n");
+			for (i = 0; i < cache_lru_limit; i++) {
+				fprintf(stderr, "Cache distance: %3d  hits: %8ld\n", i, cache_lru_statistics[i]);
+			};
+		};
 	};
 	return;
 };
@@ -334,6 +372,56 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 
 	if (strlen(token) == 0) {
 		return (1);
+	};
+
+	/* use cache ? */
+	if (flag_nocache == 0 && cache_lru_max > 0) {
+		/* check last seen one first */
+		if (ipv6calc_debug & 0x4) {
+			fprintf(stderr, "LRU cache: look for key=%s\n", token);
+		};
+
+		if (cache_lru_key_outputtype[cache_lru_last - 1] == outputtype) {
+			if (strcmp(cache_lru_key_token[cache_lru_last - 1], token) == 0) {
+				snprintf(resultstring, NI_MAXHOST, cache_lru_value[cache_lru_last - 1]);
+				cache_lru_statistics[0]++;
+				if (ipv6calc_debug & 0x4) {
+					fprintf(stderr, "LRU cache: hit last line=%d key_token=%s key_outputtype=%lx value=%s\n", cache_lru_last - 1, token, outputtype, resultstring);
+				};
+				return (0);
+			};
+		} else {
+			/* run backwards to first entry */
+			if (cache_lru_last > 1) {
+				for (i = cache_lru_last - 1; i > 0; i--) {
+					if (cache_lru_key_outputtype[i - 1] == outputtype) {
+						if (strcmp(cache_lru_key_token[i - 1], token) == 0) {
+							snprintf(resultstring, NI_MAXHOST, cache_lru_value[i - 1]);
+							cache_lru_statistics[cache_lru_last - i]++;
+							if (ipv6calc_debug & 0x4) {
+								fprintf(stderr, "LRU cache: hit line=%d key_token=%s key_outputtype=%lx value=%s\n", i - 1, token, outputtype, resultstring);
+							};
+							return (0);
+						};
+					};
+				};
+			};
+			/* round robin */ 
+			if (cache_lru_last < cache_lru_max) {
+				for (i = cache_lru_max; i > cache_lru_last; i--) {
+					if (cache_lru_key_outputtype[i - 1] == outputtype) {
+						if (strcmp(cache_lru_key_token[i - 1], token) == 0) {
+							snprintf(resultstring, NI_MAXHOST, cache_lru_value[i - 1]);
+							cache_lru_statistics[cache_lru_max - i + cache_lru_last]++;
+							if (ipv6calc_debug & 0x4) {
+								fprintf(stderr, "LRU cache: hit line=%d key_token=%s key_outputtype=%lx value=%s\n", i - 1, token, outputtype, resultstring);
+							};
+							return (0);
+						};
+					};
+				};
+			};
+		};
 	};
 
 
@@ -563,6 +651,29 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 		default:
 			fprintf(stderr, " Outputtype isn't implemented\n");
 			return (1);
+	};
+
+	/* use cache ? */
+	if (flag_nocache == 0) {
+		/* calculate pointer */
+		if (cache_lru_max < cache_lru_limit) {
+			cache_lru_last++;
+			cache_lru_max++;
+		} else {
+			if (cache_lru_last == cache_lru_limit) {
+				cache_lru_last = 1;
+			} else {
+				cache_lru_last++;
+			};
+		};
+
+		/* store key and value */
+		snprintf(cache_lru_key_token[cache_lru_last - 1], NI_MAXHOST, token);
+		cache_lru_key_outputtype[cache_lru_last - 1] = outputtype;
+		snprintf(cache_lru_value[cache_lru_last - 1], NI_MAXHOST, resultstring);
+		if (ipv6calc_debug & 0x4) {
+			fprintf(stderr, "LRU cache: fill line=%d key_token=%s key_outputtype=%lx value=%s\n", cache_lru_last - 1, cache_lru_key_token[cache_lru_last - 1], cache_lru_key_outputtype[cache_lru_last - 1], cache_lru_value[cache_lru_last - 1]);
+		};
 	};
 
 	return (0);
