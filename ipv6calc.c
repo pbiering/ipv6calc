@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.6 2002/02/25 21:18:50 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.7 2002/02/27 08:07:59 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -52,8 +52,8 @@ void printinfo()  {
 void printhelp() {
 	printversion();
 	printcopyright();
-	fprintf(stderr, "Usage: (see '%s --command -?' for more help)\n", PROGRAM_NAME);
-	fprintf(stderr, " [-d|--debug debugvalue)\n");
+	fprintf(stderr, "Usage: (see '%s <command> -?' for more help)\n", PROGRAM_NAME);
+	fprintf(stderr, " [-d|--debug <debugvalue>]\n");
 
 	addr_to_ip6int_printhelp();
 	addr_to_bitstring_printhelp();
