@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi,v 1.22 2003/09/06 13:14:21 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi,v 1.23 2003/09/07 14:05:58 peter Exp $
 # Copyright  : 2002-2003 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -53,6 +53,10 @@ my %url_whoisservers = (
 	'APNIC'	=> {
 		'ipv4'	=> "http://www.apnic.net/apnic-bin/whois2.pl?search=",
 		'ipv6'	=> "http://www.apnic.net/apnic-bin/whois2.pl?search=",
+	},
+	'LACNIC'	=> {
+		'ipv4'	=> "http://lacnic.net/cgi-bin/lacnic/whois?qr=",
+		'ipv6'	=> "http://lacnic.net/cgi-bin/lacnic/whois?qr=",
 	},
 	'IANA'	=> {
 		'ipv4'	=> "",
@@ -201,9 +205,9 @@ my %text = (
 # Please report, if more cleanup is needed on other systems
 
 # Hardwire path to well known
-if ( defined %ENV->{'PATH'} ) { %ENV->{'PATH'}="/bin:/usr/bin:/usr/local/bin"; };
+if ( defined $ENV{'PATH'} ) { $ENV{'PATH'}="/bin:/usr/bin:/usr/local/bin"; };
 # Clear shell environment
-if ( defined %ENV->{'BASH_ENV'} ) { %ENV->{'BASH_ENV'}=""; };
+if ( defined $ENV{'BASH_ENV'} ) { $ENV{'BASH_ENV'}=""; };
 
 ## Fallbacks
 if (! defined $outputformat) { $outputformat = "text" };
@@ -272,7 +276,7 @@ sub print_infohash ($) {
 	if ( ! defined \$phash ) {
 		&print_tagoutput ( "      <tr>\n" );
 		&print_tagoutput ( "        <td colspan=\"3\">" );
-		print %text->{'nodata'}->{$lang};
+		print $text{'nodata'}->{$lang};
 		&print_textonly ("\n");
 		&print_tagoutput ( "</td>\n" );
 		&print_tagoutput ( "</tr>\n" );
@@ -283,17 +287,17 @@ sub print_infohash ($) {
 		# catch internal keys
 		if ( $key =~ /^IPV6CALC_/ ) {
 			if ( $key eq "IPV6CALC_COPYRIGHT" ) {
-				$ipv6calc_copyright = %$phash->{$key};
+				$ipv6calc_copyright = $$phash{$key};
 				$ipv6calc_copyright =~ s/^\"//;
 				$ipv6calc_copyright =~ s/\"$//;
 			};
 			if ( $key eq "IPV6CALC_VERSION" ) {
-				$ipv6calc_version = %$phash->{$key};
+				$ipv6calc_version = $$phash{$key};
 				$ipv6calc_version =~ s/^\"//;
 				$ipv6calc_version =~ s/\"$//;
 			};
 			if ( $key eq "IPV6CALC_NAME" ) {
-				$ipv6calc_name = %$phash->{$key};
+				$ipv6calc_name = $$phash{$key};
 				$ipv6calc_name =~ s/^\"//;
 				$ipv6calc_name =~ s/\"$//;
 			};
@@ -318,9 +322,9 @@ sub print_infohash ($) {
 		# print description
 		if ($outputtype ne "simple") {
 			&print_tagoutput ( "        <td>" );
-			if (defined %text->{$key}->{$lang}) {
-				print %text->{$key}->{$lang};
-				&print_textonly (' ' x ($length_max_description - length(%text->{$key}->{$lang})) );
+			if (defined $text{$key}->{$lang}) {
+				print $text{$key}->{$lang};
+				&print_textonly (' ' x ($length_max_description - length($text{$key}->{$lang})) );
 			} else {
 				&print_textonly (' ' x ($length_max_description) );
 			};
@@ -336,8 +340,8 @@ sub print_infohash ($) {
 		};
 
 		if ( $key eq "IPV4" ) {
-			if ( defined %$phash->{'IPV4_REGISTRY'} ) {
-				$whois_registry = %$phash->{'IPV4_REGISTRY'};
+			if ( defined $$phash{'IPV4_REGISTRY'} ) {
+				$whois_registry = $$phash{'IPV4_REGISTRY'};
 				$whois_type = "ipv4";
 				$flag_whoisurl = 1;
 			} else {
@@ -347,23 +351,23 @@ sub print_infohash ($) {
 				$flag_whoisurl = 1;
 			};
 		} elsif ( $key eq "IPV6" ) {
-			if ( defined %$phash->{'IPV6_REGISTRY'} ) {
-				$whois_registry = %$phash->{'IPV6_REGISTRY'};
+			if ( defined $$phash{'IPV6_REGISTRY'} ) {
+				$whois_registry = $$phash{'IPV6_REGISTRY'};
 				$whois_type = "ipv6";
 				$flag_whoisurl = 1;
 			};
 		} elsif ( $key eq "IPV4_6TO4" ) {
-			if ( defined %$phash->{'IPV4_6TO4_REGISTRY'} ) {
-				$whois_registry = %$phash->{'IPV4_6TO4_REGISTRY'};
+			if ( defined $$phash{'IPV4_6TO4_REGISTRY'} ) {
+				$whois_registry = $$phash{'IPV4_6TO4_REGISTRY'};
 				$whois_type = "ipv4";
 				$flag_whoisurl = 1;
 			};
 		};
 
 		if ( $flag_whoisurl == 1 ) {
-			if ( defined %url_whoisservers->{$whois_registry}->{$whois_type} ) {
-				if ( %url_whoisservers->{$whois_registry}->{$whois_type} ne "" ) {
-					&print_tagoutput ( "<a href=\"" . %url_whoisservers->{$whois_registry}->{$whois_type} . %$phash->{$key} . "\">" );
+			if ( defined $url_whoisservers{$whois_registry}->{$whois_type} ) {
+				if ( $url_whoisservers{$whois_registry}->{$whois_type} ne "" ) {
+					&print_tagoutput ( "<a href=\"" . $url_whoisservers{$whois_registry}->{$whois_type} . $$phash{$key} . "\">" );
 				} else {
 					$flag_whoisurl = 0;
 				};
@@ -375,7 +379,7 @@ sub print_infohash ($) {
 			};
 		};
 		
-		print %$phash->{$key};
+		print $$phash{$key};
 
 		if ( $flag_whoisurl == 1 ) {
 			&print_tagoutput ( "</a>" );
@@ -486,15 +490,15 @@ if ( defined $addr_remote ) {
 			&print_error("Error: problem parsing data");
 		};
 		chomp $content;
-		%infoh_remote->{$key} = $content;
+		$infoh_remote{$key} = $content;
 	};
 	if (defined $name_remote) {
 		if ($name_remote ne $addr_remote) {
-			%infoh_remote->{'NAME'} = $name_remote;
+			$infoh_remote{'NAME'} = $name_remote;
 		};
 	};
 	if (defined $user_agent) {
-		%infoh_remote->{'USERAGENT'} = $user_agent;
+		$infoh_remote{'USERAGENT'} = $user_agent;
 	};
 };
 
@@ -509,11 +513,11 @@ if ( defined $addr_server ) {
 			&print_error("Error: problem parsing data");
 		};
 		chomp $content;
-		%infoh_server->{$key} = $content;
+		$infoh_server{$key} = $content;
 	};
 	if (defined $name_server) {
 		if ($name_server ne $addr_server) {
-			%infoh_server->{'NAME'} = $name_server;
+			$infoh_server{'NAME'} = $name_server;
 		};
 	};
 };
@@ -523,11 +527,11 @@ if ( defined $addr_server ) {
 if ($debug & 0x01) {
 	print "REMOTE\n";
 	for my $key (keys %infoh_remote) {
-		print " ". $key . "=" .  %infoh_remote->{$key} . "\n";
+		print " ". $key . "=" .  $infoh_remote{$key} . "\n";
 	};
 	print "SERVER\n";
 	for my $key (keys %infoh_server) {
-		print " " . $key . "=" .  %infoh_server->{$key} . "\n";
+		print " " . $key . "=" .  $infoh_server{$key} . "\n";
 	};
 };
 
@@ -538,8 +542,8 @@ for my $key (keys %text) {
 		$length_max_key = length($key);
 	};
 
-	if (length(%text->{$key}->{$lang}) > $length_max_description) {
-		$length_max_description = length(%text->{$key}->{$lang});
+	if (length($text{$key}->{$lang}) > $length_max_description) {
+		$length_max_description = length($text{$key}->{$lang});
 
 	};
 };
@@ -551,7 +555,7 @@ if ($outputformat eq "htmlfull") {
 	&print_tagoutput ( "  <head>\n" );
 	&print_tagoutput ( "    <meta name=\"Author\" content=\"Peter Bieringer\">\n" );
 	&print_tagoutput ( "    <title>" );
-	print %text->{'title'}->{$lang};
+	print $text{'title'}->{$lang};
 	&print_tagoutput ( "</title>\n" );
 	&print_tagoutput ( "  </head>\n" );
 	&print_tagoutput ( "  <body>\n" );
@@ -564,7 +568,7 @@ if ($outputformat eq "htmlfull") {
 &print_textonly ("\n");
 &print_tagoutput ( "      <tr>\n" );
 &print_tagoutput ( "        <th colspan=\"3\">" );
-print %text->{'REMOTE'}->{$lang};
+print $text{'REMOTE'}->{$lang};
 &print_textonly ("\n");
 &print_tagoutput ( "</th>\n" );
 &print_tagoutput ( "      </tr>\n" );
@@ -576,7 +580,7 @@ if ( $skip_server == 0 ) {
 	&print_textonly ("\n");
 	&print_tagoutput ( "      <tr>\n" );
 	&print_tagoutput ( "        <th colspan=\"3\">" );
-	print %text->{'SERVER'}->{$lang};
+	print $text{'SERVER'}->{$lang};
 	&print_textonly ("\n");
 	&print_tagoutput ( "</th>\n" );
 	&print_tagoutput ( "      </tr>\n" );
@@ -589,11 +593,11 @@ if ( $skip_server == 0 ) {
 &print_tagoutput ( "        <td colspan=\"3\">\n" );
 
 if ($outputformat eq "html" || $outputformat eq "htmlfull") {
-	print "          <font size=-2>" . %text->{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "</font><br>\n";
-	print "          <font size=-2>" . %text->{'powered'}->{$lang} . " <a href=\"http://www.deepspace6.net/projects/ipv6calc.html\">" . $ipv6calc_name . "</a> " . $ipv6calc_version . ", " . $ipv6calc_copyright . "</font>\n";
+	print "          <font size=-2>" . $text{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "</font><br>\n";
+	print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a href=\"http://www.deepspace6.net/projects/ipv6calc.html\">" . $ipv6calc_name . "</a> " . $ipv6calc_version . ", " . $ipv6calc_copyright . "</font>\n";
 } else {
-	print %text->{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "\n";
-	print %text->{'powered'}->{$lang} . " " . $ipv6calc_name . " " . $ipv6calc_version . ", " . $ipv6calc_copyright . " (http://www.deepspace6.net/projects/ipv6calc.html)" . "\n";
+	print $text{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "\n";
+	print $text{'powered'}->{$lang} . " " . $ipv6calc_name . " " . $ipv6calc_version . ", " . $ipv6calc_copyright . " (http://www.deepspace6.net/projects/ipv6calc.html)" . "\n";
 };
 
 &print_tagoutput ( "        </td>\n" );
