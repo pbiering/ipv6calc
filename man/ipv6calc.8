@@ -1,0 +1,37 @@
+.TH "ipv6calc" "8" "0.0.1" "Matanuki@Goudge.org" ""
+.SH "NAME"
+.LP 
+ipv6calc \- a small utility written in C to manipulate IPv6 addresses.
+.SH "SYNTAX"
+.LP 
+ipv6calc [\fIoption\fP] <\fIipv6addr\fP>
+
+.SH "DESCRIPTION"
+.LP 
+ipv6calc is a small utility in C to manipulate IPv6 addresses.
+
+This utility is used to extend features on network\-functions\-ipv6. 
+.SH "OPTIONS"
+.LP 
+.TP 
+\fB\-\-addr_to_ip6int\fR <\fIipv6addr[/prefixlength]\fP>
+Scans specified <\fIdirectory\fP>.
+.TP 
+\fB\-\-debug|\-d\fR 
+.TP 
+\fB\-?\fR
+Output help information and exit.
+.TP 
+\fB\-? <option>\fR
+display option help.
+.TP 
+\fB\-\-version|\-v\fR
+Output version information and exit.
+.SH "EXAMPLES"
+.LP 
+To run this program the standard way type:
+.LP 
+ipv6calc \-r 3ffe:400:100:f101::1
+.SH "AUTHORS"
+.LP 
+Peter Bieringer <pb@bieringer.de>
