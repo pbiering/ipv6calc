@@ -2,8 +2,9 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.16 2004/08/30 19:55:41 peter Exp $
-# Copyright  : 2002-2004 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: create-registry-list.pl,v 1.17 2005/02/12 14:19:47 peter Exp $
+# Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
+# License    : GNU GPL v2
 #
 # Information:
 #  Perl program which creates IPv4 address assignement header
@@ -401,31 +402,76 @@ print OUT qq| * Generated     : $now_string
 
 |;
 
-# Structure
+
+# Create hash
+my %data;
+
+sub fill_data($$) {
+	my $parray = shift || die "missing array pointer";
+	my $reg = shift || die "missing registry";
+
+	foreach my $entry (sort @$parray) {
+		my ($ipv4, $length) = split /\//, $entry;
+
+		my $ipv4_hex = sprintf("%08x", &ipv4_to_dec($ipv4));
+		my $mask_hex = sprintf("%08x", &length_to_dec($length));
+		
+		$data{$ipv4_hex}->{'mask'} = $mask_hex;
+		$data{$ipv4_hex}->{'reg'} = $reg;
+	};
+};
+
+&fill_data(\@apnic_agg, "APNIC");
+&fill_data(\@ripencc_agg, "RIPENCC");
+&fill_data(\@arin_agg, "ARIN");
+&fill_data(\@lacnic_agg, "LACNIC");
+&fill_data(\@iana_agg, "IANA");
+
+my %data_hint;
+
+# Main data structure
 print OUT qq|
 static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 |;
 
 
-sub print_header_array($$) {
-	my $parray = shift || die "missing array pointer";
-	my $reg = shift || die "missing registry";
+my $i = 0;
+foreach my $ipv4_hex (sort keys %data) {
+	printf OUT "\t{ 0x%s, 0x%s, \"%s\" },\n", $ipv4_hex, $data{$ipv4_hex}->{'mask'}, $data{$ipv4_hex}->{'reg'};
 
-	foreach my $entry (@$parray) {
-		my ($ipv4, $length) = split /\//, $entry;
-		
-		printf OUT "\t{ 0x%08x, 0x%08x, \"%s\" },\n", &ipv4_to_dec($ipv4), &length_to_dec($length), $reg;
+	# Get hint
+	my $octet_leading = substr($ipv4_hex, 0, 2);
+	if (! defined $data_hint{$octet_leading}) {
+		$data_hint{$octet_leading} = $i;
 	};
+	$i++;
 };
-
-&print_header_array(\@apnic_agg, "APNIC");
-&print_header_array(\@ripencc_agg, "RIPENCC");
-&print_header_array(\@arin_agg, "ARIN");
-&print_header_array(\@lacnic_agg, "LACNIC");
-&print_header_array(\@iana_agg, "IANA");
 
 print OUT qq|
 };
 |;
+
+# Hint table data structure
+print OUT qq|
+static const s_ipv4addr_assignment_hint dbipv4addr_assignment_hint[256] = {
+|;
+
+for (my $j = 0; $j < 256; $j++) {
+	my $string = sprintf("%02x", $j);
+	my $value;
+
+	if (defined $data_hint{$string}) {
+		$value = $data_hint{$string};
+	} else {
+		$value = -1;
+	};
+
+	printf OUT "\t{ 0x%02x, %d },\n", $j, $value;
+};
+
+print OUT qq|
+};
+|;
+
 
 print "Finished\n";
