@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.3 2003/06/15 15:08:42 peter Exp $
+ * Version    : $Id: ipv6logstats.h,v 1.4 2003/06/15 15:09:54 peter Exp $
  * Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -50,6 +50,7 @@ typedef struct {
 } stat_entries;
 
 /*@unused@*/ static stat_entries ipv6logstats_statentries[] = {
+	{ STATS_ALL		, 0, "ALL" },
 	{ STATS_IPV4		, 0, "IPv4" },
 	{ STATS_IPV6		, 0, "IPv6" },
 	{ STATS_UNKNOWN		, 0, "UNKNOWN" },
