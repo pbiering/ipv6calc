@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.1 2002/03/18 19:59:24 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.2 2002/03/19 23:15:09 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -63,13 +63,21 @@ typedef struct {
 #define IPV6_ADDR_MAPPED			0x1000U
 #define IPV6_ADDR_RESERVED			0x2000U	/* reserved address space */
 
-#define IPV6_NEW_ADDR_6TO4			0x10000U
-#define IPV6_NEW_ADDR_6BONE			0x20000U
-#define IPV6_NEW_ADDR_AGU			0x40000U
-#define IPV6_NEW_ADDR_UNSPECIFIED		0x80000U
-#define IPV6_NEW_ADDR_SOLICITED_NODE		0x100000U
-#define IPV6_NEW_ADDR_ISATAP			0x200000U
-#define IPV6_NEW_ADDR_PRODUCTIVE		0x400000U
+#define IPV6_NEW_ADDR_6TO4			0x00010000U
+#define IPV6_NEW_ADDR_6BONE			0x00020000U
+#define IPV6_NEW_ADDR_AGU			0x00040000U
+#define IPV6_NEW_ADDR_UNSPECIFIED		0x00080000U
+#define IPV6_NEW_ADDR_SOLICITED_NODE		0x00100000U
+#define IPV6_NEW_ADDR_ISATAP			0x00200000U
+#define IPV6_NEW_ADDR_PRODUCTIVE		0x00400000U
+
+/* Registries */
+#define IPV6_ADDR_REGISTRY_6BONE	1
+#define IPV6_ADDR_REGISTRY_IANA		2
+#define IPV6_ADDR_REGISTRY_APNIC	3
+#define IPV6_ADDR_REGISTRY_ARIN		4
+#define IPV6_ADDR_REGISTRY_RIPE		5
+#define IPV6_ADDR_REGISTRY_RESERVED	6
 
 /* text representations */
 typedef struct {
@@ -94,8 +102,23 @@ typedef struct {
 	{ IPV6_NEW_ADDR_UNSPECIFIED	, "unspecified" },
 	{ IPV6_NEW_ADDR_SOLICITED_NODE	, "solicited-node" },
 	{ IPV6_NEW_ADDR_ISATAP		, "ISATAP" },
+	{ IPV6_NEW_ADDR_PRODUCTIVE	, "productive" }
 };
 
+typedef struct {
+	int number;
+	char *token;
+	char *tokensimple;
+} s_type2;
+
+/*@unused@*/ static const s_type2 ipv6calc_ipv6addrregistry[] = {
+	{ IPV6_ADDR_REGISTRY_6BONE	, "6BONE"	, "6bone" 	},
+	{ IPV6_ADDR_REGISTRY_IANA	, "IANA"	, "iana" 	},
+	{ IPV6_ADDR_REGISTRY_APNIC	, "APNIC"	, "apnic" 	},
+	{ IPV6_ADDR_REGISTRY_ARIN	, "ARIN" 	, "arin"	},
+	{ IPV6_ADDR_REGISTRY_RIPE	, "RIPE NCC"	, "ripe-ncc"	},
+	{ IPV6_ADDR_REGISTRY_RESERVED	, "reserved"	, "reserved"	}
+};
 #endif
 
 
@@ -113,6 +136,7 @@ extern void ipv6addr_clearall(ipv6calc_ipv6addr *ipv6addrp);
 extern void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6addr *ipv6addrp_src);
 
 extern unsigned int ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp);
+extern int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp);
 
 extern int  addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
 

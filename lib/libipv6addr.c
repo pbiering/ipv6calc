@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.1 2002/03/18 19:59:24 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.2 2002/03/19 23:15:09 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -247,15 +247,12 @@ void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6addr *ip
 
 
 /*
- * function gets type of an IPv6 address
+ * Get type of an IPv6 address
  *
  * with credits to kernel and USAGI developer team
-  basic code was taken from "kernel/net/ipv6/addrconf.c"
+ * basic code was taken from "kernel/net/ipv6/addrconf.c"
  *
- * mod: ipv6addrp = pointer to IPv6 address structure
- * in: numdword  = number of word (0 = MSB, 3 = LSB)
- * in: value     = value to set
- * additional: calls exit on out of range
+ * in: ipv6addrp = pointer to IPv6 address structure
  */
 
 unsigned int ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
@@ -274,18 +271,24 @@ unsigned int ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 	};
 
 	/* address space information  */
+	if ((st & 0xE0000000u) == 0x20000000u) {
+		/* 2000::/3 -> aggregatable global unicast */
+		type |= IPV6_NEW_ADDR_AGU;
+	};
+	
+	/* address space information  */
 	if ((st & 0xFFFF0000u) == 0x3FFE0000u) {
-		/* 3ffe:... experimental 6bone*/
+		/* 3ffe::/16 -> experimental 6bone */
 		type |= IPV6_NEW_ADDR_6BONE;
 	};
 
 	if ((st & 0xFFFF0000u) == 0x20020000u) {
-		/* 2002:... 6to4 tunneling */
+		/* 2002::/16 -> 6to4 tunneling */
 		type |= IPV6_NEW_ADDR_6TO4;
 	};
 	
 	if ((st & 0xFFFF0000u) == 0x20010000u) {
-		/* 2001:... productive IPv6 address space */
+		/* 2001::/16 -> productive IPv6 address space */
 		type |= IPV6_NEW_ADDR_PRODUCTIVE;
 	};
 	
@@ -357,10 +360,60 @@ unsigned int ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 		if (st2 == 0x0000ffffu)
 			type |= IPV6_ADDR_MAPPED;
 			return (type);
-	}
+	};
 
 	type |= IPV6_ADDR_RESERVED;
 	return (type);
+};
+
+/*
+ * Get IPv6 address assignement information
+ *
+ * See also: http://www.iana.org/assignments/ipv6-tla-assignments
+ *
+ * in : ipv6addrp = pointer to IPv6 address structure
+ * out: assignment number (-1 = no result)
+ */
+int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
+	uint32_t st, st1, st2, st3;
+
+	st =  ipv6addr_getdword(ipv6addrp, 0); /* 32 MSB */
+	st1 = ipv6addr_getdword(ipv6addrp, 1);
+	st2 = ipv6addr_getdword(ipv6addrp, 2);
+	st3 = ipv6addr_getdword(ipv6addrp, 3); /* 32 LSB */
+	
+	if ((st & 0xFFFF0000u) == 0x3FFE0000u) {
+		/* 3ffe::/16 -> 6bone space */
+		return(IPV6_ADDR_REGISTRY_6BONE);
+	};
+		
+	if ((st & 0xFFFF0000u) == 0x20010000u) {
+		/* 2001::/16 -> productive IPv6 address space */
+		
+		if ( (st & 0xFFFFFE00u) == 0x20010000u) {
+			/* 2001:0000::/23 -> IANA */
+			return(IPV6_ADDR_REGISTRY_IANA);
+		};
+		
+		if ( (st & 0xFFFFFE00u) == 0x20010200u) {
+			/* 2001:0200::/23 -> APNIC */
+			return(IPV6_ADDR_REGISTRY_APNIC);
+		};
+		
+		if ( (st & 0xFFFFFE00u) == 0x20010400u) {
+			/* 2001:0400::/23 -> ARIN */
+			return(IPV6_ADDR_REGISTRY_ARIN);
+		};
+		
+		if ( (st & 0xFFFFFE00u) == 0x20010600u) {
+			/* 2001:0600::/23 -> RIPE NCC */
+			return(IPV6_ADDR_REGISTRY_RIPE);
+		};
+
+		return (IPV6_ADDR_REGISTRY_RESERVED);
+	};
+
+	return(-1);
 };
 
 

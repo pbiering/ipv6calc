@@ -1,6 +1,6 @@
 # Project    : ipv6calc/lib
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.1 2002/03/18 19:59:22 peter Exp $
+# Version    : $Id: Makefile,v 1.2 2002/03/19 23:15:09 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -16,9 +16,7 @@ CC	= gcc
 AR	= ar
 RANLIB	= ranlib
 
-OBJS	= libipv6calc.o librfc1924.o librfc1884.o libmac.o libeui64.o librfc3041.o libipv6addr.o librfc2874.o librfc1886.o librfc3056.o libipv4addr.o libifinet6.o libieee.o
-
-OBJSAPP = ipv6calchelp.o ipv6calctypes.o
+OBJS	= libipv6calc.o librfc1924.o librfc1884.o libmac.o libeui64.o librfc3041.o libipv6addr.o librfc2874.o librfc1886.o librfc3056.o libipv4addr.o libifinet6.o libieee.o ipv6calchelp.o ipv6calctypes.o
 
 all:		libipv6calc.a
 
