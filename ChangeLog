@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.24 2002/03/03 20:14:52 peter Exp $ 
+ *  $Id: ChangeLog,v 1.25 2002/03/03 21:39:01 peter Exp $ 
  */
 
 Info:
@@ -13,7 +13,7 @@ Info:
 	implement auto detection for input
 	showinfo now understands IPv4 address extraction of autoconfigured link local addresses
 	check format options against matrix
-	understand now input of revnibble (limited support)
+	understand now input of revnibble (limited support) and bitstring labels
 
 20020302/PB:
 	major work of redesign is done, test script runs well, unused files removed

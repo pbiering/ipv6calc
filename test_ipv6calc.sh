@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.9 2002/03/03 18:21:34 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.10 2002/03/03 21:39:01 peter Exp $
 # Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Best view with tabsize 4 (historic...)
@@ -14,11 +14,12 @@ testscenarios() {
 cat <<END | grep -v "^#"
 ## ip6.int.
 --addr_to_ip6int 3ffe:ffff:100:f101::1					=1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
---in ipv6 --out revnibbles.int 3ffe:ffff:100:f101::1		=1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
+--in ipv6 --out revnibbles.int 3ffe:ffff:100:f101::1			=1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
 --addr_to_ip6int 3ffe:ffff:100:f101::1/64				=1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
+--in revnibbles.int --out ipv6 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.	=3ffe:ffff:100:f101::1/128
 ## ip6.arpa.
 --addr_to_ip6arpa 3ffe::1/64						=0.0.0.0.0.0.0.0.0.0.0.0.e.f.f.3.ip6.arpa.
---in ipv6 --out revnibbles.arpa	3ffe::1/64			=0.0.0.0.0.0.0.0.0.0.0.0.e.f.f.3.ip6.arpa.
+--in ipv6 --out revnibbles.arpa	3ffe::1/64				=0.0.0.0.0.0.0.0.0.0.0.0.e.f.f.3.ip6.arpa.
 -a --uppercase 3ffe::1/64						=0.0.0.0.0.0.0.0.0.0.0.0.E.F.F.3.IP6.ARPA.
 ## to uncompressed
 --addr_to_compressed 3ffe:ffff:0100:f101:0000:0000:0000:0001		=3ffe:ffff:100:f101::1
@@ -94,6 +95,7 @@ cat <<END | grep -v "^#"
 --addr_to_bitstring --printprefix 3ffe:ffff::1/64			=\\\\[x3ffeffff00000000/64].ip6.arpa.
 --addr_to_bitstring --printprefix --printstart 17 3ffe:ffff:0100:e100:0123:4567:89ab:cdef/64	=\\\\[xffff0100e100/48]
 --addr_to_bitstring --uppercase 3ffe:ffff::1				=\\\\[x3FFEFFFF000000000000000000000001/128].IP6.ARPA.
+--in bitstring --out ipv6 \\\\[x3FFEFFFF000000000000000000000001/64].IP6.ARPA.	=3ffe:ffff::1/64
 ## IPv4 -> IPv6 (6to4)
 --ipv4_to_6to4addr 11.12.13.14						=2002:b0c:d0e::
 --in ipv4 --out ipv6 --action conv6to4 11.12.13.14		=2002:b0c:d0e::

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.c
- * Version    : $Id: librfc2874.c,v 1.5 2002/03/03 11:01:54 peter Exp $
+ * Version    : $Id: librfc2874.c,v 1.6 2002/03/03 21:39:01 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 #include "ipv6calc.h"
 #include "libipv6addr.h"
@@ -104,6 +105,172 @@ int librfc2874_addr_to_bitstring(ipv6calc_ipv6addr *ipv6addrp, char *resultstrin
 
 	retval = 0;
 
+	return (retval);
+};
+#undef DEBUG_function_name
+
+
+/*
+ * function a reverse nibble format string into IPv6addr_structure
+ *
+ * in : inputstring
+ * mod: *ipv6addrp = IPv6 address structure
+ * ret: ==0: ok, !=0: error
+ */
+#define DEBUG_function_name "librfc2874/nibblestring_to_ipv6addrstruct"
+int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+	int retval = 1;
+	char tempstring[NI_MAXHOST], tempstring2[NI_MAXHOST];
+	int nibblecounter = 0;
+	int noctet, xdigit, startprefixlength, endprefixlength;
+	int length, index = 0, prefixlength;
+
+	/* clear output structure */
+	ipv6addr_clearall(ipv6addrp);
+
+	/* reverse copy of string */
+	sprintf(tempstring, "%s", inputstring);
+	string_to_lowcase(tempstring);
+
+	if ( ipv6calc_debug & DEBUG_librfc2874 ) {
+		fprintf(stderr, "%s: get string: %s\n", DEBUG_function_name, tempstring);
+	};
+
+	length = strlen(tempstring);
+
+	/* check length */
+	if (length < 5) {
+		sprintf(resultstring, "Length %d too low", length);
+		return (1);
+	};
+	
+	/* check start */
+	if (tempstring[index] != '\\') {
+		sprintf(resultstring, "Char '%c' not expected on position %d", tempstring[index], index + 1);
+		return (1);
+	};
+	index++;
+	
+	if (tempstring[index] != '[') {
+		sprintf(resultstring, "Char '%c' not expected on position %d", tempstring[index], index + 1);
+		return (1);
+	};
+	index++;
+	
+	if (tempstring[index] != 'x') {
+		sprintf(resultstring, "Char '%c' not expected on position %d", tempstring[index], index + 1);
+		return (1);
+	};
+	index++;
+	
+	while(isxdigit(tempstring[index])) {
+		sprintf(tempstring2, "%c", tempstring[index]);
+		
+		/* now proceed nibbles */
+		retval = sscanf(tempstring2, "%x", &xdigit);
+
+		if (retval != 1) {
+			sprintf(resultstring, "Nibble '%s' at position %d cannot be parsed", tempstring2, index + 1);
+			return (1);
+		};
+
+		if (xdigit < 0 || xdigit > 0xf) {
+			sprintf(resultstring, "Nibble '%s' at dot position %d is out of range", tempstring2, index + 1);
+			return (1);
+		};
+
+		noctet = nibblecounter >> 1; /* divided by 2 */
+		
+		if (noctet > 15) {
+			sprintf(resultstring, "Too many nibbles");
+			return (1);
+		};
+
+		if (nibblecounter & 0x01) {
+			/* most significant bits */
+			(*ipv6addrp).in6_addr.s6_addr[noctet] = ((*ipv6addrp).in6_addr.s6_addr[noctet] & 0xf0) | xdigit;
+		} else {
+			/* least significant bits */
+			(*ipv6addrp).in6_addr.s6_addr[noctet] = ((*ipv6addrp).in6_addr.s6_addr[noctet] & 0x0f) | (xdigit << 4);
+		};
+
+		nibblecounter++;
+		index++;
+		if (index > length) {
+			break;
+		};
+	};
+	
+	if (index > length) {
+		sprintf(resultstring, "Unexpected end of string");
+		return (1);
+	};
+
+	if (tempstring[index] == ']') {
+		/* bitstring label closed */
+		ipv6addrp->flag_prefixuse = 1;
+		ipv6addrp->prefixlength = nibblecounter << 2;
+		goto END_bitstring_to_ipv6addrstruct;
+	};
+	index++;
+
+	if (index > length) {
+		sprintf(resultstring, "Unexpected end of string");
+		return (1);
+	};
+
+	/* proceed prefix length */
+	if (tempstring[index] == '/') {
+		sprintf(resultstring, "Char '%c' not expected on position %d", tempstring[index], index + 1);
+		return (1);
+	};
+	index++;
+
+	if (index > length) {
+		sprintf(resultstring, "Unexpected end of string");
+		return (1);
+	};
+
+	startprefixlength = index;
+	endprefixlength = 0;
+	while(isdigit(tempstring[index])) {
+		index++;
+		endprefixlength = index;
+		if (index > length) {
+			break;
+		};
+	};
+
+	if (tempstring[index] == ']') {
+		/* bitstring label closed */
+
+		if (endprefixlength == 0) {
+			sprintf(resultstring, "Invalid prefix length");
+			return (1);
+		};
+		
+		strncpy(tempstring2, tempstring + startprefixlength - 1, endprefixlength - startprefixlength + 1);
+		
+		/* now proceed nibbles */
+		retval = sscanf(tempstring2, "%d", &prefixlength);
+
+		if (prefixlength < 0 || prefixlength > 128) {
+			sprintf(resultstring, "Given prefix length '%d' is out of range", prefixlength);
+			return (1);
+		};
+		
+		ipv6addrp->flag_prefixuse = 1;
+		ipv6addrp->prefixlength = prefixlength;
+		goto END_bitstring_to_ipv6addrstruct;
+	};
+
+	sprintf(resultstring, "Char '%c' not expected on position %d", tempstring[index], index + 1);
+	return (1);
+
+END_bitstring_to_ipv6addrstruct:
+	ipv6addrp->flag_valid = 1;
+	
+	retval = 0;
 	return (retval);
 };
 #undef DEBUG_function_name

@@ -1,11 +1,11 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3056.c
- * Version    : $Id: librfc3056.c,v 1.3 2002/03/03 18:21:34 peter Exp $
+ * Version    : $Id: librfc3056.c,v 1.4 2002/03/03 21:39:01 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
- *  Function library for conversions defined in RFC 1884
+ *  Function library for conversions defined in RFC 3056
  */
 
 #include <stdio.h>

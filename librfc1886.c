@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.5 2002/03/03 20:14:53 peter Exp $
+ * Version    : $Id: librfc1886.c,v 1.6 2002/03/03 21:39:01 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -206,6 +206,11 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 		};
 
 		noctet = nibblecounter >> 1; /* divided by 2 */
+		
+		if (noctet > 15) {
+			sprintf(resultstring, "Too many nibbles");
+			return (1);
+		};
 
 		if (nibblecounter & 0x01) {
 			/* most significant bits */
