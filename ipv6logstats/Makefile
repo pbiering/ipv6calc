@@ -1,0 +1,47 @@
+# Project    : ipv6calc/ipv6logstats
+# File       : Makefile
+# Version    : $Id: Makefile,v 1.1 2003/06/15 12:17:49 peter Exp $
+# Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
+#
+# Information:
+#  Makefile for ipv6logstats
+#
+
+# Compiler and Linker Options
+COPTS = -O2 -Wall -g
+
+CFLAGS	= $(COPTS) -I../getopt/ -I../ -I../lib/
+
+GETOBJS = ../getopt/getopt.o ../getopt/getopt1.o
+
+CC	= gcc
+
+OBJS	= ipv6logstats.o ipv6logstatshelp.o
+
+# splint
+SPLINT_OPT_OUTSIDE = -uniondef +matchanyintegral --nullassign +ignoresigns -compdef -usedef -modobserver -formatconst -warnposix -exportlocal
+SPLINT_TODO_LATER = -unrecog
+
+all:		ipv6logstats
+
+.c.o:
+		$(CC) $(CFLAGS) -c $<
+
+$(OBJS):	ipv6logstatsoptions.h ipv6logstatshelp.h ipv6logstats.h
+
+ipv6logstats:	$(OBJS)
+		echo "Compile: ipv6logstats"
+		$(CC) -o ipv6logstats $(OBJS) $(GETOBJS) -lipv6calc -L../lib/
+
+distclean:
+		make clean
+
+clean:
+		rm -f ipv6logstats *.o
+
+test:		
+		make all
+		if [[ `id -u` = 0 ]]; then su nobody -s /bin/sh -c "./test_ipv6logstats.sh"; else ./test_ipv6logstats.sh; fi
+
+splint:
+		splint *.c ../lib/*.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)
