@@ -47,6 +47,7 @@ Where to get:
     http://www.netbsd.org/packages/net/ipv6calc/
    FreeBSD:
     http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/ (http://www.freebsd.org/cgi/query-pr.cgi?pr=34441)
+    http://www.freshports.org/net-mgmt/ipv6calc/
    OpenBSD:
     is on the way...
 
@@ -64,4 +65,4 @@ Mailing lists:
   Subscription: http://lists.deepspace6.net/listinfo/ipv6calc
 
 
-$Id: README,v 1.9 2003/06/15 14:19:07 peter Exp $
+$Id: README,v 1.10 2004/12/05 10:34:07 peter Exp $
