@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.2 2002/03/03 11:01:53 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.3 2002/03/03 11:03:37 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -179,7 +179,7 @@ void printhelp_outputtypes(long int inputtype) {
 
 /* list of action types */
 void printhelp_actiontypes(void) {
-	int i, j, maxlen = 0;
+	int j, maxlen = 0;
 	char printformatstring[20];
 	
 	printversion();
