@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.62 2002/11/04 20:07:49 peter Exp $ 
+ *  $Id: ChangeLog,v 1.63 2002/11/04 20:39:59 peter Exp $ 
  */
 
 Info:
@@ -9,7 +9,9 @@ Info:
 	update IPv6 address allocation for 2001::/16
 	update IPv4 databases
 	remove user/group on "make install" to enable non-root RPM build
+	update text on ipv6calcweb.cgi
 	minor reviews
+	tag version 0.44
 
 20020830/PB:
 	add support of dashes on MAC/EUI-48 addresses
