@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Version    : $Id: ipv6calc.spec.in,v 1.8 2002/03/16 18:25:18 peter Exp $
+# Version    : $Id: ipv6calc.spec.in,v 1.9 2002/03/16 18:31:35 peter Exp $
 # Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
@@ -46,8 +46,8 @@ install -m644 $RPM_BUILD_DIR/%{name}-%{version}/CREDITS   $RPM_BUILD_ROOT%_defau
 install -m644 $RPM_BUILD_DIR/%{name}-%{version}/TODO      $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
 install -m644 $RPM_BUILD_DIR/%{name}-%{version}/COPYING   $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
 install -m644 $RPM_BUILD_DIR/%{name}-%{version}/LICENSE   $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
-mkdir -p $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/examples/
-mkdir -p $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/examples/analog/
+mkdir $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/examples/
+mkdir $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/examples/analog/
 install -m644 $RPM_BUILD_DIR/%{name}-%{version}/examples/analog/analog-dist.cfg $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/examples/analog/analog-dist.cfg
 install -m644 $RPM_BUILD_DIR/%{name}-%{version}/examples/analog/run_analog.sh   $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/examples/analog/run_analog.sh
 
