@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Version    : $Id: ipv6calc.spec.in,v 1.29 2004/10/30 13:17:49 peter Exp $
+# Version    : $Id: ipv6calc.spec.in,v 1.30 2004/10/30 13:38:52 peter Exp $
 # Copyright  : 2001-2004 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
@@ -95,7 +95,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Sat Oct 30 2004 Peter Bieringer <pb@bieringer.de> 0.49-1
+* Sat Oct 30 2004 Peter Bieringer <pb@bieringer.de>
 - remove openssl(-devel) from requirements, no longer needed
 
 * Fri Nov 22 2003 Peter Bieringer <pb@bieringer.de>
