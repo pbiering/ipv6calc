@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.7 2002/03/03 18:21:34 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.8 2002/03/04 08:04:08 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -124,7 +124,7 @@ static const int ipv6calc_outputformatoptionmap[][2]  = {
 	{ FORMAT_eui64          , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_base85         , 0 },
 	{ FORMAT_ifinet6        , 0 },
-	{ FORMAT_ipv4addr       , 0 },
+	{ FORMAT_ipv4addr       , FORMATOPTION_machinereadable },
 	{ FORMAT_iid_token      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 };
 

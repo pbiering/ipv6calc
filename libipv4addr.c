@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.3 2002/03/03 18:21:34 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.4 2002/03/04 08:04:08 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -314,6 +314,7 @@ int addr_to_ipv4addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv4ad
 int libipv4addr_ipv4addrstruct_to_string(ipv6calc_ipv4addr *ipv4addrp, char *resultstring, unsigned long formatoptions) {
 	char tempstring[NI_MAXHOST];
 
+	/* address */
 	sprintf(tempstring, "%d.%d.%d.%d", ipv4addr_getoctett(ipv4addrp, 0), ipv4addr_getoctett(ipv4addrp, 1), ipv4addr_getoctett(ipv4addrp, 2), ipv4addr_getoctett(ipv4addrp, 3));
 
 	if (formatoptions & FORMATOPTION_machinereadable) {
@@ -321,5 +322,12 @@ int libipv4addr_ipv4addrstruct_to_string(ipv6calc_ipv4addr *ipv4addrp, char *res
 	} else {
 		sprintf(resultstring, "%s", tempstring);
 	};
+
+	/* netmaks */
+	if (ipv4addrp->flag_prefixuse == 1) {
+		/* to be filled */
+		/* IPV4NETMASK= */
+	};
+	
 	return(0);
 };
