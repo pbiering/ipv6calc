@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.80 2003/11/22 16:14:58 peter Exp $ 
+ *  $Id: ChangeLog,v 1.81 2003/11/24 21:32:23 peter Exp $ 
  */
 
 Info:
@@ -12,6 +12,7 @@ Info:
 	ipv6calc.spec.in
 	 - review, also install examples now
 	Some cleanups
+	tag version 0.47
 
 20031121/PB
 	IPv4 address database update
