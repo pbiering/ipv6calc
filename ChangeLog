@@ -1,10 +1,14 @@
 /*
- *  $Id: ChangeLog,v 1.48 2002/04/09 20:30:45 peter Exp $ 
+ *  $Id: ChangeLog,v 1.49 2002/04/10 07:00:28 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+200204010/PB:
+	new format feature: printmirrored for reverse dot separated format
+	minor fixes
+
 20020409/PB:
 	add new feature: printing IPv4 address in reverse PTR/DNS format
 	minor help extension
