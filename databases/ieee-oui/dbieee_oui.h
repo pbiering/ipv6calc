@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui.h
- * Version       : $Id: dbieee_oui.h,v 1.10 2002/11/04 20:58:36 peter Exp $
- * Generated     : Mon Nov  4 21:56:24 2002
+ * Version       : $Id: dbieee_oui.h,v 1.11 2002/11/12 19:14:36 peter Exp $
+ * Generated     : Tue Nov 12 20:06:32 2002
  * Data copyright: IEEE
  *
  * Information:
@@ -2964,7 +2964,40 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x000BAB, "Advantech Technology (CHINA) Co., Ltd.", "ADVANTECH-CHINA" },
 	{ 0x000BAC, "3Com Europe Ltd.", "3COM" },
 	{ 0x000BAD, "PC-PoS Inc.", "PC-POS" },
-	{ 0x000BAE, "PC-POS Inc.", "PC-POS" },
+	{ 0x000BAE, "PRIVATE", "PRIVATE" },
+	{ 0x000BAF, "PRIVATE", "PRIVATE" },
+	{ 0x000BB0, "Sysnet Telematica srl", "SYSNET-TELEMATICA-SRL" },
+	{ 0x000BB1, "Super Star Technology Co., Ltd.", "SUPER-STAR" },
+	{ 0x000BB2, "SMALLBIG TECHNOLOGY", "SMALLBIG" },
+	{ 0x000BB3, "RiT technologies Ltd.", "RIT-TECHNOLOGIES" },
+	{ 0x000BB4, "RDC Semiconductor Inc.,", "RDC-SEMICONDUCTOR" },
+	{ 0x000BB5, "nStor Technologies, Inc.", "NSTOR-TECHNOLOGIES" },
+	{ 0x000BB6, "Mototech Inc.", "MOTOTECH" },
+	{ 0x000BB7, "Micro Systems Co.,Ltd.", "MICRO" },
+	{ 0x000BB8, "Kihoku Electronic Co.", "KIHOKU" },
+	{ 0x000BB9, "Imsys AB", "IMSYS-AB" },
+	{ 0x000BBA, "Harmonic Broadband Access Networks", "HARMONIC-BROADBAND-ACCESS-NETWORKS" },
+	{ 0x000BBB, "Etin Systems Co., Ltd", "ETIN" },
+	{ 0x000BBC, "En Garde Systems, Inc.", "EN-GARDE" },
+	{ 0x000BBD, "Connexionz Limited", "CONNEXIONZ" },
+	{ 0x000BBE, "Cisco Systems", "CISCO" },
+	{ 0x000BBF, "Cisco Systems", "CISCO" },
+	{ 0x000BC0, "China IWNComm Co., Ltd.", "CHINA-IWNCOMM" },
+	{ 0x000BC1, "Bay Microsystems, Inc.", "BAY-MICROSYSTEMS" },
+	{ 0x000BC2, "Corinex Communication Corp.", "CORINEX-COMMUNICATION" },
+	{ 0x000BC3, "Multiplex, Inc.", "MULTIPLEX" },
+	{ 0x000BC4, "BIOTRONIK GmbH & Co", "BIOTRONIK" },
+	{ 0x000BC5, "SMC Networks, Inc.", "SMC-NETWORKS" },
+	{ 0x000BC6, "ISAC, Inc.", "ISAC" },
+	{ 0x000BC7, "ICET S.p.A.", "ICET-S-P-A" },
+	{ 0x000BC8, "AirFlow Networks", "AIRFLOW-NETWORKS" },
+	{ 0x000BC9, "Electroline Equipment", "ELECTROLINE-EQUIPMENT" },
+	{ 0x000BCA, "DATAVAN International Corporation", "DATAVAN" },
+	{ 0x000BCB, "Fagor Automation , S. Coop", "FAGOR-AUTOMATION-S-COOP" },
+	{ 0x000BCC, "JUSAN, S.A.", "JUSAN" },
+	{ 0x000BCD, "Compaq (HP)", "COMPAQ-HP" },
+	{ 0x000BCE, "Free2move AB", "FREE2MOVE-AB" },
+	{ 0x000BCF, "AGFA NDT INC.", "AGFA-NDT" },
 	{ 0x001000, "CABLE TELEVISION LABORATIES, INC.", "CABLE-TELEVISION-LABORATIES" },
 	{ 0x001001, "MCK COMMUNICATIONS", "MCK-COMMUNICATION" },
 	{ 0x001002, "ACTIA", "ACTIA" },
