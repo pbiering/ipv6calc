@@ -1,7 +1,7 @@
 #
 # Makefile for ipv6calc
 #
-# Version:     $Id: Makefile.in,v 1.1 2001/12/27 22:08:07 peter Exp $
+# Version:     $Id: Makefile.in,v 1.2 2001/12/27 22:11:35 peter Exp $
 #
 # Author:      Peter Bieringer <pb@bieringer.de>
 #
@@ -35,6 +35,7 @@ autoclean:
 		make distclean
 		rm Makefile
 		rm contrib/ipv6calc.spec
+		rm config.h
 
 clean:
 		rm -rf ipv6calc *.o
