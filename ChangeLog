@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.35 2002/03/18 20:58:13 peter Exp $ 
+ *  $Id: ChangeLog,v 1.36 2002/03/18 22:55:35 peter Exp $ 
  */
 
 Info:
@@ -9,7 +9,8 @@ Info:
 	move files to dedicated subdirectories
 	add program information on ipv6calc -m
 	enhance ipv6calcweb.cgi
-	begin to replace "sprintf" with "snprintf" (for security)
+	begin to replace "sprintf" with "snprintf" (for security reasons)
+	-> release 0.40pre7
 
 20020317/PB:
 	ipv6calc: fix not working showtypes	
