@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.3 2002/03/26 23:10:42 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.4 2002/03/27 07:20:34 peter Exp $
 # Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -119,7 +119,8 @@ testscenarios | while read line; do
 	result="`echo $line | awk -F= '{ print $2 }'`"
 	if [ -z "$result" -o -z "$command" ]; then
 		echo "Something is wrong in line '$line'"
-		continue
+		exit 1
+		#continue
 	fi
 	echo "Test './ipv6calc $command' for '$result'"
 	# get result
