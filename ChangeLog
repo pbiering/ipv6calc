@@ -1,10 +1,14 @@
 /*
- *  $Id: ChangeLog,v 1.55 2002/07/17 20:45:12 peter Exp $ 
+ *  $Id: ChangeLog,v 1.56 2002/07/30 17:23:26 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20020730/PB:
+	fix not proper autodetection code for MAC addresses
+	tag version 0.43
+
 20020717/PB:
 	update URL to OUI database, cosmetic OUI fixes, update databases
 	tag version 0.42
