@@ -1,6 +1,6 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.22 2003/08/15 17:11:24 peter Exp $
+# Version: $Id: TODO,v 1.23 2003/11/21 10:54:41 peter Exp $
 
 TODO list
 =========
@@ -8,14 +8,9 @@ TODO list
 Short term
 ----------
 
-Convert version script for ipv6calcweb.cgi from Perl to Shell or autoconf, because some systems have no Perl available
-
 
 Middle term
 -----------
-
-Documentation:
-* manpage (never wrote one, therefore need help)
 
 Features:
 * showinfo/machinereadable:
@@ -42,6 +37,9 @@ Help:
 
 ipv6calcweb.cgi:
 * add alarm wrapper around call of ipv6calc
+
+Creating a dedicated library: libipv6calc.so
+ (if someone requires it)
 
 
 
