@@ -1,10 +1,13 @@
 /*
- *  $Id: ChangeLog,v 1.6 2001/12/27 22:19:22 peter Exp $ 
+ *  $Id: ChangeLog,v 1.7 2002/01/20 09:44:15 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb@bieringer.de>
 --------------------------------------------------------------------
+20020120/PB:
+	showinfo now understands "solicited-node link-local multicast", "ISATAP", SLA on 6bone addresses
+	input now understands also "ISATAP" addresses
 
 20011227/PB:
 	Make tarball ready to use

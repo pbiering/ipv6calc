@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.2 2001/12/18 11:22:56 peter Exp $
- * Copyright  : 2001 by Peter Bieringer <pb@bieringer.de>
+ * Version    : $Id: showinfo.c,v 1.3 2002/01/20 09:44:15 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Function to show information about a given IPv6 address
@@ -52,7 +52,7 @@ int showinfo(char *addrstring, char *resultstring) {
 
 	typeinfo = ipv6addr_gettype(&ipv6addr);
 
-	fprintf(stderr, "%s: function is still incomplete\n", DEBUG_function_name);
+	/* printf(stderr, "%s: function is still incomplete\n", DEBUG_function_name); */
 
 	if (ipv6calc_debug & DEBUG_showinfo) {
 		fprintf(stderr, "%s: result of 'ipv6addr_gettype': %x\n", DEBUG_function_name, typeinfo);
@@ -78,10 +78,21 @@ int showinfo(char *addrstring, char *resultstring) {
 	};
 
 	/* SLA prefix included? */
-	if (typeinfo & IPV6_NEW_ADDR_6TO4 || typeinfo & IPV6_ADDR_SITELOCAL || typeinfo & IPV6_NEW_ADDR_AGU) {
+	if (typeinfo & IPV6_NEW_ADDR_6TO4 || typeinfo & IPV6_ADDR_SITELOCAL || typeinfo & IPV6_NEW_ADDR_AGU || typeinfo & IPV6_NEW_ADDR_6BONE) {
 		fprintf(stdout, "Address type has SLA: %04x\n", ipv6addr_getword(&ipv6addr, 3));
 	};
 	
+	/* Proper solicited node link-local multicast address? */
+	if (typeinfo & IPV6_NEW_ADDR_SOLICITED_NODE) {
+		if (typeinfo & IPV6_ADDR_LINKLOCAL && typeinfo & IPV6_ADDR_MULTICAST) {
+			/* address is ok */
+		} else {
+			fprintf(stdout, "Address is not a proper 'solicited-node link-local multicast' address!\n");
+			retval = 1;
+			goto END;
+		};
+	};
+
 	/* Interface identifier included */
 	if (typeinfo & IPV6_ADDR_LINKLOCAL || typeinfo & IPV6_ADDR_SITELOCAL || typeinfo & IPV6_NEW_ADDR_AGU || typeinfo & IPV6_NEW_ADDR_6BONE || typeinfo & IPV6_NEW_ADDR_6TO4) {
 		fprintf(stdout, "Interface identifier: %04x:%04x:%04x:%04x\n", ipv6addr_getword(&ipv6addr, 4), ipv6addr_getword(&ipv6addr, 5), ipv6addr_getword(&ipv6addr, 6), ipv6addr_getword(&ipv6addr, 7));
@@ -98,11 +109,17 @@ int showinfo(char *addrstring, char *resultstring) {
 			if (ipv6addr_getoctett(&ipv6addr, 8) & 0x02) {
 				fprintf(stdout, "Interface identifier is probably EUI-64 based: %02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x\n", ipv6addr_getoctett(&ipv6addr, 8) ^ 0x02, ipv6addr_getoctett(&ipv6addr, 9), ipv6addr_getoctett(&ipv6addr, 10), ipv6addr_getoctett(&ipv6addr, 11), ipv6addr_getoctett(&ipv6addr, 12), ipv6addr_getoctett(&ipv6addr, 13), ipv6addr_getoctett(&ipv6addr, 14), ipv6addr_getoctett(&ipv6addr, 15));
 			} else {
-				fprintf(stdout, "Interface identifier is probably manual set or based on a local EUI-64 identifier");
+				if (typeinfo & IPV6_NEW_ADDR_SOLICITED_NODE) {
+					fprintf(stdout, "Generated from the extension identifier of an EUI-48 (MAC): ...:%02x:%02x:%02x\n", ipv6addr_getoctett(&ipv6addr, 13), ipv6addr_getoctett(&ipv6addr, 14), ipv6addr_getoctett(&ipv6addr, 15));
+				} else if (typeinfo & IPV6_NEW_ADDR_ISATAP) {
+					fprintf(stdout, "Address type is ISATAP and included IPv4 address is: %d.%d.%d.%d\n", ipv6addr_getoctett(&ipv6addr, 12), ipv6addr_getoctett(&ipv6addr, 13), ipv6addr_getoctett(&ipv6addr, 14), ipv6addr_getoctett(&ipv6addr, 15));
+				} else {
+					fprintf(stdout, "Interface identifier is probably manual set or based on a local EUI-64 identifier");
+				};
 			};
 		};
 	};
-	
+END:	
 	retval = 0;
 	return (retval);
 };

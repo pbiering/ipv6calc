@@ -1,9 +1,11 @@
 /*
- * libipv6addr: Function libary for IPv6 storage
+ * Project    : ipv6calc
+ * File       : libipv6addr.c
+ * Version    : $Id: libipv6addr.c,v 1.3 2002/01/20 09:44:15 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
- * Version:		$Id: libipv6addr.c,v 1.2 2001/10/09 07:03:10 peter Exp $
- * 
- * Author:		Peter Bieringer <pb@bieringer.de>
+ * Information:
+ *  Function libary for IPv6 storage
  *
  */
 
@@ -14,7 +16,7 @@
 
 /* array of numerical types */
 unsigned int ipv6addr_typesnum[IPV6INFO_NUM] = {
-    IPV6_ADDR_UNICAST,
+	IPV6_ADDR_UNICAST,
 	IPV6_ADDR_MULTICAST,
 	IPV6_ADDR_ANYCAST,
 	IPV6_ADDR_LOOPBACK,
@@ -26,11 +28,13 @@ unsigned int ipv6addr_typesnum[IPV6INFO_NUM] = {
 	IPV6_NEW_ADDR_6TO4,
 	IPV6_NEW_ADDR_6BONE, 
 	IPV6_NEW_ADDR_AGU,
-	IPV6_NEW_ADDR_UNSPECIFIED
+	IPV6_NEW_ADDR_UNSPECIFIED,
+	IPV6_NEW_ADDR_SOLICITED_NODE,
+	IPV6_NEW_ADDR_ISATAP
 };
 
 char *ipv6addr_typesstring[IPV6INFO_NUM] = {
-    TXT_IPV6_ADDR_UNICAST,
+	TXT_IPV6_ADDR_UNICAST,
 	TXT_IPV6_ADDR_MULTICAST,
 	TXT_IPV6_ADDR_ANYCAST,
 	TXT_IPV6_ADDR_LOOPBACK,
@@ -42,7 +46,9 @@ char *ipv6addr_typesstring[IPV6INFO_NUM] = {
 	TXT_IPV6_NEW_ADDR_6TO4,
 	TXT_IPV6_NEW_ADDR_6BONE,
 	TXT_IPV6_NEW_ADDR_AGU,
-	TXT_IPV6_NEW_ADDR_UNSPECIFIED
+	TXT_IPV6_NEW_ADDR_UNSPECIFIED,
+	TXT_IPV6_NEW_ADDR_SOLICITED_NODE,
+	TXT_IPV6_NEW_ADDR_ISATAP
 };
 
 
@@ -256,6 +262,16 @@ unsigned int ipv6addr_gettype(ipv6calc_ipv6addr *ipv6addrp) {
 	if ((st & (0xFFFF0000)) == (0x20020000)) {
 		/* 2002:... 6to4 tunneling */
 		type |= IPV6_NEW_ADDR_6TO4;
+	};
+	
+	if ((st2 == 0x00000001) && (st3 & (0xFF000000)) == (0xFF000000)) {
+		/* ..:0000:0001:ffxx:xxxx solicited node suffix */
+		type |= IPV6_NEW_ADDR_SOLICITED_NODE;
+	};
+
+	if (st2 == 0x00005EFE) {
+		/* ..:0000:5EFE:xx.xx.xx.xx ISATAP suffix */
+		type |= IPV6_NEW_ADDR_ISATAP;
 	};
 
 	/* Consider all addresses with the first three bits different of

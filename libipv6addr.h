@@ -1,9 +1,11 @@
 /*
- * Version:     $Id: libipv6addr.h,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Project    : ipv6calc
+ * File       : libipv6addr.h
+ * Version    : $Id: libipv6addr.h,v 1.2 2002/01/20 09:44:15 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
- * Header file for libipv6addr.c libary
- *
- * Author:      Peter Bieringer <pb@bieringer.de>
+ * Information:
+ *  Header file for libipv6addr.c libary
  *
  */ 
 
@@ -49,8 +51,8 @@ extern char *ipv6addr_typesstring[];
 
 #define IPV6_ADDR_ANY				0x0000U
 
-#define IPV6_ADDR_UNICAST      		0x0001U	
-#define IPV6_ADDR_MULTICAST    		0x0002U	
+#define IPV6_ADDR_UNICAST			0x0001U	
+#define IPV6_ADDR_MULTICAST			0x0002U	
 #define IPV6_ADDR_ANYCAST			0x0004U
 
 #define IPV6_ADDR_LOOPBACK			0x0010U
@@ -59,7 +61,7 @@ extern char *ipv6addr_typesstring[];
 
 #define IPV6_ADDR_COMPATv4			0x0080U
 
-#define IPV6_ADDR_SCOPE_MASK		0x00f0U
+#define IPV6_ADDR_SCOPE_MASK			0x00f0U
 
 #define IPV6_ADDR_MAPPED			0x1000U
 #define IPV6_ADDR_RESERVED			0x2000U	/* reserved address space */
@@ -67,24 +69,28 @@ extern char *ipv6addr_typesstring[];
 #define IPV6_NEW_ADDR_6TO4			0x10000U
 #define IPV6_NEW_ADDR_6BONE			0x20000U
 #define IPV6_NEW_ADDR_AGU			0x40000U
-#define IPV6_NEW_ADDR_UNSPECIFIED	0x80000U
+#define IPV6_NEW_ADDR_UNSPECIFIED		0x80000U
+#define IPV6_NEW_ADDR_SOLICITED_NODE		0x100000U
+#define IPV6_NEW_ADDR_ISATAP			0x200000U
 
 /* text representations */
 #define TXT_IPV6_ADDR_ANY			"unknown"
-#define TXT_IPV6_ADDR_UNICAST		"unicast"
-#define TXT_IPV6_ADDR_MULTICAST		"multicast"
-#define TXT_IPV6_ADDR_ANYCAST		"anycast"
-#define TXT_IPV6_ADDR_LOOPBACK		"loopback"
-#define TXT_IPV6_ADDR_LINKLOCAL		"link-local"
-#define TXT_IPV6_ADDR_SITELOCAL		"site-local"
-#define TXT_IPV6_ADDR_COMPATv4		"compat-v4"
-#define TXT_IPV6_ADDR_MAPPED		"mapped"
-#define TXT_IPV6_ADDR_RESERVED		"reserved"
-#define TXT_IPV6_NEW_ADDR_6TO4		"6to4"
-#define TXT_IPV6_NEW_ADDR_6BONE		"6bone"
-#define TXT_IPV6_NEW_ADDR_AGU		"aggregatable-global-unicast"
-#define TXT_IPV6_NEW_ADDR_UNSPECIFIED	"unspecified"
+#define TXT_IPV6_ADDR_UNICAST			"unicast"
+#define TXT_IPV6_ADDR_MULTICAST			"multicast"
+#define TXT_IPV6_ADDR_ANYCAST			"anycast"
+#define TXT_IPV6_ADDR_LOOPBACK			"loopback"
+#define TXT_IPV6_ADDR_LINKLOCAL			"link-local"
+#define TXT_IPV6_ADDR_SITELOCAL			"site-local"
+#define TXT_IPV6_ADDR_COMPATv4			"compat-v4"
+#define TXT_IPV6_ADDR_MAPPED			"mapped"
+#define TXT_IPV6_ADDR_RESERVED			"reserved"
+#define TXT_IPV6_NEW_ADDR_6TO4			"6to4"
+#define TXT_IPV6_NEW_ADDR_6BONE			"6bone"
+#define TXT_IPV6_NEW_ADDR_AGU			"aggregatable-global-unicast"
+#define TXT_IPV6_NEW_ADDR_UNSPECIFIED		"unspecified"
+#define TXT_IPV6_NEW_ADDR_SOLICITED_NODE	"solicited-node"
+#define TXT_IPV6_NEW_ADDR_ISATAP		"ISATAP"
 
-#define IPV6INFO_NUM 13
+#define IPV6INFO_NUM 15
 
 #endif

@@ -1,9 +1,11 @@
 /*
- * libipv6calc: Function libary for conversions
+ * Project    : ipv6calc
+ * File       : libipv6calc.c
+ * Version    : $Id: libipv6calc.c,v 1.3 2002/01/20 09:44:15 peter Exp $
+ * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
- * Version:		$Id: libipv6calc.c,v 1.2 2001/10/09 07:03:10 peter Exp $
- * 
- * Author:		Peter Bieringer <pb@bieringer.de>
+ * Information:
+ *  Function libary for conversions
  *
  */
 
@@ -168,9 +170,9 @@ int addr_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6ad
 	ipv6addrp->scope = result;
 
 	if ( scope != 0 ) {
-		/* test, whether compatv4/mapped is really one */
-		if ( ! ( ( ipv6addrp->scope & IPV6_ADDR_COMPATv4 ) || ( ipv6addrp->scope & IPV6_ADDR_MAPPED ) ) ) {
-			sprintf(resultstring, "Error, given address '%s' is not valid compatv4/mapped one!", addronlystring);
+		/* test, whether compatv4/mapped/ISATAP is really one */
+		if ( ! ( ipv6addrp->scope & IPV6_ADDR_COMPATv4 || ipv6addrp->scope & IPV6_ADDR_MAPPED || ipv6addrp->scope & IPV6_NEW_ADDR_ISATAP) ) {
+			sprintf(resultstring, "Error, given address '%s' is not valid compatv4/mapped/ISATAP one!", addronlystring);
 			retval = 1;
 			return (retval);
 		};
