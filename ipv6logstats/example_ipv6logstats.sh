@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/logstats
 # File       : example_ipv6logstats.sh
-# Version    : $Id: example_ipv6logstats.sh,v 1.4 2003/06/15 16:01:56 peter Exp $
+# Version    : $Id: example_ipv6logstats.sh,v 1.5 2003/11/22 12:42:24 peter Exp $
 # Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Example program for "ipv6logstats"
@@ -35,9 +35,9 @@ cat_file() {
 		return 1
 	fi
 
-	if echo "$f" | grep -q "\.gz"; then
+	if echo "$f" | grep -q "\.gz$"; then
 		zcat "$f"
-	elif echo "$f" | grep -q "\.bz2"; then
+	elif echo "$f" | grep -q "\.bz2$"; then
 		bzcat "$f"
 	else
 		cat "$f"
