@@ -1,10 +1,13 @@
 /*
- *  $Id: ChangeLog,v 1.9 2002/01/24 22:01:10 peter Exp $ 
+ *  $Id: ChangeLog,v 1.10 2002/01/27 17:16:17 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb@bieringer.de>
 --------------------------------------------------------------------
+20020127/PB:
+	tag release 0.34
+
 20020124/PB:
 	use now "-lcrypto" instead of full defined lib name	
 
