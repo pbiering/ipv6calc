@@ -1,7 +1,25 @@
 #!/usr/bin/perl -w
+#
+# Project    : ipv6calc/databases/ipv4-assignment
+# File       : create-registry-list.pl
+# Version    : $Id: create-registry-list.pl,v 1.14 2003/06/15 12:11:00 peter Exp $
+# Copyright  : 2002-2003 by Peter Bieringer <pb (at) bieringer.de>
+#
+# Information:
+#  Perl program which creates IPv4 address assignement header
+# Requires:
+#  aggreagate
+
 
 use IPC::Open2;
 #use strict;
+
+if (! -x "/usr/bin/aggregate") {
+	print STDERR "Missing or cannot execute binary '/usr/bin/aggregate'\n";
+	print STDERR " You can get it from here: http://freshmeat.net/projects/aggregate\n";
+
+	exit 1;
+};
 
 
 my $OUTFILE = "dbipv4addr_assignment.h";
@@ -12,12 +30,12 @@ $year = 1900 + $year;
 $mon = sprintf "%02d", $mon + 1;
 $mday = sprintf "%02d", $mday;
 
-my @files = ( "arin/arin." . $year . $mon . "01", "ripencc/ripencc." . $year . $mon . $mday, "apnic/apnic-" . $year . "-" . $mon . "-01" );
-#my @files = ( "ripencc/ripencc.20020320" );
+my @files = ( "arin/arin." . $year . $mon . "01", "ripencc/ripencc." . $year . $mon . $mday, "apnic/apnic-" . $year . "-" . $mon . "-01", "lacnic/lacnic." . $year . $mon . "01" );
+#my @files = ( "lacnic/lacnic." . $year . $mon . "01" );
 
-my (@arin, @apnic, @ripencc, @iana);
+my (@arin, @apnic, @ripencc, @iana, @lacnic);
 
-my (@arin_agg, @apnic_agg, @ripencc_agg, @iana_agg);
+my (@arin_agg, @apnic_agg, @ripencc_agg, @iana_agg, @lacnic_agg);
 
 my $global_file = "iana/ipv4-address-space";
 
@@ -132,7 +150,7 @@ sub proceed_global() {
 		$reg = uc($reg);
 		$reg =~ s/RIPE/RIPENCC/g;
 
-		if ( ($reg ne "ARIN") && ($reg ne "APNIC") && ($reg ne "RIPENCC") && ($reg ne "IANA") ) {
+		if ( ($reg ne "ARIN") && ($reg ne "APNIC") && ($reg ne "RIPENCC") && ($reg ne "IANA") && ($reg ne "LACNIC") ) {
 			#print "Unsupported registry: " . $reg . "\n";
 			next;
 		};
@@ -154,6 +172,9 @@ sub proceed_global() {
 			} elsif ($reg eq "IANA" ) {
 				#print "Push IANA: " . $ipv4 . "/" . $length . "\n";
 				push @iana, $ipv4 . "/" . $length;
+			} elsif ($reg eq "LACNIC" ) {
+				#print "Push LACNIC: " . $ipv4 . "/" . $length . "\n";
+				push @lacnic, $ipv4 . "/" . $length;
 			} else {
 				die "Unsupported registry";	
 			};
@@ -190,7 +211,7 @@ foreach my $file (@files) {
 		$reg = uc($reg);
 		$reg =~ s/\wRIPE\w/RIPENCC/g;
 
-		if ( $reg ne "ARIN" && $reg ne "APNIC" && $reg ne "RIPENCC" && $reg ne "IANA" ) {
+		if ( $reg ne "ARIN" && $reg ne "APNIC" && $reg ne "RIPENCC" && $reg ne "IANA" && $reg ne "LACNIC") {
 			print "Unsupported registry: " . $reg . "\n";
 			next;
 		};
@@ -206,6 +227,8 @@ foreach my $file (@files) {
 			$parray = \@ripencc;
 		} elsif ($reg eq "IANA" ) {
 			$parray = \@iana;
+		} elsif ($reg eq "LACNIC" ) {
+			$parray = \@lacnic;
 		} else {
 			die "Unsupported registry: " . $reg;
 		};
@@ -281,7 +304,7 @@ sub proceed_array($$) {
 	my $parray = shift || die "missing array pointer";
 	my $parray_agg = shift || die "missing array pointer";
 
-	print "Start proceeding array with 'aggregate'\n";
+	print "Start proceeding array with 'aggregate' (Entries: " . scalar(@$parray) . ")\n";
 
 	my $pid = open2(AGGREGATE_READ, AGGREGATE_WRITE, "aggregate -t") || die "cannot for: $!";
 	
@@ -302,7 +325,7 @@ sub proceed_array($$) {
 
 	close(AGGREGATE_READ);
 
-	print "End proceeding array with 'aggregate'\n";
+	print "End proceeding array with 'aggregate' (Entries: " . scalar(@$parray_agg) . ")\n";
 };
 
 
@@ -315,6 +338,9 @@ print "Aggregate APNIC\n";
 
 print "Aggregate IANA\n";
 &proceed_array(\@iana, \@iana_agg);
+
+print "Aggregate LACNIC\n";
+&proceed_array(\@lacnic, \@lacnic_agg);
 
 # Look for maximum used prefix length
 my ($net, $length);
@@ -395,6 +421,7 @@ sub print_header_array($$) {
 &print_header_array(\@apnic_agg, "APNIC");
 &print_header_array(\@ripencc_agg, "RIPENCC");
 &print_header_array(\@arin_agg, "ARIN");
+&print_header_array(\@lacnic_agg, "LACNIC");
 &print_header_array(\@iana_agg, "IANA");
 
 print OUT qq|

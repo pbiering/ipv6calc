@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : update-ipv4-assignment.sh
-# Version    : $Id: update-ipv4-assignment.sh,v 1.1 2002/03/24 16:54:56 peter Exp $
+# Version    : $Id: update-ipv4-assignment.sh,v 1.2 2003/06/15 12:11:00 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -21,6 +21,7 @@ ripencc	ftp://ftp.ripe.net/ripe/stats/		ripencc.%Y%m%d
 arin	ftp://ftp.arin.net/pub/stats/arin/	arin.%Y%m01
 apnic	http://ftp.apnic.net/stats/apnic/	apnic-%Y-%m-01
 iana	http://www.iana.org/assignments/	ipv4-address-space
+lacnic	ftp://lacnic.net/pub/stats/lacnic/	lacnic.%Y%m01
 END
 }
 
