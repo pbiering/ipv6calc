@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/lib
 # File       : create_ieee_oui_headerfile.pl
-# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.6 2002/07/17 20:41:48 peter Exp $
+# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.7 2002/11/04 20:58:36 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE/oui.txt
@@ -15,7 +15,7 @@ my $OUTFILE = "dbieee_oui.h";
 
 $INFILE = shift;
 
-if (! defined $INFILE) { $INFILE = "oui.txt" };
+if (! defined $INFILE) { $INFILE = "oui_public.txt" };
 
 print "Create dbieee_oui.h automatically\n";
 
@@ -115,6 +115,9 @@ while (<IN>) {
 		# Some final cleanup
 		$oui =~ s/-INT-L//ig;
 		$oui =~ s/-B-V//ig;
+
+		# remove trailling '-'
+		$oui =~ s/-+$//ig;
 	
 		#print $oui . "\n";
 	

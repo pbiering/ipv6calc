@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui.h
- * Version       : $Id: dbieee_oui.h,v 1.9 2002/11/04 19:49:22 peter Exp $
- * Generated     : Mon Nov  4 20:11:08 2002
+ * Version       : $Id: dbieee_oui.h,v 1.10 2002/11/04 20:58:36 peter Exp $
+ * Generated     : Mon Nov  4 21:56:24 2002
  * Data copyright: IEEE
  *
  * Information:
@@ -1881,7 +1881,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x00074E, "Naughty boy co., Ltd.", "NAUGHTY-BOY" },
 	{ 0x00074F, "Cisco Systems, Inc.", "CISCO" },
 	{ 0x000750, "Cisco Systems, Inc.", "CISCO" },
-	{ 0x000751, "m.u.t. - GmbH", "M-U-T--" },
+	{ 0x000751, "m.u.t. - GmbH", "M-U-T" },
 	{ 0x000752, "Rhythm Watch Co., Ltd.", "RHYTHM-WATCH" },
 	{ 0x000753, "Beijing Qxcomm Technology Co., Ltd.", "BEIJING-QXCOMM" },
 	{ 0x000754, "Xyterra Computing, Inc.", "XYTERRA-COMPUTING" },
@@ -4006,7 +4006,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x00500E, "CHROMATIS NETWORKS, INC.", "CHROMATIS-NETWORKS" },
 	{ 0x00500F, "CISCO SYSTEMS, INC.", "CISCO" },
 	{ 0x005010, "NovaNET Learning, Inc.", "NOVANET-LEARNING" },
-	{ 0x005012, "CBL - GMBH", "CBL--" },
+	{ 0x005012, "CBL - GMBH", "CBL" },
 	{ 0x005013, "Chaparral Network Storage", "CHAPARRAL-NETWORK-STORAGE" },
 	{ 0x005014, "CISCO SYSTEMS, INC.", "CISCO" },
 	{ 0x005015, "BRIGHT STAR ENGINEERING", "BRIGHT-STAR-ENGINEERING" },
@@ -5034,7 +5034,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x00A01E, "EST CORPORATION", "EST" },
 	{ 0x00A01F, "TRICORD SYSTEMS, INC.", "TRICORD" },
 	{ 0x00A020, "CITICORP/TTI", "CITICORP/TTI" },
-	{ 0x00A021, "GENERAL DYNAMICS-", "GENERAL-DYNAMICS-" },
+	{ 0x00A021, "GENERAL DYNAMICS-", "GENERAL-DYNAMICS" },
 	{ 0x00A022, "CENTRE FOR DEVELOPMENT OF ADVANCED COMPUTING", "CENTRE-FOR-DEVELOPMENT-OF-ADVANCED-COMPUTING" },
 	{ 0x00A023, "APPLIED CREATIVE TECHNOLOGY, INC.", "APPLIED-CREATIVE" },
 	{ 0x00A024, "3COM CORPORATION", "3COM" },
@@ -5202,7 +5202,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x00A0C6, "QUALCOMM INCORPORATED", "QUALCOMM-INCORPORATED" },
 	{ 0x00A0C7, "TADIRAN TELECOMMUNICATIONS", "TADIRAN-TELECOMMUNICATIONS" },
 	{ 0x00A0C8, "ADTRAN INC.", "ADTRAN" },
-	{ 0x00A0C9, "INTEL CORPORATION - HF1-06", "INTEL--" },
+	{ 0x00A0C9, "INTEL CORPORATION - HF1-06", "INTEL" },
 	{ 0x00A0CA, "FUJITSU DENSO LTD.", "FUJITSU-DENSO" },
 	{ 0x00A0CB, "ARK TELECOMMUNICATIONS, INC.", "ARK-TELECOMMUNICATIONS" },
 	{ 0x00A0CC, "LITE-ON COMMUNICATIONS, INC.", "LITE-ON-COMMUNICATION" },
@@ -6059,7 +6059,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x00E0E4, "FANUC ROBOTICS NORTH AMERICA, Inc.", "FANUC-ROBOTICS-NORTH-AMERICA" },
 	{ 0x00E0E5, "CINCO NETWORKS, INC.", "CINCO-NETWORKS" },
 	{ 0x00E0E6, "INCAA DATACOM B.V.", "INCAA-DATACOM" },
-	{ 0x00E0E7, "RAYTHEON E-SYSTEMS, INC.", "RAYTHEON-E-" },
+	{ 0x00E0E7, "RAYTHEON E-SYSTEMS, INC.", "RAYTHEON-E" },
 	{ 0x00E0E8, "GRETACODER Data Systems AG", "GRETACODER-DATA" },
 	{ 0x00E0E9, "DATA LABS, INC.", "DATA-LABS" },
 	{ 0x00E0EA, "INNOVAT COMMUNICATIONS, INC.", "INNOVAT-COMMUNICATION" },
