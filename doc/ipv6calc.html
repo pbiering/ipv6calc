@@ -1,3 +1,4 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <HTML
 ><HEAD
 ><TITLE
@@ -5,8 +6,7 @@
   </TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.76b+
-"></HEAD
+CONTENT="Modular DocBook HTML Stylesheet Version 1.7"></HEAD
 ><BODY
 CLASS="ARTICLE"
 BGCOLOR="#FFFFFF"
@@ -21,7 +21,9 @@ CLASS="TITLEPAGE"
 ><H1
 CLASS="TITLE"
 ><A
-NAME="AEN2">The ipv6calc Homepage</H1
+NAME="AEN2"
+>The ipv6calc Homepage</A
+></H1
 ><HR></DIV
 ><DIV
 CLASS="TOC"
@@ -71,95 +73,95 @@ HREF="#AEN53"
 ></DD
 ><DT
 >5. <A
-HREF="#AEN81"
+HREF="#AEN82"
 >Mailling Lists</A
 ></DT
 ><DD
 ><DL
 ><DT
 >5.1. <A
-HREF="#AEN83"
+HREF="#AEN84"
 >ipv6calc-announce</A
 ></DT
 ><DT
 >5.2. <A
-HREF="#AEN103"
+HREF="#AEN104"
 >ipv6calc</A
 ></DT
 ></DL
 ></DD
 ><DT
 >6. <A
-HREF="#AEN123"
+HREF="#AEN124"
 >Bug Reports</A
 ></DT
 ><DT
 >7. <A
-HREF="#AEN126"
+HREF="#AEN127"
 >Features of ipv6calc</A
 ></DT
 ><DD
 ><DL
 ><DT
 >7.1. <A
-HREF="#AEN128"
+HREF="#AEN129"
 >Description</A
 ></DT
 ><DT
 >7.2. <A
-HREF="#AEN131"
+HREF="#AEN132"
 >Examples</A
 ></DT
 ><DT
 >7.3. <A
-HREF="#AEN144"
+HREF="#AEN145"
 >Option style</A
 ></DT
 ><DT
 >7.4. <A
-HREF="#AEN156"
+HREF="#AEN157"
 >Online help</A
 ></DT
 ></DL
 ></DD
 ><DT
 >8. <A
-HREF="#AEN170"
+HREF="#AEN171"
 >Webserver log conversion helper program "ipv6logconv"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >8.1. <A
-HREF="#AEN173"
+HREF="#AEN174"
 >Examples</A
 ></DT
 ></DL
 ></DD
 ><DT
 >9. <A
-HREF="#AEN177"
+HREF="#AEN178"
 >Perl CGI wrapper program "ipv6calcweb.cgi"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >9.1. <A
-HREF="#AEN180"
+HREF="#AEN181"
 >Examples</A
 ></DT
 ></DL
 ></DD
 ><DT
 >10. <A
-HREF="#AEN196"
+HREF="#AEN197"
 >Webserver log statistics helper program "ipv6logstats"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >10.1. <A
-HREF="#AEN199"
+HREF="#AEN200"
 >Examples</A
 ></DT
 ></DL
@@ -171,7 +173,9 @@ CLASS="SECT1"
 ><H2
 CLASS="SECT1"
 ><A
-NAME="AEN4">1. General</H2
+NAME="AEN4"
+>1. General</A
+></H2
 ><P
 >ipv6calc is a small utility written in programming languate C to manipulate (not only) IPv6 addresses. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.
   </P
@@ -198,7 +202,9 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN12">2. License</H2
+NAME="AEN12"
+>2. License</A
+></H2
 ><P
 >The program is published under the GNU GPL version 2.
   </P
@@ -208,7 +214,9 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN15">3. Author</H2
+NAME="AEN15"
+>3. Author</A
+></H2
 ><P
 >The author of ipv6calc is
   </P
@@ -231,13 +239,17 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN22">4. Where to get sources or binaries</H2
+NAME="AEN22"
+>4. Where to get sources or binaries</A
+></H2
 ><DIV
 CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN24">4.1. Latest version of sources:</H3
+NAME="AEN24"
+>4.1. Latest version of sources:</A
+></H3
 ><P
 ></P
 ><UL
@@ -296,13 +308,17 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN42">4.2. Available formats:</H3
+NAME="AEN42"
+>4.2. Available formats:</A
+></H3
 ><DIV
 CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
-NAME="AEN44">4.2.1. tar.gz</H4
+NAME="AEN44"
+>4.2.1. tar.gz</A
+></H4
 ><P
 >A SPEC file is included, so you can build a RPM from source tarball using
     </P
@@ -316,7 +332,7 @@ WIDTH="100%"
 COLOR="#000000"
 ><PRE
 CLASS="PROGRAMLISTING"
->$ rpm -ta path/to/ipv6calc-$version.tar.gz
+>$ rpmbuild -ta path/to/ipv6calc-$version.tar.gz
     </PRE
 ></FONT
 ></TD
@@ -328,7 +344,9 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN48">4.2.2. as RPM</H4
+NAME="AEN48"
+>4.2.2. as RPM</A
+></H4
 ><P
 >Currently only on <A
 HREF="http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc"
@@ -347,13 +365,17 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN53">4.3. Ready to use packages for several operating systems:</H3
+NAME="AEN53"
+>4.3. Ready to use packages for several operating systems:</A
+></H3
 ><DIV
 CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
-NAME="AEN55">4.3.1. Red Hat Linux</H4
+NAME="AEN55"
+>4.3.1. Red Hat Linux</A
+></H4
 ><P
 >Red Hat Linux (currently version 7.3) is the developing platform, so use given hints above to create a RPM.
     </P
@@ -363,7 +385,9 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN58">4.3.2. Mandrake:</H4
+NAME="AEN58"
+>4.3.2. Mandrake:</A
+></H4
 ><P
 >Linux Mandrake is very similar to Red Hat Linux, therefore a rebuild should work, too.
     </P
@@ -373,7 +397,9 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN61">4.3.3. PLD:</H4
+NAME="AEN61"
+>4.3.3. PLD:</A
+></H4
 ><P
 >See <A
 HREF="http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc"
@@ -387,7 +413,9 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN65">4.3.4. Debian GNU/Linux</H4
+NAME="AEN65"
+>4.3.4. Debian GNU/Linux</A
+></H4
 ><P
 >Package is maintained, more information can be found at <A
 HREF="http://packages.debian.org/ipv6calc"
@@ -401,7 +429,9 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN69">4.3.5. NetBSD:</H4
+NAME="AEN69"
+>4.3.5. NetBSD:</A
+></H4
 ><P
 >See here for more: <A
 HREF="http://www.netbsd.org/packages/net/ipv6calc/"
@@ -415,7 +445,9 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN73">4.3.6. FreeBSD:</H4
+NAME="AEN73"
+>4.3.6. FreeBSD:</A
+></H4
 ><P
 >See here for more: <A
 HREF="http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/"
@@ -433,9 +465,15 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN78">4.3.7. OpenBSD:</H4
+NAME="AEN78"
+>4.3.7. OpenBSD:</A
+></H4
 ><P
->Someone told me time ago that a port is on the way...
+>See here for more: <A
+HREF="http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/"
+TARGET="_top"
+>http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/</A
+>
     </P
 ></DIV
 ></DIV
@@ -445,13 +483,17 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN81">5. Mailling Lists</H2
+NAME="AEN82"
+>5. Mailling Lists</A
+></H2
 ><DIV
 CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN83">5.1. ipv6calc-announce</H3
+NAME="AEN84"
+>5.1. ipv6calc-announce</A
+></H3
 ><P
 ></P
 ><DIV
@@ -497,7 +539,9 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN103">5.2. ipv6calc</H3
+NAME="AEN104"
+>5.2. ipv6calc</A
+></H3
 ><P
 ></P
 ><DIV
@@ -544,9 +588,11 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN123">6. Bug Reports</H2
+NAME="AEN124"
+>6. Bug Reports</A
+></H2
 ><P
->You can send bug reports to the author himself or subscribe to maillist &#8220;ipv6calc&#8221; and send it to the list.
+>You can send bug reports to the author himself or subscribe to maillist "ipv6calc" and send it to the list.
   </P
 ></DIV
 ><DIV
@@ -554,15 +600,19 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN126">7. Features of ipv6calc</H2
+NAME="AEN127"
+>7. Features of ipv6calc</A
+></H2
 ><DIV
 CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN128">7.1. Description</H3
+NAME="AEN129"
+>7.1. Description</A
+></H3
 ><P
->The main program named &#8220;ipv6calc&#8221; is able to recognice many (not only) IPv6 address formats and depending on a selectable action (not required) a selectable output format can be specified.
+>The main program named "ipv6calc" is able to recognice many (not only) IPv6 address formats and depending on a selectable action (not required) a selectable output format can be specified.
    </P
 ></DIV
 ><DIV
@@ -570,7 +620,9 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN131">7.2. Examples</H3
+NAME="AEN132"
+>7.2. Examples</A
+></H3
 ><P
 >A simple example is the conversion of an IPv6 address to a DNS PTR query string:
    </P
@@ -613,7 +665,7 @@ CLASS="PROGRAMLISTING"
 ></TR
 ></TABLE
 ><P
->Also you've learnt now that switch &#8220;-q&#8221; (quiet) suppresses informational messages. You can use this now to start a DNS PTR query using:
+>Also you've learnt now that switch "-q" (quiet) suppresses informational messages. You can use this now to start a DNS PTR query using:
    </P
 ><TABLE
 BORDER="0"
@@ -680,7 +732,9 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN144">7.3. Option style</H3
+NAME="AEN145"
+>7.3. Option style</A
+></H3
 ><P
 >Since version 0.40 new-style option handling was introduced, using
    </P
@@ -715,7 +769,9 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN156">7.4. Online help</H3
+NAME="AEN157"
+>7.4. Online help</A
+></H3
 ><P
 >Online help always shows the currently implemented features.
    </P
@@ -724,7 +780,9 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN159">7.4.1. Main online help:</H4
+NAME="AEN160"
+>7.4.1. Main online help:</A
+></H4
 ><TABLE
 BORDER="0"
 BGCOLOR="#E0E0E0"
@@ -912,7 +970,9 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN170">8. Webserver log conversion helper program "ipv6logconv"</H2
+NAME="AEN171"
+>8. Webserver log conversion helper program "ipv6logconv"</A
+></H2
 ><P
 >This program parses address tokens of a given webserver logfile and converts them to special strings, useful for statistics (e.g. created by using "analog").
   </P
@@ -921,7 +981,9 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN173">8.1. Examples</H3
+NAME="AEN174"
+>8.1. Examples</A
+></H3
 ><P
 >A demonstration about which kind of statistics are possible to produce is shown at <A
 HREF="http://www.ipv6.bieringer.de/"
@@ -936,7 +998,9 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN177">9. Perl CGI wrapper program "ipv6calcweb.cgi"</H2
+NAME="AEN178"
+>9. Perl CGI wrapper program "ipv6calcweb.cgi"</A
+></H2
 ><P
 >Because calling C programs directly as CGI isn't really recommended (too much security troubles all the time), I wrote a small wrapper utility which calls "ipv6calc" to get information about client and server address. 
   </P
@@ -945,7 +1009,9 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN180">9.1. Examples</H3
+NAME="AEN181"
+>9.1. Examples</A
+></H3
 ><P
 >A demonstration about which kind of output is possible to produce is shown at
    </P
@@ -996,7 +1062,9 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN196">10. Webserver log statistics helper program "ipv6logstats"</H2
+NAME="AEN197"
+>10. Webserver log statistics helper program "ipv6logstats"</A
+></H2
 ><P
 >This program parses a given webserver logfile and count addresses, useful for time period statistics.
   </P
@@ -1005,7 +1073,9 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN199">10.1. Examples</H3
+NAME="AEN200"
+>10.1. Examples</A
+></H3
 ><P
 >A demonstration about which kind of statistics is currently not public online.
    </P

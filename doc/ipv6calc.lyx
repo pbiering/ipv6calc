@@ -149,7 +149,7 @@ tar.gz
 A SPEC file is included, so you can build a RPM from source tarball using
 \layout Code
 
-$ rpm -ta path/to/ipv6calc-$version.tar.gz
+$ rpmbuild -ta path/to/ipv6calc-$version.tar.gz
 \layout Subsubsection
 
 as RPM
