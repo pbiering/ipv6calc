@@ -2,7 +2,7 @@
  * librfc1884: Function libary for conversions
  *              defined in RFC 1884
  *
- * Version:		$Id: librfc1884.c,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Version:		$Id: librfc1884.c,v 1.1.1.1 2001/10/07 14:47:40 peter Exp $
  * 
  * Author:		Peter Bieringer <pb@bieringer.de>
  *

@@ -1,5 +1,5 @@
 /*
- * Version:     $Id: librfc1924.h,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Version:     $Id: librfc1924.h,v 1.1.1.1 2001/10/07 14:47:40 peter Exp $
  *
  * Header file for librfc1924.c libary
  *

@@ -3,7 +3,7 @@
  *  A function to format a given IPv6 address to a
  *   base85 one (RFC 1924)
  *
- * Version:		$Id: addr_to_base85.c,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Version:		$Id: addr_to_base85.c,v 1.1.1.1 2001/10/07 14:47:40 peter Exp $
  * 
  * Author:		Peter Bieringer <pb@bieringer.de>
  *

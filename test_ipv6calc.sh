@@ -2,7 +2,7 @@
 #
 # Testfile for ipv6calc
 #
-# Version:     $Id: test_ipv6calc.sh,v 1.1 2001/10/07 14:47:40 peter Exp $
+# Version:     $Id: test_ipv6calc.sh,v 1.1.1.1 2001/10/07 14:47:40 peter Exp $
 #
 # Author:      Peter Bieringer <pb@bieringer.de>
 #

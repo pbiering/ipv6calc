@@ -1,7 +1,7 @@
 /*
  * libipv6addr: Function libary for IPv6 storage
  *
- * Version:		$Id: libipv6addr.c,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Version:		$Id: libipv6addr.c,v 1.1.1.1 2001/10/07 14:47:40 peter Exp $
  * 
  * Author:		Peter Bieringer <pb@bieringer.de>
  *

@@ -2,7 +2,7 @@
  * showinfo:
  *  Function to show information about a given IPv6 address
  *
- * Version:		$Id: showinfo.c,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Version:		$Id: showinfo.c,v 1.1.1.1 2001/10/07 14:47:40 peter Exp $
  * 
  * Author:		Peter Bieringer <pb@bieringer.de>
  *

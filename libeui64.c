@@ -2,7 +2,7 @@
  * libeui64: Function libary for conversions
  *            defined in EUI-64
  * 
- * Version:		$Id: libeui64.c,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Version:		$Id: libeui64.c,v 1.1.1.1 2001/10/07 14:47:40 peter Exp $
  * 
  * Author:		Peter Bieringer <pb@bieringer.de>
  *

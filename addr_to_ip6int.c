@@ -2,7 +2,7 @@
  * addr_to_ip6int:
  *  Function to format a given address to reverse ip6.int format
  *
- * Version:		$Id: addr_to_ip6int.c,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Version:		$Id: addr_to_ip6int.c,v 1.1.1.1 2001/10/07 14:47:40 peter Exp $
  * 
  * Author:		Peter Bieringer <pb@bieringer.de>
  *

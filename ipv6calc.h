@@ -1,5 +1,5 @@
 /*
- * Version:     $Id: ipv6calc.h,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Version:     $Id: ipv6calc.h,v 1.1.1.1 2001/10/07 14:47:40 peter Exp $
  *
  * Author:      Peter Bieringer <pb@bieringer.de>
  *

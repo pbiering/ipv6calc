@@ -1,5 +1,5 @@
 /*
- * Version:     $Id: librfc3041.h,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Version:     $Id: librfc3041.h,v 1.1.1.1 2001/10/07 14:47:40 peter Exp $
  *
  * Header file for librfc3041.c libary
  *

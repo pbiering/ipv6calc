@@ -3,7 +3,7 @@
  *  Function to format an address string like shown in 
  *   Linux /proc/net/if_inet6 to a normal compressed one
  *
- * Version:		$Id: ifinet6_to_compressed.c,v 1.1 2001/10/07 14:47:40 peter Exp $
+ * Version:		$Id: ifinet6_to_compressed.c,v 1.1.1.1 2001/10/07 14:47:40 peter Exp $
  * 
  * Author:		Peter Bieringer <pb@bieringer.de>
  *
