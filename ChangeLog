@@ -1,10 +1,15 @@
 /*
- *  $Id: ChangeLog,v 1.27 2002/03/11 19:27:09 peter Exp $ 
+ *  $Id: ChangeLog,v 1.28 2002/03/11 21:52:25 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20020311/PB:
+	new: libieee to display an OUI, if available
+	showinfo: machinereadable now printout one info per line (switchable later)
+	minor fixes
+
 20020306/PB:
 	enhance help, adapt format to 80 chars per line
 	bugfix in showinfo.c relating to display EUI-64 id
