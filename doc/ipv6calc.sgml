@@ -7,15 +7,6 @@
    <title>
 The ipv6calc Homepage
   </title>
-    <revision>
-     <revnumber>
-Last update: 2003-08-28
-    </revnumber>
-
-    </revision>
-
-
-
 
   </articleinfo>
 
@@ -320,7 +311,7 @@ Information:
 Bug Reports
   </title>
   <para>
-You can send bug reports to the author himself or subscribe to maillist &quot;ipv6calc&quot; and send it to the list.
+You can send bug reports to the author himself or subscribe to maillist &ldquo;ipv6calc&rdquo; and send it to the list.
   </para>
 
   </sect1>
@@ -334,7 +325,7 @@ Features of ipv6calc
 Description
    </title>
    <para>
-The main program named &quot;ipv6calc&quot; is able to recognice many (not only) IPv6 address formats and depending on a selectable action (not required) a selectable output format can be specified.
+The main program named &ldquo;ipv6calc&rdquo; is able to recognice many (not only) IPv6 address formats and depending on a selectable action (not required) a selectable output format can be specified.
    </para>
 
    </sect2>
@@ -361,7 +352,7 @@ Like you see, input format was autodetected. And given example can be extended b
 ]]>
    </programlisting>
    <para>
-Also you've learnt now that switch &quot;-q&quot; (quiet) suppresses informational messages. You can use this now to start a DNS PTR query using:
+Also you've learnt now that switch &ldquo;-q&rdquo; (quiet) suppresses informational messages. You can use this now to start a DNS PTR query using:
    </para>
    <programlisting>
 <![CDATA[$ dig PTR `./ipv6calc -q --out revnibbles.arpa 3ffe:ffff::1/64`
