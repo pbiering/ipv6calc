@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.28 2003/11/21 11:07:10 peter Exp $
+# Version    : $Id: Makefile.in,v 1.29 2003/11/21 11:38:15 peter Exp $
 # Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -31,8 +31,8 @@ ipv6calc:	getopt-make lib-make ipv6calc-make ipv6calcweb-make db-ieee-oui-make d
 distclean:
 		make clean
 		rm -f config.cache config.status config.log
-		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib databases/ieee-oui databases/ipv4-assignment; do
-			cd $dir && make distclean
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib databases/ieee-oui databases/ipv4-assignment; do \
+			cd $$dir && make distclean; \
 		done
 
 autoclean:
@@ -41,13 +41,13 @@ autoclean:
 		rm -f version.h
 		rm -f contrib/ipv6calc.spec
 		rm config.h
-		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do
-			cd $dir && make autoclean
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do \
+			cd $$dir && make autoclean; \
 		done
 
 clean:
-		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do
-			cd $dir && make clean
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do \
+			pushd $$dir && make clean; popd; \
 		done
 
 install:
@@ -55,8 +55,8 @@ install:
 		make installonly
 
 installonly:
-		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do
-			cd $dir && make install
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do \
+			pushd $$dir && make install; popd; \
 		done
 
 getopt-make:
@@ -84,12 +84,11 @@ db-ipv4-assignment-make:
 		cd databases/ipv4-assignment && make
 
 update:
-		cd databases/ieee-oui && make update
-		cd databases/ipv4-assignment && make update
-		cd ipv6calcweb/ && make update
-
+		for dir in databases/ieee-oui databases/ipv4-assignment; do \
+			pushd $$dir && make update; popd; \
+		done
 
 test:
-		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do
-			cd $dir && make test
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do \
+			pushd $$dir && make test; popd; \
 		done
