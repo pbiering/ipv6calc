@@ -1,16 +1,23 @@
 /*
- *  $Id: ChangeLog,v 1.34 2002/03/18 20:03:32 peter Exp $ 
+ *  $Id: ChangeLog,v 1.35 2002/03/18 20:58:13 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
 20020317/PB:
+	move files to dedicated subdirectories
+	add program information on ipv6calc -m
+	enhance ipv6calcweb.cgi
+	begin to replace "sprintf" with "snprintf" (for security)
+
+20020317/PB:
 	ipv6calc: fix not working showtypes	
 	new: ipv6calcweb.cgi: Perl wrapper program for web interface
 	replace all "strtok" to "strtok_r" because of problems due calls in subfunctions (thanks to manpage...)
           remove "-ansi" from compiling options
 	ipv6logconv: add output format "any", fills address, referer and user with proper information
+	some code lint
 
 20020316/PB:
 	new: ipv6logconv is able to convert addresses of webserver logs into special domain names

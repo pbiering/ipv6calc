@@ -1,6 +1,6 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.12 2002/03/16 18:27:11 peter Exp $
+# Version: $Id: TODO,v 1.13 2002/03/18 20:58:13 peter Exp $
 
 TODO list
 
@@ -22,6 +22,11 @@ IEEE/OUI library:
 * perhaps more filtering of unnecessary information
 
 Creating a dedicated output library
+
+Code cleanup:
+ * replace sprintf with snprintf
+ * splint
+
 
 
 Features requested from others:
