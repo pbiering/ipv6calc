@@ -1,6 +1,6 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.4 2002/02/27 23:14:15 peter Exp $
+# Version: $Id: TODO,v 1.5 2002/03/03 11:01:53 peter Exp $
 
 TODO list
 
@@ -16,8 +16,6 @@ Features:
 Format features
 * printprefix, printsuffix for full
 
-Cosmetics:
-* less major options, more format options 
 
 
 

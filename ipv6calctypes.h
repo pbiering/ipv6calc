@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.4 2002/03/02 22:06:53 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.5 2002/03/03 11:01:53 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -12,6 +12,7 @@
 
 /* prototypes */
 extern int ipv6calctypes_checktype(char *string);
+extern int ipv6calctypes_checkaction(char *string);
 
 /* defines */
 #ifndef _ipv6calctypes_h_
@@ -34,6 +35,8 @@ extern int ipv6calctypes_checktype(char *string);
 #define FORMAT_eui64		0x0040
 #define FORMAT_base85		0x0080
 #define FORMAT_ifinet6		0x0100
+#define FORMAT_iid		0x0200
+#define FORMAT_iid_token	0x0400
 
 /* Primary label of format number, keeping also an explanation */
 typedef struct {
@@ -54,6 +57,8 @@ static const s_format ipv6calc_formatstrings[] = {
 	{ FORMAT_eui64          , "eui64"          , "EUI-64 identifier (64 bits)", "" },
 	{ FORMAT_base85         , "base85"         , "Base-85 string", "" },
 	{ FORMAT_ifinet6        , "ifinet6"        , "Like line in /proc/net/if_inet6", "" },
+	{ FORMAT_iid            , "iid"            , "Interface identifiers", "" },
+	{ FORMAT_iid_token      , "iid+token"      , "Interface identifier and token", "" },
 };
 
 /* Format conversion matrix */
@@ -67,7 +72,8 @@ static const long int ipv6calc_formatmatrix[][2] = {
 	{ FORMAT_mac            , FORMAT_eui64 },
 	{ FORMAT_eui64          , 0 }, /* input currently not supported */
 	{ FORMAT_base85         , FORMAT_base85 | FORMAT_ipv6addr | FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ifinet6 },
-	{ FORMAT_ifinet6        , FORMAT_base85 | FORMAT_ipv6addr | FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ifinet6 }
+	{ FORMAT_ifinet6        , FORMAT_base85 | FORMAT_ipv6addr | FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ifinet6 },
+	{ FORMAT_iid_token      , FORMAT_iid_token },
 };
 
 
@@ -116,13 +122,29 @@ static const int ipv6calc_outputformatoptionmap[][2]  = {
 	{ FORMAT_eui64          , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_base85         , 0 },
 	{ FORMAT_ifinet6        , 0 },
-	{ FORMAT_ipv4addr       , 0 }
+	{ FORMAT_ipv4addr       , 0 },
+	{ FORMAT_iid_token      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 };
 
-/*
 
+/* Actions */
+#define ACTION_auto			0x0000000l
+#define ACTION_mac_to_eui64		0x0000001l
+#define ACTION_ipv4_to_6to4addr		0x0000002l
+#define ACTION_iid_token_to_privacy	0x0000004l
+
+typedef struct {
+	unsigned long int number;
+	char *token;
+	char *explanation;
+	char *aliases;
+} s_action;
+
+static const s_action ipv6calc_actionstrings[] = {
+	{ ACTION_auto                   , "auto"           , "Automatic selection of action (default)", "" },
+	{ ACTION_mac_to_eui64           , "geneui64"       , "Converts a MAC address to an EUI-64 address", "" },
+	{ ACTION_ipv4_to_6to4addr       , "gen6to4"        , "Converts an IPv4 address to a 6to4 IPv6 address prefix", "" },
+	{ ACTION_iid_token_to_privacy   , "genprivacyiid"  , "Generates a privacy interface ID out of a given one and a token", "" },
 };
-
-*/
 
 #endif

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.c
- * Version    : $Id: librfc2874.c,v 1.4 2002/03/02 17:27:28 peter Exp $
+ * Version    : $Id: librfc2874.c,v 1.5 2002/03/03 11:01:54 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -58,7 +58,7 @@ int librfc2874_addr_to_bitstring(ipv6calc_ipv6addr *ipv6addrp, char *resultstrin
 		bit_end = 128;
 	};
 
-	if ( ipv6calc_debug & DEBUG_addr_to_bitstring ) {
+	if ( ipv6calc_debug & DEBUG_librfc2874 ) {
 		fprintf(stderr, "%s: print from start bit to end bit: %d - %d\n", DEBUG_function_name, bit_start, bit_end);
 	};
 
@@ -75,7 +75,7 @@ int librfc2874_addr_to_bitstring(ipv6calc_ipv6addr *ipv6addrp, char *resultstrin
 		/* extract nibble */
 		nibble = ( (*ipv6addrp).in6_addr.s6_addr[noctett] & ( 0xf << (4 * (1 - nnibble)) ) ) >> ( 4 * (1 - nnibble));
 		
-		if ( ipv6calc_debug & DEBUG_addr_to_bitstring ) {
+		if ( ipv6calc_debug & DEBUG_librfc2874 ) {
 			fprintf(stderr, "%s: bit: %d = noctett: %d, nnibble: %d, octett: %02x, value: %x\n", DEBUG_function_name, nbit, noctett, nnibble, (*ipv6addrp).in6_addr.s6_addr[noctett], nibble);
 		};
 

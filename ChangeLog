@@ -1,12 +1,18 @@
 /*
- *  $Id: ChangeLog,v 1.21 2002/03/02 22:06:51 peter Exp $ 
+ *  $Id: ChangeLog,v 1.22 2002/03/03 11:01:53 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20020303/PB:
+	migrate eui64 to privacy into new style
+	more cleanup
+	extend test script
+
 20020302/PB:
 	major work of redesign is done, test script runs well, unused files removed
+	tag release 0.40pre1
 
 20020301/PB:
 	start redesign

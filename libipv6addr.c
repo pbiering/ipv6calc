@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.8 2002/03/02 17:27:28 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.9 2002/03/03 11:01:53 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -191,7 +191,7 @@ void ipv6addr_setdword(ipv6calc_ipv6addr *ipv6addrp, int numdword, unsigned int 
 void ipv6addr_clear(ipv6calc_ipv6addr *ipv6addrp) {
 	int i;
 
-	for (i = 0; i <= 15; i++) {
+	for (i = 0; i < sizeof(ipv6addrp->in6_addr.s6_addr) / sizeof(ipv6addrp->in6_addr.s6_addr[0]); i++) {
 		ipv6addrp->in6_addr.s6_addr[i] = 0;
 	};
 	
@@ -226,6 +226,26 @@ void ipv6addr_clearall(ipv6calc_ipv6addr *ipv6addrp) {
 	return;
 };
 #undef DEBUG_function_name
+
+
+/*
+ * function copies the IPv6 structure
+ *
+ * in:  ipv6addrp  = pointer to IPv6 address structure
+ * mod: ipv6addrp2 = pointer to IPv6 address structure
+ */
+#define DEBUG_function_name "libipv6addr/ipv6addr_copy"
+void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6addr *ipv6addrp_src) {
+	int i;
+
+	for (i = 0; i < sizeof(ipv6calc_ipv6addr); i++) {
+		*(ipv6addrp_dst + i) = *(ipv6addrp_src + i);
+	};
+	
+	return;
+};
+#undef DEBUG_function_name
+
 
 /*
  * function gets type of an IPv6 address
@@ -535,9 +555,13 @@ int ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstrin
 	return (retval);
 };
 
-#define DEBUG_function_name "libipv6addr/libipv6addr_ipv6addrstruct_to_uncompaddr"
+#define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddr"
 int libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned int formatoptions) {
 	int retval = 1;
+	
+	if ( ipv6calc_debug & DEBUG_libipv6addr ) {
+		fprintf(stderr, "%s: get format option: %x\n", DEBUG_function_name, formatoptions);
+	};
 
 	if ( formatoptions & FORMATOPTION_printprefix ) {
 		retval = ipv6addrstruct_to_uncompaddrprefix(ipv6addrp, resultstring);
@@ -573,11 +597,15 @@ int libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char 
  * out: *resultstring = IPv6 address (modified)
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddrsuffix"
+#define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddrprefix"
 int ipv6addrstruct_to_uncompaddrprefix(ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 	int retval = 1;
 	int max, i;
 	char tempstring1[NI_MAXHOST], tempstring2[NI_MAXHOST];
+	
+	if ( ipv6calc_debug & DEBUG_libipv6addr ) {
+		fprintf(stderr, "%s: called\n", DEBUG_function_name);
+	};
 
 	/* test for misuse */
 	if ( ( ( ipv6addrp->scope & IPV6_ADDR_COMPATv4 ) || ( ipv6addrp->scope & IPV6_ADDR_MAPPED ) ) && ( ipv6addrp->prefixlength > 96 ) ) {
@@ -627,6 +655,10 @@ int ipv6addrstruct_to_uncompaddrsuffix(ipv6calc_ipv6addr *ipv6addrp, char *resul
 	int retval = 1;
 	int max, i;
 	char tempstring1[NI_MAXHOST], tempstring2[NI_MAXHOST];
+
+	if ( ipv6calc_debug & DEBUG_libipv6addr ) {
+		fprintf(stderr, "%s: called\n", DEBUG_function_name);
+	};
 
 	/* test for misuse */
 	if ( ( ( ipv6addrp->scope & IPV6_ADDR_COMPATv4 ) || ( ipv6addrp->scope & IPV6_ADDR_MAPPED ) ) && ( ipv6addrp->prefixlength > 96 ) ) {
@@ -803,17 +835,18 @@ void ipv6addrstruct_masksuffix(ipv6calc_ipv6addr *ipv6addrp) {
 
 
 /*
- * function stores an 16 char identifier/token into a structure
+ * function stores an 16 char token into a structure
  *
- * in : *addrstring = 16 char identifier/token
+ * in : *addrstring = 16 char token
  * out: *resultstring = error message
  * out: ipv6addr = IPv6 address structure
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libipv6addr/identifier_to_ipv6addrstruct"
-int identifier_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
-	int retval = 1, result, i;
-	unsigned int temp[8];
+#define DEBUG_function_name "libipv6addr/tokenlsb64_to_ipv6addrstruct"
+int tokenlsb64_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
+	int retval = 1, result;
+	int temp[4];
+	char tempstring[NI_MAXHOST];
 
 	sprintf(resultstring, "%s", ""); /* clear result string */
 
@@ -822,45 +855,93 @@ int identifier_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_
 	};
 	
 	if ( strlen(addrstring) != 16 ) {
-		sprintf(resultstring, "Error, given identifier/token '%s' is not valid (length != 16!", addrstring);
+		sprintf(resultstring, "Error, given /token '%s' is not valid (length != 16!", addrstring);
 		retval = 1;
 		return (retval);
 	};
 
-	/* clear variables */
-	ipv6addr_clear(ipv6addrp);
-
 	/* scan address into array */
-	result = sscanf(addrstring, "%04x%04x%04x%04x", &temp[4], &temp[5], &temp[6], &temp[7]);
+	result = sscanf(addrstring, "%04x%04x%04x%04x", &temp[0], &temp[1], &temp[2], &temp[3]);
 	if ( result != 4 ) {
 		sprintf(resultstring, "Error splitting address '%s', got %d items instead of 4!", addrstring, result);
 		retval = 1;
 		return (retval);
 	};
-	if ( ipv6calc_debug & DEBUG_libipv6addr ) {
-		fprintf(stderr, "%s: reading into array, got items: %d\n", DEBUG_function_name, result);
-	};
 
-	/* check address words range */
-	for ( i = 4; i <= 7; i++ ) {
-		if ( ( temp[i] < 0x0 ) || ( temp[i] > 0xffff ) )	{
-			sprintf(resultstring, "Error, given address '%s' is not valid on position %d (%x)!", addrstring, i, temp[i]);
-			retval = 1;
-			return (retval);
-		};
+	/* set prefix */
+	sprintf(tempstring, "0:0:0:0:%04x:%04x:%04x:%04x", temp[0], temp[1], temp[2], temp[3]);
+
+	/* store into structure */
+	retval = addr_to_ipv6addrstruct(tempstring, resultstring, ipv6addrp);
+
+	return (retval);
+};
+#undef DEBUG_function_name
+
+/*
+ * function stores an interface identifier into a structure
+ *
+ * in : *addrstring = interface identifier
+ * out: *resultstring = error message
+ * out: ipv6addr = IPv6 address structure
+ * ret: ==0: ok, !=0: error
+ */
+#define DEBUG_function_name "libipv6addr/identifier_to_ipv6addrstruct"
+int identifier_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
+	int retval = 1;
+	char tempstring[NI_MAXHOST];
+
+	sprintf(resultstring, "%s", ""); /* clear result string */
+
+	if ( ipv6calc_debug & DEBUG_libipv6addr ) {
+		fprintf(stderr, "%s: got input '%s'\n", DEBUG_function_name, addrstring);
 	};
 	
-	/* copy into structure */
-	ipv6addr_setword(ipv6addrp, 4, temp[4]);
-	ipv6addr_setword(ipv6addrp, 5, temp[5]);
-	ipv6addr_setword(ipv6addrp, 6, temp[6]);
-	ipv6addr_setword(ipv6addrp, 7, temp[7]);
-	
-	if ( ipv6calc_debug & DEBUG_libipv6addr ) {
-		fprintf(stderr, "%s: Got value '%04x%04x%04x%04x'\n", DEBUG_function_name, temp[4], temp[5], temp[6], temp[7]);
+	if ( strlen(addrstring) > 19 ) {
+		sprintf(resultstring, "Error, given identifier identifier '%s' is too long (length > 16!", addrstring);
+		retval = 1;
+		return (retval);
 	};
 
-	retval = 0;
+	/* set prefix */
+	sprintf(tempstring, "0:0:0:0:%s", addrstring);
+
+	/* store into structure */
+	retval = addr_to_ipv6addrstruct(tempstring, resultstring, ipv6addrp);
+
+	if ( ipv6calc_debug & DEBUG_libipv6addr ) {
+		fprintf(stderr, "%s: result string '%s'\n", DEBUG_function_name, resultstring);
+	};
+
+	return (retval);
+};
+#undef DEBUG_function_name
+
+/*
+ * function stores the ipv6addr structure in an uncompressed IPv6 format string
+ *
+ * in:  ipv6addr = IPv6 address structure
+ * out: *resultstring = IPv6 address (modified)
+ * ret: ==0: ok, !=0: error
+ */
+#define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_tokenlsb64"
+int libipv6addr_ipv6addrstruct_to_tokenlsb64(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned long formatoptions) {
+	int retval = 1;
+	
+	/* print array */
+	sprintf(resultstring, "%04x%04x%04x%04x", ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addr_getword(ipv6addrp, 6), ipv6addr_getword(ipv6addrp, 7));
+
+	if (formatoptions & FORMATOPTION_printlowercase) {
+		/* nothing to do */
+	} else if (formatoptions & FORMATOPTION_printuppercase) {
+		string_to_upcase(resultstring);
+	};
+
+	if ( ipv6calc_debug & DEBUG_libipv6addr ) {
+		fprintf(stderr, "%s: result string '%s'\n", DEBUG_function_name, resultstring);
+	};
+	
+	retval = 0;	
 	return (retval);
 };
 #undef DEBUG_function_name

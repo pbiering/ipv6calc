@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3041.c
- * Version    : $Id: librfc3041.c,v 1.2 2002/02/25 21:18:51 peter Exp $
+ * Version    : $Id: librfc3041.c,v 1.3 2002/03/03 11:01:54 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -60,11 +60,15 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 	ipv6addr_clear(newidentifier);
 	ipv6addr_clear(newtoken);
 	
-	for (i = 0; i <= 7; i++) {
+	for (i = 0; i < sizeof(newidentifier->in6_addr.s6_addr) / sizeof(newidentifier->in6_addr.s6_addr[0]); i++) {
 		/* copy into */	
 		newidentifier->in6_addr.s6_addr[i + 8] = digest[i];
 		newtoken->in6_addr.s6_addr[i + 8] = digest[i + 8];
 	};
+	
+	newidentifier->flag_valid = 1;
+	newidentifier->prefixlength = 64;
+	newtoken->flag_valid = 1;
 
    	retval = 0;	
 	return (retval);

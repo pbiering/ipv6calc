@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libifinet6.c
- * Version    : $Id: libifinet6.c,v 1.4 2002/03/02 22:06:53 peter Exp $
+ * Version    : $Id: libifinet6.c,v 1.5 2002/03/03 11:01:53 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -30,7 +30,7 @@ int libifinet6_ifinet6_to_ipv6addrstruct(char *addrstring, char *resultstring, i
 	char tempstring[NI_MAXHOST];
 	char addr6p[8][5]; 
 
-	if (ipv6calc_debug) {
+	if (ipv6calc_debug & DEBUG_libifinet6) {
 		fprintf(stderr, "%s: Got input %s\n", DEBUG_function_name, addrstring);
 	};
 	
@@ -52,7 +52,7 @@ int libifinet6_ifinet6_to_ipv6addrstruct(char *addrstring, char *resultstring, i
 	/* print out into temp string */
 	sprintf(tempstring, "%s:%s:%s:%s:%s:%s:%s:%s", addr6p[0], addr6p[1], addr6p[2], addr6p[3], addr6p[4], addr6p[5], addr6p[6], addr6p[7]); 
 					 
-	if (ipv6calc_debug) {
+	if (ipv6calc_debug & DEBUG_libifinet6) {
 		fprintf(stderr, "%s: Filled: %s\n", DEBUG_function_name, tempstring);
 	};
 
@@ -76,7 +76,7 @@ int libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(char *addrstring, char
 	char tempstring[NI_MAXHOST];
 	unsigned int prefixlength = 0;
 
-	if (ipv6calc_debug) {
+	if (ipv6calc_debug & DEBUG_libifinet6) {
 		fprintf(stderr, "%s: Got input addressstring: '%s', prefixlengthstring: '%s'\n", DEBUG_function_name, addrstring, prefixlengthstring);
 	};
 
@@ -113,7 +113,7 @@ int libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(char *addrstring, char
 	ipv6addrp->prefixlength = prefixlength;
 	ipv6addrp->flag_prefixuse = 1;
 	
-	if (ipv6calc_debug) {
+	if (ipv6calc_debug & DEBUG_libifinet6) {
 		fprintf(stderr, "%s: Print: '%s'\n", DEBUG_function_name, resultstring);
 	};
 			
@@ -142,7 +142,7 @@ int libifinet6_ipv6addrstruct_to_ifinet6(ipv6calc_ipv6addr *ipv6addrp, char *res
 		sprintf(resultstring, "%s", tempstring);
 	};
 
-	if (ipv6calc_debug & DEBUG_addr_to_ifinet6) {
+	if (ipv6calc_debug & DEBUG_libifinet6) {
 		fprintf(stderr, "addr_to_ifinet6: Print out: %s\n", resultstring);
 	};
 

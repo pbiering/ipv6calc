@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.8 2002/03/02 22:06:53 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.9 2002/03/03 11:01:53 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -136,6 +136,7 @@ extern void ipv6addr_setdword(ipv6calc_ipv6addr *ipv6addrp, int numdword, unsign
 
 extern void ipv6addr_clear(ipv6calc_ipv6addr *ipv6addrp);
 extern void ipv6addr_clearall(ipv6calc_ipv6addr *ipv6addrp);
+extern void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6addr *ipv6addrp_src);
 
 extern unsigned int ipv6addr_gettype(ipv6calc_ipv6addr *ipv6addrp);
 
@@ -154,3 +155,6 @@ extern void ipv6addrstruct_maskprefix(ipv6calc_ipv6addr *ipv6addrp);
 extern void ipv6addrstruct_masksuffix(ipv6calc_ipv6addr *ipv6addrp);
 
 extern int  identifier_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
+
+extern int  tokenlsb64_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
+extern int  libipv6addr_ipv6addrstruct_to_tokenlsb64(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned long formatoptions);

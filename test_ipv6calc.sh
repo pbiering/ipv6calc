@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.7 2002/03/02 10:46:03 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.8 2002/03/03 11:01:54 peter Exp $
 # Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Best view with tabsize 4 (historic...)
@@ -11,10 +11,16 @@
 
 testscenarios() {
 # Command													Expected result (no space between "=" and result)
-cat <<END
+cat <<END | grep -v "^#"
+## ip6.int.
 --addr_to_ip6int 3ffe:ffff:100:f101::1					=1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
 --intype ipv6 --outtype revnibbles.int 3ffe:ffff:100:f101::1		=1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
 --addr_to_ip6int 3ffe:ffff:100:f101::1/64				=1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
+## ip6.arpa.
+--addr_to_ip6arpa 3ffe::1/64						=0.0.0.0.0.0.0.0.0.0.0.0.e.f.f.3.ip6.arpa.
+--intype ipv6 --outtype revnibbles.arpa	3ffe::1/64			=0.0.0.0.0.0.0.0.0.0.0.0.e.f.f.3.ip6.arpa.
+-a --uppercase 3ffe::1/64						=0.0.0.0.0.0.0.0.0.0.0.0.E.F.F.3.IP6.ARPA.
+## to uncompressed
 --addr_to_compressed 3ffe:ffff:0100:f101:0000:0000:0000:0001		=3ffe:ffff:100:f101::1
 --intype ipv6 --outtype ipv6 --printcompressed 3ffe:ffff:0100:f101:0000:0000:0000:0001 =3ffe:ffff:100:f101::1
 --addr_to_compressed 3ffe:ffff:0100:f101:0000:0000:0000:0001/64		=3ffe:ffff:100:f101::1/64
@@ -33,6 +39,8 @@ cat <<END
 --addr_to_compressed 0:0:0:0:0:0:13.1.68.3				=::13.1.68.3
 --addr_to_compressed 0:0:0:0:0:ffff:129.144.52.38			=::ffff:129.144.52.38
 --addr_to_compressed --uppercase 0:0:0:0:0:ffff:129.144.52.38		=::FFFF:129.144.52.38
+--intype ipv6 --outtype ipv6 --printcompressed --uppercase 0:0:0:0:0:ffff:129.144.52.38		=::FFFF:129.144.52.38
+## uncompressed
 --addr_to_uncompressed 3ffe:ffff:100:f101::1				=3ffe:ffff:100:f101:0:0:0:1
 --intype ipv6 --outtype ipv6 --printuncompressed 3ffe:ffff:100:f101::1	=3ffe:ffff:100:f101:0:0:0:1
 --addr_to_uncompressed 3ffe:ffff:100:f101::1/64				=3ffe:ffff:100:f101:0:0:0:1/64
@@ -42,30 +50,43 @@ cat <<END
 --addr_to_uncompressed --maskprefix 3ffe:ffff:100:f101::1/64		=3ffe:ffff:100:f101:0:0:0:0/64
 --addr_to_uncompressed --masksuffix 3ffe:ffff:100:f101:c000::1/64	=0:0:0:0:c000:0:0:1/64
 --addr_to_uncompressed --uppercase ::ffff:13.1.68.3			=0:0:0:0:0:FFFF:13.1.68.3
+# selecting suffix/prefix
+--addr_to_uncompressed --printsuffix ::ffff:1.2.3.4/64			=0:ffff:1.2.3.4
+--intype ipv6 --outtype ipv6 --printsuffix --printuncompressed ::ffff:1.2.3.4/64			=0:ffff:1.2.3.4
+--addr_to_uncompressed --printsuffix ::ffff:1.2.3.4/63			=0:0:ffff:1.2.3.4
+--addr_to_uncompressed --printsuffix 3ffe:ffff:100:f101::1/64		=0:0:0:1
+--addr_to_uncompressed --printprefix 3ffe:ffff:100:f101::1/64		=3ffe:ffff:100:f101
+--addr_to_uncompressed --printprefix 3ffe:ffff:100:f101::1/65		=3ffe:ffff:100:f101:0
+--intype ipv6 --outtype ipv6 --printprefix --printuncompressed 3ffe:ffff:100:f101::1/65		=3ffe:ffff:100:f101:0
+## full uncompressed
 --addr_to_fulluncompressed 3ffe:ffff:100:f101::1			=3ffe:ffff:0100:f101:0000:0000:0000:0001
 --intype ipv6 --outtype ipv6 --printfulluncompressed 3ffe:ffff:100:f101::1 =3ffe:ffff:0100:f101:0000:0000:0000:0001
 --addr_to_fulluncompressed 3ffe:ffff:100:f101::1/64			=3ffe:ffff:0100:f101:0000:0000:0000:0001/64
 --addr_to_fulluncompressed ::13.1.68.3					=0000:0000:0000:0000:0000:0000:13.1.68.3
 --addr_to_fulluncompressed ::ffff:13.1.68.3				=0000:0000:0000:0000:0000:ffff:13.1.68.3
 --addr_to_fulluncompressed --uppercase ::ffff:13.1.68.3			=0000:0000:0000:0000:0000:FFFF:13.1.68.3
+## ifinet6
 --addr_to_ifinet6 3ffe:ffff:100:f101::1					=3ffeffff0100f1010000000000000001 00
+--intype ipv6 --outtype ifinet6 3ffe:ffff:100:f101::1			=3ffeffff0100f1010000000000000001 00
 --addr_to_ifinet6 3ffe:ffff:100:f101::1/64				=3ffeffff0100f1010000000000000001 00 40
+--intype ipv6 --outtype ifinet6 3ffe:ffff:100:f101::1/64		=3ffeffff0100f1010000000000000001 00 40
+## to compressed
 --ifinet6_to_compressed 3ffeffff0100f1010000000000000001		=3ffe:ffff:100:f101::1
+--intype ifinet6 --outtype ipv6 --printcompressed 3ffeffff0100f1010000000000000001		=3ffe:ffff:100:f101::1
 --ifinet6_to_compressed 3ffeffff0100f1010000000000000001 40		=3ffe:ffff:100:f101::1/64
+--intype ifinet6 --outtype ipv6 --printcompressed 3ffeffff0100f1010000000000000001 40		=3ffe:ffff:100:f101::1/64
+## to base85
 --addr_to_base85 1080:0:0:0:8:800:200c:417a				=4)+k&C#VzJ4br>0wv%Yp
 --intype ipv6 --outtype base85 1080:0:0:0:8:800:200c:417a		=4)+k&C#VzJ4br>0wv%Yp
 --base85_to_addr 4)+k&C#VzJ4br>0wv%Yp					=1080:0:0:0:8:800:200c:417a
+## MAC to EUI-64
 --mac_to_eui64 00:50:BF:06:B4:F5					=250:bfff:fe06:b4f5
 --mac_to_eui64 00:0:F:6:4:5						=200:fff:fe06:405
---addr_to_uncompressed --printsuffix ::ffff:1.2.3.4/64			=0:ffff:1.2.3.4
---addr_to_uncompressed --printsuffix ::ffff:1.2.3.4/63			=0:0:ffff:1.2.3.4
---addr_to_uncompressed --printsuffix 3ffe:ffff:100:f101::1/64		=0:0:0:1
---addr_to_uncompressed --printprefix 3ffe:ffff:100:f101::1/64		=3ffe:ffff:100:f101
---addr_to_uncompressed --printprefix 3ffe:ffff:100:f101::1/65		=3ffe:ffff:100:f101:0
---eui64_to_privacy 0123456789abcdef 0123456789abcdef			=4462bdea8654776d 486072ff7074945e
---addr_to_ip6arpa 3ffe::1/64						=0.0.0.0.0.0.0.0.0.0.0.0.e.f.f.3.ip6.arpa.
---intype ipv6 --outtype revnibbles.arpa	3ffe::1/64			=0.0.0.0.0.0.0.0.0.0.0.0.e.f.f.3.ip6.arpa.
--a --uppercase 3ffe::1/64						=0.0.0.0.0.0.0.0.0.0.0.0.E.F.F.3.IP6.ARPA.
+--intype mac --outtype eui64 00:0:F:6:4:5				=200:fff:fe06:405
+## Interface identifier privacy conversion
+--eui64_to_privacy 0123:4567:89ab:cdef 0123456789abcdef			=4662:bdea:8654:776d 486072ff7074945e
+--intype iid+token --outtype iid+token 0123:4567:89ab:cdef 0123456789abcdef			=4662:bdea:8654:776d 486072ff7074945e
+## Bitstring
 --addr_to_bitstring 3ffe:ffff::1					=\\\\[x3ffeffff000000000000000000000001/128].ip6.arpa.
 --intype ipv6 --outtype bitstring 3ffe:ffff::1				=\\\\[x3ffeffff000000000000000000000001/128].ip6.arpa.
 --addr_to_bitstring 3ffe:ffff::1/64					=\\\\[x3ffeffff000000000000000000000001/128].ip6.arpa.
@@ -73,7 +94,9 @@ cat <<END
 --addr_to_bitstring --printprefix 3ffe:ffff::1/64			=\\\\[x3ffeffff00000000/64].ip6.arpa.
 --addr_to_bitstring --printprefix --printstart 17 3ffe:ffff:0100:e100:0123:4567:89ab:cdef/64	=\\\\[xffff0100e100/48]
 --addr_to_bitstring --uppercase 3ffe:ffff::1				=\\\\[x3FFEFFFF000000000000000000000001/128].IP6.ARPA.
---ipv4_to_6to4addr 11.12.13.14				=2002:b0c:d0e::
+## 6to4
+--ipv4_to_6to4addr 11.12.13.14						=2002:b0c:d0e::
+--intype ipv4 --outtype ipv6 --action gen6to4 11.12.13.14		=2002:b0c:d0e::
 END
 }
 

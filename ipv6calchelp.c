@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.1 2002/03/02 22:06:53 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.2 2002/03/03 11:01:53 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -15,6 +15,8 @@
 #include "ipv6calc.h"
 #include "ipv6calctypes.h"
 #include "ipv6calchelp.h"
+
+#include "showinfo.h"
 
 
 /* display info */
@@ -174,6 +176,44 @@ void printhelp_outputtypes(long int inputtype) {
 	fprintf(stderr, "   %s --outputtype <type> --examples\n", PROGRAM_NAME);
 };
 
+
+/* list of action types */
+void printhelp_actiontypes(void) {
+	int i, j, maxlen = 0;
+	char printformatstring[20];
+	
+	printversion();
+	printcopyright();
+
+	/* look for longest type definition */
+	for (j = 0; j < sizeof(ipv6calc_actionstrings) / sizeof(ipv6calc_actionstrings[0]); j++) {
+		if (strlen(ipv6calc_actionstrings[j].token) > maxlen) {
+			maxlen = strlen(ipv6calc_actionstrings[j].token);
+		};
+	};
+
+	if (maxlen > 999) {
+		fprintf(stderr, " Something going wrong with array 'ipv6calc_actionstrings'!\n");
+		exit (1);
+	};
+
+	sprintf(printformatstring, "  %%-%ds: %%s\n", maxlen);
+
+	if (ipv6calc_debug) {
+		fprintf(stderr, "Format string: %s\n", printformatstring);
+	};
+
+	fprintf(stderr, "\n Available action types:\n");
+
+	for (j = 0; j < sizeof(ipv6calc_actionstrings) / sizeof(ipv6calc_actionstrings[0]); j++) {
+		if (ipv6calc_debug) {
+			fprintf(stderr, "Format-Row %d: %04lx - %s - %s\n", j, ipv6calc_actionstrings[j].number, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
+		};
+		fprintf(stderr, printformatstring, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
+	};
+};
+
+
 /* print global help */
 void printhelp(void) {
 	printversion();
@@ -182,28 +222,17 @@ void printhelp(void) {
 	fprintf(stderr, " [-d|--debug <debug value>] ...\n");
 	
 	fprintf(stderr, "Usage with new style options:\n");
-	fprintf(stderr, " %s --inputtype|--intype <input type> --outputtype|--outtype <output type> [<format option> ...] <input data>\n", PROGRAM_NAME);
+	fprintf(stderr, " %s --inputtype|--intype <input type> --outputtype|--outtype <output type> [--actiontype|--action <action>] [<format option> ...] <input data>\n", PROGRAM_NAME);
 	fprintf(stderr, "  For more help about input types see:\n");
 	fprintf(stderr, "   %s --inputtype|--intype -?\n", PROGRAM_NAME);
 	fprintf(stderr, "  For more help about output types see:\n");
 	fprintf(stderr, "   %s --outputtype|--outtype -?\n", PROGRAM_NAME);
+	fprintf(stderr, "  For more help about action types see:\n");
+	fprintf(stderr, "   %s --actiontype|--action -?\n", PROGRAM_NAME);
 
 	fprintf(stderr, "\nOld style options:\n");
 	fprintf(stderr, "Usage: (see '%s <command> -?' for more help)\n", PROGRAM_NAME);
-	/*addr_to_ip6int_printhelp();*/
-	/*
-	addr_to_bitstring_printhelp();
-	addr_to_compressed_printhelp();
-	addr_to_uncompressed_printhelp();
-	addr_to_fulluncompressed_printhelp();
-	addr_to_ifinet6_printhelp();
-	ifinet6_to_compressed_printhelp();
-	addr_to_base85_printhelp();
-	base85_to_addr_printhelp();
-	mac_to_eui64_printhelp();
-	ipv4_to_6to4addr_printhelp();
-	*/
-	eui64_to_privacy_printhelp();
+	
 	showinfo_printhelp();
 
 	return;
@@ -240,6 +269,11 @@ static void printhelp_output_ipv6addr(void) {
 static void printhelp_output_eui64(void) {
 	fprintf(stderr, " Print a generated EUI-64 identifier, e.g.:\n");
 	fprintf(stderr, "  00:50:BF:06:B4:F5 -> 0250:bfff:fe06:b4f5\n");
+};
+
+static void printhelp_output_iid_token(void) {
+	fprintf(stderr, " Print generated interface identifier and token, e.g.:\n");
+	fprintf(stderr, "  -> 4462:bdea:8654:776d 486072ff7074945e\n");
 };
 
 static void printhelp_output_revnibble_int(void) {
@@ -295,6 +329,10 @@ void printhelp_output_dispatcher(long int outputtype) {
 
 		case FORMAT_ifinet6:
 			printhelp_output_ifinet6void();
+			break;
+			
+		case FORMAT_iid_token:
+			printhelp_output_iid_token();
 			break;
 
 		default:

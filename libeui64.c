@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libeui64.c
- * Version    : $Id: libeui64.c,v 1.3 2002/03/02 19:02:27 peter Exp $
+ * Version    : $Id: libeui64.c,v 1.4 2002/03/03 11:01:53 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -28,7 +28,7 @@ int create_eui64_from_mac(ipv6calc_ipv6addr *ipv6addrp, ipv6calc_macaddr *macadd
 	int retval = 1;
 
 	if (ipv6calc_debug) {
-		fprintf(stderr, "%s: Called\n", DEBUG_function_name);
+		fprintf(stderr, "%s: called\n", DEBUG_function_name);
 	};
 
 	/* clear IPv6 structure */
