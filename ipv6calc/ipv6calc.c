@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.15 2003/02/02 16:41:42 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.16 2003/04/04 20:23:31 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -903,6 +903,11 @@ int main(int argc,char *argv[]) {
 				fprintf(stderr, "%s: Call 'librfc2874_addr_to_bitstring'\n", DEBUG_function_name);
 			};
 			retval = librfc2874_addr_to_bitstring(&ipv6addr, resultstring, formatoptions);
+			break;
+			
+		case FORMAT_octal:
+			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
+			retval = libipv6addr_to_octal(&ipv6addr, resultstring, formatoptions);
 			break;
 				
 		case FORMAT_revnibbles_int:

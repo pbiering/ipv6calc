@@ -1,10 +1,14 @@
 /*
- *  $Id: ChangeLog,v 1.67 2003/02/02 16:41:42 peter Exp $ 
+ *  $Id: ChangeLog,v 1.68 2003/04/04 20:23:31 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20030404/PB
+	add new output format "octal" as requested from Lionel Elie Mamane <lionel at mamane dotlu>
+	 to create proper input for tinydns
+
 20030202/PB:
 	add new input type "ipv4hex" (hexadecimal IPv4 address)
 	add new input type "ipv4revhex" (reverse hexadecimal IPv4 address)

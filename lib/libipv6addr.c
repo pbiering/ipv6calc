@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.9 2002/11/04 19:49:45 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.10 2003/04/04 20:23:31 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -1044,6 +1044,27 @@ int libipv6addr_ipv6addrstruct_to_tokenlsb64(const ipv6calc_ipv6addr *ipv6addrp,
 		fprintf(stderr, "%s: result string '%s'\n", DEBUG_function_name, resultstring);
 	};
 	
+	retval = 0;	
+	return (retval);
+};
+#undef DEBUG_function_name
+
+/*
+ * function prints an IPv6 address in native octal format
+ *
+ * in:  ipv6addr = IPv6 address structure
+ * formatoptions
+ * out: *resultstring = IPv6 address (modified)
+ * ret: ==0: ok, !=0: error
+ */
+#define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_octal"
+int libipv6addr_to_octal(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
+	int retval = 1;
+	char tempstring[NI_MAXHOST];
+
+	snprintf(tempstring, sizeof(tempstring), "\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o", ipv6addrp->in6_addr.s6_addr[0], ipv6addrp->in6_addr.s6_addr[1], ipv6addrp->in6_addr.s6_addr[2], ipv6addrp->in6_addr.s6_addr[3], ipv6addrp->in6_addr.s6_addr[4], ipv6addrp->in6_addr.s6_addr[5], ipv6addrp->in6_addr.s6_addr[6], ipv6addrp->in6_addr.s6_addr[7], ipv6addrp->in6_addr.s6_addr[8], ipv6addrp->in6_addr.s6_addr[9], ipv6addrp->in6_addr.s6_addr[10], ipv6addrp->in6_addr.s6_addr[11], ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
+
+	snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
 	retval = 0;	
 	return (retval);
 };
