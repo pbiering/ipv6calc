@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui.h
- * Version       : $Id: dbieee_oui.h,v 1.1 2002/04/05 18:47:22 peter Exp $
- * Generated     : Fri Apr  5 20:44:53 2002
+ * Version       : $Id: dbieee_oui.h,v 1.2 2002/04/08 19:50:31 peter Exp $
+ * Generated     : Mon Apr  8 21:25:21 2002
  * Data copyright: IEEE
  *
  * Information:
@@ -597,7 +597,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x000245, "Lampus Co, Ltd.", "LAMPUS" },
 	{ 0x000246, "All-Win Tech Co., Ltd.", "ALL-WIN-TECH" },
 	{ 0x000247, "Great Dragon Information Technology (Group) Co., Ltd.", "GREAT-DRAGON-INFORMATION-GROUP" },
-	{ 0x000248, "Pila GmbH & Co.", "PILA" },
+	{ 0x000248, "Pilz GmbH & Co.", "PILZ" },
 	{ 0x000249, "Aviv Infocom Co, Ltd.", "AVIV-INFOCOM" },
 	{ 0x00024A, "Cisco Systems, Inc.", "CISCO" },
 	{ 0x00024B, "Cisco Systems, Inc.", "CISCO" },
