@@ -40,6 +40,17 @@ options.
 Execute "./configure".
 
 
+UPDATE OF DATABASES
+-------------------
+ipv6calc contains several databases, currently
+* OUI type (IEEE)
+* IPv4 address space assignment
+to update this database before compilation you need:
+- install perl, wget, aggregate
+- run "make update"
+See also: ./databases/ipv4-assignment/README
+
+
 COMPILE
 -------  
 To compile simply use "make".
@@ -56,4 +67,4 @@ If you want to install the binary use "make install".
 Peter Bieringer
 <pb (at) bieringer.de>
 
-$Id: INSTALLING,v 1.4 2002/09/02 20:56:24 peter Exp $
+$Id: INSTALLING,v 1.5 2002/11/12 19:02:09 peter Exp $
