@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.24 2002/03/17 10:13:51 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.25 2002/03/17 10:35:59 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -373,6 +373,20 @@ int main(int argc,char *argv[]) {
 		fprintf(stderr, "%s: Start of input type handling\n", DEBUG_function_name);
 	};
 
+
+	/* check length of input */
+	if (argc > 0) {
+		for (i = 0; i < argc; i++) {
+			if ( argv[i] != NULL ) {
+				if ( strlen(argv[i]) >= NI_MAXHOST ) {
+					/* that's not good for size limited buffers...*/
+					fprintf(stderr, "Argument %d is too long\n", i);
+					exit(EXIT_FAILURE);
+				};
+			};
+		};
+	};
+	
 	/* autodetection */
 	if ((inputtype == -1 || inputtype == FORMAT_auto) && argc > 0) {
 		/* no input type specified or automatic selected */
