@@ -1,15 +1,20 @@
 /*
- *  $Id: ChangeLog,v 1.17 2002/02/25 22:55:54 peter Exp $ 
+ *  $Id: ChangeLog,v 1.18 2002/02/26 22:14:52 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20020226/PB:
+	add original getopt tarball into samplecode, fill related READMEs
+	tag release 0.38
+
 20020224/PB:
 	move nibble string function to librfc1886
 	minor fixes
 	restore original samplecode files and remove CVS id to prevent CVS changes
 	add original getopt code to samplecode
+	tag release 0.37
 
 20020224/PB:
 	minor Makefile fixes
