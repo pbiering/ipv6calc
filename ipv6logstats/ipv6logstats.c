@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.2 2003/06/15 13:33:41 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.3 2003/06/15 14:24:27 peter Exp $
  * Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -390,14 +390,14 @@ static void lineparser(void) {
 		if (opt_noheader == 0) {
 			if (strlen(opt_token) > 0) {
 				if (opt_onlyheader == 0) {
-					printf("Token,");
+					printf("Token ");
 				} else {
 					printf("%s,", opt_token);
 				};
 			};
 			for (i = 0; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
 				if (i > 0) {
-					printf(",");
+					printf(" ");
 				};
 				printf("%s", ipv6logstats_statentries[i].token);
 			};
@@ -405,11 +405,11 @@ static void lineparser(void) {
 		};
 		if (opt_onlyheader == 0) {
 			if (strlen(opt_token) > 0) {
-				printf("%s,", opt_token);
+				printf("%s ", opt_token);
 			};
 			for (i = 0; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
 				if (i > 0) {
-					printf(",");
+					printf(" ");
 				};
 				printf("%lu", ipv6logstats_statentries[i].counter);
 			};
