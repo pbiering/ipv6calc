@@ -1,5 +1,5 @@
 #!/bin/bash
-# dig6 v0.2 by mikolas bingemer
+# dig6 v0.4 by mikolas bingemer <bingemer@gmx.net>
 # http://netfreaks.org/dig6
 #
 # little dig/ipv6calc wrapper for easy digging
@@ -7,6 +7,10 @@
 IPV6CALC=/bin/ipv6calc
 DIG=/usr/bin/dig
 #
+usage() {
+echo -e "Usage: dig6 [<type>] <ipv6addr> [options]\n allowed types: arpa, int"; exit 1
+}
+
 if [ ! -x "$IPV6CALC" ]; then
 	echo "Can't exceute $IPV6CALC"; exit 1
 fi;
@@ -14,32 +18,55 @@ if [ ! -x "$DIG" ]; then
 	echo "Can't exceute $DIG"; exit 1
 fi;
 if [ ! $# -gt 0 ]; then
-	echo "Usage: dig6 <ipv6addr> [options]"; exit 1
+	usage
 fi;
 
-echo "; <<>> dig6 0.1 <<>> "$@""
 
+echo "; <<>> dig6 0.4 <<>> "$@""
+
+if [ "$1" = "arpa" ]; then
+	type=$1; shift
+	if [ ! $# -gt 0 ]; then usage; fi
+elif [ "$1" = "int" ]; then
+	type=$1; shift
+	if [ ! $# -gt 0 ]; then usage; fi
+fi
+ 
 IPV6ADDR=$1;shift
+MODE=aaaa
 if [ `echo "$IPV6ADDR" | grep "/"` ]; then
 	echo ";; object: ipv6 network"
-	echo ";; query: ns"
+	echo ";; query: ns ($type)"
 	echo ""
 	MODE=ns
 elif [ `echo "$IPV6ADDR" | grep ":"` ]; then
 	echo ";; object: ipv6 address"
-	echo ";; query: ptr"
+	echo ";; query: ptr ($type)"
 	echo ""
 	MODE=ptr
-elif [ ! $MODE ]; then
+else
 	echo ";; object: hostname"
 	echo ";; query: aaaa"
-	MODE=aaaa
+	"$DIG" aaaa "$IPV6ADDR" "$@"
+	exit 0
 fi;
-if [ $MODE!="aaaa" ]; then
-	IP6INT=`"$IPV6CALC" --out revnibbles.int --in ipv6addr $IPV6ADDR` || exit 1
-	echo ";; CALCULATED:"
-	echo ";$IP6INT"
-fi;
+if [ ! "$type" ]; then
+	if [ "`echo $IPV6ADDR | grep "3ffe:"`" ]; then
+		type="int"
+	else
+		type="arpa"
+	fi
+fi
+case "$type" in
+	int)
+	IP6=`"$IPV6CALC" --out revnibbles.int --in ipv6addr $IPV6ADDR` || exit 1
+	;;
+	arpa)
+	IP6=`"$IPV6CALC" --out revnibbles.arpa --in ipv6addr $IPV6ADDR` || exit 1
+	;;
+esac
 
-"$DIG" $MODE $IP6INT "$@"
+echo ";; CALCULATED:"
+echo ";$IP6"
+"$DIG" $MODE $IP6 "$@"
 exit 0
