@@ -1,11 +1,10 @@
-.TH "ipv6calc" "8" "0.0.1" "Matanuki@Goudge.org" ""
+.TH "ipv6calc" "8" "0.0.2" "Masamichi Goudge M.D. <Matanuki@Goudge.org>" "system administration"
 .SH "NAME"
 .LP 
 ipv6calc \- a small utility written in C to manipulate IPv6 addresses.
 .SH "SYNTAX"
 .LP 
-ipv6calc [\fIoption\fP] <\fIipv6addr\fP>
-
+ipv6calc [\fIoption\fP] \fB<input data>\fR
 .SH "DESCRIPTION"
 .LP 
 ipv6calc is a small utility in C to manipulate IPv6 addresses.
@@ -13,25 +12,174 @@ ipv6calc is a small utility in C to manipulate IPv6 addresses.
 This utility is used to extend features on network\-functions\-ipv6. 
 .SH "OPTIONS"
 .LP 
+General options :
 .TP 
-\fB\-\-addr_to_ip6int\fR <\fIipv6addr[/prefixlength]\fP>
-Scans specified <\fIdirectory\fP>.
+\fB[\-\-debug | \-d <debug value>]\fR : debug value (bitwise like)
 .TP 
-\fB\-\-debug|\-d\fR 
+\fB[ \-q | \-\-quiet ]\fR : be more quiet
 .TP 
-\fB\-?\fR
-Output help information and exit.
+Usage with new style options :
 .TP 
-\fB\-? <option>\fR
-display option help.
+\fB[\-\-in <input type>]\fR : specify input  type (default: autodetect)
+We can see available \fBinput types\fR to type "ipv6calc \-\-in \-?", "ipv6calc \-\-in \-h" or "ipv6calc \-\-in \-\-help" . 
 .TP 
-\fB\-\-version|\-v\fR
-Output version information and exit.
+Available \fBinput types\fR :
+.TP 
+\fBauto\fR : automatic detection
+.TP 
+\fBrevnibbles.int\fR : dot separated nibbles reverse, ending with ip6.int.
+.TP 
+\fBrevnibbles.arpa\fR : dot separated nibbles reverse, ending with ip6.arpa.
+.TP 
+\fBbitstring\fR : bitstring labes, ending with ip6.arpa.
+.TP 
+\fBipv6addr\fR : IPv6 address
+.TP 
+\fBipv4addr\fR : IPv4 address
+.TP 
+\fBmac\fR : MAC address (48 bits)
+.TP 
+\fBbase85\fR : Base\-85 string
+.TP 
+\fBifinet6\fR : Like line in /proc/net/if_inet6
+.TP 
+\fBiid+token\fR : Interface identifier and token
+.TP 
+\fBipv6logconv\fR : ipv6logconv (currently not supported)
+.TP 
+\fBprefix+mac\fR : IPv6 prefix and a MAC address
+.TP 
+For examples and available format options use:
+.br 
+\-\-in \fB<type>\fR \-\-examples
+.TP 
+\fB[\-\-out <output type>]\fR : specify output type (sometimes: autodetect)
+.TP 
+We can see available \fBoutput types\fR to type "ipv6calc \-\-out \-?", "ipv6calc \-\-out \-h" or "ipv6calc \-\-out \-\-help".
+.TP 
+Available \fBoutput types\fR :
+.TP 
+\fBrevnibbles.int\fR : dot separated nibbles reverse, ending with ip6.int.
+.TP 
+\fBrevnibbles.arpa\fR : dot separated nibbles reverse, ending with ip6.arpa.
+.TP 
+\fBbitstring\fR : bitstring labes, ending with ip6.arpa.
+.TP 
+\fBipv6addr\fR : IPv6 address
+.TP 
+\fBipv4addr\fR : IPv4 address
+.TP 
+\fBmac\fR : MAC address (48 bits)
+.TP 
+\fBeui64\fR : EUI\-64 identifier (64 bits)
+.TP 
+\fBbase85\fR : Base\-85 string
+.TP 
+\fBifinet6\fR : Like line in /proc/net/if_inet6
+.TP 
+\fBiid\fR : Interface identifier
+.TP 
+\fBiid+token\fR : Interface identifier and token
+.TP 
+\fBaddrtype\fR : Address type
+.TP 
+\fBouitype\fR : OUI (IEEE) type
+.TP 
+\fBipv6addrtype\fR : IPv6 address type
+.TP 
+\fBany\fR : any type (currently not supported)
+.TP 
+\fBrevipv4\fR : reverse IPv4, ending with in\-addr.arpa
+.TP 
+For examples and available format options use:
+.br 
+\-\-out \fB<type>\fR \-\-examples
+.TP 
+\fB[\-\-action <action>]\fR : specify action (default: format conversion, sometimes: autodetect)
+.TP 
+We can see available action types to type "ipv6calc \-\-action \-?", "ipv6calc \-\-action \-h" or "ipv6calc \-\-action \-\-help".
+.TP 
+Available \fBaction types\fR : 
+.TP 
+\fBauto\fR : Automatic selection of action (default)
+.TP 
+\fBgeneui64\fR : Converts a MAC address to an EUI\-64 address
+.TP 
+\fBconv6to4\fR : Converts IPv4 address <\-> 6to4 IPv6 address (prefix)
+.TP 
+\fBgenprivacyiid\fR : Generates a privacy interface ID out of a given one and a token
+.TP 
+\fBprefixmac2ipv6\fR : Generates an IPv6 address out of a prefix and a MAC address
+.TP 
+\fB[<format option> ...]\fR : specify format options
+.TP 
+\fB<input data> [...]\fR : input data.
+.br 
+For example, "\fB127.0.0.1\fR", "\fB::1\fR".
+.TP 
+\fBOther usage\fR : 
+.TP 
+\fB\-\-showinfo\fR | \fB\-i\fR [ \fB\-\-machine_readable\fR | \fB\-m\fR ] : show information about \fBinput data\fR
+.TP 
+\fB\-\-showinfo\fR | \fB\-i\fR \fB\-\-show_types\fB : show available types on '\fB\-m\fR'
+.TP 
+To see old\-style option use : \fB\-\-printoldoptions\fR
+.TP 
+\-\-printoldoptions : 
+.TP 
+\-\-addr2ip6_int
+.TP 
+\-\-addr_to_ip6int
+.TP 
+\-\-addr2ip6_arpa
+.TP 
+\-\-addr_to_ip6arpa
+.TP 
+\-\-addr_to_bitstring
+.TP 
+\-\-addr2compaddr
+.TP 
+\-\-addr_to_compressed
+.TP 
+\-\-addr2uncompaddr
+.TP 
+\-\-addr_to_uncompressed
+.TP 
+\-\-addr_to_base85
+.TP 
+\-\-base85_to_addr
+.TP 
+\-\-mac_to_eui64
+.TP 
+\-\-addr2fulluncompaddr
+.TP 
+\-\-addr_to_fulluncompressed
+.TP 
+\-\-addr2if_inet6
+.TP 
+\-\-addr_to_ifinet6
+.TP 
+\-\-if_inet62addr
+.TP 
+\-\-ifinet6_to_compressed
+.TP 
+\-\-eui64_to_privacy
+.TP 
+\-\-ipv4_to_6to4addr
+.TP 
+\fB\-\-version\fR : print version.
 .SH "EXAMPLES"
-.LP 
 To run this program the standard way type:
 .LP 
-ipv6calc \-r 3ffe:400:100:f101::1
+ipv6calc \-\-showinfo \-i \-m ::1
+.TP 
+ipv6calc \-\-showinfo \-m 127.0.0.1
+.TP 
+ipv6calc \-\-shouwinfo \-\-show_types
+.TP 
+ipv6calc \-\-ipv4_to_6to4addr 127.0.0.1
+.TP 
+ipv6calc \-\-addr_to_uncompressed ::1
 .SH "AUTHORS"
 .LP 
 Peter Bieringer <pb@bieringer.de>
