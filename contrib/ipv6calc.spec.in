@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Version    : $Id: ipv6calc.spec.in,v 1.24 2003/11/21 10:31:21 peter Exp $
+# Version    : $Id: ipv6calc.spec.in,v 1.25 2003/11/21 11:46:48 peter Exp $
 # Copyright  : 2001-2003 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
@@ -65,7 +65,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/ipv6logstats
 
 # man pages
-%{_mandir}/man1/*
+%{_mandir}/man8/*
 
 # docs
 %doc ChangeLog README CREDITS TODO COPYING LICENSE USAGE
