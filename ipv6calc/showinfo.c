@@ -1,17 +1,18 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.1 2002/03/18 20:00:20 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.2 2002/03/18 20:54:01 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Function to show information about a given IPv6 address
- *
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "showinfo.h"
+#include "ipv6calc.h"
+#include "version.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
 #include "ipv6calctypes.h"
@@ -19,8 +20,6 @@
 #include "libipv4addr.h"
 #include "libipv6calc.h"
 #include "libieee.h"
-
-
 
 /*
  * show available types on machine readable format
@@ -42,7 +41,9 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IIDSCOPE=local|global         : scope of IID\n");
 	fprintf(stderr, " EUI48=xx:xx:xx:xx:xx:xx       : an included EUI-48 (MAC) identifier\n");
 	fprintf(stderr, " EUI64=xx:xx:xx:xx:xx:xx:xx:xx : an included EUI-64 identifier\n");
-	fprintf(stderr, " OUI=\"...\"                     : OUI string, if available\n");
+	fprintf(stderr, " OUI=\"...\"                   : OUI string, if available\n");
+	fprintf(stderr, " IPV6CALC_VERSION=x.y          : Version of ipv6calc\n");
+	fprintf(stderr, " IPV6CALC_COPYRIGHT=\"...\"    : Copyright string\n");
 };
 
 /*
@@ -63,9 +64,13 @@ static void printout(const char *string) {
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "showinfo_ipv6addr"
-int showinfo_ipv6addr(ipv6calc_ipv6addr *ipv6addrp, unsigned long formatoptions) {
+int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long formatoptions) {
 	int retval = 1, i, j, typeinfo, flag_prefixuse, result;
 	char tempstring[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
+	ipv6calc_ipv6addr ipv6addr, *ipv6addrp;
+
+	ipv6addrp = &ipv6addr;
+	ipv6addr_copy(ipv6addrp, ipv6addrp1);
 
 	typeinfo = ipv6addr_gettype(ipv6addrp);
 
@@ -263,6 +268,14 @@ int showinfo_ipv6addr(ipv6calc_ipv6addr *ipv6addrp, unsigned long formatoptions)
 		};
 	};
 END:	
+	if (formatoptions & FORMATOPTION_machinereadable) {
+		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_NAME=%s", PROGRAM_NAME);
+		printout(tempstring);
+		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_VERSION=%s", PROGRAM_VERSION);
+		printout(tempstring);
+		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_COPYRIGHT=\"%s\"", PROGRAM_COPYRIGHT);
+		printout(tempstring);
+	};
 	retval = 0;
 	return (retval);
 };
@@ -276,7 +289,7 @@ END:
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "showinfo_ipv4addr"
-int showinfo_ipv4addr(ipv6calc_ipv4addr *ipv4addrp, unsigned long formatoptions) {
+int showinfo_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const unsigned long formatoptions) {
 	int retval = 1, typeinfo;
 	char tempstring[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
 
