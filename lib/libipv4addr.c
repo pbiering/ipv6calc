@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.9 2003/02/02 12:55:07 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.10 2003/02/02 16:41:42 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -331,7 +331,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "libipv4calc/addrhex_to_ipv4addrstruct"
-int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv4addr *ipv4addrp) {
+int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv4addr *ipv4addrp, int flag_reverse) {
 	int retval = 1, result, i;
 	char *addronlystring, *cp;
 	int expecteditems = 0;
@@ -388,7 +388,11 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6ca
 	};
 
 	expecteditems = 4;
-	result = sscanf(addronlystring, "%2x%2x%2x%2x", &compat[0], &compat[1], &compat[2], &compat[3]);
+	if (flag_reverse != 0)  {
+		result = sscanf(addronlystring, "%2x%2x%2x%2x", &compat[3], &compat[2], &compat[1], &compat[0]);
+	} else {
+		result = sscanf(addronlystring, "%2x%2x%2x%2x", &compat[0], &compat[1], &compat[2], &compat[3]);
+	};
 	
 	for ( i = 0; i <= 3; i++ ) {
 		if ( ( compat[i] < 0 ) || ( compat[i] > 255 ) )	{

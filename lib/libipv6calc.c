@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.7 2003/02/02 12:55:07 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.8 2003/02/02 16:41:42 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -141,7 +141,7 @@ void string_to_reverse_dotted(char *string) {
 uint32_t libipv6calc_autodetectinput(const char *string) {
 	uint32_t type = FORMAT_undefined;
 	int i, j, result;
-	int numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, numdashes = 0;
+	int numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, numdashes = 0, numspaces = 0;
 	char resultstring[NI_MAXHOST];
 	size_t length;
 
@@ -156,6 +156,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		if (string[i] == '.') { numdots++; };
 		if (string[i] == ':') { numcolons++; };
 		if (string[i] == '-') { numdashes++; };
+		if (string[i] == ' ') { numspaces++; };
 		if (isdigit(string[i])) { numdigits++; };
 		if (isxdigit(string[i])) { numxdigits++; };
 	};
@@ -198,8 +199,8 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		goto END_libipv6calc_autodetectinput;
 	};
 	
-	if (length >= 11 && length <= 17 && numxdigits >= 6 && numxdigits <= 12 && numdots == 0 && ( ( numcolons == 5 && numdashes == 0) || ( numcolons == 0 && numdashes == 5) ) ) {
-		/* MAC 00:00:00:00:00:00 or 00-00-00-00-00-00 */
+	if (length >= 11 && length <= 17 && numxdigits >= 6 && numxdigits <= 12 && numdots == 0 && ( ( numcolons == 5 && numdashes == 0 && numspaces == 0) || ( numcolons == 0 && numdashes == 5 && numspaces == 0) || ( numcolons == 0 && numdashes == 0 && numspaces == 5) ) ) {
+		/* MAC 00:00:00:00:00:00 or 00-00-00-00-00-00 or "xx xx xx xx xx xx" */
 
 		/* Check whether minimum 1 xdigit is between colons */
 		j = 0;
@@ -212,9 +213,9 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 					break;
 				};
 				continue;
-		       	} else if ( string[i] == ':' || string[i] == '-' ) {
+		       	} else if ( string[i] == ':' || string[i] == '-' || string[i] == ' ') {
 				if ( j == 0 ) {
-					/* colon/dash follows colon/dash */
+					/* colon/dash/space follows colon/dash/space */
 					j = -1;
 					break;
 				};
