@@ -364,7 +364,7 @@ print OUT qq|
 /*
  * Project       : ipv6calc
  * File          : dbipv4_assignment.h
- * Version       : $Id:
+ * Version       : \$Id: create-registry-list.pl,v 1.10 2002/04/04 21:47:31 peter Exp $
  * Generated     : $now_string
  * Data copyright: RIPE NCC, APNIC, ARIN
  *
