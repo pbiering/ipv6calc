@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.4 2002/02/25 21:18:51 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.5 2002/02/25 22:55:54 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -56,6 +56,8 @@ int addr_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6ad
 		fprintf(stderr, "%s: got input %s\n", DEBUG_function_name,  addrstring);
 	};
 	
+	ipv6addr_clearall(ipv6addrp);
+
 	/* save prefix length first, if available */
 	ipv6addrp->flag_prefixuse = 0; /* reset flag first */
 	addronlystring = strtok (addrstring, "/");
@@ -72,6 +74,7 @@ int addr_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6ad
 		
 		if ( ipv6calc_debug & DEBUG_libipv6calc ) {
 			fprintf(stderr, "%s: prefix length %d\n", DEBUG_function_name, ipv6addrp->prefixlength);
+			fprintf(stderr, "%s: flag_prefixuse %d\n", DEBUG_function_name, ipv6addrp->flag_prefixuse);
 		};
 	};
 
@@ -182,6 +185,7 @@ int addr_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6ad
 
 	if ( ipv6calc_debug & DEBUG_libipv6calc ) {
 		fprintf(stderr, "%s: First word is: %x, address info value: %x\n", DEBUG_function_name, ipv6addr_getword(ipv6addrp, 0), result);
+		fprintf(stderr, "%s: flag_prefixuse %d\n", DEBUG_function_name, ipv6addrp->flag_prefixuse);
 	};
 	
 	retval = 0;

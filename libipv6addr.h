@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.2 2002/01/20 09:44:15 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.3 2002/02/25 22:55:54 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -21,6 +21,7 @@ extern void ipv6addr_setword(ipv6calc_ipv6addr *ipv6addrp, int numword, unsigned
 extern void ipv6addr_setdword(ipv6calc_ipv6addr *ipv6addrp, int numdword, unsigned int value);
 
 extern void ipv6addr_clear(ipv6calc_ipv6addr *ipv6addrp);
+extern void ipv6addr_clearall(ipv6calc_ipv6addr *ipv6addrp);
 
 extern unsigned int ipv6addr_gettype(ipv6calc_ipv6addr *ipv6addrp);
 

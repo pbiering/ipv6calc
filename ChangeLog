@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.16 2002/02/25 21:40:18 peter Exp $ 
+ *  $Id: ChangeLog,v 1.17 2002/02/25 22:55:54 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,8 @@ Info:
 20020224/PB:
 	move nibble string function to librfc1886
 	minor fixes
+	restore original samplecode files and remove CVS id to prevent CVS changes
+	add original getopt code to samplecode
 
 20020224/PB:
 	minor Makefile fixes

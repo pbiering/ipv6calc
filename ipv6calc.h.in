@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.h[.in]
- * Version    : $Id: ipv6calc.h.in,v 1.5 2002/02/25 21:18:50 peter Exp $
+ * Version    : $Id: ipv6calc.h.in,v 1.6 2002/02/25 22:55:54 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -89,6 +89,7 @@
 #define DEBUG_librfc3041		0x000002l
 #define DEBUG_librfc1884		0x000004l
 #define DEBUG_librfc2874		0x000008l
+#define DEBUG_librfc1886		0x000010l
 
 /* structures */
 typedef struct {

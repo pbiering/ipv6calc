@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.3 2002/01/20 09:44:15 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.4 2002/02/25 22:55:54 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -207,7 +207,8 @@ void ipv6addr_setdword(ipv6calc_ipv6addr *ipv6addrp, int numdword, unsigned int 
 #undef DEBUG_function_name
 
 
-/* function clears the IPv6 structure
+/*
+ * function clears the IPv6 structure
  *
  * mod: ipv6addrp = pointer to IPv6 address structure
  */
@@ -221,11 +222,31 @@ void ipv6addr_clear(ipv6calc_ipv6addr *ipv6addrp) {
 	
 	/* Clear IPv6 address scope */
 	ipv6addrp->scope = 0;
-	
+
 	return;
 };
 #undef DEBUG_function_name
 
+
+/*
+ * function clears the IPv6 structure
+ *
+ * mod: ipv6addrp = pointer to IPv6 address structure
+ */
+#define DEBUG_function_name "libipv6addr/ipv6addr_clearall"
+void ipv6addr_clearall(ipv6calc_ipv6addr *ipv6addrp) {
+	ipv6addr_clear(ipv6addrp);
+
+	/* Clear other field */
+	ipv6addrp->bit_start = 1;
+	ipv6addrp->bit_end = 128;
+	ipv6addrp->flag_startend_use = 0;
+	ipv6addrp->flag_prefixuse = 0;
+	ipv6addrp->prefixlength = 0;
+	
+	return;
+};
+#undef DEBUG_function_name
 
 /* function gets type of an IPv6 address
  *

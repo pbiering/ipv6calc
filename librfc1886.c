@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.1 2002/02/25 21:40:18 peter Exp $
+ * Version    : $Id: librfc1886.c,v 1.2 2002/02/25 22:55:54 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -40,11 +40,19 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 	unsigned int nibble;
 	int noctett, nbit, nnibble, bit_start, bit_end;
 	char tempstring[NI_MAXHOST];
+	
+	if (ipv6calc_debug & DEBUG_librfc1886) {
+		fprintf(stderr, "%s: command value %lx\n", DEBUG_function_name, command);
+		fprintf(stderr, "%s: flag_prefixuse %d\n", DEBUG_function_name, (*ipv6addrp).flag_prefixuse);
+	};
 
 	if ( !(command & (CMD_printprefix | CMD_printsuffix | CMD_printstart | CMD_printend)) && (*ipv6addrp).flag_prefixuse ) {
 		/* simulate old behavior */
 		bit_start = 1;
 		bit_end = (*ipv6addrp).prefixlength;
+		if (ipv6calc_debug & DEBUG_librfc1886) {
+			fprintf(stderr, "%s: simulate old behavior\n", DEBUG_function_name);
+		};
 	} else if ( (*ipv6addrp).flag_startend_use != 0 ) {
 		/* check start and end */
 		if ( ((*ipv6addrp).bit_start - 1) & 0x03 ) {
@@ -63,6 +71,10 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 	} else {
 		bit_start = 1;
 		bit_end = 128;
+	};
+	
+	if (ipv6calc_debug & DEBUG_librfc1886) {
+		fprintf(stderr, "%s: start bit %d  end bit %d\n", DEBUG_function_name, bit_start, bit_end);
 	};
 
 	/* print out nibble format */
