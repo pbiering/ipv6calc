@@ -1,6 +1,6 @@
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.6 2002/03/24 21:44:08 peter Exp $
+# Version    : $Id: Makefile,v 1.7 2002/03/24 21:46:33 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -9,7 +9,7 @@
 all:
 		make update
 		echo "Generate new header file, if necessary"
-		test -f dbipv4addr_assignment.h && ./create-registry-list.pl
+		test -f dbipv4addr_assignment.h || ./create-registry-list.pl
 		find iana    -name 'ipv4-address-space' -newer dbipv4addr_assignement.h || ./create-registry-list.pl
 		find arin    -name 'arin*' -newer dbipv4addr_assignement.h              || ./create-registry-list.pl
 		find apnic   -name 'apnic*' -newer dbipv4addr_assignement.h             || ./create-registry-list.pl
