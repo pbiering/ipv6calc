@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.4 2003/06/15 15:08:42 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.5 2003/06/15 15:59:09 peter Exp $
  * Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -230,7 +230,7 @@ static void lineparser(void) {
 
 		/* check for proper type */
 		if ((inputtype != FORMAT_ipv4addr) && (inputtype != FORMAT_ipv6addr)) {
-			fprintf(stderr, "Token 1 (address) is not an IP address in line: %d\n", linecounter);
+			/* fprintf(stderr, "Token 1 (address) is not an IP address in line: %d\n", linecounter); */
 			stat_inc(STATS_UNKNOWN);
 			continue;
 		};
