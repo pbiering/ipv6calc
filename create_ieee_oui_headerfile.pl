@@ -5,7 +5,7 @@ use strict;
 #
 # Project    : ipv6calc
 # File       : create_ieee_oui_headerfile.pl
-# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.1 2002/03/11 21:52:25 peter Exp $
+# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.2 2002/03/11 21:57:25 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE/oui.txt
@@ -13,6 +13,8 @@ use strict;
 my $INFILE = "samplecode/ieee/oui.txt";
 
 my $OUTFILE = "libieeeoui.h";
+
+print "Create libieeeoui.h automatically\n";
 
 open(IN, "<$INFILE") || die "Cannot open infile: $INFILE";
 open(OUT, ">$OUTFILE") || die "Cannot open outfile: $OUTFILE";
@@ -35,7 +37,7 @@ print OUT qq|
 /* Structure */
 #include "libieee.h"
 
-static const s_ieee_oui libieee_oui[] {
+static const s_ieee_oui libieee_oui[] = {
 |;
 
 
@@ -65,3 +67,5 @@ while (<IN>) {
 print OUT qq|
 };
 |;
+
+print "Finished\n";
