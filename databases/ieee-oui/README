@@ -1,0 +1,6 @@
+$ Id: $
+
+OUI database:
+URL: http://standards.ieee.org/regauth/oui/oui.txt
+
+File will be retrieved on-the-fly during "make"
