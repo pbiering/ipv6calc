@@ -1,16 +1,26 @@
 /*
- *  $Id: ChangeLog,v 1.71 2003/06/23 21:38:31 peter Exp $ 
+ *  $Id: ChangeLog,v 1.72 2003/07/22 21:37:07 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20030722/PB
+	enable "printprefix", "printsuffix" for normal IPv6 addresses (autoswitch to uncompressed format)
+	prefix length of 6to4 addresses changed from 16 to 48 for proper support of format "printprefix"
+
+20030717/PB
+	add IPv6 LACNIC range
+
+20030628/PB
+	minor adjustments to "ipv6logstats", add a gri example
+
 20030623/PB
 	lib/librfc1886.c/librfc1886_addr_to_nibblestring:
 	 don't print trailing "." on middle part end
 
 20030615/PB
-	add support for new registry LACNIC
+	add support for new registry LACNIC (in IPv4)
 	add new program "ipv6logstats" to create historic address distribution statistics of webservers
 	 for use e.g. with gnuplot (add an example cmd script also)
 	remove autodetection code for EUI-64 (can misinterpret a proper IPv6 address)
