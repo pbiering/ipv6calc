@@ -1,5 +1,3 @@
-$Id: README,v 1.6 2002/04/20 17:24:51 peter Exp $
-
 ipv6calc will do some format changes and calculations for you
 
 (P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
@@ -48,9 +46,18 @@ Where to get:
    OpenBSD:
     is on the way...
 
-Maillists:
+Mailing lists:
  ipv6calc-announce
   Reason: sending announcements of new versions
   Traffic: very low
   Postings: only moderators are allowed to post, others are rejected automatically
-  Subscription: mailto:ipv6calc-announce-subscribe@maillists.bieringer.de
+  Subscription: http://lists.deepspace6.net/listinfo/ipv6calc-announce
+
+ ipv6calc
+  Reason: discussions
+  Traffic: medium
+  Postings: only subscribers are allowed to post
+  Subscription: http://lists.deepspace6.net/listinfo/ipv6calc
+
+
+$Id: README,v 1.7 2003/02/24 20:15:45 peter Exp $
