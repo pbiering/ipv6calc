@@ -2,7 +2,7 @@
 #
 # Makefile for ipv6calc
 #
-# Version:     $Id: Makefile,v 1.2 2001/12/18 11:22:55 peter Exp $
+# Version:     $Id: Makefile,v 1.3 2001/12/27 22:04:42 peter Exp $
 #
 # Author:      Peter Bieringer <pb@bieringer.de>
 #
@@ -18,7 +18,7 @@ CC	= gcc
 #OBJS = ipv6calc.o addr_to_compressed.o addr_to_uncompressed.o addr_to_fulluncompressed.o addr_to_ifinet6.o addr_to_ip6int.o ifinet6_to_compressed.o  libipv6calc.o addr_to_base85.o librfc1924.o base85_to_addr.o librfc1884.o libmac.o libeui64.o mac_to_eui64.o eui64_to_privacy.o librfc3041.o showinfo.o ipv6types.o
 OBJS = ipv6calc.o addr_to_compressed.o addr_to_uncompressed.o addr_to_fulluncompressed.o addr_to_ifinet6.o addr_to_ip6int.o ifinet6_to_compressed.o  libipv6calc.o addr_to_base85.o librfc1924.o base85_to_addr.o librfc1884.o libmac.o libeui64.o mac_to_eui64.o eui64_to_privacy.o librfc3041.o showinfo.o libipv6addr.o
 
-all:	ipv6calc
+all:		ipv6calc
 
 .c.o:
 		$(CC) $(CFLAGS) -c $<
@@ -26,7 +26,15 @@ all:	ipv6calc
 $(OBJS):	ipv6calc.h libipv6addr.h librfc1884.h
 
 ipv6calc:	$(OBJS)
-			$(CC)  -o ipv6calc $(OBJS) /usr/lib/libcrypto.so
+		$(CC)  -o ipv6calc $(OBJS) /usr/lib/libcrypto.so
+
+distclean:
+		make clean
+		rm config.cache config.status config.log
+
+autoclean:
+		make distclean
+		rm Makefile
 
 clean:
 		rm -rf ipv6calc *.o

@@ -1,3 +1,8 @@
+# Project    : ipv6calc
+# File       : contrib/ipv6calc.spec
+# Version    : $Id: ipv6calc.spec,v 1.4 2001/12/27 22:04:45 peter Exp $
+# Copyright  : 2001 by Peter Bieringer <pb@bieringer.de>
+
 Summary: IPv6 address format change and calculation utility
 Name: ipv6calc
 Version: 0.31
@@ -51,6 +56,12 @@ rm -rf $RPM_BUILD_ROOT
 %doc ChangeLog README CREDITS TODO
 
 %changelog
+* Thu Dec 27 2001 Peter Bieringer <pb@bieringer.de>
+- Add comment header
+
+* Tue Dec 18 2001 Peter Bieringer <pb@bieringer.de>
+- Replace hardwired version number with autoconf/configure variable
+
 * Wed Apr 25 2001 Peter Bieringer <pb@bieringer.de>
 - Fix permissions of doc files
 
