@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.3 2002/03/24 17:00:39 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.4 2002/03/24 21:38:08 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -104,6 +104,10 @@ int main(int argc,char *argv[]) {
 
 			case CMD_printexamples:
 				command = CMD_printexamples;
+				break;
+
+			case CMD_printoldoptions:
+				command = CMD_printoldoptions;
 				break;
 
 
@@ -371,6 +375,11 @@ int main(int argc,char *argv[]) {
 
 	if (command == CMD_printhelp) {
 		printhelp();
+		exit(EXIT_FAILURE);
+	};
+	
+	if (command == CMD_printoldoptions) {
+		printhelp_oldoptions();
 		exit(EXIT_FAILURE);
 	};
 	
@@ -721,6 +730,14 @@ int main(int argc,char *argv[]) {
 			if (macaddr.flag_valid != 1) {
 				fprintf(stderr, "No valid MAC address given!\n");
 				exit(EXIT_FAILURE);
+			};
+			
+			/* check for empty IID, otherwise display warning */
+			for ( i = 8; i <= 15; i++ ) {
+				if (ipv6addr.in6_addr.s6_addr[i] != 0) {
+					fprintf(stderr, "Warning: given prefix is not 0 in 64 LSBs!\n");
+					break;	
+				};
 			};
 			
 			/* convert MAC to IID */

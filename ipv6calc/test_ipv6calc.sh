@@ -2,11 +2,10 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.1 2002/03/18 20:00:20 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.2 2002/03/24 21:38:08 peter Exp $
 # Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
 #
-# Best view with tabsize 4 (historic...)
-#
+# Test patterns for ipv6calc conversions
 
 if [ ! -x ./ipv6calc ]; then
 	echo "Binary './ipv6calc' missing or not executable"
@@ -102,9 +101,11 @@ cat <<END | grep -v "^#"
 --in bitstring --out ipv6 \\\\[x3FFEFFFF000000000000000000000001/64].IP6.ARPA.	=3ffe:ffff::1/64
 ## IPv4 -> IPv6 (6to4)
 --ipv4_to_6to4addr 11.12.13.14						=2002:b0c:d0e::
---in ipv4 --out ipv6 --action conv6to4 11.12.13.14		=2002:b0c:d0e::
+--in ipv4 --out ipv6 --action conv6to4 11.12.13.14			=2002:b0c:d0e::
 ## IPv6 -> IPv4 (6to4)
- --in ipv6 --out ipv4 --action conv6to4 2002:102:304::1			=1.2.3.4
+--in ipv6 --out ipv4 --action conv6to4 2002:102:304::1			=1.2.3.4
+## Prefix + MAC -> IPv6
+--in prefix+mac fec0:0:0:1:: 01:23:45:67:89:01				=fec0::1:323:45ff:fe67:8901
 END
 }
 
