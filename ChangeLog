@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.69 2003/06/15 14:30:41 peter Exp $ 
+ *  $Id: ChangeLog,v 1.70 2003/06/15 16:23:55 peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,7 @@ Info:
 	add new program "ipv6logstats" to create historic address distribution statistics of webservers
 	 for use e.g. with gnuplot (add an example cmd script also)
 	remove autodetection code for EUI-64 (can misinterpret a proper IPv6 address)
+	fix some bugs in autodection
 
 20030404/PB
 	add new output format "octal" as requested from Lionel Elie Mamane <lionel at mamane dot lu>
