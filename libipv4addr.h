@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.3 2002/03/03 18:21:34 peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.4 2002/03/11 19:27:09 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -9,6 +9,7 @@
  */ 
 
 #include "ipv6calc.h"
+#include <netinet/in.h>
 
 
 /* typedefs */

@@ -1,7 +1,7 @@
 #
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.14 2002/03/03 11:01:53 peter Exp $
+# Version    : $Id: Makefile.in,v 1.15 2002/03/11 19:27:09 peter Exp $
 # Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -24,7 +24,7 @@ all:		ipv6calc
 .c.o:
 		$(CC) $(CFLAGS) -c $<
 
-$(OBJS):	ipv6calc.h libipv6addr.h librfc1884.h librfc2874.h libeui64.h libmac.h librfc3041.h ipv6calchelp.h libipv6addr.h librfc1924.h showinfo.h librfc1886.h librfc3056.h libipv4addr.h ipv6calctypes.h libifinet6.h
+$(OBJS):	ipv6calc.h libipv6addr.h librfc1884.h librfc2874.h libeui64.h libmac.h librfc3041.h ipv6calchelp.h libipv6addr.h librfc1924.h showinfo.h librfc1886.h librfc3056.h libipv4addr.h ipv6calctypes.h libifinet6.h ipv6calcoptions.h
 
 ipv6calc:	$(OBJS) getopt-make
 		$(CC) -o ipv6calc $(OBJS) $(GETOBJS) -lcrypto

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.10 2002/03/03 18:21:34 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.11 2002/03/11 19:27:09 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -9,7 +9,7 @@
  */ 
 
 #include "ipv6calc.h"
-
+#include <netinet/in.h>
 
 /* typedefs */
 
@@ -71,7 +71,7 @@ typedef struct {
 
 /* text representations */
 typedef struct {
-	long int number;
+	unsigned int number;
 	char *token;
 } s_type;
 
@@ -114,13 +114,13 @@ extern unsigned int ipv6addr_gettype(ipv6calc_ipv6addr *ipv6addrp);
 
 extern int  addr_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
 
-extern int  libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned int formatoptions); /* going obsolete */
+extern int  libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, int formatoptions); /* going obsolete */
 extern int  ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring); 
 
 extern int  ipv6addrstruct_to_uncompaddrprefix(ipv6calc_ipv6addr *ipv6addrp, char *resultstring);
 extern int  ipv6addrstruct_to_uncompaddrsuffix(ipv6calc_ipv6addr *ipv6addrp, char *resultstring);
 
-extern int  libipv6addr_ipv6addrstruct_to_fulluncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned int formatoptions);
+extern int  libipv6addr_ipv6addrstruct_to_fulluncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, int formatoptions);
 extern int  ipv6addrstruct_to_fulluncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring); /* going obsolete */
 
 extern void ipv6addrstruct_maskprefix(ipv6calc_ipv6addr *ipv6addrp);
@@ -129,4 +129,4 @@ extern void ipv6addrstruct_masksuffix(ipv6calc_ipv6addr *ipv6addrp);
 extern int  identifier_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
 
 extern int  tokenlsb64_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
-extern int  libipv6addr_ipv6addrstruct_to_tokenlsb64(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned long formatoptions);
+extern int  libipv6addr_ipv6addrstruct_to_tokenlsb64(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, int formatoptions);

@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2002/02/27 08:04:01 peter Exp $
+$Id: README,v 1.5 2002/03/11 19:27:09 peter Exp $
 
 ipv6calc will do some format changes and calculations for you
 
@@ -51,3 +51,5 @@ Maillists:
   Postings: only moderators are allowed to post, others are rejected automatically
   Subscription: mailto:ipv6calc-announce-subscribe@maillists.bieringer.de
 
+MAC/OUI:
+ http://standards.ieee.org/regauth/oui/oui.txt

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.h[.in]
- * Version    : $Id: ipv6calc.h.in,v 1.13 2002/03/03 18:21:34 peter Exp $
+ * Version    : $Id: ipv6calc.h.in,v 1.14 2002/03/11 19:27:09 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -16,10 +16,10 @@
 /* global program related definitions */
 #define PROGRAM_NAME "ipv6calc"
 #define PROGRAM_VERSION "@IPV6CALC_VERSION@"
-#define PROGRAM_COPYRIGHT " (P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.de> published under GNU GPL"
+#define PROGRAM_COPYRIGHT " (P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.de>\n published under GNU GPL"
 
 /* global includes */
-#include <netinet/in.h>
+/*#include <netinet/in.h>*/
 
 /*** global definitions ***/
 /* max length of a string for storage in a char array */
@@ -39,34 +39,36 @@
 
 
 /* command values */
-#define CMD_printhelp           0x00001l
-#define CMD_printversion        0x00002l
+#define CMD_printhelp           0x00001
+#define CMD_printversion        0x00002
 
-#define CMD_printexamples       0x00004l
+#define CMD_printexamples       0x00004
 
 /* new style options */
-#define CMD_inputtype			0x0200000l
-#define CMD_outputtype			0x0400000l
-#define CMD_actiontype			0x0800000l
+#define CMD_inputtype			0x0200000
+#define CMD_outputtype			0x0400000
+#define CMD_actiontype			0x0800000
 
 
 /* shortcut commands */
-#define CMD_addr_to_ip6int		0x000101l
-#define CMD_addr_to_compressed		0x000102l
-#define CMD_addr_to_uncompressed	0x000103l
-#define CMD_addr_to_fulluncompressed	0x000104l
-#define CMD_addr_to_ifinet6		0x000105l
-#define CMD_addr_to_base85		0x000106l
-#define CMD_addr_to_ip6arpa		0x000107l
-#define CMD_addr_to_bitstring		0x000108l
-#define CMD_ipv4_to_6to4addr		0x000109l
-#define CMD_base85_to_addr		0x00010al
-#define CMD_mac_to_eui64		0x00010bl
-#define CMD_eui64_to_privacy		0x00010cl
-#define CMD_ifinet6_to_compressed	0x00010dl
+#define CMD_shortcut_start		0x000101
+#define CMD_addr_to_ip6int		0x000101
+#define CMD_addr_to_compressed		0x000102
+#define CMD_addr_to_uncompressed	0x000103
+#define CMD_addr_to_fulluncompressed	0x000104
+#define CMD_addr_to_ifinet6		0x000105
+#define CMD_addr_to_base85		0x000106
+#define CMD_addr_to_ip6arpa		0x000107
+#define CMD_addr_to_bitstring		0x000108
+#define CMD_ipv4_to_6to4addr		0x000109
+#define CMD_base85_to_addr		0x00010a
+#define CMD_mac_to_eui64		0x00010b
+#define CMD_eui64_to_privacy		0x00010c
+#define CMD_ifinet6_to_compressed	0x00010d
+#define CMD_shortcut_end		0x00010d
 
-#define CMD_showinfo			0x001001l
-#define CMD_showinfotypes		0x001002l
+#define CMD_showinfo			0x001001
+#define CMD_showinfotypes		0x001002
 
 
 /* debug values */

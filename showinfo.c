@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.8 2002/03/03 18:21:34 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.9 2002/03/11 19:27:09 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -59,7 +59,7 @@ int showinfo_ipv6addr(ipv6calc_ipv6addr *ipv6addrp, unsigned long formatoptions)
 
 	for (i = 0; i < sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0]); i++ ) {
 		if (ipv6calc_debug & DEBUG_showinfo) {
-			fprintf(stderr, "%s: test: %lx : %s\n", DEBUG_function_name, ipv6calc_ipv6addrtypestrings[i].number, ipv6calc_ipv6addrtypestrings[i].token);
+			fprintf(stderr, "%s: test: %x : %s\n", DEBUG_function_name, ipv6calc_ipv6addrtypestrings[i].number, ipv6calc_ipv6addrtypestrings[i].token);
 		};
 
 	};	
@@ -190,7 +190,6 @@ int showinfo_ipv6addr(ipv6calc_ipv6addr *ipv6addrp, unsigned long formatoptions)
 					};
 				} else {
 					if (formatoptions & FORMATOPTION_machinereadable) {
-						fprintf(stdout, " EUI64=%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x", ipv6addr_getoctett(ipv6addrp, 8) ^ 0x02, ipv6addr_getoctett(ipv6addrp, 9), ipv6addr_getoctett(ipv6addrp, 10), ipv6addr_getoctett(ipv6addrp, 11), ipv6addr_getoctett(ipv6addrp, 12), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
 						fprintf(stdout, " IIDSCOPE=local");
 					} else {
 						fprintf(stdout, "Interface identifier is probably manual set or based on a local EUI-64 identifier");

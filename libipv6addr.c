@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.9 2002/03/03 11:01:53 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.10 2002/03/11 19:27:09 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -556,7 +556,7 @@ int ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstrin
 };
 
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddr"
-int libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned int formatoptions) {
+int libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, int formatoptions) {
 	int retval = 1;
 	
 	if ( ipv6calc_debug & DEBUG_libipv6addr ) {
@@ -716,7 +716,7 @@ int ipv6addrstruct_to_fulluncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *results
 };
 
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_fulluncompaddr"
-int libipv6addr_ipv6addrstruct_to_fulluncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned int formatoptions) {
+int libipv6addr_ipv6addrstruct_to_fulluncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, int formatoptions) {
 	int retval = 1, result;
 	char tempstring[NI_MAXHOST];
 
@@ -925,7 +925,7 @@ int identifier_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_tokenlsb64"
-int libipv6addr_ipv6addrstruct_to_tokenlsb64(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned long formatoptions) {
+int libipv6addr_ipv6addrstruct_to_tokenlsb64(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, int formatoptions) {
 	int retval = 1;
 	
 	/* print array */

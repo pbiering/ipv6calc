@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.c
- * Version    : $Id: ipv6calctypes.c,v 1.3 2002/03/03 11:01:53 peter Exp $
+ * Version    : $Id: ipv6calctypes.c,v 1.4 2002/03/11 19:27:09 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -23,7 +23,7 @@ int ipv6calctypes_checktype(char *string) {
 	char tokenlist[100];
 	char *token;
 	
-	if (ipv6calc_debug & DEBUG_libipv6calctypes) {
+	if ((ipv6calc_debug & DEBUG_libipv6calctypes) != 0) {
 		fprintf(stderr, "%s: Got string: %s\n", DEBUG_function_name, string);
 	};
 
