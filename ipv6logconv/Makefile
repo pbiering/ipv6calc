@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6logconf
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.6 2002/04/21 11:47:22 peter Exp $
+# Version    : $Id: Makefile,v 1.7 2002/11/12 18:58:10 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -41,7 +41,7 @@ clean:
 
 test:		
 		make all
-		./test_ipv6logconv.sh
+		if [[ `id -u` = 0 ]]; then su nobody -s /bin/sh -c "./test_ipv6logconv.sh"; else ./test_ipv6logconv.sh; fi
 
 splint:
 		splint *.c ../lib/*.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)
