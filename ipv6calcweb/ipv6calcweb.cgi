@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi,v 1.7 2002/03/21 08:23:42 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi,v 1.8 2002/03/24 17:01:02 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -370,7 +370,7 @@ if ( defined $ENV{'SERVER_PROTOCOL'} ) {
 
 ## Get variables
 if ( defined $ENV{'REMOTE_ADDR'} ) {
-	$ENV{'REMOTE_ADDR'} =~ /^([[:xdigit:]\.:]*)$/;
+	$ENV{'REMOTE_ADDR'} =~ /^([[:xdigit:]\.\:]*)$/;
 	if ( ! defined $1 || (length($1) > $maxenvlength)) {
 		&print_error("Error: problem with data");
 	};
@@ -378,7 +378,7 @@ if ( defined $ENV{'REMOTE_ADDR'} ) {
 };
 
 if ( defined $ENV{'REMOTE_HOST'} ) {
-	$ENV{'REMOTE_HOST'} =~ /^([[:alnum:]\.-_]*)$/;
+	$ENV{'REMOTE_HOST'} =~ /^([[:alnum:]\.\-_]*)$/;
 	if ( ! defined $1 || (length($1) > $maxenvlength)) {
 		&print_error("Error: problem with data");
 	};
@@ -395,7 +395,7 @@ if ( defined $ENV{'HTTP_USER_AGENT'} ) {
 };
 
 if ( defined $ENV{'SERVER_ADDR'} ) {
-	$ENV{'SERVER_ADDR'} =~ /^([[:xdigit:]\.:]*)$/;
+	$ENV{'SERVER_ADDR'} =~ /^([[:xdigit:]\.\:]*)$/;
 	if ( ! defined $1 || (length($1) > $maxenvlength)) {
 		&print_error("Error: problem with data");
 	};
@@ -403,7 +403,7 @@ if ( defined $ENV{'SERVER_ADDR'} ) {
 };
 
 if ( defined $ENV{'SERVER_NAME'} ) {
-	$ENV{'SERVER_NAME'} =~ /^([[:alnum:]\.-_]*)$/;
+	$ENV{'SERVER_NAME'} =~ /^([[:alnum:]\.\-_]*)$/;
 	if ( ! defined $1 || (length($1) > $maxenvlength)) {
 		&print_error("Error: problem with data");
 	};
