@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.1 2002/03/18 20:00:20 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.2 2002/03/19 23:14:42 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -650,7 +650,7 @@ int main(int argc,char *argv[]) {
 	};
 
 	/* clear resultstring */
-	sprintf(resultstring, "%s", "");
+	resultstring[0] = '\0';
 	
 	switch (action) {
 		case ACTION_mac_to_eui64:
@@ -800,7 +800,7 @@ int main(int argc,char *argv[]) {
 			retval = libipv6addr_ipv6addrstruct_to_tokenlsb64(&ipv6addr2, resultstring3, formatoptions);
 			
 			/* cat together */
-			sprintf(resultstring, "%s %s", resultstring2, resultstring3);
+			snprintf(resultstring, sizeof(resultstring), "%s %s", resultstring2, resultstring3);
 			break;
 
 

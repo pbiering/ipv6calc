@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.3 2002/03/18 22:06:46 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.4 2002/03/19 23:14:42 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "showinfo.h"
 #include "ipv6calc.h"
 #include "version.h"
@@ -78,14 +79,17 @@ static void printfooter(const unsigned long formatoptions) {
  */
 #define DEBUG_function_name "showinfo_ipv6addr"
 int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long formatoptions) {
-	int retval = 1, i, j, typeinfo, flag_prefixuse, result;
+	int retval = 1, i, j, typeinfo, flag_prefixuse, result, registry;
 	char tempstring[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
 	ipv6calc_ipv6addr ipv6addr, *ipv6addrp;
+
+	int machinereadable = ( formatoptions & FORMATOPTION_machinereadable);
 
 	ipv6addrp = &ipv6addr;
 	ipv6addr_copy(ipv6addrp, ipv6addrp1);
 
 	typeinfo = ipv6addr_gettype(ipv6addrp);
+	registry = ipv6addr_getregistry(ipv6addrp);
 
 	if ( (ipv6calc_debug & DEBUG_showinfo)  != 0) {
 		fprintf(stderr, "%s: result of 'ipv6addr_gettype': %x\n", DEBUG_function_name, typeinfo);
@@ -104,42 +108,45 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long f
 	ipv6addrstruct_to_fulluncompaddr(ipv6addrp, helpstring);
 	ipv6addrp->flag_prefixuse = flag_prefixuse;
 	
-	if (formatoptions & FORMATOPTION_machinereadable) {
-		sprintf(tempstring, "IPV6=%s", helpstring);
+	if ( machinereadable != 0 ) {
+		snprintf(tempstring, sizeof(tempstring), "IPV6=%s", helpstring);
 		printout(tempstring);
 	
 		if (ipv6addrp->flag_prefixuse == 1) {	
-			sprintf(tempstring, "PREFIXLENGTH=%d", ipv6addrp->prefixlength);
+			snprintf(tempstring, sizeof(tempstring), "PREFIXLENGTH=%d", ipv6addrp->prefixlength);
 			printout(tempstring);
 		};
 
 		j = 0;
-		sprintf(tempstring, "TYPE=");
+		snprintf(tempstring, sizeof(tempstring), "TYPE=");
 		for (i = 0; i < sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0]); i++ ) {
 			if (typeinfo & ipv6calc_ipv6addrtypestrings[i].number) {
 				if (j != 0) {
-					sprintf(helpstring, "%s,", tempstring);
-					sprintf(tempstring, "%s", helpstring);
+					snprintf(helpstring, sizeof(tempstring), "%s,", tempstring);
+					snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
 				};
-				sprintf(helpstring, "%s%s", tempstring, ipv6calc_ipv6addrtypestrings[i].token);
-				sprintf(tempstring, "%s", helpstring);
+				snprintf(helpstring, sizeof(tempstring), "%s%s", tempstring, ipv6calc_ipv6addrtypestrings[i].token);
+				snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
 				j = 1;
 			};
 		};
 		printout(tempstring);
 	} else {
 		fprintf(stdout, "Address type: ");
-		for (i = 0; i < sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0]); i++ ) {
-			if (typeinfo & ipv6calc_ipv6addrtypestrings[i].number) {
+		j = 0;
+		for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
+			if ( (typeinfo & ipv6calc_ipv6addrtypestrings[i].number) != 0 ) {
+				if ( j != 0 ) { fprintf(stdout, ", "); };
 				fprintf(stdout, "%s", ipv6calc_ipv6addrtypestrings[i].token);
+				j = 1;
 			};
 		};
 		fprintf(stdout, "\n");
 	};	
 
-	if (typeinfo & IPV6_NEW_ADDR_6TO4 ) {
-		if (formatoptions & FORMATOPTION_machinereadable) {
-			sprintf(tempstring, "IPV4=%d.%d.%d.%d", ipv6addr_getoctett(ipv6addrp, 2), ipv6addr_getoctett(ipv6addrp, 3), ipv6addr_getoctett(ipv6addrp, 4), ipv6addr_getoctett(ipv6addrp, 5));
+	if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
+		if ( machinereadable != 0 ) {
+			snprintf(tempstring, sizeof(tempstring), "IPV4=%d.%d.%d.%d", ipv6addr_getoctett(ipv6addrp, 2), ipv6addr_getoctett(ipv6addrp, 3), ipv6addr_getoctett(ipv6addrp, 4), ipv6addr_getoctett(ipv6addrp, 5));
 			printout(tempstring);
 		} else {
 			fprintf(stdout, "Address type is 6to4 and included IPv4 address is: %d.%d.%d.%d\n", ipv6addr_getoctett(ipv6addrp, 2), ipv6addr_getoctett(ipv6addrp, 3), ipv6addr_getoctett(ipv6addrp, 4), ipv6addr_getoctett(ipv6addrp, 5));
@@ -147,21 +154,36 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long f
 	};
 
 	/* SLA prefix included? */
-	if ( typeinfo & (IPV6_NEW_ADDR_6TO4 | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_NEW_ADDR_6BONE) ) {
-		if (formatoptions & FORMATOPTION_machinereadable) {
-			sprintf(tempstring, "SLA=%04x", ipv6addr_getword(ipv6addrp, 3));
+	if ( typeinfo & ( IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU ) ) {
+		if ( machinereadable != 0 ) {
+			snprintf(tempstring, sizeof(tempstring), "SLA=%04x", ipv6addr_getword(ipv6addrp, 3));
 			printout(tempstring);
 		} else {
 			fprintf(stdout, "Address type has SLA: %04x\n", ipv6addr_getword(ipv6addrp, 3));
 		};
 	};
 	
+	/* Registry? */
+	if ( registry != -1 ) {
+		for ( i = 0; i < (int) (sizeof(ipv6calc_ipv6addrregistry) / sizeof(ipv6calc_ipv6addrregistry[0])); i++ ){
+			if ( ipv6calc_ipv6addrregistry[i].number == registry ) {
+				if ( machinereadable != 0 ) {
+					snprintf(tempstring, sizeof(tempstring), "REGISTRY=%s", ipv6calc_ipv6addrregistry[i].tokensimple);
+					printout(tempstring);
+				} else {
+					fprintf(stdout, "Registry for address: %s\n", ipv6calc_ipv6addrregistry[i].token);
+				};
+			};
+			break;
+		};
+	};
+	
 	/* Proper solicited node link-local multicast address? */
-	if (typeinfo & IPV6_NEW_ADDR_SOLICITED_NODE) {
+	if ( (typeinfo & IPV6_NEW_ADDR_SOLICITED_NODE) != 0 ) {
 		if (typeinfo & IPV6_ADDR_LINKLOCAL && typeinfo & IPV6_ADDR_MULTICAST) {
 			/* address is ok */
 		} else {
-			if (formatoptions & FORMATOPTION_machinereadable) {
+			if ( machinereadable != 0 ) {
 			} else {
 				fprintf(stdout, "Address is not a proper 'solicited-node link-local multicast' address!\n");
 				retval = 1;
@@ -171,9 +193,9 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long f
 	};
 	
 	/* Compat or mapped */
-	if ( typeinfo & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED) ) {
-		if (formatoptions & FORMATOPTION_machinereadable) {
-			sprintf(tempstring, "IPV4=%d.%d.%d.%d", ipv6addr_getoctett(ipv6addrp, 12), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
+	if ( (typeinfo & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)) != 0 ) {
+		if ( machinereadable != 0 ) {
+			snprintf(tempstring, sizeof(tempstring), "IPV4=%d.%d.%d.%d", ipv6addr_getoctett(ipv6addrp, 12), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
 			printout(tempstring);
 		} else {
 			fprintf(stdout, "Address type is compat/mapped and included IPv4 address is: %d.%d.%d.%d\n", ipv6addr_getoctett(ipv6addrp, 12), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
@@ -181,9 +203,9 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long f
 	};
 
 	/* Interface identifier included */
-	if ( (typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4)) || ((typeinfo & (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) == (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) ) {
-		if (formatoptions & FORMATOPTION_machinereadable) {
-			sprintf(tempstring, "IID=%04x:%04x:%04x:%04x", ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addr_getword(ipv6addrp, 6), ipv6addr_getword(ipv6addrp, 7));
+	if ( (typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU )) || ((typeinfo & (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) == (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) ) {
+		if ( machinereadable != 0 ) {
+			snprintf(tempstring, sizeof(tempstring), "IID=%04x:%04x:%04x:%04x", ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addr_getword(ipv6addrp, 6), ipv6addr_getword(ipv6addrp, 7));
 			printout(tempstring);
 		} else {
 			fprintf(stdout, "Interface identifier: %04x:%04x:%04x:%04x\n", ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addr_getword(ipv6addrp, 6), ipv6addr_getword(ipv6addrp, 7));
@@ -191,14 +213,14 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long f
 
 		if (ipv6addr_getoctett(ipv6addrp, 11) == 0xff && ipv6addr_getoctett(ipv6addrp, 12) == 0xfe) {
 			/* EUI-48 */
-			if (formatoptions & FORMATOPTION_machinereadable) {
-				sprintf(tempstring, "EUI48=%02x:%02x:%02x:%02x:%02x:%02x", ipv6addr_getoctett(ipv6addrp, 8) ^ 0x02, ipv6addr_getoctett(ipv6addrp, 9), ipv6addr_getoctett(ipv6addrp, 10), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
+			if ( machinereadable != 0 ) {
+				snprintf(tempstring, sizeof(tempstring), "EUI48=%02x:%02x:%02x:%02x:%02x:%02x", ipv6addr_getoctett(ipv6addrp, 8) ^ 0x02, ipv6addr_getoctett(ipv6addrp, 9), ipv6addr_getoctett(ipv6addrp, 10), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
 				printout(tempstring);
 			} else {
 				fprintf(stdout, "Interface identifier is an EUI-64 generated from EUI-48 (MAC): %02x:%02x:%02x:%02x:%02x:%02x\n", ipv6addr_getoctett(ipv6addrp, 8) ^ 0x02, ipv6addr_getoctett(ipv6addrp, 9), ipv6addr_getoctett(ipv6addrp, 10), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
 			};
 
-			if (formatoptions & FORMATOPTION_machinereadable) {
+			if ( machinereadable != 0 ) {
 				if (ipv6addr_getoctett(ipv6addrp, 8) & 0x02) {
 					printout("IIDSCOPE=global");
 				} else {
@@ -215,8 +237,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long f
 			/* get vendor string */
 			result = libieee_get_vendor_string(helpstring, ipv6addr_getoctett(ipv6addrp, 8) ^ 0x02, ipv6addr_getoctett(ipv6addrp, 9), ipv6addr_getoctett(ipv6addrp, 10));
 			if (result == 0) {
-				if (formatoptions & FORMATOPTION_machinereadable) {
-					sprintf(tempstring, "OUI=\"%s\"", helpstring);
+				if ( machinereadable != 0 ) {
+					snprintf(tempstring, sizeof(tempstring), "OUI=\"%s\"", helpstring);
 					printout(tempstring);
 				} else {
 					fprintf(stdout, "OUI is: %s\n", tempstring);
@@ -225,8 +247,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long f
 
 			/* check for Linux ISDN-NET/PLIP */
 			if (((ipv6addr_getoctett(ipv6addrp, 8) ^ 0x02) == 0xfc) && (ipv6addr_getoctett(ipv6addrp, 9 == 0xfc))) {
-				if (formatoptions & FORMATOPTION_machinereadable) {
-					sprintf(tempstring, "IPV4=%d.%d.%d.%d", ipv6addr_getoctett(ipv6addrp, 10), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
+				if ( machinereadable != 0 ) {
+					snprintf(tempstring, sizeof(tempstring), "IPV4=%d.%d.%d.%d", ipv6addr_getoctett(ipv6addrp, 10), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
 					printout(tempstring);
 				} else {
 					fprintf(stdout, "Address type contains IPv4 address: %d.%d.%d.%d\n", ipv6addr_getoctett(ipv6addrp, 10), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
@@ -236,8 +258,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long f
 		} else {
 			/* Check for global EUI-64 */
 			if (ipv6addr_getoctett(ipv6addrp, 8) & 0x02) {
-				if (formatoptions & FORMATOPTION_machinereadable) {
-					sprintf(tempstring, "EUI64=%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x", ipv6addr_getoctett(ipv6addrp, 8) ^ 0x02, ipv6addr_getoctett(ipv6addrp, 9), ipv6addr_getoctett(ipv6addrp, 10), ipv6addr_getoctett(ipv6addrp, 11), ipv6addr_getoctett(ipv6addrp, 12), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
+				if ( machinereadable != 0 ) {
+					snprintf(tempstring, sizeof(tempstring), "EUI64=%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x", ipv6addr_getoctett(ipv6addrp, 8) ^ 0x02, ipv6addr_getoctett(ipv6addrp, 9), ipv6addr_getoctett(ipv6addrp, 10), ipv6addr_getoctett(ipv6addrp, 11), ipv6addr_getoctett(ipv6addrp, 12), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
 					printout(tempstring);
 					printout("IIDSCOPE=global");
 				} else {
@@ -247,8 +269,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long f
 				/* get vendor string */
 				result = libieee_get_vendor_string(helpstring, ipv6addr_getoctett(ipv6addrp, 8) ^ 0x02, ipv6addr_getoctett(ipv6addrp, 9), ipv6addr_getoctett(ipv6addrp, 10));
 				if (result == 0) {
-					if (formatoptions & FORMATOPTION_machinereadable) {
-						sprintf(tempstring, "OUI=\"%s\"", helpstring);
+					if ( machinereadable != 0 ) {
+						snprintf(tempstring, sizeof(tempstring), "OUI=\"%s\"", helpstring);
 						printout(tempstring);
 					} else {
 						fprintf(stdout, "OUI is: %s\n", tempstring);
@@ -257,24 +279,24 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const unsigned long f
 
 			} else {
 				if (typeinfo & IPV6_NEW_ADDR_SOLICITED_NODE) {
-					if (formatoptions & FORMATOPTION_machinereadable) {
-						sprintf(tempstring, "EUI64=??:??:??:??:??:%02x:%02x:%02x", ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
+					if ( machinereadable != 0 ) {
+						snprintf(tempstring, sizeof(tempstring), "EUI64=??:??:??:??:??:%02x:%02x:%02x", ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
 						printout(tempstring);
 					} else {
 						fprintf(stdout, "Generated from the extension identifier of an EUI-48 (MAC): ...:%02x:%02x:%02x\n", ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
 					};
 				} else if (typeinfo & IPV6_NEW_ADDR_ISATAP || (typeinfo & IPV6_ADDR_LINKLOCAL && ipv6addr_getdword(ipv6addrp, 2) == 0) ) {
-					if (formatoptions & FORMATOPTION_machinereadable) {
-						sprintf(tempstring, "IPV4=%d.%d.%d.%d", ipv6addr_getoctett(ipv6addrp, 12), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
+					if ( machinereadable != 0 ) {
+						snprintf(tempstring, sizeof(tempstring), "IPV4=%d.%d.%d.%d", ipv6addr_getoctett(ipv6addrp, 12), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
 						printout(tempstring);
 					} else {
 						fprintf(stdout, "Address type contains IPv4 address: %d.%d.%d.%d\n", ipv6addr_getoctett(ipv6addrp, 12), ipv6addr_getoctett(ipv6addrp, 13), ipv6addr_getoctett(ipv6addrp, 14), ipv6addr_getoctett(ipv6addrp, 15));
 					};
 				} else {
-					if (formatoptions & FORMATOPTION_machinereadable) {
+					if ( machinereadable != 0 ) {
 						printout("IIDSCOPE=local");
 					} else {
-						fprintf(stdout, "Interface identifier is probably manual set or based on a local EUI-64 identifier");
+						fprintf(stdout, "Interface identifier is probably manual set or based on a local EUI-64 identifier\n");
 					};
 				};
 			};
