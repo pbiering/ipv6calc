@@ -237,7 +237,12 @@ See here for more:
 OpenBSD:
 \layout Standard
 
-Someone told me time ago that a port is on the way...
+See here for more: 
+\begin_inset LatexCommand \url[http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/]{http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/}
+
+\end_inset 
+
+
 \layout Section
 
 Mailling Lists
