@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : addr_to_base85.c
- * Version    : $Id: addr_to_base85.c,v 1.2 2002/02/25 21:18:49 peter Exp $
+ * Version    : $Id: addr_to_base85.c,v 1.3 2002/02/25 21:40:18 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -25,9 +25,10 @@ void addr_to_base85_printhelplong(void) {
 	fprintf(stderr, "   e.g. 1080:0:0:0:8:800:200c:417a -> 4)+k&C#VzJ4br>0wv%%Yp \n");
 };
 
-/* function formats an given IPv6 address to a base85 one
+/*
+ * function formats an given IPv6 address to a base85 one
  *  
- * in : *addrstring = IPv6 address
+ * in : *ipv6addrp = pointer to IPv6 address structure
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */

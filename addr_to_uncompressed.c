@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : addr_to_uncompressed.c
- * Version    : $Id: addr_to_uncompressed.c,v 1.3 2002/02/25 21:18:50 peter Exp $
+ * Version    : $Id: addr_to_uncompressed.c,v 1.4 2002/02/25 21:40:18 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
  *
  * Information:
@@ -35,7 +35,7 @@ void addr_to_uncompressed_printhelplong(void) {
 /* function formats an given IPv6 address to an uncompressed format
  *  not touching prefix length
  *
- * in : *addrstring = IPv6 address, unsigned int formatselector
+ * in : *ipv6addrp = pointer to IPv6 address structure, command
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */

@@ -1,10 +1,14 @@
 /*
- *  $Id: ChangeLog,v 1.15 2002/02/25 21:18:49 peter Exp $ 
+ *  $Id: ChangeLog,v 1.16 2002/02/25 21:40:18 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20020224/PB:
+	move nibble string function to librfc1886
+	minor fixes
+
 20020224/PB:
 	minor Makefile fixes
 	fix getopt Makefile
