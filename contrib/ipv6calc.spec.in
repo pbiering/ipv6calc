@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Version    : $Id: ipv6calc.spec.in,v 1.2 2001/12/27 22:19:25 peter Exp $
-# Copyright  : 2001 by Peter Bieringer <pb@bieringer.de>
+# Version    : $Id: ipv6calc.spec.in,v 1.3 2002/01/21 08:16:27 peter Exp $
+# Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
 Name: ipv6calc
@@ -9,7 +9,7 @@ Version: @IPV6CALC_VERSION@
 Release: 1
 Group: System Environment/Base
 URL: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/
-License: GPL
+License: GNU GPL version 2
 
 Source: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/ipv6calc-%{version}.tar.gz
 
@@ -43,6 +43,8 @@ install -m644 $RPM_BUILD_DIR/%{name}-%{version}/ChangeLog $RPM_BUILD_ROOT%_defau
 install -m644 $RPM_BUILD_DIR/%{name}-%{version}/README    $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
 install -m644 $RPM_BUILD_DIR/%{name}-%{version}/CREDITS   $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
 install -m644 $RPM_BUILD_DIR/%{name}-%{version}/TODO      $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
+install -m644 $RPM_BUILD_DIR/%{name}-%{version}/COPYING   $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
+install -m644 $RPM_BUILD_DIR/%{name}-%{version}/LICENSE   $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -54,9 +56,12 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 /bin/ipv6calc
-%doc ChangeLog README CREDITS TODO
+%doc ChangeLog README CREDITS TODO COPYING LICENSE
 
 %changelog
+* Mon Jan 21 2002 Peter Bieringer <pb@bieringer.de>
+- Add LICENSE + COPYING file
+
 * Thu Dec 27 2001 Peter Bieringer <pb@bieringer.de>
 - Add comment header
 - Add call to configure on build
