@@ -34,13 +34,16 @@ Credits to
 * Vladimir Kotal <vlada at openbsd dot cz>
    for getopt patch for compiling on OpenBSD
 
+* Peter Poeml <poeml at suse dot de>
+   for bug reporting
+
 * VMware, in which my OpenBSD and FreeBSD installation is running
 
 * Peter A. Darnell and Philip E. Margolis
    C - A software engineering approach
-  [one of the best books about programming language C around the world,
-    forget Kerningham/Ritchie, use this book instead like me for over
-    8 years ]
+    [one of the best books about programming language C around the world,
+      forget Kerningham/Ritchie, use this book instead like me for over
+      11 years ]
 
 
-	Peter Bieringer, 2001-2002
+	Peter Bieringer, 2002/11/12
