@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3041.c
- * Version    : $Id: librfc3041.c,v 1.3 2002/04/04 19:40:27 peter Exp $
+ * Version    : $Id: librfc3041.c,v 1.4 2002/04/04 21:58:22 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -38,7 +38,7 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 	unsigned char digest[MD5_DIGEST_LENGTH];
 
 	if ( (ipv6calc_debug & DEBUG_librfc3041) != 0 ) {
-		fprintf(stderr, "%s: Got identifier '%08x-%08x' and token '%08x-%08x'\n", DEBUG_function_name, ipv6addr_getdword(identifier, 2), ipv6addr_getdword(identifier, 3), ipv6addr_getdword(token, 2), ipv6addr_getdword(token, 3)); 
+		fprintf(stderr, "%s: Got identifier '%08x-%08x' and token '%08x-%08x'\n", DEBUG_function_name, (unsigned int) ipv6addr_getdword(identifier, 2), (unsigned int) ipv6addr_getdword(identifier, 3), (unsigned int) ipv6addr_getdword(token, 2), (unsigned int) ipv6addr_getdword(token, 3)); 
 	};
 
 	MD5_Init(&md5hash);
@@ -62,7 +62,7 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 	ipv6addr_clear(newidentifier);
 	ipv6addr_clear(newtoken);
 	
-	for (i = 0; i < sizeof(newidentifier->in6_addr.s6_addr) / sizeof(newidentifier->in6_addr.s6_addr[0]); i++) {
+	for (i = 0; i < (int) (sizeof(newidentifier->in6_addr.s6_addr) / sizeof(newidentifier->in6_addr.s6_addr[0])); i++) {
 		/* copy into */	
 		newidentifier->in6_addr.s6_addr[i + 8] = (uint8_t) digest[i];
 		newtoken->in6_addr.s6_addr[i + 8] = (uint8_t) digest[i + 8];

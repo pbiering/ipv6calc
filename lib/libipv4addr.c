@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.5 2002/04/04 19:40:27 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.6 2002/04/04 21:58:21 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -155,7 +155,7 @@ void ipv4addr_setdword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int value) {
 		exit(EXIT_FAILURE);
 	}; 
 
-	ipv4addr_setword(ipv4addrp, 0, (value & 0xffff0000u > 16) );
+	ipv4addr_setword(ipv4addrp, 0, ((value & 0xffff0000u) >> 16) );
 	ipv4addr_setword(ipv4addrp, 1, (value & 0xffffu) );
 
 	return;

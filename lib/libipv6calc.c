@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.2 2002/04/04 19:40:27 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.3 2002/04/04 21:58:21 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -28,7 +28,7 @@ void string_to_upcase(char *string) {
 	int i;
 
 	if (strlen(string) > 0) {
-		for (i = 0; i < strlen(string); i++) {
+		for (i = 0; i < (int) strlen(string); i++) {
 			string[i] = toupper(string[i]);
 		};
 	};
@@ -47,7 +47,7 @@ void string_to_lowcase(char *string) {
 	int i;
 
 	if (strlen(string) > 0) {
-		for (i = 0; i < strlen(string); i++) {
+		for (i = 0; i < (int) strlen(string); i++) {
 			string[i] = tolower(string[i]);
 		};
 	};
@@ -74,7 +74,7 @@ void string_to_reverse(char *string) {
 		return;
 	};
 
-	for (i = 0; i < (length >> 1); i++) {
+	for (i = 0; i < ( (int) (length >> 1)); i++) {
 		helpchar = string[i];
 		string[i] = string[length - i - 1];
 		string[length - i - 1] = helpchar;
@@ -92,8 +92,9 @@ void string_to_reverse(char *string) {
 #define DEBUG_function_name "libipv6calc/autodetectinput"
 uint32_t libipv6calc_autodetectinput(const char *string) {
 	uint32_t type = FORMAT_undefined;
-	int i, length, numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, result;
+	int i, numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, result;
 	char resultstring[NI_MAXHOST];
+	size_t length;
 
 	length = strlen(string);
 
@@ -102,7 +103,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		goto END_libipv6calc_autodetectinput;
 	};
 
-	for (i = 0; i < length; i++) {
+	for (i = 0; i < (int) length; i++) {
 		if (string[i] == '.') { numdots++; };
 		if (string[i] == ':') { numcolons++; };
 		if (isdigit(string[i])) { numdigits++; };

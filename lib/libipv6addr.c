@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.6 2002/04/04 19:40:27 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.7 2002/04/04 21:58:21 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -603,7 +603,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	/* copy into structure */
 	for ( i = 0; i <= 7; i++ ) {
 		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-			fprintf(stderr, "%s: Push word %u: %08x\n", DEBUG_function_name, (unsigned int) i, (unsigned int) temp[i]);
+			fprintf(stderr, "%s: Push word %u: %04x\n", DEBUG_function_name, (unsigned int) i, (unsigned int) temp[i]);
 		};
 		ipv6addr_setword(ipv6addrp, (unsigned int) i, (unsigned int) temp[i]);
 	};
@@ -616,22 +616,24 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	scope = ipv6addr_gettype(ipv6addrp); 
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s: Got scope %02x\n", DEBUG_function_name, scope);
+		fprintf(stderr, "%s: Got scope %08x\n", DEBUG_function_name, (unsigned int) scope);
 	};
 
-	ipv6addrp->scope = result;
-
-	if ( scope != 0 ) {
+	ipv6addrp->scope = scope;
+	
+	/* currently unused code - forgotten why there... :-(
+	if ( scope != 0 ) { */
 		/* test, whether compatv4/mapped/ISATAP is really one */
+	/*
 		if ( (ipv6addrp->scope & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED | IPV6_NEW_ADDR_ISATAP)) == 0 ) {
 			snprintf(resultstring, NI_MAXHOST, "Error, given address '%s' is not valid compatv4/mapped/ISATAP one!", addrstring);
 			retval = 1;
 			return (retval);
 		};
-	};
+	};*/
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s: First word is: %x, address info value: %x\n", DEBUG_function_name, ipv6addr_getword(ipv6addrp, 0), result);
+		fprintf(stderr, "%s: First word is: %04x, address info value: %08x\n", DEBUG_function_name, (unsigned int) ipv6addr_getword(ipv6addrp, 0), (unsigned int) scope);
 		fprintf(stderr, "%s: flag_prefixuse %d\n", DEBUG_function_name, ipv6addrp->flag_prefixuse);
 	};
 	
@@ -680,7 +682,7 @@ int libipv6addr_ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp,
 	int retval = 1;
 	
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s: get format option: %x\n", DEBUG_function_name, formatoptions);
+		fprintf(stderr, "%s: get format option: %08x\n", DEBUG_function_name, (unsigned int) formatoptions);
 	};
 
 	if ( (formatoptions & FORMATOPTION_printprefix) != 0 ) {
@@ -720,7 +722,7 @@ int libipv6addr_ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp,
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddrprefix"
 int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 	int retval = 1;
-	int max, i;
+	unsigned int max, i;
 	char tempstring1[NI_MAXHOST], tempstring2[NI_MAXHOST];
 	
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
@@ -773,7 +775,7 @@ int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp, char 
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddrsuffix"
 int ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 	int retval = 1;
-	int max, i;
+	unsigned int max, i;
 	char tempstring1[NI_MAXHOST], tempstring2[NI_MAXHOST];
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
@@ -793,7 +795,7 @@ int ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp, char 
 	};
 
 	max = 7;
-	i   = ipv6addrp->prefixlength >> 4;
+	i   = ipv6addrp->prefixlength / 16;
 	tempstring1[0] = '\0';
 	while (i <= max ) {
 		if ( ( ( ipv6addrp->scope & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)) != 0 ) && ( i == 6 ) ) {
@@ -829,7 +831,7 @@ int ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp, char 
 int ipv6addrstruct_to_fulluncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 	int retval = 1;
 	/* old style compatibility */
-	unsigned int formatoptions = FORMATOPTION_printlowercase;
+	uint32_t formatoptions = FORMATOPTION_printlowercase;
 	
 	retval = libipv6addr_ipv6addrstruct_to_fulluncompaddr(ipv6addrp, resultstring, formatoptions);
 	return (retval);
@@ -879,7 +881,7 @@ int libipv6addr_ipv6addrstruct_to_fulluncompaddr(const ipv6calc_ipv6addr *ipv6ad
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_masksuffix"
 void ipv6addrstruct_maskprefix(ipv6calc_ipv6addr *ipv6addrp) {
 	unsigned int nbit, nword;
-	unsigned int mask, newword;
+	uint16_t mask, newword;
 	int i;
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
@@ -893,21 +895,21 @@ void ipv6addrstruct_maskprefix(ipv6calc_ipv6addr *ipv6addrp) {
 
 	for (i = 127; i >= 0; i--) {
 		nbit = (unsigned int) i;
-		if (nbit >= ipv6addrp->prefixlength) {
+		if (nbit >= (unsigned int) ipv6addrp->prefixlength) {
 			/* set bit to zero */
 			
 			/* calculate word (16 bit) - matches with addr6p[]*/
 			nword = (nbit & 0x70) >> 4;
 				 
 			/* calculate mask */
-			mask = 0x8000 >> ((nbit & 0x0f));
+			mask = ((uint16_t) 0x8000u) >> (( ((uint16_t) nbit) & ((uint16_t) 0x0fu)));
 			newword = ipv6addr_getword(ipv6addrp, nword) & (~ mask );
 			
 			if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-				fprintf(stderr, "%s: bit: %d = nword: %d, mask: %04x, word: %04x newword: %04x\n", DEBUG_function_name, nbit, nword, mask, ipv6addr_getword(ipv6addrp, nword), newword);
+				fprintf(stderr, "%s: bit: %u = nword: %u, mask: %04x, word: %04x newword: %04x\n", DEBUG_function_name, nbit, nword, (unsigned int) mask, (unsigned int) ipv6addr_getword(ipv6addrp, nword), (unsigned int) newword);
 			};
 
-			ipv6addr_setword(ipv6addrp, nword, newword);
+			ipv6addr_setword(ipv6addrp, nword, (unsigned int) newword);
 		};
 	};
 };
@@ -923,7 +925,7 @@ void ipv6addrstruct_maskprefix(ipv6calc_ipv6addr *ipv6addrp) {
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_masksuffix"
 void ipv6addrstruct_masksuffix(ipv6calc_ipv6addr *ipv6addrp) {
 	unsigned int nbit, nword;
-	unsigned int mask, newword;
+	uint16_t mask, newword;
 	int i;
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
@@ -938,21 +940,21 @@ void ipv6addrstruct_masksuffix(ipv6calc_ipv6addr *ipv6addrp) {
 	for (i = 127; i >= 0; i--) {
 		nbit = (unsigned int) i;
 
-		if (nbit < ipv6addrp->prefixlength) {
+		if (nbit < (unsigned int) ipv6addrp->prefixlength) {
 			/* set bit to zero */
 			
 			/* calculate word (16 bit) - matches with addr6p[]*/
 			nword = (nbit & 0x70) >> 4;
 				 
 			/* calculate mask */
-			mask = 0x8000 >> ((nbit & 0x0f));
+			mask = ((uint32_t) 0x8000u) >> (((uint32_t) nbit) & ((uint32_t) 0x0fu ));
 			newword = ipv6addr_getword(ipv6addrp, nword) & (~ mask );
 			
 			if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-				fprintf(stderr, "libipv6addr/ipv6calc_ipv6addr_masksuffix: bit: %d = nword: %d, mask: %04x, word: %04x newword: %04x\n", nbit, nword, mask, ipv6addr_getword(ipv6addrp, nword), newword);
+				fprintf(stderr, "libipv6addr/ipv6calc_ipv6addr_masksuffix: bit: %u = nword: %u, mask: %04x, word: %04x newword: %04x\n", nbit, nword, (unsigned int) mask, (unsigned int) ipv6addr_getword(ipv6addrp, nword), (unsigned int) newword);
 			};
 
-			ipv6addr_setword(ipv6addrp, nword, newword);
+			ipv6addr_setword(ipv6addrp, nword, (unsigned int) newword);
 		};
 	};
 };
@@ -1050,7 +1052,7 @@ int identifier_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_tokenlsb64"
-int libipv6addr_ipv6addrstruct_to_tokenlsb64(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, int formatoptions) {
+int libipv6addr_ipv6addrstruct_to_tokenlsb64(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, uint32_t formatoptions) {
 	int retval = 1;
 	
 	/* print array */

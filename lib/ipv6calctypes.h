@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.3 2002/04/04 19:40:26 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.4 2002/04/04 21:58:21 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -115,7 +115,7 @@ typedef struct {
 
 
 /* Format options */
-#define FORMATOPTION_NUM_HEAD			0x100
+#define FORMATOPTION_NUM_HEAD			0x300
 
 #define FORMATOPTION_NUM_printlowercase		1
 #define FORMATOPTION_NUM_printuppercase		2

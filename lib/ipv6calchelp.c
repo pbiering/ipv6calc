@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.4 2002/04/04 19:40:26 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.5 2002/04/04 21:58:21 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -87,7 +87,7 @@ void printhelp_inputtypes(void) {
 	/* run through matrix */
 	for (i = 0; i < (int) (sizeof(ipv6calc_formatmatrix) / sizeof(ipv6calc_formatmatrix[0])); i++) {
 		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "Row %d: %08x - %08x\n", i, (unsigned int) iv6calc_formatmatrix[i][0], (unsigned int) ipv6calc_formatmatrix[i][1]);
+			fprintf(stderr, "Row %d: %08x - %08x\n", i, (unsigned int) ipv6calc_formatmatrix[i][0], (unsigned int) ipv6calc_formatmatrix[i][1]);
 		};
 		if (ipv6calc_formatmatrix[i][1] != 0) {
 			/* available for input, look for name now */

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.3 2002/04/04 19:40:27 peter Exp $
+ * Version    : $Id: librfc1886.c,v 1.4 2002/04/04 21:58:21 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -40,9 +40,9 @@
 int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions, char* domain) {
 	int retval = 1;
 	unsigned int nibble;
-	int noctett, bit_start, bit_end, nbit;
+	int bit_start, bit_end, nbit;
 	char tempstring[NI_MAXHOST];
-	unsigned int nnibble;
+	unsigned int nnibble, noctett;
 	
 	if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
 		fprintf(stderr, "%s: flag_prefixuse %d\n", DEBUG_function_name, (*ipv6addrp).flag_prefixuse);
@@ -51,7 +51,7 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 	if ( ((formatoptions & (FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_printstart | FORMATOPTION_printend)) == 0 ) && ((*ipv6addrp).flag_prefixuse != 0) ) {
 		/* simulate old behavior */
 		bit_start = 1;
-		bit_end = (*ipv6addrp).prefixlength;
+		bit_end = (int) (*ipv6addrp).prefixlength;
 		if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
 			fprintf(stderr, "%s: simulate old behavior\n", DEBUG_function_name);
 		};
@@ -68,8 +68,8 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 			return (retval);
 		};
 
-		bit_start = (*ipv6addrp).bit_start;
-		bit_end = (*ipv6addrp).bit_end;
+		bit_start = (int) (*ipv6addrp).bit_start;
+		bit_end = (int) (*ipv6addrp).bit_end;
 	} else {
 		bit_start = 1;
 		bit_end = 128;
@@ -94,7 +94,7 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 		nibble = ( (*ipv6addrp).in6_addr.s6_addr[noctett] & ( 0xf << (4 * (1 - nnibble)) ) ) >> ( 4 * (1 - nnibble));
 		
 		if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-			fprintf(stderr, "%s: bit: %d = noctett: %d, nnibble: %d, octett: %02x, value: %x\n", DEBUG_function_name, nbit, noctett, nnibble, (*ipv6addrp).in6_addr.s6_addr[noctett], nibble);
+			fprintf(stderr, "%s: bit: %d = noctett: %u, nnibble: %u, octett: %02x, value: %x\n", DEBUG_function_name, nbit, noctett, nnibble, (unsigned int) (*ipv6addrp).in6_addr.s6_addr[noctett], nibble);
 		};
 
 		snprintf(tempstring, sizeof(tempstring), "%s%x", resultstring, nibble);
@@ -137,7 +137,8 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 	int retval = 1;
 	char tempstring[NI_MAXHOST], *token, *cptr, **ptrptr;
 	int flag_tld = 0, flag_nld = 0, tokencounter = 0;
-	unsigned int noctet, xdigit, nibblecounter = 0;
+	unsigned int noctet, nibblecounter = 0;
+	int xdigit;
 
 	ptrptr = &cptr;
 
@@ -210,7 +211,7 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 			return (1);
 		};
 
-		if ( xdigit > 0xf ) {
+		if ( xdigit < 0 || xdigit > 0xf ) {
 			snprintf(resultstring, NI_MAXHOST, "Nibble '%s' on dot position %d (from right side) is out of range", token, tokencounter + 1);
 			return (1);
 		};
@@ -227,7 +228,7 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 			(*ipv6addrp).in6_addr.s6_addr[noctet] = ((*ipv6addrp).in6_addr.s6_addr[noctet] & 0xf0) | xdigit;
 		} else {
 			/* least significant bits */
-			(*ipv6addrp).in6_addr.s6_addr[noctet] = ((*ipv6addrp).in6_addr.s6_addr[noctet] & 0x0f) | (xdigit << 4);
+			(*ipv6addrp).in6_addr.s6_addr[noctet] = ((*ipv6addrp).in6_addr.s6_addr[noctet] & 0x0f) | ((uint8_t) xdigit << 4);
 		};
 
 		nibblecounter++;
@@ -239,7 +240,7 @@ NEXT_token_nibblestring_to_ipv6addrstruct:
 
 	ipv6addrp->flag_valid = 1;
 	ipv6addrp->flag_prefixuse = 1;
-	ipv6addrp->prefixlength = nibblecounter << 2;
+	ipv6addrp->prefixlength = (uint8_t) nibblecounter << 2;
 	
 	retval = 0;
 	return (retval);

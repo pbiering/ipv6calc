@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.3 2002/04/04 19:40:27 peter Exp $
+ * Version    : $Id: libmac.c,v 1.4 2002/04/04 21:58:21 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -46,7 +46,7 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 	};
 
 	/* count ":", must be 5 */
-	for (i = 0; i < strlen(addrstring); i++) {
+	for (i = 0; i < (int) strlen(addrstring); i++) {
 		if (addrstring[i] == ':') {
 			ccolons++;
 		};
@@ -78,7 +78,7 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 
 	/* copy address */
 	for ( i = 0; i <= 5; i++ ) {
-		macaddrp->addr[i] = temp[i];
+		macaddrp->addr[i] = (uint8_t) temp[i];
 	};  
 
 	macaddrp->flag_valid = 1;

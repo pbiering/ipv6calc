@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.3 2002/04/04 19:40:26 peter Exp $
+ * Version    : $Id: ipv6calcoptions.h,v 1.4 2002/04/04 21:58:21 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -114,24 +114,24 @@
 	{ "show_types", 0, 0, CMD_showinfotypes },
 
 	/* format options */
-	{ "maskprefix"           , 0, 0, FORMATOPTION_maskprefix + FORMATOPTION_HEAD },
-	{ "masksuffix"           , 0, 0, FORMATOPTION_masksuffix + FORMATOPTION_HEAD },
+	{ "maskprefix"           , 0, 0, FORMATOPTION_NUM_maskprefix + FORMATOPTION_NUM_HEAD },
+	{ "masksuffix"           , 0, 0, FORMATOPTION_NUM_masksuffix + FORMATOPTION_NUM_HEAD },
 	
-	{ "uppercase"            , 0, 0, FORMATOPTION_printuppercase + FORMATOPTION_HEAD },
-	{ "lowercase"            , 0, 0, FORMATOPTION_printlowercase + FORMATOPTION_HEAD },
+	{ "uppercase"            , 0, 0, FORMATOPTION_NUM_printuppercase + FORMATOPTION_NUM_HEAD },
+	{ "lowercase"            , 0, 0, FORMATOPTION_NUM_printlowercase + FORMATOPTION_NUM_HEAD },
 	
-	{ "printstart"           , 1, 0, FORMATOPTION_printstart + FORMATOPTION_HEAD },
-	{ "printend"             , 1, 0, FORMATOPTION_printend + FORMATOPTION_HEAD },
+	{ "printstart"           , 1, 0, FORMATOPTION_NUM_printstart + FORMATOPTION_NUM_HEAD },
+	{ "printend"             , 1, 0, FORMATOPTION_NUM_printend + FORMATOPTION_NUM_HEAD },
 	
-	{ "printprefix"          , 0, 0, FORMATOPTION_printprefix + FORMATOPTION_HEAD },
-	{ "printsuffix"          , 0, 0, FORMATOPTION_printsuffix + FORMATOPTION_HEAD },
+	{ "printprefix"          , 0, 0, FORMATOPTION_NUM_printprefix + FORMATOPTION_NUM_HEAD },
+	{ "printsuffix"          , 0, 0, FORMATOPTION_NUM_printsuffix + FORMATOPTION_NUM_HEAD },
 	
-	{ "printcompressed"      , 0, 0, FORMATOPTION_printcompressed       + FORMATOPTION_HEAD },
-	{ "printuncompressed"    , 0, 0, FORMATOPTION_printuncompressed     + FORMATOPTION_HEAD },
-	{ "printfulluncompressed", 0, 0, FORMATOPTION_printfulluncompressed + FORMATOPTION_HEAD },
+	{ "printcompressed"      , 0, 0, FORMATOPTION_NUM_printcompressed       + FORMATOPTION_NUM_HEAD },
+	{ "printuncompressed"    , 0, 0, FORMATOPTION_NUM_printuncompressed     + FORMATOPTION_NUM_HEAD },
+	{ "printfulluncompressed", 0, 0, FORMATOPTION_NUM_printfulluncompressed + FORMATOPTION_NUM_HEAD },
 	
-	{ "machine_readable"     , 0, 0, FORMATOPTION_machinereadable + FORMATOPTION_HEAD },
-	{ "quiet"                , 0, 0, FORMATOPTION_quiet + FORMATOPTION_HEAD },
+	{ "machine_readable"     , 0, 0, FORMATOPTION_NUM_machinereadable + FORMATOPTION_NUM_HEAD },
+	{ "quiet"                , 0, 0, FORMATOPTION_NUM_quiet + FORMATOPTION_NUM_HEAD },
 
 	/* new options */
 	{ "in"        , 1, 0, CMD_inputtype  },

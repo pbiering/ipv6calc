@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.c
- * Version    : $Id: librfc1884.c,v 1.3 2002/04/04 19:40:27 peter Exp $
+ * Version    : $Id: librfc1884.c,v 1.4 2002/04/04 21:58:21 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -111,7 +111,7 @@ int compaddr_to_uncompaddr(const char *addrstring, char *resultstring) {
 int ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 	int retval = -1;
 
-	unsigned int formatoptions = FORMATOPTION_printlowercase;
+	uint32_t formatoptions = FORMATOPTION_printlowercase;
 
 	/* old style compatibility */
 	retval = librfc1884_ipv6addrstruct_to_compaddr(ipv6addrp, resultstring, formatoptions);
@@ -125,6 +125,10 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 	int retval = 1, result;
 	int zstart = -1, zend = -1, tstart = -1, tend = -1, i;
 
+	if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
+		fprintf(stderr, "%s: scope of IPv6 address: %08x\n", DEBUG_function_name, (unsigned int) ipv6addrp->scope);
+	};
+	
 	if ( (ipv6addrp->scope & IPV6_ADDR_COMPATv4) != 0 ) {
 		/* compatv4 address */
 			
@@ -169,7 +173,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 		};
 
 		for ( i = 0; i <= 7; i++ ) {
-			if ( ipv6addr_getword(ipv6addrp, i) == 0 ) {
+			if ( ipv6addr_getword(ipv6addrp, (unsigned int) i) == 0 ) {
 				/* found a '0' */
 					
 				if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
@@ -271,12 +275,12 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 				snprintf(temp2string, sizeof(temp2string), "%s:", tempstring);
 			} else if ( i == 0 ) {
 				if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
-					fprintf(stderr, "%s: normal start value at '%d' (%x)\n",  DEBUG_function_name, i, ipv6addr_getword(ipv6addrp, i));
+					fprintf(stderr, "%s: normal start value at '%d' (%x)\n",  DEBUG_function_name, i, (unsigned int) ipv6addr_getword(ipv6addrp, (unsigned int) i));
 				};
 				
-				snprintf(temp2string, sizeof(temp2string), "%x", ipv6addr_getword(ipv6addrp, i));
+				snprintf(temp2string, sizeof(temp2string), "%x", (unsigned int) ipv6addr_getword(ipv6addrp, (unsigned int) i));
 			} else if ( ( i > zend ) || ( i < zstart ) ) {
-				snprintf(temp2string, sizeof(temp2string), "%s:%x", tempstring, ipv6addr_getword(ipv6addrp, i));
+				snprintf(temp2string, sizeof(temp2string), "%s:%x", tempstring, (unsigned int) ipv6addr_getword(ipv6addrp, (unsigned int) i));
 			} else if ( ( i == 7 ) && ( zend == i )) {
 				snprintf(temp2string, sizeof(temp2string), "%s:", tempstring);
 			};
