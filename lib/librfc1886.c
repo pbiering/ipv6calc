@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.6 2002/04/10 07:00:43 peter Exp $
+ * Version    : $Id: librfc1886.c,v 1.7 2003/06/23 21:38:31 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -98,7 +98,8 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 		};
 
 		snprintf(tempstring, sizeof(tempstring), "%s%x", resultstring, nibble);
-		if (nbit < bit_start) {
+		if ((nbit < bit_start) && (bit_start != 1)) {
+			/* don't print trailing "." on middle part end */
 			snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
 		} else {
 			snprintf(resultstring, NI_MAXHOST, "%s.", tempstring);
