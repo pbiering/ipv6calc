@@ -1,9 +1,14 @@
 # Project    : ipv6calc/logstats
 # File       : example_gnuplot.cmd
-# Version    : $Id: example_gnuplot.cmd,v 1.2 2003/06/15 15:08:42 peter Exp $
+# Version    : $Id: example_gnuplot.cmd,v 1.3 2003/11/22 14:05:15 peter Exp $
 # Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Command file for gnuplot
+#  Usage: gnuplot example_gnuplot.cmd
+#
+# Don't forget to adjust file names
+#  set output "..." : for output file
+#  plot '...'       : for input data file
 
 set terminal png small color
 set output "result.png"
