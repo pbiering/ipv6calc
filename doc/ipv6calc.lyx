@@ -1,0 +1,785 @@
+#LyX 1.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 220
+\textclass docbook
+\language english
+\inputencoding auto
+\fontscheme default
+\graphics default
+\paperfontsize default
+\spacing single 
+\papersize Default
+\paperpackage a4
+\use_geometry 0
+\use_amsmath 0
+\use_natbib 0
+\use_numerical_citations 0
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\quotes_times 2
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+
+\layout Title
+\added_space_top vfill \added_space_bottom vfill 
+The ipv6calc Homepage
+\layout Section
+
+General
+\layout Standard
+
+ipv6calc is a small utility written in programming languate C to manipulate
+ (not only) IPv6 addresses.
+ Intentions were convering a given IPv6 address into compressed format,
+ convering a given IPv6 address into the same format like shown in 
+\shape italic 
+/proc/net/if_inet6
+\shape default 
+ and (because it was not difficulty) migrating the Perl program 
+\shape italic 
+ip6_int
+\shape default 
+ into.
+ Now only one utiltity is needed to do a lot.
+\layout Standard
+
+This utility is also used to extend features on network-functions-ipv6 library,
+ used by initscripts-ipv6.
+\layout Standard
+
+Note: this tool got also its 
+\begin_inset LatexCommand \url[freshmeat / ipv6calc]{http://freshmeat.net/projects/ipv6calc/}
+
+\end_inset 
+
+ page (not maintained by the author)
+\layout Standard
+
+Hint: take also a look at the 
+\begin_inset LatexCommand \url[Advanced Network Management Laboratory / IPv6 Address Oracle]{http://steinbeck.ucs.indiana.edu:47401/}
+
+\end_inset 
+
+ if you want to learn more about IPv6 addresses.
+\layout Section
+
+License
+\layout Standard
+
+The program is published under the GNU GPL version 2.
+\layout Section
+
+Author
+\layout Standard
+
+The author of ipv6calc is
+\layout Itemize
+
+
+\begin_inset LatexCommand \url[Dr. Peter Bieringer]{mailto:pb@bieringer.de}
+
+\end_inset 
+
+ with some minor contribution by others
+\layout Section
+
+Where to get sources or binaries:
+\layout Subsection
+
+Latest version of sources:
+\layout Itemize
+
+Via CVS at 
+\begin_inset LatexCommand \url[DeepSpace6]{http://www.deepspace6.net/}
+
+\end_inset 
+
+: 
+\begin_inset LatexCommand \url[DeepSpace6 / CVS instructions]{http://www.deepspace6.net/sections/cvs.html}
+
+\end_inset 
+
+
+\layout Itemize
+
+Via web interface to CVS at 
+\begin_inset LatexCommand \url[DeepSpace6]{http://www.deepspace6.net/}
+
+\end_inset 
+
+: 
+\begin_inset LatexCommand \url[DeepSpace6 / CVS web interface]{http://cvs.deepspace6.net/view/ipv6calc/}
+
+\end_inset 
+
+
+\layout Itemize
+
+Via FTP at 
+\begin_inset LatexCommand \url[DeepSpace6]{http://www.deepspace6.net/}
+
+\end_inset 
+
+: 
+\begin_inset LatexCommand \url[DeepSpace6 / anonymous FTP]{ftp://ftp.deepspace6.net/pub/sources/ipv6calc/}
+
+\end_inset 
+
+
+\layout Itemize
+
+Via FTP at 
+\begin_inset LatexCommand \url[ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/]{ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/}
+
+\end_inset 
+
+
+\layout Subsection
+
+Available formats:
+\layout Subsubsection
+
+tar.gz
+\layout Standard
+
+A SPEC file is included, so you can build a RPM from source tarball using
+\layout Code
+
+$ rpm -ta path/to/ipv6calc-$version.tar.gz
+\layout Subsubsection
+
+as RPM
+\layout Standard
+
+Currently only on 
+\begin_inset LatexCommand \url[rpmfind / ipv6calc]{http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc}
+
+\end_inset 
+
+, but there are plans to publish at least source RPMS on 
+\begin_inset LatexCommand \url[DeepSpace6]{http://www.deepspace6.net/}
+
+\end_inset 
+
+ some day.
+\layout Subsection
+
+Ready to use packages for several operating systems:
+\layout Subsubsection
+
+Red Hat Linux
+\layout Standard
+
+Red Hat Linux is the developing platform, so use given hints above to create
+ a RPM.
+\layout Subsubsection
+
+Mandrake:
+\layout Standard
+
+Linux Mandrake is very similar to Red Hat Linux, therefore a rebuild should
+ work, too.
+\layout Subsubsection
+
+PLD:
+\layout Standard
+
+See 
+\begin_inset LatexCommand \url[rpmfind / ipv6calc]{http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc}
+
+\end_inset 
+
+.
+\layout Subsubsection
+
+Debian GNU/Linux
+\layout Standard
+
+Package is maintained, more information can be found at 
+\begin_inset LatexCommand \url[http://packages.debian.org/ipv6calc]{http://packages.debian.org/ipv6calc}
+
+\end_inset 
+
+
+\layout Subsubsection
+
+NetBSD:
+\layout Standard
+
+See here for more: 
+\begin_inset LatexCommand \url[http://www.netbsd.org/packages/net/ipv6calc/]{http://www.netbsd.org/packages/net/ipv6calc/}
+
+\end_inset 
+
+
+\layout Subsubsection
+
+FreeBSD:
+\layout Standard
+
+See here for more: 
+\begin_inset LatexCommand \url[http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/]{http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/}
+
+\end_inset 
+
+ (
+\begin_inset LatexCommand \url[http://www.freebsd.org/cgi/query-pr.cgi?pr=34441]{http://www.freebsd.org/cgi/query-pr.cgi?pr=34441}
+
+\end_inset 
+
+)
+\layout Subsubsection
+
+OpenBSD:
+\layout Standard
+
+Someone told me time ago that a port is on the way...
+\layout Section
+
+Mailling Lists
+\layout Subsection
+
+ipv6calc-announce
+\layout Description
+
+Reason: sending announcements of new versions
+\layout Description
+
+Traffic: very low
+\layout Description
+
+Postings: only moderators are allowed to post
+\layout Description
+
+Information: 
+\begin_inset LatexCommand \url[DeepSpace6 / maillist ipv6calc-announce]{http://lists.deepspace6.net/listinfo/ipv6calc-announce}
+
+\end_inset 
+
+
+\layout Subsection
+
+ipv6calc
+\layout Description
+
+Reason: discussions
+\layout Description
+
+Traffic: currently very low, this list is new (started at Dec 2002)
+\layout Description
+
+Postings: subscribers
+\layout Description
+
+Information: 
+\begin_inset LatexCommand \url[DeepSpace6 / maillist ipv6calc]{http://lists.deepspace6.net/listinfo/ipv6calc}
+
+\end_inset 
+
+
+\layout Section
+
+Bug Reports
+\layout Standard
+
+You can send bug reports to the author himself or subscribe to maillist
+ 
+\begin_inset Quotes eld
+\end_inset 
+
+ipv6calc
+\begin_inset Quotes erd
+\end_inset 
+
+ and send it to the list.
+\layout Section
+
+Features of ipv6calc
+\layout Subsection
+
+Description
+\layout Standard
+
+The main program named 
+\begin_inset Quotes eld
+\end_inset 
+
+ipv6calc
+\begin_inset Quotes erd
+\end_inset 
+
+ is able to recognice many (not only) IPv6 address formats and depending
+ on a selectable action (not required) a selectable output format can be
+ specified.
+\layout Subsection
+
+Examples
+\layout Standard
+
+A simple example is the conversion of an IPv6 address to a DNS PTR query
+ string:
+\layout Code
+
+$ ./ipv6calc --out revnibbles.arpa 3ffe:ffff::1
+\layout Code
+
+No input type specified, try autodetection...found type: ipv6addr
+\layout Code
+
+1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.f.f.e.f.f.3.ip6.arpa.
+\layout Standard
+
+Like you see, input format was autodetected.
+ And given example can be extended because ipv6calc also understands netmask
+ / prefix length values:
+\layout Code
+
+$ ./ipv6calc -q --out revnibbles.arpa 3ffe:ffff::1/64
+\layout Code
+
+0.0.0.0.0.0.0.0.f.f.f.f.e.f.f.3.ip6.arpa.
+\layout Standard
+
+Also you've learnt now that switch 
+\begin_inset Quotes eld
+\end_inset 
+
+-q
+\begin_inset Quotes erd
+\end_inset 
+
+ (quiet) suppresses informational messages.
+ You can use this now to start a DNS PTR query using:
+\layout Code
+
+$ dig PTR `./ipv6calc -q --out revnibbles.arpa 3ffe:ffff::1/64`
+\layout Standard
+
+But ipv6calc can do many more for you! Next example shows you the extraction
+ of the IPv4 address contained in a 6to4 IPv6 address:
+\layout Code
+
+$ ./ipv6calc -q --action conv6to4 --in ipv6 2002:c0a8:fb61::1 --out ipv4
+\layout Code
+
+192.168.251.97
+\layout Standard
+
+This also works vice-versa:
+\layout Code
+
+$ ./ipv6calc -q --action conv6to4 --in ipv4 192.168.251.97 --out ipv6
+\layout Code
+
+2002:c0a8:fb61::
+\layout Standard
+
+There are many more features already implemented, if you miss one, send
+ a note.
+\layout Subsection
+
+Option style
+\layout Standard
+
+Since version 0.40 new-style option handling was introduced, using
+\layout Itemize
+
+--in <inputtype>
+\layout Itemize
+
+--out <outputtype>
+\layout Itemize
+
+--action <actiontype>
+\layout Standard
+
+and many more conversions were added.
+ A built-in check matrix should prevent misconversions.
+\layout Standard
+
+Up to version 0.39, only old-style options (which perhaps - but it's not
+ sure - are going obsolete in the future) were available.
+ They are one-in-all options, specifying input/action/output in one token.
+ Internally this options will be converted into new-style options.
+\layout Subsection
+
+Online help
+\layout Standard
+
+Online help always shows the currently implemented features.
+\layout Subsubsection
+
+Main online help:
+\layout Code
+
+$ ./ipv6calc -?
+\layout Code
+
+ipv6calc: version 0.45
+\layout Code
+
+(P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+\layout Code
+
+\layout Code
+
+ General:
+\layout Code
+
+  [-d|--debug <debug value>] : debug value (bitwise like)
+\layout Code
+
+  [-q|--quiet]               : be more quiet
+\layout Code
+
+\layout Code
+
+ Usage with new style options:
+\layout Code
+
+  [--in <input type>]   : specify input  type
+\layout Code
+
+                           (default: autodetect)
+\layout Code
+
+  [--out <output type>] : specify output type
+\layout Code
+
+                           (sometimes: autodetect)
+\layout Code
+
+  [--action <action>]   : specify action
+\layout Code
+
+                           (default: format conversion, sometimes: autodetect)
+\layout Code
+
+  [<format option> ...] : specify format options
+\layout Code
+
+  <input data> [...]    : input data
+\layout Code
+
+\layout Code
+
+  Available input  types:  --in     -?|-h|--help
+\layout Code
+
+  Available output types:  --out    -?|-h|--help
+\layout Code
+
+  Available action types:  --action -?|-h|--help
+\layout Code
+
+\layout Code
+
+ Other usage:
+\layout Code
+
+\layout Code
+
+  --showinfo|-i [--machine_readable|-m] : show information about input data
+\layout Code
+
+  --showinfo|-i --show_types            : show available types on '-m'
+\layout Code
+
+\layout Code
+
+ To see old-style option use: --printoldoptions
+\layout Standard
+
+Input-type options
+\layout Code
+
+$ ./ipv6calc --in -?
+\layout Code
+
+ipv6calc: version 0.45 
+\layout Code
+
+(P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+\layout Code
+
+\layout Code
+
+ Available input types:
+\layout Code
+
+  auto           : automatic detection
+\layout Code
+
+  revnibbles.int : dot separated nibbles reverse, ending with ip6.int.
+\layout Code
+
+  revnibbles.arpa: dot separated nibbles reverse, ending with ip6.arpa.
+\layout Code
+
+  bitstring      : bitstring labes, ending with ip6.arpa.
+\layout Code
+
+  ipv6addr       : IPv6 address
+\layout Code
+
+  ipv4addr       : IPv4 address
+\layout Code
+
+  mac            : MAC address (48 bits)
+\layout Code
+
+  base85         : Base-85 string
+\layout Code
+
+  ifinet6        : Like line in /proc/net/if_inet6
+\layout Code
+
+  iid+token      : Interface identifier and token
+\layout Code
+
+  ipv6logconv    : ipv6logconv (currently not supported)
+\layout Code
+
+  prefix+mac     : IPv6 prefix and a MAC address
+\layout Standard
+
+Output-type options:
+\layout Code
+
+$ ./ipv6calc --out -?
+\layout Code
+
+ipv6calc: version 0.45 (P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.d
+e>
+\layout Code
+
+ Available output types:
+\layout Code
+
+  revnibbles.int : dot separated nibbles reverse, ending with ip6.int.
+\layout Code
+
+  revnibbles.arpa: dot separated nibbles reverse, ending with ip6.arpa.
+\layout Code
+
+  bitstring      : bitstring labes, ending with ip6.arpa.
+\layout Code
+
+  ipv6addr       : IPv6 address
+\layout Code
+
+  ipv4addr       : IPv4 address
+\layout Code
+
+  mac            : MAC address (48 bits)
+\layout Code
+
+  eui64          : EUI-64 identifier (64 bits)
+\layout Code
+
+  base85         : Base-85 string
+\layout Code
+
+  ifinet6        : Like line in /proc/net/if_inet6
+\layout Code
+
+  iid            : Interface identifier
+\layout Code
+
+  iid+token      : Interface identifier and token
+\layout Code
+
+  addrtype       : Address type
+\layout Code
+
+  ouitype        : OUI (IEEE) type
+\layout Code
+
+  ipv6addrtype   : IPv6 address type
+\layout Code
+
+  any            : any type (currently not supported)
+\layout Code
+
+  revipv4        : reverse IPv4, ending with in-addr.arpa
+\layout Code
+
+\layout Code
+
+For examples and available format options use:
+\layout Code
+
+    --out <type> --examples 
+\layout Standard
+
+Action-type options: 
+\layout Code
+
+$ ./ipv6calc --action -?
+\layout Code
+
+ipv6calc: version 0.45 (P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.d
+e>
+\layout Code
+
+ Available action types:
+\layout Code
+
+  auto          : Automatic selection of action (default)
+\layout Code
+
+  geneui64      : Converts a MAC address to an EUI-64 address
+\layout Code
+
+  conv6to4      : Converts IPv4 address <-> 6to4 IPv6 address (prefix)
+\layout Code
+
+  genprivacyiid : Generates a privacy interface ID out of a given one and
+ a token
+\layout Code
+
+  prefixmac2ipv6: Generates an IPv6 address out of a prefix and a MAC address
+\layout Standard
+
+Because of historical issues, there exists also a support of the old-styled
+ options: 
+\layout Code
+
+$ ./ipv6calc --printoldoptions
+\layout Code
+
+ipv6calc: version 0.45 (P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.d
+e>
+\layout Code
+
+ Usage with old style (shortcut) options (going obsolete):
+\layout Code
+
+  <shortcut option> [<format option> ...] <input data> [...]
+\layout Code
+
+  --addr2ip6_int
+\layout Code
+
+  --addr_to_ip6int
+\layout Code
+
+  --addr2ip6_arpa
+\layout Code
+
+  --addr_to_ip6arpa
+\layout Code
+
+  --addr_to_bitstring
+\layout Code
+
+  --addr2compaddr
+\layout Code
+
+  --addr_to_compressed
+\layout Code
+
+  --addr2uncompaddr
+\layout Code
+
+  --addr_to_uncompressed
+\layout Code
+
+  --addr_to_base85
+\layout Code
+
+  --base85_to_addr
+\layout Code
+
+  --mac_to_eui64
+\layout Code
+
+  --addr2fulluncompaddr
+\layout Code
+
+  --addr_to_fulluncompressed
+\layout Code
+
+  --addr2if_inet6
+\layout Code
+
+  --addr_to_ifinet6
+\layout Code
+
+  --if_inet62addr
+\layout Code
+
+  --ifinet6_to_compressed
+\layout Code
+
+  --eui64_to_privacy
+\layout Code
+
+  --ipv4_to_6to4addr
+\layout Code
+
+\layout Section
+
+Webserver log conversion helper program "ipv6logconv"
+\layout Standard
+
+This program parses address tokens of a given webserver logfile and converts
+ them to special strings, useful for statistics (e.g.
+ created by using "analog").
+\layout Subsection
+
+Examples
+\layout Standard
+
+A demonstration about which kind of statistics are possible to produce is
+ shown at 
+\begin_inset LatexCommand \url[http://www.ipv6.bieringer.de/]{http://www.ipv6.bieringer.de/}
+
+\end_inset 
+
+ (IPv6 only).
+\layout Section
+
+Perl CGI wrapper program "ipv6calcweb.cgi"
+\layout Standard
+
+Because calling C programs directly as CGI isn't really recommended (too
+ much security troubles all the time), I wrote a small wrapper utility which
+ calls "ipv6calc" to get information about client and server address.
+ 
+\layout Subsection
+
+Examples
+\layout Standard
+
+A demonstration about which kind of output is possible to produce is shown
+ at
+\layout Itemize
+
+
+\begin_inset LatexCommand \url[http://www.ipv6.bieringer.de/]{http://www.ipv6.bieringer.de/}
+
+\end_inset 
+
+ (IPv6 only)
+\layout Itemize
+
+
+\begin_inset LatexCommand \url[http://ipv6to4.aerasec.de/index2.html]{http://ipv6to4.aerasec.de/index2.html}
+
+\end_inset 
+
+ (IPv4/IPv6)
+\layout Itemize
+
+
+\begin_inset LatexCommand \url[http://www.sixxs.net/tools/ipv6calc/]{http://www.sixxs.net/tools/ipv6calc/}
+
+\end_inset 
+
+(IPv4/IPv6)
+\the_end
