@@ -7732,7 +7732,6 @@ company_id			Organization
 
 00-04-C4   (hex)		Allen & Health
 0004C4     (base 16)		Allen & Health
-				Div of Harman Int'l Industried Ltd
 				Kernick Industrial Estate, Penryn
 				Cornwall England TR10 9LU
 				UNITED KINGDOM
@@ -15095,6 +15094,199 @@ company_id			Organization
 				2F,NO 4, Lane 497, Chung-Cheng Rd.,Hsin-
 				Hsin-Tien Taipei Hsien 231
 				TAIWAN, PROVINCE OF CHINA
+
+00-09-7B   (hex)		Cisco Systems
+00097B     (base 16)		Cisco Systems
+				80 West Tasman Dr.
+				SJ-M/1
+				San Jose CA 95134
+				UNITED STATES
+
+00-09-7C   (hex)		Cisco Systems
+00097C     (base 16)		Cisco Systems
+				80 West Tasman Dr
+				SJ-M/1
+				San Jose CA 95134
+				UNITED STATES
+
+00-09-7D   (hex)		SecWell Networks Oy
+00097D     (base 16)		SecWell Networks Oy
+				P.O.BOX 174
+				Hämeenpuisto 21
+				Tampere  33101
+				FINLAND
+
+00-09-7E   (hex)		IMI TECHNOLOGY CO., LTD
+00097E     (base 16)		IMI TECHNOLOGY CO., LTD
+				4th floor, Sun Building, 677-12
+				Yeoksam-dong,
+				Kangnam-ku Seoul 135-080
+				KOREA, REPUBLIC OF
+
+00-09-7F   (hex)		PRIVATE
+00097F     (base 16)		 
+				 
+00-09-80   (hex)		Power Zenith Inc.
+000980     (base 16)		Power Zenith Inc.
+				Tsujido Nishikaigan 1-10-7
+				Fujisawa Kanagawa 251-0046
+				JAPAN
+
+00-09-81   (hex)		Newport Networks
+000981     (base 16)		Newport Networks
+				Enterprise House
+				Station Road
+				Chepstow Monmouthshire NP16 5PB
+				UNITED KINGDOM
+
+00-09-82   (hex)		Loewe Opta GmbH
+000982     (base 16)		Loewe Opta GmbH
+				Industriestrasse 11
+				Kronach Bavaria 96317
+				GERMANY
+
+00-09-83   (hex)		Gvision Incorporated
+000983     (base 16)		Gvision Incorporated
+				11F, No.166, Chien-I Road
+				Chung Ho City, Taipei Hsien  235
+				TAIWAN, PROVINCE OF CHINA
+
+00-09-84   (hex)		MyCasa Network Inc.
+000984     (base 16)		MyCasa Network Inc.
+				200 Sheridan Ave #103
+				Palo Alto CA 94306
+				UNITED STATES
+
+00-09-85   (hex)		Auto Telecom Company
+000985     (base 16)		Auto Telecom Company
+				10F, No.3,Lane 16, Sec.2, Shih Chuan Rd.
+				Pan Chiao City, Taipei  220
+				TAIWAN, PROVINCE OF CHINA
+
+00-09-86   (hex)		Metalink LTD.
+000986     (base 16)		Metalink LTD.
+				Yakum Business Park
+				Yakum HOF HASHARON 60972
+				ISRAEL
+
+00-09-87   (hex)		NISHI NIPPON ELECTRIC WIRE & CABLE CO.,LTD.
+000987     (base 16)		NISHI NIPPON ELECTRIC WIRE & CABLE CO.,LTD.
+				Kasugaura
+				Oita-City OITA 870-8632
+				JAPAN
+
+00-09-88   (hex)		Nudian Electron Co., Ltd.
+000988     (base 16)		Nudian Electron Co., Ltd.
+				797-28 Bangbae-Dong, Seocho-Gu
+				Seoul  137-060
+				KOREA, REPUBLIC OF
+
+00-09-89   (hex)		VividLogic Inc.
+000989     (base 16)		VividLogic Inc.
+				39210 State Street
+				Suite 107
+				Fremont CA 94538
+				UNITED STATES
+
+00-09-8A   (hex)		EqualLogic Inc
+00098A     (base 16)		EqualLogic Inc
+				9 Townsend West
+				Nashua NH 03062
+				UNITED STATES
+
+00-09-8B   (hex)		Entropic Communications, Inc.
+00098B     (base 16)		Entropic Communications, Inc.
+				9276 Scranton Rd #200
+				San Diego CA 92121
+				UNITED STATES
+
+00-09-8C   (hex)		Possio AB
+00098C     (base 16)		Possio AB
+				Polygonvagen 53
+				Taby Stockholm 18712
+				SWEDEN
+
+00-09-8D   (hex)		DCT Ltd (Digital Communication Technologies Ltd)
+00098D     (base 16)		DCT Ltd (Digital Communication Technologies Ltd)
+				Unit 5 WIndmill Business Village
+				Brooklands Close
+				Sunbury Middlesex TW16 7DY
+				UNITED KINGDOM
+
+00-09-8E   (hex)		ipcas GmbH
+00098E     (base 16)		ipcas GmbH
+				Wetterkreuz 17
+				Erlangen Bavaria 91058
+				GERMANY
+
+00-09-8F   (hex)		Cetacean Networks
+00098F     (base 16)		Cetacean Networks
+				110 Corporate Drive
+				Building 2
+				Portsmouth NH 03801
+				UNITED STATES
+
+00-09-90   (hex)		ACKSYS Communications & systems
+000990     (base 16)		ACKSYS Communications & systems
+				3/5, rue du stade
+				BP 4580
+				POISSY  78330
+				FRANCE
+
+00-09-91   (hex)		GE Fanuc Automation Manufacturing, Inc.
+000991     (base 16)		GE Fanuc Automation Manufacturing, Inc.
+				Route 606 & Route 29N
+				PO Box 8106
+				Charlottesville Virginia 22911
+				UNITED STATES
+
+00-09-92   (hex)		InterEpoch Technology,INC.
+000992     (base 16)		InterEpoch Technology,INC.
+				7F,No.3,Alley 6,Lane 235,Pao-Chiao Rd
+				Hsin-Tien Taipei Hsien 231
+				TAIWAN, PROVINCE OF CHINA
+
+00-09-93   (hex)		Visteon Corporation
+000993     (base 16)		Visteon Corporation
+				16630 Southfield Road
+				St. 41E10
+				Allen Park Michigan 48101
+				UNITED STATES
+
+00-09-94   (hex)		Cronyx Engineering
+000994     (base 16)		Cronyx Engineering
+				Gamalei str. 9
+				Moscow  123363
+				RUSSIAN FEDERATION
+
+00-09-95   (hex)		Castle Technology Ltd
+000995     (base 16)		Castle Technology Ltd
+				Ore Trading Estate
+				Woodbridge Road
+				Framlingham Suffolk IP13 9LL
+				UNITED KINGDOM
+
+00-09-96   (hex)		RDI
+000996     (base 16)		RDI
+				20406 Earl St.
+				Torrance CA 90503
+				UNITED STATES
+
+00-09-97   (hex)		Nortel Networks
+000997     (base 16)		Nortel Networks
+				8200 Dixie Road
+				Suite 100
+				Brampton Ontario L6T 5P6
+				CANADA
+
+00-09-98   (hex)		PRIVATE
+000998     (base 16)		 
+				 
+00-09-99   (hex)		CP GEORGES RENAULT
+000999     (base 16)		CP GEORGES RENAULT
+				199 ROUTE DE CLISSON
+				ST SEBASTIEN SUR LOIRE  44230
+				FRANCE
 
 00-0A-27   (hex)		Apple Computer, Inc.
 000A27     (base 16)		Apple Computer, Inc.
@@ -31805,8 +31997,8 @@ company_id			Organization
 				CHELMSFORD MA 01842
 				UNITED STATES
 
-00-D0-B7   (hex)		INTEL CORPOTATION
-00D0B7     (base 16)		INTEL CORPOTATION
+00-D0-B7   (hex)		INTEL CORPORATION
+00D0B7     (base 16)		INTEL CORPORATION
 				5200 NE ELAM YOUNG PARKWAY
 				HF1-08
 				HILLSBORO OR 97124
