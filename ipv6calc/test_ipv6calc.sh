@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.5 2002/04/04 21:58:10 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.6 2002/04/05 21:12:16 peter Exp $
 # Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -116,7 +116,7 @@ echo "Run 'ipv6calc' function tests..."
 testscenarios | while read line; do
 	if [ -z "$line" ]; then
 		# end
-		break
+		continue
 	fi
 
 	# extract result
@@ -124,7 +124,7 @@ testscenarios | while read line; do
 	result="`echo $line | awk -F= '{ print $2 }'`"
 	if [ -z "$result" -o -z "$command" ]; then
 		echo "Something is wrong in line '$line'"
-		break
+		exit 1
 	fi
 	echo "Test './ipv6calc $command' for '$result'"
 	#continue
@@ -133,15 +133,14 @@ testscenarios | while read line; do
 	retval=$?
 	if [ $retval -ne 0 ]; then
 		echo "Error executing 'ipv6calc'!"
-		break
+		exit 1
 	fi
 	# Check result
 	if [ "$output" != "$result" ]; then
 		echo "Result '$output' doesn't match!"
-		break
+		exit 1
 	fi	
 done
 
-if [ $? -eq 0 ]; then
-	echo "All tests were successfully done!"
-fi
+echo "All tests were successfully done!"
+exit 0
