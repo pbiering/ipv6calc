@@ -1,11 +1,11 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Version    : $Id: ipv6calc.spec,v 1.21 2003/11/21 11:38:15 peter Exp $
+# Version    : $Id: ipv6calc.spec,v 1.22 2003/11/22 14:59:46 peter Exp $
 # Copyright  : 2001-2003 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
 Name: ipv6calc
-Version: 0.46
+Version: 0.47cvs
 Release: 1
 Group: System Environment/Base
 URL: http://www.deepspace6.net/projects/ipv6calc.html
@@ -41,7 +41,27 @@ rm -rf $RPM_BUILD_ROOT
 
 make installonly root=$RPM_BUILD_ROOT
 
-#mkdir -p $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
+
+## Install examples and helper files
+
+mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/
+
+# ipv6logconv
+mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logconv
+cp -r examples/analog/* $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logconv
+
+# ipv6logstats
+mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logstats
+pushd ipv6logstats
+cp data example_* collect_ipv6logstats.pl README $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logstats/
+cp -r examples-* $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logstats/
+popd
+
+# ipv6calcweb
+mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6calcweb
+cp ipv6calcweb/ipv6calcweb.cgi $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6calcweb
+
+
 #install -m644 $RPM_BUILD_DIR/%{name}-%{version}/ChangeLog $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
 #install -m644 $RPM_BUILD_DIR/%{name}-%{version}/README    $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
 #install -m644 $RPM_BUILD_DIR/%{name}-%{version}/CREDITS   $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
@@ -65,12 +85,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_bindir}/ipv6logstats
 
 # man pages
-%{_mandir}/man1/*
+%{_mandir}/man8/*
 
 # docs
 %doc ChangeLog README CREDITS TODO COPYING LICENSE USAGE
-%doc examples/analog/analog-dist.cfg examples/analog/run_analog.sh examples/analog/ipv6calc.tab examples/analog/analog-ipv6calc-descriptions.txt examples/analog/analog-dist-combined.cfg
-%doc ipv6calcweb/ipv6calcweb.cgi doc/ipv6calc.lyx doc/ipv6calc.sgml
+%doc doc/ipv6calc.lyx doc/ipv6calc.sgml doc/ipv6calc.html
+
+# examples and helper
+%{_docdir}/ipv6logstats/*
+%{_docdir}/ipv6conv/*
+%{_docdir}/ipv6calcweb/*
 
 
 %changelog
