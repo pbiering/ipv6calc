@@ -12,7 +12,7 @@ $year = 1900 + $year;
 $mon = sprintf "%02d", $mon;
 $mday = sprintf "%02d", $mday;
 
-my @files = ( "arin/arin." . $year . $mon . "01", "ripencc/ripencc." . $year . $mon . $mday, "apnic/apnic-" . $year . "-" . $month . "-01" );
+my @files = ( "arin/arin." . $year . $mon . "01", "ripencc/ripencc." . $year . $mon . $mday, "apnic/apnic-" . $year . "-" . $mon . "-01" );
 #my @files = ( "ripencc/ripencc.20020320" );
 
 my (@arin, @apnic, @ripencc, @iana);
