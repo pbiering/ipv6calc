@@ -1,10 +1,23 @@
 /*
- *  $Id: ChangeLog,v 1.39 2002/03/25 07:20:18 peter Exp $ 
+ *  $Id: ChangeLog,v 1.40 2002/04/05 19:12:15 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20020405/PB:
+	fix some database dependencies, 
+
+20020403/PB:
+	more splint'ing, some type review
+
+20020401/PB:
+	more splint'ing, some type review
+	
+20020331/PB:
+	more splint'ing
+	extend ipv6logconv
+
 20020325/PB:
 	ipv6calcweg.cgi: extension for new showinfo extension
 
