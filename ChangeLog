@@ -1,10 +1,13 @@
 /*
- *  $Id: ChangeLog,v 1.49 2002/04/10 07:00:28 peter Exp $ 
+ *  $Id: ChangeLog,v 1.50 2002/04/12 19:51:20 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+200204010/PB:
+	tag version 0.40rc4
+
 200204010/PB:
 	new format feature: printmirrored for reverse dot separated format
 	minor fixes
