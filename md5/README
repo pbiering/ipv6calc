@@ -1,0 +1,10 @@
+$Id: README,v 1.1 2004/10/30 13:02:53 peter Exp $
+
+md5 was added because of replace the use of OpenSSL library for calculation (license issue)
+
+Original code is located at
+ ftp://alpha.gnu.org/gnu/coreutils/coreutils-5.1.3.tar.gz
+and a local copy is at
+ ../samplecode/coreutils/
+
+	Peter Bieringer
