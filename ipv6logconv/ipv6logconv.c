@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.6 2003/11/21 09:36:57 peter Exp $
- * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logconv.c,v 1.7 2004/08/30 19:56:29 peter Exp $
+ * Copyright  : 2002-2004 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile conversions
@@ -320,7 +320,7 @@ static void lineparser(const long int outputtype) {
 static int converttoken(char *resultstring, const char *token, const long int outputtype, const int flag_skipunknown) {
 	long int inputtype = -1;
 	int retval = 1, i;
-	int typeinfo, typeinfo_test;
+	uint32_t typeinfo, typeinfo_test;
 	char tempstring[NI_MAXHOST], temp2string[NI_MAXHOST];
 
 	/* used structures */
@@ -485,8 +485,10 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 				};
 		       	};
 
+			typeinfo = ipv6addr_gettype(&ipv6addr);
+
 			/* check whether address has a OUI ID */
-			if ( ( ipv6addr_gettype(&ipv6addr) & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4)) == 0 )  {
+			if ( ( typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4)) == 0 )  {
 				if (flag_skipunknown != 0) {
 					return (1);
 				} else {
@@ -512,7 +514,13 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 					snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
 				};
 			} else {
-				snprintf(resultstring, NI_MAXHOST, "local-scope.ouitype.ipv6calc");
+				if ( (typeinfo & IPV6_NEW_ADDR_6TO4_MICROSOFT) != 0 ) {
+					snprintf(resultstring, NI_MAXHOST, "6to4-microsoft.ouitype.ipv6calc");
+				} else if ( (typeinfo & IPV6_NEW_ADDR_ISATAP) != 0 ) {
+					snprintf(resultstring, NI_MAXHOST, "ISATAP.ouitype.ipv6calc");
+				} else {
+					snprintf(resultstring, NI_MAXHOST, "local-scope.ouitype.ipv6calc");
+				};
 			};
 			break;
 			

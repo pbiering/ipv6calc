@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.12 2003/08/15 11:58:28 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.13 2004/08/30 19:56:29 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -285,6 +285,15 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 	if ((st & 0xFFFF0000u) == 0x20020000u) {
 		/* 2002::/16 -> 6to4 tunneling */
 		type |= IPV6_NEW_ADDR_6TO4;
+
+		if (	(ipv6addr_getword(ipv6addrp, 3) == 0) &&
+			(ipv6addr_getword(ipv6addrp, 4) == 0) &&
+			(ipv6addr_getword(ipv6addrp, 5) == 0) &&
+			(ipv6addr_getword(ipv6addrp, 6) == ipv6addr_getword(ipv6addrp, 1)) &&
+			(ipv6addr_getword(ipv6addrp, 7) == ipv6addr_getword(ipv6addrp, 2)) ) {
+			/* 2002:<ipv4addr>::<ipv4addr> -> usually Microsoft does this */
+			type |= IPV6_NEW_ADDR_6TO4_MICROSOFT;
+		};
 	};
 	
 	if ((st & 0xFFFF0000u) == 0x20010000u) {

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6logconv.sh
-# Version    : $Id: test_ipv6logconv.sh,v 1.2 2003/11/21 09:36:58 peter Exp $
+# Version    : $Id: test_ipv6logconv.sh,v 1.3 2004/08/30 19:56:29 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logconv"
@@ -28,6 +28,7 @@ fe80::210:a489:ab01:2345 - -
 3ffe:ffff::000:a489:ab01:2345 - -
 fe80::fefc:acff:fe10:fe01 - -
 1.2.3.4 - -
+2002:50b5:7940:0000:0000:0000:50b5:7940 - - "Microsoft 6to4 address"
 END
 }
 

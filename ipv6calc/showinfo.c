@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.12 2002/10/05 21:54:55 peter Exp $
- * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: showinfo.c,v 1.13 2004/08/30 19:56:29 peter Exp $
+ * Copyright  : 2001-2004 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Function to show information about a given IPv6 address
@@ -496,9 +496,17 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 					print_ipv4addr(&ipv4addr, formatoptions);
 				} else {
 					if ( machinereadable != 0 ) {
-						printout("EUI64_SCOPE=local");
+						if ((typeinfo & IPV6_NEW_ADDR_6TO4_MICROSOFT) != 0) {
+							printout("EUI64_SCOPE=local-6to4-microsoft");
+						} else {
+							printout("EUI64_SCOPE=local");
+						};
 					} else {
-						fprintf(stdout, "Interface identifier is probably manual set or based on a local EUI-64 identifier\n");
+						if ((typeinfo & IPV6_NEW_ADDR_6TO4_MICROSOFT) != 0) {
+							fprintf(stdout, "Interface identifier contain only IPv4 address from 6to4 prefix, usually seen on Microsoft OS\n");
+						} else {
+							fprintf(stdout, "Interface identifier is probably manual set or based on a local EUI-64 identifier\n");
+						};
 					};
 				};
 			};
