@@ -1,6 +1,6 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.17 2002/04/05 22:14:26 peter Exp $
+# Version: $Id: TODO,v 1.18 2002/04/08 19:50:21 peter Exp $
 
 TODO list
 =========
@@ -27,9 +27,6 @@ Features:
     should be able to switch between multiline and single line mode (source is already prepared)
     should be able to print a prefix on tokens (source is already prepared)
 
-Format features
-* printprefix, printsuffix for full
-
 IEEE/OUI library:
 * perhaps more filtering of unnecessary information
 
@@ -38,7 +35,7 @@ Creating a dedicated output library
 Code cleanup:
  * finish splint
 
-pv6calcweb.cgi:
+ipv6calcweb.cgi:
  * add alarm wrapper around call of ipv6calc
 
 

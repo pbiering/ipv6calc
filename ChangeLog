@@ -1,10 +1,16 @@
 /*
- *  $Id: ChangeLog,v 1.45 2002/04/07 10:55:42 peter Exp $ 
+ *  $Id: ChangeLog,v 1.46 2002/04/08 19:50:21 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20020408/PB:
+	fix completly broken online help
+	add some autodetection
+	printprefix|suffix now works also for fulluncompressed
+	some cleanups
+
 20020407/PB:
 	minor cosmetic fixes, import forgotten ipv6logconv changes
 	tag version 0.40rc2
