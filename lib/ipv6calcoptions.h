@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.4 2002/04/04 21:58:21 peter Exp $
+ * Version    : $Id: ipv6calcoptions.h,v 1.5 2002/04/10 07:00:43 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -132,6 +132,8 @@
 	
 	{ "machine_readable"     , 0, 0, FORMATOPTION_NUM_machinereadable + FORMATOPTION_NUM_HEAD },
 	{ "quiet"                , 0, 0, FORMATOPTION_NUM_quiet + FORMATOPTION_NUM_HEAD },
+	
+	{ "printmirrored"        , 0, 0, FORMATOPTION_NUM_printmirrored + FORMATOPTION_NUM_HEAD },
 
 	/* new options */
 	{ "in"        , 1, 0, CMD_inputtype  },

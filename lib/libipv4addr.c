@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.7 2002/04/09 20:31:10 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.8 2002/04/10 07:00:43 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -469,6 +469,10 @@ int libipv4addr_to_reversestring(ipv6calc_ipv4addr *ipv4addrp, char *resultstrin
 
 	if ( (formatoptions & FORMATOPTION_printuppercase) != 0 ) {
 		string_to_upcase(resultstring);
+	};
+	
+	if ( (formatoptions & FORMATOPTION_printmirrored) != 0 ) {
+		string_to_reverse_dotted(resultstring);
 	};
 		
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {

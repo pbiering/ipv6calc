@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.6 2002/04/09 20:31:10 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.7 2002/04/10 07:00:43 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -137,6 +137,7 @@ typedef struct {
 #define FORMATOPTION_NUM_printfulluncompressed	11
 #define FORMATOPTION_NUM_machinereadable	12
 #define FORMATOPTION_NUM_quiet			13
+#define FORMATOPTION_NUM_printmirrored		14
 
 #define FORMATOPTION_printlowercase		(uint32_t) (1 << FORMATOPTION_NUM_printlowercase)
 #define FORMATOPTION_printuppercase		(uint32_t) (1 << FORMATOPTION_NUM_printuppercase)
@@ -151,6 +152,7 @@ typedef struct {
 #define FORMATOPTION_printfulluncompressed	(uint32_t) (1 << FORMATOPTION_NUM_printfulluncompressed)
 #define FORMATOPTION_machinereadable		(uint32_t) (1 << FORMATOPTION_NUM_machinereadable)
 #define FORMATOPTION_quiet			(uint32_t) (1 << FORMATOPTION_NUM_quiet)
+#define FORMATOPTION_printmirrored		(uint32_t) (1 << FORMATOPTION_NUM_printmirrored)
 
 typedef struct {
 	const uint32_t number;
@@ -172,13 +174,14 @@ typedef struct {
 	{ FORMATOPTION_printfulluncompressed  , "--printfulluncompressed"  , "Print in full uncompressed format" },
 	{ FORMATOPTION_machinereadable  , "--machinereadable|-m" , "Print output machine readable" },
 	{ FORMATOPTION_quiet            , "--quiet|-q"         , "Be more quiet" },
+	{ FORMATOPTION_printmirrored	, "--printmirrored"    , "Print output mirrored" }
 };
 
 /* Possible format option map */
 /*@unused@*/ static const uint32_t ipv6calc_outputformatoptionmap[12][2]  = {
-	{ FORMAT_revnibbles_int , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
-	{ FORMAT_revnibbles_arpa, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
-	{ FORMAT_revipv4, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
+	{ FORMAT_revnibbles_int , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend | FORMATOPTION_printmirrored },
+	{ FORMAT_revnibbles_arpa, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend | FORMATOPTION_printmirrored },
+	{ FORMAT_revipv4, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printmirrored },
 	{ FORMAT_bitstring      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
 	{ FORMAT_ipv6addr       , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed },
 	{ FORMAT_mac            , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.3 2002/04/04 21:58:21 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.4 2002/04/10 07:00:43 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -58,7 +58,7 @@ void string_to_lowcase(char *string) {
 
 
 /*
- * function converts chars in a string to upcase
+ * reverse string
  * in : pointer to a string
  */
 #define DEBUG_function_name "libipv6calc/string_to_reverse"
@@ -83,6 +83,54 @@ void string_to_reverse(char *string) {
 	return;
 };
 #undef DEBUG_function_name
+
+
+/*
+ * dotted-reverse string
+ * in : pointer to a string
+ */
+#define DEBUG_function_name "libipv6calc/string_to_reverse_dotted"
+void string_to_reverse_dotted(char *string) {
+	char resultstring[NI_MAXHOST], tempstring[NI_MAXHOST];
+	char *token, *cptr, **ptrptr;
+	int flag_first = 1;
+	
+	ptrptr = &cptr;
+
+	/* clear result string */
+	snprintf(resultstring, sizeof(resultstring), "%s", "");
+
+	/* check for starting dot */
+	if ( string[0] == '.' ) {
+		snprintf(tempstring, sizeof(tempstring), "%s.", resultstring);
+		snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
+	};
+
+	token = strtok_r(string, ".", ptrptr);
+
+	while (token != NULL) {
+		if (flag_first == 1) {
+			snprintf(tempstring, sizeof(tempstring), "%s%s", token, resultstring);
+			flag_first = 0;
+		} else {
+			snprintf(tempstring, sizeof(tempstring), "%s.%s", token, resultstring);
+		};
+		snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
+
+		token = strtok_r(NULL, ".", ptrptr);
+	};
+	
+	if ( string[strlen(string) - 1] == '.' ) {
+		snprintf(tempstring, sizeof(tempstring), ".%s", resultstring);
+		snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
+	};
+
+	snprintf(string, NI_MAXHOST, ".%s", resultstring);
+	
+	return;
+};
+#undef DEBUG_function_name
+
 
 /*
  * function converts chars in a string to upcase

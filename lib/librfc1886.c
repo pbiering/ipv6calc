@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.5 2002/04/09 20:31:10 peter Exp $
+ * Version    : $Id: librfc1886.c,v 1.6 2002/04/10 07:00:43 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -113,6 +113,10 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 
 	if ( (formatoptions & FORMATOPTION_printuppercase) != 0 ) {
 		string_to_upcase(resultstring);
+	};
+
+	if ( (formatoptions & FORMATOPTION_printmirrored) != 0 ) {
+		string_to_reverse_dotted(resultstring);
 	};
 		
 	if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
