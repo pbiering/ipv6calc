@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.10 2002/03/11 22:10:17 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.11 2002/03/15 13:27:37 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -13,8 +13,8 @@
 #include "ipv6calc.h"
 
 /* prototypes */
-extern int ipv6calctypes_checktype(char *string);
-extern int ipv6calctypes_checkaction(char *string);
+extern int ipv6calctypes_checktype(const char *string);
+extern int ipv6calctypes_checkaction(const char *string);
 
 /* defines */
 #ifndef _ipv6calctypes_h_

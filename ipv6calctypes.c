@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.c
- * Version    : $Id: ipv6calctypes.c,v 1.4 2002/03/11 19:27:09 peter Exp $
+ * Version    : $Id: ipv6calctypes.c,v 1.5 2002/03/15 13:27:37 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -17,7 +17,7 @@
  * check given type string
  */
 #define DEBUG_function_name "ipv6calctypes/checktype"
-int ipv6calctypes_checktype(char *string) {
+int ipv6calctypes_checktype(const char *string) {
 	int i;
 	long int number = -1;
 	char tokenlist[100];
@@ -84,7 +84,7 @@ int ipv6calctypes_checktype(char *string) {
  * check given type string
  */
 #define DEBUG_function_name "ipv6calctypes/checkaction"
-int ipv6calctypes_checkaction(char *string) {
+int ipv6calctypes_checkaction(const char *string) {
 	int i;
 	long int number = -1;
 	char tokenlist[100];
