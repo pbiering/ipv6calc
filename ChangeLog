@@ -1,19 +1,23 @@
 /*
- *  $Id: ChangeLog,v 1.79 2003/11/22 14:56:28 peter Exp $ 
+ *  $Id: ChangeLog,v 1.80 2003/11/22 16:14:58 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
 20031122/PB
-	ipv6logconv:
+	ipv6logstats:
 	 - add option "-q|--quiet" for be more quiet
 	 - minor fixes
+	ipv6calc.spec.in
+	 - review, also install examples now
+	Some cleanups
 
 20031121/PB
 	IPv4 address database update
 	Some redesign on Makefile usage, move some Makefile to Makefile.in
 	 - minor redesign in Makefile.in
+	 - take now use of "bindir" and "mandir" in configure run
 	Update ipv6calc.spec.in
 	ipv6calcweb.cgi:
 	 - renamed to ipv6calcweb.cgi
