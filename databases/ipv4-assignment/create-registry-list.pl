@@ -23,6 +23,8 @@ my $global_file = "iana/ipv4-address-space";
 
 my %assignments;
 
+my $max_prefixlength_not_arin = 0;
+
 
 # Generate subnet powers
 my %subnet_powers;
@@ -224,6 +226,7 @@ foreach my $file (@files) {
 					push @$parray, $ipv4 . "/" . $check_length;
 					#printf "%s/%d=%s (case 1a)\n", $ipv4, $check_length, $reg;
 					$flag_proceeded = 1;
+					
 					last;
 				} else {
 					#printf "%s/%d=%s (case 1b)\n", $ipv4, $check_length, $reg;
@@ -260,6 +263,7 @@ foreach my $file (@files) {
 				#printf "%s/%d=%s (partially catch case 1b or 2: %d)\n", &dec_to_ipv4($ipv4_dec), $check_length, $reg, %subnet_powers->{$check_length}->{'numbers'};
 				$newnumbers -= %subnet_powers->{$check_length}->{'numbers'};
 				$ipv4_dec += %subnet_powers->{$check_length}->{'numbers'};
+
 				next;
 			} else {
 				$check_length++;
@@ -282,6 +286,10 @@ sub proceed_array($$) {
 	my $pid = open2(AGGREGATE_READ, AGGREGATE_WRITE, "aggregate -t") || die "cannot for: $!";
 	
 	foreach my $entry (@$parray) {
+		# filter out longer prefix length
+
+
+
 		print AGGREGATE_WRITE $entry . "\n";
 	};
 	close(AGGREGATE_WRITE);
@@ -297,17 +305,52 @@ sub proceed_array($$) {
 	print "End proceeding array with 'aggregate'\n";
 };
 
+
+
 print "Aggregate RIPENCC\n";
 &proceed_array(\@ripencc, \@ripencc_agg);
 
 print "Aggregate APNIC\n";
 &proceed_array(\@apnic, \@apnic_agg);
 
+print "Aggregate IANA\n";
+&proceed_array(\@iana, \@iana_agg);
+
+# Look for maximum used prefix length
+my ($net, $length);
+for my $entry (@ripencc_agg, @apnic_agg, @iana_agg) {
+	my ($net, $length) = split /\//, $entry;
+	if ($length > $max_prefixlength_not_arin) {
+		$max_prefixlength_not_arin = $length;
+	};
+};
+
+print "Maximum used prefix length by not ARIN: " . $max_prefixlength_not_arin . "\n";
+
+## Run filter of ARIN entries
+print "Run filter on ARIN entries\n";
+# 1. overwrite prefix length and network
+for (my $i = 0; $i < $#arin; $i++) {
+	my ($net, $length) = split /\//, $arin[$i];
+	if ($length > $max_prefixlength_not_arin) {
+		$arin[$i] = &dec_to_ipv4(&ipv4_to_dec($net) & %subnet_powers->{$max_prefixlength_not_arin}->{'mask'}) . "\/" . $max_prefixlength_not_arin;
+	};
+};
+# 2. remove duplicates
+my @arin_new;
+push @arin_new, $arin[0];	
+for (my $i = 1; $i < $#arin; $i++) {
+	if ($arin[$i] eq $arin[$i - 1]) {
+		next;
+	} else {
+		push @arin_new, $arin[$i];	
+	};
+};
+print "End of filter on ARIN entries\n";
+
 print "Aggregate ARIN (this can need some time...)\n";
 &proceed_array(\@arin, \@arin_agg);
 
-print "Aggregate IANA\n";
-&proceed_array(\@iana, \@iana_agg);
 
 # Create header file
 
