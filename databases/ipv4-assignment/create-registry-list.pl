@@ -9,7 +9,7 @@ my $OUTFILE = "dbipv4addr_assignement.h";
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time - 24*60*60);
 
 $year = 1900 + $year;
-$mon = sprintf "%02d", $mon;
+$mon = sprintf "%02d", $mon + 1;
 $mday = sprintf "%02d", $mday;
 
 my @files = ( "arin/arin." . $year . $mon . "01", "ripencc/ripencc." . $year . $mon . $mday, "apnic/apnic-" . $year . "-" . $mon . "-01" );
