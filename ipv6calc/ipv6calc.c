@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.17 2003/07/22 21:37:07 peter Exp $
- * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calc.c,v 1.18 2003/08/28 18:51:55 peter Exp $
+ * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
