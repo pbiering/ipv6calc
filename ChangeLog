@@ -1,10 +1,16 @@
 /*
- *  $Id: ChangeLog,v 1.20 2002/02/28 18:20:05 peter Exp $ 
+ *  $Id: ChangeLog,v 1.21 2002/03/02 22:06:51 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20020302/PB:
+	major work of redesign is done, test script runs well, unused files removed
+
+20020301/PB:
+	start redesign
+
 20020227/PB:
 	libipv6addr.c: fixed a bug in ipv6addr_setoctett.c regarding num limit (oops..)
 	ipv6calc.c: move structure definitions to...

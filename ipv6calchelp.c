@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
- * File       : libhelp.c
- * Version    : $Id: libhelp.c,v 1.2 2002/03/02 17:27:27 peter Exp $
+ * File       : ipv6calchelp.c
+ * Version    : $Id: ipv6calchelp.c,v 1.1 2002/03/02 22:06:53 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -14,19 +14,19 @@
 #include <stdlib.h>
 #include "ipv6calc.h"
 #include "ipv6calctypes.h"
-#include "libhelp.h"
+#include "ipv6calchelp.h"
 
 
 /* display info */
-void printversion()  {
+void printversion(void) {
 	fprintf(stderr, "%s  version: %s\n", PROGRAM_NAME, PROGRAM_VERSION);
 };
 
-void printcopyright()  {
+void printcopyright(void) {
 	fprintf(stderr, "%s\n", PROGRAM_COPYRIGHT);
 };
 
-void printinfo()  {
+void printinfo(void)  {
 	printversion();
 	printcopyright();
 	fprintf(stderr, "This program formats and calculates IPv6 addresses\n");
@@ -169,12 +169,13 @@ void printhelp_outputtypes(long int inputtype) {
 				break;
 			};
 		};
-
 	};
+	fprintf(stderr, "\n For examples and available format options use:\n");
+	fprintf(stderr, "   %s --outputtype <type> --examples\n", PROGRAM_NAME);
 };
 
 /* print global help */
-void printhelp() {
+void printhelp(void) {
 	printversion();
 	printcopyright();
 	fprintf(stderr, "\nGeneral:\n");
@@ -190,6 +191,7 @@ void printhelp() {
 	fprintf(stderr, "\nOld style options:\n");
 	fprintf(stderr, "Usage: (see '%s <command> -?' for more help)\n", PROGRAM_NAME);
 	/*addr_to_ip6int_printhelp();*/
+	/*
 	addr_to_bitstring_printhelp();
 	addr_to_compressed_printhelp();
 	addr_to_uncompressed_printhelp();
@@ -199,9 +201,126 @@ void printhelp() {
 	addr_to_base85_printhelp();
 	base85_to_addr_printhelp();
 	mac_to_eui64_printhelp();
-	eui64_to_privacy_printhelp();
 	ipv4_to_6to4addr_printhelp();
+	*/
+	eui64_to_privacy_printhelp();
 	showinfo_printhelp();
 
 	return;
 };
+
+
+/* print help for output type examples */
+
+
+static void printhelp_output_base85(void) {
+	fprintf(stderr, " Print a given IPv6 address in base85 format (RFC 1924), e.g.\n");
+	fprintf(stderr, "  1080:0:0:0:8:800:200c:417a -> 4)+k&C#VzJ4br>0wv%%Yp\n");
+};
+
+static void printhelp_output_bitstring(void) {
+	fprintf(stderr, " Print a given IPv6 address as a bitstring label for use with DNS, e.g.\n");
+	fprintf(stderr, "  3ffe:ffff::1    -> \\[x3ffeffff000000000000000000000001/128].ip6.arpa.\n");
+	fprintf(stderr, "  3ffe:ffff::1/64 -> \\[x3ffeffff000000000000000000000001/64].ip6.arpa.\n");
+	fprintf(stderr, "  --printsuffix 3ffe:ffff::1/64 -> \\[x0000000000000001/64]\n");
+	fprintf(stderr, "  --printprefix 3ffe:ffff::1/64 -> \\[x3ffeffff00000000/64]\n");
+};
+
+static void printhelp_output_ipv6addr(void) {
+	fprintf(stderr, " Print a given IPv6 address depending on format options:\n");
+	fprintf(stderr, "  Uncompressed, e.g.\n");
+	fprintf(stderr, "   3ffe:ffff:100:f101::1 -> 3ffe:ffff:100:f101:0:0:0:1\n");
+	fprintf(stderr, "   3ffe:ffff:100:f101::1/64 -> 3ffe:ffff:100:f101:0:0:0:1/64\n");
+	fprintf(stderr, "  Full uncompressed, e.g.\n");
+	fprintf(stderr, "   3ffe:ffff:100:f101::1 -> 3ffe:ffff:0100:f101:0000:0000:0000:0001\n");
+	fprintf(stderr, "  Compressed, e.g.\n");
+	fprintf(stderr, "   3ffe:ffff:0100:f101:0000:0000:0000:0001 -> 3ffe:ffff:100:f101::1\n");
+};
+
+static void printhelp_output_eui64(void) {
+	fprintf(stderr, " Print a generated EUI-64 identifier, e.g.:\n");
+	fprintf(stderr, "  00:50:BF:06:B4:F5 -> 0250:bfff:fe06:b4f5\n");
+};
+
+static void printhelp_output_revnibble_int(void) {
+	fprintf(stderr, " Print a given IPv6 address in dot separated reverse nibble format for use with DNS, e.g.\n");
+	fprintf(stderr, "  3ffe:ffff:100:f101::1\n    -> 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.0.0.4.0.e.f.f.3.ip6.int.\n");
+	fprintf(stderr, "  3ffe:ffff:100:f101::1/64\n    -> 1.0.1.f.0.0.1.0.0.0.4.0.e.f.f.3.ip6.int.\n");
+};
+
+static void printhelp_output_revnibble_arpa(void) {
+	fprintf(stderr, " Print a given IPv6 address in dot separated reverse nibble format for use with DNS, e.g.\n");
+	fprintf(stderr, "  3ffe:ffff:100:f101::1\n    -> 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.0.0.4.0.e.f.f.3.ip6.arpa.\n");
+	fprintf(stderr, "  3ffe:ffff:100:f101::1/64\n    -> 1.0.1.f.0.0.1.0.0.0.4.0.e.f.f.3.ip6.arpa.\n");
+};
+
+static void printhelp_output_ifinet6void(void) {
+	fprintf(stderr, " Print a given IPv6 address to same format shown in Linux /proc/net/if_inet6:\n");
+	fprintf(stderr, "  3ffe:ffff:100:f101::1    -> 3ffeffff0100f1010000000000000001 00\n");
+	fprintf(stderr, "  3ffe:ffff:100:f101::1/64 -> 3ffeffff0100f1010000000000000001 00 40\n");
+};
+
+
+void printhelp_output_dispatcher(long int outputtype) {
+	int i, j;
+
+	printversion();
+	
+	fprintf(stderr, "\n");
+
+	switch (outputtype) {
+		case FORMAT_base85:
+			printhelp_output_base85();
+			break;
+
+		case FORMAT_bitstring:
+			printhelp_output_bitstring();
+			break;
+			
+		case FORMAT_ipv6addr:
+			printhelp_output_ipv6addr();
+			break;
+			
+		case FORMAT_eui64:
+			printhelp_output_eui64();
+			break;
+
+		case FORMAT_revnibbles_int:
+			printhelp_output_revnibble_int();
+			break;
+
+		case FORMAT_revnibbles_arpa:
+			printhelp_output_revnibble_arpa();
+			break;
+
+		case FORMAT_ifinet6:
+			printhelp_output_ifinet6void();
+			break;
+
+		default:
+			fprintf(stderr, " Help currently missing...!\n");
+			break;
+	};
+	
+	/* looking for outtype */
+	for (i = 0; i < sizeof(ipv6calc_outputformatoptionmap) / sizeof(ipv6calc_outputformatoptionmap[0]); i++) {
+		if (outputtype == ipv6calc_outputformatoptionmap[i][0]) {
+			if (ipv6calc_outputformatoptionmap[i][1] == 0) {
+				break;
+			};
+			
+			fprintf(stderr, " Available format options:\n");
+
+			/* run through format options */
+			for (j = 0; j < sizeof(ipv6calc_formatoptionstrings) / sizeof (ipv6calc_formatoptionstrings[0]); j++) {
+				if (ipv6calc_outputformatoptionmap[i][1] & ipv6calc_formatoptionstrings[j].number) {
+					fprintf(stderr, "  %s: %s\n", ipv6calc_formatoptionstrings[j].token, ipv6calc_formatoptionstrings[j].explanation);
+				};
+			};
+			break;
+		};
+	};
+};
+
+
+

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.7 2002/03/02 17:27:28 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.8 2002/03/02 22:06:53 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -87,7 +87,7 @@ typedef struct {
 #define TXT_IPV6_NEW_ADDR_ISATAP		"ISATAP"
 
 /* array of numerical types */
-static unsigned int ipv6addr_typesnum[] = {
+static const unsigned int ipv6addr_typesnum[] = {
 	IPV6_ADDR_UNICAST,
 	IPV6_ADDR_MULTICAST,
 	IPV6_ADDR_ANYCAST,
@@ -105,7 +105,7 @@ static unsigned int ipv6addr_typesnum[] = {
 	IPV6_NEW_ADDR_ISATAP
 };
 
-static char *ipv6addr_typesstring[] = {
+static const char *ipv6addr_typesstring[] = {
 	TXT_IPV6_ADDR_UNICAST,
 	TXT_IPV6_ADDR_MULTICAST,
 	TXT_IPV6_ADDR_ANYCAST,
@@ -122,8 +122,6 @@ static char *ipv6addr_typesstring[] = {
 	TXT_IPV6_NEW_ADDR_SOLICITED_NODE,
 	TXT_IPV6_NEW_ADDR_ISATAP
 };
-
-
 #endif
 
 
@@ -140,9 +138,6 @@ extern void ipv6addr_clear(ipv6calc_ipv6addr *ipv6addrp);
 extern void ipv6addr_clearall(ipv6calc_ipv6addr *ipv6addrp);
 
 extern unsigned int ipv6addr_gettype(ipv6calc_ipv6addr *ipv6addrp);
-
-extern unsigned int ipv6addr_typesnum[];
-extern char *ipv6addr_typesstring[];
 
 extern int  addr_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
 

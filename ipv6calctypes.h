@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.3 2002/03/02 17:27:27 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.4 2002/03/02 22:06:53 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -45,8 +45,8 @@ typedef struct {
 
 static const s_format ipv6calc_formatstrings[] = {
 	{ FORMAT_auto           , "auto"           , "automatic detection", "" },
-	{ FORMAT_revnibbles_int , "revnibbles.int" , "dotseparated nibbles reverse, ending with ip6.int. (for DNS/PTR)", "" },
-	{ FORMAT_revnibbles_arpa, "revnibbles.arpa", "dotseparated nibbles reverse, ending with ip6.arpa. (for DNS/PTR)", "" },
+	{ FORMAT_revnibbles_int , "revnibbles.int" , "dot separated nibbles reverse, ending with ip6.int. (for DNS/PTR)", "" },
+	{ FORMAT_revnibbles_arpa, "revnibbles.arpa", "dot separated nibbles reverse, ending with ip6.arpa. (for DNS/PTR)", "" },
 	{ FORMAT_bitstring      , "bitstring"      , "bitstring labes, ending with ip6.arpa. (for DNS/PTR)", "" },
 	{ FORMAT_ipv6addr       , "ipv6addr"       , "IPv6 address", "ipv6" },
 	{ FORMAT_ipv4addr       , "ipv4addr"       , "IPv4 address", "ipv4" },
@@ -85,6 +85,27 @@ static const long int ipv6calc_formatmatrix[][2] = {
 #define FORMATOPTION_printuncompressed		0x0200
 #define FORMATOPTION_printfulluncompressed	0x0400
 
+typedef struct {
+	unsigned long int number;
+	char *token;
+	char *explanation;
+} s_formatoption;
+
+static const s_formatoption ipv6calc_formatoptionstrings[] = {
+	{ FORMATOPTION_printlowercase   , "--printlowercase"   , "Print output in lower case" },
+	{ FORMATOPTION_printuppercase   , "--printuppercase"   , "Print output in upper case" },
+	{ FORMATOPTION_printprefix      , "--printprefix"      , "Print only prefix" },
+	{ FORMATOPTION_printsuffix      , "--printsuffix"      , "Print only suffix" },
+	{ FORMATOPTION_maskprefix       , "--maskprefix"       , "Mask prefix bits (suffix set to 0)" },
+	{ FORMATOPTION_masksuffix       , "--masksuffix"       , "Mask suffix bits (prefix set to 0)" },
+	{ FORMATOPTION_printstart       , "--printstart <num>" , "Printing starts at bit <num>" },
+	{ FORMATOPTION_printend         , "--printend <num>"   , "Printing ends at bit <num>" },
+	{ FORMATOPTION_printcompressed  , "--printcompressed"  , "Print in compressed format" },
+	{ FORMATOPTION_printuncompressed  , "--printuncompressed"  , "Print in uncompressed format" },
+	{ FORMATOPTION_printfulluncompressed  , "--printfulluncompressed"  , "Print in full uncompressed format" },
+	{ FORMATOPTION_printsuffix      , "--printsuffix"     , "Print only suffix" }
+};
+
 /* Possible format option map */
 static const int ipv6calc_outputformatoptionmap[][2]  = {
 	{ FORMAT_revnibbles_int , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
@@ -94,7 +115,7 @@ static const int ipv6calc_outputformatoptionmap[][2]  = {
 	{ FORMAT_mac            , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_eui64          , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_base85         , 0 },
-	{ FORMAT_ifinet6        , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
+	{ FORMAT_ifinet6        , 0 },
 	{ FORMAT_ipv4addr       , 0 }
 };
 

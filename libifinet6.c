@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libifinet6.c
- * Version    : $Id: libifinet6.c,v 1.3 2002/03/02 19:02:27 peter Exp $
+ * Version    : $Id: libifinet6.c,v 1.4 2002/03/02 22:06:53 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -117,6 +117,35 @@ int libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(char *addrstring, char
 		fprintf(stderr, "%s: Print: '%s'\n", DEBUG_function_name, resultstring);
 	};
 			
+	retval = 0;
+	return (retval);
+};
+
+
+/*
+ * function formats an given IPv6 address to Linux /proc/net/if_inet6 format
+ *
+ * in : *addrstring = IPv6 address
+ * out: *resultstring = result
+ * ret: ==0: ok, !=0: error
+ */
+int libifinet6_ipv6addrstruct_to_ifinet6(ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+	int retval = 1;
+	char tempstring[NI_MAXHOST];
+
+	/* print out array */	
+	sprintf(tempstring, "%08x%08x%08x%08x %02x",  ipv6addr_getdword(ipv6addrp, 0), ipv6addr_getdword(ipv6addrp, 1), ipv6addr_getdword(ipv6addrp, 2), ipv6addr_getdword(ipv6addrp, 3), (*ipv6addrp).scope & IPV6_ADDR_SCOPE_MASK);
+	
+	if ( (*ipv6addrp).flag_prefixuse == 1 ) {
+		sprintf(resultstring, "%s %02x", tempstring, (*ipv6addrp).prefixlength);
+	} else {
+		sprintf(resultstring, "%s", tempstring);
+	};
+
+	if (ipv6calc_debug & DEBUG_addr_to_ifinet6) {
+		fprintf(stderr, "addr_to_ifinet6: Print out: %s\n", resultstring);
+	};
+
 	retval = 0;
 	return (retval);
 };

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.c
- * Version    : $Id: librfc1884.c,v 1.4 2002/03/02 10:46:03 peter Exp $
+ * Version    : $Id: librfc1884.c,v 1.5 2002/03/02 22:06:53 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -14,6 +14,7 @@
 
 #include "ipv6calc.h"
 #include "libipv6addr.h"
+#include "libipv6calc.h"
 #include "librfc1884.h"
 #include "ipv6calctypes.h"
 
