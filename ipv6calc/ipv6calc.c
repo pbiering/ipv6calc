@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.2 2002/03/19 23:14:42 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.3 2002/03/24 17:00:39 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -70,7 +70,7 @@ int main(int argc,char *argv[]) {
 	int inputtype = -1, outputtype = -1;
 	
 	/* convert storage */
-	long int action = -1;
+	int action = -1;
 
 	/* format options storage */
 	int formatoptions = 0;
@@ -379,10 +379,15 @@ int main(int argc,char *argv[]) {
 	};
 
 	/***** automatic action handling *****/
-	if (inputtype == FORMAT_mac && outputtype ==FORMAT_eui64) {
+	if ( (inputtype == FORMAT_mac) && (outputtype ==FORMAT_eui64) ) {
 		action = ACTION_mac_to_eui64;
-	} else if (inputtype == FORMAT_iid_token && outputtype ==FORMAT_iid_token) {;
+	} else if ( (inputtype == FORMAT_iid_token) && (outputtype ==FORMAT_iid_token) ) {;
 		action = ACTION_iid_token_to_privacy;
+	} else if ( inputtype == FORMAT_prefix_mac ) {
+		action = ACTION_prefix_mac_to_ipv6;
+		if ( outputtype < 0 ) {
+			outputtype = FORMAT_ipv6addr;
+		};
 	};
 
 	/***** input type handling *****/
@@ -500,6 +505,19 @@ int main(int argc,char *argv[]) {
 			/* Get second token */
 			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
 			retval = tokenlsb64_to_ipv6addrstruct(argv[1], resultstring, &ipv6addr2);
+			argc--;
+			break;
+			
+		case FORMAT_prefix_mac:
+			/* Get first: IPv6 prefix */
+			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
+			retval = addr_to_ipv6addrstruct(argv[0], resultstring, &ipv6addr);
+			argc--;
+			if (retval != 0) { break; };
+			
+			/* Get second: MAC address */
+			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
+			retval = mac_to_macaddrstruct(argv[1], resultstring, &macaddr);
 			argc--;
 			break;
 
@@ -692,8 +710,35 @@ int main(int argc,char *argv[]) {
 			ipv6addr_copy(&ipv6addr2, &ipv6addr4);
 			break;
 
+		case ACTION_prefix_mac_to_ipv6:
+			/* check IPv6 prefix */
+			if ( ipv6addr.flag_valid != 1 ) {
+				fprintf(stderr, "No valid IPv6 address given!\n");
+				exit(EXIT_FAILURE);
+			};
+
+			/* check MAC */
+			if (macaddr.flag_valid != 1) {
+				fprintf(stderr, "No valid MAC address given!\n");
+				exit(EXIT_FAILURE);
+			};
+			
+			/* convert MAC to IID */
+			retval = create_eui64_from_mac(&ipv6addr2, &macaddr);
+
+			/* put IID into address */
+			for ( i = 8; i <= 15; i++ ) {
+				ipv6addr.in6_addr.s6_addr[i] = ipv6addr2.in6_addr.s6_addr[i];
+			};
+			break;
+
+		case -1:
+			/* no action selected */
+			break;
+
 		default:
-			/* no action */
+			fprintf(stderr, " Action-type isn't implemented\n");
+			exit(EXIT_FAILURE);
 			break;
 	};
 
@@ -718,10 +763,9 @@ int main(int argc,char *argv[]) {
 	       	} else if (ipv4addr.flag_valid == 1) {
 			retval = showinfo_ipv4addr(&ipv4addr, formatoptions);
 	       	} else if (macaddr.flag_valid == 1) {
-		       	fprintf(stderr, "Showinfo of MAC address currently not implemented!\n");
-			retval = 1;
+			retval = showinfo_eui48(&macaddr, formatoptions);
 		} else {
-		       	fprintf(stderr, "No valid IPv6 address given!\n");
+		       	fprintf(stderr, "No valid or supported input address given!\n");
 			retval = 1;
 		};
 		if (retval != 0) {
