@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.13 2002/11/12 19:03:29 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.14 2003/02/02 12:55:07 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -521,6 +521,12 @@ int main(int argc,char *argv[]) {
 			retval = addr_to_ipv4addrstruct(argv[0], resultstring, &ipv4addr);
 			argc--;
 			break;
+			
+		case FORMAT_ipv4hex:
+			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
+			retval = addrhex_to_ipv4addrstruct(argv[0], resultstring, &ipv4addr);
+			argc--;
+			break;
 
 		case FORMAT_base85:
 			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
@@ -730,6 +736,8 @@ int main(int argc,char *argv[]) {
 			formatoptions |= FORMATOPTION_printfulluncompressed;
 		} else if ( (inputtype == FORMAT_ipv6addr) && (action == ACTION_undefined) ) {
 			outputtype = FORMAT_ipv6addr;
+		} else if ( ((inputtype == FORMAT_ipv4addr) || (inputtype == FORMAT_ipv4hex)) && (action == ACTION_undefined) ) {
+			outputtype = FORMAT_ipv4addr;
 		};
 
 		if ( outputtype != FORMAT_undefined ) {

@@ -1,10 +1,13 @@
 /*
- *  $Id: ChangeLog,v 1.65 2002/11/12 19:16:44 peter Exp $ 
+ *  $Id: ChangeLog,v 1.66 2003/02/02 12:55:07 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20030202/PB:
+	add new input type "ipv4hex" (hexadecimal IPv4 address)
+
 20021112/PB:
 	fix not proper handling of option "-q|--quiet" in some cases
 	enhance help options (-h|--help now also valid) on --out|action|in

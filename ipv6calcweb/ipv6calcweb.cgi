@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi,v 1.17 2002/11/04 20:38:37 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi,v 1.18 2003/02/02 12:55:07 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -28,7 +28,7 @@ use strict;
 # Program information
 my $program_name = "ipv6calcweb.cgi";
 my $program_copyright = "(P) & (C) 2002 by Peter Bieringer";
-my $program_version = "0.44";       # automatic generated line, don't remove this token: @@VERSION@@
+my $program_version = "0.45";       # automatic generated line, don't remove this token: @@VERSION@@
 
 
 # Debug value

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.6 2002/08/30 20:43:57 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.7 2003/02/02 12:55:07 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -189,6 +189,12 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 	if (length == 32 && numxdigits == 32 && numdots == 0 && numcolons == 0) {
 		/* ifinet6 xxxx..xxxx  */
 		type = FORMAT_ifinet6;
+		goto END_libipv6calc_autodetectinput;
+	};
+	
+	if (length == 8 && numxdigits == 8 && numdots == 0 && numcolons == 0) {
+		/* IPv4 hexadecimal: xxxxxxxx */
+		type = FORMAT_ipv4hex;
 		goto END_libipv6calc_autodetectinput;
 	};
 	

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.10 2002/04/21 11:24:08 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.11 2003/02/02 12:55:07 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -47,6 +47,7 @@ extern uint32_t ipv6calctypes_checkaction(const char *string);
 #define FORMAT_NUM_any	 		16
 #define FORMAT_NUM_prefix_mac		17
 #define FORMAT_NUM_revipv4		18
+#define FORMAT_NUM_ipv4hex		19
 #define FORMAT_NUM_undefined		31
 
 #define FORMAT_auto		(uint32_t) 0x00000u
@@ -68,6 +69,7 @@ extern uint32_t ipv6calctypes_checkaction(const char *string);
 #define FORMAT_any	 	(uint32_t) (1 << FORMAT_NUM_any)
 #define FORMAT_prefix_mac	(uint32_t) (1 << FORMAT_NUM_prefix_mac)
 #define FORMAT_revipv4		(uint32_t) (1 << FORMAT_NUM_revipv4)
+#define FORMAT_ipv4hex		(uint32_t) (1 << FORMAT_NUM_ipv4hex)
 #define FORMAT_undefined	(uint32_t) (1 << FORMAT_NUM_undefined)
 
 /* Primary label of format number, keeping also an explanation */
@@ -97,17 +99,19 @@ typedef struct {
 	{ FORMAT_ipv6logconv    , "ipv6logconv"    , "ipv6logconv (currently not supported)", "" },
 	{ FORMAT_any            , "any"            , "any type (currently not supported)", "" },
 	{ FORMAT_revipv4	, "revipv4"        , "reverse IPv4, ending with in-addr.arpa", "" },
+	{ FORMAT_ipv4hex	, "ipv4hex"        , "IPv4 in hexdecimal format", "" },
 	{ FORMAT_prefix_mac     , "prefix+mac"     , "IPv6 prefix and a MAC address", "" },
 };
 
 /* Format conversion matrix */
-/*@unused@*/ static const uint32_t ipv6calc_formatmatrix[13][2] = {
+/*@unused@*/ static const uint32_t ipv6calc_formatmatrix[14][2] = {
 	{ FORMAT_auto           , 0x5ff },
 	{ FORMAT_revnibbles_int , 0x5ff },
 	{ FORMAT_revnibbles_arpa, 0x5ff },
 	{ FORMAT_bitstring      , 0x5ff },
 	{ FORMAT_ipv6addr       , FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ipv6addr | FORMAT_base85 | FORMAT_ifinet6 },
-	{ FORMAT_ipv4addr       , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 },
+	{ FORMAT_ipv4addr       , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex },
+	{ FORMAT_ipv4hex        , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex },
 	{ FORMAT_mac            , FORMAT_eui64 },
 	{ FORMAT_eui64          , 0 },
 	{ FORMAT_base85         , FORMAT_base85 | FORMAT_ipv6addr | FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ifinet6 },
