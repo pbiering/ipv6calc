@@ -1,6 +1,6 @@
 # Project    : ipv6calc/lib
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.9 2002/04/20 14:21:22 peter Exp $
+# Version    : $Id: Makefile,v 1.10 2002/04/20 17:14:28 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -37,7 +37,7 @@ libipv6calc.a:	$(OBJS)
 		cd ../ && make db-ieee-oui-make
 		cd ../ && make db-ipv4-assignment-make
 		echo "Create library"
-		$(AR) rs libipv6calc.a $(OBJS)
+		$(AR) r libipv6calc.a $(OBJS)
 		$(RANLIB) libipv6calc.a
 
 distclean:
