@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.52 2002/04/21 11:23:05 peter Exp $ 
+ *  $Id: ChangeLog,v 1.53 2002/04/21 16:30:25 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,8 @@ Info:
 200204021/PB:
 	review inttypes definitions, create new header file
 	minor fixes to suppress compiler warnings
+	tag version 0.40rc5
+	tag version 0.40
 
 200204020/PB:
 	fix defines for FreeBSD and OpenBSD
