@@ -1,11 +1,15 @@
 /*
- *  $Id: ChangeLog,v 1.36 2002/03/18 22:55:35 peter Exp $ 
+ *  $Id: ChangeLog,v 1.37 2002/03/19 23:14:23 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
-20020317/PB:
+20020320/PB:
+	showinfo: add new info: registry, fix a bug in output of non machinereadable
+	some snprintf fixes
+
+20020318/PB:
 	move files to dedicated subdirectories
 	add program information on ipv6calc -m
 	enhance ipv6calcweb.cgi
