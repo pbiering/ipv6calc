@@ -348,7 +348,7 @@ for (my $i = 1; $i < $#arin; $i++) {
 };
 print "End of filter on ARIN entries\n";
 
-print "Aggregate ARIN (this can need some time...)\n";
+print "Aggregate ARIN (this can take some time...)\n";
 &proceed_array(\@arin, \@arin_agg);
 
 
