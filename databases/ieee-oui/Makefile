@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ieee-oui
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.5 2002/07/17 18:25:36 peter Exp $
+# Version    : $Id: Makefile,v 1.6 2002/07/17 20:41:48 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -20,8 +20,8 @@ install:
 
 update:
 		echo "Download new version of file"
-		wget $(BASEURL)$(FILE) --timestamp --output-document=oui.txt
-		./create_ieee_oui_headerfile.pl
+		wget $(BASEURL)$(FILE) --timestamp
+		./create_ieee_oui_headerfile.pl $(FILE)
 
 distclean:
 		echo "Remove database file"

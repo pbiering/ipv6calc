@@ -2,16 +2,20 @@
 #
 # Project    : ipv6calc/lib
 # File       : create_ieee_oui_headerfile.pl
-# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.5 2002/07/17 18:38:52 peter Exp $
+# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.6 2002/07/17 20:41:48 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE/oui.txt
 
 use strict;
 
-my $INFILE = "oui.txt";
+my $INFILE;
 
 my $OUTFILE = "dbieee_oui.h";
+
+$INFILE = shift;
+
+if (! defined $INFILE) { $INFILE = "oui.txt" };
 
 print "Create dbieee_oui.h automatically\n";
 
