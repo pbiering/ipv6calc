@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.6 2002/04/04 21:58:10 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.7 2002/04/07 10:32:35 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -39,7 +39,6 @@
 long int ipv6calc_debug = 0;
 
 void printversion(void) {
-	fprintf(stderr, "\n");
 	fprintf(stderr, "%s: version %s\n", PROGRAM_NAME, PROGRAM_VERSION);
 };
 
