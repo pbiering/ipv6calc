@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi,v 1.1 2002/03/18 20:54:37 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi,v 1.2 2002/03/18 21:16:58 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -19,6 +19,7 @@
 #  SERVER_ADDR    : local server address
 #  SERVER_NAME    : local server name (by http server config)
 #  QUERY_STRING   : for language setting
+#  SERVER_PROTOCOL: check for INCLUDED (called by SSI)
 #    Currently supported: "lang=$lang" with $lang in @supported_languages
 
 use strict;
@@ -30,7 +31,7 @@ use strict;
 my $debug = 0x0;
 
 # Location of binary
-my $bin_ipv6calc = "../ipv6calc/ipv6calc";
+my $bin_ipv6calc = "./ipv6calc/ipv6calc";
 my $options_ipv6calc = "-m -i -q";
 
 # Whois server url
@@ -42,9 +43,9 @@ my $lang_default = "en";
 my $lang = $lang_default;
 
 ## Output format: text, html, htmlfull
-my $outputformat = "text";
+#my $outputformat = "text";
 #my $outputformat = "html";
-#my $outputformat = "htmlfull";
+my $outputformat = "htmlfull"; # switched to "html", if called by SSI
 
 ## Output type
 # full = with description
@@ -283,6 +284,15 @@ if ( ! -f $bin_ipv6calc ) {
 if ( ! -x $bin_ipv6calc ) {
 	&print_error("Error: missing needed program");
 };
+
+## Check type
+if ( $ENV{'SERVER_PROTOCOL'} eq "INCLUDED" ) {
+	if ( $outputformat eq "htmlfull" ) {
+		# Switch back to included html
+		$outputformat = "html";
+	};
+};
+
 
 ## Get variables
 if ( defined $ENV{'REMOTE_ADDR'} ) {
