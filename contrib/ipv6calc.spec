@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Version    : $Id: ipv6calc.spec,v 1.22 2003/11/22 14:59:46 peter Exp $
+# Version    : $Id: ipv6calc.spec,v 1.23 2003/11/22 15:36:25 peter Exp $
 # Copyright  : 2001-2003 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
@@ -53,21 +53,24 @@ cp -r examples/analog/* $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logconv
 # ipv6logstats
 mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logstats
 pushd ipv6logstats
-cp data example_* collect_ipv6logstats.pl README $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logstats/
-cp -r examples-* $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logstats/
+cp example_* collect_ipv6logstats.pl README $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logstats/
+for dir in examples-data examples-gri; do
+	cp -r $dir $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logstats/
+done
 popd
 
 # ipv6calcweb
 mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6calcweb
 cp ipv6calcweb/ipv6calcweb.cgi $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6calcweb
 
+# Docs
+for f in ChangeLog README CREDITS TODO COPYING LICENSE USAGE doc/ipv6calc.lyx doc/ipv6calc.sgml doc/ipv6calc.html; do
+	cp $f $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/
+done
 
-#install -m644 $RPM_BUILD_DIR/%{name}-%{version}/ChangeLog $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
-#install -m644 $RPM_BUILD_DIR/%{name}-%{version}/README    $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
-#install -m644 $RPM_BUILD_DIR/%{name}-%{version}/CREDITS   $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
-#install -m644 $RPM_BUILD_DIR/%{name}-%{version}/TODO      $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
-#install -m644 $RPM_BUILD_DIR/%{name}-%{version}/COPYING   $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
-#install -m644 $RPM_BUILD_DIR/%{name}-%{version}/LICENSE   $RPM_BUILD_ROOT%_defaultdocdir/%{name}-%{version}/
+# Remove all CVS files
+find $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} -type d -name CVS |xargs rm -rf
+
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -87,17 +90,14 @@ rm -rf $RPM_BUILD_ROOT
 # man pages
 %{_mandir}/man8/*
 
-# docs
-%doc ChangeLog README CREDITS TODO COPYING LICENSE USAGE
-%doc doc/ipv6calc.lyx doc/ipv6calc.sgml doc/ipv6calc.html
-
-# examples and helper
-%{_docdir}/ipv6logstats/*
-%{_docdir}/ipv6conv/*
-%{_docdir}/ipv6calcweb/*
+# docs, examples and helper
+%{_docdir}/%{name}-%{version}/*
 
 
 %changelog
+* Fri Nov 22 2003 Peter Bieringer <pb@bieringer.de>
+- adjustments
+
 * Fri Nov 21 2003 Peter Bieringer <pb@bieringer.de>
 - add ipv6logstats
 - add man pages
