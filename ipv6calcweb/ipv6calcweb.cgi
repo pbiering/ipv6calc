@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi,v 1.5 2002/03/20 08:19:50 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi,v 1.6 2002/03/20 23:35:32 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -37,7 +37,7 @@ my $options_ipv6calc = "-m -i -q";
 
 # Whois server urls
 my %url_whoisservers = (
-	'ripe-ncc' => {
+	'ripe' => {
 		'ipv4'	=> "http://www.ripe.net/perl/whois?searchtext=",
 		'ipv6'	=> "http://www.ripe.net/perl/whois?searchtext=",
 	},
@@ -74,6 +74,11 @@ my $outputformat = "htmlfull"; # switched to "html", if called by SSI
 # simple = without description
 #my $outputtype = "full";
 my $outputtype = "simple";
+
+
+## Select output
+# skip server = 1
+my $skip_server = 1;
 
 ## Text
 # Language
@@ -217,7 +222,7 @@ sub print_infohash ($) {
 	my $phash = shift;
 	if (! defined $phash) { return; };
 
-	my $flag_tt;
+	my ($flag_tt, $flag_whoisurl, $whois_registry, $whois_type);
 
 	if ( ! defined \$phash ) {
 		&print_tagoutput ( "      <tr>\n" );
@@ -251,6 +256,7 @@ sub print_infohash ($) {
 		};
 
 		$flag_tt = 0;
+		$flag_whoisurl = 0;
 
 		if (grep(/^$key$/, @format_tt)) {
 			$flag_tt = 1;
@@ -281,13 +287,45 @@ sub print_infohash ($) {
 		if ($flag_tt) {
 			&print_tagoutput ( "<tt>" );
 		};
-		if ($key eq "IPV4") {
-			&print_tagoutput ( "<a href=\"" . $url_ipv4_whoisserver . %$phash->{$key} . "\">" );
+
+		if ( $key eq "IPV4" ) {
+			if ( defined %$phash->{'IPV4_REGISTRY'} ) {
+				$whois_registry = %$phash->{'IPV4_REGISTRY'};
+				$whois_type = "ipv4";
+				$flag_whoisurl = 1;
+			};
+		} elsif ( $key eq "IPV6" ) {
+			if ( defined %$phash->{'IPV6_REGISTRY'} ) {
+				$whois_registry = %$phash->{'IPV6_REGISTRY'};
+				$whois_type = "ipv6";
+				$flag_whoisurl = 1;
+			};
+		} elsif ( $key eq "IPV4_6TO4" ) {
+			if ( defined %$phash->{'IPV4_6TO4_REGISTRY'} ) {
+				$whois_registry = %$phash->{'IPV4_6TO4_REGISTRY'};
+				$whois_type = "ipv4";
+				$flag_whoisurl = 1;
+			};
 		};
+
+		if ( $flag_whoisurl == 1 ) {
+			if ( defined %url_whoisservers->{$whois_registry}->{$whois_type} ) {
+				if ( %url_whoisservers->{$whois_registry}->{$whois_type} ne "" ) {
+					&print_tagoutput ( "<a href=\"" . %url_whoisservers->{$whois_registry}->{$whois_type} . %$phash->{$key} . "\">" );
+				} else {
+					$flag_whoisurl = 0;
+				};
+			} else {
+				$flag_whoisurl = 0;
+			};
+		};
+		
 		print %$phash->{$key};
-		if ($key eq "IPV4") {
+
+		if ( $flag_whoisurl == 1 ) {
 			&print_tagoutput ( "</a>" );
 		};
+
 		if ($flag_tt) {
 			&print_tagoutput ( "</tt>" );
 		};
@@ -478,15 +516,17 @@ print %text->{'REMOTE'}->{$lang};
 &print_infohash (\%infoh_remote);
 
 
-# Server
-&print_textonly ("\n");
-&print_tagoutput ( "      <tr>\n" );
-&print_tagoutput ( "        <th colspan=\"3\">" );
-print %text->{'SERVER'}->{$lang};
-&print_textonly ("\n");
-&print_tagoutput ( "</th>\n" );
-&print_tagoutput ( "      </tr>\n" );
-&print_infohash (\%infoh_server);
+if ( $skip_server == 0 ) {
+	# Server
+	&print_textonly ("\n");
+	&print_tagoutput ( "      <tr>\n" );
+	&print_tagoutput ( "        <th colspan=\"3\">" );
+	print %text->{'SERVER'}->{$lang};
+	&print_textonly ("\n");
+	&print_tagoutput ( "</th>\n" );
+	&print_tagoutput ( "      </tr>\n" );
+	&print_infohash (\%infoh_server);
+};
 
 # Footer
 &print_textonly ("\n");
