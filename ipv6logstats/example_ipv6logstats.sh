@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/logstats
 # File       : example_ipv6logstats.sh
-# Version    : $Id: example_ipv6logstats.sh,v 1.3 2003/06/15 15:57:50 peter Exp $
+# Version    : $Id: example_ipv6logstats.sh,v 1.4 2003/06/15 16:01:56 peter Exp $
 # Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Example program for "ipv6logstats"
@@ -48,7 +48,7 @@ find $dir -name '*-log.*' -type f | while read file; do
 	echo "Proceed file: $file" >&2
 
 	# Extract %Y%m
-	yearmonth="`basename "$file" | sed 's/^.*-log\.//' | sed 's/\.gz$//' | sed 's/\.bz2$//`"
+	yearmonth="`basename "$file" | sed 's/^.*-log\.//' | sed 's/\.gz$//' | sed 's/\.bz2$//'`"
 
 	# don't count mon checks
 	cat_file "$file" | grep -v "mon.d/http.monitor" | $bin -c -n -p "$yearmonth"
