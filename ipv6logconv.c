@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.7 2002/03/16 19:25:15 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.3 2002/03/16 19:40:29 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -12,14 +12,12 @@
 #include <string.h>
 #include <stdlib.h> 
 #include <getopt.h> 
-#include <unistd.h>
 
 #include "ipv6calc.h"
 #include "libipv6calc.h"
 #include "ipv6calctypes.h"
-#include "ipv6logconvoptions.h"
+#include "ipv6calcoptions.h"
 #include "ipv6calchelp.h"
-#include "ipv6logconvhelp.h"
 
 #include "libipv4addr.h"
 #include "libipv6addr.h"
@@ -54,6 +52,7 @@ static int lineparser(const long int outputtype);
 int main(int argc,char *argv[]) {
 	int retval = 1, i, lop;
 	unsigned long int command = 0;
+	int bit_start = 0, bit_end = 0;
 
 	/* new option style storage */	
 	long int inputtype = -1, outputtype = -1;
@@ -61,22 +60,16 @@ int main(int argc,char *argv[]) {
 	/* convert storage */
 	long int action = -1;
 
-	/* check for UID */
-	if (getuid() == 0) {
-		ipv6logconv_printversion();
-		fprintf(stderr, " DON'T RUN THIS PROGRAM AS root USER!\n");
-		fprintf(stderr, " This program uses insecure C string handling functions and is not full audited\n");
-		fprintf(stderr, "  therefore parsing insecure and unchecked input like logfiles isn't a good choice\n");
-		exit(EXIT_FAILURE);
-	};
+	/* format options storage */
+	int formatoptions = 0;
 
 	if (argc <= 1) {
-		ipv6logconv_printinfo();
+		printinfo();
 		exit(EXIT_FAILURE);
 	};
 
 	/* Fetch the command-line arguments. */
-	while ((i = getopt_long(argc, argv, ipv6logconv_shortopts, ipv6logconv_longopts, &lop)) != EOF) {
+	while ((i = getopt_long(argc, argv, ipv6calc_shortopts, ipv6calc_longopts, &lop)) != EOF) {
 		switch (i) {
 			case -1:
 				break;
@@ -92,6 +85,85 @@ int main(int argc,char *argv[]) {
 				ipv6calc_debug = atol(optarg);
 				break;
 
+			/* format options */
+			case FORMATOPTION_printcompressed + FORMATOPTION_HEAD:
+	       			formatoptions |= FORMATOPTION_printcompressed;
+				break;
+				
+			case FORMATOPTION_printuncompressed + FORMATOPTION_HEAD:
+	       			formatoptions |= FORMATOPTION_printuncompressed;
+				break;
+				
+			case FORMATOPTION_printfulluncompressed + FORMATOPTION_HEAD:
+	       			formatoptions |= FORMATOPTION_printfulluncompressed;
+				break;
+				
+			case FORMATOPTION_printprefix + FORMATOPTION_HEAD:
+				formatoptions |= FORMATOPTION_printprefix;
+				break;
+				
+			case FORMATOPTION_printsuffix + FORMATOPTION_HEAD:
+				formatoptions |= FORMATOPTION_printsuffix;
+				break;
+				
+			case FORMATOPTION_maskprefix + FORMATOPTION_HEAD:
+				formatoptions |= FORMATOPTION_maskprefix;
+				break;
+				
+			case FORMATOPTION_masksuffix + FORMATOPTION_HEAD:
+				formatoptions |= FORMATOPTION_masksuffix;
+				break;
+				
+			case 'l':	
+			case FORMATOPTION_printlowercase + FORMATOPTION_HEAD:
+				formatoptions |= FORMATOPTION_printlowercase;
+				break;
+				
+			case 'u':	
+			case FORMATOPTION_printuppercase + FORMATOPTION_HEAD:
+				formatoptions |= FORMATOPTION_printuppercase;
+				break;
+				
+			case FORMATOPTION_printstart + FORMATOPTION_HEAD:
+				if ((atoi(optarg) >= 1) && (atoi(optarg) <= 128)) {
+					bit_start = atoi(optarg);
+					formatoptions |= FORMATOPTION_printstart;
+				} else {
+					fprintf(stderr, " Argument of option 'printstart' is out or range (1-128): %d\n", atoi(optarg));
+					exit(EXIT_FAILURE);
+				};
+				break;
+				
+			case FORMATOPTION_printend + FORMATOPTION_HEAD:
+				if ((atoi(optarg) >= 1) && (atoi(optarg) <= 128)) {
+					bit_end = atoi(optarg);
+					formatoptions |= FORMATOPTION_printend;
+				} else {
+					fprintf(stderr, " Argument of option 'printend' is out or range (1-128): %d\n", atoi(optarg));
+					exit(EXIT_FAILURE);
+				};
+				break;
+				
+			/* new options */
+			case CMD_inputtype:
+				if (ipv6calc_debug != 0) {
+					fprintf(stderr, "%s: Got input string: %s\n", DEBUG_function_name, optarg);
+				};
+
+				if (strcmp(optarg, "-?") == 0) {
+					inputtype = -2;
+					command = CMD_printhelp;
+					break;
+				};
+				
+				inputtype = ipv6calctypes_checktype(optarg);
+				
+				if (inputtype < 0) {
+					fprintf(stderr, " Input option is unknown: %s\n", optarg);
+					exit(EXIT_FAILURE);
+				};
+				break;	
+				
 			case CMD_outputtype:
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "%s: Got output string: %s\n", DEBUG_function_name, optarg);
@@ -107,11 +179,7 @@ int main(int argc,char *argv[]) {
 					fprintf(stderr, " Output option is unknown: %s\n", optarg);
 					exit(EXIT_FAILURE);
 				};
-				break;
-
-			case CMD_printexamples:
-				command = CMD_printexamples;
-				break;
+				break;	
 
 			default:
 				fprintf(stderr, "Usage: (see '%s --command -?' for more help)\n", PROGRAM_NAME);
@@ -125,26 +193,29 @@ int main(int argc,char *argv[]) {
 	/* print help handling */
 	if (command == CMD_printhelp) {
 		if (outputtype == -2) {
-			printhelp_outputtypes(FORMAT_ipv6logconv);
+			printhelp_outputtypes(inputtype);
+			exit(EXIT_FAILURE);
+		} else if (inputtype == -2) {
+			printhelp_inputtypes();
+			exit(EXIT_FAILURE);
+		} else if (action == -2) {
+			printhelp_actiontypes();
 			exit(EXIT_FAILURE);
 		};
-        } else if (command == CMD_printexamples) {
-		printhelp_output_dispatcher(outputtype);
-		exit(EXIT_FAILURE);
 	};
 
 	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "Debug value:%lx  command:%lx  inputtype:%lx   outputtype:%lx  action:%lx\n", (unsigned long) ipv6calc_debug, command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action); 
+		fprintf(stderr, "Debug value:%lx  command:%lx  inputtype:%lx   outputtype:%lx  action:%lx  formatoptions:%x\n", (unsigned long) ipv6calc_debug, command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, formatoptions); 
 	};
 	
 	/* do work depending on selection */
 	if (command == CMD_printversion) {
-		ipv6logconv_printversion();
+		printversion();
 		exit(EXIT_FAILURE);
 	};
 
 	if (command == CMD_printhelp) {
-		ipv6logconv_printhelp();
+		printhelp();
 		exit(EXIT_FAILURE);
 	};
 	
@@ -169,7 +240,7 @@ static int lineparser(const long int outputtype) {
 	int linecounter = 0, retval;
 	size_t numsep;
 	
-	fprintf(stderr, "Expecting log lines on stdin\n");
+	fprintf(stderr, "Waiting for log lines on stdin\n");
 
 	while (1 == 1) {
 		/* read line from stdin */
@@ -181,14 +252,6 @@ static int lineparser(const long int outputtype) {
 		};
 
 		linecounter++;
-
-		if (linecounter == 1) {
-			fprintf(stderr, "Ok, proceeding stdin...\n");
-		};
-		
-		if (ipv6calc_debug == 1) {
-			fprintf(stderr, "Line: %d\r", linecounter);
-		};
 
 		if (strlen(linebuffer) >= LINEBUFFER) {
 			fprintf(stderr, "Line too long: %d\n", linecounter);
@@ -234,7 +297,6 @@ static int lineparser(const long int outputtype) {
 		};
 	};
 
-	fprintf(stderr, "...finished\n");
 	return (0);
 };
 #undef DEBUG_function_name
@@ -247,8 +309,11 @@ static int lineparser(const long int outputtype) {
 static int converttoken(char *resultstring, const char *token, const long int outputtype) {
 	long int inputtype = -1;
 	int retval = 1, i;
+	int bit_start = 0, bit_end = 0;
 	int typeinfo;
-	char tempstring[NI_MAXHOST];
+
+	/* format options storage */
+	int formatoptions = 0;
 
 	/* used structures */
 	ipv6calc_ipv6addr ipv6addr;
@@ -303,18 +368,130 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 		fprintf(stderr, "%s: Start of postprocessing input\n", DEBUG_function_name);
 	};
 
+	if (ipv6addr.flag_valid == 1) {
+		/* mask bits */
+		if ((formatoptions & (FORMATOPTION_maskprefix | FORMATOPTION_masksuffix)) != 0) {
+			if (ipv6addr.flag_prefixuse == 1) {
+				if ((formatoptions & FORMATOPTION_maskprefix) != 0) {
+					ipv6addrstruct_maskprefix(&ipv6addr);
+				} else if ((formatoptions & FORMATOPTION_masksuffix) != 0) {
+					ipv6addrstruct_masksuffix(&ipv6addr);
+				};
+			} else {
+				fprintf(stderr, " Error: mask option used without specifying a prefix length\n");
+				exit(EXIT_FAILURE);
+			};
+		};
+		
+		/* start bit */
+		if ((formatoptions & FORMATOPTION_printstart) != 0) {
+			if (ipv6calc_debug != 0) {
+				fprintf(stderr, "%s: Set bit start to: %d\n", DEBUG_function_name, bit_start);
+			};
+			ipv6addr.bit_start = (unsigned short) bit_start;
+			ipv6addr.flag_startend_use = 1;
+		} else {
+			ipv6addr.bit_start = 1;
+		};
+		
+		/* end bit */
+		if ((formatoptions & FORMATOPTION_printend) != 0) {
+			if (ipv6calc_debug != 0) {
+				fprintf(stderr, "%s: Set bit end to: %d\n", DEBUG_function_name, bit_end);
+			};
+			ipv6addr.bit_end = (unsigned short) bit_end;
+			ipv6addr.flag_startend_use = 1;
+		} else {
+			/* default */
+			ipv6addr.bit_end = 128;
+		};
+		
+		/* prefix+suffix */
+		if ((formatoptions & (FORMATOPTION_printprefix | FORMATOPTION_printsuffix)) != 0) {
+			if ( ipv6addr.flag_prefixuse == 0 ) {
+				fprintf(stderr, " Error: missing prefix length for printing prefix/suffix\n");
+				exit(EXIT_FAILURE);
+			} else {
+				if ( ipv6addr.flag_startend_use == 0 ) {
+					/* only print[prefix|suffix] */
+					if ((formatoptions & FORMATOPTION_printprefix) != 0) {
+						ipv6addr.bit_start = 1;
+						ipv6addr.bit_end = ipv6addr.prefixlength;
+						ipv6addr.flag_startend_use = 1;
+					} else if ((formatoptions & FORMATOPTION_printsuffix) != 0) {
+						ipv6addr.bit_start = ipv6addr.prefixlength + 1;
+						ipv6addr.bit_end = 128;
+						ipv6addr.flag_startend_use = 1;
+					};
+				} else {
+					/* mixed */
+					if ((formatoptions & FORMATOPTION_printprefix) != 0) {
+						if ( ipv6addr.prefixlength < ipv6addr.bit_start ) {
+							fprintf(stderr, " Error: prefix length '%d' lower than given start bit number '%d'\n", ipv6addr.prefixlength, ipv6addr.bit_start);
+							exit(EXIT_FAILURE);
+						} else if ( ipv6addr.prefixlength >= ipv6addr.bit_end ) {
+							fprintf(stderr, " Error: prefix length '%d' higher than given end bit number '%d'\n", ipv6addr.prefixlength, ipv6addr.bit_end);
+							exit(EXIT_FAILURE);
+						} else {
+							ipv6addr.bit_end = ipv6addr.prefixlength;
+						};
+					} else if ((formatoptions & FORMATOPTION_printsuffix) != 0) {
+						if ( ipv6addr.prefixlength >= ipv6addr.bit_end ) {
+							fprintf(stderr, " Error: prefix length '%d' higher than or eqal to given end bit number '%d'\n", ipv6addr.prefixlength, ipv6addr.bit_end);
+							exit(EXIT_FAILURE);
+						} else if (ipv6addr.prefixlength >= ipv6addr.bit_start) {
+							fprintf(stderr, " Error: prefix length '%d' higher than or equal to given start bit number '%d'\n", ipv6addr.prefixlength, ipv6addr.bit_start);
+							exit(EXIT_FAILURE);
+						} else {
+							ipv6addr.bit_start = ipv6addr.prefixlength + 1;
+						};
+					};
+				};
+			};
+		};
+
+		/* check start/end */
+		if ( ipv6addr.flag_startend_use == 1 ) {
+			if ( ipv6addr.bit_start > ipv6addr.bit_end ) {
+				fprintf(stderr, " Error: start bit bigger than end bit\n");
+				exit(EXIT_FAILURE);
+			} else if ( ipv6addr.bit_start == ipv6addr.bit_end ) {
+				fprintf(stderr, " Error: start bit equal to end bit\n");
+				exit(EXIT_FAILURE);
+			};
+		};
+	};
+
 	switch (outputtype) {
 		case FORMAT_addrtype:
 			if (ipv6addr.flag_valid == 1) {
-				sprintf(resultstring, "ipv6-addr.addrtype.ipv6calc");
+				sprintf(resultstring, "ipv6-addr");
 			} else if (ipv4addr.flag_valid == 1) {
-				sprintf(resultstring, "ipv4-addr.addrtype.ipv6calc");
+				sprintf(resultstring, "ipv4-addr");
 			} else {
-				sprintf(resultstring, "reverse-lookup-successful.addrtype.ipv6calc");
+				sprintf(resultstring, "reverse-lookup-succesful");
 			};
 			break;
 
-		case FORMAT_ouitype:
+		case FORMAT_ipv6addr:
+			if (ipv6addr.flag_valid != 1) { return(1); };
+
+			if ((formatoptions & FORMATOPTION_printuncompressed) != 0) {
+				retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, formatoptions);
+			} else if ((formatoptions & FORMATOPTION_printfulluncompressed) != 0) {
+				retval = libipv6addr_ipv6addrstruct_to_fulluncompaddr(&ipv6addr, resultstring, formatoptions);
+			} else {
+				retval = librfc1884_ipv6addrstruct_to_compaddr(&ipv6addr, resultstring, formatoptions);
+			};
+			break;
+			
+		case FORMAT_ipv4addr:
+			if (ipv4addr.flag_valid != 1) { return(1); };
+
+			retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, resultstring, formatoptions);
+			break;
+			
+		case FORMAT_oui:
 			if (ipv6addr.flag_valid != 1) { return(1); };
 
 			/* check whether address has a OUI ID */
@@ -326,13 +503,10 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 					return (1);
 				};
 				if (strlen(resultstring) == 0) {
-					sprintf(resultstring, "unknown.ouitype.ipv6calc");
-				} else {
-					sprintf(tempstring, "%s.ouitype.ipv6calc", resultstring);
-					sprintf(resultstring, "%s", tempstring);
+					sprintf(resultstring, "unknown");
 				};
 			} else {
-				sprintf(resultstring, "local-scope.ouitype.ipv6calc");
+				sprintf(resultstring, "local-scope");
 			};
 			break;
 			
@@ -342,21 +516,21 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 			typeinfo = ipv6addr_gettype(&ipv6addr);
 
 		       	if ( (typeinfo & IPV6_ADDR_LINKLOCAL) != 0 ) {
-				sprintf(resultstring, "link-local.ipv6addrtype.ipv6calc");
+				sprintf(resultstring, "link-local");
 			} else if ( (typeinfo & IPV6_ADDR_SITELOCAL) != 0 ) {
-				sprintf(resultstring, "site-local.ipv6addrtype.ipv6calc");
+				sprintf(resultstring, "site-local");
 			} else if ( (typeinfo & IPV6_NEW_ADDR_6BONE) != 0 ) {
-				sprintf(resultstring, "6bone-global.ipv6addrtype.ipv6calc");
+				sprintf(resultstring, "6bone-global");
 			} else if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
-				sprintf(resultstring, "6to4-global.ipv6addrtype.ipv6calc");
+				sprintf(resultstring, "6to4-global");
 			} else if ( (typeinfo & IPV6_NEW_ADDR_PRODUCTIVE) != 0 ) {
-				sprintf(resultstring, "productive-global.ipv6addrtype.ipv6calc");
+				sprintf(resultstring, "productive-global");
 			} else if ( (typeinfo & IPV6_ADDR_MAPPED) ) {
-				sprintf(resultstring, "mapped-ipv4.ipv6addrtype.ipv6calc");
+				sprintf(resultstring, "mapped-ipv4");
 			} else if ( (typeinfo & IPV6_ADDR_COMPATv4) ) {
-				sprintf(resultstring, "compat-ipv4.ipv6addrtype.ipv6calc");
+				sprintf(resultstring, "compat-ipv4");
 			} else {
-				sprintf(resultstring, "unknown-ipv6.ipv6addrtype.ipv6calc");
+				sprintf(resultstring, "unknown-ipv6");
 			};
 			break;
 

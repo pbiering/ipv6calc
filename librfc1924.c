@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1924.c
- * Version    : $Id: librfc1924.c,v 1.4 2002/03/02 19:02:28 peter Exp $
+ * Version    : $Id: librfc1924.c,v 1.5 2002/03/16 19:40:30 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -16,6 +16,7 @@
 #include <stdlib.h>
 #include "ipv6calc.h"
 #include "libipv6addr.h"
+#include "librfc1924.h"
 
 /*
  * Base 85 (RFC 1924) encodings of IPv6 addresses
@@ -25,7 +26,8 @@ typedef struct {
 	unsigned char b[128];		/* never anything but 0 or 1 */
 } bitvec;
 
-static char ChSet[86] = {
+
+static char librfc1924_charset[] = {
 	'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 	'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
 	'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
@@ -37,6 +39,7 @@ static char ChSet[86] = {
 	'`', '{', '|', '}', '~',
 	0
 };
+
 
 static bitvec lsl(bitvec bv, int n) {
 	register int i;
@@ -225,9 +228,9 @@ static bitvec unpk85(register char *str) {
 	r = zbv();
 	for (i = 0; i < 20; i++) {
 		c = *str++;
-		if (c == 0 || (p = strchr(ChSet, c)) == 0)
+		if (c == 0 || (p = strchr(librfc1924_charset, c)) == 0)
 			return zbv();
-		r = addbv(bvx85(r), smallbv(p - ChSet));
+		r = addbv(bvx85(r), smallbv(p - librfc1924_charset));
 	};
 	return (r);
 };
@@ -244,7 +247,7 @@ static char *pk85(bitvec bv) {
 
 	p = str;
 	while (--i >= 0)
-		*p++ = ChSet[vals[i]];
+		*p++ = librfc1924_charset[vals[i]];
 	*p = '\0';
 
 	return str;
@@ -258,7 +261,7 @@ static char *pk85(bitvec bv) {
  * ret: ==0: ok, !=0: error
  */
 
-int ipv6addrstruct_to_base85(ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+int ipv6addrstruct_to_base85(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 	int retval = 1, nbit, ndword;
 	unsigned int mask;
 	bitvec bv;
@@ -273,7 +276,7 @@ int ipv6addrstruct_to_base85(ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 		/* calculate mask */
 		mask = 0x80000000 >> ((nbit & 0x01f));
 		
-		if ( ipv6addr_getdword(ipv6addrp, ndword) & mask ) {
+		if ( (ipv6addr_getdword(ipv6addrp, ndword) & mask) != 0) {
 			bv.b[nbit] = 1;
 		};
 	};
@@ -293,29 +296,27 @@ int ipv6addrstruct_to_base85(ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
  * ret: ==0: ok, !=0: error
  */
 
-int base85_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
+int base85_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1, nbit, ndword;
-	size_t cnt;
 	unsigned int mask;
 	bitvec bv;
+	char tempstring[NI_MAXHOST];
 
-	/* check length */
-	if ( strlen(addrstring) != 20 ) {
-		sprintf(resultstring, "Error in given base85 formatted address, has not 20 chars!");
-		retval = 1;
-		return (retval);
+	retval = librfc1924_formatcheck(addrstring, resultstring);
+
+	if (retval != 0) {
+		/* format check fails */
+		return (1);
 	};
 
-	/* check for base85 chars only content */
-	cnt = strspn(addrstring, ChSet);
-	if ( cnt != 20 ) {
-		sprintf(resultstring, "Illegal character in given base85 formatted address on position %d (%c)!", (int) cnt + 1, addrstring[cnt]);
-		retval = 1;
-		return (retval);
+	if (strlen(addrstring) > sizeof(tempstring) - 1) {
+		fprintf(stderr, "Input too long: %s\n", addrstring);
+		return (1);
+	};
+
+	strncpy(tempstring, addrstring, sizeof(tempstring) - 1);
 		
-	};
-
-	bv = unpk85(addrstring);
+	bv = unpk85(tempstring);
 
 	/* Clear IPv6 address structure */
 	ipv6addr_clear(ipv6addrp);
@@ -341,3 +342,36 @@ int base85_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6
    	retval = 0;	
 	return (retval);
 };
+
+
+/*
+ * checks for proper format of a base85 string
+ *
+ * in : string
+ * ret: ==0: ok, !=0: error
+ */
+#define DEBUG_function_name "librfc1924/formatcheck"
+int librfc1924_formatcheck(const char *string, char *infostring) {
+	size_t length, cnt;
+
+	/* clear result string */
+	infostring[0] = '\0';
+
+	length = strlen(string);
+
+	/* check length */
+	if ( length != 20 ) {
+		sprintf(infostring, "Given base85 formatted address has not 20 chars!");
+		return (1);
+	};
+
+	/* check for base85 chars only content */
+	cnt = strspn(string, librfc1924_charset);
+	if ( cnt != 20 ) {
+		sprintf(infostring, "Illegal character in given base85 formatted address on position %d (%c)!", (int) cnt + 1, string[cnt]);
+		return (1);
+	};
+
+	return (0);
+};
+#undef DEBUG_function_name

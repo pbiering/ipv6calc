@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.11 2002/03/16 00:39:03 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.12 2002/03/16 19:40:29 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -29,7 +29,7 @@
  * additional: calls exit on out of range
  */
 #define DEBUG_function_name "libipv6addr/ipv6addr_getoctett"
-unsigned int ipv6addr_getoctett(ipv6calc_ipv6addr *ipv6addrp, int numoctett) {
+unsigned int ipv6addr_getoctett(const ipv6calc_ipv6addr *ipv6addrp, const int numoctett) {
 	unsigned int retval;
 	
 	if ( ( numoctett < 0 ) || ( numoctett > 15 ) ) {
@@ -52,7 +52,7 @@ unsigned int ipv6addr_getoctett(ipv6calc_ipv6addr *ipv6addrp, int numoctett) {
  * additional: calls exit on out of range
  */
 #define DEBUG_function_name "libipv6addr/ipv6addr_getword"
-unsigned int ipv6addr_getword(ipv6calc_ipv6addr *ipv6addrp, int numword) {
+unsigned int ipv6addr_getword(const ipv6calc_ipv6addr *ipv6addrp, const int numword) {
 	unsigned int retval;
 	
 	if ( ( numword < 0 ) || ( numword > 7 ) ) {
@@ -76,7 +76,7 @@ unsigned int ipv6addr_getword(ipv6calc_ipv6addr *ipv6addrp, int numword) {
  * additional: calls exit on out of range
  */
 #define DEBUG_function_name "libipv6addr/ipv6addr_getdword"
-unsigned int ipv6addr_getdword(ipv6calc_ipv6addr *ipv6addrp, int numdword) {
+unsigned int ipv6addr_getdword(const ipv6calc_ipv6addr *ipv6addrp, const int numdword) {
 	unsigned int retval;
 	
 	if ( ( numdword < 0 ) || ( numdword > 3 ) ) {
@@ -103,7 +103,7 @@ unsigned int ipv6addr_getdword(ipv6calc_ipv6addr *ipv6addrp, int numdword) {
  * additional: calls exit on out of range
  */
 #define DEBUG_function_name "libipv6addr/ipv6addr_setoctett"
-void ipv6addr_setoctett(ipv6calc_ipv6addr *ipv6addrp, int numoctett, unsigned int value) {
+void ipv6addr_setoctett(ipv6calc_ipv6addr *ipv6addrp, const int numoctett, const unsigned int value) {
 	
 	if ( ( numoctett < 0 ) || ( numoctett > 15 ) ) {
 		fprintf(stderr, "%s: given octett number '%d' is out of range!\n", DEBUG_function_name, numoctett);
@@ -131,7 +131,7 @@ void ipv6addr_setoctett(ipv6calc_ipv6addr *ipv6addrp, int numoctett, unsigned in
  * additional: calls exit on out of range
  */
 #define DEBUG_function_name "libipv6addr/ipv6addr_setword"
-void ipv6addr_setword(ipv6calc_ipv6addr *ipv6addrp, int numword, unsigned int value) {
+void ipv6addr_setword(ipv6calc_ipv6addr *ipv6addrp, const int numword, const unsigned int value) {
 	
 	if ( ( numword < 0 ) || ( numword > 7 ) ) {
 		fprintf(stderr, "%s: given word number '%d' is out of range!\n", DEBUG_function_name, numword);
@@ -160,7 +160,7 @@ void ipv6addr_setword(ipv6calc_ipv6addr *ipv6addrp, int numword, unsigned int va
  * additional: calls exit on out of range
  */
 #define DEBUG_function_name "libipv6addr/ipv6addr_setdword"
-void ipv6addr_setdword(ipv6calc_ipv6addr *ipv6addrp, int numdword, unsigned int value) {
+void ipv6addr_setdword(ipv6calc_ipv6addr *ipv6addrp, const int numdword, const unsigned int value) {
 	
 	if ( ( numdword < 0 ) || ( numdword > 3 ) ) {
 		fprintf(stderr, "%s: given dword number '%d' is out of range!\n", DEBUG_function_name, numdword);
@@ -259,7 +259,7 @@ void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6addr *ip
  * additional: calls exit on out of range
  */
 
-unsigned int ipv6addr_gettype(ipv6calc_ipv6addr *ipv6addrp) {
+unsigned int ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 	unsigned int type = 0;
 	unsigned int st, st1, st2, st3;
 
@@ -375,24 +375,31 @@ unsigned int ipv6addr_gettype(ipv6calc_ipv6addr *ipv6addrp) {
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "libipv6addr/addr_to_ipv6addrstruct"
-int addr_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
+int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1, result, i, cpoints = 0, ccolons = 0;
 	char *addronlystring, *cp, tempstring[NI_MAXHOST];
 	int scope = 0, expecteditems = 0;
 	unsigned int temp[8];
 	int compat[4];
 
-	sprintf(resultstring, "%s", ""); /* clear result string */
+	resultstring[0] = '\0'; /* clear result string */
 
 	if ( ipv6calc_debug & DEBUG_libipv6addr ) {
-		fprintf(stderr, "%s: got input %s\n", DEBUG_function_name,  addrstring);
+		fprintf(stderr, "%s: got input: %s\n", DEBUG_function_name, addrstring);
 	};
+
+	if (strlen(addrstring) > sizeof(tempstring) - 1) {
+		fprintf(stderr, "Input too long: %s\n", addrstring);
+		return (1);
+	};
+
+	strncpy(tempstring, addrstring, sizeof(tempstring) - 1);
 	
 	ipv6addr_clearall(ipv6addrp);
 
 	/* save prefix length first, if available */
 	ipv6addrp->flag_prefixuse = 0; /* reset flag first */
-	addronlystring = strtok (addrstring, "/");
+	addronlystring = strtok (tempstring, "/");
 	cp = strtok (NULL, "/");
 	if ( cp != NULL ) {
 		i = atol(cp);
@@ -534,7 +541,7 @@ int addr_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6ad
  * out: *resultstring = IPv6 address (modified)
  * ret: ==0: ok, !=0: error
  */
-int ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 	int retval = 1;
 	char tempstring[NI_MAXHOST];
 	
@@ -561,7 +568,7 @@ int ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstrin
 };
 
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddr"
-int libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, int formatoptions) {
+int libipv6addr_ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const int formatoptions) {
 	int retval = 1;
 	
 	if ( ipv6calc_debug & DEBUG_libipv6addr ) {
@@ -603,7 +610,7 @@ int libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char 
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddrprefix"
-int ipv6addrstruct_to_uncompaddrprefix(ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 	int retval = 1;
 	int max, i;
 	char tempstring1[NI_MAXHOST], tempstring2[NI_MAXHOST];
@@ -656,7 +663,7 @@ int ipv6addrstruct_to_uncompaddrprefix(ipv6calc_ipv6addr *ipv6addrp, char *resul
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_uncompaddrsuffix"
-int ipv6addrstruct_to_uncompaddrsuffix(ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+int ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 	int retval = 1;
 	int max, i;
 	char tempstring1[NI_MAXHOST], tempstring2[NI_MAXHOST];
@@ -711,7 +718,7 @@ int ipv6addrstruct_to_uncompaddrsuffix(ipv6calc_ipv6addr *ipv6addrp, char *resul
  * out: *resultstring = IPv6 address (modified)
  * ret: ==0: ok, !=0: error
  */
-int ipv6addrstruct_to_fulluncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+int ipv6addrstruct_to_fulluncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 	int retval = 1;
 	/* old style compatibility */
 	unsigned int formatoptions = FORMATOPTION_printlowercase;
@@ -721,7 +728,7 @@ int ipv6addrstruct_to_fulluncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *results
 };
 
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_fulluncompaddr"
-int libipv6addr_ipv6addrstruct_to_fulluncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, int formatoptions) {
+int libipv6addr_ipv6addrstruct_to_fulluncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const int formatoptions) {
 	int retval = 1, result;
 	char tempstring[NI_MAXHOST];
 
@@ -848,7 +855,7 @@ void ipv6addrstruct_masksuffix(ipv6calc_ipv6addr *ipv6addrp) {
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "libipv6addr/tokenlsb64_to_ipv6addrstruct"
-int tokenlsb64_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
+int tokenlsb64_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1, result;
 	int temp[4];
 	char tempstring[NI_MAXHOST];
@@ -892,7 +899,7 @@ int tokenlsb64_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "libipv6addr/identifier_to_ipv6addrstruct"
-int identifier_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
+int identifier_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1;
 	char tempstring[NI_MAXHOST];
 
@@ -930,7 +937,7 @@ int identifier_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_tokenlsb64"
-int libipv6addr_ipv6addrstruct_to_tokenlsb64(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, int formatoptions) {
+int libipv6addr_ipv6addrstruct_to_tokenlsb64(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, int formatoptions) {
 	int retval = 1;
 	
 	/* print array */

@@ -1,14 +1,13 @@
 #!/usr/bin/perl -w
-
-use strict;
-
 #
 # Project    : ipv6calc
 # File       : create_ieee_oui_headerfile.pl
-# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.2 2002/03/11 21:57:25 peter Exp $
+# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.3 2002/03/16 19:40:29 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE/oui.txt
+
+use strict;
 
 my $INFILE = "samplecode/ieee/oui.txt";
 
@@ -59,8 +58,53 @@ while (<IN>) {
 		my ($t1, $t2, $t3) = split / /, $line, 3;
 	
 		my ($a, $b, $c) = split /-/, $t1;
+
+		# shorten OUI string
+		my $oui = uc($t3);
+
+		# replace '(' ')' '&'
+		$oui =~ s/[\(\)\&\']/ /ig;
+
+		# remove unimportand information
+		$oui =~ s/\bINC[\.]*\b//ig;
+		$oui =~ s/\bLTD[\.]*\b//ig;
+		$oui =~ s/\bLIMITED\b//ig;
+		$oui =~ s/\bCO[\.]*\b//ig;
+		$oui =~ s/\bCORP[\.]*\b//ig;
+		$oui =~ s/\bCOMP[\.]\b//ig;
+		$oui =~ s/\bGMBH\b//ig;
+		$oui =~ s/\bCORPORATION\b//ig;
+		$oui =~ s/\bS[\.]*A[\.]*\b//ig;
+		$oui =~ s/\bAG\b/ELECTRONIC/ig;
+		$oui =~ s/\bKG\b//ig;
+		$oui =~ s/\bBV\b//ig;
+		$oui =~ s/\bINT'L\b/INTERNATIONAL/ig;
+		$oui =~ s/\bCOMMUNICATIONS\b/COMMUNICATION/ig;
+		$oui =~ s/\bCORPOTATION\b/CORPORATION/ig;
+		$oui =~ s/\bINTERNAIONAL\b/INTERNATIONAL/ig;
+
+		# remove some unneeded text
+		$oui =~ s/\bINTERNATIONAL\b//ig;
+		$oui =~ s/\bTECHNOLOGY\b//ig;
+		$oui =~ s/\bCOMPUTER\b//ig;
+		$oui =~ s/\bSYSTEMS\b//ig;
+		$oui =~ s/\bENTERPRISE\b//ig;
+		$oui =~ s/\bCORPORATION\b//ig;
+		$oui =~ s/\bELECTRONIC\b//ig;
+
+		# remove ',' '.'
+		$oui =~ s/[,\.;]/ /ig;
+
+		# remove leading and trailing spaces
+		$oui =~ s/^\s+//ig;
+		$oui =~ s/\s+$//ig;
+
+		# convert spaces to '-'
+		$oui =~ s/\s+/-/ig;
 	
-		print OUT "\t{ 0x" . $a . $b . $c . ", \"$t3\" },\n";
+		#print $oui . "\n";
+	
+		print OUT "\t{ 0x" . $a . $b . $c . ", \"$t3\", \"$oui\" },\n";
 	};
 };
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.c
- * Version    : $Id: librfc2874.c,v 1.6 2002/03/03 21:39:01 peter Exp $
+ * Version    : $Id: librfc2874.c,v 1.7 2002/03/16 19:40:30 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -21,14 +21,14 @@
 
 
 /*
- * function converts IPv6addr_structure to a bitstring label
+ * converts IPv6addr_structure to a bitstring label
  *
  * in : *ipv6addrp = IPv6 address structure
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "librfc2874/addr_to_bitstring"
-int librfc2874_addr_to_bitstring(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned long int formatoptions) {
+int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const unsigned long int formatoptions) {
 	int retval = 1, result;
 	unsigned int nibble;
 	int noctett, nbit, nnibble, prefixlength, bit_start, bit_end;
@@ -111,13 +111,13 @@ int librfc2874_addr_to_bitstring(ipv6calc_ipv6addr *ipv6addrp, char *resultstrin
 
 
 /*
- * function a reverse nibble format string into IPv6addr_structure
+ * converts a bitstring label into IPv6addr_structure
  *
  * in : inputstring
  * mod: *ipv6addrp = IPv6 address structure
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "librfc2874/nibblestring_to_ipv6addrstruct"
+#define DEBUG_function_name "librfc2874/bitstring_to_ipv6addrstruct"
 int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 	int retval = 1;
 	char tempstring[NI_MAXHOST], tempstring2[NI_MAXHOST];
@@ -138,30 +138,14 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 
 	length = strlen(tempstring);
 
-	/* check length */
-	if (length < 5) {
-		sprintf(resultstring, "Length %d too low", length);
-		return (1);
-	};
+	/* check content */
+	retval = librfc2874_formatcheck(tempstring, resultstring);
 	
-	/* check start */
-	if (tempstring[index] != '\\') {
-		sprintf(resultstring, "Char '%c' not expected on position %d", tempstring[index], index + 1);
+	if (retval != 0) {
 		return (1);
-	};
-	index++;
+	}
 	
-	if (tempstring[index] != '[') {
-		sprintf(resultstring, "Char '%c' not expected on position %d", tempstring[index], index + 1);
-		return (1);
-	};
-	index++;
-	
-	if (tempstring[index] != 'x') {
-		sprintf(resultstring, "Char '%c' not expected on position %d", tempstring[index], index + 1);
-		return (1);
-	};
-	index++;
+	index = 3; /* start value */
 	
 	while(isxdigit(tempstring[index])) {
 		sprintf(tempstring2, "%c", tempstring[index]);
@@ -272,5 +256,114 @@ END_bitstring_to_ipv6addrstruct:
 	
 	retval = 0;
 	return (retval);
+};
+#undef DEBUG_function_name
+
+
+/*
+ * checks for proper format of a bitstring label
+ *
+ * in : string
+ * ret: ==0: ok, !=0: error
+ */
+#define DEBUG_function_name "librfc2874/formatcheck"
+int librfc2874_formatcheck(const char *string, char *infostring) {
+	size_t length;
+	int index = 0, nibblecounter = 0, digitcounter = 0;
+
+	infostring[0] = '\0'; /* clear string */
+	
+	length = strlen(string);
+
+	/* check length */
+	if (length < 5) {
+		sprintf(infostring, "Length %d too low", length);
+		return (1);
+	};
+	
+	/* check start */
+	if (string[index] != '\\') {
+		sprintf(infostring, "Char '%c' not expected on position %d", string[index], index + 1);
+		return (1);
+	};
+	index++;
+	
+	if (string[index] != '[') {
+		sprintf(infostring, "Char '%c' not expected on position %d", string[index], index + 1);
+		return (1);
+	};
+	index++;
+	
+	if (tolower(string[index]) != 'x') {
+		sprintf(infostring, "Char '%c' not expected on position %d", string[index], index + 1);
+		return (1);
+	};
+	index++;
+
+	/* check nibble string */	
+	while(isxdigit(string[index])) {
+		nibblecounter++;
+
+		if (nibblecounter > 32) {
+			sprintf(infostring, "More than 32 nibbles on position %d", index + 1);
+			return (1);
+		};
+
+		index++;
+		if (index > length) {
+			break;
+		};
+	};
+	
+	if (index >= length) {
+		sprintf(infostring, "Unexpected end of string (missing '/' or ']')");
+		return (1);
+	};
+
+	if (string[index] == ']') {
+		/* bitstring label closed */
+		return (0);
+	};
+
+	/* proceed prefix length */
+	if (string[index] != '/') {
+		sprintf(infostring, "Char '%c' not expected on position %d", string[index], index + 1);
+		return (1);
+	};
+	index++;
+
+	if (index >= length) {
+		sprintf(infostring, "Unexpected end of string (missing prefix length)");
+		return (1);
+	};
+	
+	/* check digit string */	
+	while(isdigit(string[index])) {
+		digitcounter++;
+
+		if (digitcounter > 3) {
+			sprintf(infostring, "More than 3 digits on position %d", index + 1);
+			return (1);
+		};
+
+		index++;
+		if (index > length) {
+			break;
+		};
+	};
+	
+	if (index >= length) {
+		sprintf(infostring, "Unexpected end of string (missing ']')");
+		return (1);
+	};
+	
+	if (string[index] == ']') {
+		/* bitstring label closed */
+		return (0);
+	};
+	
+	sprintf(infostring, "Char '%c' not expected on position %d", string[index], index + 1);
+
+	return (1);
 };
 #undef DEBUG_function_name

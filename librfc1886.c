@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.6 2002/03/03 21:39:01 peter Exp $
+ * Version    : $Id: librfc1886.c,v 1.7 2002/03/16 19:40:30 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -149,6 +149,12 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 	if ( ipv6calc_debug & DEBUG_librfc1886 ) {
 		fprintf(stderr, "%s: reverse copied string: %s\n", DEBUG_function_name, tempstring);
 	};
+
+	/* check string */
+	retval = librfc1886_formatcheck(tempstring, resultstring);
+	if (retval != 0) {
+		return (1);
+	};
 	
 	/* run through nibbles */
 	token = strtok(tempstring, ".");
@@ -233,5 +239,88 @@ NEXT_token_nibblestring_to_ipv6addrstruct:
 	
 	retval = 0;
 	return (retval);
+};
+#undef DEBUG_function_name
+
+/*
+ * checks for proper format of a nibble string
+ *
+ * in : string
+ * ret: ==0: ok, !=0: error
+ */
+#define DEBUG_function_name "librfc1886/formatcheck"
+int librfc1886_formatcheck(const char *string, char *infostring) {
+	size_t length;
+	int nibblecounter = 0, flag_tld = 0, flag_nld = 0, tokencounter = 0;
+	char tempstring[NI_MAXHOST], *token;
+
+	infostring[0] = '\0'; /* clear string */
+
+        if (strlen(string) > sizeof(tempstring) - 1) {
+		fprintf(stderr, "Input too long: %s\n", string);
+		return (1);
+	};
+
+	strncpy(tempstring, string, sizeof(tempstring) - 1);
+	
+	length = strlen(tempstring);
+	
+	/* run through nibbles */
+	token = strtok(tempstring, ".");
+
+	while(token != NULL) {
+		if (strcmp(token, "apra") == 0) {
+			if (flag_tld == 0) {
+				flag_tld = 1;
+				goto NEXT_librfc1886_formatcheck;
+			} else {
+				sprintf(infostring, "Top level domain 'arpa' is in wrong place");
+				return (1);
+			};
+		};
+		if (strcmp(token, "tni") == 0) {
+			if (flag_tld == 0) {
+				flag_tld = 1;
+				goto NEXT_librfc1886_formatcheck;
+			} else {
+				sprintf(infostring, "Top level domain 'int' is in wrong place");
+				return (1);
+			};
+		};
+		if (tokencounter == 1 && flag_tld == 1 && flag_nld == 0) {
+			if (strcmp(token, "6pi") == 0) {
+				flag_nld = 1;
+				goto NEXT_librfc1886_formatcheck;
+			} else {
+				sprintf(infostring, "Next level domain 'ip6' is in wrong place or missing");
+				return (1);
+			};
+		};
+
+		/* now proceed nibbles */
+		if (strlen(token) > 1) {
+			string_to_reverse(token);
+			sprintf(infostring, "Nibble '%s' on dot position %d (from right side) is longer than one char", token, tokencounter + 1);
+			return (1);
+		};
+		
+		if (! isxdigit(token[0])) {
+			sprintf(infostring, "Nibble '%s' on dot position %d (from right side) is not a valid hexdigit", token, tokencounter + 1);
+			return (1);
+		};
+
+		nibblecounter++;
+		
+		if (nibblecounter > 32) {
+			sprintf(infostring, "Too many nibbles (more than 32)");
+			return (1);
+		};
+		
+NEXT_librfc1886_formatcheck:
+		token = strtok(NULL, ".");
+		tokencounter++;
+	};
+
+	return (0);
 };
 #undef DEBUG_function_name

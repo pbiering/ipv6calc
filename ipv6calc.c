@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.21 2002/03/16 00:39:03 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.22 2002/03/16 19:40:29 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -13,8 +13,6 @@
 #include <string.h>
 #include <stdlib.h> 
 #include <getopt.h> 
-/*#include <unistd.h> */
-
 
 #include "ipv6calc.h"
 #include "libipv6calc.h"
@@ -406,6 +404,8 @@ int main(int argc,char *argv[]) {
 	};
 	
 	/* proceed input depending on type */	
+	retval = -1; /* default */
+
 	switch (inputtype) {
 		case FORMAT_ipv6addr:
 			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };

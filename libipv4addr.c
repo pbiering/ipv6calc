@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.4 2002/03/04 08:04:08 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.5 2002/03/16 19:40:29 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -24,7 +24,7 @@
  * additional: calls exit on out of range
  */
 #define DEBUG_function_name "libipv4addr/ipv4addr_getoctett"
-unsigned int ipv4addr_getoctett(ipv6calc_ipv4addr *ipv4addrp, int numoctett) {
+unsigned int ipv4addr_getoctett(const ipv6calc_ipv4addr *ipv4addrp, const int numoctett) {
 	unsigned int retval;
 	
 	if ( ( numoctett < 0 ) || ( numoctett > 3 ) ) {
@@ -47,7 +47,7 @@ unsigned int ipv4addr_getoctett(ipv6calc_ipv4addr *ipv4addrp, int numoctett) {
  * additional: calls exit on out of range
  */
 #define DEBUG_function_name "libipv4addr/ipv4addr_getword"
-unsigned int ipv4addr_getword(ipv6calc_ipv4addr *ipv4addrp, int numword) {
+unsigned int ipv4addr_getword(const ipv6calc_ipv4addr *ipv4addrp, const int numword) {
 	unsigned int retval;
 	
 	if ( ( numword < 0 ) || ( numword > 1 ) ) {
@@ -69,7 +69,7 @@ unsigned int ipv4addr_getword(ipv6calc_ipv4addr *ipv4addrp, int numword) {
  * additional: calls exit on out of range
  */
 #define DEBUG_function_name "libipv4addr/ipv4addr_getdword"
-unsigned int ipv4addr_getdword(ipv6calc_ipv4addr *ipv4addrp) {
+unsigned int ipv4addr_getdword(const ipv6calc_ipv4addr *ipv4addrp) {
 	unsigned int retval;
 	
 	retval = ipv4addrp->in_addr.s_addr;
@@ -88,7 +88,7 @@ unsigned int ipv4addr_getdword(ipv6calc_ipv4addr *ipv4addrp) {
  * additional: calls exit on out of range
  */
 #define DEBUG_function_name "libipv4addr/ipv4addr_setoctett"
-void ipv4addr_setoctett(ipv6calc_ipv4addr *ipv4addrp, int numoctett, unsigned int value) {
+void ipv4addr_setoctett(ipv6calc_ipv4addr *ipv4addrp, const int numoctett, const unsigned int value) {
 	
 	if ( ( numoctett < 0 ) || ( numoctett > 3 ) ) {
 		fprintf(stderr, "%s: given octett number '%d' is out of range!\n", DEBUG_function_name, numoctett);
@@ -117,7 +117,7 @@ void ipv4addr_setoctett(ipv6calc_ipv4addr *ipv4addrp, int numoctett, unsigned in
  * additional: calls exit on out of range
  */
 #define DEBUG_function_name "libipv4addr/ipv4addr_setword"
-void ipv4addr_setword(ipv6calc_ipv4addr *ipv4addrp, int numword, unsigned int value) {
+void ipv4addr_setword(ipv6calc_ipv4addr *ipv4addrp, const int numword, const unsigned int value) {
 	
 	if ( ( numword < 0 ) || ( numword > 1 ) ) {
 		fprintf(stderr, "%s: given word number '%d' is out of range!\n", DEBUG_function_name, numword);
@@ -145,7 +145,7 @@ void ipv4addr_setword(ipv6calc_ipv4addr *ipv4addrp, int numword, unsigned int va
  * additional: calls exit on out of range
  */
 #define DEBUG_function_name "libipv4addr/ipv4addr_setdword"
-void ipv4addr_setdword(ipv6calc_ipv4addr *ipv4addrp, unsigned int value) {
+void ipv4addr_setdword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int value) {
 	
 	if ( ( value < 0 ) || ( value > 0xffffffff ) ) {
 		fprintf(stderr, "%s: given value '%x' is out of range!\n", DEBUG_function_name, value);
@@ -193,7 +193,7 @@ void ipv4addr_clearall(ipv6calc_ipv4addr *ipv4addrp) {
  *   to be implemented...
  */
 
-unsigned int ipv4addr_gettype(ipv6calc_ipv4addr *ipv4addrp) {
+unsigned int ipv4addr_gettype(const ipv6calc_ipv4addr *ipv4addrp) {
 	return (0);
 };
 
@@ -206,22 +206,30 @@ unsigned int ipv4addr_gettype(ipv6calc_ipv4addr *ipv4addrp) {
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "libipv4calc/addr_to_ipv4addrstruct"
-int addr_to_ipv4addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv4addr *ipv4addrp) {
+int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv4addr *ipv4addrp) {
 	int retval = 1, result, i, cpoints = 0;
 	char *addronlystring, *cp;
 	int expecteditems = 0;
 	int compat[4];
+	char tempstring[NI_MAXHOST];
 
 	sprintf(resultstring, "%s", ""); /* clear result string */
 
 	if ( ipv6calc_debug & DEBUG_libipv4addr ) {
 		fprintf(stderr, "%s: got input %s\n", DEBUG_function_name,  addrstring);
 	};
+
+	if (strlen(addrstring) > sizeof(tempstring) - 1) {
+		fprintf(stderr, "%s: input too long: %s\n", DEBUG_function_name, addrstring);
+		return (1);
+	};
+
+	strncpy(tempstring, addrstring, sizeof(tempstring) - 1);
 	
 	ipv4addr_clearall(ipv4addrp);
 
 	/* save prefix length first, if available */
-	addronlystring = strtok (addrstring, "/");
+	addronlystring = strtok (tempstring, "/");
 	cp = strtok (NULL, "/");
 	if ( cp != NULL ) {
 		i = atol(cp);
@@ -311,7 +319,7 @@ int addr_to_ipv4addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv4ad
  * out: *resultstring = IPv4 address string
  * ret: ==0: ok, !=0: error
  */
-int libipv4addr_ipv4addrstruct_to_string(ipv6calc_ipv4addr *ipv4addrp, char *resultstring, unsigned long formatoptions) {
+int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const unsigned long formatoptions) {
 	char tempstring[NI_MAXHOST];
 
 	/* address */

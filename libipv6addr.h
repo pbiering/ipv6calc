@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.12 2002/03/16 00:39:03 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.13 2002/03/16 19:40:29 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -99,35 +99,36 @@ static const s_type ipv6calc_ipv6addrtypestrings[] = {
 
 
 /* prototypes */
-extern unsigned int ipv6addr_getoctett(ipv6calc_ipv6addr *ipv6addrp, int numoctett);
-extern unsigned int ipv6addr_getword(ipv6calc_ipv6addr *ipv6addrp, int numword);
-extern unsigned int ipv6addr_getdword(ipv6calc_ipv6addr *ipv6addrp, int numdword);
+extern unsigned int ipv6addr_getoctett(const ipv6calc_ipv6addr *ipv6addrp, const int numoctett);
+extern unsigned int ipv6addr_getword(const ipv6calc_ipv6addr *ipv6addrp, const int numword);
+extern unsigned int ipv6addr_getdword(const ipv6calc_ipv6addr *ipv6addrp, const int numdword);
 
-extern void ipv6addr_setoctett(ipv6calc_ipv6addr *ipv6addrp, int numocett, unsigned int value);
-extern void ipv6addr_setword(ipv6calc_ipv6addr *ipv6addrp, int numword, unsigned int value);
-extern void ipv6addr_setdword(ipv6calc_ipv6addr *ipv6addrp, int numdword, unsigned int value);
+extern void ipv6addr_setoctett(ipv6calc_ipv6addr *ipv6addrp, const int numocett, unsigned int value);
+extern void ipv6addr_setword(ipv6calc_ipv6addr *ipv6addrp, const int numword, unsigned int value);
+extern void ipv6addr_setdword(ipv6calc_ipv6addr *ipv6addrp, const int numdword, unsigned int value);
 
 extern void ipv6addr_clear(ipv6calc_ipv6addr *ipv6addrp);
 extern void ipv6addr_clearall(ipv6calc_ipv6addr *ipv6addrp);
 extern void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6addr *ipv6addrp_src);
 
-extern unsigned int ipv6addr_gettype(ipv6calc_ipv6addr *ipv6addrp);
+extern unsigned int ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp);
 
-extern int  addr_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
+extern int  addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
 
-extern int  libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, int formatoptions); /* going obsolete */
-extern int  ipv6addrstruct_to_uncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring); 
 
-extern int  ipv6addrstruct_to_uncompaddrprefix(ipv6calc_ipv6addr *ipv6addrp, char *resultstring);
-extern int  ipv6addrstruct_to_uncompaddrsuffix(ipv6calc_ipv6addr *ipv6addrp, char *resultstring);
+extern int  libipv6addr_ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const int formatoptions); /* going obsolete */
+extern int  ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring); 
 
-extern int  libipv6addr_ipv6addrstruct_to_fulluncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, int formatoptions);
-extern int  ipv6addrstruct_to_fulluncompaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring); /* going obsolete */
+extern int  ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring);
+extern int  ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring);
+
+extern int  libipv6addr_ipv6addrstruct_to_fulluncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const int formatoptions);
+extern int  ipv6addrstruct_to_fulluncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring); /* going obsolete */
 
 extern void ipv6addrstruct_maskprefix(ipv6calc_ipv6addr *ipv6addrp);
 extern void ipv6addrstruct_masksuffix(ipv6calc_ipv6addr *ipv6addrp);
 
-extern int  identifier_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
+extern int  identifier_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
 
-extern int  tokenlsb64_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
-extern int  libipv6addr_ipv6addrstruct_to_tokenlsb64(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, int formatoptions);
+extern int  tokenlsb64_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
+extern int  libipv6addr_ipv6addrstruct_to_tokenlsb64(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const int formatoptions);

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.9 2002/03/03 20:14:53 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.10 2002/03/16 19:40:30 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -14,6 +14,9 @@
 #include <ctype.h>
 
 #include "ipv6calctypes.h"
+#include "librfc1924.h"
+#include "librfc2874.h"
+#include "librfc1886.h"
 
 
 /*
@@ -85,9 +88,10 @@ void string_to_reverse(char *string) {
  * in : pointer to a string
  */
 #define DEBUG_function_name "libipv6calc/autodetectinput"
-long libipv6calc_autodetectinput(char *string) {
+long libipv6calc_autodetectinput(const char *string) {
 	long type = -1;
-	int i, length, numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0;
+	int i, length, numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, result;
+	char resultstring[NI_MAXHOST];
 
 	length = strlen(string);
 
@@ -103,10 +107,14 @@ long libipv6calc_autodetectinput(char *string) {
 		if (isxdigit(string[i])) { numxdigits++; };
 	};
 
-	if (length == 20 && numdots == 0 && numcolons == 0) {
-		/* base85 */
-		type = FORMAT_base85;
-		goto END_libipv6calc_autodetectinput;
+	if ( length == 20 && numdots == 0 && numcolons == 0 ) {
+	        /* probably a base85 one */
+		result = librfc1924_formatcheck(string, resultstring);	
+	        if ( result == 0 ) {
+			/* ok: base85 */
+			type = FORMAT_base85;
+			goto END_libipv6calc_autodetectinput;
+		};
 	};
 	
 	if (length >= 7 && length <= 15 && numdots == 3 && numcolons == 0 && numdigits == numxdigits) {
@@ -115,10 +123,14 @@ long libipv6calc_autodetectinput(char *string) {
 		goto END_libipv6calc_autodetectinput;
 	};
 
-	if (strncmp(string, "\\[x", 3) == 0) {
-		/* Bitstring label: \[x.... */
-		type = FORMAT_bitstring;
-		goto END_libipv6calc_autodetectinput;
+	if ( strncmp(string, "\\[", 2) == 0 ) {
+		/* check for Bitstring label: \[x..../dd] */
+		result = librfc2874_formatcheck(string, resultstring);	
+	        if ( result == 0 ) {
+			/* ok: bitstring label */
+			type = FORMAT_bitstring;
+			goto END_libipv6calc_autodetectinput;
+		};
 	};
 	
 	if (length == 32 && numxdigits == 32 && numdots == 0 && numcolons == 0) {
@@ -140,9 +152,13 @@ long libipv6calc_autodetectinput(char *string) {
 	};
 	
 	if (numcolons == 0 && numdots > 0) {
-		/* hopefully an reverse nibble string */
-		type = FORMAT_revnibbles_int;
-		goto END_libipv6calc_autodetectinput;
+		/* check for reverse nibble string */
+		result = librfc1886_formatcheck(string, resultstring);	
+	        if ( result == 0 ) {
+			/* ok: reverse nibble string */
+			type = FORMAT_revnibbles_int;
+			goto END_libipv6calc_autodetectinput;
+		};
 	};
 	
 	if (numcolons != 0 && numdots <= 3) {

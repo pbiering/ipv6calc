@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.c
- * Version    : $Id: librfc1884.c,v 1.5 2002/03/02 22:06:53 peter Exp $
+ * Version    : $Id: librfc1884.c,v 1.6 2002/03/16 19:40:30 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -29,20 +29,28 @@
  * Based on code in from 'ircd'
  */
 #define DEBUG_function_name "librfc1884/compaddr_to_uncompaddr"
-int compaddr_to_uncompaddr(char *addrstring, char *resultstring) {
+int compaddr_to_uncompaddr(const char *addrstring, char *resultstring) {
 	int retval = 1;
 	char cnt, *cp, *op, *strp;
+	char tempstring[NI_MAXHOST];
 
 	if ( ipv6calc_debug & DEBUG_librfc1884 ) {
 		fprintf(stderr, "%s: got input: %s\n", DEBUG_function_name, addrstring);
 	};
 
+	if (strlen(addrstring) > sizeof(tempstring) - 1) {
+		fprintf(stderr, "%s: input too long: %s\n", DEBUG_function_name, addrstring);
+		return (1);
+	};
+
+	strncpy(tempstring, addrstring, sizeof(tempstring) - 1);
+
 	strp = strstr(addrstring, "::");
 	if (strp) {
 			
-	if ( ipv6calc_debug & DEBUG_librfc1884 ) {
-		fprintf(stderr, "%s: found '::' in IPv6 address\n",  DEBUG_function_name);
-	};
+		if ( ipv6calc_debug & DEBUG_librfc1884 ) {
+			fprintf(stderr, "%s: found '::' in IPv6 address\n",  DEBUG_function_name);
+		};
 
 		/* check for additional "::" occurance - not allowed! */
 		if (strstr(strp+1, "::")) {
@@ -52,7 +60,7 @@ int compaddr_to_uncompaddr(char *addrstring, char *resultstring) {
 		};
 		
 		cnt = 0;
-		cp = addrstring;
+		cp = tempstring;
 		op = resultstring;
 	   	while (*cp) {
 			if (*cp == ':')	cnt += 1;
@@ -60,12 +68,12 @@ int compaddr_to_uncompaddr(char *addrstring, char *resultstring) {
 				cnt += 1;
 				break;
 			};
-	    };
-		cp = addrstring;
+		};
+		cp = tempstring;
 		while (*cp) {
 			*op++ = *cp++;
 			if (*(cp-1) == ':' && *cp == ':') {
-				if ((cp-1) == addrstring) {
+				if ((cp-1) == tempstring) {
 					op--;
 					*op++ = '0';
 					*op++ = ':';
@@ -84,7 +92,7 @@ int compaddr_to_uncompaddr(char *addrstring, char *resultstring) {
 			fprintf(stderr, "%s: result: %s\n", DEBUG_function_name, resultstring);
 		};
 	} else {
-		strcpy(resultstring, addrstring);
+		strcpy(resultstring, tempstring);
 		if ( ipv6calc_debug & DEBUG_librfc1884 ) {
 			fprintf(stderr, "%s: address is not in compressed format\n", DEBUG_function_name);
 		};
@@ -105,7 +113,7 @@ int compaddr_to_uncompaddr(char *addrstring, char *resultstring) {
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */
-int ipv6addrstruct_to_compaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+int ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 	int retval = -1;
 
 	unsigned int formatoptions = FORMATOPTION_printlowercase;
@@ -117,7 +125,7 @@ int ipv6addrstruct_to_compaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring)
 };
 	
 #define DEBUG_function_name "librfc1884/ipv6addrstruct_to_compaddr"
-int librfc1884_ipv6addrstruct_to_compaddr(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned int formatoptions) {
+int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, unsigned int formatoptions) {
 	char tempstring[NI_MAXHOST], temp2string[NI_MAXHOST];
 	int retval = 1, result;
 	int zstart = -1, zend = -1, tstart = -1, tend = -1, i;
