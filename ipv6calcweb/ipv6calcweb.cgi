@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi,v 1.2 2002/03/18 21:16:58 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi,v 1.3 2002/03/18 22:07:02 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -31,7 +31,7 @@ use strict;
 my $debug = 0x0;
 
 # Location of binary
-my $bin_ipv6calc = "./ipv6calc/ipv6calc";
+my $bin_ipv6calc = "/bin/ipv6calc";
 my $options_ipv6calc = "-m -i -q";
 
 # Whois server url
@@ -260,7 +260,7 @@ sub print_infohash ($) {
 			&print_tagoutput ( "<tt>" );
 		};
 		if ($key eq "IPV4") {
-			&print_tagoutput ( "<a href=\"" . $url_ipv4_whoisserver . %infoh_server->{$key} . "\">" );
+			&print_tagoutput ( "<a href=\"" . $url_ipv4_whoisserver . %$phash->{$key} . "\">" );
 		};
 		print %$phash->{$key};
 		if ($key eq "IPV4") {
@@ -276,6 +276,8 @@ sub print_infohash ($) {
 };
 
 ############### Main
+&print_tagoutput ("Content-type: text/html\n\n");
+&print_textonly  ("Content-type: text/plain\n\n");
 
 ## Check for binary ipv6calc is executable
 if ( ! -f $bin_ipv6calc ) {
@@ -286,10 +288,12 @@ if ( ! -x $bin_ipv6calc ) {
 };
 
 ## Check type
-if ( $ENV{'SERVER_PROTOCOL'} eq "INCLUDED" ) {
-	if ( $outputformat eq "htmlfull" ) {
-		# Switch back to included html
-		$outputformat = "html";
+if ( defined $ENV{'SERVER_PROTOCOL'} ) {
+	if ( $ENV{'SERVER_PROTOCOL'} eq "INCLUDED" ) {
+		if ( $outputformat eq "htmlfull" ) {
+			# Switch back to included html
+			$outputformat = "html";
+		};
 	};
 };
 
