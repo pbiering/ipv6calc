@@ -1,16 +1,16 @@
 #!/bin/sh
 
-$Id: autogen.sh,v 1.1 2003/11/21 10:31:21 peter Exp $
+$Id: autogen.sh,v 1.2 2003/11/21 10:38:17 peter Exp $
 
-autoconf
+autoconf || exit 1
 
-./configure --bindir=/usr/bin --mandir=/usr/share/man
+./configure --bindir=/usr/bin --mandir=/usr/share/man || exit 1
 
-make clean
-make
-make test
+make clean || exit 1
+make || exit 1
+make test || exit 1
 
-make -n installonly
+make -n installonly || exit 1
 
 echo
 echo "For installing the binaries, type: make installonly"
