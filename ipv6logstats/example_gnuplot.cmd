@@ -1,6 +1,6 @@
 # Project    : ipv6calc/logstats
 # File       : example_gnuplot.cmd
-# Version    : $Id: example_gnuplot.cmd,v 1.1 2003/06/15 14:17:09 peter Exp $
+# Version    : $Id: example_gnuplot.cmd,v 1.2 2003/06/15 15:08:42 peter Exp $
 # Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Command file for gnuplot
@@ -18,7 +18,7 @@ set ylabel "Requests"
 set format x "%m/%Y"
 set grid
 set key left
-plot 'data' using 1:3 t 'IPv6' lw 2, 'data' using 1:($2 + $3) t 'IPv4+IPv6' lw 2
+plot 'data' using 1:4 t 'IPv6' lw 2, 'data' using 1:($2) t 'ALL' lw 2
 reset
 
 set terminal png small color
@@ -34,5 +34,5 @@ set ylabel "Requests (Percent)"
 set format x "%m/%Y"
 set grid
 set key left
-plot 'data' using 1:($3 / ($2 + $3) * 100) t 'IPv6' lw 2, 'data' using 1:($2 / ($2 + $3) * 100 ) t 'IPv4' lw 2
+plot 'data' using 1:($4 / $2 * 100) t 'IPv6' lw 2, 'data' using 1:($3 / $2 * 100 ) t 'IPv4' lw 2
 reset

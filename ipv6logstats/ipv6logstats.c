@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.3 2003/06/15 14:24:27 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.4 2003/06/15 15:08:42 peter Exp $
  * Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -222,6 +222,8 @@ static void lineparser(void) {
 		if (ipv6calc_debug != 0) {
 			fprintf(stderr, "%s: Token 1: '%s'\n", DEBUG_function_name, token);
 		};
+
+		stat_inc(STATS_ALL);
 
 		/* get input type now */
 		inputtype = libipv6calc_autodetectinput(token);
