@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.6 2002/03/03 12:55:43 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.7 2002/03/03 14:54:03 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ipv6calc.h"
+#include "ipv6calctypes.h"
 #include "libipv6addr.h"
 #include "libipv6calc.h"
 
