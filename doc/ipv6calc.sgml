@@ -1,53 +1,446 @@
 <!DOCTYPE article  PUBLIC "-//OASIS//DTD DocBook V4.1//EN">
 
-<article lang="en"><!-- DocBook file was created by LyX 1.2
+<article lang="en">
+<!-- DocBook file was created by LyX 1.3
   See http://www.lyx.org/ for more information -->
-<articleinfo><title>The ipv6calc Homepage</title></articleinfo>
-<sect1><title>General</title><para>ipv6calc is a small utility written in programming languate C to manipulate (not only) IPv6 addresses. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para><para>This utility is also used to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para><para>Note: this tool got also its <ulink url="http://freshmeat.net/projects/ipv6calc/">freshmeat / ipv6calc</ulink> page (not maintained by the author)</para><para>Hint: take also a look at the <ulink url="http://steinbeck.ucs.indiana.edu:47401/">Advanced Network Management Laboratory / IPv6 Address Oracle</ulink> if you want to learn more about IPv6 addresses.</para></sect1>
-<sect1><title>License</title><para>The program is published under the GNU GPL version 2.</para></sect1>
-<sect1><title>Author</title><para>The author of ipv6calc is</para><itemizedlist><listitem><para><ulink url="mailto:pb@bieringer.de">Dr. Peter Bieringer</ulink> with some minor contribution by others</para></listitem></itemizedlist></sect1>
-<sect1><title>Where to get sources or binaries:</title><sect2><title>Latest version of sources:</title><itemizedlist><listitem><para>Via CVS at <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink>: <ulink url="http://www.deepspace6.net/sections/cvs.html">DeepSpace6 / CVS instructions</ulink></para></listitem><listitem><para>Via web interface to CVS at <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink>: <ulink url="http://cvs.deepspace6.net/view/ipv6calc/">DeepSpace6 / CVS web interface</ulink></para></listitem><listitem><para>Via FTP at <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink>: <ulink url="ftp://ftp.deepspace6.net/pub/sources/ipv6calc/">DeepSpace6 / anonymous FTP</ulink></para></listitem><listitem><para>Via FTP at <ulink url="ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/">ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/</ulink></para></listitem></itemizedlist></sect2>
-<sect2><title>Available formats:</title><sect3><title>tar.gz</title><para>A SPEC file is included, so you can build a RPM from source tarball using</para><programlisting><![CDATA[$ rpm -ta path/to/ipv6calc-$version.tar.gz
-]]></programlisting></sect3>
-<sect3><title>as RPM</title><para>Currently only on <ulink url="http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc">rpmfind / ipv6calc</ulink>, but there are plans to publish at least source RPMS on <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink> some day.</para></sect3>
-</sect2>
-<sect2><title>Ready to use packages for several operating systems:</title><sect3><title>Red Hat Linux</title><para>Red Hat Linux is the developing platform, so use given hints above to create a RPM.</para></sect3>
-<sect3><title>Mandrake:</title><para>Linux Mandrake is very similar to Red Hat Linux, therefore a rebuild should work, too.</para></sect3>
-<sect3><title>PLD:</title><para>See <ulink url="http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc">rpmfind / ipv6calc</ulink>.</para></sect3>
-<sect3><title>Debian GNU/Linux</title><para>Package is maintained, more information can be found at <ulink url="http://packages.debian.org/ipv6calc">http://packages.debian.org/ipv6calc</ulink></para></sect3>
-<sect3><title>NetBSD:</title><para>See here for more: <ulink url="http://www.netbsd.org/packages/net/ipv6calc/">http://www.netbsd.org/packages/net/ipv6calc/</ulink></para></sect3>
-<sect3><title>FreeBSD:</title><para>See here for more: <ulink url="http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/">http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/</ulink> (<ulink url="http://www.freebsd.org/cgi/query-pr.cgi?pr=34441">http://www.freebsd.org/cgi/query-pr.cgi?pr=34441</ulink>)</para></sect3>
-<sect3><title>OpenBSD:</title><para>Someone told me time ago that a port is on the way...</para></sect3>
-</sect2>
-</sect1>
-<sect1><title>Mailling Lists</title><sect2><title>ipv6calc-announce</title><variablelist><varlistentry><term>Reason:
-</term><listitem><para>sending announcements of new versions</para></listitem></varlistentry><varlistentry><term>Traffic:
-</term><listitem><para>very low</para></listitem></varlistentry><varlistentry><term>Postings:
-</term><listitem><para>only moderators are allowed to post</para></listitem></varlistentry><varlistentry><term>Information:
-</term><listitem><para><ulink url="http://lists.deepspace6.net/listinfo/ipv6calc-announce">DeepSpace6 / maillist ipv6calc-announce</ulink></para></listitem></varlistentry></variablelist></sect2>
-<sect2><title>ipv6calc</title><variablelist><varlistentry><term>Reason:
-</term><listitem><para>discussions</para></listitem></varlistentry><varlistentry><term>Traffic:
-</term><listitem><para>currently very low, this list is new (started at Dec 2002)</para></listitem></varlistentry><varlistentry><term>Postings:
-</term><listitem><para>subscribers</para></listitem></varlistentry><varlistentry><term>Information:
-</term><listitem><para><ulink url="http://lists.deepspace6.net/listinfo/ipv6calc">DeepSpace6 / maillist ipv6calc</ulink></para></listitem></varlistentry></variablelist></sect2>
-</sect1>
-<sect1><title>Bug Reports</title><para>You can send bug reports to the author himself or subscribe to maillist &ldquo;ipv6calc&rdquo; and send it to the list.</para></sect1>
-<sect1><title>Features of ipv6calc</title><sect2><title>Description</title><para>The main program named &ldquo;ipv6calc&rdquo; is able to recognice many (not only) IPv6 address formats and depending on a selectable action (not required) a selectable output format can be specified.</para></sect2>
-<sect2><title>Examples</title><para>A simple example is the conversion of an IPv6 address to a DNS PTR query string:</para><programlisting><![CDATA[$ ./ipv6calc --out revnibbles.arpa 3ffe:ffff::1
+  <articleinfo>
+   <title>
+The ipv6calc Homepage
+  </title>
+    <revision>
+     <revnumber>
+Last update: 2003-08-28
+    </revnumber>
+
+    </revision>
+
+
+
+
+  </articleinfo>
+
+  <sect1>
+   <title>
+General
+  </title>
+  <para>
+ipv6calc is a small utility written in programming languate C to manipulate (not only) IPv6 addresses. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.
+  </para>
+  <para>
+This utility is also used to extend features on network-functions-ipv6 library, used by initscripts-ipv6.
+  </para>
+  <para>
+Note: this tool got also its <ulink url="http://freshmeat.net/projects/ipv6calc/">freshmeat / ipv6calc</ulink> page (not maintained by the author)
+  </para>
+  <para>
+Hint: take also a look at the <ulink url="http://steinbeck.ucs.indiana.edu:47401/">Advanced Network Management Laboratory / IPv6 Address Oracle</ulink> if you want to learn more about IPv6 addresses.
+  </para>
+
+  </sect1>
+
+  <sect1>
+   <title>
+License
+  </title>
+  <para>
+The program is published under the GNU GPL version 2.
+  </para>
+
+  </sect1>
+
+  <sect1>
+   <title>
+Author
+  </title>
+  <para>
+The author of ipv6calc is
+  </para>
+  <itemizedlist>
+   <listitem>
+   <para>
+<ulink url="mailto:pb@bieringer.de">Dr. Peter Bieringer</ulink> with some minor contribution by others
+   </para>
+
+  </listitem>
+
+  </itemizedlist>
+
+  </sect1>
+
+  <sect1>
+   <title>
+Where to get sources or binaries
+  </title>
+   <sect2>
+    <title>
+Latest version of sources:
+   </title>
+   <itemizedlist>
+    <listitem>
+    <para>
+Via CVS at <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink>: <ulink url="http://www.deepspace6.net/sections/cvs.html">DeepSpace6 / CVS instructions</ulink>
+    </para>
+
+   </listitem>
+    <listitem>
+    <para>
+Via web interface to CVS at <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink>: <ulink url="http://cvs.deepspace6.net/view/ipv6calc/">DeepSpace6 / CVS web interface</ulink>
+    </para>
+
+   </listitem>
+    <listitem>
+    <para>
+Via FTP at <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink>: <ulink url="ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/">DeepSpace6 / anonymous FTP</ulink>
+    </para>
+
+   </listitem>
+    <listitem>
+    <para>
+Via FTP at <ulink url="ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/">ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/</ulink>
+    </para>
+
+   </listitem>
+
+   </itemizedlist>
+
+   </sect2>
+
+   <sect2>
+    <title>
+Available formats:
+   </title>
+    <sect3>
+     <title>
+tar.gz
+    </title>
+    <para>
+A SPEC file is included, so you can build a RPM from source tarball using
+    </para>
+    <programlisting>
+<![CDATA[$ rpm -ta path/to/ipv6calc-$version.tar.gz
+]]>
+    </programlisting>
+
+    </sect3>
+
+    <sect3>
+     <title>
+as RPM
+    </title>
+    <para>
+Currently only on <ulink url="http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc">rpmfind / ipv6calc</ulink>, but there are plans to publish at least source RPMS on <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink> some day.
+    </para>
+
+    </sect3>
+
+
+   </sect2>
+
+   <sect2>
+    <title>
+Ready to use packages for several operating systems:
+   </title>
+    <sect3>
+     <title>
+Red Hat Linux
+    </title>
+    <para>
+Red Hat Linux (currently version 7.3) is the developing platform, so use given hints above to create a RPM.
+    </para>
+
+    </sect3>
+
+    <sect3>
+     <title>
+Mandrake:
+    </title>
+    <para>
+Linux Mandrake is very similar to Red Hat Linux, therefore a rebuild should work, too.
+    </para>
+
+    </sect3>
+
+    <sect3>
+     <title>
+PLD:
+    </title>
+    <para>
+See <ulink url="http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc">rpmfind / ipv6calc</ulink>.
+    </para>
+
+    </sect3>
+
+    <sect3>
+     <title>
+Debian GNU/Linux
+    </title>
+    <para>
+Package is maintained, more information can be found at <ulink url="http://packages.debian.org/ipv6calc">http://packages.debian.org/ipv6calc</ulink>
+    </para>
+
+    </sect3>
+
+    <sect3>
+     <title>
+NetBSD:
+    </title>
+    <para>
+See here for more: <ulink url="http://www.netbsd.org/packages/net/ipv6calc/">http://www.netbsd.org/packages/net/ipv6calc/</ulink>
+    </para>
+
+    </sect3>
+
+    <sect3>
+     <title>
+FreeBSD:
+    </title>
+    <para>
+See here for more: <ulink url="http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/">http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/</ulink> (<ulink url="http://www.freebsd.org/cgi/query-pr.cgi?pr=34441">http://www.freebsd.org/cgi/query-pr.cgi?pr=34441</ulink>)
+    </para>
+
+    </sect3>
+
+    <sect3>
+     <title>
+OpenBSD:
+    </title>
+    <para>
+Someone told me time ago that a port is on the way...
+    </para>
+
+    </sect3>
+
+
+   </sect2>
+
+
+  </sect1>
+
+  <sect1>
+   <title>
+Mailling Lists
+  </title>
+   <sect2>
+    <title>
+ipv6calc-announce
+   </title>
+   <variablelist>
+    <varlistentry>
+    <term>
+Reason:
+</term><listitem><para>sending announcements of new versions
+    </para>
+
+   </listitem>
+
+   </varlistentry>
+    <varlistentry>
+    <term>
+Traffic:
+</term><listitem><para>very low
+    </para>
+
+   </listitem>
+
+   </varlistentry>
+    <varlistentry>
+    <term>
+Postings:
+</term><listitem><para>only moderators are allowed to post
+    </para>
+
+   </listitem>
+
+   </varlistentry>
+    <varlistentry>
+    <term>
+Information:
+</term><listitem><para><ulink url="http://lists.deepspace6.net/listinfo/ipv6calc-announce">DeepSpace6 / maillist ipv6calc-announce</ulink>
+    </para>
+
+   </listitem>
+
+   </varlistentry>
+
+   </variablelist>
+
+   </sect2>
+
+   <sect2>
+    <title>
+ipv6calc
+   </title>
+   <variablelist>
+    <varlistentry>
+    <term>
+Reason:
+</term><listitem><para>discussions
+    </para>
+
+   </listitem>
+
+   </varlistentry>
+    <varlistentry>
+    <term>
+Traffic:
+</term><listitem><para>low
+    </para>
+
+   </listitem>
+
+   </varlistentry>
+    <varlistentry>
+    <term>
+Postings:
+</term><listitem><para>subscribers
+    </para>
+
+   </listitem>
+
+   </varlistentry>
+    <varlistentry>
+    <term>
+Information:
+</term><listitem><para><ulink url="http://lists.deepspace6.net/listinfo/ipv6calc">DeepSpace6 / maillist ipv6calc</ulink>
+    </para>
+
+   </listitem>
+
+   </varlistentry>
+
+   </variablelist>
+
+   </sect2>
+
+
+  </sect1>
+
+  <sect1>
+   <title>
+Bug Reports
+  </title>
+  <para>
+You can send bug reports to the author himself or subscribe to maillist &ldquo;ipv6calc&rdquo; and send it to the list.
+  </para>
+
+  </sect1>
+
+  <sect1>
+   <title>
+Features of ipv6calc
+  </title>
+   <sect2>
+    <title>
+Description
+   </title>
+   <para>
+The main program named &ldquo;ipv6calc&rdquo; is able to recognice many (not only) IPv6 address formats and depending on a selectable action (not required) a selectable output format can be specified.
+   </para>
+
+   </sect2>
+
+   <sect2>
+    <title>
+Examples
+   </title>
+   <para>
+A simple example is the conversion of an IPv6 address to a DNS PTR query string:
+   </para>
+   <programlisting>
+<![CDATA[$ ./ipv6calc --out revnibbles.arpa 3ffe:ffff::1
 ]]><![CDATA[No input type specified, try autodetection...found type: ipv6addr
 ]]><![CDATA[1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.f.f.e.f.f.3.ip6.arpa.
-]]></programlisting><para>Like you see, input format was autodetected. And given example can be extended because ipv6calc also understands netmask / prefix length values:</para><programlisting><![CDATA[$ ./ipv6calc -q --out revnibbles.arpa 3ffe:ffff::1/64
+]]>
+   </programlisting>
+   <para>
+Like you see, input format was autodetected. And given example can be extended because ipv6calc also understands netmask / prefix length values:
+   </para>
+   <programlisting>
+<![CDATA[$ ./ipv6calc -q --out revnibbles.arpa 3ffe:ffff::1/64
 ]]><![CDATA[0.0.0.0.0.0.0.0.f.f.f.f.e.f.f.3.ip6.arpa.
-]]></programlisting><para>Also you've learnt now that switch &ldquo;-q&rdquo; (quiet) suppresses informational messages. You can use this now to start a DNS PTR query using:</para><programlisting><![CDATA[$ dig PTR `./ipv6calc -q --out revnibbles.arpa 3ffe:ffff::1/64`
-]]></programlisting><para>But ipv6calc can do many more for you! Next example shows you the extraction of the IPv4 address contained in a 6to4 IPv6 address:</para><programlisting><![CDATA[$ ./ipv6calc -q --action conv6to4 --in ipv6 2002:c0a8:fb61::1 --out ipv4
+]]>
+   </programlisting>
+   <para>
+Also you've learnt now that switch &ldquo;-q&rdquo; (quiet) suppresses informational messages. You can use this now to start a DNS PTR query using:
+   </para>
+   <programlisting>
+<![CDATA[$ dig PTR `./ipv6calc -q --out revnibbles.arpa 3ffe:ffff::1/64`
+]]>
+   </programlisting>
+   <para>
+But ipv6calc can do many more for you! Next example shows you the extraction of the IPv4 address contained in a 6to4 IPv6 address:
+   </para>
+   <programlisting>
+<![CDATA[$ ./ipv6calc -q --action conv6to4 --in ipv6 2002:c0a8:fb61::1 --out ipv4
 ]]><![CDATA[192.168.251.97
-]]></programlisting><para>This also works vice-versa:</para><programlisting><![CDATA[$ ./ipv6calc -q --action conv6to4 --in ipv4 192.168.251.97 --out ipv6
+]]>
+   </programlisting>
+   <para>
+This also works vice-versa:
+   </para>
+   <programlisting>
+<![CDATA[$ ./ipv6calc -q --action conv6to4 --in ipv4 192.168.251.97 --out ipv6
 ]]><![CDATA[2002:c0a8:fb61::
-]]></programlisting><para>There are many more features already implemented, if you miss one, send a note.</para></sect2>
-<sect2><title>Option style</title><para>Since version 0.40 new-style option handling was introduced, using</para><itemizedlist><listitem><para>--in &lt;inputtype&gt;</para></listitem><listitem><para>--out &lt;outputtype&gt;</para></listitem><listitem><para>--action &lt;actiontype&gt;</para></listitem></itemizedlist><para>and many more conversions were added. A built-in check matrix should prevent misconversions.</para><para>Up to version 0.39, only old-style options (which perhaps - but it's not sure - are going obsolete in the future) were available. They are one-in-all options, specifying input/action/output in one token. Internally this options will be converted into new-style options.</para></sect2>
-<sect2><title>Online help</title><para>Online help always shows the currently implemented features.</para><sect3><title>Main online help:</title><programlisting><![CDATA[$ ./ipv6calc -?
-]]><![CDATA[ipv6calc: version 0.45
-]]><![CDATA[(P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+]]>
+   </programlisting>
+   <para>
+There are many more features already implemented, if you miss one, send a note.
+   </para>
+
+   </sect2>
+
+   <sect2>
+    <title>
+Option style
+   </title>
+   <para>
+Since version 0.40 new-style option handling was introduced, using
+   </para>
+   <itemizedlist>
+    <listitem>
+    <para>
+--in &lt;inputtype&gt;
+    </para>
+
+   </listitem>
+    <listitem>
+    <para>
+--out &lt;outputtype&gt;
+    </para>
+
+   </listitem>
+    <listitem>
+    <para>
+--action &lt;actiontype&gt;
+    </para>
+
+   </listitem>
+
+   </itemizedlist>
+   <para>
+and many more conversions were added. A built-in check matrix should prevent misconversions.
+   </para>
+   <para>
+Up to version 0.39, only old-style options (which perhaps - but it's not sure - are going obsolete in the future) were available. They are one-in-all options, specifying input/action/output in one token. Internally this options will be converted into new-style options.
+   </para>
+
+   </sect2>
+
+   <sect2>
+    <title>
+Online help
+   </title>
+   <para>
+Online help always shows the currently implemented features.
+   </para>
+    <sect3>
+     <title>
+Main online help:
+    </title>
+    <programlisting>
+<![CDATA[$ ./ipv6calc -?
+]]><![CDATA[ipv6calc: version 0.46
+]]><![CDATA[(P) & (C) 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
 ]]><![CDATA[
 ]]><![CDATA[ General:
 ]]><![CDATA[  [-d|--debug <debug value>] : debug value (bitwise like)
@@ -73,9 +466,15 @@
 ]]><![CDATA[  --showinfo|-i --show_types            : show available types on '-m'
 ]]><![CDATA[
 ]]><![CDATA[ To see old-style option use: --printoldoptions
-]]></programlisting><para>Input-type options</para><programlisting><![CDATA[$ ./ipv6calc --in -?
-]]><![CDATA[ipv6calc: version 0.45 
-]]><![CDATA[(P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+]]>
+    </programlisting>
+    <para>
+Input-type options
+    </para>
+    <programlisting>
+<![CDATA[$ ./ipv6calc --in -?
+]]><![CDATA[ipv6calc: version 0.46
+]]><![CDATA[(P) & (C) 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
 ]]><![CDATA[
 ]]><![CDATA[ Available input types:
 ]]><![CDATA[  auto           : automatic detection
@@ -90,8 +489,14 @@
 ]]><![CDATA[  iid+token      : Interface identifier and token
 ]]><![CDATA[  ipv6logconv    : ipv6logconv (currently not supported)
 ]]><![CDATA[  prefix+mac     : IPv6 prefix and a MAC address
-]]></programlisting><para>Output-type options:</para><programlisting><![CDATA[$ ./ipv6calc --out -?
-]]><![CDATA[ipv6calc: version 0.45 (P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+]]>
+    </programlisting>
+    <para>
+Output-type options:
+    </para>
+    <programlisting>
+<![CDATA[$ ./ipv6calc --out -?
+]]><![CDATA[ipv6calc: version 0.46 (P) & (C) 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
 ]]><![CDATA[ Available output types:
 ]]><![CDATA[  revnibbles.int : dot separated nibbles reverse, ending with ip6.int.
 ]]><![CDATA[  revnibbles.arpa: dot separated nibbles reverse, ending with ip6.arpa.
@@ -109,10 +514,17 @@
 ]]><![CDATA[  ipv6addrtype   : IPv6 address type
 ]]><![CDATA[  any            : any type (currently not supported)
 ]]><![CDATA[  revipv4        : reverse IPv4, ending with in-addr.arpa
+]]><![CDATA[  octal          : IP address in escaped octal format
 ]]><![CDATA[
 ]]><![CDATA[For examples and available format options use:
 ]]><![CDATA[    --out <type> --examples 
-]]></programlisting><para>Action-type options: </para><programlisting><![CDATA[$ ./ipv6calc --action -?
+]]>
+    </programlisting>
+    <para>
+Action-type options: 
+    </para>
+    <programlisting>
+<![CDATA[$ ./ipv6calc --action -?
 ]]><![CDATA[ipv6calc: version 0.45 (P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
 ]]><![CDATA[ Available action types:
 ]]><![CDATA[  auto          : Automatic selection of action (default)
@@ -120,7 +532,13 @@
 ]]><![CDATA[  conv6to4      : Converts IPv4 address <-> 6to4 IPv6 address (prefix)
 ]]><![CDATA[  genprivacyiid : Generates a privacy interface ID out of a given one and a token
 ]]><![CDATA[  prefixmac2ipv6: Generates an IPv6 address out of a prefix and a MAC address
-]]></programlisting><para>Because of historical issues, there exists also a support of the old-styled options: </para><programlisting><![CDATA[$ ./ipv6calc --printoldoptions
+]]>
+    </programlisting>
+    <para>
+Because of historical issues, there exists also a support of the old-styled options: 
+    </para>
+    <programlisting>
+<![CDATA[$ ./ipv6calc --printoldoptions
 ]]><![CDATA[ipv6calc: version 0.45 (P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
 ]]><![CDATA[ Usage with old style (shortcut) options (going obsolete):
 ]]><![CDATA[  <shortcut option> [<format option> ...] <input data> [...]
@@ -145,13 +563,105 @@
 ]]><![CDATA[  --eui64_to_privacy
 ]]><![CDATA[  --ipv4_to_6to4addr
 ]]><![CDATA[
-]]></programlisting></sect3>
-</sect2>
-</sect1>
-<sect1><title>Webserver log conversion helper program &quot;ipv6logconv&quot;</title><para>This program parses address tokens of a given webserver logfile and converts them to special strings, useful for statistics (e.g. created by using &quot;analog&quot;).</para><sect2><title>Examples</title><para>A demonstration about which kind of statistics are possible to produce is shown at <ulink url="http://www.ipv6.bieringer.de/">http://www.ipv6.bieringer.de/</ulink> (IPv6 only).</para></sect2>
-</sect1>
-<sect1><title>Perl CGI wrapper program &quot;ipv6calcweb.cgi&quot;</title><para>Because calling C programs directly as CGI isn't really recommended (too much security troubles all the time), I wrote a small wrapper utility which calls &quot;ipv6calc&quot; to get information about client and server address. </para><sect2><title>Examples</title><para>A demonstration about which kind of output is possible to produce is shown at</para><itemizedlist><listitem><para><ulink url="http://www.ipv6.bieringer.de/">http://www.ipv6.bieringer.de/</ulink> (IPv6 only)</para></listitem><listitem><para><ulink url="http://ipv6to4.aerasec.de/index2.html">http://ipv6to4.aerasec.de/index2.html</ulink> (IPv4/IPv6)</para></listitem><listitem><para><ulink url="http://www.sixxs.net/tools/ipv6calc/">http://www.sixxs.net/tools/ipv6calc/</ulink>(IPv4/IPv6)</para></listitem></itemizedlist></sect2>
-</sect1>
+]]>
+    </programlisting>
+
+    </sect3>
+
+
+   </sect2>
+
+
+  </sect1>
+
+  <sect1>
+   <title>
+Webserver log conversion helper program &quot;ipv6logconv&quot;
+  </title>
+  <para>
+This program parses address tokens of a given webserver logfile and converts them to special strings, useful for statistics (e.g. created by using &quot;analog&quot;).
+  </para>
+   <sect2>
+    <title>
+Examples
+   </title>
+   <para>
+A demonstration about which kind of statistics are possible to produce is shown at <ulink url="http://www.ipv6.bieringer.de/">http://www.ipv6.bieringer.de/</ulink> (IPv6 only).
+   </para>
+
+   </sect2>
+
+
+  </sect1>
+
+  <sect1>
+   <title>
+Perl CGI wrapper program &quot;ipv6calcweb.cgi&quot;
+  </title>
+  <para>
+Because calling C programs directly as CGI isn't really recommended (too much security troubles all the time), I wrote a small wrapper utility which calls &quot;ipv6calc&quot; to get information about client and server address. 
+  </para>
+   <sect2>
+    <title>
+Examples
+   </title>
+   <para>
+A demonstration about which kind of output is possible to produce is shown at
+   </para>
+   <itemizedlist>
+    <listitem>
+    <para>
+<ulink url="http://www.ipv6.bieringer.de/">http://www.ipv6.bieringer.de/</ulink> (IPv6 only)
+    </para>
+
+   </listitem>
+    <listitem>
+    <para>
+<ulink url="http://ipv6.aerasec.de/index2.html">http://ipv6.aerasec.de/index2.html</ulink> (IPv4/IPv6)
+    </para>
+
+   </listitem>
+    <listitem>
+    <para>
+<ulink url="http://www.sixxs.net/tools/ipv6calc/">http://www.sixxs.net/tools/ipv6calc/</ulink> (IPv4/IPv6)
+    </para>
+
+   </listitem>
+    <listitem>
+    <para>
+<ulink url="http://ipv6-info.internet2.edu/">http://ipv6-info.internet2.edu/</ulink>
+    </para>
+
+   </listitem>
+
+   </itemizedlist>
+
+   </sect2>
+
+
+  </sect1>
+
+  <sect1>
+   <title>
+Webserver log statistics helper program &quot;ipv6logstats&quot;
+  </title>
+  <para>
+This program parses a given webserver logfile and count addresses, useful for time period statistics.
+  </para>
+   <sect2>
+    <title>
+Examples
+   </title>
+   <para>
+A demonstration about which kind of statistics is currently not public online.
+   </para>
+
+   </sect2>
+
+
+  </sect1>
+
+
 
 
 </article>
