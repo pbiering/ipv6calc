@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.3 2002/03/26 23:11:15 peter Exp $
+ * Version    : $Id: libieee.c,v 1.4 2004/10/30 12:36:17 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -14,7 +14,9 @@
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
 #include "libieee.h"
+#include "libmac.h"
 #include "../databases/ieee-oui/dbieee_oui.h"
+#include "../databases/ieee-iab/dbieee_iab.h"
 
 /*
  * Get vendor string
@@ -23,35 +25,47 @@
  * out: 0=found, 1=not found
  */
 #define DEBUG_function_name "libieee/get_vendor_string"
-int libieee_get_vendor_string(char *resultstring, const uint8_t o1,  const uint8_t o2, const uint8_t o3) {
+int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macaddrp) {
 	int retval = 1;
 	int i;
-	uint32_t idval;
+	uint32_t idval, subidval;
 
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "%s: called\n", DEBUG_function_name);
 	};
 
 	/* catch special ones */
-	if ((o1 == 0xfc && o2 == 0xfc)) {
+	if ((macaddrp->addr[0] == 0xfc && macaddrp->addr[1] == 0xfc)) {
 		/* Linux special OUI for ISDN-NET or PLIP interfaces */
 		snprintf(resultstring, NI_MAXHOST, "Linux ISDN-NET/PLIP");
 		return (0);
 	};
 	
-	if ( (o1 & 0x01) != 0 ) {
+	if ( (macaddrp->addr[0] & 0x01) != 0 ) {
 		/* Multicast */
 		return (1);
 	};
 
-	if ( (o1 & 0x02) != 0 ) {
+	if ( (macaddrp->addr[0] & 0x02) != 0 ) {
 		/* Not global scope */
 		return (1);
 	};
 
-	idval = (o1 << 16) | (o2 << 8) | o3;
+	idval = (macaddrp->addr[0] << 16) | (macaddrp->addr[1] << 8) | macaddrp->addr[2];
+	subidval = (macaddrp->addr[3] << 16) | (macaddrp->addr[4] << 8) | macaddrp->addr[5];
 
-	/* run through OUI list now */
+	/* run through IAB list */
+	for (i = 0; i < (int) (sizeof(libieee_iab) / sizeof(libieee_iab[0])); i++) {
+		if (libieee_iab[i].id == idval) {
+			/* major id match */
+			if (libieee_iab[i].subid_begin <= subidval && libieee_iab[i].subid_end >= subidval) {
+				snprintf(resultstring, NI_MAXHOST, "%s", libieee_iab[i].string_owner);
+				return (0);
+			};
+		};
+	};
+
+	/* run through OUI list */
 	for (i = 0; i < (int) (sizeof(libieee_oui) / sizeof(libieee_oui[0])); i++) {
 		if (libieee_oui[i].id == idval) {
 			/* match */
@@ -73,35 +87,47 @@ int libieee_get_vendor_string(char *resultstring, const uint8_t o1,  const uint8
  * out: 0=found, 1=not found
  */
 #define DEBUG_function_name "libieee/get_short_vendor_string"
-int libieee_get_short_vendor_string(char *resultstring, const uint8_t o1, const uint8_t o2, const uint8_t o3) {
+int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *macaddrp) {
 	int retval = 1;
 	int i;
-	uint32_t idval;
+	uint32_t idval, subidval;
 
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "%s: called\n", DEBUG_function_name);
 	};
 
 	/* catch special ones */
-	if ((o1 == 0xfc && o2 == 0xfc)) {
+	if ((macaddrp->addr[0] == 0xfc && macaddrp->addr[1] == 0xfc)) {
 		/* Linux special OUI for ISDN-NET or PLIP interfaces */
 		snprintf(resultstring, NI_MAXHOST, "Linux-ISDN-NET+PLIP");
 		return (0);
 	};
 	
-	if ( (o1 & 0x01) != 0 ) {
+	if ( (macaddrp->addr[0] & 0x01) != 0 ) {
 		/* Multicast */
 		return (1);
 	};
 
-	if ( (o1 & 0x02) != 0 ) {
+	if ( (macaddrp->addr[0] & 0x02) != 0 ) {
 		/* Not global scope */
 		return (1);
 	};
 
-	idval = (o1 << 16) | (o2 << 8) | o3;
+	idval = (macaddrp->addr[0] << 16) | (macaddrp->addr[1] << 8) | macaddrp->addr[2];
+	subidval = (macaddrp->addr[3] << 16) | (macaddrp->addr[4] << 8) | macaddrp->addr[5];
 
-	/* run through OUI list now */
+	/* run through IAB list */
+	for (i = 0; i < (int) (sizeof(libieee_iab) / sizeof(libieee_iab[0])); i++) {
+		if (libieee_iab[i].id == idval) {
+			/* major id match */
+			if (libieee_iab[i].subid_begin <= subidval && libieee_iab[i].subid_end >= subidval) {
+				snprintf(resultstring, NI_MAXHOST, "%s", libieee_iab[i].shortstring_owner);
+				return (0);
+			};
+		};
+	};
+
+	/* run through OUI list */
 	for (i = 0; i < (int) (sizeof(libieee_oui) / sizeof(libieee_oui[0])); i++) {
 		if (libieee_oui[i].id == idval) {
 			/* match */

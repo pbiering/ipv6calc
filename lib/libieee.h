@@ -1,13 +1,14 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.h
- * Version    : $Id: libieee.h,v 1.5 2002/04/21 11:24:08 peter Exp $
+ * Version    : $Id: libieee.h,v 1.6 2004/10/30 12:36:17 peter Exp $
  *
  * Information:
  *  Header file for libieee.c
  */
 
 #include "ipv6calc_inttypes.h"
+#include "libmac.h"
 
 
 #ifndef _libieee_h
@@ -21,9 +22,17 @@ typedef struct {
 	const char *shortstring_owner;
 } s_ieee_oui;
 
+typedef struct {
+	const uint32_t id;
+	const uint32_t subid_begin;
+	const uint32_t subid_end;
+	const char *string_owner;
+	const char *shortstring_owner;
+} s_ieee_iab;
+
 #endif
 
 /* extern static const s_ieee_oui libieee_oui[];*/
 
-extern int libieee_get_vendor_string(char *resultstring, const uint8_t o1, const uint8_t o2, const uint8_t o3);
-extern int libieee_get_short_vendor_string(char *resultstring, const uint8_t, const uint8_t o2, const uint8_t o3);
+extern int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macaddrp);
+extern int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *macaddrp);
