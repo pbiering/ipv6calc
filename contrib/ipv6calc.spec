@@ -1,11 +1,11 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Version    : $Id: ipv6calc.spec,v 1.13 2002/11/04 19:57:07 peter Exp $
+# Version    : $Id: ipv6calc.spec,v 1.14 2002/11/12 19:17:58 peter Exp $
 # Copyright  : 2001-2002 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
 Name: ipv6calc
-Version: 0.44
+Version: 0.45
 Release: 1
 Group: System Environment/Base
 URL: http://www.bieringer.de/linux/IPv6/ipv6calc/
@@ -16,7 +16,6 @@ Source: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/ipv6calc-%{version}.tar.g
 BuildRoot: %{_tmppath}/ipv6calc-root
 Requires: openssl
 BuildRequires: openssl-devel 
-#BuildRequires: openssl-devel perl /usr/bin/aggregate wget
 
 %description
 ipv6calc is a small utility which formats and calculates IPv6 addresses in
@@ -25,7 +24,7 @@ different ways.
 Install this package, if you want to extend the existing address detection
 on IPv6 initscript setup or make life easier in adding reverse IPv6 zones to DNS
 or using in DNS queries like
- nslookup -q=ANY `ipv6calc -r 3ffe:400:100:f101::1/48`
+ dig -t ANY `ipv6calc -r 3ffe:ffff:100::1/48`
 See also here for more details: http://www.bieringer.de/linux/IPv6/
 
 %prep
@@ -63,6 +62,9 @@ rm -rf $RPM_BUILD_ROOT
 %doc examples/analog/analog-dist.cfg %doc examples/analog/run_analog.sh examples/analog/ipv6calc.tab ipv6calcweb/ipv6calcweb.cgi examples/analog/analog-ipv6calc-descriptions.txt examples/analog/analog-dist-combined.cfg
 
 %changelog
+* Tue Nov 11 2002 Peter Bieringer <pb@bieringer.de>
+- change IPv6 address in %description
+
 * Sat Apr 20 2002 Peter Bieringer <pb@bieringer.de>
 - Change URL
 
