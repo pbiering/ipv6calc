@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.15 2002/03/03 12:55:42 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.16 2002/03/03 18:21:34 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -46,7 +46,7 @@ int main(int argc,char *argv[]) {
 	char resultstring[NI_MAXHOST] = "";
 	char resultstring2[NI_MAXHOST] = "";
 	char resultstring3[NI_MAXHOST] = "";
-	int retval = 1, i, lop;
+	int retval = 1, i, j, lop;
 	unsigned long int command = 0;
 	unsigned short bit_start = 0, bit_end = 0;
 
@@ -57,7 +57,7 @@ int main(int argc,char *argv[]) {
 	long int action = -1;
 
 	/* format options storage */
-	unsigned int formatoptions = 0;
+	unsigned long formatoptions = 0;
 
 	/* used structures */
 	ipv6calc_ipv6addr ipv6addr, ipv6addr2, ipv6addr3, ipv6addr4;
@@ -130,12 +130,9 @@ int main(int argc,char *argv[]) {
 		{ "machine_readable"     , 0, 0, FORMATOPTION_machinereadable + FORMATOPTION_HEAD },
 
 		/* new options */
-		{ "inputtype" , 1, 0, CMD_inputtype  },
-		{ "intype"    , 1, 0, CMD_inputtype  },
-		{ "outputtype", 1, 0, CMD_outputtype },
-		{ "outtype"   , 1, 0, CMD_outputtype },
+		{ "in"        , 1, 0, CMD_inputtype  },
+		{ "out"       , 1, 0, CMD_outputtype },
 		{ "action"    , 1, 0, CMD_actiontype },
-		{ "actiontype", 1, 0, CMD_actiontype },
 
 		{NULL, 0, 0, 0}
 	};                
@@ -163,7 +160,7 @@ int main(int argc,char *argv[]) {
 				break;
 
 			case CMD_printexamples:
-				command |= CMD_printexamples | CMD_printhelp;
+				command = CMD_printexamples;
 				break;
 
 
@@ -257,7 +254,6 @@ int main(int argc,char *argv[]) {
 
 			case 'i':
 			case CMD_showinfo:
-				inputtype  = FORMAT_ipv6addr;
 				command = CMD_showinfo;
 				break;
 
@@ -404,14 +400,13 @@ int main(int argc,char *argv[]) {
 			exit(1);
 		};
 
-		if (command & CMD_printexamples) {
-			printhelp_output_dispatcher(outputtype);
-			exit(1);
-		};
+	} else if (command == CMD_printexamples) {
+		printhelp_output_dispatcher(outputtype);
+		exit(1);
 	};
 
 	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "Debug value: %lx  command: %lx  inputtype: %lx   outputtype: %lx  action: %lx\n", ipv6calc_debug, command, inputtype, outputtype, action); 
+		fprintf(stderr, "Debug value:%lx  command:%lx  inputtype:%lx   outputtype:%lx  action:%lx  formatoptions:%lx\n", ipv6calc_debug, command, inputtype, outputtype, action, formatoptions); 
 	};
 	
 	/* do work depending on selection */
@@ -441,12 +436,49 @@ int main(int argc,char *argv[]) {
 		fprintf(stderr, "%s: Start of input type handling\n", DEBUG_function_name);
 	};
 
-	switch (inputtype) {
-		case -1:
-			/* old implementation */
-			goto OUTPUT_type;
-			break;
+	/* autodetection */
+	if ((inputtype == -1 || inputtype == FORMAT_auto) && argc > 0) {
+		/* no input type specified or automatic selected */
+		fprintf(stderr, "No input type specified, try autodetection...");
+		
+		inputtype = libipv6calc_autodetectinput(argv[0]);
 
+		if (inputtype >= 0) {
+			for (i = 0; i < sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0]); i++) {
+				if (inputtype == ipv6calc_formatstrings[i].number) {
+					fprintf(stderr, "found type: %s\n", ipv6calc_formatstrings[i].token);
+					break;
+				};
+			};
+		} else {
+			fprintf(stderr, "no result!\n");
+		};
+	};
+
+	/* check formatoptions whether valid */
+	for (i = 0; i < sizeof(ipv6calc_outputformatoptionmap) / sizeof(ipv6calc_outputformatoptionmap[0]); i++) {
+		if (outputtype != ipv6calc_outputformatoptionmap[i][0]) {
+			continue;
+		};
+		
+		if ((ipv6calc_outputformatoptionmap[i][1] & formatoptions) == formatoptions) {
+			/* all options valid */
+			break;
+		};
+		
+		fprintf(stderr, " Unsupported format option(s):\n");
+
+		/* run through format options */
+		for (j = 0; j < sizeof(ipv6calc_formatoptionstrings) / sizeof (ipv6calc_formatoptionstrings[0]); j++) {
+			if (((~ ipv6calc_outputformatoptionmap[i][1]) & formatoptions) & ipv6calc_formatoptionstrings[j].number) {
+				fprintf(stderr, "  %s: %s\n", ipv6calc_formatoptionstrings[j].token, ipv6calc_formatoptionstrings[j].explanation);
+			};
+		};
+		exit(1);
+	};
+	
+	/* proceed input depending on type */	
+	switch (inputtype) {
 		case FORMAT_ipv6addr:
 			if (argc < 1) { printhelp_missinginputdata(); exit(1); };
 			retval = addr_to_ipv6addrstruct(argv[0], resultstring, &ipv6addr);
@@ -628,6 +660,9 @@ int main(int argc,char *argv[]) {
 	if (ipv6calc_debug) {
 		fprintf(stderr, "%s: Start of action\n", DEBUG_function_name);
 	};
+
+	/* clear resultstring */
+	sprintf(resultstring, "%s", "");
 	
 	switch (action) {
 		case ACTION_mac_to_eui64:
@@ -639,11 +674,24 @@ int main(int argc,char *argv[]) {
 			break;
 			
 		case ACTION_ipv4_to_6to4addr:
-			if (ipv4addr.flag_valid != 1) {
-				fprintf(stderr, "No valid IPv4 address given!\n");
+			if (inputtype == FORMAT_ipv4addr && outputtype == FORMAT_ipv6addr) {
+				/* IPv4 -> IPv6 */
+				if (ipv4addr.flag_valid != 1) {
+					fprintf(stderr, "No valid IPv4 address given!\n");
+					exit(1);
+				};
+				retval = librfc3056_ipv4addr_to_ipv6to4addr(&ipv6addr, &ipv4addr);
+			} else if (inputtype == FORMAT_ipv6addr && outputtype == FORMAT_ipv4addr) {
+				/* IPv6 -> IPv4 */
+				if (ipv6addr.flag_valid != 1) {
+					fprintf(stderr, "No valid IPv6 address given!\n");
+					exit(1);
+				};
+				retval = librfc3056_ipv6addr_to_ipv4addr(&ipv4addr, &ipv6addr, resultstring);
+			} else {
+				fprintf(stderr, "Unsupported 6to4 conversion!\n");
 				exit(1);
 			};
-			retval = ipv4addr_to_ipv6to4addr(&ipv6addr, &ipv4addr);
 			break;
 			
 		case ACTION_iid_token_to_privacy:
@@ -662,15 +710,13 @@ int main(int argc,char *argv[]) {
 	};
 
 	if (retval != 0) {
-		fprintf(stderr, "Problem occurs during action\n");
+		fprintf(stderr, "Problem occurs during action: %s\n", resultstring);
 		exit (1);
 	};
 
 	if (ipv6calc_debug) {
 		fprintf(stderr, "%s: End of action\n", DEBUG_function_name);
 	};
-
-OUTPUT_type: /* temporary solutions */
 
 	/***** output type *****/
 	if (ipv6calc_debug) {
@@ -682,8 +728,7 @@ OUTPUT_type: /* temporary solutions */
 		if (ipv6addr.flag_valid == 1) {
 			retval = showinfo_ipv6addr(&ipv6addr, formatoptions);
 	       	} else if (ipv4addr.flag_valid == 1) {
-		       	fprintf(stderr, "Showinfo of IPv4 address currently not implemented!\n");
-			retval = 1;
+			retval = showinfo_ipv4addr(&ipv4addr, formatoptions);
 	       	} else if (macaddr.flag_valid == 1) {
 		       	fprintf(stderr, "Showinfo of MAC address currently not implemented!\n");
 			retval = 1;
@@ -747,6 +792,10 @@ OUTPUT_type: /* temporary solutions */
 			} else {
 				retval = librfc1884_ipv6addrstruct_to_compaddr(&ipv6addr, resultstring, formatoptions);
 			};
+			break;
+			
+		case FORMAT_ipv4addr:
+			retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, resultstring, formatoptions);
 			break;
 			
 		case FORMAT_eui64:

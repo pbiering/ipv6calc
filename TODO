@@ -1,6 +1,6 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.5 2002/03/03 11:01:53 peter Exp $
+# Version: $Id: TODO,v 1.6 2002/03/03 18:21:33 peter Exp $
 
 TODO list
 
@@ -9,8 +9,6 @@ Documentation:
 
 Features:
 * ip6int_to_addr
-* IPv4 address extraction of autoconfigured link local addresses
-* 6to4addr -> IPv4 (currently only via showinfo)
 * showinfo: add vendor database for global EUI-64/48 identifiers
 
 Format features

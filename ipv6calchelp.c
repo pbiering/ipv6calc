@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.3 2002/03/03 11:03:37 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.4 2002/03/03 18:21:34 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -21,7 +21,8 @@
 
 /* display info */
 void printversion(void) {
-	fprintf(stderr, "%s  version: %s\n", PROGRAM_NAME, PROGRAM_VERSION);
+	fprintf(stderr, "\n");
+	fprintf(stderr, "%s: version %s\n", PROGRAM_NAME, PROGRAM_VERSION);
 };
 
 void printcopyright(void) {
@@ -113,6 +114,7 @@ void printhelp_inputtypes(void) {
 			};
 		};
 	};
+	fprintf(stderr, "\n");
 };
 
 
@@ -173,7 +175,8 @@ void printhelp_outputtypes(long int inputtype) {
 		};
 	};
 	fprintf(stderr, "\n For examples and available format options use:\n");
-	fprintf(stderr, "   %s --outputtype <type> --examples\n", PROGRAM_NAME);
+	fprintf(stderr, "   %s --out <type> --examples\n", PROGRAM_NAME);
+	fprintf(stderr, "\n");
 };
 
 
@@ -211,6 +214,7 @@ void printhelp_actiontypes(void) {
 		};
 		fprintf(stderr, printformatstring, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
 	};
+	fprintf(stderr, "\n");
 };
 
 
@@ -218,23 +222,27 @@ void printhelp_actiontypes(void) {
 void printhelp(void) {
 	printversion();
 	printcopyright();
-	fprintf(stderr, "\nGeneral:\n");
-	fprintf(stderr, " [-d|--debug <debug value>] ...\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr, " General:\n");
+	fprintf(stderr, "  [-d|--debug <debug value>] : debug value (bitwise like)\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr, " Usage with new style options:\n");
+	fprintf(stderr, "  [--in <input type>]   : specify input  type (default: autodetection)\n");
+	fprintf(stderr, "  --out <output type>   : specify output type\n");
+	fprintf(stderr, "  [--action <action>]   : specify action (default: format conversion or autodetected on input/output types)\n");
+	fprintf(stderr, "  [<format option> ...] : specify format options\n");
+	fprintf(stderr, "  <input data> [...]    : input data\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr, "  Available input  types:  --in     -?\n");
+	fprintf(stderr, "  Available output types:  --out    -?\n");
+	fprintf(stderr, "  Available action types:  --action -?\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr, " Usage with old style (shortcut) options:\n");
+	fprintf(stderr, "  <shortcut option> [<format option> ...] <input data> [...]\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr, "  --showinfo|-i [--machine_readable|-m] : show information about input data\n");
+	fprintf(stderr, "  --showinfo|-i --show_types            : show available types on '-m'\n");
 	
-	fprintf(stderr, "Usage with new style options:\n");
-	fprintf(stderr, " %s --inputtype|--intype <input type> --outputtype|--outtype <output type> [--actiontype|--action <action>] [<format option> ...] <input data>\n", PROGRAM_NAME);
-	fprintf(stderr, "  For more help about input types see:\n");
-	fprintf(stderr, "   %s --inputtype|--intype -?\n", PROGRAM_NAME);
-	fprintf(stderr, "  For more help about output types see:\n");
-	fprintf(stderr, "   %s --outputtype|--outtype -?\n", PROGRAM_NAME);
-	fprintf(stderr, "  For more help about action types see:\n");
-	fprintf(stderr, "   %s --actiontype|--action -?\n", PROGRAM_NAME);
-
-	fprintf(stderr, "\nOld style options:\n");
-	fprintf(stderr, "Usage: (see '%s <command> -?' for more help)\n", PROGRAM_NAME);
-	
-	showinfo_printhelp();
-
 	return;
 };
 
@@ -258,7 +266,7 @@ static void printhelp_output_bitstring(void) {
 static void printhelp_output_ipv6addr(void) {
 	fprintf(stderr, " Print a given IPv6 address depending on format options:\n");
 	fprintf(stderr, "  Uncompressed, e.g.\n");
-	fprintf(stderr, "   3ffe:ffff:100:f101::1 -> 3ffe:ffff:100:f101:0:0:0:1\n");
+	fprintf(stderr, "   3ffe:ffff:100:f101::1    -> 3ffe:ffff:100:f101:0:0:0:1\n");
 	fprintf(stderr, "   3ffe:ffff:100:f101::1/64 -> 3ffe:ffff:100:f101:0:0:0:1/64\n");
 	fprintf(stderr, "  Full uncompressed, e.g.\n");
 	fprintf(stderr, "   3ffe:ffff:100:f101::1 -> 3ffe:ffff:0100:f101:0000:0000:0000:0001\n");
@@ -292,6 +300,10 @@ static void printhelp_output_ifinet6void(void) {
 	fprintf(stderr, " Print a given IPv6 address to same format shown in Linux /proc/net/if_inet6:\n");
 	fprintf(stderr, "  3ffe:ffff:100:f101::1    -> 3ffeffff0100f1010000000000000001 00\n");
 	fprintf(stderr, "  3ffe:ffff:100:f101::1/64 -> 3ffeffff0100f1010000000000000001 00 40\n");
+};
+
+static void printhelp_output_ipv4addr(void) {
+	fprintf(stderr, " Print an IPv4 address\n");
 };
 
 
@@ -335,6 +347,10 @@ void printhelp_output_dispatcher(long int outputtype) {
 			printhelp_output_iid_token();
 			break;
 
+		case FORMAT_ipv4addr:
+			printhelp_output_ipv4addr();
+			break;
+
 		default:
 			fprintf(stderr, " Help currently missing...!\n");
 			break;
@@ -344,9 +360,11 @@ void printhelp_output_dispatcher(long int outputtype) {
 	for (i = 0; i < sizeof(ipv6calc_outputformatoptionmap) / sizeof(ipv6calc_outputformatoptionmap[0]); i++) {
 		if (outputtype == ipv6calc_outputformatoptionmap[i][0]) {
 			if (ipv6calc_outputformatoptionmap[i][1] == 0) {
+				fprintf(stderr, " No format options supported\n");
 				break;
 			};
 			
+			fprintf(stderr, "\n");
 			fprintf(stderr, " Available format options:\n");
 
 			/* run through format options */
@@ -358,7 +376,5 @@ void printhelp_output_dispatcher(long int outputtype) {
 			break;
 		};
 	};
+	fprintf(stderr, "\n");
 };
-
-
-

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.6 2002/03/03 12:55:43 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.7 2002/03/03 18:21:34 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -63,7 +63,7 @@ static const s_format ipv6calc_formatstrings[] = {
 
 /* Format conversion matrix */
 static const long int ipv6calc_formatmatrix[][2] = {
-	{ FORMAT_auto           , 0xffff },
+	{ FORMAT_auto           , 0 },
 	{ FORMAT_revnibbles_int , 0 }, /* input currently not supported */
 	{ FORMAT_revnibbles_arpa, 0 }, /* input currently not supported */
 	{ FORMAT_bitstring      , 0 }, /* input currently not supported */
@@ -145,7 +145,7 @@ typedef struct {
 static const s_action ipv6calc_actionstrings[] = {
 	{ ACTION_auto                   , "auto"           , "Automatic selection of action (default)", "" },
 	{ ACTION_mac_to_eui64           , "geneui64"       , "Converts a MAC address to an EUI-64 address", "" },
-	{ ACTION_ipv4_to_6to4addr       , "gen6to4"        , "Converts an IPv4 address to a 6to4 IPv6 address prefix", "" },
+	{ ACTION_ipv4_to_6to4addr       , "conv6to4"       , "Converts IPv4 address <-> 6to4 IPv6 address (prefix)", "" },
 	{ ACTION_iid_token_to_privacy   , "genprivacyiid"  , "Generates a privacy interface ID out of a given one and a token", "" },
 };
 

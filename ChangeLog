@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.22 2002/03/03 11:01:53 peter Exp $ 
+ *  $Id: ChangeLog,v 1.23 2002/03/03 18:21:33 peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,10 @@ Info:
 	migrate eui64 to privacy into new style
 	more cleanup
 	extend test script
+	tag release 0.40pre2
+	implement auto detection for input
+	showinfo now understands IPv4 address extraction of autoconfigured link local addresses
+	check format options against matrix
 
 20020302/PB:
 	major work of redesign is done, test script runs well, unused files removed

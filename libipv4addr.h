@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.2 2002/03/02 19:02:28 peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.3 2002/03/03 18:21:34 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -41,6 +41,5 @@ extern void ipv4addr_clearall(ipv6calc_ipv4addr *ipv4addrp);
 
 extern unsigned int ipv4addr_gettype(ipv6calc_ipv4addr *ipv4addrp);
 
-int addr_to_ipv4addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv4addr *ipv4addrp);
-
-
+extern int addr_to_ipv4addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv4addr *ipv4addrp);
+extern int libipv4addr_ipv4addrstruct_to_string(ipv6calc_ipv4addr *ipv4addrp, char *resultstring, unsigned long formatoptions);

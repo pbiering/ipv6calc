@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.h[.in]
- * Version    : $Id: ipv6calc.h.in,v 1.12 2002/03/03 12:55:43 peter Exp $
+ * Version    : $Id: ipv6calc.h.in,v 1.13 2002/03/03 18:21:34 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -16,7 +16,7 @@
 /* global program related definitions */
 #define PROGRAM_NAME "ipv6calc"
 #define PROGRAM_VERSION "@IPV6CALC_VERSION@"
-#define PROGRAM_COPYRIGHT "(P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.de> published under GNU GPL"
+#define PROGRAM_COPYRIGHT " (P) & (C) 2001-2002 by Peter Bieringer <pb (at) bieringer.de> published under GNU GPL"
 
 /* global includes */
 #include <netinet/in.h>

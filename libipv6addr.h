@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.9 2002/03/03 11:01:53 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.10 2002/03/03 18:21:34 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -17,6 +17,7 @@
 
 #define _libipv6addr_h 1
 
+/* IPv6 address storage structure */
 typedef struct {
 	struct in6_addr in6_addr;	/* in6_addr structure */
 	unsigned short prefixlength;	/* prefix length (0-128) 8 bit*/
@@ -69,59 +70,30 @@ typedef struct {
 #define IPV6_NEW_ADDR_ISATAP			0x200000U
 
 /* text representations */
-#define TXT_IPV6_ADDR_ANY			"unknown"
-#define TXT_IPV6_ADDR_UNICAST			"unicast"
-#define TXT_IPV6_ADDR_MULTICAST			"multicast"
-#define TXT_IPV6_ADDR_ANYCAST			"anycast"
-#define TXT_IPV6_ADDR_LOOPBACK			"loopback"
-#define TXT_IPV6_ADDR_LINKLOCAL			"link-local"
-#define TXT_IPV6_ADDR_SITELOCAL			"site-local"
-#define TXT_IPV6_ADDR_COMPATv4			"compat-v4"
-#define TXT_IPV6_ADDR_MAPPED			"mapped"
-#define TXT_IPV6_ADDR_RESERVED			"reserved"
-#define TXT_IPV6_NEW_ADDR_6TO4			"6to4"
-#define TXT_IPV6_NEW_ADDR_6BONE			"6bone"
-#define TXT_IPV6_NEW_ADDR_AGU			"aggregatable-global-unicast"
-#define TXT_IPV6_NEW_ADDR_UNSPECIFIED		"unspecified"
-#define TXT_IPV6_NEW_ADDR_SOLICITED_NODE	"solicited-node"
-#define TXT_IPV6_NEW_ADDR_ISATAP		"ISATAP"
+typedef struct {
+	long int number;
+	char *token;
+} s_type;
 
-/* array of numerical types */
-static const unsigned int ipv6addr_typesnum[] = {
-	IPV6_ADDR_UNICAST,
-	IPV6_ADDR_MULTICAST,
-	IPV6_ADDR_ANYCAST,
-	IPV6_ADDR_LOOPBACK,
-	IPV6_ADDR_LINKLOCAL,
-	IPV6_ADDR_SITELOCAL,
-	IPV6_ADDR_COMPATv4,
-	IPV6_ADDR_MAPPED,
-	IPV6_ADDR_RESERVED,
-	IPV6_NEW_ADDR_6TO4,
-	IPV6_NEW_ADDR_6BONE, 
-	IPV6_NEW_ADDR_AGU,
-	IPV6_NEW_ADDR_UNSPECIFIED,
-	IPV6_NEW_ADDR_SOLICITED_NODE,
-	IPV6_NEW_ADDR_ISATAP
+static const s_type ipv6calc_ipv6addrtypestrings[] = {
+	{ IPV6_ADDR_ANY			, "unknown" },
+	{ IPV6_ADDR_UNICAST		, "unicast" },
+	{ IPV6_ADDR_MULTICAST		, "multicast" },
+	{ IPV6_ADDR_ANYCAST		, "anycast" },
+	{ IPV6_ADDR_LOOPBACK		, "loopback" },
+	{ IPV6_ADDR_LINKLOCAL		, "link-local" },
+	{ IPV6_ADDR_SITELOCAL		, "site-local" },
+	{ IPV6_ADDR_COMPATv4		, "compat-v4" },
+	{ IPV6_ADDR_MAPPED		, "mapped" },
+	{ IPV6_ADDR_RESERVED		, "reserved" },
+	{ IPV6_NEW_ADDR_6TO4		, "6to4" },
+	{ IPV6_NEW_ADDR_6BONE		, "6bone" },
+	{ IPV6_NEW_ADDR_AGU		, "aggregatable-global-unicast" },
+	{ IPV6_NEW_ADDR_UNSPECIFIED	, "unspecified" },
+	{ IPV6_NEW_ADDR_SOLICITED_NODE	, "solicited-node" },
+	{ IPV6_NEW_ADDR_ISATAP		, "ISATAP" },
 };
 
-static const char *ipv6addr_typesstring[] = {
-	TXT_IPV6_ADDR_UNICAST,
-	TXT_IPV6_ADDR_MULTICAST,
-	TXT_IPV6_ADDR_ANYCAST,
-	TXT_IPV6_ADDR_LOOPBACK,
-	TXT_IPV6_ADDR_LINKLOCAL,
-	TXT_IPV6_ADDR_SITELOCAL,
-	TXT_IPV6_ADDR_COMPATv4,
-	TXT_IPV6_ADDR_MAPPED,
-	TXT_IPV6_ADDR_RESERVED,
-	TXT_IPV6_NEW_ADDR_6TO4,
-	TXT_IPV6_NEW_ADDR_6BONE,
-	TXT_IPV6_NEW_ADDR_AGU,
-	TXT_IPV6_NEW_ADDR_UNSPECIFIED,
-	TXT_IPV6_NEW_ADDR_SOLICITED_NODE,
-	TXT_IPV6_NEW_ADDR_ISATAP
-};
 #endif
 
 
