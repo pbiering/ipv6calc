@@ -1,8 +1,8 @@
 /*
- * Project    : ipv6calc
+ * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.12 2003/04/04 20:23:31 peter Exp $
- * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv6addr.h,v 1.13 2003/06/15 14:24:01 peter Exp $
+ * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Header file for libipv6addr.c
@@ -72,12 +72,13 @@ typedef struct {
 #define IPV6_NEW_ADDR_PRODUCTIVE		(uint32_t) 0x00400000U
 
 /* Registries */
-#define IPV6_ADDR_REGISTRY_6BONE	1
-#define IPV6_ADDR_REGISTRY_IANA		2
-#define IPV6_ADDR_REGISTRY_APNIC	3
-#define IPV6_ADDR_REGISTRY_ARIN		4
-#define IPV6_ADDR_REGISTRY_RIPE		5
-#define IPV6_ADDR_REGISTRY_RESERVED	6
+#define IPV6_ADDR_REGISTRY_6BONE	0x01
+#define IPV6_ADDR_REGISTRY_IANA		0x02
+#define IPV6_ADDR_REGISTRY_APNIC	0x03
+#define IPV6_ADDR_REGISTRY_ARIN		0x04
+#define IPV6_ADDR_REGISTRY_RIPE		0x05
+#define IPV6_ADDR_REGISTRY_LACNIC	0x06
+#define IPV6_ADDR_REGISTRY_RESERVED	0x0e
 
 /* text representations */
 typedef struct {
