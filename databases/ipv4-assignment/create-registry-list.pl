@@ -2,13 +2,13 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.14 2003/06/15 12:11:00 peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.15 2003/11/21 10:39:01 peter Exp $
 # Copyright  : 2002-2003 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Perl program which creates IPv4 address assignement header
 # Requires:
-#  aggreagate
+#  /usr/bin/aggregate
 
 
 use IPC::Open2;
@@ -60,8 +60,8 @@ for (my $i = 32; $i >= 1; $i--) {
 
 	#print STDERR "Power " . $i . ":". $power;
 	#printf STDERR "   subnet mask: %8x\n", $dec;
-	%subnet_powers->{$i}->{'numbers'} = $power;
-	%subnet_powers->{$i}->{'mask'} = $dec;
+	$subnet_powers{$i}->{'numbers'} = $power;
+	$subnet_powers{$i}->{'mask'} = $dec;
 };
 
 
@@ -102,8 +102,8 @@ sub check_in_list($) {
 	my $num = shift || die "Missing IPv4 address number";
 
 	foreach my $ipv4num (keys %assignments ) {
-		if ( ( $num & %assignments->{$ipv4num}->{'mask'} ) == $ipv4num ) {
-			return( %assignments->{$ipv4num}->{'registry'} );
+		if ( ( $num & $assignments{$ipv4num}->{'mask'} ) == $ipv4num ) {
+			return( $assignments{$ipv4num}->{'registry'} );
 		};
 	};
 	return;
@@ -241,10 +241,10 @@ foreach my $file (@files) {
 		$flag_proceeded = 0;
 		# check numbers maching
 		for ($check_length = 1; $check_length <= 32; $check_length++) {
-			if ( %subnet_powers->{$check_length}->{'numbers'} == $numbers ) {
+			if ( $subnet_powers{$check_length}->{'numbers'} == $numbers ) {
 				# case 1: numbers = 2^x
 				
-				if ( ( $ipv4_dec & %subnet_powers->{$check_length}->{'mask'} ) == $ipv4_dec ) {
+				if ( ( $ipv4_dec & $subnet_powers{$check_length}->{'mask'} ) == $ipv4_dec ) {
 					# case 1a: easy, subnet(numbers) matches given network
 					push @$parray, $ipv4 . "/" . $check_length;
 					#printf "%s/%d=%s (case 1a)\n", $ipv4, $check_length, $reg;
@@ -257,7 +257,7 @@ foreach my $file (@files) {
 					$flag_proceeded = 2;
 					last;
 				};
-			} elsif ( %subnet_powers->{$check_length}->{'numbers'} < $numbers ) {
+			} elsif ( $subnet_powers{$check_length}->{'numbers'} < $numbers ) {
 				# case 2: numbers != 2^x
 				#printf "%s=%s (case 2: %d)\n", $ipv4, $reg, $numbers;
 				$flag_proceeded = 3;
@@ -277,15 +277,15 @@ foreach my $file (@files) {
 		while ($newnumbers > 0) {
 			#printf "Newnumbers: %d   Length: %d\n", $newnumbers, $check_length;
 
-			while ( $newnumbers < %subnet_powers->{$check_length}->{'numbers'} ) {
+			while ( $newnumbers < $subnet_powers{$check_length}->{'numbers'} ) {
 				$check_length++;
 			};
 
-			if ( ( $ipv4_dec & (~ %subnet_powers->{$check_length}->{'mask'}) ) == 0 ) {
+			if ( ( $ipv4_dec & (~ $subnet_powers{$check_length}->{'mask'}) ) == 0 ) {
 				push @$parray, $ipv4 . "/" . $check_length;
-				#printf "%s/%d=%s (partially catch case 1b or 2: %d)\n", &dec_to_ipv4($ipv4_dec), $check_length, $reg, %subnet_powers->{$check_length}->{'numbers'};
-				$newnumbers -= %subnet_powers->{$check_length}->{'numbers'};
-				$ipv4_dec += %subnet_powers->{$check_length}->{'numbers'};
+				#printf "%s/%d=%s (partially catch case 1b or 2: %d)\n", &dec_to_ipv4($ipv4_dec), $check_length, $reg, $subnet_powers{$check_length}->{'numbers'};
+				$newnumbers -= $subnet_powers{$check_length}->{'numbers'};
+				$ipv4_dec += $subnet_powers{$check_length}->{'numbers'};
 
 				next;
 			} else {
@@ -359,7 +359,7 @@ print "Run filter on ARIN entries\n";
 for (my $i = 0; $i < $#arin; $i++) {
 	my ($net, $length) = split /\//, $arin[$i];
 	if ($length > $max_prefixlength_not_arin) {
-		$arin[$i] = &dec_to_ipv4(&ipv4_to_dec($net) & %subnet_powers->{$max_prefixlength_not_arin}->{'mask'}) . "\/" . $max_prefixlength_not_arin;
+		$arin[$i] = &dec_to_ipv4(&ipv4_to_dec($net) & $subnet_powers{$max_prefixlength_not_arin}->{'mask'}) . "\/" . $max_prefixlength_not_arin;
 	};
 };
 # 2. remove duplicates
