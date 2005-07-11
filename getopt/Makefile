@@ -1,5 +1,7 @@
 # Adapted for use with project 'ipv6calc' by Peter Bieringer <pb (at) bieringer.de>
-# $Id: Makefile,v 1.2 2002/02/25 21:19:02 peter Exp $
+# $Id: Makefile,v 1.3 2005/07/11 15:04:05 peter Exp $
+
+CC = gcc
 
 all: getopt1.o getopt.o
 
