@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.10 2003/06/15 16:15:07 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.11 2005/07/11 15:09:25 peter Exp $
  * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -158,8 +158,8 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		if (string[i] == ':') { numcolons++; };
 		if (string[i] == '-') { numdashes++; };
 		if (string[i] == ' ') { numspaces++; };
-		if (isdigit(string[i])) { numdigits++; };
-		if (isxdigit(string[i])) { numxdigits++; };
+		if (isdigit((int) string[i])) { numdigits++; };
+		if (isxdigit((int) string[i])) { numxdigits++; };
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {

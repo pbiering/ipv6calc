@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.c
- * Version    : $Id: librfc2874.c,v 1.7 2002/04/08 19:04:31 peter Exp $
+ * Version    : $Id: librfc2874.c,v 1.8 2005/07/11 15:09:25 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -149,7 +149,7 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 	
 	index = 3; /* start value */
 	
-	while(isxdigit(tempstring[index])) {
+	while(isxdigit((int) tempstring[index])) {
 		snprintf(tempstring2, sizeof(tempstring2), "%c", tempstring[index]);
 		
 		/* now proceed nibbles */
@@ -219,7 +219,7 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 
 	startprefixlength = index;
 	endprefixlength = 0;
-	while(isdigit(tempstring[index])) {
+	while(isdigit((int) tempstring[index])) {
 		index++;
 		endprefixlength = index;
 		if (index > length) {
@@ -303,7 +303,7 @@ int librfc2874_formatcheck(const char *string, char *infostring) {
 	index++;
 
 	/* check nibble string */	
-	while(isxdigit(string[index])) {
+	while(isxdigit((int) string[index])) {
 		nibblecounter++;
 
 		if (nibblecounter > 32) {
@@ -340,7 +340,7 @@ int librfc2874_formatcheck(const char *string, char *infostring) {
 	};
 	
 	/* check digit string */	
-	while(isdigit(string[index])) {
+	while(isdigit((int) string[index])) {
 		digitcounter++;
 
 		if (digitcounter > 3) {

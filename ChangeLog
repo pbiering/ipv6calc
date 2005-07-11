@@ -1,10 +1,18 @@
 /*
- *  $Id: ChangeLog,v 1.88 2005/06/28 07:03:44 peter Exp $ 
+ *  $Id: ChangeLog,v 1.89 2005/07/11 15:09:25 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20050711/PB
+	lib/librfc2874.c
+	lib/libipv6calc.c
+	 - Fix prototyping to avoid warnings
+	md5/Makefile
+	getopt/Makefile
+	 - Add CC definition
+
 20050628/PB
 	ipv6calc:
 	 - replace hardcoded $(root)/bin with $(root)@bindir@ (suggested by Andrew Walrond)
