@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.14 2005/07/14 08:06:19 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.15 2005/07/14 09:43:29 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -296,10 +296,9 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 		};
 	};
 	
-	if ((st & 0xFFFF0000u) == 0x20010000u ||
-	    (st & 0xFFFF0000u) == 0x20030000u) {
-		/* 2001::/16 -> productive IPv6 address space */
-		/* 2003::/16 -> productive IPv6 address space */
+	if (!(type & (IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4)) && (st & 0xE0000000u) == 0x20000000u) {
+		/* 2000::/3 -> productive IPv6 address space */
+		/*  except 3ffe::/16 (6BONE) and 2002::/16 (6TO4) */
 		type |= IPV6_NEW_ADDR_PRODUCTIVE;
 	};
 	
@@ -410,11 +409,14 @@ int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
 		/* 3ffe::/16 -> 6bone space */
 		return(IPV6_ADDR_REGISTRY_6BONE);
 	};
+
+	if ((st & 0xFFFF0000u) == 0x20020000u) {
+		/* 2002::/16 -> 6to4 space */
+		return(-1);
+	};
 		
-	if ((st & 0xFFFF0000u) == 0x20010000u ||
-	    (st & 0xFFFF0000u) == 0x20030000u) {
-		/* 2001::/16 -> productive IPv6 address space */
-		/* 2003::/16 -> productive IPv6 address space */
+	if ((st & 0xE0000000u) == 0x20000000u) {
+		/* 2000::/3 -> productive IPv6 address space */
 		
 		if ( (st & 0xFFFFFE00u) == 0x20010000u) {
 			/* 2001:0000::/23 -> IANA */
@@ -425,23 +427,35 @@ int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
 		     (st & 0xFFFFFC00u) == 0x20010C00u ||
 		     (st & 0xFFFFFE00u) == 0x20014400u ||
 		     (st & 0xFFFFC000u) == 0x20018000u ||
-		     (st & 0xFFFFE000u) == 0x2001A000u ) {
+		     (st & 0xFFFFE000u) == 0x2001A000u ||
+		     (st & 0xFFFFE000u) == 0x24000000u ||
+		     (st & 0xFFFFE000u) == 0x24002000u ) {
 			/* 2001:0200::/23 -> APNIC */
 			/* 2001:0C00::/22 -> APNIC */
 			/* 2001:4400::/23 -> APNIC */
 			/* 2001:8000::/18 -> APNIC */
 			/* 2001:A000::/19 -> APNIC */
+			/* 2400:0000::/19 -> APNIC */
+			/* 2400:2000::/19 -> APNIC */
 			return(IPV6_ADDR_REGISTRY_APNIC);
 		};
 		
 		if ( (st & 0xFFFFFE00u) == 0x20010400u ||
 		     (st & 0xFFFFFE00u) == 0x20011800u ||
 		     (st & 0xFFFFFE00u) == 0x20014200u ||
-		     (st & 0xFFFFFE00u) == 0x20014800u) {
+		     (st & 0xFFFFFE00u) == 0x20014800u ||
+		     (st & 0xFFFFFC00u) == 0x26000000u ||
+		     (st & 0xFFFFFC00u) == 0x26040000u ||
+		     (st & 0xFFFFFC00u) == 0x26080000u ||
+		     (st & 0xFFFFFC00u) == 0x260C0000u) {
 			/* 2001:0400::/23 -> ARIN */
 			/* 2001:1800::/23 -> ARIN */
 			/* 2001:4200::/23 -> ARIN */
 			/* 2001:4800::/23 -> ARIN */
+			/* 2600:0000::/22 -> ARIN */
+			/* 2604:0000::/22 -> ARIN */
+			/* 2608:0000::/22 -> ARIN */
+			/* 260C:0000::/22 -> ARIN */
 			return(IPV6_ADDR_REGISTRY_ARIN);
 		};
 		
@@ -460,7 +474,8 @@ int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
 		     (st & 0xFFFFFE00u) == 0x20014A00u ||
 		     (st & 0xFFFFFE00u) == 0x20014C00u ||
 		     (st & 0xFFFFC000u) == 0x20015000u ||
-		     (st & 0xFFFFC000u) == 0x20030000u ) {
+		     (st & 0xFFFFC000u) == 0x20030000u ||
+		     (st & 0xFFFFF800u) == 0x2A000000u ) {
 			/* 2001:0600::/23 -> RIPE NCC */
 			/* 2001:0800::/23 -> RIPE NCC */
 			/* 2001:0A00::/23 -> RIPE NCC */
@@ -477,6 +492,7 @@ int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
 			/* 2001:4C00::/23 -> RIPE NCC */
 			/* 2001:5000::/18 -> RIPE NCC */
 			/* 2003:0000::/18 -> RIPE NCC */
+			/* 2A00:0000::/21 -> RIPE NCC */
 			return(IPV6_ADDR_REGISTRY_RIPE);
 		};
 
