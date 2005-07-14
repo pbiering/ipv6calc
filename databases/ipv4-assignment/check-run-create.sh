@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : check-run-create.sh
-# Version    : $Id: check-run-create.sh,v 1.5 2002/04/04 21:56:32 peter Exp $
+# Version    : $Id: check-run-create.sh,v 1.6 2005/07/14 08:21:41 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 
 #set -x
@@ -15,7 +15,5 @@ APNIC=`find apnic   -type f -name 'apnic*' -newer dbipv4addr_assignment.h       
 RIPENCC=`find ripencc -type f -name 'ripencc*' -newer dbipv4addr_assignment.h        | wc -l`
 
 if [ $IANA -ne 0 -o $ARIN -ne 0 -o $APNIC -ne 0 -o $RIPENCC -ne 0 ]; then
-	exit 1
-else
-	exit 0
+	./create-registry-list.pl
 fi
