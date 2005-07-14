@@ -46,6 +46,9 @@ Credits to
 * Radek Vokal <rvokal at redhat dot com>
    some fixes
 
+* Simon Arlott <simon at arlott dot org>
+   patch to extend IPv6 TLA assignement
+
 * VMware, in which my OpenBSD and FreeBSD installation is running
 
 * Peter A. Darnell and Philip E. Margolis
@@ -55,4 +58,4 @@ Credits to
       11 years ]
 
 
-	Peter Bieringer, 2003-11-24
+	Peter Bieringer, 2005-07-14
