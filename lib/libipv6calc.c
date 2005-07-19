@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.11 2005/07/11 15:09:25 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.12 2005/07/19 14:54:57 peter Exp $
  * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -107,7 +107,7 @@ void string_to_reverse_dotted(char *string) {
 		snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
 	};
 
-	token = strtok_r(string, ".", ptrptr);
+	token = (char*) strtok_r(string, ".", ptrptr);
 
 	while (token != NULL) {
 		if (flag_first == 1) {
@@ -118,7 +118,7 @@ void string_to_reverse_dotted(char *string) {
 		};
 		snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
 
-		token = strtok_r(NULL, ".", ptrptr);
+		token = (char*) strtok_r(NULL, ".", ptrptr);
 	};
 	
 	if ( string[strlen(string) - 1] == '.' ) {
