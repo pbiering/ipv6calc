@@ -31,6 +31,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* insert for ipv6calc for proper working on big endian machines */
+#ifdef _BIG_ENDIAN
+#  define WORDS_BIGENDIAN 1
+#endif
+/* end of insert */
+
+
 #ifdef _LIBC
 # include <endian.h>
 # if __BYTE_ORDER == __BIG_ENDIAN
