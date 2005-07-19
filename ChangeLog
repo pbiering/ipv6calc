@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.91 2005/07/19 13:50:19 peter Exp $ 
+ *  $Id: ChangeLog,v 1.92 2005/07/19 15:10:14 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 20050719/PB
 	ipv6logstats, ipv6logconf
 	 - remove not really needed uid check in test step
+	md5/md5.c
+	 - fix for proper support of big endian machines
+	ipv6calc/test_ipv6calc.sh
+	 - fix proper error reporting 
 
 20050714/PB
 	Update databases

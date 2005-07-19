@@ -67,8 +67,7 @@ INSTALLATION
 If you want to install the binary use "make install".
 
 
-
 Peter Bieringer
 <pb (at) bieringer.de>
 
-$Id: INSTALLING,v 1.7 2003/11/22 15:53:52 peter Exp $
+$Id: INSTALLING,v 1.8 2005/07/19 15:10:14 peter Exp $
