@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.13 2005/07/19 14:56:18 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.14 2005/07/19 16:03:25 peter Exp $
  * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -107,7 +107,7 @@ void string_to_reverse_dotted(char *string) {
 		snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
 	};
 
-	token = (char*) strtok_r(string, ".", ptrptr);
+	token = strtok_r(string, ".", ptrptr);
 
 	while (token != NULL) {
 		if (flag_first == 1) {
@@ -118,7 +118,7 @@ void string_to_reverse_dotted(char *string) {
 		};
 		snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
 
-		token = (char*) strtok_r(NULL, ".", ptrptr);
+		token = strtok_r(NULL, ".", ptrptr);
 	};
 	
 	if ( string[strlen(string) - 1] == '.' ) {
@@ -170,7 +170,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		fprintf(stderr, "%s:  numspaces :%d\n", DEBUG_function_name, numspaces);
 		fprintf(stderr, "%s:  numdigits :%d\n", DEBUG_function_name, numdigits);
 		fprintf(stderr, "%s:  numxdigits:%d\n", DEBUG_function_name, numxdigits);
-		fprintf(stderr, "%s:  length    :%d\n", DEBUG_function_name, length);
+		fprintf(stderr, "%s:  length    :%d\n", DEBUG_function_name, (int) length);
 	};
 
 	if ( length == 20 && numdots == 0 && numcolons == 0 ) {
