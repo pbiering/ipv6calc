@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.93 2005/07/19 15:18:04 peter Exp $ 
+ *  $Id: ChangeLog,v 1.94 2005/07/19 16:17:19 peter Exp $ 
  */
 
 Info:
@@ -13,6 +13,9 @@ Info:
 	ipv6calc/test_ipv6calc.sh
 	 - fix proper error reporting
 	Further prototyping fixes
+	lib/libipv6addr
+	 - replace hardcoded IPv6 assignement by dynamic one
+	Update databases
 
 20050714/PB
 	Update databases
