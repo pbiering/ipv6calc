@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.7 2003/06/23 21:38:31 peter Exp $
+ * Version    : $Id: librfc1886.c,v 1.8 2005/07/19 14:52:00 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -205,7 +205,7 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 			return (1);
 		};
 		
-		if (! isxdigit(token[0])) {
+		if (! isxdigit((int) token[0])) {
 			snprintf(resultstring, NI_MAXHOST, "Nibble '%s' on dot position %d (from right side) is not a valid hexdigit", token, tokencounter + 1);
 			return (1);
 		};
@@ -316,7 +316,7 @@ int librfc1886_formatcheck(const char *string, char *infostring) {
 			return (1);
 		};
 		
-		if (! isxdigit(token[0])) {
+		if (! isxdigit((int) token[0])) {
 			snprintf(infostring, NI_MAXHOST, "Nibble '%s' on dot position %d (from right side) is not a valid hexdigit", token, tokencounter + 1);
 			return (1);
 		};
