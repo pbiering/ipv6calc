@@ -31,6 +31,16 @@ cd /usr/src ; tar xvzf ipv6calc*.tar.gz
 make install
 
 
+For Solaris 8 you need following packages installed:
+autoconf
+automake
+gcc
+make
+binutils
+cvs (optional)
+perl
+m4
+
 
 CONFIGURE
 ---------
@@ -70,4 +80,4 @@ If you want to install the binary use "make install".
 Peter Bieringer
 <pb (at) bieringer.de>
 
-$Id: INSTALLING,v 1.8 2005/07/19 15:10:14 peter Exp $
+$Id: INSTALLING,v 1.9 2005/07/19 15:18:04 peter Exp $

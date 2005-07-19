@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.92 2005/07/19 15:10:14 peter Exp $ 
+ *  $Id: ChangeLog,v 1.93 2005/07/19 15:18:04 peter Exp $ 
  */
 
 Info:
@@ -11,7 +11,8 @@ Info:
 	md5/md5.c
 	 - fix for proper support of big endian machines
 	ipv6calc/test_ipv6calc.sh
-	 - fix proper error reporting 
+	 - fix proper error reporting
+	Further prototyping fixes
 
 20050714/PB
 	Update databases
