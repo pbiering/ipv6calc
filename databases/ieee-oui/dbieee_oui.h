@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui.h
- * Version       : $Id: dbieee_oui.h,v 1.21 2005/07/14 08:45:34 peter Exp $
- * Generated     : Thu Jul 14 10:07:48 2005
+ * Version       : $Id: dbieee_oui.h,v 1.22 2005/07/19 15:48:33 peter Exp $
+ * Generated     : Tue Jul 19 17:45:18 2005
  * Data copyright: IEEE
  *
  * Information:
@@ -5398,6 +5398,17 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x00152E, "PacketHop, Inc.", "PACKETHOP" },
 	{ 0x00152F, "Motorola CHS", "MOTOROLA-CHS" },
 	{ 0x001530, "Bus-Tech, Inc.", "BUS-TECH" },
+	{ 0x001531, "KOCOM", "KOCOM" },
+	{ 0x001532, "Consumer Technologies Group, LLC", "CONSUMER-TECHNOLOGIES-GROUP-LLC" },
+	{ 0x001533, "NADAM.CO.,LTD", "NADAM" },
+	{ 0x001534, "A BELTRÓNICA, Companhia de Comunicações, Lda", "A-BELTRÓNICA-COMPANHIA-DE-COMUNICAçõES-LDA" },
+	{ 0x001535, "OTE Spa", "OTE-SPA" },
+	{ 0x001536, "Powertech co.,Ltd", "POWERTECH" },
+	{ 0x001537, "Ventus Networks", "VENTUS-NETWORKS" },
+	{ 0x001538, "RFID, Inc.", "RFID" },
+	{ 0x001539, "Technodrive SRL", "TECHNODRIVE-SRL" },
+	{ 0x00153A, "Shenzhen Syscan Technology Co.,Ltd.", "SHENZHEN-SYSCAN" },
+	{ 0x00153B, "EMH Elektrizitätszähler GmbH & CoKG", "EMH-ELEKTRIZITäTSZäHLER-COKG" },
 	{ 0x001C7C, "PERQ SYSTEMS CORPORATION", "PERQ" },
 	{ 0x002000, "LEXMARK INTERNATIONAL, INC.", "LEXMARK" },
 	{ 0x002001, "DSP SOLUTIONS, INC.", "DSP-SOLUTIONS" },

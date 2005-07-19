@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.15 2005/07/14 09:43:29 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.16 2005/07/19 15:48:33 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -19,6 +19,7 @@
 #include "ipv6calctypes.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
+#include "../databases/ipv6-assignment/dbipv6addr_assignment.h"
 
 
 /*
@@ -376,136 +377,42 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 	return (type);
 };
 
-
 /*
- * Get IPv6 address assignement information
+ * get registry number of an IPv4 address
  *
- * See also: http://www.iana.org/assignments/ipv6-tla-assignments
- *
- * in : ipv6addrp = pointer to IPv6 address structure
+ * in:  ipv6addr = IPv6 address structure
  * out: assignment number (-1 = no result)
  */
+#define DEBUG_function_name "libipv6calc/getregistry"
 int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
-	uint32_t st, st1, st2, st3;
+    char resultstring[NI_MAXHOST];
+    int i;
 
-	st =  ipv6addr_getdword(ipv6addrp, 0); /* 32 MSB */
-	st1 = ipv6addr_getdword(ipv6addrp, 1);
-	st2 = ipv6addr_getdword(ipv6addrp, 2);
-	st3 = ipv6addr_getdword(ipv6addrp, 3); /* 32 LSB */
+    i = libipv6addr_get_registry_string(ipv6addrp, resultstring);
 
-/*
-16 ....00
-17 ....80
-18 ....C0
-19 ....E0
-20 ....F0
-21 ....F8
-22 ....FC
-23 ....FE
-24 ....FF
-*/
-	
-	if ((st & 0xFFFF0000u) == 0x3FFE0000u) {
-		/* 3ffe::/16 -> 6bone space */
-		return(IPV6_ADDR_REGISTRY_6BONE);
+    if (i != 0) {
+        return(IPV6_ADDR_REGISTRY_RESERVED);
+    };
+
+    if (strcmp(resultstring, "IANA") == 0) {
+        return(IPV6_ADDR_REGISTRY_IANA);
+    } else if (strcmp(resultstring, "APNIC") == 0) {
+        return(IPV6_ADDR_REGISTRY_APNIC);
+    } else if (strcmp(resultstring, "ARIN") == 0) {
+        return(IPV6_ADDR_REGISTRY_ARIN);
+    } else if (strcmp(resultstring, "RIPENCC") == 0) {
+        return(IPV6_ADDR_REGISTRY_RIPE);
+    } else if (strcmp(resultstring, "LACNIC") == 0) {
+        return(IPV6_ADDR_REGISTRY_LACNIC);
+    } else if (strcmp(resultstring, "6BONE") == 0) {
+        return(IPV6_ADDR_REGISTRY_6BONE);
+    } else if (strcmp(resultstring, "6TO4") == 0) {
+        return(-1);
+    } else {
+        return(-1);
 	};
-
-	if ((st & 0xFFFF0000u) == 0x20020000u) {
-		/* 2002::/16 -> 6to4 space */
-		return(-1);
-	};
-		
-	if ((st & 0xE0000000u) == 0x20000000u) {
-		/* 2000::/3 -> productive IPv6 address space */
-		
-		if ( (st & 0xFFFFFE00u) == 0x20010000u) {
-			/* 2001:0000::/23 -> IANA */
-			return(IPV6_ADDR_REGISTRY_IANA);
-		};
-		
-		if ( (st & 0xFFFFFE00u) == 0x20010200u ||
-		     (st & 0xFFFFFC00u) == 0x20010C00u ||
-		     (st & 0xFFFFFE00u) == 0x20014400u ||
-		     (st & 0xFFFFC000u) == 0x20018000u ||
-		     (st & 0xFFFFE000u) == 0x2001A000u ||
-		     (st & 0xFFFFE000u) == 0x24000000u ||
-		     (st & 0xFFFFE000u) == 0x24002000u ) {
-			/* 2001:0200::/23 -> APNIC */
-			/* 2001:0C00::/22 -> APNIC */
-			/* 2001:4400::/23 -> APNIC */
-			/* 2001:8000::/18 -> APNIC */
-			/* 2001:A000::/19 -> APNIC */
-			/* 2400:0000::/19 -> APNIC */
-			/* 2400:2000::/19 -> APNIC */
-			return(IPV6_ADDR_REGISTRY_APNIC);
-		};
-		
-		if ( (st & 0xFFFFFE00u) == 0x20010400u ||
-		     (st & 0xFFFFFE00u) == 0x20011800u ||
-		     (st & 0xFFFFFE00u) == 0x20014200u ||
-		     (st & 0xFFFFFE00u) == 0x20014800u ||
-		     (st & 0xFFFFFC00u) == 0x26000000u ||
-		     (st & 0xFFFFFC00u) == 0x26040000u ||
-		     (st & 0xFFFFFC00u) == 0x26080000u ||
-		     (st & 0xFFFFFC00u) == 0x260C0000u) {
-			/* 2001:0400::/23 -> ARIN */
-			/* 2001:1800::/23 -> ARIN */
-			/* 2001:4200::/23 -> ARIN */
-			/* 2001:4800::/23 -> ARIN */
-			/* 2600:0000::/22 -> ARIN */
-			/* 2604:0000::/22 -> ARIN */
-			/* 2608:0000::/22 -> ARIN */
-			/* 260C:0000::/22 -> ARIN */
-			return(IPV6_ADDR_REGISTRY_ARIN);
-		};
-		
-		if ( (st & 0xFFFFFE00u) == 0x20010600u ||
-		     (st & 0xFFFFFE00u) == 0x20010800u || 
-		     (st & 0xFFFFFE00u) == 0x20010A00u ||
-		     (st & 0xFFFFFC00u) == 0x20011400u ||
-		     (st & 0xFFFFFE00u) == 0x20011A00u ||
-		     (st & 0xFFFFFE00u) == 0x20011C00u ||
-		     (st & 0xFFFFFE00u) == 0x20011E00u ||
-		     (st & 0xFFFFE000u) == 0x20012000u ||
-		     (st & 0xFFFFF800u) == 0x20013000u ||
-		     (st & 0xFFFFFC00u) == 0x20013800u ||
-		     (st & 0xFFFFFE00u) == 0x20014000u ||
-		     (st & 0xFFFFFE00u) == 0x20014600u ||
-		     (st & 0xFFFFFE00u) == 0x20014A00u ||
-		     (st & 0xFFFFFE00u) == 0x20014C00u ||
-		     (st & 0xFFFFC000u) == 0x20015000u ||
-		     (st & 0xFFFFC000u) == 0x20030000u ||
-		     (st & 0xFFFFF800u) == 0x2A000000u ) {
-			/* 2001:0600::/23 -> RIPE NCC */
-			/* 2001:0800::/23 -> RIPE NCC */
-			/* 2001:0A00::/23 -> RIPE NCC */
-			/* 2001:1400::/22 -> RIPE NCC */
-			/* 2001:1A00::/23 -> RIPE NCC */
-			/* 2001:1C00::/23 -> RIPE NCC */
-			/* 2001:1E00::/23 -> RIPE NCC */
-			/* 2001:2000::/19 -> RIPE NCC */
-			/* 2001:3000::/21 -> RIPE NCC */
-			/* 2001:3800::/22 -> RIPE NCC */
-			/* 2001:4000::/23 -> RIPE NCC */
-			/* 2001:4600::/23 -> RIPE NCC */
-			/* 2001:4A00::/23 -> RIPE NCC */
-			/* 2001:4C00::/23 -> RIPE NCC */
-			/* 2001:5000::/18 -> RIPE NCC */
-			/* 2003:0000::/18 -> RIPE NCC */
-			/* 2A00:0000::/21 -> RIPE NCC */
-			return(IPV6_ADDR_REGISTRY_RIPE);
-		};
-
-		if ( (st & 0xFFFFFE00u) == 0x20011200u ) {
-			/* 2001:1200::/23 -> LACNIC */
-			return(IPV6_ADDR_REGISTRY_LACNIC);
-		};
-
-		return (IPV6_ADDR_REGISTRY_RESERVED);
-	};
-
-	return(-1);
-};
+}
+#undef DEBUG_function_name
 
 
 /*
@@ -515,22 +422,38 @@ int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
  * mod: resultstring
  * ret: 1=not found, 0=ok
  */
+#define DEBUG_function_name "libipv6calc/get_registry_string"
 int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
-	int i, registry;
+	int i;
+	int match = -1;
 
-	registry = ipv6addr_getregistry(ipv6addrp);
+	uint32_t ipv6 = ipv6addr_getdword(ipv6addrp, 0);
+	
+	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		fprintf(stderr, "%s: Given ipv6 address: %08x\n", DEBUG_function_name, (unsigned int) ipv6);
+	};
 
-	if ( registry != -1 ) {
-		for ( i = 0; i < (int) (sizeof(ipv6calc_ipv6addrregistry) / sizeof(ipv6calc_ipv6addrregistry[0])); i++ ) {
-			if ( ipv6calc_ipv6addrregistry[i].number == registry ) {
-				snprintf(resultstring, NI_MAXHOST, "%s", ipv6calc_ipv6addrregistry[i].tokensimple);
-				return (0);
+	for (i = 0; i < (int) ( sizeof(dbipv6addr_assignment) / sizeof(dbipv6addr_assignment[0])); i++) {
+		/* run through database array */
+		if ( (ipv6 & dbipv6addr_assignment[i].ipv6mask) == dbipv6addr_assignment[i].ipv6addr ) {
+			/* ok, entry matches */
+			if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+				fprintf(stderr, "%s: Found match\n", DEBUG_function_name);
 			};
+			match = i;
 		};
 	};
 
-	return (1);
+	/* result */
+	if ( match > -1 ) {
+		snprintf(resultstring, NI_MAXHOST, "%s", dbipv6addr_assignment[match].string_registry);
+		return(0);
+	} else {
+		snprintf(resultstring, NI_MAXHOST, "%s", "unknown");
+		return(1);
+	};
 };
+#undef DEBUG_function_name
 
 
 /*

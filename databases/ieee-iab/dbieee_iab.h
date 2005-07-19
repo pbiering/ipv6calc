@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.5 2005/07/14 08:45:34 peter Exp $
- * Generated     : Thu Jul 14 10:08:05 2005
+ * Version       : $Id: dbieee_iab.h,v 1.6 2005/07/19 15:48:33 peter Exp $
+ * Generated     : Tue Jul 19 17:45:22 2005
  * Data copyright: IEEE
  *
  * Information:
@@ -1247,5 +1247,9 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x4D2000, 0x4D2FFF, "Twoway CATV SERVICE INC.", "TWOWAY-CATV-SERVICE" },
 	{ 0x0050C2, 0x4D3000, 0x4D3FFF, "SOFTIN sp. z o.o.", "SOFTIN-SP-Z-O-O" },
 	{ 0x0050C2, 0x4D4000, 0x4D4FFF, "Herholdt Controls srl", "HERHOLDT-CONTROLS-SRL" },
+	{ 0x0050C2, 0x4D5000, 0x4D5FFF, "SEBA Design Pty Ltd", "SEBA-DESIGN-PTY" },
+	{ 0x0050C2, 0x4D6000, 0x4D6FFF, "Ingenieurbüro Schober", "INGENIEURBüRO-SCHOBER" },
+	{ 0x0050C2, 0x4D7000, 0x4D7FFF, "Delta Tau Data Systems, Inc.", "DELTA-TAU-DATA" },
+	{ 0x0050C2, 0x4D8000, 0x4D8FFF, "Avantry Ltd.", "AVANTRY" },
 
 };

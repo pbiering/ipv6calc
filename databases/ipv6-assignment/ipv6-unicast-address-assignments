@@ -1,0 +1,96 @@
+IPV6 GLOBAL UNICAST ADDRESS ASSIGNMENTS
+
+[last updated 14 July 2005]
+
+Global Unicast Prefix Assignment     Date        Note
+--------------------- ----------     ------      ----
+2001:0000::/23        IANA           01 Jul 99   [1]
+2001:0200::/23        APNIC          01 Jul 99
+2001:0400::/23        ARIN           01 Jul 99
+2001:0600::/23        RIPE NCC       01 Jul 99
+2001:0800::/23        RIPE NCC       01 May 02
+2001:0A00::/23        RIPE NCC       02 Nov 02
+2001:0C00::/23        APNIC          01 May 02   [2]
+2001:0E00::/23        APNIC          01 Jan 03
+2001:1200::/23        LACNIC         01 Nov 02
+2001:1400::/23        RIPE NCC       01 Feb 03
+2001:1600::/23        RIPE NCC       01 Jul 03
+2001:1800::/23        ARIN           01 Apr 03
+2001:1A00::/23        RIPE NCC       01 Jan 04
+2001:1C00::/22        RIPE NCC       01 May 04
+2001:2000::/20        RIPE NCC       01 May 04
+2001:3000::/21        RIPE NCC       01 May 04
+2001:3800::/22        RIPE NCC       01 May 04
+2001:3C00::/22        RESERVED       11 Jun 04   [3]
+2001:4000::/23        RIPE NCC       11 Jun 04
+2001:4200::/23        ARIN           01 Jun 04
+2001:4400::/23        APNIC          11 Jun 04
+2001:4600::/23        RIPE NCC       17 Aug 04
+2001:4800::/23        ARIN           24 Aug 04
+2001:4A00::/23        RIPE NCC       15 Oct 04
+2001:4C00::/23        RIPE NCC       17 Dec 04
+2001:5000::/20        RIPE NCC       10 Sep 04
+2001:8000::/19        APNIC          30 Nov 04
+2001:A000::/20        APNIC          30 Nov 04
+2002:0000::/16        6to4           01 Feb 01   [4]
+2003:0000::/18        RIPE NCC       12 Jan 05
+2400:0000::/19        APNIC          20 May 05
+2400:2000::/19        APNIC          08 Jul 05 
+2600:0000::/22        ARIN           19 Apr 05
+2604:0000::/22        ARIN           19 Apr 05
+2608:0000::/22        ARIN           19 Apr 05
+260C:0000::/22        ARIN           19 Apr 05
+2A00:0000::/21        RIPE NCC       19 Apr 05
+2A01:0000::/23        RIPE NCC       14 Jul 05
+3FFE:0000::/16        6BONE          01 Dec 98   [5]
+
+Notes:
+
+[0]  The assignable Global Unicast Address space is defined
+     in [RFC3513] as being the address block defined by the
+     prefix 2000::/3. All address space in this block not
+     listed in the table above is reserved by IANA for
+     future allocation.
+
+[1]  The prefix assigned to the IANA, 2001:0000::/23, is for
+     assignment for testing, experimental and trial usage by IANA
+     [RFC2928].
+
+[2]  2001:0DB8::/32 has been assigned as a NON-ROUTABLE
+     range to be used for documentation purpose [RFC3849].
+
+[3]  2001:3C00::/22 is reserved for possible future allocation
+     to the RIPE NCC.
+
+[4]  2002::/16 is reserved for use in 6to4 deployments [RFC3056].
+
+[5]  3FFE::/16 is an experimental allocation to the 6BONE [RFC2471].
+     This prefix will be returned to the unassigned address pool on
+     the 6th June 2006 [RFC3701].
+
+References
+----------
+[RFC2471]   Hinden, R., R. Fink, J. Postel, "IPv6 Testing Address
+            Allocation", RFC 2471, December 1998.
+
+[RFC2928]   Hinden, R., Deering, S., Fink, R., Hain, T., , "Initial
+            IPv6 Sub-TLA ID Assignments", RFC 2928, September 2000.
+
+[RFC3056]   Carpenter, B., K. Moore, "Connection of IPv6 Domains via
+            IPv4 Clouds without Explicit Tunnels", RFC 3056, 
+            February 2001.
+
+[RFC3513]   Hinden, R., "IP Version 6 Addressing Architecture",
+            RFC 3513, April 2003.
+
+[RFC3701]   Fink, R., "6Bone (IPv6 Testing Address Allocation)
+            Phaseout", RFC 3701, March 2004.
+
+[RFC3849]   Huston, G., A. Lord, P. Smith, "IPv6 Address Prefix
+            Reserved for Documentation", RFC 3849, July 2004.
+
+[RFC-huston-ip6-iana-registry-05.txt]
+            Huston, G., "Proposed changes to the format of the IANA 
+            IPv6 Registry", RFC XXXX, Month Year.
+
+[]

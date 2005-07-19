@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.14 2004/08/30 19:56:29 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.15 2005/07/19 15:48:33 peter Exp $
  * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -29,6 +29,13 @@ typedef struct {
 	int flag_startend_use;		/* =1 start or end of bit in use */
 	int flag_valid;			/* address structure filled */
 } ipv6calc_ipv6addr;
+
+/* IPv6 address assignment structure */
+typedef struct {
+	const uint32_t ipv6addr;
+	const uint32_t ipv6mask;
+	const char *string_registry;
+} s_ipv6addr_assignment;
 
 /* IPv6 address type definitions 
  * with credits to kernel and USAGI developer team
