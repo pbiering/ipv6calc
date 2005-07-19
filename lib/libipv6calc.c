@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.12 2005/07/19 14:54:57 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.13 2005/07/19 14:56:18 peter Exp $
  * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -217,7 +217,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		/* Check whether minimum 1 xdigit is between colons */
 		j = 0;
 		for (i = 0; i < (int) length; i++) {
-			if (isxdigit(string[i])) {
+			if (isxdigit((int) string[i])) {
 				j++;
 				if ( j > 2 ) {
 					/* more than 2 xdigits */
