@@ -1,7 +1,7 @@
 # Project    : ipv6calc/ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.7 2005/06/28 07:03:44 peter Exp $
-# Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile.in,v 1.8 2005/07/20 06:29:08 peter Exp $
+# Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calc
@@ -44,7 +44,7 @@ distclean:
 		make clean
 
 clean:
-		rm -f ipv6calc *.o
+		rm -f ipv6calc ipv6calc-static *.o
 
 test:
 		make
