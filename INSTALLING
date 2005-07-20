@@ -26,9 +26,14 @@ HACKERS WAY
 -----------
 cd /usr/src ; tar xvzf ipv6calc*.tar.gz
 
-./configure --prefix=/usr --mandir=/usr/share/man && make && make test && make -n install
+./configure --exec_prefix=/usr --mandir=/usr/share/man && make && make test && make -n install exec_prefix=/usr
+make install exec_prefix=/usr
 
-make install
+
+If you want to suppress configure's exec_prefix, specify bindir directly, e.g.
+
+./configure --prefix=/usr/local --bindir /usr/local/bin --mandir /usr/local/share/man
+
 
 
 For Solaris 8 you need following packages installed:
@@ -80,4 +85,4 @@ If you want to install the binary use "make install".
 Peter Bieringer
 <pb (at) bieringer.de>
 
-$Id: INSTALLING,v 1.9 2005/07/19 15:18:04 peter Exp $
+$Id: INSTALLING,v 1.10 2005/07/20 06:19:58 peter Exp $
