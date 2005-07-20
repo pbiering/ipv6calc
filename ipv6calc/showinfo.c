@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.15 2004/10/30 12:38:59 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.16 2005/07/20 06:44:31 peter Exp $
  * Copyright  : 2001-2004 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -490,7 +490,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 					} else {
 						fprintf(stdout, "Generated from the extension identifier of an EUI-48 (MAC): ...:%02x:%02x:%02x\n", (unsigned int) ipv6addr_getoctett(ipv6addrp, 13), (unsigned int) ipv6addr_getoctett(ipv6addrp, 14), (unsigned int) ipv6addr_getoctett(ipv6addrp, 15));
 					};
-				} else if ( ((typeinfo & IPV6_NEW_ADDR_ISATAP) != 0) || (((typeinfo & IPV6_ADDR_LINKLOCAL) != 0) && (ipv6addr_getdword(ipv6addrp, 2) == 0)) )   {
+				} else if ( ((typeinfo & IPV6_NEW_ADDR_ISATAP) != 0) || (((typeinfo & IPV6_ADDR_LINKLOCAL) != 0) && (ipv6addr_getdword(ipv6addrp, 2) == 0 && ipv6addr_getword(ipv6addrp, 6) != 0)) )   {
+					/* fe80:: must have 0000:0000:xxxx:yyyy where xxxx > 0 */
 					if ( machinereadable != 0 ) {
 					} else {
 						fprintf(stdout, "Address type contains IPv4 address:\n");
