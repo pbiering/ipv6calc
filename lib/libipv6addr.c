@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.16 2005/07/19 15:48:33 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.17 2005/07/20 07:01:19 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -378,38 +378,38 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 };
 
 /*
- * get registry number of an IPv4 address
+ * get registry number of an IPv6 address
  *
  * in:  ipv6addr = IPv6 address structure
  * out: assignment number (-1 = no result)
  */
 #define DEBUG_function_name "libipv6calc/getregistry"
 int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
-    char resultstring[NI_MAXHOST];
-    int i;
+	char resultstring[NI_MAXHOST];
+	int i;
 
-    i = libipv6addr_get_registry_string(ipv6addrp, resultstring);
+	i = libipv6addr_get_registry_string(ipv6addrp, resultstring);
 
-    if (i != 0) {
-        return(IPV6_ADDR_REGISTRY_RESERVED);
-    };
+	if (i != 0) {
+		return(IPV6_ADDR_REGISTRY_RESERVED);
+	};
 
-    if (strcmp(resultstring, "IANA") == 0) {
-        return(IPV6_ADDR_REGISTRY_IANA);
-    } else if (strcmp(resultstring, "APNIC") == 0) {
-        return(IPV6_ADDR_REGISTRY_APNIC);
-    } else if (strcmp(resultstring, "ARIN") == 0) {
-        return(IPV6_ADDR_REGISTRY_ARIN);
-    } else if (strcmp(resultstring, "RIPENCC") == 0) {
-        return(IPV6_ADDR_REGISTRY_RIPE);
-    } else if (strcmp(resultstring, "LACNIC") == 0) {
-        return(IPV6_ADDR_REGISTRY_LACNIC);
-    } else if (strcmp(resultstring, "6BONE") == 0) {
-        return(IPV6_ADDR_REGISTRY_6BONE);
-    } else if (strcmp(resultstring, "6TO4") == 0) {
-        return(-1);
-    } else {
-        return(-1);
+	if (strcmp(resultstring, "IANA") == 0) {
+		return(IPV6_ADDR_REGISTRY_IANA);
+	} else if (strcmp(resultstring, "APNIC") == 0) {
+		return(IPV6_ADDR_REGISTRY_APNIC);
+	} else if (strcmp(resultstring, "ARIN") == 0) {
+		return(IPV6_ADDR_REGISTRY_ARIN);
+	} else if (strcmp(resultstring, "RIPENCC") == 0) {
+		return(IPV6_ADDR_REGISTRY_RIPE);
+	} else if (strcmp(resultstring, "LACNIC") == 0) {
+		return(IPV6_ADDR_REGISTRY_LACNIC);
+	} else if (strcmp(resultstring, "6BONE") == 0) {
+		return(IPV6_ADDR_REGISTRY_6BONE);
+	} else if (strcmp(resultstring, "6TO4") == 0) {
+		return(-1);
+	} else {
+		return(-1);
 	};
 }
 #undef DEBUG_function_name
