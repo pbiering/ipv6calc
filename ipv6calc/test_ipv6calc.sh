@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.8 2005/07/19 15:10:14 peter Exp $
-# Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6calc.sh,v 1.9 2005/07/25 06:34:11 peter Exp $
+# Copyright  : 2001-2005 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 
@@ -108,6 +108,9 @@ cat <<END | grep -v '^#'
 --in prefix+mac fec0:0:0:1:: 01:23:45:67:89:01				=fec0::1:323:45ff:fe67:8901
 ## IPv4 -> reverse
 --in ipv4addr --out revipv4 1.2.3.4					=4.3.2.1.in-addr.arpa.
+## Information
+-i fe80::1								=*
+-i -m ff02::1								=*
 END
 }
 
@@ -138,10 +141,12 @@ testscenarios | while read line; do
 		exit 1
 	fi
 	# Check result
-	if [ "$output" != "$result" ]; then
-		echo "Result '$output' doesn't match!"
-		exit 1
-	fi	
+	if [ "$result" != "*" ]; then
+		if [ "$output" != "$result" ]; then
+			echo "Result '$output' doesn't match!"
+			exit 1
+		fi
+	fi
 done
 
 if [ $? -eq 0 ]; then
