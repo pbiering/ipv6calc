@@ -1,10 +1,15 @@
 /*
- *  $Id: ChangeLog,v 1.94 2005/07/19 16:17:19 peter Exp $ 
+ *  $Id: ChangeLog,v 1.95 2005/07/25 06:29:11 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20050725/PB
+	several Makefiles
+	 - remove compiler switch -O2, this causes segfaults on
+	    Fedora Core 4 using gcc-4.0.0-8
+
 20050719/PB
 	ipv6logstats, ipv6logconf
 	 - remove not really needed uid check in test step

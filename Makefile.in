@@ -1,14 +1,14 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.35 2005/07/19 15:48:33 peter Exp $
-# Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile.in,v 1.36 2005/07/25 06:29:11 peter Exp $
+# Copyright  : 2001-2005 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calc project
 #
 
 # Compiler and Linker Options
-COPTS = -O2 -Wall -g
+COPTS = -Wall -g
 
 CFLAGS	= $(COPTS) -Igetopt/
 
