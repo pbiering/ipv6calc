@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.16 2005/07/20 06:44:31 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.17 2005/07/25 20:59:43 peter Exp $
  * Copyright  : 2001-2004 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -396,7 +396,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	};
 
 	/* SLA prefix included? */
-	if ( (typeinfo & ( IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU ) ) != 0 ) {
+	if ( (typeinfo & ( IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_ADDR_ULUA ) ) != 0 ) {
 		if ( machinereadable != 0 ) {
 			snprintf(tempstring, sizeof(tempstring), "SLA=%04x", (unsigned int) ipv6addr_getword(ipv6addrp, 3));
 			printout(tempstring);
@@ -453,7 +453,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	};
 
 	/* Interface identifier included */
-	if ( ((typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU )) != 0) || ((typeinfo & (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) == (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) ) {
+	if ( ((typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_ADDR_ULUA )) != 0) || ((typeinfo & (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) == (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) ) {
 		if ( machinereadable != 0 ) {
 			snprintf(tempstring, sizeof(tempstring), "IID=%04x:%04x:%04x:%04x", (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addr_getword(ipv6addrp, 6), (unsigned int) ipv6addr_getword(ipv6addrp, 7));
 			printout(tempstring);

@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.95 2005/07/25 06:29:11 peter Exp $ 
+ *  $Id: ChangeLog,v 1.96 2005/07/25 20:59:43 peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,9 @@ Info:
 	several Makefiles
 	 - remove compiler switch -O2, this causes segfaults on
 	    Fedora Core 4 using gcc-4.0.0-8
+	lib/libipv6addr
+	ipv6calc/showinfo
+	 - add support for Unique Local IPv6 Unicast Addresses
 
 20050719/PB
 	ipv6logstats, ipv6logconf

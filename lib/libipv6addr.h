@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.16 2005/07/20 07:01:20 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.17 2005/07/25 20:59:43 peter Exp $
  * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -70,6 +70,8 @@ typedef struct {
 #define IPV6_ADDR_MAPPED			(uint32_t) 0x1000U
 #define IPV6_ADDR_RESERVED			(uint32_t) 0x2000U	/* reserved address space */
 
+#define IPV6_ADDR_ULUA				(uint32_t) 0x4000U	/* Unique Local Unicast Address */
+
 #define IPV6_NEW_ADDR_6TO4			(uint32_t) 0x00010000U
 #define IPV6_NEW_ADDR_6BONE			(uint32_t) 0x00020000U
 #define IPV6_NEW_ADDR_AGU			(uint32_t) 0x00040000U
@@ -106,6 +108,7 @@ typedef struct {
 	{ IPV6_ADDR_COMPATv4		, "compat-v4" },
 	{ IPV6_ADDR_MAPPED		, "mapped" },
 	{ IPV6_ADDR_RESERVED		, "reserved" },
+	{ IPV6_ADDR_ULUA		, "unique-local-unicast" },
 	{ IPV6_NEW_ADDR_6TO4		, "6to4" },
 	{ IPV6_NEW_ADDR_6BONE		, "6bone" },
 	{ IPV6_NEW_ADDR_AGU		, "global-unicast" },

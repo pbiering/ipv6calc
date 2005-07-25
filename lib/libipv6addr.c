@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.17 2005/07/20 07:01:19 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.18 2005/07/25 20:59:43 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -272,6 +272,12 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 	};
 
 	/* address space information  */
+	if ((st & 0xFC000000u) == 0xFC000000u) {
+		/* FC00::/7 -> Unique Local IPv6 Unicast Address */
+		type |= IPV6_ADDR_ULUA;
+	};
+
+	/* address space information  */
 	if ((st & 0xE0000000u) == 0x20000000u) {
 		/* 2000::/3 -> global unicast */
 		type |= IPV6_NEW_ADDR_AGU;
@@ -317,8 +323,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 	   000 and 111 as unicasts.
 	 */
 
-	/* original from kernel, only | and return changed */	
-	if ( ((st & 0xE0000000u) != 0x00000000u) && (st & 0xE0000000u) != 0xE0000000u) {
+	if ( (((st & 0xE0000000u) != 0x00000000u) && (st & 0xE0000000u) != 0xE0000000u) || ((st & 0xFC000000u) == 0xFC000000u)) {
 		type |= IPV6_ADDR_UNICAST;
 		return (type);
 	};
