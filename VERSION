@@ -1,8 +1,8 @@
 # Project: ipv6calc
 # File   : VERSION
 #
-# Version: $Id: VERSION,v 1.44 2005/02/12 16:33:54 peter Exp $ 
+# Version: $Id: VERSION,v 1.45 2005/09/14 21:24:30 peter Exp $ 
 #
 # This is the current version number, processed by autoconf/configure
 
-VERSION	0.49pre
+VERSION	0.49
