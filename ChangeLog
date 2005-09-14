@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.98 2005/09/14 21:41:02 peter Exp $ 
+ *  $Id: ChangeLog,v 1.99 2005/09/14 22:00:20 peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,7 @@ Info:
 	 - fix update check script
 	Update databases
 	spec file fix
+	Tag version 0.49
 	
 20050725/PB
 	several Makefiles
