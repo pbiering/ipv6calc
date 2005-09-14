@@ -1,8 +1,8 @@
  /*
  * Project       : ipv6calc
  * File          : dbipv6_assignment.h
- * Version       : $Id: dbipv6addr_assignment.h,v 1.1 2005/07/19 15:48:33 peter Exp $
- * Generated     : Tue Jul 19 17:46:02 2005
+ * Version       : $Id: dbipv6addr_assignment.h,v 1.2 2005/09/14 21:23:47 peter Exp $
+ * Generated     : Wed Sep 14 20:46:01 2005
  * Data copyright: IANA
  *
  * Information:
@@ -42,6 +42,7 @@ static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 	{ 0x20030000u, 0xffffc000u, "RIPENCC" },
 	{ 0x24000000u, 0xffffe000u, "APNIC" },
 	{ 0x24002000u, 0xffffe000u, "APNIC" },
+	{ 0x24004000u, 0xfffff800u, "APNIC" },
 	{ 0x26000000u, 0xfffffc00u, "ARIN" },
 	{ 0x26040000u, 0xfffffc00u, "ARIN" },
 	{ 0x26080000u, 0xfffffc00u, "ARIN" },
