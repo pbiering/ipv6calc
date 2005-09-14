@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Version    : $Id: ipv6calc.spec,v 1.38 2005/09/14 21:24:30 peter Exp $
+# Version    : $Id: ipv6calc.spec,v 1.39 2005/09/14 21:41:02 peter Exp $
 # Copyright  : 2001-2005 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
@@ -40,7 +40,7 @@ rm -rf $RPM_BUILD_ROOT
 make installonly root=$RPM_BUILD_ROOT
 
 # Move ipv6calc
-mv %{_bindir}/ipv6calc /bin
+mv $RPM_BUILD_ROOT%{_bindir}/ipv6calc $RPM_BUILD_ROOT/bin
 
 
 ## Install examples and helper files

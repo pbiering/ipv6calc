@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.97 2005/09/14 21:24:30 peter Exp $ 
+ *  $Id: ChangeLog,v 1.98 2005/09/14 21:41:02 peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,7 @@ Info:
 	databases/ipv4-assignment
 	 - fix update check script
 	Update databases
+	spec file fix
 	
 20050725/PB
 	several Makefiles
