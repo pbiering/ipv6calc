@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.102 2005/09/15 17:28:51 peter Exp $ 
+ *  $Id: ChangeLog,v 1.103 2005/09/15 17:34:56 peter Exp $ 
  */
 
 Info:
@@ -14,7 +14,8 @@ Info:
 	    Radek Vokál for finding the bug)
 	several Makefiles
 	 - add compiler switch -O2, reason for segfault was found
-	tag version 0.49
+	 - remove also static on clean
+	tag version 0.50
 
 20050914/PB
 	databases/ipv4-assignment
