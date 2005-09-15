@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.103 2005/09/15 17:34:56 peter Exp $ 
+ *  $Id: ChangeLog,v 1.104 2005/09/15 17:50:45 peter Exp $ 
  */
 
 Info:
@@ -15,6 +15,8 @@ Info:
 	several Makefiles
 	 - add compiler switch -O2, reason for segfault was found
 	 - remove also static on clean
+	ipv6logconv:
+	 - add support for unique local unicast
 	tag version 0.50
 
 20050914/PB
