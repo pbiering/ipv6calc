@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.14 2005/09/15 12:32:21 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.15 2005/09/15 17:48:32 peter Exp $
  * Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -477,7 +477,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 						break;
 					};
 				};
-				typeinfo_test = typeinfo & (IPV6_NEW_ADDR_AGU | IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_ADDR_MAPPED | IPV6_ADDR_COMPATv4);
+				typeinfo_test = typeinfo & (IPV6_NEW_ADDR_AGU | IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_ADDR_MAPPED | IPV6_ADDR_COMPATv4 | IPV6_ADDR_ULUA);
 				if ( typeinfo_test != 0 ) {
 					/* get string */
 					for (i = 0; i < (size_t) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++) {
@@ -568,7 +568,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 			typeinfo = ipv6addr_gettype(&ipv6addr);
 
 			/* check whether address has a OUI ID */
-			if ( ( typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4)) == 0 )  {
+			if ( ( typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4 | IPV6_ADDR_ULUA)) == 0 )  {
 				if (flag_skipunknown != 0) {
 					return (1);
 				} else {
@@ -627,6 +627,8 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 				snprintf(resultstring, LINEBUFFER - 1, "link-local.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_ADDR_SITELOCAL) != 0 ) {
 				snprintf(resultstring, LINEBUFFER - 1, "site-local.ipv6addrtype.ipv6calc");
+			} else if ( (typeinfo & IPV6_ADDR_ULUA) != 0 ) {
+				snprintf(resultstring, LINEBUFFER - 1, "unique-local.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_NEW_ADDR_6BONE) != 0 ) {
 				snprintf(resultstring, LINEBUFFER - 1, "6bone-global.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
