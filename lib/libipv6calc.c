@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.15 2005/09/15 12:14:00 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.16 2005/09/15 12:32:21 peter Exp $
  * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -126,7 +126,7 @@ void string_to_reverse_dotted(char *string) {
 		snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
 	};
 
-	snprintf(string, sizeof(string) - 1, ".%s", resultstring);
+	snprintf(string, NI_MAXHOST - 1, ".%s", resultstring);
 	
 	return;
 };

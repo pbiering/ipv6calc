@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.c
- * Version    : $Id: librfc2874.c,v 1.9 2005/09/15 12:14:00 peter Exp $
+ * Version    : $Id: librfc2874.c,v 1.10 2005/09/15 12:32:21 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -37,12 +37,12 @@ int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resul
 	if ( (*ipv6addrp).flag_startend_use != 0 ) {
 		/* check start and end */
 		if ( (((*ipv6addrp).bit_start - 1) & 0x03) != 0 ) {
-			snprintf(resultstring, sizeof(resultstring) - 1, "Start bit number '%d' not dividable by 4 aren't supported because of non unique representation", ((*ipv6addrp).bit_start));
+			snprintf(resultstring, NI_MAXHOST - 1, "Start bit number '%d' not dividable by 4 aren't supported because of non unique representation", ((*ipv6addrp).bit_start));
 			retval = 1;
 			return (retval);
 		};
 		if ( ((*ipv6addrp).bit_end & 0x03 ) != 0 ) {
-			snprintf(resultstring, sizeof(resultstring) - 1, "End bit number '%d' not dividable by 4 aren't supported because of non unique representation", (*ipv6addrp).bit_end);
+			snprintf(resultstring, NI_MAXHOST - 1, "End bit number '%d' not dividable by 4 aren't supported because of non unique representation", (*ipv6addrp).bit_end);
 			retval = 1;
 			return (retval);
 		};
@@ -103,7 +103,7 @@ int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resul
 		string_to_upcase(tempstring);
 	};
 
-	snprintf(resultstring, sizeof(resultstring) - 1, "\\[x%s", tempstring);
+	snprintf(resultstring, NI_MAXHOST - 1, "\\[x%s", tempstring);
 
 	retval = 0;
 
@@ -156,19 +156,19 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 		retval = sscanf(tempstring2, "%x", &xdigit);
 
 		if (retval != 1) {
-			snprintf(resultstring, sizeof(resultstring) - 1, "Nibble '%s' at position %d cannot be parsed", tempstring2, index + 1);
+			snprintf(resultstring, NI_MAXHOST - 1, "Nibble '%s' at position %d cannot be parsed", tempstring2, index + 1);
 			return (1);
 		};
 
 		if (xdigit > 0xf) {
-			snprintf(resultstring, sizeof(resultstring) - 1, "Nibble '%s' at dot position %d is out of range", tempstring2, index + 1);
+			snprintf(resultstring, NI_MAXHOST - 1, "Nibble '%s' at dot position %d is out of range", tempstring2, index + 1);
 			return (1);
 		};
 
 		noctet = nibblecounter >> 1; /* divided by 2 */
 		
 		if (noctet > 15) {
-			snprintf(resultstring, sizeof(resultstring) - 1, "Too many nibbles");
+			snprintf(resultstring, NI_MAXHOST - 1, "Too many nibbles");
 			return (1);
 		};
 
@@ -188,7 +188,7 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 	};
 	
 	if (index > length) {
-		snprintf(resultstring, sizeof(resultstring) - 1, "Unexpected end of string");
+		snprintf(resultstring, NI_MAXHOST - 1, "Unexpected end of string");
 		return (1);
 	};
 
@@ -201,19 +201,19 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 	index++;
 
 	if (index > length) {
-		snprintf(resultstring, sizeof(resultstring) - 1, "Unexpected end of string");
+		snprintf(resultstring, NI_MAXHOST - 1, "Unexpected end of string");
 		return (1);
 	};
 
 	/* proceed prefix length */
 	if (tempstring[index] == '/') {
-		snprintf(resultstring, sizeof(resultstring) - 1, "Char '%c' not expected on position %d", tempstring[index], index + 1);
+		snprintf(resultstring, NI_MAXHOST - 1, "Char '%c' not expected on position %d", tempstring[index], index + 1);
 		return (1);
 	};
 	index++;
 
 	if (index > length) {
-		snprintf(resultstring, sizeof(resultstring) - 1, "Unexpected end of string");
+		snprintf(resultstring, NI_MAXHOST - 1, "Unexpected end of string");
 		return (1);
 	};
 
@@ -231,7 +231,7 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 		/* bitstring label closed */
 
 		if (endprefixlength == 0) {
-			snprintf(resultstring, sizeof(resultstring) - 1, "Invalid prefix length");
+			snprintf(resultstring, NI_MAXHOST - 1, "Invalid prefix length");
 			return (1);
 		};
 		
@@ -241,7 +241,7 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 		retval = sscanf(tempstring2, "%u", &prefixlength);
 
 		if ( /*prefixlength < 0 || */ prefixlength > 128) {
-			snprintf(resultstring, sizeof(resultstring) - 1, "Given prefix length '%d' is out of range", prefixlength);
+			snprintf(resultstring, NI_MAXHOST - 1, "Given prefix length '%d' is out of range", prefixlength);
 			return (1);
 		};
 		
@@ -250,7 +250,7 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 		goto END_bitstring_to_ipv6addrstruct;
 	};
 
-	snprintf(resultstring, sizeof(resultstring) - 1, "Char '%c' not expected on position %d", tempstring[index], index + 1);
+	snprintf(resultstring, NI_MAXHOST - 1, "Char '%c' not expected on position %d", tempstring[index], index + 1);
 	return (1);
 
 END_bitstring_to_ipv6addrstruct:
@@ -279,25 +279,25 @@ int librfc2874_formatcheck(const char *string, char *infostring) {
 
 	/* check length */
 	if (length < 5) {
-		snprintf(infostring, sizeof(infostring) - 1, "Length %d too low", length);
+		snprintf(infostring, NI_MAXHOST - 1, "Length %d too low", length);
 		return (1);
 	};
 	
 	/* check start */
 	if (string[index] != '\\') {
-		snprintf(infostring, sizeof(infostring) - 1, "Char '%c' not expected on position %d", string[index], index + 1);
+		snprintf(infostring, NI_MAXHOST - 1, "Char '%c' not expected on position %d", string[index], index + 1);
 		return (1);
 	};
 	index++;
 	
 	if (string[index] != '[') {
-		snprintf(infostring, sizeof(infostring) - 1, "Char '%c' not expected on position %d", string[index], index + 1);
+		snprintf(infostring, NI_MAXHOST - 1, "Char '%c' not expected on position %d", string[index], index + 1);
 		return (1);
 	};
 	index++;
 	
 	if ( (char) tolower(string[index]) != 'x') {
-		snprintf(infostring, sizeof(infostring) - 1, "Char '%c' not expected on position %d", string[index], index + 1);
+		snprintf(infostring, NI_MAXHOST - 1, "Char '%c' not expected on position %d", string[index], index + 1);
 		return (1);
 	};
 	index++;
@@ -307,7 +307,7 @@ int librfc2874_formatcheck(const char *string, char *infostring) {
 		nibblecounter++;
 
 		if (nibblecounter > 32) {
-			snprintf(infostring, sizeof(infostring) - 1, "More than 32 nibbles on position %d", index + 1);
+			snprintf(infostring, NI_MAXHOST - 1, "More than 32 nibbles on position %d", index + 1);
 			return (1);
 		};
 
@@ -318,7 +318,7 @@ int librfc2874_formatcheck(const char *string, char *infostring) {
 	};
 	
 	if (index >= length) {
-		snprintf(infostring, sizeof(infostring) - 1, "Unexpected end of string (missing '/' or ']')");
+		snprintf(infostring, NI_MAXHOST - 1, "Unexpected end of string (missing '/' or ']')");
 		return (1);
 	};
 
@@ -329,13 +329,13 @@ int librfc2874_formatcheck(const char *string, char *infostring) {
 
 	/* proceed prefix length */
 	if (string[index] != '/') {
-		snprintf(infostring, sizeof(infostring) - 1, "Char '%c' not expected on position %d", string[index], index + 1);
+		snprintf(infostring, NI_MAXHOST - 1, "Char '%c' not expected on position %d", string[index], index + 1);
 		return (1);
 	};
 	index++;
 
 	if (index >= length) {
-		snprintf(infostring, sizeof(infostring) - 1, "Unexpected end of string (missing prefix length)");
+		snprintf(infostring, NI_MAXHOST - 1, "Unexpected end of string (missing prefix length)");
 		return (1);
 	};
 	
@@ -344,7 +344,7 @@ int librfc2874_formatcheck(const char *string, char *infostring) {
 		digitcounter++;
 
 		if (digitcounter > 3) {
-			snprintf(infostring, sizeof(infostring) - 1, "More than 3 digits on position %d", index + 1);
+			snprintf(infostring, NI_MAXHOST - 1, "More than 3 digits on position %d", index + 1);
 			return (1);
 		};
 
@@ -355,7 +355,7 @@ int librfc2874_formatcheck(const char *string, char *infostring) {
 	};
 	
 	if (index >= length) {
-		snprintf(infostring, sizeof(infostring) - 1, "Unexpected end of string (missing ']')");
+		snprintf(infostring, NI_MAXHOST - 1, "Unexpected end of string (missing ']')");
 		return (1);
 	};
 	
@@ -364,7 +364,7 @@ int librfc2874_formatcheck(const char *string, char *infostring) {
 		return (0);
 	};
 	
-	snprintf(infostring, sizeof(infostring) - 1, "Char '%c' not expected on position %d", string[index], index + 1);
+	snprintf(infostring, NI_MAXHOST - 1, "Char '%c' not expected on position %d", string[index], index + 1);
 
 	return (1);
 };

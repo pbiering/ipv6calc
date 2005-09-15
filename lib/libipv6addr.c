@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.20 2005/09/15 12:14:00 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.21 2005/09/15 12:32:21 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -448,10 +448,10 @@ int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, char *re
 
 	/* result */
 	if ( match > -1 ) {
-		snprintf(resultstring, sizeof(resultstring) - 1, "%s", dbipv6addr_assignment[match].string_registry);
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", dbipv6addr_assignment[match].string_registry);
 		return(0);
 	} else {
-		snprintf(resultstring, sizeof(resultstring) - 1, "%s", "unknown");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "unknown");
 		return(1);
 	};
 };
@@ -514,7 +514,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	if ( cp != NULL ) {
 		i = atoi(cp);
 		if (i < 0 || i > 128 ) {
-			snprintf(resultstring, sizeof(resultstring) - 1, "Illegal prefix length: '%s'", cp);
+			snprintf(resultstring, NI_MAXHOST - 1, "Illegal prefix length: '%s'", cp);
 			retval = 1;
 			return (retval);
 		};
@@ -534,7 +534,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 			fprintf(stderr, "%s: Result of uncompressed string: '%s'\n", DEBUG_function_name, tempstring);
 		};
 		if ( result != 0 ) {
-			snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
+			snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
 			retval = 1;
 			return (retval);
 		};
@@ -560,9 +560,9 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	};
 	if ( ! ( ( ( ccolons == 7 ) && ( cpoints == 0 ) ) ||  ( ( ccolons == 6 ) && ( cpoints == 3 ) ) ) ) {
 		if (strstr(addronlystring, "::")) {
-			snprintf(resultstring, sizeof(resultstring) - 1, "Error, given address expanded to '%s' is not valid!", tempstring);
+			snprintf(resultstring, NI_MAXHOST - 1, "Error, given address expanded to '%s' is not valid!", tempstring);
 		} else {
-			snprintf(resultstring, sizeof(resultstring) - 1, "Error, given address '%s' is not valid!", addrstring);
+			snprintf(resultstring, NI_MAXHOST - 1, "Error, given address '%s' is not valid!", addrstring);
 		};
 		retval = 1;
 		return (retval);
@@ -582,7 +582,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 		/* check compat */
 		for ( i = 0; i <= 3; i++ ) {
 			if ( compat[i] > 255 )	{
-				snprintf(resultstring, sizeof(resultstring) - 1, "Error, given compatv4/mapped address '%s' is not valid (%d)!", addrstring, compat[i]);
+				snprintf(resultstring, NI_MAXHOST - 1, "Error, given compatv4/mapped address '%s' is not valid (%d)!", addrstring, compat[i]);
 				retval = 1;
 				return (retval);
 			};
@@ -601,7 +601,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	};
 
 	if ( result != expecteditems ) {
-		snprintf(resultstring, sizeof(resultstring) - 1, "Error splitting address %s, got %d items instead of %d!", addronlystring, result, expecteditems);
+		snprintf(resultstring, NI_MAXHOST - 1, "Error splitting address %s, got %d items instead of %d!", addronlystring, result, expecteditems);
 		retval = 1;
 		return (retval);
 	};
@@ -609,7 +609,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	/* check address words range */
 	for ( i = 0; i <= 7; i++ ) {
 		if ( (temp[i] < 0) || (temp[i] > 0xffff) )	{
-			snprintf(resultstring, sizeof(resultstring) - 1, "Error, given address '%s' is not valid on position %d (%x)!", addronlystring, i, temp[i]);
+			snprintf(resultstring, NI_MAXHOST - 1, "Error, given address '%s' is not valid on position %d (%x)!", addronlystring, i, temp[i]);
 			retval = 1;
 			return (retval);
 		};
@@ -641,7 +641,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 		/* test, whether compatv4/mapped/ISATAP is really one */
 	/*
 		if ( (ipv6addrp->scope & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED | IPV6_NEW_ADDR_ISATAP)) == 0 ) {
-			snprintf(resultstring, sizeof(resultstring) - 1, "Error, given address '%s' is not valid compatv4/mapped/ISATAP one!", addrstring);
+			snprintf(resultstring, NI_MAXHOST - 1, "Error, given address '%s' is not valid compatv4/mapped/ISATAP one!", addrstring);
 			retval = 1;
 			return (retval);
 		};
@@ -687,9 +687,9 @@ static int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char
 
 	if (ipv6addrp->flag_prefixuse == 1) {
 		/* append prefix length */
-		snprintf(resultstring, sizeof(resultstring) - 1, "%s/%u", tempstring, ipv6addrp->prefixlength);
+		snprintf(resultstring, NI_MAXHOST - 1, "%s/%u", tempstring, ipv6addrp->prefixlength);
 	} else {
-		snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
 	};
 
 	retval = 0;	
@@ -716,12 +716,12 @@ static int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp
 
 	/* test for misuse */
 	if ( ((ipv6addrp->scope & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)) != 0 ) && (ipv6addrp->prefixlength > 96) ) {
-		snprintf(resultstring, sizeof(resultstring) - 1, "Error, cannot print prefix of a compatv4/mapped address with prefix length bigger than 96!");
+		snprintf(resultstring, NI_MAXHOST - 1, "Error, cannot print prefix of a compatv4/mapped address with prefix length bigger than 96!");
 		retval = 1;
 		return (retval);
 	};
 	if ( ipv6addrp->prefixlength == 0 ) {
-		snprintf(resultstring, sizeof(resultstring) - 1, "Error, cannot print prefix of a address with prefix length 0!");
+		snprintf(resultstring, NI_MAXHOST - 1, "Error, cannot print prefix of a address with prefix length 0!");
 		retval = 1;
 		return (retval);
 	};
@@ -746,7 +746,7 @@ static int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp
 		i++;
 		snprintf(tempstring1, sizeof(tempstring1) - 1, "%s", tempstring2);
 	};
-	snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring1);
+	snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring1);
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
 		fprintf(stderr, "%s: result string: %s\n", DEBUG_function_name, resultstring);
@@ -777,12 +777,12 @@ static int ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp
 
 	/* test for misuse */
 	if ( ( (ipv6addrp->scope & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)) != 0) && ( ipv6addrp->prefixlength > 96 ) ) {
-		snprintf(resultstring, sizeof(resultstring) - 1, "Error, cannot print suffix of a compatv4/mapped address with prefix length bigger than 96!");
+		snprintf(resultstring, NI_MAXHOST - 1, "Error, cannot print suffix of a compatv4/mapped address with prefix length bigger than 96!");
 		retval = 1;
 		return (retval);
 	};
 	if ( ipv6addrp->prefixlength == 128 ) {
-		snprintf(resultstring, sizeof(resultstring) - 1, "Error, cannot print suffix of a address with prefix length 128!");
+		snprintf(resultstring, NI_MAXHOST - 1, "Error, cannot print suffix of a address with prefix length 128!");
 		retval = 1;
 		return (retval);
 	};
@@ -810,7 +810,7 @@ static int ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp
 		i++;
 		snprintf(tempstring1, sizeof(tempstring1) - 1, "%s", tempstring2);
 	};
-	snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring1);
+	snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring1);
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
 		fprintf(stderr, "%s: result string: %s\n", DEBUG_function_name, resultstring);
@@ -967,7 +967,7 @@ int tokenlsb64_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv
 	};
 	
 	if ( strlen(addrstring) != 16 ) {
-		snprintf(resultstring, sizeof(resultstring) - 1, "Error, given /token '%s' is not valid (length != 16!", addrstring);
+		snprintf(resultstring, NI_MAXHOST - 1, "Error, given /token '%s' is not valid (length != 16!", addrstring);
 		retval = 1;
 		return (retval);
 	};
@@ -975,7 +975,7 @@ int tokenlsb64_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv
 	/* scan address into array */
 	result = sscanf(addrstring, "%04x%04x%04x%04x", &temp[0], &temp[1], &temp[2], &temp[3]);
 	if ( result != 4 ) {
-		snprintf(resultstring, sizeof(resultstring) - 1, "Error splitting address '%s', got %d items instead of 4!", addrstring, result);
+		snprintf(resultstring, NI_MAXHOST - 1, "Error splitting address '%s', got %d items instead of 4!", addrstring, result);
 		retval = 1;
 		return (retval);
 	};
@@ -1010,7 +1010,7 @@ int identifier_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv
 	};
 	
 	if ( strlen(addrstring) > 19 ) {
-		snprintf(resultstring, sizeof(resultstring) - 1, "Error, given identifier identifier '%s' is too long (length > 16!", addrstring);
+		snprintf(resultstring, NI_MAXHOST - 1, "Error, given identifier identifier '%s' is too long (length > 16!", addrstring);
 		retval = 1;
 		return (retval);
 	};
@@ -1041,7 +1041,7 @@ int libipv6addr_ipv6addrstruct_to_tokenlsb64(const ipv6calc_ipv6addr *ipv6addrp,
 	int retval = 1;
 	
 	/* print array */
-	snprintf(resultstring, sizeof(resultstring) - 1, "%04x%04x%04x%04x", ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addr_getword(ipv6addrp, 6), ipv6addr_getword(ipv6addrp, 7));
+	snprintf(resultstring, NI_MAXHOST - 1, "%04x%04x%04x%04x", ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addr_getword(ipv6addrp, 6), ipv6addr_getword(ipv6addrp, 7));
 
 	if ( (formatoptions & FORMATOPTION_printlowercase) != 0 ) {
 		/* nothing to do */
@@ -1077,7 +1077,7 @@ int libipv6addr_to_octal(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring,
 		snprintf(tempstring, sizeof(tempstring) - 1, "\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o", ipv6addrp->in6_addr.s6_addr[0], ipv6addrp->in6_addr.s6_addr[1], ipv6addrp->in6_addr.s6_addr[2], ipv6addrp->in6_addr.s6_addr[3], ipv6addrp->in6_addr.s6_addr[4], ipv6addrp->in6_addr.s6_addr[5], ipv6addrp->in6_addr.s6_addr[6], ipv6addrp->in6_addr.s6_addr[7], ipv6addrp->in6_addr.s6_addr[8], ipv6addrp->in6_addr.s6_addr[9], ipv6addrp->in6_addr.s6_addr[10], ipv6addrp->in6_addr.s6_addr[11], ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
 	};
 
-	snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
+	snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
 	retval = 0;	
 	return (retval);
 };

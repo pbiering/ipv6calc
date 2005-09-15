@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.c
- * Version    : $Id: librfc1884.c,v 1.5 2005/09/15 12:14:00 peter Exp $
+ * Version    : $Id: librfc1884.c,v 1.6 2005/09/15 12:32:21 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -49,7 +49,7 @@ int compaddr_to_uncompaddr(const char *addrstring, char *resultstring) {
 
 		/* check for additional "::" occurance - not allowed! */
 		if (strstr(strp+1, "::")) {
-			snprintf(resultstring, sizeof(resultstring) - 1, "%s", "More than 2 colons in address are not allowed!");
+			snprintf(resultstring, NI_MAXHOST - 1, "%s", "More than 2 colons in address are not allowed!");
 			retval = 1;
 			return (retval);
 		};
@@ -87,7 +87,7 @@ int compaddr_to_uncompaddr(const char *addrstring, char *resultstring) {
 			fprintf(stderr, "%s: result: %s\n", DEBUG_function_name, resultstring);
 		};
 	} else {
-		snprintf(resultstring, sizeof(resultstring) - 1, "%s", addrstring);
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", addrstring);
 		if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
 			fprintf(stderr, "%s: address is not in compressed format\n", DEBUG_function_name);
 		};
@@ -296,9 +296,9 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 
 
 	if ( ( retval == 0 ) && ( ipv6addrp->flag_prefixuse == 1 ) ) {
-		snprintf(resultstring, sizeof(resultstring) - 1, "%s/%u", tempstring, ipv6addrp->prefixlength);
+		snprintf(resultstring, NI_MAXHOST - 1, "%s/%u", tempstring, ipv6addrp->prefixlength);
 	} else {
-		snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
 	};
 
 	if ( (formatoptions & FORMATOPTION_printlowercase) != 0 ) {

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.13 2005/09/15 12:14:00 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.14 2005/09/15 12:32:21 peter Exp $
  * Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -377,7 +377,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 
 		if (cache_lru_key_outputtype[cache_lru_last - 1] == outputtype) {
 			if (strcmp(cache_lru_key_token[cache_lru_last - 1], token) == 0) {
-				snprintf(resultstring, sizeof(resultstring) - 1, cache_lru_value[cache_lru_last - 1]);
+				snprintf(resultstring, LINEBUFFER - 1, cache_lru_value[cache_lru_last - 1]);
 				cache_lru_statistics[0]++;
 				if (ipv6calc_debug & 0x4) {
 					fprintf(stderr, "LRU cache: hit last line=%d key_token=%s key_outputtype=%lx value=%s\n", cache_lru_last - 1, token, outputtype, resultstring);
@@ -390,7 +390,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 				for (i = cache_lru_last - 1; i > 0; i--) {
 					if (cache_lru_key_outputtype[i - 1] == outputtype) {
 						if (strcmp(cache_lru_key_token[i - 1], token) == 0) {
-							snprintf(resultstring, sizeof(resultstring) - 1, cache_lru_value[i - 1]);
+							snprintf(resultstring, LINEBUFFER - 1, cache_lru_value[i - 1]);
 							cache_lru_statistics[cache_lru_last - i]++;
 							if (ipv6calc_debug & 0x4) {
 								fprintf(stderr, "LRU cache: hit line=%d key_token=%s key_outputtype=%lx value=%s\n", i - 1, token, outputtype, resultstring);
@@ -405,7 +405,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 				for (i = cache_lru_max; i > cache_lru_last; i--) {
 					if (cache_lru_key_outputtype[i - 1] == outputtype) {
 						if (strcmp(cache_lru_key_token[i - 1], token) == 0) {
-							snprintf(resultstring, sizeof(resultstring) - 1, cache_lru_value[i - 1]);
+							snprintf(resultstring, LINEBUFFER - 1, cache_lru_value[i - 1]);
 							cache_lru_statistics[cache_lru_max - i + cache_lru_last]++;
 							if (ipv6calc_debug & 0x4) {
 								fprintf(stderr, "LRU cache: hit line=%d key_token=%s key_outputtype=%lx value=%s\n", i - 1, token, outputtype, resultstring);
@@ -464,7 +464,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 	switch (outputtype) {
 		case FORMAT_addrtype:
 			if (ipv6addr.flag_valid == 1) {
-				snprintf(resultstring, sizeof(resultstring) - 1, "ipv6-addr.addrtype.ipv6calc");
+				snprintf(resultstring, LINEBUFFER - 1, "ipv6-addr.addrtype.ipv6calc");
 
 				/* check for registry */
 				typeinfo = ipv6addr_gettype(&ipv6addr);
@@ -488,7 +488,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 					};
 				};
 				snprintf(tempstring, sizeof(tempstring) - 1, "%s.%s", ipv6calc_ipv6addrtypestrings[retval].token, resultstring);
-				snprintf(resultstring, sizeof(resultstring) - 1,"%s", tempstring);
+				snprintf(resultstring, LINEBUFFER - 1,"%s", tempstring);
 
 				/* type of global IPv6 address */
 				/* init retval */
@@ -508,7 +508,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 						};
 					};
 					snprintf(tempstring, sizeof(tempstring) - 1, "%s.%s", ipv6calc_ipv6addrtypestrings[retval].token, resultstring);
-					snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
+					snprintf(resultstring, LINEBUFFER - 1, "%s", tempstring);
 				};
 
 				/* registry of IPv6 address */
@@ -516,7 +516,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 					retval = libipv6addr_get_registry_string(&ipv6addr, temp2string);
 					if ( retval == 0 ) {
 						snprintf(tempstring, sizeof(tempstring) - 1, "%s.%s", temp2string, resultstring);
-						snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
+						snprintf(resultstring, LINEBUFFER - 1, "%s", tempstring);
 					};
 				} else if ( (typeinfo & (IPV6_NEW_ADDR_6TO4 | IPV6_ADDR_MAPPED | IPV6_ADDR_COMPATv4)) != 0 ) {
 					/* fill IPv4 address */
@@ -538,20 +538,20 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 					if ( retval == 0 ) {
 						/* IPv4 registry */
 						snprintf(tempstring, sizeof(tempstring) - 1, "%s.%s", temp2string, resultstring);
-						snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
+						snprintf(resultstring, LINEBUFFER - 1, "%s", tempstring);
 					};
 				};
 			} else if (ipv4addr.flag_valid == 1) {
-				snprintf(resultstring, sizeof(resultstring) - 1, "ipv4-addr.addrtype.ipv6calc");
+				snprintf(resultstring, LINEBUFFER - 1, "ipv4-addr.addrtype.ipv6calc");
 
 				retval = libipv4addr_get_registry_string(&ipv4addr, temp2string);
 				if ( retval == 0 ) {
 					/* IPv4 registry */
 					snprintf(tempstring, sizeof(tempstring) - 1, "%s.%s", temp2string, resultstring);
-					snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
+					snprintf(resultstring, LINEBUFFER - 1, "%s", tempstring);
 				};
 			} else {
-				snprintf(resultstring, sizeof(resultstring) - 1, "reverse-lookup-successful.addrtype.ipv6calc");
+				snprintf(resultstring, LINEBUFFER - 1, "reverse-lookup-successful.addrtype.ipv6calc");
 			};
 			break;
 
@@ -560,7 +560,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 				if (flag_skipunknown != 0) {
 					return (1);
 				} else {
-					snprintf(resultstring, sizeof(resultstring) - 1, "not-ipv6.ouitype.ipv6calc");
+					snprintf(resultstring, LINEBUFFER - 1, "not-ipv6.ouitype.ipv6calc");
 					return (0);
 				};
 		       	};
@@ -572,7 +572,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 				if (flag_skipunknown != 0) {
 					return (1);
 				} else {
-					snprintf(resultstring, sizeof(resultstring) - 1, "unresolvable.ouitype.ipv6calc");
+					snprintf(resultstring, LINEBUFFER - 1, "unresolvable.ouitype.ipv6calc");
 					return (0);
 				};
 		       	};
@@ -590,23 +590,23 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 					if (flag_skipunknown != 0) {
 						return (1);
 					} else {
-						snprintf(resultstring, sizeof(resultstring) - 1, "unresolvable.ouitype.ipv6calc");
+						snprintf(resultstring, LINEBUFFER - 1, "unresolvable.ouitype.ipv6calc");
 						return (0);
 					};
 				};
 				if (strlen(resultstring) == 0) {
-					snprintf(resultstring, sizeof(resultstring) - 1, "unknown.ouitype.ipv6calc");
+					snprintf(resultstring, LINEBUFFER - 1, "unknown.ouitype.ipv6calc");
 				} else {
 					snprintf(tempstring, sizeof(tempstring) - 1, "%s.ouitype.ipv6calc", resultstring);
-					snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
+					snprintf(resultstring, LINEBUFFER - 1, "%s", tempstring);
 				};
 			} else {
 				if ( (typeinfo & IPV6_NEW_ADDR_6TO4_MICROSOFT) != 0 ) {
-					snprintf(resultstring, sizeof(resultstring) - 1, "6to4-microsoft.ouitype.ipv6calc");
+					snprintf(resultstring, LINEBUFFER - 1, "6to4-microsoft.ouitype.ipv6calc");
 				} else if ( (typeinfo & IPV6_NEW_ADDR_ISATAP) != 0 ) {
-					snprintf(resultstring, sizeof(resultstring) - 1, "ISATAP.ouitype.ipv6calc");
+					snprintf(resultstring, LINEBUFFER - 1, "ISATAP.ouitype.ipv6calc");
 				} else {
-					snprintf(resultstring, sizeof(resultstring) - 1, "local-scope.ouitype.ipv6calc");
+					snprintf(resultstring, LINEBUFFER - 1, "local-scope.ouitype.ipv6calc");
 				};
 			};
 			break;
@@ -616,7 +616,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 				if (flag_skipunknown != 0) {
 					return (1);
 				} else {
-					snprintf(resultstring, sizeof(resultstring) - 1, "not-ipv6.ipv6addrtype.ipv6calc");
+					snprintf(resultstring, LINEBUFFER - 1, "not-ipv6.ipv6addrtype.ipv6calc");
 					return (0);
 				};
 		       	};
@@ -624,21 +624,21 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 			typeinfo = ipv6addr_gettype(&ipv6addr);
 
 		       	if ( (typeinfo & IPV6_ADDR_LINKLOCAL) != 0 ) {
-				snprintf(resultstring, sizeof(resultstring) - 1, "link-local.ipv6addrtype.ipv6calc");
+				snprintf(resultstring, LINEBUFFER - 1, "link-local.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_ADDR_SITELOCAL) != 0 ) {
-				snprintf(resultstring, sizeof(resultstring) - 1, "site-local.ipv6addrtype.ipv6calc");
+				snprintf(resultstring, LINEBUFFER - 1, "site-local.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_NEW_ADDR_6BONE) != 0 ) {
-				snprintf(resultstring, sizeof(resultstring) - 1, "6bone-global.ipv6addrtype.ipv6calc");
+				snprintf(resultstring, LINEBUFFER - 1, "6bone-global.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
-				snprintf(resultstring, sizeof(resultstring) - 1, "6to4-global.ipv6addrtype.ipv6calc");
+				snprintf(resultstring, LINEBUFFER - 1, "6to4-global.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_NEW_ADDR_PRODUCTIVE) != 0 ) {
-				snprintf(resultstring, sizeof(resultstring) - 1, "productive-global.ipv6addrtype.ipv6calc");
+				snprintf(resultstring, LINEBUFFER - 1, "productive-global.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_ADDR_MAPPED) != 0 ) {
-				snprintf(resultstring, sizeof(resultstring) - 1, "mapped-ipv4.ipv6addrtype.ipv6calc");
+				snprintf(resultstring, LINEBUFFER - 1, "mapped-ipv4.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_ADDR_COMPATv4) != 0 ) {
-				snprintf(resultstring, sizeof(resultstring) - 1, "compat-ipv4.ipv6addrtype.ipv6calc");
+				snprintf(resultstring, LINEBUFFER - 1, "compat-ipv4.ipv6addrtype.ipv6calc");
 			} else {
-				snprintf(resultstring, sizeof(resultstring) - 1, "unknown-ipv6.ipv6addrtype.ipv6calc");
+				snprintf(resultstring, LINEBUFFER - 1, "unknown-ipv6.ipv6addrtype.ipv6calc");
 			};
 			break;
 

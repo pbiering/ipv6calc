@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3056.c
- * Version    : $Id: librfc3056.c,v 1.6 2005/09/15 12:14:01 peter Exp $
+ * Version    : $Id: librfc3056.c,v 1.7 2005/09/15 12:32:21 peter Exp $
  * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -65,7 +65,7 @@ int librfc3056_ipv6addr_to_ipv4addr(ipv6calc_ipv4addr *ipv4addrp, const ipv6calc
 
 	/* check scope */
 	if ( (ipv6addrp->scope & IPV6_NEW_ADDR_6TO4) == 0 ) {
-		snprintf(resultstring, sizeof(resultstring) - 1, "IPv6 address is not a 6to4 one!");
+		snprintf(resultstring, NI_MAXHOST - 1, "IPv6 address is not a 6to4 one!");
 		return(retval);	
 	};
 
