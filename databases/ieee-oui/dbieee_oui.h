@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui.h
- * Version       : $Id: dbieee_oui.h,v 1.23 2005/09/14 21:23:46 peter Exp $
- * Generated     : Wed Sep 14 20:45:12 2005
+ * Version       : $Id: dbieee_oui.h,v 1.24 2005/09/15 17:59:49 peter Exp $
+ * Generated     : Thu Sep 15 19:56:51 2005
  * Data copyright: IEEE
  *
  * Information:
@@ -4395,7 +4395,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x001143, "DELL INC.", "DELL" },
 	{ 0x001144, "Assurance Technology Corp", "ASSURANCE" },
 	{ 0x001145, "ValuePoint Networks", "VALUEPOINT-NETWORKS" },
-	{ 0x001146, "PRIVATE", "PRIVATE" },
+	{ 0x001146, "Telecard-Pribor Ltd", "TELECARD-PRIBOR" },
 	{ 0x001147, "Secom-Industry co.LTD.", "SECOM-INDUSTRY" },
 	{ 0x001148, "Prolon Control Systems", "PROLON-CONTROL" },
 	{ 0x001149, "Proliphix LLC", "PROLIPHIX-LLC" },

@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.104 2005/09/15 17:50:45 peter Exp $ 
+ *  $Id: ChangeLog,v 1.105 2005/09/15 17:59:49 peter Exp $ 
  */
 
 Info:
@@ -17,6 +17,7 @@ Info:
 	 - remove also static on clean
 	ipv6logconv:
 	 - add support for unique local unicast
+	update databases
 	tag version 0.50
 
 20050914/PB
