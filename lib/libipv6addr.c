@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.18 2005/07/25 20:59:43 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.19 2005/09/15 09:21:34 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -236,11 +236,8 @@ void ipv6addr_clearall(ipv6calc_ipv6addr *ipv6addrp) {
  */
 #define DEBUG_function_name "libipv6addr/ipv6addr_copy"
 void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6addr *ipv6addrp_src) {
-	int i;
 
-	for (i = 0; i < (int) sizeof(ipv6calc_ipv6addr); i++) {
-		*(ipv6addrp_dst + i) = *(ipv6addrp_src + i);
-	};
+	*(ipv6addrp_dst) = *(ipv6addrp_src);
 	
 	return;
 };

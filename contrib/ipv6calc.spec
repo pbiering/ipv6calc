@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Version    : $Id: ipv6calc.spec,v 1.40 2005/09/14 21:48:41 peter Exp $
+# Version    : $Id: ipv6calc.spec,v 1.41 2005/09/15 09:21:34 peter Exp $
 # Copyright  : 2001-2005 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
@@ -100,7 +100,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 * Wed Jul 20 2005 Peter Bieringer <pb@bieringer.de>
-- adjust code because of use of ${exec_prefix}/bin in Makefile of ivp6calc
+- adjust code because of use of /usr/bin in Makefile of ivp6calc
 
 * Sat Oct 30 2004 Peter Bieringer <pb@bieringer.de>
 - remove openssl(-devel) from requirements, no longer needed
