@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.5 2004/10/30 12:44:35 peter Exp $
+ * Version    : $Id: libieee.c,v 1.6 2005/09/15 12:14:00 peter Exp $
  * Copyright  : 2002-2004 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -37,7 +37,7 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
 	/* catch special ones */
 	if ((macaddrp->addr[0] == 0xfc && macaddrp->addr[1] == 0xfc)) {
 		/* Linux special OUI for ISDN-NET or PLIP interfaces */
-		snprintf(resultstring, NI_MAXHOST, "Linux ISDN-NET/PLIP");
+		snprintf(resultstring, sizeof(resultstring) - 1, "Linux ISDN-NET/PLIP");
 		return (0);
 	};
 	
@@ -59,7 +59,7 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
 		if (libieee_iab[i].id == idval) {
 			/* major id match */
 			if (libieee_iab[i].subid_begin <= subidval && libieee_iab[i].subid_end >= subidval) {
-				snprintf(resultstring, NI_MAXHOST, "%s", libieee_iab[i].string_owner);
+				snprintf(resultstring, sizeof(resultstring) - 1, "%s", libieee_iab[i].string_owner);
 				return (0);
 			};
 		};
@@ -69,7 +69,7 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
 	for (i = 0; i < (int) (sizeof(libieee_oui) / sizeof(libieee_oui[0])); i++) {
 		if (libieee_oui[i].id == idval) {
 			/* match */
-			snprintf(resultstring, NI_MAXHOST, "%s", libieee_oui[i].string_owner);
+			snprintf(resultstring, sizeof(resultstring) - 1, "%s", libieee_oui[i].string_owner);
 			return (0);
 		};
 	};
@@ -99,7 +99,7 @@ int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *
 	/* catch special ones */
 	if ((macaddrp->addr[0] == 0xfc && macaddrp->addr[1] == 0xfc)) {
 		/* Linux special OUI for ISDN-NET or PLIP interfaces */
-		snprintf(resultstring, NI_MAXHOST, "Linux-ISDN-NET+PLIP");
+		snprintf(resultstring, sizeof(resultstring) - 1, "Linux-ISDN-NET+PLIP");
 		return (0);
 	};
 	
@@ -121,7 +121,7 @@ int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *
 		if (libieee_iab[i].id == idval) {
 			/* major id match */
 			if (libieee_iab[i].subid_begin <= subidval && libieee_iab[i].subid_end >= subidval) {
-				snprintf(resultstring, NI_MAXHOST, "%s", libieee_iab[i].shortstring_owner);
+				snprintf(resultstring, sizeof(resultstring) - 1, "%s", libieee_iab[i].shortstring_owner);
 				return (0);
 			};
 		};
@@ -131,7 +131,7 @@ int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *
 	for (i = 0; i < (int) (sizeof(libieee_oui) / sizeof(libieee_oui[0])); i++) {
 		if (libieee_oui[i].id == idval) {
 			/* match */
-			snprintf(resultstring, NI_MAXHOST, "%s", libieee_oui[i].shortstring_owner);
+			snprintf(resultstring, sizeof(resultstring) - 1, "%s", libieee_oui[i].shortstring_owner);
 			return (0);
 		};
 	};

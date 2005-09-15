@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.c
- * Version    : $Id: librfc1884.c,v 1.4 2002/04/04 21:58:21 peter Exp $
+ * Version    : $Id: librfc1884.c,v 1.5 2005/09/15 12:14:00 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -38,7 +38,7 @@ int compaddr_to_uncompaddr(const char *addrstring, char *resultstring) {
 		fprintf(stderr, "%s: got input: %s\n", DEBUG_function_name, addrstring);
 	};
 
-	snprintf(tempstring, sizeof(tempstring), "%s", addrstring);
+	snprintf(tempstring, sizeof(tempstring) - 1, "%s", addrstring);
 
 	strp = strstr(tempstring, "::");
 	if (strp) {
@@ -49,7 +49,7 @@ int compaddr_to_uncompaddr(const char *addrstring, char *resultstring) {
 
 		/* check for additional "::" occurance - not allowed! */
 		if (strstr(strp+1, "::")) {
-			snprintf(resultstring, NI_MAXHOST, "%s", "More than 2 colons in address are not allowed!");
+			snprintf(resultstring, sizeof(resultstring) - 1, "%s", "More than 2 colons in address are not allowed!");
 			retval = 1;
 			return (retval);
 		};
@@ -87,7 +87,7 @@ int compaddr_to_uncompaddr(const char *addrstring, char *resultstring) {
 			fprintf(stderr, "%s: result: %s\n", DEBUG_function_name, resultstring);
 		};
 	} else {
-		snprintf(resultstring, NI_MAXHOST, "%s", addrstring);
+		snprintf(resultstring, sizeof(resultstring) - 1, "%s", addrstring);
 		if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
 			fprintf(stderr, "%s: address is not in compressed format\n", DEBUG_function_name);
 		};
@@ -136,7 +136,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 			fprintf(stderr, "%s: IPV6_ADDR_COMPATv4 type - fast conversion\n", DEBUG_function_name);
 		};
 		
-		result = snprintf(tempstring, sizeof(tempstring), "::%u.%u.%u.%u", ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
+		result = snprintf(tempstring, sizeof(tempstring) - 1, "::%u.%u.%u.%u", ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
 		retval = 0;
 	} else if ( (ipv6addrp->scope & IPV6_ADDR_MAPPED) != 0 ) {
 		/* mapped address */
@@ -145,7 +145,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 			fprintf(stderr, "%s: IPV6_ADDR_MAPPED type - fast conversion\n", DEBUG_function_name);
 		};
 		
-		result = snprintf(tempstring, sizeof(tempstring), "::%x:%u.%u.%u.%u", ipv6addr_getword(ipv6addrp, 5), ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
+		result = snprintf(tempstring, sizeof(tempstring) - 1, "::%x:%u.%u.%u.%u", ipv6addr_getword(ipv6addrp, 5), ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
 		retval = 0;
 	} else if ( (ipv6addr_getdword(ipv6addrp, 0) == 0) && (ipv6addr_getdword(ipv6addrp, 1) == 0) && (ipv6addr_getdword(ipv6addrp, 2) == 0) && (ipv6addr_getdword(ipv6addrp, 3) == 0) ) {
 		/* unspecified address */
@@ -154,7 +154,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 			fprintf(stderr, "%s: unspecified address - fast conversion\n", DEBUG_function_name);
 		};
 		
-		result = snprintf(tempstring, sizeof(tempstring), "::");
+		result = snprintf(tempstring, sizeof(tempstring) - 1, "::");
 		retval = 0;
 	} else if ( (ipv6addr_getdword(ipv6addrp, 0) == 0) && (ipv6addr_getdword(ipv6addrp, 1) == 0) && (ipv6addr_getdword(ipv6addrp, 2) == 0) && (ipv6addr_getdword(ipv6addrp, 3) == 1) ) {
 		/* loopback address */
@@ -163,7 +163,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 			fprintf(stderr, "%s: loopback - fast conversion\n",  DEBUG_function_name);
 		};
 		
-		result = snprintf(tempstring, sizeof(tempstring), "::1");
+		result = snprintf(tempstring, sizeof(tempstring) - 1, "::1");
 		retval = 0;
 	} else {
 		/* normal address */
@@ -272,19 +272,19 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 					fprintf(stderr, "%s: start of '0' at '%d'\n",  DEBUG_function_name, i);
 				};
 				
-				snprintf(temp2string, sizeof(temp2string), "%s:", tempstring);
+				snprintf(temp2string, sizeof(temp2string) - 1, "%s:", tempstring);
 			} else if ( i == 0 ) {
 				if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
 					fprintf(stderr, "%s: normal start value at '%d' (%x)\n",  DEBUG_function_name, i, (unsigned int) ipv6addr_getword(ipv6addrp, (unsigned int) i));
 				};
 				
-				snprintf(temp2string, sizeof(temp2string), "%x", (unsigned int) ipv6addr_getword(ipv6addrp, (unsigned int) i));
+				snprintf(temp2string, sizeof(temp2string) - 1, "%x", (unsigned int) ipv6addr_getword(ipv6addrp, (unsigned int) i));
 			} else if ( ( i > zend ) || ( i < zstart ) ) {
-				snprintf(temp2string, sizeof(temp2string), "%s:%x", tempstring, (unsigned int) ipv6addr_getword(ipv6addrp, (unsigned int) i));
+				snprintf(temp2string, sizeof(temp2string) - 1, "%s:%x", tempstring, (unsigned int) ipv6addr_getword(ipv6addrp, (unsigned int) i));
 			} else if ( ( i == 7 ) && ( zend == i )) {
-				snprintf(temp2string, sizeof(temp2string), "%s:", tempstring);
+				snprintf(temp2string, sizeof(temp2string) - 1, "%s:", tempstring);
 			};
-			snprintf(tempstring, sizeof(tempstring), "%s", temp2string);
+			snprintf(tempstring, sizeof(tempstring) - 1, "%s", temp2string);
 		};
 		
 		if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
@@ -296,9 +296,9 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 
 
 	if ( ( retval == 0 ) && ( ipv6addrp->flag_prefixuse == 1 ) ) {
-		snprintf(resultstring, NI_MAXHOST, "%s/%u", tempstring, ipv6addrp->prefixlength);
+		snprintf(resultstring, sizeof(resultstring) - 1, "%s/%u", tempstring, ipv6addrp->prefixlength);
 	} else {
-		snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
+		snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
 	};
 
 	if ( (formatoptions & FORMATOPTION_printlowercase) != 0 ) {

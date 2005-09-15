@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.10 2003/08/15 11:58:28 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.11 2005/09/15 12:14:00 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -76,7 +76,7 @@ void printhelp_inputtypes(void) {
 		exit(EXIT_FAILURE);
 	};
 
-	snprintf(printformatstring, sizeof(printformatstring), "  %%-%ds: %%s\n", (int) maxlen);
+	snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds: %%s\n", (int) maxlen);
 
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "Format string: %s\n", printformatstring);
@@ -126,7 +126,7 @@ void printhelp_outputtypes(const uint32_t inputtype) {
 		exit(EXIT_FAILURE);
 	};
 
-	snprintf(printformatstring, sizeof(printformatstring), "  %%-%ds: %%s\n", (int) maxlen);
+	snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds: %%s\n", (int) maxlen);
 
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "Format string: %s\n", printformatstring);
@@ -189,7 +189,7 @@ void printhelp_actiontypes(void) {
 		exit (EXIT_FAILURE);
 	};
 
-	snprintf(printformatstring, sizeof(printformatstring), "  %%-%ds: %%s\n", (int) maxlen);
+	snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds: %%s\n", (int) maxlen);
 
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "Format string: %s\n", printformatstring);

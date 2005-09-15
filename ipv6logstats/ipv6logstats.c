@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.10 2003/11/22 12:44:39 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.11 2005/09/15 12:14:00 peter Exp $
  * Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -220,7 +220,7 @@ static void lineparser(void) {
 			continue;
 		};
 
-		snprintf(token, sizeof(token), "%s", charptr);
+		snprintf(token, sizeof(token) - 1, "%s", charptr);
 		
 		if (ipv6calc_debug != 0) {
 			fprintf(stderr, "%s: Token 1: '%s'\n", DEBUG_function_name, token);

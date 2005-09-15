@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.14 2005/07/19 16:03:25 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.15 2005/09/15 12:14:00 peter Exp $
  * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -99,34 +99,34 @@ void string_to_reverse_dotted(char *string) {
 	ptrptr = &cptr;
 
 	/* clear result string */
-	snprintf(resultstring, sizeof(resultstring), "%s", "");
+	snprintf(resultstring, sizeof(resultstring) - 1 , "%s", "");
 
 	/* check for starting dot */
 	if ( string[0] == '.' ) {
-		snprintf(tempstring, sizeof(tempstring), "%s.", resultstring);
-		snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "%s.", resultstring);
+		snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
 	};
 
 	token = strtok_r(string, ".", ptrptr);
 
 	while (token != NULL) {
 		if (flag_first == 1) {
-			snprintf(tempstring, sizeof(tempstring), "%s%s", token, resultstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "%s%s", token, resultstring);
 			flag_first = 0;
 		} else {
-			snprintf(tempstring, sizeof(tempstring), "%s.%s", token, resultstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "%s.%s", token, resultstring);
 		};
-		snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
+		snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
 
 		token = strtok_r(NULL, ".", ptrptr);
 	};
 	
 	if ( string[strlen(string) - 1] == '.' ) {
-		snprintf(tempstring, sizeof(tempstring), ".%s", resultstring);
-		snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, ".%s", resultstring);
+		snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
 	};
 
-	snprintf(string, NI_MAXHOST, ".%s", resultstring);
+	snprintf(string, sizeof(string) - 1, ".%s", resultstring);
 	
 	return;
 };

@@ -1,14 +1,17 @@
 /*
- *  $Id: ChangeLog,v 1.100 2005/09/15 09:21:34 peter Exp $ 
+ *  $Id: ChangeLog,v 1.101 2005/09/15 12:14:00 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
 20050915/PB
+	various c files
+	 - fix snprintf size parameter (credits to
+	    Radek Vokál for pointing this out)
 	lib/libipv6addr.c#ipv6addr_copy
-	 - fix bug which causes stack overflow, credits to
-	    Radek Vokál for finding the bug
+	 - fix bug which causes stack overflow (credits to
+	    Radek Vokál for finding the bug)
 	several Makefiles
 	 - add compiler switch -O2, reason for segfault was found
 
