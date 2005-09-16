@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6logconv
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.10 2005/09/15 17:34:56 peter Exp $
+# Version    : $Id: Makefile.in,v 1.11 2005/09/16 11:40:19 peter Exp $
 # Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -37,6 +37,9 @@ static:		ipv6logconv
 
 distclean:
 		make clean
+
+autoclean:
+		make distclean
 
 clean:
 		rm -f ipv6logconv ipv6logconv-static *.o

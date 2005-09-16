@@ -1,5 +1,5 @@
 # Adapted for use with project 'ipv6calc' by Peter Bieringer <pb (at) bieringer.de>
-# $Id: Makefile,v 1.3 2005/09/16 09:07:36 peter Exp $
+# $Id: Makefile,v 1.4 2005/09/16 11:40:19 peter Exp $
 
 CC = gcc
 
@@ -12,4 +12,7 @@ clean:
 	rm -f *.o *.so.1 *.a
 
 distclean:
-	# nothing to do
+	make clean
+
+autoclean:
+	make distclean
