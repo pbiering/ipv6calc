@@ -1,5 +1,5 @@
 # Adapted for use with project 'ipv6calc' by Peter Bieringer <pb (at) bieringer.de>
-# $Id: Makefile,v 1.3 2005/07/11 15:04:05 peter Exp $
+# $Id: Makefile,v 1.4 2005/09/16 09:08:41 peter Exp $
 
 CC = gcc
 
@@ -13,3 +13,6 @@ getopt.o: getopt.c
 
 clean:
 	rm -f *.o *.so.1 *.a
+
+distclean:
+	# nothing to do
