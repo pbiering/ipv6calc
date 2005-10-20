@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.15 2005/09/15 17:48:32 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.16 2005/10/20 16:22:41 peter Exp $
  * Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -500,25 +500,30 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 				};
 				typeinfo_test = typeinfo & (IPV6_NEW_ADDR_6TO4 | IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_PRODUCTIVE);
 				if ( typeinfo_test != 0 ) {
-					/* get string */
-					for (i = 0; i < (size_t) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++) {
-						if ( (typeinfo_test & ipv6calc_ipv6addrtypestrings[i].number) != 0 ) {
-							retval = i;
-							break;
+					if ((typeinfo & IPV6_NEW_ADDR_TEREDO) != 0) {
+						snprintf(tempstring, sizeof(tempstring) - 1, "teredo.%s", resultstring);
+						snprintf(resultstring, LINEBUFFER - 1, "%s", tempstring);
+					} else {
+						/* get string */
+						for (i = 0; i < (size_t) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++) {
+							if ( (typeinfo_test & ipv6calc_ipv6addrtypestrings[i].number) != 0 ) {
+								retval = i;
+								break;
+							};
 						};
+						snprintf(tempstring, sizeof(tempstring) - 1, "%s.%s", ipv6calc_ipv6addrtypestrings[retval].token, resultstring);
+						snprintf(resultstring, LINEBUFFER - 1, "%s", tempstring);
 					};
-					snprintf(tempstring, sizeof(tempstring) - 1, "%s.%s", ipv6calc_ipv6addrtypestrings[retval].token, resultstring);
-					snprintf(resultstring, LINEBUFFER - 1, "%s", tempstring);
 				};
 
 				/* registry of IPv6 address */
-				if ( (typeinfo & (IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_PRODUCTIVE) ) != 0 ) {
+				if ( ( (typeinfo & (IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_PRODUCTIVE) ) != 0) && ( (typeinfo & (IPV6_NEW_ADDR_TEREDO)) == 0)) {
 					retval = libipv6addr_get_registry_string(&ipv6addr, temp2string);
 					if ( retval == 0 ) {
 						snprintf(tempstring, sizeof(tempstring) - 1, "%s.%s", temp2string, resultstring);
 						snprintf(resultstring, LINEBUFFER - 1, "%s", tempstring);
 					};
-				} else if ( (typeinfo & (IPV6_NEW_ADDR_6TO4 | IPV6_ADDR_MAPPED | IPV6_ADDR_COMPATv4)) != 0 ) {
+				} else if ( (typeinfo & (IPV6_NEW_ADDR_6TO4 | IPV6_ADDR_MAPPED | IPV6_ADDR_COMPATv4 | IPV6_NEW_ADDR_TEREDO)) != 0 ) {
 					/* fill IPv4 address */
 					if ( (typeinfo & (IPV6_ADDR_MAPPED | IPV6_ADDR_COMPATv4)) != 0 ) {
 						for (i = 0; i <= 3; i++) {
@@ -527,6 +532,10 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 					} else if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
 						for (i = 0; i <= 3; i++) {
 							ipv4addr_setoctett(&ipv4addr, i, ipv6addr_getoctett(&ipv6addr, i + 2));
+						};
+					} else if ( (typeinfo & IPV6_NEW_ADDR_TEREDO) != 0 ) {
+						for (i = 0; i <= 3; i++) {
+							ipv4addr_setoctett(&ipv4addr, i, ipv6addr_getoctett(&ipv6addr, i + 12) ^ 0xff);
 						};
 					} else {
 						/* normally never happen */
@@ -568,7 +577,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 			typeinfo = ipv6addr_gettype(&ipv6addr);
 
 			/* check whether address has a OUI ID */
-			if ( ( typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4 | IPV6_ADDR_ULUA)) == 0 )  {
+			if ( (( typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4 | IPV6_ADDR_ULUA)) == 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO)) ==0) )  {
 				if (flag_skipunknown != 0) {
 					return (1);
 				} else {
@@ -629,6 +638,12 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 				snprintf(resultstring, LINEBUFFER - 1, "site-local.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_ADDR_ULUA) != 0 ) {
 				snprintf(resultstring, LINEBUFFER - 1, "unique-local.ipv6addrtype.ipv6calc");
+			} else if ( (typeinfo & IPV6_NEW_ADDR_TEREDO) != 0 ) {
+				if ( (typeinfo & IPV6_NEW_ADDR_6BONE) != 0 ) {
+					snprintf(resultstring, LINEBUFFER - 1, "teredo.6bone-global.ipv6addrtype.ipv6calc");
+				} else {
+					snprintf(resultstring, LINEBUFFER - 1, "teredo.unknown-global.ipv6addrtype.ipv6calc");
+				};
 			} else if ( (typeinfo & IPV6_NEW_ADDR_6BONE) != 0 ) {
 				snprintf(resultstring, LINEBUFFER - 1, "6bone-global.ipv6addrtype.ipv6calc");
 			} else if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {

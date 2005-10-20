@@ -1,10 +1,21 @@
 /*
- *  $Id: ChangeLog,v 1.105 2005/09/15 17:59:49 peter Exp $ 
+ *  $Id: ChangeLog,v 1.106 2005/10/20 16:22:41 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20051020/PB
+	lib/libipv6addr
+	ipv6calc/showinfo
+	ipv6logconv
+	ipv6logstats
+	 - add support for Teredo addresses
+
+20050916/PB
+	various make files
+	 - add missing entries to fullfil NetBSD's make
+
 20050915/PB
 	various c files
 	 - fix snprintf size parameter (credits to

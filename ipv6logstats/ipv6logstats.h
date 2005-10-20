@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.5 2003/06/27 20:32:19 peter Exp $
- * Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logstats.h,v 1.6 2005/10/20 16:22:41 peter Exp $
+ * Copyright  : 2003-2005 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Main header file
@@ -10,10 +10,10 @@
 
 /* global program related definitions */
 #define PROGRAM_NAME "ipv6logstats"
-#define PROGRAM_COPYRIGHT "(P) & (C) 2003 by Peter Bieringer <pb (at) bieringer.de>"
+#define PROGRAM_COPYRIGHT "(P) & (C) 2003-2005 by Peter Bieringer <pb (at) bieringer.de>"
 
 #define STATS_VERSION_MAJOR	1
-#define STATS_VERSION_MINOR	1
+#define STATS_VERSION_MINOR	2
 
 #define STATS_ALL		0x00
 #define STATS_IPV4		0x01
@@ -44,6 +44,14 @@
 #define STATS_IPV6_6TO4_LACNIC		0x36
 #define STATS_IPV6_6TO4_RESERVED	0x3e
 #define STATS_IPV6_6TO4_UNKNOWN		0x3f
+
+#define STATS_IPV6_TEREDO_IANA		0x42
+#define STATS_IPV6_TEREDO_APNIC		0x43
+#define STATS_IPV6_TEREDO_ARIN		0x44
+#define STATS_IPV6_TEREDO_RIPE		0x45
+#define STATS_IPV6_TEREDO_LACNIC	0x46
+#define STATS_IPV6_TEREDO_RESERVED	0x4e
+#define STATS_IPV6_TEREDO_UNKNOWN	0x4f
 
 /* labels statistic numbers */
 typedef struct {
@@ -76,5 +84,12 @@ typedef struct {
 	{ STATS_IPV6_6TO4_RIPE	, 0, "IPv6/6to4/RIPE" },
 	{ STATS_IPV6_6TO4_LACNIC, 0, "IPv6/6to4/LACNIC" },
 	{ STATS_IPV6_6TO4_RESERVED, 0, "IPv6/6to4/RESERVED" },
-	{ STATS_IPV6_6TO4_UNKNOWN, 0, "IPv6/6to4/UNKNOWN" }
+	{ STATS_IPV6_6TO4_UNKNOWN, 0, "IPv6/6to4/UNKNOWN" },
+	{ STATS_IPV6_TEREDO_IANA	, 0, "IPv6/Teredo/IANA" },
+	{ STATS_IPV6_TEREDO_APNIC	, 0, "IPv6/Teredo/APNIC" },
+	{ STATS_IPV6_TEREDO_ARIN	, 0, "IPv6/Teredo/ARIN" },
+	{ STATS_IPV6_TEREDO_RIPE	, 0, "IPv6/Teredo/RIPE" },
+	{ STATS_IPV6_TEREDO_LACNIC, 0, "IPv6/Teredo/LACNIC" },
+	{ STATS_IPV6_TEREDO_RESERVED, 0, "IPv6/Teredo/RESERVED" },
+	{ STATS_IPV6_TEREDO_UNKNOWN, 0, "IPv6/Teredo/UNKNOWN" }
 };

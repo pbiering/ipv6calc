@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.11 2005/09/15 12:14:00 peter Exp $
- * Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logstats.c,v 1.12 2005/10/20 16:22:41 peter Exp $
+ * Copyright  : 2003-2005 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile statistics
@@ -269,7 +269,6 @@ static void lineparser(void) {
 
 				if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
 					/* 6to4 address */
-
 					for (i = 0; i <= 3; i++) {
 						ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(&ipv6addr, (unsigned int) 2 + i));
 					};
@@ -297,6 +296,40 @@ static void lineparser(void) {
 							break;
 						default:
 							stat_inc(STATS_IPV6_6TO4_UNKNOWN);
+							if (opt_unknown == 1) {
+								fprintf(stderr, "Unknown address: %s\n", token);
+							};
+							break;
+					};
+				} else if ( (typeinfo & IPV6_NEW_ADDR_TEREDO) != 0 ) {
+					/* Teredo address */
+					for (i = 0; i <= 3; i++) {
+						ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(&ipv6addr, (unsigned int) 12 + i) ^ 0xff);
+					};
+					
+					/* get registry */
+					registry = ipv4addr_getregistry(&ipv4addr);
+					switch (registry) {
+						case IPV4_ADDR_REGISTRY_IANA:
+							stat_inc(STATS_IPV6_TEREDO_IANA);
+							break;
+						case IPV4_ADDR_REGISTRY_APNIC:
+							stat_inc(STATS_IPV6_TEREDO_APNIC);
+							break;
+						case IPV4_ADDR_REGISTRY_ARIN:
+							stat_inc(STATS_IPV6_TEREDO_ARIN);
+							break;
+						case IPV4_ADDR_REGISTRY_RIPE:
+							stat_inc(STATS_IPV6_TEREDO_RIPE);
+							break;
+						case IPV4_ADDR_REGISTRY_LACNIC:
+							stat_inc(STATS_IPV6_TEREDO_LACNIC);
+							break;
+						case IPV4_ADDR_REGISTRY_RESERVED:
+							stat_inc(STATS_IPV6_TEREDO_RESERVED);
+							break;
+						default:
+							stat_inc(STATS_IPV6_TEREDO_UNKNOWN);
 							if (opt_unknown == 1) {
 								fprintf(stderr, "Unknown address: %s\n", token);
 							};

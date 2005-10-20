@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.21 2005/09/15 12:32:21 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.22 2005/10/20 16:22:41 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -298,6 +298,11 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 			/* 2002:<ipv4addr>::<ipv4addr> -> usually Microsoft does this */
 			type |= IPV6_NEW_ADDR_6TO4_MICROSOFT;
 		};
+	};
+
+	if (st == 0x3FFE831Fu) {
+		/* 3ffe:831f/32 -> Teredo */
+		type |= IPV6_NEW_ADDR_TEREDO;
 	};
 	
 	if (!(type & (IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4)) && (st & 0xE0000000u) == 0x20000000u) {

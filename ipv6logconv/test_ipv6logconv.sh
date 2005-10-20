@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6logconv.sh
-# Version    : $Id: test_ipv6logconv.sh,v 1.6 2005/09/15 17:48:32 peter Exp $
+# Version    : $Id: test_ipv6logconv.sh,v 1.7 2005/10/20 16:22:41 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logconv"
@@ -32,6 +32,7 @@ fe80::fefc:acff:fe10:fe01 - -
 2002:50b5:7940:0000:0000:0000:50b5:7940 - - "Microsoft 6to4 address"
 fd00:1234:5678:9abc::1 - - "Unique Local IPv6 Unicast Address"
 fd00:1234:5678:9abc:210:a489:ab01:2345 - - "Unique Local IPv6 Unicast Address"
+3ffe:831f:ce49:7601:8000:efff:af4a:86BF - - Teredo
 END
 }
 
