@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.1 2003/11/21 10:55:49 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.2 2005/10/21 13:49:37 peter Exp $
 # Copyright  : 2002-2003 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -137,13 +137,21 @@ my %text = (
 		'de' => "Registry der IPv6 Adresse",
 		'en' => "Registry of IPv6 address",
 	},
-	'IPV4_6TO4' => {
-		'de' => "6to4 IPv4 Adresse",
-		'en' => "6to4 IPv4 address",
+	'IPV4_SOURCE' => {
+		'de' => "Quelle der IPv4 Adresse",
+		'en' => "Source of IPv4 address",
 	},
-	'IPV4_6TO4_REGISTRY' => {
-		'de' => "Registry der 6to4 IPv4 Adresse",
-		'en' => "Registry of 6to4 IPv4 address",
+	'TEREDO_IPV4_SERVER' => {
+		'de' => "IPv4 Adresse des Teredo Servers",
+		'en' => "IPv4 address of Teredo server",
+	},
+	'TEREDO_IPV4_SERVER_REGISTRY' => {
+		'de' => "Registry der IPv4 Adresse des Teredo Servers",
+		'en' => "Registry of IPv4 address of Teredo server",
+	},
+	'TEREDO_PORT_CLIENT' => {
+		'de' => "UDP-Port des Teredo Clients (nach NAT)",
+		'en' => "UDP port of Teredo client (outside NAT)",
 	},
 	'OUI' => {
 		'de' => "Hersteller-Identifizierung der Netzwerkarte",
@@ -354,12 +362,6 @@ sub print_infohash ($) {
 			if ( defined $$phash{'IPV6_REGISTRY'} ) {
 				$whois_registry = $$phash{'IPV6_REGISTRY'};
 				$whois_type = "ipv6";
-				$flag_whoisurl = 1;
-			};
-		} elsif ( $key eq "IPV4_6TO4" ) {
-			if ( defined $$phash{'IPV4_6TO4_REGISTRY'} ) {
-				$whois_registry = $$phash{'IPV4_6TO4_REGISTRY'};
-				$whois_type = "ipv4";
 				$flag_whoisurl = 1;
 			};
 		};
