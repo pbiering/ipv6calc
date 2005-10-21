@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: test_showinfo.sh,v 1.2 2002/03/19 23:14:42 peter Exp $
+# $Id: test_showinfo.sh,v 1.3 2005/10/21 13:42:33 peter Exp $
 
 
 getexamples() {
@@ -20,7 +20,8 @@ fe80::210:a489:ab01:2345		# link-local autoconfig EUI-64
 3ffe:ffff::000:a4ff:fe01:2345		# global manual EUI-48
 3ffe:ffff::000:a489:ab01:2345		# global manual EUI-64
 fe80::fefc:acff:fe10:fe01		# link-local autoconf on ISDN interface
-2001:7b0:ffff::1				# Productive IPv6
+2001:7b0:ffff::1			# Productive IPv6
+3ffe:831f:ce49:7601:8000:efff:af4a:86BF	# Teredo
 END
 }
 

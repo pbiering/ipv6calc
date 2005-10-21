@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.19 2005/10/20 16:22:41 peter Exp $
- * Copyright  : 2001-2004 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: showinfo.c,v 1.20 2005/10/21 13:42:33 peter Exp $
+ * Copyright  : 2001-2005 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Function to show information about a given IPv6 address
@@ -40,10 +40,10 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV6=...                      : given IPv6 address full uncompressed\n");
 	fprintf(stderr, " IPV6_REGISTRY=...             : registry token of given IPv6 address\n");
 	fprintf(stderr, " IPV6_PREFIXLENGTH=ddd         : given prefix length\n");
-	fprintf(stderr, " IPV4_6TO4=ddd.ddd.ddd.ddd     : 6to4 IPv4 address\n");
-	fprintf(stderr, " IPV4_6TO4_REGISTRY=...        : registry token of 6to4 IPv4 address\n");
-	fprintf(stderr, " IPV4=ddd.ddd.ddd.ddd          : an included IPv4 address in IID\n");
+	fprintf(stderr, " IPV4=ddd.ddd.ddd.ddd          : an included IPv4 address in IID (e.g. ISATAP, TEREDO)\n");
 	fprintf(stderr, " IPV4_REGISTRY=...             : registry token of IPv4 address in IID\n");
+	fprintf(stderr, " IPV4_SOURCE=...               : source of IPv4 address\n");
+	fprintf(stderr, "  ISATAP|TEREDO|6TO4|LINK-LOCAL-IID\n");
 	fprintf(stderr, " IPV4_PREFIXLENGTH=...         : given prefix length of IPv4 address\n");
 	fprintf(stderr, " SLA=xxxx                      : an included SLA\n");
 	fprintf(stderr, " IID=xxxx:xxxx:xxxx:xxxx       : an included interface identifier\n");
@@ -55,10 +55,8 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " EUI64_SCOPE=local|global      : scope of EUI-64 identifier\n");
 	fprintf(stderr, " OUI=\"...\"                     : OUI string, if available\n");
 	fprintf(stderr, " TEREDO_IPV4_SERVER=...        : IPv4 address of Teredo server\n");
-	fprintf(stderr, " TEREDO_IPV4_CLIENT=..         : IPv4 address of Teredo client (NAT outside)\n");
 	fprintf(stderr, " TEREDO_PORT_CLIENT=...        : port of Teredo client (NAT outside)\n");
 	fprintf(stderr, " TEREDO_IPV4_SERVER_REGISTRY=..: registry token of IPv4 address of Teredo server\n");
-	fprintf(stderr, " TEREDO_IPV4_CLIENT_REGISTRY=..: registry token of IPv4 address of Teredo client (NAT outside)\n");
 	fprintf(stderr, " IPV6CALC_VERSION=x.y          : Version of ipv6calc\n");
 	fprintf(stderr, " IPV6CALC_COPYRIGHT=\"...\"      : Copyright string\n");
 };
@@ -291,7 +289,7 @@ static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t for
 #define DEBUG_function_name "showinfo_ipv6addr"
 int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t formatoptions) {
 	int retval = 1, i, j, flag_prefixuse, registry;
-	char tempstring[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "", helpstring2[NI_MAXHOST] = "";
+	char tempstring[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
 	ipv6calc_ipv6addr ipv6addr, *ipv6addrp;
 	ipv6calc_ipv4addr ipv4addr, ipv4addr2;
 	ipv6calc_macaddr macaddr;
@@ -379,7 +377,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		};	
 
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_6TO4=%s", helpstring);
+			printout("IPV4_SOURCE=6TO4");
+			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4=%s", helpstring);
 			printout(tempstring);
 		} else {
 			fprintf(stdout, "Address type is 6to4 and included IPv4 address is: %s\n", helpstring);
@@ -387,14 +386,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 
 		/* get registry string */
 		retval = libipv4addr_get_registry_string(&ipv4addr, helpstring);
-		if ( retval != 0 ) {
-			fprintf(stderr, "Error getting registry string for IPv4 address: %s\n", helpstring);
-			retval = 1;
-			goto END;
-		};
-		
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_6TO4_REGISTRY=%s", helpstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY=%s", helpstring);
 			printout(tempstring);
 		} else {
 			fprintf(stderr, "IPv4 registry for 6to4 address: %s\n", helpstring);
@@ -402,24 +395,22 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	};
 
 	if ( (typeinfo & IPV6_NEW_ADDR_TEREDO) != 0 ) {
-		/* extract Teredo server IPv4 address */
-		for (i = 0; i <= 3; i++) {
-			ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) 4 + i));
-		};
-
-		retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, helpstring, 0);
-		if ( retval != 0 ) {
-			fprintf(stderr, "Error converting IPv4 address to string\n");
-			retval = 1;
-			goto END;
-		};	
-
 		/* extract Teredo client IPv4 address */
 		for (i = 0; i <= 3; i++) {
-			ipv4addr_setoctett(&ipv4addr2, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) 12 + i) ^ 0xff);
+			ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) 12 + i) ^ 0xff);
 		};
 
-		retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr2, helpstring2, 0);
+		/* extract Teredo server IPv4 address */
+		for (i = 0; i <= 3; i++) {
+			ipv4addr_setoctett(&ipv4addr2, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) 4 + i));
+		};
+
+		if ( machinereadable != 0 ) {
+			printout("IPV4_SOURCE=ISATAP");
+		};
+		print_ipv4addr(&ipv4addr, formatoptions);
+
+		retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, helpstring, 0);
 		if ( retval != 0 ) {
 			fprintf(stderr, "Error converting IPv4 address to string\n");
 			retval = 1;
@@ -432,38 +423,20 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		if ( machinereadable != 0 ) {
 			snprintf(tempstring, sizeof(tempstring) - 1, "TEREDO_IPV4_SERVER=%s", helpstring);
 			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "TEREDO_IPV4_CLIENT=%s", helpstring2);
-			printout(tempstring);
 			snprintf(tempstring, sizeof(tempstring) - 1, "TEREDO_PORT_CLIENT=%d", port);
 			printout(tempstring);
 		} else {
-			fprintf(stdout, "Address type is Teredo and included IPv4 server address is: %s, client address is: %s and client port: %d\n", helpstring, helpstring2, port);
+			fprintf(stdout, "Address type is Teredo and included IPv4 server address is: %s and client port: %d\n", helpstring, port);
 		};
 
 		/* get registry string */
-		retval = libipv4addr_get_registry_string(&ipv4addr, helpstring);
-		if ( retval != 0 ) {
-			fprintf(stderr, "Error getting registry string for IPv4 address: %s\n", helpstring);
-			retval = 1;
-			goto END;
-		};
-
-		retval = libipv4addr_get_registry_string(&ipv4addr2, helpstring2);
-		if ( retval != 0 ) {
-			fprintf(stderr, "Error getting registry string for IPv4 address: %s\n", helpstring2);
-			retval = 1;
-			goto END;
-		};
-		
+		retval = libipv4addr_get_registry_string(&ipv4addr2, helpstring);
 		
 		if ( machinereadable != 0 ) {
 			snprintf(tempstring, sizeof(tempstring) - 1, "TEREDO_IPV4_SERVER_REGISTRY=%s", helpstring);
 			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "TEREDO_IPV4_CLIENT_REGISTRY=%s", helpstring2);
-			printout(tempstring);
 		} else {
 			fprintf(stderr, "IPv4 registry for Teredo server address: %s\n", helpstring);
-			fprintf(stderr, "IPv4 registry for Teredo client address: %s\n", helpstring2);
 		};
 	};
 
@@ -562,7 +535,18 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 					} else {
 						fprintf(stdout, "Generated from the extension identifier of an EUI-48 (MAC): ...:%02x:%02x:%02x\n", (unsigned int) ipv6addr_getoctett(ipv6addrp, 13), (unsigned int) ipv6addr_getoctett(ipv6addrp, 14), (unsigned int) ipv6addr_getoctett(ipv6addrp, 15));
 					};
-				} else if ( ((typeinfo & IPV6_NEW_ADDR_ISATAP) != 0) || (((typeinfo & IPV6_ADDR_LINKLOCAL) != 0) && (ipv6addr_getdword(ipv6addrp, 2) == 0 && ipv6addr_getword(ipv6addrp, 6) != 0)) )   {
+				} else if ( (typeinfo & IPV6_NEW_ADDR_ISATAP) != 0 )  {
+					for (i = 0; i <= 3; i++) {
+						ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) (i + 12)));
+					};
+
+					if ( machinereadable != 0 ) {
+						printout("IPV4_SOURCE=ISATAP");
+					} else {
+						fprintf(stderr, "IPv4 registry for ISATAP client address: %s\n", helpstring);
+					};
+					print_ipv4addr(&ipv4addr, formatoptions);
+				} else if ( ( ( (typeinfo & IPV6_ADDR_LINKLOCAL) != 0) && (ipv6addr_getdword(ipv6addrp, 2) == 0 && ipv6addr_getword(ipv6addrp, 6) != 0)) )   {
 					/* fe80:: must have 0000:0000:xxxx:yyyy where xxxx > 0 */
 					if ( machinereadable != 0 ) {
 					} else {
@@ -570,6 +554,9 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 					};
 					for (i = 0; i <= 3; i++) {
 						ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) (i + 12)));
+					};
+					if ( machinereadable != 0 ) {
+						printout("IPV4_SOURCE=LINK-LOCAL-IID");
 					};
 					print_ipv4addr(&ipv4addr, formatoptions);
 				} else {

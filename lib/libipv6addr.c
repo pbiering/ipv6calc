@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.22 2005/10/20 16:22:41 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.23 2005/10/21 13:42:33 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -269,7 +269,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 	};
 
 	/* address space information  */
-	if ((st & 0xFC000000u) == 0xFC000000u) {
+	if ((st & 0xFE000000u) == 0xFC000000u) {
 		/* FC00::/7 -> Unique Local IPv6 Unicast Address */
 		type |= IPV6_ADDR_ULUA;
 	};
@@ -301,7 +301,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 	};
 
 	if (st == 0x3FFE831Fu) {
-		/* 3ffe:831f/32 -> Teredo */
+		/* 3ffe:831f::/32 -> Teredo */
 		type |= IPV6_NEW_ADDR_TEREDO;
 	};
 	
@@ -325,12 +325,12 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 	   000 and 111 as unicasts.
 	 */
 
-	if ( (((st & 0xE0000000u) != 0x00000000u) && (st & 0xE0000000u) != 0xE0000000u) || ((st & 0xFC000000u) == 0xFC000000u)) {
+	if ( (((st & 0xE0000000u) != 0x00000000u) && (st & 0xE0000000u) != 0xE0000000u) || ((st & 0xFF000000u) == 0xFC000000u)) {
 		type |= IPV6_ADDR_UNICAST;
 		return (type);
 	};
 
-	if ((st & (0xFF000000u)) == (0xFF000000u)) {
+	if ((st & 0xFF000000u) == 0xFF000000u) {
 		type |= IPV6_ADDR_MULTICAST;
 
 		switch((st & 0x00FF0000u)) {

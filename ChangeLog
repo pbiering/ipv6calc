@@ -1,10 +1,16 @@
 /*
- *  $Id: ChangeLog,v 1.106 2005/10/20 16:22:41 peter Exp $ 
+ *  $Id: ChangeLog,v 1.107 2005/10/21 13:42:32 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20051021/PB
+	lib/libipv6addr
+	- fix bug for unique local unicast detection
+	ipv6calc/showinfo
+	- minor review
+
 20051020/PB
 	lib/libipv6addr
 	ipv6calc/showinfo
