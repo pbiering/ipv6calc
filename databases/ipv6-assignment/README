@@ -1,10 +1,3 @@
-$Id: README,v 1.1 2005/07/19 15:48:33 peter Exp $ 
+$Id: README,v 1.2 2005/10/23 21:22:53 peter Exp $ 
 
-IPv6 assignment data file:
- http://www.iana.org/assignments/ipv6-unicast-address-assignments
-
-Because of unknown license issues, the database files aren't
-included in source tarball (cleanup by "make distclean"), but
-will be retrieved on "make"
-
-Use "make update" to refresh data files
+Use "make update" to create header file from registry data files

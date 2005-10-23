@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.8 2005/09/15 17:59:49 peter Exp $
- * Generated     : Thu Sep 15 19:56:59 2005
+ * Version       : $Id: dbieee_iab.h,v 1.9 2005/10/23 21:22:52 peter Exp $
+ * Generated     : Sun Oct 23 22:00:23 2005
  * Data copyright: IEEE
  *
  * Information:
@@ -1306,5 +1306,32 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x50D000, 0x50DFFF, "Clearsonics Pty. Ltd.", "CLEARSONICS-PTY" },
 	{ 0x0050C2, 0x50E000, 0x50EFFF, "Fibresavers Corporation", "FIBRESAVERS" },
 	{ 0x0050C2, 0x50F000, 0x50FFFF, "Polystar Instruments AB", "POLYSTAR-INSTRUMENTS-AB" },
+	{ 0x0050C2, 0x510000, 0x510FFF, "Summit Developmen", "SUMMIT-DEVELOPMEN" },
+	{ 0x0050C2, 0x511000, 0x511FFF, "Tecna Srl", "TECNA-SRL" },
+	{ 0x0050C2, 0x512000, 0x512FFF, "Linear Acoustic, Inc", "LINEAR-ACOUSTIC" },
+	{ 0x0050C2, 0x513000, 0x513FFF, "Genie Network Resource Management Inc.", "GENIE-NETWORK-RESOURCE-MANAGEMENT" },
+	{ 0x0050C2, 0x514000, 0x514FFF, "Tadian Electronics Systems LTD", "TADIAN-ELECTRONICS" },
+	{ 0x0050C2, 0x515000, 0x515FFF, "Monaghan Engineering, Inc.", "MONAGHAN-ENGINEERING" },
+	{ 0x0050C2, 0x516000, 0x516FFF, "SOWA ELECTRIC CO., LTD.", "SOWA-ELECTRIC" },
+	{ 0x0050C2, 0x517000, 0x517FFF, "Solid State Logic", "SOLID-STATE-LOGIC" },
+	{ 0x0050C2, 0x518000, 0x518FFF, "Christ Elektronik GmbH", "CHRIST-ELEKTRONIK" },
+	{ 0x0050C2, 0x519000, 0x519FFF, "DBM, LLC", "DBM-LLC" },
+	{ 0x0050C2, 0x51A000, 0x51AFFF, "SpeasTech, Inc.", "SPEASTECH" },
+	{ 0x0050C2, 0x51B000, 0x51BFFF, "Beta Lasermike Ltd", "BETA-LASERMIKE" },
+	{ 0x0050C2, 0x51C000, 0x51CFFF, "TOA Systems", "TOA" },
+	{ 0x0050C2, 0x51D000, 0x51DFFF, "VELUX", "VELUX" },
+	{ 0x0050C2, 0x51E000, 0x51EFFF, "Alcon Technologies", "ALCON-TECHNOLOGIES" },
+	{ 0x0050C2, 0x51F000, 0x51FFFF, "Traquair Data Systems, Inc.", "TRAQUAIR-DATA" },
+	{ 0x0050C2, 0x520000, 0x520FFF, "McCain Traffic Supply", "MCCAIN-TRAFFIC-SUPPLY" },
+	{ 0x0050C2, 0x521000, 0x521FFF, "ARIS TECHNOLOGIES", "ARIS-TECHNOLOGIES" },
+	{ 0x0050C2, 0x522000, 0x522FFF, "Mark IV IDS Corp.", "MARK-IV-IDS" },
+	{ 0x0050C2, 0x523000, 0x523FFF, "AMRDEC Prototype Integration Facility", "AMRDEC-PROTOTYPE-INTEGRATION-FACILITY" },
+	{ 0x0050C2, 0x524000, 0x524FFF, "Motec Pty Ltd", "MOTEC-PTY" },
+	{ 0x0050C2, 0x525000, 0x525FFF, "VASTech", "VASTECH" },
+	{ 0x0050C2, 0x526000, 0x526FFF, "AC SYSTEMS, s.r.o.", "AC-S-R-O" },
+	{ 0x0050C2, 0x527000, 0x527FFF, "IRTrans", "IRTRANS" },
+	{ 0x0050C2, 0x528000, 0x528FFF, "tattile srl", "TATTILE-SRL" },
+	{ 0x0050C2, 0x529000, 0x529FFF, "Phytec Messtechnik GmbH", "PHYTEC-MESSTECHNIK" },
+	{ 0x0050C2, 0x52A000, 0x52AFFF, "OMNITRONICS PTY LTD", "OMNITRONICS-PTY" },
 
 };

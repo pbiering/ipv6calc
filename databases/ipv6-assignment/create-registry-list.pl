@@ -2,8 +2,9 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.1 2005/07/19 15:48:33 peter Exp $
-# Copyright  : 2005 by Simon Arlott
+# Version    : $Id: create-registry-list.pl,v 1.2 2005/10/23 21:22:53 peter Exp $
+# Copyright  : 2005 by Simon Arlott (initial implementation)
+#               further extension by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
 # Information:
@@ -14,7 +15,7 @@
 
 my $OUTFILE = "dbipv6addr_assignment.h";
 
-my $global_file = "ipv6-unicast-address-assignments";
+my $global_file = "../registries/iana/ipv6-unicast-address-assignments";
 
 my %assignments;
 
@@ -90,7 +91,7 @@ while (<FILE>) {
 	$reg =~ s/RIPE/RIPENCC/g;
 
 	if ( ($reg ne "ARIN") && ($reg ne "APNIC") && ($reg ne "RIPENCC") && ($reg ne "IANA")
-		&& ($reg ne "LACNIC") && ($reg ne "6BONE") && ($reg ne "6TO4") ) {
+		&& ($reg ne "LACNIC") && ($reg ne "6BONE") && ($reg ne "6TO4") && ($reg ne "AFRINIC") ) {
 		#print "Unsupported registry: " . $reg . "\n";
 		next;
 	};

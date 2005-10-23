@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.19 2005/02/13 11:57:15 peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.20 2005/10/23 21:22:52 peter Exp $
 # Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -33,14 +33,14 @@ $year = 1900 + $year;
 $mon = sprintf "%02d", $mon + 1;
 $mday = sprintf "%02d", $mday;
 
-my @files = ( "arin/delegated-arin-" . $year . $mon . $mday, "ripencc/delegated-ripencc-" . $year . $mon . $mday, "apnic/delegated-apnic-" . $year . $mon . $mday, "lacnic/delegated-lacnic-" . $year . $mon . $mday );
+my @files = ( "../registries/arin/delegated-arin-" . $year . $mon . $mday, "../registries/ripencc/delegated-ripencc-" . $year . $mon . $mday, "../registries/apnic/delegated-apnic-" . $year . $mon . $mday, "../registries/lacnic/delegated-lacnic-" . $year . $mon . $mday, "../registries/afrinic/delegated-afrinic-" . $year . $mon . $mday );
 #my @files = ( "lacnic/lacnic." . $year . $mon . "01" );
 
-my (@arin, @apnic, @ripencc, @iana, @lacnic);
+my (@arin, @apnic, @ripencc, @iana, @lacnic, @afrinic);
 
-my (@arin_agg, @apnic_agg, @ripencc_agg, @iana_agg, @lacnic_agg);
+my (@arin_agg, @apnic_agg, @ripencc_agg, @iana_agg, @lacnic_agg, @afrinic_agg);
 
-my $global_file = "iana/ipv4-address-space";
+my $global_file = "../registries/iana/ipv4-address-space";
 
 my %assignments;
 
@@ -178,6 +178,9 @@ sub proceed_global() {
 			} elsif ($reg eq "LACNIC" ) {
 				#print "Push LACNIC: " . $ipv4 . "/" . $length . "\n";
 				push @lacnic, $ipv4 . "/" . $length;
+			} elsif ($reg eq "AFRINIC" ) {
+				#print "Push AFRINIC: " . $ipv4 . "/" . $length . "\n";
+				push @afrinic, $ipv4 . "/" . $length;
 			} else {
 				die "Unsupported registry";	
 			};
@@ -214,7 +217,7 @@ foreach my $file (@files) {
 		$reg = uc($reg);
 		$reg =~ s/\wRIPE\w/RIPENCC/g;
 
-		if ( $reg ne "ARIN" && $reg ne "APNIC" && $reg ne "RIPENCC" && $reg ne "IANA" && $reg ne "LACNIC") {
+		if ( $reg ne "ARIN" && $reg ne "APNIC" && $reg ne "RIPENCC" && $reg ne "IANA" && $reg ne "LACNIC" && $reg ne "AFRINIC") {
 			print "Unsupported registry: " . $reg . "\n";
 			next;
 		};
@@ -232,6 +235,8 @@ foreach my $file (@files) {
 			$parray = \@iana;
 		} elsif ($reg eq "LACNIC" ) {
 			$parray = \@lacnic;
+		} elsif ($reg eq "AFRINIC" ) {
+			$parray = \@afrinic;
 		} else {
 			die "Unsupported registry: " . $reg;
 		};
@@ -345,6 +350,9 @@ print "Aggregate IANA\n";
 print "Aggregate LACNIC\n";
 &proceed_array(\@lacnic, \@lacnic_agg);
 
+print "Aggregate AFRINIC\n";
+&proceed_array(\@afrinic, \@afrinic_agg);
+
 if (1 == 0) {
 	# Look for maximum used prefix length
 	my ($net, $length);
@@ -398,7 +406,7 @@ print OUT qq| /*
 print OUT " * Version       : \$I";
 print OUT "d:\$\n";
 print OUT qq| * Generated     : $now_string
- * Data copyright: RIPE NCC, APNIC, ARIN
+ * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
  *  Additional header file for libipv4addr.c
@@ -431,6 +439,7 @@ sub fill_data($$) {
 &fill_data(\@ripencc_agg, "RIPENCC");
 &fill_data(\@arin_agg, "ARIN");
 &fill_data(\@lacnic_agg, "LACNIC");
+&fill_data(\@afrinic_agg, "AFRINIC")
 &fill_data(\@iana_agg, "IANA");
 
 my %data_hint;

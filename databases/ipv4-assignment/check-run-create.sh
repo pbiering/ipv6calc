@@ -2,21 +2,30 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : check-run-create.sh
-# Version    : $Id: check-run-create.sh,v 1.7 2005/09/14 18:25:24 peter Exp $
-# Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: check-run-create.sh,v 1.8 2005/10/23 21:22:52 peter Exp $
+# Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
 
 #set -x
 
-test -f dbipv4addr_assignment.h || exit 1
+flag_update=0
 
-IANA=`find iana       -type f -name 'ipv4-address-space' -newer dbipv4addr_assignment.h | wc -l`
-ARIN=`find arin       -type f -name 'delegated-arin*'    -newer dbipv4addr_assignment.h | wc -l`
-APNIC=`find apnic     -type f -name 'delegated-apnic*'   -newer dbipv4addr_assignment.h | wc -l`
-RIPENCC=`find ripencc -type f -name 'delegated-ripencc*' -newer dbipv4addr_assignment.h | wc -l`
-LACNIC=`find lacnic   -type f -name 'delegated-lacnic*'  -newer dbipv4addr_assignment.h | wc -l`
+if [ -f dbipv4addr_assignment.h ]; then
+	IANA=`find    ../registries/iana    -type f -name 'ipv4-address-space' -newer dbipv4addr_assignment.h | wc -l`
+	ARIN=`find    ../registries/arin    -type f -name 'delegated-arin*'    -newer dbipv4addr_assignment.h | wc -l`
+	APNIC=`find   ../registries/apnic   -type f -name 'delegated-apnic*'   -newer dbipv4addr_assignment.h | wc -l`
+	RIPENCC=`find ../registries/ripencc -type f -name 'delegated-ripencc*' -newer dbipv4addr_assignment.h | wc -l`
+	LACNIC=`find  ../registries/lacnic  -type f -name 'delegated-lacnic*'  -newer dbipv4addr_assignment.h | wc -l`
+	AFRINIC=`find ../registries/afrinic -type f -name 'delegated-afrinic*' -newer dbipv4addr_assignment.h | wc -l`
 
-echo "Found newer than dbipv4addr_assignment.h files: IANA=$IANA ARIN=$ARIN APNIC=$APNIC RIPENCC=$RIPENCC LACNIC=$LACNIC"
+	echo "Found newer than dbipv4addr_assignment.h files: IANA=$IANA ARIN=$ARIN APNIC=$APNIC RIPENCC=$RIPENCC LACNIC=$LACNICi AFRINIC=$AFRINIC"
 
-if [ $IANA -gt 0 -o $ARIN -gt 0 -o $APNIC -gt 0 -o $RIPENCC -gt 0 ]; then
+	if [ $IANA -gt 0 -o $ARIN -gt 0 -o $APNIC -gt 0 -o $RIPENCC -gt 0 -o $LACNIC -gt 0 -o $AFRINIC -gt 0 ]; then
+		flag_update=1
+	fi
+else
+	flag_update=1
+fi
+
+if [ $flag_update -eq 1 ]; then
 	./create-registry-list.pl
 fi
