@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.19 2005/10/21 13:42:33 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.20 2005/10/23 20:19:20 peter Exp $
  * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -89,6 +89,7 @@ typedef struct {
 #define IPV6_ADDR_REGISTRY_ARIN		0x04
 #define IPV6_ADDR_REGISTRY_RIPE		0x05
 #define IPV6_ADDR_REGISTRY_LACNIC	0x06
+#define IPV6_ADDR_REGISTRY_AFRINIC	0x07
 #define IPV6_ADDR_REGISTRY_RESERVED	0x0e
 #define IPV6_ADDR_REGISTRY_UNKNOWN	0x0f
 
@@ -133,6 +134,8 @@ typedef struct {
 	{ IPV6_ADDR_REGISTRY_APNIC	, "APNIC"	, "APNIC" 	},
 	{ IPV6_ADDR_REGISTRY_ARIN	, "ARIN" 	, "ARIN"	},
 	{ IPV6_ADDR_REGISTRY_RIPE	, "RIPE NCC"	, "RIPENCC"	},
+	{ IPV6_ADDR_REGISTRY_LACNIC	, "LACNIC"	, "LACNIC"	},
+	{ IPV6_ADDR_REGISTRY_AFRINIC	, "AFRINIC"	, "AFRINIC"	},
 	{ IPV6_ADDR_REGISTRY_RESERVED	, "reserved"	, "reserved"	},
 	{ IPV6_ADDR_REGISTRY_UNKNOWN	, "unknown"	, "unknown"	}
 };

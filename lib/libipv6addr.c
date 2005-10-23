@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.23 2005/10/21 13:42:33 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.24 2005/10/23 20:19:20 peter Exp $
  * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -411,6 +411,8 @@ int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
 		return(IPV6_ADDR_REGISTRY_RIPE);
 	} else if (strcmp(resultstring, "LACNIC") == 0) {
 		return(IPV6_ADDR_REGISTRY_LACNIC);
+	} else if (strcmp(resultstring, "AFRINIC") == 0) {
+		return(IPV6_ADDR_REGISTRY_AFRINIC);
 	} else if (strcmp(resultstring, "6BONE") == 0) {
 		return(IPV6_ADDR_REGISTRY_6BONE);
 	} else if (strcmp(resultstring, "6TO4") == 0) {

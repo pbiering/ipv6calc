@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.14 2005/09/15 12:32:21 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.15 2005/10/23 20:19:20 peter Exp $
  * Copyright  : 2002-2003 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -574,6 +574,8 @@ int ipv4addr_getregistry(const ipv6calc_ipv4addr *ipv4addrp) {
 		return(IPV4_ADDR_REGISTRY_RIPE);
 	} else if (strcmp(resultstring, "LACNIC") == 0) {
 		return(IPV4_ADDR_REGISTRY_LACNIC);
+	} else if (strcmp(resultstring, "AFRINIC") == 0) {
+		return(IPV4_ADDR_REGISTRY_AFRINIC);
 	} else {
 		return(IPV4_ADDR_REGISTRY_UNKNOWN);
 	};
