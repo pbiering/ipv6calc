@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.9 2005/10/23 21:22:52 peter Exp $
- * Generated     : Sun Oct 23 22:00:23 2005
+ * Version       : $Id: dbieee_iab.h,v 1.10 2005/10/26 09:36:52 peter Exp $
+ * Generated     : Wed Oct 26 11:25:27 2005
  * Data copyright: IEEE
  *
  * Information:
@@ -412,10 +412,10 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x18F000, 0x18FFFF, "MATSUI MFG CO.,LTD", "MATSUI-MFG" },
 	{ 0x0050C2, 0x190000, 0x190FFF, "Goerlitz AG", "GOERLITZ" },
 	{ 0x0050C2, 0x191000, 0x191FFF, "Partner Voxtream A/S", "PARTNER-VOXTREAM-A/S" },
-	{ 0x0050C2, 0x192000, 0x192FFF, "PRIVATE", "PRIVATE" },
+	{ 0x0050C2, 0x192000, 0x192FFF, "Advanced Concepts, Inc.", "ADVANCED-CONCEPTS" },
 	{ 0x0050C2, 0x193000, 0x193FFF, "LaserBit Communications Corp.", "LASERBIT-COMMUNICATION" },
 	{ 0x0050C2, 0x194000, 0x194FFF, "COMINFO", "COMINFO" },
-	{ 0x0050C2, 0x195000, 0x195FFF, "PRIVATE", "PRIVATE" },
+	{ 0x0050C2, 0x195000, 0x195FFF, "Momentum Data Systems", "MOMENTUM-DATA" },
 	{ 0x0050C2, 0x196000, 0x196FFF, "Netsynt Spa", "NETSYNT-SPA" },
 	{ 0x0050C2, 0x197000, 0x197FFF, "EPM Tecnologia e Equipamentos", "EPM-TECNOLOGIA-E-EQUIPAMENTOS" },
 	{ 0x0050C2, 0x198000, 0x198FFF, "PotsTek, Inc", "POTSTEK" },
@@ -647,7 +647,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x27A000, 0x27AFFF, "Maestro Pty Ltd", "MAESTRO-PTY" },
 	{ 0x0050C2, 0x27B000, 0x27BFFF, "LinkSecurity A/S", "LINKSECURITY-A/S" },
 	{ 0x0050C2, 0x27C000, 0x27CFFF, "Danlaw Inc", "DANLAW" },
-	{ 0x0050C2, 0x27D000, 0x27DFFF, "PRIVATE", "PRIVATE" },
+	{ 0x0050C2, 0x27D000, 0x27DFFF, "ALLIED TELESIS K.K.", "ALLIED-TELESIS-K-K" },
 	{ 0x0050C2, 0x27E000, 0x27EFFF, "AnaLogic Computers Ltd.", "ANALOGIC-COMPUTERS" },
 	{ 0x0050C2, 0x27F000, 0x27FFFF, "Air Broadband Communications, Inc.", "AIR-BROADBAND-COMMUNICATION" },
 	{ 0x0050C2, 0x280000, 0x280FFF, "AGECODAGIS SARL", "AGECODAGIS-SARL" },
@@ -1333,5 +1333,8 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x528000, 0x528FFF, "tattile srl", "TATTILE-SRL" },
 	{ 0x0050C2, 0x529000, 0x529FFF, "Phytec Messtechnik GmbH", "PHYTEC-MESSTECHNIK" },
 	{ 0x0050C2, 0x52A000, 0x52AFFF, "OMNITRONICS PTY LTD", "OMNITRONICS-PTY" },
+	{ 0x0050C2, 0x52B000, 0x52BFFF, "Sicon s.r.l.", "SICON-S-R-L" },
+	{ 0x0050C2, 0x52C000, 0x52CFFF, "VITEC MULTIMEDIA", "VITEC-MULTIMEDIA" },
+	{ 0x0050C2, 0x52D000, 0x52DFFF, "Smartcom-Bulgaria AD", "SMARTCOM-BULGARIA-AD" },
 
 };

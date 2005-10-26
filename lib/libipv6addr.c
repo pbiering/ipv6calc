@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.24 2005/10/23 20:19:20 peter Exp $
- * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv6addr.c,v 1.25 2005/10/26 09:36:54 peter Exp $
+ * Copyright  : 2001-2005 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Function library for IPv6 address handling
@@ -436,21 +436,31 @@ int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, char *re
 	int i;
 	int match = -1;
 
-	uint32_t ipv6 = ipv6addr_getdword(ipv6addrp, 0);
+	uint32_t ipv6_00_31 = ipv6addr_getdword(ipv6addrp, 0);
+	uint32_t ipv6_32_63 = ipv6addr_getdword(ipv6addrp, 1);
 	
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s: Given ipv6 address: %08x\n", DEBUG_function_name, (unsigned int) ipv6);
+		fprintf(stderr, "%s: Given ipv6 prefix: %08x%08x\n", DEBUG_function_name, (unsigned int) ipv6_00_31, (unsigned int) ipv6_32_63);
 	};
 
 	for (i = 0; i < (int) ( sizeof(dbipv6addr_assignment) / sizeof(dbipv6addr_assignment[0])); i++) {
 		/* run through database array */
-		if ( (ipv6 & dbipv6addr_assignment[i].ipv6mask) == dbipv6addr_assignment[i].ipv6addr ) {
-			/* ok, entry matches */
-			if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-				fprintf(stderr, "%s: Found match\n", DEBUG_function_name);
-			};
-			match = i;
+		if ( (ipv6_00_31 & dbipv6addr_assignment[i].ipv6mask_00_31) != dbipv6addr_assignment[i].ipv6addr_00_31 ) {
+			/* MSB 00-31 do not match */
+			continue;
 		};
+
+		if ( dbipv6addr_assignment[i].ipv6mask_32_63 != 0 ) {
+			if ( (ipv6_32_63 & dbipv6addr_assignment[i].ipv6mask_32_63) != dbipv6addr_assignment[i].ipv6addr_32_63 ) {
+				/* MSB 32-63 do not match */
+				continue;
+			};
+		};
+
+		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+			fprintf(stderr, "%s: Found match: prefix=%08x%08x mask=%08x%08x  registry=%s (entry: %d)\n", DEBUG_function_name, dbipv6addr_assignment[i].ipv6addr_00_31, dbipv6addr_assignment[i].ipv6addr_32_63, dbipv6addr_assignment[i].ipv6mask_00_31, dbipv6addr_assignment[i].ipv6mask_32_63, dbipv6addr_assignment[i].string_registry, i);
+		};
+		match = i;
 	};
 
 	/* result */

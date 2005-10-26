@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.20 2005/10/23 21:22:52 peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.21 2005/10/26 09:36:53 peter Exp $
 # Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -27,7 +27,7 @@ my $debug_hinttable = 0;
 
 my $OUTFILE = "dbipv4addr_assignment.h";
 
-my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time - 24*60*60);
+my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time - 48*60*60);
 
 $year = 1900 + $year;
 $mon = sprintf "%02d", $mon + 1;
@@ -153,9 +153,8 @@ sub proceed_global() {
 		$reg = uc($reg);
 		$reg =~ s/RIPE/RIPENCC/g;
 
-		if ( ($reg ne "ARIN") && ($reg ne "APNIC") && ($reg ne "RIPENCC") && ($reg ne "IANA") && ($reg ne "LACNIC") ) {
-			#print "Unsupported registry: " . $reg . "\n";
-			next;
+		if ( ($reg ne "ARIN") && ($reg ne "APNIC") && ($reg ne "RIPENCC") && ($reg ne "IANA") && ($reg ne "LACNIC") && ($reg ne "AFRINIC")) {
+			die "Unsupported registry: " . $reg . "\n";
 		};
 
 		for ($ipv4 = $ipv4_start; $ipv4 <= $ipv4_end; $ipv4++) {
@@ -439,7 +438,7 @@ sub fill_data($$) {
 &fill_data(\@ripencc_agg, "RIPENCC");
 &fill_data(\@arin_agg, "ARIN");
 &fill_data(\@lacnic_agg, "LACNIC");
-&fill_data(\@afrinic_agg, "AFRINIC")
+&fill_data(\@afrinic_agg, "AFRINIC");
 &fill_data(\@iana_agg, "IANA");
 
 my %data_hint;

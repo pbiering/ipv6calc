@@ -2,21 +2,21 @@
 #
 # Project    : ipv6calc/databases/registries
 # File       : update-registries.sh
-# Version    : $Id: update-registries.sh,v 1.1 2005/10/23 21:22:54 peter Exp $
+# Version    : $Id: update-registries.sh,v 1.2 2005/10/26 09:36:54 peter Exp $
 # Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces ../ipv4-assignment/update-ipv4-assignment.sh
 #               replaces ../ipv6-assignment/update-ipv6-assignment.sh
 #
 # Information:
-#  Update shell script, extract file if necessary
+#  Update registry data shell script
 
 #set -x
 
 get_urls() {
-# yesterday's date
-year="`date -d yesterday +%Y`"
-month="`date -d yesterday +%m`"
-day="`date -d yesterday +%d`"
+# date 2 days ago
+year="`date -d '2 days ago' +%Y`"
+month="`date -d '2 days ago' +%m`"
+day="`date -d '2 days ago' +%d`"
 
 cat <<END | sed s/\%Y/$year/g | sed s/\%m/$month/g | sed s/\%d/$day/g
 iana	http://www.iana.org/assignments/		ipv4-address-space			txt
