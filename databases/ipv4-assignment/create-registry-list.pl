@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.21 2005/10/26 09:36:53 peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.22 2005/11/19 21:44:59 peter Exp $
 # Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -129,7 +129,7 @@ sub proceed_global() {
 
 		if ( $line =~ /^\d{3}\// ) {
 			# single entry
-			(my $block, $reg, my $dummy) = split /\s+/, $line;
+			(my $block, my $month, my $year, $reg, my $dummy) = split /\s+/, $line;
 
 			($block, $length) = split /\//, $block;
 
@@ -154,7 +154,8 @@ sub proceed_global() {
 		$reg =~ s/RIPE/RIPENCC/g;
 
 		if ( ($reg ne "ARIN") && ($reg ne "APNIC") && ($reg ne "RIPENCC") && ($reg ne "IANA") && ($reg ne "LACNIC") && ($reg ne "AFRINIC")) {
-			die "Unsupported registry: " . $reg . "\n";
+			$reg = "ARIN"; # default now
+			#die "Unsupported registry: " . $reg . "\nLine: $line\n";
 		};
 
 		for ($ipv4 = $ipv4_start; $ipv4 <= $ipv4_end; $ipv4++) {

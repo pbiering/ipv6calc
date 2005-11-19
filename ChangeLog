@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.109 2005/11/19 21:14:37 peter Exp $ 
+ *  $Id: ChangeLog,v 1.110 2005/11/19 21:44:59 peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,7 @@ Info:
 	various make files
 	 - replace "make" by "${MAKE}"
 	 - add definitions for prefix and exec_prefix
+	update databases
 	
 20051026/PB
 	restructure registry database directory

@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.10 2005/10/26 09:36:52 peter Exp $
- * Generated     : Wed Oct 26 11:25:27 2005
+ * Version       : $Id: dbieee_iab.h,v 1.11 2005/11/19 21:44:59 peter Exp $
+ * Generated     : Sat Nov 19 22:15:43 2005
  * Data copyright: IEEE
  *
  * Information:
@@ -621,7 +621,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x260000, 0x260FFF, "PRIVATE", "PRIVATE" },
 	{ 0x0050C2, 0x261000, 0x261FFF, "Tattile Srl", "TATTILE-SRL" },
 	{ 0x0050C2, 0x262000, 0x262FFF, "Shanghai Gaozhi Science&Technology Development Ltd.", "SHANGHAI-GAOZHI-SCIENCE-DEVELOPMENT" },
-	{ 0x0050C2, 0x263000, 0x263FFF, "Mitron Oy", "MITRON-OY" },
+	{ 0x0050C2, 0x263000, 0x263FFF, "Vansco Electronics Oy", "VANSCO-ELECTRONICS-OY" },
 	{ 0x0050C2, 0x264000, 0x264FFF, "PRIVATE", "PRIVATE" },
 	{ 0x0050C2, 0x265000, 0x265FFF, "BELIK S.P.R.L.", "BELIK-S-P-R-L" },
 	{ 0x0050C2, 0x266000, 0x266FFF, "ATOM GIKEN Co.,Ltd.", "ATOM-GIKEN" },
@@ -1336,5 +1336,28 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x52B000, 0x52BFFF, "Sicon s.r.l.", "SICON-S-R-L" },
 	{ 0x0050C2, 0x52C000, 0x52CFFF, "VITEC MULTIMEDIA", "VITEC-MULTIMEDIA" },
 	{ 0x0050C2, 0x52D000, 0x52DFFF, "Smartcom-Bulgaria AD", "SMARTCOM-BULGARIA-AD" },
+	{ 0x0050C2, 0x52E000, 0x52EFFF, "DSP DESIGN", "DSP-DESIGN" },
+	{ 0x0050C2, 0x52F000, 0x52FFFF, "Gesellschaft für Rationalisierung und Rechentechnik mbH", "GESELLSCHAFT-FüR-RATIONALISIERUNG-UND-RECHENTECHNIK-MBH" },
+	{ 0x0050C2, 0x530000, 0x530FFF, "Innovation, Institute, Inc", "INNOVATION-INSTITUTE" },
+	{ 0x0050C2, 0x531000, 0x531FFF, "Orion Technologies, Inc.", "ORION-TECHNOLOGIES" },
+	{ 0x0050C2, 0x532000, 0x532FFF, "NVE Corporation", "NVE" },
+	{ 0x0050C2, 0x533000, 0x533FFF, "NanShanBridge Co.Ltd", "NANSHANBRIDGE" },
+	{ 0x0050C2, 0x534000, 0x534FFF, "Hyundai J. Comm", "HYUNDAI-J-COMM" },
+	{ 0x0050C2, 0x535000, 0x535FFF, "MMS Servis s.r.o.", "MMS-SERVIS-S-R-O" },
+	{ 0x0050C2, 0x536000, 0x536FFF, "C2 DIAGNOSTICS", "C2-DIAGNOSTICS" },
+	{ 0x0050C2, 0x537000, 0x537FFF, "DST CONTROL AB", "DST-CONTROL-AB" },
+	{ 0x0050C2, 0x538000, 0x538FFF, "BND Communications", "BND-COMMUNICATION" },
+	{ 0x0050C2, 0x539000, 0x539FFF, "Detection Technology Inc.", "DETECTION" },
+	{ 0x0050C2, 0x53A000, 0x53AFFF, "Image Control Design Limited", "IMAGE-CONTROL-DESIGN" },
+	{ 0x0050C2, 0x53B000, 0x53BFFF, "Teleks Co. Ltd.", "TELEKS" },
+	{ 0x0050C2, 0x53C000, 0x53CFFF, "Marposs SPA", "MARPOSS-SPA" },
+	{ 0x0050C2, 0x53D000, 0x53DFFF, "Digital communications Technologies", "DIGITAL-COMMUNICATION-TECHNOLOGIES" },
+	{ 0x0050C2, 0x53E000, 0x53EFFF, "Honeywell GNO", "HONEYWELL-GNO" },
+	{ 0x0050C2, 0x53F000, 0x53FFFF, "Ellips B.V.", "ELLIPS" },
+	{ 0x0050C2, 0x540000, 0x540FFF, "Mesure Controle Commande", "MESURE-CONTROLE-COMMANDE" },
+	{ 0x0050C2, 0x541000, 0x541FFF, "WAVES SYSTEM", "WAVES-SYSTEM" },
+	{ 0x0050C2, 0x542000, 0x542FFF, "AVerMedia Technologies, Inc.", "AVERMEDIA-TECHNOLOGIES" },
+	{ 0x0050C2, 0x543000, 0x543FFF, "DIGI SESN AG", "DIGI-SESN" },
+	{ 0x0050C2, 0x544000, 0x544FFF, "Zetera", "ZETERA" },
 
 };
