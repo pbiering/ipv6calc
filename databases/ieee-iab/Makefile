@@ -1,7 +1,7 @@
 # Project    : ipv6calc/databases/ieee-iab
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.1 2004/10/30 12:00:00 peter Exp $
-# Copyright  : 2004 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile,v 1.2 2005/11/19 21:14:38 peter Exp $
+# Copyright  : 2004-2005 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ieee-iab
@@ -10,7 +10,7 @@ FILE = "iab.txt"
 BASEURL = "http://standards.ieee.org/regauth/oui/"
 
 all:
-		test -f dbieee_iab.h || make update
+		test -f dbieee_iab.h || ${MAKE} update
 
 install:
 		echo "Nothing to do"

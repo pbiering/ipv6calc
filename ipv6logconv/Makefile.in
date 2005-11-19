@@ -1,11 +1,14 @@
 # Project    : ipv6calc/ipv6logconv
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.11 2005/09/16 11:40:19 peter Exp $
+# Version    : $Id: Makefile.in,v 1.12 2005/11/19 21:14:38 peter Exp $
 # Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6logconv
 #
+
+prefix          = @prefix@
+exec_prefix     = @exec_prefix@
 
 # Compiler and Linker Options
 COPTS = -O2 -Wall -g -D__EXTENSIONS__
@@ -30,22 +33,22 @@ all:		ipv6logconv
 $(OBJS):	ipv6logconvoptions.h ipv6logconvhelp.h ipv6logconv.h
 
 ipv6logconv:	$(OBJS)
-		$(CC) -o ipv6logconv $(OBJS) $(GETOBJS) -lipv6calc -L../lib/
+		$(CC) -o ipv6logconv $(OBJS) $(GETOBJS) -lipv6calc -L../lib/ $(LDFLAGS)
 
 static:		ipv6logconv
-		$(CC) -o ipv6logconv-static $(OBJS) $(GETOBJS) -lipv6calc -L../lib/ -static
+		$(CC) -o ipv6logconv-static $(OBJS) $(GETOBJS) -lipv6calc -L../lib/ -static $(LDFLAGS)
 
 distclean:
-		make clean
+		${MAKE} clean
 
 autoclean:
-		make distclean
+		${MAKE} distclean
 
 clean:
 		rm -f ipv6logconv ipv6logconv-static *.o
 
 test:		
-		make all
+		${MAKE} all
 		./test_ipv6logconv.sh
 
 splint:

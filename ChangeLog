@@ -1,10 +1,15 @@
 /*
- *  $Id: ChangeLog,v 1.108 2005/10/26 09:36:52 peter Exp $ 
+ *  $Id: ChangeLog,v 1.109 2005/11/19 21:14:37 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20051119/PB
+	various make files
+	 - replace "make" by "${MAKE}"
+	 - add definitions for prefix and exec_prefix
+	
 20051026/PB
 	restructure registry database directory
 	- process now registry files 2 days ago to prevent problems short after local day switches
