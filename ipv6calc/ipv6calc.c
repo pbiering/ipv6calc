@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.19 2005/09/15 12:14:00 peter Exp $
- * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calc.c,v 1.20 2006/01/26 13:52:49 peter Exp $
+ * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
@@ -217,14 +217,17 @@ int main(int argc,char *argv[]) {
 				break;
 
 			/* format options */
+			case 'C':
 			case FORMATOPTION_NUM_printcompressed + FORMATOPTION_NUM_HEAD:
 	       			formatoptions |= FORMATOPTION_printcompressed;
 				break;
 				
+			case 'U':
 			case FORMATOPTION_NUM_printuncompressed + FORMATOPTION_NUM_HEAD:
 	       			formatoptions |= FORMATOPTION_printuncompressed;
 				break;
 				
+			case 'F':
 			case FORMATOPTION_NUM_printfulluncompressed + FORMATOPTION_NUM_HEAD:
 	       			formatoptions |= FORMATOPTION_printfulluncompressed;
 				break;
@@ -290,6 +293,7 @@ int main(int argc,char *argv[]) {
 				break;
 
 			/* new options */
+			case 'I':	
 			case CMD_inputtype:
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "%s: Got input string: %s\n", DEBUG_function_name, optarg);
@@ -308,6 +312,7 @@ int main(int argc,char *argv[]) {
 				};
 				break;	
 				
+			case 'O':	
 			case CMD_outputtype:
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "%s: Got output string: %s\n", DEBUG_function_name, optarg);
@@ -325,6 +330,7 @@ int main(int argc,char *argv[]) {
 				};
 				break;	
 
+			case 'A':	
 			case CMD_actiontype:
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "%s: Got action string: %s\n", DEBUG_function_name, optarg);

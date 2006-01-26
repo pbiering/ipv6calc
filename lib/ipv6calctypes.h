@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.14 2003/08/15 11:58:28 peter Exp $
- * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calctypes.h,v 1.15 2006/01/26 13:52:49 peter Exp $
+ * Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for ipv6calctypes.c
@@ -169,17 +169,17 @@ typedef struct {
 } s_formatoption;
 
 /*@unused@*/ static const s_formatoption ipv6calc_formatoptionstrings[] = {
-	{ FORMATOPTION_printlowercase   , "--printlowercase"   , "Print output in lower case" },
-	{ FORMATOPTION_printuppercase   , "--printuppercase"   , "Print output in upper case" },
+	{ FORMATOPTION_printlowercase   , "--lowercase|-l"     , "Print output in lower case" },
+	{ FORMATOPTION_printuppercase   , "--uppercase|-u"     , "Print output in upper case" },
 	{ FORMATOPTION_printprefix      , "--printprefix"      , "Print only prefix" },
 	{ FORMATOPTION_printsuffix      , "--printsuffix"      , "Print only suffix" },
 	{ FORMATOPTION_maskprefix       , "--maskprefix"       , "Mask prefix bits (suffix set to 0)" },
 	{ FORMATOPTION_masksuffix       , "--masksuffix"       , "Mask suffix bits (prefix set to 0)" },
 	{ FORMATOPTION_printstart       , "--printstart <num>" , "Printing starts at bit <num>" },
 	{ FORMATOPTION_printend         , "--printend <num>"   , "Printing ends at bit <num>" },
-	{ FORMATOPTION_printcompressed  , "--printcompressed"  , "Print in compressed format" },
-	{ FORMATOPTION_printuncompressed  , "--printuncompressed"  , "Print in uncompressed format" },
-	{ FORMATOPTION_printfulluncompressed  , "--printfulluncompressed"  , "Print in full uncompressed format" },
+	{ FORMATOPTION_printcompressed  , "--printcompressed|-C"  , "Print in compressed format" },
+	{ FORMATOPTION_printuncompressed  , "--printuncompressed|-U"  , "Print in uncompressed format" },
+	{ FORMATOPTION_printfulluncompressed  , "--printfulluncompressed|-F"  , "Print in full uncompressed format" },
 	{ FORMATOPTION_machinereadable  , "--machinereadable|-m" , "Print output machine readable" },
 	{ FORMATOPTION_quiet            , "--quiet|-q"         , "Be more quiet" },
 	{ FORMATOPTION_printmirrored	, "--printmirrored"    , "Print output mirrored" }

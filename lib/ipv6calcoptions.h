@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.6 2002/04/21 11:24:08 peter Exp $
- * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calcoptions.h,v 1.7 2006/01/26 13:52:49 peter Exp $
+ * Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options for ipv6calc.c
@@ -34,7 +34,7 @@
  *  i = showinfo
  *  q = be more quiet
  */
-/*@unused@*/ static char *ipv6calc_shortopts = "vh?rmabd:iulq";
+/*@unused@*/ static char *ipv6calc_shortopts = "vh?rmabd:iulqUFCI:O:A:";
 
 /* define long options */
 /*@unused@*/ static struct option ipv6calc_longopts[] = {
@@ -86,9 +86,9 @@
 	{ "maskprefix"           , 0, 0, FORMATOPTION_NUM_maskprefix + FORMATOPTION_NUM_HEAD },
 	{ "masksuffix"           , 0, 0, FORMATOPTION_NUM_masksuffix + FORMATOPTION_NUM_HEAD },
 	
-	{ "uppercase"            , 0, 0, FORMATOPTION_NUM_printuppercase + FORMATOPTION_NUM_HEAD },
-	{ "lowercase"            , 0, 0, FORMATOPTION_NUM_printlowercase + FORMATOPTION_NUM_HEAD },
-	
+	{ "uppercase"       , 0, 0, FORMATOPTION_NUM_printuppercase + FORMATOPTION_NUM_HEAD },
+	{ "lowercase"       , 0, 0, FORMATOPTION_NUM_printlowercase + FORMATOPTION_NUM_HEAD },
+
 	{ "printstart"           , 1, 0, FORMATOPTION_NUM_printstart + FORMATOPTION_NUM_HEAD },
 	{ "printend"             , 1, 0, FORMATOPTION_NUM_printend + FORMATOPTION_NUM_HEAD },
 	

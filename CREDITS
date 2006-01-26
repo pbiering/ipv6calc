@@ -49,6 +49,9 @@ Credits to
 * Simon Arlott <simon at arlott dot org>
    patch to extend IPv6 TLA assignement
 
+* Brad Allen/sonic.net
+   for bug reporting
+
 * VMware, in which my OpenBSD and FreeBSD installation is running
 
 * Peter A. Darnell and Philip E. Margolis
@@ -58,4 +61,4 @@ Credits to
       11 years ]
 
 
-	Peter Bieringer, 2005-07-14
+	Peter Bieringer, 2006-01-26

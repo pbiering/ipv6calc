@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.9 2005/07/25 06:34:11 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.10 2006/01/26 13:52:49 peter Exp $
 # Copyright  : 2001-2005 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -24,9 +24,11 @@ cat <<END | grep -v '^#'
 --addr_to_ip6arpa 3ffe::1/64						=0.0.0.0.0.0.0.0.0.0.0.0.e.f.f.3.ip6.arpa.
 --in ipv6 --out revnibbles.arpa	3ffe::1/64				=0.0.0.0.0.0.0.0.0.0.0.0.e.f.f.3.ip6.arpa.
 -a --uppercase 3ffe::1/64						=0.0.0.0.0.0.0.0.0.0.0.0.E.F.F.3.IP6.ARPA.
+-a -u 3ffe::1/64							=0.0.0.0.0.0.0.0.0.0.0.0.E.F.F.3.IP6.ARPA.
 ## to uncompressed
 --addr_to_compressed 3ffe:ffff:0100:f101:0000:0000:0000:0001		=3ffe:ffff:100:f101::1
 --in ipv6 --out ipv6 --printcompressed 3ffe:ffff:0100:f101:0000:0000:0000:0001 =3ffe:ffff:100:f101::1
+-I ipv6 -O ipv6 -C 3ffe:ffff:0100:f101:0000:0000:0000:0001 		=3ffe:ffff:100:f101::1
 --addr_to_compressed 3ffe:ffff:0100:f101:0000:0000:0000:0001/64		=3ffe:ffff:100:f101::1/64
 --addr_to_compressed 0:0:1:2:3:4:0:0					=::1:2:3:4:0:0
 --addr_to_compressed 0:0:1:0:0:1:0:0					=::1:0:0:1:0:0

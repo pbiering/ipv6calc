@@ -1,10 +1,21 @@
 /*
- *  $Id: ChangeLog,v 1.110 2005/11/19 21:44:59 peter Exp $ 
+ *  $Id: ChangeLog,v 1.111 2006/01/26 13:52:48 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20060126/PB
+	lib/ipv6calchelp.c
+	lib/ipv6calctypes.h
+	ipv6calc/ipv6calc.c
+	ipv6calc/ipv6calc.h
+	 - fix help for {upper|lower}case option inconsistency
+	 - add new shortcut options:
+		--in|-I --out|-O --action|-A
+		--printcompressed|-C --printuncompressed|-U --printfulluncompressed|-F
+	 - update copyright range
+
 20051119/PB
 	various make files
 	 - replace "make" by "${MAKE}"
@@ -13,17 +24,17 @@ Info:
 	
 20051026/PB
 	restructure registry database directory
-	- process now registry files 2 days ago to prevent problems short after local day switches
+	 - process now registry files 2 days ago to prevent problems short after local day switches
 	add support for new registry AFRINIC
 	extend IPv6 registry data from 32 to 64 bits, adapt related function in lib/libipv6addr
 	
 20051021/PB
 	lib/libipv6addr
-	- fix bug for unique local unicast detection
+	 - fix bug for unique local unicast detection
 	ipv6calc/showinfo
-	- minor review
+	 - minor review
 	ipv6calcweb.cgi
-	- updates according to changes of showinfo.c
+	 - updates according to changes of showinfo.c
 
 20051020/PB
 	lib/libipv6addr

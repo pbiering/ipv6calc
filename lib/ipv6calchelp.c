@@ -1,11 +1,11 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.11 2005/09/15 12:14:00 peter Exp $
- * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calchelp.c,v 1.12 2006/01/26 13:52:49 peter Exp $
+ * Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
- *  Help libary
+ *  Help library
  */
 
 #include <stdio.h>
@@ -221,12 +221,12 @@ void printhelp(void) {
 	fprintf(stderr, "  [-q|--quiet]               : be more quiet\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, " Usage with new style options:\n");
-	fprintf(stderr, "  [--in <input type>]   : specify input  type\n");
-	fprintf(stderr, "                           (default: autodetect)\n");
-	fprintf(stderr, "  [--out <output type>] : specify output type\n");
-	fprintf(stderr, "                           (sometimes: autodetect)\n");
-	fprintf(stderr, "  [--action <action>]   : specify action\n");
-	fprintf(stderr, "                           (default: format conversion, sometimes: autodetect)\n");
+	fprintf(stderr, "  [--in|-I <input type>]   : specify input  type\n");
+	fprintf(stderr, "                             (default: autodetect)\n");
+	fprintf(stderr, "  [--out|-O <output type>] : specify output type\n");
+	fprintf(stderr, "                             (sometimes: autodetect)\n");
+	fprintf(stderr, "  [--action|-A <action>]   : specify action\n");
+	fprintf(stderr, "                             (default: format conversion, sometimes: autodetect)\n");
 	fprintf(stderr, "  [<format option> ...] : specify format options\n");
 	fprintf(stderr, "  <input data> [...]    : input data\n");
 	fprintf(stderr, "\n");
