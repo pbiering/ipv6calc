@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.111 2006/01/26 13:52:48 peter Exp $ 
+ *  $Id: ChangeLog,v 1.112 2006/01/26 14:45:12 peter Exp $ 
  */
 
 Info:
@@ -15,6 +15,7 @@ Info:
 		--in|-I --out|-O --action|-A
 		--printcompressed|-C --printuncompressed|-U --printfulluncompressed|-F
 	 - update copyright range
+	update databases
 
 20051119/PB
 	various make files
