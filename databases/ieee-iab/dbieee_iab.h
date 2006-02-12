@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.12 2006/01/26 14:45:12 peter Exp $
- * Generated     : Thu Jan 26 15:00:40 2006
+ * Version       : $Id: dbieee_iab.h,v 1.13 2006/02/12 14:01:44 peter Exp $
+ * Generated     : Sun Feb 12 14:51:09 2006
  * Data copyright: IEEE
  *
  * Information:
@@ -1420,5 +1420,23 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x57F000, 0x57FFFF, "Orderite, Inc.", "ORDERITE" },
 	{ 0x0050C2, 0x580000, 0x580FFF, "Buyang Electronics Industrial co.,Ltd.", "BUYANG-ELECTRONICS-INDUSTRIAL" },
 	{ 0x0050C2, 0x581000, 0x581FFF, "Devitech ApS", "DEVITECH-APS" },
+	{ 0x0050C2, 0x582000, 0x582FFF, "AllSun A/S", "ALLSUN-A/S" },
+	{ 0x0050C2, 0x583000, 0x583FFF, "Jünger Audio-Studiotechnik GmbH", "JüNGER-AUDIO-STUDIOTECHNIK" },
+	{ 0x0050C2, 0x584000, 0x584FFF, "Toyota Motorsport GmbH", "TOYOTA-MOTORSPORT" },
+	{ 0x0050C2, 0x585000, 0x585FFF, "Wireless Cables Inc", "WIRELESS-CABLES" },
+	{ 0x0050C2, 0x586000, 0x586FFF, "Genetix Ltd", "GENETIX" },
+	{ 0x0050C2, 0x587000, 0x587FFF, "Dynalco", "DYNALCO" },
+	{ 0x0050C2, 0x588000, 0x588FFF, "Federal Electronics", "FEDERAL-ELECTRONICS" },
+	{ 0x0050C2, 0x589000, 0x589FFF, "HORIBA ABX", "HORIBA-ABX" },
+	{ 0x0050C2, 0x58A000, 0x58AFFF, "Dixell S.p.a.", "DIXELL-S-P-A" },
+	{ 0x0050C2, 0x58B000, 0x58BFFF, "Innovative Dynamics GmbH", "INNOVATIVE-DYNAMICS" },
+	{ 0x0050C2, 0x58C000, 0x58CFFF, "Lattice Semiconductor Corp. (LPA)", "LATTICE-SEMICONDUCTOR-LPA" },
+	{ 0x0050C2, 0x58D000, 0x58DFFF, "ZAO", "ZAO" },
+	{ 0x0050C2, 0x58E000, 0x58EFFF, "Penny & Giles Aerospace Ltd", "PENNY-GILES-AEROSPACE" },
+	{ 0x0050C2, 0x58F000, 0x58FFFF, "XoIP Systems Pty Ltd", "XOIP-PTY" },
+	{ 0x0050C2, 0x590000, 0x590FFF, "EM Motorsport Ltd", "EM-MOTORSPORT" },
+	{ 0x0050C2, 0x591000, 0x591FFF, "Grosvenor Technology Ltd", "GROSVENOR" },
+	{ 0x0050C2, 0x592000, 0x592FFF, "PaloDEx Group Oy", "PALODEX-GROUP-OY" },
+	{ 0x0050C2, 0x593000, 0x593FFF, "Broadlight", "BROADLIGHT" },
 
 };

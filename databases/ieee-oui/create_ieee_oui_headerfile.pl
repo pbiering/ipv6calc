@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/lib
 # File       : create_ieee_oui_headerfile.pl
-# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.8 2004/10/30 12:00:48 peter Exp $
+# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.9 2006/02/12 14:01:44 peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE/oui.txt
@@ -102,8 +102,8 @@ while (<IN>) {
 		$oui =~ s/\bELECTRONIC\b//ig;
 		$oui =~ s/\bHF1-06\b//ig;
 
-		# remove ',' '.'
-		$oui =~ s/[,\.;]/ /ig;
+		# remove ',' '.', '"'
+		$oui =~ s/[,\.;"]/ /ig;
 
 		# remove leading and trailing spaces
 		$oui =~ s/^\s+//ig;
@@ -118,8 +118,9 @@ while (<IN>) {
 
 		# remove trailling '-'
 		$oui =~ s/-+$//ig;
-	
-		#print $oui . "\n";
+
+		# escape "
+		$t3 =~ s/"/\\"/g;
 	
 		print OUT "\t{ 0x" . $a . $b . $c . ", \"$t3\", \"$oui\" },\n";
 	};

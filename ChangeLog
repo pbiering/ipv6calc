@@ -1,10 +1,16 @@
 /*
- *  $Id: ChangeLog,v 1.112 2006/01/26 14:45:12 peter Exp $ 
+ *  $Id: ChangeLog,v 1.113 2006/02/12 14:01:44 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20060212/PB
+	update databases
+	databases/ieee-oui/create_ieee_oui_headerfile.pl
+	 - replace " with ' in entries
+	tag version 0.51
+
 20060126/PB
 	lib/ipv6calchelp.c
 	lib/ipv6calctypes.h

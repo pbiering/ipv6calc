@@ -1,12 +1,11 @@
 # Project    : ipv6calc/databases/ieee-oui
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.8 2005/11/19 21:14:38 peter Exp $
-# Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile,v 1.9 2006/02/12 14:01:44 peter Exp $
+# Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ieee-oui
 
-#FILE = "oui.txt"
 FILE = "oui_public.txt"
 BASEURL = "http://standards.ieee.org/regauth/oui/"
 
@@ -16,10 +15,13 @@ all:
 install:
 		echo "Nothing to do"
 
+create:
+		./create_ieee_oui_headerfile.pl $(FILE)
+
 update:
 		echo "Download new version of file"
 		wget $(BASEURL)$(FILE) --timestamp
-		./create_ieee_oui_headerfile.pl $(FILE)
+		${MAKE} create
 
 distclean:
 		echo "Remove database file"
