@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.113 2006/02/12 14:01:44 peter Exp $ 
+ *  $Id: ChangeLog,v 1.114 2006/02/12 14:16:21 peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,10 @@ Info:
 	update databases
 	databases/ieee-oui/create_ieee_oui_headerfile.pl
 	 - replace " with ' in entries
+	Makefile.in
+	 - remove also autom4te.cache on distclean
+	contrib/ipv6calc.spec[.in]
+	 - remove CVS version line to avoid problems
 	tag version 0.51
 
 20060126/PB
