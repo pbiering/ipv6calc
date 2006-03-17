@@ -8,6 +8,9 @@
 
 #include "libipv4addr.h"
 #include "libipv6addr.h"
+#include "librfc1884.h"
+
+#include "ipv6calctypes.h"
 
 #include "libipv6calcdebug.h"
 
@@ -73,9 +76,6 @@ int main(int argc,char *argv[]) {
 	ipv4addr_clearall(&ipv4addr);
 	ipv6addr_clearall(&ipv6addr);
 
-	int j;
-	unsigned int mask;
-
 	printf ("# Selected registry: %s\n", registry);
 	printf ("# Selected IP address version: IPv%d\n", type);
 
@@ -88,17 +88,9 @@ int main(int argc,char *argv[]) {
 
 			ipv4addr_setdword(&ipv4addr, dbipv4addr_assignment[i].ipv4addr);
 
-			/* Set mask */
-			mask = 0xffffffff;
-			j = 32;
-			while (j >= 0 && (mask != dbipv4addr_assignment[i].ipv4mask)) {
-				mask = mask & ~ ((1 << (32 - j)) + 1);
-				j--;
-			};
-
 			retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, resultstring, 0);
 			//printf("%s/%d %08x %08x\ %08x\n", resultstring, j, dbipv4addr_assignment[i].ipv4addr, dbipv4addr_assignment[i].ipv4mask, ipv4addr.in_addr.s_addr);
-			printf("%s/%d\n", resultstring, j);
+			printf("%s/%d\n", resultstring, dbipv4addr_assignment[i].prefixlength);
 			//	break;
 		};
 	} else if (type == 6) {
@@ -110,17 +102,9 @@ int main(int argc,char *argv[]) {
 			ipv6addr_setdword(&ipv6addr, 0, dbipv6addr_assignment[i].ipv6addr_00_31);
 			ipv6addr_setdword(&ipv6addr, 1, dbipv6addr_assignment[i].ipv6addr_32_63);
 
-			/* Set mask */
-	//		mask = 0xffffffff;
-	//		j = 32;
-	//		while (j >= 0 && (mask != dbipv4addr_assignment[i].ipv4mask)) {
-	//			mask = mask & ~ ((1 << (32 - j)) + 1);
-	//			j--;
-	//		};
-
-			retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, 0);
+			retval = librfc1884_ipv6addrstruct_to_compaddr(&ipv6addr, resultstring, FORMATOPTION_printcompressed);
 			//printf("%s/%d %08x %08x\ %08x\n", resultstring, j, dbipv4addr_assignment[i].ipv4addr, dbipv4addr_assignment[i].ipv4mask, ipv4addr.in_addr.s_addr);
-			printf("%s/%d\n", resultstring, j);
+			printf("%s/%d\n", resultstring, dbipv6addr_assignment[i].prefixlength);
 			//	break;
 		};
 	};
