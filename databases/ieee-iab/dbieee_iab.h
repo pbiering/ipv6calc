@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.13 2006/02/12 14:01:44 peter Exp $
- * Generated     : Sun Feb 12 14:51:09 2006
+ * Version       : $Id: dbieee_iab.h,v 1.14 2006/03/17 17:02:26 peter Exp $
+ * Generated     : Thu Mar 16 15:53:39 2006
  * Data copyright: IEEE
  *
  * Information:
@@ -642,7 +642,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x275000, 0x275FFF, "Extreme Engineering Solutions", "EXTREME-ENGINEERING-SOLUTIONS" },
 	{ 0x0050C2, 0x276000, 0x276FFF, "Tieline Research Pty Ltd", "TIELINE-RESEARCH-PTY" },
 	{ 0x0050C2, 0x277000, 0x277FFF, "T/R Systems, Inc.", "T/R" },
-	{ 0x0050C2, 0x278000, 0x278FFF, "PRIVATE", "PRIVATE" },
+	{ 0x0050C2, 0x278000, 0x278FFF, "Replicom Ltd.", "REPLICOM" },
 	{ 0x0050C2, 0x279000, 0x279FFF, "PATLITE Corporation", "PATLITE" },
 	{ 0x0050C2, 0x27A000, 0x27AFFF, "Maestro Pty Ltd", "MAESTRO-PTY" },
 	{ 0x0050C2, 0x27B000, 0x27BFFF, "LinkSecurity A/S", "LINKSECURITY-A/S" },
@@ -1438,5 +1438,38 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x591000, 0x591FFF, "Grosvenor Technology Ltd", "GROSVENOR" },
 	{ 0x0050C2, 0x592000, 0x592FFF, "PaloDEx Group Oy", "PALODEX-GROUP-OY" },
 	{ 0x0050C2, 0x593000, 0x593FFF, "Broadlight", "BROADLIGHT" },
+	{ 0x0050C2, 0x594000, 0x594FFF, "Pixel Velocity, Inc.", "PIXEL-VELOCITY" },
+	{ 0x0050C2, 0x595000, 0x595FFF, "Callpod, Inc.", "CALLPOD" },
+	{ 0x0050C2, 0x596000, 0x596FFF, "SPANSION", "SPANSION" },
+	{ 0x0050C2, 0x597000, 0x597FFF, "Nautel Ltd.", "NAUTEL" },
+	{ 0x0050C2, 0x598000, 0x598FFF, "Bundesamt für Strahlenschutz", "BUNDESAMT-FüR-STRAHLENSCHUTZ" },
+	{ 0x0050C2, 0x599000, 0x599FFF, "Fen Technology Limited", "FEN" },
+	{ 0x0050C2, 0x59A000, 0x59AFFF, "MultiTrode Pty Ltd", "MULTITRODE-PTY" },
+	{ 0x0050C2, 0x59B000, 0x59BFFF, "SAPEC", "SAPEC" },
+	{ 0x0050C2, 0x59C000, 0x59CFFF, "DELSAT GROUP S.A.", "DELSAT-GROUP" },
+	{ 0x0050C2, 0x59D000, 0x59DFFF, "DSS Networks, Inc.", "DSS-NETWORKS" },
+	{ 0x0050C2, 0x59E000, 0x59EFFF, "Legerity", "LEGERITY" },
+	{ 0x0050C2, 0x59F000, 0x59FFFF, "ads-tec GmbH", "ADS-TEC" },
+	{ 0x0050C2, 0x5A0000, 0x5A0FFF, "Rudolph Technologies, Inc.", "RUDOLPH-TECHNOLOGIES" },
+	{ 0x0050C2, 0x5A1000, 0x5A1FFF, "Vestfold Butikkdata AS", "VESTFOLD-BUTIKKDATA-AS" },
+	{ 0x0050C2, 0x5A2000, 0x5A2FFF, "Audiomatica Srl", "AUDIOMATICA-SRL" },
+	{ 0x0050C2, 0x5A3000, 0x5A3FFF, "LUMEL S.A.", "LUMEL" },
+	{ 0x0050C2, 0x5A4000, 0x5A4FFF, "Federal State Unitary Enterprise Experimental Factory for Sc", "FEDERAL-STATE-UNITARY-EXPERIMENTAL-FACTORY-FOR-SC" },
+	{ 0x0050C2, 0x5A5000, 0x5A5FFF, "Equipos de Telecomunicación Optoelectronicos, S.A.", "EQUIPOS-DE-TELECOMUNICACIóN-OPTOELECTRONICOS" },
+	{ 0x0050C2, 0x5A6000, 0x5A6FFF, "Plastic Logic", "PLASTIC-LOGIC" },
+	{ 0x0050C2, 0x5A7000, 0x5A7FFF, "Phytec Meßtechnik GmbH", "PHYTEC-MEßTECHNIK" },
+	{ 0x0050C2, 0x5A8000, 0x5A8FFF, "ETAP NV", "ETAP-NV" },
+	{ 0x0050C2, 0x5A9000, 0x5A9FFF, "AYC Telecom Ltd", "AYC-TELECOM" },
+	{ 0x0050C2, 0x5AA000, 0x5AAFFF, "Transenna AB", "TRANSENNA-AB" },
+	{ 0x0050C2, 0x5AB000, 0x5ABFFF, "Pulizzi Engineering, Inc.", "PULIZZI-ENGINEERING" },
+	{ 0x0050C2, 0x5AC000, 0x5ACFFF, "Kinemetrics, Inc.", "KINEMETRICS" },
+	{ 0x0050C2, 0x5AD000, 0x5ADFFF, "Emcom Systems", "EMCOM" },
+	{ 0x0050C2, 0x5AE000, 0x5AEFFF, "CPS EUROPE B.V.", "CPS-EUROPE" },
+	{ 0x0050C2, 0x5AF000, 0x5AFFFF, "DORLET S.A.", "DORLET" },
+	{ 0x0050C2, 0x5B0000, 0x5B0FFF, "INCOTEC GmbH", "INCOTEC" },
+	{ 0x0050C2, 0x5B1000, 0x5B1FFF, "Rosta Ltd", "ROSTA" },
+	{ 0x0050C2, 0x5B2000, 0x5B2FFF, "Syntronic AB", "SYNTRONIC-AB" },
+	{ 0x0050C2, 0x5B3000, 0x5B3FFF, "HITECOM System", "HITECOM-SYSTEM" },
+	{ 0x0050C2, 0x5B4000, 0x5B4FFF, "Terrascience Systems Ltd.", "TERRASCIENCE" },
 
 };

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.21 2005/10/26 09:36:54 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.22 2006/03/17 17:02:26 peter Exp $
  * Copyright  : 2001-2005 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -36,6 +36,7 @@ typedef struct {
 	const uint32_t ipv6addr_32_63;
 	const uint32_t ipv6mask_00_31;
 	const uint32_t ipv6mask_32_63;
+	const uint8_t  prefixlength;	/* prefix length (0-128) 8 bit*/
 	const char *string_registry;
 } s_ipv6addr_assignment;
 

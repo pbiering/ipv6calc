@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.3 2005/10/26 09:36:53 peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.4 2006/03/17 17:02:26 peter Exp $
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
 #               further extension by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
@@ -268,6 +268,7 @@ sub fill_data($$) {
 
 		$data{$ipv6}->{'mask_00_31'} = $mask_00_31;
 		$data{$ipv6}->{'mask_32_63'} = $mask_32_63;
+		$data{$ipv6}->{'mask_length'} = $length;
 		$data{$ipv6}->{'reg'} = $reg;
 		print " ipv6_hex_00_31=$ipv6_hex_00_31 ipv6_hex_32_63=$ipv6_hex_32_63 mask_00_31=$mask_00_31 mask_00_31=$mask_32_63 hex reg=$reg\n" if ($debug & 0x40);
 	};
@@ -311,7 +312,7 @@ static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 
 
 foreach my $ipv6 (sort keys %data) {
-	printf OUT "\t{ 0x%s, 0x%s, 0x%s, 0x%s, \"%s\" },\n", $data{$ipv6}->{'ipv6_00_31'}, $data{$ipv6}->{'ipv6_32_63'}, $data{$ipv6}->{'mask_00_31'}, $data{$ipv6}->{'mask_32_63'},  $data{$ipv6}->{'reg'};
+	printf OUT "\t{ 0x%s, 0x%s, 0x%s, 0x%s, %3d, \"%s\" },\n", $data{$ipv6}->{'ipv6_00_31'}, $data{$ipv6}->{'ipv6_32_63'}, $data{$ipv6}->{'mask_00_31'}, $data{$ipv6}->{'mask_32_63'}, $data{$ipv6}->{'mask_length'}, $data{$ipv6}->{'reg'};
 };
 
 print OUT qq|};

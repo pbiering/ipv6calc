@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.22 2005/11/19 21:44:59 peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.23 2006/03/17 17:02:26 peter Exp $
 # Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -427,10 +427,12 @@ sub fill_data($$) {
 
 		my $ipv4_hex = sprintf("%08x", &ipv4_to_dec($ipv4));
 		my $mask_hex = sprintf("%08x", &length_to_dec($length));
+		my $mask_length = sprintf("%2d", $length);
 		
 		$data{$ipv4_hex}->{'ipv4'} = &ipv4_to_dec($ipv4);
 		$data{$ipv4_hex}->{'mask'} = &length_to_dec($length);
 		$data{$ipv4_hex}->{'mask_hex'} = $mask_hex;
+		$data{$ipv4_hex}->{'mask_length'} = $mask_length;
 		$data{$ipv4_hex}->{'reg'} = $reg;
 	};
 };
@@ -452,7 +454,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 
 my $i = 0;
 foreach my $ipv4_hex (sort keys %data) {
-	printf OUT "\t{ 0x%s, 0x%s, \"%s\" },\n", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'reg'};
+	printf OUT "\t{ 0x%s, 0x%s, %2d, \"%s\" },\n", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'mask_length'}, $data{$ipv4_hex}->{'reg'};
 
 	printf "ipv4_hex=0x%s, mask_hex=0x%s, reg=\"%s\"", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'reg'} if ($debug_hinttable);
 
