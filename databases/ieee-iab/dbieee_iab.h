@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.14 2006/03/17 17:02:26 peter Exp $
- * Generated     : Thu Mar 16 15:53:39 2006
+ * Version       : $Id: dbieee_iab.h,v 1.15 2006/05/10 14:20:36 peter Exp $
+ * Generated     : Wed May 10 15:47:18 2006
  * Data copyright: IEEE
  *
  * Information:
@@ -607,7 +607,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x252000, 0x252FFF, "ads-tec GmbH", "ADS-TEC" },
 	{ 0x0050C2, 0x253000, 0x253FFF, "DSM-Messtechnik GmbH", "DSM-MESSTECHNIK" },
 	{ 0x0050C2, 0x254000, 0x254FFF, "Thales Communications Ltd", "THALES-COMMUNICATION" },
-	{ 0x0050C2, 0x255000, 0x255FFF, "ST Microelectronics (R&D) Ltd", "ST-MICROELECTRONICS-R-D" },
+	{ 0x0050C2, 0x255000, 0x255FFF, "STMicroelectronics (R&D) Ltd", "STMICROELECTRONICS-R-D" },
 	{ 0x0050C2, 0x256000, 0x256FFF, "Information Technology Corp.", "INFORMATION" },
 	{ 0x0050C2, 0x257000, 0x257FFF, "Digicast Networks", "DIGICAST-NETWORKS" },
 	{ 0x0050C2, 0x258000, 0x258FFF, "Spacesaver Corporation", "SPACESAVER" },
@@ -1471,5 +1471,48 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x5B2000, 0x5B2FFF, "Syntronic AB", "SYNTRONIC-AB" },
 	{ 0x0050C2, 0x5B3000, 0x5B3FFF, "HITECOM System", "HITECOM-SYSTEM" },
 	{ 0x0050C2, 0x5B4000, 0x5B4FFF, "Terrascience Systems Ltd.", "TERRASCIENCE" },
+	{ 0x0050C2, 0x5B5000, 0x5B5FFF, "RAFAEL", "RAFAEL" },
+	{ 0x0050C2, 0x5B6000, 0x5B6FFF, "Kontron (Beijing) Technology Co.,Ltd.", "KONTRON-BEIJING" },
+	{ 0x0050C2, 0x5B7000, 0x5B7FFF, "AVerMedia Technologies, Inc.", "AVERMEDIA-TECHNOLOGIES" },
+	{ 0x0050C2, 0x5B8000, 0x5B8FFF, "WestfaliaSurge GmbH", "WESTFALIASURGE" },
+	{ 0x0050C2, 0x5B9000, 0x5B9FFF, "Taiwan Video & Monitor", "TAIWAN-VIDEO-MONITOR" },
+	{ 0x0050C2, 0x5BA000, 0x5BAFFF, "SAIA Burgess Controls AG", "SAIA-BURGESS-CONTROLS" },
+	{ 0x0050C2, 0x5BB000, 0x5BBFFF, "UNIC TECHNOLOGIES INC", "UNIC-TECHNOLOGIES" },
+	{ 0x0050C2, 0x5BC000, 0x5BCFFF, "Guangzhou Hui Si Information Technologies Inc.", "GUANGZHOU-HUI-SI-INFORMATION-TECHNOLOGIES" },
+	{ 0x0050C2, 0x5BD000, 0x5BDFFF, "Nomus Comm-Systems", "NOMUS-COMM" },
+	{ 0x0050C2, 0x5BE000, 0x5BEFFF, "Card Access Services Pty Ltd", "CARD-ACCESS-SERVICES-PTY" },
+	{ 0x0050C2, 0x5BF000, 0x5BFFFF, "Techimp Systems S.r.l.", "TECHIMP-S-R-L" },
+	{ 0x0050C2, 0x5C0000, 0x5C0FFF, "Pyott-Boone Electronics", "PYOTT-BOONE-ELECTRONICS" },
+	{ 0x0050C2, 0x5C1000, 0x5C1FFF, "R. L. Drake Company", "R-L-DRAKE-COMPANY" },
+	{ 0x0050C2, 0x5C2000, 0x5C2FFF, "Intuitive Surgical", "INTUITIVE-SURGICAL" },
+	{ 0x0050C2, 0x5C3000, 0x5C3FFF, "KS System GmbH", "KS-SYSTEM" },
+	{ 0x0050C2, 0x5C4000, 0x5C4FFF, "ProMik GmbH", "PROMIK" },
+	{ 0x0050C2, 0x5C5000, 0x5C5FFF, "Radiant Imaging, Inc.", "RADIANT-IMAGING" },
+	{ 0x0050C2, 0x5C6000, 0x5C6FFF, "Technische Alternative GmbH", "TECHNISCHE-ALTERNATIVE" },
+	{ 0x0050C2, 0x5C7000, 0x5C7FFF, "InSync Technology Ltd", "INSYNC" },
+	{ 0x0050C2, 0x5C8000, 0x5C8FFF, "Georgia Tech Research Institute", "GEORGIA-TECH-RESEARCH-INSTITUTE" },
+	{ 0x0050C2, 0x5C9000, 0x5C9FFF, "Shenzhen Quanlong Technique Co.Ltd", "SHENZHEN-QUANLONG-TECHNIQUE" },
+	{ 0x0050C2, 0x5CA000, 0x5CAFFF, "Buyang Electronics Industrial Co., Ltd.", "BUYANG-ELECTRONICS-INDUSTRIAL" },
+	{ 0x0050C2, 0x5CB000, 0x5CBFFF, "Kobold Sistemi s.r.l.", "KOBOLD-SISTEMI-S-R-L" },
+	{ 0x0050C2, 0x5CC000, 0x5CCFFF, "ENSEO", "ENSEO" },
+	{ 0x0050C2, 0x5CD000, 0x5CDFFF, "RADA Electronics Industries Ltd.", "RADA-ELECTRONICS-INDUSTRIES" },
+	{ 0x0050C2, 0x5CE000, 0x5CEFFF, "Roke Manor Research Ltd", "ROKE-MANOR-RESEARCH" },
+	{ 0x0050C2, 0x5CF000, 0x5CFFFF, "Innomed Medical Inc", "INNOMED-MEDICAL" },
+	{ 0x0050C2, 0x5D0000, 0x5D0FFF, "Automata Spa", "AUTOMATA-SPA" },
+	{ 0x0050C2, 0x5D1000, 0x5D1FFF, "Meucci Solutions", "MEUCCI-SOLUTIONS" },
+	{ 0x0050C2, 0x5D2000, 0x5D2FFF, "Laske Oy", "LASKE-OY" },
+	{ 0x0050C2, 0x5D3000, 0x5D3FFF, "Wexiodisk AB", "WEXIODISK-AB" },
+	{ 0x0050C2, 0x5D4000, 0x5D4FFF, "Buyang Electronics Industrial Co., Ltd.", "BUYANG-ELECTRONICS-INDUSTRIAL" },
+	{ 0x0050C2, 0x5D5000, 0x5D5FFF, "Cannon Technologies", "CANNON-TECHNOLOGIES" },
+	{ 0x0050C2, 0x5D6000, 0x5D6FFF, "BioAccess Tecnologia em Biometria Ltda.", "BIOACCESS-TECNOLOGIA-EM-BIOMETRIA-LTDA" },
+	{ 0x0050C2, 0x5D7000, 0x5D7FFF, "Synrad, Inc.", "SYNRAD" },
+	{ 0x0050C2, 0x5D8000, 0x5D8FFF, "TECHNIFOR SAS", "TECHNIFOR-SAS" },
+	{ 0x0050C2, 0x5D9000, 0x5D9FFF, "Crimson Microsystems, Inc.", "CRIMSON-MICROSYSTEMS" },
+	{ 0x0050C2, 0x5DA000, 0x5DAFFF, "TONNA ELECTRONIQUE", "TONNA-ELECTRONIQUE" },
+	{ 0x0050C2, 0x5DB000, 0x5DBFFF, "CEGELEC SUD EST", "CEGELEC-SUD-EST" },
+	{ 0x0050C2, 0x5DC000, 0x5DCFFF, "RM Michaelides Software & Elektronik GmbH", "RM-MICHAELIDES-SOFTWARE-ELEKTRONIK" },
+	{ 0x0050C2, 0x5DD000, 0x5DDFFF, "SomerData ltd", "SOMERDATA" },
+	{ 0x0050C2, 0x5DE000, 0x5DEFFF, "Magal Senstar Inc.", "MAGAL-SENSTAR" },
+	{ 0x0050C2, 0x5DF000, 0x5DFFFF, "Gnutek Ltd.", "GNUTEK" },
 
 };
