@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.8 2006/06/07 06:27:46 peter Exp $
+ * Version    : $Id: ipv6calcoptions.h,v 1.9 2006/06/07 13:18:28 peter Exp $
  * Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -33,8 +33,9 @@
  *  m = output machine readable
  *  i = showinfo
  *  q = be more quiet
+ *  p <path to ip2location file> = path to IP2Location file
  */
-/*@unused@*/ static char *ipv6calc_shortopts = "vh?f:rmabd:iulqUFCI:O:A:";
+/*@unused@*/ static char *ipv6calc_shortopts = "vh?p:rmabd:iulqUFCI:O:A:";
 
 /* define long options */
 /*@unused@*/ static struct option ipv6calc_longopts[] = {

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.21 2006/06/07 06:27:46 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.22 2006/06/07 13:18:28 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -113,7 +113,7 @@ int main(int argc,char *argv[]) {
 				ipv6calc_debug = atol(optarg);
 				break;
 
-			case 'f':
+			case 'p':
 #ifdef SUPPORT_IP2LOCATION
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "%s: Got IP2Location file: %s\n", DEBUG_function_name, optarg);
