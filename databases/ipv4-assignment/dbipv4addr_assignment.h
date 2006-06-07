@@ -1,8 +1,8 @@
  /*
  * Project       : ipv6calc
  * File          : dbipv4_assignment.h
- * Version       : $Id: dbipv4addr_assignment.h,v 1.26 2006/05/10 14:20:37 peter Exp $
- * Generated     : Wed May 10 15:58:09 2006
+ * Version       : $Id: dbipv4addr_assignment.h,v 1.27 2006/06/07 06:42:01 peter Exp $
+ * Generated     : Wed Jun  7 08:41:05 2006
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
@@ -3914,6 +3914,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc4067900, 0xffffff00, 24, "AFRINIC" },
 	{ 0xc4067b00, 0xffffff00, 24, "AFRINIC" },
 	{ 0xc4068300, 0xffffff00, 24, "AFRINIC" },
+	{ 0xc4068500, 0xffffff00, 24, "AFRINIC" },
 	{ 0xc406ad00, 0xffffff00, 24, "AFRINIC" },
 	{ 0xc406b800, 0xffffff00, 24, "AFRINIC" },
 	{ 0xc406c600, 0xffffff00, 24, "AFRINIC" },
@@ -4119,8 +4120,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc4d81000, 0xfffff800, 21, "AFRINIC" },
 	{ 0xc4d82000, 0xffffe000, 19, "AFRINIC" },
 	{ 0xc4d84000, 0xffffe000, 19, "AFRINIC" },
-	{ 0xc4d88000, 0xfffff800, 21, "AFRINIC" },
-	{ 0xc4d88800, 0xfffffc00, 22, "AFRINIC" },
+	{ 0xc4d88000, 0xfffff000, 20, "AFRINIC" },
 	{ 0xc4d90000, 0xffff0000, 16, "AFRINIC" },
 	{ 0xc4da0000, 0xfffe0000, 15, "AFRINIC" },
 	{ 0xc4dc0000, 0xffffc000, 18, "AFRINIC" },

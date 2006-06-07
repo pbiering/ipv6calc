@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.15 2006/05/10 14:20:36 peter Exp $
- * Generated     : Wed May 10 15:47:18 2006
+ * Version       : $Id: dbieee_iab.h,v 1.16 2006/06/07 06:42:01 peter Exp $
+ * Generated     : Wed Jun  7 08:28:14 2006
  * Data copyright: IEEE
  *
  * Information:
@@ -1514,5 +1514,26 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x5DD000, 0x5DDFFF, "SomerData ltd", "SOMERDATA" },
 	{ 0x0050C2, 0x5DE000, 0x5DEFFF, "Magal Senstar Inc.", "MAGAL-SENSTAR" },
 	{ 0x0050C2, 0x5DF000, 0x5DFFFF, "Gnutek Ltd.", "GNUTEK" },
+	{ 0x0050C2, 0x5E0000, 0x5E0FFF, "Phytec Messtechnik GmbH", "PHYTEC-MESSTECHNIK" },
+	{ 0x0050C2, 0x5E1000, 0x5E1FFF, "Ittiam Systems (P) Ltd", "ITTIAM-P" },
+	{ 0x0050C2, 0x5E2000, 0x5E2FFF, "PYRAMID Computer GmbH", "PYRAMID" },
+	{ 0x0050C2, 0x5E3000, 0x5E3FFF, "Computechnic AG", "COMPUTECHNIC" },
+	{ 0x0050C2, 0x5E4000, 0x5E4FFF, "Buyang Electronics Industrial Co., Ltd.", "BUYANG-ELECTRONICS-INDUSTRIAL" },
+	{ 0x0050C2, 0x5E5000, 0x5E5FFF, "Stresstech OY", "STRESSTECH-OY" },
+	{ 0x0050C2, 0x5E6000, 0x5E6FFF, "Musatel", "MUSATEL" },
+	{ 0x0050C2, 0x5E7000, 0x5E7FFF, "EADS TEST & SERVICES", "EADS-TEST-SERVICES" },
+	{ 0x0050C2, 0x5E8000, 0x5E8FFF, "Info-Chip Communications Ltd.", "INFO-CHIP-COMMUNICATION" },
+	{ 0x0050C2, 0x5E9000, 0x5E9FFF, "Micro Technology Services Inc.", "MICRO-SERVICES" },
+	{ 0x0050C2, 0x5EA000, 0x5EAFFF, "Micro Elektronische Producten", "MICRO-ELEKTRONISCHE-PRODUCTEN" },
+	{ 0x0050C2, 0x5EB000, 0x5EBFFF, "Garper Telecomunicaciones, S.L.", "GARPER-TELECOMUNICACIONES-S-L" },
+	{ 0x0050C2, 0x5EC000, 0x5ECFFF, "ASiS Technologies Pte Ltd", "ASIS-TECHNOLOGIES-PTE" },
+	{ 0x0050C2, 0x5ED000, 0x5EDFFF, "AQUAROTTER A FRANKE COMPANY", "AQUAROTTER-A-FRANKE-COMPANY" },
+	{ 0x0050C2, 0x5EE000, 0x5EEFFF, "Condre Corporation", "CONDRE" },
+	{ 0x0050C2, 0x5EF000, 0x5EFFFF, "pikkerton GmbH", "PIKKERTON" },
+	{ 0x0050C2, 0x5F0000, 0x5F0FFF, "DIAS Infrared GmbH", "DIAS-INFRARED" },
+	{ 0x0050C2, 0x5F1000, 0x5F1FFF, "Technomarine JSC", "TECHNOMARINE-JSC" },
+	{ 0x0050C2, 0x5F2000, 0x5F2FFF, "ESEM Grünau GmbH & Co. KG", "ESEM-GRüNAU" },
+	{ 0x0050C2, 0x5F3000, 0x5F3FFF, "POSNET Polska S.A.", "POSNET-POLSKA" },
+	{ 0x0050C2, 0x5F4000, 0x5F4FFF, "TeamProjects BV", "TEAMPROJECTS" },
 
 };
