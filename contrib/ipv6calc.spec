@@ -99,7 +99,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %changelog
 * Wed Jul 20 2005 Peter Bieringer <pb@bieringer.de>
-- adjust code because of use of ${exec_prefix}/bin in Makefile of ivp6calc
+- adjust code because of use of /usr/bin in Makefile of ivp6calc
 
 * Sat Oct 30 2004 Peter Bieringer <pb@bieringer.de>
 - remove openssl(-devel) from requirements, no longer needed

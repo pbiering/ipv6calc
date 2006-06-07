@@ -1,11 +1,14 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.42 2006/06/07 06:27:46 peter Exp $
-# Copyright  : 2001-2005 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile.in,v 1.43 2006/06/07 13:28:40 peter Exp $
+# Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calc project
 #
+
+# IP2Location support
+#ENABLE_SUPPORT_IP2LOCATION=y
 
 # Compiler and Linker Options
 COPTS = -O2 -Wall -g
@@ -15,6 +18,10 @@ CFLAGS	= $(COPTS) -Igetopt/
 CC	= gcc
 
 GETOBJS	= getopt/getopt.o getopt/getopt1.o md5/md5.o
+
+ifdef ENABLE_SUPPORT_IP2LOCATION
+IP2LOCATION_MAKE = ip2location-make
+endif
 
 all:		md5-make getopt-make ipv6calc ipv6logconv ipv6logstats
 
@@ -77,6 +84,7 @@ getopt-make:
 
 md5-make:
 		cd md5 && ${MAKE}
+
 lib-make:	md5-make db-ieee-oui-make db-ieee-iab-make db-ipv4-assignment-make db-ipv6-assignment-make
 		cd lib && ${MAKE}
 
@@ -86,7 +94,7 @@ ipv6logconv-make: lib-make
 ipv6logstats-make: lib-make
 		cd ipv6logstats && ${MAKE}
 
-ipv6calc-make:	lib-make
+ipv6calc-make:	lib-make $(IP2LOCATION_MAKE)
 		cd ipv6calc && ${MAKE}
 
 ipv6calcweb-make:
@@ -104,7 +112,7 @@ db-ipv4-assignment-make:
 db-ipv6-assignment-make:
 		cd databases/ipv6-assignment && ${MAKE}
 
-ip2location:
+ip2location-make:
 		cd databases/IP2Location/C-IP2Location-1.1.0 && autoreconf -i -v --force && ./configure && ${MAKE}
 
 update:

@@ -1,11 +1,17 @@
 /*
- *  $Id: ChangeLog,v 1.117 2006/06/07 06:27:46 peter Exp $ 
+ *  $Id: ChangeLog,v 1.118 2006/06/07 13:28:40 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
 20060607/PB
+	Makefile.in
+	ipv6calc/Makefile.in
+	 - make IP2Location support switchable
+	ipv6calc/ipv6calc.c
+	lib/ipv6calcoptions.h
+	 - fix wrong named option (-f instead of -p)
 	lib/librfc1924.c
 	 - replace conversion code with clean reimplementation
 	    created by Niko Tyni because of unknown license issue
