@@ -1,13 +1,39 @@
 /*
- *  $Id: ChangeLog,v 1.116 2006/03/16 15:57:58 peter Exp $ 
+ *  $Id: ChangeLog,v 1.117 2006/06/07 06:27:46 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20060607/PB
+	lib/librfc1924.c
+	 - replace conversion code with clean reimplementation
+	    created by Niko Tyni because of unknown license issue
+	    of the old piece of code
+	update databases
+
+20060317/PB
+	databases/ipv6-assignment/create-registry-list.pl
+	databases/ipv4-assignment/create-registry-list.pl
+	databases/ipv6-assignment/dbipv6addr_assignment.h
+	databases/ipv4-assignment/dbipv4addr_assignment.h
+	lib/libipv6addr.h
+	lib/libipv4addr.h
+	 - store also prefix length in lookup table
+	update databases
+
 20060316/PB
 	lib/libipv4addr.c
 	 - fix wrong use of () in ipv4addr_setword
+
+20060306/PB
+	Makefile.in
+	ipv6calc/Makefile.in
+	ipv6calc/ipv6calc.c
+	ipv6calc/showinfo.c
+	 - add support for IP2Location
+	lib/ipv6calcoptions.h
+	 - add new option: -p <path to IP2Location database>
 
 20060213/PB
 	ipv6calc/Makefile.in

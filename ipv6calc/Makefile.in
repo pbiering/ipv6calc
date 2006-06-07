@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.13 2006/02/12 20:44:26 peter Exp $
+# Version    : $Id: Makefile.in,v 1.14 2006/06/07 06:27:46 peter Exp $
 # Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -11,11 +11,11 @@ prefix		= @prefix@
 exec_prefix	= @exec_prefix@
 
 # Compiler and Linker Options
-COPTS = -O2 -Wall -g
+COPTS = -O2 -Wall -g -DSUPPORT_IP2LOCATION
 
-CFLAGS	= $(COPTS) -I../getopt/ -I../ -I../lib/
+CFLAGS	= $(COPTS) -I../getopt/ -I../ -I../lib/ -I../databases/IP2Location/C-IP2Location-1.1.0/libIP2Location/
 
-GETOBJS = ../getopt/getopt.o ../getopt/getopt1.o ../md5/md5.o
+GETOBJS = ../getopt/getopt.o ../getopt/getopt1.o ../md5/md5.o ../databases/IP2Location/C-IP2Location-1.1.0/libIP2Location/IP2Location.o
 
 CC	= gcc
 
@@ -32,7 +32,7 @@ all:		ipv6calc
 .c.o:
 		$(CC) $(CFLAGS) -c $<
 
-$(OBJS):	ipv6calc.h showinfo.h
+$(OBJS):	ipv6calc.h showinfo.h ../version.h
 
 libipv6calc.a:	
 		cd ../ && ${MAKE} lib-make

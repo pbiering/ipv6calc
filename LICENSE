@@ -1,12 +1,8 @@
-0. The program "ipv6calc" is produced and copyright 2001-2002 by Peter Bieringer <pb (at) bieringer.de>, except
+0. The program "ipv6calc" is produced and copyright 2001-2006 by Peter Bieringer <pb (at) bieringer.de>, except
    * some codelines regarding address type resolving, which were directly copied from Linux kernel source (also GPL license)
 	related files are:
 	- libipv6addr.c
 	- libipv6addr.h
-
-   * code for base85 en-/decoding, which was copied from ftp://munnari.oz.au/ipv6imp/rfc1924-encode.c (has neither a license nor an author specified...file was published at or before 09. April 1996)
-	related file is
-	- librfc1924.c
 
    * code for uncompressing IPv6 addresses, which was copied from "ircd"
 	related file is
@@ -21,8 +17,16 @@
    -> see directory "samplecode" in the source file for original versions
 
    * source data of databases
-	OUI data is taken from IEEE
-	IPv4 assignment data is taken from registries RIPE NCC, APNIC, ARIN
+	IAB/OUI data is taken from IEEE
+	IPv4/IPv6 assignment data is taken from registries RIPE NCC, APNIC, ARIN, LACNIC, AfriNIC
+
+   * IP2Location API code
+	related files have also GPL licence
+	- databases/IP2Location/*
+
+   * IP2Location real databases
+	are NOT distributed with this package because of dedicated licensing is required
+	see here for more: http://www.ip2location.com/
 
 1. The program "ipv6calc" is distributed under the GNU GPL version 2
     (see COPYING file for more)
@@ -31,4 +35,4 @@
     (md5 hash function is used from this libary)
 
 
-2002-03-27, Peter Bieringer <pb@bieringer.de>
+2006-06-07, Peter Bieringer <pb@bieringer.de>

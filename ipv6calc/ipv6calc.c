@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.20 2006/01/26 13:52:49 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.21 2006/06/07 06:27:46 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -37,6 +37,11 @@
 #include "version.h"
 
 long int ipv6calc_debug = 0;
+
+#ifdef SUPPORT_IP2LOCATION
+char file_ip2location[NI_MAXHOST] = "";
+#endif
+
 
 void printversion(void) {
 	fprintf(stderr, "%s: version %s\n", PROGRAM_NAME, PROGRAM_VERSION);
@@ -106,6 +111,19 @@ int main(int argc,char *argv[]) {
 				
 			case 'd':
 				ipv6calc_debug = atol(optarg);
+				break;
+
+			case 'f':
+#ifdef SUPPORT_IP2LOCATION
+				if (ipv6calc_debug != 0) {
+					fprintf(stderr, "%s: Got IP2Location file: %s\n", DEBUG_function_name, optarg);
+				};
+				strncpy(file_ip2location, optarg, sizeof(file_ip2location) -1 );
+#else
+				fprintf(stderr, " Support for option -p <path to ip2location database> not compiled in.\n");
+				exit(EXIT_FAILURE);
+#endif
+			
 				break;
 
 			case CMD_printexamples:

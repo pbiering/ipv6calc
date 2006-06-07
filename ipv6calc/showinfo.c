@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.20 2005/10/21 13:42:33 peter Exp $
- * Copyright  : 2001-2005 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: showinfo.c,v 1.21 2006/06/07 06:27:46 peter Exp $
+ * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Function to show information about a given IPv6 address
@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <ctype.h>
 #include "showinfo.h"
 #include "ipv6calc.h"
@@ -23,6 +24,14 @@
 #include "libieee.h"
 #include "libmac.h"
 #include "libeui64.h"
+#ifdef SUPPORT_IP2LOCATION
+#include "IP2Location.h"
+#endif
+
+#ifdef SUPPORT_IP2LOCATION
+extern char file_ip2location[NI_MAXHOST];
+#endif
+
 
 /*
  * show available types on machine readable format
@@ -57,6 +66,17 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " TEREDO_IPV4_SERVER=...        : IPv4 address of Teredo server\n");
 	fprintf(stderr, " TEREDO_PORT_CLIENT=...        : port of Teredo client (NAT outside)\n");
 	fprintf(stderr, " TEREDO_IPV4_SERVER_REGISTRY=..: registry token of IPv4 address of Teredo server\n");
+#ifdef SUPPORT_IP2LOCATION
+	fprintf(stderr, " IP2LOCATION_COUNTRY_SHORT=... : Country code of IP address\n");
+	fprintf(stderr, " IP2LOCATION_COUNTRY_LONG=...  : Country of IP address\n");
+	fprintf(stderr, " IP2LOCATION_REGION=...        : Region of IP address\n");
+	fprintf(stderr, " IP2LOCATION_CITY=...          : City of IP address\n");
+	fprintf(stderr, " IP2LOCATION_ISP=...           : ISP of IP address\n");
+	fprintf(stderr, " IP2LOCATION_LATITUDE=...      : Latitude of IP address\n");
+	fprintf(stderr, " IP2LOCATION_LONGITUDE=...     : Longitude of IP address\n");
+	fprintf(stderr, " IP2LOCATION_DOMAIN=...        : Domain of IP address\n");
+	fprintf(stderr, " IP2LOCATION_ZIPCODE=...       : Zip code of IP address\n");
+#endif
 	fprintf(stderr, " IPV6CALC_VERSION=x.y          : Version of ipv6calc\n");
 	fprintf(stderr, " IPV6CALC_COPYRIGHT=\"...\"      : Copyright string\n");
 };
@@ -130,6 +150,54 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	} else {
 		fprintf(stderr, "IPv4 registry: %s\n", helpstring);
 	};
+
+#ifdef SUPPORT_IP2LOCATION
+	/* IP2Location information */
+	if (strlen(file_ip2location) == 0) {
+		/* no file given, nothing more todo */
+		fprintf(stderr, " IP2LOCATION database file not given\n");
+		return;
+	};
+
+	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
+		fprintf(stderr, "%s: IP2LOCATION try to open database: %s\n", DEBUG_function_name, file_ip2location);
+	};
+
+	IP2Location *IP2LocationObj = IP2Location_open(file_ip2location);
+	if (IP2LocationObj == NULL) {
+		/* error on opening database, nothing more todo */
+		fprintf(stderr, " IP2LOCATION can't open database\n");
+		return;
+	};
+
+	IP2LocationRecord *record = IP2Location_get_all(IP2LocationObj, tempipv4string);
+
+	if ( machinereadable != 0 ) {
+		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_COUNTRY_SHORT=%s", record->country_short);
+		printout(tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_COUNTRY_LONG=%s", record->country_long);
+		printout(tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_REGION=%s", record->region);
+		printout(tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_CITY=%s", record->city);
+		printout(tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ISP=%s", record->isp);
+		printout(tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LATITUDE=%f", record->latitude);
+		printout(tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LONGITUDE=%f", record->longitude);
+		printout(tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DOMAIN=%s", record->domain);
+		printout(tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ZIPCODE=%s", record->zipcode);
+		printout(tempstring);
+	} else {
+		fprintf(stderr, " IP2LOCATION not machinereadable output currently not supported\n");
+	};
+
+	IP2Location_free_record(record);
+	IP2Location_close(IP2LocationObj);
+#endif
 
 	return;
 };

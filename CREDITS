@@ -1,7 +1,7 @@
 Credits to
 
-* Robert Elz <kre at munnari dot OZ dot AU>
-   for RFC 1924 conversion source
+* Niko Tyni <ntyni at iki dot fi>
+   clean reimplementation of RFC 1924 conversion code
 
 * Authors of ircd
    for RFC 1884 decompress algorithmus
@@ -40,7 +40,7 @@ Credits to
 * Rolf Holtsmark <rolf at holtsmark dot no>
    for bug reporting
 
-* Matanuki@goudge.org
+* <Matanuki at  goudge dot org>
    for contributing man pages
 
 * Radek Vokal <rvokal at redhat dot com>
@@ -61,4 +61,4 @@ Credits to
       11 years ]
 
 
-	Peter Bieringer, 2006-01-26
+	Peter Bieringer, 2006-06-07
