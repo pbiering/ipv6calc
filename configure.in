@@ -1,6 +1,6 @@
 dnl Project: ipv6calc
 dnl File   : configure.in
-dnl Version: $Id: configure.in,v 1.6 2004/10/30 12:58:40 peter Exp $
+dnl Version: $Id: configure.in,v 1.7 2006/06/07 20:46:58 peter Exp $
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(ipv6calc/ipv6calc.c)
@@ -34,5 +34,13 @@ AC_DEFINE_UNQUOTED(IPV6CALC_VERSION, "${IPV6CALC_VERSION}")
 
 dnl Substitute version
 AC_SUBST(IPV6CALC_VERSION)
+
+AC_ARG_ENABLE([ip2location], 
+	AS_HELP_STRING([--enable-ip2location],
+	               [Enable IP2Location support (default: disabled)]),
+	[if test "x$enable_ip2location" = "xyes"; then
+		ENABLE_SUPPORT_IP2LOCATION=1
+	fi])
+AC_SUBST(ENABLE_SUPPORT_IP2LOCATION)
 
 AC_OUTPUT([Makefile ipv6calc/Makefile man/Makefile ipv6logconv/Makefile ipv6logstats/Makefile version.h contrib/ipv6calc.spec ipv6calcweb/ipv6calcweb.cgi ])

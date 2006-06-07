@@ -24,11 +24,14 @@ or using in DNS queries like
  dig -t ANY `ipv6calc -r 3ffe:ffff:100::1/48`
 Many more format conversions are supported, see given URL for more.
 
+Available rpmbuild rebuild options:
+--with : ip2location
+
 %prep
 %setup -q -n ipv6calc-%{version}
 
 %build
-./configure --bindir=%{_bindir} --mandir=%{_mandir}
+./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?_with_ip2location:--enable-ip2location}
 make clean
 make
 make test
@@ -98,8 +101,11 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Jun 07 2006 Peter Bieringer <pb@bieringer.de>
+- add support for rebuild option --with-ip2location
+
 * Wed Jul 20 2005 Peter Bieringer <pb@bieringer.de>
-- adjust code because of use of /usr/bin in Makefile of ivp6calc
+- adjust code because of use of ${exec_prefix}/bin in Makefile of ivp6calc
 
 * Sat Oct 30 2004 Peter Bieringer <pb@bieringer.de>
 - remove openssl(-devel) from requirements, no longer needed

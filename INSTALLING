@@ -54,6 +54,7 @@ There is a configure script available.
 Following options are used:
  --bindir=/usr/bin  (@bindir@)
  --mandir=/usr/share/man (@mandir@)
+ --enable-ip2location (@ENABLE_SUPPORT_IP2LOCATION@)
 
 Execute:
  ./configure --bindir=/usr/bin --mandir=/usr/share/man
@@ -67,14 +68,20 @@ ipv6calc contains several databases, currently
 to update this database before compilation you need:
 - install perl, wget, aggregate
 - run "make update"
-See also: ./databases/ipv4-assignment/README
+
+See also:
+ ./databases/registries/README
+ ./databases/ipv4-assignment/README
+ ./databases/ipv6-assignment/README
+ ./databases/ieee-iab/README
+ ./databases/ieee-oui/README
 
 
 COMPILE
 -------  
 To compile simply use "make".
 
-There should be no warnings or errors.
+There should be no warnings or errors occur.
 
 
 INSTALLATION
@@ -85,4 +92,4 @@ If you want to install the binary use "make install".
 Peter Bieringer
 <pb (at) bieringer.de>
 
-$Id: INSTALLING,v 1.10 2005/07/20 06:19:58 peter Exp $
+$Id: INSTALLING,v 1.11 2006/06/07 20:46:58 peter Exp $

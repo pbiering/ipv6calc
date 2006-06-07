@@ -309,7 +309,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT SET_MAKE CPP EGREP LIBOBJS IPV6CALC_VERSION LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT SET_MAKE CPP EGREP LIBOBJS IPV6CALC_VERSION ENABLE_SUPPORT_IP2LOCATION LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -836,6 +836,11 @@ fi
 if test -n "$ac_init_help"; then
 
   cat <<\_ACEOF
+
+Optional Features:
+  --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
+  --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-ip2location    Enable IP2Location support (default: disabled)
 
 Some influential environment variables:
   CC          C compiler command
@@ -3212,6 +3217,15 @@ _ACEOF
 
 
 
+# Check whether --enable-ip2location or --disable-ip2location was given.
+if test "${enable_ip2location+set}" = set; then
+  enableval="$enable_ip2location"
+  if test "x$enable_ip2location" = "xyes"; then
+		ENABLE_SUPPORT_IP2LOCATION=1
+	fi
+fi;
+
+
                                                                                 ac_config_files="$ac_config_files Makefile ipv6calc/Makefile man/Makefile ipv6logconv/Makefile ipv6logstats/Makefile version.h contrib/ipv6calc.spec ipv6calcweb/ipv6calcweb.cgi"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3843,6 +3857,7 @@ s,@CPP@,$CPP,;t t
 s,@EGREP@,$EGREP,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@IPV6CALC_VERSION@,$IPV6CALC_VERSION,;t t
+s,@ENABLE_SUPPORT_IP2LOCATION@,$ENABLE_SUPPORT_IP2LOCATION,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF
 

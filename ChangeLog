@@ -1,16 +1,19 @@
 /*
- *  $Id: ChangeLog,v 1.119 2006/06/07 13:38:21 peter Exp $ 
+ *  $Id: ChangeLog,v 1.120 2006/06/07 20:46:58 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
 20060607/PB
+	contrib/ipv6calc.spec[.in]
+	 - add support for rebuild option --with-ip2location
 	LICENSE
 	 - updates according to changes
 	Makefile.in
+	configure.in
 	ipv6calc/Makefile.in
-	 - make IP2Location support switchable
+	 - make IP2Location support switchable (--enable-ip2location)
 	ipv6calc/ipv6calc.c
 	lib/ipv6calcoptions.h
 	 - fix wrong named option (-f instead of -p)
