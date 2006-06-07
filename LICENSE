@@ -31,8 +31,5 @@
 1. The program "ipv6calc" is distributed under the GNU GPL version 2
     (see COPYING file for more)
 
-2. I allow to link OpenSSL library used by SSLeay license
-    (md5 hash function is used from this libary)
-
 
 2006-06-07, Peter Bieringer <pb@bieringer.de>
