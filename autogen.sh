@@ -1,6 +1,6 @@
 #!/bin/sh
 
-$Id: autogen.sh,v 1.4 2004/11/21 15:56:28 peter Exp $
+$Id: autogen.sh,v 1.5 2006/06/07 19:43:23 peter Exp $
 
 if [ -f Makefile ]; then
 	echo "*** cleanup"
@@ -11,7 +11,7 @@ echo "*** run: autoconf"
 autoconf || exit 1
 
 echo "*** run: configure"
-./configure --bindir=/usr/bin --mandir=/usr/share/man || exit 1
+./configure --bindir=/usr/bin --mandir=/usr/share/man $* || exit 1
 
 echo "*** run: make clean"
 make clean || exit 1
