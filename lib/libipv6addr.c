@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.25 2005/10/26 09:36:54 peter Exp $
- * Copyright  : 2001-2005 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv6addr.c,v 1.26 2006/06/07 14:06:32 peter Exp $
+ * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Function library for IPv6 address handling
@@ -317,7 +317,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 	};
 
 	if (st2 == (uint32_t) 0x00005EFEu) {
-		/* ..:0000:5EFE:xx.xx.xx.xx ISATAP suffix */
+		/* ..:0000:5EFE:xx.xx.xx.xx ISATAP suffix (RFC 4214) */
 		type |= IPV6_NEW_ADDR_ISATAP;
 	};
 

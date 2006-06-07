@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.22 2006/03/17 17:02:26 peter Exp $
- * Copyright  : 2001-2005 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv6addr.h,v 1.23 2006/06/07 14:06:32 peter Exp $
+ * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Header file for libipv6addr.c
@@ -80,7 +80,7 @@ typedef struct {
 #define IPV6_NEW_ADDR_AGU			(uint32_t) 0x00040000U
 #define IPV6_NEW_ADDR_UNSPECIFIED		(uint32_t) 0x00080000U
 #define IPV6_NEW_ADDR_SOLICITED_NODE		(uint32_t) 0x00100000U
-#define IPV6_NEW_ADDR_ISATAP			(uint32_t) 0x00200000U
+#define IPV6_NEW_ADDR_ISATAP			(uint32_t) 0x00200000U	/* RFC 4214 */
 #define IPV6_NEW_ADDR_PRODUCTIVE		(uint32_t) 0x00400000U
 #define IPV6_NEW_ADDR_6TO4_MICROSOFT		(uint32_t) 0x00800000U
 #define IPV6_NEW_ADDR_TEREDO			(uint32_t) 0x01000000U
