@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.21 2006/06/07 06:27:46 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.22 2006/06/10 13:46:01 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -76,6 +76,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IP2LOCATION_LONGITUDE=...     : Longitude of IP address\n");
 	fprintf(stderr, " IP2LOCATION_DOMAIN=...        : Domain of IP address\n");
 	fprintf(stderr, " IP2LOCATION_ZIPCODE=...       : Zip code of IP address\n");
+	fprintf(stderr, " IP2LOCATION_DATABASE_INFO=... : Information about the used database\n");
 #endif
 	fprintf(stderr, " IPV6CALC_VERSION=x.y          : Version of ipv6calc\n");
 	fprintf(stderr, " IPV6CALC_COPYRIGHT=\"...\"      : Copyright string\n");
@@ -164,38 +165,50 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	};
 
 	IP2Location *IP2LocationObj = IP2Location_open(file_ip2location);
+
 	if (IP2LocationObj == NULL) {
 		/* error on opening database, nothing more todo */
 		fprintf(stderr, " IP2LOCATION can't open database\n");
 		return;
 	};
 
-	IP2LocationRecord *record = IP2Location_get_all(IP2LocationObj, tempipv4string);
-
-	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_COUNTRY_SHORT=%s", record->country_short);
-		printout(tempstring);
-		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_COUNTRY_LONG=%s", record->country_long);
-		printout(tempstring);
-		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_REGION=%s", record->region);
-		printout(tempstring);
-		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_CITY=%s", record->city);
-		printout(tempstring);
-		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ISP=%s", record->isp);
-		printout(tempstring);
-		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LATITUDE=%f", record->latitude);
-		printout(tempstring);
-		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LONGITUDE=%f", record->longitude);
-		printout(tempstring);
-		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DOMAIN=%s", record->domain);
-		printout(tempstring);
-		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ZIPCODE=%s", record->zipcode);
-		printout(tempstring);
-	} else {
-		fprintf(stderr, " IP2LOCATION not machinereadable output currently not supported\n");
+	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
+		fprintf(stderr, "%s: IP2LOCATION database opened: %s\n", DEBUG_function_name, file_ip2location);
 	};
 
-	IP2Location_free_record(record);
+	IP2LocationRecord *record = IP2Location_get_all(IP2LocationObj, tempipv4string);
+
+	if (record != NULL) {
+		if ( machinereadable != 0 ) {
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_COUNTRY_SHORT=%s", record->country_short);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_COUNTRY_LONG=%s", record->country_long);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_REGION=%s", record->region);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_CITY=%s", record->city);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ISP=%s", record->isp);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LATITUDE=%f", record->latitude);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LONGITUDE=%f", record->longitude);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DOMAIN=%s", record->domain);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ZIPCODE=%s", record->zipcode);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DATABASE_INFO=\"url=http://www.ip2location.com date=%04d-%02d-%02d entries=%d\"", IP2LocationObj->databaseyear + 2000, IP2LocationObj->databasemonth + 1, IP2LocationObj->databaseday, IP2LocationObj->databasecount);
+			printout(tempstring);
+		} else {
+			fprintf(stderr, " IP2LOCATION not machinereadable output currently not supported\n");
+		};
+
+		IP2Location_free_record(record);
+	} else {
+		fprintf(stderr, "%s: IP2LOCATION returned no record for address: %s\n", DEBUG_function_name, tempipv4string);
+	};
+
 	IP2Location_close(IP2LocationObj);
 #endif
 

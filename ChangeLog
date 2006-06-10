@@ -1,10 +1,18 @@
 /*
- *  $Id: ChangeLog,v 1.121 2006/06/07 21:27:48 peter Exp $ 
+ *  $Id: ChangeLog,v 1.122 2006/06/10 13:46:01 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20060610/PB
+	ipv6calc/showinfo.c/print_ipv4addr
+	 - check for result != of IP2Location before using (prevents segfault)
+
+20060608/PB
+	ipv6calcweb.cgi
+	 - add support for format=<format> in QUERY_STRING
+
 20060607/PB
 	ipv6calcweb.cgi
 	 - add support for IP2Location according to showinfo.c
