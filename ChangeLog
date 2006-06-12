@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.123 2006/06/12 20:01:39 peter Exp $ 
+ *  $Id: ChangeLog,v 1.124 2006/06/12 20:06:45 peter Exp $ 
  */
 
 Info:
@@ -42,6 +42,8 @@ Info:
 	ipv6calc/ipv6calc.c
 	 - missing IP2Location database is now only a soft error
 	 - add flag whether IP2Location database is given
+	man/ipv6logconv.8
+	 - fix small problem with hyphens (thanks to Niko Tyni)
 
 20060610/PB
 	ipv6calc/showinfo.c/print_ipv4addr
