@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.26 2006/06/07 14:06:32 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.27 2006/06/12 13:29:53 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -300,8 +300,9 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 		};
 	};
 
-	if (st == 0x3FFE831Fu) {
-		/* 3ffe:831f::/32 -> Teredo */
+	if (st == 0x3FFE831Fu || st == 0x20010000u) {
+		/* 3ffe:831f::/32 -> Teredo (6bone, older draft) */
+		/* 2001:0000::/32 -> Teredo (RFC 4380) */
 		type |= IPV6_NEW_ADDR_TEREDO;
 	};
 	
@@ -311,12 +312,12 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 		type |= IPV6_NEW_ADDR_PRODUCTIVE;
 	};
 	
-	if ((st2 == (uint32_t) 0x00000001u) && (st3 & 0xFF000000u) == 0xFF000000u) {
+	if ((st2 == 0x00000001u) && (st3 & 0xFF000000u) == 0xFF000000u) {
 		/* ..:0000:0001:ffxx:xxxx solicited node suffix */
 		type |= IPV6_NEW_ADDR_SOLICITED_NODE;
 	};
 
-	if (st2 == (uint32_t) 0x00005EFEu) {
+	if (st2 == 0x00005EFEu) {
 		/* ..:0000:5EFE:xx.xx.xx.xx ISATAP suffix (RFC 4214) */
 		type |= IPV6_NEW_ADDR_ISATAP;
 	};
