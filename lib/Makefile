@@ -1,7 +1,7 @@
 # Project    : ipv6calc/lib
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.18 2005/11/19 21:14:38 peter Exp $
-# Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile,v 1.19 2006/06/12 19:52:19 peter Exp $
+# Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calc library
@@ -17,7 +17,21 @@ CC	= gcc
 AR	= ar
 RANLIB	= ranlib
 
-OBJS	= libipv6calc.o librfc1924.o librfc1884.o libmac.o libeui64.o librfc3041.o libipv6addr.o librfc2874.o librfc1886.o librfc3056.o libipv4addr.o libifinet6.o libieee.o ipv6calchelp.o ipv6calctypes.o
+OBJS	=	libipv6calc.o  \
+		libipv6addr.o  \
+		libipv4addr.o  \
+		libieee.o      \
+		libeui64.o     \
+		libmac.o       \
+		librfc1884.o   \
+		librfc1886.o   \
+		librfc1924.o   \
+		librfc2874.o   \
+		librfc3041.o   \
+		librfc3056.o   \
+		libifinet6.o   \
+		ipv6calchelp.o \
+		ipv6calctypes.o
 
 all:		libipv6calc.a
 
@@ -36,7 +50,25 @@ libipv6addr.o:	../databases/ipv6-assignment/dbipv6addr_assignment.h libipv6addr.
 .c.o:
 		$(CC) $(CFLAGS) -c $<
 
-$(OBJS):	libipv6calcdebug.h libipv6addr.h librfc1884.h librfc2874.h libeui64.h libmac.h librfc3041.h libipv4addr.h librfc1924.h librfc1886.h librfc3056.h libipv4addr.h libifinet6.h libieee.h ipv6calchelp.h ipv6calctypes.h ipv6calc_inttypes.h ipv6calccommands.h
+$(OBJS):	libipv6calcdebug.h  \
+		libipv6calc.h       \
+		libipv6addr.h       \
+		libipv4addr.h       \
+		libieee.h           \
+		libeui64.h          \
+		libmac.h            \
+		librfc1884.h        \
+		librfc1886.h        \
+		librfc1924.h        \
+		librfc2874.h        \
+		librfc3041.h        \
+		librfc3056.h        \
+		libifinet6.h        \
+		ipv6calchelp.h      \
+		ipv6calctypes.h     \
+		ipv6calcoptions.h   \
+		ipv6calccommands.h  \
+		ipv6calc_inttypes.h \
 
 libipv6calc.a:	$(OBJS)
 		cd ../ && ${MAKE} db-ieee-oui-make
