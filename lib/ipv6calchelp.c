@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.12 2006/01/26 13:52:49 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.13 2006/06/12 19:55:18 peter Exp $
  * Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -16,6 +16,7 @@
 #include "ipv6calctypes.h"
 #include "ipv6calcoptions.h"
 #include "ipv6calchelp.h"
+#include "config.h"
 
 /* to be defined in each application */
 extern void printversion(void);
@@ -237,6 +238,9 @@ void printhelp(void) {
 	fprintf(stderr, " Other usage:\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "  --showinfo|-i [--machine_readable|-m] : show information about input data\n");
+#ifdef SUPPORT_IP2LOCATION
+	fprintf(stderr, "  [-p <file>]                           : IP2Location datafile (optional\n");
+#endif
 	fprintf(stderr, "  --showinfo|-i --show_types            : show available types on '-m'\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, " To see old-style option use: --printoldoptions\n");

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.16 2006/03/16 15:57:58 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.17 2006/06/12 19:55:18 peter Exp $
  * Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -524,6 +524,24 @@ int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *re
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
 		fprintf(stderr, "%s: Given IPv4 address: %08x\n", DEBUG_function_name, (unsigned int) ipv4);
 	};
+
+	if ((ipv4 & 0xff000000u) == 0x0a000000u) {
+		// 10.0.0.0/8 (RFC 1918)
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1918)");
+		return (0);
+	} else if ((ipv4 & 0xfff00000u) == 0xac100000u) {
+		// 172.16.0.0/12 (RFC 1918)
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1918)");
+		return (0);
+	} else if ((ipv4 & 0xffff0000u) == 0xc0a80000u) {
+		// 192.168.0.0/16 (RFC 1918)
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1918)");
+		return (0);
+	} else if ((ipv4 & 0xffffff00u) == 0xc0000200u) {
+		// 192.0.2.0/24 (RFC 3330)
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3330)");
+		return (0);
+	}; 
 
 #define OPTIMIZED_LOOKUP 1
 #ifdef OPTIMIZED_LOOKUP

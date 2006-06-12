@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.15 2006/01/26 13:52:49 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.16 2006/06/12 19:55:18 peter Exp $
  * Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -146,6 +146,7 @@ typedef struct {
 #define FORMATOPTION_NUM_machinereadable	12
 #define FORMATOPTION_NUM_quiet			13
 #define FORMATOPTION_NUM_printmirrored		14
+#define FORMATOPTION_NUM_printembedded		31
 
 #define FORMATOPTION_printlowercase		(uint32_t) (1 << FORMATOPTION_NUM_printlowercase)
 #define FORMATOPTION_printuppercase		(uint32_t) (1 << FORMATOPTION_NUM_printuppercase)
@@ -161,6 +162,7 @@ typedef struct {
 #define FORMATOPTION_machinereadable		(uint32_t) (1 << FORMATOPTION_NUM_machinereadable)
 #define FORMATOPTION_quiet			(uint32_t) (1 << FORMATOPTION_NUM_quiet)
 #define FORMATOPTION_printmirrored		(uint32_t) (1 << FORMATOPTION_NUM_printmirrored)
+#define FORMATOPTION_printembedded		(uint32_t) (1 << FORMATOPTION_NUM_printembedded)
 
 typedef struct {
 	const uint32_t number;

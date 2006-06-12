@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.23 2006/06/07 14:06:32 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.24 2006/06/12 19:55:18 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -122,7 +122,7 @@ typedef struct {
 	{ IPV6_NEW_ADDR_ISATAP		, "ISATAP" },
 	{ IPV6_NEW_ADDR_PRODUCTIVE	, "productive" },
 	{ IPV6_NEW_ADDR_6TO4_MICROSOFT	, "6to4-microsoft" },
-	{ IPV6_NEW_ADDR_TEREDO		, "TEREDO" }
+	{ IPV6_NEW_ADDR_TEREDO		, "teredo" }
 };
 
 typedef struct {

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.27 2006/06/12 13:29:53 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.28 2006/06/12 19:55:18 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -317,8 +317,9 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 		type |= IPV6_NEW_ADDR_SOLICITED_NODE;
 	};
 
-	if (st2 == 0x00005EFEu) {
+	if (st2 == 0x00005EFEu && ((type & IPV6_NEW_ADDR_TEREDO) == 0)) {
 		/* ..:0000:5EFE:xx.xx.xx.xx ISATAP suffix (RFC 4214) */
+		/* but not if TEREDO */
 		type |= IPV6_NEW_ADDR_ISATAP;
 	};
 
