@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.22 2006/06/10 13:46:01 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.23 2006/06/12 19:58:30 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -24,11 +24,12 @@
 #include "libieee.h"
 #include "libmac.h"
 #include "libeui64.h"
-#ifdef SUPPORT_IP2LOCATION
-#include "IP2Location.h"
-#endif
+#include "libeui64.h"
+#include "config.h"
 
 #ifdef SUPPORT_IP2LOCATION
+#include "IP2Location.h"
+extern int use_ip2location;
 extern char file_ip2location[NI_MAXHOST];
 #endif
 
@@ -52,7 +53,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV4=ddd.ddd.ddd.ddd          : an included IPv4 address in IID (e.g. ISATAP, TEREDO)\n");
 	fprintf(stderr, " IPV4_REGISTRY=...             : registry token of IPv4 address in IID\n");
 	fprintf(stderr, " IPV4_SOURCE=...               : source of IPv4 address\n");
-	fprintf(stderr, "  ISATAP|TEREDO|6TO4|LINK-LOCAL-IID\n");
+	fprintf(stderr, "  ISATAP|TEREDO-SERVER|TEREDO-CLIENT|6TO4|LINK-LOCAL-IID\n");
 	fprintf(stderr, " IPV4_PREFIXLENGTH=...         : given prefix length of IPv4 address\n");
 	fprintf(stderr, " SLA=xxxx                      : an included SLA\n");
 	fprintf(stderr, " IID=xxxx:xxxx:xxxx:xxxx       : an included interface identifier\n");
@@ -80,6 +81,7 @@ void showinfo_availabletypes(void) {
 #endif
 	fprintf(stderr, " IPV6CALC_VERSION=x.y          : Version of ipv6calc\n");
 	fprintf(stderr, " IPV6CALC_COPYRIGHT=\"...\"      : Copyright string\n");
+	fprintf(stderr, " IPV6CALC_OUTPUT_VERSION=x     : Version of output format\n");
 };
 
 /*
@@ -103,15 +105,18 @@ static void printfooter(const uint32_t formatoptions) {
 		printout(tempstring);
 		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6CALC_COPYRIGHT=\"%s\"", PROGRAM_COPYRIGHT);
 		printout(tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6CALC_OUTPUT_VERSION=%d", IPV6CALC_OUTPUT_VERSION);
+		printout(tempstring);
 	};
 };
 
 
 /* print IPv4 address */
 #define DEBUG_function_name "showinfo/print_ipv4addr"
-static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formatoptions) {
+static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formatoptions, const char *string) {
 	char tempstring[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
 	char tempipv4string[NI_MAXHOST] = "";
+	char embeddedipv4string[NI_MAXHOST] = "";
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable);
 	int retval;
 	uint32_t typeinfo;
@@ -125,14 +130,25 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	retval = libipv4addr_ipv4addrstruct_to_string(ipv4addrp, tempipv4string, 0);
 	if ( retval != 0 ) {
 		fprintf(stderr, "Error converting IPv4 address: %s\n", tempipv4string);
-	};	
+	};
+
+	if (formatoptions & FORMATOPTION_printembedded) {
+		snprintf(embeddedipv4string, sizeof(embeddedipv4string) - 1, "[%s]", tempipv4string);
+	};
 	
 	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring) - 1, "IPV4=%s", tempipv4string);
+		/* given source string */
+		if (string != NULL) {
+			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_SOURCE%s=%s", embeddedipv4string, string);
+			printout(tempstring);
+		};
+
+		/* address */
+		snprintf(tempstring, sizeof(tempstring) - 1, "IPV4%s=%s", embeddedipv4string, tempipv4string);
 		printout(tempstring);
 	
 		if (ipv4addrp->flag_prefixuse == 1) {	
-			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_PREFIXLENGTH=%d", (int) ipv4addrp->prefixlength);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_PREFIXLENGTH%s=%d", embeddedipv4string, (int) ipv4addrp->prefixlength);
 			printout(tempstring);
 		};
 	} else {
@@ -146,14 +162,19 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		return;
 	};
 	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY=%s", helpstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY%s=%s", embeddedipv4string, helpstring);
 		printout(tempstring);
 	} else {
-		fprintf(stderr, "IPv4 registry: %s\n", helpstring);
+		fprintf(stderr, "IPv4 registry%s: %s\n", embeddedipv4string, helpstring);
 	};
 
 #ifdef SUPPORT_IP2LOCATION
 	/* IP2Location information */
+	if (use_ip2location == 0) {
+		/* flag not set, nothing more todo */
+		return;
+	};
+
 	if (strlen(file_ip2location) == 0) {
 		/* no file given, nothing more todo */
 		fprintf(stderr, " IP2LOCATION database file not given\n");
@@ -178,27 +199,30 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 	IP2LocationRecord *record = IP2Location_get_all(IP2LocationObj, tempipv4string);
 
+	if ( machinereadable != 0 ) {
+		snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DATABASE_INFO=url=http://www.ip2location.com date=%04d-%02d-%02d entries=%d", IP2LocationObj->databaseyear + 2000, IP2LocationObj->databasemonth + 1, IP2LocationObj->databaseday, IP2LocationObj->databasecount);
+		printout(tempstring);
+	};
+
 	if (record != NULL) {
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_COUNTRY_SHORT=%s", record->country_short);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_COUNTRY_SHORT%s=%s", embeddedipv4string, record->country_short);
 			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_COUNTRY_LONG=%s", record->country_long);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_COUNTRY_LONG%s=%s", embeddedipv4string, record->country_long);
 			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_REGION=%s", record->region);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_REGION%s=%s", embeddedipv4string, record->region);
 			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_CITY=%s", record->city);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_CITY%s=%s", embeddedipv4string, record->city);
 			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ISP=%s", record->isp);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ISP%s=%s", embeddedipv4string, record->isp);
 			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LATITUDE=%f", record->latitude);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LATITUDE%s=%f", embeddedipv4string, record->latitude);
 			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LONGITUDE=%f", record->longitude);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LONGITUDE%s=%f", embeddedipv4string, record->longitude);
 			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DOMAIN=%s", record->domain);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DOMAIN%s=%s", embeddedipv4string, record->domain);
 			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ZIPCODE=%s", record->zipcode);
-			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DATABASE_INFO=\"url=http://www.ip2location.com date=%04d-%02d-%02d entries=%d\"", IP2LocationObj->databaseyear + 2000, IP2LocationObj->databasemonth + 1, IP2LocationObj->databaseday, IP2LocationObj->databasecount);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ZIPCODE%s=%s", embeddedipv4string, record->zipcode);
 			printout(tempstring);
 		} else {
 			fprintf(stderr, " IP2LOCATION not machinereadable output currently not supported\n");
@@ -299,7 +323,7 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 		} else {
 			fprintf(stdout, "Address type contains IPv4 address:\n");
 		};
-		print_ipv4addr(&ipv4addr, formatoptions);
+		print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "ISDN-NET/PLIP");
 	};
 
 	return;
@@ -458,9 +482,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		};	
 
 		if ( machinereadable != 0 ) {
-			printout("IPV4_SOURCE=6TO4");
-			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4=%s", helpstring);
-			printout(tempstring);
+			print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "6TO4");
 		} else {
 			fprintf(stdout, "Address type is 6to4 and included IPv4 address is: %s\n", helpstring);
 		};
@@ -468,8 +490,6 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		/* get registry string */
 		retval = libipv4addr_get_registry_string(&ipv4addr, helpstring);
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY=%s", helpstring);
-			printout(tempstring);
 		} else {
 			fprintf(stderr, "IPv4 registry for 6to4 address: %s\n", helpstring);
 		};
@@ -486,10 +506,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			ipv4addr_setoctett(&ipv4addr2, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) 4 + i));
 		};
 
-		if ( machinereadable != 0 ) {
-			printout("IPV4_SOURCE=ISATAP");
-		};
-		print_ipv4addr(&ipv4addr, formatoptions);
+		print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "TEREDO-SERVER");
+		print_ipv4addr(&ipv4addr2, formatoptions | FORMATOPTION_printembedded, "TEREDO-CLIENT");
 
 		retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, helpstring, 0);
 		if ( retval != 0 ) {
@@ -502,8 +520,6 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		port = ((unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) 10) << 8 | (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) 11)) ^ 0xffff;
 
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "TEREDO_IPV4_SERVER=%s", helpstring);
-			printout(tempstring);
 			snprintf(tempstring, sizeof(tempstring) - 1, "TEREDO_PORT_CLIENT=%d", port);
 			printout(tempstring);
 		} else {
@@ -514,8 +530,6 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		retval = libipv4addr_get_registry_string(&ipv4addr2, helpstring);
 		
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "TEREDO_IPV4_SERVER_REGISTRY=%s", helpstring);
-			printout(tempstring);
 		} else {
 			fprintf(stderr, "IPv4 registry for Teredo server address: %s\n", helpstring);
 		};
@@ -575,7 +589,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		for (i = 0; i <= 3; i++) {
 			ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) (i + 12)));
 		};
-		print_ipv4addr(&ipv4addr, formatoptions);
+		print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "COMPAT/MAPPED");
 	};
 
 	/* Interface identifier included */
@@ -622,11 +636,10 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 					};
 
 					if ( machinereadable != 0 ) {
-						printout("IPV4_SOURCE=ISATAP");
 					} else {
 						fprintf(stderr, "IPv4 registry for ISATAP client address: %s\n", helpstring);
 					};
-					print_ipv4addr(&ipv4addr, formatoptions);
+					print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "ISATAP");
 				} else if ( ( ( (typeinfo & IPV6_ADDR_LINKLOCAL) != 0) && (ipv6addr_getdword(ipv6addrp, 2) == 0 && ipv6addr_getword(ipv6addrp, 6) != 0)) )   {
 					/* fe80:: must have 0000:0000:xxxx:yyyy where xxxx > 0 */
 					if ( machinereadable != 0 ) {
@@ -637,9 +650,9 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 						ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) (i + 12)));
 					};
 					if ( machinereadable != 0 ) {
-						printout("IPV4_SOURCE=LINK-LOCAL-IID");
+						// printout("IPV4_SOURCE=LINK-LOCAL-IID");
 					};
-					print_ipv4addr(&ipv4addr, formatoptions);
+					print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "LINK-LOCAL-IID");
 				} else {
 					if ( machinereadable != 0 ) {
 						if ((typeinfo & IPV6_NEW_ADDR_6TO4_MICROSOFT) != 0) {
@@ -659,6 +672,75 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		};
 	};
 END:	
+#ifdef SUPPORT_IP2LOCATION
+	if (use_ip2location == 0) {
+		/* flag not set, nothing more todo */
+		return 0;
+	};
+
+	/* IP2Location information */
+	if (strlen(file_ip2location) == 0) {
+		/* no file given, nothing more todo */
+		fprintf(stderr, " IP2LOCATION database file not given\n");
+		return 0;
+	};
+
+	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
+		fprintf(stderr, "%s: IP2LOCATION try to open database: %s\n", DEBUG_function_name, file_ip2location);
+	};
+
+	IP2Location *IP2LocationObj = IP2Location_open(file_ip2location);
+
+	if (IP2LocationObj == NULL) {
+		/* error on opening database, nothing more todo */
+		fprintf(stderr, " IP2LOCATION can't open database\n");
+		return 0;
+	};
+
+	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
+		fprintf(stderr, "%s: IP2LOCATION database opened: %s\n", DEBUG_function_name, file_ip2location);
+	};
+
+	/* C-API 1.1.0 currently doesn't support IPv6 */
+	fprintf(stderr, "%s: IP2LOCATION C-API currently misses support of IPv6\n", DEBUG_function_name);
+
+	/*
+	IP2LocationRecord *record = IP2Location_get_all(IP2LocationObj, tempipv4string);
+
+	if (record != NULL) {
+		if ( machinereadable != 0 ) {
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_COUNTRY_SHORT=%s", record->country_short);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_COUNTRY_LONG=%s", record->country_long);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_REGION=%s", record->region);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_CITY=%s", record->city);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ISP=%s", record->isp);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LATITUDE=%f", record->latitude);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LONGITUDE=%f", record->longitude);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DOMAIN=%s", record->domain);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ZIPCODE=%s", record->zipcode);
+			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DATABASE_INFO=\"url=http://www.ip2location.com date=%04d-%02d-%02d entries=%d\"", IP2LocationObj->databaseyear + 2000, IP2LocationObj->databasemonth + 1, IP2LocationObj->databaseday, IP2LocationObj->databasecount);
+			printout(tempstring);
+		} else {
+			fprintf(stderr, " IP2LOCATION not machinereadable output currently not supported\n");
+		};
+
+		IP2Location_free_record(record);
+	} else {
+		fprintf(stderr, "%s: IP2LOCATION returned no record for address: %s\n", DEBUG_function_name, tempipv4string);
+	};
+	*/
+
+	IP2Location_close(IP2LocationObj);
+#endif
 	printfooter(formatoptions);
 	retval = 0;
 	return (retval);
@@ -676,7 +758,7 @@ END:
 int showinfo_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formatoptions) {
 	int retval = 1;
 
-	print_ipv4addr(ipv4addrp, formatoptions);
+	print_ipv4addr(ipv4addrp, formatoptions, NULL);
 
 	printfooter(formatoptions);
 	retval = 0;

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.22 2006/06/07 13:18:28 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.23 2006/06/12 19:58:30 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -35,10 +35,12 @@
 #include "librfc3041.h"
 #include "libeui64.h"
 #include "version.h"
+#include "config.h"
 
 long int ipv6calc_debug = 0;
 
 #ifdef SUPPORT_IP2LOCATION
+int  use_ip2location = 0; /* if set to 1, IP2Location is enabled by option(s) */
 char file_ip2location[NI_MAXHOST] = "";
 #endif
 
@@ -119,9 +121,9 @@ int main(int argc,char *argv[]) {
 					fprintf(stderr, "%s: Got IP2Location file: %s\n", DEBUG_function_name, optarg);
 				};
 				strncpy(file_ip2location, optarg, sizeof(file_ip2location) -1 );
+				use_ip2location = 1;
 #else
-				fprintf(stderr, " Support for option -p <path to ip2location database> not compiled in.\n");
-				exit(EXIT_FAILURE);
+				fprintf(stderr, " Support for option -p <path to ip2location database> not compiled in, IP2Location support disabled\n");
 #endif
 			
 				break;
