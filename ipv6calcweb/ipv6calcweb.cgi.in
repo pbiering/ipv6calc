@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.5 2006/06/08 10:11:31 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.6 2006/06/12 19:51:43 peter Exp $
 # Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -32,10 +32,14 @@ my $program_name = "ipv6calcweb.cgi";
 my $program_copyright = "(P) & (C) 2002-2006 by Peter Bieringer";
 my $program_version = "@IPV6CALC_VERSION@";
 
+# required output version of ipv6calc (introduced in 0.60.0)
+my $program_required_ipv6calc_output_version = 2;
+
 
 # Debug value
-#my $debug = 0xffff;
-my $debug = 0x0;
+my $debug = 0;
+#$debug = 0xffff;
+#$debug = 0x01;
 
 # Location of binary
 #my $bin_ipv6calc = "/bin/ipv6calc";
@@ -43,6 +47,9 @@ my $bin_ipv6calc = "../ipv6calc/ipv6calc";
 my $options_ipv6calc = "-m -i -q";
 
 my $database_ip2location = "../databases/IP2Location/C-IP2Location-1.1.0/data/IP-COUNTRY-SAMPLE.BIN";
+my $flag_ip2location_used = 0;
+my %info_ip2location;
+my $info_ip2location_string;
 
 if ( -f $database_ip2location) {
 	$options_ipv6calc .= " -p $database_ip2location";
@@ -55,16 +62,16 @@ my %url_whoisservers = (
 		'ipv6'	=> "http://www.ripe.net/perl/whois?searchtext=",
 	},
 	'ARIN'	=> {
-		'ipv4'	=> "http://www.arin.net/cgi-bin/whois.pl?queryinput=",
-		'ipv6'	=> "http://www.arin.net/cgi-bin/whois.pl?queryinput=",
+		'ipv4'	=> "http://ws.arin.net/whois?queryinput=",
+		'ipv6'	=> "http://ws.arin.net/whois?queryinput=",
 	},
 	'APNIC'	=> {
-		'ipv4'	=> "http://www.apnic.net/apnic-bin/whois2.pl?search=",
-		'ipv6'	=> "http://www.apnic.net/apnic-bin/whois2.pl?search=",
+		'ipv4'	=> "http://www.apnic.net/apnic-bin/whois.pl?searchtext=",
+		'ipv6'	=> "http://www.apnic.net/apnic-bin/whois.pl?searchtext=",
 	},
 	'LACNIC'	=> {
-		'ipv4'	=> "http://lacnic.net/cgi-bin/lacnic/whois?qr=",
-		'ipv6'	=> "http://lacnic.net/cgi-bin/lacnic/whois?qr=",
+		'ipv4'	=> "http://lacnic.net/cgi-bin/lacnic/whois?query=",
+		'ipv6'	=> "http://lacnic.net/cgi-bin/lacnic/whois?query=",
 	},
 	'AFRINIC'	=> {
 		'ipv4'	=> "http://www.afrinic.net/cgi-bin/whois?searchtext=",
@@ -73,10 +80,6 @@ my %url_whoisservers = (
 	'IANA'	=> {
 		'ipv4'	=> "",
 		'ipv6'	=> "",
-	},
-	'6BONE'	=> {
-		'ipv4'	=> "",
-		'ipv6'	=> "http://www-ntd.lbl.gov/cgi-bin/whois.pl?",
 	},
 	'unknown'	=> {
 		'ipv4'	=> "",
@@ -112,7 +115,7 @@ my @supported_languages = ( "de", "en");
 # Format
 my @supported_formats = ( "text", "html");
 
-# Tokens to be formatted usin <TT>
+# Tokens to be formatted using <TT>
 my @format_tt = ( "EUI48", "EUI64", "IPV6", "IPV4", "SLA", "IID", "IPV4_6TO4" );
 
 my %text = (
@@ -155,14 +158,6 @@ my %text = (
 	'IPV4_SOURCE' => {
 		'de' => "Quelle der IPv4 Adresse",
 		'en' => "Source of IPv4 address",
-	},
-	'TEREDO_IPV4_SERVER' => {
-		'de' => "IPv4 Adresse des Teredo Servers",
-		'en' => "IPv4 address of Teredo server",
-	},
-	'TEREDO_IPV4_SERVER_REGISTRY' => {
-		'de' => "Registry der IPv4 Adresse des Teredo Servers",
-		'en' => "Registry of IPv4 address of Teredo server",
 	},
 	'TEREDO_PORT_CLIENT' => {
 		'de' => "UDP-Port des Teredo Clients (nach NAT)",
@@ -216,6 +211,18 @@ my %text = (
 		'de' => "Unterstützt durch",
 		'en' => "Powered by",
 	},
+	'entries' => {
+		'de' => "Einträge",
+		'en' => "entries",
+	},
+	'database' => {
+		'de' => "Datenbank",
+		'en' => "database",
+	},
+	'version' => {
+		'de' => "Version",
+		'en' => "version",
+	},
 	'USERAGENT' => {
 		'de' => "Browseridentifikation",
 		'en' => "User agent identification",
@@ -256,6 +263,10 @@ my %text = (
 		'de' => "IP2Location Postleitzahl",
 		'en' => "IP2Location ZIP code",
 	},
+	'IP2LOCATION_DATABASE_INFO' => {
+		'de' => "IP2Location Datenbank-Information",
+		'en' => "IP2Location database information",
+	},
 );
 
 ###### Normally nothing to change here
@@ -284,6 +295,8 @@ my @info_remote;
 my @info_server;
 my %infoh_remote;
 my %infoh_server;
+my @sort_remote;
+my @sort_server;
 my $length_max_key = 0;
 my $length_max_description = 0;
 my $query_string;
@@ -325,9 +338,18 @@ sub print_textonly ($) {
 	};
 };
 
+## split IP2Location data
+sub split_ip2location() {
+	for my $stringlet (split / /, $info_ip2location_string) {
+		my ($key, $value) = split /=/, $stringlet;
+		$info_ip2location{$key} = $value;
+	};
+};
+
 ## Print one table part
-sub print_infohash ($) {
-	my $phash = shift;
+sub print_infohash ($$) {
+	my $phash = $_[0];
+	my $parray = $_[1];
 	if (! defined $phash) { return; };
 
 	my ($flag_tt, $flag_whoisurl, $whois_registry, $whois_type);
@@ -342,7 +364,17 @@ sub print_infohash ($) {
 		return;
 	};
 
-	for my $key (sort keys %$phash) {
+	for my $key (@$parray) {
+		if ($key eq "IP2LOCATION_DATABASE_INFO") {
+			$info_ip2location_string = $$phash{$key};
+			# skipped, will be shown in footer
+			next;
+		};
+
+		if ( $key =~ /^IP2LOCATION/ ) {
+			$flag_ip2location_used = 1;
+		};
+
 		# catch internal keys
 		if ( $key =~ /^IPV6CALC_/ ) {
 			if ( $key eq "IPV6CALC_COPYRIGHT" ) {
@@ -366,7 +398,15 @@ sub print_infohash ($) {
 		$flag_tt = 0;
 		$flag_whoisurl = 0;
 
-		if (grep(/^$key$/, @format_tt)) {
+		# extract lookup key
+		$key =~ /^([^[]+)(\[[^]]*\])?$/;;
+		my $key_lookup = $1;
+		my $key_embedded = "";
+		if (defined $2) {
+			$key_embedded = $2;
+		};
+
+		if (grep(/^$key_lookup$/, @format_tt)) {
 			$flag_tt = 1;
 		};
 
@@ -381,9 +421,9 @@ sub print_infohash ($) {
 		# print description
 		if ($outputtype ne "simple") {
 			&print_tagoutput ( "        <td>" );
-			if (defined $text{$key}->{$lang}) {
-				print $text{$key}->{$lang};
-				&print_textonly (' ' x ($length_max_description - length($text{$key}->{$lang})) );
+			if (defined $text{$key_lookup}->{$lang}) {
+				print $text{$key_lookup}->{$lang};
+				&print_textonly (' ' x ($length_max_description - length($text{$key_lookup}->{$lang})) );
 			} else {
 				&print_textonly (' ' x ($length_max_description) );
 			};
@@ -398,9 +438,9 @@ sub print_infohash ($) {
 			&print_tagoutput ( "<tt>" );
 		};
 
-		if ( $key eq "IPV4" ) {
-			if ( defined $$phash{'IPV4_REGISTRY'} ) {
-				$whois_registry = $$phash{'IPV4_REGISTRY'};
+		if ( $key_lookup eq "IPV4" ) {
+			if ( defined $$phash{'IPV4_REGISTRY' . $key_embedded} ) {
+				$whois_registry = $$phash{'IPV4_REGISTRY' . $key_embedded};
 				$whois_type = "ipv4";
 				$flag_whoisurl = 1;
 			} else {
@@ -409,9 +449,9 @@ sub print_infohash ($) {
 				$whois_type = "ipv4";
 				$flag_whoisurl = 1;
 			};
-		} elsif ( $key eq "IPV6" ) {
-			if ( defined $$phash{'IPV6_REGISTRY'} ) {
-				$whois_registry = $$phash{'IPV6_REGISTRY'};
+		} elsif ( $key_lookup eq "IPV6" ) {
+			if ( defined $$phash{'IPV6_REGISTRY' . $key_embedded} ) {
+				$whois_registry = $$phash{'IPV6_REGISTRY' . $key_embedded};
 				$whois_type = "ipv6";
 				$flag_whoisurl = 1;
 			};
@@ -420,7 +460,7 @@ sub print_infohash ($) {
 		if ( $flag_whoisurl == 1 ) {
 			if ( defined $url_whoisservers{$whois_registry}->{$whois_type} ) {
 				if ( $url_whoisservers{$whois_registry}->{$whois_type} ne "" ) {
-					&print_tagoutput ( "<a href=\"" . $url_whoisservers{$whois_registry}->{$whois_type} . $$phash{$key} . "\">" );
+					&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url_whoisservers{$whois_registry}->{$whois_type} . $$phash{$key} . "\">" );
 				} else {
 					$flag_whoisurl = 0;
 				};
@@ -560,12 +600,14 @@ if ( defined $addr_remote ) {
 		chomp $content;
 
 		if ( $key =~ /^IP2LOCATION/ ) {
-			if ( $content =~ /^This parameter is unavailable/ ) {
+			$flag_ip2location_used = 1;
+			if ( $content =~ /^This (parameter|record) is unavailable/ ) {
 				$content = "n/a";
 			};
 		};
 
 		$infoh_remote{$key} = $content;
+		push @sort_remote, $key;
 	};
 	if (defined $name_remote) {
 		if ($name_remote ne $addr_remote) {
@@ -590,12 +632,13 @@ if ( defined $addr_server ) {
 		chomp $content;
 
 		if ( $key =~ /^IP2LOCATION/ ) {
-			if ( $content =~ /^This parameter is unavailable/ ) {
+			if ( $content =~ /^This (parameter|record) is unavailable/ ) {
 				$content = "n/a";
 			};
 		};
 
 		$infoh_server{$key} = $content;
+		push @sort_server, $key;
 	};
 	if (defined $name_server) {
 		if ($name_server ne $addr_server) {
@@ -607,21 +650,21 @@ if ( defined $addr_server ) {
 
 ## Print content
 if ($debug & 0x01) {
-	print "REMOTE\n";
+	print STDERR "REMOTE\n";
 	for my $key (keys %infoh_remote) {
-		print " ". $key . "=" .  $infoh_remote{$key} . "\n";
+		print STDERR " ". $key . "=" .  $infoh_remote{$key} . "\n";
 	};
-	print "SERVER\n";
+	print STDERR "SERVER\n";
 	for my $key (keys %infoh_server) {
-		print " " . $key . "=" .  $infoh_server{$key} . "\n";
+		print STDERR " " . $key . "=" .  $infoh_server{$key} . "\n";
 	};
 };
 
 
 ## Calculate max lengths
 for my $key (keys %text) {
-	if (length($key) > $length_max_key) {
-		$length_max_key = length($key);
+	if (length($key) + 17 > $length_max_key) {
+		$length_max_key = length($key) + 17;
 	};
 
 	if (length($text{$key}->{$lang}) > $length_max_description) {
@@ -654,7 +697,7 @@ print $text{'REMOTE'}->{$lang};
 &print_textonly ("\n");
 &print_tagoutput ( "</th>\n" );
 &print_tagoutput ( "      </tr>\n" );
-&print_infohash (\%infoh_remote);
+&print_infohash (\%infoh_remote, \@sort_remote);
 
 
 if ( $skip_server == 0 ) {
@@ -666,7 +709,7 @@ if ( $skip_server == 0 ) {
 	&print_textonly ("\n");
 	&print_tagoutput ( "</th>\n" );
 	&print_tagoutput ( "      </tr>\n" );
-	&print_infohash (\%infoh_server);
+	&print_infohash (\%infoh_server, \@sort_server);
 };
 
 # Footer
@@ -676,10 +719,20 @@ if ( $skip_server == 0 ) {
 
 if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 	print "          <font size=-2>" . $text{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "</font><br>\n";
-	print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a href=\"http://www.deepspace6.net/projects/ipv6calc.html\">" . $ipv6calc_name . "</a> " . $ipv6calc_version . ", " . $ipv6calc_copyright . "</font>\n";
+	print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.deepspace6.net/projects/ipv6calc.html\">" . $ipv6calc_name . "</a> " . $ipv6calc_version . ", " . $ipv6calc_copyright . "</font>\n";
+	if ($flag_ip2location_used == 1) {
+		split_ip2location();
+		print "<br>\n";
+		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $info_ip2location{'url'} . "\">IP2Location</a> " . $text{'database'}->{$lang} . " " . $text{'version'}->{$lang} . " " . $info_ip2location{'date'} . "(" . $info_ip2location{'entries'} . " " . $text{'entries'}->{$lang} . ")</font>\n";
+	};
 } else {
 	print $text{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "\n";
 	print $text{'powered'}->{$lang} . " " . $ipv6calc_name . " " . $ipv6calc_version . ", " . $ipv6calc_copyright . " (http://www.deepspace6.net/projects/ipv6calc.html)" . "\n";
+	if ($flag_ip2location_used) {
+		split_ip2location();
+		print $text{'powered'}->{$lang} . " IP2Location " . $text{'database'}->{$lang} . " " . $text{'version'}->{$lang} . " " . $info_ip2location{'date'} ." (" . $info_ip2location{'entries'} . " " . $text{'entries'}->{$lang} . ")" . " (" . $info_ip2location{'url'} . ")" . "\n";
+
+	};
 };
 
 &print_tagoutput ( "        </td>\n" );
