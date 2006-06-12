@@ -79,9 +79,9 @@ int IP2Location_initialize(IP2Location *loc)
 {
 	loc->databasetype   = IP2Location_read8(loc->filehandle, 1);
 	loc->databasecolumn = IP2Location_read8(loc->filehandle, 2);
-	loc->databaseday    = IP2Location_read8(loc->filehandle, 3);
+	loc->databaseyear   = IP2Location_read8(loc->filehandle, 3);
 	loc->databasemonth  = IP2Location_read8(loc->filehandle, 4);
-	loc->databaseyear   = IP2Location_read8(loc->filehandle, 5);
+	loc->databaseday    = IP2Location_read8(loc->filehandle, 5);
 	loc->databasecount  = IP2Location_read32(loc->filehandle, 6);
 	loc->databaseaddr   = IP2Location_read32(loc->filehandle, 10);
 	return 0;
