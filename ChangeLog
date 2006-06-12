@@ -1,20 +1,58 @@
 /*
- *  $Id: ChangeLog,v 1.122 2006/06/10 13:46:01 peter Exp $ 
+ *  $Id: ChangeLog,v 1.123 2006/06/12 20:01:39 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 --------------------------------------------------------------------
+20060612/PB
+	databases/IP2Location/C-IP2Location-1.1.0/libIP2Location/IP2Location.c
+	 - fix bug in original code according to retrieve date from database
+	config.h.in configure.in
+	 - add support for SUPPORT_IP2LOCATION in config.h
+	lib/ipv6calchelp.c
+	 - add comment for option -p
+	ipv6calc/ipv6calc.c
+	 - add internal flag for IP2Location support
+	lib/ipv6calctypes.h ipv6calc/showinfo.c 
+	 - print embedded IPv4 addresses explicitly in embedded format []
+	   this solves the issue if more than one IPv4 address is included in IPv6 address
+	lib/libipv6addr.c
+	 - support new Teredo prefix (RFC 4380)
+	lib/libipv4addr.c
+	 - exclude some RFC1918/RFC3330 addresses from registry lookup, report reserved(reason)
+	   instead
+	lib/libipv6addr.h
+	 - lower case "teredo"
+	lib/ipv6calctypes.h
+	 - add new (internal used) format "printembedded"
+	lib/Makefile
+	 - fix elements in $(OBJS), minor review
+	ipv6calcweb/ipv6calcweb.cgi
+	 - add support for variables with embedded IPv4 address
+	 - keep sort order of ipv6calc -m output
+	 - fix whois URL of ARIN,APNIC,LACNIC
+	 - remove whois URL for 6bone addresses, no longer valid
+	 - add IP2Location information in footer (if used)
+	 - add required output version for check
+	ipv6calc/showinfo.h
+	 - define output version
+	ipv6calc/showinfo.c
+	 - support embedded IPv4 addresses in machine readable output
+	ipv6calc/ipv6calc.c
+	 - missing IP2Location database is now only a soft error
+	 - add flag whether IP2Location database is given
+
 20060610/PB
 	ipv6calc/showinfo.c/print_ipv4addr
 	 - check for result != of IP2Location before using (prevents segfault)
 
 20060608/PB
-	ipv6calcweb.cgi
+	ipv6calcweb/ipv6calcweb.cgi
 	 - add support for format=<format> in QUERY_STRING
 
 20060607/PB
-	ipv6calcweb.cgi
+	ipv6calcweb/ipv6calcweb.cgi
 	 - add support for IP2Location according to showinfo.c
 	contrib/ipv6calc.spec[.in]
 	 - add support for rebuild option --with-ip2location

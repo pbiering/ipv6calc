@@ -2,13 +2,16 @@
 /*
  * Project: ipv6calc
  * File   : acconfig.h
- * Version: $Id: config.h.in,v 1.4 2006/06/07 20:46:58 peter Exp $
+ * Version: $Id: config.h.in,v 1.5 2006/06/12 20:01:39 peter Exp $
  *
  * (P) & (C) 2001 by Peter Bieringer <pb@bieringer.de>
  */ 
 
 /* Define version of package */
 #undef IPV6CALC_VERSION
+
+/* Define to 1 if IP2Location support should be built-in */
+#undef SUPPORT_IP2LOCATION
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H

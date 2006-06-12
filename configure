@@ -3222,6 +3222,11 @@ if test "${enable_ip2location+set}" = set; then
   enableval="$enable_ip2location"
   if test "x$enable_ip2location" = "xyes"; then
 		ENABLE_SUPPORT_IP2LOCATION=1
+
+cat >>confdefs.h <<\_ACEOF
+#define SUPPORT_IP2LOCATION 1
+_ACEOF
+
 	fi
 fi;
 
