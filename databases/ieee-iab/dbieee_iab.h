@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.16 2006/06/07 06:42:01 peter Exp $
- * Generated     : Wed Jun  7 08:28:14 2006
+ * Version       : $Id: dbieee_iab.h,v 1.17 2006/06/25 17:58:19 peter Exp $
+ * Generated     : Sun Jun 25 19:00:32 2006
  * Data copyright: IEEE
  *
  * Information:
@@ -1535,5 +1535,17 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x5F2000, 0x5F2FFF, "ESEM Grünau GmbH & Co. KG", "ESEM-GRüNAU" },
 	{ 0x0050C2, 0x5F3000, 0x5F3FFF, "POSNET Polska S.A.", "POSNET-POLSKA" },
 	{ 0x0050C2, 0x5F4000, 0x5F4FFF, "TeamProjects BV", "TEAMPROJECTS" },
+	{ 0x0050C2, 0x5F5000, 0x5F5FFF, "Genesis inc", "GENESIS" },
+	{ 0x0050C2, 0x5F6000, 0x5F6FFF, "CAMBRIDGE CONSULTANTS LTD", "CAMBRIDGE-CONSULTANTS" },
+	{ 0x0050C2, 0x5F7000, 0x5F7FFF, "Metrologic Group", "METROLOGIC-GROUP" },
+	{ 0x0050C2, 0x5F8000, 0x5F8FFF, "Grupo Epelsa s. l.", "GRUPO-EPELSA-S-L" },
+	{ 0x0050C2, 0x5F9000, 0x5F9FFF, "ROTHARY Solutions AG", "ROTHARY-SOLUTIONS" },
+	{ 0x0050C2, 0x5FA000, 0x5FAFFF, "LEA d.o.o.", "LEA-D-O-O" },
+	{ 0x0050C2, 0x5FB000, 0x5FBFFF, "All-Systems Electronics Pty Ltd", "ALL--ELECTRONICS-PTY" },
+	{ 0x0050C2, 0x5FC000, 0x5FCFFF, "FilmLight Limited", "FILMLIGHT" },
+	{ 0x0050C2, 0x5FD000, 0x5FDFFF, "MEG Electronic Inc.", "MEG" },
+	{ 0x0050C2, 0x5FE000, 0x5FEFFF, "Novacomm", "NOVACOMM" },
+	{ 0x0050C2, 0x5FF000, 0x5FFFFF, "Gazelle Monitoring Systems", "GAZELLE-MONITORING" },
+	{ 0x0050C2, 0x600000, 0x600FFF, "Protec Fire Detection plc", "PROTEC-FIRE-DETECTION-PLC" },
 
 };
