@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.125 2006/06/25 17:58:18 peter Exp $ 
+ *  $Id: ChangeLog,v 1.126 2006/06/25 18:09:02 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,8 @@ Info:
 20060625/PB
 	update databases
 	tag version 0.60.0
+	Makefile[.in]
+	 - remove autom4te.cache also in subdirectories
 
 20060612/PB
 	databases/IP2Location/C-IP2Location-1.1.0/libIP2Location/IP2Location.c
