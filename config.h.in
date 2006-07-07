@@ -1,14 +1,4 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
-/*
- * Project: ipv6calc
- * File   : acconfig.h
- * Version: $Id: config.h.in,v 1.7 2006/07/07 15:11:02 peter Exp $
- *
- * (P) & (C) 2001 by Peter Bieringer <pb@bieringer.de>
- */ 
-
-/* Define version of package */
-#undef IPV6CALC_VERSION
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
@@ -42,6 +32,9 @@
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
+
+/* "Version of ipv6calc" */
+#undef IPV6CALC_VERSION
 
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT

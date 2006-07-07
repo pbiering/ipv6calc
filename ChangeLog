@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.129 2006/07/07 15:11:02 peter Exp $ 
+ *  $Id: ChangeLog,v 1.130 2006/07/07 15:40:27 peter Exp $ 
  */
 
 Info:
@@ -11,6 +11,7 @@ Info:
 	 - catch result proper
 	configure.in
 	 - define AC_C_BIGENDIAN for proper support of big-endian arch
+	 - improve version definition, remove acconfig.h (no longer needed)
 	config.h.in
 	 - regenerated during autoheader
 	md5/Makefile

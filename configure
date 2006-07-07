@@ -3440,6 +3440,7 @@ fi
 done
 
 
+
 cat >>confdefs.h <<_ACEOF
 #define IPV6CALC_VERSION "${IPV6CALC_VERSION}"
 _ACEOF
