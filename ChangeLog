@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.128 2006/07/07 14:37:49 peter Exp $ 
+ *  $Id: ChangeLog,v 1.129 2006/07/07 15:11:02 peter Exp $ 
  */
 
 Info:
@@ -16,6 +16,8 @@ Info:
 	md5/Makefile
 	md5/md5.c
 	 - fix code for proper support of big-endian arch
+	autogen.sh
+	 - add call to autoheader
 
 20060625/PB
 	update databases
