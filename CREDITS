@@ -3,7 +3,7 @@ Credits to
 * Niko Tyni <ntyni at iki dot fi>
    - clean reimplementation of RFC 1924 conversion code
    - some help on configure.in
-   - contribution of minor patches
+   - contribution of patches
 
 * Authors of ircd
    for RFC 1884 decompress algorithmus

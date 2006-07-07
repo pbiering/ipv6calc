@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.10 2006/01/26 13:52:49 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.11 2006/07/07 13:30:50 peter Exp $
 # Copyright  : 2001-2005 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -151,9 +151,11 @@ testscenarios | while read line; do
 	fi
 done
 
-if [ $? -eq 0 ]; then
+retval=$?
+if [ $retval -eq 0 ]; then
 	echo "All tests were successfully done!"
 	exit 0
 else
-	echo $?
+	echo "Tests failed! (code $retval)"
+	exit $retval
 fi

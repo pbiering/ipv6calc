@@ -1,6 +1,6 @@
 dnl Project: ipv6calc
 dnl File   : configure.in
-dnl Version: $Id: configure.in,v 1.8 2006/06/12 20:01:39 peter Exp $
+dnl Version: $Id: configure.in,v 1.9 2006/07/07 13:30:49 peter Exp $
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(ipv6calc/ipv6calc.c)
@@ -24,6 +24,7 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
 AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
+AC_C_BIGENDIAN
 
 dnl Checks for library functions.
 AC_FUNC_MEMCMP

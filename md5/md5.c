@@ -24,19 +24,14 @@
 	for ipv6calc, not needed code was removed
 */
 
+#include "config.h"
+
 #include "md5.h"
 
 #include <sys/types.h>
 
 #include <stdlib.h>
 #include <string.h>
-
-/* insert for ipv6calc for proper working on big endian machines */
-#ifdef _BIG_ENDIAN
-#  define WORDS_BIGENDIAN 1
-#endif
-/* end of insert */
-
 
 #ifdef _LIBC
 # include <endian.h>
