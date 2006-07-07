@@ -2,16 +2,13 @@
 /*
  * Project: ipv6calc
  * File   : acconfig.h
- * Version: $Id: config.h.in,v 1.5 2006/06/12 20:01:39 peter Exp $
+ * Version: $Id: config.h.in,v 1.6 2006/07/07 14:37:49 peter Exp $
  *
  * (P) & (C) 2001 by Peter Bieringer <pb@bieringer.de>
  */ 
 
 /* Define version of package */
 #undef IPV6CALC_VERSION
-
-/* Define to 1 if IP2Location support should be built-in */
-#undef SUPPORT_IP2LOCATION
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
@@ -63,6 +60,13 @@
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
+
+/* Define if you want IP2Location support. */
+#undef SUPPORT_IP2LOCATION
+
+/* Define to 1 if your processor stores words with the most significant byte
+   first (like Motorola and SPARC, unlike Intel and VAX). */
+#undef WORDS_BIGENDIAN
 
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
