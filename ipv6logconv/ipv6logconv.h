@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.h
- * Version    : $Id: ipv6logconv.h,v 1.5 2005/02/13 11:50:30 peter Exp $
- * Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logconv.h,v 1.6 2006/07/10 11:38:19 peter Exp $
+ * Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
  * Information:
@@ -11,7 +11,7 @@
 
 /* global program related definitions */
 #define PROGRAM_NAME "ipv6logconv"
-#define PROGRAM_COPYRIGHT "(P) & (C) 2002-2005 by Peter Bieringer <pb (at) bieringer.de>"
+#define PROGRAM_COPYRIGHT "(P) & (C) 2002-2006 by Peter Bieringer <pb (at) bieringer.de>"
 
 /* LRU cache maximum size */
 #define CACHE_LRU_SIZE 200

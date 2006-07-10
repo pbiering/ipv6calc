@@ -21,7 +21,7 @@ different ways.
 Install this package, if you want to extend the existing address detection
 on IPv6 initscript setup or make life easier in adding reverse IPv6 zones to DNS
 or using in DNS queries like
- dig -t ANY `ipv6calc -r 3ffe:ffff:100::1/48`
+ dig -t ANY `ipv6calc -r 2001:db8:1234::1/48`
 Many more format conversions are supported, see given URL for more.
 
 Available rpmbuild rebuild options:

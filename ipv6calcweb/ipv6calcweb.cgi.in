@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.6 2006/06/12 19:51:43 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.7 2006/07/10 11:38:19 peter Exp $
 # Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -30,7 +30,7 @@ use strict;
 # Program information
 my $program_name = "ipv6calcweb.cgi";
 my $program_copyright = "(P) & (C) 2002-2006 by Peter Bieringer";
-my $program_version = "@IPV6CALC_VERSION@";
+my $program_version = "@PACKAGE_VERSION@";
 
 # required output version of ipv6calc (introduced in 0.60.0)
 my $program_required_ipv6calc_output_version = 2;

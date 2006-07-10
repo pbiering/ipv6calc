@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.23 2006/06/12 19:58:30 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.24 2006/07/10 11:38:19 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -34,7 +34,6 @@
 #include "librfc3056.h"
 #include "librfc3041.h"
 #include "libeui64.h"
-#include "version.h"
 #include "config.h"
 
 long int ipv6calc_debug = 0;
@@ -46,7 +45,7 @@ char file_ip2location[NI_MAXHOST] = "";
 
 
 void printversion(void) {
-	fprintf(stderr, "%s: version %s\n", PROGRAM_NAME, PROGRAM_VERSION);
+	fprintf(stderr, "%s: version %s\n", PROGRAM_NAME, PACKAGE_VERSION);
 };
 
 void printcopyright(void) {

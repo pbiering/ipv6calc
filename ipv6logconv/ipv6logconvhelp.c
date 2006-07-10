@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconvhelp.c
- * Version    : $Id: ipv6logconvhelp.c,v 1.7 2005/02/13 11:50:30 peter Exp $
+ * Version    : $Id: ipv6logconvhelp.c,v 1.8 2006/07/10 11:38:19 peter Exp $
  * Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
@@ -13,14 +13,14 @@
 #include <string.h>
 #include <stdlib.h>
 #include "ipv6logconv.h"
-#include "version.h"
 #include "ipv6calctypes.h"
 #include "ipv6calccommands.h"
 #include "ipv6calchelp.h"
+#include "config.h"
 
 /* display info */
 void printversion(void) {
-	fprintf(stderr, "%s: version %s\n", PROGRAM_NAME, PROGRAM_VERSION);
+	fprintf(stderr, "%s: version %s\n", PROGRAM_NAME, PACKAGE_VERSION);
 };
 
 void printcopyright(void) {

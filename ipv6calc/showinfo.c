@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.23 2006/06/12 19:58:30 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.24 2006/07/10 11:38:19 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -14,7 +14,6 @@
 #include <ctype.h>
 #include "showinfo.h"
 #include "ipv6calc.h"
-#include "version.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
 #include "ipv6calctypes.h"
@@ -101,7 +100,7 @@ static void printfooter(const uint32_t formatoptions) {
 	if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
 		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6CALC_NAME=%s", PROGRAM_NAME);
 		printout(tempstring);
-		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6CALC_VERSION=%s", PROGRAM_VERSION);
+		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6CALC_VERSION=%s", PACKAGE_VERSION);
 		printout(tempstring);
 		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6CALC_COPYRIGHT=\"%s\"", PROGRAM_COPYRIGHT);
 		printout(tempstring);

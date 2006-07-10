@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile,v 1.1 2006/03/16 16:52:27 peter Exp $
+# Version    : $Id: Makefile,v 1.2 2006/07/10 11:42:29 peter Exp $
 # Copyright  : 2006 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -32,7 +32,7 @@ all:		registry-assignment-to-list
 .c.o:
 		$(CC) $(CFLAGS) -c $<
 
-$(OBJS):	../version.h
+$(OBJS):	../config.h
 
 libipv6calc.a:	
 		cd ../ && ${MAKE} lib-make

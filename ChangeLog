@@ -1,11 +1,15 @@
 /*
- *  $Id: ChangeLog,v 1.130 2006/07/07 15:40:27 peter Exp $ 
+ *  $Id: ChangeLog,v 1.131 2006/07/10 11:38:19 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 	NT = Niko Tynii <ntyni (at) iki dot fi>
 --------------------------------------------------------------------
+20060710/PB
+	<several files>
+	 - change internal version number handling from dedicated file(s) to configure.in
+
 20060707/NT
 	ipv6calc/test_ipv6calc.sh
 	 - catch result proper

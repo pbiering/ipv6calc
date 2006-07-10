@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstatshelp.c
- * Version    : $Id: ipv6logstatshelp.c,v 1.2 2003/06/15 13:33:41 peter Exp $
- * Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logstatshelp.c,v 1.3 2006/07/10 11:38:19 peter Exp $
+ * Copyright  : 2003-2006 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -12,14 +12,14 @@
 #include <string.h>
 #include <stdlib.h>
 #include "ipv6logstats.h"
-#include "version.h"
 #include "ipv6calctypes.h"
 #include "ipv6calccommands.h"
 #include "ipv6calchelp.h"
+#include "config.h"
 
 /* display info */
 void printversion(void) {
-	fprintf(stderr, "%s: version %s\n", PROGRAM_NAME, PROGRAM_VERSION);
+	fprintf(stderr, "%s: version %s\n", PROGRAM_NAME, PACKAGE_VERSION);
 };
 
 void printcopyright(void) {

@@ -1,12 +1,9 @@
 dnl Project: ipv6calc
 dnl File   : configure.in
-dnl Version: $Id: configure.in,v 1.10 2006/07/07 15:40:27 peter Exp $
+dnl Version: $Id: configure.in,v 1.11 2006/07/10 11:38:19 peter Exp $
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(ipv6calc/ipv6calc.c)
-
-dnl Get version
-IPV6CALC_VERSION=`cat VERSION | grep '^VERSION' | head -1 | awk '{ print $2 }'`
+AC_INIT(ipv6calc, 0.60.1cvs, ipv6calc@deepspace6.net, ipv6calc)
 
 dnl Define version header
 AC_CONFIG_HEADER(config.h)
@@ -30,12 +27,6 @@ dnl Checks for library functions.
 AC_FUNC_MEMCMP
 AC_CHECK_FUNCS(strspn strstr)
 
-dnl Define version
-AC_DEFINE_UNQUOTED([IPV6CALC_VERSION], "${IPV6CALC_VERSION}", "Version of ipv6calc")
-
-dnl Substitute version
-AC_SUBST(IPV6CALC_VERSION)
-
 AC_ARG_ENABLE([ip2location], 
 	AS_HELP_STRING([--enable-ip2location],
 	               [Enable IP2Location support (default: disabled)]),
@@ -45,4 +36,4 @@ AC_ARG_ENABLE([ip2location],
 	fi])
 AC_SUBST(ENABLE_SUPPORT_IP2LOCATION)
 
-AC_OUTPUT([Makefile ipv6calc/Makefile man/Makefile ipv6logconv/Makefile ipv6logstats/Makefile version.h contrib/ipv6calc.spec ipv6calcweb/ipv6calcweb.cgi ])
+AC_OUTPUT([Makefile ipv6calc/Makefile man/Makefile ipv6logconv/Makefile ipv6logstats/Makefile contrib/ipv6calc.spec ipv6calcweb/ipv6calcweb.cgi ])
