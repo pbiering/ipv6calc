@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.131 2006/07/10 11:38:19 peter Exp $ 
+ *  $Id: ChangeLog,v 1.132 2006/07/10 14:55:42 peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,7 @@ Info:
 20060710/PB
 	<several files>
 	 - change internal version number handling from dedicated file(s) to configure.in
+	update databases
 
 20060707/NT
 	ipv6calc/test_ipv6calc.sh

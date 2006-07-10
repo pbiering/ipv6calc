@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.17 2006/06/25 17:58:19 peter Exp $
- * Generated     : Sun Jun 25 19:00:32 2006
+ * Version       : $Id: dbieee_iab.h,v 1.18 2006/07/10 14:55:42 peter Exp $
+ * Generated     : Mon Jul 10 16:34:14 2006
  * Data copyright: IEEE
  *
  * Information:
@@ -1547,5 +1547,24 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x5FE000, 0x5FEFFF, "Novacomm", "NOVACOMM" },
 	{ 0x0050C2, 0x5FF000, 0x5FFFFF, "Gazelle Monitoring Systems", "GAZELLE-MONITORING" },
 	{ 0x0050C2, 0x600000, 0x600FFF, "Protec Fire Detection plc", "PROTEC-FIRE-DETECTION-PLC" },
+	{ 0x0050C2, 0x601000, 0x601FFF, "ProxyMed", "PROXYMED" },
+	{ 0x0050C2, 0x602000, 0x602FFF, "CHAUVIN ARNOUX", "CHAUVIN-ARNOUX" },
+	{ 0x0050C2, 0x603000, 0x603FFF, "PRIVATE", "PRIVATE" },
+	{ 0x0050C2, 0x604000, 0x604FFF, "HCJB World Radio", "HCJB-WORLD-RADIO" },
+	{ 0x0050C2, 0x605000, 0x605FFF, "Swistec GmbH", "SWISTEC" },
+	{ 0x0050C2, 0x606000, 0x606FFF, "Shenzhen Huazhong Technology Inc", "SHENZHEN-HUAZHONG" },
+	{ 0x0050C2, 0x607000, 0x607FFF, "Telecom FM", "TELECOM-FM" },
+	{ 0x0050C2, 0x608000, 0x608FFF, "Silex Industrial Automation Ltd.", "SILEX-INDUSTRIAL-AUTOMATION" },
+	{ 0x0050C2, 0x609000, 0x609FFF, "Toptech Systems, Inc.", "TOPTECH" },
+	{ 0x0050C2, 0x60A000, 0x60AFFF, "Gradual Tecnologia Ltda", "GRADUAL-TECNOLOGIA-LTDA" },
+	{ 0x0050C2, 0x60B000, 0x60BFFF, "Shanghai QianJin Electronic Equipment Co. Ltd.", "SHANGHAI-QIANJIN-EQUIPMENT" },
+	{ 0x0050C2, 0x60C000, 0x60CFFF, "IDENTIC AB", "IDENTIC-AB" },
+	{ 0x0050C2, 0x60D000, 0x60DFFF, "Sicon s.r.l.", "SICON-S-R-L" },
+	{ 0x0050C2, 0x60E000, 0x60EFFF, "Automation and Control Technology, Inc.", "AUTOMATION-AND-CONTROL" },
+	{ 0x0050C2, 0x60F000, 0x60FFFF, "Kommunikations- & Sicherheitssysteme Gesellschaft m.b.H", "KOMMUNIKATIONS--SICHERHEITSSYSTEME-GESELLSCHAFT-M-B-H" },
+	{ 0x0050C2, 0x610000, 0x610FFF, "FDT Manufacturing, LLC", "FDT-MANUFACTURING-LLC" },
+	{ 0x0050C2, 0x611000, 0x611FFF, "Brookhaven National Laboratory", "BROOKHAVEN-NATIONAL-LABORATORY" },
+	{ 0x0050C2, 0x612000, 0x612FFF, "IHP-GmbH", "IHP" },
+	{ 0x0050C2, 0x613000, 0x613FFF, "TATTILE SRL", "TATTILE-SRL" },
 
 };
