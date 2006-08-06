@@ -6,7 +6,7 @@ if [ -z "$1" ]; then
 fi
 
 if [ ipv6calcweb.cgi.in -nt ipv6calcweb.cgi ]; then
-	cat ipv6calcweb.cgi.in | sed s/\@IPV6CALC_VERSION\@/test/ >ipv6calcweb.cgi
+	cat ipv6calcweb.cgi.in | sed s/\@PACKAGE_VERSION\@/test/ >ipv6calcweb.cgi
 	chmod u+x ipv6calcweb.cgi
 fi
 
