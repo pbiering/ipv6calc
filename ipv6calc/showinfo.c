@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.26 2006/08/06 14:53:48 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.27 2006/08/06 15:04:26 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -279,16 +279,6 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 			fprintf(stderr, "%s: GeoIP database opened: %s\n", DEBUG_function_name, file_geoip);
 		};
 
-
-		if (flag_geoip_info_shown == 0) {
-			flag_geoip_info_shown = 1;
-
-			if ( machinereadable != 0 ) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_DATABASE_INFO=%s", GeoIP_database_info(gi));
-				printout(tempstring);
-			};
-		};
-
 		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
 			fprintf(stderr, "%s: GeoIP check available databases\n", DEBUG_function_name);
 		};
@@ -358,7 +348,16 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 			};
 		};
 
-		if (flag_geoip_ok != 1) {
+		if (flag_geoip_ok == 1) {
+			if (flag_geoip_info_shown == 0) {
+				flag_geoip_info_shown = 1;
+
+				if ( machinereadable != 0 ) {
+					snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_DATABASE_INFO=%s", GeoIP_database_info(gi));
+					printout(tempstring);
+				};
+			};
+		} else {
 			fprintf(stderr, "%s: GeoIP returned no record for address: %s\n", DEBUG_function_name, tempipv4string);
 		};
 
