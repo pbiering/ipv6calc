@@ -4,7 +4,7 @@
 
 Summary: IPv6 address format change and calculation utility
 Name: ipv6calc
-Version: 0.61.cvs
+Version: 0.61.0cvs
 Release: 1
 Group: System Environment/Base
 URL: http://www.deepspace6.net/projects/ipv6calc.html
@@ -26,12 +26,13 @@ Many more format conversions are supported, see given URL for more.
 
 Available rpmbuild rebuild options:
 --with : ip2location
+--with : geoip
 
 %prep
 %setup -q -n ipv6calc-%{version}
 
 %build
-./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?_with_ip2location:--enable-ip2location}
+./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?_with_ip2location:--enable-ip2location} %{?_with_geoip:--enable-geoip}
 make clean
 make
 make test
@@ -101,11 +102,14 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Aug 06 2006 Peter Bieringer <pb@bieringer.de>
+- add support for rebuild option --with-geoip
+
 * Wed Jun 07 2006 Peter Bieringer <pb@bieringer.de>
 - add support for rebuild option --with-ip2location
 
 * Wed Jul 20 2005 Peter Bieringer <pb@bieringer.de>
-- adjust code because of use of ${exec_prefix}/bin in Makefile of ivp6calc
+- adjust code because of use of /usr/bin in Makefile of ivp6calc
 
 * Sat Oct 30 2004 Peter Bieringer <pb@bieringer.de>
 - remove openssl(-devel) from requirements, no longer needed
