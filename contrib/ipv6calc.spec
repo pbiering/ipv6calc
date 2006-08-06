@@ -4,7 +4,7 @@
 
 Summary: IPv6 address format change and calculation utility
 Name: ipv6calc
-Version: 0.60.1
+Version: 0.61.cvs
 Release: 1
 Group: System Environment/Base
 URL: http://www.deepspace6.net/projects/ipv6calc.html
@@ -105,7 +105,7 @@ rm -rf $RPM_BUILD_ROOT
 - add support for rebuild option --with-ip2location
 
 * Wed Jul 20 2005 Peter Bieringer <pb@bieringer.de>
-- adjust code because of use of /usr/bin in Makefile of ivp6calc
+- adjust code because of use of ${exec_prefix}/bin in Makefile of ivp6calc
 
 * Sat Oct 30 2004 Peter Bieringer <pb@bieringer.de>
 - remove openssl(-devel) from requirements, no longer needed

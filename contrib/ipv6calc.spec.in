@@ -26,12 +26,13 @@ Many more format conversions are supported, see given URL for more.
 
 Available rpmbuild rebuild options:
 --with : ip2location
+--with : geoip
 
 %prep
 %setup -q -n ipv6calc-%{version}
 
 %build
-./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?_with_ip2location:--enable-ip2location}
+./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?_with_ip2location:--enable-ip2location} %{?_with_geoip:--enable-geoip}
 make clean
 make
 make test
@@ -101,6 +102,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sun Aug 06 2006 Peter Bieringer <pb@bieringer.de>
+- add support for rebuild option --with-geoip
+
 * Wed Jun 07 2006 Peter Bieringer <pb@bieringer.de>
 - add support for rebuild option --with-ip2location
 

@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.18 2006/07/10 14:55:42 peter Exp $
- * Generated     : Mon Jul 10 16:34:14 2006
+ * Version       : $Id: dbieee_iab.h,v 1.19 2006/08/06 14:12:43 peter Exp $
+ * Generated     : Sun Aug  6 15:28:26 2006
  * Data copyright: IEEE
  *
  * Information:
@@ -1536,7 +1536,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x5F3000, 0x5F3FFF, "POSNET Polska S.A.", "POSNET-POLSKA" },
 	{ 0x0050C2, 0x5F4000, 0x5F4FFF, "TeamProjects BV", "TEAMPROJECTS" },
 	{ 0x0050C2, 0x5F5000, 0x5F5FFF, "Genesis inc", "GENESIS" },
-	{ 0x0050C2, 0x5F6000, 0x5F6FFF, "CAMBRIDGE CONSULTANTS LTD", "CAMBRIDGE-CONSULTANTS" },
+	{ 0x0050C2, 0x5F6000, 0x5F6FFF, "PRIVATE", "PRIVATE" },
 	{ 0x0050C2, 0x5F7000, 0x5F7FFF, "Metrologic Group", "METROLOGIC-GROUP" },
 	{ 0x0050C2, 0x5F8000, 0x5F8FFF, "Grupo Epelsa s. l.", "GRUPO-EPELSA-S-L" },
 	{ 0x0050C2, 0x5F9000, 0x5F9FFF, "ROTHARY Solutions AG", "ROTHARY-SOLUTIONS" },
@@ -1566,5 +1566,32 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x611000, 0x611FFF, "Brookhaven National Laboratory", "BROOKHAVEN-NATIONAL-LABORATORY" },
 	{ 0x0050C2, 0x612000, 0x612FFF, "IHP-GmbH", "IHP" },
 	{ 0x0050C2, 0x613000, 0x613FFF, "TATTILE SRL", "TATTILE-SRL" },
+	{ 0x0050C2, 0x614000, 0x614FFF, "SICOM AS", "SICOM-AS" },
+	{ 0x0050C2, 0x615000, 0x615FFF, "Axis Electronics", "AXIS-ELECTRONICS" },
+	{ 0x0050C2, 0x616000, 0x616FFF, "Honeywell", "HONEYWELL" },
+	{ 0x0050C2, 0x617000, 0x617FFF, "NARINET, INC.", "NARINET" },
+	{ 0x0050C2, 0x618000, 0x618FFF, "Intergrated Security Mfg. Ltd", "INTERGRATED-SECURITY-MFG" },
+	{ 0x0050C2, 0x619000, 0x619FFF, "Linkbit, Inc.", "LINKBIT" },
+	{ 0x0050C2, 0x61A000, 0x61AFFF, "Communication Components Inc.", "COMMUNICATION-COMPONENTS" },
+	{ 0x0050C2, 0x61B000, 0x61BFFF, "NCI Technologies Inc.", "NCI-TECHNOLOGIES" },
+	{ 0x0050C2, 0x61C000, 0x61CFFF, "TestPro Systems, Inc.", "TESTPRO" },
+	{ 0x0050C2, 0x61D000, 0x61DFFF, "Sutus Inc", "SUTUS" },
+	{ 0x0050C2, 0x61E000, 0x61EFFF, "LESTER ELECTRONICS LTD", "LESTER-ELECTRONICS" },
+	{ 0x0050C2, 0x61F000, 0x61FFFF, "Imagine Communications", "IMAGINE-COMMUNICATION" },
+	{ 0x0050C2, 0x620000, 0x620FFF, "Harman Becker Automotive Systems", "HARMAN-BECKER-AUTOMOTIVE" },
+	{ 0x0050C2, 0x621000, 0x621FFF, "Version-T", "VERSION-T" },
+	{ 0x0050C2, 0x622000, 0x622FFF, "2N TELEKOMUNIKACE a.s.", "2N-TELEKOMUNIKACE-A-S" },
+	{ 0x0050C2, 0x623000, 0x623FFF, "SAFELINE SL", "SAFELINE-SL" },
+	{ 0x0050C2, 0x624000, 0x624FFF, "Comtest Networks", "COMTEST-NETWORKS" },
+	{ 0x0050C2, 0x625000, 0x625FFF, "EBNeuro SpA", "EBNEURO-SPA" },
+	{ 0x0050C2, 0x626000, 0x626FFF, "Winsys Informatica ltda", "WINSYS-INFORMATICA-LTDA" },
+	{ 0x0050C2, 0x627000, 0x627FFF, "JungleSystem Co., Ltd.", "JUNGLESYSTEM" },
+	{ 0x0050C2, 0x628000, 0x628FFF, "DARE Development", "DARE-DEVELOPMENT" },
+	{ 0x0050C2, 0x629000, 0x629FFF, "MacDonald Humfrey (Products) Ltd", "MACDONALD-HUMFREY-PRODUCTS" },
+	{ 0x0050C2, 0x62A000, 0x62AFFF, "Prisma Engineering srl", "PRISMA-ENGINEERING-SRL" },
+	{ 0x0050C2, 0x62B000, 0x62BFFF, "First Control Systems AB", "FIRST-CONTROL-AB" },
+	{ 0x0050C2, 0x62C000, 0x62CFFF, "AirMatrix, Inc.", "AIRMATRIX" },
+	{ 0x0050C2, 0x62D000, 0x62DFFF, "Procon Electronics", "PROCON-ELECTRONICS" },
+	{ 0x0050C2, 0x62E000, 0x62EFFF, "TDM ingénierie", "TDM-INGéNIERIE" },
 
 };

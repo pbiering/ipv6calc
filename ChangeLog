@@ -1,11 +1,18 @@
 /*
- *  $Id: ChangeLog,v 1.133 2006/07/10 20:29:55 peter Exp $ 
+ *  $Id: ChangeLog,v 1.134 2006/08/06 14:12:43 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 	NT = Niko Tynii <ntyni (at) iki dot fi>
 --------------------------------------------------------------------
+20060806/PB
+	<several files>
+	 - add support for GeoIP (GeoIP-1.3.17)
+	LICENSE
+	 - updates according to changes
+	update databases
+
 20060710/PB
 	<several files>
 	 - change internal version number handling from dedicated file(s) to configure.in

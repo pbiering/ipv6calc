@@ -32,8 +32,13 @@
 	related files have also GPL licence
 	- databases/GeoIP/*
 
-   * GeoIP databases
-	free database is included
+   * GeoIP free databases
+	are NOT included with this package because of keeping exported package small
+	see here for more: http://www.maxmind.com/ or retrieve them directly:
+	 http://www.maxmind.com/download/geoip/database/GeoIP.dat.gz
+	 http://www.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
+	but don't forget to read the license
+	 http://www.maxmind.com/download/geoip/database/LICENSE.txt
 
 
 1. The program "ipv6calc" is distributed under the GNU GPL version 2

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.7 2006/07/10 11:38:19 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.8 2006/08/06 14:12:44 peter Exp $
 # Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -266,6 +266,42 @@ my %text = (
 	'IP2LOCATION_DATABASE_INFO' => {
 		'de' => "IP2Location Datenbank-Information",
 		'en' => "IP2Location database information",
+	},
+	'GEOIP_COUNTRY_SHORT' => {
+		'de' => "GeoIP Länderkennung",
+		'en' => "GeoIP country code",
+	},
+	'GEOIP_COUNTRY_LONG' => {
+		'de' => "GeoIP Land",
+		'en' => "GeoIP country",
+	},
+	'GEOIP_REGION' => {
+		'de' => "GeoIP Region",
+		'en' => "GeoIP region",
+	},
+	'GEOIP_CITY' => {
+		'de' => "GeoIP Stadt",
+		'en' => "GeoIP city",
+	},
+	'GEOIP_LATITUDE' => {
+		'de' => "GeoIP Breitengrad",
+		'en' => "GeoIP latitude",
+	},
+	'GEOIP_LONGITUDE' => {
+		'de' => "GeoIP Längengrad",
+		'en' => "GeoIP longitude",
+	},
+	'GEOIP_DMACODE' => {
+		'de' => "GeoIP DMACODE",
+		'en' => "GeoIP DMACODE",
+	},
+	'GEOIP_AREACODE' => {
+		'de' => "GeoIP AREACODE",
+		'en' => "GeoIP AREACODE",
+	},
+	'GEOIP_DATABASE_INFO' => {
+		'de' => "GeoIP Datenbank-Information",
+		'en' => "GeoIP database information",
 	},
 );
 
