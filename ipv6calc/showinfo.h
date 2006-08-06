@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.h
- * Version    : $Id: showinfo.h,v 1.9 2006/06/12 19:58:30 peter Exp $
+ * Version    : $Id: showinfo.h,v 1.10 2006/08/06 12:44:14 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -17,8 +17,9 @@
 
 /* output version of machine readable format */
 // 1: never defined, until 0.51
-// 2: 0.60.0cvs to current
-#define IPV6CALC_OUTPUT_VERSION	2
+// 2: 0.60.0cvs to 0.60.1
+// 3: 0.61.0cvs to current
+#define IPV6CALC_OUTPUT_VERSION	3
 
 
 /* prototypes */

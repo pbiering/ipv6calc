@@ -28,8 +28,16 @@
 	are NOT distributed with this package because of dedicated licensing is required
 	see here for more: http://www.ip2location.com/
 
+   * GeoIP API code
+	related files have also GPL licence
+	- databases/GeoIP/*
+
+   * GeoIP databases
+	free database is included
+
+
 1. The program "ipv6calc" is distributed under the GNU GPL version 2
     (see COPYING file for more)
 
 
-2006-06-07, Peter Bieringer <pb@bieringer.de>
+2006-08-06, Peter Bieringer <pb@bieringer.de>

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.24 2006/07/10 11:38:19 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.25 2006/08/06 12:44:13 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -43,6 +43,10 @@ int  use_ip2location = 0; /* if set to 1, IP2Location is enabled by option(s) */
 char file_ip2location[NI_MAXHOST] = "";
 #endif
 
+#ifdef SUPPORT_GEOIP
+int  use_geoip = 0; /* if set to 1, GeoIP is enabled by option(s) */
+char file_geoip[NI_MAXHOST] = "";
+#endif
 
 void printversion(void) {
 	fprintf(stderr, "%s: version %s\n", PROGRAM_NAME, PACKAGE_VERSION);
@@ -117,12 +121,25 @@ int main(int argc,char *argv[]) {
 			case 'p':
 #ifdef SUPPORT_IP2LOCATION
 				if (ipv6calc_debug != 0) {
-					fprintf(stderr, "%s: Got IP2Location file: %s\n", DEBUG_function_name, optarg);
+					fprintf(stderr, "%s: Got IP2Location database file: %s\n", DEBUG_function_name, optarg);
 				};
 				strncpy(file_ip2location, optarg, sizeof(file_ip2location) -1 );
 				use_ip2location = 1;
 #else
-				fprintf(stderr, " Support for option -p <path to ip2location database> not compiled in, IP2Location support disabled\n");
+				fprintf(stderr, " Support for option -p <path to IP2Location database> not compiled in, IP2Location support disabled\n");
+#endif
+			
+				break;
+
+			case 'g':
+#ifdef SUPPORT_GEOIP
+				if (ipv6calc_debug != 0) {
+					fprintf(stderr, "%s: Got GeoIP database file: %s\n", DEBUG_function_name, optarg);
+				};
+				strncpy(file_geoip, optarg, sizeof(file_geoip) -1 );
+				use_geoip = 1;
+#else
+				fprintf(stderr, " Support for option -g <path to GeoIP database> not compiled in, GeoIP support disabled\n");
 #endif
 			
 				break;
