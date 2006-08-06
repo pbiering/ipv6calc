@@ -21,7 +21,7 @@
 	IPv4/IPv6 assignment data is taken from registries RIPE NCC, APNIC, ARIN, LACNIC, AfriNIC
 
    * IP2Location API code
-	related files have also GPL licence
+	GPL licence: databases/IP2Location/C-IP2Location-1.1.0/COPYING
 	- databases/IP2Location/*
 
    * IP2Location real databases
@@ -29,7 +29,7 @@
 	see here for more: http://www.ip2location.com/
 
    * GeoIP API code
-	related files have also GPL licence
+	GPL licence: databases/GeoIP/GeoIP-1.3.17/COPYING
 	- databases/GeoIP/*
 
    * GeoIP free databases
