@@ -7,6 +7,9 @@ fi
 
 if [ ipv6calcweb.cgi.in -nt ipv6calcweb.cgi ]; then
 	cat ipv6calcweb.cgi.in | sed s/\@PACKAGE_VERSION\@/test/ >ipv6calcweb.cgi
+fi
+
+if [ ! -x ipv6calcweb.cgi ]; then
 	chmod u+x ipv6calcweb.cgi
 fi
 

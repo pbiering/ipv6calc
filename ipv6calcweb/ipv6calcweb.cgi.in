@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.10 2006/08/06 14:42:50 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.11 2006/08/07 20:14:46 peter Exp $
 # Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -111,7 +111,6 @@ my $outputformat = "htmlfull"; # switched to "html", if called by SSI
 # simple = without description
 my $outputtype = "full";
 #my $outputtype = "simple";
-
 
 ## Select output
 # skip server = 1
@@ -398,6 +397,8 @@ sub print_infohash ($$) {
 	if (! defined $phash) { return; };
 
 	my ($flag_tt, $flag_whoisurl, $whois_registry, $whois_type);
+	my $last_key_embedded = "";
+	my $count_key_embedded = 0;
 
 	if ( ! defined \$phash ) {
 		&print_tagoutput ( "      <tr>\n" );
@@ -422,31 +423,17 @@ sub print_infohash ($$) {
 			next;
 		};
 
-		if ( $key =~ /^IP2LOCATION/ ) {
+		if ( $key =~ /^IP2LOCATION_/ ) {
 			$flag_ip2location_used = 1;
 		};
 
-		if ( $key =~ /^GEOIP/ ) {
+		if ( $key =~ /^GEOIP_/ ) {
 			$flag_geoip_used = 1;
 		};
 
 		# catch internal keys
 		if ( $key =~ /^IPV6CALC_/ ) {
-			if ( $key eq "IPV6CALC_COPYRIGHT" ) {
-				$ipv6calc_copyright = $$phash{$key};
-				$ipv6calc_copyright =~ s/^\"//;
-				$ipv6calc_copyright =~ s/\"$//;
-			};
-			if ( $key eq "IPV6CALC_VERSION" ) {
-				$ipv6calc_version = $$phash{$key};
-				$ipv6calc_version =~ s/^\"//;
-				$ipv6calc_version =~ s/\"$//;
-			};
-			if ( $key eq "IPV6CALC_NAME" ) {
-				$ipv6calc_name = $$phash{$key};
-				$ipv6calc_name =~ s/^\"//;
-				$ipv6calc_name =~ s/\"$//;
-			};
+			# skipped, will be shown in footer
 			next;
 		};
 
@@ -459,6 +446,16 @@ sub print_infohash ($$) {
 		my $key_embedded = "";
 		if (defined $2) {
 			$key_embedded = $2;
+			if ($last_key_embedded eq "") {
+				$last_key_embedded = $key_embedded;
+				$count_key_embedded++;
+			} elsif ( $last_key_embedded ne $key_embedded) {
+				$last_key_embedded = $key_embedded;
+				$count_key_embedded++;
+			};
+		} else {
+			$count_key_embedded = 0;
+			$last_key_embedded = "";
 		};
 
 		if (grep(/^$key_lookup$/, @format_tt)) {
@@ -466,7 +463,15 @@ sub print_infohash ($$) {
 		};
 
 		# print key
-		&print_tagoutput ( "      <tr>\n" );
+		if ($count_key_embedded > 0) {
+			if ($count_key_embedded & 1) {
+				&print_tagoutput ( "      <tr style=\"background-color: rgb(240, 240, 240);\">\n" );
+			} else {
+				&print_tagoutput ( "      <tr style=\"background-color: rgb(224, 224, 224);\">\n" );
+			};
+		} else {
+			&print_tagoutput ( "      <tr>\n" );
+		};
 		&print_tagoutput ( "        <td><b>" );
 		print $key;
 		&print_textonly (' ' x ($length_max_key - length($key)) );
@@ -654,15 +659,34 @@ if ( defined $addr_remote ) {
 		};
 		chomp $content;
 
-		if ( $key =~ /^IP2LOCATION/ ) {
+		if ( $key =~ /^IP2LOCATION_/ ) {
 			$flag_ip2location_used = 1;
 			if ( $content =~ /^This (parameter|record) is unavailable/ ) {
 				$content = "n/a";
 			};
 		};
 
-		if ( $key =~ /^GEOIP/ ) {
+		if ( $key =~ /^GEOIP_/ ) {
 			$flag_geoip_used = 1;
+		};
+
+		# catch internal keys
+		if ( $key =~ /^IPV6CALC_/ ) {
+			if ( $key eq "IPV6CALC_COPYRIGHT" ) {
+				$ipv6calc_copyright = $content;
+				$ipv6calc_copyright =~ s/^\"//;
+				$ipv6calc_copyright =~ s/\"$//;
+			};
+			if ( $key eq "IPV6CALC_VERSION" ) {
+				$ipv6calc_version = $content;
+				$ipv6calc_version =~ s/^\"//;
+				$ipv6calc_version =~ s/\"$//;
+			};
+			if ( $key eq "IPV6CALC_NAME" ) {
+				$ipv6calc_name = $content;
+				$ipv6calc_name =~ s/^\"//;
+				$ipv6calc_name =~ s/\"$//;
+			};
 		};
 
 		$infoh_remote{$key} = $content;
@@ -693,6 +717,29 @@ if ( defined $addr_server ) {
 		if ( $key =~ /^IP2LOCATION/ ) {
 			if ( $content =~ /^This (parameter|record) is unavailable/ ) {
 				$content = "n/a";
+			};
+		};
+
+		if ( $key =~ /^GEOIP_/ ) {
+			$flag_geoip_used = 1;
+		};
+
+		# catch internal keys
+		if ( $key =~ /^IPV6CALC_/ ) {
+			if ( $key eq "IPV6CALC_COPYRIGHT" ) {
+				$ipv6calc_copyright = $content;
+				$ipv6calc_copyright =~ s/^\"//;
+				$ipv6calc_copyright =~ s/\"$//;
+			};
+			if ( $key eq "IPV6CALC_VERSION" ) {
+				$ipv6calc_version = $content;
+				$ipv6calc_version =~ s/^\"//;
+				$ipv6calc_version =~ s/\"$//;
+			};
+			if ( $key eq "IPV6CALC_NAME" ) {
+				$ipv6calc_name = $content;
+				$ipv6calc_name =~ s/^\"//;
+				$ipv6calc_name =~ s/\"$//;
 			};
 		};
 
