@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: test_showinfo.sh,v 1.3 2005/10/21 13:42:33 peter Exp $
+# $Id: test_showinfo.sh,v 1.4 2006/08/07 19:40:11 peter Exp $
 
 
 getexamples() {
@@ -27,6 +27,6 @@ END
 
 getexamples | while read address separator comment; do
 	echo "$comment: $address"
-	./ipv6calc -i -m $address
+	./ipv6calc -q -i -m -p ../databases/IP2Location/C-IP2Location-1.1.0/data/IP-COUNTRY-SAMPLE.BIN -g ../databases/GeoIP/GeoIP-1.3.17/data/GeoIP.dat $address
 	echo
 done
