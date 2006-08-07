@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.135 2006/08/07 19:40:11 peter Exp $ 
+ *  $Id: ChangeLog,v 1.136 2006/08/07 21:33:13 peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,8 @@ Info:
 	ipv6calc/showinfo.c
 	 - make code for printing GeoIP and IP2Location universal for IPv4 and IPv6
 	 - fix missing printout of footer in case of IPv6 address is given
+	ipv6calcweb/ipv6calcweb.cgi
+	 - toggle background for lines with embedded IPv4 address
 	
 20060806/PB
 	<several files>

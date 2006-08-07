@@ -6,7 +6,8 @@ if [ -z "$1" ]; then
 fi
 
 if [ ipv6calcweb.cgi.in -nt ipv6calcweb.cgi ]; then
-	cat ipv6calcweb.cgi.in | sed s/\@PACKAGE_VERSION\@/test/ >ipv6calcweb.cgi
+	version="`cat ../config.h | grep PACKAGE_VERSION | awk '{ print $3 }' | sed 's/"//g'`"
+	cat ipv6calcweb.cgi.in | sed s/\@PACKAGE_VERSION\@/$version/ >ipv6calcweb.cgi
 fi
 
 if [ ! -x ipv6calcweb.cgi ]; then

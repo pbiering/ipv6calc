@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.28 2006/08/07 19:40:11 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.29 2006/08/07 21:33:13 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -263,14 +263,18 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 			printout(tempstring);
 			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_CITY%s=%s", additionalstring, gir->city);
 			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_ZIPCODE%s=%s", additionalstring, gir->postal_code);
+			printout(tempstring);
 			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_LATITUDE%s=%f", additionalstring, gir->latitude);
 			printout(tempstring);
 			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_LONGITUDE%s=%f", additionalstring, gir->longitude);
 			printout(tempstring);
+			/*
 			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_DMACODE%s=%d", additionalstring, gir->dma_code);
 			printout(tempstring);
 			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_AREACODE%s=%d", additionalstring, gir->area_code);
 			printout(tempstring);
+			*/
 		} else {
 			fprintf(stderr, " GeoIP not machinereadable output currently not supported\n");
 		};
