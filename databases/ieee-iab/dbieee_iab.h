@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.19 2006/08/06 14:12:43 peter Exp $
- * Generated     : Sun Aug  6 15:28:26 2006
+ * Version       : $Id: dbieee_iab.h,v 1.20 2006/08/28 20:24:05 peter Exp $
+ * Generated     : Mon Aug 28 21:49:57 2006
  * Data copyright: IEEE
  *
  * Information:
@@ -52,7 +52,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x025000, 0x025FFF, "Teracom Telematica Ltda.", "TERACOM-TELEMATICA-LTDA" },
 	{ 0x0050C2, 0x026000, 0x026FFF, "Abatis Systems Corp.", "ABATIS" },
 	{ 0x0050C2, 0x027000, 0x027FFF, "Industrial Control Links", "INDUSTRIAL-CONTROL-LINKS" },
-	{ 0x0050C2, 0x028000, 0x028FFF, "The Frensch Corporation", "THE-FRENSCH" },
+	{ 0x0050C2, 0x028000, 0x028FFF, "The Frensch Corporation (Pty) Ltd.", "THE-FRENSCH-PTY" },
 	{ 0x0050C2, 0x029000, 0x029FFF, "Grossenbacher Systeme AG", "GROSSENBACHER-SYSTEME" },
 	{ 0x0050C2, 0x02A000, 0x02AFFF, "VersaLogic Corp.", "VERSALOGIC" },
 	{ 0x0050C2, 0x02B000, 0x02BFFF, "Nova Engineering Inc.", "NOVA-ENGINEERING" },
@@ -1593,5 +1593,33 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x62C000, 0x62CFFF, "AirMatrix, Inc.", "AIRMATRIX" },
 	{ 0x0050C2, 0x62D000, 0x62DFFF, "Procon Electronics", "PROCON-ELECTRONICS" },
 	{ 0x0050C2, 0x62E000, 0x62EFFF, "TDM ingÈnierie", "TDM-INGÈNIERIE" },
+	{ 0x0050C2, 0x62F000, 0x62FFFF, "QES", "QES" },
+	{ 0x0050C2, 0x630000, 0x630FFF, "Aurora Flight Sciences", "AURORA-FLIGHT-SCIENCES" },
+	{ 0x0050C2, 0x631000, 0x631FFF, "Fraunhofer IIS", "FRAUNHOFER-IIS" },
+	{ 0x0050C2, 0x632000, 0x632FFF, "RoseTechnology A/S", "ROSETECHNOLOGY-A/S" },
+	{ 0x0050C2, 0x633000, 0x633FFF, "Rice University", "RICE-UNIVERSITY" },
+	{ 0x0050C2, 0x634000, 0x634FFF, "Sohon Inc", "SOHON" },
+	{ 0x0050C2, 0x635000, 0x635FFF, "Shockfish SA", "SHOCKFISH" },
+	{ 0x0050C2, 0x636000, 0x636FFF, "dSPACE GmbH", "DSPACE" },
+	{ 0x0050C2, 0x637000, 0x637FFF, "Omnitrol Networks, Inc.", "OMNITROL-NETWORKS" },
+	{ 0x0050C2, 0x638000, 0x638FFF, "HUNGAROCOM Telecommunication Ltd.", "HUNGAROCOM-TELECOMMUNICATION" },
+	{ 0x0050C2, 0x639000, 0x639FFF, "Qstreams Networks Inc.", "QSTREAMS-NETWORKS" },
+	{ 0x0050C2, 0x63A000, 0x63AFFF, "3DSP Corporation", "3DSP" },
+	{ 0x0050C2, 0x63B000, 0x63BFFF, "Powis Corporation", "POWIS" },
+	{ 0x0050C2, 0x63C000, 0x63CFFF, "dPict Imaging, Inc.", "DPICT-IMAGING" },
+	{ 0x0050C2, 0x63D000, 0x63DFFF, "IDERs Inc", "IDERS" },
+	{ 0x0050C2, 0x63E000, 0x63EFFF, "T2 Communication Ltd", "T2-COMMUNICATION" },
+	{ 0x0050C2, 0x63F000, 0x63FFFF, "Speech Technology Center, Ltd.", "SPEECH-CENTER" },
+	{ 0x0050C2, 0x640000, 0x640FFF, "IAC", "IAC" },
+	{ 0x0050C2, 0x641000, 0x641FFF, "NEO Information Systems Co., Ltd.", "NEO-INFORMATION" },
+	{ 0x0050C2, 0x642000, 0x642FFF, "Stanton Technologies Sdn Bhd", "STANTON-TECHNOLOGIES-SDN-BHD" },
+	{ 0x0050C2, 0x643000, 0x643FFF, "Enatel Limited", "ENATEL" },
+	{ 0x0050C2, 0x644000, 0x644FFF, "Phytec Meﬂtechnik GmbH", "PHYTEC-MEﬂTECHNIK" },
+	{ 0x0050C2, 0x645000, 0x645FFF, "The Software Group Limited", "THE-SOFTWARE-GROUP" },
+	{ 0x0050C2, 0x646000, 0x646FFF, "TRUTOUCH TECHNOLOGIES INC", "TRUTOUCH-TECHNOLOGIES" },
+	{ 0x0050C2, 0x647000, 0x647FFF, "R&D Technology Solutionz Limited", "R-D-SOLUTIONZ" },
+	{ 0x0050C2, 0x648000, 0x648FFF, "Fidelity Comtech, Inc.", "FIDELITY-COMTECH" },
+	{ 0x0050C2, 0x649000, 0x649FFF, "Pan-STARRS", "PAN-STARRS" },
+	{ 0x0050C2, 0x64A000, 0x64AFFF, "CPqD", "CPQD" },
 
 };

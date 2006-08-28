@@ -1,16 +1,22 @@
 /*
- *  $Id: ChangeLog,v 1.136 2006/08/07 21:33:13 peter Exp $ 
+ *  $Id: ChangeLog,v 1.137 2006/08/28 20:24:05 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 	NT = Niko Tynii <ntyni (at) iki dot fi>
 --------------------------------------------------------------------
+20060828/PB
+	ipv6calcweb/ipv6calcweb.cgi.in
+	 - remove non-ascii chars on GEOIP_DATABASE_INFO
+	update databases
+	tag version 0.61.0
+
 20060807/PB
 	ipv6calc/showinfo.c
 	 - make code for printing GeoIP and IP2Location universal for IPv4 and IPv6
 	 - fix missing printout of footer in case of IPv6 address is given
-	ipv6calcweb/ipv6calcweb.cgi
+	ipv6calcweb/ipv6calcweb.cgi.in
 	 - toggle background for lines with embedded IPv4 address
 	
 20060806/PB
