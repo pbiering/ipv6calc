@@ -1,0 +1,36 @@
+IP2Location 2.1.0
+=================
+
+IP2Location is a C library that enables the user to find the country, region, city, latitude, longitude, zip code, time zone, ISP, domain name and connection type by IP address or hostname originates from.  It contains a demo IP2Location IP-COUNTRY BIN database which consists of real data for IP address range 0.0.0.0 to 99.255.255.255.  This database contains IP address blocks as key and countries as values.  The paid version of IP2Location database covers all IP address range. In general, it is more complete, fast and accurate than using reverse DNS lookups. Developers can download other sample databases to evaluate other features such as region, city, latitude, longitude, zip code, ISP and domain name using the same C library.
+
+For more details, please visit:
+http://www.ip2location.com/c.htm
+http://www.ip2location.com/developers.htm
+
+This version also supports IP2Location IPv6.
+
+Installation
+------------
+cd C-IP2Location-<version>
+autoreconf -i -v --force
+./configure
+make
+
+
+Testing
+-------
+cd C-IP2Location-<version>
+cd test
+test-IP2Location
+
+
+Download More Sample Databases
+------------------------------
+cd C-IP2Location-<version>
+wget http://www.ip2location.com/developers/samples-db14.zip
+unzip samples-db14.zip
+
+
+For support, please email support@ip2location.com.
+
+http://www.ip2location.com
