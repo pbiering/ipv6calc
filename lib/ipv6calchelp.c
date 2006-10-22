@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.13 2006/06/12 19:55:18 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.14 2006/10/22 10:50:32 peter Exp $
  * Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -238,10 +238,16 @@ void printhelp(void) {
 	fprintf(stderr, " Other usage:\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "  --showinfo|-i [--machine_readable|-m] : show information about input data\n");
-#ifdef SUPPORT_IP2LOCATION
-	fprintf(stderr, "  [-p <file>]                           : IP2Location datafile (optional\n");
-#endif
 	fprintf(stderr, "  --showinfo|-i --show_types            : show available types on '-m'\n");
+#ifdef SUPPORT_IP2LOCATION
+	fprintf(stderr, "\n");
+	fprintf(stderr, "  [--db-ip2location-ipv4 <file>] : IP2Location IPv4 database file (optional)\n");
+	fprintf(stderr, "  [--db-ip2location-ipv6 <file>] : IP2Location IPv6 database file (optional)\n");
+#endif
+#ifdef SUPPORT_GEOIP
+	fprintf(stderr, "\n");
+	fprintf(stderr, "  [--db-geoip <file>]            : GeoIP database file (optional)\n");
+#endif
 	fprintf(stderr, "\n");
 	fprintf(stderr, " To see old-style option use: --printoldoptions\n");
 	fprintf(stderr, "\n");

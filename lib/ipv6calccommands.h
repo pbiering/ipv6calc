@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calccommands.h
- * Version    : $Id: ipv6calccommands.h,v 1.1 2002/04/21 11:31:25 peter Exp $
+ * Version    : $Id: ipv6calccommands.h,v 1.2 2006/10/22 10:50:32 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -44,5 +44,10 @@
 
 #define CMD_showinfo			0x001001
 #define CMD_showinfotypes		0x001002
+
+/* database options */
+#define DB_ip2location_ipv4		0x002001
+#define DB_ip2location_ipv6		0x002002
+#define DB_geoip			0x002011
 
 #endif
