@@ -1,10 +1,10 @@
-$Id: USAGE,v 1.3 2006/06/07 20:46:58 peter Exp $
+$Id: USAGE,v 1.4 2006/10/22 11:57:52 peter Exp $
 
 File: ipv6calc/ipv6calc
 	see docs/ipv6calc.html for more
 
 Example for IP2Location information:
-$ ./ipv6calc/ipv6calc -p databases/IP2Location/C-IP2Location-1.1.0/data/IP-COUNTRY-SAMPLE.BIN -q -m -i 66.1.2.3
+$ ./ipv6calc/ipv6calc --db-ip2location-ipv4 /path/to/IP-COUNTRY-SAMPLE.BIN -q -m -i 66.1.2.3
 IPV4=66.1.2.3
 IPV4_REGISTRY=ARIN
 IP2LOCATION_COUNTRY_SHORT=US

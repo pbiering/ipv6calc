@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.138 2006/10/22 10:59:19 peter Exp $ 
+ *  $Id: ChangeLog,v 1.139 2006/10/22 11:57:52 peter Exp $ 
  */
 
 Info:
@@ -20,6 +20,7 @@ Info:
 	    -g <file> => --db-geoip <file>
 	 - new option
 	    --db-ip2location-ipv6 <file>
+	update databases
 
 20060828/PB
 	ipv6calcweb/ipv6calcweb.cgi.in
