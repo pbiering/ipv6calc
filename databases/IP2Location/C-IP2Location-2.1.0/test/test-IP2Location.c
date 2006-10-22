@@ -20,6 +20,7 @@
  */
 
 #include <IP2Location.h>
+#include <string.h>
 
 int main () {
   FILE *f;

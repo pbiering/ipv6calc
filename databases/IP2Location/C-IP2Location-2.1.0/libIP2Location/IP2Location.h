@@ -36,7 +36,8 @@ extern "C" {
 #ifdef _SUN_
 	#include <stdint.h>
 #else
-	#define uint8_t unsigned char
+	#include <stdint.h>
+/*	#define uint8_t unsigned char */
 #endif
 #include <bigd.h>
 

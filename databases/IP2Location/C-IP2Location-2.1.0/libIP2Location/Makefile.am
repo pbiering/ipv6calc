@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = foreign
 
-AM_CPPFLAGS = -I. -pipe -D _GNU_SOURCE -D_SUN_
+AM_CPPFLAGS = -I. -pipe -D _GNU_SOURCE
 AM_CXXFLAGS = -Wall -Werror
 
 pkglib_LTLIBRARIES = libIP2Location.la

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: test_showinfo.sh,v 1.5 2006/08/07 21:33:13 peter Exp $
+# $Id: test_showinfo.sh,v 1.6 2006/10/22 10:59:19 peter Exp $
 
 
 getexamples() {
@@ -22,11 +22,12 @@ fe80::210:a489:ab01:2345		# link-local autoconfig EUI-64
 fe80::fefc:acff:fe10:fe01		# link-local autoconf on ISDN interface
 2001:7b0:ffff::1			# Productive IPv6
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF	# Teredo
+2001:a60:f011::1			# Productive IPv6
 END
 }
 
 getexamples | while read address separator comment; do
 	echo "$comment: $address"
-	./ipv6calc -q -i -m -p ../databases/IP2Location/C-IP2Location-1.1.0/data/IP-COUNTRY-SAMPLE.BIN -g ../databases/GeoIP/GeoIP-1.3.17/data/GeoLiteCity.dat $address
+	./ipv6calc -q -i -m --db-ip2location-ipv4 ../databases/IP2Location/IP-COUNTRY-SAMPLE.BIN --db-ip2location-ipv6 ../databases/IP2Location/IPV6-COUNTRY.BIN --db-geoip ../databases/GeoIP/GeoLiteCity.dat $address || exit 1
 	echo
 done

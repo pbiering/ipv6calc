@@ -57,6 +57,12 @@
 /* Define if you want IP2Location support. */
 #undef SUPPORT_IP2LOCATION
 
+/* Version of GeoIP API. */
+#undef VERSION_GEOIP
+
+/* Version of IP2Location API. */
+#undef VERSION_IP2LOCATION
+
 /* Define to 1 if your processor stores words with the most significant byte
    first (like Motorola and SPARC, unlike Intel and VAX). */
 #undef WORDS_BIGENDIAN

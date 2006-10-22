@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.29 2006/08/07 21:33:13 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.30 2006/10/22 10:59:19 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -28,8 +28,10 @@
 
 #ifdef SUPPORT_IP2LOCATION
 #include "IP2Location.h"
-extern int use_ip2location;
-extern char file_ip2location[NI_MAXHOST];
+extern int use_ip2location_ipv4;
+extern int use_ip2location_ipv6;
+extern char file_ip2location_ipv4[NI_MAXHOST];
+extern char file_ip2location_ipv6[NI_MAXHOST];
 #endif
 
 #ifdef SUPPORT_GEOIP
@@ -120,21 +122,31 @@ static void printfooter(const uint32_t formatoptions) {
 #ifdef SUPPORT_IP2LOCATION
 /* print IP2Location information */
 #define DEBUG_function_name "showinfo/print_ip2location"
-static void print_ip2location(const char *addrstring, const uint32_t formatoptions, const char *additionalstring) {
+static void print_ip2location(const char *addrstring, const uint32_t formatoptions, const char *additionalstring, int version) {
 
 	static int flag_ip2location_info_shown = 0;
 
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable);
 	char tempstring[NI_MAXHOST] = "";
+	char *file_ip2location;
+
+	if (version == 4) {
+		file_ip2location = file_ip2location_ipv4;
+	} else if (version == 6) {
+		file_ip2location = file_ip2location_ipv6;
+	} else {
+		fprintf(stderr, " IP2LOCATION version %d not supported\n", version);
+		return;
+	};
 
 	if (strlen(file_ip2location) == 0) {
 		/* no file given, nothing more todo */
-		fprintf(stderr, " IP2LOCATION database file not given\n");
+		fprintf(stderr, " IP2LOCATION IPv%d database file not given\n", version);
 		return;
 	};
 
 	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-		fprintf(stderr, "%s: IP2LOCATION try to open database: %s\n", DEBUG_function_name, file_ip2location);
+		fprintf(stderr, "%s: IP2LOCATION try to open IPv%d database: %s\n", DEBUG_function_name, version, file_ip2location);
 	};
 
 	IP2Location *IP2LocationObj = IP2Location_open(file_ip2location);
@@ -155,7 +167,7 @@ static void print_ip2location(const char *addrstring, const uint32_t formatoptio
 		flag_ip2location_info_shown = 1;
 
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DATABASE_INFO=url=http://www.ip2location.com date=%04d-%02d-%02d entries=%d", IP2LocationObj->databaseyear + 2000, IP2LocationObj->databasemonth + 1, IP2LocationObj->databaseday, IP2LocationObj->databasecount);
+			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DATABASE_INFO=url=http://www.ip2location.com date=%04d-%02d-%02d entries=%d apiversion=%s", IP2LocationObj->databaseyear + 2000, IP2LocationObj->databasemonth + 1, IP2LocationObj->databaseday, IP2LocationObj->databasecount, VERSION_IP2LOCATION);
 			printout(tempstring);
 		};
 	};
@@ -307,7 +319,7 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 			flag_geoip_info_shown = 1;
 
 			if ( machinereadable != 0 ) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_DATABASE_INFO=%s", GeoIP_database_info(gi));
+				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_DATABASE_INFO=%s apiversion=%s", GeoIP_database_info(gi), VERSION_GEOIP);
 				printout(tempstring);
 			};
 		};
@@ -380,8 +392,8 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 #ifdef SUPPORT_IP2LOCATION
 	/* IP2Location information */
-	if (use_ip2location == 1) {
-		print_ip2location(tempipv4string, formatoptions, embeddedipv4string);
+	if (use_ip2location_ipv4 == 1) {
+		print_ip2location(tempipv4string, formatoptions, embeddedipv4string, 4);
 	};
 #endif
 
@@ -832,13 +844,8 @@ END:
 
 #ifdef SUPPORT_IP2LOCATION
 	/* IP2Location information */
-	if (use_ip2location == 1) {
-		/* C-API at least version 1.1.0 currently doesn't support IPv6, while related database is available */
-		if ((formatoptions & FORMATOPTION_quiet) == 0) {
-			fprintf(stderr, "%s: IP2Location C-API currently misses support of IPv6\n", DEBUG_function_name);
-		};
-
-		// print_ip2location(ipv6addrstring, formatoptions, "");
+	if (use_ip2location_ipv6 == 1) {
+		print_ip2location(ipv6addrstring, formatoptions, "", 6);
 	};
 #endif
 

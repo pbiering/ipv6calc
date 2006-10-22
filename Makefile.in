@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.54 2006/08/06 13:18:37 peter Exp $
+# Version    : $Id: Makefile.in,v 1.55 2006/10/22 10:59:19 peter Exp $
 # Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -39,9 +39,9 @@ distclean:
 		${MAKE} clean
 		rm -f config.cache config.status config.log
 		rm -rf autom4te.cache
-		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt databases/ieee-oui databases/ieee-iab databases/ipv4-assignment databases/ipv6-assignment databases/IP2Location/C-IP2Location-1.1.0 databases/GeoIP/GeoIP-1.3.17; do \
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt databases/ieee-oui databases/ieee-iab databases/ipv4-assignment databases/ipv6-assignment databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@ databases/GeoIP/GeoIP-@VERSION_GEOIP@; do \
 			ocwd=`pwd`; \
-			cd $$dir; \
+			cd $$dir || exit 1; \
 			${MAKE} $@ ; \
 			rm -rf autom4te.cache; \
 			cd $$ocwd ; \
@@ -54,15 +54,15 @@ autoclean:
 		rm config.h
 		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt; do \
 			ocwd=`pwd`; \
-			cd $$dir; \
+			cd $$dir || exit 1; \
 			${MAKE} $@ ; \
 			cd $$ocwd ; \
 		done
 
 clean:
-		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt databases/IP2Location/C-IP2Location-1.1.0 databases/GeoIP/GeoIP-1.3.17; do \
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@ databases/GeoIP/GeoIP-@VERSION_GEOIP@; do \
 			ocwd=`pwd`; \
-			cd $$dir; \
+			cd $$dir || exit 1; \
 			${MAKE} $@ ; \
 			cd $$ocwd ; \
 		done
@@ -74,7 +74,7 @@ install:
 installonly:
 		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt; do \
 			ocwd=`pwd`; \
-			cd $$dir; \
+			cd $$dir || exit 1; \
 			${MAKE} install; \
 			cd $$ocwd ; \
 		done
@@ -114,26 +114,25 @@ db-ipv6-assignment-make:
 
 ip2location-make:
 		# check for existence of object file
-		test -f databases/IP2Location/C-IP2Location-1.1.0/libIP2Location/IP2Location.o || ${MAKE} ip2location-makereal
+		test -f databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@/libIP2Location/IP2Location.o || ${MAKE} ip2location-makereal
 		# check for object file newer than source file
-		test databases/IP2Location/C-IP2Location-1.1.0/libIP2Location/IP2Location.o -nt databases/IP2Location/C-IP2Location-1.1.0/libIP2Location/IP2Location.c || ${MAKE} ip2location-makereal
+		test databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@/libIP2Location/IP2Location.o -nt databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@/libIP2Location/IP2Location.c || ${MAKE} ip2location-makereal
 
 ip2location-makereal:
-			( cd databases/IP2Location/C-IP2Location-1.1.0; \
-			autoreconf -i -v --force; \
-			cd databases/IP2Location/C-IP2Location-1.1.0; \
-			./configure; \
+			( cd databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@ || exit 1 ; \
+			autoreconf -i -v --force || exit 1; \
+			./configure || exit 1; \
 			${MAKE}; \
 			)
 
 geoip-make:
 		# check for existence of object file
-		test -f databases/GeoIP/GeoIP-1.3.17/libGeoIP/GeoIP.o || ${MAKE} geoip-makereal
+		test -f databases/GeoIP/GeoIP-@VERSION_GEOIP@/libGeoIP/GeoIP.o || ${MAKE} geoip-makereal
 
 geoip-makereal:
-			( cd databases/GeoIP/GeoIP-1.3.17; \
-			./bootstrap; \
-			./configure; \
+			( cd databases/GeoIP/GeoIP-@VERSION_GEOIP@ || exit 1; \
+			./bootstrap || exit 1; \
+			./configure || exit 1; \
 			${MAKE}; \
 			${MAKE} check; \
 			)
@@ -141,7 +140,7 @@ geoip-makereal:
 update:
 		for dir in databases/ieee-oui databases/ieee-iab databases/registries; do \
 			ocwd=`pwd`; \
-			cd $$dir; \
+			cd $$dir || exit 1; \
 			${MAKE} $@ ; \
 			cd $$ocwd ; \
 		done
@@ -149,7 +148,7 @@ update:
 static:		ipv6logconv-make ipv6logstats-make ipv6calc-make	
 		for dir in ipv6logconv ipv6logstats ipv6calc; do \
 			ocwd=`pwd`; \
-			cd $$dir; \
+			cd $$dir || exit 1; \
 			${MAKE} $@ ; \
 			cd $$ocwd ; \
 		done
@@ -157,7 +156,7 @@ static:		ipv6logconv-make ipv6logstats-make ipv6calc-make
 test:
 		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib; do \
 			ocwd=`pwd`; \
-			cd $$dir; \
+			cd $$dir || exit 1; \
 			${MAKE} $@ ; \
 			cd $$ocwd ; \
 		done

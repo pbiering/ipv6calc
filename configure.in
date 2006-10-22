@@ -1,9 +1,16 @@
 dnl Project: ipv6calc
 dnl File   : configure.in
-dnl Version: $Id: configure.in,v 1.14 2006/08/28 20:24:05 peter Exp $
+dnl Version: $Id: configure.in,v 1.15 2006/10/22 10:59:19 peter Exp $
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(ipv6calc, 0.61.0, ipv6calc@deepspace6.net, ipv6calc)
+AC_INIT(ipv6calc, 0.62.0cvs, ipv6calc@deepspace6.net, ipv6calc)
+
+dnl Define versions of built-in IP location database APIs
+VERSION_IP2LOCATION=2.1.0
+VERSION_GEOIP=1.4.0
+
+AC_DEFINE(VERSION_IP2LOCATION, "2.1.0", Version of IP2Location API.)
+AC_DEFINE(VERSION_GEOIP, "1.4.0", Version of GeoIP API.)
 
 dnl Define version header
 AC_CONFIG_HEADER(config.h)
@@ -35,6 +42,7 @@ AC_ARG_ENABLE([ip2location],
 		AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location support.)
 	fi])
 AC_SUBST(ENABLE_SUPPORT_IP2LOCATION)
+AC_SUBST(VERSION_IP2LOCATION)
 
 AC_ARG_ENABLE([geoip], 
 	AS_HELP_STRING([--enable-geoip],
@@ -44,5 +52,6 @@ AC_ARG_ENABLE([geoip],
 		AC_DEFINE(SUPPORT_GEOIP, 1, Define if you want GeoIP support.)
 	fi])
 AC_SUBST(ENABLE_SUPPORT_GEOIP)
+AC_SUBST(VERSION_GEOIP)
 
 AC_OUTPUT([Makefile ipv6calc/Makefile man/Makefile ipv6logconv/Makefile ipv6logstats/Makefile contrib/ipv6calc.spec ipv6calcweb/ipv6calcweb.cgi ])

@@ -80,8 +80,6 @@ AC_DEFINE_DIR(LOCALESTATEDIR, localstatedir, [where to put logs etc])
 AC_DEFINE_DIR(LIBDIR, libdir, [where to look for plugins])
 AC_DEFINE_DIR(SYSCONFDIR, [sysconfdir], [System configuration dir])
 
-AC_CONFIG_FILES([Makefile
-                 libIP2Location/Makefile
-                 test/Makefile])
+AC_CONFIG_FILES([Makefile libIP2Location/Makefile test/Makefile])
                  
 AC_OUTPUT
