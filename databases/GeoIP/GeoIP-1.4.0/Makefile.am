@@ -6,7 +6,6 @@ SUBDIRS =		\
 	libGeoIP	\
 	apps		\
 	conf		\
-	test		\
 	man		\
 	$(NULL)
 
