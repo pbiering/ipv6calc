@@ -1,6 +1,6 @@
 # Project    : ipv6calc/lib
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.19 2006/06/12 19:52:19 peter Exp $
+# Version    : $Id: Makefile,v 1.20 2006/10/28 09:29:30 peter Exp $
 # Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -11,7 +11,7 @@
 #  -D__EXTENSIONS__ is for Solaris & strtok_r
 COPTS = -O2 -Wall -D__EXTENSIONS__
 
-CFLAGS	= $(COPTS) -I../ -I../getopt/ -I../md5/
+CFLAGS	= $(COPTS) -I../ $(GETOPT_INCLUDE) -I../md5/
 
 CC	= gcc
 AR	= ar

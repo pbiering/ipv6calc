@@ -14,6 +14,11 @@ Source: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/ipv6calc-%{version}.tar.g
 
 BuildRoot: %{_tmppath}/ipv6calc-root
 
+if %{?_with_geoip_system}
+BuildPreReq: GeoIP-devel
+Requires: GeoIP
+fi
+
 %description
 ipv6calc is a small utility which formats and calculates IPv6 addresses in
 different ways.
@@ -26,13 +31,13 @@ Many more format conversions are supported, see given URL for more.
 
 Available rpmbuild rebuild options:
 --with : ip2location
---with : geoip
+--with : geoip [geoip-system]
 
 %prep
 %setup -q -n ipv6calc-%{version}
 
 %build
-./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?_with_ip2location:--enable-ip2location} %{?_with_geoip:--enable-geoip}
+./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?_with_ip2location:--enable-ip2location} %{?_with_geoip:--enable-geoip} %{?_with_geoip_system:--enable-geoip-system}
 make clean
 make
 make test
@@ -102,11 +107,14 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Oct 28 2006 Peter Bieringer <pb@bieringer.de>
+- add support for build option --with-geoip-system
+
 * Sun Aug 06 2006 Peter Bieringer <pb@bieringer.de>
-- add support for rebuild option --with-geoip
+- add support for build option --with-geoip
 
 * Wed Jun 07 2006 Peter Bieringer <pb@bieringer.de>
-- add support for rebuild option --with-ip2location
+- add support for build option --with-ip2location
 
 * Wed Jul 20 2005 Peter Bieringer <pb@bieringer.de>
 - adjust code because of use of /usr/bin in Makefile of ivp6calc

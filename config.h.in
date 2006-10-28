@@ -1,5 +1,11 @@
 /* config.h.in.  Generated from configure.in by autoheader.  */
 
+/* Define if you want to use GeoIP system library support. */
+#undef ENABLE_GEOIP_SYSTEM
+
+/* Define for a default GeoIP database file. */
+#undef GEOIP_DEFAULT_FILE
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
@@ -51,7 +57,7 @@
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
-/* Define if you want GeoIP support. */
+/* Define if you want to use GeoIP support. */
 #undef SUPPORT_GEOIP
 
 /* Define if you want IP2Location support. */

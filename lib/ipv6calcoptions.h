@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.11 2006/10/22 10:50:32 peter Exp $
+ * Version    : $Id: ipv6calcoptions.h,v 1.12 2006/10/28 09:29:30 peter Exp $
  * Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -34,7 +34,7 @@
  *  i = showinfo
  *  q = be more quiet
  */
-/*@unused@*/ static char *ipv6calc_shortopts = "vh?rmabd:iulqUFCI:O:A:";
+/*@unused@*/ static char *ipv6calc_shortopts = "vh?rmabd:iulqGUFCI:O:A:";
 
 /* define long options */
 /*@unused@*/ static struct option ipv6calc_longopts[] = {
@@ -45,6 +45,7 @@
 	{"db-ip2location-ipv4", 1, 0, DB_ip2location_ipv4},
 	{"db-ip2location-ipv6", 1, 0, DB_ip2location_ipv6},
 	{"db-geoip", 1, 0, DB_geoip},
+	{"db-geoip-default", 1, 0, (int) 'G'},
 
 	/* help options */
 	{"help", 0, 0, (int) 'h'},

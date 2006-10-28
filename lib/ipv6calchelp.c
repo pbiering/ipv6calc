@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.14 2006/10/22 10:50:32 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.15 2006/10/28 09:29:30 peter Exp $
  * Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -247,6 +247,10 @@ void printhelp(void) {
 #ifdef SUPPORT_GEOIP
 	fprintf(stderr, "\n");
 	fprintf(stderr, "  [--db-geoip <file>]            : GeoIP database file (optional)\n");
+#ifdef GEOIP_DEFAULT_FILE
+	fprintf(stderr, "  [--db-geoip-default|-G]        : enable & use GeoIP default database file (optional):\n");
+	fprintf(stderr, "                                    %s\n", GEOIP_DEFAULT_FILE);
+#endif
 #endif
 	fprintf(stderr, "\n");
 	fprintf(stderr, " To see old-style option use: --printoldoptions\n");

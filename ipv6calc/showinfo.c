@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.30 2006/10/22 10:59:19 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.31 2006/10/28 09:29:30 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -319,7 +319,11 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 			flag_geoip_info_shown = 1;
 
 			if ( machinereadable != 0 ) {
+#ifdef ENABLE_GEOIP_SYSTEM
+				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_DATABASE_INFO=%s apiversion=system", GeoIP_database_info(gi));
+#else
 				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_DATABASE_INFO=%s apiversion=%s", GeoIP_database_info(gi), VERSION_GEOIP);
+#endif
 				printout(tempstring);
 			};
 		};

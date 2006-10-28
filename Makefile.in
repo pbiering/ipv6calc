@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.55 2006/10/22 10:59:19 peter Exp $
+# Version    : $Id: Makefile.in,v 1.56 2006/10/28 09:29:29 peter Exp $
 # Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -10,36 +10,41 @@
 # Compiler and Linker Options
 COPTS = -O2 -Wall -g
 
-CFLAGS	= $(COPTS) -Igetopt/
+ifeq (@ENABLE_BUNDLED_GETOPT@, 1)
+  GETOPT_MAKE = getopt-make
+  GETOPT_DIR  = getopt
+endif
+
+CFLAGS = $(COPTS) -I$(GETOPT_DIR)
 
 CC	= gcc
-
-GETOBJS	= getopt/getopt.o getopt/getopt1.o md5/md5.o
 
 ifeq (@ENABLE_SUPPORT_IP2LOCATION@, 1)
   IP2LOCATION_MAKE = ip2location-make
 endif
 ifeq (@ENABLE_SUPPORT_GEOIP@, 1)
-  GEOIP_MAKE = geoip-make
+  ifeq (, @ENABLE_SYSTEM_GEOIP@)
+    GEOIP_MAKE = geoip-make
+  endif
 endif
 
-all:		md5-make getopt-make ipv6calc ipv6logconv ipv6logstats
+all:		md5-make $(GETOPT_MAKE) ipv6calc ipv6logconv ipv6logstats
 
 .c.o:
 		$(CC) $(CFLAGS) -c $<
 
 
-ipv6logconv:	getopt-make lib-make ipv6logconv-make
+ipv6logconv:	$(GETOPT_MAKE) lib-make ipv6logconv-make
 
-ipv6logstats:	getopt-make lib-make ipv6logstats-make
+ipv6logstats:	$(GETOPT_MAKE) lib-make ipv6logstats-make
 
-ipv6calc:	getopt-make lib-make ipv6calc-make ipv6calcweb-make
+ipv6calc:	$(GETOPT_MAKE) lib-make ipv6calc-make ipv6calcweb-make
 
 distclean:
 		${MAKE} clean
 		rm -f config.cache config.status config.log
 		rm -rf autom4te.cache
-		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt databases/ieee-oui databases/ieee-iab databases/ipv4-assignment databases/ipv6-assignment databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@ databases/GeoIP/GeoIP-@VERSION_GEOIP@; do \
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 $(GETOPT_MAKE) databases/ieee-oui databases/ieee-iab databases/ipv4-assignment databases/ipv6-assignment databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@ databases/GeoIP/GeoIP-@VERSION_GEOIP@; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} $@ ; \
@@ -52,7 +57,7 @@ autoclean:
 		rm -f Makefile
 		rm -f contrib/ipv6calc.spec
 		rm config.h
-		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt; do \
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 $(GETOPT_MAKE); do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} $@ ; \
@@ -60,7 +65,7 @@ autoclean:
 		done
 
 clean:
-		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@ databases/GeoIP/GeoIP-@VERSION_GEOIP@; do \
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 $(GETOPT_MAKE) databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@ databases/GeoIP/GeoIP-@VERSION_GEOIP@; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} $@ ; \
@@ -72,7 +77,7 @@ install:
 		${MAKE} installonly
 
 installonly:
-		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt; do \
+		for dir in ipv6logconv ipv6logstats ipv6calcweb ipv6calc man lib md5 $(GETOPT_MAKE); do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} install; \
@@ -86,7 +91,7 @@ md5-make:
 		cd md5 && ${MAKE}
 
 lib-make:	md5-make db-ieee-oui-make db-ieee-iab-make db-ipv4-assignment-make db-ipv6-assignment-make
-		cd lib && ${MAKE}
+		cd lib && ${MAKE} GETOPT_INCLUDE=@GETOPT_INCLUDE@
 
 ipv6logconv-make: lib-make
 		cd ipv6logconv && ${MAKE}

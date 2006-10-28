@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.26 2006/10/22 10:59:19 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.27 2006/10/28 09:29:30 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -47,7 +47,11 @@ char file_ip2location_ipv6[NI_MAXHOST] = "";
 
 #ifdef SUPPORT_GEOIP
 int  use_geoip = 0; /* if set to 1, GeoIP is enabled by option(s) */
+#ifdef GEOIP_DEFAULT_FILE
+char file_geoip[NI_MAXHOST] = GEOIP_DEFAULT_FILE;
+#else
 char file_geoip[NI_MAXHOST] = "";
+#endif
 #endif
 
 void printversion(void) {
@@ -155,6 +159,15 @@ int main(int argc,char *argv[]) {
 				fprintf(stderr, " Support for option '--db-geoip <GeoIP database file>' not compiled in, GeoIP support disabled\n");
 #endif
 				break;
+
+			case 'G':
+#ifdef GEOIP_DEFAULT_FILE
+				use_geoip = 1;
+#else
+				fprintf(stderr, " Support for option '--db-geoip-default|-G' not compiled in, GeoIP support disabled\n");
+#endif
+				break;
+
 
 			case CMD_printexamples:
 				command = CMD_printexamples;

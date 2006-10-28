@@ -1,11 +1,19 @@
 /*
- *  $Id: ChangeLog,v 1.139 2006/10/22 11:57:52 peter Exp $ 
+ *  $Id: ChangeLog,v 1.140 2006/10/28 09:29:29 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 	NT = Niko Tynii <ntyni (at) iki dot fi>
 --------------------------------------------------------------------
+20061028/NT+PB
+	GeoIP support
+	 - add new configure options
+	    --enable-geoip-system: use system GeoIP library
+	    --enable-geoip-default-file: specify default database file
+	Getopts support
+	 - configure detects now the presence of system getopts library
+	
 20061021/PB
 	IP2Location support
 	 - update to API 2.1.0 (which supports IPv6 now)

@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6logconv
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.12 2005/11/19 21:14:38 peter Exp $
+# Version    : $Id: Makefile.in,v 1.13 2006/10/28 09:29:30 peter Exp $
 # Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -13,9 +13,9 @@ exec_prefix     = @exec_prefix@
 # Compiler and Linker Options
 COPTS = -O2 -Wall -g -D__EXTENSIONS__
 
-CFLAGS	= $(COPTS) -I../getopt/ -I../ -I../lib/
+CFLAGS	= $(COPTS) @GETOPT_INCLUDE@ -I../ -I../lib/
 
-GETOBJS = ../getopt/getopt.o ../getopt/getopt1.o
+GETOBJS = @LIBOBJS@
 
 CC	= gcc
 
