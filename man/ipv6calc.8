@@ -1,8 +1,16 @@
 .TH "ipv6calc" "8" "0.0.2" "Masamichi Goudge M.D. <Matanuki@Goudge.org>" "system administration"
+.de EX
+.nf
+.ft CW
+..
+.de EE
+.ft R
+.fi
+..
 .SH "NAME"
 .LP 
 ipv6calc \- a small utility written in C to manipulate IPv6 addresses.
-.SH "SYNTAX"
+.SH "SYNOPSIS"
 .LP 
 ipv6calc [\fIoption\fP] \fB<input data>\fR
 .SH "DESCRIPTION"
@@ -22,7 +30,7 @@ Usage with new style options :
 .TP 
 \fB[\-\-in <input type>]\fR : specify input  type (default: autodetect)
 We can see available \fBinput types\fR to type "ipv6calc \-\-in \-?", "ipv6calc \-\-in \-h" or "ipv6calc \-\-in \-\-help" . 
-.TP 
+.LP 
 Available \fBinput types\fR :
 .TP 
 \fBauto\fR : automatic detection
@@ -48,13 +56,13 @@ Available \fBinput types\fR :
 \fBipv6logconv\fR : ipv6logconv (currently not supported)
 .TP 
 \fBprefix+mac\fR : IPv6 prefix and a MAC address
-.TP 
+.LP 
 For examples and available format options use:
-.br 
-\-\-in \fB<type>\fR \-\-examples
-.TP 
+.EX 
+\-\-in \fB<type>\fR \-\-examples 
 \fB[\-\-out <output type>]\fR : specify output type (sometimes: autodetect)
-.TP 
+.EE
+.LP
 We can see available \fBoutput types\fR to type "ipv6calc \-\-out \-?", "ipv6calc \-\-out \-h" or "ipv6calc \-\-out \-\-help".
 .TP 
 Available \fBoutput types\fR :
@@ -114,7 +122,7 @@ Available \fBaction types\fR :
 \fB[<format option> ...]\fR : specify format options
 .TP 
 \fB<input data> [...]\fR : input data.
-.br 
+.sp 
 For example, "\fB127.0.0.1\fR", "\fB::1\fR".
 .TP 
 \fBOther usage\fR : 

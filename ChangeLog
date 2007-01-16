@@ -1,11 +1,16 @@
 /*
- *  $Id: ChangeLog,v 1.140 2006/10/28 09:29:29 peter Exp $ 
+ *  $Id: ChangeLog,v 1.141 2007/01/16 18:43:09 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 	NT = Niko Tynii <ntyni (at) iki dot fi>
+	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 --------------------------------------------------------------------
+20070116/ESR
+	man/ipv6calc.8
+	 - code fixes
+
 20061028/NT+PB
 	GeoIP support
 	 - add new configure options

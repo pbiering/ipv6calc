@@ -5,6 +5,9 @@ Credits to
    - some help on configure.in
    - contribution of patches
 
+* Eric S. Raymond <esr (at) thyrsus dot com>
+   - contribution of patch for man page
+
 * Authors of ircd
    for RFC 1884 decompress algorithmus
 
