@@ -1,0 +1,63 @@
+# Project    : ipv6calc/ipv6loganon
+# File       : Makefile
+# Version    : $Id: Makefile.in,v 1.1 2007/01/30 17:00:37 peter Exp $
+# Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
+#
+# Information:
+#  Makefile for ipv6loganon
+#
+
+prefix          = @prefix@
+exec_prefix     = @exec_prefix@
+
+# Compiler and Linker Options
+COPTS = -O2 -Wall -g -D__EXTENSIONS__
+
+CFLAGS	= $(COPTS) @GETOPT_INCLUDE@ -I../ -I../lib/
+
+GETOBJS = @LIBOBJS@
+
+CC	= gcc
+
+OBJS	= ipv6loganon.o ipv6loganonhelp.o
+
+# splint
+SPLINT_OPT_OUTSIDE = -uniondef +matchanyintegral --nullassign +ignoresigns -compdef -usedef -modobserver -formatconst -warnposix -exportlocal
+SPLINT_TODO_LATER = -unrecog -retvalint
+
+all:		ipv6loganon
+
+.c.o:
+		$(CC) $(CFLAGS) -c $<
+
+$(OBJS):	ipv6loganonoptions.h ipv6loganonhelp.h ipv6loganon.h
+
+libipv6calc.a:
+		cd ../ && ${MAKE} lib-make
+
+ipv6loganon:	$(OBJS) libipv6calc.a
+		$(CC) -o ipv6loganon $(OBJS) $(GETOBJS) -lipv6calc -L../lib/ $(LDFLAGS)
+
+static:		ipv6loganon
+		$(CC) -o ipv6loganon-static $(OBJS) $(GETOBJS) -lipv6calc -L../lib/ -static $(LDFLAGS)
+
+distclean:
+		${MAKE} clean
+
+autoclean:
+		${MAKE} distclean
+
+clean:
+		rm -f ipv6loganon ipv6loganon-static *.o
+
+test:		
+		${MAKE} all
+		./test_ipv6loganon.sh
+
+splint:
+		splint *.c ../lib/*.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)
+
+install:	ipv6loganon
+		mkdir -p $(root)@bindir@
+		install -m 755 ipv6loganon $(root)@bindir@
+	
