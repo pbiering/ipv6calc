@@ -1,11 +1,11 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconvoptions.h
- * Version    : $Id: ipv6logconvoptions.h,v 1.4 2005/02/12 16:33:54 peter Exp $
- * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logconvoptions.h,v 1.5 2007/01/30 15:46:45 peter Exp $
+ * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
- *  Header file containing optios for ipvlogconv.c
+ *  Header file containing options for ipvlogconv.c
  */ 
 
 #include <getopt.h> 
