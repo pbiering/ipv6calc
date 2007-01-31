@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1924.c
- * Version    : $Id: librfc1924.c,v 1.8 2006/06/07 06:27:46 peter Exp $
- * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc1924.c,v 1.9 2007/01/31 15:10:31 peter Exp $
+ * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  *              and 2006 by Niko Tyni <ntyni (at) iki.fi>
  *
  * Information:
@@ -46,9 +46,8 @@ static char librfc1924_charset[] = {
  * algorithm, just with digits in strange bases
  */
 
-char *pk85(uint16_t *words)
+void pk85(uint16_t *words, char *ret)
 {
-	static char ret[21];
 	uint16_t buf[8]; /* working space */
 	uint32_t accu;
 	int i,j;
@@ -74,12 +73,11 @@ char *pk85(uint16_t *words)
 		ret[19 - i] = librfc1924_charset[accu];
 	}
 	ret[20] = '\0';
-	return ret;
+	return;
 }
 
-uint16_t *unpk85(char *b)
+void unpk85(char *b, uint16_t *ret)
 {
-	static uint16_t ret[8];
 	int buf[20]; /* working space */
 	uint32_t accu;
 	int i, j;
@@ -95,7 +93,7 @@ uint16_t *unpk85(char *b)
 		accu = 0;
 		for (j = 0; j < 20; j++) {
 			accu = accu * 85 + buf[j];
-			if (accu & 0xffff0000) {      /* >= 2**16  */
+			if ((accu & 0xffff0000) != 0) {      /* >= 2**16  */
 				buf[j] = accu >> 16;  /* quotient  */
 				accu = accu & 0xffff; /* remainder */
 			} else {
@@ -105,7 +103,7 @@ uint16_t *unpk85(char *b)
 		/* reverse, as the least significant digit comes out first */
 		ret[7 - i] = accu;
 	}
-	return ret;
+	return;
 }
 
 /*
@@ -120,13 +118,15 @@ int ipv6addrstruct_to_base85(const ipv6calc_ipv6addr *ipv6addrp, char *resultstr
 	int retval = 1, i;
 
 	uint16_t words[8];
+	char ret[21];
 
 	for (i=0; i < 8; i++) {
 		words[i] = ipv6addr_getword(ipv6addrp, i) ;
 	};
 
-	/* convert */	
-	snprintf(resultstring, NI_MAXHOST - 1, "%s", pk85(words) );	
+	/* convert */
+	pk85(words, ret);
+	snprintf(resultstring, NI_MAXHOST - 1, "%s", ret);	
 
 	retval = 0;	
 	return (retval);
@@ -143,7 +143,7 @@ int ipv6addrstruct_to_base85(const ipv6calc_ipv6addr *ipv6addrp, char *resultstr
 int base85_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1, i;
 	char tempstring[NI_MAXHOST];
-	uint16_t *result;
+	uint16_t result[8];
 
 	retval = librfc1924_formatcheck(addrstring, resultstring);
 
@@ -159,7 +159,7 @@ int base85_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6cal
 
 	strncpy(tempstring, addrstring, sizeof(tempstring) - 1);
 		
-	result = unpk85(tempstring);
+	unpk85(tempstring, result);
 
 	/* Clear IPv6 address structure */
 	ipv6addr_clear(ipv6addrp);
