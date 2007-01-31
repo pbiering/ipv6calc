@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganonhelp.c
- * Version    : $Id: ipv6loganonhelp.c,v 1.1 2007/01/30 17:00:37 peter Exp $
+ * Version    : $Id: ipv6loganonhelp.c,v 1.2 2007/01/31 16:27:32 peter Exp $
  * Copyright  : 2007 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
@@ -47,11 +47,11 @@ void ipv6loganon_printhelp(void) {
 	fprintf(stderr, "                               default: %d\n", cache_lru_limit);
 	fprintf(stderr, "                               maximum: %d\n", CACHE_LRU_SIZE);
 	fprintf(stderr, " Output anonymization:\n");
-	fprintf(stderr, "  --mask-ipv4 <bits>     : mask IPv4 address [0-32], default 8\n");
-	fprintf(stderr, "  --mask-ipv6-net <bits> : mask IPv6 network [0-32], default 16\n");
-	fprintf(stderr, "  --mask-eui-id          : mask ID in 48/64 bit EUI-ID\n");
+	fprintf(stderr, "  --mask-ipv4 <bits>     : mask all IPv4 addresses [0-32], default 8\n");
+	fprintf(stderr, "                            even if occurs in IPv6-IID\n");
+	fprintf(stderr, "  --no-mask-iid          : do not mask non-IPv4 based IPv6-IID\n");
 	fprintf(stderr, "  --anonymize-standard   : preset for standard anonymization\n");
-	fprintf(stderr, "                            mask-ipv4=8 mask-ipv6-net=16 mask-eui-id\n");
+	fprintf(stderr, "  (default)                 mask-ipv4=8 mask-iid\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, " Takes data from stdin, proceed it to stdout\n");
 	fprintf(stderr, "\n");
