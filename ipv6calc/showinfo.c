@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.32 2007/01/31 12:40:28 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.33 2007/01/31 16:26:08 peter Exp $
  * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -358,7 +358,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		fprintf(stderr, "Error converting IPv4 address: %s\n", tempipv4string);
 	};
 
-	if (formatoptions & FORMATOPTION_printembedded) {
+	if ((formatoptions & FORMATOPTION_printembedded) != 0) {
 		snprintf(embeddedipv4string, sizeof(embeddedipv4string) - 1, "[%s]", tempipv4string);
 	};
 	
@@ -690,13 +690,13 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		};	
 
 		/* extract Teredo client UDP port */
-		port = ((unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) 10) << 8 | (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) 11)) ^ 0xffff;
+		port = (uint16_t) (((uint16_t) ipv6addr_getoctett(ipv6addrp, (unsigned int) 10) << 8 | (uint16_t) ipv6addr_getoctett(ipv6addrp, (unsigned int) 11)) ^ 0xffff);
 
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "TEREDO_PORT_CLIENT=%d", port);
+			snprintf(tempstring, sizeof(tempstring) - 1, "TEREDO_PORT_CLIENT=%u", (unsigned int) port);
 			printout(tempstring);
 		} else {
-			fprintf(stdout, "Address type is Teredo and included IPv4 server address is: %s and client port: %d\n", helpstring, port);
+			fprintf(stdout, "Address type is Teredo and included IPv4 server address is: %s and client port: %u\n", helpstring, (unsigned int) port);
 		};
 
 		/* get registry string */
@@ -882,7 +882,7 @@ END:
 int showinfo_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formatoptions) {
 	int retval = 1;
 
-	print_ipv4addr(ipv4addrp, formatoptions, NULL);
+	print_ipv4addr(ipv4addrp, formatoptions, "");
 
 	printfooter(formatoptions);
 	retval = 0;
