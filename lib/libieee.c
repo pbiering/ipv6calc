@@ -1,11 +1,11 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.7 2005/09/15 12:32:21 peter Exp $
- * Copyright  : 2002-2004 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libieee.c,v 1.8 2007/01/31 16:21:47 peter Exp $
+ * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
- *  Function libary for IEEE information
+ *  Function library for IEEE information
  */
 
 #include <stdio.h>

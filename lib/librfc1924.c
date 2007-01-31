@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1924.c
- * Version    : $Id: librfc1924.c,v 1.9 2007/01/31 15:10:31 peter Exp $
+ * Version    : $Id: librfc1924.c,v 1.10 2007/01/31 16:21:47 peter Exp $
  * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  *              and 2006 by Niko Tyni <ntyni (at) iki.fi>
  *
@@ -78,7 +78,7 @@ void pk85(uint16_t *words, char *ret)
 
 void unpk85(char *b, uint16_t *ret)
 {
-	int buf[20]; /* working space */
+	uint32_t buf[20]; /* working space */
 	uint32_t accu;
 	int i, j;
 
@@ -121,7 +121,7 @@ int ipv6addrstruct_to_base85(const ipv6calc_ipv6addr *ipv6addrp, char *resultstr
 	char ret[21];
 
 	for (i=0; i < 8; i++) {
-		words[i] = ipv6addr_getword(ipv6addrp, i) ;
+		words[i] = ipv6addr_getword(ipv6addrp, (unsigned int) i) ;
 	};
 
 	/* convert */
@@ -165,8 +165,8 @@ int base85_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6cal
 	ipv6addr_clear(ipv6addrp);
 
 	/* fill IPv6 address structure */
-	for (i=0; i<8; i++) {
-		ipv6addr_setword(ipv6addrp, i, result[i]);
+	for (i = 0; i < 8; i++) {
+		ipv6addr_setword(ipv6addrp, (unsigned int) i, (unsigned int) result[i]);
 	};
 	
 	/* Get scope */

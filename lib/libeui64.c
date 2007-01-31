@@ -1,11 +1,11 @@
 /*
  * Project    : ipv6calc
  * File       : libeui64.c
- * Version    : $Id: libeui64.c,v 1.1 2002/03/18 19:59:23 peter Exp $
- * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libeui64.c,v 1.2 2007/01/31 16:21:47 peter Exp $
+ * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
- *  Function libary for conversions defined in EUI-64
+ *  Function library EUI-64 identifier handling
  */
 
 #include <stdio.h>

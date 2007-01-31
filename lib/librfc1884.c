@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.c
- * Version    : $Id: librfc1884.c,v 1.6 2005/09/15 12:32:21 peter Exp $
- * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc1884.c,v 1.7 2007/01/31 16:21:47 peter Exp $
+ * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for conversions defined in RFC 1884
@@ -136,7 +136,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 			fprintf(stderr, "%s: IPV6_ADDR_COMPATv4 type - fast conversion\n", DEBUG_function_name);
 		};
 		
-		result = snprintf(tempstring, sizeof(tempstring) - 1, "::%u.%u.%u.%u", ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
+		result = snprintf(tempstring, sizeof(tempstring) - 1, "::%u.%u.%u.%u", (unsigned int) ipv6addrp->in6_addr.s6_addr[12], (unsigned int) ipv6addrp->in6_addr.s6_addr[13], (unsigned int) ipv6addrp->in6_addr.s6_addr[14], (unsigned int) ipv6addrp->in6_addr.s6_addr[15]);
 		retval = 0;
 	} else if ( (ipv6addrp->scope & IPV6_ADDR_MAPPED) != 0 ) {
 		/* mapped address */
@@ -145,7 +145,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 			fprintf(stderr, "%s: IPV6_ADDR_MAPPED type - fast conversion\n", DEBUG_function_name);
 		};
 		
-		result = snprintf(tempstring, sizeof(tempstring) - 1, "::%x:%u.%u.%u.%u", ipv6addr_getword(ipv6addrp, 5), ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
+		result = snprintf(tempstring, sizeof(tempstring) - 1, "::%x:%u.%u.%u.%u", (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addrp->in6_addr.s6_addr[12], (unsigned int) ipv6addrp->in6_addr.s6_addr[13], (unsigned int) ipv6addrp->in6_addr.s6_addr[14], (unsigned int) ipv6addrp->in6_addr.s6_addr[15]);
 		retval = 0;
 	} else if ( (ipv6addr_getdword(ipv6addrp, 0) == 0) && (ipv6addr_getdword(ipv6addrp, 1) == 0) && (ipv6addr_getdword(ipv6addrp, 2) == 0) && (ipv6addr_getdword(ipv6addrp, 3) == 0) ) {
 		/* unspecified address */
@@ -296,7 +296,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 
 
 	if ( ( retval == 0 ) && ( ipv6addrp->flag_prefixuse == 1 ) ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "%s/%u", tempstring, ipv6addrp->prefixlength);
+		snprintf(resultstring, NI_MAXHOST - 1, "%s/%u", tempstring, (unsigned int) ipv6addrp->prefixlength);
 	} else {
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
 	};

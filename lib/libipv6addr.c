@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.29 2007/01/31 15:10:31 peter Exp $
- * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv6addr.c,v 1.30 2007/01/31 16:21:47 peter Exp $
+ * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Function library for IPv6 address handling
@@ -300,7 +300,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 		};
 	};
 
-	if (st == 0x3FFE831Fu || st == 0x20010000u) {
+	if (st == (uint32_t) 0x3FFE831Fu || st == (uint32_t) 0x20010000u) {
 		/* 3ffe:831f::/32 -> Teredo (6bone, older draft) */
 		/* 2001:0000::/32 -> Teredo (RFC 4380) */
 		type |= IPV6_NEW_ADDR_TEREDO;
@@ -312,12 +312,12 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 		type |= IPV6_NEW_ADDR_PRODUCTIVE;
 	};
 	
-	if ((st2 == 0x00000001u) && (st3 & 0xFF000000u) == 0xFF000000u) {
+	if ((st2 == (uint32_t) 0x00000001u) && (st3 & 0xFF000000u) == 0xFF000000u) {
 		/* ..:0000:0001:ffxx:xxxx solicited node suffix */
 		type |= IPV6_NEW_ADDR_SOLICITED_NODE;
 	};
 
-	if (st2 == 0x00005EFEu && ((type & IPV6_NEW_ADDR_TEREDO) == 0)) {
+	if (st2 == (uint32_t) 0x00005EFEu && ((type & IPV6_NEW_ADDR_TEREDO) == 0)) {
 		/* ..:0000:5EFE:xx.xx.xx.xx ISATAP suffix (RFC 4214) */
 		/* but not if TEREDO */
 		type |= IPV6_NEW_ADDR_ISATAP;
@@ -460,7 +460,12 @@ int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, char *re
 		};
 
 		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-			fprintf(stderr, "%s: Found match: prefix=%08x%08x mask=%08x%08x  registry=%s (entry: %d)\n", DEBUG_function_name, dbipv6addr_assignment[i].ipv6addr_00_31, dbipv6addr_assignment[i].ipv6addr_32_63, dbipv6addr_assignment[i].ipv6mask_00_31, dbipv6addr_assignment[i].ipv6mask_32_63, dbipv6addr_assignment[i].string_registry, i);
+			fprintf(stderr, "%s: Found match: prefix=%08x%08x mask=%08x%08x  registry=%s (entry: %d)\n", DEBUG_function_name, \
+				(unsigned int) dbipv6addr_assignment[i].ipv6addr_00_31, \
+				(unsigned int) dbipv6addr_assignment[i].ipv6addr_32_63, \
+				(unsigned int) dbipv6addr_assignment[i].ipv6mask_00_31, \
+				(unsigned int) dbipv6addr_assignment[i].ipv6mask_32_63, \
+				dbipv6addr_assignment[i].string_registry, i);
 		};
 		match = i;
 	};
@@ -601,7 +606,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 		/* check compat */
 		for ( i = 0; i <= 3; i++ ) {
 			if ( compat[i] > 255 )	{
-				snprintf(resultstring, NI_MAXHOST - 1, "Error, given compatv4/mapped address '%s' is not valid (%d)!", addrstring, compat[i]);
+				snprintf(resultstring, NI_MAXHOST - 1, "Error, given compatv4/mapped address '%s' is not valid on position %d!", addrstring, i);
 				retval = 1;
 				return (retval);
 			};
@@ -628,7 +633,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	/* check address words range */
 	for ( i = 0; i <= 7; i++ ) {
 		if ( (temp[i] < 0) || (temp[i] > 0xffff) )	{
-			snprintf(resultstring, NI_MAXHOST - 1, "Error, given address '%s' is not valid on position %d (%x)!", addronlystring, i, temp[i]);
+			snprintf(resultstring, NI_MAXHOST - 1, "Error, given address '%s' is not valid on position %d!", addronlystring, i);
 			retval = 1;
 			return (retval);
 		};
@@ -692,21 +697,61 @@ static int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char
 	/* print array */
 	if ( (ipv6addrp->scope & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)) != 0 ) {
 		if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "%04x:%04x:%04x:%04x:%04x:%04x:%u.%u.%u.%u", ipv6addr_getword(ipv6addrp, 0), ipv6addr_getword(ipv6addrp, 1), ipv6addr_getword(ipv6addrp, 2), ipv6addr_getword(ipv6addrp, 3), ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
+			snprintf(tempstring, sizeof(tempstring) - 1, "%04x:%04x:%04x:%04x:%04x:%04x:%u.%u.%u.%u", \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 0), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 1), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 2), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 3), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 4), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 5), \
+				(unsigned int) ipv6addrp->in6_addr.s6_addr[12], \
+				(unsigned int) ipv6addrp->in6_addr.s6_addr[13], \
+				(unsigned int) ipv6addrp->in6_addr.s6_addr[14], \
+				(unsigned int) ipv6addrp->in6_addr.s6_addr[15]  \
+			);
 		} else {
-			snprintf(tempstring, sizeof(tempstring) - 1, "%x:%x:%x:%x:%x:%x:%u.%u.%u.%u", (unsigned int) ipv6addr_getword(ipv6addrp, 0), (unsigned int) ipv6addr_getword(ipv6addrp, 1), (unsigned int) ipv6addr_getword(ipv6addrp, 2), (unsigned int) ipv6addr_getword(ipv6addrp, 3), (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addrp->in6_addr.s6_addr[12], (unsigned int) ipv6addrp->in6_addr.s6_addr[13], (unsigned int) ipv6addrp->in6_addr.s6_addr[14], (unsigned int) ipv6addrp->in6_addr.s6_addr[15]);
+			snprintf(tempstring, sizeof(tempstring) - 1, "%x:%x:%x:%x:%x:%x:%u.%u.%u.%u", \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 0), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 1), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 2), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 3), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 4), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 5), \
+				(unsigned int) ipv6addrp->in6_addr.s6_addr[12], \
+				(unsigned int) ipv6addrp->in6_addr.s6_addr[13], \
+				(unsigned int) ipv6addrp->in6_addr.s6_addr[14], \
+				(unsigned int) ipv6addrp->in6_addr.s6_addr[15]  \
+			);
 		};
 	} else {
 		if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "%04x:%04x:%04x:%04x:%04x:%04x:%04x:%04x", ipv6addr_getword(ipv6addrp, 0), ipv6addr_getword(ipv6addrp, 1), ipv6addr_getword(ipv6addrp, 2), ipv6addr_getword(ipv6addrp, 3), ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addr_getword(ipv6addrp, 6), ipv6addr_getword(ipv6addrp, 7));
+			snprintf(tempstring, sizeof(tempstring) - 1, "%04x:%04x:%04x:%04x:%04x:%04x:%04x:%04x", \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 0), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 1), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 2), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 3), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 4), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 5), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 6), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 7)  \
+			);
 		} else {
-			snprintf(tempstring, sizeof(tempstring) - 1, "%x:%x:%x:%x:%x:%x:%x:%x", (unsigned int) ipv6addr_getword(ipv6addrp, 0), (unsigned int) ipv6addr_getword(ipv6addrp, 1), (unsigned int) ipv6addr_getword(ipv6addrp, 2), (unsigned int) ipv6addr_getword(ipv6addrp, 3), (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addr_getword(ipv6addrp, 6), (unsigned int) ipv6addr_getword(ipv6addrp, 7));
+			snprintf(tempstring, sizeof(tempstring) - 1, "%x:%x:%x:%x:%x:%x:%x:%x", \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 0), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 1), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 2), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 3), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 4), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 5), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 6), \
+				(unsigned int) ipv6addr_getword(ipv6addrp, 7)  \
+			);
 		};
 	};
 
 	if (ipv6addrp->flag_prefixuse == 1) {
 		/* append prefix length */
-		snprintf(resultstring, NI_MAXHOST - 1, "%s/%u", tempstring, ipv6addrp->prefixlength);
+		snprintf(resultstring, NI_MAXHOST - 1, "%s/%u", tempstring, (unsigned int) ipv6addrp->prefixlength);
 	} else {
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
 	};
@@ -745,21 +790,21 @@ static int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp
 		return (retval);
 	};
 
-	max = ( ipv6addrp->prefixlength - 1 ) / 16;
+	max = ( (unsigned int) ipv6addrp->prefixlength - 1 ) / 16u;
 	i = 0;
 	tempstring1[0] = '\0';
 	while (i <= max ) {
 		if ( i < max ) {
 			if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
-				snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%04x:", tempstring1, ipv6addr_getword(ipv6addrp, i));
+				snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%04x:", tempstring1, (unsigned int) ipv6addr_getword(ipv6addrp, i));
 			} else {
-				snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%x:", tempstring1, ipv6addr_getword(ipv6addrp, i));
+				snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%x:", tempstring1, (unsigned int) ipv6addr_getword(ipv6addrp, i));
 			};
 		} else {
 			if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
-				snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%04x", tempstring1, ipv6addr_getword(ipv6addrp, i));
+				snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%04x", tempstring1, (unsigned int) ipv6addr_getword(ipv6addrp, i));
 			} else {
-				snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%x", tempstring1, ipv6addr_getword(ipv6addrp, i));
+				snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%x", tempstring1, (unsigned int) ipv6addr_getword(ipv6addrp, i));
 			};
 		};
 		i++;
@@ -807,23 +852,28 @@ static int ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp
 	};
 
 	max = 7;
-	i   = ipv6addrp->prefixlength / 16;
+	i = (unsigned int) ipv6addrp->prefixlength / 16u;
 	tempstring1[0] = '\0';
 	while (i <= max ) {
 		if ( ( ( ipv6addrp->scope & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)) != 0 ) && ( i == 6 ) ) {
-			snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%u.%u.%u.%u", tempstring1, ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
+			snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%u.%u.%u.%u", tempstring1, \
+				(unsigned int) ipv6addrp->in6_addr.s6_addr[12], \
+				(unsigned int) ipv6addrp->in6_addr.s6_addr[13], \
+				(unsigned int) ipv6addrp->in6_addr.s6_addr[14], \
+				(unsigned int) ipv6addrp->in6_addr.s6_addr[15]  \
+			);
 			i = max;
 		} else if ( i < max ) {
 			if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
-				snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%04x:", tempstring1, ipv6addr_getword(ipv6addrp, i));
+				snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%04x:", tempstring1, (unsigned int) ipv6addr_getword(ipv6addrp, i));
 			} else {
-				snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%x:", tempstring1, ipv6addr_getword(ipv6addrp, i));
+				snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%x:", tempstring1, (unsigned int) ipv6addr_getword(ipv6addrp, i));
 			};
 		} else {
 			if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
-				snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%04x", tempstring1, ipv6addr_getword(ipv6addrp, i));
+				snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%04x", tempstring1, (unsigned int) ipv6addr_getword(ipv6addrp, i));
 			} else {
-				snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%x", tempstring1, ipv6addr_getword(ipv6addrp, i));
+				snprintf(tempstring2, sizeof(tempstring2) - 1, "%s%x", tempstring1, (unsigned int) ipv6addr_getword(ipv6addrp, i));
 			};
 		};
 		i++;
@@ -1000,7 +1050,12 @@ int tokenlsb64_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv
 	};
 
 	/* set prefix */
-	snprintf(tempstring, sizeof(tempstring) - 1,  "0:0:0:0:%04x:%04x:%04x:%04x", temp[0], temp[1], temp[2], temp[3]);
+	snprintf(tempstring, sizeof(tempstring) - 1,  "0:0:0:0:%04x:%04x:%04x:%04x", \
+		(unsigned int) temp[0] ,\
+		(unsigned int) temp[1], \
+		(unsigned int) temp[2], \
+		(unsigned int) temp[3]  \
+	);
 
 	/* store into structure */
 	retval = addr_to_ipv6addrstruct(tempstring, resultstring, ipv6addrp);
@@ -1060,7 +1115,12 @@ int libipv6addr_ipv6addrstruct_to_tokenlsb64(const ipv6calc_ipv6addr *ipv6addrp,
 	int retval = 1;
 	
 	/* print array */
-	snprintf(resultstring, NI_MAXHOST - 1, "%04x%04x%04x%04x", ipv6addr_getword(ipv6addrp, 4), ipv6addr_getword(ipv6addrp, 5), ipv6addr_getword(ipv6addrp, 6), ipv6addr_getword(ipv6addrp, 7));
+	snprintf(resultstring, NI_MAXHOST - 1, "%04x%04x%04x%04x", \
+		(unsigned int) ipv6addr_getword(ipv6addrp, 4), \
+		(unsigned int) ipv6addr_getword(ipv6addrp, 5), \
+		(unsigned int) ipv6addr_getword(ipv6addrp, 6), \
+		(unsigned int) ipv6addr_getword(ipv6addrp, 7)  \
+	);
 
 	if ( (formatoptions & FORMATOPTION_printlowercase) != 0 ) {
 		/* nothing to do */
@@ -1091,9 +1151,43 @@ int libipv6addr_to_octal(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring,
 	char tempstring[NI_MAXHOST];
 
 	if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
-		snprintf(tempstring, sizeof(tempstring) - 1, "\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o", ipv6addrp->in6_addr.s6_addr[0], ipv6addrp->in6_addr.s6_addr[1], ipv6addrp->in6_addr.s6_addr[2], ipv6addrp->in6_addr.s6_addr[3], ipv6addrp->in6_addr.s6_addr[4], ipv6addrp->in6_addr.s6_addr[5], ipv6addrp->in6_addr.s6_addr[6], ipv6addrp->in6_addr.s6_addr[7], ipv6addrp->in6_addr.s6_addr[8], ipv6addrp->in6_addr.s6_addr[9], ipv6addrp->in6_addr.s6_addr[10], ipv6addrp->in6_addr.s6_addr[11], ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
+		snprintf(tempstring, sizeof(tempstring) - 1, "\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o",
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[0],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[1],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[2],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[3],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[4],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[5],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[6],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[7],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[8],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[9],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[10], \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[11], \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[12], \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[13], \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[14], \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[15]  \
+		);
 	} else {
-		snprintf(tempstring, sizeof(tempstring) - 1, "\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o", ipv6addrp->in6_addr.s6_addr[0], ipv6addrp->in6_addr.s6_addr[1], ipv6addrp->in6_addr.s6_addr[2], ipv6addrp->in6_addr.s6_addr[3], ipv6addrp->in6_addr.s6_addr[4], ipv6addrp->in6_addr.s6_addr[5], ipv6addrp->in6_addr.s6_addr[6], ipv6addrp->in6_addr.s6_addr[7], ipv6addrp->in6_addr.s6_addr[8], ipv6addrp->in6_addr.s6_addr[9], ipv6addrp->in6_addr.s6_addr[10], ipv6addrp->in6_addr.s6_addr[11], ipv6addrp->in6_addr.s6_addr[12], ipv6addrp->in6_addr.s6_addr[13], ipv6addrp->in6_addr.s6_addr[14], ipv6addrp->in6_addr.s6_addr[15]);
+		snprintf(tempstring, sizeof(tempstring) - 1, "\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o",
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[0],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[1],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[2],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[3],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[4],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[5],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[6],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[7],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[8],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[9],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[10], \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[11], \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[12], \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[13], \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[14], \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[15]  \
+		);
 	};
 
 	snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);

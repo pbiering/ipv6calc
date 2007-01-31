@@ -1,11 +1,11 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.9 2005/09/15 12:32:21 peter Exp $
- * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libmac.c,v 1.10 2007/01/31 16:21:47 peter Exp $
+ * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
- *  Function libary for conversions of MAC addresses
+ *  Function library MAC address handling
  */
 
 #include <stdio.h>
@@ -83,7 +83,7 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 	/* check address words range */
 	for ( i = 0; i <= 5; i++ ) {
 		if ( ( temp[i] < 0x0 ) || ( temp[i] > 0xff ) )    {
-			snprintf(resultstring, NI_MAXHOST - 1, "Error, given MAC address '%s' is not valid on position %d (%x)!", addrstring, i, temp[i]);
+			snprintf(resultstring, NI_MAXHOST - 1, "Error, given MAC address '%s' is not valid on position %d!", addrstring, i);
 			retval = 1;
 			return (retval);
 		};
