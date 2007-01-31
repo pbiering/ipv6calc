@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.31 2006/10/28 09:29:30 peter Exp $
- * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: showinfo.c,v 1.32 2007/01/31 12:40:28 peter Exp $
+ * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Function to show information about a given IPv6 address
@@ -679,8 +679,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			ipv4addr_setoctett(&ipv4addr2, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) 4 + i));
 		};
 
-		print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "TEREDO-SERVER");
-		print_ipv4addr(&ipv4addr2, formatoptions | FORMATOPTION_printembedded, "TEREDO-CLIENT");
+		print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "TEREDO-CLIENT");
+		print_ipv4addr(&ipv4addr2, formatoptions | FORMATOPTION_printembedded, "TEREDO-SERVER");
 
 		retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, helpstring, 0);
 		if ( retval != 0 ) {
