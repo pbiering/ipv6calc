@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6loganon
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.2 2007/01/31 16:27:32 peter Exp $
+# Version    : $Id: Makefile.in,v 1.3 2007/02/01 14:39:57 peter Exp $
 # Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -53,6 +53,7 @@ clean:
 test:		
 		${MAKE} all
 		./test_ipv6loganon.sh
+		./test_ipv6loganon.sh bulk
 
 splint:
 		splint *.c ../lib/*.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)
