@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.2 2007/01/31 16:27:32 peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.3 2007/02/01 14:38:47 peter Exp $
 # Copyright  : 2007 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -82,7 +82,7 @@ if [ "$1" != "bulk" ]; then
 		echo "IN   : $input"
 		echo "CHECK: $result"
 		# get result
-		output="`echo "$input" | ./ipv6loganon -q`"
+		output="`echo "$input" | ./ipv6loganon`"
 		echo "OUT  : $output"
 		retval=$?
 		if [ $retval -ne 0 ]; then
@@ -110,7 +110,7 @@ else
 		exit 1
 	fi
 	echo "Test without cache"
-	testscenarios_cache | grep -v "^#" | ./ipv6loganon -q -n
+	testscenarios_cache | grep -v "^#" | ./ipv6loganon -n
 	retval=$?
 	if [ $retval -ne 0 ]; then
 		echo "Error executing 'ipv6loganon'!" >&2
