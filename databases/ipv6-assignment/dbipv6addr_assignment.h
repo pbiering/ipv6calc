@@ -1,8 +1,8 @@
  /*
  * Project       : ipv6calc
  * File          : dbipv6_assignment.h
- * Version       : $Id: dbipv6addr_assignment.h,v 1.16 2006/10/22 11:57:53 peter Exp $
- * Generated     : Sun Oct 22 13:40:27 2006
+ * Version       : $Id: dbipv6addr_assignment.h,v 1.17 2007/02/01 14:41:41 peter Exp $
+ * Generated     : Thu Feb  1 14:22:20 2007
  * Data copyright: IANA ARIN RIPENCC APNIC LACNIC AFRINIC
  *
  * Information:
@@ -40,6 +40,7 @@ static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 	{ 0x200107fa, 0x00000002, 0xffffffff, 0xffffffff,  64, "APNIC" },
 	{ 0x200107fa, 0x00000003, 0xffffffff, 0xffffffff,  64, "APNIC" },
 	{ 0x200107fa, 0x00100000, 0xffffffff, 0xffff0000,  48, "APNIC" },
+	{ 0x200107fa, 0x00110000, 0xffffffff, 0xffff0000,  48, "APNIC" },
 	{ 0x200107fa, 0x00010000, 0xffffffff, 0xffff0000,  48, "APNIC" },
 	{ 0x200107fa, 0x00020000, 0xffffffff, 0xffff0000,  48, "APNIC" },
 	{ 0x200107fa, 0x00030000, 0xffffffff, 0xffff0000,  48, "APNIC" },
@@ -63,6 +64,8 @@ static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 	{ 0x20030000, 0x00000000, 0xffffc000, 0x00000000,  18, "RIPENCC" },
 	{ 0x24000000, 0x00000000, 0xfff00000, 0x00000000,  12, "APNIC" },
 	{ 0x26000000, 0x00000000, 0xfff00000, 0x00000000,  12, "ARIN" },
+	{ 0x26100000, 0x00000000, 0xfffffe00, 0x00000000,  23, "ARIN" },
+	{ 0x26200000, 0x00000000, 0xfffffe00, 0x00000000,  23, "ARIN" },
 	{ 0x28000000, 0x00000000, 0xfff00000, 0x00000000,  12, "LACNIC" },
 	{ 0x2a000000, 0x00000000, 0xfff00000, 0x00000000,  12, "RIPENCC" },
 	{ 0x2c000000, 0x00000000, 0xfff00000, 0x00000000,  12, "AFRINIC" },

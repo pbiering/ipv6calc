@@ -1,9 +1,9 @@
 dnl Project: ipv6calc
 dnl File   : configure.in
-dnl Version: $Id: configure.in,v 1.16 2006/10/28 09:29:30 peter Exp $
+dnl Version: $Id: configure.in,v 1.17 2007/02/01 14:41:40 peter Exp $
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(ipv6calc, 0.62.0cvs, ipv6calc@deepspace6.net, ipv6calc)
+AC_INIT(ipv6calc, 0.70.0cvs, ipv6calc@deepspace6.net, ipv6calc)
 
 dnl Define versions of built-in IP location database APIs
 VERSION_IP2LOCATION=2.1.0
@@ -90,4 +90,4 @@ AC_SUBST(VERSION_GEOIP)
 AC_SUBST(ENABLE_SYSTEM_GEOIP)
 
 dnl Files to create
-AC_OUTPUT([Makefile ipv6calc/Makefile man/Makefile ipv6logconv/Makefile ipv6logstats/Makefile contrib/ipv6calc.spec ipv6calcweb/ipv6calcweb.cgi ])
+AC_OUTPUT([Makefile ipv6calc/Makefile man/Makefile ipv6logconv/Makefile ipv6loganon/Makefile ipv6logstats/Makefile contrib/ipv6calc.spec ipv6calcweb/ipv6calcweb.cgi ])

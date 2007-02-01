@@ -1,4 +1,4 @@
-$Id: USAGE,v 1.4 2006/10/22 11:57:52 peter Exp $
+$Id: USAGE,v 1.5 2007/02/01 14:41:40 peter Exp $
 
 File: ipv6calc/ipv6calc
 	see docs/ipv6calc.html for more
@@ -25,6 +25,9 @@ File: ipv6calcweb/ipv6calcweb.cgi
 
 File: ipv6logconv/ipv6logconv
 	see examples/analog/run_analog.sh for more
+
+File: ipv6loganon/ipv6loganon
+	see ipv6loganon/README for more
 
 File: ipv6logstats/ipv6logstats
 	see ipv6logstats/example* for more

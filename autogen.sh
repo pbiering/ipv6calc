@@ -1,6 +1,11 @@
 #!/bin/sh
 
-$Id: autogen.sh,v 1.6 2006/07/07 15:11:02 peter Exp $
+$Id: autogen.sh,v 1.7 2007/02/01 14:41:40 peter Exp $
+
+if [ "$1" = "--no-make" ]; then
+	shift
+	flag_no_make=1
+fi
 
 if [ -f Makefile ]; then
 	echo "*** cleanup"
@@ -15,6 +20,12 @@ autoconf || exit 1
 
 echo "*** run: configure"
 ./configure --bindir=/usr/bin --mandir=/usr/share/man $* || exit 1
+
+if [ "$flag_no_make" = "1" ]; then
+	echo
+	echo "Stop before running 'make'"
+	exit
+fi
 
 echo "*** run: make clean"
 make clean || exit 1
