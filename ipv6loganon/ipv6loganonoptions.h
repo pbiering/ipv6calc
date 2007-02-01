@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganonoptions.h
- * Version    : $Id: ipv6loganonoptions.h,v 1.2 2007/01/31 16:27:32 peter Exp $
+ * Version    : $Id: ipv6loganonoptions.h,v 1.3 2007/02/01 14:34:40 peter Exp $
  * Copyright  : 2007 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -20,13 +20,13 @@
 /* Options */
 
 /* define short options */
-static char *ipv6loganon_shortopts = "vnqh?d:c:";
+static char *ipv6loganon_shortopts = "vnVh?d:c:";
 
 /* define long options */
 static struct option ipv6loganon_longopts[] = {
 	{"version", 0, 0, (int) 'v'},
 	{"debug", 1, 0, (int) 'd'},
-	{"quiet", 0, 0, (int) 'q'},
+	{"verbose", 0, 0, (int) 'V'},
 	{"nocache", 0, 0, (int) 'n'},
 	{"cachelimit", 0, 0, (int) 'c'},
 

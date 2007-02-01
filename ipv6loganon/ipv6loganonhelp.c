@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganonhelp.c
- * Version    : $Id: ipv6loganonhelp.c,v 1.2 2007/01/31 16:27:32 peter Exp $
+ * Version    : $Id: ipv6loganonhelp.c,v 1.3 2007/02/01 14:34:40 peter Exp $
  * Copyright  : 2007 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
@@ -39,9 +39,11 @@ void ipv6loganon_printhelp(void) {
 	printversion();
 	printcopyright();
 	fprintf(stderr, "\n");
+	fprintf(stderr, "This program anonymize IPv4/IPv6 addresses in HTTP server log files\n");
+	fprintf(stderr, "\n");
 	fprintf(stderr, " General:\n");
 	fprintf(stderr, "  [-d|--debug <debug value>] : debug value (bitwise like)\n");
-	fprintf(stderr, "  [-q|--quiet] : be more quiet\n");
+	fprintf(stderr, "  [-V|--verbose] : be verbose\n");
 	fprintf(stderr, "  [-n|--nocache] : disable caching\n");
 	fprintf(stderr, "  [-c|--cachelimit <value>] : set cache limit\n");
 	fprintf(stderr, "                               default: %d\n", cache_lru_limit);

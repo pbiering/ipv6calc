@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.2 2007/01/31 16:27:32 peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.3 2007/02/01 14:34:39 peter Exp $
  * Copyright  : 2007 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -39,7 +39,7 @@
 #define LINEBUFFER	16384
 
 long int ipv6calc_debug = 0;
-int flag_quiet = 0;
+int flag_quiet = 1;
 int flag_nocache = 0;
 
 /* default values */
@@ -69,16 +69,6 @@ static long int cache_lru_statistics[CACHE_LRU_SIZE];
 #define DEBUG_function_name "ipv6loganon/main"
 int main(int argc,char *argv[]) {
 	int i, lop;
-	unsigned long int command = 0;
-
-	/* check for UID */
-	if (getuid() == 0) {
-		printversion();
-		fprintf(stderr, " DON'T RUN THIS PROGRAM AS root USER!\n");
-		fprintf(stderr, " This program uses insecure C string handling functions and is not full audited\n");
-		fprintf(stderr, "  therefore parsing insecure and unchecked input like logfiles isn't a good choice\n");
-		exit(EXIT_FAILURE);
-	};
 
 	/* Fetch the command-line arguments. */
 	while ((i = getopt_long(argc, argv, ipv6loganon_shortopts, ipv6loganon_longopts, &lop)) != EOF) {
@@ -87,16 +77,18 @@ int main(int argc,char *argv[]) {
 				break;
 
 			case 'v':
-				command |= CMD_printversion;
+				printversion();
+				exit(EXIT_FAILURE);
 				break;
 
-			case 'q':
-				flag_quiet = 1;
+			case 'V':
+				flag_quiet = 0;
 				break;
 
 			case 'h':
 			case '?':
-				command |= CMD_printhelp;
+				ipv6loganon_printhelp();
+				exit(EXIT_FAILURE);
 				break;
 				
 			case 'd':
@@ -137,21 +129,14 @@ int main(int argc,char *argv[]) {
 				break;
 
 			default:
-				fprintf(stderr, "Usage: (see '%s --command -?|-h|--help' for more help)\n", PROGRAM_NAME);
-				printhelp();
+				ipv6loganon_printinfo();
+				exit(EXIT_FAILURE);
 				break;
 		};
 	};
 	argv += optind;
 	argc -= optind;
 
-	/* do work depending on selection */
-	if (command == CMD_printversion) {
-		printversion();
-		exit(EXIT_FAILURE);
-	};
-
-	/* call lineparser */
 	lineparser();
 
 	exit(EXIT_SUCCESS);
@@ -240,8 +225,10 @@ static void lineparser(void) {
 		/* print result and rest of line, if available */
 		if (*ptrptr[0] != '\0') {
 			printf("%s %s", resultstring, *ptrptr);
+			fflush(stdin);
 		} else {
 			printf("%s\n", resultstring);
+			fflush(stdin);
 		};
 	};
 

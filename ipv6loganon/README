@@ -1,0 +1,42 @@
+$ Id: $
+
+ipv6loganon is a HTTP server log file anonymizer
+
+It expect a log line on stdin with an IPv4/IPv6 address as first token.
+
+This token would be anonymized according to given/default options.
+
+The anonymizer would keep as much information as possible for IPv6 address types.
+
+Client-side IID would be anonymized by
+ - EUI-48 based: serial number would be zero'ed, keeping OID
+ - EUI-64 based: serial number would be zero'ed, keeping OID
+ - ISATAP: client IPv4 address would be anonymized by given IPv4 mask
+ - TEREDO: client IPv4 address would be anonymized by given IPv4 mask
+           client port would be zero'ed
+ - 6to4(Microsoft): client IPv4 address would be anonymized by given IPv4 mask
+ - local: whole IID would be zero'ed
+
+Client-side SLA would be anonymized by 
+ - SLA would be zero'ed
+
+Prefix would be anonymized by
+ - 6to4: client IPv4 address would be anonymized by given IPv4 mask
+
+Compat/Mapped IPv4 addresses would be anonymized by
+ - IPv4 address would be anonymized by given IPv4 mask
+
+
+
+Afterwards, the modified address and the trailing line would be printed to stdout.
+
+
+Example:
+
+Original lines (stdin):
+207.46.98.53 - - [01/Jan/2007:00:01:15 +0100] "GET /Linux+IPv6-HOWTO/x1112.html HTTP/1.0" 200 6162 "-" "msnbot/1.0 (+http://search.msn.com/msnbot.htm)" 253 6334
+2002:52b6:6b01:1:216:17ff:fe01:2345 - - [10/Jan/2007:15:04:28 +0100] "GET /favicon.ico HTTP/1.1" 200 4710 "http://www.bieringer.de/linux/IPv6/" "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.0.9) Gecko/20061219 Fedora/1.5.0.9-1.fc6 Firefox/1.5.0.9 pango-text" 413 5005
+
+Modified lines (stdout):
+207.46.98.0 - - [01/Jan/2007:00:01:15 +0100] "GET /Linux+IPv6-HOWTO/x1112.html HTTP/1.0" 200 6162 "-" "msnbot/1.0 (+http://search.msn.com/msnbot.htm)" 253 6334
+2002:52b6:6b00:0:216:17ff:fe00:0 - - [10/Jan/2007:15:04:28 +0100] "GET /favicon.ico HTTP/1.1" 200 4710 "http://www.bieringer.de/linux/IPv6/" "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.0.9) Gecko/20061219 Fedora/1.5.0.9-1.fc6 Firefox/1.5.0.9 pango-text" 413 5005
