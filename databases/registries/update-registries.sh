@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/databases/registries
 # File       : update-registries.sh
-# Version    : $Id: update-registries.sh,v 1.2 2005/10/26 09:36:54 peter Exp $
-# Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: update-registries.sh,v 1.3 2007/02/01 13:36:46 peter Exp $
+# Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces ../ipv4-assignment/update-ipv4-assignment.sh
 #               replaces ../ipv6-assignment/update-ipv6-assignment.sh
 #
@@ -24,7 +24,7 @@ iana	http://www.iana.org/assignments/		ipv6-unicast-address-assignments	txt
 ripencc	ftp://ftp.ripe.net/pub/stats/ripencc/%Y/	delegated-ripencc-%Y%m%d.bz2		bz2
 arin	ftp://ftp.arin.net/pub/stats/arin/		delegated-arin-%Y%m%d			txt
 apnic	http://ftp.apnic.net/stats/apnic/		delegated-apnic-%Y%m%d			txt
-lacnic	ftp://lacnic.net/pub/stats/lacnic/		delegated-lacnic-%Y%m%d			txt
+lacnic	ftp://ftp.lacnic.net/pub/stats/lacnic/		delegated-lacnic-%Y%m%d			txt
 afrinic	ftp://ftp.afrinic.net/pub/stats/afrinic/	delegated-afrinic-%Y%m%d		txt
 END
 }
