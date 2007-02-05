@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.4 2007/02/01 14:39:57 peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.5 2007/02/05 16:37:14 peter Exp $
 # Copyright  : 2007 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -122,3 +122,5 @@ fi
 if [ $retval -eq 0 ]; then
 	echo "All tests were successfully done!" >&2
 fi
+
+exit $retval
