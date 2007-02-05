@@ -1,12 +1,23 @@
 /*
- *  $Id: ChangeLog,v 1.142 2007/02/01 14:41:40 peter Exp $ 
+ *  $Id: ChangeLog,v 1.143 2007/02/05 16:38:49 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
-	NT = Niko Tynii <ntyni (at) iki dot fi>
+	NT = Niko Tyni <ntyni (at) iki dot fi>
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 --------------------------------------------------------------------
+20070205/PB
+	lib/libipv{4,6}addr.{c,h}
+	 - migrate IPv4/IPv6 address anonymization code into
+	    ipv6loganon to libraries
+
+20070202/PB
+	ipv6loganon/ipv6loganonhelp.c
+	 - spelling fixes
+	man/ipv6loganon.8
+	 - contribution
+
 20070201/PB
 	database update
 	ipv6loganon/*

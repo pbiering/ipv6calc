@@ -3,7 +3,7 @@ Credits to
 * Niko Tyni <ntyni at iki dot fi>
    - clean reimplementation of RFC 1924 conversion code
    - some help on configure.in
-   - contribution of patches
+   - contribution of patches and man files
 
 * Eric S. Raymond <esr (at) thyrsus dot com>
    - contribution of patch for man page
