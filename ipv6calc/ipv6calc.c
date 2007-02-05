@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.27 2006/10/28 09:29:30 peter Exp $
- * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calc.c,v 1.28 2007/02/05 16:55:44 peter Exp $
+ * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
@@ -37,6 +37,10 @@
 #include "config.h"
 
 long int ipv6calc_debug = 0;
+
+/* anonymization default values */
+int mask_ipv4 = 24;
+int mask_iid = 1;
 
 #ifdef SUPPORT_IP2LOCATION
 int  use_ip2location_ipv4 = 0; /* if set to 1, IP2Location IPv4 is enabled by option(s) */
@@ -807,8 +811,10 @@ int main(int argc,char *argv[]) {
 		} else if ( (inputtype == FORMAT_mac) && (action == ACTION_mac_to_eui64) ) {
 			outputtype = FORMAT_eui64;
 			formatoptions |= FORMATOPTION_printfulluncompressed;
-		} else if ( (inputtype == FORMAT_ipv6addr) && (action == ACTION_undefined) ) {
+		} else if ( (inputtype == FORMAT_ipv6addr) && ( (action == ACTION_undefined) || (action == ACTION_anonymize) ) ) {
 			outputtype = FORMAT_ipv6addr;
+		} else if ( (inputtype == FORMAT_ipv4addr) && (action == ACTION_anonymize) ) {
+			outputtype = FORMAT_ipv4addr;
 		} else if ( ((inputtype == FORMAT_ipv4addr) || (inputtype == FORMAT_ipv4hex) || (inputtype == FORMAT_ipv4revhex)) && (action == ACTION_undefined) ) {
 			outputtype = FORMAT_ipv4addr;
 		};
@@ -866,6 +872,27 @@ int main(int argc,char *argv[]) {
 				retval = librfc3056_ipv6addr_to_ipv4addr(&ipv4addr, &ipv6addr, resultstring);
 			} else {
 				fprintf(stderr, "Unsupported 6to4 conversion!\n");
+				exit(EXIT_FAILURE);
+			};
+			break;
+
+		case ACTION_anonymize:
+			if (inputtype == FORMAT_ipv4addr && outputtype == FORMAT_ipv4addr) {
+				/* anonymize IPv4 address */
+				if (ipv4addr.flag_valid != 1) {
+					fprintf(stderr, "No valid IPv4 address given!\n");
+					exit(EXIT_FAILURE);
+				};
+				libipv4addr_anonymize(&ipv4addr, mask_ipv4);
+			} else if (inputtype == FORMAT_ipv6addr && outputtype == FORMAT_ipv6addr) {
+				/* anonymize IPv6 address */
+				if (ipv6addr.flag_valid != 1) {
+					fprintf(stderr, "No valid IPv6 address given!\n");
+					exit(EXIT_FAILURE);
+				};
+				libipv6addr_anonymize(&ipv6addr, mask_iid, mask_ipv4);
+			} else {
+				fprintf(stderr, "Unsupported anonymization!\n");
 				exit(EXIT_FAILURE);
 			};
 			break;
