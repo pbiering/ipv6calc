@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.143 2007/02/05 16:38:49 peter Exp $ 
+ *  $Id: ChangeLog,v 1.144 2007/02/05 16:57:41 peter Exp $ 
  */
 
 Info:
@@ -11,8 +11,10 @@ Info:
 	lib/libipv{4,6}addr.{c,h}
 	 - migrate IPv4/IPv6 address anonymization code into
 	    ipv6loganon to libraries
+	ipv6calc/ipv6calc.c lib/ipv6calctypes.h
+	 - add support for action anonymize
 
-20070202/PB
+20070202/NT
 	ipv6loganon/ipv6loganonhelp.c
 	 - spelling fixes
 	man/ipv6loganon.8

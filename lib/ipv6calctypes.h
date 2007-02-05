@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.16 2006/06/12 19:55:18 peter Exp $
- * Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calctypes.h,v 1.17 2007/02/05 16:57:41 peter Exp $
+ * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for ipv6calctypes.c
@@ -211,6 +211,7 @@ typedef struct {
 #define ACTION_NUM_ipv4_to_6to4addr	2
 #define ACTION_NUM_iid_token_to_privacy	3
 #define ACTION_NUM_prefix_mac_to_ipv6	4
+#define ACTION_NUM_anonymize		5
 #define ACTION_NUM_undefined		31
 
 #define ACTION_auto			(uint32_t) 0x0
@@ -218,6 +219,7 @@ typedef struct {
 #define ACTION_ipv4_to_6to4addr		(uint32_t) (1 << ACTION_NUM_ipv4_to_6to4addr)
 #define ACTION_iid_token_to_privacy	(uint32_t) (1 << ACTION_NUM_iid_token_to_privacy)
 #define ACTION_prefix_mac_to_ipv6	(uint32_t) (1 << ACTION_NUM_prefix_mac_to_ipv6)
+#define ACTION_anonymize		(uint32_t) (1 << ACTION_NUM_anonymize)
 #define ACTION_undefined		(uint32_t) (1 << ACTION_NUM_undefined)
 
 typedef struct {
@@ -232,6 +234,7 @@ typedef struct {
 	{ ACTION_mac_to_eui64         , "geneui64"       , "Converts a MAC address to an EUI-64 address", "" },
 	{ ACTION_ipv4_to_6to4addr     , "conv6to4"       , "Converts IPv4 address <-> 6to4 IPv6 address (prefix)", "" },
 	{ ACTION_iid_token_to_privacy , "genprivacyiid"  , "Generates a privacy interface ID out of a given one and a token", "" },
+	{ ACTION_anonymize            , "anonymize"      , "Anonymize IPv4/IPv6 address without loosing much information", "" },
 	{ ACTION_prefix_mac_to_ipv6   , "prefixmac2ipv6" , "Generates an IPv6 address out of a prefix and a MAC address", "" }
 };
 
