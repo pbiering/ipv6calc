@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.18 2007/01/31 16:21:47 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.19 2007/02/05 16:30:46 peter Exp $
  * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -696,6 +696,44 @@ int libipv4addr_to_reversestring(ipv6calc_ipv4addr *ipv4addrp, char *resultstrin
 
 	retval = 0;
 	return (retval);
+};
+#undef DEBUG_function_name
+
+/*
+ * anonymize IPv4 address
+ *
+ * in : *ipv4addrp = IPv4 address structure
+ *      mask = number of bits of mask
+ * ret: <void>
+ */
+#define DEBUG_function_name "libipv4addr/anonymize"
+void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask) {
+	/* anonymize IPv4 address according to settings */
+
+	if (mask == 0) {
+		/* clear IPv4 address: 0.0.0.0 */
+		ipv4addr_clear(ipv4addrp);
+	} else if (mask == 32) {
+		/* nothing to do */
+	} else if (mask < 1 || mask > 31) {
+		/* should not happen here */
+		fprintf(stderr, "%s: 'mask' has an unexpected illegal value!\n", DEBUG_function_name);
+		exit(EXIT_FAILURE);
+	} else {
+		/* quick mode */
+		if (mask == 24) {
+			ipv4addr_setoctett(ipv4addrp, 3, 0u);
+		} else if (mask == 16) {
+			ipv4addr_setword(ipv4addrp, 1, 0u);
+		} else if (mask == 8) {
+			ipv4addr_setword(ipv4addrp, 1, 0u);
+			ipv4addr_setoctett(ipv4addrp, 1, 0u);
+		} else {
+			/* mask IPv4 address */
+			ipv4addr_setdword(ipv4addrp, ipv4addr_getdword(ipv4addrp) & (0xffffffffu << ((unsigned int) 32 - mask)));
+		};
+	};
+	return;
 };
 #undef DEBUG_function_name
 

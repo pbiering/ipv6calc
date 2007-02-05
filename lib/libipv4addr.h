@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.15 2006/03/17 17:02:25 peter Exp $
- * Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv4addr.h,v 1.16 2007/02/05 16:30:47 peter Exp $
+ * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -79,3 +79,5 @@ extern int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4add
 extern int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring);
 
 extern int libipv4addr_to_reversestring(ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions);
+
+extern void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask);
