@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganonhelp.c
- * Version    : $Id: ipv6loganonhelp.c,v 1.3 2007/02/01 14:34:40 peter Exp $
+ * Version    : $Id: ipv6loganonhelp.c,v 1.4 2007/02/05 16:36:59 peter Exp $
  * Copyright  : 2007 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
@@ -30,7 +30,7 @@ void printcopyright(void) {
 void ipv6loganon_printinfo(void)  {
 	printversion();
 	printcopyright();
-	fprintf(stderr, "This program anonymize IPv4/IPv6 addresses in HTTP server log files\n");
+	fprintf(stderr, "This program anonymizes IPv4/IPv6 addresses in HTTP server log files\n");
 	fprintf(stderr, "See '%s -?' for more details\n\n", PROGRAM_NAME);
 };
 
@@ -39,7 +39,7 @@ void ipv6loganon_printhelp(void) {
 	printversion();
 	printcopyright();
 	fprintf(stderr, "\n");
-	fprintf(stderr, "This program anonymize IPv4/IPv6 addresses in HTTP server log files\n");
+	fprintf(stderr, "This program anonymizes IPv4/IPv6 addresses in HTTP server log files\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, " General:\n");
 	fprintf(stderr, "  [-d|--debug <debug value>] : debug value (bitwise like)\n");
@@ -55,7 +55,7 @@ void ipv6loganon_printhelp(void) {
 	fprintf(stderr, "  --anonymize-standard   : preset for standard anonymization\n");
 	fprintf(stderr, "  (default)                 mask-ipv4=8 mask-iid\n");
 	fprintf(stderr, "\n");
-	fprintf(stderr, " Takes data from stdin, proceed it to stdout\n");
+	fprintf(stderr, " Takes data from stdin, outputs the processed data to stdout\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "\n");
 
