@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.4 2007/02/05 16:38:15 peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.5 2007/02/06 07:08:26 peter Exp $
  * Copyright  : 2007 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -111,11 +111,11 @@ int main(int argc,char *argv[]) {
 				flag_nocache = 1;
 				break;
 
-			case CMD_LA_NO_MASK_IID:
+			case CMD_ANON_NO_MASK_IID:
 				mask_iid = 0;
 				break;
 
-			case CMD_LA_MASK_IPV4:
+			case CMD_ANON_MASK_IPV4:
 				mask_ipv4 = atoi(optarg);
 				if (mask_ipv4 < 0 || mask_ipv4 > 32) {
 					fprintf(stderr, " value for option 'mask-ipv4' out-of-range  [0-32]\n");
@@ -123,7 +123,7 @@ int main(int argc,char *argv[]) {
 				};
 				break;
 
-			case CMD_LA_PRESET_STANDARD:
+			case CMD_ANON_PRESET_STANDARD:
 				mask_ipv4 = 24;
 				mask_iid = 1;
 				break;

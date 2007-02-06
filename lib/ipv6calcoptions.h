@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.12 2006/10/28 09:29:30 peter Exp $
+ * Version    : $Id: ipv6calcoptions.h,v 1.13 2007/02/06 07:08:26 peter Exp $
  * Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -109,6 +109,11 @@
 	{ "quiet"                , 0, 0, FORMATOPTION_NUM_quiet + FORMATOPTION_NUM_HEAD },
 	
 	{ "printmirrored"        , 0, 0, FORMATOPTION_NUM_printmirrored + FORMATOPTION_NUM_HEAD },
+
+	/* address anonymizer options */
+	{ "anonymize-standard" , 0, 0, CMD_ANON_PRESET_STANDARD },
+	{ "mask-ipv4" , 1, 0, CMD_ANON_MASK_IPV4 },
+	{ "no-mask-iid" , 0, 0, CMD_ANON_NO_MASK_IID },
 
 	/* new options */
 	{ "in"        , 1, 0, CMD_inputtype  },
