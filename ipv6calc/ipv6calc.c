@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.28 2007/02/05 16:55:44 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.29 2007/02/06 07:04:33 peter Exp $
  * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -279,6 +279,23 @@ int main(int argc,char *argv[]) {
 
 			case CMD_showinfotypes:
 				command = CMD_showinfotypes;
+				break;
+
+			case CMD_ANON_NO_MASK_IID:
+				mask_iid = 0;
+				break;
+
+			case CMD_ANON_MASK_IPV4:
+				mask_ipv4 = atoi(optarg);
+				if (mask_ipv4 < 0 || mask_ipv4 > 32) {
+					fprintf(stderr, " value for option 'mask-ipv4' out-of-range  [0-32]\n");
+					exit(EXIT_FAILURE);
+				};
+				break;
+
+			case CMD_ANON_PRESET_STANDARD:
+				mask_ipv4 = 24;
+				mask_iid = 1;
 				break;
 
 			/* format options */
