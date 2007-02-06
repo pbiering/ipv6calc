@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.11 2006/07/07 13:30:50 peter Exp $
-# Copyright  : 2001-2005 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6calc.sh,v 1.12 2007/02/06 07:12:24 peter Exp $
+# Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 
@@ -113,6 +113,11 @@ cat <<END | grep -v '^#'
 ## Information
 -i fe80::1								=*
 -i -m ff02::1								=*
+# Anonymization
+--action anonymize 3ffe:831f:ce49:7601:8000:efff:af4a:86BF		=3ffe:831f:ce49:7601:8000:ffff:af4a:86ff
+--action anonymize 3ffe:831f:ce49:7601:8000:efff:af4a:86BF --mask-ipv4 16	=3ffe:831f:ce49:7601:8000:ffff:af4a:ffff
+--action anonymize 192.0.2.1						=192.0.2.0
+--action anonymize 192.0.2.1 --mask-ipv4 16				=192.0.0.0
 END
 }
 
