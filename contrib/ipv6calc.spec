@@ -14,11 +14,21 @@ Source: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/ipv6calc-%{version}.tar.g
 
 BuildRoot: %{_tmppath}/ipv6calc-root
 
-%{?_with_geoip: BuildPreReq: GeoIP-devel}
-%{?_with_geoip: Requires: GeoIP}
+%define enable_geoip 0
+%define enable_ip2location 0
 
-%{?_with_ip2location: BuildPreReq: IP2Location-devel}
-%{?_with_ip2location: Requires: IP2Location}
+%{?_with_geoip: %{expand: %%define enable_geoip 1}}
+%{?_with_ip2location: %{expand: %%define enable_ip2location 1}}
+
+%if %{enable_geoip}
+BuildPreReq: GeoIP-devel
+Requires: GeoIP
+%endif
+
+%if %{enable_ip2location}
+BuildPreReq: IP2Location-devel
+Requires: IP2Location
+%endif
 
 
 %description
@@ -34,6 +44,7 @@ Many more format conversions are supported, see given URL for more.
 Available rpmbuild rebuild options:
 --with : ip2location
 --with : geoip
+
 
 %prep
 %setup -q -n ipv6calc-%{version}
