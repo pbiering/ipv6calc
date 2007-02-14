@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.145 2007/02/06 07:08:26 peter Exp $ 
+ *  $Id: ChangeLog,v 1.146 2007/02/14 19:58:12 peter Exp $ 
  */
 
 Info:
@@ -7,6 +7,9 @@ Info:
 	NT = Niko Tyni <ntyni (at) iki dot fi>
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 --------------------------------------------------------------------
+20070214/NT
+	remove support of static (built-in) GeoIP/IP2Location support
+
 20070207/PB
 	ipv6calc/ipv6calc.c lib/ipv6calctypes.h
 	 - add support for action anonymize
