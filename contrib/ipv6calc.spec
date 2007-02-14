@@ -14,11 +14,11 @@ Source: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/ipv6calc-%{version}.tar.g
 
 BuildRoot: %{_tmppath}/ipv6calc-root
 
-%{?_with_geoip: %{expand: BuildPreReq: GeoIP-devel}}
-%{?_with_geoip: %{expand: Requires: GeoIP}}
+%{?_with_geoip: BuildPreReq: GeoIP-devel}
+%{?_with_geoip: Requires: GeoIP}
 
-%{?_with_ip2location: %{expand: BuildPreReq: IP2Location-devel}}
-%{?_with_ip2location: %{expand: Requires: IP2Location}}
+%{?_with_ip2location: BuildPreReq: IP2Location-devel}
+%{?_with_ip2location: Requires: IP2Location}
 
 
 %description
