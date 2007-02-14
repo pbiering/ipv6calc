@@ -1,16 +1,9 @@
 dnl Project: ipv6calc
 dnl File   : configure.in
-dnl Version: $Id: configure.in,v 1.17 2007/02/01 14:41:40 peter Exp $
+dnl Version: $Id: configure.in,v 1.18 2007/02/14 19:53:59 peter Exp $
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(ipv6calc, 0.70.0cvs, ipv6calc@deepspace6.net, ipv6calc)
-
-dnl Define versions of built-in IP location database APIs
-VERSION_IP2LOCATION=2.1.0
-VERSION_GEOIP=1.4.0
-
-AC_DEFINE(VERSION_IP2LOCATION, "2.1.0", Version of IP2Location API.)
-AC_DEFINE(VERSION_GEOIP, "1.4.0", Version of GeoIP API.)
 
 dnl Define version header
 AC_CONFIG_HEADER(config.h)
@@ -49,45 +42,97 @@ dnl IP2Location support
 AC_ARG_ENABLE([ip2location], 
 	AS_HELP_STRING([--enable-ip2location],
 	               [Enable IP2Location support (default: disabled)]),
-	[if test "x$enable_ip2location" = "xyes"; then
-		ENABLE_SUPPORT_IP2LOCATION=1
-		AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location support.)
-	fi])
-AC_SUBST(ENABLE_SUPPORT_IP2LOCATION)
-AC_SUBST(VERSION_IP2LOCATION)
+	[
+        IP2LOCATION="$enableval"
+        IP2LOCATION_LIB="-lIP2Location"
+    ],
+    [IP2LOCATION="no"])
+
+AC_ARG_WITH([ip2location-headers],
+    AS_HELP_STRING([--with-ip2location-headers=DIR],
+                   [IP2Location include files location]),
+    [IP2LOCATION_INCLUDE="-I$withval"])
+
+AC_ARG_WITH([ip2location-lib],
+    AS_HELP_STRING([--with-ip2location-lib=DIR],
+                   [IP2Location library location]),
+    [IP2LOCATION_LIB="-L$withval $IP2LOCATION_LIB"])
+
+AC_ARG_WITH([ip2location-static],
+    AS_HELP_STRING([--with-ip2location-static],
+                   [Explicitly link IP2Location statically (default=no)]),
+    [if test "$withval" != "no"; then 
+        IP2LOCATION_LIB="-Wl,-Bstatic $IP2LOCATION_LIB -Wl,-Bdynamic"
+     fi])
+
+if test "$IP2LOCATION" = "yes"; then
+    CPPFLAGS="$CPPFLAGS $IP2LOCATION_INCLUDE"
+    LDFLAGS="$LDFLAGS $IP2LOCATION_LIB"
+    AC_CHECK_HEADER(IP2Location.h,,
+        [AC_MSG_ERROR([IP2Location library header files not found])]
+    )
+    AC_CHECK_LIB(IP2Location,IP2Location_open,
+        [
+            AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location support.)
+        ],
+        [
+            AC_MSG_ERROR([IP2Location library header files were found but the library was not found])
+        ])
+fi
+
+AC_SUBST(IP2LOCATION_INCLUDE)
+AC_SUBST(IP2LOCATION_LIB)
 
 dnl GeoIP support
 AC_ARG_ENABLE([geoip], 
 	AS_HELP_STRING([--enable-geoip],
 	               [Enable GeoIP support (default: disabled)]),
-	[if test "x$enable_geoip" = "xyes"; then
-		ENABLE_SUPPORT_GEOIP=1
-		AC_DEFINE(SUPPORT_GEOIP, 1, Define if you want GeoIP support.)
-	fi])
+    [
+        GEOIP="$enableval"
+        GEOIP_LIB="-lGeoIP"
+    ],
+    [GEOIP="no"])
 
-AC_ARG_ENABLE([geoip-system],
-       AS_HELP_STRING([--enable-geoip-system],
-               [Use the system GeoIP library instead of the bundled one (default: bundled)]),
-       [if test "x$enable_geoip_system" = "xyes"; then
-               AC_CHECK_HEADER([GeoIP.h], [], AC_MSG_ERROR([System GeoIP library not found]))
-               ENABLE_SYSTEM_GEOIP=1
-               ENABLE_SUPPORT_GEOIP=1
-               AC_DEFINE(SUPPORT_GEOIP, 1, Define if you want to use GeoIP support.)
-               AC_DEFINE(ENABLE_GEOIP_SYSTEM, 1, Define if you want to use GeoIP system library support.)
-       fi])
+AC_ARG_WITH([geoip-headers],
+    AS_HELP_STRING([--with-geoip-headers=DIR],
+                   [GeoIP include files location]),
+    [GEOIP_INCLUDE="-I$withval"])
 
-AC_ARG_ENABLE([geoip-default-file],
-       AS_HELP_STRING([--enable-geoip-default-file=file],
+AC_ARG_WITH([geoip-lib],
+    AS_HELP_STRING([--with-geoip-lib=DIR],
+                   [GeoIP library location]),
+    [GEOIP_LIB="-L$withval $GEOIP_LIB"])
+
+
+AC_ARG_WITH([geoip-static],
+    AS_HELP_STRING([--with-geoip-static],
+                   [Explicitly link GeoIP statically (default=no)]),
+    [if test "$withval" != "no"; then 
+        GEOIP_LIB="-Wl,-Bstatic $GEOIP_LIB -Wl,-Bdynamic"
+     fi])
+
+AC_ARG_WITH([geoip-default-file],
+       AS_HELP_STRING([--with-geoip-default-file=file],
                [Use a default GeoIP database file when ipv6calc is invoked with '--db-geoip-default|-G']),
-       [if test "x$enable_geoip_default_file" != xno; then
-               AC_DEFINE_UNQUOTED(GEOIP_DEFAULT_FILE, "$enable_geoip_default_file", Define for a default GeoIP database file.)
-               ENABLE_SUPPORT_GEOIP=1
-               AC_DEFINE(SUPPORT_GEOIP, 1, Define if you want to use GeoIP support.)
-       fi])
+       [AC_DEFINE_UNQUOTED(GEOIP_DEFAULT_FILE, "$withval", Define for a default GeoIP database file.)])
 
-AC_SUBST(ENABLE_SUPPORT_GEOIP)
-AC_SUBST(VERSION_GEOIP)
-AC_SUBST(ENABLE_SYSTEM_GEOIP)
+if test "$GEOIP" = "yes"; then
+    CPPFLAGS="$CFLAGS $GEOIP_INCLUDE"
+    LDFLAGS="$LDFLAGS $GEOIP_LIB"
+    AC_CHECK_HEADER(GeoIP.h,,
+        [AC_MSG_ERROR([GeoIP library header files not found])]
+    )
+    AC_CHECK_LIB(GeoIP, GeoIP_open,
+        [
+	        AC_DEFINE(SUPPORT_GEOIP, 1, Define if you want GeoIP support.)
+        ],
+        [
+            AC_MSG_ERROR([GeoIP library header files were found but the library was not found])
+        ])
+fi
+
+AC_SUBST(GEOIP_INCLUDE)
+AC_SUBST(GEOIP_LIB)
 
 dnl Files to create
 AC_OUTPUT([Makefile ipv6calc/Makefile man/Makefile ipv6logconv/Makefile ipv6loganon/Makefile ipv6logstats/Makefile contrib/ipv6calc.spec ipv6calcweb/ipv6calcweb.cgi ])

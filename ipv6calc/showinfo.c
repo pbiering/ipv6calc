@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.33 2007/01/31 16:26:08 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.34 2007/02/14 19:53:59 peter Exp $
  * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -28,6 +28,14 @@
 
 #ifdef SUPPORT_IP2LOCATION
 #include "IP2Location.h"
+
+/* 
+ * API_VERSION is defined as a bareword in IP2Location.h, 
+ * we need this trick to stringify it. Blah.
+ */
+#define makestr(x) #x
+#define xmakestr(x) makestr(x)
+
 extern int use_ip2location_ipv4;
 extern int use_ip2location_ipv6;
 extern char file_ip2location_ipv4[NI_MAXHOST];
@@ -167,7 +175,13 @@ static void print_ip2location(const char *addrstring, const uint32_t formatoptio
 		flag_ip2location_info_shown = 1;
 
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DATABASE_INFO=url=http://www.ip2location.com date=%04d-%02d-%02d entries=%d apiversion=%s", IP2LocationObj->databaseyear + 2000, IP2LocationObj->databasemonth + 1, IP2LocationObj->databaseday, IP2LocationObj->databasecount, VERSION_IP2LOCATION);
+			snprintf(tempstring, sizeof(tempstring) - 1, \
+				"IP2LOCATION_DATABASE_INFO=url=http://www.ip2location.com date=%04d-%02d-%02d entries=%d apiversion=%s", \
+				IP2LocationObj->databaseyear + 2000, \
+				IP2LocationObj->databasemonth + 1, \
+				IP2LocationObj->databaseday, \
+				IP2LocationObj->databasecount, \
+				xmakestr(API_VERSION));
 			printout(tempstring);
 		};
 	};
@@ -319,11 +333,7 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 			flag_geoip_info_shown = 1;
 
 			if ( machinereadable != 0 ) {
-#ifdef ENABLE_GEOIP_SYSTEM
 				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_DATABASE_INFO=%s apiversion=system", GeoIP_database_info(gi));
-#else
-				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_DATABASE_INFO=%s apiversion=%s", GeoIP_database_info(gi), VERSION_GEOIP);
-#endif
 				printout(tempstring);
 			};
 		};

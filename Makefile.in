@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.57 2007/02/01 14:41:40 peter Exp $
+# Version    : $Id: Makefile.in,v 1.58 2007/02/14 19:53:59 peter Exp $
 # Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -18,15 +18,6 @@ endif
 CFLAGS = $(COPTS) -I$(GETOPT_DIR)
 
 CC	= gcc
-
-ifeq (@ENABLE_SUPPORT_IP2LOCATION@, 1)
-  IP2LOCATION_MAKE = ip2location-make
-endif
-ifeq (@ENABLE_SUPPORT_GEOIP@, 1)
-  ifeq (, @ENABLE_SYSTEM_GEOIP@)
-    GEOIP_MAKE = geoip-make
-  endif
-endif
 
 all:		md5-make $(GETOPT_MAKE) ipv6calc ipv6logconv ipv6loganon ipv6logstats
 
@@ -46,7 +37,7 @@ distclean:
 		${MAKE} clean
 		rm -f config.cache config.status config.log
 		rm -rf autom4te.cache
-		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib md5 $(GETOPT_MAKE) databases/ieee-oui databases/ieee-iab databases/ipv4-assignment databases/ipv6-assignment databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@ databases/GeoIP/GeoIP-@VERSION_GEOIP@; do \
+		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib md5 $(GETOPT_MAKE) databases/ieee-oui databases/ieee-iab databases/ipv4-assignment databases/ipv6-assignment; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} $@ ; \
@@ -67,7 +58,7 @@ autoclean:
 		done
 
 clean:
-		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib md5 $(GETOPT_MAKE) databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@ databases/GeoIP/GeoIP-@VERSION_GEOIP@; do \
+		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib md5 $(GETOPT_MAKE); do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} $@ ; \
@@ -104,7 +95,7 @@ ipv6loganon-make: lib-make
 ipv6logstats-make: lib-make
 		cd ipv6logstats && ${MAKE}
 
-ipv6calc-make:	lib-make $(IP2LOCATION_MAKE) $(GEOIP_MAKE)
+ipv6calc-make:	lib-make
 		cd ipv6calc && ${MAKE}
 
 ipv6calcweb-make:
@@ -121,31 +112,6 @@ db-ipv4-assignment-make:
 
 db-ipv6-assignment-make:
 		cd databases/ipv6-assignment && ${MAKE}
-
-ip2location-make:
-		# check for existence of object file
-		test -f databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@/libIP2Location/IP2Location.o || ${MAKE} ip2location-makereal
-		# check for object file newer than source file
-		test databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@/libIP2Location/IP2Location.o -nt databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@/libIP2Location/IP2Location.c || ${MAKE} ip2location-makereal
-
-ip2location-makereal:
-			( cd databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@ || exit 1 ; \
-			autoreconf -i -v --force || exit 1; \
-			./configure || exit 1; \
-			${MAKE}; \
-			)
-
-geoip-make:
-		# check for existence of object file
-		test -f databases/GeoIP/GeoIP-@VERSION_GEOIP@/libGeoIP/GeoIP.o || ${MAKE} geoip-makereal
-
-geoip-makereal:
-			( cd databases/GeoIP/GeoIP-@VERSION_GEOIP@ || exit 1; \
-			./bootstrap || exit 1; \
-			./configure || exit 1; \
-			${MAKE}; \
-			${MAKE} check; \
-			)
 
 update:
 		for dir in databases/ieee-oui databases/ieee-iab databases/registries; do \

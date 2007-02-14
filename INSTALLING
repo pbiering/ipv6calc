@@ -57,7 +57,8 @@ There is a configure script available.
 Following options are used:
  --bindir=/usr/bin  (@bindir@)
  --mandir=/usr/share/man (@mandir@)
- --enable-ip2location (@ENABLE_SUPPORT_IP2LOCATION@)
+ --enable-ip2location (see below for more information)
+ --enable-geoip (see below for more information)
 
 Execute:
  ./configure --bindir=/usr/bin --mandir=/usr/share/man
@@ -79,6 +80,40 @@ See also:
  ./databases/ieee-iab/README
  ./databases/ieee-oui/README
 
+IP2LOCATION LIBRARY
+-------------------
+
+You can use the IP2Location library with ipv6calc. The library is available
+at <http://www.ip2location.com/c.aspx>, and the currently supported version
+is 2.1.1. The support is enabled with the --enable-ip2location configure
+option.
+
+If you have installed the IP2Location library in a non-standard place, you
+may find the --with-ip2location-headers=DIR and --with-ip2location-lib=DIR
+configure options useful. If you have problems finding the library at
+runtime, try linking it statically the --with-ip2location-static configure
+option.
+
+If you have problems building the IP2Location library, see the
+README.BUILDING-IP2LOCATION file in the ipv6calc distribution.
+
+GEOIP LIBRARY
+-------------
+
+You can also use the GeoIP library with ipv6calc. The library is available
+at <http://www.maxmind.com/app/ip-location>, and the currently supported
+version is 1.4.1 (although others may work too). The support is enabled
+with the --enable-geoip configure option.
+
+If you have installed the GeoIP library in a non-standard place, you may
+find the --with-geoip-headers=DIR and --with-geoip-lib=DIR configure
+options useful. If you have problems finding the library at runtime,
+try linking it statically the --with-geoip-static configure option.
+
+You can set the path to a default GeoIP database file by using the
+--with-geoip-default-file configure option. This file is used
+when ipv6calc is invoked with the '-G' (or '--db-geoip-default')
+option.
 
 COMPILE
 -------  
@@ -95,4 +130,4 @@ If you want to install the binary use "make install".
 Peter Bieringer
 <pb (at) bieringer.de>
 
-$Id: INSTALLING,v 1.12 2006/06/07 20:58:07 peter Exp $
+$Id: INSTALLING,v 1.13 2007/02/14 19:53:59 peter Exp $

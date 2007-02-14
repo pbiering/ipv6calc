@@ -20,27 +20,6 @@
 	IAB/OUI data is taken from IEEE
 	IPv4/IPv6 assignment data is taken from registries RIPE NCC, APNIC, ARIN, LACNIC, AfriNIC
 
-   * IP2Location API code
-	GPL licence: databases/IP2Location/C-IP2Location-1.1.0/COPYING
-	- databases/IP2Location/*
-
-   * IP2Location real databases
-	are NOT distributed with this package because of dedicated licensing is required
-	see here for more: http://www.ip2location.com/
-
-   * GeoIP API code
-	GPL licence: databases/GeoIP/GeoIP-1.3.17/COPYING
-	- databases/GeoIP/*
-
-   * GeoIP free databases
-	are NOT included with this package because of keeping exported package small
-	see here for more: http://www.maxmind.com/ or retrieve them directly:
-	 http://www.maxmind.com/download/geoip/database/GeoIP.dat.gz
-	 http://www.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz
-	but don't forget to read the license
-	 http://www.maxmind.com/download/geoip/database/LICENSE.txt
-
-
 1. The program "ipv6calc" is distributed under the GNU GPL version 2
     (see COPYING file for more)
 

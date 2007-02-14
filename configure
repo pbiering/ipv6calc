@@ -310,7 +310,7 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT SET_MAKE CPP EGREP LIBOBJS GETOPT_INCLUDE ENABLE_BUNDLED_GETOPT ENABLE_SUPPORT_IP2LOCATION VERSION_IP2LOCATION ENABLE_SUPPORT_GEOIP VERSION_GEOIP ENABLE_SYSTEM_GEOIP LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS AWK CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT SET_MAKE CPP EGREP LIBOBJS GETOPT_INCLUDE ENABLE_BUNDLED_GETOPT IP2LOCATION_INCLUDE IP2LOCATION_LIB GEOIP_INCLUDE GEOIP_LIB LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -845,9 +845,21 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-ip2location    Enable IP2Location support (default: disabled)
   --enable-geoip          Enable GeoIP support (default: disabled)
-  --enable-geoip-system   Use the system GeoIP library instead of the bundled
-                          one (default: bundled)
-  --enable-geoip-default-file=file
+
+Optional Packages:
+  --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
+  --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-ip2location-headers=DIR
+                          IP2Location include files location
+  --with-ip2location-lib=DIR
+                          IP2Location library location
+  --with-ip2location-static
+                          Explicitly link IP2Location statically (default=no)
+  --with-geoip-headers=DIR
+                          GeoIP include files location
+  --with-geoip-lib=DIR    GeoIP library location
+  --with-geoip-static     Explicitly link GeoIP statically (default=no)
+  --with-geoip-default-file=file
                           Use a default GeoIP database file when ipv6calc is
                           invoked with '--db-geoip-default|-G'
 
@@ -1308,20 +1320,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-
-
-VERSION_IP2LOCATION=2.1.0
-VERSION_GEOIP=1.4.0
-
-
-cat >>confdefs.h <<\_ACEOF
-#define VERSION_IP2LOCATION "2.1.0"
-_ACEOF
-
-
-cat >>confdefs.h <<\_ACEOF
-#define VERSION_GEOIP "1.4.0"
-_ACEOF
 
 
           ac_config_headers="$ac_config_headers config.h"
@@ -3593,36 +3591,322 @@ fi
 # Check whether --enable-ip2location or --disable-ip2location was given.
 if test "${enable_ip2location+set}" = set; then
   enableval="$enable_ip2location"
-  if test "x$enable_ip2location" = "xyes"; then
-		ENABLE_SUPPORT_IP2LOCATION=1
+
+        IP2LOCATION="$enableval"
+        IP2LOCATION_LIB="-lIP2Location"
+
+else
+  IP2LOCATION="no"
+fi;
+
+
+# Check whether --with-ip2location-headers or --without-ip2location-headers was given.
+if test "${with_ip2location_headers+set}" = set; then
+  withval="$with_ip2location_headers"
+  IP2LOCATION_INCLUDE="-I$withval"
+fi;
+
+
+# Check whether --with-ip2location-lib or --without-ip2location-lib was given.
+if test "${with_ip2location_lib+set}" = set; then
+  withval="$with_ip2location_lib"
+  IP2LOCATION_LIB="-L$withval $IP2LOCATION_LIB"
+fi;
+
+
+# Check whether --with-ip2location-static or --without-ip2location-static was given.
+if test "${with_ip2location_static+set}" = set; then
+  withval="$with_ip2location_static"
+  if test "$withval" != "no"; then
+        IP2LOCATION_LIB="-Wl,-Bstatic $IP2LOCATION_LIB -Wl,-Bdynamic"
+     fi
+fi;
+
+if test "$IP2LOCATION" = "yes"; then
+    CPPFLAGS="$CPPFLAGS $IP2LOCATION_INCLUDE"
+    LDFLAGS="$LDFLAGS $IP2LOCATION_LIB"
+    if test "${ac_cv_header_IP2Location_h+set}" = set; then
+  echo "$as_me:$LINENO: checking for IP2Location.h" >&5
+echo $ECHO_N "checking for IP2Location.h... $ECHO_C" >&6
+if test "${ac_cv_header_IP2Location_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_IP2Location_h" >&5
+echo "${ECHO_T}$ac_cv_header_IP2Location_h" >&6
+else
+  # Is the header compilable?
+echo "$as_me:$LINENO: checking IP2Location.h usability" >&5
+echo $ECHO_N "checking IP2Location.h usability... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <IP2Location.h>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
+  (eval $ac_compile) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest.$ac_objext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_header_compiler=no
+fi
+rm -f conftest.err conftest.$ac_objext conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6
+
+# Is the header present?
+echo "$as_me:$LINENO: checking IP2Location.h presence" >&5
+echo $ECHO_N "checking IP2Location.h presence... $ECHO_C" >&6
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <IP2Location.h>
+_ACEOF
+if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
+  (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null; then
+  if test -s conftest.err; then
+    ac_cpp_err=$ac_c_preproc_warn_flag
+    ac_cpp_err=$ac_cpp_err$ac_c_werror_flag
+  else
+    ac_cpp_err=
+  fi
+else
+  ac_cpp_err=yes
+fi
+if test -z "$ac_cpp_err"; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+rm -f conftest.err conftest.$ac_ext
+echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: IP2Location.h: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: IP2Location.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: IP2Location.h: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: IP2Location.h: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: IP2Location.h: present but cannot be compiled" >&5
+echo "$as_me: WARNING: IP2Location.h: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: IP2Location.h:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: IP2Location.h:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: IP2Location.h: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: IP2Location.h: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: IP2Location.h:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: IP2Location.h:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: IP2Location.h: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: IP2Location.h: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: IP2Location.h: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: IP2Location.h: in the future, the compiler will take precedence" >&2;}
+    (
+      cat <<\_ASBOX
+## -------------------------------------- ##
+## Report this to ipv6calc@deepspace6.net ##
+## -------------------------------------- ##
+_ASBOX
+    ) |
+      sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+echo "$as_me:$LINENO: checking for IP2Location.h" >&5
+echo $ECHO_N "checking for IP2Location.h... $ECHO_C" >&6
+if test "${ac_cv_header_IP2Location_h+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_cv_header_IP2Location_h=$ac_header_preproc
+fi
+echo "$as_me:$LINENO: result: $ac_cv_header_IP2Location_h" >&5
+echo "${ECHO_T}$ac_cv_header_IP2Location_h" >&6
+
+fi
+if test $ac_cv_header_IP2Location_h = yes; then
+  :
+else
+  { { echo "$as_me:$LINENO: error: IP2Location library header files not found" >&5
+echo "$as_me: error: IP2Location library header files not found" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+
+    echo "$as_me:$LINENO: checking for IP2Location_open in -lIP2Location" >&5
+echo $ECHO_N "checking for IP2Location_open in -lIP2Location... $ECHO_C" >&6
+if test "${ac_cv_lib_IP2Location_IP2Location_open+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lIP2Location  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char IP2Location_open ();
+int
+main ()
+{
+IP2Location_open ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_IP2Location_IP2Location_open=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_IP2Location_IP2Location_open=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_IP2Location_IP2Location_open" >&5
+echo "${ECHO_T}$ac_cv_lib_IP2Location_IP2Location_open" >&6
+if test $ac_cv_lib_IP2Location_IP2Location_open = yes; then
+
 
 cat >>confdefs.h <<\_ACEOF
 #define SUPPORT_IP2LOCATION 1
 _ACEOF
 
-	fi
-fi;
+
+else
+
+            { { echo "$as_me:$LINENO: error: IP2Location library header files were found but the library was not found" >&5
+echo "$as_me: error: IP2Location library header files were found but the library was not found" >&2;}
+   { (exit 1); exit 1; }; }
+
+fi
+
+fi
+
 
 
 
 # Check whether --enable-geoip or --disable-geoip was given.
 if test "${enable_geoip+set}" = set; then
   enableval="$enable_geoip"
-  if test "x$enable_geoip" = "xyes"; then
-		ENABLE_SUPPORT_GEOIP=1
 
-cat >>confdefs.h <<\_ACEOF
-#define SUPPORT_GEOIP 1
-_ACEOF
+        GEOIP="$enableval"
+        GEOIP_LIB="-lGeoIP"
 
-	fi
+else
+  GEOIP="no"
 fi;
 
-# Check whether --enable-geoip-system or --disable-geoip-system was given.
-if test "${enable_geoip_system+set}" = set; then
-  enableval="$enable_geoip_system"
-  if test "x$enable_geoip_system" = "xyes"; then
-               if test "${ac_cv_header_GeoIP_h+set}" = set; then
+
+# Check whether --with-geoip-headers or --without-geoip-headers was given.
+if test "${with_geoip_headers+set}" = set; then
+  withval="$with_geoip_headers"
+  GEOIP_INCLUDE="-I$withval"
+fi;
+
+
+# Check whether --with-geoip-lib or --without-geoip-lib was given.
+if test "${with_geoip_lib+set}" = set; then
+  withval="$with_geoip_lib"
+  GEOIP_LIB="-L$withval $GEOIP_LIB"
+fi;
+
+
+
+# Check whether --with-geoip-static or --without-geoip-static was given.
+if test "${with_geoip_static+set}" = set; then
+  withval="$with_geoip_static"
+  if test "$withval" != "no"; then
+        GEOIP_LIB="-Wl,-Bstatic $GEOIP_LIB -Wl,-Bdynamic"
+     fi
+fi;
+
+
+# Check whether --with-geoip-default-file or --without-geoip-default-file was given.
+if test "${with_geoip_default_file+set}" = set; then
+  withval="$with_geoip_default_file"
+
+cat >>confdefs.h <<_ACEOF
+#define GEOIP_DEFAULT_FILE "$withval"
+_ACEOF
+
+fi;
+
+if test "$GEOIP" = "yes"; then
+    CPPFLAGS="$CFLAGS $GEOIP_INCLUDE"
+    LDFLAGS="$LDFLAGS $GEOIP_LIB"
+    if test "${ac_cv_header_GeoIP_h+set}" = set; then
   echo "$as_me:$LINENO: checking for GeoIP.h" >&5
 echo $ECHO_N "checking for GeoIP.h... $ECHO_C" >&6
 if test "${ac_cv_header_GeoIP_h+set}" = set; then
@@ -3762,45 +4046,94 @@ fi
 if test $ac_cv_header_GeoIP_h = yes; then
   :
 else
-  { { echo "$as_me:$LINENO: error: System GeoIP library not found" >&5
-echo "$as_me: error: System GeoIP library not found" >&2;}
+  { { echo "$as_me:$LINENO: error: GeoIP library header files not found" >&5
+echo "$as_me: error: GeoIP library header files not found" >&2;}
    { (exit 1); exit 1; }; }
+
 fi
 
 
-               ENABLE_SYSTEM_GEOIP=1
-               ENABLE_SUPPORT_GEOIP=1
+    echo "$as_me:$LINENO: checking for GeoIP_open in -lGeoIP" >&5
+echo $ECHO_N "checking for GeoIP_open in -lGeoIP... $ECHO_C" >&6
+if test "${ac_cv_lib_GeoIP_GeoIP_open+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lGeoIP  $LIBS"
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+/* Override any gcc2 internal prototype to avoid an error.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+/* We use char because int might match the return type of a gcc2
+   builtin and then its argument prototype would still apply.  */
+char GeoIP_open ();
+int
+main ()
+{
+GeoIP_open ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (eval echo "$as_me:$LINENO: \"$ac_link\"") >&5
+  (eval $ac_link) 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } &&
+	 { ac_try='test -z "$ac_c_werror_flag"
+			 || test ! -s conftest.err'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; } &&
+	 { ac_try='test -s conftest$ac_exeext'
+  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  ac_cv_lib_GeoIP_GeoIP_open=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+ac_cv_lib_GeoIP_GeoIP_open=no
+fi
+rm -f conftest.err conftest.$ac_objext \
+      conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+echo "$as_me:$LINENO: result: $ac_cv_lib_GeoIP_GeoIP_open" >&5
+echo "${ECHO_T}$ac_cv_lib_GeoIP_GeoIP_open" >&6
+if test $ac_cv_lib_GeoIP_GeoIP_open = yes; then
+
 
 cat >>confdefs.h <<\_ACEOF
 #define SUPPORT_GEOIP 1
 _ACEOF
 
 
-cat >>confdefs.h <<\_ACEOF
-#define ENABLE_GEOIP_SYSTEM 1
-_ACEOF
+else
 
-       fi
-fi;
+            { { echo "$as_me:$LINENO: error: GeoIP library header files were found but the library was not found" >&5
+echo "$as_me: error: GeoIP library header files were found but the library was not found" >&2;}
+   { (exit 1); exit 1; }; }
 
-# Check whether --enable-geoip-default-file or --disable-geoip-default-file was given.
-if test "${enable_geoip_default_file+set}" = set; then
-  enableval="$enable_geoip_default_file"
-  if test "x$enable_geoip_default_file" != xno; then
+fi
 
-cat >>confdefs.h <<_ACEOF
-#define GEOIP_DEFAULT_FILE "$enable_geoip_default_file"
-_ACEOF
-
-               ENABLE_SUPPORT_GEOIP=1
-
-cat >>confdefs.h <<\_ACEOF
-#define SUPPORT_GEOIP 1
-_ACEOF
-
-       fi
-fi;
-
+fi
 
 
 
@@ -4437,11 +4770,10 @@ s,@EGREP@,$EGREP,;t t
 s,@LIBOBJS@,$LIBOBJS,;t t
 s,@GETOPT_INCLUDE@,$GETOPT_INCLUDE,;t t
 s,@ENABLE_BUNDLED_GETOPT@,$ENABLE_BUNDLED_GETOPT,;t t
-s,@ENABLE_SUPPORT_IP2LOCATION@,$ENABLE_SUPPORT_IP2LOCATION,;t t
-s,@VERSION_IP2LOCATION@,$VERSION_IP2LOCATION,;t t
-s,@ENABLE_SUPPORT_GEOIP@,$ENABLE_SUPPORT_GEOIP,;t t
-s,@VERSION_GEOIP@,$VERSION_GEOIP,;t t
-s,@ENABLE_SYSTEM_GEOIP@,$ENABLE_SYSTEM_GEOIP,;t t
+s,@IP2LOCATION_INCLUDE@,$IP2LOCATION_INCLUDE,;t t
+s,@IP2LOCATION_LIB@,$IP2LOCATION_LIB,;t t
+s,@GEOIP_INCLUDE@,$GEOIP_INCLUDE,;t t
+s,@GEOIP_LIB@,$GEOIP_LIB,;t t
 s,@LTLIBOBJS@,$LTLIBOBJS,;t t
 CEOF
 
