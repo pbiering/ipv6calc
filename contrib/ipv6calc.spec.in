@@ -14,14 +14,12 @@ Source: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/ipv6calc-%{version}.tar.g
 
 BuildRoot: %{_tmppath}/ipv6calc-root
 
-%if %{?_with_geoip}
-BuildPreReq: GeoIP-devel
-Requires: GeoIP
-%endif
-%if %{?_with_ip2location}
-BuildPreReq: IP2Location-devel
-Requires: IP2Location
-%endif
+%{?_with_geoip: %{expand: BuildPreReq: GeoIP-devel}}
+%{?_with_geoip: %{expand: Requires: GeoIP}}
+
+%{?_with_ip2location: %{expand: BuildPreReq: IP2Location-devel}}
+%{?_with_ip2location: %{expand: Requires: IP2Location}}
+
 
 %description
 ipv6calc is a small utility which formats and calculates IPv6 addresses in
