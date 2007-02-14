@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Copyright  : 2001-2006 by Peter Bieringer <pb@bieringer.de>
+# Copyright  : 2001-2007 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
 Name: ipv6calc
@@ -14,9 +14,13 @@ Source: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/ipv6calc-%{version}.tar.g
 
 BuildRoot: %{_tmppath}/ipv6calc-root
 
-if %{?_with_geoip_system}
+if %{?_with_geoip}
 BuildPreReq: GeoIP-devel
 Requires: GeoIP
+fi
+if %{?_with_ip2location}
+BuildPreReq: IP2Location-devel
+Requires: IP2Location
 fi
 
 %description
@@ -31,17 +35,19 @@ Many more format conversions are supported, see given URL for more.
 
 Available rpmbuild rebuild options:
 --with : ip2location
---with : geoip [geoip-system]
+--with : geoip
 
 %prep
 %setup -q -n ipv6calc-%{version}
 
+
 %build
-./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?_with_ip2location:--enable-ip2location} %{?_with_geoip:--enable-geoip} %{?_with_geoip_system:--enable-geoip-system}
+./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?_with_ip2location:--enable-ip2location} %{?_with_geoip:--enable-geoip}
 make clean
 make
 make test
-	
+
+
 %install
 rm -rf $RPM_BUILD_ROOT
 
@@ -98,6 +104,7 @@ rm -rf $RPM_BUILD_ROOT
 /bin/ipv6calc
 %{_bindir}/ipv6logconv
 %{_bindir}/ipv6logstats
+%{_bindir}/ipv6loganon
 
 # man pages
 %{_mandir}/man8/*
@@ -107,6 +114,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Feb 14 2007 Peter Bieringer <pb@bieringer.de>
+- remove support for build option --with-geoip-system
+- add additinal binaries
+
 * Sat Oct 28 2006 Peter Bieringer <pb@bieringer.de>
 - add support for build option --with-geoip-system
 

@@ -1,7 +1,7 @@
 # Project    : ipv6calc/ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.21 2006/10/28 09:29:30 peter Exp $
-# Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile.in,v 1.22 2007/02/14 21:49:18 peter Exp $
+# Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calc
@@ -13,27 +13,11 @@ exec_prefix	= @exec_prefix@
 # Compiler and Linker Options
 COPTS = -O2 -Wall -g
 
-CFLAGS	= $(COPTS) @GETOPT_INCLUDE@ -I../ -I../lib/
+CFLAGS	= $(COPTS) @GETOPT_INCLUDE@ -I../ -I../lib/ @IP2LOCATION_INCLUDE@ @GEOIP_INCLUDE@
+
+LDFLAGS = @IP2LOCATION_LIB@ @GEOIP_LIB@
 
 GETOBJS = @LIBOBJS@ ../md5/md5.o
-
-ifeq (@ENABLE_SUPPORT_IP2LOCATION@, 1)
-  COPTS := $(COPTS) -DSUPPORT_IP2LOCATION
-  path_libIP2Location = ../databases/IP2Location/C-IP2Location-@VERSION_IP2LOCATION@/libIP2Location
-  CFLAGS := $(CFLAGS) -I$(path_libIP2Location)
-  GETOBJS := $(GETOBJS) $(path_libIP2Location)/IP2Location.o $(path_libIP2Location)/bigdigits.o $(path_libIP2Location)/spBigdigits.o $(path_libIP2Location)/bigd.o
-endif
-
-ifeq (@ENABLE_SUPPORT_GEOIP@, 1)
-  COPTS := $(COPTS) -DSUPPORT_GEOIP
-  ifeq (@ENABLE_SYSTEM_GEOIP@, 1)
-    GETOBJS := $(GETOBJS) -lGeoIP
-  else
-    path_libGeoIP = ../databases/GeoIP/GeoIP-@VERSION_GEOIP@/libGeoIP
-    CFLAGS := $(CFLAGS) -I$(path_libGeoIP)
-    GETOBJS := $(GETOBJS) $(path_libGeoIP)/GeoIP.o $(path_libGeoIP)/GeoIPCity.o
-  endif
-endif
 
 CC	= gcc
 
