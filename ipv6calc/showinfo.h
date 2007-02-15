@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.h
- * Version    : $Id: showinfo.h,v 1.10 2006/08/06 12:44:14 peter Exp $
+ * Version    : $Id: showinfo.h,v 1.11 2007/02/15 14:53:33 peter Exp $
  * Copyright  : 2001-2006 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -21,9 +21,11 @@
 // 3: 0.61.0cvs to current
 #define IPV6CALC_OUTPUT_VERSION	3
 
-
 /* prototypes */
+#ifndef SUPPORT_IP2LOCATION
+// TODO: analyse reason (happen with at least 2.1.2)
 extern int  showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, const uint32_t formatoptions);
 extern int  showinfo_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formatoptions);
 extern int  showinfo_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formatoptions);
+#endif
 extern void showinfo_availabletypes(void);

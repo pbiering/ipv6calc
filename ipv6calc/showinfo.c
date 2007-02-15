@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.34 2007/02/14 19:53:59 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.35 2007/02/15 14:53:33 peter Exp $
  * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -12,7 +12,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "showinfo.h"
 #include "ipv6calc.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
@@ -25,6 +24,7 @@
 #include "libeui64.h"
 #include "libeui64.h"
 #include "config.h"
+#include "showinfo.h"
 
 #ifdef SUPPORT_IP2LOCATION
 #include "IP2Location.h"
@@ -47,6 +47,21 @@ extern char file_ip2location_ipv6[NI_MAXHOST];
 #include "GeoIPCity.h"
 extern int use_geoip;
 extern char file_geoip[NI_MAXHOST];
+#endif
+
+#ifdef SUPPORT_IP2LOCATION
+/* prototypes copied from showinfo.h */
+/* TODO: analyse reason (happen with at least 2.1.2) for following messages:
+showinfo.c:587: error: conflicting types for 'showinfo_ipv6addr'
+showinfo.h:27: error: previous declaration of 'showinfo_ipv6addr' was here
+showinfo.c:902: error: conflicting types for 'showinfo_ipv4addr'
+showinfo.h:28: error: previous declaration of 'showinfo_ipv4addr' was here
+showinfo.c:921: error: conflicting types for 'showinfo_eui48'
+showinfo.h:29: error: previous declaration of 'showinfo_eui48' was here
+*/
+int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, const uint32_t formatoptions);
+int showinfo_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formatoptions);
+int showinfo_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formatoptions);
 #endif
 
 
