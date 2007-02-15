@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.147 2007/02/14 21:49:18 peter Exp $ 
+ *  $Id: ChangeLog,v 1.148 2007/02/15 14:59:43 peter Exp $ 
  */
 
 Info:
@@ -7,6 +7,12 @@ Info:
 	NT = Niko Tyni <ntyni (at) iki dot fi>
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 --------------------------------------------------------------------
+20070215/PB
+	ipv6calc/showinfo.[h,c]
+	 - move prototypes in case of use of IP2Location (2.1.2) because of a strange compilation warning
+	ipv6calc/Makefile.in
+	 - reorder CFLAGS according to patch from NT
+
 20070214/PB
 	contrib/ipv6calc.spec[.in] ipv6calc/Makefile[.in]
 	 - adjustments according to remove of static GeoIP/IP2Location support

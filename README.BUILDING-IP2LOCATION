@@ -14,7 +14,7 @@ Then, as normal:
 
 ./configure
 
-If you get this message:
+If you get this message (< 2.1.2):
 
 configure: creating ./config.status
 config.status: error: cannot find input file: Makefile
@@ -44,7 +44,8 @@ pkglib_LTLIBRARIES = libIP2Location.la
 into
 
 lib_LTLIBRARIES = libIP2Location.la
-include_HEADERS = IP2Location.h bigd.h
+include_HEADERS = IP2Location.h bigd.h # (< 2.1.2)
+include_HEADERS = IP2Location.h mpi.h mpi-config.h mpi-types.h # (>= 2.1.2)
 
 So, one more iteration:
 

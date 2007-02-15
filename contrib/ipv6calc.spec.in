@@ -75,6 +75,12 @@ mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/
 mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logconv
 cp -r examples/analog/* $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logconv
 
+# ipv6loganon
+mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6loganon
+pushd ipv6loganon
+cp README $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6loganon/
+popd
+
 # ipv6logstats
 mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logstats
 pushd ipv6logstats
@@ -125,7 +131,7 @@ rm -rf $RPM_BUILD_ROOT
 %changelog
 * Wed Feb 14 2007 Peter Bieringer <pb@bieringer.de>
 - remove support for build option --with-geoip-system
-- add additinal binaries
+- add support for 'ipv6loganon'
 
 * Sat Oct 28 2006 Peter Bieringer <pb@bieringer.de>
 - add support for build option --with-geoip-system
