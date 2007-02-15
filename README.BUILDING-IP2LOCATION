@@ -1,0 +1,62 @@
+BUILDING IP2LOCATION
+--------------------
+
+If you want to use the IP2Location library with ipv6calc, you will
+have to build and install it yourself separately.  Unfortunately,
+the current version (2.1.1) of the IP2Location library distributed at
+<http://www.ip2location.com/c.aspx> is not very polished. It needs at
+least GNU automake, autoconf and libtool to build. You must first build
+the configure script, as documented in the README:
+
+% autoreconf -i -v --force
+
+Then, as normal:
+
+./configure
+
+If you get this message:
+
+configure: creating ./config.status
+config.status: error: cannot find input file: Makefile
+
+the problem is that configure.ac contains DOS-style line
+endings.
+
+An easy way to fix this is:
+
+% perl -pi.bak -e 's/\r//' configure.ac
+
+Afterwards, you'll have to rerun autoreconf:
+
+% autoreconf -i -v --force
+
+Now the normal build procedure
+
+% ./configure && make
+
+should work, but be aware that 'make install' will only
+install the library, not the include files (and even the
+library will go into a strange place). The best way to fix
+this is to edit libIP2Location/Makefile.am and change
+
+pkglib_LTLIBRARIES = libIP2Location.la
+
+into
+
+lib_LTLIBRARIES = libIP2Location.la
+include_HEADERS = IP2Location.h bigd.h
+
+So, one more iteration:
+
+% autoreconf -i -v --force
+
+% ./configure && make
+
+# make install
+
+and you should be OK. Phew!
+
+Next, see the INSTALL file in the ipv6calc distribution for information
+on configuring ipv6calc to use the library.
+
+-- Niko Tyni <ntyni@iki.fi>, Fri, 09 Feb 2007 00:23:29 +0200
