@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.23 2006/03/17 17:02:26 peter Exp $
-# Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: create-registry-list.pl,v 1.24 2007/03/03 11:57:28 peter Exp $
+# Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
 # Information:
@@ -33,7 +33,13 @@ $year = 1900 + $year;
 $mon = sprintf "%02d", $mon + 1;
 $mday = sprintf "%02d", $mday;
 
-my @files = ( "../registries/arin/delegated-arin-" . $year . $mon . $mday, "../registries/ripencc/delegated-ripencc-" . $year . $mon . $mday, "../registries/apnic/delegated-apnic-" . $year . $mon . $mday, "../registries/lacnic/delegated-lacnic-" . $year . $mon . $mday, "../registries/afrinic/delegated-afrinic-" . $year . $mon . $mday );
+my @files = (
+	"../registries/arin/delegated-arin-latest",
+	"../registries/ripencc/delegated-ripencc-latest",
+	"../registries/apnic/delegated-apnic-latest",
+	"../registries/lacnic/delegated-lacnic-latest",
+	"../registries/afrinic/delegated-afrinic-latest"
+);
 #my @files = ( "lacnic/lacnic." . $year . $mon . "01" );
 
 my (@arin, @apnic, @ripencc, @iana, @lacnic, @afrinic);

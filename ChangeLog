@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.148 2007/02/15 14:59:43 peter Exp $ 
+ *  $Id: ChangeLog,v 1.149 2007/03/03 11:57:28 peter Exp $ 
  */
 
 Info:
@@ -7,6 +7,24 @@ Info:
 	NT = Niko Tyni <ntyni (at) iki dot fi>
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 --------------------------------------------------------------------
+20070303/PB
+	autogen.sh
+	 - add support for more options, see -? for more
+	ipv6calc/showinfo.[h,c]
+	 - revert to pre 20070215 release, IP2Location (2.1.3) was fixed now
+	ipv6calc/ipv6calc.h
+	 - adjust copyright year
+	databases/registries/update-registries.sh
+	 - remove unconditional exit code 0
+	databases/registries/update-registries.sh databases/ipv{4,6}-assignment/create-registry-list.pl
+	 - change from %Y%m%d to -latest
+	databases/ipv6-assignment/create-registry-list.pl
+	 - reenable all registries
+	databases/registries/Makefile
+	 - support "lacnic" on distclean
+	databases/ipv4-assignment/Makefile
+	 - cleanup
+	
 20070215/PB
 	ipv6calc/showinfo.[h,c]
 	 - move prototypes in case of use of IP2Location (2.1.2) because of a strange compilation warning

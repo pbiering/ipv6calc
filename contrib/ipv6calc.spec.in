@@ -27,7 +27,7 @@ Requires: GeoIP
 
 %if %{enable_ip2location}
 BuildPreReq: IP2Location-devel
-Requires: IP2Location
+Requires: IP2Location >= 2.1.3
 %endif
 
 

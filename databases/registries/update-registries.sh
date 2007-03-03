@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/registries
 # File       : update-registries.sh
-# Version    : $Id: update-registries.sh,v 1.3 2007/02/01 13:36:46 peter Exp $
+# Version    : $Id: update-registries.sh,v 1.4 2007/03/03 11:57:29 peter Exp $
 # Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces ../ipv4-assignment/update-ipv4-assignment.sh
 #               replaces ../ipv6-assignment/update-ipv6-assignment.sh
@@ -21,11 +21,11 @@ day="`date -d '2 days ago' +%d`"
 cat <<END | sed s/\%Y/$year/g | sed s/\%m/$month/g | sed s/\%d/$day/g
 iana	http://www.iana.org/assignments/		ipv4-address-space			txt
 iana	http://www.iana.org/assignments/		ipv6-unicast-address-assignments	txt
-ripencc	ftp://ftp.ripe.net/pub/stats/ripencc/%Y/	delegated-ripencc-%Y%m%d.bz2		bz2
-arin	ftp://ftp.arin.net/pub/stats/arin/		delegated-arin-%Y%m%d			txt
-apnic	http://ftp.apnic.net/stats/apnic/		delegated-apnic-%Y%m%d			txt
-lacnic	ftp://ftp.lacnic.net/pub/stats/lacnic/		delegated-lacnic-%Y%m%d			txt
-afrinic	ftp://ftp.afrinic.net/pub/stats/afrinic/	delegated-afrinic-%Y%m%d		txt
+ripencc	ftp://ftp.ripe.net/pub/stats/ripencc/		delegated-ripencc-latest		txt
+arin	ftp://ftp.arin.net/pub/stats/arin/		delegated-arin-latest			txt
+apnic	http://ftp.apnic.net/stats/apnic/		delegated-apnic-latest			txt
+lacnic	ftp://ftp.lacnic.net/pub/stats/lacnic/		delegated-lacnic-latest			txt
+afrinic	ftp://ftp.afrinic.net/pub/stats/afrinic/	delegated-afrinic-latest		txt
 END
 }
 
@@ -34,7 +34,7 @@ echo "Download new version of files"
 get_urls | while read subdir url filename format; do
 	echo "Check: $subdir"
 	pushd $subdir || exit 1
-	wget $url$filename --timestamping
+	wget $url$filename --timestamping --retr-symlinks
 	retval=$?
 	popd
 	if [ $retval -ne 0 ]; then
@@ -60,4 +60,3 @@ get_urls | while read subdir url filename format; do
 
 	echo
 done
-exit 0

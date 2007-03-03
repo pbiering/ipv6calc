@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.22 2007/02/01 14:41:40 peter Exp $
- * Generated     : Thu Feb  1 14:10:18 2007
+ * Version       : $Id: dbieee_iab.h,v 1.23 2007/03/03 11:57:28 peter Exp $
+ * Generated     : Sat Mar  3 12:41:28 2007
  * Data copyright: IEEE
  *
  * Information:
@@ -523,7 +523,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x1FE000, 0x1FEFFF, "Safetran Traffic Systems Inc.", "SAFETRAN-TRAFFIC" },
 	{ 0x0050C2, 0x1FF000, 0x1FFFFF, "Product Design Dept., Sohwa Corporation", "PRODUCT-DESIGN-DEPT-SOHWA" },
 	{ 0x0050C2, 0x200000, 0x200FFF, "Whittier Mailing Products, Inc.", "WHITTIER-MAILING-PRODUCTS" },
-	{ 0x0050C2, 0x201000, 0x201FFF, "Staveley Instruments", "STAVELEY-INSTRUMENTS" },
+	{ 0x0050C2, 0x201000, 0x201FFF, "OlympusNDT", "OLYMPUSNDT" },
 	{ 0x0050C2, 0x202000, 0x202FFF, "Audio Riders Oy", "AUDIO-RIDERS-OY" },
 	{ 0x0050C2, 0x203000, 0x203FFF, "PRIVATE", "PRIVATE" },
 	{ 0x0050C2, 0x204000, 0x204FFF, "Algodue Elettronica srl", "ALGODUE-ELETTRONICA-SRL" },
@@ -723,7 +723,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x2C6000, 0x2C6FFF, "Initial Electronic Security Systems", "INITIAL-SECURITY" },
 	{ 0x0050C2, 0x2C7000, 0x2C7FFF, "Siliquent Technologies Ltd", "SILIQUENT-TECHNOLOGIES" },
 	{ 0x0050C2, 0x2C8000, 0x2C8FFF, "SELCO", "SELCO" },
-	{ 0x0050C2, 0x2C9000, 0x2C9FFF, "Roseman Engineering Ltd.", "ROSEMAN-ENGINEERING" },
+	{ 0x0050C2, 0x2C9000, 0x2C9FFF, "PRIVATE", "PRIVATE" },
 	{ 0x0050C2, 0x2CA000, 0x2CAFFF, "PUTERCOM CO., LTD", "PUTERCOM" },
 	{ 0x0050C2, 0x2CB000, 0x2CBFFF, "FACTS Engineering LLC", "FACTS-ENGINEERING-LLC" },
 	{ 0x0050C2, 0x2CC000, 0x2CCFFF, "EMBEDDED TOOLSMITHS", "EMBEDDED-TOOLSMITHS" },
@@ -776,7 +776,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x2FB000, 0x2FBFFF, "Arthur Industries Inc., dba On Hold Media Group", "ARTHUR-INDUSTRIES-DBA-ON-HOLD-MEDIA-GROUP" },
 	{ 0x0050C2, 0x2FC000, 0x2FCFFF, "Blackline Systems Corporation", "BLACKLINE" },
 	{ 0x0050C2, 0x2FD000, 0x2FDFFF, "American Microsystems LTD", "AMERICAN-MICROSYSTEMS" },
-	{ 0x0050C2, 0x2FE000, 0x2FEFFF, "AerotechTelub AB", "AEROTECHTELUB-AB" },
+	{ 0x0050C2, 0x2FE000, 0x2FEFFF, "Saab AB", "SAAB-AB" },
 	{ 0x0050C2, 0x2FF000, 0x2FFFFF, "Patria Advanced Solutions", "PATRIA-ADVANCED-SOLUTIONS" },
 	{ 0x0050C2, 0x300000, 0x300FFF, "Soredex Instrumentarium Oyj", "SOREDEX-INSTRUMENTARIUM-OYJ" },
 	{ 0x0050C2, 0x301000, 0x301FFF, "Delphi Display Systems, Inc.", "DELPHI-DISPLAY" },
@@ -1069,7 +1069,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x420000, 0x420FFF, "Boundless Technologies", "BOUNDLESS-TECHNOLOGIES" },
 	{ 0x0050C2, 0x421000, 0x421FFF, "EFSYS", "EFSYS" },
 	{ 0x0050C2, 0x422000, 0x422FFF, "Gekeler Martina", "GEKELER-MARTINA" },
-	{ 0x0050C2, 0x423000, 0x423FFF, "Magnetek", "MAGNETEK" },
+	{ 0x0050C2, 0x423000, 0x423FFF, "Power-One Inc.", "POWER-ONE" },
 	{ 0x0050C2, 0x424000, 0x424FFF, "Metrolab Instruments SA", "METROLAB-INSTRUMENTS" },
 	{ 0x0050C2, 0x425000, 0x425FFF, "Pinnacle Technology", "PINNACLE" },
 	{ 0x0050C2, 0x426000, 0x426FFF, "STOM System", "STOM-SYSTEM" },
@@ -1798,5 +1798,38 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x6F9000, 0x6F9FFF, "Revox GmbH", "REVOX" },
 	{ 0x0050C2, 0x6FA000, 0x6FAFFF, "DCN", "DCN" },
 	{ 0x0050C2, 0x6FB000, 0x6FBFFF, "WaveIP", "WAVEIP" },
+	{ 0x0050C2, 0x6FC000, 0x6FCFFF, "Acte Sp. z o.o.", "ACTE-SP-Z-O-O" },
+	{ 0x0050C2, 0x6FD000, 0x6FDFFF, "SAIA Burgess Controls AG", "SAIA-BURGESS-CONTROLS" },
+	{ 0x0050C2, 0x6FE000, 0x6FEFFF, "PRIVATE", "PRIVATE" },
+	{ 0x0050C2, 0x6FF000, 0x6FFFFF, "St. Michael Strategies Inc.", "ST-MICHAEL-STRATEGIES" },
+	{ 0x0050C2, 0x700000, 0x700FFF, "GEM-MED SL", "GEM-MED-SL" },
+	{ 0x0050C2, 0x701000, 0x701FFF, "Keith & Koep GmbH", "KEITH-KOEP" },
+	{ 0x0050C2, 0x702000, 0x702FFF, "SPM Instrument AB", "SPM-INSTRUMENT-AB" },
+	{ 0x0050C2, 0x703000, 0x703FFF, "SAE IT-systems GmbH & Co. KG", "SAE-IT" },
+	{ 0x0050C2, 0x704000, 0x704FFF, "The Dini Group, La Jolla inc.", "THE-DINI-GROUP-LA-JOLLA" },
+	{ 0x0050C2, 0x705000, 0x705FFF, "Hauch & Bach ApS", "HAUCH-BACH-APS" },
+	{ 0x0050C2, 0x706000, 0x706FFF, "DioDigiWorks. CO., LTD.", "DIODIGIWORKS" },
+	{ 0x0050C2, 0x707000, 0x707FFF, "DTech Labs Inc", "DTECH-LABS" },
+	{ 0x0050C2, 0x708000, 0x708FFF, "Smartek d.o.o.", "SMARTEK-D-O-O" },
+	{ 0x0050C2, 0x709000, 0x709FFF, "RO.VE.R. Laboratories S.p.A", "RO-VE-R-LABORATORIES-S-P-A" },
+	{ 0x0050C2, 0x70A000, 0x70AFFF, "Efficient Channel Coding", "EFFICIENT-CHANNEL-CODING" },
+	{ 0x0050C2, 0x70B000, 0x70BFFF, "B.E.A.R. Solutions (Australasia) Pty Ltd", "B-E-A-R-SOLUTIONS-AUSTRALASIA-PTY" },
+	{ 0x0050C2, 0x70C000, 0x70CFFF, "Exertus", "EXERTUS" },
+	{ 0x0050C2, 0x70D000, 0x70DFFF, "ela-soft GmbH & Co. KG", "ELA-SOFT" },
+	{ 0x0050C2, 0x70E000, 0x70EFFF, "AUDICO SYSTEMS OY", "AUDICO-OY" },
+	{ 0x0050C2, 0x70F000, 0x70FFFF, "Zumbach Electronic AG", "ZUMBACH" },
+	{ 0x0050C2, 0x710000, 0x710FFF, "Wharton Electronics Ltd", "WHARTON-ELECTRONICS" },
+	{ 0x0050C2, 0x711000, 0x711FFF, "LINKIT S.R.L.", "LINKIT-S-R-L" },
+	{ 0x0050C2, 0x712000, 0x712FFF, "Belval SA", "BELVAL" },
+	{ 0x0050C2, 0x713000, 0x713FFF, "3DX-Ray Limited", "3DX-RAY" },
+	{ 0x0050C2, 0x714000, 0x714FFF, "T.E.AM., S. A.", "T-E-AM-S-A" },
+	{ 0x0050C2, 0x715000, 0x715FFF, "RIEXINGER Elektronik", "RIEXINGER-ELEKTRONIK" },
+	{ 0x0050C2, 0x716000, 0x716FFF, "MITROL S.R.L.", "MITROL-S-R-L" },
+	{ 0x0050C2, 0x717000, 0x717FFF, "MB Connect Line GmbH", "MB-CONNECT-LINE" },
+	{ 0x0050C2, 0x718000, 0x718FFF, "illunis LLC", "ILLUNIS-LLC" },
+	{ 0x0050C2, 0x719000, 0x719FFF, "ennovatis GmbH", "ENNOVATIS" },
+	{ 0x0050C2, 0x71A000, 0x71AFFF, "Logus Broadband Wireless Solutions Inc.", "LOGUS-BROADBAND-WIRELESS-SOLUTIONS" },
+	{ 0x0050C2, 0x71B000, 0x71BFFF, "ADVA Optical Networking", "ADVA-OPTICAL-NETWORKING" },
+	{ 0x0050C2, 0x71C000, 0x71CFFF, "Elmec Inc.", "ELMEC" },
 
 };

@@ -1,11 +1,29 @@
 #!/bin/sh
 
-$Id: autogen.sh,v 1.7 2007/02/01 14:41:40 peter Exp $
+$Id: autogen.sh,v 1.8 2007/03/03 11:57:28 peter Exp $
 
-if [ "$1" = "--no-make" ]; then
-	shift
-	flag_no_make=1
-fi
+OPTIONS_CONFIGURE=""
+
+LAST=""
+while [ "$1" != "$LAST" ]; do
+	LAST="$1"
+	case $1 in
+	    '--no-make'|'-n')
+		shift
+		flag_no_make=1
+		;;
+	    '--all'|'-a')
+		shift
+		OPTIONS_CONFIGURE="--enable-geoip --enable-ip2location"
+		;;
+	    '-?'|'-h'|'--help')
+		echo "Supported options:"
+		echo "   -?|-h|--help: this help"
+		echo "   -n|--no-make: stop before running 'make'"
+		echo "   -a|--all    : enable GeoIP and IP2Location support"
+		exit 1
+	esac
+done
 
 if [ -f Makefile ]; then
 	echo "*** cleanup"
@@ -18,8 +36,8 @@ autoheader || exit 1
 echo "*** run: autoconf"
 autoconf || exit 1
 
-echo "*** run: configure"
-./configure --bindir=/usr/bin --mandir=/usr/share/man $* || exit 1
+echo "*** run: configure, options: $OPTIONS_CONFIGURE $*"
+./configure --bindir=/usr/bin --mandir=/usr/share/man $OPTIONS_CONFIGURE $* || exit 1
 
 if [ "$flag_no_make" = "1" ]; then
 	echo
