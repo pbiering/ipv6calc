@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.149 2007/03/03 11:57:28 peter Exp $ 
+ *  $Id: ChangeLog,v 1.150 2007/04/01 20:00:51 peter Exp $ 
  */
 
 Info:
@@ -7,6 +7,10 @@ Info:
 	NT = Niko Tyni <ntyni (at) iki dot fi>
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 --------------------------------------------------------------------
+20070401/PB
+	update databases
+	tag version 0.70.0
+
 20070303/PB
 	autogen.sh
 	 - add support for more options, see -? for more

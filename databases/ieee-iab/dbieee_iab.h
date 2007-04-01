@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.23 2007/03/03 11:57:28 peter Exp $
- * Generated     : Sat Mar  3 12:41:28 2007
+ * Version       : $Id: dbieee_iab.h,v 1.24 2007/04/01 20:00:51 peter Exp $
+ * Generated     : Sun Apr  1 21:55:48 2007
  * Data copyright: IEEE
  *
  * Information:
@@ -1831,5 +1831,35 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x71A000, 0x71AFFF, "Logus Broadband Wireless Solutions Inc.", "LOGUS-BROADBAND-WIRELESS-SOLUTIONS" },
 	{ 0x0050C2, 0x71B000, 0x71BFFF, "ADVA Optical Networking", "ADVA-OPTICAL-NETWORKING" },
 	{ 0x0050C2, 0x71C000, 0x71CFFF, "Elmec Inc.", "ELMEC" },
+	{ 0x0050C2, 0x71D000, 0x71DFFF, "MG s.r.l.", "MG-S-R-L" },
+	{ 0x0050C2, 0x71E000, 0x71EFFF, "ASKI Industrie Elektronik", "ASKI-INDUSTRIE-ELEKTRONIK" },
+	{ 0x0050C2, 0x71F000, 0x71FFFF, "ASC telecom AG", "ASC-TELECOM" },
+	{ 0x0050C2, 0x720000, 0x720FFF, "PRIVATE", "PRIVATE" },
+	{ 0x0050C2, 0x721000, 0x721FFF, "Spectrum Communications FZE", "SPECTRUM-COMMUNICATION-FZE" },
+	{ 0x0050C2, 0x722000, 0x722FFF, "Centric TSolve BV", "CENTRIC-TSOLVE" },
+	{ 0x0050C2, 0x723000, 0x723FFF, "Power Electronics", "POWER-ELECTRONICS" },
+	{ 0x0050C2, 0x724000, 0x724FFF, "HSC-Regelungstechnik GmbH", "HSC-REGELUNGSTECHNIK" },
+	{ 0x0050C2, 0x725000, 0x725FFF, "DSP DESIGN", "DSP-DESIGN" },
+	{ 0x0050C2, 0x726000, 0x726FFF, "eta systemi CKB", "ETA-SYSTEMI-CKB" },
+	{ 0x0050C2, 0x727000, 0x727FFF, "Pelweckyj Videotechnik GmbH", "PELWECKYJ-VIDEOTECHNIK" },
+	{ 0x0050C2, 0x728000, 0x728FFF, "InterDigital Canada Ltd", "INTERDIGITAL-CANADA" },
+	{ 0x0050C2, 0x729000, 0x729FFF, "SP Controls, Inc", "SP-CONTROLS" },
+	{ 0x0050C2, 0x72A000, 0x72AFFF, "Phytec Messtechnik GmbH", "PHYTEC-MESSTECHNIK" },
+	{ 0x0050C2, 0x72B000, 0x72BFFF, "Sequestered Solutions", "SEQUESTERED-SOLUTIONS" },
+	{ 0x0050C2, 0x72C000, 0x72CFFF, "Richard Griessbach Feinmechanik GmbH", "RICHARD-GRIESSBACH-FEINMECHANIK" },
+	{ 0x0050C2, 0x72D000, 0x72DFFF, "Physical Acoustics Corporation", "PHYSICAL-ACOUSTICS" },
+	{ 0x0050C2, 0x72E000, 0x72EFFF, "SNCF EIM PAYS DE LOIRE", "SNCF-EIM-PAYS-DE-LOIRE" },
+	{ 0x0050C2, 0x72F000, 0x72FFFF, "Priority Electronics Ltd", "PRIORITY-ELECTRONICS" },
+	{ 0x0050C2, 0x730000, 0x730FFF, "haber & koenig electronics gmbh", "HABER-KOENIG-ELECTRONICS" },
+	{ 0x0050C2, 0x731000, 0x731FFF, "Spirent Communications", "SPIRENT-COMMUNICATION" },
+	{ 0x0050C2, 0x732000, 0x732FFF, "Schlumberger K.K.", "SCHLUMBERGER-K-K" },
+	{ 0x0050C2, 0x733000, 0x733FFF, "Cimetrics Research Pty Ltd", "CIMETRICS-RESEARCH-PTY" },
+	{ 0x0050C2, 0x734000, 0x734FFF, "CardioMEMS Inc.", "CARDIOMEMS" },
+	{ 0x0050C2, 0x735000, 0x735FFF, "Duma Video, Inc.", "DUMA-VIDEO" },
+	{ 0x0050C2, 0x736000, 0x736FFF, "Nika Ltd", "NIKA" },
+	{ 0x0050C2, 0x737000, 0x737FFF, "Teradici Corporation", "TERADICI" },
+	{ 0x0050C2, 0x738000, 0x738FFF, "Miracom Technology Co., Ltd.", "MIRACOM" },
+	{ 0x0050C2, 0x739000, 0x739FFF, "Tattile srl", "TATTILE-SRL" },
+	{ 0x0050C2, 0x73A000, 0x73AFFF, "Naturela Ltd.", "NATURELA" },
 
 };
