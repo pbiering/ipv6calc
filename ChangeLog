@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.150 2007/04/01 20:00:51 peter Exp $ 
+ *  $Id: ChangeLog,v 1.151 2007/04/02 19:35:35 peter Exp $ 
  */
 
 Info:
@@ -7,6 +7,16 @@ Info:
 	NT = Niko Tyni <ntyni (at) iki dot fi>
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 --------------------------------------------------------------------
+20070402/PB
+	ipv6calc/showinfo.c
+	 - skip displaying of IPV4_SOURCE if no data is given
+	 - fix month of IP2Location database
+	 - separate IP2Location information for IPv4 and IPv6 (increase output version to 4)
+	ipv6calcweb/ipv6calcweb.cgi.in
+	 - fix database options according to changes before releasing 0.70.0
+	 - if server address is skipped, do not retrieve information at all
+	 - use built-in list for detecting binary and database files on various locations
+	
 20070401/PB
 	update databases
 	tag version 0.70.0
@@ -60,11 +70,11 @@ Info:
 20070201/PB
 	database update
 	ipv6loganon/*
-	 - minor improvements, add READE
+	 - minor improvements, add README
 
 20070131/PB
 	ipv6calc/showinfo.c
-	 - fix bug y exchange TEREDO SERVER<->CLIENT tokens
+	 - fix bug by exchange TEREDO SERVER<->CLIENT tokens
 	 - code improvements (triggered by splint)
 	ipv6loganon/*
 	 - improve ipv6loganon
