@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.36 2007/03/03 11:57:29 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.37 2007/04/02 19:34:11 peter Exp $
  * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -93,7 +93,8 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IP2LOCATION_LONGITUDE=...     : Longitude of IP address\n");
 	fprintf(stderr, " IP2LOCATION_DOMAIN=...        : Domain of IP address\n");
 	fprintf(stderr, " IP2LOCATION_ZIPCODE=...       : Zip code of IP address\n");
-	fprintf(stderr, " IP2LOCATION_DATABASE_INFO=... : Information about the used database\n");
+	fprintf(stderr, " IP2LOCATION_DATABASE_INFO_IPV4=... : Information about the used IPv4 database\n");
+	fprintf(stderr, " IP2LOCATION_DATABASE_INFO_IPV6=... : Information about the used IPv6 database\n");
 #endif
 	fprintf(stderr, " IPV6CALC_VERSION=x.y          : Version of ipv6calc\n");
 	fprintf(stderr, " IPV6CALC_COPYRIGHT=\"...\"      : Copyright string\n");
@@ -132,11 +133,13 @@ static void printfooter(const uint32_t formatoptions) {
 #define DEBUG_function_name "showinfo/print_ip2location"
 static void print_ip2location(const char *addrstring, const uint32_t formatoptions, const char *additionalstring, int version) {
 
-	static int flag_ip2location_info_shown = 0;
+	static int flag_ip2location_info_shown_ipv4 = 0;
+	static int flag_ip2location_info_shown_ipv6 = 0;
 
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable);
 	char tempstring[NI_MAXHOST] = "";
 	char *file_ip2location;
+	int flag_info_show;
 
 	if (version == 4) {
 		file_ip2location = file_ip2location_ipv4;
@@ -171,14 +174,22 @@ static void print_ip2location(const char *addrstring, const uint32_t formatoptio
 
 	IP2LocationRecord *record = IP2Location_get_all(IP2LocationObj, (char*) addrstring);
 
-	if (flag_ip2location_info_shown == 0) {
-		flag_ip2location_info_shown = 1;
+	flag_info_show = 0;
+	if ((version == 4) && (flag_ip2location_info_shown_ipv4 == 0)) {
+		flag_ip2location_info_shown_ipv4 = 1;
+		flag_info_show = 1;
+	} else if ((version == 6) && (flag_ip2location_info_shown_ipv6 == 0)) {
+		flag_ip2location_info_shown_ipv6 = 1;
+		flag_info_show = 1;
+	};
 
+	if (flag_info_show != 0) {
 		if ( machinereadable != 0 ) {
 			snprintf(tempstring, sizeof(tempstring) - 1, \
-				"IP2LOCATION_DATABASE_INFO=url=http://www.ip2location.com date=%04d-%02d-%02d entries=%d apiversion=%s", \
+				"IP2LOCATION_DATABASE_INFO_IPV%d=url=http://www.ip2location.com date=%04d-%02d-%02d entries=%d apiversion=%s", \
+				version, \
 				IP2LocationObj->databaseyear + 2000, \
-				IP2LocationObj->databasemonth + 1, \
+				IP2LocationObj->databasemonth, \
 				IP2LocationObj->databaseday, \
 				IP2LocationObj->databasecount, \
 				xmakestr(API_VERSION));
@@ -374,7 +385,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	
 	if ( machinereadable != 0 ) {
 		/* given source string */
-		if (string != NULL) {
+		if ((string != NULL) && (strlen(string) > 0)) {
 			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_SOURCE%s=%s", embeddedipv4string, string);
 			printout(tempstring);
 		};
