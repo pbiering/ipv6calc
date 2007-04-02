@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.13 2006/08/28 20:24:06 peter Exp $
-# Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.14 2007/04/02 19:31:40 peter Exp $
+# Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
 # Simple Perl web interface and security wrapper
@@ -29,7 +29,7 @@ use strict;
 ## Defines
 # Program information
 my $program_name = "ipv6calcweb.cgi";
-my $program_copyright = "(P) & (C) 2002-2006 by Peter Bieringer";
+my $program_copyright = "(P) & (C) 2002-2007 by Peter Bieringer";
 my $program_version = "@PACKAGE_VERSION@";
 
 # required output version of ipv6calc (introduced in 0.60.0)
@@ -38,29 +38,74 @@ my $program_required_ipv6calc_output_version = 2;
 
 # Debug value
 my $debug = 0;
+#$debug |= 0x02;
+#$debug |= 0x10;
 #$debug = 0xffff;
 #$debug = 0x01;
 
+# debug | 0x10: print raw ipv6calc output
+# debug | 0x02: print result of find_file to stderr
+
+
+# List of deefault location of files (first existing one would be choosen)
+my @list_bin_ipv6calc = (
+	"../ipv6calc/ipv6calc",
+	"/bin/ipv6calc",
+);
+
+my @list_database_ip2location_ipv4 = (
+	"/usr/share/IP2Location/IP-COUNTRY-SAMPLE.BIN",
+);
+
+my @list_database_ip2location_ipv6 = (
+	"/var/local/share/IP2Location/IPV6-COUNTRY.BIN",
+	"/usr/share/IP2Location/IPV6-COUNTRY.BIN",
+);
+
+my @list_database_geoip = (
+	"/var/local/share/GeoIP/GeoIPLiteCity.dat",
+	"/var/local/share/GeoIP/GeoIP.dat",
+	"/usr/share/GeoIP/GeoIPLiteCity.dat",
+	"/usr/share/GeoIP/GeoIP.dat",
+);
+
+sub find_file(@) {
+	foreach my $file (@_) {
+		if (-e $file) {
+			print STDERR "find_file selected: $file\n" if ($debug & 0x02);
+			return ($file);
+		};
+	};
+	return undef;
+};
+
 # Location of binary
-#my $bin_ipv6calc = "/bin/ipv6calc";
-my $bin_ipv6calc = "../ipv6calc/ipv6calc";
+my $bin_ipv6calc = find_file(@list_bin_ipv6calc);
 my $options_ipv6calc = "-m -i -q";
 
-my $database_ip2location = "../databases/IP2Location/C-IP2Location-1.1.0/data/IP-COUNTRY-SAMPLE.BIN";
-my $flag_ip2location_used = 0;
+my $database_ip2location_ipv4 = find_file(@list_database_ip2location_ipv4);
+my $database_ip2location_ipv6 = find_file(@list_database_ip2location_ipv6);
+my $flag_ip2location_used_ipv4 = 0;
+my $flag_ip2location_used_ipv6 = 0;
 my %info_ip2location;
 my $info_ip2location_string;
+my $info_ip2location_string_ipv4;
+my $info_ip2location_string_ipv6;
 
-my $database_geoip = "../databases/GeoIP/GeoIP-1.3.17/data/GeoLiteCity.dat";
+my $database_geoip = find_file(@list_database_geoip);
 my $flag_geoip_used = 0;
 my $info_geoip_string;
 
-if ( -f $database_ip2location) {
-	$options_ipv6calc .= " -p $database_ip2location";
+if (defined $database_ip2location_ipv4) {
+	$options_ipv6calc .= " --db-ip2location-ipv4 $database_ip2location_ipv4";
 };
 
-if ( -f $database_geoip) {
-	$options_ipv6calc .= " -g $database_geoip";
+if (defined $database_ip2location_ipv6) {
+	$options_ipv6calc .= " --db-ip2location-ipv6 $database_ip2location_ipv6";
+};
+
+if (defined $database_geoip) {
+	$options_ipv6calc .= " --db-geoip $database_geoip";
 };
 
 
@@ -275,6 +320,14 @@ my %text = (
 		'de' => "IP2Location Datenbank-Information",
 		'en' => "IP2Location database information",
 	},
+	'IP2LOCATION_DATABASE_INFO_IPV4' => {
+		'de' => "IP2Location IPv4 Datenbank-Information",
+		'en' => "IP2Location IPv4 database information",
+	},
+	'IP2LOCATION_DATABASE_INFO_IPV6' => {
+		'de' => "IP2Location IPv6 Datenbank-Information",
+		'en' => "IP2Location IPv6 database information",
+	},
 	'GEOIP_COUNTRY_SHORT' => {
 		'de' => "GeoIP Länderkennung",
 		'en' => "GeoIP country code",
@@ -387,10 +440,13 @@ sub print_textonly ($) {
 };
 
 ## split IP2Location data
-sub split_ip2location() {
-	for my $stringlet (split / /, $info_ip2location_string) {
+sub split_ip2location($) {
+	for my $stringlet (split / /, $_[0]) {
 		my ($key, $value) = split /=/, $stringlet;
 		$info_ip2location{$key} = $value;
+	};
+	if (! defined $info_ip2location{'proto'}) {
+		$info_ip2location{'proto'} = "";
 	};
 };
 
@@ -421,6 +477,18 @@ sub print_infohash ($$) {
 			next;
 		};
 
+		if ($key eq "IP2LOCATION_DATABASE_INFO_IPV4") {
+			$info_ip2location_string_ipv4 = $$phash{$key} . " proto=IPv4";
+			# skipped, will be shown in footer
+			next;
+		};
+
+		if ($key eq "IP2LOCATION_DATABASE_INFO_IPV6") {
+			$info_ip2location_string_ipv6 = $$phash{$key} . " proto=IPv6";
+			# skipped, will be shown in footer
+			next;
+		};
+
 		if ($key eq "GEOIP_DATABASE_INFO") {
 			$info_geoip_string = $$phash{$key};
 			# strip non-ascii chars
@@ -430,7 +498,7 @@ sub print_infohash ($$) {
 		};
 
 		if ( $key =~ /^IP2LOCATION_/ ) {
-			$flag_ip2location_used = 1;
+			#$flag_ip2location_used = 1;
 		};
 
 		if ( $key =~ /^GEOIP_/ ) {
@@ -658,7 +726,11 @@ if ( defined $addr_remote ) {
 		&print_error("Error: problem retrieving data");
 	};
 
+	print "***remote***\n" if ($debug & 0x10);
+
 	for my $line (@info_remote) {
+		print $line if ($debug & 0x10);
+
 		my ( $key, $content ) = split /=/, $line, 2;
 		if ( (! defined $key) || (! defined $content) ) {
 			&print_error("Error: problem parsing data");
@@ -666,7 +738,7 @@ if ( defined $addr_remote ) {
 		chomp $content;
 
 		if ( $key =~ /^IP2LOCATION_/ ) {
-			$flag_ip2location_used = 1;
+			#$flag_ip2location_used = 1;
 			if ( $content =~ /^This (parameter|record) is unavailable/ ) {
 				$content = "n/a";
 			};
@@ -708,19 +780,23 @@ if ( defined $addr_remote ) {
 	};
 };
 
-if ( defined $addr_server ) {
+if ((defined $addr_server) && ($skip_server == 0)) {
 	@info_server = `$bin_ipv6calc $options_ipv6calc  $addr_server`;
 	if ( $? != 0 ) {
 		&print_error("Error: problem retrieving data");
 	};
+
+	print "***server***\n" if ($debug & 0x10);
+
 	for my $line (@info_server) {
+		print $line if ($debug & 0x10);
 		my ( $key, $content ) = split /=/, $line, 2;
 		if ( (! defined $key) || (! defined $content) ) {
 			&print_error("Error: problem parsing data");
 		};
 		chomp $content;
 
-		if ( $key =~ /^IP2LOCATION/ ) {
+		if ( $key =~ /^IP2LOCATION_/ ) {
 			if ( $content =~ /^This (parameter|record) is unavailable/ ) {
 				$content = "n/a";
 			};
@@ -833,10 +909,11 @@ if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 	print "          <font size=-2>" . $text{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "</font><br>\n";
 	print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.deepspace6.net/projects/ipv6calc.html\">" . $ipv6calc_name . "</a> " . $ipv6calc_version . ", " . $ipv6calc_copyright . "</font>\n";
 
-	if ($flag_ip2location_used == 1) {
-		split_ip2location();
+	foreach my $string ($info_ip2location_string, $info_ip2location_string_ipv4, $info_ip2location_string_ipv6) {
+		if (! defined $string) { next; };
+		split_ip2location($string);
 		print "<br>\n";
-		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $info_ip2location{'url'} . "\">IP2Location</a> " . $text{'database'}->{$lang} . " " . $text{'version'}->{$lang} . " " . $info_ip2location{'date'} . " (" . $info_ip2location{'entries'} . " " . $text{'entries'}->{$lang} . ")</font>\n";
+		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $info_ip2location{'url'} . "\">IP2Location</a> " . $info_ip2location{'proto'} . " " . $text{'database'}->{$lang} . " " . $text{'version'}->{$lang} . " " . $info_ip2location{'date'} . " (" . $info_ip2location{'entries'} . " " . $text{'entries'}->{$lang} . ")</font>\n";
 	};
 
 	if ($flag_geoip_used == 1) {
@@ -848,9 +925,10 @@ if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 	print $text{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "\n";
 	print $text{'powered'}->{$lang} . " " . $ipv6calc_name . " " . $ipv6calc_version . ", " . $ipv6calc_copyright . " (http://www.deepspace6.net/projects/ipv6calc.html)" . "\n";
 
-	if ($flag_ip2location_used) {
-		split_ip2location();
-		print $text{'powered'}->{$lang} . " IP2Location " . $text{'database'}->{$lang} . " " . $text{'version'}->{$lang} . " " . $info_ip2location{'date'} ." (" . $info_ip2location{'entries'} . " " . $text{'entries'}->{$lang} . ")" . " (" . $info_ip2location{'url'} . ")" . "\n";
+	foreach my $string ($info_ip2location_string, $info_ip2location_string_ipv4, $info_ip2location_string_ipv6) {
+		if (! defined $string) { next; };
+		split_ip2location($string);
+		print $text{'powered'}->{$lang} . " IP2Location " . $info_ip2location{'proto'} . " " . $text{'database'}->{$lang} . " " . $text{'version'}->{$lang} . " " . $info_ip2location{'date'} ." (" . $info_ip2location{'entries'} . " " . $text{'entries'}->{$lang} . ")" . " (" . $info_ip2location{'url'} . ")" . "\n";
 
 	};
 
