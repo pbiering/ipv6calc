@@ -1,7 +1,7 @@
 # Project    : ipv6calc/ipv6calcweb
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.7 2005/11/19 21:14:38 peter Exp $
-# Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile,v 1.8 2007/04/02 19:30:38 peter Exp $
+# Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calcweb
@@ -23,4 +23,9 @@ autoclean:
 clean:
 
 test:
-		echo "Currently missing"
+		# Pseudo random selected
+		./test_ipv6calcweb.sh 2001:200:1:ea::1
+		# www.hp.com
+		./test_ipv6calcweb.sh 15.200.30.23
+		# Pseudo random
+		./test_ipv6calcweb.sh 3ffe:831f:ce49:7601:8000:efff:af4a:86BF
