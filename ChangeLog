@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.151 2007/04/02 19:35:35 peter Exp $ 
+ *  $Id: ChangeLog,v 1.152 2007/04/26 09:57:31 peter Exp $ 
  */
 
 Info:
@@ -7,6 +7,13 @@ Info:
 	NT = Niko Tyni <ntyni (at) iki dot fi>
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 --------------------------------------------------------------------
+20070426/PB
+	lib/libipv6addr.{c,h} lib/ipv6calcoptions.h lib/ipv6calccommands.h
+	ipv6loganon/ipv6loganon*
+	ipv6calc/ipv6calc.c
+	 - add support for anonymizing IPv6 prefix flexible (mask-ipv6)
+	 - add new preset options for anonmiyzing (careful,paranoid)
+
 20070402/PB
 	ipv6calc/showinfo.c
 	 - skip displaying of IPV4_SOURCE if no data is given
@@ -61,6 +68,7 @@ Info:
 	lib/libipv{4,6}addr.{c,h}
 	 - migrate IPv4/IPv6 address anonymization code into
 	    ipv6loganon to libraries
+
 20070202/NT
 	ipv6loganon/ipv6loganonhelp.c
 	 - spelling fixes

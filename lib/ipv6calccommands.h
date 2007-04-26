@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calccommands.h
- * Version    : $Id: ipv6calccommands.h,v 1.4 2007/02/06 07:08:26 peter Exp $
+ * Version    : $Id: ipv6calccommands.h,v 1.5 2007/04/26 09:57:31 peter Exp $
  * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -52,8 +52,11 @@
 
 /* address anonymizer options */
 #define CMD_ANON_PRESET_STANDARD	0x003001
+#define CMD_ANON_PRESET_CAREFUL		0x003002
+#define CMD_ANON_PRESET_PARANOID	0x003003
 #define CMD_ANON_MASK_IPV4		0x003010
-#define CMD_ANON_NO_MASK_IID		0x003011
+#define CMD_ANON_MASK_IPV6		0x003011
+#define CMD_ANON_NO_MASK_IID		0x003012
 
 
 #endif

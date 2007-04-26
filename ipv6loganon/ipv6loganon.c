@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.5 2007/02/06 07:08:26 peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.6 2007/04/26 09:57:31 peter Exp $
  * Copyright  : 2007 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -44,6 +44,7 @@ int flag_nocache = 0;
 
 /* default values */
 int mask_ipv4 = 24;
+int mask_ipv6 = 48;
 int mask_iid = 1;
 
 
@@ -123,8 +124,29 @@ int main(int argc,char *argv[]) {
 				};
 				break;
 
+			case CMD_ANON_MASK_IPV6:
+				mask_ipv6 = atoi(optarg);
+				if (mask_ipv6 < 0 || mask_ipv4 > 64) {
+					fprintf(stderr, " value for option 'mask-ipv6' out-of-range  [0-64]\n");
+					exit(EXIT_FAILURE);
+				};
+				break;
+
 			case CMD_ANON_PRESET_STANDARD:
 				mask_ipv4 = 24;
+				mask_ipv6 = 48;
+				mask_iid = 1;
+				break;
+
+			case CMD_ANON_PRESET_CAREFUL:
+				mask_ipv4 = 20;
+				mask_ipv6 = 40;
+				mask_iid = 1;
+				break;
+
+			case CMD_ANON_PRESET_PARANOID:
+				mask_ipv4 = 16;
+				mask_ipv6 = 32;
 				mask_iid = 1;
 				break;
 
@@ -358,7 +380,7 @@ static int anonymizetoken(char *resultstring, const char *token) {
 
 	if (ipv6addr.flag_valid == 1) {
 		/* anonymize IPv6 address according to settings */
-		libipv6addr_anonymize(&ipv6addr, mask_iid, mask_ipv4);
+		libipv6addr_anonymize(&ipv6addr, mask_iid, mask_ipv6, mask_ipv4);
 
 		/* convert IPv6 address structure to string */
 		libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, 0);

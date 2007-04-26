@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.31 2007/02/05 16:30:47 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.32 2007/04/26 09:57:31 peter Exp $
  * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -1202,12 +1202,14 @@ int libipv6addr_to_octal(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring,
  * anonymize IPv6 address
  *
  * in : *ipv6addrp = IPv6 address structure
+ *      mask values used depending on address type:
  *      mask_iid (flag)
- *      mask_ipv4
+ *      mask_ipv4 (number of bits) [0-32]
+ *      mask_ipv6_prefix (number of bits) [0-64]
  * ret: <void>
  */
 #define DEBUG_function_name "libipv6addr/anonymize"
-void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, unsigned int mask_iid, unsigned int mask_ipv4) {
+void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, unsigned int mask_iid, unsigned int mask_ipv6, unsigned int mask_ipv4) {
 	/* anonymize IPv4 address according to settings */
 	uint32_t typeinfo;
 	char tempstring[NI_MAXHOST];
@@ -1361,10 +1363,35 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, unsigned int mask_iid, 
 		};
 	};
 
-	/* SLA included */
-	if ( ((typeinfo & (IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_ADDR_ULUA )) != 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO)) == 0) ) {
-		/* mask SLA */
-		ipv6addr_setword(ipv6addrp, (unsigned int) 3, 0x0u);
+	/* prefix included */
+	if ( ((typeinfo & (IPV6_ADDR_SITELOCAL | IPV6_ADDR_ULUA | IPV6_NEW_ADDR_AGU)) != 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO)) == 0) ) {
+		if (mask_ipv6 == 0) {
+			/* clear IPv6 address prefix 0-63 */
+			ipv6addr_setdword(ipv6addrp, 0, 0u);
+			ipv6addr_setdword(ipv6addrp, 1, 0u);
+		} else if (mask_ipv6 == 64) {
+			/* nothing to do */
+		} else if (mask_ipv6 < 1 || mask_ipv6 > 64) {
+			/* should not happen here */
+			fprintf(stderr, "%s: 'mask_ipv6' has an unexpected illegal value!\n", DEBUG_function_name);
+			exit(EXIT_FAILURE);
+		} else {
+			if (mask_ipv6 < 64 && mask_ipv6 > 32) {
+				ipv6addr_setdword(ipv6addrp, 1, ipv6addr_getdword(ipv6addrp, 1) & (0xffffffffu << ((unsigned int) 64 - mask_ipv6)));
+			} else if (mask_ipv6 == 32) {
+				ipv6addr_setdword(ipv6addrp, 1, 0u);
+			} else if (mask_ipv6 < 32 && mask_ipv6 >= 0) {
+				ipv6addr_setdword(ipv6addrp, 1, 0u);
+				ipv6addr_setdword(ipv6addrp, 0, ipv6addr_getdword(ipv6addrp, 0) & (0xffffffffu << ((unsigned int) 32 - mask_ipv6)));
+			};
+		};
+
+		/* restore prefix in special cases */
+		if ( ((typeinfo & IPV6_ADDR_SITELOCAL) != 0) && (mask_ipv6 < 10) ) { 
+			ipv6addr_setword(ipv6addrp, 0, ipv6addr_getword(ipv6addrp, 1) | 0xfec0u);
+		} else if ( ((typeinfo & IPV6_ADDR_ULUA) != 0) && (mask_ipv6 < 7) ) {
+			ipv6addr_setoctett(ipv6addrp, 0, ipv6addr_getoctett(ipv6addrp, 0) | 0xfdu);
+		};
 	};
 
 	return;

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.5 2007/02/05 16:37:14 peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.6 2007/04/26 09:57:31 peter Exp $
 # Copyright  : 2007 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -65,6 +65,42 @@ fe80::210:a489:ab01:2345 - -
 END_CACHE
 }
 
+testscenarios_special() {
+# Address
+cat <<END | grep -v "^#"
+192.0.2.1 - - IPv4 address			=--anonymize-careful=192.0.0.0 - - IPv4 address
+192.0.130.1 - - IPv4 address			=--anonymize-careful=192.0.128.0 - - IPv4 address
+192.0.2.1 - - IPv4 address			=--anonymize-paranoid=192.0.0.0 - - IPv4 address
+192.0.130.1 - - IPv4 address			=--anonymize-paranoid=192.0.0.0 - - IPv4 address
+192.1.130.1 - - IPv4 address			=--anonymize-paranoid=192.1.0.0 - - IPv4 address
+3ffe:ffff:1234::1 - - IPv6 address/6bone test	=--anonymize-standard=3ffe:ffff:1234:0:0:0:0:0 - - IPv6 address/6bone test
+3ffe:ffff:1234::1 - - IPv6 address/6bone test	=--anonymize-careful=3ffe:ffff:1200:0:0:0:0:0 - - IPv6 address/6bone test
+3ffe:ffff:1234::1 - - IPv6 address/6bone test	=--anonymize-paranoid=3ffe:ffff:0:0:0:0:0:0 - - IPv6 address/6bone test
+3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - ISATAP1	=--anonymize-careful=3ffe:1a05:500:0:0:5efe:8cad:8000 - - ISATAP1
+3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - ISATAP2	=--anonymize-paranoid=3ffe:1a05:0:0:0:5efe:8cad:0 - - ISATAP2
+2002:50b5:7940::50b5:7940 - - 6to4 Microsoft1	=--anonymize-careful=2002:50b5:7000:0:0:0:50b5:7000 - - 6to4 Microsoft1
+2002:50b5:7940::50b5:7940 - - 6to4 Microsoft2	=--anonymize-paranoid=2002:50b5:0:0:0:0:50b5:0 - - 6to4 Microsoft2
+fe80::210:a4ff:fe01:2345 - - link local EUI-48	=--anonymize-careful=fe80:0:0:0:210:a4ff:fe00:0 - - link local EUI-48
+fe80::210:a489:ab01:2345 - - link local EUI-64	=--anonymize-paranoid=fe80:0:0:0:210:a400:0:0 - - link local EUI-64
+fec0::1234:210:a4ff:fe01:2345 - - link local EUI-48	=--anonymize-standard=fec0:0:0:0:210:a4ff:fe00:0 - - link local EUI-48
+fec0::1234:210:a4ff:fe01:2345 - - link local EUI-48	=--anonymize-careful=fec0:0:0:0:210:a4ff:fe00:0 - - link local EUI-48
+fed0::1234:210:a489:ab01:2345 - - link local EUI-64	=--anonymize-paranoid=fed0:0:0:0:210:a400:0:0 - - link local EUI-64
+fed0::1234:210:a489:ab01:2345 - - link local EUI-64	=--mask-ipv6 4=fec0:0:0:0:210:a400:0:0 - - link local EUI-64
+fd00:1234:5678:9abc::1 - - ULUA local		=--anonymize-standard=fd00:1234:5678:0:0:0:0:0 - - ULUA local
+fd00:1234:5678:9abc:210:a4ff:fe01:2345 - - ULUA EUI-64=--anonymize-careful=fd00:1234:5600:0:210:a4ff:fe00:0 - - ULUA EUI-64
+fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--anonymize-paranoid=fd00:1234:0:0:210:a400:0:0 - - ULUA EUI-64
+fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--mask-ipv6 56=fd00:1234:5678:9a00:210:a400:0:0 - - ULUA EUI-64
+fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--mask-ipv6 48=fd00:1234:5678:0:210:a400:0:0 - - ULUA EUI-64
+fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--mask-ipv6 40=fd00:1234:5600:0:210:a400:0:0 - - ULUA EUI-64
+fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--mask-ipv6 32=fd00:1234:0:0:210:a400:0:0 - - ULUA EUI-64
+fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--mask-ipv6 24=fd00:1200:0:0:210:a400:0:0 - - ULUA EUI-64
+fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--mask-ipv6 16=fd00:0:0:0:210:a400:0:0 - - ULUA EUI-64
+fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--mask-ipv6 8=fd00:0:0:0:210:a400:0:0 - - ULUA EUI-64
+fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--mask-ipv6 4=fd00:0:0:0:210:a400:0:0 - - ULUA EUI-64
+END
+}
+
+
 #set -x
 ## main ##
 echo "Run 'ipv6loganon' function tests..." >&2
@@ -79,11 +115,11 @@ if [ "$1" != "bulk" ]; then
 			echo "Something is wrong in line '$line'"
 			exit 1
 		fi
-		echo "IN   : $input"
-		echo "CHECK: $result"
+		echo "IN     : $input"
+		echo "CHECK  : $result"
 		# get result
 		output="`echo "$input" | ./ipv6loganon`"
-		echo "OUT  : $output"
+		echo "OUT    : $output"
 		retval=$?
 		if [ $retval -ne 0 ]; then
 			echo "Error executing 'ipv6loganon'!"
@@ -92,13 +128,50 @@ if [ "$1" != "bulk" ]; then
 		# Check result
 		if [ "$result" != "*" ]; then
 			if [ "$output" != "$result" ]; then
-				echo "TEST : fail"
+				echo "RESULT : fail"
 				exit 1
 			fi
 		fi
-		echo "TEST : ok"
+		echo "RESULT : ok"
+		echo
 	done
 	retval=$?
+
+	if [ $retval -eq 0 ]; then
+		# special tests
+		testscenarios_special | grep -v "^#" | while read line; do
+
+			# extract result
+			input="`echo $line | awk -F= '{ print $1 }' | sed 's/\W*$//g'`"
+			options="`echo $line | awk -F= '{ print $2 }'`"
+			result="`echo $line | awk -F= '{ print $3 }'`"
+			if [ -z "$result" -o -z "$input" -o -z "$options" ]; then
+				echo "Something is wrong in line '$line'"
+				exit 1
+			fi
+			echo "IN     : $input"
+			echo "OPTIONS: $options"
+			echo "CHECK  : $result"
+			# get result
+			output="`echo "$input" | ./ipv6loganon $options`"
+			echo "OUT    : $output"
+			retval=$?
+			if [ $retval -ne 0 ]; then
+				echo "Error executing 'ipv6loganon'!"
+				exit 1
+			fi
+			# Check result
+			if [ "$result" != "*" ]; then
+				if [ "$output" != "$result" ]; then
+					echo "RESULT : fail"
+					exit 1
+				fi
+			fi
+			echo "RESULT : ok"
+			echo
+		done
+		retval=$?
+	fi
 	echo 
 else
 	shift

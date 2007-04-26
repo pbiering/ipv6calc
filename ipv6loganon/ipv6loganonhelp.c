@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganonhelp.c
- * Version    : $Id: ipv6loganonhelp.c,v 1.4 2007/02/05 16:36:59 peter Exp $
+ * Version    : $Id: ipv6loganonhelp.c,v 1.5 2007/04/26 09:57:31 peter Exp $
  * Copyright  : 2007 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
@@ -49,11 +49,17 @@ void ipv6loganon_printhelp(void) {
 	fprintf(stderr, "                               default: %d\n", cache_lru_limit);
 	fprintf(stderr, "                               maximum: %d\n", CACHE_LRU_SIZE);
 	fprintf(stderr, " Output anonymization:\n");
-	fprintf(stderr, "  --mask-ipv4 <bits>     : mask all IPv4 addresses [0-32], default 8\n");
+	fprintf(stderr, "  --mask-ipv4 <bits>     : mask all IPv4 addresses [0-32], default 24\n");
 	fprintf(stderr, "                            even if occurs in IPv6-IID\n");
+	fprintf(stderr, "  --mask-ipv6 <bits>     : mask IPv6 prefix [0-64], default 48\n");
+	fprintf(stderr, "                            only applied to related address types\n");
 	fprintf(stderr, "  --no-mask-iid          : do not mask non-IPv4 based IPv6-IID\n");
 	fprintf(stderr, "  --anonymize-standard   : preset for standard anonymization\n");
-	fprintf(stderr, "  (default)                 mask-ipv4=8 mask-iid\n");
+	fprintf(stderr, "  (default)                 mask-ipv4=24 mask-ipv6=48 mask-iid\n");
+	fprintf(stderr, "  --anonymize-careful    : preset for careful anonymization\n");
+	fprintf(stderr, "                            mask-ipv4=20 mask-ipv6=40 mask-iid\n");
+	fprintf(stderr, "  --anonymize-paranoid   : preset for paranoid anonymization\n");
+	fprintf(stderr, "                            mask-ipv4=16 mask-ipv6=32 mask-iid\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, " Takes data from stdin, outputs the processed data to stdout\n");
 	fprintf(stderr, "\n");

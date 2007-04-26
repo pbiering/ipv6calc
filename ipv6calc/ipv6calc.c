@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.29 2007/02/06 07:04:33 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.30 2007/04/26 09:57:31 peter Exp $
  * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -40,6 +40,7 @@ long int ipv6calc_debug = 0;
 
 /* anonymization default values */
 int mask_ipv4 = 24;
+int mask_ipv6 = 48;
 int mask_iid = 1;
 
 #ifdef SUPPORT_IP2LOCATION
@@ -293,8 +294,29 @@ int main(int argc,char *argv[]) {
 				};
 				break;
 
+			case CMD_ANON_MASK_IPV6:
+				mask_ipv6 = atoi(optarg);
+				if (mask_ipv6 < 0 || mask_ipv6 > 32) {
+					fprintf(stderr, " value for option 'mask-ipv4' out-of-range  [0-64]\n");
+					exit(EXIT_FAILURE);
+				};
+				break;
+
 			case CMD_ANON_PRESET_STANDARD:
 				mask_ipv4 = 24;
+				mask_ipv6 = 48;
+				mask_iid = 1;
+				break;
+
+			case CMD_ANON_PRESET_CAREFUL:
+				mask_ipv4 = 20;
+				mask_ipv6 = 40;
+				mask_iid = 1;
+				break;
+
+			case CMD_ANON_PRESET_PARANOID:
+				mask_ipv4 = 16;
+				mask_ipv6 = 32;
 				mask_iid = 1;
 				break;
 
@@ -907,7 +929,7 @@ int main(int argc,char *argv[]) {
 					fprintf(stderr, "No valid IPv6 address given!\n");
 					exit(EXIT_FAILURE);
 				};
-				libipv6addr_anonymize(&ipv6addr, mask_iid, mask_ipv4);
+				libipv6addr_anonymize(&ipv6addr, mask_iid, mask_ipv6, mask_ipv4);
 			} else {
 				fprintf(stderr, "Unsupported anonymization!\n");
 				exit(EXIT_FAILURE);

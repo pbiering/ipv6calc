@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.13 2007/02/06 07:08:26 peter Exp $
- * Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calcoptions.h,v 1.14 2007/04/26 09:57:31 peter Exp $
+ * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options for ipv6calc.c
@@ -112,7 +112,10 @@
 
 	/* address anonymizer options */
 	{ "anonymize-standard" , 0, 0, CMD_ANON_PRESET_STANDARD },
+	{ "anonymize-careful" , 0, 0, CMD_ANON_PRESET_CAREFUL },
+	{ "anonymize-paranoid" , 0, 0, CMD_ANON_PRESET_PARANOID },
 	{ "mask-ipv4" , 1, 0, CMD_ANON_MASK_IPV4 },
+	{ "mask-ipv6" , 1, 0, CMD_ANON_MASK_IPV6 },
 	{ "no-mask-iid" , 0, 0, CMD_ANON_NO_MASK_IID },
 
 	/* new options */

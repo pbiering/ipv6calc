@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganonoptions.h
- * Version    : $Id: ipv6loganonoptions.h,v 1.4 2007/02/06 07:08:26 peter Exp $
+ * Version    : $Id: ipv6loganonoptions.h,v 1.5 2007/04/26 09:57:31 peter Exp $
  * Copyright  : 2007 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -35,7 +35,10 @@ static struct option ipv6loganon_longopts[] = {
 
 	/* options */
 	{ "anonymize-standard" , 0, 0, CMD_ANON_PRESET_STANDARD },
+	{ "anonymize-careful" , 0, 0, CMD_ANON_PRESET_CAREFUL },
+	{ "anonymize-paranoid" , 0, 0, CMD_ANON_PRESET_PARANOID },
 	{ "mask-ipv4" , 1, 0, CMD_ANON_MASK_IPV4 },
+	{ "mask-ipv6" , 1, 0, CMD_ANON_MASK_IPV6 },
 	{ "no-mask-iid" , 0, 0, CMD_ANON_NO_MASK_IID },
 
 	{NULL, 0, 0, 0}
