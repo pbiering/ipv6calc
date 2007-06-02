@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: test_showinfo.sh,v 1.6 2006/10/22 10:59:19 peter Exp $
+# $Id: test_showinfo.sh,v 1.7 2007/06/02 11:58:54 peter Exp $
 
 
 getexamples() {
@@ -28,6 +28,6 @@ END
 
 getexamples | while read address separator comment; do
 	echo "$comment: $address"
-	./ipv6calc -q -i -m --db-ip2location-ipv4 ../databases/IP2Location/IP-COUNTRY-SAMPLE.BIN --db-ip2location-ipv6 ../databases/IP2Location/IPV6-COUNTRY.BIN --db-geoip ../databases/GeoIP/GeoLiteCity.dat $address || exit 1
+	./ipv6calc -q -i -m --db-ip2location-ipv4 /usr/share/IP2Location/IP-COUNTRY-SAMPLE.BIN --db-ip2location-ipv6 /var/local/share/IP2Location/IPV6-COUNTRY.BIN --db-geoip /usr/share/GeoIP/GeoIP.dat $address || exit 1
 	echo
 done
