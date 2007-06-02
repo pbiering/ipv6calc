@@ -41,7 +41,7 @@
 <sect3>
 <title>Fedora</title>
 <para>Fedora Core 6 is the current developing platform, so use given hints above to create a RPM. Fedora 7 includes this package by default.</para></sect3><sect3>
-<title>Red Hat Enterprise Linux and clones (like CentOS)</title>
+<title>Red Hat Enterprise Linux and clones</title>
 <para>It's tested by the developer that creation of the RPM is working fine on RHEL4. RHEL5 includes this package by default.</para></sect3><sect3>
 <title>Mandrake:</title>
 <para>Linux Mandrake is very similar to Red Hat Linux, therefore a rebuild should work, too.</para></sect3><sect3>
@@ -68,8 +68,10 @@
 <title>Features of ipv6calc</title>
 <sect2>
 <title>Description</title>
-<para>The main program named &ldquo;ipv6calc&rdquo; is able to recognice many (not only) IPv6 address formats and depending on a selectable action (not required) a selectable output format can be specified.</para></sect2><sect2>
+<para>The main program named &ldquo;ipv6calc&rdquo; is able to recognice many (not only) IPv6 address formats and depending on a selectable action (not required) a selectable output format can be specified. Also it has the capability to show detailed information of an IPv4/IPv6 address or anonymize it.</para></sect2><sect2>
 <title>Examples</title>
+<sect3>
+<title>Conversion</title>
 <para>A simple example is the conversion of an IPv6 address to a DNS PTR query string:</para><screen>
 <![CDATA[ ./ipv6calc --out revnibbles.arpa 2001:db8::1
 No input type specified, try autodetection...found type: ipv6addr
@@ -85,7 +87,79 @@ No input type specified, try autodetection...found type: ipv6addr
 ]]></screen><para>This also works vice-versa:</para><screen>
 <![CDATA[$ ./ipv6calc -q --action conv6to4 --in ipv4 192.168.251.97 --out ipv6
 2002:c0a8:fb61::
-]]></screen><para>There are many more features already implemented, if you miss one, send a note.</para></sect2><sect2>
+]]></screen><para>There are many more features already implemented, if you miss one, send a note.</para></sect3><sect3>
+<title>Information</title>
+<para>Information about a simple IPv6 address:</para><screen>
+<![CDATA[$ ./ipv6calc -q -i 3ffe:ffff::210:a4ff:fe01:2345
+Address type: unicast, 6bone, global-unicast, productive
+Address type has SLA: 0000
+Registry for address: reserved
+Interface identifier: 0210:a4ff:fe01:2345
+EUI-48/MAC address: 00:10:a4:01:23:45
+MAC is a global unique one
+MAC is an unicast one
+OUI is: XIRCOM
+]]></screen><para>Information about a Teredo IPv6 address:</para><screen>
+<![CDATA[$ ./ipv6calc -q -i 3ffe:831f:ce49:7601:8000:efff:af4a:86BF
+Address type: unicast, 6bone, global-unicast, productive, teredo
+IPv4 address: 80.181.121.64
+IPv4 registry[80.181.121.64]: RIPENCC
+IPv4 address: 206.73.118.1
+IPv4 registry[206.73.118.1]: ARIN
+Address type is Teredo and included IPv4 server address is: 80.181.121.64 and client port: 4096
+IPv4 registry for Teredo server address: ARIN
+Registry for address: reserved
+]]></screen><para>There exists also a machine readable output (e.g. used by 'ipv6calcweb.cgi') - in addition, here <ulink url="http://www.ip2location.com/">IP2Location</ulink> and/or <ulink url="http://www.maxmind.com/">GeoIP</ulink> information can be displayed, if databases are specified. Note that GeoIP currently still supports IPv4 only.</para><screen>
+<![CDATA[$ ./ipv6calc -q -i -m --db-ip2location-ipv4 /usr/share/IP2Location/IP-COUNTRY-SAMPLE.BIN --db-ip2location-ipv6 /var/local/share/IP2Location/IPV6-COUNTRY.BIN --db-geoip /usr/share/GeoIP/GeoIP.dat  3ffe:831f:ce49:7601:8000:efff:af4a:86BF
+IPV6=3ffe:831f:ce49:7601:8000:efff:af4a:86bf
+TYPE=unicast,6bone,global-unicast,productive,teredo
+IPV4_SOURCE[80.181.121.64]=TEREDO-CLIENT
+IPV4[80.181.121.64]=80.181.121.64
+IPV4_REGISTRY[80.181.121.64]=RIPENCC
+IP2LOCATION_DATABASE_INFO_IPV4=url=http://www.ip2location.com date=2005-06-17 entries=20470 apiversion=2.1.3
+IP2LOCATION_COUNTRY_SHORT[80.181.121.64]=IT
+IP2LOCATION_COUNTRY_LONG[80.181.121.64]=ITALY
+IP2LOCATION_REGION[80.181.121.64]=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_CITY[80.181.121.64]=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_ISP[80.181.121.64]=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_LATITUDE[80.181.121.64]=0.000000
+IP2LOCATION_LONGITUDE[80.181.121.64]=0.000000
+IP2LOCATION_DOMAIN[80.181.121.64]=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_ZIPCODE[80.181.121.64]=This parameter is unavailable for selected data file. Please upgrade the data file.
+GEOIP_COUNTRY_SHORT[80.181.121.64]=IT
+GEOIP_COUNTRY_LONG[80.181.121.64]=Italy
+GEOIP_DATABASE_INFO=GEO-106FREE 20070201 Build 1 Copyright (c) 2007 MaxMind LLC All Rights Reserved apiversion=system
+IPV4_SOURCE[206.73.118.1]=TEREDO-SERVER
+IPV4[206.73.118.1]=206.73.118.1
+IPV4_REGISTRY[206.73.118.1]=ARIN
+IP2LOCATION_COUNTRY_SHORT[206.73.118.1]=??
+IP2LOCATION_COUNTRY_LONG[206.73.118.1]=This record is unavailable in demo version. Please subscribe.
+IP2LOCATION_REGION[206.73.118.1]=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_CITY[206.73.118.1]=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_ISP[206.73.118.1]=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_LATITUDE[206.73.118.1]=0.000000
+IP2LOCATION_LONGITUDE[206.73.118.1]=0.000000
+IP2LOCATION_DOMAIN[206.73.118.1]=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_ZIPCODE[206.73.118.1]=This parameter is unavailable for selected data file. Please upgrade the data file.
+GEOIP_COUNTRY_SHORT[206.73.118.1]=US
+GEOIP_COUNTRY_LONG[206.73.118.1]=United States
+TEREDO_PORT_CLIENT=4096
+IPV6_REGISTRY=reserved
+IP2LOCATION_DATABASE_INFO_IPV6=url=http://www.ip2location.com date=2007-05-26 entries=7495 apiversion=2.1.3
+IP2LOCATION_COUNTRY_SHORT=-
+IP2LOCATION_COUNTRY_LONG=-
+IP2LOCATION_REGION=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_CITY=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_ISP=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_LATITUDE=0.000000
+IP2LOCATION_LONGITUDE=0.000000
+IP2LOCATION_DOMAIN=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_ZIPCODE=This parameter is unavailable for selected data file. Please upgrade the data file.
+IPV6CALC_NAME=ipv6calc
+IPV6CALC_VERSION=0.70.1
+IPV6CALC_COPYRIGHT="(P) & (C) 2001-2007 by Peter Bieringer <pb (at) bieringer.de>"
+IPV6CALC_OUTPUT_VERSION=4
+]]></screen></sect3></sect2><sect2>
 <title>Option style</title>
 <para>Since version 0.40 new-style option handling was introduced, using</para><itemizedlist>
 <listitem><para>--in &lt;inputtype&gt;</para></listitem><listitem><para>--out &lt;outputtype&gt;</para></listitem><listitem><para>--action &lt;actiontype&gt;</para></listitem></itemizedlist><para>and many more conversions were added. A built-in check matrix should prevent misconversions.</para>

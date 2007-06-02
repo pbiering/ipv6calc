@@ -161,93 +161,93 @@ HREF="#AEN146"
 ></DT
 ><DT
 >7.3. <A
-HREF="#AEN159"
+HREF="#AEN171"
 >Option style</A
 ></DT
 ><DT
 >7.4. <A
-HREF="#AEN171"
+HREF="#AEN183"
 >Online help</A
 ></DT
 ></DL
 ></DD
 ><DT
 >8. <A
-HREF="#AEN185"
+HREF="#AEN197"
 >Webserver log conversion helper program "ipv6logconv"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >8.1. <A
-HREF="#AEN188"
+HREF="#AEN200"
 >Examples</A
 ></DT
 ></DL
 ></DD
 ><DT
 >9. <A
-HREF="#AEN192"
+HREF="#AEN204"
 >Webserver log anonymization helper program "ipv6loganon"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >9.1. <A
-HREF="#AEN195"
+HREF="#AEN207"
 >Anonymization details</A
 ></DT
 ><DT
 >9.2. <A
-HREF="#AEN224"
+HREF="#AEN236"
 >Supported log file formats</A
 ></DT
 ><DT
 >9.3. <A
-HREF="#AEN231"
+HREF="#AEN243"
 >Supported options</A
 ></DT
 ><DT
 >9.4. <A
-HREF="#AEN234"
+HREF="#AEN246"
 >Usage</A
 ></DT
 ></DL
 ></DD
 ><DT
 >10. <A
-HREF="#AEN238"
+HREF="#AEN250"
 >Perl CGI wrapper program "ipv6calcweb.cgi"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >10.1. <A
-HREF="#AEN241"
+HREF="#AEN253"
 >Examples</A
 ></DT
 ></DL
 ></DD
 ><DT
 >11. <A
-HREF="#AEN257"
+HREF="#AEN269"
 >Webserver log statistics helper program "ipv6logstats"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >11.1. <A
-HREF="#AEN260"
+HREF="#AEN272"
 >Supported options</A
 ></DT
 ><DT
 >11.2. <A
-HREF="#AEN263"
+HREF="#AEN275"
 >Usage</A
 ></DT
 ><DT
 >11.3. <A
-HREF="#AEN266"
+HREF="#AEN278"
 >Examples</A
 ></DT
 ></DL
@@ -457,7 +457,7 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="AEN68"
->4.3.2. Red Hat Enterprise Linux and clones (like CentOS)</A
+>4.3.2. Red Hat Enterprise Linux and clones</A
 ></H4
 ><P
 >It's tested by the developer that creation of the RPM is working fine on RHEL4. RHEL5 includes this package by default.</P
@@ -683,7 +683,7 @@ NAME="AEN143"
 >7.1. Description</A
 ></H3
 ><P
->The main program named &#8220;ipv6calc&#8221; is able to recognice many (not only) IPv6 address formats and depending on a selectable action (not required) a selectable output format can be specified.</P
+>The main program named &#8220;ipv6calc&#8221; is able to recognice many (not only) IPv6 address formats and depending on a selectable action (not required) a selectable output format can be specified. Also it has the capability to show detailed information of an IPv4/IPv6 address or anonymize it.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -693,6 +693,14 @@ CLASS="SECT2"
 NAME="AEN146"
 >7.2. Examples</A
 ></H3
+><DIV
+CLASS="SECT3"
+><H4
+CLASS="SECT3"
+><A
+NAME="AEN148"
+>7.2.1. Conversion</A
+></H4
 ><P
 >A simple example is the conversion of an IPv6 address to a DNS PTR query string:</P
 ><TABLE
@@ -787,11 +795,144 @@ CLASS="SCREEN"
 >There are many more features already implemented, if you miss one, send a note.</P
 ></DIV
 ><DIV
+CLASS="SECT3"
+><HR><H4
+CLASS="SECT3"
+><A
+NAME="AEN161"
+>7.2.2. Information</A
+></H4
+><P
+>Information about a simple IPv6 address:</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+>$ ./ipv6calc -q -i 3ffe:ffff::210:a4ff:fe01:2345
+Address type: unicast, 6bone, global-unicast, productive
+Address type has SLA: 0000
+Registry for address: reserved
+Interface identifier: 0210:a4ff:fe01:2345
+EUI-48/MAC address: 00:10:a4:01:23:45
+MAC is a global unique one
+MAC is an unicast one
+OUI is: XIRCOM</PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+>Information about a Teredo IPv6 address:</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+>$ ./ipv6calc -q -i 3ffe:831f:ce49:7601:8000:efff:af4a:86BF
+Address type: unicast, 6bone, global-unicast, productive, teredo
+IPv4 address: 80.181.121.64
+IPv4 registry[80.181.121.64]: RIPENCC
+IPv4 address: 206.73.118.1
+IPv4 registry[206.73.118.1]: ARIN
+Address type is Teredo and included IPv4 server address is: 80.181.121.64 and client port: 4096
+IPv4 registry for Teredo server address: ARIN
+Registry for address: reserved</PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+>There exists also a machine readable output (e.g. used by 'ipv6calcweb.cgi') - in addition, here <A
+HREF="http://www.ip2location.com/"
+TARGET="_top"
+>IP2Location</A
+> and/or <A
+HREF="http://www.maxmind.com/"
+TARGET="_top"
+>GeoIP</A
+> information can be displayed, if databases are specified. Note that GeoIP currently still supports IPv4 only.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+>$ ./ipv6calc -q -i -m --db-ip2location-ipv4 /usr/share/IP2Location/IP-COUNTRY-SAMPLE.BIN --db-ip2location-ipv6 /var/local/share/IP2Location/IPV6-COUNTRY.BIN --db-geoip /usr/share/GeoIP/GeoIP.dat  3ffe:831f:ce49:7601:8000:efff:af4a:86BF
+IPV6=3ffe:831f:ce49:7601:8000:efff:af4a:86bf
+TYPE=unicast,6bone,global-unicast,productive,teredo
+IPV4_SOURCE[80.181.121.64]=TEREDO-CLIENT
+IPV4[80.181.121.64]=80.181.121.64
+IPV4_REGISTRY[80.181.121.64]=RIPENCC
+IP2LOCATION_DATABASE_INFO_IPV4=url=http://www.ip2location.com date=2005-06-17 entries=20470 apiversion=2.1.3
+IP2LOCATION_COUNTRY_SHORT[80.181.121.64]=IT
+IP2LOCATION_COUNTRY_LONG[80.181.121.64]=ITALY
+IP2LOCATION_REGION[80.181.121.64]=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_CITY[80.181.121.64]=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_ISP[80.181.121.64]=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_LATITUDE[80.181.121.64]=0.000000
+IP2LOCATION_LONGITUDE[80.181.121.64]=0.000000
+IP2LOCATION_DOMAIN[80.181.121.64]=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_ZIPCODE[80.181.121.64]=This parameter is unavailable for selected data file. Please upgrade the data file.
+GEOIP_COUNTRY_SHORT[80.181.121.64]=IT
+GEOIP_COUNTRY_LONG[80.181.121.64]=Italy
+GEOIP_DATABASE_INFO=GEO-106FREE 20070201 Build 1 Copyright (c) 2007 MaxMind LLC All Rights Reserved apiversion=system
+IPV4_SOURCE[206.73.118.1]=TEREDO-SERVER
+IPV4[206.73.118.1]=206.73.118.1
+IPV4_REGISTRY[206.73.118.1]=ARIN
+IP2LOCATION_COUNTRY_SHORT[206.73.118.1]=??
+IP2LOCATION_COUNTRY_LONG[206.73.118.1]=This record is unavailable in demo version. Please subscribe.
+IP2LOCATION_REGION[206.73.118.1]=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_CITY[206.73.118.1]=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_ISP[206.73.118.1]=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_LATITUDE[206.73.118.1]=0.000000
+IP2LOCATION_LONGITUDE[206.73.118.1]=0.000000
+IP2LOCATION_DOMAIN[206.73.118.1]=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_ZIPCODE[206.73.118.1]=This parameter is unavailable for selected data file. Please upgrade the data file.
+GEOIP_COUNTRY_SHORT[206.73.118.1]=US
+GEOIP_COUNTRY_LONG[206.73.118.1]=United States
+TEREDO_PORT_CLIENT=4096
+IPV6_REGISTRY=reserved
+IP2LOCATION_DATABASE_INFO_IPV6=url=http://www.ip2location.com date=2007-05-26 entries=7495 apiversion=2.1.3
+IP2LOCATION_COUNTRY_SHORT=-
+IP2LOCATION_COUNTRY_LONG=-
+IP2LOCATION_REGION=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_CITY=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_ISP=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_LATITUDE=0.000000
+IP2LOCATION_LONGITUDE=0.000000
+IP2LOCATION_DOMAIN=This parameter is unavailable for selected data file. Please upgrade the data file.
+IP2LOCATION_ZIPCODE=This parameter is unavailable for selected data file. Please upgrade the data file.
+IPV6CALC_NAME=ipv6calc
+IPV6CALC_VERSION=0.70.1
+IPV6CALC_COPYRIGHT="(P) &#38; (C) 2001-2007 by Peter Bieringer &#60;pb (at) bieringer.de&#62;"
+IPV6CALC_OUTPUT_VERSION=4</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
 CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN159"
+NAME="AEN171"
 >7.3. Option style</A
 ></H3
 ><P
@@ -822,7 +963,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN171"
+NAME="AEN183"
 >7.4. Online help</A
 ></H3
 ><P
@@ -832,7 +973,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN174"
+NAME="AEN186"
 >7.4.1. Main online help:</A
 ></H4
 ><TABLE
@@ -1033,7 +1174,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN185"
+NAME="AEN197"
 >8. Webserver log conversion helper program "ipv6logconv"</A
 ></H2
 ><P
@@ -1043,7 +1184,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN188"
+NAME="AEN200"
 >8.1. Examples</A
 ></H3
 ><P
@@ -1059,7 +1200,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN192"
+NAME="AEN204"
 >9. Webserver log anonymization helper program "ipv6loganon"</A
 ></H2
 ><P
@@ -1069,7 +1210,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN195"
+NAME="AEN207"
 >9.1. Anonymization details</A
 ></H3
 ><P
@@ -1140,7 +1281,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN224"
+NAME="AEN236"
 >9.2. Supported log file formats</A
 ></H3
 ><P
@@ -1161,7 +1302,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN231"
+NAME="AEN243"
 >9.3. Supported options</A
 ></H3
 ><TABLE
@@ -1211,7 +1352,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN234"
+NAME="AEN246"
 >9.4. Usage</A
 ></H3
 ><P
@@ -1238,7 +1379,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN238"
+NAME="AEN250"
 >10. Perl CGI wrapper program "ipv6calcweb.cgi"</A
 ></H2
 ><P
@@ -1248,7 +1389,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN241"
+NAME="AEN253"
 >10.1. Examples</A
 ></H3
 ><P
@@ -1296,7 +1437,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN257"
+NAME="AEN269"
 >11. Webserver log statistics helper program "ipv6logstats"</A
 ></H2
 ><P
@@ -1306,7 +1447,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN260"
+NAME="AEN272"
 >11.1. Supported options</A
 ></H3
 ><TABLE
@@ -1342,7 +1483,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN263"
+NAME="AEN275"
 >11.2. Usage</A
 ></H3
 ><P
@@ -1353,7 +1494,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN266"
+NAME="AEN278"
 >11.3. Examples</A
 ></H3
 ><P

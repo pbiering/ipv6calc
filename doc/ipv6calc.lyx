@@ -266,7 +266,7 @@ Fedora Core 6 is the current developing platform, so use given hints above
 \end_layout
 
 \begin_layout Subsubsection
-Red Hat Enterprise Linux and clones (like CentOS)
+Red Hat Enterprise Linux and clones
 \end_layout
 
 \begin_layout Standard
@@ -450,10 +450,16 @@ ipv6calc
  is able to recognice many (not only) IPv6 address formats and depending
  on a selectable action (not required) a selectable output format can be
  specified.
+ Also it has the capability to show detailed information of an IPv4/IPv6
+ address or anonymize it.
 \end_layout
 
 \begin_layout Subsection
 Examples
+\end_layout
+
+\begin_layout Subsubsection
+Conversion
 \end_layout
 
 \begin_layout Standard
@@ -525,6 +531,335 @@ $ ./ipv6calc -q --action conv6to4 --in ipv4 192.168.251.97 --out ipv6
 \begin_layout Standard
 There are many more features already implemented, if you miss one, send
  a note.
+\end_layout
+
+\begin_layout Subsubsection
+Information
+\end_layout
+
+\begin_layout Standard
+Information about a simple IPv6 address:
+\end_layout
+
+\begin_layout Code
+$ ./ipv6calc -q -i 3ffe:ffff::210:a4ff:fe01:2345
+\end_layout
+
+\begin_layout Code
+Address type: unicast, 6bone, global-unicast, productive
+\end_layout
+
+\begin_layout Code
+Address type has SLA: 0000
+\end_layout
+
+\begin_layout Code
+Registry for address: reserved
+\end_layout
+
+\begin_layout Code
+Interface identifier: 0210:a4ff:fe01:2345
+\end_layout
+
+\begin_layout Code
+EUI-48/MAC address: 00:10:a4:01:23:45
+\end_layout
+
+\begin_layout Code
+MAC is a global unique one
+\end_layout
+
+\begin_layout Code
+MAC is an unicast one
+\end_layout
+
+\begin_layout Code
+OUI is: XIRCOM
+\end_layout
+
+\begin_layout Standard
+Information about a Teredo IPv6 address:
+\end_layout
+
+\begin_layout Code
+$ ./ipv6calc -q -i 3ffe:831f:ce49:7601:8000:efff:af4a:86BF
+\end_layout
+
+\begin_layout Code
+Address type: unicast, 6bone, global-unicast, productive, teredo
+\end_layout
+
+\begin_layout Code
+IPv4 address: 80.181.121.64
+\end_layout
+
+\begin_layout Code
+IPv4 registry[80.181.121.64]: RIPENCC
+\end_layout
+
+\begin_layout Code
+IPv4 address: 206.73.118.1
+\end_layout
+
+\begin_layout Code
+IPv4 registry[206.73.118.1]: ARIN
+\end_layout
+
+\begin_layout Code
+Address type is Teredo and included IPv4 server address is: 80.181.121.64 and
+ client port: 4096
+\end_layout
+
+\begin_layout Code
+IPv4 registry for Teredo server address: ARIN
+\end_layout
+
+\begin_layout Code
+Registry for address: reserved
+\end_layout
+
+\begin_layout Standard
+There exists also a machine readable output (e.g.
+ used by 'ipv6calcweb.cgi') - in addition, here 
+\begin_inset LatexCommand \url[IP2Location]{http://www.ip2location.com/}
+
+\end_inset
+
+ and/or 
+\begin_inset LatexCommand \url[GeoIP]{http://www.maxmind.com/}
+
+\end_inset
+
+ information can be displayed, if databases are specified.
+ Note that GeoIP currently still supports IPv4 only.
+\end_layout
+
+\begin_layout Code
+$ ./ipv6calc -q -i -m --db-ip2location-ipv4 /usr/share/IP2Location/IP-COUNTRY-SAM
+PLE.BIN --db-ip2location-ipv6 /var/local/share/IP2Location/IPV6-COUNTRY.BIN
+ --db-geoip /usr/share/GeoIP/GeoIP.dat  3ffe:831f:ce49:7601:8000:efff:af4a:86BF
+\end_layout
+
+\begin_layout Code
+IPV6=3ffe:831f:ce49:7601:8000:efff:af4a:86bf
+\end_layout
+
+\begin_layout Code
+TYPE=unicast,6bone,global-unicast,productive,teredo
+\end_layout
+
+\begin_layout Code
+IPV4_SOURCE[80.181.121.64]=TEREDO-CLIENT
+\end_layout
+
+\begin_layout Code
+IPV4[80.181.121.64]=80.181.121.64
+\end_layout
+
+\begin_layout Code
+IPV4_REGISTRY[80.181.121.64]=RIPENCC
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_DATABASE_INFO_IPV4=url=http://www.ip2location.com date=2005-06-17
+ entries=20470 apiversion=2.1.3
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_COUNTRY_SHORT[80.181.121.64]=IT
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_COUNTRY_LONG[80.181.121.64]=ITALY
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_REGION[80.181.121.64]=This parameter is unavailable for selected
+ data file.
+ Please upgrade the data file.
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_CITY[80.181.121.64]=This parameter is unavailable for selected
+ data file.
+ Please upgrade the data file.
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_ISP[80.181.121.64]=This parameter is unavailable for selected data
+ file.
+ Please upgrade the data file.
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_LATITUDE[80.181.121.64]=0.000000
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_LONGITUDE[80.181.121.64]=0.000000
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_DOMAIN[80.181.121.64]=This parameter is unavailable for selected
+ data file.
+ Please upgrade the data file.
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_ZIPCODE[80.181.121.64]=This parameter is unavailable for selected
+ data file.
+ Please upgrade the data file.
+\end_layout
+
+\begin_layout Code
+GEOIP_COUNTRY_SHORT[80.181.121.64]=IT
+\end_layout
+
+\begin_layout Code
+GEOIP_COUNTRY_LONG[80.181.121.64]=Italy
+\end_layout
+
+\begin_layout Code
+GEOIP_DATABASE_INFO=GEO-106FREE 20070201 Build 1 Copyright (c) 2007 MaxMind
+ LLC All Rights Reserved apiversion=system
+\end_layout
+
+\begin_layout Code
+IPV4_SOURCE[206.73.118.1]=TEREDO-SERVER
+\end_layout
+
+\begin_layout Code
+IPV4[206.73.118.1]=206.73.118.1
+\end_layout
+
+\begin_layout Code
+IPV4_REGISTRY[206.73.118.1]=ARIN
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_COUNTRY_SHORT[206.73.118.1]=??
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_COUNTRY_LONG[206.73.118.1]=This record is unavailable in demo version.
+ Please subscribe.
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_REGION[206.73.118.1]=This parameter is unavailable for selected
+ data file.
+ Please upgrade the data file.
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_CITY[206.73.118.1]=This parameter is unavailable for selected data
+ file.
+ Please upgrade the data file.
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_ISP[206.73.118.1]=This parameter is unavailable for selected data
+ file.
+ Please upgrade the data file.
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_LATITUDE[206.73.118.1]=0.000000
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_LONGITUDE[206.73.118.1]=0.000000
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_DOMAIN[206.73.118.1]=This parameter is unavailable for selected
+ data file.
+ Please upgrade the data file.
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_ZIPCODE[206.73.118.1]=This parameter is unavailable for selected
+ data file.
+ Please upgrade the data file.
+\end_layout
+
+\begin_layout Code
+GEOIP_COUNTRY_SHORT[206.73.118.1]=US
+\end_layout
+
+\begin_layout Code
+GEOIP_COUNTRY_LONG[206.73.118.1]=United States
+\end_layout
+
+\begin_layout Code
+TEREDO_PORT_CLIENT=4096
+\end_layout
+
+\begin_layout Code
+IPV6_REGISTRY=reserved
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_DATABASE_INFO_IPV6=url=http://www.ip2location.com date=2007-05-26
+ entries=7495 apiversion=2.1.3
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_COUNTRY_SHORT=-
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_COUNTRY_LONG=-
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_REGION=This parameter is unavailable for selected data file.
+ Please upgrade the data file.
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_CITY=This parameter is unavailable for selected data file.
+ Please upgrade the data file.
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_ISP=This parameter is unavailable for selected data file.
+ Please upgrade the data file.
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_LATITUDE=0.000000
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_LONGITUDE=0.000000
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_DOMAIN=This parameter is unavailable for selected data file.
+ Please upgrade the data file.
+\end_layout
+
+\begin_layout Code
+IP2LOCATION_ZIPCODE=This parameter is unavailable for selected data file.
+ Please upgrade the data file.
+\end_layout
+
+\begin_layout Code
+IPV6CALC_NAME=ipv6calc
+\end_layout
+
+\begin_layout Code
+IPV6CALC_VERSION=0.70.1
+\end_layout
+
+\begin_layout Code
+IPV6CALC_COPYRIGHT="(P) & (C) 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
+"
+\end_layout
+
+\begin_layout Code
+IPV6CALC_OUTPUT_VERSION=4
 \end_layout
 
 \begin_layout Subsection
