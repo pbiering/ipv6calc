@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.153 2007/06/02 11:59:29 peter Exp $ 
+ *  $Id: ChangeLog,v 1.154 2007/06/02 12:00:34 peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,8 @@ Info:
 --------------------------------------------------------------------
 20070601/PB
 	update databases
+	update doc files
+	minor fixes in test scripts
 	tag version 0.71.0
 
 20070426/PB
