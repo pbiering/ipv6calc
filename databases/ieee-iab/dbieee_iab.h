@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.24 2007/04/01 20:00:51 peter Exp $
- * Generated     : Sun Apr  1 21:55:48 2007
+ * Version       : $Id: dbieee_iab.h,v 1.25 2007/06/02 07:31:32 peter Exp $
+ * Generated     : Sat Jun  2 09:25:39 2007
  * Data copyright: IEEE
  *
  * Information:
@@ -1861,5 +1861,60 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x738000, 0x738FFF, "Miracom Technology Co., Ltd.", "MIRACOM" },
 	{ 0x0050C2, 0x739000, 0x739FFF, "Tattile srl", "TATTILE-SRL" },
 	{ 0x0050C2, 0x73A000, 0x73AFFF, "Naturela Ltd.", "NATURELA" },
+	{ 0x0050C2, 0x73B000, 0x73BFFF, "On Air Networks", "ON-AIR-NETWORKS" },
+	{ 0x0050C2, 0x73C000, 0x73CFFF, "Simicon", "SIMICON" },
+	{ 0x0050C2, 0x73D000, 0x73DFFF, "cryptiris", "CRYPTIRIS" },
+	{ 0x0050C2, 0x73E000, 0x73EFFF, "Quantec Networks GmbH", "QUANTEC-NETWORKS" },
+	{ 0x0050C2, 0x73F000, 0x73FFFF, "MEDAV GmbH", "MEDAV" },
+	{ 0x0050C2, 0x740000, 0x740FFF, "McQuay China", "MCQUAY-CHINA" },
+	{ 0x0050C2, 0x741000, 0x741FFF, "Dain", "DAIN" },
+	{ 0x0050C2, 0x742000, 0x742FFF, "Fantuzzi Reggiane", "FANTUZZI-REGGIANE" },
+	{ 0x0050C2, 0x743000, 0x743FFF, "Elektro-Top 3000 Ltd.", "ELEKTRO-TOP-3000" },
+	{ 0x0050C2, 0x744000, 0x744FFF, "Avonaco Systems, Inc.", "AVONACO" },
+	{ 0x0050C2, 0x745000, 0x745FFF, "ACISA", "ACISA" },
+	{ 0x0050C2, 0x746000, 0x746FFF, "Realtronix Company", "REALTRONIX-COMPANY" },
+	{ 0x0050C2, 0x747000, 0x747FFF, "CDSA Dam Neck", "CDSA-DAM-NECK" },
+	{ 0x0050C2, 0x748000, 0x748FFF, "Letechnic Ltd", "LETECHNIC" },
+	{ 0x0050C2, 0x749000, 0x749FFF, "Affolter Technologies SA", "AFFOLTER-TECHNOLOGIES" },
+	{ 0x0050C2, 0x74A000, 0x74AFFF, "MONITOR ELECTRONICS LTD", "MONITOR-ELECTRONICS" },
+	{ 0x0050C2, 0x74B000, 0x74BFFF, "STAR-Dundee Ltd", "STAR-DUNDEE" },
+	{ 0x0050C2, 0x74C000, 0x74CFFF, "Saia-Burgess Controls AG", "SAIA-BURGESS-CONTROLS" },
+	{ 0x0050C2, 0x74D000, 0x74DFFF, "Beceem Communications, Inc.", "BECEEM-COMMUNICATION" },
+	{ 0x0050C2, 0x74E000, 0x74EFFF, "TRONICO", "TRONICO" },
+	{ 0x0050C2, 0x74F000, 0x74FFFF, "German Technologies", "GERMAN-TECHNOLOGIES" },
+	{ 0x0050C2, 0x750000, 0x750FFF, "Brightlights Intellectual Property Ltd", "BRIGHTLIGHTS-INTELLECTUAL-PROPERTY" },
+	{ 0x0050C2, 0x751000, 0x751FFF, "e&s Engineering & Software GmbH", "E-S-ENGINEERING-SOFTWARE" },
+	{ 0x0050C2, 0x752000, 0x752FFF, "LOBER, S.A.", "LOBER" },
+	{ 0x0050C2, 0x753000, 0x753FFF, "ABB", "ABB" },
+	{ 0x0050C2, 0x754000, 0x754FFF, "Abeo Corporation", "ABEO" },
+	{ 0x0050C2, 0x755000, 0x755FFF, "Teletek Electronics", "TELETEK-ELECTRONICS" },
+	{ 0x0050C2, 0x756000, 0x756FFF, "Chesapeake Sciences Corp", "CHESAPEAKE-SCIENCES" },
+	{ 0x0050C2, 0x757000, 0x757FFF, "E S P Technologies Ltd", "E-S-P-TECHNOLOGIES" },
+	{ 0x0050C2, 0x758000, 0x758FFF, "AixSolve GmbH", "AIXSOLVE" },
+	{ 0x0050C2, 0x759000, 0x759FFF, "Sequentric Energy Systems, LLC", "SEQUENTRIC-ENERGY-LLC" },
+	{ 0x0050C2, 0x75A000, 0x75AFFF, "Gaisler Research AB", "GAISLER-RESEARCH-AB" },
+	{ 0x0050C2, 0x75B000, 0x75BFFF, "DMT System S.p.A.", "DMT-SYSTEM-S-P-A" },
+	{ 0x0050C2, 0x75C000, 0x75CFFF, "STÖRK-TRONIC Störk GmbH&Co. KG", "STÖRK-TRONIC-STöRK" },
+	{ 0x0050C2, 0x75D000, 0x75DFFF, "Fluid Analytics, Inc.", "FLUID-ANALYTICS" },
+	{ 0x0050C2, 0x75E000, 0x75EFFF, "Sky-Skan, Incorporated", "SKY-SKAN-INCORPORATED" },
+	{ 0x0050C2, 0x75F000, 0x75FFFF, "B. Rexroth the identity company GmbH", "B-REXROTH-THE-IDENTITY-COMPANY" },
+	{ 0x0050C2, 0x760000, 0x760FFF, "AR'S CO., LTD.", "AR-S" },
+	{ 0x0050C2, 0x761000, 0x761FFF, "EFW Inc.", "EFW" },
+	{ 0x0050C2, 0x762000, 0x762FFF, "Assembly Contracts Limited", "ASSEMBLY-CONTRACTS" },
+	{ 0x0050C2, 0x763000, 0x763FFF, "XtendWave", "XTENDWAVE" },
+	{ 0x0050C2, 0x764000, 0x764FFF, "Argus-Spectrum", "ARGUS-SPECTRUM" },
+	{ 0x0050C2, 0x765000, 0x765FFF, "Phytec Messtechnik GmbH", "PHYTEC-MESSTECHNIK" },
+	{ 0x0050C2, 0x766000, 0x766FFF, "EMTEC Elektronische Messtechnik GmbH", "EMTEC-ELEKTRONISCHE-MESSTECHNIK" },
+	{ 0x0050C2, 0x767000, 0x767FFF, "EID", "EID" },
+	{ 0x0050C2, 0x768000, 0x768FFF, "Control Service do Brasil Ltda", "CONTROL-SERVICE-DO-BRASIL-LTDA" },
+	{ 0x0050C2, 0x769000, 0x769FFF, "BES GmbH", "BES" },
+	{ 0x0050C2, 0x76A000, 0x76AFFF, "Digidrive Audio Limited", "DIGIDRIVE-AUDIO" },
+	{ 0x0050C2, 0x76B000, 0x76BFFF, "Putercom Enterprise Co., LTD.", "PUTERCOM" },
+	{ 0x0050C2, 0x76C000, 0x76CFFF, "EFG CZ spol. s r.o.", "EFG-CZ-SPOL-S-R-O" },
+	{ 0x0050C2, 0x76D000, 0x76DFFF, "Mobilisme", "MOBILISME" },
+	{ 0x0050C2, 0x76E000, 0x76EFFF, "Crinia Corporation", "CRINIA" },
+	{ 0x0050C2, 0x76F000, 0x76FFFF, "Control and Robotics Solutions", "CONTROL-AND-ROBOTICS-SOLUTIONS" },
+	{ 0x0050C2, 0x770000, 0x770FFF, "Cadex Electronics Inc.", "CADEX-ELECTRONICS" },
+	{ 0x0050C2, 0x771000, 0x771FFF, "ZigBee Alliance", "ZIGBEE-ALLIANCE" },
 
 };
