@@ -35,12 +35,19 @@ Where to get:
 
  Ready to use packages for several operating systems:
   Linux:
-   Red Hat:
-    developing platform, so use given hint above to create a RPM
+   Fedora:
+    Core 6: developing platform, so use given hint above to create a RPM
+    7: package is included
+   Red Hat Enterprise Linux:
+    RHEL3: build from source package should work but not tested
+    RHEL4: build from source package tested, working
+    RHEL5: package is included
    Mandrake:
     similar to Red Hat, rebuild should work, too
    Debian:
     maintained package at http://packages.debian.org/ipv6calc
+   Pardus Linux:
+    maintained package at http://members.comu.edu.tr/nyucel/pisi/ipv6calc/
 
   BSD:
    NetBSD:
@@ -65,4 +72,4 @@ Mailing lists:
   Subscription: http://lists.deepspace6.net/listinfo/ipv6calc
 
 
-$Id: README,v 1.12 2007/06/02 11:59:29 peter Exp $
+$Id: README,v 1.13 2007/06/02 12:14:30 peter Exp $
