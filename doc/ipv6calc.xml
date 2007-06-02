@@ -1,13 +1,9 @@
-<!DOCTYPE article  PUBLIC "-//OASIS//DTD DocBook V4.2//EN"
- [ <!ENTITY % output.print.png "IGNORE">
-<!ENTITY % output.print.pdf "IGNORE">
-<!ENTITY % output.print.eps "IGNORE">
-<!ENTITY % output.print.bmp "IGNORE">
- ]>
+<?xml version="1.0" encoding="iso8859-1"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
-<!-- SGML file was created by LyX 1.4.4
+<!-- XML file was created by LyX 1.4.4
   See http://www.lyx.org/ for more information -->
-<article lang="en">
+<article lang="en_US">
 <articleinfo>
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>

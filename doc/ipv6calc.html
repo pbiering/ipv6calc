@@ -1,12 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <HTML
 ><HEAD
 ><TITLE
->The ipv6calc Homepage
-  </TITLE
+>The ipv6calc Homepage</TITLE
 ><META
 NAME="GENERATOR"
-CONTENT="Modular DocBook HTML Stylesheet Version 1.7"></HEAD
+CONTENT="Modular DocBook HTML Stylesheet Version 1.79"></HEAD
 ><BODY
 CLASS="ARTICLE"
 BGCOLOR="#FFFFFF"
@@ -24,6 +23,54 @@ CLASS="TITLE"
 NAME="AEN2"
 >The ipv6calc Homepage</A
 ></H1
+><H3
+CLASS="AUTHOR"
+><A
+NAME="AEN4"
+>Peter Bieringer</A
+></H3
+><DIV
+CLASS="AFFILIATION"
+><DIV
+CLASS="ADDRESS"
+><P
+CLASS="ADDRESS"
+>pb&nbsp;at&nbsp;bieringer&nbsp;dot&nbsp;de</P
+></DIV
+></DIV
+><DIV
+CLASS="REVHISTORY"
+><TABLE
+WIDTH="100%"
+BORDER="0"
+><TR
+><TH
+ALIGN="LEFT"
+VALIGN="TOP"
+COLSPAN="3"
+><B
+>Revision History</B
+></TH
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+>Revision 2.0</TD
+><TD
+ALIGN="LEFT"
+>2007-06-01</TD
+><TD
+ALIGN="LEFT"
+>Revised by: PB</TD
+></TR
+><TR
+><TD
+ALIGN="LEFT"
+COLSPAN="3"
+></TD
+></TR
+></TABLE
+></DIV
 ><HR></DIV
 ><DIV
 CLASS="TOC"
@@ -34,134 +81,173 @@ CLASS="TOC"
 ></DT
 ><DT
 >1. <A
-HREF="#AEN4"
+HREF="#AEN14"
 >General</A
 ></DT
 ><DT
 >2. <A
-HREF="#AEN12"
+HREF="#AEN22"
 >License</A
 ></DT
 ><DT
 >3. <A
-HREF="#AEN15"
+HREF="#AEN25"
 >Author</A
 ></DT
 ><DT
 >4. <A
-HREF="#AEN22"
+HREF="#AEN32"
 >Where to get sources or binaries</A
 ></DT
 ><DD
 ><DL
 ><DT
 >4.1. <A
-HREF="#AEN24"
+HREF="#AEN34"
 >Latest version of sources:</A
 ></DT
 ><DT
 >4.2. <A
-HREF="#AEN42"
+HREF="#AEN52"
 >Available formats:</A
 ></DT
 ><DT
 >4.3. <A
-HREF="#AEN53"
+HREF="#AEN63"
 >Ready to use packages for several operating systems:</A
 ></DT
 ></DL
 ></DD
 ><DT
 >5. <A
-HREF="#AEN82"
+HREF="#AEN96"
 >Mailling Lists</A
 ></DT
 ><DD
 ><DL
 ><DT
 >5.1. <A
-HREF="#AEN84"
+HREF="#AEN98"
 >ipv6calc-announce</A
 ></DT
 ><DT
 >5.2. <A
-HREF="#AEN104"
+HREF="#AEN118"
 >ipv6calc</A
 ></DT
 ></DL
 ></DD
 ><DT
 >6. <A
-HREF="#AEN124"
+HREF="#AEN138"
 >Bug Reports</A
 ></DT
 ><DT
 >7. <A
-HREF="#AEN127"
+HREF="#AEN141"
 >Features of ipv6calc</A
 ></DT
 ><DD
 ><DL
 ><DT
 >7.1. <A
-HREF="#AEN129"
+HREF="#AEN143"
 >Description</A
 ></DT
 ><DT
 >7.2. <A
-HREF="#AEN132"
+HREF="#AEN146"
 >Examples</A
 ></DT
 ><DT
 >7.3. <A
-HREF="#AEN145"
+HREF="#AEN159"
 >Option style</A
 ></DT
 ><DT
 >7.4. <A
-HREF="#AEN157"
+HREF="#AEN171"
 >Online help</A
 ></DT
 ></DL
 ></DD
 ><DT
 >8. <A
-HREF="#AEN171"
+HREF="#AEN185"
 >Webserver log conversion helper program "ipv6logconv"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >8.1. <A
-HREF="#AEN174"
+HREF="#AEN188"
 >Examples</A
 ></DT
 ></DL
 ></DD
 ><DT
 >9. <A
-HREF="#AEN178"
->Perl CGI wrapper program "ipv6calcweb.cgi"</A
+HREF="#AEN192"
+>Webserver log anonymization helper program "ipv6loganon"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >9.1. <A
-HREF="#AEN181"
->Examples</A
+HREF="#AEN195"
+>Anonymization details</A
+></DT
+><DT
+>9.2. <A
+HREF="#AEN224"
+>Supported log file formats</A
+></DT
+><DT
+>9.3. <A
+HREF="#AEN231"
+>Supported options</A
+></DT
+><DT
+>9.4. <A
+HREF="#AEN234"
+>Usage</A
 ></DT
 ></DL
 ></DD
 ><DT
 >10. <A
-HREF="#AEN197"
->Webserver log statistics helper program "ipv6logstats"</A
+HREF="#AEN238"
+>Perl CGI wrapper program "ipv6calcweb.cgi"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >10.1. <A
-HREF="#AEN200"
+HREF="#AEN241"
+>Examples</A
+></DT
+></DL
+></DD
+><DT
+>11. <A
+HREF="#AEN257"
+>Webserver log statistics helper program "ipv6logstats"</A
+></DT
+><DD
+><DL
+><DT
+>11.1. <A
+HREF="#AEN260"
+>Supported options</A
+></DT
+><DT
+>11.2. <A
+HREF="#AEN263"
+>Usage</A
+></DT
+><DT
+>11.3. <A
+HREF="#AEN266"
 >Examples</A
 ></DT
 ></DL
@@ -173,53 +259,47 @@ CLASS="SECT1"
 ><H2
 CLASS="SECT1"
 ><A
-NAME="AEN4"
+NAME="AEN14"
 >1. General</A
 ></H2
 ><P
->ipv6calc is a small utility written in programming languate C to manipulate (not only) IPv6 addresses. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.
-  </P
+>ipv6calc is a small utility written in programming languate C to manipulate (not only) IPv6 addresses. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</P
 ><P
->This utility is also used to extend features on network-functions-ipv6 library, used by initscripts-ipv6.
-  </P
+>This utility is also used to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</P
 ><P
 >Note: this tool got also its <A
 HREF="http://freshmeat.net/projects/ipv6calc/"
 TARGET="_top"
 >freshmeat / ipv6calc</A
-> page (not maintained by the author)
-  </P
+> page (not maintained by the author)</P
 ><P
 >Hint: take also a look at the <A
 HREF="http://steinbeck.ucs.indiana.edu:47401/"
 TARGET="_top"
 >Advanced Network Management Laboratory / IPv6 Address Oracle</A
-> if you want to learn more about IPv6 addresses.
-  </P
+> if you want to learn more about IPv6 addresses.</P
 ></DIV
 ><DIV
 CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN12"
+NAME="AEN22"
 >2. License</A
 ></H2
 ><P
->The program is published under the GNU GPL version 2.
-  </P
+>The program is published under the GNU GPL version 2.</P
 ></DIV
 ><DIV
 CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN15"
+NAME="AEN25"
 >3. Author</A
 ></H2
 ><P
->The author of ipv6calc is
-  </P
+>The author of ipv6calc is</P
 ><P
 ></P
 ><UL
@@ -229,8 +309,7 @@ NAME="AEN15"
 HREF="mailto:pb@bieringer.de"
 TARGET="_top"
 >Dr. Peter Bieringer</A
-> with some minor contribution by others
-   </P
+> with some minor contribution by others</P
 ></LI
 ></UL
 ></DIV
@@ -239,7 +318,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN22"
+NAME="AEN32"
 >4. Where to get sources or binaries</A
 ></H2
 ><DIV
@@ -247,7 +326,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN24"
+NAME="AEN34"
 >4.1. Latest version of sources:</A
 ></H3
 ><P
@@ -263,8 +342,7 @@ TARGET="_top"
 HREF="http://www.deepspace6.net/sections/cvs.html"
 TARGET="_top"
 >DeepSpace6 / CVS instructions</A
->
-    </P
+></P
 ></LI
 ><LI
 ><P
@@ -276,8 +354,7 @@ TARGET="_top"
 HREF="http://cvs.deepspace6.net/view/ipv6calc/"
 TARGET="_top"
 >DeepSpace6 / CVS web interface</A
->
-    </P
+></P
 ></LI
 ><LI
 ><P
@@ -289,8 +366,7 @@ TARGET="_top"
 HREF="ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/"
 TARGET="_top"
 >DeepSpace6 / anonymous FTP</A
->
-    </P
+></P
 ></LI
 ><LI
 ><P
@@ -298,8 +374,7 @@ TARGET="_top"
 HREF="ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/"
 TARGET="_top"
 >ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/</A
->
-    </P
+></P
 ></LI
 ></UL
 ></DIV
@@ -308,7 +383,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN42"
+NAME="AEN52"
 >4.2. Available formats:</A
 ></H3
 ><DIV
@@ -316,14 +391,13 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
-NAME="AEN44"
+NAME="AEN54"
 >4.2.1. tar.gz</A
 ></H4
 ><P
->A SPEC file is included, so you can build a RPM from source tarball using
-    </P
+>A SPEC file is included, so you can build a RPM from source tarball using</P
 ><TABLE
-BORDER="0"
+BORDER="1"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
 ><TR
@@ -331,9 +405,8 @@ WIDTH="100%"
 ><FONT
 COLOR="#000000"
 ><PRE
-CLASS="PROGRAMLISTING"
->$ rpmbuild -ta path/to/ipv6calc-$version.tar.gz
-    </PRE
+CLASS="SCREEN"
+>$ rpmbuild -ta path/to/ipv6calc-$version.tar.gz</PRE
 ></FONT
 ></TD
 ></TR
@@ -344,7 +417,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN48"
+NAME="AEN58"
 >4.2.2. as RPM</A
 ></H4
 ><P
@@ -356,8 +429,7 @@ TARGET="_top"
 HREF="http://www.deepspace6.net/"
 TARGET="_top"
 >DeepSpace6</A
-> some day.
-    </P
+> some day.</P
 ></DIV
 ></DIV
 ><DIV
@@ -365,7 +437,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN53"
+NAME="AEN63"
 >4.3. Ready to use packages for several operating systems:</A
 ></H3
 ><DIV
@@ -373,80 +445,86 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
-NAME="AEN55"
->4.3.1. Red Hat Linux</A
+NAME="AEN65"
+>4.3.1. Fedora</A
 ></H4
 ><P
->Red Hat Linux (currently version 7.3) is the developing platform, so use given hints above to create a RPM.
-    </P
+>Fedora Core 6 is the current developing platform, so use given hints above to create a RPM. Fedora 7 includes this package by default.</P
 ></DIV
 ><DIV
 CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN58"
->4.3.2. Mandrake:</A
+NAME="AEN68"
+>4.3.2. Red Hat Enterprise Linux and clones (like CentOS)</A
 ></H4
 ><P
->Linux Mandrake is very similar to Red Hat Linux, therefore a rebuild should work, too.
-    </P
+>It's tested by the developer that creation of the RPM is working fine on RHEL4. RHEL5 includes this package by default.</P
 ></DIV
 ><DIV
 CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN61"
->4.3.3. PLD:</A
+NAME="AEN71"
+>4.3.3. Mandrake:</A
+></H4
+><P
+>Linux Mandrake is very similar to Red Hat Linux, therefore a rebuild should work, too.</P
+></DIV
+><DIV
+CLASS="SECT3"
+><HR><H4
+CLASS="SECT3"
+><A
+NAME="AEN74"
+>4.3.4. PLD:</A
 ></H4
 ><P
 >See <A
 HREF="http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc"
 TARGET="_top"
 >rpmfind / ipv6calc</A
->.
-    </P
+>.</P
 ></DIV
 ><DIV
 CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN65"
->4.3.4. Debian GNU/Linux</A
+NAME="AEN78"
+>4.3.5. Debian GNU/Linux</A
 ></H4
 ><P
 >Package is maintained, more information can be found at <A
 HREF="http://packages.debian.org/ipv6calc"
 TARGET="_top"
 >http://packages.debian.org/ipv6calc</A
->
-    </P
+></P
 ></DIV
 ><DIV
 CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN69"
->4.3.5. NetBSD:</A
+NAME="AEN82"
+>4.3.6. NetBSD:</A
 ></H4
 ><P
 >See here for more: <A
 HREF="http://www.netbsd.org/packages/net/ipv6calc/"
 TARGET="_top"
 >http://www.netbsd.org/packages/net/ipv6calc/</A
->
-    </P
+></P
 ></DIV
 ><DIV
 CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN73"
->4.3.6. FreeBSD:</A
+NAME="AEN86"
+>4.3.7. FreeBSD:</A
 ></H4
 ><P
 >See here for more: <A
@@ -457,24 +535,26 @@ TARGET="_top"
 HREF="http://www.freebsd.org/cgi/query-pr.cgi?pr=34441"
 TARGET="_top"
 >http://www.freebsd.org/cgi/query-pr.cgi?pr=34441</A
->)
-    </P
+>), <A
+HREF="http://www.freshports.org/net-mgmt/ipv6calc/"
+TARGET="_top"
+>http://www.freshports.org/net-mgmt/ipv6calc/</A
+></P
 ></DIV
 ><DIV
 CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN78"
->4.3.7. OpenBSD:</A
+NAME="AEN92"
+>4.3.8. OpenBSD:</A
 ></H4
 ><P
 >See here for more: <A
 HREF="http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/"
 TARGET="_top"
 >http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/</A
->
-    </P
+></P
 ></DIV
 ></DIV
 ></DIV
@@ -483,7 +563,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN82"
+NAME="AEN96"
 >5. Mailling Lists</A
 ></H2
 ><DIV
@@ -491,7 +571,7 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN84"
+NAME="AEN98"
 >5.1. ipv6calc-announce</A
 ></H3
 ><P
@@ -503,22 +583,19 @@ CLASS="VARIABLELIST"
 >Reason:</DT
 ><DD
 ><P
->sending announcements of new versions
-    </P
+>sending announcements of new versions</P
 ></DD
 ><DT
 >Traffic:</DT
 ><DD
 ><P
->very low
-    </P
+>very low</P
 ></DD
 ><DT
 >Postings:</DT
 ><DD
 ><P
->only moderators are allowed to post
-    </P
+>only moderators are allowed to post</P
 ></DD
 ><DT
 >Information:</DT
@@ -528,8 +605,7 @@ CLASS="VARIABLELIST"
 HREF="http://lists.deepspace6.net/listinfo/ipv6calc-announce"
 TARGET="_top"
 >DeepSpace6 / maillist ipv6calc-announce</A
->
-    </P
+></P
 ></DD
 ></DL
 ></DIV
@@ -539,7 +615,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN104"
+NAME="AEN118"
 >5.2. ipv6calc</A
 ></H3
 ><P
@@ -551,22 +627,19 @@ CLASS="VARIABLELIST"
 >Reason:</DT
 ><DD
 ><P
->discussions
-    </P
+>discussions</P
 ></DD
 ><DT
 >Traffic:</DT
 ><DD
 ><P
->low
-    </P
+>low</P
 ></DD
 ><DT
 >Postings:</DT
 ><DD
 ><P
->subscribers
-    </P
+>subscribers</P
 ></DD
 ><DT
 >Information:</DT
@@ -576,8 +649,7 @@ CLASS="VARIABLELIST"
 HREF="http://lists.deepspace6.net/listinfo/ipv6calc"
 TARGET="_top"
 >DeepSpace6 / maillist ipv6calc</A
->
-    </P
+></P
 ></DD
 ></DL
 ></DIV
@@ -588,19 +660,18 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN124"
+NAME="AEN138"
 >6. Bug Reports</A
 ></H2
 ><P
->You can send bug reports to the author himself or subscribe to maillist "ipv6calc" and send it to the list.
-  </P
+>You can send bug reports to the author himself or subscribe to maillist &#8220;ipv6calc&#8221; and send it to the list.</P
 ></DIV
 ><DIV
 CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN127"
+NAME="AEN141"
 >7. Features of ipv6calc</A
 ></H2
 ><DIV
@@ -608,26 +679,24 @@ CLASS="SECT2"
 ><H3
 CLASS="SECT2"
 ><A
-NAME="AEN129"
+NAME="AEN143"
 >7.1. Description</A
 ></H3
 ><P
->The main program named "ipv6calc" is able to recognice many (not only) IPv6 address formats and depending on a selectable action (not required) a selectable output format can be specified.
-   </P
+>The main program named &#8220;ipv6calc&#8221; is able to recognice many (not only) IPv6 address formats and depending on a selectable action (not required) a selectable output format can be specified.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN132"
+NAME="AEN146"
 >7.2. Examples</A
 ></H3
 ><P
->A simple example is the conversion of an IPv6 address to a DNS PTR query string:
-   </P
+>A simple example is the conversion of an IPv6 address to a DNS PTR query string:</P
 ><TABLE
-BORDER="0"
+BORDER="1"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
 ><TR
@@ -635,20 +704,18 @@ WIDTH="100%"
 ><FONT
 COLOR="#000000"
 ><PRE
-CLASS="PROGRAMLISTING"
->$ ./ipv6calc --out revnibbles.arpa 3ffe:ffff::1
+CLASS="SCREEN"
+> ./ipv6calc --out revnibbles.arpa 2001:db8::1
 No input type specified, try autodetection...found type: ipv6addr
-1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.f.f.f.f.e.f.f.3.ip6.arpa.
-   </PRE
+1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.</PRE
 ></FONT
 ></TD
 ></TR
 ></TABLE
 ><P
->Like you see, input format was autodetected. And given example can be extended because ipv6calc also understands netmask / prefix length values:
-   </P
+>Like you see, input format was autodetected. And the given example can be extended because ipv6calc also understands netmask / prefix length values:</P
 ><TABLE
-BORDER="0"
+BORDER="1"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
 ><TR
@@ -656,19 +723,17 @@ WIDTH="100%"
 ><FONT
 COLOR="#000000"
 ><PRE
-CLASS="PROGRAMLISTING"
->$ ./ipv6calc -q --out revnibbles.arpa 3ffe:ffff::1/64
-0.0.0.0.0.0.0.0.f.f.f.f.e.f.f.3.ip6.arpa.
-   </PRE
+CLASS="SCREEN"
+>$ ./ipv6calc -q --out revnibbles.arpa 2001:db8::1/64
+0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.</PRE
 ></FONT
 ></TD
 ></TR
 ></TABLE
 ><P
->Also you've learnt now that switch "-q" (quiet) suppresses informational messages. You can use this now to start a DNS PTR query using:
-   </P
+>Also you've also learnt now that switch '-q' (quiet) suppresses informational messages. You can use this now to start a DNS PTR query using:</P
 ><TABLE
-BORDER="0"
+BORDER="1"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
 ><TR
@@ -676,18 +741,16 @@ WIDTH="100%"
 ><FONT
 COLOR="#000000"
 ><PRE
-CLASS="PROGRAMLISTING"
->$ dig PTR `./ipv6calc -q --out revnibbles.arpa 3ffe:ffff::1/64`
-   </PRE
+CLASS="SCREEN"
+>$ dig PTR `./ipv6calc -q --out revnibbles.arpa 2001:db8::1/64`</PRE
 ></FONT
 ></TD
 ></TR
 ></TABLE
 ><P
->But ipv6calc can do many more for you! Next example shows you the extraction of the IPv4 address contained in a 6to4 IPv6 address:
-   </P
+>But ipv6calc can do many more for you! Next example shows you the extraction of the IPv4 address contained in a 6to4 IPv6 address:</P
 ><TABLE
-BORDER="0"
+BORDER="1"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
 ><TR
@@ -695,19 +758,17 @@ WIDTH="100%"
 ><FONT
 COLOR="#000000"
 ><PRE
-CLASS="PROGRAMLISTING"
+CLASS="SCREEN"
 >$ ./ipv6calc -q --action conv6to4 --in ipv6 2002:c0a8:fb61::1 --out ipv4
-192.168.251.97
-   </PRE
+192.168.251.97</PRE
 ></FONT
 ></TD
 ></TR
 ></TABLE
 ><P
->This also works vice-versa:
-   </P
+>This also works vice-versa:</P
 ><TABLE
-BORDER="0"
+BORDER="1"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
 ><TR
@@ -715,76 +776,67 @@ WIDTH="100%"
 ><FONT
 COLOR="#000000"
 ><PRE
-CLASS="PROGRAMLISTING"
+CLASS="SCREEN"
 >$ ./ipv6calc -q --action conv6to4 --in ipv4 192.168.251.97 --out ipv6
-2002:c0a8:fb61::
-   </PRE
+2002:c0a8:fb61::</PRE
 ></FONT
 ></TD
 ></TR
 ></TABLE
 ><P
->There are many more features already implemented, if you miss one, send a note.
-   </P
+>There are many more features already implemented, if you miss one, send a note.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN145"
+NAME="AEN159"
 >7.3. Option style</A
 ></H3
 ><P
->Since version 0.40 new-style option handling was introduced, using
-   </P
+>Since version 0.40 new-style option handling was introduced, using</P
 ><P
 ></P
 ><UL
 ><LI
 ><P
->--in &#60;inputtype&#62;
-    </P
+>--in &#60;inputtype&#62;</P
 ></LI
 ><LI
 ><P
->--out &#60;outputtype&#62;
-    </P
+>--out &#60;outputtype&#62;</P
 ></LI
 ><LI
 ><P
->--action &#60;actiontype&#62;
-    </P
+>--action &#60;actiontype&#62;</P
 ></LI
 ></UL
 ><P
->and many more conversions were added. A built-in check matrix should prevent misconversions.
-   </P
+>and many more conversions were added. A built-in check matrix should prevent misconversions.</P
 ><P
->Up to version 0.39, only old-style options (which perhaps - but it's not sure - are going obsolete in the future) were available. They are one-in-all options, specifying input/action/output in one token. Internally this options will be converted into new-style options.
-   </P
+>Up to version 0.39, only old-style options (which perhaps - but it's not planned at the moment - are going obsolete sometimes the future) were available. They are one-in-all options, specifying input/action/output in one token. Internally this options will be converted into new-style options.</P
 ></DIV
 ><DIV
 CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN157"
+NAME="AEN171"
 >7.4. Online help</A
 ></H3
 ><P
->Online help always shows the currently implemented features.
-   </P
+>Online help always shows the currently implemented features.</P
 ><DIV
 CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN160"
+NAME="AEN174"
 >7.4.1. Main online help:</A
 ></H4
 ><TABLE
-BORDER="0"
+BORDER="1"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
 ><TR
@@ -792,39 +844,46 @@ WIDTH="100%"
 ><FONT
 COLOR="#000000"
 ><PRE
-CLASS="PROGRAMLISTING"
+CLASS="SCREEN"
 >$ ./ipv6calc -?
-ipv6calc: version 0.46
-(P) &#38; (C) 2001-2003 by Peter Bieringer &#60;pb (at) bieringer.de&#62;
+ipv6calc: version 0.70.1
+(P) &#38; (C) 2001-2007 by Peter Bieringer &#60;pb (at) bieringer.de&#62;
+
  General:
   [-d|--debug &#60;debug value&#62;] : debug value (bitwise like)
   [-q|--quiet]               : be more quiet
+
  Usage with new style options:
-  [--in &#60;input type&#62;]   : specify input  type
-                           (default: autodetect)
-  [--out &#60;output type&#62;] : specify output type
-                           (sometimes: autodetect)
-  [--action &#60;action&#62;]   : specify action
-                           (default: format conversion, sometimes: autodetect)
+  [--in|-I &#60;input type&#62;]   : specify input  type
+                             (default: autodetect)
+  [--out|-O &#60;output type&#62;] : specify output type
+                             (sometimes: autodetect)
+  [--action|-A &#60;action&#62;]   : specify action
+                             (default: format conversion, sometimes: autodetect)
   [&#60;format option&#62; ...] : specify format options
   &#60;input data&#62; [...]    : input data
+
   Available input  types:  --in     -?|-h|--help
   Available output types:  --out    -?|-h|--help
   Available action types:  --action -?|-h|--help
+
  Other usage:
   --showinfo|-i [--machine_readable|-m] : show information about input data
   --showinfo|-i --show_types            : show available types on '-m'
- To see old-style option use: --printoldoptions
-    </PRE
+
+  [--db-ip2location-ipv4 &#60;file&#62;] : IP2Location IPv4 database file (optional)
+  [--db-ip2location-ipv6 &#60;file&#62;] : IP2Location IPv6 database file (optional)
+  [--db-geoip &#60;file&#62;]            : GeoIP database file (optional)
+
+ To see old-style option use: --printoldoptions</PRE
 ></FONT
 ></TD
 ></TR
 ></TABLE
 ><P
->Input-type options
-    </P
+>Input-type options</P
 ><TABLE
-BORDER="0"
+BORDER="1"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
 ><TR
@@ -832,10 +891,11 @@ WIDTH="100%"
 ><FONT
 COLOR="#000000"
 ><PRE
-CLASS="PROGRAMLISTING"
->$ ./ipv6calc --in -?
-ipv6calc: version 0.46
-(P) &#38; (C) 2001-2003 by Peter Bieringer &#60;pb (at) bieringer.de&#62;
+CLASS="SCREEN"
+>]$ ./ipv6calc --in -?
+ipv6calc: version 0.70.1
+(P) &#38; (C) 2001-2007 by Peter Bieringer &#60;pb (at) bieringer.de&#62;
+
  Available input types:
   auto           : automatic detection
   revnibbles.int : dot separated nibbles reverse, ending with ip6.int.
@@ -843,22 +903,22 @@ ipv6calc: version 0.46
   bitstring      : bitstring labes, ending with ip6.arpa.
   ipv6addr       : IPv6 address
   ipv4addr       : IPv4 address
+  ipv4hex        : IPv4 in hexdecimal format
+  ipv4revhex     : IPv4 in byte-reversed hexdecimal format
   mac            : MAC address (48 bits)
   base85         : Base-85 string
   ifinet6        : Like line in /proc/net/if_inet6
   iid+token      : Interface identifier and token
   ipv6logconv    : ipv6logconv (currently not supported)
-  prefix+mac     : IPv6 prefix and a MAC address
-    </PRE
+  prefix+mac     : IPv6 prefix and a MAC address</PRE
 ></FONT
 ></TD
 ></TR
 ></TABLE
 ><P
->Output-type options:
-    </P
+>Output-type options:</P
 ><TABLE
-BORDER="0"
+BORDER="1"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
 ><TR
@@ -866,9 +926,11 @@ WIDTH="100%"
 ><FONT
 COLOR="#000000"
 ><PRE
-CLASS="PROGRAMLISTING"
+CLASS="SCREEN"
 >$ ./ipv6calc --out -?
-ipv6calc: version 0.46 (P) &#38; (C) 2001-2003 by Peter Bieringer &#60;pb (at) bieringer.de&#62;
+ipv6calc: version 0.70.1
+(P) &#38; (C) 2001-2007 by Peter Bieringer &#60;pb (at) bieringer.de&#62;
+
  Available output types:
   revnibbles.int : dot separated nibbles reverse, ending with ip6.int.
   revnibbles.arpa: dot separated nibbles reverse, ending with ip6.arpa.
@@ -886,19 +948,18 @@ ipv6calc: version 0.46 (P) &#38; (C) 2001-2003 by Peter Bieringer &#60;pb (at) b
   ipv6addrtype   : IPv6 address type
   any            : any type (currently not supported)
   revipv4        : reverse IPv4, ending with in-addr.arpa
+  ipv4hex        : IPv4 in hexdecimal format
   octal          : IP address in escaped octal format
-For examples and available format options use:
-    --out &#60;type&#62; --examples 
-    </PRE
+ For examples and available format options use:
+    --out &#60;type&#62; --examples</PRE
 ></FONT
 ></TD
 ></TR
 ></TABLE
 ><P
->Action-type options: 
-    </P
+>Action-type options: </P
 ><TABLE
-BORDER="0"
+BORDER="1"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
 ><TR
@@ -906,25 +967,26 @@ WIDTH="100%"
 ><FONT
 COLOR="#000000"
 ><PRE
-CLASS="PROGRAMLISTING"
+CLASS="SCREEN"
 >$ ./ipv6calc --action -?
-ipv6calc: version 0.45 (P) &#38; (C) 2001-2002 by Peter Bieringer &#60;pb (at) bieringer.de&#62;
+ipv6calc: version 0.70.1
+
+(P) &#38; (C) 2001-2007 by Peter Bieringer &#60;pb (at) bieringer.de&#62;
  Available action types:
   auto          : Automatic selection of action (default)
   geneui64      : Converts a MAC address to an EUI-64 address
   conv6to4      : Converts IPv4 address &#60;-&#62; 6to4 IPv6 address (prefix)
   genprivacyiid : Generates a privacy interface ID out of a given one and a token
-  prefixmac2ipv6: Generates an IPv6 address out of a prefix and a MAC address
-    </PRE
+  anonymize     : Anonymize IPv4/IPv6 address without loosing much information
+  prefixmac2ipv6: Generates an IPv6 address out of a prefix and a MAC address</PRE
 ></FONT
 ></TD
 ></TR
 ></TABLE
 ><P
->Because of historical issues, there exists also a support of the old-styled options: 
-    </P
+>Because of historical issues, there exists also a support of the old-styled options: </P
 ><TABLE
-BORDER="0"
+BORDER="1"
 BGCOLOR="#E0E0E0"
 WIDTH="100%"
 ><TR
@@ -932,9 +994,11 @@ WIDTH="100%"
 ><FONT
 COLOR="#000000"
 ><PRE
-CLASS="PROGRAMLISTING"
+CLASS="SCREEN"
 >$ ./ipv6calc --printoldoptions
-ipv6calc: version 0.45 (P) &#38; (C) 2001-2002 by Peter Bieringer &#60;pb (at) bieringer.de&#62;
+ipv6calc: version 0.70.1
+(P) &#38; (C) 2001-2007 by Peter Bieringer &#60;pb (at) bieringer.de&#62;
+
  Usage with old style (shortcut) options (going obsolete):
   &#60;shortcut option&#62; [&#60;format option&#62; ...] &#60;input data&#62; [...]
   --addr2ip6_int
@@ -956,8 +1020,7 @@ ipv6calc: version 0.45 (P) &#38; (C) 2001-2002 by Peter Bieringer &#60;pb (at) b
   --if_inet62addr
   --ifinet6_to_compressed
   --eui64_to_privacy
-  --ipv4_to_6to4addr
-    </PRE
+  --ipv4_to_6to4addr</PRE
 ></FONT
 ></TD
 ></TR
@@ -970,18 +1033,17 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN171"
+NAME="AEN185"
 >8. Webserver log conversion helper program "ipv6logconv"</A
 ></H2
 ><P
->This program parses address tokens of a given webserver logfile and converts them to special strings, useful for statistics (e.g. created by using "analog").
-  </P
+>This program parses address tokens of a given webserver logfile and converts them to special strings, useful for statistics (e.g. created by using "analog").</P
 ><DIV
 CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN174"
+NAME="AEN188"
 >8.1. Examples</A
 ></H3
 ><P
@@ -989,8 +1051,7 @@ NAME="AEN174"
 HREF="http://www.ipv6.bieringer.de/"
 TARGET="_top"
 >http://www.ipv6.bieringer.de/</A
-> (IPv6 only).
-   </P
+> (IPv6 only).</P
 ></DIV
 ></DIV
 ><DIV
@@ -998,23 +1059,200 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN178"
->9. Perl CGI wrapper program "ipv6calcweb.cgi"</A
+NAME="AEN192"
+>9. Webserver log anonymization helper program "ipv6loganon"</A
 ></H2
 ><P
->Because calling C programs directly as CGI isn't really recommended (too much security troubles all the time), I wrote a small wrapper utility which calls "ipv6calc" to get information about client and server address. 
-  </P
+>On autoconfiguration, the interface part of an IPv6 address is based on the MAC address of the network interface card (NIC). This address is used for outgoing requests, if privacy option (RFC3041) is not enabled. This results in many privacy related information on web- or mail-server log files. Administrators, which won't (be allowed to) store such information over time, but still do not want to loose information about address type distribution should use 'ipv6loganon' to anonymize their log files.</P
 ><DIV
 CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN181"
->9.1. Examples</A
+NAME="AEN195"
+>9.1. Anonymization details</A
 ></H3
 ><P
->A demonstration about which kind of output is possible to produce is shown at
-   </P
+>The anonymizer would keep as much information as possible for IPv6 address types.</P
+><P
+>Client-side IID would be anonymized by</P
+><P
+></P
+><UL
+><LI
+><P
+>UI-48 based: serial number would be zero'ed, keeping OID</P
+></LI
+><LI
+><P
+>EUI-64 based: serial number would be zero'ed, keeping OID</P
+></LI
+><LI
+><P
+>ISATAP: client IPv4 address would be anonymized by given IPv4 mask</P
+></LI
+><LI
+><P
+>TEREDO: client IPv4 address would be anonymized by given IPv4 mask, client port would be zero'ed</P
+></LI
+><LI
+><P
+>6to4(Microsoft): client IPv4 address would be anonymized by given IPv4 mask</P
+></LI
+><LI
+><P
+>local: whole IID would be zero'ed</P
+></LI
+></UL
+><P
+>Client-side SLA would be anonymized by </P
+><P
+></P
+><UL
+><LI
+><P
+>SLA would be zero'ed</P
+></LI
+></UL
+><P
+>Prefix would be anonymized by</P
+><P
+></P
+><UL
+><LI
+><P
+>6to4: client IPv4 address would be anonymized by given IPv4 mask</P
+></LI
+></UL
+><P
+>Compat/Mapped IPv4 addresses would be anonymized by</P
+><P
+></P
+><UL
+><LI
+><P
+>IPv4 address would be anonymized by given IPv4 mask</P
+></LI
+></UL
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN224"
+>9.2. Supported log file formats</A
+></H3
+><P
+>Currently native supported log files:</P
+><P
+></P
+><UL
+><LI
+><P
+>Apache log file format, 1st token is IPv4 or IPv6 address</P
+></LI
+></UL
+><P
+>There are plans to support also mail server log files sometimes in the future, but because of different formats, this would be probably done by a Perl program which parses the log file and a (cached) 'ip6calc' call with action 'anonymize'.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN231"
+>9.3. Supported options</A
+></H3
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+>$ ./ipv6loganon -?
+ipv6loganon: version 0.70.1
+(P) &#38; (C) 2007 by Peter Bieringer &#60;pb (at) bieringer.de&#62;
+
+This program anonymizes IPv4/IPv6 addresses in HTTP server log files
+
+ General:
+  [-d|--debug &#60;debug value&#62;] : debug value (bitwise like)
+  [-V|--verbose] : be verbose
+  [-n|--nocache] : disable caching
+  [-c|--cachelimit &#60;value&#62;] : set cache limit
+                               default: 20
+                               maximum: 200
+ Output anonymization:
+  --mask-ipv4 &#60;bits&#62;     : mask all IPv4 addresses [0-32], default 24
+                            even if occurs in IPv6-IID
+  --mask-ipv6 &#60;bits&#62;     : mask IPv6 prefix [0-64], default 48
+                            only applied to related address types
+  --no-mask-iid          : do not mask non-IPv4 based IPv6-IID
+  --anonymize-standard   : preset for standard anonymization
+  (default)                 mask-ipv4=24 mask-ipv6=48 mask-iid
+  --anonymize-careful    : preset for careful anonymization
+                            mask-ipv4=20 mask-ipv6=40 mask-iid
+  --anonymize-paranoid   : preset for paranoid anonymization
+                            mask-ipv4=16 mask-ipv6=32 mask-iid
+
+ Takes data from stdin, outputs the processed data to stdout</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN234"
+>9.4. Usage</A
+></H3
+><P
+>Currently, only offline conversion is supported. Implementation as pipe filter between Apache and 'cronolog' has been tested, but didn't work for unknown reason.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+>$ cat /path/to/http_log | ./ipv6loganon &#62;/path/to/http_log_anonymized</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN238"
+>10. Perl CGI wrapper program "ipv6calcweb.cgi"</A
+></H2
+><P
+>Because calling C programs directly as CGI isn't really recommended (too much security troubles all the time), I wrote a small wrapper utility which calls "ipv6calc" to get information about client and server address for displaying on a web page. </P
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN241"
+>10.1. Examples</A
+></H3
+><P
+>A demonstration about which kind of output is possible to produce is shown at</P
 ><P
 ></P
 ><UL
@@ -1024,8 +1262,7 @@ NAME="AEN181"
 HREF="http://www.ipv6.bieringer.de/"
 TARGET="_top"
 >http://www.ipv6.bieringer.de/</A
-> (IPv6 only)
-    </P
+> (IPv6 only)</P
 ></LI
 ><LI
 ><P
@@ -1033,8 +1270,7 @@ TARGET="_top"
 HREF="http://ipv6.aerasec.de/index2.html"
 TARGET="_top"
 >http://ipv6.aerasec.de/index2.html</A
-> (IPv4/IPv6)
-    </P
+> (IPv4/IPv6)</P
 ></LI
 ><LI
 ><P
@@ -1042,8 +1278,7 @@ TARGET="_top"
 HREF="http://www.sixxs.net/tools/ipv6calc/"
 TARGET="_top"
 >http://www.sixxs.net/tools/ipv6calc/</A
-> (IPv4/IPv6)
-    </P
+> (IPv4/IPv6)</P
 ></LI
 ><LI
 ><P
@@ -1051,8 +1286,7 @@ TARGET="_top"
 HREF="http://ipv6-info.internet2.edu/"
 TARGET="_top"
 >http://ipv6-info.internet2.edu/</A
->
-    </P
+></P
 ></LI
 ></UL
 ></DIV
@@ -1062,23 +1296,72 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN197"
->10. Webserver log statistics helper program "ipv6logstats"</A
+NAME="AEN257"
+>11. Webserver log statistics helper program "ipv6logstats"</A
 ></H2
 ><P
->This program parses a given webserver logfile and count addresses, useful for time period statistics.
-  </P
+>This program parses a given webserver logfile and count addresses, useful for time period statistics.</P
 ><DIV
 CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN200"
->10.1. Examples</A
+NAME="AEN260"
+>11.1. Supported options</A
+></H3
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+>$ ./ipv6logstats -?
+ipv6logstats: version 0.70.1
+(P) &#38; (C) 2003-2005 by Peter Bieringer &#60;pb (at) bieringer.de&#62;
+
+ General:
+  [-d|--debug &#60;debug value&#62;] : debug value (bitwise like)
+  [-u|--unknown]             : print unknown IP addresses to stderr
+  [-c|--colums]              : print statistics in colums
+  [-n|--noheader]            : don't print header in colums mode
+  [-o|--onlyheader]          : print only header in colums mode
+  [-p|--prefix &#60;token&#62;]      : print token as prefix
+
+ Takes http log data from stdin and print a table on output</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN263"
+>11.2. Usage</A
 ></H3
 ><P
->A demonstration about which kind of statistics is currently not public online.
-   </P
+>There are a README and some helper scripts available in the package how to use this program and how to generate a graph using Gnuplot.</P
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN266"
+>11.3. Examples</A
+></H3
+><P
+>A demonstration with real data is available at <A
+HREF="http://mirrors.bieringer.de/stats/timeline.html"
+TARGET="_top"
+>http://mirrors.bieringer.de/stats/timeline.html</A
+>.</P
 ></DIV
 ></DIV
 ></DIV
