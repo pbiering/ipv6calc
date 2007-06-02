@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.152 2007/04/26 09:57:31 peter Exp $ 
+ *  $Id: ChangeLog,v 1.153 2007/06/02 11:59:29 peter Exp $ 
  */
 
 Info:
@@ -7,6 +7,10 @@ Info:
 	NT = Niko Tyni <ntyni (at) iki dot fi>
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 --------------------------------------------------------------------
+20070601/PB
+	update databases
+	tag version 0.71.0
+
 20070426/PB
 	lib/libipv6addr.{c,h} lib/ipv6calcoptions.h lib/ipv6calccommands.h
 	ipv6loganon/ipv6loganon*
