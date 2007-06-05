@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.14 2007/04/02 19:31:40 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.15 2007/06/05 14:45:19 peter Exp $
 # Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -63,9 +63,9 @@ my @list_database_ip2location_ipv6 = (
 );
 
 my @list_database_geoip = (
-	"/var/local/share/GeoIP/GeoIPLiteCity.dat",
+	"/var/local/share/GeoIP/GeoLiteCity.dat",
 	"/var/local/share/GeoIP/GeoIP.dat",
-	"/usr/share/GeoIP/GeoIPLiteCity.dat",
+	"/usr/share/GeoIP/GeoLiteCity.dat",
 	"/usr/share/GeoIP/GeoIP.dat",
 );
 
