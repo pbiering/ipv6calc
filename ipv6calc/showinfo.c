@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.37 2007/04/02 19:34:11 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.38 2007/06/05 14:51:35 peter Exp $
  * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -146,30 +146,30 @@ static void print_ip2location(const char *addrstring, const uint32_t formatoptio
 	} else if (version == 6) {
 		file_ip2location = file_ip2location_ipv6;
 	} else {
-		fprintf(stderr, " IP2LOCATION version %d not supported\n", version);
+		fprintf(stderr, " IP2Location version %d not supported\n", version);
 		return;
 	};
 
 	if (strlen(file_ip2location) == 0) {
 		/* no file given, nothing more todo */
-		fprintf(stderr, " IP2LOCATION IPv%d database file not given\n", version);
+		fprintf(stderr, " IP2Location IPv%d database file not given\n", version);
 		return;
 	};
 
 	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-		fprintf(stderr, "%s: IP2LOCATION try to open IPv%d database: %s\n", DEBUG_function_name, version, file_ip2location);
+		fprintf(stderr, "%s: IP2Location try to open IPv%d database: %s\n", DEBUG_function_name, version, file_ip2location);
 	};
 
 	IP2Location *IP2LocationObj = IP2Location_open(file_ip2location);
 
 	if (IP2LocationObj == NULL) {
 		/* error on opening database, nothing more todo */
-		fprintf(stderr, " IP2LOCATION can't open database\n");
+		fprintf(stderr, " IP2Location can't open database\n");
 		return;
 	};
 
 	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-		fprintf(stderr, "%s: IP2LOCATION database opened: %s\n", DEBUG_function_name, file_ip2location);
+		fprintf(stderr, "%s: IP2Location database opened: %s\n", DEBUG_function_name, file_ip2location);
 	};
 
 	IP2LocationRecord *record = IP2Location_get_all(IP2LocationObj, (char*) addrstring);
@@ -218,12 +218,14 @@ static void print_ip2location(const char *addrstring, const uint32_t formatoptio
 			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ZIPCODE%s=%s", additionalstring, record->zipcode);
 			printout(tempstring);
 		} else {
-			fprintf(stderr, " IP2LOCATION not machinereadable output currently not supported\n");
+			fprintf(stderr, " IP2Location not machinereadable output currently not supported\n");
 		};
 
 		IP2Location_free_record(record);
 	} else {
-		fprintf(stderr, "%s: IP2LOCATION returned no record for address: %s\n", DEBUG_function_name, addrstring);
+		if ((formatoptions & FORMATOPTION_quiet) == 0) {
+			fprintf(stderr, "%s: IP2Location returned no record for address: %s\n", DEBUG_function_name, addrstring);
+		};
 	};
 
 	IP2Location_close(IP2LocationObj);
@@ -349,7 +351,9 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 			};
 		};
 	} else {
-		fprintf(stderr, "%s: GeoIP returned no record for address: %s\n", DEBUG_function_name, addrstring);
+		if ((formatoptions & FORMATOPTION_quiet) == 0) {
+			fprintf(stderr, "%s: GeoIP returned no record for address: %s\n", DEBUG_function_name, addrstring);
+		};
 	};
 
 	GeoIP_delete(gi);
