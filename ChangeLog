@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.155 2007/07/04 20:46:38 peter Exp $ 
+ *  $Id: ChangeLog,v 1.156 2007/07/04 20:49:52 peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,7 @@ Info:
 --------------------------------------------------------------------
 20070704/PB
 	lib/libipv6addr.{c,h}
+	ipv6calc/showinfo.c
 	 - add support for ORCHID address type
 
 20070605/PB
