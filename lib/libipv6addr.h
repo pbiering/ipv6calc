@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.26 2007/04/26 09:57:31 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.27 2007/07/04 20:46:38 peter Exp $
  * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -84,6 +84,7 @@ typedef struct {
 #define IPV6_NEW_ADDR_PRODUCTIVE		(uint32_t) 0x00400000U
 #define IPV6_NEW_ADDR_6TO4_MICROSOFT		(uint32_t) 0x00800000U
 #define IPV6_NEW_ADDR_TEREDO			(uint32_t) 0x01000000U
+#define IPV6_NEW_ADDR_ORCHID			(uint32_t) 0x02000000U  /* RFC 4843 */
 
 /* Registries */
 #define IPV6_ADDR_REGISTRY_6BONE	0x01
@@ -122,7 +123,8 @@ typedef struct {
 	{ IPV6_NEW_ADDR_ISATAP		, "ISATAP" },
 	{ IPV6_NEW_ADDR_PRODUCTIVE	, "productive" },
 	{ IPV6_NEW_ADDR_6TO4_MICROSOFT	, "6to4-microsoft" },
-	{ IPV6_NEW_ADDR_TEREDO		, "teredo" }
+	{ IPV6_NEW_ADDR_TEREDO		, "teredo" },
+	{ IPV6_NEW_ADDR_ORCHID		, "orchid" }
 };
 
 typedef struct {

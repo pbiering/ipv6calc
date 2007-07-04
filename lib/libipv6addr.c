@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.32 2007/04/26 09:57:31 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.33 2007/07/04 20:46:38 peter Exp $
  * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -305,6 +305,11 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 		/* 3ffe:831f::/32 -> Teredo (6bone, older draft) */
 		/* 2001:0000::/32 -> Teredo (RFC 4380) */
 		type |= IPV6_NEW_ADDR_TEREDO;
+	};
+
+	if ((st & 0xFFFFFFF0u) == 0x20010010u) {
+		/* 2001:0010::/28 -> ORCHID (RFC 4843) */
+		type |= IPV6_NEW_ADDR_ORCHID;
 	};
 	
 	if (((type & (IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4)) != 0) && (st & 0xE0000000u) == 0x20000000u) {

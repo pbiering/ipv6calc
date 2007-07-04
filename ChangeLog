@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.154 2007/06/02 12:00:34 peter Exp $ 
+ *  $Id: ChangeLog,v 1.155 2007/07/04 20:46:38 peter Exp $ 
  */
 
 Info:
@@ -7,6 +7,16 @@ Info:
 	NT = Niko Tyni <ntyni (at) iki dot fi>
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 --------------------------------------------------------------------
+20070704/PB
+	lib/libipv6addr.{c,h}
+	 - add support for ORCHID address type
+
+20070605/PB
+	ipv6calcweb/ipv6calcweb.cgi.in
+	 - fix built-in list for GeoCityLite
+	ipv6calc/showinfo.c
+	 - do not show "GeoIP|IP2Location returned no record" in quiet mode
+
 20070601/PB
 	update databases
 	update doc files
