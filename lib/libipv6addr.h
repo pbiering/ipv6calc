@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.27 2007/07/04 20:46:38 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.28 2007/07/05 20:48:43 peter Exp $
  * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -169,8 +169,7 @@ extern int  addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, i
 
 extern int  libipv6addr_ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions);
 extern int  libipv6addr_to_octal(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions);
-
-/* extern int  ipv6addrstruct_to_fulluncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring);*/ /* going obsolete */
+extern int  libipv6addr_to_hex(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions);
 
 extern void ipv6addrstruct_maskprefix(ipv6calc_ipv6addr *ipv6addrp);
 extern void ipv6addrstruct_masksuffix(ipv6calc_ipv6addr *ipv6addrp);

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.33 2007/07/04 20:46:38 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.34 2007/07/05 20:48:43 peter Exp $
  * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -1143,6 +1143,7 @@ int libipv6addr_ipv6addrstruct_to_tokenlsb64(const ipv6calc_ipv6addr *ipv6addrp,
 };
 #undef DEBUG_function_name
 
+
 /*
  * function prints an IPv6 address in native octal format
  *
@@ -1157,7 +1158,7 @@ int libipv6addr_to_octal(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring,
 	char tempstring[NI_MAXHOST];
 
 	if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
-		snprintf(tempstring, sizeof(tempstring) - 1, "\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o\\%03o",
+		snprintf(tempstring, sizeof(tempstring) - 1, "\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o",
 			(unsigned int) ipv6addrp->in6_addr.s6_addr[0],  \
 			(unsigned int) ipv6addrp->in6_addr.s6_addr[1],  \
 			(unsigned int) ipv6addrp->in6_addr.s6_addr[2],  \
@@ -1176,7 +1177,7 @@ int libipv6addr_to_octal(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring,
 			(unsigned int) ipv6addrp->in6_addr.s6_addr[15]  \
 		);
 	} else {
-		snprintf(tempstring, sizeof(tempstring) - 1, "\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o\\%o",
+		snprintf(tempstring, sizeof(tempstring) - 1, "\\0%o\\0%o\\0%o\\0%o\\0%o\\0%o\\0%o\\0%o\\0%o\\0%o\\0%o\\0%o\\0%o\\0%o\\0%o\\0%o",
 			(unsigned int) ipv6addrp->in6_addr.s6_addr[0],  \
 			(unsigned int) ipv6addrp->in6_addr.s6_addr[1],  \
 			(unsigned int) ipv6addrp->in6_addr.s6_addr[2],  \
@@ -1203,6 +1204,45 @@ int libipv6addr_to_octal(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring,
 #undef DEBUG_function_name
 
 
+/*
+ * function prints an IPv6 address in native hex format
+ *
+ * in:  ipv6addr = IPv6 address structure
+ * formatoptions
+ * out: *resultstring = IPv6 address (modified)
+ * ret: ==0: ok, !=0: error
+ */
+#define DEBUG_function_name "libipv6addr/ipv6addrstruct_to_hex"
+int libipv6addr_to_hex(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
+	int retval = 1;
+	char tempstring[NI_MAXHOST];
+
+	snprintf(tempstring, sizeof(tempstring) - 1, "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[0],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[1],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[2],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[3],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[4],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[5],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[6],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[7],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[8],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[9],  \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[10], \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[11], \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[12], \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[13], \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[14], \
+			(unsigned int) ipv6addrp->in6_addr.s6_addr[15]  \
+		);
+
+	snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
+	retval = 0;	
+	return (retval);
+};
+
+
+#undef DEBUG_function_name
 /*
  * anonymize IPv6 address
  *
@@ -1289,7 +1329,7 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, unsigned int mask_iid, 
 	};
 
 	/* Interface identifier included */
-	if ( ( ((typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_ADDR_ULUA )) != 0) || ((typeinfo & (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) == (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) ) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO)) == 0) ) {
+	if ( ( ((typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_ADDR_ULUA )) != 0) || ((typeinfo & (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) == (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) ) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID)) == 0) ) {
 		if (ipv6addr_getoctett(ipv6addrp, 11) == 0xff && ipv6addr_getoctett(ipv6addrp, 12) == 0xfe) {
 			if (ipv6calc_debug != 0) {
 				fprintf(stderr, "%s: EUI-48 identifier found\n", DEBUG_function_name);
@@ -1368,8 +1408,20 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, unsigned int mask_iid, 
 		};
 	};
 
+	/* ORCHID hash */
+	if ( (typeinfo & IPV6_NEW_ADDR_ORCHID) != 0 ) {
+		/* mask 100 LSBs */
+		ipv6addr_setword(ipv6addrp, 7, 0x0u);
+		ipv6addr_setword(ipv6addrp, 6, 0x0u);
+		ipv6addr_setword(ipv6addrp, 5, 0x0u);
+		ipv6addr_setword(ipv6addrp, 4, 0x0u);
+		ipv6addr_setword(ipv6addrp, 3, 0x0u);
+		ipv6addr_setword(ipv6addrp, 2, 0x0u);
+		ipv6addr_setword(ipv6addrp, 1, ipv6addr_getword(ipv6addrp, 1) & 0xFFF0);
+	};
+
 	/* prefix included */
-	if ( ((typeinfo & (IPV6_ADDR_SITELOCAL | IPV6_ADDR_ULUA | IPV6_NEW_ADDR_AGU)) != 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO)) == 0) ) {
+	if ( ((typeinfo & (IPV6_ADDR_SITELOCAL | IPV6_ADDR_ULUA | IPV6_NEW_ADDR_AGU)) != 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID)) == 0) ) {
 		if (mask_ipv6 == 0) {
 			/* clear IPv6 address prefix 0-63 */
 			ipv6addr_setdword(ipv6addrp, 0, 0u);

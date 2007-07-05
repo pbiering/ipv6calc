@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.17 2007/02/05 16:57:41 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.18 2007/07/05 20:48:43 peter Exp $
  * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -50,6 +50,7 @@ extern uint32_t ipv6calctypes_checkaction(const char *string);
 #define FORMAT_NUM_ipv4hex		19
 #define FORMAT_NUM_ipv4revhex		20
 #define FORMAT_NUM_octal		21
+#define FORMAT_NUM_hex			22
 #define FORMAT_NUM_undefined		31
 
 #define FORMAT_auto		(uint32_t) 0x00000u
@@ -74,6 +75,7 @@ extern uint32_t ipv6calctypes_checkaction(const char *string);
 #define FORMAT_ipv4hex		(uint32_t) (1 << FORMAT_NUM_ipv4hex)
 #define FORMAT_ipv4revhex	(uint32_t) (1 << FORMAT_NUM_ipv4revhex)
 #define FORMAT_octal		(uint32_t) (1 << FORMAT_NUM_octal)
+#define FORMAT_hex		(uint32_t) (1 << FORMAT_NUM_hex)
 #define FORMAT_undefined	(uint32_t) (1 << FORMAT_NUM_undefined)
 
 /* Primary label of format number, keeping also an explanation */
@@ -103,9 +105,10 @@ typedef struct {
 	{ FORMAT_ipv6logconv    , "ipv6logconv"    , "ipv6logconv (currently not supported)", "" },
 	{ FORMAT_any            , "any"            , "any type (currently not supported)", "" },
 	{ FORMAT_revipv4	, "revipv4"        , "reverse IPv4, ending with in-addr.arpa", "" },
-	{ FORMAT_ipv4hex	, "ipv4hex"        , "IPv4 in hexdecimal format", "" },
+	{ FORMAT_ipv4hex	, "ipv4hex" 	   , "IPv4 in hexdecimal format", "" },
 	{ FORMAT_ipv4revhex	, "ipv4revhex"     , "IPv4 in byte-reversed hexdecimal format", "" },
 	{ FORMAT_octal		, "octal"	   , "IP address in escaped octal format", "" },
+	{ FORMAT_hex		, "hex"	 	   , "IP address in hexadecimal format", "" },
 	{ FORMAT_prefix_mac     , "prefix+mac"     , "IPv6 prefix and a MAC address", "" },
 };
 

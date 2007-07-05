@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.19 2007/02/05 16:30:46 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.20 2007/07/05 20:48:43 peter Exp $
  * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -698,6 +698,70 @@ int libipv4addr_to_reversestring(ipv6calc_ipv4addr *ipv4addrp, char *resultstrin
 	return (retval);
 };
 #undef DEBUG_function_name
+
+
+/*
+ * function prints an IPv4 address in native octal format
+ *
+ * in:  ipv4addr = IPv4 address structure
+ * formatoptions
+ * out: *resultstring = IPv4 address (modified)
+ * ret: ==0: ok, !=0: error
+ */
+#define DEBUG_function_name "libipv4addr/ipv4addrstruct_to_octal"
+int libipv4addr_to_octal(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions) {
+	int retval = 1;
+	char tempstring[NI_MAXHOST];
+
+	if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
+		snprintf(tempstring, sizeof(tempstring) - 1, "\\0%03o\\0%03o\\0%03o\\0%03o",
+			(unsigned int) ipv4addr_getoctett(ipv4addrp, 0),  \
+			(unsigned int) ipv4addr_getoctett(ipv4addrp, 1),  \
+			(unsigned int) ipv4addr_getoctett(ipv4addrp, 2),  \
+			(unsigned int) ipv4addr_getoctett(ipv4addrp, 3)   \
+		);
+	} else {
+		snprintf(tempstring, sizeof(tempstring) - 1, "\\0%o\\0%o\\0%o\\0%o",
+			(unsigned int) ipv4addr_getoctett(ipv4addrp, 0),  \
+			(unsigned int) ipv4addr_getoctett(ipv4addrp, 1),  \
+			(unsigned int) ipv4addr_getoctett(ipv4addrp, 2),  \
+			(unsigned int) ipv4addr_getoctett(ipv4addrp, 3)   \
+		);
+	};
+
+	snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
+	retval = 0;	
+	return (retval);
+};
+#undef DEBUG_function_name
+
+
+/*
+ * function prints an IPv4 address in native hex format
+ *
+ * in:  ipv4addr = IPv4 address structure
+ * formatoptions
+ * out: *resultstring = IPv4 address (modified)
+ * ret: ==0: ok, !=0: error
+ */
+#define DEBUG_function_name "libipv4addr/ipv4addrstruct_to_hex"
+int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions) {
+	int retval = 1;
+	char tempstring[NI_MAXHOST];
+
+	snprintf(tempstring, sizeof(tempstring) - 1, "%02x%02x%02x%02x",
+		(unsigned int) ipv4addr_getoctett(ipv4addrp, 0),  \
+		(unsigned int) ipv4addr_getoctett(ipv4addrp, 1),  \
+		(unsigned int) ipv4addr_getoctett(ipv4addrp, 2),  \
+		(unsigned int) ipv4addr_getoctett(ipv4addrp, 3)   \
+	);
+
+	snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
+	retval = 0;	
+	return (retval);
+};
+#undef DEBUG_function_name
+
 
 /*
  * anonymize IPv4 address
