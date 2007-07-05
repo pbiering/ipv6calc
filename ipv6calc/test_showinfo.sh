@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: test_showinfo.sh,v 1.7 2007/06/02 11:58:54 peter Exp $
+# $Id: test_showinfo.sh,v 1.8 2007/07/05 20:58:23 peter Exp $
 
 
 getexamples() {
@@ -23,6 +23,7 @@ fe80::fefc:acff:fe10:fe01		# link-local autoconf on ISDN interface
 2001:7b0:ffff::1			# Productive IPv6
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF	# Teredo
 2001:a60:f011::1			# Productive IPv6
+2001:0010:392e:a450:2cd3:75e1:6098:8104	# Orchid
 END
 }
 

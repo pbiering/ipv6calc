@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.30 2007/04/26 09:57:31 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.31 2007/07/05 20:58:23 peter Exp $
  * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1039,8 +1039,19 @@ int main(int argc,char *argv[]) {
 			break;
 			
 		case FORMAT_octal:
-			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
-			retval = libipv6addr_to_octal(&ipv6addr, resultstring, formatoptions);
+			if (ipv4addr.flag_valid == 1) {
+				retval = libipv4addr_to_octal(&ipv4addr, resultstring, formatoptions);
+			} else if (ipv6addr.flag_valid == 1) {
+				retval = libipv6addr_to_octal(&ipv6addr, resultstring, formatoptions);
+			};
+			break;
+				
+		case FORMAT_hex:
+			if (ipv4addr.flag_valid == 1) {
+				retval = libipv4addr_to_hex(&ipv4addr, resultstring, formatoptions);
+			} else if (ipv6addr.flag_valid == 1) {
+				retval = libipv6addr_to_hex(&ipv6addr, resultstring, formatoptions);
+			};
 			break;
 				
 		case FORMAT_revnibbles_int:

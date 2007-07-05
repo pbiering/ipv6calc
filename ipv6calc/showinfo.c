@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.39 2007/07/04 20:49:52 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.40 2007/07/05 20:58:23 peter Exp $
  * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -209,10 +209,17 @@ static void print_ip2location(const char *addrstring, const uint32_t formatoptio
 			printout(tempstring);
 			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ISP%s=%s", additionalstring, record->isp);
 			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LATITUDE%s=%f", additionalstring, record->latitude);
-			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LONGITUDE%s=%f", additionalstring, record->longitude);
-			printout(tempstring);
+			if ((record->latitude != 0) && (record->longitude != 0)) {
+				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LATITUDE%s=%f", additionalstring, record->latitude);
+				printout(tempstring);
+				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LONGITUDE%s=%f", additionalstring, record->longitude);
+				printout(tempstring);
+			} else {
+				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LATITUDE%s=This parameter is unavailable for selected data file. Please upgrade the data file.", additionalstring);
+				printout(tempstring);
+				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LONGITUDE%s=This parameter is unavailable for selected data file. Please upgrade the data file.", additionalstring);
+				printout(tempstring);
+			};
 			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DOMAIN%s=%s", additionalstring, record->domain);
 			printout(tempstring);
 			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ZIPCODE%s=%s", additionalstring, record->zipcode);
@@ -835,7 +842,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 
 					if ( machinereadable != 0 ) {
 					} else {
-						fprintf(stderr, "IPv4 registry for ISATAP client address: %s\n", helpstring);
+						fprintf(stdout, "IPv4 registry for ISATAP client address: %s\n", helpstring);
 					};
 					print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "ISATAP");
 				} else if ( ( ( (typeinfo & IPV6_ADDR_LINKLOCAL) != 0) && (ipv6addr_getdword(ipv6addrp, 2) == 0 && ipv6addr_getword(ipv6addrp, 6) != 0)) )   {
@@ -869,26 +876,42 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			};
 		};
 	};
-END:	
 
-#ifdef SUPPORT_IP2LOCATION
-	/* IP2Location information */
-	if (use_ip2location_ipv6 == 1) {
-		print_ip2location(ipv6addrstring, formatoptions, "", 6);
+	if ( (typeinfo & IPV6_NEW_ADDR_ORCHID) != 0) {
+		/* 'extract' hash */
+		ipv6addr_setword(ipv6addrp, 0, 0x0000);
+		ipv6addr_setword(ipv6addrp, 1, ipv6addr_getword(ipv6addrp, 1) & 0x000F);
+
+		retval = libipv6addr_to_hex(ipv6addrp, ipv6addrstring, 0);
+
+		if ( machinereadable != 0 ) {
+		} else {
+			snprintf(tempstring, sizeof(tempstring) - 1, "%s", ipv6addrstring+7);
+			fprintf(stdout, "ORCHID hash (100 bits): %s\n", tempstring);
+		};
 	};
+END:
+
+	if ( ((typeinfo & IPV6_NEW_ADDR_AGU) != 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID)) == 0) ) {
+#ifdef SUPPORT_IP2LOCATION
+		/* IP2Location information */
+		if (use_ip2location_ipv6 == 1) {
+			print_ip2location(ipv6addrstring, formatoptions, "", 6);
+		};
 #endif
 
 #ifdef SUPPORT_GEOIP
-	/* GeoIP information */
-	if (use_geoip == 1) {
-		/* C-API at least version 1.3.17 currently doesn't support IPv6, in addition no related database is available */
-		if ((formatoptions & FORMATOPTION_quiet) == 0) {
-			fprintf(stderr, "%s: GeoIP C-API currently misses support of IPv6\n", DEBUG_function_name);
-		};
+		/* GeoIP information */
+		if (use_geoip == 1) {
+			/* C-API at least version 1.3.17 currently doesn't support IPv6, in addition no related database is available */
+			if ((formatoptions & FORMATOPTION_quiet) == 0) {
+				fprintf(stderr, "%s: GeoIP C-API currently misses support of IPv6\n", DEBUG_function_name);
+			};
 
-		// print_geoip(ipv6addrstring, formatoptions, "");
-	};
+			// print_geoip(ipv6addrstring, formatoptions, "");
+		};
 #endif
+	};
 
 	printfooter(formatoptions);
 	retval = 0;
