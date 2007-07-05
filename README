@@ -48,6 +48,9 @@ Where to get:
     maintained package at http://packages.debian.org/ipv6calc
    Pardus Linux:
     maintained package at http://members.comu.edu.tr/nyucel/pisi/ipv6calc/
+   Ubuntu:
+    maintained package at http://packages.ubuntu.com/dapper/net/ipv6calc
+     or http://packages.ubuntu.com/cgi-bin/search_packages.pl?searchon=names&version=all&exact=1&keywords=ipv6calc
 
   BSD:
    NetBSD:
@@ -72,4 +75,4 @@ Mailing lists:
   Subscription: http://lists.deepspace6.net/listinfo/ipv6calc
 
 
-$Id: README,v 1.13 2007/06/02 12:14:30 peter Exp $
+$Id: README,v 1.14 2007/07/05 21:00:59 peter Exp $
