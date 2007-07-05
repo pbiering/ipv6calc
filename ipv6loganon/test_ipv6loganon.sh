@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.6 2007/04/26 09:57:31 peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.7 2007/07/05 20:44:37 peter Exp $
 # Copyright  : 2007 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -30,6 +30,7 @@ fd00:1234:5678:9abc::1 - - ULUA local		=fd00:1234:5678:0:0:0:0:0 - - ULUA local
 fd00:1234:5678:9abc:210:a4ff:fe01:2345 - - ULUA EUI-64=fd00:1234:5678:0:210:a4ff:fe00:0 - - ULUA EUI-64
 fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=fd00:1234:5678:0:210:a400:0:0 - - ULUA EUI-64
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF - - Teredo 6bone=3ffe:831f:ce49:7601:8000:ffff:af4a:86ff - - Teredo 6bone
+2001:001a:392e:a450:2cd3:75e1:6098:8104 - - ORCHID=2001:10:0:0:0:0:0:0 - - ORCHID
 END
 }
 
