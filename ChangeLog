@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.156 2007/07/04 20:49:52 peter Exp $ 
+ *  $Id: ChangeLog,v 1.157 2007/07/05 20:59:31 peter Exp $ 
  */
 
 Info:
@@ -7,6 +7,22 @@ Info:
 	NT = Niko Tyni <ntyni (at) iki dot fi>
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 --------------------------------------------------------------------
+20070705/PB
+	ipv6loganon/test_ipv6loganon.sh
+	 - add ORCHID test scenario
+	lib/libipv6addr.{c,h}
+	 - fix octal printout
+	 - add hex printout
+	 - support ORCHID in anonymize
+	lib/libipv4addr.{c,h}
+	 - add octal & hex printout
+	ipv6calc/showinfo.c
+	 - print warning message in IP2Location longitude/latitude if 0
+	 - do not print GeoIP/IP2Location information on non-global IPv6 addresses
+	 - fix output on ISATAP addresses (stderr->stdout)
+	ipv6calc/ipv6calc.c
+	 - support octal output for IPv4 and hex output for IPv4 and IPv6
+
 20070704/PB
 	lib/libipv6addr.{c,h}
 	ipv6calc/showinfo.c
