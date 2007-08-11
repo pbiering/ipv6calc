@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.35 2007/08/11 07:07:36 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.36 2007/08/11 12:04:58 peter Exp $
  * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -359,8 +359,11 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 	
 	if ((st & 0xFFC00000u) == 0xFE800000u) {
 		type |=  IPV6_ADDR_LINKLOCAL | IPV6_ADDR_UNICAST;
-		if ((st2 == 0x80005445u) && (st3 ==0x5245444fu)) {
-			/* IID: EUI64_SCOPE=local, LSB string: "TEREDO" */
+		if ( ((st2 == 0x80005445u) && (st3 ==0x5245444fu)) \
+		    || ((st2 == 0x0000FFFFu) && (st3 ==0xFFFFFFFDu)) \
+		) {
+			/* fe80::8000:5445:5245:444F : LSB string: "TEREDO" */
+			/* fe80::ffff:ffff:fffd */
 			type |= IPV6_NEW_ADDR_LINKLOCAL_TEREDO;
 		}
 		return (type);
