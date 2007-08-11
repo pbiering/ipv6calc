@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.157 2007/07/05 20:59:31 peter Exp $ 
+ *  $Id: ChangeLog,v 1.158 2007/08/11 07:07:36 peter Exp $ 
  */
 
 Info:
@@ -7,6 +7,10 @@ Info:
 	NT = Niko Tyni <ntyni (at) iki dot fi>
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 --------------------------------------------------------------------
+20070811/PB
+	lib/libipv6addr.{c,h}
+	 - detect link-local-teredo addresses
+
 20070705/PB
 	ipv6loganon/test_ipv6loganon.sh
 	 - add ORCHID test scenario
@@ -732,7 +736,7 @@ Info:
 
 20020121/PB:
 	update "COPYING" to current GPLv2, add "LICENSE" with some comments to make Debian people happy
-        add both in spec file
+	add both in spec file
 
 20020120/PB:
 	showinfo now understands "solicited-node link-local multicast", "ISATAP", SLA on 6bone addresses
