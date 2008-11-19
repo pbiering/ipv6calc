@@ -1,11 +1,14 @@
 Credits to
 
-* Niko Tyni <ntyni at iki dot fi>
+* JC Janos
+   for bug reporting
+
+* Niko Tyni
    - clean reimplementation of RFC 1924 conversion code
    - some help on configure.in
    - contribution of patches and man files
 
-* Eric S. Raymond <esr (at) thyrsus dot com>
+* Eric S. Raymond
    - contribution of patch for man page
 
 * Authors of ircd
@@ -63,7 +66,7 @@ Credits to
    C - A software engineering approach
     [one of the best books about programming language C around the world,
       forget Kerningham/Ritchie, use this book instead like me for over
-      11 years ]
+      17 years ]
 
 
-	Peter Bieringer, 2006-06-07
+	Peter Bieringer, 2008-11-19
