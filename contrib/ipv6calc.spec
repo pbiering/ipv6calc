@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Copyright  : 2001-2007 by Peter Bieringer <pb@bieringer.de>
+# Copyright  : 2001-2008 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IPv6 address format change and calculation utility
 Name: ipv6calc
@@ -60,7 +60,7 @@ make test
 %install
 rm -rf $RPM_BUILD_ROOT
 
-make installonly root=$RPM_BUILD_ROOT
+make install root=$RPM_BUILD_ROOT
 
 # Move ipv6calc
 mkdir -p $RPM_BUILD_ROOT/bin
@@ -129,6 +129,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Wed Nov 19 2008 Peter Bieringer <pb@bieringer.de>
+- switch from "make installonly" to "make install"
+
 * Wed Feb 14 2007 Peter Bieringer <pb@bieringer.de>
 - remove support for build option --with-geoip-system
 - add support for 'ipv6loganon'
