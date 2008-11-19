@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.159 2008/11/19 19:44:43 peter Exp $ 
+ *  $Id: ChangeLog,v 1.160 2008/11/19 21:29:40 peter Exp $ 
  */
 
 Info:
@@ -15,6 +15,13 @@ Info:
 	 - remove '"' from names to avoid problems in generated header file
 	databases/ieee-oui/Makefile
 	 - adjust remote filename on webserver
+	ipv6calc/ipv6calc.c
+	 - do not show warning messages for missig GeoIP/IP2Location support
+	    if option "-q" is used (good for ipv6calcweb.cgi)
+	Makefile[.in]
+	 - move "make test" from "make install" to dedicated "make ..."
+	Several files
+	 - minor cleanup
 
 20070811/PB
 	lib/libipv6addr.{c,h}
