@@ -1,7 +1,7 @@
-# Project    : ipv6calc/ipv6logconv
+# Project    : ipv6calc
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.9 2005/11/19 21:14:38 peter Exp $
-# Copyright  : 2003-2005 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile.in,v 1.10 2008/11/19 21:28:20 peter Exp $
+# Copyright  : 2003-2008 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for man pages
@@ -22,7 +22,7 @@ clean:
 test:		
 
 install:
-		mkdir -p $(root)@mandir@/man8
+		mkdir -p $(datarootdir)@mandir@/man8
 		for f in *.8; do \
-			install -m 644 $$f $(root)@mandir@/man8; \
+			install -m 644 $$f $(datarootdir)@mandir@/man8; \
 		done
