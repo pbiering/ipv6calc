@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.31 2007/07/05 20:58:23 peter Exp $
- * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calc.c,v 1.32 2008/11/19 21:28:57 peter Exp $
+ * Copyright  : 2001-2008 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
@@ -137,7 +137,9 @@ int main(int argc,char *argv[]) {
 				strncpy(file_ip2location_ipv4, optarg, sizeof(file_ip2location_ipv4) -1 );
 				use_ip2location_ipv4 = 1;
 #else
-				fprintf(stderr, " Support for option '--db-ip2location-ipv4 <IP2Location IPv4 database file>' not compiled in, IP2Location support disabled\n");
+				if ((formatoptions & FORMATOPTION_quiet) == 0) {
+					fprintf(stderr, " Support for option '--db-ip2location-ipv4 <IP2Location IPv4 database file>' not compiled in, IP2Location support disabled\n");
+				};
 #endif
 				break;
 
@@ -149,7 +151,9 @@ int main(int argc,char *argv[]) {
 				strncpy(file_ip2location_ipv6, optarg, sizeof(file_ip2location_ipv6) -1 );
 				use_ip2location_ipv6 = 1;
 #else
-				fprintf(stderr, " Support for option '--db-ip2location-ipv6 <IP2Location IPv6 database file>' not compiled in, IP2Location support disabled\n");
+				if ((formatoptions & FORMATOPTION_quiet) == 0) {
+					fprintf(stderr, " Support for option '--db-ip2location-ipv6 <IP2Location IPv6 database file>' not compiled in, IP2Location support disabled\n");
+				};
 #endif
 				break;
 
@@ -161,7 +165,9 @@ int main(int argc,char *argv[]) {
 				strncpy(file_geoip, optarg, sizeof(file_geoip) -1 );
 				use_geoip = 1;
 #else
-				fprintf(stderr, " Support for option '--db-geoip <GeoIP database file>' not compiled in, GeoIP support disabled\n");
+				if ((formatoptions & FORMATOPTION_quiet) == 0) {
+					fprintf(stderr, " Support for option '--db-geoip <GeoIP database file>' not compiled in, GeoIP support disabled\n");
+				};
 #endif
 				break;
 
@@ -169,7 +175,9 @@ int main(int argc,char *argv[]) {
 #ifdef GEOIP_DEFAULT_FILE
 				use_geoip = 1;
 #else
-				fprintf(stderr, " Support for option '--db-geoip-default|-G' not compiled in, GeoIP support disabled\n");
+				if ((formatoptions & FORMATOPTION_quiet) == 0) {
+					fprintf(stderr, " Support for option '--db-geoip-default|-G' not compiled in, GeoIP support disabled\n");
+				};
 #endif
 				break;
 
