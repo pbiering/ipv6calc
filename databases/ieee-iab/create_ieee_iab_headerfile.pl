@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/lib
 # File       : create_ieee_iab_headerfile.pl
-# Version    : $Id: create_ieee_iab_headerfile.pl,v 1.2 2008/11/19 18:53:23 peter Exp $
-# Copyright  : 2002-2004 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: create_ieee_iab_headerfile.pl,v 1.3 2008/11/19 18:54:08 peter Exp $
+# Copyright  : 2002-2008 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Modified copy of create_ieee_oui_headerfile.pl
 #
