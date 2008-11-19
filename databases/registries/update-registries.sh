@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/registries
 # File       : update-registries.sh
-# Version    : $Id: update-registries.sh,v 1.5 2008/11/19 18:54:38 peter Exp $
+# Version    : $Id: update-registries.sh,v 1.6 2008/11/19 19:44:22 peter Exp $
 # Copyright  : 2002-2008 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces ../ipv4-assignment/update-ipv4-assignment.sh
 #               replaces ../ipv6-assignment/update-ipv6-assignment.sh
@@ -19,7 +19,7 @@ month="`date -d '2 days ago' +%m`"
 day="`date -d '2 days ago' +%d`"
 
 cat <<END | sed s/\%Y/$year/g | sed s/\%m/$month/g | sed s/\%d/$day/g
-iana	http://www.iana.org/assignments/		ipv4-address-space			txt
+iana	http://www.iana.org/assignments/		ipv4-address-space			txt	out
 iana	http://www.iana.org/assignments/		ipv6-unicast-address-assignments	txt
 ripencc	ftp://ftp.ripe.net/pub/stats/ripencc/		delegated-ripencc-latest		txt
 arin	ftp://ftp.arin.net/pub/stats/arin/		delegated-arin-latest			txt
@@ -31,13 +31,17 @@ END
 
 echo "Download new version of files"
 
-get_urls | while read subdir url filename format; do
+get_urls | while read subdir url filename format flag; do
 	echo "Check: $subdir"
 	if [ ! -d "$subdir" ]; then
 		mkdir "$subdir" || exit 1
 	fi
 	pushd $subdir || exit 1
-	wget $url$filename --timestamping --retr-symlinks
+	if [ "$flag" = "out" ]; then
+		wget $url$filename -O $filename
+	else
+		wget $url$filename --timestamping --retr-symlinks
+	fi
 	retval=$?
 	popd
 	if [ $retval -ne 0 ]; then
