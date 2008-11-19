@@ -1,7 +1,7 @@
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.18 2007/03/03 11:57:28 peter Exp $
-# Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile,v 1.19 2008/11/19 19:54:22 peter Exp $
+# Copyright  : 2002-2008 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv4-assignment
@@ -15,6 +15,10 @@ install:
 update:
 		echo "Generate new header file, if necessary"
 		./check-run-create.sh
+
+updateclean:
+		echo "Delete header file"
+		rm -f dbipv4addr_assignment.h
 
 distclean:
 		echo "Nothing to do"

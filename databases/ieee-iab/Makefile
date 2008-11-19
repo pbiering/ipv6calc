@@ -1,7 +1,7 @@
 # Project    : ipv6calc/databases/ieee-iab
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.2 2005/11/19 21:14:38 peter Exp $
-# Copyright  : 2004-2005 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile,v 1.3 2008/11/19 19:55:48 peter Exp $
+# Copyright  : 2004-2008 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ieee-iab
@@ -19,6 +19,11 @@ update:
 		echo "Download new version of file"
 		wget $(BASEURL)$(FILE) --timestamp
 		./create_ieee_iab_headerfile.pl $(FILE)
+
+updateclean:
+		echo "Remove header file"
+		rm -f dbieee_iab.h
+		make distclean
 
 distclean:
 		echo "Remove database file"
