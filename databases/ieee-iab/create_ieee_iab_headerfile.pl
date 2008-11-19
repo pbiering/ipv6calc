@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/lib
 # File       : create_ieee_iab_headerfile.pl
-# Version    : $Id: create_ieee_iab_headerfile.pl,v 1.1 2004/10/30 12:00:01 peter Exp $
+# Version    : $Id: create_ieee_iab_headerfile.pl,v 1.2 2008/11/19 18:53:23 peter Exp $
 # Copyright  : 2002-2004 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Modified copy of create_ieee_oui_headerfile.pl
@@ -126,6 +126,10 @@ while (<IN>) {
 
 		# convert spaces to '-'
 		$oui =~ s/\s+/-/ig;
+
+		# remove '"'
+		$oui =~ s/"//ig;
+		$t3 =~ s/"//ig;
 
 		# Some final cleanup
 		$oui =~ s/-INT-L//ig;
