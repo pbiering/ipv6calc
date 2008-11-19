@@ -1,8 +1,8 @@
  /*
  * Project       : ipv6calc
  * File          : dbipv6_assignment.h
- * Version       : $Id: dbipv6addr_assignment.h,v 1.20 2007/06/02 07:31:33 peter Exp $
- * Generated     : Sat Jun  2 09:29:46 2007
+ * Version       : $Id: dbipv6addr_assignment.h,v 1.21 2008/11/19 20:14:36 peter Exp $
+ * Generated     : Wed Nov 19 21:06:09 2008
  * Data copyright: IANA ARIN RIPENCC APNIC LACNIC AFRINIC
  *
  * Information:
@@ -58,7 +58,6 @@ static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 	{ 0x200107fa, 0x000e0000, 0xffffffff, 0xffff0000,  48, "APNIC" },
 	{ 0x200107fa, 0x000f0000, 0xffffffff, 0xffff0000,  48, "APNIC" },
 	{ 0x20018000, 0x00000000, 0xffffe000, 0x00000000,  19, "APNIC" },
-	{ 0x20010970, 0x00000000, 0xffffffff, 0x00000000,  32, "AFRINIC" },
 	{ 0x2001a000, 0x00000000, 0xfffff000, 0x00000000,  20, "APNIC" },
 	{ 0x2001b000, 0x00000000, 0xfffff000, 0x00000000,  20, "APNIC" },
 	{ 0x20020000, 0x00000000, 0xffff0000, 0x00000000,  16, "6TO4" },
