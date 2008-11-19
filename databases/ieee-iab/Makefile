@@ -1,6 +1,6 @@
 # Project    : ipv6calc/databases/ieee-iab
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.3 2008/11/19 19:55:48 peter Exp $
+# Version    : $Id: Makefile,v 1.4 2008/11/19 19:57:39 peter Exp $
 # Copyright  : 2004-2008 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -23,7 +23,7 @@ update:
 updateclean:
 		echo "Remove header file"
 		rm -f dbieee_iab.h
-		make distclean
+		${MAKE} distclean
 
 distclean:
 		echo "Remove database file"
