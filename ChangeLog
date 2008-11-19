@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.160 2008/11/19 21:29:40 peter Exp $ 
+ *  $Id: ChangeLog,v 1.161 2008/11/19 22:00:42 peter Exp $ 
  */
 
 Info:
@@ -20,6 +20,7 @@ Info:
 	    if option "-q" is used (good for ipv6calcweb.cgi)
 	Makefile[.in]
 	 - move "make test" from "make install" to dedicated "make ..."
+	 - remove "make installonly"
 	Several files
 	 - minor cleanup
 
