@@ -1,13 +1,13 @@
 # Project    : ipv6calc/databases/ieee-oui
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.9 2006/02/12 14:01:44 peter Exp $
-# Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile,v 1.10 2008/11/19 19:26:12 peter Exp $
+# Copyright  : 2002-2008 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ieee-oui
 
-FILE = "oui_public.txt"
-BASEURL = "http://standards.ieee.org/regauth/oui/"
+FILE = oui_public.txt
+BASEURL = http://standards.ieee.org/regauth/oui/
 
 all:
 		test -f dbieee_oui.h || ${MAKE} update
