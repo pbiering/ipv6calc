@@ -1,6 +1,6 @@
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.4 2008/11/19 19:53:39 peter Exp $
+# Version    : $Id: Makefile,v 1.5 2008/11/19 19:54:47 peter Exp $
 # Copyright  : 2005-2008 by Peter Bieringer <pb (at) bieringer.de>
 #               Initial copy from ../ipv4-assignment/Makefile & adaption for IPv6 by Simon Arlott
 #
@@ -20,7 +20,6 @@ update:
 updateclean:
 		echo "Delete header file"
 		rm -f dbipv6addr_assignment.h
-		make distclean
 
 distclean:
 		echo "Nothing to do"
