@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.158 2007/08/11 07:07:36 peter Exp $ 
+ *  $Id: ChangeLog,v 1.159 2008/11/19 19:44:43 peter Exp $ 
  */
 
 Info:
@@ -7,6 +7,15 @@ Info:
 	NT = Niko Tyni <ntyni (at) iki dot fi>
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 --------------------------------------------------------------------
+20081119/PB
+	databases/registries/update-registries.sh
+	 - create registry subdir if not existing
+	 - fix IANA ipv4-address-space weblink problem
+	databases/ieee-iab/create_ieee_iab_headerfile.pl
+	 - remove '"' from names to avoid problems in generated header file
+	databases/ieee-oui/Makefile
+	 - adjust remote filename on webserver
+
 20070811/PB
 	lib/libipv6addr.{c,h}
 	 - detect link-local-teredo addresses
