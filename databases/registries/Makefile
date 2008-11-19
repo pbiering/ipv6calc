@@ -1,7 +1,7 @@
 # Project    : ipv6calc/databases/registries
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.3 2007/03/03 11:57:29 peter Exp $
-# Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile,v 1.4 2008/11/19 19:58:41 peter Exp $
+# Copyright  : 2002-2008 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces parts of ../ipv4-assignment/Makefile
 #               replaces parts of ../ipv6-assignment/Makefile
 #
@@ -29,6 +29,7 @@ distclean:
 		cd apnic   && rm -f delegated-apnic-*
 		cd arin    && rm -f delegated-arin-*
 		cd lacnic  && rm -f delegated-lacnic-*
+		cd afrinic && rm -f delegated-afrinic-*
 
 autoclean:
 		echo "Nothing to do"
