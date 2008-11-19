@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/databases/registries
 # File       : update-registries.sh
-# Version    : $Id: update-registries.sh,v 1.4 2007/03/03 11:57:29 peter Exp $
-# Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: update-registries.sh,v 1.5 2008/11/19 18:54:38 peter Exp $
+# Copyright  : 2002-2008 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces ../ipv4-assignment/update-ipv4-assignment.sh
 #               replaces ../ipv6-assignment/update-ipv6-assignment.sh
 #
@@ -33,6 +33,9 @@ echo "Download new version of files"
 
 get_urls | while read subdir url filename format; do
 	echo "Check: $subdir"
+	if [ ! -d "$subdir" ]; then
+		mkdir "$subdir" || exit 1
+	fi
 	pushd $subdir || exit 1
 	wget $url$filename --timestamping --retr-symlinks
 	retval=$?
