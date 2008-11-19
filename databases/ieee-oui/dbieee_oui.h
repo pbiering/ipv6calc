@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui.h
- * Version       : $Id: dbieee_oui.h,v 1.42 2008/11/19 20:14:35 peter Exp $
- * Generated     : Wed Nov 19 21:02:18 2008
+ * Version       : $Id: dbieee_oui.h,v 1.43 2008/11/19 22:17:05 peter Exp $
+ * Generated     : Wed Nov 19 23:09:10 2008
  * Data copyright: IEEE
  *
  * Information:
