@@ -1,6 +1,6 @@
 ipv6calc will do some format changes and calculations for you
 
-(P) & (C) 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2008 by Peter Bieringer <pb (at) bieringer.de>
                    published under GNU GPLv2
 
 For suggestions and bug report please contact author
@@ -37,11 +37,11 @@ Where to get:
   Linux:
    Fedora:
     Core 6: developing platform, so use given hint above to create a RPM
-    7: package is included
+    since 7: package is included
    Red Hat Enterprise Linux:
     RHEL3: build from source package should work but not tested
     RHEL4: build from source package tested, working
-    RHEL5: package is included
+    since RHEL5: package is included
    Mandrake:
     similar to Red Hat, rebuild should work, too
    Debian:
@@ -75,4 +75,4 @@ Mailing lists:
   Subscription: http://lists.deepspace6.net/listinfo/ipv6calc
 
 
-$Id: README,v 1.14 2007/07/05 21:00:59 peter Exp $
+$Id: README,v 1.15 2008/11/19 19:03:29 peter Exp $
