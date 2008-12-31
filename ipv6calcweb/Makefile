@@ -1,7 +1,7 @@
 # Project    : ipv6calc/ipv6calcweb
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.8 2007/04/02 19:30:38 peter Exp $
-# Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile,v 1.9 2008/12/31 12:17:31 peter Exp $
+# Copyright  : 2002-2008 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calcweb
@@ -10,7 +10,6 @@
 all:		ipv6calcweb
 
 ipv6calcweb:
-		test -x /usr/bin/perl && ${MAKE} update || exit 0
 
 update:
 

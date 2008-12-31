@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6logstats
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.10 2006/10/28 09:29:30 peter Exp $
+# Version    : $Id: Makefile.in,v 1.11 2008/12/31 12:17:31 peter Exp $
 # Copyright  : 2003-2005 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -11,13 +11,13 @@ prefix          = @prefix@
 exec_prefix     = @exec_prefix@
 
 # Compiler and Linker Options
-COPTS = -O2 -Wall -g -D__EXTENSIONS__
+DEFAULT_CFLAGS = -O2 -Wall -g -D__EXTENSIONS__
 
-CFLAGS	= $(COPTS) @GETOPT_INCLUDE@ -I../ -I../lib/
+INCLUDES= $(COPTS) @GETOPT_INCLUDE@ -I../ -I../lib/
 
 GETOBJS = @LIBOBJS@
 
-CC	= gcc
+CC	= @CC@
 
 OBJS	= ipv6logstats.o ipv6logstatshelp.o
 
@@ -28,7 +28,7 @@ SPLINT_TODO_LATER = -unrecog
 all:		ipv6logstats
 
 .c.o:
-		$(CC) $(CFLAGS) -c $<
+		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -c $<
 
 $(OBJS):	ipv6logstatsoptions.h ipv6logstatshelp.h ipv6logstats.h
 

@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6loganon
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.3 2007/02/01 14:39:57 peter Exp $
+# Version    : $Id: Makefile.in,v 1.4 2008/12/31 12:17:31 peter Exp $
 # Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -11,13 +11,13 @@ prefix          = @prefix@
 exec_prefix     = @exec_prefix@
 
 # Compiler and Linker Options
-COPTS = -O2 -Wall -g -D__EXTENSIONS__
+DEFAULT_CFLAGS = -O2 -Wall -g -D__EXTENSIONS__
 
-CFLAGS	= $(COPTS) @GETOPT_INCLUDE@ -I../ -I../lib/
+INCLUDES= $(COPTS) @GETOPT_INCLUDE@ -I../ -I../lib/
 
 GETOBJS = @LIBOBJS@
 
-CC	= gcc
+CC	= @CC@
 
 OBJS	= ipv6loganon.o ipv6loganonhelp.o
 
@@ -28,7 +28,7 @@ SPLINT_TODO_LATER = -unrecog -retvalint
 all:		ipv6loganon
 
 .c.o:
-		$(CC) $(CFLAGS) -c $<
+		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -c $<
 
 $(OBJS):	ipv6loganonoptions.h ipv6loganonhelp.h ipv6loganon.h ../lib/ipv6calccommands.h
 

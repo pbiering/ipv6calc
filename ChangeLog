@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.162 2008/12/31 10:38:44 peter Exp $ 
+ *  $Id: ChangeLog,v 1.163 2008/12/31 12:17:31 peter Exp $ 
  */
 
 Info:
@@ -11,6 +11,9 @@ Info:
 20081231/PV
 	configure.in
 	 - apply fix for GeoIP option
+	various Makefile.in and Makefile
+	 - adjust/switch to Makefile.in and improvements (use of @CC@, remove
+	   CFLAGS, LDFLAGS, fix @ENABLE_BUNDLED_GETOPT@)
 
 20081119/PB
 	databases/registries/update-registries.sh

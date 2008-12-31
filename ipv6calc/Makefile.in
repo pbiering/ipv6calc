@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.24 2007/04/26 09:57:31 peter Exp $
+# Version    : $Id: Makefile.in,v 1.25 2008/12/31 12:17:31 peter Exp $
 # Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -11,15 +11,15 @@ prefix		= @prefix@
 exec_prefix	= @exec_prefix@
 
 # Compiler and Linker Options
-COPTS = -O2 -Wall -g
+DEFAULT_CFLAGS = -O2 -Wall -g
 
-CFLAGS	= $(COPTS) @GETOPT_INCLUDE@ @IP2LOCATION_INCLUDE@ @GEOIP_INCLUDE@ -I../ -I../lib/
+INCLUDES= @GETOPT_INCLUDE@ @IP2LOCATION_INCLUDE@ @GEOIP_INCLUDE@ -I../ -I../lib/
 
-LDFLAGS = @IP2LOCATION_LIB@ @GEOIP_LIB@
+LIBS = @IP2LOCATION_LIB@ @GEOIP_LIB@
 
 GETOBJS = @LIBOBJS@ ../md5/md5.o
 
-CC	= gcc
+CC	= @CC@
 
 OBJS	= ipv6calc.o showinfo.o
 
@@ -32,7 +32,7 @@ SPLINT_TODO_LATER = -unrecog  -retvalint
 all:		ipv6calc
 
 .c.o:
-		$(CC) $(CFLAGS) -c $<
+		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -c $<
 
 $(OBJS):	ipv6calc.h showinfo.h ../config.h ../lib/ipv6calcoptions.h
 
@@ -40,10 +40,10 @@ libipv6calc.a:
 		cd ../ && ${MAKE} lib-make
 
 ipv6calc:	$(OBJS) libipv6calc.a
-		$(CC) -o ipv6calc $(OBJS) $(GETOBJS) -lipv6calc -L../lib/ $(LDFLAGS)
+		$(CC) $(LDFLAGS) -o ipv6calc $(OBJS) $(GETOBJS) -lipv6calc -L../lib/ $(LIBS)
 
 static:		ipv6calc
-		$(CC) -o ipv6calc-static $(OBJS) $(GETOBJS) -lipv6calc -L../lib/ -static $(LDFLAGS)
+		$(CC) $(LDFLAGS) -o ipv6calc-static $(OBJS) $(GETOBJS) -lipv6calc -L../lib/ -static $(LIBS)
 
 distclean:
 		${MAKE} clean

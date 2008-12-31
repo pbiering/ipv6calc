@@ -1,6 +1,6 @@
 dnl Project: ipv6calc
 dnl File   : configure.in
-dnl Version: $Id: configure.in,v 1.24 2008/12/31 10:38:44 peter Exp $
+dnl Version: $Id: configure.in,v 1.25 2008/12/31 12:17:31 peter Exp $
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(ipv6calc, 0.72.0, ipv6calc@deepspace6.net, ipv6calc)
@@ -12,6 +12,7 @@ dnl Checks for programs.
 AC_PROG_AWK
 AC_PROG_CC
 dnl AC_PROG_INSTALL
+AC_PROG_RANLIB
 AC_PROG_MAKE_SET
 
 dnl Checks for header files.
@@ -137,4 +138,15 @@ AC_SUBST(GEOIP_INCLUDE)
 AC_SUBST(GEOIP_LIB)
 
 dnl Files to create
-AC_OUTPUT([Makefile ipv6calc/Makefile man/Makefile ipv6logconv/Makefile ipv6loganon/Makefile ipv6logstats/Makefile contrib/ipv6calc.spec ipv6calcweb/ipv6calcweb.cgi ])
+AC_OUTPUT([Makefile
+	md5/Makefile
+	tools/Makefile
+	getopt/Makefile
+	ipv6calc/Makefile
+	lib/Makefile
+	man/Makefile
+	ipv6logconv/Makefile
+	ipv6loganon/Makefile
+	ipv6logstats/Makefile
+	contrib/ipv6calc.spec
+	ipv6calcweb/ipv6calcweb.cgi ])

@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6logconv
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.14 2007/01/30 16:58:04 peter Exp $
+# Version    : $Id: Makefile.in,v 1.15 2008/12/31 12:17:31 peter Exp $
 # Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -11,13 +11,13 @@ prefix          = @prefix@
 exec_prefix     = @exec_prefix@
 
 # Compiler and Linker Options
-COPTS = -O2 -Wall -g -D__EXTENSIONS__
+DEFAULT_CFLAGS = -O2 -Wall -g -D__EXTENSIONS__
 
-CFLAGS	= $(COPTS) @GETOPT_INCLUDE@ -I../ -I../lib/
+INCLUDES= @GETOPT_INCLUDE@ -I../ -I../lib/
 
 GETOBJS = @LIBOBJS@
 
-CC	= gcc
+CC	= @CC@
 
 OBJS	= ipv6logconv.o ipv6logconvhelp.o
 
@@ -28,7 +28,7 @@ SPLINT_TODO_LATER = -unrecog -retvalint
 all:		ipv6logconv
 
 .c.o:
-		$(CC) $(CFLAGS) -c $<
+		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -c $<
 
 $(OBJS):	ipv6logconvoptions.h ipv6logconvhelp.h ipv6logconv.h
 
