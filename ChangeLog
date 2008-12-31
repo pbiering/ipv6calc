@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.163 2008/12/31 12:17:31 peter Exp $ 
+ *  $Id: ChangeLog,v 1.164 2008/12/31 12:38:55 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,11 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva@gentoo.org>
 --------------------------------------------------------------------
+20081231/PB
+	ipv6calc/ipv6calc.c
+	 - print token GeoIP, IP2Location, if supported
+	update databases
+
 20081231/PV
 	configure.in
 	 - apply fix for GeoIP option

@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.27 2008/11/19 22:17:05 peter Exp $
- * Generated     : Wed Nov 19 23:09:15 2008
+ * Version       : $Id: dbieee_iab.h,v 1.28 2008/12/31 12:38:55 peter Exp $
+ * Generated     : Wed Dec 31 13:27:04 2008
  * Data copyright: IEEE
  *
  * Information:
@@ -2543,5 +2543,60 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x9E2000, 0x9E2FFF, "E-ViEWS SAFETY SYSTEMS, INC", "E-VIEWS-SAFETY" },
 	{ 0x0050C2, 0x9E3000, 0x9E3FFF, "beON Automatenmanagement GmbH", "BEON-AUTOMATENMANAGEMENT" },
 	{ 0x0050C2, 0x9E4000, 0x9E4FFF, "Pyxis Controls WLL", "PYXIS-CONTROLS-WLL" },
+	{ 0x0050C2, 0x9E5000, 0x9E5FFF, "Halliburton Far East Pte Ltd", "HALLIBURTON-FAR-EAST-PTE" },
+	{ 0x0050C2, 0x9E6000, 0x9E6FFF, "Kumho Electric, Inc.", "KUMHO-ELECTRIC" },
+	{ 0x0050C2, 0x9E7000, 0x9E7FFF, "DORLET S.A.", "DORLET" },
+	{ 0x0050C2, 0x9E8000, 0x9E8FFF, "Hammock Corporation", "HAMMOCK" },
+	{ 0x0050C2, 0x9E9000, 0x9E9FFF, "Ciemme Sistemi Spa", "CIEMME-SISTEMI-SPA" },
+	{ 0x0050C2, 0x9EA000, 0x9EAFFF, "SISMODULAR - Engenharia, Lda", "SISMODULAR---ENGENHARIA-LDA" },
+	{ 0x0050C2, 0x9EB000, 0x9EBFFF, "AFORE Solutions Inc.", "AFORE-SOLUTIONS" },
+	{ 0x0050C2, 0x9EC000, 0x9ECFFF, "TOPEX SA", "TOPEX" },
+	{ 0x0050C2, 0x9ED000, 0x9EDFFF, "Picell B.V.", "PICELL" },
+	{ 0x0050C2, 0x9EE000, 0x9EEFFF, "Michael Stevens & Partners Ltd", "MICHAEL-STEVENS-PARTNERS" },
+	{ 0x0050C2, 0x9EF000, 0x9EFFFF, "WoKa-Elektronik GmbH", "WOKA-ELEKTRONIK" },
+	{ 0x0050C2, 0x9F0000, 0x9F0FFF, "Veracity UK Ltd", "VERACITY-UK" },
+	{ 0x0050C2, 0x9F1000, 0x9F1FFF, "IDEAS s.r.l.", "IDEAS-S-R-L" },
+	{ 0x0050C2, 0x9F2000, 0x9F2FFF, "Keith & Koep GmbH", "KEITH-KOEP" },
+	{ 0x0050C2, 0x9F3000, 0x9F3FFF, "Vision Technologies, Inc.", "VISION-TECHNOLOGIES" },
+	{ 0x0050C2, 0x9F4000, 0x9F4FFF, "FSR Inc.", "FSR" },
+	{ 0x0050C2, 0x9F5000, 0x9F5FFF, "Commex Technologies", "COMMEX-TECHNOLOGIES" },
+	{ 0x0050C2, 0x9F6000, 0x9F6FFF, "Ion Sense Inc.", "ION-SENSE" },
+	{ 0x0050C2, 0x9F7000, 0x9F7FFF, "Dave Jones Design", "DAVE-JONES-DESIGN" },
+	{ 0x0050C2, 0x9F8000, 0x9F8FFF, "Austco Communication Systems Pty Ltd", "AUSTCO-COMMUNICATION-PTY" },
+	{ 0x0050C2, 0x9F9000, 0x9F9FFF, "ABB Transmission and Distribution Auto Eqip(Xiamen.China)", "ABB-TRANSMISSION-AND-DISTRIBUTION-AUTO-EQIP-XIAMEN-CHINA" },
+	{ 0x0050C2, 0x9FA000, 0x9FAFFF, "Teranex A Division of Silicon Optix", "TERANEX-A-DIVISION-OF-SILICON-OPTIX" },
+	{ 0x0050C2, 0x9FB000, 0x9FBFFF, "Villbau Kft.", "VILLBAU-KFT" },
+	{ 0x0050C2, 0x9FC000, 0x9FCFFF, "ECTEC INC.", "ECTEC" },
+	{ 0x0050C2, 0x9FD000, 0x9FDFFF, "Bitt technology-A Ltd.", "BITT--A" },
+	{ 0x0050C2, 0x9FE000, 0x9FEFFF, "SPECTRA EMBEDDED SYSTEMS", "SPECTRA-EMBEDDED" },
+	{ 0x0050C2, 0x9FF000, 0x9FFFFF, "Humphrey Products", "HUMPHREY-PRODUCTS" },
+	{ 0x0050C2, 0xA00000, 0xA00FFF, "Technovare Systems", "TECHNOVARE" },
+	{ 0x0050C2, 0xA01000, 0xA01FFF, "Patronics International LTD", "PATRONICS" },
+	{ 0x0050C2, 0xA02000, 0xA02FFF, "Reference, LLC.", "REFERENCE-LLC" },
+	{ 0x0050C2, 0xA03000, 0xA03FFF, "EEG Enterprises Inc", "EEG-ENTERPRISES" },
+	{ 0x0050C2, 0xA04000, 0xA04FFF, "TP Radio", "TP-RADIO" },
+	{ 0x0050C2, 0xA05000, 0xA05FFF, "Adgil Design Inc.", "ADGIL-DESIGN" },
+	{ 0x0050C2, 0xA06000, 0xA06FFF, "Cloos Schweisstechnik GmbH", "CLOOS-SCHWEISSTECHNIK" },
+	{ 0x0050C2, 0xA07000, 0xA07FFF, "Dynon Instruments", "DYNON-INSTRUMENTS" },
+	{ 0x0050C2, 0xA08000, 0xA08FFF, "LabJack Corporation", "LABJACK" },
+	{ 0x0050C2, 0xA09000, 0xA09FFF, "Innovative American Technology", "INNOVATIVE-AMERICAN" },
+	{ 0x0050C2, 0xA0A000, 0xA0AFFF, "ACD Elektronik Gmbh", "ACD-ELEKTRONIK" },
+	{ 0x0050C2, 0xA0B000, 0xA0BFFF, "I.D.S. Ingegneria Dei Sistemi S.p.A.", "I-D-S-INGEGNERIA-DEI-SISTEMI-S-P-A" },
+	{ 0x0050C2, 0xA0C000, 0xA0CFFF, "Phytec Messtechnik GmbH", "PHYTEC-MESSTECHNIK" },
+	{ 0x0050C2, 0xA0D000, 0xA0DFFF, "CHARLYROBOT", "CHARLYROBOT" },
+	{ 0x0050C2, 0xA0E000, 0xA0EFFF, "Engicam srl", "ENGICAM-SRL" },
+	{ 0x0050C2, 0xA0F000, 0xA0FFFF, "Visualware Inc", "VISUALWARE" },
+	{ 0x0050C2, 0xA10000, 0xA10FFF, "Essential Design & Integration P/L", "ESSENTIAL-DESIGN-INTEGRATION-P/L" },
+	{ 0x0050C2, 0xA11000, 0xA11FFF, "OJSC Rawenstvo", "OJSC-RAWENSTVO" },
+	{ 0x0050C2, 0xA12000, 0xA12FFF, "HCE Engineering S.r.l.", "HCE-ENGINEERING-S-R-L" },
+	{ 0x0050C2, 0xA13000, 0xA13FFF, "Talyst, Inc.", "TALYST" },
+	{ 0x0050C2, 0xA14000, 0xA14FFF, "Elbit Systems of America - Tallahassee Operations", "ELBIT-OF-AMERICA---TALLAHASSEE-OPERATIONS" },
+	{ 0x0050C2, 0xA15000, 0xA15FFF, "Industrial Computing Ltd", "INDUSTRIAL-COMPUTING" },
+	{ 0x0050C2, 0xA16000, 0xA16FFF, "Baudisch Electronic GmbH", "BAUDISCH" },
+	{ 0x0050C2, 0xA17000, 0xA17FFF, "Winners Satellite Electronics Corp.", "WINNERS-SATELLITE-ELECTRONICS" },
+	{ 0x0050C2, 0xA18000, 0xA18FFF, "Eoslink", "EOSLINK" },
+	{ 0x0050C2, 0xA19000, 0xA19FFF, "Icon Time Systems", "ICON-TIME" },
+	{ 0x0050C2, 0xA1A000, 0xA1AFFF, "DDL", "DDL" },
+	{ 0x0050C2, 0xA1B000, 0xA1BFFF, "Realtime Systems Ltd.", "REALTIME" },
 
 };

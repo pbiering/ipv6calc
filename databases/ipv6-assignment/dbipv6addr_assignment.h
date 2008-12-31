@@ -1,8 +1,8 @@
  /*
  * Project       : ipv6calc
  * File          : dbipv6_assignment.h
- * Version       : $Id: dbipv6addr_assignment.h,v 1.22 2008/11/19 22:17:06 peter Exp $
- * Generated     : Wed Nov 19 23:12:22 2008
+ * Version       : $Id: dbipv6addr_assignment.h,v 1.23 2008/12/31 12:38:55 peter Exp $
+ * Generated     : Wed Dec 31 13:31:22 2008
  * Data copyright: IANA ARIN RIPENCC APNIC LACNIC AFRINIC
  *
  * Information:
