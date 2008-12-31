@@ -1,6 +1,6 @@
 #!/bin/sh
 
-$Id: autogen.sh,v 1.8 2007/03/03 11:57:28 peter Exp $
+$Id: autogen.sh,v 1.9 2008/12/31 12:26:22 peter Exp $
 
 OPTIONS_CONFIGURE=""
 
@@ -54,9 +54,6 @@ make || exit 1
 echo "*** run: make test"
 make test || exit 1
 
-echo "*** run: make -n installonly (dry-run)"
-make -n installonly || exit 1
-
 echo
-echo "For installing the binaries, type: make installonly"
+echo "For installing the binaries, type: make install"
 
