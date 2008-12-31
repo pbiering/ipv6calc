@@ -1,6 +1,6 @@
 dnl Project: ipv6calc
 dnl File   : configure.in
-dnl Version: $Id: configure.in,v 1.23 2008/11/19 20:16:13 peter Exp $
+dnl Version: $Id: configure.in,v 1.24 2008/12/31 10:38:44 peter Exp $
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(ipv6calc, 0.72.0, ipv6calc@deepspace6.net, ipv6calc)
@@ -88,8 +88,10 @@ AC_ARG_ENABLE([geoip],
 	AS_HELP_STRING([--enable-geoip],
 	               [Enable GeoIP support (default: disabled)]),
     [
-        GEOIP="$enableval"
-        GEOIP_LIB="-lGeoIP"
+	if test "$enableval" != "no"; then
+        	GEOIP="$enableval"
+        	GEOIP_LIB="-lGeoIP"
+	fi
     ],
     [GEOIP="no"])
 

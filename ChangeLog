@@ -1,12 +1,17 @@
 /*
- *  $Id: ChangeLog,v 1.161 2008/11/19 22:00:42 peter Exp $ 
+ *  $Id: ChangeLog,v 1.162 2008/12/31 10:38:44 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 	NT = Niko Tyni <ntyni (at) iki dot fi>
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
+	PV = Peter Volkov <pva@gentoo.org>
 --------------------------------------------------------------------
+20081231/PV
+	configure.in
+	 - apply fix for GeoIP option
+
 20081119/PB
 	databases/registries/update-registries.sh
 	 - create registry subdir if not existing
@@ -23,6 +28,7 @@ Info:
 	 - remove "make installonly"
 	Several files
 	 - minor cleanup
+	tag version 0.72.0
 
 20070811/PB
 	lib/libipv6addr.{c,h}
