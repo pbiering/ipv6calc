@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.32 2008/11/19 21:28:57 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.33 2008/12/31 12:37:35 peter Exp $
  * Copyright  : 2001-2008 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -60,7 +60,14 @@ char file_geoip[NI_MAXHOST] = "";
 #endif
 
 void printversion(void) {
-	fprintf(stderr, "%s: version %s\n", PROGRAM_NAME, PACKAGE_VERSION);
+	fprintf(stderr, "%s: version %s", PROGRAM_NAME, PACKAGE_VERSION);
+#ifdef SUPPORT_IP2LOCATION
+	fprintf(stderr, " IP2Location");
+#endif
+#ifdef SUPPORT_GEOIP
+	fprintf(stderr, " GeoIP");
+#endif
+	fprintf(stderr, "\n");
 };
 
 void printcopyright(void) {
