@@ -1,13 +1,18 @@
 /*
- *  $Id: ChangeLog,v 1.164 2008/12/31 12:38:55 peter Exp $ 
+ *  $Id: ChangeLog,v 1.165 2009/01/06 16:37:45 peter Exp $ 
  */
 
 Info:
 	PB = Peter Bieringer <pb (at) bieringer.de>
 	NT = Niko Tyni <ntyni (at) iki dot fi>
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
-	PV = Peter Volkov <pva@gentoo.org>
+	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20090106/PV
+	various Makefile.in and Makefile
+	 - rename $(root) into $(DESTDIR) to respect GNU coding standards
+	 - fixed datarootdir warning
+
 20081231/PB
 	ipv6calc/ipv6calc.c
 	 - print token GeoIP, IP2Location, if supported
@@ -19,7 +24,6 @@ Info:
 	various Makefile.in and Makefile
 	 - adjust/switch to Makefile.in and improvements (use of @CC@, remove
 	   CFLAGS, LDFLAGS, fix @ENABLE_BUNDLED_GETOPT@)
-
 20081119/PB
 	databases/registries/update-registries.sh
 	 - create registry subdir if not existing
@@ -29,7 +33,7 @@ Info:
 	databases/ieee-oui/Makefile
 	 - adjust remote filename on webserver
 	ipv6calc/ipv6calc.c
-	 - do not show warning messages for missig GeoIP/IP2Location support
+	 - do not show warning messages for missing GeoIP/IP2Location support
 	    if option "-q" is used (good for ipv6calcweb.cgi)
 	Makefile[.in]
 	 - move "make test" from "make install" to dedicated "make ..."

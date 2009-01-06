@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6logconv
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.15 2008/12/31 12:17:31 peter Exp $
+# Version    : $Id: Makefile.in,v 1.16 2009/01/06 16:37:45 peter Exp $
 # Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -9,6 +9,7 @@
 
 prefix          = @prefix@
 exec_prefix     = @exec_prefix@
+bindir		= @bindir@
 
 # Compiler and Linker Options
 DEFAULT_CFLAGS = -O2 -Wall -g -D__EXTENSIONS__
@@ -58,6 +59,6 @@ splint:
 		splint *.c ../lib/*.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)
 
 install:	ipv6logconv
-		mkdir -p $(root)@bindir@
-		install -m 755 ipv6logconv $(root)@bindir@
+		mkdir -p $(DESTDIR)$(bindir)
+		install -m 755 ipv6logconv $(DESTDIR)$(bindir)
 	
