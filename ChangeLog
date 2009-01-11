@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.165 2009/01/06 16:37:45 peter Exp $ 
+ *  $Id: ChangeLog,v 1.166 2009/01/11 15:09:47 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20090111/PB
+	update databases
+	tag version 0.72.1
+
 20090106/PV
 	various Makefile.in and Makefile
 	 - rename $(root) into $(DESTDIR) to respect GNU coding standards
