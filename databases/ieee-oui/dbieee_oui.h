@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui.h
- * Version       : $Id: dbieee_oui.h,v 1.44 2008/12/31 12:38:55 peter Exp $
- * Generated     : Wed Dec 31 13:26:59 2008
+ * Version       : $Id: dbieee_oui.h,v 1.45 2009/01/11 15:08:30 peter Exp $
+ * Generated     : Sun Jan 11 11:07:43 2009
  * Data copyright: IEEE
  *
  * Information:
@@ -8817,7 +8817,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x002289, "Optosecurity Inc.", "OPTOSECURITY" },
 	{ 0x00228A, "Teratronik elektronische systeme gmbh", "TERATRONIK-ELEKTRONISCHE-SYSTEME" },
 	{ 0x00228B, "Kensington Computer Products Group", "KENSINGTON-PRODUCTS-GROUP" },
-	{ 0x00228C, "Solar Verlag GmbH", "SOLAR-VERLAG" },
+	{ 0x00228C, "Photon Europe GmbH", "PHOTON-EUROPE" },
 	{ 0x00228D, "GBS Laboratories LLC", "GBS-LABORATORIES-LLC" },
 	{ 0x00228E, "TV-NUMERIC", "TV-NUMERIC" },
 	{ 0x00228F, "CNRS", "CNRS" },
@@ -9413,6 +9413,21 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x0024DD, "Centrak, Inc.", "CENTRAK" },
 	{ 0x0024DE, "GLOBAL Technology Inc.", "GLOBAL" },
 	{ 0x0024DF, "Digitalbox Europe GmbH", "DIGITALBOX-EUROPE" },
+	{ 0x0024E0, "DS Tech, LLC", "DS-TECH-LLC" },
+	{ 0x0024E1, "Convey Computer Corp.", "CONVEY" },
+	{ 0x0024E2, "HASEGAWA ELECTRIC CO.,LTD.", "HASEGAWA-ELECTRIC" },
+	{ 0x0024E3, "CAO Group", "CAO-GROUP" },
+	{ 0x0024E4, "Withings", "WITHINGS" },
+	{ 0x0024E5, "Seer Technology, Inc", "SEER" },
+	{ 0x0024E6, "In Motion Technology Inc.", "IN-MOTION" },
+	{ 0x0024E7, "Plaster Networks", "PLASTER-NETWORKS" },
+	{ 0x0024E8, "Dell Inc.", "DELL" },
+	{ 0x0024E9, "Samsung Electronics Co., Ltd., Storage System Division", "SAMSUNG-ELECTRONICS-STORAGE-SYSTEM-DIVISION" },
+	{ 0x0024EA, "iris-GmbH infrared & intelligent sensors", "IRIS--INFRARED-INTELLIGENT-SENSORS" },
+	{ 0x0024EB, "ClearPath Networks, Inc.", "CLEARPATH-NETWORKS" },
+	{ 0x0024EC, "United Information Technology Co.,Ltd.", "UNITED-INFORMATION" },
+	{ 0x0024ED, "YT Elec. Co,.Ltd.", "YT-ELEC" },
+	{ 0x0024EE, "AICTEK Co.,Ltd.", "AICTEK" },
 	{ 0x002654, "3Com Corporation", "3COM" },
 	{ 0x003000, "ALLWELL TECHNOLOGY CORP.", "ALLWELL" },
 	{ 0x003001, "SMP", "SMP" },
@@ -10020,7 +10035,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x005062, "KOUWELL ELECTRONICS CORP. **", "KOUWELL-ELECTRONICS-**" },
 	{ 0x005063, "OY COMSEL SYSTEM AB", "OY-COMSEL-SYSTEM-AB" },
 	{ 0x005064, "CAE ELECTRONICS", "CAE-ELECTRONICS" },
-	{ 0x005065, "DENSEI-LAMBAD Co., Ltd.", "DENSEI-LAMBAD" },
+	{ 0x005065, "TDK-Lambda Corporation", "TDK-LAMBDA" },
 	{ 0x005066, "AtecoM GmbH advanced telecomunication modules", "ATECOM-ADVANCED-TELECOMUNICATION-MODULES" },
 	{ 0x005067, "AEROCOMM, INC.", "AEROCOMM" },
 	{ 0x005068, "ELECTRONIC INDUSTRIES ASSOCIATION", "INDUSTRIES-ASSOCIATION" },

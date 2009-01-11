@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.28 2008/12/31 12:38:55 peter Exp $
- * Generated     : Wed Dec 31 13:27:04 2008
+ * Version       : $Id: dbieee_iab.h,v 1.29 2009/01/11 15:08:29 peter Exp $
+ * Generated     : Sun Jan 11 11:07:47 2009
  * Data copyright: IEEE
  *
  * Information:
@@ -1078,7 +1078,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x429000, 0x429FFF, "Matthews Australasia", "MATTHEWS-AUSTRALASIA" },
 	{ 0x0050C2, 0x42A000, 0x42AFFF, "DSP DESIGN", "DSP-DESIGN" },
 	{ 0x0050C2, 0x42B000, 0x42BFFF, "VLSIP TECHNOLOGIES, INC.", "VLSIP-TECHNOLOGIES" },
-	{ 0x0050C2, 0x42C000, 0x42CFFF, "SIEMENS VDO", "SIEMENS-VDO" },
+	{ 0x0050C2, 0x42C000, 0x42CFFF, "Continental Automotive Systems US, Inc.", "CONTINENTAL-AUTOMOTIVE-US" },
 	{ 0x0050C2, 0x42D000, 0x42DFFF, "Argo-Tech", "ARGO-TECH" },
 	{ 0x0050C2, 0x42E000, 0x42EFFF, "Oelmann Elektronik GmbH", "OELMANN-ELEKTRONIK" },
 	{ 0x0050C2, 0x42F000, 0x42FFFF, "Win4NET", "WIN4NET" },
@@ -2598,5 +2598,18 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xA19000, 0xA19FFF, "Icon Time Systems", "ICON-TIME" },
 	{ 0x0050C2, 0xA1A000, 0xA1AFFF, "DDL", "DDL" },
 	{ 0x0050C2, 0xA1B000, 0xA1BFFF, "Realtime Systems Ltd.", "REALTIME" },
+	{ 0x0050C2, 0xA1C000, 0xA1CFFF, "Microtechnica", "MICROTECHNICA" },
+	{ 0x0050C2, 0xA1D000, 0xA1DFFF, "SAMH Engineering Services", "SAMH-ENGINEERING-SERVICES" },
+	{ 0x0050C2, 0xA1E000, 0xA1EFFF, "MAMAC Systems, Inc.", "MAMAC" },
+	{ 0x0050C2, 0xA1F000, 0xA1FFFF, "Flight Data Systems Pty Ltd", "FLIGHT-DATA-PTY" },
+	{ 0x0050C2, 0xA20000, 0xA20FFF, "Quorum Technologies Ltd", "QUORUM-TECHNOLOGIES" },
+	{ 0x0050C2, 0xA21000, 0xA21FFF, "ISAC SRL", "ISAC-SRL" },
+	{ 0x0050C2, 0xA22000, 0xA22FFF, "Nippon Manufacturing Service Corporation (abbreviated as 'nms')", "NIPPON-MANUFACTURING-SERVICE-ABBREVIATED-AS-NMS" },
+	{ 0x0050C2, 0xA23000, 0xA23FFF, "Agility Mfg, Inc.", "AGILITY-MFG" },
+	{ 0x0050C2, 0xA24000, 0xA24FFF, "GRUPO EPELSA s.l.", "GRUPO-EPELSA-S-L" },
+	{ 0x0050C2, 0xA25000, 0xA25FFF, "Saia-Burgess Controls AG", "SAIA-BURGESS-CONTROLS" },
+	{ 0x0050C2, 0xA26000, 0xA26FFF, "Preferred Oil, LLC", "PREFERRED-OIL-LLC" },
+	{ 0x0050C2, 0xA27000, 0xA27FFF, "meconet e. K.", "MECONET-E-K" },
+	{ 0x0050C2, 0xA28000, 0xA28FFF, "KENDA ELECTRONIC SYSTEMS LIMITED", "KENDA" },
 
 };

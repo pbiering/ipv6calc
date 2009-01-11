@@ -60,7 +60,7 @@ make test
 %install
 rm -rf $RPM_BUILD_ROOT
 
-make install root=$RPM_BUILD_ROOT
+make install DESTDIR=$RPM_BUILD_ROOT
 
 # Move ipv6calc
 mkdir -p $RPM_BUILD_ROOT/bin
