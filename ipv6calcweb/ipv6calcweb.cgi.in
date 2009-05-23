@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.18 2008/12/31 12:17:31 peter Exp $
-# Copyright  : 2002-2008 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.19 2009/05/23 12:56:31 peter Exp $
+# Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
 # Simple Perl web interface and security wrapper
@@ -29,7 +29,7 @@ use strict;
 ## Defines
 # Program information
 my $program_name = "ipv6calcweb.cgi";
-my $program_copyright = "(P) & (C) 2002-2008 by Peter Bieringer";
+my $program_copyright = "(P) & (C) 2002-2009 by Peter Bieringer";
 my $program_version = "@PACKAGE_VERSION@";
 
 # required output version of ipv6calc (introduced in 0.60.0)
@@ -50,6 +50,7 @@ my $debug = 0;
 # List of deefault location of files (first existing one would be choosen)
 my @list_bin_ipv6calc = (
 	"../ipv6calc/ipv6calc",
+	"/usr/bin/ipv6calc",
 	"/bin/ipv6calc",
 );
 
