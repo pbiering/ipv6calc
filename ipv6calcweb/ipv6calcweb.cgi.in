@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.19 2009/05/23 12:56:31 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.20 2009/06/11 17:01:48 peter Exp $
 # Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -230,8 +230,8 @@ my %text = (
 		'en' => "This server",
 	},
 	'SLA' => {
-		'de' => "Site Level Aggregator (Subnetz)",
-		'en' => "Site Level Aggregator (subnet)",
+		'de' => "Subnetz ID",
+		'en' => "Subnet ID",
 	},
 	'IIDSCOPE' => {
 		'de' => "Art der Interface-Identifierungsnummer",
