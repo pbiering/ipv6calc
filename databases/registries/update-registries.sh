@@ -2,13 +2,13 @@
 #
 # Project    : ipv6calc/databases/registries
 # File       : update-registries.sh
-# Version    : $Id: update-registries.sh,v 1.6 2008/11/19 19:44:22 peter Exp $
-# Copyright  : 2002-2008 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: update-registries.sh,v 1.7 2009/06/20 13:43:34 peter Exp $
+# Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces ../ipv4-assignment/update-ipv4-assignment.sh
 #               replaces ../ipv6-assignment/update-ipv6-assignment.sh
 #
 # Information:
-#  Update registry data shell script
+#  Shell script to update registry data
 
 #set -x
 
@@ -20,7 +20,7 @@ day="`date -d '2 days ago' +%d`"
 
 cat <<END | sed s/\%Y/$year/g | sed s/\%m/$month/g | sed s/\%d/$day/g
 iana	http://www.iana.org/assignments/		ipv4-address-space			txt	out
-iana	http://www.iana.org/assignments/		ipv6-unicast-address-assignments	txt
+iana	http://www.iana.org/assignments/		ipv6-unicast-address-assignments	txt	out
 ripencc	ftp://ftp.ripe.net/pub/stats/ripencc/		delegated-ripencc-latest		txt
 arin	ftp://ftp.arin.net/pub/stats/arin/		delegated-arin-latest			txt
 apnic	http://ftp.apnic.net/stats/apnic/		delegated-apnic-latest			txt
