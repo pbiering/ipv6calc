@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.167 2009/06/11 17:07:52 peter Exp $ 
+ *  $Id: ChangeLog,v 1.168 2009/06/20 13:44:45 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20090620/PB
+	databases/registries/update-registries.sh
+	 - fix IANA ipv6-unicast-address-assignments weblink problem
+
 20090611/PB
 	update databases
 	add /usr/bin/ipv6calc to binary list of ipv6calcweb.cgi
