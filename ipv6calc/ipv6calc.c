@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.34 2009/08/11 20:38:51 peter Exp $
- * Copyright  : 2001-2008 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calc.c,v 1.35 2009/08/11 21:04:44 peter Exp $
+ * Copyright  : 2001-2009 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
@@ -484,13 +484,13 @@ int main(int argc,char *argv[]) {
 			if (inputtype == FORMAT_undefined) {
 				inputtype = FORMAT_auto;
 			};
-			printhelp_outputtypes(inputtype);
+			printhelp_outputtypes(inputtype, formatoptions);
 			exit(EXIT_FAILURE);
 		} else if (inputtype == FORMAT_auto) {
 			printhelp_inputtypes(formatoptions);
 			exit(EXIT_FAILURE);
 		} else if (action == ACTION_auto) {
-			printhelp_actiontypes();
+			printhelp_actiontypes(formatoptions);
 			exit(EXIT_FAILURE);
 		};
 

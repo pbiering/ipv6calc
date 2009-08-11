@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.16 2009/08/11 20:38:51 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.17 2009/08/11 21:04:44 peter Exp $
  * Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -106,24 +106,27 @@ void printhelp_inputtypes(const uint32_t formatoptions) {
 					if ((formatoptions & FORMATOPTION_machinereadable) == 0) {	
 						fprintf(stderr, printformatstring, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
 					} else {
-						fprintf(stdout, printformatstring, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
+						fprintf(stdout, printformatstring, ipv6calc_formatstrings[j].token);
 					};
 				};
 			};
 		};
 	};
+
 	if ((formatoptions & FORMATOPTION_machinereadable) == 0) fprintf(stderr, "\n");
 };
 
 
 /* list of output types */
-void printhelp_outputtypes(const uint32_t inputtype) {
+void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoptions) {
 	int i, j;
 	size_t maxlen = 0;
 	char printformatstring[20];
 	
-	printversion();
-	printcopyright();
+	if ((formatoptions & FORMATOPTION_machinereadable) == 0) {	
+		printversion();
+		printcopyright();
+	};
 
 	/* look for longest type definition */
 	for (j = 0; j < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); j++) {
@@ -137,16 +140,22 @@ void printhelp_outputtypes(const uint32_t inputtype) {
 		exit(EXIT_FAILURE);
 	};
 
-	snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds: %%s\n", (int) maxlen);
+	if ((formatoptions & FORMATOPTION_machinereadable) == 0) {	
+		snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds: %%s\n", (int) maxlen);
+	} else {
+		snprintf(printformatstring, sizeof(printformatstring) - 1, "%%-%ds\n", (int) maxlen);
+	};
 
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "Format string: %s\n", printformatstring);
 	};
 
-	if ( (inputtype & ~ (FORMAT_auto | FORMAT_any) ) != 0 ) {
-		fprintf(stderr, "\n Available output types filtered by input type:\n");
-	} else {
-		fprintf(stderr, "\n Available output types:\n");
+	if ((formatoptions & FORMATOPTION_machinereadable) == 0) {
+		if ( (inputtype & ~ (FORMAT_auto | FORMAT_any) ) != 0 ) {
+			fprintf(stderr, "\n Available output types filtered by input type:\n");
+		} else {
+			fprintf(stderr, "\n Available output types:\n");
+		};
 	};
 
 	/* run through matrix */
@@ -168,25 +177,34 @@ void printhelp_outputtypes(const uint32_t inputtype) {
 			};
 			if ((ipv6calc_formatmatrix[i][1] & ipv6calc_formatstrings[j].number) != 0) {
 				/* available for output, look for name now */
-				fprintf(stderr, printformatstring, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
+				if (ipv6calc_formatstrings[j].number == ipv6calc_formatmatrix[i][0]) {
+					fprintf(stderr, printformatstring, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
+				} else {
+					fprintf(stdout, printformatstring, ipv6calc_formatstrings[j].token);
+				};
 				break;
 			};
 		};
 	};
-	fprintf(stderr, "\n For examples and available format options use:\n");
-	fprintf(stderr, "    --out <type> --examples\n");
-	fprintf(stderr, "\n");
+
+	if ((formatoptions & FORMATOPTION_machinereadable) == 0) {
+		fprintf(stderr, "\n For examples and available format options use:\n");
+		fprintf(stderr, "    --out <type> --examples\n");
+		fprintf(stderr, "\n");
+	};
 };
 
 
 /* list of action types */
-void printhelp_actiontypes(void) {
+void printhelp_actiontypes(const uint32_t formatoptions) {
 	int j;
 	size_t maxlen = 0;
 	char printformatstring[20];
 	
-	printversion();
-	printcopyright();
+	if ((formatoptions & FORMATOPTION_machinereadable) == 0) {	
+		printversion();
+		printcopyright();
+	};
 
 	/* look for longest type definition */
 	for (j = 0; j < (int) (sizeof(ipv6calc_actionstrings) / sizeof(ipv6calc_actionstrings[0])); j++) {
@@ -200,21 +218,29 @@ void printhelp_actiontypes(void) {
 		exit (EXIT_FAILURE);
 	};
 
-	snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds: %%s\n", (int) maxlen);
+	if ((formatoptions & FORMATOPTION_machinereadable) == 0) {
+		snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds: %%s\n", (int) maxlen);
+	} else {
+		snprintf(printformatstring, sizeof(printformatstring) - 1, "%%-%ds\n", (int) maxlen);
+	};
 
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "Format string: %s\n", printformatstring);
 	};
 
-	fprintf(stderr, "\n Available action types:\n");
+	if ((formatoptions & FORMATOPTION_machinereadable) == 0) fprintf(stderr, "\n Available action types:\n");
 
 	for (j = 0; j < (int) (sizeof(ipv6calc_actionstrings) / sizeof(ipv6calc_actionstrings[0])); j++) {
 		if (ipv6calc_debug != 0) {
 			fprintf(stderr, "Format-Row %d: %08x - %s - %s\n", j, (unsigned int) ipv6calc_actionstrings[j].number, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
 		};
-		fprintf(stderr, printformatstring, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
+		if ((formatoptions & FORMATOPTION_machinereadable) == 0) {
+			fprintf(stderr, printformatstring, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
+		} else {
+			fprintf(stdout, printformatstring, ipv6calc_actionstrings[j].token);
+		};
 	};
-	fprintf(stderr, "\n");
+	if ((formatoptions & FORMATOPTION_machinereadable) == 0) fprintf(stderr, "\n");
 };
 
 
@@ -241,9 +267,9 @@ void printhelp(void) {
 	fprintf(stderr, "  [<format option> ...] : specify format options\n");
 	fprintf(stderr, "  <input data> [...]    : input data\n");
 	fprintf(stderr, "\n");
-	fprintf(stderr, "  Available input  types:  --in     -?|-h|--help\n");
-	fprintf(stderr, "  Available output types:  --out    -?|-h|--help\n");
-	fprintf(stderr, "  Available action types:  --action -?|-h|--help\n");
+	fprintf(stderr, "  Available input  types:  [-m] --in     -?|-h|--help\n");
+	fprintf(stderr, "  Available output types:  [-m] --out    -?|-h|--help\n");
+	fprintf(stderr, "  Available action types:  [-m] --action -?|-h|--help\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, " Other usage:\n");
 	fprintf(stderr, "\n");

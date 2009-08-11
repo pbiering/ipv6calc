@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.h
- * Version    : $Id: ipv6calchelp.h,v 1.8 2009/08/11 20:38:51 peter Exp $
+ * Version    : $Id: ipv6calchelp.h,v 1.9 2009/08/11 21:04:44 peter Exp $
  * Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -24,8 +24,8 @@ extern void printhelp_version(void);
 extern void printhelp_doublecommands(void);
 extern void printhelp_missinginputdata(void);
 extern void printhelp_inputtypes(const uint32_t formatoptions);
-extern void printhelp_outputtypes(const uint32_t inputtype);
-extern void printhelp_actiontypes(void);
+extern void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoptions);
+extern void printhelp_actiontypes(const uint32_t formatoptions);
 extern void printhelp(void);
 extern void printhelp_oldoptions(void);
 extern void printhelp_output_dispatcher(const uint32_t outputtype);
