@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.30 2009/06/11 17:00:37 peter Exp $
- * Generated     : Thu Jun 11 18:56:52 2009
+ * Version       : $Id: dbieee_iab.h,v 1.31 2009/08/11 20:46:50 peter Exp $
+ * Generated     : Tue Aug 11 22:41:06 2009
  * Data copyright: IEEE
  *
  * Information:
@@ -2787,5 +2787,61 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xAD6000, 0xAD6FFF, "Unisensor A/S", "UNISENSOR-A/S" },
 	{ 0x0050C2, 0xAD7000, 0xAD7FFF, "Air Monitors Ltd", "AIR-MONITORS" },
 	{ 0x0050C2, 0xAD8000, 0xAD8FFF, "Incyma", "INCYMA" },
+	{ 0x0050C2, 0xAD9000, 0xAD9FFF, "elettrondata srl", "ELETTRONDATA-SRL" },
+	{ 0x0050C2, 0xADA000, 0xADAFFF, "Essepie Srl", "ESSEPIE-SRL" },
+	{ 0x0050C2, 0xADB000, 0xADBFFF, "GO engineering GmbH", "GO-ENGINEERING" },
+	{ 0x0050C2, 0xADC000, 0xADCFFF, "Synthesechemie Dr. Penth GmbH", "SYNTHESECHEMIE-DR-PENTH" },
+	{ 0x0050C2, 0xADD000, 0xADDFFF, "General Dynamics C4 Sysems", "GENERAL-DYNAMICS-C4-SYSEMS" },
+	{ 0x0050C2, 0xADE000, 0xADEFFF, "Neoptix Inc.", "NEOPTIX" },
+	{ 0x0050C2, 0xADF000, 0xADFFFF, "Altinex, Inc", "ALTINEX" },
+	{ 0x0050C2, 0xAE0000, 0xAE0FFF, "AT4 wireless.S.A", "AT4-WIRELESS" },
+	{ 0x0050C2, 0xAE1000, 0xAE1FFF, "EVERCARE", "EVERCARE" },
+	{ 0x0050C2, 0xAE2000, 0xAE2FFF, "Power Medical Interventions", "POWER-MEDICAL-INTERVENTIONS" },
+	{ 0x0050C2, 0xAE3000, 0xAE3FFF, "PSD", "PSD" },
+	{ 0x0050C2, 0xAE4000, 0xAE4FFF, "Advanced Electronic Designs, Inc.", "ADVANCED-DESIGNS" },
+	{ 0x0050C2, 0xAE5000, 0xAE5FFF, "ABS Gesellschaft f. Automatisierung, Bildverarbeitung und Software mbH", "ABS-GESELLSCHAFT-F-AUTOMATISIERUNG-BILDVERARBEITUNG-UND-SOFTWARE-MBH" },
+	{ 0x0050C2, 0xAE6000, 0xAE6FFF, "VECOM USA", "VECOM-USA" },
+	{ 0x0050C2, 0xAE7000, 0xAE7FFF, "Redwood Systems", "REDWOOD" },
+	{ 0x0050C2, 0xAE8000, 0xAE8FFF, "Bit-Lab PTY LTD", "BIT-LAB-PTY" },
+	{ 0x0050C2, 0xAE9000, 0xAE9FFF, "ClearCorp Enterprises, Inc", "CLEARCORP-ENTERPRISES" },
+	{ 0x0050C2, 0xAEA000, 0xAEAFFF, "EMBEDIA", "EMBEDIA" },
+	{ 0x0050C2, 0xAEB000, 0xAEBFFF, "UMLogics Corporation", "UMLOGICS" },
+	{ 0x0050C2, 0xAEC000, 0xAECFFF, "Fritz Pauker Ingenieure GmbH", "FRITZ-PAUKER-INGENIEURE" },
+	{ 0x0050C2, 0xAED000, 0xAEDFFF, "3Roam", "3ROAM" },
+	{ 0x0050C2, 0xAEE000, 0xAEEFFF, "IPtec, Inc.", "IPTEC" },
+	{ 0x0050C2, 0xAEF000, 0xAEFFFF, "National CineMedia", "NATIONAL-CINEMEDIA" },
+	{ 0x0050C2, 0xAF0000, 0xAF0FFF, "Fr. Sauter AG", "FR-SAUTER" },
+	{ 0x0050C2, 0xAF1000, 0xAF1FFF, "Green Goose", "GREEN-GOOSE" },
+	{ 0x0050C2, 0xAF2000, 0xAF2FFF, "ACD Elektronik Gmbh", "ACD-ELEKTRONIK" },
+	{ 0x0050C2, 0xAF3000, 0xAF3FFF, "Palomar Products, Inc.", "PALOMAR-PRODUCTS" },
+	{ 0x0050C2, 0xAF4000, 0xAF4FFF, "Dixell S.p.A.", "DIXELL-S-P-A" },
+	{ 0x0050C2, 0xAF5000, 0xAF5FFF, "Kramara s.r.o.", "KRAMARA-S-R-O" },
+	{ 0x0050C2, 0xAF6000, 0xAF6FFF, "Energid", "ENERGID" },
+	{ 0x0050C2, 0xAF7000, 0xAF7FFF, "Midwest Microwave Solutions Inc.", "MIDWEST-MICROWAVE-SOLUTIONS" },
+	{ 0x0050C2, 0xAF8000, 0xAF8FFF, "Global Satellite Engineering", "GLOBAL-SATELLITE-ENGINEERING" },
+	{ 0x0050C2, 0xAF9000, 0xAF9FFF, "Ingenieurbuero Bickele und Buehler GmbH", "INGENIEURBUERO-BICKELE-UND-BUEHLER" },
+	{ 0x0050C2, 0xAFA000, 0xAFAFFF, "Absolute Fire Solutions Inc.", "ABSOLUTE-FIRE-SOLUTIONS" },
+	{ 0x0050C2, 0xAFB000, 0xAFBFFF, "PRIVATE", "PRIVATE" },
+	{ 0x0050C2, 0xAFC000, 0xAFCFFF, "Odus Technologies SA", "ODUS-TECHNOLOGIES" },
+	{ 0x0050C2, 0xAFD000, 0xAFDFFF, "HomeScenario, Inc.", "HOMESCENARIO" },
+	{ 0x0050C2, 0xAFE000, 0xAFEFFF, "Trolex Limited", "TROLEX" },
+	{ 0x0050C2, 0xAFF000, 0xAFFFFF, "XoByte LLC", "XOBYTE-LLC" },
+	{ 0x0050C2, 0xB00000, 0xB00FFF, "Saia-Burgess Controls AG", "SAIA-BURGESS-CONTROLS" },
+	{ 0x0050C2, 0xB01000, 0xB01FFF, "HSR Harald L. Reuter", "HSR-HARALD-L-REUTER" },
+	{ 0x0050C2, 0xB02000, 0xB02FFF, "MASTER CO LTD", "MASTER" },
+	{ 0x0050C2, 0xB03000, 0xB03FFF, "Spider Tecnologia Ind. e Com. Ltda.", "SPIDER-TECNOLOGIA-IND-E-COM-LTDA" },
+	{ 0x0050C2, 0xB04000, 0xB04FFF, "Ubiquiti Networks", "UBIQUITI-NETWORKS" },
+	{ 0x0050C2, 0xB05000, 0xB05FFF, "POLA s.r.l.", "POLA-S-R-L" },
+	{ 0x0050C2, 0xB06000, 0xB06FFF, "CompuDesigns, Inc.", "COMPUDESIGNS" },
+	{ 0x0050C2, 0xB07000, 0xB07FFF, "FARECO", "FARECO" },
+	{ 0x0050C2, 0xB08000, 0xB08FFF, "Goerlitz AG", "GOERLITZ" },
+	{ 0x0050C2, 0xB09000, 0xB09FFF, "Harper Chalice Group Limited", "HARPER-CHALICE-GROUP" },
+	{ 0x0050C2, 0xB0A000, 0xB0AFFF, "Indutherm Giesstechnologie GmbH", "INDUTHERM-GIESSTECHNOLOGIE" },
+	{ 0x0050C2, 0xB0B000, 0xB0BFFF, "Honeywell", "HONEYWELL" },
+	{ 0x0050C2, 0xB0C000, 0xB0CFFF, "SMARTB TECHNOLOGIES", "SMARTB-TECHNOLOGIES" },
+	{ 0x0050C2, 0xB0D000, 0xB0DFFF, "Japan Electronics System, Inc", "JAPAN-ELECTRONICS-SYSTEM" },
+	{ 0x0050C2, 0xB0E000, 0xB0EFFF, "KYAB Lulea AB", "KYAB-LULEA-AB" },
+	{ 0x0050C2, 0xB0F000, 0xB0FFFF, "NARA Controls Inc.", "NARA-CONTROLS" },
+	{ 0x0050C2, 0xB10000, 0xB10FFF, "Marine Entertainment Systems Ltd", "MARINE-ENTERTAINMENT" },
 
 };

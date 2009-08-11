@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.169 2009/08/11 20:38:51 peter Exp $ 
+ *  $Id: ChangeLog,v 1.170 2009/08/11 20:46:50 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20090811/PB
+	update databases
+
 20090808/PB
 	ipv6calc/ipv6calc.c
 	 - add auto-output format detection for revnibble
