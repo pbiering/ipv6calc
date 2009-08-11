@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.12 2007/02/06 07:12:24 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.13 2009/08/11 20:38:51 peter Exp $
 # Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -155,6 +155,24 @@ testscenarios | while read line; do
 		fi
 	fi
 done
+
+echo "Run 'ipv6calc' input validation tests..."
+./ipv6calc -m --in -? | while read inputformat; do
+	if echo $inputformat | grep -q '+'; then
+		echo "Test './ipv6calc -q --in $inputformat \"\" \"\"'"
+		./ipv6calc -q --in $inputformat "" ""
+		retval=$?
+	else
+		echo "Test './ipv6calc -q --in $inputformat \"\"'"
+		./ipv6calc -q --in $inputformat ""
+		retval=$?
+	fi
+	if [ $retval -ne 0 -a $retval -ne 1 ]; then
+		echo "Error executing 'ipv6calc'!"
+		exit 1
+	fi
+done
+
 
 retval=$?
 if [ $retval -eq 0 ]; then

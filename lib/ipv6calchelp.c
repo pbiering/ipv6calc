@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.15 2006/10/28 09:29:30 peter Exp $
- * Copyright  : 2002-2006 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calchelp.c,v 1.16 2009/08/11 20:38:51 peter Exp $
+ * Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -57,13 +57,15 @@ void printhelp_missinginputdata(void) {
 };
 
 /* list of input types */
-void printhelp_inputtypes(void) {
+void printhelp_inputtypes(const uint32_t formatoptions) {
 	int i, j;
 	size_t maxlen = 0;
 	char printformatstring[20];
-	
-	printversion();
-	printcopyright();
+
+	if ((formatoptions & FORMATOPTION_machinereadable) == 0) {	
+		printversion();
+		printcopyright();
+	};
 
 	/* look for longest type definition */
 	for (j = 0; j < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); j++) {
@@ -77,13 +79,17 @@ void printhelp_inputtypes(void) {
 		exit(EXIT_FAILURE);
 	};
 
-	snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds: %%s\n", (int) maxlen);
+	if ((formatoptions & FORMATOPTION_machinereadable) == 0) {	
+		snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds: %%s\n", (int) maxlen);
+	} else {
+		snprintf(printformatstring, sizeof(printformatstring) - 1, "%%-%ds\n", (int) maxlen);
+	}
 
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "Format string: %s\n", printformatstring);
 	};
 
-	fprintf(stderr, "\n Available input types:\n");
+	if ((formatoptions & FORMATOPTION_machinereadable) == 0) fprintf(stderr, "\n Available input types:\n");
 
 	/* run through matrix */
 	for (i = 0; i < (int) (sizeof(ipv6calc_formatmatrix) / sizeof(ipv6calc_formatmatrix[0])); i++) {
@@ -97,12 +103,16 @@ void printhelp_inputtypes(void) {
 					fprintf(stderr, "Format-Row %d: %08x - %s - %s\n", j, (unsigned int) ipv6calc_formatstrings[j].number, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
 				};
 				if (ipv6calc_formatstrings[j].number == ipv6calc_formatmatrix[i][0]) {
-					fprintf(stderr, printformatstring, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
+					if ((formatoptions & FORMATOPTION_machinereadable) == 0) {	
+						fprintf(stderr, printformatstring, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
+					} else {
+						fprintf(stdout, printformatstring, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
+					};
 				};
 			};
 		};
 	};
-	fprintf(stderr, "\n");
+	if ((formatoptions & FORMATOPTION_machinereadable) == 0) fprintf(stderr, "\n");
 };
 
 

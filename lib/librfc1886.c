@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.11 2007/01/31 16:21:47 peter Exp $
- * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc1886.c,v 1.12 2009/08/11 20:38:51 peter Exp $
+ * Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  RFC 1886 conform reverse nibble format string
@@ -144,6 +144,13 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 	int flag_tld = 0, flag_nld = 0, tokencounter = 0;
 	unsigned int noctet, nibblecounter = 0;
 	int xdigit;
+
+	if ((strlen(inputstring) < 4) || (strlen(inputstring) > 72)) {
+		/* min: .int */
+		/* max: f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.ip6.arpa */
+		snprintf(resultstring, NI_MAXHOST - 1, "Error in given nibble string, has not 4 to 72 chars!");
+		return (1);
+	};
 
 	ptrptr = &cptr;
 

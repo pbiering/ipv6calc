@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libifinet6.c
- * Version    : $Id: libifinet6.c,v 1.5 2005/09/15 12:32:21 peter Exp $
- * Copyright  : 2001-2002 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libifinet6.c,v 1.6 2009/08/11 20:38:51 peter Exp $
+ * Copyright  : 2001-2009 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function to converts a address string like shown in 
@@ -32,12 +32,12 @@ int libifinet6_ifinet6_to_ipv6addrstruct(char *addrstring, char *resultstring, i
 	char addr6p[8][5]; 
 
 	if ( (ipv6calc_debug & DEBUG_libifinet6) != 0 ) {
-		fprintf(stderr, "%s: Got input %s\n", DEBUG_function_name, addrstring);
+		fprintf(stderr, "%s: Got input '%s'\n", DEBUG_function_name, addrstring);
 	};
 	
 	/* simple test */
 	if ( strlen(addrstring) != 32 ) {
-		snprintf(resultstring,NI_MAXHOST - 1, "Given hex string '%s' has not 32 chars!", addrstring);
+		snprintf(resultstring,NI_MAXHOST - 1, "Error in given hex string, has not 32 chars!");
 		retval = 1;
 		return (retval);
 	};

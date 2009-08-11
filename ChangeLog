@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.168 2009/06/20 13:44:45 peter Exp $ 
+ *  $Id: ChangeLog,v 1.169 2009/08/11 20:38:51 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,23 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20090808/PB
+	ipv6calc/ipv6calc.c
+	 - add auto-output format detection for revnibble
+	 - do not print resultstring, if empty
+	ipv6calc/test_ipv6calc.sh
+	 - add input validation tests
+	lib/ipv6calchelp.[ch]
+	 - support machine readable output for input types
+	lib/libifinet6.c
+	lib/librfc2874.c
+	 - cosmetic fixes of error messages
+	lib/libipv4addr.c
+	lib/libipv6addr.c
+	lib/librfc1886.c
+	 - improve input validation
+	 - cosmetic fixes of error messages
+
 20090620/PB
 	databases/registries/update-registries.sh
 	 - fix IANA ipv6-unicast-address-assignments weblink problem

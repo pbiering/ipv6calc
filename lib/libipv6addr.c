@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.36 2007/08/11 12:04:58 peter Exp $
- * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv6addr.c,v 1.37 2009/08/11 20:38:51 peter Exp $
+ * Copyright  : 2001-2009 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Function library for IPv6 address handling
@@ -517,7 +517,15 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	resultstring[0] = '\0'; /* clear result string */
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s: Got input: %s\n", DEBUG_function_name, addrstring);
+		fprintf(stderr, "%s: Got input '%s'\n", DEBUG_function_name, addrstring);
+	};
+
+	if ((strlen(addrstring) < 2) || (strlen(addrstring) > 49)) {
+		/* min: :: */
+		/* max: ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/128 */
+		/* max: ffff:ffff:ffff:ffff:ffff:ffff:123.123.123.123/128 */
+		snprintf(resultstring, NI_MAXHOST - 1, "Error in given IPv6 address, has not 2 to 49 chars!");
+		return (1);
 	};
 
 	if (strlen(addrstring) > sizeof(tempstring) - 1) {
@@ -597,9 +605,9 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	};
 	if ( ! ( ( ( ccolons == 7 ) && ( cpoints == 0 ) ) ||  ( ( ccolons == 6 ) && ( cpoints == 3 ) ) ) ) {
 		if (strstr(addronlystring, "::")) {
-			snprintf(resultstring, NI_MAXHOST - 1, "Error, given address expanded to '%s' is not valid!", tempstring);
+			snprintf(resultstring, NI_MAXHOST - 1, "Error in given address expanded to '%s' is not valid!", tempstring);
 		} else {
-			snprintf(resultstring, NI_MAXHOST - 1, "Error, given address '%s' is not valid!", addrstring);
+			snprintf(resultstring, NI_MAXHOST - 1, "Error in given address '%s' is not valid!", addrstring);
 		};
 		retval = 1;
 		return (retval);
@@ -1049,7 +1057,7 @@ int tokenlsb64_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv
 	};
 	
 	if ( strlen(addrstring) != 16 ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "Error, given /token '%s' is not valid (length != 16!", addrstring);
+		snprintf(resultstring, NI_MAXHOST - 1, "Error in given token '%s' is not valid (length != 16!", addrstring);
 		retval = 1;
 		return (retval);
 	};
@@ -1087,7 +1095,7 @@ int tokenlsb64_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv
  */
 #define DEBUG_function_name "libipv6addr/identifier_to_ipv6addrstruct"
 int identifier_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
-	int retval = 1;
+	int retval = 1, i, ccolons = 0;
 	char tempstring[NI_MAXHOST];
 
 	resultstring[0] = '\0'; /* clear result string */
@@ -1096,8 +1104,22 @@ int identifier_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv
 		fprintf(stderr, "%s: Got input '%s'\n", DEBUG_function_name, addrstring);
 	};
 	
-	if ( strlen(addrstring) > 19 ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "Error, given identifier identifier '%s' is too long (length > 16!", addrstring);
+	if ((strlen(addrstring) < 2) || (strlen(addrstring) > 19)) {
+		/* min: :: */
+		/* max: ffff:ffff:ffff:ffff */
+		snprintf(resultstring, NI_MAXHOST - 1, "Error in given identifier identifier, has not 2 to 19 chars!");
+		retval = 1;
+		return (retval);
+	};
+
+	/* count ":", must be 2 to 3 */
+	for (i = 0; i < (int) strlen(addrstring); i++) {
+		if (addrstring[i] == ':') {
+			ccolons++;
+		};
+	};
+	if ((ccolons < 2) || (ccolons > 3)) {
+		snprintf(resultstring, NI_MAXHOST - 1, "Error in given identifier '%s' is not valid!", addrstring);
 		retval = 1;
 		return (retval);
 	};

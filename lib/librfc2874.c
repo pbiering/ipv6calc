@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.c
- * Version    : $Id: librfc2874.c,v 1.11 2007/01/31 16:21:47 peter Exp $
- * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc2874.c,v 1.12 2009/08/11 20:38:51 peter Exp $
+ * Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  RFC 2874 conform addresses (A6/DNAME) bitstring labels
@@ -279,7 +279,7 @@ int librfc2874_formatcheck(const char *string, char *infostring) {
 
 	/* check length */
 	if (length < 5) {
-		snprintf(infostring, NI_MAXHOST - 1, "Length %u too low", length);
+		snprintf(infostring, NI_MAXHOST - 1, "Error in given bitstring label, has less than 5 chars!");
 		return (1);
 	};
 	

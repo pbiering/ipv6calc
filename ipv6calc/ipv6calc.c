@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.33 2008/12/31 12:37:35 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.34 2009/08/11 20:38:51 peter Exp $
  * Copyright  : 2001-2008 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -487,7 +487,7 @@ int main(int argc,char *argv[]) {
 			printhelp_outputtypes(inputtype);
 			exit(EXIT_FAILURE);
 		} else if (inputtype == FORMAT_auto) {
-			printhelp_inputtypes();
+			printhelp_inputtypes(formatoptions);
 			exit(EXIT_FAILURE);
 		} else if (action == ACTION_auto) {
 			printhelp_actiontypes();
@@ -602,6 +602,13 @@ int main(int argc,char *argv[]) {
 			};
 		} else {
 			fprintf(stderr, "no result!\n");
+		};
+	};
+
+	/* auto set of output type*/
+	if (inputtype == FORMAT_revnibbles_int || inputtype == FORMAT_revnibbles_arpa) {
+		if ( outputtype == FORMAT_undefined ) {
+			outputtype = FORMAT_ipv6addr;
 		};
 	};
 
@@ -727,7 +734,7 @@ int main(int argc,char *argv[]) {
 	};
 
 	if (retval != 0) {
-		fprintf(stderr, "%s\n", resultstring);
+		if (strlen(resultstring) > 0) fprintf(stderr, "%s\n", resultstring);
 		exit(EXIT_FAILURE);
 	};
 	

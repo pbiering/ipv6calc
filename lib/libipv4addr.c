@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.20 2007/07/05 20:48:43 peter Exp $
- * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv4addr.c,v 1.21 2009/08/11 20:38:51 peter Exp $
+ * Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Function library for IPv4 address handling
@@ -259,11 +259,18 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	resultstring[0] = '\0'; /* clear result string */
 
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: got input %s\n", DEBUG_function_name,  addrstring);
+		fprintf(stderr, "%s: Got input '%s'\n", DEBUG_function_name,  addrstring);
+	};
+
+	if ((strlen(addrstring) < 7) || (strlen(addrstring) > 18)) {
+		/* min: 0.0.0.0 */
+		/* max: 123.123.123.123/32 */
+		snprintf(resultstring, NI_MAXHOST - 1, "Error in given dot notated IPv4 address, has not 7 to 18 chars!");
+		return (1);
 	};
 
 	if (strlen(addrstring) > sizeof(tempstring) - 1) {
-		fprintf(stderr, "%s: input too long: %s\n", DEBUG_function_name, addrstring);
+		fprintf(stderr, "%s: Input too long: %s\n", DEBUG_function_name, addrstring);
 		return (1);
 	};
 
@@ -273,6 +280,12 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 
 	/* save prefix length first, if available */
 	addronlystring = strtok_r(tempstring, "/", ptrptr);
+
+	if ( addronlystring == NULL ) {
+		fprintf(stderr, "Strange input: %s\n", addrstring);
+		return (1);
+	};
+
 	cp = strtok_r(NULL, "/", ptrptr);
 	if ( cp != NULL ) {
 		i = atoi(cp);
@@ -364,7 +377,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
  * out: ipv4addrp = changed IPv4 address structure
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libipv4calc/addrhex_to_ipv4addrstruct"
+#define DEBUG_function_name "libipv4addr/addrhex_to_ipv4addrstruct"
 int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv4addr *ipv4addrp, int flag_reverse) {
 	int retval = 1, result, i;
 	char *addronlystring, *cp;
@@ -378,11 +391,18 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6ca
 	resultstring[0] = '\0'; /* clear result string */
 
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: got input %s\n", DEBUG_function_name,  addrstring);
+		fprintf(stderr, "%s: Got input '%s'\n", DEBUG_function_name,  addrstring);
+	};
+
+	if ((strlen(addrstring) < 8)  || (strlen(addrstring) > 11)) {
+		/* min: ffffffff */
+		/* max: ffffffff/32 */
+		snprintf(resultstring, NI_MAXHOST - 1, "Error in given hex notated IPv4 address, has not 8 to 11 chars!");
+		return (1);
 	};
 
 	if (strlen(addrstring) > sizeof(tempstring) - 1) {
-		fprintf(stderr, "%s: input too long: %s\n", DEBUG_function_name, addrstring);
+		fprintf(stderr, "%s: Input too long: %s\n", DEBUG_function_name, addrstring);
 		return (1);
 	};
 
@@ -481,7 +501,7 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6ca
  * out: *resultstring = IPv4 address string
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libipv4calc/ipv4addrstruct_to_string"
+#define DEBUG_function_name "libipv4addr/ipv4addrstruct_to_string"
 int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST];
 
