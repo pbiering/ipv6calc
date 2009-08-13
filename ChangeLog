@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.171 2009/08/11 21:04:44 peter Exp $ 
+ *  $Id: ChangeLog,v 1.172 2009/08/13 18:25:53 peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,7 @@ Info:
 --------------------------------------------------------------------
 20090811/PB
 	update databases
+	ipv6calc/ipv6calc.c
 	 - add support for '-m' for '--out|action -?'
 	tag version 0.73.0
 
