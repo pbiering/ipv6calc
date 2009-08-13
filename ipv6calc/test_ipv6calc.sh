@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.13 2009/08/11 20:38:51 peter Exp $
-# Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6calc.sh,v 1.14 2009/08/13 17:58:22 peter Exp $
+# Copyright  : 2001-2009 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 
@@ -156,7 +156,7 @@ testscenarios | while read line; do
 	fi
 done
 
-echo "Run 'ipv6calc' input validation tests..."
+echo "Run 'ipv6calc' input validation tests...(empty input)"
 ./ipv6calc -m --in -? | while read inputformat; do
 	if echo $inputformat | grep -q '+'; then
 		echo "Test './ipv6calc -q --in $inputformat \"\" \"\"'"
@@ -165,6 +165,49 @@ echo "Run 'ipv6calc' input validation tests..."
 	else
 		echo "Test './ipv6calc -q --in $inputformat \"\"'"
 		./ipv6calc -q --in $inputformat ""
+		retval=$?
+	fi
+	if [ $retval -ne 0 -a $retval -ne 1 ]; then
+		echo "Error executing 'ipv6calc'!"
+		exit 1
+	fi
+done
+
+echo "Run 'ipv6calc' input validation tests...(too long input)"
+line="`perl -e 'print "x" x300'`"
+./ipv6calc -m --in -? | while read inputformat; do
+	if echo $inputformat | grep -q '+'; then
+		echo "Test './ipv6calc -q --in $inputformat \"$line\" \"$line\"'"
+		./ipv6calc -q --in $inputformat "$line" "$line"
+		retval=$?
+	else
+		echo "Test './ipv6calc -q --in $inputformat \"$line\"'"
+		./ipv6calc -q --in $inputformat "$line"
+		retval=$?
+	fi
+	if [ $retval -ne 0 -a $retval -ne 1 ]; then
+		echo "Error executing 'ipv6calc'!"
+		exit 1
+	fi
+done
+
+echo "Run 'ipv6calc' input validation tests...(strange input)"
+./ipv6calc -m --in -? | while read inputformat; do
+	case $inputformat in
+	    hex|ifinet6)
+		line="`perl -e 'print "x" x32'`"
+		;;
+	    *)
+		line="`perl -e 'print "x" x11'`"
+		;;
+	esac
+	if echo $inputformat | grep -q '+'; then
+		echo "Test './ipv6calc -q --in $inputformat \"$line\" \"$line\"'"
+		./ipv6calc -q --in $inputformat "$line" "$line"
+		retval=$?
+	else
+		echo "Test './ipv6calc -q --in $inputformat \"$line\"'"
+		./ipv6calc -q --in $inputformat "$line"
 		retval=$?
 	fi
 	if [ $retval -ne 0 -a $retval -ne 1 ]; then
