@@ -1,17 +1,28 @@
-#LyX 1.4.4 created this file. For more info see http://www.lyx.org/
-\lyxformat 245
+#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
 \begin_document
 \begin_header
 \textclass docbook
+\use_default_options false
 \language english
 \inputencoding auto
-\fontscheme default
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
 \graphics default
 \paperfontsize default
 \spacing single
+\use_hyperref false
 \papersize default
 \use_geometry false
 \use_amsmath 1
+\use_esint 0
 \cite_engine basic
 \use_bibtopic false
 \paperorientation portrait
@@ -24,7 +35,8 @@
 \papersides 1
 \paperpagestyle default
 \tracking_changes false
-\output_changes true
+\output_changes false
+\author "" 
 \end_header
 
 \begin_body
@@ -35,9 +47,9 @@ The ipv6calc Homepage
 
 \begin_layout Standard
 \begin_inset ERT
-status inlined
+status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><ad
 dress>pb at bieringer dot de</address></affiliation></author>
@@ -50,9 +62,9 @@ dress>pb at bieringer dot de</address></affiliation></author>
 
 \begin_layout Standard
 \begin_inset ERT
-status inlined
+status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 <revhistory> 
 \end_layout
@@ -64,11 +76,11 @@ status inlined
 
 \begin_layout Standard
 \begin_inset ERT
-status inlined
+status open
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
-<revision> <revnumber>2.0</revnumber> <date>2007-06-01</date> <authorinitials>PB<
+<revision> <revnumber>3.0</revnumber> <date>2010-03-01</date> <authorinitials>PB<
 /authorinitials></revision>
 \end_layout
 
@@ -79,9 +91,9 @@ status inlined
 
 \begin_layout Standard
 \begin_inset ERT
-status inlined
+status collapsed
 
-\begin_layout Standard
+\begin_layout Plain Layout
 
 </revhistory> 
 \end_layout
@@ -96,7 +108,7 @@ General
 \end_layout
 
 \begin_layout Standard
-ipv6calc is a small utility written in programming languate C to manipulate
+ipv6calc is a small utility written in programming language C to manipulate
  (not only) IPv6 addresses.
  Intentions were convering a given IPv6 address into compressed format,
  convering a given IPv6 address into the same format like shown in 
@@ -112,26 +124,79 @@ ip6_int
 \end_layout
 
 \begin_layout Standard
-This utility is also used to extend features on network-functions-ipv6 library,
- used by initscripts-ipv6.
+This utility was also used in the past to extend features on network-functions-i
+pv6 library, used by initscripts-ipv6.
 \end_layout
 
 \begin_layout Standard
 Note: this tool got also its 
-\begin_inset LatexCommand \url[freshmeat / ipv6calc]{http://freshmeat.net/projects/ipv6calc/}
+\begin_inset CommandInset href
+LatexCommand href
+name "freshmeat / ipv6calc"
+target "http://freshmeat.net/projects/ipv6calc/"
 
 \end_inset
 
  page (not maintained by the author)
 \end_layout
 
-\begin_layout Standard
-Hint: take also a look at the 
-\begin_inset LatexCommand \url[Advanced Network Management Laboratory / IPv6 Address Oracle]{http://steinbeck.ucs.indiana.edu:47401/}
+\begin_layout Subsection
+Included programs
+\end_layout
 
+\begin_layout Itemize
+\begin_inset Quotes eld
 \end_inset
 
- if you want to learn more about IPv6 addresses.
+ipv6calc
+\begin_inset Quotes erd
+\end_inset
+
+: the main utility
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+ipv6calcweb
+\begin_inset Quotes erd
+\end_inset
+
+: CGI wrapper for ipv6calc's address information output
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+ipv6logconv
+\begin_inset Quotes erd
+\end_inset
+
+: log converter (IPv4/IPv6)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+ipv6loganon
+\begin_inset Quotes erd
+\end_inset
+
+: log anonymizer (IPv4/IPv6)
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+ipv6logstats
+\begin_inset Quotes erd
+\end_inset
+
+: log statistic generator (IPv4/IPv6)
 \end_layout
 
 \begin_layout Section
@@ -151,7 +216,10 @@ The author of ipv6calc is
 \end_layout
 
 \begin_layout Itemize
-\begin_inset LatexCommand \url[Dr. Peter Bieringer]{mailto:pb@bieringer.de}
+\begin_inset CommandInset href
+LatexCommand href
+name "Dr. Peter Bieringer"
+target "mailto:pb@bieringer.de"
 
 \end_inset
 
@@ -168,12 +236,18 @@ Latest version of sources:
 
 \begin_layout Itemize
 Via CVS at 
-\begin_inset LatexCommand \url[DeepSpace6]{http://www.deepspace6.net/}
+\begin_inset CommandInset href
+LatexCommand href
+name "DeepSpace6"
+target "http://www.deepspace6.net/"
 
 \end_inset
 
 : 
-\begin_inset LatexCommand \url[DeepSpace6 / CVS instructions]{http://www.deepspace6.net/sections/cvs.html}
+\begin_inset CommandInset href
+LatexCommand href
+name "DeepSpace6 / CVS instructions"
+target "http://www.deepspace6.net/sections/cvs.html"
 
 \end_inset
 
@@ -182,12 +256,18 @@ Via CVS at
 
 \begin_layout Itemize
 Via web interface to CVS at 
-\begin_inset LatexCommand \url[DeepSpace6]{http://www.deepspace6.net/}
+\begin_inset CommandInset href
+LatexCommand href
+name "DeepSpace6"
+target "http://www.deepspace6.net/"
 
 \end_inset
 
 : 
-\begin_inset LatexCommand \url[DeepSpace6 / CVS web interface]{http://cvs.deepspace6.net/view/ipv6calc/}
+\begin_inset CommandInset href
+LatexCommand href
+name "DeepSpace6 / CVS web interface"
+target "http://cvs.deepspace6.net/view/ipv6calc/"
 
 \end_inset
 
@@ -196,12 +276,18 @@ Via web interface to CVS at
 
 \begin_layout Itemize
 Via FTP at 
-\begin_inset LatexCommand \url[DeepSpace6]{http://www.deepspace6.net/}
+\begin_inset CommandInset href
+LatexCommand href
+name "DeepSpace6"
+target "http://www.deepspace6.net/"
 
 \end_inset
 
 : 
-\begin_inset LatexCommand \url[DeepSpace6 / anonymous FTP]{ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/}
+\begin_inset CommandInset href
+LatexCommand href
+name "DeepSpace6 / anonymous FTP"
+target "ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/"
 
 \end_inset
 
@@ -210,7 +296,10 @@ Via FTP at
 
 \begin_layout Itemize
 Via FTP at 
-\begin_inset LatexCommand \url[ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/]{ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/}
+\begin_inset CommandInset href
+LatexCommand href
+name "ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/"
+target "ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/"
 
 \end_inset
 
@@ -239,12 +328,18 @@ as RPM
 
 \begin_layout Standard
 Currently only on 
-\begin_inset LatexCommand \url[rpmfind / ipv6calc]{http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc}
+\begin_inset CommandInset href
+LatexCommand href
+name "rpmfind / ipv6calc"
+target "http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc"
 
 \end_inset
 
 , but there are plans to publish at least source RPMS on 
-\begin_inset LatexCommand \url[DeepSpace6]{http://www.deepspace6.net/}
+\begin_inset CommandInset href
+LatexCommand href
+name "DeepSpace6"
+target "http://www.deepspace6.net/"
 
 \end_inset
 
@@ -260,9 +355,9 @@ Fedora
 \end_layout
 
 \begin_layout Standard
-Fedora Core 6 is the current developing platform, so use given hints above
- to create a RPM.
- Fedora 7 includes this package by default.
+Fedora 12 is the current developing platform, so use given hints above to
+ create a RPM.
+ Since Fedora 7 this package is included by default.
 \end_layout
 
 \begin_layout Subsubsection
@@ -272,7 +367,7 @@ Red Hat Enterprise Linux and clones
 \begin_layout Standard
 It's tested by the developer that creation of the RPM is working fine on
  RHEL4.
- RHEL5 includes this package by default.
+ Since RHEL5 this package is included by default.
 \end_layout
 
 \begin_layout Subsubsection
@@ -285,25 +380,15 @@ Linux Mandrake is very similar to Red Hat Linux, therefore a rebuild should
 \end_layout
 
 \begin_layout Subsubsection
-PLD:
-\end_layout
-
-\begin_layout Standard
-See 
-\begin_inset LatexCommand \url[rpmfind / ipv6calc]{http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc}
-
-\end_inset
-
-.
-\end_layout
-
-\begin_layout Subsubsection
 Debian GNU/Linux
 \end_layout
 
 \begin_layout Standard
 Package is maintained, more information can be found at 
-\begin_inset LatexCommand \url[http://packages.debian.org/ipv6calc]{http://packages.debian.org/ipv6calc}
+\begin_inset CommandInset href
+LatexCommand href
+name "http://packages.debian.org/ipv6calc"
+target "http://packages.debian.org/ipv6calc"
 
 \end_inset
 
@@ -316,7 +401,10 @@ NetBSD:
 
 \begin_layout Standard
 See here for more: 
-\begin_inset LatexCommand \url[http://www.netbsd.org/packages/net/ipv6calc/]{http://www.netbsd.org/packages/net/ipv6calc/}
+\begin_inset CommandInset href
+LatexCommand href
+name "http://www.netbsd.org/packages/net/ipv6calc/"
+target "http://www.netbsd.org/packages/net/ipv6calc/"
 
 \end_inset
 
@@ -329,17 +417,26 @@ FreeBSD:
 
 \begin_layout Standard
 See here for more: 
-\begin_inset LatexCommand \url[http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/]{http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/}
+\begin_inset CommandInset href
+LatexCommand href
+name "http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/"
+target "http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/"
 
 \end_inset
 
  (
-\begin_inset LatexCommand \url[http://www.freebsd.org/cgi/query-pr.cgi?pr=34441]{http://www.freebsd.org/cgi/query-pr.cgi?pr=34441}
+\begin_inset CommandInset href
+LatexCommand href
+name "http://www.freebsd.org/cgi/query-pr.cgi?pr=34441"
+target "http://www.freebsd.org/cgi/query-pr.cgi?pr=34441"
 
 \end_inset
 
 ), 
-\begin_inset LatexCommand \url[http://www.freshports.org/net-mgmt/ipv6calc/]{http://www.freshports.org/net-mgmt/ipv6calc/}
+\begin_inset CommandInset href
+LatexCommand href
+name "http://www.freshports.org/net-mgmt/ipv6calc/"
+target "http://www.freshports.org/net-mgmt/ipv6calc/"
 
 \end_inset
 
@@ -352,7 +449,10 @@ OpenBSD:
 
 \begin_layout Standard
 See here for more: 
-\begin_inset LatexCommand \url[http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/]{http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/}
+\begin_inset CommandInset href
+LatexCommand href
+name "http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/"
+target "http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/"
 
 \end_inset
 
@@ -381,7 +481,10 @@ Postings: only moderators are allowed to post
 
 \begin_layout Description
 Information: 
-\begin_inset LatexCommand \url[DeepSpace6 / maillist ipv6calc-announce]{http://lists.deepspace6.net/listinfo/ipv6calc-announce}
+\begin_inset CommandInset href
+LatexCommand href
+name "DeepSpace6 / maillist ipv6calc-announce"
+target "http://lists.deepspace6.net/listinfo/ipv6calc-announce"
 
 \end_inset
 
@@ -406,7 +509,10 @@ Postings: subscribers
 
 \begin_layout Description
 Information: 
-\begin_inset LatexCommand \url[DeepSpace6 / maillist ipv6calc]{http://lists.deepspace6.net/listinfo/ipv6calc}
+\begin_inset CommandInset href
+LatexCommand href
+name "DeepSpace6 / maillist ipv6calc"
+target "http://lists.deepspace6.net/listinfo/ipv6calc"
 
 \end_inset
 
@@ -447,7 +553,7 @@ ipv6calc
 \begin_inset Quotes erd
 \end_inset
 
- is able to recognice many (not only) IPv6 address formats and depending
+ is able to recognize many (not only) IPv6 address formats and depending
  on a selectable action (not required) a selectable output format can be
  specified.
  Also it has the capability to show detailed information of an IPv4/IPv6
@@ -621,12 +727,18 @@ Registry for address: reserved
 \begin_layout Standard
 There exists also a machine readable output (e.g.
  used by 'ipv6calcweb.cgi') - in addition, here 
-\begin_inset LatexCommand \url[IP2Location]{http://www.ip2location.com/}
+\begin_inset CommandInset href
+LatexCommand href
+name "IP2Location"
+target "http://www.ip2location.com/"
 
 \end_inset
 
  and/or 
-\begin_inset LatexCommand \url[GeoIP]{http://www.maxmind.com/}
+\begin_inset CommandInset href
+LatexCommand href
+name "GeoIP"
+target "http://www.maxmind.com/"
 
 \end_inset
 
@@ -1389,7 +1501,10 @@ Examples
 \begin_layout Standard
 A demonstration about which kind of statistics are possible to produce is
  shown at 
-\begin_inset LatexCommand \url[http://www.ipv6.bieringer.de/]{http://www.ipv6.bieringer.de/}
+\begin_inset CommandInset href
+LatexCommand href
+name "http://www.ipv6.bieringer.de/"
+target "http://www.ipv6.bieringer.de/"
 
 \end_inset
 
@@ -1641,7 +1756,10 @@ A demonstration about which kind of output is possible to produce is shown
 \end_layout
 
 \begin_layout Itemize
-\begin_inset LatexCommand \url[http://www.ipv6.bieringer.de/]{http://www.ipv6.bieringer.de/}
+\begin_inset CommandInset href
+LatexCommand href
+name "http://www.ipv6.bieringer.de/"
+target "http://www.ipv6.bieringer.de/"
 
 \end_inset
 
@@ -1649,7 +1767,10 @@ A demonstration about which kind of output is possible to produce is shown
 \end_layout
 
 \begin_layout Itemize
-\begin_inset LatexCommand \url[http://ipv6.aerasec.de/index2.html]{http://ipv6.aerasec.de/index2.html}
+\begin_inset CommandInset href
+LatexCommand href
+name "http://ipv6.aerasec.de/index2.html"
+target "http://ipv6.aerasec.de/index2.html"
 
 \end_inset
 
@@ -1657,7 +1778,10 @@ A demonstration about which kind of output is possible to produce is shown
 \end_layout
 
 \begin_layout Itemize
-\begin_inset LatexCommand \url[http://www.sixxs.net/tools/ipv6calc/]{http://www.sixxs.net/tools/ipv6calc/}
+\begin_inset CommandInset href
+LatexCommand href
+name "http://www.sixxs.net/tools/ipv6calc/"
+target "http://www.sixxs.net/tools/ipv6calc/"
 
 \end_inset
 
@@ -1665,7 +1789,10 @@ A demonstration about which kind of output is possible to produce is shown
 \end_layout
 
 \begin_layout Itemize
-\begin_inset LatexCommand \url[http://ipv6-info.internet2.edu/]{http://ipv6-info.internet2.edu/}
+\begin_inset CommandInset href
+LatexCommand href
+name "http://ipv6-info.internet2.edu/"
+target "http://ipv6-info.internet2.edu/"
 
 \end_inset
 
@@ -1752,7 +1879,10 @@ Examples
 
 \begin_layout Standard
 A demonstration with real data is available at 
-\begin_inset LatexCommand \url[http://mirrors.bieringer.de/stats/timeline.html]{http://mirrors.bieringer.de/stats/timeline.html}
+\begin_inset CommandInset href
+LatexCommand href
+name "http://mirrors.bieringer.de/stats/timeline.html"
+target "http://mirrors.bieringer.de/stats/timeline.html"
 
 \end_inset
 

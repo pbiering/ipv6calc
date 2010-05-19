@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.14 2009/08/13 17:58:22 peter Exp $
-# Copyright  : 2001-2009 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6calc.sh,v 1.15 2010/05/19 21:17:06 peter Exp $
+# Copyright  : 2001-2010 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 
@@ -48,7 +48,14 @@ cat <<END | grep -v '^#'
 --in ipv6 --out ipv6 --printcompressed --uppercase 0:0:0:0:0:ffff:129.144.52.38		=::FFFF:129.144.52.38
 ## uncompressed
 --addr_to_uncompressed 3ffe:ffff:100:f101::1				=3ffe:ffff:100:f101:0:0:0:1
---in ipv6 --out ipv6 --printuncompressed 3ffe:ffff:100:f101::1	=3ffe:ffff:100:f101:0:0:0:1
+--in ipv6 --out ipv6 --printuncompressed 3ffe:ffff:100:f101::1		=3ffe:ffff:100:f101:0:0:0:1
+--in ipv6 --out ipv6 --printuncompressed 2001:db8:0:cd30:1:2:3::	=2001:db8:0:cd30:1:2:3:0
+--in ipv6 --out ipv6 --printuncompressed 2001:db8:0:cd30:1::2		=2001:db8:0:cd30:1:0:0:2
+--in ipv6 --out ipv6 --printuncompressed 2001:db8:0:1::2:3		=2001:db8:0:1:0:0:2:3
+--in ipv6 --out ipv6 --printuncompressed 2001:db8:0:cd30:1:2::		=2001:db8:0:cd30:1:2:0:0
+--in ipv6 --out ipv6 --printuncompressed 2001:db8:0:cd30:1:2::4		=2001:db8:0:cd30:1:2:0:4
+--in ipv6 --out ipv6 --printuncompressed ::db8:0:cd30:1:2:3:4		=0:db8:0:cd30:1:2:3:4
+--in ipv6 --out ipv6 --printuncompressed ::1:cd30:1:2:3:4		=0:0:1:cd30:1:2:3:4
 --addr_to_uncompressed 3ffe:ffff:100:f101::1/64				=3ffe:ffff:100:f101:0:0:0:1/64
 --addr_to_uncompressed ::13.1.68.3					=0:0:0:0:0:0:13.1.68.3
 --addr_to_uncompressed ::013.01.068.0003				=0:0:0:0:0:0:13.1.68.3
@@ -132,7 +139,7 @@ testscenarios | while read line; do
 	fi
 
 	# extract result
-	command="`echo $line | awk -F= '{ print $1 }' | sed 's/\W*$//g'`"
+	command="`echo $line | awk -F= '{ print $1 }' | sed 's/ $//g'`"
 	result="`echo $line | awk -F= '{ print $2 }'`"
 	if [ -z "$result" -o -z "$command" ]; then
 		echo "Something is wrong in line '$line'"
@@ -154,7 +161,7 @@ testscenarios | while read line; do
 			exit 1
 		fi
 	fi
-done
+done || exit 1 
 
 echo "Run 'ipv6calc' input validation tests...(empty input)"
 ./ipv6calc -m --in -? | while read inputformat; do

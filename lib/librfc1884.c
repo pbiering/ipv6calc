@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.c
- * Version    : $Id: librfc1884.c,v 1.7 2007/01/31 16:21:47 peter Exp $
- * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc1884.c,v 1.8 2010/05/19 21:17:06 peter Exp $
+ * Copyright  : 2001-2010 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for conversions defined in RFC 1884
@@ -49,7 +49,7 @@ int compaddr_to_uncompaddr(const char *addrstring, char *resultstring) {
 
 		/* check for additional "::" occurance - not allowed! */
 		if (strstr(strp+1, "::")) {
-			snprintf(resultstring, NI_MAXHOST - 1, "%s", "More than 2 colons in address are not allowed!");
+			snprintf(resultstring, NI_MAXHOST - 1, "%s", "More than 1 block of 2 colons in address is not allowed!");
 			retval = 1;
 			return (retval);
 		};
@@ -63,18 +63,33 @@ int compaddr_to_uncompaddr(const char *addrstring, char *resultstring) {
 				cnt += 1;
 				break;
 			};
-	    };
+		};
 		cp = tempstring;
 		while (*cp != '\0') {
 			*op++ = *cp++;
 			if (*(cp-1) == ':' && *cp == ':') {
+				if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
+					fprintf(stderr, "%s: cnt: %d\n", DEBUG_function_name, cnt);
+				};
 				if ((cp-1) == tempstring) {
+					if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
+						fprintf(stderr, "%s: fill one 0:\n", DEBUG_function_name, cnt);
+					};
 					op--;
 					*op++ = '0';
 					*op++ = ':';
 				};
-		   		*op++ = '0';
+				if (cnt < 8) {
+					fprintf(stderr, "%s: fill one 0\n", DEBUG_function_name, cnt);
+			   		*op++ = '0';
+				} else if (cnt == 8) {
+					fprintf(stderr, "%s: replace : by 0\n", DEBUG_function_name, cnt);
+					op--;
+				};
 				while (cnt++ < 7) {
+					if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
+						fprintf(stderr, "%s: fill one :0\n", DEBUG_function_name, cnt);
+					};
 					*op++ = ':';
 					*op++ = '0';
 				};

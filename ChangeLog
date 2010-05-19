@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.173 2009/08/13 18:26:44 peter Exp $ 
+ *  $Id: ChangeLog,v 1.174 2010/05/19 21:17:06 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,27 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20100427/PB
+	lib/librfc1884.c: bugfix regarding uncompressing an address
+	ipv6calc/test_ipv6calc.c: add some testcases
+
+20090808/PB
+	ipv6calc/ipv6calc.c
+	 - add auto-output format detection for revnibble
+	 - do not print resultstring, if empty
+	ipv6calc/test_ipv6calc.sh
+	 - add input validation tests
+	lib/ipv6calchelp.[ch]
+	 - support machine readable output for input types
+	lib/libifinet6.c
+	lib/librfc2874.c
+	 - cosmetic fixes of error messages
+	lib/libipv4addr.c
+	lib/libipv6addr.c
+	lib/librfc1886.c
+	 - improve input validation
+	 - cosmetic fixes of error messages
+
 20090811/PB
 	update databases
 	ipv6calc/ipv6calc.c
@@ -708,7 +729,7 @@ Info:
 	ipv6calc: fix not working showtypes	
 	new: ipv6calcweb.cgi: Perl wrapper program for web interface
 	replace all "strtok" to "strtok_r" because of problems due calls in subfunctions (thanks to manpage...)
-          remove "-ansi" from compiling options
+	remove "-ansi" from compiling options
 	ipv6logconv: add output format "any", fills address, referer and user with proper information
 	some code lint
 
@@ -913,7 +934,7 @@ Info:
 	Rename internal used functions
 	Rename options (old ones still work)
 	Change IPv6 address compression method from getaddrinfo to
-     native calculation (hopefully bugless)
+	native calculation (hopefully bugless)
 	Some review
 
 0.12: Peter Bieringer <pb@bieringer.de>
