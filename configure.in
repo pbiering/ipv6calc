@@ -1,9 +1,11 @@
 dnl Project: ipv6calc
 dnl File   : configure.in
-dnl Version: $Id: configure.in,v 1.28 2009/08/11 21:04:44 peter Exp $
+dnl Version: $Id: configure.in,v 1.29 2010/05/20 16:21:22 peter Exp $
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(ipv6calc, 0.73.0, ipv6calc@deepspace6.net, ipv6calc)
+AC_INIT(ipv6calc, 0.74.0, ipv6calc@deepspace6.net, ipv6calc)
+
+AC_DEFINE(COPYRIGHT_YEAR, "2010", [Copyright year])
 
 dnl Define version header
 AC_CONFIG_HEADER(config.h)

@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.175 2010/05/20 14:49:38 peter Exp $ 
+ *  $Id: ChangeLog,v 1.176 2010/05/20 16:21:22 peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,8 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
 20100520/PB
+	configure.in: add value for copyright year, update version number
+	some header files: replace hardcoded copyright year with value
 	lib/librfc1884.c: minor bugfix
 
 	From http://patch-tracker.debian.org/package/ipv6calc/0.73.0-3

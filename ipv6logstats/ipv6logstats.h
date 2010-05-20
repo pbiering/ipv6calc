@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.6 2005/10/20 16:22:41 peter Exp $
+ * Version    : $Id: ipv6logstats.h,v 1.7 2010/05/20 16:21:22 peter Exp $
  * Copyright  : 2003-2005 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -10,7 +10,7 @@
 
 /* global program related definitions */
 #define PROGRAM_NAME "ipv6logstats"
-#define PROGRAM_COPYRIGHT "(P) & (C) 2003-2005 by Peter Bieringer <pb (at) bieringer.de>"
+#define PROGRAM_COPYRIGHT "(P) & (C) 2003-" COPYRIGHT_YEAR " by Peter Bieringer <pb (at) bieringer.de>"
 
 #define STATS_VERSION_MAJOR	1
 #define STATS_VERSION_MINOR	2
