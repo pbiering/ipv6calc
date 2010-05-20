@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.174 2010/05/19 21:17:06 peter Exp $ 
+ *  $Id: ChangeLog,v 1.175 2010/05/20 14:49:38 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,14 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20100520/PB
+	lib/librfc1884.c: minor bugfix
+
+	From http://patch-tracker.debian.org/package/ipv6calc/0.73.0-3
+	ipv6calc/showinfo.c: fix typo regarding Teredo addresses (not affecting -m)
+	lib/ipv6calchelp.c: fix segfault
+	*/Makefile.in: fixes
+
 20100427/PB
 	lib/librfc1884.c: bugfix regarding uncompressing an address
 	ipv6calc/test_ipv6calc.c: add some testcases

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.17 2009/08/11 21:04:44 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.18 2010/05/20 14:49:38 peter Exp $
  * Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -180,7 +180,7 @@ void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoption
 				if (ipv6calc_formatstrings[j].number == ipv6calc_formatmatrix[i][0]) {
 					fprintf(stderr, printformatstring, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
 				} else {
-					fprintf(stdout, printformatstring, ipv6calc_formatstrings[j].token);
+					fprintf(stdout, printformatstring, ipv6calc_formatstrings[j].token, "(empty)");
 				};
 				break;
 			};
