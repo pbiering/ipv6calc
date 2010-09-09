@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.12 2009/08/11 20:38:51 peter Exp $
- * Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc1886.c,v 1.13 2010/09/09 20:42:55 peter Exp $
+ * Copyright  : 2002-2010 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  RFC 1886 conform reverse nibble format string
@@ -47,6 +47,12 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 	if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
 		fprintf(stderr, "%s: flag_prefixuse %d\n", DEBUG_function_name, (*ipv6addrp).flag_prefixuse);
 	};
+
+	/* 20100909: following code would take care of prefix length before printing the nibbles, but break old behavior
+	if ((*ipv6addrp).flag_prefixuse != 0) {
+		ipv6addrstruct_maskprefix(ipv6addrp);
+	};
+	*/
 
 	if ( ((formatoptions & (FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_printstart | FORMATOPTION_printend)) == 0 ) && ((*ipv6addrp).flag_prefixuse != 0) ) {
 		/* simulate old behavior */
