@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.176 2010/05/20 16:21:22 peter Exp $ 
+ *  $Id: ChangeLog,v 1.177 2010/09/21 19:01:15 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,12 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20100921/PB
+	update databases
+	lib/librfc1886.c: take care of prefix length before printing nibbles
+	 (bugfix, but breaking old behavior, if prefix length is used)
+	tag version 0.80.0
+
 20100520/PB
 	configure.in: add value for copyright year, update version number
 	some header files: replace hardcoded copyright year with value
