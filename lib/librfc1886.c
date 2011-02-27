@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.14 2010/09/21 19:01:16 peter Exp $
+ * Version    : $Id: librfc1886.c,v 1.15 2011/02/27 11:34:36 peter Exp $
  * Copyright  : 2002-2010 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -48,10 +48,11 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 		fprintf(stderr, "%s: flag_prefixuse %d\n", DEBUG_function_name, (*ipv6addrp).flag_prefixuse);
 	};
 
-	/* 20100909: take care of prefix length before printing the nibbles, but break old behavior */
+	/* 20100909: following code would take care of prefix length before printing the nibbles, but break old behavior
 	if ((*ipv6addrp).flag_prefixuse != 0) {
 		ipv6addrstruct_maskprefix(ipv6addrp);
 	};
+	*/
 
 	if ( ((formatoptions & (FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_printstart | FORMATOPTION_printend)) == 0 ) && ((*ipv6addrp).flag_prefixuse != 0) ) {
 		/* simulate old behavior */
@@ -150,10 +151,10 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 	unsigned int noctet, nibblecounter = 0;
 	int xdigit;
 
-	if ((strlen(inputstring) < 4) || (strlen(inputstring) > 72)) {
+	if ((strlen(inputstring) < 4) || (strlen(inputstring) > 73)) {
 		/* min: .int */
-		/* max: f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.ip6.arpa */
-		snprintf(resultstring, NI_MAXHOST - 1, "Error in given nibble string, has not 4 to 72 chars!");
+		/* max: f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.ip6.arpa. */
+		snprintf(resultstring, NI_MAXHOST - 1, "Error in given nibble string, has not 4 to 73 chars!");
 		return (1);
 	};
 
@@ -166,18 +167,18 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 	snprintf(tempstring, sizeof(tempstring) - 1, "%s", inputstring);
 	string_to_lowcase(tempstring);
 
-	string_to_reverse(tempstring);	
-	
-	if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-		fprintf(stderr, "%s: reverse copied string: %s\n", DEBUG_function_name, tempstring);
-	};
-
 	/* check string */
 	retval = librfc1886_formatcheck(tempstring, resultstring);
 	if (retval != 0) {
 		return (1);
 	};
 	
+	string_to_reverse(tempstring);	
+	
+	if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
+		fprintf(stderr, "%s: reverse copied string: %s\n", DEBUG_function_name, tempstring);
+	};
+
 	/* run through nibbles */
 	token = strtok_r(tempstring, ".", ptrptr);
 
@@ -287,14 +288,31 @@ int librfc1886_formatcheck(const char *string, char *infostring) {
 
 	strncpy(tempstring, string, sizeof(tempstring) - 1);
 	
+	if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
+		fprintf(stderr, "%s: check %s\n", DEBUG_function_name, tempstring);
+	};
+
 	length = strlen(tempstring);
+
+	string_to_reverse(tempstring);	
 	
 	/* run through nibbles */
 	token = strtok_r(tempstring, ".", ptrptr);
 
 	while(token != NULL) {
+		if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
+			fprintf(stderr, "%s: check token: %s (tld: %d, nld: %d, tokencounter: %d)\n", DEBUG_function_name, token, flag_tld, flag_nld, tokencounter + 1);
+		};
+
 		if (strcmp(token, "apra") == 0) {
-			if (flag_tld == 0) {
+			/* arpa (reverse) */
+			if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
+				fprintf(stderr, "%s: found: arpa\n", DEBUG_function_name);
+			};
+			if (flag_tld == 0 && tokencounter == 0) {
+				if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
+					fprintf(stderr, "%s: found TLD: arpa\n", DEBUG_function_name);
+				};
 				flag_tld = 1;
 				goto NEXT_librfc1886_formatcheck;
 			} else {
@@ -303,7 +321,14 @@ int librfc1886_formatcheck(const char *string, char *infostring) {
 			};
 		};
 		if (strcmp(token, "tni") == 0) {
-			if (flag_tld == 0) {
+			/* int (reverse) */
+			if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
+				fprintf(stderr, "%s: found: int\n", DEBUG_function_name);
+			};
+			if (flag_tld == 0 && tokencounter == 0) {
+				if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
+					fprintf(stderr, "%s: found TLD: int\n", DEBUG_function_name);
+				};
 				flag_tld = 1;
 				goto NEXT_librfc1886_formatcheck;
 			} else {
@@ -311,8 +336,15 @@ int librfc1886_formatcheck(const char *string, char *infostring) {
 				return (1);
 			};
 		};
-		if (tokencounter == 1 && flag_tld == 1 && flag_nld == 0) {
-			if (strcmp(token, "6pi") == 0) {
+		if (strcmp(token, "6pi") == 0) {
+			/* ip6 (reverse) */
+			if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
+				fprintf(stderr, "%s: found: ip6\n", DEBUG_function_name);
+			};
+			if (tokencounter == 1 && flag_tld == 1 && flag_nld == 0) {
+				if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
+					fprintf(stderr, "%s: found NLD: ip6\n", DEBUG_function_name);
+				};
 				flag_nld = 1;
 				goto NEXT_librfc1886_formatcheck;
 			} else {
@@ -343,6 +375,10 @@ int librfc1886_formatcheck(const char *string, char *infostring) {
 NEXT_librfc1886_formatcheck:
 		token = strtok_r(NULL, ".", ptrptr);
 		tokencounter++;
+	};
+
+	if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
+		fprintf(stderr, "%s: check %s is ok\n", DEBUG_function_name, string);
 	};
 
 	return (0);
