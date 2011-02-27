@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.35 2009/08/11 21:04:44 peter Exp $
- * Copyright  : 2001-2009 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calc.c,v 1.36 2011/02/27 11:27:14 peter Exp $
+ * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
@@ -728,6 +728,10 @@ int main(int argc,char *argv[]) {
 			argc--;
 			break;
 			
+		case FORMAT_auto_noresult:
+			fprintf(stderr, " Input-type isn't autodetected\n");
+			exit(EXIT_FAILURE);
+
 		default:
 			fprintf(stderr, " Input-type isn't implemented\n");
 			exit(EXIT_FAILURE);
@@ -878,6 +882,10 @@ int main(int argc,char *argv[]) {
 			outputtype = FORMAT_ipv4addr;
 		} else if ( ((inputtype == FORMAT_ipv4addr) || (inputtype == FORMAT_ipv4hex) || (inputtype == FORMAT_ipv4revhex)) && (action == ACTION_undefined) ) {
 			outputtype = FORMAT_ipv4addr;
+		} else if ( (inputtype == FORMAT_mac) ) {
+			outputtype = FORMAT_mac;
+		} else if ( (inputtype == FORMAT_bitstring) || (inputtype == FORMAT_base85) ) {
+			outputtype = FORMAT_ipv6addr;
 		};
 
 		if ( outputtype != FORMAT_undefined ) {
@@ -1123,6 +1131,11 @@ int main(int argc,char *argv[]) {
 			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
 			formatoptions |= FORMATOPTION_printsuffix;
 			retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, formatoptions);
+			break;
+			
+		case FORMAT_mac:
+			if (macaddr.flag_valid != 1) { fprintf(stderr, "No valid MAC address given!\n"); exit(EXIT_FAILURE); };
+			retval = macaddrstruct_to_string(&macaddr, resultstring, formatoptions);
 			break;
 			
 		case FORMAT_iid_token:
