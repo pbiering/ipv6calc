@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.10 2007/01/31 16:21:47 peter Exp $
- * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libmac.c,v 1.11 2011/02/27 11:38:43 peter Exp $
+ * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library MAC address handling
@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include "libipv6calc.h"
 #include "libmac.h"
+#include "ipv6calctypes.h"
 
 static char ChSet[] = "0123456789abcdefABCDEF:- ";
 
@@ -120,3 +121,29 @@ void mac_clearall(ipv6calc_macaddr *macaddrp) {
 
 	return;
 };
+
+
+/*
+ * stores the macaddr structure in a string
+ *
+ * in:  macaddr = MAC address structure
+ * out: *resultstring = MAC address string
+ * ret: ==0: ok, !=0: error
+ */
+#define DEBUG_function_name "libmac/macaddrstruct_to_string"
+int macaddrstruct_to_string(const ipv6calc_macaddr *macaddrp, char *resultstring, const uint32_t formatoptions) {
+	char tempstring[NI_MAXHOST];
+
+	/* address */
+	snprintf(tempstring, sizeof(tempstring) - 1, "%02x:%02x:%02x:%02x:%02x:%02x", (unsigned int) macaddrp->addr[0], (unsigned int) macaddrp->addr[1], (unsigned int) macaddrp->addr[2], (unsigned int) macaddrp->addr[3], (unsigned int) macaddrp->addr[4], (unsigned int) macaddrp->addr[5]);
+
+	if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
+		snprintf(resultstring, NI_MAXHOST - 1, "MAC=%s", tempstring);
+	} else {
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
+	};
+
+	return(0);
+};
+#undef DEBUG_function_name
+
