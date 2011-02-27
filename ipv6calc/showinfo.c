@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.41 2010/05/20 14:49:38 peter Exp $
- * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: showinfo.c,v 1.42 2011/02/27 11:24:53 peter Exp $
+ * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Function to show information about a given IPv6 address
@@ -410,7 +410,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 			printout(tempstring);
 		};
 	} else {
-		fprintf(stderr, "IPv4 address: %s\n", tempipv4string);
+		fprintf(stdout, "IPv4 address: %s\n", tempipv4string);
 	};	
 
 	/* get registry string */
@@ -423,7 +423,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY%s=%s", embeddedipv4string, helpstring);
 		printout(tempstring);
 	} else {
-		fprintf(stderr, "IPv4 registry%s: %s\n", embeddedipv4string, helpstring);
+		fprintf(stdout, "IPv4 registry%s: %s\n", embeddedipv4string, helpstring);
 	};
 
 #ifdef SUPPORT_IP2LOCATION
@@ -696,7 +696,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		retval = libipv4addr_get_registry_string(&ipv4addr, helpstring);
 		if ( machinereadable != 0 ) {
 		} else {
-			fprintf(stderr, "IPv4 registry for 6to4 address: %s\n", helpstring);
+			fprintf(stdout, "IPv4 registry for 6to4 address: %s\n", helpstring);
 		};
 	};
 
@@ -714,7 +714,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "TEREDO-CLIENT");
 		print_ipv4addr(&ipv4addr2, formatoptions | FORMATOPTION_printembedded, "TEREDO-SERVER");
 
-		retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr2, helpstring, 0);
+		retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, helpstring, 0);
 		if ( retval != 0 ) {
 			fprintf(stderr, "Error converting IPv4 address to string\n");
 			retval = 1;
@@ -736,7 +736,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		
 		if ( machinereadable != 0 ) {
 		} else {
-			fprintf(stderr, "IPv4 registry for Teredo server address: %s\n", helpstring);
+			fprintf(stdout, "IPv4 registry for Teredo server address: %s\n", helpstring);
 		};
 	};
 
