@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.177 2010/09/21 19:01:15 peter Exp $ 
+ *  $Id: ChangeLog,v 1.178 2011/02/27 12:06:19 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,32 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20110227/PB
+	databases:
+	 - change from txt to xml for IANA data
+	 - update
+	ipv6calc/test_ipv6calc.c:
+	 -add good/bad testcases for explicit and autodetection input
+	 - improve catch of errors
+	ipv6calc/showinfo.c:
+	 - fix buggy fprintf output devices
+	ipv6calc/ipv6calc.c:
+	 - add support for output format FORMAT_mac
+	 - extend auto-output detection for input format FORMAT_mac, FORMAT_bitstring, FORMAT_base85
+	 - add dedicated error message if auto-input detection doesn't work
+	lib/librfc1886.c:
+	 - fix librfc1886_formatcheck for proper work with autodetection
+	lib/librfc1884.c:
+	 - fix debug messages
+	lib/libmac.[ch]:
+	 - add function macaddrstruct_to_string
+	lib/libipv6calc.c:
+	 - improve autodetection
+	lib/libipv6addr.c, lib/libipv4addr.c:
+	 - improve format check
+	lib/ipv6calctypes.h:
+	 - add new format type for non-working autodetection
+
 20100921/PB
 	update databases
 	lib/librfc1886.c: take care of prefix length before printing nibbles
