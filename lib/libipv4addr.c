@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.21 2009/08/11 20:38:51 peter Exp $
- * Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv4addr.c,v 1.22 2011/02/27 11:41:57 peter Exp $
+ * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Function library for IPv4 address handling
@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "libipv4addr.h"
 #include "ipv6calctypes.h"
@@ -245,9 +246,9 @@ uint32_t ipv4addr_gettype(/*@unused@*/ const ipv6calc_ipv4addr *ipv4addrp) {
  * out: ipv4addrp = changed IPv4 address structure
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libipv4calc/addr_to_ipv4addrstruct"
+#define DEBUG_function_name "libipv4addr/addr_to_ipv4addrstruct"
 int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv4addr *ipv4addrp) {
-	int retval = 1, result, i, cpoints = 0;
+	int retval = 1, result, i, cpoints = 0, cdigits = 0;
 	char *addronlystring, *cp;
 	int expecteditems = 0;
 	int compat[4];
@@ -303,14 +304,26 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 		};
 	};
 
-	/* count ".", must be 3 */
+	/* count "." and digits */
 	for (i = 0; i < (int) strlen(addronlystring); i++) {
 		if (addronlystring[i] == '.') {
 			cpoints++;
 		};
+		if (isdigit(addronlystring[i])) {
+			cdigits++;
+		};
 	};
+
+	/* check amount of ".", must be 3 */
 	if ( cpoints != 3 ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "Error, given address '%s' is not valid (only %d dots)!", addronlystring, cpoints);
+		snprintf(resultstring, NI_MAXHOST - 1, "Error, given IPv4 address '%s' is not valid (only %d dots)!", addronlystring, cpoints);
+		retval = 1;
+		return (retval);
+	};
+
+	/* amount of "." and digits must be length */
+	if (cdigits + cpoints != strlen(addronlystring)) {
+		snprintf(resultstring, NI_MAXHOST - 1, "Error, given IPv4 address '%s' is not valid!", addronlystring);
 		retval = 1;
 		return (retval);
 	};
@@ -532,7 +545,7 @@ int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, cha
  * out: *resultstring = Registry string
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libipv4calc/get_registry_string"
+#define DEBUG_function_name "libipv4addr/get_registry_string"
 int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring) {
 	int i;
 	int match = -1;
@@ -621,7 +634,7 @@ int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *re
  * in:  ipv4addr = IPv4 address structure
  * out: assignment number (-1 = no result)
  */
-#define DEBUG_function_name "libipv4calc/getregistry"
+#define DEBUG_function_name "libipv4addr/getregistry"
 int ipv4addr_getregistry(const ipv6calc_ipv4addr *ipv4addrp) {
 	char resultstring[NI_MAXHOST];
 	int i;
