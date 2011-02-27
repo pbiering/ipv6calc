@@ -2,17 +2,19 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.24 2007/03/03 11:57:28 peter Exp $
-# Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: create-registry-list.pl,v 1.25 2011/02/27 11:45:10 peter Exp $
+# Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
 # Information:
 #  Perl program which creates IPv4 address assignement header
 # Requires:
 #  /usr/bin/aggregate
+#  XML::Simple
 
 
 use IPC::Open2;
+use XML::Simple;
 #use strict;
 
 if (! -x "/usr/bin/aggregate") {
@@ -46,7 +48,7 @@ my (@arin, @apnic, @ripencc, @iana, @lacnic, @afrinic);
 
 my (@arin_agg, @apnic_agg, @ripencc_agg, @iana_agg, @lacnic_agg, @afrinic_agg);
 
-my $global_file = "../registries/iana/ipv4-address-space";
+my $global_file = "../registries/iana/ipv4-address-space.xml";
 
 my %assignments;
 
@@ -120,55 +122,38 @@ sub check_in_list($) {
 
 # Should't be used, a little bit obsolete
 sub proceed_global() {
-	# Proceed first global IANA file
-	print "Proceed file: " . $global_file . "\n";
-
-	open(FILE, "<$global_file") || die "Cannot open file: $global_file";
-
-	my $line;
 	my $ipv4; my $length;
 	my ($ipv4_start, $ipv4_end);
-	while (<FILE>) {
-		$line = $_;
-		chomp $line;
-		my $reg;
 
-		if ( $line =~ /^\d{3}\// ) {
-			# single entry
-			(my $block, my $month, my $year, $reg, my $dummy) = split /\s+/, $line;
+	# Proceed first global IANA file
+	print "Proceed file (XML): " . $global_file . "\n";
 
-			($block, $length) = split /\//, $block;
+	my $xs = XML::Simple->new();
+	my $xd = $xs->XMLin($global_file) || die "Cannot open/parse file: $global_file";
 
-			$ipv4_start = int($block);
-			$ipv4_end = int($block);
+	for my $e1 ($xd->{'record'}) {
+	    for my $e2 (@$e1) {
+		#print $$e2{'prefix'} . ":" . $$e2{'designation'} . "\n";
 
-		} elsif ( $line =~ /^\d{3}\-\d{3}\// ) {
-			# range entry
-			(my $rangeblock, $reg, my $dummy) = split /\s+/, $line;
+		($block, $length) = split /\//, $$e2{'prefix'};
+		$ipv4_start = int($block);
+		$ipv4_end = int($block);
 
-			($rangeblock, $length) = split /\//, $rangeblock;
-
-			my ($start, $end) = split /\-/, $rangeblock;
-			$ipv4_start = int($start);
-			$ipv4_end = int($end);
-		} else {
-			# skip not proper lines
-			next;
-		};
-
-		$reg = uc($reg);
-		$reg =~ s/RIPE/RIPENCC/g;
+		$reg = uc($$e2{'designation'});
+		$reg =~ s/RIPE NCC/RIPENCC/g;
+		$reg =~ s/(IANA) .*/$1/g;
+		$reg =~ s/.* (RIPENCC)/$1/g;
 
 		if ( ($reg ne "ARIN") && ($reg ne "APNIC") && ($reg ne "RIPENCC") && ($reg ne "IANA") && ($reg ne "LACNIC") && ($reg ne "AFRINIC")) {
 			$reg = "ARIN"; # default now
-			#die "Unsupported registry: " . $reg . "\nLine: $line\n";
+			# die "Unsupported registry: " . $reg\n";
 		};
+
+		print $$e2{'prefix'} . ":" . $reg . "\n";
 
 		for ($ipv4 = $ipv4_start; $ipv4 <= $ipv4_end; $ipv4++) {
 			$ipv4 = $ipv4 . ".0.0.0";
 	
-		#printf "%s/%d=%s", $ipv4, $length, $reg . "\n";
-
 			if ($reg eq "ARIN" ) {
 				#print "Push ARIN: " . $ipv4 . "/" . $length . "\n";
 				push @arin, $ipv4 . "/" . $length;
@@ -191,8 +176,8 @@ sub proceed_global() {
 				die "Unsupported registry";	
 			};
 		};
+	    };
 	};
-	close(FILE);
 };
 
 &proceed_global();
@@ -317,6 +302,8 @@ foreach my $file (@files) {
 sub proceed_array($$) {
 	my $parray = shift || die "missing array pointer";
 	my $parray_agg = shift || die "missing array pointer";
+
+	scalar(@$parray) == 0 && die "array empty!";
 
 	print "Start proceeding array with 'aggregate' (Entries: " . scalar(@$parray) . ")\n";
 

@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/databases/registries
 # File       : update-registries.sh
-# Version    : $Id: update-registries.sh,v 1.7 2009/06/20 13:43:34 peter Exp $
-# Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: update-registries.sh,v 1.8 2011/02/27 11:43:38 peter Exp $
+# Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces ../ipv4-assignment/update-ipv4-assignment.sh
 #               replaces ../ipv6-assignment/update-ipv6-assignment.sh
 #
@@ -19,8 +19,8 @@ month="`date -d '2 days ago' +%m`"
 day="`date -d '2 days ago' +%d`"
 
 cat <<END | sed s/\%Y/$year/g | sed s/\%m/$month/g | sed s/\%d/$day/g
-iana	http://www.iana.org/assignments/		ipv4-address-space			txt	out
-iana	http://www.iana.org/assignments/		ipv6-unicast-address-assignments	txt	out
+iana	http://www.iana.org/assignments/ipv4-address-space/			ipv4-address-space.xml			xml	out
+iana	http://www.iana.org/assignments/ipv6-unicast-address-assignments/	ipv6-unicast-address-assignments.xml	xml	out
 ripencc	ftp://ftp.ripe.net/pub/stats/ripencc/		delegated-ripencc-latest		txt
 arin	ftp://ftp.arin.net/pub/stats/arin/		delegated-arin-latest			txt
 apnic	http://ftp.apnic.net/stats/apnic/		delegated-apnic-latest			txt
@@ -51,7 +51,7 @@ get_urls | while read subdir url filename format flag; do
 
 	pushd $subdir || exit 1
 	case $format in
-            'txt')
+            'txt'|'xml')
 		# nothing to do
 		;;
 	    'bz2')

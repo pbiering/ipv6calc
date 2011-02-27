@@ -2,9 +2,9 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.5 2007/03/03 11:57:29 peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.6 2011/02/27 11:45:10 peter Exp $
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
-#               further extension by Peter Bieringer <pb (at) bieringer.de>
+#              2005-2011 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
 # License    : GNU GPL v2
 #
 # Information:
@@ -15,6 +15,7 @@ use strict;
 
 use Net::IP;
 use Math::BigInt;
+use XML::Simple;
 
 my $debug = (0xffff &  ~(0x10 | 0x20 | 0x100 | 0x40));
 # Debugging
@@ -31,7 +32,7 @@ $year = 1900 + $year;
 $mon = sprintf "%02d", $mon + 1;
 $mday = sprintf "%02d", $mday;
 
-my $global_file = "../registries/iana/ipv6-unicast-address-assignments";
+my $global_file = "../registries/iana/ipv6-unicast-address-assignments.xml";
 
 my @files = (
 	"../registries/arin/delegated-arin-latest",
@@ -70,24 +71,17 @@ for (my $i = 0; $i <= 64; $i++) {
 # Fill global assignement (IPv6 should be more hierarchical than IPv4)
 sub proceed_global() {
 	# Proceed first global IANA file
-	print "Proceed file: " . $global_file . "\n";
+	print "Proceed file (XML): " . $global_file . "\n";
 
-	open(FILE, "<$global_file") || die "Cannot open file: $global_file";
+	my $xs = XML::Simple->new();
+	my $xd = $xs->XMLin($global_file) || die "Cannot open/parse file: $global_file";
 
-	my $line;
-	my $ipv4; my $length;
-	my ($ipv4_start, $ipv4_end);
-	while (<FILE>) {
-		$line = $_;
-		chomp $line;
+	for my $e1 ($xd->{'record'}) {
+	    for my $e2 (@$e1) {
+		#print $$e2{'prefix'} . ":" . $$e2{'description'} . "\n";
 
-		if ( $line !~ /^[0-9A-F]{4}:/ ) {
-			# skip not proper lines
-			next;
-		};
-
-		#print "Line: $line\n";
-		my ($ipv6, $reg, $dummy) = split /\s+/, $line;
+		my $ipv6 = $$e2{'prefix'};
+		my $reg = $$e2{'description'};
 
 		# Check for > /32
 		my ($addr, $length) = split /\//, $ipv6;
@@ -98,7 +92,9 @@ sub proceed_global() {
 		print "reg=" . $reg . " addr=$ipv6\n" if ($debug & 0x20);
 
 		$reg = uc($reg);
-		$reg =~ s/RIPE/RIPENCC/g;
+		$reg =~ s/RIPE NCC/RIPENCC/g;
+
+		print $$e2{'prefix'} . ":" . $reg . "\n";
 
 		if ($reg eq "ARIN" ) {
 			push @arin, $ipv6;
@@ -121,9 +117,8 @@ sub proceed_global() {
 		} else {
 			die "Unsupported registry: " . $reg . "\n";
 		};
+	    };
 	};
-
-	close(FILE);
 };
 
 
