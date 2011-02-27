@@ -1,7 +1,6 @@
-$Id: README,v 1.5 2005/10/23 21:22:52 peter Exp $
+$Id: README,v 1.6 2011/02/27 11:59:13 peter Exp $
 
 "aggregate" can be found at
  http://freshmeat.net/projects/aggregate/
- http://buffoon.automagic.org/dist/aggregate-1.6.tar.gz
 
 Use "make update" to create header file from registry data files
