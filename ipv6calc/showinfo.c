@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.42 2011/02/27 11:24:53 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.43 2011/02/27 12:13:33 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -714,7 +714,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "TEREDO-CLIENT");
 		print_ipv4addr(&ipv4addr2, formatoptions | FORMATOPTION_printembedded, "TEREDO-SERVER");
 
-		retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, helpstring, 0);
+		retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr2, helpstring, 0);
 		if ( retval != 0 ) {
 			fprintf(stderr, "Error converting IPv4 address to string\n");
 			retval = 1;
