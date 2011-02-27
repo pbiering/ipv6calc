@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.17 2011/02/27 11:22:46 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.18 2011/02/27 12:19:12 peter Exp $
 # Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -25,6 +25,7 @@ cat <<END | grep -v '^#'
 --in ipv6 --out revnibbles.arpa	3ffe::1/64				=0.0.0.0.0.0.0.0.0.0.0.0.e.f.f.3.ip6.arpa.
 -a --uppercase 3ffe::1/64						=0.0.0.0.0.0.0.0.0.0.0.0.E.F.F.3.IP6.ARPA.
 -a -u 3ffe::1/64							=0.0.0.0.0.0.0.0.0.0.0.0.E.F.F.3.IP6.ARPA.
+--out revnibbles.arpa abcd:1234:5678:abcd:1234:1234:1234:1234/125	=0.3.2.1.4.3.2.1.4.3.2.1.4.3.2.1.d.c.b.a.8.7.6.5.4.3.2.1.d.c.b.a.ip6.arpa.
 ## to uncompressed
 --addr_to_compressed 3ffe:ffff:0100:f101:0000:0000:0000:0001		=3ffe:ffff:100:f101::1
 --in ipv6 --out ipv6 --printcompressed 3ffe:ffff:0100:f101:0000:0000:0000:0001 =3ffe:ffff:100:f101::1
