@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.18 2007/07/05 20:48:43 peter Exp $
- * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calctypes.h,v 1.19 2011/02/27 11:42:48 peter Exp $
+ * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for ipv6calctypes.c
@@ -51,6 +51,7 @@ extern uint32_t ipv6calctypes_checkaction(const char *string);
 #define FORMAT_NUM_ipv4revhex		20
 #define FORMAT_NUM_octal		21
 #define FORMAT_NUM_hex			22
+#define FORMAT_NUM_auto_noresult	30
 #define FORMAT_NUM_undefined		31
 
 #define FORMAT_auto		(uint32_t) 0x00000u
@@ -76,6 +77,7 @@ extern uint32_t ipv6calctypes_checkaction(const char *string);
 #define FORMAT_ipv4revhex	(uint32_t) (1 << FORMAT_NUM_ipv4revhex)
 #define FORMAT_octal		(uint32_t) (1 << FORMAT_NUM_octal)
 #define FORMAT_hex		(uint32_t) (1 << FORMAT_NUM_hex)
+#define FORMAT_auto_noresult	(uint32_t) (1 << FORMAT_NUM_auto_noresult)
 #define FORMAT_undefined	(uint32_t) (1 << FORMAT_NUM_undefined)
 
 /* Primary label of format number, keeping also an explanation */
