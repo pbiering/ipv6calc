@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.16 2010/09/21 19:01:16 peter Exp $
-# Copyright  : 2001-2010 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6calc.sh,v 1.17 2011/02/27 11:22:46 peter Exp $
+# Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 
@@ -25,7 +25,6 @@ cat <<END | grep -v '^#'
 --in ipv6 --out revnibbles.arpa	3ffe::1/64				=0.0.0.0.0.0.0.0.0.0.0.0.e.f.f.3.ip6.arpa.
 -a --uppercase 3ffe::1/64						=0.0.0.0.0.0.0.0.0.0.0.0.E.F.F.3.IP6.ARPA.
 -a -u 3ffe::1/64							=0.0.0.0.0.0.0.0.0.0.0.0.E.F.F.3.IP6.ARPA.
---out revnibbles.arpa abcd:1234:5678:abcd:1234:1234:1234:1234/125	=0.3.2.1.4.3.2.1.4.3.2.1.4.3.2.1.d.c.b.a.8.7.6.5.4.3.2.1.d.c.b.a.ip6.arpa. 
 ## to uncompressed
 --addr_to_compressed 3ffe:ffff:0100:f101:0000:0000:0000:0001		=3ffe:ffff:100:f101::1
 --in ipv6 --out ipv6 --printcompressed 3ffe:ffff:0100:f101:0000:0000:0000:0001 =3ffe:ffff:100:f101::1
@@ -129,6 +128,42 @@ cat <<END | grep -v '^#'
 END
 }
 
+# Test Scenarios for autodetection "good case"
+testscenarios_auto_good() {
+cat <<END | grep -v '^#'
+3ffe:831f:ce49:7601:8000:efff:af4a:86BF						ipv6addr
+1.2.3.4										ipv4addr
+1.2.3.4/0									ipv4addr
+1.2.3.4/32									ipv4addr
+01:23:45:67:89:01								mac
+2002:102:304::1/0								ipv6addr
+2002:102:304::1/128								ipv6addr
+\\\\[x3FFEFFFF000000000000000000000001/64].IP6.ARPA.				bitstring
+1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.	revnibbles.int
+1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.arpa.	revnibbles.arpa
+0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.arpa.		revnibbles.int
+12345678									ipv4hex
+4)+k&C#VzJ4br>0wv%Yp								base85
+END
+}
+
+# Test Scenarios for autodetection "bad case"
+testscenarios_auto_bad() {
+cat <<END | grep -v '^#'
+1.2.3.r4									ipv4addr
+1.2.3.4/-1									ipv4addr
+1.2.3.4/33									ipv4addr
+01:23:r5:67:89:01								mac
+2002:102:304::r1								ipv6addr
+2002:102:304::1/-1								ipv6addr
+2002:102:304::1/129								ipv6addr
+1.0.0.0.r.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.	revnibbles.int
+1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.arpa.arpa.	revnibbles.arpa
+0.0.0.0.01.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.arpa.		revnibbles.arpa
+123456789									ipv4hex
+END
+}
+
 #set -x
 ## main ##
 echo "Run 'ipv6calc' function tests..."
@@ -222,8 +257,51 @@ echo "Run 'ipv6calc' input validation tests...(strange input)"
 		echo "Error executing 'ipv6calc'!"
 		exit 1
 	fi
-done
+done || exit 1
 
+echo "Run 'ipv6calc' input autodetection tests...(good cases)"
+testscenarios_auto_good | while read input dummy; do
+	echo "Test './ipv6calc -q \"$input\"'"
+	./ipv6calc -q "$input" >/dev/null
+	retval=$?
+	if [ $retval -ne 0 ]; then
+		echo "Error executing 'ipv6calc'!"
+		exit 1
+	fi
+done || exit 1
+
+echo "Run 'ipv6calc' input autodetection tests...(bad cases)"
+testscenarios_auto_bad | while read input dummy; do
+	echo "Test './ipv6calc -q \"$input\"'"
+	./ipv6calc -q "$input" >/dev/null
+	retval=$?
+	if [ $retval -eq 0 ]; then
+		echo "Error executing 'ipv6calc' ($retval)!"
+		exit 1
+	fi
+done || exit 1
+
+echo "Run 'ipv6calc' input tests...(good cases)"
+testscenarios_auto_good | while read input type; do
+	echo "Test './ipv6calc --in $type -q \"$input\"'"
+	./ipv6calc --in $type -q "$input" >/dev/null
+	retval=$?
+	if [ $retval -ne 0 ]; then
+		echo "Error executing 'ipv6calc'!"
+		exit 1
+	fi
+done || exit 1
+
+echo "Run 'ipv6calc' input tests...(bad cases)"
+testscenarios_auto_bad | while read input type; do
+	echo "Test './ipv6calc --in $type -q \"$input\"'"
+	./ipv6calc --in $type -q "$input" >/dev/null
+	retval=$?
+	if [ $retval -eq 0 ]; then
+		echo "Error executing 'ipv6calc' ($retval)!"
+		exit 1
+	fi
+done || exit 1
 
 retval=$?
 if [ $retval -eq 0 ]; then
