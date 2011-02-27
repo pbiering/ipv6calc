@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.37 2009/08/11 20:38:51 peter Exp $
- * Copyright  : 2001-2009 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv6addr.c,v 1.38 2011/02/27 11:41:10 peter Exp $
+ * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Function library for IPv6 address handling
@@ -505,7 +505,7 @@ int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, char *re
  */
 #define DEBUG_function_name "libipv6addr/addr_to_ipv6addrstruct"
 int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
-	int retval = 1, result, i, cpoints = 0, ccolons = 0;
+	int retval = 1, result, i, cpoints = 0, ccolons = 0, cxdigits = 0;
 	char *addronlystring, *cp, tempstring[NI_MAXHOST], *cptr, **ptrptr;
 	int expecteditems = 0;
 	int temp[8];
@@ -594,7 +594,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 		fprintf(stderr, "%s: Check string: '%s'\n", DEBUG_function_name, tempstring);
 	};
 
-	/* count ":", must be 6 (compat) or 7 (other) */
+	/* count ":", "." and xdigits */
 	for (i = 0; i < (int) strlen(tempstring); i++) {
 		if (tempstring[i] == ':') {
 			ccolons++;
@@ -602,13 +602,25 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 		if (tempstring[i] == '.') {
 			cpoints++;
 		};
+		if (isxdigit(tempstring[i])) {
+			cxdigits++;
+		};
 	};
+
+	/* check amount of ":", must be 6 (compat) or 7 (other) */
 	if ( ! ( ( ( ccolons == 7 ) && ( cpoints == 0 ) ) ||  ( ( ccolons == 6 ) && ( cpoints == 3 ) ) ) ) {
 		if (strstr(addronlystring, "::")) {
 			snprintf(resultstring, NI_MAXHOST - 1, "Error in given address expanded to '%s' is not valid!", tempstring);
 		} else {
 			snprintf(resultstring, NI_MAXHOST - 1, "Error in given address '%s' is not valid!", addrstring);
 		};
+		retval = 1;
+		return (retval);
+	};
+
+	/* amount of ":" + "." + xdigits must be length */
+	if (ccolons + cpoints + cxdigits != (int) strlen(tempstring)) {
+		snprintf(resultstring, NI_MAXHOST - 1, "Error in given address '%s' is not valid!", tempstring);
 		retval = 1;
 		return (retval);
 	};
