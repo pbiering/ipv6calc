@@ -5,20 +5,22 @@
 <!ENTITY % output.print.bmp "IGNORE">
  ]>
 
-<!-- SGML file was created by LyX 1.4.4
+<!-- SGML file was created by LyX 2.0.0beta3
   See http://www.lyx.org/ for more information -->
 <article lang="en">
 <articleinfo>
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>2.0</revnumber> <date>2007-06-01</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>3.1</revnumber> <date>2011-03-05</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
-<para>ipv6calc is a small utility written in programming languate C to manipulate (not only) IPv6 addresses. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
-<para>This utility is also used to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
-<para>Note: this tool got also its <ulink url="http://freshmeat.net/projects/ipv6calc/">freshmeat / ipv6calc</ulink> page (not maintained by the author)</para>
-<para>Hint: take also a look at the <ulink url="http://steinbeck.ucs.indiana.edu:47401/">Advanced Network Management Laboratory / IPv6 Address Oracle</ulink> if you want to learn more about IPv6 addresses.</para></sect1><sect1>
+<para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
+<para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
+<para>Note: this tool got also its <ulink url="http://freshmeat.net/projects/ipv6calc/">freshmeat / ipv6calc</ulink> page (not maintained by the author)</para><sect2>
+<title>Included programs</title>
+<itemizedlist>
+<listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem></itemizedlist></sect2></sect1><sect1>
 <title>License</title>
 <para>The program is published under the GNU GPL version 2.</para></sect1><sect1>
 <title>Author</title>
@@ -39,21 +41,21 @@
 <para>Currently only on <ulink url="http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc">rpmfind / ipv6calc</ulink>, but there are plans to publish at least source RPMS on <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink> some day.</para></sect3></sect2><sect2>
 <title>Ready to use packages for several operating systems:</title>
 <sect3>
-<title>Fedora</title>
-<para>Fedora Core 6 is the current developing platform, so use given hints above to create a RPM. Fedora 7 includes this package by default.</para></sect3><sect3>
+<title>Fedora Linux</title>
+<para>Fedora 14 is the current developing platform, so use given hints above to create a RPM. Since Fedora 7 this package is included by default.</para></sect3><sect3>
 <title>Red Hat Enterprise Linux and clones</title>
-<para>It's tested by the developer that creation of the RPM is working fine on RHEL4. RHEL5 includes this package by default.</para></sect3><sect3>
-<title>Mandrake:</title>
+<para>It's tested by the developer that creation of the RPM is working fine on RHEL4. Since RHEL5 this package is included by default.</para></sect3><sect3>
+<title>Mandrake Linux</title>
 <para>Linux Mandrake is very similar to Red Hat Linux, therefore a rebuild should work, too.</para></sect3><sect3>
-<title>PLD:</title>
-<para>See <ulink url="http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc">rpmfind / ipv6calc</ulink>.</para></sect3><sect3>
 <title>Debian GNU/Linux</title>
 <para>Package is maintained, more information can be found at <ulink url="http://packages.debian.org/ipv6calc">http://packages.debian.org/ipv6calc</ulink></para></sect3><sect3>
-<title>NetBSD:</title>
+<title>openSUSE</title>
+<para>Package is maintained, more information can be found at <ulink url="http://download.opensuse.org/repositories/home:/uebelhacker/">http://download.opensuse.org/repositories/home:/uebelhacker/</ulink></para></sect3><sect3>
+<title>NetBSD</title>
 <para>See here for more: <ulink url="http://www.netbsd.org/packages/net/ipv6calc/">http://www.netbsd.org/packages/net/ipv6calc/</ulink></para></sect3><sect3>
-<title>FreeBSD:</title>
+<title>FreeBSD</title>
 <para>See here for more: <ulink url="http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/">http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/</ulink> (<ulink url="http://www.freebsd.org/cgi/query-pr.cgi?pr=34441">http://www.freebsd.org/cgi/query-pr.cgi?pr=34441</ulink>), <ulink url="http://www.freshports.org/net-mgmt/ipv6calc/">http://www.freshports.org/net-mgmt/ipv6calc/</ulink></para></sect3><sect3>
-<title>OpenBSD:</title>
+<title>OpenBSD</title>
 <para>See here for more: <ulink url="http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/">http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/</ulink></para></sect3></sect2></sect1><sect1>
 <title>Mailling Lists</title>
 <sect2>
@@ -68,7 +70,7 @@
 <title>Features of ipv6calc</title>
 <sect2>
 <title>Description</title>
-<para>The main program named &ldquo;ipv6calc&rdquo; is able to recognice many (not only) IPv6 address formats and depending on a selectable action (not required) a selectable output format can be specified. Also it has the capability to show detailed information of an IPv4/IPv6 address or anonymize it.</para></sect2><sect2>
+<para>The main program named &ldquo;ipv6calc&rdquo; is able to recognize many (not only) IPv6 address formats and depending on a selectable action (not required) a selectable output format can be specified. Also it has the capability to show detailed information of an IPv4/IPv6 address or anonymize it.</para></sect2><sect2>
 <title>Examples</title>
 <sect3>
 <title>Conversion</title>
@@ -167,10 +169,10 @@ IPV6CALC_OUTPUT_VERSION=4
 <title>Online help</title>
 <para>Online help always shows the currently implemented features.</para><sect3>
 <title>Main online help:</title>
-<screen>
+<para>IP2Location and GeoIP options only appear if compiled with such support.</para><screen>
 <![CDATA[$ ./ipv6calc -?
-ipv6calc: version 0.70.1
-(P) & (C) 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
+ipv6calc: version 0.81.0
+(P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de> 
 
  General:
   [-d|--debug <debug value>] : debug value (bitwise like)
@@ -200,9 +202,9 @@ ipv6calc: version 0.70.1
 
  To see old-style option use: --printoldoptions
 ]]></screen><para>Input-type options</para><screen>
-<![CDATA[]$ ./ipv6calc --in -?
-ipv6calc: version 0.70.1
-(P) & (C) 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
+<![CDATA[$ ./ipv6calc --in -?
+ipv6calc: version 0.81.0
+(P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de> 
 
  Available input types:
   auto           : automatic detection
@@ -221,8 +223,8 @@ ipv6calc: version 0.70.1
   prefix+mac     : IPv6 prefix and a MAC address
 ]]></screen><para>Output-type options:</para><screen>
 <![CDATA[$ ./ipv6calc --out -?
-ipv6calc: version 0.70.1
-(P) & (C) 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
+ipv6calc: version 0.81.0
+(P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de> 
 
  Available output types:
   revnibbles.int : dot separated nibbles reverse, ending with ip6.int.
@@ -243,13 +245,14 @@ ipv6calc: version 0.70.1
   revipv4        : reverse IPv4, ending with in-addr.arpa
   ipv4hex        : IPv4 in hexdecimal format
   octal          : IP address in escaped octal format
+
  For examples and available format options use:
     --out <type> --examples
 ]]></screen><para>Action-type options: </para><screen>
 <![CDATA[$ ./ipv6calc --action -?
-ipv6calc: version 0.70.1
+ipv6calc: version 0.81.0
+(P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de> 
 
-(P) & (C) 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
  Available action types:
   auto          : Automatic selection of action (default)
   geneui64      : Converts a MAC address to an EUI-64 address
@@ -259,12 +262,12 @@ ipv6calc: version 0.70.1
   prefixmac2ipv6: Generates an IPv6 address out of a prefix and a MAC address
 ]]></screen><para>Because of historical issues, there exists also a support of the old-styled options: </para><screen>
 <![CDATA[$ ./ipv6calc --printoldoptions
-ipv6calc: version 0.70.1
-(P) & (C) 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
-
- Usage with old style (shortcut) options (going obsolete):
+ipv6calc: version 0.81.0
+(P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
+ Usage with old style (shortcut) options (going obsolete): 
   <shortcut option> [<format option> ...] <input data> [...]
-  --addr2ip6_int
+
+  --addr2ip6_int 
   --addr_to_ip6int
   --addr2ip6_arpa
   --addr_to_ip6arpa
@@ -290,7 +293,7 @@ ipv6calc: version 0.70.1
 <title>Examples</title>
 <para>A demonstration about which kind of statistics are possible to produce is shown at <ulink url="http://www.ipv6.bieringer.de/">http://www.ipv6.bieringer.de/</ulink> (IPv6 only).</para></sect2></sect1><sect1>
 <title>Webserver log anonymization helper program "ipv6loganon"</title>
-<para>On autoconfiguration, the interface part of an IPv6 address is based on the MAC address of the network interface card (NIC). This address is used for outgoing requests, if privacy option (RFC3041) is not enabled. This results in many privacy related information on web- or mail-server log files. Administrators, which won't (be allowed to) store such information over time, but still do not want to loose information about address type distribution should use 'ipv6loganon' to anonymize their log files.</para><sect2>
+<para>On autoconfiguration, the interface part of an IPv6 address is based on the MAC address of the network interface card (NIC). This address is used for outgoing requests, if privacy option (RFC3041 / RFC4941) is not enabled. This results in many privacy related information on web- or mail-server log files. Administrators, which won't (be allowed to) store such information over time, but still do not want to loose information about address type distribution should use 'ipv6loganon' to anonymize their log files.</para><sect2>
 <title>Anonymization details</title>
 <para>The anonymizer would keep as much information as possible for IPv6 address types.</para>
 <para>Client-side IID would be anonymized by</para><itemizedlist>
@@ -304,8 +307,8 @@ ipv6calc: version 0.70.1
 <title>Supported options</title>
 <screen>
 <![CDATA[$ ./ipv6loganon -?
-ipv6loganon: version 0.70.1
-(P) & (C) 2007 by Peter Bieringer <pb (at) bieringer.de>
+ipv6loganon: version 0.81.0
+(P) & (C) 2007-2011 by Peter Bieringer <pb (at) bieringer.de>
 
 This program anonymizes IPv4/IPv6 addresses in HTTP server log files
 
@@ -339,14 +342,14 @@ This program anonymizes IPv4/IPv6 addresses in HTTP server log files
 <para>Because calling C programs directly as CGI isn't really recommended (too much security troubles all the time), I wrote a small wrapper utility which calls "ipv6calc" to get information about client and server address for displaying on a web page. </para><sect2>
 <title>Examples</title>
 <para>A demonstration about which kind of output is possible to produce is shown at</para><itemizedlist>
-<listitem><para><ulink url="http://www.ipv6.bieringer.de/">http://www.ipv6.bieringer.de/</ulink> (IPv6 only)</para></listitem><listitem><para><ulink url="http://ipv6.aerasec.de/index2.html">http://ipv6.aerasec.de/index2.html</ulink> (IPv4/IPv6)</para></listitem><listitem><para><ulink url="http://www.sixxs.net/tools/ipv6calc/">http://www.sixxs.net/tools/ipv6calc/</ulink> (IPv4/IPv6)</para></listitem><listitem><para><ulink url="http://ipv6-info.internet2.edu/">http://ipv6-info.internet2.edu/</ulink></para></listitem></itemizedlist></sect2></sect1><sect1>
+<listitem><para><ulink url="http://www.ipv6.bieringer.de/">http://www.ipv6.bieringer.de/</ulink> (IPv6 only)</para></listitem><listitem><para><ulink url="http://ipv6.aerasec.de/index2.html">http://ipv6.aerasec.de/index2.html</ulink> (IPv4/IPv6)</para></listitem><listitem><para><ulink url="http://www.sixxs.net/tools/ipv6calc/">http://www.sixxs.net/tools/ipv6calc/</ulink> (IPv4/IPv6)</para></listitem></itemizedlist></sect2></sect1><sect1>
 <title>Webserver log statistics helper program "ipv6logstats"</title>
 <para>This program parses a given webserver logfile and count addresses, useful for time period statistics.</para><sect2>
 <title>Supported options</title>
 <screen>
 <![CDATA[$ ./ipv6logstats -?
-ipv6logstats: version 0.70.1
-(P) & (C) 2003-2005 by Peter Bieringer <pb (at) bieringer.de>
+ipv6logstats: version 0.81.0
+(P) & (C) 2007-2011 by Peter Bieringer <pb (at) bieringer.de>
 
  General:
   [-d|--debug <debug value>] : debug value (bitwise like)

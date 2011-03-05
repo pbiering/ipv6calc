@@ -1,6 +1,8 @@
 #!/bin/sh
 
-# $Id: generate.sh,v 1.2 2007/06/02 09:03:09 peter Exp $
+# $Id: generate.sh,v 1.3 2011/03/05 15:23:52 peter Exp $
+
+# Requires: opensp
 
 if [ -z "$1" ]; then
 	file_sgml="ipv6calc.sgml"

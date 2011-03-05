@@ -1,21 +1,28 @@
-#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
-\lyxformat 345
+#LyX 2.0.0beta3 created this file. For more info see http://www.lyx.org/
+\lyxformat 410
 \begin_document
 \begin_header
 \textclass docbook
 \use_default_options false
+\maintain_unincluded_children false
 \language english
 \inputencoding auto
+\fontencoding global
 \font_roman default
 \font_sans default
 \font_typewriter default
 \font_default_family default
+\use_non_tex_fonts false
 \font_sc false
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
 
 \graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
 \paperfontsize default
 \spacing single
 \use_hyperref false
@@ -23,20 +30,30 @@
 \use_geometry false
 \use_amsmath 1
 \use_esint 0
+\use_mhchem 1
+\use_mathdots 1
 \cite_engine basic
 \use_bibtopic false
+\use_indices false
 \paperorientation portrait
+\suppress_date false
+\use_refstyle 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation indent
-\defskip medskip
+\paragraph_indentation default
 \quotes_language english
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
 \tracking_changes false
 \output_changes false
-\author "" 
+\html_math_output 0
+\html_be_strict false
 \end_header
 
 \begin_body
@@ -80,7 +97,7 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>3.0</revnumber> <date>2010-03-01</date> <authorinitials>PB<
+<revision> <revnumber>3.1</revnumber> <date>2011-03-05</date> <authorinitials>PB<
 /authorinitials></revision>
 \end_layout
 
@@ -351,11 +368,11 @@ Ready to use packages for several operating systems:
 \end_layout
 
 \begin_layout Subsubsection
-Fedora
+Fedora Linux
 \end_layout
 
 \begin_layout Standard
-Fedora 12 is the current developing platform, so use given hints above to
+Fedora 14 is the current developing platform, so use given hints above to
  create a RPM.
  Since Fedora 7 this package is included by default.
 \end_layout
@@ -371,7 +388,7 @@ It's tested by the developer that creation of the RPM is working fine on
 \end_layout
 
 \begin_layout Subsubsection
-Mandrake:
+Mandrake Linux
 \end_layout
 
 \begin_layout Standard
@@ -396,7 +413,23 @@ target "http://packages.debian.org/ipv6calc"
 \end_layout
 
 \begin_layout Subsubsection
-NetBSD:
+openSUSE
+\end_layout
+
+\begin_layout Standard
+Package is maintained, more information can be found at 
+\begin_inset CommandInset href
+LatexCommand href
+name "http://download.opensuse.org/repositories/home:/uebelhacker/"
+target "http://download.opensuse.org/repositories/home:/uebelhacker/"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+NetBSD
 \end_layout
 
 \begin_layout Standard
@@ -412,7 +445,7 @@ target "http://www.netbsd.org/packages/net/ipv6calc/"
 \end_layout
 
 \begin_layout Subsubsection
-FreeBSD:
+FreeBSD
 \end_layout
 
 \begin_layout Standard
@@ -444,7 +477,7 @@ target "http://www.freshports.org/net-mgmt/ipv6calc/"
 \end_layout
 
 \begin_layout Subsubsection
-OpenBSD:
+OpenBSD
 \end_layout
 
 \begin_layout Standard
@@ -1018,16 +1051,20 @@ Online help always shows the currently implemented features.
 Main online help:
 \end_layout
 
+\begin_layout Standard
+IP2Location and GeoIP options only appear if compiled with such support.
+\end_layout
+
 \begin_layout Code
 $ ./ipv6calc -?
 \end_layout
 
 \begin_layout Code
-ipv6calc: version 0.70.1
+ipv6calc: version 0.81.0
 \end_layout
 
 \begin_layout Code
-(P) & (C) 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de> 
 \end_layout
 
 \begin_layout Code
@@ -1147,15 +1184,15 @@ Input-type options
 \end_layout
 
 \begin_layout Code
-]$ ./ipv6calc --in -?
+$ ./ipv6calc --in -?
 \end_layout
 
 \begin_layout Code
-ipv6calc: version 0.70.1
+ipv6calc: version 0.81.0
 \end_layout
 
 \begin_layout Code
-(P) & (C) 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de> 
 \end_layout
 
 \begin_layout Code
@@ -1231,11 +1268,11 @@ $ ./ipv6calc --out -?
 \end_layout
 
 \begin_layout Code
-ipv6calc: version 0.70.1
+ipv6calc: version 0.81.0
 \end_layout
 
 \begin_layout Code
-(P) & (C) 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de> 
 \end_layout
 
 \begin_layout Code
@@ -1319,6 +1356,10 @@ ipv6calc: version 0.70.1
 \end_layout
 
 \begin_layout Code
+
+\end_layout
+
+\begin_layout Code
  For examples and available format options use:
 \end_layout
 
@@ -1335,15 +1376,15 @@ $ ./ipv6calc --action -?
 \end_layout
 
 \begin_layout Code
-ipv6calc: version 0.70.1
+ipv6calc: version 0.81.0
+\end_layout
+
+\begin_layout Code
+(P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de> 
 \end_layout
 
 \begin_layout Code
 
-\end_layout
-
-\begin_layout Code
-(P) & (C) 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
 \end_layout
 
 \begin_layout Code
@@ -1385,19 +1426,15 @@ $ ./ipv6calc --printoldoptions
 \end_layout
 
 \begin_layout Code
-ipv6calc: version 0.70.1
+ipv6calc: version 0.81.0
 \end_layout
 
 \begin_layout Code
-(P) & (C) 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
 \end_layout
 
 \begin_layout Code
-
-\end_layout
-
-\begin_layout Code
- Usage with old style (shortcut) options (going obsolete):
+ Usage with old style (shortcut) options (going obsolete): 
 \end_layout
 
 \begin_layout Code
@@ -1405,7 +1442,11 @@ ipv6calc: version 0.70.1
 \end_layout
 
 \begin_layout Code
-  --addr2ip6_int
+
+\end_layout
+
+\begin_layout Code
+  --addr2ip6_int 
 \end_layout
 
 \begin_layout Code
@@ -1518,8 +1559,8 @@ Webserver log anonymization helper program "ipv6loganon"
 \begin_layout Standard
 On autoconfiguration, the interface part of an IPv6 address is based on
  the MAC address of the network interface card (NIC).
- This address is used for outgoing requests, if privacy option (RFC3041)
- is not enabled.
+ This address is used for outgoing requests, if privacy option (RFC3041
+ / RFC4941) is not enabled.
  This results in many privacy related information on web- or mail-server
  log files.
  Administrators, which won't (be allowed to) store such information over
@@ -1617,11 +1658,11 @@ $ ./ipv6loganon -?
 \end_layout
 
 \begin_layout Code
-ipv6loganon: version 0.70.1
+ipv6loganon: version 0.81.0
 \end_layout
 
 \begin_layout Code
-(P) & (C) 2007 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2007-2011 by Peter Bieringer <pb (at) bieringer.de>
 \end_layout
 
 \begin_layout Code
@@ -1788,17 +1829,6 @@ target "http://www.sixxs.net/tools/ipv6calc/"
  (IPv4/IPv6)
 \end_layout
 
-\begin_layout Itemize
-\begin_inset CommandInset href
-LatexCommand href
-name "http://ipv6-info.internet2.edu/"
-target "http://ipv6-info.internet2.edu/"
-
-\end_inset
-
-
-\end_layout
-
 \begin_layout Section
 Webserver log statistics helper program "ipv6logstats"
 \end_layout
@@ -1817,11 +1847,11 @@ $ ./ipv6logstats -?
 \end_layout
 
 \begin_layout Code
-ipv6logstats: version 0.70.1
+ipv6logstats: version 0.81.0
 \end_layout
 
 \begin_layout Code
-(P) & (C) 2003-2005 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2007-2011 by Peter Bieringer <pb (at) bieringer.de>
 \end_layout
 
 \begin_layout Code

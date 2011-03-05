@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.179 2011/03/05 14:36:50 peter Exp $ 
+ *  $Id: ChangeLog,v 1.180 2011/03/05 15:23:52 peter Exp $ 
  */
 
 Info:
@@ -11,6 +11,8 @@ Info:
 20110305/PB
 	ipv6calc/test_ipv6calc.sh:
 	 - add test cases for RFC 5952
+	doc
+	 - add URL to openSUSE, minor cleanup
 
 20110227/PB
 	databases:
