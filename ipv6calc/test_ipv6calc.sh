@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.18 2011/02/27 12:19:12 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.19 2011/03/05 14:36:50 peter Exp $
 # Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -126,6 +126,15 @@ cat <<END | grep -v '^#'
 --action anonymize 3ffe:831f:ce49:7601:8000:efff:af4a:86BF --mask-ipv4 16	=3ffe:831f:ce49:7601:8000:ffff:af4a:ffff
 --action anonymize 192.0.2.1						=192.0.2.0
 --action anonymize 192.0.2.1 --mask-ipv4 16				=192.0.0.0
+# RFC 5952 4.2.1
+--in ipv6addr --out ipv6addr 2001:db8:0:0:0:0:2:1			=2001:db8::2:1
+# RFC 5952 4.2.2
+--in ipv6addr --out ipv6addr 2001:db8:0:1:1:1:1:1			=2001:db8:0:1:1:1:1:1
+# RFC 5952 4.2.3
+--in ipv6addr --out ipv6addr 2001:0:0:1:0:0:0:1			 	=2001:0:0:1::1
+--in ipv6addr --out ipv6addr 2001:db8:0:0:1:0:0:1 			=2001:db8::1:0:0:1
+# RFC 5952 4.2.4
+--in ipv6addr --out ipv6addr 2001:DB8:0:0:1:0:0:1		 	=2001:db8::1:0:0:1
 END
 }
 
@@ -145,6 +154,30 @@ cat <<END | grep -v '^#'
 0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.arpa.		revnibbles.int
 12345678									ipv4hex
 4)+k&C#VzJ4br>0wv%Yp								base85
+# RFC 5952 2.x
+2001:db8:0:0:1:0:0:1								ipv6addr
+2001:0db8:0:0:1:0:0:1								ipv6addr
+2001:db8::1:0:0:1								ipv6addr
+2001:db8::0:1:0:0:1								ipv6addr
+2001:0db8::1:0:0:1								ipv6addr
+2001:db8:0:0:1::1								ipv6addr
+2001:db8:0000:0:1::1								ipv6addr
+2001:DB8:0:0:1::1								ipv6addr
+2001:db8:aaaa:bbbb:cccc:dddd:eeee:0001						ipv6addr
+2001:db8:aaaa:bbbb:cccc:dddd:eeee:001						ipv6addr
+2001:db8:aaaa:bbbb:cccc:dddd:eeee:01						ipv6addr
+2001:db8:aaaa:bbbb:cccc:dddd:eeee:1						ipv6addr
+2001:db8:aaaa:bbbb:cccc:dddd::1							ipv6addr
+2001:db8:aaaa:bbbb:cccc:dddd:0:1						ipv6addr
+2001:db8:0:0:0::1								ipv6addr
+2001:db8:0:0::1									ipv6addr
+2001:db8:0::1									ipv6addr
+2001:db8::1									ipv6addr
+2001:db8::aaaa:0:0:1								ipv6addr
+2001:db8:0:0:aaaa::1								ipv6addr
+2001:db8:aaaa:bbbb:cccc:dddd:eeee:aaaa						ipv6addr
+2001:db8:aaaa:bbbb:cccc:dddd:eeee:AAAA						ipv6addr
+2001:db8:aaaa:bbbb:cccc:dddd:eeee:AaAa						ipv6addr
 END
 }
 

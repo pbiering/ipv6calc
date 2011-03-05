@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.178 2011/02/27 12:06:19 peter Exp $ 
+ *  $Id: ChangeLog,v 1.179 2011/03/05 14:36:50 peter Exp $ 
  */
 
 Info:
@@ -8,11 +8,15 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20110305/PB
+	ipv6calc/test_ipv6calc.sh:
+	 - add test cases for RFC 5952
+
 20110227/PB
 	databases:
 	 - change from txt to xml for IANA data
 	 - update
-	ipv6calc/test_ipv6calc.c:
+	ipv6calc/test_ipv6calc.sh:
 	 -add good/bad testcases for explicit and autodetection input
 	 - improve catch of errors
 	ipv6calc/showinfo.c:
