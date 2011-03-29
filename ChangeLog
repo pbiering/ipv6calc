@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.181 2011/03/29 18:33:32 peter Exp $ 
+ *  $Id: ChangeLog,v 1.182 2011/03/29 18:36:23 peter Exp $ 
  */
 
 Info:
@@ -13,6 +13,7 @@ Info:
 	 - add support for RFC 6052 (NAT64)
 	databases:
 	 - update
+	tag version 0.82.0
 	
 20110305/PB
 	ipv6calc/test_ipv6calc.sh:
