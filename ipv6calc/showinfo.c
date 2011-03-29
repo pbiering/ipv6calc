@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.43 2011/02/27 12:13:33 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.44 2011/03/29 18:33:32 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -66,7 +66,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV6=...                      : given IPv6 address full uncompressed\n");
 	fprintf(stderr, " IPV6_REGISTRY=...             : registry token of given IPv6 address\n");
 	fprintf(stderr, " IPV6_PREFIXLENGTH=ddd         : given prefix length\n");
-	fprintf(stderr, " IPV4=ddd.ddd.ddd.ddd          : an included IPv4 address in IID (e.g. ISATAP, TEREDO)\n");
+	fprintf(stderr, " IPV4=ddd.ddd.ddd.ddd          : an included IPv4 address in IID (e.g. ISATAP, TEREDO, NAT64)\n");
 	fprintf(stderr, " IPV4_REGISTRY=...             : registry token of IPv4 address in IID\n");
 	fprintf(stderr, " IPV4_SOURCE=...               : source of IPv4 address\n");
 	fprintf(stderr, "  ISATAP|TEREDO-SERVER|TEREDO-CLIENT|6TO4|LINK-LOCAL-IID\n");
@@ -738,6 +738,18 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		} else {
 			fprintf(stdout, "IPv4 registry for Teredo server address: %s\n", helpstring);
 		};
+	};
+
+	if ( (typeinfo & IPV6_NEW_ADDR_NAT64) != 0 )  {
+		for (i = 0; i <= 3; i++) {
+			ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) (i + 12)));
+		};
+
+		if ( machinereadable != 0 ) {
+		} else {
+			fprintf(stdout, "IPv4 registry for NAT64 address: %s\n", helpstring);
+		};
+		print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "NAT64");
 	};
 
 	/* SLA prefix included? */

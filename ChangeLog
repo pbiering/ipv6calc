@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.180 2011/03/05 15:23:52 peter Exp $ 
+ *  $Id: ChangeLog,v 1.181 2011/03/29 18:33:32 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,12 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20110329/PB
+	ipv6calc/test_ipv6calc.sh, ipv6calc/showinfo.c, lib/libipv6addr.[h,c]
+	 - add support for RFC 6052 (NAT64)
+	databases:
+	 - update
+	
 20110305/PB
 	ipv6calc/test_ipv6calc.sh:
 	 - add test cases for RFC 5952

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.38 2011/02/27 11:41:10 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.39 2011/03/29 18:33:32 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -310,6 +310,11 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 	if ((st & 0xFFFFFFF0u) == 0x20010010u) {
 		/* 2001:0010::/28 -> ORCHID (RFC 4843) */
 		type |= IPV6_NEW_ADDR_ORCHID;
+	};
+	
+	if ((st == 0x0064ff9bu) && (st1 == 0) && (st2 == 0)) {
+		/* 64:ff9b::/96 -> NAT64 (RFC 6052) */
+		type |= IPV6_NEW_ADDR_NAT64;
 	};
 	
 	if (((type & (IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4)) != 0) && (st & 0xE0000000u) == 0x20000000u) {

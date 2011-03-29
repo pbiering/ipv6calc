@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.29 2007/08/11 07:07:36 peter Exp $
- * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv6addr.h,v 1.30 2011/03/29 18:33:32 peter Exp $
+ * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Header file for libipv6addr.c
@@ -86,6 +86,7 @@ typedef struct {
 #define IPV6_NEW_ADDR_TEREDO			(uint32_t) 0x01000000U
 #define IPV6_NEW_ADDR_ORCHID			(uint32_t) 0x02000000U  /* RFC 4843 */
 #define IPV6_NEW_ADDR_LINKLOCAL_TEREDO		(uint32_t) 0x04000000U
+#define IPV6_NEW_ADDR_NAT64			(uint32_t) 0x08000000U	/* RFC 6052 */
 
 /* Registries */
 #define IPV6_ADDR_REGISTRY_6BONE	0x01
@@ -126,7 +127,8 @@ typedef struct {
 	{ IPV6_NEW_ADDR_6TO4_MICROSOFT	, "6to4-microsoft" },
 	{ IPV6_NEW_ADDR_TEREDO		, "teredo" },
 	{ IPV6_NEW_ADDR_ORCHID		, "orchid" },
-	{ IPV6_NEW_ADDR_LINKLOCAL_TEREDO, "link-local-teredo" }
+	{ IPV6_NEW_ADDR_LINKLOCAL_TEREDO, "link-local-teredo" },
+	{ IPV6_NEW_ADDR_NAT64		, "nat64" }
 };
 
 typedef struct {

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.19 2011/03/05 14:36:50 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.20 2011/03/29 18:33:32 peter Exp $
 # Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -178,6 +178,7 @@ cat <<END | grep -v '^#'
 2001:db8:aaaa:bbbb:cccc:dddd:eeee:aaaa						ipv6addr
 2001:db8:aaaa:bbbb:cccc:dddd:eeee:AAAA						ipv6addr
 2001:db8:aaaa:bbbb:cccc:dddd:eeee:AaAa						ipv6addr
+64:ff9b::192.0.2.33								ipv6addr
 END
 }
 
