@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.11 2011/02/27 11:38:43 peter Exp $
+ * Version    : $Id: libmac.c,v 1.12 2011/05/04 18:26:00 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -106,9 +106,7 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 /* 
  * clear MACaddr_structure
  *
- * in : *addrstring = MAC address
- * out: *resultstring = result
- * ret: ==0: ok, !=0: error
+ * mod: *addrstring = MAC address
  */
 void mac_clearall(ipv6calc_macaddr *macaddrp) {
 	int i;
@@ -117,7 +115,8 @@ void mac_clearall(ipv6calc_macaddr *macaddrp) {
 		macaddrp->addr[i] = 0;
 	};  
 
-	macaddrp->flag_valid = 1;
+	/* Clear valid flag */
+	macaddrp->flag_valid = 0;
 
 	return;
 };

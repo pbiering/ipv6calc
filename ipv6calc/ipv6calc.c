@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.37 2011/05/04 17:22:13 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.38 2011/05/04 18:26:00 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -910,7 +910,7 @@ int main(int argc,char *argv[]) {
 
 	if ( (outputtype & (FORMAT_revnibbles_int | FORMAT_revnibbles_arpa)) != 0 ) {
 		/* workaround for reverse IPv4 */
-		if (ipv4addr.flag_valid == 1) {
+		 if (ipv6addr.flag_valid == 0 && ipv4addr.flag_valid == 1) {
 			outputtype = FORMAT_revipv4;
 		};
 	};

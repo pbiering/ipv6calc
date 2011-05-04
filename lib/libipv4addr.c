@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.22 2011/02/27 11:41:57 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.23 2011/05/04 18:26:00 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -206,7 +206,10 @@ void ipv4addr_setdword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int value) {
 #define DEBUG_function_name "libipv4addr/ipv4addr_clear"
 void ipv4addr_clear(ipv6calc_ipv4addr *ipv4addrp) {
 	ipv4addrp->in_addr.s_addr = 0;
-	
+
+	/* Clear valid flag */
+	ipv4addrp->flag_valid = 0;
+
 	return;
 };
 #undef DEBUG_function_name

@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.183 2011/05/04 17:22:13 peter Exp $ 
+ *  $Id: ChangeLog,v 1.184 2011/05/04 18:26:00 peter Exp $ 
  */
 
 Info:
@@ -11,6 +11,9 @@ Info:
 20110504/PB
 	ipv6calc/ipv6calc.c
 	 - add some debug code
+	 - improve selection of format switch for revipv4
+	lib/libipv4addr.c lib/libmac.c
+	 - clear 'valid' flag also if structure is cleared
 
 20110329/PB
 	ipv6calc/test_ipv6calc.sh, ipv6calc/showinfo.c, lib/libipv6addr.[h,c]
