@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.184 2011/05/04 18:26:00 peter Exp $ 
+ *  $Id: ChangeLog,v 1.185 2011/05/05 19:19:52 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,18 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20110505/PB
+	lib/librfc1884.c
+	 - cosmetic improvement of debug information
+	lib/ipv6calchelp.c
+	 - add space between token and ":"
+	 - fix --out -h not showing explanation
+	update-registries.sh
+	 - add workaround for buggy encoding information in XML
+	databases
+	 - update
+	tag version 0.82.1
+
 20110504/PB
 	ipv6calc/ipv6calc.c
 	 - add some debug code

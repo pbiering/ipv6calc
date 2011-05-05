@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.18 2010/05/20 14:49:38 peter Exp $
- * Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calchelp.c,v 1.19 2011/05/05 19:19:52 peter Exp $
+ * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -80,7 +80,7 @@ void printhelp_inputtypes(const uint32_t formatoptions) {
 	};
 
 	if ((formatoptions & FORMATOPTION_machinereadable) == 0) {	
-		snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds: %%s\n", (int) maxlen);
+		snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds : %%s\n", (int) maxlen);
 	} else {
 		snprintf(printformatstring, sizeof(printformatstring) - 1, "%%-%ds\n", (int) maxlen);
 	}
@@ -141,7 +141,7 @@ void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoption
 	};
 
 	if ((formatoptions & FORMATOPTION_machinereadable) == 0) {	
-		snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds: %%s\n", (int) maxlen);
+		snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds : %%s\n", (int) maxlen);
 	} else {
 		snprintf(printformatstring, sizeof(printformatstring) - 1, "%%-%ds\n", (int) maxlen);
 	};
@@ -177,7 +177,7 @@ void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoption
 			};
 			if ((ipv6calc_formatmatrix[i][1] & ipv6calc_formatstrings[j].number) != 0) {
 				/* available for output, look for name now */
-				if (ipv6calc_formatstrings[j].number == ipv6calc_formatmatrix[i][0]) {
+				if (strlen(ipv6calc_formatstrings[j].explanation) > 0) {
 					fprintf(stderr, printformatstring, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
 				} else {
 					fprintf(stdout, printformatstring, ipv6calc_formatstrings[j].token, "(empty)");
@@ -219,7 +219,7 @@ void printhelp_actiontypes(const uint32_t formatoptions) {
 	};
 
 	if ((formatoptions & FORMATOPTION_machinereadable) == 0) {
-		snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds: %%s\n", (int) maxlen);
+		snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds : %%s\n", (int) maxlen);
 	} else {
 		snprintf(printformatstring, sizeof(printformatstring) - 1, "%%-%ds\n", (int) maxlen);
 	};

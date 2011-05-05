@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.c
- * Version    : $Id: librfc1884.c,v 1.10 2011/02/27 11:37:10 peter Exp $
+ * Version    : $Id: librfc1884.c,v 1.11 2011/05/05 19:19:52 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -73,7 +73,7 @@ int compaddr_to_uncompaddr(const char *addrstring, char *resultstring) {
 				};
 				if ((cp-1) == tempstring) {
 					if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
-						fprintf(stderr, "%s: fill one 0: (%d)\n", DEBUG_function_name, cnt);
+						fprintf(stderr, "%s: fill one '0:' (%d)\n", DEBUG_function_name, cnt);
 					};
 					op--;
 					*op++ = '0';
@@ -81,18 +81,18 @@ int compaddr_to_uncompaddr(const char *addrstring, char *resultstring) {
 				};
 				if (cnt < 8) {
 					if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
-						fprintf(stderr, "%s: fill one 0: (%d)\n", DEBUG_function_name, cnt);
+						fprintf(stderr, "%s: fill one '0:' (%d)\n", DEBUG_function_name, cnt);
 					};
 			   		*op++ = '0';
 				} else if (cnt == 8) {
 					if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
-						fprintf(stderr, "%s: replace : by 0 (%d)\n", DEBUG_function_name, cnt);
+						fprintf(stderr, "%s: replace ':' by '0' (%d)\n", DEBUG_function_name, cnt);
 					};
 					op--;
 				};
 				while (cnt++ < 7) {
 					if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
-						fprintf(stderr, "%s: fill one :0 (%d)\n", DEBUG_function_name, cnt);
+						fprintf(stderr, "%s: fill one ':0' (%d)\n", DEBUG_function_name, cnt);
 					};
 					*op++ = ':';
 					*op++ = '0';

@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.35 2011/03/29 18:33:32 peter Exp $
- * Generated     : Tue Mar 29 20:28:59 2011
+ * Version       : $Id: dbieee_iab.h,v 1.36 2011/05/05 19:19:52 peter Exp $
+ * Generated     : Thu May  5 21:11:53 2011
  * Data copyright: IEEE
  *
  * Information:
@@ -3574,10 +3574,51 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xDEB000, 0xDEBFFF, "Ruwisch & Kollegen GmbH", "RUWISCH-KOLLEGEN" },
 	{ 0x0050C2, 0xDEC000, 0xDECFFF, "VendNovation LLC", "VENDNOVATION-LLC" },
 	{ 0x0050C2, 0xDED000, 0xDEDFFF, "Lee Laser", "LEE-LASER" },
-	{ 0x0050C2, 0xDEE000, 0xDEEFFF, "PRIVATE", "PRIVATE" },
 	{ 0x0050C2, 0xDEF000, 0xDEFFFF, "Powersense A/S", "POWERSENSE-A/S" },
 	{ 0x0050C2, 0xDF0000, 0xDF0FFF, "Koncar Electrical Engineering Institute", "KONCAR-ELECTRICAL-ENGINEERING-INSTITUTE" },
 	{ 0x0050C2, 0xDF1000, 0xDF1FFF, "Saia-Burgess Controls AG", "SAIA-BURGESS-CONTROLS" },
 	{ 0x0050C2, 0xDF2000, 0xDF2FFF, "Instrument Concepts", "INSTRUMENT-CONCEPTS" },
+	{ 0x0050C2, 0xDF3000, 0xDF3FFF, "INSEVIS GmbH", "INSEVIS" },
+	{ 0x0050C2, 0xDF4000, 0xDF4FFF, "Potter Electric Signal", "POTTER-ELECTRIC-SIGNAL" },
+	{ 0x0050C2, 0xDF5000, 0xDF5FFF, "EtherLight", "ETHERLIGHT" },
+	{ 0x0050C2, 0xDF6000, 0xDF6FFF, "HINO ENGINEERING, INC", "HINO-ENGINEERING" },
+	{ 0x0050C2, 0xDF7000, 0xDF7FFF, "Combilent", "COMBILENT" },
+	{ 0x0050C2, 0xDF8000, 0xDF8FFF, "Tommotek (WA) Pty Ltd.", "TOMMOTEK-WA-PTY" },
+	{ 0x0050C2, 0xDF9000, 0xDF9FFF, "Jenny Science AG", "JENNY-SCIENCE" },
+	{ 0x0050C2, 0xDFA000, 0xDFAFFF, "MAC Valves, Inc.", "MAC-VALVES" },
+	{ 0x0050C2, 0xDFB000, 0xDFBFFF, "BETTINI SRL", "BETTINI-SRL" },
+	{ 0x0050C2, 0xDFC000, 0xDFCFFF, "I-Evo Ltd", "I-EVO" },
+	{ 0x0050C2, 0xDFD000, 0xDFDFFF, "Wotbox ltd", "WOTBOX" },
+	{ 0x0050C2, 0xDFE000, 0xDFEFFF, "Xitek Design Limited", "XITEK-DESIGN" },
+	{ 0x0050C2, 0xDFF000, 0xDFFFFF, "TANTAL ELECTRONICA, SL", "TANTAL-ELECTRONICA-SL" },
+	{ 0x0050C2, 0xE00000, 0xE00FFF, "Aplex Technology Inc.", "APLEX" },
+	{ 0x0050C2, 0xE01000, 0xE01FFF, "Tyco Traffic & Transportation", "TYCO-TRAFFIC-TRANSPORTATION" },
+	{ 0x0050C2, 0xE02000, 0xE02FFF, "Cleverscope", "CLEVERSCOPE" },
+	{ 0x0050C2, 0xE03000, 0xE03FFF, "ICU Scandinavia Schweiz GmbH", "ICU-SCANDINAVIA-SCHWEIZ" },
+	{ 0x0050C2, 0xE04000, 0xE04FFF, "Sec.Eng Systems Pty Ltd", "SEC-ENG-PTY" },
+	{ 0x0050C2, 0xE05000, 0xE05FFF, "NOCOSIUM", "NOCOSIUM" },
+	{ 0x0050C2, 0xE06000, 0xE06FFF, "Ebner Electronic GmbH", "EBNER" },
+	{ 0x0050C2, 0xE07000, 0xE07FFF, "Protagon Process Technologies GmbH", "PROTAGON-PROCESS-TECHNOLOGIES" },
+	{ 0x0050C2, 0xE08000, 0xE08FFF, "KST Technology", "KST" },
+	{ 0x0050C2, 0xE09000, 0xE09FFF, "ATEME", "ATEME" },
+	{ 0x0050C2, 0xE0A000, 0xE0AFFF, "Sicon srl", "SICON-SRL" },
+	{ 0x0050C2, 0xE0B000, 0xE0BFFF, "Seartech", "SEARTECH" },
+	{ 0x0050C2, 0xE0C000, 0xE0CFFF, "YOUHO ELECTRIC IND.,LTD.", "YOUHO-ELECTRIC-IND" },
+	{ 0x0050C2, 0xE0D000, 0xE0DFFF, "Unixmedia Srl", "UNIXMEDIA-SRL" },
+	{ 0x0050C2, 0xE0E000, 0xE0EFFF, "PMAC JAPAN", "PMAC-JAPAN" },
+	{ 0x0050C2, 0xE0F000, 0xE0FFFF, "Trentino Systems", "TRENTINO" },
+	{ 0x0050C2, 0xE10000, 0xE10FFF, "Radinetworks Co., Ltd", "RADINETWORKS" },
+	{ 0x0050C2, 0xE11000, 0xE11FFF, "RF Neulink", "RF-NEULINK" },
+	{ 0x0050C2, 0xE12000, 0xE12FFF, "Innolex", "INNOLEX" },
+	{ 0x0050C2, 0xE13000, 0xE13FFF, "Automation Assist Japan Company", "AUTOMATION-ASSIST-JAPAN-COMPANY" },
+	{ 0x0050C2, 0xE14000, 0xE14FFF, "Calixto Systems Pvt Ltd", "CALIXTO-PVT" },
+	{ 0x0050C2, 0xE15000, 0xE15FFF, "IHI Scube Co.,Ltd", "IHI-SCUBE" },
+	{ 0x0050C2, 0xE16000, 0xE16FFF, "Jetstream Ltd.", "JETSTREAM" },
+	{ 0x0050C2, 0xE17000, 0xE17FFF, "Gall Tankdatensysteme GmbH", "GALL-TANKDATENSYSTEME" },
+	{ 0x0050C2, 0xE18000, 0xE18FFF, "ABB Transmission and Distribution Automation Equipment (Xiamen) Co., Ltd.", "ABB-TRANSMISSION-AND-DISTRIBUTION-AUTOMATION-EQUIPMENT-XIAMEN" },
+	{ 0x0050C2, 0xE19000, 0xE19FFF, "Zoe Medical", "ZOE-MEDICAL" },
+	{ 0x0050C2, 0xE1A000, 0xE1AFFF, "Rosslare Enterprises Limited", "ROSSLARE-ENTERPRISES" },
+	{ 0x0050C2, 0xE1B000, 0xE1BFFF, "Embedded Labs", "EMBEDDED-LABS" },
+	{ 0x0050C2, 0xE1C000, 0xE1CFFF, "Saia-Burgess Controls AG", "SAIA-BURGESS-CONTROLS" },
 
 };

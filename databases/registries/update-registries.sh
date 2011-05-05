@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/registries
 # File       : update-registries.sh
-# Version    : $Id: update-registries.sh,v 1.8 2011/02/27 11:43:38 peter Exp $
+# Version    : $Id: update-registries.sh,v 1.9 2011/05/05 19:19:52 peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces ../ipv4-assignment/update-ipv4-assignment.sh
 #               replaces ../ipv6-assignment/update-ipv6-assignment.sh
@@ -51,8 +51,12 @@ get_urls | while read subdir url filename format flag; do
 
 	pushd $subdir || exit 1
 	case $format in
-            'txt'|'xml')
+            'txt')
 		# nothing to do
+		;;
+            'xml')
+		# fix buggy encoding
+		perl -pi -e "s/^(.*encoding=')ASCII('.*)$/\1US-ASCII\2/" $filename || exit 1
 		;;
 	    'bz2')
 		# decompress
