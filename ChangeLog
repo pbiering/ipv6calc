@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.185 2011/05/05 19:19:52 peter Exp $ 
+ *  $Id: ChangeLog,v 1.186 2011/05/11 20:12:20 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,11 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20110511/PB
+	ipv6loganon:
+	 - add support for option -w (write) and -a (append) output to a given file
+	 - IPv6 address output is now in compressed format
+
 20110505/PB
 	lib/librfc1884.c
 	 - cosmetic improvement of debug information

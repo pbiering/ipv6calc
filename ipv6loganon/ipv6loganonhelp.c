@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganonhelp.c
- * Version    : $Id: ipv6loganonhelp.c,v 1.5 2007/04/26 09:57:31 peter Exp $
+ * Version    : $Id: ipv6loganonhelp.c,v 1.6 2011/05/11 20:12:20 peter Exp $
  * Copyright  : 2007 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
@@ -43,6 +43,8 @@ void ipv6loganon_printhelp(void) {
 	fprintf(stderr, "\n");
 	fprintf(stderr, " General:\n");
 	fprintf(stderr, "  [-d|--debug <debug value>] : debug value (bitwise like)\n");
+	fprintf(stderr, "  [-w|--write]               : write output to file instead of stdout\n");
+	fprintf(stderr, "  [-a|--append]              : append output to file instead of stdout\n");
 	fprintf(stderr, "  [-V|--verbose] : be verbose\n");
 	fprintf(stderr, "  [-n|--nocache] : disable caching\n");
 	fprintf(stderr, "  [-c|--cachelimit <value>] : set cache limit\n");
@@ -61,7 +63,7 @@ void ipv6loganon_printhelp(void) {
 	fprintf(stderr, "  --anonymize-paranoid   : preset for paranoid anonymization\n");
 	fprintf(stderr, "                            mask-ipv4=16 mask-ipv6=32 mask-iid\n");
 	fprintf(stderr, "\n");
-	fprintf(stderr, " Takes data from stdin, outputs the processed data to stdout\n");
+	fprintf(stderr, " Takes data from stdin, outputs the processed data to stdout (default)\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "\n");
 

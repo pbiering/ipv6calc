@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.6 2007/04/26 09:57:31 peter Exp $
- * Copyright  : 2007 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6loganon.c,v 1.7 2011/05/11 20:12:20 peter Exp $
+ * Copyright  : 2007-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile anonymization
@@ -64,6 +64,10 @@ static char     cache_lru_key_token[CACHE_LRU_SIZE][NI_MAXHOST];
 static char     cache_lru_value[CACHE_LRU_SIZE][NI_MAXHOST];
 static long int cache_lru_statistics[CACHE_LRU_SIZE];
 
+char	file_out[NI_MAXHOST] = "";
+int	file_out_flag = 0;
+char	file_out_mode[NI_MAXHOST] = "";
+FILE	*FILE_OUT;
 
 /**************************************************/
 /* main */
@@ -94,6 +98,26 @@ int main(int argc,char *argv[]) {
 				
 			case 'd':
 				ipv6calc_debug = atol(optarg);
+				break;
+
+			case 'w':
+			case 'a':
+				if (strlen(optarg) < NI_MAXHOST) {
+					strcpy(file_out, optarg);
+					file_out_flag = 1;
+				} else {
+					fprintf(stderr, " Output file too long: %s\n", optarg);
+					exit(EXIT_FAILURE);
+				};
+
+				switch (i) {
+					case 'w':
+						strcpy(file_out_mode, "w");
+						break;
+					case 'a':
+						strcpy(file_out_mode, "a");
+						break;	
+				};
 				break;
 
 			case 'c':
@@ -159,7 +183,35 @@ int main(int argc,char *argv[]) {
 	argv += optind;
 	argc -= optind;
 
+	if (file_out_flag == 1) {
+		if (ipv6calc_debug > 0) {
+			fprintf(stderr, "Output file specified: %s\n", file_out);
+		};
+
+		FILE_OUT = fopen(file_out, file_out_mode);
+		if (! FILE_OUT) {
+			fprintf(stderr, "Can't open Output file: %s\n", file_out);
+			exit(EXIT_FAILURE);
+		} else {
+			if (ipv6calc_debug > 0) {
+				if (strcmp(file_out_mode, "a") == 0) {
+					fprintf(stderr, "Output file opened successfully in append mode: %s\n", file_out);
+				} else {
+					fprintf(stderr, "Output file opened successfully in write mode: %s\n", file_out);
+				};
+			};
+			file_out_flag = 2;
+		};
+	};
+
 	lineparser();
+
+	if (file_out_flag == 2) {
+		if (ipv6calc_debug > 0) {
+			fprintf(stderr, "Output file is closed now: %s\n", file_out);
+		};
+		fclose(FILE_OUT);
+	};
 
 	exit(EXIT_SUCCESS);
 };
@@ -246,11 +298,21 @@ static void lineparser(void) {
 		
 		/* print result and rest of line, if available */
 		if (*ptrptr[0] != '\0') {
-			printf("%s %s", resultstring, *ptrptr);
-			fflush(stdin);
+			if (file_out_flag == 2) {
+				fprintf(FILE_OUT, "%s %s", resultstring, *ptrptr);
+				fflush(FILE_OUT);
+			} else {
+				printf("%s %s", resultstring, *ptrptr);
+				fflush(stdin);
+			};
 		} else {
-			printf("%s\n", resultstring);
-			fflush(stdin);
+			if (file_out_flag == 2) {
+				fprintf(FILE_OUT, "%s\n", resultstring);
+				fflush(FILE_OUT);
+			} else {
+				printf("%s\n", resultstring);
+				fflush(stdin);
+			};
 		};
 	};
 
@@ -383,7 +445,7 @@ static int anonymizetoken(char *resultstring, const char *token) {
 		libipv6addr_anonymize(&ipv6addr, mask_iid, mask_ipv6, mask_ipv4);
 
 		/* convert IPv6 address structure to string */
-		libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, 0);
+		ipv6addrstruct_to_compaddr(&ipv6addr, resultstring);
 
 	} else if (ipv4addr.flag_valid == 1) {
 		/* anonymize IPv6 address according to settings */
