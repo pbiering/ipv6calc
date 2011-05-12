@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.188 2011/05/12 14:22:14 peter Exp $ 
+ *  $Id: ChangeLog,v 1.189 2011/05/12 15:24:54 peter Exp $ 
  */
 
 Info:
@@ -14,6 +14,9 @@ Info:
 	 - some bugfixes
 	ipv6calc, ipv6calcweb.cgi
 	 - implement support for GeoIPv6
+	ipv6calcweb.cgi
+	 - skip not-useful entries for IP2LOCATION in case of unsupported by database
+	update information for IP2Location 4.0.2
 
 20110511/PB
 	ipv6loganon:

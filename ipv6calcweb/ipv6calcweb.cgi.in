@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.22 2011/05/12 14:22:15 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.23 2011/05/12 15:24:54 peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -772,8 +772,9 @@ if ( defined $addr_remote ) {
 
 		if ( $key =~ /^IP2LOCATION_/ ) {
 			#$flag_ip2location_used = 1;
-			if ( $content =~ /^This (parameter|record) is unavailable/ ) {
-				$content = "n/a";
+			if ( $content =~ /^This (parameter|record) is unavailable/ || length($content) == 0) {
+				# $content = "n/a";
+				next;
 			};
 		};
 
@@ -830,8 +831,9 @@ if ((defined $addr_server) && ($skip_server == 0)) {
 		chomp $content;
 
 		if ( $key =~ /^IP2LOCATION_/ ) {
-			if ( $content =~ /^This (parameter|record) is unavailable/ ) {
-				$content = "n/a";
+			if ( $content =~ /^This (parameter|record) is unavailable/ || length($content) == 0) {
+				#$content = "n/a";
+				next;
 			};
 		};
 

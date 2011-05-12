@@ -3,30 +3,10 @@ BUILDING IP2LOCATION
 If you want to use the IP2Location library with ipv6calc, you will
 have to build and install it yourself separately.
 Versions below 2.1.3 are NOT suported.
-Because at least the current version (2.1.3) of the IP2Location library
-distributed at <http://www.ip2location.com/c.aspx> is not very polished.
-It needs at least GNU automake, autoconf and libtool to build. You must
-first build the configure script, as documented in the README:
 
-% autoreconf -i -v --force
+Instructions for current version (4.0.2)
 
-% ./configure && make
-
-should work, but be aware that 'make install' will only
-install the library, not the include files (and even the
-library will go into a strange place). The best way to fix
-this is to edit libIP2Location/Makefile.am and change
-
-pkglib_LTLIBRARIES = libIP2Location.la
-
-into
-
-lib_LTLIBRARIES = libIP2Location.la
-include_HEADERS = IP2Location.h bigd.h				# (< 2.1.2)
-include_HEADERS = IP2Location.h mpi.h mpi-config.h mpi-types.h	# (2.1.2)
-include_HEADERS = IP2Location.h imath.h				# (>= 2.1.3)
-
-So, one more iteration:
+Check for installed "libtool" package
 
 % autoreconf -i -v --force
 
@@ -34,9 +14,27 @@ So, one more iteration:
 
 # make install
 
-and you should be OK. Phew!
+This will install following files:
 
-Next, see the INSTALL file in the ipv6calc distribution for information
-on configuring ipv6calc to use the library.
+/usr/local/include/IP2Location.h
+/usr/local/include/imath.h
+/usr/local/lib/libIP2Location.a
+/usr/local/lib/libIP2Location.la
+/usr/local/lib/libIP2Location.so
 
--- Niko Tyni <ntyni@iki.fi>, Fri, 09 Feb 2007 00:23:29 +0200
+
+Extend dynamic linking
+
+# echo "/usr/local/lib" >>/etc/ld.so.conf.d/usr-local-lib.conf
+
+# ldconfig
+
+
+Install databases
+
+# mkdir -p /var/local/share/IP2Location
+# cp data/IP* /var/local/share/IP2Location/
+# chmod 644 /var/local/share/IP2Location/*
+
+Update databases (requires subscription)
+http://www.ip2location.com/IPV6-COUNTRY.aspx
