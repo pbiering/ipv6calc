@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.7 2011/05/11 20:12:20 peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.8 2011/05/12 10:30:47 peter Exp $
  * Copyright  : 2007-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -66,6 +66,7 @@ static long int cache_lru_statistics[CACHE_LRU_SIZE];
 
 char	file_out[NI_MAXHOST] = "";
 int	file_out_flag = 0;
+int	file_out_flush = 0;
 char	file_out_mode[NI_MAXHOST] = "";
 FILE	*FILE_OUT;
 
@@ -98,6 +99,10 @@ int main(int argc,char *argv[]) {
 				
 			case 'd':
 				ipv6calc_debug = atol(optarg);
+				break;
+
+			case 'f':
+				file_out_flush = 1;
 				break;
 
 			case 'w':
@@ -210,7 +215,10 @@ int main(int argc,char *argv[]) {
 		if (ipv6calc_debug > 0) {
 			fprintf(stderr, "Output file is closed now: %s\n", file_out);
 		};
+		fflush(FILE_OUT);
 		fclose(FILE_OUT);
+	} else {
+		fflush(stdout);
 	};
 
 	exit(EXIT_SUCCESS);
@@ -300,18 +308,22 @@ static void lineparser(void) {
 		if (*ptrptr[0] != '\0') {
 			if (file_out_flag == 2) {
 				fprintf(FILE_OUT, "%s %s", resultstring, *ptrptr);
-				fflush(FILE_OUT);
 			} else {
 				printf("%s %s", resultstring, *ptrptr);
-				fflush(stdin);
 			};
 		} else {
 			if (file_out_flag == 2) {
 				fprintf(FILE_OUT, "%s\n", resultstring);
-				fflush(FILE_OUT);
 			} else {
 				printf("%s\n", resultstring);
-				fflush(stdin);
+			};
+		};
+
+		if (file_out_flush == 1) {
+			if (file_out_flag == 2) {
+				fflush(FILE_OUT);
+			} else {
+				fflush(stdout);
 			};
 		};
 	};
