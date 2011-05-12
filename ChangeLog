@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.187 2011/05/12 10:30:47 peter Exp $ 
+ *  $Id: ChangeLog,v 1.188 2011/05/12 14:22:14 peter Exp $ 
  */
 
 Info:
@@ -12,6 +12,8 @@ Info:
 	ipv6loganon:
 	 - add support for option -f (flush)
 	 - some bugfixes
+	ipv6calc, ipv6calcweb.cgi
+	 - implement support for GeoIPv6
 
 20110511/PB
 	ipv6loganon:

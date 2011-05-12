@@ -1,6 +1,6 @@
 #!/bin/sh
 
-$Id: autogen.sh,v 1.9 2008/12/31 12:26:22 peter Exp $
+$Id: autogen.sh,v 1.10 2011/05/12 14:22:14 peter Exp $
 
 OPTIONS_CONFIGURE=""
 
@@ -16,11 +16,16 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		OPTIONS_CONFIGURE="--enable-geoip --enable-ip2location"
 		;;
+	    '--geoip'|'-g')
+		shift
+		OPTIONS_CONFIGURE="--enable-geoip"
+		;;
 	    '-?'|'-h'|'--help')
 		echo "Supported options:"
 		echo "   -?|-h|--help: this help"
 		echo "   -n|--no-make: stop before running 'make'"
 		echo "   -a|--all    : enable GeoIP and IP2Location support"
+		echo "   -g|--geoip  : enable GeoIP support"
 		exit 1
 	esac
 done

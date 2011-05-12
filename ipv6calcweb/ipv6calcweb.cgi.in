@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.21 2010/09/21 19:01:16 peter Exp $
-# Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.22 2011/05/12 14:22:15 peter Exp $
+# Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
 # Simple Perl web interface and security wrapper
@@ -63,11 +63,16 @@ my @list_database_ip2location_ipv6 = (
 	"/usr/share/IP2Location/IPV6-COUNTRY.BIN",
 );
 
-my @list_database_geoip = (
+my @list_database_geoip_ipv4 = (
 	"/var/local/share/GeoIP/GeoLiteCity.dat",
 	"/var/local/share/GeoIP/GeoIP.dat",
 	"/usr/share/GeoIP/GeoLiteCity.dat",
 	"/usr/share/GeoIP/GeoIP.dat",
+);
+
+my @list_database_geoip_ipv6 = (
+	"/var/local/share/GeoIP/GeoIPv6.dat",
+	"/usr/share/GeoIP/GeoIPv6.dat",
 );
 
 sub find_file(@) {
@@ -86,16 +91,17 @@ my $options_ipv6calc = "-m -i -q";
 
 my $database_ip2location_ipv4 = find_file(@list_database_ip2location_ipv4);
 my $database_ip2location_ipv6 = find_file(@list_database_ip2location_ipv6);
-my $flag_ip2location_used_ipv4 = 0;
-my $flag_ip2location_used_ipv6 = 0;
 my %info_ip2location;
 my $info_ip2location_string;
 my $info_ip2location_string_ipv4;
 my $info_ip2location_string_ipv6;
 
-my $database_geoip = find_file(@list_database_geoip);
+my $database_geoip_ipv4 = find_file(@list_database_geoip_ipv4);
+my $database_geoip_ipv6 = find_file(@list_database_geoip_ipv6);
 my $flag_geoip_used = 0;
 my $info_geoip_string;
+my $info_geoip_string_ipv4;
+my $info_geoip_string_ipv6;
 
 if (defined $database_ip2location_ipv4) {
 	$options_ipv6calc .= " --db-ip2location-ipv4 $database_ip2location_ipv4";
@@ -105,10 +111,13 @@ if (defined $database_ip2location_ipv6) {
 	$options_ipv6calc .= " --db-ip2location-ipv6 $database_ip2location_ipv6";
 };
 
-if (defined $database_geoip) {
-	$options_ipv6calc .= " --db-geoip $database_geoip";
+if (defined $database_geoip_ipv4) {
+	$options_ipv6calc .= " --db-geoip-ipv4 $database_geoip_ipv4";
 };
 
+if (defined $database_geoip_ipv6) {
+	$options_ipv6calc .= " --db-geoip-ipv6 $database_geoip_ipv6";
+};
 
 # Whois server urls
 my %url_whoisservers = (
@@ -365,9 +374,13 @@ my %text = (
 		'de' => "GeoIP AREACODE",
 		'en' => "GeoIP AREACODE",
 	},
-	'GEOIP_DATABASE_INFO' => {
-		'de' => "GeoIP Datenbank-Information",
-		'en' => "GeoIP database information",
+	'GEOIP_DATABASE_INFO_IPV4' => {
+		'de' => "GeoIP IPv4 Datenbank-Information",
+		'en' => "GeoIP IPv4 database information",
+	},
+	'GEOIP_DATABASE_INFO_IPV6' => {
+		'de' => "GeoIP IPv6 Datenbank-Information",
+		'en' => "GeoIP IPv6 database information",
 	},
 );
 
@@ -502,8 +515,20 @@ sub print_infohash ($$) {
 			#$flag_ip2location_used = 1;
 		};
 
+		if ($key eq "GEOIP_DATABASE_INFO_IPV4") {
+			$info_geoip_string_ipv4 = $$phash{$key} . " proto=IPv4";
+			# skipped, will be shown in footer
+			next;
+		};
+
+		if ($key eq "GEOIP_DATABASE_INFO_IPV6") {
+			$info_geoip_string_ipv6 = $$phash{$key} . " proto=IPv6";
+			# skipped, will be shown in footer
+			next;
+		};
+
 		if ( $key =~ /^GEOIP_/ ) {
-			$flag_geoip_used = 1;
+			#$flag_geoip_used = 1;
 		};
 
 		# catch internal keys
@@ -924,9 +949,10 @@ if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $info_ip2location{'url'} . "\">IP2Location</a> " . $info_ip2location{'proto'} . " " . $text{'database'}->{$lang} . " " . $text{'version'}->{$lang} . " " . $info_ip2location{'date'} . " (" . $info_ip2location{'entries'} . " " . $text{'entries'}->{$lang} . ")</font>\n";
 	};
 
-	if ($flag_geoip_used == 1) {
+	foreach my $string ($info_geoip_string, $info_geoip_string_ipv4, $info_geoip_string_ipv6) {
+		if (! defined $string) { next; };
 		print "<br>\n";
-		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.maxmind.com\">MaxMind</a> " . $text{'database'}->{$lang} . " " . $info_geoip_string . "</font>\n";
+		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.maxmind.com\">MaxMind</a> " . $text{'database'}->{$lang} . " " . $string . "</font>\n";
 	};
 
 } else {
@@ -940,8 +966,9 @@ if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 
 	};
 
-	if ($flag_geoip_used == 1) {
-		print $text{'powered'}->{$lang} . " MaxMind " . $text{'database'}->{$lang} . " " . $info_geoip_string . "(http://www.maxmind.com)" . "\n";
+	foreach my $string ($info_geoip_string, $info_geoip_string_ipv4, $info_geoip_string_ipv6) {
+		if (! defined $string) { next; };
+		print $text{'powered'}->{$lang} . " MaxMind " . $text{'database'}->{$lang} . " " . $string . "(http://www.maxmind.com)" . "\n";
 	};
 };
 

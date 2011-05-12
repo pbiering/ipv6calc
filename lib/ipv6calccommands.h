@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calccommands.h
- * Version    : $Id: ipv6calccommands.h,v 1.5 2007/04/26 09:57:31 peter Exp $
- * Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calccommands.h,v 1.6 2011/05/12 14:22:15 peter Exp $
+ * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing commands for ipv6calc
@@ -48,7 +48,8 @@
 /* database options */
 #define DB_ip2location_ipv4		0x002001
 #define DB_ip2location_ipv6		0x002002
-#define DB_geoip			0x002011
+#define DB_geoip_ipv4			0x002011
+#define DB_geoip_ipv6			0x002012
 
 /* address anonymizer options */
 #define CMD_ANON_PRESET_STANDARD	0x003001

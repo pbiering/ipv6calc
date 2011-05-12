@@ -665,6 +665,7 @@ with_geoip_headers
 with_geoip_lib
 with_geoip_static
 with_geoip_default_file
+with_geoipv6_default_file
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1304,6 +1305,9 @@ Optional Packages:
   --with-geoip-default-file=file
                           Use a default GeoIP database file when ipv6calc is
                           invoked with '--db-geoip-default|-G'
+  --with-geoipv6-default-file=file
+                          Use a default GeoIPv6 database file when ipv6calc is
+                          invoked with '--db-geoipv6-default'
 
 Some influential environment variables:
   CC          C compiler command
@@ -4087,7 +4091,18 @@ fi
 if test "${with_geoip_default_file+set}" = set; then :
   withval=$with_geoip_default_file;
 cat >>confdefs.h <<_ACEOF
-#define GEOIP_DEFAULT_FILE "$withval"
+#define GEOIP_DEFAULT_FILE_V4 "$withval"
+_ACEOF
+
+fi
+
+
+
+# Check whether --with-geoipv6-default-file was given.
+if test "${with_geoipv6_default_file+set}" = set; then :
+  withval=$with_geoipv6_default_file;
+cat >>confdefs.h <<_ACEOF
+#define GEOIP_DEFAULT_FILE_V6 "$withval"
 _ACEOF
 
 fi

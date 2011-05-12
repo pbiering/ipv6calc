@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.38 2011/05/04 18:26:00 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.39 2011/05/12 14:22:14 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -51,11 +51,14 @@ char file_ip2location_ipv6[NI_MAXHOST] = "";
 #endif
 
 #ifdef SUPPORT_GEOIP
-int  use_geoip = 0; /* if set to 1, GeoIP is enabled by option(s) */
+int  use_geoip_ipv4 = 0; /* if set to 1, GeoIPv4 is enabled by option(s) */
+int  use_geoip_ipv6 = 0; /* if set to 1, GeoIPv6 is enabled by option(s) */
 #ifdef GEOIP_DEFAULT_FILE
-char file_geoip[NI_MAXHOST] = GEOIP_DEFAULT_FILE;
+char file_geoip_ipv4[NI_MAXHOST] = GEOIP_DEFAULT_FILE_V4;
+char file_geoip_ipv6[NI_MAXHOST] = GEOIP_DEFAULT_FILE_V6;
 #else
-char file_geoip[NI_MAXHOST] = "";
+char file_geoip_ipv4[NI_MAXHOST] = "";
+char file_geoip_ipv6[NI_MAXHOST] = "";
 #endif
 #endif
 
@@ -164,13 +167,13 @@ int main(int argc,char *argv[]) {
 #endif
 				break;
 
-			case DB_geoip:
+			case DB_geoip_ipv4:
 #ifdef SUPPORT_GEOIP
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "%s: Got GeoIP database file: %s\n", DEBUG_function_name, optarg);
 				};
-				strncpy(file_geoip, optarg, sizeof(file_geoip) -1 );
-				use_geoip = 1;
+				strncpy(file_geoip_ipv4, optarg, sizeof(file_geoip_ipv4) -1 );
+				use_geoip_ipv4 = 1;
 #else
 				if ((formatoptions & FORMATOPTION_quiet) == 0) {
 					fprintf(stderr, " Support for option '--db-geoip <GeoIP database file>' not compiled in, GeoIP support disabled\n");
@@ -178,9 +181,24 @@ int main(int argc,char *argv[]) {
 #endif
 				break;
 
+			case DB_geoip_ipv6:
+#ifdef SUPPORT_GEOIP
+				if (ipv6calc_debug != 0) {
+					fprintf(stderr, "%s: Got GeoIPv6 database file: %s\n", DEBUG_function_name, optarg);
+				};
+				strncpy(file_geoip_ipv6, optarg, sizeof(file_geoip_ipv6) -1 );
+				use_geoip_ipv6 = 1;
+#else
+				if ((formatoptions & FORMATOPTION_quiet) == 0) {
+					fprintf(stderr, " Support for option '--db-geoipv6 <GeoIPv6 database file>' not compiled in, GeoIPv6 support disabled\n");
+				};
+#endif
+				break;
+
 			case 'G':
 #ifdef GEOIP_DEFAULT_FILE
-				use_geoip = 1;
+				use_geoip_ipv4 = 1;
+				use_geoip_ipv6 = 1;
 #else
 				if ((formatoptions & FORMATOPTION_quiet) == 0) {
 					fprintf(stderr, " Support for option '--db-geoip-default|-G' not compiled in, GeoIP support disabled\n");

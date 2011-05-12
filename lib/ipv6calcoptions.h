@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.14 2007/04/26 09:57:31 peter Exp $
- * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calcoptions.h,v 1.15 2011/05/12 14:22:15 peter Exp $
+ * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options for ipv6calc.c
@@ -42,10 +42,12 @@
 	{"debug", 1, 0, (int) 'd'},
 
 	/* database options */
-	{"db-ip2location-ipv4", 1, 0, DB_ip2location_ipv4},
-	{"db-ip2location-ipv6", 1, 0, DB_ip2location_ipv6},
-	{"db-geoip", 1, 0, DB_geoip},
-	{"db-geoip-default", 1, 0, (int) 'G'},
+	{"db-ip2location-ipv4" , 1, 0, DB_ip2location_ipv4 },
+	{"db-ip2location-ipv6" , 1, 0, DB_ip2location_ipv6 },
+	{"db-geoip"            , 1, 0, DB_geoip_ipv4       }, // backward compatibility
+	{"db-geoip-ipv4"       , 1, 0, DB_geoip_ipv4       },
+	{"db-geoip-ipv6"       , 1, 0, DB_geoip_ipv6       },
+	{"db-geoip-default"    , 1, 0, (int) 'G'},
 
 	/* help options */
 	{"help", 0, 0, (int) 'h'},

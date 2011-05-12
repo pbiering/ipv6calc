@@ -7,7 +7,10 @@
 #undef COPYRIGHT_YEAR
 
 /* Define for a default GeoIP database file. */
-#undef GEOIP_DEFAULT_FILE
+#undef GEOIP_DEFAULT_FILE_V4
+
+/* Define for a default GeoIPv6 database file. */
+#undef GEOIP_DEFAULT_FILE_V6
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
