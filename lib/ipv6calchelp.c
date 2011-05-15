@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.19 2011/05/05 19:19:52 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.20 2011/05/15 11:46:25 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -255,7 +255,8 @@ void printhelp(void) {
 	fprintf(stderr, "\n");
 	fprintf(stderr, " General:\n");
 	fprintf(stderr, "  [-d|--debug <debug value>] : debug value (bitwise like)\n");
-	fprintf(stderr, "  [-q|--quiet]               : be more quiet\n");
+	fprintf(stderr, "  [-q|--quiet]               : be more quiet (auto-enabled in pipe mode)\n");
+	fprintf(stderr, "  [-f|--flush]               : flush each line in pipe mode\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, " Usage with new style options:\n");
 	fprintf(stderr, "  [--in|-I <input type>]   : specify input  type\n");
@@ -279,13 +280,26 @@ void printhelp(void) {
 	fprintf(stderr, "\n");
 	fprintf(stderr, "  [--db-ip2location-ipv4 <file>] : IP2Location IPv4 database file (optional)\n");
 	fprintf(stderr, "  [--db-ip2location-ipv6 <file>] : IP2Location IPv6 database file (optional)\n");
+#ifdef IP2LOCATION_DEFAULT_FILE_IPV4
+	fprintf(stderr, "  [--db-ip2location-ipv4-default|-L] : enable & use IP2Location IPv4 default database file (optional)\n");
+	fprintf(stderr, "                                        %s\n", IP2LOCATION_DEFAULT_FILE_IPV4);
+#endif
+#ifdef IP2LOCATION_DEFAULT_FILE_IPV6
+	fprintf(stderr, "  [--db-ip2location-ipv6-default|-L] : enable & use IP2Location IPv6 default database file (optional)\n");
+	fprintf(stderr, "                                        %s\n", IP2LOCATION_DEFAULT_FILE_IPV6);
+#endif
 #endif
 #ifdef SUPPORT_GEOIP
 	fprintf(stderr, "\n");
-	fprintf(stderr, "  [--db-geoip <file>]            : GeoIP database file (optional)\n");
-#ifdef GEOIP_DEFAULT_FILE
-	fprintf(stderr, "  [--db-geoip-default|-G]        : enable & use GeoIP default database file (optional):\n");
-	fprintf(stderr, "                                    %s\n", GEOIP_DEFAULT_FILE);
+	fprintf(stderr, "  [--db-geoip-ipv4 <file>]  : GeoIP IPv4 database file (optional)\n");
+	fprintf(stderr, "  [--db-geoip-ipv6 <file>]  : GeoIP IPv6 database file (optional)\n");
+#ifdef GEOIP_DEFAULT_FILE_IPV4
+	fprintf(stderr, "  [--db-geoip-ipv4-default|-G] : enable & use GeoIP IPv4 default database file (optional)\n");
+	fprintf(stderr, "                                  %s\n", GEOIP_DEFAULT_FILE_IPV4);
+#endif
+#ifdef GEOIP_DEFAULT_FILE_IPV6
+	fprintf(stderr, "  [--db-geoip-ipv6-default|-G] : enable & use GeoIP IPv6 default database file (optional)\n");
+	fprintf(stderr, "                                  %s\n", GEOIP_DEFAULT_FILE_IPV6);
 #endif
 #endif
 	fprintf(stderr, "\n");

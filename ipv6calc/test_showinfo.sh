@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.10 2007/08/11 12:04:58 peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.11 2011/05/15 11:46:25 peter Exp $
 # Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -34,8 +34,51 @@ fe80::ffff:ffff:fffd			# Link-local teredo
 END
 }
 
+getexamples_GeoIP() {
+	cat <<END
+2001:a60:9002:1::186:6
+212.18.21.186
+END
+}
+
+getexamples_IP2Location() {
+	cat <<END
+2001:a60:9002:1::186:6
+212.18.21.186
+END
+}
+
 getexamples | while read address separator comment; do
 	echo "$comment: $address"
-	./ipv6calc -q -i -m --db-ip2location-ipv4 /usr/share/IP2Location/IP-COUNTRY-SAMPLE.BIN --db-ip2location-ipv6 /var/local/share/IP2Location/IPV6-COUNTRY.BIN --db-geoip /usr/share/GeoIP/GeoIP.dat $address || exit 1
+	./ipv6calc -q -i -m $address || exit 1
 	echo
 done
+
+if ./ipv6calc -v 2>&1 | grep -qw GeoIP; then
+	echo "Run GeoIP tests"
+	getexamples_GeoIP | while read address; do
+		echo "Run GeoIP showinfo on: $address"
+		if ./ipv6calc -q -i -m -G $address | grep ^GEOIP; then
+			true
+		else
+			exit 1
+		fi
+	done || exit 1
+else
+	echo "GeoIP tests skipped"
+fi
+
+if ./ipv6calc -v 2>&1 | grep -qw IP2Location; then
+	echo "Run IP2Location tests"
+	getexamples_IP2Location | while read address; do
+		echo "Run IP2Location showinfo on: $address"
+		if ./ipv6calc -q -i -m -L $address | egrep -v '=This (record|parameter) ' | grep ^IP2LOCATION; then
+			true
+		else
+			exit 1
+		fi
+	done || exit 1
+else
+	echo "IP2Location tests skipped"
+
+fi

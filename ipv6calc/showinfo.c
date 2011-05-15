@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.45 2011/05/12 14:22:15 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.46 2011/05/15 11:46:25 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -177,7 +177,7 @@ static void print_ip2location(const char *addrstring, const uint32_t formatoptio
 
 	if (IP2LocationObj == NULL) {
 		/* error on opening database, nothing more todo */
-		fprintf(stderr, " IP2Location can't open database\n");
+		fprintf(stderr, "%s: IP2Location can't open database: %s\n", DEBUG_function_name, file_ip2location);
 		return;
 	};
 
@@ -274,33 +274,33 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 	} else if (version == 6) {
 		file_geoip = file_geoip_ipv6;
 	} else {
-		fprintf(stderr, " GeoIP for IP version %d not supported\n", version);
+		fprintf(stderr, " GeoIP for IPv%d not supported\n", version);
 		return;
 	};
 
 	if (strlen(file_geoip) == 0) {
 		/* no file given, nothing more todo */
-		fprintf(stderr, " GeoIPv%d database file not given\n", version);
+		fprintf(stderr, " GeoIP IPv%d database file not given\n", version);
 	};
 
 	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-		fprintf(stderr, "%s: GeoIPv%d try to open database: %s\n", DEBUG_function_name, version, file_geoip);
+		fprintf(stderr, "%s: GeoIP IPv%d try to open database: %s\n", DEBUG_function_name, version, file_geoip);
 	};
 
 	GeoIP *gi = GeoIP_open(file_geoip, GEOIP_STANDARD);
 
 	if (gi == NULL) {
 		/* error on opening database, nothing more todo */
-		fprintf(stderr, " GeoIPv%d can't open database: %s\n", version, file_geoip);
+		fprintf(stderr, " GeoIP IPv%d can't open database: %s\n", version, file_geoip);
 		return;
 	};
 
 	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-		fprintf(stderr, "%s: GeoIPv%d database opened: %s\n", DEBUG_function_name, version, file_geoip);
+		fprintf(stderr, "%s: GeoIP IPv%d database opened: %s\n", DEBUG_function_name, version, file_geoip);
 	};
 
 	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-		fprintf(stderr, "%s: GeoIPv%d check available databases\n", DEBUG_function_name, version);
+		fprintf(stderr, "%s: GeoIP IPv%d check available databases\n", DEBUG_function_name, version);
 	};
 
 	if (GeoIP_database_edition(gi) == GEOIP_COUNTRY_EDITION && version == 4) {
@@ -332,7 +332,7 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 		flag_geoip_ok = 1;
 
 		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-			fprintf(stderr, "%s: GeoIPv%d city database result\n", DEBUG_function_name, version);
+			fprintf(stderr, "%s: GeoIP IPv%d city database result\n", DEBUG_function_name, version);
 		};
 
 		if ( machinereadable != 0 ) {
@@ -365,7 +365,7 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 		flag_geoip_ok = 1;
 
 		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-			fprintf(stderr, "%s: GeoIP%d contry database result\n", DEBUG_function_name, version);
+			fprintf(stderr, "%s: GeoIP IP%d contry database result\n", DEBUG_function_name, version);
 		};
 
 		if ( machinereadable != 0 ) {

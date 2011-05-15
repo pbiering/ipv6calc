@@ -6,11 +6,11 @@
 /* Copyright year */
 #undef COPYRIGHT_YEAR
 
-/* Define for a default GeoIP database file. */
-#undef GEOIP_DEFAULT_FILE_V4
+/* Define for a default GeoIP IPv4 database file. */
+#undef GEOIP_DEFAULT_FILE_IPV4
 
-/* Define for a default GeoIPv6 database file. */
-#undef GEOIP_DEFAULT_FILE_V6
+/* Define for a default GeoIP IPv6 database file. */
+#undef GEOIP_DEFAULT_FILE_IPV6
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
@@ -44,6 +44,12 @@
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
+
+/* Define for a default IP2Location IPv4 database file. */
+#undef IP2LOCATION_DEFAULT_FILE_IPV4
+
+/* Define for a default IP2Location IPv6 database file. */
+#undef IP2LOCATION_DEFAULT_FILE_IPV6
 
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT

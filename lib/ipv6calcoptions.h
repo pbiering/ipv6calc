@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.15 2011/05/12 14:22:15 peter Exp $
+ * Version    : $Id: ipv6calcoptions.h,v 1.16 2011/05/15 11:46:25 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -33,21 +33,28 @@
  *  m = output machine readable
  *  i = showinfo
  *  q = be more quiet
+ *  f = flush (each line in pipe mode)
  */
-/*@unused@*/ static char *ipv6calc_shortopts = "vh?rmabd:iulqGUFCI:O:A:";
+/*@unused@*/ static char *ipv6calc_shortopts = "vh?rmabfd:iulqLGUFCI:O:A:";
 
 /* define long options */
 /*@unused@*/ static struct option ipv6calc_longopts[] = {
-	{"version", 0, 0, (int) 'v'},
-	{"debug", 1, 0, (int) 'd'},
+	{"version", 0, 0, (int) 'v' },
+	{"flush"  , 0, 0, (int) 'f' },
+	{"debug"  , 1, 0, (int) 'd' },
 
 	/* database options */
-	{"db-ip2location-ipv4" , 1, 0, DB_ip2location_ipv4 },
-	{"db-ip2location-ipv6" , 1, 0, DB_ip2location_ipv6 },
-	{"db-geoip"            , 1, 0, DB_geoip_ipv4       }, // backward compatibility
-	{"db-geoip-ipv4"       , 1, 0, DB_geoip_ipv4       },
-	{"db-geoip-ipv6"       , 1, 0, DB_geoip_ipv6       },
-	{"db-geoip-default"    , 1, 0, (int) 'G'},
+	{"db-ip2location-ipv4"         , 1, 0, DB_ip2location_ipv4   },
+	{"db-ip2location-ipv6"         , 1, 0, DB_ip2location_ipv6   },
+	{"db-ip2location-default"      , 0, 0, 'L'                   },
+	{"db-ip2location-ipv4-default" , 0, 0, DB_geoip_ipv4_default },
+	{"db-ip2location-ipv6-default" , 0, 0, DB_geoip_ipv6_default },
+	{"db-geoip"                    , 1, 0, DB_geoip_ipv4         }, // backward compatibility
+	{"db-geoip-ipv4"               , 1, 0, DB_geoip_ipv4         },
+	{"db-geoip-ipv6"               , 1, 0, DB_geoip_ipv6         },
+	{"db-geoip-default"            , 0, 0, 'G'                   },
+	{"db-geoip-ipv4-default"       , 0, 0, DB_geoip_ipv4_default },
+	{"db-geoip-ipv6-default"       , 0, 0, DB_geoip_ipv6_default },
 
 	/* help options */
 	{"help", 0, 0, (int) 'h'},
@@ -94,11 +101,12 @@
 	{ "maskprefix"           , 0, 0, FORMATOPTION_NUM_maskprefix + FORMATOPTION_NUM_HEAD },
 	{ "masksuffix"           , 0, 0, FORMATOPTION_NUM_masksuffix + FORMATOPTION_NUM_HEAD },
 	
-	{ "uppercase"       , 0, 0, FORMATOPTION_NUM_printuppercase + FORMATOPTION_NUM_HEAD },
-	{ "lowercase"       , 0, 0, FORMATOPTION_NUM_printlowercase + FORMATOPTION_NUM_HEAD },
+	{ "uppercase"            , 0, 0, FORMATOPTION_NUM_printuppercase + FORMATOPTION_NUM_HEAD },
+	{ "lowercase"            , 0, 0, FORMATOPTION_NUM_printlowercase + FORMATOPTION_NUM_HEAD },
 
-	{ "printstart"           , 1, 0, FORMATOPTION_NUM_printstart + FORMATOPTION_NUM_HEAD },
-	{ "printend"             , 1, 0, FORMATOPTION_NUM_printend + FORMATOPTION_NUM_HEAD },
+	{ "printstart"           , 1, 0, FORMATOPTION_NUM_printstart  + FORMATOPTION_NUM_HEAD },
+	{ "printend"             , 1, 0, FORMATOPTION_NUM_printend    + FORMATOPTION_NUM_HEAD },
+	{ "forceprefix"          , 1, 0, FORMATOPTION_NUM_forceprefix + FORMATOPTION_NUM_HEAD },
 	
 	{ "printprefix"          , 0, 0, FORMATOPTION_NUM_printprefix + FORMATOPTION_NUM_HEAD },
 	{ "printsuffix"          , 0, 0, FORMATOPTION_NUM_printsuffix + FORMATOPTION_NUM_HEAD },

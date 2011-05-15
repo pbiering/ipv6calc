@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.36 2011/05/05 19:19:52 peter Exp $
- * Generated     : Thu May  5 21:11:53 2011
+ * Version       : $Id: dbieee_iab.h,v 1.37 2011/05/15 11:46:25 peter Exp $
+ * Generated     : Sun May 15 13:42:26 2011
  * Data copyright: IEEE
  *
  * Information:
@@ -3620,5 +3620,15 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xE1A000, 0xE1AFFF, "Rosslare Enterprises Limited", "ROSSLARE-ENTERPRISES" },
 	{ 0x0050C2, 0xE1B000, 0xE1BFFF, "Embedded Labs", "EMBEDDED-LABS" },
 	{ 0x0050C2, 0xE1C000, 0xE1CFFF, "Saia-Burgess Controls AG", "SAIA-BURGESS-CONTROLS" },
+	{ 0x0050C2, 0xE1D000, 0xE1DFFF, "Holdline Tecnologia e Sistemas Ltda", "HOLDLINE-TECNOLOGIA-E-SISTEMAS-LTDA" },
+	{ 0x0050C2, 0xE1E000, 0xE1EFFF, "Lo-Q plc", "LO-Q-PLC" },
+	{ 0x0050C2, 0xE1F000, 0xE1FFFF, "ELVEES", "ELVEES" },
+	{ 0x0050C2, 0xE20000, 0xE20FFF, "Divelbiss Corporation", "DIVELBISS" },
+	{ 0x0050C2, 0xE21000, 0xE21FFF, "Norwia AS", "NORWIA-AS" },
+	{ 0x0050C2, 0xE22000, 0xE22FFF, "Michael Riedel Transformatorenbau GmbH", "MICHAEL-RIEDEL-TRANSFORMATORENBAU" },
+	{ 0x0050C2, 0xE23000, 0xE23FFF, "VITEC", "VITEC" },
+	{ 0x0050C2, 0xE24000, 0xE24FFF, "DiTEST Fahrzeugdiagnose GmbH", "DITEST-FAHRZEUGDIAGNOSE" },
+	{ 0x0050C2, 0xE25000, 0xE25FFF, "ACD Elektronik GmbH", "ACD-ELEKTRONIK" },
+	{ 0x0050C2, 0xE26000, 0xE26FFF, "Cinetix s.r.l.", "CINETIX-S-R-L" },
 
 };

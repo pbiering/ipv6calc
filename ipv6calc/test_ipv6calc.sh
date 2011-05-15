@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.20 2011/03/29 18:33:32 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.21 2011/05/15 11:46:25 peter Exp $
 # Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -123,9 +123,9 @@ cat <<END | grep -v '^#'
 -i -m ff02::1								=*
 # Anonymization
 --action anonymize 3ffe:831f:ce49:7601:8000:efff:af4a:86BF		=3ffe:831f:ce49:7601:8000:ffff:af4a:86ff
---action anonymize 3ffe:831f:ce49:7601:8000:efff:af4a:86BF --mask-ipv4 16	=3ffe:831f:ce49:7601:8000:ffff:af4a:ffff
+--action anonymize --mask-ipv4 16 3ffe:831f:ce49:7601:8000:efff:af4a:86BF	=3ffe:831f:ce49:7601:8000:ffff:af4a:ffff
 --action anonymize 192.0.2.1						=192.0.2.0
---action anonymize 192.0.2.1 --mask-ipv4 16				=192.0.0.0
+--action anonymize --mask-ipv4 16 192.0.2.1				=192.0.0.0
 # RFC 5952 4.2.1
 --in ipv6addr --out ipv6addr 2001:db8:0:0:0:0:2:1			=2001:db8::2:1
 # RFC 5952 4.2.2
@@ -197,6 +197,15 @@ cat <<END | grep -v '^#'
 0.0.0.0.01.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.arpa.		revnibbles.arpa
 123456789									ipv4hex
 END
+}
+
+# Test Scenarios for pipe handling
+testscenarios_pipe() {
+	cat <<END
+3ffe::1:ff00:1234,--in ipv6addr --out ipv6addr -h --printuncompressed,3ffe:0:0:0:0:1:ff00:1234
+3ffe::1:ff00:1234,--in ipv6addr --out ipv6addr -h --printuncompressed --printprefix --forceprefix 96,3ffe:0:0:0:0:1
+END
+
 }
 
 #set -x
@@ -327,16 +336,75 @@ testscenarios_auto_good | while read input type; do
 	fi
 done || exit 1
 
-echo "Run 'ipv6calc' input tests...(bad cases)"
-testscenarios_auto_bad | while read input type; do
-	echo "Test './ipv6calc --in $type -q \"$input\"'"
-	./ipv6calc --in $type -q "$input" >/dev/null
+echo "Run 'ipv6calc' pipe tests (1)"
+testscenarios_pipe | while IFS="," read input arguments result; do
+	echo "Test 'echo $input | ./ipv6calc $arguments | grep \"^$result\$i\"'"
+	#set -x
+	echo -e $input | ./ipv6calc $arguments | grep "^$result\$" >/dev/null
 	retval=$?
-	if [ $retval -eq 0 ]; then
+	#set +x
+	if [ $retval -ne 0 ]; then
 		echo "Error executing 'ipv6calc' ($retval)!"
 		exit 1
 	fi
 done || exit 1
+
+echo "Run 'ipv6calc' pipe tests (2)"
+# reuse original test cases
+testscenarios | while read line; do
+	# extract result
+	command="`echo "$line" | awk -F= '{ print $1 }' | sed 's/ $//g'`"
+	result="`echo "$line" | awk -F= '{ print $2 }'`"
+	#echo "command=$command" >&2
+	stdin="`echo "$command" | awk '{ print $NF }'`"
+	options="`echo "$command" | awk '{ for (i=1; i < NF; i++) printf "%s ", $i; }'`"
+	case $command in
+	    *ifinet*)
+		if echo "$stdin" | grep -q "^..$"; then
+			stdin="`echo "$command" | awk '{ for (i=NF-1; i <= NF; i++) printf "%s ", $i; }'`"
+			options="`echo "$command" | awk '{ for (i=1; i < NF-1; i++) printf "%s ", $i; }'`"
+		fi
+		;;
+	    *eui64_to_privacy*|*iid+token*|*prefix+mac*)
+		stdin="`echo "$command" | awk '{ for (i=NF-1; i <= NF; i++) printf "%s ", $i; }'`"
+		options="`echo "$command" | awk '{ for (i=1; i < NF-1; i++) printf "%s ", $i; }'`"
+		;;
+	esac
+	echo "Test 'echo $stdin | ./ipv6calc $options | grep \"^$result\$i\"'"
+	#set -x
+	output="`echo -e $stdin | ./ipv6calc $options`"
+	retval=$?
+	#set +x
+	if [ $retval -ne 0 ]; then
+		echo "Error executing 'ipv6calc' ($retval)!"
+		exit 1
+	fi
+	# Check result
+	if [ "$result" != "*" ]; then
+		if [ "$output" != "$result" ]; then
+			echo "Result '$output' doesn't match!"
+			exit 1
+		fi
+	fi
+done || exit 1
+
+echo "Run 'ipv6calc' pipe mode input validation tests...(too long input)"
+./ipv6calc -m --in -? | while read inputformat; do
+	if echo $inputformat | grep -q '+'; then
+		echo "Test '8192*x 8192*x | ./ipv6calc -q --in $inputformat"
+		perl -e 'print "x" x8192 . " " . "y" x8192' | ./ipv6calc -q --in $inputformat
+		retval=$?
+	else
+		echo "Test '8192*x | ./ipv6calc -q --in $inputformat"
+		perl -e 'print "x" x8192' | ./ipv6calc -q --in $inputformat
+		retval=$?
+	fi
+	if [ $retval -ne 0 -a $retval -ne 1 ]; then
+		echo "Error executing 'ipv6calc'!"
+		exit 1
+	fi
+done || exit 1
+
 
 retval=$?
 if [ $retval -eq 0 ]; then

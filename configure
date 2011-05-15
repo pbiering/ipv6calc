@@ -660,12 +660,14 @@ enable_ip2location
 with_ip2location_headers
 with_ip2location_lib
 with_ip2location_static
+with_ip2location_ipv4_default_file
+with_ip2location_ipv6_default_file
 enable_geoip
 with_geoip_headers
 with_geoip_lib
 with_geoip_static
-with_geoip_default_file
-with_geoipv6_default_file
+with_geoip_ipv4_default_file
+with_geoip_ipv6_default_file
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1298,16 +1300,24 @@ Optional Packages:
                           IP2Location library location
   --with-ip2location-static
                           Explicitly link IP2Location statically (default=no)
+  --with-ip2location-ipv4-default-file=file
+                          Use a default IP2Location IPv4 database file when
+                          ipv6calc is invoked with
+                          '--db-ip2location-ipv4-default|-L'
+  --with-ip2location-ipv6-default-file=file
+                          Use a default IP2Location IPv6 database file when
+                          ipv6calc is invoked with
+                          '--db-ip2location-ipv6-default|-L'
   --with-geoip-headers=DIR
                           GeoIP include files location
   --with-geoip-lib=DIR    GeoIP library location
   --with-geoip-static     Explicitly link GeoIP statically (default=no)
-  --with-geoip-default-file=file
-                          Use a default GeoIP database file when ipv6calc is
-                          invoked with '--db-geoip-default|-G'
-  --with-geoipv6-default-file=file
-                          Use a default GeoIPv6 database file when ipv6calc is
-                          invoked with '--db-geoipv6-default'
+  --with-geoip-ipv4-default-file=file
+                          Use a default GeoIP IPv4 database file when ipv6calc
+                          is invoked with '--db-geoip-ipv4-default|-G'
+  --with-geoip-ipv6-default-file=file
+                          Use a default GeoIP IPv6 database file when ipv6calc
+                          is invoked with '--db-geoip-ipv6-default|-G'
 
 Some influential environment variables:
   CC          C compiler command
@@ -3984,6 +3994,28 @@ if test "${with_ip2location_static+set}" = set; then :
 fi
 
 
+
+# Check whether --with-ip2location-ipv4-default-file was given.
+if test "${with_ip2location_ipv4_default_file+set}" = set; then :
+  withval=$with_ip2location_ipv4_default_file;
+cat >>confdefs.h <<_ACEOF
+#define IP2LOCATION_DEFAULT_FILE_IPV4 "$withval"
+_ACEOF
+
+fi
+
+
+
+# Check whether --with-ip2location-ipv6-default-file was given.
+if test "${with_ip2location_ipv6_default_file+set}" = set; then :
+  withval=$with_ip2location_ipv6_default_file;
+cat >>confdefs.h <<_ACEOF
+#define IP2LOCATION_DEFAULT_FILE_IPV6 "$withval"
+_ACEOF
+
+fi
+
+
 if test "$IP2LOCATION" = "yes"; then
     CPPFLAGS="$CPPFLAGS $IP2LOCATION_INCLUDE"
     LDFLAGS="$LDFLAGS $IP2LOCATION_LIB"
@@ -4087,22 +4119,22 @@ fi
 
 
 
-# Check whether --with-geoip-default-file was given.
-if test "${with_geoip_default_file+set}" = set; then :
-  withval=$with_geoip_default_file;
+# Check whether --with-geoip-ipv4-default-file was given.
+if test "${with_geoip_ipv4_default_file+set}" = set; then :
+  withval=$with_geoip_ipv4_default_file;
 cat >>confdefs.h <<_ACEOF
-#define GEOIP_DEFAULT_FILE_V4 "$withval"
+#define GEOIP_DEFAULT_FILE_IPV4 "$withval"
 _ACEOF
 
 fi
 
 
 
-# Check whether --with-geoipv6-default-file was given.
-if test "${with_geoipv6_default_file+set}" = set; then :
-  withval=$with_geoipv6_default_file;
+# Check whether --with-geoip-ipv6-default-file was given.
+if test "${with_geoip_ipv6_default_file+set}" = set; then :
+  withval=$with_geoip_ipv6_default_file;
 cat >>confdefs.h <<_ACEOF
-#define GEOIP_DEFAULT_FILE_V6 "$withval"
+#define GEOIP_DEFAULT_FILE_IPV6 "$withval"
 _ACEOF
 
 fi

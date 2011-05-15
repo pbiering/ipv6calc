@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.19 2011/02/27 11:42:48 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.20 2011/05/15 11:46:25 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -135,23 +135,25 @@ typedef struct {
 
 
 /* Format options */
-#define FORMATOPTION_NUM_HEAD			0x300
+#define FORMATOPTION_NUM_HEAD			0x300	// offset
 
-#define FORMATOPTION_NUM_printlowercase		1
-#define FORMATOPTION_NUM_printuppercase		2
-#define FORMATOPTION_NUM_printprefix		3
-#define FORMATOPTION_NUM_printsuffix		4
-#define FORMATOPTION_NUM_maskprefix		5
-#define FORMATOPTION_NUM_masksuffix		6
-#define FORMATOPTION_NUM_printstart		7
-#define FORMATOPTION_NUM_printend		8
-#define FORMATOPTION_NUM_printcompressed	9
-#define FORMATOPTION_NUM_printuncompressed	10
-#define FORMATOPTION_NUM_printfulluncompressed	11
-#define FORMATOPTION_NUM_machinereadable	12
-#define FORMATOPTION_NUM_quiet			13
-#define FORMATOPTION_NUM_printmirrored		14
-#define FORMATOPTION_NUM_printembedded		31
+#define FORMATOPTION_NUM_printlowercase		1	// 00000002
+#define FORMATOPTION_NUM_printuppercase		2	// 00000004
+#define FORMATOPTION_NUM_printprefix		3	// 00000008
+#define FORMATOPTION_NUM_printsuffix		4	// 00000010
+#define FORMATOPTION_NUM_maskprefix		5	// 00000020
+#define FORMATOPTION_NUM_masksuffix		6	// 00000040
+#define FORMATOPTION_NUM_printstart		7	// 00000080
+#define FORMATOPTION_NUM_printend		8	// 00000100
+#define FORMATOPTION_NUM_printcompressed	9	// 00000200
+#define FORMATOPTION_NUM_printuncompressed	10	// 00000400
+#define FORMATOPTION_NUM_printfulluncompressed	11	// 00000800
+#define FORMATOPTION_NUM_machinereadable	12	// 00001000
+#define FORMATOPTION_NUM_quiet			13	// 00002000
+#define FORMATOPTION_NUM_printmirrored		14	// 00004000
+#define FORMATOPTION_NUM_forceprefix		15	// 00010000
+
+#define FORMATOPTION_NUM_printembedded		31	// special
 
 #define FORMATOPTION_printlowercase		(uint32_t) (1 << FORMATOPTION_NUM_printlowercase)
 #define FORMATOPTION_printuppercase		(uint32_t) (1 << FORMATOPTION_NUM_printuppercase)
@@ -167,6 +169,8 @@ typedef struct {
 #define FORMATOPTION_machinereadable		(uint32_t) (1 << FORMATOPTION_NUM_machinereadable)
 #define FORMATOPTION_quiet			(uint32_t) (1 << FORMATOPTION_NUM_quiet)
 #define FORMATOPTION_printmirrored		(uint32_t) (1 << FORMATOPTION_NUM_printmirrored)
+#define FORMATOPTION_forceprefix		(uint32_t) (1 << FORMATOPTION_NUM_forceprefix)
+
 #define FORMATOPTION_printembedded		(uint32_t) (1 << FORMATOPTION_NUM_printembedded)
 
 typedef struct {
@@ -189,7 +193,8 @@ typedef struct {
 	{ FORMATOPTION_printfulluncompressed  , "--printfulluncompressed|-F"  , "Print in full uncompressed format" },
 	{ FORMATOPTION_machinereadable  , "--machinereadable|-m" , "Print output machine readable" },
 	{ FORMATOPTION_quiet            , "--quiet|-q"         , "Be more quiet" },
-	{ FORMATOPTION_printmirrored	, "--printmirrored"    , "Print output mirrored" }
+	{ FORMATOPTION_printmirrored	, "--printmirrored"    , "Print output mirrored" },
+	{ FORMATOPTION_forceprefix	, "--forceprefix <num>", "Force prefix to <num>" },
 };
 
 /* Possible format option map */
@@ -198,7 +203,7 @@ typedef struct {
 	{ FORMAT_revnibbles_arpa, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend | FORMATOPTION_printmirrored },
 	{ FORMAT_revipv4, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printmirrored },
 	{ FORMAT_bitstring      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
-	{ FORMAT_ipv6addr       , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed },
+	{ FORMAT_ipv6addr       , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed | FORMATOPTION_forceprefix },
 	{ FORMAT_mac            , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_eui64          , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_base85         , 0 },
@@ -239,8 +244,8 @@ typedef struct {
 	{ ACTION_mac_to_eui64         , "geneui64"       , "Converts a MAC address to an EUI-64 address", "" },
 	{ ACTION_ipv4_to_6to4addr     , "conv6to4"       , "Converts IPv4 address <-> 6to4 IPv6 address (prefix)", "" },
 	{ ACTION_iid_token_to_privacy , "genprivacyiid"  , "Generates a privacy interface ID out of a given one and a token", "" },
+	{ ACTION_prefix_mac_to_ipv6   , "prefixmac2ipv6" , "Generates an IPv6 address out of a prefix and a MAC address", "" },
 	{ ACTION_anonymize            , "anonymize"      , "Anonymize IPv4/IPv6 address without loosing much information", "" },
-	{ ACTION_prefix_mac_to_ipv6   , "prefixmac2ipv6" , "Generates an IPv6 address out of a prefix and a MAC address", "" }
 };
 
 

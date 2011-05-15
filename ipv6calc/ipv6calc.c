@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.39 2011/05/12 14:22:14 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.40 2011/05/15 11:46:25 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -13,6 +13,7 @@
 #include <string.h>
 #include <stdlib.h> 
 #include <getopt.h> 
+#include <unistd.h>
 
 #include "ipv6calc.h"
 #include "libipv6calc.h"
@@ -38,6 +39,10 @@
 
 long int ipv6calc_debug = 0;
 
+/* pipe support */
+int input_is_pipe = 0;
+#define LINEBUFFER      16384
+
 /* anonymization default values */
 int mask_ipv4 = 24;
 int mask_ipv6 = 48;
@@ -46,18 +51,29 @@ int mask_iid = 1;
 #ifdef SUPPORT_IP2LOCATION
 int  use_ip2location_ipv4 = 0; /* if set to 1, IP2Location IPv4 is enabled by option(s) */
 int  use_ip2location_ipv6 = 0; /* if set to 1, IP2Location IPv6 is enabled by option(s) */
+#ifdef IP2LOCATION_DEFAULT_FILE_IPV4
+char file_ip2location_ipv4[NI_MAXHOST] = IP2LOCATION_DEFAULT_FILE_IPV4;
+#else
 char file_ip2location_ipv4[NI_MAXHOST] = "";
+#endif
+#ifdef IP2LOCATION_DEFAULT_FILE_IPV6
+char file_ip2location_ipv6[NI_MAXHOST] = IP2LOCATION_DEFAULT_FILE_IPV6;
+#else
 char file_ip2location_ipv6[NI_MAXHOST] = "";
+#endif
 #endif
 
 #ifdef SUPPORT_GEOIP
-int  use_geoip_ipv4 = 0; /* if set to 1, GeoIPv4 is enabled by option(s) */
-int  use_geoip_ipv6 = 0; /* if set to 1, GeoIPv6 is enabled by option(s) */
-#ifdef GEOIP_DEFAULT_FILE
-char file_geoip_ipv4[NI_MAXHOST] = GEOIP_DEFAULT_FILE_V4;
-char file_geoip_ipv6[NI_MAXHOST] = GEOIP_DEFAULT_FILE_V6;
+int  use_geoip_ipv4 = 0; /* if set to 1, GeoIP IPv4 is enabled by option(s) */
+int  use_geoip_ipv6 = 0; /* if set to 1, GeoIP IPv6 is enabled by option(s) */
+#ifdef GEOIP_DEFAULT_FILE_IPV4
+char file_geoip_ipv4[NI_MAXHOST] = GEOIP_DEFAULT_FILE_IPV4;
 #else
 char file_geoip_ipv4[NI_MAXHOST] = "";
+#endif
+#ifdef GEOIP_DEFAULT_FILE_IPV6
+char file_geoip_ipv6[NI_MAXHOST] = GEOIP_DEFAULT_FILE_IPV6;
+#else
 char file_geoip_ipv6[NI_MAXHOST] = "";
 #endif
 #endif
@@ -88,13 +104,15 @@ void printinfo(void)  {
 /**************************************************/
 /* main */
 #define DEBUG_function_name "ipv6calc/main"
-int main(int argc,char *argv[]) {
+int main(int argc, char *argv[]) {
 	char resultstring[NI_MAXHOST] = "";
 	char resultstring2[NI_MAXHOST] = "";
 	char resultstring3[NI_MAXHOST] = "";
 	int retval = 1, i, j, lop;
 	unsigned long int command = 0;
-	int bit_start = 0, bit_end = 0;
+	int bit_start = 0, bit_end = 0, force_prefix = 0;
+	char *input1 = NULL, *input2 = NULL;
+	int inputc;
 
 	/* new option style storage */	
 	uint32_t inputtype  = FORMAT_undefined;
@@ -117,6 +135,14 @@ int main(int argc,char *argv[]) {
 	ipv4addr_clearall(&ipv4addr);
 	mac_clearall(&macaddr);
 
+	/* pipe mode */
+	char linebuffer[LINEBUFFER];
+	char token[LINEBUFFER];
+	char *charptr, *cptr, **ptrptr;
+	ptrptr = &cptr;
+	int linecounter = 0;
+	int flush_mode = 0;
+
 	if (argc <= 1) {
 		printinfo();
 		exit(EXIT_FAILURE);
@@ -127,9 +153,15 @@ int main(int argc,char *argv[]) {
 		switch (i) {
 			case -1:
 				break;
+
 			case 'v':
 				command |= CMD_printversion;
 				break;
+
+			case 'f':
+				flush_mode = 1;
+				break;
+
 			case 'h':
 			case '?':
 				command |= CMD_printhelp;
@@ -167,16 +199,50 @@ int main(int argc,char *argv[]) {
 #endif
 				break;
 
+			case 'L':
+#ifdef IP2LOCATION_DEFAULT_FILE_IPV4
+				use_ip2location_ipv4 = 1;
+#endif
+#ifdef IP2LOCATION_DEFAULT_FILE_IPV4
+				use_ip2location_ipv6 = 1;
+#endif
+				if (use_ip2location_ipv4 == 0 && use_ip2location_ipv6 == 0) {
+					if ((formatoptions & FORMATOPTION_quiet) == 0) {
+						fprintf(stderr, " Neither support for IP2Location IPv4 or IPv6 default database is compiled in, IP2Location support disabled\n");
+					};
+				};
+				break;
+
+			case DB_ip2location_ipv4_default:
+#ifdef IP2LOCATION_DEFAULT_FILE_IPV4
+				use_ip2location_ipv4 = 1;
+#else
+				if ((formatoptions & FORMATOPTION_quiet) == 0) {
+					fprintf(stderr, " Support for option '--db-ip2location-ipv4-default' not compiled in, IP2Location IPv4 support disabled\n");
+				};
+#endif
+				break;
+
+			case DB_ip2location_ipv6_default:
+#ifdef IP2LOCATION_DEFAULT_FILE_IPV4
+				use_ip2location_ipv6 = 1;
+#else
+				if ((formatoptions & FORMATOPTION_quiet) == 0) {
+					fprintf(stderr, " Support for option '--db-ip2location-ipv6-default' not compiled in, IP2Location IPv6 support disabled\n");
+				};
+#endif
+				break;
+
 			case DB_geoip_ipv4:
 #ifdef SUPPORT_GEOIP
 				if (ipv6calc_debug != 0) {
-					fprintf(stderr, "%s: Got GeoIP database file: %s\n", DEBUG_function_name, optarg);
+					fprintf(stderr, "%s: Got GeoIP IPv4 database file: %s\n", DEBUG_function_name, optarg);
 				};
 				strncpy(file_geoip_ipv4, optarg, sizeof(file_geoip_ipv4) -1 );
 				use_geoip_ipv4 = 1;
 #else
 				if ((formatoptions & FORMATOPTION_quiet) == 0) {
-					fprintf(stderr, " Support for option '--db-geoip <GeoIP database file>' not compiled in, GeoIP support disabled\n");
+					fprintf(stderr, " Support for option '--db-geoip-ipv4 <GeoIP IPv4 database file>' not compiled in, GeoIP support disabled\n");
 				};
 #endif
 				break;
@@ -184,28 +250,50 @@ int main(int argc,char *argv[]) {
 			case DB_geoip_ipv6:
 #ifdef SUPPORT_GEOIP
 				if (ipv6calc_debug != 0) {
-					fprintf(stderr, "%s: Got GeoIPv6 database file: %s\n", DEBUG_function_name, optarg);
+					fprintf(stderr, "%s: Got GeoIP IPv6 database file: %s\n", DEBUG_function_name, optarg);
 				};
 				strncpy(file_geoip_ipv6, optarg, sizeof(file_geoip_ipv6) -1 );
 				use_geoip_ipv6 = 1;
 #else
 				if ((formatoptions & FORMATOPTION_quiet) == 0) {
-					fprintf(stderr, " Support for option '--db-geoipv6 <GeoIPv6 database file>' not compiled in, GeoIPv6 support disabled\n");
+					fprintf(stderr, " Support for option '--db-geo-ipv6 <GeoIP IPv6 database file>' not compiled in, GeoIP support disabled\n");
 				};
 #endif
 				break;
 
 			case 'G':
-#ifdef GEOIP_DEFAULT_FILE
+#ifdef GEOIP_DEFAULT_FILE_IPV4
 				use_geoip_ipv4 = 1;
+#endif
+#ifdef GEOIP_DEFAULT_FILE_IPV4
 				use_geoip_ipv6 = 1;
+#endif
+				if (use_geoip_ipv4 == 0 && use_geoip_ipv6 == 0) {
+					if ((formatoptions & FORMATOPTION_quiet) == 0) {
+						fprintf(stderr, " Neither support for GeoIP IPv4 or IPv6 default database is compiled in, GeoIP support disabled\n");
+					};
+				};
+				break;
+
+			case DB_geoip_ipv4_default:
+#ifdef GEOIP_DEFAULT_FILE_IPV4
+				use_geoip_ipv4 = 1;
 #else
 				if ((formatoptions & FORMATOPTION_quiet) == 0) {
-					fprintf(stderr, " Support for option '--db-geoip-default|-G' not compiled in, GeoIP support disabled\n");
+					fprintf(stderr, " Support for option '--db-geoip-ipv4-default' not compiled in, GeoIP IPv4 support disabled\n");
 				};
 #endif
 				break;
 
+			case DB_geoip_ipv6_default:
+#ifdef GEOIP_DEFAULT_FILE_IPV4
+				use_geoip_ipv6 = 1;
+#else
+				if ((formatoptions & FORMATOPTION_quiet) == 0) {
+					fprintf(stderr, " Support for option '--db-geoip-ipv6-default' not compiled in, GeoIP IPv6 support disabled\n");
+				};
+#endif
+				break;
 
 			case CMD_printexamples:
 				command = CMD_printexamples;
@@ -395,7 +483,19 @@ int main(int argc,char *argv[]) {
 				formatoptions |= FORMATOPTION_printuppercase;
 				break;
 				
+			case FORMATOPTION_NUM_forceprefix + FORMATOPTION_NUM_HEAD:
+				if (ipv6calc_debug != 0) fprintf(stderr, "%s: format option 'forceprefix' selected\n", DEBUG_function_name);
+				if ((atoi(optarg) >= 1) && (atoi(optarg) <= 128)) {
+					force_prefix = atoi(optarg);
+					formatoptions |= FORMATOPTION_forceprefix;
+				} else {
+					fprintf(stderr, " Argument of option 'forceprefix' is out or range (1-128): %d\n", atoi(optarg));
+					exit(EXIT_FAILURE);
+				};
+				break;
+				
 			case FORMATOPTION_NUM_printstart + FORMATOPTION_NUM_HEAD:
+				if (ipv6calc_debug != 0) fprintf(stderr, "%s: format option 'printstart' selected\n", DEBUG_function_name);
 				if ((atoi(optarg) >= 1) && (atoi(optarg) <= 128)) {
 					bit_start = atoi(optarg);
 					formatoptions |= FORMATOPTION_printstart;
@@ -406,6 +506,7 @@ int main(int argc,char *argv[]) {
 				break;
 				
 			case FORMATOPTION_NUM_printend + FORMATOPTION_NUM_HEAD:
+				if (ipv6calc_debug != 0) fprintf(stderr, "%s: format option 'printend' selected\n", DEBUG_function_name);
 				if ((atoi(optarg) >= 1) && (atoi(optarg) <= 128)) {
 					bit_end = atoi(optarg);
 					formatoptions |= FORMATOPTION_printend;
@@ -487,7 +588,7 @@ int main(int argc,char *argv[]) {
 			default:
 				fprintf(stderr, "Usage: (see '%s --command -?|-h|--help' for more help)\n", PROGRAM_NAME);
 				printhelp();
-				break;
+				exit(EXIT_FAILURE);
 		};
 	};
 	argv += optind;
@@ -521,7 +622,7 @@ int main(int argc,char *argv[]) {
 	};
 
 	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "Debug value:%lx  command:%lx  inputtype:%lx   outputtype:%lx  action:%lx  formatoptions:%x\n", (unsigned long) ipv6calc_debug, command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, (unsigned) formatoptions); 
+		fprintf(stderr, "Debug value:%08lx command:%08lx inputtype:%08lx outputtype:%08lx action:%08lx formatoptions:%08lx\n", (unsigned long) ipv6calc_debug, command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, (unsigned long) formatoptions); 
 	};
 	
 	/* do work depending on selection */
@@ -535,8 +636,19 @@ int main(int argc,char *argv[]) {
 		exit(EXIT_FAILURE);
 	};
 	
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: Got input %s\n", DEBUG_function_name, argv[0]);
+	if (argc > 0) {
+		if (ipv6calc_debug != 0) {
+			fprintf(stderr, "%s: Got input %s\n", DEBUG_function_name, argv[0]);
+		};
+	} else {
+		if (isatty (STDIN_FILENO)) {
+		} else {
+			input_is_pipe = 1;
+			if (ipv6calc_debug != 0) {
+				fprintf(stderr, "%s: Input is a pipe\n", DEBUG_function_name);
+			};
+			formatoptions |= FORMATOPTION_quiet; // force quiet mode
+		};
 	};
 
 	/***** automatic action handling *****/
@@ -586,6 +698,10 @@ int main(int argc,char *argv[]) {
 
 	/* check length of input */
 	if (argc > 0) {
+		if (input_is_pipe == 1) {
+			fprintf(stderr, "Additional input found in pipe mode\n");
+			exit(EXIT_FAILURE);
+		};
 		for (i = 0; i < argc; i++) {
 			if ( argv[i] != NULL ) {
 				if ( strlen(argv[i]) >= NI_MAXHOST ) {
@@ -596,9 +712,93 @@ int main(int argc,char *argv[]) {
 			};
 		};
 	};
+
+	/* loop for pipe */
+	if (input_is_pipe == 1) {
+PIPE_input:
+                /* read line from stdin */
+                charptr = fgets(linebuffer, LINEBUFFER, stdin);
+
+		if (charptr == NULL) {
+			/* end of input */
+			exit(retval);
+		};
+
+		linecounter++;
+
+		if (linecounter == 1) {
+			if (ipv6calc_debug == 1) {
+				fprintf(stderr, "Ok, proceeding stdin...\n");
+			};
+		};
+		
+		if (ipv6calc_debug == 1) {
+			fprintf(stderr, "Line: %d\r", linecounter);
+		};
+
+		if (strlen(linebuffer) >= NI_MAXHOST) {
+			fprintf(stderr, "Line too long: %d\n", linecounter);
+			exit(EXIT_FAILURE);
+		};
+		
+		if (strlen(linebuffer) == 0) {
+			fprintf(stderr, "Line empty: %d\n", linecounter);
+			goto PIPE_input;
+		};
+		
+		if (ipv6calc_debug != 0) {
+			fprintf(stderr, "%s: stdin got line: '%s'\n", DEBUG_function_name, linebuffer);
+		};
+
+		if (linebuffer[strlen(linebuffer) - 1] == '\n') {
+			/* remove trailing \n */
+			linebuffer[strlen(linebuffer) - 1] = '\0';
+		};
+
+		/* look for first token */
+		charptr = strtok_r(linebuffer, " \t\n", ptrptr);
+
+		if ( charptr == NULL ) {
+			fprintf(stderr, "Line contains no token: %d\n", linecounter);
+			goto PIPE_input;
+		};
+
+		if ( strlen(charptr) >=  LINEBUFFER) {
+			fprintf(stderr, "Line too strange: %d\n", linecounter);
+			goto PIPE_input;
+		};
+
+		snprintf(token, sizeof(token) - 1, "%s", charptr);
+		
+		input1 = token;
+		inputc = 1;
+
+		if (ipv6calc_debug != 0) {
+			fprintf(stderr, "%s: Token 1: '%s'\n", DEBUG_function_name, input1);
+		};
+
+		/* check for second token */
+		if (*ptrptr[0] != '\0') {
+			input2 = *ptrptr;
+			inputc = 2;
+
+			if (ipv6calc_debug != 0) {
+				fprintf(stderr, "%s: Token 2: '%s'\n", DEBUG_function_name, input2);
+			};
+		};
+
+	} else {
+		inputc = argc;
+		if (argc >= 1) {
+			input1 = argv[0];
+		};
+		if (argc >= 2) {
+			input2 = argv[1];
+		};
+	};
 	
 	/* autodetection */
-	if ((inputtype == FORMAT_undefined || inputtype == FORMAT_auto) && argc > 0) {
+	if ((inputtype == FORMAT_undefined || inputtype == FORMAT_auto) && inputc > 0) {
 		if (ipv6calc_debug != 0) {
 			fprintf(stderr, "%s: Call input type autodetection\n", DEBUG_function_name);
 		};
@@ -607,7 +807,7 @@ int main(int argc,char *argv[]) {
 			fprintf(stderr, "No input type specified, try autodetection...");
 		};
 		
-		inputtype = libipv6calc_autodetectinput(argv[0]);
+		inputtype = libipv6calc_autodetectinput(input1);
 
 		if ( inputtype != FORMAT_undefined ) {
 			for (i = 0; i < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); i++) {
@@ -660,93 +860,99 @@ int main(int argc,char *argv[]) {
 	retval = -1; /* default */
 
 	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: Process input (inputtype:%lx)\n", DEBUG_function_name, (unsigned long) inputtype);
+		fprintf(stderr, "%s: Process input (inputtype:%lx, count=%d)\n", DEBUG_function_name, (unsigned long) inputtype, inputc);
 	};
 
 	switch (inputtype) {
 		case FORMAT_ipv6addr:
-			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
-			retval = addr_to_ipv6addrstruct(argv[0], resultstring, &ipv6addr);
+		case FORMAT_ipv4addr:
+		case FORMAT_ipv4hex:
+		case FORMAT_ipv4revhex:
+		case FORMAT_base85:
+		case FORMAT_mac:
+		case FORMAT_ifinet6:
+		case FORMAT_revnibbles_int:
+		case FORMAT_revnibbles_arpa:
+		case FORMAT_bitstring:
+			if (inputc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
+			break;
+
+		case FORMAT_iid_token:
+		case FORMAT_prefix_mac:
+			if (inputc < 2) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
+			break;
+
+		case FORMAT_auto_noresult:
+		default:
+			fprintf(stderr, " Input-type isn't autodetected\n");
+			exit(EXIT_FAILURE);
+	};
+
+	switch (inputtype) {
+		case FORMAT_ipv6addr:
+			retval = addr_to_ipv6addrstruct(input1, resultstring, &ipv6addr);
 			argc--;
 			break;
 
 		case FORMAT_ipv4addr:
-			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
-			retval = addr_to_ipv4addrstruct(argv[0], resultstring, &ipv4addr);
+			retval = addr_to_ipv4addrstruct(input1, resultstring, &ipv4addr);
 			argc--;
 			break;
 			
 		case FORMAT_ipv4hex:
-			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
-			retval = addrhex_to_ipv4addrstruct(argv[0], resultstring, &ipv4addr, 0);
+			retval = addrhex_to_ipv4addrstruct(input1, resultstring, &ipv4addr, 0);
 			argc--;
 			break;
 
 		case FORMAT_ipv4revhex:
-			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
-			retval = addrhex_to_ipv4addrstruct(argv[0], resultstring, &ipv4addr, 1);
+			retval = addrhex_to_ipv4addrstruct(input1, resultstring, &ipv4addr, 1);
 			argc--;
 			break;
 
 		case FORMAT_base85:
-			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
-			retval = base85_to_ipv6addrstruct(argv[0], resultstring, &ipv6addr);
+			retval = base85_to_ipv6addrstruct(input1, resultstring, &ipv6addr);
 			argc--;
 			break;
 			
 		case FORMAT_mac:
-			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
-			retval = mac_to_macaddrstruct(argv[0], resultstring, &macaddr);
+			retval = mac_to_macaddrstruct(input1, resultstring, &macaddr);
 			argc--;
 			break;
 
 		case FORMAT_ifinet6:
-			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
-			if (argc < 2) {
-				retval = libifinet6_ifinet6_to_ipv6addrstruct(argv[0], resultstring, &ipv6addr);
-				argc--;
+			if (inputc < 2) {
+				retval = libifinet6_ifinet6_to_ipv6addrstruct(input1, resultstring, &ipv6addr);
 			} else {
-				retval = libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(argv[0], argv[1], resultstring, &ipv6addr);
-				argc -= 2;
+				retval = libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(input1, input2, resultstring, &ipv6addr);
 			};
 			break;
 
 		case FORMAT_iid_token:
 			/* Get first interface identifier */
-			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
-			retval = identifier_to_ipv6addrstruct(argv[0], resultstring, &ipv6addr);
-			argc--;
+			retval = identifier_to_ipv6addrstruct(input1, resultstring, &ipv6addr);
 			if (retval != 0) { break; };
 			
 			/* Get second token */
-			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
-			retval = tokenlsb64_to_ipv6addrstruct(argv[1], resultstring, &ipv6addr2);
-			argc--;
+			retval = tokenlsb64_to_ipv6addrstruct(input2, resultstring, &ipv6addr2);
 			break;
 			
 		case FORMAT_prefix_mac:
 			/* Get first: IPv6 prefix */
-			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
-			retval = addr_to_ipv6addrstruct(argv[0], resultstring, &ipv6addr);
-			argc--;
+			retval = addr_to_ipv6addrstruct(input1, resultstring, &ipv6addr);
 			if (retval != 0) { break; };
 			
 			/* Get second: MAC address */
-			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
-			retval = mac_to_macaddrstruct(argv[1], resultstring, &macaddr);
-			argc--;
+			retval = mac_to_macaddrstruct(input2, resultstring, &macaddr);
 			break;
 
 		case FORMAT_revnibbles_int:
 		case FORMAT_revnibbles_arpa:
-			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
-			retval = librfc1886_nibblestring_to_ipv6addrstruct(argv[0], &ipv6addr, resultstring);
+			retval = librfc1886_nibblestring_to_ipv6addrstruct(input1, &ipv6addr, resultstring);
 			argc--;
 			break;
 			
 		case FORMAT_bitstring:
-			if (argc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
-			retval = librfc2874_bitstring_to_ipv6addrstruct(argv[0], &ipv6addr, resultstring);
+			retval = librfc2874_bitstring_to_ipv6addrstruct(input1, &ipv6addr, resultstring);
 			argc--;
 			break;
 			
@@ -775,6 +981,12 @@ int main(int argc,char *argv[]) {
 	};
 
 	if (ipv6addr.flag_valid == 1) {
+		/* force prefix */
+		if ((formatoptions & (FORMATOPTION_forceprefix)) != 0) {
+			ipv6addr.flag_prefixuse = 1;
+			ipv6addr.prefixlength = force_prefix;
+		};
+		
 		/* mask bits */
 		if ((formatoptions & (FORMATOPTION_maskprefix | FORMATOPTION_masksuffix)) != 0) {
 			if (ipv6addr.flag_prefixuse == 1) {
@@ -811,7 +1023,7 @@ int main(int argc,char *argv[]) {
 			/* default */
 			ipv6addr.bit_end = 128;
 		};
-		
+
 		/* prefix+suffix */
 		if ((formatoptions & (FORMATOPTION_printprefix | FORMATOPTION_printsuffix)) != 0) {
 			if ( ipv6addr.flag_prefixuse == 0 ) {
@@ -1207,6 +1419,14 @@ RESULT_print:
 			fprintf(stderr, "%s\n", resultstring);
 		};
 	};
+
+	if (input_is_pipe == 1) {
+		if (flush_mode == 1) {
+			fflush(stdout);
+		};
+		goto PIPE_input;
+	};
+
 	exit(retval);
 };
 #undef DEBUG_function_name

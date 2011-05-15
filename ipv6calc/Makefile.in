@@ -1,7 +1,7 @@
 # Project    : ipv6calc/ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.27 2010/05/20 14:49:38 peter Exp $
-# Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile.in,v 1.28 2011/05/15 11:46:25 peter Exp $
+# Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calc
@@ -58,6 +58,7 @@ clean:
 test:
 		${MAKE}
 		./test_ipv6calc.sh || exit 1
+		./test_showinfo.sh || exit 1
 
 splint:		
 		splint *.c ../lib/*.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)

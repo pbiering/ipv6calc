@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.189 2011/05/12 15:24:54 peter Exp $ 
+ *  $Id: ChangeLog,v 1.190 2011/05/15 11:46:25 peter Exp $ 
  */
 
 Info:
@@ -8,12 +8,30 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20110515/PB
+	ipv6calc
+	 - disable accept of 'printstart' & 'printend' option for output type 'ipv6addr' (not suppported at all at the moment)
+	 - add option 'forceprefix <num>'
+	 - add option 'f|flush' for pipe mode
+	 - implement pipe mode (autodetected)
+	 - GeoIP option '--db-geoip-default|-G' enables now IPv4 and IPv6 default database, if file locations are compiled in
+	 - new options for specifying GeoIP file locations: '--db-geoip-ipv4' and '--db-geoip-ipv6'
+	 - new option '--db-ip2location-default|-L' for enabling IPv4 or IPv6 default database, if file locations are compiled in
+	 - extend test cases
+	BUILD
+	 --with-geoip-default-file is replaced by --with-geoip-ipv4-default-file
+	 - new options for specifying IP2Location default file locations
+	    --with-ip2location-ipv4-default-file
+	    --with-ip2location-ipv6-default-file
+	registry databases
+	 - update
+
 20110512/PB
 	ipv6loganon:
 	 - add support for option -f (flush)
 	 - some bugfixes
 	ipv6calc, ipv6calcweb.cgi
-	 - implement support for GeoIPv6
+	 - implement support for GeoIP IPv6 database
 	ipv6calcweb.cgi
 	 - skip not-useful entries for IP2LOCATION in case of unsupported by database
 	update information for IP2Location 4.0.2

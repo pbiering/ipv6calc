@@ -1,8 +1,11 @@
 #!/bin/sh
 
-$Id: autogen.sh,v 1.10 2011/05/12 14:22:14 peter Exp $
+$Id: autogen.sh,v 1.11 2011/05/15 11:46:25 peter Exp $
 
 OPTIONS_CONFIGURE=""
+
+DB_GEOIP="--with-geoip-ipv4-default-file=/var/local/share/GeoIP/GeoIP.dat --with-geoip-ipv6-default-file=/var/local/share/GeoIP/GeoIPv6.dat"
+DB_IP2LOCATION="--with-ip2location-ipv4-default-file=/var/local/share/IP2Location/IP-COUNTRY-SAMPLE.BIN --with-ip2location-ipv6-default-file=/var/local/share/IP2Location/IPV6-COUNTRY.BIN"
 
 LAST=""
 while [ "$1" != "$LAST" ]; do
@@ -14,11 +17,16 @@ while [ "$1" != "$LAST" ]; do
 		;;
 	    '--all'|'-a')
 		shift
-		OPTIONS_CONFIGURE="--enable-geoip --enable-ip2location"
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --enable-ip2location"
 		;;
 	    '--geoip'|'-g')
 		shift
-		OPTIONS_CONFIGURE="--enable-geoip"
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip"
+		;;
+	    '--db'|'-d')
+		shift
+		# default database locations
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $DB_GEOIP $DB_IP2LOCATION"
 		;;
 	    '-?'|'-h'|'--help')
 		echo "Supported options:"
@@ -26,6 +34,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   -n|--no-make: stop before running 'make'"
 		echo "   -a|--all    : enable GeoIP and IP2Location support"
 		echo "   -g|--geoip  : enable GeoIP support"
+		echo "   -d|--db     : enable default GeoIP and IP2Location database locations"
 		exit 1
 	esac
 done

@@ -1,4 +1,4 @@
-$Id: USAGE,v 1.5 2007/02/01 14:41:40 peter Exp $
+$Id: USAGE,v 1.6 2011/05/15 11:46:25 peter Exp $
 
 File: ipv6calc/ipv6calc
 	see docs/ipv6calc.html for more
@@ -19,6 +19,9 @@ IP2LOCATION_ZIPCODE=This parameter is unavailable for selected data file. Please
 IPV6CALC_NAME=ipv6calc
 IPV6CALC_VERSION=0.52cvs
 IPV6CALC_COPYRIGHT="(P) & (C) 2001-2006 by Peter Bieringer <pb (at) bieringer.de>"
+
+pipe mode:
+cat /proc/net/if_inet6 | awk '{ print $1 " " $3 }' | ./ipv6calc --ifinet6_to_compresse
 
 File: ipv6calcweb/ipv6calcweb.cgi
 	see ipv6calcweb/USAGE for more
