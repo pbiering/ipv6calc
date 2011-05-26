@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.190 2011/05/15 11:46:25 peter Exp $ 
+ *  $Id: ChangeLog,v 1.191 2011/05/26 17:30:54 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,12 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20110526/PB
+	database
+	 -update
+	minor fixes
+	tag version 0.90.0
+
 20110515/PB
 	ipv6calc
 	 - disable accept of 'printstart' & 'printend' option for output type 'ipv6addr' (not suppported at all at the moment)

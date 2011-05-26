@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.40 2011/05/15 11:46:25 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.41 2011/05/26 17:30:54 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -48,9 +48,9 @@ int mask_ipv4 = 24;
 int mask_ipv6 = 48;
 int mask_iid = 1;
 
-#ifdef SUPPORT_IP2LOCATION
 int  use_ip2location_ipv4 = 0; /* if set to 1, IP2Location IPv4 is enabled by option(s) */
 int  use_ip2location_ipv6 = 0; /* if set to 1, IP2Location IPv6 is enabled by option(s) */
+#ifdef SUPPORT_IP2LOCATION
 #ifdef IP2LOCATION_DEFAULT_FILE_IPV4
 char file_ip2location_ipv4[NI_MAXHOST] = IP2LOCATION_DEFAULT_FILE_IPV4;
 #else
@@ -63,9 +63,9 @@ char file_ip2location_ipv6[NI_MAXHOST] = "";
 #endif
 #endif
 
-#ifdef SUPPORT_GEOIP
 int  use_geoip_ipv4 = 0; /* if set to 1, GeoIP IPv4 is enabled by option(s) */
 int  use_geoip_ipv6 = 0; /* if set to 1, GeoIP IPv6 is enabled by option(s) */
+#ifdef SUPPORT_GEOIP
 #ifdef GEOIP_DEFAULT_FILE_IPV4
 char file_geoip_ipv4[NI_MAXHOST] = GEOIP_DEFAULT_FILE_IPV4;
 #else
@@ -203,7 +203,7 @@ int main(int argc, char *argv[]) {
 #ifdef IP2LOCATION_DEFAULT_FILE_IPV4
 				use_ip2location_ipv4 = 1;
 #endif
-#ifdef IP2LOCATION_DEFAULT_FILE_IPV4
+#ifdef IP2LOCATION_DEFAULT_FILE_IPV6
 				use_ip2location_ipv6 = 1;
 #endif
 				if (use_ip2location_ipv4 == 0 && use_ip2location_ipv6 == 0) {
@@ -224,7 +224,7 @@ int main(int argc, char *argv[]) {
 				break;
 
 			case DB_ip2location_ipv6_default:
-#ifdef IP2LOCATION_DEFAULT_FILE_IPV4
+#ifdef IP2LOCATION_DEFAULT_FILE_IPV6
 				use_ip2location_ipv6 = 1;
 #else
 				if ((formatoptions & FORMATOPTION_quiet) == 0) {
@@ -265,7 +265,7 @@ int main(int argc, char *argv[]) {
 #ifdef GEOIP_DEFAULT_FILE_IPV4
 				use_geoip_ipv4 = 1;
 #endif
-#ifdef GEOIP_DEFAULT_FILE_IPV4
+#ifdef GEOIP_DEFAULT_FILE_IPV6
 				use_geoip_ipv6 = 1;
 #endif
 				if (use_geoip_ipv4 == 0 && use_geoip_ipv6 == 0) {
@@ -286,7 +286,7 @@ int main(int argc, char *argv[]) {
 				break;
 
 			case DB_geoip_ipv6_default:
-#ifdef GEOIP_DEFAULT_FILE_IPV4
+#ifdef GEOIP_DEFAULT_FILE_IPV6
 				use_geoip_ipv6 = 1;
 #else
 				if ((formatoptions & FORMATOPTION_quiet) == 0) {

@@ -1,6 +1,11 @@
 #!/bin/sh
-
-$Id: autogen.sh,v 1.11 2011/05/15 11:46:25 peter Exp $
+#
+# Project    : ipv6calc
+# File       : autogen.sh
+# Version    : $Id: autogen.sh,v 1.12 2011/05/26 17:30:54 peter Exp $
+# Copyright  : 2011-2011 by Peter Bieringer <pb (at) bieringer.de>
+#
+# Information: autogeneration of projects with optional features
 
 OPTIONS_CONFIGURE=""
 
@@ -23,6 +28,10 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip"
 		;;
+	    '--ip2location'|'-i')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location"
+		;;
 	    '--db'|'-d')
 		shift
 		# default database locations
@@ -30,11 +39,12 @@ while [ "$1" != "$LAST" ]; do
 		;;
 	    '-?'|'-h'|'--help')
 		echo "Supported options:"
-		echo "   -?|-h|--help: this help"
-		echo "   -n|--no-make: stop before running 'make'"
-		echo "   -a|--all    : enable GeoIP and IP2Location support"
-		echo "   -g|--geoip  : enable GeoIP support"
-		echo "   -d|--db     : enable default GeoIP and IP2Location database locations"
+		echo "   -?|-h|--help     : this help"
+		echo "   -n|--no-make     : stop before running 'make'"
+		echo "   -a|--all         : enable GeoIP and IP2Location support"
+		echo "   -g|--geoip       : enable GeoIP support"
+		echo "   -i|--ip2location : enable IP2Location support"
+		echo "   -d|--db          : enable default GeoIP and IP2Location database locations"
 		exit 1
 	esac
 done

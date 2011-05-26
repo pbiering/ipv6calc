@@ -8,9 +8,15 @@ Instructions for current version (4.0.2)
 
 Check for installed "libtool" package
 
-% autoreconf -i -v --force
+Download C Library from http://www.ip2location.com/c.aspx
 
-% ./configure && make
+Extract, configure & compile
+
+$ tar xzf C-IP2Location-4.0.2.tar.gz
+$ cd C-IP2Location-4.0.2
+$ autoreconf -i && ./configure && make
+
+Install as user
 
 # make install
 
@@ -26,7 +32,6 @@ This will install following files:
 Extend dynamic linking
 
 # echo "/usr/local/lib" >>/etc/ld.so.conf.d/usr-local-lib.conf
-
 # ldconfig
 
 
