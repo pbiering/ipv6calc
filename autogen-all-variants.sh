@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.1 2011/05/26 17:30:54 peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.2 2011/05/26 17:33:50 peter Exp $
 # Copyright  : 2011-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -32,6 +32,7 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+make distclean
+
 echo "INFO  : congratulations, all variants built successful!"
 
-make distclean
