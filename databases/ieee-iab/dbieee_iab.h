@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.37 2011/05/15 11:46:25 peter Exp $
- * Generated     : Sun May 15 13:42:26 2011
+ * Version       : $Id: dbieee_iab.h,v 1.38 2011/05/26 17:28:56 peter Exp $
+ * Generated     : Thu May 26 19:25:55 2011
  * Data copyright: IEEE
  *
  * Information:
@@ -3630,5 +3630,13 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xE24000, 0xE24FFF, "DiTEST Fahrzeugdiagnose GmbH", "DITEST-FAHRZEUGDIAGNOSE" },
 	{ 0x0050C2, 0xE25000, 0xE25FFF, "ACD Elektronik GmbH", "ACD-ELEKTRONIK" },
 	{ 0x0050C2, 0xE26000, 0xE26FFF, "Cinetix s.r.l.", "CINETIX-S-R-L" },
+	{ 0x0050C2, 0xE27000, 0xE27FFF, "CONTROL SYSTEMS Srl", "CONTROL-SRL" },
+	{ 0x0050C2, 0xE28000, 0xE28FFF, "Teplovodokhran", "TEPLOVODOKHRAN" },
+	{ 0x0050C2, 0xE29000, 0xE29FFF, "Fr. Sauter AG", "FR-SAUTER" },
+	{ 0x0050C2, 0xE2A000, 0xE2AFFF, "Rohde&Schwarz Topex SA", "ROHDE-SCHWARZ-TOPEX" },
+	{ 0x0050C2, 0xE2B000, 0xE2BFFF, "Plant Integrity Limited", "PLANT-INTEGRITY" },
+	{ 0x0050C2, 0xE2C000, 0xE2CFFF, "EN ElectronicNetwork Hamburg GmbH", "EN-ELECTRONICNETWORK-HAMBURG" },
+	{ 0x0050C2, 0xE2D000, 0xE2DFFF, "Funkwerk IT Karlsfeld GmbH", "FUNKWERK-IT-KARLSFELD" },
+	{ 0x0050C2, 0xE2E000, 0xE2EFFF, "DS! Ingenieurbuero", "DS!-INGENIEURBUERO" },
 
 };
