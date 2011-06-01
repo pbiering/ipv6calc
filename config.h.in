@@ -72,6 +72,15 @@
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
+/* Define if you want IEEE database included. */
+#undef SUPPORT_DB_IEEE
+
+/* Define if you want IPv4 database included. */
+#undef SUPPORT_DB_IPV4
+
+/* Define if you want IPv6 database included. */
+#undef SUPPORT_DB_IPV6
+
 /* Define if you want GeoIP support. */
 #undef SUPPORT_GEOIP
 

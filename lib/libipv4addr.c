@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.23 2011/05/04 18:26:00 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.24 2011/06/01 06:06:07 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -13,11 +13,15 @@
 #include <string.h>
 #include <ctype.h>
 
+#include "config.h"
 #include "libipv4addr.h"
 #include "ipv6calctypes.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
+
+#ifdef SUPPORT_DB_IPV4
 #include "../databases/ipv4-assignment/dbipv4addr_assignment.h"
+#endif
 
 
 /*
@@ -579,6 +583,7 @@ int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *re
 		return (0);
 	}; 
 
+#ifdef SUPPORT_DB_IPV4
 #define OPTIMIZED_LOOKUP 1
 #ifdef OPTIMIZED_LOOKUP
 	/* lookup in hint table for faster start */
@@ -628,6 +633,11 @@ int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *re
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "unknown");
 		return(1);
 	};
+#else
+	snprintf(resultstring, NI_MAXHOST - 1, "%s", "(IPv4 database not compiled in)");
+	return(0);
+#endif
+
 };
 #undef DEBUG_function_name
 
@@ -642,6 +652,7 @@ int ipv4addr_getregistry(const ipv6calc_ipv4addr *ipv4addrp) {
 	char resultstring[NI_MAXHOST];
 	int i;
 
+#ifdef SUPPORT_DB_IPV4
 	i = libipv4addr_get_registry_string(ipv4addrp, resultstring);
 
 	if (i != 0) {
@@ -663,6 +674,9 @@ int ipv4addr_getregistry(const ipv6calc_ipv4addr *ipv4addrp) {
 	} else {
 		return(IPV4_ADDR_REGISTRY_UNKNOWN);
 	};
+#else
+	return(IPV4_ADDR_REGISTRY_UNKNOWN);
+#endif
 };
 #undef DEBUG_function_name
 

@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.8 2007/01/31 16:21:47 peter Exp $
- * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libieee.c,v 1.9 2011/06/01 06:06:07 peter Exp $
+ * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for IEEE information
@@ -11,12 +11,16 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "config.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
 #include "libieee.h"
 #include "libmac.h"
+
+#ifdef SUPPORT_DB_IEEE
 #include "../databases/ieee-oui/dbieee_oui.h"
 #include "../databases/ieee-iab/dbieee_iab.h"
+#endif
 
 /*
  * Get vendor string
@@ -51,6 +55,7 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
 		return (1);
 	};
 
+#ifdef SUPPORT_DB_IEEE
 	idval = (macaddrp->addr[0] << 16) | (macaddrp->addr[1] << 8) | macaddrp->addr[2];
 	subidval = (macaddrp->addr[3] << 16) | (macaddrp->addr[4] << 8) | macaddrp->addr[5];
 
@@ -73,6 +78,10 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
 			return (0);
 		};
 	};
+#else
+	snprintf(resultstring, NI_MAXHOST - 1, "(IEEE database not compiled in)");
+	return (0);
+#endif
 
 	/* not found */
    	retval = 1;	
@@ -113,6 +122,7 @@ int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *
 		return (1);
 	};
 
+#ifdef SUPPORT_DB_IEEE
 	idval = (macaddrp->addr[0] << 16) | (macaddrp->addr[1] << 8) | macaddrp->addr[2];
 	subidval = (macaddrp->addr[3] << 16) | (macaddrp->addr[4] << 8) | macaddrp->addr[5];
 
@@ -135,6 +145,10 @@ int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *
 			return (0);
 		};
 	};
+#else
+	snprintf(resultstring, NI_MAXHOST - 1, "(IEEE database not compiled in)");
+	return (0);
+#endif
 
 	/* not found */
    	retval = 1;	

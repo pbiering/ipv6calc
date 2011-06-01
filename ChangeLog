@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.191 2011/05/26 17:30:54 peter Exp $ 
+ *  $Id: ChangeLog,v 1.192 2011/06/01 06:06:07 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,12 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20110601/PB
+	add configure options for disabling compiled-in databases:
+		--disable-db-ieee
+		--disable-db-ipv4
+		--disable-db-ipv6
+
 20110526/PB
 	database
 	 -update

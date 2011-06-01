@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.39 2011/03/29 18:33:32 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.40 2011/06/01 06:06:07 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -13,6 +13,7 @@
 #include <ctype.h>
 #include <string.h>
 
+#include "config.h"
 #include "libipv6addr.h"
 #include "librfc1884.h"
 #include "libipv6addr.h"
@@ -20,7 +21,10 @@
 #include "ipv6calctypes.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
+
+#ifdef SUPPORT_DB_IPV6
 #include "../databases/ipv6-assignment/dbipv6addr_assignment.h"
+#endif
 
 
 /*
@@ -415,6 +419,7 @@ int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
 	char resultstring[NI_MAXHOST];
 	int i;
 
+#ifdef SUPPORT_DB_IPV6
 	i = libipv6addr_get_registry_string(ipv6addrp, resultstring);
 
 	if (i != 0) {
@@ -440,6 +445,9 @@ int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
 	} else {
 		return(-1);
 	};
+#else
+	return(-1);
+#endif
 }
 #undef DEBUG_function_name
 
@@ -463,6 +471,7 @@ int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, char *re
 		fprintf(stderr, "%s: Given ipv6 prefix: %08x%08x\n", DEBUG_function_name, (unsigned int) ipv6_00_31, (unsigned int) ipv6_32_63);
 	};
 
+#ifdef SUPPORT_DB_IPV6
 	for (i = 0; i < (int) ( sizeof(dbipv6addr_assignment) / sizeof(dbipv6addr_assignment[0])); i++) {
 		/* run through database array */
 		if ( (ipv6_00_31 & dbipv6addr_assignment[i].ipv6mask_00_31) != dbipv6addr_assignment[i].ipv6addr_00_31 ) {
@@ -496,6 +505,10 @@ int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, char *re
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "unknown");
 		return(1);
 	};
+#else
+	snprintf(resultstring, NI_MAXHOST - 1, "%s", "(IPv6 database not compiled in)");
+	return(0);
+#endif
 };
 #undef DEBUG_function_name
 
