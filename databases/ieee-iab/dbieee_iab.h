@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.38 2011/05/26 17:28:56 peter Exp $
- * Generated     : Thu May 26 19:25:55 2011
+ * Version       : $Id: dbieee_iab.h,v 1.39 2011/06/09 19:08:34 peter Exp $
+ * Generated     : Thu Jun  9 20:59:16 2011
  * Data copyright: IEEE
  *
  * Information:
@@ -3638,5 +3638,14 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xE2C000, 0xE2CFFF, "EN ElectronicNetwork Hamburg GmbH", "EN-ELECTRONICNETWORK-HAMBURG" },
 	{ 0x0050C2, 0xE2D000, 0xE2DFFF, "Funkwerk IT Karlsfeld GmbH", "FUNKWERK-IT-KARLSFELD" },
 	{ 0x0050C2, 0xE2E000, 0xE2EFFF, "DS! Ingenieurbuero", "DS!-INGENIEURBUERO" },
+	{ 0x0050C2, 0xE2F000, 0xE2FFFF, "Beam Ltd", "BEAM" },
+	{ 0x0050C2, 0xE30000, 0xE30FFF, "Goennheimer Elektronic GmbH", "GOENNHEIMER-ELEKTRONIC" },
+	{ 0x0050C2, 0xE31000, 0xE31FFF, "ENSIS Co., Ltd.", "ENSIS" },
+	{ 0x0050C2, 0xE32000, 0xE32FFF, "Oshoksh Corporation", "OSHOKSH" },
+	{ 0x0050C2, 0xE33000, 0xE33FFF, "Morita Technical Center Company", "MORITA-TECHNICAL-CENTER-COMPANY" },
+	{ 0x0050C2, 0xE34000, 0xE34FFF, "HGL Dynamics", "HGL-DYNAMICS" },
+	{ 0x0050C2, 0xE35000, 0xE35FFF, "Omnica Corporation", "OMNICA" },
+	{ 0x0050C2, 0xE36000, 0xE36FFF, "Saia-Burgess Controls AG", "SAIA-BURGESS-CONTROLS" },
+	{ 0x0050C2, 0xE37000, 0xE37FFF, "FUJI DATA SYSTEM Co., Ltd", "FUJI-DATA-SYSTEM" },
 
 };
