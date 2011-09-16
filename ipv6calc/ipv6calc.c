@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.42 2011/09/16 18:05:13 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.43 2011/09/16 19:35:07 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1129,6 +1129,8 @@ PIPE_input:
 			outputtype = FORMAT_mac;
 		} else if ( (inputtype == FORMAT_bitstring) || (inputtype == FORMAT_base85) ) {
 			outputtype = FORMAT_ipv6addr;
+		} else if ( (inputtype == FORMAT_ipv4addr) && (action == ACTION_6rd_local_prefix) ) {
+			outputtype = FORMAT_ipv6addr;
 		};
 
 		if ( outputtype != FORMAT_undefined ) {
@@ -1154,6 +1156,11 @@ PIPE_input:
 		};
 	};
 
+	/* check output format depending on action */
+	if ( action == ACTION_6rd_local_prefix && outputtype != FORMAT_ipv6addr ) {
+		fprintf(stderr, "output type incompatible!\n");
+		exit(EXIT_FAILURE);
+	};
 	
 	/* clear resultstring */
 	snprintf(resultstring, sizeof(resultstring) - 1, "%s", "");
