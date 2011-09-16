@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.22 2011/09/16 19:25:33 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.23 2011/09/16 19:52:05 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -249,7 +249,7 @@ typedef struct {
 	{ ACTION_iid_token_to_privacy , "genprivacyiid"  , "Generates a privacy interface ID out of a given one and a token", "" },
 	{ ACTION_prefix_mac_to_ipv6   , "prefixmac2ipv6" , "Generates an IPv6 address out of a prefix and a MAC address", "" },
 	{ ACTION_anonymize            , "anonymize"      , "Anonymize IPv4/IPv6 address without loosing much information", "" },
-	{ ACTION_6rd_local_prefix     , "6rd_local_prefix"  , "Calculate the local 6rd prefix from given IPv6 prefix & relay prefix and local IPv4", "" },
+	{ ACTION_6rd_local_prefix     , "6rd_local_prefix"  , "Calculate the 6rd prefix from given IPv6 prefix & relay prefix and IPv4", "" },
 };
 
 /* Possible action option map */

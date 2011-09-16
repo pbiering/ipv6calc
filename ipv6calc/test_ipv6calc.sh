@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.23 2011/09/16 19:35:07 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.24 2011/09/16 19:52:05 peter Exp $
 # Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -136,7 +136,7 @@ cat <<END | grep -v '^#'
 # RFC 5952 4.2.4
 --in ipv6addr --out ipv6addr 2001:DB8:0:0:1:0:0:1		 	=2001:db8::1:0:0:1
 # 6rd
---action 6rd_local_prefix --6rd_prefix 2607:fedc:ff40::/43 --6rd_relay_prefix 6.230.0.0/15 --in ipv4addr 6.231.32.33	=2607:fedc:ff52:210::/60
+--action 6rd_local_prefix --6rd_prefix 2607:fedc:ff40::/43 --6rd_relay_prefix 6.230.0.0/15 6.231.32.33	=2607:fedc:ff52:210::/60
 END
 }
 

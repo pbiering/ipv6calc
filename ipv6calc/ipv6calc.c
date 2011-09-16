@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.43 2011/09/16 19:35:07 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.44 2011/09/16 19:52:05 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1156,12 +1156,6 @@ PIPE_input:
 		};
 	};
 
-	/* check output format depending on action */
-	if ( action == ACTION_6rd_local_prefix && outputtype != FORMAT_ipv6addr ) {
-		fprintf(stderr, "output type incompatible!\n");
-		exit(EXIT_FAILURE);
-	};
-	
 	/* clear resultstring */
 	snprintf(resultstring, sizeof(resultstring) - 1, "%s", "");
 
@@ -1261,6 +1255,17 @@ PIPE_input:
 			break;
 
 		case ACTION_6rd_local_prefix:
+			/* check formats */
+			if ( outputtype != FORMAT_ipv6addr ) {
+				fprintf(stderr, "output type incompatible (no IPv6 address)!\n");
+				exit(EXIT_FAILURE);
+			};
+	
+			if ( inputtype != FORMAT_ipv4addr ) {
+				fprintf(stderr, "input type incompatible (no IPv4 address)!\n");
+				exit(EXIT_FAILURE);
+			};
+	
 			/* check IPv6 prefix */
 			if ( ipv6addr.flag_valid != 1 ) {
 				fprintf(stderr, "No valid IPv6 address given as 6rd prefix!\n");
