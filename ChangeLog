@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.194 2011/09/16 18:05:13 peter Exp $ 
+ *  $Id: ChangeLog,v 1.195 2011/09/16 19:25:33 peter Exp $ 
  */
 
 Info:
@@ -11,6 +11,7 @@ Info:
 20110916/PB
 	6rd extension: change options to support stdin for IPv4 addresses
 	minor code review
+	extend online help for action types
 
 20110915/PB
 	Makefile: catch exit code on sub tests

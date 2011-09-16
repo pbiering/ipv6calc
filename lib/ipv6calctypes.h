@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.21 2011/09/16 18:05:13 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.22 2011/09/16 19:25:33 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -9,6 +9,7 @@
  */ 
 
 #include "ipv6calc_inttypes.h"
+#include "ipv6calccommands.h"
 #include <getopt.h>
 
 
@@ -251,5 +252,16 @@ typedef struct {
 	{ ACTION_6rd_local_prefix     , "6rd_local_prefix"  , "Calculate the local 6rd prefix from given IPv6 prefix & relay prefix and local IPv4", "" },
 };
 
+/* Possible action option map */
+/*@unused@*/ static const uint32_t ipv6calc_actionoptionmap[8][2]  = {
+	{ ACTION_auto			, 0 },
+	{ ACTION_mac_to_eui64		, 0 },
+	{ ACTION_ipv4_to_6to4addr	, 0 },
+	{ ACTION_iid_token_to_privacy	, 0 },
+	{ ACTION_prefix_mac_to_ipv6	, 0 },
+	{ ACTION_anonymize		, 0 },
+	{ ACTION_6rd_local_prefix	, CMD_6rd_prefix },
+	{ ACTION_6rd_local_prefix	, CMD_6rd_relay_prefix }
+};
 
 #endif

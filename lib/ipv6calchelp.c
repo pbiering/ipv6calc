@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.21 2011/09/16 18:05:13 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.22 2011/09/16 19:25:33 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -175,6 +175,7 @@ void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoption
 			if (ipv6calc_debug != 0) {
 				fprintf(stderr, "Row %d: %08x - %08x\n", i, (unsigned int) ipv6calc_formatmatrix[i][0], (unsigned int) ipv6calc_formatmatrix[i][1]);
 			};
+
 			if ((ipv6calc_formatmatrix[i][1] & ipv6calc_formatstrings[j].number) != 0) {
 				/* available for output, look for name now */
 				if (strlen(ipv6calc_formatstrings[j].explanation) > 0) {
@@ -197,9 +198,9 @@ void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoption
 
 /* list of action types */
 void printhelp_actiontypes(const uint32_t formatoptions) {
-	int j;
+	int i, j, o, test = 2, has_options = 0;
 	size_t maxlen = 0;
-	char printformatstring[20];
+	char printformatstring[20], printformatstring2[20], printformatstring3[20];
 	
 	if ((formatoptions & FORMATOPTION_machinereadable) == 0) {	
 		printversion();
@@ -224,6 +225,9 @@ void printhelp_actiontypes(const uint32_t formatoptions) {
 		snprintf(printformatstring, sizeof(printformatstring) - 1, "%%-%ds\n", (int) maxlen);
 	};
 
+	snprintf(printformatstring2, sizeof(printformatstring2) - 1, "  %%-%ds%%s\n", (int) maxlen + 4);
+	snprintf(printformatstring3, sizeof(printformatstring3) - 1, "  %%-%ds--%%s", (int) maxlen + 5);
+
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "Format string: %s\n", printformatstring);
 	};
@@ -234,8 +238,51 @@ void printhelp_actiontypes(const uint32_t formatoptions) {
 		if (ipv6calc_debug != 0) {
 			fprintf(stderr, "Format-Row %d: %08x - %s - %s\n", j, (unsigned int) ipv6calc_actionstrings[j].number, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
 		};
+
 		if ((formatoptions & FORMATOPTION_machinereadable) == 0) {
 			fprintf(stderr, printformatstring, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
+
+			while (test != 0) {
+				if (test == 1) {	
+					fprintf(stderr, printformatstring2, "", "Required options:");
+				};
+
+				/* search for defined options */
+				for (i = 0; i < (int) (sizeof(ipv6calc_actionoptionmap) / sizeof(ipv6calc_actionoptionmap[0])); i++) {
+					if (ipv6calc_debug != 0) {
+						fprintf(stderr, "Option %d\n", i);
+					};
+
+					if (ipv6calc_actionstrings[j].number == ipv6calc_actionoptionmap[i][0]) {
+						if (ipv6calc_actionoptionmap[i][1] == 0) {
+							/* no options supported */
+							break;
+						};
+						
+						if (ipv6calc_debug != 0) {
+							fprintf(stderr, "Option value: %08x\n", (unsigned int) ipv6calc_actionoptionmap[i][1]);
+						};
+
+						/* run through options */
+						for (o = 0; o < (int) (sizeof(ipv6calc_longopts) / sizeof (ipv6calc_longopts[0])); o++) {
+							if ((ipv6calc_actionoptionmap[i][1] == ipv6calc_longopts[o].val)) {
+								has_options = 1;
+								if (test == 1) {	
+									fprintf(stderr, printformatstring3, "", ipv6calc_longopts[o].name);
+									if (ipv6calc_longopts[o].has_arg > 0) {
+										fprintf(stderr, " ...");
+									};
+									fprintf(stderr, "\n");
+								};
+							};
+						};
+					};
+				};
+				if (has_options == 0) {
+					break;
+				};
+				test--;
+			};
 		} else {
 			fprintf(stdout, printformatstring, ipv6calc_actionstrings[j].token);
 		};
