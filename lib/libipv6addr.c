@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.40 2011/06/01 06:06:07 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.41 2011/09/16 18:05:13 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -28,22 +28,22 @@
 
 
 /*
- * function returns an octett of an IPv6 address
+ * function returns an octet of an IPv6 address
  *
  * in: ipv6addrp = pointer to IPv6 address structure
- * in: numoctett  = number of octett (0 = MSB, 15 = LSB)
+ * in: numoctet  = number of octet (0 = MSB, 15 = LSB)
  * additional: calls exit on out of range
  */
-#define DEBUG_function_name "libipv6addr/ipv6addr_getoctett"
-uint8_t ipv6addr_getoctett(const ipv6calc_ipv6addr *ipv6addrp, const unsigned int numoctett) {
+#define DEBUG_function_name "libipv6addr/ipv6addr_getoctet"
+uint8_t ipv6addr_getoctet(const ipv6calc_ipv6addr *ipv6addrp, const unsigned int numoctet) {
 	uint8_t retval;
 	
-	if ( numoctett > 15 ) {
-		fprintf(stderr, "%s: given ocett number '%u' is out of range!\n", DEBUG_function_name, numoctett);
+	if ( numoctet > 15 ) {
+		fprintf(stderr, "%s: given ocett number '%u' is out of range!\n", DEBUG_function_name, numoctet);
 		exit(EXIT_FAILURE);
 	};
 
-	retval = ipv6addrp->in6_addr.s6_addr[numoctett];
+	retval = ipv6addrp->in6_addr.s6_addr[numoctet];
 
 	return (retval);
 };
@@ -101,18 +101,18 @@ uint32_t ipv6addr_getdword(const ipv6calc_ipv6addr *ipv6addrp, const unsigned in
 
 
 /*
- * function sets an octett of an IPv6 address
+ * function sets an octet of an IPv6 address
  *
  * mod: ipv6addrp = pointer to IPv6 address structure
- * in: numoctett   = number of word (0 = MSB, 15 = LSB)
+ * in: numoctet   = number of word (0 = MSB, 15 = LSB)
  * in: value     = value to set
  * additional: calls exit on out of range
  */
-#define DEBUG_function_name "libipv6addr/ipv6addr_setoctett"
-void ipv6addr_setoctett(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numoctett, const unsigned int value) {
+#define DEBUG_function_name "libipv6addr/ipv6addr_setoctet"
+void ipv6addr_setoctet(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numoctet, const unsigned int value) {
 	
-	if ( numoctett > 15 ) {
-		fprintf(stderr, "%s: given octett number '%u' is out of range!\n", DEBUG_function_name, numoctett);
+	if ( numoctet > 15 ) {
+		fprintf(stderr, "%s: given octet number '%u' is out of range!\n", DEBUG_function_name, numoctet);
 		exit(EXIT_FAILURE);
 	};
 	
@@ -121,7 +121,7 @@ void ipv6addr_setoctett(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numocte
 		exit(EXIT_FAILURE);
 	}; 
 
-	ipv6addrp->in6_addr.s6_addr[numoctett] = (uint8_t) value;
+	ipv6addrp->in6_addr.s6_addr[numoctet] = (uint8_t) value;
 
 	return;
 };
@@ -1345,28 +1345,28 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, unsigned int mask_iid, 
 	if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
 		/* extract IPv4 address */
 		for (i = 0; i <= 3; i++) {
-			ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) 2 + i));
+			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 2 + i));
 		};
 
 		libipv4addr_anonymize(&ipv4addr, mask_ipv4);
 
 		/* store back */
 		for (i = 0; i <= 3; i++) {
-			ipv6addr_setoctett(ipv6addrp, (unsigned int) 2 + i, (unsigned int) ipv4addr_getoctett(&ipv4addr, (unsigned int) i));
+			ipv6addr_setoctet(ipv6addrp, (unsigned int) 2 + i, (unsigned int) ipv4addr_getoctet(&ipv4addr, (unsigned int) i));
 		};
 	 };
 
 	if ( (typeinfo & IPV6_NEW_ADDR_TEREDO) != 0 ) {
 		/* extract Teredo client IPv4 address */
 		for (i = 0; i <= 3; i++) {
-			ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) 12 + i) ^ 0xff);
+			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 12 + i) ^ 0xff);
 		};
 
 		libipv4addr_anonymize(&ipv4addr, mask_ipv4);
 
 		/* store back */
 		for (i = 0; i <= 3; i++) {
-			ipv6addr_setoctett(ipv6addrp, (unsigned int) 12 + i, (unsigned int) ipv4addr_getoctett(&ipv4addr, (unsigned int) i) ^ 0xff);
+			ipv6addr_setoctet(ipv6addrp, (unsigned int) 12 + i, (unsigned int) ipv4addr_getoctet(&ipv4addr, (unsigned int) i) ^ 0xff);
 		};
 
 		/* clear client port */
@@ -1376,84 +1376,84 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, unsigned int mask_iid, 
 	if ( (typeinfo & (IPV6_ADDR_MAPPED | IPV6_ADDR_COMPATv4)) != 0 ) {
 		/* extract IPv4 address */
 		for (i = 0; i <= 3; i++) {
-			ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) 12 + i));
+			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 12 + i));
 		};
 
 		libipv4addr_anonymize(&ipv4addr, mask_ipv4);
 
 		/* store back */
 		for (i = 0; i <= 3; i++) {
-			ipv6addr_setoctett(ipv6addrp, (unsigned int) 12 + i, (unsigned int) ipv4addr_getoctett(&ipv4addr, (unsigned int) i));
+			ipv6addr_setoctet(ipv6addrp, (unsigned int) 12 + i, (unsigned int) ipv4addr_getoctet(&ipv4addr, (unsigned int) i));
 		};
 	};
 
 	/* Interface identifier included */
 	if ( ( ((typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_ADDR_ULUA )) != 0) || ((typeinfo & (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) == (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) ) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID)) == 0) ) {
-		if (ipv6addr_getoctett(ipv6addrp, 11) == 0xff && ipv6addr_getoctett(ipv6addrp, 12) == 0xfe) {
+		if (ipv6addr_getoctet(ipv6addrp, 11) == 0xff && ipv6addr_getoctet(ipv6addrp, 12) == 0xfe) {
 			if (ipv6calc_debug != 0) {
 				fprintf(stderr, "%s: EUI-48 identifier found\n", DEBUG_function_name);
 			};
 			/* EUI-48 */
 			if (mask_iid == 1) {
 				/* mask unique ID */
-				ipv6addr_setoctett(ipv6addrp, 13, 0x0u);
-				ipv6addr_setoctett(ipv6addrp, 14, 0x0u);
-				ipv6addr_setoctett(ipv6addrp, 15, 0x0u);
+				ipv6addr_setoctet(ipv6addrp, 13, 0x0u);
+				ipv6addr_setoctet(ipv6addrp, 14, 0x0u);
+				ipv6addr_setoctet(ipv6addrp, 15, 0x0u);
 			};
 		} else {
 			/* Check for global EUI-64 */
-			if ( (ipv6addr_getoctett(ipv6addrp, 8) & 0x02) != 0 ) {
+			if ( (ipv6addr_getoctet(ipv6addrp, 8) & 0x02) != 0 ) {
 				if (mask_iid == 1) {
 					/* mask unique ID */
-					ipv6addr_setoctett(ipv6addrp, 11, 0x0u);
-					ipv6addr_setoctett(ipv6addrp, 12, 0x0u);
-					ipv6addr_setoctett(ipv6addrp, 13, 0x0u);
-					ipv6addr_setoctett(ipv6addrp, 14, 0x0u);
-					ipv6addr_setoctett(ipv6addrp, 15, 0x0u);
+					ipv6addr_setoctet(ipv6addrp, 11, 0x0u);
+					ipv6addr_setoctet(ipv6addrp, 12, 0x0u);
+					ipv6addr_setoctet(ipv6addrp, 13, 0x0u);
+					ipv6addr_setoctet(ipv6addrp, 14, 0x0u);
+					ipv6addr_setoctet(ipv6addrp, 15, 0x0u);
 				};
 			} else {
 				if ( (typeinfo & IPV6_NEW_ADDR_SOLICITED_NODE) != 0 ) {
 					if (mask_iid == 1) {
 						/* mask unique ID */
-						ipv6addr_setoctett(ipv6addrp, 13, 0x0u);
-						ipv6addr_setoctett(ipv6addrp, 14, 0x0u);
-						ipv6addr_setoctett(ipv6addrp, 15, 0x0u);
+						ipv6addr_setoctet(ipv6addrp, 13, 0x0u);
+						ipv6addr_setoctet(ipv6addrp, 14, 0x0u);
+						ipv6addr_setoctet(ipv6addrp, 15, 0x0u);
 					};
 				} else if ( (typeinfo & IPV6_NEW_ADDR_ISATAP) != 0 )  {
 					for (i = 0; i <= 3; i++) {
-						ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) (i + 12)));
+						ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + 12)));
 					};
 
 					libipv4addr_anonymize(&ipv4addr, mask_ipv4);
 
 					/* store back */
 					for (i = 0; i <= 3; i++) {
-						ipv6addr_setoctett(ipv6addrp, (unsigned int) 12 + i, (unsigned int) ipv4addr_getoctett(&ipv4addr, (unsigned int) i));
+						ipv6addr_setoctet(ipv6addrp, (unsigned int) 12 + i, (unsigned int) ipv4addr_getoctet(&ipv4addr, (unsigned int) i));
 					};
 				} else if ( ( ( (typeinfo & IPV6_ADDR_LINKLOCAL) != 0) && (ipv6addr_getdword(ipv6addrp, 2) == 0 && ipv6addr_getword(ipv6addrp, 6) != 0)) )   {
 					/* fe80:: must have 0000:0000:xxxx:yyyy where xxxx > 0 */
 					for (i = 0; i <= 3; i++) {
-						ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) (i + 12)));
+						ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + 12)));
 					};
 
 					libipv4addr_anonymize(&ipv4addr, mask_ipv4);
 
 					/* store back */
 					for (i = 0; i <= 3; i++) {
-						ipv6addr_setoctett(ipv6addrp, (unsigned int) 12 + i, (unsigned int) ipv4addr_getoctett(&ipv4addr, (unsigned int) i));
+						ipv6addr_setoctet(ipv6addrp, (unsigned int) 12 + i, (unsigned int) ipv4addr_getoctet(&ipv4addr, (unsigned int) i));
 					};
 				} else {
 					if ((typeinfo & IPV6_NEW_ADDR_6TO4_MICROSOFT) != 0) {
 						/* extract IPv4 address */
 						for (i = 0; i <= 3; i++) {
-							ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) (i + 12)));
+							ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + 12)));
 						};
 
 						libipv4addr_anonymize(&ipv4addr, mask_ipv4);
 
 						/* store back */
 						for (i = 0; i <= 3; i++) {
-							ipv6addr_setoctett(ipv6addrp, (unsigned int) 12 + i, (unsigned int) ipv4addr_getoctett(&ipv4addr, (unsigned int) i));
+							ipv6addr_setoctet(ipv6addrp, (unsigned int) 12 + i, (unsigned int) ipv4addr_getoctet(&ipv4addr, (unsigned int) i));
 						};
 					} else {
 						/* Identifier has local scope */
@@ -1506,7 +1506,7 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, unsigned int mask_iid, 
 		if ( ((typeinfo & IPV6_ADDR_SITELOCAL) != 0) && (mask_ipv6 < 10) ) { 
 			ipv6addr_setword(ipv6addrp, 0, ipv6addr_getword(ipv6addrp, 1) | 0xfec0u);
 		} else if ( ((typeinfo & IPV6_ADDR_ULUA) != 0) && (mask_ipv6 < 7) ) {
-			ipv6addr_setoctett(ipv6addrp, 0, ipv6addr_getoctett(ipv6addrp, 0) | 0xfdu);
+			ipv6addr_setoctet(ipv6addrp, 0, ipv6addr_getoctet(ipv6addrp, 0) | 0xfdu);
 		};
 	};
 

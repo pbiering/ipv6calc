@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.41 2011/05/26 17:30:54 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.42 2011/09/16 18:05:13 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -34,6 +34,7 @@
 #include "librfc2874.h"
 #include "librfc3056.h"
 #include "librfc3041.h"
+#include "librfc5569.h"
 #include "libeui64.h"
 #include "config.h"
 
@@ -124,7 +125,7 @@ int main(int argc, char *argv[]) {
 
 	/* used structures */
 	ipv6calc_ipv6addr ipv6addr, ipv6addr2, ipv6addr3, ipv6addr4;
-	ipv6calc_ipv4addr ipv4addr;
+	ipv6calc_ipv4addr ipv4addr, ipv4addr2;
 	ipv6calc_macaddr  macaddr;
 
 	/* clear address structures */
@@ -439,6 +440,14 @@ int main(int argc, char *argv[]) {
 				mask_ipv4 = 16;
 				mask_ipv6 = 32;
 				mask_iid = 1;
+				break;
+
+			case CMD_6rd_relay_prefix:
+				retval = addr_to_ipv4addrstruct(optarg, resultstring, &ipv4addr2);
+				break;
+
+			case CMD_6rd_prefix:
+				retval = addr_to_ipv6addrstruct(optarg, resultstring, &ipv6addr);
 				break;
 
 			/* format options */
@@ -1242,6 +1251,43 @@ PIPE_input:
 			for ( i = 8; i <= 15; i++ ) {
 				ipv6addr.in6_addr.s6_addr[i] = ipv6addr2.in6_addr.s6_addr[i];
 			};
+			break;
+
+		case ACTION_6rd_local_prefix:
+			/* check IPv6 prefix */
+			if ( ipv6addr.flag_valid != 1 ) {
+				fprintf(stderr, "No valid IPv6 address given as 6rd prefix!\n");
+				exit(EXIT_FAILURE);
+			}
+
+			if ( !ipv6addr.flag_prefixuse ) {
+				fprintf(stderr, "Specified IPv6 address has no prefix length!\n");
+				exit(EXIT_FAILURE);
+			}
+
+			/* check IPv4 local ip */
+			if ( ipv4addr.flag_valid != 1 ) {
+				fprintf(stderr, "No valid IPv4 address given as local IP!\n");
+				exit(EXIT_FAILURE);
+			}
+		
+			if ( ipv4addr.flag_prefixuse ) {
+				fprintf(stderr, "No prefix length should be specified for the local IP!\n");
+				exit(EXIT_FAILURE);
+			}
+
+			/* check IPv4 relay prefix */
+			if ( ipv4addr2.flag_valid != 1 ) {
+				fprintf(stderr, "No valid IPv4 address given as 6rd relay prefix!\n");
+				exit(EXIT_FAILURE);
+			}
+
+			if ( !ipv4addr2.flag_prefixuse ) {
+				fprintf(stderr, "Specified relay prefix IPv4 address has no prefix length!\n");
+				exit(EXIT_FAILURE);
+			}
+
+			retval = librfc5569_calc_6rd_local_prefix(&ipv6addr, &ipv4addr2, &ipv4addr, resultstring);
 			break;
 
 		case ACTION_undefined:

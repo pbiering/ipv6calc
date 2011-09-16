@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.193 2011/06/09 19:08:34 peter Exp $ 
+ *  $Id: ChangeLog,v 1.194 2011/09/16 18:05:13 peter Exp $ 
  */
 
 Info:
@@ -8,9 +8,22 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20110916/PB
+	6rd extension: change options to support stdin for IPv4 addresses
+	minor code review
+
+20110915/PB
+	Makefile: catch exit code on sub tests
+	syntax fix "octett" -> "octet"
+	ipv6calc, ipv6calccommands.h, ipv6calcoptions.h, ipv6calctypes.h,
+	librfc5569.c, librfc5569.h, Makefile.in
+	 - add 6rd extension from Raphaël Assénat and add test case
+	database
+	 - update
+
 20110610/PB
 	database
-	 -update
+	 - update
 	tag version 0.90.1
 
 20110601/PB

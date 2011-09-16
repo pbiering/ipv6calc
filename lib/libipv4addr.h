@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.17 2007/07/05 20:48:43 peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.18 2011/09/16 18:05:13 peter Exp $
  * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
@@ -56,11 +56,11 @@ typedef struct {
 
 
 /* prototypes */
-extern uint8_t  ipv4addr_getoctett(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int numoctett);
+extern uint8_t  ipv4addr_getoctet(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int numoctett);
 extern uint16_t ipv4addr_getword(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword);
 extern uint32_t ipv4addr_getdword(const ipv6calc_ipv4addr *ipv4addrp);
 
-extern void ipv4addr_setoctett(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numocett, const unsigned int value);
+extern void ipv4addr_setoctet(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numocett, const unsigned int value);
 extern void ipv4addr_setword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword, const unsigned int value);
 extern void ipv4addr_setdword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int value);
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3056.c
- * Version    : $Id: librfc3056.c,v 1.7 2005/09/15 12:32:21 peter Exp $
+ * Version    : $Id: librfc3056.c,v 1.8 2011/09/16 18:05:13 peter Exp $
  * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -37,7 +37,7 @@ int librfc3056_ipv4addr_to_ipv6to4addr(ipv6calc_ipv6addr *ipv6addrp, const ipv6c
 
 	/* set IPv4 address */
 	for (i = 0; i <=3; i++) {
-		ipv6addr_setoctett(ipv6addrp, i + 2, (unsigned int) ipv4addr_getoctett(ipv4addrp, i));
+		ipv6addr_setoctet(ipv6addrp, i + 2, (unsigned int) ipv4addr_getoctet(ipv4addrp, i));
 	};
 
 	ipv6addrp->prefixlength = 48;
@@ -74,7 +74,7 @@ int librfc3056_ipv6addr_to_ipv4addr(ipv6calc_ipv4addr *ipv4addrp, const ipv6calc
 
 	/* set IPv4 address */
 	for (i = 0; i < 4; i++) {
-		ipv4addr_setoctett(ipv4addrp, i, (unsigned int) ipv6addr_getoctett(ipv6addrp, i + 2));
+		ipv4addr_setoctet(ipv4addrp, i, (unsigned int) ipv6addr_getoctet(ipv6addrp, i + 2));
 	};
 
 	ipv4addrp->prefixlength = 32;

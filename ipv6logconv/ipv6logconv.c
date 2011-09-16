@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.16 2005/10/20 16:22:41 peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.17 2011/09/16 18:05:13 peter Exp $
  * Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -527,15 +527,15 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 					/* fill IPv4 address */
 					if ( (typeinfo & (IPV6_ADDR_MAPPED | IPV6_ADDR_COMPATv4)) != 0 ) {
 						for (i = 0; i <= 3; i++) {
-							ipv4addr_setoctett(&ipv4addr, i, ipv6addr_getoctett(&ipv6addr, i + 12));
+							ipv4addr_setoctet(&ipv4addr, i, ipv6addr_getoctet(&ipv6addr, i + 12));
 						};
 					} else if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
 						for (i = 0; i <= 3; i++) {
-							ipv4addr_setoctett(&ipv4addr, i, ipv6addr_getoctett(&ipv6addr, i + 2));
+							ipv4addr_setoctet(&ipv4addr, i, ipv6addr_getoctet(&ipv6addr, i + 2));
 						};
 					} else if ( (typeinfo & IPV6_NEW_ADDR_TEREDO) != 0 ) {
 						for (i = 0; i <= 3; i++) {
-							ipv4addr_setoctett(&ipv4addr, i, ipv6addr_getoctett(&ipv6addr, i + 12) ^ 0xff);
+							ipv4addr_setoctet(&ipv4addr, i, ipv6addr_getoctet(&ipv6addr, i + 12) ^ 0xff);
 						};
 					} else {
 						/* normally never happen */
@@ -586,13 +586,13 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 				};
 		       	};
 
-			if ((ipv6addr_getoctett(&ipv6addr, 8) & 0x02) != 0) {
-				macaddr.addr[0] = ipv6addr_getoctett(&ipv6addr, 8) ^0x02;
-				macaddr.addr[1] = ipv6addr_getoctett(&ipv6addr, 9);
-				macaddr.addr[2] = ipv6addr_getoctett(&ipv6addr, 10);
-				macaddr.addr[3] = ipv6addr_getoctett(&ipv6addr, 13);
-				macaddr.addr[4] = ipv6addr_getoctett(&ipv6addr, 14);
-				macaddr.addr[5] = ipv6addr_getoctett(&ipv6addr, 15);
+			if ((ipv6addr_getoctet(&ipv6addr, 8) & 0x02) != 0) {
+				macaddr.addr[0] = ipv6addr_getoctet(&ipv6addr, 8) ^0x02;
+				macaddr.addr[1] = ipv6addr_getoctet(&ipv6addr, 9);
+				macaddr.addr[2] = ipv6addr_getoctet(&ipv6addr, 10);
+				macaddr.addr[3] = ipv6addr_getoctet(&ipv6addr, 13);
+				macaddr.addr[4] = ipv6addr_getoctet(&ipv6addr, 14);
+				macaddr.addr[5] = ipv6addr_getoctet(&ipv6addr, 15);
 
 				retval = libieee_get_short_vendor_string(resultstring, &macaddr);
 				if (retval != 0) {

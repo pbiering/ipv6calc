@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.c
- * Version    : $Id: librfc2874.c,v 1.12 2009/08/11 20:38:51 peter Exp $
+ * Version    : $Id: librfc2874.c,v 1.13 2011/09/16 18:05:13 peter Exp $
  * Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -31,7 +31,7 @@
 int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
 	int retval = 1;
 	unsigned int nibble;
-	unsigned int noctett, nbit, nnibble, prefixlength, bit_start, bit_end;
+	unsigned int noctet, nbit, nnibble, prefixlength, bit_start, bit_end;
 	char tempstring[NI_MAXHOST];
 
 	if ( (*ipv6addrp).flag_startend_use != 0 ) {
@@ -62,17 +62,17 @@ int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resul
 	/* 127 is lowest bit, 0 is highest bit */
 	resultstring[0] = '\0';
 	for (nbit = bit_start - 1; nbit <= bit_end - 1; nbit = nbit + 4) {
-		/* calculate octett (8 bit) */
-		noctett = (nbit & 0x78) >> 3;
+		/* calculate octet (8 bit) */
+		noctet = (nbit & 0x78) >> 3;
 		
 		/* calculate nibble */
 		nnibble = (nbit & 0x04) >> 2;
 
 		/* extract nibble */
-		nibble = ( (*ipv6addrp).in6_addr.s6_addr[noctett] & ( 0xf << (unsigned int) (4 * (1 - nnibble)) ) ) >> (unsigned int) ( 4 * (1 - nnibble));
+		nibble = ( (*ipv6addrp).in6_addr.s6_addr[noctet] & ( 0xf << (unsigned int) (4 * (1 - nnibble)) ) ) >> (unsigned int) ( 4 * (1 - nnibble));
 		
 		if ( (ipv6calc_debug & DEBUG_librfc2874) != 0 ) {
-			fprintf(stderr, "%s: bit: %u= noctett: %u, nnibble: %u, octett: %02x, value: %x\n", DEBUG_function_name, nbit, noctett, nnibble, (unsigned int) (*ipv6addrp).in6_addr.s6_addr[noctett], nibble);
+			fprintf(stderr, "%s: bit: %u= noctet: %u, nnibble: %u, octet: %02x, value: %x\n", DEBUG_function_name, nbit, noctet, nnibble, (unsigned int) (*ipv6addrp).in6_addr.s6_addr[noctet], nibble);
 		};
 
 		snprintf(tempstring, sizeof(tempstring) - 1, "%s%x", resultstring, nibble);

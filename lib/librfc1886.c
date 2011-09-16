@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.16 2011/02/27 12:09:32 peter Exp $
+ * Version    : $Id: librfc1886.c,v 1.17 2011/09/16 18:05:13 peter Exp $
  * Copyright  : 2002-2010 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -42,7 +42,7 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 	unsigned int nibble;
 	int bit_start, bit_end, nbit;
 	char tempstring[NI_MAXHOST];
-	unsigned int nnibble, noctett;
+	unsigned int nnibble, noctet;
 	
 	if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
 		fprintf(stderr, "%s: flag_prefixuse %d\n", DEBUG_function_name, (*ipv6addrp).flag_prefixuse);
@@ -89,17 +89,17 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 	resultstring[0] = '\0';
 
 	for (nbit = bit_end - 1; nbit >= bit_start - 1; nbit = nbit - 4) {
-		/* calculate octett (8 bit) */
-		noctett = ( ((unsigned int) nbit) & 0x78) >> 3;
+		/* calculate octet (8 bit) */
+		noctet = ( ((unsigned int) nbit) & 0x78) >> 3;
 		
 		/* calculate nibble */
 		nnibble = ( ((unsigned int) nbit) & 0x04) >> 2;
 
 		/* extract nibble */
-		nibble = ( (*ipv6addrp).in6_addr.s6_addr[noctett] & ( 0xf << (unsigned int) (4 * (1 - nnibble)) ) ) >> (unsigned int) ( 4 * (1 - nnibble));
+		nibble = ( (*ipv6addrp).in6_addr.s6_addr[noctet] & ( 0xf << (unsigned int) (4 * (1 - nnibble)) ) ) >> (unsigned int) ( 4 * (1 - nnibble));
 		
 		if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-			fprintf(stderr, "%s: bit: %d = noctett: %u, nnibble: %u, octett: %02x, value: %x\n", DEBUG_function_name, nbit, noctett, nnibble, (unsigned int) (*ipv6addrp).in6_addr.s6_addr[noctett], nibble);
+			fprintf(stderr, "%s: bit: %d = noctet: %u, nnibble: %u, octet: %02x, value: %x\n", DEBUG_function_name, nbit, noctet, nnibble, (unsigned int) (*ipv6addrp).in6_addr.s6_addr[noctet], nibble);
 		};
 
 		snprintf(tempstring, sizeof(tempstring) - 1, "%s%x", resultstring, nibble);
@@ -272,7 +272,6 @@ NEXT_token_nibblestring_to_ipv6addrstruct:
  */
 #define DEBUG_function_name "librfc1886/formatcheck"
 int librfc1886_formatcheck(const char *string, char *infostring) {
-	size_t length;
 	int nibblecounter = 0, flag_tld = 0, flag_nld = 0, tokencounter = 0;
 	char tempstring[NI_MAXHOST], *token, *cptr, **ptrptr;
 
@@ -290,8 +289,6 @@ int librfc1886_formatcheck(const char *string, char *infostring) {
 	if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
 		fprintf(stderr, "%s: check %s\n", DEBUG_function_name, tempstring);
 	};
-
-	length = strlen(tempstring);
 
 	string_to_reverse(tempstring);	
 	

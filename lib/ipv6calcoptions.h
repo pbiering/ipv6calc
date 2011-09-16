@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.16 2011/05/15 11:46:25 peter Exp $
+ * Version    : $Id: ipv6calcoptions.h,v 1.17 2011/09/16 18:05:13 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -132,6 +132,10 @@
 	{ "in"        , 1, 0, CMD_inputtype  },
 	{ "out"       , 1, 0, CMD_outputtype },
 	{ "action"    , 1, 0, CMD_actiontype },
+
+	/* 6rd_prefix options */
+	{ "6rd_relay_prefix"	, 1, 0, CMD_6rd_relay_prefix },
+	{ "6rd_prefix"		, 1, 0, CMD_6rd_prefix },
 
 	{NULL, 0, 0, 0}
 };                

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.46 2011/05/15 11:46:25 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.47 2011/09/16 18:05:13 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -552,7 +552,7 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 	if ( (macaddrp->addr[0] == 0xfc) && (macaddrp->addr[1] == 0xfc) ) {
 		/* copy address */
 		for ( i = 0; i <= 3; i++ ) {
-			ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) macaddrp->addr[i + 2]);
+			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) macaddrp->addr[i + 2]);
 		};
 
 		if ( machinereadable != 0 ) {
@@ -709,7 +709,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 
 	if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
 		for (i = 0; i <= 3; i++) {
-			ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) 2 + i));
+			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 2 + i));
 		};
 
 		retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, helpstring, 0);
@@ -736,12 +736,12 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	if ( (typeinfo & IPV6_NEW_ADDR_TEREDO) != 0 ) {
 		/* extract Teredo client IPv4 address */
 		for (i = 0; i <= 3; i++) {
-			ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) 12 + i) ^ 0xff);
+			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 12 + i) ^ 0xff);
 		};
 
 		/* extract Teredo server IPv4 address */
 		for (i = 0; i <= 3; i++) {
-			ipv4addr_setoctett(&ipv4addr2, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) 4 + i));
+			ipv4addr_setoctet(&ipv4addr2, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 4 + i));
 		};
 
 		print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "TEREDO-CLIENT");
@@ -755,7 +755,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		};	
 
 		/* extract Teredo client UDP port */
-		port = (uint16_t) (((uint16_t) ipv6addr_getoctett(ipv6addrp, (unsigned int) 10) << 8 | (uint16_t) ipv6addr_getoctett(ipv6addrp, (unsigned int) 11)) ^ 0xffff);
+		port = (uint16_t) (((uint16_t) ipv6addr_getoctet(ipv6addrp, (unsigned int) 10) << 8 | (uint16_t) ipv6addr_getoctet(ipv6addrp, (unsigned int) 11)) ^ 0xffff);
 
 		if ( machinereadable != 0 ) {
 			snprintf(tempstring, sizeof(tempstring) - 1, "TEREDO_PORT_CLIENT=%u", (unsigned int) port);
@@ -775,7 +775,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 
 	if ( (typeinfo & IPV6_NEW_ADDR_NAT64) != 0 )  {
 		for (i = 0; i <= 3; i++) {
-			ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) (i + 12)));
+			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + 12)));
 		};
 
 		if ( machinereadable != 0 ) {
@@ -837,7 +837,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			fprintf(stdout, "Address type is compat/mapped and include an IPv4 address\n");
 		};
 		for (i = 0; i <= 3; i++) {
-			ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) (i + 12)));
+			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + 12)));
 		};
 		print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "COMPAT/MAPPED");
 	};
@@ -851,38 +851,38 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			fprintf(stdout, "Interface identifier: %04x:%04x:%04x:%04x\n", (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addr_getword(ipv6addrp, 6), (unsigned int) ipv6addr_getword(ipv6addrp, 7));
 		};
 
-		if (ipv6addr_getoctett(ipv6addrp, 11) == 0xff && ipv6addr_getoctett(ipv6addrp, 12) == 0xfe) {
+		if (ipv6addr_getoctet(ipv6addrp, 11) == 0xff && ipv6addr_getoctet(ipv6addrp, 12) == 0xfe) {
 			/* EUI-48 */
-			macaddr.addr[0] = ipv6addr_getoctett(ipv6addrp,  8) ^ 0x02;
-			macaddr.addr[1] = ipv6addr_getoctett(ipv6addrp,  9);
-			macaddr.addr[2] = ipv6addr_getoctett(ipv6addrp, 10);
-			macaddr.addr[3] = ipv6addr_getoctett(ipv6addrp, 13);
-			macaddr.addr[4] = ipv6addr_getoctett(ipv6addrp, 14);
-			macaddr.addr[5] = ipv6addr_getoctett(ipv6addrp, 15);
+			macaddr.addr[0] = ipv6addr_getoctet(ipv6addrp,  8) ^ 0x02;
+			macaddr.addr[1] = ipv6addr_getoctet(ipv6addrp,  9);
+			macaddr.addr[2] = ipv6addr_getoctet(ipv6addrp, 10);
+			macaddr.addr[3] = ipv6addr_getoctet(ipv6addrp, 13);
+			macaddr.addr[4] = ipv6addr_getoctet(ipv6addrp, 14);
+			macaddr.addr[5] = ipv6addr_getoctet(ipv6addrp, 15);
 			print_eui48(&macaddr, formatoptions);
 		} else {
 			/* Check for global EUI-64 */
-			if ( (ipv6addr_getoctett(ipv6addrp, 8) & 0x02) != 0 ) {
-				eui64addr.addr[0] = ipv6addr_getoctett(ipv6addrp,  8) ^ 0x02;
-				eui64addr.addr[1] = ipv6addr_getoctett(ipv6addrp,  9);
-				eui64addr.addr[2] = ipv6addr_getoctett(ipv6addrp, 10);
-				eui64addr.addr[3] = ipv6addr_getoctett(ipv6addrp, 11);
-				eui64addr.addr[4] = ipv6addr_getoctett(ipv6addrp, 12);
-				eui64addr.addr[5] = ipv6addr_getoctett(ipv6addrp, 13);
-				eui64addr.addr[6] = ipv6addr_getoctett(ipv6addrp, 14);
-				eui64addr.addr[7] = ipv6addr_getoctett(ipv6addrp, 15);
+			if ( (ipv6addr_getoctet(ipv6addrp, 8) & 0x02) != 0 ) {
+				eui64addr.addr[0] = ipv6addr_getoctet(ipv6addrp,  8) ^ 0x02;
+				eui64addr.addr[1] = ipv6addr_getoctet(ipv6addrp,  9);
+				eui64addr.addr[2] = ipv6addr_getoctet(ipv6addrp, 10);
+				eui64addr.addr[3] = ipv6addr_getoctet(ipv6addrp, 11);
+				eui64addr.addr[4] = ipv6addr_getoctet(ipv6addrp, 12);
+				eui64addr.addr[5] = ipv6addr_getoctet(ipv6addrp, 13);
+				eui64addr.addr[6] = ipv6addr_getoctet(ipv6addrp, 14);
+				eui64addr.addr[7] = ipv6addr_getoctet(ipv6addrp, 15);
 				print_eui64(&eui64addr, formatoptions);
 			} else {
 				if ( (typeinfo & IPV6_NEW_ADDR_SOLICITED_NODE) != 0 ) {
 					if ( machinereadable != 0 ) {
-						snprintf(tempstring, sizeof(tempstring) - 1, "EUI64=??:??:??:??:??:%02x:%02x:%02x", (unsigned int) ipv6addr_getoctett(ipv6addrp, 13), (unsigned int) ipv6addr_getoctett(ipv6addrp, 14), (unsigned int) ipv6addr_getoctett(ipv6addrp, 15));
+						snprintf(tempstring, sizeof(tempstring) - 1, "EUI64=??:??:??:??:??:%02x:%02x:%02x", (unsigned int) ipv6addr_getoctet(ipv6addrp, 13), (unsigned int) ipv6addr_getoctet(ipv6addrp, 14), (unsigned int) ipv6addr_getoctet(ipv6addrp, 15));
 						printout(tempstring);
 					} else {
-						fprintf(stdout, "Generated from the extension identifier of an EUI-48 (MAC): ...:%02x:%02x:%02x\n", (unsigned int) ipv6addr_getoctett(ipv6addrp, 13), (unsigned int) ipv6addr_getoctett(ipv6addrp, 14), (unsigned int) ipv6addr_getoctett(ipv6addrp, 15));
+						fprintf(stdout, "Generated from the extension identifier of an EUI-48 (MAC): ...:%02x:%02x:%02x\n", (unsigned int) ipv6addr_getoctet(ipv6addrp, 13), (unsigned int) ipv6addr_getoctet(ipv6addrp, 14), (unsigned int) ipv6addr_getoctet(ipv6addrp, 15));
 					};
 				} else if ( (typeinfo & IPV6_NEW_ADDR_ISATAP) != 0 )  {
 					for (i = 0; i <= 3; i++) {
-						ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) (i + 12)));
+						ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + 12)));
 					};
 
 					if ( machinereadable != 0 ) {
@@ -897,7 +897,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 						fprintf(stdout, "Address type contains IPv4 address:\n");
 					};
 					for (i = 0; i <= 3; i++) {
-						ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(ipv6addrp, (unsigned int) (i + 12)));
+						ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + 12)));
 					};
 					if ( machinereadable != 0 ) {
 						// printout("IPV4_SOURCE=LINK-LOCAL-IID");

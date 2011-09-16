@@ -6,6 +6,12 @@ Versions below 2.1.3 are NOT suported.
 
 Instructions for current version (4.0.2)
 
+Rebuild available SRPMS:
+
+Download SRPMS from http://fr2.rpmfind.net/linux/rpm2html/search.php?query=ip2location
+
+From source code:
+
 Check for installed "libtool" package
 
 Download C Library from http://www.ip2location.com/c.aspx

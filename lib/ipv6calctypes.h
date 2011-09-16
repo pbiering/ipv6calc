@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.20 2011/05/15 11:46:25 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.21 2011/09/16 18:05:13 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -222,6 +222,7 @@ typedef struct {
 #define ACTION_NUM_iid_token_to_privacy	3
 #define ACTION_NUM_prefix_mac_to_ipv6	4
 #define ACTION_NUM_anonymize		5
+#define ACTION_NUM_6rd_local_prefix		6
 #define ACTION_NUM_undefined		31
 
 #define ACTION_auto			(uint32_t) 0x0
@@ -230,6 +231,7 @@ typedef struct {
 #define ACTION_iid_token_to_privacy	(uint32_t) (1 << ACTION_NUM_iid_token_to_privacy)
 #define ACTION_prefix_mac_to_ipv6	(uint32_t) (1 << ACTION_NUM_prefix_mac_to_ipv6)
 #define ACTION_anonymize		(uint32_t) (1 << ACTION_NUM_anonymize)
+#define ACTION_6rd_local_prefix		(uint32_t) (1 << ACTION_NUM_6rd_local_prefix)
 #define ACTION_undefined		(uint32_t) (1 << ACTION_NUM_undefined)
 
 typedef struct {
@@ -246,6 +248,7 @@ typedef struct {
 	{ ACTION_iid_token_to_privacy , "genprivacyiid"  , "Generates a privacy interface ID out of a given one and a token", "" },
 	{ ACTION_prefix_mac_to_ipv6   , "prefixmac2ipv6" , "Generates an IPv6 address out of a prefix and a MAC address", "" },
 	{ ACTION_anonymize            , "anonymize"      , "Anonymize IPv4/IPv6 address without loosing much information", "" },
+	{ ACTION_6rd_local_prefix     , "6rd_local_prefix"  , "Calculate the local 6rd prefix from given IPv6 prefix & relay prefix and local IPv4", "" },
 };
 
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.20 2011/05/15 11:46:25 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.21 2011/09/16 18:05:13 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -246,10 +246,6 @@ void printhelp_actiontypes(const uint32_t formatoptions) {
 
 /* print global help */
 void printhelp(void) {
-	/* dummy assignment to prevent compiler warning about unused constant */
-	size_t maxlen = 0;
-	maxlen = strlen(ipv6calc_shortopts);
-
 	printversion();
 	printcopyright();
 	fprintf(stderr, "\n");

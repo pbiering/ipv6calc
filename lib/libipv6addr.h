@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.30 2011/03/29 18:33:32 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.31 2011/09/16 18:05:13 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -152,11 +152,11 @@ typedef struct {
 
 
 /* prototypes */
-extern uint8_t  ipv6addr_getoctett(const ipv6calc_ipv6addr *ipv6addrp, const unsigned int numoctett);
+extern uint8_t  ipv6addr_getoctet(const ipv6calc_ipv6addr *ipv6addrp, const unsigned int numoctet);
 extern uint16_t ipv6addr_getword(const ipv6calc_ipv6addr *ipv6addrp, const unsigned int numword);
 extern uint32_t ipv6addr_getdword(const ipv6calc_ipv6addr *ipv6addrp, const unsigned int numdword);
 
-extern void ipv6addr_setoctett(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numocett, unsigned int value);
+extern void ipv6addr_setoctet(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numocett, unsigned int value);
 extern void ipv6addr_setword(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numword, unsigned int value);
 extern void ipv6addr_setdword(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numdword, unsigned int value);
 

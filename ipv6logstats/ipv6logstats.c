@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.12 2005/10/20 16:22:41 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.13 2011/09/16 18:05:13 peter Exp $
  * Copyright  : 2003-2005 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -270,7 +270,7 @@ static void lineparser(void) {
 				if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
 					/* 6to4 address */
 					for (i = 0; i <= 3; i++) {
-						ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(&ipv6addr, (unsigned int) 2 + i));
+						ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(&ipv6addr, (unsigned int) 2 + i));
 					};
 					
 					/* get registry */
@@ -304,7 +304,7 @@ static void lineparser(void) {
 				} else if ( (typeinfo & IPV6_NEW_ADDR_TEREDO) != 0 ) {
 					/* Teredo address */
 					for (i = 0; i <= 3; i++) {
-						ipv4addr_setoctett(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctett(&ipv6addr, (unsigned int) 12 + i) ^ 0xff);
+						ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(&ipv6addr, (unsigned int) 12 + i) ^ 0xff);
 					};
 					
 					/* get registry */
