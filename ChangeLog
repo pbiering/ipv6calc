@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.196 2011/10/06 19:22:46 peter Exp $ 
+ *  $Id: ChangeLog,v 1.197 2011/10/06 19:34:02 peter Exp $ 
  */
 
 Info:
@@ -11,7 +11,7 @@ Info:
 20111006/PB
 	configure.in
 	 - checking GeoIP library for IPv6 support
-	ipv6calc/ipv6calc.c, ipv6calc/showinfo.c, lib/ipv6calchelp.c
+	ipv6calc/ipv6calc.c, ipv6calc/showinfo.c, lib/ipv6calchelp.c, ipv6calc/test_showinfo.sh
 	 - skip IPv6 related GeoIP parts, if support is missing in GeoIP library
 
 20110916/PB
