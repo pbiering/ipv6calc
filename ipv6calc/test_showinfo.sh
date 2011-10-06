@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.12 2011/10/06 19:22:47 peter Exp $
-# Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_showinfo.sh,v 1.13 2011/10/06 19:27:15 peter Exp $
+# Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
 
@@ -61,9 +61,13 @@ if ./ipv6calc -v 2>&1 | grep -qw GeoIP; then
 		if ./ipv6calc -q -i -m -G $address | grep ^GEOIP; then
 			true
 		else
-			echo "Unexpected result (missing GEOIP):"
-			./ipv6calc -q -i -m -G $address
-			exit 1
+			if ./ipv6calc -v 2>&1 | grep -qw GeoIP | grep "v4only"; then
+				echo "Expected result (missing GEOIP) because of missing IPv6 support in GeoIP)"
+			else
+				echo "Unexpected result (missing GEOIP):"
+				./ipv6calc -q -i -m -G $address
+				exit 1
+			fi
 		fi
 	done || exit 1
 else
