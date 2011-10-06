@@ -84,6 +84,9 @@
 /* Define if you want GeoIP support. */
 #undef SUPPORT_GEOIP
 
+/* Define if you want GeoIP IPv6 support. */
+#undef SUPPORT_GEOIP_V6
+
 /* Define if you want IP2Location support. */
 #undef SUPPORT_IP2LOCATION
 

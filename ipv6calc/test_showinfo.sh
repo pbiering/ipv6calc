@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.11 2011/05/15 11:46:25 peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.12 2011/10/06 19:22:47 peter Exp $
 # Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -61,6 +61,8 @@ if ./ipv6calc -v 2>&1 | grep -qw GeoIP; then
 		if ./ipv6calc -q -i -m -G $address | grep ^GEOIP; then
 			true
 		else
+			echo "Unexpected result (missing GEOIP):"
+			./ipv6calc -q -i -m -G $address
 			exit 1
 		fi
 	done || exit 1
@@ -75,6 +77,8 @@ if ./ipv6calc -v 2>&1 | grep -qw IP2Location; then
 		if ./ipv6calc -q -i -m -L $address | egrep -v '=This (record|parameter) ' | grep ^IP2LOCATION; then
 			true
 		else
+			echo "Unexpected result (missing IP2LOCATION):"
+			./ipv6calc -q -i -m -L $address
 			exit 1
 		fi
 	done || exit 1

@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.195 2011/09/16 19:25:33 peter Exp $ 
+ *  $Id: ChangeLog,v 1.196 2011/10/06 19:22:46 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,12 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20111006/PB
+	configure.in
+	 - checking GeoIP library for IPv6 support
+	ipv6calc/ipv6calc.c, ipv6calc/showinfo.c, lib/ipv6calchelp.c
+	 - skip IPv6 related GeoIP parts, if support is missing in GeoIP library
+
 20110916/PB
 	6rd extension: change options to support stdin for IPv4 addresses
 	minor code review

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.47 2011/09/16 18:05:13 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.48 2011/10/06 19:22:47 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -312,6 +312,7 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 		returnedCountryName = GeoIP_country_name_by_addr(gi, addrstring);
 	};
 
+#ifdef SUPPORT_GEOIP_V6
 	if (GeoIP_database_edition(gi) == GEOIP_COUNTRY_EDITION_V6 && version == 6) {
 		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
 			fprintf(stderr, "%s: GeoIP country database IPv6 available\n", DEBUG_function_name);
@@ -320,6 +321,7 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 		returnedCountry = GeoIP_country_code_by_addr_v6(gi, addrstring);
 		returnedCountryName = GeoIP_country_name_by_addr_v6(gi, addrstring);
 	};
+#endif
 
 	if (GeoIP_database_edition(gi) == GEOIP_CITY_EDITION_REV1 && version == 4) {
 		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
@@ -391,7 +393,7 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 			};
 		};
 	} else {
-		if ((formatoptions & FORMATOPTION_quiet) == 0) {
+		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
 			fprintf(stderr, "%s: GeoIP returned no record for address: %s\n", DEBUG_function_name, addrstring);
 		};
 	};
