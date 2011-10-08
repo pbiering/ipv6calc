@@ -1,13 +1,15 @@
 #!/usr/bin/perl -w
 #
-# Project    : ipv6calc/lib
+# Project    : ipv6calc
 # File       : create_ieee_oui_headerfile.pl
-# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.9 2006/02/12 14:01:44 peter Exp $
-# Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.10 2011/10/08 11:50:13 peter Exp $
+# Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE/oui.txt
 
 use strict;
+use File::stat;
+use POSIX qw(strftime);
 
 my $INFILE;
 
@@ -15,7 +17,7 @@ my $OUTFILE = "dbieee_oui.h";
 
 $INFILE = shift;
 
-if (! defined $INFILE) { $INFILE = "oui_public.txt" };
+if (! defined $INFILE) { $INFILE = "oui.txt" };
 
 print "Create dbieee_oui.h automatically\n";
 
@@ -38,6 +40,10 @@ print OUT qq| * Generated     : $now_string
  */
 
 |;
+
+# print creation date
+my $sb = stat($INFILE);
+print OUT "static const char* libieee_oui_status = \"OUI/" . strftime("%Y%m%d", localtime($sb->mtime)) . "\";\n";
 
 # Structure
 print OUT qq|

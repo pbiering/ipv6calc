@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.14 2011/10/06 19:32:36 peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.15 2011/10/08 11:50:13 peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -62,7 +62,7 @@ if ./ipv6calc -v 2>&1 | grep -qw GeoIP; then
 			true
 		else
 			if echo "$address" | grep -q ":"; then
-				if ./ipv6calc -v 2>&1 | grep -q "GeoIP (v4only)"; then
+				if ./ipv6calc -v 2>&1 | grep -v -q "GeoIPv6"; then
 					echo "Expected result (missing GEOIP) because of missing IPv6 support in GeoIP)"
 					true
 				else

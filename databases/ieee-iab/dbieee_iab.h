@@ -1,14 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.40 2011/09/14 19:00:16 peter Exp $
- * Generated     : Wed Sep 14 20:27:49 2011
+ * Version       : $Id: dbieee_iab.h,v 1.41 2011/10/08 11:50:13 peter Exp $
+ * Generated     : Sat Oct  8 13:46:34 2011
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
+static const char* libieee_iab_status = "IAB/20111008";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -3750,5 +3751,31 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xE9C000, 0xE9CFFF, "SPARQ systems", "SPARQ" },
 	{ 0x0050C2, 0xE9D000, 0xE9DFFF, "nicai-systems", "NICAI" },
 	{ 0x0050C2, 0xE9E000, 0xE9EFFF, "American Microsystems, Ltd.", "AMERICAN-MICROSYSTEMS" },
+	{ 0x0050C2, 0xE9F000, 0xE9FFFF, "DataSoft Corporation", "DATASOFT" },
+	{ 0x0050C2, 0xEA0000, 0xEA0FFF, "Robert Bosch Healthcare, Inc. ", "ROBERT-BOSCH-HEALTHCARE" },
+	{ 0x0050C2, 0xEA1000, 0xEA1FFF, "TEX COMPUTER SRL ", "TEX-SRL" },
+	{ 0x0050C2, 0xEA2000, 0xEA2FFF, "ThinkRF Corp", "THINKRF" },
+	{ 0x0050C2, 0xEA3000, 0xEA3FFF, "Subsea Systems, Inc.", "SUBSEA" },
+	{ 0x0050C2, 0xEA4000, 0xEA4FFF, "head", "HEAD" },
+	{ 0x0050C2, 0xEA5000, 0xEA5FFF, "Aerodata AG", "AERODATA" },
+	{ 0x0050C2, 0xEA6000, 0xEA6FFF, "Powersense A/S", "POWERSENSE-A/S" },
+	{ 0x0050C2, 0xEA7000, 0xEA7FFF, "Saia-Burgess Controls AG", "SAIA-BURGESS-CONTROLS" },
+	{ 0x0050C2, 0xEA8000, 0xEA8FFF, "MB Connect Line GmbH", "MB-CONNECT-LINE" },
+	{ 0x0050C2, 0xEA9000, 0xEA9FFF, "METTLER-TOLEDO HI-SPEED", "METTLER-TOLEDO-HI-SPEED" },
+	{ 0x0050C2, 0xEAA000, 0xEAAFFF, "BAE Systems", "BAE" },
+	{ 0x0050C2, 0xEAB000, 0xEABFFF, "Warp9 Tech Design, Inc.", "WARP9-TECH-DESIGN" },
+	{ 0x0050C2, 0xEAC000, 0xEACFFF, "Alias ip", "ALIAS-IP" },
+	{ 0x0050C2, 0xEAD000, 0xEADFFF, "Rohde&Schwarz Topex SA", "ROHDE-SCHWARZ-TOPEX" },
+	{ 0x0050C2, 0xEAE000, 0xEAEFFF, "Alyrica Networks", "ALYRICA-NETWORKS" },
+	{ 0x0050C2, 0xEAF000, 0xEAFFFF, "Aircell", "AIRCELL" },
+	{ 0x0050C2, 0xEB0000, 0xEB0FFF, "Pulse Communication Systems Pvt. Ltd.", "PULSE-COMMUNICATION-PVT" },
+	{ 0x0050C2, 0xEB1000, 0xEB1FFF, "PDU EXPERT UK LTD", "PDU-EXPERT-UK" },
+	{ 0x0050C2, 0xEB2000, 0xEB2FFF, "Otaki Electric Corporation", "OTAKI-ELECTRIC" },
+	{ 0x0050C2, 0xEB3000, 0xEB3FFF, "AR RF/Microwave Instrumentation", "AR-RF/MICROWAVE-INSTRUMENTATION" },
+	{ 0x0050C2, 0xEB4000, 0xEB4FFF, "Wishtek Technology, Inc.", "WISHTEK" },
+	{ 0x0050C2, 0xEB5000, 0xEB5FFF, "Covidence A/S", "COVIDENCE-A/S" },
+	{ 0x0050C2, 0xEB6000, 0xEB6FFF, "Monsoon Solutions, Inc.", "MONSOON-SOLUTIONS" },
+	{ 0x0050C2, 0xEB7000, 0xEB7FFF, "Saab AB", "SAAB-AB" },
+	{ 0x0050C2, 0xEB8000, 0xEB8FFF, "dspnor", "DSPNOR" },
 
 };

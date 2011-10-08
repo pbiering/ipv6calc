@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.197 2011/10/06 19:34:02 peter Exp $ 
+ *  $Id: ChangeLog,v 1.198 2011/10/08 11:50:13 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,14 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20111008/PB
+	databases
+	 - update
+	ipv6calc
+	 - support option "-v -v" to show extended version information
+	database generation programs
+	 - retrieve and store database status (last update) into related header file
+
 20111006/PB
 	configure.in
 	 - checking GeoIP library for IPv6 support

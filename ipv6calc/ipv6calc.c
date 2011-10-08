@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.45 2011/10/06 19:22:47 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.46 2011/10/08 11:50:13 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -37,6 +37,30 @@
 #include "librfc5569.h"
 #include "libeui64.h"
 #include "config.h"
+#include "libieee.h"
+#include "../databases/ieee-oui/dbieee_oui.h"
+#include "../databases/ieee-iab/dbieee_iab.h"
+#include "libipv4addr.h"
+#include "../databases/ipv4-assignment/dbipv4addr_assignment.h"
+#include "libipv6addr.h"
+#include "../databases/ipv6-assignment/dbipv6addr_assignment.h"
+
+#ifdef SUPPORT_IP2LOCATION
+#include "IP2Location.h"
+
+/* 
+ *  * API_VERSION is defined as a bareword in IP2Location.h, 
+ *   * we need this trick to stringify it. Blah.
+ *    */
+#define makestr(x) #x
+#define xmakestr(x) makestr(x)
+#endif
+
+
+#ifdef SUPPORT_GEOIP
+#include "GeoIP.h"
+#endif
+
 
 long int ipv6calc_debug = 0;
 
@@ -85,13 +109,88 @@ void printversion(void) {
 	fprintf(stderr, " IP2Location");
 #endif
 #ifdef SUPPORT_GEOIP
+	fprintf(stderr, " GeoIP");
 #ifdef SUPPORT_GEOIP_V6
-	fprintf(stderr, " GeoIP (v4+v6)");
-#else
-	fprintf(stderr, " GeoIP (v4only)");
+	fprintf(stderr, " GeoIPv6");
 #endif
+#endif
+#ifdef SUPPORT_DB_IEEE
+	fprintf(stderr, " DB_IEEE");
+#endif
+#ifdef SUPPORT_DB_IPV4
+	fprintf(stderr, " DB_IPV4");
+#endif
+#ifdef SUPPORT_DB_IPV6
+	fprintf(stderr, " DB_IPV6");
 #endif
 	fprintf(stderr, "\n");
+};
+
+void printversion_verbose(void) {
+	printversion();
+	fprintf(stderr, "\n");
+
+#ifdef SUPPORT_DB_IEEE
+	fprintf(stderr, "IEEE database included: %s %s\n", libieee_iab_status, libieee_oui_status);
+#else
+	fprintf(stderr, "IEEE database not included\n");
+#endif
+
+#ifdef SUPPORT_DB_IPV4
+	fprintf(stderr, "IPv4 database included: %s\n", dbipv4addr_registry_status);
+#else
+	fprintf(stderr, "IPv4 database not included\n");
+#endif
+
+#ifdef SUPPORT_DB_IPV6
+	fprintf(stderr, "IPv6 database included: %s\n", dbipv6addr_registry_status);
+#else
+	fprintf(stderr, "IPv6 database not included\n");
+#endif
+
+	fprintf(stderr, "\n");
+
+#ifdef SUPPORT_GEOIP
+#ifdef SUPPORT_GEOIP_V6
+	fprintf(stderr, "GeoIP support enabled, compiled with IPv4 & IPv6 support\n");
+#else
+	fprintf(stderr, "GeoIP support enabled, compiled with IPv4 support ONLY");
+#endif
+	fprintf(stderr, "GeoIP dynamic library version (on this system): %s\n", GeoIP_lib_version());
+	if (file_geoip_ipv4 != NULL && strlen(file_geoip_ipv4) > 0) {
+		fprintf(stderr, "GeoIP IPv4 default file: %s\n", file_geoip_ipv4);
+	} else {
+		fprintf(stderr, "GeoIP IPv4 default file: not configured\n");
+	};
+#ifdef SUPPORT_GEOIP_V6
+	if (file_geoip_ipv6 != NULL && strlen(file_geoip_ipv6) > 0) {
+		fprintf(stderr, "GeoIP IPv6 default file: %s\n", file_geoip_ipv6);
+	} else {
+		fprintf(stderr, "GeoIP IPv6 default file: not configured\n");
+	};
+#endif
+#else
+	fprintf(stderr, "GeoIP support not enabled\n");
+#endif
+
+	fprintf(stderr, "\n");
+
+#ifdef SUPPORT_IP2LOCATION
+	fprintf(stderr, "IP2Location support enabled, compiled with API version: %s\n", xmakestr(API_VERSION));
+	if (file_ip2location_ipv4 != NULL && strlen(file_ip2location_ipv4) > 0) {
+		fprintf(stderr, "IP2Location IPv4 default file: %s\n", file_ip2location_ipv4);
+	} else {
+		fprintf(stderr, "IP2Location IPv4 default file: not configured\n");
+	};
+	if (file_ip2location_ipv6 != NULL && strlen(file_ip2location_ipv6) > 0) {
+		fprintf(stderr, "IP2Location IPv6 default file: %s\n", file_ip2location_ipv6);
+	} else {
+		fprintf(stderr, "IP2Location IPv6 default file: not configured\n");
+	};
+#else
+	fprintf(stderr, "IP2Location support not enabled\n");
+#endif
+
 };
 
 void printcopyright(void) {
@@ -103,32 +202,6 @@ void printinfo(void)  {
 	printcopyright();
 	fprintf(stderr, "This program formats and calculates IPv6 addresses\n");
 	fprintf(stderr, "See '%s -?|-h|--help' for more details\n\n", PROGRAM_NAME);
-
-#ifdef SUPPORT_GEOIP
-#ifdef GEOIP_DEFAULT_FILE_IPV4
-	if (file_geoip_ipv4 != NULL) {
-		fprintf(stderr, "GeoIP IPv4 default file: %s\n", file_geoip_ipv4);
-	};
-#endif
-#ifdef GEOIP_DEFAULT_FILE_IPV6
-	if (file_geoip_ipv6 != NULL) {
-		fprintf(stderr, "GeoIP IPv6 default file: %s\n", file_geoip_ipv6);
-	};
-#endif
-#endif
-
-#ifdef SUPPORT_IP2LOCATION
-#ifdef IP2LOCATION_DEFAULT_FILE_IPV4
-	if (file_ip2location_ipv4 != NULL) {
-		fprintf(stderr, "IP2Location IPv4 default file: %s\n", file_ip2location_ipv4);
-	};
-#endif
-#ifdef IP2LOCATION_DEFAULT_FILE_IPV6
-	if (file_ip2location_ipv6 != NULL) {
-		fprintf(stderr, "IP2Location IPv6 default file: %s\n", file_ip2location_ipv6);
-	};
-#endif
-#endif
 };
 
 
@@ -186,7 +259,12 @@ int main(int argc, char *argv[]) {
 				break;
 
 			case 'v':
-				command |= CMD_printversion;
+				if ((command & CMD_printversion) != 0) {
+					// second time '-v'
+					command |= CMD_printversion_verbose;
+				} else {
+					command |= CMD_printversion;
+				};
 				break;
 
 			case 'f':
@@ -667,8 +745,12 @@ int main(int argc, char *argv[]) {
 	};
 	
 	/* do work depending on selection */
-	if (command == CMD_printversion) {
-		printversion();
+	if ((command & CMD_printversion) != 0) {
+		if ((command & CMD_printversion_verbose) != 0) {
+			printversion_verbose();
+		} else {
+			printversion();
+		};
 		exit(EXIT_FAILURE);
 	};
 

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.25 2011/02/27 11:45:10 peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.26 2011/10/08 11:50:13 peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -53,6 +53,8 @@ my $global_file = "../registries/iana/ipv4-address-space.xml";
 my %assignments;
 
 my $max_prefixlength_not_arin = 0;
+
+my %date_created;
 
 
 # Generate subnet powers
@@ -131,15 +133,22 @@ sub proceed_global() {
 	my $xs = XML::Simple->new();
 	my $xd = $xs->XMLin($global_file) || die "Cannot open/parse file: $global_file";
 
+	for my $e1 ($xd->{'updated'}) {
+		$e1 =~ s/-//go;
+		$date_created{'IANA'} = $e1;
+		print "Found create date: " . $e1 . "\n";
+		last;
+	};
+
 	for my $e1 ($xd->{'record'}) {
 	    for my $e2 (@$e1) {
 		#print $$e2{'prefix'} . ":" . $$e2{'designation'} . "\n";
 
-		($block, $length) = split /\//, $$e2{'prefix'};
+		my ($block, $length) = split /\//, $$e2{'prefix'};
 		$ipv4_start = int($block);
 		$ipv4_end = int($block);
 
-		$reg = uc($$e2{'designation'});
+		my $reg = uc($$e2{'designation'});
 		$reg =~ s/RIPE NCC/RIPENCC/g;
 		$reg =~ s/(IANA) .*/$1/g;
 		$reg =~ s/.* (RIPENCC)/$1/g;
@@ -149,7 +158,7 @@ sub proceed_global() {
 			# die "Unsupported registry: " . $reg\n";
 		};
 
-		print $$e2{'prefix'} . ":" . $reg . "\n";
+		#print $$e2{'prefix'} . ":" . $reg . "\n";
 
 		for ($ipv4 = $ipv4_start; $ipv4 <= $ipv4_end; $ipv4++) {
 			$ipv4 = $ipv4 . ".0.0.0";
@@ -195,9 +204,16 @@ foreach my $file (@files) {
 		$line = $_;
 		chomp $line;
 
+		# catch date line
+		if ($line =~ /^2\|([^\|]+)\|.*\|([0-9]{8})\|[^\|]*$/o) {
+			$date_created{uc($1)} = $2;
+			print "Found create date: " . $2 . "\n";
+			next;
+		};
+
 		# skip not proper lines
-		if ( ! ( $line =~ /\|ipv4\|/ ) ) { next; };
-		if ( $line =~ /\|\*\|/ ) { next; };
+		if ( ! ( $line =~ /\|ipv4\|/o ) ) { next; };
+		if ( $line =~ /\|\*\|/o ) { next; };
 
 		#print $line . "\n";
 
@@ -406,6 +422,16 @@ print OUT qq| * Generated     : $now_string
  */
 
 |;
+
+# print creation dates
+my $string = "";
+for my $reg (sort keys %date_created) {
+	if (length($string) > 0) {
+		$string .= " ";
+	};
+	$string .= $reg . "/" . $date_created{$reg};
+};
+print OUT "static const char* dbipv4addr_registry_status = \"$string\";\n";
 
 
 # Create hash

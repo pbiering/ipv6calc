@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.6 2011/02/27 11:45:10 peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.7 2011/10/08 11:50:13 peter Exp $
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
 #              2005-2011 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
 # License    : GNU GPL v2
@@ -44,6 +44,8 @@ my @files = (
 
 my (@arin, @apnic, @ripencc, @iana, @lacnic, @afrinic, @reserved, @s6to4, @s6bone);
 
+my %date_created;
+
 
 # Generate subnet powers
 my %subnet_masks;
@@ -76,6 +78,13 @@ sub proceed_global() {
 	my $xs = XML::Simple->new();
 	my $xd = $xs->XMLin($global_file) || die "Cannot open/parse file: $global_file";
 
+	for my $e1 ($xd->{'updated'}) {
+		$e1 =~ s/-//go;
+		$date_created{'IANA'} = $e1;
+		print "Found create date: " . $e1 . "\n";
+		last;
+	};
+
 	for my $e1 ($xd->{'record'}) {
 	    for my $e2 (@$e1) {
 		#print $$e2{'prefix'} . ":" . $$e2{'description'} . "\n";
@@ -94,7 +103,7 @@ sub proceed_global() {
 		$reg = uc($reg);
 		$reg =~ s/RIPE NCC/RIPENCC/g;
 
-		print $$e2{'prefix'} . ":" . $reg . "\n";
+		#print $$e2{'prefix'} . ":" . $reg . "\n";
 
 		if ($reg eq "ARIN" ) {
 			push @arin, $ipv6;
@@ -136,6 +145,13 @@ foreach my $file (@files) {
 	while (<FILE>) {
 		$line = $_;
 		chomp $line;
+
+		# catch date line
+		if ($line =~ /^2\|([^\|]+)\|.*\|([0-9]{8})\|[^\|]*$/o) {
+			$date_created{uc($1)} = $2;
+			print "Found create date: " . $2 . "\n";
+			next;
+		};
 
 		# skip not proper lines
 		if ( ! ( $line =~ /\|ipv6\|/ ) ) { next; };
@@ -299,6 +315,16 @@ print OUT qq| * Generated     : $now_string
  */
 
 |;
+
+# print creation dates
+my $string = "";
+for my $reg (sort keys %date_created) {
+	if (length($string) > 0) {
+		$string .= " ";
+	};
+	$string .= $reg . "/" . $date_created{$reg};
+};
+print OUT "static const char* dbipv6addr_registry_status = \"$string\";\n";
 
 # Main data structure
 print OUT qq|

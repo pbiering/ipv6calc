@@ -1,15 +1,17 @@
 #!/usr/bin/perl -w
 #
-# Project    : ipv6calc/lib
+# Project    : ipv6calc
 # File       : create_ieee_iab_headerfile.pl
-# Version    : $Id: create_ieee_iab_headerfile.pl,v 1.3 2008/11/19 18:54:08 peter Exp $
-# Copyright  : 2002-2008 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: create_ieee_iab_headerfile.pl,v 1.4 2011/10/08 11:50:13 peter Exp $
+# Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Modified copy of create_ieee_oui_headerfile.pl
 #
 # Creates a header file out of IEEE/iab.txt
 
 use strict;
+use File::stat;
+use POSIX qw(strftime);
 
 my $INFILE;
 
@@ -40,6 +42,10 @@ print OUT qq| * Generated     : $now_string
  */
 
 |;
+
+# print creation date
+my $sb = stat($INFILE);
+print OUT "static const char* libieee_iab_status = \"IAB/" . strftime("%Y%m%d", localtime($sb->mtime)) . "\";\n";
 
 # Structure
 print OUT qq|
