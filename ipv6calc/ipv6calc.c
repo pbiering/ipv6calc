@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.48 2011/10/08 12:03:44 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.49 2011/10/08 14:08:26 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -204,8 +204,8 @@ void printcopyright(void) {
 void printinfo(void)  {
 	printversion();
 	printcopyright();
-	fprintf(stderr, "This program formats and calculates IPv6 addresses\n");
-	fprintf(stderr, "See '%s -?|-h|--help' for more details\n\n", PROGRAM_NAME);
+	fprintf(stderr, "This program formats and calculates IPv6 addresses and can do many more tricky things\n");
+	fprintf(stderr, "See '%s -?|-h|--help or -v -v' for more details\n\n", PROGRAM_NAME);
 };
 
 
