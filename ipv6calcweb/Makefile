@@ -1,7 +1,7 @@
 # Project    : ipv6calc/ipv6calcweb
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.9 2008/12/31 12:17:31 peter Exp $
-# Copyright  : 2002-2008 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile,v 1.10 2011/10/08 14:33:23 peter Exp $
+# Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calcweb
@@ -28,3 +28,7 @@ test:
 		./test_ipv6calcweb.sh 15.200.30.23
 		# Pseudo random
 		./test_ipv6calcweb.sh 3ffe:831f:ce49:7601:8000:efff:af4a:86BF
+
+test-minimal:
+		${MAKE} test
+

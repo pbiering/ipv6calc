@@ -1,7 +1,7 @@
 # Project    : ipv6calc/ipv6logstats
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.13 2010/05/20 14:49:38 peter Exp $
-# Copyright  : 2003-2005 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile.in,v 1.14 2011/10/08 14:33:23 peter Exp $
+# Copyright  : 2003-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6logstats
@@ -48,10 +48,12 @@ autoclean:
 clean:
 		rm -f ipv6logstats ipv6logstats-static *.o
 
-test:		
-		${MAKE} all
+test:		ipv6logstats
 		./test_ipv6logstats.sh
 
+test-minimal:
+		${MAKE} test
+	
 splint:
 		splint *.c ../lib/*.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)
 

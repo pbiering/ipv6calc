@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.16 2011/10/08 14:01:36 peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.17 2011/10/08 14:33:23 peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -53,6 +53,11 @@ getexamples | while read address separator comment; do
 	./ipv6calc -q -i -m $address || exit 1
 	echo
 done
+
+if [ "$1" = "minimal" ]; then
+	echo "GeoIP & IP2Location tests skipped (option 'minimal' used)"
+	exit 0
+fi
 
 if ./ipv6calc -v 2>&1 | grep -qw GeoIP; then
 	echo "Run GeoIP tests"

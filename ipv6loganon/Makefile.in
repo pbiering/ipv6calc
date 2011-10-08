@@ -1,7 +1,7 @@
 # Project    : ipv6calc/ipv6loganon
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.6 2010/05/20 14:49:38 peter Exp $
-# Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile.in,v 1.7 2011/10/08 14:33:23 peter Exp $
+# Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6loganon
@@ -51,10 +51,12 @@ autoclean:
 clean:
 		rm -f ipv6loganon ipv6loganon-static *.o
 
-test:		
-		${MAKE} all
+test:		ipv6loganon	
 		./test_ipv6loganon.sh
 		./test_ipv6loganon.sh bulk
+
+test-minimal:
+		${MAKE} test
 
 splint:
 		splint *.c ../lib/*.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)

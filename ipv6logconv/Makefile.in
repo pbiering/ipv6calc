@@ -1,7 +1,7 @@
 # Project    : ipv6calc/ipv6logconv
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.17 2010/05/20 14:49:38 peter Exp $
-# Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile.in,v 1.18 2011/10/08 14:33:23 peter Exp $
+# Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6logconv
@@ -51,9 +51,11 @@ autoclean:
 clean:
 		rm -f ipv6logconv ipv6logconv-static *.o
 
-test:		
-		${MAKE} all
+test:		ipv6logconv
 		./test_ipv6logconv.sh
+
+test-minimal:
+		${MAKE} test
 
 splint:
 		splint *.c ../lib/*.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)
