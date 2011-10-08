@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.200 2011/10/08 14:33:23 peter Exp $ 
+ *  $Id: ChangeLog,v 1.201 2011/10/08 14:35:41 peter Exp $ 
  */
 
 Info:
@@ -11,8 +11,10 @@ Info:
 20111008/PB
 	configure.in, ipv6calc/showinfo.c
 	 - Extend for GeoIP 1.4.5 IPv6 support (which has reduced function set)
-	Makefile.in
+	Makefile.in (all)
 	 - introduce "make test-minimal" to skip GeoIP/IP2Location tests on RPM build systems
+	ipv6calc.spec.in
+	 - replace 'make test' by 'make test-minimal'
 	tag version 0.91.1
 
 20111008/PB

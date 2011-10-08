@@ -54,7 +54,7 @@ Available rpmbuild rebuild options:
 ./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?_with_ip2location:--enable-ip2location} %{?_with_geoip:--enable-geoip}
 make clean
 make
-make test
+make test-minimal
 
 
 %install
@@ -129,6 +129,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Oct 08 2011 Peter Bieringer <pb@bieringer.de>
+- reduce "make test" to "make test-minimal"
+
 * Wed Nov 19 2008 Peter Bieringer <pb@bieringer.de>
 - switch from "make installonly" to "make install"
 
@@ -200,7 +203,7 @@ rm -rf $RPM_BUILD_ROOT
 - Add doc directory also to %files to make sure the directory will be removed
    on update or deinstall
 - change install permissions for entries in doc directory
-- change "make install" to "make installonly" (make test should be only executed once" 
+- change "make install" to "make installonly" (make test should be only executed once)" 
 
 * Wed Mar 14 2001 Peter Bieringer <pb@bieringer.de>
 - Add "make clean" and "make test" on %build
