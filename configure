@@ -4378,7 +4378,7 @@ $as_echo "$as_me: WARNING: GeoIP library header files were found but not support
 fi
 
 
-    if test "GEOIP_COMPAT" = "no"; then
+    if test "$GEOIP_COMPAT" = "no"; then
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GeoIP_country_code_by_addr_v6 in -lGeoIP" >&5
 $as_echo_n "checking for GeoIP_country_code_by_addr_v6 in -lGeoIP... " >&6; }
 if ${ac_cv_lib_GeoIP_GeoIP_country_code_by_addr_v6+:} false; then :

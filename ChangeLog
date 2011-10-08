@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.203 2011/10/08 17:16:33 peter Exp $ 
+ *  $Id: ChangeLog,v 1.204 2011/10/08 17:24:13 peter Exp $ 
  */
 
 Info:
@@ -21,6 +21,7 @@ Info:
 	 - fix broken ARIN whois URL
 	 - show information from IPV6CALC_FEATURES
 	 - claim about missing IP2Location or GeoIP database files, if feature is enabled
+	tag version 0.92.0
 
 20111008/PB
 	databases
