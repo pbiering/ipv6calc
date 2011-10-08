@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.23 2011/10/06 19:22:47 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.24 2011/10/08 11:53:23 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -300,6 +300,8 @@ void printhelp(void) {
 	fprintf(stderr, "  [-d|--debug <debug value>] : debug value (bitwise like)\n");
 	fprintf(stderr, "  [-q|--quiet]               : be more quiet (auto-enabled in pipe mode)\n");
 	fprintf(stderr, "  [-f|--flush]               : flush each line in pipe mode\n");
+	fprintf(stderr, "  -v                         : show version (and included features)\n");
+	fprintf(stderr, "  -v -v                      : show verbose version information\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, " Usage with new style options:\n");
 	fprintf(stderr, "  [--in|-I <input type>]   : specify input  type\n");
