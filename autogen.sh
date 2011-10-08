@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.13 2011/10/06 19:22:46 peter Exp $
+# Version    : $Id: autogen.sh,v 1.14 2011/10/08 12:14:28 peter Exp $
 # Copyright  : 2003-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -37,6 +37,18 @@ while [ "$1" != "$LAST" ]; do
 		# default database locations
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $DB_GEOIP $DB_IP2LOCATION"
 		;;
+	    '--disable-db-ieee')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --disable-db-ieee"
+		;;
+	    '--disable-db-ipv6')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --disable-db-ipv4"
+		;;
+	    '--disable-db-ipv6')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --disable-db-ipv6"
+		;;
 	    '-?'|'-h'|'--help')
 		echo "Supported options:"
 		echo "   -?|-h|--help     : this help"
@@ -45,6 +57,9 @@ while [ "$1" != "$LAST" ]; do
 		echo "   -g|--geoip       : enable GeoIP support"
 		echo "   -i|--ip2location : enable IP2Location support"
 		echo "   -d|--db          : enable default GeoIP and IP2Location database locations"
+		echo "   --disable-db-ieee: disable builtin IEEE database"
+		echo "   --disable-db-ipv4: disable builtin IPv4 database"
+		echo "   --disable-db-ipv6: disable builtin IPv6 database"
 		exit 1
 	esac
 done
