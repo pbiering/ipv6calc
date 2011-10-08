@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.24 2011/10/08 16:08:33 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.25 2011/10/08 17:16:33 peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -961,17 +961,21 @@ if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 	print "</font>\n";
 
 	if (defined $ipv6calc_feature_hash{'IP2Location'} && ! defined $database_ip2location_ipv4) {
+		print "<br>\n";
 		print "          <font size=-2>IP2Location support, but no IPv4 database file found</font>\n";
 	};
 	if (defined $ipv6calc_feature_hash{'IP2Location'} && ! defined $database_ip2location_ipv4) {
+		print "<br>\n";
 		print "          <font size=-2>IP2Location support, but no IPv6 database file found</font>\n";
 	};
 
 	if (defined $ipv6calc_feature_hash{'GeoIP'} && ! defined $database_geoip_ipv4) {
+		print "<br>\n";
 		print "          <font size=-2>GeoIP support, but no IPv4 database file found</font>\n";
 	};
 
 	if (defined $ipv6calc_feature_hash{'GeoIPv6'} && ! defined $database_geoip_ipv6) {
+		print "<br>\n";
 		print "          <font size=-2>GeoIP with IPv6 support, but no IPv6 database file found</font>\n";
 	};
 

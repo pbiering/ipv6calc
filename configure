@@ -679,6 +679,7 @@ with_geoip_lib
 with_geoip_static
 with_geoip_ipv4_default_file
 with_geoip_ipv6_default_file
+with_geoip_ipv6_compat
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1333,6 +1334,9 @@ Optional Packages:
   --with-geoip-ipv6-default-file=file
                           Use a default GeoIP IPv6 database file when ipv6calc
                           is invoked with '--db-geoip-ipv6-default|-G'
+  --with-geoip-ipv6-compat
+                          Use IPv6 interface of GeoIP in compatibility mode
+                          (supporting 1.4.5)
 
 Some influential environment variables:
   CC          C compiler command
@@ -4204,6 +4208,17 @@ _ACEOF
 fi
 
 
+
+# Check whether --with-geoip-ipv6-compat was given.
+if test "${with_geoip_ipv6_compat+set}" = set; then :
+  withval=$with_geoip_ipv6_compat; if test "$withval" != "no"; then
+        GEOIP_COMPAT="yes",
+     fi
+else
+   GEOIP_COMPAT="no"
+fi
+
+
 if test "$GEOIP" = "yes"; then
     CPPFLAGS="$CFLAGS $GEOIP_INCLUDE"
     LDFLAGS="$LDFLAGS $GEOIP_LIB"
@@ -4362,6 +4377,8 @@ $as_echo "$as_me: WARNING: GeoIP library header files were found but not support
 
 fi
 
+
+    if test "GEOIP_COMPAT" = "no"; then
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GeoIP_country_code_by_addr_v6 in -lGeoIP" >&5
 $as_echo_n "checking for GeoIP_country_code_by_addr_v6 in -lGeoIP... " >&6; }
 if ${ac_cv_lib_GeoIP_GeoIP_country_code_by_addr_v6+:} false; then :
@@ -4460,6 +4477,10 @@ $as_echo "$as_me: WARNING: GeoIP library header files were found but not support
 
 fi
 
+    else
+        { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GeoIP IPv6 support compatibility mode enabled (supporting 1.4.5)." >&5
+$as_echo "$as_me: WARNING: GeoIP IPv6 support compatibility mode enabled (supporting 1.4.5)." >&2;}
+    fi
 fi
 
 

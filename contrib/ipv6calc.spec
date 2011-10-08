@@ -42,8 +42,8 @@ or using in DNS queries like
 Many more format conversions are supported, see given URL for more.
 
 Available rpmbuild rebuild options:
---with : ip2location
---with : geoip
+  --with ip2location
+  --with geoip
 
 %{?_with_geoip: %{expand: Built with GeoIP support}}
 %{?_with_ip2location: %{expand: Built with IP2Location suppport}}
