@@ -4353,8 +4353,12 @@ if test "x$ac_cv_lib_GeoIP_GeoIP_lib_version" = xyes; then :
 
 
 $as_echo "#define SUPPORT_GEOIP_LIB_VERSION 1" >>confdefs.h
-" >&5
-$as_echo "$as_me: WARNING: GeoIP library header files were found but not supporting GeoIP_lib_version.)" >&2;}
+
+
+else
+
+            { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GeoIP library header files were found but not supporting GeoIP_lib_version ()upgrade to newer version for support.)" >&5
+$as_echo "$as_me: WARNING: GeoIP library header files were found but not supporting GeoIP_lib_version ()upgrade to newer version for support.)" >&2;}
 
 fi
 

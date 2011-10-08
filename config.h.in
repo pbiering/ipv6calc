@@ -84,10 +84,7 @@
 /* Define if you want GeoIP support. */
 #undef SUPPORT_GEOIP
 
-/* Define if your GeoIP version supports GeoIP_lib_version (upgrade to newer
-   version for support). else { $as_echo "$as_me:${as_lineno-$LINENO}:
-   WARNING: GeoIP library header files were found but not supporting
-   GeoIP_lib_version. */
+/* Define if your GeoIP version supports GeoIP_lib_version. */
 #undef SUPPORT_GEOIP_LIB_VERSION
 
 /* Define if you want GeoIP IPv6 support. */
