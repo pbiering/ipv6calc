@@ -4,7 +4,7 @@
 
 Summary: IPv6 address format change and calculation utility
 Name: ipv6calc
-Version: 0.91.1
+Version: 0.92.0
 Release: 1
 Group: System Environment/Base
 URL: http://www.deepspace6.net/projects/ipv6calc.html
@@ -45,6 +45,8 @@ Available rpmbuild rebuild options:
 --with : ip2location
 --with : geoip
 
+%{?_with_geoip: %{expand: Built with GeoIP support}}
+%{?_with_ip2location: %{expand: Built with IP2Location suppport}}
 
 %prep
 %setup -q -n ipv6calc-%{version}

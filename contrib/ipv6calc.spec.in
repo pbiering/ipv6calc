@@ -45,6 +45,8 @@ Available rpmbuild rebuild options:
 --with : ip2location
 --with : geoip
 
+%{?_with_geoip: %{expand: Built with GeoIP support}}
+%{?_with_ip2location: %{expand: Built with IP2Location suppport}}
 
 %prep
 %setup -q -n ipv6calc-%{version}

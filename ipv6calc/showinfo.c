@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.51 2011/10/08 14:03:07 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.52 2011/10/08 16:08:33 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -109,9 +109,11 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " GEOIP_DATABASE_INFO_IPV4=...  : Information about the used IPv4 database\n");
 	fprintf(stderr, " GEOIP_DATABASE_INFO_IPV6=...  : Information about the used IPv6 database\n");
 #endif
+	fprintf(stderr, " IPV6CALC_NAME=name            : Name of ipv6calc\n");
 	fprintf(stderr, " IPV6CALC_VERSION=x.y          : Version of ipv6calc\n");
 	fprintf(stderr, " IPV6CALC_COPYRIGHT=\"...\"      : Copyright string\n");
 	fprintf(stderr, " IPV6CALC_OUTPUT_VERSION=x     : Version of output format\n");
+	fprintf(stderr, " IPV6CALC_FEATURES=\"...\"     : Feature string of ipv6calc -v\n");
 };
 
 /*
@@ -126,7 +128,9 @@ static void printout(const char *string) {
 };
 
 static void printfooter(const uint32_t formatoptions) {
-	char tempstring[NI_MAXHOST];
+	char tempstring[NI_MAXHOST] = "";
+	char tempstring2[NI_MAXHOST] = "";
+	int i;
 
 	if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
 		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6CALC_NAME=%s", PROGRAM_NAME);
@@ -137,6 +141,40 @@ static void printfooter(const uint32_t formatoptions) {
 		printout(tempstring);
 		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6CALC_OUTPUT_VERSION=%d", IPV6CALC_OUTPUT_VERSION);
 		printout(tempstring);
+
+		tempstring[0] = '\0'; /* clear tempstring */
+
+#ifdef SUPPORT_IP2LOCATION
+		snprintf(tempstring2, sizeof(tempstring2) - 1, "%s IP2Location", tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "%s", tempstring2);
+#endif
+#ifdef SUPPORT_GEOIP
+		snprintf(tempstring2, sizeof(tempstring2) - 1, "%s GeoIP", tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "%s", tempstring2);
+#ifdef SUPPORT_GEOIP_V6
+		snprintf(tempstring2, sizeof(tempstring2) - 1, "%s GeoIPv6", tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "%s", tempstring2);
+#endif
+#endif
+#ifdef SUPPORT_DB_IEEE
+		snprintf(tempstring2, sizeof(tempstring2) - 1, "%s DB_IEEE", tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "%s", tempstring2);
+#endif
+#ifdef SUPPORT_DB_IPV4
+		snprintf(tempstring2, sizeof(tempstring2) - 1, "%s DB_IPV4", tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "%s", tempstring2);
+#endif
+#ifdef SUPPORT_DB_IPV6
+		snprintf(tempstring2, sizeof(tempstring2) - 1, "%s DB_IPV6", tempstring);
+		snprintf(tempstring, sizeof(tempstring) - 1, "%s", tempstring2);
+#endif
+		/* cut off first char */
+		for (i = 0; i < strlen(tempstring); i++) {
+			tempstring[i] = tempstring[i+1];
+		};
+	
+		snprintf(tempstring2, sizeof(tempstring2) - 1, "IPV6CALC_FEATURES=\"%s\"", tempstring);
+		printout(tempstring2);
 	};
 };
 

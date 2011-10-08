@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.23 2011/05/12 15:24:54 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.24 2011/10/08 16:08:33 peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -55,6 +55,7 @@ my @list_bin_ipv6calc = (
 );
 
 my @list_database_ip2location_ipv4 = (
+	"/var/local/share/IP2Location/IP-COUNTRY.BIN",
 	"/usr/share/IP2Location/IP-COUNTRY-SAMPLE.BIN",
 );
 
@@ -126,8 +127,8 @@ my %url_whoisservers = (
 		'ipv6'	=> "http://www.ripe.net/perl/whois?searchtext=",
 	},
 	'ARIN'	=> {
-		'ipv4'	=> "http://ws.arin.net/whois?queryinput=",
-		'ipv6'	=> "http://ws.arin.net/whois?queryinput=",
+		'ipv4'	=> "http://whois.arin.net/rest/ip/",
+		'ipv6'	=> "http://whois.arin.net/rest/ip/",
 	},
 	'APNIC'	=> {
 		'ipv4'	=> "http://www.apnic.net/apnic-bin/whois.pl?searchtext=",
@@ -418,9 +419,12 @@ my $query_string;
 
 my $maxenvlength = 256;
 
+# default values
 my $ipv6calc_version = "";
 my $ipv6calc_copyright = "(P) & (C) by Peter Bieringer";
 my $ipv6calc_name = "ipv6calc";
+my $ipv6calc_features = "";
+my %ipv6calc_feature_hash;
 
 
 ############### Functions
@@ -799,6 +803,14 @@ if ( defined $addr_remote ) {
 				$ipv6calc_name =~ s/^\"//;
 				$ipv6calc_name =~ s/\"$//;
 			};
+			if ( $key eq "IPV6CALC_FEATURES" ) {
+				$ipv6calc_features = $content;
+				$ipv6calc_features =~ s/^\"//;
+				$ipv6calc_features =~ s/\"$//;
+				foreach my $feature (split / /, $ipv6calc_features) {
+					$ipv6calc_feature_hash{$feature} = 1;
+				};
+			};
 		};
 
 		$infoh_remote{$key} = $content;
@@ -942,7 +954,26 @@ if ( $skip_server == 0 ) {
 
 if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 	print "          <font size=-2>" . $text{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "</font><br>\n";
-	print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.deepspace6.net/projects/ipv6calc.html\">" . $ipv6calc_name . "</a> " . $ipv6calc_version . ", " . $ipv6calc_copyright . "</font>\n";
+	print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.deepspace6.net/projects/ipv6calc.html\">" . $ipv6calc_name . "</a> " . $ipv6calc_version . ", " . $ipv6calc_copyright;
+	if (length($ipv6calc_features) > 0) {
+		print " (features: " . $ipv6calc_features . ")";
+	};
+	print "</font>\n";
+
+	if (defined $ipv6calc_feature_hash{'IP2Location'} && ! defined $database_ip2location_ipv4) {
+		print "          <font size=-2>IP2Location support, but no IPv4 database file found</font>\n";
+	};
+	if (defined $ipv6calc_feature_hash{'IP2Location'} && ! defined $database_ip2location_ipv4) {
+		print "          <font size=-2>IP2Location support, but no IPv6 database file found</font>\n";
+	};
+
+	if (defined $ipv6calc_feature_hash{'GeoIP'} && ! defined $database_geoip_ipv4) {
+		print "          <font size=-2>GeoIP support, but no IPv4 database file found</font>\n";
+	};
+
+	if (defined $ipv6calc_feature_hash{'GeoIPv6'} && ! defined $database_geoip_ipv6) {
+		print "          <font size=-2>GeoIP with IPv6 support, but no IPv6 database file found</font>\n";
+	};
 
 	foreach my $string ($info_ip2location_string, $info_ip2location_string_ipv4, $info_ip2location_string_ipv6) {
 		if (! defined $string) { next; };
@@ -959,13 +990,31 @@ if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 
 } else {
 	print $text{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "\n";
-	print $text{'powered'}->{$lang} . " " . $ipv6calc_name . " " . $ipv6calc_version . ", " . $ipv6calc_copyright . " (http://www.deepspace6.net/projects/ipv6calc.html)" . "\n";
+	print $text{'powered'}->{$lang} . " " . $ipv6calc_name . " " . $ipv6calc_version . ", " . $ipv6calc_copyright . " (http://www.deepspace6.net/projects/ipv6calc.html)";
+	if (length($ipv6calc_features) > 0) {
+		print " (features: " . $ipv6calc_features . ")";
+	};
+	print "\n";
+
+	if (defined $ipv6calc_feature_hash{'IP2Location'} && ! defined $database_ip2location_ipv4) {
+		print "IP2Location support, but no IPv4 database file found\n";
+	};
+	if (defined $ipv6calc_feature_hash{'IP2Location'} && ! defined $database_ip2location_ipv4) {
+		print "IP2Location support, but no IPv6 database file found\n";
+	};
+
+	if (defined $ipv6calc_feature_hash{'GeoIP'} && ! defined $database_geoip_ipv4) {
+		print "GeoIP support, but no IPv4 database file found\n";
+	};
+
+	if (defined $ipv6calc_feature_hash{'GeoIPv6'} && ! defined $database_geoip_ipv6) {
+		print "GeoIP with IPv6 support, but no IPv6 database file found\n";
+	};
 
 	foreach my $string ($info_ip2location_string, $info_ip2location_string_ipv4, $info_ip2location_string_ipv6) {
 		if (! defined $string) { next; };
 		split_ip2location($string);
 		print $text{'powered'}->{$lang} . " IP2Location " . $info_ip2location{'proto'} . " " . $text{'database'}->{$lang} . " " . $text{'version'}->{$lang} . " " . $info_ip2location{'date'} ." (" . $info_ip2location{'entries'} . " " . $text{'entries'}->{$lang} . ")" . " (" . $info_ip2location{'url'} . ")" . "\n";
-
 	};
 
 	foreach my $string ($info_geoip_string, $info_geoip_string_ipv4, $info_geoip_string_ipv6) {
