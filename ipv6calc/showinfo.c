@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.50 2011/10/08 14:01:36 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.51 2011/10/08 14:03:07 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -263,7 +263,7 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 #if defined (SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6) && defined (SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6)
 	/* both functions are available */
 #else
-	ipv6calc_ipv6addr *ipv6addr;
+	ipv6calc_ipv6addr ipv6addr;
 	int result = 0;
 #endif
 
