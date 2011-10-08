@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.48 2011/10/06 19:22:47 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.49 2011/10/08 13:46:16 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -259,6 +259,8 @@ static void print_ip2location(const char *addrstring, const uint32_t formatoptio
 static void print_geoip(const char *addrstring, const uint32_t formatoptions, const char *additionalstring, int version) {
 
 	char *file_geoip;
+	ipv6calc_ipv6addr *ipv6addrp;
+	int result = 0;
 
 	const char *returnedCountry = NULL;
 	const char *returnedCountryName = NULL;
@@ -317,9 +319,26 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
 			fprintf(stderr, "%s: GeoIP country database IPv6 available\n", DEBUG_function_name);
 		};
-
+#ifdef SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6
 		returnedCountry = GeoIP_country_code_by_addr_v6(gi, addrstring);
+#else
+		result = addr_to_ipv6addrstruct(addrstring, tempstring, ipv6addrp);
+		if (result == 0) {
+			returnedCountry = GeoIP_country_code_by_ipnum_v6(gi, ipv6addrp->in6_addr);
+		} else {
+			fprintf(stderr, "%s: GeoIPv6 workaround not can't convert IPv6 address: %s\n", addrstring);
+		};
+#endif
+#ifdef SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6
 		returnedCountryName = GeoIP_country_name_by_addr_v6(gi, addrstring);
+#else
+		result = addr_to_ipv6addrstruct(addrstring, tempstring, ipv6addrp);
+		if (result == 0) {
+			returnedCountryName = GeoIP_country_name_by_ipnum_v6(gi, ipv6addrp->in6_addr);
+		} else {
+			fprintf(stderr, "%s: GeoIPv6 workaround not can't convert IPv6 address: %s\n", addrstring);
+		};
+#endif
 	};
 #endif
 

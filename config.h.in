@@ -84,6 +84,12 @@
 /* Define if you want GeoIP support. */
 #undef SUPPORT_GEOIP
 
+/* Define if your GeoIP version supports GeoIP_country_code_by_addr_v6. */
+#undef SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6
+
+/* Define if your GeoIP version supports GeoIP_country_name_by_addr_v6. */
+#undef SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6
+
 /* Define if your GeoIP version supports GeoIP_lib_version. */
 #undef SUPPORT_GEOIP_LIB_VERSION
 

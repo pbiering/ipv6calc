@@ -1,6 +1,6 @@
 dnl Project: ipv6calc
 dnl File   : configure.in
-dnl Version: $Id: configure.in,v 1.45 2011/10/08 12:21:26 peter Exp $
+dnl Version: $Id: configure.in,v 1.46 2011/10/08 13:46:16 peter Exp $
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(ipv6calc, 0.91.0, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
@@ -202,7 +202,21 @@ if test "$GEOIP" = "yes"; then
 	        AC_DEFINE(SUPPORT_GEOIP_LIB_VERSION, 1, Define if your GeoIP version supports GeoIP_lib_version.)
         ],
         [
-            AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_lib_version ()upgrade to newer version for support.)])
+            AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_lib_version (upgrade to newer version for support).])
+        ])
+    AC_CHECK_LIB(GeoIP, GeoIP_country_code_by_addr_v6,
+        [
+	        AC_DEFINE(SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6, 1, Define if your GeoIP version supports GeoIP_country_code_by_addr_v6.)
+        ],
+        [
+            AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_country_code_by_addr_v6 (will use workaround).])
+        ])
+    AC_CHECK_LIB(GeoIP, GeoIP_country_name_by_addr_v6,
+        [
+	        AC_DEFINE(SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6, 1, Define if your GeoIP version supports GeoIP_country_name_by_addr_v6.)
+        ],
+        [
+            AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_country_name_by_addr_v6 (will use workaround).])
         ])
 fi
 
