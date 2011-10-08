@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.46 2011/10/08 11:50:13 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.47 2011/10/08 12:01:04 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -156,7 +156,11 @@ void printversion_verbose(void) {
 #else
 	fprintf(stderr, "GeoIP support enabled, compiled with IPv4 support ONLY");
 #endif
+#ifdef SUPPORT_GEOIP_LIB_VERSION
 	fprintf(stderr, "GeoIP dynamic library version (on this system): %s\n", GeoIP_lib_version());
+#else
+	fprintf(stderr, "GeoIP dynamic library version (on this system): compiled without detection\n");
+#endif
 	if (file_geoip_ipv4 != NULL && strlen(file_geoip_ipv4) > 0) {
 		fprintf(stderr, "GeoIP IPv4 default file: %s\n", file_geoip_ipv4);
 	} else {

@@ -1,6 +1,6 @@
 dnl Project: ipv6calc
 dnl File   : configure.in
-dnl Version: $Id: configure.in,v 1.40 2011/10/06 19:22:46 peter Exp $
+dnl Version: $Id: configure.in,v 1.41 2011/10/08 12:01:04 peter Exp $
 
 dnl Process this file with autoconf to produce a configure script.
 AC_INIT(ipv6calc, 0.90.1, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
@@ -196,6 +196,13 @@ if test "$GEOIP" = "yes"; then
         ],
         [
             AC_MSG_WARN([GeoIP library header files were found but not supporting IPv6 (upgrade to GeoIP 1.4.5 or newer for enabling IPv6 support)])
+        ])
+    AC_CHECK_LIB(GeoIP, GeoIP_lib_version,
+        [
+	        AC_DEFINE(SUPPORT_GEOIP_LIB_VERSION, 1, Define if your GeoIP version supports GeoIP_lib_version.)
+        ],
+        [
+            AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_lib_version.)])
         ])
 fi
 
