@@ -138,6 +138,9 @@ TESTING
 -------
 It's very recommended to test the created binaries using "make test".
 
+If using a build system, which has not GeoIP or IP2Location databases installed,
+but support was was enabled, use at least "make test-minimal"
+
 
 INSTALLATION
 ------------
@@ -147,4 +150,4 @@ If you want to install the binary use "make install".
 Peter Bieringer
 <pb (at) bieringer.de>
 
-$Id: INSTALLING,v 1.16 2011/10/08 14:33:23 peter Exp $
+$Id: INSTALLING,v 1.17 2011/10/09 16:57:04 peter Exp $
