@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.24 2011/09/16 19:52:05 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.25 2011/10/09 07:17:09 peter Exp $
 # Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -212,6 +212,25 @@ END
 
 #set -x
 ## main ##
+echo "Run 'ipv6calc' basic tests..."
+
+echo "Test './ipv6calc -v'"
+output="`./ipv6calc -v`"
+retval=$?
+if [ $retval -ne 0 ]; then
+	echo "Error executing: ipv6calc -v: $output"
+	exit 1
+fi
+
+echo "Test './ipv6calc -v -v'"
+output="`./ipv6calc -v -v`"
+retval=$?
+if [ $retval -ne 0 ]; then
+	echo "Error executing: ipv6calc -v -v: $output"
+	exit 1
+fi
+
+
 echo "Run 'ipv6calc' function tests..."
 
 testscenarios | while read line; do

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.14 2011/10/08 12:14:28 peter Exp $
+# Version    : $Id: autogen.sh,v 1.15 2011/10/09 07:17:09 peter Exp $
 # Copyright  : 2003-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -49,17 +49,22 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --disable-db-ipv6"
 		;;
+	    '--geoip-ipv6-compat')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --with-geoip-ipv6-compat"
+		;;
 	    '-?'|'-h'|'--help')
 		echo "Supported options:"
-		echo "   -?|-h|--help     : this help"
-		echo "   -n|--no-make     : stop before running 'make'"
-		echo "   -a|--all         : enable GeoIP and IP2Location support"
-		echo "   -g|--geoip       : enable GeoIP support"
-		echo "   -i|--ip2location : enable IP2Location support"
-		echo "   -d|--db          : enable default GeoIP and IP2Location database locations"
-		echo "   --disable-db-ieee: disable builtin IEEE database"
-		echo "   --disable-db-ipv4: disable builtin IPv4 database"
-		echo "   --disable-db-ipv6: disable builtin IPv6 database"
+		echo "   -?|-h|--help       : this help"
+		echo "   -n|--no-make       : stop before running 'make'"
+		echo "   -a|--all           : enable GeoIP and IP2Location support"
+		echo "   -g|--geoip         : enable GeoIP support"
+		echo "   -i|--ip2location   : enable IP2Location support"
+		echo "   -d|--db            : enable default GeoIP and IP2Location database locations"
+		echo "   --disable-db-ieee  : disable builtin IEEE database"
+		echo "   --disable-db-ipv4  : disable builtin IPv4 database"
+		echo "   --disable-db-ipv6  : disable builtin IPv6 database"
+		echo "   --geoip-ipv6-compat: enable GeoIP IPv6 compatibility mode"
 		exit 1
 	esac
 done

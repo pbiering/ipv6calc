@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.4 2011/10/08 12:14:28 peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.5 2011/10/09 07:17:09 peter Exp $
 # Copyright  : 2011-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -23,6 +23,12 @@ fi
 ./autogen.sh -g -d
 if [ $? -ne 0 ]; then
 	echo "ERROR : 'autogen.sh -g' reports an error"
+	exit 1
+fi
+
+./autogen.sh -g -d --geoip-ipv6-compat
+if [ $? -ne 0 ]; then
+	echo "ERROR : 'autogen.sh -g --geoip-ipv6-compat' reports an error"
 	exit 1
 fi
 

@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.204 2011/10/08 17:24:13 peter Exp $ 
+ *  $Id: ChangeLog,v 1.205 2011/10/09 07:17:09 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,12 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20111009/PB
+	configure.in
+	 - Exclude use of GeoIP_lib_version also for GeoIP 1.4.5 IPv6 support
+	ipv6calc/ipv6calc.c
+	 - display GeoIP IPv6 compat mode, if enabled
+
 20111008/PB
 	configure.in, ipv6calc/showinfo.c
 	 - Extend for GeoIP 1.4.5 IPv6 support (which has reduced function set)
