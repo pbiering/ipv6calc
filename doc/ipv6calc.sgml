@@ -5,26 +5,34 @@
 <!ENTITY % output.print.bmp "IGNORE">
  ]>
 
-<!-- SGML file was created by LyX 2.0.0beta3
+<!-- SGML file was created by LyX 2.0.1
   See http://www.lyx.org/ for more information -->
 <article lang="en">
 <articleinfo>
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>3.1</revnumber> <date>2011-03-05</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>3.2</revnumber> <date>2011-10-29</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
-<para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
+<para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freshmeat.net/projects/ipv6calc/">freshmeat / ipv6calc</ulink> page (not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 0.81.0 (released 2011-02-28)</para></sect2><sect2>
+<para>Latest version since last update of this page is 0.92.0 (released 2011-10-08)</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
-<listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem></itemizedlist></sect2></sect1><sect1>
+<listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem></itemizedlist></sect2><sect2>
+<title>Included databases</title>
+<para>If not disabled during compiling the tool, following databases are statically included:</para><itemizedlist>
+<listitem><para>IEEE &amp; OUI databases (for decoding vendor part of MAC/EUI-48)</para></listitem><listitem><para>IPv4 assignment database (for selecting proper registry in ipv6calcweb.cgi)</para></listitem><listitem><para>IPv6 database (for selecting proper registry in ipv6calcweb.cgi)</para></listitem></itemizedlist></sect2><sect2>
+<title>Possible external databases</title>
+<para>If enabled during compiling the tool, following external (but local installed) databases can be used</para><itemizedlist>
+<listitem><para>GeoIP IPv4, IPv6 (since 0.90.0, req. GeoIP &gt;= 1.4.5)</para></listitem><listitem><para>IP2Location IPv4, IPv6</para></listitem></itemizedlist></sect2></sect1><sect1>
 <title>License</title>
 <para>The program is published under the GNU GPL version 2.</para></sect1><sect1>
+<title>Copyright</title>
+<para>(C) 2001 - 2011 by Dr. Peter Bieringer</para></sect1><sect1>
 <title>Author</title>
 <para>The author of ipv6calc is</para><itemizedlist>
 <listitem><para><ulink url="mailto:pb@bieringer.de">Dr. Peter Bieringer</ulink> with some minor contribution by others</para></listitem></itemizedlist></sect1><sect1>
@@ -44,7 +52,7 @@
 <title>Ready to use packages for several operating systems:</title>
 <sect3>
 <title>Fedora Linux</title>
-<para>Fedora 14 is the current developing platform, so use given hints above to create a RPM. Since Fedora 7 this package is included by default.</para></sect3><sect3>
+<para>Fedora 15 is the current developing platform, so use given hints above to create a RPM. Since Fedora 7 this package is included by default.</para></sect3><sect3>
 <title>Red Hat Enterprise Linux and clones</title>
 <para>It's tested by the developer that creation of the RPM is working fine on RHEL4. Since RHEL5 this package is included by default.</para></sect3><sect3>
 <title>Mandrake Linux</title>
@@ -59,6 +67,53 @@
 <para>See here for more: <ulink url="http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/">http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/</ulink> (<ulink url="http://www.freebsd.org/cgi/query-pr.cgi?pr=34441">http://www.freebsd.org/cgi/query-pr.cgi?pr=34441</ulink>), <ulink url="http://www.freshports.org/net-mgmt/ipv6calc/">http://www.freshports.org/net-mgmt/ipv6calc/</ulink></para></sect3><sect3>
 <title>OpenBSD</title>
 <para>See here for more: <ulink url="http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/">http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/</ulink></para></sect3></sect2></sect1><sect1>
+<title>Configuring &amp; Compiling</title>
+<sect2>
+<title>Configuring</title>
+<para>Following &ldquo;ipc6calc&rdquo; related configure options are currently supported (note: disabling the internal databases reduces the size of the resulting binary a lot):</para><screen>
+<![CDATA[  --disable-db-ieee       Disable IEEE database (default: enabled)
+  --disable-db-ipv4       Disable IPv4 database (default: enabled)
+  --disable-db-ipv6       Disable IPv6 database (default: enabled)
+
+  --enable-ip2location    Enable IP2Location support (default: disabled)
+  --enable-geoip          Enable GeoIP support (default: disabled) 
+ 
+  --with-ip2location-headers=DIR
+                          IP2Location include files location
+  --with-ip2location-lib=DIR
+                          IP2Location library location
+  --with-ip2location-static
+                          Explicitly link IP2Location statically (default=no)
+  --with-ip2location-ipv4-default-file=file
+                          Use a default IP2Location IPv4 database file when
+                          ipv6calc is invoked with
+                          '--db-ip2location-ipv4-default|-L'
+  --with-ip2location-ipv6-default-file=file
+                          Use a default IP2Location IPv6 database file when
+                          ipv6calc is invoked with
+                          '--db-ip2location-ipv6-default|-L'
+  --with-geoip-headers=DIR
+                          GeoIP include files location
+  --with-geoip-lib=DIR    GeoIP library location
+  --with-geoip-static     Explicitly link GeoIP statically (default=no)
+  --with-geoip-ipv4-default-file=file
+                          Use a default GeoIP IPv4 database file when ipv6calc
+                          is invoked with '--db-geoip-ipv4-default|-G'
+  --with-geoip-ipv6-default-file=file
+                          Use a default GeoIP IPv6 database file when ipv6calc
+                          is invoked with '--db-geoip-ipv6-default|-G'
+  --with-geoip-ipv6-compat
+                          Use IPv6 interface of GeoIP in compatibility mode
+                          (supporting 1.4.5) 
+]]></screen></sect2><sect2>
+<title>Compiling</title>
+<para>As usual, use</para><screen>
+<![CDATA[$ make
+]]></screen><para>and run tests afterwards using</para><screen>
+<![CDATA[$ make test
+]]></screen><para>or at least (e.g. if external databases are not available)</para><screen>
+<![CDATA[$ make test-minimal
+]]></screen></sect2></sect1><sect1>
 <title>Mailling Lists</title>
 <sect2>
 <title>ipv6calc-announce</title>
@@ -73,11 +128,32 @@
 <sect2>
 <title>Description</title>
 <para>The main program named &ldquo;ipv6calc&rdquo; is able to recognize many (not only) IPv6 address formats and depending on a selectable action (not required) a selectable output format can be specified. Also it has the capability to show detailed information of an IPv4/IPv6 address or anonymize it.</para></sect2><sect2>
+<title>List of built-in features</title>
+<para>Option &ldquo;-v&rdquo; shows built-in features, depending on configuration before compiling:</para><screen>
+<![CDATA[$ ./ipv6calc/ipv6calc -v 
+ipv6calc: version 0.92.0 IP2Location GeoIP GeoIPv6 DB_IEEE DB_IPV4 DB_IPV6
+]]></screen><para>Option &ldquo;-v -v&rdquo; (since 0.91.0) shows built-in features in detail, depending on configuration before compiling:</para><screen>
+<![CDATA[$ ./ipv6calc/ipv6calc -v -v
+ipv6calc: version 0.92.0 IP2Location GeoIP GeoIPv6 DB_IEEE DB_IPV4 DB_IPV6
+
+IEEE database included: IAB/20111008 OUI/20111008 
+IPv4 database included: AFRINIC/20111008 APNIC/20111007 ARIN/20111007 IANA/20110203 LACNIC/20111006 RIPENCC/20111007
+IPv6 database included: AFRINIC/20111008 APNIC/20111007 ARIN/20111007 IANA/20080827 LACNIC/20111006 RIPENCC/20111007
+
+GeoIP support enabled, compiled with IPv4 & IPv6 support 
+GeoIP dynamic library version (on this system): 1.4.8 
+GeoIP IPv4 default file: /var/local/share/GeoIP/GeoIP.dat 
+GeoIP IPv6 default file: /var/local/share/GeoIP/GeoIPv6.dat
+
+IP2Location support enabled, compiled with API version: 4.0.2 
+IP2Location IPv4 default file: /var/local/share/IP2Location/IP-COUNTRY-SAMPLE.BIN
+IP2Location IPv6 default file: /var/local/share/IP2Location/IPV6-COUNTRY.BIN 
+]]></screen></sect2><sect2>
 <title>Examples</title>
 <sect3>
 <title>Conversion</title>
 <para>A simple example is the conversion of an IPv6 address to a DNS PTR query string:</para><screen>
-<![CDATA[ ./ipv6calc --out revnibbles.arpa 2001:db8::1
+<![CDATA[$ ./ipv6calc --out revnibbles.arpa 2001:db8::1
 No input type specified, try autodetection...found type: ipv6addr
 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.
 ]]></screen><para>Like you see, input format was autodetected. And the given example can be extended because ipv6calc also understands netmask / prefix length values:</para><screen>
@@ -113,56 +189,25 @@ IPv4 registry[206.73.118.1]: ARIN
 Address type is Teredo and included IPv4 server address is: 80.181.121.64 and client port: 4096
 IPv4 registry for Teredo server address: ARIN
 Registry for address: reserved
-]]></screen><para>There exists also a machine readable output (e.g. used by 'ipv6calcweb.cgi') - in addition, here <ulink url="http://www.ip2location.com/">IP2Location</ulink> and/or <ulink url="http://www.maxmind.com/">GeoIP</ulink> information can be displayed, if databases are specified. Note that GeoIP currently still supports IPv4 only.</para><screen>
-<![CDATA[$ ./ipv6calc -q -i -m --db-ip2location-ipv4 /usr/share/IP2Location/IP-COUNTRY-SAMPLE.BIN --db-ip2location-ipv6 /var/local/share/IP2Location/IPV6-COUNTRY.BIN --db-geoip /usr/share/GeoIP/GeoIP.dat  3ffe:831f:ce49:7601:8000:efff:af4a:86BF
-IPV6=3ffe:831f:ce49:7601:8000:efff:af4a:86bf
-TYPE=unicast,6bone,global-unicast,productive,teredo
-IPV4_SOURCE[80.181.121.64]=TEREDO-CLIENT
-IPV4[80.181.121.64]=80.181.121.64
-IPV4_REGISTRY[80.181.121.64]=RIPENCC
-IP2LOCATION_DATABASE_INFO_IPV4=url=http://www.ip2location.com date=2005-06-17 entries=20470 apiversion=2.1.3
-IP2LOCATION_COUNTRY_SHORT[80.181.121.64]=IT
-IP2LOCATION_COUNTRY_LONG[80.181.121.64]=ITALY
-IP2LOCATION_REGION[80.181.121.64]=This parameter is unavailable for selected data file. Please upgrade the data file.
-IP2LOCATION_CITY[80.181.121.64]=This parameter is unavailable for selected data file. Please upgrade the data file.
-IP2LOCATION_ISP[80.181.121.64]=This parameter is unavailable for selected data file. Please upgrade the data file.
-IP2LOCATION_LATITUDE[80.181.121.64]=0.000000
-IP2LOCATION_LONGITUDE[80.181.121.64]=0.000000
-IP2LOCATION_DOMAIN[80.181.121.64]=This parameter is unavailable for selected data file. Please upgrade the data file.
-IP2LOCATION_ZIPCODE[80.181.121.64]=This parameter is unavailable for selected data file. Please upgrade the data file.
-GEOIP_COUNTRY_SHORT[80.181.121.64]=IT
-GEOIP_COUNTRY_LONG[80.181.121.64]=Italy
-GEOIP_DATABASE_INFO=GEO-106FREE 20070201 Build 1 Copyright (c) 2007 MaxMind LLC All Rights Reserved apiversion=system
-IPV4_SOURCE[206.73.118.1]=TEREDO-SERVER
-IPV4[206.73.118.1]=206.73.118.1
-IPV4_REGISTRY[206.73.118.1]=ARIN
-IP2LOCATION_COUNTRY_SHORT[206.73.118.1]=??
-IP2LOCATION_COUNTRY_LONG[206.73.118.1]=This record is unavailable in demo version. Please subscribe.
-IP2LOCATION_REGION[206.73.118.1]=This parameter is unavailable for selected data file. Please upgrade the data file.
-IP2LOCATION_CITY[206.73.118.1]=This parameter is unavailable for selected data file. Please upgrade the data file.
-IP2LOCATION_ISP[206.73.118.1]=This parameter is unavailable for selected data file. Please upgrade the data file.
-IP2LOCATION_LATITUDE[206.73.118.1]=0.000000
-IP2LOCATION_LONGITUDE[206.73.118.1]=0.000000
-IP2LOCATION_DOMAIN[206.73.118.1]=This parameter is unavailable for selected data file. Please upgrade the data file.
-IP2LOCATION_ZIPCODE[206.73.118.1]=This parameter is unavailable for selected data file. Please upgrade the data file.
-GEOIP_COUNTRY_SHORT[206.73.118.1]=US
-GEOIP_COUNTRY_LONG[206.73.118.1]=United States
-TEREDO_PORT_CLIENT=4096
-IPV6_REGISTRY=reserved
-IP2LOCATION_DATABASE_INFO_IPV6=url=http://www.ip2location.com date=2007-05-26 entries=7495 apiversion=2.1.3
-IP2LOCATION_COUNTRY_SHORT=-
-IP2LOCATION_COUNTRY_LONG=-
-IP2LOCATION_REGION=This parameter is unavailable for selected data file. Please upgrade the data file.
-IP2LOCATION_CITY=This parameter is unavailable for selected data file. Please upgrade the data file.
-IP2LOCATION_ISP=This parameter is unavailable for selected data file. Please upgrade the data file.
-IP2LOCATION_LATITUDE=0.000000
-IP2LOCATION_LONGITUDE=0.000000
-IP2LOCATION_DOMAIN=This parameter is unavailable for selected data file. Please upgrade the data file.
-IP2LOCATION_ZIPCODE=This parameter is unavailable for selected data file. Please upgrade the data file.
-IPV6CALC_NAME=ipv6calc
-IPV6CALC_VERSION=0.70.1
-IPV6CALC_COPYRIGHT="(P) & (C) 2001-2007 by Peter Bieringer <pb (at) bieringer.de>"
-IPV6CALC_OUTPUT_VERSION=4
+]]></screen><para>There exists also a machine readable output (e.g. used by 'ipv6calcweb.cgi') - in addition, here <ulink url="http://www.ip2location.com/">IP2Location</ulink> and/or <ulink url="http://www.maxmind.com/">GeoIP</ulink> information can be displayed, if databases are specified.</para><screen>
+<![CDATA[$ ./ipv6calc -G -L -q -i -m 2a01:238:423d:8800:85b3:9e6b:3019:8909  
+IPV6=2a01:0238:423d:8800:85b3:9e6b:3019:8909 
+TYPE=unicast,global-unicast 
+SLA=8800 
+IPV6_REGISTRY=RIPENCC 
+IID=85b3:9e6b:3019:8909 
+EUI64_SCOPE=local 
+IP2LOCATION_DATABASE_INFO_IPV6=url=http://www.ip2location.com date=2011-05-12 entries=24341 apiversion=4.0.2 
+IP2LOCATION_COUNTRY_SHORT=DE 
+IP2LOCATION_COUNTRY_LONG= 
+GEOIP_COUNTRY_SHORT=DE 
+GEOIP_COUNTRY_LONG=Germany 
+GEOIP_DATABASE_INFO_IPV6=GEO-106FREE 20110501 Build 1 Copyright (c) 2011 MaxMind Inc All Rights Reserved apiversion=system 
+IPV6CALC_NAME=ipv6calc 
+IPV6CALC_VERSION=0.92.0 
+IPV6CALC_COPYRIGHT="(P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de>" 
+IPV6CALC_OUTPUT_VERSION=5 
+IPV6CALC_FEATURES="IP2Location GeoIP GeoIPv6 DB_IEEE DB_IPV4 DB_IPV6" 
 ]]></screen></sect3></sect2><sect2>
 <title>Option style</title>
 <para>Since version 0.40 new-style option handling was introduced, using</para><itemizedlist>
@@ -172,13 +217,15 @@ IPV6CALC_OUTPUT_VERSION=4
 <para>Online help always shows the currently implemented features.</para><sect3>
 <title>Main online help:</title>
 <para>IP2Location and GeoIP options only appear if compiled with such support.</para><screen>
-<![CDATA[$ ./ipv6calc -?
-ipv6calc: version 0.81.0
-(P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de> 
+<![CDATA[$ ./ipv6calc -? 
+ipv6calc: version 0.92.0 IP2Location GeoIP GeoIPv6 DB_IEEE DB_IPV4 DB_IPV6 
+(P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
 
- General:
-  [-d|--debug <debug value>] : debug value (bitwise like)
-  [-q|--quiet]               : be more quiet
+ General:   [-d|--debug <debug value>] : debug value (bitwise like)
+  [-q|--quiet]               : be more quiet (auto-enabled in pipe mode)
+  [-f|--flush]               : flush each line in pipe mode
+  -v                         : show version (and included features)
+  -v -v                      : show verbose version information
 
  Usage with new style options:
   [--in|-I <input type>]   : specify input  type
@@ -190,22 +237,35 @@ ipv6calc: version 0.81.0
   [<format option> ...] : specify format options
   <input data> [...]    : input data
 
-  Available input  types:  --in     -?|-h|--help
-  Available output types:  --out    -?|-h|--help
-  Available action types:  --action -?|-h|--help
+  Available input  types:  [-m] --in     -?|-h|--help
+  Available output types:  [-m] --out    -?|-h|--help
+  Available action types:  [-m] --action -?|-h|--help
 
- Other usage:
+Other usage:
   --showinfo|-i [--machine_readable|-m] : show information about input data
   --showinfo|-i --show_types            : show available types on '-m'
 
   [--db-ip2location-ipv4 <file>] : IP2Location IPv4 database file (optional)
   [--db-ip2location-ipv6 <file>] : IP2Location IPv6 database file (optional)
-  [--db-geoip <file>]            : GeoIP database file (optional)
+  [--db-ip2location-ipv4-default|-L] : enable & use IP2Location IPv4 default database file (optional)
+                                        /var/local/share/IP2Location/IP-COUNTRY-SAMPLE.BIN
+  [--db-ip2location-ipv6-default|-L] : enable & use IP2Location IPv6 default database file (optional)
+                                        /var/local/share/IP2Location/IPV6-COUNTRY.BIN
 
- To see old-style option use: --printoldoptions
-]]></screen><para>Input-type options</para><screen>
+  [--db-geoip-ipv4 <file>]  : GeoIP IPv4 database file (optional)
+  [--db-geoip-ipv6 <file>]  : GeoIP IPv6 database file (optional)
+  [--db-geoip-ipv4-default|-G] : enable & use GeoIP IPv4 default database file (optional)
+                                  /var/local/share/GeoIP/GeoIP.dat 
+  [--db-geoip-ipv6-default|-G] : enable & use GeoIP IPv6 default database file (optional)
+                                  /var/local/share/GeoIP/GeoIPv6.dat
+
+ To see old-style option use: --printoldoptions 
+
+]]></screen></sect3><sect3>
+<title>Input-type options</title>
+<screen>
 <![CDATA[$ ./ipv6calc --in -?
-ipv6calc: version 0.81.0
+ipv6calc: version 0.92.0 IP2Location GeoIP GeoIPv6 DB_IEEE DB_IPV4 DB_IPV6
 (P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de> 
 
  Available input types:
@@ -223,9 +283,11 @@ ipv6calc: version 0.81.0
   iid+token      : Interface identifier and token
   ipv6logconv    : ipv6logconv (currently not supported)
   prefix+mac     : IPv6 prefix and a MAC address
-]]></screen><para>Output-type options:</para><screen>
+]]></screen></sect3><sect3>
+<title>Output-type options:</title>
+<screen>
 <![CDATA[$ ./ipv6calc --out -?
-ipv6calc: version 0.81.0
+ipv6calc: version 0.92.0 IP2Location GeoIP GeoIPv6 DB_IEEE DB_IPV4 DB_IPV6
 (P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de> 
 
  Available output types:
@@ -250,9 +312,11 @@ ipv6calc: version 0.81.0
 
  For examples and available format options use:
     --out <type> --examples
-]]></screen><para>Action-type options: </para><screen>
+]]></screen></sect3><sect3>
+<title>Action-type options: </title>
+<screen>
 <![CDATA[$ ./ipv6calc --action -?
-ipv6calc: version 0.81.0
+ipv6calc: version 0.92.0 IP2Location GeoIP GeoIPv6 DB_IEEE DB_IPV4 DB_IPV6
 (P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de> 
 
  Available action types:
@@ -260,9 +324,15 @@ ipv6calc: version 0.81.0
   geneui64      : Converts a MAC address to an EUI-64 address
   conv6to4      : Converts IPv4 address <-> 6to4 IPv6 address (prefix)
   genprivacyiid : Generates a privacy interface ID out of a given one and a token
-  anonymize     : Anonymize IPv4/IPv6 address without loosing much information
   prefixmac2ipv6: Generates an IPv6 address out of a prefix and a MAC address
-]]></screen><para>Because of historical issues, there exists also a support of the old-styled options: </para><screen>
+  anonymize        : Anonymize IPv4/IPv6 address without loosing much information
+  6rd_local_prefix : Calculate the 6rd prefix from given IPv6 prefix & relay prefix and IPv4
+                      Required options:
+                       --6rd_prefix ...
+                       --6rd_relay_prefix ... 
+]]></screen></sect3><sect3>
+<title>Because of historical issues, there exists also a support of the old-styled options: </title>
+<screen>
 <![CDATA[$ ./ipv6calc --printoldoptions
 ipv6calc: version 0.81.0
 (P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
@@ -327,8 +397,8 @@ This program anonymizes IPv4/IPv6 addresses in HTTP server log files
   --mask-ipv6 <bits>     : mask IPv6 prefix [0-64], default 48
                             only applied to related address types
   --no-mask-iid          : do not mask non-IPv4 based IPv6-IID
-  --anonymize-standard   : preset for standard anonymization
-  (default)                 mask-ipv4=24 mask-ipv6=48 mask-iid
+  --anonymize-standard   : preset for standard anonymization (default)
+                            mask-ipv4=24 mask-ipv6=48 mask-iid
   --anonymize-careful    : preset for careful anonymization
                             mask-ipv4=20 mask-ipv6=40 mask-iid
   --anonymize-paranoid   : preset for paranoid anonymization
@@ -337,14 +407,23 @@ This program anonymizes IPv4/IPv6 addresses in HTTP server log files
  Takes data from stdin, outputs the processed data to stdout
 ]]></screen></sect2><sect2>
 <title>Usage</title>
-<para>Currently, only offline conversion is supported. Implementation as pipe filter between Apache and 'cronolog' has been tested, but didn't work for unknown reason.</para><screen>
+<sect3>
+<title>Offline anonymization</title>
+<screen>
 <![CDATA[$ cat /path/to/http_log | ./ipv6loganon >/path/to/http_log_anonymized
-]]></screen></sect2></sect1><sect1>
+]]></screen></sect3><sect3>
+<title>On-the-fly online anonymization</title>
+<para>(Supported since 0.90.0)</para>
+<para>Adjust httpd.conf like following:</para><screen>
+<![CDATA[CustomLog "|/usr/local/bin/ipv6loganon -a -f /var/log/httpd/access_log" combined
+]]></screen><para>In case of &ldquo;cronolog&rdquo; is used on the system, configure like this:</para><screen>
+<![CDATA[CustomLog "|/usr/bin/ipv6loganon -f |/usr/sbin/cronolog /var/log/httpd/access.log-%Y%m%d" combined 
+]]></screen></sect3></sect2></sect1><sect1>
 <title>Perl CGI wrapper program "ipv6calcweb.cgi"</title>
 <para>Because calling C programs directly as CGI isn't really recommended (too much security troubles all the time), I wrote a small wrapper utility which calls "ipv6calc" to get information about client and server address for displaying on a web page. </para><sect2>
 <title>Examples</title>
 <para>A demonstration about which kind of output is possible to produce is shown at</para><itemizedlist>
-<listitem><para><ulink url="http://www.ipv6.bieringer.de/">http://www.ipv6.bieringer.de/</ulink> (IPv6 only)</para></listitem><listitem><para><ulink url="http://ipv6.aerasec.de/index2.html">http://ipv6.aerasec.de/index2.html</ulink> (IPv4/IPv6)</para></listitem><listitem><para><ulink url="http://www.sixxs.net/tools/ipv6calc/">http://www.sixxs.net/tools/ipv6calc/</ulink> (IPv4/IPv6)</para></listitem></itemizedlist></sect2></sect1><sect1>
+<listitem><para><ulink url="http://www.ipv6.bieringer.de/">http://www.ipv6.bieringer.de/</ulink> (IPv6 only)</para></listitem><listitem><para><ulink url="http://mirrors.bieringer.de/">http://mirrors.bieringer.de/</ulink> (IPv4/IPv6)</para></listitem><listitem><para><ulink url="http://www.sixxs.net/tools/ipv6calc/">http://www.sixxs.net/tools/ipv6calc/</ulink> (IPv4/IPv6)</para></listitem></itemizedlist></sect2></sect1><sect1>
 <title>Webserver log statistics helper program "ipv6logstats"</title>
 <para>This program parses a given webserver logfile and count addresses, useful for time period statistics.</para><sect2>
 <title>Supported options</title>
@@ -366,4 +445,11 @@ ipv6logstats: version 0.81.0
 <title>Usage</title>
 <para>There are a README and some helper scripts available in the package how to use this program and how to generate a graph using Gnuplot.</para></sect2><sect2>
 <title>Examples</title>
-<para>A demonstration with real data is available at <ulink url="http://mirrors.bieringer.de/stats/timeline.html">http://mirrors.bieringer.de/stats/timeline.html</ulink>.</para></sect2></sect1></article>
+<para>A demonstration with real data is available at <ulink url="http://mirrors.bieringer.de/stats/timeline.html">http://mirrors.bieringer.de/stats/timeline.html</ulink>.</para></sect2></sect1><sect1>
+<title>History</title>
+<para>Major extensions/changes are listed here</para><sect2>
+<title>2011</title>
+<itemizedlist>
+<listitem><para>ipv6calc/ipv6calcweb.cgi: enable included GeoIP support with IPv6 (usable with GeoIP &gt;= 1.4.5)</para></listitem><listitem><para>ipv6calc: extend for 6rd support (--action 6rd_local_prefix --6rd_prefix &lt;PREFIX&gt; --6rd_relay_prefix &lt;RELAY_PREFIX&gt;)</para></listitem><listitem><para>ipv6calc: enable stdin support for bulk transformation</para></listitem><listitem><para>ipv6calc: add support for NAT64 address type</para></listitem><listitem><para>ipv6calc: add option &ldquo;forceprefix &lt;LENGTH&gt;&rdquo; to print prefix of an address without a given prefix length</para></listitem><listitem><para>ipv6loganon: extend for pipe usage (e.g. in Apache log file directive) and write/append to specified file</para></listitem><listitem><para>General: add configure options to disable built-in databases (reduce binary size a lot, e.g. for embedded devices)</para></listitem></itemizedlist></sect2><sect2>
+<title>2010 and older</title>
+<para>TODO</para></sect2></sect1></article>

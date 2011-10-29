@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.205 2011/10/09 07:17:09 peter Exp $ 
+ *  $Id: ChangeLog,v 1.206 2011/10/29 08:35:24 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,12 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20111029/PB
+	update doc, add ldp.dsl and adjust generate script
+
+20111026/PB
+	update documentation and INSTALLING
+
 20111009/PB
 	configure.in
 	 - Exclude use of GeoIP_lib_version also for GeoIP 1.4.5 IPv6 support

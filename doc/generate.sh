@@ -1,8 +1,11 @@
 #!/bin/sh
 
-# $Id: generate.sh,v 1.3 2011/03/05 15:23:52 peter Exp $
+# $Id: generate.sh,v 1.4 2011/10/29 08:35:24 peter Exp $
 
 # Requires: opensp
+
+#export SP_ENCODING=UTF-8
+export SP_CHARSET_FIXED=yes
 
 if [ -z "$1" ]; then
 	file_sgml="ipv6calc.sgml"
@@ -16,7 +19,7 @@ file_base="`basename $file_sgml .sgml`"
 
 file_html="${file_base}.html"
 
-file_dsl="/usr/local/share/sgml/dsssl/ldp.dsl"
+file_dsl="./ldp.dsl"
 
 if [ ! -f "$file_dsl" ]; then
 	echo "ERR: Missing DSL file: $file_dsl"
