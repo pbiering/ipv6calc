@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.50 2011/10/09 07:17:09 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.51 2011/11/02 21:40:16 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1555,7 +1555,9 @@ PIPE_input:
 			
 		case FORMAT_eui64:
 			if (ipv6calc_debug != 0) { fprintf(stderr, "%s: Start of output handling for FORMAT_eui64\n", DEBUG_function_name); }
-			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
+			if (action != ACTION_mac_to_eui64) { fprintf(stderr, "Specify proper action or input for EUI-64 identifier!\n"); exit(EXIT_FAILURE); };
+			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid EUI-64 identifier given!\n"); exit(EXIT_FAILURE); };
+			if (ipv6addr.prefixlength != 64) { fprintf(stderr, "No valid EUI-64 identifier given!\n"); exit(EXIT_FAILURE); };
 			formatoptions |= FORMATOPTION_printsuffix;
 			retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, formatoptions);
 			break;
