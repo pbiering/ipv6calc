@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.8 2011/05/12 10:30:47 peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.9 2011/11/03 06:48:11 peter Exp $
  * Copyright  : 2007-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -374,7 +374,7 @@ static int anonymizetoken(char *resultstring, const char *token) {
 		};
 
 		if (strcmp(cache_lru_key_token[cache_lru_last - 1], token) == 0) {
-			snprintf(resultstring, LINEBUFFER - 1, cache_lru_value[cache_lru_last - 1]);
+			snprintf(resultstring, LINEBUFFER - 1, "%s", cache_lru_value[cache_lru_last - 1]);
 			cache_lru_statistics[0]++;
 			if ((ipv6calc_debug & 0x4) != 0) {
 				fprintf(stderr, "LRU cache: hit last line=%d key_token=%s value=%s\n", cache_lru_last - 1, token, resultstring);
@@ -385,7 +385,7 @@ static int anonymizetoken(char *resultstring, const char *token) {
 		if (cache_lru_last > 1) {
 			for (i = cache_lru_last - 1; i > 0; i--) {
 				if (strcmp(cache_lru_key_token[i - 1], token) == 0) {
-					snprintf(resultstring, LINEBUFFER - 1, cache_lru_value[i - 1]);
+					snprintf(resultstring, LINEBUFFER - 1, "%s", cache_lru_value[i - 1]);
 					cache_lru_statistics[cache_lru_last - i]++;
 					if ((ipv6calc_debug & 0x4) != 0) {
 						fprintf(stderr, "LRU cache: hit line=%d key_token=%s value=%s\n", i - 1, token, resultstring);
@@ -398,7 +398,7 @@ static int anonymizetoken(char *resultstring, const char *token) {
 		if (cache_lru_last < cache_lru_max) {
 			for (i = cache_lru_max; i > cache_lru_last; i--) {
 				if (strcmp(cache_lru_key_token[i - 1], token) == 0) {
-					snprintf(resultstring, LINEBUFFER - 1, cache_lru_value[i - 1]);
+					snprintf(resultstring, LINEBUFFER - 1, "%s", cache_lru_value[i - 1]);
 					cache_lru_statistics[cache_lru_max - i + cache_lru_last]++;
 					if ((ipv6calc_debug & 0x4) != 0) {
 						fprintf(stderr, "LRU cache: hit line=%d key_token=%s value=%s\n", i - 1, token, resultstring);
@@ -468,7 +468,7 @@ static int anonymizetoken(char *resultstring, const char *token) {
 
 	} else {
 		/* probably reverse DNS resolving lookup string, do not touch */
-		snprintf(resultstring, LINEBUFFER - 1, token);
+		snprintf(resultstring, LINEBUFFER - 1, "%s", token);
 	};
 
 	/* use cache ? */
@@ -487,8 +487,8 @@ static int anonymizetoken(char *resultstring, const char *token) {
 		};
 
 		/* store key and value */
-		snprintf(cache_lru_key_token[cache_lru_last - 1], NI_MAXHOST - 1, token);
-		snprintf(cache_lru_value[cache_lru_last - 1], NI_MAXHOST - 1, resultstring);
+		snprintf(cache_lru_key_token[cache_lru_last - 1], NI_MAXHOST - 1, "%s", token);
+		snprintf(cache_lru_value[cache_lru_last - 1], NI_MAXHOST - 1, "%s", resultstring);
 		if ((ipv6calc_debug & 0x4) != 0) {
 			fprintf(stderr, "LRU cache: fill line=%d key_token=%s value=%s\n", cache_lru_last - 1, cache_lru_key_token[cache_lru_last - 1], cache_lru_value[cache_lru_last - 1]);
 		};

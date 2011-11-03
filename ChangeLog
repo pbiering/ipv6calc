@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.207 2011/11/02 21:40:16 peter Exp $ 
+ *  $Id: ChangeLog,v 1.208 2011/11/03 06:48:11 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20111103/PB
+	ipv6loganon/ipv6loganon.c, ipv6logconv/ipv6logconv.c:
+	 - using sprintf for LRU cache in more secure way (credits to Luca Bruno)
+
 20111102/PB
 	ipv6calc/ipv6calc.c: force -O eui64 to request either -I mac or -A geneui64
 
