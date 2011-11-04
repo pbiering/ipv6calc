@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.25 2011/10/09 07:17:09 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.26 2011/11/04 07:05:24 peter Exp $
 # Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -96,7 +96,9 @@ cat <<END | grep -v '^#'
 ## MAC to EUI-64
 --mac_to_eui64 00:50:BF:06:B4:F5					=250:bfff:fe06:b4f5
 --mac_to_eui64 00:0:F:6:4:5						=200:fff:fe06:405
---in mac --out eui64 00:0:F:6:4:5				=200:fff:fe06:405
+--in mac --out eui64 00:0:F:6:4:5					=200:fff:fe06:405
+## MAC to EUI-64 (autodetect mode, not supported in pipe mode)
+NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 ## Interface identifier privacy conversion
 --eui64_to_privacy 0123:4567:89ab:cdef 0123456789abcdef			=4662:bdea:8654:776d 486072ff7074945e
 --in iid+token --out iid+token 0123:4567:89ab:cdef 0123456789abcdef			=4662:bdea:8654:776d 486072ff7074945e
@@ -233,7 +235,7 @@ fi
 
 echo "Run 'ipv6calc' function tests..."
 
-testscenarios | while read line; do
+testscenarios | sed 's/NOPIPETEST//' | while read line; do
 	if [ -z "$line" ]; then
 		# end
 		continue
@@ -372,7 +374,7 @@ done || exit 1
 
 echo "Run 'ipv6calc' pipe tests (2)"
 # reuse original test cases
-testscenarios | while read line; do
+testscenarios | grep -v "^NOPIPETEST" | while read line; do
 	# extract result
 	command="`echo "$line" | awk -F= '{ print $1 }' | sed 's/ $//g'`"
 	result="`echo "$line" | awk -F= '{ print $2 }'`"

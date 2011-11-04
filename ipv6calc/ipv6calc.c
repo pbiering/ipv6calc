@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.51 2011/11/02 21:40:16 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.52 2011/11/04 07:05:24 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -225,6 +225,7 @@ int main(int argc, char *argv[]) {
 	int bit_start = 0, bit_end = 0, force_prefix = 0;
 	char *input1 = NULL, *input2 = NULL;
 	int inputc;
+	int inputtype_given = 0, outputtype_given = 0, action_given = 0;
 
 	/* new option style storage */	
 	uint32_t inputtype  = FORMAT_undefined;
@@ -675,6 +676,7 @@ int main(int argc, char *argv[]) {
 					fprintf(stderr, " Input option is unknown: %s\n", optarg);
 					exit(EXIT_FAILURE);
 				};
+				inputtype_given = 1;
 				break;	
 				
 			case 'O':	
@@ -693,6 +695,7 @@ int main(int argc, char *argv[]) {
 					fprintf(stderr, " Output option is unknown: %s\n", optarg);
 					exit(EXIT_FAILURE);
 				};
+				outputtype_given = 1;
 				break;	
 
 			case 'A':	
@@ -710,6 +713,7 @@ int main(int argc, char *argv[]) {
 					fprintf(stderr, " Action option is unknown: %s\n", optarg);
 					exit(EXIT_FAILURE);
 				};
+				action_given = 1;
 				break;
 				
 			default:
@@ -779,46 +783,6 @@ int main(int argc, char *argv[]) {
 				fprintf(stderr, "%s: Input is a pipe\n", DEBUG_function_name);
 			};
 			formatoptions |= FORMATOPTION_quiet; // force quiet mode
-		};
-	};
-
-	/***** automatic action handling *****/
-	if ( action == ACTION_undefined ) {
-		/*
-		if ((formatoptions & FORMATOPTION_quiet) == 0) {
-			fprintf(stderr, "No action type specified, try autodetection...");
-		};
-		*/
-
-		if ( (inputtype == FORMAT_mac) && (outputtype ==FORMAT_eui64) ) {
-			action = ACTION_mac_to_eui64;
-		} else if ( (inputtype == FORMAT_iid_token) && (outputtype ==FORMAT_iid_token) ) {
-			action = ACTION_iid_token_to_privacy;
-		} else if ( inputtype == FORMAT_prefix_mac ) {
-			action = ACTION_prefix_mac_to_ipv6;
-			if ( outputtype == FORMAT_undefined ) {
-				outputtype = FORMAT_ipv6addr;
-			};
-		};
-		
-		if ( action != FORMAT_undefined ) {
-			if ((formatoptions & FORMATOPTION_quiet) == 0) {
-				fprintf(stderr, "No action type specified, try autodetection...");
-			};
-			for (i = 0; i < (int) (sizeof(ipv6calc_actionstrings) / sizeof(ipv6calc_actionstrings[0])); i++) {
-				if (action == ipv6calc_actionstrings[i].number) {
-					if ((formatoptions & FORMATOPTION_quiet) == 0) {
-						fprintf(stderr, "found type: %s\n", ipv6calc_actionstrings[i].token);
-					};
-					break;
-				};
-			};
-		} else {
-			/*
-			if ((formatoptions & FORMATOPTION_quiet) == 0) {
-				fprintf(stderr, "no result!\n");
-			};
-			*/
 		};
 	};
 
@@ -958,6 +922,36 @@ PIPE_input:
 	if (inputtype == FORMAT_revnibbles_int || inputtype == FORMAT_revnibbles_arpa) {
 		if ( outputtype == FORMAT_undefined ) {
 			outputtype = FORMAT_ipv6addr;
+		};
+	};
+
+	/***** automatic action handling *****/
+	if (action == ACTION_undefined) {
+		if ( (inputtype == FORMAT_mac && (input_is_pipe == 0 || inputtype_given == 1)) && (outputtype == FORMAT_eui64 && outputtype_given == 1) ) {
+			action = ACTION_mac_to_eui64;
+		} else if ( (inputtype == FORMAT_iid_token && (input_is_pipe == 0 || inputtype_given == 1)) && (outputtype == FORMAT_iid_token && outputtype_given == 1) ) {
+			action = ACTION_iid_token_to_privacy;
+		} else if ( inputtype == FORMAT_prefix_mac && (input_is_pipe == 0 || inputtype_given == 1)) {
+			action = ACTION_prefix_mac_to_ipv6;
+			if ( outputtype == FORMAT_undefined ) {
+				outputtype = FORMAT_ipv6addr;
+			};
+		};
+	};
+
+	if (input_is_pipe == 0 && action_given == 0) {
+		if ( action != ACTION_undefined ) {
+			if ((formatoptions & FORMATOPTION_quiet) == 0) {
+				fprintf(stderr, "No action type specified, try autodetection...");
+			};
+			for (i = 0; i < (int) (sizeof(ipv6calc_actionstrings) / sizeof(ipv6calc_actionstrings[0])); i++) {
+				if (action == ipv6calc_actionstrings[i].number) {
+					if ((formatoptions & FORMATOPTION_quiet) == 0) {
+						fprintf(stderr, "found type: %s\n", ipv6calc_actionstrings[i].token);
+					};
+					break;
+				};
+			};
 		};
 	};
 
@@ -1555,7 +1549,7 @@ PIPE_input:
 			
 		case FORMAT_eui64:
 			if (ipv6calc_debug != 0) { fprintf(stderr, "%s: Start of output handling for FORMAT_eui64\n", DEBUG_function_name); }
-			if (action != ACTION_mac_to_eui64) { fprintf(stderr, "Specify proper action or input for EUI-64 identifier!\n"); exit(EXIT_FAILURE); };
+			if (action != ACTION_mac_to_eui64) { fprintf(stderr, "Specify proper action or input for output format: eui64\n"); exit(EXIT_FAILURE); };
 			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid EUI-64 identifier given!\n"); exit(EXIT_FAILURE); };
 			if (ipv6addr.prefixlength != 64) { fprintf(stderr, "No valid EUI-64 identifier given!\n"); exit(EXIT_FAILURE); };
 			formatoptions |= FORMATOPTION_printsuffix;
