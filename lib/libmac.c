@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.12 2011/05/04 18:26:00 peter Exp $
+ * Version    : $Id: libmac.c,v 1.13 2011/11/05 18:18:56 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -45,7 +45,7 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 		
 	};
 
-	/* count ":" or "-" or " " must be 5 */
+	/* count ":" or "-" or " " must be 5 or 1 x "-" */
 	for (i = 0; i < (int) strlen(addrstring); i++) {
 		if (addrstring[i] == ':') {
 			ccolons++;
@@ -56,8 +56,8 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 		};
 	};
 
-	if ( ! ( ( ccolons == 5 && cdashes == 0 && cspaces == 0) || ( ccolons == 0 && cdashes == 5 && cspaces == 0)  || ( ccolons == 0 && cdashes == 0 && cspaces == 5)) ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "Error, given MAC address '%s' is not valid (number of colons/dashes is not 5)!", addrstring);
+	if ( ! ( (ccolons == 5 && cdashes == 0 && cspaces == 0) || (ccolons == 0 && cdashes == 5 && cspaces == 0)  || (ccolons == 0 && cdashes == 0 && cspaces == 5) || (ccolons == 0 && cdashes == 1 && cspaces == 0 && strlen(addrstring) == 13)) ) {
+		snprintf(resultstring, NI_MAXHOST - 1, "Error, given MAC address '%s' is not valid (number of colons/dashes/spaces is not 5 or number of dashes is not 1)!", addrstring);
 		retval = 1;
 		return (retval);
 	};
@@ -67,6 +67,8 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 		result = sscanf(addrstring, "%x:%x:%x:%x:%x:%x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5]);
 	} else if ( cdashes == 5 ) {
 		result = sscanf(addrstring, "%x-%x-%x-%x-%x-%x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5]);
+	} else if ( cdashes == 1 ) {
+		result = sscanf(addrstring, "%2x%2x%2x-%2x%2x%2x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5]);
 	} else if ( cspaces == 5 ) {
 		result = sscanf(addrstring, "%x %x %x %x %x %x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5]);
 	} else {

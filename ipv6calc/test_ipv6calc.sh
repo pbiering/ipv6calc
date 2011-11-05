@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.26 2011/11/04 07:05:24 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.27 2011/11/05 18:18:56 peter Exp $
 # Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -97,6 +97,7 @@ cat <<END | grep -v '^#'
 --mac_to_eui64 00:50:BF:06:B4:F5					=250:bfff:fe06:b4f5
 --mac_to_eui64 00:0:F:6:4:5						=200:fff:fe06:405
 --in mac --out eui64 00:0:F:6:4:5					=200:fff:fe06:405
+--mac_to_eui64 0050BF-06B4F5						=250:bfff:fe06:b4f5
 ## MAC to EUI-64 (autodetect mode, not supported in pipe mode)
 NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 ## Interface identifier privacy conversion

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.18 2011/02/27 11:40:02 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.19 2011/11/05 18:18:56 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -225,13 +225,43 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		goto END_libipv6calc_autodetectinput;
 	};
 	
-	if (length >= 11 && length <= 17 && numxdigits >= 6 && numxdigits <= 12 && numdots == 0 && ( ( numcolons == 5 && numdashes == 0 && numspaces == 0) || ( numcolons == 0 && numdashes == 5 && numspaces == 0) || ( numcolons == 0 && numdashes == 0 && numspaces == 5) ) ) {
-		/* MAC 00:00:00:00:00:00 or 00-00-00-00-00-00 or "xx xx xx xx xx xx" */
+	if (length >= 11 && length <= 17 && numxdigits >= 6 && numxdigits <= 12 && numdots == 0 && ( (numcolons == 5 && numdashes == 0 && numspaces == 0) || (numcolons == 0 && numdashes == 5 && numspaces == 0) || (numcolons == 0 && numdashes == 0 && numspaces == 5) || (numcolons == 0 && numdashes == 1 && numspaces == 0 && numxdigits == 12) ) ) {
+		/* MAC 00:00:00:00:00:00 or 00-00-00-00-00-00 or "xx xx xx xx xx xx" or "xxxxxx-xxxxxx" */
 
-		/* Check whether minimum 1 xdigit is between colons */
 		if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
 			fprintf(stderr, "%s:  check FORMAT_mac\n", DEBUG_function_name);
 		};
+
+		/* Check whether minimum 1 xdigit is between colons, dashes, spaces */
+		if (numcolons == 0 && numdashes == 1 && numspaces == 0 && numxdigits == 12) {
+
+		/* Check xxxxxx-xxxxxx */
+		j = 0;
+		for (i = 0; i < (int) length; i++) {
+			if (isxdigit((int) string[i])) {
+				j++;
+				if ( j > 6 ) {
+					/* more than 6 xdigits */
+					j = -1;
+					break;
+				};
+				continue;
+		       	} else if (string[i] == '-' ) {
+				if ( j == 0 ) {
+					/* dash follow dash */
+					j = -1;
+					break;
+				};
+				j = 0;
+				continue;
+		       	};
+			/* normally not reached */
+			j = -1;
+			break;
+		};
+
+		} else {
+
 		j = 0;
 		for (i = 0; i < (int) length; i++) {
 			if (isxdigit((int) string[i])) {
@@ -242,7 +272,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 					break;
 				};
 				continue;
-		       	} else if ( string[i] == ':' || string[i] == '-' || string[i] == ' ') {
+		       	} else if (string[i] == ':' || string[i] == '-' || string[i] == ' ') {
 				if ( j == 0 ) {
 					/* colon/dash/space follows colon/dash/space */
 					j = -1;
@@ -255,6 +285,8 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 			j = -1;
 			break;
 		};
+
+		}; /* end of if */
 
 		if ( j != -1 ) {
 			type = FORMAT_mac;
