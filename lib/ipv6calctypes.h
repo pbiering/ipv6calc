@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.23 2011/09/16 19:52:05 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.24 2011/11/26 13:55:38 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -52,6 +52,7 @@ extern uint32_t ipv6calctypes_checkaction(const char *string);
 #define FORMAT_NUM_ipv4revhex		20
 #define FORMAT_NUM_octal		21
 #define FORMAT_NUM_hex			22
+#define FORMAT_NUM_ipv6literal		23
 #define FORMAT_NUM_auto_noresult	30
 #define FORMAT_NUM_undefined		31
 
@@ -78,6 +79,7 @@ extern uint32_t ipv6calctypes_checkaction(const char *string);
 #define FORMAT_ipv4revhex	(uint32_t) (1 << FORMAT_NUM_ipv4revhex)
 #define FORMAT_octal		(uint32_t) (1 << FORMAT_NUM_octal)
 #define FORMAT_hex		(uint32_t) (1 << FORMAT_NUM_hex)
+#define FORMAT_ipv6literal	(uint32_t) (1 << FORMAT_NUM_ipv6literal)
 #define FORMAT_auto_noresult	(uint32_t) (1 << FORMAT_NUM_auto_noresult)
 #define FORMAT_undefined	(uint32_t) (1 << FORMAT_NUM_undefined)
 
@@ -112,6 +114,7 @@ typedef struct {
 	{ FORMAT_ipv4revhex	, "ipv4revhex"     , "IPv4 in byte-reversed hexdecimal format", "" },
 	{ FORMAT_octal		, "octal"	   , "IP address in escaped octal format", "" },
 	{ FORMAT_hex		, "hex"	 	   , "IP address in hexadecimal format", "" },
+	{ FORMAT_ipv6literal	, "ipv6literal"	   , "IPv6 address in literal", "" },
 	{ FORMAT_prefix_mac     , "prefix+mac"     , "IPv6 prefix and a MAC address", "" },
 };
 
@@ -153,6 +156,7 @@ typedef struct {
 #define FORMATOPTION_NUM_quiet			13	// 00002000
 #define FORMATOPTION_NUM_printmirrored		14	// 00004000
 #define FORMATOPTION_NUM_forceprefix		15	// 00010000
+#define FORMATOPTION_NUM_literal		16	// 00020000
 
 #define FORMATOPTION_NUM_printembedded		31	// special
 
@@ -171,6 +175,7 @@ typedef struct {
 #define FORMATOPTION_quiet			(uint32_t) (1 << FORMATOPTION_NUM_quiet)
 #define FORMATOPTION_printmirrored		(uint32_t) (1 << FORMATOPTION_NUM_printmirrored)
 #define FORMATOPTION_forceprefix		(uint32_t) (1 << FORMATOPTION_NUM_forceprefix)
+#define FORMATOPTION_literal			(uint32_t) (1 << FORMATOPTION_NUM_literal)
 
 #define FORMATOPTION_printembedded		(uint32_t) (1 << FORMATOPTION_NUM_printembedded)
 
@@ -212,6 +217,7 @@ typedef struct {
 	{ FORMAT_ipv4addr       , FORMATOPTION_machinereadable },
 	{ FORMAT_iid_token      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_octal          , FORMATOPTION_printfulluncompressed },
+	{ FORMAT_ipv6literal    , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_prefix_mac     , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase }
 };
 
