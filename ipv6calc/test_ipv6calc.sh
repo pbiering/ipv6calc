@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.27 2011/11/05 18:18:56 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.28 2011/11/26 16:07:23 peter Exp $
 # Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -98,6 +98,7 @@ cat <<END | grep -v '^#'
 --mac_to_eui64 00:0:F:6:4:5						=200:fff:fe06:405
 --in mac --out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 --mac_to_eui64 0050BF-06B4F5						=250:bfff:fe06:b4f5
+--mac_to_eui64 0050BF06B4F5						=250:bfff:fe06:b4f5
 ## MAC to EUI-64 (autodetect mode, not supported in pipe mode)
 NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 ## Interface identifier privacy conversion
@@ -140,6 +141,12 @@ NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 --in ipv6addr --out ipv6addr 2001:DB8:0:0:1:0:0:1		 	=2001:db8::1:0:0:1
 # 6rd
 --action 6rd_local_prefix --6rd_prefix 2607:fedc:ff40::/43 --6rd_relay_prefix 6.230.0.0/15 6.231.32.33	=2607:fedc:ff52:210::/60
+# IPv6 literal
+--in ipv6literal fe80--1.IPV6-LITERAL.NET				=fe80::1
+--in ipv6literal fe80--1.IPV6-liTERal.NET				=fe80::1
+--out ipv6literal -u --in ipv6addr 2001:db8::1				=2001-DB8--1.IPV6-LITERAL.NET
+--out ipv6literal -U --in ipv6addr 2001:db8::1				=2001-db8-0-0-0-0-0-1.ipv6-literal.net
+--out ipv6literal -F --in ipv6addr 2001:db8::1				=2001-0db8-0000-0000-0000-0000-0000-0001.ipv6-literal.net
 END
 }
 
@@ -151,6 +158,9 @@ cat <<END | grep -v '^#'
 1.2.3.4/0									ipv4addr
 1.2.3.4/32									ipv4addr
 01:23:45:67:89:01								mac
+01-23-45-67-89-01								mac
+012345678901									mac
+012345-678901									mac
 2002:102:304::1/0								ipv6addr
 2002:102:304::1/128								ipv6addr
 \\\\[x3FFEFFFF000000000000000000000001/64].IP6.ARPA.				bitstring
@@ -184,6 +194,10 @@ cat <<END | grep -v '^#'
 2001:db8:aaaa:bbbb:cccc:dddd:eeee:AAAA						ipv6addr
 2001:db8:aaaa:bbbb:cccc:dddd:eeee:AaAa						ipv6addr
 64:ff9b::192.0.2.33								ipv6addr
+fe80--1.IPV6-LITERAL.NET							ipv6literal
+2001-db8-0-0-0-0-0-1.ipv6-literal.net						ipv6literal
+2001-0db8-0000-0000-0000-0000-0000-0001.ipv6-literal.net			ipv6literal
+2001-db8--1.ipv6-literal.net							ipv6literal
 END
 }
 
@@ -201,6 +215,7 @@ cat <<END | grep -v '^#'
 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.arpa.arpa.	revnibbles.arpa
 0.0.0.0.01.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.arpa.		revnibbles.arpa
 123456789									ipv4hex
+fe80---1.IPV6-LITERAL.NET							ipv6literal
 END
 }
 

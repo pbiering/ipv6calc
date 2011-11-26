@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.41 2011/09/16 18:05:13 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.42 2011/11/26 16:07:23 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -514,6 +514,68 @@ int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, char *re
 
 
 /*
+ * function stores an IPv6 literal address string into a structure
+ *
+ * in : *addrstring = IPv6 address
+ * out: *resultstring = error message
+ * out: ipv6addrp = changed IPv6 address structure
+ * ret: ==0: ok, !=0: error
+ */
+#define DEBUG_function_name "libipv6addr/addrliteral_to_ipv6addrstruct"
+int addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
+	int retval = 1, i;
+	char tempstring[NI_MAXHOST], *cptr;
+	const char *literalstring = ".ipv6-literal.net";
+
+	resultstring[0] = '\0'; /* clear result string */
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		fprintf(stderr, "%s: Got input '%s'\n", DEBUG_function_name, addrstring);
+	};
+
+	/* search for literal string */
+	cptr = strcasestr(addrstring, literalstring);
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		fprintf(stderr, "%s: String lengths addrstring=%d strcasestr=%d literal=%d\n", DEBUG_function_name, strlen(addrstring), strlen(cptr), strlen(literalstring));
+	};
+
+	if (cptr == NULL) {
+		snprintf(resultstring, NI_MAXHOST - 1, "Error in given IPv6 literal address, has no 'ipv6-literal.net' included!");
+		return (1);
+	};
+
+	if (strlen(cptr) != strlen(literalstring)) {
+		snprintf(resultstring, NI_MAXHOST - 1, "Error in given IPv6 literal address, ends not with 'ipv6-literal.net'!");
+		return (1);
+	};
+
+	/* copy without literal */
+	strncpy(tempstring, addrstring, strlen(addrstring) - strlen(literalstring));
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		fprintf(stderr, "%s: String without literal suffix: %s\n", DEBUG_function_name, tempstring);
+	};
+
+	/* replace - with : */
+	for (i = 0; i < strlen(tempstring); i++) {
+		if (tempstring[i] == '-') {
+			tempstring[i] = ':';
+		};
+	};
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		fprintf(stderr, "%s: String converted to non-literal format: %s\n", DEBUG_function_name, tempstring);
+	};
+
+	/* call normal IPv6 parsing function */
+	retval = addr_to_ipv6addrstruct(tempstring, resultstring, ipv6addrp);
+
+	return (retval);
+};
+#undef DEBUG_function_name
+
+/*
  * function stores an IPv6 address string into a structure
  *
  * in : *addrstring = IPv6 address
@@ -743,6 +805,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
  */
 static int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
 	int retval = 1;
+	int i;
 	char tempstring[NI_MAXHOST];
 	
 	/* print array */
@@ -800,11 +863,21 @@ static int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char
 		};
 	};
 
-	if (ipv6addrp->flag_prefixuse == 1) {
+	if ((ipv6addrp->flag_prefixuse == 1) && ((formatoptions & FORMATOPTION_literal) == 0)) {
 		/* append prefix length */
 		snprintf(resultstring, NI_MAXHOST - 1, "%s/%u", tempstring, (unsigned int) ipv6addrp->prefixlength);
 	} else {
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
+		if ((formatoptions & FORMATOPTION_literal) != 0) {
+			/* replace : by - */
+			for (i =0; i < strlen(tempstring); i++) {
+				if (tempstring[i] == ':') {
+					tempstring[i] = '-';
+				};
+			};
+			snprintf(resultstring, NI_MAXHOST - 1, "%s.ipv6-literal.net", tempstring);
+		} else {
+			snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
+		};
 	};
 
 	retval = 0;	

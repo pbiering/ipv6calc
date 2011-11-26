@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.210 2011/11/05 18:18:56 peter Exp $ 
+ *  $Id: ChangeLog,v 1.211 2011/11/26 16:07:23 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20111126/PB
+	lib/* ipv6calc/ipv6calc.c: support input/output format "ipv6literal"
+	lib/libmac.c, lib/libipv6calc.c: support MAC format xxxxxxxxxxxx (seen on some network devices) 
+
 20111105/PB
 	lib/libmac.c, lib/libipv6calc.c: support MAC format xxxxxx-xxxxxx (seen on HP switches)
 

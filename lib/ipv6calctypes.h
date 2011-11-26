@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.24 2011/11/26 13:55:38 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.25 2011/11/26 16:07:23 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -119,12 +119,13 @@ typedef struct {
 };
 
 /* Format conversion matrix */
-/*@unused@*/ static const uint32_t ipv6calc_formatmatrix[15][2] = {
+/*@unused@*/ static const uint32_t ipv6calc_formatmatrix[][2] = {
 	{ FORMAT_auto           , 0x5ff },
 	{ FORMAT_revnibbles_int , 0x5ff },
 	{ FORMAT_revnibbles_arpa, 0x5ff },
 	{ FORMAT_bitstring      , 0x5ff },
-	{ FORMAT_ipv6addr       , FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ipv6addr | FORMAT_base85 | FORMAT_ifinet6 | FORMAT_octal },
+	{ FORMAT_ipv6addr       , FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ipv6addr | FORMAT_base85 | FORMAT_ifinet6 | FORMAT_octal | FORMAT_ipv6literal },
+	{ FORMAT_ipv6literal    , FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ipv6addr | FORMAT_base85 | FORMAT_ifinet6 | FORMAT_octal | FORMAT_ipv6literal },
 	{ FORMAT_ipv4addr       , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex },
 	{ FORMAT_ipv4hex        , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex },
 	{ FORMAT_ipv4revhex     , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex },
@@ -204,7 +205,7 @@ typedef struct {
 };
 
 /* Possible format option map */
-/*@unused@*/ static const uint32_t ipv6calc_outputformatoptionmap[13][2]  = {
+/*@unused@*/ static const uint32_t ipv6calc_outputformatoptionmap[][2]  = {
 	{ FORMAT_revnibbles_int , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend | FORMATOPTION_printmirrored },
 	{ FORMAT_revnibbles_arpa, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend | FORMATOPTION_printmirrored },
 	{ FORMAT_revipv4, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printmirrored },
@@ -217,7 +218,7 @@ typedef struct {
 	{ FORMAT_ipv4addr       , FORMATOPTION_machinereadable },
 	{ FORMAT_iid_token      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_octal          , FORMATOPTION_printfulluncompressed },
-	{ FORMAT_ipv6literal    , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
+	{ FORMAT_ipv6literal    , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed },
 	{ FORMAT_prefix_mac     , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase }
 };
 
@@ -229,7 +230,7 @@ typedef struct {
 #define ACTION_NUM_iid_token_to_privacy	3
 #define ACTION_NUM_prefix_mac_to_ipv6	4
 #define ACTION_NUM_anonymize		5
-#define ACTION_NUM_6rd_local_prefix		6
+#define ACTION_NUM_6rd_local_prefix	6
 #define ACTION_NUM_undefined		31
 
 #define ACTION_auto			(uint32_t) 0x0

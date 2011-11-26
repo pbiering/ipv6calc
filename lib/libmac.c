@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.13 2011/11/05 18:18:56 peter Exp $
+ * Version    : $Id: libmac.c,v 1.14 2011/11/26 16:07:23 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -56,7 +56,7 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 		};
 	};
 
-	if ( ! ( (ccolons == 5 && cdashes == 0 && cspaces == 0) || (ccolons == 0 && cdashes == 5 && cspaces == 0)  || (ccolons == 0 && cdashes == 0 && cspaces == 5) || (ccolons == 0 && cdashes == 1 && cspaces == 0 && strlen(addrstring) == 13)) ) {
+	if ( ! ( (ccolons == 5 && cdashes == 0 && cspaces == 0) || (ccolons == 0 && cdashes == 5 && cspaces == 0)  || (ccolons == 0 && cdashes == 0 && cspaces == 5) || (ccolons == 0 && cdashes == 1 && cspaces == 0 && strlen(addrstring) == 13) || (ccolons == 0 && cdashes == 0 && cspaces == 0 && strlen(addrstring) == 12)) ) {
 		snprintf(resultstring, NI_MAXHOST - 1, "Error, given MAC address '%s' is not valid (number of colons/dashes/spaces is not 5 or number of dashes is not 1)!", addrstring);
 		retval = 1;
 		return (retval);
@@ -71,6 +71,8 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 		result = sscanf(addrstring, "%2x%2x%2x-%2x%2x%2x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5]);
 	} else if ( cspaces == 5 ) {
 		result = sscanf(addrstring, "%x %x %x %x %x %x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5]);
+	} else if ( cdashes == 0 ) {
+		result = sscanf(addrstring, "%2x%2x%2x%2x%2x%2x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5]);
 	} else {
 		snprintf(resultstring, NI_MAXHOST - 1, "Error, unexpected failure on scanning MAC address '%s'!", addrstring);
 		retval = 1;

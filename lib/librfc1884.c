@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.c
- * Version    : $Id: librfc1884.c,v 1.12 2011/09/16 18:05:13 peter Exp $
+ * Version    : $Id: librfc1884.c,v 1.13 2011/11/26 16:07:23 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -313,11 +313,20 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 		retval = 0;
 	};
 
-
-	if ( ( retval == 0 ) && ( ipv6addrp->flag_prefixuse == 1 ) ) {
+	if ( ( retval == 0 ) && ( ipv6addrp->flag_prefixuse == 1 ) && ((formatoptions & FORMATOPTION_literal) == 0) ) {
 		snprintf(resultstring, NI_MAXHOST - 1, "%s/%u", tempstring, (unsigned int) ipv6addrp->prefixlength);
 	} else {
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
+		if ((formatoptions & FORMATOPTION_literal) != 0) {
+			/* replace : by - */
+			for (i =0; i < strlen(tempstring); i++) {
+				if (tempstring[i] == ':') {
+					tempstring[i] = '-';
+				};
+			};
+			snprintf(resultstring, NI_MAXHOST - 1, "%s.ipv6-literal.net", tempstring);
+		} else {
+			snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
+		};
 	};
 
 	if ( (formatoptions & FORMATOPTION_printlowercase) != 0 ) {

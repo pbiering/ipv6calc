@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.24 2011/10/08 11:53:23 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.25 2011/11/26 16:07:23 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -404,6 +404,16 @@ static void printhelp_output_ipv6addr(void) {
 	fprintf(stderr, "   3ffe:ffff:0100:f101:0000:0000:0000:0001 -> 3ffe:ffff:100:f101::1\n");
 };
 
+static void printhelp_output_ipv6literal(void) {
+	fprintf(stderr, " Print a given IPv6 address in literal format depending on format options:\n");
+	fprintf(stderr, "  Uncompressed, e.g.\n");
+	fprintf(stderr, "   2001:db8::1 -> 2001-db8-0-0-0-0-0-1.ipv6-literal.net\n");
+	fprintf(stderr, "  Full uncompressed, e.g.\n");
+	fprintf(stderr, "   2001:db8::1 -> 2001-0db8-0000-0000-0000-0000-0000-0001.ipv6-literal.net\n");
+	fprintf(stderr, "  Compressed (default), e.g.\n");
+	fprintf(stderr, "   2001:db8::1 -> 2001-db8--1.ipv6-literal.net\n");
+};
+
 static void printhelp_output_eui64(void) {
 	fprintf(stderr, " Print a generated EUI-64 identifier, e.g.:\n");
 	fprintf(stderr, "  00:50:BF:06:B4:F5 -> 0250:bfff:fe06:b4f5\n");
@@ -489,6 +499,10 @@ void printhelp_output_dispatcher(const uint32_t outputtype) {
 			
 		case FORMAT_ipv6addr:
 			printhelp_output_ipv6addr();
+			break;
+			
+		case FORMAT_ipv6literal:
+			printhelp_output_ipv6literal();
 			break;
 			
 		case FORMAT_eui64:

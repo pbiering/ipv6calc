@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.19 2011/11/05 18:18:56 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.20 2011/11/26 16:07:23 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -225,8 +225,8 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		goto END_libipv6calc_autodetectinput;
 	};
 	
-	if (length >= 11 && length <= 17 && numxdigits >= 6 && numxdigits <= 12 && numdots == 0 && ( (numcolons == 5 && numdashes == 0 && numspaces == 0) || (numcolons == 0 && numdashes == 5 && numspaces == 0) || (numcolons == 0 && numdashes == 0 && numspaces == 5) || (numcolons == 0 && numdashes == 1 && numspaces == 0 && numxdigits == 12) ) ) {
-		/* MAC 00:00:00:00:00:00 or 00-00-00-00-00-00 or "xx xx xx xx xx xx" or "xxxxxx-xxxxxx" */
+	if ((length >= 11 && length <= 17 && numxdigits >= 6 && numxdigits <= 12 && numdots == 0 && ( (numcolons == 5 && numdashes == 0 && numspaces == 0) || (numcolons == 0 && numdashes == 5 && numspaces == 0) || (numcolons == 0 && numdashes == 0 && numspaces == 5))) || (length == 13 && numcolons == 0 && numdashes == 1 && numspaces == 0 && numxdigits == 12) || (length == 12 && numcolons == 0 && numdashes == 0 && numspaces == 0 && numxdigits == 12)) {
+		/* MAC 00:00:00:00:00:00 or 00-00-00-00-00-00 or "xx xx xx xx xx xx" or "xxxxxx-xxxxxx" or xxxxxxxxxxxx */
 
 		if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
 			fprintf(stderr, "%s:  check FORMAT_mac\n", DEBUG_function_name);
@@ -260,6 +260,8 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 			break;
 		};
 
+		} else if (numcolons == 0 && numdashes == 0 && numspaces == 0 && numxdigits == 12) {
+			/* nothing more to check */
 		} else {
 
 		j = 0;
@@ -317,11 +319,17 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		type = FORMAT_ipv6addr;
 		goto END_libipv6calc_autodetectinput;
 	};
+
+	if (numcolons == 0 && numdots == 2 && numslashes == 0 && numdashes >= 3 && (numdashes + numdots + numxdigits + 10) == length) {
+		/* hopefully an IPv6 literal address (e.g. 2001-DB8--1.IPV6-LITERAL.NET) IPV6-LITERAL.NET has 10 chars which are not xdigit  */
+		type = FORMAT_ipv6literal;
+		goto END_libipv6calc_autodetectinput;
+	};
 	
 END_libipv6calc_autodetectinput:	
 	if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
 		if (type != FORMAT_auto_noresult) {
-			fprintf(stderr, "%s: Autodetection found type: %x\n", DEBUG_function_name, (unsigned int) type);
+			fprintf(stderr, "%s: Autodetection found type: 0x%08lx\n", DEBUG_function_name, (unsigned int) type);
 		} else {
 			fprintf(stderr, "%s: Autodetection not successful\n", DEBUG_function_name);
 		};
