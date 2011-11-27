@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.32 2011/11/26 16:07:23 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.33 2011/11/27 15:44:41 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -28,6 +28,8 @@ typedef struct {
 	uint8_t bit_end;		/* end of bit */
 	int flag_startend_use;		/* =1 start or end of bit in use */
 	int flag_valid;			/* address structure filled */
+	char scopeid[NI_MAXHOST];	/* scope ID value */
+	int flag_scopeid;		/* =1: scope ID value set */
 } ipv6calc_ipv6addr;
 
 /* IPv6 address assignment structure */

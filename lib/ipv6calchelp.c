@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.25 2011/11/26 16:07:23 peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.26 2011/11/27 15:44:41 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -412,6 +412,8 @@ static void printhelp_output_ipv6literal(void) {
 	fprintf(stderr, "   2001:db8::1 -> 2001-0db8-0000-0000-0000-0000-0000-0001.ipv6-literal.net\n");
 	fprintf(stderr, "  Compressed (default), e.g.\n");
 	fprintf(stderr, "   2001:db8::1 -> 2001-db8--1.ipv6-literal.net\n");
+	fprintf(stderr, "  With Scope ID, e.g.\n");
+	fprintf(stderr, "   fe80::1%%0    -> fe80--1s0.ipv6-literal.net\n");
 };
 
 static void printhelp_output_eui64(void) {

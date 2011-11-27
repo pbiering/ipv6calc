@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.28 2011/11/26 16:07:23 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.29 2011/11/27 15:44:41 peter Exp $
 # Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -144,9 +144,14 @@ NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 # IPv6 literal
 --in ipv6literal fe80--1.IPV6-LITERAL.NET				=fe80::1
 --in ipv6literal fe80--1.IPV6-liTERal.NET				=fe80::1
+--in ipv6literal fe80--218-8bff-fe17-a226s4.ipv6-literal.net		=fe80::218:8bff:fe17:a226%4
 --out ipv6literal -u --in ipv6addr 2001:db8::1				=2001-DB8--1.IPV6-LITERAL.NET
 --out ipv6literal -U --in ipv6addr 2001:db8::1				=2001-db8-0-0-0-0-0-1.ipv6-literal.net
 --out ipv6literal -F --in ipv6addr 2001:db8::1				=2001-0db8-0000-0000-0000-0000-0000-0001.ipv6-literal.net
+--out ipv6literal --in ipv6addr fe80::1%0				=fe80--1s0.ipv6-literal.net
+--out ipv6literal -F --in ipv6addr fe80::1%0				=fe80-0000-0000-0000-0000-0000-0000-0001s0.ipv6-literal.net
+--out ipv6addr -U --in ipv6addr fe80::1%eth0				=fe80:0:0:0:0:0:0:1%eth0
+--out ipv6addr -F --in ipv6addr fe80::1%eth0				=fe80:0000:0000:0000:0000:0000:0000:0001%eth0
 END
 }
 
@@ -194,10 +199,12 @@ cat <<END | grep -v '^#'
 2001:db8:aaaa:bbbb:cccc:dddd:eeee:AAAA						ipv6addr
 2001:db8:aaaa:bbbb:cccc:dddd:eeee:AaAa						ipv6addr
 64:ff9b::192.0.2.33								ipv6addr
+fe80::1%eth0									ipv6addr
 fe80--1.IPV6-LITERAL.NET							ipv6literal
 2001-db8-0-0-0-0-0-1.ipv6-literal.net						ipv6literal
 2001-0db8-0000-0000-0000-0000-0000-0001.ipv6-literal.net			ipv6literal
 2001-db8--1.ipv6-literal.net							ipv6literal
+fe80--218-8bff-fe17-a226s4.ipv6-literal.net					ipv6literal
 END
 }
 

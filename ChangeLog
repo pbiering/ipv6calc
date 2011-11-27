@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.211 2011/11/26 16:07:23 peter Exp $ 
+ *  $Id: ChangeLog,v 1.212 2011/11/27 15:44:41 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20111127/PB
+	lib/*: support scope IDs on IPv6 addresses (also on literal format)
+
 20111126/PB
 	lib/* ipv6calc/ipv6calc.c: support input/output format "ipv6literal"
 	lib/libmac.c, lib/libipv6calc.c: support MAC format xxxxxxxxxxxx (seen on some network devices) 

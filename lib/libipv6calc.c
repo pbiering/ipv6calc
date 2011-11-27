@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.20 2011/11/26 16:07:23 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.21 2011/11/27 15:44:41 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -142,7 +142,7 @@ void string_to_reverse_dotted(char *string) {
 uint32_t libipv6calc_autodetectinput(const char *string) {
 	uint32_t type = FORMAT_auto_noresult;
 	int i, j, result;
-	int numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, numdashes = 0, numspaces = 0, numslashes = 0, numalnums = 0;
+	int numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, numdashes = 0, numspaces = 0, numslashes = 0, numalnums = 0, numchar_s = 0, numpercents = 0;
 	char resultstring[NI_MAXHOST];
 	size_t length;
 
@@ -159,6 +159,8 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		if (string[i] == '-') { numdashes++; };
 		if (string[i] == '/') { numslashes++; };
 		if (string[i] == ' ') { numspaces++; };
+		if (string[i] == '%') { numpercents++; };
+		if (string[i] == 's') { numchar_s++; };
 		if (isdigit((int) string[i])) { numdigits++; };
 		if (isxdigit((int) string[i])) { numxdigits++; };
 		if (isalnum((int) string[i])) { numalnums++; };
@@ -166,15 +168,17 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 
 	if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
 		fprintf(stderr, "%s: Autodetection source:\n", DEBUG_function_name);
-		fprintf(stderr, "%s:  numdots   :%d\n", DEBUG_function_name, numdots);
-		fprintf(stderr, "%s:  numcolons :%d\n", DEBUG_function_name, numcolons);
-		fprintf(stderr, "%s:  numdashes :%d\n", DEBUG_function_name, numdashes);
-		fprintf(stderr, "%s:  numspaces :%d\n", DEBUG_function_name, numspaces);
-		fprintf(stderr, "%s:  numslashes:%d\n", DEBUG_function_name, numslashes);
-		fprintf(stderr, "%s:  numdigits :%d\n", DEBUG_function_name, numdigits);
-		fprintf(stderr, "%s:  numxdigits:%d\n", DEBUG_function_name, numxdigits);
-		fprintf(stderr, "%s:  numalnums :%d\n", DEBUG_function_name, numalnums);
-		fprintf(stderr, "%s:  length    :%d\n", DEBUG_function_name, (int) length);
+		fprintf(stderr, "%s:  numdots    :%d\n", DEBUG_function_name, numdots);
+		fprintf(stderr, "%s:  numcolons  :%d\n", DEBUG_function_name, numcolons);
+		fprintf(stderr, "%s:  numdashes  :%d\n", DEBUG_function_name, numdashes);
+		fprintf(stderr, "%s:  numspaces  :%d\n", DEBUG_function_name, numspaces);
+		fprintf(stderr, "%s:  numslashes :%d\n", DEBUG_function_name, numslashes);
+		fprintf(stderr, "%s:  numdigits  :%d\n", DEBUG_function_name, numdigits);
+		fprintf(stderr, "%s:  numxdigits :%d\n", DEBUG_function_name, numxdigits);
+		fprintf(stderr, "%s:  numalnums  :%d\n", DEBUG_function_name, numalnums);
+		fprintf(stderr, "%s:  numpercents:%d\n", DEBUG_function_name, numpercents);
+		fprintf(stderr, "%s:  numchar_s  :%d\n", DEBUG_function_name, numchar_s);
+		fprintf(stderr, "%s:  length     :%d\n", DEBUG_function_name, (int) length);
 	};
 
 	if ( length == 20 && numdots == 0 && numcolons == 0 ) {
@@ -314,14 +318,17 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		};
 	};
 	
-	if (numcolons != 0 && numdots <= 3 && numslashes <= 1 && (numdots + numcolons + numxdigits + numslashes) == length) {
+	if (numcolons != 0 && numdots <= 3 && numslashes <= 1 && ((numpercents == 0 && (numdots + numcolons + numxdigits + numslashes) == length) || (numpercents == 1 && (numdots + numcolons + numxdigits + numslashes + numpercents) <= length))) {
 		/* hopefully an IPv6 address */
+		/* fe80::1 */
+		/* fe80::1%eth0 */
 		type = FORMAT_ipv6addr;
 		goto END_libipv6calc_autodetectinput;
 	};
 
-	if (numcolons == 0 && numdots == 2 && numslashes == 0 && numdashes >= 3 && (numdashes + numdots + numxdigits + 10) == length) {
+	if (numcolons == 0 && numdots == 2 && numslashes == 0 && numdashes >= 3 && ((numchar_s == 0 && (numdashes + numdots + numxdigits + 10) == length) || (numchar_s == 1 && (numdashes + numdots + numxdigits + numchar_s + 10) <= length))) {
 		/* hopefully an IPv6 literal address (e.g. 2001-DB8--1.IPV6-LITERAL.NET) IPV6-LITERAL.NET has 10 chars which are not xdigit  */
+		/* also supported with scope: fe80--218-8bff-fe17-a226s4.ipv6-literal.net */
 		type = FORMAT_ipv6literal;
 		goto END_libipv6calc_autodetectinput;
 	};

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.42 2011/11/26 16:07:23 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.43 2011/11/27 15:44:41 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -227,6 +227,7 @@ void ipv6addr_clearall(ipv6calc_ipv6addr *ipv6addrp) {
 	ipv6addrp->flag_prefixuse = 0;
 	ipv6addrp->prefixlength = 0;
 	ipv6addrp->flag_valid = 0;
+	ipv6addrp->flag_scopeid = 0;
 	
 	return;
 };
@@ -524,7 +525,7 @@ int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, char *re
 #define DEBUG_function_name "libipv6addr/addrliteral_to_ipv6addrstruct"
 int addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1, i;
-	char tempstring[NI_MAXHOST], *cptr;
+	char tempstring[NI_MAXHOST], tempstring2[NI_MAXHOST], *cptr;
 	const char *literalstring = ".ipv6-literal.net";
 
 	resultstring[0] = '\0'; /* clear result string */
@@ -533,11 +534,17 @@ int addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, ip
 		fprintf(stderr, "%s: Got input '%s'\n", DEBUG_function_name, addrstring);
 	};
 
+	/* lowercase string */
+	for (i = 0; i <= strlen(addrstring); i++) {
+		/* including trailing \0 */
+		tempstring2[i] = tolower(addrstring[i]);
+	}
+
 	/* search for literal string */
-	cptr = strcasestr(addrstring, literalstring);
+	cptr = strstr(tempstring2, literalstring);
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s: String lengths addrstring=%d strcasestr=%d literal=%d\n", DEBUG_function_name, strlen(addrstring), strlen(cptr), strlen(literalstring));
+		fprintf(stderr, "%s: String lengths addrstring=%d strstr=%d literal=%d\n", DEBUG_function_name, strlen(addrstring), strlen(cptr), strlen(literalstring));
 	};
 
 	if (cptr == NULL) {
@@ -561,6 +568,8 @@ int addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, ip
 	for (i = 0; i < strlen(tempstring); i++) {
 		if (tempstring[i] == '-') {
 			tempstring[i] = ':';
+		} else if (tempstring[i] == 's') {
+			tempstring[i] = '%';
 		};
 	};
 
@@ -586,7 +595,7 @@ int addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, ip
 #define DEBUG_function_name "libipv6addr/addr_to_ipv6addrstruct"
 int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1, result, i, cpoints = 0, ccolons = 0, cxdigits = 0;
-	char *addronlystring, *cp, tempstring[NI_MAXHOST], *cptr, **ptrptr;
+	char *addronlystring, *cp, tempstring[NI_MAXHOST], tempstring2[NI_MAXHOST], *cptr, **ptrptr;
 	int expecteditems = 0;
 	int temp[8];
 	unsigned int compat[4];
@@ -600,28 +609,18 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 		fprintf(stderr, "%s: Got input '%s'\n", DEBUG_function_name, addrstring);
 	};
 
-	if ((strlen(addrstring) < 2) || (strlen(addrstring) > 49)) {
-		/* min: :: */
-		/* max: ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/128 */
-		/* max: ffff:ffff:ffff:ffff:ffff:ffff:123.123.123.123/128 */
-		snprintf(resultstring, NI_MAXHOST - 1, "Error in given IPv6 address, has not 2 to 49 chars!");
-		return (1);
-	};
-
 	if (strlen(addrstring) > sizeof(tempstring) - 1) {
 		fprintf(stderr, "Input too long: %s\n", addrstring);
 		return (1);
 	};
 
-	snprintf(tempstring, sizeof(tempstring) - 1, "%s", addrstring);
-	
 	ipv6addr_clearall(ipv6addrp);
 
+	snprintf(tempstring, sizeof(tempstring) - 1, "%s", addrstring);
+	
 	/* save prefix length first, if available */
-	ipv6addrp->flag_prefixuse = 0; /* reset flag first */
-
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s: Call strtok_r\n", DEBUG_function_name);
+		fprintf(stderr, "%s: Call strtok_r, searching for / in %s\n", DEBUG_function_name, tempstring);
 	};
 
 	addronlystring = strtok_r(tempstring, "/", ptrptr);
@@ -650,6 +649,43 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 			fprintf(stderr, "%s: prefix length %u\n", DEBUG_function_name, (unsigned int) ipv6addrp->prefixlength);
 			fprintf(stderr, "%s: flag_prefixuse %d\n", DEBUG_function_name, ipv6addrp->flag_prefixuse);
 		};
+	};
+
+	snprintf(tempstring2, sizeof(tempstring2) - 1, "%s", addronlystring);
+
+	/* save scope ID, if available */
+	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		fprintf(stderr, "%s: Call strtok_r, searching for %% in %s\n", DEBUG_function_name, tempstring2);
+	};
+
+	addronlystring = strtok_r(tempstring2, "%%", ptrptr);
+	
+	if ( addronlystring == NULL ) {
+		fprintf(stderr, "Strange input: %s\n", addronlystring);
+		return (1);
+	};
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		fprintf(stderr, "%s: Got address only string: %s\n", DEBUG_function_name, addronlystring);
+	};
+
+	cp = strtok_r (NULL, "%", ptrptr);
+	if ( cp != NULL ) {
+		ipv6addrp->flag_scopeid = 1;
+		snprintf(ipv6addrp->scopeid, sizeof(ipv6addrp->scopeid) - 1, "%s", cp);
+		
+		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+			fprintf(stderr, "%s: scope ID    : %s\n", DEBUG_function_name, ipv6addrp->scopeid);
+			fprintf(stderr, "%s: flag_scopeid: %d\n", DEBUG_function_name, ipv6addrp->flag_scopeid);
+		};
+	};
+
+	if ((strlen(addronlystring) < 2) || (strlen(addronlystring) > 45)) {
+		/* min: :: */
+		/* max: ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/128 */
+		/* max: ffff:ffff:ffff:ffff:ffff:ffff:123.123.123.123 */
+		snprintf(resultstring, NI_MAXHOST - 1, "Error in given IPv6 address, has not 2 to 45 chars!");
+		return (1);
 	};
 
 	/* uncompress string, if necessary */
@@ -874,9 +910,18 @@ static int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char
 					tempstring[i] = '-';
 				};
 			};
-			snprintf(resultstring, NI_MAXHOST - 1, "%s.ipv6-literal.net", tempstring);
+
+			if (ipv6addrp->flag_scopeid) {
+				snprintf(resultstring, NI_MAXHOST - 1, "%ss%s.ipv6-literal.net", tempstring, ipv6addrp->scopeid);
+			} else {
+				snprintf(resultstring, NI_MAXHOST - 1, "%s.ipv6-literal.net", tempstring);
+			}
 		} else {
-			snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
+			if (ipv6addrp->flag_scopeid) {
+				snprintf(resultstring, NI_MAXHOST - 1, "%s%%%s", tempstring, ipv6addrp->scopeid);
+			} else {
+				snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
+			};
 		};
 	};
 
