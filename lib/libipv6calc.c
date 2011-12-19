@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.21 2011/11/27 15:44:41 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.22 2011/12/19 21:20:44 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -336,7 +336,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 END_libipv6calc_autodetectinput:	
 	if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
 		if (type != FORMAT_auto_noresult) {
-			fprintf(stderr, "%s: Autodetection found type: 0x%08lx\n", DEBUG_function_name, (unsigned int) type);
+			fprintf(stderr, "%s: Autodetection found type: 0x%08x\n", DEBUG_function_name, (unsigned int) type);
 		} else {
 			fprintf(stderr, "%s: Autodetection not successful\n", DEBUG_function_name);
 		};
