@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.25 2011/10/08 17:16:33 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.26 2011/12/19 21:22:34 peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -21,10 +21,25 @@
 #  SERVER_PROTOCOL: check for INCLUDED (called by SSI)
 #  QUERY_STRING   : for language setting
 #    Currently supported:
+#      Always:
 #	"lang=$lang" with $lang in @supported_languages
 #	"format=$format" with $format in @supported_formats
+#      Mode=mixed/form
+#	"input=$input"
+#	"token=$token"
+#
+## program controls by httpd's setenv
+#  IPV6CALCWEB_MODE                : info (default), form (display a form for user input), mixed (both)
+#  IPV6CALCWEB_INFO_SERVER         : 0 (default), 1 (show information about server)
+#  IPV6CALCWEB_DEBUG               : 0 (default)
+#  IPV6CALCWEB_DB_IP2LOCATION_IPV4 : IP2Location IPv4 database file (optional)
+#  IPV6CALCWEB_DB_IP2LOCATION_IPV6 : IP2Location IPv6 database file (optional)
+#  IPV6CALCWEB_DB_GEOPIP_IPV4      : GeoIPv4 database file (optional)
+#  IPV6CALCWEB_DB_GEOPIP_IPV6      : GeoIPv6 database file (optional)
+#  IPV6CALCWEB_BIN_IPV6CALC        : path to ipv6calc binary (optional)
 
 use strict;
+use URI::Escape;
 
 ## Defines
 # Program information
@@ -36,7 +51,7 @@ my $program_version = "@PACKAGE_VERSION@";
 my $program_required_ipv6calc_output_version = 2;
 
 
-# Debug value
+## Debug value
 my $debug = 0;
 #$debug |= 0x02;
 #$debug |= 0x10;
@@ -45,7 +60,34 @@ my $debug = 0;
 
 # debug | 0x10: print raw ipv6calc output
 # debug | 0x02: print result of find_file to stderr
+# debug | 0x40: print form input/token to stderr
+# debug | 0x80: print environment to stderr
 
+if ( defined $ENV{'IPV6CALCWEB_DEBUG'} ) {
+	if ($ENV{'IPV6CALCWEB_DEBUG'} =~ /^[0-9]+$/) {
+		$debug = $ENV{'IPV6CALCWEB_DEBUG'};
+	} elsif ($ENV{'IPV6CALCWEB_DEBUG'} =~ /^0x[0-9a-f]+$/oi) {
+		$debug = hex($ENV{'IPV6CALCWEB_DEBUG'});
+	};
+};
+
+## debug output
+if ($debug & 0x80) {
+	foreach my $key (sort keys %ENV) {
+		print STDERR "  DEBUG/ENV: " . $key . "=" . $ENV{$key} . "\n";
+	};
+}
+
+## Program mode
+my $mode = "info";
+
+if ( defined $ENV{'IPV6CALCWEB_MODE'} ) {
+	if ($ENV{'IPV6CALCWEB_MODE'} eq "form") {
+		$mode = "form";
+	} elsif ($ENV{'IPV6CALCWEB_MODE'} eq "mixed") {
+		$mode = "mixed";
+	};
+};
 
 # List of deefault location of files (first existing one would be choosen)
 my @list_bin_ipv6calc = (
@@ -87,18 +129,48 @@ sub find_file(@) {
 };
 
 # Location of binary
-my $bin_ipv6calc = find_file(@list_bin_ipv6calc);
+my $bin_ipv6calc;
+if (defined $ENV{'IPV6CALCWEB_BIN_IPV6CALC'}) {
+	$bin_ipv6calc = $ENV{'IPV6CALCWEB_BIN_IPV6CALC'};
+} else {
+	$bin_ipv6calc = find_file(@list_bin_ipv6calc);
+};
+
 my $options_ipv6calc = "-m -i -q";
 
-my $database_ip2location_ipv4 = find_file(@list_database_ip2location_ipv4);
-my $database_ip2location_ipv6 = find_file(@list_database_ip2location_ipv6);
+my $database_ip2location_ipv4;
+if (defined $ENV{'IPV6CALCWEB_DB_IP2LOCATION_IPV4'}) {
+	$database_ip2location_ipv4 = $ENV{'IPV6CALCWEB_DB_IP2LOCATION_IPV4'};
+} else {
+	$database_ip2location_ipv4 = find_file(@list_database_ip2location_ipv4);
+};
+
+my $database_ip2location_ipv6;
+if (defined $ENV{'IPV6CALCWEB_DB_IP2LOCATION_IPV6'}) {
+	$database_ip2location_ipv6 = $ENV{'IPV6CALCWEB_DB_IP2LOCATION_IPV6'};
+} else {
+	$database_ip2location_ipv6 = find_file(@list_database_ip2location_ipv6);
+};
+
 my %info_ip2location;
 my $info_ip2location_string;
 my $info_ip2location_string_ipv4;
 my $info_ip2location_string_ipv6;
 
-my $database_geoip_ipv4 = find_file(@list_database_geoip_ipv4);
-my $database_geoip_ipv6 = find_file(@list_database_geoip_ipv6);
+my $database_geoip_ipv4;
+if (defined $ENV{'IPV6CALCWEB_DB_GEOIP_IPV4'}) {
+	$database_geoip_ipv4 = $ENV{'IPV6CALCWEB_DB_GEOIP_IPV4'};
+} else {
+	$database_geoip_ipv4 = find_file(@list_database_geoip_ipv4);
+};
+
+my $database_geoip_ipv6;
+if (defined $ENV{'IPV6CALCWEB_DB_GEOIP_IPV6'}) {
+	$database_geoip_ipv6 = $ENV{'IPV6CALCWEB_DB_GEOIP_IPV6'};
+} else {
+	$database_geoip_ipv6 = find_file(@list_database_geoip_ipv6);
+};
+
 my $flag_geoip_used = 0;
 my $info_geoip_string;
 my $info_geoip_string_ipv4;
@@ -172,6 +244,12 @@ my $outputtype = "full";
 # skip server = 1
 my $skip_server = 1;
 
+if ( defined $ENV{'IPV6CALCWEB_INFO_SERVER'} ) {
+	if ($ENV{'IPV6CALCWEB_INFO_SERVER'} eq "1") {
+		$skip_server = 0;
+	};
+};
+
 ## Text
 # Language
 my @supported_languages = ( "de", "en");
@@ -230,6 +308,10 @@ my %text = (
 	'OUI' => {
 		'de' => "Hersteller-Identifizierung der Netzwerkarte",
 		'en' => "Vendor identification of network interface card",
+	},
+	'INPUT' => {
+		'de' => "Ihre Eingabe",
+		'en' => "Your input",
 	},
 	'REMOTE' => {
 		'de' => "Ihr Client",
@@ -416,8 +498,16 @@ my @sort_server;
 my $length_max_key = 0;
 my $length_max_description = 0;
 my $query_string;
+my $error;
 
 my $maxenvlength = 256;
+
+my $input;
+my $input_default;
+my $token;
+my @info_input;
+my %infoh_input;
+my @sort_input;
 
 # default values
 my $ipv6calc_version = "";
@@ -435,7 +525,8 @@ sub print_error ($) {
 	if ( defined $message ) {
 		printf STDERR $message . "\n";
 	};
-	exit 1;
+	goto("OUTPUT_BEGIN_ERROR");
+	#exit 1;
 };
 
 ## Print conditional html
@@ -656,9 +747,9 @@ sub print_infohash ($$) {
 # Parse query string first 
 if ( defined $ENV{'QUERY_STRING'} ) {
 	# split query string
-	foreach my $query_stringlet (split /\?/, $ENV{'QUERY_STRING'}) {
-		if ($query_stringlet !~ /^([[:alnum:]]+)=([[:alnum:]]+)$/ ) {
-			&print_error("Error: problem with data");
+	foreach my $query_stringlet (split /[\?\&]/, $ENV{'QUERY_STRING'}) {
+		if ($query_stringlet !~ /^([[:alnum:]]+)=([[:alnum:].-:%]+)$/ ) {
+			&print_error("Error: problem with data in query_stringlet");
 			next;
 		};
 
@@ -677,6 +768,28 @@ if ( defined $ENV{'QUERY_STRING'} ) {
 					$outputformat = $formattest;
 					last;
 				};
+			};
+		} elsif ($name eq "input") {
+			if (length($value) >  $maxenvlength) {
+				&print_error("Error: problem with data in query_stringlet (input too long)");
+				next;
+			};
+			$input = uri_unescape($value);
+			if ($debug & 0x40) {
+				print STDERR "QUERY_STRING contains: input=" . $input . "\n";	
+			};
+		} elsif ($name eq "token") {
+			if (length($value) >  $maxenvlength) {
+				&print_error("Error: problem with data in query_stringlet (token too long)");
+				next;
+			};
+			if ($value !~ /^[[:alnum:]]+$/) {
+				&print_error("Error: problem with data in query_stringlet (token has unexpected chars)");
+				next;
+			};
+			$token = $value;
+			if ($debug & 0x40) {
+				print STDERR "QUERY_STRING contains: token=" . $token . "\n";	
 			};
 		};
 	};
@@ -739,7 +852,6 @@ if ( defined $ENV{'SERVER_NAME'} ) {
 	$name_server = $1;
 };
 
-
 ## Check type
 if ( defined $ENV{'SERVER_PROTOCOL'} ) {
 	if ( $ENV{'SERVER_PROTOCOL'} eq "INCLUDED" ) {
@@ -750,10 +862,6 @@ if ( defined $ENV{'SERVER_PROTOCOL'} ) {
 	};
 };
 
-
-## HTML header
-&print_tagoutput ("Content-type: text/html\n\n");
-&print_textonly  ("Content-type: text/plain\n\n");
 
 ## Get and fill information
 
@@ -882,6 +990,56 @@ if ((defined $addr_server) && ($skip_server == 0)) {
 	};
 };
 
+if ((defined $input) && ($mode eq "form" || $mode eq "mixed")) {
+	@info_input = `$bin_ipv6calc $options_ipv6calc $input`;
+	if ( $? != 0 ) {
+		&print_error("Error: problem retrieving data");
+	};
+
+	print "***input***\n" if ($debug & 0x10);
+
+	for my $line (@info_input) {
+		print $line if ($debug & 0x10);
+		my ( $key, $content ) = split /=/, $line, 2;
+		if ( (! defined $key) || (! defined $content) ) {
+			&print_error("Error: problem parsing data");
+		};
+		chomp $content;
+
+		if ( $key =~ /^IP2LOCATION_/ ) {
+			if ( $content =~ /^This (parameter|record) is unavailable/ || length($content) == 0) {
+				#$content = "n/a";
+				next;
+			};
+		};
+
+		if ( $key =~ /^GEOIP_/ ) {
+			$flag_geoip_used = 1;
+		};
+
+		# catch internal keys
+		if ( $key =~ /^IPV6CALC_/ ) {
+			if ( $key eq "IPV6CALC_COPYRIGHT" ) {
+				$ipv6calc_copyright = $content;
+				$ipv6calc_copyright =~ s/^\"//;
+				$ipv6calc_copyright =~ s/\"$//;
+			};
+			if ( $key eq "IPV6CALC_VERSION" ) {
+				$ipv6calc_version = $content;
+				$ipv6calc_version =~ s/^\"//;
+				$ipv6calc_version =~ s/\"$//;
+			};
+			if ( $key eq "IPV6CALC_NAME" ) {
+				$ipv6calc_name = $content;
+				$ipv6calc_name =~ s/^\"//;
+				$ipv6calc_name =~ s/\"$//;
+			};
+		};
+
+		$infoh_input{$key} = $content;
+		push @sort_input, $key;
+	};
+};
 
 ## Print content
 if ($debug & 0x01) {
@@ -893,8 +1051,11 @@ if ($debug & 0x01) {
 	for my $key (keys %infoh_server) {
 		print STDERR " " . $key . "=" .  $infoh_server{$key} . "\n";
 	};
+	print STDERR "INPUT\n";
+	for my $key (keys %infoh_input) {
+		print STDERR " " . $key . "=" .  $infoh_input{$key} . "\n";
+	};
 };
-
 
 ## Calculate max lengths
 for my $key (keys %text) {
@@ -907,9 +1068,20 @@ for my $key (keys %text) {
 
 	};
 };
-	
+
+goto("OUTPUT_BEGIN");
+
+OUTPUT_BEGIN_ERROR:
+$error = "$program_name: unexpected problem occurs";
+
+OUTPUT_BEGIN:
 
 ## Print output
+#
+## HTML header
+&print_tagoutput ("Content-type: text/html\n\n");
+&print_textonly  ("Content-type: text/plain\n\n");
+
 if ($outputformat eq "htmlfull") {
 	&print_tagoutput ( "<html>\n" );
 	&print_tagoutput ( "  <head>\n" );
@@ -917,40 +1089,84 @@ if ($outputformat eq "htmlfull") {
 	&print_tagoutput ( "    <title>" );
 	print $text{'title'}->{$lang};
 	&print_tagoutput ( "</title>\n" );
+	&print_tagoutput ( "
+    <style type=\"text/css\">
+      .th_input  { background-color:#DDDDFF; }
+      .th_client { background-color:#FFDDDD; }
+      .th_server { background-color:#DDFFDD; }
+      .td_footer { background-color:#DDDDDD; }
+    </style>
+\n" );
 	&print_tagoutput ( "  </head>\n" );
 	&print_tagoutput ( "  <body>\n" );
-
 };
+
+if (defined $error) {
+	print $error . "\n";
+	goto("OUTPUT_END");
+};
+
 
 &print_tagoutput ( "    <table border CELLSPACING=0>\n" );
 
-# Client
-&print_textonly ("\n");
-&print_tagoutput ( "      <tr>\n" );
-&print_tagoutput ( "        <th colspan=\"3\">" );
-print $text{'REMOTE'}->{$lang};
-&print_textonly ("\n");
-&print_tagoutput ( "</th>\n" );
-&print_tagoutput ( "      </tr>\n" );
-&print_infohash (\%infoh_remote, \@sort_remote);
-
-
-if ( $skip_server == 0 ) {
-	# Server
+if ($mode eq "form" || $mode eq "mixed") {
+	# Input
 	&print_textonly ("\n");
 	&print_tagoutput ( "      <tr>\n" );
 	&print_tagoutput ( "        <th colspan=\"3\">" );
-	print $text{'SERVER'}->{$lang};
+	&print_tagoutput ( "          <form action=\"" . $ENV{'REQUEST_URI'} . "\" method=\"get\">" );
+	if (!defined $input) {
+		$input = "::1";
+		$input_default = 1;
+	};
+	&print_tagoutput ( "            <p>Address: <input name=\"input\" type=\"text\" size=\"64\" maxlength=\" $maxenvlength\" value=\"$input\">" );
+	&print_tagoutput ( "            <input name=\"token\" type=\"text\" size=\"128\" maxlength=\"128\" value=\"0123\" hidden>" );
+	&print_tagoutput ( "            <input name=\"lang\" type=\"text\" size=\"128\" maxlength=\"128\" value=\"$lang\" hidden>" );
+	&print_tagoutput ( "            <input type=\"submit\" value=\" Send \">  <input type=\"reset\" value=\" Cancel \">" );
+	&print_tagoutput ( "          </form>" );
 	&print_textonly ("\n");
-	&print_tagoutput ( "</th>\n" );
+	&print_tagoutput ( "        </th>\n" );
 	&print_tagoutput ( "      </tr>\n" );
-	&print_infohash (\%infoh_server, \@sort_server);
+
+	if (defined $input && !defined $input_default) {
+		&print_tagoutput ( "      <tr>\n" );
+		&print_tagoutput ( "        <th class=\"th_input\" colspan=\"3\">" );
+		print $text{'INPUT'}->{$lang} . " " . $input;
+		&print_textonly ("\n");
+		&print_tagoutput ( "        </th>\n" );
+		&print_tagoutput ( "      </tr>\n" );
+		&print_infohash (\%infoh_input, \@sort_input);
+	};
+};
+
+if ($mode eq "info" || $mode eq "mixed") {
+	# Client
+	&print_textonly ("\n");
+	&print_tagoutput ( "      <tr>\n" );
+	&print_tagoutput ( "        <th class=\"th_client\" colspan=\"3\">" );
+	print $text{'REMOTE'}->{$lang};
+	&print_textonly ("\n");
+	&print_tagoutput ( "        </th>\n" );
+	&print_tagoutput ( "      </tr>\n" );
+	&print_infohash (\%infoh_remote, \@sort_remote);
+
+	if ((defined $addr_server) && ($skip_server == 0)) {
+		# Server
+		&print_textonly ("\n");
+		&print_tagoutput ( "      <tr>\n" );
+		&print_tagoutput ( "        <th class=\"th_server\" colspan=\"3\">" );
+		print $text{'SERVER'}->{$lang};
+		&print_textonly ("\n");
+		&print_tagoutput ( "        </th>\n" );
+		&print_tagoutput ( "      </tr>\n" );
+		&print_infohash (\%infoh_server, \@sort_server);
+	};
 };
 
 # Footer
 &print_textonly ("\n");
 &print_tagoutput ( "      <tr>\n" );
-&print_tagoutput ( "        <td colspan=\"3\">\n" );
+&print_tagoutput ( "        <td class=\"td_footer\" colspan=\"3\">\n" );
 
 if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 	print "          <font size=-2>" . $text{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "</font><br>\n";
@@ -1030,6 +1246,9 @@ if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 &print_tagoutput ( "        </td>\n" );
 &print_tagoutput ( "      </tr>\n" );
 &print_tagoutput ( "    </table>\n" );
+
+
+OUTPUT_END:
 
 if ($outputformat eq "htmlfull") {
 	&print_tagoutput ( "  </body>\n" );

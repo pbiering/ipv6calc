@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.212 2011/11/27 15:44:41 peter Exp $ 
+ *  $Id: ChangeLog,v 1.213 2011/12/19 21:22:34 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20111219/PB
+	ipv6calcweb.cgi: add support for form mode and configuration via SetEnv
+
 20111127/PB
 	lib/*: support scope IDs on IPv6 addresses (also on literal format)
 
