@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.52 2011/10/08 16:08:33 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.53 2011/12/31 17:23:09 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -68,11 +68,13 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV6=...                      : given IPv6 address full uncompressed\n");
 	fprintf(stderr, " IPV6_REGISTRY=...             : registry token of given IPv6 address\n");
 	fprintf(stderr, " IPV6_PREFIXLENGTH=ddd         : given prefix length\n");
-	fprintf(stderr, " IPV4=ddd.ddd.ddd.ddd          : an included IPv4 address in IID (e.g. ISATAP, TEREDO, NAT64)\n");
-	fprintf(stderr, " IPV4_REGISTRY=...             : registry token of IPv4 address in IID\n");
-	fprintf(stderr, " IPV4_SOURCE=...               : source of IPv4 address\n");
+	fprintf(stderr, " IPV4=ddd.ddd.ddd.ddd          : native IPv4 address\n");
+	fprintf(stderr, " IPV4_REGISTRY=...             : registry token of native IPv4 address\n");
+	fprintf(stderr, " IPV4_PREFIXLENGTH=ddd         : given prefix length of native IPv4 address\n");
+	fprintf(stderr, " IPV4[...]=ddd.ddd.ddd.ddd     : included IPv4 address in IID (e.g. ISATAP, TEREDO, NAT64)\n");
+	fprintf(stderr, " IPV4_REGISTRY[...]=...        : registry token of included IPv4 address\n");
+	fprintf(stderr, " IPV4_SOURCE[...]=...           : source of IPv4 address\n");
 	fprintf(stderr, "  ISATAP|TEREDO-SERVER|TEREDO-CLIENT|6TO4|LINK-LOCAL-IID\n");
-	fprintf(stderr, " IPV4_PREFIXLENGTH=...         : given prefix length of IPv4 address\n");
 	fprintf(stderr, " SLA=xxxx                      : an included SLA\n");
 	fprintf(stderr, " IID=xxxx:xxxx:xxxx:xxxx       : an included interface identifier\n");
 	fprintf(stderr, " EUI48=xx:xx:xx:xx:xx:xx       : an included EUI-48 (MAC) identifier\n");
@@ -82,9 +84,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " EUI64=xx:xx:xx:xx:xx:xx:xx:xx : an included EUI-64 identifier\n");
 	fprintf(stderr, " EUI64_SCOPE=local|global      : scope of EUI-64 identifier\n");
 	fprintf(stderr, " OUI=\"...\"                     : OUI string, if available\n");
-	fprintf(stderr, " TEREDO_IPV4_SERVER=...        : IPv4 address of Teredo server\n");
 	fprintf(stderr, " TEREDO_PORT_CLIENT=...        : port of Teredo client (NAT outside)\n");
-	fprintf(stderr, " TEREDO_IPV4_SERVER_REGISTRY=..: registry token of IPv4 address of Teredo server\n");
 #ifdef SUPPORT_IP2LOCATION
 	fprintf(stderr, " IP2LOCATION_COUNTRY_SHORT=... : Country code of IP address\n");
 	fprintf(stderr, " IP2LOCATION_COUNTRY_LONG=...  : Country of IP address\n");
@@ -113,7 +113,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV6CALC_VERSION=x.y          : Version of ipv6calc\n");
 	fprintf(stderr, " IPV6CALC_COPYRIGHT=\"...\"      : Copyright string\n");
 	fprintf(stderr, " IPV6CALC_OUTPUT_VERSION=x     : Version of output format\n");
-	fprintf(stderr, " IPV6CALC_FEATURES=\"...\"     : Feature string of ipv6calc -v\n");
+	fprintf(stderr, " IPV6CALC_FEATURES=\"...\"       : Feature string of ipv6calc -v\n");
 };
 
 /*
