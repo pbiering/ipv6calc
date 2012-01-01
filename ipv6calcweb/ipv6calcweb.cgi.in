@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.29 2012/01/01 20:26:31 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.30 2012/01/01 20:46:26 peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -29,14 +29,14 @@
 #	"token=$token"
 #
 ## program controls by httpd's setenv
-#  IPV6CALCWEB_MODE                : info (default), form (display a form for user input), mixed (both)
-#  IPV6CALCWEB_INFO_SERVER         : 0 (default), 1 (show information about server)
-#  IPV6CALCWEB_DEBUG               : 0 (default)
-#  IPV6CALCWEB_DB_IP2LOCATION_IPV4 : IP2Location IPv4 database file (optional)
-#  IPV6CALCWEB_DB_IP2LOCATION_IPV6 : IP2Location IPv6 database file (optional)
-#  IPV6CALCWEB_DB_GEOPIP_IPV4      : GeoIPv4 database file (optional)
-#  IPV6CALCWEB_DB_GEOPIP_IPV6      : GeoIPv6 database file (optional)
-#  IPV6CALCWEB_BIN_IPV6CALC        : path to ipv6calc binary (optional)
+#  HTTP_IPV6CALCWEB_MODE                : info (default), form (display a form for user input), mixed (both)
+#  HTTP_IPV6CALCWEB_INFO_SERVER         : 0 (default), 1 (show information about server)
+#  HTTP_IPV6CALCWEB_DEBUG               : 0 (default)
+#  HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV4 : IP2Location IPv4 database file (optional)
+#  HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV6 : IP2Location IPv6 database file (optional)
+#  HTTP_IPV6CALCWEB_DB_GEOPIP_IPV4      : GeoIPv4 database file (optional)
+#  HTTP_IPV6CALCWEB_DB_GEOPIP_IPV6      : GeoIPv6 database file (optional)
+#  HTTP_IPV6CALCWEB_BIN_IPV6CALC        : path to ipv6calc binary (optional)
 
 ## general
 use strict;
@@ -84,11 +84,11 @@ my $debug = 0;
 # debug | 0x0080: print environment to stderr
 # debug | 0x0100: print Anti-DoS token infos to stderr
 
-if ( defined $ENV{'IPV6CALCWEB_DEBUG'} ) {
-	if ($ENV{'IPV6CALCWEB_DEBUG'} =~ /^[0-9]+$/) {
-		$debug = $ENV{'IPV6CALCWEB_DEBUG'};
-	} elsif ($ENV{'IPV6CALCWEB_DEBUG'} =~ /^0x[0-9a-f]+$/oi) {
-		$debug = hex($ENV{'IPV6CALCWEB_DEBUG'});
+if ( defined $ENV{'HTTP_IPV6CALCWEB_DEBUG'} ) {
+	if ($ENV{'HTTP_IPV6CALCWEB_DEBUG'} =~ /^[0-9]+$/) {
+		$debug = $ENV{'HTTP_IPV6CALCWEB_DEBUG'};
+	} elsif ($ENV{'HTTP_IPV6CALCWEB_DEBUG'} =~ /^0x[0-9a-f]+$/oi) {
+		$debug = hex($ENV{'HTTP_IPV6CALCWEB_DEBUG'});
 	};
 };
 
@@ -102,10 +102,10 @@ if ($debug & 0x80) {
 ## Program mode
 my $mode = "info"; # default
 
-if ( defined $ENV{'IPV6CALCWEB_MODE'} ) {
-	if ($ENV{'IPV6CALCWEB_MODE'} eq "form") {
+if ( defined $ENV{'HTTP_IPV6CALCWEB_MODE'} ) {
+	if ($ENV{'HTTP_IPV6CALCWEB_MODE'} eq "form") {
 		$mode = "form";
-	} elsif ($ENV{'IPV6CALCWEB_MODE'} eq "mixed") {
+	} elsif ($ENV{'HTTP_IPV6CALCWEB_MODE'} eq "mixed") {
 		$mode = "mixed";
 	};
 };
@@ -156,11 +156,11 @@ sub find_file(@) {
 
 # Location of binary
 my $bin_ipv6calc;
-if (defined $ENV{'IPV6CALCWEB_BIN_IPV6CALC'}) {
-	if ($ENV{'IPV6CALCWEB_BIN_IPV6CALC'} =~ /^([[:alnum:]\/-]+)$/o) {
+if (defined $ENV{'HTTP_IPV6CALCWEB_BIN_IPV6CALC'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_BIN_IPV6CALC'} =~ /^([[:alnum:]\/-]+)$/o) {
 		$bin_ipv6calc = $1;
 	} else {
-		logging("ERROR", "IPV6CALCWEB_BIN_IPV6CALC found, but not containing proper chars");
+		logging("ERROR", "HTTP_IPV6CALCWEB_BIN_IPV6CALC found, but not containing proper chars");
 		&print_error();
 	};
 } else {
@@ -170,15 +170,15 @@ if (defined $ENV{'IPV6CALCWEB_BIN_IPV6CALC'}) {
 my $options_ipv6calc = "-m -i -q";
 
 my $database_ip2location_ipv4;
-if (defined $ENV{'IPV6CALCWEB_DB_IP2LOCATION_IPV4'}) {
-	$database_ip2location_ipv4 = $ENV{'IPV6CALCWEB_DB_IP2LOCATION_IPV4'};
+if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV4'}) {
+	$database_ip2location_ipv4 = $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV4'};
 } else {
 	$database_ip2location_ipv4 = find_file(@list_database_ip2location_ipv4);
 };
 
 my $database_ip2location_ipv6;
-if (defined $ENV{'IPV6CALCWEB_DB_IP2LOCATION_IPV6'}) {
-	$database_ip2location_ipv6 = $ENV{'IPV6CALCWEB_DB_IP2LOCATION_IPV6'};
+if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV6'}) {
+	$database_ip2location_ipv6 = $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV6'};
 } else {
 	$database_ip2location_ipv6 = find_file(@list_database_ip2location_ipv6);
 };
@@ -189,15 +189,15 @@ my $info_ip2location_string_ipv4;
 my $info_ip2location_string_ipv6;
 
 my $database_geoip_ipv4;
-if (defined $ENV{'IPV6CALCWEB_DB_GEOIP_IPV4'}) {
-	$database_geoip_ipv4 = $ENV{'IPV6CALCWEB_DB_GEOIP_IPV4'};
+if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_IPV4'}) {
+	$database_geoip_ipv4 = $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_IPV4'};
 } else {
 	$database_geoip_ipv4 = find_file(@list_database_geoip_ipv4);
 };
 
 my $database_geoip_ipv6;
-if (defined $ENV{'IPV6CALCWEB_DB_GEOIP_IPV6'}) {
-	$database_geoip_ipv6 = $ENV{'IPV6CALCWEB_DB_GEOIP_IPV6'};
+if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_IPV6'}) {
+	$database_geoip_ipv6 = $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_IPV6'};
 } else {
 	$database_geoip_ipv6 = find_file(@list_database_geoip_ipv6);
 };
@@ -275,8 +275,8 @@ my $outputtype = "full";
 # skip server = 1
 my $skip_server = 1;
 
-if ( defined $ENV{'IPV6CALCWEB_INFO_SERVER'} ) {
-	if ($ENV{'IPV6CALCWEB_INFO_SERVER'} eq "1") {
+if ( defined $ENV{'HTTP_IPV6CALCWEB_INFO_SERVER'} ) {
+	if ($ENV{'HTTP_IPV6CALCWEB_INFO_SERVER'} eq "1") {
 		$skip_server = 0;
 	};
 };
@@ -1097,6 +1097,7 @@ if ( defined $ENV{'REQUEST_URI'} ) {
 ## Check type
 if ( defined $ENV{'SERVER_PROTOCOL'} ) {
 	if ( $ENV{'SERVER_PROTOCOL'} eq "INCLUDED" ) {
+		$mode = "info"; # force info mode
 		if ( $outputformat eq "htmlfull" ) {
 			# Switch back to included html
 			$outputformat = "html";
