@@ -144,6 +144,8 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %files ipv6calcweb
+%defattr(-,root,root)
+
 %doc %{_docdir}/%{name}-%{version}/ipv6calcweb/*
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
 %{_localstatedir}/www/cgi-bin/ipv6calcweb.cgi
