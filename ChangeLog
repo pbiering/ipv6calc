@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.214 2012/01/01 19:41:43 peter Exp $ 
+ *  $Id: ChangeLog,v 1.215 2012/01/01 19:52:06 peter Exp $ 
  */
 
 Info:
@@ -11,6 +11,7 @@ Info:
 20120101/PB
 	ipv6calcweb.cgi: minor review
 	ipv6calc.spec: create subpackage for ipv6calcweb
+	VERSION[.in]: new for improve scripting of build process
 
 20111219/PB
 	ipv6calcweb.cgi: add support for form mode and configuration via SetEnv
