@@ -2,9 +2,9 @@
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2008 by Peter Bieringer <pb@bieringer.de>
 
-Summary: IPv6 address format change and calculation utility
+Summary: IP address format change and calculation utility
 Name: ipv6calc
-Version: 0.92.1
+Version: 0.93.0
 Release: 1
 Group: System Environment/Base
 URL: http://www.deepspace6.net/projects/ipv6calc.html
@@ -47,6 +47,16 @@ Available rpmbuild rebuild options:
 
 %{?_with_geoip: %{expand: Built with GeoIP support}}
 %{?_with_ip2location: %{expand: Built with IP2Location suppport}}
+
+
+%package ipv6calcweb
+Summary: IP address information web utility
+Name: ipv6calcweb
+
+%description ipv6calcweb
+ipv6calcweb contains a CGI program and a configuration file for
+displaying information of IP addresses on a web page.
+
 
 %prep
 %setup -q -n ipv6calc-%{version}
@@ -93,10 +103,13 @@ done
 popd
 
 # ipv6calcweb
-mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6calcweb
-pushd ipv6calcweb
-cp USAGE ipv6calcweb.cgi $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6calcweb
-popd
+install -d $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6calcweb
+install -d $RPM_BUILD_ROOT%{_localstatedir}/www/cgi-bin
+install -d $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d
+
+install ipv6calcweb/USAGE            $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6calcweb
+install ipv6calcweb/ipv6calcweb.cgi  $RPM_BUILD_ROOT%{_localstatedir}/www/cgi-bin
+install ipv6calcweb/ipv6calcweb.conf $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d
 
 # Docs
 for f in ChangeLog README CREDITS TODO COPYING LICENSE USAGE doc/ipv6calc.lyx doc/ipv6calc.sgml doc/ipv6calc.html; do
@@ -127,10 +140,20 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man8/*
 
 # docs, examples and helper
-%{_docdir}/%{name}-%{version}/*
+%doc %{_docdir}/%{name}-%{version}/*
+
+
+%files ipv6calcweb
+%doc %{_docdir}/%{name}-%{version}/ipv6calcweb/*
+%config(noreplace) %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
+%{_localstatedir}/www/cgi-bin/ipv6calcweb.cgi
 
 
 %changelog
+* Sun Jan 01 2012 Peter Bieringer <pb@bieringer.de>
+- create subpackage for ipv6calcweb
+- minor review
+
 * Sat Oct 08 2011 Peter Bieringer <pb@bieringer.de>
 - reduce "make test" to "make test-minimal"
 

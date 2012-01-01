@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.27 2011/12/31 17:26:46 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.28 2012/01/01 19:41:44 peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -147,7 +147,7 @@ my @list_database_geoip_ipv6 = (
 sub find_file(@) {
 	foreach my $file (@_) {
 		if (-e $file) {
-			logging("DEBUG", "find_file selected: $file\n") if ($debug & 0x02);
+			logging("DEBUG", "find_file selected: $file") if ($debug & 0x02);
 			return ($file);
 		};
 	};
@@ -157,7 +157,12 @@ sub find_file(@) {
 # Location of binary
 my $bin_ipv6calc;
 if (defined $ENV{'IPV6CALCWEB_BIN_IPV6CALC'}) {
-	$bin_ipv6calc = $ENV{'IPV6CALCWEB_BIN_IPV6CALC'};
+	if ($ENV{'IPV6CALCWEB_BIN_IPV6CALC'} =~ /^([[:alnum:]\/-]+)$/o) {
+		$bin_ipv6calc = $1;
+	} else {
+		logging("ERROR", "IPV6CALCWEB_BIN_IPV6CALC found, but not containing proper chars");
+		&print_error();
+	};
 } else {
 	$bin_ipv6calc = find_file(@list_bin_ipv6calc);
 };

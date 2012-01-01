@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.213 2011/12/19 21:22:34 peter Exp $ 
+ *  $Id: ChangeLog,v 1.214 2012/01/01 19:41:43 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120101/PB
+	ipv6calcweb.cgi: minor review
+	ipv6calc.spec: create subpackage for ipv6calcweb
+
 20111219/PB
 	ipv6calcweb.cgi: add support for form mode and configuration via SetEnv
 
