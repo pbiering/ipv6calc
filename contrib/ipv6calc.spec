@@ -104,12 +104,12 @@ popd
 
 # ipv6calcweb
 install -d $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6calcweb
-install -d $RPM_BUILD_ROOT%{_localstatedir}/www/cgi-bin
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d
+install -d $RPM_BUILD_ROOT%{_localstatedir}/www/cgi-bin
 
 install -m 644 ipv6calcweb/USAGE            $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6calcweb
-install -m 755 ipv6calcweb/ipv6calcweb.cgi  $RPM_BUILD_ROOT%{_localstatedir}/www/cgi-bin
 install -m 644 ipv6calcweb/ipv6calcweb.conf $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d
+install -m 755 ipv6calcweb/ipv6calcweb.cgi  $RPM_BUILD_ROOT%{_localstatedir}/www/cgi-bin
 
 # Docs
 for f in ChangeLog README CREDITS TODO COPYING LICENSE USAGE doc/ipv6calc.lyx doc/ipv6calc.sgml doc/ipv6calc.html; do
@@ -147,9 +147,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 
 %{_localstatedir}/www/cgi-bin/ipv6calcweb.cgi
-
-%doc %attr(0644) %{_docdir}/%{name}-%{version}/ipv6calcweb/*
-%config(noreplace) %attr(0644) %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
+%doc %{_docdir}/%{name}-%{version}/ipv6calcweb/*
+%config(noreplace) %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
 
 
 %changelog
