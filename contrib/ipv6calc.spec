@@ -146,9 +146,10 @@ rm -rf $RPM_BUILD_ROOT
 %files ipv6calcweb
 %defattr(-,root,root)
 
-%doc %attr(644) %{_docdir}/%{name}-%{version}/ipv6calcweb/*
-%config(noreplace) %attr(644) %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
 %{_localstatedir}/www/cgi-bin/ipv6calcweb.cgi
+
+%doc %attr(0644) %{_docdir}/%{name}-%{version}/ipv6calcweb/*
+%config(noreplace) %attr(0644) %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
 
 
 %changelog
