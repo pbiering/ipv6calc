@@ -51,7 +51,7 @@ Available rpmbuild rebuild options:
 
 %package ipv6calcweb
 Summary: IP address information web utility
-Name: ipv6calcweb
+Group: Web/Applications
 
 %description ipv6calcweb
 ipv6calcweb contains a CGI program and a configuration file for
