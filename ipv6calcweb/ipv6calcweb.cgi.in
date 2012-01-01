@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.28 2012/01/01 19:41:44 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.29 2012/01/01 20:26:31 peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -1196,7 +1196,7 @@ sub ipv6calc_exec($$$$) {
 		};
 
 		$$p_hash{$key} = $content;
-		push $p_array, $key;
+		push @$p_array, $key;
 	};
 	return 0;
 };
