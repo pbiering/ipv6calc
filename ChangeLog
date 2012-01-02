@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.216 2012/01/01 20:17:48 peter Exp $ 
+ *  $Id: ChangeLog,v 1.217 2012/01/02 05:41:20 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120102/PB
+	ipv6calcweb.cgi: additional check on unescaped input
+
 20120101/PB
 	ipv6calcweb.cgi: minor review
 	ipv6calc.spec: create subpackage for ipv6calcweb

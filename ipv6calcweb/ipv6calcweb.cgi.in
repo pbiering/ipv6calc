@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.30 2012/01/01 20:46:26 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.31 2012/01/02 05:41:20 peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -925,6 +925,10 @@ if ( defined $ENV{'QUERY_STRING'} ) {
 				next;
 			};
 			$input = uri_unescape($value);
+			if ($input !~ /^([[:xdigit:]\.\:-]+)$/) {
+				logging("ERROR", "problem with data in query_stringlet (input has unexpected chars)");
+				&print_error();
+			};
 			logging("DEBUG", "QUERY_STRING contains: input=" . $input) if ($debug & 0x40);
 		} elsif ($name eq "tokenhash") {
 			if (length($value) >  $maxenvlength) {
