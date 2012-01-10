@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.25 2011/11/26 16:07:23 peter Exp $
- * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calctypes.h,v 1.26 2012/01/10 20:50:16 peter Exp $
+ * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for ipv6calctypes.c
@@ -210,7 +210,7 @@ typedef struct {
 	{ FORMAT_revnibbles_arpa, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend | FORMATOPTION_printmirrored },
 	{ FORMAT_revipv4, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printmirrored },
 	{ FORMAT_bitstring      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
-	{ FORMAT_ipv6addr       , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed | FORMATOPTION_forceprefix },
+	{ FORMAT_ipv6addr       , FORMATOPTION_machinereadable | FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed | FORMATOPTION_forceprefix },
 	{ FORMAT_mac            , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_eui64          , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_base85         , 0 },
@@ -218,7 +218,7 @@ typedef struct {
 	{ FORMAT_ipv4addr       , FORMATOPTION_machinereadable },
 	{ FORMAT_iid_token      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_octal          , FORMATOPTION_printfulluncompressed },
-	{ FORMAT_ipv6literal    , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed },
+	{ FORMAT_ipv6literal    , FORMATOPTION_machinereadable | FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed },
 	{ FORMAT_prefix_mac     , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase }
 };
 

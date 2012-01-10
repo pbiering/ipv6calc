@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.217 2012/01/02 05:41:20 peter Exp $ 
+ *  $Id: ChangeLog,v 1.218 2012/01/10 20:50:16 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,17 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120110/PB
+	ipv6calc/test_ipv6calc.sh: split good testscenarios into dedicated file test_scenarios.sh
+	ipv6calcweb/test_ipv6calcweb_form.sh: new for testing form mode
+	ipv6calcweb/test_ipv6calcweb.sh: improve error handling by output check
+	lib/ipv6calctypes.h: support machinereadable for FORMAT_ipv6literal
+	lib/libipv6calc.c: minor bugfix
+	ipv6calc/test_showinfo.sh: add FORMAT_ipv6literal tests
+	ipv6calc/test_ipv6calc.sh: split some test scenarios
+	ipv6calc/test_scenarios: new file
+	ipv6calcweb.cgi: minor improvements
+
 20120102/PB
 	ipv6calcweb.cgi: additional check on unescaped input
 

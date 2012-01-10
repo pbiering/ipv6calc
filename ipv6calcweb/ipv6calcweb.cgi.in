@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.31 2012/01/02 05:41:20 peter Exp $
-# Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.32 2012/01/10 20:50:16 peter Exp $
+# Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
 # Simple Perl web interface and security wrapper
@@ -83,6 +83,7 @@ my $debug = 0;
 # debug | 0x0040: print form input/token to stderr
 # debug | 0x0080: print environment to stderr
 # debug | 0x0100: print Anti-DoS token infos to stderr
+# debug | 0x1000: skip Anti-DoS sleep
 
 if ( defined $ENV{'HTTP_IPV6CALCWEB_DEBUG'} ) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DEBUG'} =~ /^[0-9]+$/) {
@@ -896,7 +897,7 @@ sub token_generate($$$) {
 if ( defined $ENV{'QUERY_STRING'} ) {
 	# split query string
 	foreach my $query_stringlet (split /[\?\&]/, $ENV{'QUERY_STRING'}) {
-		if ($query_stringlet !~ /^([[:alnum:]]+)=([[:alnum:].-:%]+)$/ ) {
+		if ($query_stringlet !~ /^([[:alnum:]]+)=([[:alnum:].\-:%]+)$/ ) {
 			logging("ERROR", "generic problem with data in query_stringlet");
 			&print_error();
 			next;
@@ -925,7 +926,7 @@ if ( defined $ENV{'QUERY_STRING'} ) {
 				next;
 			};
 			$input = uri_unescape($value);
-			if ($input !~ /^([[:xdigit:]\.\:-]+)$/) {
+			if ($input !~ /^([[:alnum:]\/\.\:-]+)$/) {
 				logging("ERROR", "problem with data in query_stringlet (input has unexpected chars)");
 				&print_error();
 			};
@@ -1024,10 +1025,10 @@ if ($tokenhash_found == 1 && $tokentime_found == 1) {
 
 	if ($delta < $time_range_min) {
 		logging("NOTICE", "tokentime usage too early, sleep seconds: " . ($time_range_min - $delta));
-		sleep ($time_range_min - ($delta % 5));
+		sleep ($time_range_min - ($delta % 5)) if (! ($debug & 0x1000));
 	} elsif (($delta % $time_range_min) < $time_range_min) {
 		logging("NOTICE", "tokentime (re)usage not aligned to $time_range_min seconds, sleep seconds: " . ($time_range_min - ($delta % $time_range_min)));
-		sleep ($time_range_min - ($delta % $time_range_min));
+		sleep ($time_range_min - ($delta % $time_range_min)) if (! ($debug & 0x1000));
 	} else {
 		logging("DEBUG", "tokentime in range") if ($debug & 0x100);
 	};
@@ -1334,7 +1335,7 @@ if (defined $error) {
 
 if ($mode eq "form" || $mode eq "mixed") {
 	# sleep 500 ms
-	select(undef, undef, undef, 0.5);
+	select(undef, undef, undef, 0.5) if (! ($debug & 0x1000));
 
 	# Input
 	&print_textonly ("\n");
@@ -1346,8 +1347,8 @@ if ($mode eq "form" || $mode eq "mixed") {
 		$input_default = 1;
 	};
 	&print_tagoutput ( "            <p>Address: <input name=\"input\" type=\"text\" size=\"64\" maxlength=\" $maxenvlength\" value=\"$input\">" );
-	&print_tagoutput ( "            <input name=\"tokenhash\" type=\"text\" size=\"128\" maxlength=\"128\" value=\"" . $tokenhash . "\" hidden>" );
-	&print_tagoutput ( "            <input name=\"tokentime\" type=\"text\" size=\"128\" maxlength=\"128\" value=\"" . $tokentime . "\" hidden>" );
+	&print_tagoutput ( "            <input type=\"text\" size=\"128\" maxlength=\"128\" name=\"tokenhash\" value=\"" . $tokenhash . "\" hidden>" );
+	&print_tagoutput ( "            <input type=\"text\" size=\"128\" maxlength=\"128\" name=\"tokentime\" value=\"" . $tokentime . "\" hidden>" );
 	&print_tagoutput ( "            <input name=\"lang\" type=\"text\" size=\"128\" maxlength=\"128\" value=\"$lang\" hidden>" );
 	&print_tagoutput ( "            <input type=\"submit\" value=\"send\">  <input type=\"reset\" value=\"cancel\">" );
 	&print_tagoutput ( "          </form>" );

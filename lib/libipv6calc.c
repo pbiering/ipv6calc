@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.22 2011/12/19 21:20:44 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.23 2012/01/10 20:50:16 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -141,7 +141,7 @@ void string_to_reverse_dotted(char *string) {
 #define DEBUG_function_name "libipv6calc/autodetectinput"
 uint32_t libipv6calc_autodetectinput(const char *string) {
 	uint32_t type = FORMAT_auto_noresult;
-	int i, j, result;
+	int i, j = 0, result;
 	int numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, numdashes = 0, numspaces = 0, numslashes = 0, numalnums = 0, numchar_s = 0, numpercents = 0;
 	char resultstring[NI_MAXHOST];
 	size_t length;
