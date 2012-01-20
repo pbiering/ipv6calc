@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.218 2012/01/10 20:50:16 peter Exp $ 
+ *  $Id: ChangeLog,v 1.219 2012/01/20 17:37:36 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120120/PB
+	ipv6calcweb.cgi: fix taint problem for external environment
+
 20120110/PB
 	ipv6calc/test_ipv6calc.sh: split good testscenarios into dedicated file test_scenarios.sh
 	ipv6calcweb/test_ipv6calcweb_form.sh: new for testing form mode

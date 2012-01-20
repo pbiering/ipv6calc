@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.32 2012/01/10 20:50:16 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.33 2012/01/20 17:37:36 peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -153,75 +153,6 @@ sub find_file(@) {
 		};
 	};
 	return undef;
-};
-
-# Location of binary
-my $bin_ipv6calc;
-if (defined $ENV{'HTTP_IPV6CALCWEB_BIN_IPV6CALC'}) {
-	if ($ENV{'HTTP_IPV6CALCWEB_BIN_IPV6CALC'} =~ /^([[:alnum:]\/-]+)$/o) {
-		$bin_ipv6calc = $1;
-	} else {
-		logging("ERROR", "HTTP_IPV6CALCWEB_BIN_IPV6CALC found, but not containing proper chars");
-		&print_error();
-	};
-} else {
-	$bin_ipv6calc = find_file(@list_bin_ipv6calc);
-};
-
-my $options_ipv6calc = "-m -i -q";
-
-my $database_ip2location_ipv4;
-if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV4'}) {
-	$database_ip2location_ipv4 = $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV4'};
-} else {
-	$database_ip2location_ipv4 = find_file(@list_database_ip2location_ipv4);
-};
-
-my $database_ip2location_ipv6;
-if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV6'}) {
-	$database_ip2location_ipv6 = $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV6'};
-} else {
-	$database_ip2location_ipv6 = find_file(@list_database_ip2location_ipv6);
-};
-
-my %info_ip2location;
-my $info_ip2location_string;
-my $info_ip2location_string_ipv4;
-my $info_ip2location_string_ipv6;
-
-my $database_geoip_ipv4;
-if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_IPV4'}) {
-	$database_geoip_ipv4 = $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_IPV4'};
-} else {
-	$database_geoip_ipv4 = find_file(@list_database_geoip_ipv4);
-};
-
-my $database_geoip_ipv6;
-if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_IPV6'}) {
-	$database_geoip_ipv6 = $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_IPV6'};
-} else {
-	$database_geoip_ipv6 = find_file(@list_database_geoip_ipv6);
-};
-
-my $flag_geoip_used = 0;
-my $info_geoip_string;
-my $info_geoip_string_ipv4;
-my $info_geoip_string_ipv6;
-
-if (defined $database_ip2location_ipv4) {
-	$options_ipv6calc .= " --db-ip2location-ipv4 $database_ip2location_ipv4";
-};
-
-if (defined $database_ip2location_ipv6) {
-	$options_ipv6calc .= " --db-ip2location-ipv6 $database_ip2location_ipv6";
-};
-
-if (defined $database_geoip_ipv4) {
-	$options_ipv6calc .= " --db-geoip-ipv4 $database_geoip_ipv4";
-};
-
-if (defined $database_geoip_ipv6) {
-	$options_ipv6calc .= " --db-geoip-ipv6 $database_geoip_ipv6";
 };
 
 # Whois server urls
@@ -514,6 +445,96 @@ my %text = (
 		'en' => "GeoIP IPv6 database information",
 	},
 );
+
+# Location of binary
+my $bin_ipv6calc;
+if (defined $ENV{'HTTP_IPV6CALCWEB_BIN_IPV6CALC'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_BIN_IPV6CALC'} =~ /^([[:alnum:]\.\-\/]+)$/o) {
+		$bin_ipv6calc = $1;
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_BIN_IPV6CALC found, but not containing proper chars");
+		&print_error();
+	};
+} else {
+	$bin_ipv6calc = find_file(@list_bin_ipv6calc);
+};
+
+my $options_ipv6calc = "-m -i -q";
+
+# Location of database files
+my $database_ip2location_ipv4;
+if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV4'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV4'} =~ /^([[:alnum:]\.\-\/]+)$/) {
+		$database_ip2location_ipv4 = $1;
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV4 found, but not containing proper chars");
+		&print_error();
+	};
+} else {
+	$database_ip2location_ipv4 = find_file(@list_database_ip2location_ipv4);
+};
+
+my $database_ip2location_ipv6;
+if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV6'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV6'} =~ /^([[:alnum:]\.\-\/]+)$/) {
+		$database_ip2location_ipv6 = $1;
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV6 found, but not containing proper chars");
+		&print_error();
+	};
+} else {
+	$database_ip2location_ipv6 = find_file(@list_database_ip2location_ipv6);
+};
+
+my %info_ip2location;
+my $info_ip2location_string;
+my $info_ip2location_string_ipv4;
+my $info_ip2location_string_ipv6;
+
+my $database_geoip_ipv4;
+if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_IPV4'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_IPV4'} =~ /^([[:alnum:]\.\-\/]+)$/) {
+		$database_geoip_ipv4 = $1;
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_DB_GEOIP_IPV4 found, but not containing proper chars");
+		&print_error();
+	};
+} else {
+	$database_geoip_ipv4 = find_file(@list_database_geoip_ipv4);
+};
+
+my $database_geoip_ipv6;
+if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_IPV6'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_IPV6'} =~ /^([[:alnum:].-]+)$/) {
+		$database_geoip_ipv6 = $1;
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_DB_GEOIP_IPV6 found, but not containing proper chars");
+		&print_error();
+	};
+} else {
+	$database_geoip_ipv6 = find_file(@list_database_geoip_ipv6);
+};
+
+my $flag_geoip_used = 0;
+my $info_geoip_string;
+my $info_geoip_string_ipv4;
+my $info_geoip_string_ipv6;
+
+if (defined $database_ip2location_ipv4) {
+	$options_ipv6calc .= " --db-ip2location-ipv4 $database_ip2location_ipv4";
+};
+
+if (defined $database_ip2location_ipv6) {
+	$options_ipv6calc .= " --db-ip2location-ipv6 $database_ip2location_ipv6";
+};
+
+if (defined $database_geoip_ipv4) {
+	$options_ipv6calc .= " --db-geoip-ipv4 $database_geoip_ipv4";
+};
+
+if (defined $database_geoip_ipv6) {
+	$options_ipv6calc .= " --db-geoip-ipv6 $database_geoip_ipv6";
+};
 
 ###### Normally nothing to change here
 
@@ -1283,8 +1304,10 @@ for my $key (keys %text) {
 goto("OUTPUT_BEGIN");
 
 OUTPUT_BEGIN_ERROR:
+my $error_flag = 0;
 if (!defined $error) {
 	$error = "$program_name: unexpected problem occurs";
+	$error_flag = 1;
 } else {
 	$error = "$program_name: " . $error;
 };
@@ -1306,7 +1329,7 @@ if ($outputformat eq "htmlfull") {
 	&print_tagoutput ( "</title>\n" );
 
 	# automatic redirect on errors
-	if (defined $error && defined $ENV{'SCRIPT_NAME'}) {
+	if (defined $error && defined $ENV{'SCRIPT_NAME'} && $error_flag == 0) {
 		&print_tagoutput ( "    <meta HTTP-EQUIV=\"refresh\" CONTENT=\"5;URL=" . $ENV{'SCRIPT_NAME'} . "\">\n" );
 	};
 
