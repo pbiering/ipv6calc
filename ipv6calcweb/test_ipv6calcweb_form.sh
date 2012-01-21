@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ipv6calcweb
 # File       : test_ipv6calcweb_form.sh
-# Version    : $Id: test_ipv6calcweb_form.sh,v 1.1 2012/01/10 20:50:16 peter Exp $
+# Version    : $Id: test_ipv6calcweb_form.sh,v 1.2 2012/01/21 18:55:35 peter Exp $
 # Copyright  : 2012-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -55,13 +55,15 @@ else
 fi 
 
 tokenhash="`echo "$OUTPUT" | grep 'name="tokenhash"' | sed 's/.* name="tokenhash" value="\([0-9a-f]*\)" .*/\1/'`"
-tokentime="`echo "$OUTPUT" | grep 'name="tokenhash"' | sed 's/.* name="tokentime" value="\([0-9]*\)" .*/\1/'`"
+tokentime="`echo "$OUTPUT" | grep 'name="tokentime"' | sed 's/.* name="tokentime" value="\([0-9]*\)" .*/\1/'`"
 if [ ${#tokenhash} -ne 72 ]; then
 	echo "TEST FAILED (tokenhash extraction)"
+	echo "$OUTPUT"
 	exit 1
 fi
 if [ ${#tokentime} -ne 10 ]; then
 	echo "TEST FAILED (tokentime extraction)"
+	echo "$OUTPUT"
 	exit 1
 fi
 
