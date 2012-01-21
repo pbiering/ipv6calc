@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.33 2012/01/20 17:37:36 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.34 2012/01/21 13:18:41 peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -348,6 +348,22 @@ my %text = (
 		'de' => "Version",
 		'en' => "version",
 	},
+	'clear' => {
+		'de' => "loeschen",
+		'en' => "clear",
+	},
+	'cancel' => {
+		'de' => "abbrechen",
+		'en' => "cancel",
+	},
+	'Address' => {
+		'de' => "Adresse",
+		'en' => "Address",
+	},
+	'send' => {
+		'de' => "absenden",
+		'en' => "send",
+	},
 	'USERAGENT' => {
 		'de' => "Browseridentifikation",
 		'en' => "User agent identification",
@@ -515,7 +531,6 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_IPV6'}) {
 	$database_geoip_ipv6 = find_file(@list_database_geoip_ipv6);
 };
 
-my $flag_geoip_used = 0;
 my $info_geoip_string;
 my $info_geoip_string_ipv4;
 my $info_geoip_string_ipv6;
@@ -567,8 +582,10 @@ my @sort_server;
 my $length_max_key = 0;
 my $length_max_description = 0;
 my $query_string;
-my $request_uri;
+my $script_name;
+my $uri = "";
 my $error;
+my $error_insert_input = 0;
 
 my $maxenvlength = 256;
 
@@ -698,10 +715,6 @@ sub print_infohash ($$) {
 			$info_geoip_string_ipv6 = $$phash{$key} . " proto=IPv6";
 			# skipped, will be shown in footer
 			next;
-		};
-
-		if ( $key =~ /^GEOIP_/ ) {
-			#$flag_geoip_used = 1;
 		};
 
 		# catch internal keys
@@ -1041,6 +1054,7 @@ if ($tokenhash_found == 1 && $tokentime_found == 1) {
 	if ($delta > $time_range_valid) {
 		logging("ERROR", "tokentime expired");
 		$error = "session expired";
+		$error_insert_input = 1;
 		&print_error();
 	};
 
@@ -1056,8 +1070,9 @@ if ($tokenhash_found == 1 && $tokentime_found == 1) {
 
 } elsif ($tokenhash_found == 0 && $tokentime_found == 0) {
 	if ((defined $input) && ($mode eq "form" || $mode eq "mixed")) {
-		logging("ERROR", "form/mixed mode, input given, but tokenhash/tokentime missing");
-		&print_error();
+		logging("NOTICE", "form/mixed mode, input given, but tokenhash/tokentime missing, use value as default and sleep seconds: 5");
+		sleep (5) if (! ($debug & 0x1000));
+		$input_default = 1; # take this input as default
 	};
 } else {
 	logging("ERROR", "strange error occurs (tokentime/tokenhash only partially found)");
@@ -1109,16 +1124,17 @@ if ( defined $ENV{'SERVER_NAME'} ) {
 	$name_server = $1;
 };
 
-if ( defined $ENV{'REQUEST_URI'} ) {
-	$ENV{'REQUEST_URI'} =~ /^([[:alnum:]\?\%\&=\.\-\:_\/]*)$/;
+if ( defined $ENV{'SCRIPT_NAME'} ) {
+	$ENV{'SCRIPT_NAME'} =~ /^([[:alnum:]\?\%\&=\.\-\:_\/]*)$/;
 	if ( ! defined $1 || (length($1) > $maxenvlength)) {
-		logging("ERROR", "problem with data (REQUEST_URI)");
+		logging("ERROR", "problem with data (SCRIPT_NAME)");
 		&print_error();
 	};
-	$request_uri = $1;
+	$script_name = $1;
 } else {
-	$request_uri = "";
+	$script_name = "";
 };
+
 
 ## Check type
 if ( defined $ENV{'SERVER_PROTOCOL'} ) {
@@ -1185,14 +1201,10 @@ sub ipv6calc_exec($$$$) {
 
 		if ( $key =~ /^IP2LOCATION_/ ) {
 			#$flag_ip2location_used = 1;
-			if ( $content =~ /^This (parameter|record) is unavailable/ || length($content) == 0) {
+			if ( $content =~ /^This (parameter|record) is unavailable/o || length($content) == 0 || $content eq "-") {
 				# $content = "n/a";
 				next;
 			};
-		};
-
-		if ( $key =~ /^GEOIP_/ ) {
-			$flag_geoip_used = 1;
 		};
 
 		# catch internal keys
@@ -1265,7 +1277,7 @@ if ((defined $addr_server) && ($skip_server == 0)) {
 };
 
 ## input
-if ((defined $input) && ($mode eq "form" || $mode eq "mixed")) {
+if ((defined $input) && ($mode eq "form" || $mode eq "mixed") && ($tokenhash_found == 1 && $tokentime_found == 1)) {
 	$result = ipv6calc_exec($input, "***input***", \%infoh_input, \@sort_input);
 	if ($result != 0) {
 		$infoh_input{'RESULT'} = "(unrecognized input)";
@@ -1312,6 +1324,9 @@ if (!defined $error) {
 	$error = "$program_name: " . $error;
 };
 
+# delay error output
+sleep (5) if (! ($debug & 0x1000));
+
 OUTPUT_BEGIN:
 
 ## Print output
@@ -1330,7 +1345,17 @@ if ($outputformat eq "htmlfull") {
 
 	# automatic redirect on errors
 	if (defined $error && defined $ENV{'SCRIPT_NAME'} && $error_flag == 0) {
-		&print_tagoutput ( "    <meta HTTP-EQUIV=\"refresh\" CONTENT=\"5;URL=" . $ENV{'SCRIPT_NAME'} . "\">\n" );
+		if ($error_insert_input == 1) {
+			$uri .= "input=" . uri_escape($input);
+		};
+		if (defined $lang) {
+			if (length($uri) > 0) { $uri .= "&"; };
+			$uri .= "lang=$lang";
+		};
+
+		if (length($uri) > 0) { $uri = "?" . $uri; };
+			
+		&print_tagoutput ( "    <meta HTTP-EQUIV=\"refresh\" CONTENT=\"5;URL=" . $ENV{'SCRIPT_NAME'} . $uri . "\">\n" );
 	};
 
 	&print_tagoutput ( "
@@ -1348,7 +1373,11 @@ if ($outputformat eq "htmlfull") {
 if (defined $error) {
 	print $error . "\n";
 	if ($outputformat eq "htmlfull") {
-		print " (redirected soon back)\n";
+		if (defined $error && defined $ENV{'SCRIPT_NAME'} && $error_flag == 0) {
+			print " (redirected soon back)\n";
+		} else {
+			print " (hit 'back' in browser)\n";
+		};
 	};
 	goto("OUTPUT_END");
 };
@@ -1363,29 +1392,34 @@ if ($mode eq "form" || $mode eq "mixed") {
 	# Input
 	&print_textonly ("\n");
 	&print_tagoutput ( "      <tr>\n" );
-	&print_tagoutput ( "        <th colspan=\"3\">" );
-	&print_tagoutput ( "          <form action=\"" . $request_uri . "\" method=\"get\">" );
+	&print_tagoutput ( "        <th colspan=\"3\">\n" );
+	&print_tagoutput ( "          <form action=\"" . $script_name . "\" method=\"get\">\n" );
 	if (!defined $input) {
 		$input = "::1";
 		$input_default = 1;
 	};
-	&print_tagoutput ( "            <p>Address: <input name=\"input\" type=\"text\" size=\"64\" maxlength=\" $maxenvlength\" value=\"$input\">" );
-	&print_tagoutput ( "            <input type=\"text\" size=\"128\" maxlength=\"128\" name=\"tokenhash\" value=\"" . $tokenhash . "\" hidden>" );
-	&print_tagoutput ( "            <input type=\"text\" size=\"128\" maxlength=\"128\" name=\"tokentime\" value=\"" . $tokentime . "\" hidden>" );
-	&print_tagoutput ( "            <input name=\"lang\" type=\"text\" size=\"128\" maxlength=\"128\" value=\"$lang\" hidden>" );
-	&print_tagoutput ( "            <input type=\"submit\" value=\"send\">  <input type=\"reset\" value=\"cancel\">" );
-	&print_tagoutput ( "          </form>" );
-	&print_tagoutput ( "          <form action=\"" . $request_uri . "\" method=\"get\">" );
-	&print_tagoutput ( "            <input type=\"submit\" value=\"clear\">" );
-	&print_tagoutput ( "          </form>" );
+	&print_tagoutput ( "            <p>" . $text{'Address'}->{$lang} . ": <input name=\"input\" type=\"text\" size=\"64\" maxlength=\" $maxenvlength\" value=\"$input\">\n" );
+	&print_tagoutput ( "            <input type=\"text\" size=\"128\" maxlength=\"128\" name=\"tokenhash\" value=\"" . $tokenhash . "\" hidden>\n" );
+	&print_tagoutput ( "            <input type=\"text\" size=\"128\" maxlength=\"128\" name=\"tokentime\" value=\"" . $tokentime . "\" hidden>\n" );
+	&print_tagoutput ( "            <input name=\"lang\" type=\"text\" size=\"128\" maxlength=\"128\" value=\"$lang\" hidden>\n" );
+	&print_tagoutput ( "            <input type=\"submit\" value=\"" . $text{'send'}->{$lang} . "\">  <input type=\"reset\" value=\"" . $text{'cancel'}->{$lang} . "\">\n" );
+	&print_tagoutput ( "          </form>\n" );
+	&print_tagoutput ( "          <form action=\"" . $script_name . "\" method=\"get\">\n" );
+	&print_tagoutput ( "            <input name=\"lang\" type=\"text\" size=\"128\" maxlength=\"128\" value=\"$lang\" hidden>\n" );
+	&print_tagoutput ( "            <input type=\"submit\" value=\"" . $text{'clear'}->{$lang} . "\">\n" );
+	&print_tagoutput ( "          </form>\n" );
 	&print_textonly ("\n");
 	&print_tagoutput ( "        </th>\n" );
 	&print_tagoutput ( "      </tr>\n" );
 
 	if (defined $input && !defined $input_default) {
 		&print_tagoutput ( "      <tr>\n" );
-		&print_tagoutput ( "        <th class=\"th_input\" colspan=\"3\">" );
-		print $text{'INPUT'}->{$lang} . " " . $input;
+		&print_tagoutput ( "        <th class=\"th_input\" align=\"right\" colspan=\"2\">" );
+		print $text{'INPUT'}->{$lang};
+		&print_textonly (" ");
+		&print_tagoutput ( "        </th>\n" );
+		&print_tagoutput ( "        <th class=\"th_input\" align=\"left\" colspan=\"1\">" );
+		print $input;
 		&print_textonly ("\n");
 		&print_tagoutput ( "        </th>\n" );
 		&print_tagoutput ( "      </tr>\n" );

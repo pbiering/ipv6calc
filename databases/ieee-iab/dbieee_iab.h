@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.42 2012/01/01 20:17:48 peter Exp $
- * Generated     : Sun Jan  1 21:49:58 2012
+ * Version       : $Id: dbieee_iab.h,v 1.43 2012/01/21 13:18:41 peter Exp $
+ * Generated     : Fri Jan 20 19:14:44 2012
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-static const char* libieee_iab_status = "IAB/20120101";
+static const char* libieee_iab_status = "IAB/20120120";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -3849,7 +3849,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xF00000, 0xF00FFF, "Syscom Instruments", "SYSCOM-INSTRUMENTS" },
 	{ 0x0050C2, 0xF01000, 0xF01FFF, "Mango DSP, Inc", "MANGO-DSP" },
 	{ 0x0050C2, 0xF02000, 0xF02FFF, "BMR", "BMR" },
-	{ 0x0050C2, 0xF03000, 0xF03FFF, "Wren Sound Systems", "WREN-SOUND" },
+	{ 0x0050C2, 0xF03000, 0xF03FFF, "PRIVATE", "PRIVATE" },
 	{ 0x0050C2, 0xF04000, 0xF04FFF, "KINKI ROENTGEN INDUSTRIAL CO.,LTD", "KINKI-ROENTGEN-INDUSTRIAL" },
 	{ 0x0050C2, 0xF05000, 0xF05FFF, "ESI Ventures", "ESI-VENTURES" },
 	{ 0x0050C2, 0xF06000, 0xF06FFF, "Micro-Key BV", "MICRO-KEY" },
@@ -3859,5 +3859,27 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xF0A000, 0xF0AFFF, "HASCOM International Pty Ltd", "HASCOM-PTY" },
 	{ 0x0050C2, 0xF0B000, 0xF0BFFF, "Treehaven Technologies, Inc.", "TREEHAVEN-TECHNOLOGIES" },
 	{ 0x0050C2, 0xF0C000, 0xF0CFFF, "SKYCHANNEL LTD ", "SKYCHANNEL" },
+	{ 0x0050C2, 0xF0D000, 0xF0DFFF, "Bluetest AB", "BLUETEST-AB" },
+	{ 0x0050C2, 0xF0E000, 0xF0EFFF, "Micro Technic A/S", "MICRO-TECHNIC-A/S" },
+	{ 0x0050C2, 0xF0F000, 0xF0FFFF, "AeroVision Avionics, Inc.", "AEROVISION-AVIONICS" },
+	{ 0x0050C2, 0xF10000, 0xF10FFF, "Wincor Nixdorf Sp. z o.o.", "WINCOR-NIXDORF-SP-Z-O-O" },
+	{ 0x0050C2, 0xF11000, 0xF11FFF, "Organis GmbH", "ORGANIS" },
+	{ 0x0050C2, 0xF12000, 0xF12FFF, "General Industrial Controls Pvt Ltd", "GENERAL-INDUSTRIAL-CONTROLS-PVT" },
+	{ 0x0050C2, 0xF13000, 0xF13FFF, "Packet Plus, Inc.", "PACKET-PLUS" },
+	{ 0x0050C2, 0xF14000, 0xF14FFF, "VISION SYSTEMS AERONAUTIC", "VISION-AERONAUTIC" },
+	{ 0x0050C2, 0xF15000, 0xF15FFF, "Sascal Displays Ltd", "SASCAL-DISPLAYS" },
+	{ 0x0050C2, 0xF16000, 0xF16FFF, "Peter Huber K�ltemaschinenbau GmbH", "PETER-HUBER-K�LTEMASCHINENBAU" },
+	{ 0x0050C2, 0xF17000, 0xF17FFF, "ABB Transmission and Distribution Automation Equipment (Xiamen) Co., Ltd", "ABB-TRANSMISSION-AND-DISTRIBUTION-AUTOMATION-EQUIPMENT-XIAMEN" },
+	{ 0x0050C2, 0xF18000, 0xF18FFF, "Vitec Multimedia", "VITEC-MULTIMEDIA" },
+	{ 0x0050C2, 0xF19000, 0xF19FFF, "Netlink Bilisim Sistemleri San. ve Tic. Ltd. Sti.", "NETLINK-BILISIM-SISTEMLERI-SAN-VE-TIC-STI" },
+	{ 0x0050C2, 0xF1A000, 0xF1AFFF, "Aqua Management", "AQUA-MANAGEMENT" },
+	{ 0x0050C2, 0xF1B000, 0xF1BFFF, "Saia-Burgess Controls AG", "SAIA-BURGESS-CONTROLS" },
+	{ 0x0050C2, 0xF1C000, 0xF1CFFF, "GENERAL DYNAMICS C4 SYSTEMS", "GENERAL-DYNAMICS-C4" },
+	{ 0x0050C2, 0xF1D000, 0xF1DFFF, "Grossenbacher Systeme AG", "GROSSENBACHER-SYSTEME" },
+	{ 0x0050C2, 0xF1E000, 0xF1EFFF, "Dell'Orto S.P.A.", "DELL-ORTO-S-P-A" },
+	{ 0x0050C2, 0xF1F000, 0xF1FFFF, "Verified Energy, LLC.", "VERIFIED-ENERGY-LLC" },
+	{ 0x0050C2, 0xF20000, 0xF20FFF, "Unfors Instruments AB ", "UNFORS-INSTRUMENTS-AB" },
+	{ 0x0050C2, 0xF21000, 0xF21FFF, "SEITEC Co. Ltd", "SEITEC" },
+	{ 0x0050C2, 0xF22000, 0xF22FFF, "Harland Simon plc", "HARLAND-SIMON-PLC" },
 
 };

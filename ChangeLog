@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.219 2012/01/20 17:37:36 peter Exp $ 
+ *  $Id: ChangeLog,v 1.220 2012/01/21 13:18:41 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120121/PB
+	ipv6calcweb.cgi: some improvements
+
 20120120/PB
 	ipv6calcweb.cgi: fix taint problem for external environment
 
