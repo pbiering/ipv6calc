@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.35 2012/01/21 14:10:56 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.36 2012/01/21 19:16:38 peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -1358,14 +1358,6 @@ if ($outputformat eq "htmlfull") {
 		&print_tagoutput ( "    <meta HTTP-EQUIV=\"refresh\" CONTENT=\"5;URL=" . $ENV{'SCRIPT_NAME'} . $uri . "\">\n" );
 	};
 
-	&print_tagoutput ( "
-    <style type=\"text/css\">
-      .th_input  { background-color:#DDDDFF; }
-      .th_client { background-color:#FFDDDD; }
-      .th_server { background-color:#DDFFDD; }
-      .td_footer { background-color:#DDDDDD; }
-    </style>
-\n" );
 	&print_tagoutput ( "  </head>\n" );
 	&print_tagoutput ( "  <body>\n" );
 };
@@ -1414,11 +1406,11 @@ if ($mode eq "form" || $mode eq "mixed") {
 
 	if (defined $input && !defined $input_default) {
 		&print_tagoutput ( "      <tr>\n" );
-		&print_tagoutput ( "        <th class=\"th_input\" align=\"right\" colspan=\"2\">" );
+		&print_tagoutput ( "        <th style=\"background-color:#DDDDFF;\" align=\"right\" colspan=\"2\">" );
 		print $text{'INPUT'}->{$lang};
 		&print_textonly (" ");
 		&print_tagoutput ( "        </th>\n" );
-		&print_tagoutput ( "        <th class=\"th_input\" align=\"left\" colspan=\"1\">" );
+		&print_tagoutput ( "        <th style=\"background-color:#DDDDFF;\" align=\"left\" colspan=\"1\">" );
 		print $input;
 		&print_textonly ("\n");
 		&print_tagoutput ( "        </th>\n" );
@@ -1431,7 +1423,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 	# Client
 	&print_textonly ("\n");
 	&print_tagoutput ( "      <tr>\n" );
-	&print_tagoutput ( "        <th class=\"th_client\" colspan=\"3\">" );
+	&print_tagoutput ( "        <th style=\"background-color:#FFDDDD;\" colspan=\"3\">" );
 	print $text{'REMOTE'}->{$lang};
 	&print_textonly ("\n");
 	&print_tagoutput ( "        </th>\n" );
@@ -1442,7 +1434,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 		# Server
 		&print_textonly ("\n");
 		&print_tagoutput ( "      <tr>\n" );
-		&print_tagoutput ( "        <th class=\"th_server\" colspan=\"3\">" );
+		&print_tagoutput ( "        <th style=\"background-color:#DDFFDD;\" colspan=\"3\">" );
 		print $text{'SERVER'}->{$lang};
 		&print_textonly ("\n");
 		&print_tagoutput ( "        </th>\n" );
@@ -1454,7 +1446,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 # Footer
 &print_textonly ("\n");
 &print_tagoutput ( "      <tr>\n" );
-&print_tagoutput ( "        <td class=\"td_footer\" colspan=\"3\">\n" );
+&print_tagoutput ( "        <td style=\"background-color:#DDDDDD;\" colspan=\"3\">\n" );
 
 if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 	print "          <font size=-2>" . $text{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . "</font><br>\n";
