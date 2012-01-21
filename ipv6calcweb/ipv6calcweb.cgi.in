@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.34 2012/01/21 13:18:41 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.35 2012/01/21 14:10:56 peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -1201,7 +1201,7 @@ sub ipv6calc_exec($$$$) {
 
 		if ( $key =~ /^IP2LOCATION_/ ) {
 			#$flag_ip2location_used = 1;
-			if ( $content =~ /^This (parameter|record) is unavailable/o || length($content) == 0 || $content eq "-") {
+			if ( $content =~ /^This (parameter|record) is unavailable/o || length($content) == 0 || $content eq "-" || $content eq "??") {
 				# $content = "n/a";
 				next;
 			};
