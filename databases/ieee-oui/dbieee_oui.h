@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui.h
- * Version       : $Id: dbieee_oui.h,v 1.59 2012/01/21 13:18:41 peter Exp $
- * Generated     : Fri Jan 20 19:14:39 2012
+ * Version       : $Id: dbieee_oui.h,v 1.60 2012/01/21 14:08:53 peter Exp $
+ * Generated     : Sat Jan 21 15:08:26 2012
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-static const char* libieee_oui_status = "OUI/20120120";
+static const char* libieee_oui_status = "OUI/20120121";
 
 
 static const s_ieee_oui libieee_oui[] = {
@@ -13111,6 +13111,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x18C086, "Broadcom Corporation", "BROADCOM" },
 	{ 0x18C451, "Tucson Embedded Systems", "TUCSON-EMBEDDED" },
 	{ 0x18D071, "DASAN SMC, Inc.", "DASAN-SMC" },
+	{ 0x18D66A, "Inmarsat", "INMARSAT" },
 	{ 0x18E288, "STT Condigi", "STT-CONDIGI" },
 	{ 0x18E7F4, "Apple, Inc.", "APPLE" },
 	{ 0x18E80F, "Viking Electronics Inc.", "VIKING-ELECTRONICS" },
@@ -13259,6 +13260,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x28107B, "D-Link International", "D-LINK" },
 	{ 0x281471, "Lantis co., LTD.", "LANTIS" },
 	{ 0x28162E, "2Wire", "2WIRE" },
+	{ 0x2817CE, "Omnisense Ltd", "OMNISENSE" },
 	{ 0x2818FD, "Aditya Infotech Ltd.", "ADITYA-INFOTECH" },
 	{ 0x2826A6, "PBR electronics GmbH", "PBR-ELECTRONICS" },
 	{ 0x283410, "Enigma Diagnostics Limited", "ENIGMA-DIAGNOSTICS" },
@@ -13299,6 +13301,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x28D997, "Yuduan Mobile Co., Ltd.", "YUDUAN-MOBILE" },
 	{ 0x28E02C, "Apple, Inc.", "APPLE" },
 	{ 0x28E297, "Shanghai InfoTM Microelectronics Co.,Ltd.", "SHANGHAI-INFOTM-MICROELECTRONICS" },
+	{ 0x28E608, "Tokheim", "TOKHEIM" },
 	{ 0x28E794, "Microtime Computer Inc.", "MICROTIME" },
 	{ 0x28E7CF, "Apple, Inc.", "APPLE" },
 	{ 0x28ED58, "JAG Jakob AG", "JAG-JAKOB" },
@@ -15310,6 +15313,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xCC9E00, "Nintendo Co., Ltd.", "NINTENDO" },
 	{ 0xCCA374, "Guangdong Guanglian Electronic Technology Co.Ltd", "GUANGDONG-GUANGLIAN" },
 	{ 0xCCAF78, "Hon Hai Precision Ind. Co.,Ltd.", "HON-HAI-PRECISION-IND" },
+	{ 0xCCB255, "D-Link International", "D-LINK" },
 	{ 0xCCB55A, "Fraunhofer ITWM", "FRAUNHOFER-ITWM" },
 	{ 0xCCB888, "AnB Securite s.a.", "ANB-SECURITE" },
 	{ 0xCCB8F1, "EAGLE KINGDOM TECHNOLOGIES LIMITED", "EAGLE-KINGDOM-TECHNOLOGIES" },

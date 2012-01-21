@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.43 2012/01/21 13:18:41 peter Exp $
- * Generated     : Fri Jan 20 19:14:44 2012
+ * Version       : $Id: dbieee_iab.h,v 1.44 2012/01/21 14:08:53 peter Exp $
+ * Generated     : Sat Jan 21 15:08:31 2012
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-static const char* libieee_iab_status = "IAB/20120120";
+static const char* libieee_iab_status = "IAB/20120121";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -3881,5 +3881,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xF20000, 0xF20FFF, "Unfors Instruments AB ", "UNFORS-INSTRUMENTS-AB" },
 	{ 0x0050C2, 0xF21000, 0xF21FFF, "SEITEC Co. Ltd", "SEITEC" },
 	{ 0x0050C2, 0xF22000, 0xF22FFF, "Harland Simon plc", "HARLAND-SIMON-PLC" },
+	{ 0x0050C2, 0xF23000, 0xF23FFF, "Electro Motive Diesel", "ELECTRO-MOTIVE-DIESEL" },
+	{ 0x0050C2, 0xF24000, 0xF24FFF, "CT Company", "CT-COMPANY" },
 
 };

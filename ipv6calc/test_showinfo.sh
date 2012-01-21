@@ -2,10 +2,12 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.18 2012/01/10 20:50:16 peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.19 2012/01/21 14:08:54 peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
+
+source ./test_scenarios.sh
 
 
 getexamples() {
@@ -57,7 +59,18 @@ getexamples | while read address separator comment; do
 	echo "$comment: $address"
 	./ipv6calc -q -i -m $address || exit 1
 	echo
-done
+done || exit 1
+
+# Test reserved IPv4 addresses
+testscenarios_ipv4_reserved | while read address rfc; do
+	echo "$rfc: $address"
+	if ! ./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY | grep "$rfc"; then
+		echo "ERROR: unexpected result (should: $rfc)"
+		./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY
+		exit 1	
+	fi
+	echo
+done || exit 1
 
 if [ "$1" = "minimal" ]; then
 	echo "GeoIP & IP2Location tests skipped (option 'minimal' used)"
@@ -107,3 +120,4 @@ else
 	echo "IP2Location tests skipped"
 
 fi
+

@@ -2,14 +2,14 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.1 2012/01/10 20:50:16 peter Exp $
-# Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_scenarios.sh,v 1.2 2012/01/21 14:08:54 peter Exp $
+# Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
 
 # Test Scenarios for autodetection "good case"
 testscenarios_auto_good() {
-cat <<END | grep -v '^#'
+	cat <<END | grep -v '^#'
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF						ipv6addr
 1.2.3.4										ipv4addr
 1.2.3.4/0									ipv4addr
@@ -60,3 +60,37 @@ fe80--218-8bff-fe17-a226s4.ipv6-literal.net					ipv6literal
 END
 }
 
+# Test Scenarios for reserved IPv4 addresses (RFC 5735)
+testscenarios_ipv4_reserved() {
+	cat <<END | grep -v '^#'
+0.0.0.0			RFC1122
+0.255.255.255		RFC1122
+10.0.0.0		RFC1918
+10.255.255.255		RFC1918
+127.0.0.0		RFC1122
+127.255.255.255		RFC1122
+169.254.0.0		RFC3927
+169.254.255.255		RFC3927
+172.16.0.0		RFC1918
+172.31.255.255		RFC1918
+192.0.0.0		RFC5736
+192.0.0.255		RFC5736
+192.0.2.0		RFC5737
+192.0.2.255		RFC5737
+192.88.99.0		RFC3068
+192.88.99.255		RFC3068
+192.168.0.0		RFC1918
+192.168.255.255		RFC1918
+198.18.0.0		RFC2544
+198.19.255.255		RFC2544
+198.51.100.0		RFC5737
+198.51.100.255		RFC5737
+203.0.113.0		RFC5737
+203.0.113.255		RFC5737
+224.0.0.0		RFC3171
+239.255.255.255		RFC3171
+240.0.0.0		RFC1112
+255.255.255.254		RFC1112
+255.255.255.255		RFC919
+END
+}

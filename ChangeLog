@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.220 2012/01/21 13:18:41 peter Exp $ 
+ *  $Id: ChangeLog,v 1.221 2012/01/21 14:08:53 peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,9 @@ Info:
 --------------------------------------------------------------------
 20120121/PB
 	ipv6calcweb.cgi: some improvements
+	databases: update
+	lib/libipv4addr.c: extend detection for reserved addresses (RFC5735)
+	ipv6calc/test_showinfo.sh,test_scenarios.sh: extend for testing reserved IPv4 addresses
 
 20120120/PB
 	ipv6calcweb.cgi: fix taint problem for external environment
