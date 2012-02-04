@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.9 2011/11/03 06:48:11 peter Exp $
- * Copyright  : 2007-2011 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6loganon.c,v 1.10 2012/02/04 21:01:02 peter Exp $
+ * Copyright  : 2007-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile anonymization
@@ -469,6 +469,7 @@ static int anonymizetoken(char *resultstring, const char *token) {
 	} else {
 		/* probably reverse DNS resolving lookup string, do not touch */
 		snprintf(resultstring, LINEBUFFER - 1, "%s", token);
+		return (0);
 	};
 
 	/* use cache ? */
