@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.53 2011/12/31 17:23:09 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.54 2012/02/04 21:45:46 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -870,23 +870,20 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	if ( (ipv6calc_debug & DEBUG_showinfo) != 0) {
 		fprintf(stderr, "%s: Check registry: %d\n", DEBUG_function_name, registry);
 	};
-	if ( registry != -1 ) {
-		for ( i = 0; i < (int) (sizeof(ipv6calc_ipv6addrregistry) / sizeof(ipv6calc_ipv6addrregistry[0])); i++ ) {
-			if ( (ipv6calc_debug & DEBUG_showinfo) != 0) {
-				fprintf(stderr, "%s: Registry type check: %d\n", DEBUG_function_name, i);
-			};
-			if ( ipv6calc_ipv6addrregistry[i].number == registry ) {
-				if ( machinereadable != 0 ) {
-					snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_REGISTRY=%s", ipv6calc_ipv6addrregistry[i].tokensimple);
-					printout(tempstring);
-				} else {
-					fprintf(stdout, "Registry for address: %s\n", ipv6calc_ipv6addrregistry[i].token);
-				};
-				break;
-			};
+
+	/* get registry string */
+	retval = libipv6addr_get_registry_string(ipv6addrp, helpstring);
+	if ( retval != 0  && machinereadable == 0 ) {
+		fprintf(stderr, "Error getting registry string for IPv6 address: %s\n", helpstring);
+	} else {
+		if ( machinereadable != 0 ) {
+			snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_REGISTRY=%s", helpstring);
+			printout(tempstring);
+		} else {
+			fprintf(stdout, "Registry for address: %s\n", helpstring);
 		};
 	};
-	
+
 	/* Proper solicited node link-local multicast address? */
 	if ( (typeinfo & IPV6_NEW_ADDR_SOLICITED_NODE) != 0 ) {
 		if ( (typeinfo & (IPV6_ADDR_LINKLOCAL & IPV6_ADDR_MULTICAST)) != 0 ) {

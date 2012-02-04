@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.223 2012/02/04 21:01:02 peter Exp $ 
+ *  $Id: ChangeLog,v 1.224 2012/02/04 21:45:46 peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,9 @@ Info:
 --------------------------------------------------------------------
 20120204/PB
 	ipv6loganon/ipv6loganon.c: don't cache unmodified lines
+	lib/libipv6addr.c: extend detection for reserved addresses
+	ipv6calc/showinfo.c: use function from lib/libipv6addr.c for retrieving IPv6 registry string
+	lib/libipv4addr.c: minor review
 
 20120121/PB
 	ipv6calcweb.cgi: some improvements

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.26 2012/01/21 14:08:54 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.27 2012/02/04 21:45:46 peter Exp $
  * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -550,7 +550,7 @@ int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, cha
  *
  * in:  ipv4addr = IPv4 address structure
  * out: *resultstring = Registry string
- * ret: ==0: ok, !=0: error
+ * ret: 0: ok, 1: unknown, 2: reserved
  */
 #define DEBUG_function_name "libipv4addr/get_registry_string"
 int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring) {
@@ -568,63 +568,63 @@ int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *re
 	if ((ipv4 & 0xff000000u) == 0x00000000u) {
 		// 0.0.0.0/8 (RFC 1122)
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1122)");
-		return (0);
+		return (2);
 	} else if ((ipv4 & 0xff000000u) == 0x0a000000u) {
 		// 10.0.0.0/8 (RFC 1918)
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1918)");
-		return (0);
+		return (2);
 	} else if ((ipv4 & 0xff000000u) == 0x7f000000u) {
 		// 127.0.0.0/8 (RFC 1122)
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1122)");
-		return (0);
+		return (2);
 	} else if ((ipv4 & 0xffff0000u) == 0xa9fe0000u) {
 		// 169.254.0.0/16 (RFC 1918)
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3927)");
-		return (0);
+		return (2);
 	} else if ((ipv4 & 0xfff00000u) == 0xac100000u) {
 		// 172.16.0.0/12 (RFC 1918)
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1918)");
-		return (0);
+		return (2);
 	} else if ((ipv4 & 0xffff0000u) == 0xc0a80000u) {
 		// 192.168.0.0/16 (RFC 1918)
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1918)");
-		return (0);
+		return (2);
 	} else if ((ipv4 & 0xffffff00u) == 0xc0000000u) {
 		// 192.0.0.0/24 (RFC 5736)
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC5736)");
-		return (0);
+		return (2);
 	} else if ((ipv4 & 0xffffff00u) == 0xc0000200u) {
 		// 192.0.2.0/24 (RFC 3330)
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC5737)");
-		return (0);
+		return (2);
 	} else if ((ipv4 & 0xffffff00u) == 0xc0586300u) {
 		// 192.88.99.0/24 (RFC 3068)
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3068)");
-		return (0);
+		return (2);
 	} else if ((ipv4 & 0xfffe0000u) == 0xc6120000u) {
 		// 198.18.0.0/15 (RFC 2544)
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC2544)");
-		return (0);
+		return (2);
 	} else if ((ipv4 & 0xffffff00u) == 0xc6336400u) {
 		// 198.51.100.0/24 (RFC 5737)
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC5737)");
-		return (0);
+		return (2);
 	} else if ((ipv4 & 0xffffff00u) == 0xcb007100u) {
 		// 203.0.113.0/24 (RFC 5737)
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC5737)");
-		return (0);
+		return (2);
 	} else if ((ipv4 & 0xf0000000u) == 0xe0000000u) {
 		// 224.0.0.0/4 (RFC 3171)
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3171)");
-		return (0);
+		return (2);
 	} else if ((ipv4 & 0xffffffffu) == 0xffffffffu) {
 		// 255.255.255.255/32
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC919)");
-		return (0);
+		return (2);
 	} else if ((ipv4 & 0xf0000000u) == 0xf0000000u) {
 		// 240.0.0.0/4 (RFC 1112)
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1112)");
-		return (0);
+		return (2);
 	}; 
 
 #ifdef SUPPORT_DB_IPV4
@@ -679,7 +679,7 @@ int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *re
 	};
 #else
 	snprintf(resultstring, NI_MAXHOST - 1, "%s", "(IPv4 database not compiled in)");
-	return(0);
+	return(1);
 #endif
 
 };
@@ -696,13 +696,15 @@ int ipv4addr_getregistry(const ipv6calc_ipv4addr *ipv4addrp) {
 	char resultstring[NI_MAXHOST];
 	int i;
 
-#ifdef SUPPORT_DB_IPV4
 	i = libipv4addr_get_registry_string(ipv4addrp, resultstring);
 
-	if (i != 0) {
+	if (i == 2) {
+		return(IPV4_ADDR_REGISTRY_RESERVED);
+	} else if (i != 0) {
 		return(IPV4_ADDR_REGISTRY_UNKNOWN);
 	};
 
+#ifdef SUPPORT_DB_IPV4
 	if (strcmp(resultstring, "IANA") == 0) {
 		return(IPV4_ADDR_REGISTRY_IANA);
 	} else if (strcmp(resultstring, "APNIC") == 0) {
