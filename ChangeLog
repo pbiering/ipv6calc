@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.228 2012/02/05 11:19:26 peter Exp $ 
+ *  $Id: ChangeLog,v 1.229 2012/02/05 13:45:07 peter Exp $ 
  */
 
 Info:
@@ -13,6 +13,7 @@ Info:
 	ipv6calcweb.cgi: add support for RFC URLs
 	COPYING: update FSF address
 	databases: update
+	tag version 0.93.1
 
 20120204/PB
 	ipv6loganon/ipv6loganon.c: don't cache unmodified lines
