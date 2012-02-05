@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.224 2012/02/04 21:45:46 peter Exp $ 
+ *  $Id: ChangeLog,v 1.225 2012/02/05 09:03:34 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120205/PB
+	lib/libipv6addr.c lib/libipv4addr.c: extend RFC info with section
+
 20120204/PB
 	ipv6loganon/ipv6loganon.c: don't cache unmodified lines
 	lib/libipv6addr.c: extend detection for reserved addresses

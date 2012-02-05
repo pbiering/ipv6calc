@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.27 2012/02/04 21:45:46 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.28 2012/02/05 09:03:34 peter Exp $
  * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -567,63 +567,63 @@ int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *re
 
 	if ((ipv4 & 0xff000000u) == 0x00000000u) {
 		// 0.0.0.0/8 (RFC 1122)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1122)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1122#3.2.1.3)");
 		return (2);
 	} else if ((ipv4 & 0xff000000u) == 0x0a000000u) {
 		// 10.0.0.0/8 (RFC 1918)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1918)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1918#3)");
 		return (2);
 	} else if ((ipv4 & 0xff000000u) == 0x7f000000u) {
 		// 127.0.0.0/8 (RFC 1122)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1122)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1122#3.2.1.3)");
 		return (2);
 	} else if ((ipv4 & 0xffff0000u) == 0xa9fe0000u) {
 		// 169.254.0.0/16 (RFC 1918)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3927)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3927#1)");
 		return (2);
 	} else if ((ipv4 & 0xfff00000u) == 0xac100000u) {
 		// 172.16.0.0/12 (RFC 1918)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1918)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1918#3)");
 		return (2);
 	} else if ((ipv4 & 0xffff0000u) == 0xc0a80000u) {
 		// 192.168.0.0/16 (RFC 1918)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1918)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1918#3)");
 		return (2);
 	} else if ((ipv4 & 0xffffff00u) == 0xc0000000u) {
 		// 192.0.0.0/24 (RFC 5736)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC5736)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC5736#1)");
 		return (2);
 	} else if ((ipv4 & 0xffffff00u) == 0xc0000200u) {
 		// 192.0.2.0/24 (RFC 3330)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC5737)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC5737#1)");
 		return (2);
 	} else if ((ipv4 & 0xffffff00u) == 0xc0586300u) {
 		// 192.88.99.0/24 (RFC 3068)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3068)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3068#2.3)");
 		return (2);
 	} else if ((ipv4 & 0xfffe0000u) == 0xc6120000u) {
 		// 198.18.0.0/15 (RFC 2544)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC2544)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC2544#C.2.2)");
 		return (2);
 	} else if ((ipv4 & 0xffffff00u) == 0xc6336400u) {
 		// 198.51.100.0/24 (RFC 5737)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC5737)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC5737#3)");
 		return (2);
 	} else if ((ipv4 & 0xffffff00u) == 0xcb007100u) {
 		// 203.0.113.0/24 (RFC 5737)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC5737)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC5737#3)");
 		return (2);
 	} else if ((ipv4 & 0xf0000000u) == 0xe0000000u) {
 		// 224.0.0.0/4 (RFC 3171)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3171)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3171#2)");
 		return (2);
 	} else if ((ipv4 & 0xffffffffu) == 0xffffffffu) {
 		// 255.255.255.255/32
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC919)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC919#7)");
 		return (2);
 	} else if ((ipv4 & 0xf0000000u) == 0xf0000000u) {
 		// 240.0.0.0/4 (RFC 1112)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1112)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1112#4)");
 		return (2);
 	}; 
 

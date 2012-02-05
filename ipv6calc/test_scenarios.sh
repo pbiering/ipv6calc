@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.2 2012/01/21 14:08:54 peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.3 2012/02/05 09:03:34 peter Exp $
 # Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -63,34 +63,62 @@ END
 # Test Scenarios for reserved IPv4 addresses (RFC 5735)
 testscenarios_ipv4_reserved() {
 	cat <<END | grep -v '^#'
-0.0.0.0			RFC1122
-0.255.255.255		RFC1122
-10.0.0.0		RFC1918
-10.255.255.255		RFC1918
-127.0.0.0		RFC1122
-127.255.255.255		RFC1122
-169.254.0.0		RFC3927
-169.254.255.255		RFC3927
-172.16.0.0		RFC1918
-172.31.255.255		RFC1918
-192.0.0.0		RFC5736
-192.0.0.255		RFC5736
-192.0.2.0		RFC5737
-192.0.2.255		RFC5737
-192.88.99.0		RFC3068
-192.88.99.255		RFC3068
-192.168.0.0		RFC1918
-192.168.255.255		RFC1918
-198.18.0.0		RFC2544
-198.19.255.255		RFC2544
-198.51.100.0		RFC5737
-198.51.100.255		RFC5737
-203.0.113.0		RFC5737
-203.0.113.255		RFC5737
-224.0.0.0		RFC3171
-239.255.255.255		RFC3171
-240.0.0.0		RFC1112
-255.255.255.254		RFC1112
-255.255.255.255		RFC919
+0.0.0.0			RFC1122#3.2.1.3
+0.255.255.255		RFC1122#3.2.1.3
+10.0.0.0		RFC1918#3
+10.255.255.255		RFC1918#3
+127.0.0.0		RFC1122#3.2.1.3
+127.255.255.255		RFC1122#3.2.1.3
+169.254.0.0		RFC3927#1
+169.254.255.255		RFC3927#1
+172.16.0.0		RFC1918#3
+172.31.255.255		RFC1918#3
+192.0.0.0		RFC5736#1
+192.0.0.255		RFC5736#1
+192.0.2.0		RFC5737#1
+192.0.2.255		RFC5737#1
+192.88.99.0		RFC3068#2.3
+192.88.99.255		RFC3068#2.3
+192.168.0.0		RFC1918#3
+192.168.255.255		RFC1918#3
+198.18.0.0		RFC2544#C.2.2
+198.19.255.255		RFC2544#C.2.2
+198.51.100.0		RFC5737#3
+198.51.100.255		RFC5737#3
+203.0.113.0		RFC5737#3
+203.0.113.255		RFC5737#3
+224.0.0.0		RFC3171#2
+239.255.255.255		RFC3171#2
+240.0.0.0		RFC1112#4
+255.255.255.254		RFC1112#4
+255.255.255.255		RFC919#7
+END
+}
+
+# Test Scenarios for reserved IPv6 addresses (RFC 5156)
+testscenarios_ipv6_reserved() {
+	cat <<END | grep -v '^#'
+::			RFC4291#2.5.2
+::1			RFC4291#2.5.3
+::0.0.0.2		RFC4291#2.5.5.1
+::255.255.255.255	RFC4291#2.5.5.1
+::ffff:0.0.0.0		RFC4291#2.5.5.2
+::ffff:255.255.255.255	RFC4291#2.5.5.2
+2001:0000::				RFC4380#6
+2001:0000:ffff:ffff:ffff:ffff:ffff:ffff	RFC4380#6
+2001:0010::				RFC4843#2
+2001:001f:ffff:ffff:ffff:ffff:ffff:ffff	RFC4843#2
+2001:0db8::				RFC3849#4
+2001:0db8:ffff:ffff:ffff:ffff:ffff:ffff	RFC3849#4
+2002::					RFC3056#2
+2002:ffff:ffff:ffff:ffff:ffff:ffff:ffff	RFC3056#2
+fc00::					RFC4193#3.1
+fdff:ffff:ffff:ffff:ffff:ffff:ffff:ffff	RFC4193#3.1
+fe80::					RFC4291#2.5.6
+fe9f:ffff:ffff:ffff:ffff:ffff:ffff:ffff	RFC4291#2.5.6
+fec0::					RFC4291#2.5.7
+fed0:ffff:ffff:ffff:ffff:ffff:ffff:ffff	RFC4291#2.5.7
+ff00::					RFC4291#2.7
+ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff	RFC4291#2.7
 END
 }

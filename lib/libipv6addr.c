@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.44 2012/02/04 21:45:46 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.45 2012/02/05 09:03:34 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -480,43 +480,51 @@ int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, char *re
 
 	if ((ipv6_00_31 == 0) && (ipv6_32_63 == 0) && (ipv6_64_95 == 0) && (ipv6_96_127 == 0)) {
 		// :: (RFC 4291)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291#2.5.2)");
 		return (2);
 	} else if ((ipv6_00_31 == 0) && (ipv6_32_63 == 0) && (ipv6_64_95 == 0) && (ipv6_96_127 == 1)) {
 		// ::1 (RFC 4291)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291#2.5.3)");
 		return (2);
 	} else if ((ipv6_00_31 == 0) && (ipv6_32_63 == 0) && (ipv6_64_95 == 0)) {
 		// ::x.x.x.x (RFC 4291)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291#2.5.5.1)");
 		return (2);
 	} else if ((ipv6_00_31 == 0) && (ipv6_32_63 == 0) && (ipv6_64_95 == 0x0000ffff)) {
 		// ::ffff:x.x.x.x (RFC 4291)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291#2.5.5.2)");
+		return (2);
+	} else if (ipv6_00_31 == 0x20010000) {
+		// 2001:0000::/32 (RFC 4380)
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4380#6)");
+		return (2);
+	} else if ((ipv6_00_31 & 0xfffffff0) == 0x20010010) {
+		// 2001:0010::/28 (RFC 4843)
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4843#2)");
 		return (2);
 	} else if (ipv6_00_31 == 0x20010db8) {
 		// 2001:0db8::/32 (RFC 3849)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3849)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3849#4)");
 		return (2);
 	} else if ((ipv6_00_15 & 0xffff) == 0x2002) {
 		// 2002::/16 (RFC 3056)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3056)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3056#2)");
 		return (2);
 	} else if ((ipv6_00_15 & 0xfe00) == 0xfc00) {
 		// fc00::/7 (RFC 4193)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4193)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4193#3.1)");
 		return (2);
 	} else if ((ipv6_00_15 & 0xffe0) == 0xfe80) {
 		// fe80::/10 (RFC 4291)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291#2.5.6)");
 		return (2);
 	} else if ((ipv6_00_15 & 0xffe0) == 0xfec0) {
 		// fec0::/10 (RFC 4291)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291#2.5.7)");
 		return (2);
 	} else if ((ipv6_00_15 & 0xff00) == 0xff00) {
 		// ffxx::/8 (RFC 4291)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291)");
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291#2.7)");
 		return (2);
 	};
 
@@ -556,7 +564,7 @@ int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, char *re
 	};
 #else
 	snprintf(resultstring, NI_MAXHOST - 1, "%s", "(IPv6 database not compiled in)");
-	return(0);
+	return(1);
 #endif
 };
 #undef DEBUG_function_name
