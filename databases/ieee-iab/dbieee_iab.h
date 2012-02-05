@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.44 2012/01/21 14:08:53 peter Exp $
- * Generated     : Sat Jan 21 15:08:31 2012
+ * Version       : $Id: dbieee_iab.h,v 1.45 2012/02/05 09:40:35 peter Exp $
+ * Generated     : Sun Feb  5 11:01:01 2012
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-static const char* libieee_iab_status = "IAB/20120121";
+static const char* libieee_iab_status = "IAB/20120205";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -3883,5 +3883,11 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xF22000, 0xF22FFF, "Harland Simon plc", "HARLAND-SIMON-PLC" },
 	{ 0x0050C2, 0xF23000, 0xF23FFF, "Electro Motive Diesel", "ELECTRO-MOTIVE-DIESEL" },
 	{ 0x0050C2, 0xF24000, 0xF24FFF, "CT Company", "CT-COMPANY" },
+	{ 0x0050C2, 0xF25000, 0xF25FFF, "Samway Electronic SRL", "SAMWAY-SRL" },
+	{ 0x0050C2, 0xF26000, 0xF26FFF, "WaveIP", "WAVEIP" },
+	{ 0x0050C2, 0xF27000, 0xF27FFF, "ELAN SYSTEMS", "ELAN" },
+	{ 0x0050C2, 0xF28000, 0xF28FFF, "Vertex Antennentechnik GmbH", "VERTEX-ANTENNENTECHNIK" },
+	{ 0x0050C2, 0xF29000, 0xF29FFF, "RADYNE CORPORATION", "RADYNE" },
+	{ 0x0050C2, 0xF2A000, 0xF2AFFF, "ACD Elektronik GmbH", "ACD-ELEKTRONIK" },
 
 };
