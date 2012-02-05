@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.36 2012/01/21 19:16:38 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.37 2012/02/05 09:25:09 peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -154,6 +154,9 @@ sub find_file(@) {
 	};
 	return undef;
 };
+
+# Base URL for RFCs
+my $url_rfc = "https://tools.ietf.org/html/";
 
 # Whois server urls
 my %url_whoisservers = (
@@ -803,8 +806,16 @@ sub print_infohash ($$) {
 			};
 		};
 
+		my ($rfc, $section, $url);
 		if ( $flag_whoisurl == 1 ) {
-			if ( defined $url_whoisservers{$whois_registry}->{$whois_type} ) {
+			if ( $whois_registry =~ /^reserved\((.*)\)$/o ) {
+				($rfc, $section) = split /#/, $1;
+				$url = $url_rfc . lc($rfc);
+				if (defined $section) {
+					$url .= "#section-" . $section;
+				};
+				&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
+			} elsif ( defined $url_whoisservers{$whois_registry}->{$whois_type} ) {
 				if ( $url_whoisservers{$whois_registry}->{$whois_type} ne "" ) {
 					&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url_whoisservers{$whois_registry}->{$whois_type} . $$phash{$key} . "\">" );
 				} else {

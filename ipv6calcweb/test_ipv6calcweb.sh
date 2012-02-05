@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ipv6calcweb
 # File       : test_ipv6calcweb.sh
-# Version    : $Id: test_ipv6calcweb.sh,v 1.6 2012/01/10 20:50:16 peter Exp $
+# Version    : $Id: test_ipv6calcweb.sh,v 1.7 2012/02/05 09:25:09 peter Exp $
 # Copyright  : 2012-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -52,5 +52,8 @@ else
 	if echo "$OUTPUT" | egrep -q "(ERROR|problem)"; then
 		echo "TEST FAILED"
 		exit 1
+	fi
+	if echo "$OUTPUT" | egrep -q "(reserved)"; then
+		echo "$OUTPUT"
 	fi
 fi

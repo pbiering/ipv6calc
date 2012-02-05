@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.225 2012/02/05 09:03:34 peter Exp $ 
+ *  $Id: ChangeLog,v 1.226 2012/02/05 09:25:09 peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,7 @@ Info:
 --------------------------------------------------------------------
 20120205/PB
 	lib/libipv6addr.c lib/libipv4addr.c: extend RFC info with section
+	ipv6calcweb.cgi: add support for RFC URLs
 
 20120204/PB
 	ipv6loganon/ipv6loganon.c: don't cache unmodified lines
