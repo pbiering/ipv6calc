@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.47 2012/03/03 17:31:58 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.48 2012/03/03 17:40:12 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -263,11 +263,10 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp) {
 	iid[1] = ipv6addr_getdword(ipv6addrp, 3); // 32-63
 
 	/* 0:4, 1:8, 2:16, 3=32, 4=64 */
-	double variance[5];
+	double variance[5], variance_sum = 0;
 	const double variance_privacy_max = 6;
 
-	int f, b, i, e, c, a = 0;
-	unsigned int v;
+	int f, b, i, e, c, v, a = 0;
 	int bits[4][16] = {
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},  // 0-15 (4)
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},  // 0-7 (8)
@@ -377,7 +376,9 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp) {
 	};
 
 	/* calculate variance of 4<<i bit blocks, assumed average is (4<<i / 2) */
+	v = 0;
 	for (i = 1; i <= 4; i++) {
+		v++;
 		c = 0;
 		variance[i] = 0.0;
 		for (b = 0; b < (32>>i); b++) {
@@ -398,9 +399,15 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp) {
 		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
 			fprintf(stderr, "%s/%s: variance for: size %2d: %0.5f\n", __FILE__, __func__, 4<<i, variance[i]);
 		};
+		variance_sum += variance[i];
+	};
+	variance_sum /= (double) v; /* calculate average */
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		fprintf(stderr, "%s/%s: avarages of variances: %0.5f\n", __FILE__, __func__, variance_sum);
 	};
 
-	if (variance[3] < variance_privacy_max) {
+	if (variance_sum < variance_privacy_max) {
 		return (0);
 	};
 
