@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.49 2012/03/03 17:43:45 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.50 2012/03/03 21:25:33 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -263,8 +263,8 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp) {
 	iid[1] = ipv6addr_getdword(ipv6addrp, 3); // 32-63
 
 	/* 0:4, 1:8, 2:16, 3=32, 4=64 */
-	double variance[5], variance_sum = 0;
-	const double variance_privacy_max = 6;
+	float variance, variance_sum = 0;
+	const float variance_privacy_max = 4; // never seen more than 3.47324 on my test system
 
 	int f, b, i, e, c, v, a = 0;
 	int bits[4][16] = {
@@ -375,12 +375,61 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp) {
 		fprintf(stderr, "|\n");
 	};
 
-	/* calculate variance of 4<<i bit blocks, assumed average is (4<<i / 2) */
+	/* calculate variances */
 	v = 0;
-	for (i = 1; i < 4; i++) {
-		v++;
+
+	/* calculate variance over hexdigits */
+	c = 0;
+	variance = 0.0;
+	for (b = 0; b < 16; b++) {
+		c++;
+		e = hexval[b];
+		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+			fprintf(stderr, "%s/%s: hexdigit %x: amount=%d\n", __FILE__, __func__, b, e);
+		};
+		e = e - 1; /* substract related average */
+		e = e * e; /* square */
+		variance += (float) e;
+	};
+
+	variance = sqrt(variance / (c-1)); /* divided by entries -1 */
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		fprintf(stderr, "%s/%s: variance for hexdigits: %0.5f\n", __FILE__, __func__, variance);
+	};
+
+	variance_sum += variance;
+	v++;
+
+	/* calculate simple variances */
+	for (i = 0; i < 4; i++) {
 		c = 0;
-		variance[i] = 0.0;
+		variance = 0.0;
+		for (b = 0; b < (16>>i); b++) {
+			c++;
+			e = bits[i][b];
+			if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+				fprintf(stderr, "%s/%s: entry of size %2d: %2d: entry=%d\n", __FILE__, __func__, (4<<i), b, e);
+			};
+			e = e - (4<<i) / 2; /* substract related average */
+			e = e * e; /* square */
+			variance += (float) e;
+		};
+
+		variance = sqrt(variance / (c-1)); /* divided by entries -1 */
+
+		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+			fprintf(stderr, "%s/%s: variance for: size %2d: %0.5f\n", __FILE__, __func__, 4<<i, variance);
+		};
+
+		variance_sum += variance;
+		v++;
+	};
+
+	/* calculate variance of 4<<i bit blocks, assumed average is (4<<i / 2) */
+	for (i = 1; i < 4; i++) {
+		c = 0;
+		variance = 0.0;
 		for (b = 0; b < (32>>i); b++) {
 			c++;
 			for (f = b+1; f < (32>>i); f++) {
@@ -390,18 +439,22 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp) {
 				};
 				e = e - (4<<i) / 2; /* substract related average */
 				e = e * e; /* square */
-				variance[i] += (double) e;
+				variance += (float) e;
 			};
 		};
 
-		variance[i] = sqrt(variance[i] / (c-1)); /* divided by entries -1 */
+		variance = sqrt(variance / (c-1)); /* divided by entries -1 */
 
 		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-			fprintf(stderr, "%s/%s: variance for: size %2d: %0.5f\n", __FILE__, __func__, 4<<i, variance[i]);
+			fprintf(stderr, "%s/%s: variance for: size %2d: %0.5f\n", __FILE__, __func__, 4<<i, variance);
 		};
-		variance_sum += variance[i];
+
+		variance_sum += variance;
+		v++;
 	};
-	variance_sum /= (double) v; /* calculate average */
+
+	/* calculate average */
+	variance_sum /= v;
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
 		fprintf(stderr, "%s/%s: avarages of variances: %0.5f\n", __FILE__, __func__, variance_sum);
@@ -487,7 +540,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 		type |= IPV6_NEW_ADDR_NAT64;
 	};
 	
-	if (((type & (IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4)) != 0) && (st & 0xE0000000u) == 0x20000000u) {
+	if (((type & (IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4)) == 0) && ((st & 0xE0000000u) == 0x20000000u)) {
 		/* 2000::/3 -> productive IPv6 address space */
 		/*  except 3ffe::/16 (6BONE) and 2002::/16 (6TO4) */
 		type |= IPV6_NEW_ADDR_PRODUCTIVE;
