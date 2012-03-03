@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.46 2012/03/03 16:45:11 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.47 2012/03/03 17:31:58 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -262,10 +262,11 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp) {
 	iid[0] = ipv6addr_getdword(ipv6addrp, 2); // 00-31
 	iid[1] = ipv6addr_getdword(ipv6addrp, 3); // 32-63
 
-	double variance_32;
-	const double variance_privacy_max = 4;
+	/* 0:4, 1:8, 2:16, 3=32, 4=64 */
+	double variance[5];
+	const double variance_privacy_max = 6;
 
-	int b, i, a = 0;
+	int f, b, i, e, c, a = 0;
 	unsigned int v;
 	int bits[4][16] = {
 		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},  // 0-15 (4)
@@ -375,18 +376,31 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp) {
 		fprintf(stderr, "|\n");
 	};
 
-	/* calculate variance of 32 bit blocks, assumed average is 16 */
-	variance_32 = 0.0;
-	for (b = 0; b < 6; b++) {
-		variance_32 += (double) ((bits[3][b] - 16) * (bits[3][b] - 16));
-	};
-	variance_32 = sqrt(variance_32 / 5);
+	/* calculate variance of 4<<i bit blocks, assumed average is (4<<i / 2) */
+	for (i = 1; i <= 4; i++) {
+		c = 0;
+		variance[i] = 0.0;
+		for (b = 0; b < (32>>i); b++) {
+			c++;
+			for (f = b+1; f < (32>>i); f++) {
+				e = bits[i-1][b] + bits[i-1][f]; /* add a pair of halfsized bitsums */
+				if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+					fprintf(stderr, "%s/%s: array entries of size %2d: %2d & %2d: sum=%d\n", __FILE__, __func__, (4<<i) / 2, b, f, e);
+				};
+				e = e - (4<<i) / 2; /* substract related average */
+				e = e * e; /* square */
+				variance[i] += (double) e;
+			};
+		};
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s/%s: variance for: size 32: %0.5f\n", __FILE__, __func__, variance_32);
+		variance[i] = sqrt(variance[i] / (c-1)); /* divided by entries -1 */
+
+		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+			fprintf(stderr, "%s/%s: variance for: size %2d: %0.5f\n", __FILE__, __func__, 4<<i, variance[i]);
+		};
 	};
 
-	if (variance_32 < variance_privacy_max) {
+	if (variance[3] < variance_privacy_max) {
 		return (0);
 	};
 
