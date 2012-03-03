@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.48 2012/03/03 17:40:12 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.49 2012/03/03 17:43:45 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -377,7 +377,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp) {
 
 	/* calculate variance of 4<<i bit blocks, assumed average is (4<<i / 2) */
 	v = 0;
-	for (i = 1; i <= 4; i++) {
+	for (i = 1; i < 4; i++) {
 		v++;
 		c = 0;
 		variance[i] = 0.0;
