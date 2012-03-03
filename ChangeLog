@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.229 2012/02/05 13:45:07 peter Exp $ 
+ *  $Id: ChangeLog,v 1.230 2012/03/03 16:45:11 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120303/PB
+	lib/libipv6addr.[ch]: add IID privacy detection
+	*/Makefile.in: add -lm for linking math (req. for IID privacy detection)
+
 20120205/PB
 	lib/libipv6addr.c lib/libipv4addr.c: extend RFC info with section
 	ipv6calcweb.cgi: add support for RFC URLs
