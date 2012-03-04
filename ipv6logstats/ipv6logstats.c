@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.13 2011/09/16 18:05:13 peter Exp $
- * Copyright  : 2003-2005 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logstats.c,v 1.14 2012/03/04 18:08:50 peter Exp $
+ * Copyright  : 2003-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile statistics
@@ -13,6 +13,7 @@
 #include <stdlib.h> 
 #include <getopt.h> 
 #include <unistd.h>
+#include <math.h>
 
 #include "ipv6logstats.h"
 #include "libipv6calcdebug.h"
@@ -35,11 +36,22 @@ int flag_quiet = 0;
 static int opt_unknown = 0;
 static int opt_noheader = 0;
 static int opt_onlyheader = 0;
+static int opt_iid = 0;
 static int opt_printdirection = 0; /* rows */
 static char opt_token[NI_MAXHOST] = "";
 
 /* prototypes */
 static void lineparser(void);
+
+/* IID statistics */
+#define HISTMAX 128
+struct {
+	long unsigned int hexdigit[HISTMAX];
+	long unsigned int bits_simple[4][HISTMAX];
+	long unsigned int bits_permuted[4][HISTMAX];
+	long unsigned int average[HISTMAX];
+} variances_distribution;
+
 
 /**************************************************/
 /* main */
@@ -97,6 +109,10 @@ int main(int argc,char *argv[]) {
 			case 'o':
 				opt_onlyheader = 1;
 				opt_printdirection = 1;
+				break;
+
+			case 'i':
+				opt_iid = 1;
 				break;
 
 			case 'c':
@@ -164,6 +180,9 @@ static void lineparser(void) {
 	int registry;
 	uint32_t typeinfo;
 
+	s_iid_statistics variances;
+	uint32_t histoentry;
+
 	ptrptr = &cptr;
 	
 	if (opt_onlyheader == 0) {
@@ -197,6 +216,12 @@ static void lineparser(void) {
 			fprintf(stderr, "Line too long: %d\n", linecounter);
 			continue;
 		};
+
+		/* remove trailing \n */
+		if (linebuffer[strlen(linebuffer) - 1] == '\n') {
+			linebuffer[strlen(linebuffer) - 1] = '\0';
+		};
+
 		
 		if (strlen(linebuffer) == 0) {
 			fprintf(stderr, "Line empty: %d\n", linecounter);
@@ -369,6 +394,34 @@ static void lineparser(void) {
 							};
 							break;
 					};
+
+					if (opt_iid == 1) {
+						/* analyize IID */
+						if (ipv6addr_privacyextensiondetection(&ipv6addr, &variances) >= 0) {
+							if (ipv6calc_debug != 0) {
+								fprintf(stderr, "%s/%s: variances: hexdigit=%.5f avg=%.5f\n", __FILE__, __func__, variances.hexdigit, variances.average);
+							};
+
+							/* spread variances */
+							histoentry = rint(variances.hexdigit * 4); /* 0-31 -> 0 - 127 */
+							if (histoentry > 127) { histoentry = 127; };
+							variances_distribution.hexdigit[histoentry]++;
+
+							histoentry = rint(variances.average * 4); /* 0-31 -> 0 - 127 */
+							if (histoentry > 127) { histoentry = 127; };
+							variances_distribution.average[histoentry]++;
+
+							for (i = 0; i < 4;i++) {
+								histoentry = rint(variances.bits_simple[i] * 4); /* 0-31 -> 0 - 127 */
+								if (histoentry >= HISTMAX) { histoentry = HISTMAX - 1; };
+								variances_distribution.bits_simple[i][histoentry]++;
+
+								histoentry = rint(variances.bits_permuted[i] * 4); /* 0-31 -> 0 - 127 */
+								if (histoentry >= HISTMAX) { histoentry = HISTMAX - 1; };
+								variances_distribution.bits_permuted[i][histoentry]++;
+							};
+						};
+					};	
 				};
 				
 				break;
@@ -427,6 +480,30 @@ static void lineparser(void) {
 		};
 		for (i = 0; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
 			printf("%-20s %lu\n", ipv6logstats_statentries[i].token, ipv6logstats_statentries[i].counter);
+		};
+
+		if (opt_iid == 1) {
+			/* header */
+			printf("%5s | %8s", "Var", "Hexdigit");
+			for (i = 0; i < 4; i++) {
+				printf("|Simple %2d", 4<<i);
+			};
+			for (i = 1; i < 4; i++) {
+				printf("|Permut %2d", 4<<i);
+			};
+			printf("| %8s |\n", "Average");
+
+			/* values */
+			for (histoentry = 0; histoentry < HISTMAX; histoentry++) {
+				printf("%5.2f | %8lu", histoentry / 4.0, variances_distribution.hexdigit[histoentry]);
+				for (i = 0; i < 4; i++) {
+					printf("| %8lu", variances_distribution.bits_simple[i][histoentry]);
+				};
+				for (i = 1; i < 4; i++) {
+					printf("| %8lu", variances_distribution.bits_permuted[i][histoentry]);
+				};
+				printf("| %8lu |\n", variances_distribution.average[histoentry]);
+			};
 		};
 	} else {
 		/* print in columns */

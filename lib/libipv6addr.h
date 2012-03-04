@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.34 2012/03/03 16:45:11 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.35 2012/03/04 18:08:50 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -41,6 +41,22 @@ typedef struct {
 	const uint8_t  prefixlength;	/* prefix length (0-128) 8 bit*/
 	const char *string_registry;
 } s_ipv6addr_assignment;
+
+/* IID statistics */
+typedef struct {
+	float hexdigit;
+	float bits_simple[4];
+	float bits_permuted[4];
+	float average;
+} s_iid_statistics;
+
+static const s_iid_statistics s_iid_statistics_spread = {
+	4,
+	{ 4, 3, 2, 1 }, // bits_simple
+	{ 3, 1, 1, 0.75 }, // bits_permuted
+	1
+};
+
 
 /* IPv6 address type definitions 
  * with credits to kernel and USAGI developer team
@@ -188,3 +204,5 @@ extern int  tokenlsb64_to_ipv6addrstruct(const char *addrstring, char *resultstr
 extern int  libipv6addr_ipv6addrstruct_to_tokenlsb64(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions);
 
 extern void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, unsigned int mask_iid, unsigned int mask_ipv6, unsigned int mask_ipv4);
+
+extern int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statistics *variancesp);
