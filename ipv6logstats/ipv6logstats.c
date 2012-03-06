@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.14 2012/03/04 18:08:50 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.15 2012/03/06 06:28:19 peter Exp $
  * Copyright  : 2003-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -40,11 +40,16 @@ static int opt_iid = 0;
 static int opt_printdirection = 0; /* rows */
 static char opt_token[NI_MAXHOST] = "";
 
+char    file_out[NI_MAXHOST] = "";
+int     file_out_flag = 0;
+FILE    *FILE_OUT;
+
 /* prototypes */
 static void lineparser(void);
 
 /* IID statistics */
-#define HISTMAX 128
+#define HISTRES 1
+#define HISTMAX 32 * HISTRES
 struct {
 	long unsigned int hexdigit[HISTMAX];
 	long unsigned int bits_simple[4][HISTMAX];
@@ -117,6 +122,16 @@ int main(int argc,char *argv[]) {
 
 			case 'c':
 				opt_printdirection = 1;
+				break;
+
+			case 'w':
+				if (strlen(optarg) < NI_MAXHOST) {
+					strcpy(file_out, optarg);
+					file_out_flag = 1;
+				} else {
+					fprintf(stderr, " Output file too long: %s\n", optarg);
+					exit(EXIT_FAILURE);
+				};
 				break;
 
 			default:
@@ -403,20 +418,20 @@ static void lineparser(void) {
 							};
 
 							/* spread variances */
-							histoentry = rint(variances.hexdigit * 4); /* 0-31 -> 0 - 127 */
-							if (histoentry > 127) { histoentry = 127; };
+							histoentry = rint(variances.hexdigit * HISTRES);
+							if (histoentry >= HISTMAX) { histoentry = HISTMAX - 1; };
 							variances_distribution.hexdigit[histoentry]++;
 
-							histoentry = rint(variances.average * 4); /* 0-31 -> 0 - 127 */
-							if (histoentry > 127) { histoentry = 127; };
+							histoentry = rint(variances.average * HISTRES);
+							if (histoentry >= HISTMAX) { histoentry = HISTMAX - 1; };
 							variances_distribution.average[histoentry]++;
 
 							for (i = 0; i < 4;i++) {
-								histoentry = rint(variances.bits_simple[i] * 4); /* 0-31 -> 0 - 127 */
+								histoentry = rint(variances.bits_simple[i] * HISTRES);
 								if (histoentry >= HISTMAX) { histoentry = HISTMAX - 1; };
 								variances_distribution.bits_simple[i][histoentry]++;
 
-								histoentry = rint(variances.bits_permuted[i] * 4); /* 0-31 -> 0 - 127 */
+								histoentry = rint(variances.bits_permuted[i] * HISTRES);
 								if (histoentry >= HISTMAX) { histoentry = HISTMAX - 1; };
 								variances_distribution.bits_permuted[i][histoentry]++;
 							};
@@ -537,6 +552,34 @@ static void lineparser(void) {
 		};
 	};
 
+	if ((opt_iid) == 1 && (file_out_flag == 1)) {
+		if (ipv6calc_debug > 0) {
+			fprintf(stderr, "Output file specified: %s\n", file_out);
+		};
+
+		FILE_OUT = fopen(file_out, "w");
+		if (! FILE_OUT) {
+			fprintf(stderr, "Can't open Output file: %s\n", file_out);
+			exit(EXIT_FAILURE);
+		};
+
+		for (histoentry = 0; histoentry < HISTMAX; histoentry++) {
+			fprintf(FILE_OUT, "%5.2f %8lu", (float) histoentry / (float) HISTRES, variances_distribution.hexdigit[histoentry]);
+			for (i = 0; i < 4; i++) {
+				fprintf(FILE_OUT, " %8lu", variances_distribution.bits_simple[i][histoentry]);
+			};
+			for (i = 1; i < 4; i++) {
+				fprintf(FILE_OUT, " %8lu", variances_distribution.bits_permuted[i][histoentry]);
+			};
+			fprintf(FILE_OUT, " %8lu\n", variances_distribution.average[histoentry]);
+		};
+
+		if (ipv6calc_debug > 0) {
+			fprintf(stderr, "Output file is closed now: %s\n", file_out);
+		};
+		fflush(FILE_OUT);
+		fclose(FILE_OUT);
+	};
 	return;
 };
 #undef DEBUG_function_name

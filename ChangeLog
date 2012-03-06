@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.231 2012/03/04 18:08:49 peter Exp $ 
+ *  $Id: ChangeLog,v 1.232 2012/03/06 06:28:18 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120306/PB
+	lib/libipv6addr.*: adjust calc of IID privacy detection
+	ipv6logstats/*: add option -w FILE to write IID privacy statistics, fix gnuplot example
+
 20120304/PB
 	lib/libipv6addr.[ch]: extend IID privacy detection
 	ipv6logstats/*: extend for IID privacy detection

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.35 2012/03/04 18:08:50 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.36 2012/03/06 06:28:19 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -52,11 +52,17 @@ typedef struct {
 
 static const s_iid_statistics s_iid_statistics_spread = {
 	4,
-	{ 4, 3, 2, 1 }, // bits_simple
-	{ 3, 1, 1, 0.75 }, // bits_permuted
+	{ 8, 3, 1.5, 1 }, // bits_simple
+	{ 1, 1.2, 1, 1 }, // bits_permuted
 	1
 };
 
+static const s_iid_statistics s_iid_statistics_shift = {
+	1,
+	{ 5, 1, 1, 1 }, // bits_simple
+	{ 1, 2, 1, 1.5 }, // bits_permuted
+	1
+};
 
 /* IPv6 address type definitions 
  * with credits to kernel and USAGI developer team
