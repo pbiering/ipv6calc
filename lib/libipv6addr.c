@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.52 2012/03/06 06:28:19 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.53 2012/03/15 21:02:12 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -370,7 +370,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 	};
 
 	variance = sqrt(variance / (c-1)) * s_iid_statistics_spread.hexdigit; /* divided by entries -1 & spread by factor 4 */
-	variance -= s_iid_statistics_shift.hexdigit;
+	variance += s_iid_statistics_shift.hexdigit;
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
 		fprintf(stderr, "%s/%s: variance for hexdigits: %0.5f\n", __FILE__, __func__, variance);
@@ -404,7 +404,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 		};
 
 		variance = sqrt(variance / (c-1)) * s_iid_statistics_spread.bits_simple[i]; /* divided by entries -1 */
-		variance -= s_iid_statistics_shift.bits_simple[i];
+		variance += s_iid_statistics_shift.bits_simple[i];
 
 		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
 			fprintf(stderr, "%s/%s: variance for: size %2d: %0.5f\n", __FILE__, __func__, 4<<i, variance);
@@ -439,7 +439,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 		};
 
 		variance = sqrt(variance / (c-1)) * s_iid_statistics_spread.bits_permuted[i]; /* divided by entries -1 */
-		variance -= s_iid_statistics_shift.bits_permuted[i];
+		variance += s_iid_statistics_shift.bits_permuted[i];
 
 		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
 			fprintf(stderr, "%s/%s: variance for: size %2d: %0.5f\n", __FILE__, __func__, 4<<i, variance);
