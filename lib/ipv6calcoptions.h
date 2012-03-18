@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.17 2011/09/16 18:05:13 peter Exp $
+ * Version    : $Id: ipv6calcoptions.h,v 1.18 2012/03/18 15:00:05 peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -34,8 +34,12 @@
  *  i = showinfo
  *  q = be more quiet
  *  f = flush (each line in pipe mode)
+ *  I <input type>
+ *  O <output type>
+ *  A <action type>
+ *  E expression for action=filter
  */
-/*@unused@*/ static char *ipv6calc_shortopts = "vh?rmabfd:iulqLGUFCI:O:A:";
+/*@unused@*/ static char *ipv6calc_shortopts = "vh?rmabfd:iulqLGUFCI:O:A:E:";
 
 /* define long options */
 /*@unused@*/ static struct option ipv6calc_longopts[] = {

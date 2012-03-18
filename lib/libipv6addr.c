@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.53 2012/03/15 21:02:12 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.54 2012/03/18 15:00:05 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -264,7 +264,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 
 	/* 0:4, 1:8, 2:16, 3=32, 4=64 */
 	float m, e, variance, variance_sum = 0;
-	const float variance_privacy_max = 4; // never seen more than 3.47324 on my test system
+	const float variance_privacy_max = IPV6_IID_PRIVACY_LIMIT;
 
 	int f, b, i, c, v;
 	int bits[4][16] = {
@@ -276,12 +276,12 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 	int hexval[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 	int hexbit[16] = { 0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4}; // number of bits per hex digit 0-f
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+	if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
 		fprintf(stderr, "%s/%s: Given IID: %08x%08x\n", __FILE__, __func__, (unsigned int) iid[0], (unsigned int) iid[1]);
 	};
 
 	if ((iid[0] & 0x02000000u) == 0x02000000u) {
-		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
 			fprintf(stderr, "%s/%s: universal/local bit set to: universal (no further privacy detection)\n", __FILE__, __func__);
 		};
 		return (-1);
@@ -291,7 +291,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 	for (b = 0; b < 16; b++) {
 		v = (iid[b/8] & (0xf << ((7 - (b % 8)) * 4))) >> ((7 - (b % 8)) * 4);
 
-		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
 			fprintf(stderr, "%s/%s: analyze nibble %2d: %x\n", __FILE__, __func__, b, v);
 		};
 
@@ -302,7 +302,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 		bits[3][b/8] += hexbit[v];
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+	if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
 		fprintf(stderr, "%s/%s: distribution\n", __FILE__, __func__);
 
 		fprintf(stderr, "%s/%s: hex distribution: digit   ", __FILE__, __func__);
@@ -360,7 +360,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 			m += 0.0625;
 		};
 
-		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
 			fprintf(stderr, "%s/%s: hexdigit %x: amount=%.0f  exp.avg.=%.4f\n", __FILE__, __func__, b, e, m);
 		};
 
@@ -372,7 +372,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 	variance = sqrt(variance / (c-1)) * s_iid_statistics_spread.hexdigit; /* divided by entries -1 & spread by factor 4 */
 	variance += s_iid_statistics_shift.hexdigit;
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+	if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
 		fprintf(stderr, "%s/%s: variance for hexdigits: %0.5f\n", __FILE__, __func__, variance);
 	};
 
@@ -381,7 +381,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 	v++;
 
 	/* calculate simple variances */
-	for (i = 0; i < 4; i++) {
+	for (i = 1; i < 4; i++) {
 		c = 0;
 		variance = 0.0;
 		for (b = 0; b < (16>>i); b++) {
@@ -394,7 +394,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 				m -= 0.5;
 			};
 
-			if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+			if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
 				fprintf(stderr, "%s/%s: entry of size %2d: %2d: entry=%.0f  related average=%.1f\n", __FILE__, __func__, (4<<i), b, e, m);
 			};
 
@@ -406,7 +406,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 		variance = sqrt(variance / (c-1)) * s_iid_statistics_spread.bits_simple[i]; /* divided by entries -1 */
 		variance += s_iid_statistics_shift.bits_simple[i];
 
-		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
 			fprintf(stderr, "%s/%s: variance for: size %2d: %0.5f\n", __FILE__, __func__, 4<<i, variance);
 		};
 
@@ -429,7 +429,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 				};
 
 				e = bits[i-1][b] + bits[i-1][f]; /* add a pair of halfsized bitsums */
-				if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+				if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
 					fprintf(stderr, "%s/%s: array entries of size %2d: %2d & %2d: sum=%.0f exp.avg=%.1f\n", __FILE__, __func__, (4<<i) / 2, b, f, e, m);
 				};
 				e = e - m; /* substract related average */
@@ -441,7 +441,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 		variance = sqrt(variance / (c-1)) * s_iid_statistics_spread.bits_permuted[i]; /* divided by entries -1 */
 		variance += s_iid_statistics_shift.bits_permuted[i];
 
-		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
 			fprintf(stderr, "%s/%s: variance for: size %2d: %0.5f\n", __FILE__, __func__, 4<<i, variance);
 		};
 
@@ -454,7 +454,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 	variance_sum /= v;
 	variancesp->average = variance_sum;
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+	if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
 		fprintf(stderr, "%s/%s: avarages of variances: %0.5f\n", __FILE__, __func__, variance_sum);
 	};
 
@@ -556,21 +556,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 		type |= IPV6_NEW_ADDR_ISATAP;
 	};
 
-	/* Consider all addresses with the first three bits different of
-	   000 and 111 as unicasts.
-	 */
-
-	if ( (((st & 0xE0000000u) != 0x00000000u) && (st & 0xE0000000u) != 0xE0000000u) || ((st & 0xFE000000u) == 0xFC000000u)) {
-		type |= IPV6_ADDR_UNICAST;
-
-		/* fuzzy detection of IID privacy extension */
-		if (ipv6addr_privacyextensiondetection(ipv6addrp, &variances) > 0) {
-			type |= IPV6_NEW_ADDR_IID_PRIVACY;
-		};
-
-		return (type);
-	};
-
+	/* multicast */
 	if ((st & 0xFF000000u) == 0xFF000000u) {
 		type |= IPV6_ADDR_MULTICAST;
 
@@ -588,25 +574,9 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 				break;
 		};
 		return (type);
-	}
-	
-	if ((st & 0xFFC00000u) == 0xFE800000u) {
-		type |=  IPV6_ADDR_LINKLOCAL | IPV6_ADDR_UNICAST;
-		if ( ((st2 == 0x80005445u) && (st3 ==0x5245444fu)) \
-		    || ((st2 == 0x0000FFFFu) && (st3 ==0xFFFFFFFDu)) \
-		) {
-			/* fe80::8000:5445:5245:444F : LSB string: "TEREDO" */
-			/* fe80::ffff:ffff:fffd */
-			type |= IPV6_NEW_ADDR_LINKLOCAL_TEREDO;
-		}
-		return (type);
 	};
 
-	if ((st & 0xFFC00000u) == 0xFEC00000u) {
-		type |= IPV6_ADDR_SITELOCAL | IPV6_ADDR_UNICAST;
-		return (type);
-	}; 
-
+	/* special */
 	if ((st | st1) == 0) {
 		if (st2 == 0) {
 			if (st3 == 0) {
@@ -626,6 +596,47 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 		if (st2 == (uint32_t) 0x0000ffffu)
 			type |= IPV6_ADDR_MAPPED;
 			return (type);
+	};
+
+	
+	/* Consider all addresses with the first three bits different of
+	   000 and 111 as unicasts.
+	   also link-local,site-local,ULULA
+	 */
+
+	if ((((st & 0xE0000000u) != 0x00000000u) && ((st & 0xE0000000u) != 0xE0000000u)) || ((st & 0xFC000000u) == 0xFC000000u)) {
+		type |= IPV6_ADDR_UNICAST;
+		type |= IPV6_NEW_ADDR_IID;
+
+		if ((st & 0xFFC00000u) == 0xFE800000u) {
+			type |=  IPV6_ADDR_LINKLOCAL;
+			if ( ((st2 == 0x80005445u) && (st3 ==0x5245444fu)) \
+			    || ((st2 == 0x0000FFFFu) && (st3 ==0xFFFFFFFDu)) \
+			) {
+				/* fe80::8000:5445:5245:444F : LSB string: "TEREDO" */
+				/* fe80::ffff:ffff:fffd */
+				type |= IPV6_NEW_ADDR_LINKLOCAL_TEREDO;
+			};
+		} else if ((st & 0xFFC00000u) == 0xFEC00000u) {
+			type |= IPV6_ADDR_SITELOCAL;
+		};
+
+		if ((type & IPV6_NEW_ADDR_IID) == IPV6_NEW_ADDR_IID) {
+			/* check IID */
+			if ((st2 & 0x02000000u) == 0x02000000u) {
+				type |= IPV6_NEW_ADDR_IID_GLOBAL;
+			} else {
+				type |= IPV6_NEW_ADDR_IID_LOCAL;
+
+				if ((type & (IPV6_NEW_ADDR_LINKLOCAL_TEREDO | IPV6_NEW_ADDR_ISATAP | IPV6_NEW_ADDR_TEREDO)) == 0) {
+					/* fuzzy detection of IID privacy extension */
+					if (ipv6addr_privacyextensiondetection(ipv6addrp, &variances) == 0) {
+						type |= IPV6_NEW_ADDR_IID_PRIVACY;
+					};
+				};
+			};
+		};
+		return (type);
 	};
 
 	type |= IPV6_ADDR_RESERVED;
@@ -1696,9 +1707,9 @@ int libipv6addr_to_hex(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, c
 	retval = 0;	
 	return (retval);
 };
-
-
 #undef DEBUG_function_name
+
+
 /*
  * anonymize IPv6 address
  *
@@ -1910,3 +1921,95 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, unsigned int mask_iid, 
 	return;
 };
 #undef DEBUG_function_name
+
+
+/*
+ * clear filter IPv6 address
+ *
+ * in : *filter    = filter structure
+ */
+void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter) {
+	filter->typeinfo_must_have = 0;
+	return;
+};
+
+
+/*
+ * parse filter IPv6 address
+ *
+ * in : *filter    = filter structure
+ * in : *expression= expression string
+ */
+void ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char* expression) {
+	int i;
+	char *token, *cptr, **ptrptr, tempstring[NI_MAXHOST];
+
+	ptrptr = &cptr;
+
+	snprintf(tempstring, NI_MAXHOST - 1, "%s", expression);
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		fprintf(stderr, "%s/%s: input: %s\n", __FILE__, __func__, tempstring);
+	};
+
+	token = strtok_r(tempstring, ",", ptrptr);
+
+	while (token != NULL) {
+		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+			fprintf(stderr, "%s/%s: token found: %s\n", __FILE__, __func__, token);
+		};
+
+		for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
+			if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+				fprintf(stderr, "%s/%s: check token against: %s\n", __FILE__, __func__, ipv6calc_ipv6addrtypestrings[i].token);
+			};
+
+			if (strcmp(ipv6calc_ipv6addrtypestrings[i].token, token) == 0) {
+				if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+					fprintf(stderr, "%s/%s: token match: %s\n", __FILE__, __func__, ipv6calc_ipv6addrtypestrings[i].token);
+				};
+
+				filter->typeinfo_must_have |= ipv6calc_ipv6addrtypestrings[i].number;
+				break;
+			};
+		};
+
+		/* next token */
+		token = strtok_r(NULL, ",", ptrptr);
+	};
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		fprintf(stderr, "%s/%s: filter 'must_have': 0x%08x\n", __FILE__, __func__, filter->typeinfo_must_have);
+	};
+
+	return;
+};
+
+
+/*
+ * filter IPv6 address
+ *
+ * in : *ipv6addrp = IPv6 address structure
+ * in : *filter    = filter structure
+ * ret: 0=match 1=not match
+ */
+int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_ipv6addr *filter) {
+	uint32_t typeinfo;
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		fprintf(stderr, "%s/%s: start\n", __FILE__, __func__);
+	};
+
+	/* get type */
+	typeinfo = ipv6addr_gettype(ipv6addrp);
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		fprintf(stderr, "%s/%s: compare typeinfo against must_have: 0x%08x/0x%08x\n", __FILE__, __func__, typeinfo, filter->typeinfo_must_have);
+	};
+
+	if ((typeinfo & filter->typeinfo_must_have) == filter->typeinfo_must_have) {
+		return (0);
+	};
+
+	return (1);
+};

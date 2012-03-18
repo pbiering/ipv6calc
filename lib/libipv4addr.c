@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.28 2012/02/05 09:03:34 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.29 2012/03/18 15:00:05 peter Exp $
  * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -897,3 +897,26 @@ void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask) {
 };
 #undef DEBUG_function_name
 
+
+/*
+ * clear filter IPv4 address
+ *
+ * in : *filter    = filter structure
+ */
+void ipv4addr_filter_clear(s_ipv6calc_filter_ipv4addr *filter) {
+	filter->typeinfo_must_have = 0;
+	return;
+};
+
+
+/*
+ * filter IPv4 address
+ *
+ * in : *ipv4addrp = IPv4 address structure
+ * in : *filter    = filter structure
+ * ret: 0=match 1=not match
+ */
+int ipv4addr_filter(const ipv6calc_ipv4addr *ipv4addrp, const s_ipv6calc_filter_ipv4addr *filter) {
+
+	return 1;
+};

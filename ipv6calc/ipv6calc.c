@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.54 2011/11/26 16:07:23 peter Exp $
- * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calc.c,v 1.55 2012/03/18 15:00:05 peter Exp $
+ * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
@@ -72,6 +72,7 @@ int input_is_pipe = 0;
 int mask_ipv4 = 24;
 int mask_ipv6 = 48;
 int mask_iid = 1;
+
 
 int  use_ip2location_ipv4 = 0; /* if set to 1, IP2Location IPv4 is enabled by option(s) */
 int  use_ip2location_ipv6 = 0; /* if set to 1, IP2Location IPv6 is enabled by option(s) */
@@ -220,7 +221,7 @@ int main(int argc, char *argv[]) {
 	char resultstring[NI_MAXHOST] = "";
 	char resultstring2[NI_MAXHOST] = "";
 	char resultstring3[NI_MAXHOST] = "";
-	int retval = 1, i, j, lop;
+	int retval = 1, i, j, lop, result;
 	unsigned long int command = 0;
 	int bit_start = 0, bit_end = 0, force_prefix = 0;
 	char *input1 = NULL, *input2 = NULL;
@@ -239,6 +240,14 @@ int main(int argc, char *argv[]) {
 	ipv6calc_ipv6addr ipv6addr, ipv6addr2, ipv6addr3, ipv6addr4;
 	ipv6calc_ipv4addr ipv4addr, ipv4addr2;
 	ipv6calc_macaddr  macaddr;
+
+	/* filter structure */
+	s_ipv6calc_filter_ipv6addr filter_ipv6addr;
+	s_ipv6calc_filter_ipv4addr filter_ipv4addr;
+	s_ipv6calc_filter_macaddr  filter_macaddr;
+	ipv6addr_filter_clear(&filter_ipv6addr);
+	ipv4addr_filter_clear(&filter_ipv4addr);
+	macaddr_filter_clear(&filter_macaddr);
 
 	/* clear address structures */
 	ipv6addr_clearall(&ipv6addr);
@@ -715,6 +724,22 @@ int main(int argc, char *argv[]) {
 				};
 				action_given = 1;
 				break;
+
+			case 'E':	
+				if (ipv6calc_debug != 0) {
+					fprintf(stderr, "%s: Got expression string: %s\n", DEBUG_function_name, optarg);
+				};
+				if ((strcmp(optarg, "-?") == 0) || (strcmp(optarg, "-h") == 0) || (strcmp(optarg, "--help") == 0) ) {
+					action = ACTION_auto;
+					command = CMD_printhelp;
+					break;
+				};
+
+				/* parse expression string */
+				// ipv4addr_filter_parse(&filter_ipv4addr, optarg);
+				ipv6addr_filter_parse(&filter_ipv6addr, optarg);
+				// macaddr_filter_parse(&filter_macaddr, optarg);
+				break;
 				
 			default:
 				fprintf(stderr, "Usage: (see '%s --command -?|-h|--help' for more help)\n", PROGRAM_NAME);
@@ -839,6 +864,11 @@ PIPE_input:
 		if (strlen(linebuffer) == 0) {
 			fprintf(stderr, "Line empty: %d\n", linecounter);
 			goto PIPE_input;
+		};
+
+		/* remove trailing \n */
+		if (linebuffer[strlen(linebuffer) - 1] == '\n') {
+			linebuffer[strlen(linebuffer) - 1] = '\0';
 		};
 		
 		if (ipv6calc_debug != 0) {
@@ -1426,6 +1456,38 @@ PIPE_input:
 			}
 
 			retval = librfc5569_calc_6rd_local_prefix(&ipv6addr, &ipv4addr2, &ipv4addr, resultstring);
+			break;
+
+		case ACTION_filter:
+			if (ipv6calc_debug != 0) {
+				fprintf(stderr, "%s: Start of action: filter\n", DEBUG_function_name);
+			};
+
+			outputtype = inputtype;
+
+			result = 1; /* default, skip */
+			if (inputtype == FORMAT_ipv4addr) {
+				/* call filter for IPv4 addresses */
+				result = ipv4addr_filter(&ipv4addr, &filter_ipv4addr);
+			} else if (inputtype == FORMAT_ipv6addr) {
+				/* call filter for IPv6 addresses */
+				result = ipv6addr_filter(&ipv6addr, &filter_ipv6addr);
+			} else if (inputtype == FORMAT_mac) {
+				/* call filter for MAC addresses */
+				result = macaddr_filter(&macaddr, &filter_macaddr);
+			} else {
+				/* TODO: more specific notice */
+				fprintf(stderr, "Action-type isn't currently implemented for inputtype\n");
+			};
+
+			if (result != 0) {
+				/* skip everything */
+				if (ipv6calc_debug != 0) {
+					fprintf(stderr, "%s: filter result SKIP: '%s'\n", DEBUG_function_name, linebuffer);
+				};
+				goto RESULT_print;
+			};
+
 			break;
 
 		case ACTION_undefined:

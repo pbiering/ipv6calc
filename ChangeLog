@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.232 2012/03/06 06:28:18 peter Exp $ 
+ *  $Id: ChangeLog,v 1.233 2012/03/18 15:00:05 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120318/PB
+	lib/*: extend for action 'filter'
+	ipv6calc/ipv6calc.c: implement action (-A) 'filter' with expression '-E', currently only supporting IPv6 addresses
+
 20120306/PB
 	lib/libipv6addr.*: adjust calc of IID privacy detection
 	ipv6logstats/*: add option -w FILE to write IID privacy statistics, fix gnuplot example

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.37 2012/03/15 21:02:12 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.38 2012/03/18 15:00:05 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -50,6 +50,7 @@ typedef struct {
 	float average;
 } s_iid_statistics;
 
+/* spread values to align peaks */
 static const s_iid_statistics s_iid_statistics_spread = {
 	2.86,
 	{ 8, 3.07, 1.2, 0.44 }, // bits_simple  4, 8, 16, 32
@@ -57,13 +58,22 @@ static const s_iid_statistics s_iid_statistics_spread = {
 	1
 };
 
-/* >0: shift right  <0: shift left */
+/* shift values to align peaks: >0: shift right  <0: shift left */
 static const s_iid_statistics s_iid_statistics_shift = {
 	0.25,
 	{ -5, -1.5, 0.5, 1.5 }, // bits_simple 4, 8, 16, 32
 	{ -1, -2, 0, 1.5 }, // bits_permuted
 	0
 };
+
+#define IPV6_IID_PRIVACY_LIMIT	6.0
+
+/* filter */
+typedef struct {
+	uint32_t typeinfo_must_have;
+	/* others coming next */
+} s_ipv6calc_filter_ipv6addr;
+
 
 /* IPv6 address type definitions 
  * with credits to kernel and USAGI developer team
@@ -81,24 +91,23 @@ static const s_iid_statistics s_iid_statistics_shift = {
  *	loopback
  */
 
-#define IPV6_ADDR_ANY				(uint32_t) 0x0000U
+#define IPV6_ADDR_ANY				(uint32_t) 0x00000000U
 
-#define IPV6_ADDR_UNICAST			(uint32_t) 0x0001U	
-#define IPV6_ADDR_MULTICAST			(uint32_t) 0x0002U	
-#define IPV6_ADDR_ANYCAST			(uint32_t) 0x0004U
+#define IPV6_ADDR_UNICAST			(uint32_t) 0x00000001U	
+#define IPV6_ADDR_MULTICAST			(uint32_t) 0x00000002U	
+#define IPV6_ADDR_ANYCAST			(uint32_t) 0x00000004U
 
-#define IPV6_ADDR_LOOPBACK			(uint32_t) 0x0010U
-#define IPV6_ADDR_LINKLOCAL			(uint32_t) 0x0020U
-#define IPV6_ADDR_SITELOCAL			(uint32_t) 0x0040U
+#define IPV6_ADDR_LOOPBACK			(uint32_t) 0x00000010U
+#define IPV6_ADDR_LINKLOCAL			(uint32_t) 0x00000020U
+#define IPV6_ADDR_SITELOCAL			(uint32_t) 0x00000040U
 
-#define IPV6_ADDR_COMPATv4			(uint32_t) 0x0080U
+#define IPV6_ADDR_COMPATv4			(uint32_t) 0x00000080U
 
-#define IPV6_ADDR_SCOPE_MASK			(uint32_t) 0x00f0U
+#define IPV6_ADDR_SCOPE_MASK			(uint32_t) 0x000000f0U
 
-#define IPV6_ADDR_MAPPED			(uint32_t) 0x1000U
-#define IPV6_ADDR_RESERVED			(uint32_t) 0x2000U	/* reserved address space */
-
-#define IPV6_ADDR_ULUA				(uint32_t) 0x4000U	/* Unique Local Unicast Address */
+#define IPV6_ADDR_MAPPED			(uint32_t) 0x00001000U
+#define IPV6_ADDR_RESERVED			(uint32_t) 0x00002000U	/* reserved address space */
+#define IPV6_ADDR_ULUA				(uint32_t) 0x00004000U	/* Unique Local Unicast Address */
 
 #define IPV6_NEW_ADDR_6TO4			(uint32_t) 0x00010000U
 #define IPV6_NEW_ADDR_6BONE			(uint32_t) 0x00020000U
@@ -113,6 +122,9 @@ static const s_iid_statistics s_iid_statistics_shift = {
 #define IPV6_NEW_ADDR_LINKLOCAL_TEREDO		(uint32_t) 0x04000000U
 #define IPV6_NEW_ADDR_NAT64			(uint32_t) 0x08000000U	/* RFC 6052 */
 #define IPV6_NEW_ADDR_IID_PRIVACY		(uint32_t) 0x10000000U	/* RFC 4941 (ex 3041) */
+#define IPV6_NEW_ADDR_IID			(uint32_t) 0x20000000U	/* IPv6 address with IID inside */
+#define IPV6_NEW_ADDR_IID_LOCAL			(uint32_t) 0x40000000U	/* IPv6 address with local generated IID */
+#define IPV6_NEW_ADDR_IID_GLOBAL		(uint32_t) 0x80000000U	/* IPv6 address with global IID */
 
 /* Registries */
 #define IPV6_ADDR_REGISTRY_6BONE	0x01
@@ -155,7 +167,10 @@ typedef struct {
 	{ IPV6_NEW_ADDR_ORCHID		, "orchid" },
 	{ IPV6_NEW_ADDR_LINKLOCAL_TEREDO, "link-local-teredo" },
 	{ IPV6_NEW_ADDR_NAT64		, "nat64" },
-	{ IPV6_NEW_ADDR_IID_PRIVACY	, "iid-privacy" }
+	{ IPV6_NEW_ADDR_IID_PRIVACY	, "iid-privacy" },
+	{ IPV6_NEW_ADDR_IID		, "iid" },
+	{ IPV6_NEW_ADDR_IID_LOCAL	, "iid-local" },
+	{ IPV6_NEW_ADDR_IID_GLOBAL	, "iid-global" }
 };
 
 typedef struct {
@@ -213,3 +228,7 @@ extern int  libipv6addr_ipv6addrstruct_to_tokenlsb64(const ipv6calc_ipv6addr *ip
 extern void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, unsigned int mask_iid, unsigned int mask_ipv6, unsigned int mask_ipv4);
 
 extern int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statistics *variancesp);
+
+extern int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_ipv6addr *filter);
+extern void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter);
+extern void ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char* expression);

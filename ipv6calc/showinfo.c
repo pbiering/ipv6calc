@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.54 2012/02/04 21:45:46 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.55 2012/03/18 15:00:05 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -727,7 +727,6 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		if ( (ipv6calc_debug & DEBUG_showinfo) != 0) {
 			fprintf(stderr, "%s: test: %x : %s\n", DEBUG_function_name, (unsigned int) ipv6calc_ipv6addrtypestrings[i].number, ipv6calc_ipv6addrtypestrings[i].token);
 		};
-
 	};	
 
 	/* get full uncompressed IPv6 address */

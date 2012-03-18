@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.16 2012/03/15 21:02:12 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.17 2012/03/18 15:00:05 peter Exp $
  * Copyright  : 2003-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -511,7 +511,7 @@ static void lineparser(void) {
 			/* values */
 			for (histoentry = 0; histoentry < HISTMAX; histoentry++) {
 				printf("%5.2f | %8lu", histoentry / 4.0, variances_distribution.hexdigit[histoentry]);
-				for (i = 0; i < 4; i++) {
+				for (i = 1; i < 4; i++) {
 					printf("| %8lu", variances_distribution.bits_simple[i][histoentry]);
 				};
 				for (i = 1; i < 4; i++) {

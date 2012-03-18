@@ -1,15 +1,15 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.18 2011/09/16 18:05:13 peter Exp $
- * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv4addr.h,v 1.19 2012/03/18 15:00:05 peter Exp $
+ * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
  *  Header file for libipv4addr.c
  */ 
 
-#include "ipv6calc_inttypes.h"
+#include "libipv6calc.h"
 #include <netinet/in.h>
 
 /* typedefs */
@@ -41,6 +41,13 @@ typedef struct {
 	const unsigned int start;
 	const unsigned int end;
 } s_ipv4addr_assignment_hint;
+
+
+typedef struct {
+	uint32_t typeinfo_must_have;
+	/* others coming next */
+} s_ipv6calc_filter_ipv4addr;
+
 
 /* Registries */
 #define IPV4_ADDR_REGISTRY_IANA		0x02
@@ -84,3 +91,6 @@ extern int libipv4addr_to_octal(const ipv6calc_ipv4addr *ipv4addrp, char *result
 extern int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions);
 
 extern void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask);
+
+extern int ipv4addr_filter(const ipv6calc_ipv4addr *ipv4addrp, const s_ipv6calc_filter_ipv4addr *filter);
+extern void ipv4addr_filter_clear(s_ipv6calc_filter_ipv4addr *filter);
