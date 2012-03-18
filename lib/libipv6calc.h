@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.8 2012/03/18 15:00:05 peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.9 2012/03/18 17:15:41 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -16,6 +16,12 @@
 #ifndef _libipv6calc_h
 
 #define _libipv6calc_h 1
+
+/* text representations for defines */
+typedef struct {
+	const uint32_t number;
+	const char *token;
+} s_type;
 
 #endif
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.55 2012/03/18 15:00:05 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.56 2012/03/18 17:15:41 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -59,7 +59,7 @@ void showinfo_availabletypes(void) {
 	int i;
 
 	fprintf(stderr, "\nAvailable tokens for machine-readable output (printed in one line):\n");
-	fprintf(stderr, " TYPE=...                      : type of IPv6 address (commata separated)\n");
+	fprintf(stderr, " IPV6_TYPE=...                 : type of IPv6 address (commata separated)\n");
 	fprintf(stderr, " ");
 	for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
 		fprintf(stderr, " %s", ipv6calc_ipv6addrtypestrings[i].token);
@@ -480,7 +480,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	char tempipv4string[NI_MAXHOST] = "";
 	char embeddedipv4string[NI_MAXHOST] = "";
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable);
-	int retval;
+	int retval, i, j;
 	uint32_t typeinfo;
 
 	typeinfo = ipv4addr_gettype(ipv4addrp);
@@ -513,8 +513,34 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_PREFIXLENGTH%s=%d", embeddedipv4string, (int) ipv4addrp->prefixlength);
 			printout(tempstring);
 		};
+
+		j = 0;
+		snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_TYPE%s=", embeddedipv4string);
+		for (i = 0; i < (int) (sizeof(ipv6calc_ipv4addrtypestrings) / sizeof(ipv6calc_ipv4addrtypestrings[0])); i++ ) {
+			if ( (typeinfo & ipv6calc_ipv4addrtypestrings[i].number) != 0 ) {
+				if (j != 0) {
+					snprintf(helpstring, sizeof(helpstring) - 1, "%s,", tempstring);
+					snprintf(tempstring, sizeof(tempstring) - 1, "%s", helpstring);
+				};
+				snprintf(helpstring, sizeof(helpstring) - 1, "%s%s", tempstring, ipv6calc_ipv4addrtypestrings[i].token);
+				snprintf(tempstring, sizeof(tempstring) - 1, "%s", helpstring);
+				j = 1;
+			};
+		};
+		printout(tempstring);
 	} else {
 		fprintf(stdout, "IPv4 address: %s\n", tempipv4string);
+
+		fprintf(stdout, "Address type: ");
+		j = 0;
+		for (i = 0; i < (int) (sizeof(ipv6calc_ipv4addrtypestrings) / sizeof(ipv6calc_ipv4addrtypestrings[0])); i++ ) {
+			if ( (typeinfo & ipv6calc_ipv4addrtypestrings[i].number) != 0 ) {
+				if ( j != 0 ) { fprintf(stdout, ", "); };
+				fprintf(stdout, "%s", ipv6calc_ipv4addrtypestrings[i].token);
+				j = 1;
+			};
+		};
+		fprintf(stdout, "\n");
 	};	
 
 	/* get registry string */
@@ -751,7 +777,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		};
 
 		j = 0;
-		snprintf(tempstring, sizeof(tempstring) - 1, "TYPE=");
+		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_TYPE=");
 		for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
 			if ( (typeinfo & ipv6calc_ipv6addrtypestrings[i].number) != 0 ) {
 				if (j != 0) {

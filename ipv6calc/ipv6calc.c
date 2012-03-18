@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.55 2012/03/18 15:00:05 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.56 2012/03/18 17:15:41 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -736,7 +736,7 @@ int main(int argc, char *argv[]) {
 				};
 
 				/* parse expression string */
-				// ipv4addr_filter_parse(&filter_ipv4addr, optarg);
+				ipv4addr_filter_parse(&filter_ipv4addr, optarg);
 				ipv6addr_filter_parse(&filter_ipv6addr, optarg);
 				// macaddr_filter_parse(&filter_macaddr, optarg);
 				break;
@@ -922,6 +922,11 @@ PIPE_input:
 		};
 	};
 	
+	/* reset input type in case of action=filter and pipe mode */
+	if (input_is_pipe == 1 && action_given == 1 && action == ACTION_filter) {
+		inputtype = 0;
+	};
+
 	/* autodetection */
 	if ((inputtype == FORMAT_undefined || inputtype == FORMAT_auto) && inputc > 0) {
 		if (ipv6calc_debug != 0) {

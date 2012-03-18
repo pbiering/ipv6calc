@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.29 2012/03/18 15:00:05 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.30 2012/03/18 17:15:41 peter Exp $
  * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -237,11 +237,67 @@ void ipv4addr_clearall(ipv6calc_ipv4addr *ipv4addrp) {
 
 /*
  * function gets type of an IPv4 address
- *
- *   to be implemented...
  */
 uint32_t ipv4addr_gettype(/*@unused@*/ const ipv6calc_ipv4addr *ipv4addrp) {
-	return (0);
+	uint32_t type = 0;
+	uint32_t ipv4 = ipv4addr_getdword(ipv4addrp);
+
+	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+		fprintf(stderr, "%s/%s: got IPv4 address: 0x%08x\n", __FILE__, __func__, ipv4);
+	};
+
+	if (ipv4 == 0x00000000u) {
+		type = IPV4_ADDR_ANY;
+	} else if ((ipv4 & 0xff000000u) == 0x0a000000u) {
+		// 10.0.0.0/8 (RFC 1918)
+		type = IPV4_ADDR_UNICAST | IPV4_ADDR_SITELOCAL;
+	} else if ((ipv4 & 0xff000000u) == 0x7f000000u) {
+		// 127.0.0.0/8 (RFC 1122)
+		type = IPV4_ADDR_LOOPBACK;
+	} else if ((ipv4 & 0xffff0000u) == 0xa9fe0000u) {
+		// 169.254.0.0/16 (RFC 1918)
+		type = IPV4_ADDR_UNICAST | IPV4_ADDR_ZEROCONF | IPV4_ADDR_SITELOCAL;
+	} else if ((ipv4 & 0xfff00000u) == 0xac100000u) {
+		// 172.16.0.0/12 (RFC 1918)
+		type = IPV4_ADDR_UNICAST | IPV4_ADDR_SITELOCAL;
+	} else if ((ipv4 & 0xffff0000u) == 0xc0a80000u) {
+		// 192.168.0.0/16 (RFC 1918)
+		type = IPV4_ADDR_UNICAST | IPV4_ADDR_SITELOCAL;
+	} else if ((ipv4 & 0xffffff00u) == 0xc0000000u) {
+		// 192.0.0.0/24 (RFC 5736)
+		type = IPV4_ADDR_RESERVED;
+	} else if ((ipv4 & 0xffffff00u) == 0xc0000200u) {
+		// 192.0.2.0/24 (RFC 3330)
+		type = IPV4_ADDR_RESERVED;
+	} else if ((ipv4 & 0xffffff00u) == 0xc0586300u) {
+		// 192.88.99.0/24 (RFC 3068)
+		type = IPV4_ADDR_ANYCAST | IPV4_ADDR_6TO4RELAY;
+	} else if ((ipv4 & 0xfffe0000u) == 0xc6120000u) {
+		// 198.18.0.0/15 (RFC 2544)
+		type = IPV4_ADDR_RESERVED;
+	} else if ((ipv4 & 0xffffff00u) == 0xc6336400u) {
+		// 198.51.100.0/24 (RFC 5737)
+		type = IPV4_ADDR_RESERVED;
+	} else if ((ipv4 & 0xffffff00u) == 0xcb007100u) {
+		// 203.0.113.0/24 (RFC 5737)
+		type = IPV4_ADDR_RESERVED;
+	} else if ((ipv4 & 0xf0000000u) == 0xe0000000u) {
+		// 224.0.0.0/4 (RFC 3171)
+		type = IPV4_ADDR_MULTICAST;
+	} else if ((ipv4 & 0xffffffffu) == 0xffffffffu) {
+		// 255.255.255.255/32
+		type = IPV4_ADDR_BROADCAST;
+	} else if ((ipv4 & 0xf0000000u) == 0xf0000000u) {
+		// 240.0.0.0/4 (RFC 1112)
+		type = IPV4_ADDR_RESERVED;
+	} else {
+		type = IPV4_ADDR_UNICAST;
+	};
+
+	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+		fprintf(stderr, "%s/%s: return typeinfo: 0x%08x\n", __FILE__, __func__, type);
+	};
+	return(type);
 };
 
 
@@ -377,7 +433,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	typeinfo = ipv4addr_gettype(ipv4addrp); 
 
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: Got scope %02x\n", DEBUG_function_name, (unsigned int) typeinfo);
+		fprintf(stderr, "%s: Got typeinfo: 0x%08x\n", DEBUG_function_name, typeinfo);
 	};
 
 	ipv4addrp->scope = typeinfo;
@@ -502,7 +558,7 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6ca
 	typeinfo = ipv4addr_gettype(ipv4addrp); 
 
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: Got scope %02x\n", DEBUG_function_name, (unsigned int) typeinfo);
+		fprintf(stderr, "%s: Got typeinfo: 0x%08x\n", DEBUG_function_name, typeinfo);
 	};
 
 	ipv4addrp->scope = typeinfo;
@@ -904,7 +960,62 @@ void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask) {
  * in : *filter    = filter structure
  */
 void ipv4addr_filter_clear(s_ipv6calc_filter_ipv4addr *filter) {
+	filter->active = 0;
 	filter->typeinfo_must_have = 0;
+	return;
+};
+
+
+/*
+ * parse filter IPv4 address
+ *
+ * in : *filter    = filter structure
+ * in : *expression= expression string
+ */
+void ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char* expression) {
+	int i;
+	char *token, *cptr, **ptrptr, tempstring[NI_MAXHOST];
+
+	ptrptr = &cptr;
+
+	snprintf(tempstring, NI_MAXHOST - 1, "%s", expression);
+
+	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+		fprintf(stderr, "%s/%s: input: %s\n", __FILE__, __func__, tempstring);
+	};
+
+	token = strtok_r(tempstring, ",", ptrptr);
+
+	while (token != NULL) {
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s/%s: token found: %s\n", __FILE__, __func__, token);
+		};
+
+		for (i = 0; i < (int) (sizeof(ipv6calc_ipv4addrtypestrings) / sizeof(ipv6calc_ipv4addrtypestrings[0])); i++ ) {
+			if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+				fprintf(stderr, "%s/%s: check token against: %s\n", __FILE__, __func__, ipv6calc_ipv4addrtypestrings[i].token);
+			};
+
+			if (strcmp(ipv6calc_ipv4addrtypestrings[i].token, token) == 0) {
+				if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+					fprintf(stderr, "%s/%s: token match: %s\n", __FILE__, __func__, ipv6calc_ipv4addrtypestrings[i].token);
+				};
+
+				filter->typeinfo_must_have |= ipv6calc_ipv4addrtypestrings[i].number;
+				filter->active = 1;
+				break;
+			};
+		};
+
+		/* next token */
+		token = strtok_r(NULL, ",", ptrptr);
+	};
+
+	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+		fprintf(stderr, "%s/%s: filter 'must_have': 0x%08x\n", __FILE__, __func__, filter->typeinfo_must_have);
+		fprintf(stderr, "%s/%s: filter 'active': %d\n", __FILE__, __func__, filter->active);
+	};
+
 	return;
 };
 
@@ -917,6 +1028,29 @@ void ipv4addr_filter_clear(s_ipv6calc_filter_ipv4addr *filter) {
  * ret: 0=match 1=not match
  */
 int ipv4addr_filter(const ipv6calc_ipv4addr *ipv4addrp, const s_ipv6calc_filter_ipv4addr *filter) {
+	uint32_t typeinfo;
 
-	return 1;
+	if (filter->active == 0) {
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s/%s: no filter active (SKIP)\n", __FILE__, __func__);
+		};
+		return (1);
+	};
+
+	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+		fprintf(stderr, "%s/%s: start\n", __FILE__, __func__);
+	};
+
+	/* get type */
+	typeinfo = ipv4addr_gettype(ipv4addrp);
+
+	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+		fprintf(stderr, "%s/%s: compare typeinfo against must_have: 0x%08x/0x%08x\n", __FILE__, __func__, typeinfo, filter->typeinfo_must_have);
+	};
+
+	if ((typeinfo & filter->typeinfo_must_have) == filter->typeinfo_must_have) {
+		return (0);
+	};
+
+	return (1);
 };

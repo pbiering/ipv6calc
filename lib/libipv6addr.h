@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.38 2012/03/18 15:00:05 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.39 2012/03/18 17:15:41 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -70,6 +70,7 @@ static const s_iid_statistics s_iid_statistics_shift = {
 
 /* filter */
 typedef struct {
+	int active;
 	uint32_t typeinfo_must_have;
 	/* others coming next */
 } s_ipv6calc_filter_ipv6addr;
@@ -126,23 +127,7 @@ typedef struct {
 #define IPV6_NEW_ADDR_IID_LOCAL			(uint32_t) 0x40000000U	/* IPv6 address with local generated IID */
 #define IPV6_NEW_ADDR_IID_GLOBAL		(uint32_t) 0x80000000U	/* IPv6 address with global IID */
 
-/* Registries */
-#define IPV6_ADDR_REGISTRY_6BONE	0x01
-#define IPV6_ADDR_REGISTRY_IANA		0x02
-#define IPV6_ADDR_REGISTRY_APNIC	0x03
-#define IPV6_ADDR_REGISTRY_ARIN		0x04
-#define IPV6_ADDR_REGISTRY_RIPE		0x05
-#define IPV6_ADDR_REGISTRY_LACNIC	0x06
-#define IPV6_ADDR_REGISTRY_AFRINIC	0x07
-#define IPV6_ADDR_REGISTRY_RESERVED	0x0e
-#define IPV6_ADDR_REGISTRY_UNKNOWN	0x0f
-
 /* text representations */
-typedef struct {
-	const uint32_t number;
-	const char *token;
-} s_type;
-
 /*@unused@*/ static const s_type ipv6calc_ipv6addrtypestrings[] = {
 	{ IPV6_ADDR_ANY			, "unknown" },
 	{ IPV6_ADDR_UNICAST		, "unicast" },
@@ -172,6 +157,18 @@ typedef struct {
 	{ IPV6_NEW_ADDR_IID_LOCAL	, "iid-local" },
 	{ IPV6_NEW_ADDR_IID_GLOBAL	, "iid-global" }
 };
+
+
+/* Registries */
+#define IPV6_ADDR_REGISTRY_6BONE	0x01
+#define IPV6_ADDR_REGISTRY_IANA		0x02
+#define IPV6_ADDR_REGISTRY_APNIC	0x03
+#define IPV6_ADDR_REGISTRY_ARIN		0x04
+#define IPV6_ADDR_REGISTRY_RIPE		0x05
+#define IPV6_ADDR_REGISTRY_LACNIC	0x06
+#define IPV6_ADDR_REGISTRY_AFRINIC	0x07
+#define IPV6_ADDR_REGISTRY_RESERVED	0x0e
+#define IPV6_ADDR_REGISTRY_UNKNOWN	0x0f
 
 typedef struct {
 	const int number;

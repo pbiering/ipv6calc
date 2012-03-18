@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.19 2012/03/18 15:00:05 peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.20 2012/03/18 17:15:41 peter Exp $
  * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
@@ -44,9 +44,47 @@ typedef struct {
 
 
 typedef struct {
+	int active;	
 	uint32_t typeinfo_must_have;
 	/* others coming next */
 } s_ipv6calc_filter_ipv4addr;
+
+
+
+/*
+ * IPv4 address type definitions 
+ */
+
+#define IPV4_ADDR_ANY				(uint32_t) 0x00000000U
+
+#define IPV4_ADDR_UNICAST			(uint32_t) 0x00000001U	
+#define IPV4_ADDR_MULTICAST			(uint32_t) 0x00000002U	
+#define IPV4_ADDR_ANYCAST			(uint32_t) 0x00000004U	
+#define IPV4_ADDR_BROADCAST			(uint32_t) 0x00000008U	
+#define IPV4_ADDR_LOOPBACK			(uint32_t) 0x00000010U
+#define IPV4_ADDR_UNKNOWN			(uint32_t) 0x00000400U
+#define IPV4_ADDR_RESERVED			(uint32_t) 0x00000800U
+
+#define IPV4_ADDR_ZEROCONF			(uint32_t) 0x00001000U
+#define IPV4_ADDR_SITELOCAL			(uint32_t) 0x00002000U
+
+#define IPV4_ADDR_6TO4RELAY			(uint32_t) 0x01000000U
+
+
+/* text representation */
+/*@unused@*/ static const s_type ipv6calc_ipv4addrtypestrings[] = {
+	{ IPV4_ADDR_ANY			, "any" },
+	{ IPV4_ADDR_UNICAST		, "unicast" },
+	{ IPV4_ADDR_MULTICAST		, "multicast" },
+	{ IPV4_ADDR_ANYCAST		, "anycast" },
+	{ IPV4_ADDR_BROADCAST		, "broadcast" },
+	{ IPV4_ADDR_LOOPBACK		, "loopback" },
+	{ IPV4_ADDR_UNKNOWN		, "unknown" },
+	{ IPV4_ADDR_RESERVED		, "reserved" },
+	{ IPV4_ADDR_ZEROCONF		, "zeroconf" },
+	{ IPV4_ADDR_SITELOCAL		, "site-local" },
+	{ IPV4_ADDR_6TO4RELAY		, "6to4relay" }
+};
 
 
 /* Registries */
@@ -58,6 +96,9 @@ typedef struct {
 #define IPV4_ADDR_REGISTRY_AFRINIC	0x07
 #define IPV4_ADDR_REGISTRY_RESERVED	0x0e
 #define IPV4_ADDR_REGISTRY_UNKNOWN	0x0f
+
+
+
 
 #endif
 
@@ -94,3 +135,4 @@ extern void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mas
 
 extern int ipv4addr_filter(const ipv6calc_ipv4addr *ipv4addrp, const s_ipv6calc_filter_ipv4addr *filter);
 extern void ipv4addr_filter_clear(s_ipv6calc_filter_ipv4addr *filter);
+extern void ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char* expression);

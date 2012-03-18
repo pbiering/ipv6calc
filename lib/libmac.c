@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.15 2012/03/18 15:00:05 peter Exp $
+ * Version    : $Id: libmac.c,v 1.16 2012/03/18 17:15:41 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -157,6 +157,7 @@ int macaddrstruct_to_string(const ipv6calc_macaddr *macaddrp, char *resultstring
  * in : *filter    = filter structure
  */
 void macaddr_filter_clear(s_ipv6calc_filter_macaddr *filter) {
+	filter->active = 0;
 	filter->typeinfo_must_have = 0;
 	return;
 };

@@ -1,7 +1,7 @@
  /*
  * Project       : ipv6calc
  * File          : dbipv4_assignment.h
- * Version       : $Id: dbipv4addr_assignment.h,v 1.53 2012/02/05 09:40:36 peter Exp $
+ * Version       : $Id: dbipv4addr_assignment.h,v 1.54 2012/03/18 17:15:41 peter Exp $
  * Generated     : Sun Feb  5 11:03:40 2012
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
@@ -9,7 +9,7 @@
  *  Additional header file for libipv4addr.c
  */
 
-static const char* dbipv4addr_registry_status = "AFRINIC/20120205 APNIC/20120203 ARIN/20120204 IANA/20110203 LACNIC/20120203 RIPENCC/20120203";
+/*@unused@*/ static const char* dbipv4addr_registry_status = "AFRINIC/20120205 APNIC/20120203 ARIN/20120204 IANA/20110203 LACNIC/20120203 RIPENCC/20120203";
 
 static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x00000000, 0xff000000,  8, "IANA" },

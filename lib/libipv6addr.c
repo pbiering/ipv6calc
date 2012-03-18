@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.54 2012/03/18 15:00:05 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.55 2012/03/18 17:15:41 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -1094,7 +1094,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	scope = ipv6addr_gettype(ipv6addrp); 
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s: Got scope %08x\n", DEBUG_function_name, (unsigned int) scope);
+		fprintf(stderr, "%s: Got type info: 0x%08x\n", DEBUG_function_name, (unsigned int) scope);
 	};
 
 	ipv6addrp->scope = scope;
@@ -1929,6 +1929,7 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, unsigned int mask_iid, 
  * in : *filter    = filter structure
  */
 void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter) {
+	filter->active = 0;
 	filter->typeinfo_must_have = 0;
 	return;
 };
@@ -1970,6 +1971,7 @@ void ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char* expre
 				};
 
 				filter->typeinfo_must_have |= ipv6calc_ipv6addrtypestrings[i].number;
+				filter->active = 1;
 				break;
 			};
 		};
@@ -1980,6 +1982,7 @@ void ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char* expre
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
 		fprintf(stderr, "%s/%s: filter 'must_have': 0x%08x\n", __FILE__, __func__, filter->typeinfo_must_have);
+		fprintf(stderr, "%s/%s: filter 'active': %d\n", __FILE__, __func__, filter->active);
 	};
 
 	return;
@@ -1995,6 +1998,13 @@ void ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char* expre
  */
 int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_ipv6addr *filter) {
 	uint32_t typeinfo;
+
+	if (filter->active == 0) {
+		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+			fprintf(stderr, "%s/%s: no filter active (SKIP)\n", __FILE__, __func__);
+		};
+		return (1);
+	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
 		fprintf(stderr, "%s/%s: start\n", __FILE__, __func__);

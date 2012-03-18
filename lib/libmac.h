@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.h
- * Version    : $Id: libmac.h,v 1.8 2012/03/18 15:00:05 peter Exp $
+ * Version    : $Id: libmac.h,v 1.9 2012/03/18 17:15:41 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -25,6 +25,7 @@ typedef struct {
 
 
 typedef struct {
+	int active;
 	uint32_t typeinfo_must_have;
 	/* others coming next */
 } s_ipv6calc_filter_macaddr;

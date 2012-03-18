@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.233 2012/03/18 15:00:05 peter Exp $ 
+ *  $Id: ChangeLog,v 1.234 2012/03/18 17:15:41 peter Exp $ 
  */
 
 Info:
@@ -11,6 +11,7 @@ Info:
 20120318/PB
 	lib/*: extend for action 'filter'
 	ipv6calc/ipv6calc.c: implement action (-A) 'filter' with expression '-E', currently only supporting IPv6 addresses
+	lib/libipv4addr.*: implement gettype with proper values
 
 20120306/PB
 	lib/libipv6addr.*: adjust calc of IID privacy detection

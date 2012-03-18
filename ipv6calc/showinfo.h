@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.h
- * Version    : $Id: showinfo.h,v 1.14 2011/10/08 16:08:33 peter Exp $
- * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: showinfo.h,v 1.15 2012/03/18 17:15:41 peter Exp $
+ * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for showinfo.c
@@ -19,13 +19,15 @@
 // 1: never defined, until 0.51
 // 2: 0.60.0cvs to 0.60.1
 // 3: 0.61.0cvs to 0.70.0
-// 4: 0.71.0cvs to current
+// 4: 0.71.0cvs to < 0.92.0
 //	- IP2LOCATION_DATABASE_INFO
 //	+ IP2LOCATION_DATABASE_INFO_IPV4
 //	+ IP2LOCATION_DATABASE_INFO_IPV6 
-// 5: 0.92.0 to current
+// 5: 0.92.0 to < 0.94.0
 //	+ IPV6CALC_FEATURES (see ipv6calc -v)
-#define IPV6CALC_OUTPUT_VERSION	5
+// 6: 0.94.0 to current
+//      TYPE renamed to IPV6_TYPE for alignment
+#define IPV6CALC_OUTPUT_VERSION	6
 
 /* prototypes */
 extern int  showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, const uint32_t formatoptions);
