@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.56 2012/03/18 17:15:41 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.57 2012/03/19 20:04:49 peter Exp $
  * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -973,7 +973,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 					} else {
 						fprintf(stdout, "Generated from the extension identifier of an EUI-48 (MAC): ...:%02x:%02x:%02x\n", (unsigned int) ipv6addr_getoctet(ipv6addrp, 13), (unsigned int) ipv6addr_getoctet(ipv6addrp, 14), (unsigned int) ipv6addr_getoctet(ipv6addrp, 15));
 					};
-				} else if ( (typeinfo & IPV6_NEW_ADDR_ISATAP) != 0 )  {
+				} else if ( (typeinfo & IPV6_NEW_ADDR_IID_ISATAP) != 0 )  {
 					for (i = 0; i <= 3; i++) {
 						ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + 12)));
 					};

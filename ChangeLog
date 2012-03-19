@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.234 2012/03/18 17:15:41 peter Exp $ 
+ *  $Id: ChangeLog,v 1.235 2012/03/19 20:04:48 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120319/PB
+	databases/*: cosmetic fix for suppressing unused-variable during compilation
+	lib/*: review filter tokens
+
 20120318/PB
 	lib/*: extend for action 'filter'
 	ipv6calc/ipv6calc.c: implement action (-A) 'filter' with expression '-E', currently only supporting IPv6 addresses

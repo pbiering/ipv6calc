@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : create_ieee_iab_headerfile.pl
-# Version    : $Id: create_ieee_iab_headerfile.pl,v 1.4 2011/10/08 11:50:13 peter Exp $
-# Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: create_ieee_iab_headerfile.pl,v 1.5 2012/03/19 20:04:48 peter Exp $
+# Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Modified copy of create_ieee_oui_headerfile.pl
 #
@@ -45,7 +45,7 @@ print OUT qq| * Generated     : $now_string
 
 # print creation date
 my $sb = stat($INFILE);
-print OUT "static const char* libieee_iab_status = \"IAB/" . strftime("%Y%m%d", localtime($sb->mtime)) . "\";\n";
+print OUT "\/\*\@unused\@\*\/ static const char* libieee_iab_status __attribute__ ((__unused__)) = \"IAB/" . strftime("%Y%m%d", localtime($sb->mtime)) . "\";\n";
 
 # Structure
 print OUT qq|

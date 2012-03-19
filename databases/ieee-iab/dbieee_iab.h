@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.45 2012/02/05 09:40:35 peter Exp $
- * Generated     : Sun Feb  5 11:01:01 2012
+ * Version       : $Id: dbieee_iab.h,v 1.46 2012/03/19 20:04:48 peter Exp $
+ * Generated     : Mon Mar 19 20:52:52 2012
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-static const char* libieee_iab_status = "IAB/20120205";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20120319";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -3889,5 +3889,50 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xF28000, 0xF28FFF, "Vertex Antennentechnik GmbH", "VERTEX-ANTENNENTECHNIK" },
 	{ 0x0050C2, 0xF29000, 0xF29FFF, "RADYNE CORPORATION", "RADYNE" },
 	{ 0x0050C2, 0xF2A000, 0xF2AFFF, "ACD Elektronik GmbH", "ACD-ELEKTRONIK" },
+	{ 0x0050C2, 0xF2B000, 0xF2BFFF, "Bio Guard component & technologies", "BIO-GUARD-COMPONENT-TECHNOLOGIES" },
+	{ 0x0050C2, 0xF2C000, 0xF2CFFF, "Terratel Technology s.r.o.", "TERRATEL-S-R-O" },
+	{ 0x0050C2, 0xF2D000, 0xF2DFFF, "Robert Bosch Healthcare Systems, Inc. ", "ROBERT-BOSCH-HEALTHCARE" },
+	{ 0x0050C2, 0xF2E000, 0xF2EFFF, "H&L Instruments, LLC", "H-L-INSTRUMENTS-LLC" },
+	{ 0x0050C2, 0xF2F000, 0xF2FFFF, "Arcos Technologies LTD", "ARCOS-TECHNOLOGIES" },
+	{ 0x0050C2, 0xF30000, 0xF30FFF, "Miris AB", "MIRIS-AB" },
+	{ 0x0050C2, 0xF31000, 0xF31FFF, "Ruetz Technologies GmbH", "RUETZ-TECHNOLOGIES" },
+	{ 0x0050C2, 0xF32000, 0xF32FFF, "Net4Things", "NET4THINGS" },
+	{ 0x0050C2, 0xF33000, 0xF33FFF, "Applied Micro Electronics AME BV ", "APPLIED-MICRO-ELECTRONICS-AME" },
+	{ 0x0050C2, 0xF34000, 0xF34FFF, "Sequip S+E GmbH", "SEQUIP-S+E" },
+	{ 0x0050C2, 0xF35000, 0xF35FFF, "GRUPO EPELSA S.L.", "GRUPO-EPELSA-S-L" },
+	{ 0x0050C2, 0xF36000, 0xF36FFF, "Visitech AS", "VISITECH-AS" },
+	{ 0x0050C2, 0xF37000, 0xF37FFF, "Rosslare Enterprises Limited", "ROSSLARE-ENTERPRISES" },
+	{ 0x0050C2, 0xF38000, 0xF38FFF, "AeroControl, Inc.", "AEROCONTROL" },
+	{ 0x0050C2, 0xF39000, 0xF39FFF, "Inforce Computing, Inc. ", "INFORCE-COMPUTING" },
+	{ 0x0050C2, 0xF3A000, 0xF3AFFF, "Saia-Burgess Controls AG", "SAIA-BURGESS-CONTROLS" },
+	{ 0x0050C2, 0xF3B000, 0xF3BFFF, "TAMS firmware co.", "TAMS-FIRMWARE" },
+	{ 0x0050C2, 0xF3C000, 0xF3CFFF, "Vemco Sp. z o. o.", "VEMCO-SP-Z-O-O" },
+	{ 0x0050C2, 0xF3D000, 0xF3DFFF, "Project service S.a.s", "PROJECT-SERVICE-S" },
+	{ 0x0050C2, 0xF3E000, 0xF3EFFF, "Vtron Pty Ltd", "VTRON-PTY" },
+	{ 0x0050C2, 0xF3F000, 0xF3FFFF, "DENSEI COMMUNICATION Inc.", "DENSEI-COMMUNICATION" },
+	{ 0x0050C2, 0xF40000, 0xF40FFF, "iBWorld co.,ltd.", "IBWORLD" },
+	{ 0x0050C2, 0xF41000, 0xF41FFF, "FairyDevices Inc.", "FAIRYDEVICES" },
+	{ 0x0050C2, 0xF42000, 0xF42FFF, "DSPCon", "DSPCON" },
+	{ 0x0050C2, 0xF43000, 0xF43FFF, "Special Systems Engineering Center LLC", "SPECIAL-ENGINEERING-CENTER-LLC" },
+	{ 0x0050C2, 0xF44000, 0xF44FFF, "Steinbichler Optotechnik GmbH", "STEINBICHLER-OPTOTECHNIK" },
+	{ 0x0050C2, 0xF45000, 0xF45FFF, "HUSTY M.Styczen J.Hupert Sp.J.", "HUSTY-M-STYCZEN-J-HUPERT-SP-J" },
+	{ 0x0050C2, 0xF46000, 0xF46FFF, "Reason Tecnologia S.A.", "REASON-TECNOLOGIA" },
+	{ 0x0050C2, 0xF47000, 0xF47FFF, "cadac,inc.", "CADAC" },
+	{ 0x0050C2, 0xF48000, 0xF48FFF, "Midas Technology DBA Phoenix Audio Technologies", "MIDAS-DBA-PHOENIX-AUDIO-TECHNOLOGIES" },
+	{ 0x0050C2, 0xF49000, 0xF49FFF, "Green Instruments A/S", "GREEN-INSTRUMENTS-A/S" },
+	{ 0x0050C2, 0xF4A000, 0xF4AFFF, "Z-App Systems, Inc.", "Z-APP" },
+	{ 0x0050C2, 0xF4B000, 0xF4BFFF, "Supranet", "SUPRANET" },
+	{ 0x0050C2, 0xF4C000, 0xF4CFFF, "Enistic Limited", "ENISTIC" },
+	{ 0x0050C2, 0xF4D000, 0xF4DFFF, "KNOWHOW INFOCOM INC.", "KNOWHOW-INFOCOM" },
+	{ 0x0050C2, 0xF4E000, 0xF4EFFF, "Heinzinger electronic GmbH", "HEINZINGER" },
+	{ 0x0050C2, 0xF4F000, 0xF4FFFF, "BAP Precision Ltd.", "BAP-PRECISION" },
+	{ 0x0050C2, 0xF50000, 0xF50FFF, "Moritex Corporation", "MORITEX" },
+	{ 0x0050C2, 0xF51000, 0xF51FFF, "NDC Infrared Engineering, Inc.", "NDC-INFRARED-ENGINEERING" },
+	{ 0x0050C2, 0xF52000, 0xF52FFF, "Rohde&Schwarz Topex SA", "ROHDE-SCHWARZ-TOPEX" },
+	{ 0x0050C2, 0xF53000, 0xF53FFF, "BAYCOM OPTO-ELECTRONICS TECHNOLOGY CO.,LTD.", "BAYCOM-OPTO-ELECTRONICS" },
+	{ 0x0050C2, 0xF54000, 0xF54FFF, "Hella Gutmann Solutions GmbH", "HELLA-GUTMANN-SOLUTIONS" },
+	{ 0x0050C2, 0xF55000, 0xF55FFF, "Honeywell International Inc.", "HONEYWELL" },
+	{ 0x0050C2, 0xF56000, 0xF56FFF, "Monsoon Solutions, Inc.", "MONSOON-SOLUTIONS" },
+	{ 0x0050C2, 0xF57000, 0xF57FFF, "Reach Technologies Inc.", "REACH-TECHNOLOGIES" },
 
 };

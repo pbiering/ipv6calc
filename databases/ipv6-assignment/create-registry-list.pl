@@ -2,9 +2,9 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.7 2011/10/08 11:50:13 peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.8 2012/03/19 20:04:49 peter Exp $
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
-#              2005-2011 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
+#              2005-2012 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
 # License    : GNU GPL v2
 #
 # Information:
@@ -324,7 +324,7 @@ for my $reg (sort keys %date_created) {
 	};
 	$string .= $reg . "/" . $date_created{$reg};
 };
-print OUT "static const char* dbipv6addr_registry_status = \"$string\";\n";
+print OUT "\/\*\@unused\@\*\/ static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = \"$string\";\n";
 
 # Main data structure
 print OUT qq|

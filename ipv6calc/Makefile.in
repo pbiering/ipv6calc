@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.31 2012/03/03 16:45:11 peter Exp $
+# Version    : $Id: Makefile.in,v 1.32 2012/03/19 20:04:49 peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -57,6 +57,7 @@ clean:
 
 test:		ipv6calc
 		./test_ipv6calc.sh || exit 1
+		./test_ipv6calc_filter.sh || exit 1
 		./test_showinfo.sh || exit 1
 
 test-minimal:	ipv6calc

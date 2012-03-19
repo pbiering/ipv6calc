@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.20 2012/03/18 17:15:41 peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.21 2012/03/19 20:04:49 peter Exp $
  * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
@@ -46,6 +46,7 @@ typedef struct {
 typedef struct {
 	int active;	
 	uint32_t typeinfo_must_have;
+	uint32_t typeinfo_may_not_have;
 	/* others coming next */
 } s_ipv6calc_filter_ipv4addr;
 
@@ -135,4 +136,4 @@ extern void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mas
 
 extern int ipv4addr_filter(const ipv6calc_ipv4addr *ipv4addrp, const s_ipv6calc_filter_ipv4addr *filter);
 extern void ipv4addr_filter_clear(s_ipv6calc_filter_ipv4addr *filter);
-extern void ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char* expression);
+extern void ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char* expression, uint32_t *expression_flag);

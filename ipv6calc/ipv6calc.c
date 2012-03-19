@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.56 2012/03/18 17:15:41 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.57 2012/03/19 20:04:49 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -248,6 +248,8 @@ int main(int argc, char *argv[]) {
 	ipv6addr_filter_clear(&filter_ipv6addr);
 	ipv4addr_filter_clear(&filter_ipv4addr);
 	macaddr_filter_clear(&filter_macaddr);
+	uint32_t expression_flag;
+	char tempstring[NI_MAXHOST] = "";
 
 	/* clear address structures */
 	ipv6addr_clearall(&ipv6addr);
@@ -735,10 +737,30 @@ int main(int argc, char *argv[]) {
 					break;
 				};
 
+				snprintf(tempstring, NI_MAXHOST - 1, "%s", optarg);
+
 				/* parse expression string */
-				ipv4addr_filter_parse(&filter_ipv4addr, optarg);
-				ipv6addr_filter_parse(&filter_ipv6addr, optarg);
+				ipv4addr_filter_parse(&filter_ipv4addr, optarg, &expression_flag);
+				ipv6addr_filter_parse(&filter_ipv6addr, optarg, &expression_flag);
 				// macaddr_filter_parse(&filter_macaddr, optarg);
+				
+				/* check for unrecognized option */
+				j = 0;
+				result = 0;
+				charptr = strtok_r(tempstring, ",", ptrptr);
+				while (charptr != NULL) {
+					if ((expression_flag & (1 << j)) == 0) {
+						result = 1;
+						fprintf(stderr, "Unrecognized filter token: %s\n", charptr);
+					};
+
+					charptr = strtok_r(NULL, ",", ptrptr);
+					j++;
+				};
+
+				if (result != 0) {
+					exit(EXIT_FAILURE);
+				};
 				break;
 				
 			default:

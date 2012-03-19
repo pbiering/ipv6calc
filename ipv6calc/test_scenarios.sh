@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.3 2012/02/05 09:03:34 peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.4 2012/03/19 20:04:49 peter Exp $
 # Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -120,5 +120,13 @@ fec0::					RFC4291#2.5.7
 fed0:ffff:ffff:ffff:ffff:ffff:ffff:ffff	RFC4291#2.5.7
 ff00::					RFC4291#2.7
 ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff	RFC4291#2.7
+END
+}
+
+# Test Scenarios for filter
+testscenarios_filter() {
+	cat <<END | grep -v '^#'
+3FFE:1a05:510:200:0:5EFE:8CAD:8108		iid-isatap
+3ffe:831f:ce49:7601:8000:efff:af4a:86BF		teredo
 END
 }

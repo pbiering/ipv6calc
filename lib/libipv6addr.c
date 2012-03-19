@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.55 2012/03/18 17:15:41 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.56 2012/03/19 20:04:49 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -553,7 +553,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 	if (st2 == (uint32_t) 0x00005EFEu && ((type & IPV6_NEW_ADDR_TEREDO) == 0)) {
 		/* ..:0000:5EFE:xx.xx.xx.xx ISATAP suffix (RFC 4214) */
 		/* but not if TEREDO */
-		type |= IPV6_NEW_ADDR_ISATAP;
+		type |= IPV6_NEW_ADDR_IID_ISATAP;
 	};
 
 	/* multicast */
@@ -615,20 +615,20 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 			) {
 				/* fe80::8000:5445:5245:444F : LSB string: "TEREDO" */
 				/* fe80::ffff:ffff:fffd */
-				type |= IPV6_NEW_ADDR_LINKLOCAL_TEREDO;
+				type |= IPV6_NEW_ADDR_LINKLOCAL_TEREDO | IPV6_NEW_ADDR_IID_TEREDO;
 			};
 		} else if ((st & 0xFFC00000u) == 0xFEC00000u) {
 			type |= IPV6_ADDR_SITELOCAL;
 		};
 
-		if ((type & IPV6_NEW_ADDR_IID) == IPV6_NEW_ADDR_IID) {
+		if ((type & IPV6_NEW_ADDR_IID) != 0) {
 			/* check IID */
 			if ((st2 & 0x02000000u) == 0x02000000u) {
 				type |= IPV6_NEW_ADDR_IID_GLOBAL;
 			} else {
 				type |= IPV6_NEW_ADDR_IID_LOCAL;
 
-				if ((type & (IPV6_NEW_ADDR_LINKLOCAL_TEREDO | IPV6_NEW_ADDR_ISATAP | IPV6_NEW_ADDR_TEREDO)) == 0) {
+				if ((type & (IPV6_NEW_ADDR_LINKLOCAL_TEREDO | IPV6_NEW_ADDR_IID_ISATAP | IPV6_NEW_ADDR_TEREDO)) == 0) {
 					/* fuzzy detection of IID privacy extension */
 					if (ipv6addr_privacyextensiondetection(ipv6addrp, &variances) == 0) {
 						type |= IPV6_NEW_ADDR_IID_PRIVACY;
@@ -1099,17 +1099,6 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 
 	ipv6addrp->scope = scope;
 	
-	/* currently unused code - forgotten why there... :-(
-	if ( scope != 0 ) { */
-		/* test, whether compatv4/mapped/ISATAP is really one */
-	/*
-		if ( (ipv6addrp->scope & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED | IPV6_NEW_ADDR_ISATAP)) == 0 ) {
-			snprintf(resultstring, NI_MAXHOST - 1, "Error, given address '%s' is not valid compatv4/mapped/ISATAP one!", addrstring);
-			retval = 1;
-			return (retval);
-		};
-	};*/
-
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
 		fprintf(stderr, "%s: First word is: %04x, address info value: %08x\n", DEBUG_function_name, (unsigned int) ipv6addr_getword(ipv6addrp, 0), (unsigned int) scope);
 		fprintf(stderr, "%s: flag_prefixuse %d\n", DEBUG_function_name, ipv6addrp->flag_prefixuse);
@@ -1827,7 +1816,7 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, unsigned int mask_iid, 
 						ipv6addr_setoctet(ipv6addrp, 14, 0x0u);
 						ipv6addr_setoctet(ipv6addrp, 15, 0x0u);
 					};
-				} else if ( (typeinfo & IPV6_NEW_ADDR_ISATAP) != 0 )  {
+				} else if ( (typeinfo & IPV6_NEW_ADDR_IID_ISATAP) != 0 )  {
 					for (i = 0; i <= 3; i++) {
 						ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + 12)));
 					};
@@ -1940,9 +1929,10 @@ void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter) {
  *
  * in : *filter    = filter structure
  * in : *expression= expression string
+ * in : *expression_flag
  */
-void ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char* expression) {
-	int i;
+void ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *expression, uint32_t *expression_flag) {
+	int i, j = 0;
 	char *token, *cptr, **ptrptr, tempstring[NI_MAXHOST];
 
 	ptrptr = &cptr;
@@ -1972,12 +1962,14 @@ void ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char* expre
 
 				filter->typeinfo_must_have |= ipv6calc_ipv6addrtypestrings[i].number;
 				filter->active = 1;
+				*expression_flag |= 1 << j;
 				break;
 			};
 		};
 
 		/* next token */
 		token = strtok_r(NULL, ",", ptrptr);
+		j++;
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {

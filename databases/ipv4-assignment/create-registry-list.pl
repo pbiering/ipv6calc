@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.26 2011/10/08 11:50:13 peter Exp $
-# Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: create-registry-list.pl,v 1.27 2012/03/19 20:04:49 peter Exp $
+# Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
 # Information:
@@ -431,7 +431,7 @@ for my $reg (sort keys %date_created) {
 	};
 	$string .= $reg . "/" . $date_created{$reg};
 };
-print OUT "static const char* dbipv4addr_registry_status = \"$string\";\n";
+print OUT "\/\*\@unused\@\*\/ static const char* dbipv4addr_registry_status __attribute__ ((__unused__)) = \"$string\";\n";
 
 
 # Create hash

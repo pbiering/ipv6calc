@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.30 2012/03/18 17:15:41 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.31 2012/03/19 20:04:49 peter Exp $
  * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -972,8 +972,8 @@ void ipv4addr_filter_clear(s_ipv6calc_filter_ipv4addr *filter) {
  * in : *filter    = filter structure
  * in : *expression= expression string
  */
-void ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char* expression) {
-	int i;
+void ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *expression, uint32_t *expression_flag) {
+	int i, j = 0;
 	char *token, *cptr, **ptrptr, tempstring[NI_MAXHOST];
 
 	ptrptr = &cptr;
@@ -1003,12 +1003,14 @@ void ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char* expre
 
 				filter->typeinfo_must_have |= ipv6calc_ipv4addrtypestrings[i].number;
 				filter->active = 1;
+				*expression_flag |= 1 << j;
 				break;
 			};
 		};
 
 		/* next token */
 		token = strtok_r(NULL, ",", ptrptr);
+		j++;
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {

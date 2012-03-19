@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.18 2011/11/03 06:48:11 peter Exp $
- * Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logconv.c,v 1.19 2012/03/19 20:04:49 peter Exp $
+ * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile conversions
@@ -612,7 +612,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 			} else {
 				if ( (typeinfo & IPV6_NEW_ADDR_6TO4_MICROSOFT) != 0 ) {
 					snprintf(resultstring, LINEBUFFER - 1, "6to4-microsoft.ouitype.ipv6calc");
-				} else if ( (typeinfo & IPV6_NEW_ADDR_ISATAP) != 0 ) {
+				} else if ( (typeinfo & IPV6_NEW_ADDR_IID_ISATAP) != 0 ) {
 					snprintf(resultstring, LINEBUFFER - 1, "ISATAP.ouitype.ipv6calc");
 				} else {
 					snprintf(resultstring, LINEBUFFER - 1, "local-scope.ouitype.ipv6calc");

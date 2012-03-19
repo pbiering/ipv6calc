@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.39 2012/03/18 17:15:41 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.40 2012/03/19 20:04:49 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -72,6 +72,7 @@ static const s_iid_statistics s_iid_statistics_shift = {
 typedef struct {
 	int active;
 	uint32_t typeinfo_must_have;
+	uint32_t typeinfo_may_not_have;
 	/* others coming next */
 } s_ipv6calc_filter_ipv6addr;
 
@@ -106,6 +107,9 @@ typedef struct {
 
 #define IPV6_ADDR_SCOPE_MASK			(uint32_t) 0x000000f0U
 
+#define IPV6_NEW_ADDR_IID_TEREDO		(uint32_t) 0x00000100U	/* RFC xxxx */
+#define IPV6_NEW_ADDR_IID_ISATAP		(uint32_t) 0x00000200U	/* RFC 4214 */
+
 #define IPV6_ADDR_MAPPED			(uint32_t) 0x00001000U
 #define IPV6_ADDR_RESERVED			(uint32_t) 0x00002000U	/* reserved address space */
 #define IPV6_ADDR_ULUA				(uint32_t) 0x00004000U	/* Unique Local Unicast Address */
@@ -115,13 +119,14 @@ typedef struct {
 #define IPV6_NEW_ADDR_AGU			(uint32_t) 0x00040000U
 #define IPV6_NEW_ADDR_UNSPECIFIED		(uint32_t) 0x00080000U
 #define IPV6_NEW_ADDR_SOLICITED_NODE		(uint32_t) 0x00100000U
-#define IPV6_NEW_ADDR_ISATAP			(uint32_t) 0x00200000U	/* RFC 4214 */
+
 #define IPV6_NEW_ADDR_PRODUCTIVE		(uint32_t) 0x00400000U
 #define IPV6_NEW_ADDR_6TO4_MICROSOFT		(uint32_t) 0x00800000U
 #define IPV6_NEW_ADDR_TEREDO			(uint32_t) 0x01000000U
 #define IPV6_NEW_ADDR_ORCHID			(uint32_t) 0x02000000U  /* RFC 4843 */
 #define IPV6_NEW_ADDR_LINKLOCAL_TEREDO		(uint32_t) 0x04000000U
 #define IPV6_NEW_ADDR_NAT64			(uint32_t) 0x08000000U	/* RFC 6052 */
+
 #define IPV6_NEW_ADDR_IID_PRIVACY		(uint32_t) 0x10000000U	/* RFC 4941 (ex 3041) */
 #define IPV6_NEW_ADDR_IID			(uint32_t) 0x20000000U	/* IPv6 address with IID inside */
 #define IPV6_NEW_ADDR_IID_LOCAL			(uint32_t) 0x40000000U	/* IPv6 address with local generated IID */
@@ -145,7 +150,6 @@ typedef struct {
 	{ IPV6_NEW_ADDR_AGU		, "global-unicast" },
 	{ IPV6_NEW_ADDR_UNSPECIFIED	, "unspecified" },
 	{ IPV6_NEW_ADDR_SOLICITED_NODE	, "solicited-node" },
-	{ IPV6_NEW_ADDR_ISATAP		, "ISATAP" },
 	{ IPV6_NEW_ADDR_PRODUCTIVE	, "productive" },
 	{ IPV6_NEW_ADDR_6TO4_MICROSOFT	, "6to4-microsoft" },
 	{ IPV6_NEW_ADDR_TEREDO		, "teredo" },
@@ -155,7 +159,9 @@ typedef struct {
 	{ IPV6_NEW_ADDR_IID_PRIVACY	, "iid-privacy" },
 	{ IPV6_NEW_ADDR_IID		, "iid" },
 	{ IPV6_NEW_ADDR_IID_LOCAL	, "iid-local" },
-	{ IPV6_NEW_ADDR_IID_GLOBAL	, "iid-global" }
+	{ IPV6_NEW_ADDR_IID_GLOBAL	, "iid-global" },
+	{ IPV6_NEW_ADDR_IID_TEREDO	, "iid-teredo" },
+	{ IPV6_NEW_ADDR_IID_ISATAP	, "iid-isatap" }
 };
 
 
@@ -228,4 +234,4 @@ extern int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp
 
 extern int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_ipv6addr *filter);
 extern void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter);
-extern void ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char* expression);
+extern void ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char* expression, uint32_t *expression_flag);
