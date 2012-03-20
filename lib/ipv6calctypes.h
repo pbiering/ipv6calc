@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.27 2012/03/18 15:00:05 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.28 2012/03/20 06:36:30 peter Exp $
  * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -21,6 +21,13 @@ extern uint32_t ipv6calctypes_checkaction(const char *string);
 #ifndef _ipv6calctypes_h_
 
 #define _ipv6calctypes_h_
+
+/* text representations for defines */
+typedef struct {
+	const uint32_t number;
+	const char *token;
+} s_type;
+
 
 /*
  * Format handling matrix for new address option style

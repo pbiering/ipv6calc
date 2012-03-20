@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.235 2012/03/19 20:04:48 peter Exp $ 
+ *  $Id: ChangeLog,v 1.236 2012/03/20 06:36:30 peter Exp $ 
  */
 
 Info:
@@ -8,9 +8,13 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120320/PB
+	lib/*: extend filter handling, implement negate
+	
 20120319/PB
 	databases/*: cosmetic fix for suppressing unused-variable during compilation
 	lib/*: review filter tokens
+	dabases: update
 
 20120318/PB
 	lib/*: extend for action 'filter'

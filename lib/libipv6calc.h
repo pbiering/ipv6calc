@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.9 2012/03/18 17:15:41 peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.10 2012/03/20 06:36:30 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -9,6 +9,9 @@
  */ 
 
 #include "ipv6calc_inttypes.h"
+#include "libipv4addr.h"
+#include "libipv6addr.h"
+#include "libmac.h"
 
 
 /* typedefs */
@@ -17,11 +20,12 @@
 
 #define _libipv6calc_h 1
 
-/* text representations for defines */
+/* master filter structure */
 typedef struct {
-	const uint32_t number;
-	const char *token;
-} s_type;
+	s_ipv6calc_filter_ipv4addr filter_ipv4addr;
+	s_ipv6calc_filter_ipv6addr filter_ipv6addr;
+	s_ipv6calc_filter_macaddr  filter_macaddr;
+} s_ipv6calc_filter_master;
 
 #endif
 
@@ -34,5 +38,8 @@ extern void string_to_reverse(char *string);
 extern void string_to_reverse_dotted(char *string);
 
 extern uint32_t libipv6calc_autodetectinput(const char *string);
+
+int libipv6calc_filter_parse(const char *expression, s_ipv6calc_filter_master *filter_master);
+void libipv6calc_filter_clear(s_ipv6calc_filter_master *filter_master);
 
 

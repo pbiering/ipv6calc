@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.57 2012/03/19 20:04:49 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.58 2012/03/20 06:36:30 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -242,14 +242,8 @@ int main(int argc, char *argv[]) {
 	ipv6calc_macaddr  macaddr;
 
 	/* filter structure */
-	s_ipv6calc_filter_ipv6addr filter_ipv6addr;
-	s_ipv6calc_filter_ipv4addr filter_ipv4addr;
-	s_ipv6calc_filter_macaddr  filter_macaddr;
-	ipv6addr_filter_clear(&filter_ipv6addr);
-	ipv4addr_filter_clear(&filter_ipv4addr);
-	macaddr_filter_clear(&filter_macaddr);
-	uint32_t expression_flag;
-	char tempstring[NI_MAXHOST] = "";
+	s_ipv6calc_filter_master filter_master;
+	libipv6calc_filter_clear(&filter_master);
 
 	/* clear address structures */
 	ipv6addr_clearall(&ipv6addr);
@@ -737,26 +731,7 @@ int main(int argc, char *argv[]) {
 					break;
 				};
 
-				snprintf(tempstring, NI_MAXHOST - 1, "%s", optarg);
-
-				/* parse expression string */
-				ipv4addr_filter_parse(&filter_ipv4addr, optarg, &expression_flag);
-				ipv6addr_filter_parse(&filter_ipv6addr, optarg, &expression_flag);
-				// macaddr_filter_parse(&filter_macaddr, optarg);
-				
-				/* check for unrecognized option */
-				j = 0;
-				result = 0;
-				charptr = strtok_r(tempstring, ",", ptrptr);
-				while (charptr != NULL) {
-					if ((expression_flag & (1 << j)) == 0) {
-						result = 1;
-						fprintf(stderr, "Unrecognized filter token: %s\n", charptr);
-					};
-
-					charptr = strtok_r(NULL, ",", ptrptr);
-					j++;
-				};
+				result = libipv6calc_filter_parse(optarg, &filter_master);
 
 				if (result != 0) {
 					exit(EXIT_FAILURE);
@@ -1495,13 +1470,13 @@ PIPE_input:
 			result = 1; /* default, skip */
 			if (inputtype == FORMAT_ipv4addr) {
 				/* call filter for IPv4 addresses */
-				result = ipv4addr_filter(&ipv4addr, &filter_ipv4addr);
+				result = ipv4addr_filter(&ipv4addr, &filter_master.filter_ipv4addr);
 			} else if (inputtype == FORMAT_ipv6addr) {
 				/* call filter for IPv6 addresses */
-				result = ipv6addr_filter(&ipv6addr, &filter_ipv6addr);
+				result = ipv6addr_filter(&ipv6addr, &filter_master.filter_ipv6addr);
 			} else if (inputtype == FORMAT_mac) {
 				/* call filter for MAC addresses */
-				result = macaddr_filter(&macaddr, &filter_macaddr);
+				result = macaddr_filter(&macaddr, &filter_master.filter_macaddr);
 			} else {
 				/* TODO: more specific notice */
 				fprintf(stderr, "Action-type isn't currently implemented for inputtype\n");

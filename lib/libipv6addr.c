@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.56 2012/03/19 20:04:49 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.57 2012/03/20 06:36:30 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -625,6 +625,10 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 			/* check IID */
 			if ((st2 & 0x02000000u) == 0x02000000u) {
 				type |= IPV6_NEW_ADDR_IID_GLOBAL;
+
+				if (((st2 & (uint32_t) 0x000000FFu) == (uint32_t) 0x000000FFu) && ((st3 & (uint32_t) 0xFE000000u) == (uint32_t) 0xFE000000u)) {
+					type |= IPV6_NEW_ADDR_IID_EUI48;
+				};
 			} else {
 				type |= IPV6_NEW_ADDR_IID_LOCAL;
 
@@ -1920,6 +1924,7 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, unsigned int mask_iid, 
 void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter) {
 	filter->active = 0;
 	filter->typeinfo_must_have = 0;
+	filter->typeinfo_may_not_have = 0;
 	return;
 };
 
@@ -1928,56 +1933,58 @@ void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter) {
  * parse filter IPv6 address
  *
  * in : *filter    = filter structure
- * in : *expression= expression string
- * in : *expression_flag
+ * ret: 0:ok !=0 problem
  */
-void ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *expression, uint32_t *expression_flag) {
-	int i, j = 0;
-	char *token, *cptr, **ptrptr, tempstring[NI_MAXHOST];
+int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token) {
+	int i, result = 0, negate = 0;
 
-	ptrptr = &cptr;
-
-	snprintf(tempstring, NI_MAXHOST - 1, "%s", expression);
-
-	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s/%s: input: %s\n", __FILE__, __func__, tempstring);
+	if (token == NULL) {
+		return (result);
 	};
 
-	token = strtok_r(tempstring, ",", ptrptr);
+	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
+		fprintf(stderr, "%s/%s: input: %s\n", __FILE__, __func__, token);
+	};
 
-	while (token != NULL) {
+	if (token[0] == '^') {
+		negate = 1;
+	};
+
+	for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
 		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-			fprintf(stderr, "%s/%s: token found: %s\n", __FILE__, __func__, token);
+			fprintf(stderr, "%s/%s: check token against: %s\n", __FILE__, __func__, ipv6calc_ipv6addrtypestrings[i].token);
 		};
 
-		for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
+		if (strcmp(ipv6calc_ipv6addrtypestrings[i].token, token + negate) == 0) {
 			if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-				fprintf(stderr, "%s/%s: check token against: %s\n", __FILE__, __func__, ipv6calc_ipv6addrtypestrings[i].token);
+				fprintf(stderr, "%s/%s: token match: %s\n", __FILE__, __func__, ipv6calc_ipv6addrtypestrings[i].token);
 			};
 
-			if (strcmp(ipv6calc_ipv6addrtypestrings[i].token, token) == 0) {
-				if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-					fprintf(stderr, "%s/%s: token match: %s\n", __FILE__, __func__, ipv6calc_ipv6addrtypestrings[i].token);
-				};
-
+			if (negate == 1) {
+				filter->typeinfo_may_not_have |= ipv6calc_ipv6addrtypestrings[i].number;
+			} else {
 				filter->typeinfo_must_have |= ipv6calc_ipv6addrtypestrings[i].number;
-				filter->active = 1;
-				*expression_flag |= 1 << j;
-				break;
 			};
+			filter->active = 1;
+			result = 1;
+			break;
 		};
-
-		/* next token */
-		token = strtok_r(NULL, ",", ptrptr);
-		j++;
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s/%s: filter 'must_have': 0x%08x\n", __FILE__, __func__, filter->typeinfo_must_have);
+	if (result == 0) {
+		if ((ipv6calc_debug & DEBUG_libipv6addr) != 0) {
+			fprintf(stderr, "%s/%s: token not supported: %s\n", __FILE__, __func__, token);
+		};
+		return (result);
+	};
+
+	if ((ipv6calc_debug & DEBUG_libipv6addr) != 0) {
+		fprintf(stderr, "%s/%s: filter 'must_have'   : 0x%08x\n", __FILE__, __func__, filter->typeinfo_must_have);
+		fprintf(stderr, "%s/%s: filter 'may_not_have': 0x%08x\n", __FILE__, __func__, filter->typeinfo_may_not_have);
 		fprintf(stderr, "%s/%s: filter 'active': %d\n", __FILE__, __func__, filter->active);
 	};
 
-	return;
+	return (result);
 };
 
 
@@ -2010,7 +2017,9 @@ int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_
 	};
 
 	if ((typeinfo & filter->typeinfo_must_have) == filter->typeinfo_must_have) {
-		return (0);
+		if ((typeinfo & filter->typeinfo_may_not_have) == 0) {
+			return (0);
+		};
 	};
 
 	return (1);

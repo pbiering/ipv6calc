@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.23 2012/01/10 20:50:16 peter Exp $
- * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calc.c,v 1.24 2012/03/20 06:36:30 peter Exp $
+ * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for some tools
@@ -14,6 +14,7 @@
 #include <ctype.h>
 
 #include "ipv6calctypes.h"
+#include "libipv6calc.h"
 #include "libipv6calcdebug.h"
 #include "librfc1924.h"
 #include "librfc2874.h"
@@ -344,3 +345,51 @@ END_libipv6calc_autodetectinput:
 	return (type);
 };
 #undef DEBUG_function_name
+
+
+/*
+ * clear filter master address
+ *
+ * in : *filter    = filter structure
+ */
+void libipv6calc_filter_clear(s_ipv6calc_filter_master *filter_master) {
+	ipv4addr_filter_clear(&filter_master->filter_ipv4addr);
+	ipv6addr_filter_clear(&filter_master->filter_ipv6addr);
+        macaddr_filter_clear(&filter_master->filter_macaddr);
+	return;
+};
+
+
+/*
+ * function parses ipv6calc filter expression
+ *
+ * in : pointer to a string
+ * mod: master filter structure
+ * ret: success
+ */
+int libipv6calc_filter_parse(const char *expression, s_ipv6calc_filter_master *filter_master) {
+	char tempstring[NI_MAXHOST] = "";
+	char *charptr, *cptr, **ptrptr;
+	ptrptr = &cptr;
+	int r, result = 0;
+
+	snprintf(tempstring, NI_MAXHOST - 1, "%s", expression);
+
+	/* split expression */
+	charptr = strtok_r(tempstring, ",", ptrptr);
+	while (charptr != NULL) {
+		r = 0;
+		r += ipv4addr_filter_parse(&filter_master->filter_ipv4addr, charptr);
+		r += ipv6addr_filter_parse(&filter_master->filter_ipv6addr, charptr);
+		// r += macaddr_filter_parse(&filter_macaddr, charptr);
+
+		if (r == 0) {
+			result = 1;
+			fprintf(stderr, "Unrecognized filter token: %s\n", charptr);
+		};
+
+		charptr = strtok_r(NULL, ",", ptrptr);
+	};
+
+	return (result);
+};

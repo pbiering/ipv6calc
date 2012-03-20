@@ -1,14 +1,14 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.40 2012/03/19 20:04:49 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.41 2012/03/20 06:36:30 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Header file for libipv6addr.c
  */ 
 
-#include "libipv6calc.h"
+#include "ipv6calctypes.h"
 #include <netinet/in.h>
 #include <ctype.h>
 
@@ -109,6 +109,7 @@ typedef struct {
 
 #define IPV6_NEW_ADDR_IID_TEREDO		(uint32_t) 0x00000100U	/* RFC xxxx */
 #define IPV6_NEW_ADDR_IID_ISATAP		(uint32_t) 0x00000200U	/* RFC 4214 */
+#define IPV6_NEW_ADDR_IID_EUI48			(uint32_t) 0x00000400U
 
 #define IPV6_ADDR_MAPPED			(uint32_t) 0x00001000U
 #define IPV6_ADDR_RESERVED			(uint32_t) 0x00002000U	/* reserved address space */
@@ -161,6 +162,7 @@ typedef struct {
 	{ IPV6_NEW_ADDR_IID_LOCAL	, "iid-local" },
 	{ IPV6_NEW_ADDR_IID_GLOBAL	, "iid-global" },
 	{ IPV6_NEW_ADDR_IID_TEREDO	, "iid-teredo" },
+	{ IPV6_NEW_ADDR_IID_EUI48	, "iid-eui48" },
 	{ IPV6_NEW_ADDR_IID_ISATAP	, "iid-isatap" }
 };
 
@@ -233,5 +235,5 @@ extern void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, unsigned int mas
 extern int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statistics *variancesp);
 
 extern int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_ipv6addr *filter);
+extern int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token);
 extern void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter);
-extern void ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char* expression, uint32_t *expression_flag);
