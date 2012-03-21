@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.17 2012/03/18 15:00:05 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.18 2012/03/21 18:39:05 peter Exp $
  * Copyright  : 2003-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -500,7 +500,7 @@ static void lineparser(void) {
 		if (opt_iid == 1) {
 			/* header */
 			printf("%5s | %8s", "Var", "Hexdigit");
-			for (i = 0; i < 4; i++) {
+			for (i = 1; i < 4; i++) {
 				printf("|Simple %2d", 4<<i);
 			};
 			for (i = 1; i < 4; i++) {
@@ -530,7 +530,7 @@ static void lineparser(void) {
 					printf("%s ", opt_token);
 				};
 			};
-			for (i = 0; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
+			for (i = 1; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
 				if (i > 0) {
 					printf(" ");
 				};
@@ -542,7 +542,7 @@ static void lineparser(void) {
 			if (strlen(opt_token) > 0) {
 				printf("%s ", opt_token);
 			};
-			for (i = 0; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
+			for (i = 1; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
 				if (i > 0) {
 					printf(" ");
 				};
@@ -565,7 +565,7 @@ static void lineparser(void) {
 
 		for (histoentry = 0; histoentry < HISTMAX; histoentry++) {
 			fprintf(FILE_OUT, "%5.2f %8lu", (float) histoentry / (float) HISTRES, variances_distribution.hexdigit[histoentry]);
-			for (i = 0; i < 4; i++) {
+			for (i = 1; i < 4; i++) {
 				fprintf(FILE_OUT, " %8lu", variances_distribution.bits_simple[i][histoentry]);
 			};
 			for (i = 1; i < 4; i++) {

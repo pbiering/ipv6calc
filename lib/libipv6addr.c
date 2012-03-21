@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.57 2012/03/20 06:36:30 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.58 2012/03/21 18:39:05 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -410,9 +410,11 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 			fprintf(stderr, "%s/%s: variance for: size %2d: %0.5f\n", __FILE__, __func__, 4<<i, variance);
 		};
 
-		variance_sum += variance;
+		if (i >= 1) {	/* 8,16,32 only */
+			variance_sum += variance;
+			v++;
+		};
 		variancesp->bits_simple[i] = variance;
-		v++;
 	};
 
 	/* calculate variance of 4<<i bit blocks, assumed average is (4<<i / 2) */
@@ -445,9 +447,9 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 			fprintf(stderr, "%s/%s: variance for: size %2d: %0.5f\n", __FILE__, __func__, 4<<i, variance);
 		};
 
-		variance_sum += variance;
+		//variance_sum += variance;
 		variancesp->bits_permuted[i] = variance;
-		v++;
+		//v++;
 	};
 
 	/* calculate average */
@@ -628,6 +630,8 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 
 				if (((st2 & (uint32_t) 0x000000FFu) == (uint32_t) 0x000000FFu) && ((st3 & (uint32_t) 0xFE000000u) == (uint32_t) 0xFE000000u)) {
 					type |= IPV6_NEW_ADDR_IID_EUI48;
+				} else {
+					type |= IPV6_NEW_ADDR_IID_EUI64;
 				};
 			} else {
 				type |= IPV6_NEW_ADDR_IID_LOCAL;
@@ -1933,10 +1937,12 @@ void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter) {
  * parse filter IPv6 address
  *
  * in : *filter    = filter structure
- * ret: 0:ok !=0 problem
+ * ret: 0:found 1:skip 2:problem
  */
 int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token) {
-	int i, result = 0, negate = 0;
+	int i, result = 1, negate = 0, offset = 0;
+	const char *prefix = "ipv6";
+	const char *prefixdot = "ipv6.";
 
 	if (token == NULL) {
 		return (result);
@@ -1947,7 +1953,40 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 	};
 
 	if (token[0] == '^') {
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s/%s: found negate prefix in token: %s\n", __FILE__, __func__, token);
+		};
+
 		negate = 1;
+		offset += 1;
+	};
+
+	if (strcmp(token + offset, prefix) == 0) {
+		/* any */
+		if (negate == 1) {
+			filter->typeinfo_may_not_have = ~IPV6_ADDR_ANY;
+		} else {
+			filter->typeinfo_must_have = IPV6_ADDR_ANY;
+		};
+		filter->active = 1;
+		result = 0;
+		goto END_ipv6addr_filter_parse;
+
+	} else if (strncmp(token + offset, prefixdot, strlen(prefixdot)) == 0) {
+		/* prefix with dot found */
+		offset += strlen(prefixdot);
+		result = 2; /* token with prefix, result into problem if not found */
+
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s/%s: token with prefix, suffix: %s\n", __FILE__, __func__, token + offset);
+		};
+
+	} else if (strstr(token, ".") != NULL) {
+		/* other prefix */
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s/%s: prefix did not match: %s\n", __FILE__, __func__, token + offset);
+		};
+		return(1);
 	};
 
 	for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
@@ -1955,7 +1994,7 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 			fprintf(stderr, "%s/%s: check token against: %s\n", __FILE__, __func__, ipv6calc_ipv6addrtypestrings[i].token);
 		};
 
-		if (strcmp(ipv6calc_ipv6addrtypestrings[i].token, token + negate) == 0) {
+		if (strcmp(ipv6calc_ipv6addrtypestrings[i].token, token + offset) == 0) {
 			if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
 				fprintf(stderr, "%s/%s: token match: %s\n", __FILE__, __func__, ipv6calc_ipv6addrtypestrings[i].token);
 			};
@@ -1966,18 +2005,19 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 				filter->typeinfo_must_have |= ipv6calc_ipv6addrtypestrings[i].number;
 			};
 			filter->active = 1;
-			result = 1;
+			result = 0;
 			break;
 		};
 	};
 
-	if (result == 0) {
+	if (result != 0) {
 		if ((ipv6calc_debug & DEBUG_libipv6addr) != 0) {
 			fprintf(stderr, "%s/%s: token not supported: %s\n", __FILE__, __func__, token);
 		};
 		return (result);
 	};
 
+END_ipv6addr_filter_parse:
 	if ((ipv6calc_debug & DEBUG_libipv6addr) != 0) {
 		fprintf(stderr, "%s/%s: filter 'must_have'   : 0x%08x\n", __FILE__, __func__, filter->typeinfo_must_have);
 		fprintf(stderr, "%s/%s: filter 'may_not_have': 0x%08x\n", __FILE__, __func__, filter->typeinfo_may_not_have);

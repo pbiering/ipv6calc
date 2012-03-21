@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.41 2012/03/20 06:36:30 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.42 2012/03/21 18:39:05 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -54,7 +54,7 @@ typedef struct {
 static const s_iid_statistics s_iid_statistics_spread = {
 	2.86,
 	{ 8, 3.07, 1.2, 0.44 }, // bits_simple  4, 8, 16, 32
-	{ 1, 1.2, 0.714, 0.44 }, // bits_permuted
+	{ 1, 1.147, 0.714, 0.44 }, // bits_permuted
 	1
 };
 
@@ -62,11 +62,11 @@ static const s_iid_statistics s_iid_statistics_spread = {
 static const s_iid_statistics s_iid_statistics_shift = {
 	0.25,
 	{ -5, -1.5, 0.5, 1.5 }, // bits_simple 4, 8, 16, 32
-	{ -1, -2, 0, 1.5 }, // bits_permuted
+	{ -1, -1.5, 0, 1.5 }, // bits_permuted
 	0
 };
 
-#define IPV6_IID_PRIVACY_LIMIT	6.0
+#define IPV6_IID_PRIVACY_LIMIT	5.5
 
 /* filter */
 typedef struct {
@@ -110,6 +110,7 @@ typedef struct {
 #define IPV6_NEW_ADDR_IID_TEREDO		(uint32_t) 0x00000100U	/* RFC xxxx */
 #define IPV6_NEW_ADDR_IID_ISATAP		(uint32_t) 0x00000200U	/* RFC 4214 */
 #define IPV6_NEW_ADDR_IID_EUI48			(uint32_t) 0x00000400U
+#define IPV6_NEW_ADDR_IID_EUI64			(uint32_t) 0x00000800U
 
 #define IPV6_ADDR_MAPPED			(uint32_t) 0x00001000U
 #define IPV6_ADDR_RESERVED			(uint32_t) 0x00002000U	/* reserved address space */
@@ -163,6 +164,7 @@ typedef struct {
 	{ IPV6_NEW_ADDR_IID_GLOBAL	, "iid-global" },
 	{ IPV6_NEW_ADDR_IID_TEREDO	, "iid-teredo" },
 	{ IPV6_NEW_ADDR_IID_EUI48	, "iid-eui48" },
+	{ IPV6_NEW_ADDR_IID_EUI64	, "iid-eui64" },
 	{ IPV6_NEW_ADDR_IID_ISATAP	, "iid-isatap" }
 };
 

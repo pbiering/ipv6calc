@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.24 2012/03/20 06:36:30 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.25 2012/03/21 18:39:05 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -371,19 +371,35 @@ int libipv6calc_filter_parse(const char *expression, s_ipv6calc_filter_master *f
 	char tempstring[NI_MAXHOST] = "";
 	char *charptr, *cptr, **ptrptr;
 	ptrptr = &cptr;
-	int r, result = 0;
+	int r, token_used, result = 0;
 
 	snprintf(tempstring, NI_MAXHOST - 1, "%s", expression);
 
 	/* split expression */
 	charptr = strtok_r(tempstring, ",", ptrptr);
 	while (charptr != NULL) {
-		r = 0;
-		r += ipv4addr_filter_parse(&filter_master->filter_ipv4addr, charptr);
-		r += ipv6addr_filter_parse(&filter_master->filter_ipv6addr, charptr);
+		token_used = 0;
+
+		r = ipv4addr_filter_parse(&filter_master->filter_ipv4addr, charptr);
+		if (r == 0) {
+			token_used = 1;
+		} else if (r == 2) {
+			result = 1;
+			fprintf(stderr, "Unrecognized filter token: %s\n", charptr);
+		};
+
+		r = ipv6addr_filter_parse(&filter_master->filter_ipv6addr, charptr);
+		if (r == 0) {
+			token_used = 1;
+		} else if (r == 2) {
+			result = 1;
+			fprintf(stderr, "Unrecognized filter token: %s\n", charptr);
+		};
+
 		// r += macaddr_filter_parse(&filter_macaddr, charptr);
 
-		if (r == 0) {
+		/* overall check */
+		if (token_used == 0) {
 			result = 1;
 			fprintf(stderr, "Unrecognized filter token: %s\n", charptr);
 		};

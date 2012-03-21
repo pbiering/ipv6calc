@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.236 2012/03/20 06:36:30 peter Exp $ 
+ *  $Id: ChangeLog,v 1.237 2012/03/21 18:39:05 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120321/PB
+	lib/*: extend filter handling, implement address token, improve privacy detection
+
 20120320/PB
 	lib/*: extend filter handling, implement negate
 	

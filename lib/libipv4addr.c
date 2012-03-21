@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.32 2012/03/20 06:36:30 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.33 2012/03/21 18:39:05 peter Exp $
  * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -971,10 +971,12 @@ void ipv4addr_filter_clear(s_ipv6calc_filter_ipv4addr *filter) {
  * parse filter IPv4 address
  *
  * in : *filter    = filter structure
- * ret: 1:ok 0:problem
+ * ret: 0:found 1:skip 2:problem
  */
 int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token) {
-	int i, result = 0, negate = 0;
+	int i, result = 1, negate = 0, offset = 0;
+	const char *prefix = "ipv4";
+	const char *prefixdot = "ipv4.";
 
 	if (token == NULL) {
 		return (result);
@@ -985,7 +987,36 @@ int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token)
 	};
 
 	if (token[0] == '^') {
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s/%s: found negate prefix in token: %s\n", __FILE__, __func__, token);
+		};
+
 		negate = 1;
+		offset += 1;
+	};
+
+	if (strcmp(token + offset, prefix) == 0) {
+		/* any */
+		if (negate == 1) {
+			filter->typeinfo_may_not_have = ~IPV4_ADDR_ANY;
+		} else {
+			filter->typeinfo_must_have = IPV4_ADDR_ANY;
+		};
+		filter->active = 1;
+		result = 0;
+		goto END_ipv4addr_filter_parse;
+
+	} else if (strncmp(token + offset, prefixdot, strlen(prefixdot)) == 0) {
+		/* prefix with dot found */
+		offset += strlen(prefixdot);
+		result = 2; /* token with prefix, result into problem if not found */
+
+	} else if (strstr(token, ".") != NULL) {
+		/* other prefix */
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s/%s: prefix did not match: %s\n", __FILE__, __func__, token + offset);
+		};
+		return(1);
 	};
 
 	for (i = 0; i < (int) (sizeof(ipv6calc_ipv4addrtypestrings) / sizeof(ipv6calc_ipv4addrtypestrings[0])); i++ ) {
@@ -993,7 +1024,7 @@ int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token)
 			fprintf(stderr, "%s/%s: check token against: %s\n", __FILE__, __func__, ipv6calc_ipv4addrtypestrings[i].token);
 		};
 
-		if (strcmp(ipv6calc_ipv4addrtypestrings[i].token, token + negate) == 0) {
+		if (strcmp(ipv6calc_ipv4addrtypestrings[i].token, token + offset) == 0) {
 			if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
 				fprintf(stderr, "%s/%s: token match: %s\n", __FILE__, __func__, ipv6calc_ipv4addrtypestrings[i].token);
 			};
@@ -1004,18 +1035,19 @@ int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token)
 				filter->typeinfo_must_have |= ipv6calc_ipv4addrtypestrings[i].number;
 			};
 			filter->active = 1;
-			result = 1;
+			result = 0;
 			break;
 		};
 	};
 
-	if (result == 0) {
+	if (result != 0) {
 		if ((ipv6calc_debug & DEBUG_libipv4addr) != 0) {
 			fprintf(stderr, "%s/%s: token not supported: %s\n", __FILE__, __func__, token);
 		};
 		return (result);
 	};
 
+END_ipv4addr_filter_parse:
 	if ((ipv6calc_debug & DEBUG_libipv4addr) != 0) {
 		fprintf(stderr, "%s/%s: filter 'must_have'   : 0x%08x\n", __FILE__, __func__, filter->typeinfo_must_have);
 		fprintf(stderr, "%s/%s: filter 'may_not_have': 0x%08x\n", __FILE__, __func__, filter->typeinfo_may_not_have);
