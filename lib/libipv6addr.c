@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.58 2012/03/21 18:39:05 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.59 2012/03/22 20:41:49 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -229,7 +229,7 @@ void ipv6addr_clearall(ipv6calc_ipv6addr *ipv6addrp) {
 	ipv6addrp->prefixlength = 0;
 	ipv6addrp->flag_valid = 0;
 	ipv6addrp->flag_scopeid = 0;
-	
+
 	return;
 };
 #undef DEBUG_function_name
@@ -264,7 +264,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 
 	/* 0:4, 1:8, 2:16, 3=32, 4=64 */
 	float m, e, variance, variance_sum = 0;
-	const float variance_privacy_max = IPV6_IID_PRIVACY_LIMIT;
+	const float variance_privacy_max = IPV6_IID_PRIVACY_AVG_LIMIT;
 
 	int f, b, i, c, v;
 	int bits[4][16] = {
@@ -350,6 +350,9 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 	variance = 0.0;
 	for (b = 0; b < 16; b++) {
 		c++;
+		if (hexval[b] == 0) {
+			continue;
+		};
 		e = hexval[b];
 
 		m = 1.0;
@@ -410,7 +413,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 			fprintf(stderr, "%s/%s: variance for: size %2d: %0.5f\n", __FILE__, __func__, 4<<i, variance);
 		};
 
-		if (i >= 1) {	/* 8,16,32 only */
+		if (i >= IPV6_IID_PRIVACY_AVG_SIMPLE_START) {
 			variance_sum += variance;
 			v++;
 		};
@@ -447,9 +450,11 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 			fprintf(stderr, "%s/%s: variance for: size %2d: %0.5f\n", __FILE__, __func__, 4<<i, variance);
 		};
 
-		//variance_sum += variance;
+		if (i >= IPV6_IID_PRIVACY_AVG_PERMUTED_START) {
+			variance_sum += variance;
+			v++;
+		};
 		variancesp->bits_permuted[i] = variance;
-		//v++;
 	};
 
 	/* calculate average */
@@ -1929,6 +1934,8 @@ void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter) {
 	filter->active = 0;
 	filter->typeinfo_must_have = 0;
 	filter->typeinfo_may_not_have = 0;
+	filter->iid_var_min_active = 0;
+	filter->iid_var_max_active = 0;
 	return;
 };
 
@@ -1940,9 +1947,13 @@ void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter) {
  * ret: 0:found 1:skip 2:problem
  */
 int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token) {
-	int i, result = 1, negate = 0, offset = 0;
+	int i, result = 1, negate = 0, offset = 0, minmax = 0;
+	float var;
+	char *cp;
 	const char *prefix = "ipv6";
 	const char *prefixdot = "ipv6.";
+	const char *iid_var_min = "iid-var-min:";
+	const char *iid_var_max = "iid-var-max:";
 
 	if (token == NULL) {
 		return (result);
@@ -2010,6 +2021,36 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 		};
 	};
 
+	if (strncmp(iid_var_min, token + offset, strlen(iid_var_min)) == 0) {
+		minmax = -1;
+	} else if (strncmp(iid_var_max, token + offset, strlen(iid_var_min)) == 0)  {
+		minmax = 1;
+	};
+
+	if (minmax != 0) {
+		if ((ipv6calc_debug & DEBUG_libipv6addr) != 0) {
+			fprintf(stderr, "%s/%s: found special token: %s\n", __FILE__, __func__, token);
+		};
+		/* iid variance limits */
+		cp = strstr(token + offset, ":");
+		if (cp == NULL) {
+			result = 2;
+		} else if (strlen(cp) < 1) {
+			result = 2;
+		} else {;
+			var = (float) atol(strstr(token + offset, ":") + 1);
+			if (minmax == -1) {
+				filter->iid_var_min_active = 1;
+				filter->iid_var_min = var;
+				result = 0;
+			} else {
+				filter->iid_var_max_active = 1;
+				filter->iid_var_max = var;
+				result = 0;
+			};
+		};
+	};
+
 	if (result != 0) {
 		if ((ipv6calc_debug & DEBUG_libipv6addr) != 0) {
 			fprintf(stderr, "%s/%s: token not supported: %s\n", __FILE__, __func__, token);
@@ -2019,9 +2060,17 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 
 END_ipv6addr_filter_parse:
 	if ((ipv6calc_debug & DEBUG_libipv6addr) != 0) {
-		fprintf(stderr, "%s/%s: filter 'must_have'   : 0x%08x\n", __FILE__, __func__, filter->typeinfo_must_have);
-		fprintf(stderr, "%s/%s: filter 'may_not_have': 0x%08x\n", __FILE__, __func__, filter->typeinfo_may_not_have);
-		fprintf(stderr, "%s/%s: filter 'active': %d\n", __FILE__, __func__, filter->active);
+		fprintf(stderr, "%s/%s: filter 'must_have'         : 0x%08x\n", __FILE__, __func__, filter->typeinfo_must_have);
+		fprintf(stderr, "%s/%s: filter 'may_not_have'      : 0x%08x\n", __FILE__, __func__, filter->typeinfo_may_not_have);
+		fprintf(stderr, "%s/%s: filter 'active'            : %d\n", __FILE__, __func__, filter->active);
+		fprintf(stderr, "%s/%s: filter 'iid_var_min_active': %d\n", __FILE__, __func__, filter->iid_var_min_active);
+		if (filter->iid_var_min_active == 1) {
+			fprintf(stderr, "%s/%s: filter 'iid_var_min       ': %f\n", __FILE__, __func__, filter->iid_var_min);
+		};
+		fprintf(stderr, "%s/%s: filter 'iid_var_max_active': %d\n", __FILE__, __func__, filter->iid_var_max_active);
+		if (filter->iid_var_max_active == 1) {
+			fprintf(stderr, "%s/%s: filter 'iid_var_max       ': %f\n", __FILE__, __func__, filter->iid_var_max);
+		};
 	};
 
 	return (result);
@@ -2037,6 +2086,9 @@ END_ipv6addr_filter_parse:
  */
 int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_ipv6addr *filter) {
 	uint32_t typeinfo;
+	int result = 1;
+	float iid_var;
+	s_iid_statistics variances;
 
 	if (filter->active == 0) {
 		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
@@ -2058,9 +2110,23 @@ int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_
 
 	if ((typeinfo & filter->typeinfo_must_have) == filter->typeinfo_must_have) {
 		if ((typeinfo & filter->typeinfo_may_not_have) == 0) {
-			return (0);
+			result = 0;
+
+			ipv6addr_privacyextensiondetection(ipv6addrp, &variances);
+			iid_var = variances.average;
+			if (filter->iid_var_min_active == 1) {
+				if (iid_var < filter->iid_var_min) {
+					result = 1;
+				};
+			};
+			if (filter->iid_var_max_active == 1) {
+				if (iid_var > filter->iid_var_max) {
+					result = 1;
+				};
+			};
+
 		};
 	};
 
-	return (1);
+	return (result);
 };

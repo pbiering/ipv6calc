@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.18 2012/03/21 18:39:05 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.19 2012/03/22 20:41:49 peter Exp $
  * Copyright  : 2003-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -48,7 +48,7 @@ FILE    *FILE_OUT;
 static void lineparser(void);
 
 /* IID statistics */
-#define HISTRES 4
+#define HISTRES 8
 #define HISTMAX 32 * HISTRES
 struct {
 	long unsigned int hexdigit[HISTMAX];

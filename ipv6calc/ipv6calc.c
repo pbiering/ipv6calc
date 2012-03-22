@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.58 2012/03/20 06:36:30 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.59 2012/03/22 20:41:49 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -244,6 +244,7 @@ int main(int argc, char *argv[]) {
 	/* filter structure */
 	s_ipv6calc_filter_master filter_master;
 	libipv6calc_filter_clear(&filter_master);
+	s_iid_statistics variances;
 
 	/* clear address structures */
 	ipv6addr_clearall(&ipv6addr);
@@ -663,6 +664,11 @@ int main(int argc, char *argv[]) {
 				formatoptions |= FORMATOPTION_printmirrored;
 				break;
 
+			case FORMATOPTION_NUM_print_iid_var + FORMATOPTION_NUM_HEAD:
+				formatoptions |= FORMATOPTION_print_iid_var;
+	       			formatoptions |= FORMATOPTION_printfulluncompressed;
+				break;
+
 			/* new options */
 			case 'I':	
 			case CMD_inputtype:
@@ -997,11 +1003,15 @@ PIPE_input:
 			continue;
 		};
 
-		if ( (ipv6calc_outputformatoptionmap[i][1] & (formatoptions & ~ FORMATOPTION_quiet) ) == (formatoptions & ~ FORMATOPTION_quiet ) ) {
+		if ( (ipv6calc_outputformatoptionmap[i][1] & (formatoptions & ~FORMATOPTION_quiet) ) == (formatoptions & ~FORMATOPTION_quiet ) ) {
 			/* all options valid */
 			break;
 		};
 		
+		if ((input_is_pipe == 1) && ((formatoptions & FORMATOPTION_print_iid_var) == FORMATOPTION_print_iid_var)) {
+			/* workaround */
+			continue;
+		};
 		fprintf(stderr, " Unsupported format option(s):\n");
 
 		/* run through format options */
@@ -1613,6 +1623,12 @@ PIPE_input:
 			} else {
 				retval = librfc1884_ipv6addrstruct_to_compaddr(&ipv6addr, resultstring, formatoptions);
 			};
+
+			if ((formatoptions & FORMATOPTION_print_iid_var) == FORMATOPTION_print_iid_var) {
+				ipv6addr_privacyextensiondetection(&ipv6addr, &variances);
+				sprintf(resultstring2, "%-40s iid-var=%7.3f  h=%7.3f  s2=%7.3f  s3=%7.3f  s4=%7.3f  p2=%7.3f  p3=%7.3f  p4=%7.3f", resultstring, variances.average, variances.hexdigit, variances.bits_simple[1], variances.bits_simple[2], variances.bits_simple[3], variances.bits_permuted[1], variances.bits_permuted[2], variances.bits_permuted[3]);
+				sprintf(resultstring, "%s", resultstring2);
+			};
 			break;
 
 		case FORMAT_ipv6literal:
@@ -1673,7 +1689,7 @@ PIPE_input:
 
 RESULT_print:
 	/* print result */
-	if ( strlen(resultstring) > 0 ) {
+	if (strlen(resultstring) > 0) {
 		if ( retval == 0 ) {
 			fprintf(stdout, "%s\n", resultstring);
 		} else {

@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.237 2012/03/21 18:39:05 peter Exp $ 
+ *  $Id: ChangeLog,v 1.238 2012/03/22 20:41:49 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120322/PB
+	ipv6calc/ipv6calc: add suppport for --print-iid-var
+	lib/*: some improvements
+
 20120321/PB
 	lib/*: extend filter handling, implement address token, improve privacy detection
 

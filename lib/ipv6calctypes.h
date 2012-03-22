@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.28 2012/03/20 06:36:30 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.29 2012/03/22 20:41:49 peter Exp $
  * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -165,6 +165,7 @@ typedef struct {
 #define FORMATOPTION_NUM_printmirrored		14	// 00004000
 #define FORMATOPTION_NUM_forceprefix		15	// 00010000
 #define FORMATOPTION_NUM_literal		16	// 00020000
+#define FORMATOPTION_NUM_print_iid_var		17	// 00040000
 
 #define FORMATOPTION_NUM_printembedded		31	// special
 
@@ -184,6 +185,7 @@ typedef struct {
 #define FORMATOPTION_printmirrored		(uint32_t) (1 << FORMATOPTION_NUM_printmirrored)
 #define FORMATOPTION_forceprefix		(uint32_t) (1 << FORMATOPTION_NUM_forceprefix)
 #define FORMATOPTION_literal			(uint32_t) (1 << FORMATOPTION_NUM_literal)
+#define FORMATOPTION_print_iid_var		(uint32_t) (1 << FORMATOPTION_NUM_print_iid_var)
 
 #define FORMATOPTION_printembedded		(uint32_t) (1 << FORMATOPTION_NUM_printembedded)
 
@@ -209,6 +211,7 @@ typedef struct {
 	{ FORMATOPTION_quiet            , "--quiet|-q"         , "Be more quiet" },
 	{ FORMATOPTION_printmirrored	, "--printmirrored"    , "Print output mirrored" },
 	{ FORMATOPTION_forceprefix	, "--forceprefix <num>", "Force prefix to <num>" },
+	{ FORMATOPTION_print_iid_var	, "--print-iid-var"	, "IPv6 address IID variance"},
 };
 
 /* Possible format option map */
@@ -217,7 +220,7 @@ typedef struct {
 	{ FORMAT_revnibbles_arpa, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend | FORMATOPTION_printmirrored },
 	{ FORMAT_revipv4, FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printmirrored },
 	{ FORMAT_bitstring      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printstart | FORMATOPTION_printend },
-	{ FORMAT_ipv6addr       , FORMATOPTION_machinereadable | FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed | FORMATOPTION_forceprefix },
+	{ FORMAT_ipv6addr       , FORMATOPTION_machinereadable | FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed | FORMATOPTION_forceprefix | FORMATOPTION_print_iid_var },
 	{ FORMAT_mac            , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_eui64          , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_base85         , 0 },

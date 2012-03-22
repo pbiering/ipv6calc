@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.19 2012/03/19 20:04:49 peter Exp $
- * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calcoptions.h,v 1.20 2012/03/22 20:41:49 peter Exp $
+ * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options for ipv6calc.c
@@ -123,6 +123,8 @@
 	{ "quiet"                , 0, 0, FORMATOPTION_NUM_quiet + FORMATOPTION_NUM_HEAD },
 	
 	{ "printmirrored"        , 0, 0, FORMATOPTION_NUM_printmirrored + FORMATOPTION_NUM_HEAD },
+
+	{ "print-iid-var"        , 0, 0, FORMATOPTION_NUM_print_iid_var + FORMATOPTION_NUM_HEAD },
 
 	/* address anonymizer options */
 	{ "anonymize-standard" , 0, 0, CMD_ANON_PRESET_STANDARD },

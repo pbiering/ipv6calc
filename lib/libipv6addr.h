@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.42 2012/03/21 18:39:05 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.43 2012/03/22 20:41:49 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -52,27 +52,54 @@ typedef struct {
 
 /* spread values to align peaks */
 static const s_iid_statistics s_iid_statistics_spread = {
-	2.86,
-	{ 8, 3.07, 1.2, 0.44 }, // bits_simple  4, 8, 16, 32
-	{ 1, 1.147, 0.714, 0.44 }, // bits_permuted
+	1,
+	{ 0, 1, 1, 1 }, // bits_simple blocksize (4), 8, 16, 32
+	{ 0, 1, 1, 1 }, // bits_permuted (4), 8, 16, 32
 	1
 };
 
+/*
+static const s_iid_statistics s_iid_statistics_spread = {
+	2.89,
+	{ 0, 3.045, 1.2, 0.44, }, // bits_simple blocksize (4), 8, 16, 32
+	{ 0, 1.147, 0.698, 0.44 }, // bits_permuted (4), 8, 16, 32
+	1
+};
+*/
+
 /* shift values to align peaks: >0: shift right  <0: shift left */
 static const s_iid_statistics s_iid_statistics_shift = {
-	0.25,
-	{ -5, -1.5, 0.5, 1.5 }, // bits_simple 4, 8, 16, 32
-	{ -1, -1.5, 0, 1.5 }, // bits_permuted
+	0,
+	{ 0, 0, 0, 0 }, // bits_simple blocksize 4, 8, 16, 32
+	{ 0, 0, 0, 0 }, // bits_permuted (4), 8, 16, 32
 	0
 };
 
-#define IPV6_IID_PRIVACY_LIMIT	5.5
+/*
+static const s_iid_statistics s_iid_statistics_shift = {
+	0.25,
+	{ 0, -1.5, 0.375, 1.5 }, // bits_simple blocksize 4, 8, 16, 32
+	{ 0, -1.375, 0.375, 1.5 }, // bits_permuted (4), 8, 16, 32
+	0
+};
+*/
+
+#define IPV6_IID_PRIVACY_AVG_LIMIT		5.5	// 99% probability
+#define IPV6_IID_PRIVACY_AVG_SIMPLE_START	1
+#define IPV6_IID_PRIVACY_AVG_PERMUTED_START	1
 
 /* filter */
 typedef struct {
 	int active;
 	uint32_t typeinfo_must_have;
 	uint32_t typeinfo_may_not_have;
+
+	/* iid variance */
+	float	iid_var_min;
+	int	iid_var_min_active;
+	float	iid_var_max;
+	int	iid_var_max_active;
+
 	/* others coming next */
 } s_ipv6calc_filter_ipv6addr;
 
