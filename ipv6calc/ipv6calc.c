@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.59 2012/03/22 20:41:49 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.60 2012/03/25 17:57:01 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1049,7 +1049,22 @@ PIPE_input:
 			if (inputc < 1) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
 			break;
 
+		case FORMAT_iid:
+			if (inputc == 2) {
+				inputtype = FORMAT_iid_token;
+				if (outputtype == FORMAT_undefined) {
+					outputtype = FORMAT_iid_token;
+				};
+			};
+			break;
+
 		case FORMAT_iid_token:
+			if (inputc < 2) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
+			if (outputtype == FORMAT_undefined) {
+				outputtype = FORMAT_iid_token;
+			};
+			break;
+
 		case FORMAT_prefix_mac:
 			if (inputc < 2) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
 			break;

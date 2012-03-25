@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.59 2012/03/22 20:41:49 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.60 2012/03/25 17:57:01 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -349,10 +349,10 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 	c = 0;
 	variance = 0.0;
 	for (b = 0; b < 16; b++) {
-		c++;
 		if (hexval[b] == 0) {
 			continue;
 		};
+		c++;
 		e = hexval[b];
 
 		m = 1.0;
@@ -1497,7 +1497,7 @@ int tokenlsb64_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv
 	};
 	
 	if ( strlen(addrstring) != 16 ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "Error in given token '%s' is not valid (length != 16!", addrstring);
+		snprintf(resultstring, NI_MAXHOST - 1, "Error in given token '%s' is not valid (length != 16)!", addrstring);
 		retval = 1;
 		return (retval);
 	};

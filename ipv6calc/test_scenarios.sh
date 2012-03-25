@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.4 2012/03/19 20:04:49 peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.5 2012/03/25 17:57:01 peter Exp $
 # Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -129,4 +129,10 @@ testscenarios_filter() {
 3FFE:1a05:510:200:0:5EFE:8CAD:8108		iid-isatap
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF		teredo
 END
+}
+
+# Test Scenarios for genprivacyiid
+testscenarios_genprivacyiid() {
+	#TODO
+	true
 }

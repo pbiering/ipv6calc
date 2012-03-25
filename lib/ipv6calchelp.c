@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.26 2011/11/27 15:44:41 peter Exp $
- * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calchelp.c,v 1.27 2012/03/25 17:57:01 peter Exp $
+ * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -313,9 +313,9 @@ void printhelp(void) {
 	fprintf(stderr, "  [<format option> ...] : specify format options\n");
 	fprintf(stderr, "  <input data> [...]    : input data\n");
 	fprintf(stderr, "\n");
-	fprintf(stderr, "  Available input  types:  [-m] --in     -?|-h|--help\n");
-	fprintf(stderr, "  Available output types:  [-m] --out    -?|-h|--help\n");
-	fprintf(stderr, "  Available action types:  [-m] --action -?|-h|--help\n");
+	fprintf(stderr, "  Available input  types:  [-m] -I|--in     -?|-h|--help\n");
+	fprintf(stderr, "  Available output types:  [-m] -O|--out    -?|-h|--help\n");
+	fprintf(stderr, "  Available action types:  [-m] -A|--action -?|-h|--help\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, " Other usage:\n");
 	fprintf(stderr, "\n");

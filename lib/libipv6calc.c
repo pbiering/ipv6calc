@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.25 2012/03/21 18:39:05 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.26 2012/03/25 17:57:01 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -143,7 +143,7 @@ void string_to_reverse_dotted(char *string) {
 uint32_t libipv6calc_autodetectinput(const char *string) {
 	uint32_t type = FORMAT_auto_noresult;
 	int i, j = 0, result;
-	int numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, numdashes = 0, numspaces = 0, numslashes = 0, numalnums = 0, numchar_s = 0, numpercents = 0;
+	int numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, numdashes = 0, numspaces = 0, numslashes = 0, numalnums = 0, numchar_s = 0, numpercents = 0, numcolonsdouble = 0;
 	char resultstring[NI_MAXHOST];
 	size_t length;
 
@@ -156,7 +156,17 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 
 	for (i = 0; i < (int) length; i++) {
 		if (string[i] == '.') { numdots++; };
-		if (string[i] == ':') { numcolons++; };
+		if (string[i] == ':') {
+			numcolons++;
+			if (i < (int) length + 1) {
+				/* check for double colons */
+				if (string[i+1] == ':') {
+					numcolonsdouble++;
+					numcolons++;
+					i++;
+				};
+			};
+		};
 		if (string[i] == '-') { numdashes++; };
 		if (string[i] == '/') { numslashes++; };
 		if (string[i] == ' ') { numspaces++; };
@@ -169,17 +179,18 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 
 	if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
 		fprintf(stderr, "%s: Autodetection source:\n", DEBUG_function_name);
-		fprintf(stderr, "%s:  numdots    :%d\n", DEBUG_function_name, numdots);
-		fprintf(stderr, "%s:  numcolons  :%d\n", DEBUG_function_name, numcolons);
-		fprintf(stderr, "%s:  numdashes  :%d\n", DEBUG_function_name, numdashes);
-		fprintf(stderr, "%s:  numspaces  :%d\n", DEBUG_function_name, numspaces);
-		fprintf(stderr, "%s:  numslashes :%d\n", DEBUG_function_name, numslashes);
-		fprintf(stderr, "%s:  numdigits  :%d\n", DEBUG_function_name, numdigits);
-		fprintf(stderr, "%s:  numxdigits :%d\n", DEBUG_function_name, numxdigits);
-		fprintf(stderr, "%s:  numalnums  :%d\n", DEBUG_function_name, numalnums);
-		fprintf(stderr, "%s:  numpercents:%d\n", DEBUG_function_name, numpercents);
-		fprintf(stderr, "%s:  numchar_s  :%d\n", DEBUG_function_name, numchar_s);
-		fprintf(stderr, "%s:  length     :%d\n", DEBUG_function_name, (int) length);
+		fprintf(stderr, "%s:  numdots        :%d\n", DEBUG_function_name, numdots);
+		fprintf(stderr, "%s:  numcolons      :%d\n", DEBUG_function_name, numcolons);
+		fprintf(stderr, "%s:  numcolonsdouble:%d\n", DEBUG_function_name, numcolonsdouble);
+		fprintf(stderr, "%s:  numdashes      :%d\n", DEBUG_function_name, numdashes);
+		fprintf(stderr, "%s:  numspaces      :%d\n", DEBUG_function_name, numspaces);
+		fprintf(stderr, "%s:  numslashes     :%d\n", DEBUG_function_name, numslashes);
+		fprintf(stderr, "%s:  numdigits      :%d\n", DEBUG_function_name, numdigits);
+		fprintf(stderr, "%s:  numxdigits     :%d\n", DEBUG_function_name, numxdigits);
+		fprintf(stderr, "%s:  numalnums      :%d\n", DEBUG_function_name, numalnums);
+		fprintf(stderr, "%s:  numpercents    :%d\n", DEBUG_function_name, numpercents);
+		fprintf(stderr, "%s:  numchar_s      :%d\n", DEBUG_function_name, numchar_s);
+		fprintf(stderr, "%s:  length         :%d\n", DEBUG_function_name, (int) length);
 	};
 
 	if ( length == 20 && numdots == 0 && numcolons == 0 ) {
@@ -319,6 +330,12 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		};
 	};
 	
+	if (((numcolons == 3) || (numcolons > 0 && numcolons < 3 && numcolonsdouble == 1)) && numdots == 0 && numslashes == 0 && numpercents == 0 && ((numcolons + numxdigits) == length)) {
+		/* IID */
+		type = FORMAT_iid;
+		goto END_libipv6calc_autodetectinput;
+	};
+
 	if (numcolons != 0 && numdots <= 3 && numslashes <= 1 && ((numpercents == 0 && (numdots + numcolons + numxdigits + numslashes) == length) || (numpercents == 1 && (numdots + numcolons + numxdigits + numslashes + numpercents) <= length))) {
 		/* hopefully an IPv6 address */
 		/* fe80::1 */

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.29 2012/03/22 20:41:49 peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.30 2012/03/25 17:57:01 peter Exp $
  * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -265,7 +265,7 @@ typedef struct {
 	{ ACTION_auto                 , "auto"            , "Automatic selection of action (default)", "" },
 	{ ACTION_mac_to_eui64         , "geneui64"        , "Converts a MAC address to an EUI-64 address", "" },
 	{ ACTION_ipv4_to_6to4addr     , "conv6to4"        , "Converts IPv4 address <-> 6to4 IPv6 address (prefix)", "" },
-	{ ACTION_iid_token_to_privacy , "genprivacyiid"   , "Generates a privacy interface ID out of a given one and a token", "" },
+	{ ACTION_iid_token_to_privacy , "genprivacyiid"   , "Generates a privacy interface ID out of a given one (arg1) and a token (arg2)", "" },
 	{ ACTION_prefix_mac_to_ipv6   , "prefixmac2ipv6"  , "Generates an IPv6 address out of a prefix and a MAC address", "" },
 	{ ACTION_anonymize            , "anonymize"       , "Anonymize IPv4/IPv6 address without loosing much information", "" },
 	{ ACTION_6rd_local_prefix     , "6rd_local_prefix", "Calculate the 6rd prefix from given IPv6 prefix & relay prefix and IPv4", "" },

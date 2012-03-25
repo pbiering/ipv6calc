@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3041.c
- * Version    : $Id: librfc3041.c,v 1.10 2007/01/31 16:21:47 peter Exp $
- * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc3041.c,v 1.11 2012/03/25 17:57:01 peter Exp $
+ * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for host identifier privacy extension defined in RFC 3041
@@ -67,10 +67,13 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 		newidentifier->in6_addr.s6_addr[i + 8] = (uint8_t) digest[i];
 		newtoken->in6_addr.s6_addr[i + 8] = (uint8_t) digest[i + 8];
 	};
-	
+
 	newidentifier->flag_valid = 1;
 	newidentifier->prefixlength = 64;
 	newtoken->flag_valid = 1;
+
+	/* clear universal/local bit */
+	ipv6addr_setoctet(newidentifier, 8, ipv6addr_getoctet(newidentifier, 8) & 0xfd);
 
    	retval = 0;	
 	return (retval);
