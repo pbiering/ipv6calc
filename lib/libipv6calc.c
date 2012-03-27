@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.26 2012/03/25 17:57:01 peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.27 2012/03/27 19:15:14 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -330,7 +330,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		};
 	};
 	
-	if (((numcolons == 3) || (numcolons > 0 && numcolons < 3 && numcolonsdouble == 1)) && numdots == 0 && numslashes == 0 && numpercents == 0 && ((numcolons + numxdigits) == length)) {
+	if ((numcolons == 3) && (numcolonsdouble == 0) && numdots == 0 && numslashes == 0 && numpercents == 0 && ((numcolons + numxdigits) == length)) {
 		/* IID */
 		type = FORMAT_iid;
 		goto END_libipv6calc_autodetectinput;

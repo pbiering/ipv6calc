@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.60 2012/03/25 17:57:01 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.61 2012/03/27 19:15:14 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -259,6 +259,18 @@ void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6addr *ip
 int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statistics *variancesp) {
 	uint32_t iid[2];
 
+	/* clear s_iid_statistics */
+	variancesp->hexdigit = 0;
+	variancesp->bits_simple[0] = 0;
+	variancesp->bits_simple[1] = 0;
+	variancesp->bits_simple[2] = 0;
+	variancesp->bits_simple[3] = 0;
+	variancesp->bits_permuted[0] = 0;
+	variancesp->bits_permuted[1] = 0;
+	variancesp->bits_permuted[2] = 0;
+	variancesp->bits_permuted[3] = 0;
+	variancesp->average = 0;
+
 	iid[0] = ipv6addr_getdword(ipv6addrp, 2); // 00-31
 	iid[1] = ipv6addr_getdword(ipv6addrp, 3); // 32-63
 
@@ -372,16 +384,18 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 		variance += e;
 	};
 
-	variance = sqrt(variance / (c-1)) * s_iid_statistics_spread.hexdigit; /* divided by entries -1 & spread by factor 4 */
+	variance = sqrt(variance / c) * s_iid_statistics_spread.hexdigit;
 	variance += s_iid_statistics_shift.hexdigit;
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
 		fprintf(stderr, "%s/%s: variance for hexdigits: %0.5f\n", __FILE__, __func__, variance);
 	};
 
-	variance_sum += variance;
 	variancesp->hexdigit = variance;
-	v++;
+	if (s_iid_statistics_spread.hexdigit != 0) {
+		variance_sum += variance;
+		v++;
+	};
 
 	/* calculate simple variances */
 	for (i = 1; i < 4; i++) {
@@ -406,7 +420,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 			variance += e;
 		};
 
-		variance = sqrt(variance / (c-1)) * s_iid_statistics_spread.bits_simple[i]; /* divided by entries -1 */
+		variance = sqrt(variance / c-1) * s_iid_statistics_spread.bits_simple[i];
 		variance += s_iid_statistics_shift.bits_simple[i];
 
 		if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
@@ -414,8 +428,10 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 		};
 
 		if (i >= IPV6_IID_PRIVACY_AVG_SIMPLE_START) {
-			variance_sum += variance;
-			v++;
+			if (s_iid_statistics_spread.bits_simple[i] != 0) {
+				variance_sum += variance;
+				v++;
+			};
 		};
 		variancesp->bits_simple[i] = variance;
 	};
@@ -443,7 +459,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 			};
 		};
 
-		variance = sqrt(variance / (c-1)) * s_iid_statistics_spread.bits_permuted[i]; /* divided by entries -1 */
+		variance = sqrt(variance / c) * s_iid_statistics_spread.bits_permuted[i];
 		variance += s_iid_statistics_shift.bits_permuted[i];
 
 		if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
@@ -451,8 +467,10 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 		};
 
 		if (i >= IPV6_IID_PRIVACY_AVG_PERMUTED_START) {
-			variance_sum += variance;
-			v++;
+			if (s_iid_statistics_spread.bits_permuted[i] != 0) {
+				variance_sum += variance;
+				v++;
+			};
 		};
 		variancesp->bits_permuted[i] = variance;
 	};
@@ -2038,7 +2056,8 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 		} else if (strlen(cp) < 1) {
 			result = 2;
 		} else {;
-			var = (float) atol(strstr(token + offset, ":") + 1);
+			var = (float) atof(strstr(token + offset, ":") + 1);
+			filter->active = 1;
 			if (minmax == -1) {
 				filter->iid_var_min_active = 1;
 				filter->iid_var_min = var;
@@ -2065,11 +2084,11 @@ END_ipv6addr_filter_parse:
 		fprintf(stderr, "%s/%s: filter 'active'            : %d\n", __FILE__, __func__, filter->active);
 		fprintf(stderr, "%s/%s: filter 'iid_var_min_active': %d\n", __FILE__, __func__, filter->iid_var_min_active);
 		if (filter->iid_var_min_active == 1) {
-			fprintf(stderr, "%s/%s: filter 'iid_var_min       ': %f\n", __FILE__, __func__, filter->iid_var_min);
+			fprintf(stderr, "%s/%s: filter 'iid_var_min       ': %6.3f\n", __FILE__, __func__, filter->iid_var_min);
 		};
 		fprintf(stderr, "%s/%s: filter 'iid_var_max_active': %d\n", __FILE__, __func__, filter->iid_var_max_active);
 		if (filter->iid_var_max_active == 1) {
-			fprintf(stderr, "%s/%s: filter 'iid_var_max       ': %f\n", __FILE__, __func__, filter->iid_var_max);
+			fprintf(stderr, "%s/%s: filter 'iid_var_max       ': %6.3f\n", __FILE__, __func__, filter->iid_var_max);
 		};
 	};
 
@@ -2112,19 +2131,34 @@ int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_
 		if ((typeinfo & filter->typeinfo_may_not_have) == 0) {
 			result = 0;
 
-			ipv6addr_privacyextensiondetection(ipv6addrp, &variances);
-			iid_var = variances.average;
-			if (filter->iid_var_min_active == 1) {
-				if (iid_var < filter->iid_var_min) {
-					result = 1;
+			if ((filter->iid_var_min_active == 1) || (filter->iid_var_max_active == 1)) {
+				ipv6addr_privacyextensiondetection(ipv6addrp, &variances);
+				iid_var = variances.average;
+				if (filter->iid_var_min_active == 1) {
+					if (iid_var < filter->iid_var_min) {
+						if ((ipv6calc_debug & DEBUG_libipv6addr) != 0) {
+							fprintf(stderr, "%s/%s: compare against privacy detection: %6.3f < %6.3f\n", __FILE__, __func__, iid_var, filter->iid_var_min);
+						};
+						result = 1;
+					} else {
+						if ((ipv6calc_debug & DEBUG_libipv6addr) != 0) {
+							fprintf(stderr, "%s/%s: compare against privacy detection: %6.3f !< %6.3f\n", __FILE__, __func__, iid_var, filter->iid_var_min);
+						};
+					};
+				};
+				if (filter->iid_var_max_active == 1) {
+					if (iid_var > filter->iid_var_max) {
+						if ((ipv6calc_debug & DEBUG_libipv6addr) != 0) {
+							fprintf(stderr, "%s/%s: compare against privacy detection: %6.3f > %6.3f\n", __FILE__, __func__, iid_var, filter->iid_var_max);
+						};
+						result = 1;
+					} else {
+						if ((ipv6calc_debug & DEBUG_libipv6addr) != 0) {
+							fprintf(stderr, "%s/%s: compare against privacy detection: %6.3f !> %6.3f\n", __FILE__, __func__, iid_var, filter->iid_var_max);
+						};
+					};
 				};
 			};
-			if (filter->iid_var_max_active == 1) {
-				if (iid_var > filter->iid_var_max) {
-					result = 1;
-				};
-			};
-
 		};
 	};
 

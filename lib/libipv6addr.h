@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.43 2012/03/22 20:41:49 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.44 2012/03/27 19:15:14 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -53,8 +53,8 @@ typedef struct {
 /* spread values to align peaks */
 static const s_iid_statistics s_iid_statistics_spread = {
 	1,
-	{ 0, 1, 1, 1 }, // bits_simple blocksize (4), 8, 16, 32
-	{ 0, 1, 1, 1 }, // bits_permuted (4), 8, 16, 32
+	{ 0, 0, 0, 0 }, // bits_simple blocksize (4), 8, 16, 32
+	{ 0, 0, 0, 0 }, // bits_permuted (4), 8, 16, 32
 	1
 };
 
