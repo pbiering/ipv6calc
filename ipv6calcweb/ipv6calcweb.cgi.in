@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.38 2012/03/18 17:15:41 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.39 2012/04/01 18:39:58 peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -303,9 +303,13 @@ my %text = (
 		'de' => "Interface-Identifierungsnummer",
 		'en' => "Interface identifier",
 	},
-	'IPV6_-TYPE' => {
+	'IPV6_TYPE' => {
 		'de' => "IPv6 Adresstyp",
 		'en' => "IPv6 Address type",
+	},
+	'IPV4_TYPE' => {
+		'de' => "IPv4 Adresstyp",
+		'en' => "IPv4 Address type",
 	},
 	'NAME' => {
 		'de' => "Reverse DNS Aufloesung",
