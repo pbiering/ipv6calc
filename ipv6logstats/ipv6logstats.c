@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.19 2012/03/22 20:41:49 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.20 2012/04/01 18:04:00 peter Exp $
  * Copyright  : 2003-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -116,10 +116,6 @@ int main(int argc,char *argv[]) {
 				opt_printdirection = 1;
 				break;
 
-			case 'i':
-				opt_iid = 1;
-				break;
-
 			case 'c':
 				opt_printdirection = 1;
 				break;
@@ -195,7 +191,6 @@ static void lineparser(void) {
 	int registry;
 	uint32_t typeinfo;
 
-	s_iid_statistics variances;
 	uint32_t histoentry;
 
 	ptrptr = &cptr;
@@ -412,30 +407,6 @@ static void lineparser(void) {
 
 					if (opt_iid == 1) {
 						/* analyize IID */
-						if (ipv6addr_privacyextensiondetection(&ipv6addr, &variances) >= 0) {
-							if (ipv6calc_debug != 0) {
-								fprintf(stderr, "%s/%s: variances: hexdigit=%.5f avg=%.5f\n", __FILE__, __func__, variances.hexdigit, variances.average);
-							};
-
-							/* spread variances */
-							histoentry = rint(variances.hexdigit * HISTRES);
-							if (histoentry >= HISTMAX) { histoentry = HISTMAX - 1; };
-							variances_distribution.hexdigit[histoentry]++;
-
-							histoentry = rint(variances.average * HISTRES);
-							if (histoentry >= HISTMAX) { histoentry = HISTMAX - 1; };
-							variances_distribution.average[histoentry]++;
-
-							for (i = 0; i < 4;i++) {
-								histoentry = rint(variances.bits_simple[i] * HISTRES);
-								if (histoentry >= HISTMAX) { histoentry = HISTMAX - 1; };
-								variances_distribution.bits_simple[i][histoentry]++;
-
-								histoentry = rint(variances.bits_permuted[i] * HISTRES);
-								if (histoentry >= HISTMAX) { histoentry = HISTMAX - 1; };
-								variances_distribution.bits_permuted[i][histoentry]++;
-							};
-						};
 					};	
 				};
 				

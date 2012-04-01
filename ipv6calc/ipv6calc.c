@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.60 2012/03/25 17:57:01 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.61 2012/04/01 18:04:00 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -244,7 +244,8 @@ int main(int argc, char *argv[]) {
 	/* filter structure */
 	s_ipv6calc_filter_master filter_master;
 	libipv6calc_filter_clear(&filter_master);
-	s_iid_statistics variances;
+	s_iid_statistics iid_statistics;
+	int iid_privacy_result;
 
 	/* clear address structures */
 	ipv6addr_clearall(&ipv6addr);
@@ -1640,8 +1641,8 @@ PIPE_input:
 			};
 
 			if ((formatoptions & FORMATOPTION_print_iid_var) == FORMATOPTION_print_iid_var) {
-				ipv6addr_privacyextensiondetection(&ipv6addr, &variances);
-				sprintf(resultstring2, "%-40s iid-var=%7.3f  h=%7.3f  s2=%7.3f  s3=%7.3f  s4=%7.3f  p2=%7.3f  p3=%7.3f  p4=%7.3f", resultstring, variances.average, variances.hexdigit, variances.bits_simple[1], variances.bits_simple[2], variances.bits_simple[3], variances.bits_permuted[1], variances.bits_permuted[2], variances.bits_permuted[3]);
+				iid_privacy_result = ipv6addr_privacyextensiondetection(&ipv6addr, &iid_statistics);
+				sprintf(resultstring2, "%-40s R=%d h=%7.3f r=%7.3f db= %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d da= %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", resultstring, iid_privacy_result, iid_statistics.hexdigit, iid_statistics.lls_residual, iid_statistics.digit_blocks[0], iid_statistics.digit_blocks[1], iid_statistics.digit_blocks[2], iid_statistics.digit_blocks[3], iid_statistics.digit_blocks[4], iid_statistics.digit_blocks[5], iid_statistics.digit_blocks[6], iid_statistics.digit_blocks[7], iid_statistics.digit_blocks[8], iid_statistics.digit_blocks[9], iid_statistics.digit_blocks[10], iid_statistics.digit_blocks[11], iid_statistics.digit_blocks[12], iid_statistics.digit_blocks[13], iid_statistics.digit_blocks[14], iid_statistics.digit_blocks[15], iid_statistics.digit_amount[0], iid_statistics.digit_amount[1], iid_statistics.digit_amount[2], iid_statistics.digit_amount[3], iid_statistics.digit_amount[4], iid_statistics.digit_amount[5], iid_statistics.digit_amount[6], iid_statistics.digit_amount[7], iid_statistics.digit_amount[8], iid_statistics.digit_amount[9], iid_statistics.digit_amount[10], iid_statistics.digit_amount[11], iid_statistics.digit_amount[12], iid_statistics.digit_amount[13], iid_statistics.digit_amount[14], iid_statistics.digit_amount[15]);
 				sprintf(resultstring, "%s", resultstring2);
 			};
 			break;

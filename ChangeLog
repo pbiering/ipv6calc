@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.239 2012/03/25 17:57:01 peter Exp $ 
+ *  $Id: ChangeLog,v 1.240 2012/04/01 18:03:59 peter Exp $ 
  */
 
 Info:
@@ -8,8 +8,12 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120401/PB
+	ipv6calc/showinfo: finalze autodetection for privacy IIDs
+
 20120325/PB
 	ipv6calc: improve autodetection (for IID), improve genprivacyiid
+
 20120322/PB
 	ipv6calc/ipv6calc: add suppport for --print-iid-var
 	lib/*: some improvements

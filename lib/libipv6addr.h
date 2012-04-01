@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.44 2012/03/27 19:15:14 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.45 2012/04/01 18:04:00 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -42,63 +42,36 @@ typedef struct {
 	const char *string_registry;
 } s_ipv6addr_assignment;
 
+
 /* IID statistics */
 typedef struct {
 	float hexdigit;
-	float bits_simple[4];
-	float bits_permuted[4];
-	float average;
+	float lls_residual;	// lls: linear least square
+	int   digit_blocks[16];	// block length of same digit
+	int   digit_amount[16]; // amount of digit
 } s_iid_statistics;
 
-/* spread values to align peaks */
-static const s_iid_statistics s_iid_statistics_spread = {
-	1,
-	{ 0, 0, 0, 0 }, // bits_simple blocksize (4), 8, 16, 32
-	{ 0, 0, 0, 0 }, // bits_permuted (4), 8, 16, 32
-	1
+/* IID privacy limits */
+static const s_iid_statistics s_iid_statistics_ok_min = {
+	0.249,		// fits to 100% of 1 million tested
+	6.275,		// fits to 100% of 1 million tested
+	{  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},	// fit to 100% of 1 million tested
+	{  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},	// default
 };
 
-/*
-static const s_iid_statistics s_iid_statistics_spread = {
-	2.89,
-	{ 0, 3.045, 1.2, 0.44, }, // bits_simple blocksize (4), 8, 16, 32
-	{ 0, 1.147, 0.698, 0.44 }, // bits_permuted (4), 8, 16, 32
-	1
-};
-*/
-
-/* shift values to align peaks: >0: shift right  <0: shift left */
-static const s_iid_statistics s_iid_statistics_shift = {
-	0,
-	{ 0, 0, 0, 0 }, // bits_simple blocksize 4, 8, 16, 32
-	{ 0, 0, 0, 0 }, // bits_permuted (4), 8, 16, 32
-	0
+static const s_iid_statistics s_iid_statistics_ok_max = {
+	2.5,		// fits to 1 million - 90 tested (100%: 4.016)
+	26.042,		// fits to 100% of 1 million tested
+	{ 16,  6,  3,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},	// fit to 1 million - 3 tested
+	{  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6},	// fit to 1 million - 455 tested
 };
 
-/*
-static const s_iid_statistics s_iid_statistics_shift = {
-	0.25,
-	{ 0, -1.5, 0.375, 1.5 }, // bits_simple blocksize 4, 8, 16, 32
-	{ 0, -1.375, 0.375, 1.5 }, // bits_permuted (4), 8, 16, 32
-	0
-};
-*/
-
-#define IPV6_IID_PRIVACY_AVG_LIMIT		5.5	// 99% probability
-#define IPV6_IID_PRIVACY_AVG_SIMPLE_START	1
-#define IPV6_IID_PRIVACY_AVG_PERMUTED_START	1
 
 /* filter */
 typedef struct {
 	int active;
 	uint32_t typeinfo_must_have;
 	uint32_t typeinfo_may_not_have;
-
-	/* iid variance */
-	float	iid_var_min;
-	int	iid_var_min_active;
-	float	iid_var_max;
-	int	iid_var_max_active;
 
 	/* others coming next */
 } s_ipv6calc_filter_ipv6addr;

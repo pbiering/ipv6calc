@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.30 2012/01/10 20:50:16 peter Exp $
-# Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6calc.sh,v 1.31 2012/04/01 18:04:00 peter Exp $
+# Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 
@@ -105,8 +105,8 @@ cat <<END | grep -v '^#'
 ## MAC to EUI-64 (autodetect mode, not supported in pipe mode)
 NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 ## Interface identifier privacy conversion
---eui64_to_privacy 0123:4567:89ab:cdef 0123456789abcdef			=4662:bdea:8654:776d 486072ff7074945e
---in iid+token --out iid+token 0123:4567:89ab:cdef 0123456789abcdef			=4662:bdea:8654:776d 486072ff7074945e
+--eui64_to_privacy 0123:4567:89ab:cdef 0123456789abcdef			=4462:bdea:8654:776d 486072ff7074945e
+--in iid+token --out iid+token 0123:4567:89ab:cdef 0123456789abcdef			=4462:bdea:8654:776d 486072ff7074945e
 ## Bitstring
 --addr_to_bitstring 3ffe:ffff::1					=\\\\[x3ffeffff000000000000000000000001/128].ip6.arpa.
 --in ipv6 --out bitstring 3ffe:ffff::1				=\\\\[x3ffeffff000000000000000000000001/128].ip6.arpa.
@@ -402,6 +402,15 @@ echo "Run 'ipv6calc' pipe mode input validation tests...(too long input)"
 	fi
 done || exit 1
 
+echo "Run 'ipv6calc' filter tests"
+testscenarios_filter | while read address filter; do
+	echo "Test echo $address |./ipv6calc -A filter -E $filter"
+	c="`echo "$address" | ./ipv6calc -A filter -E $filter | wc -l`"
+	if [ $c -eq 0 ]; then
+		echo "Filter result is empty!"
+		exit 1
+	fi
+done || exit 1
 
 retval=$?
 if [ $retval -eq 0 ]; then
@@ -411,3 +420,4 @@ else
 	echo "Tests failed! (code $retval)"
 	exit $retval
 fi
+
