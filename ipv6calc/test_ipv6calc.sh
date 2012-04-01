@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.31 2012/04/01 18:04:00 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.32 2012/04/01 18:28:24 peter Exp $
 # Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -398,16 +398,6 @@ echo "Run 'ipv6calc' pipe mode input validation tests...(too long input)"
 	fi
 	if [ $retval -ne 0 -a $retval -ne 1 ]; then
 		echo "Error executing 'ipv6calc'!"
-		exit 1
-	fi
-done || exit 1
-
-echo "Run 'ipv6calc' filter tests"
-testscenarios_filter | while read address filter; do
-	echo "Test echo $address |./ipv6calc -A filter -E $filter"
-	c="`echo "$address" | ./ipv6calc -A filter -E $filter | wc -l`"
-	if [ $c -eq 0 ]; then
-		echo "Filter result is empty!"
 		exit 1
 	fi
 done || exit 1
