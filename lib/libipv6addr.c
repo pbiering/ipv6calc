@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.62 2012/04/01 18:04:00 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.63 2012/04/04 19:01:05 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -271,6 +271,13 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 
 	int hexval[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // amount of hex digits
 
+	// clear structure
+	for (c = 0; c < 16; c++) {
+		iid_statisticsp->digit_blocks[c] = 0;
+		iid_statisticsp->digit_amount[c] = 0;
+		iid_statisticsp->digit_delta[c] = 0;
+	};
+
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
 		fprintf(stderr, "%s/%s: Given IID: %08x%08x\n", __FILE__, __func__, (unsigned int) iid[0], (unsigned int) iid[1]);
 	};
@@ -397,6 +404,13 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 	};
 	digit_blocks[c]++;	
 
+
+	/* analyze delta of neighbor digits (digit delta) */
+	for (b = 1; b < 16; b++) {
+		iid_statisticsp->digit_delta[abs(iid_digit[b] - iid_digit[b-1])]++;
+	};
+
+
 	// copy to structure
 	for (c = 0; c < 16; c++) {
 		iid_statisticsp->digit_blocks[c] = digit_blocks[c];
@@ -425,6 +439,11 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 
 			// digit amount
 			if (iid_statisticsp->digit_amount[b] < s_iid_statistics_ok_min.digit_amount[b] || iid_statisticsp->digit_amount[b] > s_iid_statistics_ok_max.digit_amount[b]) {
+				return (1);
+			};
+
+			// digit delta
+			if (iid_statisticsp->digit_delta[b] < s_iid_statistics_ok_min.digit_delta[b] || iid_statisticsp->digit_delta[b] > s_iid_statistics_ok_max.digit_delta[b]) {
 				return (1);
 			};
 		};

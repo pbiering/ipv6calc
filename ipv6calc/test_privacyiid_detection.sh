@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_privacyiid_detection.sh
-# Version    : $Id: test_privacyiid_detection.sh,v 1.2 2012/04/01 18:04:00 peter Exp $
+# Version    : $Id: test_privacyiid_detection.sh,v 1.3 2012/04/04 19:01:05 peter Exp $
 # Copyright  : 2012-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test script for detection of a privacy IID
@@ -49,7 +49,7 @@ analyze-hexvar() {
 		return 1
 	fi
 
-	echo "INFO : analyze file (hex digit variance): $f"
+	echo "INFO : analyze file (hex digit variance): $f" >&2
 
 	# hexvariance
 	cat $f | ./ipv6calc --print-iid-var | awk -v limit_high=$limit_high -v limit_low=$limit_low '{
@@ -83,7 +83,7 @@ analyze-digitblock() {
 		return 1
 	fi
 
-	echo "INFO : analyze file (digit blocks): $f"
+	echo "INFO : analyze file (digit blocks): $f" >&2
 
 	cat $f | ./ipv6calc --print-iid-var | awk -v limit_high=$limit_high -v limit_low=$limit_low -v size=$size '{
 		h = $8;
@@ -125,7 +125,7 @@ analyze-digitamount() {
 		return 1
 	fi
 
-	echo "INFO : analyze file (digit amount): $f"
+	echo "INFO : analyze file (digit amount): $f" >&2
 
 	cat $f | ./ipv6calc --print-iid-var | awk -v limit_high=$limit_high -v limit_low=$limit_low -v digit=$digit '{
 		h = $10;
@@ -134,6 +134,7 @@ analyze-digitamount() {
 
 		if (digit == "-1") {
 			# all
+			flag = 1;
 			for (i = 1; i <= 16; i++) {
 				f = db[i];
 				if (f >= limit_low && f <= limit_high) {
@@ -145,8 +146,82 @@ analyze-digitamount() {
 					if (f > max) { max = f; };
 					if (f < min) { min = f; };
 
-					print $1 " " h " " size " f:" f " min=" min " max=" max;
+				} else {
+					flag = 0;
 				};
+			};
+			if (flag == 1) {
+				print $1 " " h " " size " f:" f " min=" min " max=" max;
+			};
+		} else {
+			f = db[digit];
+
+			if (f >= limit_low && f <= limit_high) {
+				if (init != 1) {
+					min = f;
+					max = f;
+					init = 1;
+				};
+				if (f > max) { max = f; };
+				if (f < min) { min = f; };
+
+				print $1 " " h " " size " f:" f " min=" min " max=" max;
+			};
+		};
+
+	}'
+}
+
+analyze-digitdelta() {
+	f="$1"
+	limit_low="$2"
+	limit_high="$3"
+	digit="$4"
+
+	if [ -z "$limit_low" ]; then
+		echo "ERROR : missing limit_low (arg2)"
+		return 1
+	fi
+	if [ -z "$limit_high" ]; then
+		echo "ERROR : missing limit_high (arg3)"
+		return 1
+	fi
+	if [ -z "$digit" ]; then
+		echo "ERROR : missing digit (arg4)"
+		return 1
+	fi
+
+	echo "INFO : analyze file (digit delta): $f limit_low=$limit_low limit_high=$$limit_high digit=$digit" >&2
+
+	cat $f | ./ipv6calc --print-iid-var | awk -v limit_high=$limit_high -v limit_low=$limit_low -v digit=$digit '{
+		h = $12;
+
+		split(h, db, ",");
+
+		if (digit == "-1" || digit == "-2") {
+			# all
+			flag = 1;
+			for (i = 1; i <= 16; i++) {
+				f = db[i];
+				if (f >= limit_low && f <= limit_high) {
+					if (init != 1) {
+						min = f;
+						max = f;
+						init = 1;
+					};
+					if (f > max) { max = f; };
+					if (f < min) { min = f; };
+					if (digit == "-2") {
+						flag = 0;
+					};
+				} else {
+					if (digit == "-1") {
+						flag = 0;
+					};
+				};
+			};
+			if ((digit == "-1" && flag == 1) || (digit == "-2" && flag == 0)) {
+				print $1 " " h " " size " f:" f " min=" min " max=" max;
 			};
 		} else {
 			f = db[digit];
@@ -169,7 +244,7 @@ analyze-digitamount() {
 
 analyze() {
 	for f in $*; do
-		echo "INFO : analyze file (hex digit variance): $f"
+		echo "INFO : analyze file (hex digit variance): $f" >&2
 
 		# hexvariance
 		cat $f | ./ipv6calc --print-iid-var | awk '{
@@ -261,6 +336,37 @@ analyze() {
 			printf "[maxall:%d]\n", maxall;
 		}' | tail -1
 
+		# digit delta
+		echo
+		echo "INFO : analyze file (digit delta): $f"
+		cat $f | ./ipv6calc --print-iid-var | awk '{
+			h = $12;
+
+			split(h, db, ",");
+
+			for (i = 1; i <= 16; i++) {
+				if (init[i] != 1) {
+					min[i] = h;
+					max[i] = h;
+					init[i] = 1;
+				};
+				if (db[i] > max[i]) { max[i] = db[i]; };
+				if (db[i] < min[i]) { min[i] = db[i]; };
+
+				if (max[i] > maxall || maxall == 0) { maxall = max[i]; };
+
+				if (db[i] > 0) {
+					count[i]++;
+				};
+			};
+
+			printf "%s ", $1;
+			for (i = 1; i <= 16; i++) {
+				printf "%d:%d/%d (%d) ", i-1, min[i], max[i], count[i];
+			};
+			printf "[maxall:%d]\n", maxall;
+		}' | tail -1
+
 	done
 
 }
@@ -284,6 +390,10 @@ case $1 in
 	;;
     analyze-digitamount)
 	analyze-digitamount $2 $3 $4 $5
+	exit 0
+	;;
+    analyze-digitdelta)
+	analyze-digitdelta $2 $3 $4 $5
 	exit 0
 	;;
     *)
