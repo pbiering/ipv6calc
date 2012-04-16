@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_privacyiid_detection.sh
-# Version    : $Id: test_privacyiid_detection.sh,v 1.3 2012/04/04 19:01:05 peter Exp $
+# Version    : $Id: test_privacyiid_detection.sh,v 1.4 2012/04/16 05:31:47 peter Exp $
 # Copyright  : 2012-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test script for detection of a privacy IID
@@ -191,7 +191,7 @@ analyze-digitdelta() {
 		return 1
 	fi
 
-	echo "INFO : analyze file (digit delta): $f limit_low=$limit_low limit_high=$$limit_high digit=$digit" >&2
+	echo "INFO : analyze file (digit delta): $f limit_low=$limit_low limit_high=$limit_high digit=$digit" >&2
 
 	cat $f | ./ipv6calc --print-iid-var | awk -v limit_high=$limit_high -v limit_low=$limit_low -v digit=$digit '{
 		h = $12;
@@ -201,7 +201,7 @@ analyze-digitdelta() {
 		if (digit == "-1" || digit == "-2") {
 			# all
 			flag = 1;
-			for (i = 1; i <= 16; i++) {
+			for (i = 1; i <= 31; i++) {
 				f = db[i];
 				if (f >= limit_low && f <= limit_high) {
 					if (init != 1) {
@@ -344,7 +344,7 @@ analyze() {
 
 			split(h, db, ",");
 
-			for (i = 1; i <= 16; i++) {
+			for (i = 1; i <= 31; i++) {
 				if (init[i] != 1) {
 					min[i] = h;
 					max[i] = h;
@@ -361,11 +361,25 @@ analyze() {
 			};
 
 			printf "%s ", $1;
-			for (i = 1; i <= 16; i++) {
+			for (i = 1; i <= 31; i++) {
 				printf "%d:%d/%d (%d) ", i-1, min[i], max[i], count[i];
 			};
-			printf "[maxall:%d]\n", maxall;
+			printf "[maxall:%d] ", maxall;
+
+			#printf "Digit-Delta-Min: ";
+			for (i = 1; i <= 31; i++) {
+				printf "%2d", min[i];
+				if (i < 31) { printf ","; };
+			};
+			printf "|";
+			#printf "Digit-Delta-Max: ";
+			for (i = 1; i <= 31; i++) {
+				printf "%2d", max[i];
+				if (i < 31) { printf ","; };
+			};
+			printf "\n";
 		}' | tail -1
+
 
 	done
 

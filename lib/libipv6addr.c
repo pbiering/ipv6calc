@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.63 2012/04/04 19:01:05 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.64 2012/04/16 05:31:47 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -275,6 +275,8 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 	for (c = 0; c < 16; c++) {
 		iid_statisticsp->digit_blocks[c] = 0;
 		iid_statisticsp->digit_amount[c] = 0;
+	};
+	for (c = 0; c < 31; c++) {
 		iid_statisticsp->digit_delta[c] = 0;
 	};
 
@@ -407,7 +409,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 
 	/* analyze delta of neighbor digits (digit delta) */
 	for (b = 1; b < 16; b++) {
-		iid_statisticsp->digit_delta[abs(iid_digit[b] - iid_digit[b-1])]++;
+		iid_statisticsp->digit_delta[iid_digit[b] - iid_digit[b-1] + 15]++;
 	};
 
 
@@ -431,19 +433,20 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 	} else if (iid_statisticsp->lls_residual < s_iid_statistics_ok_min.lls_residual || iid_statisticsp->lls_residual > s_iid_statistics_ok_max.lls_residual) {
 		return (1);
 	} else {
-		for (b = 1; b < 16; b++) {
+		for (c = 0; c < 16; c++) {
 			// digit blocks
-			if (iid_statisticsp->digit_blocks[b] < s_iid_statistics_ok_min.digit_blocks[b] || iid_statisticsp->digit_blocks[b] > s_iid_statistics_ok_max.digit_blocks[b]) {
+			if (iid_statisticsp->digit_blocks[c] < s_iid_statistics_ok_min.digit_blocks[c] || iid_statisticsp->digit_blocks[c] > s_iid_statistics_ok_max.digit_blocks[c]) {
 				return (1);
 			};
 
 			// digit amount
-			if (iid_statisticsp->digit_amount[b] < s_iid_statistics_ok_min.digit_amount[b] || iid_statisticsp->digit_amount[b] > s_iid_statistics_ok_max.digit_amount[b]) {
+			if (iid_statisticsp->digit_amount[c] < s_iid_statistics_ok_min.digit_amount[c] || iid_statisticsp->digit_amount[c] > s_iid_statistics_ok_max.digit_amount[c]) {
 				return (1);
 			};
-
+		};
+		for (c = 0; c < 31; c++) {
 			// digit delta
-			if (iid_statisticsp->digit_delta[b] < s_iid_statistics_ok_min.digit_delta[b] || iid_statisticsp->digit_delta[b] > s_iid_statistics_ok_max.digit_delta[b]) {
+			if (iid_statisticsp->digit_delta[c] < s_iid_statistics_ok_min.digit_delta[c] || iid_statisticsp->digit_delta[c] > s_iid_statistics_ok_max.digit_delta[c]) {
 				return (1);
 			};
 		};

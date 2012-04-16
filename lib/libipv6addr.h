@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.47 2012/04/04 19:01:05 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.48 2012/04/16 05:31:47 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -49,7 +49,7 @@ typedef struct {
 	float lls_residual;	// lls: linear least square
 	int   digit_blocks[16];	// block length of same digit
 	int   digit_amount[16]; // amount of digits
-	int   digit_delta[16];  // delta of digits
+	int   digit_delta[31];  // delta of digits
 } s_iid_statistics;
 
 /* IID privacy limits */
@@ -57,17 +57,17 @@ typedef struct {
 static const s_iid_statistics s_iid_statistics_ok_min = {
 	0.249,		// fits to 100% of 1 million tested
 	6.275,		// fits to 100% of 1 million tested
-	{  4,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},	// fit to 100% of 1 million tested
-	{  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},	// default
-	{  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},	// default
+	{  4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	// fit to 100% of 1 million tested
+	{  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	// default
+	{  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}	// default
 };
 
 static const s_iid_statistics s_iid_statistics_ok_max = {
 	2.5,		// fits to 1 million - 90 tested (100%: 4.016)
 	26.042,		// fits to 100% of 1 million tested
-	{ 16,  6,  3,  1,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0},	// fit to 1 million - 3 tested
-	{  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7,  7},	// fit to 1 million - 38 tested
-	{  6,  9,  8,  9,  8,  8,  7,  7,  7,  7,  7,  6,  6,  5,  5,  5},	// fit to 1 million
+	{ 16, 6, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	// fit to 1 million - 3 tested
+	{  7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},	// fit to 1 million - 38 tested
+	{  3, 4, 3, 3, 4, 5, 4, 5, 5, 5, 6, 6, 6, 7, 7, 6, 6, 7, 6, 6, 6, 5, 5, 5, 4, 4, 4, 4, 4, 3, 2}	// fit to 1 million
 };
 
 
