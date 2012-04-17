@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.64 2012/04/16 05:31:47 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.65 2012/04/17 19:07:16 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -272,14 +272,21 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 	int hexval[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // amount of hex digits
 
 	// clear structure
+	iid_statisticsp->hexdigit = 0;
+	iid_statisticsp->lls_residual = 0;
+
 	for (c = 0; c < 16; c++) {
 		iid_statisticsp->digit_blocks[c] = 0;
 		iid_statisticsp->digit_amount[c] = 0;
 	};
+
 	for (c = 0; c < 31; c++) {
 		iid_statisticsp->digit_delta[c] = 0;
 	};
 
+	iid_statisticsp->digit_delta_amount = 0;
+
+	// debug
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
 		fprintf(stderr, "%s/%s: Given IID: %08x%08x\n", __FILE__, __func__, (unsigned int) iid[0], (unsigned int) iid[1]);
 	};
@@ -409,7 +416,15 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 
 	/* analyze delta of neighbor digits (digit delta) */
 	for (b = 1; b < 16; b++) {
-		iid_statisticsp->digit_delta[iid_digit[b] - iid_digit[b-1] + 15]++;
+		v = iid_digit[b] - iid_digit[b-1] + 15;
+
+		if (iid_statisticsp->digit_delta[v] == 0) {
+			// count, how many different digit deltas found
+			iid_statisticsp->digit_delta_amount++;
+		};
+
+		iid_statisticsp->digit_delta[v]++;
+
 	};
 
 
@@ -432,6 +447,8 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 		return (1);
 	} else if (iid_statisticsp->lls_residual < s_iid_statistics_ok_min.lls_residual || iid_statisticsp->lls_residual > s_iid_statistics_ok_max.lls_residual) {
 		return (1);
+	} else if (iid_statisticsp->digit_delta_amount < s_iid_statistics_ok_min.digit_delta_amount || iid_statisticsp->digit_delta_amount > s_iid_statistics_ok_max.digit_delta_amount) {
+		return (1);
 	} else {
 		for (c = 0; c < 16; c++) {
 			// digit blocks
@@ -450,6 +467,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 				return (1);
 			};
 		};
+
 	};
 
 	return (0);

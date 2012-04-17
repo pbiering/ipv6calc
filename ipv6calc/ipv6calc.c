@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.63 2012/04/16 05:31:47 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.64 2012/04/17 19:07:16 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1642,12 +1642,13 @@ PIPE_input:
 
 			if ((formatoptions & FORMATOPTION_print_iid_var) == FORMATOPTION_print_iid_var) {
 				iid_privacy_result = ipv6addr_privacyextensiondetection(&ipv6addr, &iid_statistics);
-				sprintf(resultstring2, "%-40s R=%d h=%7.3f r=%7.3f db= %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d da= %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d dd= %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d", resultstring, \
+				sprintf(resultstring2, "%-40s R=%d h=%7.3f r=%7.3f db= %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d da= %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d dd= %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d dda= %d", resultstring, \
 					iid_privacy_result, iid_statistics.hexdigit, iid_statistics.lls_residual, \
 					iid_statistics.digit_blocks[0], iid_statistics.digit_blocks[1], iid_statistics.digit_blocks[2], iid_statistics.digit_blocks[3], iid_statistics.digit_blocks[4], iid_statistics.digit_blocks[5], iid_statistics.digit_blocks[6], iid_statistics.digit_blocks[7], iid_statistics.digit_blocks[8], iid_statistics.digit_blocks[9], iid_statistics.digit_blocks[10], iid_statistics.digit_blocks[11], iid_statistics.digit_blocks[12], iid_statistics.digit_blocks[13], iid_statistics.digit_blocks[14], iid_statistics.digit_blocks[15], \
 					iid_statistics.digit_amount[0], iid_statistics.digit_amount[1], iid_statistics.digit_amount[2], iid_statistics.digit_amount[3], iid_statistics.digit_amount[4], iid_statistics.digit_amount[5], iid_statistics.digit_amount[6], iid_statistics.digit_amount[7], iid_statistics.digit_amount[8], iid_statistics.digit_amount[9], iid_statistics.digit_amount[10], iid_statistics.digit_amount[11], iid_statistics.digit_amount[12], iid_statistics.digit_amount[13], iid_statistics.digit_amount[14], iid_statistics.digit_amount[15], \
 					iid_statistics.digit_delta[0], iid_statistics.digit_delta[1], iid_statistics.digit_delta[2], iid_statistics.digit_delta[3], iid_statistics.digit_delta[4], iid_statistics.digit_delta[5], iid_statistics.digit_delta[6], iid_statistics.digit_delta[7], iid_statistics.digit_delta[8], iid_statistics.digit_delta[9], iid_statistics.digit_delta[10], iid_statistics.digit_delta[11], iid_statistics.digit_delta[12], iid_statistics.digit_delta[13], iid_statistics.digit_delta[14], iid_statistics.digit_delta[15], \
-					iid_statistics.digit_delta[16], iid_statistics.digit_delta[17], iid_statistics.digit_delta[18], iid_statistics.digit_delta[19], iid_statistics.digit_delta[20], iid_statistics.digit_delta[21], iid_statistics.digit_delta[22], iid_statistics.digit_delta[23], iid_statistics.digit_delta[24], iid_statistics.digit_delta[25], iid_statistics.digit_delta[26], iid_statistics.digit_delta[27], iid_statistics.digit_delta[28], iid_statistics.digit_delta[29], iid_statistics.digit_delta[30]
+					iid_statistics.digit_delta[16], iid_statistics.digit_delta[17], iid_statistics.digit_delta[18], iid_statistics.digit_delta[19], iid_statistics.digit_delta[20], iid_statistics.digit_delta[21], iid_statistics.digit_delta[22], iid_statistics.digit_delta[23], iid_statistics.digit_delta[24], iid_statistics.digit_delta[25], iid_statistics.digit_delta[26], iid_statistics.digit_delta[27], iid_statistics.digit_delta[28], iid_statistics.digit_delta[29], iid_statistics.digit_delta[30], \
+					iid_statistics.digit_delta_amount
 				);
 				sprintf(resultstring, "%s", resultstring2);
 			};

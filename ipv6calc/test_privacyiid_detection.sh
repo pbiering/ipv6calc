@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_privacyiid_detection.sh
-# Version    : $Id: test_privacyiid_detection.sh,v 1.4 2012/04/16 05:31:47 peter Exp $
+# Version    : $Id: test_privacyiid_detection.sh,v 1.5 2012/04/17 19:07:16 peter Exp $
 # Copyright  : 2012-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test script for detection of a privacy IID
@@ -244,9 +244,8 @@ analyze-digitdelta() {
 
 analyze() {
 	for f in $*; do
-		echo "INFO : analyze file (hex digit variance): $f" >&2
-
 		# hexvariance
+		echo "INFO : analyze file (hex digit variance): $f" >&2
 		cat $f | ./ipv6calc --print-iid-var | awk '{
 			h = $4;
 			if (init != 1) {
@@ -380,6 +379,21 @@ analyze() {
 			printf "\n";
 		}' | tail -1
 
+		# digitdeltaamount
+		echo
+		echo "INFO : analyze file (digit delta amount): $f" >&2
+		cat $f | ./ipv6calc --print-iid-var | awk '{
+			h = $14;
+			if (init != 1) {
+				min = h;
+				max = h;
+				init = 1;
+			};
+			if (h > max) { max = h; };
+			if (h < min) { min = h; };
+
+			print $1 " " h " min=" min " max=" max;
+		}' | tail -1
 
 	done
 
