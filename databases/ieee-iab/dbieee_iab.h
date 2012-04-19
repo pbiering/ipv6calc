@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.46 2012/03/19 20:04:48 peter Exp $
- * Generated     : Mon Mar 19 20:52:52 2012
+ * Version       : $Id: dbieee_iab.h,v 1.47 2012/04/19 18:56:00 peter Exp $
+ * Generated     : Thu Apr 19 21:24:11 2012
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20120319";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20120419";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -3934,5 +3934,42 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xF55000, 0xF55FFF, "Honeywell International Inc.", "HONEYWELL" },
 	{ 0x0050C2, 0xF56000, 0xF56FFF, "Monsoon Solutions, Inc.", "MONSOON-SOLUTIONS" },
 	{ 0x0050C2, 0xF57000, 0xF57FFF, "Reach Technologies Inc.", "REACH-TECHNOLOGIES" },
+	{ 0x0050C2, 0xF58000, 0xF58FFF, "IEEE-SA", "IEEE" },
+	{ 0x0050C2, 0xF59000, 0xF59FFF, "G3 Technologies", "G3-TECHNOLOGIES" },
+	{ 0x0050C2, 0xF5A000, 0xF5AFFF, "Sentry 360 Security", "SENTRY-360-SECURITY" },
+	{ 0x0050C2, 0xF5B000, 0xF5BFFF, "Saia-Burgess Controls AG", "SAIA-BURGESS-CONTROLS" },
+	{ 0x0050C2, 0xF5C000, 0xF5CFFF, "DSP DESIGN LTD", "DSP-DESIGN" },
+	{ 0x0050C2, 0xF5D000, 0xF5DFFF, "SMARTB TECHNOLOGIES", "SMARTB-TECHNOLOGIES" },
+	{ 0x0050C2, 0xF5E000, 0xF5EFFF, "Y-cam Solutions Ltd", "Y-CAM-SOLUTIONS" },
+	{ 0x0050C2, 0xF5F000, 0xF5FFFF, "BORYEU TECHNOLOGY CO.,LTD", "BORYEU" },
+	{ 0x0050C2, 0xF60000, 0xF60FFF, "Deckma GmbH", "DECKMA" },
+	{ 0x0050C2, 0xF61000, 0xF61FFF, "Brauch Elektronik GmbH&Co.KG", "BRAUCH-ELEKTRONIK" },
+	{ 0x0050C2, 0xF62000, 0xF62FFF, "EMAC, Inc. ", "EMAC" },
+	{ 0x0050C2, 0xF63000, 0xF63FFF, "Triax A/S", "TRIAX-A/S" },
+	{ 0x0050C2, 0xF64000, 0xF64FFF, "Chrisso Technologies LLC", "CHRISSO-TECHNOLOGIES-LLC" },
+	{ 0x0050C2, 0xF65000, 0xF65FFF, "Telebyte Inc.", "TELEBYTE" },
+	{ 0x0050C2, 0xF66000, 0xF66FFF, "GWT LLC", "GWT-LLC" },
+	{ 0x0050C2, 0xF67000, 0xF67FFF, "Celestial Audio", "CELESTIAL-AUDIO" },
+	{ 0x0050C2, 0xF68000, 0xF68FFF, "NEWTEC A/S", "NEWTEC-A/S" },
+	{ 0x0050C2, 0xF69000, 0xF69FFF, "Safe Place Solutions Ltd", "SAFE-PLACE-SOLUTIONS" },
+	{ 0x0050C2, 0xF6A000, 0xF6AFFF, "OFI Inc. (dba 2D2C)", "OFI-DBA-2D2C" },
+	{ 0x0050C2, 0xF6B000, 0xF6BFFF, "Algodue Elettronica Srl", "ALGODUE-ELETTRONICA-SRL" },
+	{ 0x0050C2, 0xF6C000, 0xF6CFFF, "Pro Design Electronic GmbH", "PRO-DESIGN" },
+	{ 0x0050C2, 0xF6D000, 0xF6DFFF, "Pro Design Electronic GmbH", "PRO-DESIGN" },
+	{ 0x0050C2, 0xF6E000, 0xF6EFFF, "Smith Meter, Inc.", "SMITH-METER" },
+	{ 0x0050C2, 0xF6F000, 0xF6FFFF, "Aplex Technology Inc.", "APLEX" },
+	{ 0x0050C2, 0xF70000, 0xF70FFF, "Noralta Technologies Inc", "NORALTA-TECHNOLOGIES" },
+	{ 0x0050C2, 0xF71000, 0xF71FFF, "RF CODE, INC", "RF-CODE" },
+	{ 0x0050C2, 0xF72000, 0xF72FFF, "MaxDeTec AG", "MAXDETEC" },
+	{ 0x0050C2, 0xF73000, 0xF73FFF, "DELTACAST.TV", "DELTACAST-TV" },
+	{ 0x0050C2, 0xF74000, 0xF74FFF, "Thor Technologies Pty Ltd", "THOR-TECHNOLOGIES-PTY" },
+	{ 0x0050C2, 0xF75000, 0xF75FFF, "PumpWell Solutions Ltd.", "PUMPWELL-SOLUTIONS" },
+	{ 0x0050C2, 0xF76000, 0xF76FFF, "Rong Jie(FuZhou)Electronics Co.,Ltd", "RONG-JIE-FUZHOU-ELECTRONICS" },
+	{ 0x0050C2, 0xF77000, 0xF77FFF, "SYSTEMTECHNIK GmbH", "SYSTEMTECHNIK" },
+	{ 0x0050C2, 0xF78000, 0xF78FFF, "Gets MSS S.A.", "GETS-MSS" },
+	{ 0x0050C2, 0xF79000, 0xF79FFF, "Tattile SRL", "TATTILE-SRL" },
+	{ 0x0050C2, 0xF7A000, 0xF7AFFF, "C3 LLC", "C3-LLC" },
+	{ 0x0050C2, 0xF7B000, 0xF7BFFF, "MCM Electronics", "MCM-ELECTRONICS" },
+	{ 0x0050C2, 0xF7C000, 0xF7CFFF, "Atonometrics, Inc.", "ATONOMETRICS" },
 
 };

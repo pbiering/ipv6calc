@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.240 2012/04/01 18:03:59 peter Exp $ 
+ *  $Id: ChangeLog,v 1.241 2012/04/19 18:56:00 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120419/PB
+	lib/*: extend filter handling, implement address token, improve privacy detection
+	dabases: update
+
 20120401/PB
 	ipv6calc/showinfo: finalze autodetection for privacy IIDs
 

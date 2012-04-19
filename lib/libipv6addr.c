@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.65 2012/04/17 19:07:16 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.66 2012/04/19 18:56:00 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -265,11 +265,8 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 	float m, e;
 
 	int iid_digit[16]; // digit of IID
-	int digit_blocks[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; // block of digits
 
 	int b, i, c, v;
-
-	int hexval[16] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; // amount of hex digits
 
 	// clear structure
 	iid_statisticsp->hexdigit = 0;
@@ -277,6 +274,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 
 	for (c = 0; c < 16; c++) {
 		iid_statisticsp->digit_blocks[c] = 0;
+		iid_statisticsp->digit_amount[c] = 0;
 		iid_statisticsp->digit_amount[c] = 0;
 	};
 
@@ -307,7 +305,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 			fprintf(stderr, "%s/%s: analyze nibble %2d: %x\n", __FILE__, __func__, b, v);
 		};
 
-		hexval[v]++;
+		iid_statisticsp->digit_amount[v]++;
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
@@ -320,7 +318,7 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 		fprintf(stderr, "|\n");
 		fprintf(stderr, "%s/%s: hex distribution: count   ", __FILE__, __func__);
 		for (b = 0; b < 16; b++) {
-			fprintf(stderr, "|%2d", hexval[b]);
+			fprintf(stderr, "|%2d", iid_statisticsp->digit_amount[b]);
 		};
 		fprintf(stderr, "|\n");
 	};
@@ -332,11 +330,11 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 	c = 0;
 	float variance = 0.0;
 	for (b = 0; b < 16; b++) {
-		if (hexval[b] == 0) {
+		if (iid_statisticsp->digit_amount[b] == 0) {
 			continue;
 		};
 		c++;
-		e = hexval[b];
+		e = iid_statisticsp->digit_amount[b];
 
 		m = 1.0;
 		/* compensate universal/local bit = 0 by shifting average */
@@ -406,12 +404,12 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 		if (i == iid_digit[b]) {
 			c++;
 		} else {
-			digit_blocks[c]++;	
+			iid_statisticsp->digit_blocks[c]++;	
 			i = iid_digit[b];
 			c = 0;
 		};
 	};
-	digit_blocks[c]++;	
+	iid_statisticsp->digit_blocks[c]++;
 
 
 	/* analyze delta of neighbor digits (digit delta) */
@@ -427,17 +425,10 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 
 	};
 
-
-	// copy to structure
-	for (c = 0; c < 16; c++) {
-		iid_statisticsp->digit_blocks[c] = digit_blocks[c];
-		iid_statisticsp->digit_amount[c] = hexval[c];
-	};
-
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
 		fprintf(stderr, "%s/%s: digit blocks: ", __FILE__, __func__);
 		for (c = 0; c < 16; c++) {
-			fprintf(stderr, "%d:%d ", c+1, digit_blocks[c]);
+			fprintf(stderr, "%d:%d ", c+1, iid_statisticsp->digit_blocks[c]);
 		};
 		fprintf(stderr, "\n");
 	};
