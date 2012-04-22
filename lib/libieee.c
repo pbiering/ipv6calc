@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.9 2011/06/01 06:06:07 peter Exp $
- * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libieee.c,v 1.10 2012/04/22 11:05:13 peter Exp $
+ * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for IEEE information
@@ -24,7 +24,7 @@
 
 /*
  * Get vendor string
- * in:  o1,o2,o3: first octets
+ * in:  macaddrp
  * mod: resultstring
  * out: 0=found, 1=not found
  */
@@ -42,6 +42,12 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
 	if ((macaddrp->addr[0] == 0xfc && macaddrp->addr[1] == 0xfc)) {
 		/* Linux special OUI for ISDN-NET or PLIP interfaces */
 		snprintf(resultstring, NI_MAXHOST - 1, "Linux ISDN-NET/PLIP");
+		return (0);
+	};
+
+	if ((macaddrp->addr[0] == 0x52 && macaddrp->addr[1] == 0x54 && macaddrp->addr[2] == 0x00)) {
+		/* standard QEMU MAC prefix */
+		snprintf(resultstring, NI_MAXHOST - 1, "QEMU");
 		return (0);
 	};
 	
@@ -91,7 +97,7 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
 
 /*
  * Get short vendor string
- * in:  o1,o2,o3: first octets
+ * in:  macaddrp
  * mod: resultstring
  * out: 0=found, 1=not found
  */
@@ -112,6 +118,12 @@ int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *
 		return (0);
 	};
 	
+	if ((macaddrp->addr[0] == 0x52 && macaddrp->addr[1] == 0x54 && macaddrp->addr[2] == 0x00)) {
+		/* standard QEMU MAC prefix */
+		snprintf(resultstring, NI_MAXHOST - 1, "QEMU");
+		return (0);
+	};
+
 	if ( (macaddrp->addr[0] & 0x01) != 0 ) {
 		/* Multicast */
 		return (1);

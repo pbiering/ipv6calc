@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.66 2012/04/19 18:56:00 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.67 2012/04/22 11:05:13 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -289,9 +289,17 @@ int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 		fprintf(stderr, "%s/%s: Given IID: %08x%08x\n", __FILE__, __func__, (unsigned int) iid[0], (unsigned int) iid[1]);
 	};
 
+	// blacklists
 	if ((iid[0] & 0x02000000u) == 0x02000000u) {
 		if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
 			fprintf(stderr, "%s/%s: universal/local bit set to: universal (no further privacy detection)\n", __FILE__, __func__);
+		};
+		return (-1);
+	};
+
+	if (((iid[0] & 0x000000ffu) == 0x000000ffu) && ((iid[1] & 0xff000000u) == 0xfe000000u)) {
+		if ( (ipv6calc_debug & DEBUG_libipv6addr_privacydetection) != 0 ) {
+			fprintf(stderr, "%s/%s: expanded EUI-48 (no further privacy detection)\n", __FILE__, __func__);
 		};
 		return (-1);
 	};

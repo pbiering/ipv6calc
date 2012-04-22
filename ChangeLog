@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.241 2012/04/19 18:56:00 peter Exp $ 
+ *  $Id: ChangeLog,v 1.242 2012/04/22 11:05:13 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120422/PB
+	lib/libieee.c: detect standard QEMU MAC prefix
+	lib/libipv6addr.c: blacklist expanded EUI-48 from privacy extension
+
 20120419/PB
 	lib/*: extend filter handling, implement address token, improve privacy detection
 	dabases: update
