@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.242 2012/04/22 11:05:13 peter Exp $ 
+ *  $Id: ChangeLog,v 1.243 2012/04/22 14:01:19 peter Exp $ 
  */
 
 Info:
@@ -11,6 +11,7 @@ Info:
 20120422/PB
 	lib/libieee.c: detect standard QEMU MAC prefix
 	lib/libipv6addr.c: blacklist expanded EUI-48 from privacy extension
+	ipv6calcweb.cgi: cell background for OUI is now yellow, for EUI64_TYPE=local-privay green
 
 20120419/PB
 	lib/*: extend filter handling, implement address token, improve privacy detection

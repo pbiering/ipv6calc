@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.39 2012/04/01 18:39:58 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.40 2012/04/22 14:01:19 peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -785,7 +785,14 @@ sub print_infohash ($$) {
 		};
 
 		# print data
-		&print_tagoutput ( "        <td>" );
+		if ($key eq "EUI64_SCOPE" && $$phash{$key} eq "local-privacy") {
+			&print_tagoutput ( "        <td style=\"background-color: rgb(0, 255, 0);\">" );
+		} elsif ($key eq "OUI") {
+			&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 0);\">" );
+		} else {
+			&print_tagoutput ( "        <td>" );
+		};
+	
 
 		if ($flag_tt) {
 			&print_tagoutput ( "<tt>" );
