@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.243 2012/04/22 14:01:19 peter Exp $ 
+ *  $Id: ChangeLog,v 1.244 2012/04/23 19:00:05 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120423/PB
+	ipv6calcweb.cgi: allow spaces around input in form mode
+
 20120422/PB
 	lib/libieee.c: detect standard QEMU MAC prefix
 	lib/libipv6addr.c: blacklist expanded EUI-48 from privacy extension

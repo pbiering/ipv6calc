@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.40 2012/04/22 14:01:19 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.41 2012/04/23 19:00:05 peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -953,7 +953,7 @@ sub token_generate($$$) {
 if ( defined $ENV{'QUERY_STRING'} ) {
 	# split query string
 	foreach my $query_stringlet (split /[\?\&]/, $ENV{'QUERY_STRING'}) {
-		if ($query_stringlet !~ /^([[:alnum:]]+)=([[:alnum:].\-:%]+)$/ ) {
+		if ($query_stringlet !~ /^([[:alnum:]]+)=([[:alnum:].\-:%+]+)$/ ) {
 			logging("ERROR", "generic problem with data in query_stringlet");
 			&print_error();
 			next;
@@ -982,6 +982,8 @@ if ( defined $ENV{'QUERY_STRING'} ) {
 				next;
 			};
 			$input = uri_unescape($value);
+			$input =~ s/^[+\s]+//g; # remove leading whitespaces (Firefox codes space as '+')
+			$input =~ s/[+\s]+$//g; # remove trailing whitespaces (Firefox codes space as '+')
 			if ($input !~ /^([[:alnum:]\/\.\:-]+)$/) {
 				logging("ERROR", "problem with data in query_stringlet (input has unexpected chars)");
 				&print_error();
