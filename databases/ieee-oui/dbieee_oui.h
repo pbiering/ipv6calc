@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui.h
- * Version       : $Id: dbieee_oui.h,v 1.63 2012/04/19 18:56:00 peter Exp $
- * Generated     : Thu Apr 19 21:24:08 2012
+ * Version       : $Id: dbieee_oui.h,v 1.64 2012/04/24 17:17:33 peter Exp $
+ * Generated     : Tue Apr 24 19:39:50 2012
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_oui_status __attribute__ ((__unused__)) = "OUI/20120419";
+/*@unused@*/ static const char* libieee_oui_status __attribute__ ((__unused__)) = "OUI/20120424";
 
 
 static const s_ieee_oui libieee_oui[] = {
@@ -1037,7 +1037,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x0003FC, "Intertex Data AB", "INTERTEX-DATA-AB" },
 	{ 0x0003FD, "Cisco Systems, Inc.", "CISCO" },
 	{ 0x0003FE, "Cisco Systems, Inc.", "CISCO" },
-	{ 0x0003FF, "Microsoft Corporation", "MICROSOFT" },
+	{ 0x0003FF, "Microsoft Corporation (possible Hyper-V, Virtual Server, Virtual PC VM)", "MICROSOFT-VIRTUAL" },
 	{ 0x000400, "LEXMARK INTERNATIONAL, INC.", "LEXMARK" },
 	{ 0x000401, "Osaki Electric Co., Ltd.", "OSAKI-ELECTRIC" },
 	{ 0x000402, "Nexsan Technologies, Ltd.", "NEXSAN-TECHNOLOGIES" },
@@ -1399,7 +1399,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x000566, "Secui.com Corporation", "SECUI-COM" },
 	{ 0x000567, "Etymonic Design, Inc.", "ETYMONIC-DESIGN" },
 	{ 0x000568, "Piltofish Networks AB", "PILTOFISH-NETWORKS-AB" },
-	{ 0x000569, "VMware, Inc.", "VMWARE" },
+	{ 0x000569, "VMware, Inc. (possible VMware VM)", "VMWARE-VIRTUAL" },
 	{ 0x00056A, "Heuft Systemtechnik GmbH", "HEUFT-SYSTEMTECHNIK" },
 	{ 0x00056B, "C.P. Technology Co., Ltd.", "C-P" },
 	{ 0x00056C, "Hung Chang Co., Ltd.", "HUNG-CHANG" },
@@ -3098,7 +3098,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x000C26, "Weintek Labs. Inc.", "WEINTEK-LABS" },
 	{ 0x000C27, "Sammy Corporation", "SAMMY" },
 	{ 0x000C28, "RIFATRON", "RIFATRON" },
-	{ 0x000C29, "VMware, Inc.", "VMWARE" },
+	{ 0x000C29, "VMware, Inc. (possible VMware VM)", "VMWARE-VIRTUAL" },
 	{ 0x000C2A, "OCTTEL Communication Co., Ltd.", "OCTTEL-COMMUNICATION" },
 	{ 0x000C2B, "ELIAS Technology, Inc.", "ELIAS" },
 	{ 0x000C2C, "Enwiser Inc.", "ENWISER" },
@@ -3900,7 +3900,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x000F48, "Polypix Inc.", "POLYPIX" },
 	{ 0x000F49, "Northover Solutions Limited", "NORTHOVER-SOLUTIONS" },
 	{ 0x000F4A, "Kyushu-kyohan co.,ltd", "KYUSHU-KYOHAN" },
-	{ 0x000F4B, "Oracle Corporation", "ORACLE" },
+	{ 0x000F4B, "Oracle Corporation (possible Virtual Iron VM)", "ORACLE-VIRTUAL" },
 	{ 0x000F4C, "Elextech INC", "ELEXTECH" },
 	{ 0x000F4D, "TalkSwitch", "TALKSWITCH" },
 	{ 0x000F4E, "Cellink", "CELLINK" },
@@ -4925,7 +4925,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x00134A, "Engim, Inc.", "ENGIM" },
 	{ 0x00134B, "ToGoldenNet Technology Inc.", "TOGOLDENNET" },
 	{ 0x00134C, "YDT Technology International", "YDT" },
-	{ 0x00134D, "IPC systems", "IPC" },
+	{ 0x00134D, "Inepro BV", "INEPRO" },
 	{ 0x00134E, "Valox Systems, Inc.", "VALOX" },
 	{ 0x00134F, "Tranzeo Wireless Technologies Inc.", "TRANZEO-WIRELESS-TECHNOLOGIES" },
 	{ 0x001350, "Silver Spring Networks, Inc", "SILVER-SPRING-NETWORKS" },
@@ -5678,7 +5678,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x00163B, "VertexRSI/General Dynamics", "VERTEXRSI/GENERAL-DYNAMICS" },
 	{ 0x00163C, "Rebox B.V.", "REBOX" },
 	{ 0x00163D, "Tsinghua Tongfang Legend Silicon Tech. Co., Ltd.", "TSINGHUA-TONGFANG-LEGEND-SILICON-TECH" },
-	{ 0x00163E, "Xensource, Inc.", "XENSOURCE" },
+	{ 0x00163E, "Xensource, Inc. (possible Xen VM)", "XENSOURCE-VIRTUAL" },
 	{ 0x00163F, "CReTE SYSTEMS Inc.", "CRETE" },
 	{ 0x001640, "Asmobile Communication Inc.", "ASMOBILE-COMMUNICATION" },
 	{ 0x001641, "Universal Global Scientific Industrial Co., Ltd.", "UNIVERSAL-GLOBAL-SCIENTIFIC-INDUSTRIAL" },
@@ -7218,7 +7218,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x001C3F, "International Police Technologies, Inc.", "POLICE-TECHNOLOGIES" },
 	{ 0x001C40, "VDG-Security bv", "VDG-SECURITY" },
 	{ 0x001C41, "scemtec Transponder Technology GmbH", "SCEMTEC-TRANSPONDER" },
-	{ 0x001C42, "Parallels, Inc.", "PARALLELS" },
+	{ 0x001C42, "Parallels, Inc. (possible Paralles Desktop, Workstation, Server, Virtuozzo VM)", "PARALLELS-VIRTUAL" },
 	{ 0x001C43, "Samsung Electronics Co.,Ltd", "SAMSUNG-ELECTRONICS" },
 	{ 0x001C44, "Bosch Security Systems BV", "BOSCH-SECURITY" },
 	{ 0x001C45, "Chenbro Micom Co., Ltd.", "CHENBRO-MICOM" },
@@ -10611,7 +10611,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x005053, "CISCO SYSTEMS, INC.", "CISCO" },
 	{ 0x005054, "CISCO SYSTEMS, INC.", "CISCO" },
 	{ 0x005055, "DOMS A/S", "DOMS-A/S" },
-	{ 0x005056, "VMware, Inc.", "VMWARE" },
+	{ 0x005056, "VMware, Inc. (possible VMware VM)", "VMWARE-VIRTUAL" },
 	{ 0x005057, "BROADBAND ACCESS SYSTEMS", "BROADBAND-ACCESS" },
 	{ 0x005058, "VegaStream Group Limted", "VEGASTREAM-GROUP-LIMTED" },
 	{ 0x005059, "iBAHN", "IBAHN" },
@@ -12668,6 +12668,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x00E0FF, "SECURITY DYNAMICS TECHNOLOGIES, Inc.", "SECURITY-DYNAMICS-TECHNOLOGIES" },
 	{ 0x00E175, "AK-Systems Ltd", "AK" },
 	{ 0x00E6D3, "NIXDORF COMPUTER CORP.", "NIXDORF" },
+	{ 0x00E8AB, "Meggitt Training Systems, Inc.", "MEGGITT-TRAINING" },
 	{ 0x00F051, "KWB Gmbh", "KWB" },
 	{ 0x00F4B9, "Apple, Inc.", "APPLE" },
 	{ 0x00F860, "PT. Panggung Electric Citrabuana", "PT-PANGGUNG-ELECTRIC-CITRABUANA" },
@@ -12723,6 +12724,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x048B42, "Skspruce Technology Limited", "SKSPRUCE" },
 	{ 0x0494A1, "CATCH THE WIND INC", "CATCH-THE-WIND" },
 	{ 0x0498F3, "ALPS Electric Co,. Ltd.", "ALPS-ELECTRIC" },
+	{ 0x049C62, "BMT Medical Technology s.r.o.", "BMT-MEDICAL-S-R-O" },
 	{ 0x049F81, "Simena, LLC", "SIMENA-LLC" },
 	{ 0x04A3F3, "Emicon", "EMICON" },
 	{ 0x04A82A, "Nokia Corporation", "NOKIA" },
@@ -12733,6 +12735,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x04C1B9, "Fiberhome Telecommunication Tech.Co.,Ltd.", "FIBERHOME-TELECOMMUNICATION-TECH" },
 	{ 0x04C5A4, "Cisco Systems", "CISCO" },
 	{ 0x04C880, "Samtec Inc", "SAMTEC" },
+	{ 0x04CE14, "Wilocity LTD.", "WILOCITY" },
 	{ 0x04D783, "Y&H E&C Co.,LTD.", "Y-H-E-C" },
 	{ 0x04DD4C, "IPBlaze", "IPBLAZE" },
 	{ 0x04E0C4, "TRIUMPH-ADLER AG", "TRIUMPH-ADLER" },
@@ -12784,7 +12787,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x080024, "10NET COMMUNICATIONS/DCA", "10NET-COMMUNICATION/DCA" },
 	{ 0x080025, "CONTROL DATA", "CONTROL-DATA" },
 	{ 0x080026, "NORSK DATA A.S.", "NORSK-DATA-A-S" },
-	{ 0x080027, "CADMUS COMPUTER SYSTEMS", "CADMUS" },
+	{ 0x080027, "CADMUS COMPUTER SYSTEMS (possible VirtualBox VM)", "CADMUS-VIRTUAL" },
 	{ 0x080028, "Texas Instruments", "TEXAS-INSTRUMENTS" },
 	{ 0x080029, "MEGATEK CORPORATION", "MEGATEK" },
 	{ 0x08002A, "MOSAIC TECHNOLOGIES INC.", "MOSAIC-TECHNOLOGIES" },
@@ -12917,6 +12920,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x08863B, "Belkin International, Inc.", "BELKIN" },
 	{ 0x088DC8, "Ryowa Electronics Co.,Ltd", "RYOWA-ELECTRONICS" },
 	{ 0x088F2C, "Hills Sound Vision & Lighting", "HILLS-SOUND-VISION-LIGHTING" },
+	{ 0x089E01, "QUANTA COMPUTER INC.", "QUANTA" },
 	{ 0x089F97, "LEROY AUTOMATION", "LEROY-AUTOMATION" },
 	{ 0x08A12B, "ShenZhen EZL Technology Co., Ltd", "SHENZHEN-EZL" },
 	{ 0x08A95A, "Azurewave", "AZUREWAVE" },
@@ -12941,6 +12945,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x0C17F1, "TELECSYS", "TELECSYS" },
 	{ 0x0C1DC2, "SeAH Networks", "SEAH-NETWORKS" },
 	{ 0x0C2755, "Valuable Techologies Limited", "VALUABLE-TECHOLOGIES" },
+	{ 0x0C2A69, "electric imp, incorporated", "ELECTRIC-IMP-INCORPORATED" },
 	{ 0x0C37DC, "Huawei Technologies Co., Ltd", "HUAWEI-TECHNOLOGIES" },
 	{ 0x0C3956, "Observator instruments", "OBSERVATOR-INSTRUMENTS" },
 	{ 0x0C3C65, "Dome Imaging Inc", "DOME-IMAGING" },
@@ -13118,6 +13123,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x183BD2, "BYD Precision Manufacture Company Ltd.", "BYD-PRECISION-MANUFACTURE-COMPANY" },
 	{ 0x183DA2, "Intel Corporate", "INTEL-CORPORATE" },
 	{ 0x183F47, "Samsung Electronics Co.,Ltd", "SAMSUNG-ELECTRONICS" },
+	{ 0x18421D, "PRIVATE", "PRIVATE" },
 	{ 0x18422F, "Alcatel Lucent", "ALCATEL-LUCENT" },
 	{ 0x184617, "Samsung Electronics", "SAMSUNG-ELECTRONICS" },
 	{ 0x184E94, "MESSOA TECHNOLOGIES INC.", "MESSOA-TECHNOLOGIES" },
@@ -13353,6 +13359,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x28BE9B, "Technicolor USA Inc.", "TECHNICOLOR-USA" },
 	{ 0x28C0DA, "Juniper Networks", "JUNIPER-NETWORKS" },
 	{ 0x28C718, "Altierre", "ALTIERRE" },
+	{ 0x28C914, "Taimag Corporation", "TAIMAG" },
 	{ 0x28CCFF, "Corporacion Empresarial Altra SL", "CORPORACION-EMPRESARIAL-ALTRA-SL" },
 	{ 0x28CD1C, "Espotel Oy", "ESPOTEL-OY" },
 	{ 0x28CD4C, "Individual Computers GmbH", "INDIVIDUAL-COMPUTERS" },
@@ -14313,6 +14320,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x70B035, "Shenzhen Zowee Technology Co., Ltd", "SHENZHEN-ZOWEE" },
 	{ 0x70B08C, "Shenou Communication Equipment Co.,Ltd", "SHENOU-COMMUNICATION-EQUIPMENT" },
 	{ 0x70B265, "Hiltron s.r.l.", "HILTRON-S-R-L" },
+	{ 0x70B599, "Embedded Technologies s.r.o.", "EMBEDDED-TECHNOLOGIES-S-R-O" },
 	{ 0x70B921, "FiberHome Telecommunication Technologies CO.,LTD", "FIBERHOME-TELECOMMUNICATION-TECHNOLOGIES" },
 	{ 0x70CA9B, "Cisco Systems", "CISCO" },
 	{ 0x70CD60, "Apple, Inc.", "APPLE" },
@@ -14403,6 +14411,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x785712, "Mobile Integration Workgroup", "MOBILE-INTEGRATION-WORKGROUP" },
 	{ 0x78593E, "RAFI GmbH & Co.KG", "RAFI" },
 	{ 0x785C72, "Hioso Technology Co., Ltd.", "HIOSO" },
+	{ 0x78617C, "MITSUMI ELECTRIC CO.,LTD ", "MITSUMI-ELECTRIC" },
 	{ 0x7866AE, "ZTEC Instruments, Inc.", "ZTEC-INSTRUMENTS" },
 	{ 0x787F62, "GiK mbH", "GIK-MBH" },
 	{ 0x78818F, "Server Racks Australia Pty Ltd", "SERVER-RACKS-AUSTRALIA-PTY" },
@@ -14518,6 +14527,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x801F02, "Edimax Technology Co. Ltd.", "EDIMAX" },
 	{ 0x8020AF, "Trade FIDES, a.s.", "TRADE-FIDES-A-S" },
 	{ 0x802275, "Beijing Beny Wave Technology Co Ltd", "BEIJING-BENY-WAVE" },
+	{ 0x802AFA, "Germaneers GmbH", "GERMANEERS" },
 	{ 0x802DE1, "Solarbridge Technologies", "SOLARBRIDGE-TECHNOLOGIES" },
 	{ 0x802E14, "azeti Networks AG", "AZETI-NETWORKS" },
 	{ 0x803457, "OT Systems Limited", "OT" },
@@ -15194,6 +15204,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xB09BD4, "GNH Software India Private Limited", "GNH-SOFTWARE-INDIA-PRIVATE" },
 	{ 0xB0A10A, "Pivotal Systems Corporation", "PIVOTAL" },
 	{ 0xB0A72A, "Ensemble Designs, Inc.", "ENSEMBLE-DESIGNS" },
+	{ 0xB0A86E, "Juniper Networks", "JUNIPER-NETWORKS" },
 	{ 0xB0AA36, "GUANGDONG OPPO MOBILE TELECOMMUNICATIONS CORP.,LTD.", "GUANGDONG-OPPO-MOBILE-TELECOMMUNICATIONS" },
 	{ 0xB0B2DC, "Zyxel Communications Corporation", "ZYXEL-COMMUNICATION" },
 	{ 0xB0B32B, "Slican Sp. z o.o.", "SLICAN-SP-Z-O-O" },
@@ -15365,6 +15376,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xBC7737, "Intel Corporate", "INTEL-CORPORATE" },
 	{ 0xBC779F, "SBM Co., Ltd.", "SBM" },
 	{ 0xBC7DD1, "Radio Data Comms", "RADIO-DATA-COMMS" },
+	{ 0xBC811F, "Ingate Systems", "INGATE" },
 	{ 0xBC8199, "BASIC Co.,Ltd.", "BASIC" },
 	{ 0xBC83A7, "SHENZHEN CHUANGWEI-RGB ELECTRONICS CO.,LT", "SHENZHEN-CHUANGWEI-RGB-ELECTRONICS-LT" },
 	{ 0xBC851F, "Samsung Electronics", "SAMSUNG-ELECTRONICS" },
@@ -15459,6 +15471,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xC44AD0, "FIREFLIES RTLS", "FIREFLIES-RTLS" },
 	{ 0xC44B44, "Omniprint Inc.", "OMNIPRINT" },
 	{ 0xC455A6, "Cadac Holdings Ltd", "CADAC-HOLDINGS" },
+	{ 0xC455C2, "Bach-Simpson", "BACH-SIMPSON" },
 	{ 0xC45600, "Galleon Embedded Computing", "GALLEON-EMBEDDED-COMPUTING" },
 	{ 0xC45976, "Fugoo", "FUGOO" },
 	{ 0xC46044, "Everex Electronics Limited", "EVEREX-ELECTRONICS" },
@@ -15479,6 +15492,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xC49805, "Minieum Networks, Inc", "MINIEUM-NETWORKS" },
 	{ 0xC4AAA1, "SUMMIT DEVELOPMENT, spol.s r.o.", "SUMMIT-DEVELOPMENT-SPOL-S-R-O" },
 	{ 0xC4B512, "General Electric Digital Energy", "GENERAL-ELECTRIC-DIGITAL-ENERGY" },
+	{ 0xC4BA99, "I+ME Actia Informatik und Mikro-Elektronik GmbH", "I+ME-ACTIA-INFORMATIK-UND-MIKRO-ELEKTRONIK" },
 	{ 0xC4C19F, "National Oilwell Varco Instrumentation, Monitoring, and Optimization (NOV IMO)", "NATIONAL-OILWELL-VARCO-INSTRUMENTATION-MONITORING-AND-OPTIMIZATION-NOV-IMO" },
 	{ 0xC4CAD9, "Hangzhou H3C Technologies Co., Limited", "HANGZHOU-H3C-TECHNOLOGIES" },
 	{ 0xC4CD45, "Beijing Boomsense Technology CO.,LTD.", "BEIJING-BOOMSENSE" },
@@ -15988,6 +16002,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xE8C320, "Austco Communication Systems Pty Ltd", "AUSTCO-COMMUNICATION-PTY" },
 	{ 0xE8CC32, "Micronet LTD", "MICRONET" },
 	{ 0xE8D0FA, "MKS Instruments Deutschland GmbH", "MKS-INSTRUMENTS-DEUTSCHLAND" },
+	{ 0xE8D483, "ULTIMATE Europe Transportation Equipment GmbH", "ULTIMATE-EUROPE-TRANSPORTATION-EQUIPMENT" },
 	{ 0xE8DA96, "Zhuhai Tianrui Electrical Power Tech. Co., Ltd.", "ZHUHAI-TIANRUI-ELECTRICAL-POWER-TECH" },
 	{ 0xE8DAAA, "VideoHome Technology Corp.", "VIDEOHOME" },
 	{ 0xE8DFF2, "PRF Co., Ltd.", "PRF" },
@@ -16012,6 +16027,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xEC4476, "Cisco Systems", "CISCO" },
 	{ 0xEC4644, "TTK SAS", "TTK-SAS" },
 	{ 0xEC4670, "Meinberg Funkuhren GmbH &amp; Co. KG", "MEINBERG-FUNKUHREN-AMP" },
+	{ 0xEC4C4D, "ZAO NPK RoTeK", "ZAO-NPK-ROTEK" },
 	{ 0xEC542E, "Shanghai XiMei Electronic Technology Co. Ltd", "SHANGHAI-XIMEI" },
 	{ 0xEC55F9, "Hon Hai Precision Ind. Co.,Ltd.", "HON-HAI-PRECISION-IND" },
 	{ 0xEC5C69, "MITSUBISHI HEAVY INDUSTRIES MECHATRONICS SYSTEMS,LTD.", "MITSUBISHI-HEAVY-INDUSTRIES-MECHATRONICS" },
@@ -16031,6 +16047,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xEC9A74, "Hewlett Packard", "HEWLETT-PACKARD" },
 	{ 0xEC9B5B, "Nokia Corporation", "NOKIA" },
 	{ 0xEC9ECD, "Emerson Network Power and Embedded Computing", "EMERSON-NETWORK-POWER-AND-EMBEDDED-COMPUTING" },
+	{ 0xECA29B, "Kemppi Oy", "KEMPPI-OY" },
 	{ 0xECA86B, "ELITEGROUP COMPUTER SYSTEMS CO., LTD.", "ELITEGROUP" },
 	{ 0xECB106, "Acuro Networks, Inc", "ACURO-NETWORKS" },
 	{ 0xECBBAE, "Digivoice Tecnologia em Eletronica Ltda", "DIGIVOICE-TECNOLOGIA-EM-ELETRONICA-LTDA" },
@@ -16274,5 +16291,6 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xFCF8AE, "Intel Corporate", "INTEL-CORPORATE" },
 	{ 0xFCFAF7, "Shanghai Baud Data Communication Co.,Ltd.", "SHANGHAI-BAUD-DATA-COMMUNICATION" },
 	{ 0xFCFBFB, "Cisco Systems", "CISCO" },
+	{ 0x525400, "possible QEMU VM", "QEMU-VIRTUAL" },
 
 };

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.10 2012/04/22 11:05:13 peter Exp $
+ * Version    : $Id: libieee.c,v 1.11 2012/04/24 17:17:33 peter Exp $
  * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -45,19 +45,8 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
 		return (0);
 	};
 
-	if ((macaddrp->addr[0] == 0x52 && macaddrp->addr[1] == 0x54 && macaddrp->addr[2] == 0x00)) {
-		/* standard QEMU MAC prefix */
-		snprintf(resultstring, NI_MAXHOST - 1, "QEMU");
-		return (0);
-	};
-	
 	if ( (macaddrp->addr[0] & 0x01) != 0 ) {
 		/* Multicast */
-		return (1);
-	};
-
-	if ( (macaddrp->addr[0] & 0x02) != 0 ) {
-		/* Not global scope */
 		return (1);
 	};
 
@@ -118,19 +107,8 @@ int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *
 		return (0);
 	};
 	
-	if ((macaddrp->addr[0] == 0x52 && macaddrp->addr[1] == 0x54 && macaddrp->addr[2] == 0x00)) {
-		/* standard QEMU MAC prefix */
-		snprintf(resultstring, NI_MAXHOST - 1, "QEMU");
-		return (0);
-	};
-
 	if ( (macaddrp->addr[0] & 0x01) != 0 ) {
 		/* Multicast */
-		return (1);
-	};
-
-	if ( (macaddrp->addr[0] & 0x02) != 0 ) {
-		/* Not global scope */
 		return (1);
 	};
 

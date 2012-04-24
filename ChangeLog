@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.244 2012/04/23 19:00:05 peter Exp $ 
+ *  $Id: ChangeLog,v 1.245 2012/04/24 17:17:33 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120424/PB
+	lib/libieee.c: remove QEMU prefix handling
+	databases/ieee-oui/create_ieee_oui_headerfile.pl: extend with information about MAC prefixes used by Virtual Machines
+
 20120423/PB
 	ipv6calcweb.cgi: allow spaces around input in form mode
 
