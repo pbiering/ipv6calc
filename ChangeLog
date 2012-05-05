@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.245 2012/04/24 17:17:33 peter Exp $ 
+ *  $Id: ChangeLog,v 1.246 2012/05/05 14:01:02 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20120505/PB
+	databases: update
+
 20120424/PB
 	lib/libieee.c: remove QEMU prefix handling
 	databases/ieee-oui/create_ieee_oui_headerfile.pl: extend with information about MAC prefixes used by Virtual Machines
@@ -22,7 +25,7 @@ Info:
 
 20120419/PB
 	lib/*: extend filter handling, implement address token, improve privacy detection
-	dabases: update
+	databases: update
 
 20120401/PB
 	ipv6calc/showinfo: finalze autodetection for privacy IIDs

@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.47 2012/04/19 18:56:00 peter Exp $
- * Generated     : Thu Apr 19 21:24:11 2012
+ * Version       : $Id: dbieee_iab.h,v 1.48 2012/05/05 14:01:02 peter Exp $
+ * Generated     : Sat May  5 16:32:09 2012
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20120419";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20120505";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -405,7 +405,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x187000, 0x187FFF, "Cyan Technology Ltd", "CYAN" },
 	{ 0x0050C2, 0x188000, 0x188FFF, "dresden-elektronik", "DRESDEN-ELEKTRONIK" },
 	{ 0x0050C2, 0x189000, 0x189FFF, "CC Systems AB", "CC-AB" },
-	{ 0x0050C2, 0x18A000, 0x18AFFF, "Basler Electric", "BASLER-ELECTRIC" },
+	{ 0x0050C2, 0x18A000, 0x18AFFF, "Basler Electric Company", "BASLER-ELECTRIC-COMPANY" },
 	{ 0x0050C2, 0x18B000, 0x18BFFF, "Teradyne Inc.", "TERADYNE" },
 	{ 0x0050C2, 0x18C000, 0x18CFFF, "Technodrive srl", "TECHNODRIVE-SRL" },
 	{ 0x0050C2, 0x18D000, 0x18DFFF, "CCII Systems (Pty) Ltd", "CCII-PTY" },
@@ -3971,5 +3971,15 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xF7A000, 0xF7AFFF, "C3 LLC", "C3-LLC" },
 	{ 0x0050C2, 0xF7B000, 0xF7BFFF, "MCM Electronics", "MCM-ELECTRONICS" },
 	{ 0x0050C2, 0xF7C000, 0xF7CFFF, "Atonometrics, Inc.", "ATONOMETRICS" },
+	{ 0x0050C2, 0xF7D000, 0xF7DFFF, "D-Hike Electroncs Technology Co.,Ltd", "D-HIKE-ELECTRONCS" },
+	{ 0x0050C2, 0xF7E000, 0xF7EFFF, "TruTeq Wireless (Pty) Ltd", "TRUTEQ-WIRELESS-PTY" },
+	{ 0x0050C2, 0xF7F000, 0xF7FFFF, "Dynamic Design", "DYNAMIC-DESIGN" },
+	{ 0x0050C2, 0xF80000, 0xF80FFF, "SYS TEC electronic GmbH", "SYS-TEC" },
+	{ 0x0050C2, 0xF81000, 0xF81FFF, "PLDA", "PLDA" },
+	{ 0x0050C2, 0xF82000, 0xF82FFF, "Sincair Systems International", "SINCAIR" },
+	{ 0x0050C2, 0xF83000, 0xF83FFF, "GSP Sprachtechnologie GmbH", "GSP-SPRACHTECHNOLOGIE" },
+	{ 0x0050C2, 0xF84000, 0xF84FFF, "Dynon Instruments", "DYNON-INSTRUMENTS" },
+	{ 0x0050C2, 0xF85000, 0xF85FFF, "Enetics, Inc.", "ENETICS" },
+	{ 0x0050C2, 0xF86000, 0xF86FFF, "Audio Power Labs", "AUDIO-POWER-LABS" },
 
 };
