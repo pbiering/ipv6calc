@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.246 2012/05/05 14:01:02 peter Exp $ 
+ *  $Id: ChangeLog,v 1.247 2012/05/06 13:50:02 peter Exp $ 
  */
 
 Info:
@@ -108,6 +108,10 @@ Info:
 	VERSION[.in]: new for improve scripting of build process
 	databases
 	 - update
+
+20111231/PB
+	ipv6calc/showinfo.c: fix show show_types output
+	ipv6calcweb.cgi: improve form mode, implement some Anti-DoS code, some review
 
 20111219/PB
 	ipv6calcweb.cgi: add support for form mode and configuration via SetEnv
