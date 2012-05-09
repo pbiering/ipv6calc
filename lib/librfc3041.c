@@ -1,11 +1,11 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3041.c
- * Version    : $Id: librfc3041.c,v 1.11 2012/03/25 17:57:01 peter Exp $
+ * Version    : $Id: librfc3041.c,v 1.12 2012/05/09 17:08:10 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
- *  Function library for host identifier privacy extension defined in RFC 3041
+ *  Function library for host identifier privacy extension defined in RFC 3041 / RFC 4941
  *
  * Credits to YOSHIFUJI Hideaki <yoshfuji at linux-ipv6 dot org>
  *  for hints and sample code in Perl:

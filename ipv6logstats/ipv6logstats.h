@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.7 2010/05/20 16:21:22 peter Exp $
- * Copyright  : 2003-2005 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logstats.h,v 1.8 2012/05/09 17:08:10 peter Exp $
+ * Copyright  : 2003-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Main header file
@@ -12,8 +12,8 @@
 #define PROGRAM_NAME "ipv6logstats"
 #define PROGRAM_COPYRIGHT "(P) & (C) 2003-" COPYRIGHT_YEAR " by Peter Bieringer <pb (at) bieringer.de>"
 
-#define STATS_VERSION_MAJOR	1
-#define STATS_VERSION_MINOR	2
+#define STATS_VERSION_MAJOR	2
+#define STATS_VERSION_MINOR	0
 
 #define STATS_ALL		0x00
 #define STATS_IPV4		0x01
@@ -53,6 +53,11 @@
 #define STATS_IPV6_TEREDO_RESERVED	0x4e
 #define STATS_IPV6_TEREDO_UNKNOWN	0x4f
 
+#define STATS_IPV6_IID_GLOBAL		0x100
+#define STATS_IPV6_IID_MANUAL		0x101
+#define STATS_IPV6_IID_PRIVACY		0x102
+#define STATS_IPV6_IID_UNKNOWN		0x10f
+
 /* labels statistic numbers */
 typedef struct {
 	const int	number;
@@ -91,5 +96,9 @@ typedef struct {
 	{ STATS_IPV6_TEREDO_RIPE	, 0, "IPv6/Teredo/RIPE" },
 	{ STATS_IPV6_TEREDO_LACNIC, 0, "IPv6/Teredo/LACNIC" },
 	{ STATS_IPV6_TEREDO_RESERVED, 0, "IPv6/Teredo/RESERVED" },
-	{ STATS_IPV6_TEREDO_UNKNOWN, 0, "IPv6/Teredo/UNKNOWN" }
+	{ STATS_IPV6_TEREDO_UNKNOWN, 0, "IPv6/Teredo/UNKNOWN" },
+	{ STATS_IPV6_IID_GLOBAL, 0, "IPv6/IID/Global" },
+	{ STATS_IPV6_IID_PRIVACY, 0, "IPv6/IID/Privacy" },
+	{ STATS_IPV6_IID_MANUAL, 0, "IPv6/IID/Manual" },
+	{ STATS_IPV6_IID_MANUAL, 0, "IPv6/IID/Unknown" },
 };

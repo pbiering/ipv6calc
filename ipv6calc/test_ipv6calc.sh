@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.32 2012/04/01 18:28:24 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.33 2012/05/09 17:08:10 peter Exp $
 # Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -129,6 +129,7 @@ NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 -i fe80::1								=*
 -i -m ff02::1								=*
 # Anonymization
+--action anonymize 2001:0db8:0000:0000:81c0:0f3f:c807:1455		=2001:db8::a0fc:4941:a0fc:3041
 --action anonymize 3ffe:831f:ce49:7601:8000:efff:af4a:86BF		=3ffe:831f:ce49:7601:8000:ffff:af4a:86ff
 --action anonymize --mask-ipv4 16 3ffe:831f:ce49:7601:8000:efff:af4a:86BF	=3ffe:831f:ce49:7601:8000:ffff:af4a:ffff
 --action anonymize 192.0.2.1						=192.0.2.0

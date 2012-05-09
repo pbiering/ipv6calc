@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.8 2011/05/11 20:12:20 peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.9 2012/05/09 17:08:10 peter Exp $
 # Copyright  : 2007-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -11,6 +11,7 @@ testscenarios_standard() {
 # Address
 cat <<END | grep -v "^#"
 192.0.2.1 - - IPv4 address			=192.0.2.0 - - IPv4 address
+2001:0db8:0000:0000:81c0:0f3f:c807:1455 - - IPv6 address/RFC3041	=2001:db8::a0fc:4941:a0fc:3041 - - IPv6 address/RFC3041
 3ffe:ffff::1 - - IPv6 address/6bone test	=3ffe:ffff:: - - IPv6 address/6bone test
 3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - ISATAP	=3ffe:1a05:510::5efe:8cad:8100 - - ISATAP
 ff02::1:ff00:1234 - - Solicited Node		=ff02::1:ff00:0 - - Solicited Node

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.20 2012/04/01 18:04:00 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.21 2012/05/09 17:08:10 peter Exp $
  * Copyright  : 2003-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -36,7 +36,6 @@ int flag_quiet = 0;
 static int opt_unknown = 0;
 static int opt_noheader = 0;
 static int opt_onlyheader = 0;
-static int opt_iid = 0;
 static int opt_printdirection = 0; /* rows */
 static char opt_token[NI_MAXHOST] = "";
 
@@ -46,16 +45,6 @@ FILE    *FILE_OUT;
 
 /* prototypes */
 static void lineparser(void);
-
-/* IID statistics */
-#define HISTRES 8
-#define HISTMAX 32 * HISTRES
-struct {
-	long unsigned int hexdigit[HISTMAX];
-	long unsigned int bits_simple[4][HISTMAX];
-	long unsigned int bits_permuted[4][HISTMAX];
-	long unsigned int average[HISTMAX];
-} variances_distribution;
 
 
 /**************************************************/
@@ -190,8 +179,6 @@ static void lineparser(void) {
 	ipv6calc_ipv4addr ipv4addr;
 	int registry;
 	uint32_t typeinfo;
-
-	uint32_t histoentry;
 
 	ptrptr = &cptr;
 	
@@ -405,9 +392,17 @@ static void lineparser(void) {
 							break;
 					};
 
-					if (opt_iid == 1) {
-						/* analyize IID */
-					};	
+					if ((typeinfo & IPV6_NEW_ADDR_IID) == IPV6_NEW_ADDR_IID) {
+						if ((typeinfo & IPV6_NEW_ADDR_IID_PRIVACY) == IPV6_NEW_ADDR_IID_PRIVACY) {
+							stat_inc(STATS_IPV6_IID_PRIVACY);
+						} else if ((typeinfo & IPV6_NEW_ADDR_IID_LOCAL) == IPV6_NEW_ADDR_IID_LOCAL) {
+							stat_inc(STATS_IPV6_IID_MANUAL);
+						} else if ((typeinfo & IPV6_NEW_ADDR_IID_GLOBAL) == IPV6_NEW_ADDR_IID_GLOBAL) {
+							stat_inc(STATS_IPV6_IID_GLOBAL);
+						} else {
+							stat_inc(STATS_IPV6_IID_UNKNOWN);
+						};
+					};
 				};
 				
 				break;
@@ -467,30 +462,6 @@ static void lineparser(void) {
 		for (i = 0; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
 			printf("%-20s %lu\n", ipv6logstats_statentries[i].token, ipv6logstats_statentries[i].counter);
 		};
-
-		if (opt_iid == 1) {
-			/* header */
-			printf("%5s | %8s", "Var", "Hexdigit");
-			for (i = 1; i < 4; i++) {
-				printf("|Simple %2d", 4<<i);
-			};
-			for (i = 1; i < 4; i++) {
-				printf("|Permut %2d", 4<<i);
-			};
-			printf("| %8s |\n", "Average");
-
-			/* values */
-			for (histoentry = 0; histoentry < HISTMAX; histoentry++) {
-				printf("%5.2f | %8lu", histoentry / 4.0, variances_distribution.hexdigit[histoentry]);
-				for (i = 1; i < 4; i++) {
-					printf("| %8lu", variances_distribution.bits_simple[i][histoentry]);
-				};
-				for (i = 1; i < 4; i++) {
-					printf("| %8lu", variances_distribution.bits_permuted[i][histoentry]);
-				};
-				printf("| %8lu |\n", variances_distribution.average[histoentry]);
-			};
-		};
 	} else {
 		/* print in columns */
 		if (opt_noheader == 0) {
@@ -523,34 +494,6 @@ static void lineparser(void) {
 		};
 	};
 
-	if ((opt_iid) == 1 && (file_out_flag == 1)) {
-		if (ipv6calc_debug > 0) {
-			fprintf(stderr, "Output file specified: %s\n", file_out);
-		};
-
-		FILE_OUT = fopen(file_out, "w");
-		if (! FILE_OUT) {
-			fprintf(stderr, "Can't open Output file: %s\n", file_out);
-			exit(EXIT_FAILURE);
-		};
-
-		for (histoentry = 0; histoentry < HISTMAX; histoentry++) {
-			fprintf(FILE_OUT, "%5.2f %8lu", (float) histoentry / (float) HISTRES, variances_distribution.hexdigit[histoentry]);
-			for (i = 1; i < 4; i++) {
-				fprintf(FILE_OUT, " %8lu", variances_distribution.bits_simple[i][histoentry]);
-			};
-			for (i = 1; i < 4; i++) {
-				fprintf(FILE_OUT, " %8lu", variances_distribution.bits_permuted[i][histoentry]);
-			};
-			fprintf(FILE_OUT, " %8lu\n", variances_distribution.average[histoentry]);
-		};
-
-		if (ipv6calc_debug > 0) {
-			fprintf(stderr, "Output file is closed now: %s\n", file_out);
-		};
-		fflush(FILE_OUT);
-		fclose(FILE_OUT);
-	};
 	return;
 };
 #undef DEBUG_function_name
