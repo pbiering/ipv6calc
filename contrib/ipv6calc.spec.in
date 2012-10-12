@@ -26,8 +26,8 @@ Requires: GeoIP
 %endif
 
 %if %{enable_ip2location}
-BuildPreReq: IP2Location-devel
-Requires: IP2Location >= 2.1.3
+BuildPreReq: ip2location-devel
+Requires: ip2location0 >= 2.1.3
 %endif
 
 
@@ -76,10 +76,6 @@ make test-minimal
 rm -rf $RPM_BUILD_ROOT
 
 make install DESTDIR=$RPM_BUILD_ROOT
-
-# Move ipv6calc
-mkdir -p $RPM_BUILD_ROOT/bin
-mv $RPM_BUILD_ROOT%{_bindir}/ipv6calc $RPM_BUILD_ROOT/bin/ipv6calc
 
 
 ## Install examples and helper files
@@ -134,7 +130,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 
 # binaries
-/bin/ipv6calc
+%{_bindir}/ipv6calc
 %{_bindir}/ipv6logconv
 %{_bindir}/ipv6logstats
 %{_bindir}/ipv6loganon
@@ -155,6 +151,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Sep 12 2012 Peter Bieringer <pb@bieringer.de>
+- change requirements for ip2location to Mandrake Linux compatible names
+- change location of "ipv6calc" from bin to %{_bindir}
+
 * Sun Jan 01 2012 Peter Bieringer <pb@bieringer.de>
 - create subpackage for ipv6calcweb
 - minor review
@@ -179,7 +179,7 @@ rm -rf $RPM_BUILD_ROOT
 - add support for build option --with-ip2location
 
 * Wed Jul 20 2005 Peter Bieringer <pb@bieringer.de>
-- adjust code because of use of @bindir@ in Makefile of ivp6calc
+- adjust code because of use of "bindir" in Makefile of ivp6calc
 
 * Sat Oct 30 2004 Peter Bieringer <pb@bieringer.de>
 - remove openssl(-devel) from requirements, no longer needed

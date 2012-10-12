@@ -11,15 +11,28 @@ Check for installed "libtool" package
 Rebuild available SRPMS:
 
 -Download SRPMS from http://rpm.pbone.net/index.php3
-  e.g. http://rpm.pbone.net/index.php3/stat/3/srodzaj/2/search/ip2location-4.0.2-1.src.rpm
+  e.g. ftp://ftp.icm.edu.pl/vol/rzm2/linux-mandriva/official/2011/SRPMS/contrib/release/ip2location-4.0.2-1.src.rpm
+
+- extend .rpmmacros:
+
+# for Mandrake SRPMS on non Mandrake systems
+%mkrel()          %1
+%mklibname(ds)    %{1}%{?2:%{2}}%{?3:_%{3}}%{-s:-static}%{-d:-devel}
+%mdkversion       201200
+%configure2_5x    %configure
+%make             make
+%makeinstall_std  %makeinstall
+
 - rebuild by
+
 $ rpmbuild --rebuild ip2location-4.0.2-1.src.rpm
 
-(not proper working on Fedora)
+at least on Fedora 17 + RHEL/CentOS 6:
+$ QA_RPATHS=$[ 0x0002 ] rpmbuild --rebuild /tmp/ip2location-4.0.2-1.src.rpm
+
 
 
 From source code:
-
 
 Download C Library from http://www.ip2location.com/c.aspx
 
