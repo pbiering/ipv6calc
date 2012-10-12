@@ -115,6 +115,10 @@ for f in ChangeLog README CREDITS TODO COPYING LICENSE USAGE doc/ipv6calc.lyx do
 	cp $f $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/
 done
 
+for f in tools/GeoIP-update.sh tools/IP2Location-update.sh; do
+	cp $f $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/
+done
+
 # Remove all CVS files
 find $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} -type d -name CVS |xargs rm -rf
 
@@ -154,6 +158,7 @@ rm -rf $RPM_BUILD_ROOT
 * Fri Sep 12 2012 Peter Bieringer <pb@bieringer.de>
 - change requirements for ip2location to Mandrake Linux compatible names
 - change location of "ipv6calc" from bin to %{_bindir}
+- install tools/GeoIP-update.sh tools/IP2Location-update.sh to doc dir
 
 * Sun Jan 01 2012 Peter Bieringer <pb@bieringer.de>
 - create subpackage for ipv6calcweb
@@ -179,7 +184,7 @@ rm -rf $RPM_BUILD_ROOT
 - add support for build option --with-ip2location
 
 * Wed Jul 20 2005 Peter Bieringer <pb@bieringer.de>
-- adjust code because of use of /usr/bin in Makefile of ivp6calc
+- adjust code because of use of "bindir" in Makefile of ivp6calc
 
 * Sat Oct 30 2004 Peter Bieringer <pb@bieringer.de>
 - remove openssl(-devel) from requirements, no longer needed
