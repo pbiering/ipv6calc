@@ -1,11 +1,11 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Copyright  : 2001-2008 by Peter Bieringer <pb@bieringer.de>
+# Copyright  : 2001-2012 by Peter Bieringer <pb@bieringer.de>
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
 Version: 0.94.0
-Release: 1
+Release: 1%dist
 Group: System Environment/Base
 URL: http://www.deepspace6.net/projects/ipv6calc.html
 License: GNU GPL version 2
