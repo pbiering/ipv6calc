@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.251 2012/10/12 18:36:25 peter Exp $ 
+ *  $Id: ChangeLog,v 1.252 2012/10/12 19:33:04 peter Exp $ 
  */
 
 Info:
@@ -16,6 +16,8 @@ Info:
 	man/ipv6loganon.8: update
 	spec:	- change requirements for ip2location to Mandrake Linux compatible names
 		- change location of "ipv6calc" from bin to %{_bindir}
+	tools/GeoIP-update.sh: new
+	tools/IP2Location-update.sh: new
 
 20120509/PB
 	lib/libipv6addr.c lib/librfc3041.h: anoymize a privacy extension IID to a special value and recognize this also
