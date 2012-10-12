@@ -1,8 +1,8 @@
-.TH "ipv6loganon" "8" "2007-02-01" "Niko Tyni <ntyni@iki.fi>" ""
+.TH "ipv6loganon" "8" "2012-05-09" "Peter Bieringer <pb@bieringer.de>, Niko Tyni <ntyni@iki.fi>" ""
 .SH "NAME"
 ipv6loganon \- HTTP server log file anonymizer
 .SH "SYNOPSIS"
-.PP
+.PP 
 .B ipv6loganon 
 [
 .B \-d
@@ -12,32 +12,45 @@ ipv6loganon \- HTTP server log file anonymizer
 ] [
 .B \-n
 ] [
+.B \-w
+.I file
+] [
+.B \-a
+.I file
+] [
 .B \-c 
 .I value
 ] [
 .B \-\-mask\-ipv4
 .I bits
 ] [
+.B \-\-mask\-ipv6
+.I bits
+] [
 .B \-\-no\-mask\-iid
 ] [
 .B \-\-anonymize\-standard
+|
+.B \-\-anonymize\-careful
+|
+.B \-\-anonymize\-paranoid
 ]
 .SH "DESCRIPTION"
-.PP
+.PP 
 .B ipv6loganon
 is a HTTP server log file anonymizer
-.PP
+.PP 
 It expects a log line on stdin with an IPv4/IPv6 address as first token.
-.PP
+.PP 
 This token would be anonymized according to given/default options.
-.PP
+.PP 
 The anonymizer would keep as much information as possible for IPv6 address types.
-.PP
-Client-side IID would be anonymized by
-.IP
-\(bu EUI-48 based: serial number would be zero'ed, keeping OID
+.PP 
+Client\-side IID would be anonymized by
+.IP 
+\(bu EUI\-48 based: serial number would be zero'ed, keeping OID
 
-\(bu EUI-64 based: serial number would be zero'ed, keeping OID
+\(bu EUI\-64 based: serial number would be zero'ed, keeping OID
 
 \(bu ISATAP: client IPv4 address would be anonymized by given IPv4 mask
 
@@ -46,62 +59,87 @@ client port would be zero'ed
 
 \(bu 6to4(Microsoft): client IPv4 address would be anonymized by given IPv4 mask
 
-\(bu local: whole IID would be zero'ed
-.PP
-Client-side SLA would be anonymized by 
-.IP
+\(bu local: whole IID would be zero'ed (except if privacy extension was detected, then replaced by a special token)
+.PP 
+Client\-side SLA would be anonymized by 
+.IP 
 \(bu SLA would be zero'ed
-.PP
+.PP 
 Prefix would be anonymized by
-.IP
+.IP 
 \(bu 6to4: client IPv4 address would be anonymized by given IPv4 mask
-.PP
+.PP 
 Compat/Mapped IPv4 addresses would be anonymized by
-.IP
+.IP 
 \(bu IPv4 address would be anonymized by given IPv4 mask
-.PP
-Afterwards, the modified address and the trailing line would be printed to stdout.
+.PP 
+Afterwards, the modified address and the trailing line would be printed to stdout or given file.
 .SH "OPTIONS"
 .SS "GENERAL"
-.TP
+.TP 
 .B \-d, \-\-debug <debug value>
 debug value (bitwise like)
-.TP
+.TP 
 .B \-V, \-\-verbose
 be verbose
-.TP
+.TP 
+.B \-w, \-\-write <file>
+write output to file instead of stdout
+.TP 
+.B \-a, \-\-append <file>
+append output to file instead of stdout
+.TP 
+.B \-f, \-\-flush
+flush output after each line	
+.TP 
 .B \-n, \-\-nocache
 disable caching
-.TP
+.TP 
 .B \-c, \-\-cachelimit
 set cache limit (default: 20, maximum: 200)
 .SS "OUTPUT ANONYMIZATION"
-.TP
+.TP 
 .B \-\-mask\-ipv4 <bits>
-mask all IPv4 addresses [0-32], default 8 even if occurs in IPv6-IID
-.TP
+mask all IPv4 addresses [0\-32], default 24
+ (applied also to IPv4 addresses inside IPv6 address)
+.TP 
+.B \-\-mask\-ipv6 <bits>
+mask IPv6 prefix [0\-63], default 48
+ (only applied to related address types)
+.TP 
 .B \-\-no\-mask\-iid
-do not mask non-IPv4 based IPv6-IID
-.TP
+do not mask non\-IPv4 based IPv6\-IID
+.TP 
 .B \-\-anonymize\-standard
-preset for standard anonymization
-.PP
-Default settings:
-.B mask-ipv4=8 mask-iid
+(default) preset for standard anonymization
+ mask\-ipv4=24 mask\-ipv6=48 mask\-iid
+.TP 
+.B \-\-anonymize\-careful
+preset for careful anonymization
+ mask\-ipv4=20 mask\-ipv6=40 mask\-iid
+.TP 
+.B \-\-anonymize\-paranoid
+preset for paranoid anonymization
+ mask\-ipv4=16 mask\-ipv6=32 mask\-iid
+.PP 
+
 
 .SH "EXAMPLE"
+.SS "OUTPUT"
 Original lines (stdin):
-.PP
-207.46.98.53 - - [01/Jan/2007:00:01:15 +0100] "GET /Linux+IPv6-HOWTO/x1112.html HTTP/1.0" 200 6162 "-" "msnbot/1.0 (+http://search.msn.com/msnbot.htm)" 253 6334
+.PP 
+207.46.98.53 \- \- [01/Jan/2007:00:01:15 +0100] "GET /Linux+IPv6\-HOWTO/x1112.html HTTP/1.0" 200 6162 "\-" "msnbot/1.0 (+http://search.msn.com/msnbot.htm)" 253 6334
 
-2002:52b6:6b01:1:216:17ff:fe01:2345 - - [10/Jan/2007:15:04:28 +0100] "GET /favicon.ico HTTP/1.1" 200 4710 "http://www.bieringer.de/linux/IPv6/" "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.0.9) Gecko/20061219 Fedora/1.5.0.9-1.fc6 Firefox/1.5.0.9 pango-text" 413 5005
-.PP
+2002:52b6:6b01:1:216:17ff:fe01:2345 \- \- [10/Jan/2007:15:04:28 +0100] "GET /favicon.ico HTTP/1.1" 200 4710 "http://www.bieringer.de/linux/IPv6/" "Mozilla/5.0 (X11; U; Linux i686; en\-US; rv:1.8.0.9) Gecko/20061219 Fedora/1.5.0.9\-1.fc6 Firefox/1.5.0.9 pango\-text" 413 5005
+.PP 
 Modified lines (stdout):
-.PP
-207.46.98.0 - - [01/Jan/2007:00:01:15 +0100] "GET /Linux+IPv6-HOWTO/x1112.html HTTP/1.0" 200 6162 "-" "msnbot/1.0 (+http://search.msn.com/msnbot.htm)" 253 6334
+.PP 
+207.46.98.0 \- \- [01/Jan/2007:00:01:15 +0100] "GET /Linux+IPv6\-HOWTO/x1112.html HTTP/1.0" 200 6162 "\-" "msnbot/1.0 (+http://search.msn.com/msnbot.htm)" 253 6334
 
-2002:52b6:6b00:0:216:17ff:fe00:0 - - [10/Jan/2007:15:04:28 +0100] "GET /favicon.ico HTTP/1.1" 200 4710 "http://www.bieringer.de/linux/IPv6/" "Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.8.0.9) Gecko/20061219 Fedora/1.5.0.9-1.fc6 Firefox/1.5.0.9 pango-text" 413 5005
+2002:52b6:6b00:0:216:17ff:fe00:0 \- \- [10/Jan/2007:15:04:28 +0100] "GET /favicon.ico HTTP/1.1" 200 4710 "http://www.bieringer.de/linux/IPv6/" "Mozilla/5.0 (X11; U; Linux i686; en\-US; rv:1.8.0.9) Gecko/20061219 Fedora/1.5.0.9\-1.fc6 Firefox/1.5.0.9 pango\-text" 413 5005
 
+.SS "OUTPUT"
+TODO
 .SH "AUTHORS"
 .PP 
 Peter Bieringer <pb@bieringer.de>
