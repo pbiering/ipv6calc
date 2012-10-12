@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.248 2012/05/09 17:08:10 peter Exp $ 
+ *  $Id: ChangeLog,v 1.249 2012/10/12 05:33:44 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20121012/PB
+	databases: update
+
 20120509/PB
 	lib/libipv6addr.c lib/librfc3041.h: anoymize a privacy extension IID to a special value and recognize this also
 	ipv6logstats: add output related to IID type
@@ -50,7 +53,7 @@ Info:
 20120319/PB
 	databases/*: cosmetic fix for suppressing unused-variable during compilation
 	lib/*: review filter tokens
-	dabases: update
+	databases: update
 
 20120318/PB
 	lib/*: extend for action 'filter'
