@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.68 2012/05/09 17:08:10 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.69 2012/10/12 17:21:08 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -857,7 +857,7 @@ int addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, ip
 	cptr = strstr(tempstring2, literalstring);
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s: String lengths addrstring=%d strstr=%d literal=%d\n", DEBUG_function_name, strlen(addrstring), strlen(cptr), strlen(literalstring));
+		fprintf(stderr, "%s: String lengths addrstring=%d strstr=%d literal=%d\n", DEBUG_function_name, (unsigned int) strlen(addrstring), (unsigned int) strlen(cptr), (unsigned int) strlen(literalstring));
 	};
 
 	if (cptr == NULL) {

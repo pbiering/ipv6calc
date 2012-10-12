@@ -52,8 +52,8 @@ Available rpmbuild rebuild options:
 %package ipv6calcweb
 Summary: IP address information web utility
 Group: Web/Applications
-Requires: perl-URI perl-Digest-SHA1
-BuildPreReq: perl-URI perl-Digest-SHA1
+Requires: perl-URI perl-Digest-SHA1 perl-Digest-MD5
+BuildPreReq: perl-URI perl-Digest-SHA1 perl-Digest-MD5
 
 %description ipv6calcweb
 ipv6calcweb contains a CGI program and a configuration file for

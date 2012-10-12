@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.249 2012/10/12 05:33:44 peter Exp $ 
+ *  $Id: ChangeLog,v 1.250 2012/10/12 17:21:08 peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,10 @@ Info:
 --------------------------------------------------------------------
 20121012/PB
 	databases: update
+	README.BUILDING-GeoIP: new
+	README.BUILDING-IP2LOCATION: minor update
+	lib/libipv6addr.c: minor fix to avoid compiler warning
+	man/ipv6loganon.8: update
 
 20120509/PB
 	lib/libipv6addr.c lib/librfc3041.h: anoymize a privacy extension IID to a special value and recognize this also

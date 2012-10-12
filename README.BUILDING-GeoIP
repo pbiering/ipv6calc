@@ -1,0 +1,22 @@
+BUILDING GeoIP
+--------------------
+If you want to use the GeoIP library with ipv6calc, you will
+have to build and install it yourself separately.
+
+Instructions for current version (1.4.8)
+
+install following RPMs (usually supported by distribution)
+
+	GeoIP GeoIP-devel
+
+Create as user "root" database directories:
+
+Install databases
+
+# mkdir -p /var/local/share/GeoIP
+
+Update databases (GeoLite databases do not require a license)
+
+# pushd /var/local/share/GeoIP/ || exit 1
+# wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz && gunzip -f GeoIP.dat.gz
+# wget http://geolite.maxmind.com/download/geoip/database/GeoIPv6.dat.gz && gunzip -f GeoIPv6.dat.gz
