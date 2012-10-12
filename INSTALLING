@@ -27,6 +27,9 @@ For deinstalling use
 	rpm -e ipv6calc
 
 
+RPM is currently tested on CentOS 5 / CentOS 6 / Fedora 17
+
+
 HACKERS WAY
 -----------
 cd /usr/src ; tar xvzf ipv6calc*.tar.gz
@@ -119,6 +122,8 @@ You can set the path to a default GeoIP database file by using the
 when ipv6calc is invoked with the '-G' (or '--db-geoip-default')
 option.
 
+See also README.BUILDING-GeoIP
+
 
 PREPARATIONS
 ------------
@@ -151,4 +156,4 @@ If you want to install the binary use "make install".
 Peter Bieringer
 <pb (at) bieringer.de>
 
-$Id: INSTALLING,v 1.18 2011/10/29 08:35:24 peter Exp $
+$Id: INSTALLING,v 1.19 2012/10/12 19:40:16 peter Exp $
