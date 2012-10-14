@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.59 2012/10/14 11:10:30 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.60 2012/10/14 13:50:08 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -810,7 +810,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6=%s", ipv6addrstring);
 		printout(tempstring);
 	
-		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_ANONYMIZED=%s", tempstring2);
+		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_ANON=%s", tempstring2);
 		printout(tempstring);
 
 		if (ipv6addrp->flag_prefixuse == 1) {	
