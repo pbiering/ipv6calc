@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.60 2012/10/14 13:50:08 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.61 2012/10/14 13:54:04 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -150,7 +150,7 @@ static void printfooter(const uint32_t formatoptions) {
 		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6CALC_OUTPUT_VERSION=%d", IPV6CALC_OUTPUT_VERSION);
 		printout(tempstring);
 
-		snprintf(tempstring, sizeof(tempstring) - 1, "ANON_SETTINGS=mask_ipv6=%d,mask_ipv4=%d,mask_iid=%d", mask_ipv6, mask_ipv4, mask_iid);
+		snprintf(tempstring, sizeof(tempstring) - 1, "SETTINGS_ANON=mask_ipv6=%d,mask_ipv4=%d,mask_iid=%d", mask_ipv6, mask_ipv4, mask_iid);
 		printout(tempstring);
 
 		tempstring[0] = '\0'; /* clear tempstring */
