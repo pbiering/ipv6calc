@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.44 2012/10/14 14:10:27 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.45 2012/10/14 14:21:26 peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -1497,6 +1497,9 @@ if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 	if (length($ipv6calc_features) > 0) {
 		print " (features: " . $ipv6calc_features . ")";
 	};
+	if (length($ipv6calc_settings) > 0) {
+		print " (settings: " . $ipv6calc_settings . ")";
+	};
 	print "</font>\n";
 
 	if (defined $ipv6calc_feature_hash{'IP2Location'} && ! defined $database_ip2location_ipv4) {
@@ -1536,6 +1539,8 @@ if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 	print $text{'powered'}->{$lang} . " " . $ipv6calc_name . " " . $ipv6calc_version . ", " . $ipv6calc_copyright . " (http://www.deepspace6.net/projects/ipv6calc.html)";
 	if (length($ipv6calc_features) > 0) {
 		print " (features: " . $ipv6calc_features . ")";
+	};
+	if (length($ipv6calc_settings) > 0) {
 		print " (settings: " . $ipv6calc_settings . ")";
 	};
 	print "\n";
