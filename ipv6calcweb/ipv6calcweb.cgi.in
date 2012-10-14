@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.43 2012/10/14 14:06:26 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.44 2012/10/14 14:10:27 peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -1269,7 +1269,7 @@ sub ipv6calc_exec($$$$) {
 					$ipv6calc_feature_hash{$feature} = 1;
 				};
 			};
-			if ( $key ~= /^IPV6CALC_SETTINGS_(.*)$/ ) {
+			if ( $key =~ /^IPV6CALC_SETTINGS_(.*)$/ ) {
 				if (length($ipv6calc_settings) > 0) {
 					$ipv6calc_settings .= " ";
 				};
