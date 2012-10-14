@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.h
- * Version    : $Id: showinfo.h,v 1.15 2012/03/18 17:15:41 peter Exp $
+ * Version    : $Id: showinfo.h,v 1.16 2012/10/14 11:10:30 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -27,6 +27,9 @@
 //	+ IPV6CALC_FEATURES (see ipv6calc -v)
 // 6: 0.94.0 to current
 //      TYPE renamed to IPV6_TYPE for alignment
+//      + IPV6_ANON
+//      + IPV4_ANON
+//      + SETTINGS_ANON
 #define IPV6CALC_OUTPUT_VERSION	6
 
 /* prototypes */

@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.252 2012/10/12 19:33:04 peter Exp $ 
+ *  $Id: ChangeLog,v 1.253 2012/10/14 11:10:30 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,11 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20121014/PB
+	ipv6calc/showinfo: add anonymized IPv4/IPv6 addresses on machinereadable output
+	lib/libipv4addr: add ipv4_copy function
+	ipv6calcweb.cgi: support anoymized IPv4/IPv6 addresses
+
 20121012/PB
 	databases: update
 	README.BUILDING-GeoIP: new

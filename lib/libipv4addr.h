@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.22 2012/03/20 06:36:30 peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.23 2012/10/14 11:10:30 peter Exp $
  * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
@@ -115,6 +115,7 @@ extern void ipv4addr_setdword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int v
 
 extern void ipv4addr_clear(ipv6calc_ipv4addr *ipv4addrp);
 extern void ipv4addr_clearall(ipv6calc_ipv4addr *ipv4addrp);
+extern void ipv4addr_copy(ipv6calc_ipv4addr *ipv4addrp_dst, const ipv6calc_ipv4addr *ipv4addrp_src);
 
 extern uint32_t ipv4addr_gettype(const ipv6calc_ipv4addr *ipv4addrp);
 

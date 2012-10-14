@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.58 2012/04/01 18:04:00 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.59 2012/10/14 11:10:30 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -51,6 +51,10 @@ extern char file_geoip_ipv4[NI_MAXHOST];
 extern char file_geoip_ipv6[NI_MAXHOST];
 #endif
 
+/* from anonymizer */
+extern int mask_ipv6;
+extern int mask_ipv4;
+extern int mask_iid;
 
 /*
  * show available types on machine readable format
@@ -66,14 +70,17 @@ void showinfo_availabletypes(void) {
 	};
 	fprintf(stderr, "\n");
 	fprintf(stderr, " IPV6=...                      : given IPv6 address full uncompressed\n");
+	fprintf(stderr, " IPV6_ANON=...                 : given anonymized IPv6 address full uncompressed\n");
 	fprintf(stderr, " IPV6_REGISTRY=...             : registry token of given IPv6 address\n");
 	fprintf(stderr, " IPV6_PREFIXLENGTH=ddd         : given prefix length\n");
 	fprintf(stderr, " IPV4=ddd.ddd.ddd.ddd          : native IPv4 address\n");
+	fprintf(stderr, " IPV4_ANON=ddd.ddd.ddd.ddd     : native anonymized IPv4 address\n");
 	fprintf(stderr, " IPV4_REGISTRY=...             : registry token of native IPv4 address\n");
 	fprintf(stderr, " IPV4_PREFIXLENGTH=ddd         : given prefix length of native IPv4 address\n");
-	fprintf(stderr, " IPV4[...]=ddd.ddd.ddd.ddd     : included IPv4 address in IID (e.g. ISATAP, TEREDO, NAT64)\n");
+	fprintf(stderr, " IPV4[...]=ddd.ddd.ddd.ddd     : included IPv4 address in IID or SLA (e.g. ISATAP, TEREDO, NAT64, 6to4)\n");
+	fprintf(stderr, " IPV4_ANON[...]=ddd.ddd.ddd.ddd: included anonymized IPv4 address in IID or SLA (e.g. ISATAP, TEREDO, NAT64, 6to4)\n");
 	fprintf(stderr, " IPV4_REGISTRY[...]=...        : registry token of included IPv4 address\n");
-	fprintf(stderr, " IPV4_SOURCE[...]=...           : source of IPv4 address\n");
+	fprintf(stderr, " IPV4_SOURCE[...]=...          : source of IPv4 address\n");
 	fprintf(stderr, "  ISATAP|TEREDO-SERVER|TEREDO-CLIENT|6TO4|LINK-LOCAL-IID\n");
 	fprintf(stderr, " SLA=xxxx                      : an included SLA\n");
 	fprintf(stderr, " IID=xxxx:xxxx:xxxx:xxxx       : an included interface identifier\n");
@@ -85,6 +92,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " EUI64_SCOPE=local-*|global    : scope of EUI-64 identifier\n");
 	fprintf(stderr, " OUI=\"...\"                     : OUI string, if available\n");
 	fprintf(stderr, " TEREDO_PORT_CLIENT=...        : port of Teredo client (NAT outside)\n");
+	fprintf(stderr, " SETTINGS_ANON=...             : anonymization settings\n");
 #ifdef SUPPORT_IP2LOCATION
 	fprintf(stderr, " IP2LOCATION_COUNTRY_SHORT=... : Country code of IP address\n");
 	fprintf(stderr, " IP2LOCATION_COUNTRY_LONG=...  : Country of IP address\n");
@@ -140,6 +148,9 @@ static void printfooter(const uint32_t formatoptions) {
 		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6CALC_COPYRIGHT=\"%s\"", PROGRAM_COPYRIGHT);
 		printout(tempstring);
 		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6CALC_OUTPUT_VERSION=%d", IPV6CALC_OUTPUT_VERSION);
+		printout(tempstring);
+
+		snprintf(tempstring, sizeof(tempstring) - 1, "ANON_SETTINGS=mask_ipv6=%d,mask_ipv4=%d,mask_iid=%d", mask_ipv6, mask_ipv4, mask_iid);
 		printout(tempstring);
 
 		tempstring[0] = '\0'; /* clear tempstring */
@@ -476,12 +487,15 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 /* print IPv4 address */
 #define DEBUG_function_name "showinfo/print_ipv4addr"
 static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formatoptions, const char *string) {
-	char tempstring[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
+	char tempstring[NI_MAXHOST] = "", tempstring2[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
 	char tempipv4string[NI_MAXHOST] = "";
 	char embeddedipv4string[NI_MAXHOST] = "";
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable);
 	int retval, i, j;
 	uint32_t typeinfo;
+	ipv6calc_ipv4addr ipv4addr_anon, *ipv4addr_anon_ptr;
+
+	ipv4addr_anon_ptr = &ipv4addr_anon;
 
 	typeinfo = ipv4addr_gettype(ipv4addrp);
 
@@ -497,6 +511,15 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	if ((formatoptions & FORMATOPTION_printembedded) != 0) {
 		snprintf(embeddedipv4string, sizeof(embeddedipv4string) - 1, "[%s]", tempipv4string);
 	};
+
+	ipv4addr_copy(ipv4addr_anon_ptr, ipv4addrp); /* copy structure */
+	libipv4addr_anonymize(ipv4addr_anon_ptr, mask_ipv4);
+	retval = libipv4addr_ipv4addrstruct_to_string(ipv4addr_anon_ptr, tempstring2, 0);
+	if ( retval != 0 ) {
+		fprintf(stderr, "Error uncompressing IPv4 address: %s\n", tempstring2);
+		retval = 1;
+		goto END_print_ipv4addr;
+	};	
 	
 	if ( machinereadable != 0 ) {
 		/* given source string */
@@ -509,6 +532,10 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		snprintf(tempstring, sizeof(tempstring) - 1, "IPV4%s=%s", embeddedipv4string, tempipv4string);
 		printout(tempstring);
 	
+		/* anonymized address */
+		snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_ANON%s=%s", embeddedipv4string, tempstring2);
+		printout(tempstring);
+
 		if (ipv4addrp->flag_prefixuse == 1) {	
 			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_PREFIXLENGTH%s=%d", embeddedipv4string, (int) ipv4addrp->prefixlength);
 			printout(tempstring);
@@ -570,6 +597,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	};
 #endif
 
+END_print_ipv4addr:
 	return;
 };
 #undef DEBUG_function_name
@@ -728,9 +756,9 @@ static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t for
 #define DEBUG_function_name "showinfo_ipv6addr"
 int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t formatoptions) {
 	int retval = 1, i, j, flag_prefixuse, registry;
-	char tempstring[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
+	char tempstring[NI_MAXHOST] = "", tempstring2[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
 	char ipv6addrstring[NI_MAXHOST] = "";
-	ipv6calc_ipv6addr ipv6addr, *ipv6addrp;
+	ipv6calc_ipv6addr ipv6addr, ipv6addr_anon, *ipv6addrp, *ipv6addr_anon_ptr;
 	ipv6calc_ipv4addr ipv4addr, ipv4addr2;
 	ipv6calc_macaddr macaddr;
 	ipv6calc_eui64addr eui64addr;
@@ -738,8 +766,10 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	uint32_t typeinfo;
 	uint32_t machinereadable = ( formatoptions & FORMATOPTION_machinereadable);
 
+	ipv6addr_anon_ptr = &ipv6addr_anon;
+
 	ipv6addrp = &ipv6addr;
-	ipv6addr_copy(ipv6addrp, ipv6addrp1);
+	ipv6addr_copy(ipv6addrp, ipv6addrp1); /* copy structure */
 
 	typeinfo = ipv6addr_gettype(ipv6addrp);
 	registry = ipv6addr_getregistry(ipv6addrp);
@@ -766,11 +796,23 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	};	
 
 	ipv6addrp->flag_prefixuse = flag_prefixuse;
+
+	ipv6addr_copy(ipv6addr_anon_ptr, ipv6addrp); /* copy structure */
+	libipv6addr_anonymize(ipv6addr_anon_ptr, mask_iid, mask_ipv6, mask_ipv4);
+	retval = libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6addr_anon_ptr, tempstring2, FORMATOPTION_printfulluncompressed);
+	if ( retval != 0 ) {
+		fprintf(stderr, "Error uncompressing IPv6 address: %s\n", tempstring2);
+		retval = 1;
+		goto END;
+	};	
 	
 	if ( machinereadable != 0 ) {
 		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6=%s", ipv6addrstring);
 		printout(tempstring);
 	
+		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_ANONYMIZED=%s", tempstring2);
+		printout(tempstring);
+
 		if (ipv6addrp->flag_prefixuse == 1) {	
 			snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_PREFIXLENGTH=%d", (int) ipv6addrp->prefixlength);
 			printout(tempstring);

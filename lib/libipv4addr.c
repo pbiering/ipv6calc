@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.33 2012/03/21 18:39:05 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.34 2012/10/14 11:10:30 peter Exp $
  * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -230,6 +230,22 @@ void ipv4addr_clearall(ipv6calc_ipv4addr *ipv4addrp) {
 	(*ipv4addrp).prefixlength = 0;
 	(*ipv4addrp).flag_prefixuse = 0;
 
+	return;
+};
+#undef DEBUG_function_name
+
+
+/*
+ * function copies the IPv4 structure
+ *
+ * in:  ipv64ddrp  = pointer to IPv4 address structure
+ * mod: ipv64ddrp2 = pointer to IPv4 address structure
+ */
+#define DEBUG_function_name "libipv4addr/ipv4addr_copy"
+void ipv4addr_copy(ipv6calc_ipv4addr *ipv4addrp_dst, const ipv6calc_ipv4addr *ipv4addrp_src) {
+
+	*(ipv4addrp_dst) = *(ipv4addrp_src);
+	
 	return;
 };
 #undef DEBUG_function_name
