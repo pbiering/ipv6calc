@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.61 2012/10/14 13:54:04 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.62 2012/10/14 14:06:26 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -92,7 +92,6 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " EUI64_SCOPE=local-*|global    : scope of EUI-64 identifier\n");
 	fprintf(stderr, " OUI=\"...\"                     : OUI string, if available\n");
 	fprintf(stderr, " TEREDO_PORT_CLIENT=...        : port of Teredo client (NAT outside)\n");
-	fprintf(stderr, " SETTINGS_ANON=...             : anonymization settings\n");
 #ifdef SUPPORT_IP2LOCATION
 	fprintf(stderr, " IP2LOCATION_COUNTRY_SHORT=... : Country code of IP address\n");
 	fprintf(stderr, " IP2LOCATION_COUNTRY_LONG=...  : Country of IP address\n");
@@ -122,6 +121,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV6CALC_COPYRIGHT=\"...\"      : Copyright string\n");
 	fprintf(stderr, " IPV6CALC_OUTPUT_VERSION=x     : Version of output format\n");
 	fprintf(stderr, " IPV6CALC_FEATURES=\"...\"       : Feature string of ipv6calc -v\n");
+	fprintf(stderr, " IPV6CALC_SETTINGS_ANON=...    : Anonymizer settings\n");
 };
 
 /*
@@ -150,7 +150,7 @@ static void printfooter(const uint32_t formatoptions) {
 		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6CALC_OUTPUT_VERSION=%d", IPV6CALC_OUTPUT_VERSION);
 		printout(tempstring);
 
-		snprintf(tempstring, sizeof(tempstring) - 1, "SETTINGS_ANON=mask_ipv6=%d,mask_ipv4=%d,mask_iid=%d", mask_ipv6, mask_ipv4, mask_iid);
+		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6CALC_SETTINGS_ANON=mask_ipv6=%d,mask_ipv4=%d,mask_iid=%d", mask_ipv6, mask_ipv4, mask_iid);
 		printout(tempstring);
 
 		tempstring[0] = '\0'; /* clear tempstring */
