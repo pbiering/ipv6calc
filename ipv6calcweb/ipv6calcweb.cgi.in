@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.45 2012/10/14 14:21:26 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.46 2012/10/14 14:42:50 peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -622,6 +622,7 @@ my $ipv6calc_name = "ipv6calc";
 my $ipv6calc_features = "";
 my %ipv6calc_feature_hash;
 my $ipv6calc_settings = "";
+my %ipv6calc_settings_hash;
 
 
 ############### Functions
@@ -1273,7 +1274,11 @@ sub ipv6calc_exec($$$$) {
 				if (length($ipv6calc_settings) > 0) {
 					$ipv6calc_settings .= " ";
 				};
-				$ipv6calc_settings .= $1 . ":" . $content;
+
+				if (! defined %ipv6calc_settings{$1}) {
+					%ipv6calc_settings{$1} = $content;
+					$ipv6calc_settings .= $1 . ":" . $content;
+				};
 			};
 		};
 
