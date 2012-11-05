@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.49 2012/10/12 05:33:44 peter Exp $
- * Generated     : Fri Oct 12 07:19:41 2012
+ * Version       : $Id: dbieee_iab.h,v 1.50 2012/11/05 20:32:48 peter Exp $
+ * Generated     : Mon Nov  5 21:36:15 2012
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20121012";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20121101";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -1442,7 +1442,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x594000, 0x594FFF, "Pixel Velocity, Inc.", "PIXEL-VELOCITY" },
 	{ 0x0050C2, 0x595000, 0x595FFF, "Callpod, Inc.", "CALLPOD" },
 	{ 0x0050C2, 0x596000, 0x596FFF, "SPANSION", "SPANSION" },
-	{ 0x0050C2, 0x597000, 0x597FFF, "Nautel Ltd.", "NAUTEL" },
+	{ 0x0050C2, 0x597000, 0x597FFF, "Nautel Limited", "NAUTEL" },
 	{ 0x0050C2, 0x598000, 0x598FFF, "Bundesamt fÃÂ¼r Strahlenschutz", "BUNDESAMT-FÃÂ¼R-STRAHLENSCHUTZ" },
 	{ 0x0050C2, 0x599000, 0x599FFF, "Fen Technology Limited", "FEN" },
 	{ 0x0050C2, 0x59A000, 0x59AFFF, "MultiTrode Pty Ltd", "MULTITRODE-PTY" },
@@ -3849,7 +3849,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xF00000, 0xF00FFF, "Syscom Instruments", "SYSCOM-INSTRUMENTS" },
 	{ 0x0050C2, 0xF01000, 0xF01FFF, "Mango DSP, Inc", "MANGO-DSP" },
 	{ 0x0050C2, 0xF02000, 0xF02FFF, "BMR", "BMR" },
-	{ 0x0050C2, 0xF03000, 0xF03FFF, "PRIVATE", "PRIVATE" },
+	{ 0x0050C2, 0xF03000, 0xF03FFF, "Wren Sound Systems", "WREN-SOUND" },
 	{ 0x0050C2, 0xF04000, 0xF04FFF, "KINKI ROENTGEN INDUSTRIAL CO.,LTD", "KINKI-ROENTGEN-INDUSTRIAL" },
 	{ 0x0050C2, 0xF05000, 0xF05FFF, "ESI Ventures", "ESI-VENTURES" },
 	{ 0x0050C2, 0xF06000, 0xF06FFF, "Micro-Key BV", "MICRO-KEY" },
@@ -4010,7 +4010,6 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xFA1000, 0xFA1FFF, "N-Hands GmbH und Co KG", "N-HANDS-UND" },
 	{ 0x0050C2, 0xFA2000, 0xFA2FFF, "Power-One", "POWER-ONE" },
 	{ 0x0050C2, 0xFA3000, 0xFA3FFF, "Xemex NV", "XEMEX-NV" },
-	{ 0x0050C2, 0xFA4000, 0xFA4FFF, "Jasmine Systems, Inc.", "JASMINE" },
 	{ 0x0050C2, 0xFA5000, 0xFA5FFF, "Intuitive Surgical, Inc.", "INTUITIVE-SURGICAL" },
 	{ 0x0050C2, 0xFA6000, 0xFA6FFF, "Hilkom digital GmbH", "HILKOM-DIGITAL" },
 	{ 0x0050C2, 0xFA7000, 0xFA7FFF, "Exelis Inc.", "EXELIS" },
@@ -4140,5 +4139,23 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x023000, 0x023FFF, "Shanghai o-solution electronics & Technology Co., Ltd.", "SHANGHAI-O-SOLUTION-ELECTRONICS" },
 	{ 0x40D855, 0x024000, 0x024FFF, "Electrical Geodesics Incorporated", "ELECTRICAL-GEODESICS-INCORPORATED" },
 	{ 0x40D855, 0x025000, 0x025FFF, "Rosemount Analytical", "ROSEMOUNT-ANALYTICAL" },
+	{ 0x40D855, 0x026000, 0x026FFF, "Symetrics Industries", "SYMETRICS-INDUSTRIES" },
+	{ 0x40D855, 0x027000, 0x027FFF, "GRUPO EPELSA S.L.", "GRUPO-EPELSA-S-L" },
+	{ 0x40D855, 0x028000, 0x028FFF, "Integrated Control Corp.", "INTEGRATED-CONTROL" },
+	{ 0x40D855, 0x029000, 0x029FFF, "Depro Electronique", "DEPRO-ELECTRONIQUE" },
+	{ 0x40D855, 0x02A000, 0x02AFFF, "Tinkerforge GmbH", "TINKERFORGE" },
+	{ 0x40D855, 0x02B000, 0x02BFFF, "Nomatronics", "NOMATRONICS" },
+	{ 0x40D855, 0x02C000, 0x02CFFF, "InventLab s.c.", "INVENTLAB-S-C" },
+	{ 0x40D855, 0x02D000, 0x02DFFF, "Elgama Sistemos", "ELGAMA-SISTEMOS" },
+	{ 0x40D855, 0x02E000, 0x02EFFF, "Circuitec Ind. Equip. Eletr. Ltda", "CIRCUITEC-IND-EQUIP-ELETR-LTDA" },
+	{ 0x40D855, 0x02F000, 0x02FFFF, "Adva Technologies", "ADVA-TECHNOLOGIES" },
+	{ 0x40D855, 0x030000, 0x030FFF, "Tecnologias Plexus", "TECNOLOGIAS-PLEXUS" },
+	{ 0x40D855, 0x031000, 0x031FFF, "Dommel GmbH", "DOMMEL" },
+	{ 0x40D855, 0x032000, 0x032FFF, "BETTINI SRL", "BETTINI-SRL" },
+	{ 0x40D855, 0x033000, 0x033FFF, "Ermes Elettronica s.r.l.", "ERMES-ELETTRONICA-S-R-L" },
+	{ 0x40D855, 0x034000, 0x034FFF, "Dacom West GmbH", "DACOM-WEST" },
+	{ 0x40D855, 0x035000, 0x035FFF, "Mesotech International, Inc.", "MESOTECH" },
+	{ 0x40D855, 0x036000, 0x036FFF, "Schweers informationstechnologie GmbH", "SCHWEERS-INFORMATIONSTECHNOLOGIE" },
+	{ 0x40D855, 0x037000, 0x037FFF, "Software Workshop", "SOFTWARE-WORKSHOP" },
 
 };

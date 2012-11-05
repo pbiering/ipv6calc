@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.253 2012/10/14 11:10:30 peter Exp $ 
+ *  $Id: ChangeLog,v 1.254 2012/11/05 20:32:48 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20121105/PB
+	databases: update
+	databases/ipv4-assignment/create-registry-list.pl: fix long undetected bug regarding calculation of IP mask (not easy detectable on 32-bit systems)
+
 20121014/PB
 	ipv6calc/showinfo: add anonymized IPv4/IPv6 addresses on machinereadable output
 	lib/libipv4addr: add ipv4_copy function

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.27 2012/03/19 20:04:49 peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.28 2012/11/05 20:32:48 peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -25,6 +25,7 @@ if (! -x "/usr/bin/aggregate") {
 };
 
 my $debug_hinttable = 0;
+my $debug = 0;
 
 
 my $OUTFILE = "dbipv4addr_assignment.h";
@@ -105,7 +106,11 @@ sub dec_to_ipv4($) {
 sub length_to_dec($) {
 	my $length = shift || die "Missing prefix length";
 
-	my $dec = ((2 << $length) - 1) << (32 - $length);
+	my $dec = ((1 << $length) - 1);
+	printf "length=%d dec(hex)=%x dec(decimal)=%d\n", $length, $dec, $dec if ($debug);
+
+	$dec = $dec << (32 - $length);
+	printf "length=%d dec(hex)=%x dec(decimal)=%d\n", $length, $dec, $dec if ($debug);
 
 	return ($dec);
 };
@@ -453,6 +458,9 @@ sub fill_data($$) {
 		$data{$ipv4_hex}->{'mask_hex'} = $mask_hex;
 		$data{$ipv4_hex}->{'mask_length'} = $mask_length;
 		$data{$ipv4_hex}->{'reg'} = $reg;
+
+		printf "ipv4_hex=0x%s, mask_hex=0x%s, reg=\"%s\" length=%d\n", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'reg'}, $length if ($debug);
+		die if ($debug);
 	};
 };
 
