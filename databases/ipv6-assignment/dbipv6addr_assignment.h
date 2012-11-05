@@ -1,15 +1,15 @@
  /*
  * Project       : ipv6calc
  * File          : dbipv6_assignment.h
- * Version       : $Id: dbipv6addr_assignment.h,v 1.41 2012/10/12 05:33:45 peter Exp $
- * Generated     : Fri Oct 12 07:27:00 2012
+ * Version       : $Id: dbipv6addr_assignment.h,v 1.42 2012/11/05 20:29:50 peter Exp $
+ * Generated     : Mon Nov  5 21:37:31 2012
  * Data copyright: IANA ARIN RIPENCC APNIC LACNIC AFRINIC
  *
  * Information:
  *  Additional header file for libipv6addr.c
  */
 
-/*@unused@*/ static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20121012 APNIC/20121011 ARIN/20121011 IANA/20121001 LACNIC/20121011 RIPENCC/20121011";
+/*@unused@*/ static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20121105 APNIC/20121105 ARIN/20121104 IANA/20121001 LACNIC/20121030 RIPENCC/20121104";
 
 static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 	{ 0x20010000, 0x00000000, 0xfffffe00, 0x00000000,  23, "IANA" },
