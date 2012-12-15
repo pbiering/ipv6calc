@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.254 2012/11/05 20:32:48 peter Exp $ 
+ *  $Id: ChangeLog,v 1.255 2012/12/15 19:14:57 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20121215/PB
+	databases: update
+
 20121105/PB
 	databases: update
 	databases/ipv4-assignment/create-registry-list.pl: fix long undetected bug regarding calculation of IP mask (not easy detectable on 32-bit systems)
