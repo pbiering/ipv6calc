@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
-# Version    : $Id: test_ipv6logstats.sh,v 1.4 2012/05/09 17:08:10 peter Exp $
+# Version    : $Id: test_ipv6logstats.sh,v 1.5 2012/12/16 09:39:02 peter Exp $
 # Copyright  : 2003-2005 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"
@@ -17,6 +17,7 @@ cat <<END | grep -v "^#"
 3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - [15/Jun/2003:05:01:56 +0200] "GET /isatap.ico HTTP/1.1" 200 1011 "http://www.bieringer.de/linux/IPv6/" "Privoxy/3.0 (Anonymous)"
 2001:db8::a0fc:4941:a0fc:3041 - - [15/Jun/2003:05:01:56 +0200] "GET /iid-privacy.ico HTTP/1.1" 200 1011 "http://www.bieringer.de/linux/IPv6/" "Privoxy/3.0 (Anonymous)"
 192.168.1.1 - - [09/Jun/2003:10:16:56 +0200] "GET /stats/result.png HTTP/1.0" 200 4244 "-" "Privoxy/3.0 (Anonymous)"
+2001:db8::a0fc:4291:a0fc:1884 - - [15/Jun/2003:05:01:56 +0200] "GET /iid-static.ico HTTP/1.1" 200 1011 "http://www.bieringer.de/linux/IPv6/" "Privoxy/3.0 (Anonymous)"
 END
 }
 

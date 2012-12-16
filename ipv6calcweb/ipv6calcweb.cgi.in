@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.48 2012/10/14 14:50:40 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.49 2012/12/16 09:39:02 peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -19,6 +19,7 @@
 #  SERVER_ADDR    : local server address
 #  SERVER_NAME    : local server name (by http server config)
 #  SERVER_PROTOCOL: check for INCLUDED (called by SSI)
+#  X-Forwarded-For: added by passing proxies (if not disabled on proxy)
 #  QUERY_STRING   : for language setting
 #    Currently supported:
 #      Always:
@@ -383,6 +384,10 @@ my %text = (
 		'de' => "Browseridentifikation",
 		'en' => "User agent identification",
 	},
+	'X-Forward-For' => {
+		'de' => "Information vom passierten Proxy",
+		'en' => "Information from passed proxy",
+	},
 	'IP2LOCATION_COUNTRY_SHORT' => {
 		'de' => "IP2Location Laenderkennung",
 		'en' => "IP2Location country code",
@@ -590,6 +595,7 @@ if (! defined $lang) { $lang = $lang_default};
 my $addr_remote;
 my $name_remote;
 my $user_agent;
+my $x_forward_for;
 my $addr_server;
 my $name_server;
 my @info_remote;
@@ -1144,6 +1150,15 @@ if ( defined $ENV{'HTTP_USER_AGENT'} ) {
 	};
 };
 
+if ( defined $ENV{'X-Forwarded-For'} ) {
+	$ENV{'X-Forwarded-For'} =~ /^([[:alnum:]\[\]\/\(\)\\\.\-+\;\: ]*)$/;
+	if ( ! defined $1 || (length($1) > $maxenvlength)) {
+		# not a problem, skip it
+	} else {
+		$x_forward_for = $1;
+	};
+};
+
 if ( defined $ENV{'SERVER_ADDR'} ) {
 	$ENV{'SERVER_ADDR'} =~ /^([[:xdigit:]\.\:]*)$/;
 	if ( ! defined $1 || (length($1) > $maxenvlength)) {
@@ -1306,6 +1321,10 @@ if ( defined $addr_remote ) {
 	if (defined $user_agent) {
 		$infoh_remote{'USERAGENT'} = $user_agent;
 		push @sort_remote, 'USERAGENT';
+	};
+	if (defined $x_forward_for) {
+		$infoh_remote{'X-Forward-For'} = $x_forward_for;
+		push @sort_remote, 'X-Forward-For';
 	};
 };
 
