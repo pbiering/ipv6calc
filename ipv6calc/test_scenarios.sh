@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.8 2012/12/16 09:31:29 peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.9 2012/12/16 10:08:15 peter Exp $
 # Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -126,7 +126,7 @@ END
 # Test Scenarios for filter
 testscenarios_filter() {
 	cat <<END | grep -v '^#'
-3FFE:1a05:510:200:0:5EFE:8CAD:8108		iid-isatap
+3FFE:1a05:510:200::5EFE:8CAD:8108		iid-isatap
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF		teredo
 2001:db8:1:4135:7536:e4f:5513:4dd2		iid-privacy
 2001:db8:1:4135:208:54ff:fe00:1			iid-global

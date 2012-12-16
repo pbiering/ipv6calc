@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.33 2012/05/09 17:08:10 peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.34 2012/12/16 10:08:15 peter Exp $
 # Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -49,6 +49,7 @@ cat <<END | grep -v '^#'
 --addr_to_compressed 0:0:0:0:0:0:13.1.68.3				=::13.1.68.3
 --addr_to_compressed 0:0:0:0:0:ffff:129.144.52.38			=::ffff:129.144.52.38
 --addr_to_compressed --uppercase 0:0:0:0:0:ffff:129.144.52.38		=::FFFF:129.144.52.38
+--addr_to_compressed fd00:1234:5678:0:210:a4ff:fe01:2345		=fd00:1234:5678::210:a4ff:fe01:2345
 --in ipv6 --out ipv6 --printcompressed --uppercase 0:0:0:0:0:ffff:129.144.52.38		=::FFFF:129.144.52.38
 ## uncompressed
 --addr_to_uncompressed 3ffe:ffff:100:f101::1				=3ffe:ffff:100:f101:0:0:0:1
@@ -137,7 +138,7 @@ NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 # RFC 5952 4.2.1
 --in ipv6addr --out ipv6addr 2001:db8:0:0:0:0:2:1			=2001:db8::2:1
 # RFC 5952 4.2.2
---in ipv6addr --out ipv6addr 2001:db8:0:1:1:1:1:1			=2001:db8:0:1:1:1:1:1
+--in ipv6addr --out ipv6addr 2001:db8:0:1:1:1:1:1			=2001:db8::1:1:1:1:1
 # RFC 5952 4.2.3
 --in ipv6addr --out ipv6addr 2001:0:0:1:0:0:0:1			 	=2001:0:0:1::1
 --in ipv6addr --out ipv6addr 2001:db8:0:0:1:0:0:1 			=2001:db8::1:0:0:1

@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.c
- * Version    : $Id: librfc1884.c,v 1.14 2011/11/27 15:44:41 peter Exp $
- * Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc1884.c,v 1.15 2012/12/16 10:08:15 peter Exp $
+ * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for conversions defined in RFC 1884
@@ -217,8 +217,8 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 
 				if ( tstart != -1 ) {
 					tend = i - 1;
-					if ( ( tend - tstart ) > 0 ) {
-						/* ok, a block with 2 or more '0' */
+					if ( ( tend - tstart ) >= 0 ) {
+						/* ok, a block with 1 or more '0' */
 							
 						if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
 							fprintf(stderr, "%s: Found a '0' block from '%d' to '%d' with length '%d'\n",  DEBUG_function_name, tstart, tend, tend - tstart + 1);

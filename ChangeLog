@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.257 2012/12/16 09:39:02 peter Exp $ 
+ *  $Id: ChangeLog,v 1.258 2012/12/16 10:08:15 peter Exp $ 
  */
 
 Info:
@@ -11,8 +11,10 @@ Info:
 20121216/PB
 	ipv6calc/ipv6calc.c: accept also debug value in hexadecimal notation
 	ipv6calc/test_scenarios.sh: extend with testscenarios for detection of already anonymized addresses
-	lib/libipv6addr.c lib/libipv6addr.h lib/librfc3041.h: use special value for anonmization also of static defined IID, introduce new type flag 'anonymized'
+	lib/libipv6addr.c lib/libipv6addr.h lib/librfc3041.h: use special value for anonymization also of static defined IID, introduce new type flag 'anonymized'
 	ipv6calcweb/ipv6calcweb.cgi.[in]: display also X-Forward-For header, if given 
+	lib/librfc1884.c ipv6calc/test_ipv6calc.sh: fix a long outstanding bug not compressing only one block of '0'
+	ipv6loganon/test_ipv6loganon.sh: fix examples according to special value for static defined IID
 
 20121215/PB
 	databases: update

@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.9 2012/05/09 17:08:10 peter Exp $
-# Copyright  : 2007-2011 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6loganon.sh,v 1.10 2012/12/16 10:08:15 peter Exp $
+# Copyright  : 2007-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
 
@@ -12,23 +12,23 @@ testscenarios_standard() {
 cat <<END | grep -v "^#"
 192.0.2.1 - - IPv4 address			=192.0.2.0 - - IPv4 address
 2001:0db8:0000:0000:81c0:0f3f:c807:1455 - - IPv6 address/RFC3041	=2001:db8::a0fc:4941:a0fc:3041 - - IPv6 address/RFC3041
-3ffe:ffff::1 - - IPv6 address/6bone test	=3ffe:ffff:: - - IPv6 address/6bone test
+3ffe:ffff::1 - - IPv6 address/6bone test	=3ffe:ffff::a0fc:4291:a0fc:1884 - - IPv6 address/6bone test
 3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - ISATAP	=3ffe:1a05:510::5efe:8cad:8100 - - ISATAP
 ff02::1:ff00:1234 - - Solicited Node		=ff02::1:ff00:0 - - Solicited Node
 3ffe::1:ff00:1234 - - Solicited Node		=3ffe::1:ff00:0 - - Solicited Node
 ::1 - - loopback				=::1 - - loopback
 ::1.2.3.4 - - compatible IPv4			=::1.2.3.0 - - compatible IPv4
 ::ffff:1.2.3.4 - - mapped IPv4			=::ffff:1.2.3.0 - - mapped IPv4
-2002:0102:0204::1 - - 6to4 local		=2002:102:200:: - - 6to4 local
+2002:0102:0204::1 - - 6to4 local		=2002:102:200::a0fc:4291:a0fc:1884 - - 6to4 local
 2002:50b5:7940::50b5:7940 - - 6to4 Microsoft	=2002:50b5:7900::50b5:7900 - - 6to4 Microsoft
 fe80::210:a4ff:fe01:2345 - - link local EUI-48	=fe80::210:a4ff:fe00:0 - - link local EUI-48
 fe80::210:a489:ab01:2345 - - link local EUI-64	=fe80::210:a400:0:0 - - link local EUI-64
 3ffe:ffff::210:a4ff:fe01:2345 - - 6bone EUI-48	=3ffe:ffff::210:a4ff:fe00:0 - - 6bone EUI-48
 3ffe:ffff::210:a489:ab01:2345 - - 6bone EUI-64	=3ffe:ffff::210:a400:0:0  - - 6bone EUI-64
 3ffe:ffff::000:a4ff:fe01:2345 - - 6bone local	=3ffe:ffff::a4ff:fe00:0 - - 6bone local
-3ffe:ffff::000:a489:ab01:2345 - - 6bone local	=3ffe:ffff:: - - 6bone local
-fd00:1234:5678:9abc::1 - - ULUA local		=fd00:1234:5678:: - - ULUA local
-fd00:1234:5678:9abc:210:a4ff:fe01:2345 - - ULUA EUI-64=fd00:1234:5678:0:210:a4ff:fe00:0 - - ULUA EUI-64
+3ffe:ffff::000:a489:ab01:2345 - - 6bone local	=3ffe:ffff::a0fc:4291:a0fc:1884 - - 6bone local
+fd00:1234:5678:9abc::1 - - ULUA local		=fd00:1234:5678::a0fc:4291:a0fc:1884 - - ULUA local
+fd00:1234:5678:9abc:210:a4ff:fe01:2345 - - ULUA EUI-64=fd00:1234:5678::210:a4ff:fe00:0 - - ULUA EUI-64
 fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=fd00:1234:5678:0:210:a400:: - - ULUA EUI-64
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF - - Teredo 6bone=3ffe:831f:ce49:7601:8000:ffff:af4a:86ff - - Teredo 6bone
 2001:001a:392e:a450:2cd3:75e1:6098:8104 - - ORCHID=2001:10:: - - ORCHID
@@ -75,9 +75,9 @@ cat <<END | grep -v "^#"
 192.0.2.1 - - IPv4 address			=--anonymize-paranoid=192.0.0.0 - - IPv4 address
 192.0.130.1 - - IPv4 address			=--anonymize-paranoid=192.0.0.0 - - IPv4 address
 192.1.130.1 - - IPv4 address			=--anonymize-paranoid=192.1.0.0 - - IPv4 address
-3ffe:ffff:1234::1 - - IPv6 address/6bone test	=--anonymize-standard=3ffe:ffff:1234:: - - IPv6 address/6bone test
-3ffe:ffff:1234::1 - - IPv6 address/6bone test	=--anonymize-careful=3ffe:ffff:1200:: - - IPv6 address/6bone test
-3ffe:ffff:1234::1 - - IPv6 address/6bone test	=--anonymize-paranoid=3ffe:ffff:: - - IPv6 address/6bone test
+3ffe:ffff:1234::1 - - IPv6 address/6bone test	=--anonymize-standard=3ffe:ffff:1234::a0fc:4291:a0fc:1884 - - IPv6 address/6bone test
+3ffe:ffff:1234::1 - - IPv6 address/6bone test	=--anonymize-careful=3ffe:ffff:1200::a0fc:4291:a0fc:1884 - - IPv6 address/6bone test
+3ffe:ffff:1234::1 - - IPv6 address/6bone test	=--anonymize-paranoid=3ffe:ffff::a0fc:4291:a0fc:1884 - - IPv6 address/6bone test
 3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - ISATAP1	=--anonymize-careful=3ffe:1a05:500::5efe:8cad:8000 - - ISATAP1
 3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - ISATAP2	=--anonymize-paranoid=3ffe:1a05::5efe:8cad:0 - - ISATAP2
 2002:50b5:7940::50b5:7940 - - 6to4 Microsoft1	=--anonymize-careful=2002:50b5:7000::50b5:7000 - - 6to4 Microsoft1
@@ -88,8 +88,8 @@ fec0::1234:210:a4ff:fe01:2345 - - link local EUI-48	=--anonymize-standard=fec0::
 fec0::1234:210:a4ff:fe01:2345 - - link local EUI-48	=--anonymize-careful=fec0::210:a4ff:fe00:0 - - link local EUI-48
 fed0::1234:210:a489:ab01:2345 - - link local EUI-64	=--anonymize-paranoid=fed0::210:a400:0:0 - - link local EUI-64
 fed0::1234:210:a489:ab01:2345 - - link local EUI-64	=--mask-ipv6 4=fec0::210:a400:0:0 - - link local EUI-64
-fd00:1234:5678:9abc::1 - - ULUA local		=--anonymize-standard=fd00:1234:5678:: - - ULUA local
-fd00:1234:5678:9abc:210:a4ff:fe01:2345 - - ULUA EUI-64=--anonymize-careful=fd00:1234:5600:0:210:a4ff:fe00:0 - - ULUA EUI-64
+fd00:1234:5678:9abc::1 - - ULUA local		=--anonymize-standard=fd00:1234:5678::a0fc:4291:a0fc:1884 - - ULUA local
+fd00:1234:5678:9abc:210:a4ff:fe01:2345 - - ULUA EUI-64=--anonymize-careful=fd00:1234:5600::210:a4ff:fe00:0 - - ULUA EUI-64
 fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--anonymize-paranoid=fd00:1234::210:a400:0:0 - - ULUA EUI-64
 fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--mask-ipv6 56=fd00:1234:5678:9a00:210:a400:: - - ULUA EUI-64
 fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--mask-ipv6 48=fd00:1234:5678:0:210:a400:: - - ULUA EUI-64
