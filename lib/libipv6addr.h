@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.49 2012/04/17 19:07:16 peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.50 2012/12/16 09:31:29 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -12,11 +12,19 @@
 #include <netinet/in.h>
 #include <ctype.h>
 
-/* typedefs */
+/* typedefs & defines */
 
 #ifndef _libipv6addr_h
 
 #define _libipv6addr_h 1
+
+/* special IIDs for anonymization */
+#define ANON_RFC3041_IID_00_31  (uint32_t) 0xa0fc4941u          // "a_fc4941" (RFC 4941)
+#define ANON_RFC3041_IID_32_63  (uint32_t) 0xa0fc3041u          // "a_fc3041" (RFC 3041)
+
+#define ANON_STATIC_IID_00_31   (uint32_t) 0xa0fc4291u          // "a_fc4291" (RFC 4291)
+#define ANON_STATIC_IID_32_63   (uint32_t) 0xa0fc1884u          // "a_fc1884" (RFC 1884)
+
 
 /* IPv6 address storage structure */
 typedef struct {
@@ -123,6 +131,8 @@ typedef struct {
 #define IPV6_ADDR_RESERVED			(uint32_t) 0x00002000U	/* reserved address space */
 #define IPV6_ADDR_ULUA				(uint32_t) 0x00004000U	/* Unique Local Unicast Address */
 
+#define IPV6_ADDR_ANONYMIZED			(uint32_t) 0x00008000U	/* anonymized IPv6 address */
+
 #define IPV6_NEW_ADDR_6TO4			(uint32_t) 0x00010000U
 #define IPV6_NEW_ADDR_6BONE			(uint32_t) 0x00020000U
 #define IPV6_NEW_ADDR_AGU			(uint32_t) 0x00040000U
@@ -154,6 +164,7 @@ typedef struct {
 	{ IPV6_ADDR_MAPPED		, "mapped" },
 	{ IPV6_ADDR_RESERVED		, "reserved" },
 	{ IPV6_ADDR_ULUA		, "unique-local-unicast" },
+	{ IPV6_ADDR_ANONYMIZED		, "anonymized" },
 	{ IPV6_NEW_ADDR_6TO4		, "6to4" },
 	{ IPV6_NEW_ADDR_6BONE		, "6bone" },
 	{ IPV6_NEW_ADDR_AGU		, "global-unicast" },

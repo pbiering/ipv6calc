@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3041.h
- * Version    : $Id: librfc3041.h,v 1.4 2012/05/09 17:08:10 peter Exp $
+ * Version    : $Id: librfc3041.h,v 1.5 2012/12/16 09:31:29 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -19,9 +19,6 @@
 #ifndef _librfc3041_h
 
 #define _librfc3041_h
-
-#define RFC3041_ANON_IID_00_31	(uint32_t) 0xa0fc4941u		// RFC 4941
-#define RFC3041_ANON_IID_32_63	(uint32_t) 0xa0fc3041u		// RFC 3041
 
 #endif
 

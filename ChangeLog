@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.255 2012/12/15 19:14:57 peter Exp $ 
+ *  $Id: ChangeLog,v 1.256 2012/12/16 09:31:29 peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,11 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20121216/PB
+	ipv6calc/ipv6calc.c: accept also debug value in hexadecimal notation
+	ipv6calc/test_scenarios.sh: extend with testscenarios for detection of already anonymized addresses
+	lib/libipv6addr.c lib/libipv6addr.h lib/librfc3041.h: use special value for anonmization also of static defined IID, introduce new type flag 'anonymized'
+
 20121215/PB
 	databases: update
 

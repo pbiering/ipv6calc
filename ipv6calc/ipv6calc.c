@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.65 2012/10/12 21:06:20 peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.66 2012/12/16 09:31:29 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -293,7 +293,19 @@ int main(int argc, char *argv[]) {
 				break;
 				
 			case 'd':
-				ipv6calc_debug = atol(optarg);
+				if ((strlen(optarg) > 2) && (strncmp(optarg, "0x", 2) || strncmp(optarg, "0X", 2))) {
+					// convert hex
+					if (sscanf(optarg + 2, "%lx", &ipv6calc_debug) == 0) {
+						ipv6calc_debug = 0;
+						fprintf(stderr, "%s: can't parse value for debug option: %s\n", DEBUG_function_name, optarg);
+						exit (1);
+					} else {
+					};
+				} else {
+					ipv6calc_debug = atol(optarg);
+				};
+
+				fprintf(stderr, "%s: given debug value: %lx\n", DEBUG_function_name, ipv6calc_debug);
 				break;
 
 			case DB_ip2location_ipv4:

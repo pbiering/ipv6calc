@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.7 2012/05/09 17:08:10 peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.8 2012/12/16 09:31:29 peter Exp $
 # Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -131,6 +131,8 @@ testscenarios_filter() {
 2001:db8:1:4135:7536:e4f:5513:4dd2		iid-privacy
 2001:db8:1:4135:208:54ff:fe00:1			iid-global
 2001:db8::a0fc:4941:a0fc:3041			iid-privacy
+2001:db8::a0fc:4291:a0fc:1884			anonymized
+2001:db8::a0fc:4941:a0fc:3041			anonymized
 END
 }
 
