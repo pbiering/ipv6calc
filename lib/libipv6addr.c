@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.70 2012/12/16 09:31:29 peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.71 2012/12/22 06:06:05 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -631,6 +631,12 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 
 	if ((((st & 0xE0000000u) != 0x00000000u) && ((st & 0xE0000000u) != 0xE0000000u)) || ((st & 0xFC000000u) == 0xFC000000u)) {
 		type |= IPV6_ADDR_UNICAST;
+
+		if ((type & IPV6_NEW_ADDR_TEREDO) != 0) {
+			/* teredo has no IID */
+			return (type);
+		};
+
 		type |= IPV6_NEW_ADDR_IID;
 
 		if ((st & 0xFFC00000u) == 0xFE800000u) {

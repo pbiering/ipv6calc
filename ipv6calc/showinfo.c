@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.62 2012/10/14 14:06:26 peter Exp $
+ * Version    : $Id: showinfo.c,v 1.63 2012/12/22 06:06:05 peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -775,13 +775,13 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	registry = ipv6addr_getregistry(ipv6addrp);
 
 	if ( (ipv6calc_debug & DEBUG_showinfo) != 0) {
-		fprintf(stderr, "%s: result of 'ipv6addr_gettype'    : %x\n", DEBUG_function_name, (unsigned int) typeinfo);
 		fprintf(stderr, "%s: result of 'ipv6addr_getregistry': %d\n", DEBUG_function_name, registry);
+		fprintf(stderr, "%s:       %08x (result of 'ipv6addr_gettype')\n", DEBUG_function_name, (unsigned int) typeinfo);
 	};
 
 	for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
 		if ( (ipv6calc_debug & DEBUG_showinfo) != 0) {
-			fprintf(stderr, "%s: test: %x : %s\n", DEBUG_function_name, (unsigned int) ipv6calc_ipv6addrtypestrings[i].number, ipv6calc_ipv6addrtypestrings[i].token);
+			fprintf(stderr, "%s: test: %08x : %s\n", DEBUG_function_name, (unsigned int) ipv6calc_ipv6addrtypestrings[i].number, ipv6calc_ipv6addrtypestrings[i].token);
 		};
 	};	
 
