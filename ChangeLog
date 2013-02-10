@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.263 2013/02/10 09:31:27 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.264 2013/02/10 09:41:43 ds6peter Exp $ 
  */
 
 Info:
@@ -8,7 +8,6 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
-Test3
 20121221/PB
 	ipv6calcweb/ipv6calcweb.cgi: display X-Via header, if given, display also address information of first proxy, if given
 	lib/libipv6addr.c: fix type info for teredo address
