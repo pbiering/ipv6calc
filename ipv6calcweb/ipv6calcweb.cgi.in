@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.50 2012/12/22 05:41:33 peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.51 2013/02/23 17:23:08 ds6peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -609,12 +609,12 @@ my $via;
 my $addr_server;
 my $name_server;
 
+my @address_proxy;
+
 my (@info_remote, %infoh_remote, @sort_remote);
 my (@info_server, %infoh_server, @sort_server);
 my (@info_proxy, %infoh_proxy, @sort_proxy);
 my (@info_input, %infoh_input, @sort_input);
-
-my $proxy_valid = 0;
 
 my $length_max_key = 0;
 my $length_max_description = 0;
@@ -1160,7 +1160,7 @@ if ( defined $ENV{'HTTP_USER_AGENT'} ) {
 };
 
 if ( defined $ENV{'HTTP_X_FORWARDED_FOR'} ) {
-	$ENV{'HTTP_X_FORWARDED_FOR'} =~ /^([[:alnum:]\[\]\/\(\)\\\.\-+\;\: ]*)$/;
+	$ENV{'HTTP_X_FORWARDED_FOR'} =~ /^([[:alnum:]\[\]\/\(\)\\\.\-+\,\: ]*)$/;
 	if ( ! defined $1 || (length($1) > $maxenvlength)) {
 		# not a problem, skip it
 	} else {
@@ -1169,7 +1169,7 @@ if ( defined $ENV{'HTTP_X_FORWARDED_FOR'} ) {
 };
 
 if ( defined $ENV{'HTTP_VIA'} ) {
-	$ENV{'HTTP_VIA'} =~ /^([[:alnum:]\[\]\/\(\)\\\.\-+\;\: ]*)$/;
+	$ENV{'HTTP_VIA'} =~ /^([[:alnum:]\[\]\/\(\)\\\.\-+\;\,\: ]*)$/;
 	if ( ! defined $1 || (length($1) > $maxenvlength)) {
 		# not a problem, skip it
 	} else {
@@ -1322,6 +1322,34 @@ sub ipv6calc_exec($$$$) {
 
 my $result;
 
+## check HTTP-XForwardFor
+if (defined $x_forward_for) {
+	my $addr_remote_temp = $addr_remote; # save exit proxy address
+	my $x_forward_for_entries = 0;
+
+	foreach my $address (split /, /, $x_forward_for) {
+		if ($address !~ /^([[:xdigit:]\.\:]+)$/) {
+			# silently skip
+			next;
+		};
+
+		if ($x_forward_for_entries == 0) {
+			# first found entry is real client
+			$addr_remote = $address;
+		} else {
+			# next proxy
+			push @address_proxy, $address;
+		};
+
+		$x_forward_for_entries++;
+	};
+
+	if ($x_forward_for_entries > 0) {
+		# addr_remote is exit proxy
+		push @address_proxy, $addr_remote_temp;
+	};
+};
+
 ## remote
 if ( defined $addr_remote ) {
 	$result = ipv6calc_exec($addr_remote, "***remote***", \%infoh_remote, \@sort_remote);
@@ -1348,26 +1376,6 @@ if ( defined $addr_remote ) {
 		push @sort_remote, 'HTTP-Via';
 	};
 };
-
-## check HTTP-XForwardFor
-if (defined $x_forward_for) {
-	foreach my $address (split / /, $x_forward_for) {
-		if ($address !~ /^([[:xdigit:]\.\:]*)$/) {
-			# silently skip
-			next;
-		};
-		$result = ipv6calc_exec($address, "***proxy***", \%infoh_proxy, \@sort_proxy);
-		if ($result != 0) {
-			# silently skip
-			next;
-		} else {
-			# only one proxy supported
-			$proxy_valid = 1;
-			last;
-		};
-	};
-};
-
 
 ## server
 if ((defined $addr_server) && ($skip_server == 0)) {
@@ -1539,15 +1547,24 @@ if ($mode eq "info" || $mode eq "mixed") {
 	&print_infohash (\%infoh_remote, \@sort_remote);
 
 	# Proxy
-	if ($proxy_valid == 1) {
-		&print_textonly ("\n");
-		&print_tagoutput ( "      <tr>\n" );
-		&print_tagoutput ( "        <th style=\"background-color:#EEDDDD;\" colspan=\"3\">" );
-		print $text{'PROXY'}->{$lang};
-		&print_textonly ("\n");
-		&print_tagoutput ( "        </th>\n" );
-		&print_tagoutput ( "      </tr>\n" );
-		&print_infohash (\%infoh_proxy, \@sort_proxy);
+	my $proxy_count = 0;
+	for my $address (reverse @address_proxy) {
+		$proxy_count ++;
+
+		$result = ipv6calc_exec($address, "***proxy***", \%infoh_proxy, \@sort_proxy);
+		if ($result != 0) {
+			# silently skip
+			next;
+		} else {
+			&print_textonly ("\n");
+			&print_tagoutput ( "      <tr>\n" );
+			&print_tagoutput ( "        <th style=\"background-color:#EEDDDD;\" colspan=\"3\">" );
+			print $text{'PROXY'}->{$lang} . " #" . $proxy_count;
+			&print_textonly ("\n");
+			&print_tagoutput ( "        </th>\n" );
+			&print_tagoutput ( "      </tr>\n" );
+			&print_infohash (\%infoh_proxy, \@sort_proxy);
+		};
 	};
 
 	if ((defined $addr_server) && ($skip_server == 0)) {
