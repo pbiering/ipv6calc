@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.50 2012/12/16 09:31:29 peter Exp $
- * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv6addr.h,v 1.51 2013/02/24 13:31:29 ds6peter Exp $
+ * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Header file for libipv6addr.c
@@ -24,6 +24,50 @@
 
 #define ANON_STATIC_IID_00_31   (uint32_t) 0xa0fc4291u          // "a_fc4291" (RFC 4291)
 #define ANON_STATIC_IID_32_63   (uint32_t) 0xa0fc1884u          // "a_fc1884" (RFC 1884)
+
+/* IPv6 anonymization */
+/* 
+ * IID anyonymization (64-bit)
+ * xxxx:xxxx:xxxx:xxxx
+ * a909                 -> A Nine O Nine = ANON
+ *      ....            -> RFC-Number (5 digits)
+ *           c... ...   -> Chapter number (dot = d)
+ *           6... ...   -> 6 chars follow for information
+ *                   C  -> Checksum
+ *
+ * a909 4941 0000 000.  -> RFC 4941 anonymized privacy extension Interface ID
+ * a909 4291 c02d 5d1.  -> RFC 4291 Chapter 2.5.1 anonymized static Interface ID
+ * a909 4291 4xxx xxx.  -> RFC 4291 anonymized EUI-48 Interface ID, xxxx xx = OUI
+ * a909 4291 6xxx xxx.  -> RFC 4291 anonymized EUI-64 Interface ID, xxxx xx = OUI
+ */
+#define ANON_TOKEN_VALUE_00_31		(uint32_t) 0xa9090000u
+#define ANON_TOKEN_MASK_00_31		(uint32_t) 0xffff0000u
+
+#define ANON_CHECKSUM_MASK_32_63	(uint32_t) 0x0000000fu
+
+#define ANON_IID_PRIVACY_VALUE_00_31	(uint32_t) 0x00004941u
+#define ANON_IID_PRIVACY_MASK_00_31	(uint32_t) 0x0000ffffu
+#define ANON_IID_PRIVACY_VALUE_32_63	(uint32_t) 0x00000000u
+#define ANON_IID_PRIVACY_MASK_32_63	(uint32_t) 0xfffffff0u
+
+#define ANON_IID_STATIC_VALUE_00_31	(uint32_t) 0x00004291u
+#define ANON_IID_STATIC_MASK_00_31	(uint32_t) 0x0000ffffu
+#define ANON_IID_STATIC_VALUE_32_63	(uint32_t) 0xc02d5d10u
+#define ANON_IID_STATIC_MASK_32_63	(uint32_t) 0xfffffff0u
+
+#define ANON_IID_EUI48_VALUE_00_31	(uint32_t) 0x00004291u
+#define ANON_IID_EUI48_MASK_00_31	(uint32_t) 0x0000ffffu
+#define ANON_IID_EUI48_VALUE_32_63	(uint32_t) 0x40000000u
+#define ANON_IID_EUI48_MASK_32_63	(uint32_t) 0xf0000000u
+#define ANON_IID_EUI48_PAYLOAD_32_63	(uint32_t) 0x0ffffff0u
+#define ANON_IID_EUI48_PAYLOAD_SHIFT	4
+
+#define ANON_IID_EUI64_VALUE_00_31	(uint32_t) 0x00004291u
+#define ANON_IID_EUI64_MASK_00_31	(uint32_t) 0x0000ffffu
+#define ANON_IID_EUI64_VALUE_32_63	(uint32_t) 0x60000000u
+#define ANON_IID_EUI64_MASK_32_63	(uint32_t) 0xf0000000u
+#define ANON_IID_EUI64_PAYLOAD_32_63	(uint32_t) 0x0ffffff0u
+#define ANON_IID_EUI64_PAYLOAD_SHIFT	4
 
 
 /* IPv6 address storage structure */

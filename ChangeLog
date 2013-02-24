@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.268 2013/02/24 08:39:46 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.269 2013/02/24 13:31:29 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130224/PB
+	lib/libipv6addr.[ch]: introduce new format for anonymized IID
+
 20130224/PB
 	ipv6calcweb/ipv6calcweb.cgi[.in]: improved display of proxy information
 
