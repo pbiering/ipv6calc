@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc_filter.sh
-# Version    : $Id: test_ipv6calc_filter.sh,v 1.1 2012/04/01 18:27:04 peter Exp $
-# Copyright  : 2012-2012 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6calc_filter.sh,v 1.2 2013/02/24 19:12:14 ds6peter Exp $
+# Copyright  : 2012-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc filter
 

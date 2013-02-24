@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.10 2012/02/04 21:01:02 peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.11 2013/02/24 19:12:14 ds6peter Exp $
  * Copyright  : 2007-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -45,7 +45,7 @@ int flag_nocache = 0;
 /* default values */
 int mask_ipv4 = 24;
 int mask_ipv6 = 48;
-int mask_iid = 1;
+int mask_iid = 0;
 
 
 /* prototypes */
@@ -164,19 +164,19 @@ int main(int argc,char *argv[]) {
 			case CMD_ANON_PRESET_STANDARD:
 				mask_ipv4 = 24;
 				mask_ipv6 = 48;
-				mask_iid = 1;
+				mask_iid = 0;
 				break;
 
 			case CMD_ANON_PRESET_CAREFUL:
 				mask_ipv4 = 20;
 				mask_ipv6 = 40;
-				mask_iid = 1;
+				mask_iid = 0;
 				break;
 
 			case CMD_ANON_PRESET_PARANOID:
 				mask_ipv4 = 16;
 				mask_ipv6 = 32;
-				mask_iid = 1;
+				mask_iid = 0;
 				break;
 
 			default:

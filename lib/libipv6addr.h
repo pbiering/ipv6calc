@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.51 2013/02/24 13:31:29 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.52 2013/02/24 19:12:14 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -18,27 +18,20 @@
 
 #define _libipv6addr_h 1
 
-/* special IIDs for anonymization */
-#define ANON_RFC3041_IID_00_31  (uint32_t) 0xa0fc4941u          // "a_fc4941" (RFC 4941)
-#define ANON_RFC3041_IID_32_63  (uint32_t) 0xa0fc3041u          // "a_fc3041" (RFC 3041)
-
-#define ANON_STATIC_IID_00_31   (uint32_t) 0xa0fc4291u          // "a_fc4291" (RFC 4291)
-#define ANON_STATIC_IID_32_63   (uint32_t) 0xa0fc1884u          // "a_fc1884" (RFC 1884)
-
 /* IPv6 anonymization */
 /* 
- * IID anyonymization (64-bit)
+ * IID anonymization is done by replacing with related information (64-bit)
  * xxxx:xxxx:xxxx:xxxx
  * a909                 -> A Nine O Nine = ANON
- *      ....            -> RFC-Number (5 digits)
- *           c... ...   -> Chapter number (dot = d)
- *           6... ...   -> 6 chars follow for information
+ *      ....            -> RFC-Number (4 digits)
+ *      .... c... ...   -> Chapter number (dot = d)
+ *      4291 6... ...   -> 6 chars follow for information
  *                   C  -> Checksum
  *
  * a909 4941 0000 000.  -> RFC 4941 anonymized privacy extension Interface ID
  * a909 4291 c02d 5d1.  -> RFC 4291 Chapter 2.5.1 anonymized static Interface ID
- * a909 4291 4xxx xxx.  -> RFC 4291 anonymized EUI-48 Interface ID, xxxx xx = OUI
- * a909 4291 6xxx xxx.  -> RFC 4291 anonymized EUI-64 Interface ID, xxxx xx = OUI
+ * a909 4291 4xxx xxx.  -> RFC 4291 anonymized EUI-48 Interface ID, xxx xxx = OUI
+ * a909 4291 6xxx xxx.  -> RFC 4291 anonymized EUI-64 Interface ID, xxx xxx = OUI
  */
 #define ANON_TOKEN_VALUE_00_31		(uint32_t) 0xa9090000u
 #define ANON_TOKEN_MASK_00_31		(uint32_t) 0xffff0000u
@@ -61,6 +54,7 @@
 #define ANON_IID_EUI48_MASK_32_63	(uint32_t) 0xf0000000u
 #define ANON_IID_EUI48_PAYLOAD_32_63	(uint32_t) 0x0ffffff0u
 #define ANON_IID_EUI48_PAYLOAD_SHIFT	4
+#define ANON_IID_EUI48_PAYLOAD_LENGTH	24	
 
 #define ANON_IID_EUI64_VALUE_00_31	(uint32_t) 0x00004291u
 #define ANON_IID_EUI64_MASK_00_31	(uint32_t) 0x0000ffffu
@@ -68,6 +62,7 @@
 #define ANON_IID_EUI64_MASK_32_63	(uint32_t) 0xf0000000u
 #define ANON_IID_EUI64_PAYLOAD_32_63	(uint32_t) 0x0ffffff0u
 #define ANON_IID_EUI64_PAYLOAD_SHIFT	4
+#define ANON_IID_EUI64_PAYLOAD_LENGTH	24	
 
 
 /* IPv6 address storage structure */
@@ -295,6 +290,7 @@ extern int  tokenlsb64_to_ipv6addrstruct(const char *addrstring, char *resultstr
 extern int  libipv6addr_ipv6addrstruct_to_tokenlsb64(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions);
 
 extern void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, unsigned int mask_iid, unsigned int mask_ipv6, unsigned int mask_ipv4);
+extern uint32_t ipv6addr_get_payload_anonymized_iid(const ipv6calc_ipv6addr *ipv6addrp, const uint32_t typeinfo);
 
 extern int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statistics *variancesp);
 

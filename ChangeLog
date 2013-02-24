@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.269 2013/02/24 13:31:29 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.270 2013/02/24 19:12:13 ds6peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,11 @@ Info:
 --------------------------------------------------------------------
 20130224/PB
 	lib/libipv6addr.[ch]: introduce new format for anonymized IID
+	ipv6calc/showinfo.c: extend display for anonymized IIDs
+	ipv6loganon/ipv6loganon.c, ipv6calc/ipv6calc.c: change default of
+		anonymization presets: mask_iid is now disabled by default and
+		replaced by new anoymized IID
+	ipv6loganon/test_ipv6loganon.sh, ipv6calc/test_ipv6calc.sh, ipv6calc/test_scenarios.sh: adjusted for new anonymization
 
 20130224/PB
 	ipv6calcweb/ipv6calcweb.cgi[.in]: improved display of proxy information
