@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.267 2013/02/23 17:23:08 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.268 2013/02/24 08:39:46 ds6peter Exp $ 
  */
 
 Info:
@@ -8,8 +8,11 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130224/PB
+	ipv6calcweb/ipv6calcweb.cgi[.in]: improved display of proxy information
+
 20130223/PB
-	ipv6calcweb/ipv6calcweb.cgi: display now information of all passed proxies
+	ipv6calcweb/ipv6calcweb.cgi[.in]: display now information of all passed proxies
 
 20121221/PB
 	ipv6calcweb/ipv6calcweb.cgi: display X-Via header, if given, display also address information of first proxy, if given
@@ -20,7 +23,7 @@ Info:
 	ipv6calc/ipv6calc.c: accept also debug value in hexadecimal notation
 	ipv6calc/test_scenarios.sh: extend with testscenarios for detection of already anonymized addresses
 	lib/libipv6addr.c lib/libipv6addr.h lib/librfc3041.h: use special value for anonymization also of static defined IID, introduce new type flag 'anonymized'
-	ipv6calcweb/ipv6calcweb.cgi.[in]: display also X-Forward-For header, if given 
+	ipv6calcweb/ipv6calcweb.cgi[.in]: display also X-Forward-For header, if given 
 	lib/librfc1884.c ipv6calc/test_ipv6calc.sh: fix a long outstanding bug not compressing only one block of '0'
 	ipv6loganon/test_ipv6loganon.sh: fix examples according to special value for static defined IID
 

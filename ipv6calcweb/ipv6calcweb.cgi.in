@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.51 2013/02/23 17:23:08 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.52 2013/02/24 08:39:46 ds6peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -20,7 +20,7 @@
 #  SERVER_NAME    : local server name (by http server config)
 #  SERVER_PROTOCOL: check for INCLUDED (called by SSI)
 #  HTTP_X_FORWARDED_FOR: added by passing proxies (if not disabled on proxy)
-#  HTTP_X_VIA          : added by passing proxies (if not disabled on proxy)
+#  HTTP_VIA            : added by passing proxies (if not disabled on proxy)
 #  QUERY_STRING   : for language setting
 #    Currently supported:
 #      Always:
@@ -397,6 +397,10 @@ my %text = (
 		'de' => "Passierender Proxy",
 		'en' => "Passing proxy",
 	},
+	'PROXY_INFO' => {
+		'de' => "Proxy Information",
+		'en' => "Proxy Information",
+	},
 	'IP2LOCATION_COUNTRY_SHORT' => {
 		'de' => "IP2Location Laenderkennung",
 		'en' => "IP2Location country code",
@@ -609,7 +613,8 @@ my $via;
 my $addr_server;
 my $name_server;
 
-my @address_proxy;
+my @proxy_addresses;
+my @proxy_infos;
 
 my (@info_remote, %infoh_remote, @sort_remote);
 my (@info_server, %infoh_server, @sort_server);
@@ -1325,6 +1330,7 @@ my $result;
 ## check HTTP-XForwardFor
 if (defined $x_forward_for) {
 	my $addr_remote_temp = $addr_remote; # save exit proxy address
+
 	my $x_forward_for_entries = 0;
 
 	foreach my $address (split /, /, $x_forward_for) {
@@ -1338,7 +1344,7 @@ if (defined $x_forward_for) {
 			$addr_remote = $address;
 		} else {
 			# next proxy
-			push @address_proxy, $address;
+			push @proxy_addresses, $address;
 		};
 
 		$x_forward_for_entries++;
@@ -1346,8 +1352,23 @@ if (defined $x_forward_for) {
 
 	if ($x_forward_for_entries > 0) {
 		# addr_remote is exit proxy
-		push @address_proxy, $addr_remote_temp;
+		push @proxy_addresses, $addr_remote_temp;
 	};
+};
+
+## check HTTP-Via
+if (defined $via) {
+	foreach my $entry (split /,/, $via) {
+		$entry =~ s/^ +//o; # remove leading spaces
+		$entry =~ s/ +$//o; # remove trailing spaces
+		push @proxy_infos, $entry;
+	};
+};
+
+## check proxy information
+if (scalar(@proxy_addresses) != scalar(@proxy_infos)) {
+	# amount not matching, don't show information
+	undef @proxy_infos;
 };
 
 ## remote
@@ -1367,11 +1388,15 @@ if ( defined $addr_remote ) {
 		$infoh_remote{'HTTP-UserAgent'} = $user_agent;
 		push @sort_remote, 'HTTP-UserAgent';
 	};
-	if (defined $x_forward_for) {
+
+	# add x-forward-for information to client if not handled otherwise
+	if ((defined $x_forward_for) && (scalar(@proxy_addresses) == 0)) {
 		$infoh_remote{'HTTP-XForwardFor'} = $x_forward_for;
 		push @sort_remote, 'HTTP-XForwardFor';
 	};
-	if (defined $via) {
+
+	# add via information to client if not handled otherwise
+	if ((defined $via) && (scalar(@proxy_infos) == 0)) {
 		$infoh_remote{'HTTP-Via'} = $via;
 		push @sort_remote, 'HTTP-Via';
 	};
@@ -1548,14 +1573,23 @@ if ($mode eq "info" || $mode eq "mixed") {
 
 	# Proxy
 	my $proxy_count = 0;
-	for my $address (reverse @address_proxy) {
-		$proxy_count ++;
+	for my $address (reverse @proxy_addresses) {
+		$proxy_count++;
+
+		undef %infoh_proxy;
+		undef @sort_proxy;
 
 		$result = ipv6calc_exec($address, "***proxy***", \%infoh_proxy, \@sort_proxy);
 		if ($result != 0) {
 			# silently skip
 			next;
 		} else {
+			# add information from "via" header
+			if (defined $proxy_infos[$proxy_count - 1]) {
+				$infoh_proxy{'PROXY_INFO'} = $proxy_infos[$proxy_count - 1];
+				splice @sort_proxy, 0, 0, 'PROXY_INFO';
+			};
+
 			&print_textonly ("\n");
 			&print_tagoutput ( "      <tr>\n" );
 			&print_tagoutput ( "        <th style=\"background-color:#EEDDDD;\" colspan=\"3\">" );
