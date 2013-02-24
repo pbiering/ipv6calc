@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.11 2013/02/24 19:12:14 ds6peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.12 2013/02/24 19:19:52 ds6peter Exp $
 # Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -99,6 +99,7 @@ fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--mask-ipv6 24=fd00:1200:
 fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--mask-ipv6 16=fd00::a909:4291:6001:a43 - - ULUA EUI-64
 fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--mask-ipv6 8=fd00::a909:4291:6001:a43 - - ULUA EUI-64
 fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--mask-ipv6 4=fd00::a909:4291:6001:a43 - - ULUA EUI-64
+fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=--mask-iid=fd00:1234:5678:0:210:a400:: - - ULUA EUI-64
 END
 }
 

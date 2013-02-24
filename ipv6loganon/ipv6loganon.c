@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.11 2013/02/24 19:12:14 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.12 2013/02/24 19:19:52 ds6peter Exp $
  * Copyright  : 2007-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -141,8 +141,8 @@ int main(int argc,char *argv[]) {
 				flag_nocache = 1;
 				break;
 
-			case CMD_ANON_NO_MASK_IID:
-				mask_iid = 0;
+			case CMD_ANON_MASK_IID:
+				mask_iid = 1;
 				break;
 
 			case CMD_ANON_MASK_IPV4:

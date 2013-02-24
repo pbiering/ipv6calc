@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.20 2012/03/22 20:41:49 peter Exp $
- * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calcoptions.h,v 1.21 2013/02/24 19:19:52 ds6peter Exp $
+ * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options for ipv6calc.c
@@ -132,7 +132,7 @@
 	{ "anonymize-paranoid" , 0, 0, CMD_ANON_PRESET_PARANOID },
 	{ "mask-ipv4" , 1, 0, CMD_ANON_MASK_IPV4 },
 	{ "mask-ipv6" , 1, 0, CMD_ANON_MASK_IPV6 },
-	{ "no-mask-iid" , 0, 0, CMD_ANON_NO_MASK_IID },
+	{ "mask-iid"  , 0, 0, CMD_ANON_MASK_IID },
 
 	/* new options */
 	{ "in"        , 1, 0, CMD_inputtype  },

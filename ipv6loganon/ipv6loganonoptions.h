@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganonoptions.h
- * Version    : $Id: ipv6loganonoptions.h,v 1.7 2011/05/12 10:30:47 peter Exp $
- * Copyright  : 2007-2011 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6loganonoptions.h,v 1.8 2013/02/24 19:19:52 ds6peter Exp $
+ * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options for ipvloganon.c
@@ -42,7 +42,7 @@ static struct option ipv6loganon_longopts[] = {
 	{ "anonymize-paranoid", no_argument      , 0, CMD_ANON_PRESET_PARANOID },
 	{ "mask-ipv4"         , required_argument, 0, CMD_ANON_MASK_IPV4       },
 	{ "mask-ipv6"         , required_argument, 0, CMD_ANON_MASK_IPV6       },
-	{ "no-mask-iid"       , no_argument      , 0, CMD_ANON_NO_MASK_IID     },
+	{ "mask-iid"          , no_argument      , 0, CMD_ANON_MASK_IID        },
 
 	{NULL, 0, 0, 0}
 };                
