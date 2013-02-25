@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.68 2013/02/24 19:19:52 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.69 2013/02/25 06:58:52 ds6peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -71,7 +71,7 @@ int input_is_pipe = 0;
 /* anonymization default values */
 int mask_ipv4 = 24;
 int mask_ipv6 = 48;
-int mask_iid = 1;
+int mask_iid = 0;
 
 
 int  use_ip2location_ipv4 = 0; /* if set to 1, IP2Location IPv4 is enabled by option(s) */

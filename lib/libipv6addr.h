@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.52 2013/02/24 19:12:14 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.53 2013/02/25 06:58:53 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -63,6 +63,9 @@
 #define ANON_IID_EUI64_PAYLOAD_32_63	(uint32_t) 0x0ffffff0u
 #define ANON_IID_EUI64_PAYLOAD_SHIFT	4
 #define ANON_IID_EUI64_PAYLOAD_LENGTH	24	
+
+#define ANON_CHECKSUM_FLAG_CREATE	1
+#define ANON_CHECKSUM_FLAG_VERIFY	2
 
 
 /* IPv6 address storage structure */
