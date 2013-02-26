@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.10 2013/02/24 19:12:14 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.11 2013/02/26 20:25:31 ds6peter Exp $
 # Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -126,7 +126,7 @@ END
 # Test Scenarios for filter
 testscenarios_filter() {
 	cat <<END | grep -v '^#'
-3FFE:1a05:510:200::5EFE:8CAD:8108		iid-isatap
+3ffe:1a05:510:200::5efe:140.173.129.8		iid-isatap
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF		teredo
 2001:db8:1:4135:7536:e4f:5513:4dd2		iid-privacy
 2001:db8:1:4135:208:54ff:fe00:1			iid-global
@@ -136,6 +136,20 @@ testscenarios_filter() {
 2001:db8::a909:4291:4002:4217			iid-eui48
 2001:db8::a909:4941:0:7				anonymized
 2001:db8::a909:4941:0:7				iid-privacy
+fe80::200:5efe:192.0.2.143			iid-isatap
+fe80::200:5efe:192.0.2.143			iid-global
+fe80::200:5efe:192.0.2.143			link-local
+fe80::200:5efe:192.0.2.143			iid
+fe80::5efe:192.168.1.1				iid-isatap
+fe80::5efe:192.168.1.1				iid-local
+fe80::5efe:192.168.1.1				link-local
+fe80::5efe:192.168.1.1				iid
+fe80::5eff:fe01:2345				iid
+fe80::5eff:fe01:2345				iid-local
+fe80::5eff:fe01:2345				iid-isatap
+fe80::5e01:2345:6789				iid
+fe80::5e01:2345:6789				iid-local
+fe80::5e01:2345:6789				iid-isatap
 END
 }
 

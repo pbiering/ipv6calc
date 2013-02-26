@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.53 2013/02/25 06:58:53 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.54 2013/02/26 20:25:31 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -32,6 +32,9 @@
  * a909 4291 c02d 5d1.  -> RFC 4291 Chapter 2.5.1 anonymized static Interface ID
  * a909 4291 4xxx xxx.  -> RFC 4291 anonymized EUI-48 Interface ID, xxx xxx = OUI
  * a909 4291 6xxx xxx.  -> RFC 4291 anonymized EUI-64 Interface ID, xxx xxx = OUI
+ * a909 5214 4xxx xxx.  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included (anonymized) IPv4 address
+ * a909 5214 1xx0 000.  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 8 bit of included vendor ID
+ * a909 5214 fxxx xxx.  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included extension ID
  */
 #define ANON_TOKEN_VALUE_00_31		(uint32_t) 0xa9090000u
 #define ANON_TOKEN_MASK_00_31		(uint32_t) 0xffff0000u
@@ -63,6 +66,19 @@
 #define ANON_IID_EUI64_PAYLOAD_32_63	(uint32_t) 0x0ffffff0u
 #define ANON_IID_EUI64_PAYLOAD_SHIFT	4
 #define ANON_IID_EUI64_PAYLOAD_LENGTH	24	
+
+#define ANON_IID_ISATAP_VALUE_00_31		(uint32_t) 0x00005214u
+#define ANON_IID_ISATAP_MASK_00_31		(uint32_t) 0x0000ffffu
+#define ANON_IID_ISATAP_PAYLOAD_SHIFT		4
+#define ANON_IID_ISATAP_PAYLOAD_LENGTH		24	
+#define ANON_IID_ISATAP_TYPE_MASK_32_63		(uint32_t) 0xf0000000u
+
+#define ANON_IID_ISATAP_TYPE_IPV4_VALUE_32_63		(uint32_t) 0x40000000u
+#define ANON_IID_ISATAP_TYPE_IPV4_PAYLOAD_32_63		(uint32_t) 0x0ffffff0u
+#define ANON_IID_ISATAP_TYPE_VENDOR_VALUE_32_63		(uint32_t) 0x10000000u
+#define ANON_IID_ISATAP_TYPE_VENDOR_PAYLOAD_32_63	(uint32_t) 0x0ff00000u
+#define ANON_IID_ISATAP_TYPE_EXTID_VALUE_32_63		(uint32_t) 0xf0000000u
+#define ANON_IID_ISATAP_TYPE_EXTID_PAYLOAD_32_63	(uint32_t) 0x0ffffff0u
 
 #define ANON_CHECKSUM_FLAG_CREATE	1
 #define ANON_CHECKSUM_FLAG_VERIFY	2
@@ -156,33 +172,34 @@ typedef struct {
 #define IPV6_ADDR_MULTICAST			(uint32_t) 0x00000002U	
 #define IPV6_ADDR_ANYCAST			(uint32_t) 0x00000004U
 
+
 #define IPV6_ADDR_LOOPBACK			(uint32_t) 0x00000010U
 #define IPV6_ADDR_LINKLOCAL			(uint32_t) 0x00000020U
 #define IPV6_ADDR_SITELOCAL			(uint32_t) 0x00000040U
-
 #define IPV6_ADDR_COMPATv4			(uint32_t) 0x00000080U
 
 #define IPV6_ADDR_SCOPE_MASK			(uint32_t) 0x000000f0U
 
 #define IPV6_NEW_ADDR_IID_TEREDO		(uint32_t) 0x00000100U	/* RFC xxxx */
-#define IPV6_NEW_ADDR_IID_ISATAP		(uint32_t) 0x00000200U	/* RFC 4214 */
+#define IPV6_NEW_ADDR_IID_ISATAP		(uint32_t) 0x00000200U	/* RFC 5214 (ex 4214) */
 #define IPV6_NEW_ADDR_IID_EUI48			(uint32_t) 0x00000400U
 #define IPV6_NEW_ADDR_IID_EUI64			(uint32_t) 0x00000800U
 
 #define IPV6_ADDR_MAPPED			(uint32_t) 0x00001000U
 #define IPV6_ADDR_RESERVED			(uint32_t) 0x00002000U	/* reserved address space */
 #define IPV6_ADDR_ULUA				(uint32_t) 0x00004000U	/* Unique Local Unicast Address */
-
 #define IPV6_ADDR_ANONYMIZED			(uint32_t) 0x00008000U	/* anonymized IPv6 address */
 
 #define IPV6_NEW_ADDR_6TO4			(uint32_t) 0x00010000U
 #define IPV6_NEW_ADDR_6BONE			(uint32_t) 0x00020000U
 #define IPV6_NEW_ADDR_AGU			(uint32_t) 0x00040000U
 #define IPV6_NEW_ADDR_UNSPECIFIED		(uint32_t) 0x00080000U
-#define IPV6_NEW_ADDR_SOLICITED_NODE		(uint32_t) 0x00100000U
 
+#define IPV6_NEW_ADDR_SOLICITED_NODE		(uint32_t) 0x00100000U
+#define IPV6_ADDR_IID_32_63_HAS_IPV4		(uint32_t) 0x00200000U
 #define IPV6_NEW_ADDR_PRODUCTIVE		(uint32_t) 0x00400000U
 #define IPV6_NEW_ADDR_6TO4_MICROSOFT		(uint32_t) 0x00800000U
+
 #define IPV6_NEW_ADDR_TEREDO			(uint32_t) 0x01000000U
 #define IPV6_NEW_ADDR_ORCHID			(uint32_t) 0x02000000U  /* RFC 4843 */
 #define IPV6_NEW_ADDR_LINKLOCAL_TEREDO		(uint32_t) 0x04000000U
@@ -225,7 +242,8 @@ typedef struct {
 	{ IPV6_NEW_ADDR_IID_TEREDO	, "iid-teredo" },
 	{ IPV6_NEW_ADDR_IID_EUI48	, "iid-eui48" },
 	{ IPV6_NEW_ADDR_IID_EUI64	, "iid-eui64" },
-	{ IPV6_NEW_ADDR_IID_ISATAP	, "iid-isatap" }
+	{ IPV6_NEW_ADDR_IID_ISATAP	, "iid-isatap" },
+	{ IPV6_ADDR_IID_32_63_HAS_IPV4	, "iid-includes-ipv4" }
 };
 
 

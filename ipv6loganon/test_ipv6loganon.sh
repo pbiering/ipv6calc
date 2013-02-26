@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.12 2013/02/24 19:19:52 ds6peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.13 2013/02/26 20:25:31 ds6peter Exp $
 # Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -13,7 +13,7 @@ cat <<END | grep -v "^#"
 192.0.2.1 - - IPv4 address			=192.0.2.0 - - IPv4 address
 2001:0db8:0000:0000:81c0:0f3f:c807:1455 - - IPv6 address/privacy IID	=2001:db8::a909:4941:0:7 - - IPv6 address/privacy IID
 3ffe:ffff::1 - - IPv6 address/6bone/static IID	=3ffe:ffff::a909:4291:c02d:5d1d - - IPv6 address/6bone/static IID
-3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - ISATAP	=3ffe:1a05:510::5efe:8cad:8100 - - ISATAP
+3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - ISATAP	=3ffe:1a05:510::a909:5214:48ca:d81c - - ISATAP
 ff02::1:ff00:1234 - - Solicited Node		=ff02::1:ff00:0 - - Solicited Node
 3ffe::1:ff00:1234 - - Solicited Node		=3ffe::1:ff00:0 - - Solicited Node
 ::1 - - loopback				=::1 - - loopback
@@ -25,7 +25,7 @@ fe80::210:a4ff:fe01:2345 - - link local EUI-48	=fe80::a909:4291:4001:a48 - - lin
 fe80::210:a489:ab01:2345 - - link local EUI-64	=fe80::a909:4291:6001:a43 - - link local EUI-64
 3ffe:ffff::210:a4ff:fe01:2345 - - 6bone EUI-48	=3ffe:ffff::a909:4291:4001:a48 - - 6bone EUI-48
 3ffe:ffff::210:a489:ab01:2345 - - 6bone EUI-64	=3ffe:ffff::a909:4291:6001:a43 - - 6bone EUI-64
-3ffe:ffff::000:a4ff:fe01:2345 - - 6bone local	=3ffe:ffff::a909:4291:4000:a43 - - 6bone local
+3ffe:ffff::000:a4ff:fe01:2345 - - 6bone EUI-48 local	=3ffe:ffff::a909:4291:4000:a43 - - 6bone EUI-48 local
 3ffe:ffff::000:a489:ab01:2345 - - 6bone local	=3ffe:ffff::a909:4291:c02d:5d1d - - 6bone local
 fd00:1234:5678:9abc::1 - - ULUA local		=fd00:1234:5678::a909:4291:c02d:5d1d - - ULUA local
 fd00:1234:5678:9abc:210:a4ff:fe01:2345 - - ULUA EUI-64=fd00:1234:5678::a909:4291:4001:a48 - - ULUA EUI-64
@@ -78,8 +78,8 @@ cat <<END | grep -v "^#"
 3ffe:ffff:1234::1 - - IPv6 address/6bone/standard	=--anonymize-standard=3ffe:ffff:1234::a909:4291:c02d:5d1d - - IPv6 address/6bone/standard
 3ffe:ffff:1234::1 - - IPv6 address/6bone/careful	=--anonymize-careful=3ffe:ffff:1200::a909:4291:c02d:5d1d - - IPv6 address/6bone/careful
 3ffe:ffff:1234::1 - - IPv6 address/6bone/paranoid	=--anonymize-paranoid=3ffe:ffff::a909:4291:c02d:5d1d - - IPv6 address/6bone/paranoid
-3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - ISATAP1	=--anonymize-careful=3ffe:1a05:500::5efe:8cad:8000 - - ISATAP1
-3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - ISATAP2	=--anonymize-paranoid=3ffe:1a05::5efe:8cad:0 - - ISATAP2
+3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - ISATAP1	=--mask-iid --anonymize-careful=3ffe:1a05:500::5efe:140.173.128.0 - - ISATAP1
+3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - ISATAP2	=--mask-iid --anonymize-paranoid=3ffe:1a05::5efe:140.173.0.0 - - ISATAP2
 2002:50b5:7940::50b5:7940 - - 6to4 Microsoft1	=--anonymize-careful=2002:50b5:7000::50b5:7000 - - 6to4 Microsoft1
 2002:50b5:7940::50b5:7940 - - 6to4 Microsoft2	=--anonymize-paranoid=2002:50b5::50b5:0 - - 6to4 Microsoft2
 fe80::210:a4ff:fe01:2345 - - link local EUI-48/careful	=--anonymize-careful=fe80::a909:4291:4001:a48 - - link local EUI-48/careful

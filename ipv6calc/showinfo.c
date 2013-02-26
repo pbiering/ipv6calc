@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.64 2013/02/24 19:12:13 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.65 2013/02/26 20:25:30 ds6peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -558,7 +558,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	} else {
 		fprintf(stdout, "IPv4 address: %s\n", tempipv4string);
 
-		fprintf(stdout, "Address type: ");
+		fprintf(stdout, "IPv4 address type: ");
 		j = 0;
 		for (i = 0; i < (int) (sizeof(ipv6calc_ipv4addrtypestrings) / sizeof(ipv6calc_ipv4addrtypestrings[0])); i++ ) {
 			if ( (typeinfo & ipv6calc_ipv4addrtypestrings[i].number) != 0 ) {
@@ -572,7 +572,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 	/* get registry string */
 	retval = libipv4addr_get_registry_string(ipv4addrp, helpstring);
-	if ( retval != 0  && machinereadable == 0 ) {
+	if ( retval == 1  && machinereadable == 0 ) {
 		fprintf(stderr, "Error getting registry string for IPv4 address: %s (%s)\n", helpstring, tempipv4string);
 		return;
 	};
@@ -941,7 +941,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 
 	/* get registry string */
 	retval = libipv6addr_get_registry_string(ipv6addrp, helpstring);
-	if ( retval != 0  && machinereadable == 0 ) {
+	if ( retval == 1  && machinereadable == 0 ) {
 		fprintf(stderr, "Error getting registry string for IPv6 address: %s\n", helpstring);
 	} else {
 		if ( machinereadable != 0 ) {
@@ -1027,7 +1027,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 				};
 			};
 		} else {
-			if (ipv6addr_getoctet(ipv6addrp, 11) == 0xff && ipv6addr_getoctet(ipv6addrp, 12) == 0xfe) {
+			if ((typeinfo & IPV6_NEW_ADDR_IID_EUI48) == IPV6_NEW_ADDR_IID_EUI48) {
 				/* EUI-48 */
 				macaddr.addr[0] = ipv6addr_getoctet(ipv6addrp,  8) ^ 0x02;
 				macaddr.addr[1] = ipv6addr_getoctet(ipv6addrp,  9);
@@ -1038,7 +1038,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 				print_eui48(&macaddr, formatoptions);
 			} else {
 				/* Check for global EUI-64 */
-				if ( (ipv6addr_getoctet(ipv6addrp, 8) & 0x02) != 0 ) {
+				if ((typeinfo & IPV6_NEW_ADDR_IID_EUI64) == IPV6_NEW_ADDR_IID_EUI64) {
 					eui64addr.addr[0] = ipv6addr_getoctet(ipv6addrp,  8) ^ 0x02;
 					eui64addr.addr[1] = ipv6addr_getoctet(ipv6addrp,  9);
 					eui64addr.addr[2] = ipv6addr_getoctet(ipv6addrp, 10);
@@ -1057,15 +1057,27 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 							fprintf(stdout, "Generated from the extension identifier of an EUI-48 (MAC): ...:%02x:%02x:%02x\n", (unsigned int) ipv6addr_getoctet(ipv6addrp, 13), (unsigned int) ipv6addr_getoctet(ipv6addrp, 14), (unsigned int) ipv6addr_getoctet(ipv6addrp, 15));
 						};
 					} else if ( (typeinfo & IPV6_NEW_ADDR_IID_ISATAP) != 0 )  {
-						for (i = 0; i <= 3; i++) {
-							ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + 12)));
-						};
+						if (ipv6addr_getoctet(ipv6addrp, 11) == 0xfe) {
+							/* IPv4 address included */
+							for (i = 0; i <= 3; i++) {
+								ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + 12)));
+							};
 
-						if ( machinereadable != 0 ) {
+							print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "ISATAP");
+
+						} else if ((ipv6addr_getoctet(ipv6addrp, 11) == 0xff) && (ipv6addr_getoctet(ipv6addrp, 12) == 0xfe)) {
+							/* Vendor ID included */
+							if ( machinereadable != 0 ) {
+							} else {
+								fprintf(stdout, "ISATAP vendor ID: 0x%02x%02x%02x\n", ipv6addr_getoctet(ipv6addrp, 13), ipv6addr_getoctet(ipv6addrp, 14), ipv6addr_getoctet(ipv6addrp, 15));
+							};
 						} else {
-							fprintf(stdout, "IPv4 registry for ISATAP client address: %s\n", helpstring);
+							/* Extension ID included */
+							if ( machinereadable != 0 ) {
+							} else {
+								fprintf(stdout, "ISATAP extension ID: 0x%02x%02x%02x%02x%02x\n", ipv6addr_getoctet(ipv6addrp, 11), ipv6addr_getoctet(ipv6addrp, 12), ipv6addr_getoctet(ipv6addrp, 13), ipv6addr_getoctet(ipv6addrp, 14), ipv6addr_getoctet(ipv6addrp, 15));
+							};
 						};
-						print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "ISATAP");
 					} else if ( ( ( (typeinfo & IPV6_ADDR_LINKLOCAL) != 0) && (ipv6addr_getdword(ipv6addrp, 2) == 0 && ipv6addr_getword(ipv6addrp, 6) != 0)) )   {
 						/* fe80:: must have 0000:0000:xxxx:yyyy where xxxx > 0 */
 						if ( machinereadable != 0 ) {

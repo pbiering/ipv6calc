@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.c
- * Version    : $Id: librfc1884.c,v 1.15 2012/12/16 10:08:15 peter Exp $
- * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc1884.c,v 1.16 2013/02/26 20:25:31 ds6peter Exp $
+ * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for conversions defined in RFC 1884
@@ -142,7 +142,7 @@ int ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, char *results
 int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST], temp2string[NI_MAXHOST];
 	int retval = 1;
-	int zstart = -1, zend = -1, tstart = -1, tend = -1, i;
+	int zstart = -1, zend = -1, tstart = -1, tend = -1, i, w_max = 7;
 
 	if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
 		fprintf(stderr, "%s: scope of IPv6 address: %08x\n", DEBUG_function_name, (unsigned int) ipv6addrp->scope);
@@ -186,12 +186,16 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 		retval = 0;
 	} else {
 		/* normal address */
+
+		if ( (ipv6addrp->scope & IPV6_ADDR_IID_32_63_HAS_IPV4) != 0) {
+			w_max = 5;
+		};
 			
 		if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
 			fprintf(stderr, "%s: normal address, detect '0' blocks now\n",  DEBUG_function_name);
 		};
 
-		for ( i = 0; i <= 7; i++ ) {
+		for ( i = 0; i <= w_max; i++ ) {
 			if ( ipv6addr_getword(ipv6addrp, (unsigned int) i) == 0 ) {
 				/* found a '0' */
 					
@@ -257,7 +261,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 		};
 		/* cleanup */
 		if ( tstart >= 0 ) {
-			tend = 7;
+			tend = w_max;
 			/* trailing '0' block */
 			if ( ( tend - tstart ) > 0 ) {
 				/* ok, a block with 2 or more '0' */
@@ -284,7 +288,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 		/* create string */
 		tempstring[0] = '\0';
 
-		for ( i = 0; i <= 7; i++ ) {
+		for ( i = 0; i <= w_max; i++ ) {
 			if ( i == zstart ) {
 		
 				if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
@@ -306,6 +310,18 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 			snprintf(tempstring, sizeof(tempstring) - 1, "%s", temp2string);
 		};
 		
+		if ( (ipv6addrp->scope & IPV6_ADDR_IID_32_63_HAS_IPV4) != 0) {
+			/* append IPv4 address */
+			snprintf(temp2string, sizeof(temp2string) - 1, "%s:%u.%u.%u.%u", \
+				tempstring, \
+				(unsigned int) ipv6addrp->in6_addr.s6_addr[12], \
+				(unsigned int) ipv6addrp->in6_addr.s6_addr[13], \
+				(unsigned int) ipv6addrp->in6_addr.s6_addr[14], \
+				(unsigned int) ipv6addrp->in6_addr.s6_addr[15]  \
+			);
+			snprintf(tempstring, sizeof(tempstring) - 1, "%s", temp2string);
+		};
+
 		if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
 			fprintf(stderr, "%s: new method: '%s'\n",  DEBUG_function_name, tempstring);
 		};

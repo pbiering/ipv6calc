@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.69 2013/02/25 06:58:52 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.70 2013/02/26 20:25:30 ds6peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -565,19 +565,16 @@ int main(int argc, char *argv[]) {
 			case CMD_ANON_PRESET_STANDARD:
 				mask_ipv4 = 24;
 				mask_ipv6 = 48;
-				mask_iid = 0;
 				break;
 
 			case CMD_ANON_PRESET_CAREFUL:
 				mask_ipv4 = 20;
 				mask_ipv6 = 40;
-				mask_iid = 0;
 				break;
 
 			case CMD_ANON_PRESET_PARANOID:
 				mask_ipv4 = 16;
 				mask_ipv6 = 32;
-				mask_iid = 0;
 				break;
 
 			case CMD_6rd_relay_prefix:
