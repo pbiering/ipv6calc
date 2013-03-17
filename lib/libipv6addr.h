@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.55 2013/03/17 18:07:54 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.56 2013/03/17 20:43:58 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -22,22 +22,25 @@
 /* 
  * IID anonymization is done by replacing with related information (64-bit)
  * xxxx:xxxx:xxxx:xxxx
- * a909                 -> A Nine O Nine = ANON
+ * a9p9                 -> A Nine O Nine = ANON
  *      ....            -> RFC-Number (4 digits)
  *      .... c... ...   -> Chapter number (dot = d)
  *      4291 6... ...   -> 6 chars follow for information
  *                   C  -> Checksum
  *
- * a909 4941 0000 000.  -> RFC 4941 anonymized privacy extension Interface ID
- * a909 4291 c02d 5d1.  -> RFC 4291 Chapter 2.5.1 anonymized static Interface ID
- * a909 4291 4xxx xxx.  -> RFC 4291 anonymized EUI-48 Interface ID, xxx xxx = OUI
- * a909 4291 6xxx xxx.  -> RFC 4291 anonymized EUI-64 Interface ID, xxx xxx = OUI
- * a909 5214 4xxx xxx.  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included (anonymized) IPv4 address
- * a909 5214 1xx0 000.  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 8 bit of included vendor ID
- * a909 5214 fxxx xxx.  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included extension ID
+ * a9p9 4941 0000 000C  -> RFC 4941 anonymized privacy extension Interface ID
+ * a9p9 4291 c02d 5d1C  -> RFC 4291 Chapter 2.5.1 anonymized static Interface ID
+ * a9p9 4291 4xxx xxxC  -> RFC 4291 anonymized EUI-48 Interface ID, xxx xxx = OUI
+ * a9p9 4291 6xxx xxxC  -> RFC 4291 anonymized EUI-64 Interface ID, xxx xxx = OUI
+ * a9p9 5214 4xxx xxxC  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included (anonymized) IPv4 address
+ * a9p9 5214 1xx0 000C  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 8 bit of included vendor ID
+ * a9p9 5214 fxxx xxxC  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included extension ID
+ *
+ * SLA/NLA prefix part anonymization is done by replacing with pattern a909a909
+ *   p = number of nibbles anonymized
  */
 #define ANON_TOKEN_VALUE_00_31		(uint32_t) 0xa9090000u
-#define ANON_TOKEN_MASK_00_31		(uint32_t) 0xffff0000u
+#define ANON_TOKEN_MASK_00_31		(uint32_t) 0xff0f0000u
 
 #define ANON_CHECKSUM_MASK_32_63	(uint32_t) 0x0000000fu
 
