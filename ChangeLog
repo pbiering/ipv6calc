@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.273 2013/02/26 20:25:30 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.274 2013/03/17 18:07:54 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130317/PB
+	bin/ipv6logconv.c: dedicated token for privacy & Teredo IID
+	ipv6calcweb/ipv6calcweb.cgi[.in]: show date/time of generated output
+
 20130226/PB
 	lib/libipv6addr.[ch]: switch ISATAP anonymization to new method, extend ISATAP recognition
 	ipv6calc/showinfo.c: improve ISATAP information

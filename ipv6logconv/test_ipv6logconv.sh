@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6logconv.sh
-# Version    : $Id: test_ipv6logconv.sh,v 1.7 2005/10/20 16:22:41 peter Exp $
+# Version    : $Id: test_ipv6logconv.sh,v 1.8 2013/03/17 18:07:54 ds6peter Exp $
 # Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logconv"
@@ -33,6 +33,7 @@ fe80::fefc:acff:fe10:fe01 - -
 fd00:1234:5678:9abc::1 - - "Unique Local IPv6 Unicast Address"
 fd00:1234:5678:9abc:210:a489:ab01:2345 - - "Unique Local IPv6 Unicast Address"
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF - - Teredo
+2001:db8:0123:4567:837:3b0d:a304:9141 - - Privacy IID
 END
 }
 

@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.19 2012/03/19 20:04:49 peter Exp $
- * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logconv.c,v 1.20 2013/03/17 18:07:54 ds6peter Exp $
+ * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile conversions
@@ -577,7 +577,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 			typeinfo = ipv6addr_gettype(&ipv6addr);
 
 			/* check whether address has a OUI ID */
-			if ( (( typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4 | IPV6_ADDR_ULUA)) == 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO)) ==0) )  {
+			if ( (( typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4 | IPV6_ADDR_ULUA)) == 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO)) == 0) )  {
 				if (flag_skipunknown != 0) {
 					return (1);
 				} else {
@@ -614,6 +614,10 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 					snprintf(resultstring, LINEBUFFER - 1, "6to4-microsoft.ouitype.ipv6calc");
 				} else if ( (typeinfo & IPV6_NEW_ADDR_IID_ISATAP) != 0 ) {
 					snprintf(resultstring, LINEBUFFER - 1, "ISATAP.ouitype.ipv6calc");
+				} else if ( (typeinfo & IPV6_NEW_ADDR_IID_PRIVACY) != 0 ) {
+					snprintf(resultstring, LINEBUFFER - 1, "local-scope-privacy.ouitype.ipv6calc");
+				} else if ( (typeinfo & IPV6_NEW_ADDR_TEREDO) != 0 ) {
+					snprintf(resultstring, LINEBUFFER - 1, "local-scope-teredo.ouitype.ipv6calc");
 				} else {
 					snprintf(resultstring, LINEBUFFER - 1, "local-scope.ouitype.ipv6calc");
 				};
