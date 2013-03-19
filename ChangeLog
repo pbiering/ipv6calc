@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.275 2013/03/17 20:43:58 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.276 2013/03/19 18:59:12 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,13 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130319/PB
+	lib/libipv6addr.h: fix duplicate merge
+	lib/libipv6addr.c: proper handling of prefix anonymization/masking
+	lib/ipv6calchelp.[ch]: implement online help for actions
+	ipv6loganon/ipv6loganonhelp.c: fix online help
+	ipv6calc/ipv6calc.c: fix online help and debug option value parser
+
 20130317/PB
 	bin/ipv6logconv.c: dedicated token for privacy & Teredo IID
 	ipv6calcweb/ipv6calcweb.cgi[.in]: show date/time of generated output

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.h
- * Version    : $Id: ipv6calchelp.h,v 1.9 2009/08/11 21:04:44 peter Exp $
+ * Version    : $Id: ipv6calchelp.h,v 1.10 2013/03/19 18:59:12 ds6peter Exp $
  * Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -29,3 +29,4 @@ extern void printhelp_actiontypes(const uint32_t formatoptions);
 extern void printhelp(void);
 extern void printhelp_oldoptions(void);
 extern void printhelp_output_dispatcher(const uint32_t outputtype);
+extern void printhelp_action_dispatcher(const uint32_t action);

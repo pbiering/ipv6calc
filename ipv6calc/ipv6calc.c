@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.70 2013/02/26 20:25:30 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.71 2013/03/19 18:59:12 ds6peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -290,10 +290,11 @@ int main(int argc, char *argv[]) {
 			case 'h':
 			case '?':
 				command |= CMD_printhelp;
+				fprintf(stderr, "%s: help option detected\n", DEBUG_function_name);
 				break;
 				
 			case 'd':
-				if ((strlen(optarg) > 2) && (strncmp(optarg, "0x", 2) || strncmp(optarg, "0X", 2))) {
+				if ((strlen(optarg) > 2) && ((strncmp(optarg, "0x", 2) == 0) || (strncmp(optarg, "0X", 2)) == 0)) {
 					// convert hex
 					if (sscanf(optarg + 2, "%lx", &ipv6calc_debug) == 0) {
 						ipv6calc_debug = 0;
@@ -741,8 +742,9 @@ int main(int argc, char *argv[]) {
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "%s: Got expression string: %s\n", DEBUG_function_name, optarg);
 				};
+
 				if ((strcmp(optarg, "-?") == 0) || (strcmp(optarg, "-h") == 0) || (strcmp(optarg, "--help") == 0) ) {
-					action = ACTION_auto;
+					action = ACTION_filter;
 					command = CMD_printhelp;
 					break;
 				};
@@ -779,6 +781,9 @@ int main(int argc, char *argv[]) {
 			exit(EXIT_FAILURE);
 		} else if (action == ACTION_auto) {
 			printhelp_actiontypes(formatoptions);
+			exit(EXIT_FAILURE);
+		} else if (action != ACTION_undefined) {
+			printhelp_action_dispatcher(action);
 			exit(EXIT_FAILURE);
 		};
 

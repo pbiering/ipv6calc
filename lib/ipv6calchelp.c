@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.27 2012/03/25 17:57:01 peter Exp $
- * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calchelp.c,v 1.28 2013/03/19 18:59:12 ds6peter Exp $
+ * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -581,4 +581,65 @@ void printhelp_output_dispatcher(const uint32_t outputtype) {
 		};
 	};
 	fprintf(stderr, "\n");
+};
+
+/* help regarding action command */
+void printhelp_action_dispatcher(const uint32_t action) {
+	int i;
+
+	printversion();
+	
+	fprintf(stderr, "\n");
+
+	switch (action) {
+		case ACTION_mac_to_eui64:
+			fprintf(stderr, " help still missing - sorry.\n");
+			break;
+			
+		case ACTION_ipv4_to_6to4addr:
+			fprintf(stderr, " help still missing - sorry.\n");
+			break;
+
+		case ACTION_anonymize:
+			fprintf(stderr, " help still missing - sorry.\n");
+			break;
+			
+		case ACTION_iid_token_to_privacy:
+			fprintf(stderr, " help still missing - sorry.\n");
+			break;
+
+		case ACTION_prefix_mac_to_ipv6:
+			fprintf(stderr, " help still missing - sorry.\n");
+			break;
+
+		case ACTION_6rd_local_prefix:
+			fprintf(stderr, " help still missing - sorry.\n");
+			break;
+
+		case ACTION_filter:
+			fprintf(stderr, " Filter given addresses from stdout by filter expression, e.g.\n");
+			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc -A filter -E iid-local\n");
+			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc -A filter -E iid-local,global-unicast\n");
+			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc -A filter -E ^iid-privacy\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, "  IPv6 address filter tokens:\n");
+			fprintf(stderr, "   ");
+			for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
+				fprintf(stderr, " %s", ipv6calc_ipv6addrtypestrings[i].token);
+			};
+			fprintf(stderr, "\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, "  IPv4 address filter tokens:\n");
+			fprintf(stderr, "   ");
+			for (i = 0; i < (int) (sizeof(ipv6calc_ipv4addrtypestrings) / sizeof(ipv6calc_ipv4addrtypestrings[0])); i++ ) {
+				fprintf(stderr, " %s", ipv6calc_ipv4addrtypestrings[i].token);
+			};
+			fprintf(stderr, "\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, "  MAC address filter tokens:\n");
+			fprintf(stderr, "   ");
+			fprintf(stderr, " IMPLEMENTATION MISSING");
+			fprintf(stderr, "\n");
+			break;
+	};
 };

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.76 2013/03/17 20:43:58 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.77 2013/03/19 18:59:12 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -1924,6 +1924,10 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const unsigned int mask
 	int zeroize_prefix = 0;
 	int anonymized_prefix_nibbles = 0;
 
+	if (mask_iid == 1) {
+		zeroize_prefix = 1;
+	};
+
 	ipv6calc_ipv4addr ipv4addr;
 
 	if ( (ipv6calc_debug) != 0 ) {
@@ -2030,13 +2034,18 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const unsigned int mask
 			};
 		} else {
 			if ( (typeinfo & IPV6_NEW_ADDR_IID_PRIVACY) == IPV6_NEW_ADDR_IID_PRIVACY ) {
-				/* replace IID with special value */
-				iid[0] = ANON_TOKEN_VALUE_00_31 | ANON_IID_PRIVACY_VALUE_00_31;
-				iid[1] = ANON_IID_PRIVACY_VALUE_32_63;
+				if (mask_iid == 1) {
+					ipv6addr_setdword(ipv6addrp, 2, 0);
+					ipv6addr_setdword(ipv6addrp, 3, 0);
+				} else {
+					/* replace IID with special value */
+					iid[0] = ANON_TOKEN_VALUE_00_31 | ANON_IID_PRIVACY_VALUE_00_31;
+					iid[1] = ANON_IID_PRIVACY_VALUE_32_63;
 
-				ipv6addr_setdword(ipv6addrp, 2, iid[0]);
-				ipv6addr_setdword(ipv6addrp, 3, iid[1]);
-				calculate_checksum = 1;
+					ipv6addr_setdword(ipv6addrp, 2, iid[0]);
+					ipv6addr_setdword(ipv6addrp, 3, iid[1]);
+					calculate_checksum = 1;
+				};
 			} else if ((typeinfo & IPV6_NEW_ADDR_IID_EUI64) == IPV6_NEW_ADDR_IID_EUI64) {
 				/* Check for global EUI-64 */
 				if (mask_iid == 1) {
@@ -2172,6 +2181,11 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const unsigned int mask
 		ipv6addr_setword(ipv6addrp, 3, 0x0u);
 		ipv6addr_setword(ipv6addrp, 2, 0x0u);
 		ipv6addr_setword(ipv6addrp, 1, ipv6addr_getword(ipv6addrp, 1) & 0xFFF0);
+	};
+
+	/* switch prefix anonymization if IID is not anonymizied in reliable way */
+	if (calculate_checksum == 0) {
+		zeroize_prefix = 1;
 	};
 
 	/* prefix included */
