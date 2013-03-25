@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.21 2013/02/24 19:19:52 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.h,v 1.22 2013/03/25 21:29:47 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -133,6 +133,7 @@
 	{ "mask-ipv4" , 1, 0, CMD_ANON_MASK_IPV4 },
 	{ "mask-ipv6" , 1, 0, CMD_ANON_MASK_IPV6 },
 	{ "mask-iid"  , 0, 0, CMD_ANON_MASK_IID },
+	{ "mask-mac"  , 1, 0, CMD_ANON_MASK_MAC },
 
 	/* new options */
 	{ "in"        , 1, 0, CMD_inputtype  },

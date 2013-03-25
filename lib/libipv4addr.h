@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.23 2012/10/14 11:10:30 peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.24 2013/03/25 21:29:47 ds6peter Exp $
  * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
@@ -133,7 +133,7 @@ extern int libipv4addr_to_reversestring(ipv6calc_ipv4addr *ipv4addrp, char *resu
 extern int libipv4addr_to_octal(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions);
 extern int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions);
 
-extern void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask);
+extern void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, const unsigned int mask);
 
 extern int ipv4addr_filter(const ipv6calc_ipv4addr *ipv4addrp, const s_ipv6calc_filter_ipv4addr *filter);
 extern int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token);

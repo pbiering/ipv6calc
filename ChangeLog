@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.277 2013/03/25 07:14:08 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.278 2013/03/25 21:29:46 ds6peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,8 @@ Info:
 --------------------------------------------------------------------
 20130325/PB
 	lib/libipv6addr.[ch]: store/retrieve global/local flag for anonymized EUI & ISATAP
+	lib/libmac.[ch], ipv6calc/ipv6calc.c: implement MAC address anonymization
+	ipv6calc/ipv6calc.c: improve anonymization depending on various formats
 
 20130324/PB
 	lib/libipv6addr.[ch]: add support for ORCHID anonymization, fix OUI storage in anonymized IID

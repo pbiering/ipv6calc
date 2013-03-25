@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.71 2013/03/19 18:59:12 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.72 2013/03/25 21:29:46 ds6peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -72,6 +72,7 @@ int input_is_pipe = 0;
 int mask_ipv4 = 24;
 int mask_ipv6 = 48;
 int mask_iid = 0;
+int mask_mac = 24;
 
 
 int  use_ip2location_ipv4 = 0; /* if set to 1, IP2Location IPv4 is enabled by option(s) */
@@ -557,8 +558,16 @@ int main(int argc, char *argv[]) {
 
 			case CMD_ANON_MASK_IPV6:
 				mask_ipv6 = atoi(optarg);
-				if (mask_ipv6 < 0 || mask_ipv6 > 32) {
-					fprintf(stderr, " value for option 'mask-ipv4' out-of-range  [0-64]\n");
+				if (mask_ipv6 < 0 || mask_ipv6 > 64) {
+					fprintf(stderr, " value for option 'mask-ipv6' out-of-range  [0-64]\n");
+					exit(EXIT_FAILURE);
+				};
+				break;
+
+			case CMD_ANON_MASK_MAC:
+				mask_mac = atoi(optarg);
+				if (mask_mac < 0 || mask_mac > 48) {
+					fprintf(stderr, " value for option 'mask-mac' out-of-range  [0-48]\n");
 					exit(EXIT_FAILURE);
 				};
 				break;
@@ -1321,7 +1330,7 @@ PIPE_input:
 			outputtype = FORMAT_ipv6addr;
 		} else if ( (inputtype == FORMAT_ipv4addr) && (action == ACTION_anonymize) ) {
 			outputtype = FORMAT_ipv4addr;
-		} else if ( ((inputtype == FORMAT_ipv4addr) || (inputtype == FORMAT_ipv4hex) || (inputtype == FORMAT_ipv4revhex)) && (action == ACTION_undefined) ) {
+		} else if ( ((inputtype == FORMAT_ipv4addr) || (inputtype == FORMAT_ipv4hex) || (inputtype == FORMAT_ipv4revhex)) && (action == ACTION_undefined || action == ACTION_anonymize) ) {
 			outputtype = FORMAT_ipv4addr;
 		} else if ( (inputtype == FORMAT_mac) ) {
 			outputtype = FORMAT_mac;
@@ -1392,20 +1401,27 @@ PIPE_input:
 			break;
 
 		case ACTION_anonymize:
-			if (inputtype == FORMAT_ipv4addr && outputtype == FORMAT_ipv4addr) {
+			if ((inputtype == FORMAT_ipv4addr || inputtype == FORMAT_ipv4hex || inputtype == FORMAT_ipv4revhex) && outputtype == FORMAT_ipv4addr) {
 				/* anonymize IPv4 address */
 				if (ipv4addr.flag_valid != 1) {
 					fprintf(stderr, "No valid IPv4 address given!\n");
 					exit(EXIT_FAILURE);
 				};
 				libipv4addr_anonymize(&ipv4addr, mask_ipv4);
-			} else if (inputtype == FORMAT_ipv6addr && outputtype == FORMAT_ipv6addr) {
+			} else if ((inputtype == FORMAT_ipv6addr || inputtype == FORMAT_bitstring || inputtype == FORMAT_revnibbles_int || inputtype == FORMAT_revnibbles_arpa || inputtype == FORMAT_base85 || inputtype == FORMAT_ipv6literal) && outputtype == FORMAT_ipv6addr) {
 				/* anonymize IPv6 address */
 				if (ipv6addr.flag_valid != 1) {
 					fprintf(stderr, "No valid IPv6 address given!\n");
 					exit(EXIT_FAILURE);
 				};
 				libipv6addr_anonymize(&ipv6addr, mask_iid, mask_ipv6, mask_ipv4);
+			} else if (inputtype == FORMAT_mac && outputtype == FORMAT_mac) {
+				/* anonymize MAC address */
+				if (macaddr.flag_valid != 1) {
+					fprintf(stderr, "No valid MAC address given!\n");
+					exit(EXIT_FAILURE);
+				};
+				libmacaddr_anonymize(&macaddr, mask_mac);
 			} else {
 				fprintf(stderr, "Unsupported anonymization!\n");
 				exit(EXIT_FAILURE);

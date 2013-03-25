@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.16 2012/03/18 17:15:41 peter Exp $
+ * Version    : $Id: libmac.c,v 1.17 2013/03/25 21:29:47 ds6peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -14,6 +14,8 @@
 #include "libipv6calc.h"
 #include "libmac.h"
 #include "ipv6calctypes.h"
+#include "libipv6calc.h"
+#include "libipv6calcdebug.h"
 
 static char ChSet[] = "0123456789abcdefABCDEF:- ";
 
@@ -106,6 +108,20 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 };
 #undef DEBUG_function_name
 
+/* 
+ * clear MACaddr
+ *
+ * mod: *addrstring = MAC address
+ */
+void mac_clear(ipv6calc_macaddr *macaddrp) {
+	int i;
+
+	for ( i = 0; i <= 5; i++ ) {
+		macaddrp->addr[i] = 0;
+	};  
+
+	return;
+};
 
 /* 
  * clear MACaddr_structure
@@ -113,11 +129,7 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
  * mod: *addrstring = MAC address
  */
 void mac_clearall(ipv6calc_macaddr *macaddrp) {
-	int i;
-
-	for ( i = 0; i <= 5; i++ ) {
-		macaddrp->addr[i] = 0;
-	};  
+	mac_clear(macaddrp);
 
 	/* Clear valid flag */
 	macaddrp->flag_valid = 0;
@@ -174,4 +186,52 @@ void macaddr_filter_clear(s_ipv6calc_filter_macaddr *filter) {
 int macaddr_filter(const ipv6calc_macaddr *macaddrp, const s_ipv6calc_filter_macaddr *filter) {
 
 	return 1;
+};
+
+
+/*
+ * anonymize MAC address
+ *
+ * in : *macaddrp = MAC address structure
+ *      mask = number of bits of mask
+ * ret: <void>
+ */
+void libmacaddr_anonymize(ipv6calc_macaddr *macaddrp, const unsigned int mask) {
+	int i, max, min, bit;
+
+	/* anonymize MAC address according to settings */
+
+	if (mask == 0) {
+		/* clear MAC address: 0:0:0:0:0:0 */
+		mac_clear(macaddrp);
+	} else if (mask == 48) {
+		/* nothing to do */
+	} else if (mask < 1 || mask > 48) {
+		/* should not happen here */
+		fprintf(stderr, "%s/%s: 'mask' has an unexpected illegal value: %d!\n", __FILE__, __func__, mask);
+		exit(EXIT_FAILURE);
+	} else {
+		/* complete byte mask */
+		max = 6;
+		min = mask / 8 + 2;
+
+                if ( (ipv6calc_debug ) != 0 ) {
+                        fprintf(stderr, "%s/%s: mask=%d -> complete byte mask from %d to %d\n", __FILE__, __func__, mask, max, min);
+                };
+
+		if (max > min) {
+			for (i = max; i >= min; i--) {
+				macaddrp->addr[i-1] = 0;
+			};
+		};
+
+		/* partial byte mask */
+		bit = ((0xffu << (8 - (mask % 8))) & 0xffu);
+                if ( (ipv6calc_debug ) != 0 ) {
+                        fprintf(stderr, "%s/%s: mask=%d -> partial byte mask %d with %02x\n", __FILE__, __func__, mask, min-1, bit);
+                };
+
+		macaddrp->addr[min-2] &= bit;
+	};
+	return;
 };

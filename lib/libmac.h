@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.h
- * Version    : $Id: libmac.h,v 1.9 2012/03/18 17:15:41 peter Exp $
- * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libmac.h,v 1.10 2013/03/25 21:29:47 ds6peter Exp $
+ * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libmac.c
@@ -40,3 +40,5 @@ extern void mac_clearall(ipv6calc_macaddr *macaddrp);
 
 extern int macaddr_filter(const ipv6calc_macaddr *macaddrp, const s_ipv6calc_filter_macaddr *filter);
 extern void macaddr_filter_clear(s_ipv6calc_filter_macaddr *filter);
+
+extern void libmacaddr_anonymize(ipv6calc_macaddr *macaddrp, const unsigned int mask);
