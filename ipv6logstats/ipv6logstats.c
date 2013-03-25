@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.21 2012/05/09 17:08:10 peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.22 2013/03/25 07:14:09 ds6peter Exp $
  * Copyright  : 2003-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -393,11 +393,13 @@ static void lineparser(void) {
 					};
 
 					if ((typeinfo & IPV6_NEW_ADDR_IID) == IPV6_NEW_ADDR_IID) {
-						if ((typeinfo & IPV6_NEW_ADDR_IID_PRIVACY) == IPV6_NEW_ADDR_IID_PRIVACY) {
+						if ((typeinfo & IPV6_NEW_ADDR_IID_PRIVACY) != 0) {
 							stat_inc(STATS_IPV6_IID_PRIVACY);
-						} else if ((typeinfo & IPV6_NEW_ADDR_IID_LOCAL) == IPV6_NEW_ADDR_IID_LOCAL) {
+						} else if ((typeinfo & IPV6_NEW_ADDR_IID_ISATAP) != 0) {
+							stat_inc(STATS_IPV6_IID_ISATAP);
+						} else if ((typeinfo & IPV6_NEW_ADDR_IID_LOCAL) != 0) {
 							stat_inc(STATS_IPV6_IID_MANUAL);
-						} else if ((typeinfo & IPV6_NEW_ADDR_IID_GLOBAL) == IPV6_NEW_ADDR_IID_GLOBAL) {
+						} else if ((typeinfo & IPV6_NEW_ADDR_IID_GLOBAL) != 0) {
 							stat_inc(STATS_IPV6_IID_GLOBAL);
 						} else {
 							stat_inc(STATS_IPV6_IID_UNKNOWN);

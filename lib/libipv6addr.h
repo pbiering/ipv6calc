@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.57 2013/03/19 18:59:12 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.58 2013/03/25 07:14:09 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -29,12 +29,17 @@
  *                   C  -> Checksum
  *
  * a9p9 4941 0000 000C  -> RFC 4941 anonymized privacy extension Interface ID
+ *
  * a9p9 4291 c02d 5d1C  -> RFC 4291 Chapter 2.5.1 anonymized static Interface ID
  * a9p9 4291 4xxx xxxC  -> RFC 4291 anonymized EUI-48 Interface ID, xxx xxx = OUI
  * a9p9 4291 6xxx xxxC  -> RFC 4291 anonymized EUI-64 Interface ID, xxx xxx = OUI
- * a9p9 5214 4xxx xxxC  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included (anonymized) IPv4 address
- * a9p9 5214 1xx0 000C  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 8 bit of included vendor ID
+ *
+ * a9p9 5214 4xxx xxxC  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included (anonymized) local IPv4 address
+ * a9p9 5214 5xxx xxxC  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included (anonymized) global IPv4 address
+ * a9p9 5214 1xx0 000C  -> RFC 5214 anonymized ISATAP Interface ID, xx      = first 8 bit of included vendor ID
  * a9p9 5214 fxxx xxxC  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included extension ID
+ *
+ * a9p9 4843 0000 000C  -> RFC 4843 anonymized ORCHID hash
  *
  * SLA/NLA prefix part anonymization is done by replacing with pattern a909a909
  *   p = number of nibbles anonymized
@@ -53,6 +58,11 @@
 #define ANON_IID_STATIC_MASK_00_31	(uint32_t) 0x0000ffffu
 #define ANON_IID_STATIC_VALUE_32_63	(uint32_t) 0xc02d5d10u
 #define ANON_IID_STATIC_MASK_32_63	(uint32_t) 0xfffffff0u
+
+#define ANON_ORCHID_VALUE_00_31		(uint32_t) 0x00004843u
+#define ANON_ORCHID_STATIC_MASK_00_31	(uint32_t) 0x0000ffffu
+#define ANON_ORCHID_VALUE_32_63		(uint32_t) 0x00000000u
+#define ANON_ORCHID_STATIC_MASK_32_63	(uint32_t) 0xfffffff0u
 
 #define ANON_IID_EUI48_VALUE_00_31	(uint32_t) 0x00004291u
 #define ANON_IID_EUI48_MASK_00_31	(uint32_t) 0x0000ffffu
@@ -76,7 +86,8 @@
 #define ANON_IID_ISATAP_PAYLOAD_LENGTH		24	
 #define ANON_IID_ISATAP_TYPE_MASK_32_63		(uint32_t) 0xf0000000u
 
-#define ANON_IID_ISATAP_TYPE_IPV4_VALUE_32_63		(uint32_t) 0x40000000u
+#define ANON_IID_ISATAP_TYPE_IPV4_LOCAL_VALUE_32_63	(uint32_t) 0x40000000u
+#define ANON_IID_ISATAP_TYPE_IPV4_GLOBAL_VALUE_32_63	(uint32_t) 0x50000000u
 #define ANON_IID_ISATAP_TYPE_IPV4_PAYLOAD_32_63		(uint32_t) 0x0ffffff0u
 #define ANON_IID_ISATAP_TYPE_VENDOR_VALUE_32_63		(uint32_t) 0x10000000u
 #define ANON_IID_ISATAP_TYPE_VENDOR_PAYLOAD_32_63	(uint32_t) 0x0ff00000u

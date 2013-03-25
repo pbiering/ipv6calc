@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.11 2013/02/26 20:25:31 ds6peter Exp $
-# Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_scenarios.sh,v 1.12 2013/03/25 07:14:09 ds6peter Exp $
+# Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
 
@@ -126,7 +126,7 @@ END
 # Test Scenarios for filter
 testscenarios_filter() {
 	cat <<END | grep -v '^#'
-3ffe:1a05:510:200::5efe:140.173.129.8		iid-isatap
+3ffe:1a05:510:200:0200:5efe:140.173.129.8	iid-isatap
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF		teredo
 2001:db8:1:4135:7536:e4f:5513:4dd2		iid-privacy
 2001:db8:1:4135:208:54ff:fe00:1			iid-global
@@ -150,6 +150,24 @@ fe80::5eff:fe01:2345				iid-isatap
 fe80::5e01:2345:6789				iid
 fe80::5e01:2345:6789				iid-local
 fe80::5e01:2345:6789				iid-isatap
+2001:1a:392e:a450:2cd3:75e1:6098:8104		orchid
+2001:1a:392e:a450:2cd3:75e1:6098:8104		^iid-local
+2001:1a:392e:a450:2cd3:75e1:6098:8104		^iid
+2001:1a:392e:a450:2cd3:75e1:6098:8104		^iid-privacy
+2001:19:a909:a909:a999:4843::e			orchid
+2001:19:a909:a909:a999:4843::e			anonymized
+2001:19:a909:a909:a999:4843::e			^iid-privacy
+3ffe:1a05:510:a909:a949:5214:48ca:d81d		anonymized
+3ffe:1a05:510:a909:a949:5214:48ca:d81d		iid-isatap
+3ffe:1a05:510:a909:a949:5214:48ca:d81d		^iid-privacy
+3ffe:ffff::a4ff:fe01:2345			iid-local
+3ffe:ffff::a4ff:fe01:2345			iid-eui48
+fe80:0000:0000:0000:0200:5efe:192.0.2.143	^anonymized 
+fe80:0000:0000:0000:0000:5e01:2345:6789		^anonymized 
+fe80:0000:0000:0000:0000:5eff:fe01:2345		^anonymized
+2001:0db8:0000:0000:81c0:0f3f:c807:1455		^anonymized
+3ffe:831f:ce49:7601:8000:efff:af4a:86BF		^anonymized
+2001:1a:392e:a450:2cd3:75e1:6098:8104		^anonymized
 END
 }
 

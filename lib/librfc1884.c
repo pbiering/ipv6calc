@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.c
- * Version    : $Id: librfc1884.c,v 1.16 2013/02/26 20:25:31 ds6peter Exp $
+ * Version    : $Id: librfc1884.c,v 1.17 2013/03/25 07:14:09 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -187,7 +187,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 	} else {
 		/* normal address */
 
-		if ( (ipv6addrp->scope & IPV6_ADDR_IID_32_63_HAS_IPV4) != 0) {
+		if ( ((ipv6addrp->scope & IPV6_ADDR_IID_32_63_HAS_IPV4) != 0) && ((ipv6addrp->scope & IPV6_ADDR_ANONYMIZED) == 0)) {
 			w_max = 5;
 		};
 			
@@ -310,7 +310,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 			snprintf(tempstring, sizeof(tempstring) - 1, "%s", temp2string);
 		};
 		
-		if ( (ipv6addrp->scope & IPV6_ADDR_IID_32_63_HAS_IPV4) != 0) {
+		if ( ((ipv6addrp->scope & IPV6_ADDR_IID_32_63_HAS_IPV4) != 0) && ((ipv6addrp->scope & IPV6_ADDR_ANONYMIZED) == 0)) {
 			/* append IPv4 address */
 			snprintf(temp2string, sizeof(temp2string) - 1, "%s:%u.%u.%u.%u", \
 				tempstring, \

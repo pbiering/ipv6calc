@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.8 2012/05/09 17:08:10 peter Exp $
- * Copyright  : 2003-2012 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logstats.h,v 1.9 2013/03/25 07:14:09 ds6peter Exp $
+ * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Main header file
@@ -56,6 +56,7 @@
 #define STATS_IPV6_IID_GLOBAL		0x100
 #define STATS_IPV6_IID_MANUAL		0x101
 #define STATS_IPV6_IID_PRIVACY		0x102
+#define STATS_IPV6_IID_ISATAP		0x103
 #define STATS_IPV6_IID_UNKNOWN		0x10f
 
 /* labels statistic numbers */
@@ -100,5 +101,6 @@ typedef struct {
 	{ STATS_IPV6_IID_GLOBAL, 0, "IPv6/IID/Global" },
 	{ STATS_IPV6_IID_PRIVACY, 0, "IPv6/IID/Privacy" },
 	{ STATS_IPV6_IID_MANUAL, 0, "IPv6/IID/Manual" },
+	{ STATS_IPV6_IID_ISATAP, 0, "IPv6/IID/ISATAP" },
 	{ STATS_IPV6_IID_MANUAL, 0, "IPv6/IID/Unknown" },
 };

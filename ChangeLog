@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.276 2013/03/19 18:59:12 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.277 2013/03/25 07:14:08 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,15 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130325/PB
+	lib/libipv6addr.[ch]: store/retrieve global/local flag for anonymized EUI & ISATAP
+
+20130324/PB
+	lib/libipv6addr.[ch]: add support for ORCHID anonymization, fix OUI storage in anonymized IID
+	ipv6calc/showinfo.c: restructure display of anonymized information
+	ipv6loganon/test_ipv6loganon.sh: add some testcases
+	lib/librfc1884.c: fix for anonmized IIDs
+
 20130319/PB
 	lib/libipv6addr.h: fix duplicate merge
 	lib/libipv6addr.c: proper handling of prefix anonymization/masking

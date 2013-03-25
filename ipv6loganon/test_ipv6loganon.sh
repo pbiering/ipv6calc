@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.13 2013/02/26 20:25:31 ds6peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.14 2013/03/25 07:14:09 ds6peter Exp $
 # Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -194,6 +194,29 @@ else
 	fi
 	echo
 fi
+
+echo "Run 'ipv6loganon' reliability tests..." >&2
+list="`testscenarios_standard | awk '{ print $1 }'`"
+list="$list
+`testscenarios_special | awk '{ print $1 }'`"
+sortlist="`echo "$list" | sort -u`"
+
+for entry in $sortlist; do
+	echo "DEBUG : test: $entry"
+	nonanonymized="`echo "$entry" | ../ipv6logstats/ipv6logstats -q`"
+	anonymized="`echo "$entry" | ./ipv6loganon | ../ipv6logstats/ipv6logstats -q`"
+
+	entry_anon="`echo "$entry" | ./ipv6loganon`"
+
+	if [ "$nonanonymized" != "$anonymized" ]; then
+		echo "ERROR : result not equal: $entry_anon"
+		echo "INFO  : non-anonymized statistics"
+		echo "$nonanonymized"
+		echo "INFO  : anonymized statistics"
+		echo "$anonymized"
+		exit 1
+	fi
+done
 
 if [ $retval -eq 0 ]; then
 	echo "All tests were successfully done!" >&2
