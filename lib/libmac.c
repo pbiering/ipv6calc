@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.17 2013/03/25 21:29:47 ds6peter Exp $
+ * Version    : $Id: libmac.c,v 1.18 2013/03/26 18:57:29 ds6peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -226,9 +226,9 @@ void libmacaddr_anonymize(ipv6calc_macaddr *macaddrp, const unsigned int mask) {
 		};
 
 		/* partial byte mask */
-		bit = ((0xffu << (8 - (mask % 8))) & 0xffu);
+		bit = (~ (0xffu >> (mask % 8))) & 0xff;
                 if ( (ipv6calc_debug ) != 0 ) {
-                        fprintf(stderr, "%s/%s: mask=%d -> partial byte mask %d with %02x\n", __FILE__, __func__, mask, min-1, bit);
+                        fprintf(stderr, "%s/%s: mask=%d -> partial byte mask %d with 0x%02x\n", __FILE__, __func__, mask, min-1, bit);
                 };
 
 		macaddrp->addr[min-2] &= bit;

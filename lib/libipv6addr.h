@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.59 2013/03/25 21:29:47 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.60 2013/03/26 18:57:29 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -31,13 +31,15 @@
  * a9p9 4941 0000 000C  -> RFC 4941 anonymized privacy extension Interface ID
  *
  * a9p9 4291 c02d 5d1C  -> RFC 4291 Chapter 2.5.1 anonymized static Interface ID
- * a9p9 4291 4xxx xxxC  -> RFC 4291 anonymized EUI-48 Interface ID, xxx xxx = OUI
- * a9p9 4291 6xxx xxxC  -> RFC 4291 anonymized EUI-64 Interface ID, xxx xxx = OUI
+ * a9p9 4291 4xxx xxxC  -> RFC 4291 anonymized EUI-48 Interface ID, xxx xxx = converted OUI
+ * a9p9 4291 6xxx xxxC  -> RFC 4291 anonymized EUI-64 Interface ID, xxx xxx = converted OUI
  *
- * a9p9 5214 4xxx xxxC  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included (anonymized) local IPv4 address
- * a9p9 5214 5xxx xxxC  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included (anonymized) global IPv4 address
- * a9p9 5214 1xx0 000C  -> RFC 5214 anonymized ISATAP Interface ID, xx      = first 8 bit of included vendor ID
- * a9p9 5214 fxxx xxxC  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included extension ID
+ * a9p9 5214 4xxx xxxC  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included (anonymized) IPv4 address (local scope)
+ * a9p9 5214 5xxx xxxC  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included (anonymized) IPv4 address (global scope)
+ * a9p9 5214 cxx0 000C  -> RFC 5214 anonymized ISATAP Interface ID, xx      = first  8 bit of included vendor ID (local scope)
+ * a9p9 5214 dxx0 000C  -> RFC 5214 anonymized ISATAP Interface ID, xx      = first  8 bit of included vendor ID (global scope)
+ * a9p9 5214 exxx xxxC  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included extension ID (local scope)
+ * a9p9 5214 fxxx xxxC  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included extension ID (global scope)
  *
  * a9p9 4843 0000 000C  -> RFC 4843 anonymized ORCHID hash
  *
@@ -80,18 +82,25 @@
 #define ANON_IID_EUI64_PAYLOAD_SHIFT	4
 #define ANON_IID_EUI64_PAYLOAD_LENGTH	24	
 
-#define ANON_IID_ISATAP_VALUE_00_31		(uint32_t) 0x00005214u
-#define ANON_IID_ISATAP_MASK_00_31		(uint32_t) 0x0000ffffu
-#define ANON_IID_ISATAP_PAYLOAD_SHIFT		4
-#define ANON_IID_ISATAP_PAYLOAD_LENGTH		24	
-#define ANON_IID_ISATAP_TYPE_MASK_32_63		(uint32_t) 0xf0000000u
+#define ANON_IID_EUIxx_SCOPE_MASK	(uint32_t) 0x00200000u
+#define ANON_IID_EUIxx_SCOPE_GLOBAL	(uint32_t) 0x00200000u
+#define ANON_IID_EUIxx_SCOPE_LOCAL	(uint32_t) 0x00000000u
 
-#define ANON_IID_ISATAP_TYPE_IPV4_LOCAL_VALUE_32_63	(uint32_t) 0x40000000u
-#define ANON_IID_ISATAP_TYPE_IPV4_GLOBAL_VALUE_32_63	(uint32_t) 0x50000000u
+#define ANON_IID_ISATAP_VALUE_00_31			(uint32_t) 0x00005214u
+#define ANON_IID_ISATAP_MASK_00_31			(uint32_t) 0x0000ffffu
+#define ANON_IID_ISATAP_PAYLOAD_SHIFT			4
+#define ANON_IID_ISATAP_PAYLOAD_LENGTH			24
+
+#define ANON_IID_ISATAP_SCOPE_MASK			(uint32_t) 0x10000000u
+#define ANON_IID_ISATAP_SCOPE_LOCAL			(uint32_t) 0x00000000u
+#define ANON_IID_ISATAP_SCOPE_GLOBAL			(uint32_t) 0x10000000u
+
+#define ANON_IID_ISATAP_TYPE_MASK_32_63			(uint32_t) 0xe0000000u
+#define ANON_IID_ISATAP_TYPE_IPV4_VALUE_32_63		(uint32_t) 0x40000000u
 #define ANON_IID_ISATAP_TYPE_IPV4_PAYLOAD_32_63		(uint32_t) 0x0ffffff0u
-#define ANON_IID_ISATAP_TYPE_VENDOR_VALUE_32_63		(uint32_t) 0x10000000u
+#define ANON_IID_ISATAP_TYPE_VENDOR_VALUE_32_63		(uint32_t) 0xc0000000u
 #define ANON_IID_ISATAP_TYPE_VENDOR_PAYLOAD_32_63	(uint32_t) 0x0ff00000u
-#define ANON_IID_ISATAP_TYPE_EXTID_VALUE_32_63		(uint32_t) 0xf0000000u
+#define ANON_IID_ISATAP_TYPE_EXTID_VALUE_32_63		(uint32_t) 0xe0000000u
 #define ANON_IID_ISATAP_TYPE_EXTID_PAYLOAD_32_63	(uint32_t) 0x0ffffff0u
 
 #define ANON_CHECKSUM_FLAG_CREATE	1

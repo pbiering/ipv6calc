@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.72 2013/03/25 21:29:46 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.73 2013/03/26 18:57:29 ds6peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1543,8 +1543,10 @@ PIPE_input:
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "%s: filter result SKIP: '%s'\n", DEBUG_function_name, linebuffer);
 				};
-				goto RESULT_print;
+			} else {
+				strncpy(resultstring, linebuffer, sizeof(resultstring) - 1);
 			};
+			goto RESULT_print;
 
 			break;
 

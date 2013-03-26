@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.278 2013/03/25 21:29:46 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.279 2013/03/26 18:57:29 ds6peter Exp $ 
  */
 
 Info:
@@ -8,10 +8,13 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
-20130325/PB
+20130326/PB
 	lib/libipv6addr.[ch]: store/retrieve global/local flag for anonymized EUI & ISATAP
 	lib/libmac.[ch], ipv6calc/ipv6calc.c: implement MAC address anonymization
 	ipv6calc/ipv6calc.c: improve anonymization depending on various formats
+	lib/libipv6addr.[ch]: fix reliable anonymization
+	ipv6loganon/test_ipv6loganon.sh: fix testcases
+	ipv6calc/ipv6calc.c: don't normalize input in filter mode
 
 20130324/PB
 	lib/libipv6addr.[ch]: add support for ORCHID anonymization, fix OUI storage in anonymized IID
