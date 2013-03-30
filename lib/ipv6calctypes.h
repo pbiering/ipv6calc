@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.30 2012/03/25 17:57:01 peter Exp $
- * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calctypes.h,v 1.31 2013/03/30 18:03:45 ds6peter Exp $
+ * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for ipv6calctypes.c
@@ -70,6 +70,7 @@ typedef struct {
 #define FORMAT_ipv6addr		(uint32_t) (1 << FORMAT_NUM_ipv6addr)
 #define FORMAT_ipv4addr		(uint32_t) (1 << FORMAT_NUM_ipv4addr)
 #define FORMAT_mac		(uint32_t) (1 << FORMAT_NUM_mac)
+#define FORMAT_macaddr		(uint32_t) (1 << FORMAT_NUM_mac)	// compatible syntax
 #define FORMAT_eui64		(uint32_t) (1 << FORMAT_NUM_eui64)
 #define FORMAT_base85		(uint32_t) (1 << FORMAT_NUM_base85)
 #define FORMAT_ifinet6		(uint32_t) (1 << FORMAT_NUM_ifinet6)
@@ -283,5 +284,24 @@ typedef struct {
 	{ ACTION_6rd_local_prefix	, CMD_6rd_prefix },
 	{ ACTION_6rd_local_prefix	, CMD_6rd_relay_prefix }
 };
+
+
+/* anonymization set */
+typedef struct {
+	char name[32];
+	char name_short[3];
+	int mask_ipv4;
+	int mask_ipv6;
+	int mask_iid;
+	int mask_mac;
+	int method;	// 1=anonymize, 2=zeroize
+} s_ipv6calc_anon_set;
+
+/* anonymization methods */
+typedef struct {
+	char name[32];
+	int method;
+	char description[128];
+} s_ipv6calc_anon_methods;
 
 #endif

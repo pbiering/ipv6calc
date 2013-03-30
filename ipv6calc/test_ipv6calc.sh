@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.39 2013/03/26 18:57:29 ds6peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.40 2013/03/30 18:03:45 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -134,7 +134,7 @@ NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 --action anonymize fe80:0000:0000:0000:0000:5e01:2345:6789		=fe80::a909:5214:e012:3451
 --action anonymize fe80:0000:0000:0000:0200:5e01:2345:6789		=fe80::a909:5214:f012:345f
 --action anonymize fe80:0000:0000:0000:0000:5eff:fe01:2345		=fe80::a909:5214:c010:1
---action anonymize 2001:0db8:0000:0000:81c0:0f3f:c807:1455		=2001:db8::a909:a949:4941:0:1
+--action anonymize 2001:0db8:0000:0000:81c0:0f3f:c807:1455		=2001:db8::9:a929:4941:0:c
 --action anonymize 3ffe:831f:ce49:7601:8000:efff:af4a:86BF		=3ffe:831f:ce49:7601:8000:ffff:af4a:86ff
 --action anonymize --mask-ipv4 16 3ffe:831f:ce49:7601:8000:efff:af4a:86BF	=3ffe:831f:ce49:7601:8000:ffff:af4a:ffff
 --action anonymize 192.0.2.1						=192.0.2.0
@@ -149,6 +149,12 @@ NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 --action anonymize --mask-mac 8  ff:23:45:67:89:a8			=ff:00:00:00:00:00
 --action anonymize --mask-mac 7  ff:23:45:67:89:a8			=fe:00:00:00:00:00
 --action anonymize --mask-mac 1  ff:23:45:67:89:a8			=80:00:00:00:00:00
+-A anonymize --anonymize-preset zeroize-paranoid   2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2200::224:21ff:fe00:0
+-A anonymize --anonymize-preset zeroize-careful    2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2280::224:21ff:fe00:0
+-A anonymize --anonymize-preset zeroize-standard   2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2280:6900:224:21ff:fe00:0
+-A anonymize --anonymize-preset anonymize-paranoid 2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2209:a909:a969:4291:4022:4213
+-A anonymize --anonymize-preset anonymize-careful  2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2280:a909:a949:4291:4022:4219
+-A anonymize --anonymize-preset anonymize-standard 2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2280:6909:a929:4291:4022:4217
 # RFC 5952 4.2.1
 --in ipv6addr --out ipv6addr 2001:db8:0:0:0:0:2:1			=2001:db8::2:1
 # RFC 5952 4.2.2

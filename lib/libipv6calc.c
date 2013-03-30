@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.27 2012/03/27 19:15:14 peter Exp $
- * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calc.c,v 1.28 2013/03/30 18:03:45 ds6peter Exp $
+ * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for some tools
@@ -425,4 +425,65 @@ int libipv6calc_filter_parse(const char *expression, s_ipv6calc_filter_master *f
 	};
 
 	return (result);
+};
+
+
+/*
+ * return proper anonymization set by name
+ *
+ * in : *name = name of anonymization set
+ *      *ipv6calc_anon_set = pointer to anonymization set to be filled
+ * return: 1=not found, 0=success
+ */
+int libipv6calc_anon_set_by_name(s_ipv6calc_anon_set *ipv6calc_anon_set, const char *name) {
+	int i;
+
+	if (strlen(name) == 0) {
+		fprintf(stderr, "Name of anonyimization set is empty\n");
+		return 1;
+	};
+
+	if ( (ipv6calc_debug) != 0 ) {
+		fprintf(stderr, "%s/%s: search for anonymization set with name: %s\n", __FILE__, __func__, name);
+	};
+
+	for (i = 0; i < sizeof(ipv6calc_anon_set_list) / sizeof(s_ipv6calc_anon_set); i++) {
+		if ( (ipv6calc_debug) != 0 ) {
+			fprintf(stderr, "%s/%s: compare name: %s ? %s\n", __FILE__, __func__, name, ipv6calc_anon_set_list[i].name);
+		};
+
+		if ((strcmp(name, ipv6calc_anon_set_list[i].name) == 0) || (strcmp(name, ipv6calc_anon_set_list[i].name_short) == 0)) {
+			if ( (ipv6calc_debug) != 0 ) {
+				fprintf(stderr, "%s/%s: hit name: %s = %s\n", __FILE__, __func__, name, ipv6calc_anon_set_list[i].name);
+			};
+
+			memcpy(ipv6calc_anon_set, &ipv6calc_anon_set_list[i], sizeof(s_ipv6calc_anon_set));
+			return 0;
+		};
+	};
+
+	return 1;
+};
+
+/*
+ * create string of anonymization settings
+ *
+ * in : *string = string to be filled
+ *      s_ipv6calc_anon_set = anonymization set
+ * return: void
+ */
+void libipv6calc_anon_infostring(char *string, const int stringlength, const s_ipv6calc_anon_set *ipv6calc_anon_set) {
+	char method_name[32] = "unknown";
+	int i;
+
+	for (i = 0; i < sizeof(ipv6calc_anon_methods) / sizeof(s_ipv6calc_anon_methods); i++) {
+		if (ipv6calc_anon_methods[i].method == ipv6calc_anon_set->method) {
+			strncpy(method_name, ipv6calc_anon_methods[i].name, sizeof(method_name) - 1);
+			break;
+		};
+	};
+
+	snprintf(string, stringlength - 1, "set=%s,mask-ipv6=%d,mask-ipv4=%d,mask-iid=%d,mask-mac=%d,method=%s", ipv6calc_anon_set->name, ipv6calc_anon_set->mask_ipv6, ipv6calc_anon_set->mask_ipv4, ipv6calc_anon_set->mask_iid, ipv6calc_anon_set->mask_mac, method_name);
+
+	return;
 };

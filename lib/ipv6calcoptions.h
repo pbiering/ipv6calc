@@ -1,11 +1,11 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.22 2013/03/25 21:29:47 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.h,v 1.23 2013/03/30 18:03:45 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
- *  Header file containing options for ipv6calc.c
+ *  Header file containing options
  */ 
 
 #include <getopt.h> 
@@ -128,11 +128,13 @@
 
 	/* address anonymizer options */
 	{ "anonymize-standard" , 0, 0, CMD_ANON_PRESET_STANDARD },
-	{ "anonymize-careful" , 0, 0, CMD_ANON_PRESET_CAREFUL },
+	{ "anonymize-careful"  , 0, 0, CMD_ANON_PRESET_CAREFUL  },
 	{ "anonymize-paranoid" , 0, 0, CMD_ANON_PRESET_PARANOID },
+	{ "anonymize-preset"   , 1, 0, CMD_ANON_PRESET_OPTION   },
+	{ "anonymize-method"   , 1, 0, CMD_ANON_METHOD_OPTION   },
 	{ "mask-ipv4" , 1, 0, CMD_ANON_MASK_IPV4 },
 	{ "mask-ipv6" , 1, 0, CMD_ANON_MASK_IPV6 },
-	{ "mask-iid"  , 0, 0, CMD_ANON_MASK_IID },
+	{ "mask-iid"  , 1, 0, CMD_ANON_MASK_IID },
 	{ "mask-mac"  , 1, 0, CMD_ANON_MASK_MAC },
 
 	/* new options */

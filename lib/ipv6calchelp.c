@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.28 2013/03/19 18:59:12 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.29 2013/03/30 18:03:45 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -584,10 +584,14 @@ void printhelp_output_dispatcher(const uint32_t outputtype) {
 };
 
 /* help regarding action command */
-void printhelp_action_dispatcher(const uint32_t action) {
-	int i;
+/* in: embedded = 1 : do not show version and command */
+void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
+	int i, j;
+	char method_name[32];
 
-	printversion();
+	if (embedded != 1) {
+		printversion();
+	};
 	
 	fprintf(stderr, "\n");
 
@@ -601,7 +605,48 @@ void printhelp_action_dispatcher(const uint32_t action) {
 			break;
 
 		case ACTION_anonymize:
-			fprintf(stderr, " help still missing - sorry.\n");
+			if (embedded != 1) {
+				fprintf(stderr, " Anonymize given address according to preset or custom values, e.g.\n");
+				fprintf(stderr, "  ipv6calc -A anonymize 2001:db8:2280:6901:224:21ff:fe01:2345 --anonymize-preset zeroize-standard\n");
+				fprintf(stderr, "   2001:db8:2280:6900:224:21ff:fe00:0\n");
+				fprintf(stderr, "  ipv6calc -A anonymize 2001:db8:2280:6901:224:21ff:fe01:2345 --anonymize-preset anonymize-standard\n");
+				fprintf(stderr, "   2001:db8:2280:6909:a929:4291:4022:4217\n");
+				fprintf(stderr, "\n");
+			};
+
+			fprintf(stderr, "  Shortcut for anonymization presets:\n");
+			fprintf(stderr, "   --anonymize-standard (default)\n");
+			fprintf(stderr, "   --anonymize-careful\n");
+			fprintf(stderr, "   --anonymize-paranoid\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, "  Supported methods [--anonymize-method METHOD]:\n");
+			for (i = 0; i < sizeof(ipv6calc_anon_methods) / sizeof(s_ipv6calc_anon_methods); i++) {
+				fprintf(stderr, "   %-10s: %s\n", ipv6calc_anon_methods[i].name, ipv6calc_anon_methods[i].description);
+			};
+			fprintf(stderr, "\n");
+
+			fprintf(stderr, "  Available presets (shortcut names) [--anonymize-preset PRESET-NAME]:\n");
+
+			for (i = 0; i < sizeof(ipv6calc_anon_set_list) / sizeof(s_ipv6calc_anon_set); i++) {
+				strncpy(method_name, "unknown", sizeof(method_name) - 1); // default
+
+				for (j = 0; j < sizeof(ipv6calc_anon_methods) / sizeof(s_ipv6calc_anon_methods); j++) {
+					if (ipv6calc_anon_methods[j].method == ipv6calc_anon_set_list[i].method) {
+						strncpy(method_name, ipv6calc_anon_methods[j].name, sizeof(method_name) - 1);
+						break;
+					};
+				};
+
+				fprintf(stderr, "   %-20s (%2s): mask-ipv6=%3d mask-ipv4=%2d mask-iid=%2d mask-mac=%2d method=%s\n", ipv6calc_anon_set_list[i].name, ipv6calc_anon_set_list[i].name_short, ipv6calc_anon_set_list[i].mask_ipv6, ipv6calc_anon_set_list[i].mask_ipv4, ipv6calc_anon_set_list[i].mask_iid, ipv6calc_anon_set_list[i].mask_mac, method_name);
+			};
+			fprintf(stderr, "\n");
+
+			fprintf(stderr, "  Custom control:\n");
+			fprintf(stderr, "  --mask-ipv4 <bits>     : mask IPv4 address [0-32] (even if occurs in IPv6 address)\n");
+			fprintf(stderr, "  --mask-ipv6 <bits>     : mask IPv6 prefix [0-64] (only applied to related address types)\n");
+			fprintf(stderr, "  --mask-iid  <bits>     : mask IPv6 interface identifiers [0-64]\n");
+			fprintf(stderr, "  --mask-mac  <bits>     : mask MAC address [0-48]\n");
+
 			break;
 			
 		case ACTION_iid_token_to_privacy:

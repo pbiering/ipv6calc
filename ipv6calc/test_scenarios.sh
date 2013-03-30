@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.14 2013/03/26 18:57:29 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.15 2013/03/30 18:03:45 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -172,8 +172,65 @@ fe80:0000:0000:0000:0000:5eff:fe01:2345		^anonymized
 END
 }
 
-# Test Scenarios for genprivacyiid
+# Test scenarios for genprivacyiid
 testscenarios_genprivacyiid() {
 	#TODO
 	true
+}
+
+# Test scenarios for anonymization options (ipv6calc & ipv6loganon)
+testscenarios_anonymization_options() {
+	cat <<END | grep -v '^#'
+--mask-iid  64 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:123:4567
+--mask-iid  60 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:123:4560
+--mask-iid  56 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:123:4500
+--mask-iid  48 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:123:0
+--mask-iid  40 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:100:0
+--mask-iid  36 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef::
+--mask-iid  32 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef::
+--mask-iid  28 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cde0::
+--mask-iid  12 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89a0::
+--mask-iid   8 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:8900::
+--mask-iid   0 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500::
+--anonymize-standard			2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4509:a929:4291:c02d:5d15
+--anonymize-careful			2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:a909:a949:4291:c02d:5d13
+--anonymize-paranoid			2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:109:a909:a969:4291:c02d:5d1a
+--anonymize-preset anonymize-standard	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4509:a929:4291:c02d:5d15
+--anonymize-preset as			2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4509:a929:4291:c02d:5d15
+--anonymize-preset anonymize-careful	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:a909:a949:4291:c02d:5d13
+--anonymize-preset ac			2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:a909:a949:4291:c02d:5d13
+--anonymize-preset anonymize-paranoid	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:109:a909:a969:4291:c02d:5d1a
+--anonymize-preset ap			2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:109:a909:a969:4291:c02d:5d1a
+--anonymize-preset zeroize-standard	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:100:0
+--anonymize-preset zs			2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:100:0
+--anonymize-preset zeroize-careful	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:0:89ab:cd00::
+--anonymize-preset zc			2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:0:89ab:cd00::
+--anonymize-preset zeroize-paranoid	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:100::
+--anonymize-preset zp			2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:100::
+--mask-ipv4 32				12.34.56.78=12.34.56.78
+--mask-ipv4 28				12.34.56.78=12.34.56.64
+--mask-ipv4 24				12.34.56.78=12.34.56.0
+--mask-ipv4 20				12.34.56.78=12.34.48.0
+--mask-ipv4 16				12.34.56.78=12.34.0.0
+--mask-ipv4 12				12.34.56.78=12.32.0.0
+--mask-ipv4  8				12.34.56.78=12.0.0.0
+--mask-ipv4  4				12.34.56.78=0.0.0.0
+--mask-ipv4  0				12.34.56.78=0.0.0.0
+--mask-ipv6 64				2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4567:a909:4291:c02d:5d1d
+--mask-ipv6 60				2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4569:a919:4291:c02d:5d1f
+--mask-ipv6 56				2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4509:a929:4291:c02d:5d15
+--mask-ipv6 48				2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:a909:a949:4291:c02d:5d13
+--mask-ipv6 28				2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db9:a909:a909:a999:4291:c02d:5d1f
+--mask-ipv6 24				2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:d09:a909:a909:a9a9:4291:c02d:5d16
+--mask-ipv6 20 				2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:909:a909:a909:a9b9:4291:c02d:5d14
+--mask-ipv6 16				2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:a909:a909:a909:a9c9:4291:c02d:5d14
+--mask-mac  48				12:34:56:78:9a:bc=12:34:56:78:9a:bc
+--mask-mac  40				12:34:56:78:9a:bc=12:34:56:78:9a:00
+--mask-mac  28				12:34:56:78:9a:bc=12:34:56:70:00:00
+--mask-mac  24				12:34:56:78:9a:bc=12:34:56:00:00:00
+--mask-mac  20				12:34:56:78:9a:bc=12:34:50:00:00:00
+--mask-mac  16				12:34:56:78:9a:bc=12:34:00:00:00:00
+--mask-mac   8				12:34:56:78:9a:bc=12:00:00:00:00:00
+--mask-mac   0				12:34:56:78:9a:bc=00:00:00:00:00:00
+END
 }

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calccommands.h
- * Version    : $Id: ipv6calccommands.h,v 1.11 2013/03/25 21:29:46 ds6peter Exp $
+ * Version    : $Id: ipv6calccommands.h,v 1.12 2013/03/30 18:03:45 ds6peter Exp $
  * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -60,6 +60,8 @@
 #define CMD_ANON_PRESET_STANDARD	0x0003001
 #define CMD_ANON_PRESET_CAREFUL		0x0003002
 #define CMD_ANON_PRESET_PARANOID	0x0003003
+#define CMD_ANON_METHOD_OPTION		0x000300e
+#define CMD_ANON_PRESET_OPTION		0x000300f
 #define CMD_ANON_MASK_IPV4		0x0003010
 #define CMD_ANON_MASK_IPV6		0x0003011
 #define CMD_ANON_MASK_IID		0x0003012

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.34 2012/10/14 11:10:30 peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.35 2013/03/30 18:03:45 ds6peter Exp $
  * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -945,6 +945,7 @@ void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask) {
 	if (mask == 0) {
 		/* clear IPv4 address: 0.0.0.0 */
 		ipv4addr_clear(ipv4addrp);
+		ipv4addrp->flag_valid = 1;
 	} else if (mask == 32) {
 		/* nothing to do */
 	} else if (mask < 1 || mask > 31) {

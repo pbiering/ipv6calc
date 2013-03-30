@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.13 2013/02/26 20:25:31 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.14 2013/03/30 18:03:45 ds6peter Exp $
  * Copyright  : 2007-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -42,10 +42,12 @@ long int ipv6calc_debug = 0;
 int flag_quiet = 1;
 int flag_nocache = 0;
 
-/* default values */
-int mask_ipv4 = 24;
-int mask_ipv6 = 48;
-int mask_iid = 0;
+/* anonymization default values */
+s_ipv6calc_anon_set ipv6calc_anon_set;
+int mask_ipv4;
+int mask_ipv6;
+int mask_iid;
+int mask_mac;
 
 
 /* prototypes */
@@ -74,7 +76,14 @@ FILE	*FILE_OUT;
 /* main */
 #define DEBUG_function_name "ipv6loganon/main"
 int main(int argc,char *argv[]) {
-	int i, lop;
+	int i, lop, result;
+
+	/* default */
+	result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, "anonymize-standard");
+	if (result != 0) {
+		fprintf(stderr, "major problem, ipv6calc anonymization default preset not found: anonymize-standard\n");
+		exit(EXIT_FAILURE);
+	};
 
 	/* Fetch the command-line arguments. */
 	while ((i = getopt_long(argc, argv, ipv6loganon_shortopts, ipv6loganon_longopts, &lop)) != EOF) {
@@ -143,6 +152,13 @@ int main(int argc,char *argv[]) {
 
 			case CMD_ANON_MASK_IID:
 				mask_iid = 1;
+				mask_iid = atoi(optarg);
+				if (mask_iid < 0 || mask_iid > 64) {
+					fprintf(stderr, " value for option 'mask-iid' out-of-range  [0-64]\n");
+					exit(EXIT_FAILURE);
+				};
+				ipv6calc_anon_set.mask_iid = mask_iid;
+				strncpy(ipv6calc_anon_set.name, "custom", sizeof(ipv6calc_anon_set.name) -1);
 				break;
 
 			case CMD_ANON_MASK_IPV4:
@@ -151,29 +167,75 @@ int main(int argc,char *argv[]) {
 					fprintf(stderr, " value for option 'mask-ipv4' out-of-range  [0-32]\n");
 					exit(EXIT_FAILURE);
 				};
+				ipv6calc_anon_set.mask_ipv4 = mask_ipv4;
+				strncpy(ipv6calc_anon_set.name, "custom", sizeof(ipv6calc_anon_set.name) -1);
 				break;
 
 			case CMD_ANON_MASK_IPV6:
 				mask_ipv6 = atoi(optarg);
-				if (mask_ipv6 < 0 || mask_ipv4 > 64) {
+				if (mask_ipv6 < 0 || mask_ipv6 > 64) {
 					fprintf(stderr, " value for option 'mask-ipv6' out-of-range  [0-64]\n");
+					exit(EXIT_FAILURE);
+				};
+				ipv6calc_anon_set.mask_ipv6 = mask_ipv6;
+				strncpy(ipv6calc_anon_set.name, "custom", sizeof(ipv6calc_anon_set.name) -1);
+				break;
+
+			case CMD_ANON_MASK_MAC:
+				mask_mac = atoi(optarg);
+				if (mask_mac < 0 || mask_mac > 48) {
+					fprintf(stderr, " value for option 'mask-mac' out-of-range  [0-48]\n");
+					exit(EXIT_FAILURE);
+				};
+				ipv6calc_anon_set.mask_mac = mask_mac;
+				strncpy(ipv6calc_anon_set.name, "custom", sizeof(ipv6calc_anon_set.name) -1);
+				break;
+
+			case CMD_ANON_PRESET_STANDARD:
+				result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, "as");
+				if (result != 0) {
+					fprintf(stderr, "major problem, ipv6calc anonymization preset not found: anonymize-standard\n");
 					exit(EXIT_FAILURE);
 				};
 				break;
 
-			case CMD_ANON_PRESET_STANDARD:
-				mask_ipv4 = 24;
-				mask_ipv6 = 48;
-				break;
-
 			case CMD_ANON_PRESET_CAREFUL:
-				mask_ipv4 = 20;
-				mask_ipv6 = 40;
+				result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, "ac");
+				if (result != 0) {
+					fprintf(stderr, "major problem, ipv6calc anonymization preset not found: anonymize-careful\n");
+					exit(EXIT_FAILURE);
+				};
 				break;
 
 			case CMD_ANON_PRESET_PARANOID:
-				mask_ipv4 = 16;
-				mask_ipv6 = 32;
+				result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, "ap");
+				if (result != 0) {
+					fprintf(stderr, "major problem, ipv6calc anonymization preset not found: anonymize-paranoid\n");
+					exit(EXIT_FAILURE);
+				};
+				break;
+
+			case CMD_ANON_PRESET_OPTION:
+				result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, optarg);
+				if (result != 0) {
+					fprintf(stderr, "major problem, ipv6calc anonymization preset not found: %s\n", optarg);
+					exit(EXIT_FAILURE);
+				};
+				break;
+
+			case CMD_ANON_METHOD_OPTION:
+				for (i = 0; i < sizeof(ipv6calc_anon_methods) / sizeof(s_ipv6calc_anon_methods); i++) {
+					if (strcmp(ipv6calc_anon_methods[i].name, optarg) == 0) {
+						ipv6calc_anon_set.method = ipv6calc_anon_methods[i].method;
+						strncpy(ipv6calc_anon_set.name, "custom", sizeof(ipv6calc_anon_set.name) -1);
+						break;
+					};
+				};
+
+				if (i == sizeof(ipv6calc_anon_methods) / sizeof(s_ipv6calc_anon_methods)) {
+					fprintf(stderr, "ipv6calc anonymization method not supported: %s\n", optarg);
+					exit(EXIT_FAILURE);
+				};
 				break;
 
 			default:
@@ -351,6 +413,7 @@ static int anonymizetoken(char *resultstring, const char *token) {
 	/* used structures */
 	ipv6calc_ipv6addr ipv6addr;
 	ipv6calc_ipv4addr ipv4addr;
+	ipv6calc_macaddr  macaddr;
 
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "%s: Token: '%s'\n", DEBUG_function_name, token);
@@ -437,6 +500,10 @@ static int anonymizetoken(char *resultstring, const char *token) {
 		case FORMAT_ipv4addr:
 			retval = addr_to_ipv4addrstruct(token, resultstring, &ipv4addr);
 			break;
+
+		case FORMAT_macaddr:
+			retval = addr_to_macaddrstruct(token, resultstring, &macaddr);
+			break;
 	};
 
 	if (ipv6calc_debug != 0) {
@@ -451,17 +518,24 @@ static int anonymizetoken(char *resultstring, const char *token) {
 
 	if (ipv6addr.flag_valid == 1) {
 		/* anonymize IPv6 address according to settings */
-		libipv6addr_anonymize(&ipv6addr, mask_iid, mask_ipv6, mask_ipv4);
+		libipv6addr_anonymize(&ipv6addr, &ipv6calc_anon_set);
 
 		/* convert IPv6 address structure to string */
 		ipv6addrstruct_to_compaddr(&ipv6addr, resultstring);
 
 	} else if (ipv4addr.flag_valid == 1) {
-		/* anonymize IPv6 address according to settings */
-		libipv4addr_anonymize(&ipv4addr, mask_ipv4);
+		/* anonymize IPv4 address according to settings */
+		libipv4addr_anonymize(&ipv4addr, ipv6calc_anon_set.mask_ipv4);
 
 		/* convert IPv4 address structure to string */
 		libipv4addr_ipv4addrstruct_to_string(&ipv4addr, resultstring, 0);
+
+	} else if (macaddr.flag_valid == 1) {
+		/* anonymize MAC address according to settings */
+		libmacaddr_anonymize(&macaddr, ipv6calc_anon_set.mask_mac);
+
+		/* convert MAC address structure to string */
+		libmacaddr_macaddrstruct_to_string(&macaddr, resultstring, 0);
 
 	} else {
 		/* probably reverse DNS resolving lookup string, do not touch */

@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.279 2013/03/26 18:57:29 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.280 2013/03/30 18:03:45 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,17 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130330/PB
+	lib/libipv6calc.h, lib/ipv6calctypes.h: minor reorg
+	lib/libipv6calc.c, lib/ipv6calcoptions.h, lib/ipv6calccommands.h: add support for anonymization sets
+	lib/libipv6addr.[ch]: switch anonymization to use sets instead of dedicated values
+	lib/ipv6calchelp.[ch]: add help for anonymization
+	ipv6loganon/test_ipv6loganon.sh: add anonymization options test cases
+	ipv6loganon/ipv6loganon.c, ipv6loganon/ipv6loganonoptions.h: add additional anonymization options
+	ipv6loganon/ipv6loganonhelp.c: update help for anonymization
+	lib/libmac.[ch]: add compatible function names (alignment)
+	ipv6calc/test_scenarios.sh, ipv6calc/test_ipv6calc.sh: test additional anonymization cases
+
 20130326/PB
 	lib/libipv6addr.[ch]: store/retrieve global/local flag for anonymized EUI & ISATAP
 	lib/libmac.[ch], ipv6calc/ipv6calc.c: implement MAC address anonymization

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.66 2013/03/25 07:14:09 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.67 2013/03/30 18:03:45 ds6peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -55,6 +55,7 @@ extern char file_geoip_ipv6[NI_MAXHOST];
 extern int mask_ipv6;
 extern int mask_ipv4;
 extern int mask_iid;
+extern s_ipv6calc_anon_set ipv6calc_anon_set;
 
 /*
  * show available types on machine readable format
@@ -150,7 +151,8 @@ static void printfooter(const uint32_t formatoptions) {
 		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6CALC_OUTPUT_VERSION=%d", IPV6CALC_OUTPUT_VERSION);
 		printout(tempstring);
 
-		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6CALC_SETTINGS_ANON=mask_ipv6=%d,mask_ipv4=%d,mask_iid=%d", mask_ipv6, mask_ipv4, mask_iid);
+		libipv6calc_anon_infostring(tempstring2, sizeof(tempstring2), &ipv6calc_anon_set);
+		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6CALC_SETTINGS_ANON=%s", tempstring2);
 		printout(tempstring);
 
 		tempstring[0] = '\0'; /* clear tempstring */
@@ -799,7 +801,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	ipv6addrp->flag_prefixuse = flag_prefixuse;
 
 	ipv6addr_copy(ipv6addr_anon_ptr, ipv6addrp); /* copy structure */
-	libipv6addr_anonymize(ipv6addr_anon_ptr, mask_iid, mask_ipv6, mask_ipv4);
+	libipv6addr_anonymize(ipv6addr_anon_ptr, &ipv6calc_anon_set);
 	retval = libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6addr_anon_ptr, tempstring2, FORMATOPTION_printfulluncompressed);
 	if ( retval != 0 ) {
 		fprintf(stderr, "Error uncompressing IPv6 address: %s\n", tempstring2);

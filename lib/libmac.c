@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.18 2013/03/26 18:57:29 ds6peter Exp $
+ * Version    : $Id: libmac.c,v 1.19 2013/03/30 18:03:45 ds6peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -108,6 +108,11 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 };
 #undef DEBUG_function_name
 
+/* compatible name */
+int addr_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp) {
+	return (mac_to_macaddrstruct(addrstring, resultstring, macaddrp));
+};
+
 /* 
  * clear MACaddr
  *
@@ -161,6 +166,11 @@ int macaddrstruct_to_string(const ipv6calc_macaddr *macaddrp, char *resultstring
 	return(0);
 };
 #undef DEBUG_function_name
+
+/* compatible name */
+int libmacaddr_macaddrstruct_to_string(const ipv6calc_macaddr *macaddrp, char *resultstring, const uint32_t formatoptions) {
+	return (macaddrstruct_to_string(macaddrp, resultstring, formatoptions));
+};
 
 
 /*
