@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.29 2013/03/30 18:03:45 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.30 2013/04/07 17:52:29 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -668,14 +668,14 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc -A filter -E ^iid-privacy\n");
 			fprintf(stderr, "\n");
 			fprintf(stderr, "  IPv6 address filter tokens:\n");
-			fprintf(stderr, "   ");
+			fprintf(stderr, "   ipv6 ");
 			for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
 				fprintf(stderr, " %s", ipv6calc_ipv6addrtypestrings[i].token);
 			};
 			fprintf(stderr, "\n");
 			fprintf(stderr, "\n");
 			fprintf(stderr, "  IPv4 address filter tokens:\n");
-			fprintf(stderr, "   ");
+			fprintf(stderr, "   ipv4 ");
 			for (i = 0; i < (int) (sizeof(ipv6calc_ipv4addrtypestrings) / sizeof(ipv6calc_ipv4addrtypestrings[0])); i++ ) {
 				fprintf(stderr, " %s", ipv6calc_ipv4addrtypestrings[i].token);
 			};

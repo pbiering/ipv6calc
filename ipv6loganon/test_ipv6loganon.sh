@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.16 2013/03/30 18:03:45 ds6peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.17 2013/04/07 17:52:29 ds6peter Exp $
 # Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -20,7 +20,7 @@ ff02::1:ff00:1234 - - Solicited Node		=ff02::1:ff00:0 - - Solicited Node
 ::1.2.3.4 - - compatible IPv4			=::1.2.3.0 - - compatible IPv4
 ::ffff:1.2.3.4 - - mapped IPv4			=::ffff:1.2.3.0 - - mapped IPv4
 2002:0102:0204::1 - - 6to4 local		=2002:102:200:9:a929:4291:c02d:5d15 - - 6to4 local
-2002:50b5:7940::50b5:7940 - - 6to4 Microsoft	=2002:50b5:7900::50b5:7900 - - 6to4 Microsoft
+2002:50b5:7940::50b5:7940 - - 6to4 Microsoft	=2002:50b5:7900:9:a929:4291:850b:5794 - - 6to4 Microsoft
 fe80::210:a4ff:fe01:2345 - - link local EUI-48	=fe80::a909:4291:4021:a4c - - link local EUI-48
 fe80::210:a489:ab01:2345 - - link local EUI-64	=fe80::a909:4291:6021:a43 - - link local EUI-64
 3ffe:ffff::210:a4ff:fe01:2345 - - 6bone EUI-48	=3ffe:ffff::9:a929:4291:4021:a48 - - 6bone EUI-48
@@ -78,8 +78,8 @@ cat <<END | grep -v "^#"
 3ffe:ffff:1234::1 - - IPv6 address/6bone/standard	=--anonymize-standard=3ffe:ffff:1234:9:a929:4291:c02d:5d15 - - IPv6 address/6bone/standard
 3ffe:ffff:1234::1 - - IPv6 address/6bone/careful	=--anonymize-careful=3ffe:ffff:1234:a909:a949:4291:c02d:5d13 - - IPv6 address/6bone/careful
 3ffe:ffff:1234::1 - - IPv6 address/6bone/paranoid	=--anonymize-paranoid=3ffe:ffff:1209:a909:a969:4291:c02d:5d1a - - IPv6 address/6bone/paranoid
-2002:50b5:7940::50b5:7940 - - 6to4 Microsoft1	=--anonymize-careful=2002:50b5:7000::50b5:7000 - - 6to4 Microsoft1
-2002:50b5:7940::50b5:7940 - - 6to4 Microsoft2	=--anonymize-paranoid=2002:50b5::50b5:0 - - 6to4 Microsoft2
+2002:50b5:7940::50b5:7940 - - 6to4 Microsoft1	=--anonymize-careful=2002:50b5:7000:a909:a949:4291:850b:570f - - 6to4 Microsoft1
+2002:50b5:7940::50b5:7940 - - 6to4 Microsoft2	=--anonymize-paranoid=2002:50b5:9:a909:a969:4291:850b:500c - - 6to4 Microsoft2
 fe80::210:a4ff:fe01:2345 - - link local EUI-48/careful	=--anonymize-careful=fe80::a909:4291:4021:a4c - - link local EUI-48/careful
 fe80::210:a489:ab01:2345 - - link local EUI-64/paranoid	=--anonymize-paranoid=fe80::a909:4291:6021:a43 - - link local EUI-64/paranoid
 fec0::1234:210:a4ff:fe01:2345 - - site local EUI-48/standard	=--anonymize-standard=fec0::1209:a929:4291:4021:a48 - - site local EUI-48/standard

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.15 2013/03/30 18:03:45 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.16 2013/04/07 17:52:29 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -169,6 +169,13 @@ fe80:0000:0000:0000:0000:5eff:fe01:2345		^anonymized
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF		^anonymized
 2001:1a:392e:a450:2cd3:75e1:6098:8104		^anonymized
 3ffe:ffff::000:a4ff:fe01:2345			^anonymized
+2002:c0a8:f900:9:a929:4291:4021:132d		anonymized
+2002:c0a8:f900:9:a929:4291:4021:132d		6to4
+2001::d91f:cca0:3875:ffff:263c:ffff		anonymized
+2001::d91f:cca0:3875:ffff:263c:ffff		teredo
+2002:c000:0251::c000:0251			6to4-microsoft
+2002:c000:200:9:a929:4291:8c00:28		6to4-microsoft
+2002:c000:200:9:a929:4291:8c00:28		anonymized
 END
 }
 
@@ -232,5 +239,8 @@ testscenarios_anonymization_options() {
 --mask-mac  16				12:34:56:78:9a:bc=12:34:00:00:00:00
 --mask-mac   8				12:34:56:78:9a:bc=12:00:00:00:00:00
 --mask-mac   0				12:34:56:78:9a:bc=00:00:00:00:00:00
+--mask-ipv4 24				2002:c002:f97f::211:32ff:fe13:956f=2002:c002:f900:9:a929:4291:4021:132d
+--mask-ipv4 24				2002:c000:0251::c000:0251=2002:c000:200:9:a929:4291:8c00:28
+--mask-ipv4 24 --anonymize-method zeroise	2002:c000:0251::c000:0251=2002:c000:200::192.0.2.0
 END
 }

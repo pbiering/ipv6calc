@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.61 2013/03/30 18:03:45 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.62 2013/04/07 17:52:29 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -22,17 +22,13 @@
 /* 
  * IID anonymization is done by replacing with related information (64-bit)
  * xxxx:xxxx:xxxx:xxxx
- * a9p9                 -> A Nine O Nine = ANON
- *      ....            -> RFC-Number (4 digits)
- *      .... c... ...   -> Chapter number (dot = d)
- *      4291 6... ...   -> 6 chars follow for information
- *                   C  -> Checksum
  *
  * a9p9 4941 0000 000C  -> RFC 4941 anonymized privacy extension Interface ID
  *
- * a9p9 4291 c02d 5d1C  -> RFC 4291 Chapter 2.5.1 anonymized static Interface ID
  * a9p9 4291 4xxx xxxC  -> RFC 4291 anonymized EUI-48 Interface ID, xxx xxx = converted OUI
  * a9p9 4291 6xxx xxxC  -> RFC 4291 anonymized EUI-64 Interface ID, xxx xxx = converted OUI
+ * a9p9 4291 8xxx xxxC  -> RFC 4291 embedded anonymized IPv4 address, xxx xxx = first 24 bit of included (anonymized) IPv4 address
+ * a9p9 4291 c02d 5d1C  -> RFC 4291 Chapter 2.5.1 anonymized static Interface ID
  *
  * a9p9 5214 4xxx xxxC  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included (anonymized) IPv4 address (local scope)
  * a9p9 5214 5xxx xxxC  -> RFC 5214 anonymized ISATAP Interface ID, xxx xxx = first 24 bit of included (anonymized) IPv4 address (global scope)
@@ -81,6 +77,14 @@
 #define ANON_IID_EUI64_PAYLOAD_32_63	(uint32_t) 0x0ffffff0u
 #define ANON_IID_EUI64_PAYLOAD_SHIFT	4
 #define ANON_IID_EUI64_PAYLOAD_LENGTH	24	
+
+#define ANON_IID_IPV4_VALUE_00_31	(uint32_t) 0x00004291u
+#define ANON_IID_IPV4_MASK_00_31	(uint32_t) 0x0000ffffu
+#define ANON_IID_IPV4_VALUE_32_63	(uint32_t) 0x80000000u
+#define ANON_IID_IPV4_MASK_32_63	(uint32_t) 0xf0000000u
+#define ANON_IID_IPV4_PAYLOAD_32_63	(uint32_t) 0x0ffffff0u
+#define ANON_IID_IPV4_PAYLOAD_SHIFT	4
+#define ANON_IID_IPV4_PAYLOAD_LENGTH	24	
 
 #define ANON_IID_EUIxx_SCOPE_MASK	(uint32_t) 0x00200000u
 #define ANON_IID_EUIxx_SCOPE_GLOBAL	(uint32_t) 0x00200000u

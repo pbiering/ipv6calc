@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.67 2013/03/30 18:03:45 ds6peter Exp $
- * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: showinfo.c,v 1.68 2013/04/07 17:52:29 ds6peter Exp $
+ * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Function to show information about a given IPv6 address
@@ -515,7 +515,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	};
 
 	ipv4addr_copy(ipv4addr_anon_ptr, ipv4addrp); /* copy structure */
-	libipv4addr_anonymize(ipv4addr_anon_ptr, mask_ipv4);
+	libipv4addr_anonymize(ipv4addr_anon_ptr, ipv6calc_anon_set.mask_ipv4);
 	retval = libipv4addr_ipv4addrstruct_to_string(ipv4addr_anon_ptr, tempstring2, 0);
 	if ( retval != 0 ) {
 		fprintf(stderr, "Error uncompressing IPv4 address: %s\n", tempstring2);
@@ -1048,7 +1048,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 					} else {
 						fprintf(stdout, "Generated from the extension identifier of an EUI-48 (MAC): ...:%02x:%02x:%02x\n", (unsigned int) ipv6addr_getoctet(ipv6addrp, 13), (unsigned int) ipv6addr_getoctet(ipv6addrp, 14), (unsigned int) ipv6addr_getoctet(ipv6addrp, 15));
 					};
-				} else if ( (typeinfo & IPV6_NEW_ADDR_IID_ISATAP) != 0 )  {
+				} else if ( (typeinfo & (IPV6_NEW_ADDR_IID_ISATAP | IPV6_NEW_ADDR_6TO4_MICROSOFT) ) != 0 )  {
 					if ((typeinfo & IPV6_ADDR_IID_32_63_HAS_IPV4) != 0) {
 						/* IPv4 address included */
 
@@ -1065,7 +1065,11 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 							};
 						};
 
-						print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "ISATAP");
+						if ( (typeinfo & IPV6_NEW_ADDR_IID_ISATAP) != 0 )  {
+							print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "ISATAP");
+						} else {
+							print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "6to4-microsoft");
+						};
 
 					} else if ((ipv6addr_getoctet(ipv6addrp, 11) == 0xff) && (ipv6addr_getoctet(ipv6addrp, 12) == 0xfe)) {
 						/* Vendor ID included */

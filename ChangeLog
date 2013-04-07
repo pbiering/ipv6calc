@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.280 2013/03/30 18:03:45 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.281 2013/04/07 17:52:29 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130407/PB
+	lib/libipv6addr.[hc]: support Microsoft 6to4 IID (includes IPv4 address) anonymization
+	ipv6calc/showinfo.c: minor bugfix + support of printing Microsoft 6to4 IID information
+
 20130330/PB
 	lib/libipv6calc.h, lib/ipv6calctypes.h: minor reorg
 	lib/libipv6calc.c, lib/ipv6calcoptions.h, lib/ipv6calccommands.h: add support for anonymization sets
