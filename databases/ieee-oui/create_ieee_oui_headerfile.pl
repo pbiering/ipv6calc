@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : create_ieee_oui_headerfile.pl
-# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.12 2012/04/24 17:17:33 peter Exp $
-# Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.13 2013/04/08 19:34:56 ds6peter Exp $
+# Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE/oui.txt
 #
@@ -19,6 +19,8 @@ my $INFILE;
 my $OUTFILE = "dbieee_oui.h";
 
 my $flag_qemu = 0;
+
+my $debug = 0;
 
 $INFILE = shift;
 
@@ -63,22 +65,33 @@ my $oui;
 
 # Data
 my $i = 0;
+my $m = 0;
 while (<IN>) {
 	my $line = $_;
 	chomp $line;
 
+	$i++;
+
 	if ($line =~ /\(hex\)/ ) {
-
-		$i++;
-		print STDERR $i . "\r";
-
-
-		# kill spaces
+		# kill additional spaces
 		$line =~ s/[ \t]+/ /g;
-		#print $line . "\n";
+		# kill leading spaces
+		$line =~ s/^ *//g;
+		# kill trailing spaces
+		$line =~ s/ *$//g;
+
+		$m++;
+		print STDERR "$m\r" if ($debug == 0);
+
+		print STDERR "$i: $line\n" if ($debug != 0);
+
 		($t1, $t2, $t3) = split / /, $line, 3;
+
+		print STDERR $i . ": t1=$t1 t2=$t2 t3=$t3\n" if ($debug != 0);
 	
 		($a, $b, $c) = split /-/, $t1;
+
+		print STDERR $i . ": a=$a b=$b c=$c\n" if ($debug != 0);
 
 		# shorten OUI string
 		$oui = uc($t3);

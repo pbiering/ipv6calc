@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : create_ieee_iab_headerfile.pl
-# Version    : $Id: create_ieee_iab_headerfile.pl,v 1.5 2012/03/19 20:04:48 peter Exp $
-# Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: create_ieee_iab_headerfile.pl,v 1.6 2013/04/08 19:34:56 ds6peter Exp $
+# Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Modified copy of create_ieee_oui_headerfile.pl
 #
@@ -81,6 +81,11 @@ while (<IN>) {
 
 		# kill spaces
 		$line =~ s/[ \t]+/ /g;
+                # kill leading spaces
+		$line =~ s/^ *//g;
+		# kill trailing spaces
+		$line =~ s/ *$//g;
+
 		#print $line . "\n";
 		my ($t1, $t2, $t3) = split / /, $line, 3;
 	

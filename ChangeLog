@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.281 2013/04/07 17:52:29 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.282 2013/04/08 19:34:56 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,11 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130408/PB
+	databases: update
+	databases/ieee-iab/create_ieee_iab_headerfile.pl: fixed for current supplied txt format
+	databases/ieee-oui/create_ieee_oui_headerfile.pl: fixed for current supplied txt format
+	
 20130407/PB
 	lib/libipv6addr.[hc]: support Microsoft 6to4 IID (includes IPv4 address) anonymization
 	ipv6calc/showinfo.c: minor bugfix + support of printing Microsoft 6to4 IID information
