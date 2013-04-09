@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui.h
- * Version       : $Id: dbieee_oui.h,v 1.69 2013/04/08 19:34:56 ds6peter Exp $
- * Generated     : Mon Apr  8 21:06:11 2013
+ * Version       : $Id: dbieee_oui.h,v 1.70 2013/04/09 20:30:45 ds6peter Exp $
+ * Generated     : Tue Apr  9 22:27:36 2013
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_oui_status __attribute__ ((__unused__)) = "OUI/20130408";
+/*@unused@*/ static const char* libieee_oui_status __attribute__ ((__unused__)) = "OUI/20130409";
 
 
 static const s_ieee_oui libieee_oui[] = {
@@ -12751,6 +12751,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x0488E2, "Beats Electronics LLC", "BEATS-ELECTRONICS-LLC" },
 	{ 0x048A15, "Avaya, Inc", "AVAYA" },
 	{ 0x048B42, "Skspruce Technology Limited", "SKSPRUCE" },
+	{ 0x048D38, "Netcore Technology Inc.", "NETCORE" },
 	{ 0x0494A1, "CATCH THE WIND INC", "CATCH-THE-WIND" },
 	{ 0x0498F3, "ALPS Electric Co,. Ltd.", "ALPS-ELECTRIC" },
 	{ 0x049C62, "BMT Medical Technology s.r.o.", "BMT-MEDICAL-S-R-O" },
@@ -13363,6 +13364,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x1C3E84, "Hon Hai Precision Ind. Co.,Ltd.", "HON-HAI-PRECISION-IND" },
 	{ 0x1C43EC, "JAPAN CIRCUIT CO.,LTD", "JAPAN-CIRCUIT" },
 	{ 0x1C4593, "Texas Instruments", "TEXAS-INSTRUMENTS" },
+	{ 0x1C4AF7, "AMON INC", "AMON" },
 	{ 0x1C4BD6, "AzureWave", "AZUREWAVE" },
 	{ 0x1C51B5, "Techaya LTD", "TECHAYA" },
 	{ 0x1C52D6, "FLAT DISPLAY TECHNOLOGY CORPORATION", "FLAT-DISPLAY" },
@@ -14629,6 +14631,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x60BB0C, "Beijing HuaqinWorld Technology Co,Ltd", "BEIJING-HUAQINWORLD" },
 	{ 0x60BC4C, "EWM Hightec Welding GmbH", "EWM-HIGHTEC-WELDING" },
 	{ 0x60BD91, "Move Innovation", "MOVE-INNOVATION" },
+	{ 0x60C397, "2 Wire Inc", "2-WIRE" },
 	{ 0x60C547, "Apple, Inc.", "APPLE" },
 	{ 0x60C5A8, "Beijing LT Honway Technology Co.,Ltd", "BEIJING-LT-HONWAY" },
 	{ 0x60C980, "Trymus", "TRYMUS" },
@@ -15147,6 +15150,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x78D004, "Neousys Technology Inc.", "NEOUSYS" },
 	{ 0x78D129, "Vicos", "VICOS" },
 	{ 0x78D34F, "Pace-O-Matic, Inc.", "PACE-O-MATIC" },
+	{ 0x78D5B5, "NAVIELEKTRO KY", "NAVIELEKTRO-KY" },
 	{ 0x78D6F0, "Samsung Electro Mechanics", "SAMSUNG-ELECTRO-MECHANICS" },
 	{ 0x78DD08, "Hon Hai Precision Ind. Co.,Ltd.", "HON-HAI-PRECISION-IND" },
 	{ 0x78DDD6, "c-scape", "C-SCAPE" },
@@ -15931,6 +15935,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xA40BED, "Carry Technology Co.,Ltd", "CARRY" },
 	{ 0xA40CC3, "CISCO SYSTEMS, INC.", "CISCO" },
 	{ 0xA4134E, "Luxul", "LUXUL" },
+	{ 0xA41566, "Wei Fang Goertek Electronics Co.,Ltd", "WEI-FANG-GOERTEK-ELECTRONICS" },
 	{ 0xA41731, "Hon Hai Precision Ind. Co.,Ltd.", "HON-HAI-PRECISION-IND" },
 	{ 0xA41875, "CISCO SYSTEMS, INC.", "CISCO" },
 	{ 0xA41BC0, "Fastec Imaging Corporation", "FASTEC-IMAGING" },
@@ -16180,6 +16185,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xB0435D, "NuLEDs, Inc.", "NULEDS" },
 	{ 0xB046FC, "MitraStar Technology Corp.", "MITRASTAR" },
 	{ 0xB0487A, "TP-LINK TECHNOLOGIES CO., LTD.", "TP-LINK-TECHNOLOGIES" },
+	{ 0xB04C05, "Fresenius Medical Care Deutschland GmbH", "FRESENIUS-MEDICAL-CARE-DEUTSCHLAND" },
 	{ 0xB050BC, "SHENZHEN BASICOM ELECTRONIC CO.,LTD.", "SHENZHEN-BASICOM" },
 	{ 0xB0518E, "Holl technology CO.Ltd.", "HOLL" },
 	{ 0xB058C4, "Broadcast Microwave Services, Inc", "BROADCAST-MICROWAVE-SERVICES" },
@@ -17134,6 +17140,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xE06290, "Jinan Jovision Science & Technology Co., Ltd.", "JINAN-JOVISION-SCIENCE" },
 	{ 0xE063E5, "Sony Mobile Communications AB", "SONY-MOBILE-COMMUNICATION-AB" },
 	{ 0xE064BB, "DigiView S.r.l.", "DIGIVIEW-S-R-L" },
+	{ 0xE067B3, "C-Data Technology Co., Ltd", "C-DATA" },
 	{ 0xE06995, "PEGATRON CORPORATION", "PEGATRON" },
 	{ 0xE0757D, "Motorola Mobility LLC", "MOTOROLA-MOBILITY-LLC" },
 	{ 0xE07C62, "Whistle Labs, Inc.", "WHISTLE-LABS" },
@@ -17575,6 +17582,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xF81D93, "Longdhua(Beijing) Controls Technology Co.,Ltd", "LONGDHUA-BEIJING-CONTROLS" },
 	{ 0xF81EDF, "Apple, Inc", "APPLE" },
 	{ 0xF82285, "Cypress Technology CO., LTD.", "CYPRESS" },
+	{ 0xF82BC8, "Jiangsu Switter Co., Ltd", "JIANGSU-SWITTER" },
 	{ 0xF82EDB, "RTW GmbH & Co. KG", "RTW" },
 	{ 0xF82F5B, "eGauge Systems LLC", "EGAUGE-LLC" },
 	{ 0xF82FA8, "Hon Hai Precision Ind. Co.,Ltd.", "HON-HAI-PRECISION-IND" },

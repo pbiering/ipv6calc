@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.h
- * Version    : $Id: libieee.h,v 1.9 2013/04/09 20:20:43 ds6peter Exp $
+ * Version    : $Id: libieee.h,v 1.10 2013/04/09 20:30:45 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -39,9 +39,22 @@ typedef struct {
 	const char *shortstring_owner;
 } s_ieee_iab;
 
-#endif
+typedef struct {
+	const uint32_t bit_00_23;
+	const uint32_t mapping;
+} s_ieee_mapping;
 
-/* extern static const s_ieee_oui libieee_oui[];*/
+
+// internal map for IAB / OUI-36 lists
+static const s_ieee_mapping ieee_mapping = {
+	// IAB
+	{ 0x0050C2,	0x101 },
+	{ 0x40D855,	0x102 },
+	// OUI36
+	{ 0x001BC5,	0x901 },
+};
+
+#endif
 
 extern int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macaddrp);
 extern int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *macaddrp);
