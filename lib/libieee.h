@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.h
- * Version    : $Id: libieee.h,v 1.8 2013/04/09 20:09:33 ds6peter Exp $
- * Copyright  : 2002-2004 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libieee.h,v 1.9 2013/04/09 20:20:43 ds6peter Exp $
+ * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libieee.c
