@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : create_ieee_headerfile.pl
-# Version    : $Id: create_ieee_headerfile.pl,v 1.1 2013/04/09 20:09:33 ds6peter Exp $
+# Version    : $Id: create_ieee_headerfile.pl,v 1.2 2013/04/09 20:22:15 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE files
@@ -57,7 +57,7 @@ if ($TYPE eq "oui") {
 };
 my $flag_qemu = 0;
 
-print "Create file " . $OUTFILE . " from " . $INFILE . "of type " . $TYPE . "\n";
+print "Create file " . $OUTFILE . " from " . $INFILE . " of type " . $TYPE . "\n";
 
 open(IN, "<$INFILE") || die "Cannot open infile: $INFILE";
 open(OUT, ">$OUTFILE") || die "Cannot open outfile: $OUTFILE";
