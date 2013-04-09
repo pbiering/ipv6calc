@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.75 2013/04/09 20:09:33 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.76 2013/04/09 20:14:51 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -40,6 +40,7 @@
 #include "config.h"
 #include "libieee.h"
 #include "../databases/ieee-oui/dbieee_oui.h"
+#include "../databases/ieee-oui36/dbieee_oui36.h"
 #include "../databases/ieee-iab/dbieee_iab.h"
 #include "libipv4addr.h"
 #include "../databases/ipv4-assignment/dbipv4addr_assignment.h"
@@ -134,7 +135,7 @@ void printversion_verbose(void) {
 	fprintf(stderr, "\n");
 
 #ifdef SUPPORT_DB_IEEE
-	fprintf(stderr, "IEEE database included: %s %s\n", libieee_iab_status, libieee_oui_status);
+	fprintf(stderr, "IEEE database included: %s %s %s\n", libieee_iab_status, libieee_oui_status, libieee_oui36_status);
 #else
 	fprintf(stderr, "IEEE database not included\n");
 #endif
