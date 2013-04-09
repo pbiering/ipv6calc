@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.28 2013/03/30 18:03:45 ds6peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.29 2013/04/09 20:09:33 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -142,8 +142,8 @@ void string_to_reverse_dotted(char *string) {
 #define DEBUG_function_name "libipv6calc/autodetectinput"
 uint32_t libipv6calc_autodetectinput(const char *string) {
 	uint32_t type = FORMAT_auto_noresult;
-	int i, j = 0, result;
-	int numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, numdashes = 0, numspaces = 0, numslashes = 0, numalnums = 0, numchar_s = 0, numpercents = 0, numcolonsdouble = 0;
+	int xdl, i, j = 0, result;
+	int numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, numdashes = 0, numspaces = 0, numslashes = 0, numalnums = 0, numchar_s = 0, numpercents = 0, numcolonsdouble = 0, xdigitlen_max = 0;
 	char resultstring[NI_MAXHOST];
 	size_t length;
 
@@ -154,6 +154,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		goto END_libipv6calc_autodetectinput;
 	};
 
+	xdl = 0;
 	for (i = 0; i < (int) length; i++) {
 		if (string[i] == '.') { numdots++; };
 		if (string[i] == ':') {
@@ -173,7 +174,15 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		if (string[i] == '%') { numpercents++; };
 		if (string[i] == 's') { numchar_s++; };
 		if (isdigit((int) string[i])) { numdigits++; };
-		if (isxdigit((int) string[i])) { numxdigits++; };
+		if (isxdigit((int) string[i])) {
+			numxdigits++;
+			xdl++;
+		} else {
+			if (xdl > xdigitlen_max) {
+				xdigitlen_max = xdl;
+			};
+			xdl = 0;
+		};
 		if (isalnum((int) string[i])) { numalnums++; };
 	};
 
@@ -190,6 +199,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		fprintf(stderr, "%s:  numalnums      :%d\n", DEBUG_function_name, numalnums);
 		fprintf(stderr, "%s:  numpercents    :%d\n", DEBUG_function_name, numpercents);
 		fprintf(stderr, "%s:  numchar_s      :%d\n", DEBUG_function_name, numchar_s);
+		fprintf(stderr, "%s:  xdigit len max :%d\n", DEBUG_function_name, xdigitlen_max);
 		fprintf(stderr, "%s:  length         :%d\n", DEBUG_function_name, (int) length);
 	};
 
@@ -251,58 +261,58 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		/* Check whether minimum 1 xdigit is between colons, dashes, spaces */
 		if (numcolons == 0 && numdashes == 1 && numspaces == 0 && numxdigits == 12) {
 
-		/* Check xxxxxx-xxxxxx */
-		j = 0;
-		for (i = 0; i < (int) length; i++) {
-			if (isxdigit((int) string[i])) {
-				j++;
-				if ( j > 6 ) {
-					/* more than 6 xdigits */
-					j = -1;
-					break;
+			/* Check xxxxxx-xxxxxx */
+			j = 0;
+			for (i = 0; i < (int) length; i++) {
+				if (isxdigit((int) string[i])) {
+					j++;
+					if ( j > 6 ) {
+						/* more than 6 xdigits */
+						j = -1;
+						break;
+					};
+					continue;
+				} else if (string[i] == '-' ) {
+					if ( j == 0 ) {
+						/* dash follow dash */
+						j = -1;
+						break;
+					};
+					j = 0;
+					continue;
 				};
-				continue;
-		       	} else if (string[i] == '-' ) {
-				if ( j == 0 ) {
-					/* dash follow dash */
-					j = -1;
-					break;
-				};
-				j = 0;
-				continue;
-		       	};
-			/* normally not reached */
-			j = -1;
-			break;
-		};
+				/* normally not reached */
+				j = -1;
+				break;
+			};
 
 		} else if (numcolons == 0 && numdashes == 0 && numspaces == 0 && numxdigits == 12) {
 			/* nothing more to check */
 		} else {
 
-		j = 0;
-		for (i = 0; i < (int) length; i++) {
-			if (isxdigit((int) string[i])) {
-				j++;
-				if ( j > 2 ) {
-					/* more than 2 xdigits */
-					j = -1;
-					break;
+			j = 0;
+			for (i = 0; i < (int) length; i++) {
+				if (isxdigit((int) string[i])) {
+					j++;
+					if ( j > 2 ) {
+						/* more than 2 xdigits */
+						j = -1;
+						break;
+					};
+					continue;
+				} else if (string[i] == ':' || string[i] == '-' || string[i] == ' ') {
+					if ( j == 0 ) {
+						/* colon/dash/space follows colon/dash/space */
+						j = -1;
+						break;
+					};
+					j = 0;
+					continue;
 				};
-				continue;
-		       	} else if (string[i] == ':' || string[i] == '-' || string[i] == ' ') {
-				if ( j == 0 ) {
-					/* colon/dash/space follows colon/dash/space */
-					j = -1;
-					break;
-				};
-				j = 0;
-				continue;
-		       	};
-			/* normally not reached */
-			j = -1;
-			break;
-		};
+				/* normally not reached */
+				j = -1;
+				break;
+			};
 
 		}; /* end of if */
 
@@ -310,6 +320,52 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 			type = FORMAT_mac;
 			if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
 				fprintf(stderr, "%s: Autodetection found type: mac\n", DEBUG_function_name);
+			};
+			goto END_libipv6calc_autodetectinput;
+		};
+	};
+
+	if ((length >= 15 && length <= 23 && numxdigits >= 8 && numxdigits <= 16 && numdots == 0 && ( (numcolons == 7 && numdashes == 0 && numspaces == 0) || (numcolons == 0 && numdashes == 7 && numspaces == 0) || (numcolons == 0 && numdashes == 0 && numspaces == 7))) || (length == 16 && numcolons == 0 && numdashes == 0 && numspaces == 0 && numxdigits == 16)) {
+		/* EUI-64 00:00:00:00:00:00:00:00 or 00-00-00-00-00-00-00-00 or "xx xx xx xx xx xx xx xx" or xxxxxxxxxxxxxxxx */
+
+		if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
+			fprintf(stderr, "%s:  check FORMAT_eui64\n", DEBUG_function_name);
+		};
+
+		if (numcolons == 0 && numdashes == 0 && numspaces == 0 && numxdigits == 16) {
+			/* nothing more to check */
+		} else {
+
+			j = 0;
+			for (i = 0; i < (int) length; i++) {
+				if (isxdigit((int) string[i])) {
+					j++;
+					if ( j > 2 ) {
+						/* more than 2 xdigits */
+						j = -1;
+						break;
+					};
+					continue;
+				} else if (string[i] == ':' || string[i] == '-' || string[i] == ' ') {
+					if ( j == 0 ) {
+						/* colon/dash/space follows colon/dash/space */
+						j = -1;
+						break;
+					};
+					j = 0;
+					continue;
+				};
+				/* normally not reached */
+				j = -1;
+				break;
+			};
+
+		}; /* end of if */
+
+		if ( j != -1 ) {
+			type = FORMAT_eui64;
+			if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
+				fprintf(stderr, "%s: Autodetection found type: eui64\n", DEBUG_function_name);
 			};
 			goto END_libipv6calc_autodetectinput;
 		};

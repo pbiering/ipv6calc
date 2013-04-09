@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.16 2013/04/07 17:52:29 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.17 2013/04/09 20:09:33 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -242,5 +242,22 @@ testscenarios_anonymization_options() {
 --mask-ipv4 24				2002:c002:f97f::211:32ff:fe13:956f=2002:c002:f900:9:a929:4291:4021:132d
 --mask-ipv4 24				2002:c000:0251::c000:0251=2002:c000:200:9:a929:4291:8c00:28
 --mask-ipv4 24 --anonymize-method zeroise	2002:c000:0251::c000:0251=2002:c000:200::192.0.2.0
+END
+}
+
+testscenarios_showinfo() {
+	cat <<END | grep -v '^#'
+00:02:b3:01:23:45	OUI="Intel Corporation"
+00:02:b3:01:23:45	EUI48_SCOPE=global
+00:1b:c5:06:a3:45	OUI="IST GmbH"
+00:1b:c5:06:a3:45	EUI48_SCOPE=global
+00:50:c2:86:23:45	OUI="Elsys AG"
+00:50:c2:86:23:45	EUI48_SCOPE=global
+00:02:b3:01:23:45:67:89	OUI="Intel Corporation"
+00:02:b3:01:23:45:67:89	EUI64_SCOPE=global
+00:1b:c5:06:a3:45:67:89	OUI="IST GmbH"
+00:1b:c5:06:a3:45:67:89	EUI64_SCOPE=global
+00:50:c2:86:23:45:67:89	OUI="Elsys AG"
+00:50:c2:86:23:45:67:89	EUI64_SCOPE=global
 END
 }

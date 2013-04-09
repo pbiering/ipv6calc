@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.h
- * Version    : $Id: showinfo.h,v 1.16 2012/10/14 11:10:30 peter Exp $
+ * Version    : $Id: showinfo.h,v 1.17 2013/04/09 20:09:33 ds6peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -36,4 +36,5 @@
 extern int  showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, const uint32_t formatoptions);
 extern int  showinfo_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formatoptions);
 extern int  showinfo_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formatoptions);
+extern int  showinfo_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t formatoptions);
 extern void showinfo_availabletypes(void);

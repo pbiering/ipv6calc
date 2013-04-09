@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.68 2013/04/07 17:52:29 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.69 2013/04/09 20:09:33 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -21,7 +21,6 @@
 #include "libipv6calc.h"
 #include "libieee.h"
 #include "libmac.h"
-#include "libeui64.h"
 #include "libeui64.h"
 #include "config.h"
 #include "showinfo.h"
@@ -1198,3 +1197,20 @@ int showinfo_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formatoption
 	return (retval);
 };
 #undef DEBUG_function_name
+
+
+/*
+ * shows information about a given EUI-64 identifier
+ *
+ * in : *eui64addrp = pointer to EUI-64 address
+ * ret: ==0: ok, !=0: error
+ */
+int showinfo_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t formatoptions) {
+	int retval = 1;
+
+	print_eui64(eui64addrp, formatoptions);
+	printfooter(formatoptions);
+
+	retval = 0;
+	return (retval);
+};

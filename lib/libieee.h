@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.h
- * Version    : $Id: libieee.h,v 1.7 2004/10/30 12:44:35 peter Exp $
+ * Version    : $Id: libieee.h,v 1.8 2013/04/09 20:09:33 ds6peter Exp $
  * Copyright  : 2002-2004 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -22,6 +22,14 @@ typedef struct {
 	const char *string_owner;
 	const char *shortstring_owner;
 } s_ieee_oui;
+
+typedef struct {
+	const uint32_t id;
+	const uint32_t subid_begin;
+	const uint32_t subid_end;
+	const char *string_owner;
+	const char *shortstring_owner;
+} s_ieee_oui36;
 
 typedef struct {
 	const uint32_t id;

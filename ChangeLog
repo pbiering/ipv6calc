@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.282 2013/04/08 19:34:56 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.283 2013/04/09 20:09:33 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,15 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130409/PB
+	databases/ieee-oui36/*, lib/libieee.h, lib/libieee.c: add support for OUI36
+	databases/tools/create_ieee_headerfile.pl: replace databases/ieee-iab/create_ieee_iab_headerfile.pl
+	Makefile[.in]: add support for databases/ieee-oui36
+	lib/libipv6calc.c: add detection for EUI-64
+	lib/libeui64.h, lib/libeui64.c: add support for parsing EUI-64
+	ipv6calc/showinfo.[hc], ipv6calc/ipv6calc.c: add support for EUI-64
+	ipv6calc/test_showinfo.sh, ipv6calc/test_scenarios.sh: add support for EUI-64 tests
+
 20130408/PB
 	databases: update
 	databases/ieee-iab/create_ieee_iab_headerfile.pl: fixed for current supplied txt format

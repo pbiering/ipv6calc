@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.52 2013/04/08 19:34:56 ds6peter Exp $
- * Generated     : Mon Apr  8 21:06:18 2013
+ * Version       : $Id: dbieee_iab.h,v 1.53 2013/04/09 20:09:33 ds6peter Exp $
+ * Generated     : Tue Apr  9 21:03:31 2013
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20130408";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20130409";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -4314,5 +4314,8 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x0D2000, 0x0D2FFF, "ELAN SYSTEMS", "ELAN" },
 	{ 0x40D855, 0x0D3000, 0x0D3FFF, "LECO Corporation", "LECO" },
 	{ 0x40D855, 0x0D4000, 0x0D4FFF, "Mitsubishi Heavy Industries, Ltd.", "MITSUBISHI-HEAVY-INDUSTRIES" },
+	{ 0x40D855, 0x0D5000, 0x0D5FFF, "Shimizu Electric Co., Ltd.", "SHIMIZU-ELECTRIC" },
+	{ 0x40D855, 0x0D6000, 0x0D6FFF, "deskontrol electronics", "DESKONTROL-ELECTRONICS" },
+	{ 0x40D855, 0x0D7000, 0x0D7FFF, "Avant Technologies,Inc", "AVANT-TECHNOLOGIES" },
 
 };

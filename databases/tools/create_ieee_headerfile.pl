@@ -1,27 +1,63 @@
 #!/usr/bin/perl -w
 #
 # Project    : ipv6calc
-# File       : create_ieee_iab_headerfile.pl
-# Version    : $Id: create_ieee_iab_headerfile.pl,v 1.6 2013/04/08 19:34:56 ds6peter Exp $
+# File       : create_ieee_headerfile.pl
+# Version    : $Id: create_ieee_headerfile.pl,v 1.1 2013/04/09 20:09:33 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
-# Modified copy of create_ieee_oui_headerfile.pl
+# Creates a header file out of IEEE files
 #
-# Creates a header file out of IEEE/iab.txt
+# Virtual Machine prefixes from:
+# http://www.techrepublic.com/blog/networking/mac-address-scorecard-for-common-virtual-machine-platforms/538
 
 use strict;
 use File::stat;
 use POSIX qw(strftime);
+use Getopt::Std;
+
 
 my $INFILE;
+my $OUTFILE;
+my $TYPE;
 
-my $OUTFILE = "dbieee_iab.h";
+my %opts;
+getopts ("di:o:t:", \%opts);
 
-$INFILE = shift;
+if (! defined $opts{'i'}) {
+	print "ERROR : missing input file (option -i)\n";
+	exit 1
+};
+$INFILE = $opts{'i'};
 
-if (! defined $INFILE) { $INFILE = "iab.txt" };
+if (! defined $opts{'o'}) {
+	print "ERROR : missing output file (option -o)\n";
+	exit 1
+}
+$OUTFILE = $opts{'o'};
 
-print "Create dbieee_iab.h automatically\n";
+if (! defined $opts{'t'}) {
+	print "ERROR : missing type (option -t)\n";
+	exit 1
+};
+
+$TYPE = $opts{'t'};
+
+my $debug = $opts{'d'};
+
+# set options according to type
+if ($TYPE eq "oui") {
+
+} elsif ($TYPE eq "oui36") {
+
+} elsif ($TYPE eq "iab") {
+
+} else {
+	print "ERROR : unsupported type: " . $TYPE . "\n";
+	exit 1;
+};
+my $flag_qemu = 0;
+
+print "Create file " . $OUTFILE . " from " . $INFILE . "of type " . $TYPE . "\n";
 
 open(IN, "<$INFILE") || die "Cannot open infile: $INFILE";
 open(OUT, ">$OUTFILE") || die "Cannot open outfile: $OUTFILE";
@@ -30,7 +66,7 @@ open(OUT, ">$OUTFILE") || die "Cannot open outfile: $OUTFILE";
 my $now_string = localtime;
 print OUT qq|/*
  * Project       : ipv6calc
- * File          : dbieee_iab.h
+ * File          : $OUTFILE
 |;
 print OUT " * Version       : \$Id";
 print OUT ":\$\n";
@@ -45,16 +81,17 @@ print OUT qq| * Generated     : $now_string
 
 # print creation date
 my $sb = stat($INFILE);
-print OUT "\/\*\@unused\@\*\/ static const char* libieee_iab_status __attribute__ ((__unused__)) = \"IAB/" . strftime("%Y%m%d", localtime($sb->mtime)) . "\";\n";
+print OUT "\/\*\@unused\@\*\/ static const char* libieee_" . $TYPE . "_status __attribute__ ((__unused__)) = \"" . uc($TYPE) . "/" . strftime("%Y%m%d", localtime($sb->mtime)) . "\";\n";
 
 # Structure
 print OUT qq|
 
-static const s_ieee_iab libieee_iab[] = {
+static const s_ieee_$TYPE libieee_${TYPE}[] = {
 |;
 
 
 # Data
+my %major_list;
 my $oui_major;
 my $oui_owner;
 my $oui_owner_short;
@@ -68,8 +105,10 @@ while (<IN>) {
 	my $line = $_;
 	chomp $line;
 
+	print "DEBUG : parse line: " . $line . "\n" if (defined $debug);
+
 	if ($line =~ /\(hex\)/ ) {
-		#print $line . "\n";
+		print "DEBUG : found major entry line: " . $line . "\n" if (defined $debug);
 
 		if ($state != 0) {
 			die "Major problem during parsing (out of state)";
@@ -155,11 +194,16 @@ while (<IN>) {
 		$oui_owner = $t3;
 		$oui_owner_short = $oui;
 
+		if (! defined $major_list{$oui_major}) {
+			$major_list{$oui_major} = 1;
+		};
+
 		$state = 1;
+		print "DEBUG : found entry: " . $oui_major . "\n" if (defined $debug);
 	};
 
 	if ($line =~ /\(base 16\)/) {
-		#print $line . "\n";
+		print "DEBUG : found minor entry line: " . $line . "\n" if (defined $debug);
 
 		if ($state != 1) {
 			die "Major problem during parsing (out of state)";
@@ -170,7 +214,11 @@ while (<IN>) {
 
 		# kill spaces
 		$line =~ s/[ \t]+/ /g;
-		#print $line . "\n";
+                # kill leading spaces
+		$line =~ s/^ *//g;
+		# kill trailing spaces
+		$line =~ s/ *$//g;
+
 		$line =~ /^([0-9A-Fa-f]+)-([0-9A-Fa-f]+) /;
 
 		if (! defined $1 || ! defined $2) {
@@ -192,4 +240,8 @@ print OUT qq|
 };
 |;
 
+print "List of major OUIs\n";
+for my $key (sort keys %major_list) {
+	print $key . "\n";
+};
 print "Finished\n";

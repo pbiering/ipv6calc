@@ -1,15 +1,15 @@
-# Project    : ipv6calc/databases/ieee-iab
+# Project    : ipv6calc/databases/ieee-oui36
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.5 2013/04/09 20:09:33 ds6peter Exp $
-# Copyright  : 2004-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile,v 1.1 2013/04/09 20:09:33 ds6peter Exp $
+# Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
-#  Makefile for ieee-iab
+#  Makefile for ieee-oui36
 
-FILE    = "iab.txt"
-BASEURL = "http://standards.ieee.org/regauth/oui/"
-FILE_H  = dbieee_iab.h
-TYPE    = iab
+FILE    = oui36.txt
+BASEURL = http://standards.ieee.org/develop/regauth/oui36/
+FILE_H  = dbieee_oui36.h
+TYPE    = oui36
 
 all:
 		test -f $(FILE_H) || ${MAKE} update

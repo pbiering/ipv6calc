@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.74 2013/03/30 18:03:45 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.75 2013/04/09 20:09:33 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -24,6 +24,7 @@
 #include "libipv4addr.h"
 #include "libipv6addr.h"
 #include "libmac.h"
+#include "libeui64.h"
 
 #include "showinfo.h"
 
@@ -241,6 +242,7 @@ int main(int argc, char *argv[]) {
 	ipv6calc_ipv6addr ipv6addr, ipv6addr2, ipv6addr3, ipv6addr4;
 	ipv6calc_ipv4addr ipv4addr, ipv4addr2;
 	ipv6calc_macaddr  macaddr;
+	ipv6calc_eui64addr  eui64addr;
 
 	/* filter structure */
 	s_ipv6calc_filter_master filter_master;
@@ -1118,6 +1120,7 @@ PIPE_input:
 		case FORMAT_ipv4revhex:
 		case FORMAT_base85:
 		case FORMAT_mac:
+		case FORMAT_eui64:
 		case FORMAT_ifinet6:
 		case FORMAT_revnibbles_int:
 		case FORMAT_revnibbles_arpa:
@@ -1184,6 +1187,11 @@ PIPE_input:
 			
 		case FORMAT_mac:
 			retval = mac_to_macaddrstruct(input1, resultstring, &macaddr);
+			argc--;
+			break;
+
+		case FORMAT_eui64:
+			retval = libeui64_addr_to_eui64addrstruct(input1, resultstring, &eui64addr);
 			argc--;
 			break;
 
@@ -1386,6 +1394,8 @@ PIPE_input:
 			outputtype = FORMAT_ipv4addr;
 		} else if ( (inputtype == FORMAT_mac) ) {
 			outputtype = FORMAT_mac;
+		} else if ( (inputtype == FORMAT_eui64) ) {
+			outputtype = FORMAT_eui64;
 		} else if ( (inputtype == FORMAT_bitstring) || (inputtype == FORMAT_base85) ) {
 			outputtype = FORMAT_ipv6addr;
 		} else if ( (inputtype == FORMAT_ipv4addr) && (action == ACTION_6rd_local_prefix) ) {
@@ -1634,6 +1644,8 @@ PIPE_input:
 			retval = showinfo_ipv4addr(&ipv4addr, formatoptions);
 	       	} else if (macaddr.flag_valid == 1) {
 			retval = showinfo_eui48(&macaddr, formatoptions);
+	       	} else if (eui64addr.flag_valid == 1) {
+			retval = showinfo_eui64(&eui64addr, formatoptions);
 		} else {
 		       	fprintf(stderr, "No valid or supported input address given!\n");
 			retval = 1;

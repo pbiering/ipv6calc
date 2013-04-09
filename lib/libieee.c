@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.11 2012/04/24 17:17:33 peter Exp $
- * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libieee.c,v 1.12 2013/04/09 20:09:33 ds6peter Exp $
+ * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for IEEE information
@@ -19,6 +19,7 @@
 
 #ifdef SUPPORT_DB_IEEE
 #include "../databases/ieee-oui/dbieee_oui.h"
+#include "../databases/ieee-oui36/dbieee_oui36.h"
 #include "../databases/ieee-iab/dbieee_iab.h"
 #endif
 
@@ -60,6 +61,17 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
 			/* major id match */
 			if (libieee_iab[i].subid_begin <= subidval && libieee_iab[i].subid_end >= subidval) {
 				snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_iab[i].string_owner);
+				return (0);
+			};
+		};
+	};
+
+	/* run through OUI36 list */
+	for (i = 0; i < (int) (sizeof(libieee_oui36) / sizeof(libieee_oui36[0])); i++) {
+		if (libieee_oui36[i].id == idval) {
+			/* major id match */
+			if (libieee_oui36[i].subid_begin <= subidval && libieee_oui36[i].subid_end >= subidval) {
+				snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_oui36[i].string_owner);
 				return (0);
 			};
 		};
@@ -122,6 +134,17 @@ int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *
 			/* major id match */
 			if (libieee_iab[i].subid_begin <= subidval && libieee_iab[i].subid_end >= subidval) {
 				snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_iab[i].shortstring_owner);
+				return (0);
+			};
+		};
+	};
+
+	/* run through OUI36 list */
+	for (i = 0; i < (int) (sizeof(libieee_oui36) / sizeof(libieee_oui36[0])); i++) {
+		if (libieee_oui36[i].id == idval) {
+			/* major id match */
+			if (libieee_oui36[i].subid_begin <= subidval && libieee_oui36[i].subid_end >= subidval) {
+				snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_oui36[i].shortstring_owner);
 				return (0);
 			};
 		};
