@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.284 2013/04/10 18:30:52 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.285 2013/04/10 20:28:51 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,7 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
 20130410/PB
+	databases: update
 	lib/libipv6addr.[hc]: add support for reliable anonymization of IAB/OUI36 based EUI-48/64 based IPv6 addresses
 	lib/libieee.[hc]: add support for mapping of IAB/OUI36
 	ipv6calc/showinfo.c, ipv6calc/test_scenarios.sh: changes related to anonymized of IAB/OUI36

@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.54 2013/04/09 20:22:15 ds6peter Exp $
- * Generated     : Tue Apr  9 22:21:39 2013
+ * Version       : $Id: dbieee_iab.h,v 1.55 2013/04/10 20:28:51 ds6peter Exp $
+ * Generated     : Wed Apr 10 20:31:11 2013
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20130409";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20130410";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -4317,5 +4317,6 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x0D5000, 0x0D5FFF, "Shimizu Electric Co., Ltd.", "SHIMIZU-ELECTRIC" },
 	{ 0x40D855, 0x0D6000, 0x0D6FFF, "deskontrol electronics", "DESKONTROL-ELECTRONICS" },
 	{ 0x40D855, 0x0D7000, 0x0D7FFF, "Avant Technologies,Inc", "AVANT-TECHNOLOGIES" },
+	{ 0x40D855, 0x0D8000, 0x0D8FFF, "NEXT! s.c. S.Piela B.Dryja", "NEXT!-S-C-S-PIELA-B-DRYJA" },
 
 };

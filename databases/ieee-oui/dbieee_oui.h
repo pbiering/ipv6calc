@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui.h
- * Version       : $Id: dbieee_oui.h,v 1.70 2013/04/09 20:30:45 ds6peter Exp $
- * Generated     : Tue Apr  9 22:27:36 2013
+ * Version       : $Id: dbieee_oui.h,v 1.71 2013/04/10 20:28:51 ds6peter Exp $
+ * Generated     : Wed Apr 10 20:31:00 2013
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_oui_status __attribute__ ((__unused__)) = "OUI/20130409";
+/*@unused@*/ static const char* libieee_oui_status __attribute__ ((__unused__)) = "OUI/20130410";
 
 
 static const s_ieee_oui libieee_oui[] = {
@@ -12757,6 +12757,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x049C62, "BMT Medical Technology s.r.o.", "BMT-MEDICAL-S-R-O" },
 	{ 0x049F06, "Smobile Co., Ltd.", "SMOBILE" },
 	{ 0x049F81, "Simena, LLC", "SIMENA-LLC" },
+	{ 0x04A151, "NETGEAR INC.,", "NETGEAR" },
 	{ 0x04A3F3, "Emicon", "EMICON" },
 	{ 0x04A82A, "Nokia Corporation", "NOKIA" },
 	{ 0x04B3B6, "Seamap (UK) Ltd", "SEAMAP-UK" },
@@ -13589,6 +13590,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x284121, "OptiSense Network, LLC", "OPTISENSE-NETWORK-LLC" },
 	{ 0x284846, "GridCentric Inc.", "GRIDCENTRIC" },
 	{ 0x284C53, "Intune Networks", "INTUNE-NETWORKS" },
+	{ 0x284FCE, "Liaoning Wontel Science and Technology Development Co.,Ltd.", "LIAONING-WONTEL-SCIENCE-AND-DEVELOPMENT" },
 	{ 0x285132, "Shenzhen Prayfly Technology Co.,Ltd", "SHENZHEN-PRAYFLY" },
 	{ 0x285FDB, "Shenzhen Huawei Communication Technologies Co., Ltd", "SHENZHEN-HUAWEI-COMMUNICATION-TECHNOLOGIES" },
 	{ 0x286046, "Lantech Communications Global, Inc.", "LANTECH-COMMUNICATION-GLOBAL" },
@@ -14042,6 +14044,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x406186, "MICRO-STAR INT'L CO.,LTD", "MICRO-STAR" },
 	{ 0x40618E, "Stella-Green Co", "STELLA-GREEN" },
 	{ 0x40667A, "mediola - connected living AG", "MEDIOLA---CONNECTED-LIVING" },
+	{ 0x406826, "Thales Optronics Limited", "THALES-OPTRONICS" },
 	{ 0x406AAB, "RIM", "RIM" },
 	{ 0x406C8F, "Apple, Inc.", "APPLE" },
 	{ 0x406F2A, "Research In Motion", "RESEARCH-IN-MOTION" },
@@ -14351,6 +14354,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x50ABBF, "Hoseo Telecom", "HOSEO-TELECOM" },
 	{ 0x50AF73, "Shenzhen Bitland Information Technology Co., Ltd.", "SHENZHEN-BITLAND-INFORMATION" },
 	{ 0x50B7C3, "Samsung Electronics Co.,LTD", "SAMSUNG-ELECTRONICS" },
+	{ 0x50B8A2, "ImTech Technologies LLC,", "IMTECH-TECHNOLOGIES-LLC" },
 	{ 0x50C58D, "Juniper Networks", "JUNIPER-NETWORKS" },
 	{ 0x50C971, "GN Netcom A/S", "GN-NETCOM-A/S" },
 	{ 0x50CCF8, "Samsung Electro Mechanics", "SAMSUNG-ELECTRO-MECHANICS" },
@@ -14431,6 +14435,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x581243, "AcSiP Technology Corp.", "ACSIP" },
 	{ 0x581626, "Avaya, Inc", "AVAYA" },
 	{ 0x58170C, "Sony Ericsson Mobile Communications AB", "SONY-ERICSSON-MOBILE-COMMUNICATION-AB" },
+	{ 0x581CBD, "Affinegy", "AFFINEGY" },
 	{ 0x581D91, "Advanced Mobile Telecom co.,ltd.", "ADVANCED-MOBILE-TELECOM" },
 	{ 0x581FAA, "Apple, Inc.", "APPLE" },
 	{ 0x581FEF, "Tuttnaer LTD", "TUTTNAER" },
@@ -14504,6 +14509,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x5C0CBB, "CELIZION Inc.", "CELIZION" },
 	{ 0x5C0E8B, "Motorola", "MOTOROLA" },
 	{ 0x5C1437, "Thyssenkrupp Aufzugswerke GmbH", "THYSSENKRUPP-AUFZUGSWERKE" },
+	{ 0x5C15E1, "AIDC TECHNOLOGY (S) PTE LTD", "AIDC-S-PTE" },
 	{ 0x5C16C7, "Big Switch Networks", "BIG-SWITCH-NETWORKS" },
 	{ 0x5C1737, "I-View Now, LLC.", "I-VIEW-NOW-LLC" },
 	{ 0x5C17D3, "LGE", "LGE" },
@@ -14718,6 +14724,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x649968, "Elentec", "ELENTEC" },
 	{ 0x6499A0, "AG Elektronik AB", "ELEKTRONIK-AB" },
 	{ 0x649B24, "V Technology Co., Ltd.", "V" },
+	{ 0x649C81, "Qualcomm iSkoot, Inc.", "QUALCOMM-ISKOOT" },
 	{ 0x649C8E, "Texas Instruments", "TEXAS-INSTRUMENTS" },
 	{ 0x649EF3, "CISCO SYSTEMS, INC.", "CISCO" },
 	{ 0x649FF7, "Kone OYj", "KONE-OYJ" },
@@ -15407,6 +15414,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x881FA1, "Apple", "APPLE" },
 	{ 0x882012, "LMI Technologies", "LMI-TECHNOLOGIES" },
 	{ 0x8821E3, "Nebusens, S.L.", "NEBUSENS-S-L" },
+	{ 0x882364, "Watchnet DVR Inc", "WATCHNET-DVR" },
 	{ 0x8823FE, "TTTech Computertechnik AG", "TTTECH-COMPUTERTECHNIK" },
 	{ 0x88252C, "Arcadyan Technology Corporation", "ARCADYAN" },
 	{ 0x882E5A, "storONE", "STORONE" },
@@ -15665,6 +15673,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x9498A2, "Shanghai LISTEN TECH.LTD", "SHANGHAI-LISTEN-TECH" },
 	{ 0x949BFD, "Trans New Technology, Inc.", "TRANS-NEW" },
 	{ 0x949C55, "Alta Data Technologies", "ALTA-DATA-TECHNOLOGIES" },
+	{ 0x949FB4, "ChengDu JiaFaAnTai Technology Co.,Ltd", "CHENGDU-JIAFAANTAI" },
 	{ 0x94A7BC, "BodyMedia, Inc.", "BODYMEDIA" },
 	{ 0x94AAB8, "Joview(Beijing) Technology Co. Ltd.", "JOVIEW-BEIJING" },
 	{ 0x94ACCA, "trivum technologies GmbH", "TRIVUM-TECHNOLOGIES" },
@@ -15873,6 +15882,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xA055DE, "Pace plc", "PACE-PLC" },
 	{ 0xA0593A, "V.D.S. Video Display Systems srl", "V-D-S-VIDEO-DISPLAY-SRL" },
 	{ 0xA05AA4, "Grand Products Nevada, Inc.", "GRAND-PRODUCTS-NEVADA" },
+	{ 0xA05B21, "ENVINET GmbH", "ENVINET" },
 	{ 0xA05DC1, "TMCT Co., LTD.", "TMCT" },
 	{ 0xA05DE7, "DIRECTV, Inc.", "DIRECTV" },
 	{ 0xA05E6B, "MELPER Co., Ltd.", "MELPER" },

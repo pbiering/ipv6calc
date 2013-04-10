@@ -1,15 +1,15 @@
  /*
  * Project       : ipv6calc
  * File          : dbipv4_assignment.h
- * Version       : $Id: dbipv4addr_assignment.h,v 1.61 2013/04/08 19:34:56 ds6peter Exp $
- * Generated     : Mon Apr  8 21:08:26 2013
+ * Version       : $Id: dbipv4addr_assignment.h,v 1.62 2013/04/10 20:28:51 ds6peter Exp $
+ * Generated     : Wed Apr 10 20:33:32 2013
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
  *  Additional header file for libipv4addr.c
  */
 
-/*@unused@*/ static const char* dbipv4addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20130408 APNIC/20130408 ARIN/20130407 IANA/20130322 LACNIC/20130405 RIPENCC/20130407";
+/*@unused@*/ static const char* dbipv4addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20130410 APNIC/20130410 ARIN/20130409 IANA/20130322 LACNIC/20130409 RIPENCC/20130409";
 
 static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x00000000, 0xff000000,  8, "IANA" },
@@ -4124,9 +4124,9 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc406a000, 0xfffff800, 21, "AFRINIC" },
 	{ 0xc406a800, 0xfffffc00, 22, "AFRINIC" },
 	{ 0xc406ac00, 0xfffffe00, 23, "AFRINIC" },
-	{ 0xc406b800, 0xfffffc00, 22, "AFRINIC" },
+	{ 0xc406b800, 0xfffff800, 21, "AFRINIC" },
 	{ 0xc406c600, 0xfffffe00, 23, "AFRINIC" },
-	{ 0xc406c800, 0xfffffc00, 22, "AFRINIC" },
+	{ 0xc406c800, 0xfffff800, 21, "AFRINIC" },
 	{ 0xc406d400, 0xfffffc00, 22, "AFRINIC" },
 	{ 0xc406dc00, 0xfffffc00, 22, "AFRINIC" },
 	{ 0xc406ec00, 0xfffffe00, 23, "AFRINIC" },
