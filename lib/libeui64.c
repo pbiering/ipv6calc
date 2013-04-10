@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libeui64.c
- * Version    : $Id: libeui64.c,v 1.3 2013/04/09 20:09:33 ds6peter Exp $
+ * Version    : $Id: libeui64.c,v 1.4 2013/04/10 18:30:52 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -142,5 +142,34 @@ int libeui64_addr_to_eui64addrstruct(char *addrstring, char *resultstring, ipv6c
 
    	retval = 0;	
 	return (retval);
+};
+
+/* 
+ * clear EUI-64 addr
+ *
+ * mod: *addrstring = EUI-64 address
+ */
+void libeui64_clear(ipv6calc_eui64addr *eui64addrp) {
+	int i;
+
+	for ( i = 0; i <= 7; i++ ) {
+		eui64addrp->addr[i] = 0;
+	};  
+
+	return;
+};
+
+/* 
+ * clear EUI64 addr_structure
+ *
+ * mod: *addrstring = EUI64 address
+ */
+void libeui64_clearall(ipv6calc_eui64addr *eui64addrp) {
+	libeui64_clear(eui64addrp);
+
+	/* Clear valid flag */
+	eui64addrp->flag_valid = 0;
+
+	return;
 };
 

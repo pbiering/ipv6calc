@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.283 2013/04/09 20:09:33 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.284 2013/04/10 18:30:52 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,11 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130410/PB
+	lib/libipv6addr.[hc]: add support for reliable anonymization of IAB/OUI36 based EUI-48/64 based IPv6 addresses
+	lib/libieee.[hc]: add support for mapping of IAB/OUI36
+	ipv6calc/showinfo.c, ipv6calc/test_scenarios.sh: changes related to anonymized of IAB/OUI36
+
 20130409/PB
 	databases/ieee-oui36/*, lib/libieee.h, lib/libieee.c: add support for OUI36
 	databases/tools/create_ieee_headerfile.pl: replace databases/ieee-iab/create_ieee_iab_headerfile.pl

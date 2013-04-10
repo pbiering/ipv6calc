@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.17 2013/04/09 20:09:33 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.18 2013/04/10 18:30:52 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -242,6 +242,8 @@ testscenarios_anonymization_options() {
 --mask-ipv4 24				2002:c002:f97f::211:32ff:fe13:956f=2002:c002:f900:9:a929:4291:4021:132d
 --mask-ipv4 24				2002:c000:0251::c000:0251=2002:c000:200:9:a929:4291:8c00:28
 --mask-ipv4 24 --anonymize-method zeroise	2002:c000:0251::c000:0251=2002:c000:200::192.0.2.0
+--anonymize-standard			2001:db8:0123:4567:0250:c2ff:fe86:2345=2001:db8:123:4509:a929:4291:5021:8621
+--anonymize-standard			2001:db8:0123:4567:0250:c286:2345:4567=2001:db8:123:4509:a929:4291:7021:8626
 END
 }
 
@@ -259,5 +261,11 @@ testscenarios_showinfo() {
 00:1b:c5:06:a3:45:67:89	EUI64_SCOPE=global
 00:50:c2:86:23:45:67:89	OUI="Elsys AG"
 00:50:c2:86:23:45:67:89	EUI64_SCOPE=global
+2001:db8:123:4509:a929:4291:5021:8621	OUI="Elsys AG"
+2001:db8:123:4509:a929:4291:5021:8621	EUI48_SCOPE=global
+2001:db8:123:4509:a929:4291:7021:8626	OUI="Elsys AG"
+2001:db8:123:4509:a929:4291:7021:8626	EUI64_SCOPE=global
+2001:db8:11e0:6201:224:21ff:fe01:2345	EUI48_SCOPE=global
+2001:db8:11e0:6201:224:21ff:fe01:2345	OUI="MICRO-STAR INT'L CO., LTD."
 END
 }

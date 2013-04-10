@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.69 2013/04/09 20:09:33 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.70 2013/04/10 18:30:52 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -998,13 +998,18 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		if ((typeinfo & IPV6_NEW_ADDR_IID_EUI48) == IPV6_NEW_ADDR_IID_EUI48) {
 			/* EUI-48 */
 			if ((typeinfo & IPV6_ADDR_ANONYMIZED) == IPV6_ADDR_ANONYMIZED) {
-				payload = ipv6addr_get_payload_anonymized_iid(ipv6addrp, typeinfo);
-				macaddr.addr[0] = (payload >> 16) & 0xff;
-				macaddr.addr[1] = (payload >> 8) & 0xff;
-				macaddr.addr[2] = (payload & 0xff);
-				macaddr.addr[3] = 0;
-				macaddr.addr[4] = 0;
-				macaddr.addr[5] = 0;
+				payload = ipv6addr_get_payload_anonymized_iid(ipv6addrp, typeinfo) ^ 0x020000;
+
+				if ((payload & 0x1000000) != 0) {
+					libieee_unmap_oui_macaddr(&macaddr, payload);
+				} else {
+					macaddr.addr[0] = ((payload >> 16) & 0xff) ^ 0x02;
+					macaddr.addr[1] = (payload >> 8) & 0xff;
+					macaddr.addr[2] = (payload & 0xff);
+					macaddr.addr[3] = 0;
+					macaddr.addr[4] = 0;
+					macaddr.addr[5] = 0;
+				};
 			} else {
 				macaddr.addr[0] = ipv6addr_getoctet(ipv6addrp,  8) ^ 0x02;
 				macaddr.addr[1] = ipv6addr_getoctet(ipv6addrp,  9);
@@ -1018,16 +1023,20 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			if ((typeinfo & IPV6_NEW_ADDR_IID_EUI64) == IPV6_NEW_ADDR_IID_EUI64) {
 				/* EUI-64 */
 				if ((typeinfo & IPV6_ADDR_ANONYMIZED) == IPV6_ADDR_ANONYMIZED) {
-					payload = ipv6addr_get_payload_anonymized_iid(ipv6addrp, typeinfo);
+					payload = ipv6addr_get_payload_anonymized_iid(ipv6addrp, typeinfo) ^ 0x020000;
 
-					eui64addr.addr[0] = (payload >> 16) & 0xff;
-					eui64addr.addr[1] = (payload >> 8) & 0xff;
-					eui64addr.addr[2] = (payload & 0xff);
-					eui64addr.addr[3] = 0;
-					eui64addr.addr[4] = 0;
-					eui64addr.addr[5] = 0;
-					eui64addr.addr[6] = 0;
-					eui64addr.addr[7] = 0;
+					if ((payload & 0x1000000) != 0) {
+						libieee_unmap_oui_eui64addr(&eui64addr, payload);
+					} else  {
+						eui64addr.addr[0] = ((payload >> 16) & 0xff) ^ 0x02;
+						eui64addr.addr[1] = (payload >> 8) & 0xff;
+						eui64addr.addr[2] = (payload & 0xff);
+						eui64addr.addr[3] = 0;
+						eui64addr.addr[4] = 0;
+						eui64addr.addr[5] = 0;
+						eui64addr.addr[6] = 0;
+						eui64addr.addr[7] = 0;
+					};
 				} else {
 					eui64addr.addr[0] = ipv6addr_getoctet(ipv6addrp,  8) ^ 0x02;
 					eui64addr.addr[1] = ipv6addr_getoctet(ipv6addrp,  9);

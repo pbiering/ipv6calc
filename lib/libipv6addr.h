@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.62 2013/04/07 17:52:29 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.63 2013/04/10 18:30:52 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -26,7 +26,9 @@
  * a9p9 4941 0000 000C  -> RFC 4941 anonymized privacy extension Interface ID
  *
  * a9p9 4291 4xxx xxxC  -> RFC 4291 anonymized EUI-48 Interface ID, xxx xxx = converted OUI
+ * a9p9 4291 5xxx xxxC  -> RFC 4291 anonymized EUI-48 Interface ID, xxx xxx = converted mapped IAB/OUI-36
  * a9p9 4291 6xxx xxxC  -> RFC 4291 anonymized EUI-64 Interface ID, xxx xxx = converted OUI
+ * a9p9 4291 7xxx xxxC  -> RFC 4291 anonymized EUI-64 Interface ID, xxx xxx = converted mapped IAB/OUI-36
  * a9p9 4291 8xxx xxxC  -> RFC 4291 embedded anonymized IPv4 address, xxx xxx = first 24 bit of included (anonymized) IPv4 address
  * a9p9 4291 c02d 5d1C  -> RFC 4291 Chapter 2.5.1 anonymized static Interface ID
  *
@@ -65,16 +67,16 @@
 #define ANON_IID_EUI48_VALUE_00_31	(uint32_t) 0x00004291u
 #define ANON_IID_EUI48_MASK_00_31	(uint32_t) 0x0000ffffu
 #define ANON_IID_EUI48_VALUE_32_63	(uint32_t) 0x40000000u
-#define ANON_IID_EUI48_MASK_32_63	(uint32_t) 0xf0000000u
-#define ANON_IID_EUI48_PAYLOAD_32_63	(uint32_t) 0x0ffffff0u
+#define ANON_IID_EUI48_MASK_32_63	(uint32_t) 0xe0000000u
+#define ANON_IID_EUI48_PAYLOAD_32_63	(uint32_t) 0x1ffffff0u
 #define ANON_IID_EUI48_PAYLOAD_SHIFT	4
 #define ANON_IID_EUI48_PAYLOAD_LENGTH	24	
 
 #define ANON_IID_EUI64_VALUE_00_31	(uint32_t) 0x00004291u
 #define ANON_IID_EUI64_MASK_00_31	(uint32_t) 0x0000ffffu
 #define ANON_IID_EUI64_VALUE_32_63	(uint32_t) 0x60000000u
-#define ANON_IID_EUI64_MASK_32_63	(uint32_t) 0xf0000000u
-#define ANON_IID_EUI64_PAYLOAD_32_63	(uint32_t) 0x0ffffff0u
+#define ANON_IID_EUI64_MASK_32_63	(uint32_t) 0xe0000000u
+#define ANON_IID_EUI64_PAYLOAD_32_63	(uint32_t) 0x1ffffff0u
 #define ANON_IID_EUI64_PAYLOAD_SHIFT	4
 #define ANON_IID_EUI64_PAYLOAD_LENGTH	24	
 

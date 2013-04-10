@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.81 2013/04/07 17:52:29 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.82 2013/04/10 18:30:52 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -23,6 +23,8 @@
 #include "ipv6calctypes.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
+#include "libieee.h"
+#include "libeui64.h"
 
 #ifdef SUPPORT_DB_IPV6
 #include "../databases/ipv6-assignment/dbipv6addr_assignment.h"
@@ -1998,6 +2000,10 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_s
 	int zeroize_iid = 0;
 	int anonymized_prefix_nibbles = 0;
 
+	ipv6calc_macaddr   macaddr;
+	ipv6calc_eui64addr eui64addr;
+	uint32_t map_value;
+
 	int mask_iid  = ipv6calc_anon_set->mask_iid;
 	int mask_mac  = ipv6calc_anon_set->mask_mac;
 	int mask_ipv6 = ipv6calc_anon_set->mask_ipv6;
@@ -2107,8 +2113,19 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_s
 					fprintf(stderr, "%s/%s: Anonymize IPv6 address: OUI=%02x:%02x:%02x\n", __FILE__, __func__, ipv6addr_getoctet(ipv6addrp, 8) & 0xfc, ipv6addr_getoctet(ipv6addrp, 9), ipv6addr_getoctet(ipv6addrp, 10));
 				};
 
+				mac_clearall(&macaddr);
+				macaddr.addr[0] = ipv6addr_getoctet(ipv6addrp,  8) ^ 0x2;
+				macaddr.addr[1] = ipv6addr_getoctet(ipv6addrp,  9);
+				macaddr.addr[2] = ipv6addr_getoctet(ipv6addrp, 10);
+				macaddr.addr[3] = ipv6addr_getoctet(ipv6addrp, 13);
+				macaddr.addr[4] = ipv6addr_getoctet(ipv6addrp, 14);
+				macaddr.addr[5] = ipv6addr_getoctet(ipv6addrp, 15);
+				macaddr.flag_valid = 1;
+
+				map_value = libieee_map_oui_macaddr(&macaddr) ^ 0x00020000;
+
 				iid[0] = ANON_TOKEN_VALUE_00_31 | ANON_IID_EUI48_VALUE_00_31;
-				iid[1] = ANON_IID_EUI48_VALUE_32_63 | (ipv6addr_getoctet(ipv6addrp, 8) << (ANON_IID_EUI48_PAYLOAD_SHIFT + 16)) | (ipv6addr_getoctet(ipv6addrp, 9) << (ANON_IID_EUI48_PAYLOAD_SHIFT + 8)) | (ipv6addr_getoctet(ipv6addrp, 10) << (ANON_IID_EUI48_PAYLOAD_SHIFT));
+				iid[1] = ANON_IID_EUI48_VALUE_32_63 | ((map_value & 0x1ffffff) << ANON_IID_EUI48_PAYLOAD_SHIFT);
 
 				ipv6addr_setdword(ipv6addrp, 2, iid[0]);
 				ipv6addr_setdword(ipv6addrp, 3, iid[1]);
@@ -2134,8 +2151,21 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_s
 					/* mask ID according to mask_iid */
 					zeroize_iid = 1;
 				} else {
+					libeui64_clearall(&eui64addr);
+					eui64addr.addr[0] = ipv6addr_getoctet(ipv6addrp,  8) ^ 0x2;
+					eui64addr.addr[1] = ipv6addr_getoctet(ipv6addrp,  9);
+					eui64addr.addr[2] = ipv6addr_getoctet(ipv6addrp, 10);
+					eui64addr.addr[3] = ipv6addr_getoctet(ipv6addrp, 11);
+					eui64addr.addr[4] = ipv6addr_getoctet(ipv6addrp, 12);
+					eui64addr.addr[5] = ipv6addr_getoctet(ipv6addrp, 13);
+					eui64addr.addr[6] = ipv6addr_getoctet(ipv6addrp, 14);
+					eui64addr.addr[7] = ipv6addr_getoctet(ipv6addrp, 15);
+					eui64addr.flag_valid = 1;
+
+					map_value = libieee_map_oui_eui64addr(&eui64addr) ^ 0x00020000;
+
 					iid[0] = ANON_TOKEN_VALUE_00_31 | ANON_IID_EUI64_VALUE_00_31;
-					iid[1] = ANON_IID_EUI64_VALUE_32_63 | (ipv6addr_getoctet(ipv6addrp, 8) << (ANON_IID_EUI64_PAYLOAD_SHIFT + 16)) | (ipv6addr_getoctet(ipv6addrp, 9) << (ANON_IID_EUI64_PAYLOAD_SHIFT + 8)) | (ipv6addr_getoctet(ipv6addrp, 10) << (ANON_IID_EUI64_PAYLOAD_SHIFT));
+					iid[1] = ANON_IID_EUI64_VALUE_32_63 | ((map_value & 0x1ffffff) << ANON_IID_EUI64_PAYLOAD_SHIFT);
 
 					ipv6addr_setdword(ipv6addrp, 2, iid[0]);
 					ipv6addr_setdword(ipv6addrp, 3, iid[1]);

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libeui64.h
- * Version    : $Id: libeui64.h,v 1.3 2013/04/09 20:09:33 ds6peter Exp $
+ * Version    : $Id: libeui64.h,v 1.4 2013/04/10 18:30:52 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -25,3 +25,5 @@ typedef struct {
 /* prototypes */
 extern int create_eui64_from_mac(ipv6calc_ipv6addr *ipv6addrp, ipv6calc_macaddr *macaddrp);
 extern int libeui64_addr_to_eui64addrstruct(char *addrstring, char *resultstring, ipv6calc_eui64addr *eui64addrp);
+extern void libeui64_clear(ipv6calc_eui64addr *eui64addrp);
+extern void libeui64_clearall(ipv6calc_eui64addr *eui64addrp);
