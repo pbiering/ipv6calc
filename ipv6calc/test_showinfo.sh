@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.21 2013/04/09 20:09:33 ds6peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.22 2013/04/11 06:11:23 ds6peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -84,7 +84,17 @@ testscenarios_ipv6_reserved | while read address rfc; do
 done || exit 1
 
 # Test showinfo output
+ipv6calc_has_db_ieee=0
+if ./ipv6calc -v 2>&1 | grep -qw DB_IEEE; then
+	ipv6calc_has_db_ieee=1
+fi
 testscenarios_showinfo | while read address output; do
+	if echo "$output" | grep -q "^OUI="; then
+		if [ $ipv6calc_has_db_ieee -ne 1 ]; then
+			echo "Test: $address for $output SKIPPED (no DB_IEEE compiled in)"
+			continue
+		fi
+	fi
 	echo "Test: $address for $output"
 	if ! ./ipv6calc -q -i -m $address | grep "^$output$"; then
 		echo "ERROR: unexpected result"
