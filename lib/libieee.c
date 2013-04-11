@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.13 2013/04/10 18:30:52 ds6peter Exp $
+ * Version    : $Id: libieee.c,v 1.14 2013/04/11 06:23:09 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -237,7 +237,7 @@ int libieee_unmap_oui36_iab(const uint32_t map_value, uint32_t *bits_00_23_p, ui
 		};
 	};
 
-	fprintf(stderr, "%s/%s: missing entry in map: %06x\n", __FILE__, __func__, ieee_mapping[i].mapping);
+	fprintf(stderr, "%s/%s: missing entry in map: %06x\n", __FILE__, __func__, map_index);
 	return (1);
 };
 
