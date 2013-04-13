@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.18 2013/04/10 18:30:52 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.19 2013/04/13 08:10:56 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -267,5 +267,12 @@ testscenarios_showinfo() {
 2001:db8:123:4509:a929:4291:7021:8626	EUI64_SCOPE=global
 2001:db8:11e0:6201:224:21ff:fe01:2345	EUI48_SCOPE=global
 2001:db8:11e0:6201:224:21ff:fe01:2345	OUI="MICRO-STAR INT'L CO., LTD."
+0123.4567.89ab				EUI48=01:23:45:67:89:ab
+01-23-45-67-89-ab			EUI48=01:23:45:67:89:ab
+012345-6789ab				EUI48=01:23:45:67:89:ab
+0123456789ab				EUI48=01:23:45:67:89:ab
+c0a80102				IPV4=192.168.1.2
+0a010203				IPV4=10.1.2.3
+a010203					IPV4=10.1.2.3
 END
 }
