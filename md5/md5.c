@@ -87,6 +87,7 @@ md5_init_ctx (struct md5_ctx *ctx)
 
    IMPORTANT: On some systems it is required that RESBUF is correctly
    aligned for a 32 bits value.  */
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
 void *
 md5_read_ctx (const struct md5_ctx *ctx, void *resbuf)
 {
@@ -119,9 +120,7 @@ md5_finish_ctx (struct md5_ctx *ctx, void *resbuf)
   memcpy (&ctx->buffer[bytes], fillbuf, pad);
 
   /* Put the 64-bit file length in *bits* at the end of the buffer.  */
-#pragma GCC diagnostic ignored "-Wstrict-aliasing"
   *(md5_uint32 *) &ctx->buffer[bytes + pad] = SWAP (ctx->total[0] << 3);
-#pragma GCC diagnostic ignored "-Wstrict-aliasing"
   *(md5_uint32 *) &ctx->buffer[bytes + pad + 4] = SWAP ((ctx->total[1] << 3) |
 							(ctx->total[0] >> 29));
 
