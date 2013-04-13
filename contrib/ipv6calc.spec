@@ -21,12 +21,12 @@ BuildRoot: %{_tmppath}/ipv6calc-root
 %{?_with_ip2location: %{expand: %%define enable_ip2location 1}}
 
 %if %{enable_geoip}
-BuildPreReq: GeoIP-devel
+BuildRequires: GeoIP-devel
 Requires: GeoIP
 %endif
 
 %if %{enable_ip2location}
-BuildPreReq: ip2location-devel
+BuildRequires: ip2location-devel
 Requires: ip2location0 >= 2.1.3
 %endif
 
@@ -53,8 +53,7 @@ Available rpmbuild rebuild options:
 Summary: IP address information web utility
 Group: Web/Applications
 Requires: perl(URI) perl(Digest::SHA1) perl(Digest::MD5)
-
-BuildPreReq: perl(URI) perl(Digest::SHA1) perl(Digest::MD5)
+BuildRequires: perl(URI) perl(Digest::SHA1) perl(Digest::MD5)
 
 %description ipv6calcweb
 ipv6calcweb contains a CGI program and a configuration file for
