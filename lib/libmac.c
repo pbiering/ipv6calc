@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.21 2013/04/13 08:11:23 ds6peter Exp $
+ * Version    : $Id: libmac.c,v 1.22 2013/04/13 17:34:28 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -26,7 +26,7 @@ static char ChSet[] = "0123456789abcdefABCDEF:- .";
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "libmac/mac_to_macaddrstruct"
-int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp) {
+int mac_to_macaddrstruct(const char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp) {
 	int retval = 1, result, i, ccolons = 0, cdashes = 0, cspaces = 0, cdots = 0;
 	size_t cnt;
 	int temp[6];
@@ -119,7 +119,7 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 #undef DEBUG_function_name
 
 /* compatible name */
-int addr_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp) {
+int addr_to_macaddrstruct(const char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp) {
 	return (mac_to_macaddrstruct(addrstring, resultstring, macaddrp));
 };
 

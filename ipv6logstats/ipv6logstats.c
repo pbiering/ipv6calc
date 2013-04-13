@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.22 2013/03/25 07:14:09 ds6peter Exp $
- * Copyright  : 2003-2012 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logstats.c,v 1.23 2013/04/13 17:34:28 ds6peter Exp $
+ * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile statistics

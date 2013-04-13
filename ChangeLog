@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.286 2013/04/13 08:11:23 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.287 2013/04/13 17:34:27 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130413/PB
+	fix code or add pragmas to avoid warnings
+
 20130412/PB
 	lib/libmac.c/lib/libipv6calc.c: support Cisco format xxxx.xxxx.xxxx
 	lib/libipv6calc.c: support Check Point IPsec debug log format of IPv4 addresses if first octet is < 16: xxxxxx (7 hex chars)

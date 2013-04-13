@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.82 2013/04/10 18:30:52 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.83 2013/04/13 17:34:28 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -2005,7 +2005,7 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_s
 	uint32_t map_value;
 
 	int mask_iid  = ipv6calc_anon_set->mask_iid;
-	int mask_mac  = ipv6calc_anon_set->mask_mac;
+	// int mask_mac  = ipv6calc_anon_set->mask_mac; // currently not used
 	int mask_ipv6 = ipv6calc_anon_set->mask_ipv6;
 	int mask_ipv4 = ipv6calc_anon_set->mask_ipv4;
 	int method    = ipv6calc_anon_set->method;

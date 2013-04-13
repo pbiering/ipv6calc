@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.14 2013/03/30 18:03:45 ds6peter Exp $
- * Copyright  : 2007-2012 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6loganon.c,v 1.15 2013/04/13 17:34:27 ds6peter Exp $
+ * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile anonymization
@@ -504,6 +504,11 @@ static int anonymizetoken(char *resultstring, const char *token) {
 		case FORMAT_macaddr:
 			retval = addr_to_macaddrstruct(token, resultstring, &macaddr);
 			break;
+	};
+
+	if (retval != 0) {
+		fprintf(stderr, "Can't parse string: %s (%s)\n", token, resultstring);
+		return 1;
 	};
 
 	if (ipv6calc_debug != 0) {

@@ -1,14 +1,14 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.67 2013/04/09 20:09:33 ds6peter Exp $
-# Copyright  : 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile.in,v 1.68 2013/04/13 17:34:27 ds6peter Exp $
+# Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calc project
 #
 
 # Compiler and Linker Options
-export DEFAULT_CFLAGS = -O2 -Wall -g
+export DEFAULT_CFLAGS = -O2 -Wall -g $(EXTRA_CFLAGS)
 
 ifeq (@ENABLE_BUNDLED_GETOPT@, 1)
   GETOPT_MAKE = getopt-make

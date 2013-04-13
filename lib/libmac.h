@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.h
- * Version    : $Id: libmac.h,v 1.11 2013/03/30 18:03:45 ds6peter Exp $
+ * Version    : $Id: libmac.h,v 1.12 2013/04/13 17:34:28 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -34,8 +34,8 @@ typedef struct {
 #endif
 
 /* prototypes */
-extern int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp);
-extern int addr_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp); // compatible name
+extern int mac_to_macaddrstruct(const char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp);
+extern int addr_to_macaddrstruct(const char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp); // compatible name
 extern int macaddrstruct_to_string(const ipv6calc_macaddr *macaddrp, char *resultstring, const uint32_t formatoptions);
 extern int libmacaddr_macaddrstruct_to_string(const ipv6calc_macaddr *macaddrp, char *resultstring, const uint32_t formatoptions); // compatible name
 extern void mac_clearall(ipv6calc_macaddr *macaddrp);
