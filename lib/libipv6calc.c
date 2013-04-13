@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.29 2013/04/09 20:09:33 ds6peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.30 2013/04/13 08:11:23 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -143,7 +143,7 @@ void string_to_reverse_dotted(char *string) {
 uint32_t libipv6calc_autodetectinput(const char *string) {
 	uint32_t type = FORMAT_auto_noresult;
 	int xdl, i, j = 0, result;
-	int numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, numdashes = 0, numspaces = 0, numslashes = 0, numalnums = 0, numchar_s = 0, numpercents = 0, numcolonsdouble = 0, xdigitlen_max = 0;
+	int numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, numdashes = 0, numspaces = 0, numslashes = 0, numalnums = 0, numchar_s = 0, numpercents = 0, numcolonsdouble = 0, xdigitlen_max = 0, xdigitlen_min = 0;
 	char resultstring[NI_MAXHOST];
 	size_t length;
 
@@ -178,8 +178,16 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 			numxdigits++;
 			xdl++;
 		} else {
+			if (xdigitlen_max == 0 && xdigitlen_min == 0) {
+				// init
+				xdigitlen_max = xdl;
+				xdigitlen_min = xdl;
+			};
 			if (xdl > xdigitlen_max) {
 				xdigitlen_max = xdl;
+			};
+			if (xdl < xdigitlen_min) {
+				xdigitlen_min = xdl;
 			};
 			xdl = 0;
 		};
@@ -200,6 +208,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		fprintf(stderr, "%s:  numpercents    :%d\n", DEBUG_function_name, numpercents);
 		fprintf(stderr, "%s:  numchar_s      :%d\n", DEBUG_function_name, numchar_s);
 		fprintf(stderr, "%s:  xdigit len max :%d\n", DEBUG_function_name, xdigitlen_max);
+		fprintf(stderr, "%s:  xdigit len min :%d\n", DEBUG_function_name, xdigitlen_min);
 		fprintf(stderr, "%s:  length         :%d\n", DEBUG_function_name, (int) length);
 	};
 
@@ -245,14 +254,30 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		goto END_libipv6calc_autodetectinput;
 	};
 	
-	if (length == 8 && numxdigits == 8 && numdots == 0 && numcolons == 0) {
-		/* IPv4 hexadecimal: xxxxxxxx */
+	if (((length == 8 && numxdigits == 8) || (length == 7 && numxdigits == 7)) && numdots == 0 && numcolons == 0) {
+		/* IPv4 hexadecimal: xxxxxxxx or xxxxxxx */
 		type = FORMAT_ipv4hex;
 		goto END_libipv6calc_autodetectinput;
 	};
 	
-	if ((length >= 11 && length <= 17 && numxdigits >= 6 && numxdigits <= 12 && numdots == 0 && ( (numcolons == 5 && numdashes == 0 && numspaces == 0) || (numcolons == 0 && numdashes == 5 && numspaces == 0) || (numcolons == 0 && numdashes == 0 && numspaces == 5))) || (length == 13 && numcolons == 0 && numdashes == 1 && numspaces == 0 && numxdigits == 12) || (length == 12 && numcolons == 0 && numdashes == 0 && numspaces == 0 && numxdigits == 12)) {
-		/* MAC 00:00:00:00:00:00 or 00-00-00-00-00-00 or "xx xx xx xx xx xx" or "xxxxxx-xxxxxx" or xxxxxxxxxxxx */
+	if ((length >= 11 && length <= 17 && numxdigits >= 6 && numxdigits <= 12 && numdots == 0 && ( (numcolons == 5 && numdashes == 0 && numspaces == 0)
+	   	 || (numcolons == 0 && numdashes == 5 && numspaces == 0)
+		    || (numcolons == 0 && numdashes == 0 && numspaces == 5))
+	    )
+	    || (length == 13 && numcolons == 0 && numdashes == 1 && numspaces == 0 && numxdigits == 12)
+	    || (length == 12 && numcolons == 0 && numdashes == 0 && numspaces == 0 && numxdigits == 12)
+	    || (length == 14 && numdots == 2 && numxdigits ==12 && xdigitlen_min == 4 && xdigitlen_max == 4)
+	   ) {
+		/* MAC 00:00:00:00:00:00 or 00-00-00-00-00-00 or "xx xx xx xx xx xx" or "xxxxxx-xxxxxx" or xxxxxxxxxxxx or xxxx.xxxx.xxxx */
+
+	    	if (length == 14 && numdots == 2 && numxdigits ==12 && xdigitlen_min == 4 && xdigitlen_max == 4) {
+			// xxxx.xxxx.xxxx
+			type = FORMAT_mac;
+			if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
+				fprintf(stderr, "%s: Autodetection found type: mac\n", DEBUG_function_name);
+			};
+			goto END_libipv6calc_autodetectinput;
+		};
 
 		if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
 			fprintf(stderr, "%s:  check FORMAT_mac\n", DEBUG_function_name);

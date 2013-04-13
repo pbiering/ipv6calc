@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.35 2013/03/30 18:03:45 ds6peter Exp $
- * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv4addr.c,v 1.36 2013/04/13 08:11:23 ds6peter Exp $
+ * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Function library for IPv4 address handling
@@ -486,10 +486,10 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6ca
 		fprintf(stderr, "%s: Got input '%s'\n", DEBUG_function_name,  addrstring);
 	};
 
-	if ((strlen(addrstring) < 8)  || (strlen(addrstring) > 11)) {
+	if ((strlen(addrstring) < 7)  || (strlen(addrstring) > 11)) {
 		/* min: ffffffff */
 		/* max: ffffffff/32 */
-		snprintf(resultstring, NI_MAXHOST - 1, "Error in given hex notated IPv4 address, has not 8 to 11 chars!");
+		snprintf(resultstring, NI_MAXHOST - 1, "Error in given hex notated IPv4 address, has not 7 to 11 chars!");
 		return (1);
 	};
 
@@ -522,7 +522,7 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6ca
 	};
 
 	/* check length 3 */
-	if (strlen(addronlystring) != 8) {
+	if ((flag_reverse == 0 && (strlen(addronlystring) < 7 || strlen(addronlystring) > 8)) || (flag_reverse != 0 && strlen(addronlystring) != 8)) {
 		snprintf(resultstring, NI_MAXHOST - 1, "Error, given hexadecimal IPv4 address '%s' is not valid (not proper length)!", addronlystring);
 		retval = 1;
 		return (retval);
@@ -537,7 +537,11 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6ca
 	if (flag_reverse != 0)  {
 		result = sscanf(addronlystring, "%2x%2x%2x%2x", &compat[3], &compat[2], &compat[1], &compat[0]);
 	} else {
-		result = sscanf(addronlystring, "%2x%2x%2x%2x", &compat[0], &compat[1], &compat[2], &compat[3]);
+		if (strlen(addronlystring) == 7) {
+			result = sscanf(addronlystring, "%1x%2x%2x%2x", &compat[0], &compat[1], &compat[2], &compat[3]);
+		} else {
+			result = sscanf(addronlystring, "%2x%2x%2x%2x", &compat[0], &compat[1], &compat[2], &compat[3]);
+		};
 	};
 	
 	for ( i = 0; i <= 3; i++ ) {

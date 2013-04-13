@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.20 2013/04/07 17:52:29 ds6peter Exp $
+ * Version    : $Id: libmac.c,v 1.21 2013/04/13 08:11:23 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -17,7 +17,7 @@
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
 
-static char ChSet[] = "0123456789abcdefABCDEF:- ";
+static char ChSet[] = "0123456789abcdefABCDEF:- .";
 
 /* function 48-bit MAC address to MACaddr_structure
  *
@@ -27,7 +27,7 @@ static char ChSet[] = "0123456789abcdefABCDEF:- ";
  */
 #define DEBUG_function_name "libmac/mac_to_macaddrstruct"
 int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp) {
-	int retval = 1, result, i, ccolons = 0, cdashes = 0, cspaces = 0;
+	int retval = 1, result, i, ccolons = 0, cdashes = 0, cspaces = 0, cdots = 0;
 	size_t cnt;
 	int temp[6];
 
@@ -47,7 +47,7 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 		
 	};
 
-	/* count ":" or "-" or " " must be 5 or 1 x "-" */
+	/* count ":" or "-" or " " or " " must be 5 or 1 x "-" */
 	for (i = 0; i < (int) strlen(addrstring); i++) {
 		if (addrstring[i] == ':') {
 			ccolons++;
@@ -55,10 +55,18 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 			cdashes++;
 		} else if (addrstring[i] == ' ') {
 			cspaces++;
+		} else if (addrstring[i] == '.') {
+			cdots++;
 		};
 	};
 
-	if ( ! ( (ccolons == 5 && cdashes == 0 && cspaces == 0) || (ccolons == 0 && cdashes == 5 && cspaces == 0)  || (ccolons == 0 && cdashes == 0 && cspaces == 5) || (ccolons == 0 && cdashes == 1 && cspaces == 0 && strlen(addrstring) == 13) || (ccolons == 0 && cdashes == 0 && cspaces == 0 && strlen(addrstring) == 12)) ) {
+	if ( ! ( (ccolons == 5 && cdashes == 0 && cspaces == 0 && cdots == 0)
+		   || (ccolons == 0 && cdashes == 5 && cspaces == 0 && cdots == 0)
+		   || (ccolons == 0 && cdashes == 0 && cspaces == 5 && cdots == 0)
+		   || (ccolons == 0 && cdashes == 0 && cspaces == 0 && cdots == 2)
+		   || (ccolons == 0 && cdashes == 1 && cspaces == 0 && strlen(addrstring) == 13 && cdots == 0)
+		   || (ccolons == 0 && cdashes == 0 && cspaces == 0 && strlen(addrstring) == 12 && cdots == 0))
+	   ) {
 		snprintf(resultstring, NI_MAXHOST - 1, "Error, given MAC address '%s' is not valid (number of colons/dashes/spaces is not 5 or number of dashes is not 1)!", addrstring);
 		retval = 1;
 		return (retval);
@@ -73,6 +81,8 @@ int mac_to_macaddrstruct(char *addrstring, char *resultstring, ipv6calc_macaddr 
 		result = sscanf(addrstring, "%2x%2x%2x-%2x%2x%2x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5]);
 	} else if ( cspaces == 5 ) {
 		result = sscanf(addrstring, "%x %x %x %x %x %x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5]);
+	} else if ( cdots == 2 ) {
+		result = sscanf(addrstring, "%2x%2x.%2x%2x.%2x%2x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5]);
 	} else if ( cdashes == 0 ) {
 		result = sscanf(addrstring, "%2x%2x%2x%2x%2x%2x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5]);
 	} else {
