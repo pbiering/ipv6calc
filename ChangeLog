@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.287 2013/04/13 17:34:27 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.288 2013/05/10 05:51:04 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130510/PB
+	ipv6calc/test_ipv6calc.sh: fix 2 typos (issue reported by PV)
+
 20130413/PB
 	fix code or add pragmas to avoid warnings
 

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.40 2013/03/30 18:03:45 ds6peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.41 2013/05/10 05:51:04 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -357,7 +357,7 @@ done || exit 1
 
 echo "Run 'ipv6calc' pipe tests (1)"
 testscenarios_pipe | while IFS="," read input arguments result; do
-	echo "Test 'echo $input | ./ipv6calc $arguments | grep \"^$result\$i\"'"
+	echo "Test 'echo $input | ./ipv6calc $arguments | grep \"^$result\$\"'"
 	#set -x
 	echo -e $input | ./ipv6calc $arguments | grep "^$result\$" >/dev/null
 	retval=$?
@@ -389,7 +389,7 @@ testscenarios | grep -v "^NOPIPETEST" | while read line; do
 		options="`echo "$command" | awk '{ for (i=1; i < NF-1; i++) printf "%s ", $i; }'`"
 		;;
 	esac
-	echo "Test 'echo $stdin | ./ipv6calc $options | grep \"^$result\$i\"'"
+	echo "Test 'echo $stdin | ./ipv6calc $options | grep \"^$result\$\"'"
 	#set -x
 	output="`echo -e $stdin | ./ipv6calc $options`"
 	retval=$?
