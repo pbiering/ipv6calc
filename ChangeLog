@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.288 2013/05/10 05:51:04 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.289 2013/05/10 05:51:49 ds6peter Exp $ 
  */
 
 Info:
@@ -13,6 +13,7 @@ Info:
 
 20130413/PB
 	fix code or add pragmas to avoid warnings
+	tag version 0.94.0
 
 20130412/PB
 	lib/libmac.c/lib/libipv6calc.c: support Cisco format xxxx.xxxx.xxxx
