@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.11 2013/03/30 18:03:45 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.12 2013/05/12 07:34:04 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -29,7 +29,7 @@ typedef struct {
 } s_ipv6calc_filter_master;
 
 
-static const s_ipv6calc_anon_set ipv6calc_anon_set_list[] = {
+/*@unused@*/ static const s_ipv6calc_anon_set ipv6calc_anon_set_list[] = {
 	// name                 short ip4 ip6 iid mac method
 	{ "anonymize-standard", "as", 24, 56, 40, 24, 1 },
 	{ "anonymize-careful" , "ac", 20, 48, 24, 24, 1 },
@@ -39,7 +39,7 @@ static const s_ipv6calc_anon_set ipv6calc_anon_set_list[] = {
 	{ "zeroize-paranoid"  , "zp", 16, 40,  0, 24, 2 }
 };
 
-static const s_ipv6calc_anon_methods ipv6calc_anon_methods[] = {
+/*@unused@*/ static const s_ipv6calc_anon_methods ipv6calc_anon_methods[] = {
 	{ "anonymize", 1, "reliable anonymization, keep as much type information as possible" },
 	{ "zeroise"  , 2, "simple zero'ising according to given masks, probably loose type information" },
 };

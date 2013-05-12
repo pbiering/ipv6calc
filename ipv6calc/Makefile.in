@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.33 2013/03/25 21:29:46 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.34 2013/05/12 07:34:04 ds6peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -64,6 +64,9 @@ test:		ipv6calc
 test-minimal:	ipv6calc
 		./test_ipv6calc.sh || exit 1
 		./test_showinfo.sh minimal || exit 1
+
+codecheck:
+		${MAKE} splint
 
 splint:		
 		splint *.c ../lib/*.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)

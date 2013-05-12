@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.63 2013/04/10 18:30:52 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.64 2013/05/12 07:34:04 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -150,7 +150,7 @@ typedef struct {
 
 /* IID privacy limits */
 // this filter values detects 999.744 from 1.000.000 generated privacy extension IIDs (256 are not detected)
-static const s_iid_statistics s_iid_statistics_ok_min = {
+/*@unused@*/ static const s_iid_statistics s_iid_statistics_ok_min = {
 	0.249,		// fits to 100% of 1 million tested
 	6.275,		// fits to 100% of 1 million tested
 	{  4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	// fit to 100% of 1 million tested
@@ -159,7 +159,7 @@ static const s_iid_statistics s_iid_statistics_ok_min = {
 	6	// fit to 1 million
 };
 
-static const s_iid_statistics s_iid_statistics_ok_max = {
+/*@unused@*/ static const s_iid_statistics s_iid_statistics_ok_max = {
 	2.5,		// fits to 1 million - 90 tested (100%: 4.016)
 	26.042,		// fits to 100% of 1 million tested
 	{ 16, 6, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	// fit to 1 million - 3 tested

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.14 2013/04/11 06:23:09 ds6peter Exp $
+ * Version    : $Id: libieee.c,v 1.15 2013/05/12 07:34:04 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -258,8 +258,6 @@ uint32_t libieee_map_oui_macaddr(const ipv6calc_macaddr *macaddrp) {
 	};
 
 	return (libieee_map_oui36_iab(oui, ven));
-
-	return (oui);
 };
 
 /*
@@ -279,9 +277,8 @@ uint32_t libieee_map_oui_eui64addr(const ipv6calc_eui64addr *eui64addrp) {
 	};
 
 	return (libieee_map_oui36_iab(oui, ven));
-
-	return (oui);
 };
+
 /*
  * unmap IAB/OUI-36
  * in : OUI (0x0......) or mapped IAB/OUI-36 (0x1mmm...)

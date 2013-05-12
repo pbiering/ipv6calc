@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.290 2013/05/12 07:23:12 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.291 2013/05/12 07:34:04 ds6peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,7 @@ Info:
 --------------------------------------------------------------------
 20130512/PB
 	several *.c: replace strncpy/strcpy by snprintf (implicit fix of some improper/missing \0 termination)
+	several *.c: fixes according to splint 
 
 20130510/PB
 	ipv6calc/test_ipv6calc.sh: fix 2 typos (issue reported by PV)

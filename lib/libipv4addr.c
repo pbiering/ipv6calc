@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.37 2013/05/12 07:23:12 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.38 2013/05/12 07:34:04 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -917,7 +917,7 @@ int libipv4addr_to_octal(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring,
  * ret: ==0: ok, !=0: error
  */
 #define DEBUG_function_name "libipv4addr/ipv4addrstruct_to_hex"
-int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions) {
+int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, /*@unused@*/ const uint32_t formatoptions) {
 	int retval = 1;
 	char tempstring[NI_MAXHOST];
 

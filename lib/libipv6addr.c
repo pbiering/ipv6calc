@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.84 2013/05/12 07:23:12 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.85 2013/05/12 07:34:04 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -268,6 +268,7 @@ uint32_t ipv6addr_checksum_anonymized_iid(const ipv6calc_ipv6addr *ipv6addrp, co
 	uint32_t iid[2];
 	uint32_t checksum = 0;
 	int i, n, iid_num, i_max = 16;
+	unsigned int s;
 	uint32_t a, b, c = 0;
 
 	iid[0] = ipv6addr_getdword(ipv6addrp, 2); // 00-31 (8 nibbles)
@@ -282,6 +283,7 @@ uint32_t ipv6addr_checksum_anonymized_iid(const ipv6calc_ipv6addr *ipv6addrp, co
 	for (i = 1; i <= i_max; i++) {
 		iid_num = (i - 1) / 8; // 0-1
 		n = (i - 1) % 8; // 0-7
+		s = (7 - n) * 4;
 
 		if (i == 1) {
 			a = 16; // init
@@ -289,7 +291,7 @@ uint32_t ipv6addr_checksum_anonymized_iid(const ipv6calc_ipv6addr *ipv6addrp, co
 			a = c * 2;
 		};
 
-		b = (a % 17) + ((iid[iid_num] & (0xf << ((7-n)*4))) >> ((7-n)*4));
+		b = (a % 17) + ((iid[iid_num] & (0xf << s)) >> s);
 		c = b % 16;
 
 		// if ( (ipv6calc_debug) != 0 ) {

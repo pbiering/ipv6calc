@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.h
- * Version    : $Id: libieee.h,v 1.11 2013/04/10 18:30:52 ds6peter Exp $
+ * Version    : $Id: libieee.h,v 1.12 2013/05/12 07:34:04 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -47,7 +47,7 @@ typedef struct {
 
 
 // internal map for IAB / OUI-36 lists
-static const s_ieee_mapping ieee_mapping[] = {
+/*@unused@*/ static const s_ieee_mapping ieee_mapping[] = {
 	// IAB
 	{ 0x0050C2,	0x1 },
 	{ 0x40D855,	0x2 },

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.77 2013/05/12 07:23:12 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.78 2013/05/12 07:34:04 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -248,6 +248,8 @@ int main(int argc, char *argv[]) {
 	/* filter structure */
 	s_ipv6calc_filter_master filter_master;
 	libipv6calc_filter_clear(&filter_master);
+
+	/* IID statistics */
 	s_iid_statistics iid_statistics;
 	int iid_privacy_result;
 
