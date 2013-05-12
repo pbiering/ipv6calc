@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.c
- * Version    : $Id: librfc1884.c,v 1.17 2013/03/25 07:14:09 ds6peter Exp $
+ * Version    : $Id: librfc1884.c,v 1.18 2013/05/12 07:23:12 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -359,6 +359,9 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 		string_to_upcase(resultstring);
 	};
 
+	if ( (ipv6calc_debug & DEBUG_librfc1884) != 0 ) {
+		fprintf(stderr, "%s: Result: '%s'\n",  DEBUG_function_name, resultstring);
+	};
 	return (retval);
 };
 #undef DEBUG_function_name

@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.17 2011/09/16 18:05:13 peter Exp $
- * Copyright  : 2002-2010 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc1886.c,v 1.18 2013/05/12 07:23:12 ds6peter Exp $
+ * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  RFC 1886 conform reverse nibble format string
@@ -284,7 +284,7 @@ int librfc1886_formatcheck(const char *string, char *infostring) {
 		return (1);
 	};
 
-	strncpy(tempstring, string, sizeof(tempstring) - 1);
+	snprintf(tempstring, sizeof(tempstring) - 1, "%s", string);
 	
 	if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
 		fprintf(stderr, "%s: check %s\n", DEBUG_function_name, tempstring);

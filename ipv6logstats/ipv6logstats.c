@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.23 2013/04/13 17:34:28 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.24 2013/05/12 07:23:12 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -87,8 +87,7 @@ int main(int argc,char *argv[]) {
 				break;
 
 			case 'p':
-				strncpy(opt_token, optarg, NI_MAXHOST - 1);
-				opt_token[NI_MAXHOST - 1] = '\0';
+				snprintf(opt_token, sizeof(opt_token) - 1, "%s", optarg);
 				break;
 
 			case 'u':

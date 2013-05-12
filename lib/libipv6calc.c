@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.30 2013/04/13 08:11:23 ds6peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.31 2013/05/12 07:23:12 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -559,7 +559,7 @@ void libipv6calc_anon_infostring(char *string, const int stringlength, const s_i
 
 	for (i = 0; i < sizeof(ipv6calc_anon_methods) / sizeof(s_ipv6calc_anon_methods); i++) {
 		if (ipv6calc_anon_methods[i].method == ipv6calc_anon_set->method) {
-			strncpy(method_name, ipv6calc_anon_methods[i].name, sizeof(method_name) - 1);
+			snprintf(method_name, sizeof(method_name) - 1, "%s", ipv6calc_anon_methods[i].name);
 			break;
 		};
 	};

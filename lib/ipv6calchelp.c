@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.30 2013/04/07 17:52:29 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.31 2013/05/12 07:23:12 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -628,11 +628,11 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "  Available presets (shortcut names) [--anonymize-preset PRESET-NAME]:\n");
 
 			for (i = 0; i < sizeof(ipv6calc_anon_set_list) / sizeof(s_ipv6calc_anon_set); i++) {
-				strncpy(method_name, "unknown", sizeof(method_name) - 1); // default
+				snprintf(method_name, sizeof(method_name) - 1, "%s", "unknown"); // default
 
 				for (j = 0; j < sizeof(ipv6calc_anon_methods) / sizeof(s_ipv6calc_anon_methods); j++) {
 					if (ipv6calc_anon_methods[j].method == ipv6calc_anon_set_list[i].method) {
-						strncpy(method_name, ipv6calc_anon_methods[j].name, sizeof(method_name) - 1);
+						snprintf(method_name, sizeof(method_name) - 1, "%s", ipv6calc_anon_methods[j].name);
 						break;
 					};
 				};

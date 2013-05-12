@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.68 2013/04/13 17:34:27 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.69 2013/05/12 07:23:12 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -151,3 +151,10 @@ test-minimal:
 			${MAKE} $@ || exit 1; \
 			cd $$ocwd ; \
 		done
+
+codecheck:
+		# catch use of strncpy
+		LC_ALL=C find . -type f -name '*.c' | xargs -r grep strncpy || exit 1
+		# catch use of strcpy
+		LC_ALL=C find . -type f -name '*.c' | xargs -r grep strcpy || exit 1
+

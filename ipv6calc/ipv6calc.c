@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.76 2013/04/09 20:14:51 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.77 2013/05/12 07:23:12 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -325,7 +325,7 @@ int main(int argc, char *argv[]) {
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "%s: Got IP2Location IPv4 database file: %s\n", DEBUG_function_name, optarg);
 				};
-				strncpy(file_ip2location_ipv4, optarg, sizeof(file_ip2location_ipv4) -1 );
+				snprintf(file_ip2location_ipv4, sizeof(file_ip2location_ipv4) - 1, "%s", optarg);
 				use_ip2location_ipv4 = 1;
 #else
 				if ((formatoptions & FORMATOPTION_quiet) == 0) {
@@ -339,7 +339,7 @@ int main(int argc, char *argv[]) {
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "%s: Got IP2Location IPv6 database file: %s\n", DEBUG_function_name, optarg);
 				};
-				strncpy(file_ip2location_ipv6, optarg, sizeof(file_ip2location_ipv6) -1 );
+				snprintf(file_ip2location_ipv6, sizeof(file_ip2location_ipv6) - 1, "%s", optarg);
 				use_ip2location_ipv6 = 1;
 #else
 				if ((formatoptions & FORMATOPTION_quiet) == 0) {
@@ -387,7 +387,7 @@ int main(int argc, char *argv[]) {
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "%s: Got GeoIP IPv4 database file: %s\n", DEBUG_function_name, optarg);
 				};
-				strncpy(file_geoip_ipv4, optarg, sizeof(file_geoip_ipv4) -1 );
+				snprintf(file_geoip_ipv4, sizeof(file_geoip_ipv4) - 1, "%s", optarg);
 				use_geoip_ipv4 = 1;
 #else
 				if ((formatoptions & FORMATOPTION_quiet) == 0) {
@@ -401,7 +401,7 @@ int main(int argc, char *argv[]) {
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "%s: Got GeoIP IPv6 database file: %s\n", DEBUG_function_name, optarg);
 				};
-				strncpy(file_geoip_ipv6, optarg, sizeof(file_geoip_ipv6) -1 );
+				snprintf(file_geoip_ipv6, sizeof(file_geoip_ipv6) - 1, "%s", optarg);
 				use_geoip_ipv6 = 1;
 #else
 				if ((formatoptions & FORMATOPTION_quiet) == 0) {
@@ -562,7 +562,7 @@ int main(int argc, char *argv[]) {
 					exit(EXIT_FAILURE);
 				};
 				ipv6calc_anon_set.mask_iid = mask_iid;
-				strncpy(ipv6calc_anon_set.name, "custom", sizeof(ipv6calc_anon_set.name) -1);
+				snprintf(ipv6calc_anon_set.name, sizeof(ipv6calc_anon_set.name) - 1, "%s", "custom");
 				break;
 
 			case CMD_ANON_MASK_IPV4:
@@ -572,7 +572,7 @@ int main(int argc, char *argv[]) {
 					exit(EXIT_FAILURE);
 				};
 				ipv6calc_anon_set.mask_ipv4 = mask_ipv4;
-				strncpy(ipv6calc_anon_set.name, "custom", sizeof(ipv6calc_anon_set.name) -1);
+				snprintf(ipv6calc_anon_set.name, sizeof(ipv6calc_anon_set.name) - 1, "%s", "custom");
 				break;
 
 			case CMD_ANON_MASK_IPV6:
@@ -582,7 +582,7 @@ int main(int argc, char *argv[]) {
 					exit(EXIT_FAILURE);
 				};
 				ipv6calc_anon_set.mask_ipv6 = mask_ipv6;
-				strncpy(ipv6calc_anon_set.name, "custom", sizeof(ipv6calc_anon_set.name) -1);
+				snprintf(ipv6calc_anon_set.name, sizeof(ipv6calc_anon_set.name) - 1, "%s", "custom");
 				break;
 
 			case CMD_ANON_MASK_MAC:
@@ -592,7 +592,7 @@ int main(int argc, char *argv[]) {
 					exit(EXIT_FAILURE);
 				};
 				ipv6calc_anon_set.mask_mac = mask_mac;
-				strncpy(ipv6calc_anon_set.name, "custom", sizeof(ipv6calc_anon_set.name) -1);
+				snprintf(ipv6calc_anon_set.name, sizeof(ipv6calc_anon_set.name) - 1, "%s", "custom");
 				break;
 
 			case CMD_ANON_PRESET_STANDARD:
@@ -631,7 +631,7 @@ int main(int argc, char *argv[]) {
 				for (i = 0; i < sizeof(ipv6calc_anon_methods) / sizeof(s_ipv6calc_anon_methods); i++) {
 					if (strcmp(ipv6calc_anon_methods[i].name, optarg) == 0) {
 						ipv6calc_anon_set.method = ipv6calc_anon_methods[i].method;
-						strncpy(ipv6calc_anon_set.name, "custom", sizeof(ipv6calc_anon_set.name) -1);
+						snprintf(ipv6calc_anon_set.name, sizeof(ipv6calc_anon_set.name) -1, "%s", "custom");
 						break;
 					};
 				};
@@ -1607,7 +1607,7 @@ PIPE_input:
 					fprintf(stderr, "%s: filter result SKIP: '%s'\n", DEBUG_function_name, linebuffer);
 				};
 			} else {
-				strncpy(resultstring, linebuffer, sizeof(resultstring) - 1);
+				snprintf(resultstring, sizeof(resultstring) - 1, "%s", linebuffer);
 			};
 			goto RESULT_print;
 

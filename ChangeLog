@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.289 2013/05/10 05:51:49 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.290 2013/05/12 07:23:12 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130512/PB
+	several *.c: replace strncpy/strcpy by snprintf (implicit fix of some improper/missing \0 termination)
+
 20130510/PB
 	ipv6calc/test_ipv6calc.sh: fix 2 typos (issue reported by PV)
 

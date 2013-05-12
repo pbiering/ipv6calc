@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.36 2013/04/13 08:11:23 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.37 2013/05/12 07:23:12 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -354,7 +354,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 		return (1);
 	};
 
-	strncpy(tempstring, addrstring, sizeof(tempstring) - 1);
+	snprintf(tempstring, sizeof(tempstring) - 1, "%s", addrstring);
 	
 	ipv4addr_clearall(ipv4addrp);
 
@@ -498,7 +498,7 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6ca
 		return (1);
 	};
 
-	strncpy(tempstring, addrstring, sizeof(tempstring) - 1);
+	snprintf(tempstring, sizeof(tempstring) - 1, "%s", addrstring);
 	
 	ipv4addr_clearall(ipv4addrp);
 

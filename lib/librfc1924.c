@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1924.c
- * Version    : $Id: librfc1924.c,v 1.10 2007/01/31 16:21:47 peter Exp $
- * Copyright  : 2001-2007 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc1924.c,v 1.11 2013/05/12 07:23:12 ds6peter Exp $
+ * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *              and 2006 by Niko Tyni <ntyni (at) iki.fi>
  *
  * Information:
@@ -157,7 +157,7 @@ int base85_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6cal
 		return (1);
 	};
 
-	strncpy(tempstring, addrstring, sizeof(tempstring) - 1);
+	snprintf(tempstring, sizeof(tempstring) - 1, "%s", addrstring);
 		
 	unpk85(tempstring, result);
 

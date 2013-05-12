@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.83 2013/04/13 17:34:28 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.84 2013/05/12 07:23:12 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -1102,7 +1102,7 @@ int addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, ip
 	};
 
 	/* copy without literal */
-	strncpy(tempstring, addrstring, strlen(addrstring) - strlen(literalstring));
+	snprintf(tempstring, strlen(addrstring) - strlen(literalstring) + 1, "%s", addrstring);
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
 		fprintf(stderr, "%s: String without literal suffix: %s\n", DEBUG_function_name, tempstring);
@@ -1247,7 +1247,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
 			fprintf(stderr, "%s: Copy string: '%s'\n", DEBUG_function_name, addronlystring);
 		};
-		strncpy(tempstring, addronlystring, sizeof(tempstring) - 1);
+		snprintf(tempstring, sizeof(tempstring) - 1, "%s", addronlystring);
 	};
 	
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {

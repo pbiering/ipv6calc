@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.15 2013/04/13 17:34:27 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.16 2013/05/12 07:23:12 ds6peter Exp $
  * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -116,8 +116,8 @@ int main(int argc,char *argv[]) {
 
 			case 'w':
 			case 'a':
-				if (strlen(optarg) < NI_MAXHOST) {
-					strcpy(file_out, optarg);
+				if (strlen(optarg) < sizeof(file_out)) {
+					snprintf(file_out, sizeof(file_out) - 1, "%s", optarg);
 					file_out_flag = 1;
 				} else {
 					fprintf(stderr, " Output file too long: %s\n", optarg);
@@ -126,10 +126,10 @@ int main(int argc,char *argv[]) {
 
 				switch (i) {
 					case 'w':
-						strcpy(file_out_mode, "w");
+						snprintf(file_out_mode, sizeof(file_out_mode) - 1, "%s", "w");
 						break;
 					case 'a':
-						strcpy(file_out_mode, "a");
+						snprintf(file_out_mode, sizeof(file_out_mode) - 1, "%s", "a");
 						break;	
 				};
 				break;
@@ -158,7 +158,7 @@ int main(int argc,char *argv[]) {
 					exit(EXIT_FAILURE);
 				};
 				ipv6calc_anon_set.mask_iid = mask_iid;
-				strncpy(ipv6calc_anon_set.name, "custom", sizeof(ipv6calc_anon_set.name) -1);
+				snprintf(ipv6calc_anon_set.name, sizeof(ipv6calc_anon_set.name) - 1, "%s", "custom");
 				break;
 
 			case CMD_ANON_MASK_IPV4:
@@ -168,7 +168,7 @@ int main(int argc,char *argv[]) {
 					exit(EXIT_FAILURE);
 				};
 				ipv6calc_anon_set.mask_ipv4 = mask_ipv4;
-				strncpy(ipv6calc_anon_set.name, "custom", sizeof(ipv6calc_anon_set.name) -1);
+				snprintf(ipv6calc_anon_set.name, sizeof(ipv6calc_anon_set.name) - 1, "%s", "custom");
 				break;
 
 			case CMD_ANON_MASK_IPV6:
@@ -178,7 +178,7 @@ int main(int argc,char *argv[]) {
 					exit(EXIT_FAILURE);
 				};
 				ipv6calc_anon_set.mask_ipv6 = mask_ipv6;
-				strncpy(ipv6calc_anon_set.name, "custom", sizeof(ipv6calc_anon_set.name) -1);
+				snprintf(ipv6calc_anon_set.name, sizeof(ipv6calc_anon_set.name) - 1, "%s", "custom");
 				break;
 
 			case CMD_ANON_MASK_MAC:
@@ -188,7 +188,7 @@ int main(int argc,char *argv[]) {
 					exit(EXIT_FAILURE);
 				};
 				ipv6calc_anon_set.mask_mac = mask_mac;
-				strncpy(ipv6calc_anon_set.name, "custom", sizeof(ipv6calc_anon_set.name) -1);
+				snprintf(ipv6calc_anon_set.name, sizeof(ipv6calc_anon_set.name) - 1, "%s", "custom");
 				break;
 
 			case CMD_ANON_PRESET_STANDARD:
@@ -227,7 +227,7 @@ int main(int argc,char *argv[]) {
 				for (i = 0; i < sizeof(ipv6calc_anon_methods) / sizeof(s_ipv6calc_anon_methods); i++) {
 					if (strcmp(ipv6calc_anon_methods[i].name, optarg) == 0) {
 						ipv6calc_anon_set.method = ipv6calc_anon_methods[i].method;
-						strncpy(ipv6calc_anon_set.name, "custom", sizeof(ipv6calc_anon_set.name) -1);
+						snprintf(ipv6calc_anon_set.name, sizeof(ipv6calc_anon_set.name) -1, "%s", "custom");
 						break;
 					};
 				};
