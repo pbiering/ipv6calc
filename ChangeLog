@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.292 2013/05/13 18:37:46 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.293 2013/05/13 18:48:49 ds6peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,7 @@ Info:
 --------------------------------------------------------------------
 20130513/PB
 	ipv6calcweb/ipv6calcweb.cgi.in: improve colored output for some fields
+	tag version 0.94.1
 
 20130512/PB
 	several *.c: replace strncpy/strcpy by snprintf (implicit fix of some improper/missing \0 termination)
