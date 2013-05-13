@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.291 2013/05/12 07:34:04 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.292 2013/05/13 18:37:46 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130513/PB
+	ipv6calcweb/ipv6calcweb.cgi.in: improve colored output for some fields
+
 20130512/PB
 	several *.c: replace strncpy/strcpy by snprintf (implicit fix of some improper/missing \0 termination)
 	several *.c: fixes according to splint 

@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.53 2013/03/17 17:59:22 ds6peter Exp $
-# Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.54 2013/05/13 18:37:48 ds6peter Exp $
+# Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
 # Simple Perl web interface and security wrapper
@@ -701,9 +701,11 @@ sub split_ip2location($) {
 };
 
 ## Print one table part
-sub print_infohash ($$) {
+sub print_infohash ($$;$) {
 	my $phash = $_[0];
 	my $parray = $_[1];
+	my $colormode = $_[2];
+
 	if (! defined $phash) { return; };
 
 	my ($flag_tt, $flag_whoisurl, $whois_registry, $whois_type);
@@ -823,15 +825,39 @@ sub print_infohash ($$) {
 			&print_tagoutput ( "</td>\n" );
 		};
 
-		# print data
-		if ($key eq "EUI64_SCOPE" && $$phash{$key} eq "local-privacy") {
-			&print_tagoutput ( "        <td style=\"background-color: rgb(0, 255, 0);\">" );
-		} elsif ($key eq "OUI") {
-			&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 0);\">" );
+		my $color = "";
+
+		if (defined $colormode) {
+			# set color
+
+			if ($key eq "EUI64_SCOPE" && $$phash{$key} eq "local-privacy") {
+				$color = "lime";
+			} elsif ($key eq "EUI64_SCOPE" && $$phash{$key} eq "local") {
+				$color = "cyan";
+			} elsif ($key eq "EUI48_SCOPE") {
+				if ($$phash{$key} eq "global") {
+					$color = "yellow";
+				};
+			} elsif ($key eq "IID" && defined $$phash{"EUI64_SCOPE"} && $$phash{"EUI64_SCOPE"} eq "local") {
+				$color = "cyan";
+			} elsif ($key eq "IID" && defined $$phash{"EUI64_SCOPE"} && $$phash{"EUI64_SCOPE"} eq "local-privacy") {
+				$color = "lime";
+			} elsif ($key eq "EUI64" && defined $$phash{"OUI"}) {
+				$color = "yellow";
+			} elsif ($key eq "EUI48" && defined $$phash{"OUI"}) {
+				$color = "yellow";
+			} elsif ($key eq "OUI") {
+				$color = "yellow";
+			} else {
+			};
+		};
+
+		# set background color
+		if ($color ne "") {
+			&print_tagoutput ( "        <td style=\"background-color: " . $color . ";\">" );
 		} else {
 			&print_tagoutput ( "        <td>" );
 		};
-	
 
 		if ($flag_tt) {
 			&print_tagoutput ( "<tt>" );
@@ -1574,7 +1600,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 	&print_textonly ("\n");
 	&print_tagoutput ( "        </th>\n" );
 	&print_tagoutput ( "      </tr>\n" );
-	&print_infohash (\%infoh_remote, \@sort_remote);
+	&print_infohash (\%infoh_remote, \@sort_remote, 'client');
 
 	# Proxy
 	my $proxy_count = 0;
@@ -1602,7 +1628,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 			&print_textonly ("\n");
 			&print_tagoutput ( "        </th>\n" );
 			&print_tagoutput ( "      </tr>\n" );
-			&print_infohash (\%infoh_proxy, \@sort_proxy);
+			&print_infohash (\%infoh_proxy, \@sort_proxy, 'proxy');
 		};
 	};
 
