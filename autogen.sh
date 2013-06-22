@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.15 2011/10/09 07:17:09 peter Exp $
+# Version    : $Id: autogen.sh,v 1.16 2013/06/22 14:42:02 ds6peter Exp $
 # Copyright  : 2003-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -27,6 +27,10 @@ while [ "$1" != "$LAST" ]; do
 	    '--geoip'|'-g')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip"
+		;;
+	    '--geoip-dyn')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --with-geoip-dynamic"
 		;;
 	    '--ip2location'|'-i')
 		shift
@@ -59,6 +63,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   -n|--no-make       : stop before running 'make'"
 		echo "   -a|--all           : enable GeoIP and IP2Location support"
 		echo "   -g|--geoip         : enable GeoIP support"
+		echo "   --geoip-dyn        : switch to dynamic library loading of GeoIP"
 		echo "   -i|--ip2location   : enable IP2Location support"
 		echo "   -d|--db            : enable default GeoIP and IP2Location database locations"
 		echo "   --disable-db-ieee  : disable builtin IEEE database"

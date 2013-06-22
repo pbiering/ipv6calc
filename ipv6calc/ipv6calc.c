@@ -1,12 +1,12 @@
 /*
  * Project    : ipv6calc
- * File       : ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.78 2013/05/12 07:34:04 ds6peter Exp $
+ * File       : ipv6calc/ipv6calc.c
+ * Version    : $Id: ipv6calc.c,v 1.79 2013/06/22 14:41:40 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
- *  This program print out different formats of an given IP(v4/v6) address
+ *  This program print out different formats of an given IP(v4/v6)/MAC address
  */
 
 #include <stdio.h>
@@ -46,6 +46,8 @@
 #include "../databases/ipv4-assignment/dbipv4addr_assignment.h"
 #include "libipv6addr.h"
 #include "../databases/ipv6-assignment/dbipv6addr_assignment.h"
+
+#include "../databases/lib/libipv6calc_db_wrapper.h"
 
 #ifdef SUPPORT_IP2LOCATION
 #include "IP2Location.h"
@@ -92,8 +94,13 @@ char file_ip2location_ipv6[NI_MAXHOST] = "";
 #endif
 #endif
 
-int  use_geoip_ipv4 = 0; /* if set to 1, GeoIP IPv4 is enabled by option(s) */
-int  use_geoip_ipv6 = 0; /* if set to 1, GeoIP IPv6 is enabled by option(s) */
+#ifdef SUPPORT_GEOIP_DYN
+int  use_geoip_ipv4 = -1; /* if set to 1, GeoIP IPv4 is enabled by option(s) */
+int  use_geoip_ipv6 = -1; /* if set to 1, GeoIP IPv6 is enabled by option(s) */
+#else
+int  use_geoip_ipv4 = -1; /* if set to 1, GeoIP IPv4 is enabled by option(s) */
+int  use_geoip_ipv6 = -1; /* if set to 1, GeoIP IPv6 is enabled by option(s) */
+#endif
 #ifdef SUPPORT_GEOIP
 #ifdef GEOIP_DEFAULT_FILE_IPV4
 char file_geoip_ipv4[NI_MAXHOST] = GEOIP_DEFAULT_FILE_IPV4;
@@ -155,6 +162,7 @@ void printversion_verbose(void) {
 	fprintf(stderr, "\n");
 
 #ifdef SUPPORT_GEOIP
+#ifndef SUPPORT_GEOIP_DYN
 #ifdef SUPPORT_GEOIP_V6
 #if defined (SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6) && defined (SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6)
 	fprintf(stderr, "GeoIP support enabled, compiled with IPv4 & IPv6 support\n");
@@ -165,9 +173,17 @@ void printversion_verbose(void) {
 	fprintf(stderr, "GeoIP support enabled, compiled with IPv4 support only\n");
 #endif
 #ifdef SUPPORT_GEOIP_LIB_VERSION
-	fprintf(stderr, "GeoIP dynamic library version (on this system): %s\n", GeoIP_lib_version());
+	fprintf(stderr, "GeoIP dynamic library version (on this system): %s\n", libipv6calc_db_wrapper_GeoIP_lib_version());
 #else
 	fprintf(stderr, "GeoIP dynamic library version (on this system): compiled without detection\n");
+#endif
+#else
+#ifdef SUPPORT_GEOIP_V6
+	fprintf(stderr, "GeoIP support by dynamic library load, compiled with IPv4 & IPv6 support\n");
+#else
+	fprintf(stderr, "GeoIP support by dynamic library load, compiled with IPv4 support only\n");
+#endif
+	fprintf(stderr, "GeoIP dynamic library version (on this system): %s\n", libipv6calc_db_wrapper_GeoIP_lib_version());
 #endif
 	if (file_geoip_ipv4 != NULL && strlen(file_geoip_ipv4) > 0) {
 		fprintf(stderr, "GeoIP IPv4 default file: %s\n", file_geoip_ipv4);
@@ -863,6 +879,12 @@ int main(int argc, char *argv[]) {
 
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "Debug value:%08lx command:%08lx inputtype:%08lx outputtype:%08lx action:%08lx formatoptions:%08lx\n", (unsigned long) ipv6calc_debug, command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, (unsigned long) formatoptions); 
+	};
+
+	/* initialise database wrapper */
+	result = libipv6calc_db_wrapper_init();
+	if (result != 0) {
+		exit(EXIT_FAILURE);
 	};
 	
 	/* do work depending on selection */

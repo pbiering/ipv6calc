@@ -90,8 +90,16 @@
 /* Define if your GeoIP version supports GeoIP_country_name_by_addr_v6. */
 #undef SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6
 
+/* Define if you want GeoIP support with dynamic loading support - requires
+   also additional linker options. */
+#undef SUPPORT_GEOIP_DYN
+
 /* Define if your GeoIP version supports GeoIP_lib_version. */
 #undef SUPPORT_GEOIP_LIB_VERSION
+
+/* Define if you want GeoIP support statically linked - requires also
+   additional linker options. */
+#undef SUPPORT_GEOIP_STATIC
 
 /* Define if you want GeoIP IPv6 support. */
 #undef SUPPORT_GEOIP_V6

@@ -1,10 +1,10 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.70 2013/05/12 07:34:04 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.71 2013/06/22 14:42:02 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
-#  Makefile for ipv6calc project
+#  Main Makefile for ipv6calc project
 #
 
 # Compiler and Linker Options
@@ -58,7 +58,7 @@ autoclean:
 		rm -f Makefile
 		rm -f contrib/ipv6calc.spec
 		rm config.h
-		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib md5 $(GETOPT_MAKE); do \
+		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib databases/lib md5 $(GETOPT_MAKE); do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} $@ ; \
@@ -66,7 +66,7 @@ autoclean:
 		done
 
 clean:
-		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib md5 $(GETOPT_MAKE); do \
+		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib databases/lib md5 $(GETOPT_MAKE); do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} $@ ; \
@@ -87,7 +87,7 @@ getopt-make:
 md5-make:
 		cd md5 && ${MAKE}
 
-lib-make:	md5-make db-ieee-oui-make db-ieee-iab-make db-ipv4-assignment-make db-ipv6-assignment-make
+lib-make:	md5-make db-ieee-oui-make db-ieee-iab-make db-ipv4-assignment-make db-ipv6-assignment-make db-wrapper-make db-lib-make
 		cd lib && ${MAKE} GETOPT_INCLUDE=@GETOPT_INCLUDE@
 
 ipv6logconv-make: lib-make
@@ -105,6 +105,9 @@ ipv6calc-make:	lib-make
 ipv6calcweb-make: ipv6calc-make
 		cd ipv6calcweb && ${MAKE}
 
+db-wrapper-make:
+		cd databases/lib && ${MAKE}
+
 db-ieee-oui-make:
 		cd databases/ieee-oui && ${MAKE}
 
@@ -119,6 +122,9 @@ db-ipv4-assignment-make:
 
 db-ipv6-assignment-make:
 		cd databases/ipv6-assignment && ${MAKE}
+
+db-lib-make:
+		cd databases/lib && ${MAKE}
 
 update:
 		for dir in databases/ieee-oui databases/ieee-oui36 databases/ieee-iab databases/registries; do \

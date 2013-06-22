@@ -1,7 +1,7 @@
 /*
- * Project    : ipv6calc/lib
+ * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.64 2013/05/12 07:34:04 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.65 2013/06/22 14:42:02 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
