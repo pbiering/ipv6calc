@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.h
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.h,v 1.1 2013/06/22 14:42:02 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.h,v 1.2 2013/06/23 13:43:17 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -22,12 +22,6 @@
 #ifdef SUPPORT_GEOIP
 #include "GeoIP.h"
 #include "GeoIPCity.h"
-
-#ifndef SUPPORT_GEOIP_DYN
-/* prototype external private function */
-void _GeoIP_setup_dbfilename(void);
-#endif
-
 #endif
 
 #define GEOIP_SUPPORT_UNKOWN		0
@@ -59,13 +53,14 @@ void _GeoIP_setup_dbfilename(void);
 
 #endif
 
-extern int libipv6calc_db_wrapper_GeoIP_init(void);
-extern int libipv6calc_db_wrapper_GeoIP_cleanup(void);
+extern int libipv6calc_db_wrapper_GeoIP_wrapper_init(void);
+extern int libipv6calc_db_wrapper_GeoIP_wrapper_cleanup(void);
 
 #ifdef SUPPORT_GEOIP
 extern GeoIP*        libipv6calc_db_wrapper_GeoIP_open(const char * filename, int flags);
 extern GeoIP*        libipv6calc_db_wrapper_GeoIP_open_type (int type, int flags);
 extern int           libipv6calc_db_wrapper_GeoIP_db_avail(int type);
+extern int           libipv6calc_db_wrapper_GeoIP_cleanup(void);
 extern unsigned char libipv6calc_db_wrapper_GeoIP_database_edition (GeoIP* gi);
 extern char*         libipv6calc_db_wrapper_GeoIP_database_info (GeoIP* gi);
 extern void          libipv6calc_db_wrapper_GeoIP_delete(GeoIP* gi);

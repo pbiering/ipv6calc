@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.1 2013/06/22 14:42:02 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.2 2013/06/23 13:43:17 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -30,7 +30,7 @@ int libipv6calc_db_wrapper_init(void) {
 	};
 
 	// Call GeoIP wrapper
-	r = libipv6calc_db_wrapper_GeoIP_init();
+	r = libipv6calc_db_wrapper_GeoIP_wrapper_init();
 	if (r != 0) {
 		result = 1;
 	};
@@ -53,7 +53,7 @@ int libipv6calc_db_wrapper_cleanup(void) {
 	};
 
 	// Call GeoIP wrapper
-	r = libipv6calc_db_wrapper_GeoIP_cleanup();
+	r = libipv6calc_db_wrapper_GeoIP_wrapper_cleanup();
 	if (r != 0) {
 		result = 1;
 	};
