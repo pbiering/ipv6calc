@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.294 2013/06/22 14:42:02 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.295 2013/07/01 19:52:15 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130701/PB
+	ipv6logstats: enhance output by country code / proto statistics
+	databases/lib: major extensions of wrapper
+
 20130622/PB
 	databases/lib: start implementation of dynamic load of GeoIP library by adding a wrapper layer
 
