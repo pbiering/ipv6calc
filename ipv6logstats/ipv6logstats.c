@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.25 2013/07/01 19:52:16 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.26 2013/07/01 20:44:29 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -53,7 +53,12 @@ static long unsigned int counter_country_ipv4[COUNTRY_CODE_INDEX_MAX]; // A-Z * 
 static long unsigned int counter_country_ipv6[COUNTRY_CODE_INDEX_MAX]; // A-Z * A-Z
 
 /* stat by ASN (only 16-bit ASN supported, 32-bit ASNs are mapped to 23456 "AS_TRANS" */
-static long unsigned int counter_asn[65536];
+#define ASNUM_MAX     65536
+#define ASNUM_UNKNOWN 0
+#define ASNUM_AS_TRANS 23456  // special 16-bit AS number for compatibility
+static long unsigned int counter_asn[ASNUM_MAX];
+static long unsigned int counter_asn_ipv4[ASNUM_MAX];
+static long unsigned int counter_asn_ipv6[ASNUM_MAX];
 
 /* prototypes */
 static void lineparser(void);
@@ -193,6 +198,7 @@ static void stat_inc(int number) {
 	};
 };
 
+
 /*
  * Country code statistics
  */
@@ -220,6 +226,57 @@ static void stat_inc_country_code(const char* country_code, const int proto) {
 	};
 };
 
+
+/*
+ * AS Number statistics
+ */
+static void stat_inc_asnum(const char* asnum, const int proto) {
+	unsigned int index = ASNUM_UNKNOWN;
+	int i, valid = 1;
+	long unsigned int as_number = ASNUM_UNKNOWN;
+	char as_number_string[16];
+
+	if ((asnum != NULL) && (strncmp(asnum, "AS", 2) == 0) && (strlen(asnum) > 2)) {
+		// catch ASddddd
+		for (i = 0; i <= 15; i++) {
+			if ((asnum[i+2] == ' ') || (asnum[i+2] == '\0')) {
+				break;
+			} else if (isdigit(asnum[i+2])) {
+				continue;
+			} else {
+				// something wrong
+				valid = 0;
+				break;
+			};
+		};
+
+		if (valid == 1) {
+			strncpy(as_number_string, asnum + 2, i);
+			as_number_string[i+1] = '\0';
+			as_number = atol(as_number_string);
+		};
+	
+		if (as_number > ASNUM_MAX) {
+			as_number = ASNUM_AS_TRANS;
+		};
+	
+		index = (unsigned int) as_number;
+	};
+
+	if (ipv6calc_debug != 0) {
+		fprintf(stderr, "%s/%s: Increment index: %d (%s)\n", __FILE__, __func__, index, asnum);
+	};
+
+	counter_asn[index]++;
+
+	if (proto == 4) {
+		counter_asn_ipv4[index]++;
+	} else if (proto == 6) {
+		counter_asn_ipv6[index]++;
+	};
+};
+
+
 /*
  * Line parser
  */
@@ -240,6 +297,7 @@ static void lineparser(void) {
 	const char *country_code;
 	int country_code_index_1, country_code_index_2, index;
 	char country_code_char_1, country_code_char_2;
+	char *asnum;
 
 	ptrptr = &cptr;
 	
@@ -347,9 +405,13 @@ static void lineparser(void) {
 				/* is IPv6 address */
 				stat_inc(STATS_IPV6);
 
-				/* get country */
+				/* country code */
 				country_code = libipv6calc_db_wrapper_country_code_by_addr(token, 6);
 				stat_inc_country_code(country_code, 6);
+
+				/* asnum */
+				asnum = libipv6calc_db_wrapper_asnum_by_addr(token, 6);
+				stat_inc_asnum(asnum, 6);
 
 				/* get type */
 				typeinfo = ipv6addr_gettype(&ipv6addr);
@@ -483,9 +545,13 @@ static void lineparser(void) {
 					fprintf(stderr, "%s/%s: Call now country_code_by_addr\n", __FILE__, __func__);
 				};
 
-				/* get country */
+				/* get country code */
 				country_code = libipv6calc_db_wrapper_country_code_by_addr(token, 4);
 				stat_inc_country_code(country_code, 4);
+
+				/* asnum */
+				asnum = libipv6calc_db_wrapper_asnum_by_addr(token, 4);
+				stat_inc_asnum(asnum, 4);
 
 				/* get registry */
 				registry = ipv4addr_getregistry(&ipv4addr);
@@ -552,6 +618,15 @@ static void lineparser(void) {
 					printf("CountryCode/%c%c/IPv4  %lu\n", country_code_char_1, country_code_char_2, counter_country_ipv4[index]);
 					printf("CountryCode/%c%c/IPv6  %lu\n", country_code_char_1, country_code_char_2, counter_country_ipv6[index]);
 				};
+			};
+		};
+
+		/* AS numbers */
+		for (index = 0; index < ASNUM_MAX; index++) {
+			if (counter_asn[index] > 0) {
+				printf("ASN/%d/ALL   %lu\n", index, counter_asn[index]);
+				printf("ASN/%d/IPv4  %lu\n", index, counter_asn_ipv4[index]);
+				printf("ASN/%d/IPv6  %lu\n", index, counter_asn_ipv6[index]);
 			};
 		};
 

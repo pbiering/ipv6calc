@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.295 2013/07/01 19:52:15 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.296 2013/07/01 20:44:29 ds6peter Exp $ 
  */
 
 Info:
@@ -9,7 +9,7 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
 20130701/PB
-	ipv6logstats: enhance output by country code / proto statistics
+	ipv6logstats: enhance output by country code / AS Number / proto statistics
 	databases/lib: major extensions of wrapper
 
 20130622/PB
