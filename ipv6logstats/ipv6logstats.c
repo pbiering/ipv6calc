@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.26 2013/07/01 20:44:29 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.27 2013/07/02 05:00:54 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -214,7 +214,7 @@ static void stat_inc_country_code(const char* country_code, const int proto) {
 	};
 
 	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s/%s: Increment index: %d (%s)\n", __FILE__, __func__, index, country_code);
+		fprintf(stderr, "%s/%s: Increment CountryCode index: %d (%s)\n", __FILE__, __func__, index, country_code);
 	};
 
 	counter_country[index]++;
@@ -256,7 +256,10 @@ static void stat_inc_asnum(const char* asnum, const int proto) {
 			as_number = atol(as_number_string);
 		};
 	
-		if (as_number > ASNUM_MAX) {
+		if (as_number < ASNUM_MAX) {
+			// everything is fine
+		} else {
+			// map to AS_TRANS
 			as_number = ASNUM_AS_TRANS;
 		};
 	
@@ -264,7 +267,7 @@ static void stat_inc_asnum(const char* asnum, const int proto) {
 	};
 
 	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s/%s: Increment index: %d (%s)\n", __FILE__, __func__, index, asnum);
+		fprintf(stderr, "%s/%s: Increment ASN index: %d (%s)\n", __FILE__, __func__, index, asnum);
 	};
 
 	counter_asn[index]++;
