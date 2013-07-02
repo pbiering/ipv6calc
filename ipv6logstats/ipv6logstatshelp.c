@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstatshelp.c
- * Version    : $Id: ipv6logstatshelp.c,v 1.3 2006/07/10 11:38:19 peter Exp $
- * Copyright  : 2003-2006 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logstatshelp.c,v 1.4 2013/07/02 20:56:48 ds6peter Exp $
+ * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -17,9 +17,22 @@
 #include "ipv6calchelp.h"
 #include "config.h"
 
+#include "../databases/lib/libipv6calc_db_wrapper.h"
+
 /* display info */
 void printversion(void) {
-	fprintf(stderr, "%s: version %s\n", PROGRAM_NAME, PACKAGE_VERSION);
+	fprintf(stderr, "%s: version %s", PROGRAM_NAME, PACKAGE_VERSION);
+
+	ipv6calc_print_features();
+
+	fprintf(stderr, "\n");
+};
+
+void printversion_verbose(void) {
+	char string[NI_MAXHOST];
+	printversion();
+
+	ipv6calc_print_features_verbose();
 };
 
 void printcopyright(void) {
@@ -46,6 +59,7 @@ void ipv6logstats_printhelp(void) {
 	fprintf(stderr, "  [-n|--noheader]            : don't print header in colums mode\n");
 	fprintf(stderr, "  [-o|--onlyheader]          : print only header in colums mode\n");
 	fprintf(stderr, "  [-p|--prefix <token>]      : print token as prefix\n");
+	fprintf(stderr, "  [-v|--version]             : version information\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, " Takes http log data from stdin and print a table on output\n");
 	fprintf(stderr, "\n");

@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.296 2013/07/01 20:44:29 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.297 2013/07/02 20:56:47 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130702/PB
+	migrate displaying verbose features into lib
+
 20130701/PB
 	ipv6logstats: enhance output by country code / AS Number / proto statistics
 	databases/lib: major extensions of wrapper

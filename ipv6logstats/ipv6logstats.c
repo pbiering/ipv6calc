@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.27 2013/07/02 05:00:54 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.28 2013/07/02 20:56:48 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -87,7 +87,12 @@ int main(int argc,char *argv[]) {
 				break;
 
 			case 'v':
-				command |= CMD_printversion;
+				if ((command & CMD_printversion) != 0) {
+					// second time '-v'
+					command |= CMD_printversion_verbose;
+				} else {
+					command |= CMD_printversion;
+				};
 				break;
 
 			case 'h':
@@ -162,9 +167,13 @@ int main(int argc,char *argv[]) {
 	};
 
 	/* do work depending on selection */
-	if (command == CMD_printversion) {
-		printversion();
-		exit(EXIT_FAILURE);
+	if ((command & CMD_printversion) != 0) {
+		if ((command & CMD_printversion_verbose) != 0) {
+			printversion_verbose();
+		} else {
+			printversion();
+		};
+		exit(EXIT_SUCCESS);
 	};
 
 	if (command == CMD_printhelp) {
