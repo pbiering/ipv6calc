@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calccommands.h
- * Version    : $Id: ipv6calccommands.h,v 1.12 2013/03/30 18:03:45 ds6peter Exp $
- * Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calccommands.h,v 1.13 2013/07/07 20:21:14 ds6peter Exp $
+ * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing commands for ipv6calc
@@ -12,10 +12,15 @@
 
 #define _ipv6calccommands_h_
 
+/* verbose levels */
+#define LEVEL_VERBOSE			0x1
+#define LEVEL_VERBOSE2			0x2
+
 /* command values */
 #define CMD_printhelp			0x0000001
 #define CMD_printversion		0x0000002
 #define CMD_printversion_verbose	0x0000020
+#define CMD_printversion_verbose2	0x0000040
 
 #define CMD_printexamples		0x0000004
 #define CMD_printoldoptions		0x0000008

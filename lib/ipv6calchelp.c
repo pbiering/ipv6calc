@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.33 2013/07/03 05:50:28 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.34 2013/07/07 20:21:14 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -725,7 +725,7 @@ void ipv6calc_print_features(void) {
 
 
 /* display features in verbose mode */
-void ipv6calc_print_features_verbose(void) {
+void ipv6calc_print_features_verbose(const int level_verbose) {
 	char string[NI_MAXHOST];
 
 	fprintf(stderr, "\n");
@@ -803,6 +803,6 @@ void ipv6calc_print_features_verbose(void) {
 	fprintf(stderr, "IP2Location support not enabled\n");
 #endif
 
-	libipv6calc_db_wrapper_print_db_info();
+	libipv6calc_db_wrapper_print_db_info(level_verbose);
 };
 

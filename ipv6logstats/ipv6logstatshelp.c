@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstatshelp.c
- * Version    : $Id: ipv6logstatshelp.c,v 1.4 2013/07/02 20:56:48 ds6peter Exp $
+ * Version    : $Id: ipv6logstatshelp.c,v 1.5 2013/07/07 20:21:14 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -28,11 +28,11 @@ void printversion(void) {
 	fprintf(stderr, "\n");
 };
 
-void printversion_verbose(void) {
+void printversion_verbose(int level_verbose) {
 	char string[NI_MAXHOST];
 	printversion();
 
-	ipv6calc_print_features_verbose();
+	ipv6calc_print_features_verbose(level_verbose);
 };
 
 void printcopyright(void) {

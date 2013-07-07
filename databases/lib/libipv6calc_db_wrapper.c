@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.6 2013/07/03 05:50:28 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.7 2013/07/07 20:21:14 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -84,13 +84,13 @@ void libipv6calc_db_wrapper_info(char * string, const size_t size) {
 };
 
 /* function print db info */
-void libipv6calc_db_wrapper_print_db_info(void) {
+void libipv6calc_db_wrapper_print_db_info(const int level_verbose) {
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
 	};
 
 	// Call GeoIP wrapper
-	libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info();
+	libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(level_verbose);
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Return\n", __FILE__, __func__);
