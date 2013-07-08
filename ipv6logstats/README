@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2013/07/07 20:21:14 ds6peter Exp $
+$Id: README,v 1.6 2013/07/08 06:25:30 ds6peter Exp $
 
 Gnuplot:
 Homepage: http://www.gnuplot.info/
@@ -8,43 +8,51 @@ Gnuplot is normally contained by Linux distribution
 GRI:
 Homepage: http://gri.sourceforge.net/
 
+Output format
+*Verion			$MAJOR.$MINOR
+
 
 Output format version 3.0 extended with:
 
-- one line per AS and proto:
-*ASN-num-proto/$AS/ALL   $ALL[$AS]
-*ASN-num-proto/$AS/IPv4  $IPv4[$AS]
-*ASN-num-proto/$AS/IPv6  $IPv6[$AS]
-
-- list per AS
-**ASN-num-proto/$AS/A46  $ALL[$AS] $IPv4[$AS] $IPv6[$AS]
-
-- one line per proto and AS
-*ASN-proto-num/ALL/$AS   $ALL[$AS]
-*ASN-proto-num/IPv4/$AS  $IPv4[$AS]
-*ASN-proto-num/IPv6/$AS  $IPv6[$AS]
-
-- list per proto (summary)
-**ASN-proto-num/A46/ALL  sum($ALL[$AS]) sum($IPv4[$AS]) sum($IPv6[$AS])
-
+- Database information
+*3*DB-Info: ...
 
 - one line per CountryCode and proto
-*CC-code-proto/DE/ALL    $ALL[$CC]
-*CC-code-proto/DE/IPv4   $IPv4[$CC]
-*CC-code-proto/DE/IPv6   $IPv6[$CC]
+*3*CC-code-proto/$CC/ALL    $ALL[$CC]
+*3*CC-code-proto/$CC/IPv4   $IPv4[$CC]
+*3*CC-code-proto/$CC/IPv6   $IPv6[$CC]
 
 - list per CountryCode
-**CC-code-proto/$CC/ALL   $ALL[$CC] $IPv4[$CC] $IPv6[$CC]
+*3*CC-code-proto-list/$CC    $ALL[$CC] $IPv4[$CC] $IPv6[$CC]
 
 - one line per proto and CountryCode
-*CC-proto-code/ALL/$CC   $ALL[$CC]
-*CC-proto-code/IPv4/$CC  $IPv4[$CC]
-*CC-proto-code/IPv6/$CC  $IPv6[$CC]
+*3*CC-proto-code/ALL/$CC   $ALL[$CC]
+*3*CC-proto-code/IPv4/$CC  $IPv4[$CC]
+*3*CC-proto-code/IPv6/$CC  $IPv6[$CC]
 
 - list per proto (summary)
-**CC-proto-code/A46/ALL  sum($ALL[$CC]) sum($IPv4[$CC]) sum($IPv6[$CC])
+*3*CC-proto-code-list/ALL  sum($ALL[$CC]) sum($IPv4[$CC]) sum($IPv6[$CC])
+
+- one line per AS and proto:
+*3*ASN-num-proto/$AS/ALL   $ALL[$AS]
+*3*ASN-num-proto/$AS/IPv4  $IPv4[$AS]
+*3*ASN-num-proto/$AS/IPv6  $IPv6[$AS]
+
+- list per AS
+*3*ASN-num-proto-list/$AS  $ALL[$AS] $IPv4[$AS] $IPv6[$AS]
+
+- one line per proto and AS
+*3*ASN-proto-num/ALL/$AS   $ALL[$AS]
+*3*ASN-proto-num/IPv4/$AS  $IPv4[$AS]
+*3*ASN-proto-num/IPv6/$AS  $IPv6[$AS]
+
+- list per proto (summary)
+*3*ASN-proto-num-list/ALL  sum($ALL[$AS]) sum($IPv4[$AS]) sum($IPv6[$AS])
 
 
-=> "grep" your favorite lines, "*" can be matched with '^\*\*'
+=> "grep" your favorite lines, "*" can be matched with '^\*3\*'
 
-NOTE: country code "00" is "unknown", there are also other special ones defined in GeoIP like A1, A2 and O1 (see GeoIP source code)
+NOTE: country code "--" (unkown) is mapped to "00", there are also other special ones defined in GeoIP like A1, A2 and O1 (see GeoIP source code)
+
+
+Output format in future versions will be introduced with *$MAJOR*

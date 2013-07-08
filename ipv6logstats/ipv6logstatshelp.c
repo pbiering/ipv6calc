@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstatshelp.c
- * Version    : $Id: ipv6logstatshelp.c,v 1.5 2013/07/07 20:21:14 ds6peter Exp $
+ * Version    : $Id: ipv6logstatshelp.c,v 1.6 2013/07/08 06:25:30 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -55,13 +55,17 @@ void ipv6logstats_printhelp(void) {
 	fprintf(stderr, "  [-d|--debug <debug value>] : debug value (bitwise like)\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "  [-u|--unknown]             : print unknown IP addresses to stderr\n");
-	fprintf(stderr, "  [-c|--colums]              : print statistics in colums\n");
-	fprintf(stderr, "  [-n|--noheader]            : don't print header in colums mode\n");
-	fprintf(stderr, "  [-o|--onlyheader]          : print only header in colums mode\n");
-	fprintf(stderr, "  [-p|--prefix <token>]      : print token as prefix\n");
-	fprintf(stderr, "  [-v|--version]             : version information\n");
+	fprintf(stderr, "  [-c|--colums]              : print statistics in colums (1)\n");
+	fprintf(stderr, "  [-n|--noheader]            : don't print header in colums mode (1)\n");
+	fprintf(stderr, "  [-o|--onlyheader]          : print only header in colums mode (1)\n");
+	fprintf(stderr, "  [-p|--prefix <token>]      : print token as prefix (1)\n");
+	fprintf(stderr, "  [-v|--version]             : version information (2)\n");
 	fprintf(stderr, "\n");
-	fprintf(stderr, " Takes http log data from stdin and print a table on output\n");
+	fprintf(stderr, " (1) unsupported for CountryCode & ASN statistics\n");
+	fprintf(stderr, " (2) two additinal levels of verbosity supported by using more than one time\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr, " Takes web server log data (or any other data which has IPv4/v6 address in first column)\n");
+	fprintf(stderr, "   from stdin and print statistics table/list (depending on option) to stdout\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, "\n");
 

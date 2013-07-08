@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.29 2013/07/07 20:21:14 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.30 2013/07/08 06:25:30 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -54,7 +54,7 @@ static long unsigned int counter_country[COUNTRY_CODE_INDEX_MAX]; // [0-9A-Z] * 
 static long unsigned int counter_country_ipv4[COUNTRY_CODE_INDEX_MAX]; // [0-9A-Z] * [0-9A-Z]
 static long unsigned int counter_country_ipv6[COUNTRY_CODE_INDEX_MAX]; // [0-9A-Z] * [0-9A-Z]
 
-// macros
+// macros for mapping index to chars and vice-versa
 #define COUNTRY_CODE_INDEX_TO_CHAR1(index)  ((index / 36) > 9) ? ((index / 36) - 10 + 'A') : ((index / 36) + '0')
 #define COUNTRY_CODE_INDEX_TO_CHAR2(index)  ((index % 36) > 9) ? ((index % 36) - 10 + 'A') : ((index % 36) + '0')
 #define COUNTRY_CODE_CHARS_TO_INDEX(c1,c2)  (((c1 - '0') > 9) ? ((c1 - 'A') + 10) : ((c1 - '0'))) * 36 + (((c2 - '0') > 9) ? ((c2 - 'A') + 10) : ((c2 - '0')))
@@ -643,7 +643,11 @@ static void lineparser(void) {
 	/* print result */
 	if (opt_printdirection == 0) {
 		/* print in rows */
+
+		/* print version number */
 		printf("%-20s %d.%d\n", "*Version", STATS_VERSION_MAJOR, STATS_VERSION_MINOR);
+
+		libipv6calc_db_wrapper_print_db_info(0, "*3*DB-Info: ");
 
 		/* print version number */
 		if (strlen(opt_token) > 0) {
@@ -660,17 +664,11 @@ static void lineparser(void) {
 				country_code_char_1 = COUNTRY_CODE_INDEX_TO_CHAR1(index);
 				country_code_char_2 = COUNTRY_CODE_INDEX_TO_CHAR2(index);
 
-				printf("*CC-code-proto/%c%c/ALL   %lu\n", country_code_char_1, country_code_char_2, counter_country[index]);
-				printf("*CC-code-proto/%c%c/IPv4  %lu\n", country_code_char_1, country_code_char_2, counter_country_ipv4[index]);
-				printf("*CC-code-proto/%c%c/IPv6  %lu\n", country_code_char_1, country_code_char_2, counter_country_ipv6[index]);
-				printf("**CC-code-proto/%c%c/A46  %lu %lu %lu\n", country_code_char_1, country_code_char_2, counter_country[index], counter_country_ipv4[index], counter_country_ipv6[index]);
+				printf("*3*CC-code-proto/%c%c/ALL   %lu\n", country_code_char_1, country_code_char_2, counter_country[index]);
+				printf("*3*CC-code-proto/%c%c/IPv4  %lu\n", country_code_char_1, country_code_char_2, counter_country_ipv4[index]);
+				printf("*3*CC-code-proto/%c%c/IPv6  %lu\n", country_code_char_1, country_code_char_2, counter_country_ipv6[index]);
+				printf("*3*CC-code-proto-list/%c%c  %lu %lu %lu\n", country_code_char_1, country_code_char_2, counter_country[index], counter_country_ipv4[index], counter_country_ipv6[index]);
 			};
-		};
-		if (counter_country[COUNTRY_CODE_INDEX_UNKNOWN] > 0) {
-			printf("*CC-code-proto/UNKNOWN/ALL   %lu\n", counter_country[COUNTRY_CODE_INDEX_UNKNOWN]);
-			printf("*CC-code-proto/UNKNOWN/IPv4  %lu\n", counter_country_ipv4[COUNTRY_CODE_INDEX_UNKNOWN]);
-			printf("*CC-code-proto/UNKNOWN/IPv6  %lu\n", counter_country_ipv6[COUNTRY_CODE_INDEX_UNKNOWN]);
-			printf("**CC-code-proto/UNKNOWN/A46  %lu %lu %lu\n", counter_country[COUNTRY_CODE_INDEX_UNKNOWN], counter_country_ipv4[COUNTRY_CODE_INDEX_UNKNOWN], counter_country_ipv6[COUNTRY_CODE_INDEX_UNKNOWN]);
 		};
 
 		/* proto / country_code */
@@ -680,36 +678,30 @@ static void lineparser(void) {
 				country_code_char_1 = COUNTRY_CODE_INDEX_TO_CHAR1(index);
 				country_code_char_2 = COUNTRY_CODE_INDEX_TO_CHAR2(index);
 
-				printf("*CC-proto-code/ALL/%c%c   %lu\n", country_code_char_1, country_code_char_2, counter_country[index]);
+				printf("*3*CC-proto-code/ALL/%c%c   %lu\n", country_code_char_1, country_code_char_2, counter_country[index]);
 				c_all += counter_country[index];
 			};
 		};
-
 		for (index = 0; index < COUNTRY_CODE_INDEX_MAX; index++) {
 			if (counter_country_ipv4[index] > 0) {
 				country_code_char_1 = COUNTRY_CODE_INDEX_TO_CHAR1(index);
 				country_code_char_2 = COUNTRY_CODE_INDEX_TO_CHAR2(index);
 
-				printf("*CC-proto-code/IPv4/%c%c  %lu\n", country_code_char_1, country_code_char_2, counter_country_ipv4[index]);
+				printf("*3*CC-proto-code/IPv4/%c%c  %lu\n", country_code_char_1, country_code_char_2, counter_country_ipv4[index]);
 				c_ipv4 += counter_country_ipv4[index];
 			};
 		};
-		if (counter_country_ipv4[COUNTRY_CODE_INDEX_UNKNOWN] > 0) {
-			printf("*CC-proto-code/IPv4/UNKNOWN %lu\n", counter_country_ipv4[COUNTRY_CODE_INDEX_UNKNOWN]);
-			c_ipv4 += counter_country_ipv4[COUNTRY_CODE_INDEX_UNKNOWN];
-		};
-
 		for (index = 0; index < COUNTRY_CODE_INDEX_MAX; index++) {
 			if (counter_country_ipv6[index] > 0) {
 				country_code_char_1 = COUNTRY_CODE_INDEX_TO_CHAR1(index);
 				country_code_char_2 = COUNTRY_CODE_INDEX_TO_CHAR2(index);
 
-				printf("*CC-proto-code/IPv6/%c%c  %lu\n", country_code_char_1, country_code_char_2, counter_country_ipv6[index]);
+				printf("*3*CC-proto-code/IPv6/%c%c  %lu\n", country_code_char_1, country_code_char_2, counter_country_ipv6[index]);
 				c_ipv6 += counter_country_ipv6[index];
 			};
 		};
 
-		printf("**CC-proto-code/A46/ALL  %lu %lu %lu\n", c_all, c_ipv4, c_ipv6);
+		printf("*3*CC-proto-code-list/ALL  %lu %lu %lu\n", c_all, c_ipv4, c_ipv6);
 
 		/*
 		c_all = 0; c_ipv4 = 0; c_ipv6 = 0;
@@ -726,10 +718,10 @@ static void lineparser(void) {
 		/* ASN number / proto */
 		for (index = 0; index < ASNUM_MAX; index++) {
 			if (counter_asn[index] > 0) {
-				printf("*ASN-num-proto/%d/ALL   %lu\n", index, counter_asn[index]);
-				printf("*ASN-num-proto/%d/IPv4  %lu\n", index, counter_asn_ipv4[index]);
-				printf("*ASN-num-proto/%d/IPv6  %lu\n", index, counter_asn_ipv6[index]);
-				printf("**ASN-num-proto/%d/A46  %lu %lu %lu\n", index, counter_asn[index], counter_asn_ipv4[index], counter_asn_ipv6[index]);
+				printf("*3*ASN-num-proto/%d/ALL   %lu\n", index, counter_asn[index]);
+				printf("*3*ASN-num-proto/%d/IPv4  %lu\n", index, counter_asn_ipv4[index]);
+				printf("*3*ASN-num-proto/%d/IPv6  %lu\n", index, counter_asn_ipv6[index]);
+				printf("*3*ASN-num-proto-list/%d  %lu %lu %lu\n", index, counter_asn[index], counter_asn_ipv4[index], counter_asn_ipv6[index]);
 			};
 		};
 
@@ -737,23 +729,23 @@ static void lineparser(void) {
 		c_all = 0; c_ipv4 = 0; c_ipv6 = 0;
 		for (index = 0; index < ASNUM_MAX; index++) {
 			if (counter_asn[index] > 0) {
-				printf("*ASN-proto-num/ALL/%d   %lu\n", index, counter_asn[index]);
+				printf("*3*ASN-proto-num/ALL/%d   %lu\n", index, counter_asn[index]);
 				c_all += counter_asn[index];
 			};
 		};
 		for (index = 0; index < ASNUM_MAX; index++) {
 			if (counter_asn_ipv4[index] > 0) {
-				printf("*ASN-proto-num/IPv4/%d  %lu\n", index, counter_asn_ipv4[index]);
+				printf("*3*ASN-proto-num/IPv4/%d  %lu\n", index, counter_asn_ipv4[index]);
 				c_ipv4 += counter_asn_ipv4[index];
 			};
 		};
 		for (index = 0; index < ASNUM_MAX; index++) {
 			if (counter_asn_ipv6[index] > 0) {
-				printf("*ASN-proto-num/IPv6/%d  %lu\n", index, counter_asn_ipv6[index]);
+				printf("*3*ASN-proto-num/IPv6/%d  %lu\n", index, counter_asn_ipv6[index]);
 				c_ipv6 += counter_asn_ipv6[index];
 			};
 		};
-		printf("**ASN-proto-num/A46/ALL  %lu %lu %lu\n", c_all, c_ipv4, c_ipv6);
+		printf("*3*ASN-proto-num-list/ALL  %lu %lu %lu\n", c_all, c_ipv4, c_ipv6);
 
 
 	} else {
