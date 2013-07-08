@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.19 2013/04/13 08:10:56 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.20 2013/07/08 07:04:13 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -60,33 +60,60 @@ fe80--218-8bff-fe17-a226s4.ipv6-literal.net					ipv6literal
 END
 }
 
-# Test Scenarios for reserved IPv4 addresses (RFC 5735)
+# Test Scenarios for reserved IPv4 addresses (RFC 5735) https://en.wikipedia.org/wiki/Reserved_IP_addresses
 testscenarios_ipv4_reserved() {
 	cat <<END | grep -v '^#'
 0.0.0.0			RFC1122#3.2.1.3
 0.255.255.255		RFC1122#3.2.1.3
+9.255.255.255		noRFC
 10.0.0.0		RFC1918#3
 10.255.255.255		RFC1918#3
+11.0.0.0		noRFC
+100.63.255.255		noRFC
+100.64.0.0		RFC6598
+100.127.255.255		RFC6598
+100.128.0.0		noRFC
+126.255.255.255		noRFC
 127.0.0.0		RFC1122#3.2.1.3
 127.255.255.255		RFC1122#3.2.1.3
+128.0.0.0		noRFC
+169.253.255.255		noRFC
 169.254.0.0		RFC3927#1
 169.254.255.255		RFC3927#1
+169.255.0.0		noRFC
+172.15.255.255		noRFC
 172.16.0.0		RFC1918#3
 172.31.255.255		RFC1918#3
+172.32.0.0		noRFC
+191.255.255.255		noRFC
 192.0.0.0		RFC5736#1
 192.0.0.255		RFC5736#1
+192.0.1.0		noRFC
+192.0.1.255		noRFC
 192.0.2.0		RFC5737#1
 192.0.2.255		RFC5737#1
+192.0.3.0		noRFC
+192.88.98.255		noRFC
 192.88.99.0		RFC3068#2.3
 192.88.99.255		RFC3068#2.3
+192.88.100.0		noRFC
+192.167.255.255		noRFC
 192.168.0.0		RFC1918#3
 192.168.255.255		RFC1918#3
+192.169.0.0		noRFC
+198.17.255.255		noRFC
 198.18.0.0		RFC2544#C.2.2
 198.19.255.255		RFC2544#C.2.2
+198.20.0.0		noRFC
+198.51.99.255		noRFC
 198.51.100.0		RFC5737#3
 198.51.100.255		RFC5737#3
+198.51.101.0		noRFC
+203.0.112.255		noRFC
 203.0.113.0		RFC5737#3
 203.0.113.255		RFC5737#3
+203.0.114.0		noRFC
+223.255.255.255		noRFC
 224.0.0.0		RFC3171#2
 239.255.255.255		RFC3171#2
 240.0.0.0		RFC1112#4

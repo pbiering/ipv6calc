@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.8 2013/07/08 06:25:30 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.9 2013/07/08 07:04:13 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -25,19 +25,21 @@ static int wrapper_GeoIP_status = 0;
  * out: 0=ok, 1=error
  */
 int libipv6calc_db_wrapper_init(void) {
-	int result = 0, r;
+	int result = 0;
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
 	};
 
+#ifdef SUPPORT_GEOIP
 	// Call GeoIP wrapper
-	r = libipv6calc_db_wrapper_GeoIP_wrapper_init();
+	int r = libipv6calc_db_wrapper_GeoIP_wrapper_init();
 	if (r != 0) {
 		result = 1;
 	} else {
 		wrapper_GeoIP_status = 1; // ok
 	};
+#endif
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Result: %d\n", __FILE__, __func__, result);
@@ -53,17 +55,19 @@ int libipv6calc_db_wrapper_init(void) {
  * out: 0=ok, 1=error
  */
 int libipv6calc_db_wrapper_cleanup(void) {
-	int result = 0, r;
+	int result = 0;
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
 	};
 
+#ifdef SUPPORT_GEOIP
 	// Call GeoIP wrapper
-	r = libipv6calc_db_wrapper_GeoIP_wrapper_cleanup();
+	int r = libipv6calc_db_wrapper_GeoIP_wrapper_cleanup();
 	if (r != 0) {
 		result = 1;
 	};
+#endif
 
 	return(result);
 };
@@ -74,12 +78,15 @@ void libipv6calc_db_wrapper_info(char * string, const size_t size) {
 		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
 	};
 
+#ifdef SUPPORT_GEOIP
 	// Call GeoIP wrapper
 	libipv6calc_db_wrapper_GeoIP_wrapper_info(string, size);
+#endif
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Result: %s\n", __FILE__, __func__, string);
 	};
+
 	return;
 };
 
@@ -89,14 +96,17 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
 	};
 
+#ifdef SUPPORT_GEOIP
 	// Call GeoIP wrapper
 	libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(level_verbose, prefix_string);
+#endif
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Return\n", __FILE__, __func__);
 	};
 	return;
 };
+
 
 /*********************************************
  *  * Abstract functions
@@ -110,11 +120,13 @@ const char * libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const
 	};
 
 	if (wrapper_GeoIP_status == 1) {
+#ifdef SUPPORT_GEOIP
 		if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 			fprintf(stderr, "%s/%s: Call now GeoIP\n", __FILE__, __func__);
 		};
 
 		result_char_ptr = libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(addr, proto);
+#endif
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
@@ -133,11 +145,13 @@ char * libipv6calc_db_wrapper_asnum_by_addr(const char *addr, const int proto) {
 	};
 
 	if (wrapper_GeoIP_status == 1) {
+#ifdef SUPPORT_GEOIP
 		if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 			fprintf(stderr, "%s/%s: Call now GeoIP\n", __FILE__, __func__);
 		};
 
 		result_char_ptr = libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(addr, proto);
+#endif
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {

@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2013/07/08 06:25:30 ds6peter Exp $
+$Id: README,v 1.7 2013/07/08 07:04:13 ds6peter Exp $
 
 Gnuplot:
 Homepage: http://www.gnuplot.info/
@@ -53,6 +53,8 @@ Output format version 3.0 extended with:
 => "grep" your favorite lines, "*" can be matched with '^\*3\*'
 
 NOTE: country code "--" (unkown) is mapped to "00", there are also other special ones defined in GeoIP like A1, A2 and O1 (see GeoIP source code)
+
+NOTE: ASN "0" is "unknown"
 
 
 Output format in future versions will be introduced with *$MAJOR*

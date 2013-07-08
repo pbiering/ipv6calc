@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
-# Version    : $Id: test_ipv6logstats.sh,v 1.5 2012/12/16 09:39:02 peter Exp $
+# Version    : $Id: test_ipv6logstats.sh,v 1.6 2013/07/08 07:04:13 ds6peter Exp $
 # Copyright  : 2003-2005 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"
@@ -26,7 +26,7 @@ END
 echo "Run 'ipv6logstats' function tests..."
 
 #testscenarios
-testscenarios | ./ipv6logstats
+testscenarios | ./ipv6logstats -q
 retval=$?
 if [ $retval -ne 0 ]; then
 	echo "Error executing 'ipv6logstats'!"
@@ -36,11 +36,21 @@ echo
 
 
 #testscenarios (columns)
-testscenarios | ./ipv6logstats -c
+testscenarios | ./ipv6logstats -q -c
 retval=$?
 if [ $retval -ne 0 ]; then
 	echo "Error executing 'ipv6logstats'!"
 	exit 1
 fi
-echo 
+echo
+
+
+#testscenarios version 3
+testscenarios | ./ipv6logstats -q | grep -q '\*3\*CC-proto-code-list/ALL'
+if [ $retval -ne 0 ]; then
+	echo "Error executing 'ipv6logstats' (version 3 test)"
+	exit 1
+fi
+
+
 echo "All tests were successfully done!"

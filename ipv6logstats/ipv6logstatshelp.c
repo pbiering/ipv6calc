@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstatshelp.c
- * Version    : $Id: ipv6logstatshelp.c,v 1.6 2013/07/08 06:25:30 ds6peter Exp $
+ * Version    : $Id: ipv6logstatshelp.c,v 1.7 2013/07/08 07:04:13 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -59,6 +59,7 @@ void ipv6logstats_printhelp(void) {
 	fprintf(stderr, "  [-n|--noheader]            : don't print header in colums mode (1)\n");
 	fprintf(stderr, "  [-o|--onlyheader]          : print only header in colums mode (1)\n");
 	fprintf(stderr, "  [-p|--prefix <token>]      : print token as prefix (1)\n");
+	fprintf(stderr, "  [-q|--quiet]               : be more quiet\n");
 	fprintf(stderr, "  [-v|--version]             : version information (2)\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, " (1) unsupported for CountryCode & ASN statistics\n");

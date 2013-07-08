@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.8 2013/07/08 06:25:30 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.9 2013/07/08 07:04:13 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -17,6 +17,9 @@
 #include "libipv6calcdebug.h"
 
 #include "libipv6calc_db_wrapper.h"
+
+#ifdef SUPPORT_GEOIP
+
 #include "libipv6calc_db_wrapper_GeoIP.h"
 
 #ifdef SUPPORT_GEOIP_DYN
@@ -167,6 +170,7 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 #else
 	libipv6calc_db_wrapper_GeoIPDBDescription = GeoIPDBDescription;
 #endif
+
 
 	// TODO: replace hardcoded NUM_DB_TYPES by a function of GeoIP library
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
@@ -1846,3 +1850,5 @@ char * libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr (const char *addr, con
 
 	return(GeoIP_result_ptr);
 };
+
+#endif

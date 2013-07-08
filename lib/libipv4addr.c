@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.38 2013/05/12 07:34:04 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.39 2013/07/08 07:04:13 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -267,6 +267,9 @@ uint32_t ipv4addr_gettype(/*@unused@*/ const ipv6calc_ipv4addr *ipv4addrp) {
 	} else if ((ipv4 & 0xff000000u) == 0x0a000000u) {
 		// 10.0.0.0/8 (RFC 1918)
 		type = IPV4_ADDR_UNICAST | IPV4_ADDR_SITELOCAL;
+	} else if ((ipv4 & 0xffc00000u) == 0x64400000u) {
+		// 100.64.0.0/10 (RFC 6598)
+		type = IPV4_ADDR_RESERVED;
 	} else if ((ipv4 & 0xff000000u) == 0x7f000000u) {
 		// 127.0.0.0/8 (RFC 1122)
 		type = IPV4_ADDR_LOOPBACK;
@@ -648,6 +651,10 @@ int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *re
 	} else if ((ipv4 & 0xff000000u) == 0x0a000000u) {
 		// 10.0.0.0/8 (RFC 1918)
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1918#3)");
+		return (2);
+	} else if ((ipv4 & 0xffc00000u) == 0x64400000u) {
+		// 100.64.0.0/10 (RFC 6598)
+		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC6598)");
 		return (2);
 	} else if ((ipv4 & 0xff000000u) == 0x7f000000u) {
 		// 127.0.0.0/8 (RFC 1122)

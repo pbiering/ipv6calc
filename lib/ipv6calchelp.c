@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.35 2013/07/08 06:25:30 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.36 2013/07/08 07:04:13 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -726,7 +726,9 @@ void ipv6calc_print_features(void) {
 
 /* display features in verbose mode */
 void ipv6calc_print_features_verbose(const int level_verbose) {
+#ifdef SUPPORT_GEOIP
 	char string[NI_MAXHOST];
+#endif
 
 	fprintf(stderr, "\n");
 

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.22 2013/04/11 06:11:23 ds6peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.23 2013/07/08 07:04:13 ds6peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -64,11 +64,22 @@ done || exit 1
 # Test reserved IPv4 addresses
 testscenarios_ipv4_reserved | while read address rfc; do
 	echo "$rfc: $address"
-	if ! ./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY | grep "$rfc"; then
-		echo "ERROR: unexpected result (should: $rfc)"
-		./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY
-		exit 1	
-	fi
+	case $rfc in
+	    RFC*)
+		if ! ./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY | grep "$rfc"; then
+			echo "ERROR: unexpected result (should: $rfc)"
+			./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY
+			exit 1	
+		fi
+		;;
+	    noRFC)
+		if ./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY | grep "RFC"; then
+			echo "ERROR: unexpected result (should not contain RFC token)"
+			./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY
+			exit 1	
+		fi
+		;;
+	esac
 	echo
 done || exit 1
 
