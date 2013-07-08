@@ -622,6 +622,7 @@ ac_includes_default="\
 #endif"
 
 ac_subst_vars='LTLIBOBJS
+DYNLOAD_LIB
 GEOIP_LIB
 GEOIP_INCLUDE
 IP2LOCATION_LIB
@@ -4026,6 +4027,10 @@ if test "${enable_dynamic_load+set}" = set; then :
   enableval=$enable_dynamic_load;
         	DYNAMIC_LOAD="no"
 
+else
+
+        	DYNAMIC_LOAD="yes"
+
 fi
 
 
@@ -4614,9 +4619,11 @@ if test "$DYNAMIC_LOAD" = "yes"; then
        		DYNAMIC_LOAD="yes"
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** Dynamic loading of libraries is enabled" >&5
 $as_echo "*** Dynamic loading of libraries is enabled" >&6; }
-		LDFLAGS="$LDFLAGS -rdynamic -ldl"
+		DYNLOAD_LIB="-rdynamic -ldl"
 	fi
 fi
+
+
 
 ac_config_files="$ac_config_files Makefile md5/Makefile tools/Makefile getopt/Makefile ipv6calc/Makefile lib/Makefile man/Makefile databases/lib/Makefile ipv6logconv/Makefile ipv6loganon/Makefile ipv6logstats/Makefile contrib/ipv6calc.spec VERSION ipv6calcweb/ipv6calcweb.cgi"
 

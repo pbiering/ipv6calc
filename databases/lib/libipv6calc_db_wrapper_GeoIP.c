@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.9 2013/07/08 07:04:13 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.10 2013/07/08 08:52:42 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -14,6 +14,7 @@
 #include <dlfcn.h>
 
 #include "config.h"
+
 #include "libipv6calcdebug.h"
 
 #include "libipv6calc_db_wrapper.h"
@@ -80,7 +81,7 @@ static int dl_status_GeoIP_setup_custom_directory = IPV6CALC_DL_STATUS_UNKNOWN;
 static void (*dl_GeoIP_setup_custom_directory)(char *dir) = NULL;
 
 static const char** dl_GeoIPDBDescription = NULL;
-static char** dl_GeoIPDBFileName = NULL;
+static char ***dl_GeoIPDBFileName = NULL;
 
 /* prototyping of feature check dl_load */
 static void libipv6calc_db_wrapper_dl_load_GeoIP_country_code_by_ipnum_v6 (void);
@@ -143,7 +144,7 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 		fprintf(stderr, "%s/%s: Load library: %s\n", __FILE__, __func__, IPV6CALC_DB_GEOIP_LIB_NAME);
 	};
 
-	dl_GeoIP_handle = dlopen(IPV6CALC_DB_GEOIP_LIB_NAME, RTLD_NOW);
+	dl_GeoIP_handle = dlopen(IPV6CALC_DB_GEOIP_LIB_NAME, RTLD_NOW | RTLD_LOCAL);
 
 	if (dl_GeoIP_handle == NULL) {
 		fprintf(stderr, "%s/%s: Loading of library failed: %s\n", __FILE__, __func__, IPV6CALC_DB_GEOIP_LIB_NAME);
@@ -204,13 +205,13 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 
 	dlerror();    /* Clear any existing error */
 
-	dl_GeoIPDBFileName = (char**) dlsym(dl_GeoIP_handle, "GeoIPDBFileName");
+	dl_GeoIPDBFileName = dlsym(dl_GeoIP_handle, "GeoIPDBFileName");
 	if ((error = dlerror()) != NULL)  {
 		fprintf(stderr, "%s\n", error);
 		return(1);
 	};
 
-	libipv6calc_db_wrapper_GeoIPDBFileName = dl_GeoIPDBFileName;
+	libipv6calc_db_wrapper_GeoIPDBFileName = *dl_GeoIPDBFileName;
 
 	/* check for IPv6 compat support */
 	libipv6calc_db_wrapper_dl_load_GeoIP_country_code_by_ipnum_v6();
@@ -451,6 +452,11 @@ int libipv6calc_db_wrapper_GeoIP_cleanup(void) {
 	};
 
 	r = (int) (*dl_GeoIP_cleanup)();
+
+	if (dl_GeoIPDBFileName != NULL) {
+		fprintf(stderr, "%s/%s: dl_GeoIPDBFileName != NULL (unexpected)\n", __FILE__, __func__);
+		exit(1);
+	};
 END_libipv6calc_db_wrapper:
 #else
 	r = GeoIP_cleanup();
@@ -578,7 +584,7 @@ END_libipv6calc_db_wrapper:
 	GeoIP_setup_custom_directory(dir);
 #endif
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Call libipv6calc_db_wrapper_GeoIP_db_avail\n", __FILE__, __func__);
+		fprintf(stderr, "%s/%s: Call libipv6calc_db_wrapper_GeoIP_db_avail (to trigger _GeoIP_setup_dbfilename)\n", __FILE__, __func__);
 	};
 
 	r = libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_COUNTRY_EDITION); // dummy call to trigger _GeoIP_setup_dbfilename
@@ -590,6 +596,16 @@ END_libipv6calc_db_wrapper:
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: result of dummy GeoIP_db_avail call: %d\n", __FILE__, __func__, r);
 	};
+
+#ifdef SUPPORT_GEOIP_DYN
+	dl_GeoIPDBFileName = dlsym(dl_GeoIP_handle, "GeoIPDBFileName");
+	if ((error = dlerror()) != NULL)  {
+		fprintf(stderr, "%s\n", error);
+		return;
+	};
+
+	libipv6calc_db_wrapper_GeoIPDBFileName = *dl_GeoIPDBFileName;
+#endif
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
@@ -678,12 +694,13 @@ int libipv6calc_db_wrapper_GeoIP_db_avail(int type) {
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Call dlsym: %s\n", __FILE__, __func__, "GeoIPDFilename");
 	};
-	dl_GeoIPDBFileName = (char**) dlsym(dl_GeoIP_handle, "GeoIPDBFileName");
+	//dl_GeoIPDBFileName = (char**) dlsym(dl_GeoIP_handle, "GeoIPDBFileName");
+	dl_GeoIPDBFileName = dlsym(dl_GeoIP_handle, "GeoIPDBFileName");
 	if ((error = dlerror()) != NULL)  {
 		fprintf(stderr, "%s\n", error);
 		return(0);
 	};
-	libipv6calc_db_wrapper_GeoIPDBFileName = dl_GeoIPDBFileName; // update pointer
+	libipv6calc_db_wrapper_GeoIPDBFileName = *dl_GeoIPDBFileName; // update pointer
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		if (libipv6calc_db_wrapper_GeoIPDBFileName[type] == NULL) {

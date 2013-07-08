@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6logconv
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.20 2013/05/12 07:34:04 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.21 2013/07/08 08:52:42 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -14,7 +14,9 @@ bindir		= @bindir@
 # Compiler and Linker Options
 DEFAULT_CFLAGS ?= -O2 -Wall -g
 
-INCLUDES= @GETOPT_INCLUDE@ -I../ -I../lib/
+INCLUDES= @GETOPT_INCLUDE@ -I../ -I../lib/ -I../databases/lib/
+
+LIBS = @IP2LOCATION_LIB@ @GEOIP_LIB@ @DYNLOAD_LIB@
 
 GETOBJS = @LIBOBJS@
 
@@ -36,11 +38,14 @@ $(OBJS):	ipv6logconvoptions.h ipv6logconvhelp.h ipv6logconv.h
 libipv6calc.a:
 		cd ../ && ${MAKE} lib-make
 
-ipv6logconv:	$(OBJS) libipv6calc.a
-		$(CC) -o ipv6logconv $(OBJS) $(GETOBJS) -lipv6calc -L../lib/ $(LDFLAGS) -lm
+libipv6calc_db_wrapper.a:
+		cd ../ && ${MAKE} lib-make
+
+ipv6logconv:	$(OBJS) libipv6calc.a libipv6calc_db_wrapper.a
+		$(CC) -o ipv6logconv $(OBJS) $(GETOBJS) -lipv6calc -lipv6calc_db_wrapper -L../lib/ -L../databases/lib/ $(LDFLAGS) $(LIBS) -lm
 
 static:		ipv6logconv
-		$(CC) -o ipv6logconv-static $(OBJS) $(GETOBJS) -lipv6calc -L../lib/ -static $(LDFLAGS) -lm
+		$(CC) -o ipv6logconv-static $(OBJS) $(GETOBJS) -lipv6calc -lipv6calc_db_wrapper -L../lib/ -L../databases/lib/ -static $(LDFLAGS) $(LIBS) -lm
 
 distclean:
 		${MAKE} clean
