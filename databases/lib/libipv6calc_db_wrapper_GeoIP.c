@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.10 2013/07/08 08:52:42 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.11 2013/07/08 18:59:39 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -597,16 +597,6 @@ END_libipv6calc_db_wrapper:
 		fprintf(stderr, "%s/%s: result of dummy GeoIP_db_avail call: %d\n", __FILE__, __func__, r);
 	};
 
-#ifdef SUPPORT_GEOIP_DYN
-	dl_GeoIPDBFileName = dlsym(dl_GeoIP_handle, "GeoIPDBFileName");
-	if ((error = dlerror()) != NULL)  {
-		fprintf(stderr, "%s\n", error);
-		return;
-	};
-
-	libipv6calc_db_wrapper_GeoIPDBFileName = *dl_GeoIPDBFileName;
-#endif
-
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
 
@@ -694,13 +684,6 @@ int libipv6calc_db_wrapper_GeoIP_db_avail(int type) {
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Call dlsym: %s\n", __FILE__, __func__, "GeoIPDFilename");
 	};
-	//dl_GeoIPDBFileName = (char**) dlsym(dl_GeoIP_handle, "GeoIPDBFileName");
-	dl_GeoIPDBFileName = dlsym(dl_GeoIP_handle, "GeoIPDBFileName");
-	if ((error = dlerror()) != NULL)  {
-		fprintf(stderr, "%s\n", error);
-		return(0);
-	};
-	libipv6calc_db_wrapper_GeoIPDBFileName = *dl_GeoIPDBFileName; // update pointer
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		if (libipv6calc_db_wrapper_GeoIPDBFileName[type] == NULL) {
@@ -714,7 +697,6 @@ END_libipv6calc_db_wrapper:
 	return(result_GeoIP_db_avail);
 #else
 	int r = GeoIP_db_avail(type);
-	libipv6calc_db_wrapper_GeoIPDBFileName = GeoIPDBFileName;
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		if (libipv6calc_db_wrapper_GeoIPDBFileName[type] == NULL) {
