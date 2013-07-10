@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
-# Version    : $Id: test_ipv6logstats.sh,v 1.7 2013/07/08 08:52:42 ds6peter Exp $
+# Version    : $Id: test_ipv6logstats.sh,v 1.8 2013/07/10 06:03:06 ds6peter Exp $
 # Copyright  : 2003-2005 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"
@@ -25,6 +25,14 @@ END
 ## version
 echo "Run 'ipv6logstats' version test..."
 ./ipv6logstats -vvv
+if [ $retval -ne 0 ]; then
+	echo "Error executing 'ipv6logstats'!"
+	exit 1
+fi
+echo 
+
+echo "Run 'ipv6logstats' version test in debug mode..."
+./ipv6logstats -vvv -d -1
 if [ $retval -ne 0 ]; then
 	echo "Error executing 'ipv6logstats'!"
 	exit 1
