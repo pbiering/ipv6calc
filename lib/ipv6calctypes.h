@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.31 2013/03/30 18:03:45 ds6peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.32 2013/08/11 16:42:11 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -255,6 +255,10 @@ typedef struct {
 #define ACTION_filter			(uint32_t) (1 << ACTION_NUM_filter)
 #define ACTION_undefined		(uint32_t) (1 << ACTION_NUM_undefined)
 
+#define ANON_METHOD_ANONYMIZE		1
+#define ANON_METHOD_ZEROIZE		2
+#define ANON_METHOD_KEEPTYPEASNCC	3
+
 typedef struct {
 	const uint32_t number;
 	const char *token;
@@ -294,7 +298,7 @@ typedef struct {
 	int mask_ipv6;
 	int mask_iid;
 	int mask_mac;
-	int method;	// 1=anonymize, 2=zeroize
+	int method;	// 1=anonymize, 2=zeroize, 3=keep type asn countrycode
 } s_ipv6calc_anon_set;
 
 /* anonymization methods */

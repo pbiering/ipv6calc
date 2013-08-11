@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.299 2013/07/08 07:04:13 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.300 2013/08/11 16:42:10 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130811/PB
+	commit IPv6 prefix and IPv4 address anonymization
+
 20130708/PB
 	recognize RFC 6598 addresses, extend test cases
 

@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/databases/registries
 # File       : update-registries.sh
-# Version    : $Id: update-registries.sh,v 1.9 2011/05/05 19:19:52 peter Exp $
-# Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: update-registries.sh,v 1.10 2013/08/11 16:42:11 ds6peter Exp $
+# Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces ../ipv4-assignment/update-ipv4-assignment.sh
 #               replaces ../ipv6-assignment/update-ipv6-assignment.sh
 #
@@ -13,12 +13,7 @@
 #set -x
 
 get_urls() {
-# date 2 days ago
-year="`date -d '2 days ago' +%Y`"
-month="`date -d '2 days ago' +%m`"
-day="`date -d '2 days ago' +%d`"
-
-cat <<END | sed s/\%Y/$year/g | sed s/\%m/$month/g | sed s/\%d/$day/g
+cat <<END
 iana	http://www.iana.org/assignments/ipv4-address-space/			ipv4-address-space.xml			xml	out
 iana	http://www.iana.org/assignments/ipv6-unicast-address-assignments/	ipv6-unicast-address-assignments.xml	xml	out
 ripencc	ftp://ftp.ripe.net/pub/stats/ripencc/		delegated-ripencc-latest		txt
@@ -26,6 +21,7 @@ arin	ftp://ftp.arin.net/pub/stats/arin/		delegated-arin-latest			txt
 apnic	http://ftp.apnic.net/stats/apnic/		delegated-apnic-latest			txt
 lacnic	ftp://ftp.lacnic.net/pub/stats/lacnic/		delegated-lacnic-latest			txt
 afrinic	ftp://ftp.afrinic.net/pub/stats/afrinic/	delegated-afrinic-latest		txt
+iana    https://www.iana.org/assignments/as-numbers/	as-numbers.txt				txt
 END
 }
 
@@ -51,7 +47,7 @@ get_urls | while read subdir url filename format flag; do
 
 	pushd $subdir || exit 1
 	case $format in
-            'txt')
+            'txt'|'csv')
 		# nothing to do
 		;;
             'xml')

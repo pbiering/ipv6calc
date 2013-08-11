@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.24 2013/03/25 21:29:47 ds6peter Exp $
- * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv4addr.h,v 1.25 2013/08/11 16:42:11 ds6peter Exp $
+ * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -63,6 +63,8 @@ typedef struct {
 #define IPV4_ADDR_ANYCAST			(uint32_t) 0x00000004U	
 #define IPV4_ADDR_BROADCAST			(uint32_t) 0x00000008U	
 #define IPV4_ADDR_LOOPBACK			(uint32_t) 0x00000010U
+#define IPV4_ADDR_ANONYMIZED			(uint32_t) 0x00000100U
+#define IPV4_ADDR_GLOBAL			(uint32_t) 0x00000200U
 #define IPV4_ADDR_UNKNOWN			(uint32_t) 0x00000400U
 #define IPV4_ADDR_RESERVED			(uint32_t) 0x00000800U
 
@@ -84,22 +86,61 @@ typedef struct {
 	{ IPV4_ADDR_RESERVED		, "reserved" },
 	{ IPV4_ADDR_ZEROCONF		, "zeroconf" },
 	{ IPV4_ADDR_SITELOCAL		, "site-local" },
+	{ IPV4_ADDR_ANONYMIZED		, "anonymized" },
+	{ IPV4_ADDR_GLOBAL		, "global" },
 	{ IPV4_ADDR_6TO4RELAY		, "6to4relay" }
 };
 
 
 /* Registries */
-#define IPV4_ADDR_REGISTRY_IANA		0x02
-#define IPV4_ADDR_REGISTRY_APNIC	0x03
-#define IPV4_ADDR_REGISTRY_ARIN		0x04
-#define IPV4_ADDR_REGISTRY_RIPE		0x05
-#define IPV4_ADDR_REGISTRY_LACNIC	0x06
-#define IPV4_ADDR_REGISTRY_AFRINIC	0x07
-#define IPV4_ADDR_REGISTRY_RESERVED	0x0e
-#define IPV4_ADDR_REGISTRY_UNKNOWN	0x0f
+#define IPV4_ADDR_REGISTRY_IANA		REGISTRY_IANA
+#define IPV4_ADDR_REGISTRY_APNIC	REGISTRY_APNIC
+#define IPV4_ADDR_REGISTRY_ARIN		REGISTRY_ARIN
+#define IPV4_ADDR_REGISTRY_RIPE		REGISTRY_RIPE
+#define IPV4_ADDR_REGISTRY_LACNIC	REGISTRY_LACNIC
+#define IPV4_ADDR_REGISTRY_AFRINIC	REGISTRY_AFRINIC
+#define IPV4_ADDR_REGISTRY_RESERVED	REGISTRY_RESERVED
+#define IPV4_ADDR_REGISTRY_UNKNOWN	REGISTRY_UNKNOWN
 
-
-
+/* IPv4 address anonymization */
+/*  Global IPv4 addresses are anoymized by storing country code and AS number
+ *   and using prefix of experimental range (240-255.x.y.z)
+ *
+ *  3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 
+ *  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
+ *  1 1 1 1
+ * |p p p p|
+ *  Prefix                
+ *    0xF
+ *
+ * Pariy Bit (odd parity)
+ *         |P|
+ *
+ * Mapping of Country Code
+ *           |c c c c c c c c c c|
+ *            10-bit Country Code mapping [A-Z]*[A-Z0-9] (936)
+ *            0x3FF = unknown country
+ *            0x000-0x3A7: c1= c / 36, c2 = c % 36
+ *
+ * Mapping of ASN <= 65535
+ *                                0|a a a a a a a a a a a a a a a a|
+ *                                    16-bit ASN
+ *
+ * Mapping of ASN >= 65536, ASN & 0xE000 == 0 (12-bit LSB is ok) 
+ *                                1|r r r|0|l l l l l l l l l l l l|
+ *                                           13-bit LSB of ASN
+ *
+ * Mapping of ASN >= 65536, ASN & 0xE000 != 0 (12-bit LSB overflow) => unspecified
+ *                                1|r r r|1|0 0 0 0 0 0 0 0 0 0 0 0|
+ *
+ * Mapping of ASN registry for ASN >= 65536
+ *                                  0 0 0 = "unknown ASN registry"
+ *                                  0 1 0 = APNIC
+ *                                  0 1 1 = RIPE
+ *                                  1 0 0 = LACNIC
+ *                                  1 0 1 = AFRINIC
+ *                                  1 1 0 = ARIN
+ */
 
 #endif
 
@@ -109,9 +150,9 @@ extern uint8_t  ipv4addr_getoctet(const ipv6calc_ipv4addr *ipv4addrp, const unsi
 extern uint16_t ipv4addr_getword(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword);
 extern uint32_t ipv4addr_getdword(const ipv6calc_ipv4addr *ipv4addrp);
 
-extern void ipv4addr_setoctet(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numocett, const unsigned int value);
-extern void ipv4addr_setword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword, const unsigned int value);
-extern void ipv4addr_setdword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int value);
+extern void ipv4addr_setoctet(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numocett, const uint8_t value);
+extern void ipv4addr_setword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword, const uint16_t value);
+extern void ipv4addr_setdword(ipv6calc_ipv4addr *ipv4addrp, const uint32_t value);
 
 extern void ipv4addr_clear(ipv6calc_ipv4addr *ipv4addrp);
 extern void ipv4addr_clearall(ipv6calc_ipv4addr *ipv4addrp);
@@ -133,7 +174,9 @@ extern int libipv4addr_to_reversestring(ipv6calc_ipv4addr *ipv4addrp, char *resu
 extern int libipv4addr_to_octal(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions);
 extern int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions);
 
-extern void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, const unsigned int mask);
+extern void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, const unsigned int mask, const int method);
+extern uint32_t ipv4addr_anonymized_get_as_num32(const ipv6calc_ipv4addr *ipv4addrp);
+extern uint16_t ipv4addr_anonymized_get_cc_index(const ipv6calc_ipv4addr *ipv4addrp);
 
 extern int ipv4addr_filter(const ipv6calc_ipv4addr *ipv4addrp, const s_ipv6calc_filter_ipv4addr *filter);
 extern int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token);

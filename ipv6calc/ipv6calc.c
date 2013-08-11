@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.79 2013/06/22 14:41:40 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.80 2013/08/11 16:42:11 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1494,7 +1494,7 @@ PIPE_input:
 					fprintf(stderr, "No valid IPv4 address given!\n");
 					exit(EXIT_FAILURE);
 				};
-				libipv4addr_anonymize(&ipv4addr, ipv6calc_anon_set.mask_ipv4);
+				libipv4addr_anonymize(&ipv4addr, ipv6calc_anon_set.mask_ipv4, ipv6calc_anon_set.method);
 			} else if ((inputtype == FORMAT_ipv6addr || inputtype == FORMAT_bitstring || inputtype == FORMAT_revnibbles_int || inputtype == FORMAT_revnibbles_arpa || inputtype == FORMAT_base85 || inputtype == FORMAT_ipv6literal) && outputtype == FORMAT_ipv6addr) {
 				/* anonymize IPv6 address */
 				if (ipv6addr.flag_valid != 1) {

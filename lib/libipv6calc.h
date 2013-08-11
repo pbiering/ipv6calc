@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.12 2013/05/12 07:34:04 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.13 2013/08/11 16:42:11 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -30,19 +30,51 @@ typedef struct {
 
 
 /*@unused@*/ static const s_ipv6calc_anon_set ipv6calc_anon_set_list[] = {
-	// name                 short ip4 ip6 iid mac method
-	{ "anonymize-standard", "as", 24, 56, 40, 24, 1 },
-	{ "anonymize-careful" , "ac", 20, 48, 24, 24, 1 },
-	{ "anonymize-paranoid", "ap", 16, 40,  0, 24, 1 },
-	{ "zeroize-standard"  , "zs", 24, 56, 40, 24, 2 },
-	{ "zeroize-careful"   , "zc", 20, 48, 24, 24, 2 },
-	{ "zeroize-paranoid"  , "zp", 16, 40,  0, 24, 2 }
+	// name                   short  ip4 ip6 iid mac  method
+	{ "anonymize-standard"  , "as"  , 24, 56, 40, 24, ANON_METHOD_ANONYMIZE     },
+	{ "anonymize-careful"   , "ac"  , 20, 48, 24, 24, ANON_METHOD_ANONYMIZE     },
+	{ "anonymize-paranoid"  , "ap"  , 16, 40,  0, 24, ANON_METHOD_ANONYMIZE     },
+	{ "zeroize-standard"    , "zs"  , 24, 56, 40, 24, ANON_METHOD_ZEROIZE       },
+	{ "zeroize-careful"     , "zc"  , 20, 48, 24, 24, ANON_METHOD_ZEROIZE       },
+	{ "zeroize-paranoid"    , "zp"  , 16, 40,  0, 24, ANON_METHOD_ZEROIZE       },
+	{ "keep-type-asn-cc"    , "kp"  , 24, 56, 40, 24, ANON_METHOD_KEEPTYPEASNCC }
 };
 
 /*@unused@*/ static const s_ipv6calc_anon_methods ipv6calc_anon_methods[] = {
-	{ "anonymize", 1, "reliable anonymization, keep as much type information as possible" },
-	{ "zeroise"  , 2, "simple zero'ising according to given masks, probably loose type information" },
+	{ "anonymize"        , 1, "reliable anonymization, keep as much type information as possible" },
+	{ "zeroise"          , 2, "simple zero'ising according to given masks, probably loose type information" },
+	{ "keep-type-asn-cc" , 3, "special reliable anonymization, keep type & Autonomous System Number and CountryCode" }
 };
+
+/* Registries */
+#define REGISTRY_APNIC        0x02
+#define REGISTRY_RIPE         0x03
+#define REGISTRY_LACNIC       0x04
+#define REGISTRY_AFRINIC      0x05
+#define REGISTRY_ARIN         0x06
+
+#define REGISTRY_6BONE        0x08
+#define REGISTRY_IANA         0x09
+#define REGISTRY_RESERVED     0x0e
+#define REGISTRY_UNKNOWN      0x0f
+
+// new array (try to remove old arrays)
+/*@unused@*/ static const s_type ipv6calc_registries[] = {
+        { REGISTRY_6BONE      , "6BONE"     },
+        { REGISTRY_IANA       , "IANA"      },
+        { REGISTRY_APNIC      , "APNIC"     },
+        { REGISTRY_ARIN       , "ARIN"      },
+        { REGISTRY_RIPE       , "RIPENCC"   },
+        { REGISTRY_LACNIC     , "LACNIC"    },
+        { REGISTRY_AFRINIC    , "AFRINIC"   },
+        { REGISTRY_RESERVED   , "reserved"  },
+        { REGISTRY_UNKNOWN    , "unknown"   }
+};
+
+
+/* some generic macros */
+#define PACK_XMS(v, x, m, s) 	((((v) ^ (x)) & (m)) << (s))
+#define UNPACK_XMS(p, x, m, s)	((((p) >> (s)) ^ (x)) & (m))
 
 #endif
 

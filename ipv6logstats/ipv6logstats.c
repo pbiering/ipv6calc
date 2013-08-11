@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.31 2013/07/08 08:52:42 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.32 2013/08/11 16:42:11 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -65,8 +65,6 @@ static long unsigned int counter_country_A46, counter_country_IPV4, counter_coun
 
 /* stat by ASN (only 16-bit ASN supported, 32-bit ASNs are mapped to 23456 "AS_TRANS" */
 #define ASNUM_MAX     65536
-#define ASNUM_UNKNOWN 0
-#define ASNUM_AS_TRANS 23456  // special 16-bit AS number for compatibility
 static long unsigned int counter_asn[ASNUM_MAX];
 static long unsigned int counter_asn_ipv4[ASNUM_MAX];
 static long unsigned int counter_asn_ipv6[ASNUM_MAX];
@@ -227,27 +225,18 @@ static void stat_inc(int number) {
 /*
  * Country code statistics
  */
-static void stat_inc_country_code(const char* country_code, const int proto) {
+static void stat_inc_country_code(uint16_t country_code, const int proto) {
 	int index = COUNTRY_CODE_INDEX_UNKNOWN;
-	int c1, c2;
 
-	if ((country_code != NULL) && (strlen(country_code) == 2)) {
-		if (isalnum(country_code[0]) && isalnum(country_code[1])) {
-			c1 = toupper(country_code[0]);
-			c2 = toupper(country_code[1]);
-
-			index = COUNTRY_CODE_CHARS_TO_INDEX(c1,c2);
-
-			if (index >= COUNTRY_CODE_INDEX_MAX) {
-				index = COUNTRY_CODE_INDEX_UNKNOWN; // failsafe
-				fprintf(stderr, "%s/%s: unexpected index (too high): %d\n", __FILE__, __func__, index);
-				exit(1);
-			};
-		};
+	if (country_code < COUNTRY_CODE_INDEX_MAX) {
+		index = country_code;
+	} else {
+		fprintf(stderr, "%s/%s: unexpected index (too high): %d\n", __FILE__, __func__, index);
+		exit(1);
 	};
 
 	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s/%s: Increment CountryCode index: %d (%s)\n", __FILE__, __func__, index, country_code);
+		fprintf(stderr, "%s/%s: Increment CountryCode index: %d (%d)\n", __FILE__, __func__, index, country_code);
 	};
 
 	counter_country[index]++;
@@ -269,44 +258,19 @@ static void stat_inc_country_code(const char* country_code, const int proto) {
 /*
  * AS Number statistics
  */
-static void stat_inc_asnum(const char* asnum, const int proto) {
-	unsigned int index = ASNUM_UNKNOWN;
-	int i, valid = 1;
-	long unsigned int as_number = ASNUM_UNKNOWN;
-	char as_number_string[16];
+static void stat_inc_asnum(const uint32_t as_num32, const int proto) {
+	unsigned int index = ASNUM_AS_UNKNOWN;
 
-	if ((asnum != NULL) && (strncmp(asnum, "AS", 2) == 0) && (strlen(asnum) > 2)) {
-		// catch ASddddd
-		for (i = 0; i <= 15; i++) {
-			if ((asnum[i+2] == ' ') || (asnum[i+2] == '\0')) {
-				break;
-			} else if (isdigit(asnum[i+2])) {
-				continue;
-			} else {
-				// something wrong
-				valid = 0;
-				break;
-			};
-		};
-
-		if (valid == 1) {
-			strncpy(as_number_string, asnum + 2, i);
-			as_number_string[i+1] = '\0';
-			as_number = atol(as_number_string);
-		};
-	
-		if (as_number < ASNUM_MAX) {
-			// everything is fine
-		} else {
-			// map to AS_TRANS
-			as_number = ASNUM_AS_TRANS;
-		};
-	
-		index = (unsigned int) as_number;
+	if (as_num32 < ASNUM_MAX) {
+		// everything is fine
+		index = as_num32;
+	} else {
+		// map to AS_TRANS for now
+		index = ASNUM_AS_TRANS;
 	};
-
+	
 	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s/%s: Increment ASN index: %d (%s)\n", __FILE__, __func__, index, asnum);
+		fprintf(stderr, "%s/%s: Increment ASN index: %d (%d)\n", __FILE__, __func__, index, as_num32);
 	};
 
 	counter_asn[index]++;
@@ -340,6 +304,8 @@ static void lineparser(void) {
 	int country_code_index_1, country_code_index_2, index;
 	char country_code_char_1, country_code_char_2;
 	char *asnum;
+	uint16_t cc_index;
+	uint32_t as_num32;
 	long unsigned int c_all, c_ipv4, c_ipv6;
 
 	// clear counters
@@ -456,12 +422,12 @@ static void lineparser(void) {
 				stat_inc(STATS_IPV6);
 
 				/* country code */
-				country_code = libipv6calc_db_wrapper_country_code_by_addr(token, 6);
-				stat_inc_country_code(country_code, 6);
+				cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 6);
+				stat_inc_country_code(cc_index, 6);
 
 				/* asnum */
-				asnum = libipv6calc_db_wrapper_asnum_by_addr(token, 6);
-				stat_inc_asnum(asnum, 6);
+				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 6);
+				stat_inc_asnum(as_num32, 6);
 
 				/* get type */
 				typeinfo = ipv6addr_gettype(&ipv6addr);
@@ -590,18 +556,17 @@ static void lineparser(void) {
 				/* is IPv4 address */
 				stat_inc(STATS_IPV4);
 
-				/* get country */
-				if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-					fprintf(stderr, "%s/%s: Call now country_code_by_addr\n", __FILE__, __func__);
+				if ((ipv4addr.scope & IPV4_ADDR_ANONYMIZED) != 0) {
+					cc_index = ipv4addr_anonymized_get_cc_index(&ipv4addr);
+					as_num32 = ipv4addr_anonymized_get_as_num32(&ipv4addr);
+				} else {
+					/* get country code */
+					cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 4);
+					as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 4);
 				};
 
-				/* get country code */
-				country_code = libipv6calc_db_wrapper_country_code_by_addr(token, 4);
-				stat_inc_country_code(country_code, 4);
-
-				/* asnum */
-				asnum = libipv6calc_db_wrapper_asnum_by_addr(token, 4);
-				stat_inc_asnum(asnum, 4);
+				stat_inc_country_code(cc_index, 4);
+				stat_inc_asnum(as_num32, 4);
 
 				/* get registry */
 				registry = ipv4addr_getregistry(&ipv4addr);

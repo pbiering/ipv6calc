@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.65 2013/06/22 14:42:02 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.66 2013/08/11 16:42:11 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -43,6 +43,9 @@
  *
  * SLA/NLA prefix part anonymization is done by replacing with pattern a909a909
  *   p = number of nibbles anonymized
+ *
+ * in case of method=kp: p=0x0f
+ *  Prefix contains CountryCode index and ASN
  */
 #define ANON_TOKEN_VALUE_00_31		(uint32_t) 0xa9090000u
 #define ANON_TOKEN_MASK_00_31		(uint32_t) 0xff0f0000u
@@ -111,6 +114,39 @@
 
 #define ANON_CHECKSUM_FLAG_CREATE	1
 #define ANON_CHECKSUM_FLAG_VERIFY	2
+
+// Prefix anonymization on method=kp
+#define ANON_PREFIX_CCINDEX_DWORD	0
+#define ANON_PREFIX_CCINDEX_SHIFT	4
+#define ANON_PREFIX_CCINDEX_MASK	0x3ff
+#define ANON_PREFIX_CCINDEX_XOR		0x0
+
+#define ANON_PREFIX_ASN32_MSB_DWORD	0
+#define ANON_PREFIX_ASN32_MSB_SHIFT	0
+#define ANON_PREFIX_ASN32_MSB_AMOUNT	4
+#define ANON_PREFIX_ASN32_MSB_MASK	((1 << ANON_PREFIX_ASN32_MSB_AMOUNT) - 1)
+#define ANON_PREFIX_ASN32_MSB_XOR	0x0000000a
+
+#define ANON_PREFIX_ASN32_LSB_DWORD	1
+#define ANON_PREFIX_ASN32_LSB_SHIFT	4
+#define ANON_PREFIX_ASN32_LSB_AMOUNT	28
+#define ANON_PREFIX_ASN32_LSB_MASK	((1 << ANON_PREFIX_ASN32_LSB_AMOUNT) - 1)
+#define ANON_PREFIX_ASN32_LSB_XOR	0x09090000
+
+#define ANON_PREFIX_FLAGS_DWORD		0
+#define ANON_PREFIX_FLAGS_SHIFT		14
+#define ANON_PREFIX_FLAGS_MASK		0x3
+#define ANON_PREFIX_FLAGS_XOR		0x0
+
+#define ANON_PREFIX_TOKEN_DWORD		0
+#define ANON_PREFIX_TOKEN_SHIFT		16
+#define ANON_PREFIX_TOKEN_MASK		0xffff
+#define ANON_PREFIX_TOKEN_XOR		0x0
+#define ANON_PREFIX_TOKEN_VALUE		0xa909		// fix
+
+// Payload selector
+#define ANON_PREFIX_PAYLOAD_CCINDEX	1
+#define ANON_PREFIX_PAYLOAD_ASN32	2
 
 
 /* IPv6 address storage structure */
@@ -200,7 +236,7 @@ typedef struct {
 #define IPV6_ADDR_UNICAST			(uint32_t) 0x00000001U	
 #define IPV6_ADDR_MULTICAST			(uint32_t) 0x00000002U	
 #define IPV6_ADDR_ANYCAST			(uint32_t) 0x00000004U
-
+#define IPV6_ADDR_ANONYMIZED_PREFIX		(uint32_t) 0x00000008U	/* anonymized IPv6 address (prefix) */
 
 #define IPV6_ADDR_LOOPBACK			(uint32_t) 0x00000010U
 #define IPV6_ADDR_LINKLOCAL			(uint32_t) 0x00000020U
@@ -217,7 +253,7 @@ typedef struct {
 #define IPV6_ADDR_MAPPED			(uint32_t) 0x00001000U
 #define IPV6_ADDR_RESERVED			(uint32_t) 0x00002000U	/* reserved address space */
 #define IPV6_ADDR_ULUA				(uint32_t) 0x00004000U	/* Unique Local Unicast Address */
-#define IPV6_ADDR_ANONYMIZED			(uint32_t) 0x00008000U	/* anonymized IPv6 address */
+#define IPV6_ADDR_ANONYMIZED_IID		(uint32_t) 0x00008000U	/* anonymized IPv6 address (IID) */
 
 #define IPV6_NEW_ADDR_6TO4			(uint32_t) 0x00010000U
 #define IPV6_NEW_ADDR_6BONE			(uint32_t) 0x00020000U
@@ -252,7 +288,8 @@ typedef struct {
 	{ IPV6_ADDR_MAPPED		, "mapped" },
 	{ IPV6_ADDR_RESERVED		, "reserved" },
 	{ IPV6_ADDR_ULUA		, "unique-local-unicast" },
-	{ IPV6_ADDR_ANONYMIZED		, "anonymized" },
+	{ IPV6_ADDR_ANONYMIZED_IID	, "anonymized-iid" },
+	{ IPV6_ADDR_ANONYMIZED_PREFIX	, "anonymized-prefix" },
 	{ IPV6_NEW_ADDR_6TO4		, "6to4" },
 	{ IPV6_NEW_ADDR_6BONE		, "6bone" },
 	{ IPV6_NEW_ADDR_AGU		, "global-unicast" },
@@ -277,15 +314,17 @@ typedef struct {
 
 
 /* Registries */
-#define IPV6_ADDR_REGISTRY_6BONE	0x01
-#define IPV6_ADDR_REGISTRY_IANA		0x02
-#define IPV6_ADDR_REGISTRY_APNIC	0x03
-#define IPV6_ADDR_REGISTRY_ARIN		0x04
-#define IPV6_ADDR_REGISTRY_RIPE		0x05
-#define IPV6_ADDR_REGISTRY_LACNIC	0x06
-#define IPV6_ADDR_REGISTRY_AFRINIC	0x07
-#define IPV6_ADDR_REGISTRY_RESERVED	0x0e
-#define IPV6_ADDR_REGISTRY_UNKNOWN	0x0f
+#include "libipv6calc.h"
+
+#define IPV6_ADDR_REGISTRY_6BONE	REGISTRY_6BONE
+#define IPV6_ADDR_REGISTRY_IANA		REGISTRY_IANA
+#define IPV6_ADDR_REGISTRY_APNIC	REGISTRY_APNIC
+#define IPV6_ADDR_REGISTRY_ARIN		REGISTRY_ARIN
+#define IPV6_ADDR_REGISTRY_RIPE		REGISTRY_RIPE
+#define IPV6_ADDR_REGISTRY_LACNIC	REGISTRY_LACNIC
+#define IPV6_ADDR_REGISTRY_AFRINIC	REGISTRY_AFRINIC
+#define IPV6_ADDR_REGISTRY_RESERVED	REGISTRY_RESERVED
+#define IPV6_ADDR_REGISTRY_UNKNOWN	REGISTRY_UNKNOWN
 
 typedef struct {
 	const int number;
@@ -341,6 +380,7 @@ extern int  libipv6addr_ipv6addrstruct_to_tokenlsb64(const ipv6calc_ipv6addr *ip
 
 extern void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_set *ipv6calc_anon_set);
 extern uint32_t ipv6addr_get_payload_anonymized_iid(const ipv6calc_ipv6addr *ipv6addrp, const uint32_t typeinfo);
+int ipv6addr_get_payload_anonymized_prefix(const ipv6calc_ipv6addr *ipv6addrp, const int payload_selector, uint32_t *result_ptr);
 
 extern int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statistics *variancesp);
 

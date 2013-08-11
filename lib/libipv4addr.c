@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.39 2013/07/08 07:04:13 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.40 2013/08/11 16:42:11 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -18,6 +18,8 @@
 #include "ipv6calctypes.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
+
+#include "../databases/lib/libipv6calc_db_wrapper.h"
 
 #ifdef SUPPORT_DB_IPV4
 #include "../databases/ipv4-assignment/dbipv4addr_assignment.h"
@@ -96,7 +98,7 @@ uint32_t ipv4addr_getdword(const ipv6calc_ipv4addr *ipv4addrp) {
  * additional: calls exit on out of range
  */
 #define DEBUG_function_name "libipv4addr/ipv4addr_setoctet"
-void ipv4addr_setoctet(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numoctet, const unsigned int value) {
+void ipv4addr_setoctet(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numoctet, const uint8_t value) {
 	
 	if ( numoctet > 3 ) {
 		fprintf(stderr, "%s: given octet number '%u' is out of range!\n", DEBUG_function_name, numoctet);
@@ -125,7 +127,7 @@ void ipv4addr_setoctet(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numoctet
  * additional: calls exit on out of range
  */
 #define DEBUG_function_name "libipv4addr/ipv4addr_setword"
-void ipv4addr_setword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword, const unsigned int value) {
+void ipv4addr_setword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword, const uint16_t value) {
 	unsigned int n;
 	unsigned int v;
 	
@@ -170,7 +172,7 @@ void ipv4addr_setword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword, 
  * additional: calls exit on out of range
  */
 #define DEBUG_function_name "libipv4addr/ipv4addr_setdword"
-void ipv4addr_setdword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int value) {
+void ipv4addr_setdword(ipv6calc_ipv4addr *ipv4addrp, const uint32_t value) {
 	unsigned int n;
 	unsigned int v;
 	
@@ -255,11 +257,46 @@ void ipv4addr_copy(ipv6calc_ipv4addr *ipv4addrp_dst, const ipv6calc_ipv4addr *ip
  * function gets type of an IPv4 address
  */
 uint32_t ipv4addr_gettype(/*@unused@*/ const ipv6calc_ipv4addr *ipv4addrp) {
-	uint32_t type = 0;
+	uint32_t type = 0, c, p;
 	uint32_t ipv4 = ipv4addr_getdword(ipv4addrp);
+	int i;
 
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
 		fprintf(stderr, "%s/%s: got IPv4 address: 0x%08x\n", __FILE__, __func__, ipv4);
+	};
+
+	/* check for anonymized IPv4 address */
+	if ((ipv4 & 0xf0000000u) == 0xf0000000u) {
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s/%s: check for anonymized IPv4 address\n", __FILE__, __func__);
+		};
+		// count payload bits
+		c = 0;
+		p = 0x00000001;
+		for (i = 0; i < 27; i++) {
+			if ((ipv4 & p) != 0) {
+				c++;
+			};
+			p <<= 1;
+		};
+
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s/%s: check for anonymized address, parity count c=%d\n", __FILE__, __func__, c);
+		};
+
+		if (((c & 0x1) ^ 0x1) == ((ipv4 >> 27) & 0x1)) {
+			// check country code (limited value)
+			p = (ipv4 >> 17) & 0x3ff;
+
+			if (p <= COUNTRYCODE_INDEX_LETTER_MAX || p == COUNTRYCODE_INDEX_UNKNOWN) {
+				if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+					fprintf(stderr, "%s/%s: address is an anonymized one\n", __FILE__, __func__);
+				};
+
+				type = IPV4_ADDR_ANONYMIZED | IPV4_ADDR_UNICAST;
+				goto END_ipv4addr_gettype;
+			};
+		};
 	};
 
 	if (ipv4 == 0x00000000u) {
@@ -269,7 +306,7 @@ uint32_t ipv4addr_gettype(/*@unused@*/ const ipv6calc_ipv4addr *ipv4addrp) {
 		type = IPV4_ADDR_UNICAST | IPV4_ADDR_SITELOCAL;
 	} else if ((ipv4 & 0xffc00000u) == 0x64400000u) {
 		// 100.64.0.0/10 (RFC 6598)
-		type = IPV4_ADDR_RESERVED;
+		type = IPV4_ADDR_UNICAST | IPV4_ADDR_RESERVED;
 	} else if ((ipv4 & 0xff000000u) == 0x7f000000u) {
 		// 127.0.0.0/8 (RFC 1122)
 		type = IPV4_ADDR_LOOPBACK;
@@ -284,22 +321,22 @@ uint32_t ipv4addr_gettype(/*@unused@*/ const ipv6calc_ipv4addr *ipv4addrp) {
 		type = IPV4_ADDR_UNICAST | IPV4_ADDR_SITELOCAL;
 	} else if ((ipv4 & 0xffffff00u) == 0xc0000000u) {
 		// 192.0.0.0/24 (RFC 5736)
-		type = IPV4_ADDR_RESERVED;
+		type = IPV4_ADDR_UNICAST | IPV4_ADDR_RESERVED;
 	} else if ((ipv4 & 0xffffff00u) == 0xc0000200u) {
 		// 192.0.2.0/24 (RFC 3330)
-		type = IPV4_ADDR_RESERVED;
+		type = IPV4_ADDR_UNICAST | IPV4_ADDR_RESERVED;
 	} else if ((ipv4 & 0xffffff00u) == 0xc0586300u) {
 		// 192.88.99.0/24 (RFC 3068)
 		type = IPV4_ADDR_ANYCAST | IPV4_ADDR_6TO4RELAY;
 	} else if ((ipv4 & 0xfffe0000u) == 0xc6120000u) {
 		// 198.18.0.0/15 (RFC 2544)
-		type = IPV4_ADDR_RESERVED;
+		type = IPV4_ADDR_UNICAST | IPV4_ADDR_RESERVED;
 	} else if ((ipv4 & 0xffffff00u) == 0xc6336400u) {
 		// 198.51.100.0/24 (RFC 5737)
-		type = IPV4_ADDR_RESERVED;
+		type = IPV4_ADDR_UNICAST | IPV4_ADDR_RESERVED;
 	} else if ((ipv4 & 0xffffff00u) == 0xcb007100u) {
 		// 203.0.113.0/24 (RFC 5737)
-		type = IPV4_ADDR_RESERVED;
+		type = IPV4_ADDR_UNICAST | IPV4_ADDR_RESERVED;
 	} else if ((ipv4 & 0xf0000000u) == 0xe0000000u) {
 		// 224.0.0.0/4 (RFC 3171)
 		type = IPV4_ADDR_MULTICAST;
@@ -310,12 +347,14 @@ uint32_t ipv4addr_gettype(/*@unused@*/ const ipv6calc_ipv4addr *ipv4addrp) {
 		// 240.0.0.0/4 (RFC 1112)
 		type = IPV4_ADDR_RESERVED;
 	} else {
-		type = IPV4_ADDR_UNICAST;
+		type = IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL;
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
 		fprintf(stderr, "%s/%s: return typeinfo: 0x%08x\n", __FILE__, __func__, type);
 	};
+
+END_ipv4addr_gettype:
 	return(type);
 };
 
@@ -947,39 +986,142 @@ int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, /
  *
  * in : *ipv4addrp = IPv4 address structure
  *      mask = number of bits of mask
+ *      method = 2:zeroize  1:map to CountryCode and AS
  * ret: <void>
  */
-#define DEBUG_function_name "libipv4addr/anonymize"
-void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask) {
-	/* anonymize IPv4 address according to settings */
+void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const int method) {
+	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+		fprintf(stderr, "%s/%s: called, method=%d mask=%d type=0x%08x\n", __FILE__, __func__, method, mask, ipv4addrp->scope);
+	};
 
-	if (mask == 0) {
-		/* clear IPv4 address: 0.0.0.0 */
-		ipv4addr_clear(ipv4addrp);
-		ipv4addrp->flag_valid = 1;
-	} else if (mask == 32) {
-		/* nothing to do */
-	} else if (mask < 1 || mask > 31) {
-		/* should not happen here */
-		fprintf(stderr, "%s: 'mask' has an unexpected illegal value!\n", DEBUG_function_name);
-		exit(EXIT_FAILURE);
-	} else {
-		/* quick mode */
-		if (mask == 24) {
-			ipv4addr_setoctet(ipv4addrp, 3, 0u);
-		} else if (mask == 16) {
-			ipv4addr_setword(ipv4addrp, 1, 0u);
-		} else if (mask == 8) {
-			ipv4addr_setword(ipv4addrp, 1, 0u);
-			ipv4addr_setoctet(ipv4addrp, 1, 0u);
-		} else {
-			/* mask IPv4 address */
-			ipv4addr_setdword(ipv4addrp, ipv4addr_getdword(ipv4addrp) & (0xffffffffu << ((unsigned int) 32 - mask)));
+	/* anonymize IPv4 address according to settings */
+	char resultstring[NI_MAXHOST];
+	uint32_t as_num32, as_num32_comp17, as_num32_decomp17, ipv4addr_anon, p;
+	uint16_t cc_index, c;
+	int i;
+
+	if ((method != ANON_METHOD_KEEPTYPEASNCC) || ((ipv4addrp->scope & (IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL)) != (IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL))) {
+		// not ANON_METHOD_KEEPTYPEASNCC or not a global address
+
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s/%s: anonymize by masking\n", __FILE__, __func__);
 		};
+
+		if (mask == 0) {
+			/* clear IPv4 address: 0.0.0.0 */
+			ipv4addr_clear(ipv4addrp);
+			ipv4addrp->flag_valid = 1;
+		} else if (mask == 32) {
+			/* nothing to do */
+		} else if (mask < 1 || mask > 31) {
+			/* should not happen here */
+			fprintf(stderr, "%s/%s: 'mask' has an unexpected illegal value!\n", __FILE__, __func__);
+			exit(EXIT_FAILURE);
+		} else {
+			/* quick mode */
+			if (mask == 24) {
+				ipv4addr_setoctet(ipv4addrp, 3, 0u);
+			} else if (mask == 16) {
+				ipv4addr_setword(ipv4addrp, 1, 0u);
+			} else if (mask == 8) {
+				ipv4addr_setword(ipv4addrp, 1, 0u);
+				ipv4addr_setoctet(ipv4addrp, 1, 0u);
+			} else {
+				/* mask IPv4 address */
+				ipv4addr_setdword(ipv4addrp, ipv4addr_getdword(ipv4addrp) & (0xffffffffu << ((unsigned int) 32 - mask)));
+			};
+		};
+	} else {
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s/%s: anonymize by keep information\n", __FILE__, __func__);
+		};
+
+		libipv4addr_ipv4addrstruct_to_string(ipv4addrp, resultstring, 0);
+
+		// get AS number
+		as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(resultstring, 4);
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s/%s: result of AS number  retrievement: 0x%08x (%d)\n", __FILE__, __func__, as_num32, as_num32);
+		};
+
+		as_num32_comp17 = libipv6calc_db_wrapper_as_num32_comp17(as_num32);
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s/%s: result of AS number   compression: 0x%05x\n", __FILE__, __func__, as_num32_comp17);
+		};
+
+		as_num32_decomp17 = libipv6calc_db_wrapper_as_num32_decomp17(as_num32_comp17);
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s/%s: result of AS number decompression: 0x%08x (%d)\n", __FILE__, __func__, as_num32_decomp17, as_num32_decomp17);
+		};
+
+		// get countrycode
+		cc_index = libipv6calc_db_wrapper_cc_index_by_addr(resultstring, 4);
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s/%s: result of CountryCode index retrievement: 0x%03x (%d)\n", __FILE__, __func__, cc_index, cc_index);
+		};
+
+		// 0-3   ( 4 bits) : prefix 0xf0
+		// 4     ( 1 bit ) : parity bit (odd parity)
+		// 5-14  (10 bits) : country code index
+		// 15    ( 1 bits) : ASN flag
+		// 16-31 (16 bits) : ASN16 or packed ASN32
+		//
+		ipv4addr_anon = 0xf0000000 | ((cc_index << 17) & 0x07fe0000 ) | (as_num32_comp17 & 0x0001ffff);
+
+		// create parity bits
+		c = 0;
+		p = 0x00000001;
+		for (i = 0; i < 27; i++) {
+			if ((ipv4addr_anon & p) != 0) {
+				c++;
+			};
+			p <<= 1;
+		};
+
+		ipv4addr_anon |= ((c & 0x1) ^ 0x1) << 27;
+
+		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+			fprintf(stderr, "%s/%s: result anonymized IPv4 address: 0x%08x, bitcounts=%d\n", __FILE__, __func__, ipv4addr_anon, c);
+		};
+
+		ipv4addr_setdword(ipv4addrp, ipv4addr_anon);
+	};
+
+	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+		fprintf(stderr, "%s/%s: return\n", __FILE__, __func__);
 	};
 	return;
 };
-#undef DEBUG_function_name
+
+
+/*
+ * get AS number of anonymized IPv4 address
+ *
+ * in : *ipv4addrp = IPv4 address structure
+ * ret: AS number 16-bit
+ */
+uint32_t ipv4addr_anonymized_get_as_num32(const ipv6calc_ipv4addr *ipv4addrp) {
+	if ((ipv4addrp->scope & IPV4_ADDR_ANONYMIZED) == 0) {
+		return(ASNUM_AS_UNKNOWN);
+	};
+
+	return(libipv6calc_db_wrapper_as_num32_decomp17(ipv4addr_getdword(ipv4addrp) & 0x1ffff));
+};
+
+
+/*
+ * get CountryCode index of anonymized IPv4 address
+ *
+ * in : *ipv4addrp = IPv4 address structure
+ * ret: CountryCode index
+ */
+uint16_t ipv4addr_anonymized_get_cc_index(const ipv6calc_ipv4addr *ipv4addrp) {
+	if ((ipv4addrp->scope & IPV4_ADDR_ANONYMIZED) == 0) {
+		return(COUNTRYCODE_INDEX_UNKNOWN);
+	};
+
+	return((ipv4addr_getword(ipv4addrp, 0) & 0x7fe) >>1);
+};
 
 
 /*

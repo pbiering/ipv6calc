@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.20 2013/07/08 07:04:13 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.21 2013/08/11 16:42:11 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -157,11 +157,11 @@ testscenarios_filter() {
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF		teredo
 2001:db8:1:4135:7536:e4f:5513:4dd2		iid-privacy
 2001:db8:1:4135:208:54ff:fe00:1			iid-global
-2001:db8::a909:4291:c02d:5d1d			anonymized
+2001:db8::a909:4291:c02d:5d1d			anonymized-iid
 2001:db8::a909:4291:c02d:5d1d			iid-local
-2001:db8::a909:4291:4002:4217			anonymized
+2001:db8::a909:4291:4002:4217			anonymized-iid
 2001:db8::a909:4291:4002:4217			iid-eui48
-2001:db8::a909:4941:0:7				anonymized
+2001:db8::a909:4941:0:7				anonymized-iid
 2001:db8::a909:4941:0:7				iid-privacy
 fe80::200:5efe:192.0.2.143			iid-isatap
 fe80::200:5efe:192.0.2.143			iid-global
@@ -182,27 +182,30 @@ fe80::5e01:2345:6789				iid-isatap
 2001:1a:392e:a450:2cd3:75e1:6098:8104		^iid
 2001:1a:392e:a450:2cd3:75e1:6098:8104		^iid-privacy
 2001:19:a909:a909:a999:4843::e			orchid
-2001:19:a909:a909:a999:4843::e			anonymized
+2001:19:a909:a909:a999:4843::e			anonymized-iid
 2001:19:a909:a909:a999:4843::e			^iid-privacy
-3ffe:1a05:510:a909:a949:5214:48ca:d81d		anonymized
+3ffe:1a05:510:a909:a949:5214:48ca:d81d		anonymized-iid
 3ffe:1a05:510:a909:a949:5214:48ca:d81d		iid-isatap
 3ffe:1a05:510:a909:a949:5214:48ca:d81d		^iid-privacy
 3ffe:ffff::a4ff:fe01:2345			iid-local
 3ffe:ffff::a4ff:fe01:2345			iid-eui48
-fe80:0000:0000:0000:0200:5efe:192.0.2.143	^anonymized 
-fe80:0000:0000:0000:0000:5e01:2345:6789		^anonymized 
-fe80:0000:0000:0000:0000:5eff:fe01:2345		^anonymized
-2001:0db8:0000:0000:81c0:0f3f:c807:1455		^anonymized
-3ffe:831f:ce49:7601:8000:efff:af4a:86BF		^anonymized
-2001:1a:392e:a450:2cd3:75e1:6098:8104		^anonymized
-3ffe:ffff::000:a4ff:fe01:2345			^anonymized
-2002:c0a8:f900:9:a929:4291:4021:132d		anonymized
+fe80:0000:0000:0000:0200:5efe:192.0.2.143	^anonymized-iid
+fe80:0000:0000:0000:0000:5e01:2345:6789		^anonymized-iid
+fe80:0000:0000:0000:0000:5eff:fe01:2345		^anonymized-iid
+2001:0db8:0000:0000:81c0:0f3f:c807:1455		^anonymized-iid
+3ffe:831f:ce49:7601:8000:efff:af4a:86BF		^anonymized-iid
+2001:1a:392e:a450:2cd3:75e1:6098:8104		^anonymized-iid
+3ffe:ffff::000:a4ff:fe01:2345			^anonymized-iid
+2002:c0a8:f900:9:a929:4291:4021:132d		anonymized-iid
 2002:c0a8:f900:9:a929:4291:4021:132d		6to4
-2001::d91f:cca0:3875:ffff:263c:ffff		anonymized
+2001::d91f:cca0:3875:ffff:263c:ffff		anonymized-iid
 2001::d91f:cca0:3875:ffff:263c:ffff		teredo
 2002:c000:0251::c000:0251			6to4-microsoft
 2002:c000:200:9:a929:4291:8c00:28		6to4-microsoft
-2002:c000:200:9:a929:4291:8c00:28		anonymized
+2002:c000:200:9:a929:4291:8c00:28		anonymized-iid
+a909:16fa:9092:23ff:a909:4941::7		anonymized-iid
+a909:16fa:9092:23ff:a909:4941::7		anonymized-prefix
+242.222.34.63					anonymized
 END
 }
 
@@ -271,6 +274,8 @@ testscenarios_anonymization_options() {
 --mask-ipv4 24 --anonymize-method zeroise	2002:c000:0251::c000:0251=2002:c000:200::192.0.2.0
 --anonymize-standard			2001:db8:0123:4567:0250:c2ff:fe86:2345=2001:db8:123:4509:a929:4291:5021:8621
 --anonymize-standard			2001:db8:0123:4567:0250:c286:2345:4567=2001:db8:123:4509:a929:4291:7021:8626
+--anonymize-preset kp			46.244.223.233=242.222.34.63
+--anonymize-preset kp			2001:0a60:11e1:9501:e876:aee4:0721:e8ac=a909:16fa:9092:23ff:a909:4941::7
 END
 }
 
@@ -301,5 +306,13 @@ testscenarios_showinfo() {
 c0a80102				IPV4=192.168.1.2
 0a010203				IPV4=10.1.2.3
 a010203					IPV4=10.1.2.3
+# anonymized IPv6 prefix
+a909:16fa:9092:23ff:a909:4941::7	IPV6_COUNTRYCODE=DE
+a909:16fa:9092:23ff:a909:4941::7	IPV6_AS_NUM=8767
+a909:16fa:9092:23ff:a909:4941::7	IPV6_REGISTRY=RIPENCC
+# anonymized IPv4 address
+242.222.34.63				IPV4_COUNTRYCODE=DE
+242.222.34.63				IPV4_AS_NUM=8767
+242.222.34.63				IPV4_REGISTRY=RIPENCC
 END
 }

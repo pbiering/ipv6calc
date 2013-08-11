@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc_anonymization.sh
-# Version    : $Id: test_ipv6calc_anonymization.sh,v 1.1 2013/04/11 05:59:06 ds6peter Exp $
+# Version    : $Id: test_ipv6calc_anonymization.sh,v 1.2 2013/08/11 16:42:11 ds6peter Exp $
 # Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test ipv6calc anonymization
@@ -60,6 +60,12 @@ run_anon_tests() {
 
 		type_anon_compare="${type_anon/anonymized,}"
 		type_orig_compare="${type_orig/anonymized,}"
+
+		type_anon_compare="${type_anon_compare/anonymized-iid,}"
+		type_orig_compare="${type_orig_compare/anonymized-iid,}"
+
+		type_anon_compare="${type_anon_compare/anonymized-prefix,}"
+		type_orig_compare="${type_orig_compare/anonymized-prefix,}"
 
 		echo "DEBUG : IPV6_TYPE orig: $type_orig_compare"
 		echo "DEBUG : IPV6_TYPE anon: $type_anon_compare"

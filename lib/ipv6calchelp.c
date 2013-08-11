@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.36 2013/07/08 07:04:13 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.37 2013/08/11 16:42:11 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -25,6 +25,7 @@
 #include "databases/ipv4-assignment/dbipv4addr_assignment.h"
 #include "databases/ipv6-assignment/dbipv6addr_assignment.h"
 #include "databases/lib/libipv6calc_db_wrapper.h"
+#include "databases/lib/libipv6calc_db_wrapper_GeoIP.h"
 
 /* to be defined in each application */
 extern void printversion(void);
@@ -781,10 +782,17 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 #ifdef SUPPORT_GEOIP_V6
 	//TODO: list of GeoIP files
 #endif
-	libipv6calc_db_wrapper_info(string, sizeof(string));
-	fprintf(stderr, "GeoIP %s\n", string);
+	libipv6calc_db_wrapper_GeoIP_wrapper_info(string, sizeof(string));
+	fprintf(stderr, "%s\n", string);
 #else
 	fprintf(stderr, "GeoIP support not enabled\n");
+#endif
+
+#ifdef SUPPORT_BUILTIN
+	libipv6calc_db_wrapper_info_BuiltIn(string, sizeof(string));
+	fprintf(stderr, "%s\n", string);
+#else
+	fprintf(stderr, "BuiltIn support not enabled\n");
 #endif
 
 	fprintf(stderr, "\n");

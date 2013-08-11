@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.16 2013/05/12 07:23:12 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.17 2013/08/11 16:42:11 ds6peter Exp $
  * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -530,7 +530,7 @@ static int anonymizetoken(char *resultstring, const char *token) {
 
 	} else if (ipv4addr.flag_valid == 1) {
 		/* anonymize IPv4 address according to settings */
-		libipv4addr_anonymize(&ipv4addr, ipv6calc_anon_set.mask_ipv4);
+		libipv4addr_anonymize(&ipv4addr, ipv6calc_anon_set.mask_ipv4, ipv6calc_anon_set.method);
 
 		/* convert IPv4 address structure to string */
 		libipv4addr_ipv4addrstruct_to_string(&ipv4addr, resultstring, 0);

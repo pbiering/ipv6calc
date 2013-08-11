@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : lib/Makefile
-# Version    : $Id: Makefile,v 1.7 2013/07/10 06:03:06 ds6peter Exp $
+# Version    : $Id: Makefile,v 1.8 2013/08/11 16:42:11 ds6peter Exp $
 # Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -19,7 +19,8 @@ AR	= ar
 RANLIB	= ranlib
 
 OBJS	=	libipv6calc_db_wrapper.o \
-		libipv6calc_db_wrapper_GeoIP.o
+		libipv6calc_db_wrapper_GeoIP.o \
+		libipv6calc_db_wrapper_BuiltIn.o
 
 all:		libipv6calc_db_wrapper.a
 
@@ -27,7 +28,8 @@ all:		libipv6calc_db_wrapper.a
 		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -c $<
 
 $(OBJS):	libipv6calc_db_wrapper.h \
-		libipv6calc_db_wrapper_GeoIP.h
+		libipv6calc_db_wrapper_GeoIP.h \
+		libipv6calc_db_wrapper_BuiltIn.h
 
 libipv6calc_db_wrapper.a:	$(OBJS)
 		echo "Create library"
