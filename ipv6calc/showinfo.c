@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.72 2013/08/11 16:42:11 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.73 2013/08/11 17:35:05 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -611,23 +611,6 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		fprintf(stdout, "\n");
 	};	
 
-	if ((typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
-		/* get registry string */
-		// TODO: get registry by AS, if possible
-		retval = libipv4addr_get_registry_string(ipv4addrp, helpstring);
-		if ( retval == 1  && machinereadable == 0 ) {
-			fprintf(stderr, "Error getting registry string for IPv4 address: %s (%s)\n", helpstring, tempipv4string);
-			return;
-		};
-
-		if ( machinereadable != 0 ) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY%s=%s", embeddedipv4string, helpstring);
-				printout(tempstring);
-		} else {
-			fprintf(stdout, "IPv4 registry%s: %s\n", embeddedipv4string, helpstring);
-		};
-	};
-
 	/* get AS Information */
 	if ((typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
 		as_num32 = ipv4addr_anonymized_get_as_num32(ipv4addrp);
@@ -653,6 +636,24 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 			};
 		};
 
+	};
+
+	if ((typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
+		/* get registry string */
+		// TODO: get registry by AS, if possible
+		retval = libipv4addr_get_registry_string(ipv4addrp, helpstring);
+		if ( retval == 1  && machinereadable == 0 ) {
+			fprintf(stderr, "Error getting registry string for IPv4 address: %s (%s)\n", helpstring, tempipv4string);
+			return;
+		};
+
+		if ( machinereadable != 0 ) {
+				snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY%s=%s", embeddedipv4string, helpstring);
+				printout(tempstring);
+		} else {
+			fprintf(stdout, "IPv4 registry%s: %s\n", embeddedipv4string, helpstring);
+		};
+	} else if (as_num32 != ASNUM_AS_UNKNOWN) {
 		registry = libipv6calc_db_wrapper_registry_num_by_as_num32(as_num32);
 		j = -1;
 		for (i = 0; i < (int) (sizeof(ipv6calc_registries) / sizeof(ipv6calc_registries[0])); i++ ) {
