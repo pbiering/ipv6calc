@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.h
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.h,v 1.1 2013/08/11 16:42:11 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.h,v 1.2 2013/08/15 16:54:36 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -16,6 +16,8 @@
 
 #define SUPPORT_BUILTIN  // default
 
+// features
+extern uint32_t wrapper_features_BuiltIn;
 
 /* ASN assignment structure */
 typedef struct {

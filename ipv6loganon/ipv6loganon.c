@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.17 2013/08/11 16:42:11 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.18 2013/08/15 16:54:36 ds6peter Exp $
  * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -35,6 +35,8 @@
 #include "librfc3056.h"
 #include "libeui64.h"
 #include "libieee.h"
+
+#include "../databases/lib/libipv6calc_db_wrapper.h"
 
 #define LINEBUFFER	16384
 
@@ -246,6 +248,12 @@ int main(int argc,char *argv[]) {
 	};
 	argv += optind;
 	argc -= optind;
+
+	/* initialise database wrapper */
+	result = libipv6calc_db_wrapper_init();
+	if (result != 0) {
+		exit(EXIT_FAILURE);
+	};
 
 	if (file_out_flag == 1) {
 		if (ipv6calc_debug > 0) {

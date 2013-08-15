@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.24 2013/08/11 17:35:05 ds6peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.25 2013/08/15 16:54:36 ds6peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -28,7 +28,7 @@ fe80::210:a489:ab01:2345		# link-local autoconfig EUI-64
 3ffe:ffff::000:a489:ab01:2345		# global manual EUI-64
 fe80::fefc:acff:fe10:fe01		# link-local autoconf on ISDN interface
 2001:7b0:ffff::1			# Productive IPv6
-3ffe:831f:ce49:7601:8000:efff:af4a:86BF	# Teredo
+3ffe:831f:ce49:7601:8000:efff:af4a:86bf	# Teredo
 2001:a60:f011::1			# Productive IPv6
 2001:0010:392e:a450:2cd3:75e1:6098:8104	# Orchid
 fe80::8000:5445:5245:444F		# Link-local teredo

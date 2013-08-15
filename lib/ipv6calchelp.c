@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.37 2013/08/11 16:42:11 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.38 2013/08/15 16:54:36 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -26,6 +26,7 @@
 #include "databases/ipv6-assignment/dbipv6addr_assignment.h"
 #include "databases/lib/libipv6calc_db_wrapper.h"
 #include "databases/lib/libipv6calc_db_wrapper_GeoIP.h"
+#include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
 /* to be defined in each application */
 extern void printversion(void);
@@ -731,28 +732,6 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 	char string[NI_MAXHOST];
 #endif
 
-	fprintf(stderr, "\n");
-
-#ifdef SUPPORT_DB_IEEE
-	fprintf(stderr, "IEEE database included: %s %s %s\n", libieee_iab_status, libieee_oui_status, libieee_oui36_status);
-#else
-	fprintf(stderr, "IEEE database not included\n");
-#endif
-
-#ifdef SUPPORT_DB_IPV4
-	fprintf(stderr, "IPv4 database included: %s\n", dbipv4addr_registry_status);
-#else
-	fprintf(stderr, "IPv4 database not included\n");
-#endif
-
-#ifdef SUPPORT_DB_IPV6
-	fprintf(stderr, "IPv6 database included: %s\n", dbipv6addr_registry_status);
-#else
-	fprintf(stderr, "IPv6 database not included\n");
-#endif
-
-	fprintf(stderr, "\n");
-
 #ifdef SUPPORT_GEOIP
 #ifndef SUPPORT_GEOIP_DYN
 #ifdef SUPPORT_GEOIP_V6
@@ -789,7 +768,7 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 #endif
 
 #ifdef SUPPORT_BUILTIN
-	libipv6calc_db_wrapper_info_BuiltIn(string, sizeof(string));
+	libipv6calc_db_wrapper_BuiltIn_wrapper_info(string, sizeof(string));
 	fprintf(stderr, "%s\n", string);
 #else
 	fprintf(stderr, "BuiltIn support not enabled\n");

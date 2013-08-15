@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.86 2013/08/11 16:42:11 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.87 2013/08/15 16:54:36 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -2148,12 +2148,15 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_s
 			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 2 + i));
 		};
 
+		ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
+		ipv4addr.flag_valid = 1;
 		libipv4addr_anonymize(&ipv4addr, mask_ipv4, method);
 
 		/* store back */
 		for (i = 0; i <= 3; i++) {
 			ipv6addr_setoctet(ipv6addrp, (unsigned int) 2 + i, (unsigned int) ipv4addr_getoctet(&ipv4addr, (unsigned int) i));
 		};
+
 	};
 
 	if ( (typeinfo & IPV6_NEW_ADDR_TEREDO) != 0 ) {
@@ -2162,6 +2165,8 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_s
 			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 12 + i) ^ 0xff);
 		};
 
+		ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
+		ipv4addr.flag_valid = 1;
 		libipv4addr_anonymize(&ipv4addr, mask_ipv4, method);
 
 		/* store back */
@@ -2179,6 +2184,8 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_s
 			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 12 + i));
 		};
 
+		ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
+		ipv4addr.flag_valid = 1;
 		libipv4addr_anonymize(&ipv4addr, mask_ipv4, method);
 
 		/* store back */
@@ -2456,7 +2463,7 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_s
 			fprintf(stderr, "%s: Prefix found\n", DEBUG_function_name);
 		};
 
-		if (((typeinfo & IPV6_NEW_ADDR_AGU) != 0) && (method == 3)) {
+		if (((typeinfo & IPV6_NEW_ADDR_AGU) != 0) && ((typeinfo & (IPV6_NEW_ADDR_6TO4)) == 0) && (method == 3)) {
 			// switch to prefix anonymization
 			libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6addrp, resultstring, 0);
 

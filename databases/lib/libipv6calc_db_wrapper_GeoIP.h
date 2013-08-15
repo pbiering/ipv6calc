@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.h
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.h,v 1.9 2013/07/10 06:03:06 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.h,v 1.10 2013/08/15 16:54:36 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -33,6 +33,9 @@
 #define GEOIP_IPV6_SUPPORT_COMPAT	1
 #define GEOIP_IPV6_SUPPORT_FULL		2
 #define GEOIP_IPV6_SUPPORT_NOTEXISTS	3
+
+// features
+extern uint32_t wrapper_features_GeoIP;
 
 /* text representations */
 /*@unused@*/ static const s_type libipv6calc_db_wrapper_GeoIP_support[] = {

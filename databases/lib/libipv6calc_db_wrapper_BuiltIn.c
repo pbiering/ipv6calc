@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.1 2013/08/11 16:42:11 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.2 2013/08/15 16:54:36 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -10,6 +10,7 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <dlfcn.h>
 
 #include "config.h"
@@ -22,6 +23,13 @@
 
 #include "libieee.h"
 
+uint32_t wrapper_features_BuiltIn = 0;
+
+static int builtin_asn        = 0;
+static int builtin_ipv4       = 0;
+static int builtin_ipv6       = 0;
+static int builtin_ieee       = 0;
+
 #ifdef SUPPORT_BUILTIN
 // load all built-in databases
 #include "../as-assignment/dbasn_assignment.h"
@@ -31,14 +39,6 @@
 #include "../ieee-oui/dbieee_oui.h"
 #include "../ieee-oui36/dbieee_oui36.h"
 #endif
-
-static int builtin_asn        = 0;
-static int builtin_ipv4       = 0;
-static int builtin_ipv6       = 0;
-static int builtin_ieee_iab   = 0;
-static int builtin_ieee_oui   = 0;
-static int builtin_ieee_oui36 = 0;
-
 
 
 /*
@@ -53,12 +53,17 @@ int libipv6calc_db_wrapper_BuiltIn_wrapper_init(void) {
 	};
 
 #ifdef SUPPORT_BUILTIN
+	wrapper_features_BuiltIn |= IPV6CALC_DB_AS_TO_REGISTRY;
+	wrapper_features_BuiltIn |= IPV6CALC_DB_IPV4_TO_REGISTRY;
+	wrapper_features_BuiltIn |= IPV6CALC_DB_IPV6_TO_REGISTRY;
+	wrapper_features_BuiltIn |= IPV6CALC_DB_IEEE_TO_INFO;
+
+	wrapper_features |= wrapper_features_BuiltIn;
+
 	builtin_asn        = 1;
 	builtin_ipv4       = 1;
 	builtin_ipv6       = 1;
-	builtin_ieee_iab   = 1;
-	builtin_ieee_oui   = 1;
-	builtin_ieee_oui36 = 1;
+	builtin_ieee       = 1;
 #endif
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
@@ -98,7 +103,7 @@ void libipv6calc_db_wrapper_BuiltIn_wrapper_info(char* string, const size_t size
 	};
 
 #ifdef SUPPORT_BUILTIN
-	snprintf(string, size, "BuiltIn databases available: ASN=%d IPv4=%d IPv6=%d IEEE/IAB=%d IEEE/OUI=%d IEEE/OUI36=%d", builtin_asn, builtin_ipv4, builtin_ipv6, builtin_ieee_iab, builtin_ieee_oui, builtin_ieee_oui36);
+	snprintf(string, size, "BuiltIn databases available: ASN=%d IPv4=%d IPv6=%d IEEE=%d", builtin_asn, builtin_ipv4, builtin_ipv6, builtin_ieee);
 #else
 	snprintf(string, size, "No BuiltIn databases support compiled-in");
 #endif
@@ -126,31 +131,25 @@ void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level_verbos
 		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
 	};
 
+	printf("%sBuiltIn: features: 0x%08x\n", prefix, wrapper_features_BuiltIn);
+
 #ifdef SUPPORT_BUILTIN
 	printf("%sBuiltIn: info of available databases\n", prefix);
 
-	if (builtin_asn == 1) {
-		printf("%sBuiltIn: %-10s: %s\n", prefix, "ASN", dbasn_registry_status);
+	if (wrapper_features_BuiltIn & IPV6CALC_DB_AS_TO_REGISTRY) {
+		printf("%sBuiltIn: %-5s: %s\n", prefix, "ASN", dbasn_registry_status);
 	};
 
-	if (builtin_ipv4 == 1) {
-		printf("%sBuiltIn: %-10s: %s\n", prefix, "IPv4", dbipv4addr_registry_status);
+	if (wrapper_features_BuiltIn & IPV6CALC_DB_IPV4_TO_REGISTRY) {
+		printf("%sBuiltIn: %-5s: %s\n", prefix, "IPv4", dbipv4addr_registry_status);
 	};
 
-	if (builtin_ipv6 == 1) {
-		printf("%sBuiltIn: %-10s: %s\n", prefix, "IPv6", dbipv6addr_registry_status);
+	if (wrapper_features_BuiltIn & IPV6CALC_DB_IPV6_TO_REGISTRY) {
+		printf("%sBuiltIn: %-5s: %s\n", prefix, "IPv6", dbipv6addr_registry_status);
 	};
 
-	if (builtin_ieee_iab == 1) {
-		printf("%sBuiltIn: %-10s: %s\n", prefix, "IEEE/IAB", libieee_iab_status);
-	};
-
-	if (builtin_ieee_oui == 1) {
-		printf("%sBuiltIn: %-10s: %s\n", prefix, "IEEE/OUI", libieee_oui_status);
-	};
-
-	if (builtin_ieee_oui36 == 1) {
-		printf("%sBuiltIn: %-10s: %s\n", prefix, "IEEE/OUI36", libieee_oui36_status);
+	if (wrapper_features_BuiltIn & IPV6CALC_DB_IEEE_TO_INFO) {
+		printf("%sBuiltIn: %-5s: %s %s %s\n", prefix, "IEEE", libieee_iab_status, libieee_oui_status, libieee_oui36_status);
 	};
 #else
 	snprintf(string, size, "%sNo BuiltIn support compiled-in", prefix);

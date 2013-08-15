@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.8 2013/08/11 16:42:11 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.9 2013/08/15 16:54:36 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -14,12 +14,27 @@
 
 #include "libipv6calc_db_wrapper_GeoIP.h"
 
+extern uint32_t wrapper_features;
+
+// define features
+#define IPV6CALC_DB_AS_TO_REGISTRY		0x00000001
+#define IPV6CALC_DB_IPV4_TO_REGISTRY		0x00000002
+#define IPV6CALC_DB_IPV6_TO_REGISTRY		0x00000004
+
+#define IPV6CALC_DB_IPV4_TO_AS			0x00000010
+#define IPV6CALC_DB_IPV6_TO_AS			0x00000020
+
+#define IPV6CALC_DB_IPV4_TO_CC			0x00000100
+#define IPV6CALC_DB_IPV6_TO_CC			0x00000200
+
+#define IPV6CALC_DB_IEEE_TO_INFO		0x00001000
+
+
 // define internal API versions
 #define IPV6CALC_DB_API_GEOIP		1
 #define IPV6CALC_DB_API_IP2LOCATION	1
 #define IPV6CALC_DB_API_IEEE		1
 #define IPV6CALC_DB_API_REGISTRIES	1
-
 
 #define IPV6CALC_DL_STATUS_OK		1
 #define IPV6CALC_DL_STATUS_UNKNOWN	0

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.11 2013/08/11 16:42:11 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.12 2013/08/15 16:54:36 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -9,6 +9,8 @@
  */
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include <ctype.h>
 
 #include "config.h"
@@ -21,6 +23,8 @@
 
 static int wrapper_GeoIP_status = 0;
 static int wrapper_BuiltIn_status = 0;
+
+uint32_t wrapper_features = 0;
 
 
 /*
@@ -130,6 +134,8 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
 	};
 
+	printf("DB features: 0x%08x\n", wrapper_features);
+
 #ifdef SUPPORT_GEOIP
 	// Call GeoIP wrapper
 	libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(level_verbose, prefix_string);
@@ -231,7 +237,12 @@ uint16_t libipv6calc_db_wrapper_cc_index_by_addr(const char *addr, const int pro
 			};
 		};
 	};
+
 END_libipv6calc_db_wrapper_cc_index_by_addr:
+	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
+		fprintf(stderr, "%s/%s: Finished with %d (0x%x)\n", __FILE__, __func__, index, index);
+	};
+
 	return(index);
 };
 

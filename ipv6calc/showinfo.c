@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.73 2013/08/11 17:35:05 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.74 2013/08/15 16:54:36 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1106,16 +1106,30 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		r = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_CCINDEX, &cc_index);
 
 		if (r == 0) {
-			if (as_num32 == 0) {
+			if (cc_index > COUNTRYCODE_INDEX_MAX) {
 				if ( machinereadable != 0 ) {
-					fprintf(stderr, "Error getting CountryCode from anoynmized IPv6 address\n");
+					fprintf(stderr, "Error getting CountryCode from anonymized IPv6 address\n");
 				};
-			} else {
+			} else if (cc_index == COUNTRYCODE_INDEX_UNKNOWN) {
+				if ( machinereadable != 0 ) {
+					snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_COUNTRYCODE=(unknown)");
+					printout(tempstring);
+				} else {
+					fprintf(stdout, "Country Code: (unknown)\n");
+				};
+			} else if (cc_index <= COUNTRYCODE_INDEX_LETTER_MAX) {
 				if ( machinereadable != 0 ) {
 					snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_COUNTRYCODE=%c%c", COUNTRYCODE_INDEX_TO_CHAR1(cc_index), COUNTRYCODE_INDEX_TO_CHAR2(cc_index));
 					printout(tempstring);
 				} else {
 					fprintf(stdout, "Country Code: %c%c\n", COUNTRYCODE_INDEX_TO_CHAR1(cc_index), COUNTRYCODE_INDEX_TO_CHAR2(cc_index));
+				};
+			} else {
+				if ( machinereadable != 0 ) {
+					snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_COUNTRYCODE=(unsupported)");
+					printout(tempstring);
+				} else {
+					fprintf(stdout, "Country Code: (unsupported)\n");
 				};
 			};
 		};
