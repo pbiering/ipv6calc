@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.9 2013/08/15 16:54:36 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.10 2013/08/18 19:37:10 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -62,8 +62,10 @@ extern uint32_t wrapper_features;
 extern int libipv6calc_db_wrapper_init(void);
 extern void libipv6calc_db_wrapper_info(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
+extern int libipv6calc_db_wrapper_has_features(uint32_t features);
 
 /* functional wrappers */
+
 // CountryCode Text/Number
 extern const char *libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int proto);
 extern uint16_t    libipv6calc_db_wrapper_cc_index_by_addr(const char *addr, const int proto);

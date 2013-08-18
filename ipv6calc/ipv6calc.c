@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.81 2013/08/15 16:54:36 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.82 2013/08/18 19:37:10 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -581,6 +581,7 @@ int main(int argc, char *argv[]) {
 					fprintf(stderr, "ipv6calc anonymization method not supported: %s\n", optarg);
 					exit(EXIT_FAILURE);
 				};
+
 				break;
 
 			case CMD_6rd_relay_prefix:
@@ -808,6 +809,15 @@ int main(int argc, char *argv[]) {
 	result = libipv6calc_db_wrapper_init();
 	if (result != 0) {
 		exit(EXIT_FAILURE);
+	};
+
+	/* check requirements */
+	if (ipv6calc_anon_set.method == ANON_METHOD_KEEPTYPEASNCC) {
+		// check for support
+		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_IPV6_TO_AS) != 1) {
+			fprintf(stderr, "ipv6calc anonymization method not supported, missing included/available databases: IP->CC and IP->AS\n");
+			exit(EXIT_FAILURE);
+		};
 	};
 	
 	/* do work depending on selection */

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.12 2013/08/15 16:54:36 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.13 2013/08/18 19:37:10 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -65,7 +65,7 @@ int libipv6calc_db_wrapper_init(void) {
 		wrapper_BuiltIn_status = 1; // ok
 	};
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Result: %d\n", __FILE__, __func__, result);
+		fprintf(stderr, "%s/%s: Result: %d wrapper_features=0x%08x\n", __FILE__, __func__, result, wrapper_features);
 	};
 #endif
 
@@ -150,6 +150,30 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		fprintf(stderr, "%s/%s: Return\n", __FILE__, __func__);
 	};
 	return;
+};
+
+
+/* function query for feature set
+ * ret=-1: unknown
+ * 0 : not matching
+ * 1 : ok
+ */
+int libipv6calc_db_wrapper_has_features(uint32_t features) {
+	int result = -1;
+	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
+		fprintf(stderr, "%s/%s: Called with feature value to test: 0x%08x\n", __FILE__, __func__, features);
+	};
+
+	if ((wrapper_features & features) == features) {
+		result = 1;
+	} else {
+		result = 0;
+	};
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
+		fprintf(stderr, "%s/%s: Return with result: %d\n", __FILE__, __func__, result);
+	};
+	return(result);
 };
 
 
