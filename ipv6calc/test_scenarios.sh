@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.23 2013/08/15 16:54:36 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.24 2013/08/20 06:24:59 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -274,6 +274,11 @@ testscenarios_anonymization_options() {
 --mask-ipv4 24 --anonymize-method zeroise	2002:c000:0251::c000:0251=2002:c000:200::192.0.2.0
 --anonymize-standard			2001:db8:0123:4567:0250:c2ff:fe86:2345=2001:db8:123:4509:a929:4291:5021:8621
 --anonymize-standard			2001:db8:0123:4567:0250:c286:2345:4567=2001:db8:123:4509:a929:4291:7021:8626
+END
+}
+
+testscenarios_anonymization_options_kp() {
+	cat <<END | grep -v '^#'
 --anonymize-preset kp			46.244.223.233=242.222.34.63
 --anonymize-preset kp			2001:0a60:11e1:9501:e876:aee4:0721:e8ac=a909:16fa:9092:23ff:a909:4941::7
 --anonymize-preset kp			::1.2.3.4=::246.24.59.65

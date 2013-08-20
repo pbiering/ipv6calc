@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3041.c
- * Version    : $Id: librfc3041.c,v 1.12 2012/05/09 17:08:10 peter Exp $
+ * Version    : $Id: librfc3041.c,v 1.13 2013/08/20 06:24:59 ds6peter Exp $
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -22,14 +22,13 @@
 #include "librfc3041.h"
 #include "libipv6addr.h"
 
+
 /* function 
  *
  * in : *addrstring = IPv6 address
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */
-
-
 int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv6calc_ipv6addr *newidentifier, ipv6calc_ipv6addr *newtoken) {
 #define DEBUG_function_name "librfc3041/librfc3041_calc"
 	int retval = 1, i;
@@ -62,7 +61,7 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 	ipv6addr_clear(newidentifier);
 	ipv6addr_clear(newtoken);
 	
-	for (i = 0; i < (int) (sizeof(newidentifier->in6_addr.s6_addr) / sizeof(newidentifier->in6_addr.s6_addr[0])); i++) {
+	for (i = 0; i < 8; i++) {
 		/* copy into */	
 		newidentifier->in6_addr.s6_addr[i + 8] = (uint8_t) digest[i];
 		newtoken->in6_addr.s6_addr[i + 8] = (uint8_t) digest[i + 8];

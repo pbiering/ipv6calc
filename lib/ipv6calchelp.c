@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.39 2013/08/18 19:37:10 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.40 2013/08/20 06:24:59 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -765,15 +765,6 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 	fprintf(stderr, "GeoIP support not enabled\n");
 #endif
 
-#ifdef SUPPORT_BUILTIN
-	libipv6calc_db_wrapper_BuiltIn_wrapper_info(string, sizeof(string));
-	fprintf(stderr, "%s\n", string);
-#else
-	fprintf(stderr, "BuiltIn support not enabled\n");
-#endif
-
-	fprintf(stderr, "\n");
-
 #ifdef SUPPORT_IP2LOCATION
 	fprintf(stderr, "IP2Location support enabled, compiled with API version: %s\n", xmakestr(API_VERSION));
 	if (file_ip2location_ipv4 != NULL && strlen(file_ip2location_ipv4) > 0) {
@@ -788,6 +779,13 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 	};
 #else
 	fprintf(stderr, "IP2Location support not enabled\n");
+#endif
+
+#ifdef SUPPORT_BUILTIN
+	libipv6calc_db_wrapper_BuiltIn_wrapper_info(string, sizeof(string));
+	fprintf(stderr, "%s\n", string);
+#else
+	fprintf(stderr, "BuiltIn support not enabled\n");
 #endif
 
 	libipv6calc_db_wrapper_print_db_info(level_verbose, NULL);

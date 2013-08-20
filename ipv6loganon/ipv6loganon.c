@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.18 2013/08/15 16:54:36 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.19 2013/08/20 06:24:59 ds6peter Exp $
  * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -74,11 +74,20 @@ int	file_out_flush = 0;
 char	file_out_mode[NI_MAXHOST] = "";
 FILE	*FILE_OUT;
 
+
+void printversion_verbose(void) {
+	printversion();
+	fprintf(stderr, "\n");
+
+	ipv6calc_print_features_verbose(LEVEL_VERBOSE2);
+};
+
 /**************************************************/
 /* main */
 #define DEBUG_function_name "ipv6loganon/main"
 int main(int argc,char *argv[]) {
 	int i, lop, result;
+	uint32_t command = 0;
 
 	/* default */
 	result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, "anonymize-standard");
@@ -94,8 +103,12 @@ int main(int argc,char *argv[]) {
 				break;
 
 			case 'v':
-				printversion();
-				exit(EXIT_FAILURE);
+				if ((command & CMD_printversion) != 0) {
+					// second time '-v'
+					command |= CMD_printversion_verbose;
+				} else {
+					command |= CMD_printversion;
+				};
 				break;
 
 			case 'V':
@@ -252,6 +265,22 @@ int main(int argc,char *argv[]) {
 	/* initialise database wrapper */
 	result = libipv6calc_db_wrapper_init();
 	if (result != 0) {
+		exit(EXIT_FAILURE);
+	};
+
+	/* do work depending on selection */
+	if ((command & CMD_printversion) != 0) {
+		if ((command & CMD_printversion_verbose) != 0) {
+			printversion_verbose();
+		} else {
+			printversion();
+		};
+		exit(EXIT_SUCCESS);
+	};
+
+	/* check requirements */
+	if (libipv6calc_anon_supported(&ipv6calc_anon_set) == 0) {
+		fprintf(stderr, "ipv6calc anonymization method not supported\n");
 		exit(EXIT_FAILURE);
 	};
 

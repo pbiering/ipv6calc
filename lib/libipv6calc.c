@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.31 2013/05/12 07:23:12 ds6peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.32 2013/08/20 06:24:59 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -20,6 +20,7 @@
 #include "librfc2874.h"
 #include "librfc1886.h"
 
+#include "../databases/lib/libipv6calc_db_wrapper.h"
 
 /*
  * function converts chars in a string to upcase
@@ -546,6 +547,7 @@ int libipv6calc_anon_set_by_name(s_ipv6calc_anon_set *ipv6calc_anon_set, const c
 	return 1;
 };
 
+
 /*
  * create string of anonymization settings
  *
@@ -568,3 +570,40 @@ void libipv6calc_anon_infostring(char *string, const int stringlength, const s_i
 
 	return;
 };
+
+
+/*
+ * check whether anonymization method is supported
+ *
+ * in : s_ipv6calc_anon_set = anonymization set
+ * return:
+ *   2: special check succeeded
+ *   1: no special checks needed
+ *   0: not supported
+ */
+int libipv6calc_anon_supported(const s_ipv6calc_anon_set *ipv6calc_anon_set) {
+	/* check requirements */
+	if (ipv6calc_anon_set->method == ANON_METHOD_KEEPTYPEASNCC) {
+		// check for support
+		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_IPV6_TO_AS) == 1) {
+			return(2);
+		} else {
+			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC) != 1) {
+				fprintf(stderr, "ipv6calc anonymization method not supported, missing included/available database: IPv4->CountryCode (GeoIP)\n");
+			};
+			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_CC) != 1) {
+				fprintf(stderr, "ipv6calc anonymization method not supported, missing included/available database: IPv6->CountryCode (GeoIP)\n");
+			};
+			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS) != 1) {
+				fprintf(stderr, "ipv6calc anonymization method not supported, missing included/available database: IPv4->AutonomousSystemNumber (GeoIP)\n");
+			};
+			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_AS) != 1) {
+				fprintf(stderr, "ipv6calc anonymization method not supported, missing included/available database: IPv6->AutonomousSystemNumber (GeoIP)\n");
+			};
+			return(0);
+		};
+	} else {
+		return(1);
+	};
+};
+

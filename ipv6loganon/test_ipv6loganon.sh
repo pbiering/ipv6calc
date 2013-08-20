@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.17 2013/04/07 17:52:29 ds6peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.18 2013/08/20 06:24:59 ds6peter Exp $
 # Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -256,11 +256,48 @@ run_loganon_options_tests() {
 	done || return 1
 }
 
-run_loganon_options_tests
-retval=$?
+run_loganon_options_kp_tests() {
+	if ! ./ipv6loganon -vv 2>&1 | grep -q "Country4=1 Country6=1 ASN4=1 ASN6=1"; then
+		echo "NOTICE 'ipv6calc' has not required support for Country/ASN included, skip option kp tests..."
+		return 0
+	fi
+	echo "Run 'ipv6loganon' anonymization option kp tests..."
+	testscenarios_anonymization_options_kp | while read line; do
+		if [ -z "$line" ]; then
+			continue
+		fi
 
-if [ $retval -eq 0 ]; then
-	echo "All tests were successfully done!" >&2
-fi
+		options="`echo $line | awk '{ for ( i = 1; i < NF; i++) printf "%s ", $i }'`"
+		input_result="`echo $line | awk '{ print $NF }'`"
 
-exit $retval
+		echo "DEBUG : options=$options"
+		echo "DEBUG : input_result=$input_result"
+
+		input=${input_result/=*/}
+		result=${input_result/*=/}
+
+		command="echo $input | ./ipv6loganon $options"
+
+		result_real="`echo $input | ./ipv6loganon $options`"
+		if [ $? -ne 0 ]; then
+			echo "ERROR : command was not proper executed: $command"
+			exit 1
+		fi
+
+		if [ "$result" != "$result_real" ]; then
+			echo "ERROR : result doesn't match on command: $command"
+			echo "ERROR : result is      : $result_real"
+			echo "ERROR : result expected: $result"
+			exit 1
+		else
+			echo "INFO  : $command -> test ok"
+		fi
+	done || return 1
+}
+
+run_loganon_options_tests || exit 1
+run_loganon_options_kp_tests || exit 1
+
+echo "All tests were successfully done!" >&2
+
+exit 0

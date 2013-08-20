@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc_anonymization.sh
-# Version    : $Id: test_ipv6calc_anonymization.sh,v 1.2 2013/08/11 16:42:11 ds6peter Exp $
+# Version    : $Id: test_ipv6calc_anonymization.sh,v 1.3 2013/08/20 06:24:59 ds6peter Exp $
 # Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test ipv6calc anonymization
@@ -107,5 +107,38 @@ run_anon_options_tests() {
 	done || return 1
 }
 
+run_anon_options_kp_tests() {
+	if ! ./ipv6calc -vv 2>&1| grep -q "Country4=1 Country6=1 ASN4=1 ASN6=1"; then
+		echo "NOTICE 'ipv6calc' has not required support for Country/ASN included, skip option kp tests..."
+		return 0
+	fi
+
+	echo "Run 'ipv6calc' anonymization option kp tests..."
+	testscenarios_anonymization_options_kp | while IFS="=" read input result; do
+		if [ -z "$input" ]; then
+			continue
+		fi
+
+		command="./ipv6calc -q -A anonymize $input"
+
+		result_real="`$command`"
+		if [ $? -ne 0 ]; then
+			echo "ERROR : command was not proper executed: $command"
+			exit 1
+		fi
+
+		if [ "$result" != "$result_real" ]; then
+			echo "ERROR : result doesn't match on command: $command"
+			echo "ERROR : result is      : $result_real"
+			echo "ERROR : result expected: $result"
+			exit 1
+		else
+			echo "INFO  : $command -> test ok"
+		fi
+	done || return 1
+}
+
+
 run_anon_options_tests || exit 1
+run_anon_options_kp_tests || exit 1
 run_anon_tests || exit 1

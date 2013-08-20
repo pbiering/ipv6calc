@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.82 2013/08/18 19:37:10 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.83 2013/08/20 06:24:58 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -164,7 +164,7 @@ int main(int argc, char *argv[]) {
 	char resultstring2[NI_MAXHOST] = "";
 	char resultstring3[NI_MAXHOST] = "";
 	int retval = 1, i, j, lop, result;
-	unsigned long int command = 0;
+	uint32_t command = 0;
 	int bit_start = 0, bit_end = 0, force_prefix = 0;
 	char *input1 = NULL, *input2 = NULL;
 	int inputc;
@@ -812,12 +812,9 @@ int main(int argc, char *argv[]) {
 	};
 
 	/* check requirements */
-	if (ipv6calc_anon_set.method == ANON_METHOD_KEEPTYPEASNCC) {
-		// check for support
-		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_IPV6_TO_AS) != 1) {
-			fprintf(stderr, "ipv6calc anonymization method not supported, missing included/available databases: IP->CC and IP->AS\n");
-			exit(EXIT_FAILURE);
-		};
+	if (libipv6calc_anon_supported(&ipv6calc_anon_set) == 0) {
+		fprintf(stderr, "ipv6calc anonymization method not supported\n");
+		exit(EXIT_FAILURE);
 	};
 	
 	/* do work depending on selection */

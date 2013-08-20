@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.13 2013/08/11 16:42:11 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.14 2013/08/20 06:24:59 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -93,3 +93,4 @@ void libipv6calc_filter_clear(s_ipv6calc_filter_master *filter_master);
 
 int  libipv6calc_anon_set_by_name(s_ipv6calc_anon_set *ipv6calc_anon_set, const char* name);
 void libipv6calc_anon_infostring(char* string, const int stringlength, const s_ipv6calc_anon_set *ipv6calc_anon_set);
+int  libipv6calc_anon_supported(const s_ipv6calc_anon_set *ipv6calc_anon_set);

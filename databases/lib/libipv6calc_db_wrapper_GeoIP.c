@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.14 2013/08/15 16:54:36 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.15 2013/08/20 06:24:58 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -496,10 +496,6 @@ int libipv6calc_db_wrapper_GeoIP_cleanup(void) {
 
 	r = (int) (*dl_GeoIP_cleanup)();
 
-	if (dl_GeoIPDBFileName_ptr != NULL) {
-		fprintf(stderr, "%s/%s: dl_GeoIPDBFileName_ptr != NULL (unexpected)\n", __FILE__, __func__);
-		exit(1);
-	};
 END_libipv6calc_db_wrapper:
 #else
 	r = GeoIP_cleanup();
