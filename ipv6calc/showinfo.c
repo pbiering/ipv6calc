@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.74 2013/08/15 16:54:36 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.75 2013/09/03 20:41:11 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -26,6 +26,8 @@
 #include "showinfo.h"
 
 #include "../databases/lib/libipv6calc_db_wrapper.h"
+#include "../databases/lib/libipv6calc_db_wrapper_GeoIP.h"
+#include "../databases/lib/libipv6calc_db_wrapper_IP2Location.h"
 
 #ifdef SUPPORT_IP2LOCATION
 #include "IP2Location.h"
@@ -163,7 +165,15 @@ static void printfooter(const uint32_t formatoptions) {
 		tempstring[0] = '\0'; /* clear tempstring */
 
 #ifdef SUPPORT_IP2LOCATION
+#ifdef SUPPORT_IP2LOCATION_DYN
+		snprintf(tempstring2, sizeof(tempstring2) - 1, "%s IP2Location(dyn-load)", tempstring);
+#else
+#ifdef SUPPORT_IP2LOCATION_STATIC
+		snprintf(tempstring2, sizeof(tempstring2) - 1, "%s IP2Location(static)", tempstring);
+#else
 		snprintf(tempstring2, sizeof(tempstring2) - 1, "%s IP2Location", tempstring);
+#endif
+#endif
 		snprintf(tempstring, sizeof(tempstring) - 1, "%s", tempstring2);
 #endif
 #ifdef SUPPORT_GEOIP
@@ -208,50 +218,86 @@ static void printfooter(const uint32_t formatoptions) {
 #ifdef SUPPORT_IP2LOCATION
 /* print IP2Location information */
 #define DEBUG_function_name "showinfo/print_ip2location"
-static void print_ip2location(const char *addrstring, const uint32_t formatoptions, const char *additionalstring, int version) {
+static void print_ip2location(char *addrstring, const uint32_t formatoptions, const char *additionalstring, int version) {
+	int ip2location_type = 0;
+
+	IP2Location *IP2LocationObj;
 
 	static int flag_ip2location_info_shown_ipv4 = 0;
 	static int flag_ip2location_info_shown_ipv6 = 0;
 
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable);
 	char tempstring[NI_MAXHOST] = "";
+	char *CountryCode, *CountryName;
 	char *file_ip2location;
-	int flag_info_show;
+	static int flag_info_show = 0;
+
+	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
+		fprintf(stderr, "%s/%s: Called addrstring=%s formatoptions=0x%08x additionalstring=%s version=%d\n", __FILE__, __func__, addrstring, formatoptions, additionalstring, version);
+	};
 
 	if (version == 4) {
-		file_ip2location = file_ip2location_ipv4;
+		if (libipv6calc_db_wrapper_IP2Location_has_features(IPV6CALC_DB_IPV4_TO_CC) != 1) {
+			return;
+		};
+		ip2location_type = IP2LOCATION_DB_IP_COUNTRY;
 	} else if (version == 6) {
-		file_ip2location = file_ip2location_ipv6;
+		if (libipv6calc_db_wrapper_IP2Location_has_features(IPV6CALC_DB_IPV6_TO_CC) != 1) {
+			return;
+		};
+		ip2location_type = IP2LOCATION_DB_IPV6_COUNTRY;
 	} else {
-		fprintf(stderr, " IP2Location for IP version %d not supported\n", version);
+		fprintf(stderr, " IP2Location for IPv%d is not supported\n", version);
 		return;
 	};
 
-	if (strlen(file_ip2location) == 0) {
-		/* no file given, nothing more todo */
-		fprintf(stderr, " IP2Location IPv%d database file not given\n", version);
-		return;
+	CountryCode = libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(addrstring, version);
+	CountryName = libipv6calc_db_wrapper_IP2Location_wrapper_country_name_by_addr(addrstring, version);
+
+	if (machinereadable != 0) {
+		if (CountryCode != NULL) {
+			snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_COUNTRY_SHORT%s=%s", additionalstring, CountryCode);
+			printout(tempstring);
+			flag_info_show = 1;
+		};
+
+		if (CountryName != NULL) {
+			snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_COUNTRY_LONG%s=%s", additionalstring, CountryName);
+			printout(tempstring);
+			flag_info_show = 1;
+		};
+	} else {
+		if (strlen(additionalstring) > 0) {
+			snprintf(tempstring, sizeof(tempstring), "IP2Location reports for %s country %s (%s)", additionalstring, (CountryName != 0 ? CountryName : "UNKNOWN"), (CountryCode != NULL ? CountryCode : "??"));
+		} else {
+			snprintf(tempstring, sizeof(tempstring), "IP2Location reports country %s (%s)", (CountryName != 0 ? CountryName : "UNKNOWN"), (CountryCode != NULL ? CountryCode : "??"));
+		};
+		printout(tempstring);
 	};
 
 	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-		fprintf(stderr, "%s: IP2Location try to open IPv%d database: %s\n", DEBUG_function_name, version, file_ip2location);
+		fprintf(stderr, "%s: IP2Location IPv%d try to open database by type: %s\n", DEBUG_function_name, version, libipv6calc_db_wrapper_IP2Location_dbdescription(ip2location_type));
 	};
 
-	IP2Location *IP2LocationObj = IP2Location_open(file_ip2location);
-
-	if (IP2LocationObj == NULL) {
-		/* error on opening database, nothing more todo */
-		fprintf(stderr, "%s: IP2Location can't open database: %s\n", DEBUG_function_name, file_ip2location);
+	if (libipv6calc_db_wrapper_IP2Location_db_avail(ip2location_type) != 1) {
+		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
+			fprintf(stderr, "%s: IP2Location IPv%d database by type not available: %s\n", DEBUG_function_name, version, libipv6calc_db_wrapper_IP2Location_dbdescription(ip2location_type));
+		};
+		// stay silent
 		return;
 	};
 
-	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-		fprintf(stderr, "%s: IP2Location database opened: %s\n", DEBUG_function_name, file_ip2location);
+	IP2LocationObj = libipv6calc_db_wrapper_IP2Location_open_type(ip2location_type);
+
+	if (flag_info_show != 0) {
+		if (machinereadable != 0) {
+			snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_DATABASE_INFO_IPV%d=%s", version, libipv6calc_db_wrapper_IP2Location_database_info(IP2LocationObj));
+			printout(tempstring);
+		};
 	};
 
-	IP2LocationRecord *record = IP2Location_get_all(IP2LocationObj, (char*) addrstring);
+	IP2LocationRecord *record = libipv6calc_db_wrapper_IP2Location_get_all(IP2LocationObj, (char*) addrstring);
 
-	flag_info_show = 0;
 	if ((version == 4) && (flag_ip2location_info_shown_ipv4 == 0)) {
 		flag_ip2location_info_shown_ipv4 = 1;
 		flag_info_show = 1;
@@ -260,59 +306,56 @@ static void print_ip2location(const char *addrstring, const uint32_t formatoptio
 		flag_info_show = 1;
 	};
 
-	if (flag_info_show != 0) {
-		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, \
-				"IP2LOCATION_DATABASE_INFO_IPV%d=url=http://www.ip2location.com date=%04d-%02d-%02d entries=%d apiversion=%s", \
-				version, \
-				IP2LocationObj->databaseyear + 2000, \
-				IP2LocationObj->databasemonth, \
-				IP2LocationObj->databaseday, \
-				IP2LocationObj->databasecount, \
-				xmakestr(API_VERSION));
-			printout(tempstring);
-		};
-	};
-
 	if (record != NULL) {
 		if ( machinereadable != 0 ) {
 			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_COUNTRY_SHORT%s=%s", additionalstring, record->country_short);
 			printout(tempstring);
 			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_COUNTRY_LONG%s=%s", additionalstring, record->country_long);
 			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_REGION%s=%s", additionalstring, record->region);
-			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_CITY%s=%s", additionalstring, record->city);
-			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ISP%s=%s", additionalstring, record->isp);
-			printout(tempstring);
+
+			if (strstr(record->region, "unavailable") == NULL) {
+				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_REGION%s=%s", additionalstring, record->region);
+				printout(tempstring);
+			};
+
+			if (strstr(record->city, "unavailable") == NULL) {
+				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_CITY%s=%s", additionalstring, record->city);
+				printout(tempstring);
+			};
+
+			if (strstr(record->isp, "unavailable") == NULL) {
+				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ISP%s=%s", additionalstring, record->isp);
+				printout(tempstring);
+			};
+
 			if ((record->latitude != 0) && (record->longitude != 0)) {
 				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LATITUDE%s=%f", additionalstring, record->latitude);
 				printout(tempstring);
 				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LONGITUDE%s=%f", additionalstring, record->longitude);
 				printout(tempstring);
-			} else {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LATITUDE%s=This parameter is unavailable for selected data file. Please upgrade the data file.", additionalstring);
-				printout(tempstring);
-				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LONGITUDE%s=This parameter is unavailable for selected data file. Please upgrade the data file.", additionalstring);
+			};
+
+			if (strstr(record->domain, "unavailable") == NULL) {
+				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DOMAIN%s=%s", additionalstring, record->domain);
 				printout(tempstring);
 			};
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DOMAIN%s=%s", additionalstring, record->domain);
-			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ZIPCODE%s=%s", additionalstring, record->zipcode);
-			printout(tempstring);
+
+			if (strstr(record->zipcode, "unavailable") == NULL) {
+				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ZIPCODE%s=%s", additionalstring, record->zipcode);
+				printout(tempstring);
+			};
 		} else {
 			fprintf(stderr, " IP2Location not machinereadable output currently not supported\n");
 		};
 
-		IP2Location_free_record(record);
+		libipv6calc_db_wrapper_IP2Location_free_record(record);
 	} else {
 		if ((formatoptions & FORMATOPTION_quiet) == 0) {
 			fprintf(stderr, "%s: IP2Location returned no record for address: %s\n", DEBUG_function_name, addrstring);
 		};
 	};
 
-	IP2Location_close(IP2LocationObj);
+	libipv6calc_db_wrapper_IP2Location_close(IP2LocationObj);
 };
 #undef DEBUG_function_name
 #endif
@@ -348,28 +391,23 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 		file_geoip = file_geoip_ipv6;
 		geoip_type = GEOIP_COUNTRY_EDITION_V6;
 	} else {
-		fprintf(stderr, " GeoIP for IPv%d not supported\n", version);
+		fprintf(stderr, " GeoIP for IPv%d is not supported\n", version);
 		return;
 	};
 
-	if (strlen(file_geoip) > 0) {
-		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-			fprintf(stderr, "%s: GeoIP IPv%d try to open database: %s\n", DEBUG_function_name, version, file_geoip);
-		};
-		gi = libipv6calc_db_wrapper_GeoIP_open(file_geoip, GEOIP_STANDARD);
-	} else {
-		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-			fprintf(stderr, "%s: GeoIP IPv%d try to open database by type: %s\n", DEBUG_function_name, version, libipv6calc_db_wrapper_GeoIPDBDescription[geoip_type]);
-		};
-		if (libipv6calc_db_wrapper_GeoIP_db_avail(geoip_type) != 1) {
-			if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-				fprintf(stderr, "%s: GeoIP IPv%d database by type not available: %s\n", DEBUG_function_name, version, libipv6calc_db_wrapper_GeoIPDBDescription[geoip_type]);
-			};
-			// stay silent
-			return;
-		};
-		gi = libipv6calc_db_wrapper_GeoIP_open_type(geoip_type, GEOIP_STANDARD);
+	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
+		fprintf(stderr, "%s: GeoIP IPv%d try to open database by type: %s\n", DEBUG_function_name, version, libipv6calc_db_wrapper_GeoIPDBDescription[geoip_type]);
 	};
+
+	if (libipv6calc_db_wrapper_GeoIP_db_avail(geoip_type) != 1) {
+		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
+			fprintf(stderr, "%s: GeoIP IPv%d database by type not available: %s\n", DEBUG_function_name, version, libipv6calc_db_wrapper_GeoIPDBDescription[geoip_type]);
+		};
+		// stay silent
+		return;
+	};
+
+	gi = libipv6calc_db_wrapper_GeoIP_open_type(geoip_type, GEOIP_STANDARD);
 
 	if (gi == NULL) {
 		/* error on opening database, nothing more todo */
@@ -693,9 +731,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 #ifdef SUPPORT_IP2LOCATION
 	/* IP2Location information */
-	if (use_ip2location_ipv4 == 1) {
-		print_ip2location(tempipv4string, formatoptions, embeddedipv4string, 4);
-	};
+	print_ip2location(tempipv4string, formatoptions, embeddedipv4string, 4);
 #endif
 
 #ifdef SUPPORT_GEOIP
@@ -1333,9 +1369,7 @@ END:
 	if ( ((typeinfo & IPV6_NEW_ADDR_AGU) != 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID | IPV6_ADDR_ANONYMIZED_PREFIX)) == 0) ) {
 #ifdef SUPPORT_IP2LOCATION
 		/* IP2Location information */
-		if (use_ip2location_ipv6 == 1) {
-			print_ip2location(ipv6addrstring, formatoptions, "", 6);
-		};
+		print_ip2location(ipv6addrstring, formatoptions, "", 6);
 #endif
 
 #ifdef SUPPORT_GEOIP

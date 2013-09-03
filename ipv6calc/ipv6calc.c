@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.83 2013/08/20 06:24:58 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.84 2013/09/03 20:41:11 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -802,7 +802,7 @@ int main(int argc, char *argv[]) {
 	};
 
 	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "Debug value:%08lx command:%08lx inputtype:%08lx outputtype:%08lx action:%08lx formatoptions:%08lx\n", (unsigned long) ipv6calc_debug, command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, (unsigned long) formatoptions); 
+		fprintf(stderr, "Debug value:%08lx command:%08lx inputtype:%08lx outputtype:%08lx action:%08lx formatoptions:%08lx\n", (unsigned long) ipv6calc_debug, (unsigned long) command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, (unsigned long) formatoptions); 
 	};
 
 	/* initialise database wrapper */

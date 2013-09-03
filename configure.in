@@ -1,9 +1,9 @@
 dnl Project: ipv6calc
 dnl File   : configure.in
-dnl Version: $Id: configure.in,v 1.61 2013/08/20 06:24:58 ds6peter Exp $
+dnl Version: $Id: configure.in,v 1.62 2013/09/03 20:41:10 ds6peter Exp $
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(ipv6calc, 0.95.0.alpha.2, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
+AC_INIT(ipv6calc, 0.95.0.beta.1, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
 
 AC_DEFINE(COPYRIGHT_YEAR, "2013", [Copyright year])
 
@@ -134,7 +134,6 @@ AC_ARG_ENABLE([ip2location],
 	               [Enable IP2Location support (default: disabled)]),
 	[
         IP2LOCATION="$enableval"
-        IP2LOCATION_LIB="-lIP2Location"
     ],
     [IP2LOCATION="no"])
 
@@ -155,6 +154,15 @@ AC_ARG_WITH([ip2location-static],
         IP2LOCATION_LIB="-Wl,-Bstatic $IP2LOCATION_LIB -Wl,-Bdynamic"
      fi])
 
+AC_ARG_WITH([ip2location-dynamic],
+    AS_HELP_STRING([--without-ip2location-dynamic],
+                   [Disable use of dynamic loading of IP2Location library (default=yes, if support is found)]),
+    [
+	if test "$enableval" != "no"; then
+        	IP2LOCATION_DYN="$enableval"
+	fi
+    ],
+    )
 AC_ARG_WITH([ip2location-ipv4-default-file],
        AS_HELP_STRING([--with-ip2location-ipv4-default-file=file],
                [Use a default IP2Location IPv4 database file when ipv6calc is invoked with '--db-ip2location-ipv4-default|-L']),
@@ -167,7 +175,8 @@ AC_ARG_WITH([ip2location-ipv6-default-file],
 
 if test "$IP2LOCATION" = "yes"; then
     CPPFLAGS="$CPPFLAGS $IP2LOCATION_INCLUDE"
-    LDFLAGS="$LDFLAGS $IP2LOCATION_LIB"
+	AC_MSG_RESULT([*** IP2Location support requested])
+
     AC_CHECK_HEADER(IP2Location.h,,
         [AC_MSG_ERROR([IP2Location library header files not found])]
     )
@@ -178,6 +187,29 @@ if test "$IP2LOCATION" = "yes"; then
         [
             AC_MSG_ERROR([IP2Location library header files were found but the library was not found])
         ])
+
+    if test "$IP2LOCATION_DYN" != "yes"; then
+        IP2LOCATION_LIB="-lIP2Location"
+        LDFLAGS="$LDFLAGS $IP2LOCATION_LIB"
+
+        if test "$IP2LOCATION_STATIC" = "yes"; then
+	    AC_DEFINE(SUPPORT_IP2LOCATION_STATIC, 1, Define if you want IP2Location support statically linked - requires also additional linker options.)
+	fi
+
+	AC_CHECK_LIB(IP2Location, IP2Location_open,
+	    [
+		AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location support.)
+		AC_MSG_RESULT([*** IP2Location support enabled])
+	    ],
+	    [
+		AC_MSG_ERROR([IP2Location library header files were found but the library was not found])
+	    ])
+    else
+	# wrapper detects by itself the real support
+	AC_MSG_RESULT([*** IP2Location support will be implemented by using dynamic load of library])
+	AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location support.)
+	AC_DEFINE(SUPPORT_IP2LOCATION_DYN, 1, Define if you want IP2Location support with dynamic loading support - requires also additional linker options.)
+    fi
 fi
 
 AC_SUBST(IP2LOCATION_INCLUDE)

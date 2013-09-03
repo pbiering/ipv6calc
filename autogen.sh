@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.16 2013/06/22 14:42:02 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.17 2013/09/03 20:41:10 ds6peter Exp $
 # Copyright  : 2003-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -36,6 +36,10 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location"
 		;;
+	    '--ip2location-dyn')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --with-ip2location-dynamic"
+		;;
 	    '--db'|'-d')
 		shift
 		# default database locations
@@ -65,6 +69,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   -g|--geoip         : enable GeoIP support"
 		echo "   --geoip-dyn        : switch to dynamic library loading of GeoIP"
 		echo "   -i|--ip2location   : enable IP2Location support"
+		echo "   --ip2location-dyn  : switch to dynamic library loading of IP2Location"
 		echo "   -d|--db            : enable default GeoIP and IP2Location database locations"
 		echo "   --disable-db-ieee  : disable builtin IEEE database"
 		echo "   --disable-db-ipv4  : disable builtin IPv4 database"

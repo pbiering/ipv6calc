@@ -107,6 +107,14 @@
 /* Define if you want IP2Location support. */
 #undef SUPPORT_IP2LOCATION
 
+/* Define if you want IP2Location support with dynamic loading support -
+   requires also additional linker options. */
+#undef SUPPORT_IP2LOCATION_DYN
+
+/* Define if you want IP2Location support statically linked - requires also
+   additional linker options. */
+#undef SUPPORT_IP2LOCATION_STATIC
+
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */
 #if defined AC_APPLE_UNIVERSAL_BUILD

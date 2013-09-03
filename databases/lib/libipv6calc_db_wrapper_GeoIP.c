@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.15 2013/08/20 06:24:58 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.16 2013/09/03 20:41:11 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -26,9 +26,11 @@
 uint32_t wrapper_features_GeoIP = 0;
 
 #ifdef SUPPORT_GEOIP_DYN
+static char geoip_lib_name[NI_MAXHOST] = IPV6CALC_DB_GEOIP_LIB_NAME;
+
 static const char* wrapper_geoip_info = "dyn-load";
-static int wrapper_geoip_ipv6_support = GEOIP_IPV6_SUPPORT_UNKOWN;
-static int wrapper_geoip_support      = GEOIP_SUPPORT_UNKOWN;
+static int wrapper_geoip_ipv6_support = GEOIP_IPV6_SUPPORT_UNKNOWN;
+static int wrapper_geoip_support      = GEOIP_SUPPORT_UNKNOWN;
 
 /* define status and dynamic load functions */
 static int dl_status_GeoIP_open = IPV6CALC_DL_STATUS_UNKNOWN;
@@ -145,18 +147,18 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	char *error;
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Load library: %s\n", __FILE__, __func__, IPV6CALC_DB_GEOIP_LIB_NAME);
+		fprintf(stderr, "%s/%s: Load library: %s\n", __FILE__, __func__, geoip_lib_name);
 	};
 
-	dl_GeoIP_handle = dlopen(IPV6CALC_DB_GEOIP_LIB_NAME, RTLD_NOW | RTLD_LOCAL);
+	dl_GeoIP_handle = dlopen(geoip_lib_name, RTLD_NOW | RTLD_LOCAL);
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "%s/%s: Loading of library failed: %s\n", __FILE__, __func__, IPV6CALC_DB_GEOIP_LIB_NAME);
+		fprintf(stderr, "%s/%s: Loading of library failed: %s\n", __FILE__, __func__, geoip_lib_name);
 		return(1);
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Loaded library successful: %s\n", __FILE__, __func__, IPV6CALC_DB_GEOIP_LIB_NAME);
+		fprintf(stderr, "%s/%s: Loaded library successful: %s\n", __FILE__, __func__, geoip_lib_name);
 	};
 
 	libipv6calc_db_wrapper_GeoIP_cleanup();
@@ -176,7 +178,7 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	};
 	libipv6calc_db_wrapper_GeoIPDBDescription = dl_GeoIPDBDescription;
 
-#ifdef GEOP_WORKAROUND_NUM_DB_TYPES
+#ifdef GEOIP_WORKAROUND_NUM_DB_TYPES
 	// workaround to determine NUM_DB_TYPES until GeoIP API provides a function
 	// UNTIL now, no workaround found :-(
 	geoip_num_db_types = 0;
@@ -1072,10 +1074,11 @@ void libipv6calc_db_wrapper_GeoIP_delete(GeoIP* gi) {
 	};
 
 END_libipv6calc_db_wrapper:
-	return;
 #else
 	GeoIP_delete(gi);
 #endif
+
+	return;
 };
 
 
@@ -1813,6 +1816,29 @@ END_libipv6calc_db_wrapper_dl_load:
 /*********************************************
  * Abstract functions
  * *******************************************/
+
+/* function query for feature set
+ * ret=-1: unknown
+ * 0 : not matching
+ * 1 : ok
+ */
+int libipv6calc_db_wrapper_GeoIP_has_features(uint32_t features) {
+	int result = -1;
+	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
+		fprintf(stderr, "%s/%s: Called with feature value to test: 0x%08x\n", __FILE__, __func__, features);
+	};
+
+	if ((wrapper_features_GeoIP & features) == features) {
+		result = 1;
+	} else {
+		result = 0;
+	};
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
+		fprintf(stderr, "%s/%s: Return with result: %d\n", __FILE__, __func__, result);
+	};
+	return(result);
+};
 
 /* country_code */
 const char * libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr (const char *addr, const int proto) {

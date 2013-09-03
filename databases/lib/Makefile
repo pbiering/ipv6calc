@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : lib/Makefile
-# Version    : $Id: Makefile,v 1.11 2013/08/20 06:24:58 ds6peter Exp $
+# Version    : $Id: Makefile,v 1.12 2013/09/03 20:41:10 ds6peter Exp $
 # Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -20,6 +20,7 @@ RANLIB	= ranlib
 
 OBJS	=	libipv6calc_db_wrapper.o \
 		libipv6calc_db_wrapper_GeoIP.o \
+		libipv6calc_db_wrapper_IP2Location.o \
 		libipv6calc_db_wrapper_BuiltIn.o
 
 all:		libipv6calc_db_wrapper.a
@@ -29,6 +30,7 @@ all:		libipv6calc_db_wrapper.a
 
 $(OBJS):	libipv6calc_db_wrapper.h \
 		libipv6calc_db_wrapper_GeoIP.h \
+		libipv6calc_db_wrapper_IP2Location.h \
 		libipv6calc_db_wrapper_BuiltIn.h
 
 libipv6calc_db_wrapper.a:	$(OBJS)

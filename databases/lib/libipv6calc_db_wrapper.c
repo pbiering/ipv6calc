@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.13 2013/08/18 19:37:10 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.14 2013/09/03 20:41:11 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -19,9 +19,11 @@
 
 #include "libipv6calc_db_wrapper.h"
 #include "libipv6calc_db_wrapper_GeoIP.h"
+#include "libipv6calc_db_wrapper_IP2Location.h"
 #include "libipv6calc_db_wrapper_BuiltIn.h"
 
 static int wrapper_GeoIP_status = 0;
+static int wrapper_IP2Location_status = 0;
 static int wrapper_BuiltIn_status = 0;
 
 uint32_t wrapper_features = 0;
@@ -50,6 +52,19 @@ int libipv6calc_db_wrapper_init(void) {
 		result = 1;
 	} else {
 		wrapper_GeoIP_status = 1; // ok
+	};
+#endif
+
+#ifdef SUPPORT_IP2LOCATION
+	// Call IP2Location wrapper
+	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
+		fprintf(stderr, "%s/%s: Call libipv6calc_db_wrapper_IP2Location_wrapper_init\n", __FILE__, __func__);
+	};
+	r = libipv6calc_db_wrapper_IP2Location_wrapper_init();
+	if (r != 0) {
+		result = 1;
+	} else {
+		wrapper_IP2Location_status = 1; // ok
 	};
 #endif
 
@@ -94,6 +109,14 @@ int libipv6calc_db_wrapper_cleanup(void) {
 	};
 #endif
 
+#ifdef SUPPORT_IP2LOCATION
+	// Call IP2Location wrapper
+	r = libipv6calc_db_wrapper_IP2Location_wrapper_cleanup();
+	if (r != 0) {
+		result = 1;
+	};
+#endif
+
 #ifdef SUPPORT_BUILTIN
 	// Call BuiltIn wrapper
 	r = libipv6calc_db_wrapper_BuiltIn_wrapper_cleanup();
@@ -114,6 +137,11 @@ void libipv6calc_db_wrapper_info(char * string, const size_t size) {
 #ifdef SUPPORT_GEOIP
 	// Call GeoIP wrapper
 	libipv6calc_db_wrapper_GeoIP_wrapper_info(string, size);
+#endif
+
+#ifdef SUPPORT_IP2LOCATION
+	// Call IP2Location wrapper
+	libipv6calc_db_wrapper_IP2Location_wrapper_info(string, size);
 #endif
 
 #ifdef SUPPORT_BUILTIN
@@ -139,6 +167,11 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 #ifdef SUPPORT_GEOIP
 	// Call GeoIP wrapper
 	libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(level_verbose, prefix_string);
+#endif
+
+#ifdef SUPPORT_IP2LOCATION
+	// Call IP2Location wrapper
+	libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(level_verbose, prefix_string);
 #endif
 
 #ifdef SUPPORT_BUILTIN

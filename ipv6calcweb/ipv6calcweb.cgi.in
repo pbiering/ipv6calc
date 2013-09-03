@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.54 2013/05/13 18:37:48 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.55 2013/09/03 20:41:11 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -686,17 +686,6 @@ sub print_textonly ($) {
 		if ($outputformat eq "text") {
 			print $text;
 		};
-	};
-};
-
-## split IP2Location data
-sub split_ip2location($) {
-	for my $stringlet (split / /, $_[0]) {
-		my ($key, $value) = split /=/, $stringlet;
-		$info_ip2location{$key} = $value;
-	};
-	if (! defined $info_ip2location{'proto'}) {
-		$info_ip2location{'proto'} = "";
 	};
 };
 
@@ -1684,9 +1673,8 @@ if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 
 	foreach my $string ($info_ip2location_string, $info_ip2location_string_ipv4, $info_ip2location_string_ipv6) {
 		if (! defined $string) { next; };
-		split_ip2location($string);
 		print "<br>\n";
-		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $info_ip2location{'url'} . "\">IP2Location</a> " . $info_ip2location{'proto'} . " " . $text{'database'}->{$lang} . " " . $text{'version'}->{$lang} . " " . $info_ip2location{'date'} . " (" . $info_ip2location{'entries'} . " " . $text{'entries'}->{$lang} . ")</font>\n";
+		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.ip2location.com\">IP2Location</a> " . $text{'database'}->{$lang} . " " . $string . ")</font>\n";
 	};
 
 	foreach my $string ($info_geoip_string, $info_geoip_string_ipv4, $info_geoip_string_ipv6) {

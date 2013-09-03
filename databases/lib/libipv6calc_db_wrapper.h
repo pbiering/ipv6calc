@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.10 2013/08/18 19:37:10 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.11 2013/09/03 20:41:11 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -12,7 +12,7 @@
 
 #define _libipv6calc_db_wrapper_h 1
 
-#include "libipv6calc_db_wrapper_GeoIP.h"
+#include "ipv6calctypes.h"
 
 extern uint32_t wrapper_features;
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.40 2013/08/20 06:24:59 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.41 2013/09/03 20:41:11 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -26,7 +26,21 @@
 #include "databases/ipv6-assignment/dbipv6addr_assignment.h"
 #include "databases/lib/libipv6calc_db_wrapper.h"
 #include "databases/lib/libipv6calc_db_wrapper_GeoIP.h"
+#include "databases/lib/libipv6calc_db_wrapper_IP2Location.h"
 #include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
+
+
+#ifdef SUPPORT_IP2LOCATION
+/* 
+ *  * API_VERSION is defined as a bareword in IP2Location.h, 
+ *   * we need this trick to stringify it. Blah.
+ *    */
+#define makestr(x) #x
+#define xmakestr(x) makestr(x)
+
+extern char* file_ip2location_ipv4;
+extern char* file_ip2location_ipv6;
+#endif
 
 /* to be defined in each application */
 extern void printversion(void);
@@ -766,7 +780,14 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 #endif
 
 #ifdef SUPPORT_IP2LOCATION
+#ifndef SUPPORT_GEOIP_DYN
 	fprintf(stderr, "IP2Location support enabled, compiled with API version: %s\n", xmakestr(API_VERSION));
+#else
+	fprintf(stderr, "IP2Location support by dynamic library load\n");
+	fprintf(stderr, "IP2Location dynamic library version (on this system): %s\n", libipv6calc_db_wrapper_IP2Location_lib_version());
+#endif
+	// TODO: show base directory
+	/*
 	if (file_ip2location_ipv4 != NULL && strlen(file_ip2location_ipv4) > 0) {
 		fprintf(stderr, "IP2Location IPv4 default file: %s\n", file_ip2location_ipv4);
 	} else {
@@ -777,6 +798,7 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 	} else {
 		fprintf(stderr, "IP2Location IPv6 default file: not configured\n");
 	};
+	*/
 #else
 	fprintf(stderr, "IP2Location support not enabled\n");
 #endif

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.14 2013/08/20 06:24:59 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.15 2013/09/03 20:41:11 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -73,8 +73,15 @@ typedef struct {
 
 
 /* some generic macros */
+
+// pack value using xor/mask/shift
 #define PACK_XMS(v, x, m, s) 	((((v) ^ (x)) & (m)) << (s))
+
+// unpack value using xor/mask/shift
 #define UNPACK_XMS(p, x, m, s)	((((p) >> (s)) ^ (x)) & (m))
+
+// max entries of a const array
+#define MAXENTRIES_ARRAY(a)	(sizeof(a) / sizeof(a[0]))
 
 #endif
 
