@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.75 2013/09/03 20:41:11 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.76 2013/09/04 06:05:33 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -308,22 +308,19 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 
 	if (record != NULL) {
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_COUNTRY_SHORT%s=%s", additionalstring, record->country_short);
-			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_COUNTRY_LONG%s=%s", additionalstring, record->country_long);
-			printout(tempstring);
+#define TEST_IP2LOCATION_AVAILABLE(v)	((strstr(v, "unavailable") == NULL) && (strstr(v, "demo database") == NULL))
 
-			if (strstr(record->region, "unavailable") == NULL) {
+			if (TEST_IP2LOCATION_AVAILABLE(record->region)) {
 				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_REGION%s=%s", additionalstring, record->region);
 				printout(tempstring);
 			};
 
-			if (strstr(record->city, "unavailable") == NULL) {
+			if (TEST_IP2LOCATION_AVAILABLE(record->city)) {
 				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_CITY%s=%s", additionalstring, record->city);
 				printout(tempstring);
 			};
 
-			if (strstr(record->isp, "unavailable") == NULL) {
+			if (TEST_IP2LOCATION_AVAILABLE(record->isp)) {
 				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ISP%s=%s", additionalstring, record->isp);
 				printout(tempstring);
 			};
@@ -335,12 +332,12 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 				printout(tempstring);
 			};
 
-			if (strstr(record->domain, "unavailable") == NULL) {
+			if (TEST_IP2LOCATION_AVAILABLE(record->domain)) {
 				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DOMAIN%s=%s", additionalstring, record->domain);
 				printout(tempstring);
 			};
 
-			if (strstr(record->zipcode, "unavailable") == NULL) {
+			if (TEST_IP2LOCATION_AVAILABLE(record->zipcode)) {
 				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ZIPCODE%s=%s", additionalstring, record->zipcode);
 				printout(tempstring);
 			};

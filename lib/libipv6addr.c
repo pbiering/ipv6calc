@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.87 2013/08/15 16:54:36 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.88 2013/09/04 06:05:33 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -999,9 +999,6 @@ int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
  */
 #define DEBUG_function_name "libipv6calc/get_registry_string"
 int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
-	int i;
-	int match = -1;
-
 	uint32_t ipv6_00_31 = ipv6addr_getdword(ipv6addrp, 0);
 	uint32_t ipv6_32_63 = ipv6addr_getdword(ipv6addrp, 1);
 	uint32_t ipv6_64_95 = ipv6addr_getdword(ipv6addrp, 2);
@@ -1064,7 +1061,10 @@ int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, char *re
 	};
 
 #ifdef SUPPORT_DB_IPV6
-	for (i = 0; i < (int) ( sizeof(dbipv6addr_assignment) / sizeof(dbipv6addr_assignment[0])); i++) {
+	int i;
+	int match = -1;
+
+	for (i = 0; i < MAXENTRIES_ARRAY(dbipv6addr_assignment); i++) {
 		/* run through database array */
 		if ( (ipv6_00_31 & dbipv6addr_assignment[i].ipv6mask_00_31) != dbipv6addr_assignment[i].ipv6addr_00_31 ) {
 			/* MSB 00-31 do not match */
