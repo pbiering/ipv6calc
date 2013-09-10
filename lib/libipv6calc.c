@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.32 2013/08/20 06:24:59 ds6peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.33 2013/09/10 20:25:50 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -549,6 +549,26 @@ int libipv6calc_anon_set_by_name(s_ipv6calc_anon_set *ipv6calc_anon_set, const c
 
 
 /*
+ * get name of anonymization settings
+ *
+ * in : s_ipv6calc_anon_set = anonymization set
+ * return: char *
+ */
+const char *libipv6calc_anon_method_name(const s_ipv6calc_anon_set *ipv6calc_anon_set) {
+	int i;
+
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_anon_methods); i++) {
+		if (ipv6calc_anon_methods[i].method == ipv6calc_anon_set->method) {
+			return(ipv6calc_anon_methods[i].name);
+			break;
+		};
+	};
+
+	return(NULL);
+};
+
+
+/*
  * create string of anonymization settings
  *
  * in : *string = string to be filled
@@ -556,17 +576,9 @@ int libipv6calc_anon_set_by_name(s_ipv6calc_anon_set *ipv6calc_anon_set, const c
  * return: void
  */
 void libipv6calc_anon_infostring(char *string, const int stringlength, const s_ipv6calc_anon_set *ipv6calc_anon_set) {
-	char method_name[32] = "unknown";
-	int i;
+	const char *method_name = libipv6calc_anon_method_name(ipv6calc_anon_set);
 
-	for (i = 0; i < sizeof(ipv6calc_anon_methods) / sizeof(s_ipv6calc_anon_methods); i++) {
-		if (ipv6calc_anon_methods[i].method == ipv6calc_anon_set->method) {
-			snprintf(method_name, sizeof(method_name) - 1, "%s", ipv6calc_anon_methods[i].name);
-			break;
-		};
-	};
-
-	snprintf(string, stringlength - 1, "set=%s,mask-ipv6=%d,mask-ipv4=%d,mask-iid=%d,mask-mac=%d,method=%s", ipv6calc_anon_set->name, ipv6calc_anon_set->mask_ipv6, ipv6calc_anon_set->mask_ipv4, ipv6calc_anon_set->mask_iid, ipv6calc_anon_set->mask_mac, method_name);
+	snprintf(string, stringlength - 1, "set=%s,mask-ipv6=%d,mask-ipv4=%d,mask-iid=%d,mask-mac=%d,method=%s", ipv6calc_anon_set->name, ipv6calc_anon_set->mask_ipv6, ipv6calc_anon_set->mask_ipv4, ipv6calc_anon_set->mask_iid, ipv6calc_anon_set->mask_mac, (method_name == NULL ? "unknown" : method_name));
 
 	return;
 };
@@ -585,7 +597,7 @@ int libipv6calc_anon_supported(const s_ipv6calc_anon_set *ipv6calc_anon_set) {
 	/* check requirements */
 	if (ipv6calc_anon_set->method == ANON_METHOD_KEEPTYPEASNCC) {
 		// check for support
-		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_IPV6_TO_AS) == 1) {
+		if (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV4_REQ_DB | ANON_METHOD_KEEPTYPEASNCC_IPV6_REQ_DB) == 1) {
 			return(2);
 		} else {
 			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC) != 1) {

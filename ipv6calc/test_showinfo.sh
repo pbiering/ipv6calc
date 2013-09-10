@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.26 2013/09/10 06:23:04 ds6peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.27 2013/09/10 20:25:50 ds6peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -121,6 +121,13 @@ testscenarios_showinfo | while read address output; do
 	if echo "$output" | grep -q "^IPV4_REGISTRY="; then
 		if [ $ipv6calc_has_db_ipv4 -ne 1 ]; then
 			echo "Test: $address for $output SKIPPED (no DB_IPV4 compiled in)"
+			continue
+		fi
+	fi
+
+	if echo "$output" | grep -q "^IPV6_REGISTRY="; then
+		if [ $ipv6calc_has_db_ipv6 -ne 1 ]; then
+			echo "Test: $address for $output SKIPPED (no DB_IPV6 compiled in)"
 			continue
 		fi
 	fi

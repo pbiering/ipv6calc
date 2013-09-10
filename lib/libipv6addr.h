@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.67 2013/09/10 06:23:04 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.68 2013/09/10 20:25:50 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -116,6 +116,8 @@
 #define ANON_CHECKSUM_FLAG_VERIFY	2
 
 // Prefix anonymization on method=kp
+#define ANON_METHOD_KEEPTYPEASNCC_IPV6_REQ_DB	(IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_IPV6_TO_AS)
+
 #define ANON_PREFIX_CCINDEX_DWORD	0
 #define ANON_PREFIX_CCINDEX_SHIFT	4
 #define ANON_PREFIX_CCINDEX_MASK	0x3ff

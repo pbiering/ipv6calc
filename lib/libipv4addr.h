@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.26 2013/09/10 06:23:04 ds6peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.27 2013/09/10 20:25:50 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
@@ -141,6 +141,8 @@ typedef struct {
  *                                  1 0 1 = AFRINIC
  *                                  1 1 0 = ARIN
  */
+
+#define ANON_METHOD_KEEPTYPEASNCC_IPV4_REQ_DB   (IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV4_TO_AS)
 
 #endif
 

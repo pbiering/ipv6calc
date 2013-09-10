@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.41 2013/09/10 06:23:04 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.42 2013/09/10 20:25:50 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -1035,7 +1035,7 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 		};
 	} else {
 		/* check for required database support */
-		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_IPV4_TO_CC) == 0) {
+		if (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV4_REQ_DB) == 0) {
 			if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
 				fprintf(stderr, "%s/%s: anonymization method not supported, db_wrapper reports too less features\n", __FILE__, __func__);
 			};

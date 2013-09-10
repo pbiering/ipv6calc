@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.15 2013/09/03 20:41:11 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.16 2013/09/10 20:25:50 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -95,9 +95,10 @@ extern void string_to_reverse_dotted(char *string);
 
 extern uint32_t libipv6calc_autodetectinput(const char *string);
 
-int  libipv6calc_filter_parse(const char *expression, s_ipv6calc_filter_master *filter_master);
-void libipv6calc_filter_clear(s_ipv6calc_filter_master *filter_master);
+extern int  libipv6calc_filter_parse(const char *expression, s_ipv6calc_filter_master *filter_master);
+extern void libipv6calc_filter_clear(s_ipv6calc_filter_master *filter_master);
 
-int  libipv6calc_anon_set_by_name(s_ipv6calc_anon_set *ipv6calc_anon_set, const char* name);
-void libipv6calc_anon_infostring(char* string, const int stringlength, const s_ipv6calc_anon_set *ipv6calc_anon_set);
-int  libipv6calc_anon_supported(const s_ipv6calc_anon_set *ipv6calc_anon_set);
+extern int   libipv6calc_anon_set_by_name(s_ipv6calc_anon_set *ipv6calc_anon_set, const char* name);
+extern void  libipv6calc_anon_infostring(char* string, const int stringlength, const s_ipv6calc_anon_set *ipv6calc_anon_set);
+extern const char *libipv6calc_anon_method_name(const s_ipv6calc_anon_set *ipv6calc_anon_set);
+extern int   libipv6calc_anon_supported(const s_ipv6calc_anon_set *ipv6calc_anon_set);

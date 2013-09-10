@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.32 2013/08/11 16:42:11 ds6peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.33 2013/09/10 20:25:50 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -303,9 +303,9 @@ typedef struct {
 
 /* anonymization methods */
 typedef struct {
-	char name[32];
-	int method;
-	char description[128];
+	const char name[32];
+	const int method;
+	const char description[128];
 } s_ipv6calc_anon_methods;
 
 #endif

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.2 2013/08/15 16:54:36 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.3 2013/09/10 20:25:50 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -33,11 +33,21 @@ static int builtin_ieee       = 0;
 #ifdef SUPPORT_BUILTIN
 // load all built-in databases
 #include "../as-assignment/dbasn_assignment.h"
+
+#ifdef SUPPORT_DB_IPV4
 #include "../ipv4-assignment/dbipv4addr_assignment.h"
+#endif
+
+#ifdef SUPPORT_DB_IPV6
 #include "../ipv6-assignment/dbipv6addr_assignment.h"
+#endif
+
+#ifdef SUPPORT_DB_IEEE
 #include "../ieee-iab/dbieee_iab.h"
 #include "../ieee-oui/dbieee_oui.h"
 #include "../ieee-oui36/dbieee_oui36.h"
+#endif
+
 #endif
 
 
@@ -54,16 +64,25 @@ int libipv6calc_db_wrapper_BuiltIn_wrapper_init(void) {
 
 #ifdef SUPPORT_BUILTIN
 	wrapper_features_BuiltIn |= IPV6CALC_DB_AS_TO_REGISTRY;
+	builtin_asn        = 1;
+
+#ifdef SUPPORT_DB_IPV4
 	wrapper_features_BuiltIn |= IPV6CALC_DB_IPV4_TO_REGISTRY;
+	builtin_ipv4       = 1;
+#endif
+
+#ifdef SUPPORT_DB_IPV6
 	wrapper_features_BuiltIn |= IPV6CALC_DB_IPV6_TO_REGISTRY;
+	builtin_ipv6       = 1;
+#endif
+
+#ifdef SUPPORT_DB_IEEE
 	wrapper_features_BuiltIn |= IPV6CALC_DB_IEEE_TO_INFO;
+	builtin_ieee       = 1;
+#endif
 
 	wrapper_features |= wrapper_features_BuiltIn;
 
-	builtin_asn        = 1;
-	builtin_ipv4       = 1;
-	builtin_ipv6       = 1;
-	builtin_ieee       = 1;
 #endif
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
@@ -140,17 +159,24 @@ void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level_verbos
 		printf("%sBuiltIn: %-5s: %s\n", prefix, "ASN", dbasn_registry_status);
 	};
 
+#ifdef SUPPORT_DB_IPV4
 	if (wrapper_features_BuiltIn & IPV6CALC_DB_IPV4_TO_REGISTRY) {
 		printf("%sBuiltIn: %-5s: %s\n", prefix, "IPv4", dbipv4addr_registry_status);
 	};
+#endif
 
+#ifdef SUPPORT_DB_IPV6
 	if (wrapper_features_BuiltIn & IPV6CALC_DB_IPV6_TO_REGISTRY) {
 		printf("%sBuiltIn: %-5s: %s\n", prefix, "IPv6", dbipv6addr_registry_status);
 	};
+#endif
 
+#ifdef SUPPORT_DB_IEEE
 	if (wrapper_features_BuiltIn & IPV6CALC_DB_IEEE_TO_INFO) {
 		printf("%sBuiltIn: %-5s: %s %s %s\n", prefix, "IEEE", libieee_iab_status, libieee_oui_status, libieee_oui36_status);
 	};
+#endif
+
 #else
 	snprintf(string, size, "%sNo BuiltIn support compiled-in", prefix);
 #endif

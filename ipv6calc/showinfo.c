@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.77 2013/09/10 06:23:04 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.78 2013/09/10 20:25:50 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1118,7 +1118,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			fprintf(stderr, "Error getting country code for IPv6 address\n");
 		} else {
 			if ( machinereadable != 0 ) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_COUNTRYCODE=%s", cc);
+				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_COUNTRYCODE=%s", (cc != NULL ? cc : "(unknown)"));
 				printout(tempstring);
 			} else {
 				fprintf(stdout, "Country Code: %s\n", cc);
@@ -1131,7 +1131,11 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			fprintf(stderr, "Error getting AS number for IPv6 address\n");
 		} else {
 			if ( machinereadable != 0 ) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=%d", as_num32);
+				if (as_num32 == 0) {
+					snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=(unknown)");
+				} else {
+					snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=%d", as_num32);
+				};
 				printout(tempstring);
 			} else {
 				fprintf(stdout, "ASN for address: %d\n", as_num32);

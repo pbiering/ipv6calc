@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : lib/Makefile
-# Version    : $Id: Makefile,v 1.14 2013/09/10 06:23:03 ds6peter Exp $
+# Version    : $Id: Makefile,v 1.15 2013/09/10 20:25:50 ds6peter Exp $
 # Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
