@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.88 2013/09/04 06:05:33 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.89 2013/09/10 06:23:04 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -2074,10 +2074,11 @@ uint32_t ipv6addr_get_payload_anonymized_iid(const ipv6calc_ipv6addr *ipv6addrp,
  *
  * in : *ipv6addrp = IPv6 address structure
  *      *ipv6calc_anon_set = anonymization set structure
- * ret: <void>
+ * ret: 0:anonymization ok
+ *      1:anonymization method not supported
  */
 #define DEBUG_function_name "libipv6addr/anonymize"
-void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_set *ipv6calc_anon_set) {
+int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_set *ipv6calc_anon_set) {
 	/* anonymize IPv4 address according to settings */
 	uint32_t typeinfo;
 	uint32_t iid[2];
@@ -2122,7 +2123,7 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_s
 		if ( (ipv6calc_debug) != 0 ) {
 			fprintf(stderr, "%s/%s: Already anonymized IPv6 address - skip\n", __FILE__, __func__);
 		};
-		return;
+		return(0);
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
@@ -2464,6 +2465,13 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_s
 		};
 
 		if (((typeinfo & IPV6_NEW_ADDR_AGU) != 0) && ((typeinfo & (IPV6_NEW_ADDR_6TO4)) == 0) && (method == 3)) {
+			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_AS | IPV6CALC_DB_IPV6_TO_CC) == 0) {
+				if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+					fprintf(stderr, "%s/%s: anonymization method not supported, db_wrapper reports too less features\n", __FILE__, __func__);
+				};
+				return(1);
+			};
+
 			// switch to prefix anonymization
 			libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6addrp, resultstring, 0);
 
@@ -2557,7 +2565,7 @@ void libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_s
 	/* set typeinfo */
 	ipv6addrp->scope = ipv6addr_gettype(ipv6addrp);
 
-	return;
+	return(0);
 };
 #undef DEBUG_function_name
 

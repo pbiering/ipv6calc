@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.84 2013/09/03 20:41:11 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.85 2013/09/10 06:23:04 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -209,9 +209,9 @@ int main(int argc, char *argv[]) {
 	int flush_mode = 0;
 
 	/* default */
-	result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, "anonymize-standard");
+	result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, ANONPRESET_DEFAULT);
 	if (result != 0) {
-		fprintf(stderr, "major problem, ipv6calc anonymization default preset not found: anonymize-standard\n");
+		fprintf(stderr, "major problem, ipv6calc anonymization default preset not found: %s", ANONPRESET_DEFAULT);
 		exit(EXIT_FAILURE);
 	};
 
@@ -812,7 +812,7 @@ int main(int argc, char *argv[]) {
 	};
 
 	/* check requirements */
-	if (libipv6calc_anon_supported(&ipv6calc_anon_set) == 0) {
+	if ((libipv6calc_anon_supported(&ipv6calc_anon_set) == 0) && ((command & CMD_showinfo) == 0)) {
 		fprintf(stderr, "ipv6calc anonymization method not supported\n");
 		exit(EXIT_FAILURE);
 	};

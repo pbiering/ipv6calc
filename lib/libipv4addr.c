@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.40 2013/08/11 16:42:11 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.41 2013/09/10 06:23:04 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -672,11 +672,6 @@ int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, cha
  */
 #define DEBUG_function_name "libipv4addr/get_registry_string"
 int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring) {
-	int i;
-	int match = -1;
-	uint32_t match_mask = 0;
-	uint8_t  octet_msb;
-
 	uint32_t ipv4 = ipv4addr_getdword(ipv4addrp);
 	
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
@@ -750,8 +745,14 @@ int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *re
 	}; 
 
 #ifdef SUPPORT_DB_IPV4
+	int i;
+	int match = -1;
+	uint32_t match_mask = 0;
+
 #define OPTIMIZED_LOOKUP 1
 #ifdef OPTIMIZED_LOOKUP
+	uint8_t  octet_msb;
+
 	/* lookup in hint table for faster start */
 	octet_msb = ipv4addr_getoctet(ipv4addrp, 0);
 
@@ -987,9 +988,10 @@ int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, /
  * in : *ipv4addrp = IPv4 address structure
  *      mask = number of bits of mask
  *      method = 2:zeroize  1:map to CountryCode and AS
- * ret: <void>
+ * ret: 0:anonymization ok
+ *      1:anonymization method not supported
  */
-void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const int method) {
+int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const int method) {
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
 		fprintf(stderr, "%s/%s: called, method=%d mask=%d type=0x%08x\n", __FILE__, __func__, method, mask, ipv4addrp->scope);
 	};
@@ -1032,6 +1034,14 @@ void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, cons
 			};
 		};
 	} else {
+		/* check for required database support */
+		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_IPV4_TO_CC) == 0) {
+			if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
+				fprintf(stderr, "%s/%s: anonymization method not supported, db_wrapper reports too less features\n", __FILE__, __func__);
+			};
+			return(1);
+		};
+
 		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
 			fprintf(stderr, "%s/%s: anonymize by keep information\n", __FILE__, __func__);
 		};
@@ -1090,7 +1100,8 @@ void libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, cons
 	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
 		fprintf(stderr, "%s/%s: return\n", __FILE__, __func__);
 	};
-	return;
+
+	return(0);
 };
 
 
