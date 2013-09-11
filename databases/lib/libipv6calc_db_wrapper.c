@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.15 2013/09/10 20:25:50 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.16 2013/09/11 06:04:48 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -16,6 +16,7 @@
 #include "config.h"
 
 #include "libipv6calcdebug.h"
+#include "libipv6calc.h"
 
 #include "libipv6calc_db_wrapper.h"
 #include "libipv6calc_db_wrapper_GeoIP.h"
@@ -128,8 +129,9 @@ int libipv6calc_db_wrapper_cleanup(void) {
 	return(result);
 };
 
-/* function get info string */
-void libipv6calc_db_wrapper_info(char * string, const size_t size) {
+
+/* function get info strings */
+void libipv6calc_db_wrapper_info(char *string, const size_t size) {
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
 	};
@@ -155,6 +157,37 @@ void libipv6calc_db_wrapper_info(char * string, const size_t size) {
 
 	return;
 };
+
+
+/* function get feature string */
+void libipv6calc_db_wrapper_features(char *string, const size_t size) {
+	int i;
+	char tempstring[NI_MAXHOST];
+	char *separator;
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
+		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
+	};
+
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_db_features); i++) {
+		if (wrapper_features & ipv6calc_db_features[i].number) {
+			if (strlen(string) == 0) {
+				separator = "";
+			} else {
+				separator = " ";
+			};
+			snprintf(tempstring, sizeof(tempstring), "%s%s%s", string, separator, ipv6calc_db_features[i].token);
+			snprintf(string, size, "%s", tempstring);
+		};
+	};
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
+		fprintf(stderr, "%s/%s: Return\n", __FILE__, __func__);
+	};
+
+	return;
+};
+
 
 /* function print db info */
 void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *prefix_string) {
@@ -182,6 +215,7 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Return\n", __FILE__, __func__);
 	};
+
 	return;
 };
 

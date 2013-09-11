@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.11 2013/09/03 20:41:11 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.12 2013/09/11 06:04:48 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -28,6 +28,17 @@ extern uint32_t wrapper_features;
 #define IPV6CALC_DB_IPV6_TO_CC			0x00000200
 
 #define IPV6CALC_DB_IEEE_TO_INFO		0x00001000
+
+static const s_type ipv6calc_db_features[] = {
+	{ IPV6CALC_DB_AS_TO_REGISTRY	, "DB_AS"	},
+	{ IPV6CALC_DB_IPV4_TO_REGISTRY	, "DB_IPV4"	},
+	{ IPV6CALC_DB_IPV6_TO_REGISTRY	, "DB_IPV6"	},
+	{ IPV6CALC_DB_IPV4_TO_AS	, "DB_IPV4_AS"	},
+	{ IPV6CALC_DB_IPV6_TO_AS	, "DB_IPV6_AS"	},
+	{ IPV6CALC_DB_IPV4_TO_CC	, "DB_IPV4_CC"	},
+	{ IPV6CALC_DB_IPV6_TO_CC	, "DB_IPV6_CC"	},
+	{ IPV6CALC_DB_IEEE_TO_INFO	, "DB_IEEE"	}
+};
 
 
 // define internal API versions
@@ -59,10 +70,11 @@ extern uint32_t wrapper_features;
 #endif
 
 
-extern int libipv6calc_db_wrapper_init(void);
+extern int  libipv6calc_db_wrapper_init(void);
 extern void libipv6calc_db_wrapper_info(char *string, const size_t size);
+extern void libipv6calc_db_wrapper_features(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
-extern int libipv6calc_db_wrapper_has_features(uint32_t features);
+extern int  libipv6calc_db_wrapper_has_features(uint32_t features);
 
 /* functional wrappers */
 

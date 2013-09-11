@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.86 2013/09/10 20:25:50 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.87 2013/09/11 06:04:48 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -115,6 +115,10 @@ char file_geoip_ipv6[NI_MAXHOST] = "";
 #endif
 
 void printversion(void) {
+	char resultstring[NI_MAXHOST] = "";
+
+	libipv6calc_db_wrapper_features(resultstring, sizeof(resultstring));
+
 	fprintf(stderr, "%s: version %s", PROGRAM_NAME, PACKAGE_VERSION);
 #ifdef SUPPORT_IP2LOCATION
 	fprintf(stderr, " IP2Location");
@@ -125,16 +129,8 @@ void printversion(void) {
 	fprintf(stderr, " GeoIPv6");
 #endif
 #endif
-#ifdef SUPPORT_DB_IEEE
-	fprintf(stderr, " DB_IEEE");
-#endif
-#ifdef SUPPORT_DB_IPV4
-	fprintf(stderr, " DB_IPV4");
-#endif
-#ifdef SUPPORT_DB_IPV6
-	fprintf(stderr, " DB_IPV6");
-#endif
-	fprintf(stderr, "\n");
+
+	fprintf(stderr, " %s\n", resultstring);
 };
 
 void printversion_verbose(void) {
