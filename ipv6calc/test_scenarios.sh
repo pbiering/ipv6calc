@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.25 2013/09/10 06:23:04 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.26 2013/09/12 20:40:40 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -316,8 +316,6 @@ c0a80102				IPV4=192.168.1.2
 0a010203				IPV4=10.1.2.3
 a010203					IPV4=10.1.2.3
 # non-anonymized IPv6 prefix
-2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=DE
-2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_AS_NUM=8767
 2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_REGISTRY=RIPENCC
 # anonymized IPv6 prefix
 a909:16fa:9092:23ff:a909:4941::7	IPV6_COUNTRYCODE=DE
@@ -338,5 +336,19 @@ testscenarios_showinfo_geoip() {
 46.244.223.233				GEOIP_COUNTRY_SHORT=DE
 46.244.223.233				IPV4_AS_NUM=8767
 46.244.223.233				IPV4_REGISTRY=RIPENCC
+# non-anonymized IPv6 prefix
+2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=DE
+2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_AS_NUM=8767
+END
+}
+
+testscenarios_showinfo_ip2location() {
+	cat <<END | grep -v '^#'
+# non-anonymized IPv4 address
+46.244.223.233				IPV4_COUNTRYCODE=DE
+46.244.223.233				IP2LOCATION_COUNTRY_SHORT=DE
+# non-anonymized IPv6 prefix
+2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=DE
+2001:a60:113a:0123:0123:4567:89ab:cdef	IP2LOCATION_COUNTRY_SHORT=DE
 END
 }

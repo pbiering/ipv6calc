@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.16 2013/09/11 06:04:48 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.17 2013/09/12 20:40:40 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -260,8 +260,8 @@ int libipv6calc_db_wrapper_registry_num_by_as_num32(const uint32_t as_num32) {
 /*
  * get CountryCode in text form
  */
-const char * libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int proto) {
-	const char * result_char_ptr = NULL;
+char *libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int proto) {
+	char *result_char_ptr = NULL;
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
@@ -273,10 +273,19 @@ const char * libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const
 			fprintf(stderr, "%s/%s: Call now GeoIP\n", __FILE__, __func__);
 		};
 
-		result_char_ptr = libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(addr, proto);
+		result_char_ptr = (char *) libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(addr, proto);
 #endif
 	} else {
 		// fallback
+		if (wrapper_IP2Location_status == 1) {
+#ifdef SUPPORT_IP2LOCATION
+			if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
+				fprintf(stderr, "%s/%s: Call now IP2Location\n", __FILE__, __func__);
+			};
+
+			result_char_ptr = libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr((char *) addr, proto);
+#endif
+		};
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {

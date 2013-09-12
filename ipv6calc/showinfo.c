@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.78 2013/09/10 20:25:50 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.79 2013/09/12 20:40:40 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1094,51 +1094,62 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	};
 	
 	/* IPv6 Registry, CountryCode, AS? */
-	if ( ((typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) == 0)) {
+	if ((typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) == 0) {
+		/* no anonymized address */
 		if ( (ipv6calc_debug & DEBUG_showinfo) != 0) {
 			fprintf(stderr, "%s: Check registry: %d\n", DEBUG_function_name, registry);
 		};
 
 		/* get registry string */
-		retval = libipv6addr_get_registry_string(ipv6addrp, helpstring);
-		if ( retval == 1  && machinereadable == 0 ) {
-			fprintf(stderr, "Error getting registry string for IPv6 address: %s\n", helpstring);
-		} else {
-			if ( machinereadable != 0 ) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_REGISTRY=%s", helpstring);
-				printout(tempstring);
+		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_REGISTRY) == 1) {
+			retval = libipv6addr_get_registry_string(ipv6addrp, helpstring);
+			if ( retval == 1  && machinereadable == 0 ) {
+				fprintf(stderr, "Error getting registry string for IPv6 address: %s\n", helpstring);
 			} else {
-				fprintf(stdout, "Registry for address: %s\n", helpstring);
-			};
-		};
-
-		/* get country code */
-		cc = libipv6calc_db_wrapper_country_code_by_addr(ipv6addrstring, 6);
-		if ((cc == NULL)  && (machinereadable == 0)) {
-			fprintf(stderr, "Error getting country code for IPv6 address\n");
-		} else {
-			if ( machinereadable != 0 ) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_COUNTRYCODE=%s", (cc != NULL ? cc : "(unknown)"));
-				printout(tempstring);
-			} else {
-				fprintf(stdout, "Country Code: %s\n", cc);
-			};
-		};
-
-		/* get AS Number */
-		as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(ipv6addrstring, 6);
-		if ((as_num32 == 0)  && (machinereadable == 0)) {
-			fprintf(stderr, "Error getting AS number for IPv6 address\n");
-		} else {
-			if ( machinereadable != 0 ) {
-				if (as_num32 == 0) {
-					snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=(unknown)");
+				if ( machinereadable != 0 ) {
+					snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_REGISTRY=%s", helpstring);
+					printout(tempstring);
 				} else {
-					snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=%d", as_num32);
+					fprintf(stdout, "Registry for address: %s\n", helpstring);
 				};
-				printout(tempstring);
-			} else {
-				fprintf(stdout, "ASN for address: %d\n", as_num32);
+			};
+		};
+
+		if ((typeinfo & IPV6_NEW_ADDR_AGU) != 0) {
+			/* global address */
+
+			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_CC) == 1) {
+				/* get country code */
+				cc = libipv6calc_db_wrapper_country_code_by_addr(ipv6addrstring, 6);
+				if ((cc == NULL)  && (machinereadable == 0)) {
+					fprintf(stderr, "Error getting country code for IPv6 address\n");
+				} else {
+					if ( machinereadable != 0 ) {
+						snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_COUNTRYCODE=%s", (cc != NULL ? cc : "(unknown)"));
+						printout(tempstring);
+					} else {
+						fprintf(stdout, "Country Code: %s\n", cc);
+					};
+				};
+			};
+
+			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_AS) == 1) {
+				/* get AS Number */
+				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(ipv6addrstring, 6);
+				if ((as_num32 == 0)  && (machinereadable == 0)) {
+					fprintf(stderr, "Error getting AS number for IPv6 address\n");
+				} else {
+					if ( machinereadable != 0 ) {
+						if (as_num32 == 0) {
+							snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=(unknown)");
+						} else {
+							snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=%d", as_num32);
+						};
+						printout(tempstring);
+					} else {
+						fprintf(stdout, "ASN for address: %d\n", as_num32);
+					};
+				};
 			};
 		};
 	} else {
