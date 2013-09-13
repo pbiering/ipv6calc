@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.27 2013/09/10 20:25:50 ds6peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.28 2013/09/13 05:55:53 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
@@ -63,6 +63,7 @@ typedef struct {
 #define IPV4_ADDR_ANYCAST			(uint32_t) 0x00000004U	
 #define IPV4_ADDR_BROADCAST			(uint32_t) 0x00000008U	
 #define IPV4_ADDR_LOOPBACK			(uint32_t) 0x00000010U
+#define IPV4_ADDR_UNSPECIFIED			(uint32_t) 0x00000020U
 #define IPV4_ADDR_ANONYMIZED			(uint32_t) 0x00000100U
 #define IPV4_ADDR_GLOBAL			(uint32_t) 0x00000200U
 #define IPV4_ADDR_UNKNOWN			(uint32_t) 0x00000400U
@@ -82,6 +83,7 @@ typedef struct {
 	{ IPV4_ADDR_ANYCAST		, "anycast" },
 	{ IPV4_ADDR_BROADCAST		, "broadcast" },
 	{ IPV4_ADDR_LOOPBACK		, "loopback" },
+	{ IPV4_ADDR_UNSPECIFIED		, "unspecified" },
 	{ IPV4_ADDR_UNKNOWN		, "unknown" },
 	{ IPV4_ADDR_RESERVED		, "reserved" },
 	{ IPV4_ADDR_ZEROCONF		, "zeroconf" },

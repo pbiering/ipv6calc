@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calccommands.h
- * Version    : $Id: ipv6calccommands.h,v 1.13 2013/07/07 20:21:14 ds6peter Exp $
+ * Version    : $Id: ipv6calccommands.h,v 1.14 2013/09/13 05:55:53 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -51,7 +51,7 @@
 #define CMD_showinfo			0x0001001
 #define CMD_showinfotypes		0x0001002
 
-/* database options */
+/* database options (old) */
 #define DB_ip2location_ipv4		0x0002001
 #define DB_ip2location_ipv6		0x0002002
 #define DB_ip2location_ipv4_default	0x0002003
@@ -60,6 +60,12 @@
 #define DB_geoip_ipv6			0x0002012
 #define DB_geoip_ipv4_default		0x0002013
 #define DB_geoip_ipv6_default		0x0002014
+
+/* database options (new) */
+#define DB_ip2location_dir		0x0002005
+#define DB_ip2location_lib		0x0002006
+#define DB_geoip_dir			0x0002015
+#define DB_geoip_lib			0x0002016
 
 /* address anonymizer options */
 #define CMD_ANON_PRESET_STANDARD	0x0003001

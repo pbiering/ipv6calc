@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.16 2013/09/03 20:41:11 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.17 2013/09/13 05:55:53 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -25,9 +25,10 @@
 
 uint32_t wrapper_features_GeoIP = 0;
 
+static char geoip_custom_dir[NI_MAXHOST] = IPV6CALC_DB_GEOIP_CUSTOM_DIR;
+
 #ifdef SUPPORT_GEOIP_DYN
 static char geoip_lib_name[NI_MAXHOST] = IPV6CALC_DB_GEOIP_LIB_NAME;
-
 static const char* wrapper_geoip_info = "dyn-load";
 static int wrapper_geoip_ipv6_support = GEOIP_IPV6_SUPPORT_UNKNOWN;
 static int wrapper_geoip_support      = GEOIP_SUPPORT_UNKNOWN;
@@ -125,8 +126,6 @@ static int geoip_city_v6 = 0;
 static unsigned int geoip_num_db_types = 0;
 
 static void *dl_GeoIP_handle = NULL;
-
-static char *geoip_custom_dir = IPV6CALC_DB_GEOIP_CUSTOM_DIR;
 
 char ***libipv6calc_db_wrapper_GeoIPDBFileName_ptr = NULL;
 const char **libipv6calc_db_wrapper_GeoIPDBDescription = NULL;

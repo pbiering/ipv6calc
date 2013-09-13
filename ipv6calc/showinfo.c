@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.79 2013/09/12 20:40:40 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.80 2013/09/13 05:55:53 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -338,8 +338,10 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->zipcode)) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ZIPCODE%s=%s", additionalstring, record->zipcode);
-				printout(tempstring);
+				if (strcmp(record->zipcode, "-") != 0) {
+					snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ZIPCODE%s=%s", additionalstring, record->zipcode);
+					printout(tempstring);
+				};
 			};
 		} else {
 			fprintf(stderr, " IP2Location not machinereadable output currently not supported\n");
@@ -613,10 +615,12 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 			if (retval_anon == 0 ) {	
 				/* anonymized address */
 				snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_ANON%s=%s", embeddedipv4string, tempstring2);
+				printout(tempstring);
 			} else {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_ANON%s=(unsupported, too less DB features available)", embeddedipv4string);
+				// TODO: only show this on verbose (must be implemented)
+				// snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_ANON%s=(unsupported, too less DB features available)", embeddedipv4string);
+				// printout(tempstring);
 			};
-			printout(tempstring);
 		};
 
 		if (ipv4addrp->flag_prefixuse == 1) {	
@@ -626,7 +630,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 		j = 0;
 		snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_TYPE%s=", embeddedipv4string);
-		for (i = 0; i < (int) (sizeof(ipv6calc_ipv4addrtypestrings) / sizeof(ipv6calc_ipv4addrtypestrings[0])); i++ ) {
+		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv4addrtypestrings); i++ ) {
 			if ( (typeinfo & ipv6calc_ipv4addrtypestrings[i].number) != 0 ) {
 				if (j != 0) {
 					snprintf(helpstring, sizeof(helpstring) - 1, "%s,", tempstring);
@@ -721,7 +725,9 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	if ((typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
 		cc_index = ipv4addr_anonymized_get_cc_index(ipv4addrp);
 	} else {
-		libipv6calc_db_wrapper_cc_index_by_addr(tempipv4string, 4);
+		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC) == 1) {
+			cc_index = libipv6calc_db_wrapper_cc_index_by_addr(tempipv4string, 4);
+		};
 	};
 
 	if (cc_index != COUNTRYCODE_INDEX_UNKNOWN) {
@@ -968,7 +974,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			if (retval_anon == 0) {
 				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_ANON=%s", tempstring2);
 			} else {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_ANON=(unsupported, too less DB features available)");
+				// TODO: only show this on verbose (must be implemented)
+				// snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_ANON=(unsupported, too less DB features available)");
 			};
 			printout(tempstring);
 		};
@@ -1101,17 +1108,15 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		};
 
 		/* get registry string */
-		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_REGISTRY) == 1) {
-			retval = libipv6addr_get_registry_string(ipv6addrp, helpstring);
-			if ( retval == 1  && machinereadable == 0 ) {
-				fprintf(stderr, "Error getting registry string for IPv6 address: %s\n", helpstring);
+		retval = libipv6addr_get_registry_string(ipv6addrp, helpstring);
+		if ( retval == 1  && machinereadable == 0 ) {
+			fprintf(stderr, "Error getting registry string for IPv6 address: %s\n", helpstring);
+		} else {
+			if ( machinereadable != 0 ) {
+				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_REGISTRY=%s", helpstring);
+				printout(tempstring);
 			} else {
-				if ( machinereadable != 0 ) {
-					snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_REGISTRY=%s", helpstring);
-					printout(tempstring);
-				} else {
-					fprintf(stdout, "Registry for address: %s\n", helpstring);
-				};
+				fprintf(stdout, "Registry for address: %s\n", helpstring);
 			};
 		};
 

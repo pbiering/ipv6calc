@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.42 2013/09/10 20:25:50 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.43 2013/09/13 05:55:53 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -300,7 +300,7 @@ uint32_t ipv4addr_gettype(/*@unused@*/ const ipv6calc_ipv4addr *ipv4addrp) {
 	};
 
 	if (ipv4 == 0x00000000u) {
-		type = IPV4_ADDR_ANY;
+		type = IPV4_ADDR_UNSPECIFIED;
 	} else if ((ipv4 & 0xff000000u) == 0x0a000000u) {
 		// 10.0.0.0/8 (RFC 1918)
 		type = IPV4_ADDR_UNICAST | IPV4_ADDR_SITELOCAL;
