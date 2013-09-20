@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.17 2013/09/12 20:40:40 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.18 2013/09/20 06:17:52 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -17,6 +17,9 @@
 
 #include "libipv6calcdebug.h"
 #include "libipv6calc.h"
+
+#define _ipv6calcoptions_h_ 1	// don't read options
+#include "ipv6calcoptions.h"
 
 #include "libipv6calc_db_wrapper.h"
 #include "libipv6calc_db_wrapper_GeoIP.h"
@@ -240,6 +243,84 @@ int libipv6calc_db_wrapper_has_features(uint32_t features) {
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Return with result: %d\n", __FILE__, __func__, result);
 	};
+	return(result);
+};
+
+
+/*********************************************
+ * Option handling
+ * quiet != 0: be quiet
+ * return < 0: error
+ *********************************************/
+
+int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const int quiet, const struct option longopts[]) {
+	int result = -1;
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
+		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
+	};
+
+#define NOTQUIET(a, ...)	if (quiet == 0) { fprintf(stderr, a, __VA_ARGS__); };
+
+	switch(opt) {
+		case DB_ip2location_lib:
+#ifdef SUPPORT_IP2LOCATION_DYN
+			result = snprintf(ip2location_lib_file, sizeof(ip2location_lib_file), optarg);
+#else
+			NOTQUIET("Support for IP2Location dyn-load not compiled-in, skipping option: --%s\n", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+
+		case DB_geoip_lib:
+#ifdef SUPPORT_GEOIP_DYN
+			result = snprintf(geoip_lib_file, sizeof(geoip_lib_file), optarg);
+#else
+			NOTQUIET("Support for GeoIP dyn-load not compiled-in, skipping option: --%s\n", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+
+		case DB_ip2location_dir:
+#ifdef SUPPORT_IP2LOCATION
+			result = snprintf(ip2location_db_dir, sizeof(ip2location_db_dir), optarg);
+#else
+			NOTQUIET("Support for IP2Location not compiled-in, skipping option: --%s\n", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+
+		case DB_geoip_dir:
+#ifdef SUPPORT_GEOIP
+			result = snprintf(geoip_db_dir, sizeof(geoip_db_dir), optarg);
+#else
+			NOTQUIET("Support for GeoIP not compiled-in, skipping option: --%s\n", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+
+		/* obsolete options */
+		case DB_ip2location_ipv4:
+		case DB_ip2location_ipv6:
+			NOTQUIET("Obsolete option skipped: --%s <file>, use instead: --%s <dir>\n", ipv6calcoption_name(opt, longopts), ipv6calcoption_name(DB_ip2location_dir, longopts));
+			result = 0;
+			break;
+
+		case DB_geoip_ipv4:
+		case DB_geoip_ipv6:
+			NOTQUIET("Obsolete option skipped: --%s <file>, use instead: --%s <dir>\n", ipv6calcoption_name(opt, longopts), ipv6calcoption_name(DB_geoip_dir, longopts));
+			result = 0;
+			break;
+	};
+
+	if (result > 0) {
+		result = 0;
+	};
+
+	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
+		fprintf(stderr, "%s/%s: Return with result: %d\n", __FILE__, __func__, result);
+	};
+
 	return(result);
 };
 

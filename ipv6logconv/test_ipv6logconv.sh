@@ -2,10 +2,23 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6logconv.sh
-# Version    : $Id: test_ipv6logconv.sh,v 1.8 2013/03/17 18:07:54 ds6peter Exp $
-# Copyright  : 2002 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6logconv.sh,v 1.9 2013/09/20 06:17:52 ds6peter Exp $
+# Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logconv"
+
+if [ ! -x ./ipv6logconv ]; then
+	echo "Binary './ipv6logconv' missing or not executable"
+	exit 1
+fi
+
+# Test proper option definitions
+echo "Test proper option definition"
+./ipv6logconv -h >/dev/null
+if [ $? -ne 1 ]; then
+	echo "ERROR : something wrong in option definition"
+	exit 1
+fi
 
 testscenarios() {
 # Address

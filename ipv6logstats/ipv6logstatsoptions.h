@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstatsoptions.h
- * Version    : $Id: ipv6logstatsoptions.h,v 1.6 2012/05/09 17:08:10 peter Exp $
+ * Version    : $Id: ipv6logstatsoptions.h,v 1.7 2013/09/20 06:17:52 ds6peter Exp $
  * Copyright  : 2003-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -20,12 +20,11 @@
 /* Options */
 
 /* define short options */
-static char *ipv6logstats_shortopts = "vqh?uoncd:p:w:";
+static char *ipv6logstats_shortopts = "vqh?uoncp:w:";
 
 /* define long options */
 static struct option ipv6logstats_longopts[] = {
 	{"version", 0, 0, (int) 'v'},
-	{"debug", 1, 0, (int) 'd'},
 	{"quiet", 0, 0, (int) 'q'},
 
 	/* help options */
@@ -38,8 +37,6 @@ static struct option ipv6logstats_longopts[] = {
 	{"noheader", 0, 0, (int) 'n'},
 	{"onlyheader", 0, 0, (int) 'o'},
 	{"write", 1, 0, (int) 'O'},
-
-	{NULL, 0, 0, 0}
 };                
 
 #endif

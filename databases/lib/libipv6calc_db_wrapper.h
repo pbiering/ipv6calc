@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.13 2013/09/12 20:40:40 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.14 2013/09/20 06:17:52 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -75,6 +75,7 @@ extern void libipv6calc_db_wrapper_info(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_features(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
 extern int  libipv6calc_db_wrapper_has_features(uint32_t features);
+extern int  libipv6calc_db_wrapper_options(const int opt, const char *optarg, const int quiet, const struct option longopts[]);
 
 /* functional wrappers */
 

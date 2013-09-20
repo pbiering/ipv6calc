@@ -1,20 +1,22 @@
 # Project    : ipv6calc/ipv6logconv
-# File       : Makefile
-# Version    : $Id: Makefile.in,v 1.21 2013/07/08 08:52:42 ds6peter Exp $
+# File       : ipv6logconv/Makefile[.in]
+# Version    : $Id: Makefile.in,v 1.22 2013/09/20 06:17:52 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6logconv
 #
 
-prefix          = @prefix@
-exec_prefix     = @exec_prefix@
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 
 # Compiler and Linker Options
+#  -D__EXTENSIONS__ is for Solaris & strtok_r
 DEFAULT_CFLAGS ?= -O2 -Wall -g
+CFLAGS += -D__EXTENSIONS__
 
-INCLUDES= @GETOPT_INCLUDE@ -I../ -I../lib/ -I../databases/lib/
+INCLUDES= @GETOPT_INCLUDE@ @IP2LOCATION_INCLUDE@ @GEOIP_INCLUDE@ -I../ -I../lib/ -I../databases/lib/
 
 LIBS = @IP2LOCATION_LIB@ @GEOIP_LIB@ @DYNLOAD_LIB@
 
@@ -31,7 +33,7 @@ SPLINT_TODO_LATER = -unrecog -retvalint
 all:		ipv6logconv
 
 .c.o:
-		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -D__EXTENSIONS__ -c $<
+		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -c $<
 
 $(OBJS):	ipv6logconvoptions.h ipv6logconvhelp.h ipv6logconv.h
 
@@ -42,10 +44,10 @@ libipv6calc_db_wrapper.a:
 		cd ../ && ${MAKE} lib-make
 
 ipv6logconv:	$(OBJS) libipv6calc.a libipv6calc_db_wrapper.a
-		$(CC) -o ipv6logconv $(OBJS) $(GETOBJS) -lipv6calc -lipv6calc_db_wrapper -L../lib/ -L../databases/lib/ $(LDFLAGS) $(LIBS) -lm
+		$(CC) $(LDFLAGS) -o ipv6logconv $(OBJS) $(GETOBJS) -lipv6calc -lipv6calc_db_wrapper -L../lib/ -L../databases/lib/ $(LIBS) -lm
 
 static:		ipv6logconv
-		$(CC) -o ipv6logconv-static $(OBJS) $(GETOBJS) -lipv6calc -lipv6calc_db_wrapper -L../lib/ -L../databases/lib/ -static $(LDFLAGS) $(LIBS) -lm
+		$(CC) $(LDFLAGS) -o ipv6logconv-static $(OBJS) $(GETOBJS) -lipv6calc -lipv6calc_db_wrapper -L../lib/ -L../databases/lib/ -static $(LIBS) -lm
 
 distclean:
 		${MAKE} clean

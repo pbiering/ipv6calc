@@ -2,10 +2,23 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.18 2013/08/20 06:24:59 ds6peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.19 2013/09/20 06:17:52 ds6peter Exp $
 # Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
+
+if [ ! -x ./ipv6loganon ]; then
+	echo "Binary './ipv6loganon' missing or not executable"
+	exit 1
+fi
+
+# Test proper option definitions
+echo "Test proper option definition"
+./ipv6loganon -h >/dev/null
+if [ $? -ne 1 ]; then
+	echo "ERROR : something wrong in option definition"
+	exit 1
+fi
 
 testscenarios_standard() {
 # Address

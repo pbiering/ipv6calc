@@ -2,13 +2,21 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.41 2013/05/10 05:51:04 ds6peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.42 2013/09/20 06:17:52 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 
 if [ ! -x ./ipv6calc ]; then
 	echo "Binary './ipv6calc' missing or not executable"
+	exit 1
+fi
+
+# Test proper option definitions
+echo "Test proper option definition"
+./ipv6calc -h >/dev/null
+if [ $? -ne 1 ]; then
+	echo "ERROR : something wrong in option definition"
 	exit 1
 fi
 

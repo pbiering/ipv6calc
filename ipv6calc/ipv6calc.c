@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.87 2013/09/11 06:04:48 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.88 2013/09/20 06:17:52 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -19,6 +19,7 @@
 #include "libipv6calc.h"
 #include "ipv6calctypes.h"
 #include "ipv6calcoptions.h"
+#include "ipv6calcoptions_local.h"
 #include "ipv6calchelp.h"
 
 #include "libipv4addr.h"
@@ -81,18 +82,6 @@ int mask_mac;
 
 int  use_ip2location_ipv4 = 0; /* if set to 1, IP2Location IPv4 is enabled by option(s) */
 int  use_ip2location_ipv6 = 0; /* if set to 1, IP2Location IPv6 is enabled by option(s) */
-#ifdef SUPPORT_IP2LOCATION
-#ifdef IP2LOCATION_DEFAULT_FILE_IPV4
-char file_ip2location_ipv4[NI_MAXHOST] = IP2LOCATION_DEFAULT_FILE_IPV4;
-#else
-char file_ip2location_ipv4[NI_MAXHOST] = "";
-#endif
-#ifdef IP2LOCATION_DEFAULT_FILE_IPV6
-char file_ip2location_ipv6[NI_MAXHOST] = IP2LOCATION_DEFAULT_FILE_IPV6;
-#else
-char file_ip2location_ipv6[NI_MAXHOST] = "";
-#endif
-#endif
 
 #ifdef SUPPORT_GEOIP_DYN
 int  use_geoip_ipv4 = -1; /* if set to 1, GeoIP IPv4 is enabled by option(s) */
@@ -100,18 +89,6 @@ int  use_geoip_ipv6 = -1; /* if set to 1, GeoIP IPv6 is enabled by option(s) */
 #else
 int  use_geoip_ipv4 = -1; /* if set to 1, GeoIP IPv4 is enabled by option(s) */
 int  use_geoip_ipv6 = -1; /* if set to 1, GeoIP IPv6 is enabled by option(s) */
-#endif
-#ifdef SUPPORT_GEOIP
-#ifdef GEOIP_DEFAULT_FILE_IPV4
-char file_geoip_ipv4[NI_MAXHOST] = GEOIP_DEFAULT_FILE_IPV4;
-#else
-char file_geoip_ipv4[NI_MAXHOST] = "";
-#endif
-#ifdef GEOIP_DEFAULT_FILE_IPV6
-char file_geoip_ipv6[NI_MAXHOST] = GEOIP_DEFAULT_FILE_IPV6;
-#else
-char file_geoip_ipv6[NI_MAXHOST] = "";
-#endif
 #endif
 
 void printversion(void) {
@@ -204,6 +181,17 @@ int main(int argc, char *argv[]) {
 	int linecounter = 0;
 	int flush_mode = 0;
 
+	/* options */
+	struct option longopts[MAXLONGOPTIONS];
+	char   shortopts[NI_MAXHOST];
+	int    longopts_maxentries = 0;
+
+	/* initialize debug value from environment for bootstrap debugging */
+	ipv6calc_debug_from_env();
+
+	/* add options */
+	ipv6calc_options_add(shortopts, sizeof(shortopts), longopts, &longopts_maxentries, ipv6calc_shortopts, ipv6calc_longopts, MAXENTRIES_ARRAY(ipv6calc_longopts));
+
 	/* default */
 	result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, ANONPRESET_DEFAULT);
 	if (result != 0) {
@@ -217,7 +205,29 @@ int main(int argc, char *argv[]) {
 	};
 
 	/* Fetch the command-line arguments. */
-	while ((i = getopt_long(argc, argv, ipv6calc_shortopts, ipv6calc_longopts, &lop)) != EOF) {
+	if (ipv6calc_debug != 0) {
+		fprintf(stderr, "%s/%s: Start parsing options: shortopts=%s\n", __FILE__, __func__, shortopts);
+
+		i = 0;
+		while(longopts[i].name != NULL) {
+			fprintf(stderr, "%s/%s: Long option: %s/%d/%08x\n", __FILE__, __func__, longopts[i].name, longopts[i].has_arg, longopts[i].val);
+			i++;
+		};
+	};
+	
+	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {
+		if (ipv6calc_debug != 0) {
+			fprintf(stderr, "%s/%s: Parsing option: 0x%08x\n", __FILE__, __func__, i);
+		};
+
+		/* catch common options */
+		result = ipv6calcoptions(i, optarg, (((formatoptions & FORMATOPTION_quiet) == 0) ? 0 : 1), longopts);
+		if (result == 0) {
+			// found
+			continue;
+		};
+
+		/* specific options */
 		switch (i) {
 			case -1:
 				break;
@@ -238,53 +248,11 @@ int main(int argc, char *argv[]) {
 			case 'h':
 			case '?':
 				command |= CMD_printhelp;
-				fprintf(stderr, "%s: help option detected\n", DEBUG_function_name);
+				if (ipv6calc_debug != 0) {
+					fprintf(stderr, "%s: help option detected\n", DEBUG_function_name);
+				};
 				break;
 				
-			case 'd':
-				if ((strlen(optarg) > 2) && ((strncmp(optarg, "0x", 2) == 0) || (strncmp(optarg, "0X", 2)) == 0)) {
-					// convert hex
-					if (sscanf(optarg + 2, "%lx", &ipv6calc_debug) == 0) {
-						ipv6calc_debug = 0;
-						fprintf(stderr, "%s: can't parse value for debug option: %s\n", DEBUG_function_name, optarg);
-						exit (1);
-					} else {
-					};
-				} else {
-					ipv6calc_debug = atol(optarg);
-				};
-
-				fprintf(stderr, "%s: given debug value: %lx\n", DEBUG_function_name, ipv6calc_debug);
-				break;
-
-			case DB_ip2location_ipv4:
-#ifdef SUPPORT_IP2LOCATION
-				if (ipv6calc_debug != 0) {
-					fprintf(stderr, "%s: Got IP2Location IPv4 database file: %s\n", DEBUG_function_name, optarg);
-				};
-				snprintf(file_ip2location_ipv4, sizeof(file_ip2location_ipv4) - 1, "%s", optarg);
-				use_ip2location_ipv4 = 1;
-#else
-				if ((formatoptions & FORMATOPTION_quiet) == 0) {
-					fprintf(stderr, " Support for option '--db-ip2location-ipv4 <IP2Location IPv4 database file>' not compiled in, IP2Location support disabled\n");
-				};
-#endif
-				break;
-
-			case DB_ip2location_ipv6:
-#ifdef SUPPORT_IP2LOCATION
-				if (ipv6calc_debug != 0) {
-					fprintf(stderr, "%s: Got IP2Location IPv6 database file: %s\n", DEBUG_function_name, optarg);
-				};
-				snprintf(file_ip2location_ipv6, sizeof(file_ip2location_ipv6) - 1, "%s", optarg);
-				use_ip2location_ipv6 = 1;
-#else
-				if ((formatoptions & FORMATOPTION_quiet) == 0) {
-					fprintf(stderr, " Support for option '--db-ip2location-ipv6 <IP2Location IPv6 database file>' not compiled in, IP2Location support disabled\n");
-				};
-#endif
-				break;
-
 			case 'L':
 #ifdef IP2LOCATION_DEFAULT_FILE_IPV4
 				use_ip2location_ipv4 = 1;
@@ -315,34 +283,6 @@ int main(int argc, char *argv[]) {
 #else
 				if ((formatoptions & FORMATOPTION_quiet) == 0) {
 					fprintf(stderr, " Support for option '--db-ip2location-ipv6-default' not compiled in, IP2Location IPv6 support disabled\n");
-				};
-#endif
-				break;
-
-			case DB_geoip_ipv4:
-#ifdef SUPPORT_GEOIP
-				if (ipv6calc_debug != 0) {
-					fprintf(stderr, "%s: Got GeoIP IPv4 database file: %s\n", DEBUG_function_name, optarg);
-				};
-				snprintf(file_geoip_ipv4, sizeof(file_geoip_ipv4) - 1, "%s", optarg);
-				use_geoip_ipv4 = 1;
-#else
-				if ((formatoptions & FORMATOPTION_quiet) == 0) {
-					fprintf(stderr, " Support for option '--db-geoip-ipv4 <GeoIP IPv4 database file>' not compiled in, GeoIP support disabled\n");
-				};
-#endif
-				break;
-
-			case DB_geoip_ipv6:
-#ifdef SUPPORT_GEOIP_V6
-				if (ipv6calc_debug != 0) {
-					fprintf(stderr, "%s: Got GeoIP IPv6 database file: %s\n", DEBUG_function_name, optarg);
-				};
-				snprintf(file_geoip_ipv6, sizeof(file_geoip_ipv6) - 1, "%s", optarg);
-				use_geoip_ipv6 = 1;
-#else
-				if ((formatoptions & FORMATOPTION_quiet) == 0) {
-					fprintf(stderr, " Support for option '--db-geo-ipv6 <GeoIP IPv6 database file>' not compiled in, GeoIP(v6) support disabled\n");
 				};
 #endif
 				break;
@@ -782,7 +722,7 @@ int main(int argc, char *argv[]) {
 			printhelp_inputtypes(formatoptions);
 			exit(EXIT_FAILURE);
 		} else if (action == ACTION_auto) {
-			printhelp_actiontypes(formatoptions);
+			printhelp_actiontypes(formatoptions, ipv6calc_longopts);
 			exit(EXIT_FAILURE);
 		} else if (action != ACTION_undefined) {
 			printhelp_action_dispatcher(action, 0);
@@ -826,7 +766,7 @@ int main(int argc, char *argv[]) {
 	};
 
 	if (command == CMD_printoldoptions) {
-		printhelp_oldoptions();
+		printhelp_oldoptions(longopts);
 		exit(EXIT_FAILURE);
 	};
 	

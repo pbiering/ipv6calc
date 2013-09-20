@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.303 2013/09/03 20:41:10 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.304 2013/09/20 06:17:51 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20130920/PB
+	review and enhance option handling
+
 20130903/PB
 	databases/lib: finish implementation of IP2Location wrapper incl. dynamic load support
 

@@ -2,10 +2,23 @@
 #
 # Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
-# Version    : $Id: test_ipv6logstats.sh,v 1.9 2013/09/12 20:40:40 ds6peter Exp $
+# Version    : $Id: test_ipv6logstats.sh,v 1.10 2013/09/20 06:17:52 ds6peter Exp $
 # Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"
+
+if [ ! -x ./ipv6logstats ]; then
+	echo "Binary './ipv6logstats' missing or not executable"
+	exit 1
+fi
+
+# Test proper option definitions
+echo "Test proper option definition"
+./ipv6logstats -h >/dev/null
+if [ $? -ne 1 ]; then
+	echo "ERROR : something wrong in option definition"
+	exit 1
+fi
 
 
 testscenarios() {

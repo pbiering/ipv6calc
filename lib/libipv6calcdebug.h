@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calcdebug.h
- * Version    : $Id: libipv6calcdebug.h,v 1.4 2013/06/22 14:42:02 ds6peter Exp $
- * Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calcdebug.h,v 1.5 2013/09/20 06:17:52 ds6peter Exp $
+ * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Debug information
@@ -12,6 +12,8 @@
 #ifndef _libipv6calcdebug_h_
 
 #define _libipv6calcdebug_h_
+
+#define DEBUG_ipv6calcoptions			0x000008l
 
 #define DEBUG_libipv6calc			0x000010l
 #define DEBUG_libipv6addr			0x000020l
@@ -29,7 +31,10 @@
 
 #define DEBUG_libipv6addr_db_wrapper		0x100000l
 
+
+/* print debug macros */
+#define DEBUGPRINT(d, ...)	if ((ipv6calc_debug & d) != 0) { fprintf(stderr,  __VA_ARGS__); };
+#endif
+
 /* global debug value */
 extern long int ipv6calc_debug;
-
-#endif

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.21 2013/05/12 07:34:04 ds6peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.22 2013/09/20 06:17:52 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -22,6 +22,7 @@
 #include "ipv6logconvoptions.h"
 #include "ipv6calchelp.h"
 #include "ipv6logconvhelp.h"
+#include "ipv6calcoptions.h"
 
 #include "libipv4addr.h"
 #include "libipv6addr.h"
@@ -68,7 +69,7 @@ static long int cache_lru_statistics[CACHE_LRU_SIZE];
 /* main */
 #define DEBUG_function_name "ipv6logconv/main"
 int main(int argc,char *argv[]) {
-	int i, lop;
+	int i, lop, result;
 	unsigned long int command = 0;
 
 	cache_lru_limit = 20; /* optimum */
@@ -79,6 +80,11 @@ int main(int argc,char *argv[]) {
 	/* convert storage */
 	long int action = -1;
 
+	/* options */
+	struct option longopts[MAXLONGOPTIONS];
+	char   shortopts[NI_MAXHOST];
+	int    longopts_maxentries = 0;
+
 	/* check for UID */
 	if (getuid() == 0) {
 		printversion();
@@ -88,13 +94,30 @@ int main(int argc,char *argv[]) {
 		exit(EXIT_FAILURE);
 	};
 
+	/* initialize debug value from environment for bootstrap debugging */
+	ipv6calc_debug_from_env();
+
+	/* add options */
+	ipv6calc_options_add(shortopts, sizeof(shortopts), longopts, &longopts_maxentries, ipv6logconv_shortopts, ipv6logconv_longopts, MAXENTRIES_ARRAY(ipv6logconv_longopts));
+
 	if (argc <= 1) {
 		ipv6logconv_printinfo();
 		exit(EXIT_FAILURE);
 	};
 
 	/* Fetch the command-line arguments. */
-	while ((i = getopt_long(argc, argv, ipv6logconv_shortopts, ipv6logconv_longopts, &lop)) != EOF) {
+	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {
+		if (ipv6calc_debug != 0) {
+			fprintf(stderr, "%s/%s: Parsing option: 0x%08x\n", __FILE__, __func__, i);
+		};
+
+		/* catch common options */
+		result = ipv6calcoptions(i, optarg, flag_quiet, longopts);
+		if (result == 0) {
+			// found
+			continue;
+		};
+
 		switch (i) {
 			case -1:
 				break;
@@ -112,10 +135,6 @@ int main(int argc,char *argv[]) {
 				command |= CMD_printhelp;
 				break;
 				
-			case 'd':
-				ipv6calc_debug = atol(optarg);
-				break;
-
 			case 'c':
 				cache_lru_limit = atoi(optarg);
 				if (cache_lru_limit > CACHE_LRU_SIZE) {

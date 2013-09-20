@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.32 2013/08/11 16:42:11 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.33 2013/09/20 06:17:52 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -22,6 +22,7 @@
 #include "libipv6calc.h"
 #include "ipv6calccommands.h"
 #include "ipv6calctypes.h"
+#include "ipv6calcoptions.h"
 #include "ipv6logstatsoptions.h"
 #include "ipv6calchelp.h"
 #include "ipv6logstatshelp.h"
@@ -80,6 +81,11 @@ int main(int argc,char *argv[]) {
 	int i, lop, result;
 	unsigned long int command = 0;
 
+	/* options */
+	struct option longopts[MAXLONGOPTIONS];
+	char   shortopts[NI_MAXHOST];
+	int    longopts_maxentries = 0;
+
 	/* check for UID */
 	if (getuid() == 0) {
 		printversion();
@@ -89,8 +95,22 @@ int main(int argc,char *argv[]) {
 		exit(EXIT_FAILURE);
 	};
 
+	/* initialize debug value from environment for bootstrap debugging */
+	ipv6calc_debug_from_env();
+
+	/* add options */
+	ipv6calc_options_add(shortopts, sizeof(shortopts), longopts, &longopts_maxentries, ipv6logstats_shortopts, ipv6logstats_longopts, MAXENTRIES_ARRAY(ipv6logstats_longopts));
+
 	/* Fetch the command-line arguments. */
-	while ((i = getopt_long(argc, argv, ipv6logstats_shortopts, ipv6logstats_longopts, &lop)) != EOF) {
+	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {
+
+		/* catch common options */
+		result = ipv6calcoptions(i, optarg, flag_quiet, longopts);
+		if (result == 0) {
+			// found
+			continue;
+		};
+
 		switch (i) {
 			case -1:
 				break;
@@ -116,22 +136,6 @@ int main(int argc,char *argv[]) {
 				flag_quiet = 1;
 				break;
 				
-			case 'd':
-				if ((strlen(optarg) > 2) && ((strncmp(optarg, "0x", 2) == 0) || (strncmp(optarg, "0X", 2)) == 0)) {
-					// convert hex
-					if (sscanf(optarg + 2, "%lx", &ipv6calc_debug) == 0) {
-						ipv6calc_debug = 0;
-						fprintf(stderr, "%s: can't parse value for debug option: %s\n", DEBUG_function_name, optarg);
-						exit (1);
-					} else {
-					};
-				} else {
-					ipv6calc_debug = atol(optarg);
-				};
-
-				fprintf(stderr, "%s: given debug value: %lx\n", DEBUG_function_name, ipv6calc_debug);
-				break;
-
 			case 'p':
 				snprintf(opt_token, sizeof(opt_token) - 1, "%s", optarg);
 				break;
@@ -169,6 +173,7 @@ int main(int argc,char *argv[]) {
 				break;
 		};
 	};
+
 	argv += optind;
 	argc -= optind;
 

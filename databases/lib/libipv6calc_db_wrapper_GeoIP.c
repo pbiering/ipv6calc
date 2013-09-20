@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.17 2013/09/13 05:55:53 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.18 2013/09/20 06:17:52 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -25,10 +25,10 @@
 
 uint32_t wrapper_features_GeoIP = 0;
 
-static char geoip_custom_dir[NI_MAXHOST] = IPV6CALC_DB_GEOIP_CUSTOM_DIR;
+char geoip_db_dir[NI_MAXHOST] = IPV6CALC_DB_GEOIP_CUSTOM_DIR;
 
 #ifdef SUPPORT_GEOIP_DYN
-static char geoip_lib_name[NI_MAXHOST] = IPV6CALC_DB_GEOIP_LIB_NAME;
+char geoip_lib_file[NI_MAXHOST] = IPV6CALC_DB_GEOIP_LIB_NAME;
 static const char* wrapper_geoip_info = "dyn-load";
 static int wrapper_geoip_ipv6_support = GEOIP_IPV6_SUPPORT_UNKNOWN;
 static int wrapper_geoip_support      = GEOIP_SUPPORT_UNKNOWN;
@@ -146,18 +146,18 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	char *error;
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Load library: %s\n", __FILE__, __func__, geoip_lib_name);
+		fprintf(stderr, "%s/%s: Load library: %s\n", __FILE__, __func__, geoip_lib_file);
 	};
 
-	dl_GeoIP_handle = dlopen(geoip_lib_name, RTLD_NOW | RTLD_LOCAL);
+	dl_GeoIP_handle = dlopen(geoip_lib_file, RTLD_NOW | RTLD_LOCAL);
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "%s/%s: Loading of library failed: %s\n", __FILE__, __func__, geoip_lib_name);
+		fprintf(stderr, "%s/%s: Loading of library failed: %s\n", __FILE__, __func__, geoip_lib_file);
 		return(1);
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Loaded library successful: %s\n", __FILE__, __func__, geoip_lib_name);
+		fprintf(stderr, "%s/%s: Loaded library successful: %s\n", __FILE__, __func__, geoip_lib_file);
 	};
 
 	libipv6calc_db_wrapper_GeoIP_cleanup();
@@ -255,7 +255,7 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 		fprintf(stderr, "%s/%s: Call libipv6calc_db_wrapper_GeoIP_setup_custom_directory\n", __FILE__, __func__);
 	};
 
-	libipv6calc_db_wrapper_GeoIP_setup_custom_directory(geoip_custom_dir);
+	libipv6calc_db_wrapper_GeoIP_setup_custom_directory(geoip_db_dir);
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Returned from libipv6calc_db_wrapper_GeoIP_setup_custom_directory\n", __FILE__, __func__);
@@ -313,7 +313,7 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	};
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Version of linked library: %s / IPv6 support: %s / custom directory: %s\n", __FILE__, __func__, libipv6calc_db_wrapper_GeoIP_lib_version(), libipv6calc_db_wrapper_GeoIP_IPv6_support[wrapper_geoip_ipv6_support].token, geoip_custom_dir);
+		fprintf(stderr, "%s/%s: Version of linked library: %s / IPv6 support: %s / custom directory: %s\n", __FILE__, __func__, libipv6calc_db_wrapper_GeoIP_lib_version(), libipv6calc_db_wrapper_GeoIP_IPv6_support[wrapper_geoip_ipv6_support].token, geoip_db_dir);
 	};
 
 	wrapper_features |= wrapper_features_GeoIP;
@@ -391,7 +391,7 @@ void libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(const int level_verbose,
 	printf("%sGeoIP: features: 0x%08x\n", prefix, wrapper_features_GeoIP);
 
 #ifdef SUPPORT_GEOIP
-	printf("%sGeoIP: info of available databases\n", prefix);
+	printf("%sGeoIP: info of available databases in directory: %s\n", prefix, geoip_db_dir);
 	// TODO: replace hardcoded NUM_DB_TYPES by a function of GeoIP library
 	for (i = 0; i < NUM_DB_TYPES; i++) {
 		if (libipv6calc_db_wrapper_GeoIP_db_avail(i)) {

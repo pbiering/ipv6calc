@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.19 2013/08/20 06:24:59 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.20 2013/09/20 06:17:52 ds6peter Exp $
  * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -22,6 +22,8 @@
 #include "ipv6loganonoptions.h"
 #include "ipv6calchelp.h"
 #include "ipv6loganonhelp.h"
+
+#include "ipv6calcoptions.h"
 
 #include "libipv4addr.h"
 #include "libipv6addr.h"
@@ -89,6 +91,18 @@ int main(int argc,char *argv[]) {
 	int i, lop, result;
 	uint32_t command = 0;
 
+	/* options */
+	struct option longopts[MAXLONGOPTIONS];
+	char   shortopts[NI_MAXHOST];
+	int    longopts_maxentries = 0;
+
+
+	/* initialize debug value from environment for bootstrap debugging */
+	ipv6calc_debug_from_env();
+
+	/* add options */
+	ipv6calc_options_add(shortopts, sizeof(shortopts), longopts, &longopts_maxentries, ipv6loganon_shortopts, ipv6loganon_longopts, MAXENTRIES_ARRAY(ipv6loganon_longopts));
+
 	/* default */
 	result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, "anonymize-standard");
 	if (result != 0) {
@@ -97,7 +111,18 @@ int main(int argc,char *argv[]) {
 	};
 
 	/* Fetch the command-line arguments. */
-	while ((i = getopt_long(argc, argv, ipv6loganon_shortopts, ipv6loganon_longopts, &lop)) != EOF) {
+	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {
+		if (ipv6calc_debug != 0) {
+			fprintf(stderr, "%s/%s: Parsing option: 0x%08x\n", __FILE__, __func__, i);
+		};
+
+		/* catch common options */
+		result = ipv6calcoptions(i, optarg, flag_quiet, longopts);
+		if (result == 0) {
+			// found
+			continue;
+		};
+
 		switch (i) {
 			case -1:
 				break;
@@ -121,10 +146,6 @@ int main(int argc,char *argv[]) {
 				exit(EXIT_FAILURE);
 				break;
 				
-			case 'd':
-				ipv6calc_debug = atol(optarg);
-				break;
-
 			case 'f':
 				file_out_flush = 1;
 				break;

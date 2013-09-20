@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.41 2013/09/03 20:41:11 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.42 2013/09/20 06:17:52 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -116,13 +116,13 @@ void printhelp_inputtypes(const uint32_t formatoptions) {
 	if ((formatoptions & FORMATOPTION_machinereadable) == 0) fprintf(stderr, "\n Available input types:\n");
 
 	/* run through matrix */
-	for (i = 0; i < (int) (sizeof(ipv6calc_formatmatrix) / sizeof(ipv6calc_formatmatrix[0])); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_formatmatrix); i++) {
 		if (ipv6calc_debug != 0) {
 			fprintf(stderr, "Row %d: %08x - %08x\n", i, (unsigned int) ipv6calc_formatmatrix[i][0], (unsigned int) ipv6calc_formatmatrix[i][1]);
 		};
 		if (ipv6calc_formatmatrix[i][1] != 0) {
 			/* available for input, look for name now */
-			for (j = 0; j < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); j++) {
+			for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_formatstrings); j++) {
 				if (ipv6calc_debug != 0) {
 					fprintf(stderr, "Format-Row %d: %08x - %s - %s\n", j, (unsigned int) ipv6calc_formatstrings[j].number, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
 				};
@@ -153,7 +153,7 @@ void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoption
 	};
 
 	/* look for longest type definition */
-	for (j = 0; j < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); j++) {
+	for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_formatstrings); j++) {
 		if (strlen(ipv6calc_formatstrings[j].token) > maxlen) {
 			maxlen = strlen(ipv6calc_formatstrings[j].token);
 		};
@@ -183,12 +183,12 @@ void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoption
 	};
 
 	/* run through matrix */
-	for (j = 0; j < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); j++) {
+	for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_formatstrings); j++) {
 		if (ipv6calc_debug != 0) {
 			fprintf(stderr, "Format-Row %d: %08x - %s - %s\n", j, (unsigned int) ipv6calc_formatstrings[j].number, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
 		};
 
-		for (i = 0; i < (int) (sizeof(ipv6calc_formatmatrix) / sizeof(ipv6calc_formatmatrix[0])); i++) {
+		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_formatmatrix); i++) {
 			if ( (inputtype & ~ (FORMAT_auto | FORMAT_any) ) != 0 ) {
 				if (ipv6calc_formatmatrix[i][0] != inputtype) {
 					/* skip */
@@ -221,7 +221,7 @@ void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoption
 
 
 /* list of action types */
-void printhelp_actiontypes(const uint32_t formatoptions) {
+void printhelp_actiontypes(const uint32_t formatoptions, const struct option longopts[]) {
 	int i, j, o, test = 2, has_options = 0;
 	size_t maxlen = 0;
 	char printformatstring[20], printformatstring2[20], printformatstring3[20];
@@ -258,7 +258,7 @@ void printhelp_actiontypes(const uint32_t formatoptions) {
 
 	if ((formatoptions & FORMATOPTION_machinereadable) == 0) fprintf(stderr, "\n Available action types:\n");
 
-	for (j = 0; j < (int) (sizeof(ipv6calc_actionstrings) / sizeof(ipv6calc_actionstrings[0])); j++) {
+	for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_actionstrings); j++) {
 		if (ipv6calc_debug != 0) {
 			fprintf(stderr, "Format-Row %d: %08x - %s - %s\n", j, (unsigned int) ipv6calc_actionstrings[j].number, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
 		};
@@ -272,7 +272,7 @@ void printhelp_actiontypes(const uint32_t formatoptions) {
 				};
 
 				/* search for defined options */
-				for (i = 0; i < (int) (sizeof(ipv6calc_actionoptionmap) / sizeof(ipv6calc_actionoptionmap[0])); i++) {
+				for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_actionoptionmap); i++) {
 					if (ipv6calc_debug != 0) {
 						fprintf(stderr, "Option %d\n", i);
 					};
@@ -288,17 +288,19 @@ void printhelp_actiontypes(const uint32_t formatoptions) {
 						};
 
 						/* run through options */
-						for (o = 0; o < (int) (sizeof(ipv6calc_longopts) / sizeof (ipv6calc_longopts[0])); o++) {
-							if ((ipv6calc_actionoptionmap[i][1] == ipv6calc_longopts[o].val)) {
+						o = 0;
+						while(longopts[o].name != NULL) {
+							if ((ipv6calc_actionoptionmap[i][1] == longopts[o].val)) {
 								has_options = 1;
 								if (test == 1) {	
-									fprintf(stderr, printformatstring3, "", ipv6calc_longopts[o].name);
-									if (ipv6calc_longopts[o].has_arg > 0) {
+									fprintf(stderr, printformatstring3, "", longopts[o].name);
+									if (longopts[o].has_arg > 0) {
 										fprintf(stderr, " ...");
 									};
 									fprintf(stderr, "\n");
 								};
 							};
+							o++;
 						};
 					};
 				};
@@ -322,6 +324,7 @@ void printhelp(void) {
 	fprintf(stderr, "\n");
 	fprintf(stderr, " General:\n");
 	fprintf(stderr, "  [-d|--debug <debug value>] : debug value (bitwise like)\n");
+	fprintf(stderr, "                                can also be set IPV6CALC_DEBUG environment value\n");
 	fprintf(stderr, "  [-q|--quiet]               : be more quiet (auto-enabled in pipe mode)\n");
 	fprintf(stderr, "  [-f|--flush]               : flush each line in pipe mode\n");
 	fprintf(stderr, "  -v                         : show version (and included features)\n");
@@ -345,36 +348,22 @@ void printhelp(void) {
 	fprintf(stderr, "\n");
 	fprintf(stderr, "  --showinfo|-i [--machine_readable|-m] : show information about input data\n");
 	fprintf(stderr, "  --showinfo|-i --show_types            : show available types on '-m'\n");
+
 #ifdef SUPPORT_IP2LOCATION
 	fprintf(stderr, "\n");
-	fprintf(stderr, "  [--db-ip2location-ipv4 <file>] : IP2Location IPv4 database file (optional)\n");
-	fprintf(stderr, "  [--db-ip2location-ipv6 <file>] : IP2Location IPv6 database file (optional)\n");
-#ifdef IP2LOCATION_DEFAULT_FILE_IPV4
-	fprintf(stderr, "  [--db-ip2location-ipv4-default|-L] : enable & use IP2Location IPv4 default database file (optional)\n");
-	fprintf(stderr, "                                        %s\n", IP2LOCATION_DEFAULT_FILE_IPV4);
-#endif
-#ifdef IP2LOCATION_DEFAULT_FILE_IPV6
-	fprintf(stderr, "  [--db-ip2location-ipv6-default|-L] : enable & use IP2Location IPv6 default database file (optional)\n");
-	fprintf(stderr, "                                        %s\n", IP2LOCATION_DEFAULT_FILE_IPV6);
+	fprintf(stderr, "  [--db-ip2location-dir <directory>] : IP2Location database directory (default: %s)\n", ip2location_db_dir);
+#ifdef SUPPORT_IP2LOCATION_DYN
+	fprintf(stderr, "  [--db-ip2location-lib <file>]      : IP2Location library file (default: %s)\n", ip2location_lib_file);
 #endif
 #endif
+
 #ifdef SUPPORT_GEOIP
-	fprintf(stderr, "\n");
-	fprintf(stderr, "  [--db-geoip-ipv4 <file>]  : GeoIP IPv4 database file (optional)\n");
-#ifdef SUPPORT_GEOIP_V6
-	fprintf(stderr, "  [--db-geoip-ipv6 <file>]  : GeoIP IPv6 database file (optional)\n");
-#endif
-#ifdef GEOIP_DEFAULT_FILE_IPV4
-	fprintf(stderr, "  [--db-geoip-ipv4-default|-G] : enable & use GeoIP IPv4 default database file (optional)\n");
-	fprintf(stderr, "                                  %s\n", GEOIP_DEFAULT_FILE_IPV4);
-#endif
-#ifdef GEOIP_DEFAULT_FILE_IPV6
-#ifdef SUPPORT_GEOIP_V6
-	fprintf(stderr, "  [--db-geoip-ipv6-default|-G] : enable & use GeoIP IPv6 default database file (optional)\n");
-	fprintf(stderr, "                                  %s\n", GEOIP_DEFAULT_FILE_IPV6);
+	fprintf(stderr, "  [--db-geoip-dir       <directory>] : GeoIP database directory (default: %s)\n", geoip_db_dir);
+#ifdef SUPPORT_GEOIP_DYN
+	fprintf(stderr, "  [--db-geoip-lib       <file>]      : GeoIP library file (default: %s)\n", geoip_lib_file);
 #endif
 #endif
-#endif
+
 	fprintf(stderr, "\n");
 	fprintf(stderr, " To see old-style option use: --printoldoptions\n");
 	fprintf(stderr, "\n");
@@ -382,18 +371,20 @@ void printhelp(void) {
 	return;
 };
 
-void printhelp_oldoptions(void) {
-	int i;
+void printhelp_oldoptions(const struct option longopts[]) {
+	int i = 0;
 	
 	printversion();
 	printcopyright();
 	fprintf(stderr, " Usage with old style (shortcut) options (going obsolete):\n");
 	fprintf(stderr, "  <shortcut option> [<format option> ...] <input data> [...]\n");
 	fprintf(stderr, "\n");
-	for (i = 0; i < (int) (sizeof(ipv6calc_longopts) / sizeof(ipv6calc_longopts[0])); i++) {
-		if (ipv6calc_longopts[i].val >= CMD_shortcut_start && ipv6calc_longopts[i].val <= CMD_shortcut_end) {
-			fprintf(stderr, "  --%s\n", ipv6calc_longopts[i].name);
+
+	while(longopts[i].name != NULL) {
+		if (longopts[i].val >= CMD_shortcut_start && longopts[i].val <= CMD_shortcut_end) {
+			fprintf(stderr, "  --%s\n", longopts[i].name);
 		};
+		i++;
 	};
 	
 	fprintf(stderr, "\n");
@@ -581,7 +572,7 @@ void printhelp_output_dispatcher(const uint32_t outputtype) {
 	};
 	
 	/* looking for outtype */
-	for (i = 0; i < (int) (sizeof(ipv6calc_outputformatoptionmap) / sizeof(ipv6calc_outputformatoptionmap[0])); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_outputformatoptionmap); i++) {
 		if (outputtype == ipv6calc_outputformatoptionmap[i][0]) {
 			if (ipv6calc_outputformatoptionmap[i][1] == 0) {
 				fprintf(stderr, " No format options supported\n");
@@ -596,7 +587,7 @@ void printhelp_output_dispatcher(const uint32_t outputtype) {
 			fprintf(stderr, " Available format options:\n");
 
 			/* run through format options */
-			for (j = 0; j < (int) (sizeof(ipv6calc_formatoptionstrings) / sizeof (ipv6calc_formatoptionstrings[0])); j++) {
+			for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_formatoptionstrings); j++) {
 				if ((ipv6calc_outputformatoptionmap[i][1] & ipv6calc_formatoptionstrings[j].number) != 0) {
 					fprintf(stderr, "  %s: %s\n", ipv6calc_formatoptionstrings[j].token, ipv6calc_formatoptionstrings[j].explanation);
 				};
@@ -651,7 +642,7 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 
 			fprintf(stderr, "  Available presets (shortcut names) [--anonymize-preset PRESET-NAME]:\n");
 
-			for (i = 0; i < sizeof(ipv6calc_anon_set_list) / sizeof(s_ipv6calc_anon_set); i++) {
+			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_anon_set_list); i++) {
 				snprintf(method_name, sizeof(method_name) - 1, "%s", "unknown"); // default
 
 				for (j = 0; j < sizeof(ipv6calc_anon_methods) / sizeof(s_ipv6calc_anon_methods); j++) {

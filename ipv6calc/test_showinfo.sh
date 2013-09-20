@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.28 2013/09/12 20:40:40 ds6peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.29 2013/09/20 06:17:52 ds6peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -185,6 +185,7 @@ if ./ipv6calc -v 2>&1 | grep -qw GeoIP; then
 		fi
 		echo
 	done || exit 1
+	echo "GeoIP tests were successful"
 else
 	echo "GeoIP tests skipped"
 fi
@@ -217,8 +218,8 @@ if ./ipv6calc -v 2>&1 | grep -qw IP2Location; then
 		fi
 		echo
 	done || exit 1
+	echo "IP2Location tests were successful"
 else
 	echo "IP2Location tests skipped"
-
 fi
 

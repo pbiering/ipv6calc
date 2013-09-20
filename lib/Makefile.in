@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : lib/Makefile
-# Version    : $Id: Makefile.in,v 1.5 2013/07/02 20:56:48 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.6 2013/09/20 06:17:52 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -33,6 +33,7 @@ OBJS	=	libipv6calc.o  \
 		librfc5569.o   \
 		libifinet6.o   \
 		ipv6calchelp.o \
+		ipv6calcoptions.o \
 		ipv6calctypes.o
 
 all:		libipv6calc.a
@@ -69,8 +70,9 @@ $(OBJS):	libipv6calcdebug.h  \
 		ipv6calchelp.h      \
 		ipv6calctypes.h     \
 		ipv6calcoptions.h   \
+		ipv6calcoptions_common.h \
 		ipv6calccommands.h  \
-		ipv6calc_inttypes.h \
+		ipv6calc_inttypes.h
 
 libipv6calc.a:	$(OBJS)
 		cd ../ && ${MAKE} db-ieee-oui-make
