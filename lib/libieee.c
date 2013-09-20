@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.15 2013/05/12 07:34:04 ds6peter Exp $
+ * Version    : $Id: libieee.c,v 1.16 2013/09/20 18:54:44 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -33,8 +33,11 @@
 #define DEBUG_function_name "libieee/get_vendor_string"
 int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macaddrp) {
 	int retval = 1;
+
+#ifdef SUPPORT_DB_IEEE
 	int i;
 	uint32_t idval, subidval;
+#endif
 
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "%s: called\n", DEBUG_function_name);
@@ -106,8 +109,11 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
 #define DEBUG_function_name "libieee/get_short_vendor_string"
 int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *macaddrp) {
 	int retval = 1;
+
+#ifdef SUPPORT_DB_IEEE
 	int i;
 	uint32_t idval, subidval;
+#endif
 
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "%s: called\n", DEBUG_function_name);

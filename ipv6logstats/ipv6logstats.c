@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.33 2013/09/20 06:17:52 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.34 2013/09/20 18:54:44 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -541,8 +541,8 @@ static void lineparser(void) {
 					};
 
 					if ((typeinfo & IPV6_NEW_ADDR_IID) == IPV6_NEW_ADDR_IID) {
-						if ((typeinfo & IPV6_NEW_ADDR_IID_PRIVACY) != 0) {
-							stat_inc(STATS_IPV6_IID_PRIVACY);
+						if ((typeinfo & IPV6_NEW_ADDR_IID_RANDOM) != 0) {
+							stat_inc(STATS_IPV6_IID_RANDOM);
 						} else if ((typeinfo & IPV6_NEW_ADDR_IID_ISATAP) != 0) {
 							stat_inc(STATS_IPV6_IID_ISATAP);
 						} else if ((typeinfo & IPV6_NEW_ADDR_IID_LOCAL) != 0) {

@@ -1,0 +1,28 @@
+Major Changes/Enhancements of ipv6calc
+
+
+0.94 -> 0.95
+============
+- full IPv6 address (prefix + IID) anonymization added by selecting method "kp"
+
+- type string "iid-privacy" is replaced with "iid-random"
+
+- add support for options to specify database directories
+	db-ip2location-dir <dir>
+	db-geoip-dir <dir>
+
+- add support for options to specify library files (in case of dynamic linking is configured)
+	db-ip2location-lib <file>
+	db-geoip-lib <file>
+
+- ignore options for specifying files for GeoIP & IP2Location
+	db-ip2location-ipv4 <file>
+	db-ip2location-ipv6 <file>
+	db-ip2location-default
+	db-ip2location-ipv4-default
+	db-ip2location-ipv6-default
+	db-geoip-ipv4 <file>
+	db-geoip-ipv6 <file>
+	db-geoip-default
+	db-geoip-ipv4-default
+	db-geoip-ipv6-default

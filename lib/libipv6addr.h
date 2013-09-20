@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.68 2013/09/10 20:25:50 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.69 2013/09/20 18:54:44 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -52,10 +52,10 @@
 
 #define ANON_CHECKSUM_MASK_32_63	(uint32_t) 0x0000000fu
 
-#define ANON_IID_PRIVACY_VALUE_00_31	(uint32_t) 0x00004941u
-#define ANON_IID_PRIVACY_MASK_00_31	(uint32_t) 0x0000ffffu
-#define ANON_IID_PRIVACY_VALUE_32_63	(uint32_t) 0x00000000u
-#define ANON_IID_PRIVACY_MASK_32_63	(uint32_t) 0xfffffff0u
+#define ANON_IID_RANDOM_VALUE_00_31	(uint32_t) 0x00004941u
+#define ANON_IID_RANDOM_MASK_00_31	(uint32_t) 0x0000ffffu
+#define ANON_IID_RANDOM_VALUE_32_63	(uint32_t) 0x00000000u
+#define ANON_IID_RANDOM_MASK_32_63	(uint32_t) 0xfffffff0u
 
 #define ANON_IID_STATIC_VALUE_00_31	(uint32_t) 0x00004291u
 #define ANON_IID_STATIC_MASK_00_31	(uint32_t) 0x0000ffffu
@@ -186,8 +186,8 @@ typedef struct {
 	int   digit_delta_amount;  	// amount of delta of digits
 } s_iid_statistics;
 
-/* IID privacy limits */
-// this filter values detects 999.744 from 1.000.000 generated privacy extension IIDs (256 are not detected)
+/* IID random limits */
+// this filter values detects 999.744 from 1.000.000 generated random (using privacy extension) IIDs (256 are not detected)
 /*@unused@*/ static const s_iid_statistics s_iid_statistics_ok_min = {
 	0.249,		// fits to 100% of 1 million tested
 	6.275,		// fits to 100% of 1 million tested
@@ -272,7 +272,7 @@ typedef struct {
 #define IPV6_NEW_ADDR_LINKLOCAL_TEREDO		(uint32_t) 0x04000000U
 #define IPV6_NEW_ADDR_NAT64			(uint32_t) 0x08000000U	/* RFC 6052 */
 
-#define IPV6_NEW_ADDR_IID_PRIVACY		(uint32_t) 0x10000000U	/* RFC 4941 (ex 3041) */
+#define IPV6_NEW_ADDR_IID_RANDOM		(uint32_t) 0x10000000U	/* possible RFC 4941 (ex 3041) */
 #define IPV6_NEW_ADDR_IID			(uint32_t) 0x20000000U	/* IPv6 address with IID inside */
 #define IPV6_NEW_ADDR_IID_LOCAL			(uint32_t) 0x40000000U	/* IPv6 address with local generated IID */
 #define IPV6_NEW_ADDR_IID_GLOBAL		(uint32_t) 0x80000000U	/* IPv6 address with global IID */
@@ -303,7 +303,7 @@ typedef struct {
 	{ IPV6_NEW_ADDR_ORCHID		, "orchid" },
 	{ IPV6_NEW_ADDR_LINKLOCAL_TEREDO, "link-local-teredo" },
 	{ IPV6_NEW_ADDR_NAT64		, "nat64" },
-	{ IPV6_NEW_ADDR_IID_PRIVACY	, "iid-privacy" },
+	{ IPV6_NEW_ADDR_IID_RANDOM	, "iid-random" },
 	{ IPV6_NEW_ADDR_IID		, "iid" },
 	{ IPV6_NEW_ADDR_IID_LOCAL	, "iid-local" },
 	{ IPV6_NEW_ADDR_IID_GLOBAL	, "iid-global" },
@@ -384,7 +384,7 @@ extern int  libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc
 extern uint32_t ipv6addr_get_payload_anonymized_iid(const ipv6calc_ipv6addr *ipv6addrp, const uint32_t typeinfo);
 int ipv6addr_get_payload_anonymized_prefix(const ipv6calc_ipv6addr *ipv6addrp, const int payload_selector, uint32_t *result_ptr);
 
-extern int ipv6addr_privacyextensiondetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statistics *variancesp);
+extern int ipv6addr_iidrandomdetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statistics *variancesp);
 
 extern int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_ipv6addr *filter);
 extern int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token);

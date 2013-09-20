@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.18 2013/09/04 06:05:33 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.19 2013/09/20 18:54:44 ds6peter Exp $
 # Copyright  : 2003-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -103,7 +103,7 @@ echo "*** run: make clean"
 make clean || exit 1
 
 echo "*** run: make"
-make || exit 1
+EXTRA_CFLAGS="-Werror" make || exit 1
 
 echo "*** run: make test"
 make test || exit 1

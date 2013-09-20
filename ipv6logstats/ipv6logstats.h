@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.11 2013/07/01 19:52:16 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.h,v 1.12 2013/09/20 18:54:44 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -55,7 +55,7 @@
 
 #define STATS_IPV6_IID_GLOBAL		0x100
 #define STATS_IPV6_IID_MANUAL		0x101
-#define STATS_IPV6_IID_PRIVACY		0x102
+#define STATS_IPV6_IID_RANDOM		0x102
 #define STATS_IPV6_IID_ISATAP		0x103
 #define STATS_IPV6_IID_UNKNOWN		0x10f
 
@@ -100,7 +100,7 @@ static stat_entries ipv6logstats_statentries[] = {
 	{ STATS_IPV6_TEREDO_RESERVED, 0, "IPv6/Teredo/RESERVED" },
 	{ STATS_IPV6_TEREDO_UNKNOWN, 0, "IPv6/Teredo/UNKNOWN" },
 	{ STATS_IPV6_IID_GLOBAL, 0, "IPv6/IID/Global" },
-	{ STATS_IPV6_IID_PRIVACY, 0, "IPv6/IID/Privacy" },
+	{ STATS_IPV6_IID_RANDOM, 0, "IPv6/IID/Random" },
 	{ STATS_IPV6_IID_MANUAL, 0, "IPv6/IID/Manual" },
 	{ STATS_IPV6_IID_ISATAP, 0, "IPv6/IID/ISATAP" },
 	{ STATS_IPV6_IID_MANUAL, 0, "IPv6/IID/Unknown" },

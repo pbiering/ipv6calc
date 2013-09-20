@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.22 2013/09/20 06:17:52 ds6peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.23 2013/09/20 18:54:44 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -632,8 +632,8 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 					snprintf(resultstring, LINEBUFFER - 1, "6to4-microsoft.ouitype.ipv6calc");
 				} else if ( (typeinfo & IPV6_NEW_ADDR_IID_ISATAP) != 0 ) {
 					snprintf(resultstring, LINEBUFFER - 1, "ISATAP.ouitype.ipv6calc");
-				} else if ( (typeinfo & IPV6_NEW_ADDR_IID_PRIVACY) != 0 ) {
-					snprintf(resultstring, LINEBUFFER - 1, "local-scope-privacy.ouitype.ipv6calc");
+				} else if ( (typeinfo & IPV6_NEW_ADDR_IID_RANDOM) != 0 ) {
+					snprintf(resultstring, LINEBUFFER - 1, "local-scope-random.ouitype.ipv6calc");
 				} else if ( (typeinfo & IPV6_NEW_ADDR_TEREDO) != 0 ) {
 					snprintf(resultstring, LINEBUFFER - 1, "local-scope-teredo.ouitype.ipv6calc");
 				} else {
