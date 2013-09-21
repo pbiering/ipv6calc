@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.h
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.h,v 1.1 2013/09/20 19:36:29 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.h,v 1.2 2013/09/21 17:25:56 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -13,10 +13,6 @@
 #ifndef _libipv6calc_db_wrapper_IP2Location_h
 
 #define _libipv6calc_db_wrapper_IP2Location_h 1
-
-#define IPV6CALC_DB_IP2LOCATION_LIB_NAME	"libIP2Location.so"
-
-#define IPV6CALC_DB_IP2LOCATION_CUSTOM_DIR	"/usr/share/IP2Location"
 
 #ifdef SUPPORT_IP2LOCATION
 #include "IP2Location.h"

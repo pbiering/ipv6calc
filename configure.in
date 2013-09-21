@@ -1,10 +1,10 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.64 2013/09/20 06:17:51 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.65 2013/09/21 17:25:56 ds6peter Exp $
 dnl Copyright: 2001-2013 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(ipv6calc, 0.95.0.beta.2, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
+AC_INIT(ipv6calc, 0.95.0.beta.3, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
 
 AC_DEFINE(COPYRIGHT_YEAR, "2013", [Copyright year])
 
@@ -36,14 +36,24 @@ AC_CHECK_FUNCS(strspn strstr)
 
 dnl Check for getopt
 AC_CHECK_FUNC(getopt_long, [],
-  [
-    AC_LIBOBJ(../getopt/getopt)
-    AC_LIBOBJ(../getopt/getopt1)
-    GETOPT_INCLUDE=-I../getopt
-    ENABLE_BUNDLED_GETOPT=1
-  ])
+	[
+		AC_LIBOBJ(../getopt/getopt)
+		AC_LIBOBJ(../getopt/getopt1)
+		GETOPT_INCLUDE=-I../getopt
+		ENABLE_BUNDLED_GETOPT=1
+	])
+
 AC_SUBST(GETOPT_INCLUDE)
 AC_SUBST(ENABLE_BUNDLED_GETOPT)
+
+dnl *************************************************
+dnl defaults
+dnl *************************************************
+geoip_db_default="/usr/share/GeoIP"
+ip2location_db_default="/usr/share/IP2Location"
+
+geoip_dyn_lib_default="libGeoIP.so.1"
+ip2location_dyn_lib_default="libIP2Location.so"
 
 
 dnl *************************************************
@@ -51,14 +61,13 @@ dnl Check for dynamic loading of libraries capability
 dnl *************************************************
 AC_CHECK_HEADER(dlfcn.h,
 	[
-		AC_MSG_RESULT([*** Dynamic loading of libraries is supported])
+		AC_MSG_RESULT([*** Dynamic loading of libraries is SUPPORTED])
         	DYNAMIC_LOAD_SUPPORT="yes"
 	],
         [
         	DYNAMIC_LOAD_SUPPORT="no"
 		AC_MSG_WARN(["Dynamic loading of libraries is not supported, no header file found"])
-	]
-)
+	])
 
 AC_ARG_ENABLE(
 	[dynamic-load],
@@ -69,8 +78,8 @@ AC_ARG_ENABLE(
 	],
 	[
         	DYNAMIC_LOAD="yes"
-	],
-)
+	],[
+	])
 
 if test "$DYNAMIC_LOAD_SUPPORT" = "yes"; then
 	if test "$DYNAMIC_LOAD" = "no"; then
@@ -86,12 +95,13 @@ AC_ARG_ENABLE([db-ieee],
 	AS_HELP_STRING([--disable-db-ieee],
 	               [Disable IEEE database (default: enabled)]),
 	[
-        DB_IEEE="$enableval"
-    ],
-    [DB_IEEE="yes"])
+       		DB_IEEE="$enableval"
+	],[
+		DB_IEEE="yes"
+	])
 
 if test "$DB_IEEE" = "yes"; then
-    AC_DEFINE(SUPPORT_DB_IEEE, 1, Define if you want IEEE database included.)
+	AC_DEFINE(SUPPORT_DB_IEEE, 1, Define if you want IEEE database included.)
 fi
 
 
@@ -102,12 +112,13 @@ AC_ARG_ENABLE([db-ipv4],
 	AS_HELP_STRING([--disable-db-ipv4],
 	               [Disable IPv4 database (default: enabled)]),
 	[
-        DB_IPV4="$enableval"
-    ],
-    [DB_IPV4="yes"])
+		DB_IPV4="$enableval"
+	],[
+		DB_IPV4="yes"
+	])
 
 if test "$DB_IPV4" = "yes"; then
-    AC_DEFINE(SUPPORT_DB_IPV4, 1, Define if you want IPv4 database included.)
+	AC_DEFINE(SUPPORT_DB_IPV4, 1, Define if you want IPv4 database included.)
 fi
 
 
@@ -118,12 +129,14 @@ AC_ARG_ENABLE([db-ipv6],
 	AS_HELP_STRING([--disable-db-ipv6],
 	               [Disable IPv6 database (default: enabled)]),
 	[
-        DB_IPV6="$enableval"
-    ],
-    [DB_IPV6="yes"])
+		DB_IPV6="$enableval"
+	],
+	[
+		DB_IPV6="yes"
+	])
 
 if test "$DB_IPV6" = "yes"; then
-    AC_DEFINE(SUPPORT_DB_IPV6, 1, Define if you want IPv6 database included.)
+	AC_DEFINE(SUPPORT_DB_IPV6, 1, Define if you want IPv6 database included.)
 fi
 
 
@@ -132,89 +145,118 @@ dnl IP2Location support
 dnl *************************************************
 AC_ARG_ENABLE([ip2location], 
 	AS_HELP_STRING([--enable-ip2location],
-	               [Enable IP2Location support (default: disabled)]),
+		[Enable IP2Location support (default: disabled)]),
 	[
         IP2LOCATION="$enableval"
-    ],
-    [IP2LOCATION="no"])
+	],[
+		IP2LOCATION="no"
+	])
 
 AC_ARG_WITH([ip2location-headers],
-    AS_HELP_STRING([--with-ip2location-headers=DIR],
-                   [IP2Location include files location]),
-    [IP2LOCATION_INCLUDE="-I$withval"])
+	AS_HELP_STRING([--with-ip2location-headers=DIR],
+		[IP2Location include files location]),
+	[
+		IP2LOCATION_INCLUDE="-I$withval"
+	])
 
 AC_ARG_WITH([ip2location-lib],
-    AS_HELP_STRING([--with-ip2location-lib=DIR],
-                   [IP2Location library location]),
-    [IP2LOCATION_LIB="-L$withval $IP2LOCATION_LIB"])
+	AS_HELP_STRING([--with-ip2location-lib=FILE],
+		[IP2Location library location]),
+	[
+		IP2LOCATION_LIB="-L$withval $IP2LOCATION_LIB"
+	])
 
 AC_ARG_WITH([ip2location-static],
-    AS_HELP_STRING([--with-ip2location-static],
-                   [Explicitly link IP2Location statically (default=no)]),
-    [if test "$withval" != "no"; then 
-        IP2LOCATION_LIB="-Wl,-Bstatic $IP2LOCATION_LIB -Wl,-Bdynamic"
-     fi])
+	AS_HELP_STRING([--with-ip2location-static],
+		[Explicitly link IP2Location statically (default=no)]),
+	[
+		if test "$withval" != "no"; then 
+			IP2LOCATION_LIB="-Wl,-Bstatic $IP2LOCATION_LIB -Wl,-Bdynamic"
+		fi
+	])
 
 AC_ARG_WITH([ip2location-dynamic],
-    AS_HELP_STRING([--without-ip2location-dynamic],
+	AS_HELP_STRING([--without-ip2location-dynamic],
                    [Disable use of dynamic loading of IP2Location library (default=yes, if support is found)]),
-    [
-	if test "$enableval" != "no"; then
-        	IP2LOCATION_DYN="$enableval"
-	fi
-    ],
-    )
-AC_ARG_WITH([ip2location-ipv4-default-file],
-       AS_HELP_STRING([--with-ip2location-ipv4-default-file=file],
-               [Use a default IP2Location IPv4 database file when ipv6calc is invoked with '--db-ip2location-ipv4-default|-L']),
-       [AC_DEFINE_UNQUOTED(IP2LOCATION_DEFAULT_FILE_IPV4, "$withval", Define for a default IP2Location IPv4 database file.)])
+	[
+		if test "$enableval" != "no"; then
+        		IP2LOCATION_DYN="$enableval"
+		fi
+	],[
+	])
 
-AC_ARG_WITH([ip2location-ipv6-default-file],
-       AS_HELP_STRING([--with-ip2location-ipv6-default-file=file],
-               [Use a default IP2Location IPv6 database file when ipv6calc is invoked with '--db-ip2location-ipv6-default|-L']),
-       [AC_DEFINE_UNQUOTED(IP2LOCATION_DEFAULT_FILE_IPV6, "$withval", Define for a default IP2Location IPv6 database file.)])
+dnl defaults for database directories
+AC_ARG_WITH([ip2location-db],
+	AS_HELP_STRING([--with-ip2location-db=DIR],
+               [Use specified IP2Location database directory, default: /usr/share/IP2Location]),
+	[
+		ip2location_db="$withval"
+	],
+	[
+		ip2location_db=$ip2location_db_default
+	])
+
+AC_ARG_WITH([ip2location-dyn-lib],
+	AS_HELP_STRING([--with-ip2location-dyn-lib=NAME],
+		[Use specified IP2Location dynamic library, default: libIP2Location.so]),
+	[
+		ip2location_dyn_lib="$withval"
+	],
+	[
+		ip2location_dyn_lib=$ip2location_dyn_lib_default
+	])
 
 if test "$IP2LOCATION" = "yes"; then
-    CPPFLAGS="$CPPFLAGS $IP2LOCATION_INCLUDE"
+	CPPFLAGS="$CPPFLAGS $IP2LOCATION_INCLUDE"
 	AC_MSG_RESULT([*** IP2Location support requested])
 
-    AC_CHECK_HEADER(IP2Location.h,,
-        [AC_MSG_ERROR([IP2Location library header files not found])]
-    )
-    AC_CHECK_LIB(IP2Location,IP2Location_open,
-        [
-            AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location support.)
-        ],
-        [
-            AC_MSG_ERROR([IP2Location library header files were found but the library was not found])
-        ])
+	AC_CHECK_HEADER(IP2Location.h,,
+	[	
+		AC_MSG_ERROR([IP2Location library header files not found])
+	])
 
-    if test "$IP2LOCATION_DYN" != "yes"; then
-        IP2LOCATION_LIB="-lIP2Location"
-        LDFLAGS="$LDFLAGS $IP2LOCATION_LIB"
+	AC_MSG_RESULT([*** IP2location db dir: $ip2location_db])
+	AC_DEFINE_UNQUOTED(IP2LOCATION_DB, "$ip2location_db", Define IP2Location database directory.)
 
-        if test "$IP2LOCATION_STATIC" = "yes"; then
-	    AC_DEFINE(SUPPORT_IP2LOCATION_STATIC, 1, Define if you want IP2Location support statically linked - requires also additional linker options.)
-	fi
+	if test "$IP2LOCATION_DYN" != "yes"; then
+		AC_CHECK_LIB(IP2Location,IP2Location_open,
+		[
+			AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location support.)
+		],
+		[
+			AC_MSG_ERROR([IP2Location library header files were found but the library was not found])
+		])
 
-	AC_CHECK_LIB(IP2Location, IP2Location_open,
-	    [
+        	IP2LOCATION_LIB="-lIP2Location"
+		LDFLAGS="$LDFLAGS $IP2LOCATION_LIB"
+
+		if test "$IP2LOCATION_STATIC" = "yes"; then
+			AC_DEFINE(SUPPORT_IP2LOCATION_STATIC, 1, Define if you want IP2Location support statically linked - requires also additional linker options.)
+		fi
+
+		AC_CHECK_LIB(IP2Location, IP2Location_open,
+	    	[
+			AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location support.)
+			AC_MSG_RESULT([*** IP2Location support enabled])
+	    	],
+	    	[
+			AC_MSG_ERROR([IP2Location library header files were found but the library was not found])
+	    	])
+	else
+		# wrapper detects by itself the real support
+		AC_MSG_RESULT([*** IP2Location dyn lib: $ip2location_dyn_lib])
+		AC_DEFINE_UNQUOTED(IP2LOCATION_DYN_LIB, "$ip2location_dyn_lib", Define IP2Location dynamic library.)
+
+		AC_MSG_RESULT([*** IP2Location support will be implemented by using dynamic load of library])
 		AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location support.)
-		AC_MSG_RESULT([*** IP2Location support enabled])
-	    ],
-	    [
-		AC_MSG_ERROR([IP2Location library header files were found but the library was not found])
-	    ])
-    else
-	# wrapper detects by itself the real support
-	AC_MSG_RESULT([*** IP2Location support will be implemented by using dynamic load of library])
-	AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location support.)
-	AC_DEFINE(SUPPORT_IP2LOCATION_DYN, 1, Define if you want IP2Location support with dynamic loading support - requires also additional linker options.)
-    fi
+		AC_DEFINE(SUPPORT_IP2LOCATION_DYN, 1, Define if you want IP2Location support with dynamic loading support - requires also additional linker options.)
+	fi
 fi
 
 AC_SUBST(IP2LOCATION_INCLUDE)
 AC_SUBST(IP2LOCATION_LIB)
+AC_SUBST(IP2LOCATION_DB)
+AC_SUBST(IP2LOCATION_DYN_LIB)
 
 
 dnl *************************************************
@@ -223,61 +265,80 @@ dnl *************************************************
 AC_ARG_ENABLE([geoip], 
 	AS_HELP_STRING([--enable-geoip],
 	               [Enable GeoIP support (default: disabled)]),
-    [
-	if test "$enableval" != "no"; then
-        	GEOIP="$enableval"
-	fi
-    ],
-    [GEOIP="no"])
+	[
+		if test "$enableval" != "no"; then
+        		GEOIP="$enableval"
+		fi
+	],[
+		GEOIP="no"
+	])
 
 AC_ARG_WITH([geoip-headers],
-    AS_HELP_STRING([--with-geoip-headers=DIR],
+	AS_HELP_STRING([--with-geoip-headers=DIR],
                    [GeoIP include files location]),
-    [GEOIP_INCLUDE="-I$withval"])
+	[
+		GEOIP_INCLUDE="-I$withval"
+	])
 
 AC_ARG_WITH([geoip-lib],
-    AS_HELP_STRING([--with-geoip-lib=DIR],
+	AS_HELP_STRING([--with-geoip-lib=DIR],
                    [GeoIP library location]),
-    [GEOIP_LIB="-L$withval $GEOIP_LIB"])
+	[
+		GEOIP_LIB="-L$withval $GEOIP_LIB"
+	])
 
 AC_ARG_WITH([geoip-static],
-    AS_HELP_STRING([--with-geoip-static],
+	AS_HELP_STRING([--with-geoip-static],
                    [Explicitly link GeoIP statically (default=no)]),
-    [
- 	if test "$withval" != "no"; then 
-		GEOIP_STATIC="$enableval"
-		GEOIP_LIB="-Wl,-Bstatic $GEOIP_LIB -Wl,-Bdynamic"
-	fi
-    ],
-    [GEOIP_STATIC="no"]
-)
+	[
+ 		if test "$withval" != "no"; then 
+			GEOIP_STATIC="$enableval"
+			GEOIP_LIB="-Wl,-Bstatic $GEOIP_LIB -Wl,-Bdynamic"
+		fi
+	],[
+		GEOIP_STATIC="no"
+	])
 
 AC_ARG_WITH([geoip-dynamic],
-    AS_HELP_STRING([--without-geoip-dynamic],
+	AS_HELP_STRING([--without-geoip-dynamic],
                    [Disable use of dynamic loading of GeoIP library (default=yes, if support is found)]),
-    [
-	if test "$enableval" != "no"; then
-        	GEOIP_DYN="$enableval"
-	fi
-    ],
-    )
+	[
+		if test "$enableval" != "no"; then
+        		GEOIP_DYN="$enableval"
+		fi
+	],[
+	])
 
-AC_ARG_WITH([geoip-ipv4-default-file],
-       AS_HELP_STRING([--with-geoip-ipv4-default-file=file],
-               [Use a default GeoIP IPv4 database file when ipv6calc is invoked with '--db-geoip-ipv4-default|-G']),
-       [AC_DEFINE_UNQUOTED(GEOIP_DEFAULT_FILE_IPV4, "$withval", Define for a default GeoIP IPv4 database file.)])
+AC_ARG_WITH([geoip-db],
+	AS_HELP_STRING([--with-geoip-db=DIR],
+		[Use specified GeoIP database directory, default: /usr/share/GeoIP]),
+	[
+		geoip_db="$withval"
+	],
+	[
+		geoip_db=$geoip_db_default
+	])
 
-AC_ARG_WITH([geoip-ipv6-default-file],
-       AS_HELP_STRING([--with-geoip-ipv6-default-file=file],
-               [Use a default GeoIP IPv6 database file when ipv6calc is invoked with '--db-geoip-ipv6-default|-G']),
-       [AC_DEFINE_UNQUOTED(GEOIP_DEFAULT_FILE_IPV6, "$withval", Define for a default GeoIP IPv6 database file.)])
+AC_ARG_WITH([geoip-dyn-lib],
+	AS_HELP_STRING([--with-geoip-dyn-lib=NAME],
+		[Use specified GeoIP dynamic library, default: libGeoIP.so.1]),
+	[
+		geoip_dyn_lib="$withval"
+	],
+	[
+		geoip_dyn_lib=$geoip_dyn_lib_default
+	])
 
 AC_ARG_WITH([geoip-ipv6-compat],
-       AS_HELP_STRING([--with-geoip-ipv6-compat],
+	AS_HELP_STRING([--with-geoip-ipv6-compat],
 		[Use IPv6 interface of GeoIP in compatibility mode (supporting 1.4.5)]),
-    [if test "$withval" != "no"; then 
-        GEOIP_COMPAT="yes",
-     fi], [ GEOIP_COMPAT="no" ])
+	[
+		if test "$withval" != "no"; then 
+			GEOIP_COMPAT="yes",
+		fi
+	],[
+		GEOIP_COMPAT="no"
+	])
 
 # Automagic enable GeoIP if dynamic load is available (TODO: enable later by default??)
 #if test "$DYNAMIC_LOAD" = "yes"; then
@@ -296,104 +357,118 @@ AC_ARG_WITH([geoip-ipv6-compat],
 #fi
 
 if test "$GEOIP" = "yes"; then
-    CPPFLAGS="$CFLAGS $GEOIP_INCLUDE"
+	CPPFLAGS="$CFLAGS $GEOIP_INCLUDE"
 	AC_MSG_RESULT([*** GeoIP support requested])
 
-    AC_CHECK_HEADER(GeoIP.h,,
-        [AC_MSG_ERROR([GeoIP library header files not found])]
-    )
+	AC_CHECK_HEADER(GeoIP.h,,
+	[
+		AC_MSG_ERROR([GeoIP library header files not found])
+	])
 
-    if test "$GEOIP_DYN" != "yes"; then
-        if test "$GEOIP_STATIC" = "yes"; then
-	    AC_DEFINE(SUPPORT_GEOIP_STATIC, 1, Define if you want GeoIP support statically linked - requires also additional linker options.)
-	fi
+	AC_MSG_RESULT([*** GeoIP db: $geoip_db])
+	AC_DEFINE_UNQUOTED(GEOIP_DB, "$geoip_db", Define GeoIP database directory.)
 
-        GEOIP_LIB="-lGeoIP"
-        LDFLAGS="$LDFLAGS $GEOIP_LIB"
+	if test "$GEOIP_DYN" != "yes"; then
+		if test "$GEOIP_STATIC" = "yes"; then
+			AC_DEFINE(SUPPORT_GEOIP_STATIC, 1, Define if you want GeoIP support statically linked - requires also additional linker options.)
+		fi
 
-	AC_CHECK_LIB(GeoIP, GeoIP_open,
-	    [
-		AC_DEFINE(SUPPORT_GEOIP, 1, Define if you want GeoIP support.)
-		AC_MSG_RESULT([*** GeoIP support enabled])
-	    ],
-	    [
-		AC_MSG_ERROR([GeoIP library header files were found but the library was not found])
-	    ])
-	AC_CHECK_LIB(GeoIP, GeoIP_country_code_by_ipnum_v6,
-	    [
-		    AC_DEFINE(SUPPORT_GEOIP_V6, 1, Define if you want GeoIP IPv6 support.)
-		AC_MSG_RESULT([*** GeoIP IPv6 support enabled])
-	    ],
-	    [
-		AC_MSG_WARN([GeoIP library header files were found but not supporting IPv6 (upgrade to GeoIP 1.4.5 or newer for enabling IPv6 support)])
-	    ])
+		GEOIP_LIB="-lGeoIP"
+		LDFLAGS="$LDFLAGS $GEOIP_LIB"
 
-	if test "$GEOIP_COMPAT" = "no"; then
-	    AC_CHECK_LIB(GeoIP, GeoIP_lib_version,
+		AC_CHECK_LIB(GeoIP, GeoIP_open,
 		[
-			AC_DEFINE(SUPPORT_GEOIP_LIB_VERSION, 1, Define if your GeoIP version supports GeoIP_lib_version.)
+			AC_DEFINE(SUPPORT_GEOIP, 1, Define if you want GeoIP support.)
+			AC_MSG_RESULT([*** GeoIP support enabled])
 		],
 		[
-		    AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_lib_version (upgrade to newer version for support).])
+			AC_MSG_ERROR([GeoIP library header files were found but the library was not found])
 		])
-	    AC_CHECK_LIB(GeoIP, GeoIP_country_code_by_addr_v6,
+
+		AC_CHECK_LIB(GeoIP, GeoIP_country_code_by_ipnum_v6,
 		[
-			AC_DEFINE(SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6, 1, Define if your GeoIP version supports GeoIP_country_code_by_addr_v6.)
+			AC_DEFINE(SUPPORT_GEOIP_V6, 1, Define if you want GeoIP IPv6 support.)
+			AC_MSG_RESULT([*** GeoIP IPv6 support enabled])
 		],
 		[
-		    AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_country_code_by_addr_v6 (will use workaround).])
+			AC_MSG_WARN([GeoIP library header files were found but not supporting IPv6 (upgrade to GeoIP 1.4.5 or newer for enabling IPv6 support)])
 		])
-	    AC_CHECK_LIB(GeoIP, GeoIP_country_name_by_addr_v6,
-		[
-			AC_DEFINE(SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6, 1, Define if your GeoIP version supports GeoIP_country_name_by_addr_v6.)
-		],
-		[
-		    AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_country_name_by_addr_v6 (will use workaround).])
-		])
+
+		if test "$GEOIP_COMPAT" = "no"; then
+			AC_CHECK_LIB(GeoIP, GeoIP_lib_version,
+			[
+				AC_DEFINE(SUPPORT_GEOIP_LIB_VERSION, 1, Define if your GeoIP version supports GeoIP_lib_version.)
+			],
+			[
+		    		AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_lib_version (upgrade to newer version for support).])
+			])
+
+			AC_CHECK_LIB(GeoIP, GeoIP_country_code_by_addr_v6,
+			[
+				AC_DEFINE(SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6, 1, Define if your GeoIP version supports GeoIP_country_code_by_addr_v6.)
+			],
+			[
+			    AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_country_code_by_addr_v6 (will use workaround).])
+			])
+
+			AC_CHECK_LIB(GeoIP, GeoIP_country_name_by_addr_v6,
+			[
+				AC_DEFINE(SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6, 1, Define if your GeoIP version supports GeoIP_country_name_by_addr_v6.)
+			],
+			[
+				AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_country_name_by_addr_v6 (will use workaround).])
+			])
+		else
+			AC_MSG_WARN([GeoIP IPv6 support compatibility mode enabled (supporting 1.4.5).])
+		fi
 	else
-	    AC_MSG_WARN([GeoIP IPv6 support compatibility mode enabled (supporting 1.4.5).])
+		# wrapper detects by itself the real support
+		AC_MSG_RESULT([*** GeoIP dyn lib: $geoip_dyn_lib])
+		AC_DEFINE_UNQUOTED(GEOIP_DYN_LIB, "$geoip_dyn_lib", Define GeoIP dynamic library.)
+
+		AC_MSG_RESULT([*** GeoIP support will be implemented by using dynamic load of library])
+		AC_DEFINE(SUPPORT_GEOIP, 1, Define if you want GeoIP support.)
+		AC_DEFINE(SUPPORT_GEOIP_V6, 1, Define if you want GeoIP IPv6 support.)
+		AC_DEFINE(SUPPORT_GEOIP_DYN, 1, Define if you want GeoIP support with dynamic loading support - requires also additional linker options.)
 	fi
-    else
-	# wrapper detects by itself the real support
-	AC_MSG_RESULT([*** GeoIP support will be implemented by using dynamic load of library])
-	AC_DEFINE(SUPPORT_GEOIP, 1, Define if you want GeoIP support.)
-	AC_DEFINE(SUPPORT_GEOIP_V6, 1, Define if you want GeoIP IPv6 support.)
-	AC_DEFINE(SUPPORT_GEOIP_DYN, 1, Define if you want GeoIP support with dynamic loading support - requires also additional linker options.)
-    fi
 fi
 
 AC_SUBST(GEOIP_INCLUDE)
 AC_SUBST(GEOIP_LIB)
+AC_SUBST(GEOIP_DB)
+AC_SUBST(GEOIP_DYN_LIB)
+
 
 dnl *************************************************
 dnl Dynamic load used?
 dnl *************************************************
 if test "$DYNAMIC_LOAD" = "yes"; then
-	if test "$GEOIP_DYN" = "yes"; then
+	if test "$GEOIP_DYN" = "yes" -o "$IP2LOCATION_DYN" = "yes"; then
        		DYNAMIC_LOAD="yes"
-		AC_MSG_RESULT([*** Dynamic loading of libraries is enabled])
+		AC_MSG_RESULT([*** Dynamic loading of libraries is ENABLED])
 		DYNLOAD_LIB="-rdynamic -ldl"
 	fi
 fi
 
 AC_SUBST(DYNLOAD_LIB)
 
+
 dnl *************************************************
-dnl Files to create
+dnl Files to create from <file>.in
 dnl *************************************************
-AC_OUTPUT([Makefile
-	md5/Makefile
-	tools/Makefile
-	getopt/Makefile
-	ipv6calc/Makefile
-	lib/Makefile
-	man/Makefile
-	databases/lib/Makefile
-	ipv6logconv/Makefile
-	ipv6loganon/Makefile
-	ipv6logstats/Makefile
-	contrib/ipv6calc.spec
-	VERSION
-	ipv6calcweb/ipv6calcweb.cgi ])
-		
-# vim:set sw=4:set ts=4:
+AC_OUTPUT([
+		Makefile
+		md5/Makefile
+		tools/Makefile
+		getopt/Makefile
+		ipv6calc/Makefile
+		lib/Makefile
+		man/Makefile
+		databases/lib/Makefile
+		ipv6logconv/Makefile
+		ipv6loganon/Makefile
+		ipv6logstats/Makefile
+		contrib/ipv6calc.spec
+		VERSION
+		ipv6calcweb/ipv6calcweb.cgi
+	])

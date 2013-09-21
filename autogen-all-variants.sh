@@ -2,19 +2,20 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.7 2013/09/10 20:25:50 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.8 2013/09/21 17:25:56 ds6peter Exp $
 # Copyright  : 2011-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
 
 autgen_variants() {
 	cat <<END
--i -d
--g -d
--g --geoip-dyn -d
--g -d --geoip-ipv6-compat
--g -d --geoip-ipv6-compat --geoip-dyn
--a -d
+-i
+-i --ip2location-dyn
+-g
+-g --geoip-dyn
+-g --geoip-ipv6-compat
+-g --geoip-ipv6-compat --geoip-dyn
+-a
 --disable-db-ieee
 --disable-db-ipv4
 --disable-db-ipv6
@@ -26,7 +27,7 @@ END
 }
 
 # basic defaults
-./autogen.sh
+nice -n 10 ./autogen.sh
 if [ $? -ne 0 ]; then
 	echo "ERROR : 'autogen.sh' reports an error"
 	exit 1
@@ -34,7 +35,7 @@ fi
 
 # variants
 autgen_variants | while read buildoptions; do
-	./autogen.sh $buildoptions
+	nice -n 10 ./autogen.sh $buildoptions
 	if [ $? -ne 0 ]; then
 		echo "ERROR : 'autogen.sh $buildoptions' reports an error"
 		exit 1

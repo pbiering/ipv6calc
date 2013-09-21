@@ -2,15 +2,12 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.19 2013/09/20 18:54:44 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.20 2013/09/21 17:25:56 ds6peter Exp $
 # Copyright  : 2003-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
 
 OPTIONS_CONFIGURE=""
-
-#DB_GEOIP="--with-geoip-ipv4-default-file=/var/local/share/GeoIP/GeoIP.dat --with-geoip-ipv6-default-file=/var/local/share/GeoIP/GeoIPv6.dat"
-#DB_IP2LOCATION="--with-ip2location-ipv4-default-file=/var/local/share/IP2Location/IP-COUNTRY-SAMPLE.BIN --with-ip2location-ipv6-default-file=/var/local/share/IP2Location/IPV6-COUNTRY.BIN"
 
 LAST=""
 while [ "$1" != "$LAST" ]; do
@@ -40,11 +37,6 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --with-ip2location-dynamic"
 		;;
-	    '--db'|'-d')
-		shift
-		# default database locations
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $DB_GEOIP $DB_IP2LOCATION"
-		;;
 	    '--disable-db-ieee')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --disable-db-ieee"
@@ -70,7 +62,6 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --geoip-dyn        : switch to dynamic library loading of GeoIP"
 		echo "   -i|--ip2location   : enable IP2Location support"
 		echo "   --ip2location-dyn  : switch to dynamic library loading of IP2Location"
-		echo "   -d|--db            : enable default GeoIP and IP2Location database locations"
 		echo "   --disable-db-ieee  : disable builtin IEEE database"
 		echo "   --disable-db-ipv4  : disable builtin IPv4 database"
 		echo "   --disable-db-ipv6  : disable builtin IPv6 database"

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.1 2013/09/20 19:36:29 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.2 2013/09/21 17:25:56 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -26,7 +26,7 @@
 
 #include "libipv6calc_db_wrapper_IP2Location.h"
 
-char ip2location_db_dir[NI_MAXHOST] = IPV6CALC_DB_IP2LOCATION_CUSTOM_DIR;
+char ip2location_db_dir[NI_MAXHOST] = IP2LOCATION_DB;
 
 /* 
  * API_VERSION is defined as a bareword in IP2Location.h, 
@@ -39,11 +39,11 @@ char ip2location_db_dir[NI_MAXHOST] = IPV6CALC_DB_IP2LOCATION_CUSTOM_DIR;
 uint32_t wrapper_features_IP2Location = 0;
 
 #ifdef SUPPORT_IP2LOCATION_DYN
-char ip2location_lib_file[NI_MAXHOST] = IPV6CALC_DB_IP2LOCATION_LIB_NAME;
+char ip2location_lib_file[NI_MAXHOST] = IP2LOCATION_DYN_LIB;
 
 static const char* wrapper_ip2location_info = "dyn-load";
 static int wrapper_ip2location_ipv6_support = IP2LOCATION_IPV6_SUPPORT_UNKNOWN;
-static int wrapper_ip2location_support      = IP2LOCATION_SUPPORT_UNKNOWN;
+// static int wrapper_ip2location_support      = IP2LOCATION_SUPPORT_UNKNOWN; currently not used
 
 /* define status and dynamic load functions */
 static int dl_status_IP2Location_open = IPV6CALC_DL_STATUS_UNKNOWN;
@@ -268,7 +268,7 @@ const char * libipv6calc_db_wrapper_IP2Location_lib_version(void) {
 	};
 
 #ifdef SUPPORT_IP2LOCATION_DYN
-	char *result_IP2Location_lib_version = "unknown";
+	char *result_IP2Location_lib_version = "unsupported";
 
 	return(result_IP2Location_lib_version);
 #else

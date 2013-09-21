@@ -26,3 +26,15 @@ Major Changes/Enhancements of ipv6calc
 	db-geoip-default
 	db-geoip-ipv4-default
 	db-geoip-ipv6-default
+
+- add configure options
+	--with-ip2location-db <dir>
+	--with-geoip-db <dir>
+	--with-ip2location-dyn-lib <name>
+	--with-geoip-dyn-lib <name>
+
+- remove configure options
+	--with-ip2location-ipv4-default-file=file
+	--with-ip2location-ipv6-default-file=file
+	--with-geoip-ipv4-default-file=file
+	--with-geoip-ipv6-default-file=file
