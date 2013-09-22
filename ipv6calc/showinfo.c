@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.82 2013/09/20 18:54:44 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.83 2013/09/22 17:41:19 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -647,8 +647,10 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	if ((typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
 		as_num32 = ipv4addr_anonymized_get_as_num32(ipv4addrp);
 	} else {
-		as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(tempipv4string, 4);
-		as_text = libipv6calc_db_wrapper_as_text_by_addr(tempipv4string, 4);
+		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS) == 1) {
+			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(tempipv4string, 4);
+			as_text = libipv6calc_db_wrapper_as_text_by_addr(tempipv4string, 4);
+		};
 	};
 
 	if (as_num32 != ASNUM_AS_UNKNOWN) {
