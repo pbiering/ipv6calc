@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.66 2013/09/22 16:51:50 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.67 2013/09/22 17:31:02 ds6peter Exp $
 dnl Copyright: 2001-2013 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -419,6 +419,14 @@ if test "$GEOIP" = "yes"; then
 			],
 			[
 				AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_country_name_by_addr_v6 (will use workaround).])
+			])
+
+			AC_CHECK_LIB(GeoIP, GeoIP_cleanup,
+			[
+				AC_DEFINE(SUPPORT_GEOIP_CLEANUP, 1, Define if your GeoIP version supports GeoIP_cleanup.)
+			],
+			[
+				AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_cleanup (will use workaround).])
 			])
 		else
 			AC_MSG_WARN([GeoIP IPv6 support compatibility mode enabled (supporting 1.4.5).])
