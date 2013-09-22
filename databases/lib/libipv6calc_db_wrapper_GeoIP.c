@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.24 2013/09/22 19:22:15 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.25 2013/09/22 19:33:31 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -480,7 +480,7 @@ int libipv6calc_db_wrapper_GeoIP_cleanup(void) {
 
 		if ((error = dlerror()) != NULL)  {
 			dl_status_GeoIP_cleanup = IPV6CALC_DL_STATUS_ERROR;
-			fprintf(stderr, "%s\n", error);
+			// fprintf(stderr, "%s\n", error); // >= 1.4.8
 			goto END_libipv6calc_db_wrapper;
 		};
 
@@ -1756,7 +1756,7 @@ static void libipv6calc_db_wrapper_dl_load_GeoIP_country_name_by_addr_v6 (void) 
 
 		if ((error = dlerror()) != NULL)  {
 			dl_status_GeoIP_country_name_by_addr_v6 = IPV6CALC_DL_STATUS_ERROR;
-			fprintf(stderr, "%s\n", error);
+			// fprintf(stderr, "%s\n", error); // >= 1.4.8
 			goto END_libipv6calc_db_wrapper_dl_load;
 		};
 
@@ -1802,7 +1802,7 @@ static void libipv6calc_db_wrapper_dl_load_GeoIP_lib_version (void) {
 
 		if ((error = dlerror()) != NULL)  {
 			dl_status_GeoIP_lib_version = IPV6CALC_DL_STATUS_ERROR;
-			fprintf(stderr, "%s\n", error);
+			// fprintf(stderr, "%s\n", error); // >= 1.4.8
 			goto END_libipv6calc_db_wrapper_dl_load;
 		};
 
