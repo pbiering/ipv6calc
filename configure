@@ -4159,6 +4159,10 @@ if test "${with_ip2location_dynamic+set}" = set; then :
         		IP2LOCATION_DYN="$enableval"
 		fi
 
+else
+
+		true
+
 fi
 
 
@@ -4403,6 +4407,10 @@ if test "${with_geoip_dynamic+set}" = set; then :
 		if test "$enableval" != "no"; then
         		GEOIP_DYN="$enableval"
 		fi
+
+else
+
+		true
 
 fi
 

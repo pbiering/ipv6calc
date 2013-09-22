@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.12 2013/09/20 18:54:44 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.h,v 1.13 2013/09/22 16:59:06 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -66,7 +66,6 @@ typedef struct {
 	const char *token;
 } stat_entries;
 
-#pragma GCC diagnostic ignored "-Wunused-variable"
 static stat_entries ipv6logstats_statentries[] = {
 	{ STATS_ALL		, 0, "ALL" },
 	{ STATS_IPV4		, 0, "IPv4" },

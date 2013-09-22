@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.34 2013/09/20 18:54:44 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.35 2013/09/22 16:59:06 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -305,10 +305,8 @@ static void lineparser(void) {
 	int registry;
 	uint32_t typeinfo;
 
-	const char *country_code;
-	int country_code_index_1, country_code_index_2, index;
+	int index;
 	char country_code_char_1, country_code_char_2;
-	char *asnum;
 	uint16_t cc_index;
 	uint32_t as_num32;
 	long unsigned int c_all, c_ipv4, c_ipv6;

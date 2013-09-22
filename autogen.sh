@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.20 2013/09/21 17:25:56 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.21 2013/09/22 16:59:06 ds6peter Exp $
 # Copyright  : 2003-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -53,9 +53,14 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --with-geoip-ipv6-compat"
 		;;
+	    '-W')
+		shift
+		EXTRA_CFLAGS="-Werror"
+		;;
 	    '-?'|'-h'|'--help')
 		echo "Supported options:"
 		echo "   -?|-h|--help       : this help"
+		echo "   -W                 : use extra CFLAGS=-Werror"
 		echo "   -n|--no-make       : stop before running 'make'"
 		echo "   -a|--all           : enable GeoIP and IP2Location support"
 		echo "   -g|--geoip         : enable GeoIP support"

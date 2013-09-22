@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.43 2013/09/13 05:55:53 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.44 2013/09/22 16:59:06 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -105,11 +105,6 @@ void ipv4addr_setoctet(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numoctet
 		exit(EXIT_FAILURE);
 	};
 	
-	if ( value > 0x0000000ff ) {
-		fprintf(stderr, "%s: given value '%x' is out of range!\n", DEBUG_function_name, value);
-		exit(EXIT_FAILURE);
-	}; 
-
 	ipv4addrp->in_addr.s_addr &= ~ (0xff << ((unsigned int) (3 - numoctet) << 3) );
 	ipv4addrp->in_addr.s_addr |= (value & 0xff) << ((unsigned int) (3 - numoctet) << 3);
 
@@ -136,11 +131,6 @@ void ipv4addr_setword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword, 
 		exit(EXIT_FAILURE);
 	};
 	
-	if ( value > 0x0000ffff ) {
-		fprintf(stderr, "%s: given value '%x' is out of range!\n", DEBUG_function_name, value);
-		exit(EXIT_FAILURE);
-	}; 
-
 	n = numword << 1;
 	v = (value & 0xff00) >> 8;
 
