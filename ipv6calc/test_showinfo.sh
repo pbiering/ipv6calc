@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.29 2013/09/20 06:17:52 ds6peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.30 2013/09/22 19:27:39 ds6peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -170,10 +170,19 @@ if ./ipv6calc -v 2>&1 | grep -qw GeoIP; then
 		fi
 	done || exit 1
 
-	testscenarios_showinfo_geoip | while read address output; do
+	testscenarios_showinfo_geoip | while read address output requirement; do
 		if echo "$output" | grep -q "^OUI="; then
 			if [ $ipv6calc_has_db_ieee -ne 1 ]; then
 				echo "Test: $address for $output SKIPPED (no DB_IEEE compiled in)"
+				continue
+			fi
+		fi
+
+		if [ -n "$requirement" ]; then
+			if ./ipv6calc -v | grep -q -w "$requirement"; then
+				true
+			else
+				echo "Test: $address for $output SKIPPED (no $requirement compiled in)"
 				continue
 			fi
 		fi
