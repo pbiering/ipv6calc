@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.20 2013/09/22 17:31:02 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.21 2013/09/22 17:35:46 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -402,13 +402,18 @@ void libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(const int level_verbose,
 			// GeoIP returned that database is available
 			gi = libipv6calc_db_wrapper_GeoIP_open_type(i, 0);
 			if (gi == NULL) {
-				if ((i == GEOIP_CITY_EDITION_REV0) || (i == GEOIP_LARGE_COUNTRY_EDITION))  {
-					// silently skip REV0 and LARGE, if not existing
-					continue;
-				};
+#ifdef GEOIP_CITY_EDITION_REV0
+				if (i == GEOIP_CITY_EDITION_REV0) { continue; };
+#endif
+
+#ifdef GEOIP_LARGE_COUNTRY_EDITION
+				if (i == GEOIP_LARGE_COUNTRY_EDITION) { continue; };
+#endif
+
 #ifdef GEOIP_CITY_EDITION_REV0_V6
 				if (i == GEOIP_CITY_EDITION_REV0_V6) { continue; };
 #endif
+
 #ifdef GEOIP_LARGE_COUNTRY_EDITION_V6
 				if (GEOIP_LARGE_COUNTRY_EDITION_V6) { continue; };
 #endif
@@ -513,7 +518,7 @@ END_libipv6calc_db_wrapper:
 #ifdef SUPPORT_GEOIP_CLEANUP
 	r = GeoIP_cleanup();
 #else
-	r = 0
+	r = 0;
 #endif
 #endif
 
@@ -1356,8 +1361,9 @@ END_libipv6calc_db_wrapper:
 
 /*
  * wrapper: GeoIP_country_code_by_addr_v6
+ * return: NULL: no result
  */
-const char *  libipv6calc_db_wrapper_GeoIP_country_code_by_addr_v6 (GeoIP* gi, const char *addr) {
+const char *libipv6calc_db_wrapper_GeoIP_country_code_by_addr_v6 (GeoIP* gi, const char *addr) {
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Called: %s\n", __FILE__, __func__, wrapper_geoip_info);
 	};
@@ -1414,13 +1420,18 @@ const char *  libipv6calc_db_wrapper_GeoIP_country_code_by_addr_v6 (GeoIP* gi, c
 END_libipv6calc_db_wrapper:
 	return(result_GeoIP_country_code_by_addr_v6);
 #else
+#ifdef SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6
 	return(GeoIP_country_code_by_addr_v6(gi, addr));
+#else
+	return(NULL);
+#endif
 #endif
 };
 
 
 /*
  * wrapper: GeoIP_country_name_by_addr_v6
+ * return: NULL: no result
  */
 const char *  libipv6calc_db_wrapper_GeoIP_country_name_by_addr_v6 (GeoIP* gi, const char *addr) {
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
@@ -1447,7 +1458,11 @@ const char *  libipv6calc_db_wrapper_GeoIP_country_name_by_addr_v6 (GeoIP* gi, c
 END_libipv6calc_db_wrapper:
 	return(result_GeoIP_country_name_by_addr_v6);
 #else
+#ifdef SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6
 	return(GeoIP_country_name_by_addr_v6(gi, addr));
+#else
+	return(NULL);
+#endif
 #endif
 };
 
