@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.14 2013/09/20 06:17:52 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.15 2013/09/22 19:04:43 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -33,7 +33,7 @@ static const s_type ipv6calc_db_features[] = {
 	{ IPV6CALC_DB_AS_TO_REGISTRY	, "DB_AS"	},
 	{ IPV6CALC_DB_IPV4_TO_REGISTRY	, "DB_IPV4"	},
 	{ IPV6CALC_DB_IPV6_TO_REGISTRY	, "DB_IPV6"	},
-	{ IPV6CALC_DB_IPV4_TO_AS	, "DB_IPV4:AS"	},
+	{ IPV6CALC_DB_IPV4_TO_AS	, "DB_IPV4_AS"	},
 	{ IPV6CALC_DB_IPV6_TO_AS	, "DB_IPV6_AS"	},
 	{ IPV6CALC_DB_IPV4_TO_CC	, "DB_IPV4_CC"	},
 	{ IPV6CALC_DB_IPV6_TO_CC	, "DB_IPV6_CC"	},

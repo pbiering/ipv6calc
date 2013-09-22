@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.35 2013/09/22 16:59:06 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.36 2013/09/22 19:04:43 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -624,7 +624,7 @@ static void lineparser(void) {
 			printf("%-20s %s\n", "*Token", opt_token);
 		};
 
-		for (i = 0; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
+		for (i = 0; i < MAXENTRIES_ARRAY(ipv6logstats_statentries); i++) {
 			printf("%-20s %lu\n", ipv6logstats_statentries[i].token, ipv6logstats_statentries[i].counter);
 		};
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.83 2013/09/22 17:41:19 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.84 2013/09/22 19:04:43 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1374,7 +1374,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 						if ((typeinfo & IPV6_NEW_ADDR_6TO4_MICROSOFT) != 0) {
 							printout("EUI64_SCOPE=local-6to4-microsoft");
 						} else if ((typeinfo & IPV6_NEW_ADDR_IID_RANDOM) != 0) {
-							printout("EUI64_SCOPE=local-privacy");
+							printout("EUI64_SCOPE=local-random");
 						} else {
 							printout("EUI64_SCOPE=local");
 						};

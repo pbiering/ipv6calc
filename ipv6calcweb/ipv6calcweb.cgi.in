@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.55 2013/09/03 20:41:11 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.56 2013/09/22 19:04:43 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -819,7 +819,7 @@ sub print_infohash ($$;$) {
 		if (defined $colormode) {
 			# set color
 
-			if ($key eq "EUI64_SCOPE" && $$phash{$key} eq "local-privacy") {
+			if ($key eq "EUI64_SCOPE" && $$phash{$key} eq "local-random") {
 				$color = "lime";
 			} elsif ($key eq "EUI64_SCOPE" && $$phash{$key} eq "local") {
 				$color = "cyan";
@@ -829,7 +829,7 @@ sub print_infohash ($$;$) {
 				};
 			} elsif ($key eq "IID" && defined $$phash{"EUI64_SCOPE"} && $$phash{"EUI64_SCOPE"} eq "local") {
 				$color = "cyan";
-			} elsif ($key eq "IID" && defined $$phash{"EUI64_SCOPE"} && $$phash{"EUI64_SCOPE"} eq "local-privacy") {
+			} elsif ($key eq "IID" && defined $$phash{"EUI64_SCOPE"} && $$phash{"EUI64_SCOPE"} eq "local-random") {
 				$color = "lime";
 			} elsif ($key eq "EUI64" && defined $$phash{"OUI"}) {
 				$color = "yellow";

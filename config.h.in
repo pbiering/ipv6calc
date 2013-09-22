@@ -84,6 +84,9 @@
 /* Define if you want GeoIP support. */
 #undef SUPPORT_GEOIP
 
+/* Define if your GeoIP version supports GeoIP_cleanup. */
+#undef SUPPORT_GEOIP_CLEANUP
+
 /* Define if your GeoIP version supports GeoIP_country_code_by_addr_v6. */
 #undef SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6
 

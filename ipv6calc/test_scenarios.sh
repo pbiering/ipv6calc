@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.27 2013/09/20 18:54:44 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.28 2013/09/22 19:04:43 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -334,7 +334,7 @@ testscenarios_showinfo_geoip() {
 	cat <<END | grep -v '^#'
 # non-anonymized IPv4 address
 46.244.223.233				GEOIP_COUNTRY_SHORT=DE
-46.244.223.233				IPV4_AS_NUM=8767
+46.244.223.233				IPV4_AS_NUM=8767		
 46.244.223.233				IPV4_REGISTRY=RIPENCC
 # non-anonymized IPv6 prefix
 2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=DE
