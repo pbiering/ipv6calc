@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.65 2013/09/21 17:25:56 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.66 2013/09/22 16:51:50 ds6peter Exp $
 dnl Copyright: 2001-2013 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -183,6 +183,7 @@ AC_ARG_WITH([ip2location-dynamic],
         		IP2LOCATION_DYN="$enableval"
 		fi
 	],[
+		true
 	])
 
 dnl defaults for database directories
@@ -307,6 +308,7 @@ AC_ARG_WITH([geoip-dynamic],
         		GEOIP_DYN="$enableval"
 		fi
 	],[
+		true
 	])
 
 AC_ARG_WITH([geoip-db],
