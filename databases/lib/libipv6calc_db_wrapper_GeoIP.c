@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.22 2013/09/22 19:04:43 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.23 2013/09/22 19:20:10 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -1688,7 +1688,7 @@ END_libipv6calc_db_wrapper:
  *  avoiding duplicate code
  ********************************************************/
 #ifdef SUPPORT_GEOIP_DYN
-static void libipv6calc_db_wrapper_dl_load_GeoIP_country_code_by_ipnum_v6 (void) {
+static void libipv6calc_db_wrapper_dl_load_GeoIP_country_code_by_ipnum_v6(void) {
 	const char *dl_symbol = "GeoIP_country_code_by_ipnum_v6";
 	char *error;
 
@@ -1884,7 +1884,15 @@ const char * libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr (const ch
 	if (proto == 4) {
 		GeoIP_result_ptr = libipv6calc_db_wrapper_GeoIP_country_code_by_addr(gi, addr);
 	} else if (proto == 6) {
+#ifdef SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6
 		GeoIP_result_ptr = libipv6calc_db_wrapper_GeoIP_country_code_by_addr_v6(gi, addr);
+#else
+		/* backward compatibility */
+		ipv6calc_ipv6addr ipv6addr;
+		char tempstring[NI_MAXHOST] = "";
+		result = addr_to_ipv6addrstruct(addr, tempstring, &ipv6addr);
+		GeoIP_result_ptr = libipv6calc_db_wrapper_GeoIP_country_code_by_ipnum_v6(gi, ipv6addr.in6_addr);
+#endif
 	};
 
 	if (GeoIP_result_ptr == NULL) {
