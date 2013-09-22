@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.18 2013/09/20 06:17:52 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.19 2013/09/22 19:20:10 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -350,9 +350,7 @@ char *libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int pr
 
 	if (wrapper_GeoIP_status == 1) {
 #ifdef SUPPORT_GEOIP
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-			fprintf(stderr, "%s/%s: Call now GeoIP\n", __FILE__, __func__);
-		};
+		DEBUGPRINT(DEBUG_libipv6addr_db_wrapper, "%s/%s: Call now GeoIP\n", __FILE__, __func__);
 
 		result_char_ptr = (char *) libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(addr, proto);
 #endif
