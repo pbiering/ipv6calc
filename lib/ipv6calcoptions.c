@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.1 2013/09/20 19:41:35 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.2 2013/09/26 20:20:24 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -155,14 +155,17 @@ void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct 
 	DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Add custom short options: %s\n", __FILE__, __func__, shortopts_custom);
 
 	/* check for duplicates */
-	for (j = 0; j < strlen(shortopts_p); j++) {
-		for (k = 0; k < strlen(shortopts_custom); k++) {
-			if (shortopts_custom[k] == ':') {
-				continue;
-			};
-			if (shortopts_p[j] == shortopts_custom[k]) {
-				fprintf(stderr, "FATAL error, can't add ipv6calc_options_common short options - DUPLICATE CHAR FOUND: %c\n", shortopts_p[j]);
-				exit(2);
+	if (strlen(shortopts_p) > 0) {
+		DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Already given short options: %s\n", __FILE__, __func__, shortopts_p);
+		for (j = 0; j < strlen(shortopts_p); j++) {
+			for (k = 0; k < strlen(shortopts_custom); k++) {
+				if (shortopts_custom[k] == ':') {
+					continue;
+				};
+				if (shortopts_p[j] == shortopts_custom[k]) {
+					fprintf(stderr, "FATAL error, can't add ipv6calc_options_common short options - DUPLICATE CHAR FOUND: %c\n", shortopts_p[j]);
+					exit(2);
+				};
 			};
 		};
 	};
