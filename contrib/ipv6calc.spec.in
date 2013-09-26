@@ -154,7 +154,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Fri Sep 12 2012 Peter Bieringer <pb@bieringer.de>
+* Wed Sep 12 2012 Peter Bieringer <pb@bieringer.de>
 - change requirements for ip2location to Mandrake Linux compatible names
 - change location of "ipv6calc" from bin to %{_bindir}
 - install tools/GeoIP-update.sh tools/IP2Location-update.sh to doc dir
@@ -188,7 +188,7 @@ rm -rf $RPM_BUILD_ROOT
 * Sat Oct 30 2004 Peter Bieringer <pb@bieringer.de>
 - remove openssl(-devel) from requirements, no longer needed
 
-* Fri Nov 22 2003 Peter Bieringer <pb@bieringer.de>
+* Sat Nov 22 2003 Peter Bieringer <pb@bieringer.de>
 - adjustments
 
 * Fri Nov 21 2003 Peter Bieringer <pb@bieringer.de>
@@ -196,7 +196,7 @@ rm -rf $RPM_BUILD_ROOT
 - add man pages
 - add configure options
 
-* Tue Nov 11 2002 Peter Bieringer <pb@bieringer.de>
+* Mon Nov 11 2002 Peter Bieringer <pb@bieringer.de>
 - change IPv6 address in %description
 
 * Sat Apr 20 2002 Peter Bieringer <pb@bieringer.de>
@@ -205,16 +205,16 @@ rm -rf $RPM_BUILD_ROOT
 * Mon Apr 07 2002 Peter Bieringer <pb@bieringer.de>
 - add more analog example files
 
-* Mon Apr 05 2002 Peter Bieringer <pb@bieringer.de>
+* Sun Apr 05 2002 Peter Bieringer <pb@bieringer.de>
 - remove BuildRequires extension, not needed for normal build
 
-* Mon Mar 24 2002 Peter Bieringer <pb@bieringer.de>
+* Sun Mar 24 2002 Peter Bieringer <pb@bieringer.de>
 - extend BuildRequires for perl /usr/bin/aggregate wget
 
 * Mon Mar 18 2002 Peter Bieringer <pb@bieringer.de>
 - add ipv6calcweb.cgi
 
-* Mon Mar 16 2002 Peter Bieringer <pb@bieringer.de>
+* Sat Mar 16 2002 Peter Bieringer <pb@bieringer.de>
 - add ipv6logconv, analog examples
 
 * Mon Mar 11 2002 Peter Bieringer <pb@bieringer.de>
