@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.89 2013/09/20 18:54:44 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.90 2013/09/26 20:26:07 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -183,7 +183,7 @@ int main(int argc, char *argv[]) {
 
 	/* options */
 	struct option longopts[MAXLONGOPTIONS];
-	char   shortopts[NI_MAXHOST];
+	char   shortopts[NI_MAXHOST] = "";
 	int    longopts_maxentries = 0;
 
 	/* initialize debug value from environment for bootstrap debugging */

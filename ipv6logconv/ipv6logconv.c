@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.23 2013/09/20 18:54:44 ds6peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.24 2013/09/26 20:26:07 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -82,7 +82,7 @@ int main(int argc,char *argv[]) {
 
 	/* options */
 	struct option longopts[MAXLONGOPTIONS];
-	char   shortopts[NI_MAXHOST];
+	char   shortopts[NI_MAXHOST] = "";
 	int    longopts_maxentries = 0;
 
 	/* check for UID */

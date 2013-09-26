@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.20 2013/09/20 06:17:52 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.21 2013/09/26 20:26:07 ds6peter Exp $
  * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -93,7 +93,7 @@ int main(int argc,char *argv[]) {
 
 	/* options */
 	struct option longopts[MAXLONGOPTIONS];
-	char   shortopts[NI_MAXHOST];
+	char   shortopts[NI_MAXHOST] = "";
 	int    longopts_maxentries = 0;
 
 
