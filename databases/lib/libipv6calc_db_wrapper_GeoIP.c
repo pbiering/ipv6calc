@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.28 2013/09/26 19:38:19 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.29 2013/09/26 19:54:24 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -205,7 +205,6 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	DEBUGPRINT(DEBUG_libipv6addr_db_wrapper, "%s/%s: Call libipv6calc_db_wrapper_GeoIP_setup_custom_directory\n", __FILE__, __func__);
 
 	libipv6calc_db_wrapper_GeoIP_setup_custom_directory(geoip_db_dir);
-
 
 #ifdef SUPPORT_GEOIP_DYN
 	int r = libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_COUNTRY_EDITION); // dummy call to trigger _GeoIP_setup_dbfilename
@@ -611,12 +610,17 @@ void libipv6calc_db_wrapper_GeoIP_setup_custom_directory(char *dir) {
 		goto END_libipv6calc_db_wrapper;
 	};
 
+	libipv6calc_db_wrapper_GeoIPDBFileName_ptr = dl_GeoIPDBFileName_ptr;
+
 END_libipv6calc_db_wrapper:
 #else
 	libipv6calc_db_wrapper_GeoIP_cleanup(); // free old stuff
 
 	GeoIP_setup_custom_directory(dir);
+
+	libipv6calc_db_wrapper_GeoIPDBFileName_ptr = &GeoIPDBFileName;
 #endif
+
 	DEBUGPRINT(DEBUG_libipv6addr_db_wrapper, "%s/%s: Call libipv6calc_db_wrapper_GeoIP_db_avail (to trigger _GeoIP_setup_dbfilename) for db type: %d\n", __FILE__, __func__, GEOIP_COUNTRY_EDITION);
 
 	r = libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_COUNTRY_EDITION); // dummy call to trigger _GeoIP_setup_dbfilename
@@ -636,9 +640,7 @@ END_libipv6calc_db_wrapper:
 		};
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Finished: %s with dir: %s\n", __FILE__, __func__, wrapper_geoip_info, dir);
-	};
+	DEBUGPRINT(DEBUG_libipv6addr_db_wrapper, "%s/%s: Finished: %s with dir: %s\n", __FILE__, __func__, wrapper_geoip_info, dir);
 	return;
 };
 
