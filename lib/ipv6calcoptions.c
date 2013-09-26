@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.2 2013/09/26 20:20:24 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.3 2013/09/26 20:22:28 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -168,6 +168,8 @@ void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct 
 				};
 			};
 		};
+	} else {
+		DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Already given short options: (empty)\n", __FILE__, __func__);
 	};
 
 	snprintf(tempstring, sizeof(tempstring), "%s%s", shortopts_p, shortopts_custom);
