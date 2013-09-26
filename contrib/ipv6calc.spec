@@ -16,9 +16,13 @@ BuildRoot: %{_tmppath}/ipv6calc-root
 
 %define enable_geoip 0
 %define enable_ip2location 0
+%define enable_geoip_dyn 0
+%define enable_ip2location_dyn 0
 
 %{?_with_geoip: %{expand: %%define enable_geoip 1}}
 %{?_with_ip2location: %{expand: %%define enable_ip2location 1}}
+%{?_with_geoip_dyn: %{expand: %%define enable_geoip_dyn 1}}
+%{?_with_ip2location_dyn: %{expand: %%define enable_ip2location_dyn 1}}
 
 %if %{enable_geoip}
 BuildRequires: GeoIP-devel
@@ -43,10 +47,14 @@ Many more format conversions are supported, see given URL for more.
 
 Available rpmbuild rebuild options:
   --with ip2location
+  --with ip2location-dyn
   --with geoip
+  --with geoip-dyn
 
 %{?_with_geoip: %{expand: Built with GeoIP support}}
+%{?_with_geoip_dyn: %{expand: Built with GeoIP dynamic-library-load support}}
 %{?_with_ip2location: %{expand: Built with IP2Location suppport}}
+%{?_with_ip2location_dyn: %{expand: Built with IP2Location dynamic-library-load suppport}}
 
 
 %package ipv6calcweb
@@ -65,7 +73,7 @@ displaying information of IP addresses on a web page.
 
 
 %build
-./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?_with_ip2location:--enable-ip2location} %{?_with_geoip:--enable-geoip}
+./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?_with_ip2location:--enable-ip2location} %{?_with_geoip:--enable-geoip} %{?_with_ip2location_dyn:--with-ip2location-dynamic} %{?_with_geoip_dyn:--with-geoip-dynamic}
 make clean
 make
 make test-minimal
@@ -154,7 +162,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Fri Sep 12 2012 Peter Bieringer <pb@bieringer.de>
+* Thu Sep 26 2013 Peter Bieringer <pb@bieringer.de>
+- add support for --with geoip-dyn and --with ip2location-dyn
+
+* Wed Sep 12 2012 Peter Bieringer <pb@bieringer.de>
 - change requirements for ip2location to Mandrake Linux compatible names
 - change location of "ipv6calc" from bin to %{_bindir}
 - install tools/GeoIP-update.sh tools/IP2Location-update.sh to doc dir
@@ -188,7 +199,7 @@ rm -rf $RPM_BUILD_ROOT
 * Sat Oct 30 2004 Peter Bieringer <pb@bieringer.de>
 - remove openssl(-devel) from requirements, no longer needed
 
-* Fri Nov 22 2003 Peter Bieringer <pb@bieringer.de>
+* Sat Nov 22 2003 Peter Bieringer <pb@bieringer.de>
 - adjustments
 
 * Fri Nov 21 2003 Peter Bieringer <pb@bieringer.de>
@@ -196,7 +207,7 @@ rm -rf $RPM_BUILD_ROOT
 - add man pages
 - add configure options
 
-* Tue Nov 11 2002 Peter Bieringer <pb@bieringer.de>
+* Mon Nov 11 2002 Peter Bieringer <pb@bieringer.de>
 - change IPv6 address in %description
 
 * Sat Apr 20 2002 Peter Bieringer <pb@bieringer.de>
@@ -205,16 +216,16 @@ rm -rf $RPM_BUILD_ROOT
 * Mon Apr 07 2002 Peter Bieringer <pb@bieringer.de>
 - add more analog example files
 
-* Mon Apr 05 2002 Peter Bieringer <pb@bieringer.de>
+* Sun Apr 05 2002 Peter Bieringer <pb@bieringer.de>
 - remove BuildRequires extension, not needed for normal build
 
-* Mon Mar 24 2002 Peter Bieringer <pb@bieringer.de>
+* Sun Mar 24 2002 Peter Bieringer <pb@bieringer.de>
 - extend BuildRequires for perl /usr/bin/aggregate wget
 
 * Mon Mar 18 2002 Peter Bieringer <pb@bieringer.de>
 - add ipv6calcweb.cgi
 
-* Mon Mar 16 2002 Peter Bieringer <pb@bieringer.de>
+* Sat Mar 16 2002 Peter Bieringer <pb@bieringer.de>
 - add ipv6logconv, analog examples
 
 * Mon Mar 11 2002 Peter Bieringer <pb@bieringer.de>

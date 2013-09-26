@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.67 2013/09/22 17:31:02 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.68 2013/09/26 20:44:30 ds6peter Exp $
 dnl Copyright: 2001-2013 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -176,8 +176,8 @@ AC_ARG_WITH([ip2location-static],
 	])
 
 AC_ARG_WITH([ip2location-dynamic],
-	AS_HELP_STRING([--without-ip2location-dynamic],
-                   [Disable use of dynamic loading of IP2Location library (default=yes, if support is found)]),
+	AS_HELP_STRING([--with-ip2location-dynamic],
+                   [Enable use of dynamic loading of IP2Location library (default=no)]),
 	[
 		if test "$enableval" != "no"; then
         		IP2LOCATION_DYN="$enableval"
@@ -301,8 +301,8 @@ AC_ARG_WITH([geoip-static],
 	])
 
 AC_ARG_WITH([geoip-dynamic],
-	AS_HELP_STRING([--without-geoip-dynamic],
-                   [Disable use of dynamic loading of GeoIP library (default=yes, if support is found)]),
+	AS_HELP_STRING([--with-geoip-dynamic],
+                   [Enable use of dynamic loading of GeoIP library (default=no)]),
 	[
 		if test "$enableval" != "no"; then
         		GEOIP_DYN="$enableval"

@@ -1343,9 +1343,9 @@ Optional Packages:
                           IP2Location library location
   --with-ip2location-static
                           Explicitly link IP2Location statically (default=no)
-  --without-ip2location-dynamic
-                          Disable use of dynamic loading of IP2Location
-                          library (default=yes, if support is found)
+  --with-ip2location-dynamic
+                          Enable use of dynamic loading of IP2Location library
+                          (default=no)
   --with-ip2location-db=DIR
                           Use specified IP2Location database directory,
                           default: /usr/share/IP2Location
@@ -1356,8 +1356,8 @@ Optional Packages:
                           GeoIP include files location
   --with-geoip-lib=DIR    GeoIP library location
   --with-geoip-static     Explicitly link GeoIP statically (default=no)
-  --without-geoip-dynamic Disable use of dynamic loading of GeoIP library
-                          (default=yes, if support is found)
+  --with-geoip-dynamic    Enable use of dynamic loading of GeoIP library
+                          (default=no)
   --with-geoip-db=DIR     Use specified GeoIP database directory, default:
                           /usr/share/GeoIP
   --with-geoip-dyn-lib=NAME
