@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.27 2013/09/26 19:29:41 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.28 2013/09/26 19:38:19 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -209,9 +209,7 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 
 #ifdef SUPPORT_GEOIP_DYN
 	int r = libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_COUNTRY_EDITION); // dummy call to trigger _GeoIP_setup_dbfilename
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: result of dummy GeoIP_db_avail call: %d\n", __FILE__, __func__, r);
-	};
+	DEBUGPRINT(DEBUG_libipv6addr_db_wrapper, "%s/%s: result of dummy GeoIP_db_avail call: %d\n", __FILE__, __func__, r);
 
 	/* GeoIPDBFFileName */
 	DEBUGPRINT(DEBUG_libipv6addr_db_wrapper, "%s/%s: Call dlsym: %s\n", __FILE__, __func__, "GeoIPDBFileName");
@@ -650,9 +648,7 @@ END_libipv6calc_db_wrapper:
  * ret: 1=avail  0=not-avail
  */
 int libipv6calc_db_wrapper_GeoIP_db_avail(int type) {
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called: %s type=%d (desc: %s)\n", __FILE__, __func__, wrapper_geoip_info, type, libipv6calc_db_wrapper_GeoIPDBDescription[type]);
-	};
+	DEBUGPRINT(DEBUG_libipv6addr_db_wrapper, "%s/%s: Called: %s type=%d (desc: %s)\n", __FILE__, __func__, wrapper_geoip_info, type, libipv6calc_db_wrapper_GeoIPDBDescription[type]);
 
 #ifdef SUPPORT_GEOIP_DYN
 	int result_GeoIP_db_avail = 0;
@@ -729,6 +725,7 @@ int libipv6calc_db_wrapper_GeoIP_db_avail(int type) {
 END_libipv6calc_db_wrapper:
 	return(result_GeoIP_db_avail);
 #else
+	DEBUGPRINT(DEBUG_libipv6addr_db_wrapper, "%s/%s: Call: GeoIP_db_avail type=%d\n", __FILE__, __func__, type);
 	int r = GeoIP_db_avail(type);
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
@@ -1871,6 +1868,9 @@ const char * libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr (const ch
 		char tempstring[NI_MAXHOST] = "";
 		int result = 0;
 		result = addr_to_ipv6addrstruct(addr, tempstring, &ipv6addr);
+		if (result != 0) {
+			return(NULL);
+		};
 		GeoIP_result_ptr = libipv6calc_db_wrapper_GeoIP_country_code_by_ipnum_v6(gi, ipv6addr.in6_addr);
 #endif
 	};
