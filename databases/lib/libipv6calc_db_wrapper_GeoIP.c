@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.29 2013/09/26 19:54:24 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.30 2013/09/26 20:51:28 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -1837,10 +1837,10 @@ int libipv6calc_db_wrapper_GeoIP_has_features(uint32_t features) {
 };
 
 /* country_code */
-const char * libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr (const char *addr, const int proto) {
+const char *libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr (const char *addr, const int proto) {
 	GeoIP *gi;
 	int GeoIP_type = 0;
-	const char *GeoIP_result_ptr;
+	const char *GeoIP_result_ptr = NULL;
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Called with addr=%s proto=%d\n", __FILE__, __func__, addr, proto);
@@ -1891,10 +1891,10 @@ const char * libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr (const ch
 };
 
 /* asnum */
-char * libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr (const char *addr, const int proto) {
+char *libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr (const char *addr, const int proto) {
 	GeoIP *gi;
 	int GeoIP_type = 0;
-	char *GeoIP_result_ptr;
+	char *GeoIP_result_ptr = NULL;
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Called with addr=%s proto=%d\n", __FILE__, __func__, addr, proto);
