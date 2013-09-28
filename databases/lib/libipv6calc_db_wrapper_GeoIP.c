@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.30 2013/09/26 20:51:28 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.31 2013/09/28 13:04:58 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -378,6 +378,12 @@ void libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(const int level_verbose,
 	printf("%sGeoIP: features: 0x%08x\n", prefix, wrapper_features_GeoIP);
 
 #ifdef SUPPORT_GEOIP
+
+#ifdef SUPPORT_GEOIP_DYN
+	if (dl_GeoIP_handle == NULL) {
+		printf("%sGeoIP: info of available databases in directory: %s LIBRARY-NOT-LOADED\n", prefix, geoip_db_dir);
+	} else {
+#endif
 	printf("%sGeoIP: info of available databases in directory: %s\n", prefix, geoip_db_dir);
 	// TODO: replace hardcoded NUM_DB_TYPES by a function of GeoIP library
 	for (i = 0; i < NUM_DB_TYPES; i++) {
@@ -415,6 +421,10 @@ void libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(const int level_verbose,
 	if ((geoip_num_db_types == 0) && (level_verbose == LEVEL_VERBOSE2)) {
 		printf("%sGeoIP: other possible databases can't be displayed, number of entries can't be retrieved (missing support)\n", prefix);
 	};
+#ifdef SUPPORT_GEOIP_DYN
+	};
+#endif
+
 #else
 	snprintf(string, size, "%sNo GeoIP support built-in", prefix);
 #endif
@@ -509,24 +519,27 @@ END_libipv6calc_db_wrapper:
  * wrapper: GeoIP_lib_version
  */
 const char * libipv6calc_db_wrapper_GeoIP_lib_version(void) {
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called: %s\n", __FILE__, __func__, wrapper_geoip_info);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Called: %s", wrapper_geoip_info);
 
 #ifdef SUPPORT_GEOIP_DYN
 	char *result_GeoIP_lib_version = "unknown";
 	char *error;
-	libipv6calc_db_wrapper_dl_load_GeoIP_lib_version();
 
-	if (dl_status_GeoIP_lib_version != IPV6CALC_DL_STATUS_OK) {
-		goto END_libipv6calc_db_wrapper;
-	};
+        if (dl_GeoIP_handle == NULL) {
+                result_GeoIP_lib_version = "LIBARY-NOT-LOADED";
+	} else {
+		libipv6calc_db_wrapper_dl_load_GeoIP_lib_version();
 
-	result_GeoIP_lib_version = (*dl_GeoIP_lib_version)();
+		if (dl_status_GeoIP_lib_version != IPV6CALC_DL_STATUS_OK) {
+			goto END_libipv6calc_db_wrapper;
+		};
 
-	if ((error = dlerror()) != NULL)  {
-		fprintf(stderr, "%s\n", error);
-		goto END_libipv6calc_db_wrapper;
+		result_GeoIP_lib_version = (*dl_GeoIP_lib_version)();
+
+		if ((error = dlerror()) != NULL)  {
+			fprintf(stderr, "%s\n", error);
+			goto END_libipv6calc_db_wrapper;
+		};
 	};
 
 END_libipv6calc_db_wrapper:
