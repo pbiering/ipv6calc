@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.35 2013/09/28 19:00:21 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.36 2013/09/28 19:02:31 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -561,7 +561,7 @@ const char * libipv6calc_db_wrapper_GeoIP_lib_version(void) {
 	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Called: %s", wrapper_geoip_info);
 
 #ifdef SUPPORT_GEOIP_DYN
-	char *result_GeoIP_lib_version = "unsupported (< 1.4.7)";
+	char *result_GeoIP_lib_version = "unsupported(< 1.4.7)";
 	char *error;
 
         if (dl_GeoIP_handle == NULL) {
@@ -587,7 +587,7 @@ END_libipv6calc_db_wrapper:
 #ifdef SUPPORT_GEOIP_LIB_VERSION
 	return(GeoIP_lib_version());
 #else
-	return("unsupported (< 1.4.7)");
+	return("unsupported(< 1.4.7)");
 #endif
 #endif
 };
@@ -1831,7 +1831,7 @@ static void libipv6calc_db_wrapper_dl_load_GeoIP_lib_version (void) {
 
 		if ((error = dlerror()) != NULL)  {
 			dl_status_GeoIP_lib_version = IPV6CALC_DL_STATUS_ERROR;
-			fprintf(stderr, "%s\n", error);
+			// fprintf(stderr, "%s\n", error); // be quiet, optional feature (>= 1.4.7)
 			goto END_libipv6calc_db_wrapper_dl_load;
 		};
 
