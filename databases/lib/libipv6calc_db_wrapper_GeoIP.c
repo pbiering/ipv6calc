@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.34 2013/09/28 18:56:03 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.35 2013/09/28 19:00:21 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -561,7 +561,7 @@ const char * libipv6calc_db_wrapper_GeoIP_lib_version(void) {
 	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Called: %s", wrapper_geoip_info);
 
 #ifdef SUPPORT_GEOIP_DYN
-	char *result_GeoIP_lib_version = "unknown";
+	char *result_GeoIP_lib_version = "unsupported (< 1.4.7)";
 	char *error;
 
         if (dl_GeoIP_handle == NULL) {
@@ -587,7 +587,7 @@ END_libipv6calc_db_wrapper:
 #ifdef SUPPORT_GEOIP_LIB_VERSION
 	return(GeoIP_lib_version());
 #else
-	return("unknown");
+	return("unsupported (< 1.4.7)");
 #endif
 #endif
 };
@@ -985,7 +985,7 @@ unsigned char libipv6calc_db_wrapper_GeoIP_database_edition (GeoIP* gi) {
 END_libipv6calc_db_wrapper:
 	return(result_GeoIP_database_edition);
 #else
-	return(GeoIP_database_edition.func(gi));
+	return(GeoIP_database_edition(gi));
 #endif
 };
 
