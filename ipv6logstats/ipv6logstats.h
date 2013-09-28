@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.13 2013/09/22 16:59:06 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.h,v 1.14 2013/09/28 17:24:37 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -65,42 +65,3 @@ typedef struct {
 	long unsigned int counter;
 	const char *token;
 } stat_entries;
-
-static stat_entries ipv6logstats_statentries[] = {
-	{ STATS_ALL		, 0, "ALL" },
-	{ STATS_IPV4		, 0, "IPv4" },
-	{ STATS_IPV6		, 0, "IPv6" },
-	{ STATS_UNKNOWN		, 0, "UNKNOWN" },
-	{ STATS_IPV4_APNIC	, 0, "IPv4/APNIC" },
-	{ STATS_IPV4_ARIN	, 0, "IPv4/ARIN" },
-	{ STATS_IPV4_RIPE	, 0, "IPv4/RIPE" },
-	{ STATS_IPV4_LACNIC	, 0, "IPv4/LACNIC" },
-	{ STATS_IPV4_UNKNOWN	, 0, "IPv4/UNKNOWN" },
-	{ STATS_IPV6_6BONE	, 0, "IPv6/6bone" },
-	{ STATS_IPV6_IANA	, 0, "IPv6/IANA" },
-	{ STATS_IPV6_APNIC	, 0, "IPv6/APNIC" },
-	{ STATS_IPV6_ARIN	, 0, "IPv6/ARIN" },
-	{ STATS_IPV6_RIPE	, 0, "IPv6/RIPE" },
-	{ STATS_IPV6_LACNIC	, 0, "IPv6/LACNIC" },
-	{ STATS_IPV6_RESERVED	, 0, "IPv6/RESERVED" },
-	{ STATS_IPV6_UNKNOWN	, 0, "IPv6/UNKNOWN" },
-	{ STATS_IPV6_6TO4_IANA	, 0, "IPv6/6to4/IANA" },
-	{ STATS_IPV6_6TO4_APNIC	, 0, "IPv6/6to4/APNIC" },
-	{ STATS_IPV6_6TO4_ARIN	, 0, "IPv6/6to4/ARIN" },
-	{ STATS_IPV6_6TO4_RIPE	, 0, "IPv6/6to4/RIPE" },
-	{ STATS_IPV6_6TO4_LACNIC, 0, "IPv6/6to4/LACNIC" },
-	{ STATS_IPV6_6TO4_RESERVED, 0, "IPv6/6to4/RESERVED" },
-	{ STATS_IPV6_6TO4_UNKNOWN, 0, "IPv6/6to4/UNKNOWN" },
-	{ STATS_IPV6_TEREDO_IANA	, 0, "IPv6/Teredo/IANA" },
-	{ STATS_IPV6_TEREDO_APNIC	, 0, "IPv6/Teredo/APNIC" },
-	{ STATS_IPV6_TEREDO_ARIN	, 0, "IPv6/Teredo/ARIN" },
-	{ STATS_IPV6_TEREDO_RIPE	, 0, "IPv6/Teredo/RIPE" },
-	{ STATS_IPV6_TEREDO_LACNIC, 0, "IPv6/Teredo/LACNIC" },
-	{ STATS_IPV6_TEREDO_RESERVED, 0, "IPv6/Teredo/RESERVED" },
-	{ STATS_IPV6_TEREDO_UNKNOWN, 0, "IPv6/Teredo/UNKNOWN" },
-	{ STATS_IPV6_IID_GLOBAL, 0, "IPv6/IID/Global" },
-	{ STATS_IPV6_IID_RANDOM, 0, "IPv6/IID/Random" },
-	{ STATS_IPV6_IID_MANUAL, 0, "IPv6/IID/Manual" },
-	{ STATS_IPV6_IID_ISATAP, 0, "IPv6/IID/ISATAP" },
-	{ STATS_IPV6_IID_MANUAL, 0, "IPv6/IID/Unknown" },
-};
