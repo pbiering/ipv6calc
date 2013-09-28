@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.57 2013/09/28 20:32:40 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.58 2013/09/28 21:37:43 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -258,6 +258,10 @@ my %text = (
 		'de' => "Anonymisierte IPv6 Adresse",
 		'en' => "Anonymized IPv6 address",
 	},
+	'IPV6_COUNTRYCODE' => {
+		'de' => "Ländercode der IPv6 Adresse",
+		'en' => "Country Code of IPv6 address",
+	},
 	'IPV4' => {
 		'de' => "IPv4 Adresse",
 		'en' => "IPv4 address",
@@ -277,6 +281,10 @@ my %text = (
 	'IPV4_SOURCE' => {
 		'de' => "Quelle der IPv4 Adresse",
 		'en' => "Source of IPv4 address",
+	},
+	'IPV4_COUNTRYCODE' => {
+		'de' => "Ländercode der IPv4 Adresse",
+		'en' => "Country Code of IPv4 address",
 	},
 	'TEREDO_PORT_CLIENT' => {
 		'de' => "UDP-Port des Teredo Clients (nach NAT)",
