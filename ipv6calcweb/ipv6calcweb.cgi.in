@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.58 2013/09/28 21:37:43 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.59 2013/09/28 22:18:19 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -37,8 +37,8 @@
 #  HTTP_IPV6CALCWEB_BIN_IPV6CALC        : path to ipv6calc binary (optional)
 #  HTTP_IPV6CALCWEB_DB_IP2LOCATION_DIR  : IP2Location database directory (optional)
 #  HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB  : IP2Location library name (optional dyn-load support)
-#  HTTP_IPV6CALCWEB_DB_GEOPIP_DIR       : GeoIPv4 database directory (optional)
-#  HTTP_IPV6CALCWEB_DB_GEOPIP_LIB       : GeoIPv4 library name (optional in dyn-load support)
+#  HTTP_IPV6CALCWEB_DB_GEOIP_DIR        : GeoIPv4 database directory (optional)
+#  HTTP_IPV6CALCWEB_DB_GEOIP_LIB        : GeoIPv4 library name (optional in dyn-load support)
 
 ## general
 use strict;
