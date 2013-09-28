@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.31 2013/09/28 13:04:58 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.32 2013/09/28 16:24:51 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -152,7 +152,7 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	dl_GeoIP_handle = dlopen(geoip_lib_file, RTLD_NOW | RTLD_LOCAL);
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "%s/%s: Loading of library failed: %s\n", __FILE__, __func__, geoip_lib_file);
+		fprintf(stderr, "GeoIP dynamic library load failed: %s\n", dlerror());
 		return(1);
 	};
 
@@ -460,7 +460,7 @@ int libipv6calc_db_wrapper_GeoIP_cleanup(void) {
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -481,9 +481,8 @@ int libipv6calc_db_wrapper_GeoIP_cleanup(void) {
 
 		dl_status_GeoIP_cleanup = IPV6CALC_DL_STATUS_OK;
 
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-			fprintf(stderr, "%s/%s: Called dlsym successful: %s\n", __FILE__, __func__, dl_symbol);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Called dlsym successful: %s", dl_symbol);
+
 	} else if (dl_status_GeoIP_cleanup == IPV6CALC_DL_STATUS_ERROR) {
 		/* already known issue */
 		if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
@@ -526,7 +525,7 @@ const char * libipv6calc_db_wrapper_GeoIP_lib_version(void) {
 	char *error;
 
         if (dl_GeoIP_handle == NULL) {
-                result_GeoIP_lib_version = "LIBARY-NOT-LOADED";
+                result_GeoIP_lib_version = "LIBRARY-NOT-LOADED";
 	} else {
 		libipv6calc_db_wrapper_dl_load_GeoIP_lib_version();
 
@@ -569,7 +568,7 @@ void libipv6calc_db_wrapper_GeoIP_setup_custom_directory(char *dir) {
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -671,7 +670,7 @@ int libipv6calc_db_wrapper_GeoIP_db_avail(int type) {
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -770,7 +769,7 @@ GeoIP* libipv6calc_db_wrapper_GeoIP_open_type(int type, int flags) {
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -835,7 +834,7 @@ GeoIP* libipv6calc_db_wrapper_GeoIP_open(const char * filename, int flags) {
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -900,7 +899,7 @@ unsigned char libipv6calc_db_wrapper_GeoIP_database_edition (GeoIP* gi) {
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -965,7 +964,7 @@ char* libipv6calc_db_wrapper_GeoIP_database_info (GeoIP* gi) {
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -1029,7 +1028,7 @@ void libipv6calc_db_wrapper_GeoIP_delete(GeoIP* gi) {
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -1095,7 +1094,7 @@ const char* libipv6calc_db_wrapper_GeoIP_country_code_by_addr (GeoIP* gi, const 
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -1160,7 +1159,7 @@ const char* libipv6calc_db_wrapper_GeoIP_country_name_by_addr (GeoIP* gi, const 
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -1224,7 +1223,7 @@ GeoIPRecord*  libipv6calc_db_wrapper_GeoIP_record_by_addr (GeoIP* gi, const char
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -1288,7 +1287,7 @@ void libipv6calc_db_wrapper_GeoIPRecord_delete (GeoIPRecord *gir) {
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -1354,7 +1353,7 @@ const char *libipv6calc_db_wrapper_GeoIP_country_code_by_addr_v6 (GeoIP* gi, con
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -1461,7 +1460,7 @@ const char *  libipv6calc_db_wrapper_GeoIP_country_name_by_ipnum_v6 (GeoIP* gi, 
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -1558,7 +1557,7 @@ char* libipv6calc_db_wrapper_GeoIP_name_by_addr (GeoIP* gi, const char *addr) {
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -1623,7 +1622,7 @@ char* libipv6calc_db_wrapper_GeoIP_name_by_addr_v6 (GeoIP* gi, const char *addr)
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -1684,7 +1683,7 @@ static void libipv6calc_db_wrapper_dl_load_GeoIP_country_code_by_ipnum_v6(void) 
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper_dl_load;
 	};
 
@@ -1731,7 +1730,7 @@ static void libipv6calc_db_wrapper_dl_load_GeoIP_country_name_by_addr_v6 (void) 
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper_dl_load;
 	};
 
@@ -1777,7 +1776,7 @@ static void libipv6calc_db_wrapper_dl_load_GeoIP_lib_version (void) {
 	char *error;
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "dl_GeoIP handle not defined\n");
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "dl_GeoIP_handle not defined");
 		goto END_libipv6calc_db_wrapper_dl_load;
 	};
 
@@ -1792,7 +1791,7 @@ static void libipv6calc_db_wrapper_dl_load_GeoIP_lib_version (void) {
 
 		if ((error = dlerror()) != NULL)  {
 			dl_status_GeoIP_lib_version = IPV6CALC_DL_STATUS_ERROR;
-			// fprintf(stderr, "%s\n", error); // >= 1.4.8
+			fprintf(stderr, "%s\n", error);
 			goto END_libipv6calc_db_wrapper_dl_load;
 		};
 

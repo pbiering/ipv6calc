@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.3 2013/09/26 20:22:28 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.4 2013/09/28 16:24:51 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -187,7 +187,7 @@ void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct 
 
 	/* TODO: implement strlen checks */
 
-	DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Return\n", __FILE__, __func__);
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Return");
 
 	return;
 };

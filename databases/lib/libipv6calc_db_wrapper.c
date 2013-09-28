@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.21 2013/09/28 12:00:43 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.22 2013/09/28 16:24:51 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -26,6 +26,9 @@
 #include "libipv6calc_db_wrapper_IP2Location.h"
 #include "libipv6calc_db_wrapper_BuiltIn.h"
 
+static int wrapper_GeoIP_disable = 0;
+static int wrapper_IP2Location_disable = 0;
+
 static int wrapper_GeoIP_status = 0;
 static int wrapper_IP2Location_status = 0;
 static int wrapper_BuiltIn_status = 0;
@@ -44,43 +47,45 @@ int libipv6calc_db_wrapper_init(void) {
 
 	DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "Called");
 
+	if (wrapper_GeoIP_disable != 1) {
 #ifdef SUPPORT_GEOIP
-	// Call GeoIP wrapper
-	DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "Call libipv6calc_db_wrapper_GeoIP_wrapper_init");
+		// Call GeoIP wrapper
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "Call libipv6calc_db_wrapper_GeoIP_wrapper_init");
 
-	r = libipv6calc_db_wrapper_GeoIP_wrapper_init();
+		r = libipv6calc_db_wrapper_GeoIP_wrapper_init();
 
-	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "GeoIP_wrapper_init result: %d wrapper_features=0x%08x", r, wrapper_features);
+		DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "GeoIP_wrapper_init result: %d wrapper_features=0x%08x", r, wrapper_features);
 
-	if (r != 0) {
+		if (r != 0) {
 #ifndef SUPPORT_GEOIP_DYN
-		// only non-dynamic-load results in a problem
-		result = 1;
+			// only non-dynamic-load results in a problem
+			result = 1;
 #endif
-	} else {
-		wrapper_GeoIP_status = 1; // ok
+		} else {
+			wrapper_GeoIP_status = 1; // ok
+		};
+#endif // SUPPORT_GEOIP
 	};
 
-#endif
-
+	if (wrapper_IP2Location_disable != 1) {
 #ifdef SUPPORT_IP2LOCATION
-	// Call IP2Location wrapper
-	DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "Call libipv6calc_db_wrapper_IP2Location_wrapper_init");
+		// Call IP2Location wrapper
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "Call libipv6calc_db_wrapper_IP2Location_wrapper_init");
 
-	r = libipv6calc_db_wrapper_IP2Location_wrapper_init();
+		r = libipv6calc_db_wrapper_IP2Location_wrapper_init();
 
-	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "IP2Location_wrapper_init result: %d wrapper_features=0x%08x", r, wrapper_features);
+		DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "IP2Location_wrapper_init result: %d wrapper_features=0x%08x", r, wrapper_features);
 
-	if (r != 0) {
+		if (r != 0) {
 #ifndef SUPPORT_IP2LOCATION_DYN
-		// only non-dynamic-load results in a problem
-		result = 1;
+			// only non-dynamic-load results in a problem
+			result = 1;
 #endif
-	} else {
-		wrapper_IP2Location_status = 1; // ok
+		} else {
+			wrapper_IP2Location_status = 1; // ok
+		};
+#endif // SUPPORT_IP2LOCATION
 	};
-
-#endif
 
 #ifdef SUPPORT_BUILTIN
 	// Call BuiltIn wrapper
@@ -270,8 +275,21 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const int 
 	};
 
 #define NOTQUIET(a, ...)	if (quiet == 0) { fprintf(stderr, a, __VA_ARGS__); };
+#define NOTQUIET_NA(a)	if (quiet == 0) { fprintf(stderr, a); };
 
 	switch(opt) {
+		case DB_ip2location_disable:
+			NOTQUIET_NA("Support for IP2Location disabled by option\n");
+			wrapper_IP2Location_disable = 1;
+			result = 0;
+			break;
+
+		case DB_geoip_disable:
+			NOTQUIET_NA("Support for GeoIP disabled by option\n");
+			wrapper_GeoIP_disable = 1;
+			result = 0;
+			break;
+
 		case DB_ip2location_lib:
 #ifdef SUPPORT_IP2LOCATION_DYN
 			result = snprintf(ip2location_lib_file, sizeof(ip2location_lib_file), optarg);

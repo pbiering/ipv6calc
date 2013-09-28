@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.3 2013/09/28 12:32:59 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.4 2013/09/28 16:24:51 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -111,13 +111,11 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 	dl_IP2Location_handle = dlopen(ip2location_lib_file, RTLD_NOW | RTLD_LOCAL);
 
 	if (dl_IP2Location_handle == NULL) {
-		fprintf(stderr, "%s/%s: Loading of library failed: %s\n", __FILE__, __func__, ip2location_lib_file);
+		fprintf(stderr, "IP2Location dynamic library load failed: %s\n", ip2location_lib_file, dlerror());
 		return(1);
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Loaded library successful: %s\n", __FILE__, __func__, ip2location_lib_file);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Loaded library successful: %s", ip2location_lib_file);
 #else
 	// nothing to set for the moment
 #endif

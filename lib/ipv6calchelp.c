@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.43 2013/09/28 12:33:00 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.44 2013/09/28 16:24:51 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -351,6 +351,7 @@ void printhelp(void) {
 
 #ifdef SUPPORT_IP2LOCATION
 	fprintf(stderr, "\n");
+	fprintf(stderr, "  [--db-ip2location-disable        ] : IP2Location support disabled\n");
 	fprintf(stderr, "  [--db-ip2location-dir <directory>] : IP2Location database directory (default: %s)\n", ip2location_db_dir);
 #ifdef SUPPORT_IP2LOCATION_DYN
 	fprintf(stderr, "  [--db-ip2location-lib <file>]      : IP2Location library file (default: %s)\n", ip2location_lib_file);
@@ -358,6 +359,8 @@ void printhelp(void) {
 #endif
 
 #ifdef SUPPORT_GEOIP
+	fprintf(stderr, "\n");
+	fprintf(stderr, "  [--db-geoip-disable              ] : GeoIP support disabled\n");
 	fprintf(stderr, "  [--db-geoip-dir       <directory>] : GeoIP database directory (default: %s)\n", geoip_db_dir);
 #ifdef SUPPORT_GEOIP_DYN
 	fprintf(stderr, "  [--db-geoip-lib       <file>]      : GeoIP library file (default: %s)\n", geoip_lib_file);

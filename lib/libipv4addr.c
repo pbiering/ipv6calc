@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.44 2013/09/22 16:59:06 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.45 2013/09/28 16:24:51 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -778,9 +778,7 @@ int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *re
 		};
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: Final match number: %d\n", DEBUG_function_name, match);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "Final match number: %d", match);
 	
 	/* result */
 	if ( match > -1 ) {

@@ -15,6 +15,10 @@ Major Changes/Enhancements of ipv6calc
 	db-ip2location-lib <file>
 	db-geoip-lib <file>
 
+- add support for options to disable GeoIP and IP2Location on runtime
+	db-ip2location-disable
+	db-geoip-disable
+
 - ignore options for specifying files for GeoIP & IP2Location
 	db-ip2location-ipv4 <file>
 	db-ip2location-ipv6 <file>

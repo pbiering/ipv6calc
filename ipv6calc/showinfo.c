@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.84 2013/09/22 19:04:43 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.85 2013/09/28 16:24:51 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -219,6 +219,13 @@ static void printfooter(const uint32_t formatoptions) {
 /* print IP2Location information */
 #define DEBUG_function_name "showinfo/print_ip2location"
 static void print_ip2location(char *addrstring, const uint32_t formatoptions, const char *additionalstring, int version) {
+	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
+
+	if (wrapper_features_IP2Location == 0) {
+		DEBUGPRINT_NA(DEBUG_showinfo, "IP2Location support not active");
+		return;
+	};
+
 	int ip2location_type = 0;
 
 	IP2Location *IP2LocationObj;
@@ -362,6 +369,13 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 #define DEBUG_function_name "showinfo/print_geoip"
 /* print GeoIP information */
 static void print_geoip(const char *addrstring, const uint32_t formatoptions, const char *additionalstring, int version) {
+	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
+
+	if (wrapper_features_GeoIP == 0) {
+		DEBUGPRINT_NA(DEBUG_showinfo, "GeoIP support not active");
+		return;
+	};
+
 	GeoIP *gi = NULL;
 
 #if defined (SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6) && defined (SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6)
@@ -390,9 +404,7 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 		return;
 	};
 
-	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-		fprintf(stderr, "%s: GeoIP IPv%d try to open database by type: %s\n", DEBUG_function_name, version, libipv6calc_db_wrapper_GeoIPDBDescription[geoip_type]);
-	};
+	DEBUGPRINT_WA(DEBUG_showinfo, "GeoIP IPv%d try to open database by type: %s", version, libipv6calc_db_wrapper_GeoIPDBDescription[geoip_type]);
 
 	if (libipv6calc_db_wrapper_GeoIP_db_avail(geoip_type) != 1) {
 		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
