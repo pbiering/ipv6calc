@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.9 2013/09/28 17:10:43 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.10 2013/09/28 17:12:11 ds6peter Exp $
 # Copyright  : 2011-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -26,8 +26,14 @@ autgen_variants() {
 END
 }
 
+options_add="$*"
+
+if [ -n "$options_add" ]; then
+	echo "INFO  : additional options: $options_add"
+fi
+
 # basic defaults
-nice -n 10 ./autogen.sh $*
+nice -n 10 ./autogen.sh $options_add
 if [ $? -ne 0 ]; then
 	echo "ERROR : 'autogen.sh' reports an error"
 	exit 1
@@ -35,7 +41,7 @@ fi
 
 # variants
 autgen_variants | while read buildoptions; do
-	nice -n 10 ./autogen.sh $buildoptions $*
+	nice -n 10 ./autogen.sh $buildoptions $options_add
 	if [ $? -ne 0 ]; then
 		echo "ERROR : 'autogen.sh $buildoptions $*' reports an error"
 		exit 1
