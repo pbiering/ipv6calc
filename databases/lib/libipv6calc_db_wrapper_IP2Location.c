@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.4 2013/09/28 16:24:51 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.5 2013/09/28 18:55:40 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -47,22 +47,34 @@ static int wrapper_ip2location_ipv6_support = IP2LOCATION_IPV6_SUPPORT_UNKNOWN;
 
 /* define status and dynamic load functions */
 static int dl_status_IP2Location_open = IPV6CALC_DL_STATUS_UNKNOWN;
-static IP2Location* (*dl_IP2Location_open)(char *db) = NULL;
+//static IP2Location* (*dl_IP2Location_open)(char *db) = NULL;
+typedef IP2Location *(*dl_IP2Location_open_t)(char *db);
+static union { dl_IP2Location_open_t func; void * obj; } dl_IP2Location_open;
 
 static int dl_status_IP2Location_close = IPV6CALC_DL_STATUS_UNKNOWN;
-static uint32_t (*dl_IP2Location_close)(IP2Location *loc) = NULL;
+//static uint32_t (*dl_IP2Location_close)(IP2Location *loc) = NULL;
+typedef uint32_t (*dl_IP2Location_close_t)(IP2Location *loc);
+static union { dl_IP2Location_close_t func; void * obj; } dl_IP2Location_close;
 
 static int dl_status_IP2Location_get_country_short = IPV6CALC_DL_STATUS_UNKNOWN;
-static IP2LocationRecord *(*dl_IP2Location_get_country_short)(IP2Location *loc, char *ip) = NULL;
+//static IP2LocationRecord *(*dl_IP2Location_get_country_short)(IP2Location *loc, char *ip) = NULL;
+typedef IP2LocationRecord *(*dl_IP2Location_get_country_short_t)(IP2Location *loc, char *ip);
+static union { dl_IP2Location_get_country_short_t func; void * obj; } dl_IP2Location_get_country_short;
 
 static int dl_status_IP2Location_get_country_long = IPV6CALC_DL_STATUS_UNKNOWN;
-static IP2LocationRecord *(*dl_IP2Location_get_country_long)(IP2Location *loc, char *ip) = NULL;
+//static IP2LocationRecord *(*dl_IP2Location_get_country_long)(IP2Location *loc, char *ip) = NULL;
+typedef IP2LocationRecord *(*dl_IP2Location_get_country_long_t)(IP2Location *loc, char *ip);
+static union { dl_IP2Location_get_country_long_t func; void * obj; } dl_IP2Location_get_country_long;
 
 static int dl_status_IP2Location_get_all = IPV6CALC_DL_STATUS_UNKNOWN;
-static IP2LocationRecord *(*dl_IP2Location_get_all)(IP2Location *loc, char *ip) = NULL;
+//static IP2LocationRecord *(*dl_IP2Location_get_all)(IP2Location *loc, char *ip) = NULL;
+typedef IP2LocationRecord *(*dl_IP2Location_get_all_t)(IP2Location *loc, char *ip);
+static union { dl_IP2Location_get_all_t func; void * obj; } dl_IP2Location_get_all;
 
 static int dl_status_IP2Location_free_record = IPV6CALC_DL_STATUS_UNKNOWN;
-static IP2LocationRecord* (*dl_IP2Location_free_record)(IP2LocationRecord *record) = NULL;
+//static IP2LocationRecord* (*dl_IP2Location_free_record)(IP2LocationRecord *record) = NULL;
+typedef IP2LocationRecord *(*dl_IP2Location_free_record_t)(IP2LocationRecord *record);
+static union { dl_IP2Location_free_record_t func; void * obj; } dl_IP2Location_free_record;
 
 #else // SUPPORT_IP2LOCATION_DYN
 static const char* wrapper_ip2location_info = "built-in";
@@ -111,7 +123,7 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 	dl_IP2Location_handle = dlopen(ip2location_lib_file, RTLD_NOW | RTLD_LOCAL);
 
 	if (dl_IP2Location_handle == NULL) {
-		fprintf(stderr, "IP2Location dynamic library load failed: %s\n", ip2location_lib_file, dlerror());
+		fprintf(stderr, "IP2Location dynamic library load failed: %s\n", dlerror());
 		return(1);
 	};
 
@@ -444,7 +456,7 @@ IP2Location *libipv6calc_db_wrapper_IP2Location_open(char *db) {
 
 		dlerror();    /* Clear any existing error */
 
-		*(void **) (&dl_IP2Location_open) = dlsym(dl_IP2Location_handle, dl_symbol);
+		*(void **) (&dl_IP2Location_open.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
 
 		if ((error = dlerror()) != NULL)  {
 			dl_status_IP2Location_open = IPV6CALC_DL_STATUS_ERROR;
@@ -469,7 +481,7 @@ IP2Location *libipv6calc_db_wrapper_IP2Location_open(char *db) {
 		};
 	};
 
-	loc = (*dl_IP2Location_open)(db);
+	loc = (*dl_IP2Location_open.func)(db);
 
 	if ((error = dlerror()) != NULL)  {
 		fprintf(stderr, "%s\n", error);
@@ -509,7 +521,7 @@ uint32_t libipv6calc_db_wrapper_IP2Location_close(IP2Location *loc) {
 
 		dlerror();    /* Clear any existing error */
 
-		*(void **) (&dl_IP2Location_close) = dlsym(dl_IP2Location_handle, dl_symbol);
+		*(void **) (&dl_IP2Location_close.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
 
 		if ((error = dlerror()) != NULL)  {
 			dl_status_IP2Location_close = IPV6CALC_DL_STATUS_ERROR;
@@ -534,7 +546,7 @@ uint32_t libipv6calc_db_wrapper_IP2Location_close(IP2Location *loc) {
 		};
 	};
 
-	result = (*dl_IP2Location_close)(loc);
+	result = (*dl_IP2Location_close.func)(loc);
 
 	if ((error = dlerror()) != NULL)  {
 		fprintf(stderr, "%s\n", error);
@@ -624,7 +636,7 @@ void libipv6calc_db_wrapper_IP2Location_free_record(IP2LocationRecord *record) {
 		};
 	};
 
-	(*dl_IP2Location_free_record)(record);
+	(*dl_IP2Location_free_record.func)(record);
 
 	if ((error = dlerror()) != NULL)  {
 		fprintf(stderr, "%s\n", error);
@@ -664,7 +676,7 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_country_short(IP2Locat
 
 		dlerror();    /* Clear any existing error */
 
-		*(void **) (&dl_IP2Location_get_country_short) = dlsym(dl_IP2Location_handle, dl_symbol);
+		*(void **) (&dl_IP2Location_get_country_short.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
 
 		if ((error = dlerror()) != NULL)  {
 			dl_status_IP2Location_get_country_short = IPV6CALC_DL_STATUS_ERROR;
@@ -689,7 +701,7 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_country_short(IP2Locat
 		};
 	};
 
-	result_IP2Location_get_country_short = (*dl_IP2Location_get_country_short)(loc, ip);
+	result_IP2Location_get_country_short = (*dl_IP2Location_get_country_short.func)(loc, ip);
 
 	if ((error = dlerror()) != NULL)  {
 		fprintf(stderr, "%s\n", error);
@@ -729,7 +741,7 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_country_long(IP2Locati
 
 		dlerror();    /* Clear any existing error */
 
-		*(void **) (&dl_IP2Location_get_country_long) = dlsym(dl_IP2Location_handle, dl_symbol);
+		*(void **) (&dl_IP2Location_get_country_long.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
 
 		if ((error = dlerror()) != NULL)  {
 			dl_status_IP2Location_get_country_long = IPV6CALC_DL_STATUS_ERROR;
@@ -754,7 +766,7 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_country_long(IP2Locati
 		};
 	};
 
-	result_IP2Location_get_country_long = (*dl_IP2Location_get_country_long)(loc, ip);
+	result_IP2Location_get_country_long = (*dl_IP2Location_get_country_long.func)(loc, ip);
 
 	if ((error = dlerror()) != NULL)  {
 		fprintf(stderr, "%s\n", error);
@@ -794,7 +806,7 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_all(IP2Location *loc, 
 
 		dlerror();    /* Clear any existing error */
 
-		*(void **) (&dl_IP2Location_get_all) = dlsym(dl_IP2Location_handle, dl_symbol);
+		*(void **) (&dl_IP2Location_get_all.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
 
 		if ((error = dlerror()) != NULL)  {
 			dl_status_IP2Location_get_all = IPV6CALC_DL_STATUS_ERROR;
@@ -819,7 +831,7 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_all(IP2Location *loc, 
 		};
 	};
 
-	result_IP2Location_get_all = (*dl_IP2Location_get_all)(loc, ip);
+	result_IP2Location_get_all = (*dl_IP2Location_get_all.func)(loc, ip);
 
 	if ((error = dlerror()) != NULL)  {
 		fprintf(stderr, "%s\n", error);
