@@ -63,10 +63,10 @@ Available rpmbuild rebuild options:
   --with geoip
   --with geoip-dyn
 
-%{?_with_geoip: %{expand: Built with GeoIP support}}
-%{?_with_geoip_dyn: %{expand: Built with GeoIP dynamic-library-load support}}
-%{?_with_ip2location: %{expand: Built with IP2Location suppport}}
-%{?_with_ip2location_dyn: %{expand: Built with IP2Location dynamic-library-load suppport}}
+%{?enable_geoip: %{expand: Built with GeoIP support}}
+%{?enable_geoip_dyn: %{expand: Built with GeoIP dynamic-library-load support}}
+%{?enable_ip2location: %{expand: Built with IP2Location suppport}}
+%{?enable_ip2location_dyn: %{expand: Built with IP2Location dynamic-library-load suppport}}
 
 
 %package ipv6calcweb
