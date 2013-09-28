@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.19 2013/09/22 19:20:10 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.20 2013/09/28 11:23:20 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -42,9 +42,7 @@ uint32_t wrapper_features = 0;
 int libipv6calc_db_wrapper_init(void) {
 	int result = 0, r;
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "Called");
 
 #ifdef SUPPORT_GEOIP
 	// Call GeoIP wrapper
@@ -83,9 +81,8 @@ int libipv6calc_db_wrapper_init(void) {
 	} else {
 		wrapper_BuiltIn_status = 1; // ok
 	};
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Result: %d wrapper_features=0x%08x\n", __FILE__, __func__, result, wrapper_features);
-	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "BuiltIn_wrapper_init result: %d wrapper_features=0x%08x", result, wrapper_features);
 #endif
 
 	return(result);
@@ -358,9 +355,7 @@ char *libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int pr
 		// fallback
 		if (wrapper_IP2Location_status == 1) {
 #ifdef SUPPORT_IP2LOCATION
-			if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-				fprintf(stderr, "%s/%s: Call now IP2Location\n", __FILE__, __func__);
-			};
+			DEBUGPRINT(DEBUG_libipv6addr_db_wrapper, "%s/%s: Call now IP2Location\n", __FILE__, __func__);;
 
 			result_char_ptr = libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr((char *) addr, proto);
 #endif

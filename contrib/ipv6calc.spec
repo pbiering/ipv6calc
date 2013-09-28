@@ -73,6 +73,9 @@ displaying information of IP addresses on a web page.
 
 
 %build
+%{?_with_geoip_dyn: %{expand: %%define enable_geoip 1}}
+%{?_with_ip2location_dyn: %{expand: %%define enable_ip2location 1}}
+
 ./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?_with_ip2location:--enable-ip2location} %{?_with_geoip:--enable-geoip} %{?_with_ip2location_dyn:--with-ip2location-dynamic} %{?_with_geoip_dyn:--with-geoip-dynamic}
 make clean
 make

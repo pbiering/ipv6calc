@@ -20,3 +20,15 @@ Update databases (GeoLite databases do not require a license)
 # pushd /var/local/share/GeoIP/ || exit 1
 # wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz && gunzip -f GeoIP.dat.gz
 # wget http://geolite.maxmind.com/download/geoip/database/GeoIPv6.dat.gz && gunzip -f GeoIPv6.dat.gz
+
+
+Enable GeoIP support by using following configure options:
+  --enable-geoip
+
+  In case, dynamic load of library should be enabled (conditional GeoIP support), add
+     --with-geoip-dynamic
+
+  Having GeoIP databases not stored in /usr/share/GeoIP (or a softlink created), add e.g.
+     --with-geoip-db=/var/local/share/GeoIP
+
+  For more specifc options see ./configure --help

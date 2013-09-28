@@ -88,3 +88,14 @@ Install databases
 Update databases (requires subscription)
 http://www.ip2location.com/IPV6-COUNTRY.aspx
 
+
+Enable IP2Location support by using following configure options:
+  --enable-ip2location
+
+  In case, dynamic load of library should be enabled (conditional IP2Location support), add
+     --with-ip2location-dynamic
+
+  Having IP2Location databases not stored in /usr/share/IP2Location (or a softlink created), add e.g.
+     --with-ip2location-db=/var/local/share/IP2Location
+
+  For more specifc options see ./configure --help
