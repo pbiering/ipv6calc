@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.6 2013/09/28 20:32:40 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.7 2013/09/28 20:33:47 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -221,7 +221,10 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_info(char* string, const size_t 
 void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_verbose, const char *prefix_string) {
 	IP2Location *loc;
 	int i, type;
+
+#ifdef SUPPORT_IP2LOCATION_DYN
 	struct stat file_stat;
+#endif
 
 	const char *prefix = "\0";
 	if (prefix_string != NULL) {
