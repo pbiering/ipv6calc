@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.33 2013/09/28 18:55:40 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.34 2013/09/28 18:56:03 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -183,8 +183,6 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	};
 
 #ifdef SUPPORT_GEOIP_DYN
-	dl_GeoIP_cleanup.obj = NULL;
-
 	char *error;
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
