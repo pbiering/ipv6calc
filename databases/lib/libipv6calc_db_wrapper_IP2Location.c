@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.2 2013/09/21 17:25:56 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.3 2013/09/28 12:32:59 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -228,6 +228,11 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 	for (i = 0; i < sizeof(libipv6calc_db_wrapper_IP2Location_db_file_desc) / sizeof(libipv6calc_db_wrapper_IP2Location_db_file_desc[0]); i++) {
 		type = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number;
 
+#ifdef SUPPORT_IP2LOCATION_DYN
+		if (dl_IP2Location_handle == NULL) {
+			printf("%sIP2Location: %-27s: %-40s (LIBRARY-NOT-LOADED)\n", prefix, libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description, libipv6calc_db_wrapper_IP2Location_dbfilename(type));
+		} else {
+#endif // SUPPORT_IP2LOCATION_DYN
 		if (libipv6calc_db_wrapper_IP2Location_db_avail(type)) {
 			// IP2Location returned that database is available
 			loc = libipv6calc_db_wrapper_IP2Location_open_type(type);
@@ -240,6 +245,9 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 		} else {
 			continue;
 		};
+#ifdef SUPPORT_IP2LOCATION_DYN
+		};
+#endif
 	};
 #else
 	snprintf(string, size, "%sNo IP2Location support built-in", prefix);
@@ -263,12 +271,15 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
  * wrapper extension: IP2Location_lib_version
  */
 const char * libipv6calc_db_wrapper_IP2Location_lib_version(void) {
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called: %s\n", __FILE__, __func__, wrapper_ip2location_info);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Called: %s", wrapper_ip2location_info);
 
 #ifdef SUPPORT_IP2LOCATION_DYN
-	char *result_IP2Location_lib_version = "unsupported";
+	const char *result_IP2Location_lib_version;
+	if (dl_IP2Location_handle == NULL) {
+		result_IP2Location_lib_version = "LIBARY-NOT-LOADED";
+	} else {
+		result_IP2Location_lib_version = "unsupported";
+	};
 
 	return(result_IP2Location_lib_version);
 #else
