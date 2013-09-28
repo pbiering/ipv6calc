@@ -85,7 +85,7 @@ displaying information of IP addresses on a web page.
 
 
 %build
-./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?_with_ip2location:--enable-ip2location} %{?_with_geoip:--enable-geoip} %{?_with_ip2location_dyn:--with-ip2location-dynamic} %{?_with_geoip_dyn:--with-geoip-dynamic}
+./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?enable_ip2location:--enable-ip2location} %{?enable_geoip:--enable-geoip} %{?enable_ip2location_dyn:--with-ip2location-dynamic} %{?enable_geoip_dyn:--with-geoip-dynamic}
 make clean
 make
 make test-minimal
