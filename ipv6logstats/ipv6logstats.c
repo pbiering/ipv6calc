@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.38 2013/09/28 17:24:37 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.39 2013/09/28 20:32:40 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -36,7 +36,7 @@
 #define LINEBUFFER	16384
 
 long int ipv6calc_debug = 0;
-int flag_quiet = 0;
+int ipv6calc_quiet = 0;
 
 static int opt_unknown = 0;
 static int opt_noheader = 0;
@@ -144,7 +144,7 @@ int main(int argc,char *argv[]) {
 	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {
 
 		/* catch common options */
-		result = ipv6calcoptions(i, optarg, flag_quiet, longopts);
+		result = ipv6calcoptions(i, optarg, longopts);
 		if (result == 0) {
 			// found
 			continue;
@@ -171,10 +171,6 @@ int main(int argc,char *argv[]) {
 				command |= CMD_printhelp;
 				break;
 
-			case 'q':
-				flag_quiet = 1;
-				break;
-				
 			case 'p':
 				snprintf(opt_token, sizeof(opt_token) - 1, "%s", optarg);
 				break;
@@ -360,7 +356,7 @@ static void lineparser(void) {
 	ptrptr = &cptr;
 	
 	if (opt_onlyheader == 0) {
-		if (flag_quiet == 0) {
+		if (ipv6calc_quiet == 0) {
 			fprintf(stderr, "Expecting log lines on stdin\n");
 		};
 	};
@@ -377,7 +373,7 @@ static void lineparser(void) {
 		linecounter++;
 
 		if (linecounter == 1) {
-			if (flag_quiet == 0) {
+			if (ipv6calc_quiet == 0) {
 				fprintf(stderr, "Ok, proceeding stdin...\n");
 			};
 		};
@@ -644,7 +640,7 @@ static void lineparser(void) {
 	};
 
 	if (opt_onlyheader == 0) {
-		if (flag_quiet == 0) {
+		if (ipv6calc_quiet == 0) {
 			fprintf(stderr, "...finished\n");
 		};
 	};

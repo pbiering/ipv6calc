@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.5 2013/09/28 18:55:40 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.6 2013/09/28 20:32:40 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -123,7 +123,7 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 	dl_IP2Location_handle = dlopen(ip2location_lib_file, RTLD_NOW | RTLD_LOCAL);
 
 	if (dl_IP2Location_handle == NULL) {
-		fprintf(stderr, "IP2Location dynamic library load failed: %s\n", dlerror());
+		NONQUIETPRINT_WA("IP2Location dynamic library load failed: %s", dlerror());
 		return(1);
 	};
 
@@ -221,26 +221,29 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_info(char* string, const size_t 
 void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_verbose, const char *prefix_string) {
 	IP2Location *loc;
 	int i, type;
+	struct stat file_stat;
 
 	const char *prefix = "\0";
 	if (prefix_string != NULL) {
 		prefix = prefix_string;
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "Called");
 
 	printf("%sIP2Location: features: 0x%08x\n", prefix, wrapper_features_IP2Location);
 
 #ifdef SUPPORT_IP2LOCATION
 	printf("%sIP2Location: info of available databases in directory: %s\n", prefix, ip2location_db_dir);
-	for (i = 0; i < sizeof(libipv6calc_db_wrapper_IP2Location_db_file_desc) / sizeof(libipv6calc_db_wrapper_IP2Location_db_file_desc[0]); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_IP2Location_db_file_desc); i++) {
 		type = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number;
 
 #ifdef SUPPORT_IP2LOCATION_DYN
 		if (dl_IP2Location_handle == NULL) {
-			printf("%sIP2Location: %-27s: %-40s (LIBRARY-NOT-LOADED)\n", prefix, libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description, libipv6calc_db_wrapper_IP2Location_dbfilename(type));
+			DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Check whether db file exists: %s", libipv6calc_db_wrapper_IP2Location_dbfilename(type));
+			if (stat(libipv6calc_db_wrapper_IP2Location_dbfilename(type), &file_stat) == 0) {
+				DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "DB file exists: %s", libipv6calc_db_wrapper_IP2Location_dbfilename(type));
+				printf("%sIP2Location: %-27s: %-40s (LIBRARY-NOT-LOADED)\n", prefix, libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description, libipv6calc_db_wrapper_IP2Location_dbfilename(type));
+			};
 		} else {
 #endif // SUPPORT_IP2LOCATION_DYN
 		if (libipv6calc_db_wrapper_IP2Location_db_avail(type)) {
@@ -309,7 +312,7 @@ static char *libipv6calc_db_wrapper_IP2Location_dbfilename(int type) {
 		fprintf(stderr, "%s/%s: Called: %s type=%d\n", __FILE__, __func__, wrapper_ip2location_info, type);
 	};
 
-	for (i = 0; i < sizeof(libipv6calc_db_wrapper_IP2Location_db_file_desc) / sizeof(libipv6calc_db_wrapper_IP2Location_db_file_desc[0]); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_IP2Location_db_file_desc); i++) {
 		if (libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number == type) {
 			entry = i;
 			break;

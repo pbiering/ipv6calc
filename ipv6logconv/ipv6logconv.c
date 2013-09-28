@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.24 2013/09/26 20:26:07 ds6peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.25 2013/09/28 20:32:40 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -40,7 +40,6 @@
 #define LINEBUFFER	16384
 
 long int ipv6calc_debug = 0;
-int flag_quiet = 0;
 int flag_nocache = 0;
 
 /* supported output types:
@@ -112,7 +111,7 @@ int main(int argc,char *argv[]) {
 		};
 
 		/* catch common options */
-		result = ipv6calcoptions(i, optarg, flag_quiet, longopts);
+		result = ipv6calcoptions(i, optarg, longopts);
 		if (result == 0) {
 			// found
 			continue;
@@ -127,7 +126,7 @@ int main(int argc,char *argv[]) {
 				break;
 
 			case 'q':
-				flag_quiet = 1;
+				ipv6calc_quiet = 1;
 				break;
 
 			case 'h':
@@ -220,7 +219,7 @@ static void lineparser(const long int outputtype) {
 
 	ptrptr = &cptr;
 	
-	if (flag_quiet == 0) {
+	if (ipv6calc_quiet == 0) {
 		fprintf(stderr, "Expecting log lines on stdin\n");
 	};
 
@@ -236,7 +235,7 @@ static void lineparser(const long int outputtype) {
 		linecounter++;
 
 		if (linecounter == 1) {
-			if (flag_quiet == 0) {
+			if (ipv6calc_quiet == 0) {
 				fprintf(stderr, "Ok, proceeding stdin...\n");
 			};
 		};
@@ -345,7 +344,7 @@ static void lineparser(const long int outputtype) {
 		printf(" %s", *ptrptr);
 	};
 
-	if (flag_quiet == 0) {
+	if (ipv6calc_quiet == 0) {
 		fprintf(stderr, "...finished\n");
 
 		if (flag_nocache == 0) {

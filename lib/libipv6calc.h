@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.16 2013/09/10 20:25:50 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.17 2013/09/28 20:32:40 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -83,10 +83,18 @@ typedef struct {
 // max entries of a const array
 #define MAXENTRIES_ARRAY(a)	(sizeof(a) / sizeof(a[0]))
 
+/* non-quiet print with args */
+#define NONQUIETPRINT_WA(t, ...)        if (ipv6calc_quiet == 0) { fprintf(stderr, t "\n", __VA_ARGS__); };
+
+/* non-quiet print no args */
+#define NONQUIETPRINT_NA(t)             if (ipv6calc_quiet == 0) { fprintf(stderr, t "\n"); };
+
 #endif
 
 
 /* prototypes */
+extern int ipv6calc_quiet;
+
 extern void string_to_upcase(char *string);
 extern void string_to_lowcase(char *string);
 
@@ -102,3 +110,4 @@ extern int   libipv6calc_anon_set_by_name(s_ipv6calc_anon_set *ipv6calc_anon_set
 extern void  libipv6calc_anon_infostring(char* string, const int stringlength, const s_ipv6calc_anon_set *ipv6calc_anon_set);
 extern const char *libipv6calc_anon_method_name(const s_ipv6calc_anon_set *ipv6calc_anon_set);
 extern int   libipv6calc_anon_supported(const s_ipv6calc_anon_set *ipv6calc_anon_set);
+

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calc/ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions_local.h,v 1.1 2013/09/20 06:17:52 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions_local.h,v 1.2 2013/09/28 20:32:40 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -26,19 +26,17 @@
  *  b = bitstring label
  *  m = output machine readable
  *  i = showinfo
- *  q = be more quiet
  *  f = flush (each line in pipe mode)
  *  I <input type>
  *  O <output type>
  *  A <action type>
  *  E expression for action=filter
  */
-static char *ipv6calc_shortopts = "vqhrmabfiulqUFCI:O:A:E:";
+static char *ipv6calc_shortopts = "vhrmabfiulUFCI:O:A:E:";
 
 /* define long options */
 static struct option ipv6calc_longopts[] = {
 	{"version", 0, NULL, (int) 'v' },
-	{"quiet"  , 1, NULL, (int) 'q' },
 
 	/* additional help options */
 	{"help"           , 0, NULL, (int) 'h'},

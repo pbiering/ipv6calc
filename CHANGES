@@ -42,3 +42,17 @@ Major Changes/Enhancements of ipv6calc
 	--with-ip2location-ipv6-default-file=file
 	--with-geoip-ipv4-default-file=file
 	--with-geoip-ipv6-default-file=file
+
+ipv6calcweb.cgi
+- remove support for environment values
+   HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV4
+   HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV6
+   HTTP_IPV6CALCWEB_DB_GEOPIP_IPV4
+   HTTP_IPV6CALCWEB_DB_GEOPIP_IPV6
+
+- add support for environment values
+   HTTP_IPV6CALCWEB_DB_IP2LOCATION_DIR
+   HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB
+   HTTP_IPV6CALCWEB_DB_GEOPIP_DIR
+   HTTP_IPV6CALCWEB_DB_GEOPIP_LIB
+

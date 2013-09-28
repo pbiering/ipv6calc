@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ipv6calcweb
 # File       : test_ipv6calcweb.sh
-# Version    : $Id: test_ipv6calcweb.sh,v 1.7 2012/02/05 09:25:09 peter Exp $
+# Version    : $Id: test_ipv6calcweb.sh,v 1.8 2013/09/28 20:32:40 ds6peter Exp $
 # Copyright  : 2012-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -37,7 +37,9 @@ SERVER_NAME="server.domain.example"
 
 QUERY_STRING="$2"
 
-export REMOTE_ADDR REMOTE_HOST HTTP_USER_AGENT SERVER_ADDR SERVER_NAME QUERY_STRING
+HTTP_IPV6CALCWEB_DEBUG="0x1000"
+
+export REMOTE_ADDR REMOTE_HOST HTTP_USER_AGENT SERVER_ADDR SERVER_NAME QUERY_STRING HTTP_IPV6CALCWEB_DEBUG
 
 OUTPUT="`./ipv6calcweb.cgi`"
 
@@ -45,12 +47,18 @@ result=$?
 echo "Result: $result"
 
 if [ $result -ne 0 ]; then
-	echo "TEST FAILED"
+	echo "TEST FAILED (exit code != 0)"
+	HTTP_IPV6CALCWEB_DEBUG="0xffff"
+	export HTTP_IPV6CALCWEB_DEBUG
+	./ipv6calcweb.cgi
 	exit 1
 else
 	# check output
 	if echo "$OUTPUT" | egrep -q "(ERROR|problem)"; then
-		echo "TEST FAILED"
+		echo "TEST FAILED (ERROR|problem) occurs"
+		HTTP_IPV6CALCWEB_DEBUG="0xffff"
+		export HTTP_IPV6CALCWEB_DEBUG
+		./ipv6calcweb.cgi
 		exit 1
 	fi
 	if echo "$OUTPUT" | egrep -q "(reserved)"; then

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.90 2013/09/26 20:26:07 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.91 2013/09/28 20:32:40 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -221,7 +221,7 @@ int main(int argc, char *argv[]) {
 		};
 
 		/* catch common options */
-		result = ipv6calcoptions(i, optarg, (((formatoptions & FORMATOPTION_quiet) == 0) ? 0 : 1), longopts);
+		result = ipv6calcoptions(i, optarg, longopts);
 		if (result == 0) {
 			// found
 			continue;
@@ -608,7 +608,6 @@ int main(int argc, char *argv[]) {
 				formatoptions |= FORMATOPTION_machinereadable;
 				break;
 				
-			case 'q':	
 			case FORMATOPTION_NUM_quiet + FORMATOPTION_NUM_HEAD:
 				formatoptions |= FORMATOPTION_quiet;
 				break;
@@ -706,6 +705,10 @@ int main(int argc, char *argv[]) {
 	};
 	argv += optind;
 	argc -= optind;
+
+	if (ipv6calc_quiet != 0) {
+		formatoptions |= FORMATOPTION_quiet;
+	};
 
 	/* print help handling */
 	if (command == CMD_printhelp) {

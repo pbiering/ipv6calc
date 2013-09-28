@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.22 2013/09/28 16:24:51 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.23 2013/09/28 20:32:40 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -263,29 +263,25 @@ int libipv6calc_db_wrapper_has_features(uint32_t features) {
 
 /*********************************************
  * Option handling
- * quiet != 0: be quiet
  * return < 0: error
  *********************************************/
 
-int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const int quiet, const struct option longopts[]) {
+int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const struct option longopts[]) {
 	int result = -1;
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
 	};
 
-#define NOTQUIET(a, ...)	if (quiet == 0) { fprintf(stderr, a, __VA_ARGS__); };
-#define NOTQUIET_NA(a)	if (quiet == 0) { fprintf(stderr, a); };
-
 	switch(opt) {
 		case DB_ip2location_disable:
-			NOTQUIET_NA("Support for IP2Location disabled by option\n");
+			NONQUIETPRINT_NA("Support for IP2Location disabled by option");
 			wrapper_IP2Location_disable = 1;
 			result = 0;
 			break;
 
 		case DB_geoip_disable:
-			NOTQUIET_NA("Support for GeoIP disabled by option\n");
+			NONQUIETPRINT_NA("Support for GeoIP disabled by option");
 			wrapper_GeoIP_disable = 1;
 			result = 0;
 			break;
@@ -294,7 +290,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const int 
 #ifdef SUPPORT_IP2LOCATION_DYN
 			result = snprintf(ip2location_lib_file, sizeof(ip2location_lib_file), optarg);
 #else
-			NOTQUIET("Support for IP2Location dyn-load not compiled-in, skipping option: --%s\n", ipv6calcoption_name(opt, longopts));
+			NONQUIETPRINT_WA("Support for IP2Location dyn-load not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
 			result = 0;
 			break;
@@ -303,7 +299,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const int 
 #ifdef SUPPORT_GEOIP_DYN
 			result = snprintf(geoip_lib_file, sizeof(geoip_lib_file), optarg);
 #else
-			NOTQUIET("Support for GeoIP dyn-load not compiled-in, skipping option: --%s\n", ipv6calcoption_name(opt, longopts));
+			NONQUIETPRINT_WA("Support for GeoIP dyn-load not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
 			result = 0;
 			break;
@@ -312,7 +308,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const int 
 #ifdef SUPPORT_IP2LOCATION
 			result = snprintf(ip2location_db_dir, sizeof(ip2location_db_dir), optarg);
 #else
-			NOTQUIET("Support for IP2Location not compiled-in, skipping option: --%s\n", ipv6calcoption_name(opt, longopts));
+			NONQUIETPRINT_WA("Support for IP2Location not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
 			result = 0;
 			break;
@@ -321,7 +317,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const int 
 #ifdef SUPPORT_GEOIP
 			result = snprintf(geoip_db_dir, sizeof(geoip_db_dir), optarg);
 #else
-			NOTQUIET("Support for GeoIP not compiled-in, skipping option: --%s\n", ipv6calcoption_name(opt, longopts));
+			NONQUIETPRINT_WA("Support for GeoIP not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
 			result = 0;
 			break;
@@ -329,13 +325,13 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const int 
 		/* obsolete options */
 		case DB_ip2location_ipv4:
 		case DB_ip2location_ipv6:
-			NOTQUIET("Obsolete option skipped: --%s <file>, use instead: --%s <dir>\n", ipv6calcoption_name(opt, longopts), ipv6calcoption_name(DB_ip2location_dir, longopts));
+			NONQUIETPRINT_WA("Obsolete option skipped: --%s <file>, use instead: --%s <dir>", ipv6calcoption_name(opt, longopts), ipv6calcoption_name(DB_ip2location_dir, longopts));
 			result = 0;
 			break;
 
 		case DB_geoip_ipv4:
 		case DB_geoip_ipv6:
-			NOTQUIET("Obsolete option skipped: --%s <file>, use instead: --%s <dir>\n", ipv6calcoption_name(opt, longopts), ipv6calcoption_name(DB_geoip_dir, longopts));
+			NONQUIETPRINT_WA("Obsolete option skipped: --%s <file>, use instead: --%s <dir>", ipv6calcoption_name(opt, longopts), ipv6calcoption_name(DB_geoip_dir, longopts));
 			result = 0;
 			break;
 	};

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.4 2013/09/28 16:24:51 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.5 2013/09/28 20:32:40 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -20,6 +20,7 @@
 #include "databases/lib/libipv6calc_db_wrapper.h"
 
 extern long int ipv6calc_debug;
+int ipv6calc_quiet;
 
 
 /* parse value */
@@ -197,7 +198,7 @@ void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct 
  * call further option handlers
  * return: 0: option found
  */
-int ipv6calcoptions(const int opt, const char *optarg, const int quiet, const struct option longopts[]) {
+int ipv6calcoptions(const int opt, const char *optarg, const struct option longopts[]) {
 	int result = -1;
 
 	DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Called opt=0x%08x\n", __FILE__, __func__, opt);
@@ -205,17 +206,22 @@ int ipv6calcoptions(const int opt, const char *optarg, const int quiet, const st
 	/* general options */
 	switch(opt) {
 		case 'd':
-			DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Found debug option with value: %s\n", __FILE__, __func__, optarg);
+			DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Found debug option with value: %s", optarg);
 			ipv6calc_debug = parse_dec_hex_val(optarg);
 			fprintf(stderr, "%s/%s: given debug value: %lx\n", __FILE__, __func__, ipv6calc_debug);
 			result = 0;
 			break;
 
+		case 'q':
+			DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Found quiet option");
+			ipv6calc_quiet = 1;
+			result = 0;
+			break;
 		default:
 			/* jump to other parsers */
 			DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Call sub-parser for opt=0x%08x\n", __FILE__, __func__, opt);
 
-			result = libipv6calc_db_wrapper_options(opt, optarg, quiet, longopts);
+			result = libipv6calc_db_wrapper_options(opt, optarg, longopts);
 	};
 
 	DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Return with result: %d\n", __FILE__, __func__, result);
