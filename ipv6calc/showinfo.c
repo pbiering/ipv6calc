@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.85 2013/09/28 16:24:51 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.86 2013/09/29 19:57:41 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -176,6 +176,7 @@ static void printfooter(const uint32_t formatoptions) {
 #endif
 		snprintf(tempstring, sizeof(tempstring) - 1, "%s", tempstring2);
 #endif
+
 #ifdef SUPPORT_GEOIP
 #ifdef SUPPORT_GEOIP_DYN
 		snprintf(tempstring2, sizeof(tempstring2) - 1, "%s GeoIP(dyn-load)", tempstring);
@@ -192,22 +193,12 @@ static void printfooter(const uint32_t formatoptions) {
 		snprintf(tempstring, sizeof(tempstring) - 1, "%s", tempstring2);
 #endif
 #endif
-#ifdef SUPPORT_DB_IEEE
-		snprintf(tempstring2, sizeof(tempstring2) - 1, "%s DB_IEEE", tempstring);
-		snprintf(tempstring, sizeof(tempstring) - 1, "%s", tempstring2);
-#endif
-#ifdef SUPPORT_DB_IPV4
-		snprintf(tempstring2, sizeof(tempstring2) - 1, "%s DB_IPV4", tempstring);
-		snprintf(tempstring, sizeof(tempstring) - 1, "%s", tempstring2);
-#endif
-#ifdef SUPPORT_DB_IPV6
-		snprintf(tempstring2, sizeof(tempstring2) - 1, "%s DB_IPV6", tempstring);
-		snprintf(tempstring, sizeof(tempstring) - 1, "%s", tempstring2);
-#endif
 		/* cut off first char */
 		for (i = 0; i < strlen(tempstring); i++) {
 			tempstring[i] = tempstring[i+1];
 		};
+
+		libipv6calc_db_wrapper_features(tempstring, sizeof(tempstring));
 	
 		snprintf(tempstring2, sizeof(tempstring2) - 1, "IPV6CALC_FEATURES=\"%s\"", tempstring);
 		printout(tempstring2);
