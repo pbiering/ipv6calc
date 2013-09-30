@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calcdebug.h
- * Version    : $Id: libipv6calcdebug.h,v 1.8 2013/09/30 20:14:33 ds6peter Exp $
+ * Version    : $Id: libipv6calcdebug.h,v 1.9 2013/09/30 21:26:41 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -13,23 +13,26 @@
 
 #define _libipv6calcdebug_h_
 
-#define DEBUG_ipv6calc_ALL			-1
+#define DEBUG_ipv6calc_ALL				-1
 
-#define DEBUG_ipv6calcoptions			0x000008l
+//reserved for binaries					0x00000002l
+//reserved for binaries					0x00000004l
 
-#define DEBUG_libipv6calc			0x000010l
-#define DEBUG_libipv6addr			0x000020l
-#define DEBUG_libipv4addr			0x000040l
-#define DEBUG_libipv6calctypes			0x000080l
+#define DEBUG_ipv6calcoptions				0x00000008l
 
-#define DEBUG_librfc3041			0x000100l
-#define DEBUG_librfc1884			0x000200l
-#define DEBUG_librfc2874			0x000400l
-#define DEBUG_librfc1886			0x000800l
-#define DEBUG_librfc3056			0x001000l
-#define DEBUG_libifinet6			0x002000l
+#define DEBUG_libipv6calc				0x00000010l
+#define DEBUG_libipv6addr				0x00000020l
+#define DEBUG_libipv4addr				0x00000040l
+#define DEBUG_libipv6calctypes				0x00000080l
 
-#define DEBUG_libipv6addr_iidrandomdetection	0x010000l
+#define DEBUG_librfc3041				0x00000100l
+#define DEBUG_librfc1884				0x00000200l
+#define DEBUG_librfc2874				0x00000400l
+#define DEBUG_librfc1886				0x00000800l
+#define DEBUG_librfc3056				0x00001000l
+#define DEBUG_libifinet6				0x00002000l
+
+#define DEBUG_libipv6addr_iidrandomdetection		0x00010000l
 
 #define DEBUG_libipv6addr_db_wrapper			0x00100000l
 #define DEBUG_libipv6addr_db_wrapper_GeoIP		0x00200000l

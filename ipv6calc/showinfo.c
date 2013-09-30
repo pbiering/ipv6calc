@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.86 2013/09/29 19:57:41 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.87 2013/09/30 21:26:40 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -121,6 +121,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " GEOIP_ZIPCODE=...             : Zip code of IP address\n");
 	fprintf(stderr, " GEOIP_LATITUDE=...            : Latitude of IP address\n");
 	fprintf(stderr, " GEOIP_LONGITUDE=...           : Longitude of IP address\n");
+	fprintf(stderr, " GEOIP_AS_TEXT=...             : Autonomous System information\n");
 	fprintf(stderr, " GEOIP_DATABASE_INFO_IPV4=...  : Information about the used IPv4 database\n");
 	fprintf(stderr, " GEOIP_DATABASE_INFO_IPV6=...  : Information about the used IPv6 database\n");
 #endif
@@ -378,6 +379,7 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 
 	const char *returnedCountry = NULL;
 	const char *returnedCountryName = NULL;
+	char *as_text;
 	GeoIPRecord *gir = NULL;
 	int flag_geoip_ok = 0;
 	static int flag_geoip_info_shown = 0;
@@ -462,6 +464,14 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 #endif
 	};
 #endif
+
+	as_text = libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(addrstring, version);
+	if (as_text != NULL) {
+		if ( machinereadable != 0 ) {
+			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_AS_TEXT%s=%s", additionalstring, as_text);
+			printout(tempstring);
+		};
+	};
 
 	if (libipv6calc_db_wrapper_GeoIP_database_edition(gi) == GEOIP_CITY_EDITION_REV1 && version == 4) {
 		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {

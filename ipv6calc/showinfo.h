@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.h
- * Version    : $Id: showinfo.h,v 1.17 2013/04/09 20:09:33 ds6peter Exp $
- * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: showinfo.h,v 1.18 2013/09/30 21:26:41 ds6peter Exp $
+ * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for showinfo.c
@@ -13,7 +13,7 @@
 #include "libipv4addr.h"
 #include "libmac.h"
 
-#define DEBUG_showinfo		0x2
+#define DEBUG_showinfo		0x00000002l
 
 /* output version of machine readable format */
 // 1: never defined, until 0.51
