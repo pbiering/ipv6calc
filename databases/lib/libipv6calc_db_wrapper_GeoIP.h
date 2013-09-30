@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.h
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.h,v 1.13 2013/09/21 17:25:56 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.h,v 1.14 2013/09/30 20:14:33 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -19,35 +19,16 @@
 #include "GeoIPCity.h"
 #endif
 
-#define GEOIP_SUPPORT_UNKNOWN		0
-#define GEOIP_SUPPORT_COMPAT		1
-#define GEOIP_SUPPORT_FULL		2
-#define GEOIP_SUPPORT_NOTEXISTS		3
-
-#define GEOIP_IPV6_SUPPORT_UNKNOWN	0
-#define GEOIP_IPV6_SUPPORT_COMPAT	1
-#define GEOIP_IPV6_SUPPORT_FULL		2
-#define GEOIP_IPV6_SUPPORT_NOTEXISTS	3
+#define GEOIP_LIB_FEATURE_IPv6			0x0001
+#define GEOIP_LIB_FEATURE_LIB_VERSION		0x0002
+#define GEOIP_LIB_FEATURE_IPV6_CC_BY_IPNUM	0x0100
+#define GEOIP_LIB_FEATURE_IPV6_CN_BY_IPNUM	0x0200
+#define GEOIP_LIB_FEATURE_IPV6_CC_BY_ADDR	0x0400
+#define GEOIP_LIB_FEATURE_IPV6_CN_BY_ADDR	0x0800
 
 // features
 extern uint32_t wrapper_features_GeoIP;
-
-/* text representations */
-/*@unused@*/ static const s_type libipv6calc_db_wrapper_GeoIP_support[] = {
-	{ GEOIP_SUPPORT_UNKNOWN,	"unknown" },
-	{ GEOIP_SUPPORT_COMPAT,		"compat" },
-	{ GEOIP_SUPPORT_FULL,		"full" },
-	{ GEOIP_SUPPORT_NOTEXISTS,	"not-exists" },
-};
-
-/* text representations */
-/*@unused@*/ static const s_type libipv6calc_db_wrapper_GeoIP_IPv6_support[] = {
-	{ GEOIP_IPV6_SUPPORT_UNKNOWN,	"unknown" },
-	{ GEOIP_IPV6_SUPPORT_COMPAT,	"compat" },
-	{ GEOIP_IPV6_SUPPORT_FULL,	"full" },
-	{ GEOIP_IPV6_SUPPORT_NOTEXISTS,	"not-exists" },
-};
-
+extern uint32_t lib_features_GeoIP;
 
 #endif
 
