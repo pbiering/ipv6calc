@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.87 2013/09/30 21:26:40 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.88 2013/10/02 06:41:24 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -370,100 +370,15 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 
 	GeoIP *gi = NULL;
 
-#if defined (SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6) && defined (SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6)
-	/* both functions are available */
-#else
-	ipv6calc_ipv6addr ipv6addr;
-	int result = 0;
-#endif
-
 	const char *returnedCountry = NULL;
 	const char *returnedCountryName = NULL;
 	char *as_text;
 	GeoIPRecord *gir = NULL;
 	int flag_geoip_ok = 0;
 	static int flag_geoip_info_shown = 0;
-	int geoip_type = 0;
 
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable);
 	char tempstring[NI_MAXHOST] = "";
-
-	if (version == 4) {
-		geoip_type = GEOIP_COUNTRY_EDITION;
-	} else if (version == 6) {
-		geoip_type = GEOIP_COUNTRY_EDITION_V6;
-	} else {
-		fprintf(stderr, " GeoIP for IPv%d is not supported\n", version);
-		return;
-	};
-
-	DEBUGPRINT_WA(DEBUG_showinfo, "GeoIP IPv%d try to open database by type: %s", version, libipv6calc_db_wrapper_GeoIPDBDescription[geoip_type]);
-
-	if (libipv6calc_db_wrapper_GeoIP_db_avail(geoip_type) != 1) {
-		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-			fprintf(stderr, "%s: GeoIP IPv%d database by type not available: %s\n", DEBUG_function_name, version, libipv6calc_db_wrapper_GeoIPDBDescription[geoip_type]);
-		};
-		// stay silent
-		return;
-	};
-
-	gi = libipv6calc_db_wrapper_GeoIP_open_type(geoip_type, GEOIP_STANDARD);
-
-	if (gi == NULL) {
-		return;
-	};
-
-	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-		fprintf(stderr, "%s: GeoIP IPv%d database opened by type: %s\n", DEBUG_function_name, version, libipv6calc_db_wrapper_GeoIPDBDescription[geoip_type]);
-	};
-
-	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-		fprintf(stderr, "%s: GeoIP IPv%d check available databases\n", DEBUG_function_name, version);
-	};
-
-	if (libipv6calc_db_wrapper_GeoIP_database_edition(gi) == GEOIP_COUNTRY_EDITION && version == 4) {
-		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-			fprintf(stderr, "%s: GeoIP country database available\n", DEBUG_function_name);
-		};
-
-		returnedCountry = libipv6calc_db_wrapper_GeoIP_country_code_by_addr(gi, addrstring);
-		returnedCountryName = libipv6calc_db_wrapper_GeoIP_country_name_by_addr(gi, addrstring);
-	};
-
-#ifdef SUPPORT_GEOIP_V6
-	if (libipv6calc_db_wrapper_GeoIP_database_edition(gi) == GEOIP_COUNTRY_EDITION_V6 && version == 6) {
-		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-			fprintf(stderr, "%s: GeoIP country database IPv6 available\n", DEBUG_function_name);
-		};
-
-#if defined (SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6) && defined (SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6)
-		/* both functions are available */
-#else
-		/* workaround convert address string into structure */
-		result = addr_to_ipv6addrstruct(addrstring, tempstring, &ipv6addr);
-		if (result != 0) {
-			fprintf(stderr, "%s: GeoIPv6 workaround can't convert IPv6 address: %s\n", DEBUG_function_name, addrstring);
-		};
-#endif
-
-#ifdef SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6
-		returnedCountry = libipv6calc_db_wrapper_GeoIP_country_code_by_addr_v6(gi, addrstring);
-#else
-		if (result == 0) {
-			returnedCountry = libipv6calc_db_wrapper_GeoIP_country_code_by_ipnum_v6(gi, ipv6addr.in6_addr);
-		};
-#endif
-
-#ifdef SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6
-		returnedCountryName = libipv6calc_db_wrapper_GeoIP_country_name_by_addr_v6(gi, addrstring);
-#else
-		result = addr_to_ipv6addrstruct(addrstring, tempstring, &ipv6addr);
-		if (result == 0) {
-			returnedCountryName = libipv6calc_db_wrapper_GeoIP_country_name_by_ipnum_v6(gi, ipv6addr.in6_addr);
-		};
-#endif
-	};
-#endif
 
 	as_text = libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(addrstring, version);
 	if (as_text != NULL) {
@@ -473,13 +388,7 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 		};
 	};
 
-	if (libipv6calc_db_wrapper_GeoIP_database_edition(gi) == GEOIP_CITY_EDITION_REV1 && version == 4) {
-		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-			fprintf(stderr, "%s: GeoIP city database available\n", DEBUG_function_name);
-		};
-		gir = libipv6calc_db_wrapper_GeoIP_record_by_addr(gi, addrstring);
-	};
-
+	gir = libipv6calc_db_wrapper_GeoIP_wrapper_record_city_by_addr(addrstring, version);
 	if (gir != NULL) {
 		flag_geoip_ok = 1;
 
@@ -488,14 +397,18 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 		};
 
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_COUNTRY_SHORT%s=%s", additionalstring, gir->country_code);
-			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_REGION%s=%s", additionalstring, gir->region);
-			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_CITY%s=%s", additionalstring, gir->city);
-			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_ZIPCODE%s=%s", additionalstring, gir->postal_code);
-			printout(tempstring);
+			if (gir->region != NULL) {
+				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_REGION%s=%s", additionalstring, gir->region);
+				printout(tempstring);
+			};
+			if (gir->city != NULL) {
+				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_CITY%s=%s", additionalstring, gir->city);
+				printout(tempstring);
+			};
+			if (gir->postal_code != NULL) {
+				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_ZIPCODE%s=%s", additionalstring, gir->postal_code);
+				printout(tempstring);
+			};
 			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_LATITUDE%s=%f", additionalstring, gir->latitude);
 			printout(tempstring);
 			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_LONGITUDE%s=%f", additionalstring, gir->longitude);
@@ -509,9 +422,11 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 		} else {
 			fprintf(stderr, " GeoIP not machinereadable output currently not supported\n");
 		};
-
 		libipv6calc_db_wrapper_GeoIPRecord_delete(gir);
 	};
+
+	returnedCountry     = libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(addrstring, version);
+	returnedCountryName = libipv6calc_db_wrapper_GeoIP_wrapper_country_name_by_addr(addrstring, version);
 
 	if (returnedCountry != NULL) {
 		flag_geoip_ok = 1;
@@ -527,9 +442,15 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 			if (returnedCountryName != NULL) {
 				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_COUNTRY_LONG%s=%s", additionalstring, returnedCountryName);
 				printout(tempstring);
+			} else {
+				DEBUGPRINT_NA(DEBUG_showinfo, "returnedCountryName=NULL");
 			};
 		} else {
-			fprintf(stderr, " GeoIP not machinereadable output currently not supported\n");
+			if (returnedCountryName != NULL) {
+				fprintf(stderr, " GeoIP country name and code: %s (%s)\n", returnedCountryName, returnedCountry);
+			} else {
+				fprintf(stderr, " GeoIP country code: %s\n", returnedCountry);
+			};
 		};
 	};
 

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.23 2013/09/28 17:17:50 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.24 2013/10/02 06:41:24 ds6peter Exp $
 # Copyright  : 2003-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -107,4 +107,3 @@ make test || exit 1
 
 echo
 echo "For installing the binaries, type: make install"
-
