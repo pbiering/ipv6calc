@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.39 2013/09/28 20:32:40 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.40 2013/10/11 06:06:35 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -308,7 +308,7 @@ static void stat_inc_asnum(const uint32_t as_num32, const int proto) {
 		// map to AS_TRANS for now
 		index = ASNUM_AS_TRANS;
 	};
-	
+
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "%s/%s: Increment ASN index: %d (%d)\n", __FILE__, __func__, index, as_num32);
 	};

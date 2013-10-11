@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.23 2013/09/28 20:32:40 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.24 2013/10/11 06:06:35 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -487,16 +487,14 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const char *addr, const int pro
 	uint32_t as_num32 = ASNUM_AS_UNKNOWN; // default
 	int i, valid = 1;
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called: addr=%s proto=%d\n", __FILE__, __func__, addr, proto);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Called: addr=%s proto=%d", addr, proto);
 
 	// TODO: switch mechanism depending on backend (GeoIP supports AS only by text representation)
 	as_text = libipv6calc_db_wrapper_as_text_by_addr(addr, proto);
 
 	if ((as_text != NULL) && (strncmp(as_text, "AS", 2) == 0) && (strlen(as_text) > 2)) {
 		// catch AS....
-		for (i = 0; i <= (strlen(as_text) > 11 ? 9 : strlen(as_text) - 2); i++) {
+		for (i = 0; i < (strlen(as_text) - 2); i++) {
 			if ((as_text[i+2] == ' ') || (as_text[i+2] == '\0')) {
 				break;
 			} else if (isdigit(as_text[i+2])) {
@@ -508,16 +506,18 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const char *addr, const int pro
 			};
 		};
 
+		if (i > 10) {
+			// too many digits
+			valid = 0;
+		};
+
 		if (valid == 1) {
-			strncpy(as_number_string, as_text + 2, i);
-			as_number_string[i+1] = '\0';
+			snprintf(as_number_string, 11, "%s", as_text + 2);
 			as_num32 = atol(as_number_string);
 		};
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Result: %d (0x%08x)\n", __FILE__, __func__, as_num32, as_num32);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Result: %d (0x%08x)", as_num32, as_num32);
 
 	return(as_num32);
 };

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.19 2013/09/20 06:17:52 ds6peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.20 2013/10/11 06:06:35 ds6peter Exp $
 # Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -128,7 +128,7 @@ if [ "$1" != "bulk" ]; then
 		echo "IN     : $input"
 		echo "CHECK  : $result"
 		# get result
-		output="`echo "$input" | ./ipv6loganon`"
+		output="`echo "$input" | ./ipv6loganon -q`"
 		echo "OUT    : $output"
 		retval=$?
 		if [ $retval -ne 0 ]; then
@@ -163,7 +163,7 @@ if [ "$1" != "bulk" ]; then
 			echo "OPTIONS: $options"
 			echo "CHECK  : $result"
 			# get result
-			output="`echo "$input" | ./ipv6loganon $options`"
+			output="`echo "$input" | ./ipv6loganon -q $options`"
 			echo "OUT    : $output"
 			retval=$?
 			if [ $retval -ne 0 ]; then
@@ -203,36 +203,37 @@ else
 fi
 
 if [ $retval -ne 0 ]; then
+	echo "ERROR : function tests failed"
 	exit 1
 fi
 
 
-echo "Run 'ipv6loganon' reliability tests..." >&2
-list="`testscenarios_standard | awk '{ print $1 }'`"
-list="$list
-`testscenarios_special | awk '{ print $1 }'`"
-sortlist="`echo "$list" | sort -u`"
+run_loganon_reliability_tests() {
+	local options="$*"
 
-for entry in $sortlist; do
-	echo "DEBUG : test: $entry"
-	nonanonymized="`echo "$entry" | ../ipv6logstats/ipv6logstats -q`"
-	anonymized="`echo "$entry" | ./ipv6loganon | ../ipv6logstats/ipv6logstats -q`"
+	echo "INFO  : run 'ipv6loganon' reliability tests with options: $options" >&2
+	list="`testscenarios_standard | awk '{ print $1 }'`"
+	list="$list
+	`testscenarios_special | awk '{ print $1 }'`"
+	sortlist="`echo "$list" | sort -u`"
 
-	entry_anon="`echo "$entry" | ./ipv6loganon`"
+	for entry in $sortlist; do
+		echo "DEBUG : test: $entry"
+		nonanonymized="`echo "$entry" | ../ipv6logstats/ipv6logstats -q`"
+		anonymized="`echo "$entry" | ./ipv6loganon -q $options | ../ipv6logstats/ipv6logstats -q`"
 
-	if [ "$nonanonymized" != "$anonymized" ]; then
-		echo "ERROR : result not equal: $entry_anon"
-		echo "INFO  : non-anonymized statistics"
-		echo "$nonanonymized"
-		echo "INFO  : anonymized statistics"
-		echo "$anonymized"
-		exit 1
-	fi
-done
+		entry_anon="`echo "$entry" | ./ipv6loganon -q $options`"
 
-echo "Run 'ipv6loganon' option tests..." >&2
-# Test Scenarios
-source ../ipv6calc/test_scenarios.sh
+		if [ "$nonanonymized" != "$anonymized" ]; then
+			echo "ERROR : result not equal: $entry_anon"
+			export anonymized
+			export nonanonymized
+			diff -u <(echo "$anonymized") <(echo "$nonanonymized")
+			echo "ERROR : result not equal between anonymized and non-anonymized statistics: $entry_anon"
+			return 1
+		fi
+	done
+}
 
 run_loganon_options_tests() {
 	echo "Run 'ipv6loganon' anonymization option tests..."
@@ -250,9 +251,9 @@ run_loganon_options_tests() {
 		input=${input_result/=*/}
 		result=${input_result/*=/}
 
-		command="echo $input | ./ipv6loganon $options"
+		command="echo $input | ./ipv6loganon -q $options"
 
-		result_real="`echo $input | ./ipv6loganon $options`"
+		result_real="`echo $input | ./ipv6loganon -q $options`"
 		if [ $? -ne 0 ]; then
 			echo "ERROR : command was not proper executed: $command"
 			exit 1
@@ -289,9 +290,9 @@ run_loganon_options_kp_tests() {
 		input=${input_result/=*/}
 		result=${input_result/*=/}
 
-		command="echo $input | ./ipv6loganon $options"
+		command="echo $input | ./ipv6loganon -q $options"
 
-		result_real="`echo $input | ./ipv6loganon $options`"
+		result_real="`echo $input | ./ipv6loganon -q $options`"
 		if [ $? -ne 0 ]; then
 			echo "ERROR : command was not proper executed: $command"
 			exit 1
@@ -306,10 +307,37 @@ run_loganon_options_kp_tests() {
 			echo "INFO  : $command -> test ok"
 		fi
 	done || return 1
+
+	run_loganon_reliability_tests "--anonymize-preset kp"
+	if [ $? -ne 0 ]; then
+		return 1
+	fi
 }
 
-run_loganon_options_tests || exit 1
-run_loganon_options_kp_tests || exit 1
+
+#### Main
+
+run_loganon_reliability_tests
+if [ $? -ne 0 ]; then
+	echo "ERROR : run_loganon_reliability_tests failed"
+	exit 1
+fi
+
+echo "INFO  : run 'ipv6loganon' option tests..." >&2
+# Test Scenarios
+source ../ipv6calc/test_scenarios.sh
+
+run_loganon_options_tests
+if [ $? -ne 0 ]; then
+	echo "ERROR : run_loganon_options_tests failed"
+	exit 1
+fi
+
+run_loganon_options_kp_tests
+if [ $? -ne 0 ]; then
+	echo "ERROR : run_loganon_options_kp_tests failed"
+	exit 1
+fi
 
 echo "All tests were successfully done!" >&2
 
