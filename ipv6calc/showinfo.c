@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.88 2013/10/02 06:41:24 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.89 2013/10/12 09:51:04 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -482,7 +482,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	char tempipv4string[NI_MAXHOST] = "";
 	char embeddedipv4string[NI_MAXHOST] = "";
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable), as_num32 = ASNUM_AS_UNKNOWN;
-	int retval, i, j, registry, retval_anon = 1;
+	int retval, i, j, retval_anon = 1;
 	uint32_t typeinfo;
 	ipv6calc_ipv4addr ipv4addr_anon, *ipv4addr_anon_ptr;
 	uint16_t cc_index = COUNTRYCODE_INDEX_UNKNOWN;
@@ -492,9 +492,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 	typeinfo = ipv4addr_gettype(ipv4addrp);
 
-	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-		fprintf(stderr, "%s: result of 'ipv4addr_gettype': 0x%08x\n", DEBUG_function_name, (unsigned int) typeinfo);
-	};
+	DEBUGPRINT_WA(DEBUG_showinfo, "result of 'ipv4addr_gettype': 0x%08x", (unsigned int) typeinfo);
 
 	retval = libipv4addr_ipv4addrstruct_to_string(ipv4addrp, tempipv4string, 0);
 	if ( retval != 0 ) {
@@ -579,6 +577,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 	/* get AS Information */
 	if ((typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
+		DEBUGPRINT_NA(DEBUG_showinfo, "Call ipv4addr_anonymized_get_as_num32");
 		as_num32 = ipv4addr_anonymized_get_as_num32(ipv4addrp);
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS) == 1) {
@@ -603,26 +602,30 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 				fprintf(stdout, "Autonomous System Number (32-bit): %d\n", as_num32);
 			};
 		};
-
+	} else {
+		DEBUGPRINT_NA(DEBUG_showinfo, "Skip AS print: as_num32=ASNUM_AS_UNKNOWN");
 	};
 
 	if ((typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
 		/* get registry string */
 		// TODO: get registry by AS, if possible
 		retval = libipv4addr_get_registry_string(ipv4addrp, helpstring);
-		if ( retval == 1  && machinereadable == 0 ) {
-			fprintf(stderr, "Error getting registry string for IPv4 address: %s (%s)\n", helpstring, tempipv4string);
-			return;
-		};
-
-		if ( machinereadable != 0 ) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY%s=%s", embeddedipv4string, helpstring);
-				printout(tempstring);
+		if (retval == 1) {
+			if (machinereadable == 0) {
+				fprintf(stderr, "Error getting registry string for IPv4 address: %s (%s)\n", helpstring, tempipv4string);
+			};
 		} else {
-			fprintf(stdout, "IPv4 registry%s: %s\n", embeddedipv4string, helpstring);
+			if (machinereadable != 0) {
+					snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY%s=%s", embeddedipv4string, helpstring);
+					printout(tempstring);
+			} else {
+				fprintf(stdout, "IPv4 registry%s: %s\n", embeddedipv4string, helpstring);
+			};
 		};
 	} else if (as_num32 != ASNUM_AS_UNKNOWN) {
-		registry = libipv6calc_db_wrapper_registry_num_by_as_num32(as_num32);
+/*
+ * 		Don't print registry because mapping ASNUM to Registry is not accurate enough
+		int registry = libipv6calc_db_wrapper_registry_num_by_as_num32(as_num32);
 		j = -1;
 		for (i = 0; i < (int) (sizeof(ipv6calc_registries) / sizeof(ipv6calc_registries[0])); i++ ) {
 			if (ipv6calc_registries[i].number == registry) {
@@ -632,7 +635,6 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		};
 
 		if (j != -1) {
-		/* retrive registry from AS */
 			if ( machinereadable != 0 ) {
 				snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY%s=%s", embeddedipv4string, ipv6calc_registries[j].token);
 				printout(tempstring);
@@ -640,6 +642,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 				fprintf(stdout, "Registry for address: %s\n", ipv6calc_registries[j].token);
 			};
 		};
+*/
 	};
 
 
@@ -661,17 +664,19 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		};
 	};
 
+	if ((typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
 #ifdef SUPPORT_IP2LOCATION
-	/* IP2Location information */
-	print_ip2location(tempipv4string, formatoptions, embeddedipv4string, 4);
+		/* IP2Location information */
+		print_ip2location(tempipv4string, formatoptions, embeddedipv4string, 4);
 #endif
 
 #ifdef SUPPORT_GEOIP
-	/* GeoIP information */
-	if (use_geoip_ipv4 != 0) {
-		print_geoip(tempipv4string, formatoptions, embeddedipv4string, 4);
-	};
+		/* GeoIP information */
+		if (use_geoip_ipv4 != 0) {
+			print_geoip(tempipv4string, formatoptions, embeddedipv4string, 4);
+		};
 #endif
+	};
 
 	return;
 };
@@ -754,6 +759,7 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 		for ( i = 0; i <= 3; i++ ) {
 			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) macaddrp->addr[i + 2]);
 		};
+		ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
 
 		if ( machinereadable != 0 ) {
 			/* no additional hint */
@@ -938,6 +944,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		for (i = 0; i <= 3; i++) {
 			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 2 + i));
 		};
+		ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
 
 		retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, helpstring, 0);
 		if ( retval != 0 ) {
@@ -965,11 +972,13 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		for (i = 0; i <= 3; i++) {
 			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 12 + i) ^ 0xff);
 		};
+		ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
 
 		/* extract Teredo server IPv4 address */
 		for (i = 0; i <= 3; i++) {
 			ipv4addr_setoctet(&ipv4addr2, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 4 + i));
 		};
+		ipv4addr.scope = ipv4addr_gettype(&ipv4addr2);
 
 		print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "TEREDO-CLIENT");
 		print_ipv4addr(&ipv4addr2, formatoptions | FORMATOPTION_printembedded, "TEREDO-SERVER");
@@ -1004,6 +1013,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		for (i = 0; i <= 3; i++) {
 			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + 12)));
 		};
+		ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
 
 		if ( machinereadable != 0 ) {
 		} else {
@@ -1174,6 +1184,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		for (i = 0; i <= 3; i++) {
 			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + 12)));
 		};
+		ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
 		print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "COMPAT/MAPPED");
 	};
 
@@ -1271,6 +1282,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 							};
 						};
 
+						ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
+
 						if ( (typeinfo & IPV6_NEW_ADDR_IID_ISATAP) != 0 )  {
 							print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "ISATAP");
 						} else {
@@ -1296,12 +1309,16 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 					} else {
 						fprintf(stdout, "Address type contains IPv4 address:\n");
 					};
+
 					for (i = 0; i <= 3; i++) {
 						ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + 12)));
 					};
+					ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
+
 					if ( machinereadable != 0 ) {
 						// printout("IPV4_SOURCE=LINK-LOCAL-IID");
 					};
+
 					print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "LINK-LOCAL-IID");
 				} else {
 					if ( machinereadable != 0 ) {
@@ -1372,7 +1389,6 @@ END:
  * in : *ipv4addrp = pointer to IPv4 address
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "showinfo_ipv4addr"
 int showinfo_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formatoptions) {
 	int retval = 1;
 
@@ -1382,7 +1398,6 @@ int showinfo_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formato
 	retval = 0;
 	return (retval);
 };
-#undef DEBUG_function_name
 
 
 /*

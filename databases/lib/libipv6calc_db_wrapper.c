@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.24 2013/10/11 06:06:35 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.25 2013/10/12 09:51:04 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -405,9 +405,7 @@ uint16_t libipv6calc_db_wrapper_cc_index_by_addr(const char *addr, const int pro
 	const char *cc_text = libipv6calc_db_wrapper_country_code_by_addr(addr, proto);
 	uint8_t c1, c2;
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "Called");
 
 	if ((cc_text != NULL) && (strlen(cc_text) == 2)) {
 		if (isalpha(cc_text[0]) && isalnum(cc_text[1])) {

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.29 2013/09/22 19:27:39 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.30 2013/10/12 09:51:04 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -307,7 +307,6 @@ testscenarios_showinfo() {
 2001:db8:123:4509:a929:4291:7021:8626	OUI="Elsys AG"
 2001:db8:123:4509:a929:4291:7021:8626	EUI64_SCOPE=global
 2001:db8:11e0:6201:224:21ff:fe01:2345	EUI48_SCOPE=global
-2001:db8:11e0:6201:224:21ff:fe01:2345	OUI="MICRO-STAR INT'L CO., LTD."
 0123.4567.89ab				EUI48=01:23:45:67:89:ab
 01-23-45-67-89-ab			EUI48=01:23:45:67:89:ab
 012345-6789ab				EUI48=01:23:45:67:89:ab
@@ -326,7 +325,9 @@ a909:16fa:9092:23ff:a909:4941::7	IPV6_REGISTRY=RIPENCC
 # anonymized IPv4 address
 242.222.34.63				IPV4_COUNTRYCODE=DE
 242.222.34.63				IPV4_AS_NUM=8767
-242.222.34.63				IPV4_REGISTRY=RIPENCC
+246.24.59.65				IPV4_COUNTRYCODE=AU
+::246.24.59.65				IPV4_COUNTRYCODE[246.24.59.65]=AU
+::ffff:246.24.59.65			IPV4_COUNTRYCODE[246.24.59.65]=AU
 END
 }
 
@@ -336,6 +337,9 @@ testscenarios_showinfo_geoip() {
 46.244.223.233				GEOIP_COUNTRY_SHORT=DE
 46.244.223.233				IPV4_AS_NUM=8767		DB_IPV4_AS
 46.244.223.233				IPV4_REGISTRY=RIPENCC
+1.2.3.4					IPV4_COUNTRYCODE=AU
+::1.2.3.4				IPV4_COUNTRYCODE[1.2.3.4]=AU
+::ffff:1.2.3.4				IPV4_COUNTRYCODE[1.2.3.4]=AU
 # non-anonymized IPv6 prefix
 2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=DE
 2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_AS_NUM=8767		DB_IPV6_AS

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.14 2013/09/28 17:24:37 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.h,v 1.15 2013/10/12 09:51:04 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -58,6 +58,8 @@
 #define STATS_IPV6_IID_RANDOM		0x102
 #define STATS_IPV6_IID_ISATAP		0x103
 #define STATS_IPV6_IID_UNKNOWN		0x10f
+
+#define DEBUG_ipv6logstats_summary	0x00000002l
 
 /* labels statistic numbers */
 typedef struct {
