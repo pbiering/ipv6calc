@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.89 2013/10/12 09:51:04 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.90 2013/10/12 20:55:05 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -941,85 +941,80 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	};	
 
 	if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
-		for (i = 0; i <= 3; i++) {
-			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 2 + i));
-		};
-		ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
+		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 1);
 
-		retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, helpstring, 0);
-		if ( retval != 0 ) {
-			fprintf(stderr, "Error converting IPv4 address to string\n");
-			retval = 1;
-			goto END;
-		};	
+		if (r == 0) {
+			retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, helpstring, 0);
+			if ( retval != 0 ) {
+				fprintf(stderr, "Error converting IPv4 address to string\n");
+				retval = 1;
+				goto END;
+			};	
 
-		if ( machinereadable != 0 ) {
-			print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "6TO4");
-		} else {
-			fprintf(stdout, "Address type is 6to4 and included IPv4 address is: %s\n", helpstring);
-		};
+			if ( machinereadable != 0 ) {
+				print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "6TO4");
+			} else {
+				fprintf(stdout, "Address type is 6to4 and included IPv4 address is: %s\n", helpstring);
+			};
 
-		/* get registry string */
-		retval = libipv4addr_get_registry_string(&ipv4addr, helpstring);
-		if ( machinereadable != 0 ) {
-		} else {
-			fprintf(stdout, "IPv4 registry for 6to4 address: %s\n", helpstring);
+			/* get registry string */
+			retval = libipv4addr_get_registry_string(&ipv4addr, helpstring);
+			if ( machinereadable != 0 ) {
+			} else {
+				fprintf(stdout, "IPv4 registry for 6to4 address: %s\n", helpstring);
+			};
 		};
 	};
 
 	if ( (typeinfo & IPV6_NEW_ADDR_TEREDO) != 0 ) {
 		/* extract Teredo client IPv4 address */
-		for (i = 0; i <= 3; i++) {
-			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 12 + i) ^ 0xff);
-		};
-		ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
+		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 1);
 
-		/* extract Teredo server IPv4 address */
-		for (i = 0; i <= 3; i++) {
-			ipv4addr_setoctet(&ipv4addr2, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 4 + i));
-		};
-		ipv4addr.scope = ipv4addr_gettype(&ipv4addr2);
+		if (r == 0) {
+			r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr2, 2);
 
-		print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "TEREDO-CLIENT");
-		print_ipv4addr(&ipv4addr2, formatoptions | FORMATOPTION_printembedded, "TEREDO-SERVER");
+			if (r == 0) {
+				print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "TEREDO-CLIENT");
+				print_ipv4addr(&ipv4addr2, formatoptions | FORMATOPTION_printembedded, "TEREDO-SERVER");
 
-		retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr2, helpstring, 0);
-		if ( retval != 0 ) {
-			fprintf(stderr, "Error converting IPv4 address to string\n");
-			retval = 1;
-			goto END;
-		};	
+				retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr2, helpstring, 0);
+				if ( retval != 0 ) {
+					fprintf(stderr, "Error converting IPv4 address to string\n");
+					retval = 1;
+					goto END;
+				};	
 
-		/* extract Teredo client UDP port */
-		port = (uint16_t) (((uint16_t) ipv6addr_getoctet(ipv6addrp, (unsigned int) 10) << 8 | (uint16_t) ipv6addr_getoctet(ipv6addrp, (unsigned int) 11)) ^ 0xffff);
+				/* extract Teredo client UDP port */
+				port = (uint16_t) (((uint16_t) ipv6addr_getoctet(ipv6addrp, (unsigned int) 10) << 8 | (uint16_t) ipv6addr_getoctet(ipv6addrp, (unsigned int) 11)) ^ 0xffff);
 
-		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "TEREDO_PORT_CLIENT=%u", (unsigned int) port);
-			printout(tempstring);
-		} else {
-			fprintf(stdout, "Address type is Teredo and included IPv4 server address is: %s and client port: %u\n", helpstring, (unsigned int) port);
-		};
+				if ( machinereadable != 0 ) {
+					snprintf(tempstring, sizeof(tempstring) - 1, "TEREDO_PORT_CLIENT=%u", (unsigned int) port);
+					printout(tempstring);
+				} else {
+					fprintf(stdout, "Address type is Teredo and included IPv4 server address is: %s and client port: %u\n", helpstring, (unsigned int) port);
+				};
 
-		/* get registry string */
-		retval = libipv4addr_get_registry_string(&ipv4addr2, helpstring);
-		
-		if ( machinereadable != 0 ) {
-		} else {
-			fprintf(stdout, "IPv4 registry for Teredo server address: %s\n", helpstring);
+				/* get registry string */
+				retval = libipv4addr_get_registry_string(&ipv4addr2, helpstring);
+				
+				if ( machinereadable != 0 ) {
+				} else {
+					fprintf(stdout, "IPv4 registry for Teredo server address: %s\n", helpstring);
+				};
+			};
 		};
 	};
 
 	if ( (typeinfo & IPV6_NEW_ADDR_NAT64) != 0 )  {
-		for (i = 0; i <= 3; i++) {
-			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + 12)));
-		};
-		ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
+		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 0);
 
-		if ( machinereadable != 0 ) {
-		} else {
-			fprintf(stdout, "IPv4 registry for NAT64 address: %s\n", helpstring);
+		if (r == 0) {
+			if ( machinereadable != 0 ) {
+			} else {
+				fprintf(stdout, "IPv4 registry for NAT64 address: %s\n", helpstring);
+			};
+			print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "NAT64");
 		};
-		print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "NAT64");
 	};
 
 	/* SLA prefix included? */
@@ -1177,15 +1172,16 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	
 	/* Compat or mapped */
 	if ( (typeinfo & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)) != 0 ) {
-		if ( machinereadable != 0 ) {
-		} else {
-			fprintf(stdout, "Address type is compat/mapped and include an IPv4 address\n");
+		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 0);
+
+		if (r == 0) {
+			if ( machinereadable != 0 ) {
+			} else {
+				fprintf(stdout, "Address type is compat/mapped and include an IPv4 address\n");
+			};
+
+			print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "COMPAT/MAPPED");
 		};
-		for (i = 0; i <= 3; i++) {
-			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + 12)));
-		};
-		ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
-		print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "COMPAT/MAPPED");
 	};
 
 	/* Interface identifier included */

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.15 2013/10/12 09:51:04 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.h,v 1.16 2013/10/12 20:55:06 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -52,6 +52,14 @@
 #define STATS_IPV6_TEREDO_LACNIC	0x46
 #define STATS_IPV6_TEREDO_RESERVED	0x4e
 #define STATS_IPV6_TEREDO_UNKNOWN	0x4f
+
+#define STATS_IPV6_NAT64_IANA		0x52
+#define STATS_IPV6_NAT64_APNIC		0x53
+#define STATS_IPV6_NAT64_ARIN		0x54
+#define STATS_IPV6_NAT64_RIPE		0x55
+#define STATS_IPV6_NAT64_LACNIC		0x56
+#define STATS_IPV6_NAT64_RESERVED	0x5e
+#define STATS_IPV6_NAT64_UNKNOWN	0x5f
 
 #define STATS_IPV6_IID_GLOBAL		0x100
 #define STATS_IPV6_IID_MANUAL		0x101

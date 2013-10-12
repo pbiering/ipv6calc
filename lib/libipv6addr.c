@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.91 2013/09/20 18:54:44 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.92 2013/10/12 20:55:06 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -2690,15 +2690,11 @@ int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_
 	int result = 1;
 
 	if (filter->active == 0) {
-		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-			fprintf(stderr, "%s/%s: no filter active (SKIP)\n", __FILE__, __func__);
-		};
+		DEBUGPRINT_NA(DEBUG_libipv6addr, "No filter active (SKIP)");
 		return (1);
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s/%s: start\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libipv6addr, "Start");
 
 	/* get type */
 	typeinfo = ipv6addr_gettype(ipv6addrp);
@@ -2715,3 +2711,59 @@ int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_
 
 	return (result);
 };
+
+
+/* get included IPv4 address from an IPv6 address */
+/* in:	IPv6 address pointer (ro)
+ *	selector: in case of Teredo: 1=client 2=server
+ * mod:	IPv4 address pointer (rw)
+ * ret: 0=ok, !=0: no IPv4 adress included
+ */
+int libipv6addr_get_included_ipv4addr(const ipv6calc_ipv6addr *ipv6addrp, ipv6calc_ipv4addr *ipv4addrp, const int selector) {
+	int result = -1;
+	uint32_t typeinfo;
+	int begin = -1;
+	int i;
+	uint8_t xor = 0;
+
+	typeinfo = ipv6addrp->scope;
+
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "Called with IPv6 address having typeinfo: 0x%08x", typeinfo);
+
+	if ((typeinfo & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED | IPV6_NEW_ADDR_NAT64)) != 0) {
+		begin = 12;
+	} else if ((typeinfo & IPV6_NEW_ADDR_TEREDO) != 0) {
+		if (selector == 1) {
+			// Teredo client
+			begin = 12;
+			xor   = 0xff;
+		} else if (selector == 2) {
+			begin = 4;
+		} else {
+			fprintf(stderr, "libipv6addr_get_included_ipv4addr FAILED (unsupported value of selector: %d)", selector);
+		};
+	} else if ((typeinfo & IPV6_NEW_ADDR_6TO4) != 0) {
+		begin = 2;
+	};
+
+	if (begin > 0) {
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "IPv6 address contains IPv4 address in octets %d-%d", begin, begin+3);
+
+		for (i = 0; i <= 3; i++) {
+			ipv4addr_setoctet(ipv4addrp, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + begin)) ^ xor);
+		};
+
+		ipv4addrp->scope = ipv4addr_gettype(ipv4addrp);
+
+		result = 0;
+	};
+
+	if (result == -1) {
+		fprintf(stderr, "libipv6addr_get_included_ipv4addr FAILED (this should not happen)");
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "Return with result: %d", result);
+
+	return(result);
+};
+

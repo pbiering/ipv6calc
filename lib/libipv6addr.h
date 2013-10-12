@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.69 2013/09/20 18:54:44 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.70 2013/10/12 20:55:06 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -277,6 +277,8 @@ typedef struct {
 #define IPV6_NEW_ADDR_IID_LOCAL			(uint32_t) 0x40000000U	/* IPv6 address with local generated IID */
 #define IPV6_NEW_ADDR_IID_GLOBAL		(uint32_t) 0x80000000U	/* IPv6 address with global IID */
 
+#define IPV6_ADDR_HAS_PUBLIC_IPV4		(IPV6_NEW_ADDR_NAT64 | IPV6_NEW_ADDR_6TO4 | IPV6_NEW_ADDR_TEREDO | IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)
+
 /* text representations */
 /*@unused@*/ static const s_type ipv6calc_ipv6addrtypestrings[] = {
 	{ IPV6_ADDR_ANY			, "unknown" },
@@ -380,12 +382,14 @@ extern int  identifier_to_ipv6addrstruct(const char *addrstring, char *resultstr
 extern int  tokenlsb64_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
 extern int  libipv6addr_ipv6addrstruct_to_tokenlsb64(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions);
 
-extern int  libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_set *ipv6calc_anon_set);
+extern int      libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_set *ipv6calc_anon_set);
 extern uint32_t ipv6addr_get_payload_anonymized_iid(const ipv6calc_ipv6addr *ipv6addrp, const uint32_t typeinfo);
-int ipv6addr_get_payload_anonymized_prefix(const ipv6calc_ipv6addr *ipv6addrp, const int payload_selector, uint32_t *result_ptr);
+extern int      ipv6addr_get_payload_anonymized_prefix(const ipv6calc_ipv6addr *ipv6addrp, const int payload_selector, uint32_t *result_ptr);
 
 extern int ipv6addr_iidrandomdetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statistics *variancesp);
 
-extern int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_ipv6addr *filter);
-extern int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token);
+extern int  ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_ipv6addr *filter);
+extern int  ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token);
 extern void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter);
+
+extern int  libipv6addr_get_included_ipv4addr(const ipv6calc_ipv6addr *ipv6addrp, ipv6calc_ipv4addr *ipv4addrp, const int selector);

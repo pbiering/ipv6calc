@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
-# Version    : $Id: test_ipv6logstats.sh,v 1.10 2013/09/20 06:17:52 ds6peter Exp $
+# Version    : $Id: test_ipv6logstats.sh,v 1.11 2013/10/12 20:55:06 ds6peter Exp $
 # Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"
@@ -31,6 +31,19 @@ cat <<END | grep -v "^#"
 2001:db8::a0fc:4941:a0fc:3041 - - [15/Jun/2003:05:01:56 +0200] "GET /iid-privacy.ico HTTP/1.1" 200 1011 "http://www.bieringer.de/linux/IPv6/" "Privoxy/3.0 (Anonymous)"
 192.168.1.1 - - [09/Jun/2003:10:16:56 +0200] "GET /stats/result.png HTTP/1.0" 200 4244 "-" "Privoxy/3.0 (Anonymous)"
 2001:db8::a0fc:4291:a0fc:1884 - - [15/Jun/2003:05:01:56 +0200] "GET /iid-static.ico HTTP/1.1" 200 1011 "http://www.bieringer.de/linux/IPv6/" "Privoxy/3.0 (Anonymous)"
+END
+}
+
+
+testscenarios_match() {
+	cat <<END | grep -v "^#"
+# Anonymized IPv4
+246.24.59.65					ASN-num-proto/15169/IPv4
+246.24.59.65					CC-proto-code/IPv4/AU
+::246.24.59.65					ASN-num-proto/15169/IPv4
+::246.24.59.65					CC-proto-code/IPv4/AU
+::ffff:246.24.59.65				ASN-num-proto/15169/IPv4
+::ffff:246.24.59.65				CC-proto-code/IPv4/AU
 END
 }
 
@@ -84,6 +97,18 @@ if [ $retval -ne 0 ]; then
 	echo "Error executing 'ipv6logstats' (version 3 test)"
 	exit 1
 fi
+
+# testscenarios matching
+testscenarios_match | while read ip match; do
+	echo -n "INFO  : test $ip for match $match: "
+	if echo "$ip" | ./ipv6logstats -q | grep -q "$match"; then
+		echo "OK"
+	else
+		echo "ERROR, unexpected result:"
+		echo "$ip" | ./ipv6logstats -q | grep -v "DB-Info"
+		exit 1
+	fi
+done || exit 1
 
 
 echo "All tests were successfully done!"

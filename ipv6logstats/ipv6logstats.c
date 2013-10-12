@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.41 2013/10/12 09:51:04 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.42 2013/10/12 20:55:06 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -323,13 +323,12 @@ static void lineparser(void) {
 	char token[LINEBUFFER];
 	char resultstring[LINEBUFFER];
 	char *charptr, *cptr, **ptrptr;
-	int linecounter = 0, retval, i;
+	int linecounter = 0, retval, i, r;
 
 	uint32_t inputtype  = FORMAT_undefined;
 	ipv6calc_ipv6addr ipv6addr;
 	ipv6calc_ipv4addr ipv4addr;
 	int registry;
-	uint32_t typeinfo;
 
 	int index;
 	char country_code_char_1, country_code_char_2;
@@ -444,93 +443,141 @@ static void lineparser(void) {
 			continue;
 		};
 
+		/* catch compat/mapped */
+		switch (inputtype) {
+			case FORMAT_ipv6addr:
+				if ((ipv6addr.scope & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)) != 0) {
+					/* extract IPv4 address */
+					r = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, 1);
+					if (r != 0) {
+						continue;
+					};
+
+					// remap
+					inputtype = FORMAT_ipv4addr;
+				};
+		};
+
 		/* get information and fill statistics */
 		switch (inputtype) {
 			case FORMAT_ipv6addr:
 				/* is IPv6 address */
 				stat_inc(STATS_IPV6);
 
-				/* country code */
-				cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 6);
-				stat_inc_country_code(cc_index, 6);
-
-				/* asnum */
-				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 6);
-				stat_inc_asnum(as_num32, 6);
-
-				/* get type */
-				typeinfo = ipv6addr_gettype(&ipv6addr);
-
-				if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
-					/* 6to4 address */
-					for (i = 0; i <= 3; i++) {
-						ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(&ipv6addr, (unsigned int) 2 + i));
+				if ((ipv6addr.scope & IPV6_ADDR_HAS_PUBLIC_IPV4) != 0) {
+					// get IPv4 address
+					r = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, 1);
+					if (r != 0) {
+						continue;
 					};
-					
+
 					/* get registry */
 					registry = ipv4addr_getregistry(&ipv4addr);
-					switch (registry) {
-						case IPV4_ADDR_REGISTRY_IANA:
-							stat_inc(STATS_IPV6_6TO4_IANA);
-							break;
-						case IPV4_ADDR_REGISTRY_APNIC:
-							stat_inc(STATS_IPV6_6TO4_APNIC);
-							break;
-						case IPV4_ADDR_REGISTRY_ARIN:
-							stat_inc(STATS_IPV6_6TO4_ARIN);
-							break;
-						case IPV4_ADDR_REGISTRY_RIPE:
-							stat_inc(STATS_IPV6_6TO4_RIPE);
-							break;
-						case IPV4_ADDR_REGISTRY_LACNIC:
-							stat_inc(STATS_IPV6_6TO4_LACNIC);
-							break;
-						case IPV4_ADDR_REGISTRY_RESERVED:
-							stat_inc(STATS_IPV6_6TO4_RESERVED);
-							break;
-						default:
-							stat_inc(STATS_IPV6_6TO4_UNKNOWN);
-							if (opt_unknown == 1) {
-								fprintf(stderr, "Unknown address: %s\n", token);
-							};
-							break;
+
+					if ((ipv4addr.scope & IPV4_ADDR_ANONYMIZED) != 0) {
+						cc_index = ipv4addr_anonymized_get_cc_index(&ipv4addr);
+						as_num32 = ipv4addr_anonymized_get_as_num32(&ipv4addr);
+					} else {
+						/* get country code */
+						cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 4);
+						as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 4);
 					};
-				} else if ( (typeinfo & IPV6_NEW_ADDR_TEREDO) != 0 ) {
-					/* Teredo address */
-					for (i = 0; i <= 3; i++) {
-						ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(&ipv6addr, (unsigned int) 12 + i) ^ 0xff);
-					};
-					
-					/* get registry */
-					registry = ipv4addr_getregistry(&ipv4addr);
-					switch (registry) {
-						case IPV4_ADDR_REGISTRY_IANA:
-							stat_inc(STATS_IPV6_TEREDO_IANA);
-							break;
-						case IPV4_ADDR_REGISTRY_APNIC:
-							stat_inc(STATS_IPV6_TEREDO_APNIC);
-							break;
-						case IPV4_ADDR_REGISTRY_ARIN:
-							stat_inc(STATS_IPV6_TEREDO_ARIN);
-							break;
-						case IPV4_ADDR_REGISTRY_RIPE:
-							stat_inc(STATS_IPV6_TEREDO_RIPE);
-							break;
-						case IPV4_ADDR_REGISTRY_LACNIC:
-							stat_inc(STATS_IPV6_TEREDO_LACNIC);
-							break;
-						case IPV4_ADDR_REGISTRY_RESERVED:
-							stat_inc(STATS_IPV6_TEREDO_RESERVED);
-							break;
-						default:
-							stat_inc(STATS_IPV6_TEREDO_UNKNOWN);
-							if (opt_unknown == 1) {
-								fprintf(stderr, "Unknown address: %s\n", token);
+
+					stat_inc_country_code(cc_index, 4);
+					stat_inc_asnum(as_num32, 4);
+
+					if ((ipv4addr.scope & IPV4_ADDR_ANONYMIZED) == 0) {
+						if ((ipv6addr.scope & IPV6_NEW_ADDR_6TO4) != 0) {
+							switch (registry) {
+								case IPV4_ADDR_REGISTRY_IANA:
+									stat_inc(STATS_IPV6_6TO4_IANA);
+									break;
+								case IPV4_ADDR_REGISTRY_APNIC:
+									stat_inc(STATS_IPV6_6TO4_APNIC);
+									break;
+								case IPV4_ADDR_REGISTRY_ARIN:
+									stat_inc(STATS_IPV6_6TO4_ARIN);
+									break;
+								case IPV4_ADDR_REGISTRY_RIPE:
+									stat_inc(STATS_IPV6_6TO4_RIPE);
+									break;
+								case IPV4_ADDR_REGISTRY_LACNIC:
+									stat_inc(STATS_IPV6_6TO4_LACNIC);
+									break;
+								case IPV4_ADDR_REGISTRY_RESERVED:
+									stat_inc(STATS_IPV6_6TO4_RESERVED);
+									break;
+								default:
+									stat_inc(STATS_IPV6_6TO4_UNKNOWN);
+									if (opt_unknown == 1) {
+										fprintf(stderr, "Unknown address: %s\n", token);
+									};
+									break;
 							};
-							break;
+						} else if ((ipv6addr.scope & IPV6_NEW_ADDR_TEREDO) != 0) {
+							switch (registry) {
+								case IPV4_ADDR_REGISTRY_IANA:
+									stat_inc(STATS_IPV6_TEREDO_IANA);
+									break;
+								case IPV4_ADDR_REGISTRY_APNIC:
+									stat_inc(STATS_IPV6_TEREDO_APNIC);
+									break;
+								case IPV4_ADDR_REGISTRY_ARIN:
+									stat_inc(STATS_IPV6_TEREDO_ARIN);
+									break;
+								case IPV4_ADDR_REGISTRY_RIPE:
+									stat_inc(STATS_IPV6_TEREDO_RIPE);
+									break;
+								case IPV4_ADDR_REGISTRY_LACNIC:
+									stat_inc(STATS_IPV6_TEREDO_LACNIC);
+									break;
+								case IPV4_ADDR_REGISTRY_RESERVED:
+									stat_inc(STATS_IPV6_TEREDO_RESERVED);
+									break;
+								default:
+									stat_inc(STATS_IPV6_TEREDO_UNKNOWN);
+									if (opt_unknown == 1) {
+										fprintf(stderr, "Unknown address: %s\n", token);
+									};
+									break;
+							};
+						} else if ((ipv6addr.scope & IPV6_NEW_ADDR_NAT64) != 0) {
+							switch (registry) {
+								case IPV4_ADDR_REGISTRY_IANA:
+									stat_inc(STATS_IPV6_NAT64_IANA);
+									break;
+								case IPV4_ADDR_REGISTRY_APNIC:
+									stat_inc(STATS_IPV6_NAT64_APNIC);
+									break;
+								case IPV4_ADDR_REGISTRY_ARIN:
+									stat_inc(STATS_IPV6_NAT64_ARIN);
+									break;
+								case IPV4_ADDR_REGISTRY_RIPE:
+									stat_inc(STATS_IPV6_NAT64_RIPE);
+									break;
+								case IPV4_ADDR_REGISTRY_LACNIC:
+									stat_inc(STATS_IPV6_NAT64_LACNIC);
+									break;
+								case IPV4_ADDR_REGISTRY_RESERVED:
+									stat_inc(STATS_IPV6_NAT64_RESERVED);
+									break;
+								default:
+									stat_inc(STATS_IPV6_NAT64_UNKNOWN);
+									if (opt_unknown == 1) {
+										fprintf(stderr, "Unknown address: %s\n", token);
+									};
+									break;
+							};
+						};
 					};
 				} else {
-					/* Native IPv6 address */
+					/* country code */
+					cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 6);
+					stat_inc_country_code(cc_index, 6);
+
+					/* asnum */
+					as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 6);
+					stat_inc_asnum(as_num32, 6);
 
 					/* get registry */
 					registry = ipv6addr_getregistry(&ipv6addr);
@@ -564,14 +611,14 @@ static void lineparser(void) {
 							break;
 					};
 
-					if ((typeinfo & IPV6_NEW_ADDR_IID) == IPV6_NEW_ADDR_IID) {
-						if ((typeinfo & IPV6_NEW_ADDR_IID_RANDOM) != 0) {
+					if ((ipv6addr.scope & IPV6_NEW_ADDR_IID) == IPV6_NEW_ADDR_IID) {
+						if ((ipv6addr.scope & IPV6_NEW_ADDR_IID_RANDOM) != 0) {
 							stat_inc(STATS_IPV6_IID_RANDOM);
-						} else if ((typeinfo & IPV6_NEW_ADDR_IID_ISATAP) != 0) {
+						} else if ((ipv6addr.scope & IPV6_NEW_ADDR_IID_ISATAP) != 0) {
 							stat_inc(STATS_IPV6_IID_ISATAP);
-						} else if ((typeinfo & IPV6_NEW_ADDR_IID_LOCAL) != 0) {
+						} else if ((ipv6addr.scope & IPV6_NEW_ADDR_IID_LOCAL) != 0) {
 							stat_inc(STATS_IPV6_IID_MANUAL);
-						} else if ((typeinfo & IPV6_NEW_ADDR_IID_GLOBAL) != 0) {
+						} else if ((ipv6addr.scope & IPV6_NEW_ADDR_IID_GLOBAL) != 0) {
 							stat_inc(STATS_IPV6_IID_GLOBAL);
 						} else {
 							stat_inc(STATS_IPV6_IID_UNKNOWN);
