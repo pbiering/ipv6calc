@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.16 2013/10/12 20:55:06 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.h,v 1.17 2013/10/13 16:18:44 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -37,29 +37,11 @@
 #define STATS_IPV6_RESERVED	0x2e
 #define STATS_IPV6_UNKNOWN	0x2f
 
-#define STATS_IPV6_6TO4_IANA		0x32
-#define STATS_IPV6_6TO4_APNIC		0x33
-#define STATS_IPV6_6TO4_ARIN		0x34
-#define STATS_IPV6_6TO4_RIPE		0x35
-#define STATS_IPV6_6TO4_LACNIC		0x36
-#define STATS_IPV6_6TO4_RESERVED	0x3e
-#define STATS_IPV6_6TO4_UNKNOWN		0x3f
+#define STATS_IPV6_6TO4_BASE		0x30
 
-#define STATS_IPV6_TEREDO_IANA		0x42
-#define STATS_IPV6_TEREDO_APNIC		0x43
-#define STATS_IPV6_TEREDO_ARIN		0x44
-#define STATS_IPV6_TEREDO_RIPE		0x45
-#define STATS_IPV6_TEREDO_LACNIC	0x46
-#define STATS_IPV6_TEREDO_RESERVED	0x4e
-#define STATS_IPV6_TEREDO_UNKNOWN	0x4f
+#define STATS_IPV6_TEREDO_BASE		0x40
 
-#define STATS_IPV6_NAT64_IANA		0x52
-#define STATS_IPV6_NAT64_APNIC		0x53
-#define STATS_IPV6_NAT64_ARIN		0x54
-#define STATS_IPV6_NAT64_RIPE		0x55
-#define STATS_IPV6_NAT64_LACNIC		0x56
-#define STATS_IPV6_NAT64_RESERVED	0x5e
-#define STATS_IPV6_NAT64_UNKNOWN	0x5f
+#define STATS_IPV6_NAT64_BASE		0x50
 
 #define STATS_IPV6_IID_GLOBAL		0x100
 #define STATS_IPV6_IID_MANUAL		0x101
@@ -75,3 +57,6 @@ typedef struct {
 	long unsigned int counter;
 	const char *token;
 } stat_entries;
+
+extern int feature_cc;
+extern int feature_as;

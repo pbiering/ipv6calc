@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
-# Version    : $Id: test_ipv6logstats.sh,v 1.11 2013/10/12 20:55:06 ds6peter Exp $
+# Version    : $Id: test_ipv6logstats.sh,v 1.12 2013/10/13 16:18:44 ds6peter Exp $
 # Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"
@@ -37,13 +37,44 @@ END
 
 testscenarios_match() {
 	cat <<END | grep -v "^#"
+# Non-Anonymized IPv4
+1.2.3.4						AS-num-proto/15169/IPv4
+1.2.3.4						CC-proto-code/IPv4/AU
+::1.2.3.4					AS-num-proto/15169/IPv4
+::1.2.3.4					CC-proto-code/IPv4/AU
+::ffff:1.2.3.4					AS-num-proto/15169/IPv4
+::ffff:1.2.3.4					CC-proto-code/IPv4/AU
 # Anonymized IPv4
-246.24.59.65					ASN-num-proto/15169/IPv4
+246.24.59.65					AS-num-proto/15169/IPv4
 246.24.59.65					CC-proto-code/IPv4/AU
-::246.24.59.65					ASN-num-proto/15169/IPv4
+::246.24.59.65					AS-num-proto/15169/IPv4
 ::246.24.59.65					CC-proto-code/IPv4/AU
-::ffff:246.24.59.65				ASN-num-proto/15169/IPv4
+::ffff:246.24.59.65				AS-num-proto/15169/IPv4
 ::ffff:246.24.59.65				CC-proto-code/IPv4/AU
+# Teredo
+3ffe:831f:ce49:7601:8000:efff:af4a:86BF		CC-code-proto/IT/IPv4
+3ffe:831f:ce49:7601:8000:efff:af4a:86BF		AS-num-proto/3269/IPv4
+3ffe:831f:ce49:7601:8000:efff:af4a:86BF		IPv6/Teredo/RIPE
+# Teredo (anonymized)
+3ffe:831f:ce49:7601:8000:ffff:a0b:f33a		CC-code-proto/IT/IPv4
+3ffe:831f:ce49:7601:8000:ffff:a0b:f33a		AS-num-proto/3269/IPv4
+3ffe:831f:ce49:7601:8000:ffff:a0b:f33a		IPv6/Teredo/RIPE
+# 6to4
+2002:c0a8:f900:9:a929:4291:4021:132d		IPv6/6to4/RESERVED
+2002:c0a8:f900:9:a929:4291:4021:132d		CC-code-proto/unknown/IPv4
+2002:0102:0304:0:ed08:d22b:6c15:3401		CC-proto-code/IPv4/AU
+2002:0102:0304:0:ed08:d22b:6c15:3401		AS-num-proto/15169/IPv4
+# 6to4 (anonymized)
+2002:f618:3b41:9:a929:4941::c			CC-proto-code/IPv4/AU
+2002:f618:3b41:9:a929:4941::c			AS-num-proto/15169/IPv4
+# NAT64
+64:ff9b::0102:0304				CC-proto-code/IPv4/AU
+64:ff9b::0102:0304				AS-num-proto/15169/IPv4
+64:ff9b::0102:0304				IPv6/NAT64/APNIC
+# NAT64 (anonmyized)
+64:ff9b::f618:3b41				CC-proto-code/IPv4/AU
+64:ff9b::f618:3b41				AS-num-proto/15169/IPv4
+64:ff9b::f618:3b41				IPv6/NAT64/APNIC
 END
 }
 
@@ -89,19 +120,45 @@ if [ $retval -ne 0 ]; then
 fi
 echo
 
-
 #testscenarios version 3
-testscenarios | ./ipv6logstats -q | grep -q '\*3\*CC-proto-code-list/ALL'
-retval=$?
-if [ $retval -ne 0 ]; then
-	echo "Error executing 'ipv6logstats' (version 3 test)"
-	exit 1
+if ./ipv6logstats -v | grep -w "STAT_CC"; then
+	testscenarios | ./ipv6logstats -q | grep -q '\*3\*CC-proto-code-list/ALL'
+	retval=$?
+	if [ $retval -ne 0 ]; then
+		echo "Error executing 'ipv6logstats' (version 3 test)"
+		exit 1
+	fi
+else
+	echo "Skip 'ipv6logstats' version 3 test (missing STAT_CC support)"
 fi
 
 # testscenarios matching
+if ./ipv6logstats -v | grep -w "STAT_CC"; then
+	feature_cc=1
+fi
+
+if ./ipv6logstats -v | grep -w "STAT_AS"; then
+	feature_as=1
+fi
+
 testscenarios_match | while read ip match; do
 	echo -n "INFO  : test $ip for match $match: "
-	if echo "$ip" | ./ipv6logstats -q | grep -q "$match"; then
+
+	if echo "$match" | grep -q "^AS"; then
+		if [ "$feature_as" != "1" ]; then
+			echo "SKIPPED (missing support)"
+			continue
+		fi
+	fi
+
+	if echo "$match" | grep -q "^CC"; then
+		if [ "$feature_cc" != "1" ]; then
+			echo "SKIPPED (missing support)"
+			continue
+		fi
+	fi
+
+	if echo "$ip" | ./ipv6logstats -q | grep -q "$match\W*1"; then
 		echo "OK"
 	else
 		echo "ERROR, unexpected result:"

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.33 2013/09/10 20:25:50 ds6peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.34 2013/10/13 16:18:44 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -619,3 +619,23 @@ int libipv6calc_anon_supported(const s_ipv6calc_anon_set *ipv6calc_anon_set) {
 	};
 };
 
+
+/*
+ * return pointer to registry name by number
+ */
+const char *libipv6calc_registry_string_by_num(const int registry) {
+	int j = -1, i;
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_registries); i++ ) {
+		if (ipv6calc_registries[i].number == registry) {
+			j = i;
+			break;
+		};
+	};
+
+	if (j == -1) {
+		fprintf(stderr, "ERROR - undefined registry number: %d (this should not happen)\n", registry);
+		exit(1);
+	};
+
+	return(ipv6calc_registries[j].token);
+};

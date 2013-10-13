@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.25 2013/10/12 09:51:04 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.26 2013/10/13 16:18:44 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -269,9 +269,7 @@ int libipv6calc_db_wrapper_has_features(uint32_t features) {
 int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const struct option longopts[]) {
 	int result = -1;
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "Called");
 
 	switch(opt) {
 		case DB_ip2location_disable:
@@ -353,11 +351,20 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
  *********************************************/
 
 /*
- * get Registry number by AS number
+ * get registry number by AS number
  */
 int libipv6calc_db_wrapper_registry_num_by_as_num32(const uint32_t as_num32) {
 	// currently only supported by BuiltIn
 	return(libipv6calc_db_wrapper_BuiltIn_registry_num_by_as_num32(as_num32));
+};
+
+
+/*
+ * get registry number by CC index
+ */
+int libipv6calc_db_wrapper_registry_num_by_cc_index(const uint16_t cc_index) {
+	// currently only supported by BuiltIn
+	return(libipv6calc_db_wrapper_BuiltIn_registry_num_by_cc_index(cc_index));
 };
 
 
@@ -439,11 +446,30 @@ uint16_t libipv6calc_db_wrapper_cc_index_by_addr(const char *addr, const int pro
 	};
 
 END_libipv6calc_db_wrapper_cc_index_by_addr:
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Finished with %d (0x%x)\n", __FILE__, __func__, index, index);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Finished with %d (0x%x)", index, index);
 
 	return(index);
+};
+
+
+/*
+ * get country code string by index
+ */
+int libipv6calc_db_wrapper_country_code_by_cc_index(char *string, int length, const uint16_t cc_index) {
+	int result = 0;
+
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Called with cc_index=%d", cc_index);
+
+	if (cc_index <= COUNTRYCODE_INDEX_LETTER_MAX) {
+		snprintf(string, length, "%c%c", COUNTRYCODE_INDEX_TO_CHAR1(cc_index), COUNTRYCODE_INDEX_TO_CHAR2(cc_index));
+	} else if (cc_index == COUNTRYCODE_INDEX_UNKNOWN) {
+		snprintf(string, length, "unknown");
+	} else {
+		snprintf(string, length, "unsupported");
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Return country code: %s", string);
+	return(result);
 };
 
 
@@ -579,6 +605,10 @@ uint32_t libipv6calc_db_wrapper_as_num32_comp17(const uint32_t as_num32) {;
 	return(as_num32_comp17);
 };
 
+
+/*
+ * Decompress AS 32-bit number from 17 bit
+ */
 uint32_t libipv6calc_db_wrapper_as_num32_decomp17(const uint32_t as_num32_comp17) {;
 	uint32_t as_num32 = ASNUM_AS_UNKNOWN;
 

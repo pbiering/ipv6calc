@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.70 2013/10/12 20:55:06 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.71 2013/10/13 16:18:44 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -278,6 +278,8 @@ typedef struct {
 #define IPV6_NEW_ADDR_IID_GLOBAL		(uint32_t) 0x80000000U	/* IPv6 address with global IID */
 
 #define IPV6_ADDR_HAS_PUBLIC_IPV4		(IPV6_NEW_ADDR_NAT64 | IPV6_NEW_ADDR_6TO4 | IPV6_NEW_ADDR_TEREDO | IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)
+#define IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX	(IPV6_NEW_ADDR_6TO4 | IPV6_NEW_ADDR_TEREDO)
+#define IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID	(IPV6_NEW_ADDR_NAT64 | IPV6_NEW_ADDR_TEREDO | IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED | IPV6_NEW_ADDR_6TO4_MICROSOFT)
 
 /* text representations */
 /*@unused@*/ static const s_type ipv6calc_ipv6addrtypestrings[] = {

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.16 2013/09/28 20:32:40 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.17 2013/10/13 16:18:44 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -20,6 +20,7 @@ extern uint32_t wrapper_features;
 #define IPV6CALC_DB_AS_TO_REGISTRY		0x00000001
 #define IPV6CALC_DB_IPV4_TO_REGISTRY		0x00000002
 #define IPV6CALC_DB_IPV6_TO_REGISTRY		0x00000004
+#define IPV6CALC_DB_CC_TO_REGISTRY		0x00000008
 
 #define IPV6CALC_DB_IPV4_TO_AS			0x00000010
 #define IPV6CALC_DB_IPV6_TO_AS			0x00000020
@@ -37,6 +38,7 @@ static const s_type ipv6calc_db_features[] = {
 	{ IPV6CALC_DB_IPV6_TO_AS	, "DB_IPV6_AS"	},
 	{ IPV6CALC_DB_IPV4_TO_CC	, "DB_IPV4_CC"	},
 	{ IPV6CALC_DB_IPV6_TO_CC	, "DB_IPV6_CC"	},
+	{ IPV6CALC_DB_CC_TO_REGISTRY	, "DB_CC_REG"	},
 	{ IPV6CALC_DB_IEEE_TO_INFO	, "DB_IEEE"	}
 };
 
@@ -83,6 +85,8 @@ extern int  libipv6calc_db_wrapper_options(const int opt, const char *optarg, co
 extern char       *libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int proto);
 extern uint16_t    libipv6calc_db_wrapper_cc_index_by_addr(const char *addr, const int proto);
 
+extern int         libipv6calc_db_wrapper_country_code_by_cc_index(char *string, int length, const uint16_t cc_index);
+
 // Autonomous System Text/Number
 extern char       *libipv6calc_db_wrapper_as_text_by_addr(const char *addr, const int proto);
 extern uint32_t    libipv6calc_db_wrapper_as_num32_by_addr(const char *addr, const int proto);
@@ -93,3 +97,4 @@ extern uint32_t    libipv6calc_db_wrapper_as_num32_decomp17(const uint32_t as_nu
 
 // Registries
 extern int         libipv6calc_db_wrapper_registry_num_by_as_num32(const uint32_t as_num32);
+extern int         libipv6calc_db_wrapper_registry_num_by_cc_index(const uint16_t cc_index);

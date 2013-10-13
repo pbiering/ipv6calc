@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.42 2013/10/12 20:55:06 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.43 2013/10/13 16:18:44 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -48,6 +48,9 @@ char    file_out[NI_MAXHOST] = "";
 int     file_out_flag = 0;
 FILE    *FILE_OUT;
 
+int feature_cc = 0;
+int feature_as = 0;
+
 static stat_entries ipv6logstats_statentries[] = {
 	{ STATS_ALL		, 0, "ALL" },
 	{ STATS_IPV4		, 0, "IPv4" },
@@ -66,20 +69,27 @@ static stat_entries ipv6logstats_statentries[] = {
 	{ STATS_IPV6_LACNIC	, 0, "IPv6/LACNIC" },
 	{ STATS_IPV6_RESERVED	, 0, "IPv6/RESERVED" },
 	{ STATS_IPV6_UNKNOWN	, 0, "IPv6/UNKNOWN" },
-	{ STATS_IPV6_6TO4_IANA	, 0, "IPv6/6to4/IANA" },
-	{ STATS_IPV6_6TO4_APNIC	, 0, "IPv6/6to4/APNIC" },
-	{ STATS_IPV6_6TO4_ARIN	, 0, "IPv6/6to4/ARIN" },
-	{ STATS_IPV6_6TO4_RIPE	, 0, "IPv6/6to4/RIPE" },
-	{ STATS_IPV6_6TO4_LACNIC, 0, "IPv6/6to4/LACNIC" },
-	{ STATS_IPV6_6TO4_RESERVED, 0, "IPv6/6to4/RESERVED" },
-	{ STATS_IPV6_6TO4_UNKNOWN, 0, "IPv6/6to4/UNKNOWN" },
-	{ STATS_IPV6_TEREDO_IANA	, 0, "IPv6/Teredo/IANA" },
-	{ STATS_IPV6_TEREDO_APNIC	, 0, "IPv6/Teredo/APNIC" },
-	{ STATS_IPV6_TEREDO_ARIN	, 0, "IPv6/Teredo/ARIN" },
-	{ STATS_IPV6_TEREDO_RIPE	, 0, "IPv6/Teredo/RIPE" },
-	{ STATS_IPV6_TEREDO_LACNIC, 0, "IPv6/Teredo/LACNIC" },
-	{ STATS_IPV6_TEREDO_RESERVED, 0, "IPv6/Teredo/RESERVED" },
-	{ STATS_IPV6_TEREDO_UNKNOWN, 0, "IPv6/Teredo/UNKNOWN" },
+	{ STATS_IPV6_6TO4_BASE + REGISTRY_IANA    , 0, "IPv6/6to4/IANA"     },
+	{ STATS_IPV6_6TO4_BASE + REGISTRY_APNIC   , 0, "IPv6/6to4/APNIC"    },
+	{ STATS_IPV6_6TO4_BASE + REGISTRY_ARIN    , 0, "IPv6/6to4/ARIN"     },
+	{ STATS_IPV6_6TO4_BASE + REGISTRY_RIPE    , 0, "IPv6/6to4/RIPE"     },
+	{ STATS_IPV6_6TO4_BASE + REGISTRY_LACNIC  , 0, "IPv6/6to4/LACNIC"   },
+	{ STATS_IPV6_6TO4_BASE + REGISTRY_RESERVED, 0, "IPv6/6to4/RESERVED" },
+	{ STATS_IPV6_6TO4_BASE + REGISTRY_UNKNOWN , 0, "IPv6/6to4/UNKNOWN"  },
+	{ STATS_IPV6_TEREDO_BASE + REGISTRY_IANA    , 0, "IPv6/Teredo/IANA"     },
+	{ STATS_IPV6_TEREDO_BASE + REGISTRY_APNIC   , 0, "IPv6/Teredo/APNIC"    },
+	{ STATS_IPV6_TEREDO_BASE + REGISTRY_ARIN    , 0, "IPv6/Teredo/ARIN"     },
+	{ STATS_IPV6_TEREDO_BASE + REGISTRY_RIPE    , 0, "IPv6/Teredo/RIPE"     },
+	{ STATS_IPV6_TEREDO_BASE + REGISTRY_LACNIC  , 0, "IPv6/Teredo/LACNIC"   },
+	{ STATS_IPV6_TEREDO_BASE + REGISTRY_RESERVED, 0, "IPv6/Teredo/RESERVED" },
+	{ STATS_IPV6_TEREDO_BASE + REGISTRY_UNKNOWN , 0, "IPv6/Teredo/UNKNOWN"  },
+	{ STATS_IPV6_NAT64_BASE + REGISTRY_IANA    , 0, "IPv6/NAT64/IANA"     },
+	{ STATS_IPV6_NAT64_BASE + REGISTRY_APNIC   , 0, "IPv6/NAT64/APNIC"    },
+	{ STATS_IPV6_NAT64_BASE + REGISTRY_ARIN    , 0, "IPv6/NAT64/ARIN"     },
+	{ STATS_IPV6_NAT64_BASE + REGISTRY_RIPE    , 0, "IPv6/NAT64/RIPE"     },
+	{ STATS_IPV6_NAT64_BASE + REGISTRY_LACNIC  , 0, "IPv6/NAT64/LACNIC"   },
+	{ STATS_IPV6_NAT64_BASE + REGISTRY_RESERVED, 0, "IPv6/NAT64/RESERVED" },
+	{ STATS_IPV6_NAT64_BASE + REGISTRY_UNKNOWN , 0, "IPv6/NAT64/UNKNOWN"  },
 	{ STATS_IPV6_IID_GLOBAL, 0, "IPv6/IID/Global" },
 	{ STATS_IPV6_IID_RANDOM, 0, "IPv6/IID/Random" },
 	{ STATS_IPV6_IID_MANUAL, 0, "IPv6/IID/Manual" },
@@ -209,6 +219,22 @@ int main(int argc,char *argv[]) {
 		exit(EXIT_FAILURE);
 	};
 
+	/* check for Country Code support */
+	if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_REGISTRY| IPV6CALC_DB_IPV6_TO_REGISTRY | IPV6CALC_DB_CC_TO_REGISTRY) != 1) {
+		fprintf(stderr, "Basic databases are missing for creating statistic");
+		exit(EXIT_FAILURE);
+	};
+
+	/* check for Country Code support */
+	if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV6_TO_CC) == 1) {
+		feature_cc = 1;
+	};
+
+	/* check for ASN support */
+	if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_IPV6_TO_AS) == 1) {
+		feature_as = 1;
+	};
+
 	/* do work depending on selection */
 	if ((command & CMD_printversion) != 0) {
 		if ((command & CMD_printversion_verbose2) != 0) {
@@ -225,11 +251,6 @@ int main(int argc,char *argv[]) {
 		ipv6logstats_printhelp();
 		exit(EXIT_FAILURE);
 	};
-
-	/* check for Country Code support */
-
-	/* check for ASN support */
-
 
 	/* call lineparser */
 	lineparser();
@@ -328,12 +349,11 @@ static void lineparser(void) {
 	uint32_t inputtype  = FORMAT_undefined;
 	ipv6calc_ipv6addr ipv6addr;
 	ipv6calc_ipv4addr ipv4addr;
-	int registry;
+	int registry, stat_registry_base;
 
 	int index;
-	char country_code_char_1, country_code_char_2;
-	uint16_t cc_index;
-	uint32_t as_num32;
+	uint16_t cc_index = COUNTRYCODE_INDEX_UNKNOWN;
+	uint32_t as_num32 = ASNUM_AS_UNKNOWN;
 	long unsigned int c_all, c_ipv4, c_ipv6;
 
 	// clear counters
@@ -361,6 +381,8 @@ static void lineparser(void) {
 		};
 
 		linecounter++;
+
+		stat_registry_base = 0;
 
 		if (linecounter == 1) {
 			if (ipv6calc_quiet == 0) {
@@ -455,7 +477,15 @@ static void lineparser(void) {
 
 					// remap
 					inputtype = FORMAT_ipv4addr;
+
+					// create text represenation
+					r = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, token, 0);
 				};
+				break;
+
+			default:
+				// nothing to do
+				break;
 		};
 
 		/* get information and fill statistics */
@@ -465,119 +495,102 @@ static void lineparser(void) {
 				stat_inc(STATS_IPV6);
 
 				if ((ipv6addr.scope & IPV6_ADDR_HAS_PUBLIC_IPV4) != 0) {
+					/* has public IPv4 address included */
+
 					// get IPv4 address
 					r = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, 1);
 					if (r != 0) {
 						continue;
 					};
 
-					/* get registry */
-					registry = ipv4addr_getregistry(&ipv4addr);
-
 					if ((ipv4addr.scope & IPV4_ADDR_ANONYMIZED) != 0) {
 						cc_index = ipv4addr_anonymized_get_cc_index(&ipv4addr);
 						as_num32 = ipv4addr_anonymized_get_as_num32(&ipv4addr);
+
+						/* get registry */
+						registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
 					} else {
-						/* get country code */
-						cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 4);
-						as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 4);
+						if ((feature_cc == 1) || (feature_as == 1)) {
+							// create text represenation
+							r = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, token, 0);
+
+							if (feature_cc == 1) {
+								/* get country code */
+								cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 4);
+							};
+
+							if (feature_as == 1) {
+								/* get AS */
+								as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 4);
+							};
+						};
+
+						/* get registry */
+						registry = ipv4addr_getregistry(&ipv4addr);
 					};
 
-					stat_inc_country_code(cc_index, 4);
-					stat_inc_asnum(as_num32, 4);
+					if (feature_cc == 1) {
+						stat_inc_country_code(cc_index, 4);
+					};
 
-					if ((ipv4addr.scope & IPV4_ADDR_ANONYMIZED) == 0) {
-						if ((ipv6addr.scope & IPV6_NEW_ADDR_6TO4) != 0) {
-							switch (registry) {
-								case IPV4_ADDR_REGISTRY_IANA:
-									stat_inc(STATS_IPV6_6TO4_IANA);
-									break;
-								case IPV4_ADDR_REGISTRY_APNIC:
-									stat_inc(STATS_IPV6_6TO4_APNIC);
-									break;
-								case IPV4_ADDR_REGISTRY_ARIN:
-									stat_inc(STATS_IPV6_6TO4_ARIN);
-									break;
-								case IPV4_ADDR_REGISTRY_RIPE:
-									stat_inc(STATS_IPV6_6TO4_RIPE);
-									break;
-								case IPV4_ADDR_REGISTRY_LACNIC:
-									stat_inc(STATS_IPV6_6TO4_LACNIC);
-									break;
-								case IPV4_ADDR_REGISTRY_RESERVED:
-									stat_inc(STATS_IPV6_6TO4_RESERVED);
-									break;
-								default:
-									stat_inc(STATS_IPV6_6TO4_UNKNOWN);
-									if (opt_unknown == 1) {
-										fprintf(stderr, "Unknown address: %s\n", token);
-									};
-									break;
-							};
-						} else if ((ipv6addr.scope & IPV6_NEW_ADDR_TEREDO) != 0) {
-							switch (registry) {
-								case IPV4_ADDR_REGISTRY_IANA:
-									stat_inc(STATS_IPV6_TEREDO_IANA);
-									break;
-								case IPV4_ADDR_REGISTRY_APNIC:
-									stat_inc(STATS_IPV6_TEREDO_APNIC);
-									break;
-								case IPV4_ADDR_REGISTRY_ARIN:
-									stat_inc(STATS_IPV6_TEREDO_ARIN);
-									break;
-								case IPV4_ADDR_REGISTRY_RIPE:
-									stat_inc(STATS_IPV6_TEREDO_RIPE);
-									break;
-								case IPV4_ADDR_REGISTRY_LACNIC:
-									stat_inc(STATS_IPV6_TEREDO_LACNIC);
-									break;
-								case IPV4_ADDR_REGISTRY_RESERVED:
-									stat_inc(STATS_IPV6_TEREDO_RESERVED);
-									break;
-								default:
-									stat_inc(STATS_IPV6_TEREDO_UNKNOWN);
-									if (opt_unknown == 1) {
-										fprintf(stderr, "Unknown address: %s\n", token);
-									};
-									break;
-							};
-						} else if ((ipv6addr.scope & IPV6_NEW_ADDR_NAT64) != 0) {
-							switch (registry) {
-								case IPV4_ADDR_REGISTRY_IANA:
-									stat_inc(STATS_IPV6_NAT64_IANA);
-									break;
-								case IPV4_ADDR_REGISTRY_APNIC:
-									stat_inc(STATS_IPV6_NAT64_APNIC);
-									break;
-								case IPV4_ADDR_REGISTRY_ARIN:
-									stat_inc(STATS_IPV6_NAT64_ARIN);
-									break;
-								case IPV4_ADDR_REGISTRY_RIPE:
-									stat_inc(STATS_IPV6_NAT64_RIPE);
-									break;
-								case IPV4_ADDR_REGISTRY_LACNIC:
-									stat_inc(STATS_IPV6_NAT64_LACNIC);
-									break;
-								case IPV4_ADDR_REGISTRY_RESERVED:
-									stat_inc(STATS_IPV6_NAT64_RESERVED);
-									break;
-								default:
-									stat_inc(STATS_IPV6_NAT64_UNKNOWN);
-									if (opt_unknown == 1) {
-										fprintf(stderr, "Unknown address: %s\n", token);
-									};
-									break;
-							};
+					if (feature_as == 1) {
+						stat_inc_asnum(as_num32, 4);
+					};
+
+					if ((ipv6addr.scope & IPV6_NEW_ADDR_6TO4) != 0) {
+						stat_registry_base = STATS_IPV6_6TO4_BASE;
+
+					} else if ((ipv6addr.scope & IPV6_NEW_ADDR_TEREDO) != 0) {
+						stat_registry_base = STATS_IPV6_TEREDO_BASE;
+
+					} else if ((ipv6addr.scope & IPV6_NEW_ADDR_NAT64) != 0) {
+						stat_registry_base = STATS_IPV6_NAT64_BASE;
+					};
+
+					if (stat_registry_base > 0) {
+						switch (registry) {
+							case IPV4_ADDR_REGISTRY_IANA:
+								stat_inc(stat_registry_base + REGISTRY_IANA);
+								break;
+							case IPV4_ADDR_REGISTRY_APNIC:
+								stat_inc(stat_registry_base + REGISTRY_APNIC);
+								break;
+							case IPV4_ADDR_REGISTRY_ARIN:
+								stat_inc(stat_registry_base + REGISTRY_ARIN);
+								break;
+							case IPV4_ADDR_REGISTRY_RIPE:
+								stat_inc(stat_registry_base + REGISTRY_RIPE);
+								break;
+							case IPV4_ADDR_REGISTRY_LACNIC:
+								stat_inc(stat_registry_base + REGISTRY_LACNIC);
+								break;
+							case IPV4_ADDR_REGISTRY_RESERVED:
+								stat_inc(stat_registry_base + REGISTRY_RESERVED);
+								break;
+							default:
+								stat_inc(stat_registry_base + REGISTRY_UNKNOWN);
+								if (opt_unknown == 1) {
+									fprintf(stderr, "Unknown address: %s\n", token);
+								};
+								break;
+						};
+					} else {
+						if (opt_unknown == 1) {
+							fprintf(stderr, "Unknown address: %s\n", token);
 						};
 					};
 				} else {
-					/* country code */
-					cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 6);
-					stat_inc_country_code(cc_index, 6);
+					if (feature_cc == 1) {
+						/* country code */
+						cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 6);
+						stat_inc_country_code(cc_index, 6);
+					};
 
-					/* asnum */
-					as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 6);
-					stat_inc_asnum(as_num32, 6);
+					if (feature_as == 1) {
+						/* asnum */
+						as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 6);
+						stat_inc_asnum(as_num32, 6);
+					};
 
 					/* get registry */
 					registry = ipv6addr_getregistry(&ipv6addr);
@@ -635,17 +648,27 @@ static void lineparser(void) {
 				if ((ipv4addr.scope & IPV4_ADDR_ANONYMIZED) != 0) {
 					cc_index = ipv4addr_anonymized_get_cc_index(&ipv4addr);
 					as_num32 = ipv4addr_anonymized_get_as_num32(&ipv4addr);
+
+					/* get registry */
+					registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
 				} else {
-					/* get country code */
-					cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 4);
-					as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 4);
+					if (feature_cc == 1) {
+						/* get country code */
+						cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 4);
+					};
+
+					if (feature_as == 1) {
+						/* get AS */
+						as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 4);
+					};
+
+					/* get registry */
+					registry = ipv4addr_getregistry(&ipv4addr);
 				};
 
 				stat_inc_country_code(cc_index, 4);
 				stat_inc_asnum(as_num32, 4);
 
-				/* get registry */
-				registry = ipv4addr_getregistry(&ipv4addr);
 				switch (registry) {
 					case IPV4_ADDR_REGISTRY_IANA:
 						stat_inc(STATS_IPV4_IANA);
@@ -701,97 +724,81 @@ static void lineparser(void) {
 			printf("%-20s %lu\n", ipv6logstats_statentries[i].token, ipv6logstats_statentries[i].counter);
 		};
 
-		/* country_code / proto */
-		for (index = 0; index < COUNTRYCODE_INDEX_MAX; index++) {
-			if (counter_country[index] > 0) {
-				DEBUGPRINT_WA(DEBUG_ipv6logstats_summary, "CC-Index: %d", index);
-				country_code_char_1 = COUNTRYCODE_INDEX_TO_CHAR1(index);
-				country_code_char_2 = COUNTRYCODE_INDEX_TO_CHAR2(index);
+		if (feature_cc == 1) {
+			/* country_code / proto */
+			for (index = 0; index < COUNTRYCODE_INDEX_MAX; index++) {
+				if (counter_country[index] > 0) {
+					DEBUGPRINT_WA(DEBUG_ipv6logstats_summary, "CC-Index: %d", index);
 
-				printf("*3*CC-code-proto/%c%c/ALL   %lu\n", country_code_char_1, country_code_char_2, counter_country[index]);
-				printf("*3*CC-code-proto/%c%c/IPv4  %lu\n", country_code_char_1, country_code_char_2, counter_country_ipv4[index]);
-				printf("*3*CC-code-proto/%c%c/IPv6  %lu\n", country_code_char_1, country_code_char_2, counter_country_ipv6[index]);
-				printf("*3*CC-code-proto-list/%c%c  %lu %lu %lu\n", country_code_char_1, country_code_char_2, counter_country[index], counter_country_ipv4[index], counter_country_ipv6[index]);
+					libipv6calc_db_wrapper_country_code_by_cc_index(resultstring, sizeof(resultstring), index);
+
+					printf("*3*CC-code-proto/%s/ALL   %lu\n", resultstring, counter_country[index]);
+					printf("*3*CC-code-proto/%s/IPv4  %lu\n", resultstring, counter_country_ipv4[index]);
+					printf("*3*CC-code-proto/%s/IPv6  %lu\n", resultstring, counter_country_ipv6[index]);
+					printf("*3*CC-code-proto-list/%s  %lu %lu %lu\n", resultstring, counter_country[index], counter_country_ipv4[index], counter_country_ipv6[index]);
+				};
 			};
-		};
 
-		/* proto / country_code */
-		c_all = 0; c_ipv4 = 0; c_ipv6 = 0;
-		for (index = 0; index < COUNTRYCODE_INDEX_MAX; index++) {
-			if (counter_country[index] > 0) {
-				country_code_char_1 = COUNTRYCODE_INDEX_TO_CHAR1(index);
-				country_code_char_2 = COUNTRYCODE_INDEX_TO_CHAR2(index);
-
-				printf("*3*CC-proto-code/ALL/%c%c   %lu\n", country_code_char_1, country_code_char_2, counter_country[index]);
-				c_all += counter_country[index];
+			/* proto / country_code */
+			c_all = 0; c_ipv4 = 0; c_ipv6 = 0;
+			for (index = 0; index < COUNTRYCODE_INDEX_MAX; index++) {
+				if (counter_country[index] > 0) {
+					libipv6calc_db_wrapper_country_code_by_cc_index(resultstring, sizeof(resultstring), index);
+					printf("*3*CC-proto-code/ALL/%s   %lu\n", resultstring, counter_country[index]);
+					c_all += counter_country[index];
+				};
 			};
-		};
-		for (index = 0; index < COUNTRYCODE_INDEX_MAX; index++) {
-			if (counter_country_ipv4[index] > 0) {
-				country_code_char_1 = COUNTRYCODE_INDEX_TO_CHAR1(index);
-				country_code_char_2 = COUNTRYCODE_INDEX_TO_CHAR2(index);
-
-				printf("*3*CC-proto-code/IPv4/%c%c  %lu\n", country_code_char_1, country_code_char_2, counter_country_ipv4[index]);
-				c_ipv4 += counter_country_ipv4[index];
+			for (index = 0; index < COUNTRYCODE_INDEX_MAX; index++) {
+				if (counter_country_ipv4[index] > 0) {
+					libipv6calc_db_wrapper_country_code_by_cc_index(resultstring, sizeof(resultstring), index);
+					printf("*3*CC-proto-code/IPv4/%s  %lu\n", resultstring, counter_country_ipv4[index]);
+					c_ipv4 += counter_country_ipv4[index];
+				};
 			};
-		};
-		for (index = 0; index < COUNTRYCODE_INDEX_MAX; index++) {
-			if (counter_country_ipv6[index] > 0) {
-				country_code_char_1 = COUNTRYCODE_INDEX_TO_CHAR1(index);
-				country_code_char_2 = COUNTRYCODE_INDEX_TO_CHAR2(index);
-
-				printf("*3*CC-proto-code/IPv6/%c%c  %lu\n", country_code_char_1, country_code_char_2, counter_country_ipv6[index]);
-				c_ipv6 += counter_country_ipv6[index];
+			for (index = 0; index < COUNTRYCODE_INDEX_MAX; index++) {
+				if (counter_country_ipv6[index] > 0) {
+					libipv6calc_db_wrapper_country_code_by_cc_index(resultstring, sizeof(resultstring), index);
+					printf("*3*CC-proto-code/IPv6/%s  %lu\n", resultstring, counter_country_ipv6[index]);
+					c_ipv6 += counter_country_ipv6[index];
+				};
 			};
+
+			printf("*3*CC-proto-code-list/ALL  %lu %lu %lu\n", c_all, c_ipv4, c_ipv6);
 		};
 
-		printf("*3*CC-proto-code-list/ALL  %lu %lu %lu\n", c_all, c_ipv4, c_ipv6);
-
-		/*
-		c_all = 0; c_ipv4 = 0; c_ipv6 = 0;
-		for (i = 0; i < COUNTRYCODE_INDEX_MAX; i++) {
-			index = i;
-			c_all += counter_country[index];
-			c_ipv4 += counter_country_ipv4[index];
-			c_ipv6 += counter_country_ipv6[index];
-		};
-		printf("**CC-proto-code/A46/ALL  %lu %lu %lu DEBUG\n", c_all, c_ipv4, c_ipv6);
-		printf("**CC-proto-code/A46/ALL  %lu %lu %lu DEBUG2\n", counter_country_A46, counter_country_IPV4, counter_country_IPV6);
-		*/
-
-		/* ASN number / proto */
-		for (index = 0; index < ASNUM_MAX; index++) {
-			if (counter_asn[index] > 0) {
-				printf("*3*ASN-num-proto/%d/ALL   %lu\n", index, counter_asn[index]);
-				printf("*3*ASN-num-proto/%d/IPv4  %lu\n", index, counter_asn_ipv4[index]);
-				printf("*3*ASN-num-proto/%d/IPv6  %lu\n", index, counter_asn_ipv6[index]);
-				printf("*3*ASN-num-proto-list/%d  %lu %lu %lu\n", index, counter_asn[index], counter_asn_ipv4[index], counter_asn_ipv6[index]);
+		if (feature_as == 1) {
+			/* ASN number / proto */
+			for (index = 0; index < ASNUM_MAX; index++) {
+				if (counter_asn[index] > 0) {
+					printf("*3*AS-num-proto/%d/ALL   %lu\n", index, counter_asn[index]);
+					printf("*3*AS-num-proto/%d/IPv4  %lu\n", index, counter_asn_ipv4[index]);
+					printf("*3*AS-num-proto/%d/IPv6  %lu\n", index, counter_asn_ipv6[index]);
+					printf("*3*AS-num-proto-list/%d  %lu %lu %lu\n", index, counter_asn[index], counter_asn_ipv4[index], counter_asn_ipv6[index]);
+				};
 			};
-		};
 
-		/* ASN proto / number */
-		c_all = 0; c_ipv4 = 0; c_ipv6 = 0;
-		for (index = 0; index < ASNUM_MAX; index++) {
-			if (counter_asn[index] > 0) {
-				printf("*3*ASN-proto-num/ALL/%d   %lu\n", index, counter_asn[index]);
-				c_all += counter_asn[index];
+			/* ASN proto / number */
+			c_all = 0; c_ipv4 = 0; c_ipv6 = 0;
+			for (index = 0; index < ASNUM_MAX; index++) {
+				if (counter_asn[index] > 0) {
+					printf("*3*AS-proto-num/ALL/%d   %lu\n", index, counter_asn[index]);
+					c_all += counter_asn[index];
+				};
 			};
-		};
-		for (index = 0; index < ASNUM_MAX; index++) {
-			if (counter_asn_ipv4[index] > 0) {
-				printf("*3*ASN-proto-num/IPv4/%d  %lu\n", index, counter_asn_ipv4[index]);
-				c_ipv4 += counter_asn_ipv4[index];
+			for (index = 0; index < ASNUM_MAX; index++) {
+				if (counter_asn_ipv4[index] > 0) {
+					printf("*3*AS-proto-num/IPv4/%d  %lu\n", index, counter_asn_ipv4[index]);
+					c_ipv4 += counter_asn_ipv4[index];
+				};
 			};
-		};
-		for (index = 0; index < ASNUM_MAX; index++) {
-			if (counter_asn_ipv6[index] > 0) {
-				printf("*3*ASN-proto-num/IPv6/%d  %lu\n", index, counter_asn_ipv6[index]);
-				c_ipv6 += counter_asn_ipv6[index];
+			for (index = 0; index < ASNUM_MAX; index++) {
+				if (counter_asn_ipv6[index] > 0) {
+					printf("*3*AS-proto-num/IPv6/%d  %lu\n", index, counter_asn_ipv6[index]);
+					c_ipv6 += counter_asn_ipv6[index];
+				};
 			};
+			printf("*3*AS-proto-num-list/ALL  %lu %lu %lu\n", c_all, c_ipv4, c_ipv6);
 		};
-		printf("*3*ASN-proto-num-list/ALL  %lu %lu %lu\n", c_all, c_ipv4, c_ipv6);
-
-
 	} else {
 		/* print in columns */
 		if (opt_noheader == 0) {

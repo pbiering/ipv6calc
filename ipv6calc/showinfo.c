@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.90 2013/10/12 20:55:05 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.91 2013/10/13 16:18:44 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -606,46 +606,6 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		DEBUGPRINT_NA(DEBUG_showinfo, "Skip AS print: as_num32=ASNUM_AS_UNKNOWN");
 	};
 
-	if ((typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
-		/* get registry string */
-		// TODO: get registry by AS, if possible
-		retval = libipv4addr_get_registry_string(ipv4addrp, helpstring);
-		if (retval == 1) {
-			if (machinereadable == 0) {
-				fprintf(stderr, "Error getting registry string for IPv4 address: %s (%s)\n", helpstring, tempipv4string);
-			};
-		} else {
-			if (machinereadable != 0) {
-					snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY%s=%s", embeddedipv4string, helpstring);
-					printout(tempstring);
-			} else {
-				fprintf(stdout, "IPv4 registry%s: %s\n", embeddedipv4string, helpstring);
-			};
-		};
-	} else if (as_num32 != ASNUM_AS_UNKNOWN) {
-/*
- * 		Don't print registry because mapping ASNUM to Registry is not accurate enough
-		int registry = libipv6calc_db_wrapper_registry_num_by_as_num32(as_num32);
-		j = -1;
-		for (i = 0; i < (int) (sizeof(ipv6calc_registries) / sizeof(ipv6calc_registries[0])); i++ ) {
-			if (ipv6calc_registries[i].number == registry) {
-				j = i;
-				break;
-			};
-		};
-
-		if (j != -1) {
-			if ( machinereadable != 0 ) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY%s=%s", embeddedipv4string, ipv6calc_registries[j].token);
-				printout(tempstring);
-			} else {
-				fprintf(stdout, "Registry for address: %s\n", ipv6calc_registries[j].token);
-			};
-		};
-*/
-	};
-
-
 	/* get CountryCode Information */
 	if ((typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
 		cc_index = ipv4addr_anonymized_get_cc_index(ipv4addrp);
@@ -663,6 +623,34 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 			fprintf(stdout, "Country Code: %c%c\n", COUNTRYCODE_INDEX_TO_CHAR1(cc_index), COUNTRYCODE_INDEX_TO_CHAR2(cc_index));
 		};
 	};
+
+	if ((typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
+		/* get registry string */
+		// TODO: get registry by AS, if possible
+		retval = libipv4addr_get_registry_string(ipv4addrp, helpstring);
+		if (retval == 1) {
+			if (machinereadable == 0) {
+				fprintf(stderr, "Error getting registry string for IPv4 address: %s (%s)\n", helpstring, tempipv4string);
+			};
+		} else {
+			if (machinereadable != 0) {
+					snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY%s=%s", embeddedipv4string, helpstring);
+					printout(tempstring);
+			} else {
+				fprintf(stdout, "IPv4 registry%s: %s\n", embeddedipv4string, helpstring);
+			};
+		};
+	} else if (as_num32 != ASNUM_AS_UNKNOWN) {
+		int registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
+
+		if ( machinereadable != 0 ) {
+			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY%s=%s", embeddedipv4string, libipv6calc_registry_string_by_num(registry));
+			printout(tempstring);
+		} else {
+			fprintf(stdout, "Registry for address: %s\n", ipv6calc_registries[j].token);
+		};
+	};
+
 
 	if ((typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
 #ifdef SUPPORT_IP2LOCATION
@@ -1089,35 +1077,27 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		r = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_ASN32, &as_num32);
 
 		if (r == 0) {
-			if (as_num32 == 0) {
-				if ( machinereadable != 0 ) {
-					fprintf(stderr, "Error getting AS number from anonymized IPv6 address\n");
-				};
+			if ((as_num32 == 0) && (machinereadable == 0)) {
+				fprintf(stderr, "Error getting AS number from anonymized IPv6 address\n");
 			} else {
 				if ( machinereadable != 0 ) {
-					snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=%d", as_num32);
+					if (as_num32 == 0) {
+						snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=(unknown)");
+					} else {
+						snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=%d", as_num32);
+					};
 					printout(tempstring);
 				} else {
 					fprintf(stdout, "ASN for address: %d\n", as_num32);
 				};
 
 				registry = libipv6calc_db_wrapper_registry_num_by_as_num32(as_num32);
-				j = -1;
-				for (i = 0; i < (int) (sizeof(ipv6calc_registries) / sizeof(ipv6calc_registries[0])); i++ ) {
-					if (ipv6calc_registries[i].number == registry) {
-						j = i;
-						break;
-					};
-				};
 
-				if (j != -1) {
-				/* retrive registry from AS */
-					if ( machinereadable != 0 ) {
-						snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_REGISTRY=%s", ipv6calc_registries[j].token);
-						printout(tempstring);
-					} else {
-						fprintf(stdout, "Registry for address: %s\n", ipv6calc_registries[j].token);
-					};
+				if ( machinereadable != 0 ) {
+					snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_REGISTRY=%s", libipv6calc_registry_string_by_num(registry));
+					printout(tempstring);
+				} else {
+					fprintf(stdout, "Registry for address: %s\n", libipv6calc_registry_string_by_num(registry));
 				};
 			};
 		};

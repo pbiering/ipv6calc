@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstatshelp.c
- * Version    : $Id: ipv6logstatshelp.c,v 1.8 2013/09/22 19:04:43 ds6peter Exp $
+ * Version    : $Id: ipv6logstatshelp.c,v 1.9 2013/10/13 16:18:44 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -21,9 +21,20 @@
 
 /* display info */
 void printversion(void) {
-	fprintf(stderr, "%s: version %s", PROGRAM_NAME, PACKAGE_VERSION);
+	char resultstring[NI_MAXHOST] = "";
 
-	ipv6calc_print_features();
+	libipv6calc_db_wrapper_features(resultstring, sizeof(resultstring));
+
+	fprintf(stderr, "%s: version %s", PROGRAM_NAME, PACKAGE_VERSION);
+	fprintf(stderr, " %s", resultstring);
+
+	if (feature_cc == 1) {
+		fprintf(stderr, " STAT_CC");
+	};
+
+	if (feature_cc == 1) {
+		fprintf(stderr, " STAT_AS");
+	};
 
 	fprintf(stderr, "\n");
 };

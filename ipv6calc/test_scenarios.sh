@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.30 2013/10/12 09:51:04 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.31 2013/10/13 16:18:44 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -206,6 +206,11 @@ fe80:0000:0000:0000:0000:5eff:fe01:2345		^anonymized-iid
 a909:16fa:9092:23ff:a909:4941::7		anonymized-iid
 a909:16fa:9092:23ff:a909:4941::7		anonymized-prefix
 242.222.34.63					anonymized
+64:ff9b::f618:3b41				anonymized-iid
+2002:f618:3b41:0009:a929:4291:8f61:83b0		anonymized-iid
+2002:f618:3b41:0009:a929:4291:8f61:83b0		anonymized-prefix
+3ffe:831f:ce49:7601:8000:ffff:0a0b:f33a		anonymized-iid
+3ffe:831f:ce49:7601:8000:ffff:0a0b:f33a		^anonymized-prefix
 END
 }
 
@@ -285,6 +290,8 @@ testscenarios_anonymization_options_kp() {
 --anonymize-preset kp			::ffff:1.2.3.4=::ffff:246.24.59.65
 --anonymize-preset kp			::1=::1
 --anonymize-preset kp			3ffe:831f:ce49:7601:8000:efff:af4a:86bf=3ffe:831f:ce49:7601:8000:ffff:a0b:f33a
+--anonymize-preset kp			64:ff9b::0102:0304=64:ff9b::f618:3b41
+--anonymize-preset kp			2001:0db8:0000:0000:81c0:0f3f:c807:1455=2001:db8::a909:4941:0:7
 END
 }
 

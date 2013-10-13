@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.17 2013/09/28 20:32:40 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.18 2013/10/13 16:18:44 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -110,4 +110,6 @@ extern int   libipv6calc_anon_set_by_name(s_ipv6calc_anon_set *ipv6calc_anon_set
 extern void  libipv6calc_anon_infostring(char* string, const int stringlength, const s_ipv6calc_anon_set *ipv6calc_anon_set);
 extern const char *libipv6calc_anon_method_name(const s_ipv6calc_anon_set *ipv6calc_anon_set);
 extern int   libipv6calc_anon_supported(const s_ipv6calc_anon_set *ipv6calc_anon_set);
+
+extern const char *libipv6calc_registry_string_by_num(const int registry);
 
