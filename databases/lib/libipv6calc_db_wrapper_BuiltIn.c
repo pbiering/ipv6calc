@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.4 2013/10/13 16:18:44 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.5 2013/10/13 20:57:42 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -244,6 +244,11 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_cc_index(const uint16_t cc_in
 	};
 
 	if (cc_index > MAXENTRIES_ARRAY(cc_index_reg_assignment)) {
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	if (cc_index == COUNTRYCODE_INDEX_UNKNOWN) {
+		result = REGISTRY_IANA;
 		goto END_libipv6calc_db_wrapper;
 	};
 

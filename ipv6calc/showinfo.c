@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.91 2013/10/13 16:18:44 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.92 2013/10/13 20:57:42 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1073,35 +1073,6 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			};
 		};
 	} else {
-		/* retrieve ASN from anonymization value */
-		r = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_ASN32, &as_num32);
-
-		if (r == 0) {
-			if ((as_num32 == 0) && (machinereadable == 0)) {
-				fprintf(stderr, "Error getting AS number from anonymized IPv6 address\n");
-			} else {
-				if ( machinereadable != 0 ) {
-					if (as_num32 == 0) {
-						snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=(unknown)");
-					} else {
-						snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=%d", as_num32);
-					};
-					printout(tempstring);
-				} else {
-					fprintf(stdout, "ASN for address: %d\n", as_num32);
-				};
-
-				registry = libipv6calc_db_wrapper_registry_num_by_as_num32(as_num32);
-
-				if ( machinereadable != 0 ) {
-					snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_REGISTRY=%s", libipv6calc_registry_string_by_num(registry));
-					printout(tempstring);
-				} else {
-					fprintf(stdout, "Registry for address: %s\n", libipv6calc_registry_string_by_num(registry));
-				};
-			};
-		};
-
 		/* retrieve CountryCodeIndex from anonymization value */
 		r = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_CCINDEX, &cc_index);
 
@@ -1132,7 +1103,37 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 					fprintf(stdout, "Country Code: (unsupported)\n");
 				};
 			};
+
+			registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
+
+			if ( machinereadable != 0 ) {
+				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_REGISTRY=%s", libipv6calc_registry_string_by_num(registry));
+				printout(tempstring);
+			} else {
+				fprintf(stdout, "Registry for address: %s\n", libipv6calc_registry_string_by_num(registry));
+			};
 		};
+
+		/* retrieve ASN from anonymization value */
+		r = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_ASN32, &as_num32);
+
+		if (r == 0) {
+			if ((as_num32 == 0) && (machinereadable == 0)) {
+				fprintf(stderr, "Error getting AS number from anonymized IPv6 address\n");
+			} else {
+				if ( machinereadable != 0 ) {
+					if (as_num32 == 0) {
+						snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=(unknown)");
+					} else {
+						snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=%d", as_num32);
+					};
+					printout(tempstring);
+				} else {
+					fprintf(stdout, "ASN for address: %d\n", as_num32);
+				};
+			};
+		};
+
 
   	};
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.43 2013/10/13 16:18:44 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.44 2013/10/13 20:57:42 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -354,6 +354,7 @@ static void lineparser(void) {
 	int index;
 	uint16_t cc_index = COUNTRYCODE_INDEX_UNKNOWN;
 	uint32_t as_num32 = ASNUM_AS_UNKNOWN;
+	uint32_t payload;
 	long unsigned int c_all, c_ipv4, c_ipv6;
 
 	// clear counters
@@ -580,20 +581,33 @@ static void lineparser(void) {
 						};
 					};
 				} else {
-					if (feature_cc == 1) {
-						/* country code */
-						cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 6);
-						stat_inc_country_code(cc_index, 6);
+					if ((ipv6addr.scope & IPV6_ADDR_ANONYMIZED_PREFIX) != 0) {
+						ipv6addr_get_payload_anonymized_prefix(&ipv6addr, ANON_PREFIX_PAYLOAD_CCINDEX, &payload);
+						cc_index = payload;
+
+						ipv6addr_get_payload_anonymized_prefix(&ipv6addr, ANON_PREFIX_PAYLOAD_ASN32, &payload);
+						as_num32 = payload;
+
+
+						/* get registry */
+						registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
+					} else {
+						if (feature_cc == 1) {
+							/* country code */
+							cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 6);
+							stat_inc_country_code(cc_index, 6);
+						};
+
+						if (feature_as == 1) {
+							/* asnum */
+							as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 6);
+							stat_inc_asnum(as_num32, 6);
+						};
+
+						/* get registry */
+						registry = ipv6addr_getregistry(&ipv6addr);
 					};
 
-					if (feature_as == 1) {
-						/* asnum */
-						as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 6);
-						stat_inc_asnum(as_num32, 6);
-					};
-
-					/* get registry */
-					registry = ipv6addr_getregistry(&ipv6addr);
 					switch (registry) {
 						case IPV6_ADDR_REGISTRY_6BONE:
 							stat_inc(STATS_IPV6_6BONE);
@@ -763,7 +777,9 @@ static void lineparser(void) {
 				};
 			};
 
-			printf("*3*CC-proto-code-list/ALL  %lu %lu %lu\n", c_all, c_ipv4, c_ipv6);
+			if ((c_all + c_ipv4 + c_ipv6) > 0) {
+				printf("*3*CC-proto-code-list/ALL  %lu %lu %lu\n", c_all, c_ipv4, c_ipv6);
+			};
 		};
 
 		if (feature_as == 1) {
@@ -797,7 +813,10 @@ static void lineparser(void) {
 					c_ipv6 += counter_asn_ipv6[index];
 				};
 			};
-			printf("*3*AS-proto-num-list/ALL  %lu %lu %lu\n", c_all, c_ipv4, c_ipv6);
+
+			if ((c_all + c_ipv4 + c_ipv6) > 0) {
+				printf("*3*AS-proto-num-list/ALL  %lu %lu %lu\n", c_all, c_ipv4, c_ipv6);
+			};
 		};
 	} else {
 		/* print in columns */
