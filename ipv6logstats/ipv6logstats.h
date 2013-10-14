@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.17 2013/10/13 16:18:44 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.h,v 1.18 2013/10/14 14:43:11 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -50,6 +50,7 @@
 #define STATS_IPV6_IID_UNKNOWN		0x10f
 
 #define DEBUG_ipv6logstats_summary	0x00000002l
+#define DEBUG_ipv6logstats_processing	0x00000004l
 
 /* labels statistic numbers */
 typedef struct {
@@ -60,3 +61,4 @@ typedef struct {
 
 extern int feature_cc;
 extern int feature_as;
+extern int feature_reg;

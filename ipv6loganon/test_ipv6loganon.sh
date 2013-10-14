@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.20 2013/10/11 06:06:35 ds6peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.21 2013/10/14 14:43:11 ds6peter Exp $
 # Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -228,7 +228,7 @@ run_loganon_reliability_tests() {
 			echo "ERROR : result not equal: $entry_anon"
 			export anonymized
 			export nonanonymized
-			diff -u <(echo "$anonymized") <(echo "$nonanonymized")
+			diff -u <(echo "$nonanonymized") <(echo "$anonymized")
 			echo "ERROR : result not equal between anonymized and non-anonymized statistics: $entry_anon"
 			return 1
 		fi

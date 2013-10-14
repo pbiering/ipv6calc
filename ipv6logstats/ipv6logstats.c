@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.44 2013/10/13 20:57:42 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.45 2013/10/14 14:43:11 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -48,8 +48,9 @@ char    file_out[NI_MAXHOST] = "";
 int     file_out_flag = 0;
 FILE    *FILE_OUT;
 
-int feature_cc = 0;
-int feature_as = 0;
+int feature_cc  = 0;
+int feature_as  = 0;
+int feature_reg = 0;
 
 static stat_entries ipv6logstats_statentries[] = {
 	{ STATS_ALL		, 0, "ALL" },
@@ -219,10 +220,9 @@ int main(int argc,char *argv[]) {
 		exit(EXIT_FAILURE);
 	};
 
-	/* check for Country Code support */
-	if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_REGISTRY| IPV6CALC_DB_IPV6_TO_REGISTRY | IPV6CALC_DB_CC_TO_REGISTRY) != 1) {
-		fprintf(stderr, "Basic databases are missing for creating statistic");
-		exit(EXIT_FAILURE);
+	/* check for basic database support */
+	if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_REGISTRY| IPV6CALC_DB_IPV6_TO_REGISTRY | IPV6CALC_DB_CC_TO_REGISTRY) == 1) {
+		feature_reg = 1;
 	};
 
 	/* check for Country Code support */
@@ -249,6 +249,11 @@ int main(int argc,char *argv[]) {
 
 	if (command == CMD_printhelp) {
 		ipv6logstats_printhelp();
+		exit(EXIT_FAILURE);
+	};
+
+	if (feature_reg == 0) {
+		fprintf(stderr, "Basic databases are missing for creating statistic\n");
 		exit(EXIT_FAILURE);
 	};
 
@@ -582,30 +587,33 @@ static void lineparser(void) {
 					};
 				} else {
 					if ((ipv6addr.scope & IPV6_ADDR_ANONYMIZED_PREFIX) != 0) {
+						DEBUGPRINT_NA(DEBUG_ipv6logstats_processing, "Anonymized IPv6 prefix found");
+
 						ipv6addr_get_payload_anonymized_prefix(&ipv6addr, ANON_PREFIX_PAYLOAD_CCINDEX, &payload);
 						cc_index = payload;
 
 						ipv6addr_get_payload_anonymized_prefix(&ipv6addr, ANON_PREFIX_PAYLOAD_ASN32, &payload);
 						as_num32 = payload;
 
-
 						/* get registry */
 						registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
+
+						DEBUGPRINT_WA(DEBUG_ipv6logstats_processing, "Anonymized IPv6 prefix information cc_index=%u as_num32=%u registry=%u", cc_index, as_num32, registry);
 					} else {
-						if (feature_cc == 1) {
-							/* country code */
-							cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 6);
-							stat_inc_country_code(cc_index, 6);
-						};
-
-						if (feature_as == 1) {
-							/* asnum */
-							as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 6);
-							stat_inc_asnum(as_num32, 6);
-						};
-
 						/* get registry */
 						registry = ipv6addr_getregistry(&ipv6addr);
+					};
+
+					if (feature_cc == 1) {
+						/* country code */
+						cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 6);
+						stat_inc_country_code(cc_index, 6);
+					};
+
+					if (feature_as == 1) {
+						/* asnum */
+						as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 6);
+						stat_inc_asnum(as_num32, 6);
 					};
 
 					switch (registry) {

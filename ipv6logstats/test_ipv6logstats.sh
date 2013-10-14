@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
-# Version    : $Id: test_ipv6logstats.sh,v 1.12 2013/10/13 16:18:44 ds6peter Exp $
+# Version    : $Id: test_ipv6logstats.sh,v 1.13 2013/10/14 14:43:11 ds6peter Exp $
 # Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"
@@ -97,6 +97,14 @@ if [ $retval -ne 0 ]; then
 	exit 1
 fi
 echo 
+
+## check basic support
+if ./ipv6logstats -v | grep -w "STAT_REG"; then
+	true
+else
+	echo "NOTICE: SKIP ipv6logstats tests because of missing feature STAT_REG"
+	exit 0
+fi
 
 ## main ##
 echo "Run 'ipv6logstats' function tests..."
