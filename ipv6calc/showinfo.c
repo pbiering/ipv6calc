@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.92 2013/10/13 20:57:42 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.93 2013/10/14 16:49:09 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -122,8 +122,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " GEOIP_LATITUDE=...            : Latitude of IP address\n");
 	fprintf(stderr, " GEOIP_LONGITUDE=...           : Longitude of IP address\n");
 	fprintf(stderr, " GEOIP_AS_TEXT=...             : Autonomous System information\n");
-	fprintf(stderr, " GEOIP_DATABASE_INFO_IPV4=...  : Information about the used IPv4 database\n");
-	fprintf(stderr, " GEOIP_DATABASE_INFO_IPV6=...  : Information about the used IPv6 database\n");
+	fprintf(stderr, " GEOIP_DATABASE_INFO=...       : Information about the used databases\n");
 #endif
 	fprintf(stderr, " IPV6CALC_NAME=name            : Name of ipv6calc\n");
 	fprintf(stderr, " IPV6CALC_VERSION=x.y          : Version of ipv6calc\n");
@@ -459,14 +458,13 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 			flag_geoip_info_shown = 1;
 
 			if ( machinereadable != 0 ) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_DATABASE_INFO_IPV%d=%s apiversion=system", version, libipv6calc_db_wrapper_GeoIP_database_info(gi));
+				DEBUGPRINT_NA(DEBUG_showinfo, "Print GEOIP_DATABASE_INFO");
+				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_DATABASE_INFO=%s", libipv6calc_db_wrapper_GeoIP_wrapper_db_info_used());
 				printout(tempstring);
 			};
 		};
 	} else {
-		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-			fprintf(stderr, "%s: GeoIP returned no record for address: %s\n", DEBUG_function_name, addrstring);
-		};
+		DEBUGPRINT_WA(DEBUG_showinfo, "GeoIP returned no record for address: %s", addrstring);
 	};
 
 	libipv6calc_db_wrapper_GeoIP_delete(gi);
