@@ -4,7 +4,7 @@
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
-Version: 0.95.0.beta.3
+Version: 0.95.0.beta.4
 Release: 1%dist
 Group: System Environment/Base
 URL: http://www.deepspace6.net/projects/ipv6calc.html
