@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.61 2013/10/14 16:49:09 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.62 2013/10/14 18:35:43 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -525,6 +525,10 @@ my %text = (
 	'GEOIP_DATABASE_INFO' => {
 		'de' => "GeoIP Datenbank-Information",
 		'en' => "GeoIP database information",
+	},
+	'GEOIP_AS_TEXT' => {
+		'de' => "Autonomous System der IPv6 Adresse",
+		'en' => "Autonomous System of IPv6 address",
 	},
 	'SETTINGS_ANON' => {
 		'de' => "Einstellungen der Anonymisierung",
