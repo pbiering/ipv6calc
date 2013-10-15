@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6calcweb
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.13 2013/10/15 19:47:24 ds6peter Exp $
+# Version    : $Id: Makefile,v 1.14 2013/10/15 20:56:23 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -21,7 +21,7 @@ autoclean:
 		${MAKE} distclean
 
 clean:
-		rm ipv6calcweb.cgi
+		rm -f ipv6calcweb.cgi
 
 test:
 		pushd ../ipv6calc; ${MAKE}; popd

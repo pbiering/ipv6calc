@@ -1,6 +1,6 @@
 # Project    : ipv6calc/databases/registries
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.5 2009/06/20 13:37:59 peter Exp $
+# Version    : $Id: Makefile,v 1.6 2013/10/15 20:57:23 ds6peter Exp $
 # Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces parts of ../ipv4-assignment/Makefile
 #               replaces parts of ../ipv6-assignment/Makefile
@@ -27,7 +27,7 @@ update:
 
 distclean:
 		echo "Delete data files"
-		cd iana    && rm -f ipv4-address-space ipv6-unicast-address-assignments
+		cd iana    && rm -f ipv6-unicast-address-assignments.xml ipv4-address-space.xml as-numbers.txt
 		cd ripencc && rm -f delegated-ripencc-*
 		cd apnic   && rm -f delegated-apnic-*
 		cd arin    && rm -f delegated-arin-*
