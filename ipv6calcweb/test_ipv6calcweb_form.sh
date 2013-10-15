@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/ipv6calcweb
 # File       : test_ipv6calcweb_form.sh
-# Version    : $Id: test_ipv6calcweb_form.sh,v 1.2 2012/01/21 18:55:35 peter Exp $
-# Copyright  : 2012-2012 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6calcweb_form.sh,v 1.3 2013/10/15 20:07:13 ds6peter Exp $
+# Copyright  : 2012-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Test script for form mode of ipv6calcweb
@@ -13,19 +13,9 @@
 # Test Scenarios for autodetection "good case"
 source ../ipv6calc/test_scenarios.sh
 
-
-if [ ipv6calcweb.cgi.in -nt ipv6calcweb.cgi ]; then
-	cp ipv6calcweb.cgi.in ipv6calcweb.cgi || exit 1
-fi
-
-# replace placeholders
-version="`cat ../config.h | grep -w PACKAGE_VERSION | awk '{ print $3 }' | sed 's/"//g'`"
-copyrightyear="`cat ../config.h | grep -w COPYRIGHT_YEAR | awk '{ print $3 }' | sed 's/"//g'`"
-perl -pi -e "s/\@PACKAGE_VERSION\@/$version/" ipv6calcweb.cgi
-perl -pi -e "s/\@COPYRIGHT_YEAR\@/$version/" ipv6calcweb.cgi
-
 if [ ! -x ipv6calcweb.cgi ]; then
-	chmod u+x ipv6calcweb.cgi
+	echo "ERROR : run make"
+	exit 1
 fi
 
 REMOTE_ADDR="127.0.0.1"

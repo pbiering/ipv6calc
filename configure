@@ -4855,7 +4855,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile md5/Makefile tools/Makefile getopt/Makefile ipv6calc/Makefile lib/Makefile man/Makefile databases/lib/Makefile ipv6logconv/Makefile ipv6loganon/Makefile ipv6logstats/Makefile contrib/ipv6calc.spec VERSION ipv6calcweb/ipv6calcweb.cgi"
+ac_config_files="$ac_config_files Makefile md5/Makefile tools/Makefile getopt/Makefile ipv6calc/Makefile lib/Makefile man/Makefile databases/lib/Makefile ipv6logconv/Makefile ipv6loganon/Makefile ipv6logstats/Makefile contrib/ipv6calc.spec VERSION"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -5563,7 +5563,6 @@ do
     "ipv6logstats/Makefile") CONFIG_FILES="$CONFIG_FILES ipv6logstats/Makefile" ;;
     "contrib/ipv6calc.spec") CONFIG_FILES="$CONFIG_FILES contrib/ipv6calc.spec" ;;
     "VERSION") CONFIG_FILES="$CONFIG_FILES VERSION" ;;
-    "ipv6calcweb/ipv6calcweb.cgi") CONFIG_FILES="$CONFIG_FILES ipv6calcweb/ipv6calcweb.cgi" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

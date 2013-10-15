@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ipv6calcweb
 # File       : create_ipv6calcweb.sh
-# Version    : $Id: create_ipv6calcweb-cgi.sh,v 1.1 2013/10/15 19:47:24 ds6peter Exp $
+# Version    : $Id: create_ipv6calcweb-cgi.sh,v 1.2 2013/10/15 20:07:13 ds6peter Exp $
 # Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -29,10 +29,18 @@ if [ -z "$c" ]; then
 	exit 1
 fi
 
+cp ipv6calcweb.cgi.in ipv6calcweb.cgi || exit 1
+
 # replace placeholders
 perl -pi -e "s/\@PACKAGE_VERSION\@/$v/" ipv6calcweb.cgi || exit 1
 perl -pi -e "s/\@COPYRIGHT_YEAR\@/$c/" ipv6calcweb.cgi || exit 1
 
-touch ipv6calcweb.cgi -r ipv6calcweb.cgi.in
+if [ ! -x ipv6calcweb.cgi ]; then
+	chmod u+x ipv6calcweb.cgi
+fi
+
+if [ -f ipv6calcweb.cgi ], then
+	touch ipv6calcweb.cgi -r ipv6calcweb.cgi.in
+fi
 
 echo "INFO  : successfully created: ipv6calcweb.cgi"

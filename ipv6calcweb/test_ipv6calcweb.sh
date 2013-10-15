@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ipv6calcweb
 # File       : test_ipv6calcweb.sh
-# Version    : $Id: test_ipv6calcweb.sh,v 1.9 2013/10/15 19:47:24 ds6peter Exp $
+# Version    : $Id: test_ipv6calcweb.sh,v 1.10 2013/10/15 20:07:13 ds6peter Exp $
 # Copyright  : 2012-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -14,8 +14,10 @@ if [ -z "$1" ]; then
 	exit 1
 fi
 
-make
-
+if [ ! -f ipv6calcweb.cgi ]; then
+	echo "ERROR : run make"
+	exit 1
+fi
 if [ ! -x ipv6calcweb.cgi ]; then
 	chmod u+x ipv6calcweb.cgi
 fi
@@ -23,7 +25,7 @@ fi
 ## very basic output format tests
 for format in text html htmlfull; do
 	HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi >/dev/null
-	if [ $r -ne 0 ];then
+	if [ $? -ne 0 ];then
 		echo "ERROR : output format reports an error: $format"
 		HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi
 		exit 1
