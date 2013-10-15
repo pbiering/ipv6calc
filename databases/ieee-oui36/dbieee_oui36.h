@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.3 2013/04/10 20:28:51 ds6peter Exp $
- * Generated     : Wed Apr 10 20:31:08 2013
+ * Version       : $Id: dbieee_oui36.h,v 1.4 2013/10/15 06:21:41 ds6peter Exp $
+ * Generated     : Tue Oct 15 07:46:08 2013
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20130410";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20131015";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -166,5 +166,44 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x001BC5, 0x097000, 0x097FFF, "Plexstar Inc.", "PLEXSTAR" },
 	{ 0x001BC5, 0x098000, 0x098FFF, "Cubic Systems, Inc.", "CUBIC" },
 	{ 0x001BC5, 0x099000, 0x099FFF, "UAB Kitron", "UAB-KITRON" },
+	{ 0x001BC5, 0x09A000, 0x09AFFF, "Shenzhen Guang Lian Zhi Tong Limited", "SHENZHEN-GUANG-LIAN-ZHI-TONG" },
+	{ 0x001BC5, 0x09B000, 0x09BFFF, "YIK Corporation", "YIK" },
+	{ 0x001BC5, 0x09C000, 0x09CFFF, "S.I.C.E.S. srl", "S-I-C-E-S-SRL" },
+	{ 0x001BC5, 0x09D000, 0x09DFFF, "Navitar Inc", "NAVITAR" },
+	{ 0x001BC5, 0x09E000, 0x09EFFF, "K+K Messtechnik GmbH", "K+K-MESSTECHNIK" },
+	{ 0x001BC5, 0x09F000, 0x09FFFF, "ENTE Sp. z o.o.", "ENTE-SP-Z-O-O" },
+	{ 0x001BC5, 0x0A0000, 0x0A0FFF, "HomerSoft sp. z o.o.", "HOMERSOFT-SP-Z-O-O" },
+	{ 0x001BC5, 0x0A1000, 0x0A1FFF, "Hangzhou Zhiping Technology Co., Ltd.", "HANGZHOU-ZHIPING" },
+	{ 0x001BC5, 0x0A2000, 0x0A2FFF, "Hettich Benelux", "HETTICH-BENELUX" },
+	{ 0x001BC5, 0x0A3000, 0x0A3FFF, "P A Network Laboratory Co.,Ltd", "P-A-NETWORK-LABORATORY" },
+	{ 0x001BC5, 0x0A4000, 0x0A4FFF, "RADMOR S.A.", "RADMOR" },
+	{ 0x001BC5, 0x0A5000, 0x0A5FFF, "Tesla Controls", "TESLA-CONTROLS" },
+	{ 0x001BC5, 0x0A6000, 0x0A6FFF, "Balter Security GmbH", "BALTER-SECURITY" },
+	{ 0x001BC5, 0x0A7000, 0x0A7FFF, "L.G.L. Electronics S.p.a.", "L-G-L-ELECTRONICS-S-P-A" },
+	{ 0x001BC5, 0x0A8000, 0x0A8FFF, "Link Precision", "LINK-PRECISION" },
+	{ 0x001BC5, 0x0A9000, 0x0A9FFF, "Elektrometal SA", "ELEKTROMETAL" },
+	{ 0x001BC5, 0x0AA000, 0x0AAFFF, "Senceive Ltd", "SENCEIVE" },
+	{ 0x001BC5, 0x0AB000, 0x0ABFFF, "PRIVATE", "PRIVATE" },
+	{ 0x001BC5, 0x0AC000, 0x0ACFFF, "AVnu Alliance", "AVNU-ALLIANCE" },
+	{ 0x001BC5, 0x0AD000, 0x0ADFFF, "Tierra Japan Co.,Ltd", "TIERRA-JAPAN" },
+	{ 0x001BC5, 0x0AE000, 0x0AEFFF, "Techlan Reti s.r.l.", "TECHLAN-RETI-S-R-L" },
+	{ 0x001BC5, 0x0AF000, 0x0AFFFF, "Enerwise Solutions Ltd.", "ENERWISE-SOLUTIONS" },
+	{ 0x001BC5, 0x0B0000, 0x0B0FFF, "J-D.COM", "J-D-COM" },
+	{ 0x001BC5, 0x0B1000, 0x0B1FFF, "Roslen Eco-Networking Products", "ROSLEN-ECO-NETWORKING-PRODUCTS" },
+	{ 0x001BC5, 0x0B2000, 0x0B2FFF, "SKODA electric a.s.", "SKODA-ELECTRIC-A-S" },
+	{ 0x001BC5, 0x0B3000, 0x0B3FFF, "FSM Solutions Limited", "FSM-SOLUTIONS" },
+	{ 0x001BC5, 0x0B4000, 0x0B4FFF, "COBAN SRL", "COBAN-SRL" },
+	{ 0x001BC5, 0x0B5000, 0x0B5FFF, "Exibea AB", "EXIBEA-AB" },
+	{ 0x001BC5, 0x0B6000, 0x0B6FFF, "Veilux inc.", "VEILUX" },
+	{ 0x001BC5, 0x0B7000, 0x0B7FFF, "Autelis, LLC", "AUTELIS-LLC" },
+	{ 0x001BC5, 0x0B8000, 0x0B8FFF, "PRIVATE", "PRIVATE" },
+	{ 0x001BC5, 0x0B9000, 0x0B9FFF, "Denki Kogyo Company, Limited", "DENKI-KOGYO-COMPANY" },
+	{ 0x001BC5, 0x0BA000, 0x0BAFFF, "NT MICROSYSTEMS", "NT-MICROSYSTEMS" },
+	{ 0x001BC5, 0x0BB000, 0x0BBFFF, "Triax A/S", "TRIAX-A/S" },
+	{ 0x001BC5, 0x0BC000, 0x0BCFFF, "kuwatec, Inc.", "KUWATEC" },
+	{ 0x001BC5, 0x0BD000, 0x0BDFFF, "Bridge Diagnostics, Inc.", "BRIDGE-DIAGNOSTICS" },
+	{ 0x001BC5, 0x0BE000, 0x0BEFFF, "YESpay International Ltd", "YESPAY" },
+	{ 0x001BC5, 0x0BF000, 0x0BFFFF, "TN Core Co.,Ltd.", "TN-CORE" },
+	{ 0x001BC5, 0x0C0000, 0x0C0FFF, "Digital Loggers, Inc.", "DIGITAL-LOGGERS" },
 
 };

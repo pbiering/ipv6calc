@@ -2,9 +2,9 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.8 2012/03/19 20:04:49 peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.9 2013/10/15 06:21:42 ds6peter Exp $
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
-#              2005-2012 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
+#              2005-2013 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
 # License    : GNU GPL v2
 #
 # Information:
@@ -35,7 +35,7 @@ $mday = sprintf "%02d", $mday;
 my $global_file = "../registries/iana/ipv6-unicast-address-assignments.xml";
 
 my @files = (
-	"../registries/arin/delegated-arin-latest",
+	"../registries/arin/delegated-arin-extended-latest",
 	"../registries/ripencc/delegated-ripencc-latest",
 	"../registries/apnic/delegated-apnic-latest",
 	"../registries/lacnic/delegated-lacnic-latest",
@@ -141,15 +141,18 @@ foreach my $file (@files) {
 
 	my $line;
 	my %cache;
+	my $flag_found_date = 0;
+	my $version;
 
 	while (<FILE>) {
 		$line = $_;
 		chomp $line;
 
 		# catch date line
-		if ($line =~ /^2\|([^\|]+)\|.*\|([0-9]{8})\|[^\|]*$/o) {
-			$date_created{uc($1)} = $2;
-			print "Found create date: " . $2 . "\n";
+		if ($line =~ /^2(\.[0-9])?\|([^\|]+)\|.*\|([0-9]{8})\|[^\|]*$/o) {
+			$date_created{uc($2)} = $3;
+			print "Found create date: " . $3 . "\n";
+			$flag_found_date = 1;
 			next;
 		};
 
@@ -159,7 +162,7 @@ foreach my $file (@files) {
 
 		#print $line . "\n";
 
-		my ($reg, $tld, $token, $ipv6, $prefixlen, $date, $status) = split /\|/, $line;
+		my ($reg, $tld, $token, $ipv6, $prefixlen, $date, $status, $other) = split /\|/, $line;
 
 		if ( $token ne "ipv6" ) { next; };
 
@@ -239,6 +242,10 @@ Label_restart:
 	};
 
 	close(FILE);
+
+	if ($flag_found_date != 1) {
+		die("no date line found, unsupported file format");
+	};
 };
 
 

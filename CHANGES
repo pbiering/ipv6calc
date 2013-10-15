@@ -4,6 +4,7 @@ Major Changes/Enhancements of ipv6calc
 0.94 -> 0.95
 ============
 - full IPv6 address (prefix + IID) anonymization added by selecting method "kp"
+   e.g. 2001:0a60:11e1:9501:e876:aee4:0721:e8ac => a909:16fa:9092:23ff:a909:4941::7	
 
 - type string "iid-privacy" is replaced with "iid-random"
 
@@ -56,3 +57,5 @@ ipv6calcweb.cgi
    HTTP_IPV6CALCWEB_DB_GEOPIP_DIR
    HTTP_IPV6CALCWEB_DB_GEOPIP_LIB
 
+- ipv6logstats is now able to create additional statistics by
+   CountryCode & AS Number (in case of related database support)

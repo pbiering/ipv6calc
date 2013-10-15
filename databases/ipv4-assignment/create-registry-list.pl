@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.28 2012/11/05 20:32:48 peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.29 2013/10/15 06:21:41 ds6peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -37,7 +37,7 @@ $mon = sprintf "%02d", $mon + 1;
 $mday = sprintf "%02d", $mday;
 
 my @files = (
-	"../registries/arin/delegated-arin-latest",
+	"../registries/arin/delegated-arin-extended-latest",
 	"../registries/ripencc/delegated-ripencc-latest",
 	"../registries/apnic/delegated-apnic-latest",
 	"../registries/lacnic/delegated-lacnic-latest",
@@ -205,14 +205,16 @@ foreach my $file (@files) {
 	my $ipv4;
 	my $length;
 	my $flag_proceeded;
+	my $flag_found_date = 0;
 	while (<FILE>) {
 		$line = $_;
 		chomp $line;
 
 		# catch date line
-		if ($line =~ /^2\|([^\|]+)\|.*\|([0-9]{8})\|[^\|]*$/o) {
-			$date_created{uc($1)} = $2;
-			print "Found create date: " . $2 . "\n";
+		if ($line =~ /^2(\.[0-9])?\|([^\|]+)\|.*\|([0-9]{8})\|[^\|]*$/o) {
+			$date_created{uc($2)} = $3;
+			print "Found create date: " . $3 . "\n";
+			$flag_found_date = 1;
 			next;
 		};
 
@@ -222,7 +224,7 @@ foreach my $file (@files) {
 
 		#print $line . "\n";
 
-		my ($reg, $tld, $token, $ipv4, $numbers, $date, $status) = split /\|/, $line;
+		my ($reg, $tld, $token, $ipv4, $numbers, $date, $status, $other) = split /\|/, $line;
 
 		if ( $token ne "ipv4" ) { next; };
 
@@ -318,6 +320,10 @@ foreach my $file (@files) {
 	};
 
 	close(FILE);
+
+	if ($flag_found_date != 1) {
+		die("no date line found, unsupported file format");
+	};
 };
 
 sub proceed_array($$) {
