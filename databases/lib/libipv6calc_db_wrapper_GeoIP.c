@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.42 2013/10/14 16:49:09 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.43 2013/10/15 05:48:16 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -1123,7 +1123,7 @@ char *libipv6calc_db_wrapper_GeoIP_wrapper_db_info_used(void) {
 			gi = libipv6calc_db_wrapper_GeoIP_open_type(db, 0);
 
 			if (strlen(geoip_db_usage_string) > 0) {
-				snprintf(tempstring, sizeof(tempstring), "%s  %s", geoip_db_usage_string, libipv6calc_db_wrapper_GeoIP_database_info(gi));
+				snprintf(tempstring, sizeof(tempstring), "%s / %s", geoip_db_usage_string, libipv6calc_db_wrapper_GeoIP_database_info(gi));
 			} else {
 				snprintf(tempstring, sizeof(tempstring), "%s", libipv6calc_db_wrapper_GeoIP_database_info(gi));
 			};
