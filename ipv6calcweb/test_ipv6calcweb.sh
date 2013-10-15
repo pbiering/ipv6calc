@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/ipv6calcweb
 # File       : test_ipv6calcweb.sh
-# Version    : $Id: test_ipv6calcweb.sh,v 1.8 2013/09/28 20:32:40 ds6peter Exp $
-# Copyright  : 2012-2012 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6calcweb.sh,v 1.9 2013/10/15 19:47:24 ds6peter Exp $
+# Copyright  : 2012-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Test script for ipv6calcweb
@@ -14,20 +14,24 @@ if [ -z "$1" ]; then
 	exit 1
 fi
 
-if [ ipv6calcweb.cgi.in -nt ipv6calcweb.cgi ]; then
-	cp ipv6calcweb.cgi.in ipv6calcweb.cgi || exit 1
-fi
-
-# replace placeholders
-version="`cat ../config.h | grep -w PACKAGE_VERSION | awk '{ print $3 }' | sed 's/"//g'`"
-copyrightyear="`cat ../config.h | grep -w COPYRIGHT_YEAR | awk '{ print $3 }' | sed 's/"//g'`"
-perl -pi -e "s/\@PACKAGE_VERSION\@/$version/" ipv6calcweb.cgi
-perl -pi -e "s/\@COPYRIGHT_YEAR\@/$version/" ipv6calcweb.cgi
+make
 
 if [ ! -x ipv6calcweb.cgi ]; then
 	chmod u+x ipv6calcweb.cgi
 fi
 
+## very basic output format tests
+for format in text html htmlfull; do
+	HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi >/dev/null
+	if [ $r -ne 0 ];then
+		echo "ERROR : output format reports an error: $format"
+		HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi
+		exit 1
+	fi
+done
+
+
+## more sophisticated checks
 REMOTE_ADDR="$1"
 REMOTE_HOST="client.domain.example"
 HTTP_USER_AGENT="test_ipv6calcweb"

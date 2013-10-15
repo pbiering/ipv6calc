@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.62 2013/10/14 18:35:43 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.63 2013/10/15 19:47:24 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -39,6 +39,7 @@
 #  HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB  : IP2Location library name (optional dyn-load support)
 #  HTTP_IPV6CALCWEB_DB_GEOIP_DIR        : GeoIPv4 database directory (optional)
 #  HTTP_IPV6CALCWEB_DB_GEOIP_LIB        : GeoIPv4 library name (optional in dyn-load support)
+#  HTTP_IPV6CALCWEB_OUTPUT_FORMAT       : html (default if SERVER_PROTOCOL=INCLUDED), htmlfull (default), text
 
 ## general
 use strict;
@@ -84,6 +85,7 @@ my $debug = 0;
 # debug | 0x0004: print result of find_dir to stderr
 # debug | 0x0008: print environment handling to stderr
 # debug | 0x0010: print raw ipv6calc output
+# debug | 0x0020: db info parser
 # debug | 0x0040: print form input/token to stderr
 # debug | 0x0080: print environment to stderr
 # debug | 0x0100: print Anti-DoS token infos to stderr
@@ -574,10 +576,8 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB'}) {
 	};
 };
 
-my %info_ip2location;
-my $info_ip2location_string;
-my $info_ip2location_string_ipv4;
-my $info_ip2location_string_ipv6;
+my %db_info_ip2location;
+my %db_info_geoip;
 
 my $database_geoip_dir;
 if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_DIR'}) {
@@ -688,6 +688,18 @@ sub logging($$) {
 };
 
 
+## Split by " / "
+sub split_store($$) {
+	my $p_hash = $_[0];
+
+	printf STDERR "DEBUG : need to split: %s\n", $_[1] if ($debug & 0x20);
+
+	for my $entry (split / \/ /, $_[1]) {
+		printf STDERR "DEBUG : split part: %s\n", $entry if ($debug & 0x20);
+		$$p_hash{$entry} = 1;
+	};
+};
+
 ## Error message
 sub print_error ($) {
 	my $message = shift;
@@ -741,19 +753,19 @@ sub print_infohash ($$;$) {
 
 	for my $key (@$parray) {
 		if ($key eq "IP2LOCATION_DATABASE_INFO") {
-			$info_ip2location_string = $$phash{$key};
+			split_store(\%db_info_ip2location, $$phash{$key});
 			# skipped, will be shown in footer
 			next;
 		};
 
 		if ($key eq "IP2LOCATION_DATABASE_INFO_IPV4") {
-			$info_ip2location_string_ipv4 = $$phash{$key} . " proto=IPv4";
+			split_store(\%db_info_ip2location, $$phash{$key});
 			# skipped, will be shown in footer
 			next;
 		};
 
 		if ($key eq "IP2LOCATION_DATABASE_INFO_IPV6") {
-			$info_ip2location_string_ipv6 = $$phash{$key} . " proto=IPv6";
+			split_store(\%db_info_ip2location, $$phash{$key});
 			# skipped, will be shown in footer
 			next;
 		};
@@ -762,22 +774,19 @@ sub print_infohash ($$;$) {
 			$info_geoip_string = $$phash{$key};
 			# strip non-ascii chars
 			$info_geoip_string =~ s/[\200-\377]//g;
+			split_store(\%db_info_geoip, $info_geoip_string);
 			# skipped, will be shown in footer
 			next;
 		};
 
-		if ( $key =~ /^IP2LOCATION_/ ) {
-			#$flag_ip2location_used = 1;
-		};
-
 		if ($key eq "GEOIP_DATABASE_INFO_IPV4") {
-			$info_geoip_string_ipv4 = $$phash{$key} . " proto=IPv4";
+			split_store(\%db_info_geoip, $info_geoip_string);
 			# skipped, will be shown in footer
 			next;
 		};
 
 		if ($key eq "GEOIP_DATABASE_INFO_IPV6") {
-			$info_geoip_string_ipv6 = $$phash{$key} . " proto=IPv6";
+			split_store(\%db_info_geoip, $info_geoip_string);
 			# skipped, will be shown in footer
 			next;
 		};
@@ -1259,7 +1268,7 @@ if ( defined $ENV{'SCRIPT_NAME'} ) {
 };
 
 
-## Check type
+## Check caller and select output format and mode
 if ( defined $ENV{'SERVER_PROTOCOL'} ) {
 	if ( $ENV{'SERVER_PROTOCOL'} eq "INCLUDED" ) {
 		$mode = "info"; # force info mode
@@ -1267,6 +1276,12 @@ if ( defined $ENV{'SERVER_PROTOCOL'} ) {
 			# Switch back to included html
 			$outputformat = "html";
 		};
+	};
+};
+
+if ( defined $ENV{'HTTP_IPV6CALCWEB_OUTPUT_FORMAT'} ) {
+	if ($ENV{'HTTP_IPV6CALCWEB_OUTPUT_FORMAT'} =~ /^(text|html|htmlfull)$/o) {
+		$outputformat = $ENV{'HTTP_IPV6CALCWEB_OUTPUT_FORMAT'};
 	};
 };
 
@@ -1680,16 +1695,14 @@ if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 	};
 	print "</font>\n";
 
-	foreach my $string ($info_ip2location_string, $info_ip2location_string_ipv4, $info_ip2location_string_ipv6) {
-		if (! defined $string) { next; };
+	if (scalar(keys %db_info_ip2location) > 0) {
 		print "<br>\n";
-		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.ip2location.com\">IP2Location</a> " . $text{'database'}->{$lang} . " " . $string . ")</font>\n";
+		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.ip2location.com\">IP2Location</a> " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_ip2location) . ")</font>\n";
 	};
 
-	foreach my $string ($info_geoip_string, $info_geoip_string_ipv4, $info_geoip_string_ipv6) {
-		if (! defined $string) { next; };
+	if (scalar(keys %db_info_geoip) > 0) {
 		print "<br>\n";
-		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.maxmind.com\">MaxMind</a> " . $text{'database'}->{$lang} . " " . $string . "</font>\n";
+		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.maxmind.com\">MaxMind</a> " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_geoip) . "</font>\n";
 	};
 
 } else {
@@ -1703,15 +1716,12 @@ if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 	};
 	print "\n";
 
-	foreach my $string ($info_ip2location_string, $info_ip2location_string_ipv4, $info_ip2location_string_ipv6) {
-		if (! defined $string) { next; };
-		split_ip2location($string);
-		print $text{'powered'}->{$lang} . " IP2Location " . $info_ip2location{'proto'} . " " . $text{'database'}->{$lang} . " " . $text{'version'}->{$lang} . " " . $info_ip2location{'date'} ." (" . $info_ip2location{'entries'} . " " . $text{'entries'}->{$lang} . ")" . " (" . $info_ip2location{'url'} . ")" . "\n";
+	if (scalar(keys %db_info_ip2location) > 0) {
+		print $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_ip2location) . " (http://www.ip2location.com)" . "\n";
 	};
 
-	foreach my $string ($info_geoip_string, $info_geoip_string_ipv4, $info_geoip_string_ipv6) {
-		if (! defined $string) { next; };
-		print $text{'powered'}->{$lang} . " MaxMind " . $text{'database'}->{$lang} . " " . $string . "(http://www.maxmind.com)" . "\n";
+	if (scalar(keys %db_info_geoip) > 0) {
+		print $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_geoip) . " (http://www.maxmind.com)" . "\n";
 	};
 };
 

@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# Project    : ipv6calc/ipv6calcweb
+# File       : create_ipv6calcweb.sh
+# Version    : $Id: create_ipv6calcweb-cgi.sh,v 1.1 2013/10/15 19:47:24 ds6peter Exp $
+# Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
+#
+# Information:
+#  create ipv6calcweb.cgi from ipv6calcweb.cgi.in
+#
+
+# check
+if [ ! -f ../config.h ]; then
+	echo "ERROR : missing header file: ../config.h"
+	exit 1
+fi
+
+# get placeholders
+v="`cat ../config.h | grep -w PACKAGE_VERSION | awk '{ print $3 }' | sed 's/"//g'`"
+c="`cat ../config.h | grep -w COPYRIGHT_YEAR | awk '{ print $3 }' | sed 's/"//g'`"
+
+if [ -z "$v" ]; then
+	echo "ERROR : can't retrieve version from config.h"
+	exit 1
+fi
+
+if [ -z "$c" ]; then
+	echo "ERROR : can't retrieve copyright year from config.h"
+	exit 1
+fi
+
+# replace placeholders
+perl -pi -e "s/\@PACKAGE_VERSION\@/$v/" ipv6calcweb.cgi || exit 1
+perl -pi -e "s/\@COPYRIGHT_YEAR\@/$c/" ipv6calcweb.cgi || exit 1
+
+touch ipv6calcweb.cgi -r ipv6calcweb.cgi.in
+
+echo "INFO  : successfully created: ipv6calcweb.cgi"

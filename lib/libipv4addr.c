@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.45 2013/09/28 16:24:51 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.46 2013/10/15 19:47:24 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -246,20 +246,17 @@ void ipv4addr_copy(ipv6calc_ipv4addr *ipv4addrp_dst, const ipv6calc_ipv4addr *ip
 /*
  * function gets type of an IPv4 address
  */
-uint32_t ipv4addr_gettype(/*@unused@*/ const ipv6calc_ipv4addr *ipv4addrp) {
+uint32_t ipv4addr_gettype(const ipv6calc_ipv4addr *ipv4addrp) {
 	uint32_t type = 0, c, p;
 	uint32_t ipv4 = ipv4addr_getdword(ipv4addrp);
 	int i;
 
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s/%s: got IPv4 address: 0x%08x\n", __FILE__, __func__, ipv4);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "Got IPv4 address: 0x%08x", ipv4);
 
 	/* check for anonymized IPv4 address */
 	if ((ipv4 & 0xf0000000u) == 0xf0000000u) {
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s/%s: check for anonymized IPv4 address\n", __FILE__, __func__);
-		};
+		DEBUGPRINT_NA(DEBUG_libipv4addr, "Check for anonymized IPv4 address");
+
 		// count payload bits
 		c = 0;
 		p = 0x00000001;
@@ -270,18 +267,14 @@ uint32_t ipv4addr_gettype(/*@unused@*/ const ipv6calc_ipv4addr *ipv4addrp) {
 			p <<= 1;
 		};
 
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s/%s: check for anonymized address, parity count c=%d\n", __FILE__, __func__, c);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "Check for anonymized address, parity count c=%d", c);
 
 		if (((c & 0x1) ^ 0x1) == ((ipv4 >> 27) & 0x1)) {
 			// check country code (limited value)
 			p = (ipv4 >> 17) & 0x3ff;
 
 			if (p <= COUNTRYCODE_INDEX_LETTER_MAX || p == COUNTRYCODE_INDEX_UNKNOWN) {
-				if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-					fprintf(stderr, "%s/%s: address is an anonymized one\n", __FILE__, __func__);
-				};
+				DEBUGPRINT_NA(DEBUG_libipv4addr, "Address is an anonymized one");
 
 				type = IPV4_ADDR_ANONYMIZED | IPV4_ADDR_UNICAST;
 				goto END_ipv4addr_gettype;

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.93 2013/10/14 16:49:09 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.94 2013/10/15 19:47:24 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -650,7 +650,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	};
 
 
-	if ((typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
+	if (((typeinfo & IPV4_ADDR_ANONYMIZED) == 0) && ((typeinfo & IPV4_ADDR_GLOBAL) != 0)) {
 #ifdef SUPPORT_IP2LOCATION
 		/* IP2Location information */
 		print_ip2location(tempipv4string, formatoptions, embeddedipv4string, 4);

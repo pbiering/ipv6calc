@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.70 2013/10/14 18:29:19 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.71 2013/10/15 19:47:24 ds6peter Exp $
 dnl Copyright: 2001-2013 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -480,5 +480,4 @@ AC_OUTPUT([
 		ipv6logstats/Makefile
 		contrib/ipv6calc.spec
 		VERSION
-		ipv6calcweb/ipv6calcweb.cgi
 	])
