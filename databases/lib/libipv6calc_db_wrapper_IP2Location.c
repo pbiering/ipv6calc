@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.7 2013/09/28 20:33:47 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.8 2013/10/16 05:46:45 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -206,9 +206,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_info(char* string, const size_t 
 	snprintf(string, size, "No IP2Location support built-in");
 #endif
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Finished\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "Finished");
 	return;
 };
 
@@ -220,7 +218,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_info(char* string, const size_t 
  */
 void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_verbose, const char *prefix_string) {
 	IP2Location *loc;
-	int i, type;
+	int i, type, count = 0;
 
 #ifdef SUPPORT_IP2LOCATION_DYN
 	struct stat file_stat;
@@ -237,6 +235,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 
 #ifdef SUPPORT_IP2LOCATION
 	printf("%sIP2Location: info of available databases in directory: %s\n", prefix, ip2location_db_dir);
+
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_IP2Location_db_file_desc); i++) {
 		type = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number;
 
@@ -257,21 +256,24 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 			} else {
 				printf("%sIP2Location: %-27s: %-40s (%s)\n", prefix, libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description, libipv6calc_db_wrapper_IP2Location_dbfilename(type), libipv6calc_db_wrapper_IP2Location_database_info(loc));
 				libipv6calc_db_wrapper_IP2Location_close(loc);
+				count++;
 			};
 		} else {
 			continue;
 		};
 #ifdef SUPPORT_IP2LOCATION_DYN
 		};
-#endif
+#endif // SUPPORT_IP2LOCATION_DYN
 	};
-#else
-	snprintf(string, size, "%sNo IP2Location support built-in", prefix);
-#endif
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Finished\n", __FILE__, __func__);
+	if (count == 0) {
+		printf("%sIP2Location: NO available databases found in directory: %s\n", prefix, ip2location_db_dir);
 	};
+#else // SUPPORT_IP2LOCATION
+	snprintf(string, size, "%sNo IP2Location support built-in", prefix);
+#endif // SUPPORT_IP2LOCATION
+
+	DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "Finished");
 	return;
 };
 
@@ -294,7 +296,7 @@ const char * libipv6calc_db_wrapper_IP2Location_lib_version(void) {
 	if (dl_IP2Location_handle == NULL) {
 		result_IP2Location_lib_version = "LIBARY-NOT-LOADED";
 	} else {
-		result_IP2Location_lib_version = "unsupported";
+		result_IP2Location_lib_version = "version-unknown";
 	};
 
 	return(result_IP2Location_lib_version);
