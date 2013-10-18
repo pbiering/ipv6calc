@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.8 2013/10/16 05:46:45 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.9 2013/10/18 06:23:42 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -96,6 +96,20 @@ static void *dl_IP2Location_handle = NULL;
 
 char ***libipv6calc_db_wrapper_IP2LocationDBFileName_ptr = NULL;
 const char **libipv6calc_db_wrapper_IP2LocationDBDescription = NULL;
+
+/* database usage map */
+#define IP2LOCATION_DB_MAX_BLOCKS_32	2	// 0-63
+static uint32_t ip2location_db_usage_map[IP2LOCATION_DB_MAX_BLOCKS_32];
+
+#define IP2LOCATION_DB_USAGE_MAP_TAG(db)	if (db < (32 * IP2LOCATION_DB_MAX_BLOCKS_32)) { \
+							DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper_IP2Location, "Tag usage for db: %d", db); \
+							ip2location_db_usage_map[db / 32] |= 1 << (db % 32); \
+						} else { \
+							fprintf(stderr, "FIXME: unsupported db value (exceed limit): %d (%d)\n", db, 32 * IP2LOCATION_DB_MAX_BLOCKS_32 - 1); \
+							exit(1); \
+						};
+
+char ip2location_db_usage_string[NI_MAXHOST] = "";
 
 
 // local prototyping
@@ -276,6 +290,43 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 	DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "Finished");
 	return;
 };
+
+
+/*
+ * wrapper: string regarding used database infos
+ */
+char *libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used(void) {
+	int db;
+	IP2Location *loc;
+	char tempstring[NI_MAXHOST];
+	char *info;
+
+	for (db = 0; db < 32 * IP2LOCATION_DB_MAX_BLOCKS_32; db++) {
+		if ((ip2location_db_usage_map[db / 32] & (1 << (db % 32))) != 0) {
+			DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper_IP2Location, "DB used: %d", db);
+
+			loc = libipv6calc_db_wrapper_IP2Location_open_type(db);
+			info = libipv6calc_db_wrapper_IP2Location_database_info(loc);
+
+			if (info == NULL) { continue; }; // NULL pointer returned
+
+			if (strlen(info) == 0) { continue; }; // empty string returned
+
+			if (strlen(ip2location_db_usage_string) > 0) {
+				if (strstr(ip2location_db_usage_string, info) != NULL) { continue; }; // string already included
+
+				snprintf(tempstring, sizeof(tempstring), "%s / %s", ip2location_db_usage_string, info);
+			} else {
+				snprintf(tempstring, sizeof(tempstring), "%s", info);
+			};
+
+			snprintf(ip2location_db_usage_string, sizeof(ip2location_db_usage_string), "%s", tempstring);
+		};
+	};
+
+	return(ip2location_db_usage_string);
+};
+
 
 
 #ifdef SUPPORT_IP2LOCATION
@@ -923,6 +974,8 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(char *addr
 		return (NULL);
 	};
 
+	IP2LOCATION_DB_USAGE_MAP_TAG(IP2Location_type);
+
 	libipv6calc_db_wrapper_IP2Location_close(loc);
 
 	return(IP2Location_result_ptr);
@@ -965,6 +1018,8 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_country_name_by_addr(char *addr
 	if (IP2Location_result_ptr == NULL) {
 		return (NULL);
 	};
+
+	IP2LOCATION_DB_USAGE_MAP_TAG(IP2Location_type);
 
 	libipv6calc_db_wrapper_IP2Location_close(loc);
 

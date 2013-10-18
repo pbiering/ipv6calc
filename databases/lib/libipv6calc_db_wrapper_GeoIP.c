@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.44 2013/10/16 05:46:45 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.45 2013/10/18 06:23:42 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -1115,17 +1115,26 @@ char *libipv6calc_db_wrapper_GeoIP_wrapper_db_info_used(void) {
 	int db;
 	GeoIP *gi;
 	char tempstring[NI_MAXHOST];
+	char *info;
 
 	for (db = 0; db < 32 * GEOIP_DB_MAX_BLOCKS_32; db++) {
 		if ((geoip_db_usage_map[db / 32] & (1 << (db % 32))) != 0) {
 			DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper_GeoIP, "DB used: %d", db);
 
 			gi = libipv6calc_db_wrapper_GeoIP_open_type(db, 0);
+			info = libipv6calc_db_wrapper_GeoIP_database_info(gi);
+
+			if (info == NULL) { continue; }; // NULL pointer returned
+
+			if (strlen(info) == 0) { continue; }; // empty string returned
+
+			DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper_GeoIP, "DB info: %s", info);
 
 			if (strlen(geoip_db_usage_string) > 0) {
-				snprintf(tempstring, sizeof(tempstring), "%s / %s", geoip_db_usage_string, libipv6calc_db_wrapper_GeoIP_database_info(gi));
+				if (strstr(geoip_db_usage_string, info) != NULL) { continue; }; // string already included
+				snprintf(tempstring, sizeof(tempstring), "%s / %s", geoip_db_usage_string, info);
 			} else {
-				snprintf(tempstring, sizeof(tempstring), "%s", libipv6calc_db_wrapper_GeoIP_database_info(gi));
+				snprintf(tempstring, sizeof(tempstring), "%s", info);
 			};
 
 			snprintf(geoip_db_usage_string, sizeof(geoip_db_usage_string), "%s", tempstring);
@@ -2053,8 +2062,6 @@ const char *libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(const char
 		return (NULL);
 	};
 
-	GEOIP_DB_USAGE_MAP_TAG(GeoIP_type);
-
 	if (proto == 4) {
 		GeoIP_result_ptr = libipv6calc_db_wrapper_GeoIP_country_code_by_addr(gi, addr);
 	} else if (proto == 6) {
@@ -2081,6 +2088,8 @@ const char *libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(const char
 		GeoIP_result_ptr = NULL;
 		goto END_libipv6calc_db_wrapper;
 	};
+
+	GEOIP_DB_USAGE_MAP_TAG(GeoIP_type);
 
 END_libipv6calc_db_wrapper:
 	libipv6calc_db_wrapper_GeoIP_delete(gi);
@@ -2110,8 +2119,6 @@ const char *libipv6calc_db_wrapper_GeoIP_wrapper_country_name_by_addr(const char
 		return (NULL);
 	};
 
-	GEOIP_DB_USAGE_MAP_TAG(GeoIP_type);
-
 	if (proto == 4) {
 		GeoIP_result_ptr = libipv6calc_db_wrapper_GeoIP_country_name_by_addr(gi, addr);
 	} else if (proto == 6) {
@@ -2131,6 +2138,8 @@ const char *libipv6calc_db_wrapper_GeoIP_wrapper_country_name_by_addr(const char
 			GeoIP_result_ptr = libipv6calc_db_wrapper_GeoIP_country_name_by_ipnum_v6(gi, ipv6addr.in6_addr);
 		};
 	};
+
+	GEOIP_DB_USAGE_MAP_TAG(GeoIP_type);
 
 END_libipv6calc_db_wrapper:
 	libipv6calc_db_wrapper_GeoIP_delete(gi);
@@ -2174,8 +2183,6 @@ char *libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(const char *addr, const
 		return(NULL);
 	};
 
-	GEOIP_DB_USAGE_MAP_TAG(GeoIP_type);
-
 	if (proto == 4) {
 		GeoIP_result_ptr = libipv6calc_db_wrapper_GeoIP_name_by_addr(gi, addr);
 	} else if (proto == 6) {
@@ -2185,6 +2192,8 @@ char *libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(const char *addr, const
 	if (GeoIP_result_ptr == NULL) {
 		return(NULL);
 	};
+
+	GEOIP_DB_USAGE_MAP_TAG(GeoIP_type);
 
 	libipv6calc_db_wrapper_GeoIP_delete(gi);
 
@@ -2215,8 +2224,6 @@ GeoIPRecord *libipv6calc_db_wrapper_GeoIP_wrapper_record_city_by_addr(const char
 		return (NULL);
 	};
 
-	GEOIP_DB_USAGE_MAP_TAG(GeoIP_type);
-
 	if (proto == 4) {
 		GeoIP_result_ptr = libipv6calc_db_wrapper_GeoIP_record_by_addr(gi, addr);
 	} else if (proto == 6) {
@@ -2228,6 +2235,8 @@ GeoIPRecord *libipv6calc_db_wrapper_GeoIP_wrapper_record_city_by_addr(const char
 	};
 
 	libipv6calc_db_wrapper_GeoIP_delete(gi);
+
+	GEOIP_DB_USAGE_MAP_TAG(GeoIP_type);
 
 	return(GeoIP_result_ptr);
 };

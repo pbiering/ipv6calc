@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.h
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.h,v 1.2 2013/09/21 17:25:56 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.h,v 1.3 2013/10/18 06:23:42 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -77,7 +77,7 @@ extern int         libipv6calc_db_wrapper_IP2Location_wrapper_cleanup(void);
 extern const char *libipv6calc_db_wrapper_IP2Location_wrapper_asnum_by_addr (const char *addr, const int proto);
 extern void        libipv6calc_db_wrapper_IP2Location_wrapper_info(char* string, const size_t size);
 extern void        libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
-extern char       *libipv6calc_db_wrapper_GeoIP_wrapper_db_info_used(void);
+extern char       *libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used(void);
 
 extern char       *libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(char *addr, const int proto);
 extern char       *libipv6calc_db_wrapper_IP2Location_wrapper_country_name_by_addr(char *addr, const int proto);

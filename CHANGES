@@ -59,3 +59,12 @@ ipv6calcweb.cgi
 
 - ipv6logstats is now able to create additional statistics by
    CountryCode & AS Number (in case of related database support)
+
+- ipv6calc/showinfo
+   IP2LOCATION_DATABASE_INFO_IPV4 (replaced)
+   IP2LOCATION_DATABASE_INFO_IPV6 (replaced)
+   IP2LOCATION_DATABASE_INFO (reintroduced)
+   GEOIP_DATABASE_INFO_IPV4 (replaced)
+   GEOIP_DATABASE_INFO_IPV6 (replaced)
+   GEOIP_DATABASE_INFO (reintroduced)
+   IPV6CALC_OUTPUT_VERSION=7

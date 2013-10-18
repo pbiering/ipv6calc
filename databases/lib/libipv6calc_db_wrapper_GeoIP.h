@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.h
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.h,v 1.16 2013/10/02 06:41:24 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.h,v 1.17 2013/10/18 06:23:42 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -41,7 +41,7 @@ extern void         libipv6calc_db_wrapper_GeoIP_wrapper_info(char* string, cons
 extern void         libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
 extern char        *libipv6calc_db_wrapper_GeoIP_wrapper_db_info_used(void);
 
-extern int         libipv6calc_db_wrapper_GeoIP_has_features(uint32_t features);
+extern int          libipv6calc_db_wrapper_GeoIP_has_features(uint32_t features);
 
 extern char geoip_lib_file[NI_MAXHOST];
 extern char geoip_db_dir[NI_MAXHOST];
