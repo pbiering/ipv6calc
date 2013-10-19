@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.45 2013/10/14 14:43:11 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.46 2013/10/19 13:58:09 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -14,6 +14,7 @@
 #include <getopt.h> 
 #include <unistd.h>
 #include <math.h>
+#include <time.h>
 
 #include "config.h"
 
@@ -355,6 +356,9 @@ static void lineparser(void) {
 	ipv6calc_ipv6addr ipv6addr;
 	ipv6calc_ipv4addr ipv4addr;
 	int registry, stat_registry_base;
+
+	time_t timer;
+	struct tm* tm_info;
 
 	int index;
 	uint16_t cc_index = COUNTRYCODE_INDEX_UNKNOWN;
@@ -734,6 +738,13 @@ static void lineparser(void) {
 
 		/* print version number */
 		printf("%-20s %d.%d\n", "*Version", STATS_VERSION_MAJOR, STATS_VERSION_MINOR);
+
+		time(&timer);
+		tm_info = gmtime(&timer);
+		strftime(resultstring, sizeof(resultstring), "%Y:%m:%d %H:%M:%S%z %Z", tm_info);
+
+		printf("*DateTime: %s\n", resultstring);
+		printf("*UnixTime: %ju\n", (uintmax_t) timer);
 
 		libipv6calc_db_wrapper_print_db_info(0, "*3*DB-Info: ");
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.45 2013/10/18 06:23:42 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.46 2013/10/19 13:58:09 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -480,8 +480,11 @@ void libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(const int level_verbose,
 				if (i == GEOIP_LARGE_COUNTRY_EDITION_V6) { continue; };
 #endif
 
-				printf("%sGeoIP: %-33s:[%2d] %-40s (CAN'T OPEN)\n", prefix, libipv6calc_db_wrapper_GeoIPDBDescription[i], i, (*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i]);
+				if (level_verbose == LEVEL_VERBOSE2) {
+					printf("%sGeoIP: %-33s:[%2d] %-40s (CAN'T OPEN)\n", prefix, libipv6calc_db_wrapper_GeoIPDBDescription[i], i, (*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i]);
+				};
 			} else {
+				count++;
 				printf("%sGeoIP: %-33s:[%2d] %-40s (%s)\n", prefix, libipv6calc_db_wrapper_GeoIPDBDescription[i], i, (*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i], libipv6calc_db_wrapper_GeoIP_database_info(gi));
 				libipv6calc_db_wrapper_GeoIP_delete(gi);
 			};

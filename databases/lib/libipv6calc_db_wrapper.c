@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.26 2013/10/13 16:18:44 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.27 2013/10/19 13:58:09 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -212,7 +212,7 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
 	};
 
-	printf("DB features: 0x%08x\n", wrapper_features);
+	printf("%sDB features: 0x%08x\n", prefix_string, wrapper_features);
 
 #ifdef SUPPORT_GEOIP
 	// Call GeoIP wrapper

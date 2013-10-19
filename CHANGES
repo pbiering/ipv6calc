@@ -59,6 +59,7 @@ ipv6calcweb.cgi
 
 - ipv6logstats is now able to create additional statistics by
    CountryCode & AS Number (in case of related database support)
+   DateTime and Unixtime is now displayed on generated statistics
 
 - ipv6calc/showinfo
    IP2LOCATION_DATABASE_INFO_IPV4 (replaced)

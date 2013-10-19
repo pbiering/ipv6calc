@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.24 2013/10/02 06:41:24 ds6peter Exp $
-# Copyright  : 2003-2011 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: autogen.sh,v 1.25 2013/10/19 13:58:09 ds6peter Exp $
+# Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
 
@@ -25,7 +25,7 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip"
 		;;
-	    '--geoip-dyn')
+	    '--geoip-dyn'|'-G')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --with-geoip-dynamic"
 		;;
@@ -33,7 +33,7 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location"
 		;;
-	    '--ip2location-dyn')
+	    '--ip2location-dyn'|'-I')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --with-ip2location-dynamic"
 		;;
@@ -59,18 +59,18 @@ while [ "$1" != "$LAST" ]; do
 		;;
 	    '-?'|'-h'|'--help')
 		echo "Supported options:"
-		echo "   -?|-h|--help       : this help"
-		echo "   -W                 : use extra CFLAGS=-Werror"
-		echo "   -n|--no-make       : stop before running 'make'"
-		echo "   -a|--all           : enable GeoIP and IP2Location support"
-		echo "   -g|--geoip         : enable GeoIP support"
-		echo "   --geoip-dyn        : switch to dynamic library loading of GeoIP"
-		echo "   -i|--ip2location   : enable IP2Location support"
-		echo "   --ip2location-dyn  : switch to dynamic library loading of IP2Location"
-		echo "   --disable-db-ieee  : disable builtin IEEE database"
-		echo "   --disable-db-ipv4  : disable builtin IPv4 database"
-		echo "   --disable-db-ipv6  : disable builtin IPv6 database"
-		echo "   --geoip-ipv6-compat: enable GeoIP IPv6 compatibility mode"
+		echo "   -?|-h|--help        : this help"
+		echo "   -W                  : use extra CFLAGS=-Werror"
+		echo "   -n|--no-make        : stop before running 'make'"
+		echo "   -a|--all            : enable GeoIP and IP2Location support"
+		echo "   -g|--geoip          : enable GeoIP support"
+		echo "   --geoip-dyn|-G      : switch to dynamic library loading of GeoIP"
+		echo "   -i|--ip2location    : enable IP2Location support"
+		echo "   --ip2location-dyn|-I: switch to dynamic library loading of IP2Location"
+		echo "   --disable-db-ieee   : disable builtin IEEE database"
+		echo "   --disable-db-ipv4   : disable builtin IPv4 database"
+		echo "   --disable-db-ipv6   : disable builtin IPv6 database"
+		echo "   --geoip-ipv6-compat : enable GeoIP IPv6 compatibility mode"
 		exit 1
 	esac
 done
