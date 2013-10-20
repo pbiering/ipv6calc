@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.91 2013/09/28 20:32:40 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.92 2013/10/20 18:27:33 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -254,73 +254,27 @@ int main(int argc, char *argv[]) {
 				break;
 				
 			case 'L':
-#ifdef IP2LOCATION_DEFAULT_FILE_IPV4
-				use_ip2location_ipv4 = 1;
-#endif
-#ifdef IP2LOCATION_DEFAULT_FILE_IPV6
-				use_ip2location_ipv6 = 1;
-#endif
-				if (use_ip2location_ipv4 == 0 && use_ip2location_ipv6 == 0) {
-					if ((formatoptions & FORMATOPTION_quiet) == 0) {
-						fprintf(stderr, " Neither support for IP2Location IPv4 or IPv6 default database is compiled in, IP2Location support disabled\n");
-					};
-				};
+				fprintf(stderr, "Option is obsolete: -L\n");
 				break;
 
 			case DB_ip2location_ipv4_default:
-#ifdef IP2LOCATION_DEFAULT_FILE_IPV4
-				use_ip2location_ipv4 = 1;
-#else
-				if ((formatoptions & FORMATOPTION_quiet) == 0) {
-					fprintf(stderr, " Support for option '--db-ip2location-ipv4-default' not compiled in, IP2Location IPv4 support disabled\n");
-				};
-#endif
+				fprintf(stderr, "Option is obsolete: --db-ip2location-ipv4-default\n");
 				break;
 
 			case DB_ip2location_ipv6_default:
-#ifdef IP2LOCATION_DEFAULT_FILE_IPV6
-				use_ip2location_ipv6 = 1;
-#else
-				if ((formatoptions & FORMATOPTION_quiet) == 0) {
-					fprintf(stderr, " Support for option '--db-ip2location-ipv6-default' not compiled in, IP2Location IPv6 support disabled\n");
-				};
-#endif
+				fprintf(stderr, "Option is obsolete: --db-ip2location-ipv6-default\n");
 				break;
 
 			case 'G':
-#ifdef GEOIP_DEFAULT_FILE_IPV4
-				use_geoip_ipv4 = 1;
-#endif
-#ifdef GEOIP_DEFAULT_FILE_IPV6
-				use_geoip_ipv6 = 1;
-#endif
-				if (use_geoip_ipv4 == 0 && use_geoip_ipv6 == 0) {
-					if ((formatoptions & FORMATOPTION_quiet) == 0) {
-						fprintf(stderr, " Neither support for GeoIP IPv4 or IPv6 default database is compiled in, GeoIP support disabled\n");
-					};
-				};
+				fprintf(stderr, "Option is obsolete: -G\n");
 				break;
 
 			case DB_geoip_ipv4_default:
-#ifdef GEOIP_DEFAULT_FILE_IPV4
-				use_geoip_ipv4 = 1;
-#else
-				if ((formatoptions & FORMATOPTION_quiet) == 0) {
-					fprintf(stderr, " Support for option '--db-geoip-ipv4-default' not compiled in, GeoIP IPv4 support disabled\n");
-				};
-#endif
+				fprintf(stderr, "Option is obsolete: --db-geoip-ipv4-default\n");
 				break;
 
 			case DB_geoip_ipv6_default:
-#ifdef GEOIP_DEFAULT_FILE_IPV6
-#ifdef SUPPORT_GEOIP_V6
-				use_geoip_ipv6 = 1;
-#endif
-#else
-				if ((formatoptions & FORMATOPTION_quiet) == 0) {
-					fprintf(stderr, " Support for option '--db-geoip-ipv6-default' not compiled in, GeoIP IPv6 support disabled\n");
-				};
-#endif
+				fprintf(stderr, "Option is obsolete: --db-geoip-ipv6-default\n");
 				break;
 
 			case CMD_printexamples:

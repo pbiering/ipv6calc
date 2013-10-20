@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.71 2013/10/13 16:18:44 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.72 2013/10/20 18:27:33 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -21,7 +21,7 @@
 /* IPv6 anonymization */
 /* 
  * IID anonymization is done by replacing with related information (64-bit)
- * xxxx:xxxx:xxxx:xxxx
+ * xxxx:xxxx:xxxx:xxxC  (C = 4-bit checksum)
  *
  * a9p9 4941 0000 000C  -> RFC 4941 anonymized privacy extension Interface ID
  *
@@ -44,8 +44,12 @@
  * SLA/NLA prefix part anonymization is done by replacing with pattern a909a909
  *   p = number of nibbles anonymized
  *
- * in case of method=kp: p=0x0f
- *  Prefix contains CountryCode index and ASN
+ * Prefix anonymization in case of method=kp: p=0x0f
+ * a909:ccca:aaaa:aaaC  (C = 4-bit checksum)
+ *                      ccc      -> 10-bit Country Code mapping [A-Z]*[A-Z0-9] (936)
+ *                                   0x3FF = unknown country
+ *                                   0x000-0x3A7: c1= c / 36, c2 = c % 36
+ *                      aaaaaaaa -> 32-bit ASN
  */
 #define ANON_TOKEN_VALUE_00_31		(uint32_t) 0xa9090000u
 #define ANON_TOKEN_MASK_00_31		(uint32_t) 0xff0f0000u

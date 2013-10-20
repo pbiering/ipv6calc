@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.28 2013/09/13 05:55:53 ds6peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.29 2013/10/20 18:27:33 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
@@ -104,8 +104,8 @@ typedef struct {
 #define IPV4_ADDR_REGISTRY_RESERVED	REGISTRY_RESERVED
 #define IPV4_ADDR_REGISTRY_UNKNOWN	REGISTRY_UNKNOWN
 
-/* IPv4 address anonymization */
-/*  Global IPv4 addresses are anoymized by storing country code and AS number
+/* IPv4 address anonymization
+ *  Global IPv4 addresses are anoymized by storing country code and AS number
  *   and using prefix of experimental range (240-255.x.y.z)
  *
  *  3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 

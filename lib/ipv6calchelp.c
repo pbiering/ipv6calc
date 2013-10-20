@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.44 2013/09/28 16:24:51 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.45 2013/10/20 18:27:33 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -804,6 +804,6 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 	fprintf(stderr, "BuiltIn support not enabled\n");
 #endif
 
-	libipv6calc_db_wrapper_print_db_info(level_verbose, NULL);
+	libipv6calc_db_wrapper_print_db_info(level_verbose, "");
 };
 
