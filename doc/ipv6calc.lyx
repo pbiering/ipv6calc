@@ -274,9 +274,9 @@ IP2Location IPv4, IPv6
 \end_layout
 
 \begin_layout Standard
-The tool can be compiled to use dynamically loading of library, means the
- binaries can be also used on systems where IP2Location or GeoIP libraries
- are not existing.
+Since version 0.95.0 the tool can be compiled to use dynamically loading of
+ library, means the binaries can be also used on systems where IP2Location
+ or GeoIP libraries are not existing.
  On such system, the support is simply disabled then.
 \end_layout
 
@@ -457,8 +457,12 @@ Red Hat Enterprise Linux and clones
 
 \begin_layout Standard
 It's tested by the developer that creation of the RPM is working fine on
- RHEL/CentOS 4.
- Since RHEL/CentOS 5 this package is included by default.
+ RHEL 4.
+ Since RHEL 5 this package is included by default.
+\end_layout
+
+\begin_layout Standard
+CentOS 5 and CentOS 6 are also platforms for regression tests.
 \end_layout
 
 \begin_layout Subsubsection
@@ -1133,6 +1137,31 @@ BuiltIn: IPv6 : AFRINIC/20131015 APNIC/20131014 ARIN/20131014 IANA/20130215
 \begin_layout Code
 
 BuiltIn: IEEE : IAB/20131015 OUI/20131015 OUI36/20131015
+\end_layout
+
+\begin_layout Standard
+Since version 0.95.0 the internal layer for database usage was abstracted
+ and each database 
+\begin_inset Quotes eld
+\end_inset
+
+plugin
+\begin_inset Quotes erd
+\end_inset
+
+ is initialized reporting then its supporting features in binary representation.
+ This makes implementation of other external databases easier in the future.
+ There are at least plans to create an overlay to built-in databases by
+ publishing and use some 
+\begin_inset Quotes eld
+\end_inset
+
+precompiled
+\begin_inset Quotes erd
+\end_inset
+
+ newer databases replacing the need of recompilation for updated built-in
+ databases.
 \end_layout
 
 \begin_layout Subsection
@@ -2168,6 +2197,14 @@ target "http://www.ipv6.bieringer.de/"
  (IPv6 only).
 \end_layout
 
+\begin_layout Subsection
+Usage
+\end_layout
+
+\begin_layout Standard
+See examples inside the package.
+\end_layout
+
 \begin_layout Section
 Webserver log anonymization helper program "ipv6loganon"
 \end_layout
@@ -3151,11 +3188,17 @@ Major extensions/changes are listed here
 \end_layout
 
 \begin_layout Itemize
-Prefix and IID anonymization
+Prefix and IID anonymization methods
 \end_layout
 
 \begin_layout Itemize
 Support of dynamic load of GeoIP and IP2Location libraries
+\end_layout
+
+\begin_layout Itemize
+Specifying dedicated GeoIP and IP2Location database files is now replaced
+ by specifying dedicated database directories to make especially for GeoIP
+ use of more database files.
 \end_layout
 
 \begin_layout Subsection
