@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: generate.sh,v 1.5 2013/10/21 06:14:13 ds6peter Exp $
+# $Id: generate.sh,v 1.6 2013/10/21 20:13:21 ds6peter Exp $
 
 # Requires: opensp
 
@@ -50,7 +50,7 @@ validate_sgml() {
 create_html_singlepage() {
 	echo "INF: Create HTML singlepage '$file_html'"
 	set -x
-	jade -t sgml -i html -V nochunks -d "${file_dsl}#html" -o $file_html $file_sgml >/dev/null
+	jade -t sgml -i html -V nochunks -d "${file_dsl}#html" $file_sgml >$file_html
 	local retval=$?
 	set +x
 	if [ $retval -eq 0 ]; then
