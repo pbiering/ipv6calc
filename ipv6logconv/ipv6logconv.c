@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.25 2013/09/28 20:32:40 ds6peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.26 2013/10/22 20:52:16 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -172,7 +172,7 @@ int main(int argc,char *argv[]) {
 
 			default:
 				fprintf(stderr, "Usage: (see '%s --command -?|-h|--help' for more help)\n", PROGRAM_NAME);
-				printhelp();
+				ipv6logconv_printhelp();
 				break;
 		};
 	};

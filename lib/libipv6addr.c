@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.95 2013/10/22 19:08:52 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.96 2013/10/22 20:52:17 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -416,7 +416,7 @@ int ipv6addr_iidrandomdetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statis
 
 	for (c = 0; c < 16; c++) {
 		iid_statisticsp->digit_blocks[c] = 0;
-		iid_statisticsp->digit_amount[c] = 0;
+		iid_statisticsp->digit_blocks_hexdigit[c] = 0;
 		iid_statisticsp->digit_amount[c] = 0;
 	};
 
@@ -568,7 +568,7 @@ int ipv6addr_iidrandomdetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statis
 
 	/* check against limits */
 	if (iid_statisticsp->hexdigit < s_iid_statistics_ok_min.hexdigit || iid_statisticsp->hexdigit > s_iid_statistics_ok_max.hexdigit) {
-		DEBUGPRINT_NA(DEBUG_libipv6addr_iidrandomdetection, "min/max hexdigit limit reached");
+		DEBUGPRINT_WA(DEBUG_libipv6addr_iidrandomdetection, "min/max hexdigit variance limit reached: %f min=%f max=%f", iid_statisticsp->hexdigit, s_iid_statistics_ok_min.hexdigit, s_iid_statistics_ok_max.hexdigit);
 		result = 1;
 		goto END_ipv6addr_iidrandomdetection;
 

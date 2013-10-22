@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.21 2013/10/14 14:43:11 ds6peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.22 2013/10/22 20:52:16 ds6peter Exp $
 # Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -219,8 +219,8 @@ run_loganon_reliability_tests() {
 
 	for entry in $sortlist; do
 		echo "DEBUG : test: $entry"
-		nonanonymized="`echo "$entry" | ../ipv6logstats/ipv6logstats -q`"
-		anonymized="`echo "$entry" | ./ipv6loganon -q $options | ../ipv6logstats/ipv6logstats -q`"
+		nonanonymized="`echo "$entry" | ../ipv6logstats/ipv6logstats -q | grep -v "Time:"`"
+		anonymized="`echo "$entry" | ./ipv6loganon -q $options | ../ipv6logstats/ipv6logstats -q | grep -v "Time:"`"
 
 		entry_anon="`echo "$entry" | ./ipv6loganon -q $options`"
 
