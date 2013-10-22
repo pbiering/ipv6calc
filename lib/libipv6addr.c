@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.94 2013/10/22 18:59:55 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.95 2013/10/22 19:08:52 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -923,9 +923,11 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 						if (((st2 & ANON_IID_RANDOM_MASK_00_31) == ANON_IID_RANDOM_VALUE_00_31) && ((st3 & ANON_IID_RANDOM_MASK_32_63) == ANON_IID_RANDOM_VALUE_32_63)) {
 							type |= IPV6_NEW_ADDR_IID_RANDOM | IPV6_ADDR_ANONYMIZED_IID | IPV6_NEW_ADDR_IID_LOCAL;
 							return (type);
+
 						} else if (((st2 & ANON_IID_STATIC_MASK_00_31) == ANON_IID_STATIC_VALUE_00_31) && ((st3 & ANON_IID_STATIC_MASK_32_63) == ANON_IID_STATIC_VALUE_32_63)) {
 							type |= IPV6_NEW_ADDR_IID_LOCAL | IPV6_ADDR_ANONYMIZED_IID;
 							return (type);
+
 						} else if (((st2 & ANON_IID_EUI48_MASK_00_31) == ANON_IID_EUI48_VALUE_00_31) && ((st3 & ANON_IID_EUI48_MASK_32_63) == ANON_IID_EUI48_VALUE_32_63)) {
 							type |= IPV6_NEW_ADDR_IID_EUI48 | IPV6_ADDR_ANONYMIZED_IID;
 
@@ -936,6 +938,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 								type |= IPV6_NEW_ADDR_IID_LOCAL;
 							};
 							return (type);
+
 						} else if (((st2 & ANON_IID_EUI64_MASK_00_31) == ANON_IID_EUI64_VALUE_00_31) && ((st3 & ANON_IID_EUI64_MASK_32_63) == ANON_IID_EUI64_VALUE_32_63)) {
 							type |= IPV6_NEW_ADDR_IID_EUI64 | IPV6_ADDR_ANONYMIZED_IID;
 
@@ -946,6 +949,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 								type |= IPV6_NEW_ADDR_IID_LOCAL;
 							};
 							return (type);
+
 						} else if (((st2 & ANON_IID_IPV4_MASK_00_31) == ANON_IID_IPV4_VALUE_00_31) && ((st3 & ANON_IID_IPV4_MASK_32_63) == ANON_IID_IPV4_VALUE_32_63)) {
 							type |= IPV6_ADDR_IID_32_63_HAS_IPV4 | IPV6_ADDR_ANONYMIZED_IID;
 							if ((type & IPV6_NEW_ADDR_6TO4) != 0) {
@@ -954,6 +958,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 							};
 
 							return (type);
+
 						} else if (((st2 & ANON_IID_ISATAP_MASK_00_31) == ANON_IID_ISATAP_VALUE_00_31)) {
 							type |= IPV6_NEW_ADDR_IID_ISATAP | IPV6_ADDR_ANONYMIZED_IID;
 
@@ -969,12 +974,9 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 							return (type);
 						};
 
-						fprintf(stderr, "%s/%s: unhandled anonymized IID found: %08x %08x\n", __FILE__, __func__, st2, st3);
-						return (type);
+						DEBUGPRINT_NA(DEBUG_libipv6addr, "unhandled probably anonymized IID found (this can really happen), proceed further on");
 					} else {
-						if ( (ipv6calc_debug) != 0 ) {
-							fprintf(stderr, "%s/%s: checksum WRONG - no anonymized IID found\n", __FILE__, __func__);
-						};
+						DEBUGPRINT_NA(DEBUG_libipv6addr, "checksum WRONG - no anonymized IID found, proceed further on");
 					};
 				};
 
