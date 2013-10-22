@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.92 2013/10/20 18:27:33 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.93 2013/10/22 18:59:40 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -21,6 +21,7 @@
 #include "ipv6calcoptions.h"
 #include "ipv6calcoptions_local.h"
 #include "ipv6calchelp.h"
+#include "ipv6calchelp_local.h"
 
 #include "libipv4addr.h"
 #include "libipv6addr.h"
@@ -90,43 +91,6 @@ int  use_geoip_ipv6 = -1; /* if set to 1, GeoIP IPv6 is enabled by option(s) */
 int  use_geoip_ipv4 = -1; /* if set to 1, GeoIP IPv4 is enabled by option(s) */
 int  use_geoip_ipv6 = -1; /* if set to 1, GeoIP IPv6 is enabled by option(s) */
 #endif
-
-void printversion(void) {
-	char resultstring[NI_MAXHOST] = "";
-
-	libipv6calc_db_wrapper_features(resultstring, sizeof(resultstring));
-
-	fprintf(stderr, "%s: version %s", PROGRAM_NAME, PACKAGE_VERSION);
-#ifdef SUPPORT_IP2LOCATION
-	fprintf(stderr, " IP2Location");
-#endif
-#ifdef SUPPORT_GEOIP
-	fprintf(stderr, " GeoIP");
-#ifdef SUPPORT_GEOIP_V6
-	fprintf(stderr, " GeoIPv6");
-#endif
-#endif
-
-	fprintf(stderr, " %s\n", resultstring);
-};
-
-void printversion_verbose(void) {
-	printversion();
-	fprintf(stderr, "\n");
-
-	ipv6calc_print_features_verbose(LEVEL_VERBOSE2);
-};
-
-void printcopyright(void) {
-	fprintf(stderr, "%s\n", PROGRAM_COPYRIGHT);
-};
-
-void printinfo(void)  {
-	printversion();
-	printcopyright();
-	fprintf(stderr, "This program formats and calculates IPv6 addresses and can do many more tricky things\n");
-	fprintf(stderr, "See '%s -?|-h|--help or -v -v' for more details\n\n", PROGRAM_NAME);
-};
 
 
 /**************************************************/
@@ -200,7 +164,7 @@ int main(int argc, char *argv[]) {
 	};
 
 	if (argc <= 1) {
-		printinfo();
+		ipv6calc_printinfo();
 		exit(EXIT_FAILURE);
 	};
 
@@ -233,8 +197,11 @@ int main(int argc, char *argv[]) {
 				break;
 
 			case 'v':
-				if ((command & CMD_printversion) != 0) {
-					// second time '-v'
+				if ((command & CMD_printversion_verbose) != 0) {
+					// 3rd time '-v'
+					command |= CMD_printversion_verbose2;
+				} else if ((command & CMD_printversion) != 0) {
+					// 2nd time '-v'
 					command |= CMD_printversion_verbose;
 				} else {
 					command |= CMD_printversion;
@@ -653,7 +620,7 @@ int main(int argc, char *argv[]) {
 				
 			default:
 				fprintf(stderr, "Usage: (see '%s --command -?|-h|--help' for more help)\n", PROGRAM_NAME);
-				printhelp();
+				ipv6calc_printhelp();
 				exit(EXIT_FAILURE);
 		};
 	};
@@ -664,10 +631,16 @@ int main(int argc, char *argv[]) {
 		formatoptions |= FORMATOPTION_quiet;
 	};
 
+	/* initialise database wrapper */
+	result = libipv6calc_db_wrapper_init();
+	if (result != 0) {
+		exit(EXIT_FAILURE);
+	};
+
 	/* print help handling */
 	if (command == CMD_printhelp) {
 		if ( (outputtype == FORMAT_undefined) && (inputtype == FORMAT_undefined) && (action == ACTION_undefined)) {
-			printhelp();
+			ipv6calc_printhelp();
 			exit(EXIT_FAILURE);
 		} else if (outputtype == FORMAT_auto) {
 			if (inputtype == FORMAT_undefined) {
@@ -698,16 +671,10 @@ int main(int argc, char *argv[]) {
 		fprintf(stderr, "Debug value:%08lx command:%08lx inputtype:%08lx outputtype:%08lx action:%08lx formatoptions:%08lx\n", (unsigned long) ipv6calc_debug, (unsigned long) command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, (unsigned long) formatoptions); 
 	};
 
-	/* initialise database wrapper */
-	result = libipv6calc_db_wrapper_init();
-	if (result != 0) {
-		exit(EXIT_FAILURE);
-	};
-
 	/* do work depending on selection */
 	if ((command & CMD_printversion) != 0) {
 		if ((command & CMD_printversion_verbose) != 0) {
-			printversion_verbose();
+			printversion_verbose(((command & CMD_printversion_verbose2) !=0) ? LEVEL_VERBOSE2 : LEVEL_VERBOSE);
 		} else {
 			printversion();
 		};

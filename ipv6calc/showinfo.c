@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.95 2013/10/18 06:23:42 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.96 2013/10/22 18:59:40 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1325,18 +1325,21 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	};
 END:
 
-	if ( ((typeinfo & IPV6_NEW_ADDR_AGU) != 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID | IPV6_ADDR_ANONYMIZED_PREFIX)) == 0) ) {
-#ifdef SUPPORT_IP2LOCATION
-		/* IP2Location information */
-		print_ip2location(ipv6addrstring, formatoptions, "", 6);
-#endif
+	i = ipv6addr_getregistry(ipv6addrp);
+	if ((i != IPV6_ADDR_REGISTRY_RESERVED) && (i != IPV6_ADDR_REGISTRY_6BONE)) {
+		if ( ((typeinfo & IPV6_NEW_ADDR_AGU) != 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID | IPV6_ADDR_ANONYMIZED_PREFIX)) == 0) ) {
+	#ifdef SUPPORT_IP2LOCATION
+			/* IP2Location information */
+			print_ip2location(ipv6addrstring, formatoptions, "", 6);
+	#endif
 
-#ifdef SUPPORT_GEOIP
-		/* GeoIP information */
-		if (use_geoip_ipv6 != 0) {
-			print_geoip(ipv6addrstring, formatoptions, "", 6);
+	#ifdef SUPPORT_GEOIP
+			/* GeoIP information */
+			if (use_geoip_ipv6 != 0) {
+				print_geoip(ipv6addrstring, formatoptions, "", 6);
+			};
+	#endif
 		};
-#endif
 	};
 
 	printfooter(formatoptions);
