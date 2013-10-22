@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.22 2013/09/28 20:32:40 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.23 2013/10/22 18:59:55 ds6peter Exp $
  * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -52,6 +52,11 @@ int mask_ipv6;
 int mask_iid;
 int mask_mac;
 
+/* features */
+int feature_zeroize = 1; // always supported
+int feature_anon    = 1; // always supported
+int feature_kp      = 0; // will be checked later
+
 
 /* prototypes */
 static int anonymizetoken(char *result, const char *token);
@@ -76,11 +81,10 @@ char	file_out_mode[NI_MAXHOST] = "";
 FILE	*FILE_OUT;
 
 
-void printversion_verbose(void) {
+void printversion_verbose(const int level) {
 	printversion();
 	fprintf(stderr, "\n");
-
-	ipv6calc_print_features_verbose(LEVEL_VERBOSE2);
+	ipv6calc_print_features_verbose(level);
 };
 
 /**************************************************/
@@ -127,8 +131,11 @@ int main(int argc,char *argv[]) {
 				break;
 
 			case 'v':
-				if ((command & CMD_printversion) != 0) {
-					// second time '-v'
+				if ((command & CMD_printversion_verbose) != 0) {
+					// 3rd time '-v'
+					command |= CMD_printversion_verbose2;
+				} else if ((command & CMD_printversion) != 0) {
+					// 2nd time '-v'
 					command |= CMD_printversion_verbose;
 				} else {
 					command |= CMD_printversion;
@@ -141,8 +148,7 @@ int main(int argc,char *argv[]) {
 
 			case 'h':
 			case '?':
-				ipv6loganon_printhelp();
-				exit(EXIT_FAILURE);
+				command |= CMD_printhelp;
 				break;
 				
 			case 'f':
@@ -288,10 +294,22 @@ int main(int argc,char *argv[]) {
 		exit(EXIT_FAILURE);
 	};
 
+	/* check for Country Code & ASN support */
+	if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_IPV6_TO_AS) == 1) {
+		feature_kp = 1;
+	};
+
 	/* do work depending on selection */
+	DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "command=0x%08x", command);
+
+	if ((command & CMD_printhelp) != 0) {
+		ipv6loganon_printhelp();
+		exit(EXIT_FAILURE);
+	};
+
 	if ((command & CMD_printversion) != 0) {
 		if ((command & CMD_printversion_verbose) != 0) {
-			printversion_verbose();
+			printversion_verbose(((command & CMD_printversion_verbose2) !=0) ? LEVEL_VERBOSE2 : LEVEL_VERBOSE);
 		} else {
 			printversion();
 		};

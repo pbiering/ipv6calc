@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.45 2013/10/20 18:27:33 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.46 2013/10/22 18:59:55 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -317,37 +317,12 @@ void printhelp_actiontypes(const uint32_t formatoptions, const struct option lon
 };
 
 
-/* print global help */
-void printhelp(void) {
-	printversion();
-	printcopyright();
-	fprintf(stderr, "\n");
-	fprintf(stderr, " General:\n");
+/* print global common help */
+void printhelp_common(void) {
 	fprintf(stderr, "  [-d|--debug <debug value>] : debug value (bitwise like)\n");
 	fprintf(stderr, "                                can also be set IPV6CALC_DEBUG environment value\n");
-	fprintf(stderr, "  [-q|--quiet]               : be more quiet (auto-enabled in pipe mode)\n");
-	fprintf(stderr, "  [-f|--flush]               : flush each line in pipe mode\n");
-	fprintf(stderr, "  -v                         : show version (and included features)\n");
-	fprintf(stderr, "  -v -v                      : show verbose version information\n");
-	fprintf(stderr, "\n");
-	fprintf(stderr, " Usage with new style options:\n");
-	fprintf(stderr, "  [--in|-I <input type>]   : specify input  type\n");
-	fprintf(stderr, "                             (default: autodetect)\n");
-	fprintf(stderr, "  [--out|-O <output type>] : specify output type\n");
-	fprintf(stderr, "                             (sometimes: autodetect)\n");
-	fprintf(stderr, "  [--action|-A <action>]   : specify action\n");
-	fprintf(stderr, "                             (default: format conversion, sometimes: autodetect)\n");
-	fprintf(stderr, "  [<format option> ...] : specify format options\n");
-	fprintf(stderr, "  <input data> [...]    : input data\n");
-	fprintf(stderr, "\n");
-	fprintf(stderr, "  Available input  types:  [-m] -I|--in     -?|-h|--help\n");
-	fprintf(stderr, "  Available output types:  [-m] -O|--out    -?|-h|--help\n");
-	fprintf(stderr, "  Available action types:  [-m] -A|--action -?|-h|--help\n");
-	fprintf(stderr, "\n");
-	fprintf(stderr, " Other usage:\n");
-	fprintf(stderr, "\n");
-	fprintf(stderr, "  --showinfo|-i [--machine_readable|-m] : show information about input data\n");
-	fprintf(stderr, "  --showinfo|-i --show_types            : show available types on '-m'\n");
+	fprintf(stderr, "  [-v|--version [-v [-v]]]   : version information (2 optional verbose levels)\n");
+	fprintf(stderr, "  [-h|--help|-?]             : this online help\n");
 
 #ifdef SUPPORT_IP2LOCATION
 	fprintf(stderr, "\n");
@@ -366,11 +341,6 @@ void printhelp(void) {
 	fprintf(stderr, "  [--db-geoip-lib       <file>]      : GeoIP library file (default: %s)\n", geoip_lib_file);
 #endif
 #endif
-
-	fprintf(stderr, "\n");
-	fprintf(stderr, " To see old-style option use: --printoldoptions\n");
-	fprintf(stderr, "\n");
-
 	return;
 };
 
@@ -683,7 +653,7 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, " Filter given addresses from stdout by filter expression, e.g.\n");
 			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc -A filter -E iid-local\n");
 			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc -A filter -E iid-local,global-unicast\n");
-			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc -A filter -E ^iid-privacy\n");
+			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc -A filter -E ^iid-randomy\n");
 			fprintf(stderr, "\n");
 			fprintf(stderr, "  IPv6 address filter tokens:\n");
 			fprintf(stderr, "   ipv6 ");

@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.h
- * Version    : $Id: ipv6calchelp.h,v 1.14 2013/09/20 06:17:52 ds6peter Exp $
- * Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calchelp.h,v 1.15 2013/10/22 18:59:55 ds6peter Exp $
+ * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for ipv6calchelp.c
@@ -26,7 +26,7 @@ extern void printhelp_missinginputdata(void);
 extern void printhelp_inputtypes(const uint32_t formatoptions);
 extern void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoptions);
 extern void printhelp_actiontypes(const uint32_t formatoptions, const struct option longopts[]);
-extern void printhelp(void);
+extern void printhelp_common(void);
 extern void printhelp_oldoptions(const struct option longopts[]);
 extern void printhelp_output_dispatcher(const uint32_t outputtype);
 extern void printhelp_action_dispatcher(const uint32_t action, const int embedded);

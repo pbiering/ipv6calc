@@ -1328,9 +1328,9 @@ Optional Features:
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --disable-dynamic-load  Disable dynamic load of libraries (default: enabled)
-  --disable-db-ieee       Disable IEEE database (default: enabled)
-  --disable-db-ipv4       Disable IPv4 database (default: enabled)
-  --disable-db-ipv6       Disable IPv6 database (default: enabled)
+  --disable-db-ieee       Disable built-in IEEE database (default: enabled)
+  --disable-db-ipv4       Disable built-in IPv4 database (default: enabled)
+  --disable-db-ipv6       Disable built-in IPv6 database (default: enabled)
   --enable-ip2location    Enable IP2Location support (default: disabled)
   --enable-geoip          Enable GeoIP support (default: disabled)
 

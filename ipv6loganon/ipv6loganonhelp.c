@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganonhelp.c
- * Version    : $Id: ipv6loganonhelp.c,v 1.9 2013/03/30 18:03:45 ds6peter Exp $
+ * Version    : $Id: ipv6loganonhelp.c,v 1.10 2013/10/22 18:59:55 ds6peter Exp $
  * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
@@ -20,7 +20,21 @@
 
 /* display info */
 void printversion(void) {
-	fprintf(stderr, "%s: version %s\n", PROGRAM_NAME, PACKAGE_VERSION);
+	fprintf(stderr, "%s: version %s", PROGRAM_NAME, PACKAGE_VERSION);
+
+	if (feature_zeroize == 1) {
+		fprintf(stderr, " ANON_ZEROISE");
+	};
+
+	if (feature_anon == 1) {
+		fprintf(stderr, " ANON_ANONYMIZE");
+	};
+
+	if (feature_kp == 1) {
+		fprintf(stderr, " ANON_KEEP-TYPE-ASN-CC");
+	};
+
+	fprintf(stderr, "\n");
 };
 
 void printcopyright(void) {
@@ -41,8 +55,11 @@ void ipv6loganon_printhelp(void) {
 	fprintf(stderr, "\n");
 	fprintf(stderr, "This program anonymizes IPv4/IPv6 addresses in e.g. HTTP server log files\n");
 	fprintf(stderr, "\n");
-	fprintf(stderr, " General:\n");
-	fprintf(stderr, "  [-d|--debug <debug value>] : debug value (bitwise like)\n");
+	
+	printhelp_common();
+
+	fprintf(stderr, "\n");
+
 	fprintf(stderr, "  [-w|--write]               : write output to file instead of stdout\n");
 	fprintf(stderr, "  [-a|--append]              : append output to file instead of stdout\n");
 	fprintf(stderr, "  [-f|--flush]               : flush output after each line\n");
@@ -53,6 +70,7 @@ void ipv6loganon_printhelp(void) {
 	fprintf(stderr, "                               maximum: %d\n", CACHE_LRU_SIZE);
 
 	printhelp_action_dispatcher(ACTION_anonymize, 1);
+
 	fprintf(stderr, "\n");
 	fprintf(stderr, " Takes data from stdin, outputs the processed data to stdout (default)\n");
 	fprintf(stderr, "\n");
@@ -60,4 +78,3 @@ void ipv6loganon_printhelp(void) {
 
 	return;
 };
-

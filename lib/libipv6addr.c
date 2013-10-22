@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.93 2013/10/13 16:18:44 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.94 2013/10/22 18:59:55 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -274,6 +274,8 @@ uint32_t ipv6addr_checksum_anonymized_qword(const ipv6calc_ipv6addr *ipv6addrp, 
 	unsigned int s;
 	uint32_t a, b, c = 0;
 
+	DEBUGPRINT_NA(DEBUG_libipv6addr, "Called");
+
 	dword[0] = ipv6addr_getdword(ipv6addrp, (qword << 1)); // 00-31 (8 nibbles)
 	dword[1] = ipv6addr_getdword(ipv6addrp, (qword << 1) + 1); // 32-63 (8 nibbles, only 7 nibbles are used for calculation)
 
@@ -295,17 +297,17 @@ uint32_t ipv6addr_checksum_anonymized_qword(const ipv6calc_ipv6addr *ipv6addrp, 
 		b = (a % 17) + ((dword[index] & (0xf << s)) >> s);
 		c = b % 16;
 
-		// if ( (ipv6calc_debug) != 0 ) {
-		//	fprintf(stderr, "%s/%s: checksum calculation of qword: %08x%08x  i=%d a=%d b=%d c=%d\n", __FILE__, __func__, (unsigned int) dword[0], (unsigned int) dword[1], i, a, b, c);
-		// };
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "checksum calculation of qword: %08x %08x  i=%02d a=%02d b=%02d c=%02d", (unsigned int) dword[0], (unsigned int) dword[1], i, a, b, c);
 	};
 
 	if (flag == ANON_CHECKSUM_FLAG_VERIFY) {
 		// return code depending on result
 		if (c == 1) {
+			DEBUGPRINT_NA(DEBUG_libipv6addr, "checksum verification OK");
 			return(0);
 		};
 
+		DEBUGPRINT_NA(DEBUG_libipv6addr, "checksum verification FAILED");
 		return(1);
 	};
 
@@ -318,9 +320,7 @@ uint32_t ipv6addr_checksum_anonymized_qword(const ipv6calc_ipv6addr *ipv6addrp, 
 		};
 	};
 
-	if ( (ipv6calc_debug) != 0 ) {
-		fprintf(stderr, "%s/%s: checksum of 64 bits: %08x%08x = %x\n", __FILE__, __func__, (unsigned int) dword[0], (unsigned int) dword[1], checksum);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "checksum of 64 bits: %08x %08x = %x", (unsigned int) dword[0], (unsigned int) dword[1], checksum);
 
 	return(checksum);
 };
@@ -378,13 +378,15 @@ int ipv6addr_verify_checksum_anonymized_iid(const ipv6calc_ipv6addr *ipv6addrp) 
  * fuzzy detection of IID is random generated (e.g. by privacy extension)
  *
  * in:  ipv6addrp  = pointer to IPv6 address structure
- * out: 0=probably random generated (e.g. by privacy extension), 1=manual set, -1=global
+ * out: 0=probably random generated (e.g. by privacy extension), 1=manual set, -1=global, 2=unknown
  */
 int ipv6addr_iidrandomdetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statistics *iid_statisticsp) {
 	uint32_t iid[2];
 
 	iid[0] = ipv6addr_getdword(ipv6addrp, 2); // 00-31
 	iid[1] = ipv6addr_getdword(ipv6addrp, 3); // 32-63
+
+	int result = 2;
 
 	float m, e;
 
@@ -393,23 +395,19 @@ int ipv6addr_iidrandomdetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statis
 	int b, i, c, v;
 
 	// debug
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_iidrandomdetection) != 0 ) {
-		fprintf(stderr, "%s/%s: Given IID: %08x%08x\n", __FILE__, __func__, (unsigned int) iid[0], (unsigned int) iid[1]);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_iidrandomdetection, "given IID: %08x%08x",(unsigned int) iid[0], (unsigned int) iid[1]);
 
 	// blacklists
 	if ((iid[0] & 0x02000000u) == 0x02000000u) {
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_iidrandomdetection) != 0 ) {
-			fprintf(stderr, "%s/%s: universal/local bit set to: universal (no further random detection)\n", __FILE__, __func__);
-		};
-		return (-1);
+		DEBUGPRINT_NA(DEBUG_libipv6addr_iidrandomdetection, "universal/local bit set to: universal (no further random detection)");
+		result = -1;
+		goto END_ipv6addr_iidrandomdetection;
 	};
 
 	if (((iid[0] & 0x000000ffu) == 0x000000ffu) && ((iid[1] & 0xff000000u) == 0xfe000000u)) {
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_iidrandomdetection) != 0 ) {
-			fprintf(stderr, "%s/%s: expanded EUI-48 (no further random detection)\n", __FILE__, __func__);
-		};
-		return (-1);
+		DEBUGPRINT_NA(DEBUG_libipv6addr_iidrandomdetection, "expanded EUI-48 (no further random detection)");
+		result = -1;
+		goto END_ipv6addr_iidrandomdetection;
 	};
 
 	// clear structure
@@ -434,9 +432,7 @@ int ipv6addr_iidrandomdetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statis
 		v = (iid[b/8] & (0xf << ((7 - (b % 8)) * 4))) >> ((7 - (b % 8)) * 4);
 		iid_digit[b] = v;
 
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_iidrandomdetection) != 0 ) {
-			fprintf(stderr, "%s/%s: analyze nibble %2d: %x\n", __FILE__, __func__, b, v);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6addr_iidrandomdetection, "analyze nibble %2d: %x", b, v);
 
 		iid_statisticsp->digit_amount[v]++;
 	};
@@ -477,9 +473,7 @@ int ipv6addr_iidrandomdetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statis
 			m += 0.0625;
 		};
 
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_iidrandomdetection) != 0 ) {
-			fprintf(stderr, "%s/%s: hexdigit %x: amount=%.0f  exp.avg.=%.4f\n", __FILE__, __func__, b, e, m);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6addr_iidrandomdetection, "hexdigit %x: amount=%.0f  exp.avg.=%.4f", b, e, m);
 
 		e = e - m; /* substract related average */
 		e = e * e; /* square */
@@ -488,9 +482,7 @@ int ipv6addr_iidrandomdetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statis
 
 	variance = sqrt(variance / c);
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_iidrandomdetection) != 0 ) {
-		fprintf(stderr, "%s/%s: variance for hexdigits: %0.5f\n", __FILE__, __func__, variance);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_iidrandomdetection, "variance for hexdigits: %0.5f", variance);
 
 	iid_statisticsp->hexdigit = variance;
 
@@ -498,9 +490,7 @@ int ipv6addr_iidrandomdetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statis
 	/* calculate linear least square fit to detect sequences */
 	float xm = 0, ym = 0, x2 = 0, xy = 0, a0, a1, r, r2 = 0;
 	for (b = 0; b < 16; b++) {
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_iidrandomdetection) != 0 ) {
-			fprintf(stderr, "%s/%s: linear least square calc: x=%0.5f y=%0.5f\n", __FILE__, __func__, (float) b, (float) iid_digit[b]);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6addr_iidrandomdetection, "linear least square calc: x=%0.5f y=%0.5f", (float) b, (float) iid_digit[b]);
 		xm += (float) b;
 		ym += (float) iid_digit[b];
 		xy += (float) b * (float) iid_digit[b];
@@ -508,10 +498,8 @@ int ipv6addr_iidrandomdetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statis
 	};
 	xm /= 16.0; ym /= 16.0;
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_iidrandomdetection) != 0 ) {
-		fprintf(stderr, "%s/%s: linear least square calc: xm=%0.5f ym=%0.5f\n", __FILE__, __func__, xm, ym);
-		fprintf(stderr, "%s/%s: linear least square calc: x2=%0.5f xy=%0.5f\n", __FILE__, __func__, x2, xy);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_iidrandomdetection, "linear least square calc: xm=%0.5f ym=%0.5f", xm, ym);
+	DEBUGPRINT_WA(DEBUG_libipv6addr_iidrandomdetection, "linear least square calc: x2=%0.5f xy=%0.5f", x2, xy);
 
 	a1 = (xy - 16 * xm * ym) / (x2 - 16 * xm * xm);
 	a0 = ym - a1 * xm;
@@ -523,9 +511,7 @@ int ipv6addr_iidrandomdetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statis
 
 	r = sqrt(r2);
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_iidrandomdetection) != 0 ) {
-		fprintf(stderr, "%s/%s: linear least square result: a0=%0.5f a1=%0.5f r=%05f\n", __FILE__, __func__, a0, a1, r);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_iidrandomdetection, "linear least square result: a0=%0.5f a1=%0.5f r=%05f", a0, a1, r);
 
 	iid_statisticsp->lls_residual = r;
 
@@ -537,6 +523,9 @@ int ipv6addr_iidrandomdetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statis
 		if (i == iid_digit[b]) {
 			c++;
 		} else {
+			if (c > 0) {
+				iid_statisticsp->digit_blocks_hexdigit[i]++;
+			};
 			iid_statisticsp->digit_blocks[c]++;	
 			i = iid_digit[b];
 			c = 0;
@@ -564,37 +553,74 @@ int ipv6addr_iidrandomdetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid_statis
 			fprintf(stderr, "%d:%d ", c+1, iid_statisticsp->digit_blocks[c]);
 		};
 		fprintf(stderr, "\n");
+
+		fprintf(stderr, "%s/%s: hex distribution in blocks: digit   ", __FILE__, __func__);
+		for (b = 0; b < 16; b++) {
+			fprintf(stderr, "|%2x", b);
+		};
+		fprintf(stderr, "|\n");
+		fprintf(stderr, "%s/%s: hex distribution in blocks: count   ", __FILE__, __func__);
+		for (b = 0; b < 16; b++) {
+			fprintf(stderr, "|%2d", iid_statisticsp->digit_blocks_hexdigit[b]);
+		};
+		fprintf(stderr, "|\n");
 	};
 
 	/* check against limits */
 	if (iid_statisticsp->hexdigit < s_iid_statistics_ok_min.hexdigit || iid_statisticsp->hexdigit > s_iid_statistics_ok_max.hexdigit) {
-		return (1);
+		DEBUGPRINT_NA(DEBUG_libipv6addr_iidrandomdetection, "min/max hexdigit limit reached");
+		result = 1;
+		goto END_ipv6addr_iidrandomdetection;
+
 	} else if (iid_statisticsp->lls_residual < s_iid_statistics_ok_min.lls_residual || iid_statisticsp->lls_residual > s_iid_statistics_ok_max.lls_residual) {
-		return (1);
+		DEBUGPRINT_NA(DEBUG_libipv6addr_iidrandomdetection, "min/max lls_residual limit reached");
+		result = 1;
+		goto END_ipv6addr_iidrandomdetection;
+
 	} else if (iid_statisticsp->digit_delta_amount < s_iid_statistics_ok_min.digit_delta_amount || iid_statisticsp->digit_delta_amount > s_iid_statistics_ok_max.digit_delta_amount) {
-		return (1);
+		DEBUGPRINT_NA(DEBUG_libipv6addr_iidrandomdetection, "min/max digit_delta_amount reached");
+		result = 1;
+		goto END_ipv6addr_iidrandomdetection;
+
 	} else {
 		for (c = 0; c < 16; c++) {
 			// digit blocks
 			if (iid_statisticsp->digit_blocks[c] < s_iid_statistics_ok_min.digit_blocks[c] || iid_statisticsp->digit_blocks[c] > s_iid_statistics_ok_max.digit_blocks[c]) {
-				return (1);
+				DEBUGPRINT_NA(DEBUG_libipv6addr_iidrandomdetection, "min/max digit_blocks reached");
+				result = 1;
+				goto END_ipv6addr_iidrandomdetection;
+			};
+
+			// digit blocks hexdigits
+			if (iid_statisticsp->digit_blocks_hexdigit[c] < s_iid_statistics_ok_min.digit_blocks_hexdigit[c] || iid_statisticsp->digit_blocks_hexdigit[c] > s_iid_statistics_ok_max.digit_blocks_hexdigit[c]) {
+				DEBUGPRINT_NA(DEBUG_libipv6addr_iidrandomdetection, "min/max digit_blocks_hexdigit reached");
+				result = 1;
+				goto END_ipv6addr_iidrandomdetection;
 			};
 
 			// digit amount
 			if (iid_statisticsp->digit_amount[c] < s_iid_statistics_ok_min.digit_amount[c] || iid_statisticsp->digit_amount[c] > s_iid_statistics_ok_max.digit_amount[c]) {
-				return (1);
+				DEBUGPRINT_NA(DEBUG_libipv6addr_iidrandomdetection, "min/max digit_amount reached");
+				result = 1;
+				goto END_ipv6addr_iidrandomdetection;
 			};
 		};
 		for (c = 0; c < 31; c++) {
 			// digit delta
 			if (iid_statisticsp->digit_delta[c] < s_iid_statistics_ok_min.digit_delta[c] || iid_statisticsp->digit_delta[c] > s_iid_statistics_ok_max.digit_delta[c]) {
-				return (1);
+				DEBUGPRINT_NA(DEBUG_libipv6addr_iidrandomdetection, "min/max digit_delta reached");
+				result = 1;
+				goto END_ipv6addr_iidrandomdetection;
 			};
 		};
 
 	};
 
-	return (0);
+	result = 0;
+
+END_ipv6addr_iidrandomdetection:
+	DEBUGPRINT_WA(DEBUG_libipv6addr_iidrandomdetection, "result=%d", result);
+	return (result);
 };
 
 
@@ -636,9 +662,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 
 	if (UNPACK_XMS(st, ANON_PREFIX_TOKEN_XOR, ANON_PREFIX_TOKEN_MASK, ANON_PREFIX_TOKEN_SHIFT) == ANON_PREFIX_TOKEN_VALUE) {
 		// anonymized prefix ?
-		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-			fprintf(stderr, "%s/%s: probably anonymized prefix found: %0x8%08x\n", __FILE__, __func__, st, st1);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6addr, " probably anonymized prefix found: %0x8 %08x", st, st1);
 
 		/* verify now checksum */
 		if (ipv6addr_verify_checksum_anonymized_prefix(ipv6addrp) == 0) {
@@ -886,21 +910,15 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 					type |= IPV6_NEW_ADDR_IID_EUI48;
 				};
 
-				if ( (ipv6calc_debug) != 0 ) {
-					fprintf(stderr, "%s/%s: check for anonymized IID: %08x%08x\n",  __FILE__, __func__, st2, st3);
-				};
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "check for anonymized IID: %08x %08x", st2, st3);
 
-				/* check for anonymized ID */
+				/* check for anonymized IID */
 				if ((st2 & ANON_TOKEN_MASK_00_31) == (ANON_TOKEN_VALUE_00_31 & ANON_TOKEN_MASK_00_31)) {
-					if ( (ipv6calc_debug) != 0 ) {
-						fprintf(stderr, "%s/%s: probably anonymized IID found\n", __FILE__, __func__);
-					};
+					DEBUGPRINT_NA(DEBUG_libipv6addr, "probably anonymized IID found");
 
 					/* verify now checksum */
  					if (ipv6addr_verify_checksum_anonymized_iid(ipv6addrp) == 0) {
-						if ( (ipv6calc_debug) != 0 ) {
-							fprintf(stderr, "%s/%s: checksum ok - anonymized IID found\n", __FILE__, __func__);
-						};
+						DEBUGPRINT_NA(DEBUG_libipv6addr, "checksum ok - anonymized IID found");
 
 						if (((st2 & ANON_IID_RANDOM_MASK_00_31) == ANON_IID_RANDOM_VALUE_00_31) && ((st3 & ANON_IID_RANDOM_MASK_32_63) == ANON_IID_RANDOM_VALUE_32_63)) {
 							type |= IPV6_NEW_ADDR_IID_RANDOM | IPV6_ADDR_ANONYMIZED_IID | IPV6_NEW_ADDR_IID_LOCAL;
@@ -951,7 +969,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 							return (type);
 						};
 
-						fprintf(stderr, "%s/%s: unhandled anonymized IID found\n", __FILE__, __func__);
+						fprintf(stderr, "%s/%s: unhandled anonymized IID found: %08x %08x\n", __FILE__, __func__, st2, st3);
 						return (type);
 					} else {
 						if ( (ipv6calc_debug) != 0 ) {

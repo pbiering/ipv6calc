@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: generate.sh,v 1.6 2013/10/21 20:13:21 ds6peter Exp $
+# $Id: generate.sh,v 1.7 2013/10/22 18:59:55 ds6peter Exp $
 
 # Requires: opensp
 
@@ -54,10 +54,13 @@ create_html_singlepage() {
 	local retval=$?
 	set +x
 	if [ $retval -eq 0 ]; then
-		echo "INF: Create HTML singlepage - done"
-	else
-		echo "ERR: Create HTML singlepage - an error occurs!"
+		if head -1 $file_html | grep -q DOCTYPE; then
+			echo "INF: Create HTML singlepage - done"
+			return 0
+		fi
 	fi
+
+	echo "ERR: Create HTML singlepage - an error occurs!"
 	return $retval
 }
 

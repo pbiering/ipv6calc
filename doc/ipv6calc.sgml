@@ -155,11 +155,8 @@ GeoIP: GeoIP Country Edition            :[ 1] /usr/share/GeoIP/GeoIP.dat        
 GeoIP: GeoIP City Edition, Rev 1        :[ 2] /usr/share/GeoIP/GeoIPCity.dat           (GEO-533LITE 20131001 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
 GeoIP: GeoIP ASNum Edition              :[ 9] /usr/share/GeoIP/GeoIPASNum.dat          (GEO-117 20130926 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
 GeoIP: GeoIP Country V6 Edition         :[12] /usr/share/GeoIP/GeoIPv6.dat             (GEO-106FREE 20131001 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
-GeoIP: GeoIP Large Country Edition      :[17] /usr/share/GeoIP/GeoIP.dat               (CAN'T OPEN)
-GeoIP: GeoIP Large Country V6 Edition   :[18] /usr/share/GeoIP/GeoIPv6.dat             (CAN'T OPEN)
 GeoIP: GeoIP ASNum V6 Edition           :[21] /usr/share/GeoIP/GeoIPASNumv6.dat        (GEO-117 20130306 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
 GeoIP: GeoIP City Edition V6, Rev 1     :[30] /usr/share/GeoIP/GeoIPCityv6.dat         (GEO-536LITE 20131001 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
-GeoIP: GeoIP City Edition V6, Rev 0     :[31] /usr/share/GeoIP/GeoIPCityv6.dat         (CAN'T OPEN)
 IP2Location: features: 0x00000300
 IP2Location: info of available databases in directory: /usr/share/IP2Location
 IP2Location: IPv4 Country               : /usr/share/IP2Location/IP-COUNTRY.BIN    (IP2L-DB24 20130411 Copyright (c) 2013 IP2Location All Rights Reserved)
@@ -238,6 +235,13 @@ IPV6CALC_COPYRIGHT="(P) & (C) 2001-2013 by Peter Bieringer <pb (at) bieringer.de
 IPV6CALC_OUTPUT_VERSION=7
 IPV6CALC_SETTINGS_ANON=set=anonymize-standard,mask-ipv6=56,mask-ipv4=24,mask-iid=40,mask-mac=24,method=anonymize
 IPV6CALC_FEATURES="IP2Location(dyn-load) GeoIP(dyn-load) GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE"
+]]></screen></sect3><sect3>
+<title>Filter mode</title>
+<para>&ldquo;ipv6calc&rdquo; can run in filter mode to be able to extract from a huge list of IPv4/IPv6 addresses ones which are interesting or ones which are not interesting (see printout of online help below).</para>
+<para>Filter tokens are the ones which are listed on &ldquo;TYPE&rdquo; lines shown in &ldquo;-m -i&rdquo; information mode.</para>
+<para>Example for searching for Teredo addresses:</para><screen>
+<![CDATA[$ cat ip.bieringer.de-log.201310 | awk '{ print $1 }' | sort | uniq | ipv6calc -A filter -E teredo
+2001:0:9d38:90d7:34f7:1a26:8599:e079
 ]]></screen></sect3></sect2><sect2>
 <title>Option style</title>
 <para>Since version 0.40 new-style option handling was introduced, using</para><itemizedlist>
@@ -247,16 +251,26 @@ IPV6CALC_FEATURES="IP2Location(dyn-load) GeoIP(dyn-load) GeoIPv6 DB_AS DB_IPV4 D
 <para>Online help always shows the currently implemented features.</para><sect3>
 <title>Main online help:</title>
 <para>IP2Location and GeoIP options only appear if compiled with such support.</para><screen>
-<![CDATA[$ ./ipv6calc -?
-ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 
+<![CDATA[ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
 (P) & (C) 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
- General:
+
+This program formats and calculates IPv6 addresses and can do many more tricky things
+
   [-d|--debug <debug value>] : debug value (bitwise like)
                                 can also be set IPV6CALC_DEBUG environment value
+  [-v|--version [-v [-v]]]   : version information (2 optional verbose levels)
+  [-h|--help|-?]             : this online help
+
+  [--db-ip2location-disable        ] : IP2Location support disabled
+  [--db-ip2location-dir <directory>] : IP2Location database directory (default: /usr/share/IP2Location)
+  [--db-ip2location-lib <file>]      : IP2Location library file (default: libIP2Location.so)
+  [--db-geoip-disable              ] : GeoIP support disabled
+  [--db-geoip-dir       <directory>] : GeoIP database directory (default: /usr/share/GeoIP)
+  [--db-geoip-lib       <file>]      : GeoIP library file (default: libGeoIP.so.1)
+
   [-q|--quiet]               : be more quiet (auto-enabled in pipe mode)
   [-f|--flush]               : flush each line in pipe mode
-  -v                         : show version (and included features)
-  -v -v                      : show verbose version information
+
  Usage with new style options:
   [--in|-I <input type>]   : specify input  type
                              (default: autodetect)
@@ -266,25 +280,21 @@ ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6
                              (default: format conversion, sometimes: autodetect)
   [<format option> ...] : specify format options
   <input data> [...]    : input data
+
   Available input  types:  [-m] -I|--in     -?|-h|--help
   Available output types:  [-m] -O|--out    -?|-h|--help
   Available action types:  [-m] -A|--action -?|-h|--help
+
  Other usage:
   --showinfo|-i [--machine_readable|-m] : show information about input data
   --showinfo|-i --show_types            : show available types on '-m'
-  [--db-ip2location-disable        ] : IP2Location support disabled
-  [--db-ip2location-dir <directory>] : IP2Location database directory (default: /usr/share/IP2Location)
-  [--db-ip2location-lib <file>]      : IP2Location library file (default: libIP2Location.so)
-  [--db-geoip-disable              ] : GeoIP support disabled
-  [--db-geoip-dir       <directory>] : GeoIP database directory (default: /usr/share/GeoIP)
-  [--db-geoip-lib       <file>]      : GeoIP library file (default: libGeoIP.so.1)
+ 
  To see old-style option use: --printoldoptions
-
 ]]></screen></sect3><sect3>
 <title>Input-type options</title>
 <screen>
 <![CDATA[$ ./ipv6calc --in -?
-ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 
+ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
 (P) & (C) 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  Available input types:
   auto            : automatic detection
@@ -306,7 +316,7 @@ ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6
 <title>Output-type options:</title>
 <screen>
 <![CDATA[$ ./ipv6calc --out -?
-ipv6calc: version 0.95.0.rc.1 IP2Location GeoIP GeoIPv6 
+ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
 (P) & (C) 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  Available output types:
   revnibbles.int  : dot separated nibbles reverse, ending with ip6.int.
@@ -334,7 +344,7 @@ ipv6calc: version 0.95.0.rc.1 IP2Location GeoIP GeoIPv6
 <title>Action-type options: </title>
 <screen>
 <![CDATA[$ ./ipv6calc --action -?
-ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 
+ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
 (P) & (C) 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  Available action types:
   auto             : Automatic selection of action (default)
@@ -348,6 +358,23 @@ ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6
                        --6rd_prefix ...
                        --6rd_relay_prefix ...
   filter           : Filter addresses related to filter options
+]]></screen><para>Special action &ldquo;filter&rdquo;:</para><screen>
+<![CDATA[$ ./ipv6calc --action filter -h
+ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE
+
+ Filter given addresses from stdout by filter expression, e.g.
+  echo '2001:db8::1' | ipv6calc -A filter -E iid-local
+  echo '2001:db8::1' | ipv6calc -A filter -E iid-local,global-unicast
+  echo '2001:db8::1' | ipv6calc -A filter -E ^iid-random
+
+  IPv6 address filter tokens:
+   ipv6  unknown unicast multicast anycast loopback link-local site-local compat-v4 mapped reserved unique-local-unicast anonymized-iid anonymized-prefix 6to4 6bone global-unicast unspecified solicited-node productive 6to4-microsoft teredo orchid link-local-teredo nat64 iid-random iid iid-local iid-global iid-teredo iid-eui48 iid-eui64 iid-isatap iid-includes-ipv4
+
+  IPv4 address filter tokens:
+   ipv4  any unicast multicast anycast broadcast loopback unspecified unknown reserved zeroconf site-local anonymized global 6to4relay
+
+  MAC address filter tokens:
+    IMPLEMENTATION MISSING
 ]]></screen></sect3><sect3>
 <title>Because of historical issues, there exists also a support of the old-styled options: </title>
 <screen>
@@ -477,12 +504,23 @@ ipv6calc: version 0.81.0
 <listitem><para>Apache log file format, 1st token is IPv4 or IPv6 address</para></listitem></itemizedlist><para>There are plans to support also mail server log files sometimes in the future, but because of different formats, this would be probably done by a Perl program which parses the log file and a (cached) 'ip6calc' call with action 'anonymize'.</para></sect2><sect2>
 <title>Supported options</title>
 <screen>
-<![CDATA[$ ./ipv6loganon -h
-ipv6loganon: version 0.95.0
+<![CDATA[$ ipv6loganon: version 0.95.0 ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 (P) & (C) 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
+
 This program anonymizes IPv4/IPv6 addresses in e.g. HTTP server log files
- General:
+
   [-d|--debug <debug value>] : debug value (bitwise like)
+                                can also be set IPV6CALC_DEBUG environment value
+  [-v|--version [-v [-v]]]   : version information (2 optional verbose levels)
+  [-h|--help|-?]             : this online help
+ 
+  [--db-ip2location-disable        ] : IP2Location support disabled
+  [--db-ip2location-dir <directory>] : IP2Location database directory (default: /usr/share/IP2Location)
+  [--db-ip2location-lib <file>]      : IP2Location library file (default: libIP2Location.so)
+  [--db-geoip-disable              ] : GeoIP support disabled
+  [--db-geoip-dir       <directory>] : GeoIP database directory (default: /usr/share/GeoIP)
+  [--db-geoip-lib       <file>]      : GeoIP library file (default: libGeoIP.so.1)
+
   [-w|--write]               : write output to file instead of stdout
   [-a|--append]              : append output to file instead of stdout
   [-f|--flush]               : flush output after each line
@@ -491,14 +529,17 @@ This program anonymizes IPv4/IPv6 addresses in e.g. HTTP server log files
   [-c|--cachelimit <value>]  : set cache limit
                                default: 20
                                maximum: 200
+  
   Shortcut for anonymization presets:
    --anonymize-standard (default)
    --anonymize-careful
    --anonymize-paranoid
+  
   Supported methods [--anonymize-method METHOD]:
    anonymize : reliable anonymization, keep as much type information as possible
    zeroise   : simple zero'ising according to given masks, probably loose type information
    keep-type-asn-cc: special reliable anonymization, keep type & Autonomous System Number and CountryCode
+
   Available presets (shortcut names) [--anonymize-preset PRESET-NAME]:
    anonymize-standard   (as): mask-ipv6= 56 mask-ipv4=24 mask-iid=40 mask-mac=24 method=anonymize
    anonymize-careful    (ac): mask-ipv6= 48 mask-ipv4=20 mask-iid=24 mask-mac=24 method=anonymize
@@ -507,12 +548,14 @@ This program anonymizes IPv4/IPv6 addresses in e.g. HTTP server log files
    zeroize-careful      (zc): mask-ipv6= 48 mask-ipv4=20 mask-iid=24 mask-mac=24 method=zeroise
    zeroize-paranoid     (zp): mask-ipv6= 40 mask-ipv4=16 mask-iid= 0 mask-mac=24 method=zeroise
    keep-type-asn-cc     (kp): mask-ipv6= 56 mask-ipv4=24 mask-iid=40 mask-mac=24 method=keep-type-asn-cc
+ 
   Custom control:
   --mask-ipv4 <bits>     : mask IPv4 address [0-32] (even if occurs in IPv6 address)
   --mask-ipv6 <bits>     : mask IPv6 prefix [0-64] (only applied to related address types)
   --mask-iid  <bits>     : mask IPv6 interface identifiers [0-64]
   --mask-mac  <bits>     : mask MAC address [0-48]
- Takes data from stdin, outputs the processed data to stdout (default)
+ 
+Takes data from stdin, outputs the processed data to stdout (default)
 ]]></screen></sect2><sect2>
 <title>Usage</title>
 <sect3>
@@ -537,22 +580,32 @@ This program anonymizes IPv4/IPv6 addresses in e.g. HTTP server log files
 <para>Since version 0.95.0 it has extended output, adding a date/time line and statistics by Country Code and ASN (if required databases are available).</para><sect2>
 <title>Supported options</title>
 <screen>
-<![CDATA[ ./ipv6logstats -h
-ipv6logstats: version 0.95.0 STAT_REG STAT_CC STAT_AS
+<![CDATA[ipv6logstats: version 0.95.0.rc.1 STAT_REG STAT_CC STAT_AS
 (P) & (C) 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
- General:
+ 
+ Takes web server log data (or any other data which has IPv4/v6 address in first column)
+   from stdin and print statistics table/list (depending on option) to stdout
+ 
   [-d|--debug <debug value>] : debug value (bitwise like)
+                                can also be set IPV6CALC_DEBUG environment value
+  [-v|--version [-v [-v]]]   : version information (2 optional verbose levels)
+  [-h|--help|-?]             : this online help
+
+  [--db-ip2location-disable        ] : IP2Location support disabled
+  [--db-ip2location-dir <directory>] : IP2Location database directory (default: /usr/share/IP2Location)
+  [--db-ip2location-lib <file>]      : IP2Location library file (default: libIP2Location.so)
+  [--db-geoip-disable              ] : GeoIP support disabled
+  [--db-geoip-dir       <directory>] : GeoIP database directory (default: /usr/share/GeoIP)
+  [--db-geoip-lib       <file>]      : GeoIP library file (default: libGeoIP.so.1)
+ 
   [-u|--unknown]             : print unknown IP addresses to stderr
   [-c|--colums]              : print statistics in colums (1)
   [-n|--noheader]            : don't print header in colums mode (1)
   [-o|--onlyheader]          : print only header in colums mode (1)
   [-p|--prefix <token>]      : print token as prefix (1)
   [-q|--quiet]               : be more quiet
-  [-v|--version]             : version information (2)
+
  (1) unsupported for CountryCode & ASN statistics
- (2) two additinal levels of verbosity supported by using more than one time
- Takes web server log data (or any other data which has IPv4/v6 address in first column)
-   from stdin and print statistics table/list (depending on option) to stdout
 ]]></screen></sect2><sect2>
 <title>Usage</title>
 <para>There are a README and some helper scripts available in the package how to use this program and how to generate a graph using Gnuplot.</para></sect2><sect2>

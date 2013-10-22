@@ -1084,11 +1084,8 @@ GeoIP: GeoIP Country Edition            :[ 1] /usr/share/GeoIP/GeoIP.dat        
 GeoIP: GeoIP City Edition, Rev 1        :[ 2] /usr/share/GeoIP/GeoIPCity.dat           (GEO-533LITE 20131001 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
 GeoIP: GeoIP ASNum Edition              :[ 9] /usr/share/GeoIP/GeoIPASNum.dat          (GEO-117 20130926 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
 GeoIP: GeoIP Country V6 Edition         :[12] /usr/share/GeoIP/GeoIPv6.dat             (GEO-106FREE 20131001 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
-GeoIP: GeoIP Large Country Edition      :[17] /usr/share/GeoIP/GeoIP.dat               (CAN'T OPEN)
-GeoIP: GeoIP Large Country V6 Edition   :[18] /usr/share/GeoIP/GeoIPv6.dat             (CAN'T OPEN)
 GeoIP: GeoIP ASNum V6 Edition           :[21] /usr/share/GeoIP/GeoIPASNumv6.dat        (GEO-117 20130306 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
 GeoIP: GeoIP City Edition V6, Rev 1     :[30] /usr/share/GeoIP/GeoIPCityv6.dat         (GEO-536LITE 20131001 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
-GeoIP: GeoIP City Edition V6, Rev 0     :[31] /usr/share/GeoIP/GeoIPCityv6.dat         (CAN'T OPEN)
 IP2Location: features: 0x00000300
 IP2Location: info of available databases in directory: /usr/share/IP2Location
 IP2Location: IPv4 Country               : /usr/share/IP2Location/IP-COUNTRY.BIN    (IP2L-DB24 20130411 Copyright (c) 2013 IP2Location All Rights Reserved)
@@ -1924,7 +1921,7 @@ COLOR="#000000"
 ><PRE
 CLASS="SCREEN"
 >$ ./ipv6loganon -h
-ipv6loganon: version 0.95.0
+ipv6loganon: version 0.95.0 ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 (P) &#38; (C) 2007-2013 by Peter Bieringer &#60;pb (at) bieringer.de&#62;
 This program anonymizes IPv4/IPv6 addresses in e.g. HTTP server log files
  General:
@@ -1933,10 +1930,14 @@ This program anonymizes IPv4/IPv6 addresses in e.g. HTTP server log files
   [-a|--append]              : append output to file instead of stdout
   [-f|--flush]               : flush output after each line
   [-V|--verbose]             : be verbose
+  [-v|--version]             : version information (1) 
   [-n|--nocache]             : disable caching
   [-c|--cachelimit &#60;value&#62;]  : set cache limit
                                default: 20
                                maximum: 200
+
+ (1) two additional levels of verbosity supported by using more than one time
+
   Shortcut for anonymization presets:
    --anonymize-standard (default)
    --anonymize-careful
@@ -1958,6 +1959,7 @@ This program anonymizes IPv4/IPv6 addresses in e.g. HTTP server log files
   --mask-ipv6 &#60;bits&#62;     : mask IPv6 prefix [0-64] (only applied to related address types)
   --mask-iid  &#60;bits&#62;     : mask IPv6 interface identifiers [0-64]
   --mask-mac  &#60;bits&#62;     : mask MAC address [0-48]
+
  Takes data from stdin, outputs the processed data to stdout (default)</PRE
 ></FONT
 ></TD
@@ -2137,14 +2139,16 @@ ipv6logstats: version 0.95.0 STAT_REG STAT_CC STAT_AS
  General:
   [-d|--debug &#60;debug value&#62;] : debug value (bitwise like)
   [-u|--unknown]             : print unknown IP addresses to stderr
-  [-c|--colums]              : print statistics in colums (1)
-  [-n|--noheader]            : don't print header in colums mode (1)
-  [-o|--onlyheader]          : print only header in colums mode (1)
-  [-p|--prefix &#60;token&#62;]      : print token as prefix (1)
+  [-c|--colums]              : print statistics in colums (2)
+  [-n|--noheader]            : don't print header in colums mode (2)
+  [-o|--onlyheader]          : print only header in colums mode (2)
+  [-p|--prefix &#60;token&#62;]      : print token as prefix (2)
   [-q|--quiet]               : be more quiet
-  [-v|--version]             : version information (2)
- (1) unsupported for CountryCode &#38; ASN statistics
- (2) two additinal levels of verbosity supported by using more than one time
+  [-v|--version]             : version information (1)
+
+ (1) two additional levels of verbosity supported by using more than one time
+ (2) unsupported for CountryCode &#38; ASN statistics
+
  Takes web server log data (or any other data which has IPv4/v6 address in first column)
    from stdin and print statistics table/list (depending on option) to stdout</PRE
 ></FONT

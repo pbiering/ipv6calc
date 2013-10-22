@@ -1049,18 +1049,6 @@ GeoIP: GeoIP Country V6 Edition         :[12] /usr/share/GeoIP/GeoIPv6.dat
 
 \begin_layout Code
 
-GeoIP: GeoIP Large Country Edition      :[17] /usr/share/GeoIP/GeoIP.dat
-               (CAN'T OPEN)
-\end_layout
-
-\begin_layout Code
-
-GeoIP: GeoIP Large Country V6 Edition   :[18] /usr/share/GeoIP/GeoIPv6.dat
-             (CAN'T OPEN)
-\end_layout
-
-\begin_layout Code
-
 GeoIP: GeoIP ASNum V6 Edition           :[21] /usr/share/GeoIP/GeoIPASNumv6.dat
         (GEO-117 20130306 Build 1 Copyright (c) 2013 MaxMind Inc All Rights
  Reserved)
@@ -1071,12 +1059,6 @@ GeoIP: GeoIP ASNum V6 Edition           :[21] /usr/share/GeoIP/GeoIPASNumv6.dat
 GeoIP: GeoIP City Edition V6, Rev 1     :[30] /usr/share/GeoIP/GeoIPCityv6.dat
          (GEO-536LITE 20131001 Build 1 Copyright (c) 2013 MaxMind Inc All
  Rights Reserved)
-\end_layout
-
-\begin_layout Code
-
-GeoIP: GeoIP City Edition V6, Rev 0     :[31] /usr/share/GeoIP/GeoIPCityv6.dat
-         (CAN'T OPEN)
 \end_layout
 
 \begin_layout Code
@@ -1509,6 +1491,58 @@ IPV6CALC_FEATURES="IP2Location(dyn-load) GeoIP(dyn-load) GeoIPv6 DB_AS DB_IPV4
  DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE"
 \end_layout
 
+\begin_layout Subsubsection
+Filter mode
+\end_layout
+
+\begin_layout Standard
+\begin_inset Quotes eld
+\end_inset
+
+ipv6calc
+\begin_inset Quotes erd
+\end_inset
+
+ can run in filter mode to be able to extract from a huge list of IPv4/IPv6
+ addresses ones which are interesting or ones which are not interesting
+ (see printout of online help below).
+\end_layout
+
+\begin_layout Standard
+Filter tokens are the ones which are listed on 
+\begin_inset Quotes eld
+\end_inset
+
+TYPE
+\begin_inset Quotes erd
+\end_inset
+
+ lines shown in 
+\begin_inset Quotes eld
+\end_inset
+
+-m -i
+\begin_inset Quotes erd
+\end_inset
+
+ information mode.
+\end_layout
+
+\begin_layout Standard
+Example for searching for Teredo addresses:
+\end_layout
+
+\begin_layout Code
+
+$ cat ip.bieringer.de-log.201310 | awk '{ print $1 }' | sort | uniq | ipv6calc
+ -A filter -E teredo
+\end_layout
+
+\begin_layout Code
+
+2001:0:9d38:90d7:34f7:1a26:8599:e079
+\end_layout
+
 \begin_layout Subsection
 Option style
 \end_layout
@@ -1559,12 +1593,8 @@ IP2Location and GeoIP options only appear if compiled with such support.
 
 \begin_layout Code
 
-$ ./ipv6calc -?
-\end_layout
-
-\begin_layout Code
-
-ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 
+ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
+S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
 \end_layout
 
 \begin_layout Code
@@ -1574,7 +1604,16 @@ ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6
 
 \begin_layout Code
 
- General:
+\end_layout
+
+\begin_layout Code
+
+This program formats and calculates IPv6 addresses and can do many more
+ tricky things
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -1590,6 +1629,57 @@ ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6
 
 \begin_layout Code
 
+  [-v|--version [-v [-v]]]   : version information (2 optional verbose levels)
+\end_layout
+
+\begin_layout Code
+
+  [-h|--help|-?]             : this online help
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+  [--db-ip2location-disable        ] : IP2Location support disabled
+\end_layout
+
+\begin_layout Code
+
+  [--db-ip2location-dir <directory>] : IP2Location database directory (default:
+ /usr/share/IP2Location)
+\end_layout
+
+\begin_layout Code
+
+  [--db-ip2location-lib <file>]      : IP2Location library file (default:
+ libIP2Location.so)
+\end_layout
+
+\begin_layout Code
+
+  [--db-geoip-disable              ] : GeoIP support disabled
+\end_layout
+
+\begin_layout Code
+
+  [--db-geoip-dir       <directory>] : GeoIP database directory (default:
+ /usr/share/GeoIP)
+\end_layout
+
+\begin_layout Code
+
+  [--db-geoip-lib       <file>]      : GeoIP library file (default: libGeoIP.so.1)
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
   [-q|--quiet]               : be more quiet (auto-enabled in pipe mode)
 \end_layout
 
@@ -1600,12 +1690,6 @@ ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6
 
 \begin_layout Code
 
-  -v                         : show version (and included features)
-\end_layout
-
-\begin_layout Code
-
-  -v -v                      : show verbose version information
 \end_layout
 
 \begin_layout Code
@@ -1655,6 +1739,10 @@ ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6
 
 \begin_layout Code
 
+\end_layout
+
+\begin_layout Code
+
   Available input  types:  [-m] -I|--in     -?|-h|--help
 \end_layout
 
@@ -1666,6 +1754,10 @@ ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6
 \begin_layout Code
 
   Available action types:  [-m] -A|--action -?|-h|--help
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -1685,44 +1777,12 @@ ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6
 
 \begin_layout Code
 
-  [--db-ip2location-disable        ] : IP2Location support disabled
-\end_layout
-
-\begin_layout Code
-
-  [--db-ip2location-dir <directory>] : IP2Location database directory (default:
- /usr/share/IP2Location)
-\end_layout
-
-\begin_layout Code
-
-  [--db-ip2location-lib <file>]      : IP2Location library file (default:
- libIP2Location.so)
-\end_layout
-
-\begin_layout Code
-
-  [--db-geoip-disable              ] : GeoIP support disabled
-\end_layout
-
-\begin_layout Code
-
-  [--db-geoip-dir       <directory>] : GeoIP database directory (default:
- /usr/share/GeoIP)
-\end_layout
-
-\begin_layout Code
-
-  [--db-geoip-lib       <file>]      : GeoIP library file (default: libGeoIP.so.1)
+ 
 \end_layout
 
 \begin_layout Code
 
  To see old-style option use: --printoldoptions
-\end_layout
-
-\begin_layout Code
-
 \end_layout
 
 \begin_layout Subsubsection
@@ -1736,7 +1796,8 @@ $ ./ipv6calc --in -?
 
 \begin_layout Code
 
-ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 
+ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
+S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
 \end_layout
 
 \begin_layout Code
@@ -1835,7 +1896,8 @@ $ ./ipv6calc --out -?
 
 \begin_layout Code
 
-ipv6calc: version 0.95.0.rc.1 IP2Location GeoIP GeoIPv6 
+ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
+S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
 \end_layout
 
 \begin_layout Code
@@ -1964,7 +2026,8 @@ $ ./ipv6calc --action -?
 
 \begin_layout Code
 
-ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 
+ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
+S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
 \end_layout
 
 \begin_layout Code
@@ -2034,6 +2097,100 @@ n
 \begin_layout Code
 
   filter           : Filter addresses related to filter options
+\end_layout
+
+\begin_layout Standard
+Special action 
+\begin_inset Quotes eld
+\end_inset
+
+filter
+\begin_inset Quotes erd
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Code
+
+$ ./ipv6calc --action filter -h
+\end_layout
+
+\begin_layout Code
+
+ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
+S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+ Filter given addresses from stdout by filter expression, e.g.
+\end_layout
+
+\begin_layout Code
+
+  echo '2001:db8::1' | ipv6calc -A filter -E iid-local
+\end_layout
+
+\begin_layout Code
+
+  echo '2001:db8::1' | ipv6calc -A filter -E iid-local,global-unicast
+\end_layout
+
+\begin_layout Code
+
+  echo '2001:db8::1' | ipv6calc -A filter -E ^iid-random
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+  IPv6 address filter tokens:
+\end_layout
+
+\begin_layout Code
+
+   ipv6  unknown unicast multicast anycast loopback link-local site-local
+ compat-v4 mapped reserved unique-local-unicast anonymized-iid anonymized-prefix
+ 6to4 6bone global-unicast unspecified solicited-node productive 6to4-microsoft
+ teredo orchid link-local-teredo nat64 iid-random iid iid-local iid-global
+ iid-teredo iid-eui48 iid-eui64 iid-isatap iid-includes-ipv4
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+  IPv4 address filter tokens:
+\end_layout
+
+\begin_layout Code
+
+   ipv4  any unicast multicast anycast broadcast loopback unspecified unknown
+ reserved zeroconf site-local anonymized global 6to4relay
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+  MAC address filter tokens:
+\end_layout
+
+\begin_layout Code
+
+    IMPLEMENTATION MISSING
 \end_layout
 
 \begin_layout Subsubsection
@@ -2745,17 +2902,16 @@ Supported options
 
 \begin_layout Code
 
-$ ./ipv6loganon -h
-\end_layout
-
-\begin_layout Code
-
-ipv6loganon: version 0.95.0
+$ ipv6loganon: version 0.95.0 ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 \end_layout
 
 \begin_layout Code
 
 (P) & (C) 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -2766,12 +2922,69 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 
 \begin_layout Code
 
- General:
 \end_layout
 
 \begin_layout Code
 
   [-d|--debug <debug value>] : debug value (bitwise like)
+\end_layout
+
+\begin_layout Code
+
+                                can also be set IPV6CALC_DEBUG environment
+ value
+\end_layout
+
+\begin_layout Code
+
+  [-v|--version [-v [-v]]]   : version information (2 optional verbose levels)
+\end_layout
+
+\begin_layout Code
+
+  [-h|--help|-?]             : this online help
+\end_layout
+
+\begin_layout Code
+
+ 
+\end_layout
+
+\begin_layout Code
+
+  [--db-ip2location-disable        ] : IP2Location support disabled
+\end_layout
+
+\begin_layout Code
+
+  [--db-ip2location-dir <directory>] : IP2Location database directory (default:
+ /usr/share/IP2Location)
+\end_layout
+
+\begin_layout Code
+
+  [--db-ip2location-lib <file>]      : IP2Location library file (default:
+ libIP2Location.so)
+\end_layout
+
+\begin_layout Code
+
+  [--db-geoip-disable              ] : GeoIP support disabled
+\end_layout
+
+\begin_layout Code
+
+  [--db-geoip-dir       <directory>] : GeoIP database directory (default:
+ /usr/share/GeoIP)
+\end_layout
+
+\begin_layout Code
+
+  [--db-geoip-lib       <file>]      : GeoIP library file (default: libGeoIP.so.1)
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -2816,6 +3029,11 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 
 \begin_layout Code
 
+  
+\end_layout
+
+\begin_layout Code
+
   Shortcut for anonymization presets:
 \end_layout
 
@@ -2832,6 +3050,11 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 \begin_layout Code
 
    --anonymize-paranoid
+\end_layout
+
+\begin_layout Code
+
+  
 \end_layout
 
 \begin_layout Code
@@ -2855,6 +3078,10 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 
    keep-type-asn-cc: special reliable anonymization, keep type & Autonomous
  System Number and CountryCode
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -2906,6 +3133,11 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 
 \begin_layout Code
 
+ 
+\end_layout
+
+\begin_layout Code
+
   Custom control:
 \end_layout
 
@@ -2933,7 +3165,12 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 
 \begin_layout Code
 
- Takes data from stdin, outputs the processed data to stdout (default)
+ 
+\end_layout
+
+\begin_layout Code
+
+Takes data from stdin, outputs the processed data to stdout (default)
 \end_layout
 
 \begin_layout Subsection
@@ -3070,12 +3307,7 @@ Supported options
 
 \begin_layout Code
 
- ./ipv6logstats -h
-\end_layout
-
-\begin_layout Code
-
-ipv6logstats: version 0.95.0 STAT_REG STAT_CC STAT_AS
+ipv6logstats: version 0.95.0.rc.1 STAT_REG STAT_CC STAT_AS
 \end_layout
 
 \begin_layout Code
@@ -3085,12 +3317,86 @@ ipv6logstats: version 0.95.0 STAT_REG STAT_CC STAT_AS
 
 \begin_layout Code
 
- General:
+ 
+\end_layout
+
+\begin_layout Code
+
+ Takes web server log data (or any other data which has IPv4/v6 address
+ in first column)
+\end_layout
+
+\begin_layout Code
+
+   from stdin and print statistics table/list (depending on option) to stdout
+\end_layout
+
+\begin_layout Code
+
+ 
 \end_layout
 
 \begin_layout Code
 
   [-d|--debug <debug value>] : debug value (bitwise like)
+\end_layout
+
+\begin_layout Code
+
+                                can also be set IPV6CALC_DEBUG environment
+ value
+\end_layout
+
+\begin_layout Code
+
+  [-v|--version [-v [-v]]]   : version information (2 optional verbose levels)
+\end_layout
+
+\begin_layout Code
+
+  [-h|--help|-?]             : this online help
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+  [--db-ip2location-disable        ] : IP2Location support disabled
+\end_layout
+
+\begin_layout Code
+
+  [--db-ip2location-dir <directory>] : IP2Location database directory (default:
+ /usr/share/IP2Location)
+\end_layout
+
+\begin_layout Code
+
+  [--db-ip2location-lib <file>]      : IP2Location library file (default:
+ libIP2Location.so)
+\end_layout
+
+\begin_layout Code
+
+  [--db-geoip-disable              ] : GeoIP support disabled
+\end_layout
+
+\begin_layout Code
+
+  [--db-geoip-dir       <directory>] : GeoIP database directory (default:
+ /usr/share/GeoIP)
+\end_layout
+
+\begin_layout Code
+
+  [--db-geoip-lib       <file>]      : GeoIP library file (default: libGeoIP.so.1)
+\end_layout
+
+\begin_layout Code
+
+ 
 \end_layout
 
 \begin_layout Code
@@ -3125,29 +3431,11 @@ ipv6logstats: version 0.95.0 STAT_REG STAT_CC STAT_AS
 
 \begin_layout Code
 
-  [-v|--version]             : version information (2)
 \end_layout
 
 \begin_layout Code
 
  (1) unsupported for CountryCode & ASN statistics
-\end_layout
-
-\begin_layout Code
-
- (2) two additinal levels of verbosity supported by using more than one
- time
-\end_layout
-
-\begin_layout Code
-
- Takes web server log data (or any other data which has IPv4/v6 address
- in first column)
-\end_layout
-
-\begin_layout Code
-
-   from stdin and print statistics table/list (depending on option) to stdout
 \end_layout
 
 \begin_layout Subsection
