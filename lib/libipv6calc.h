@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.18 2013/10/13 16:18:44 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.19 2013/10/24 19:05:04 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -79,6 +79,12 @@ typedef struct {
 
 // unpack value using xor/mask/shift
 #define UNPACK_XMS(p, x, m, s)	((((p) >> (s)) ^ (x)) & (m))
+
+// return 16-bit MSB from 32-bit
+#define U32_MSB16(v)	((v >> 16) & 0xffff)
+
+// return 16-bit LSB from 32-bit
+#define U32_LSB16(v)	(v & 0xffff)
 
 // max entries of a const array
 #define MAXENTRIES_ARRAY(a)	(sizeof(a) / sizeof(a[0]))

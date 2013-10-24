@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.93 2013/10/22 18:59:40 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.94 2013/10/24 19:05:04 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -17,6 +17,7 @@
 
 #include "ipv6calc.h"
 #include "libipv6calc.h"
+#include "libipv6calcdebug.h"
 #include "ipv6calctypes.h"
 #include "ipv6calcoptions.h"
 #include "ipv6calcoptions_local.h"
@@ -667,9 +668,7 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	};
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "Debug value:%08lx command:%08lx inputtype:%08lx outputtype:%08lx action:%08lx formatoptions:%08lx\n", (unsigned long) ipv6calc_debug, (unsigned long) command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, (unsigned long) formatoptions); 
-	};
+	DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Debug value:%08lx command:%08lx inputtype:%08lx outputtype:%08lx action:%08lx formatoptions:%08lx", (unsigned long) ipv6calc_debug, (unsigned long) command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, (unsigned long) formatoptions);
 
 	/* do work depending on selection */
 	if ((command & CMD_printversion) != 0) {
@@ -695,24 +694,18 @@ int main(int argc, char *argv[]) {
 	};
 	
 	if (argc > 0) {
-		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "%s: Got input %s\n", DEBUG_function_name, argv[0]);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Got input %s", argv[0]);
 	} else {
 		if (isatty (STDIN_FILENO)) {
 		} else {
 			input_is_pipe = 1;
-			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "%s: Input is a pipe\n", DEBUG_function_name);
-			};
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Input is a pipe");
 			formatoptions |= FORMATOPTION_quiet; // force quiet mode
 		};
 	};
 
 	/***** input type handling *****/
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: Start of input type handling\n", DEBUG_function_name);
-	};
+	DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of input type handling");
 
 	/* check length of input */
 	if (argc > 0) {
@@ -745,14 +738,10 @@ PIPE_input:
 		linecounter++;
 
 		if (linecounter == 1) {
-			if (ipv6calc_debug == 1) {
-				fprintf(stderr, "Ok, proceeding stdin...\n");
-			};
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Ok, proceeding stdin...\n");
 		};
 		
-		if (ipv6calc_debug == 1) {
-			fprintf(stderr, "Line: %d\r", linecounter);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Line: %d", linecounter);
 
 		if (strlen(linebuffer) >= NI_MAXHOST) {
 			fprintf(stderr, "Line too long: %d\n", linecounter);
@@ -769,9 +758,7 @@ PIPE_input:
 			linebuffer[strlen(linebuffer) - 1] = '\0';
 		};
 		
-		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "%s: stdin got line: '%s'\n", DEBUG_function_name, linebuffer);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "stdin got line: '%s'", linebuffer);
 
 		if (linebuffer[strlen(linebuffer) - 1] == '\n') {
 			/* remove trailing \n */
@@ -796,18 +783,14 @@ PIPE_input:
 		input1 = token;
 		inputc = 1;
 
-		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "%s: Token 1: '%s'\n", DEBUG_function_name, input1);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Token 1: '%s'", input1);
 
 		/* check for second token */
 		if (*ptrptr[0] != '\0') {
 			input2 = *ptrptr;
 			inputc = 2;
 
-			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "%s: Token 2: '%s'\n", DEBUG_function_name, input2);
-			};
+			DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Token 2: '%s'", input2);
 		};
 
 	} else {
@@ -827,9 +810,7 @@ PIPE_input:
 
 	/* autodetection */
 	if ((inputtype == FORMAT_undefined || inputtype == FORMAT_auto) && inputc > 0) {
-		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "%s: Call input type autodetection\n", DEBUG_function_name);
-		};
+		DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Call input type autodetection");
 		/* no input type specified or automatic selected */
 		if ((formatoptions & FORMATOPTION_quiet) == 0) {
 			fprintf(stderr, "No input type specified, try autodetection...");
@@ -889,9 +870,7 @@ PIPE_input:
 	};
 
 	/* check formatoptions for validity */
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: check format option of output type: 0x%08lx\n", DEBUG_function_name, (unsigned long) outputtype);
-	};
+	DEBUGPRINT_WA(DEBUG_ipv6calc_general, "check format option of output type: 0x%08lx", (unsigned long) outputtype);
 		
 	for (i = 0; i < (int) (sizeof(ipv6calc_outputformatoptionmap) / sizeof(ipv6calc_outputformatoptionmap[0])); i++) {
 		if (outputtype != ipv6calc_outputformatoptionmap[i][0]) {
@@ -925,9 +904,7 @@ PIPE_input:
 	/* proceed input depending on type */	
 	retval = -1; /* default */
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: Process input (inputtype: 0x%08lx, count=%d)\n", DEBUG_function_name, (unsigned long) inputtype, inputc);
-	};
+	DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Process input (inputtype: 0x%08lx, count=%d)", (unsigned long) inputtype, inputc);
 
 	switch (inputtype) {
 		case FORMAT_ipv6addr:
@@ -1063,15 +1040,11 @@ PIPE_input:
 		exit(EXIT_FAILURE);
 	};
 	
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: End of input type handling\n", DEBUG_function_name);
-	};
+	DEBUGPRINT_NA(DEBUG_ipv6calc_general, "End of input type handling");
 
 	/***** postprocessing input *****/
 	
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: Start of postprocessing input\n", DEBUG_function_name);
-	};
+	DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of postprocessing input");
 
 	if (ipv6addr.flag_valid == 1) {
 		/* force prefix */
@@ -1096,9 +1069,7 @@ PIPE_input:
 		
 		/* start bit */
 		if ((formatoptions & FORMATOPTION_printstart) != 0) {
-			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "%s: Set bit start to: %d\n", DEBUG_function_name, bit_start);
-			};
+			DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Set bit start to: %d", bit_start);
 			ipv6addr.bit_start = (uint8_t) bit_start;
 			ipv6addr.flag_startend_use = 1;
 		} else {
@@ -1107,9 +1078,7 @@ PIPE_input:
 		
 		/* end bit */
 		if ((formatoptions & FORMATOPTION_printend) != 0) {
-			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "%s: Set bit end to: %d\n", DEBUG_function_name, bit_end);
-			};
+			DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Set bit end to: %d", bit_end);
 			ipv6addr.bit_end = (uint8_t) bit_end;
 			ipv6addr.flag_startend_use = 1;
 		} else {
@@ -1174,23 +1143,17 @@ PIPE_input:
 	};
 
 	
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: result of 'inputtype': %d\n", DEBUG_function_name, retval);
-	};
+	DEBUGPRINT_WA(DEBUG_ipv6calc_general, "result of 'inputtype': %d", retval);
 
 	if (retval != 0) {
 		fprintf(stderr, "%s\n", resultstring);
 		exit(EXIT_FAILURE);
 	};
 	
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: End of postprocessing input\n", DEBUG_function_name);
-	};
+	DEBUGPRINT_NA(DEBUG_ipv6calc_general, "End of postprocessing input");
 	
 	/***** action *****/
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: Start of action\n", DEBUG_function_name);
-	};
+	DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of action");
 
 	/***** automatic output handling *****/
 	if ( outputtype == FORMAT_undefined ) {
@@ -1245,9 +1208,7 @@ PIPE_input:
 	/* clear resultstring */
 	snprintf(resultstring, sizeof(resultstring) - 1, "%s", "");
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: Process action (action: 0x%08lx)\n", DEBUG_function_name, (unsigned long) action);
-	};
+	DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Process action (action: 0x%08lx)", (unsigned long) action);
 	
 	switch (action) {
 		case ACTION_mac_to_eui64:
@@ -1396,9 +1357,7 @@ PIPE_input:
 			break;
 
 		case ACTION_filter:
-			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "%s: Start of action: filter\n", DEBUG_function_name);
-			};
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of action: filter");
 
 			outputtype = inputtype;
 
@@ -1419,9 +1378,7 @@ PIPE_input:
 
 			if (result != 0) {
 				/* skip everything */
-				if (ipv6calc_debug != 0) {
-					fprintf(stderr, "%s: filter result SKIP: '%s'\n", DEBUG_function_name, linebuffer);
-				};
+				DEBUGPRINT_WA(DEBUG_ipv6calc_general, "filter result SKIP: '%s'", linebuffer);
 			} else {
 				snprintf(resultstring, sizeof(resultstring) - 1, "%s", linebuffer);
 			};

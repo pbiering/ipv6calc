@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calcdebug.h
- * Version    : $Id: libipv6calcdebug.h,v 1.10 2013/10/22 18:59:55 ds6peter Exp $
+ * Version    : $Id: libipv6calcdebug.h,v 1.11 2013/10/24 19:05:04 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -34,6 +34,7 @@
 #define DEBUG_libifinet6				0x00002000l
 
 #define DEBUG_libipv6addr_iidrandomdetection		0x00010000l
+#define DEBUG_libipv6addr_anonymization_unknown_break	0x00020000l
 
 #define DEBUG_libipv6addr_db_wrapper			0x00100000l
 #define DEBUG_libipv6addr_db_wrapper_GeoIP		0x00200000l

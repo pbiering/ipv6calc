@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.73 2013/10/22 18:59:55 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.74 2013/10/24 19:05:04 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -42,7 +42,9 @@
  * a9p9 4843 0000 000C  -> RFC 4843 anonymized ORCHID hash
  *
  * SLA/NLA prefix part anonymization is done by replacing with pattern a909a909
- *   p = number of nibbles anonymized
+ *   p = number of nibbles anonymized in prefix
+ *   		0 : no nibble of prefix is anonymized
+ *   		f : Prefix anonymization with method=kp
  *
  * Prefix anonymization in case of method=kp: p=0x0f
  * a909:ccca:aaaa:aaaC  (C = 4-bit checksum)
@@ -53,6 +55,9 @@
  */
 #define ANON_TOKEN_VALUE_00_31		(uint32_t) 0xa9090000u
 #define ANON_TOKEN_MASK_00_31		(uint32_t) 0xff0f0000u
+
+#define ANON_IID_PREFIX_NIBBLES_MASK	(uint32_t) 0x0000000fu
+#define ANON_IID_PREFIX_NIBBLES_SHIFT	20
 
 #define ANON_CHECKSUM_MASK_32_63	(uint32_t) 0x0000000fu
 

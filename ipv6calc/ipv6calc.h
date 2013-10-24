@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.h
- * Version    : $Id: ipv6calc.h,v 1.14 2013/09/10 20:25:50 ds6peter Exp $
+ * Version    : $Id: ipv6calc.h,v 1.15 2013/10/24 19:05:04 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -19,5 +19,7 @@
 
 //#define ANONPRESET_DEFAULT "keep-type-asn-cc"
 #define ANONPRESET_DEFAULT "anonymize-standard"
+
+#define DEBUG_ipv6calc_general      0x00000001l
 
 #endif

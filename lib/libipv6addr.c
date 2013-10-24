@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.96 2013/10/22 20:52:17 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.97 2013/10/24 19:05:04 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -637,6 +637,8 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 	uint32_t type = 0, r;
 	uint32_t st, st1, st2, st3;
 	s_iid_statistics variances;
+	int p;
+	uint32_t mask_0_15, mask_16_31;
 
 	ipv6calc_ipv4addr ipv4addr;
 	ipv6calc_ipv6addr ipv6addr;
@@ -662,7 +664,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 
 	if (UNPACK_XMS(st, ANON_PREFIX_TOKEN_XOR, ANON_PREFIX_TOKEN_MASK, ANON_PREFIX_TOKEN_SHIFT) == ANON_PREFIX_TOKEN_VALUE) {
 		// anonymized prefix ?
-		DEBUGPRINT_WA(DEBUG_libipv6addr, " probably anonymized prefix found: %0x8 %08x", st, st1);
+		DEBUGPRINT_WA(DEBUG_libipv6addr, " probably anonymized prefix found: %04x:%04x:%04x:%04x", U32_MSB16(st), U32_LSB16(st), U32_MSB16(st1), U32_LSB16(st1));
 
 		/* verify now checksum */
 		if (ipv6addr_verify_checksum_anonymized_prefix(ipv6addrp) == 0) {
@@ -910,15 +912,51 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 					type |= IPV6_NEW_ADDR_IID_EUI48;
 				};
 
-				DEBUGPRINT_WA(DEBUG_libipv6addr, "check for anonymized IID: %08x %08x", st2, st3);
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "check for anonymized IID: %04x:%04x:%04x:%04x", U32_MSB16(st2), U32_LSB16(st2), U32_MSB16(st3), U32_LSB16(st3));
 
 				/* check for anonymized IID */
 				if ((st2 & ANON_TOKEN_MASK_00_31) == (ANON_TOKEN_VALUE_00_31 & ANON_TOKEN_MASK_00_31)) {
-					DEBUGPRINT_NA(DEBUG_libipv6addr, "probably anonymized IID found");
+					DEBUGPRINT_NA(DEBUG_libipv6addr, "perhaps anonymized IID found (ANON token match)");
 
 					/* verify now checksum */
  					if (ipv6addr_verify_checksum_anonymized_iid(ipv6addrp) == 0) {
-						DEBUGPRINT_NA(DEBUG_libipv6addr, "checksum ok - anonymized IID found");
+						p = UNPACK_XMS(st2, 0, ANON_IID_PREFIX_NIBBLES_MASK, ANON_IID_PREFIX_NIBBLES_SHIFT);
+
+						DEBUGPRINT_WA(DEBUG_libipv6addr, "checksum ok - probably anonymized IID found, p=%d", p);
+
+						if (p == 0) {
+							// no additional check
+						} else if (p == 0xf) {
+							if ((type & IPV6_ADDR_ANONYMIZED_PREFIX) == 0) {
+								DEBUGPRINT_NA(DEBUG_libipv6addr, "no anonymized prefix found, but p=f -> no anonymized IID");
+								goto END_ANON_IID;
+							};
+						} else {
+							// check anonymized nibbles in prefix
+							DEBUGPRINT_WA(DEBUG_libipv6addr, "check now for %d anonymized nibbles in prefix: %04x:%04x:%04x:%04x", p, U32_MSB16(st), U32_LSB16(st), U32_MSB16(st1), U32_LSB16(st1));
+
+							if (p >= 8) {
+								mask_0_15 = 0xffffffff >> ((16 - p) * 4);
+								mask_16_31 = 0xffffffff;
+							} else {
+								mask_0_15 = 0x0;
+								mask_16_31 = 0xffffffff >> ((8 - p) * 4);
+							};
+
+							// check 1st 32-bit block
+							if ((st & mask_0_15) != ((ANON_TOKEN_VALUE_00_31 | (ANON_TOKEN_VALUE_00_31 >> 16)) & mask_0_15)) {
+								DEBUGPRINT_WA(DEBUG_libipv6addr, "anonymized parts of prefix doesn't match amount of given nibbles: 0-15=%08x mask=%08x", st, mask_0_15);
+								goto END_ANON_IID;
+							};
+
+							// check 2nd 32-bit block
+							if ((st1 & mask_16_31) != ((ANON_TOKEN_VALUE_00_31 | (ANON_TOKEN_VALUE_00_31 >> 16)) & mask_16_31)) {
+								DEBUGPRINT_WA(DEBUG_libipv6addr, "anonymized parts of prefix doesn't match amount of given nibbles: 16-31=%08x mask=%08x", st1, mask_16_31);
+								goto END_ANON_IID;
+							};
+
+							DEBUGPRINT_NA(DEBUG_libipv6addr, "anonymized prefix verified");
+						};
 
 						if (((st2 & ANON_IID_RANDOM_MASK_00_31) == ANON_IID_RANDOM_VALUE_00_31) && ((st3 & ANON_IID_RANDOM_MASK_32_63) == ANON_IID_RANDOM_VALUE_32_63)) {
 							type |= IPV6_NEW_ADDR_IID_RANDOM | IPV6_ADDR_ANONYMIZED_IID | IPV6_NEW_ADDR_IID_LOCAL;
@@ -974,18 +1012,23 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 							return (type);
 						};
 
-						DEBUGPRINT_NA(DEBUG_libipv6addr, "unhandled probably anonymized IID found (this can really happen), proceed further on");
+
+						if ((ipv6calc_debug & DEBUG_libipv6addr_anonymization_unknown_break) != 0) {
+							DEBUGPRINT_WA(DEBUG_libipv6addr_anonymization_unknown_break, "unhandled probably anonymized IID found, STOP because of debug level: %08x %08x", st2, st3);
+							exit(1);
+						} else {
+							DEBUGPRINT_NA(DEBUG_libipv6addr, "unhandled probably anonymized IID found (this can really happen), proceed further on");
+						};;
 					} else {
 						DEBUGPRINT_NA(DEBUG_libipv6addr, "checksum WRONG - no anonymized IID found, proceed further on");
 					};
 				};
 
+END_ANON_IID:
 				type |= IPV6_NEW_ADDR_IID_LOCAL;
 
 				if ((type & (IPV6_ADDR_IID_32_63_HAS_IPV4 | IPV6_NEW_ADDR_LINKLOCAL_TEREDO | IPV6_NEW_ADDR_IID_ISATAP | IPV6_NEW_ADDR_TEREDO)) == 0) {
-					if ( (ipv6calc_debug) != 0 ) {
-						fprintf(stderr, "%s/%s: call IID random detection, type=%08xl\n", __FILE__, __func__, type);
-					};
+					DEBUGPRINT_WA(DEBUG_libipv6addr, "call IID random detection, type=%08xl", type);
 
 					/* fuzzy detection of random IID (e.g. privacy extension) */
 					r = ipv6addr_iidrandomdetection(ipv6addrp, &variances);
