@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.23 2013/10/22 18:59:55 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.24 2013/10/26 13:45:41 ds6peter Exp $
  * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -99,6 +99,7 @@ int main(int argc,char *argv[]) {
 	char   shortopts[NI_MAXHOST] = "";
 	int    longopts_maxentries = 0;
 
+	ipv6calc_quiet = 1; //default for ipv6loganon
 
 	/* initialize debug value from environment for bootstrap debugging */
 	ipv6calc_debug_from_env();

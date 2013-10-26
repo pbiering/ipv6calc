@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganonoptions.h
- * Version    : $Id: ipv6loganonoptions.h,v 1.11 2013/09/28 20:32:40 ds6peter Exp $
+ * Version    : $Id: ipv6loganonoptions.h,v 1.12 2013/10/26 13:45:41 ds6peter Exp $
  * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -20,7 +20,7 @@
 /* Options */
 
 /* define short options */
-static char *ipv6loganon_shortopts = "vh?Vnc:w:a:";
+static char *ipv6loganon_shortopts = "vh?Vnc:w:a:f";
 
 /* define long options */
 static struct option ipv6loganon_longopts[] = {
@@ -32,6 +32,7 @@ static struct option ipv6loganon_longopts[] = {
 
 	/* special options */
 	{"nocache"   , no_argument      , 0, (int) 'n'},
+	{"flush"     , no_argument      , 0, (int) 'f'},
 	{"cachelimit", required_argument, 0, (int) 'c'},
 	{"write"     , required_argument, 0, (int) 'w'},
 	{"append"    , required_argument, 0, (int) 'a'},

@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2011/05/15 11:54:21 peter Exp $
+$Id: README,v 1.6 2013/10/26 13:45:41 ds6peter Exp $
 
 ipv6loganon is a HTTP server log file anonymizer
 
@@ -46,7 +46,15 @@ Modified lines (stdout):
 Since version 0.90.0 also inline usage in Apache webserver is supported like:
 
 httpd.conf:
+	# Default log
+	CustomLog "/var/log/httpd/access_log" combined
+
+	# Anonymized log (in addition, more than one directive is supported)
 	CustomLog "|/usr/local/bin/ipv6loganon -a -f /var/log/httpd/access_log" combined
 
+
  in conjunction with cronolog:
+	# Default log
+	CustomLog "|/usr/sbin/cronolog /var/log/httpd/access.log-%Y%m%d" combined
+
 	CustomLog "|/usr/bin/ipv6loganon -f |/usr/sbin/cronolog /var/log/httpd/access.log-%Y%m%d" combined
