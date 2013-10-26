@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.96 2013/10/22 18:59:40 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.97 2013/10/26 17:16:35 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -491,8 +491,8 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 	ipv4addr_copy(ipv4addr_anon_ptr, ipv4addrp); /* copy structure */
 
-	if ((typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {	
-		retval_anon = libipv4addr_anonymize(ipv4addr_anon_ptr, ipv6calc_anon_set.mask_ipv4, ANON_METHOD_KEEPTYPEASNCC);
+	if ((typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
+		retval_anon = libipv4addr_anonymize(ipv4addr_anon_ptr, ipv6calc_anon_set.mask_ipv4, ipv6calc_anon_set.method);
 
 		if (retval_anon == 0) {
 			retval = libipv4addr_ipv4addrstruct_to_string(ipv4addr_anon_ptr, tempstring2, 0);
@@ -856,6 +856,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 
 	if ((typeinfo & (IPV6_ADDR_ANONYMIZED_PREFIX | IPV6_ADDR_ANONYMIZED_IID)) == 0 ) {
 		ipv6addr_copy(ipv6addr_anon_ptr, ipv6addrp); /* copy structure */
+
 		retval_anon = libipv6addr_anonymize(ipv6addr_anon_ptr, &ipv6calc_anon_set);
 
 		if (retval_anon == 0) {

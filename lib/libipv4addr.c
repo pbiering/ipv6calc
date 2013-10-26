@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.46 2013/10/15 19:47:24 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.47 2013/10/26 17:16:35 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -973,9 +973,7 @@ int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, /
  *      1:anonymization method not supported
  */
 int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const int method) {
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s/%s: called, method=%d mask=%d type=0x%08x\n", __FILE__, __func__, method, mask, ipv4addrp->scope);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "called, method=%d mask=%d type=0x%08x", method, mask, ipv4addrp->scope);
 
 	/* anonymize IPv4 address according to settings */
 	char resultstring[NI_MAXHOST];
@@ -1017,9 +1015,7 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 	} else {
 		/* check for required database support */
 		if (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV4_REQ_DB) == 0) {
-			if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-				fprintf(stderr, "%s/%s: anonymization method not supported, db_wrapper reports too less features\n", __FILE__, __func__);
-			};
+			DEBUGPRINT_NA(DEBUG_libipv4addr, "anonymization method not supported, db_wrapper reports too less features");
 			return(1);
 		};
 

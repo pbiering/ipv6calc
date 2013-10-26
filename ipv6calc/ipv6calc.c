@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.95 2013/10/24 19:26:59 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.96 2013/10/26 17:16:35 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1412,6 +1412,16 @@ PIPE_input:
 	
 	/* catch showinfo */	
 	if (command == CMD_showinfo) {
+		// change anonymization method depending on support
+		if ((libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV4_REQ_DB) == 1) \
+		    && (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV6_REQ_DB) == 1)) {
+			result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, "keep-type-asn-cc");
+			if (result != 0) {
+				// fallback
+				result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, ANONPRESET_DEFAULT);
+			};
+		};
+
 		if (ipv6addr.flag_valid == 1) {
 			retval = showinfo_ipv6addr(&ipv6addr, formatoptions);
 	       	} else if (ipv4addr.flag_valid == 1) {

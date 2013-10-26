@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.27 2013/10/19 13:58:09 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.28 2013/10/26 17:16:35 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -244,9 +244,8 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
  */
 int libipv6calc_db_wrapper_has_features(uint32_t features) {
 	int result = -1;
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called with feature value to test: 0x%08x\n", __FILE__, __func__, features);
-	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Called with feature value to test: 0x%08x", features);
 
 	if ((wrapper_features & features) == features) {
 		result = 1;
@@ -254,9 +253,8 @@ int libipv6calc_db_wrapper_has_features(uint32_t features) {
 		result = 0;
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Return with result: %d\n", __FILE__, __func__, result);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Return with result: %d", result);
+
 	return(result);
 };
 
