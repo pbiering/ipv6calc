@@ -57,6 +57,10 @@ or using in DNS queries like
  dig -t ANY `ipv6calc -r 2001:db8:1234::1/48`
 Many more format conversions are supported, see given URL for more.
 
+Also this package contains additional binaries (and some examples)
+ - ipv6loganon: anonymizes Apache webserver logs
+ - ipv6logstats: create statistics from list of IPv4/IPv6 addresses (can be used by analog)
+
 Available rpmbuild rebuild options:
   --with ip2location
   --with ip2location-dyn
