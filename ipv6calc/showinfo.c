@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.99 2013/10/28 20:10:17 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.100 2013/10/28 21:17:15 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -117,8 +117,8 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV6CALC_VERSION=x.y          : Version of ipv6calc\n");
 	fprintf(stderr, " IPV6CALC_COPYRIGHT=\"...\"      : Copyright string\n");
 	fprintf(stderr, " IPV6CALC_OUTPUT_VERSION=x     : Version of output format\n");
-	fprintf(stderr, " IPV6CALC_FEATURES=\"...\"       : Feature string of ipv6calc -v\n");
-	fprintf(stderr, " IPV6CALC_SETTINGS_ANON=...    : Anonymizer settings\n");
+	fprintf(stderr, " IPV6CALC_FEATURES=\"...\"     : Feature string of ipv6calc -v\n");
+	fprintf(stderr, " IPV6CALC_SETTINGS_ANON=\"...\": Anonymizer settings\n");
 };
 
 /*
@@ -168,7 +168,7 @@ static void printfooter(const uint32_t formatoptions) {
 		printout(tempstring);
 
 		libipv6calc_anon_infostring(tempstring2, sizeof(tempstring2), &ipv6calc_anon_set);
-		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_SETTINGS_ANON=%s", tempstring2);
+		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_SETTINGS_ANON=\"%s\"", tempstring2);
 		printout(tempstring);
 
 		tempstring[0] = '\0'; /* clear tempstring */
