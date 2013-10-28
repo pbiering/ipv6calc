@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.5 2013/09/28 20:32:40 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.6 2013/10/28 07:25:31 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -70,10 +70,16 @@ void ipv6calc_debug_from_env(void) {
  * hard exit code in case of troubles: 2
  */
 static void ipv6calc_options_common_add(char *shortopts_p, const int shortopts_maxlen, struct option longopts[], int *maxentries_p) {
+	static int already_added = 0;
 	int i, j, k;
 	char tempstring[NI_MAXHOST];
 
-	DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Called\n", __FILE__, __func__);
+	if (already_added == 1) {
+		DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "already called - nothing to do anymore");
+		return;
+	};
+
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Called");
 
 	if (*maxentries_p + MAXENTRIES_ARRAY(ipv6calc_longopts_common) >= (MAXLONGOPTIONS - 1)) {
 		fprintf(stderr, "FATAL error, can't add ipv6calc_options_common options - FIX CODE by increasing MAXLONGOPTIONS\n");
@@ -117,7 +123,9 @@ static void ipv6calc_options_common_add(char *shortopts_p, const int shortopts_m
 
 	/* TODO: implement strlen checks */
 
-	DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Return\n", __FILE__, __func__);
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Return");
+
+	already_added = 1;
 
 	return;
 };
@@ -131,7 +139,7 @@ void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct 
 	int i, j, k;
 	char tempstring[NI_MAXHOST];
 
-	DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Called\n", __FILE__, __func__);
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Called");
 
 	if (*maxentries_p + MAXENTRIES_ARRAY(longopts_custom) >= (MAXLONGOPTIONS - 1)) {
 		fprintf(stderr, "FATAL error, can't add custom options - FIX CODE by increasing MAXLONGOPTIONS\n");
@@ -147,17 +155,17 @@ void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct 
 			};
 		};
 
-		DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Add custom long option on position %d/%d: %s\n", __FILE__, __func__, *maxentries_p, i, longopts_custom[i].name);
+		DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Add custom long option on position %d/%d: %s", *maxentries_p, i, longopts_custom[i].name);
 
 		longopts[*maxentries_p] = longopts_custom[i];
 		(*maxentries_p)++;
 	};
 
-	DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Add custom short options: %s\n", __FILE__, __func__, shortopts_custom);
+	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Add custom short options: %s", shortopts_custom);
 
 	/* check for duplicates */
 	if (strlen(shortopts_p) > 0) {
-		DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Already given short options: %s\n", __FILE__, __func__, shortopts_p);
+		DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Already given short options: %s", shortopts_p);
 		for (j = 0; j < strlen(shortopts_p); j++) {
 			for (k = 0; k < strlen(shortopts_custom); k++) {
 				if (shortopts_custom[k] == ':') {
@@ -170,13 +178,13 @@ void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct 
 			};
 		};
 	} else {
-		DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Already given short options: (empty)\n", __FILE__, __func__);
+		DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Already given short options: (empty)");
 	};
 
 	snprintf(tempstring, sizeof(tempstring), "%s%s", shortopts_p, shortopts_custom);
 	snprintf(shortopts_p, shortopts_maxlen, "%s", tempstring);
 
-	DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Resulting short options: %s\n", __FILE__, __func__, shortopts_p);
+	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Resulting short options: %s", shortopts_p);
 
 	ipv6calc_options_common_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p); 
 

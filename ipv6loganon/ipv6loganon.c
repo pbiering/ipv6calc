@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.24 2013/10/26 13:45:41 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.25 2013/10/28 07:25:31 ds6peter Exp $
  * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -295,8 +295,9 @@ int main(int argc,char *argv[]) {
 		exit(EXIT_FAILURE);
 	};
 
-	/* check for Country Code & ASN support */
-	if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_IPV6_TO_AS) == 1) {
+	/* check for KeepTypeAsnCC support */
+	if ((libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV4_REQ_DB) == 1) \
+	    && (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV6_REQ_DB) == 1)) {
 		feature_kp = 1;
 	};
 

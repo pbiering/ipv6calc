@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.96 2013/10/26 17:16:35 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.97 2013/10/28 07:25:31 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -23,6 +23,7 @@
 #include "ipv6calcoptions_local.h"
 #include "ipv6calchelp.h"
 #include "ipv6calchelp_local.h"
+#include "ipv6calcoptions_common.h"
 
 #include "libipv4addr.h"
 #include "libipv6addr.h"
@@ -93,6 +94,11 @@ int  use_geoip_ipv4 = -1; /* if set to 1, GeoIP IPv4 is enabled by option(s) */
 int  use_geoip_ipv6 = -1; /* if set to 1, GeoIP IPv6 is enabled by option(s) */
 #endif
 
+/* features */
+int feature_zeroize = 1; // always supported
+int feature_anon    = 1; // always supported
+int feature_kp      = 0; // will be checked later
+
 
 /**************************************************/
 /* main */
@@ -156,6 +162,7 @@ int main(int argc, char *argv[]) {
 
 	/* add options */
 	ipv6calc_options_add(shortopts, sizeof(shortopts), longopts, &longopts_maxentries, ipv6calc_shortopts, ipv6calc_longopts, MAXENTRIES_ARRAY(ipv6calc_longopts));
+	ipv6calc_options_add(shortopts, sizeof(shortopts), longopts, &longopts_maxentries, ipv6calc_shortopts_common_anon, ipv6calc_longopts_common_anon, MAXENTRIES_ARRAY(ipv6calc_longopts_common_anon));
 
 	/* default */
 	result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, ANONPRESET_DEFAULT);
@@ -636,6 +643,12 @@ int main(int argc, char *argv[]) {
 	result = libipv6calc_db_wrapper_init();
 	if (result != 0) {
 		exit(EXIT_FAILURE);
+	};
+
+	/* check for KeepTypeAsnCC support */
+	if ((libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV4_REQ_DB) == 1) \
+	    && (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV6_REQ_DB) == 1)) {
+		feature_kp = 1;
 	};
 
 	/* print help handling */
@@ -1413,8 +1426,7 @@ PIPE_input:
 	/* catch showinfo */	
 	if (command == CMD_showinfo) {
 		// change anonymization method depending on support
-		if ((libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV4_REQ_DB) == 1) \
-		    && (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV6_REQ_DB) == 1)) {
+		if (feature_kp == 1) {
 			result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, "keep-type-asn-cc");
 			if (result != 0) {
 				// fallback

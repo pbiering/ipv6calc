@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calc/ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions_local.h,v 1.2 2013/09/28 20:32:40 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions_local.h,v 1.3 2013/10/28 07:25:31 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -102,17 +102,6 @@ static struct option ipv6calc_longopts[] = {
 	{ "printmirrored"        , 0, NULL, FORMATOPTION_NUM_printmirrored + FORMATOPTION_NUM_HEAD },
 
 	{ "print-iid-var"        , 0, NULL, FORMATOPTION_NUM_print_iid_var + FORMATOPTION_NUM_HEAD },
-
-	/* address anonymizer options */
-	{ "anonymize-standard" , 0, NULL, CMD_ANON_PRESET_STANDARD },
-	{ "anonymize-careful"  , 0, NULL, CMD_ANON_PRESET_CAREFUL  },
-	{ "anonymize-paranoid" , 0, NULL, CMD_ANON_PRESET_PARANOID },
-	{ "anonymize-preset"   , 1, NULL, CMD_ANON_PRESET_OPTION   },
-	{ "anonymize-method"   , 1, NULL, CMD_ANON_METHOD_OPTION   },
-	{ "mask-ipv4" , 1, NULL, CMD_ANON_MASK_IPV4 },
-	{ "mask-ipv6" , 1, NULL, CMD_ANON_MASK_IPV6 },
-	{ "mask-iid"  , 1, NULL, CMD_ANON_MASK_IID },
-	{ "mask-mac"  , 1, NULL, CMD_ANON_MASK_MAC },
 
 	/* new options */
 	{ "in"        , 1, NULL, CMD_inputtype  },

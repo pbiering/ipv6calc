@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions_common.h,v 1.3 2013/09/28 20:32:40 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions_common.h,v 1.4 2013/10/28 07:25:31 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -48,3 +48,20 @@ static struct option ipv6calc_longopts_common[] = {
 	{"db-geoip-dir"                , 1, NULL, DB_geoip_dir           },
 	{"db-geoip-lib"                , 1, NULL, DB_geoip_lib           },
 };                
+
+
+/* define common anonymization short options */
+static char *ipv6calc_shortopts_common_anon = "";
+
+/* define common anonymization long options */
+static struct option ipv6calc_longopts_common_anon[] = {
+	{ "anonymize-standard"	, 0, NULL, CMD_ANON_PRESET_STANDARD },
+	{ "anonymize-careful"	, 0, NULL, CMD_ANON_PRESET_CAREFUL  },
+	{ "anonymize-paranoid"	, 0, NULL, CMD_ANON_PRESET_PARANOID },
+	{ "anonymize-preset"	, 1, NULL, CMD_ANON_PRESET_OPTION   },
+	{ "anonymize-method"	, 1, NULL, CMD_ANON_METHOD_OPTION   },
+	{ "mask-ipv4"		, 1, NULL, CMD_ANON_MASK_IPV4 },
+	{ "mask-ipv6"		, 1, NULL, CMD_ANON_MASK_IPV6 },
+	{ "mask-iid"		, 1, NULL, CMD_ANON_MASK_IID },
+	{ "mask-mac"		, 1, NULL, CMD_ANON_MASK_MAC },
+};

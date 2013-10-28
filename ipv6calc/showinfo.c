@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.97 2013/10/26 17:16:35 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.98 2013/10/28 07:25:31 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -207,6 +207,22 @@ static void printfooter(const uint32_t formatoptions) {
 		snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
 #endif
 #endif
+
+		if (feature_zeroize == 1) {
+			snprintf(tempstring2, sizeof(tempstring2), "%s ANON_ZEROISE", tempstring);
+			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
+		};
+
+		if (feature_anon == 1) {
+			snprintf(tempstring2, sizeof(tempstring2), "%s ANON_ANONYMIZE", tempstring);
+			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
+		};
+
+		if (feature_kp == 1) {
+			snprintf(tempstring2, sizeof(tempstring2), "%s ANON_KEEP-TYPE-ASN-CC", tempstring);
+			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
+		};
+
 		/* cut off first char */
 		for (i = 0; i < strlen(tempstring); i++) {
 			tempstring[i] = tempstring[i+1];

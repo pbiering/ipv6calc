@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.31 2013/10/12 09:51:04 ds6peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.32 2013/10/28 07:25:31 ds6peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -241,3 +241,44 @@ else
 	echo "IP2Location tests skipped"
 fi
 
+if ./ipv6calc -v 2>&1 | grep -qw "ANON_KEEP-TYPE-ASN-CC"; then
+	echo "INFO  : run special anon tests"
+	testscenarios_showinfo_anonymized_info | while IFS=";" read input options token result; do
+		echo -n "INFO  : test: $options $input for $result: "
+		output="`./ipv6calc -q $options -m -i $input`"
+
+		case $token in
+		    key-word|key-no-word)
+			key="${result/=*/}"
+			word="${result/*=/}"
+			;;
+		esac
+
+		case $token in
+		    match)
+			if echo "$output" | grep -q "^$result$"; then
+				echo "OK"
+			else
+				echo " ERROR"
+				echo "$output"
+				exit 1
+			fi
+			;;
+		    key-word)
+			if echo "$output" | grep "^$key=" | grep -w "$word"; then
+				echo " OK"
+			else
+				exit 1
+			fi
+			;;
+		    key-no-word)
+			if ! echo "$output" | grep "^$key=" | grep -w "$word"; then
+				echo " OK"
+			else
+				exit 1
+			fi
+			;;
+		esac
+	done || exit 1
+	echo "special tests were successful"
+fi

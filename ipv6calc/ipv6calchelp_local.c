@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calchelp_local.c
- * Version    : $Id: ipv6calchelp_local.c,v 1.1 2013/10/24 19:29:03 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp_local.c,v 1.2 2013/10/28 07:25:31 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -28,9 +28,11 @@ void printversion(void) {
 	libipv6calc_db_wrapper_features(resultstring, sizeof(resultstring));
 
 	fprintf(stderr, "%s: version %s", PROGRAM_NAME, PACKAGE_VERSION);
+
 #ifdef SUPPORT_IP2LOCATION
 	fprintf(stderr, " IP2Location");
 #endif
+
 #ifdef SUPPORT_GEOIP
 	fprintf(stderr, " GeoIP");
 #ifdef SUPPORT_GEOIP_V6
@@ -38,7 +40,21 @@ void printversion(void) {
 #endif
 #endif
 
-	fprintf(stderr, " %s\n", resultstring);
+	fprintf(stderr, " %s", resultstring);
+
+	if (feature_zeroize == 1) {
+		fprintf(stderr, " ANON_ZEROISE");
+	};
+
+	if (feature_anon == 1) {
+		fprintf(stderr, " ANON_ANONYMIZE");
+	};
+
+	if (feature_kp == 1) {
+		fprintf(stderr, " ANON_KEEP-TYPE-ASN-CC");
+	};
+
+	fprintf(stderr, "\n");
 };
 
 void printversion_verbose(int level_verbose) {

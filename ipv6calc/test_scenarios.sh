@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.33 2013/10/24 19:05:04 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.34 2013/10/28 07:25:31 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -363,5 +363,15 @@ testscenarios_showinfo_ip2location() {
 # non-anonymized IPv6 prefix
 2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=DE
 2001:a60:113a:0123:0123:4567:89ab:cdef	IP2LOCATION_COUNTRY_SHORT=DE
+END
+}
+
+testscenarios_showinfo_anonymized_info() {
+	cat <<END | grep -v '^#'
+# IPv4 address
+1.2.3.4;;match;IPV4_ANON=246.24.59.65
+1.2.3.4;;key-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
+1.2.3.4;--db-geoip-disable --db-ip2location-disable;match;IPV4_ANON=1.2.3.0
+1.2.3.4;--db-geoip-disable --db-ip2location-disable;key-no-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
 END
 }
