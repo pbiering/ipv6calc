@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.6 2013/10/28 07:25:31 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.7 2013/10/28 20:10:17 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -66,73 +66,7 @@ void ipv6calc_debug_from_env(void) {
 
 
 /* 
- * add common options
- * hard exit code in case of troubles: 2
- */
-static void ipv6calc_options_common_add(char *shortopts_p, const int shortopts_maxlen, struct option longopts[], int *maxentries_p) {
-	static int already_added = 0;
-	int i, j, k;
-	char tempstring[NI_MAXHOST];
-
-	if (already_added == 1) {
-		DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "already called - nothing to do anymore");
-		return;
-	};
-
-	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Called");
-
-	if (*maxentries_p + MAXENTRIES_ARRAY(ipv6calc_longopts_common) >= (MAXLONGOPTIONS - 1)) {
-		fprintf(stderr, "FATAL error, can't add ipv6calc_options_common options - FIX CODE by increasing MAXLONGOPTIONS\n");
-		exit(2);
-	};
-
-	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_longopts_common); i++) {
-		/* check for duplicates */
-		for (j = 0; j < *maxentries_p; j++) {
-			if (strcmp(longopts[j].name, ipv6calc_longopts_common[i].name) == 0) {
-				fprintf(stderr, "FATAL error, can't add ipv6calc_options_common options - DUPLICATE NAME FOUND: %s\n", longopts[j].name);
-				exit(2);
-			};
-		};
-
-		DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Add common long option on position %d/%d: %s\n", __FILE__, __func__, *maxentries_p, i, ipv6calc_longopts_common[i].name);
-
-		longopts[*maxentries_p] = ipv6calc_longopts_common[i];
-		(*maxentries_p)++;
-	};
-
-	/* check for duplicates */
-	for (j = 0; j < strlen(shortopts_p); j++) {
-		for (k = 0; k < strlen(ipv6calc_shortopts_common); k++) {
-			if (ipv6calc_shortopts_common[k] == ':') {
-				continue;
-			};
-			if (shortopts_p[j] == ipv6calc_shortopts_common[k]) {
-				fprintf(stderr, "FATAL error, can't add ipv6calc_options_common short options - DUPLICATE CHAR FOUND: %c\n", shortopts_p[j]);
-				exit(2);
-			};
-		};
-	};
-
-	DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Add common short options: %s\n", __FILE__, __func__, ipv6calc_shortopts_common);
-
-	snprintf(tempstring, sizeof(tempstring), "%s%s", shortopts_p, ipv6calc_shortopts_common);
-	snprintf(shortopts_p, shortopts_maxlen, "%s", tempstring);
-
-	DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Resulting short options: %s\n", __FILE__, __func__, shortopts_p);
-
-	/* TODO: implement strlen checks */
-
-	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Return");
-
-	already_added = 1;
-
-	return;
-};
-
-
-/* 
- * add options
+ * add given options
  * hard exit code in case of troubles: 2
  */
 void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct option longopts[], int *maxentries_p, const char *shortopts_custom, const struct option longopts_custom[], const int longopts_custom_entries) {
@@ -142,7 +76,7 @@ void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct 
 	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Called");
 
 	if (*maxentries_p + MAXENTRIES_ARRAY(longopts_custom) >= (MAXLONGOPTIONS - 1)) {
-		fprintf(stderr, "FATAL error, can't add custom options - FIX CODE by increasing MAXLONGOPTIONS\n");
+		fprintf(stderr, "FATAL error, can't add options - FIX CODE by increasing MAXLONGOPTIONS\n");
 		exit(2);
 	};
 
@@ -150,18 +84,18 @@ void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct 
 		/* check for duplicates */
 		for (j = 0; j < *maxentries_p; j++) {
 			if (strcmp(longopts[j].name, longopts_custom[i].name) == 0) {
-				fprintf(stderr, "FATAL error, can't add ipv6calc_options_common options - DUPLICATE NAME FOUND: %s\n", longopts[j].name);
+				fprintf(stderr, "FATAL error, can't add options - DUPLICATE NAME FOUND: %s\n", longopts[j].name);
 				exit(2);
 			};
 		};
 
-		DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Add custom long option on position %d/%d: %s", *maxentries_p, i, longopts_custom[i].name);
+		DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Add long option on position %d/%d: %s", *maxentries_p, i, longopts_custom[i].name);
 
 		longopts[*maxentries_p] = longopts_custom[i];
 		(*maxentries_p)++;
 	};
 
-	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Add custom short options: %s", shortopts_custom);
+	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Add short options: %s", shortopts_custom);
 
 	/* check for duplicates */
 	if (strlen(shortopts_p) > 0) {
@@ -172,7 +106,7 @@ void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct 
 					continue;
 				};
 				if (shortopts_p[j] == shortopts_custom[k]) {
-					fprintf(stderr, "FATAL error, can't add ipv6calc_options_common short options - DUPLICATE CHAR FOUND: %c\n", shortopts_p[j]);
+					fprintf(stderr, "FATAL error, can't add short options - DUPLICATE CHAR FOUND: %c\n", shortopts_p[j]);
 					exit(2);
 				};
 			};
@@ -185,8 +119,6 @@ void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct 
 	snprintf(shortopts_p, shortopts_maxlen, "%s", tempstring);
 
 	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Resulting short options: %s", shortopts_p);
-
-	ipv6calc_options_common_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p); 
 
 	// end of options
 	longopts[*maxentries_p].name    = NULL;
@@ -203,13 +135,37 @@ void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct 
 
 
 /* 
- * call further option handlers
+ * add given options "common basic"
+ */
+void ipv6calc_options_add_common_basic(char *shortopts_p, const int shortopts_maxlen, struct option longopts[], int *maxentries_p) {
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Called");
+
+	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_common, ipv6calc_longopts_common, MAXENTRIES_ARRAY(ipv6calc_longopts_common));
+
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Finished");
+};
+
+
+/* 
+ * add given options "common anon"
+ */
+void ipv6calc_options_add_common_anon(char *shortopts_p, const int shortopts_maxlen, struct option longopts[], int *maxentries_p) {
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Called");
+
+	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_common_anon, ipv6calc_longopts_common_anon, MAXENTRIES_ARRAY(ipv6calc_longopts_common_anon));
+
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Finished");
+};
+
+
+/* 
+ * call option handler "common basic"
  * return: 0: option found
  */
-int ipv6calcoptions(const int opt, const char *optarg, const struct option longopts[]) {
+int ipv6calcoptions_common_basic(const int opt, const char *optarg, const struct option longopts[]) {
 	int result = -1;
 
-	DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Called opt=0x%08x\n", __FILE__, __func__, opt);
+	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Called opt=0x%08x", opt);
 
 	/* general options */
 	switch(opt) {
@@ -227,12 +183,130 @@ int ipv6calcoptions(const int opt, const char *optarg, const struct option longo
 			break;
 		default:
 			/* jump to other parsers */
-			DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Call sub-parser for opt=0x%08x\n", __FILE__, __func__, opt);
+			DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Call sub-parser for opt=0x%08x", opt);
 
 			result = libipv6calc_db_wrapper_options(opt, optarg, longopts);
 	};
 
-	DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Return with result: %d\n", __FILE__, __func__, result);
+	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Return with result: %d", result);
+
+	return(result);
+};
+
+
+/* 
+ * call option handler "common anon"
+ * return: 0: option found
+ */
+int ipv6calcoptions_common_anon(const int opt, const char *optarg, const struct option longopts[], s_ipv6calc_anon_set *ipv6calc_anon_set_p) {
+	int result = -1, i;
+	int mask_ipv4;
+	int mask_ipv6;
+	int mask_iid;
+	int mask_mac;
+
+	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Called opt=0x%08x", opt);
+
+	/* general options */
+	switch(opt) {
+		case CMD_ANON_MASK_IID:
+			mask_iid = 1;
+			mask_iid = atoi(optarg);
+			if (mask_iid < 0 || mask_iid > 64) {
+				fprintf(stderr, " value for option 'mask-iid' out-of-range  [0-64]\n");
+				exit(EXIT_FAILURE);
+			};
+			ipv6calc_anon_set_p->mask_iid = mask_iid;
+			snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
+			result = 0;
+			break;
+
+		case CMD_ANON_MASK_IPV4:
+			mask_ipv4 = atoi(optarg);
+			if (mask_ipv4 < 0 || mask_ipv4 > 32) {
+				fprintf(stderr, " value for option 'mask-ipv4' out-of-range  [0-32]\n");
+				exit(EXIT_FAILURE);
+			};
+			ipv6calc_anon_set_p->mask_ipv4 = mask_ipv4;
+			snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
+			result = 0;
+			break;
+
+		case CMD_ANON_MASK_IPV6:
+			mask_ipv6 = atoi(optarg);
+			if (mask_ipv6 < 0 || mask_ipv6 > 64) {
+				fprintf(stderr, " value for option 'mask-ipv6' out-of-range  [0-64]\n");
+				exit(EXIT_FAILURE);
+			};
+			ipv6calc_anon_set_p->mask_ipv6 = mask_ipv6;
+			snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
+			result = 0;
+			break;
+
+		case CMD_ANON_MASK_MAC:
+			mask_mac = atoi(optarg);
+			if (mask_mac < 0 || mask_mac > 48) {
+				fprintf(stderr, " value for option 'mask-mac' out-of-range  [0-48]\n");
+				exit(EXIT_FAILURE);
+			};
+			ipv6calc_anon_set_p->mask_mac = mask_mac;
+			snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
+			result = 0;
+			break;
+
+		case CMD_ANON_PRESET_STANDARD:
+			result = libipv6calc_anon_set_by_name(ipv6calc_anon_set_p, "as");
+			if (result != 0) {
+				fprintf(stderr, "ipv6calc anonymization preset not found: anonymize-standard\n");
+				exit(EXIT_FAILURE);
+			};
+			break;
+
+		case CMD_ANON_PRESET_CAREFUL:
+			result = libipv6calc_anon_set_by_name(ipv6calc_anon_set_p, "ac");
+			if (result != 0) {
+				fprintf(stderr, "ipv6calc anonymization preset not found: anonymize-careful\n");
+				exit(EXIT_FAILURE);
+			};
+			result = 0;
+			break;
+
+		case CMD_ANON_PRESET_PARANOID:
+			result = libipv6calc_anon_set_by_name(ipv6calc_anon_set_p, "ap");
+			if (result != 0) {
+				fprintf(stderr, "ipv6calc anonymization preset not found: anonymize-paranoid\n");
+				exit(EXIT_FAILURE);
+			};
+			result = 0;
+			break;
+
+		case CMD_ANON_PRESET_OPTION:
+			result = libipv6calc_anon_set_by_name(ipv6calc_anon_set_p, optarg);
+			if (result != 0) {
+				fprintf(stderr, "ipv6calc anonymization preset not found: %s\n", optarg);
+				exit(EXIT_FAILURE);
+			};
+			result = 0;
+			break;
+
+		case CMD_ANON_METHOD_OPTION:
+			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_anon_methods); i++) {
+				if (strcmp(ipv6calc_anon_methods[i].name, optarg) == 0) {
+					ipv6calc_anon_set_p->method = ipv6calc_anon_methods[i].method;
+					snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name) -1, "%s", "custom");
+					break;
+				};
+			};
+
+			if (i == MAXENTRIES_ARRAY(ipv6calc_anon_methods)) {
+				fprintf(stderr, "anonymization method not supported: %s\n", optarg);
+				exit(EXIT_FAILURE);
+			};
+			result = 0;
+			break;
+	};
+
+	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Return with result: %d", result);
 
 	return(result);
 };
@@ -245,7 +319,7 @@ int ipv6calcoptions(const int opt, const char *optarg, const struct option longo
 const char *ipv6calcoption_name(const int opt, const struct option longopts[]) {
 	int i = 0;
 
-	DEBUGPRINT(DEBUG_ipv6calcoptions, "%s/%s: Called opt=%d\n", __FILE__, __func__, opt);
+	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Called opt=%d\n", opt);
 
 	while (longopts[i].name != NULL) {
 		if (opt == longopts[i].val) {

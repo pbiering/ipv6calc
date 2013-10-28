@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2013/10/26 14:33:54 ds6peter Exp $
+$Id: README,v 1.8 2013/10/28 20:10:17 ds6peter Exp $
 
 ipv6loganon is a HTTP server log file anonymizer
 
@@ -57,7 +57,10 @@ httpd.conf:
 	# Default log
 	CustomLog "|/usr/sbin/cronolog /var/log/httpd/access.log-%Y%m%d" combined
 
-	# Chained piped log (works with Apache 2.0/2.2, looks like unsupported on 2.4.6 from Fedora 19)
+	# Chained piped log (works with Apache 2.0/2.2)
 	CustomLog "|/usr/bin/ipv6loganon -f |/usr/sbin/cronolog /var/log/httpd/access.log-%Y%m%d" combined
+
+	# Chained piped log (works with Apache >= 2.4, see https://httpd.apache.org/docs/2.4/logs.html#piped)
+	CustomLog "|$/usr/bin/ipv6loganon -f |/usr/sbin/cronolog /var/log/httpd/access.log-%Y%m%d" combined
 
  See also example file in ../examples/apache/

@@ -279,62 +279,62 @@ HREF="#AEN342"
 ></DD
 ><DT
 >12. <A
-HREF="#AEN354"
+HREF="#AEN356"
 >Perl CGI wrapper program "ipv6calcweb.cgi"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >12.1. <A
-HREF="#AEN357"
+HREF="#AEN359"
 >Examples</A
 ></DT
 ></DL
 ></DD
 ><DT
 >13. <A
-HREF="#AEN373"
+HREF="#AEN375"
 >Webserver log statistics helper program "ipv6logstats"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >13.1. <A
-HREF="#AEN377"
+HREF="#AEN379"
 >Supported options</A
 ></DT
 ><DT
 >13.2. <A
-HREF="#AEN380"
+HREF="#AEN382"
 >Usage</A
 ></DT
 ><DT
 >13.3. <A
-HREF="#AEN383"
+HREF="#AEN385"
 >Examples</A
 ></DT
 ></DL
 ></DD
 ><DT
 >14. <A
-HREF="#AEN387"
+HREF="#AEN389"
 >History</A
 ></DT
 ><DD
 ><DL
 ><DT
 >14.1. <A
-HREF="#AEN390"
+HREF="#AEN392"
 >2013</A
 ></DT
 ><DT
 >14.2. <A
-HREF="#AEN399"
+HREF="#AEN401"
 >2011</A
 ></DT
 ><DT
 >14.3. <A
-HREF="#AEN416"
+HREF="#AEN418"
 >2010 and older</A
 ></DT
 ></DL
@@ -2085,12 +2085,12 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="AEN347"
->11.4.2. On-the-fly online anonymization</A
+>11.4.2. On-the-fly online anonymization for Apache Webserver</A
 ></H4
 ><P
 >(Supported since 0.90.0)</P
 ><P
->Adjust httpd.conf like following:</P
+>Adjust or add (note: more than one CustomLog directive is supported by Apache) httpd.conf like following:</P
 ><TABLE
 BORDER="1"
 BGCOLOR="#E0E0E0"
@@ -2107,7 +2107,7 @@ CLASS="SCREEN"
 ></TR
 ></TABLE
 ><P
->In case of &#8220;cronolog&#8221; is used on the system, configure like this:</P
+>In case of &#8220;cronolog&#8221; is used on the system, configure like this (Apache &#60; 2.4):</P
 ><TABLE
 BORDER="1"
 BGCOLOR="#E0E0E0"
@@ -2123,6 +2123,23 @@ CLASS="SCREEN"
 ></TD
 ></TR
 ></TABLE
+><P
+>In case of &#8220;cronolog&#8221; is used on the system, configure like this (Apache &#62;= 2.4):</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+>CustomLog "|$/usr/bin/ipv6loganon -f |/usr/sbin/cronolog /var/log/httpd/access.log-%Y%m%d" combined </PRE
+></FONT
+></TD
+></TR
+></TABLE
 ></DIV
 ></DIV
 ></DIV
@@ -2131,7 +2148,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN354"
+NAME="AEN356"
 >12. Perl CGI wrapper program "ipv6calcweb.cgi"</A
 ></H2
 ><P
@@ -2141,7 +2158,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN357"
+NAME="AEN359"
 >12.1. Examples</A
 ></H3
 ><P
@@ -2189,7 +2206,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN373"
+NAME="AEN375"
 >13. Webserver log statistics helper program "ipv6logstats"</A
 ></H2
 ><P
@@ -2201,7 +2218,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN377"
+NAME="AEN379"
 >13.1. Supported options</A
 ></H3
 ><TABLE
@@ -2250,7 +2267,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN380"
+NAME="AEN382"
 >13.2. Usage</A
 ></H3
 ><P
@@ -2261,7 +2278,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN383"
+NAME="AEN385"
 >13.3. Examples</A
 ></H3
 ><P
@@ -2277,7 +2294,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN387"
+NAME="AEN389"
 >14. History</A
 ></H2
 ><P
@@ -2287,7 +2304,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN390"
+NAME="AEN392"
 >14.1. 2013</A
 ></H3
 ><P
@@ -2312,7 +2329,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN399"
+NAME="AEN401"
 >14.2. 2011</A
 ></H3
 ><P
@@ -2353,7 +2370,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN416"
+NAME="AEN418"
 >14.3. 2010 and older</A
 ></H3
 ><P

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.26 2013/10/22 20:52:16 ds6peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.27 2013/10/28 20:10:17 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -97,6 +97,7 @@ int main(int argc,char *argv[]) {
 	ipv6calc_debug_from_env();
 
 	/* add options */
+	ipv6calc_options_add_common_anon(shortopts, sizeof(shortopts), longopts, &longopts_maxentries);
 	ipv6calc_options_add(shortopts, sizeof(shortopts), longopts, &longopts_maxentries, ipv6logconv_shortopts, ipv6logconv_longopts, MAXENTRIES_ARRAY(ipv6logconv_longopts));
 
 	if (argc <= 1) {
@@ -111,7 +112,7 @@ int main(int argc,char *argv[]) {
 		};
 
 		/* catch common options */
-		result = ipv6calcoptions(i, optarg, longopts);
+		result = ipv6calcoptions_common_basic(i, optarg, longopts);
 		if (result == 0) {
 			// found
 			continue;
@@ -123,10 +124,6 @@ int main(int argc,char *argv[]) {
 
 			case 'v':
 				command |= CMD_printversion;
-				break;
-
-			case 'q':
-				ipv6calc_quiet = 1;
 				break;
 
 			case 'h':

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.27 2013/09/28 20:32:40 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.h,v 1.28 2013/10/28 20:10:17 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -28,6 +28,10 @@ extern int ipv6calc_quiet;
 extern void ipv6calc_debug_from_env(void);
 
 extern const char *ipv6calcoption_name(const int opt, const struct option longopts_p[]);
-extern int ipv6calcoptions(const int opt, const char *optarg, const struct option longopts[]);
+
+extern int ipv6calcoptions_common_basic(const int opt, const char *optarg, const struct option longopts[]);
+extern int ipv6calcoptions_common_anon(const int opt, const char *optarg, const struct option longopts[], s_ipv6calc_anon_set *ipv6calc_anon_set_p);
 
 extern void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct option longopts[], int *maxentries_p, const char *shortopts_custom, const struct option longopts_custom[], const int longopts_custom_entries);
+extern void ipv6calc_options_add_common_anon(char *shortopts_p, const int shortopts_maxlen, struct option longopts[], int *maxentries_p);
+extern void ipv6calc_options_add_common_basic(char *shortopts_p, const int shortopts_maxlen, struct option longopts[], int *maxentries_p);

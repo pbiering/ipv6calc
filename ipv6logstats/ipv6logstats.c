@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.47 2013/10/22 18:59:55 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.48 2013/10/28 20:10:17 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -141,13 +141,14 @@ int main(int argc,char *argv[]) {
 	ipv6calc_debug_from_env();
 
 	/* add options */
+	ipv6calc_options_add_common_basic(shortopts, sizeof(shortopts), longopts, &longopts_maxentries);
 	ipv6calc_options_add(shortopts, sizeof(shortopts), longopts, &longopts_maxentries, ipv6logstats_shortopts, ipv6logstats_longopts, MAXENTRIES_ARRAY(ipv6logstats_longopts));
 
 	/* Fetch the command-line arguments. */
 	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {
 
 		/* catch common options */
-		result = ipv6calcoptions(i, optarg, longopts);
+		result = ipv6calcoptions_common_basic(i, optarg, longopts);
 		if (result == 0) {
 			// found
 			continue;

@@ -3187,7 +3187,7 @@ $ cat /path/to/http_log | ./ipv6loganon >/path/to/http_log_anonymized
 \end_layout
 
 \begin_layout Subsubsection
-On-the-fly online anonymization
+On-the-fly online anonymization for Apache Webserver
 \end_layout
 
 \begin_layout Standard
@@ -3195,7 +3195,8 @@ On-the-fly online anonymization
 \end_layout
 
 \begin_layout Standard
-Adjust httpd.conf like following:
+Adjust or add (note: more than one CustomLog directive is supported by Apache)
+ httpd.conf like following:
 \end_layout
 
 \begin_layout Code
@@ -3213,13 +3214,31 @@ cronolog
 \begin_inset Quotes erd
 \end_inset
 
- is used on the system, configure like this:
+ is used on the system, configure like this (Apache < 2.4):
 \end_layout
 
 \begin_layout Code
 
 CustomLog "|/usr/bin/ipv6loganon -f |/usr/sbin/cronolog /var/log/httpd/access.log
 -%Y%m%d" combined 
+\end_layout
+
+\begin_layout Standard
+In case of 
+\begin_inset Quotes eld
+\end_inset
+
+cronolog
+\begin_inset Quotes erd
+\end_inset
+
+ is used on the system, configure like this (Apache >= 2.4):
+\end_layout
+
+\begin_layout Code
+
+CustomLog "|$/usr/bin/ipv6loganon -f |/usr/sbin/cronolog /var/log/httpd/access.lo
+g-%Y%m%d" combined 
 \end_layout
 
 \begin_layout Section

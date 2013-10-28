@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.46 2013/10/19 13:58:09 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.47 2013/10/28 20:10:17 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -352,20 +352,20 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	};
 
 	if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_COUNTRY_EDITION_V6) == 1) {
-		DEBUGPRINT(DEBUG_libipv6addr_db_wrapper_GeoIP, "%s/%s: GeoIP database GEOIP_COUNTRY_EDITION_V6 available\n", __FILE__, __func__);
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper_GeoIP, "GeoIP database GEOIP_COUNTRY_EDITION_V6 available");
 		geoip_country_v6 = 1;
 		wrapper_features_GeoIP |= IPV6CALC_DB_IPV6_TO_CC;
 	};
 
 	if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_ASNUM_EDITION) == 1) {
-		DEBUGPRINT(DEBUG_libipv6addr_db_wrapper_GeoIP, "%s/%s: GeoIP database GEOIP_ASNUM_EDITION available\n", __FILE__, __func__);
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper_GeoIP, "GeoIP database GEOIP_ASNUM_EDITION available");
 		geoip_asnum_v4 = 1;
 		wrapper_features_GeoIP |= IPV6CALC_DB_IPV4_TO_AS;
 	};
 
 	if ((lib_features_GeoIP & (GEOIP_LIB_FEATURE_IPV6_CC_BY_ADDR | GEOIP_LIB_FEATURE_IPV6_CC_BY_ADDR)) != 0) {
 		if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_ASNUM_EDITION_V6) == 1) {
-			DEBUGPRINT(DEBUG_libipv6addr_db_wrapper_GeoIP, "%s/%s: GeoIP database GEOIP_ASNUM_EDITION_V6 available\n", __FILE__, __func__);
+			DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper_GeoIP, "GeoIP database GEOIP_ASNUM_EDITION_V6 available");
 			geoip_asnum_v6 = 1;
 			wrapper_features_GeoIP |= IPV6CALC_DB_IPV6_TO_AS;
 		};
@@ -708,7 +708,7 @@ void libipv6calc_db_wrapper_GeoIP_setup_custom_directory(char *dir) {
 		fprintf(stderr, "%s/%s: Returned from libipv6calc_db_wrapper_GeoIP_cleanup\n", __FILE__, __func__);
 	};
 
-	DEBUGPRINT(DEBUG_libipv6addr_db_wrapper_GeoIP, "%s/%s: Call dl_GeoIP_setup_custom_directory: %s\n", __FILE__, __func__, dir);
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper_GeoIP, "Call dl_GeoIP_setup_custom_directory: %s", dir);
 
 	(*dl_GeoIP_setup_custom_directory.func)(dir);
 
@@ -724,7 +724,7 @@ END_libipv6calc_db_wrapper:
 	GeoIP_setup_custom_directory(dir);
 #endif // SUPPORT_GEOIP_DYN
 
-	DEBUGPRINT(DEBUG_libipv6addr_db_wrapper_GeoIP, "%s/%s: Call libipv6calc_db_wrapper_GeoIP_db_avail (to trigger _GeoIP_setup_dbfilename) for db type: %d\n", __FILE__, __func__, GEOIP_COUNTRY_EDITION);
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper_GeoIP, "Call libipv6calc_db_wrapper_GeoIP_db_avail (to trigger _GeoIP_setup_dbfilename) for db type: %d", GEOIP_COUNTRY_EDITION);
 
 	r = libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_COUNTRY_EDITION); // dummy call to trigger _GeoIP_setup_dbfilename
 
@@ -747,7 +747,7 @@ END_libipv6calc_db_wrapper:
 		};
 	};
 
-	DEBUGPRINT(DEBUG_libipv6addr_db_wrapper_GeoIP, "%s/%s: Finished: %s with dir: %s\n", __FILE__, __func__, wrapper_geoip_info, dir);
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper_GeoIP, "Finished: %s with dir: %s\n", wrapper_geoip_info, dir);
 	return;
 };
 
@@ -757,7 +757,7 @@ END_libipv6calc_db_wrapper:
  * ret: 1=avail  0=not-avail
  */
 int libipv6calc_db_wrapper_GeoIP_db_avail(int type) {
-	DEBUGPRINT(DEBUG_libipv6addr_db_wrapper_GeoIP, "%s/%s: Called: %s type=%d (desc: %s)\n", __FILE__, __func__, wrapper_geoip_info, type, libipv6calc_db_wrapper_GeoIPDBDescription[type]);
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper_GeoIP, "Called: %s type=%d (desc: %s)", wrapper_geoip_info, type, libipv6calc_db_wrapper_GeoIPDBDescription[type]);
 
 #ifdef SUPPORT_GEOIP_DYN
 	int result_GeoIP_db_avail = 0;

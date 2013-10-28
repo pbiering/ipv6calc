@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.98 2013/10/28 07:25:31 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.99 2013/10/28 20:10:17 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -45,14 +45,9 @@
 #include "GeoIPCity.h"
 extern int use_geoip_ipv4;
 extern int use_geoip_ipv6;
-extern char file_geoip_ipv4[NI_MAXHOST];
-extern char file_geoip_ipv6[NI_MAXHOST];
 #endif
 
 /* from anonymizer */
-extern int mask_ipv6;
-extern int mask_ipv4;
-extern int mask_iid;
 extern s_ipv6calc_anon_set ipv6calc_anon_set;
 
 /*
@@ -662,9 +657,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 #ifdef SUPPORT_GEOIP
 		/* GeoIP information */
-		if (use_geoip_ipv4 != 0) {
-			print_geoip(tempipv4string, formatoptions, embeddedipv4string, 4);
-		};
+		print_geoip(tempipv4string, formatoptions, embeddedipv4string, 4);
 #endif
 	};
 
@@ -1352,9 +1345,7 @@ END:
 
 	#ifdef SUPPORT_GEOIP
 			/* GeoIP information */
-			if (use_geoip_ipv6 != 0) {
-				print_geoip(ipv6addrstring, formatoptions, "", 6);
-			};
+			print_geoip(ipv6addrstring, formatoptions, "", 6);
 	#endif
 		};
 	};

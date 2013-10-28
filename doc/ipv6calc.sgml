@@ -563,12 +563,14 @@ Takes data from stdin, outputs the processed data to stdout (default)
 <screen>
 <![CDATA[$ cat /path/to/http_log | ./ipv6loganon >/path/to/http_log_anonymized
 ]]></screen></sect3><sect3>
-<title>On-the-fly online anonymization</title>
+<title>On-the-fly online anonymization for Apache Webserver</title>
 <para>(Supported since 0.90.0)</para>
-<para>Adjust httpd.conf like following:</para><screen>
+<para>Adjust or add (note: more than one CustomLog directive is supported by Apache) httpd.conf like following:</para><screen>
 <![CDATA[CustomLog "|/usr/local/bin/ipv6loganon -a -f /var/log/httpd/access_log" combined
-]]></screen><para>In case of &ldquo;cronolog&rdquo; is used on the system, configure like this:</para><screen>
+]]></screen><para>In case of &ldquo;cronolog&rdquo; is used on the system, configure like this (Apache &lt; 2.4):</para><screen>
 <![CDATA[CustomLog "|/usr/bin/ipv6loganon -f |/usr/sbin/cronolog /var/log/httpd/access.log-%Y%m%d" combined 
+]]></screen><para>In case of &ldquo;cronolog&rdquo; is used on the system, configure like this (Apache &gt;= 2.4):</para><screen>
+<![CDATA[CustomLog "|$/usr/bin/ipv6loganon -f |/usr/sbin/cronolog /var/log/httpd/access.log-%Y%m%d" combined 
 ]]></screen></sect3></sect2></sect1><sect1>
 <title>Perl CGI wrapper program "ipv6calcweb.cgi"</title>
 <para>Because calling C programs directly as CGI isn't really recommended (too much security troubles all the time), I wrote a small wrapper utility which calls "ipv6calc" to get information about client and server address for displaying on a web page. </para><sect2>

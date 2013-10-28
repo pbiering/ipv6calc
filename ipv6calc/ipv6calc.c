@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.97 2013/10/28 07:25:31 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.98 2013/10/28 20:10:17 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -23,7 +23,6 @@
 #include "ipv6calcoptions_local.h"
 #include "ipv6calchelp.h"
 #include "ipv6calchelp_local.h"
-#include "ipv6calcoptions_common.h"
 
 #include "libipv4addr.h"
 #include "libipv6addr.h"
@@ -78,21 +77,6 @@ int input_is_pipe = 0;
 
 /* anonymization default values */
 s_ipv6calc_anon_set ipv6calc_anon_set;
-int mask_ipv4;
-int mask_ipv6;
-int mask_iid;
-int mask_mac;
-
-int  use_ip2location_ipv4 = 0; /* if set to 1, IP2Location IPv4 is enabled by option(s) */
-int  use_ip2location_ipv6 = 0; /* if set to 1, IP2Location IPv6 is enabled by option(s) */
-
-#ifdef SUPPORT_GEOIP_DYN
-int  use_geoip_ipv4 = -1; /* if set to 1, GeoIP IPv4 is enabled by option(s) */
-int  use_geoip_ipv6 = -1; /* if set to 1, GeoIP IPv6 is enabled by option(s) */
-#else
-int  use_geoip_ipv4 = -1; /* if set to 1, GeoIP IPv4 is enabled by option(s) */
-int  use_geoip_ipv6 = -1; /* if set to 1, GeoIP IPv6 is enabled by option(s) */
-#endif
 
 /* features */
 int feature_zeroize = 1; // always supported
@@ -161,8 +145,9 @@ int main(int argc, char *argv[]) {
 	ipv6calc_debug_from_env();
 
 	/* add options */
+	ipv6calc_options_add_common_anon(shortopts, sizeof(shortopts), longopts, &longopts_maxentries);
+	ipv6calc_options_add_common_basic(shortopts, sizeof(shortopts), longopts, &longopts_maxentries);
 	ipv6calc_options_add(shortopts, sizeof(shortopts), longopts, &longopts_maxentries, ipv6calc_shortopts, ipv6calc_longopts, MAXENTRIES_ARRAY(ipv6calc_longopts));
-	ipv6calc_options_add(shortopts, sizeof(shortopts), longopts, &longopts_maxentries, ipv6calc_shortopts_common_anon, ipv6calc_longopts_common_anon, MAXENTRIES_ARRAY(ipv6calc_longopts_common_anon));
 
 	/* default */
 	result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, ANONPRESET_DEFAULT);
@@ -192,8 +177,15 @@ int main(int argc, char *argv[]) {
 			fprintf(stderr, "%s/%s: Parsing option: 0x%08x\n", __FILE__, __func__, i);
 		};
 
-		/* catch common options */
-		result = ipv6calcoptions(i, optarg, longopts);
+		/* catch "common basic" options */
+		result = ipv6calcoptions_common_basic(i, optarg, longopts);
+		if (result == 0) {
+			// found
+			continue;
+		};
+
+		/* catch "common anon" options */
+		result = ipv6calcoptions_common_anon(i, optarg, longopts, &ipv6calc_anon_set);
 		if (result == 0) {
 			// found
 			continue;
@@ -358,95 +350,6 @@ int main(int argc, char *argv[]) {
 
 			case CMD_showinfotypes:
 				command = CMD_showinfotypes;
-				break;
-
-			case CMD_ANON_MASK_IID:
-				mask_iid = 1;
-				mask_iid = atoi(optarg);
-				if (mask_iid < 0 || mask_iid > 64) {
-					fprintf(stderr, " value for option 'mask-iid' out-of-range  [0-64]\n");
-					exit(EXIT_FAILURE);
-				};
-				ipv6calc_anon_set.mask_iid = mask_iid;
-				snprintf(ipv6calc_anon_set.name, sizeof(ipv6calc_anon_set.name) - 1, "%s", "custom");
-				break;
-
-			case CMD_ANON_MASK_IPV4:
-				mask_ipv4 = atoi(optarg);
-				if (mask_ipv4 < 0 || mask_ipv4 > 32) {
-					fprintf(stderr, " value for option 'mask-ipv4' out-of-range  [0-32]\n");
-					exit(EXIT_FAILURE);
-				};
-				ipv6calc_anon_set.mask_ipv4 = mask_ipv4;
-				snprintf(ipv6calc_anon_set.name, sizeof(ipv6calc_anon_set.name) - 1, "%s", "custom");
-				break;
-
-			case CMD_ANON_MASK_IPV6:
-				mask_ipv6 = atoi(optarg);
-				if (mask_ipv6 < 0 || mask_ipv6 > 64) {
-					fprintf(stderr, " value for option 'mask-ipv6' out-of-range  [0-64]\n");
-					exit(EXIT_FAILURE);
-				};
-				ipv6calc_anon_set.mask_ipv6 = mask_ipv6;
-				snprintf(ipv6calc_anon_set.name, sizeof(ipv6calc_anon_set.name) - 1, "%s", "custom");
-				break;
-
-			case CMD_ANON_MASK_MAC:
-				mask_mac = atoi(optarg);
-				if (mask_mac < 0 || mask_mac > 48) {
-					fprintf(stderr, " value for option 'mask-mac' out-of-range  [0-48]\n");
-					exit(EXIT_FAILURE);
-				};
-				ipv6calc_anon_set.mask_mac = mask_mac;
-				snprintf(ipv6calc_anon_set.name, sizeof(ipv6calc_anon_set.name) - 1, "%s", "custom");
-				break;
-
-			case CMD_ANON_PRESET_STANDARD:
-				result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, "as");
-				if (result != 0) {
-					fprintf(stderr, "ipv6calc anonymization preset not found: anonymize-standard\n");
-					exit(EXIT_FAILURE);
-				};
-				break;
-
-			case CMD_ANON_PRESET_CAREFUL:
-				result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, "ac");
-				if (result != 0) {
-					fprintf(stderr, "ipv6calc anonymization preset not found: anonymize-careful\n");
-					exit(EXIT_FAILURE);
-				};
-				break;
-
-			case CMD_ANON_PRESET_PARANOID:
-				result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, "ap");
-				if (result != 0) {
-					fprintf(stderr, "ipv6calc anonymization preset not found: anonymize-paranoid\n");
-					exit(EXIT_FAILURE);
-				};
-				break;
-
-			case CMD_ANON_PRESET_OPTION:
-				result = libipv6calc_anon_set_by_name(&ipv6calc_anon_set, optarg);
-				if (result != 0) {
-					fprintf(stderr, "ipv6calc anonymization preset not found: %s\n", optarg);
-					exit(EXIT_FAILURE);
-				};
-				break;
-
-			case CMD_ANON_METHOD_OPTION:
-				for (i = 0; i < sizeof(ipv6calc_anon_methods) / sizeof(s_ipv6calc_anon_methods); i++) {
-					if (strcmp(ipv6calc_anon_methods[i].name, optarg) == 0) {
-						ipv6calc_anon_set.method = ipv6calc_anon_methods[i].method;
-						snprintf(ipv6calc_anon_set.name, sizeof(ipv6calc_anon_set.name) -1, "%s", "custom");
-						break;
-					};
-				};
-
-				if (i == sizeof(ipv6calc_anon_methods) / sizeof(s_ipv6calc_anon_methods)) {
-					fprintf(stderr, "ipv6calc anonymization method not supported: %s\n", optarg);
-					exit(EXIT_FAILURE);
-				};
-
 				break;
 
 			case CMD_6rd_relay_prefix:

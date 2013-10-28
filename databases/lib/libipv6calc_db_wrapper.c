@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.28 2013/10/26 17:16:35 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.29 2013/10/28 20:10:17 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -378,7 +378,7 @@ char *libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int pr
 
 	if (wrapper_GeoIP_status == 1) {
 #ifdef SUPPORT_GEOIP
-		DEBUGPRINT(DEBUG_libipv6addr_db_wrapper, "%s/%s: Call now GeoIP\n", __FILE__, __func__);
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "Call now GeoIP");
 
 		result_char_ptr = (char *) libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(addr, proto);
 #endif
@@ -386,7 +386,7 @@ char *libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int pr
 		// fallback
 		if (wrapper_IP2Location_status == 1) {
 #ifdef SUPPORT_IP2LOCATION
-			DEBUGPRINT(DEBUG_libipv6addr_db_wrapper, "%s/%s: Call now IP2Location\n", __FILE__, __func__);;
+			DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "Call now IP2Location");;
 
 			result_char_ptr = libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr((char *) addr, proto);
 #endif
