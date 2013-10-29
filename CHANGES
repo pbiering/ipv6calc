@@ -44,6 +44,8 @@ Major Changes/Enhancements of ipv6calc
 	--with-geoip-ipv4-default-file=file
 	--with-geoip-ipv6-default-file=file
 
+- add support for anonymization of EUI-64 addresses
+
 ipv6calcweb.cgi
 - remove support for environment values
    HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV4
@@ -69,3 +71,8 @@ ipv6calcweb.cgi
    GEOIP_DATABASE_INFO_IPV6 (replaced)
    GEOIP_DATABASE_INFO (reintroduced)
    IPV6CALC_OUTPUT_VERSION=7
+
+
+0.93 -> 0.94
+============
+- add OUI-36 database support

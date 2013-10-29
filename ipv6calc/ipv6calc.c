@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.98 2013/10/28 20:10:17 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.99 2013/10/29 21:56:30 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1178,6 +1178,13 @@ PIPE_input:
 					exit(EXIT_FAILURE);
 				};
 				libmacaddr_anonymize(&macaddr, ipv6calc_anon_set.mask_mac);
+			} else if (inputtype == FORMAT_eui64 && outputtype == FORMAT_eui64) {
+				/* anonymize EUI-64 address */
+				if (eui64addr.flag_valid != 1) {
+					fprintf(stderr, "No valid EUI-64 address given!\n");
+					exit(EXIT_FAILURE);
+				};
+				libeui64_anonymize(&eui64addr, &ipv6calc_anon_set);
 			} else {
 				fprintf(stderr, "Unsupported anonymization!\n");
 				exit(EXIT_FAILURE);
@@ -1468,12 +1475,18 @@ PIPE_input:
 			break;
 			
 		case FORMAT_eui64:
-			if (ipv6calc_debug != 0) { fprintf(stderr, "%s: Start of output handling for FORMAT_eui64\n", DEBUG_function_name); }
-			if (action != ACTION_mac_to_eui64) { fprintf(stderr, "Specify proper action or input for output format: eui64\n"); exit(EXIT_FAILURE); };
-			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid EUI-64 identifier given!\n"); exit(EXIT_FAILURE); };
-			if (ipv6addr.prefixlength != 64) { fprintf(stderr, "No valid EUI-64 identifier given!\n"); exit(EXIT_FAILURE); };
-			formatoptions |= FORMATOPTION_printsuffix;
-			retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, formatoptions);
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_eui64");
+
+			if (action == ACTION_mac_to_eui64) {
+				if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid EUI-64 identifier given!\n"); exit(EXIT_FAILURE); };
+				if (ipv6addr.prefixlength != 64) { fprintf(stderr, "No valid EUI-64 identifier given!\n"); exit(EXIT_FAILURE); };
+				formatoptions |= FORMATOPTION_printsuffix;
+				retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, formatoptions);
+			} else if (action == ACTION_anonymize) {
+				retval = libeui64_eui64addrstruct_to_string(&eui64addr, resultstring, formatoptions);
+			} else {
+				fprintf(stderr, "Specify proper action or input for output format: eui64\n"); exit(EXIT_FAILURE);
+			};
 			break;
 			
 		case FORMAT_mac:

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calcdebug.h
- * Version    : $Id: libipv6calcdebug.h,v 1.12 2013/10/28 20:10:17 ds6peter Exp $
+ * Version    : $Id: libipv6calcdebug.h,v 1.13 2013/10/29 21:56:30 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -30,8 +30,11 @@
 #define DEBUG_librfc1884				0x00000200l
 #define DEBUG_librfc2874				0x00000400l
 #define DEBUG_librfc1886				0x00000800l
+
 #define DEBUG_librfc3056				0x00001000l
 #define DEBUG_libifinet6				0x00002000l
+#define DEBUG_libieee					0x00004000l
+#define DEBUG_libeui64					0x00008000l
 
 #define DEBUG_libipv6addr_iidrandomdetection		0x00010000l
 #define DEBUG_libipv6addr_anonymization_unknown_break	0x00020000l

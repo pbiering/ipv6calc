@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libeui64.c
- * Version    : $Id: libeui64.c,v 1.4 2013/04/10 18:30:52 ds6peter Exp $
+ * Version    : $Id: libeui64.c,v 1.5 2013/10/29 21:56:30 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -13,6 +13,7 @@
 #include <stdlib.h>
 
 #include "libeui64.h"
+#include "libieee.h"
 
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
@@ -20,19 +21,17 @@
 
 static char ChSet[] = "0123456789abcdefABCDEF:- ";
 
+
 /* function MAC address to EUI format
  *
  * in : macaddrp
  * out: ipv6addrp
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libeui64/create_eui64_from_mac"
 int create_eui64_from_mac(ipv6calc_ipv6addr *ipv6addrp, ipv6calc_macaddr *macaddrp) {
 	int retval = 1;
 
-	if ( ipv6calc_debug != 0 ) {
-		fprintf(stderr, "%s: called\n", DEBUG_function_name);
-	};
+	DEBUGPRINT_NA(DEBUG_libeui64, "called");
 
 	/* clear IPv6 structure */
 	ipv6addr_clear(ipv6addrp);
@@ -56,7 +55,37 @@ int create_eui64_from_mac(ipv6calc_ipv6addr *ipv6addrp, ipv6calc_macaddr *macadd
    	retval = 0;	
 	return (retval);
 };
-#undef DEBUG_function_name
+
+
+/*
+ * stores the EUI-64 structure in a string
+ *
+ * in:  eui64addr_p = EUI-64 address structure ptr
+ * out: *resultstring = EUI-64 address string
+ * ret: ==0: ok, !=0: error
+ */
+int libeui64_eui64addrstruct_to_string(const ipv6calc_eui64addr *eui64addr_p, char *resultstring, const uint32_t formatoptions) {
+	char tempstring[NI_MAXHOST];
+
+	/* address */
+	snprintf(tempstring, sizeof(tempstring), "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x", \
+		(unsigned int) eui64addr_p->addr[0],	\
+		(unsigned int) eui64addr_p->addr[1],	\
+		(unsigned int) eui64addr_p->addr[2],	\
+		(unsigned int) eui64addr_p->addr[3],	\
+		(unsigned int) eui64addr_p->addr[4],	\
+		(unsigned int) eui64addr_p->addr[5],	\
+		(unsigned int) eui64addr_p->addr[6],	\
+		(unsigned int) eui64addr_p->addr[7]);
+
+	if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
+		snprintf(resultstring, NI_MAXHOST, "EUI64=%s", tempstring);
+	} else {
+		snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
+	};
+
+	return(0);
+};
 
 
 /* function 48-bit EUI-64 address to eui64addr_structure
@@ -69,6 +98,8 @@ int libeui64_addr_to_eui64addrstruct(char *addrstring, char *resultstring, ipv6c
 	int retval = 1, result, i, ccolons = 0, cdashes = 0, cspaces = 0;
 	size_t cnt;
 	int temp[8];
+
+	DEBUGPRINT_NA(DEBUG_libeui64, "called");
 
 	/* check length */
 	if ( ( strlen(addrstring) < 15 ) || ( strlen(addrstring) > 23 ) ) {
@@ -144,6 +175,7 @@ int libeui64_addr_to_eui64addrstruct(char *addrstring, char *resultstring, ipv6c
 	return (retval);
 };
 
+
 /* 
  * clear EUI-64 addr
  *
@@ -152,12 +184,15 @@ int libeui64_addr_to_eui64addrstruct(char *addrstring, char *resultstring, ipv6c
 void libeui64_clear(ipv6calc_eui64addr *eui64addrp) {
 	int i;
 
+	DEBUGPRINT_NA(DEBUG_libeui64, "called");
+
 	for ( i = 0; i <= 7; i++ ) {
 		eui64addrp->addr[i] = 0;
 	};  
 
 	return;
 };
+
 
 /* 
  * clear EUI64 addr_structure
@@ -167,9 +202,66 @@ void libeui64_clear(ipv6calc_eui64addr *eui64addrp) {
 void libeui64_clearall(ipv6calc_eui64addr *eui64addrp) {
 	libeui64_clear(eui64addrp);
 
+	DEBUGPRINT_NA(DEBUG_libeui64, "called");
+
 	/* Clear valid flag */
 	eui64addrp->flag_valid = 0;
 
+	return;
+};
+
+
+/* 
+ * anonymize EUI64 addr
+ *
+ * mod: *addrstring = EUI64 address
+ */
+void libeui64_anonymize(ipv6calc_eui64addr *eui64addrp, const s_ipv6calc_anon_set *ipv6calc_anon_set_p) {
+	int mask = 0, i, j;
+
+	DEBUGPRINT_WA(DEBUG_libeui64, "called with: %08x%08x", EUI64_00_31(eui64addrp->addr), EUI64_32_63(eui64addrp->addr));
+
+	if ((eui64addrp->addr[0] & 0x2) == 0) {
+		// global address
+
+		if ((eui64addrp->addr[3] == 0xff) || (eui64addrp->addr[4] == 0xfe)) {
+			// expanded EUI-48
+			mask = 24; // 64 - 24 - 16 bits
+		} else {
+			mask = 40; // 64 - 24 bits
+		};
+
+		if (libieee_check_oui36_iab(EUI64_00_23(eui64addrp->addr)) == 1) {
+			// OUI-36/IAB
+			mask -= 12; // reduce by 12 bits
+		};
+
+		DEBUGPRINT_WA(DEBUG_libeui64, "EUI-64 is a global one, source of mask: automagic: %d", mask);
+	} else {
+		// local address, honor mask_iid
+		mask = ipv6calc_anon_set_p->mask_iid;
+		DEBUGPRINT_WA(DEBUG_libeui64, "EUI-64 is a local one, source of mask: mask-iid option: %d", mask);
+	};
+
+	DEBUGPRINT_WA(DEBUG_libeui64, "anonymize EUI-64 with masked bits: %d", mask);
+
+	j = mask >> 3;
+
+	for (i = 7; i >= 0; i--) {
+		DEBUGPRINT_WA(DEBUG_libeui64, "anonymize EUI-64: mask=%02d i=%d j=%d", mask, i, j);
+		if (j < i) {
+			DEBUGPRINT_WA(DEBUG_libeui64, "anonymize EUI-64: zeroize byte %d", i);
+			eui64addrp->addr[i] = 0x00;
+		} else if (j == i) {
+			DEBUGPRINT_WA(DEBUG_libeui64, "anonymize EUI-64: mask byte %d with %02x (offset: %d)", i, (0xff << (8 - (mask % 0x7))) & 0xff, (mask % 0x7));
+			eui64addrp->addr[i] &= (0xff << (8 - (mask % 0x7))) & 0xff;
+		} else {
+			DEBUGPRINT_NA(DEBUG_libeui64, "anonymize EUI-64: finished");
+			break;
+		};
+	};
+	
+	DEBUGPRINT_WA(DEBUG_libeui64, "anonymization finished, return: %08x%08x", EUI64_00_31(eui64addrp->addr), EUI64_32_63(eui64addrp->addr));
 	return;
 };
 

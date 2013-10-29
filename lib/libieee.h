@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.h
- * Version    : $Id: libieee.h,v 1.12 2013/05/12 07:34:04 ds6peter Exp $
+ * Version    : $Id: libieee.h,v 1.13 2013/10/29 21:56:30 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -64,3 +64,5 @@ extern uint32_t libieee_map_oui_macaddr(const ipv6calc_macaddr *macaddrp);
 extern uint32_t libieee_map_oui_eui64addr(const ipv6calc_eui64addr *eui64addrp);
 extern int libieee_unmap_oui_macaddr(ipv6calc_macaddr *macaddrp, uint32_t map_value);
 extern int libieee_unmap_oui_eui64addr(ipv6calc_eui64addr *eui64addrp, uint32_t map_value);
+
+extern int libieee_check_oui36_iab(const uint32_t bits_00_23);

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.16 2013/09/20 18:54:44 ds6peter Exp $
+ * Version    : $Id: libieee.c,v 1.17 2013/10/29 21:56:30 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -30,7 +30,6 @@
  * mod: resultstring
  * out: 0=found, 1=not found
  */
-#define DEBUG_function_name "libieee/get_vendor_string"
 int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macaddrp) {
 	int retval = 1;
 
@@ -39,9 +38,7 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
 	uint32_t idval, subidval;
 #endif
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: called\n", DEBUG_function_name);
-	};
+	DEBUGPRINT_NA(DEBUG_libieee, "called");
 
 	/* catch special ones */
 	if ((macaddrp->addr[0] == 0xfc && macaddrp->addr[1] == 0xfc)) {
@@ -60,7 +57,7 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
 	subidval = (macaddrp->addr[3] << 16) | (macaddrp->addr[4] << 8) | macaddrp->addr[5];
 
 	/* run through IAB list */
-	for (i = 0; i < (int) (sizeof(libieee_iab) / sizeof(libieee_iab[0])); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(libieee_iab); i++) {
 		if (libieee_iab[i].id == idval) {
 			/* major id match */
 			if (libieee_iab[i].subid_begin <= subidval && libieee_iab[i].subid_end >= subidval) {
@@ -71,7 +68,7 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
 	};
 
 	/* run through OUI36 list */
-	for (i = 0; i < (int) (sizeof(libieee_oui36) / sizeof(libieee_oui36[0])); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui36); i++) {
 		if (libieee_oui36[i].id == idval) {
 			/* major id match */
 			if (libieee_oui36[i].subid_begin <= subidval && libieee_oui36[i].subid_end >= subidval) {
@@ -82,7 +79,7 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
 	};
 
 	/* run through OUI list */
-	for (i = 0; i < (int) (sizeof(libieee_oui) / sizeof(libieee_oui[0])); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui); i++) {
 		if (libieee_oui[i].id == idval) {
 			/* match */
 			snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_oui[i].string_owner);
@@ -90,7 +87,7 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
 		};
 	};
 #else
-	snprintf(resultstring, NI_MAXHOST - 1, "(IEEE database not compiled in)");
+	snprintf(resultstring, NI_MAXHOST - 1, "(IEEE databases not compiled in)");
 	return (0);
 #endif
 
@@ -98,7 +95,7 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
    	retval = 1;	
 	return (retval);
 };
-#undef DEBUG_function_name
+
 
 /*
  * Get short vendor string
@@ -106,7 +103,6 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
  * mod: resultstring
  * out: 0=found, 1=not found
  */
-#define DEBUG_function_name "libieee/get_short_vendor_string"
 int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *macaddrp) {
 	int retval = 1;
 
@@ -115,9 +111,7 @@ int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *
 	uint32_t idval, subidval;
 #endif
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: called\n", DEBUG_function_name);
-	};
+	DEBUGPRINT_NA(DEBUG_libieee, "called");
 
 	/* catch special ones */
 	if ((macaddrp->addr[0] == 0xfc && macaddrp->addr[1] == 0xfc)) {
@@ -136,7 +130,7 @@ int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *
 	subidval = (macaddrp->addr[3] << 16) | (macaddrp->addr[4] << 8) | macaddrp->addr[5];
 
 	/* run through IAB list */
-	for (i = 0; i < (int) (sizeof(libieee_iab) / sizeof(libieee_iab[0])); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(libieee_iab); i++) {
 		if (libieee_iab[i].id == idval) {
 			/* major id match */
 			if (libieee_iab[i].subid_begin <= subidval && libieee_iab[i].subid_end >= subidval) {
@@ -147,7 +141,7 @@ int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *
 	};
 
 	/* run through OUI36 list */
-	for (i = 0; i < (int) (sizeof(libieee_oui36) / sizeof(libieee_oui36[0])); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui36); i++) {
 		if (libieee_oui36[i].id == idval) {
 			/* major id match */
 			if (libieee_oui36[i].subid_begin <= subidval && libieee_oui36[i].subid_end >= subidval) {
@@ -158,7 +152,7 @@ int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *
 	};
 
 	/* run through OUI list */
-	for (i = 0; i < (int) (sizeof(libieee_oui) / sizeof(libieee_oui[0])); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui); i++) {
 		if (libieee_oui[i].id == idval) {
 			/* match */
 			snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_oui[i].shortstring_owner);
@@ -166,7 +160,7 @@ int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *
 		};
 	};
 #else
-	snprintf(resultstring, NI_MAXHOST - 1, "(IEEE database not compiled in)");
+	snprintf(resultstring, NI_MAXHOST - 1, "(IEEE databases not compiled in)");
 	return (0);
 #endif
 
@@ -174,7 +168,32 @@ int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *
    	retval = 1;	
 	return (retval);
 };
-#undef DEBUG_function_name
+
+
+/*
+ * check for OUI-36/IAB
+ * in:  bits_00_23
+ * out: 0=not OUI-36/IAB, 1=is OUI-36/IAB
+ */
+int libieee_check_oui36_iab(const uint32_t bits_00_23) {
+	int r = 0, i;
+
+	DEBUGPRINT_WA(DEBUG_libieee, "called with bits_00_23=%06x", bits_00_23);
+
+	/* run through map */
+	for (i = 0; i < MAXENTRIES_ARRAY(ieee_mapping); i++) {
+		DEBUGPRINT_WA(DEBUG_libieee, "check against: %06x", ieee_mapping[i].bits_00_23);
+
+		if (ieee_mapping[i].bits_00_23 == bits_00_23) {
+			DEBUGPRINT_WA(DEBUG_libieee, "found entry in map: %06x", bits_00_23);
+			r = 1;
+			break;
+		};
+	};
+
+	return(r);
+};
+
 
 /*
  * map OUI-36/IAB
@@ -185,22 +204,17 @@ uint32_t libieee_map_oui36_iab(const uint32_t bits_00_23, const uint32_t bits_24
 	int i;
 	uint32_t map_value = bits_00_23;
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s/%s: called with bits_00_23=%06x bits_24_36=%03x\n", __FILE__, __func__, bits_00_23, bits_24_36);
-	};
+	DEBUGPRINT_WA(DEBUG_libieee, "called with bits_00_23=%06x bits_24_36=%03x", bits_00_23, bits_24_36);
 
 	/* run through map */
-	for (i = 0; i < (int) (sizeof(ieee_mapping) / sizeof(ieee_mapping[0])); i++) {
-		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "%s/%s: check against: %06x\n", __FILE__, __func__, ieee_mapping[i].bits_00_23);
-		};
+	for (i = 0; i < MAXENTRIES_ARRAY(ieee_mapping); i++) {
+		DEBUGPRINT_WA(DEBUG_libieee, "check against: %06x", ieee_mapping[i].bits_00_23);
+
 		if (ieee_mapping[i].bits_00_23 == bits_00_23) {
 			// hit, set flag (0x1mmmvvv), mapping number (mmm) and 12 bit vendor code
 			map_value = 0x1000000 | (bits_00_23 & 0xff0000) | (ieee_mapping[i].mapping << 12) | bits_24_36;
 
-			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "%s/%s: found entry in map: %06x -> %08x\n", __FILE__, __func__, bits_00_23, map_value);
-			};
+			DEBUGPRINT_WA(DEBUG_libieee, "found entry in map: %06x -> %08x", bits_00_23, map_value);
 
 			break;
 		};
