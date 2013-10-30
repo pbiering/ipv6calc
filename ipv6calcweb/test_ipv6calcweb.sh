@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ipv6calcweb
 # File       : test_ipv6calcweb.sh
-# Version    : $Id: test_ipv6calcweb.sh,v 1.10 2013/10/15 20:07:13 ds6peter Exp $
+# Version    : $Id: test_ipv6calcweb.sh,v 1.11 2013/10/30 20:04:25 ds6peter Exp $
 # Copyright  : 2012-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -15,8 +15,7 @@ if [ -z "$1" ]; then
 fi
 
 if [ ! -f ipv6calcweb.cgi ]; then
-	echo "ERROR : run make"
-	exit 1
+	make || exit 1
 fi
 if [ ! -x ipv6calcweb.cgi ]; then
 	chmod u+x ipv6calcweb.cgi

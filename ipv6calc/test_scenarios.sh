@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.35 2013/10/30 07:06:02 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.36 2013/10/30 20:04:25 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -282,28 +282,39 @@ testscenarios_anonymization_options() {
 --anonymize-standard			2001:db8:0123:4567:0250:c2ff:fe86:2345=2001:db8:123:4509:a929:4291:5021:8621
 --anonymize-standard			2001:db8:0123:4567:0250:c286:2345:4567=2001:db8:123:4509:a929:4291:7021:8626
 # EUI-64: local
---mask-eui64 0			12:34:56:78:9a:ff:ff:ff=00:00:00:00:00:00:00:00
---mask-eui64 31			12:34:56:ff:ff:ff:ff:ff=12:34:56:fe:00:00:00:00
---mask-eui64 32			12:34:56:ff:ff:ff:ff:ff=12:34:56:ff:00:00:00:00
---mask-eui64 33			12:34:56:ff:ff:ff:ff:ff=12:34:56:ff:80:00:00:00
---mask-eui64 55			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:fe:00
---mask-eui64 56			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:00
---mask-eui64 57			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:80
---mask-eui64 58			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:c0
---mask-eui64 59			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:e0
---mask-eui64 60			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:f0
---mask-eui64 61			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:f8
---mask-eui64 62			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:fc
---mask-eui64 63			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:fe
---mask-eui64 64			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:ff
+--anonymize-preset zs --mask-eui64 0			12:34:56:78:9a:ff:ff:ff=00:00:00:00:00:00:00:00
+--anonymize-preset zs --mask-eui64 31			12:34:56:ff:ff:ff:ff:ff=12:34:56:fe:00:00:00:00
+--anonymize-preset zs --mask-eui64 32			12:34:56:ff:ff:ff:ff:ff=12:34:56:ff:00:00:00:00
+--anonymize-preset zs --mask-eui64 33			12:34:56:ff:ff:ff:ff:ff=12:34:56:ff:80:00:00:00
+--anonymize-preset zs --mask-eui64 55			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:fe:00
+--anonymize-preset zs --mask-eui64 56			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:00
+--anonymize-preset zs --mask-eui64 57			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:80
+--anonymize-preset zs --mask-eui64 58			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:c0
+--anonymize-preset zs --mask-eui64 59			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:e0
+--anonymize-preset zs --mask-eui64 60			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:f0
+--anonymize-preset zs --mask-eui64 61			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:f8
+--anonymize-preset zs --mask-eui64 62			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:fc
+--anonymize-preset zs --mask-eui64 63			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:fe
+--anonymize-preset zs --mask-eui64 64			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:ff
+# EUI-48: local
+--anonymize-preset zs --mask-mac 0			12:34:56:78:9a:ff=00:00:00:00:00:00
+--anonymize-preset zs --mask-mac 31			12:34:56:ff:ff:ff=12:34:56:fe:00:00
+--anonymize-preset zs --mask-mac 32			12:34:56:ff:ff:ff=12:34:56:ff:00:00
+--anonymize-preset zs --mask-mac 33			12:34:56:ff:ff:ff=12:34:56:ff:80:00
 # EUI-64: global (OUI-24)
---anonymize-standard		00:02:b3:ff:ff:ff:ff:ff=00:02:b3:00:00:00:00:00
+--anonymize-preset zc		00:02:b3:ff:ff:ff:ff:ff=00:02:b3:00:00:00:00:00
 # EUI-64: global (OUI-24) expanded EUI-48
---anonymize-standard		00:02:b3:ff:fe:ff:ff:ff=00:02:b3:ff:fe:00:00:00
+--anonymize-preset zc		00:02:b3:ff:fe:ff:ff:ff=00:02:b3:ff:fe:00:00:00
 # EUI-64: global (OUI-36)
---anonymize-standard		00:1b:c5:03:df:ff:ff:ff=00:1b:c5:03:d0:00:00:00
+--anonymize-preset zc		00:1b:c5:03:df:ff:ff:ff=00:1b:c5:03:d0:00:00:00
 # EUI-64: global (OUI-36) expanded EUI-48
---anonymize-standard		00:1b:c5:ff:fe:03:df:ff=00:1b:c5:ff:fe:03:d0:00
+--anonymize-preset zc		00:1b:c5:ff:fe:03:df:ff=00:1b:c5:ff:fe:03:d0:00
+--anonymize-preset zc --mask-eui64 16 --mask-keep-oui no	00:1b:c5:ff:fe:03:df:ff=00:1b:00:00:00:00:00:00
+# EUI-48: global (OUI-24)
+--anonymize-preset zc		00:02:b3:ff:ff:ff=00:02:b3:00:00:00
+# EUI-48: global (OUI-36)
+--anonymize-preset zc		00:1b:c5:03:df:ff=00:1b:c5:03:d0:00
+--anonymize-preset zc --mask-mac 16 --mask-keep-oui no	00:1b:c5:03:df:ff=00:1b:00:00:00:00
 END
 }
 

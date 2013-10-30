@@ -47,6 +47,8 @@ Major Changes/Enhancements of ipv6calc
 - add support for anonymization of EUI-64 addresses
 	option --mask-iid is now deprecated and replaced by new option --mask-eui64
 
+- add option to (don't) keep OUI/IAB values on masking EUI-64/EUI-48(MAC)
+
 ipv6calcweb.cgi
 - remove support for environment values
    HTTP_IPV6CALCWEB_DB_IP2LOCATION_IPV4

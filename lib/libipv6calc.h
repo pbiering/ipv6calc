@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.19 2013/10/24 19:05:04 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.20 2013/10/30 20:04:25 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -30,14 +30,14 @@ typedef struct {
 
 
 /*@unused@*/ static const s_ipv6calc_anon_set ipv6calc_anon_set_list[] = {
-	// name                   short  ip4 ip6 iid mac  method
-	{ "anonymize-standard"  , "as"  , 24, 56, 40, 24, ANON_METHOD_ANONYMIZE     },
-	{ "anonymize-careful"   , "ac"  , 20, 48, 24, 24, ANON_METHOD_ANONYMIZE     },
-	{ "anonymize-paranoid"  , "ap"  , 16, 40,  0, 24, ANON_METHOD_ANONYMIZE     },
-	{ "zeroize-standard"    , "zs"  , 24, 56, 40, 24, ANON_METHOD_ZEROIZE       },
-	{ "zeroize-careful"     , "zc"  , 20, 48, 24, 24, ANON_METHOD_ZEROIZE       },
-	{ "zeroize-paranoid"    , "zp"  , 16, 40,  0, 24, ANON_METHOD_ZEROIZE       },
-	{ "keep-type-asn-cc"    , "kp"  , 24, 56, 40, 24, ANON_METHOD_KEEPTYPEASNCC }
+	// name                   short  ip4 ip6 iid mac  keep-oui method
+	{ "anonymize-standard"  , "as"  , 24, 56, 40, 24, 1       , ANON_METHOD_ANONYMIZE     },
+	{ "anonymize-careful"   , "ac"  , 20, 48, 24, 24, 1       , ANON_METHOD_ANONYMIZE     },
+	{ "anonymize-paranoid"  , "ap"  , 16, 40,  0, 24, 0       , ANON_METHOD_ANONYMIZE     },
+	{ "zeroize-standard"    , "zs"  , 24, 56, 40, 24, 1       , ANON_METHOD_ZEROIZE       },
+	{ "zeroize-careful"     , "zc"  , 20, 48, 24, 24, 1       , ANON_METHOD_ZEROIZE       },
+	{ "zeroize-paranoid"    , "zp"  , 16, 40,  0, 24, 0       , ANON_METHOD_ZEROIZE       },
+	{ "keep-type-asn-cc"    , "kp"  , 24, 56, 40, 24, 1       , ANON_METHOD_KEEPTYPEASNCC }
 };
 
 /*@unused@*/ static const s_ipv6calc_anon_methods ipv6calc_anon_methods[] = {

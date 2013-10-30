@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.35 2013/10/30 07:06:02 ds6peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.36 2013/10/30 20:04:25 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -521,23 +521,17 @@ int libipv6calc_anon_set_by_name(s_ipv6calc_anon_set *ipv6calc_anon_set, const c
 	int i;
 
 	if (strlen(name) == 0) {
-		fprintf(stderr, "Name of anonyimization set is empty\n");
+		fprintf(stderr, "Name of anonymization set is empty\n");
 		return 1;
 	};
 
-	if ( (ipv6calc_debug) != 0 ) {
-		fprintf(stderr, "%s/%s: search for anonymization set with name: %s\n", __FILE__, __func__, name);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6calc, "search for anonymization set with name: %s", name);
 
 	for (i = 0; i < sizeof(ipv6calc_anon_set_list) / sizeof(s_ipv6calc_anon_set); i++) {
-		if ( (ipv6calc_debug) != 0 ) {
-			fprintf(stderr, "%s/%s: compare name: %s ? %s\n", __FILE__, __func__, name, ipv6calc_anon_set_list[i].name);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6calc, "compare name: %s ? %s", name, ipv6calc_anon_set_list[i].name);
 
 		if ((strcmp(name, ipv6calc_anon_set_list[i].name) == 0) || (strcmp(name, ipv6calc_anon_set_list[i].name_short) == 0)) {
-			if ( (ipv6calc_debug) != 0 ) {
-				fprintf(stderr, "%s/%s: hit name: %s = %s\n", __FILE__, __func__, name, ipv6calc_anon_set_list[i].name);
-			};
+			DEBUGPRINT_WA(DEBUG_libipv6calc, "hit name: %s = %s", name, ipv6calc_anon_set_list[i].name);
 
 			memcpy(ipv6calc_anon_set, &ipv6calc_anon_set_list[i], sizeof(s_ipv6calc_anon_set));
 			return 0;

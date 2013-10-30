@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.99 2013/10/29 21:56:30 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.100 2013/10/30 20:04:25 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1177,7 +1177,7 @@ PIPE_input:
 					fprintf(stderr, "No valid MAC address given!\n");
 					exit(EXIT_FAILURE);
 				};
-				libmacaddr_anonymize(&macaddr, ipv6calc_anon_set.mask_mac);
+				libmacaddr_anonymize(&macaddr, &ipv6calc_anon_set);
 			} else if (inputtype == FORMAT_eui64 && outputtype == FORMAT_eui64) {
 				/* anonymize EUI-64 address */
 				if (eui64addr.flag_valid != 1) {

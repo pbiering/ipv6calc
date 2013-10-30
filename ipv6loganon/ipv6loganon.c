@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.26 2013/10/28 20:10:17 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.27 2013/10/30 20:04:25 ds6peter Exp $
  * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -28,6 +28,7 @@
 #include "libipv4addr.h"
 #include "libipv6addr.h"
 #include "libmac.h"
+#include "libeui64.h"
 
 #include "librfc1884.h"
 #include "librfc1886.h"
@@ -409,9 +410,10 @@ static int anonymizetoken(char *resultstring, const char *token) {
 	int retval = 1, i;
 
 	/* used structures */
-	ipv6calc_ipv6addr ipv6addr;
-	ipv6calc_ipv4addr ipv4addr;
-	ipv6calc_macaddr  macaddr;
+	ipv6calc_ipv6addr  ipv6addr;
+	ipv6calc_ipv4addr  ipv4addr;
+	ipv6calc_macaddr   macaddr;
+	ipv6calc_eui64addr eui64addr;
 
 	if (ipv6calc_debug != 0) {
 		fprintf(stderr, "%s: Token: '%s'\n", DEBUG_function_name, token);
@@ -499,6 +501,10 @@ static int anonymizetoken(char *resultstring, const char *token) {
 			retval = addr_to_ipv4addrstruct(token, resultstring, &ipv4addr);
 			break;
 
+		case FORMAT_eui64:
+			retval = libeui64_addr_to_eui64addrstruct(token, resultstring, &eui64addr);
+			break;
+
 		case FORMAT_macaddr:
 			retval = addr_to_macaddrstruct(token, resultstring, &macaddr);
 			break;
@@ -533,9 +539,16 @@ static int anonymizetoken(char *resultstring, const char *token) {
 		/* convert IPv4 address structure to string */
 		libipv4addr_ipv4addrstruct_to_string(&ipv4addr, resultstring, 0);
 
+	} else if (eui64addr.flag_valid == 1) {
+		/* anonymize EUI-64C address according to settings */
+		libeui64_anonymize(&eui64addr, &ipv6calc_anon_set);
+
+		/* convert EUI-64 address structure to string */
+		libeui64_eui64addrstruct_to_string(&eui64addr, resultstring, 0);
+
 	} else if (macaddr.flag_valid == 1) {
 		/* anonymize MAC address according to settings */
-		libmacaddr_anonymize(&macaddr, ipv6calc_anon_set.mask_mac);
+		libmacaddr_anonymize(&macaddr, &ipv6calc_anon_set);
 
 		/* convert MAC address structure to string */
 		libmacaddr_macaddrstruct_to_string(&macaddr, resultstring, 0);

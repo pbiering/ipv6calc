@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calcdebug.h
- * Version    : $Id: libipv6calcdebug.h,v 1.13 2013/10/29 21:56:30 ds6peter Exp $
+ * Version    : $Id: libipv6calcdebug.h,v 1.14 2013/10/30 20:04:25 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -36,13 +36,15 @@
 #define DEBUG_libieee					0x00004000l
 #define DEBUG_libeui64					0x00008000l
 
-#define DEBUG_libipv6addr_iidrandomdetection		0x00010000l
-#define DEBUG_libipv6addr_anonymization_unknown_break	0x00020000l
+#define DEBUG_libmac					0x00010000l
 
 #define DEBUG_libipv6addr_db_wrapper			0x00100000l
 #define DEBUG_libipv6addr_db_wrapper_GeoIP		0x00200000l
 #define DEBUG_libipv6addr_db_wrapper_IP2Location	0x00400000l
 #define DEBUG_libipv6addr_db_wrapper_GeoIP_verbose	0x00800000l
+
+#define DEBUG_libipv6addr_iidrandomdetection		0x01000000l
+#define DEBUG_libipv6addr_anonymization_unknown_break	0x02000000l
 
 /* debug print with args */
 #define DEBUGPRINT_WA(d, t, ...)	\

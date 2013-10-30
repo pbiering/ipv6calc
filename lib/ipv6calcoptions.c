@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.8 2013/10/30 07:06:02 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.9 2013/10/30 20:04:25 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -209,38 +209,66 @@ int ipv6calcoptions_common_anon(const int opt, const char *optarg, const struct 
 
 	/* general options */
 	switch(opt) {
+		case CMD_ANON_MASK_KEEP_OUI:
+			if (strcmp(optarg, "yes") == 0) {
+				i = 1;
+			} else if (strcmp(optarg, "no") == 0) {
+				i = 0;
+			} else {
+				fprintf(stderr, " unsupported  value for option 'mask-keep-oui', only yes|no is supported\n");
+				exit(EXIT_FAILURE);
+			};
+			if (ipv6calc_anon_set_p->mask_keep_oui != i) {
+				ipv6calc_anon_set_p->mask_keep_oui = i;
+				snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
+			};
+			result = 0;
+			break;
+
 		case CMD_ANON_MASK_IID:
 			fprintf(stderr, " option 'mask-iid' is deprecated, please use 'mask-eui64'\n");
 		case CMD_ANON_MASK_EUI64:
+			DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Found option: mask-eui=%s", optarg);
 			mask_eui64 = atoi(optarg);
 			if (mask_eui64 < 0 || mask_eui64 > 64) {
 				fprintf(stderr, " value for option 'mask-eui64' out-of-range  [0-64]\n");
 				exit(EXIT_FAILURE);
 			};
-			ipv6calc_anon_set_p->mask_eui64 = mask_eui64;
-			snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
+
+			if (ipv6calc_anon_set_p->mask_eui64 != mask_eui64) {
+				ipv6calc_anon_set_p->mask_eui64 = mask_eui64;
+				snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
+			};
 			result = 0;
 			break;
 
 		case CMD_ANON_MASK_IPV4:
+			DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Found option: mask-ipv4=%s", optarg);
 			mask_ipv4 = atoi(optarg);
 			if (mask_ipv4 < 0 || mask_ipv4 > 32) {
 				fprintf(stderr, " value for option 'mask-ipv4' out-of-range  [0-32]\n");
 				exit(EXIT_FAILURE);
 			};
-			ipv6calc_anon_set_p->mask_ipv4 = mask_ipv4;
-			snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
+
+			if (ipv6calc_anon_set_p->mask_ipv4 != mask_ipv4) {
+				ipv6calc_anon_set_p->mask_ipv4 = mask_ipv4;
+				snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
+			};
 			result = 0;
 			break;
 
 		case CMD_ANON_MASK_IPV6:
+			DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Found option: mask-ipv6=%s", optarg);
 			mask_ipv6 = atoi(optarg);
 			if (mask_ipv6 < 0 || mask_ipv6 > 64) {
 				fprintf(stderr, " value for option 'mask-ipv6' out-of-range  [0-64]\n");
 				exit(EXIT_FAILURE);
 			};
-			ipv6calc_anon_set_p->mask_ipv6 = mask_ipv6;
-			snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
+
+			if (ipv6calc_anon_set_p->mask_ipv6 != mask_ipv6) {
+				ipv6calc_anon_set_p->mask_ipv6 = mask_ipv6;
+				snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
+			};
 			result = 0;
 			break;
 
@@ -250,8 +278,11 @@ int ipv6calcoptions_common_anon(const int opt, const char *optarg, const struct 
 				fprintf(stderr, " value for option 'mask-mac' out-of-range  [0-48]\n");
 				exit(EXIT_FAILURE);
 			};
-			ipv6calc_anon_set_p->mask_mac = mask_mac;
-			snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
+
+			if (ipv6calc_anon_set_p->mask_mac != mask_mac) {
+				ipv6calc_anon_set_p->mask_mac = mask_mac;
+				snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
+			};
 			result = 0;
 			break;
 

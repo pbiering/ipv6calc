@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.h
- * Version    : $Id: libmac.h,v 1.12 2013/04/13 17:34:28 ds6peter Exp $
+ * Version    : $Id: libmac.h,v 1.13 2013/10/30 20:04:25 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -30,6 +30,8 @@ typedef struct {
 	/* others coming next */
 } s_ipv6calc_filter_macaddr;
 
+#define EUI48_00_23(x)  ((x[0] << 16) | (x[1] << 8) | x[2])
+#define EUI48_24_47(x)  ((x[3] << 16) | (x[4] << 8) | x[5])
 
 #endif
 
@@ -43,4 +45,4 @@ extern void mac_clearall(ipv6calc_macaddr *macaddrp);
 extern int macaddr_filter(const ipv6calc_macaddr *macaddrp, const s_ipv6calc_filter_macaddr *filter);
 extern void macaddr_filter_clear(s_ipv6calc_filter_macaddr *filter);
 
-extern void libmacaddr_anonymize(ipv6calc_macaddr *macaddrp, const unsigned int mask);
+extern void libmacaddr_anonymize(ipv6calc_macaddr *macaddrp, const s_ipv6calc_anon_set *ipv6calc_anon_set_p);

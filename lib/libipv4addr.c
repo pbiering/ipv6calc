@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.47 2013/10/26 17:16:35 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.48 2013/10/30 20:04:25 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -33,12 +33,11 @@
  * in: numoctet  = number of octet (0 = MSB, 3 = LSB)
  * additional: calls exit on out of range
  */
-#define DEBUG_function_name "libipv4addr/ipv4addr_getoctet"
 uint8_t ipv4addr_getoctet(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int numoctet) {
 	uint8_t retval;
 	
 	if ( numoctet > 3 ) {
-		fprintf(stderr, "%s: given ocett number '%u' is out of range!\n", DEBUG_function_name, numoctet);
+		fprintf(stderr, "%s/%s: given octet number '%u' is out of range!\n", __FILE__, __func__, numoctet);
 		exit(EXIT_FAILURE);
 	};
 
@@ -46,7 +45,6 @@ uint8_t ipv4addr_getoctet(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int
 
 	return (retval);
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -1019,33 +1017,23 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 			return(1);
 		};
 
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s/%s: anonymize by keep information\n", __FILE__, __func__);
-		};
+		DEBUGPRINT_NA(DEBUG_libipv4addr, "anonymize by keep information");
 
 		libipv4addr_ipv4addrstruct_to_string(ipv4addrp, resultstring, 0);
 
 		// get AS number
 		as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(resultstring, 4);
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s/%s: result of AS number  retrievement: 0x%08x (%d)\n", __FILE__, __func__, as_num32, as_num32);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "result of AS number  retrievement: 0x%08x (%d)", as_num32, as_num32);
 
 		as_num32_comp17 = libipv6calc_db_wrapper_as_num32_comp17(as_num32);
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s/%s: result of AS number   compression: 0x%05x\n", __FILE__, __func__, as_num32_comp17);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "result of AS number   compression: 0x%05x", as_num32_comp17);
 
 		as_num32_decomp17 = libipv6calc_db_wrapper_as_num32_decomp17(as_num32_comp17);
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s/%s: result of AS number decompression: 0x%08x (%d)\n", __FILE__, __func__, as_num32_decomp17, as_num32_decomp17);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "result of AS number decompression: 0x%08x (%d)", as_num32_decomp17, as_num32_decomp17);
 
 		// get countrycode
 		cc_index = libipv6calc_db_wrapper_cc_index_by_addr(resultstring, 4);
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s/%s: result of CountryCode index retrievement: 0x%03x (%d)\n", __FILE__, __func__, cc_index, cc_index);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "result of CountryCode index retrievement: 0x%03x (%d)", cc_index, cc_index);
 
 		// 0-3   ( 4 bits) : prefix 0xf0
 		// 4     ( 1 bit ) : parity bit (odd parity)
@@ -1067,16 +1055,12 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 
 		ipv4addr_anon |= ((c & 0x1) ^ 0x1) << 27;
 
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s/%s: result anonymized IPv4 address: 0x%08x, bitcounts=%d\n", __FILE__, __func__, ipv4addr_anon, c);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "result anonymized IPv4 address: 0x%08x, bitcounts=%d", ipv4addr_anon, c);
 
 		ipv4addr_setdword(ipv4addrp, ipv4addr_anon);
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s/%s: return\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libipv4addr, "return");
 
 	return(0);
 };
@@ -1140,14 +1124,10 @@ int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token)
 		return (result);
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s/%s: input: %s\n", __FILE__, __func__, token);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "input: %s", token);
 
 	if (token[0] == '^') {
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s/%s: found negate prefix in token: %s\n", __FILE__, __func__, token);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "found negate prefix in token: %s", token);
 
 		negate = 1;
 		offset += 1;
@@ -1171,21 +1151,15 @@ int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token)
 
 	} else if (strstr(token, ".") != NULL) {
 		/* other prefix */
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s/%s: prefix did not match: %s\n", __FILE__, __func__, token + offset);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "prefix did not match: %s", token + offset);
 		return(1);
 	};
 
 	for (i = 0; i < (int) (sizeof(ipv6calc_ipv4addrtypestrings) / sizeof(ipv6calc_ipv4addrtypestrings[0])); i++ ) {
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s/%s: check token against: %s\n", __FILE__, __func__, ipv6calc_ipv4addrtypestrings[i].token);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "check token against: %s", ipv6calc_ipv4addrtypestrings[i].token);
 
 		if (strcmp(ipv6calc_ipv4addrtypestrings[i].token, token + offset) == 0) {
-			if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-				fprintf(stderr, "%s/%s: token match: %s\n", __FILE__, __func__, ipv6calc_ipv4addrtypestrings[i].token);
-			};
+			DEBUGPRINT_WA(DEBUG_libipv4addr, "token match: %s", ipv6calc_ipv4addrtypestrings[i].token);
 
 			if (negate == 1) {
 				filter->typeinfo_may_not_have |= ipv6calc_ipv4addrtypestrings[i].number;
@@ -1199,18 +1173,14 @@ int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token)
 	};
 
 	if (result != 0) {
-		if ((ipv6calc_debug & DEBUG_libipv4addr) != 0) {
-			fprintf(stderr, "%s/%s: token not supported: %s\n", __FILE__, __func__, token);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "token not supported: %s",token);
 		return (result);
 	};
 
 END_ipv4addr_filter_parse:
-	if ((ipv6calc_debug & DEBUG_libipv4addr) != 0) {
-		fprintf(stderr, "%s/%s: filter 'must_have'   : 0x%08x\n", __FILE__, __func__, filter->typeinfo_must_have);
-		fprintf(stderr, "%s/%s: filter 'may_not_have': 0x%08x\n", __FILE__, __func__, filter->typeinfo_may_not_have);
-		fprintf(stderr, "%s/%s: filter 'active': %d\n", __FILE__, __func__, filter->active);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "filter 'must_have'   : 0x%08x", filter->typeinfo_must_have);
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "filter 'may_not_have': 0x%08x", filter->typeinfo_may_not_have);
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "filter 'active': %d", filter->active);
 
 	return (result);
 };

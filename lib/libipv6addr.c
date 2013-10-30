@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.98 2013/10/30 07:06:02 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.99 2013/10/30 20:04:25 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -2297,7 +2297,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 			if (ipv6calc_debug != 0) {
 				fprintf(stderr, "%s: EUI-48 identifier found\n", DEBUG_function_name);
 			};
-			if (method == 2) {
+			if (method == ANON_METHOD_ZEROIZE) {
 				/* mask unique ID by zero'izing */
 				/* TODO: honor mask_mac */
 				ipv6addr_setoctet(ipv6addrp, 13, 0x0u);
@@ -2506,7 +2506,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 			fprintf(stderr, "%s: ORCHID address found\n", DEBUG_function_name);
 		};
 
-		if (method == 2) {
+		if (method == ANON_METHOD_ZEROIZE) {
 			/* mask 100 LSBs */
 			ipv6addr_setword(ipv6addrp, 7, 0x0u);
 			ipv6addr_setword(ipv6addrp, 6, 0x0u);

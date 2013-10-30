@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.22 2013/10/22 20:52:16 ds6peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.23 2013/10/30 20:04:25 ds6peter Exp $
 # Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -209,6 +209,11 @@ fi
 
 
 run_loganon_reliability_tests() {
+	if [ ! -x ../ipv6logstats/ipv6logstats ]; then
+		echo "ERROR : missing binary: ../ipv6logstats/ipv6logstats (check build process)"
+		return 1
+	fi
+
 	local options="$*"
 
 	echo "INFO  : run 'ipv6loganon' reliability tests with options: $options" >&2

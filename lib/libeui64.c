@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libeui64.c
- * Version    : $Id: libeui64.c,v 1.6 2013/10/30 07:06:02 ds6peter Exp $
+ * Version    : $Id: libeui64.c,v 1.7 2013/10/30 20:04:25 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -94,7 +94,7 @@ int libeui64_eui64addrstruct_to_string(const ipv6calc_eui64addr *eui64addr_p, ch
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */
-int libeui64_addr_to_eui64addrstruct(char *addrstring, char *resultstring, ipv6calc_eui64addr *eui64addrp) {
+int libeui64_addr_to_eui64addrstruct(const char *addrstring, char *resultstring, ipv6calc_eui64addr *eui64addrp) {
 	int retval = 1, result, i, ccolons = 0, cdashes = 0, cspaces = 0;
 	size_t cnt;
 	int temp[8];
@@ -219,52 +219,67 @@ void libeui64_clearall(ipv6calc_eui64addr *eui64addrp) {
 void libeui64_anonymize(ipv6calc_eui64addr *eui64addrp, const s_ipv6calc_anon_set *ipv6calc_anon_set_p) {
 	int mask = 0, i, j;
 
-	DEBUGPRINT_WA(DEBUG_libeui64, "called with: %08x%08x", EUI64_00_31(eui64addrp->addr), EUI64_32_63(eui64addrp->addr));
+	DEBUGPRINT_WA(DEBUG_libeui64, "called: EUI-64=%08x%08x method=%d", EUI64_00_31(eui64addrp->addr), EUI64_32_63(eui64addrp->addr), ipv6calc_anon_set_p->method);
 
-	if ((eui64addrp->addr[0] & 0x2) == 0) {
-		// global address
+	if (ipv6calc_anon_set_p->method == ANON_METHOD_ZEROIZE) {
+		if (ipv6calc_anon_set_p->mask_keep_oui == 1) {
+			DEBUGPRINT_NA(DEBUG_libeui64, "keep-oui is set, autoselect proper mask");
 
-		if ((eui64addrp->addr[3] == 0xff) || (eui64addrp->addr[4] == 0xfe)) {
-			// expanded EUI-48
-			mask = 40; // 24 + 16 bits
-		} else {
-			mask = 24;
-		};
+			if ((eui64addrp->addr[0] & 0x2) == 0) {
+				// global address
+				if ((eui64addrp->addr[3] == 0xff) && (eui64addrp->addr[4] == 0xfe)) {
+					// expanded EUI-48
+					mask = 40; // 24 + 16 bits
+					DEBUGPRINT_WA(DEBUG_libeui64, "EUI-64 is a expanded EUI-48, change mask: %d", mask);
+				} else {
+					mask = 24;
+				};
 
-		if (libieee_check_oui36_iab(EUI64_00_23(eui64addrp->addr)) == 1) {
-			// OUI-36/IAB
-			mask += 12; // increase by 12 bits
-		};
+				if (libieee_check_oui36_iab(EUI64_00_23(eui64addrp->addr)) == 1) {
+					// OUI-36/IAB
+					mask += 12; // increase by 12 bits
+					DEBUGPRINT_WA(DEBUG_libeui64, "EUI-64 contains OUI-36/IAB, change mask: %d", mask);
+				};
 
-		DEBUGPRINT_WA(DEBUG_libeui64, "EUI-64 is a global one, source of mask: automagic: %d", mask);
-	} else {
-		// local address, honor mask_eui64
-		mask = ipv6calc_anon_set_p->mask_eui64;
-		DEBUGPRINT_WA(DEBUG_libeui64, "EUI-64 is a local one, source of mask: mask-iid option: %d", mask);
-	};
-
-	DEBUGPRINT_WA(DEBUG_libeui64, "anonymize EUI-64 with masked bits: %d", mask);
-
-	if (mask == 64) {
-		// nothing to do
-	} else if (mask > 0) {
-		j = mask >> 3;
-
-		for (i = 7; i >= 0; i--) {
-			DEBUGPRINT_WA(DEBUG_libeui64, "anonymize EUI-64: mask=%02d i=%d j=%d", mask, i, j);
-			if (j < i) {
-				DEBUGPRINT_WA(DEBUG_libeui64, "anonymize EUI-64: zeroize byte %d", i);
-				eui64addrp->addr[i] = 0x00;
-			} else if (j == i) {
-				DEBUGPRINT_WA(DEBUG_libeui64, "anonymize EUI-64: mask byte %d with %02x (offset: %d)", i, (0xff00 >> (mask % 0x8)) & 0xff, (mask % 0x8));
-				eui64addrp->addr[i] &= (0xff00 >> (mask % 0x8)) & 0xff;
+				DEBUGPRINT_WA(DEBUG_libeui64, "EUI-64 is a global one, source of mask: automagic: %d", mask);
 			} else {
-				DEBUGPRINT_NA(DEBUG_libeui64, "anonymize EUI-64: finished");
-				break;
+				// local address, honor mask_eui64
+				mask = ipv6calc_anon_set_p->mask_eui64;
+				DEBUGPRINT_WA(DEBUG_libeui64, "EUI-64 is a local one, source of mask: mask-iid option: %d", mask);
 			};
+
+			if (ipv6calc_anon_set_p->mask_eui64 > mask) {
+				mask = ipv6calc_anon_set_p->mask_eui64;
+				DEBUGPRINT_WA(DEBUG_libeui64, "specified mask is higher than autoselected one, change to specified: %d", mask);
+			};
+		} else {
+			DEBUGPRINT_WA(DEBUG_libeui64, "keep-oui is not set, use always mask: %d", mask);
+			mask = ipv6calc_anon_set_p->mask_eui64;
 		};
-	} else {
-		libeui64_clear(eui64addrp);
+
+		DEBUGPRINT_WA(DEBUG_libeui64, "zeroize EUI-64 with masked bits: %d", mask);
+
+		if (mask == 64) {
+			// nothing to do
+		} else if (mask > 0) {
+			j = mask >> 3;
+
+			for (i = 7; i >= 0; i--) {
+				DEBUGPRINT_WA(DEBUG_libeui64, "zeroize EUI-64: mask=%02d i=%d j=%d", mask, i, j);
+				if (j < i) {
+					DEBUGPRINT_WA(DEBUG_libeui64, "zeroize EUI-64: byte %d", i);
+					eui64addrp->addr[i] = 0x00;
+				} else if (j == i) {
+					DEBUGPRINT_WA(DEBUG_libeui64, "zeroize EUI-64: mask byte %d with %02x (offset: %d)", i, (0xff00 >> (mask % 0x8)) & 0xff, (mask % 0x8));
+					eui64addrp->addr[i] &= (0xff00 >> (mask % 0x8)) & 0xff;
+				} else {
+					DEBUGPRINT_NA(DEBUG_libeui64, "zeroize EUI-64: finished");
+					break;
+				};
+			};
+		} else {
+			libeui64_clear(eui64addrp);
+		};
 	};
 	
 	DEBUGPRINT_WA(DEBUG_libeui64, "anonymization finished, return: %08x%08x", EUI64_00_31(eui64addrp->addr), EUI64_32_63(eui64addrp->addr));

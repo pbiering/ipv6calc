@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.22 2013/04/13 17:34:28 ds6peter Exp $
+ * Version    : $Id: libmac.c,v 1.23 2013/10/30 20:04:25 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include "libipv6calc.h"
 #include "libmac.h"
+#include "libieee.h"
 #include "ipv6calctypes.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
@@ -25,7 +26,6 @@ static char ChSet[] = "0123456789abcdefABCDEF:- .";
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libmac/mac_to_macaddrstruct"
 int mac_to_macaddrstruct(const char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp) {
 	int retval = 1, result, i, ccolons = 0, cdashes = 0, cspaces = 0, cdots = 0;
 	size_t cnt;
@@ -116,7 +116,7 @@ int mac_to_macaddrstruct(const char *addrstring, char *resultstring, ipv6calc_ma
    	retval = 0;	
 	return (retval);
 };
-#undef DEBUG_function_name
+
 
 /* compatible name */
 int addr_to_macaddrstruct(const char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp) {
@@ -160,7 +160,6 @@ void mac_clearall(ipv6calc_macaddr *macaddrp) {
  * out: *resultstring = MAC address string
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libmac/macaddrstruct_to_string"
 int macaddrstruct_to_string(const ipv6calc_macaddr *macaddrp, char *resultstring, const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST];
 
@@ -175,7 +174,7 @@ int macaddrstruct_to_string(const ipv6calc_macaddr *macaddrp, char *resultstring
 
 	return(0);
 };
-#undef DEBUG_function_name
+
 
 /* compatible name */
 int libmacaddr_macaddrstruct_to_string(const ipv6calc_macaddr *macaddrp, char *resultstring, const uint32_t formatoptions) {
@@ -216,42 +215,64 @@ int macaddr_filter(const ipv6calc_macaddr *macaddrp, const s_ipv6calc_filter_mac
  *      mask = number of bits of mask
  * ret: <void>
  */
-void libmacaddr_anonymize(ipv6calc_macaddr *macaddrp, const unsigned int mask) {
-	int i, max, min, bit;
+void libmacaddr_anonymize(ipv6calc_macaddr *macaddrp, const s_ipv6calc_anon_set *ipv6calc_anon_set_p) {
+	int mask = 0, i, j;
 
 	/* anonymize MAC address according to settings */
+	DEBUGPRINT_WA(DEBUG_libmac, "called: EUI-48=%06x%06x method=%d", EUI48_00_23(macaddrp->addr), EUI48_24_47(macaddrp->addr), ipv6calc_anon_set_p->method);
 
-	if (mask == 0) {
-		/* clear MAC address: 0:0:0:0:0:0 */
-		mac_clear(macaddrp);
-	} else if (mask == 48) {
-		/* nothing to do */
-	} else if (mask < 1 || mask > 48) {
-		/* should not happen here */
-		fprintf(stderr, "%s/%s: 'mask' has an unexpected illegal value: %d!\n", __FILE__, __func__, mask);
-		exit(EXIT_FAILURE);
-	} else {
-		/* complete byte mask */
-		max = 6;
-		min = mask / 8 + 2;
+	if (ipv6calc_anon_set_p->mask_keep_oui == 1) {
+		DEBUGPRINT_NA(DEBUG_libmac, "keep-oui is set, autoselect proper mask");
 
-                if ( (ipv6calc_debug ) != 0 ) {
-                        fprintf(stderr, "%s/%s: mask=%d -> complete byte mask from %d to %d\n", __FILE__, __func__, mask, max, min);
-                };
+		if ((macaddrp->addr[0] & 0x2) == 0) {
+			// global address
+			mask = 24;
 
-		if (max > min) {
-			for (i = max; i >= min; i--) {
-				macaddrp->addr[i-1] = 0;
+			if (libieee_check_oui36_iab(EUI48_00_23(macaddrp->addr)) == 1) {
+				// OUI-36/IAB
+				mask += 12; // increase by 12 bits
 			};
+
+			DEBUGPRINT_WA(DEBUG_libmac, "EUI-48 is a global one, source of mask: automagic: %d", mask);
+		} else {
+			// local address, honor mask_mac
+			mask = ipv6calc_anon_set_p->mask_mac;
+			DEBUGPRINT_WA(DEBUG_libmac, "EUI-48 is a local one, source of mask: mask-iid option: %d", mask);
 		};
 
-		/* partial byte mask */
-		bit = (~ (0xffu >> (mask % 8))) & 0xff;
-                if ( (ipv6calc_debug ) != 0 ) {
-                        fprintf(stderr, "%s/%s: mask=%d -> partial byte mask %d with 0x%02x\n", __FILE__, __func__, mask, min-1, bit);
-                };
-
-		macaddrp->addr[min-2] &= bit;
+		if (ipv6calc_anon_set_p->mask_mac > mask) {
+			mask = ipv6calc_anon_set_p->mask_mac;
+			DEBUGPRINT_WA(DEBUG_libmac, "specified mask is higher than autoselected one, change to specified: %d", mask);
+		};
+	} else {
+		DEBUGPRINT_WA(DEBUG_libmac, "keep-oui is not set, use always mask: %d", mask);
+		mask = ipv6calc_anon_set_p->mask_mac;
 	};
+
+	DEBUGPRINT_WA(DEBUG_libmac, "zeroize EUI-48 with masked bits: %d", mask);
+
+	if (mask == 48) {
+		// nothing to do
+	} else if (mask > 0) {
+		j = mask >> 3;
+
+		for (i = 5; i >= 0; i--) {
+			DEBUGPRINT_WA(DEBUG_libmac, "zeroize EUI-48: mask=%02d i=%d j=%d", mask, i, j);
+			if (j < i) {
+				DEBUGPRINT_WA(DEBUG_libmac, "zeroize EUI-48: byte %d", i);
+				macaddrp->addr[i] = 0x00;
+			} else if (j == i) {
+				DEBUGPRINT_WA(DEBUG_libmac, "zeroize EUI-48: mask byte %d with %02x (offset: %d)", i, (0xff00 >> (mask % 0x8)) & 0xff, (mask % 0x8));
+				macaddrp->addr[i] &= (0xff00 >> (mask % 0x8)) & 0xff;
+			} else {
+				DEBUGPRINT_NA(DEBUG_libmac, "zeroize EUI-48: finished");
+				break;
+			};
+		};
+	} else {
+		mac_clear(macaddrp);
+	};
+	
+	DEBUGPRINT_WA(DEBUG_libmac, "anonymization finished, return: %06x%06x", EUI48_00_23(macaddrp->addr), EUI48_24_47(macaddrp->addr));
 	return;
 };
