@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libeui64.c
- * Version    : $Id: libeui64.c,v 1.7 2013/10/30 20:04:25 ds6peter Exp $
+ * Version    : $Id: libeui64.c,v 1.8 2013/10/30 20:31:52 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -221,7 +221,7 @@ void libeui64_anonymize(ipv6calc_eui64addr *eui64addrp, const s_ipv6calc_anon_se
 
 	DEBUGPRINT_WA(DEBUG_libeui64, "called: EUI-64=%08x%08x method=%d", EUI64_00_31(eui64addrp->addr), EUI64_32_63(eui64addrp->addr), ipv6calc_anon_set_p->method);
 
-	if (ipv6calc_anon_set_p->method == ANON_METHOD_ZEROIZE) {
+	// if (ipv6calc_anon_set_p->method == ANON_METHOD_ZEROIZE) { TODO: different implementations
 		if (ipv6calc_anon_set_p->mask_keep_oui == 1) {
 			DEBUGPRINT_NA(DEBUG_libeui64, "keep-oui is set, autoselect proper mask");
 
@@ -280,7 +280,7 @@ void libeui64_anonymize(ipv6calc_eui64addr *eui64addrp, const s_ipv6calc_anon_se
 		} else {
 			libeui64_clear(eui64addrp);
 		};
-	};
+	// };
 	
 	DEBUGPRINT_WA(DEBUG_libeui64, "anonymization finished, return: %08x%08x", EUI64_00_31(eui64addrp->addr), EUI64_32_63(eui64addrp->addr));
 	return;
