@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.97 2013/10/24 19:05:04 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.98 2013/10/30 07:06:02 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -2198,7 +2198,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 	uint16_t cc_index, flags;
 	uint32_t as_num32, ipv6_prefix[2];
 
-	int mask_iid  = ipv6calc_anon_set->mask_iid;
+	int mask_eui64  = ipv6calc_anon_set->mask_eui64;
 	// int mask_mac  = ipv6calc_anon_set->mask_mac; // currently not used
 	int mask_ipv6 = ipv6calc_anon_set->mask_ipv6;
 	int mask_ipv4 = ipv6calc_anon_set->mask_ipv4;
@@ -2330,7 +2330,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 		} else {
 			if ( (ipv6addrp->scope & IPV6_NEW_ADDR_IID_RANDOM) != 0 ) {
 				if (method == 2) {
-					/* mask ID according to mask_iid */
+					/* mask ID according to mask_eui64 */
 					zeroize_iid = 1;
 				} else {
 					/* replace IID with special value */
@@ -2344,7 +2344,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 			} else if ((ipv6addrp->scope & IPV6_NEW_ADDR_IID_EUI64) == IPV6_NEW_ADDR_IID_EUI64) {
 				/* Check for global EUI-64 */
 				if (method == 2) {
-					/* mask ID according to mask_iid */
+					/* mask ID according to mask_eui64 */
 					zeroize_iid = 1;
 				} else {
 					libeui64_clearall(&eui64addr);
@@ -2404,7 +2404,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 						/* vendor ID included */
 						if (method == 2) {
 							/* zero'ise unique ID */
-							/* TODO: honor mask_iid */
+							/* TODO: honor mask_eui64 */
 							ipv6addr_setoctet(ipv6addrp, 13, 0x0u);
 							ipv6addr_setoctet(ipv6addrp, 14, 0x0u);
 							ipv6addr_setoctet(ipv6addrp, 15, 0x0u);
@@ -2417,7 +2417,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 					} else {
 						/* extension ID included */
 						if (method == 2) {
-							/* mask ID according to mask_iid */
+							/* mask ID according to mask_eui64 */
 							zeroize_iid = 1;
 						} else {
 							iid[0] = ANON_TOKEN_VALUE_00_31 | ANON_IID_ISATAP_VALUE_00_31;
@@ -2484,7 +2484,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 					} else {
 						/* Identifier has local scope */
 						if (method == 2) {
-							/* mask ID according to mask_iid */
+							/* mask ID according to mask_eui64 */
 							zeroize_iid = 1;
 						} else {
 							iid[0] = ANON_TOKEN_VALUE_00_31 | ANON_IID_STATIC_VALUE_00_31;
@@ -2538,17 +2538,17 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 
 	if (zeroize_iid == 1) {
 		if ( (ipv6calc_debug) != 0 ) {
-			fprintf(stderr, "%s/%s: Zero'ise IID with mask: %d\n", __FILE__, __func__, mask_iid);
+			fprintf(stderr, "%s/%s: Zero'ise IID with mask: %d\n", __FILE__, __func__, mask_eui64);
 		};
 
-		if (mask_iid == 0) {
+		if (mask_eui64 == 0) {
 			ipv6addr_setdword(ipv6addrp, 2, 0);
 			ipv6addr_setdword(ipv6addrp, 3, 0);
-		} else if (mask_iid <= 32) {
-			ipv6addr_setdword(ipv6addrp, 2, ipv6addr_getdword(ipv6addrp, 2) & ( mask_iid > 31 ? 0xffffffff : (0xffffffff << (32 - mask_iid))));
+		} else if (mask_eui64 <= 32) {
+			ipv6addr_setdword(ipv6addrp, 2, ipv6addr_getdword(ipv6addrp, 2) & ( mask_eui64 > 31 ? 0xffffffff : (0xffffffff << (32 - mask_eui64))));
 			ipv6addr_setdword(ipv6addrp, 3, 0);
 		} else {	
-			ipv6addr_setdword(ipv6addrp, 3, ipv6addr_getdword(ipv6addrp, 3) & ( mask_iid < 33 ? 0x0        : (0xffffffff << (64 - mask_iid))));
+			ipv6addr_setdword(ipv6addrp, 3, ipv6addr_getdword(ipv6addrp, 3) & ( mask_eui64 < 33 ? 0x0        : (0xffffffff << (64 - mask_eui64))));
 		};
 	};
 

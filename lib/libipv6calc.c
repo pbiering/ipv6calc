@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.34 2013/10/13 16:18:44 ds6peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.35 2013/10/30 07:06:02 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -578,7 +578,7 @@ const char *libipv6calc_anon_method_name(const s_ipv6calc_anon_set *ipv6calc_ano
 void libipv6calc_anon_infostring(char *string, const int stringlength, const s_ipv6calc_anon_set *ipv6calc_anon_set) {
 	const char *method_name = libipv6calc_anon_method_name(ipv6calc_anon_set);
 
-	snprintf(string, stringlength - 1, "set=%s,mask-ipv6=%d,mask-ipv4=%d,mask-iid=%d,mask-mac=%d,method=%s", ipv6calc_anon_set->name, ipv6calc_anon_set->mask_ipv6, ipv6calc_anon_set->mask_ipv4, ipv6calc_anon_set->mask_iid, ipv6calc_anon_set->mask_mac, (method_name == NULL ? "unknown" : method_name));
+	snprintf(string, stringlength - 1, "set=%s,mask-ipv6=%d,mask-ipv4=%d,mask-eui64=%d,mask-mac=%d,method=%s", ipv6calc_anon_set->name, ipv6calc_anon_set->mask_ipv6, ipv6calc_anon_set->mask_ipv4, ipv6calc_anon_set->mask_eui64, ipv6calc_anon_set->mask_mac, (method_name == NULL ? "unknown" : method_name));
 
 	return;
 };

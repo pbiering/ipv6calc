@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.7 2013/10/28 20:10:17 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.8 2013/10/30 07:06:02 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -202,7 +202,7 @@ int ipv6calcoptions_common_anon(const int opt, const char *optarg, const struct 
 	int result = -1, i;
 	int mask_ipv4;
 	int mask_ipv6;
-	int mask_iid;
+	int mask_eui64;
 	int mask_mac;
 
 	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Called opt=0x%08x", opt);
@@ -210,13 +210,14 @@ int ipv6calcoptions_common_anon(const int opt, const char *optarg, const struct 
 	/* general options */
 	switch(opt) {
 		case CMD_ANON_MASK_IID:
-			mask_iid = 1;
-			mask_iid = atoi(optarg);
-			if (mask_iid < 0 || mask_iid > 64) {
-				fprintf(stderr, " value for option 'mask-iid' out-of-range  [0-64]\n");
+			fprintf(stderr, " option 'mask-iid' is deprecated, please use 'mask-eui64'\n");
+		case CMD_ANON_MASK_EUI64:
+			mask_eui64 = atoi(optarg);
+			if (mask_eui64 < 0 || mask_eui64 > 64) {
+				fprintf(stderr, " value for option 'mask-eui64' out-of-range  [0-64]\n");
 				exit(EXIT_FAILURE);
 			};
-			ipv6calc_anon_set_p->mask_iid = mask_iid;
+			ipv6calc_anon_set_p->mask_eui64 = mask_eui64;
 			snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
 			result = 0;
 			break;

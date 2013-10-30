@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.33 2013/09/10 20:25:50 ds6peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.34 2013/10/30 07:06:02 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -138,7 +138,7 @@ typedef struct {
 	{ FORMAT_ipv4hex        , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex },
 	{ FORMAT_ipv4revhex     , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex },
 	{ FORMAT_mac            , FORMAT_eui64 },
-	{ FORMAT_eui64          , 0 },
+	{ FORMAT_eui64          , FORMAT_eui64 },
 	{ FORMAT_base85         , FORMAT_base85 | FORMAT_ipv6addr | FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ifinet6 },
 	{ FORMAT_ifinet6        , FORMAT_base85 | FORMAT_ipv6addr | FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ifinet6 },
 	{ FORMAT_iid_token      , FORMAT_iid_token },
@@ -296,7 +296,7 @@ typedef struct {
 	char name_short[3];
 	int mask_ipv4;
 	int mask_ipv6;
-	int mask_iid;
+	int mask_eui64;
 	int mask_mac;
 	int method;	// 1=anonymize, 2=zeroize, 3=keep type asn countrycode
 } s_ipv6calc_anon_set;

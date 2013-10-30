@@ -45,6 +45,7 @@ Major Changes/Enhancements of ipv6calc
 	--with-geoip-ipv6-default-file=file
 
 - add support for anonymization of EUI-64 addresses
+	option --mask-iid is now deprecated and replaced by new option --mask-eui64
 
 ipv6calcweb.cgi
 - remove support for environment values
