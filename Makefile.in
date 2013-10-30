@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.77 2013/10/30 20:04:25 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.78 2013/10/30 20:35:21 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -141,7 +141,7 @@ update:
 		done
 
 static:		ipv6logconv-make ipv6loganon-make ipv6logstats-make ipv6calc-make	
-		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calc; do \
+		for dir in ipv6logconv ipv6logstats ipv6loganon ipv6calc; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} $@ ; \
@@ -149,7 +149,7 @@ static:		ipv6logconv-make ipv6loganon-make ipv6logstats-make ipv6calc-make
 		done
 
 test:
-		for dir in ipv6calc ipv6logconv ipv6loganon ipv6logstats ipv6calcweb; do \
+		for dir in ipv6calc ipv6logconv ipv6logstats ipv6loganon ipv6calcweb; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} $@ || exit 1; \
@@ -158,7 +158,7 @@ test:
 		echo "ALL TESTS SUCCESSFUL"
 
 test-minimal:
-		for dir in ipv6calc ipv6logconv ipv6loganon ipv6logstats ipv6calcweb; do \
+		for dir in ipv6calc ipv6logconv ipv6logstats ipv6loganon ipv6calcweb; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} $@ || exit 1; \
@@ -171,7 +171,7 @@ codecheck:
 		# catch use of strcpy
 		LC_ALL=C find . -type f -name '*.c' | xargs -r grep strcpy || exit 0
 
-		for dir in ipv6calc ipv6logconv ipv6loganon ipv6logstats; do \
+		for dir in ipv6calc ipv6logconv ipv6logstats ipv6loganon; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} $@ || exit 1; \
