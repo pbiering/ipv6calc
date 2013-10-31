@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.9 2013/10/30 20:04:25 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.10 2013/10/31 21:24:46 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -209,17 +209,17 @@ int ipv6calcoptions_common_anon(const int opt, const char *optarg, const struct 
 
 	/* general options */
 	switch(opt) {
-		case CMD_ANON_MASK_KEEP_OUI:
+		case CMD_ANON_MASK_AUTOADJUST:
 			if (strcmp(optarg, "yes") == 0) {
 				i = 1;
 			} else if (strcmp(optarg, "no") == 0) {
 				i = 0;
 			} else {
-				fprintf(stderr, " unsupported  value for option 'mask-keep-oui', only yes|no is supported\n");
+				fprintf(stderr, " unsupported  value for option 'mask-autoadjust', only yes|no is supported\n");
 				exit(EXIT_FAILURE);
 			};
-			if (ipv6calc_anon_set_p->mask_keep_oui != i) {
-				ipv6calc_anon_set_p->mask_keep_oui = i;
+			if (ipv6calc_anon_set_p->mask_autoadjust != i) {
+				ipv6calc_anon_set_p->mask_autoadjust = i;
 				snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
 			};
 			result = 0;

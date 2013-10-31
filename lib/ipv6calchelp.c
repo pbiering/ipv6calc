@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.48 2013/10/30 20:04:25 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.49 2013/10/31 21:24:46 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -625,16 +625,16 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 					};
 				};
 
-				fprintf(stderr, "   %-20s (%2s): mask-ipv6=%3d mask-ipv4=%2d mask-eui64=%2d mask-mac=%2d mask-keep-oui=%-3s method=%s\n", ipv6calc_anon_set_list[i].name, ipv6calc_anon_set_list[i].name_short, ipv6calc_anon_set_list[i].mask_ipv6, ipv6calc_anon_set_list[i].mask_ipv4, ipv6calc_anon_set_list[i].mask_eui64, ipv6calc_anon_set_list[i].mask_mac, (ipv6calc_anon_set_list[i].mask_keep_oui == 1) ? "yes" : "no", method_name);
+				fprintf(stderr, "   %-20s (%2s): mask-ipv6=%3d mask-ipv4=%2d mask-eui64=%2d mask-mac=%2d mask-autoadjust=%-3s method=%s\n", ipv6calc_anon_set_list[i].name, ipv6calc_anon_set_list[i].name_short, ipv6calc_anon_set_list[i].mask_ipv6, ipv6calc_anon_set_list[i].mask_ipv4, ipv6calc_anon_set_list[i].mask_eui64, ipv6calc_anon_set_list[i].mask_mac, (ipv6calc_anon_set_list[i].mask_autoadjust == 1) ? "yes" : "no", method_name);
 			};
 			fprintf(stderr, "\n");
 
 			fprintf(stderr, "  Custom control:\n");
-			fprintf(stderr, "  --mask-ipv4  <bits>    : mask IPv4 address [0-32] (even if occurs in IPv6 address)\n");
-			fprintf(stderr, "  --mask-ipv6  <bits>    : mask IPv6 prefix [0-64] (only applied to related address types)\n");
-			fprintf(stderr, "  --mask-eui64 <bits>    : mask EUI-64 address or IPv6 interface identifier [0-64]\n");
-			fprintf(stderr, "  --mask-mac   <bits>    : mask MAC address [0-48]\n");
-			fprintf(stderr, "  --mask-keep-oui yes|no : (don't) keep OUI-24/OUI-36/IAB for EUI-64 and MAC addresses regardless of less given mask\n");
+			fprintf(stderr, "  --mask-ipv4  <bits>     : mask IPv4 address [0-32] (even if occurs in IPv6 address)\n");
+			fprintf(stderr, "  --mask-ipv6  <bits>     : mask IPv6 prefix [0-64] (only applied to related address types)\n");
+			fprintf(stderr, "  --mask-eui64 <bits>     : mask EUI-64 address or IPv6 interface identifier [0-64]\n");
+			fprintf(stderr, "  --mask-mac   <bits>     : mask MAC address [0-48]\n");
+			fprintf(stderr, "  --mask-autoadjust yes|no: autoadjust mask to keep type/vendor information regardless of less given mask\n");
 
 			break;
 			

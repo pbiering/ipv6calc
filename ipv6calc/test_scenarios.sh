@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.36 2013/10/30 20:04:25 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.37 2013/10/31 21:24:46 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -225,17 +225,17 @@ testscenarios_genprivacyiid() {
 # Test scenarios for anonymization options (ipv6calc & ipv6loganon)
 testscenarios_anonymization_options() {
 	cat <<END | grep -v '^#'
---mask-eui64  64 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:123:4567
---mask-eui64  60 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:123:4560
---mask-eui64  56 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:123:4500
---mask-eui64  48 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:123:0
---mask-eui64  40 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:100:0
---mask-eui64  36 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef::
---mask-eui64  32 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef::
---mask-eui64  28 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cde0::
---mask-eui64  12 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89a0::
---mask-eui64   8 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:8900::
---mask-eui64   0 --anonymize-method zeroise	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500::
+--mask-eui64  64 --anonymize-method zeroize	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:123:4567
+--mask-eui64  60 --anonymize-method zeroize	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:123:4560
+--mask-eui64  56 --anonymize-method zeroize	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:123:4500
+--mask-eui64  48 --anonymize-method zeroize	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:123:0
+--mask-eui64  40 --anonymize-method zeroize	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef:100:0
+--mask-eui64  36 --anonymize-method zeroize	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef::
+--mask-eui64  32 --anonymize-method zeroize	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cdef::
+--mask-eui64  28 --anonymize-method zeroize	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89ab:cde0::
+--mask-eui64  12 --anonymize-method zeroize	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:89a0::
+--mask-eui64   8 --anonymize-method zeroize	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500:8900::
+--mask-eui64   0 --anonymize-method zeroize	2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4500::
 --anonymize-standard			2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:4509:a929:4291:c02d:5d15
 --anonymize-careful			2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:123:a909:a949:4291:c02d:5d13
 --anonymize-paranoid			2001:0db8:0123:4567:89ab:cdef:0123:4567=2001:db8:109:a909:a969:4291:c02d:5d1a
@@ -275,14 +275,14 @@ testscenarios_anonymization_options() {
 --mask-mac  20				12:34:56:78:9a:bc=12:34:50:00:00:00
 --mask-mac  16				12:34:56:78:9a:bc=12:34:00:00:00:00
 --mask-mac   8				12:34:56:78:9a:bc=12:00:00:00:00:00
---mask-mac   0				12:34:56:78:9a:bc=00:00:00:00:00:00
+--mask-mac   0 				12:34:56:78:9a:bc=02:00:00:00:00:00
 --mask-ipv4 24				2002:c002:f97f::211:32ff:fe13:956f=2002:c002:f900:9:a929:4291:4021:132d
 --mask-ipv4 24				2002:c000:0251::c000:0251=2002:c000:200:9:a929:4291:8c00:28
---mask-ipv4 24 --anonymize-method zeroise	2002:c000:0251::c000:0251=2002:c000:200::192.0.2.0
+--mask-ipv4 24 --anonymize-method zeroize	2002:c000:0251::c000:0251=2002:c000:200::192.0.2.0
 --anonymize-standard			2001:db8:0123:4567:0250:c2ff:fe86:2345=2001:db8:123:4509:a929:4291:5021:8621
 --anonymize-standard			2001:db8:0123:4567:0250:c286:2345:4567=2001:db8:123:4509:a929:4291:7021:8626
 # EUI-64: local
---anonymize-preset zs --mask-eui64 0			12:34:56:78:9a:ff:ff:ff=00:00:00:00:00:00:00:00
+--anonymize-preset zs --mask-eui64 0			12:34:56:78:9a:ff:ff:ff=02:00:00:00:00:00:00:00
 --anonymize-preset zs --mask-eui64 31			12:34:56:ff:ff:ff:ff:ff=12:34:56:fe:00:00:00:00
 --anonymize-preset zs --mask-eui64 32			12:34:56:ff:ff:ff:ff:ff=12:34:56:ff:00:00:00:00
 --anonymize-preset zs --mask-eui64 33			12:34:56:ff:ff:ff:ff:ff=12:34:56:ff:80:00:00:00
@@ -297,7 +297,7 @@ testscenarios_anonymization_options() {
 --anonymize-preset zs --mask-eui64 63			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:fe
 --anonymize-preset zs --mask-eui64 64			12:34:56:78:9a:ff:ff:ff=12:34:56:78:9a:ff:ff:ff
 # EUI-48: local
---anonymize-preset zs --mask-mac 0			12:34:56:78:9a:ff=00:00:00:00:00:00
+--anonymize-preset zs --mask-mac 0			12:34:56:78:9a:ff=02:00:00:00:00:00
 --anonymize-preset zs --mask-mac 31			12:34:56:ff:ff:ff=12:34:56:fe:00:00
 --anonymize-preset zs --mask-mac 32			12:34:56:ff:ff:ff=12:34:56:ff:00:00
 --anonymize-preset zs --mask-mac 33			12:34:56:ff:ff:ff=12:34:56:ff:80:00
@@ -309,12 +309,12 @@ testscenarios_anonymization_options() {
 --anonymize-preset zc		00:1b:c5:03:df:ff:ff:ff=00:1b:c5:03:d0:00:00:00
 # EUI-64: global (OUI-36) expanded EUI-48
 --anonymize-preset zc		00:1b:c5:ff:fe:03:df:ff=00:1b:c5:ff:fe:03:d0:00
---anonymize-preset zc --mask-eui64 16 --mask-keep-oui no	00:1b:c5:ff:fe:03:df:ff=00:1b:00:00:00:00:00:00
+--anonymize-preset zc --mask-eui64 16 --mask-autoadjust no	00:1b:c5:ff:fe:03:df:ff=00:1b:00:00:00:00:00:00
 # EUI-48: global (OUI-24)
 --anonymize-preset zc		00:02:b3:ff:ff:ff=00:02:b3:00:00:00
 # EUI-48: global (OUI-36)
 --anonymize-preset zc		00:1b:c5:03:df:ff=00:1b:c5:03:d0:00
---anonymize-preset zc --mask-mac 16 --mask-keep-oui no	00:1b:c5:03:df:ff=00:1b:00:00:00:00
+--anonymize-preset zc --mask-mac 16 --mask-autoadjust no	00:1b:c5:03:df:ff=00:1b:00:00:00:00
 END
 }
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.99 2013/10/30 20:04:25 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.100 2013/10/31 21:24:46 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -2294,20 +2294,13 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 		if ((ipv6addrp->scope & IPV6_NEW_ADDR_IID_EUI48) != 0) {
 			/* EUI-48 */
 
-			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "%s: EUI-48 identifier found\n", DEBUG_function_name);
-			};
+			DEBUGPRINT_NA(DEBUG_libipv6addr, "EUI-48 identifier found");
+
 			if (method == ANON_METHOD_ZEROIZE) {
-				/* mask unique ID by zero'izing */
-				/* TODO: honor mask_mac */
-				ipv6addr_setoctet(ipv6addrp, 13, 0x0u);
-				ipv6addr_setoctet(ipv6addrp, 14, 0x0u);
-				ipv6addr_setoctet(ipv6addrp, 15, 0x0u);
+				zeroize_iid = 1;
 			} else {
 				/* set anon interface ID, include shifted OUI bytes */
-				if ( (ipv6calc_debug) != 0 ) {
-					fprintf(stderr, "%s/%s: Anonymize IPv6 address: OUI=%02x:%02x:%02x\n", __FILE__, __func__, ipv6addr_getoctet(ipv6addrp, 8) & 0xfc, ipv6addr_getoctet(ipv6addrp, 9), ipv6addr_getoctet(ipv6addrp, 10));
-				};
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "Anonymize IPv6 address: OUI=%02x:%02x:%02x", ipv6addr_getoctet(ipv6addrp, 8) & 0xfc, ipv6addr_getoctet(ipv6addrp, 9), ipv6addr_getoctet(ipv6addrp, 10));
 
 				mac_clearall(&macaddr);
 				macaddr.addr[0] = ipv6addr_getoctet(ipv6addrp,  8) ^ 0x2;
@@ -2537,19 +2530,29 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 	};
 
 	if (zeroize_iid == 1) {
-		if ( (ipv6calc_debug) != 0 ) {
-			fprintf(stderr, "%s/%s: Zero'ise IID with mask: %d\n", __FILE__, __func__, mask_eui64);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "Zeroize IID with mask: %d", mask_eui64);
 
-		if (mask_eui64 == 0) {
-			ipv6addr_setdword(ipv6addrp, 2, 0);
-			ipv6addr_setdword(ipv6addrp, 3, 0);
-		} else if (mask_eui64 <= 32) {
-			ipv6addr_setdword(ipv6addrp, 2, ipv6addr_getdword(ipv6addrp, 2) & ( mask_eui64 > 31 ? 0xffffffff : (0xffffffff << (32 - mask_eui64))));
-			ipv6addr_setdword(ipv6addrp, 3, 0);
-		} else {	
-			ipv6addr_setdword(ipv6addrp, 3, ipv6addr_getdword(ipv6addrp, 3) & ( mask_eui64 < 33 ? 0x0        : (0xffffffff << (64 - mask_eui64))));
-		};
+		libeui64_clearall(&eui64addr);
+		eui64addr.addr[0] = ipv6addr_getoctet(ipv6addrp,  8) ^ 0x2;
+		eui64addr.addr[1] = ipv6addr_getoctet(ipv6addrp,  9);
+		eui64addr.addr[2] = ipv6addr_getoctet(ipv6addrp, 10);
+		eui64addr.addr[3] = ipv6addr_getoctet(ipv6addrp, 11);
+		eui64addr.addr[4] = ipv6addr_getoctet(ipv6addrp, 12);
+		eui64addr.addr[5] = ipv6addr_getoctet(ipv6addrp, 13);
+		eui64addr.addr[6] = ipv6addr_getoctet(ipv6addrp, 14);
+		eui64addr.addr[7] = ipv6addr_getoctet(ipv6addrp, 15);
+		eui64addr.flag_valid = 1;
+
+		libeui64_anonymize(&eui64addr, ipv6calc_anon_set); // covers also EUI-48
+
+		ipv6addr_setoctet(ipv6addrp,  8, eui64addr.addr[0] ^ 0x2);
+		ipv6addr_setoctet(ipv6addrp,  9, eui64addr.addr[1]);
+		ipv6addr_setoctet(ipv6addrp, 10, eui64addr.addr[2]);
+		ipv6addr_setoctet(ipv6addrp, 11, eui64addr.addr[3]);
+		ipv6addr_setoctet(ipv6addrp, 12, eui64addr.addr[4]);
+		ipv6addr_setoctet(ipv6addrp, 13, eui64addr.addr[5]);
+		ipv6addr_setoctet(ipv6addrp, 14, eui64addr.addr[6]);
+		ipv6addr_setoctet(ipv6addrp, 15, eui64addr.addr[7]);
 	};
 
 	/* prefix included */

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libeui64.c
- * Version    : $Id: libeui64.c,v 1.8 2013/10/30 20:31:52 ds6peter Exp $
+ * Version    : $Id: libeui64.c,v 1.9 2013/10/31 21:24:46 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -212,18 +212,19 @@ void libeui64_clearall(ipv6calc_eui64addr *eui64addrp) {
 
 
 /* 
- * anonymize EUI64 addr
+ * anonymize EUI-64 addr
  *
- * mod: *addrstring = EUI64 address
+ * mod: *addrstring = EUI-64 address
  */
 void libeui64_anonymize(ipv6calc_eui64addr *eui64addrp, const s_ipv6calc_anon_set *ipv6calc_anon_set_p) {
 	int mask = 0, i, j;
+	uint8_t bit_ul = 0;
 
 	DEBUGPRINT_WA(DEBUG_libeui64, "called: EUI-64=%08x%08x method=%d", EUI64_00_31(eui64addrp->addr), EUI64_32_63(eui64addrp->addr), ipv6calc_anon_set_p->method);
 
 	// if (ipv6calc_anon_set_p->method == ANON_METHOD_ZEROIZE) { TODO: different implementations
-		if (ipv6calc_anon_set_p->mask_keep_oui == 1) {
-			DEBUGPRINT_NA(DEBUG_libeui64, "keep-oui is set, autoselect proper mask");
+		if (ipv6calc_anon_set_p->mask_autoadjust == 1) {
+			DEBUGPRINT_NA(DEBUG_libeui64, "mask-autoadjust is set, autoselect proper mask");
 
 			if ((eui64addrp->addr[0] & 0x2) == 0) {
 				// global address
@@ -253,11 +254,14 @@ void libeui64_anonymize(ipv6calc_eui64addr *eui64addrp, const s_ipv6calc_anon_se
 				DEBUGPRINT_WA(DEBUG_libeui64, "specified mask is higher than autoselected one, change to specified: %d", mask);
 			};
 		} else {
-			DEBUGPRINT_WA(DEBUG_libeui64, "keep-oui is not set, use always mask: %d", mask);
+			DEBUGPRINT_WA(DEBUG_libeui64, "mask-autoadjust is not set, use always mask: %d", mask);
 			mask = ipv6calc_anon_set_p->mask_eui64;
 		};
 
-		DEBUGPRINT_WA(DEBUG_libeui64, "zeroize EUI-64 with masked bits: %d", mask);
+		// save universal/local bit
+		bit_ul = eui64addrp->addr[0] & 0x02;
+
+		DEBUGPRINT_WA(DEBUG_libeui64, "zeroize EUI-64 with masked bits: %d (universal/local=%d)", mask, bit_ul);
 
 		if (mask == 64) {
 			// nothing to do
@@ -280,9 +284,13 @@ void libeui64_anonymize(ipv6calc_eui64addr *eui64addrp, const s_ipv6calc_anon_se
 		} else {
 			libeui64_clear(eui64addrp);
 		};
+
+		// restore universal/local bit
+		eui64addrp->addr[0] = (eui64addrp->addr[0] & 0xfd) | bit_ul;
 	// };
 	
 	DEBUGPRINT_WA(DEBUG_libeui64, "anonymization finished, return: %08x%08x", EUI64_00_31(eui64addrp->addr), EUI64_32_63(eui64addrp->addr));
+
 	return;
 };
 

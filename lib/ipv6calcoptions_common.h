@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions_common.h,v 1.6 2013/10/30 20:04:25 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions_common.h,v 1.7 2013/10/31 21:24:46 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -65,5 +65,5 @@ static struct option ipv6calc_longopts_common_anon[] = {
 	{ "mask-iid"		, 1, NULL, CMD_ANON_MASK_IID },
 	{ "mask-eui64"		, 1, NULL, CMD_ANON_MASK_EUI64 },
 	{ "mask-mac"		, 1, NULL, CMD_ANON_MASK_MAC },
-	{ "mask-keep-oui"	, 1, NULL, CMD_ANON_MASK_KEEP_OUI },
+	{ "mask-autoadjust"	, 1, NULL, CMD_ANON_MASK_AUTOADJUST },
 };

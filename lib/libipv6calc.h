@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.20 2013/10/30 20:04:25 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.21 2013/10/31 21:24:46 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -42,7 +42,7 @@ typedef struct {
 
 /*@unused@*/ static const s_ipv6calc_anon_methods ipv6calc_anon_methods[] = {
 	{ "anonymize"        , 1, "reliable anonymization, keep as much type information as possible" },
-	{ "zeroise"          , 2, "simple zero'ising according to given masks, probably loose type information" },
+	{ "zeroize"          , 2, "simple zeroizing according to given masks, probably loose type information" },
 	{ "keep-type-asn-cc" , 3, "special reliable anonymization, keep type & Autonomous System Number and CountryCode" }
 };
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.23 2013/10/30 20:04:25 ds6peter Exp $
+ * Version    : $Id: libmac.c,v 1.24 2013/10/31 21:24:46 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -217,12 +217,13 @@ int macaddr_filter(const ipv6calc_macaddr *macaddrp, const s_ipv6calc_filter_mac
  */
 void libmacaddr_anonymize(ipv6calc_macaddr *macaddrp, const s_ipv6calc_anon_set *ipv6calc_anon_set_p) {
 	int mask = 0, i, j;
+	uint8_t bit_ul = 0;
 
 	/* anonymize MAC address according to settings */
 	DEBUGPRINT_WA(DEBUG_libmac, "called: EUI-48=%06x%06x method=%d", EUI48_00_23(macaddrp->addr), EUI48_24_47(macaddrp->addr), ipv6calc_anon_set_p->method);
 
-	if (ipv6calc_anon_set_p->mask_keep_oui == 1) {
-		DEBUGPRINT_NA(DEBUG_libmac, "keep-oui is set, autoselect proper mask");
+	if (ipv6calc_anon_set_p->mask_autoadjust == 1) {
+		DEBUGPRINT_NA(DEBUG_libmac, "mask-autoadjust is set, autoselect proper mask");
 
 		if ((macaddrp->addr[0] & 0x2) == 0) {
 			// global address
@@ -245,11 +246,14 @@ void libmacaddr_anonymize(ipv6calc_macaddr *macaddrp, const s_ipv6calc_anon_set 
 			DEBUGPRINT_WA(DEBUG_libmac, "specified mask is higher than autoselected one, change to specified: %d", mask);
 		};
 	} else {
-		DEBUGPRINT_WA(DEBUG_libmac, "keep-oui is not set, use always mask: %d", mask);
+		DEBUGPRINT_WA(DEBUG_libmac, "mask-autoadjust is not set, use always mask: %d", mask);
 		mask = ipv6calc_anon_set_p->mask_mac;
 	};
 
 	DEBUGPRINT_WA(DEBUG_libmac, "zeroize EUI-48 with masked bits: %d", mask);
+
+	// save universal/local bit
+	bit_ul = macaddrp->addr[0] & 0x02;
 
 	if (mask == 48) {
 		// nothing to do
@@ -272,6 +276,9 @@ void libmacaddr_anonymize(ipv6calc_macaddr *macaddrp, const s_ipv6calc_anon_set 
 	} else {
 		mac_clear(macaddrp);
 	};
+
+	// restore universal/local bit
+	macaddrp->addr[0] = (macaddrp->addr[0] & 0xfd) | bit_ul;
 	
 	DEBUGPRINT_WA(DEBUG_libmac, "anonymization finished, return: %06x%06x", EUI48_00_23(macaddrp->addr), EUI48_24_47(macaddrp->addr));
 	return;

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.17 2013/10/29 21:56:30 ds6peter Exp $
+ * Version    : $Id: libieee.c,v 1.18 2013/10/31 21:24:46 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -303,7 +303,7 @@ uint32_t libieee_map_oui_eui64addr(const ipv6calc_eui64addr *eui64addrp) {
  * unmap IAB/OUI-36
  * in : OUI (0x0......) or mapped IAB/OUI-36 (0x1mmm...)
  *	mmm = map index
- * mod: macaddrp (last bits zeroised)
+ * mod: macaddrp (last bits zeroized)
  * out: result
  */
 int libieee_unmap_oui_macaddr(ipv6calc_macaddr *macaddrp, uint32_t map_value) {
@@ -332,7 +332,7 @@ int libieee_unmap_oui_macaddr(ipv6calc_macaddr *macaddrp, uint32_t map_value) {
  * unmap IAB/OUI-36
  * in : OUI (0x0......) or mapped IAB/OUI-36 (0x1mmm...)
  *	mmm = map index
- * mod: eui64addrp (last bits zeroised)
+ * mod: eui64addrp (last bits zeroized)
  * out: result
  */
 int libieee_unmap_oui_eui64addr(ipv6calc_eui64addr *eui64addrp, uint32_t map_value) {

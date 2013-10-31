@@ -2413,7 +2413,7 @@ Method
 \begin_inset Quotes eld
 \end_inset
 
-zeroise
+zeroize
 \begin_inset Quotes erd
 \end_inset
 
@@ -3070,7 +3070,7 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 
 \begin_layout Code
 
-   zeroise   : simple zero'ising according to given masks, probably loose
+   zeroize   : simple zeroizing according to given masks, probably loose
  type information
 \end_layout
 
@@ -3110,19 +3110,19 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 \begin_layout Code
 
    zeroize-standard     (zs): mask-ipv6= 56 mask-ipv4=24 mask-iid=40 mask-mac=24
- method=zeroise
+ method=zeroize
 \end_layout
 
 \begin_layout Code
 
    zeroize-careful      (zc): mask-ipv6= 48 mask-ipv4=20 mask-iid=24 mask-mac=24
- method=zeroise
+ method=zeroize
 \end_layout
 
 \begin_layout Code
 
    zeroize-paranoid     (zp): mask-ipv6= 40 mask-ipv4=16 mask-iid= 0 mask-mac=24
- method=zeroise
+ method=zeroize
 \end_layout
 
 \begin_layout Code
