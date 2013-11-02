@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.100 2013/10/30 20:04:25 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.101 2013/11/02 17:05:11 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -495,9 +495,8 @@ int main(int argc, char *argv[]) {
 
 			case 'A':	
 			case CMD_actiontype:
-				if (ipv6calc_debug != 0) {
-					fprintf(stderr, "%s: Got action string: %s\n", DEBUG_function_name, optarg);
-				};
+				DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Got action string: %s", optarg);
+
 				if ((strcmp(optarg, "-?") == 0) || (strcmp(optarg, "-h") == 0) || (strcmp(optarg, "--help") == 0) ) {
 					action = ACTION_auto;
 					command = CMD_printhelp;
@@ -512,9 +511,7 @@ int main(int argc, char *argv[]) {
 				break;
 
 			case 'E':	
-				if (ipv6calc_debug != 0) {
-					fprintf(stderr, "%s: Got expression string: %s\n", DEBUG_function_name, optarg);
-				};
+				DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Got expression string: %s", optarg);
 
 				if ((strcmp(optarg, "-?") == 0) || (strcmp(optarg, "-h") == 0) || (strcmp(optarg, "--help") == 0) ) {
 					action = ACTION_filter;
@@ -526,6 +523,11 @@ int main(int argc, char *argv[]) {
 
 				if (result != 0) {
 					exit(EXIT_FAILURE);
+				};
+
+				if (action == ACTION_undefined) {
+					// autodefine action
+					action = ACTION_filter;
 				};
 				break;
 				

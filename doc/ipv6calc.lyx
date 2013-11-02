@@ -99,7 +99,7 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>4.0</revnumber> <date>2013-10-20</date> <authorinitials>PB<
+<revision> <revnumber>4.0</revnumber> <date>2013-11-02</date> <authorinitials>PB<
 /authorinitials></revision>
 \end_layout
 
@@ -164,7 +164,7 @@ Latest version
 \end_layout
 
 \begin_layout Standard
-Latest version since last update of this page is 0.95.0 (released > 2013-10-20)
+Latest version since last update of this page is 0.95.0 (released > 2013-11-02)
 \end_layout
 
 \begin_layout Subsection
@@ -277,7 +277,8 @@ IP2Location IPv4, IPv6
 Since version 0.95.0 the tool can be compiled to use dynamically loading of
  library, means the binaries can be also used on systems where IP2Location
  or GeoIP libraries are not existing.
- On such system, the support is simply disabled then.
+ On such system, the support is simply disabled then and some capabilities/featu
+res which requires the databases disabled.
 \end_layout
 
 \begin_layout Section
@@ -941,7 +942,8 @@ $ ./ipv6calc/ipv6calc -v
 \begin_layout Code
 
 ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
-S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
+S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE
+ ANON_KEEP-TYPE-ASN-CC
 \end_layout
 
 \begin_layout Standard
@@ -965,7 +967,8 @@ $ ./ipv6calc/ipv6calc -v -v
 \begin_layout Code
 
 ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
-S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
+S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE
+ ANON_KEEP-TYPE-ASN-CC
 \end_layout
 
 \begin_layout Code
@@ -1340,7 +1343,7 @@ Registry for address: reserved
 
 \begin_layout Standard
 There exists also a machine readable output (e.g.
- used by 'ipv6calcweb.cgi') - in addition, here 
+ used by 'ipv6calcweb.cgi') - in addition, 
 \begin_inset CommandInset href
 LatexCommand href
 name "IP2Location"
@@ -1356,7 +1359,8 @@ target "http://www.maxmind.com/"
 
 \end_inset
 
- information can be displayed, if databases are specified.
+ information can be displayed, if databases are located on the system and
+ supported.
 \end_layout
 
 \begin_layout Code
@@ -1481,14 +1485,15 @@ IPV6CALC_OUTPUT_VERSION=7
 
 \begin_layout Code
 
-IPV6CALC_SETTINGS_ANON=set=anonymize-standard,mask-ipv6=56,mask-ipv4=24,mask-iid
-=40,mask-mac=24,method=anonymize
+IPV6CALC_SETTINGS_ANON="set=keep-type-asn-cc,mask-ipv6=56,mask-ipv4=24,mask-eui6
+4=40,mask-mac=24,method=keep-type-asn-cc"
 \end_layout
 
 \begin_layout Code
 
-IPV6CALC_FEATURES="IP2Location(dyn-load) GeoIP(dyn-load) GeoIPv6 DB_AS DB_IPV4
- DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE"
+IPV6CALC_FEATURES="IP2Location(dyn-load) GeoIP(dyn-load) GeoIPv6 ANON_ZEROISE
+ ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_A
+S DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE"
 \end_layout
 
 \begin_layout Subsubsection
@@ -1541,6 +1546,12 @@ $ cat ip.bieringer.de-log.201310 | awk '{ print $1 }' | sort | uniq | ipv6calc
 \begin_layout Code
 
 2001:0:9d38:90d7:34f7:1a26:8599:e079
+\end_layout
+
+\begin_layout Standard
+
+Note: since version 0.95.0 '-A filter' is optional if option '-E <filter expressio
+n>' is given (autoselected action).
 \end_layout
 
 \begin_layout Subsection
@@ -2113,6 +2124,10 @@ filter
 
 \begin_layout Code
 
+\end_layout
+
+\begin_layout Code
+
 $ ./ipv6calc --action filter -h
 \end_layout
 
@@ -2144,6 +2159,17 @@ S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE
 \begin_layout Code
 
   echo '2001:db8::1' | ipv6calc -A filter -E ^iid-random
+\end_layout
+
+\begin_layout Code
+
+ 
+\end_layout
+
+\begin_layout Code
+
+ (note: since version 0.95.0 '-A filter' is autoselected if option '-E' is
+ given)
 \end_layout
 
 \begin_layout Code
@@ -2186,6 +2212,20 @@ S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE
 \begin_layout Code
 
   MAC address filter tokens:
+\end_layout
+
+\begin_layout Code
+
+    IMPLEMENTATION MISSING
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+  EUI-64 address filter tokens:
 \end_layout
 
 \begin_layout Code
@@ -3214,7 +3254,11 @@ cronolog
 \begin_inset Quotes erd
 \end_inset
 
- is used on the system, configure like this (Apache < 2.4):
+ is used on the system, configure like this:
+\end_layout
+
+\begin_layout Itemize
+Apache version < 2.4:
 \end_layout
 
 \begin_layout Code
@@ -3223,16 +3267,8 @@ CustomLog "|/usr/bin/ipv6loganon -f |/usr/sbin/cronolog /var/log/httpd/access.lo
 -%Y%m%d" combined 
 \end_layout
 
-\begin_layout Standard
-In case of 
-\begin_inset Quotes eld
-\end_inset
-
-cronolog
-\begin_inset Quotes erd
-\end_inset
-
- is used on the system, configure like this (Apache >= 2.4):
+\begin_layout Itemize
+Apache version >= 2.4:
 \end_layout
 
 \begin_layout Code

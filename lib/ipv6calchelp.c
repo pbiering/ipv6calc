@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.49 2013/10/31 21:24:46 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.50 2013/11/02 17:05:11 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -652,9 +652,11 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 
 		case ACTION_filter:
 			fprintf(stderr, " Filter given addresses from stdout by filter expression, e.g.\n");
-			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc -A filter -E iid-local\n");
-			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc -A filter -E iid-local,global-unicast\n");
-			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc -A filter -E ^iid-randomy\n");
+			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A filter] -E iid-local\n");
+			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A filter] -E iid-local,global-unicast\n");
+			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A filter] -E ^iid-randomy\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, " (note: since version 0.95.0 '-A filter' is autoselected if option '-E <filter expression>' is given)\n");
 			fprintf(stderr, "\n");
 			fprintf(stderr, "  IPv6 address filter tokens:\n");
 			fprintf(stderr, "   ipv6 ");
@@ -670,7 +672,12 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			};
 			fprintf(stderr, "\n");
 			fprintf(stderr, "\n");
-			fprintf(stderr, "  MAC address filter tokens:\n");
+			fprintf(stderr, "  EUI-48/MAC address filter tokens:\n");
+			fprintf(stderr, "   ");
+			fprintf(stderr, " IMPLEMENTATION MISSING");
+			fprintf(stderr, "\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, "  EUI-64 address filter tokens:\n");
 			fprintf(stderr, "   ");
 			fprintf(stderr, " IMPLEMENTATION MISSING");
 			fprintf(stderr, "\n");

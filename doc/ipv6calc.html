@@ -58,7 +58,7 @@ ALIGN="LEFT"
 >Revision 4.0</TD
 ><TD
 ALIGN="LEFT"
->2013-10-20</TD
+>2013-11-02</TD
 ><TD
 ALIGN="LEFT"
 >Revised by: PB</TD
@@ -219,122 +219,122 @@ HREF="#AEN208"
 ></DT
 ><DT
 >9.4. <A
-HREF="#AEN239"
+HREF="#AEN240"
 >Option style</A
 ></DT
 ><DT
 >9.5. <A
-HREF="#AEN251"
+HREF="#AEN252"
 >Online help</A
 ></DT
 ></DL
 ></DD
 ><DT
 >10. <A
-HREF="#AEN272"
+HREF="#AEN273"
 >Webserver log conversion helper program "ipv6logconv"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >10.1. <A
-HREF="#AEN275"
+HREF="#AEN276"
 >Examples</A
 ></DT
 ><DT
 >10.2. <A
-HREF="#AEN279"
+HREF="#AEN280"
 >Usage</A
 ></DT
 ></DL
 ></DD
 ><DT
 >11. <A
-HREF="#AEN282"
+HREF="#AEN283"
 >Webserver log anonymization helper program "ipv6loganon"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >11.1. <A
-HREF="#AEN287"
+HREF="#AEN288"
 >Anonymization details</A
 ></DT
 ><DT
 >11.2. <A
-HREF="#AEN332"
+HREF="#AEN333"
 >Supported log file formats</A
 ></DT
 ><DT
 >11.3. <A
-HREF="#AEN339"
+HREF="#AEN340"
 >Supported options</A
 ></DT
 ><DT
 >11.4. <A
-HREF="#AEN342"
+HREF="#AEN343"
 >Usage</A
 ></DT
 ></DL
 ></DD
 ><DT
 >12. <A
-HREF="#AEN356"
+HREF="#AEN362"
 >Perl CGI wrapper program "ipv6calcweb.cgi"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >12.1. <A
-HREF="#AEN359"
+HREF="#AEN365"
 >Examples</A
 ></DT
 ></DL
 ></DD
 ><DT
 >13. <A
-HREF="#AEN375"
+HREF="#AEN381"
 >Webserver log statistics helper program "ipv6logstats"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >13.1. <A
-HREF="#AEN379"
+HREF="#AEN385"
 >Supported options</A
 ></DT
 ><DT
 >13.2. <A
-HREF="#AEN382"
+HREF="#AEN388"
 >Usage</A
 ></DT
 ><DT
 >13.3. <A
-HREF="#AEN385"
+HREF="#AEN391"
 >Examples</A
 ></DT
 ></DL
 ></DD
 ><DT
 >14. <A
-HREF="#AEN389"
+HREF="#AEN395"
 >History</A
 ></DT
 ><DD
 ><DL
 ><DT
 >14.1. <A
-HREF="#AEN392"
+HREF="#AEN398"
 >2013</A
 ></DT
 ><DT
 >14.2. <A
-HREF="#AEN401"
+HREF="#AEN407"
 >2011</A
 ></DT
 ><DT
 >14.3. <A
-HREF="#AEN418"
+HREF="#AEN424"
 >2010 and older</A
 ></DT
 ></DL
@@ -368,7 +368,7 @@ NAME="AEN20"
 >1.1. Latest version</A
 ></H3
 ><P
->Latest version since last update of this page is 0.95.0 (released &#62; 2013-10-20)</P
+>Latest version since last update of this page is 0.95.0 (released &#62; 2013-11-02)</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -453,7 +453,7 @@ NAME="AEN46"
 ></LI
 ></UL
 ><P
->Since version 0.95.0 the tool can be compiled to use dynamically loading of library, means the binaries can be also used on systems where IP2Location or GeoIP libraries are not existing. On such system, the support is simply disabled then.</P
+>Since version 0.95.0 the tool can be compiled to use dynamically loading of library, means the binaries can be also used on systems where IP2Location or GeoIP libraries are not existing. On such system, the support is simply disabled then and some capabilities/features which requires the databases disabled.</P
 ></DIV
 ></DIV
 ><DIV
@@ -1051,7 +1051,7 @@ COLOR="#000000"
 ><PRE
 CLASS="SCREEN"
 >$ ./ipv6calc/ipv6calc -v 
-ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE </PRE
+ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC</PRE
 ></FONT
 ></TD
 ></TR
@@ -1069,7 +1069,7 @@ COLOR="#000000"
 ><PRE
 CLASS="SCREEN"
 >$ ./ipv6calc/ipv6calc -v -v
-ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
+ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 
 GeoIP support by dynamic library load, compiled with IPv4 &#38; IPv6 support
 GeoIP configured dynamic library file and version: libGeoIP.so.1 1.5.1
@@ -1272,7 +1272,7 @@ Registry for address: reserved</PRE
 ></TR
 ></TABLE
 ><P
->There exists also a machine readable output (e.g. used by 'ipv6calcweb.cgi') - in addition, here <A
+>There exists also a machine readable output (e.g. used by 'ipv6calcweb.cgi') - in addition, <A
 HREF="http://www.ip2location.com/"
 TARGET="_top"
 >IP2Location</A
@@ -1280,7 +1280,7 @@ TARGET="_top"
 HREF="http://www.maxmind.com/"
 TARGET="_top"
 >GeoIP</A
-> information can be displayed, if databases are specified.</P
+> information can be displayed, if databases are located on the system and supported.</P
 ><TABLE
 BORDER="1"
 BGCOLOR="#E0E0E0"
@@ -1314,8 +1314,8 @@ IPV6CALC_NAME=ipv6calc
 IPV6CALC_VERSION=0.95.0.rc.1
 IPV6CALC_COPYRIGHT="(P) &#38; (C) 2001-2013 by Peter Bieringer &#60;pb (at) bieringer.de&#62;"
 IPV6CALC_OUTPUT_VERSION=7
-IPV6CALC_SETTINGS_ANON=set=anonymize-standard,mask-ipv6=56,mask-ipv4=24,mask-iid=40,mask-mac=24,method=anonymize
-IPV6CALC_FEATURES="IP2Location(dyn-load) GeoIP(dyn-load) GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE"</PRE
+IPV6CALC_SETTINGS_ANON="set=keep-type-asn-cc,mask-ipv6=56,mask-ipv4=24,mask-eui64=40,mask-mac=24,method=keep-type-asn-cc"
+IPV6CALC_FEATURES="IP2Location(dyn-load) GeoIP(dyn-load) GeoIPv6 ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE"</PRE
 ></FONT
 ></TD
 ></TR
@@ -1351,6 +1351,8 @@ CLASS="SCREEN"
 ></TD
 ></TR
 ></TABLE
+><P
+>Note: since version 0.95.0 '-A filter' is optional if option '-E &#60;filter expression&#62;' is given (autoselected action).</P
 ></DIV
 ></DIV
 ><DIV
@@ -1358,7 +1360,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN239"
+NAME="AEN240"
 >9.4. Option style</A
 ></H3
 ><P
@@ -1389,7 +1391,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN251"
+NAME="AEN252"
 >9.5. Online help</A
 ></H3
 ><P
@@ -1399,7 +1401,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN254"
+NAME="AEN255"
 >9.5.1. Main online help:</A
 ></H4
 ><P
@@ -1463,7 +1465,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN258"
+NAME="AEN259"
 >9.5.2. Input-type options</A
 ></H4
 ><TABLE
@@ -1505,7 +1507,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN261"
+NAME="AEN262"
 >9.5.3. Output-type options:</A
 ></H4
 ><TABLE
@@ -1553,7 +1555,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN264"
+NAME="AEN265"
 >9.5.4. Action-type options:</A
 ></H4
 ><TABLE
@@ -1604,6 +1606,8 @@ ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4
   echo '2001:db8::1' | ipv6calc -A filter -E iid-local
   echo '2001:db8::1' | ipv6calc -A filter -E iid-local,global-unicast
   echo '2001:db8::1' | ipv6calc -A filter -E ^iid-random
+ 
+ (note: since version 0.95.0 '-A filter' is autoselected if option '-E' is given)
 
   IPv6 address filter tokens:
    ipv6  unknown unicast multicast anycast loopback link-local site-local compat-v4 mapped reserved unique-local-unicast anonymized-iid anonymized-prefix 6to4 6bone global-unicast unspecified solicited-node productive 6to4-microsoft teredo orchid link-local-teredo nat64 iid-random iid iid-local iid-global iid-teredo iid-eui48 iid-eui64 iid-isatap iid-includes-ipv4
@@ -1612,6 +1616,9 @@ ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4
    ipv4  any unicast multicast anycast broadcast loopback unspecified unknown reserved zeroconf site-local anonymized global 6to4relay
 
   MAC address filter tokens:
+    IMPLEMENTATION MISSING
+
+  EUI-64 address filter tokens:
     IMPLEMENTATION MISSING</PRE
 ></FONT
 ></TD
@@ -1623,7 +1630,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN269"
+NAME="AEN270"
 >9.5.5. Because of historical issues, there exists also a support of the old-styled options:</A
 ></H4
 ><TABLE
@@ -1674,7 +1681,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN272"
+NAME="AEN273"
 >10. Webserver log conversion helper program "ipv6logconv"</A
 ></H2
 ><P
@@ -1684,7 +1691,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN275"
+NAME="AEN276"
 >10.1. Examples</A
 ></H3
 ><P
@@ -1699,7 +1706,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN279"
+NAME="AEN280"
 >10.2. Usage</A
 ></H3
 ><P
@@ -1711,7 +1718,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN282"
+NAME="AEN283"
 >11. Webserver log anonymization helper program "ipv6loganon"</A
 ></H2
 ><P
@@ -1725,7 +1732,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN287"
+NAME="AEN288"
 >11.1. Anonymization details</A
 ></H3
 ><DIV
@@ -1733,8 +1740,8 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
-NAME="AEN289"
->11.1.1. Method &#8220;zeroise&#8221;</A
+NAME="AEN290"
+>11.1.1. Method &#8220;zeroize&#8221;</A
 ></H4
 ><P
 >The anonymizer would keep as much information as possible for IPv6 address types.</P
@@ -1804,7 +1811,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN318"
+NAME="AEN319"
 >11.1.2. Method &#8220;anonmize&#8221;</A
 ></H4
 ><P
@@ -1869,7 +1876,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN325"
+NAME="AEN326"
 >11.1.3. Method &#8220;keep-type-asn-cc&#8221;</A
 ></H4
 ><P
@@ -1956,7 +1963,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN332"
+NAME="AEN333"
 >11.2. Supported log file formats</A
 ></H3
 ><P
@@ -1977,7 +1984,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN339"
+NAME="AEN340"
 >11.3. Supported options</A
 ></H3
 ><TABLE
@@ -2023,16 +2030,16 @@ This program anonymizes IPv4/IPv6 addresses in e.g. HTTP server log files
   
   Supported methods [--anonymize-method METHOD]:
    anonymize : reliable anonymization, keep as much type information as possible
-   zeroise   : simple zero'ising according to given masks, probably loose type information
+   zeroize   : simple zeroizing according to given masks, probably loose type information
    keep-type-asn-cc: special reliable anonymization, keep type &#38; Autonomous System Number and CountryCode
 
   Available presets (shortcut names) [--anonymize-preset PRESET-NAME]:
    anonymize-standard   (as): mask-ipv6= 56 mask-ipv4=24 mask-iid=40 mask-mac=24 method=anonymize
    anonymize-careful    (ac): mask-ipv6= 48 mask-ipv4=20 mask-iid=24 mask-mac=24 method=anonymize
    anonymize-paranoid   (ap): mask-ipv6= 40 mask-ipv4=16 mask-iid= 0 mask-mac=24 method=anonymize
-   zeroize-standard     (zs): mask-ipv6= 56 mask-ipv4=24 mask-iid=40 mask-mac=24 method=zeroise
-   zeroize-careful      (zc): mask-ipv6= 48 mask-ipv4=20 mask-iid=24 mask-mac=24 method=zeroise
-   zeroize-paranoid     (zp): mask-ipv6= 40 mask-ipv4=16 mask-iid= 0 mask-mac=24 method=zeroise
+   zeroize-standard     (zs): mask-ipv6= 56 mask-ipv4=24 mask-iid=40 mask-mac=24 method=zeroize
+   zeroize-careful      (zc): mask-ipv6= 48 mask-ipv4=20 mask-iid=24 mask-mac=24 method=zeroize
+   zeroize-paranoid     (zp): mask-ipv6= 40 mask-ipv4=16 mask-iid= 0 mask-mac=24 method=zeroize
    keep-type-asn-cc     (kp): mask-ipv6= 56 mask-ipv4=24 mask-iid=40 mask-mac=24 method=keep-type-asn-cc
  
   Custom control:
@@ -2052,7 +2059,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN342"
+NAME="AEN343"
 >11.4. Usage</A
 ></H3
 ><DIV
@@ -2060,7 +2067,7 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
-NAME="AEN344"
+NAME="AEN345"
 >11.4.1. Offline anonymization</A
 ></H4
 ><TABLE
@@ -2084,7 +2091,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN347"
+NAME="AEN348"
 >11.4.2. On-the-fly online anonymization for Apache Webserver</A
 ></H4
 ><P
@@ -2107,7 +2114,15 @@ CLASS="SCREEN"
 ></TR
 ></TABLE
 ><P
->In case of &#8220;cronolog&#8221; is used on the system, configure like this (Apache &#60; 2.4):</P
+>In case of &#8220;cronolog&#8221; is used on the system, configure like this:</P
+><P
+></P
+><UL
+><LI
+><P
+>Apache version &#60; 2.4:</P
+></LI
+></UL
 ><TABLE
 BORDER="1"
 BGCOLOR="#E0E0E0"
@@ -2124,7 +2139,13 @@ CLASS="SCREEN"
 ></TR
 ></TABLE
 ><P
->In case of &#8220;cronolog&#8221; is used on the system, configure like this (Apache &#62;= 2.4):</P
+></P
+><UL
+><LI
+><P
+>Apache version &#62;= 2.4:</P
+></LI
+></UL
 ><TABLE
 BORDER="1"
 BGCOLOR="#E0E0E0"
@@ -2148,7 +2169,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN356"
+NAME="AEN362"
 >12. Perl CGI wrapper program "ipv6calcweb.cgi"</A
 ></H2
 ><P
@@ -2158,7 +2179,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN359"
+NAME="AEN365"
 >12.1. Examples</A
 ></H3
 ><P
@@ -2206,7 +2227,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN375"
+NAME="AEN381"
 >13. Webserver log statistics helper program "ipv6logstats"</A
 ></H2
 ><P
@@ -2218,7 +2239,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN379"
+NAME="AEN385"
 >13.1. Supported options</A
 ></H3
 ><TABLE
@@ -2267,7 +2288,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN382"
+NAME="AEN388"
 >13.2. Usage</A
 ></H3
 ><P
@@ -2278,7 +2299,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN385"
+NAME="AEN391"
 >13.3. Examples</A
 ></H3
 ><P
@@ -2294,7 +2315,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN389"
+NAME="AEN395"
 >14. History</A
 ></H2
 ><P
@@ -2304,7 +2325,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN392"
+NAME="AEN398"
 >14.1. 2013</A
 ></H3
 ><P
@@ -2329,7 +2350,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN401"
+NAME="AEN407"
 >14.2. 2011</A
 ></H3
 ><P
@@ -2370,7 +2391,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN418"
+NAME="AEN424"
 >14.3. 2010 and older</A
 ></H3
 ><P
