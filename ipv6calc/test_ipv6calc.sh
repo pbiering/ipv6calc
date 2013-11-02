@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.43 2013/10/31 21:24:46 ds6peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.44 2013/11/02 16:41:01 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -157,7 +157,7 @@ NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 --action anonymize --mask-mac 8  ff:23:45:67:89:a8			=ff:00:00:00:00:00
 --action anonymize --mask-mac 7  ff:23:45:67:89:a8			=fe:00:00:00:00:00
 --action anonymize --mask-mac 1  ff:23:45:67:89:a8			=82:00:00:00:00:00
--A anonymize --anonymize-preset zeroize-paranoid   2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2200:0:200::
+-A anonymize --anonymize-preset zeroize-paranoid   2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2200::
 -A anonymize --anonymize-preset zeroize-careful    2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2280::224:21ff:fe00:0
 -A anonymize --anonymize-preset zeroize-standard   2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2280:6900:224:21ff:fe00:0
 -A anonymize --anonymize-preset anonymize-paranoid 2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2209:a909:a969:4291:4022:4213

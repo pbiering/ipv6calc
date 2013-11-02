@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libeui64.c
- * Version    : $Id: libeui64.c,v 1.9 2013/10/31 21:24:46 ds6peter Exp $
+ * Version    : $Id: libeui64.c,v 1.10 2013/11/02 16:41:01 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -254,14 +254,14 @@ void libeui64_anonymize(ipv6calc_eui64addr *eui64addrp, const s_ipv6calc_anon_se
 				DEBUGPRINT_WA(DEBUG_libeui64, "specified mask is higher than autoselected one, change to specified: %d", mask);
 			};
 		} else {
-			DEBUGPRINT_WA(DEBUG_libeui64, "mask-autoadjust is not set, use always mask: %d", mask);
+			DEBUGPRINT_WA(DEBUG_libeui64, "mask-autoadjust is not set, use always given mask: %d", mask);
 			mask = ipv6calc_anon_set_p->mask_eui64;
 		};
 
 		// save universal/local bit
 		bit_ul = eui64addrp->addr[0] & 0x02;
 
-		DEBUGPRINT_WA(DEBUG_libeui64, "zeroize EUI-64 with masked bits: %d (universal/local=%d)", mask, bit_ul);
+		DEBUGPRINT_WA(DEBUG_libeui64, "zeroize EUI-64 with masked bits: %d (u/l=%s)", mask, (bit_ul == 2) ? "local" : "universal");
 
 		if (mask == 64) {
 			// nothing to do
