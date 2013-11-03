@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.100 2013/10/28 21:17:15 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.101 2013/11/03 08:48:14 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -291,19 +291,20 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 		printout(tempstring);
 	};
 
-	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-		fprintf(stderr, "%s: IP2Location IPv%d try to open database by type: %s\n", DEBUG_function_name, version, libipv6calc_db_wrapper_IP2Location_dbdescription(ip2location_type));
-	};
+	DEBUGPRINT_WA(DEBUG_showinfo, "IP2Location IPv%d try to open database by type: %s", version, libipv6calc_db_wrapper_IP2Location_dbdescription(ip2location_type));
 
 	if (libipv6calc_db_wrapper_IP2Location_db_avail(ip2location_type) != 1) {
-		if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-			fprintf(stderr, "%s: IP2Location IPv%d database by type not available: %s\n", DEBUG_function_name, version, libipv6calc_db_wrapper_IP2Location_dbdescription(ip2location_type));
-		};
+		DEBUGPRINT_WA(DEBUG_showinfo, "IP2Location IPv%d database by type not available: %s", version, libipv6calc_db_wrapper_IP2Location_dbdescription(ip2location_type));
 		// stay silent
 		return;
 	};
 
 	IP2LocationObj = libipv6calc_db_wrapper_IP2Location_open_type(ip2location_type);
+	if (IP2LocationObj == NULL) {
+		DEBUGPRINT_WA(DEBUG_showinfo, "IP2Location IPv%d database open_type failed: %s", version, libipv6calc_db_wrapper_IP2Location_dbdescription(ip2location_type));
+		// stay silent
+		return;
+	};
 
 	IP2LocationRecord *record = libipv6calc_db_wrapper_IP2Location_get_all(IP2LocationObj, (char*) addrstring);
 
