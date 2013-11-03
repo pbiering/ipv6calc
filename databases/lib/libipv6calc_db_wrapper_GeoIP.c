@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.47 2013/10/28 20:10:17 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.48 2013/11/03 21:24:57 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -770,9 +770,7 @@ int libipv6calc_db_wrapper_GeoIP_db_avail(int type) {
 	};
 
 	if (dl_status_GeoIP_db_avail == IPV6CALC_DL_STATUS_UNKNOWN) {
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper_GeoIP) != 0 ) {
-			fprintf(stderr, "%s/%s: Call dlsym: %s\n", __FILE__, __func__, dl_symbol);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper_GeoIP, "Call dlsym: %s", dl_symbol);
 
 		dlerror();    /* Clear any existing error */
 
