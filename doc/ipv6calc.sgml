@@ -618,7 +618,120 @@ Takes data from stdin, outputs the processed data to stdout (default)
  (1) unsupported for CountryCode & ASN statistics
 ]]></screen></sect2><sect2>
 <title>Usage</title>
-<para>There are a README and some helper scripts available in the package how to use this program and how to generate a graph using Gnuplot.</para></sect2><sect2>
+<para>There are a README and some helper scripts available in the package how to use this program and how to generate a graph using Gnuplot.</para><sect3>
+<title>Line-by-line output</title>
+<para>The example shows output version 3.0, which </para><screen>
+<![CDATA[$ zcat ip.bieringer.de-log.201*.gz | ipv6logstats
+]]></screen><para>Header section, since output version 3.0 (&gt;= 0.95.0) additional lines starting with '*3*' and '*DateTime' and '*UnixTime' included</para><screen>
+<![CDATA[*Version             3.0
+*DateTime: 2013:11:03 08:57:01+0000 GMT
+*UnixTime: 1383469021
+*3*DB-Info: DB features: 0x0000133f
+*3*DB-Info: GeoIP: features: 0x00000330
+*3*DB-Info: GeoIP: info of available databases in directory: /usr/share/GeoIP (max: 31)
+*3*DB-Info: GeoIP: GeoIP Country Edition            :[ 1] /usr/share/GeoIP/GeoIP.dat               (GEO-106FREE 20130903 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
+*3*DB-Info: GeoIP: GeoIP ASNum Edition              :[ 9] /usr/share/GeoIP/GeoIPASNum.dat          (GEO-117 20130902 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
+*3*DB-Info: GeoIP: GeoIP Country V6 Edition         :[12] /usr/share/GeoIP/GeoIPv6.dat             (GEO-106FREE 20131001 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
+*3*DB-Info: GeoIP: GeoIP Large Country Edition      :[17] /usr/share/GeoIP/GeoIP.dat               (GEO-106FREE 20130903 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
+*3*DB-Info: GeoIP: GeoIP Large Country V6 Edition   :[18] /usr/share/GeoIP/GeoIPv6.dat             (GEO-106FREE 20131001 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
+*3*DB-Info: GeoIP: GeoIP ASNum V6 Edition           :[21] /usr/share/GeoIP/GeoIPASNumv6.dat        (GEO-117 20130306 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
+*3*DB-Info: IP2Location: features: 0x00000300
+*3*DB-Info: IP2Location: info of available databases in directory: /usr/share/IP2Location
+*3*DB-Info: IP2Location: IPv4 Country               : /usr/share/IP2Location/IP-COUNTRY.BIN    (IP2L-DB20 20130411 Copyright (c) 2013 IP2Location All Rights Reserved)
+*3*DB-Info: IP2Location: IPv6 Country               : /usr/share/IP2Location/IPV6-COUNTRY.BIN  (IP2L-DB1 20131025 Copyright (c) 2013 IP2Location All Rights Reserved)
+*3*DB-Info: BuiltIn: features: 0x0000100f
+*3*DB-Info: BuiltIn: info of available databases
+*3*DB-Info: BuiltIn: ASN  : IANA/20130730
+*3*DB-Info: BuiltIn: CC   : AFRINIC/20130806 APNIC/20130805 ARIN/20130805 LACNIC/20130805 RIPENCC/20130805
+*3*DB-Info: BuiltIn: IPv4 : AFRINIC/20131014 APNIC/20131014 ARIN/20131014 IANA/20130520 LACNIC/20131014 RIPENCC/20131014
+*3*DB-Info: BuiltIn: IPv6 : AFRINIC/20131015 APNIC/20131014 ARIN/20131014 IANA/20130215 LACNIC/20131014 RIPENCC/20131014
+*3*DB-Info: BuiltIn: IEEE : IAB/20131015 OUI/20131015 OUI36/20131015
+]]></screen><para>Simple statistics section</para><screen>
+<![CDATA[ALL                  108525
+IPv4                 46233
+IPv6                 62292
+UNKNOWN              0
+IPv4/APNIC           2397
+IPv4/ARIN            3525
+IPv4/RIPE            40198
+IPv4/LACNIC          97
+IPv4/UNKNOWN         16
+IPv6/6bone           0
+IPv6/IANA            0
+IPv6/APNIC           129
+IPv6/ARIN            839
+IPv6/RIPE            61074
+IPv6/LACNIC          0
+IPv6/RESERVED        0
+IPv6/UNKNOWN         0
+IPv6/6to4/IANA       0
+IPv6/6to4/APNIC      0
+IPv6/6to4/ARIN       16
+IPv6/6to4/RIPE       51
+IPv6/6to4/LACNIC     0
+IPv6/6to4/RESERVED   0
+IPv6/6to4/UNKNOWN    0
+IPv6/Teredo/IANA     0
+IPv6/Teredo/APNIC    63
+IPv6/Teredo/ARIN     0
+IPv6/Teredo/RIPE     90
+IPv6/Teredo/LACNIC   30
+IPv6/Teredo/RESERVED 0
+IPv6/Teredo/UNKNOWN  0
+IPv6/NAT64/IANA      0
+IPv6/NAT64/APNIC     0
+IPv6/NAT64/ARIN      0
+IPv6/NAT64/RIPE      0
+IPv6/NAT64/LACNIC    0
+IPv6/NAT64/RESERVED  0
+IPv6/NAT64/UNKNOWN   0
+IPv6/IID/Global      1436
+IPv6/IID/Random      58198
+IPv6/IID/Manual      2055
+IPv6/IID/ISATAP      353
+IPv6/IID/Unknown     0
+]]></screen><para>External database supported output since output version 3.0 (&gt;= 0.95.0)</para><itemizedlist>
+<listitem><para>Country Code / Proto</para></listitem></itemizedlist><screen>
+<![CDATA[...
+*3*CC-code-proto/DE/ALL   96450
+*3*CC-code-proto/DE/IPv4  36486
+*3*CC-code-proto/DE/IPv6  59964 
+*3*CC-code-proto-list/DE  96450 36486 59964
+...
+]]></screen><itemizedlist>
+<listitem><para>Proto / Country Code (&ldquo;ALL&rdquo; line contains: ALL IPv4 IPv6)</para></listitem></itemizedlist><screen>
+<![CDATA[...
+*3*CC-proto-code/ALL/DE   96450
+*3*CC-proto-code/IPv4/DE  36486
+*3*CC-proto-code/IPv6/DE  59964
+...
+*3*CC-proto-code-list/ALL  108525 46483 62042
+]]></screen><itemizedlist>
+<listitem><para>Autonomous System number / Proto</para></listitem></itemizedlist><screen>
+<![CDATA[...
+*3*AS-num-proto/8767/ALL   6054
+*3*AS-num-proto/8767/IPv4  2705
+*3*AS-num-proto/8767/IPv6  3349
+*3*AS-num-proto-list/8767  6054 2705 3349
+...
+]]></screen><itemizedlist>
+<listitem><para>Proto / Autonomous System number (&ldquo;ALL&rdquo; line contains: ALL IPv4 IPv6)</para></listitem></itemizedlist><screen>
+<![CDATA[...
+*3*AS-proto-num/ALL/8767   6054
+*3*AS-proto-num/IPv4/8767  2705
+*3*AS-proto-num/IPv6/8767  3349
+...
+*3*AS-proto-num-list/ALL  108525 46483 62042
+]]></screen></sect3><sect3>
+<title>Column output</title>
+<para>Column output does not support version 3 extension, only simple statistics with a header line:</para><screen>
+<![CDATA[$ zcat ip.bieringer.de-log.201*.gz | ipv6logstats -q -c 
+ IPv4 IPv6 UNKNOWN IPv4/APNIC IPv4/ARIN IPv4/RIPE IPv4/LACNIC IPv4/UNKNOWN IPv6/6bone IPv6/IANA IPv6/APNIC IPv6/ARIN IPv6/RIPE IPv6/LACNIC IPv6/RESERVED IPv6/UNKNOWN IPv6/6to4/IANA IPv6/6to4/APNIC IPv6/6to4/ARIN IPv6/6to4/RIPE IPv6/6to4/LACNIC IPv6/6to4/RESERVED IPv6/6to4/UNKNOWN IPv6/Teredo/IANA IPv6/Teredo/APNIC IPv6/Teredo/ARIN IPv6/Teredo/RIPE IPv6/Teredo/LACNIC IPv6/Teredo/RESERVED IPv6/Teredo/UNKNOWN IPv6/NAT64/IANA IPv6/NAT64/APNIC IPv6/NAT64/ARIN IPv6/NAT64/RIPE IPv6/NAT64/LACNIC IPv6/NAT64/RESERVED IPv6/NAT64/UNKNOWN IPv6/IID/Global IPv6/IID/Random IPv6/IID/Manual IPv6/IID/ISATAP IPv6/IID/Unknown
+ 46233 62292 0 2397 3525 40198 97 16 0 0 129 839 61074 0 0 0 0 0 16 51 0 0 0 0 63 0 90 30 0 0 0 0 0 0 0 0 0 1436 58198 2055 353 0
+]]></screen><para>An optional prefix token can be given (&ldquo;-p &lt;prefix&gt;&rdquo;) to create e.g. in a for-loop one line per month and put month in front of statistics, also the header line can be suppressed (&ldquo;-n&rdquo;).</para><screen>
+<![CDATA[$ zcat ip.bieringer.de-log.201*.gz | ipv6logstats -q -c -n -p ALL
+ALL  46233 62292 0 2397 3525 40198 97 16 0 0 129 839 61074 0 0 0 0 0 16 51 0 0 0 0 63 0 90 30 0 0 0 0 0 0 0 0 0 1436 58198 2055 353 0 
+]]></screen></sect3></sect2><sect2>
 <title>Examples</title>
 <para>A demonstration with real data is available at <ulink url="http://mirrors.bieringer.de/stats/timeline.html">http://mirrors.bieringer.de/stats/timeline.html</ulink>.</para></sect2></sect1><sect1>
 <title>History</title>

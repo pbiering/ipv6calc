@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.9 2013/10/18 06:23:42 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.10 2013/11/03 09:14:55 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -459,9 +459,7 @@ IP2Location *libipv6calc_db_wrapper_IP2Location_open_type(int type) {
 	char *filename;
 	int  entry = -1, i;
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called: %s type=%d\n", __FILE__, __func__, wrapper_ip2location_info, type);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Called: %s type=%d", wrapper_ip2location_info, type);
 
 	for (i = 0; i < sizeof(libipv6calc_db_wrapper_IP2Location_db_file_desc) / sizeof(libipv6calc_db_wrapper_IP2Location_db_file_desc[0]); i++) {
 		if (libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number == type) {
@@ -494,9 +492,7 @@ IP2Location *libipv6calc_db_wrapper_IP2Location_open_type(int type) {
  * wrapper: IP2Location_open
  */
 IP2Location *libipv6calc_db_wrapper_IP2Location_open(char *db) {
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called: %s filename=%s\n", __FILE__, __func__, wrapper_ip2location_info, db);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Called: %s filename=%s", wrapper_ip2location_info, db);
 
 #ifdef SUPPORT_IP2LOCATION_DYN
 	IP2Location *loc = NULL;
@@ -509,9 +505,7 @@ IP2Location *libipv6calc_db_wrapper_IP2Location_open(char *db) {
 	};
 
 	if (dl_status_IP2Location_open == IPV6CALC_DL_STATUS_UNKNOWN) {
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-			fprintf(stderr, "%s/%s: Call dlsym: %s\n", __FILE__, __func__, dl_symbol);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Call dlsym: %s", dl_symbol);
 
 		dlerror();    /* Clear any existing error */
 
@@ -525,19 +519,13 @@ IP2Location *libipv6calc_db_wrapper_IP2Location_open(char *db) {
 
 		dl_status_IP2Location_open = IPV6CALC_DL_STATUS_OK;
 
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-			fprintf(stderr, "%s/%s: Called dlsym successful: %s\n", __FILE__, __func__, dl_symbol);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Called dlsym successful: %s", dl_symbol);
 	} else if (dl_status_IP2Location_open == IPV6CALC_DL_STATUS_ERROR) {
 		/* already known issue */
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-			fprintf(stderr, "%s/%s: Previous call of dlsym already failed: %s\n", __FILE__, __func__, dl_symbol);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Previous call of dlsym already failed: %s", dl_symbol);
 		goto END_libipv6calc_db_wrapper;
 	} else {
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-			fprintf(stderr, "%s/%s: Previous call of dlsym already successful: %s\n", __FILE__, __func__, dl_symbol);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
 
 	loc = (*dl_IP2Location_open.func)(db);
@@ -844,8 +832,11 @@ END_libipv6calc_db_wrapper:
  * wrapper: IP2Location_get_all
  */
 IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_all(IP2Location *loc, char *ip) {
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called: %s\n", __FILE__, __func__, wrapper_ip2location_info);
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Called: %s", wrapper_ip2location_info);
+
+	if (loc == NULL) {
+		DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "loc==NULL, return NULL");
+		return(NULL);
 	};
 
 #ifdef SUPPORT_IP2LOCATION_DYN
@@ -859,9 +850,7 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_all(IP2Location *loc, 
 	};
 
 	if (dl_status_IP2Location_get_all == IPV6CALC_DL_STATUS_UNKNOWN) {
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-			fprintf(stderr, "%s/%s: Call dlsym: %s\n", __FILE__, __func__, dl_symbol);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Call dlsym: %s", dl_symbol);
 
 		dlerror();    /* Clear any existing error */
 
@@ -875,19 +864,13 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_all(IP2Location *loc, 
 
 		dl_status_IP2Location_get_all = IPV6CALC_DL_STATUS_OK;
 
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-			fprintf(stderr, "%s/%s: Called dlsym successful: %s\n", __FILE__, __func__, dl_symbol);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Called dlsym successful: %s", dl_symbol);
 	} else if (dl_status_IP2Location_get_all == IPV6CALC_DL_STATUS_ERROR) {
 		/* already known issue */
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-			fprintf(stderr, "%s/%s: Previous call of dlsym already failed: %s\n", __FILE__, __func__, dl_symbol);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Previous call of dlsym already failed: %s", dl_symbol);
 		goto END_libipv6calc_db_wrapper;
 	} else {
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-			fprintf(stderr, "%s/%s: Previous call of dlsym already successful: %s\n", __FILE__, __func__, dl_symbol);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
 
 	result_IP2Location_get_all = (*dl_IP2Location_get_all.func)(loc, ip);
@@ -940,9 +923,7 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(char *addr
 	int IP2Location_type = 0;
 	char *IP2Location_result_ptr;
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called with addr=%s proto=%d\n", __FILE__, __func__, addr, proto);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Called with addr=%s proto=%d", addr, proto);
 
 	if (proto == 4) {
 		IP2Location_type = IP2LOCATION_DB_IP_COUNTRY;

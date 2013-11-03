@@ -1549,7 +1549,6 @@ $ cat ip.bieringer.de-log.201310 | awk '{ print $1 }' | sort | uniq | ipv6calc
 \end_layout
 
 \begin_layout Standard
-
 Note: since version 0.95.0 '-A filter' is optional if option '-E <filter expressio
 n>' is given (autoselected action).
 \end_layout
@@ -3500,6 +3499,609 @@ Usage
 \begin_layout Standard
 There are a README and some helper scripts available in the package how
  to use this program and how to generate a graph using Gnuplot.
+\end_layout
+
+\begin_layout Subsubsection
+Line-by-line output
+\end_layout
+
+\begin_layout Standard
+The example shows output version 3.0, which 
+\end_layout
+
+\begin_layout Code
+
+$ zcat ip.bieringer.de-log.201*.gz | ipv6logstats
+\end_layout
+
+\begin_layout Standard
+
+Header section, since output version 3.0 (>= 0.95.0) 
+\lang english
+additional lines starting with '*3*' and '*DateTime' and '*UnixTime' included
+\end_layout
+
+\begin_layout Code
+
+*Version             3.0
+\end_layout
+
+\begin_layout Code
+
+*DateTime: 2013:11:03 08:57:01+0000 GMT
+\end_layout
+
+\begin_layout Code
+
+*UnixTime: 1383469021
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: DB features: 0x0000133f
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: GeoIP: features: 0x00000330
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: GeoIP: info of available databases in directory: /usr/share/GeoIP
+ (max: 31)
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: GeoIP: GeoIP Country Edition            :[ 1] /usr/share/GeoIP/GeoIP.
+dat               (GEO-106FREE 20130903 Build 1 Copyright (c) 2013 MaxMind
+ Inc All Rights Reserved)
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: GeoIP: GeoIP ASNum Edition              :[ 9] /usr/share/GeoIP/GeoIP
+ASNum.dat          (GEO-117 20130902 Build 1 Copyright (c) 2013 MaxMind Inc
+ All Rights Reserved)
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: GeoIP: GeoIP Country V6 Edition         :[12] /usr/share/GeoIP/GeoIP
+v6.dat             (GEO-106FREE 20131001 Build 1 Copyright (c) 2013 MaxMind
+ Inc All Rights Reserved)
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: GeoIP: GeoIP Large Country Edition      :[17] /usr/share/GeoIP/GeoIP.
+dat               (GEO-106FREE 20130903 Build 1 Copyright (c) 2013 MaxMind
+ Inc All Rights Reserved)
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: GeoIP: GeoIP Large Country V6 Edition   :[18] /usr/share/GeoIP/GeoIP
+v6.dat             (GEO-106FREE 20131001 Build 1 Copyright (c) 2013 MaxMind
+ Inc All Rights Reserved)
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: GeoIP: GeoIP ASNum V6 Edition           :[21] /usr/share/GeoIP/GeoIP
+ASNumv6.dat        (GEO-117 20130306 Build 1 Copyright (c) 2013 MaxMind Inc
+ All Rights Reserved)
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: IP2Location: features: 0x00000300
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: IP2Location: info of available databases in directory: /usr/share/IP
+2Location
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: IP2Location: IPv4 Country               : /usr/share/IP2Location/IP-
+COUNTRY.BIN    (IP2L-DB20 20130411 Copyright (c) 2013 IP2Location All Rights
+ Reserved)
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: IP2Location: IPv6 Country               : /usr/share/IP2Location/IPV
+6-COUNTRY.BIN  (IP2L-DB1 20131025 Copyright (c) 2013 IP2Location All Rights
+ Reserved)
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: BuiltIn: features: 0x0000100f
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: BuiltIn: info of available databases
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: BuiltIn: ASN  : IANA/20130730
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: BuiltIn: CC   : AFRINIC/20130806 APNIC/20130805 ARIN/20130805
+ LACNIC/20130805 RIPENCC/20130805
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: BuiltIn: IPv4 : AFRINIC/20131014 APNIC/20131014 ARIN/20131014
+ IANA/20130520 LACNIC/20131014 RIPENCC/20131014
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: BuiltIn: IPv6 : AFRINIC/20131015 APNIC/20131014 ARIN/20131014
+ IANA/20130215 LACNIC/20131014 RIPENCC/20131014
+\end_layout
+
+\begin_layout Code
+
+*3*DB-Info: BuiltIn: IEEE : IAB/20131015 OUI/20131015 OUI36/20131015
+\end_layout
+
+\begin_layout Standard
+
+Simple statistics section
+\end_layout
+
+\begin_layout Code
+
+ALL                  108525
+\end_layout
+
+\begin_layout Code
+
+IPv4                 46233
+\end_layout
+
+\begin_layout Code
+
+IPv6                 62292
+\end_layout
+
+\begin_layout Code
+
+UNKNOWN              0
+\end_layout
+
+\begin_layout Code
+
+IPv4/APNIC           2397
+\end_layout
+
+\begin_layout Code
+
+IPv4/ARIN            3525
+\end_layout
+
+\begin_layout Code
+
+IPv4/RIPE            40198
+\end_layout
+
+\begin_layout Code
+
+IPv4/LACNIC          97
+\end_layout
+
+\begin_layout Code
+
+IPv4/UNKNOWN         16
+\end_layout
+
+\begin_layout Code
+
+IPv6/6bone           0
+\end_layout
+
+\begin_layout Code
+
+IPv6/IANA            0
+\end_layout
+
+\begin_layout Code
+
+IPv6/APNIC           129
+\end_layout
+
+\begin_layout Code
+
+IPv6/ARIN            839
+\end_layout
+
+\begin_layout Code
+
+IPv6/RIPE            61074
+\end_layout
+
+\begin_layout Code
+
+IPv6/LACNIC          0
+\end_layout
+
+\begin_layout Code
+
+IPv6/RESERVED        0
+\end_layout
+
+\begin_layout Code
+
+IPv6/UNKNOWN         0
+\end_layout
+
+\begin_layout Code
+
+IPv6/6to4/IANA       0
+\end_layout
+
+\begin_layout Code
+
+IPv6/6to4/APNIC      0
+\end_layout
+
+\begin_layout Code
+
+IPv6/6to4/ARIN       16
+\end_layout
+
+\begin_layout Code
+
+IPv6/6to4/RIPE       51
+\end_layout
+
+\begin_layout Code
+
+IPv6/6to4/LACNIC     0
+\end_layout
+
+\begin_layout Code
+
+IPv6/6to4/RESERVED   0
+\end_layout
+
+\begin_layout Code
+
+IPv6/6to4/UNKNOWN    0
+\end_layout
+
+\begin_layout Code
+
+IPv6/Teredo/IANA     0
+\end_layout
+
+\begin_layout Code
+
+IPv6/Teredo/APNIC    63
+\end_layout
+
+\begin_layout Code
+
+IPv6/Teredo/ARIN     0
+\end_layout
+
+\begin_layout Code
+
+IPv6/Teredo/RIPE     90
+\end_layout
+
+\begin_layout Code
+
+IPv6/Teredo/LACNIC   30
+\end_layout
+
+\begin_layout Code
+
+IPv6/Teredo/RESERVED 0
+\end_layout
+
+\begin_layout Code
+
+IPv6/Teredo/UNKNOWN  0
+\end_layout
+
+\begin_layout Code
+
+IPv6/NAT64/IANA      0
+\end_layout
+
+\begin_layout Code
+
+IPv6/NAT64/APNIC     0
+\end_layout
+
+\begin_layout Code
+
+IPv6/NAT64/ARIN      0
+\end_layout
+
+\begin_layout Code
+
+IPv6/NAT64/RIPE      0
+\end_layout
+
+\begin_layout Code
+
+IPv6/NAT64/LACNIC    0
+\end_layout
+
+\begin_layout Code
+
+IPv6/NAT64/RESERVED  0
+\end_layout
+
+\begin_layout Code
+
+IPv6/NAT64/UNKNOWN   0
+\end_layout
+
+\begin_layout Code
+
+IPv6/IID/Global      1436
+\end_layout
+
+\begin_layout Code
+
+IPv6/IID/Random      58198
+\end_layout
+
+\begin_layout Code
+
+IPv6/IID/Manual      2055
+\end_layout
+
+\begin_layout Code
+
+IPv6/IID/ISATAP      353
+\end_layout
+
+\begin_layout Code
+
+IPv6/IID/Unknown     0
+\end_layout
+
+\begin_layout Standard
+
+External database supported output since output version 3.0 (>= 0.95.0)
+\end_layout
+
+\begin_layout Itemize
+
+Country Code / Proto
+\end_layout
+
+\begin_layout Code
+
+...
+\end_layout
+
+\begin_layout Code
+
+*3*CC-code-proto/DE/ALL   96450
+\end_layout
+
+\begin_layout Code
+
+*3*CC-code-proto/DE/IPv4  36486
+\end_layout
+
+\begin_layout Code
+
+*3*CC-code-proto/DE/IPv6  59964 
+\end_layout
+
+\begin_layout Code
+
+*3*CC-code-proto-list/DE  96450 36486 59964
+\end_layout
+
+\begin_layout Code
+
+...
+\end_layout
+
+\begin_layout Itemize
+
+Proto / Country Code (
+\begin_inset Quotes eld
+\end_inset
+
+ALL
+\begin_inset Quotes erd
+\end_inset
+
+ line contains: ALL IPv4 IPv6)
+\end_layout
+
+\begin_layout Code
+
+...
+\end_layout
+
+\begin_layout Code
+
+*3*CC-proto-code/ALL/DE   96450
+\end_layout
+
+\begin_layout Code
+
+*3*CC-proto-code/IPv4/DE  36486
+\end_layout
+
+\begin_layout Code
+
+*3*CC-proto-code/IPv6/DE  59964
+\end_layout
+
+\begin_layout Code
+
+...
+\end_layout
+
+\begin_layout Code
+
+*3*CC-proto-code-list/ALL  108525 46483 62042
+\end_layout
+
+\begin_layout Itemize
+
+Autonomous System number / Proto
+\end_layout
+
+\begin_layout Code
+
+...
+\end_layout
+
+\begin_layout Code
+
+*3*AS-num-proto/8767/ALL   6054
+\end_layout
+
+\begin_layout Code
+
+*3*AS-num-proto/8767/IPv4  2705
+\end_layout
+
+\begin_layout Code
+
+*3*AS-num-proto/8767/IPv6  3349
+\end_layout
+
+\begin_layout Code
+
+*3*AS-num-proto-list/8767  6054 2705 3349
+\end_layout
+
+\begin_layout Code
+
+...
+\end_layout
+
+\begin_layout Itemize
+
+Proto / Autonomous System number (
+\begin_inset Quotes eld
+\end_inset
+
+ALL
+\begin_inset Quotes erd
+\end_inset
+
+ line contains: ALL IPv4 IPv6)
+\end_layout
+
+\begin_layout Code
+
+...
+\end_layout
+
+\begin_layout Code
+
+*3*AS-proto-num/ALL/8767   6054
+\end_layout
+
+\begin_layout Code
+
+*3*AS-proto-num/IPv4/8767  2705
+\end_layout
+
+\begin_layout Code
+
+*3*AS-proto-num/IPv6/8767  3349
+\end_layout
+
+\begin_layout Code
+
+...
+\end_layout
+
+\begin_layout Code
+
+*3*AS-proto-num-list/ALL  108525 46483 62042
+\end_layout
+
+\begin_layout Subsubsection
+Column output
+\end_layout
+
+\begin_layout Standard
+Column output does not support version 3 extension, only simple statistics
+ with a header line:
+\end_layout
+
+\begin_layout Code
+
+$ zcat ip.bieringer.de-log.201*.gz | ipv6logstats -q -c 
+\end_layout
+
+\begin_layout Code
+
+ IPv4 IPv6 UNKNOWN IPv4/APNIC IPv4/ARIN IPv4/RIPE IPv4/LACNIC IPv4/UNKNOWN
+ IPv6/6bone IPv6/IANA IPv6/APNIC IPv6/ARIN IPv6/RIPE IPv6/LACNIC IPv6/RESERVED
+ IPv6/UNKNOWN IPv6/6to4/IANA IPv6/6to4/APNIC IPv6/6to4/ARIN IPv6/6to4/RIPE
+ IPv6/6to4/LACNIC IPv6/6to4/RESERVED IPv6/6to4/UNKNOWN IPv6/Teredo/IANA
+ IPv6/Teredo/APNIC IPv6/Teredo/ARIN IPv6/Teredo/RIPE IPv6/Teredo/LACNIC
+ IPv6/Teredo/RESERVED IPv6/Teredo/UNKNOWN IPv6/NAT64/IANA IPv6/NAT64/APNIC
+ IPv6/NAT64/ARIN IPv6/NAT64/RIPE IPv6/NAT64/LACNIC IPv6/NAT64/RESERVED IPv6/NAT6
+4/UNKNOWN IPv6/IID/Global IPv6/IID/Random IPv6/IID/Manual IPv6/IID/ISATAP
+ IPv6/IID/Unknown
+\end_layout
+
+\begin_layout Code
+
+ 46233 62292 0 2397 3525 40198 97 16 0 0 129 839 61074 0 0 0 0 0 16 51 0
+ 0 0 0 63 0 90 30 0 0 0 0 0 0 0 0 0 1436 58198 2055 353 0
+\end_layout
+
+\begin_layout Standard
+An optional prefix token can be given (
+\begin_inset Quotes eld
+\end_inset
+
+-p <prefix>
+\begin_inset Quotes erd
+\end_inset
+
+) to create e.g.
+ in a for-loop one line per month and put month in front of statistics,
+ also the header line can be suppressed (
+\begin_inset Quotes eld
+\end_inset
+
+-n
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Code
+
+$ zcat ip.bieringer.de-log.201*.gz | ipv6logstats -q -c -n -p ALL
+\end_layout
+
+\begin_layout Code
+
+ALL  46233 62292 0 2397 3525 40198 97 16 0 0 129 839 61074 0 0 0 0 0 16
+ 51 0 0 0 0 63 0 90 30 0 0 0 0 0 0 0 0 0 1436 58198 2055 353 0 
 \end_layout
 
 \begin_layout Subsection
