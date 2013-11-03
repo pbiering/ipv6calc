@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.11 2013/11/03 10:51:09 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.12 2013/11/03 18:21:46 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -14,6 +14,7 @@
 #include <string.h>
 #include <dlfcn.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "config.h"
 
@@ -125,14 +126,10 @@ static char     *libipv6calc_db_wrapper_IP2Location_dbfilename(int type);
 int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 	int i;
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "Called");
 
 #ifdef SUPPORT_IP2LOCATION_DYN
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Load library: %s\n", __FILE__, __func__, ip2location_lib_file);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Load library: %s", ip2location_lib_file);
 
 	dl_IP2Location_handle = dlopen(ip2location_lib_file, RTLD_NOW | RTLD_LOCAL);
 
@@ -152,26 +149,18 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 	// nothing to set for the moment
 #endif
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Check for standard IP2Location databases\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libipv6addr_db_wrapper, "Check for standard IP2Location databases");
 
 	/* check available databases for resolution */
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_IP2Location_db_file_desc); i++) {
-		if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-			fprintf(stderr, "%s/%s: IP2Location database test for availability: %s\n", __FILE__, __func__, libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "IP2Location database test for availability: %s", libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename);
 		if (libipv6calc_db_wrapper_IP2Location_db_avail(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number) == 1) {
-			if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-				fprintf(stderr, "%s/%s: IP2Location database available: %s\n", __FILE__, __func__, libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description);
-			};
+			DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "IP2Location database available: %s", libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description);
 			wrapper_features_IP2Location |= libipv6calc_db_wrapper_IP2Location_db_file_desc[i].feature;
 		};
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Version of linked library: %s / IPv6 support: %s / custom directory: %s\n", __FILE__, __func__, libipv6calc_db_wrapper_IP2Location_lib_version(), libipv6calc_db_wrapper_IP2Location_IPv6_support[wrapper_ip2location_ipv6_support].token, ip2location_db_dir);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Version of linked library: %s / IPv6 support: %s / custom directory: %s", libipv6calc_db_wrapper_IP2Location_lib_version(), libipv6calc_db_wrapper_IP2Location_IPv6_support[wrapper_ip2location_ipv6_support].token, ip2location_db_dir);
 
 	wrapper_features |= wrapper_features_IP2Location;
 
@@ -234,10 +223,6 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 	IP2Location *loc;
 	int i, type, count = 0;
 
-#ifdef SUPPORT_IP2LOCATION_DYN
-	struct stat file_stat;
-#endif
-
 	const char *prefix = "\0";
 	if (prefix_string != NULL) {
 		prefix = prefix_string;
@@ -256,9 +241,14 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 #ifdef SUPPORT_IP2LOCATION_DYN
 		if (dl_IP2Location_handle == NULL) {
 			DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Check whether db file exists: %s", libipv6calc_db_wrapper_IP2Location_dbfilename(type));
-			if (stat(libipv6calc_db_wrapper_IP2Location_dbfilename(type), &file_stat) == 0) {
+			if (access(libipv6calc_db_wrapper_IP2Location_dbfilename(type), R_OK) == 0) {
 				DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "DB file exists: %s", libipv6calc_db_wrapper_IP2Location_dbfilename(type));
 				printf("%sIP2Location: %-27s: %-40s (LIBRARY-NOT-LOADED)\n", prefix, libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description, libipv6calc_db_wrapper_IP2Location_dbfilename(type));
+			} else {
+				DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "DB file doesn't exist or can't open: %s (%s)", libipv6calc_db_wrapper_IP2Location_dbfilename(type), strerror(errno));
+				if (level_verbose == LEVEL_VERBOSE2) {
+					printf("%sIP2Location: %-27s: %-40s (%s)\n", prefix, libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description, libipv6calc_db_wrapper_IP2Location_dbfilename(type), strerror(errno));
+				};
 			};
 		} else {
 #endif // SUPPORT_IP2LOCATION_DYN
@@ -273,6 +263,9 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 				count++;
 			};
 		} else {
+			if (level_verbose == LEVEL_VERBOSE2) {
+				printf("%sIP2Location: %-27s: %-40s (%s)\n", prefix, libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description, libipv6calc_db_wrapper_IP2Location_dbfilename(type), strerror(errno));
+			};
 			continue;
 		};
 #ifdef SUPPORT_IP2LOCATION_DYN
@@ -436,12 +429,10 @@ int libipv6calc_db_wrapper_IP2Location_db_avail(int type) {
 
 	r = (access(filename, R_OK) == 0) ? 1:0;
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		if (r == 0) {
-			fprintf(stderr, "%s/%s: Finished: %s type=%d (still unknown) (r=%d)\n", __FILE__, __func__, wrapper_ip2location_info, type, r);
-		} else {
-			fprintf(stderr, "%s/%s: Finished: %s type=%d (%s) (r=%d)\n", __FILE__, __func__, wrapper_ip2location_info, type, filename, r);
-		};
+	if (r == 0) {
+		DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Finished: %s type=%d (still unknown) (r=%d: %s)", wrapper_ip2location_info, type, r, strerror(errno));
+	} else {
+		DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Finished: %s type=%d (%s) (r=%d)", wrapper_ip2location_info, type, filename, r);
 	};
 
 END_libipv6calc_db_wrapper:
