@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.10 2013/11/03 09:14:55 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.11 2013/11/03 10:51:09 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -13,7 +13,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <dlfcn.h>
-#include <sys/stat.h>
+#include <unistd.h>
 
 #include "config.h"
 
@@ -424,12 +424,9 @@ const char *libipv6calc_db_wrapper_IP2Location_dbdescription(int type) {
  */
 int libipv6calc_db_wrapper_IP2Location_db_avail(int type) {
 	char *filename;
-	struct stat file_stat;
 	int r = 0;
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called: %s type=%d\n", __FILE__, __func__, wrapper_ip2location_info, type);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Called: %s type=%d", wrapper_ip2location_info, type);
 
 	filename = libipv6calc_db_wrapper_IP2Location_dbfilename(type);
 
@@ -437,7 +434,7 @@ int libipv6calc_db_wrapper_IP2Location_db_avail(int type) {
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	r = (stat(filename, &file_stat) == 0) ? 1:0;
+	r = (access(filename, R_OK) == 0) ? 1:0;
 
 	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper) != 0 ) {
 		if (r == 0) {
