@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.18 2013/10/14 14:43:11 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.h,v 1.19 2013/11/04 20:30:50 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -49,6 +49,7 @@
 #define STATS_IPV6_IID_ISATAP		0x103
 #define STATS_IPV6_IID_UNKNOWN		0x10f
 
+#define DEBUG_ipv6logstats_general	0x00000001l
 #define DEBUG_ipv6logstats_summary	0x00000002l
 #define DEBUG_ipv6logstats_processing	0x00000004l
 

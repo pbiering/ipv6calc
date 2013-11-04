@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.48 2013/10/28 20:10:17 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.49 2013/11/04 20:30:50 ds6peter Exp $
  * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -40,6 +40,7 @@ long int ipv6calc_debug = 0;
 int ipv6calc_quiet = 0;
 
 static int opt_unknown = 0;
+static int opt_simple = 0;
 static int opt_noheader = 0;
 static int opt_onlyheader = 0;
 static int opt_printdirection = 0; /* rows */
@@ -118,7 +119,6 @@ static void lineparser(void);
 
 /**************************************************/
 /* main */
-#define DEBUG_function_name "ipv6logstats/main"
 int main(int argc,char *argv[]) {
 	int i, lop, result;
 	unsigned long int command = 0;
@@ -183,6 +183,10 @@ int main(int argc,char *argv[]) {
 				opt_unknown = 1;
 				break;
 
+			case 's':
+				opt_simple = 1;
+				break;
+
 			case 'n':
 				opt_noheader = 1;
 				opt_printdirection = 1;
@@ -195,6 +199,7 @@ int main(int argc,char *argv[]) {
 
 			case 'c':
 				opt_printdirection = 1;
+				opt_simple = 1; // force simple mode in addition
 				break;
 
 			case 'w':
@@ -227,14 +232,16 @@ int main(int argc,char *argv[]) {
 		feature_reg = 1;
 	};
 
-	/* check for Country Code support */
-	if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV6_TO_CC) == 1) {
-		feature_cc = 1;
-	};
+	if (opt_simple != 1) {
+		/* check for Country Code support */
+		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV6_TO_CC) == 1) {
+			feature_cc = 1;
+		};
 
-	/* check for ASN support */
-	if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_IPV6_TO_AS) == 1) {
-		feature_as = 1;
+		/* check for ASN support */
+		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_IPV6_TO_AS) == 1) {
+			feature_as = 1;
+		};
 	};
 
 	/* do work depending on selection */
@@ -262,7 +269,7 @@ int main(int argc,char *argv[]) {
 
 	exit(EXIT_SUCCESS);
 };
-#undef DEBUG_function_name
+
 
 /*
  * Statistics structure handling
@@ -292,9 +299,7 @@ static void stat_inc_country_code(uint16_t country_code, const int proto) {
 		exit(1);
 	};
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s/%s: Increment CountryCode index: %d (%d)\n", __FILE__, __func__, index, country_code);
-	};
+	DEBUGPRINT_WA(DEBUG_ipv6logstats_general, "Increment CountryCode index: %d (%d)", index, country_code);
 
 	counter_country[index]++;
 	counter_country_A46++;
@@ -326,9 +331,7 @@ static void stat_inc_asnum(const uint32_t as_num32, const int proto) {
 		index = ASNUM_AS_TRANS;
 	};
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s/%s: Increment ASN index: %d (%d)\n", __FILE__, __func__, index, as_num32);
-	};
+	DEBUGPRINT_WA(DEBUG_ipv6logstats_general, "Increment ASN index: %d (%d)", index, as_num32);
 
 	counter_asn[index]++;
 
@@ -343,7 +346,6 @@ static void stat_inc_asnum(const uint32_t as_num32, const int proto) {
 /*
  * Line parser
  */
-#define DEBUG_function_name "ipv6logstats/lineparser"
 static void lineparser(void) {
 	char linebuffer[LINEBUFFER];
 	char token[LINEBUFFER];
@@ -419,9 +421,7 @@ static void lineparser(void) {
 			continue;
 		};
 		
-		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "%s: Got line: '%s'\n", DEBUG_function_name, linebuffer);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6logstats_processing, "Got line: '%s'", linebuffer);
 
 		/* look for first token (should be IP address) */
 		charptr = strtok_r(linebuffer, " \t\n", ptrptr);
@@ -438,9 +438,7 @@ static void lineparser(void) {
 
 		snprintf(token, sizeof(token) - 1, "%s", charptr);
 		
-		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "%s: Token 1: '%s'\n", DEBUG_function_name, token);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6logstats_processing, "Token 1: '%s'", token);
 
 		stat_inc(STATS_ALL);
 
@@ -870,7 +868,3 @@ static void lineparser(void) {
 
 	return;
 };
-#undef DEBUG_function_name
-
-
-

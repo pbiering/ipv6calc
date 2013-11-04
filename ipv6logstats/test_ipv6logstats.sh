@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
-# Version    : $Id: test_ipv6logstats.sh,v 1.13 2013/10/14 14:43:11 ds6peter Exp $
+# Version    : $Id: test_ipv6logstats.sh,v 1.14 2013/11/04 20:30:50 ds6peter Exp $
 # Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"
@@ -99,7 +99,7 @@ fi
 echo 
 
 ## check basic support
-if ./ipv6logstats -v | grep -w "STAT_REG"; then
+if ./ipv6logstats -v 2>&1| grep -w "STAT_REG"; then
 	true
 else
 	echo "NOTICE: SKIP ipv6logstats tests because of missing feature STAT_REG"
@@ -129,7 +129,7 @@ fi
 echo
 
 #testscenarios version 3
-if ./ipv6logstats -v | grep -w "STAT_CC"; then
+if ./ipv6logstats -v 2>&1 | grep -w "STAT_CC"; then
 	testscenarios | ./ipv6logstats -q | grep -q '\*3\*CC-proto-code-list/ALL'
 	retval=$?
 	if [ $retval -ne 0 ]; then
@@ -141,11 +141,11 @@ else
 fi
 
 # testscenarios matching
-if ./ipv6logstats -v | grep -w "STAT_CC"; then
+if ./ipv6logstats -v 2>&1 | grep -w "STAT_CC"; then
 	feature_cc=1
 fi
 
-if ./ipv6logstats -v | grep -w "STAT_AS"; then
+if ./ipv6logstats -v 2>&1 | grep -w "STAT_AS"; then
 	feature_as=1
 fi
 

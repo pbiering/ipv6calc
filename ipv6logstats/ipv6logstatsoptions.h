@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstatsoptions.h
- * Version    : $Id: ipv6logstatsoptions.h,v 1.8 2013/09/28 20:32:40 ds6peter Exp $
+ * Version    : $Id: ipv6logstatsoptions.h,v 1.9 2013/11/04 20:30:50 ds6peter Exp $
  * Copyright  : 2003-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -20,7 +20,7 @@
 /* Options */
 
 /* define short options */
-static char *ipv6logstats_shortopts = "vh?uoncp:w:";
+static char *ipv6logstats_shortopts = "vh?uosncp:w:";
 
 /* define long options */
 static struct option ipv6logstats_longopts[] = {
@@ -30,12 +30,13 @@ static struct option ipv6logstats_longopts[] = {
 	{"help", 0, 0, (int) 'h'},
 
 	/* normal options */
-	{"unknown", 0, 0, (int) 'u'},
-	{"colums", 0, 0, (int) 'c'},
-	{"prefix", 0, 0, (int) 'p'},
-	{"noheader", 0, 0, (int) 'n'},
-	{"onlyheader", 0, 0, (int) 'o'},
-	{"write", 1, 0, (int) 'O'},
+	{"unknown"	, 0, 0, (int) 'u'},
+	{"colums"	, 0, 0, (int) 'c'},
+	{"prefix"	, 0, 0, (int) 'p'},
+	{"noheader"	, 0, 0, (int) 'n'},
+	{"onlyheader"	, 0, 0, (int) 'o'},
+	{"simple"	, 0, 0, (int) 's'},
+	{"write"	, 1, 0, (int) 'O'},
 };                
 
 #endif
