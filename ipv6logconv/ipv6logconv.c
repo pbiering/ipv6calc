@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.28 2013/11/04 06:50:50 ds6peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.29 2013/11/04 20:55:00 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -66,7 +66,6 @@ static long int cache_lru_statistics[CACHE_LRU_SIZE];
 
 /**************************************************/
 /* main */
-#define DEBUG_function_name "ipv6logconv/main"
 int main(int argc,char *argv[]) {
 	int i, lop, result;
 	unsigned long int command = 0;
@@ -148,9 +147,8 @@ int main(int argc,char *argv[]) {
 				break;
 
 			case CMD_outputtype:
-				if (ipv6calc_debug != 0) {
-					fprintf(stderr, "%s: Got output string: %s\n", DEBUG_function_name, optarg);
-				};
+				DEBUGPRINT_WA(DEBUG_ipv6logconv_general, "Got output string: %s", optarg);
+
 				if ( (strcmp(optarg, "-?") == 0) || (strcmp(optarg, "-h") == 0) || (strcmp(optarg, "--help") == 0) ) {
 					command = CMD_printexamples;
 					break;
@@ -200,13 +198,11 @@ int main(int argc,char *argv[]) {
 
 	exit(EXIT_SUCCESS);
 };
-#undef DEBUG_function_name
 
 
 /*
  * Line parser
  */
-#define DEBUG_function_name "ipv6logconv/lineparser"
 static void lineparser(const long int outputtype) {
 	char linebuffer[LINEBUFFER];
 	char token[LINEBUFFER];
@@ -251,9 +247,7 @@ static void lineparser(const long int outputtype) {
 			continue;
 		};
 		
-		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "%s: Got line: '%s'\n", DEBUG_function_name, linebuffer);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6logconv_processing, "Got line: '%s'", linebuffer);
 
 		/* look for first token */
 		charptr = strtok_r(linebuffer, " \t\n", ptrptr);
@@ -270,9 +264,7 @@ static void lineparser(const long int outputtype) {
 
 		snprintf(token, sizeof(token) - 1, "%s", charptr);
 		
-		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "%s: Token 1: '%s'\n", DEBUG_function_name, token);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6logconv_processing, "Token 1: '%s'", token);
 		
 		/* call converter now */
 		if ( outputtype == FORMAT_any ) {
@@ -288,26 +280,22 @@ static void lineparser(const long int outputtype) {
 		/* print result */
 		printf("%s", resultstring);
 
-		if ( outputtype == FORMAT_any ) {
-			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "%s: Format is 'any', so look for next tokens\n", DEBUG_function_name);
-			};
+		if (outputtype == FORMAT_any) {
+			DEBUGPRINT_NA(DEBUG_ipv6logconv_processing, "Format is 'any', so look for next tokens");
 			
 			/* look for next token */
 			charptr = strtok_r(NULL, " \t\n", ptrptr);
 
 			if ( charptr == NULL ) {
 				fprintf(stderr, "Line contains no 2nd token: %d\n", linecounter);
-				continue;
+				goto END_line;
 			};
 			if ( strlen(charptr) >=  LINEBUFFER) {
 				fprintf(stderr, "Line too strange: %d\n", linecounter);
-				continue;
+				goto END_line;
 			};
 
-			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "%s: Token 2: '%s'\n", DEBUG_function_name, charptr);
-			};
+			DEBUGPRINT_WA(DEBUG_ipv6logconv_processing, "Token 2: '%s'", charptr);
 		
 			/* 	
 			retval = converttoken(resultstring, token, FORMAT_addrtype, 0);
@@ -329,16 +317,18 @@ static void lineparser(const long int outputtype) {
 				continue;
 			};
 			
-			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "%s: Token 3: '%s'\n", DEBUG_function_name, charptr);
-			};
+			DEBUGPRINT_WA(DEBUG_ipv6logconv_processing, "Token 3: '%s'", charptr);
 			retval = converttoken(resultstring, token, FORMAT_ouitype, 0);
 			/* print result */
 			printf(" %s", resultstring);
 		};
 
-		/* print rest of line, if available */
-		printf(" %s", *ptrptr);
+END_line:
+		if ((*ptrptr != NULL) && (strlen(*ptrptr) > 0)) {
+			printf(" %s", *ptrptr);
+		} else {;
+			printf("\n");
+		};
 	};
 
 	if (ipv6calc_quiet == 0) {
@@ -353,13 +343,11 @@ static void lineparser(const long int outputtype) {
 	};
 	return;
 };
-#undef DEBUG_function_name
 
 
 /*
  * Convert token
  */
-#define DEBUG_function_name "ipv6logconv/converttoken"
 static int converttoken(char *resultstring, const char *token, const long int outputtype, const int flag_skipunknown) {
 	long int inputtype = -1;
 	int retval = 1, i;
@@ -371,9 +359,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 	ipv6calc_ipv6addr ipv6addr;
 	ipv6calc_ipv4addr ipv4addr;
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: Token: '%s'\n", DEBUG_function_name, token);
-	};
+	DEBUGPRINT_WA(DEBUG_ipv6logconv_processing, "Token: '%s'", token);
 
        	/* clear resultstring */
 	resultstring[0] = '\0';
@@ -444,12 +430,12 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 		if (inputtype >= 0) {
 			for (i = 0; i < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); i++) {
 				if (inputtype == ipv6calc_formatstrings[i].number) {
-					fprintf(stderr, "%s: Found type: %s\n", DEBUG_function_name, ipv6calc_formatstrings[i].token);
+					fprintf(stderr, "%s/%s: Found type: %s\n", __FILE__, __func__, ipv6calc_formatstrings[i].token);
 				};
 				break;
 			};
 		} else {
-			fprintf(stderr, "%s: Input type unknown\n", DEBUG_function_name);
+			fprintf(stderr, "%s/%s: Input type unknown\n", __FILE__, __func__);
 			return (1);
 		};
 	};
@@ -465,15 +451,11 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 			break;
 	};
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: Token: '%s'\n", DEBUG_function_name, token);
-	};
+	DEBUGPRINT_WA(DEBUG_ipv6logconv_processing, "Token: '%s'", token);
 
 	/***** postprocessing input *****/
-	
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: Start of postprocessing input\n", DEBUG_function_name);
-	};
+
+	DEBUGPRINT_NA(DEBUG_ipv6logconv_processing, "Start of postprocessing input");
 
 	switch (outputtype) {
 		case FORMAT_addrtype:
@@ -553,7 +535,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 						};
 					} else {
 						/* normally never happen */
-						fprintf(stderr, "%s: Error occurs at IPv6->IPv4 address extraction!\n", DEBUG_function_name);
+						fprintf(stderr, "%s/%s: Error occurs at IPv6->IPv4 address extraction!\n", __FILE__, __func__);
 						exit(EXIT_FAILURE);
 					};
 
@@ -707,5 +689,3 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 
 	return (0);
 };
-#undef DEBUG_function_name
-
