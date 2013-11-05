@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.49 2013/11/04 06:50:50 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.50 2013/11/05 06:32:16 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -853,6 +853,8 @@ END_libipv6calc_db_wrapper:
  * wrapper: GeoIP_open_type
  */
 GeoIP *libipv6calc_db_wrapper_GeoIP_open_type(int type, int flags) {
+	GeoIP *gi = NULL;
+
 	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper_GeoIP, "Called: %s type=%d (%s)", wrapper_geoip_info, type, libipv6calc_db_wrapper_GeoIPDBDescription[type]);
 
 	if (libipv6calc_db_wrapper_GeoIP_db_avail(type) != 1) {
@@ -860,7 +862,6 @@ GeoIP *libipv6calc_db_wrapper_GeoIP_open_type(int type, int flags) {
 	};
 
 #ifdef SUPPORT_GEOIP_DYN
-	GeoIP *gi = NULL;
 	const char *dl_symbol = "GeoIP_open_type";
 	char *error;
 
@@ -913,9 +914,7 @@ END_libipv6calc_db_wrapper:
  * wrapper: GeoIP_open
  */
 GeoIP* libipv6calc_db_wrapper_GeoIP_open(const char * filename, int flags) {
-	if ( (ipv6calc_debug & DEBUG_libipv6addr_db_wrapper_GeoIP) != 0 ) {
-		fprintf(stderr, "%s/%s: Called: %s filename=%s\n", __FILE__, __func__, wrapper_geoip_info, filename);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper_GeoIP, "Called: %s filename=%s", wrapper_geoip_info, filename);
 
 #ifdef SUPPORT_GEOIP_DYN
 	GeoIP *gi = NULL;

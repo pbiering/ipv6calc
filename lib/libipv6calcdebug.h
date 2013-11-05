@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calcdebug.h
- * Version    : $Id: libipv6calcdebug.h,v 1.14 2013/10/30 20:04:25 ds6peter Exp $
+ * Version    : $Id: libipv6calcdebug.h,v 1.15 2013/11/05 06:32:16 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -15,9 +15,9 @@
 
 #define DEBUG_ipv6calc_ALL				-1
 
-//reserved for binaries					0x00000001l
-//reserved for binaries					0x00000002l
-//reserved for binaries					0x00000004l
+//reserved for debug levels of dedicated binary 	0x00000001l
+//reserved for debug levels of dedicated binary		0x00000002l
+//reserved for debug levels of dedicated binary		0x00000004l
 
 #define DEBUG_ipv6calcoptions				0x00000008l
 
