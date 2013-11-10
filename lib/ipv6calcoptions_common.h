@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions_common.h,v 1.8 2013/11/10 18:20:53 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions_common.h,v 1.9 2013/11/10 18:22:05 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -41,7 +41,9 @@ static struct option ipv6calc_longopts_ip2location[] = {
 	/* database options (new) */
 	{"db-ip2location-disable"      , 0, NULL, DB_ip2location_disable },
 	{"db-ip2location-dir"          , 1, NULL, DB_ip2location_dir     },
+#ifdef SUPPORT_IP2LOCATION_DYN
 	{"db-ip2location-lib"          , 1, NULL, DB_ip2location_lib     },
+#endif
 };
 #endif
 
@@ -60,7 +62,9 @@ static struct option ipv6calc_longopts_geoip[] = {
 	/* database options (new) */
 	{"db-geoip-disable"            , 0, NULL, DB_geoip_disable       },
 	{"db-geoip-dir"                , 1, NULL, DB_geoip_dir           },
+#ifdef SUPPORT_GEOIP_DYN
 	{"db-geoip-lib"                , 1, NULL, DB_geoip_lib           },
+#endif
 };                
 #endif
 
