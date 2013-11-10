@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.65 2013/11/10 18:20:53 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.66 2013/11/10 18:41:29 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -341,6 +341,10 @@ my %text = (
 	'IID' => {
 		'de' => "Interface-Identifierungsnummer",
 		'en' => "Interface identifier",
+	},
+	'TYPE' => {
+		'de' => "Adresstyp",
+		'en' => "Address type",
 	},
 	'IPV6_TYPE' => {
 		'de' => "IPv6 Adresstyp",
