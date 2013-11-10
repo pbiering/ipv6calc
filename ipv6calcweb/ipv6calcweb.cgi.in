@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.64 2013/10/28 21:17:15 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.65 2013/11/10 18:20:53 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -71,6 +71,8 @@ my $salt;
 my $time_range_valid = 300; # seconds
 my $time_range_min   = 5; # seconds
 my $mask_remote_address = 0; # disabled (0), enabled (1)
+
+my $returncode = 0;
 
 
 ## Debug value
@@ -552,6 +554,8 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_BIN_IPV6CALC'}) {
 };
 
 my $options_ipv6calc = "-m -i -q";
+my $options_ipv6calc_ip2location = "";
+my $options_ipv6calc_geoip = "";
 
 # Location of database files
 my $database_ip2location_dir;
@@ -602,23 +606,21 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_LIB'}) {
 };
 
 my $info_geoip_string;
-my $info_geoip_string_ipv4;
-my $info_geoip_string_ipv6;
 
 if (defined $database_ip2location_dir) {
-	$options_ipv6calc .= " --db-ip2location-dir $database_ip2location_dir";
+	$options_ipv6calc_ip2location .= " --db-ip2location-dir $database_ip2location_dir";
 };
 
 if (defined $database_ip2location_lib) {
-	$options_ipv6calc .= " --db-ip2location-lib $database_ip2location_lib";
+	$options_ipv6calc_ip2location .= " --db-ip2location-lib $database_ip2location_lib";
 };
 
 if (defined $database_geoip_dir) {
-	$options_ipv6calc .= " --db-geoip-dir $database_geoip_dir";
+	$options_ipv6calc_geoip .= " --db-geoip-dir $database_geoip_dir";
 };
 
 if (defined $database_geoip_lib) {
-	$options_ipv6calc .= " --db-geoip-lib $database_geoip_lib";
+	$options_ipv6calc_geoip .= " --db-geoip-lib $database_geoip_lib";
 };
 
 ###### Normally nothing to change here
@@ -649,10 +651,11 @@ my $name_server;
 my @proxy_addresses;
 my @proxy_infos;
 
-my (@info_remote, %infoh_remote, @sort_remote);
-my (@info_server, %infoh_server, @sort_server);
-my (@info_proxy, %infoh_proxy, @sort_proxy);
-my (@info_input, %infoh_input, @sort_input);
+my (%infoh_remote, @sort_remote);
+my (%infoh_server, @sort_server);
+my (%infoh_proxy, @sort_proxy);
+my (%infoh_input, @sort_input);
+my (%infoh_localhost4, @sort_localhost4);
 
 my $length_max_key = 0;
 my $length_max_description = 0;
@@ -707,7 +710,6 @@ sub print_error ($) {
 		printf STDERR $message . "\n";
 	};
 	goto("OUTPUT_BEGIN_ERROR");
-	#exit 1;
 };
 
 ## Print conditional html
@@ -1439,6 +1441,21 @@ if (scalar(@proxy_addresses) != scalar(@proxy_infos)) {
 	undef @proxy_infos;
 };
 
+## check features
+$result = ipv6calc_exec("127.0.0.1", "***feature***", \%infoh_localhost4, \@sort_localhost4);
+if ($result != 0) {
+	&print_error();
+};
+
+# add options depending of available features
+if (defined $ipv6calc_feature_hash{"GeoIP"} && $ipv6calc_feature_hash{"GeoIP"} == "1") {
+	$options_ipv6calc .= $options_ipv6calc_geoip;
+};
+
+if (defined $ipv6calc_feature_hash{"IP2Location"} && $ipv6calc_feature_hash{"IP2Location"} == "1") {
+	$options_ipv6calc .= $options_ipv6calc_ip2location;
+};
+
 ## remote
 if ( defined $addr_remote ) {
 	$result = ipv6calc_exec($addr_remote, "***remote***", \%infoh_remote, \@sort_remote);
@@ -1532,6 +1549,8 @@ if (!defined $error) {
 } else {
 	$error = "$program_name: " . $error;
 };
+
+$returncode = 1;
 
 # delay error output
 sleep (5) if (! ($debug & 0x1000));
@@ -1742,4 +1761,4 @@ if ($outputformat eq "htmlfull") {
 	&print_tagoutput ( "</html>\n" );
 };
 
-exit (0);
+exit ($returncode);

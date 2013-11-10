@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.10 2013/10/31 21:24:46 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.11 2013/11/10 18:20:53 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "config.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
 #include "ipv6calcoptions.h"
@@ -141,6 +142,14 @@ void ipv6calc_options_add_common_basic(char *shortopts_p, const int shortopts_ma
 	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Called");
 
 	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_common, ipv6calc_longopts_common, MAXENTRIES_ARRAY(ipv6calc_longopts_common));
+
+#ifdef SUPPORT_IP2LOCATION
+	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_ip2location, ipv6calc_longopts_ip2location, MAXENTRIES_ARRAY(ipv6calc_longopts_ip2location));
+#endif
+
+#ifdef SUPPORT_GEOIP
+	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_geoip, ipv6calc_longopts_geoip, MAXENTRIES_ARRAY(ipv6calc_longopts_geoip));
+#endif
 
 	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Finished");
 };
