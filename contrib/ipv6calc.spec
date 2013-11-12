@@ -124,6 +124,12 @@ for dir in examples-data examples-gri; do
 done
 popd
 
+# tools
+install -d $RPM_BUILD_ROOT%{_datadir}/%{name}/tools
+for tool in GeoIP-update.sh IP2Location-update.sh; do
+	install -m 755 tools/$tool $RPM_BUILD_ROOT%{_datadir}/%{name}/tools
+done
+
 # ipv6calcweb
 install -d $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6calcweb
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d
@@ -165,6 +171,9 @@ rm -rf $RPM_BUILD_ROOT
 # man pages
 %{_mandir}/man8/*
 
+# tools
+%{_datadir}/%{name}/tools/*
+
 # docs, examples and helper
 %doc %{_docdir}/%{name}-%{version}/*
 
@@ -178,6 +187,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Nov 12 2013 Peter Bieringer <pb@bieringer.de>
+- add datadir with tools
+
 * Thu Sep 26 2013 Peter Bieringer <pb@bieringer.de>
 - add support for --with geoip-dyn and --with ip2location-dyn
 
