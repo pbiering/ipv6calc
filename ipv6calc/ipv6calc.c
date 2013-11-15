@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.101 2013/11/02 17:05:11 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.102 2013/11/15 07:18:39 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -528,6 +528,7 @@ int main(int argc, char *argv[]) {
 				if (action == ACTION_undefined) {
 					// autodefine action
 					action = ACTION_filter;
+					action_given = 1;
 				};
 				break;
 				
@@ -722,8 +723,9 @@ PIPE_input:
 	};
 	
 	/* reset input type in case of action=filter and pipe mode */
-	if (input_is_pipe == 1 && action_given == 1 && action == ACTION_filter) {
-		inputtype = 0;
+	if ((input_is_pipe == 1) && (action_given == 1) && (action == ACTION_filter)) {
+		DEBUGPRINT_NA(DEBUG_ipv6calc_general, "reset input type for later autodetection");
+		inputtype = FORMAT_auto;
 	};
 
 	/* autodetection */
@@ -748,6 +750,8 @@ PIPE_input:
 		} else {
 			fprintf(stderr, "no result!\n");
 		};
+	} else {
+		DEBUGPRINT_NA(DEBUG_ipv6calc_general, "input type autodetection skipped");
 	};
 
 	/* auto set of output type*/

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc_filter.sh
-# Version    : $Id: test_ipv6calc_filter.sh,v 1.2 2013/02/24 19:12:14 ds6peter Exp $
+# Version    : $Id: test_ipv6calc_filter.sh,v 1.3 2013/11/15 07:18:39 ds6peter Exp $
 # Copyright  : 2012-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc filter
@@ -42,4 +42,17 @@ testscenarios_filter | tr A-Z a-z | while read input filter; do
 		echo "Result empty!"
 		exit 1
 	fi
-done || exit 1 
+done || exit 1
+
+# subsequent filter
+echo -e "1.2.3.4\n2001:db8::1" | ./ipv6calc -E iid-local
+if [ $? -ne 0 ]; then
+	echo "ERROR : something is going wrong filtering sequence of IPv4->IPv6"
+	exit 1
+fi
+
+echo -e "2001:db8::1\n1.2.3.4" | ./ipv6calc -E iid-local
+if [ $? -ne 0 ]; then
+	echo "ERROR : something is going wrong filtering sequence of IPv6->IPv4"
+	exit 1
+fi
