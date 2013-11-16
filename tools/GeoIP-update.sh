@@ -4,16 +4,16 @@
 #
 # Project    : ipv6calc/GeoIP
 # File       : GeoIP-update.sh
-# Version    : $Id: GeoIP-update.sh,v 1.1 2012/10/12 19:33:04 peter Exp $
-# Copyright  : GNU GPL version 2
-# Procuded   : 2012 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: GeoIP-update.sh,v 1.2 2013/11/16 17:09:42 ds6peter Exp $
+# Copyright  : 2012-2013 by Peter Bieringer <pb (at) bieringer.de>
+# License    : GNU GPL version 2
 
 
 GEOIP_DAT_DIR="${GEOIP_DAT_DIR:-/var/local/share/GeoIP/}"
 
 GEOIP_DAT_URL_BASE="http://geolite.maxmind.com/download/geoip/database/"
 
-GEOIP_DAT_FILES="GeoLiteCountry/GeoIP.dat.gz GeoIPv6.dat.gz"
+GEOIP_DAT_FILES="GeoLiteCountry/GeoIP.dat.gz GeoIPv6.dat.gz GeoLiteCity.dat.gz GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz asnum/GeoIPASNum.dat.gz asnum/GeoIPASNumv6.dat.gz"
 
 if [ ! -d "$GEOIP_DAT_DIR" ]; then
 	echo "ERROR : missing directory: $GEOIP_DAT_DIR"

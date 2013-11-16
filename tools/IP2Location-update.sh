@@ -9,9 +9,9 @@
 #
 # Project    : ipv6calc/IP2Location
 # File       : IP2Location-update.sh
-# Version    : $Id: IP2Location-update.sh,v 1.2 2013/11/03 09:14:55 ds6peter Exp $
-# Copyright  : GNU GPL version 2
-# Procuded   : 2012 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: IP2Location-update.sh,v 1.3 2013/11/16 17:09:42 ds6peter Exp $
+# Copyright  : 2012-2013 by Peter Bieringer <pb (at) bieringer.de>
+# License    : GNU GPL version 2
 
 # Definitions:
 IP2LOCATION_DAT_DIR="${IP2LOCATION_DAT_DIR:-/var/local/share/IP2Location/}"
@@ -80,7 +80,7 @@ done
 for number in $IP2LOCATION_DAT_FILES_SAMPLE; do
 	file_dest="$IP2LOCATION_DAT_DIR/sample.bin.db$number.zip"
 
-	echo "INFO  : try to download file: $file ($file_dest)"
+	echo "INFO  : try to download sample db: $number ($file_dest)"
 	wget -q -O "$file_dest" "$IP2LOCATION_DAT_URL_BASE_SAMPLE/sample.bin.db$number.zip"
 	if [ $? -ne 0 ]; then
 		echo "ERROR : download of file not successful: DB$number ($file_dest)"
