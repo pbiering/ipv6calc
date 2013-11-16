@@ -241,10 +241,10 @@ rm -rf $RPM_BUILD_ROOT
 * Sat Apr 20 2002 Peter Bieringer <pb@bieringer.de>
 - Change URL
 
-* Mon Apr 07 2002 Peter Bieringer <pb@bieringer.de>
+* Sun Apr 07 2002 Peter Bieringer <pb@bieringer.de>
 - add more analog example files
 
-* Sun Apr 06 2002 Peter Bieringer <pb@bieringer.de>
+* Sat Apr 06 2002 Peter Bieringer <pb@bieringer.de>
 - remove BuildRequires extension, not needed for normal build
 
 * Sun Mar 24 2002 Peter Bieringer <pb@bieringer.de>
