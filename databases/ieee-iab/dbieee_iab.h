@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.56 2013/10/15 06:21:41 ds6peter Exp $
- * Generated     : Tue Oct 15 07:46:12 2013
+ * Version       : $Id: dbieee_iab.h,v 1.57 2013/11/17 06:53:24 ds6peter Exp $
+ * Generated     : Sun Nov 17 07:48:27 2013
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20131015";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20131117";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -4129,7 +4129,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x019000, 0x019FFF, "Nautel Limited", "NAUTEL" },
 	{ 0x40D855, 0x01A000, 0x01AFFF, "MEGGITT DEFENSE SYSTEMS INC.", "MEGGITT-DEFENSE" },
 	{ 0x40D855, 0x01B000, 0x01BFFF, "Audio Enhancement", "AUDIO-ENHANCEMENT" },
-	{ 0x40D855, 0x01C000, 0x01CFFF, "BERG", "BERG" },
+	{ 0x40D855, 0x01C000, 0x01CFFF, "BERG Cloud Limited", "BERG-CLOUD" },
 	{ 0x40D855, 0x01D000, 0x01DFFF, "Scharco Elektronik GmbH", "SCHARCO-ELEKTRONIK" },
 	{ 0x40D855, 0x01E000, 0x01EFFF, "A2S", "A2S" },
 	{ 0x40D855, 0x01F000, 0x01FFFF, "Sitep Italia Spa", "SITEP-ITALIA-SPA" },
@@ -4506,5 +4506,39 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x192000, 0x192FFF, "GENERAL DYNAMICS C4 SYSTEMS", "GENERAL-DYNAMICS-C4" },
 	{ 0x40D855, 0x193000, 0x193FFF, "FORZA SILICON CORP.", "FORZA-SILICON" },
 	{ 0x40D855, 0x194000, 0x194FFF, "RF Code", "RF-CODE" },
+	{ 0x40D855, 0x195000, 0x195FFF, "TONNA ELECTRONIQUE", "TONNA-ELECTRONIQUE" },
+	{ 0x40D855, 0x196000, 0x196FFF, "Advanced Micro Controls Inc.", "ADVANCED-MICRO-CONTROLS" },
+	{ 0x40D855, 0x197000, 0x197FFF, "Berg Cloud Limited", "BERG-CLOUD" },
+	{ 0x40D855, 0x198000, 0x198FFF, "devboards GmbH", "DEVBOARDS" },
+	{ 0x40D855, 0x199000, 0x199FFF, "PRESSOL Schmiergeraete GmbH", "PRESSOL-SCHMIERGERAETE" },
+	{ 0x40D855, 0x19A000, 0x19AFFF, "Rohde&Schwarz Topex SA", "ROHDE-SCHWARZ-TOPEX" },
+	{ 0x40D855, 0x19B000, 0x19BFFF, "Northern Star Technologies", "NORTHERN-STAR-TECHNOLOGIES" },
+	{ 0x40D855, 0x19C000, 0x19CFFF, "Parris Service Corporation", "PARRIS-SERVICE" },
+	{ 0x40D855, 0x19D000, 0x19DFFF, "EMAC, Inc.", "EMAC" },
+	{ 0x40D855, 0x19E000, 0x19EFFF, "Thirdwayv Inc.", "THIRDWAYV" },
+	{ 0x40D855, 0x19F000, 0x19FFFF, "Patria Aviation Oy", "PATRIA-AVIATION-OY" },
+	{ 0x40D855, 0x1A0000, 0x1A0FFF, "Futaba Corporation", "FUTABA" },
+	{ 0x40D855, 0x1A1000, 0x1A1FFF, "KRONOTECH SRL", "KRONOTECH-SRL" },
+	{ 0x40D855, 0x1A2000, 0x1A2FFF, "HIPODROMO DE AGUA CALIENTE, S.A. DE C.V.", "HIPODROMO-DE-AGUA-CALIENTE-DE-C-V" },
+	{ 0x40D855, 0x1A3000, 0x1A3FFF, "Noritake Itron Corporation", "NORITAKE-ITRON" },
+	{ 0x40D855, 0x1A4000, 0x1A4FFF, "cibite AG", "CIBITE" },
+	{ 0x40D855, 0x1A5000, 0x1A5FFF, "DemoPad", "DEMOPAD" },
+	{ 0x40D855, 0x1A6000, 0x1A6FFF, "RB-LINK Wireless", "RB-LINK-WIRELESS" },
+	{ 0x40D855, 0x1A7000, 0x1A7FFF, "ENTEC Electric & Electronic CO., LTD", "ENTEC-ELECTRIC" },
+	{ 0x40D855, 0x1A8000, 0x1A8FFF, "Multiobrabotka", "MULTIOBRABOTKA" },
+	{ 0x40D855, 0x1A9000, 0x1A9FFF, "Lubino s.r.o.", "LUBINO-S-R-O" },
+	{ 0x40D855, 0x1AA000, 0x1AAFFF, "Broachlink Technology Co.,Limited", "BROACHLINK" },
+	{ 0x40D855, 0x1AB000, 0x1ABFFF, "Rosslare Enterprises Limited", "ROSSLARE-ENTERPRISES" },
+	{ 0x40D855, 0x1AC000, 0x1ACFFF, "ELAN SYSTEMS", "ELAN" },
+	{ 0x40D855, 0x1AD000, 0x1ADFFF, "WICHER DIGITAL TECHNIK", "WICHER-DIGITAL-TECHNIK" },
+	{ 0x40D855, 0x1AE000, 0x1AEFFF, "Autonomous Solutions, Inc", "AUTONOMOUS-SOLUTIONS" },
+	{ 0x40D855, 0x1AF000, 0x1AFFFF, "Vigitron Inc.", "VIGITRON" },
+	{ 0x40D855, 0x1B0000, 0x1B0FFF, "Shin-ei Electronic Measuring Co.,Ltd.", "SHIN-EI-MEASURING" },
+	{ 0x40D855, 0x1B1000, 0x1B1FFF, "Logos 01 S.r.l.", "LOGOS-01-S-R-L" },
+	{ 0x40D855, 0x1B2000, 0x1B2FFF, "AGE A. Gilg Elektronik", "AGE-A-GILG-ELEKTRONIK" },
+	{ 0x40D855, 0x1B3000, 0x1B3FFF, "BETTINI SRL", "BETTINI-SRL" },
+	{ 0x40D855, 0x1B4000, 0x1B4FFF, "Inforce Computing Inc.", "INFORCE-COMPUTING" },
+	{ 0x40D855, 0x1B5000, 0x1B5FFF, "A+EC Klein Ingenieurbuero", "A+EC-KLEIN-INGENIEURBUERO" },
+	{ 0x40D855, 0x1B6000, 0x1B6FFF, "Magic Systems", "MAGIC" },
 
 };

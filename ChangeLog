@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.306 2013/10/29 21:56:30 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.307 2013/11/17 06:53:24 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20131117/PB
+	databases: update
+
 20131015/PB
 	databases: update and add support for changed ARIN format
 

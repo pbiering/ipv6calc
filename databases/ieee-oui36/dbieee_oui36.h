@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.4 2013/10/15 06:21:41 ds6peter Exp $
- * Generated     : Tue Oct 15 07:46:08 2013
+ * Version       : $Id: dbieee_oui36.h,v 1.5 2013/11/17 06:53:24 ds6peter Exp $
+ * Generated     : Sun Nov 17 07:48:25 2013
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20131015";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20131117";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -205,5 +205,11 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x001BC5, 0x0BE000, 0x0BEFFF, "YESpay International Ltd", "YESPAY" },
 	{ 0x001BC5, 0x0BF000, 0x0BFFFF, "TN Core Co.,Ltd.", "TN-CORE" },
 	{ 0x001BC5, 0x0C0000, 0x0C0FFF, "Digital Loggers, Inc.", "DIGITAL-LOGGERS" },
+	{ 0x001BC5, 0x0C1000, 0x0C1FFF, "EREE Electronique", "EREE-ELECTRONIQUE" },
+	{ 0x001BC5, 0x0C2000, 0x0C2FFF, "TechSolutions A/S", "TECHSOLUTIONS-A/S" },
+	{ 0x001BC5, 0x0C3000, 0x0C3FFF, "inomatic GmbH", "INOMATIC" },
+	{ 0x001BC5, 0x0C4000, 0x0C4FFF, "ELDES", "ELDES" },
+	{ 0x001BC5, 0x0C5000, 0x0C5FFF, "Gill Instruments Ltd", "GILL-INSTRUMENTS" },
+	{ 0x001BC5, 0x0C6000, 0x0C6FFF, "Connode", "CONNODE" },
 
 };
