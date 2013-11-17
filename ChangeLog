@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.307 2013/11/17 06:53:24 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.308 2013/11/17 07:43:51 ds6peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,8 @@ Info:
 --------------------------------------------------------------------
 20131117/PB
 	databases: update
+	tag version 0.95.0
+	major changes were applied, but not listed here in detail, for overview see file: CHANGES
 
 20131015/PB
 	databases: update and add support for changed ARIN format
