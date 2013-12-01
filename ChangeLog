@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.308 2013/11/17 07:43:51 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.309 2013/12/01 13:51:36 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20131201/PB
+	databases/lib/libipv6calc_db_wrapper.c: fix snprintf usage (missing format string)
+
 20131117/PB
 	databases: update
 	tag version 0.95.0

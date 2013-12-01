@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.29 2013/10/28 20:10:17 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.30 2013/12/01 13:51:36 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -284,7 +284,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 
 		case DB_ip2location_lib:
 #ifdef SUPPORT_IP2LOCATION_DYN
-			result = snprintf(ip2location_lib_file, sizeof(ip2location_lib_file), optarg);
+			result = snprintf(ip2location_lib_file, sizeof(ip2location_lib_file), "%s", optarg);
 #else
 			NONQUIETPRINT_WA("Support for IP2Location dyn-load not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
@@ -293,7 +293,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 
 		case DB_geoip_lib:
 #ifdef SUPPORT_GEOIP_DYN
-			result = snprintf(geoip_lib_file, sizeof(geoip_lib_file), optarg);
+			result = snprintf(geoip_lib_file, sizeof(geoip_lib_file), "%s", optarg);
 #else
 			NONQUIETPRINT_WA("Support for GeoIP dyn-load not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
@@ -302,7 +302,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 
 		case DB_ip2location_dir:
 #ifdef SUPPORT_IP2LOCATION
-			result = snprintf(ip2location_db_dir, sizeof(ip2location_db_dir), optarg);
+			result = snprintf(ip2location_db_dir, sizeof(ip2location_db_dir), "%s", optarg);
 #else
 			NONQUIETPRINT_WA("Support for IP2Location not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
@@ -311,7 +311,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 
 		case DB_geoip_dir:
 #ifdef SUPPORT_GEOIP
-			result = snprintf(geoip_db_dir, sizeof(geoip_db_dir), optarg);
+			result = snprintf(geoip_db_dir, sizeof(geoip_db_dir), "%s", optarg);
 #else
 			NONQUIETPRINT_WA("Support for GeoIP not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif

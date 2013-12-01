@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.26 2013/10/20 17:45:10 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.27 2013/12/01 13:51:36 ds6peter Exp $
 # Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -55,7 +55,7 @@ while [ "$1" != "$LAST" ]; do
 		;;
 	    '-W')
 		shift
-		EXTRA_CFLAGS="-Werror"
+		EXTRA_CFLAGS="-Werror -Werror=format-security -Wformat"
 		;;
 	    '-?'|'-h'|'--help')
 		echo "Supported options:"
