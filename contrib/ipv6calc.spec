@@ -1,10 +1,11 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Copyright  : 2001-2012 by Peter Bieringer <pb@bieringer.de>
+# Copyright  : 2001-2014 by Peter Bieringer <pb@bieringer.de>
+# $Id: ipv6calc.spec,v 1.133 2014/02/01 14:56:17 ds6peter Exp $
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
-Version: 0.95.0
+Version: 0.96.0
 Release: 1%dist
 Group: System Environment/Base
 URL: http://www.deepspace6.net/projects/ipv6calc.html
@@ -26,6 +27,8 @@ BuildRoot: %{_tmppath}/ipv6calc-root
 %{?_with_ip2location_dyn: %{expand: %%define enable_ip2location_dyn 1}}
 %{?_with_geoip_dyn: %{expand: %%define enable_geoip 1}}
 %{?_with_ip2location_dyn: %{expand: %%define enable_ip2location 1}}
+
+%{?_with_shared_library: %{expand: %%define enable_shared_library 1}}
 
 
 %if %{enable_geoip}
@@ -66,11 +69,13 @@ Available rpmbuild rebuild options:
   --with ip2location-dyn
   --with geoip
   --with geoip-dyn
+  --with shared-library
 
 %{?enable_geoip: %{expand: Built with GeoIP support}}
 %{?enable_geoip_dyn: %{expand: Built with GeoIP dynamic-library-load support}}
 %{?enable_ip2location: %{expand: Built with IP2Location suppport}}
 %{?enable_ip2location_dyn: %{expand: Built with IP2Location dynamic-library-load suppport}}
+%{?enable_shared_library: %{expand: Built with shared-library}}
 
 
 %package ipv6calcweb
@@ -89,7 +94,7 @@ displaying information of IP addresses on a web page.
 
 
 %build
-./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?enable_ip2location:--enable-ip2location} %{?enable_geoip:--enable-geoip} %{?enable_ip2location_dyn:--with-ip2location-dynamic} %{?enable_geoip_dyn:--with-geoip-dynamic}
+./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?enable_ip2location:--enable-ip2location} %{?enable_geoip:--enable-geoip} %{?enable_ip2location_dyn:--with-ip2location-dynamic} %{?enable_geoip_dyn:--with-geoip-dynamic} %{?enable_shared_library:--enable-shared-library}
 make clean
 make
 make test-minimal
@@ -177,6 +182,9 @@ rm -rf $RPM_BUILD_ROOT
 # docs, examples and helper
 %doc %{_docdir}/%{name}-%{version}/*
 
+%ifdef %{_with_shared_library}
+%{_libdir}/*
+%endif
 
 %files ipv6calcweb
 %defattr(-,root,root)
@@ -187,6 +195,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Sat Feb 02 2014 Peter Bieringer <pb@bieringer.de>
+- add support for optional shared-library build
+
 * Tue Nov 12 2013 Peter Bieringer <pb@bieringer.de>
 - add datadir with tools
 

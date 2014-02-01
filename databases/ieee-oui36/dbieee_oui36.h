@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.5 2013/11/17 06:53:24 ds6peter Exp $
- * Generated     : Sun Nov 17 07:48:25 2013
+ * Version       : $Id: dbieee_oui36.h,v 1.6 2014/02/01 14:56:18 ds6peter Exp $
+ * Generated     : Wed Jan 15 17:52:07 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20131117";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140115";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -211,5 +211,41 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x001BC5, 0x0C4000, 0x0C4FFF, "ELDES", "ELDES" },
 	{ 0x001BC5, 0x0C5000, 0x0C5FFF, "Gill Instruments Ltd", "GILL-INSTRUMENTS" },
 	{ 0x001BC5, 0x0C6000, 0x0C6FFF, "Connode", "CONNODE" },
+	{ 0x001BC5, 0x0C7000, 0x0C7FFF, "WIZZILAB SAS", "WIZZILAB-SAS" },
+	{ 0x001BC5, 0x0C8000, 0x0C8FFF, "Dialine", "DIALINE" },
+	{ 0x001BC5, 0x0C9000, 0x0C9FFF, "UAB Kitron", "UAB-KITRON" },
+	{ 0x70B3D5, 0xFFE000, 0xFFEFFF, "PRIVATE", "PRIVATE" },
+	{ 0x70B3D5, 0xFFF000, 0xFFFFFF, "PRIVATE", "PRIVATE" },
+	{ 0x70B3D5, 0xD9E000, 0xD9EFFF, "GRUPO EPELSA S.L.", "GRUPO-EPELSA-S-L" },
+	{ 0x70B3D5, 0x3DE000, 0x3DEFFF, "ELOMAC Elektronik GmbH", "ELOMAC-ELEKTRONIK" },
+	{ 0x70B3D5, 0xB3D000, 0xB3DFFF, "Inras GmbH", "INRAS" },
+	{ 0x70B3D5, 0xEDC000, 0xEDCFFF, "J.D. Koftinoff Software, Ltd.", "J-D-KOFTINOFF-SOFTWARE" },
+	{ 0x70B3D5, 0xEF9000, 0xEF9FFF, "Critical Link", "CRITICAL-LINK" },
+	{ 0x70B3D5, 0xEDD000, 0xEDDFFF, "Solar Network & Partners", "SOLAR-NETWORK-PARTNERS" },
+	{ 0x70B3D5, 0xF62000, 0xF62FFF, "FRS GmbH & Co. KG", "FRS" },
+	{ 0x70B3D5, 0x0A9000, 0x0A9FFF, "ProConnections, Inc.", "PROCONNECTIONS" },
+	{ 0x70B3D5, 0x3ED000, 0x3EDFFF, "Ultra Electronics Sonar System Division", "ULTRA-ELECTRONICS-SONAR-SYSTEM-DIVISION" },
+	{ 0x70B3D5, 0x3C2000, 0x3C2FFF, "Cellular Specialties, Inc.", "CELLULAR-SPECIALTIES" },
+	{ 0x70B3D5, 0xD8B000, 0xD8BFFF, "Lenoxi Automation s.r.o.", "LENOXI-AUTOMATION-S-R-O" },
+	{ 0x70B3D5, 0xF63000, 0xF63FFF, "Ars Products", "ARS-PRODUCTS" },
+	{ 0x70B3D5, 0x0AA000, 0x0AAFFF, "Wanco Inc", "WANCO" },
+	{ 0x70B3D5, 0x994000, 0x994FFF, "KeFF Networks", "KEFF-NETWORKS" },
+	{ 0x70B3D5, 0x0E0000, 0x0E0FFF, "PLCiS", "PLCIS" },
+	{ 0x70B3D5, 0xAE9000, 0xAE9FFF, "Cari Electronic", "CARI" },
+	{ 0x70B3D5, 0x6D3000, 0x6D3FFF, "DEUTA-WERKE GmbH", "DEUTA-WERKE" },
+	{ 0x70B3D5, 0x139000, 0x139FFF, "Tunstall A/S", "TUNSTALL-A/S" },
+	{ 0x70B3D5, 0x908000, 0x908FFF, "Accusonic", "ACCUSONIC" },
+	{ 0x70B3D5, 0x871000, 0x871FFF, "Oso Technologies", "OSO-TECHNOLOGIES" },
+	{ 0x70B3D5, 0x814000, 0x814FFF, "Ingenieurbuero SOMTRONIK", "INGENIEURBUERO-SOMTRONIK" },
+	{ 0x70B3D5, 0x183000, 0x183FFF, "Evco S.p.a.", "EVCO-S-P-A" },
+	{ 0x70B3D5, 0x28F000, 0x28FFFF, "Overline Systems", "OVERLINE" },
+	{ 0x70B3D5, 0x6B6000, 0x6B6FFF, "INRADIOS GmbH", "INRADIOS" },
+	{ 0x70B3D5, 0x29D000, 0x29DFFF, "XTech2 SIA", "XTECH2-SIA" },
+	{ 0x70B3D5, 0x109000, 0x109FFF, "DiTEST Fahrzeugdiagnose GmbH", "DITEST-FAHRZEUGDIAGNOSE" },
+	{ 0x70B3D5, 0x184000, 0x184FFF, "XV360 Optical Information Systems Ltd.", "XV360-OPTICAL-INFORMATION" },
+	{ 0x70B3D5, 0x35C000, 0x35CFFF, "ACS electronics srl", "ACS-ELECTRONICS-SRL" },
+	{ 0x70B3D5, 0x40A000, 0x40AFFF, "Monroe Electronics, Inc.", "MONROE-ELECTRONICS" },
+	{ 0x70B3D5, 0x190000, 0x190FFF, "Fantom Wireless, Inc.", "FANTOM-WIRELESS" },
+	{ 0x70B3D5, 0x308000, 0x308FFF, "DSD MICROTECHNOLOGY,INC.", "DSD-MICROTECHNOLOGY" },
 
 };

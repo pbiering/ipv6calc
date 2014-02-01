@@ -2,13 +2,14 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.11 2013/10/13 16:18:44 ds6peter Exp $
-# Copyright  : 2011-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: autogen-all-variants.sh,v 1.12 2014/02/01 14:56:17 ds6peter Exp $
+# Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
 
 autgen_variants() {
-	cat <<END
+	cat <<END | grep -v ^#
+# default (no options)
 -i
 -i --ip2location-dyn
 -g
@@ -40,13 +41,24 @@ if [ $? -ne 0 ]; then
 fi
 
 # variants
-autgen_variants | while read buildoptions; do
-	nice -n 10 ./autogen.sh $buildoptions $options_add
-	if [ $? -ne 0 ]; then
-		echo "ERROR : 'autogen.sh $buildoptions $*' reports an error"
-		exit 1
-	fi
-done || exit 1
+for liboption in "normal" "shared" "static"; do
+	autgen_variants | while read buildoptions; do
+		options="$buildoptions $options_add"
+		case $liboption in
+		    shared)
+			options="$options -S"
+			;;
+		    static)
+			options="$options --static"
+			;;
+		esac
+		nice -n 10 ./autogen.sh $options
+		if [ $? -ne 0 ]; then
+			echo "ERROR : 'autogen.sh reports an error with options: $options"
+			exit 1
+		fi
+	done || exit 1
+done
 
 
 make distclean

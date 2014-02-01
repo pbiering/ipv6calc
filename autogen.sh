@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.28 2013/12/01 13:52:24 ds6peter Exp $
-# Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: autogen.sh,v 1.29 2014/02/01 14:56:17 ds6peter Exp $
+# Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
 
@@ -53,6 +53,14 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --with-geoip-ipv6-compat"
 		;;
+	    '-S')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-shared-library"
+		;;
+	    '--static')
+		shift
+		STATIC="1"
+		;;
 	    '-W')
 		shift
 		EXTRA_CFLAGS="-Werror -Wformat -Werror=format-security"
@@ -71,6 +79,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --disable-db-ipv4   : disable built-in IPv4 database"
 		echo "   --disable-db-ipv6   : disable built-in IPv6 database"
 		echo "   --geoip-ipv6-compat : enable GeoIP IPv6 compatibility mode"
+		echo "   -S                  : enable shared library mode"
 		exit 1
 	esac
 done
@@ -99,8 +108,13 @@ echo "*** run: make clean"
 make clean || exit 1
 
 export EXTRA_CFLAGS
-echo "*** run: make"
-make || exit 1
+
+if [ "$STATIC" = "1" ]; then
+	echo "*** run: make STATIC"
+	make static || exit 1
+	echo "*** skip tests on STATIC"
+	exit 0
+fi
 
 echo "*** run: make test"
 make test || exit 1

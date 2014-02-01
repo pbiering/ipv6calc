@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.57 2013/11/17 06:53:24 ds6peter Exp $
- * Generated     : Sun Nov 17 07:48:27 2013
+ * Version       : $Id: dbieee_iab.h,v 1.58 2014/02/01 14:56:17 ds6peter Exp $
+ * Generated     : Wed Jan 15 17:52:10 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20131117";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20140115";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -4540,5 +4540,53 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x1B4000, 0x1B4FFF, "Inforce Computing Inc.", "INFORCE-COMPUTING" },
 	{ 0x40D855, 0x1B5000, 0x1B5FFF, "A+EC Klein Ingenieurbuero", "A+EC-KLEIN-INGENIEURBUERO" },
 	{ 0x40D855, 0x1B6000, 0x1B6FFF, "Magic Systems", "MAGIC" },
+	{ 0x40D855, 0x1B7000, 0x1B7FFF, "TEWS Elektronik GmbH & Co. KG", "TEWS-ELEKTRONIK" },
+	{ 0x40D855, 0x1B8000, 0x1B8FFF, "Orion Systems, Inc", "ORION" },
+	{ 0x40D855, 0x1B9000, 0x1B9FFF, "Beking Industrieele automatisering", "BEKING-INDUSTRIEELE-AUTOMATISERING" },
+	{ 0x40D855, 0x1BA000, 0x1BAFFF, "Creative Lighting And Sound Systems Pty Ltd", "CREATIVE-LIGHTING-AND-SOUND-PTY" },
+	{ 0x40D855, 0x1BB000, 0x1BBFFF, "Micromega Dynamics SA", "MICROMEGA-DYNAMICS" },
+	{ 0x40D855, 0x1BC000, 0x1BCFFF, "KbDevice,Inc.", "KBDEVICE" },
+	{ 0x40D855, 0x1BD000, 0x1BDFFF, "HORIBA ABX", "HORIBA-ABX" },
+	{ 0x40D855, 0x1BE000, 0x1BEFFF, "PEEK TRAFFIC", "PEEK-TRAFFIC" },
+	{ 0x40D855, 0x1BF000, 0x1BFFFF, "shanghai mingding information tech co.Ltd", "SHANGHAI-MINGDING-INFORMATION-TECH" },
+	{ 0x40D855, 0x1C0000, 0x1C0FFF, "NPB Automation AB", "NPB-AUTOMATION-AB" },
+	{ 0x40D855, 0x1C1000, 0x1C1FFF, "Triamec Motion AG", "TRIAMEC-MOTION" },
+	{ 0x40D855, 0x1C2000, 0x1C2FFF, "Digital Display Systems", "DIGITAL-DISPLAY" },
+	{ 0x40D855, 0x1C3000, 0x1C3FFF, "Cornfed Systems LLC", "CORNFED-LLC" },
+	{ 0x40D855, 0x1C4000, 0x1C4FFF, "QED Advanced Systems Limited", "QED-ADVANCED" },
+	{ 0x40D855, 0x1C5000, 0x1C5FFF, "PRIVATE", "PRIVATE" },
+	{ 0x40D855, 0x1C6000, 0x1C6FFF, "Device Solutions Ltd", "DEVICE-SOLUTIONS" },
+	{ 0x40D855, 0x1C7000, 0x1C7FFF, "Wexiödisk AB", "WEXIöDISK-AB" },
+	{ 0x40D855, 0x1C8000, 0x1C8FFF, "Sensata Technologies", "SENSATA-TECHNOLOGIES" },
+	{ 0x40D855, 0x1C9000, 0x1C9FFF, "Andy-L Ltd.", "ANDY-L" },
+	{ 0x40D855, 0x1CA000, 0x1CAFFF, "Rigel Engineering", "RIGEL-ENGINEERING" },
+	{ 0x40D855, 0x1CB000, 0x1CBFFF, "MG S.r.l.", "MG-S-R-L" },
+	{ 0x40D855, 0x1CC000, 0x1CCFFF, "NKT Photonics A/S", "NKT-PHOTONICS-A/S" },
+	{ 0x40D855, 0x1CD000, 0x1CDFFF, "YXLON International A/S", "YXLON-A/S" },
+	{ 0x40D855, 0x1CE000, 0x1CEFFF, "Peter Huber", "PETER-HUBER" },
+	{ 0x40D855, 0x1CF000, 0x1CFFFF, "Omnik New Energy Co., Ltd", "OMNIK-NEW-ENERGY" },
+	{ 0x40D855, 0x1D0000, 0x1D0FFF, "Webeasy BV", "WEBEASY" },
+	{ 0x40D855, 0x1D1000, 0x1D1FFF, "Founder Broadband Network Service Co.,Ltd.", "FOUNDER-BROADBAND-NETWORK-SERVICE" },
+	{ 0x40D855, 0x1D2000, 0x1D2FFF, "InventLab s.c.", "INVENTLAB-S-C" },
+	{ 0x40D855, 0x1D3000, 0x1D3FFF, "Kaluga Teletypes Manufacturing Plant", "KALUGA-TELETYPES-MANUFACTURING-PLANT" },
+	{ 0x40D855, 0x1D4000, 0x1D4FFF, "Prisma Engineering srl", "PRISMA-ENGINEERING-SRL" },
+	{ 0x40D855, 0x1D5000, 0x1D5FFF, "FST21 Ltd.", "FST21" },
+	{ 0x40D855, 0x1D6000, 0x1D6FFF, "EMS Computers Pty Ltd", "EMS-COMPUTERS-PTY" },
+	{ 0x40D855, 0x1D7000, 0x1D7FFF, "Wheatstone Corporation", "WHEATSTONE" },
+	{ 0x40D855, 0x1D8000, 0x1D8FFF, "Owl Computing Technologies, Inc.", "OWL-COMPUTING-TECHNOLOGIES" },
+	{ 0x40D855, 0x1D9000, 0x1D9FFF, "Commercial Wireless Systems International LLC.", "COMMERCIAL-WIRELESS-LLC" },
+	{ 0x40D855, 0x1DA000, 0x1DAFFF, "Energy Technology and Control Ltd.", "ENERGY-AND-CONTROL" },
+	{ 0x40D855, 0x1DB000, 0x1DBFFF, "NIPPON TECHNO LAB.,INC,", "NIPPON-TECHNO-LAB" },
+	{ 0x40D855, 0x1DC000, 0x1DCFFF, "Aplex Technology Inc.", "APLEX" },
+	{ 0x40D855, 0x1DD000, 0x1DDFFF, "BaOpt Benelux bv", "BAOPT-BENELUX" },
+	{ 0x40D855, 0x1DE000, 0x1DEFFF, "Vidisys GmbH", "VIDISYS" },
+	{ 0x40D855, 0x1DF000, 0x1DFFFF, "Chengdu Meihuan Technology Co.,Ltd", "CHENGDU-MEIHUAN" },
+	{ 0x40D855, 0x1E0000, 0x1E0FFF, "Embedded Technology Corporation", "EMBEDDED" },
+	{ 0x40D855, 0x1E1000, 0x1E1FFF, "AD QUALITE", "AD-QUALITE" },
+	{ 0x40D855, 0x1E2000, 0x1E2FFF, "ELNEC s.r.o.", "ELNEC-S-R-O" },
+	{ 0x40D855, 0x1E3000, 0x1E3FFF, "Mega Electronics Ltd", "MEGA-ELECTRONICS" },
+	{ 0x40D855, 0x1E4000, 0x1E4FFF, "STEK Ltd", "STEK" },
+	{ 0x40D855, 0x50D000, 0x50DFFF, "Shenzhen MaiWei Cable TV Equipment CO.,LTD.", "SHENZHEN-MAIWEI-CABLE-TV-EQUIPMENT" },
+	{ 0x40D855, 0xEE6000, 0xEE6FFF, "Narinet, Inc.", "NARINET" },
 
 };

@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.67 2013/11/12 19:40:17 ds6peter Exp $
-# Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.68 2014/02/01 14:56:18 ds6peter Exp $
+# Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
 # Simple Perl web interface and security wrapper
@@ -29,7 +29,7 @@
 #      Mode=mixed/form
 #	"input=$input"
 #	"token=$token"
-#
+
 ## program controls by httpd's setenv
 #  HTTP_IPV6CALCWEB_MODE                : info (default), form (display a form for user input), mixed (both)
 #  HTTP_IPV6CALCWEB_INFO_SERVER         : 0 (default), 1 (show information about server)
@@ -39,7 +39,11 @@
 #  HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB  : IP2Location library name (optional dyn-load support)
 #  HTTP_IPV6CALCWEB_DB_GEOIP_DIR        : GeoIPv4 database directory (optional)
 #  HTTP_IPV6CALCWEB_DB_GEOIP_LIB        : GeoIPv4 library name (optional in dyn-load support)
-#  HTTP_IPV6CALCWEB_OUTPUT_FORMAT       : html (default if SERVER_PROTOCOL=INCLUDED), htmlfull (default), text
+#  HTTP_IPV6CALCWEB_OUTPUT_FORMAT       : html (default if SERVER_PROTOCOL=INCLUDED), htmlfull (default), text, textkeyvalue
+
+## special output format "textkeyvalue"
+#  INFO__OUTPUTVERSION="1"			: current output format version
+#  (more to be documented)
 
 ## general
 use strict;
@@ -213,6 +217,9 @@ my $outputformat = "htmlfull"; # switched to "html", if called by SSI
 my $outputtype = "full";
 #my $outputtype = "simple";
 
+## Output format "textkeyvalue" version
+my $outputversion_textkeyvalue = "1";
+
 ## Select output
 # skip server = 1
 my $skip_server = 1;
@@ -228,10 +235,10 @@ if ( defined $ENV{'HTTP_IPV6CALCWEB_INFO_SERVER'} ) {
 my @supported_languages = ( "de", "en");
 
 # Format
-my @supported_formats = ( "text", "html");
+my @supported_formats = ( "text", "html", "textkeyvalue");
 
 # Tokens to be formatted using <TT>
-my @format_tt = ( "EUI48", "EUI64", "IPV6", "IPV4", "SLA", "IID", "IPV4_6TO4", "IPV4_ANON", "IPV6_ANON", "HTTP-XForwardFor" );
+my @format_tt = ( "EUI48", "EUI64", "IPV6", "IPV4", "SLA", "IID", "IPV4_6TO4", "IPV4_ANON", "IPV6_ANON", "HTTP_X_FORWARDED_FOR" );
 
 my %text = (
 	'EUI48' => {
@@ -418,15 +425,15 @@ my %text = (
 		'de' => "absenden",
 		'en' => "send",
 	},
-	'HTTP-UserAgent' => {
+	'HTTP_USER_AGENT' => {
 		'de' => "Browseridentifikation",
 		'en' => "User agent identification",
 	},
-	'HTTP-XForwardFor' => {
+	'HTTP_X_FORWARDED_FOR' => {
 		'de' => "Client hinter Proxy",
 		'en' => "Client behind proxy",
 	},
-	'HTTP-Via' => {
+	'HTTP_VIA' => {
 		'de' => "Passierender Proxy",
 		'en' => "Passing proxy",
 	},
@@ -647,7 +654,7 @@ if (! defined $lang) { $lang = $lang_default};
 my $addr_remote;
 my $name_remote;
 my $user_agent;
-my $x_forward_for;
+my $x_forwarded_for;
 my $via;
 my $addr_server;
 my $name_server;
@@ -684,6 +691,7 @@ my %ipv6calc_feature_hash;
 my $ipv6calc_settings = "";
 my %ipv6calc_settings_hash;
 
+my $chr_quote = ""; # default
 
 ############### Functions
 
@@ -720,7 +728,7 @@ sub print_error ($) {
 sub print_tagoutput ($) {
 	my $text = shift;
 	if ( defined $text ) {
-		if ($outputformat eq "html" || $outputformat eq "htmlfull") {
+		if ($outputformat =~ /^html/o) {
 			print $text;
 		};
 	};
@@ -729,17 +737,18 @@ sub print_tagoutput ($) {
 sub print_textonly ($) {
 	my $text = shift;
 	if ( defined $text ) {
-		if ($outputformat eq "text") {
+		if ($outputformat =~ /^text/o) {
 			print $text;
 		};
 	};
 };
 
 ## Print one table part
-sub print_infohash ($$;$) {
+sub print_infohash ($$$;$) {
 	my $phash = $_[0];
 	my $parray = $_[1];
 	my $colormode = $_[2];
+	my $counter = $_[3];
 
 	if (! defined $phash) { return; };
 
@@ -839,9 +848,15 @@ sub print_infohash ($$;$) {
 			&print_tagoutput ( "      <tr>\n" );
 		};
 		&print_tagoutput ( "        <td><b>" );
-		print $key;
-		&print_textonly (' ' x ($length_max_key - length($key)) );
-		&print_textonly (" | ");
+		print uc($colormode) . "__" if ($outputformat eq "textkeyvalue");
+		# reduce duplicate information
+		my $key_print = $key;
+		$key_print =~ s/^($colormode)_//i if ($outputformat eq "textkeyvalue");
+		print $key_print;
+		&print_textonly (' ' x ($length_max_key - length($key)) ) if ($outputformat ne "textkeyvalue");
+		&print_textonly (" | ") if ($outputformat ne "textkeyvalue");
+		&print_textonly ("[" . $counter . "]") if (($outputformat eq "textkeyvalue") && (defined $counter));
+		&print_textonly ("=") if ($outputformat eq "textkeyvalue");
 		&print_tagoutput ( "</b></td>\n" );
 
 		# print description
@@ -937,7 +952,7 @@ sub print_infohash ($$;$) {
 			};
 		};
 		
-		print $$phash{$key};
+		print $chr_quote . $$phash{$key} . $chr_quote;
 
 		if ( $flag_whoisurl == 1 ) {
 			&print_tagoutput ( "</a>" );
@@ -1232,7 +1247,7 @@ if ( defined $ENV{'HTTP_X_FORWARDED_FOR'} ) {
 	if ( ! defined $1 || (length($1) > $maxenvlength)) {
 		# not a problem, skip it
 	} else {
-		$x_forward_for = $1;
+		$x_forwarded_for = $1;
 	};
 };
 
@@ -1286,9 +1301,14 @@ if ( defined $ENV{'SERVER_PROTOCOL'} ) {
 };
 
 if ( defined $ENV{'HTTP_IPV6CALCWEB_OUTPUT_FORMAT'} ) {
-	if ($ENV{'HTTP_IPV6CALCWEB_OUTPUT_FORMAT'} =~ /^(text|html|htmlfull)$/o) {
+	if ($ENV{'HTTP_IPV6CALCWEB_OUTPUT_FORMAT'} =~ /^(text|html|htmlfull|textkeyvalue)$/o) {
 		$outputformat = $ENV{'HTTP_IPV6CALCWEB_OUTPUT_FORMAT'};
 	};
+};
+
+if ($outputformat eq "textkeyvalue") {
+	$outputtype = "simple";
+	$chr_quote = "\"";
 };
 
 ## Check for binary ipv6calc exists and is executable
@@ -1401,19 +1421,19 @@ sub ipv6calc_exec($$$$) {
 
 my $result;
 
-## check HTTP-XForwardFor
-if (defined $x_forward_for) {
+## check HTTP_X_FORWARDED_FOR
+if (defined $x_forwarded_for) {
 	my $addr_remote_temp = $addr_remote; # save exit proxy address
 
-	my $x_forward_for_entries = 0;
+	my $x_forwarded_for_entries = 0;
 
-	foreach my $address (split /, /, $x_forward_for) {
+	foreach my $address (split /, /, $x_forwarded_for) {
 		if ($address !~ /^([[:xdigit:]\.\:]+)$/) {
 			# silently skip
 			next;
 		};
 
-		if ($x_forward_for_entries == 0) {
+		if ($x_forwarded_for_entries == 0) {
 			# first found entry is real client
 			$addr_remote = $address;
 		} else {
@@ -1421,16 +1441,16 @@ if (defined $x_forward_for) {
 			push @proxy_addresses, $address;
 		};
 
-		$x_forward_for_entries++;
+		$x_forwarded_for_entries++;
 	};
 
-	if ($x_forward_for_entries > 0) {
+	if ($x_forwarded_for_entries > 0) {
 		# addr_remote is exit proxy
 		push @proxy_addresses, $addr_remote_temp;
 	};
 };
 
-## check HTTP-Via
+## check HTTP_VIA
 if (defined $via) {
 	foreach my $entry (split /,/, $via) {
 		$entry =~ s/^ +//o; # remove leading spaces
@@ -1474,20 +1494,20 @@ if ( defined $addr_remote ) {
 		};
 	};
 	if (defined $user_agent) {
-		$infoh_remote{'HTTP-UserAgent'} = $user_agent;
-		push @sort_remote, 'HTTP-UserAgent';
+		$infoh_remote{'HTTP_USER_AGENT'} = $user_agent;
+		push @sort_remote, 'HTTP_USER_AGENT';
 	};
 
 	# add x-forward-for information to client if not handled otherwise
-	if ((defined $x_forward_for) && (scalar(@proxy_addresses) == 0)) {
-		$infoh_remote{'HTTP-XForwardFor'} = $x_forward_for;
-		push @sort_remote, 'HTTP-XForwardFor';
+	if ((defined $x_forwarded_for) && (scalar(@proxy_addresses) == 0)) {
+		$infoh_remote{'HTTP_X_FORWARDED_FOR'} = $x_forwarded_for;
+		push @sort_remote, 'HTTP_X_FORWARDED_FOR';
 	};
 
 	# add via information to client if not handled otherwise
 	if ((defined $via) && (scalar(@proxy_infos) == 0)) {
-		$infoh_remote{'HTTP-Via'} = $via;
-		push @sort_remote, 'HTTP-Via';
+		$infoh_remote{'HTTP_VIA'} = $via;
+		push @sort_remote, 'HTTP_VIA';
 	};
 };
 
@@ -1647,22 +1667,29 @@ if ($mode eq "form" || $mode eq "mixed") {
 		&print_textonly ("\n");
 		&print_tagoutput ( "        </th>\n" );
 		&print_tagoutput ( "      </tr>\n" );
-		&print_infohash (\%infoh_input, \@sort_input);
+		&print_infohash (\%infoh_input, \@sort_input, 'form');
 	};
 };
 
 if ($mode eq "info" || $mode eq "mixed") {
+	&print_textonly("INFO__OUTPUTVERSION=\"" . $outputversion_textkeyvalue . "\"\n") if ($outputformat eq "textkeyvalue");
+
 	# Client
-	&print_textonly ("\n");
+	&print_textonly ("\n") if ($outputformat ne "textkeyvalue");
 	&print_tagoutput ( "      <tr>\n" );
 	&print_tagoutput ( "        <th style=\"background-color:#FFDDDD;\" colspan=\"3\">" );
-	print $text{'REMOTE'}->{$lang};
+	print $text{'REMOTE'}->{$lang} if ($outputformat ne "textkeyvalue");
 	&print_textonly ("\n");
 	&print_tagoutput ( "        </th>\n" );
 	&print_tagoutput ( "      </tr>\n" );
 	&print_infohash (\%infoh_remote, \@sort_remote, 'client');
 
 	# Proxy
+	if (scalar(@proxy_addresses) > 0) {
+		&print_textonly ("\n");
+		&print_textonly("PROXY__COUNT=\"" . scalar(@proxy_addresses) . "\"\n") if ($outputformat eq "textkeyvalue");
+	};
+
 	my $proxy_count = 0;
 	for my $address (@proxy_addresses) {
 		$proxy_count++;
@@ -1681,27 +1708,27 @@ if ($mode eq "info" || $mode eq "mixed") {
 				splice @sort_proxy, 0, 0, 'PROXY_INFO';
 			};
 
-			&print_textonly ("\n");
+			&print_textonly ("\n") if ($outputformat ne "textkeyvalue");
 			&print_tagoutput ( "      <tr>\n" );
 			&print_tagoutput ( "        <th style=\"background-color:#EEDDDD;\" colspan=\"3\">" );
-			print $text{'PROXY'}->{$lang} . " #" . $proxy_count;
+			print $text{'PROXY'}->{$lang} . " #" . $proxy_count if ($outputformat ne "textkeyvalue");
 			&print_textonly ("\n");
 			&print_tagoutput ( "        </th>\n" );
 			&print_tagoutput ( "      </tr>\n" );
-			&print_infohash (\%infoh_proxy, \@sort_proxy, 'proxy');
+			&print_infohash (\%infoh_proxy, \@sort_proxy, 'proxy', $proxy_count);
 		};
 	};
 
 	if ((defined $addr_server) && ($skip_server == 0)) {
 		# Server
-		&print_textonly ("\n");
+		&print_textonly ("\n") if ($outputformat ne "textkeyvalue");
 		&print_tagoutput ( "      <tr>\n" );
 		&print_tagoutput ( "        <th style=\"background-color:#DDFFDD;\" colspan=\"3\">" );
-		print $text{'SERVER'}->{$lang};
+		print $text{'SERVER'}->{$lang} if ($outputformat ne "textkeyvalue");
 		&print_textonly ("\n");
 		&print_tagoutput ( "        </th>\n" );
 		&print_tagoutput ( "      </tr>\n" );
-		&print_infohash (\%infoh_server, \@sort_server);
+		&print_infohash (\%infoh_server, \@sort_server, 'server');
 	};
 };
 
@@ -1712,7 +1739,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 
 my $datetime = POSIX::strftime("%Y-%m-%d %H:%M:%S", gmtime) . " UTC";
 
-if ($outputformat eq "html" || $outputformat eq "htmlfull") {
+if ($outputformat =~ /^html/o) {
 	print "          <font size=-2>" . $text{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . " " . $text{'at'}->{$lang} . " " . $datetime . "</font><br>\n";
 	print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.deepspace6.net/projects/ipv6calc.html\">" . $ipv6calc_name . "</a> " . $ipv6calc_version . ", " . $ipv6calc_copyright;
 	if (length($ipv6calc_features) > 0) {
@@ -1734,22 +1761,27 @@ if ($outputformat eq "html" || $outputformat eq "htmlfull") {
 	};
 
 } else {
-	print $text{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . " " . $text{'at'}->{$lang} . " " . $datetime . "\n";
-	print $text{'powered'}->{$lang} . " " . $ipv6calc_name . " " . $ipv6calc_version . ", " . $ipv6calc_copyright . " (http://www.deepspace6.net/projects/ipv6calc.html)";
+	# text output
+	print "INFO__GENERATED=" if ($outputformat eq "textkeyvalue");
+	print $chr_quote . $text{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . " " . $text{'at'}->{$lang} . " " . $datetime . $chr_quote . "\n";
+	print "INFO__POWEREDBY=" if ($outputformat eq "textkeyvalue");
+	print $chr_quote . $text{'powered'}->{$lang} . " " . $ipv6calc_name . " " . $ipv6calc_version . ", " . $ipv6calc_copyright . " (http://www.deepspace6.net/projects/ipv6calc.html)";
 	if (length($ipv6calc_features) > 0) {
 		print " (features: " . $ipv6calc_features . ")";
 	};
 	if (length($ipv6calc_settings) > 0) {
 		print " (settings: " . $ipv6calc_settings . ")";
 	};
-	print "\n";
+	print $chr_quote . "\n";
 
 	if (scalar(keys %db_info_ip2location) > 0) {
-		print $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_ip2location) . " (http://www.ip2location.com)" . "\n";
+		print "INFO__POWEREDBY_IP2LoCATION=" if ($outputformat eq "textkeyvalue");
+		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_ip2location) . " (http://www.ip2location.com)" . $chr_quote . "\n";
 	};
 
 	if (scalar(keys %db_info_geoip) > 0) {
-		print $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_geoip) . " (http://www.maxmind.com)" . "\n";
+		print "INFO__POWEREDBY_GEOIP=" if ($outputformat eq "textkeyvalue");
+		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_geoip) . " (http://www.maxmind.com)" . $chr_quote . "\n";
 	};
 };
 

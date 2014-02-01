@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.309 2013/12/01 13:51:36 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.310 2014/02/01 14:56:17 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,15 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20140201/PB
+	add support for building with shared libraries:
+	 configure: --enalbe-shared-library
+	 autogen.sh: -S
+
+20140115/PB
+	databases: update
+	ipv6calcweb/ipv6calcweb.cgi.in: add new outputformat "textkeyvalue"
+	
 20131201/PB
 	databases/lib/libipv6calc_db_wrapper.c: fix snprintf usage (missing format string)
 

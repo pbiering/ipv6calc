@@ -1,13 +1,26 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Project    : ipv6calc/ipv6calcweb
 # File       : test_ipv6calcweb.sh
-# Version    : $Id: test_ipv6calcweb.sh,v 1.12 2013/11/10 18:20:53 ds6peter Exp $
-# Copyright  : 2012-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6calcweb.sh,v 1.13 2014/02/01 14:56:18 ds6peter Exp $
+# Copyright  : 2012-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Test script for ipv6calcweb
 #
+
+while getopts "f:d" opt; do
+	case $opt in
+	    f)
+		opt_format="$OPTARG"
+		;;
+	    d)
+		opt_debug=1
+		;;
+	esac
+done
+
+shift $[ $OPTIND - 1 ]
 
 if [ -z "$1" ]; then
 	echo "Need IPv4/v6 address as argument #1"
@@ -22,13 +35,23 @@ if [ ! -x ipv6calcweb.cgi ]; then
 fi
 
 ## very basic output format tests
-for format in text html htmlfull; do
+for format in textkeyvalue text html htmlfull; do
+	if [ -n "$opt_format" -a "$opt_format" != "$format" ]; then
+		echo "NOTICE: skip format: $format"
+		continue
+	fi
 	echo "INFO  : test format: $format"
 	echo "DEBUG : execute: HTTP_IPV6CALCWEB_DEBUG=0x1000 HTTP_IPV6CALCWEB_OUTPUT_FORMAT=\"$format\" ./ipv6calcweb.cgi"
-	HTTP_IPV6CALCWEB_DEBUG="0x1000" HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi >/dev/null
+	if [ "$opt_debug" = "1" ]; then
+		HTTP_IPV6CALCWEB_DEBUG="0x1000" HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi
+	else
+		HTTP_IPV6CALCWEB_DEBUG="0x1000" HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi >/dev/null
+	fi
 	if [ $? -ne 0 ];then
 		echo "ERROR : output format reports an error: $format"
-		HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi
+		if [ "$opt_debug" != "1" ]; then
+			HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi
+		fi
 		exit 1
 	fi
 done || exit 1
@@ -45,13 +68,36 @@ SERVER_NAME="server.domain.example"
 QUERY_STRING="$2"
 
 HTTP_IPV6CALCWEB_DEBUG="0x1000"
+HTTP_IPV6CALCWEB_INFO_SERVER="1"
 
-export REMOTE_ADDR REMOTE_HOST HTTP_USER_AGENT SERVER_ADDR SERVER_NAME QUERY_STRING HTTP_IPV6CALCWEB_DEBUG
+HTTP_X_FORWARDED_FOR="5.6.7.8, 9.10.11.12"
+HTTP_VIA="1.0 fred, 1.1 nowhere.com"
 
-OUTPUT="`./ipv6calcweb.cgi`"
+export REMOTE_ADDR REMOTE_HOST HTTP_USER_AGENT SERVER_ADDR SERVER_NAME QUERY_STRING HTTP_IPV6CALCWEB_DEBUG HTTP_IPV6CALCWEB_INFO_SERVER HTTP_X_FORWARDED_FOR HTTP_VIA
 
-result=$?
-echo "Result: $result"
+for format in textkeyvalue text html htmlfull; do
+	if [ -n "$opt_format" -a "$opt_format" != "$format" ]; then
+		echo "NOTICE: skip format: $format"
+		continue
+	fi
+
+	HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format"
+	export HTTP_IPV6CALCWEB_OUTPUT_FORMAT
+
+	OUTPUT="`./ipv6calcweb.cgi`"
+	if [ "$opt_debug" = "1" ]; then
+		echo "$OUTPUT"
+	fi
+
+	result=$?
+	if [ $result -ne 0 ];then
+		echo "ERROR : output format reports an error: $format"
+		if [ "$opt_debug" != "1" ]; then
+			echo "$OUTPUT"
+		fi
+		exit 1
+	fi
+done || exit 1
 
 if [ $result -ne 0 ]; then
 	echo "TEST FAILED (exit code != 0)"

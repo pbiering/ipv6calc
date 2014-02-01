@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : lib/Makefile
-# Version    : $Id: Makefile.in,v 1.6 2013/09/20 06:17:52 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.7 2014/02/01 14:56:18 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -13,6 +13,8 @@ DEFAULT_CFLAGS ?= -O2 -Wall
 CFLAGS += -D__EXTENSIONS__
 
 INCLUDES= -I. -I../ $(GETOPT_INCLUDE) -I../md5/ -I../databases/lib/
+
+SHARED_LIBRARY=@SHARED_LIBRARY@
 
 CC	= @CC@
 AR	= ar
@@ -36,7 +38,9 @@ OBJS	=	libipv6calc.o  \
 		ipv6calcoptions.o \
 		ipv6calctypes.o
 
-all:		libipv6calc.a
+all:		
+		${MAKE} libipv6calc.a
+		${MAKE} libipv6calc.so
 
 libieee.o:	../databases/ieee-oui/dbieee_oui.h libieee.c libieee.h
 		cd ../ && ${MAKE} db-ieee-oui-make
@@ -78,9 +82,16 @@ libipv6calc.a:	$(OBJS)
 		cd ../ && ${MAKE} db-ieee-oui-make
 		cd ../ && ${MAKE} db-ipv4-assignment-make
 		cd ../ && ${MAKE} db-ipv6-assignment-make
-		echo "Create library"
+		echo "Create library (.a)"
 		$(AR) r libipv6calc.a $(OBJS)
 		$(RANLIB) libipv6calc.a
+
+libipv6calc.so: $(OBJS)
+		cd ../ && ${MAKE} db-ieee-oui-make
+		cd ../ && ${MAKE} db-ipv4-assignment-make
+		cd ../ && ${MAKE} db-ipv6-assignment-make
+		echo "Creates shared library (.so)"
+		gcc -shared -Wl,-soname,libipv6calc.so.@PACKAGE_VERSION@ -o libipv6calc.so.@PACKAGE_VERSION@ $(OBJS)
 
 distclean:
 		${MAKE} clean
@@ -89,8 +100,16 @@ autoclean:
 		${MAKE} distclean
 
 clean:
-		rm -f *.o *.a
+		rm -f *.o *.a *.so *.so.*
 
-install:
+install:	all
+ifeq ($(SHARED_LIBRARY), yes)
+		echo "Install shared library"
+		mkdir -p $(DESTDIR)$(libdir)
+		install -m 755 libipv6calc.so.@PACKAGE_VERSION@ $(DESTDIR)$(libdir)
+		ldconfig -n $(DESTDIR)$(libdir)
+else
+		echo "Nothing to do"
+endif
 
 test:
