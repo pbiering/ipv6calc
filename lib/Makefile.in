@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : lib/Makefile
-# Version    : $Id: Makefile.in,v 1.7 2014/02/01 14:56:18 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.8 2014/02/01 21:10:50 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -91,7 +91,7 @@ libipv6calc.so: $(OBJS)
 		cd ../ && ${MAKE} db-ipv4-assignment-make
 		cd ../ && ${MAKE} db-ipv6-assignment-make
 		echo "Creates shared library (.so)"
-		gcc -shared -Wl,-soname,libipv6calc.so.@PACKAGE_VERSION@ -o libipv6calc.so.@PACKAGE_VERSION@ $(OBJS)
+		$(CC) $(CFLAGS) $(LDFLAGS) -shared -Wl,-soname,libipv6calc.so.@PACKAGE_VERSION@ -o libipv6calc.so.@PACKAGE_VERSION@ $(OBJS)
 
 distclean:
 		${MAKE} clean

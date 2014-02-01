@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6loganon
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.12 2014/02/01 14:56:18 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.13 2014/02/01 21:10:50 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -24,7 +24,7 @@ GETOBJS = @LIBOBJS@
 
 CC	= @CC@
 
-LDFLAGS = @LDFLAGS_EXTRA@
+LDFLAGS_EXTRA = @LDFLAGS_EXTRA@
 
 OBJS	= ipv6loganon.o ipv6loganonhelp.o
 
@@ -46,10 +46,10 @@ libipv6calc_db_wrapper:
 		cd ../ && ${MAKE} lib-make
 
 ipv6loganon:	$(OBJS) libipv6calc libipv6calc_db_wrapper
-		$(CC) $(LDFLAGS) -o ipv6loganon $(OBJS) $(GETOBJS) $(LIBS) ../md5/md5.o -lm
+		$(CC) $(LDFLAGS) $(LDFLAGS_EXTRA) -o ipv6loganon $(OBJS) $(GETOBJS) $(LIBS) ../md5/md5.o -lm
 
 static:		ipv6loganon
-		$(CC) $(LDFLAGS) -o ipv6loganon-static $(OBJS) $(GETOBJS) -lipv6calc -lipv6calc_db_wrapper -L../lib/ -L../databases/lib/ -static $(LIBS) -lm
+		$(CC) $(LDFLAGS) $(LDFLAGS_EXTRA) -o ipv6loganon-static $(OBJS) $(GETOBJS) -lipv6calc -lipv6calc_db_wrapper -L../lib/ -L../databases/lib/ -static $(LIBS) -lm
 
 distclean:
 		${MAKE} clean

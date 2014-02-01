@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2014 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec.in,v 1.76 2014/02/01 14:56:17 ds6peter Exp $
+# $Id: ipv6calc.spec.in,v 1.77 2014/02/01 21:10:50 ds6peter Exp $
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
@@ -28,7 +28,7 @@ BuildRoot: %{_tmppath}/ipv6calc-root
 %{?_with_geoip_dyn: %{expand: %%define enable_geoip 1}}
 %{?_with_ip2location_dyn: %{expand: %%define enable_ip2location 1}}
 
-%{?_with_shared_library: %{expand: %%define enable_shared_library 1}}
+%{?_with_shared: %{expand: %%define enable_shared_library 1}}
 
 
 %if %{enable_geoip}
@@ -69,13 +69,13 @@ Available rpmbuild rebuild options:
   --with ip2location-dyn
   --with geoip
   --with geoip-dyn
-  --with shared-library
+  --with shared
 
 %{?enable_geoip: %{expand: Built with GeoIP support}}
 %{?enable_geoip_dyn: %{expand: Built with GeoIP dynamic-library-load support}}
 %{?enable_ip2location: %{expand: Built with IP2Location suppport}}
 %{?enable_ip2location_dyn: %{expand: Built with IP2Location dynamic-library-load suppport}}
-%{?enable_shared_library: %{expand: Built with shared-library}}
+%{?enable_shared: %{expand: Built with shared-library}}
 
 
 %package ipv6calcweb
@@ -94,7 +94,7 @@ displaying information of IP addresses on a web page.
 
 
 %build
-./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?enable_ip2location:--enable-ip2location} %{?enable_geoip:--enable-geoip} %{?enable_ip2location_dyn:--with-ip2location-dynamic} %{?enable_geoip_dyn:--with-geoip-dynamic} %{?enable_shared_library:--enable-shared-library}
+./configure --bindir=%{_bindir} --mandir=%{_mandir} %{?enable_ip2location:--enable-ip2location} %{?enable_geoip:--enable-geoip} %{?enable_ip2location_dyn:--with-ip2location-dynamic} %{?enable_geoip_dyn:--with-geoip-dynamic} %{?enable_shared:--enable-shared}
 make clean
 make
 make test-minimal
@@ -182,7 +182,7 @@ rm -rf $RPM_BUILD_ROOT
 # docs, examples and helper
 %doc %{_docdir}/%{name}-%{version}/*
 
-%ifdef %{_with_shared_library}
+%ifdef %{_with_shared}
 %{_libdir}/*
 %endif
 

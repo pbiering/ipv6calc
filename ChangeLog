@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.310 2014/02/01 14:56:17 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.311 2014/02/01 21:10:50 ds6peter Exp $ 
  */
 
 Info:
@@ -10,7 +10,7 @@ Info:
 --------------------------------------------------------------------
 20140201/PB
 	add support for building with shared libraries:
-	 configure: --enalbe-shared-library
+	 configure: --enalbe-shared
 	 autogen.sh: -S
 
 20140115/PB

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.29 2014/02/01 14:56:17 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.30 2014/02/01 21:10:50 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -55,7 +55,7 @@ while [ "$1" != "$LAST" ]; do
 		;;
 	    '-S')
 		shift
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-shared-library"
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-shared"
 		;;
 	    '--static')
 		shift

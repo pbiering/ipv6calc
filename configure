@@ -693,7 +693,7 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
-enable_shared_library
+enable_shared
 enable_dynamic_load
 enable_db_ieee
 enable_db_ipv4
@@ -1332,7 +1332,7 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
-  --enalbe-shared-library Enable shared library build (default: disabled)
+  --enable-shared         Enable shared library build (default: disabled)
   --disable-dynamic-load  Disable dynamic load of libraries (default: enabled)
   --disable-db-ieee       Disable built-in IEEE database (default: enabled)
   --disable-db-ipv4       Disable built-in IPv4 database (default: enabled)
@@ -4023,9 +4023,9 @@ ip2location_db_default="/usr/share/IP2Location"
 geoip_dyn_lib_default="libGeoIP.so.1"
 ip2location_dyn_lib_default="libIP2Location.so"
 
-# Check whether --enable-shared-library was given.
-if test "${enable_shared_library+set}" = set; then :
-  enableval=$enable_shared_library;
+# Check whether --enable-shared was given.
+if test "${enable_shared+set}" = set; then :
+  enableval=$enable_shared;
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** Shared library build enabled" >&5
 $as_echo "*** Shared library build enabled" >&6; }
 		SHARED_LIBRARY="yes"
