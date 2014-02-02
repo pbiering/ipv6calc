@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.79 2014/02/02 12:04:44 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.80 2014/02/02 19:33:21 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -12,12 +12,18 @@ export DEFAULT_CFLAGS = -D_GNU_SOURCE -O2 -Wall -g $(EXTRA_CFLAGS)
 
 ifeq (@ENABLE_BUNDLED_GETOPT@, 1)
   GETOPT_MAKE = getopt-make
+  GETOPT_DIR  = getopt
+endif
+
+ifeq (@ENABLE_BUNDLED_MD5@, 1)
+  MD5_MAKE = md5-make
+  MD5_DIR  = md5
 endif
 
 
 CC	= @CC@
 
-all:		md5-make $(GETOPT_MAKE) ipv6calc ipv6logconv ipv6logstats ipv6loganon
+all:		$(MD5_MAKE) $(GETOPT_MAKE) ipv6calc ipv6logconv ipv6logstats ipv6loganon
 
 .c.o:
 		$(CC) -c $< $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES)
@@ -36,50 +42,50 @@ updateclean:
 		for dir in databases/ieee-oui databases/ieee-iab databases/ipv4-assignment databases/ipv6-assignment; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
-			${MAKE} $@ ; \
+			${MAKE} $@ ; r=$$?; \
 			rm -rf autom4te.cache; \
-			cd $$ocwd ; \
-		done
+			cd $$ocwd; if [ $$r -ne 0 ]; then echo "Result: $$r"; exit $$r; fi; \
+		done || exit 1
 
 distclean:
 		${MAKE} clean
 		rm -f config.cache config.status config.log
 		rm -rf autom4te.cache
-		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib md5 $(GETOPT_MAKE) databases/ieee-oui databases/ieee-iab databases/ipv4-assignment databases/ipv6-assignment databases/registries; do \
+		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib $(MD5_DIR) $(GETOPT_DIR) databases/ieee-oui databases/ieee-iab databases/ipv4-assignment databases/ipv6-assignment databases/registries; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
-			${MAKE} $@ ; \
+			${MAKE} $@ ; r=$$?; \
 			rm -rf autom4te.cache; \
-			cd $$ocwd ; \
-		done
+			cd $$ocwd ; if [ $$r -ne 0 ]; then echo "Result: $$r"; exit $$r; fi; \
+		done || exit 1
 
 autoclean:
 		${MAKE} distclean
 		rm -f Makefile
 		rm -f contrib/ipv6calc.spec
 		rm -f config.h
-		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib databases/lib md5 $(GETOPT_MAKE); do \
+		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib databases/lib $(MD5_DIR) $(GETOPT_DIR); do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
-			${MAKE} $@ ; \
-			cd $$ocwd ; \
-		done
+			${MAKE} $@ ; r=$$?; \
+			cd $$ocwd ; if [ $$r -ne 0 ]; then echo "Result: $$r"; exit $$r; fi; \
+		done || exit 1
 
 clean:
-		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib databases/lib md5 $(GETOPT_MAKE); do \
+		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib databases/lib $(MD5_DIR) $(GETOPT_DIR); do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
-			${MAKE} $@ ; \
-			cd $$ocwd ; \
-		done
+			${MAKE} $@ ; r=$$?; \
+			cd $$ocwd ; if [ $$r -ne 0 ]; then echo "Result: $$r"; exit $$r; fi; \
+		done || exit 1
 
 install:
-		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib databases/lib $(GETOPT_MAKE); do \
+		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib databases/lib; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
-			${MAKE} install; \
-			cd $$ocwd ; \
-		done
+			${MAKE} install; r=$$?; \
+			cd $$ocwd ; if [ $$r -ne 0 ]; then echo "Result: $$r"; exit $$r; fi; \
+		done || exit 1
 
 getopt-make:
 		cd getopt && ${MAKE}
@@ -87,7 +93,7 @@ getopt-make:
 md5-make:
 		cd md5 && ${MAKE}
 
-lib-make:	md5-make db-ieee-oui-make db-ieee-iab-make db-ipv4-assignment-make db-ipv6-assignment-make db-wrapper-make db-lib-make
+lib-make:	$(MD5_MAKE) $(GETOPT_MAKE) db-ieee-oui-make db-ieee-iab-make db-ipv4-assignment-make db-ipv6-assignment-make db-wrapper-make db-lib-make
 		cd lib && ${MAKE} GETOPT_INCLUDE=@GETOPT_INCLUDE@
 
 ipv6logconv-make: lib-make
@@ -138,22 +144,22 @@ update:
 			cd $$dir || exit 1; \
 			${MAKE} $@ ; \
 			cd $$ocwd ; \
-		done
+		done || exit 1
 
 static:		ipv6logconv-make ipv6loganon-make ipv6logstats-make ipv6calc-make	
 		for dir in ipv6logconv ipv6logstats ipv6loganon ipv6calc; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
-			${MAKE} $@ ; \
-			cd $$ocwd ; \
-		done
+			${MAKE} $@ ; r=$$?; \
+			cd $$ocwd ; if [ $$r -ne 0 ]; then echo "Result: $$r"; exit $$r; fi; \
+		done || exit 1
 
 test:
 		for dir in ipv6calc ipv6logconv ipv6logstats ipv6loganon ipv6calcweb; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
-			${MAKE} $@ || exit 1; \
-			cd $$ocwd ; \
+			${MAKE} $@ ; r=$$?; \
+			cd $$ocwd ; if [ $$r -ne 0 ]; then echo "Result: $$r"; exit $$r; fi; \
 		done || exit 1
 		echo "ALL TESTS SUCCESSFUL"
 
@@ -161,8 +167,8 @@ test-minimal:
 		for dir in ipv6calc ipv6logconv ipv6logstats ipv6loganon ipv6calcweb; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
-			${MAKE} $@ || exit 1; \
-			cd $$ocwd ; \
+			${MAKE} $@ ; r=$$?; \
+			cd $$ocwd ; if [ $$r -ne 0 ]; then echo "Result: $$r"; exit $$r; fi; \
 		done
 
 codecheck:
@@ -174,6 +180,6 @@ codecheck:
 		for dir in ipv6calc ipv6logconv ipv6logstats ipv6loganon; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
-			${MAKE} $@ || exit 1; \
-			cd $$ocwd ; \
-		done
+			${MAKE} $@ ; r=$$?; \
+			cd $$ocwd ; if [ $$r -ne 0 ]; then echo "Result: $$r"; exit $$r; fi; \
+		done || exit 1

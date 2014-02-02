@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.37 2013/10/31 21:24:46 ds6peter Exp $
-# Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_scenarios.sh,v 1.38 2014/02/02 19:33:21 ds6peter Exp $
+# Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
 
@@ -216,10 +216,12 @@ a909:16fa:9092:23ff:a909:4941::7		anonymized-prefix
 END
 }
 
-# Test scenarios for genprivacyiid
+# Test scenarios for gienprivacyiid
 testscenarios_genprivacyiid() {
-	#TODO
-	true
+	cat <<END | grep -v '^#'
+0123:4567:89ab:cdef	0123456789abcdef	4462:bdea:8654:776d	486072ff7074945e
+4462:bdea:8654:776d	486072ff7074945e	69ad:92b8:b11d:be18	d74e03fb77f2f561
+END
 }
 
 # Test scenarios for anonymization options (ipv6calc & ipv6loganon)

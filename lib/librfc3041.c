@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3041.c
- * Version    : $Id: librfc3041.c,v 1.13 2013/08/20 06:24:59 ds6peter Exp $
- * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc3041.c,v 1.14 2014/02/02 19:33:21 ds6peter Exp $
+ * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for host identifier privacy extension defined in RFC 3041 / RFC 4941
@@ -16,7 +16,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+
+#include "config.h"
+
+#ifdef ENABLE_BUNDLED_MD5
 #include "../md5/md5.h"
+#else
+#include <openssl/md5.h>
+#endif
+
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
 #include "librfc3041.h"
@@ -32,20 +40,36 @@
 int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv6calc_ipv6addr *newidentifier, ipv6calc_ipv6addr *newtoken) {
 #define DEBUG_function_name "librfc3041/librfc3041_calc"
 	int retval = 1, i;
-	struct md5_ctx md5hash;
 	char tempstring[NI_MAXHOST],  tempstring2[NI_MAXHOST];
 	unsigned char digest[MD5_DIGEST_LENGTH];
 
-	if ( (ipv6calc_debug & DEBUG_librfc3041) != 0 ) {
-		fprintf(stderr, "%s: Got identifier '%08x-%08x' and token '%08x-%08x'\n", DEBUG_function_name, (unsigned int) ipv6addr_getdword(identifier, 2), (unsigned int) ipv6addr_getdword(identifier, 3), (unsigned int) ipv6addr_getdword(token, 2), (unsigned int) ipv6addr_getdword(token, 3)); 
-	};
+#ifdef ENABLE_BUNDLED_MD5
+	struct md5_ctx md5hash;
+#else
+	MD5_CTX md5hash;
+#endif
 
+	DEBUGPRINT_WA(DEBUG_librfc3041, "Got identifier '%08x-%08x' and token '%08x-%08x'", (unsigned int) ipv6addr_getdword(identifier, 2), (unsigned int) ipv6addr_getdword(identifier, 3), (unsigned int) ipv6addr_getdword(token, 2), (unsigned int) ipv6addr_getdword(token, 3));
+
+#ifdef ENABLE_BUNDLED_MD5
 	md5_init_ctx(&md5hash);
+#else
+	MD5_Init(&md5hash);
+#endif
 
+#ifdef ENABLE_BUNDLED_MD5
 	md5_process_bytes(&identifier->in6_addr.s6_addr[8], 8, &md5hash);
 	md5_process_bytes(&token->in6_addr.s6_addr[8], 8, &md5hash);
+#else
+	MD5_Update(&md5hash, &identifier->in6_addr.s6_addr[8], 8);
+	MD5_Update(&md5hash, &token->in6_addr.s6_addr[8], 8);
+#endif
 
+#ifdef ENABLE_BUNDLED_MD5
 	md5_finish_ctx(&md5hash, digest);
+#else
+	MD5_Final(digest, &md5hash);
+#endif
 
 	tempstring[0] = '\0';
 
@@ -54,9 +78,7 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 		snprintf(tempstring, sizeof(tempstring) - 1, "%s", tempstring2);
 	};
 	
-	if ( (ipv6calc_debug & DEBUG_librfc3041) != 0 ) {
-		fprintf(stderr, "%s: MD5 hash '%s'\n", DEBUG_function_name, tempstring);
-	};
+	DEBUGPRINT_WA(DEBUG_librfc3041, "MD5 hash '%s'", tempstring);
 
 	ipv6addr_clear(newidentifier);
 	ipv6addr_clear(newtoken);

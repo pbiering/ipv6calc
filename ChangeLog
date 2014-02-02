@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.314 2014/02/02 17:08:21 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.315 2014/02/02 19:33:21 ds6peter Exp $ 
  */
 
 Info:
@@ -12,6 +12,9 @@ Info:
 	move IEEE database from libieee to databases/BuiltIn
 	apply some compilation compatibility fixes submitted by Nikoli
 	move IPv4/IPv6 registriy database from libipv4addr.c/libipv6addr.c to databases/BuiltIn
+	improve error catching in Makefiles
+	add options to force bundled md5 or getopt (otherwise it depends on autodetection)
+	 configure: --enable-bundled-md5 --enable-bundled-getopt
 
 20140201/PB
 	add support for building with shared libraries:

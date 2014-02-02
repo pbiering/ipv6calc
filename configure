@@ -635,6 +635,8 @@ IP2LOCATION_LIB
 IP2LOCATION_INCLUDE
 IPV6CALC_LIB
 SHARED_LIBRARY
+ENABLE_BUNDLED_MD5
+MD5_INCLUDE
 ENABLE_BUNDLED_GETOPT
 GETOPT_INCLUDE
 LIBOBJS
@@ -693,6 +695,8 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+enable_bundled_getopt
+enable_bundled_md5
 enable_shared
 enable_dynamic_load
 enable_db_ieee
@@ -1332,6 +1336,9 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-bundled-getopt Enable bundled getopt library (default:
+                          autoselected)
+  --enable-bundled-md5    Enable bundled MD5 library (default: autoselected)
   --enable-shared         Enable shared library build (default: disabled)
   --disable-dynamic-load  Disable dynamic load of libraries (default: enabled)
   --disable-db-ieee       Disable built-in IEEE database (default: enabled)
@@ -3991,26 +3998,140 @@ fi
 done
 
 
-ac_fn_c_check_func "$LINENO" "getopt_long" "ac_cv_func_getopt_long"
+# Check whether --enable-bundled-getopt was given.
+if test "${enable_bundled_getopt+set}" = set; then :
+  enableval=$enable_bundled_getopt;
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** use of bundled getopt library forced" >&5
+$as_echo "*** use of bundled getopt library forced" >&6; }
+		ENABLE_BUNDLED_GETOPT=1
+
+else
+
+		ac_fn_c_check_func "$LINENO" "getopt_long" "ac_cv_func_getopt_long"
 if test "x$ac_cv_func_getopt_long" = xyes; then :
 
 else
 
-		case " $LIBOBJS " in
+				ENABLE_BUNDLED_GETOPT=1
+
+fi
+
+
+fi
+
+
+if test "$ENABLE_BUNDLED_GETOPT" = "1"; then
+	case " $LIBOBJS " in
   *" ../getopt/getopt.$ac_objext "* ) ;;
   *) LIBOBJS="$LIBOBJS ../getopt/getopt.$ac_objext"
  ;;
 esac
 
-		case " $LIBOBJS " in
+	case " $LIBOBJS " in
   *" ../getopt/getopt1.$ac_objext "* ) ;;
   *) LIBOBJS="$LIBOBJS ../getopt/getopt1.$ac_objext"
  ;;
 esac
 
-		GETOPT_INCLUDE=-I../getopt
-		ENABLE_BUNDLED_GETOPT=1
+	GETOPT_INCLUDE=-I../getopt
+fi
 
+
+
+
+
+# Check whether --enable-bundled-md5 was given.
+if test "${enable_bundled_md5+set}" = set; then :
+  enableval=$enable_bundled_md5;
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** use of bundled MD5 library forced" >&5
+$as_echo "*** use of bundled MD5 library forced" >&6; }
+		ENABLE_BUNDLED_MD5=1
+
+else
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for MD5_Init in -lcrypto" >&5
+$as_echo_n "checking for MD5_Init in -lcrypto... " >&6; }
+if ${ac_cv_lib_crypto_MD5_Init+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lcrypto  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char MD5_Init ();
+int
+main ()
+{
+return MD5_Init ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_crypto_MD5_Init=yes
+else
+  ac_cv_lib_crypto_MD5_Init=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_crypto_MD5_Init" >&5
+$as_echo "$ac_cv_lib_crypto_MD5_Init" >&6; }
+if test "x$ac_cv_lib_crypto_MD5_Init" = xyes; then :
+
+			LDFLAGS="$LDFLAGS -lcrypto"
+			for ac_func in MD5_Init MD5_Update MD5_Final MD5_Transform
+do :
+  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+
+else
+
+					ENABLE_BUNDLED_MD5=1
+
+fi
+done
+
+
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: crypto library header files were found but not supporting required MD5 functions (will us bundled MD5 function)." >&5
+$as_echo "$as_me: WARNING: crypto library header files were found but not supporting required MD5 functions (will us bundled MD5 function)." >&2;}
+			ENABLE_BUNDLED_MD5=1
+
+fi
+
+
+fi
+
+
+if test "$ENABLE_BUNDLED_MD5" = "1"; then
+	case " $LIBOBJS " in
+  *" ../md5/md5.$ac_objext "* ) ;;
+  *) LIBOBJS="$LIBOBJS ../md5/md5.$ac_objext"
+ ;;
+esac
+
+	GETOPT_INCLUDE=-I../md5
+
+$as_echo "#define ENABLE_BUNDLED_MD5 1" >>confdefs.h
+
+else
+	LDFLAGS_EXTRA="-lcrypto $LDFLAGS_EXTRA"
 fi
 
 
@@ -4023,6 +4144,7 @@ ip2location_db_default="/usr/share/IP2Location"
 geoip_dyn_lib_default="libGeoIP.so.1"
 ip2location_dyn_lib_default="libIP2Location.so"
 
+
 # Check whether --enable-shared was given.
 if test "${enable_shared+set}" = set; then :
   enableval=$enable_shared;
@@ -4032,7 +4154,7 @@ $as_echo "*** Shared library build enabled" >&6; }
 
 $as_echo "#define SHARED_LIBRARY 1" >>confdefs.h
 
-		LDFLAGS_EXTRA="../lib/libipv6calc.so.$PACKAGE_VERSION ../databases/lib/libipv6calc_db_wrapper.so.$PACKAGE_VERSION"
+		LDFLAGS_EXTRA="../lib/libipv6calc.so.$PACKAGE_VERSION ../databases/lib/libipv6calc_db_wrapper.so.$PACKAGE_VERSION $LDFLAGS_EXTRA"
 		LD_LIBRARY_PATH=../lib:../databases/lib:$LD_LIBRARY_PATH
 
 else
@@ -4049,6 +4171,7 @@ fi
 $as_echo "*** LDFLAGS_EXTRA: $LDFLAGS_EXTRA" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH: $LD_LIBRARY_PATH" >&5
 $as_echo "*** LD_LIBRARY_PATH: $LD_LIBRARY_PATH" >&6; }
+
 
 ac_fn_c_check_header_mongrel "$LINENO" "dlfcn.h" "ac_cv_header_dlfcn_h" "$ac_includes_default"
 if test "x$ac_cv_header_dlfcn_h" = xyes; then :

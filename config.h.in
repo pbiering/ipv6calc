@@ -6,6 +6,9 @@
 /* Copyright year */
 #undef COPYRIGHT_YEAR
 
+/* Define if bundled MD5 should be used */
+#undef ENABLE_BUNDLED_MD5
+
 /* Define GeoIP database directory. */
 #undef GEOIP_DB
 
@@ -14,6 +17,18 @@
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `MD5_Final' function. */
+#undef HAVE_MD5_FINAL
+
+/* Define to 1 if you have the `MD5_Init' function. */
+#undef HAVE_MD5_INIT
+
+/* Define to 1 if you have the `MD5_Transform' function. */
+#undef HAVE_MD5_TRANSFORM
+
+/* Define to 1 if you have the `MD5_Update' function. */
+#undef HAVE_MD5_UPDATE
 
 /* Define to 1 if you have the <memory.h> header file. */
 #undef HAVE_MEMORY_H

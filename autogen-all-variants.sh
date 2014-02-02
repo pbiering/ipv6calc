@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.12 2014/02/01 14:56:17 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.13 2014/02/02 19:33:21 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -10,6 +10,7 @@
 autgen_variants() {
 	cat <<END | grep -v ^#
 # default (no options)
+--enable-bundled-md5 --enable-bundled-getopt
 -i
 -i --ip2location-dyn
 -g
@@ -40,19 +41,23 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+echo "INFO  : test static build"
+make static
+if [ $? -ne 0 ]; then
+	echo "ERROR : 'make static' reports an error (perhaps glibc-static/openssl-static/zlib-static is missing)"
+	exit 1
+fi
+
 # variants
-for liboption in "normal" "shared" "static"; do
+for liboption in "normal" "shared"; do
 	autgen_variants | while read buildoptions; do
 		options="$buildoptions $options_add"
 		case $liboption in
 		    shared)
 			options="$options -S"
 			;;
-		    static)
-			options="$options --static"
-			;;
 		esac
-		nice -n 10 ./autogen.sh $options
+		nice -n 10 ionice -c idle ./autogen.sh $options
 		if [ $? -ne 0 ]; then
 			echo "ERROR : 'autogen.sh reports an error with options: $options"
 			exit 1
@@ -61,7 +66,7 @@ for liboption in "normal" "shared" "static"; do
 done
 
 
-make distclean
+make distclean || exit 1
 
 echo "INFO  : congratulations, all variants built successful!"
 

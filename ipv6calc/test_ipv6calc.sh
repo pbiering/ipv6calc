@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.44 2013/11/02 16:41:01 ds6peter Exp $
-# Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6calc.sh,v 1.45 2014/02/02 19:33:21 ds6peter Exp $
+# Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 
@@ -269,6 +269,27 @@ testscenarios | sed 's/NOPIPETEST//' | while read line; do
 		fi
 	fi
 done || exit 1 
+
+
+echo "Run 'ipv6calc' action 'genprivacyiid'..."
+testscenarios_genprivacyiid | while read in1 in2 out1 out2; do
+	echo "Test './ipv6calc -q -A genprivacyiid $in1 $in2'"
+	result="`./ipv6calc -A genprivacyiid $in1 $in2`"
+	retval=$?
+
+	if [ $retval -ne 0 ]; then
+		echo "Error executing 'ipv6calc'!"
+		exit 1
+	fi
+
+	if [ "$result" != "$out1 $out2" ]; then
+		echo "Result is not matching!"
+		echo "Result is      : $result"
+		echo "Result expected: $out1 $out2"
+		exit 1
+	fi
+done || exit 1
+
 
 echo "Run 'ipv6calc' input validation tests...(empty input)"
 ./ipv6calc -m --in -? | while read inputformat; do
