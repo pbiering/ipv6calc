@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.74 2013/10/24 19:05:04 ds6peter Exp $
- * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv6addr.h,v 1.75 2014/02/02 17:08:22 ds6peter Exp $
+ * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Header file for libipv6addr.c
@@ -378,8 +378,6 @@ extern void ipv6addr_clearall(ipv6calc_ipv6addr *ipv6addrp);
 extern void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6addr *ipv6addrp_src);
 
 extern uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp);
-extern int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp);
-extern int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring);
 
 extern int  addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);
 extern int  addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp);

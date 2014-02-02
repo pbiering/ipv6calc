@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.49 2013/11/04 20:30:50 ds6peter Exp $
- * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logstats.c,v 1.50 2014/02/02 17:08:22 ds6peter Exp $
+ * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile statistics
@@ -533,7 +533,7 @@ static void lineparser(void) {
 						};
 
 						/* get registry */
-						registry = ipv4addr_getregistry(&ipv4addr);
+						registry = libipv6calc_db_wrapper_registry_num_by_ipv4addr(&ipv4addr);
 					};
 
 					if (feature_cc == 1) {
@@ -602,7 +602,7 @@ static void lineparser(void) {
 						DEBUGPRINT_WA(DEBUG_ipv6logstats_processing, "Anonymized IPv6 prefix information cc_index=%u as_num32=%u registry=%u", cc_index, as_num32, registry);
 					} else {
 						/* get registry */
-						registry = ipv6addr_getregistry(&ipv6addr);
+						registry = libipv6calc_db_wrapper_registry_num_by_ipv6addr(&ipv6addr);
 					};
 
 					if (feature_cc == 1) {
@@ -686,7 +686,7 @@ static void lineparser(void) {
 					};
 
 					/* get registry */
-					registry = ipv4addr_getregistry(&ipv4addr);
+					registry = libipv6calc_db_wrapper_registry_num_by_ipv4addr(&ipv4addr);
 				};
 
 				stat_inc_country_code(cc_index, 4);

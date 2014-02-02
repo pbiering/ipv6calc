@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.19 2014/02/02 09:20:49 ds6peter Exp $
+ * Version    : $Id: libieee.c,v 1.20 2014/02/02 17:08:22 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -19,35 +19,6 @@
 #include "libeui64.h"
 
 #include "../databases/lib/libipv6calc_db_wrapper.h"
-
-/*
- * Get vendor string
- * in:  macaddrp
- * mod: resultstring
- * out: 0=found, 1=not found
- */
-int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macaddrp) {
-	int retval;
-
-	retval = libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(resultstring, macaddrp);
-
-	return (retval);
-};
-
-
-/*
- * Get short vendor string
- * in:  macaddrp
- * mod: resultstring
- * out: 0=found, 1=not found
- */
-int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *macaddrp) {
-	int retval;
-
-	retval = libipv6calc_db_wrapper_ieee_vendor_string_short_by_macaddr(resultstring, macaddrp);
-
-	return (retval);
-};
 
 
 /*

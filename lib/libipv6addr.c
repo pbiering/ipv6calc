@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.101 2013/11/02 16:41:01 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.102 2014/02/02 17:08:22 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -27,10 +27,6 @@
 #include "libeui64.h"
 
 #include "../databases/lib/libipv6calc_db_wrapper.h"
-
-#ifdef SUPPORT_DB_IPV6
-#include "../databases/ipv6-assignment/dbipv6addr_assignment.h"
-#endif
 
 
 /*
@@ -1048,166 +1044,6 @@ END_ANON_IID:
 
 	return (type);
 };
-
-/*
- * get registry number of an IPv6 address
- *
- * in:  ipv6addr = IPv6 address structure
- * out: assignment number (-1 = no result)
- */
-#define DEBUG_function_name "libipv6calc/getregistry"
-int ipv6addr_getregistry(const ipv6calc_ipv6addr *ipv6addrp) {
-	char resultstring[NI_MAXHOST];
-	int i;
-
-	i = libipv6addr_get_registry_string(ipv6addrp, resultstring);
-
-	if (i == 2) {
-		return(IPV6_ADDR_REGISTRY_RESERVED);
-	} else if (i != 0) {
-		return(IPV6_ADDR_REGISTRY_UNKNOWN);
-	};
-
-#ifdef SUPPORT_DB_IPV6
-	if (strcmp(resultstring, "IANA") == 0) {
-		return(IPV6_ADDR_REGISTRY_IANA);
-	} else if (strcmp(resultstring, "APNIC") == 0) {
-		return(IPV6_ADDR_REGISTRY_APNIC);
-	} else if (strcmp(resultstring, "ARIN") == 0) {
-		return(IPV6_ADDR_REGISTRY_ARIN);
-	} else if (strcmp(resultstring, "RIPENCC") == 0) {
-		return(IPV6_ADDR_REGISTRY_RIPE);
-	} else if (strcmp(resultstring, "LACNIC") == 0) {
-		return(IPV6_ADDR_REGISTRY_LACNIC);
-	} else if (strcmp(resultstring, "AFRINIC") == 0) {
-		return(IPV6_ADDR_REGISTRY_AFRINIC);
-	} else if (strcmp(resultstring, "6BONE") == 0) {
-		return(IPV6_ADDR_REGISTRY_6BONE);
-	} else if (strcmp(resultstring, "6TO4") == 0) {
-		return(IPV6_ADDR_REGISTRY_RESERVED);
-	} else {
-		return(IPV6_ADDR_REGISTRY_UNKNOWN);
-	};
-#else
-	return(IPV6_ADDR_REGISTRY_UNKNOWN);
-#endif
-}
-#undef DEBUG_function_name
-
-
-/*
- * Get IPv6 address assignement information as string
- *
- * in : ipv6addrp = pointer to IPv6 address structure
- * mod: resultstring
- * ret: 0: ok, 1: unknown, 2: reserved
- */
-#define DEBUG_function_name "libipv6calc/get_registry_string"
-int libipv6addr_get_registry_string(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
-	uint32_t ipv6_00_31 = ipv6addr_getdword(ipv6addrp, 0);
-	uint32_t ipv6_32_63 = ipv6addr_getdword(ipv6addrp, 1);
-	uint32_t ipv6_64_95 = ipv6addr_getdword(ipv6addrp, 2);
-	uint32_t ipv6_96_127 = ipv6addr_getdword(ipv6addrp, 3);
-	
-	uint16_t ipv6_00_15 = ipv6addr_getword(ipv6addrp, 0);
-
-	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-		fprintf(stderr, "%s: Given ipv6 prefix: %08x%08x\n", DEBUG_function_name, (unsigned int) ipv6_00_31, (unsigned int) ipv6_32_63);
-	};
-
-	if ((ipv6_00_31 == 0) && (ipv6_32_63 == 0) && (ipv6_64_95 == 0) && (ipv6_96_127 == 0)) {
-		// :: (RFC 4291)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291#2.5.2)");
-		return (2);
-	} else if ((ipv6_00_31 == 0) && (ipv6_32_63 == 0) && (ipv6_64_95 == 0) && (ipv6_96_127 == 1)) {
-		// ::1 (RFC 4291)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291#2.5.3)");
-		return (2);
-	} else if ((ipv6_00_31 == 0) && (ipv6_32_63 == 0) && (ipv6_64_95 == 0)) {
-		// ::x.x.x.x (RFC 4291)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291#2.5.5.1)");
-		return (2);
-	} else if ((ipv6_00_31 == 0) && (ipv6_32_63 == 0) && (ipv6_64_95 == 0x0000ffff)) {
-		// ::ffff:x.x.x.x (RFC 4291)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291#2.5.5.2)");
-		return (2);
-	} else if (ipv6_00_31 == 0x20010000) {
-		// 2001:0000::/32 (RFC 4380)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4380#6)");
-		return (2);
-	} else if ((ipv6_00_31 & 0xfffffff0) == 0x20010010) {
-		// 2001:0010::/28 (RFC 4843)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4843#2)");
-		return (2);
-	} else if (ipv6_00_31 == 0x20010db8) {
-		// 2001:0db8::/32 (RFC 3849)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3849#4)");
-		return (2);
-	} else if ((ipv6_00_15 & 0xffff) == 0x2002) {
-		// 2002::/16 (RFC 3056)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3056#2)");
-		return (2);
-	} else if ((ipv6_00_15 & 0xfe00) == 0xfc00) {
-		// fc00::/7 (RFC 4193)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4193#3.1)");
-		return (2);
-	} else if ((ipv6_00_15 & 0xffe0) == 0xfe80) {
-		// fe80::/10 (RFC 4291)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291#2.5.6)");
-		return (2);
-	} else if ((ipv6_00_15 & 0xffe0) == 0xfec0) {
-		// fec0::/10 (RFC 4291)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291#2.5.7)");
-		return (2);
-	} else if ((ipv6_00_15 & 0xff00) == 0xff00) {
-		// ffxx::/8 (RFC 4291)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC4291#2.7)");
-		return (2);
-	};
-
-#ifdef SUPPORT_DB_IPV6
-	int i;
-	int match = -1;
-
-	for (i = 0; i < MAXENTRIES_ARRAY(dbipv6addr_assignment); i++) {
-		/* run through database array */
-		if ( (ipv6_00_31 & dbipv6addr_assignment[i].ipv6mask_00_31) != dbipv6addr_assignment[i].ipv6addr_00_31 ) {
-			/* MSB 00-31 do not match */
-			continue;
-		};
-
-		if ( dbipv6addr_assignment[i].ipv6mask_32_63 != 0 ) {
-			if ( (ipv6_32_63 & dbipv6addr_assignment[i].ipv6mask_32_63) != dbipv6addr_assignment[i].ipv6addr_32_63 ) {
-				/* MSB 32-63 do not match */
-				continue;
-			};
-		};
-
-		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-			fprintf(stderr, "%s: Found match: prefix=%08x%08x mask=%08x%08x  registry=%s (entry: %d)\n", DEBUG_function_name, \
-				(unsigned int) dbipv6addr_assignment[i].ipv6addr_00_31, \
-				(unsigned int) dbipv6addr_assignment[i].ipv6addr_32_63, \
-				(unsigned int) dbipv6addr_assignment[i].ipv6mask_00_31, \
-				(unsigned int) dbipv6addr_assignment[i].ipv6mask_32_63, \
-				dbipv6addr_assignment[i].string_registry, i);
-		};
-		match = i;
-	};
-
-	/* result */
-	if ( match > -1 ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", dbipv6addr_assignment[match].string_registry);
-		return(0);
-	} else {
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "unknown");
-		return(1);
-	};
-#else
-	snprintf(resultstring, NI_MAXHOST - 1, "%s", "(IPv6 database not compiled in)");
-	return(1);
-#endif
-};
-#undef DEBUG_function_name
 
 
 /*
@@ -2568,7 +2404,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 			};
 
 			// check whether IPv6 address is reserved
-			r = libipv6addr_get_registry_string(ipv6addrp, helpstring);
+			r = libipv6calc_db_wrapper_registry_string_by_ipv6addr(ipv6addrp, helpstring);
 			if (r == 2) {
 				DEBUGPRINT_NA(DEBUG_libipv6addr, "IPv6 registry of prefix contains reserved, skip anonymization");
 				goto ChecksumCalc;

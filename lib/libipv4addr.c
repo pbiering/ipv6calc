@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.48 2013/10/30 20:04:25 ds6peter Exp $
- * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv4addr.c,v 1.49 2014/02/02 17:08:22 ds6peter Exp $
+ * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Function library for IPv4 address handling
@@ -20,10 +20,6 @@
 #include "libipv6calcdebug.h"
 
 #include "../databases/lib/libipv6calc_db_wrapper.h"
-
-#ifdef SUPPORT_DB_IPV4
-#include "../databases/ipv4-assignment/dbipv4addr_assignment.h"
-#endif
 
 
 /*
@@ -620,7 +616,6 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6ca
  * out: *resultstring = IPv4 address string
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libipv4addr/ipv4addrstruct_to_string"
 int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST];
 
@@ -641,192 +636,7 @@ int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, cha
 	
 	return(0);
 };
-#undef DEBUG_function_name
 
-
-/*
- * get registry string of an IPv4 address
- *
- * in:  ipv4addr = IPv4 address structure
- * out: *resultstring = Registry string
- * ret: 0: ok, 1: unknown, 2: reserved
- */
-#define DEBUG_function_name "libipv4addr/get_registry_string"
-int libipv4addr_get_registry_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring) {
-	uint32_t ipv4 = ipv4addr_getdword(ipv4addrp);
-	
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: Given IPv4 address: %08x\n", DEBUG_function_name, (unsigned int) ipv4);
-	};
-
-	if ((ipv4 & 0xff000000u) == 0x00000000u) {
-		// 0.0.0.0/8 (RFC 1122)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1122#3.2.1.3)");
-		return (2);
-	} else if ((ipv4 & 0xff000000u) == 0x0a000000u) {
-		// 10.0.0.0/8 (RFC 1918)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1918#3)");
-		return (2);
-	} else if ((ipv4 & 0xffc00000u) == 0x64400000u) {
-		// 100.64.0.0/10 (RFC 6598)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC6598)");
-		return (2);
-	} else if ((ipv4 & 0xff000000u) == 0x7f000000u) {
-		// 127.0.0.0/8 (RFC 1122)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1122#3.2.1.3)");
-		return (2);
-	} else if ((ipv4 & 0xffff0000u) == 0xa9fe0000u) {
-		// 169.254.0.0/16 (RFC 1918)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3927#1)");
-		return (2);
-	} else if ((ipv4 & 0xfff00000u) == 0xac100000u) {
-		// 172.16.0.0/12 (RFC 1918)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1918#3)");
-		return (2);
-	} else if ((ipv4 & 0xffff0000u) == 0xc0a80000u) {
-		// 192.168.0.0/16 (RFC 1918)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1918#3)");
-		return (2);
-	} else if ((ipv4 & 0xffffff00u) == 0xc0000000u) {
-		// 192.0.0.0/24 (RFC 5736)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC5736#1)");
-		return (2);
-	} else if ((ipv4 & 0xffffff00u) == 0xc0000200u) {
-		// 192.0.2.0/24 (RFC 3330)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC5737#1)");
-		return (2);
-	} else if ((ipv4 & 0xffffff00u) == 0xc0586300u) {
-		// 192.88.99.0/24 (RFC 3068)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3068#2.3)");
-		return (2);
-	} else if ((ipv4 & 0xfffe0000u) == 0xc6120000u) {
-		// 198.18.0.0/15 (RFC 2544)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC2544#C.2.2)");
-		return (2);
-	} else if ((ipv4 & 0xffffff00u) == 0xc6336400u) {
-		// 198.51.100.0/24 (RFC 5737)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC5737#3)");
-		return (2);
-	} else if ((ipv4 & 0xffffff00u) == 0xcb007100u) {
-		// 203.0.113.0/24 (RFC 5737)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC5737#3)");
-		return (2);
-	} else if ((ipv4 & 0xf0000000u) == 0xe0000000u) {
-		// 224.0.0.0/4 (RFC 3171)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC3171#2)");
-		return (2);
-	} else if ((ipv4 & 0xffffffffu) == 0xffffffffu) {
-		// 255.255.255.255/32
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC919#7)");
-		return (2);
-	} else if ((ipv4 & 0xf0000000u) == 0xf0000000u) {
-		// 240.0.0.0/4 (RFC 1112)
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "reserved(RFC1112#4)");
-		return (2);
-	}; 
-
-#ifdef SUPPORT_DB_IPV4
-	int i;
-	int match = -1;
-	uint32_t match_mask = 0;
-
-#define OPTIMIZED_LOOKUP 1
-#ifdef OPTIMIZED_LOOKUP
-	uint8_t  octet_msb;
-
-	/* lookup in hint table for faster start */
-	octet_msb = ipv4addr_getoctet(ipv4addrp, 0);
-
-	for (i = (int) dbipv4addr_assignment_hint[octet_msb].start; i <= (int) dbipv4addr_assignment_hint[octet_msb].end; i++) {
-#else
-	for (i = 0; i < (int) ( sizeof(dbipv4addr_assignment) / sizeof(dbipv4addr_assignment[0])); i++) {
-#endif
-		/* run through database array */
-		if ( (ipv4 & dbipv4addr_assignment[i].ipv4mask) == dbipv4addr_assignment[i].ipv4addr ) {
-			/* ok, entry matches */
-			if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-				fprintf(stderr, "%s: Found match number: %d\n", DEBUG_function_name, i);
-			};
-
-			/* have already found one */
-			if ( match != -1 ) {
-				if ( dbipv4addr_assignment[i].ipv4mask > match_mask ) {
-					/* this entry wins */
-					if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-						fprintf(stderr, "%s: Overwrite match number: %d (old: %d)\n", DEBUG_function_name, i, match);
-					};
-					match = i;
-					match_mask = dbipv4addr_assignment[i].ipv4mask;
-				} else {
-					if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-						fprintf(stderr, "%s: No overwriting of match number: %d (candidate: %d)\n", DEBUG_function_name, match, i);
-					};
-				};
-			} else {
-				match = i;
-				match_mask = dbipv4addr_assignment[i].ipv4mask;
-			};
-		};
-	};
-
-	DEBUGPRINT_WA(DEBUG_libipv4addr, "Final match number: %d", match);
-	
-	/* result */
-	if ( match > -1 ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", dbipv4addr_assignment[match].string_registry);
-		return(0);
-	} else {
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", "unknown");
-		return(1);
-	};
-#else
-	snprintf(resultstring, NI_MAXHOST - 1, "%s", "(IPv4 database not compiled in)");
-	return(1);
-#endif
-
-};
-#undef DEBUG_function_name
-
-/*
- * get registry number of an IPv4 address
- *
- * in:  ipv4addr = IPv4 address structure
- * out: assignment number (-1 = no result)
- */
-#define DEBUG_function_name "libipv4addr/getregistry"
-int ipv4addr_getregistry(const ipv6calc_ipv4addr *ipv4addrp) {
-	char resultstring[NI_MAXHOST];
-	int i;
-
-	i = libipv4addr_get_registry_string(ipv4addrp, resultstring);
-
-	if (i == 2) {
-		return(IPV4_ADDR_REGISTRY_RESERVED);
-	} else if (i != 0) {
-		return(IPV4_ADDR_REGISTRY_UNKNOWN);
-	};
-
-#ifdef SUPPORT_DB_IPV4
-	if (strcmp(resultstring, "IANA") == 0) {
-		return(IPV4_ADDR_REGISTRY_IANA);
-	} else if (strcmp(resultstring, "APNIC") == 0) {
-		return(IPV4_ADDR_REGISTRY_APNIC);
-	} else if (strcmp(resultstring, "ARIN") == 0) {
-		return(IPV4_ADDR_REGISTRY_ARIN);
-	} else if (strcmp(resultstring, "RIPENCC") == 0) {
-		return(IPV4_ADDR_REGISTRY_RIPE);
-	} else if (strcmp(resultstring, "LACNIC") == 0) {
-		return(IPV4_ADDR_REGISTRY_LACNIC);
-	} else if (strcmp(resultstring, "AFRINIC") == 0) {
-		return(IPV4_ADDR_REGISTRY_AFRINIC);
-	} else {
-		return(IPV4_ADDR_REGISTRY_UNKNOWN);
-	};
-#else
-	return(IPV4_ADDR_REGISTRY_UNKNOWN);
-#endif
-};
-#undef DEBUG_function_name
 
 /*
  * converts IPv4addr_structure to a reverse decimal format string

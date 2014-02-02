@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.h
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.h,v 1.4 2014/02/02 09:20:49 ds6peter Exp $
- * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.h,v 1.5 2014/02/02 17:08:21 ds6peter Exp $
+ * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_BuiltIn.c
@@ -10,6 +10,8 @@
 
 #include "ipv6calctypes.h"
 #include "libmac.h"
+#include "libipv4addr.h"
+#include "libipv6addr.h"
 
 #ifndef _libipv6calc_db_wrapper_BuiltIn_h
 
@@ -49,5 +51,14 @@ extern void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level
 extern int libipv6calc_db_wrapper_BuiltIn_registry_num_by_as_num32(const uint32_t as_num32);
 extern int libipv6calc_db_wrapper_BuiltIn_registry_num_by_cc_index(const uint16_t cc_index);
 
+// IEEE
 extern int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(char *resultstring, const ipv6calc_macaddr *macaddrp);
 extern int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(char *resultstring, const ipv6calc_macaddr *macaddrp); 
+
+// IPv4 Registry
+extern int libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring);
+extern int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp);
+
+// IPv6 Registry
+extern int libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring);
+extern int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp);

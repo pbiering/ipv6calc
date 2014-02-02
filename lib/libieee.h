@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.h
- * Version    : $Id: libieee.h,v 1.13 2013/10/29 21:56:30 ds6peter Exp $
+ * Version    : $Id: libieee.h,v 1.14 2014/02/02 17:08:22 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -56,9 +56,6 @@ typedef struct {
 };
 
 #endif
-
-extern int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macaddrp);
-extern int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *macaddrp);
 
 extern uint32_t libieee_map_oui_macaddr(const ipv6calc_macaddr *macaddrp);
 extern uint32_t libieee_map_oui_eui64addr(const ipv6calc_eui64addr *eui64addrp);

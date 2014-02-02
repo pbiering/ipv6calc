@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.102 2013/11/04 06:50:50 ds6peter Exp $
- * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: showinfo.c,v 1.103 2014/02/02 17:08:22 ds6peter Exp $
+ * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Function to show information about a given IPv6 address
@@ -600,7 +600,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	if ((typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
 		/* get registry string */
 		// TODO: get registry by AS, if possible
-		retval = libipv4addr_get_registry_string(ipv4addrp, helpstring);
+		retval = libipv6calc_db_wrapper_registry_string_by_ipv4addr(ipv4addrp, helpstring);
 		if (retval == 1) {
 			if (machinereadable == 0) {
 				fprintf(stderr, "Error getting registry string for IPv4 address: %s (%s)\n", helpstring, tempipv4string);
@@ -702,7 +702,7 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 	};
 	
 	/* vendor string */
-	result = libieee_get_vendor_string(helpstring, macaddrp);
+	result = libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(helpstring, macaddrp);
 	if (result == 0) {
 		if ( machinereadable != 0 ) {
 			snprintf(tempstring, sizeof(tempstring) - 1, "OUI=\"%s\"", helpstring);
@@ -773,7 +773,7 @@ static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t for
 		macaddr.addr[i] = eui64addrp->addr[i];
 	};
 
-	result = libieee_get_vendor_string(helpstring, &macaddr);
+	result = libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(helpstring, &macaddr);
 	if (result == 0) {
 		if ( machinereadable != 0 ) {
 			snprintf(tempstring, sizeof(tempstring) - 1, "OUI=\"%s\"", helpstring);
@@ -814,7 +814,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	ipv6addr_copy(ipv6addrp, ipv6addrp1); /* copy structure */
 
 	typeinfo = ipv6addr_gettype(ipv6addrp);
-	registry = ipv6addr_getregistry(ipv6addrp);
+	registry = libipv6calc_db_wrapper_registry_num_by_ipv6addr(ipv6addrp);
 
 	if ( (ipv6calc_debug & DEBUG_showinfo) != 0) {
 		fprintf(stderr, "%s: result of 'ipv6addr_getregistry': %d\n", DEBUG_function_name, registry);
@@ -918,7 +918,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			};
 
 			/* get registry string */
-			retval = libipv4addr_get_registry_string(&ipv4addr, helpstring);
+			retval = libipv6calc_db_wrapper_registry_string_by_ipv4addr(&ipv4addr, helpstring);
 			if ( machinereadable != 0 ) {
 			} else {
 				fprintf(stdout, "IPv4 registry for 6to4 address: %s\n", helpstring);
@@ -955,7 +955,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 				};
 
 				/* get registry string */
-				retval = libipv4addr_get_registry_string(&ipv4addr2, helpstring);
+				retval = libipv6calc_db_wrapper_registry_string_by_ipv4addr(&ipv4addr2, helpstring);
 				
 				if ( machinereadable != 0 ) {
 				} else {
@@ -995,7 +995,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		};
 
 		/* get registry string */
-		retval = libipv6addr_get_registry_string(ipv6addrp, helpstring);
+		retval = libipv6calc_db_wrapper_registry_string_by_ipv6addr(ipv6addrp, helpstring);
 		if ( retval == 1  && machinereadable == 0 ) {
 			fprintf(stderr, "Error getting registry string for IPv6 address: %s\n", helpstring);
 		} else {
@@ -1311,7 +1311,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	};
 END:
 
-	i = ipv6addr_getregistry(ipv6addrp);
+	i = libipv6calc_db_wrapper_registry_num_by_ipv6addr(ipv6addrp);
 	if ((i != IPV6_ADDR_REGISTRY_RESERVED) && (i != IPV6_ADDR_REGISTRY_6BONE)) {
 		if ( ((typeinfo & IPV6_NEW_ADDR_AGU) != 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID | IPV6_ADDR_ANONYMIZED_PREFIX)) == 0) ) {
 	#ifdef SUPPORT_IP2LOCATION

@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.29 2013/11/04 20:55:00 ds6peter Exp $
- * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logconv.c,v 1.30 2014/02/02 17:08:22 ds6peter Exp $
+ * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile conversions
@@ -36,6 +36,8 @@
 #include "librfc3056.h"
 #include "libeui64.h"
 #include "libieee.h"
+
+#include "../databases/lib/libipv6calc_db_wrapper.h"
 
 #define LINEBUFFER	16384
 
@@ -514,7 +516,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 
 				/* registry of IPv6 address */
 				if ( ( (typeinfo & (IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_PRODUCTIVE) ) != 0) && ( (typeinfo & (IPV6_NEW_ADDR_TEREDO)) == 0)) {
-					retval = libipv6addr_get_registry_string(&ipv6addr, temp2string);
+					retval = libipv6calc_db_wrapper_registry_string_by_ipv6addr(&ipv6addr, temp2string);
 					if ( retval == 0 ) {
 						snprintf(tempstring, sizeof(tempstring) - 1, "%s.%s", temp2string, resultstring);
 						snprintf(resultstring, LINEBUFFER - 1, "%s", tempstring);
@@ -539,7 +541,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 						exit(EXIT_FAILURE);
 					};
 
-					retval = libipv4addr_get_registry_string(&ipv4addr, temp2string);
+					retval = libipv6calc_db_wrapper_registry_string_by_ipv4addr(&ipv4addr, temp2string);
 					if ( retval == 0 ) {
 						/* IPv4 registry */
 						snprintf(tempstring, sizeof(tempstring) - 1, "%s.%s", temp2string, resultstring);
@@ -549,7 +551,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 			} else if (ipv4addr.flag_valid == 1) {
 				snprintf(resultstring, LINEBUFFER - 1, "ipv4-addr.addrtype.ipv6calc");
 
-				retval = libipv4addr_get_registry_string(&ipv4addr, temp2string);
+				retval = libipv6calc_db_wrapper_registry_string_by_ipv4addr(&ipv4addr, temp2string);
 				if ( retval == 0 ) {
 					/* IPv4 registry */
 					snprintf(tempstring, sizeof(tempstring) - 1, "%s.%s", temp2string, resultstring);
@@ -590,7 +592,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 				macaddr.addr[4] = ipv6addr_getoctet(&ipv6addr, 14);
 				macaddr.addr[5] = ipv6addr_getoctet(&ipv6addr, 15);
 
-				retval = libieee_get_short_vendor_string(resultstring, &macaddr);
+				retval = libipv6calc_db_wrapper_ieee_vendor_string_short_by_macaddr(resultstring, &macaddr);
 				if (retval != 0) {
 					if (flag_skipunknown != 0) {
 						return (1);

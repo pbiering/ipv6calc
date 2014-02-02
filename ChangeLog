@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.313 2014/02/02 12:04:44 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.314 2014/02/02 17:08:21 ds6peter Exp $ 
  */
 
 Info:
@@ -11,6 +11,7 @@ Info:
 20140202/PB
 	move IEEE database from libieee to databases/BuiltIn
 	apply some compilation compatibility fixes submitted by Nikoli
+	move IPv4/IPv6 registriy database from libipv4addr.c/libipv6addr.c to databases/BuiltIn
 
 20140201/PB
 	add support for building with shared libraries:
