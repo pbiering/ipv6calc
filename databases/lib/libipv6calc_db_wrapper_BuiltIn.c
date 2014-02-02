@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.5 2013/10/13 20:57:42 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.6 2014/02/02 09:20:49 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -258,6 +258,152 @@ END_libipv6calc_db_wrapper:
 	DEBUGPRINT_WA(DEBUG_libipv6addr_db_wrapper, "Return registry=%s (%d) (cc_index=%d)", libipv6calc_registry_string_by_num(result), result, cc_index);
 
 	return(result);
+};
+
+
+/*
+ * Get IEEE vendor string
+ * in:  macaddrp
+ * mod: resultstring
+ * out: 0=found, 1=not found
+ */
+int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(char *resultstring, const ipv6calc_macaddr *macaddrp) {
+	int retval = 1;
+
+#ifdef SUPPORT_DB_IEEE
+	int i;
+	uint32_t idval, subidval;
+#endif
+
+	DEBUGPRINT_NA(DEBUG_libieee, "called");
+
+	/* catch special ones */
+	if ((macaddrp->addr[0] == 0xfc && macaddrp->addr[1] == 0xfc)) {
+		/* Linux special OUI for ISDN-NET or PLIP interfaces */
+		snprintf(resultstring, NI_MAXHOST - 1, "Linux ISDN-NET/PLIP");
+		return (0);
+	};
+
+	if ( (macaddrp->addr[0] & 0x01) != 0 ) {
+		/* Multicast */
+		return (1);
+	};
+
+#ifdef SUPPORT_DB_IEEE
+	idval = (macaddrp->addr[0] << 16) | (macaddrp->addr[1] << 8) | macaddrp->addr[2];
+	subidval = (macaddrp->addr[3] << 16) | (macaddrp->addr[4] << 8) | macaddrp->addr[5];
+
+	/* run through IAB list */
+	for (i = 0; i < MAXENTRIES_ARRAY(libieee_iab); i++) {
+		if (libieee_iab[i].id == idval) {
+			/* major id match */
+			if (libieee_iab[i].subid_begin <= subidval && libieee_iab[i].subid_end >= subidval) {
+				snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_iab[i].string_owner);
+				return (0);
+			};
+		};
+	};
+
+	/* run through OUI36 list */
+	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui36); i++) {
+		if (libieee_oui36[i].id == idval) {
+			/* major id match */
+			if (libieee_oui36[i].subid_begin <= subidval && libieee_oui36[i].subid_end >= subidval) {
+				snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_oui36[i].string_owner);
+				return (0);
+			};
+		};
+	};
+
+	/* run through OUI list */
+	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui); i++) {
+		if (libieee_oui[i].id == idval) {
+			/* match */
+			snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_oui[i].string_owner);
+			return (0);
+		};
+	};
+#else
+	snprintf(resultstring, NI_MAXHOST - 1, "(IEEE databases not compiled in)");
+	return (0);
+#endif
+
+	/* not found */
+   	retval = 1;	
+	return (retval);
+};
+
+
+/*
+ * Get short IEEE vendor string
+ * in:  macaddrp
+ * mod: resultstring
+ * out: 0=found, 1=not found
+ */
+int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(char *resultstring, const ipv6calc_macaddr *macaddrp) {
+	int retval = 1;
+
+#ifdef SUPPORT_DB_IEEE
+	int i;
+	uint32_t idval, subidval;
+#endif
+
+	DEBUGPRINT_NA(DEBUG_libieee, "called");
+
+	/* catch special ones */
+	if ((macaddrp->addr[0] == 0xfc && macaddrp->addr[1] == 0xfc)) {
+		/* Linux special OUI for ISDN-NET or PLIP interfaces */
+		snprintf(resultstring, NI_MAXHOST - 1, "Linux-ISDN-NET+PLIP");
+		return (0);
+	};
+	
+	if ( (macaddrp->addr[0] & 0x01) != 0 ) {
+		/* Multicast */
+		return (1);
+	};
+
+#ifdef SUPPORT_DB_IEEE
+	idval = (macaddrp->addr[0] << 16) | (macaddrp->addr[1] << 8) | macaddrp->addr[2];
+	subidval = (macaddrp->addr[3] << 16) | (macaddrp->addr[4] << 8) | macaddrp->addr[5];
+
+	/* run through IAB list */
+	for (i = 0; i < MAXENTRIES_ARRAY(libieee_iab); i++) {
+		if (libieee_iab[i].id == idval) {
+			/* major id match */
+			if (libieee_iab[i].subid_begin <= subidval && libieee_iab[i].subid_end >= subidval) {
+				snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_iab[i].shortstring_owner);
+				return (0);
+			};
+		};
+	};
+
+	/* run through OUI36 list */
+	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui36); i++) {
+		if (libieee_oui36[i].id == idval) {
+			/* major id match */
+			if (libieee_oui36[i].subid_begin <= subidval && libieee_oui36[i].subid_end >= subidval) {
+				snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_oui36[i].shortstring_owner);
+				return (0);
+			};
+		};
+	};
+
+	/* run through OUI list */
+	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui); i++) {
+		if (libieee_oui[i].id == idval) {
+			/* match */
+			snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_oui[i].shortstring_owner);
+			return (0);
+		};
+	};
+#else
+	snprintf(resultstring, NI_MAXHOST - 1, "(IEEE databases not compiled in)");
+	return (0);
+#endif
+
+	/* not found */
+   	retval = 1;	
+	return (retval);
 };
 
 #endif

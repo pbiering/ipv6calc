@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.18 2013/10/31 21:24:46 ds6peter Exp $
+ * Version    : $Id: libieee.c,v 1.19 2014/02/02 09:20:49 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -18,11 +18,7 @@
 #include "libmac.h"
 #include "libeui64.h"
 
-#ifdef SUPPORT_DB_IEEE
-#include "../databases/ieee-oui/dbieee_oui.h"
-#include "../databases/ieee-oui36/dbieee_oui36.h"
-#include "../databases/ieee-iab/dbieee_iab.h"
-#endif
+#include "../databases/lib/libipv6calc_db_wrapper.h"
 
 /*
  * Get vendor string
@@ -31,68 +27,10 @@
  * out: 0=found, 1=not found
  */
 int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macaddrp) {
-	int retval = 1;
+	int retval;
 
-#ifdef SUPPORT_DB_IEEE
-	int i;
-	uint32_t idval, subidval;
-#endif
+	retval = libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(resultstring, macaddrp);
 
-	DEBUGPRINT_NA(DEBUG_libieee, "called");
-
-	/* catch special ones */
-	if ((macaddrp->addr[0] == 0xfc && macaddrp->addr[1] == 0xfc)) {
-		/* Linux special OUI for ISDN-NET or PLIP interfaces */
-		snprintf(resultstring, NI_MAXHOST - 1, "Linux ISDN-NET/PLIP");
-		return (0);
-	};
-
-	if ( (macaddrp->addr[0] & 0x01) != 0 ) {
-		/* Multicast */
-		return (1);
-	};
-
-#ifdef SUPPORT_DB_IEEE
-	idval = (macaddrp->addr[0] << 16) | (macaddrp->addr[1] << 8) | macaddrp->addr[2];
-	subidval = (macaddrp->addr[3] << 16) | (macaddrp->addr[4] << 8) | macaddrp->addr[5];
-
-	/* run through IAB list */
-	for (i = 0; i < MAXENTRIES_ARRAY(libieee_iab); i++) {
-		if (libieee_iab[i].id == idval) {
-			/* major id match */
-			if (libieee_iab[i].subid_begin <= subidval && libieee_iab[i].subid_end >= subidval) {
-				snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_iab[i].string_owner);
-				return (0);
-			};
-		};
-	};
-
-	/* run through OUI36 list */
-	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui36); i++) {
-		if (libieee_oui36[i].id == idval) {
-			/* major id match */
-			if (libieee_oui36[i].subid_begin <= subidval && libieee_oui36[i].subid_end >= subidval) {
-				snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_oui36[i].string_owner);
-				return (0);
-			};
-		};
-	};
-
-	/* run through OUI list */
-	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui); i++) {
-		if (libieee_oui[i].id == idval) {
-			/* match */
-			snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_oui[i].string_owner);
-			return (0);
-		};
-	};
-#else
-	snprintf(resultstring, NI_MAXHOST - 1, "(IEEE databases not compiled in)");
-	return (0);
-#endif
-
-	/* not found */
-   	retval = 1;	
 	return (retval);
 };
 
@@ -104,68 +42,10 @@ int libieee_get_vendor_string(char *resultstring, const ipv6calc_macaddr *macadd
  * out: 0=found, 1=not found
  */
 int libieee_get_short_vendor_string(char *resultstring, const ipv6calc_macaddr *macaddrp) {
-	int retval = 1;
+	int retval;
 
-#ifdef SUPPORT_DB_IEEE
-	int i;
-	uint32_t idval, subidval;
-#endif
+	retval = libipv6calc_db_wrapper_ieee_vendor_string_short_by_macaddr(resultstring, macaddrp);
 
-	DEBUGPRINT_NA(DEBUG_libieee, "called");
-
-	/* catch special ones */
-	if ((macaddrp->addr[0] == 0xfc && macaddrp->addr[1] == 0xfc)) {
-		/* Linux special OUI for ISDN-NET or PLIP interfaces */
-		snprintf(resultstring, NI_MAXHOST - 1, "Linux-ISDN-NET+PLIP");
-		return (0);
-	};
-	
-	if ( (macaddrp->addr[0] & 0x01) != 0 ) {
-		/* Multicast */
-		return (1);
-	};
-
-#ifdef SUPPORT_DB_IEEE
-	idval = (macaddrp->addr[0] << 16) | (macaddrp->addr[1] << 8) | macaddrp->addr[2];
-	subidval = (macaddrp->addr[3] << 16) | (macaddrp->addr[4] << 8) | macaddrp->addr[5];
-
-	/* run through IAB list */
-	for (i = 0; i < MAXENTRIES_ARRAY(libieee_iab); i++) {
-		if (libieee_iab[i].id == idval) {
-			/* major id match */
-			if (libieee_iab[i].subid_begin <= subidval && libieee_iab[i].subid_end >= subidval) {
-				snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_iab[i].shortstring_owner);
-				return (0);
-			};
-		};
-	};
-
-	/* run through OUI36 list */
-	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui36); i++) {
-		if (libieee_oui36[i].id == idval) {
-			/* major id match */
-			if (libieee_oui36[i].subid_begin <= subidval && libieee_oui36[i].subid_end >= subidval) {
-				snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_oui36[i].shortstring_owner);
-				return (0);
-			};
-		};
-	};
-
-	/* run through OUI list */
-	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui); i++) {
-		if (libieee_oui[i].id == idval) {
-			/* match */
-			snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_oui[i].shortstring_owner);
-			return (0);
-		};
-	};
-#else
-	snprintf(resultstring, NI_MAXHOST - 1, "(IEEE databases not compiled in)");
-	return (0);
-#endif
-
-	/* not found */
-   	retval = 1;	
 	return (retval);
 };
 

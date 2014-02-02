@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.30 2013/12/01 13:51:36 ds6peter Exp $
- * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.31 2014/02/02 09:20:49 ds6peter Exp $
+ * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc database wrapper (for decoupling databases from main binary)
@@ -628,3 +628,36 @@ uint32_t libipv6calc_db_wrapper_as_num32_decomp17(const uint32_t as_num32_comp17
 
 	return(as_num32);
 };
+
+
+/*
+ * Get IEEE vendor string
+ * in:  macaddrp
+ * mod: resultstring
+ * out: 0=found, 1=not found
+ */
+int libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(char *resultstring, const ipv6calc_macaddr *macaddrp) {
+	int retval = 1;
+
+#ifdef SUPPORT_BUILTIN
+	retval = libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(resultstring, macaddrp);
+#endif
+	return (retval);
+};
+
+
+/*
+ * Get short IEEE vendor string
+ * in:  macaddrp
+ * mod: resultstring
+ * out: 0=found, 1=not found
+ */
+int libipv6calc_db_wrapper_ieee_vendor_string_short_by_macaddr(char *resultstring, const ipv6calc_macaddr *macaddrp) {
+	int retval = 1;
+
+#ifdef SUPPORT_BUILTIN
+	retval = libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(resultstring, macaddrp);
+#endif
+	return (retval);
+};
+

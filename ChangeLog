@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.311 2014/02/01 21:10:50 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.312 2014/02/02 09:20:49 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20140202/PB
+	move IEEE database from libieee to databases/BuiltIn
+
 20140201/PB
 	add support for building with shared libraries:
 	 configure: --enalbe-shared

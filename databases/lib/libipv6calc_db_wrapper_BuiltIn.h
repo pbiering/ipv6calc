@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.h
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.h,v 1.3 2013/10/13 16:18:44 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.h,v 1.4 2014/02/02 09:20:49 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -9,6 +9,7 @@
  */
 
 #include "ipv6calctypes.h"
+#include "libmac.h"
 
 #ifndef _libipv6calc_db_wrapper_BuiltIn_h
 
@@ -47,3 +48,6 @@ extern void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level
 
 extern int libipv6calc_db_wrapper_BuiltIn_registry_num_by_as_num32(const uint32_t as_num32);
 extern int libipv6calc_db_wrapper_BuiltIn_registry_num_by_cc_index(const uint16_t cc_index);
+
+extern int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(char *resultstring, const ipv6calc_macaddr *macaddrp);
+extern int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(char *resultstring, const ipv6calc_macaddr *macaddrp); 
