@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6logstats
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.24 2014/02/01 21:10:50 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.25 2014/02/02 12:04:44 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -35,7 +35,7 @@ SPLINT_TODO_LATER = -unrecog
 all:		ipv6logstats
 
 .c.o:
-		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -D__EXTENSIONS__ -c $<
+		$(CC) -c $< $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES)
 
 libipv6calc.a:
 		cd ../ && ${MAKE} lib-make
@@ -46,10 +46,10 @@ libipv6calc_db_wrapper.a:
 $(OBJS):	ipv6logstatsoptions.h ipv6logstatshelp.h ipv6logstats.h
 
 ipv6logstats:	$(OBJS) libipv6calc.a libipv6calc_db_wrapper.a
-		$(CC) $(LDFLAGS) $(LDFLAGS_EXTRA) -o ipv6logstats $(OBJS) $(GETOBJS) $(LIBS) ../md5/md5.o -lm
+		$(CC) -o ipv6logstats $(OBJS) $(GETOBJS) $(LDFLAGS) $(LDFLAGS_EXTRA) $(LIBS) ../md5/md5.o -lm
 
 static:		ipv6logstats
-		$(CC) $(LDFLAGS) $(LDFLAGS_EXTRA) -o ipv6logstats-static $(OBJS) $(GETOBJS) -lipv6calc -lipv6calc_db_wrapper -L../lib/ -L../databases/lib/ -static $(LIBS) -lm
+		$(CC) -o ipv6logstats-static $(OBJS) $(GETOBJS) $(LDFLAGS) $(LDFLAGS_EXTRA) -lipv6calc -lipv6calc_db_wrapper -L../lib/ -L../databases/lib/ -static $(LIBS) -lm
 
 distclean:
 		${MAKE} clean
@@ -72,7 +72,7 @@ codecheck:
 splint:
 		splint *.c ../lib/*.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)
 
-install:        ipv6logstats
+install:
 		mkdir -p $(DESTDIR)$(bindir)
 		install -m 755 ipv6logstats $(DESTDIR)$(bindir)
 

@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.2 2010/05/20 14:49:38 peter Exp $
+# Version    : $Id: Makefile.in,v 1.3 2014/02/02 12:04:44 ds6peter Exp $
 # Copyright  : 2006 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -30,7 +30,7 @@ SPLINT_TODO_LATER = -unrecog  -retvalint
 all:		registry-assignment-to-list
 
 .c.o:
-		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -c $<
+		$(CC) -c $< $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES)
 
 $(OBJS):	../config.h
 
@@ -38,7 +38,7 @@ libipv6calc.a:
 		cd ../ && ${MAKE} lib-make
 
 registry-assignment-to-list:	$(OBJS) libipv6calc.a
-		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) -o registry-assignment-to-list $(OBJS) $(GETOBJS) -lipv6calc -L../lib/ $(LDFLAGS)
+		$(CC) -o registry-assignment-to-list $(OBJS) $(GETOBJS) $(DEFAULT_CFLAGS) $(CFLAGS) -lipv6calc -L../lib/ $(LDFLAGS)
 
 distclean:
 		${MAKE} clean

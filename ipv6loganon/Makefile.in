@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6loganon
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.13 2014/02/01 21:10:50 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.14 2014/02/02 12:04:44 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -35,7 +35,7 @@ SPLINT_TODO_LATER = -unrecog -retvalint
 all:		ipv6loganon
 
 .c.o:
-		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -c $<
+		$(CC) -c $< $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES)
 
 $(OBJS):	ipv6loganonoptions.h ipv6loganonhelp.h ipv6loganon.h ../config.h ../lib/ipv6calccommands.h
 
@@ -46,10 +46,10 @@ libipv6calc_db_wrapper:
 		cd ../ && ${MAKE} lib-make
 
 ipv6loganon:	$(OBJS) libipv6calc libipv6calc_db_wrapper
-		$(CC) $(LDFLAGS) $(LDFLAGS_EXTRA) -o ipv6loganon $(OBJS) $(GETOBJS) $(LIBS) ../md5/md5.o -lm
+		$(CC) -o ipv6loganon $(OBJS) $(GETOBJS) $(LDFLAGS) $(LDFLAGS_EXTRA) $(LIBS) ../md5/md5.o -lm
 
 static:		ipv6loganon
-		$(CC) $(LDFLAGS) $(LDFLAGS_EXTRA) -o ipv6loganon-static $(OBJS) $(GETOBJS) -lipv6calc -lipv6calc_db_wrapper -L../lib/ -L../databases/lib/ -static $(LIBS) -lm
+		$(CC) -o ipv6loganon-static $(OBJS) $(GETOBJS) $(LDFLAGS) $(LDFLAGS_EXTRA) -lipv6calc -lipv6calc_db_wrapper -L../lib/ -L../databases/lib/ -static $(LIBS) -lm
 
 distclean:
 		${MAKE} clean
@@ -73,7 +73,7 @@ codecheck:
 splint:
 		splint *.c ../lib/*.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)
 
-install:	ipv6loganon
+install:
 		mkdir -p $(DESTDIR)$(bindir)
 		install -m 755 ipv6loganon $(DESTDIR)$(bindir)
 	

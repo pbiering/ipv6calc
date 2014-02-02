@@ -1,11 +1,13 @@
 # Project    : ipv6calc
 # File       : lib/Makefile
-# Version    : $Id: Makefile.in,v 1.9 2014/02/02 09:55:07 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.10 2014/02/02 12:04:44 ds6peter Exp $
 # Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calc libraries
 #
+
+libdir	= @libdir@
 
 # Compiler and Linker Options
 #  -D__EXTENSIONS__ is for Solaris & strtok_r
@@ -40,22 +42,22 @@ OBJS	=	libipv6calc.o  \
 
 all:		
 		${MAKE} libipv6calc.a
-		${MAKE} libipv6calc.so
+		${MAKE} libipv6calc.so.@PACKAGE_VERSION@
 
 libieee.o:	../databases/ieee-oui/dbieee_oui.h libieee.c libieee.h
 		cd ../ && ${MAKE} db-ieee-oui-make
-		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -c libieee.c
+		$(CC) -c libieee.c $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES)
 
 libipv4addr.o:	../databases/ipv4-assignment/dbipv4addr_assignment.h libipv4addr.c libipv4addr.h
 		cd ../ && ${MAKE} db-ipv4-assignment-make
-		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -c libipv4addr.c
+		$(CC) -c libipv4addr.c $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES)
 
 libipv6addr.o:	../databases/ipv6-assignment/dbipv6addr_assignment.h libipv6addr.c libipv6addr.h
 		cd ../ && ${MAKE} db-ipv6-assignment-make
-		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -c libipv6addr.c
+		$(CC) -c libipv6addr.c $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES)
 
 .c.o:
-		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -c $<
+		$(CC) -c $< $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES)
 
 $(OBJS):	libipv6calcdebug.h  \
 		libipv6calc.h       \
@@ -86,12 +88,12 @@ libipv6calc.a:	$(OBJS)
 		$(AR) r libipv6calc.a $(OBJS)
 		$(RANLIB) libipv6calc.a
 
-libipv6calc.so: $(OBJS)
+libipv6calc.so.@PACKAGE_VERSION@: $(OBJS)
 		cd ../ && ${MAKE} db-ieee-oui-make
 		cd ../ && ${MAKE} db-ipv4-assignment-make
 		cd ../ && ${MAKE} db-ipv6-assignment-make
 		echo "Creates shared library (.so)"
-		$(CC) $(CFLAGS) $(LDFLAGS) -shared -Wl,-soname,libipv6calc.so.@PACKAGE_VERSION@ -o libipv6calc.so.@PACKAGE_VERSION@ $(OBJS)
+		$(CC) -o libipv6calc.so.@PACKAGE_VERSION@ $(OBJS) $(CFLAGS) $(LDFLAGS) -shared -Wl,-soname,libipv6calc.so.@PACKAGE_VERSION@
 
 distclean:
 		${MAKE} clean

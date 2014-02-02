@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.78 2013/10/30 20:35:21 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.79 2014/02/02 12:04:44 ds6peter Exp $
 # Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -20,7 +20,7 @@ CC	= @CC@
 all:		md5-make $(GETOPT_MAKE) ipv6calc ipv6logconv ipv6logstats ipv6loganon
 
 .c.o:
-		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -c $<
+		$(CC) -c $< $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES)
 
 
 ipv6logconv:	$(GETOPT_MAKE) lib-make ipv6logconv-make
@@ -74,7 +74,7 @@ clean:
 		done
 
 install:
-		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib $(GETOPT_MAKE); do \
+		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib databases/lib $(GETOPT_MAKE); do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} install; \

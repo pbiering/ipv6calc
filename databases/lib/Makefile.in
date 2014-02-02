@@ -1,11 +1,13 @@
 # Project    : ipv6calc
 # File       : lib/Makefile
-# Version    : $Id: Makefile.in,v 1.7 2014/02/02 09:55:07 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.8 2014/02/02 12:04:44 ds6peter Exp $
 # Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calc database libraries
 #
+
+libdir	= @libdir@
 
 # Compiler and Linker Options
 #  -D__EXTENSIONS__ is for Solaris & strtok_r
@@ -13,6 +15,8 @@ DEFAULT_CFLAGS ?= -O2 -Wall
 CFLAGS += -D__EXTENSIONS__ -fPIC
 
 INCLUDES= -I../../lib -I../.. $(GETOPT_INCLUDE)
+
+SHARED_LIBRARY=@SHARED_LIBRARY@
 
 CC	= @CC@
 AR	= ar
@@ -25,10 +29,10 @@ OBJS	=	libipv6calc_db_wrapper.o \
 
 all:		
 		${MAKE} libipv6calc_db_wrapper.a
-		${MAKE} libipv6calc_db_wrapper.so
+		${MAKE} libipv6calc_db_wrapper.so.@PACKAGE_VERSION@
 
 .c.o:
-		$(CC) $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -c $<
+		$(CC) -c $< $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES)
 
 $(OBJS):	libipv6calc_db_wrapper.h \
 		libipv6calc_db_wrapper_GeoIP.h \
@@ -41,9 +45,9 @@ libipv6calc_db_wrapper.a:	$(OBJS)
 		$(AR) r libipv6calc_db_wrapper.a $(OBJS)
 		$(RANLIB) libipv6calc_db_wrapper.a
 
-libipv6calc_db_wrapper.so:	$(OBJS)
+libipv6calc_db_wrapper.so.@PACKAGE_VERSION@:	$(OBJS)
 		echo "Create shared library (.so)"
-		$(CC) $(CFLAGS) $(LDFLAGS) -shared -Wl,-soname,libipv6calc_db_wrapper.so.@PACKAGE_VERSION@ -o libipv6calc_db_wrapper.so.@PACKAGE_VERSION@ $(OBJS)
+		$(CC) -o libipv6calc_db_wrapper.so.@PACKAGE_VERSION@ $(OBJS) $(CFLAGS) $(LDFLAGS) -shared -Wl,-soname,libipv6calc_db_wrapper.so.@PACKAGE_VERSION@
 
 distclean:
 		${MAKE} clean
