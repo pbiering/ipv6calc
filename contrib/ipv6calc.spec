@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2014 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.138 2014/02/02 12:25:08 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.139 2014/02/02 12:34:15 ds6peter Exp $
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
@@ -182,7 +182,7 @@ rm -rf $RPM_BUILD_ROOT
 # docs, examples and helper
 %doc %{_docdir}/%{name}-%{version}/*
 
-%if "%{_with_shared}" == "1"
+%if "%{enable_shared}" == "1"
 %{_libdir}/*
 %endif
 
