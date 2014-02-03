@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.13 2014/02/02 19:33:21 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.14 2014/02/03 06:45:20 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -35,16 +35,9 @@ if [ -n "$options_add" ]; then
 fi
 
 # basic defaults
-nice -n 10 ./autogen.sh $options_add
+nice -n 20 ionice -c idle ./autogen.sh $options_add
 if [ $? -ne 0 ]; then
 	echo "ERROR : 'autogen.sh (basic) $options_add' reports an error"
-	exit 1
-fi
-
-echo "INFO  : test static build"
-make static
-if [ $? -ne 0 ]; then
-	echo "ERROR : 'make static' reports an error (perhaps glibc-static/openssl-static/zlib-static is missing)"
 	exit 1
 fi
 
@@ -57,7 +50,7 @@ for liboption in "normal" "shared"; do
 			options="$options -S"
 			;;
 		esac
-		nice -n 10 ionice -c idle ./autogen.sh $options
+		nice -n 20 ionice -c idle ./autogen.sh $options
 		if [ $? -ne 0 ]; then
 			echo "ERROR : 'autogen.sh reports an error with options: $options"
 			exit 1

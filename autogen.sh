@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.30 2014/02/01 21:10:50 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.31 2014/02/03 06:45:20 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -20,22 +20,27 @@ while [ "$1" != "$LAST" ]; do
 	    '--all'|'-a')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --enable-ip2location"
+		SKIP_STATIC=1
 		;;
 	    '--geoip'|'-g')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip"
+		SKIP_STATIC=1
 		;;
 	    '--geoip-dyn'|'-G')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --with-geoip-dynamic"
+		SKIP_STATIC=1
 		;;
 	    '--ip2location'|'-i')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location"
+		SKIP_STATIC=1
 		;;
 	    '--ip2location-dyn'|'-I')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --with-ip2location-dynamic"
+		SKIP_STATIC=1
 		;;
 	    '--disable-db-ieee')
 		shift
@@ -52,14 +57,12 @@ while [ "$1" != "$LAST" ]; do
 	    '--geoip-ipv6-compat')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --with-geoip-ipv6-compat"
+		SKIP_STATIC=1
 		;;
 	    '-S')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-shared"
-		;;
-	    '--static')
-		shift
-		STATIC="1"
+		SKIP_STATIC=1
 		;;
 	    '-W')
 		shift
@@ -109,15 +112,24 @@ make clean || exit 1
 
 export EXTRA_CFLAGS
 
-if [ "$STATIC" = "1" ]; then
-	echo "*** run: make STATIC"
-	make static || exit 1
-	echo "*** skip tests on STATIC"
-	exit 0
-fi
-
 echo "*** run: make test"
 make test || exit 1
+
+if [ "$SKIP_STATIC" != "1" ]; then
+	echo "*** run: make static"
+	make static
+	if [ $? -ne 0 ]; then
+		echo "ERROR : 'make static' reports an error (perhaps glibc-static/openssl-static/zlib-static is missing)"
+		exit 1
+	fi
+fi
+
+echo "*** run: make -n install (dummy install test)"
+make -n install
+if [ $? -ne 0 ]; then
+        echo "ERROR : 'make -n install' reports an error"
+        exit 1
+fi
 
 echo
 echo "For installing the binaries, type: make install"

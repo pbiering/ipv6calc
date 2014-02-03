@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.315 2014/02/02 19:33:21 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.316 2014/02/03 06:45:19 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20140203/PB
+	minor improvements in Makefiles, configure checks now for openssl/md5.h
+
 20140202/PB
 	move IEEE database from libieee to databases/BuiltIn
 	apply some compilation compatibility fixes submitted by Nikoli

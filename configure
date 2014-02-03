@@ -623,6 +623,7 @@ ac_includes_default="\
 
 ac_subst_vars='LTLIBOBJS
 LD_LIBRARY_PATH
+LDFLAGS_EXTRA_STATIC
 LDFLAGS_EXTRA
 DYNLOAD_LIB
 GEOIP_DYN_LIB
@@ -4049,7 +4050,13 @@ $as_echo "*** use of bundled MD5 library forced" >&6; }
 
 else
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for MD5_Init in -lcrypto" >&5
+		as_ac_Header=`$as_echo "ac_cv_header_"openssl/md5.h"" | $as_tr_sh`
+ac_fn_c_check_header_mongrel "$LINENO" ""openssl/md5.h"" "$as_ac_Header" "$ac_includes_default"
+if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** openssl/md5.h header file found" >&5
+$as_echo "*** openssl/md5.h header file found" >&6; }
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for MD5_Init in -lcrypto" >&5
 $as_echo_n "checking for MD5_Init in -lcrypto... " >&6; }
 if ${ac_cv_lib_crypto_MD5_Init+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -4087,8 +4094,8 @@ fi
 $as_echo "$ac_cv_lib_crypto_MD5_Init" >&6; }
 if test "x$ac_cv_lib_crypto_MD5_Init" = xyes; then :
 
-			LDFLAGS="$LDFLAGS -lcrypto"
-			for ac_func in MD5_Init MD5_Update MD5_Final MD5_Transform
+				LDFLAGS="$LDFLAGS -lcrypto"
+				for ac_func in MD5_Init MD5_Update MD5_Final
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
@@ -4100,7 +4107,7 @@ _ACEOF
 
 else
 
-					ENABLE_BUNDLED_MD5=1
+						ENABLE_BUNDLED_MD5=1
 
 fi
 done
@@ -4109,11 +4116,21 @@ done
 
 else
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: crypto library header files were found but not supporting required MD5 functions (will us bundled MD5 function)." >&5
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: crypto library header files were found but not supporting required MD5 functions (will us bundled MD5 function)." >&5
 $as_echo "$as_me: WARNING: crypto library header files were found but not supporting required MD5 functions (will us bundled MD5 function)." >&2;}
+				ENABLE_BUNDLED_MD5=1
+
+fi
+
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: openssl/md5.h header file not found (will us bundled MD5 function)." >&5
+$as_echo "$as_me: WARNING: openssl/md5.h header file not found (will us bundled MD5 function)." >&2;}
 			ENABLE_BUNDLED_MD5=1
 
 fi
+
 
 
 fi
@@ -4132,6 +4149,7 @@ $as_echo "#define ENABLE_BUNDLED_MD5 1" >>confdefs.h
 
 else
 	LDFLAGS_EXTRA="-lcrypto $LDFLAGS_EXTRA"
+	LDFLAGS_EXTRA_STATIC="-lcrypto -lz -ldl $LDFLAGS_EXTRA_STATIC"
 fi
 
 
@@ -4167,10 +4185,6 @@ fi
 
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS_EXTRA: $LDFLAGS_EXTRA" >&5
-$as_echo "*** LDFLAGS_EXTRA: $LDFLAGS_EXTRA" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH: $LD_LIBRARY_PATH" >&5
-$as_echo "*** LD_LIBRARY_PATH: $LD_LIBRARY_PATH" >&6; }
 
 
 ac_fn_c_check_header_mongrel "$LINENO" "dlfcn.h" "ac_cv_header_dlfcn_h" "$ac_includes_default"
@@ -5008,6 +5022,7 @@ $as_echo "*** Dynamic loading of libraries is ENABLED" >&6; }
 		DYNLOAD_LIB="-rdynamic -ldl"
 	fi
 fi
+
 
 
 
@@ -6304,4 +6319,10 @@ if test -n "$ac_unrecognized_opts" && test "$enable_option_checking" != no; then
   { $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: unrecognized options: $ac_unrecognized_opts" >&5
 $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS_EXTRA: $LDFLAGS_EXTRA" >&5
+$as_echo "*** LDFLAGS_EXTRA: $LDFLAGS_EXTRA" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH: $LD_LIBRARY_PATH" >&5
+$as_echo "*** LD_LIBRARY_PATH: $LD_LIBRARY_PATH" >&6; }
 

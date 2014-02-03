@@ -24,9 +24,6 @@
 /* Define to 1 if you have the `MD5_Init' function. */
 #undef HAVE_MD5_INIT
 
-/* Define to 1 if you have the `MD5_Transform' function. */
-#undef HAVE_MD5_TRANSFORM
-
 /* Define to 1 if you have the `MD5_Update' function. */
 #undef HAVE_MD5_UPDATE
 
