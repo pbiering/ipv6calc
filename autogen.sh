@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.31 2014/02/03 06:45:20 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.32 2014/02/03 20:58:49 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -99,7 +99,7 @@ echo "*** run: autoconf"
 autoconf || exit 1
 
 echo "*** run: configure, options: $OPTIONS_CONFIGURE $*"
-./configure --bindir=/usr/bin --mandir=/usr/share/man $OPTIONS_CONFIGURE $* || exit 1
+LDFLAGS="$LDFLAGS -Wl,--as-needed" ./configure --bindir=/usr/bin --mandir=/usr/share/man $OPTIONS_CONFIGURE $* || exit 1
 
 if [ "$flag_no_make" = "1" ]; then
 	echo
