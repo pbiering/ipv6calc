@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3041.c
- * Version    : $Id: librfc3041.c,v 1.14 2014/02/02 19:33:21 ds6peter Exp $
+ * Version    : $Id: librfc3041.c,v 1.15 2014/02/03 20:48:04 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -38,7 +38,6 @@
  * ret: ==0: ok, !=0: error
  */
 int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv6calc_ipv6addr *newidentifier, ipv6calc_ipv6addr *newtoken) {
-#define DEBUG_function_name "librfc3041/librfc3041_calc"
 	int retval = 1, i;
 	char tempstring[NI_MAXHOST],  tempstring2[NI_MAXHOST];
 	unsigned char digest[MD5_DIGEST_LENGTH];

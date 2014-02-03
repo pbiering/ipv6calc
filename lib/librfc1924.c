@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1924.c
- * Version    : $Id: librfc1924.c,v 1.11 2013/05/12 07:23:12 ds6peter Exp $
+ * Version    : $Id: librfc1924.c,v 1.12 2014/02/03 20:48:04 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *              and 2006 by Niko Tyni <ntyni (at) iki.fi>
  *
@@ -185,7 +185,6 @@ int base85_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6cal
  * in : string
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "librfc1924/formatcheck"
 int librfc1924_formatcheck(const char *string, char *infostring) {
 	size_t length, cnt;
 
@@ -209,4 +208,3 @@ int librfc1924_formatcheck(const char *string, char *infostring) {
 
 	return (0);
 };
-#undef DEBUG_function_name

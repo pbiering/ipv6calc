@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.49 2014/02/02 17:08:22 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.50 2014/02/03 20:48:04 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -50,12 +50,11 @@ uint8_t ipv4addr_getoctet(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int
  * in: numword   = number of word (0 = MSB, 1 = LSB)
  * additional: calls exit on out of range
  */
-#define DEBUG_function_name "libipv4addr/ipv4addr_getword"
 uint16_t ipv4addr_getword(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword) {
 	uint16_t retval;
 	
 	if ( numword > 1 ) {
-		fprintf(stderr, "%s: given word number '%u' is out of range!\n", DEBUG_function_name, numword);
+		ERRORPRINT_WA("given word number '%u' is out of range!", numword);
 		exit(EXIT_FAILURE);
 	};
 
@@ -63,7 +62,6 @@ uint16_t ipv4addr_getword(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int
 
 	return (retval);
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -72,7 +70,6 @@ uint16_t ipv4addr_getword(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int
  * in: ipv4addrp = pointer to IPv4 address structure
  * additional: calls exit on out of range
  */
-#define DEBUG_function_name "libipv4addr/ipv4addr_getdword"
 uint32_t ipv4addr_getdword(const ipv6calc_ipv4addr *ipv4addrp) {
 	uint32_t retval;
 	
@@ -80,7 +77,6 @@ uint32_t ipv4addr_getdword(const ipv6calc_ipv4addr *ipv4addrp) {
 
 	return (retval);
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -91,11 +87,10 @@ uint32_t ipv4addr_getdword(const ipv6calc_ipv4addr *ipv4addrp) {
  * in: value     = value to set
  * additional: calls exit on out of range
  */
-#define DEBUG_function_name "libipv4addr/ipv4addr_setoctet"
 void ipv4addr_setoctet(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numoctet, const uint8_t value) {
 	
 	if ( numoctet > 3 ) {
-		fprintf(stderr, "%s: given octet number '%u' is out of range!\n", DEBUG_function_name, numoctet);
+		ERRORPRINT_WA("given octet number '%u' is out of range!", numoctet);
 		exit(EXIT_FAILURE);
 	};
 	
@@ -104,7 +99,6 @@ void ipv4addr_setoctet(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numoctet
 
 	return;
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -115,37 +109,31 @@ void ipv4addr_setoctet(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numoctet
  * in: value     = value to set
  * additional: calls exit on out of range
  */
-#define DEBUG_function_name "libipv4addr/ipv4addr_setword"
 void ipv4addr_setword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword, const uint16_t value) {
 	unsigned int n;
 	unsigned int v;
 	
 	if ( numword > 1 ) {
-		fprintf(stderr, "%s: given word number '%u' is out of range!\n", DEBUG_function_name, numword);
+		ERRORPRINT_WA("given word number '%u' is out of range!", numword);
 		exit(EXIT_FAILURE);
 	};
 	
 	n = numword << 1;
 	v = (value & 0xff00) >> 8;
 
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: set octet %u: %02x (%u %04x)\n", DEBUG_function_name, n, v, numword, value);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "set octet %u: %02x (%u %04x)", n, v, numword, value);
 
 	ipv4addr_setoctet(ipv4addrp, n, v);
 
 	n = (numword << 1) + 1;
 	v = value & 0xff;
 
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: set octet %u: %02x (%u %04x)\n", DEBUG_function_name, n, v, numword, value);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "set octet %u: %02x (%u %04x)", n, v, numword, value);
 
 	ipv4addr_setoctet(ipv4addrp, n, v);
 	
 	return;
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -155,37 +143,31 @@ void ipv4addr_setword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword, 
  * in: value     = value to set
  * additional: calls exit on out of range
  */
-#define DEBUG_function_name "libipv4addr/ipv4addr_setdword"
 void ipv4addr_setdword(ipv6calc_ipv4addr *ipv4addrp, const uint32_t value) {
 	unsigned int n;
 	unsigned int v;
 	
 	if ( value > 0xffffffffu ) {
-		fprintf(stderr, "%s: given value '%x' is out of range!\n", DEBUG_function_name, value);
+		ERRORPRINT_WA("given value '%x' is out of range!", value);
 		exit(EXIT_FAILURE);
 	}; 
 
 	n = 0;
 	v = (value & 0xffff0000u) >> 16;
 
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: set word %u: %04x (%08x)\n", DEBUG_function_name, n, v, value);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "set word %u: %04x (%08x)", n, v, value);
 
 	ipv4addr_setword(ipv4addrp, n, v);
 
 	n = 1;
 	v = value & 0xffffu;
 
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: set word %u: %04x (%08x)\n", DEBUG_function_name, n, v, value);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "set word %u: %04x (%08x)", n, v, value);
 
 	ipv4addr_setword(ipv4addrp, n, v);
 
 	return;
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -193,7 +175,6 @@ void ipv4addr_setdword(ipv6calc_ipv4addr *ipv4addrp, const uint32_t value) {
  *
  * mod: ipv4addrp = pointer to IPv4 address structure
  */
-#define DEBUG_function_name "libipv4addr/ipv4addr_clear"
 void ipv4addr_clear(ipv6calc_ipv4addr *ipv4addrp) {
 	ipv4addrp->in_addr.s_addr = 0;
 
@@ -202,7 +183,6 @@ void ipv4addr_clear(ipv6calc_ipv4addr *ipv4addrp) {
 
 	return;
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -210,7 +190,6 @@ void ipv4addr_clear(ipv6calc_ipv4addr *ipv4addrp) {
  *
  * mod: ipv4addrp = pointer to IPv4 address structure
  */
-#define DEBUG_function_name "libipv4addr/ipv4addr_clearall"
 void ipv4addr_clearall(ipv6calc_ipv4addr *ipv4addrp) {
 	ipv4addr_clear(ipv4addrp);
 	(*ipv4addrp).prefixlength = 0;
@@ -218,7 +197,6 @@ void ipv4addr_clearall(ipv6calc_ipv4addr *ipv4addrp) {
 
 	return;
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -227,14 +205,12 @@ void ipv4addr_clearall(ipv6calc_ipv4addr *ipv4addrp) {
  * in:  ipv64ddrp  = pointer to IPv4 address structure
  * mod: ipv64ddrp2 = pointer to IPv4 address structure
  */
-#define DEBUG_function_name "libipv4addr/ipv4addr_copy"
 void ipv4addr_copy(ipv6calc_ipv4addr *ipv4addrp_dst, const ipv6calc_ipv4addr *ipv4addrp_src) {
 
 	*(ipv4addrp_dst) = *(ipv4addrp_src);
 	
 	return;
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -344,7 +320,6 @@ END_ipv4addr_gettype:
  * out: ipv4addrp = changed IPv4 address structure
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libipv4addr/addr_to_ipv4addrstruct"
 int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv4addr *ipv4addrp) {
 	int retval = 1, result, i, cpoints = 0, cdigits = 0;
 	char *addronlystring, *cp;
@@ -357,9 +332,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 
 	resultstring[0] = '\0'; /* clear result string */
 
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: Got input '%s'\n", DEBUG_function_name,  addrstring);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "Got input '%s'",  addrstring);
 
 	if ((strlen(addrstring) < 7) || (strlen(addrstring) > 18)) {
 		/* min: 0.0.0.0 */
@@ -369,7 +342,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	};
 
 	if (strlen(addrstring) > sizeof(tempstring) - 1) {
-		fprintf(stderr, "%s: Input too long: %s\n", DEBUG_function_name, addrstring);
+		ERRORPRINT_WA("Input too long: %s", addrstring);
 		return (1);
 	};
 
@@ -396,10 +369,8 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 		ipv4addrp->flag_prefixuse = 1;
 		ipv4addrp->prefixlength = (uint8_t) i;
 		
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s: prefix length %u\n", DEBUG_function_name, (unsigned int) ipv4addrp->prefixlength);
-			fprintf(stderr, "%s: flag_prefixuse %d\n", DEBUG_function_name, ipv4addrp->flag_prefixuse);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "prefix length %u", (unsigned int) ipv4addrp->prefixlength);
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "flag_prefixuse %d", ipv4addrp->flag_prefixuse);
 	};
 
 	/* count "." and digits */
@@ -442,9 +413,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 		};
 	};
 	
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: reading into array, got items: %d\n", DEBUG_function_name, result);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "reading into array, got items: %d", result);
 
 	if ( result != expecteditems ) {
 		snprintf(resultstring, NI_MAXHOST - 1, "Error splitting address %s, got %d items instead of %d!", addronlystring, result, expecteditems);
@@ -454,22 +423,16 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 
 	/* copy into structure */
 	for ( i = 0; i <= 3; i++ ) {
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s: Octett %d = %d\n", DEBUG_function_name, i, compat[i]);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "Octett %d = %d", i, compat[i]);
 		ipv4addr_setoctet(ipv4addrp, (unsigned int) i, (unsigned int) compat[i]);
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: In structure %03u %03u %03u %03u\n", DEBUG_function_name, (unsigned int) ipv4addr_getoctet(ipv4addrp, 0), (unsigned int) ipv4addr_getoctet(ipv4addrp, 1), (unsigned int) ipv4addr_getoctet(ipv4addrp, 2), (unsigned int) ipv4addr_getoctet(ipv4addrp, 3));
-		fprintf(stderr, "%s: In structure %8x\n", DEBUG_function_name, (unsigned int) ipv4addr_getdword(ipv4addrp));
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "In structure %03u %03u %03u %03u", (unsigned int) ipv4addr_getoctet(ipv4addrp, 0), (unsigned int) ipv4addr_getoctet(ipv4addrp, 1), (unsigned int) ipv4addr_getoctet(ipv4addrp, 2), (unsigned int) ipv4addr_getoctet(ipv4addrp, 3));
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "In structure %8x", (unsigned int) ipv4addr_getdword(ipv4addrp));
 	
 	typeinfo = ipv4addr_gettype(ipv4addrp); 
 
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: Got typeinfo: 0x%08x\n", DEBUG_function_name, typeinfo);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "Got typeinfo: 0x%08x", typeinfo);
 
 	ipv4addrp->scope = typeinfo;
 	ipv4addrp->flag_valid = 1;
@@ -477,7 +440,6 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 	retval = 0;
 	return (retval);
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -488,7 +450,6 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_
  * out: ipv4addrp = changed IPv4 address structure
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libipv4addr/addrhex_to_ipv4addrstruct"
 int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv4addr *ipv4addrp, int flag_reverse) {
 	int retval = 1, result, i;
 	char *addronlystring, *cp;
@@ -501,9 +462,7 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6ca
 
 	resultstring[0] = '\0'; /* clear result string */
 
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: Got input '%s'\n", DEBUG_function_name,  addrstring);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "Got input '%s'",  addrstring);
 
 	if ((strlen(addrstring) < 7)  || (strlen(addrstring) > 11)) {
 		/* min: ffffffff */
@@ -513,7 +472,7 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6ca
 	};
 
 	if (strlen(addrstring) > sizeof(tempstring) - 1) {
-		fprintf(stderr, "%s: Input too long: %s\n", DEBUG_function_name, addrstring);
+		ERRORPRINT_WA("Input too long: %s", addrstring);
 		return (1);
 	};
 
@@ -534,10 +493,8 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6ca
 		ipv4addrp->flag_prefixuse = 1;
 		ipv4addrp->prefixlength = (uint8_t) i;
 		
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s: prefix length %u\n", DEBUG_function_name, (unsigned int) ipv4addrp->prefixlength);
-			fprintf(stderr, "%s: flag_prefixuse %d\n", DEBUG_function_name, ipv4addrp->flag_prefixuse);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "prefix length %u", (unsigned int) ipv4addrp->prefixlength);
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "flag_prefixuse %d", ipv4addrp->flag_prefixuse);
 	};
 
 	/* check length 3 */
@@ -571,9 +528,7 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6ca
 		};
 	};
 	
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: reading into array, got items: %d\n", DEBUG_function_name, result);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "reading into array, got items: %d", result);
 
 	if ( result != expecteditems ) {
 		snprintf(resultstring, NI_MAXHOST - 1, "Error splitting address %s, got %d items instead of %d!", addronlystring, result, expecteditems);
@@ -583,22 +538,16 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6ca
 
 	/* copy into structure */
 	for ( i = 0; i <= 3; i++ ) {
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s: Octett %d = %d\n", DEBUG_function_name, i, compat[i]);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "Octett %d = %d", i, compat[i]);
 		ipv4addr_setoctet(ipv4addrp, (unsigned int) i, (unsigned int) compat[i]);
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: In structure %03u %03u %03u %03u\n", DEBUG_function_name, (unsigned int) ipv4addr_getoctet(ipv4addrp, 0), (unsigned int) ipv4addr_getoctet(ipv4addrp, 1), (unsigned int) ipv4addr_getoctet(ipv4addrp, 2), (unsigned int) ipv4addr_getoctet(ipv4addrp, 3));
-		fprintf(stderr, "%s: In structure %8x\n", DEBUG_function_name, (unsigned int) ipv4addr_getdword(ipv4addrp));
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "In structure %03u %03u %03u %03u", (unsigned int) ipv4addr_getoctet(ipv4addrp, 0), (unsigned int) ipv4addr_getoctet(ipv4addrp, 1), (unsigned int) ipv4addr_getoctet(ipv4addrp, 2), (unsigned int) ipv4addr_getoctet(ipv4addrp, 3));
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "In structure %8x", (unsigned int) ipv4addr_getdword(ipv4addrp));
 	
 	typeinfo = ipv4addr_gettype(ipv4addrp); 
 
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: Got typeinfo: 0x%08x\n", DEBUG_function_name, typeinfo);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "Got typeinfo: 0x%08x", typeinfo);
 
 	ipv4addrp->scope = typeinfo;
 	ipv4addrp->flag_valid = 1;
@@ -606,7 +555,6 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6ca
 	retval = 0;
 	return (retval);
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -645,7 +593,6 @@ int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, cha
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libipv4addr/addr_to_reversestring"
 int libipv4addr_to_reversestring(ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions) {
 	int retval = 1;
 	uint8_t octet;
@@ -661,9 +608,7 @@ int libipv4addr_to_reversestring(ipv6calc_ipv4addr *ipv4addrp, char *resultstrin
 		bit_end = 32;
 	};
 	
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: start bit %d  end bit %d\n", DEBUG_function_name, bit_start, bit_end);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "start bit %d  end bit %d", bit_start, bit_end);
 
 	/* print out nibble format */
 	/* 31 is lowest bit, 0 is highest bit */
@@ -676,9 +621,7 @@ int libipv4addr_to_reversestring(ipv6calc_ipv4addr *ipv4addrp, char *resultstrin
 		/* extract octet */
 		octet = ipv4addr_getoctet(ipv4addrp, noctet);
 		
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s: bit: %d = noctet: %u, value: %x\n", DEBUG_function_name, nbit, noctet, (unsigned int) octet);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "bit: %d = noctet: %u, value: %x", nbit, noctet, (unsigned int) octet);
 
 		snprintf(tempstring, sizeof(tempstring) - 1, "%s%u", resultstring, (unsigned int) octet);
 		snprintf(resultstring, NI_MAXHOST - 1, "%s.", tempstring);
@@ -698,14 +641,11 @@ int libipv4addr_to_reversestring(ipv6calc_ipv4addr *ipv4addrp, char *resultstrin
 		string_to_reverse_dotted(resultstring);
 	};
 		
-	if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-		fprintf(stderr, "%s: Print out: %s\n", DEBUG_function_name, resultstring);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "Print out: %s", resultstring);
 
 	retval = 0;
 	return (retval);
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -716,7 +656,6 @@ int libipv4addr_to_reversestring(ipv6calc_ipv4addr *ipv4addrp, char *resultstrin
  * out: *resultstring = IPv4 address (modified)
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libipv4addr/ipv4addrstruct_to_octal"
 int libipv4addr_to_octal(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions) {
 	int retval = 1;
 	char tempstring[NI_MAXHOST];
@@ -741,7 +680,6 @@ int libipv4addr_to_octal(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring,
 	retval = 0;	
 	return (retval);
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -752,7 +690,6 @@ int libipv4addr_to_octal(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring,
  * out: *resultstring = IPv4 address (modified)
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libipv4addr/ipv4addrstruct_to_hex"
 int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, /*@unused@*/ const uint32_t formatoptions) {
 	int retval = 1;
 	char tempstring[NI_MAXHOST];
@@ -768,7 +705,6 @@ int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, /
 	retval = 0;	
 	return (retval);
 };
-#undef DEBUG_function_name
 
 
 /*

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libifinet6.c
- * Version    : $Id: libifinet6.c,v 1.6 2009/08/11 20:38:51 peter Exp $
+ * Version    : $Id: libifinet6.c,v 1.7 2014/02/03 20:48:03 ds6peter Exp $
  * Copyright  : 2001-2009 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -25,15 +25,12 @@
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libifinet6/ifinet6_to_ipv6addrstruct"
 int libifinet6_ifinet6_to_ipv6addrstruct(char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1;
 	char tempstring[NI_MAXHOST];
 	char addr6p[8][5]; 
 
-	if ( (ipv6calc_debug & DEBUG_libifinet6) != 0 ) {
-		fprintf(stderr, "%s: Got input '%s'\n", DEBUG_function_name, addrstring);
-	};
+	DEBUGPRINT_WA(DEBUG_libifinet6, "Got input '%s'", addrstring);
 	
 	/* simple test */
 	if ( strlen(addrstring) != 32 ) {
@@ -53,16 +50,13 @@ int libifinet6_ifinet6_to_ipv6addrstruct(char *addrstring, char *resultstring, i
 	/* print out into temp string */
 	snprintf(tempstring, sizeof(tempstring) - 1, "%s:%s:%s:%s:%s:%s:%s:%s", addr6p[0], addr6p[1], addr6p[2], addr6p[3], addr6p[4], addr6p[5], addr6p[6], addr6p[7]); 
 					 
-	if ( (ipv6calc_debug & DEBUG_libifinet6) != 0 ) {
-		fprintf(stderr, "%s: Filled: %s\n", DEBUG_function_name, tempstring);
-	};
+	DEBUGPRINT_WA(DEBUG_libifinet6, "Filled: %s", tempstring);
 
 	/* fill structure */
 	retval = addr_to_ipv6addrstruct(tempstring, resultstring, ipv6addrp);
 
 	return (retval);
 };
-#undef DEBUG_function_name
 
 /*
  * function formats an given /proc/net/if_inet6 format to normal one with prefixlength
@@ -71,15 +65,12 @@ int libifinet6_ifinet6_to_ipv6addrstruct(char *addrstring, char *resultstring, i
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "libifinet6/ifinet6_withprefixlength_to_ipv6addrstruct"
 int libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(char *addrstring, char *prefixlengthstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1, result, tempint;
 	char tempstring[NI_MAXHOST];
 	uint8_t prefixlength = 0;
 
-	if ( (ipv6calc_debug & DEBUG_libifinet6) != 0 ) {
-		fprintf(stderr, "%s: Got input addressstring: '%s', prefixlengthstring: '%s'\n", DEBUG_function_name, addrstring, prefixlengthstring);
-	};
+	DEBUGPRINT_WA(DEBUG_libifinet6, "Got input addressstring: '%s', prefixlengthstring: '%s'", addrstring, prefixlengthstring);
 
 	/* simple test on prefix length string*/
 	if ( strlen(prefixlengthstring) != 2 ) {
@@ -115,9 +106,7 @@ int libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(char *addrstring, char
 	ipv6addrp->prefixlength = (uint8_t) prefixlength;
 	ipv6addrp->flag_prefixuse = 1;
 	
-	if ( (ipv6calc_debug & DEBUG_libifinet6) != 0 ) {
-		fprintf(stderr, "%s: Print: '%s'\n", DEBUG_function_name, resultstring);
-	};
+	DEBUGPRINT_WA(DEBUG_libifinet6, "Print: '%s'", resultstring);
 			
 	retval = 0;
 	return (retval);

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calcdebug.h
- * Version    : $Id: libipv6calcdebug.h,v 1.16 2014/02/02 17:08:22 ds6peter Exp $
+ * Version    : $Id: libipv6calcdebug.h,v 1.17 2014/02/03 20:48:04 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -65,6 +65,14 @@
 			fprintf(stderr, "%s/%s: " t "\n", __FILE__, __func__); \
 		}; \
 	};
+
+/* error print with args */
+#define ERRORPRINT_WA(t, ...)	\
+	fprintf(stderr, "%s/%s: " t "\n", __FILE__, __func__, __VA_ARGS__);
+
+/* error print no args */
+#define ERRORPRINT_NA(t)		\
+	fprintf(stderr, "%s/%s: " t "\n", __FILE__, __func__);
 
 
 #endif

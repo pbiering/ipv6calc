@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.11 2013/11/10 18:20:53 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.12 2014/02/03 20:48:03 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -360,7 +360,7 @@ int ipv6calcoptions_common_anon(const int opt, const char *optarg, const struct 
 const char *ipv6calcoption_name(const int opt, const struct option longopts[]) {
 	int i = 0;
 
-	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Called opt=%d\n", opt);
+	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Called opt=%d", opt);
 
 	while (longopts[i].name != NULL) {
 		if (opt == longopts[i].val) {

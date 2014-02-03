@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.316 2014/02/03 06:45:19 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.317 2014/02/03 20:48:03 ds6peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,7 @@ Info:
 --------------------------------------------------------------------
 20140203/PB
 	minor improvements in Makefiles, configure checks now for openssl/md5.h
+	replace old debug code with macros in lib
 
 20140202/PB
 	move IEEE database from libieee to databases/BuiltIn

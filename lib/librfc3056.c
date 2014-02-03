@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3056.c
- * Version    : $Id: librfc3056.c,v 1.8 2011/09/16 18:05:13 peter Exp $
+ * Version    : $Id: librfc3056.c,v 1.9 2014/02/03 20:48:04 ds6peter Exp $
  * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -24,7 +24,6 @@
  * out: *ipv6addrp = IPv6 address
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "librfc3056/ipv4addr_to_ipv6to4addr"
 int librfc3056_ipv4addr_to_ipv6to4addr(ipv6calc_ipv6addr *ipv6addrp, const ipv6calc_ipv4addr *ipv4addrp) {
 	int retval = 1;
 	unsigned int i;
@@ -48,7 +47,6 @@ int librfc3056_ipv4addr_to_ipv6to4addr(ipv6calc_ipv6addr *ipv6addrp, const ipv6c
 	retval = 0;
 	return (retval);
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -58,7 +56,6 @@ int librfc3056_ipv4addr_to_ipv6to4addr(ipv6calc_ipv6addr *ipv6addrp, const ipv6c
  * out: *ipv4addrp = IPv4 address
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "librfc3056/ipv6addr_to_ipv4addr"
 int librfc3056_ipv6addr_to_ipv4addr(ipv6calc_ipv4addr *ipv4addrp, const ipv6calc_ipv6addr *ipv6addrp, char* resultstring) {
 	int retval = 1;
 	unsigned int i;
@@ -85,4 +82,3 @@ int librfc3056_ipv6addr_to_ipv4addr(ipv6calc_ipv4addr *ipv4addrp, const ipv6calc
 	retval = 0;
 	return (retval);
 };
-#undef DEBUG_function_name

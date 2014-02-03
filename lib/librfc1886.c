@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.18 2013/05/12 07:23:12 ds6peter Exp $
+ * Version    : $Id: librfc1886.c,v 1.19 2014/02/03 20:48:04 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -36,7 +36,6 @@
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "librfc1886/addr_to_nibblestring"
 int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions, char* domain) {
 	int retval = 1;
 	unsigned int nibble;
@@ -44,9 +43,7 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 	char tempstring[NI_MAXHOST];
 	unsigned int nnibble, noctet;
 	
-	if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-		fprintf(stderr, "%s: flag_prefixuse %d\n", DEBUG_function_name, (*ipv6addrp).flag_prefixuse);
-	};
+	DEBUGPRINT_WA(DEBUG_librfc1886, "flag_prefixuse %d", (*ipv6addrp).flag_prefixuse);
 
 	/* 20100909: take care of prefix length before printing the nibbles, but break old behavior */
 	if ((*ipv6addrp).flag_prefixuse != 0) {
@@ -57,9 +54,7 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 		/* simulate old behavior */
 		bit_start = 1;
 		bit_end = (int) (*ipv6addrp).prefixlength;
-		if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-			fprintf(stderr, "%s: simulate old behavior\n", DEBUG_function_name);
-		};
+		DEBUGPRINT_NA(DEBUG_librfc1886, "simulate old behavior");
 	} else if ( (*ipv6addrp).flag_startend_use != 0 ) {
 		/* check start and end */
 		if ( (((*ipv6addrp).bit_start - 1) & 0x03) != 0 ) {
@@ -80,9 +75,7 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 		bit_end = 128;
 	};
 	
-	if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-		fprintf(stderr, "%s: start bit %d  end bit %d\n", DEBUG_function_name, bit_start, bit_end);
-	};
+	DEBUGPRINT_WA(DEBUG_librfc1886, "start bit %d  end bit %d", bit_start, bit_end);
 
 	/* print out nibble format */
 	/* 127 is lowest bit, 0 is highest bit */
@@ -98,9 +91,7 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 		/* extract nibble */
 		nibble = ( (*ipv6addrp).in6_addr.s6_addr[noctet] & ( 0xf << (unsigned int) (4 * (1 - nnibble)) ) ) >> (unsigned int) ( 4 * (1 - nnibble));
 		
-		if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-			fprintf(stderr, "%s: bit: %d = noctet: %u, nnibble: %u, octet: %02x, value: %x\n", DEBUG_function_name, nbit, noctet, nnibble, (unsigned int) (*ipv6addrp).in6_addr.s6_addr[noctet], nibble);
-		};
+		DEBUGPRINT_WA(DEBUG_librfc1886, "bit: %d = noctet: %u, nnibble: %u, octet: %02x, value: %x", nbit, noctet, nnibble, (unsigned int) (*ipv6addrp).in6_addr.s6_addr[noctet], nibble);
 
 		snprintf(tempstring, sizeof(tempstring) - 1, "%s%x", resultstring, nibble);
 		if ((nbit < bit_start) && (bit_start != 1)) {
@@ -125,14 +116,11 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 		string_to_reverse_dotted(resultstring);
 	};
 		
-	if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-		fprintf(stderr, "%s: Print out: %s\n", DEBUG_function_name, resultstring);
-	};
+	DEBUGPRINT_WA(DEBUG_librfc1886, "Print out: %s", resultstring);
 
 	retval = 0;
 	return (retval);
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -142,7 +130,6 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
  * mod: *ipv6addrp = IPv6 address structure
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "librfc1886/nibblestring_to_ipv6addrstruct"
 int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 	int retval = 1;
 	char tempstring[NI_MAXHOST], *token, *cptr, **ptrptr;
@@ -174,9 +161,7 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 	
 	string_to_reverse(tempstring);	
 	
-	if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-		fprintf(stderr, "%s: reverse copied string: %s\n", DEBUG_function_name, tempstring);
-	};
+	DEBUGPRINT_WA(DEBUG_librfc1886, "reverse copied string: %s", tempstring);
 
 	/* run through nibbles */
 	token = strtok_r(tempstring, ".", ptrptr);
@@ -262,7 +247,6 @@ NEXT_token_nibblestring_to_ipv6addrstruct:
 	retval = 0;
 	return (retval);
 };
-#undef DEBUG_function_name
 
 /*
  * checks for proper format of a nibble string
@@ -270,7 +254,6 @@ NEXT_token_nibblestring_to_ipv6addrstruct:
  * in : string
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "librfc1886/formatcheck"
 int librfc1886_formatcheck(const char *string, char *infostring) {
 	int nibblecounter = 0, flag_tld = 0, flag_nld = 0, tokencounter = 0;
 	char tempstring[NI_MAXHOST], *token, *cptr, **ptrptr;
@@ -286,9 +269,7 @@ int librfc1886_formatcheck(const char *string, char *infostring) {
 
 	snprintf(tempstring, sizeof(tempstring) - 1, "%s", string);
 	
-	if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-		fprintf(stderr, "%s: check %s\n", DEBUG_function_name, tempstring);
-	};
+	DEBUGPRINT_WA(DEBUG_librfc1886, "check %s", tempstring);
 
 	string_to_reverse(tempstring);	
 	
@@ -296,19 +277,13 @@ int librfc1886_formatcheck(const char *string, char *infostring) {
 	token = strtok_r(tempstring, ".", ptrptr);
 
 	while(token != NULL) {
-		if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-			fprintf(stderr, "%s: check token: %s (tld: %d, nld: %d, tokencounter: %d)\n", DEBUG_function_name, token, flag_tld, flag_nld, tokencounter + 1);
-		};
+		DEBUGPRINT_WA(DEBUG_librfc1886, "check token: %s (tld: %d, nld: %d, tokencounter: %d)", token, flag_tld, flag_nld, tokencounter + 1);
 
 		if (strcmp(token, "apra") == 0) {
 			/* arpa (reverse) */
-			if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-				fprintf(stderr, "%s: found: arpa\n", DEBUG_function_name);
-			};
+			DEBUGPRINT_NA(DEBUG_librfc1886, "found: arpa");
 			if (flag_tld == 0 && tokencounter == 0) {
-				if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-					fprintf(stderr, "%s: found TLD: arpa\n", DEBUG_function_name);
-				};
+				DEBUGPRINT_NA(DEBUG_librfc1886, "found TLD: arpa");
 				flag_tld = 1;
 				goto NEXT_librfc1886_formatcheck;
 			} else {
@@ -318,13 +293,9 @@ int librfc1886_formatcheck(const char *string, char *infostring) {
 		};
 		if (strcmp(token, "tni") == 0) {
 			/* int (reverse) */
-			if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-				fprintf(stderr, "%s: found: int\n", DEBUG_function_name);
-			};
+			DEBUGPRINT_NA(DEBUG_librfc1886, "found: int");
 			if (flag_tld == 0 && tokencounter == 0) {
-				if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-					fprintf(stderr, "%s: found TLD: int\n", DEBUG_function_name);
-				};
+				DEBUGPRINT_NA(DEBUG_librfc1886, "found TLD: int");
 				flag_tld = 1;
 				goto NEXT_librfc1886_formatcheck;
 			} else {
@@ -334,13 +305,9 @@ int librfc1886_formatcheck(const char *string, char *infostring) {
 		};
 		if (strcmp(token, "6pi") == 0) {
 			/* ip6 (reverse) */
-			if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-				fprintf(stderr, "%s: found: ip6\n", DEBUG_function_name);
-			};
+			DEBUGPRINT_NA(DEBUG_librfc1886, "found: ip6");
 			if (tokencounter == 1 && flag_tld == 1 && flag_nld == 0) {
-				if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-					fprintf(stderr, "%s: found NLD: ip6\n", DEBUG_function_name);
-				};
+				DEBUGPRINT_NA(DEBUG_librfc1886, "found NLD: ip6");
 				flag_nld = 1;
 				goto NEXT_librfc1886_formatcheck;
 			} else {
@@ -373,10 +340,7 @@ NEXT_librfc1886_formatcheck:
 		tokencounter++;
 	};
 
-	if ( (ipv6calc_debug & DEBUG_librfc1886) != 0 ) {
-		fprintf(stderr, "%s: check %s is ok\n", DEBUG_function_name, string);
-	};
+	DEBUGPRINT_WA(DEBUG_librfc1886, "check %s is ok", string);
 
 	return (0);
 };
-#undef DEBUG_function_name

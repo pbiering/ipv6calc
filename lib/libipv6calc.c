@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.36 2013/10/30 20:04:25 ds6peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.37 2014/02/03 20:48:04 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -26,7 +26,6 @@
  * function converts chars in a string to upcase
  * in : pointer to a string
  */
-#define DEBUG_function_name "libipv6calc/string_to_upcase"
 void string_to_upcase(char *string) {
 	int i;
 
@@ -38,14 +37,12 @@ void string_to_upcase(char *string) {
 
 	return;
 };
-#undef DEBUG_function_name
 
 
 /*
  * function converts chars in a string to lowcase
  * in : pointer to a string
  */
-#define DEBUG_function_name "libipv6calc/string_to_lowcase"
 void string_to_lowcase(char *string) {
 	int i;
 
@@ -57,14 +54,12 @@ void string_to_lowcase(char *string) {
 
 	return;
 };
-#undef DEBUG_function_name
 
 
 /*
  * reverse string
  * in : pointer to a string
  */
-#define DEBUG_function_name "libipv6calc/string_to_reverse"
 void string_to_reverse(char *string) {
 	int i;
 	char helpchar;
@@ -85,14 +80,12 @@ void string_to_reverse(char *string) {
 
 	return;
 };
-#undef DEBUG_function_name
 
 
 /*
  * dotted-reverse string
  * in : pointer to a string
  */
-#define DEBUG_function_name "libipv6calc/string_to_reverse_dotted"
 void string_to_reverse_dotted(char *string) {
 	char resultstring[NI_MAXHOST], tempstring[NI_MAXHOST];
 	char *token, *cptr, **ptrptr;
@@ -132,7 +125,6 @@ void string_to_reverse_dotted(char *string) {
 	
 	return;
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -140,7 +132,6 @@ void string_to_reverse_dotted(char *string) {
  * in : pointer to a string
  * ret: format number
  */
-#define DEBUG_function_name "libipv6calc/autodetectinput"
 uint32_t libipv6calc_autodetectinput(const char *string) {
 	uint32_t type = FORMAT_auto_noresult;
 	int xdl, i, j = 0, result;
@@ -195,37 +186,31 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		if (isalnum((int) string[i])) { numalnums++; };
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
-		fprintf(stderr, "%s: Autodetection source:\n", DEBUG_function_name);
-		fprintf(stderr, "%s:  numdots        :%d\n", DEBUG_function_name, numdots);
-		fprintf(stderr, "%s:  numcolons      :%d\n", DEBUG_function_name, numcolons);
-		fprintf(stderr, "%s:  numcolonsdouble:%d\n", DEBUG_function_name, numcolonsdouble);
-		fprintf(stderr, "%s:  numdashes      :%d\n", DEBUG_function_name, numdashes);
-		fprintf(stderr, "%s:  numspaces      :%d\n", DEBUG_function_name, numspaces);
-		fprintf(stderr, "%s:  numslashes     :%d\n", DEBUG_function_name, numslashes);
-		fprintf(stderr, "%s:  numdigits      :%d\n", DEBUG_function_name, numdigits);
-		fprintf(stderr, "%s:  numxdigits     :%d\n", DEBUG_function_name, numxdigits);
-		fprintf(stderr, "%s:  numalnums      :%d\n", DEBUG_function_name, numalnums);
-		fprintf(stderr, "%s:  numpercents    :%d\n", DEBUG_function_name, numpercents);
-		fprintf(stderr, "%s:  numchar_s      :%d\n", DEBUG_function_name, numchar_s);
-		fprintf(stderr, "%s:  xdigit len max :%d\n", DEBUG_function_name, xdigitlen_max);
-		fprintf(stderr, "%s:  xdigit len min :%d\n", DEBUG_function_name, xdigitlen_min);
-		fprintf(stderr, "%s:  length         :%d\n", DEBUG_function_name, (int) length);
-	};
+	DEBUGPRINT_NA(DEBUG_libipv6calc, "Autodetection source:");
+	DEBUGPRINT_WA(DEBUG_libipv6calc, " numdots        :%d", numdots);
+	DEBUGPRINT_WA(DEBUG_libipv6calc, " numcolons      :%d", numcolons);
+	DEBUGPRINT_WA(DEBUG_libipv6calc, " numcolonsdouble:%d", numcolonsdouble);
+	DEBUGPRINT_WA(DEBUG_libipv6calc, " numdashes      :%d", numdashes);
+	DEBUGPRINT_WA(DEBUG_libipv6calc, " numspaces      :%d", numspaces);
+	DEBUGPRINT_WA(DEBUG_libipv6calc, " numslashes     :%d", numslashes);
+	DEBUGPRINT_WA(DEBUG_libipv6calc, " numdigits      :%d", numdigits);
+	DEBUGPRINT_WA(DEBUG_libipv6calc, " numxdigits     :%d", numxdigits);
+	DEBUGPRINT_WA(DEBUG_libipv6calc, " numalnums      :%d", numalnums);
+	DEBUGPRINT_WA(DEBUG_libipv6calc, " numpercents    :%d", numpercents);
+	DEBUGPRINT_WA(DEBUG_libipv6calc, " numchar_s      :%d", numchar_s);
+	DEBUGPRINT_WA(DEBUG_libipv6calc, " xdigit len max :%d", xdigitlen_max);
+	DEBUGPRINT_WA(DEBUG_libipv6calc, " xdigit len min :%d", xdigitlen_min);
+	DEBUGPRINT_WA(DEBUG_libipv6calc, " length         :%d", (int) length);
 
 	if ( length == 20 && numdots == 0 && numcolons == 0 ) {
 	        /* probably a base85 one */
-		if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
-			fprintf(stderr, "%s:  check FORMAT_base85\n", DEBUG_function_name);
-		};
+		DEBUGPRINT_NA(DEBUG_libipv6calc, " check FORMAT_base85");
 		result = librfc1924_formatcheck(string, resultstring);	
 	        if ( result == 0 ) {
 			/* ok: base85 */
 			type = FORMAT_base85;
 			goto END_libipv6calc_autodetectinput;
-		} else if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
-			fprintf(stderr, "%s:  check FORMAT_base85 not successful, result: %s\n", DEBUG_function_name, resultstring);
-		};
+		} else DEBUGPRINT_WA(DEBUG_libipv6calc, " check FORMAT_base85 not successful, result: %s", resultstring);
 	};
 	
 	if (length >= 7 && length <= 15 && numdots == 3 && numcolons == 0 && numdigits == numxdigits && numdigits >= 4 && numdigits <= 12 && numslashes <= 1 && (numdots + numdigits + numslashes) == length) {
@@ -236,17 +221,13 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 
 	if ( strncmp(string, "\\[", 2) == 0 ) {
 		/* check for Bitstring label: \[x..../dd] */
-		if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
-			fprintf(stderr, "%s:  check FORMAT_bitstring\n", DEBUG_function_name);
-		};
+		DEBUGPRINT_NA(DEBUG_libipv6calc, " check FORMAT_bitstring");
 		result = librfc2874_formatcheck(string, resultstring);	
 	        if ( result == 0 ) {
 			/* ok: bitstring label */
 			type = FORMAT_bitstring;
 			goto END_libipv6calc_autodetectinput;
-		} else if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
-			fprintf(stderr, "%s:  check FORMAT_bitstring not successful, result: %s\n", DEBUG_function_name, resultstring);
-		};
+		} else DEBUGPRINT_WA(DEBUG_libipv6calc, " check FORMAT_bitstring not successful, result: %s", resultstring);
 	};
 	
 	if (length == 32 && numxdigits == 32 && numdots == 0 && numcolons == 0) {
@@ -274,15 +255,11 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 	    	if (length == 14 && numdots == 2 && numxdigits ==12 && xdigitlen_min == 4 && xdigitlen_max == 4) {
 			// xxxx.xxxx.xxxx
 			type = FORMAT_mac;
-			if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
-				fprintf(stderr, "%s: Autodetection found type: mac\n", DEBUG_function_name);
-			};
+			DEBUGPRINT_NA(DEBUG_libipv6calc, "Autodetection found type: mac");
 			goto END_libipv6calc_autodetectinput;
 		};
 
-		if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
-			fprintf(stderr, "%s:  check FORMAT_mac\n", DEBUG_function_name);
-		};
+		DEBUGPRINT_NA(DEBUG_libipv6calc, " check FORMAT_mac");
 
 		/* Check whether minimum 1 xdigit is between colons, dashes, spaces */
 		if (numcolons == 0 && numdashes == 1 && numspaces == 0 && numxdigits == 12) {
@@ -344,9 +321,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 
 		if ( j != -1 ) {
 			type = FORMAT_mac;
-			if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
-				fprintf(stderr, "%s: Autodetection found type: mac\n", DEBUG_function_name);
-			};
+			DEBUGPRINT_NA(DEBUG_libipv6calc, "Autodetection found type: mac");
 			goto END_libipv6calc_autodetectinput;
 		};
 	};
@@ -354,9 +329,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 	if ((length >= 15 && length <= 23 && numxdigits >= 8 && numxdigits <= 16 && numdots == 0 && ( (numcolons == 7 && numdashes == 0 && numspaces == 0) || (numcolons == 0 && numdashes == 7 && numspaces == 0) || (numcolons == 0 && numdashes == 0 && numspaces == 7))) || (length == 16 && numcolons == 0 && numdashes == 0 && numspaces == 0 && numxdigits == 16)) {
 		/* EUI-64 00:00:00:00:00:00:00:00 or 00-00-00-00-00-00-00-00 or "xx xx xx xx xx xx xx xx" or xxxxxxxxxxxxxxxx */
 
-		if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
-			fprintf(stderr, "%s:  check FORMAT_eui64\n", DEBUG_function_name);
-		};
+		DEBUGPRINT_NA(DEBUG_libipv6calc, " check FORMAT_eui64");
 
 		if (numcolons == 0 && numdashes == 0 && numspaces == 0 && numxdigits == 16) {
 			/* nothing more to check */
@@ -390,26 +363,20 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 
 		if ( j != -1 ) {
 			type = FORMAT_eui64;
-			if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
-				fprintf(stderr, "%s: Autodetection found type: eui64\n", DEBUG_function_name);
-			};
+			DEBUGPRINT_NA(DEBUG_libipv6calc, "Autodetection found type: eui64");
 			goto END_libipv6calc_autodetectinput;
 		};
 	};
 	
 	if (numcolons == 0 && numdots > 0 && numslashes == 0 && numspaces == 0 && (numalnums + numdots) == length) {
 		/* check for reverse nibble string */
-		if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
-			fprintf(stderr, "%s:  check FORMAT_revnibbels_int\n", DEBUG_function_name);
-		};
+		DEBUGPRINT_NA(DEBUG_libipv6calc, " check FORMAT_revnibbels_int");
 		result = librfc1886_formatcheck(string, resultstring);	
 	        if ( result == 0 ) {
 			/* ok: reverse nibble string */
 			type = FORMAT_revnibbles_int;
 			goto END_libipv6calc_autodetectinput;
-		} else if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
-			fprintf(stderr, "%s:  check FORMAT_revnibbels_int not successful, result: %s\n", DEBUG_function_name, resultstring);
-		};
+		} else DEBUGPRINT_WA(DEBUG_libipv6calc, " check FORMAT_revnibbels_int not successful, result: %s", resultstring);
 	};
 	
 	if ((numcolons == 3) && (numcolonsdouble == 0) && numdots == 0 && numslashes == 0 && numpercents == 0 && ((numcolons + numxdigits) == length)) {
@@ -434,16 +401,13 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 	};
 	
 END_libipv6calc_autodetectinput:	
-	if ( (ipv6calc_debug & DEBUG_libipv6calc) != 0 ) {
-		if (type != FORMAT_auto_noresult) {
-			fprintf(stderr, "%s: Autodetection found type: 0x%08x\n", DEBUG_function_name, (unsigned int) type);
-		} else {
-			fprintf(stderr, "%s: Autodetection not successful\n", DEBUG_function_name);
-		};
+	if (type != FORMAT_auto_noresult) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc, "Autodetection found type: 0x%08x", (unsigned int) type);
+	} else {
+		DEBUGPRINT_NA(DEBUG_libipv6calc, "Autodetection not successful");
 	};
 	return (type);
 };
-#undef DEBUG_function_name
 
 
 /*

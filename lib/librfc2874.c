@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.c
- * Version    : $Id: librfc2874.c,v 1.14 2013/05/12 07:23:12 ds6peter Exp $
+ * Version    : $Id: librfc2874.c,v 1.15 2014/02/03 20:48:04 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -27,7 +27,6 @@
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "librfc2874/addr_to_bitstring"
 int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
 	int retval = 1;
 	unsigned int nibble;
@@ -54,9 +53,7 @@ int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resul
 		bit_end = 128;
 	};
 
-	if ( (ipv6calc_debug & DEBUG_librfc2874) != 0 ) {
-		fprintf(stderr, "%s: print from start bit to end bit: %u - %u\n", DEBUG_function_name, bit_start, bit_end);
-	};
+	DEBUGPRINT_WA(DEBUG_librfc2874, "print from start bit to end bit: %u - %u", bit_start, bit_end);
 
 	/* print out hex string format */
 	/* 127 is lowest bit, 0 is highest bit */
@@ -71,16 +68,13 @@ int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resul
 		/* extract nibble */
 		nibble = ( (*ipv6addrp).in6_addr.s6_addr[noctet] & ( 0xf << (unsigned int) (4 * (1 - nnibble)) ) ) >> (unsigned int) ( 4 * (1 - nnibble));
 		
-		if ( (ipv6calc_debug & DEBUG_librfc2874) != 0 ) {
-			fprintf(stderr, "%s: bit: %u= noctet: %u, nnibble: %u, octet: %02x, value: %x\n", DEBUG_function_name, nbit, noctet, nnibble, (unsigned int) (*ipv6addrp).in6_addr.s6_addr[noctet], nibble);
-		};
+		DEBUGPRINT_WA(DEBUG_librfc2874, "bit: %u= noctet: %u, nnibble: %u, octet: %02x, value: %x", nbit, noctet, nnibble, (unsigned int) (*ipv6addrp).in6_addr.s6_addr[noctet], nibble);
 
 		snprintf(tempstring, sizeof(tempstring) - 1, "%s%x", resultstring, nibble);
 		snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
-		if ( (ipv6calc_debug & DEBUG_librfc2874) != 0 ) {
-			fprintf(stderr, "%s: Result after step %u (temp): %s\n", DEBUG_function_name, nbit, tempstring);
-			fprintf(stderr, "%s: Result after step %u (resu): %s\n", DEBUG_function_name, nbit, resultstring);
-		};
+
+		DEBUGPRINT_WA(DEBUG_librfc2874, "Result after step %u (temp): %s", nbit, tempstring);
+		DEBUGPRINT_WA(DEBUG_librfc2874, "Result after step %u (resu): %s", nbit, resultstring);
 	};
 
 	/* add begin and end of label */
@@ -90,9 +84,7 @@ int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resul
 		prefixlength = 128;
 	};
 	
-	if ( (ipv6calc_debug & DEBUG_librfc2874) != 0 ) {
-		fprintf(stderr, "%s: Result after expanding: %s\n", DEBUG_function_name, tempstring);
-	};
+	DEBUGPRINT_WA(DEBUG_librfc2874, "Result after expanding: %s", tempstring);
 	
 	if ( bit_start != 1 ) {
 		snprintf(tempstring, sizeof(tempstring) - 1,  "%s/%u]", resultstring, prefixlength);
@@ -106,15 +98,12 @@ int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resul
 
 	snprintf(resultstring, NI_MAXHOST - 1, "\\[x%s", tempstring);
 
-	if ( (ipv6calc_debug & DEBUG_librfc2874) != 0 ) {
-		fprintf(stderr, "%s: Final result: %s\n", DEBUG_function_name, resultstring);
-	};
+	DEBUGPRINT_WA(DEBUG_librfc2874, "Final result: %s", resultstring);
 
 	retval = 0;
 
 	return (retval);
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -124,7 +113,6 @@ int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resul
  * mod: *ipv6addrp = IPv6 address structure
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "librfc2874/bitstring_to_ipv6addrstruct"
 int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
 	int retval = 1;
 	char tempstring[NI_MAXHOST], tempstring2[NI_MAXHOST];
@@ -139,9 +127,7 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 	snprintf(tempstring, sizeof(tempstring) - 1, "%s", inputstring);
 	string_to_lowcase(tempstring);
 
-	if ( (ipv6calc_debug & DEBUG_librfc2874) != 0 ) {
-		fprintf(stderr, "%s: get string: %s\n", DEBUG_function_name, tempstring);
-	};
+	DEBUGPRINT_WA(DEBUG_librfc2874, "get string: %s", tempstring);
 
 	length = (unsigned int) strlen(tempstring);
 
@@ -152,18 +138,14 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 		return (1);
 	}
 	
-	if ( (ipv6calc_debug & DEBUG_librfc2874) != 0 ) {
-		fprintf(stderr, "%s: format is ok: %s\n", DEBUG_function_name, tempstring);
-	};
+	DEBUGPRINT_WA(DEBUG_librfc2874, "format is ok: %s", tempstring);
 
 	index = 3; /* start value */
 	
 	while(isxdigit((int) tempstring[index])) {
 		snprintf(tempstring2, sizeof(tempstring2) - 1, "%c", tempstring[index]);
 
-		if ( (ipv6calc_debug & DEBUG_librfc2874) != 0 ) {
-			fprintf(stderr, "%s: parse nibble: %s\n", DEBUG_function_name, tempstring2);
-		};
+		DEBUGPRINT_WA(DEBUG_librfc2874, "parse nibble: %s", tempstring2);
 		
 		/* now proceed nibbles */
 		retval = sscanf(tempstring2, "%x", &xdigit);
@@ -210,9 +192,7 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 		ipv6addrp->flag_prefixuse = 1;
 		ipv6addrp->prefixlength = (uint8_t) nibblecounter << 2;
 
-		if ( (ipv6calc_debug & DEBUG_librfc2874) != 0 ) {
-			fprintf(stderr, "%s: implicit prefix length: %d\n", DEBUG_function_name, ipv6addrp->prefixlength);
-		};
+		DEBUGPRINT_WA(DEBUG_librfc2874, "implicit prefix length: %d", ipv6addrp->prefixlength);
 
 		goto END_bitstring_to_ipv6addrstruct;
 	};
@@ -253,15 +233,11 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 			return (1);
 		};
 
-		if ( (ipv6calc_debug & DEBUG_librfc2874) != 0 ) {
-			fprintf(stderr, "%s: prefix length start=%d end=%d\n", DEBUG_function_name, startprefixlength, endprefixlength);
-		};
+		DEBUGPRINT_WA(DEBUG_librfc2874, "prefix length start=%d end=%d", startprefixlength, endprefixlength);
 
 		snprintf(tempstring2, endprefixlength - startprefixlength + 2, "%s", tempstring + startprefixlength - 1);
 
-		if ( (ipv6calc_debug & DEBUG_librfc2874) != 0 ) {
-			fprintf(stderr, "%s: parse prefix length: %s\n", DEBUG_function_name, tempstring2);
-		};
+		DEBUGPRINT_WA(DEBUG_librfc2874, "parse prefix length: %s", tempstring2);
 		
 		/* now proceed nibbles */
 		retval = sscanf(tempstring2, "%u", &prefixlength);
@@ -274,9 +250,7 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 		ipv6addrp->flag_prefixuse = 1;
 		ipv6addrp->prefixlength = (uint8_t) prefixlength;
 
-		if ( (ipv6calc_debug & DEBUG_librfc2874) != 0 ) {
-			fprintf(stderr, "%s: explicit prefix length: %d\n", DEBUG_function_name, ipv6addrp->prefixlength);
-		};
+		DEBUGPRINT_WA(DEBUG_librfc2874, "explicit prefix length: %d", ipv6addrp->prefixlength);
 
 		goto END_bitstring_to_ipv6addrstruct;
 	};
@@ -290,7 +264,6 @@ END_bitstring_to_ipv6addrstruct:
 	retval = 0;
 	return (retval);
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -299,7 +272,6 @@ END_bitstring_to_ipv6addrstruct:
  * in : string
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "librfc2874/formatcheck"
 int librfc2874_formatcheck(const char *string, char *infostring) {
 	unsigned int length, index = 0;
 	unsigned int nibblecounter = 0, digitcounter = 0;
@@ -399,4 +371,3 @@ int librfc2874_formatcheck(const char *string, char *infostring) {
 
 	return (1);
 };
-#undef DEBUG_function_name
