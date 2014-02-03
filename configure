@@ -4094,7 +4094,7 @@ fi
 $as_echo "$ac_cv_lib_crypto_MD5_Init" >&6; }
 if test "x$ac_cv_lib_crypto_MD5_Init" = xyes; then :
 
-				LDFLAGS="$LDFLAGS -lcrypto"
+				LDFLAGS="-lcrypto $LDFLAGS"
 				for ac_func in MD5_Init MD5_Update MD5_Final
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
