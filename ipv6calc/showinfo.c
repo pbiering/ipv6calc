@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.103 2014/02/02 17:08:22 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.104 2014/02/03 21:22:46 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -233,7 +233,6 @@ static void printfooter(const uint32_t formatoptions) {
 
 #ifdef SUPPORT_IP2LOCATION
 /* print IP2Location information */
-#define DEBUG_function_name "showinfo/print_ip2location"
 static void print_ip2location(char *addrstring, const uint32_t formatoptions, const char *additionalstring, int version) {
 	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
 
@@ -250,9 +249,7 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 	char tempstring[NI_MAXHOST] = "";
 	char *CountryCode, *CountryName;
 
-	if ( (ipv6calc_debug & DEBUG_showinfo) != 0 ) {
-		fprintf(stderr, "%s/%s: Called addrstring=%s formatoptions=0x%08x additionalstring=%s version=%d\n", __FILE__, __func__, addrstring, formatoptions, additionalstring, version);
-	};
+	DEBUGPRINT_NA(DEBUG_showinfo, "Called addrstring=%s formatoptions=0x%08x additionalstring=%s version=%d", addrstring, formatoptions, additionalstring, version);
 
 	if (version == 4) {
 		if (libipv6calc_db_wrapper_IP2Location_has_features(IPV6CALC_DB_IPV4_TO_CC) != 1) {
@@ -352,13 +349,12 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 		libipv6calc_db_wrapper_IP2Location_free_record(record);
 	} else {
 		if ((formatoptions & FORMATOPTION_quiet) == 0) {
-			fprintf(stderr, "%s: IP2Location returned no record for address: %s\n", DEBUG_function_name, addrstring);
+			ERRORPRINT("IP2Location returned no record for address: %s", addrstring);
 		};
 	};
 
 	libipv6calc_db_wrapper_IP2Location_close(IP2LocationObj);
 };
-#undef DEBUG_function_name
 #endif
 
 #ifdef SUPPORT_GEOIP
@@ -449,7 +445,6 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 
 
 /* print IPv4 address */
-#define DEBUG_function_name "showinfo/print_ipv4addr"
 static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formatoptions, const char *string) {
 	char tempstring[NI_MAXHOST] = "", tempstring2[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
 	char tempipv4string[NI_MAXHOST] = "";
@@ -639,13 +634,11 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 	return;
 };
-#undef DEBUG_function_name
 
 
 /*
  * print EUI-48/MAC information
  */
-#define DEBUG_function_name "showinfo/print_eui48"
 static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST], helpstring[NI_MAXHOST];
 	uint32_t machinereadable = ( formatoptions & FORMATOPTION_machinereadable);
@@ -730,13 +723,11 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 
 	return;
 };
-#undef DEBUG_function_name
 
 
 /*
  * print EUI-64 information
  */
-#define DEBUG_function_name "showinfo/print_eui64"
 static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST], helpstring[NI_MAXHOST];
 	uint32_t machinereadable = ( formatoptions & FORMATOPTION_machinereadable);
@@ -785,7 +776,6 @@ static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t for
 	
 	return;
 };
-#undef DEBUG_function_name
 
 /*
  * function shows information about a given IPv6 address
@@ -793,7 +783,6 @@ static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t for
  * in : *ipv6addrp = pointer to IPv6 address
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "showinfo_ipv6addr"
 int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t formatoptions) {
 	int retval = 1, i, j, flag_prefixuse, registry, r, retval_anon = 1;;
 	char tempstring[NI_MAXHOST] = "", tempstring2[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
@@ -816,15 +805,11 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	typeinfo = ipv6addr_gettype(ipv6addrp);
 	registry = libipv6calc_db_wrapper_registry_num_by_ipv6addr(ipv6addrp);
 
-	if ( (ipv6calc_debug & DEBUG_showinfo) != 0) {
-		fprintf(stderr, "%s: result of 'ipv6addr_getregistry': %d\n", DEBUG_function_name, registry);
-		fprintf(stderr, "%s:       %08x (result of 'ipv6addr_gettype')\n", DEBUG_function_name, (unsigned int) typeinfo);
-	};
+	DEBUGPRINT_WA(DEBUG_showinfo, "result of 'ipv6addr_getregistry': %d", registry);
+	DEBUGPRINT_WA(DEBUG_showinfo, "%08x (result of 'ipv6addr_gettype')", (unsigned int) typeinfo);
 
 	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
-		if ( (ipv6calc_debug & DEBUG_showinfo) != 0) {
-			fprintf(stderr, "%s: test: %08x : %s\n", DEBUG_function_name, (unsigned int) ipv6calc_ipv6addrtypestrings[i].number, ipv6calc_ipv6addrtypestrings[i].token);
-		};
+		DEBUGPRINT_WA(DEBUG_showinfo, "test: %08x : %s", (unsigned int) ipv6calc_ipv6addrtypestrings[i].number, ipv6calc_ipv6addrtypestrings[i].token);
 	};	
 
 	/* get full uncompressed IPv6 address */
@@ -990,9 +975,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	/* IPv6 Registry, CountryCode, AS? */
 	if ((typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) == 0) {
 		/* no anonymized address */
-		if ( (ipv6calc_debug & DEBUG_showinfo) != 0) {
-			fprintf(stderr, "%s: Check registry: %d\n", DEBUG_function_name, registry);
-		};
+		DEBUGPRINT_WA(DEBUG_showinfo, "Check registry: %d", registry);
 
 		/* get registry string */
 		retval = libipv6calc_db_wrapper_registry_string_by_ipv6addr(ipv6addrp, helpstring);
@@ -1330,7 +1313,6 @@ END:
 	retval = 0;
 	return (retval);
 };
-#undef DEBUG_function_name
 
 
 /*
@@ -1356,7 +1338,6 @@ int showinfo_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formato
  * in : *macaddrp = pointer to MAC address
  * ret: ==0: ok, !=0: error
  */
-#define DEBUG_function_name "showinfo_eui48"
 int showinfo_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formatoptions) {
 	int retval = 1;
 
@@ -1366,7 +1347,6 @@ int showinfo_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formatoption
 	retval = 0;
 	return (retval);
 };
-#undef DEBUG_function_name
 
 
 /*
