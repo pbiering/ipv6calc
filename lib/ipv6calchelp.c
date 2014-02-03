@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.50 2013/11/02 17:05:11 ds6peter Exp $
- * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calchelp.c,v 1.51 2014/02/03 07:07:04 ds6peter Exp $
+ * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -19,11 +19,6 @@
 #include "config.h"
 
 #include "libieee.h"
-#include "databases/ieee-oui/dbieee_oui.h"
-#include "databases/ieee-iab/dbieee_iab.h"
-#include "databases/ieee-oui36/dbieee_oui36.h"
-#include "databases/ipv4-assignment/dbipv4addr_assignment.h"
-#include "databases/ipv6-assignment/dbipv6addr_assignment.h"
 #include "databases/lib/libipv6calc_db_wrapper.h"
 #include "databases/lib/libipv6calc_db_wrapper_GeoIP.h"
 #include "databases/lib/libipv6calc_db_wrapper_IP2Location.h"
