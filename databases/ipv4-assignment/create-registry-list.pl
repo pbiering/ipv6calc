@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.29 2013/10/15 06:21:41 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.30 2014/02/04 07:32:28 ds6peter Exp $
 # Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -429,8 +429,10 @@ print OUT qq| * Generated     : $now_string
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
- *  Additional header file for libipv4addr.c
+ *  Additional header file for databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  */
+
+#include "libipv6calc.h"
 
 |;
 
@@ -487,7 +489,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 
 my $i = 0;
 foreach my $ipv4_hex (sort keys %data) {
-	printf OUT "\t{ 0x%s, 0x%s, %2d, \"%s\" },\n", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'mask_length'}, $data{$ipv4_hex}->{'reg'};
+	printf OUT "\t{ 0x%s, 0x%s, %2d, REGISTRY_%-10s },\n", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'mask_length'}, $data{$ipv4_hex}->{'reg'};
 
 	printf "ipv4_hex=0x%s, mask_hex=0x%s, reg=\"%s\"", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'reg'} if ($debug_hinttable);
 

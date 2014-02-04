@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.317 2014/02/03 20:48:03 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.318 2014/02/04 07:32:28 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20140204/PB
+	builtin IPv4/IPv6 databases: replace registry string by define, change related lookup code (saves space)
+	databases: update
+
 20140203/PB
 	minor improvements in Makefiles, configure checks now for openssl/md5.h
 	replace old debug code with macros in lib

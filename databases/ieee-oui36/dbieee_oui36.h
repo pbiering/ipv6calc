@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.6 2014/02/01 14:56:18 ds6peter Exp $
- * Generated     : Wed Jan 15 17:52:07 2014
+ * Version       : $Id: dbieee_oui36.h,v 1.7 2014/02/04 07:32:28 ds6peter Exp $
+ * Generated     : Mon Feb  3 22:39:41 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140115";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140203";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -247,5 +247,22 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x40A000, 0x40AFFF, "Monroe Electronics, Inc.", "MONROE-ELECTRONICS" },
 	{ 0x70B3D5, 0x190000, 0x190FFF, "Fantom Wireless, Inc.", "FANTOM-WIRELESS" },
 	{ 0x70B3D5, 0x308000, 0x308FFF, "DSD MICROTECHNOLOGY,INC.", "DSD-MICROTECHNOLOGY" },
+	{ 0x70B3D5, 0x9F4000, 0x9F4FFF, "Tband srl", "TBAND-SRL" },
+	{ 0x70B3D5, 0xECD000, 0xECDFFF, "SBS-Feintechnik GmbH & Co. KG", "SBS-FEINTECHNIK" },
+	{ 0x70B3D5, 0x918000, 0x918FFF, "Glova Rail A/S", "GLOVA-RAIL-A/S" },
+	{ 0x70B3D5, 0x42F000, 0x42FFFF, "SINTOKOGIO, LTD", "SINTOKOGIO" },
+	{ 0x70B3D5, 0xC8D000, 0xC8DFFF, "KST Technology", "KST" },
+	{ 0x70B3D5, 0x702000, 0x702FFF, "Sensor Highway Ltd", "SENSOR-HIGHWAY" },
+	{ 0x70B3D5, 0x044000, 0x044FFF, "Don Electronics Ltd", "DON-ELECTRONICS" },
+	{ 0x70B3D5, 0xDDD000, 0xDDDFFF, "BIO RAD LABORATORIES", "BIO-RAD-LABORATORIES" },
+	{ 0x70B3D5, 0xC2C000, 0xC2CFFF, "Dromont S.p.A.", "DROMONT-S-P-A" },
+	{ 0x70B3D5, 0xFD1000, 0xFD1FFF, "RedRat Ltd", "REDRAT" },
+	{ 0x70B3D5, 0x5A8000, 0x5A8FFF, "Farmobile", "FARMOBILE" },
+	{ 0x70B3D5, 0x5E8000, 0x5E8FFF, "VITEC", "VITEC" },
+	{ 0x70B3D5, 0x0FB000, 0x0FBFFF, "Cygnus LLC", "CYGNUS-LLC" },
+	{ 0x70B3D5, 0xF38000, 0xF38FFF, "Scanvaegt Nordic A/S", "SCANVAEGT-NORDIC-A/S" },
+	{ 0x70B3D5, 0x8B1000, 0x8B1FFF, "M-Tech Innovations Ltd", "M-TECH-INNOVATIONS" },
+	{ 0x70B3D5, 0x9A7000, 0x9A7FFF, "Honeywell", "HONEYWELL" },
+	{ 0x70B3D5, 0x4C8000, 0x4C8FFF, "Hosokawa Micron Powder Systems", "HOSOKAWA-MICRON-POWDER" },
 
 };

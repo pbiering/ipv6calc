@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.9 2013/10/15 06:21:42 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.10 2014/02/04 07:32:28 ds6peter Exp $
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
 #              2005-2013 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
 # License    : GNU GPL v2
@@ -318,8 +318,10 @@ print OUT qq| * Generated     : $now_string
  * Data copyright: IANA ARIN RIPENCC APNIC LACNIC AFRINIC
  *
  * Information:
- *  Additional header file for libipv6addr.c
+ *  Additional header file for databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  */
+
+#include "libipv6calc.h"
 
 |;
 
@@ -340,7 +342,7 @@ static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 
 
 foreach my $ipv6 (sort keys %data) {
-	printf OUT "\t{ 0x%s, 0x%s, 0x%s, 0x%s, %3d, \"%s\" },\n", $data{$ipv6}->{'ipv6_00_31'}, $data{$ipv6}->{'ipv6_32_63'}, $data{$ipv6}->{'mask_00_31'}, $data{$ipv6}->{'mask_32_63'}, $data{$ipv6}->{'mask_length'}, $data{$ipv6}->{'reg'};
+	printf OUT "\t{ 0x%s, 0x%s, 0x%s, 0x%s, %3d, REGISTRY_%-10s },\n", $data{$ipv6}->{'ipv6_00_31'}, $data{$ipv6}->{'ipv6_32_63'}, $data{$ipv6}->{'mask_00_31'}, $data{$ipv6}->{'mask_32_63'}, $data{$ipv6}->{'mask_length'}, $data{$ipv6}->{'reg'};
 };
 
 print OUT qq|};

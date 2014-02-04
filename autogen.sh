@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.32 2014/02/03 20:58:49 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.33 2014/02/04 07:32:28 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -63,6 +63,11 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-shared"
 		SKIP_STATIC=1
+		;;
+	    '--enable-bundled-md5'|'--enable-bundled-getopt')
+		# whitelisted
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $1"
+		shift
 		;;
 	    '-W')
 		shift

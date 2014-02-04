@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.104 2014/02/03 21:22:46 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.105 2014/02/04 07:32:28 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -249,7 +249,7 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 	char tempstring[NI_MAXHOST] = "";
 	char *CountryCode, *CountryName;
 
-	DEBUGPRINT_NA(DEBUG_showinfo, "Called addrstring=%s formatoptions=0x%08x additionalstring=%s version=%d", addrstring, formatoptions, additionalstring, version);
+	DEBUGPRINT_WA(DEBUG_showinfo, "Called addrstring=%s formatoptions=0x%08x additionalstring=%s version=%d", addrstring, formatoptions, additionalstring, version);
 
 	if (version == 4) {
 		if (libipv6calc_db_wrapper_IP2Location_has_features(IPV6CALC_DB_IPV4_TO_CC) != 1) {
@@ -349,7 +349,7 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 		libipv6calc_db_wrapper_IP2Location_free_record(record);
 	} else {
 		if ((formatoptions & FORMATOPTION_quiet) == 0) {
-			ERRORPRINT("IP2Location returned no record for address: %s", addrstring);
+			ERRORPRINT_WA("IP2Location returned no record for address: %s", addrstring);
 		};
 	};
 

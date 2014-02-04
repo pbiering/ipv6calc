@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.21 2013/10/31 21:24:46 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.22 2014/02/04 07:32:29 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -49,12 +49,14 @@ typedef struct {
 /* Registries */
 #define REGISTRY_APNIC        0x02
 #define REGISTRY_RIPE         0x03
+#define REGISTRY_RIPENCC      0x03
 #define REGISTRY_LACNIC       0x04
 #define REGISTRY_AFRINIC      0x05
 #define REGISTRY_ARIN         0x06
 
 #define REGISTRY_6BONE        0x08
 #define REGISTRY_IANA         0x09
+#define REGISTRY_6TO4         0x0c
 #define REGISTRY_RESERVED     0x0e
 #define REGISTRY_UNKNOWN      0x0f
 
