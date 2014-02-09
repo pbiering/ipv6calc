@@ -1,12 +1,15 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.24 2003/11/22 15:48:04 peter Exp $
+# Version: $Id: TODO,v 1.25 2014/02/09 18:45:05 ds6peter Exp $
 
 TODO list
 =========
 
 Short term
 ----------
+
+Data libraries
+* support external db files for BuiltIn databases (targeted for 0.97.0)
 
 
 Middle term
@@ -21,10 +24,6 @@ Format:
 * octal:
     should also be understandable by input (currently, only output is supported)
 
-Data libraries
-* print date of last update in version information
-* optional usage of GeoIP library
-
 IEEE/OUI library:
 * perhaps more filtering of unnecessary information
 
@@ -38,9 +37,6 @@ Help:
 
 ipv6calcweb.cgi:
 * add alarm wrapper around call of ipv6calc
-
-Creating a dedicated library: libipv6calc.so
- (if someone requires it)
 
 Documentation:
 * add more information to USAGE docs
@@ -62,4 +58,3 @@ following forms (and convert between them):
   -binary labels
   -comparing addresses, v4/v4, v4/v6
   -not use malloc or strxxx functions.
-

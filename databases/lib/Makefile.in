@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : lib/Makefile
-# Version    : $Id: Makefile.in,v 1.9 2014/02/03 07:07:04 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.10 2014/02/09 18:45:07 ds6peter Exp $
 # Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -40,6 +40,7 @@ $(OBJS):	libipv6calc_db_wrapper.h \
 		libipv6calc_db_wrapper_BuiltIn.h \
 		../../lib/libipv6calcdebug.h \
 		../ieee-oui/dbieee_oui.h \
+		../ieee-oui/dbieee_oui36.h \
 		../ieee-iab/dbieee_iab.h \
 		../ipv4-assignment/dbipv4addr_assignment.h \
 		../ipv6-assignment/dbipv6addr_assignment.h \

@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.318 2014/02/04 07:32:28 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.319 2014/02/09 18:45:05 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,14 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20140209/PB
+	add tool for checking database lookup code against raw database information
+	databases: update and fix of IPv4 data prep step befor aggretation (found during db lookup tests)
+	ipv6calc: add input type "asn" for testing ASN database lookups
+
+20140205/PB
+	change lookup code for IPv4 registry assignment to binary sort, fix bug in binary sort for AS lookup
+
 20140204/PB
 	builtin IPv4/IPv6 databases: replace registry string by define, change related lookup code (saves space)
 	databases: update

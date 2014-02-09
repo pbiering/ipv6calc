@@ -2,10 +2,12 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.14 2014/02/03 06:45:20 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.15 2014/02/09 18:45:05 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
+
+status_file="autogen-all-variants.status"
 
 autgen_variants() {
 	cat <<END | grep -v ^#
@@ -34,27 +36,56 @@ if [ -n "$options_add" ]; then
 	echo "INFO  : additional options: $options_add"
 fi
 
-# basic defaults
-nice -n 20 ionice -c idle ./autogen.sh $options_add
-if [ $? -ne 0 ]; then
-	echo "ERROR : 'autogen.sh (basic) $options_add' reports an error"
-	exit 1
+if [ ! -f "$status_file" ]; then
+	date "+%s:START:" >$status_file
+else
+	echo "INFO  : status file found: $status_file"
+
+	if grep -q ":END:" $status_file; then
+		echo "NOTICE: all runs successful, nothing more to do"
+		exit 0
+	fi
+fi
+
+if grep -q ":FINISHED:basic:$options_add:" $status_file; then
+	echo "NOTICE : skip basic run with: $options_add"
+else
+	# basic defaults
+	nice -n 20 ionice -c idle ./autogen.sh $options_add
+	if [ $? -ne 0 ]; then
+		echo "ERROR : 'autogen.sh (basic) $options_add' reports an error"
+		exit 1
+	fi
+	# add entry in log
+	date "+%s:FINISHED:basic:$options_add:" >>$status_file
 fi
 
 # variants
 for liboption in "normal" "shared"; do
 	autgen_variants | while read buildoptions; do
-		options="$buildoptions $options_add"
+		if [ -n "$options_add" ]; then
+			options="$buildoptions $options_add"
+		else
+			options="$buildoptions"
+		fi
 		case $liboption in
 		    shared)
 			options="$options -S"
 			;;
 		esac
-		nice -n 20 ionice -c idle ./autogen.sh $options
-		if [ $? -ne 0 ]; then
-			echo "ERROR : 'autogen.sh reports an error with options: $options"
-			exit 1
+
+		if grep -q ":FINISHED:variants:$options:" $status_file; then
+			echo "NOTICE : skip variant run with: $options"
+		else
+			nice -n 20 ionice -c idle ./autogen.sh $options
+			if [ $? -ne 0 ]; then
+				echo "ERROR : 'autogen.sh reports an error with options: $options"
+				exit 1
+			fi
+			# add entry in log
+			date "+%s:FINISHED:variants:$options:" >>$status_file
 		fi
+
 	done || exit 1
 done
 
@@ -62,4 +93,5 @@ done
 make distclean || exit 1
 
 echo "INFO  : congratulations, all variants built successful!"
-
+date "+%s:END:" >>$status_file
+cat $status_file

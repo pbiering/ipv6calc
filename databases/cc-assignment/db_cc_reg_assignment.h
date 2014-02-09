@@ -1,17 +1,18 @@
  /*
  * Project       : ipv6calc
  * File          : db_cc_reg_assignment.h
- * Version       : $Id: db_cc_reg_assignment.h,v 1.1 2013/10/13 16:19:34 ds6peter Exp $
- * Generated     : Sun Oct 13 07:48:55 2013
+ * Version       : $Id: db_cc_reg_assignment.h,v 1.2 2014/02/09 18:45:06 ds6peter Exp $
+ * Generated     : Sun Feb  9 17:40:54 2014
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
  *  Additional header file for databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  */
 
-static const char *db_cc_registry_status = "AFRINIC/20130806 APNIC/20130805 ARIN/20130805 LACNIC/20130805 RIPENCC/20130805";
+static const char *db_cc_registry_status = "AFRINIC/20140209 APNIC/20140207 ARIN/20140209 LACNIC/20140207 RIPENCC/20140208";
 
 static const s_cc_reg_assignment cc_reg_assignment[] = {
+	{ "", REGISTRY_ARIN     },
 	{ "AD", REGISTRY_RIPE     },
 	{ "AE", REGISTRY_RIPE     },
 	{ "AF", REGISTRY_APNIC    },
@@ -220,7 +221,7 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "TG", REGISTRY_AFRINIC  },
 	{ "TH", REGISTRY_APNIC    },
 	{ "TJ", REGISTRY_RIPE     },
-	{ "TK", REGISTRY_RIPE     },
+	{ "TK", REGISTRY_APNIC    },
 	{ "TL", REGISTRY_APNIC    },
 	{ "TM", REGISTRY_RIPE     },
 	{ "TN", REGISTRY_AFRINIC  },
@@ -246,6 +247,7 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "WF", REGISTRY_APNIC    },
 	{ "WS", REGISTRY_APNIC    },
 	{ "YE", REGISTRY_RIPE     },
+	{ "YT", REGISTRY_AFRINIC  },
 	{ "ZA", REGISTRY_AFRINIC  },
 	{ "ZM", REGISTRY_AFRINIC  },
 	{ "ZW", REGISTRY_AFRINIC  },
@@ -791,7 +793,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  536  QK
 	{ REGISTRY_UNKNOWN  }, //  537  RK
 	{ REGISTRY_RIPE     }, //  538  SK
-	{ REGISTRY_RIPE     }, //  539  TK
+	{ REGISTRY_APNIC    }, //  539  TK
 	{ REGISTRY_UNKNOWN  }, //  540  UK
 	{ REGISTRY_UNKNOWN  }, //  541  VK
 	{ REGISTRY_UNKNOWN  }, //  542  WK
@@ -1030,7 +1032,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  775  VT
 	{ REGISTRY_UNKNOWN  }, //  776  WT
 	{ REGISTRY_UNKNOWN  }, //  777  XT
-	{ REGISTRY_UNKNOWN  }, //  778  YT
+	{ REGISTRY_AFRINIC  }, //  778  YT
 	{ REGISTRY_UNKNOWN  }, //  779  ZT
 	{ REGISTRY_APNIC    }, //  780  AU
 	{ REGISTRY_UNKNOWN  }, //  781  BU

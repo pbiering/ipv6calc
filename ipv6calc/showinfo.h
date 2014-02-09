@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.h
- * Version    : $Id: showinfo.h,v 1.20 2013/10/18 06:23:42 ds6peter Exp $
- * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: showinfo.h,v 1.21 2014/02/09 18:45:07 ds6peter Exp $
+ * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for showinfo.c
@@ -45,4 +45,5 @@ extern int  showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, const uint32_t
 extern int  showinfo_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formatoptions);
 extern int  showinfo_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formatoptions);
 extern int  showinfo_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t formatoptions);
+extern int  showinfo_asn(const uint32_t asn, const uint32_t formatoptions);
 extern void showinfo_availabletypes(void);

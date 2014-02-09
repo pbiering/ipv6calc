@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.30 2014/02/04 07:32:28 ds6peter Exp $
-# Copyright  : 2002-2012 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: create-registry-list.pl,v 1.31 2014/02/09 18:45:06 ds6peter Exp $
+# Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
 # Information:
@@ -52,6 +52,7 @@ my (@arin_agg, @apnic_agg, @ripencc_agg, @iana_agg, @lacnic_agg, @afrinic_agg);
 my $global_file = "../registries/iana/ipv4-address-space.xml";
 
 my %assignments;
+my %assignments_iana;
 
 my $max_prefixlength_not_arin = 0;
 
@@ -147,45 +148,53 @@ sub proceed_global() {
 
 	for my $e1 ($xd->{'record'}) {
 	    for my $e2 (@$e1) {
-		#print $$e2{'prefix'} . ":" . $$e2{'designation'} . "\n";
+		print $$e2{'prefix'} . ":" . $$e2{'designation'} . ":" . $$e2{'status'} . "\n" if ($debug);
 
 		my ($block, $length) = split /\//, $$e2{'prefix'};
 		$ipv4_start = int($block);
 		$ipv4_end = int($block);
 
-		my $reg = uc($$e2{'designation'});
-		$reg =~ s/RIPE NCC/RIPENCC/g;
-		$reg =~ s/(IANA) .*/$1/g;
-		$reg =~ s/.* (RIPENCC)/$1/g;
+		my $reg;
 
-		if ( ($reg ne "ARIN") && ($reg ne "APNIC") && ($reg ne "RIPENCC") && ($reg ne "IANA") && ($reg ne "LACNIC") && ($reg ne "AFRINIC")) {
-			$reg = "ARIN"; # default now
-			# die "Unsupported registry: " . $reg\n";
+		if (uc($$e2{'status'}) eq "RESERVED") {
+			$reg = "IANA";
+		} else {			
+			$reg = uc($$e2{'designation'});
+			$reg =~ s/RIPE NCC/RIPENCC/g;
+			$reg =~ s/(IANA) .*/$1/g;
+			$reg =~ s/.* (RIPENCC)/$1/g;
+
+			if ( ($reg ne "ARIN") && ($reg ne "APNIC") && ($reg ne "RIPENCC") && ($reg ne "IANA") && ($reg ne "LACNIC") && ($reg ne "AFRINIC")) {
+				$reg = "ARIN"; # default now
+				# die "Unsupported registry: " . $reg\n";
+			};
 		};
 
 		#print $$e2{'prefix'} . ":" . $reg . "\n";
 
 		for ($ipv4 = $ipv4_start; $ipv4 <= $ipv4_end; $ipv4++) {
 			$ipv4 = $ipv4 . ".0.0.0";
+
+			$assignments_iana{sprintf("%08x", &ipv4_to_dec($ipv4))} = $reg;
 	
 			if ($reg eq "ARIN" ) {
 				#print "Push ARIN: " . $ipv4 . "/" . $length . "\n";
-				push @arin, $ipv4 . "/" . $length;
+				#push @arin, $ipv4 . "/" . $length;
 			} elsif ($reg eq "APNIC" ) {
 				#print "Push APNIC: " . $ipv4 . "/" . $length . "\n";
-				push @apnic, $ipv4 . "/" . $length;
+				#push @apnic, $ipv4 . "/" . $length;
 			} elsif ($reg eq "RIPENCC" ) {
 				#print "Push RIPENCC: " . $ipv4 . "/" . $length . "\n";
-				push @ripencc, $ipv4 . "/" . $length;
+				#push @ripencc, $ipv4 . "/" . $length;
 			} elsif ($reg eq "IANA" ) {
 				#print "Push IANA: " . $ipv4 . "/" . $length . "\n";
-				push @iana, $ipv4 . "/" . $length;
+				#push @iana, $ipv4 . "/" . $length;
 			} elsif ($reg eq "LACNIC" ) {
 				#print "Push LACNIC: " . $ipv4 . "/" . $length . "\n";
-				push @lacnic, $ipv4 . "/" . $length;
+				#push @lacnic, $ipv4 . "/" . $length;
 			} elsif ($reg eq "AFRINIC" ) {
 				#print "Push AFRINIC: " . $ipv4 . "/" . $length . "\n";
-				push @afrinic, $ipv4 . "/" . $length;
+				#push @afrinic, $ipv4 . "/" . $length;
 			} else {
 				die "Unsupported registry";	
 			};
@@ -297,20 +306,21 @@ foreach my $file (@files) {
 		# now the harder work...
 		my $newnumbers = $numbers;
 		while ($newnumbers > 0) {
-			#printf "Newnumbers: %d   Length: %d\n", $newnumbers, $check_length;
+			printf "Newnumbers: %d   Length: %d (ipv4=$ipv4)\n", $newnumbers, $check_length if ($debug);
 
 			while ( $newnumbers < $subnet_powers{$check_length}->{'numbers'} ) {
 				$check_length++;
 			};
 
 			if ( ( $ipv4_dec & (~ $subnet_powers{$check_length}->{'mask'}) ) == 0 ) {
-				push @$parray, $ipv4 . "/" . $check_length;
-				#printf "%s/%d=%s (partially catch case 1b or 2: %d)\n", &dec_to_ipv4($ipv4_dec), $check_length, $reg, $subnet_powers{$check_length}->{'numbers'};
+				push @$parray, dec_to_ipv4($ipv4_dec) . "/" . $check_length;
+				printf "%s/%d=%s (partially catch case 1b or 2: %d)\n", &dec_to_ipv4($ipv4_dec), $check_length, $reg, $subnet_powers{$check_length}->{'numbers'} if ($debug);
 				$newnumbers -= $subnet_powers{$check_length}->{'numbers'};
 				$ipv4_dec += $subnet_powers{$check_length}->{'numbers'};
 
 				next;
 			} else {
+				#printf "Newnumbers: %d   Length: %d (ipv4=$ipv4)\n", $newnumbers, $check_length;
 				$check_length++;
 				if ($check_length > 32) {
 					die "Shouldn't happen";
@@ -337,17 +347,15 @@ sub proceed_array($$) {
 	my $pid = open2(AGGREGATE_READ, AGGREGATE_WRITE, "aggregate -t") || die "cannot for: $!";
 	
 	foreach my $entry (@$parray) {
-		# filter out longer prefix length
-
-
-
 		print AGGREGATE_WRITE $entry . "\n";
+		print "DEBUG : write to aggregate: $entry\n" if ($debug);
 	};
 	close(AGGREGATE_WRITE);
 
 	while (<AGGREGATE_READ>) {
 		my $line = $_;
 		chomp $line;
+		print "DEBUG : read from aggregate: $line\n" if ($debug);
 		push @$parray_agg, $line;
 	};
 
@@ -364,8 +372,8 @@ print "Aggregate RIPENCC\n";
 print "Aggregate APNIC\n";
 &proceed_array(\@apnic, \@apnic_agg);
 
-print "Aggregate IANA\n";
-&proceed_array(\@iana, \@iana_agg);
+#print "Aggregate IANA\n";
+#&proceed_array(\@iana, \@iana_agg);
 
 print "Aggregate LACNIC\n";
 &proceed_array(\@lacnic, \@lacnic_agg);
@@ -468,7 +476,7 @@ sub fill_data($$) {
 		$data{$ipv4_hex}->{'reg'} = $reg;
 
 		printf "ipv4_hex=0x%s, mask_hex=0x%s, reg=\"%s\" length=%d\n", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'reg'}, $length if ($debug);
-		die if ($debug);
+		#die if ($debug);
 	};
 };
 
@@ -477,7 +485,7 @@ sub fill_data($$) {
 &fill_data(\@arin_agg, "ARIN");
 &fill_data(\@lacnic_agg, "LACNIC");
 &fill_data(\@afrinic_agg, "AFRINIC");
-&fill_data(\@iana_agg, "IANA");
+#&fill_data(\@iana_agg, "IANA");
 
 my %data_hint;
 
@@ -489,47 +497,47 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 
 my $i = 0;
 foreach my $ipv4_hex (sort keys %data) {
-	printf OUT "\t{ 0x%s, 0x%s, %2d, REGISTRY_%-10s },\n", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'mask_length'}, $data{$ipv4_hex}->{'reg'};
+printf OUT "\t{ 0x%s, 0x%s, %2d, REGISTRY_%-10s },\n", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'mask_length'}, $data{$ipv4_hex}->{'reg'};
 
-	printf "ipv4_hex=0x%s, mask_hex=0x%s, reg=\"%s\"", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'reg'} if ($debug_hinttable);
+printf "ipv4_hex=0x%s, mask_hex=0x%s, reg=\"%s\"", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'reg'} if ($debug_hinttable);
 
-	# Get hint range
-	if (($data{$ipv4_hex}->{'mask'} & 0xff000000) == 0xff000000) {
-		# Mask is between /8 and /32 
-		printf " hint: mask >= /8" if ($debug_hinttable);
-		my $octet_leading = substr($ipv4_hex, 0, 2);
+# Get hint range
+if (($data{$ipv4_hex}->{'mask'} & 0xff000000) == 0xff000000) {
+	# Mask is between /8 and /32 
+	printf " hint: mask >= /8" if ($debug_hinttable);
+	my $octet_leading = substr($ipv4_hex, 0, 2);
+	if (! defined $data_hint{$octet_leading}->{'start'}) {
+		# set start and end
+		$data_hint{$octet_leading}->{'start'} = $i;
+		$data_hint{$octet_leading}->{'end'} = $i;
+		printf " new to: 0x%s\n", $octet_leading if ($debug_hinttable);
+	} else {
+		# extend end
+		$data_hint{$octet_leading}->{'end'} = $i;
+		printf " append to: 0x%s\n", $octet_leading if ($debug_hinttable);
+	};
+} else {
+	# Mask is between /1 and /7, more work...
+	printf " hint: mask < /8" if ($debug_hinttable);
+	my $count = (($data{$ipv4_hex}->{'mask'} & 0xff000000) >> 24) ^ 0xff;
+	printf " count: %d", $count if ($debug_hinttable);
+	for (my $j = 0; $j <= $count; $j++) {
+		my $octet_leading = sprintf("%02x", ($data{$ipv4_hex}->{'ipv4'} >> 24) +  $j);
 		if (! defined $data_hint{$octet_leading}->{'start'}) {
 			# set start and end
 			$data_hint{$octet_leading}->{'start'} = $i;
 			$data_hint{$octet_leading}->{'end'} = $i;
-			printf " new to: 0x%s\n", $octet_leading if ($debug_hinttable);
+			printf " hint: new to 0x%s", $octet_leading if ($debug_hinttable);
 		} else {
 			# extend end
 			$data_hint{$octet_leading}->{'end'} = $i;
-			printf " append to: 0x%s\n", $octet_leading if ($debug_hinttable);
+			printf " hint: append to 0x%s", $octet_leading if ($debug_hinttable);
 		};
-	} else {
-		# Mask is between /1 and /7, more work...
-		printf " hint: mask < /8" if ($debug_hinttable);
-		my $count = (($data{$ipv4_hex}->{'mask'} & 0xff000000) >> 24) ^ 0xff;
-		printf " count: %d", $count if ($debug_hinttable);
-		for (my $j = 0; $j <= $count; $j++) {
-			my $octet_leading = sprintf("%02x", ($data{$ipv4_hex}->{'ipv4'} >> 24) +  $j);
-			if (! defined $data_hint{$octet_leading}->{'start'}) {
-				# set start and end
-				$data_hint{$octet_leading}->{'start'} = $i;
-				$data_hint{$octet_leading}->{'end'} = $i;
-				printf " hint: new to 0x%s", $octet_leading if ($debug_hinttable);
-			} else {
-				# extend end
-				$data_hint{$octet_leading}->{'end'} = $i;
-				printf " hint: append to 0x%s", $octet_leading if ($debug_hinttable);
-			};
-		};
-		printf "\n" if ($debug_hinttable);
 	};
+	printf "\n" if ($debug_hinttable);
+};
 
-	$i++;
+$i++;
 };
 
 print OUT qq|
@@ -561,5 +569,19 @@ print OUT qq|
 };
 |;
 
+
+# IANA assignment
+print OUT qq|
+static const s_ipv4addr_assignment dbipv4addr_assignment_iana[] = {
+|;
+
+
+foreach my $ipv4_hex (sort keys %assignments_iana) {
+	printf OUT "\t{ 0x%s, %s, %2d, REGISTRY_%-10s },\n", $ipv4_hex, "0xff000000", "8", $assignments_iana{$ipv4_hex};
+};
+
+print OUT qq|
+};
+|;
 
 print "Finished\n";

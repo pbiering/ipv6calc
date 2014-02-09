@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.8 2014/02/04 07:32:28 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.9 2014/02/09 18:45:07 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -193,33 +193,35 @@ void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level_verbos
 
 // get registry number by AS number
 int libipv6calc_db_wrapper_BuiltIn_registry_num_by_as_num32(const uint32_t as_num32) {
-	int i = -1, i_new, i_old, r = -1;
 
 	int max = MAXENTRIES_ARRAY(dbasn_assignment);
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with as_num32=%d max=%d", as_num32, max);
 
 	// binary search
-	i_new = max / 2;
-	i_old = 0;
+	int i, r = -1;
+	int i_min = 0;
+	int i_max = max;
+	int i_old = -1;
 
-	while (i != i_new) {
-		i_old = i;
-		i = i_new;
-
+	i = max / 2;
+	while (i_old != i) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search for as_num32=%d max=%d i=%d start=%d stop=%d", as_num32, max, i, dbasn_assignment[i].asn_start, dbasn_assignment[i].asn_stop);
 
 		if (as_num32 < dbasn_assignment[i].asn_start) {
-			// to high, jump down
-			i_new = i - abs(i_old - i) / 2;
+			// to high in array, jump down
+			i_max = i;
 		} else if (as_num32 > dbasn_assignment[i].asn_stop) {
-			// to low, jump up
-			i_new = i + abs(i_old - i) / 2;
+			// to low in array, jump up
+			i_min = i;
 		} else {
 			// hit
 			r = i;
 			break;
 		};
+
+		i_old = i;
+		i = (i_max - i_min) / 2 + i_min;
 	};
 
 	if (r != -1) {
@@ -527,11 +529,17 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 	};
 
 #ifdef SUPPORT_DB_IPV4
-	int i;
+	int i = -1;
 	int match = -1;
+	int i_min, i_max, i_old, max;
+
+#define BINARY_SEARCH 1
+
+#ifndef BINARY_SEARCH
 	uint32_t match_mask = 0;
 
 #define OPTIMIZED_LOOKUP 1
+
 #ifdef OPTIMIZED_LOOKUP
 	uint8_t  octet_msb;
 
@@ -540,9 +548,10 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 
 	for (i = (int) dbipv4addr_assignment_hint[octet_msb].start; i <= (int) dbipv4addr_assignment_hint[octet_msb].end; i++) {
 #else
-	for (i = 0; i < (int) ( sizeof(dbipv4addr_assignment) / sizeof(dbipv4addr_assignment[0])); i++) {
+	for (i = 0; i < (int) MAXENTRIES_ARRAY(dbipv4addr_assignment); i++) {
 #endif
 		/* run through database array */
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search for ipv4=%08x base=%08x mask=%08x i=%d", ipv4, (unsigned int) dbipv4addr_assignment[i].ipv4addr, (unsigned int) dbipv4addr_assignment[i].ipv4mask, i);
 		if ( (ipv4 & dbipv4addr_assignment[i].ipv4mask) == dbipv4addr_assignment[i].ipv4addr ) {
 			/* ok, entry matches */
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Found match number: %d", i);
@@ -564,13 +573,86 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 		};
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv4addr, "Final match number: %d", match);
-	
 	/* result */
 	if ( match > -1 ) {
 		result = dbipv4addr_assignment[match].registry;
 	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Final match number in dbipv4addr_assignment: %d (reg=%d)", match, result);
+
+#else
+	max = MAXENTRIES_ARRAY(dbipv4addr_assignment);
+
+	i_min = 0; i_max = max; i_old = -1;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with ipv4=%08x max=%d", ipv4, max);
+
+	// binary search in dbipv4addr_assignment
+	i = max / 2;
+	while (i_old != i) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search in dbipv4addr_assignment for ipv4=%08x base=%08x mask=%08x i=%d i_min=%d i_max=%d", ipv4, (unsigned int) dbipv4addr_assignment[i].ipv4addr, (unsigned int) dbipv4addr_assignment[i].ipv4mask, i, i_min, i_max);
+
+		if (ipv4 < dbipv4addr_assignment[i].ipv4addr) {
+			// to high in array, jump down
+			i_max = i;
+		} else if (ipv4 > (dbipv4addr_assignment[i].ipv4addr | (~ dbipv4addr_assignment[i].ipv4mask))) {
+			// to low in array, jump up
+			i_min = i;
+		} else {
+			// hit
+			match = i;
+			break;
+		};
+
+		i_old = i;
+		i = (i_max - i_min) / 2 + i_min;
+	};
+
+	if (match != -1) {
+		result = dbipv4addr_assignment[match].registry;
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Finished with success result (dbipv4addr_assignment): match=%d reg=%d", match, result);
+	};
 #endif
+
+	if (result == IPV4_ADDR_REGISTRY_UNKNOWN) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Nothing found in dbipv4addr_assignment, fallback now to dbipv4addr_assignment_iana");
+
+		max = MAXENTRIES_ARRAY(dbipv4addr_assignment_iana);
+
+		i_min = 0; i_max = max; i_old = -1;
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with ipv4=%08x max=%d", ipv4, max);
+
+		// binary search in dbipv4addr_assignment_iana (fallback)
+		i = max / 2;
+		while (i_old != i) {
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search in dbipv4addr_assignment_iana for ipv4=%08x ipv4_base=%08x ipv4_mask=%08x i=%d i_min=%d i_max=%d", ipv4, (unsigned int) dbipv4addr_assignment_iana[i].ipv4addr, (unsigned int) dbipv4addr_assignment_iana[i].ipv4mask, i, i_min, i_max);
+
+			if (ipv4 < dbipv4addr_assignment_iana[i].ipv4addr) {
+				// to high in array, jump down
+				i_max = i;
+			} else if (ipv4 > (dbipv4addr_assignment_iana[i].ipv4addr | (~ dbipv4addr_assignment_iana[i].ipv4mask))) {
+				// to low in array, jump up
+				i_min = i;
+			} else {
+				// hit
+				match = i;
+				break;
+			};
+
+			i_old = i;
+			i = (i_max - i_min) / 2 + i_min;
+		};
+
+		if (match != -1) {
+			result = dbipv4addr_assignment_iana[match].registry;
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Finished with success result (dbipv4addr_assignment_iana): match=%d reg=%d", match, result);
+		} else {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Finished without success");
+		};
+	};
+
+#endif // SUPPORT_DB_IPV4
 	return(result);
 };
 

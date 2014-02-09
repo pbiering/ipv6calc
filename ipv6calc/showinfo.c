@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.105 2014/02/04 07:32:28 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.106 2014/02/09 18:45:07 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -90,6 +90,9 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " EUI64_SCOPE=local-*|global    : scope of EUI-64 identifier\n");
 	fprintf(stderr, " OUI=\"...\"                     : OUI string, if available\n");
 	fprintf(stderr, " TEREDO_PORT_CLIENT=...        : port of Teredo client (NAT outside)\n");
+
+	fprintf(stderr, " AS_NUM=...                    : Autonomous System Number\n");
+	fprintf(stderr, " AS_NUM_REGISTRY=...           : Registry of AS number\n");
 #ifdef SUPPORT_IP2LOCATION
 	fprintf(stderr, " IP2LOCATION_COUNTRY_SHORT=... : Country code of IP address\n");
 	fprintf(stderr, " IP2LOCATION_COUNTRY_LONG=...  : Country of IP address\n");
@@ -632,6 +635,35 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 #endif
 	};
 
+	return;
+};
+
+
+/*
+ * print ASN information
+ */
+static void print_asn(const uint32_t asn, const uint32_t formatoptions) {
+	char tempstring[NI_MAXHOST], helpstring[NI_MAXHOST];
+	uint32_t machinereadable = ( formatoptions & FORMATOPTION_machinereadable);
+	int registry;
+
+	snprintf(helpstring, sizeof(helpstring), "%d", asn);
+
+	if ( machinereadable != 0 ) {
+		snprintf(tempstring, sizeof(tempstring), "AS_NUM=%s", helpstring);
+		printout(tempstring);
+	} else {
+		fprintf(stdout, "Autonomous System Number: %s\n", helpstring);
+	};
+
+	registry = libipv6calc_db_wrapper_registry_num_by_as_num32(asn);	
+	if ( machinereadable != 0 ) {
+		snprintf(tempstring, sizeof(tempstring), "AS_NUM_REGISTRY=%s", libipv6calc_registry_string_by_num(registry));
+		printout(tempstring);
+	} else {
+		fprintf(stdout, "Registry of Autonomous System Number: %s\n", libipv6calc_registry_string_by_num(registry));
+	};
+	
 	return;
 };
 
@@ -1359,6 +1391,23 @@ int showinfo_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t formatop
 	int retval = 1;
 
 	print_eui64(eui64addrp, formatoptions);
+	printfooter(formatoptions);
+
+	retval = 0;
+	return (retval);
+};
+
+
+/*
+ * shows information about a given ASN
+ *
+ * in : asn
+ * ret: ==0: ok, !=0: error
+ */
+int showinfo_asn(const uint32_t asn, const uint32_t formatoptions) {
+	int retval = 1;
+
+	print_asn(asn, formatoptions);
 	printfooter(formatoptions);
 
 	retval = 0;

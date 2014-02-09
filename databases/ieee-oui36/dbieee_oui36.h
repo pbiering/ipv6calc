@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.7 2014/02/04 07:32:28 ds6peter Exp $
- * Generated     : Mon Feb  3 22:39:41 2014
+ * Version       : $Id: dbieee_oui36.h,v 1.8 2014/02/09 18:45:06 ds6peter Exp $
+ * Generated     : Sun Feb  9 16:15:57 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140203";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140209";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -264,5 +264,11 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x8B1000, 0x8B1FFF, "M-Tech Innovations Ltd", "M-TECH-INNOVATIONS" },
 	{ 0x70B3D5, 0x9A7000, 0x9A7FFF, "Honeywell", "HONEYWELL" },
 	{ 0x70B3D5, 0x4C8000, 0x4C8FFF, "Hosokawa Micron Powder Systems", "HOSOKAWA-MICRON-POWDER" },
+	{ 0x70B3D5, 0xB8A000, 0xB8AFFF, "Nexus Tech. VN", "NEXUS-TECH-VN" },
+	{ 0x70B3D5, 0x3A8000, 0x3A8FFF, "JamHub Corp.", "JAMHUB" },
+	{ 0x70B3D5, 0x090000, 0x090FFF, "POWERCRAFT ELECTRONICS PVT. LTD.", "POWERCRAFT-ELECTRONICS-PVT" },
+	{ 0x70B3D5, 0x3F1000, 0x3F1FFF, "Olympus NDT Canada", "OLYMPUS-NDT-CANADA" },
+	{ 0x70B3D5, 0xCE9000, 0xCE9FFF, "KINEMETRICS", "KINEMETRICS" },
+	{ 0x70B3D5, 0xA0B000, 0xA0BFFF, "ambiHome GmbH", "AMBIHOME" },
 
 };

@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui.h
- * Version       : $Id: dbieee_oui.h,v 1.75 2014/02/04 07:32:28 ds6peter Exp $
- * Generated     : Mon Feb  3 22:39:39 2014
+ * Version       : $Id: dbieee_oui.h,v 1.76 2014/02/09 18:45:06 ds6peter Exp $
+ * Generated     : Sun Feb  9 16:15:55 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_oui_status __attribute__ ((__unused__)) = "OUI/20140203";
+/*@unused@*/ static const char* libieee_oui_status __attribute__ ((__unused__)) = "OUI/20140209";
 
 
 static const s_ieee_oui libieee_oui[] = {
@@ -2667,7 +2667,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x000A76, "Beida Jade Bird Huaguang Technology Co.,Ltd", "BEIDA-JADE-BIRD-HUAGUANG" },
 	{ 0x000A77, "Bluewire Technologies LLC", "BLUEWIRE-TECHNOLOGIES-LLC" },
 	{ 0x000A78, "OLITEC", "OLITEC" },
-	{ 0x000A79, "Allied Telesis K.K. corega division", "ALLIED-TELESIS-K-K-COREGA-DIVISION" },
+	{ 0x000A79, "corega K.K", "COREGA-K-K" },
 	{ 0x000A7A, "Kyoritsu Electric Co., Ltd.", "KYORITSU-ELECTRIC" },
 	{ 0x000A7B, "Cornelius Consult", "CORNELIUS-CONSULT" },
 	{ 0x000A7C, "Tecton Ltd", "TECTON" },
@@ -5789,7 +5789,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x0016A8, "CWT CO., LTD.", "CWT" },
 	{ 0x0016A9, "2EI", "2EI" },
 	{ 0x0016AA, "Kei Communication Technology Inc.", "KEI-COMMUNICATION" },
-	{ 0x0016AB, "PBI-Dansensor A/S", "PBI-DANSENSOR-A/S" },
+	{ 0x0016AB, "Dansensor A/S", "DANSENSOR-A/S" },
 	{ 0x0016AC, "Toho Technology Corp.", "TOHO" },
 	{ 0x0016AD, "BT-Links Company Limited", "BT-LINKS-COMPANY" },
 	{ 0x0016AE, "INVENTEL", "INVENTEL" },
@@ -9841,7 +9841,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x002684, "KISAN SYSTEM", "KISAN-SYSTEM" },
 	{ 0x002685, "Digital Innovation", "DIGITAL-INNOVATION" },
 	{ 0x002686, "Quantenna Communcations, Inc.", "QUANTENNA-COMMUNCATIONS" },
-	{ 0x002687, "ALLIED TELESIS, K.K corega division.", "ALLIED-TELESIS-K-K-COREGA-DIVISION" },
+	{ 0x002687, "Corega K.K", "COREGA-K-K" },
 	{ 0x002688, "Juniper Networks", "JUNIPER-NETWORKS" },
 	{ 0x002689, "General Dynamics Robotic Systems", "GENERAL-DYNAMICS-ROBOTIC" },
 	{ 0x00268A, "Terrier SC Ltd", "TERRIER-SC" },
@@ -13682,6 +13682,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x2421AB, "Sony Ericsson Mobile Communications", "SONY-ERICSSON-MOBILE-COMMUNICATION" },
 	{ 0x242642, "SHARP Corporation.", "SHARP" },
 	{ 0x242FFA, "Toshiba Global Commerce Solutions", "TOSHIBA-GLOBAL-COMMERCE-SOLUTIONS" },
+	{ 0x24336C, "PRIVATE", "PRIVATE" },
 	{ 0x24374C, "Cisco SPVTG", "CISCO-SPVTG" },
 	{ 0x2437EF, "EMC Electronic Media Communication SA", "EMC-MEDIA-COMMUNICATION" },
 	{ 0x243C20, "Dynamode Group", "DYNAMODE-GROUP" },
@@ -14569,6 +14570,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x48C8B6, "SysTec GmbH", "SYSTEC" },
 	{ 0x48CB6E, "Cello Electronics (UK) Ltd", "CELLO-ELECTRONICS-UK" },
 	{ 0x48D0CF, "Universal Electronics, Inc.", "UNIVERSAL-ELECTRONICS" },
+	{ 0x48D18E, "Metis Communication Co.,Ltd", "METIS-COMMUNICATION" },
 	{ 0x48D224, "Liteon Technology Corporation", "LITEON" },
 	{ 0x48D54C, "Jeda Networks", "JEDA-NETWORKS" },
 	{ 0x48D7FF, "BLANKOM Antennentechnik GmbH", "BLANKOM-ANTENNENTECHNIK" },
@@ -17081,6 +17083,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xB01B7C, "Ontrol A.S.", "ONTROL-A-S" },
 	{ 0xB01C91, "Elim Co", "ELIM" },
 	{ 0xB024F3, "Progeny Systems", "PROGENY" },
+	{ 0xB025AA, "PRIVATE", "PRIVATE" },
 	{ 0xB03495, "Apple", "APPLE" },
 	{ 0xB0358D, "Nokia Corporation", "NOKIA" },
 	{ 0xB03829, "Siliconware Precision Industries Co., Ltd.", "SILICONWARE-PRECISION-INDUSTRIES" },
@@ -17603,6 +17606,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xC46413, "CISCO SYSTEMS, INC.", "CISCO" },
 	{ 0xC467B5, "Libratone A/S", "LIBRATONE-A/S" },
 	{ 0xC46AB7, "Xiaomi Technology,Inc.", "XIAOMI" },
+	{ 0xC46BB4, "myIDkey", "MYIDKEY" },
 	{ 0xC46DF1, "DataGravity", "DATAGRAVITY" },
 	{ 0xC46E1F, "TP-LINK TECHNOLOGIES CO.,LTD", "TP-LINK-TECHNOLOGIES" },
 	{ 0xC47130, "Fon Technology S.L.", "FON-S-L" },
@@ -18042,6 +18046,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xD4AD2D, "Fiberhome Telecommunication Tech.Co.,Ltd.", "FIBERHOME-TELECOMMUNICATION-TECH" },
 	{ 0xD4AE52, "Dell Inc", "DELL" },
 	{ 0xD4B110, "HUAWEI TECHNOLOGIES CO.,LTD", "HUAWEI-TECHNOLOGIES" },
+	{ 0xD4B43E, "Messcomp Datentechnik GmbH", "MESSCOMP-DATENTECHNIK" },
 	{ 0xD4BED9, "Dell Inc", "DELL" },
 	{ 0xD4BF2D, "SE Controls Asia Pacific Ltd", "SE-CONTROLS-ASIA-PACIFIC" },
 	{ 0xD4BF7F, "UPVEL", "UPVEL" },

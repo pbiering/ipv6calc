@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.103 2014/02/03 21:22:46 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.104 2014/02/09 18:45:07 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -111,6 +111,10 @@ int main(int argc, char *argv[]) {
 	ipv6calc_ipv4addr ipv4addr, ipv4addr2;
 	ipv6calc_macaddr  macaddr;
 	ipv6calc_eui64addr  eui64addr;
+
+	/* used simple data */
+	uint32_t asn;
+	int asn_valid = 0;
 
 	/* filter structure */
 	s_ipv6calc_filter_master filter_master;
@@ -864,6 +868,13 @@ PIPE_input:
 			if (inputc < 2) { printhelp_missinginputdata(); exit(EXIT_FAILURE); };
 			break;
 
+		case FORMAT_asn:
+			if (command != CMD_showinfo) {
+				fprintf(stderr, " Input-type only supported for 'showinfo'\n");
+				exit(EXIT_FAILURE);
+			};
+			break;
+
 		case FORMAT_auto_noresult:
 		default:
 			fprintf(stderr, " Input-type isn't autodetected\n");
@@ -945,6 +956,19 @@ PIPE_input:
 			
 		case FORMAT_bitstring:
 			retval = librfc2874_bitstring_to_ipv6addrstruct(input1, &ipv6addr, resultstring);
+			argc--;
+			break;
+
+		case FORMAT_asn:
+			retval = sscanf(input1, "%d", &asn);
+			if (retval == 0) {
+				retval = -1;
+				snprintf(resultstring, sizeof(resultstring), "error parsing ASN");
+			} else {
+				DEBUGPRINT_WA(DEBUG_ipv6calc_general, "ASN parsed: %d", asn);
+				asn_valid = 1;
+				retval = 0;
+			};
 			argc--;
 			break;
 			
@@ -1358,6 +1382,8 @@ PIPE_input:
 			retval = showinfo_eui48(&macaddr, formatoptions);
 	       	} else if (eui64addr.flag_valid == 1) {
 			retval = showinfo_eui64(&eui64addr, formatoptions);
+	       	} else if (asn_valid == 1) {
+			retval = showinfo_asn(asn, formatoptions);
 		} else {
 		       	fprintf(stderr, "No valid or supported input address given!\n");
 			retval = 1;

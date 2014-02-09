@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.22 2014/02/04 07:32:29 ds6peter Exp $
- * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calc.h,v 1.23 2014/02/09 18:45:07 ds6peter Exp $
+ * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc.c
@@ -69,6 +69,7 @@ typedef struct {
         { REGISTRY_RIPE       , "RIPENCC"   },
         { REGISTRY_LACNIC     , "LACNIC"    },
         { REGISTRY_AFRINIC    , "AFRINIC"   },
+        { REGISTRY_6TO4       , "6TO4"      },
         { REGISTRY_RESERVED   , "reserved"  },
         { REGISTRY_UNKNOWN    , "unknown"   }
 };

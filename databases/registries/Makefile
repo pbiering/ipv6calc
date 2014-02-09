@@ -1,7 +1,7 @@
 # Project    : ipv6calc/databases/registries
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.6 2013/10/15 20:57:23 ds6peter Exp $
-# Copyright  : 2002-2009 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile,v 1.7 2014/02/09 18:45:07 ds6peter Exp $
+# Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces parts of ../ipv4-assignment/Makefile
 #               replaces parts of ../ipv6-assignment/Makefile
 #
@@ -18,12 +18,23 @@ download:
 		echo "Download new version of files"
 		./update-registries.sh
 
-update:
-		${MAKE} download
+update-only:
 		echo "Create database files for IPv4"
 		cd ../ipv4-assignment && ${MAKE} update
+
 		echo "Create database files for IPv6"
 		cd ../ipv6-assignment && ${MAKE} update
+
+		echo "Create database files for ASN to Registry"
+		cd ../as-assignment && ${MAKE} update
+
+		echo "Create database files for CountryCode to Registry"
+		cd ../cc-assignment && ${MAKE} update
+
+update:
+		${MAKE} download
+
+		${MAKE} update-only
 
 distclean:
 		echo "Delete data files"

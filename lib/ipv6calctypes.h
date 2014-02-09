@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.36 2013/10/31 21:24:46 ds6peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.37 2014/02/09 18:45:07 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -60,6 +60,7 @@ typedef struct {
 #define FORMAT_NUM_octal		21
 #define FORMAT_NUM_hex			22
 #define FORMAT_NUM_ipv6literal		23
+#define FORMAT_NUM_asn			29
 #define FORMAT_NUM_auto_noresult	30
 #define FORMAT_NUM_undefined		31
 
@@ -88,6 +89,7 @@ typedef struct {
 #define FORMAT_octal		(uint32_t) (1 << FORMAT_NUM_octal)
 #define FORMAT_hex		(uint32_t) (1 << FORMAT_NUM_hex)
 #define FORMAT_ipv6literal	(uint32_t) (1 << FORMAT_NUM_ipv6literal)
+#define FORMAT_asn		(uint32_t) (1 << FORMAT_NUM_asn)
 #define FORMAT_auto_noresult	(uint32_t) (1 << FORMAT_NUM_auto_noresult)
 #define FORMAT_undefined	(uint32_t) (1 << FORMAT_NUM_undefined)
 
@@ -124,6 +126,7 @@ typedef struct {
 	{ FORMAT_hex		, "hex"	 	   , "IP address in hexadecimal format", "" },
 	{ FORMAT_ipv6literal	, "ipv6literal"	   , "IPv6 address in literal", "" },
 	{ FORMAT_prefix_mac     , "prefix+mac"     , "IPv6 prefix and a MAC address", "" },
+	{ FORMAT_asn            , "asn"            , "Autonomous System Number", "" },
 };
 
 /* Format conversion matrix */
@@ -143,7 +146,8 @@ typedef struct {
 	{ FORMAT_ifinet6        , FORMAT_base85 | FORMAT_ipv6addr | FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ifinet6 },
 	{ FORMAT_iid_token      , FORMAT_iid_token },
 	{ FORMAT_ipv6logconv    , FORMAT_ipv6addrtype | FORMAT_addrtype | FORMAT_ouitype | FORMAT_any },
-	{ FORMAT_prefix_mac     , FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ipv6addr | FORMAT_base85 | FORMAT_ifinet6 }
+	{ FORMAT_prefix_mac     , FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ipv6addr | FORMAT_base85 | FORMAT_ifinet6 },
+	{ FORMAT_asn            , FORMAT_auto_noresult },
 };
 
 

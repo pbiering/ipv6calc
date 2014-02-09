@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/databases/cc-assignment
 # File       : create-cc-to-registry-list.pl
-# Version    : $Id: create-cc-to-registry-list.pl,v 1.2 2013/10/15 06:21:41 ds6peter Exp $
-# Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: create-cc-to-registry-list.pl,v 1.3 2014/02/09 18:45:06 ds6peter Exp $
+# Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
 # Information:
@@ -56,6 +56,7 @@ foreach my $file (@files) {
 		if ($line =~ /^2(\.[0-9])?\|([^\|]+)\|.*\|([0-9]{8})\|[^\|]*$/o) {
 			$date_created{uc($2)} = $3;
 			print "Found create date: " . $3 . "\n";
+			$flag_found_date = 1;
 			next;
 		};
 
