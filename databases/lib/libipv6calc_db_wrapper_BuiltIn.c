@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.9 2014/02/09 18:45:07 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.10 2014/02/10 07:34:41 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -533,54 +533,6 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 	int match = -1;
 	int i_min, i_max, i_old, max;
 
-#define BINARY_SEARCH 1
-
-#ifndef BINARY_SEARCH
-	uint32_t match_mask = 0;
-
-#define OPTIMIZED_LOOKUP 1
-
-#ifdef OPTIMIZED_LOOKUP
-	uint8_t  octet_msb;
-
-	/* lookup in hint table for faster start */
-	octet_msb = ipv4addr_getoctet(ipv4addrp, 0);
-
-	for (i = (int) dbipv4addr_assignment_hint[octet_msb].start; i <= (int) dbipv4addr_assignment_hint[octet_msb].end; i++) {
-#else
-	for (i = 0; i < (int) MAXENTRIES_ARRAY(dbipv4addr_assignment); i++) {
-#endif
-		/* run through database array */
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search for ipv4=%08x base=%08x mask=%08x i=%d", ipv4, (unsigned int) dbipv4addr_assignment[i].ipv4addr, (unsigned int) dbipv4addr_assignment[i].ipv4mask, i);
-		if ( (ipv4 & dbipv4addr_assignment[i].ipv4mask) == dbipv4addr_assignment[i].ipv4addr ) {
-			/* ok, entry matches */
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Found match number: %d", i);
-
-			/* have already found one */
-			if ( match != -1 ) {
-				if ( dbipv4addr_assignment[i].ipv4mask > match_mask ) {
-					/* this entry wins */
-					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Overwrite match number: %d (old: %d)", i, match);
-					match = i;
-					match_mask = dbipv4addr_assignment[i].ipv4mask;
-				} else {
-					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "No overwriting of match number: %d (candidate: %d)", match, i);
-				};
-			} else {
-				match = i;
-				match_mask = dbipv4addr_assignment[i].ipv4mask;
-			};
-		};
-	};
-
-	/* result */
-	if ( match > -1 ) {
-		result = dbipv4addr_assignment[match].registry;
-	};
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Final match number in dbipv4addr_assignment: %d (reg=%d)", match, result);
-
-#else
 	max = MAXENTRIES_ARRAY(dbipv4addr_assignment);
 
 	i_min = 0; i_max = max; i_old = -1;
@@ -612,7 +564,6 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 		result = dbipv4addr_assignment[match].registry;
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Finished with success result (dbipv4addr_assignment): match=%d reg=%d", match, result);
 	};
-#endif
 
 	if (result == IPV4_ADDR_REGISTRY_UNKNOWN) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Nothing found in dbipv4addr_assignment, fallback now to dbipv4addr_assignment_iana");

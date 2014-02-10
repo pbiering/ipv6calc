@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.15 2014/02/09 18:45:05 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.16 2014/02/10 07:34:41 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -90,8 +90,12 @@ for liboption in "normal" "shared"; do
 done
 
 
-make distclean || exit 1
-
 echo "INFO  : congratulations, all variants built successful!"
 date "+%s:END:" >>$status_file
 cat $status_file
+
+make distclean >/dev/null 
+if [ $? -ne 0 ]
+	echo "ERROR : 'make distclean' failed"
+	exit 1
+fi

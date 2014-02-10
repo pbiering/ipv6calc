@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.31 2014/02/09 18:45:06 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.32 2014/02/10 07:34:41 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -24,7 +24,6 @@ if (! -x "/usr/bin/aggregate") {
 	exit 1;
 };
 
-my $debug_hinttable = 0;
 my $debug = 0;
 
 
@@ -487,94 +486,23 @@ sub fill_data($$) {
 &fill_data(\@afrinic_agg, "AFRINIC");
 #&fill_data(\@iana_agg, "IANA");
 
-my %data_hint;
-
 # Main data structure
 print OUT qq|
 static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 |;
 
-
-my $i = 0;
 foreach my $ipv4_hex (sort keys %data) {
-printf OUT "\t{ 0x%s, 0x%s, %2d, REGISTRY_%-10s },\n", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'mask_length'}, $data{$ipv4_hex}->{'reg'};
-
-printf "ipv4_hex=0x%s, mask_hex=0x%s, reg=\"%s\"", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'reg'} if ($debug_hinttable);
-
-# Get hint range
-if (($data{$ipv4_hex}->{'mask'} & 0xff000000) == 0xff000000) {
-	# Mask is between /8 and /32 
-	printf " hint: mask >= /8" if ($debug_hinttable);
-	my $octet_leading = substr($ipv4_hex, 0, 2);
-	if (! defined $data_hint{$octet_leading}->{'start'}) {
-		# set start and end
-		$data_hint{$octet_leading}->{'start'} = $i;
-		$data_hint{$octet_leading}->{'end'} = $i;
-		printf " new to: 0x%s\n", $octet_leading if ($debug_hinttable);
-	} else {
-		# extend end
-		$data_hint{$octet_leading}->{'end'} = $i;
-		printf " append to: 0x%s\n", $octet_leading if ($debug_hinttable);
-	};
-} else {
-	# Mask is between /1 and /7, more work...
-	printf " hint: mask < /8" if ($debug_hinttable);
-	my $count = (($data{$ipv4_hex}->{'mask'} & 0xff000000) >> 24) ^ 0xff;
-	printf " count: %d", $count if ($debug_hinttable);
-	for (my $j = 0; $j <= $count; $j++) {
-		my $octet_leading = sprintf("%02x", ($data{$ipv4_hex}->{'ipv4'} >> 24) +  $j);
-		if (! defined $data_hint{$octet_leading}->{'start'}) {
-			# set start and end
-			$data_hint{$octet_leading}->{'start'} = $i;
-			$data_hint{$octet_leading}->{'end'} = $i;
-			printf " hint: new to 0x%s", $octet_leading if ($debug_hinttable);
-		} else {
-			# extend end
-			$data_hint{$octet_leading}->{'end'} = $i;
-			printf " hint: append to 0x%s", $octet_leading if ($debug_hinttable);
-		};
-	};
-	printf "\n" if ($debug_hinttable);
-};
-
-$i++;
+	printf OUT "\t{ 0x%s, 0x%s, %2d, REGISTRY_%-10s },\n", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'mask_length'}, $data{$ipv4_hex}->{'reg'};
 };
 
 print OUT qq|
 };
 |;
-
-# Hint table data structure
-print OUT qq|
-static const s_ipv4addr_assignment_hint dbipv4addr_assignment_hint[256] = {
-|;
-
-for (my $j = 0; $j < 256; $j++) {
-	my $string = sprintf("%02x", $j);
-	my $value_start;
-	my $value_end;
-
-	if (defined $data_hint{$string}) {
-		$value_start = $data_hint{$string}->{'start'};
-		$value_end = $data_hint{$string}->{'end'};
-	} else {
-		$value_start = -1;
-		$value_end = -1;
-	};
-
-	printf OUT "\t{ 0x%s, %d , %d },\n", $string, $value_start, $value_end;
-};
-
-print OUT qq|
-};
-|;
-
 
 # IANA assignment
 print OUT qq|
 static const s_ipv4addr_assignment dbipv4addr_assignment_iana[] = {
 |;
-
 
 foreach my $ipv4_hex (sort keys %assignments_iana) {
 	printf OUT "\t{ 0x%s, %s, %2d, REGISTRY_%-10s },\n", $ipv4_hex, "0xff000000", "8", $assignments_iana{$ipv4_hex};

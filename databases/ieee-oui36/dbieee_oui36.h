@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.8 2014/02/09 18:45:06 ds6peter Exp $
- * Generated     : Sun Feb  9 16:15:57 2014
+ * Version       : $Id: dbieee_oui36.h,v 1.9 2014/02/10 07:34:41 ds6peter Exp $
+ * Generated     : Mon Feb 10 08:02:31 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140209";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140210";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {

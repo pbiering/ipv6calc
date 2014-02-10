@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.31 2014/02/04 07:32:28 ds6peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.32 2014/02/10 07:34:41 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
@@ -34,13 +34,6 @@ typedef struct {
 	const uint8_t  prefixlength;	/* prefix length (0-32) 8 bit */
 	const uint8_t  registry;
 } s_ipv4addr_assignment;
-
-/* IPv4 address assignment hint structure */
-typedef struct {
-	const uint8_t  octet_msb;
-	const unsigned int start;
-	const unsigned int end;
-} s_ipv4addr_assignment_hint;
 
 
 typedef struct {
