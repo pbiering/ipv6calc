@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.104 2014/02/09 18:45:07 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.105 2014/02/11 07:09:56 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -42,13 +42,8 @@
 #include "libeui64.h"
 #include "config.h"
 #include "libieee.h"
-#include "../databases/ieee-oui/dbieee_oui.h"
-#include "../databases/ieee-oui36/dbieee_oui36.h"
-#include "../databases/ieee-iab/dbieee_iab.h"
 #include "libipv4addr.h"
-#include "../databases/ipv4-assignment/dbipv4addr_assignment.h"
 #include "libipv6addr.h"
-#include "../databases/ipv6-assignment/dbipv6addr_assignment.h"
 
 #include "../databases/lib/libipv6calc_db_wrapper.h"
 
