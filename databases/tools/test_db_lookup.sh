@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_db_lookup.sh
-# Version    : $Id: test_db_lookup.sh,v 1.2 2014/02/10 07:34:41 ds6peter Exp $
+# Version    : $Id: test_db_lookup.sh,v 1.3 2014/02/11 06:51:05 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test raw database entries against ipv6calc output (to check, whether BuiltIn databases are correctly aggregated)
@@ -167,19 +167,48 @@ test_asn_registry() {
 
 			if [ "$ipv6calc_output" != "$ipv6calc_output_expected" ]; then
 				echo "ERROR : output >$ipv6calc_output< not matching expected >$ipv6calc_output_expected< ($asn)"
-				exit 1
+				#exit 1
 			fi
 
 			if [ $counter -eq $trigger ]; then
 				percent=$[ $counter * 100 / $num ]
-				echo "INFO  : registry=$registry already tested: $counter/$num $percent% ($asn)"
+				#echo "INFO  : registry=$registry already tested: $counter/$num $percent% ($asn)"
 				trigger=$[ $trigger + $interval ]
 			fi
 		done || return 1
 	done || return 1
 }
 
-test_asn_registry || exit 1
-#test_ipv4_registry || exit 1
+help() {
+	echo "-a  : test_asn_registry"
+	echo "-4  : test_ipv4_registry"
+}
+
+if [ -z "$1" ]; then
+	help
+	exit 0
+fi
+
+
+while getopts ":a4" opt; do
+        case $opt in
+            a)
+		test_asn=1
+                ;;
+            4)
+		test_ipv4=1
+                ;;
+            \?|h)
+                echo "Invalid option: -$OPTARG" >&2
+		help
+		exit 0
+                ;;
+        esac
+done
+
+shift $[ $OPTIND - 1 ]
+
+[ "$test_asn"  = "1" ] && test_asn_registry  || exit 1
+[ "$test_ipv4" = "1" ] && test_ipv6_registry || exit 1
 
 echo "INFO  : all defined database tests successful"
