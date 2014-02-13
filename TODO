@@ -1,9 +1,13 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.25 2014/02/09 18:45:05 ds6peter Exp $
+# Version: $Id: TODO,v 1.26 2014/02/13 21:55:18 ds6peter Exp $
 
 TODO list
 =========
+
+Next
+----------
+Show on -vv whether md5 and getopt were compiled in or shared lib is used
 
 Short term
 ----------

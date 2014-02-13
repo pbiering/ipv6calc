@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.320 2014/02/11 06:51:05 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.321 2014/02/13 21:55:18 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20140213/PB
+	prepend /sbin to ldconfig call
+	tag version 0.96.0
+
 20140211/PB
 	databases: update
 
