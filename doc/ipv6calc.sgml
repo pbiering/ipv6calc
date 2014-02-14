@@ -5,21 +5,21 @@
 <!ENTITY % output.print.bmp "IGNORE">
  ]>
 
-<!-- SGML file was created by LyX 2.0.6
+<!-- SGML file was created by LyX 2.0.7
   See http://www.lyx.org/ for more information -->
 <article lang="en">
 <articleinfo>
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>4.0</revnumber> <date>2013-11-02</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>4.0</revnumber> <date>2014-02-13</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freshmeat.net/projects/ipv6calc/">freshmeat / ipv6calc</ulink> page (not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 0.95.0 (released &gt; 2013-11-02)</para></sect2><sect2>
+<para>Latest version since last update of this page is 0.96.0 (released 2014-02-13)</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
 <listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem></itemizedlist></sect2><sect2>
@@ -32,27 +32,37 @@
 <title>License</title>
 <para>The program is published under the GNU GPL version 2.</para></sect1><sect1>
 <title>Copyright</title>
-<para>(C) 2001 - 2013 by Dr. Peter Bieringer</para></sect1><sect1>
+<para>(C) 2001 - 2014 by Dr. Peter Bieringer</para></sect1><sect1>
 <title>Author</title>
 <para>The author of ipv6calc is</para><itemizedlist>
 <listitem><para><ulink url="mailto:pb@bieringer.de">Dr. Peter Bieringer</ulink> with some minor contribution by others</para></listitem></itemizedlist></sect1><sect1>
 <title>Where to get sources or binaries</title>
 <sect2>
-<title>Latest version of sources:</title>
+<title>Latest version of sources</title>
 <itemizedlist>
-<listitem><para>Via CVS at <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink>: <ulink url="http://www.deepspace6.net/sections/cvs.html">DeepSpace6 / CVS instructions</ulink></para></listitem><listitem><para>Via web interface to CVS at <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink>: <ulink url="http://cvs.deepspace6.net/view/ipv6calc/">DeepSpace6 / CVS web interface</ulink></para></listitem><listitem><para>Via FTP at <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink>: <ulink url="ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/">DeepSpace6 / anonymous FTP</ulink></para></listitem><listitem><para>Via FTP at <ulink url="ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/">ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/</ulink></para></listitem></itemizedlist></sect2><sect2>
-<title>Available formats:</title>
+<listitem><para>Via CVS at <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink>: <ulink url="http://www.deepspace6.net/sections/cvs.html">DeepSpace6 / CVS instructions</ulink></para></listitem><listitem><para>Via web interface to CVS at <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink>: <ulink url="http://cvs.deepspace6.net/view/ipv6calc/">DeepSpace6 / CVS web interface</ulink></para></listitem></itemizedlist></sect2><sect2>
+<title>Releases</title>
 <sect3>
-<title>tar.gz</title>
-<para>A SPEC file is included, so you can build a RPM from source tarball using</para><screen>
+<title>as tar.gz</title>
+<itemizedlist>
+<listitem><para>Via FTP at <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink>: <ulink url="ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/">DeepSpace6 / anonymous FTP</ulink></para></listitem><listitem><para>Via FTP at <ulink url="ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/">ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/</ulink></para></listitem></itemizedlist><para>Since version 0.95.0 packages are signed with new GPG key, also available here: <ulink url="ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/CODE-GPG-KEY-bieringer.de-2013">CODE-GPG-KEY-bieringer.de-2013 @ftp.bieringer.de</ulink> or <ulink url="ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/CODE-GPG-KEY-bieringer.de-2013">CODE-GPG-KEY-bieringer.de-2013 @ftp.deepspace6.net</ulink></para><screen>
+<![CDATA[Key fingerprint: AAB3 8CB7 97C7 50C7 78C6 08C6 DDEB 141D F738 0F61
+uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
+]]></screen><para>A SPEC file is included, so you can build a RPM from tar.gz using</para><screen>
 <![CDATA[$ rpmbuild -ta path/to/ipv6calc-$version.tar.gz
+]]></screen><para>In addition, conditional build options are available (see related configure options below):</para><screen>
+<![CDATA[--with geoip
+--with geoip-dyn
+--with ip2location
+--with ip2location-dyn
+--with shared
 ]]></screen></sect3><sect3>
 <title>as RPM</title>
 <para>Currently only on <ulink url="http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc">rpmfind / ipv6calc</ulink>, but there are plans to publish at least source RPMS on <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink> some day.</para></sect3></sect2><sect2>
 <title>Ready to use packages for several operating systems:</title>
 <sect3>
 <title>Fedora Linux</title>
-<para>Fedora 19 is the current developing platform, so use given hints above to create a RPM. Since Fedora 7 this package is included by default.</para></sect3><sect3>
+<para>Fedora 20 is the current developing platform, so use given hints above to create a RPM. Since Fedora 7 this package is included by default.</para></sect3><sect3>
 <title>Red Hat Enterprise Linux and clones</title>
 <para>It's tested by the developer that creation of the RPM is working fine on RHEL 4. Since RHEL 5 this package is included by default.</para>
 <para>CentOS 5 and CentOS 6 are also platforms for regression tests.</para></sect3><sect3>
@@ -95,6 +105,11 @@
 --with-geoip-db=DIR             Use specified GeoIP database directory, default: /usr/share/GeoIP
 --with-geoip-dyn-lib=NAME       Use specified GeoIP dynamic library, default: libGeoIP.so.1
 --with-geoip-ipv6-compat        Use IPv6 interface of GeoIP in compatibility mode (supporting 1.4.5) 
+
+--enable-shared                 Enable shared library build (default: disabled)
+
+--enable-bundled-getopt         Enable bundled getopt library (default: autoselected)
+--enable-bundled-md5            Enable bundled MD5 library (default: autoselected)
 ]]></screen></sect2><sect2>
 <title>Compiling</title>
 <para>As usual, use</para><screen>
@@ -119,6 +134,7 @@ Supported options:    -?|-h|--help        : this help
    --disable-db-ipv4   : disable built-in IPv4 database
    --disable-db-ipv6   : disable builtin IPv6 database
    --geoip-ipv6-compat : enable GeoIP IPv6 compatibility mode 
+   -S                  : enable shared library mode 
 ]]></screen></sect2></sect1><sect1>
 <title>Mailling Lists</title>
 <sect2>
@@ -294,8 +310,8 @@ This program formats and calculates IPv6 addresses and can do many more tricky t
 <title>Input-type options</title>
 <screen>
 <![CDATA[$ ./ipv6calc --in -?
-ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
-(P) & (C) 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
+ipv6calc: version 0.96.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
+(P) & (C) 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  Available input types:
   auto            : automatic detection
   revnibbles.int  : dot separated nibbles reverse, ending with ip6.int.
@@ -312,6 +328,7 @@ ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4
   iid+token       : Interface identifier and token
   ipv6logconv     : ipv6logconv (currently not supported)
   prefix+mac      : IPv6 prefix and a MAC address
+  asn             : Autonomous System Number
 ]]></screen></sect3><sect3>
 <title>Output-type options:</title>
 <screen>
@@ -736,6 +753,9 @@ ALL  46233 62292 0 2397 3525 40198 97 16 0 0 129 839 61074 0 0 0 0 0 16 51 0 0 0
 <para>A demonstration with real data is available at <ulink url="http://mirrors.bieringer.de/stats/timeline.html">http://mirrors.bieringer.de/stats/timeline.html</ulink>.</para></sect2></sect1><sect1>
 <title>History</title>
 <para>Major extensions/changes are listed here</para><sect2>
+<title>2014</title>
+<itemizedlist>
+<listitem><para>Shared library mode supported (reduces size of binaries)</para></listitem></itemizedlist></sect2><sect2>
 <title>2013</title>
 <itemizedlist>
 <listitem><para>Prefix and IID anonymization methods</para></listitem><listitem><para>Support of dynamic load of GeoIP and IP2Location libraries</para></listitem><listitem><para>Specifying dedicated GeoIP and IP2Location database files is now replaced by specifying dedicated database directories to make especially for GeoIP use of more database files.</para></listitem></itemizedlist></sect2><sect2>

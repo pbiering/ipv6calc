@@ -99,7 +99,7 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>4.0</revnumber> <date>2013-11-02</date> <authorinitials>PB<
+<revision> <revnumber>4.0</revnumber> <date>2014-02-13</date> <authorinitials>PB<
 /authorinitials></revision>
 \end_layout
 
@@ -164,7 +164,7 @@ Latest version
 \end_layout
 
 \begin_layout Standard
-Latest version since last update of this page is 0.95.0 (released > 2013-11-02)
+Latest version since last update of this page is 0.96.0 (released 2014-02-13)
 \end_layout
 
 \begin_layout Subsection
@@ -294,7 +294,7 @@ Copyright
 \end_layout
 
 \begin_layout Standard
-(C) 2001 - 2013 by Dr.
+(C) 2001 - 2014 by Dr.
  Peter Bieringer
 \end_layout
 
@@ -322,7 +322,7 @@ Where to get sources or binaries
 \end_layout
 
 \begin_layout Subsection
-Latest version of sources:
+Latest version of sources
 \end_layout
 
 \begin_layout Itemize
@@ -365,6 +365,14 @@ target "http://cvs.deepspace6.net/view/ipv6calc/"
 
 \end_layout
 
+\begin_layout Subsection
+Releases
+\end_layout
+
+\begin_layout Subsubsection
+as tar.gz
+\end_layout
+
 \begin_layout Itemize
 Via FTP at 
 \begin_inset CommandInset href
@@ -397,21 +405,74 @@ target "ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/"
 
 \end_layout
 
-\begin_layout Subsection
-Available formats:
+\begin_layout Standard
+Since version 0.95.0 packages are signed with new GPG key, also available
+ here: 
+\begin_inset CommandInset href
+LatexCommand href
+name "CODE-GPG-KEY-bieringer.de-2013 @ftp.bieringer.de"
+target "ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/CODE-GPG-KEY-bieringer.de-2013"
+
+\end_inset
+
+ or 
+\begin_inset CommandInset href
+LatexCommand href
+name "CODE-GPG-KEY-bieringer.de-2013 @ftp.deepspace6.net"
+target "ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/CODE-GPG-KEY-bieringer.de-2013"
+
+\end_inset
+
+
 \end_layout
 
-\begin_layout Subsubsection
-tar.gz
+\begin_layout Code
+
+Key fingerprint: AAB3 8CB7 97C7 50C7 78C6 08C6 DDEB 141D F738 0F61
+\end_layout
+
+\begin_layout Code
+
+uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 \end_layout
 
 \begin_layout Standard
-A SPEC file is included, so you can build a RPM from source tarball using
+A SPEC file is included, so you can build a RPM from tar.gz using
 \end_layout
 
 \begin_layout Code
 
 $ rpmbuild -ta path/to/ipv6calc-$version.tar.gz
+\end_layout
+
+\begin_layout Standard
+In addition, conditional build options are available (see related configure
+ options below):
+\end_layout
+
+\begin_layout Code
+
+--with geoip
+\end_layout
+
+\begin_layout Code
+
+--with geoip-dyn
+\end_layout
+
+\begin_layout Code
+
+--with ip2location
+\end_layout
+
+\begin_layout Code
+
+--with ip2location-dyn
+\end_layout
+
+\begin_layout Code
+
+--with shared
 \end_layout
 
 \begin_layout Subsubsection
@@ -447,7 +508,7 @@ Fedora Linux
 \end_layout
 
 \begin_layout Standard
-Fedora 19 is the current developing platform, so use given hints above to
+Fedora 20 is the current developing platform, so use given hints above to
  create a RPM.
  Since Fedora 7 this package is included by default.
 \end_layout
@@ -711,6 +772,31 @@ no)
  mode (supporting 1.4.5) 
 \end_layout
 
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+--enable-shared                 Enable shared library build (default: disabled)
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+--enable-bundled-getopt         Enable bundled getopt library (default:
+ autoselected)
+\end_layout
+
+\begin_layout Code
+
+--enable-bundled-md5            Enable bundled MD5 library (default: autoselecte
+d)
+\end_layout
+
 \begin_layout Subsection
 Compiling
 \end_layout
@@ -815,6 +901,11 @@ Supported options:    -?|-h|--help        : this help
 \begin_layout Code
 
    --geoip-ipv6-compat : enable GeoIP IPv6 compatibility mode 
+\end_layout
+
+\begin_layout Code
+
+   -S                  : enable shared library mode 
 \end_layout
 
 \begin_layout Section
@@ -1806,13 +1897,13 @@ $ ./ipv6calc --in -?
 
 \begin_layout Code
 
-ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
+ipv6calc: version 0.96.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
 S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
 \end_layout
 
 \begin_layout Code
 
-(P) & (C) 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 \end_layout
 
 \begin_layout Code
@@ -1893,6 +1984,11 @@ S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE
 \begin_layout Code
 
   prefix+mac      : IPv6 prefix and a MAC address
+\end_layout
+
+\begin_layout Code
+
+  asn             : Autonomous System Number
 \end_layout
 
 \begin_layout Subsubsection
@@ -3515,10 +3611,8 @@ $ zcat ip.bieringer.de-log.201*.gz | ipv6logstats
 \end_layout
 
 \begin_layout Standard
-
-Header section, since output version 3.0 (>= 0.95.0) 
-\lang english
-additional lines starting with '*3*' and '*DateTime' and '*UnixTime' included
+Header section, since output version 3.0 (>= 0.95.0) additional lines starting
+ with '*3*' and '*DateTime' and '*UnixTime' included
 \end_layout
 
 \begin_layout Code
@@ -3658,7 +3752,6 @@ COUNTRY.BIN    (IP2L-DB20 20130411 Copyright (c) 2013 IP2Location All Rights
 \end_layout
 
 \begin_layout Standard
-
 Simple statistics section
 \end_layout
 
@@ -3878,12 +3971,10 @@ IPv6/IID/Unknown     0
 \end_layout
 
 \begin_layout Standard
-
 External database supported output since output version 3.0 (>= 0.95.0)
 \end_layout
 
 \begin_layout Itemize
-
 Country Code / Proto
 \end_layout
 
@@ -3918,7 +4009,6 @@ Country Code / Proto
 \end_layout
 
 \begin_layout Itemize
-
 Proto / Country Code (
 \begin_inset Quotes eld
 \end_inset
@@ -3961,7 +4051,6 @@ ALL
 \end_layout
 
 \begin_layout Itemize
-
 Autonomous System number / Proto
 \end_layout
 
@@ -3996,7 +4085,6 @@ Autonomous System number / Proto
 \end_layout
 
 \begin_layout Itemize
-
 Proto / Autonomous System number (
 \begin_inset Quotes eld
 \end_inset
@@ -4126,6 +4214,14 @@ History
 
 \begin_layout Standard
 Major extensions/changes are listed here
+\end_layout
+
+\begin_layout Subsection
+2014
+\end_layout
+
+\begin_layout Itemize
+Shared library mode supported (reduces size of binaries)
 \end_layout
 
 \begin_layout Subsection
