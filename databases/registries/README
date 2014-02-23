@@ -1,20 +1,22 @@
-$Id: README,v 1.1 2005/10/23 21:22:54 peter Exp $
+$Id: README,v 1.2 2014/02/23 19:25:04 ds6peter Exp $
 
 IPv4/IPv6 assignment databases:
- http://www.iana.org/assignments/ipv4-address-space
- http://www.iana.org/assignments/ipv6-unicast-address-assignments
- ftp://ftp.ripe.net/pub/stats/ripencc/%Y/delegated-ripencc-%Y%m%d.bz2
- ftp://ftp.arin.net/pub/stats/arin/delegated-arin-%Y%m%d
- http://ftp.apnic.net/stats/apnic/delegated-apnic-%Y%m%d
- ftp://lacnic.net/pub/stats/lacnic/delegated-lacnic-%Y%m%d
- ftp://ftp.afrinic.net/pub/stats/afrinic/delegated-afrinic-%Y%m%d
+ http://www.iana.org/assignments/ipv4-address-space/ipv4-address-space.xml
+ http://www.iana.org/assignments/ipv6-unicast-address-assignments/ipv6-unicast-address-assignments.xml
+ ftp://ftp.ripe.net/pub/stats/ripencc/delegated-ripencc-latest
+ ftp://ftp.arin.net/pub/stats/arin/delegated-arin-extended-latest
+ http://ftp.apnic.net/stats/apnic/delegated-apnic-latest
+ ftp://lacnic.net/pub/stats/lacnic/delegated-lacnic-latest
+ ftp://ftp.afrinic.net/pub/stats/afrinic/delegated-afrinic-latest
+
+AS databases:
+ https://www.iana.org/assignments/as-numbers/as-numbers.txt
 
 Because of unknown license issues, the database files aren't
 included in source tarball (cleanup by "make distclean"), but
-will be retrieved on "make"
+will be retrieved on "make update".
 
 See e.g.:
- ftp://ftp.ripe.net/ripe/
- http://ftp.apnic.net/stats/apnic/_README-apnic-stats.txt
+ ftp://ftp.apnic.net/apnic/stats/apnic/README.TXT
 
 Use "make update" to refresh data files
