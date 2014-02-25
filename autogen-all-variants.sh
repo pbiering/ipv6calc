@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.18 2014/02/13 21:59:37 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.19 2014/02/25 20:49:16 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -37,6 +37,7 @@ if [ -n "$options_add" ]; then
 fi
 
 if [ ! -f "$status_file" ]; then
+	echo "INFO  : status file missing, create: $status_file"
 	date "+%s:START:" >$status_file
 else
 	echo "INFO  : status file found: $status_file"
@@ -83,7 +84,7 @@ for liboption in "normal" "shared"; do
 				exit 1
 			fi
 			# add entry in log
-			date "+%s:FINISHED:variants:$options:" >>$status_file
+			date "+%s:FINISHED:variants:$options:OK" >>$status_file
 		fi
 
 	done || exit 1

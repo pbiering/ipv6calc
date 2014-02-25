@@ -2,29 +2,28 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.32 2014/02/10 07:34:41 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.33 2014/02/25 20:49:16 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
 # Information:
 #  Perl program which creates IPv4 address assignement header
 # Requires:
-#  /usr/bin/aggregate
 #  XML::Simple
 
 
 use IPC::Open2;
 use XML::Simple;
-#use strict;
-
-if (! -x "/usr/bin/aggregate") {
-	print STDERR "Missing or cannot execute binary '/usr/bin/aggregate'\n";
-	print STDERR " You can get it from here: http://freshmeat.net/projects/aggregate\n";
-
-	exit 1;
-};
+use strict;
+use warnings;
 
 my $debug = 0;
+
+#$debug |= 0x01;
+$debug |= 0x02;
+#$debug |= 0x04; # assignments_iana
+#$debug |= 0x08; # assignments_iana
+$debug |= 0x10; # assignments gap closing
 
 
 my $OUTFILE = "dbipv4addr_assignment.h";
@@ -42,44 +41,16 @@ my @files = (
 	"../registries/lacnic/delegated-lacnic-latest",
 	"../registries/afrinic/delegated-afrinic-latest"
 );
-#my @files = ( "lacnic/lacnic." . $year . $mon . "01" );
-
-my (@arin, @apnic, @ripencc, @iana, @lacnic, @afrinic);
-
-my (@arin_agg, @apnic_agg, @ripencc_agg, @iana_agg, @lacnic_agg, @afrinic_agg);
 
 my $global_file = "../registries/iana/ipv4-address-space.xml";
 
 my %assignments;
 my %assignments_iana;
 
-my $max_prefixlength_not_arin = 0;
-
 my %date_created;
 
 
-# Generate subnet powers
-my %subnet_powers;
-
-print STDERR "Generate subnet powers\n";
-for (my $i = 32; $i >= 1; $i--) {
-	my $power = 1 << (32 - $i);
-
-	my $dec;
-	if ($i == 32) {
-		$dec = 0xffffffff;
-	} else {
-		$dec = ((2 << $i) - 1) << (32 - $i);
-	};
-
-	#print STDERR "Power " . $i . ":". $power;
-	#printf STDERR "   subnet mask: %8x\n", $dec;
-	$subnet_powers{$i}->{'numbers'} = $power;
-	$subnet_powers{$i}->{'mask'} = $dec;
-};
-
-
-
+# convert a dotted IPv4 address into 32-bit decimal
 sub ipv4_to_dec($) {
 	my $ipv4 = shift || die "Missing IPv4 address";
 
@@ -90,8 +61,9 @@ sub ipv4_to_dec($) {
 	return ($dec);
 };
 
+# convert a 32-bit decimal to dotted IPv4 address
 sub dec_to_ipv4($) {
-	my $dec = shift || die "Missing decimal";
+	my $dec = shift;
 
  	my $t1 = ($dec & 0xff000000) >> 24;
  	my $t2 = ($dec & 0x00ff0000) >> 16;
@@ -103,34 +75,31 @@ sub dec_to_ipv4($) {
 	return ($ipv4);
 };
 
-sub length_to_dec($) {
-	my $length = shift || die "Missing prefix length";
 
-	my $dec = ((1 << $length) - 1);
-	printf "length=%d dec(hex)=%x dec(decimal)=%d\n", $length, $dec, $dec if ($debug);
+# find start of ipv4 in %assignments_iana
+sub find_start_iana($) {
+	my $ipv4 = shift || die "Missing IPv4 address";
 
-	$dec = $dec << (32 - $length);
-	printf "length=%d dec(hex)=%x dec(decimal)=%d\n", $length, $dec, $dec if ($debug);
-
-	return ($dec);
-};
-
-
-sub check_in_list($) {
-	my $num = shift || die "Missing IPv4 address number";
-
-	foreach my $ipv4num (keys %assignments ) {
-		if ( ( $num & $assignments{$ipv4num}->{'mask'} ) == $ipv4num ) {
-			return( $assignments{$ipv4num}->{'registry'} );
+	for my $key (keys %assignments_iana) {
+		if ($ipv4 < $key) {
+			next;
+		} elsif ($ipv4 >= ($key + $assignments_iana{$key}->{'distance'})) {
+			next;
+		} else {
+			# match
+			return ($key);
 		};
 	};
-	return;
+
+	return (undef);
 };
+
+
 
 # Should't be used, a little bit obsolete
 sub proceed_global() {
 	my $ipv4; my $length;
-	my ($ipv4_start, $ipv4_end);
+	my ($start, $distance);
 
 	# Proceed first global IANA file
 	print "Proceed file (XML): " . $global_file . "\n";
@@ -149,9 +118,16 @@ sub proceed_global() {
 	    for my $e2 (@$e1) {
 		print $$e2{'prefix'} . ":" . $$e2{'designation'} . ":" . $$e2{'status'} . "\n" if ($debug);
 
-		my ($block, $length) = split /\//, $$e2{'prefix'};
-		$ipv4_start = int($block);
-		$ipv4_end = int($block);
+		my ($block, $prefixlength) = split /\//, $$e2{'prefix'};
+
+		if ($block =~ /^[0-9]+$/) {
+			$start = &ipv4_to_dec(int($block) . ".0.0.0");
+		} else {
+			die "Currently unsupported block, fix code: " . $block;
+		};
+
+		$distance   = 2**(32 - int($prefixlength));
+		printf "data  : start=%08x distance=%08x from prefx=%s\n", $start, $distance, $$e2{'prefix'} if ($debug & 0x04);
 
 		my $reg;
 
@@ -164,56 +140,54 @@ sub proceed_global() {
 			$reg =~ s/.* (RIPENCC)/$1/g;
 
 			if ( ($reg ne "ARIN") && ($reg ne "APNIC") && ($reg ne "RIPENCC") && ($reg ne "IANA") && ($reg ne "LACNIC") && ($reg ne "AFRINIC")) {
-				$reg = "ARIN"; # default now
-				# die "Unsupported registry: " . $reg\n";
+				# fallback to whois entry
+				if (defined $$e2{'whois'}) {
+					$$e2{'whois'} =~ /^whois\.([a-z]+)\..*/;
+					$reg = uc($1);
+
+					if (! defined $reg) {
+						die "Can't extract registry from whois entry: " . $$e2{'whois'}; 
+					};
+
+					if ($reg eq "RIPE") {
+						$reg = "RIPENCC";
+					};
+
+					if ( ($reg ne "ARIN") && ($reg ne "APNIC") && ($reg ne "RIPENCC") && ($reg ne "IANA") && ($reg ne "LACNIC") && ($reg ne "AFRINIC")) {
+						die "Unsupported registry extracted from whois entry: " . $reg;
+					};
+				} else {
+					print "Missing whois entry for: " . $start . " (fallback to ARIN)\n"; 
+					$reg = "ARIN";
+				};
 			};
 		};
 
-		#print $$e2{'prefix'} . ":" . $reg . "\n";
-
-		for ($ipv4 = $ipv4_start; $ipv4 <= $ipv4_end; $ipv4++) {
-			$ipv4 = $ipv4 . ".0.0.0";
-
-			$assignments_iana{sprintf("%08x", &ipv4_to_dec($ipv4))} = $reg;
-	
-			if ($reg eq "ARIN" ) {
-				#print "Push ARIN: " . $ipv4 . "/" . $length . "\n";
-				#push @arin, $ipv4 . "/" . $length;
-			} elsif ($reg eq "APNIC" ) {
-				#print "Push APNIC: " . $ipv4 . "/" . $length . "\n";
-				#push @apnic, $ipv4 . "/" . $length;
-			} elsif ($reg eq "RIPENCC" ) {
-				#print "Push RIPENCC: " . $ipv4 . "/" . $length . "\n";
-				#push @ripencc, $ipv4 . "/" . $length;
-			} elsif ($reg eq "IANA" ) {
-				#print "Push IANA: " . $ipv4 . "/" . $length . "\n";
-				#push @iana, $ipv4 . "/" . $length;
-			} elsif ($reg eq "LACNIC" ) {
-				#print "Push LACNIC: " . $ipv4 . "/" . $length . "\n";
-				#push @lacnic, $ipv4 . "/" . $length;
-			} elsif ($reg eq "AFRINIC" ) {
-				#print "Push AFRINIC: " . $ipv4 . "/" . $length . "\n";
-				#push @afrinic, $ipv4 . "/" . $length;
-			} else {
-				die "Unsupported registry";	
-			};
-		};
+		printf "store : reg=%-10s start=%08x distance=%08x\n", $reg, $start, $distance if ($debug & 0x08);
+		$assignments_iana{$start}->{'registry'} = $reg;
+		$assignments_iana{$start}->{'distance'} = $distance;
 	    };
 	};
 };
 
 &proceed_global();
 
+## proceed files of each registry
 foreach my $file (@files) {
 	print "Proceed file: " . $file . "\n";
+
 
 	open(FILE, "<$file") || die "Cannot open file: $file";
 
 	my $line;
-	my $ipv4;
-	my $length;
 	my $flag_proceeded;
 	my $flag_found_date = 0;
+
+	my $start = -1;
+	my $distance;
+
+	my ($reg, $tld, $token, $ipv4, $numbers, $date, $status, $other);
+
 	while (<FILE>) {
 		$line = $_;
 		chomp $line;
@@ -232,7 +206,7 @@ foreach my $file (@files) {
 
 		#print $line . "\n";
 
-		my ($reg, $tld, $token, $ipv4, $numbers, $date, $status, $other) = split /\|/, $line;
+		($reg, $tld, $token, $ipv4, $numbers, $date, $status, $other) = split /\|/, $line;
 
 		if ( $token ne "ipv4" ) { next; };
 
@@ -244,181 +218,72 @@ foreach my $file (@files) {
 			next;
 		};
 
-		# get registry array
-		my $parray;
-
 		if ($reg eq "ARIN" ) {
-			$parray = \@arin;
 		} elsif ($reg eq "APNIC" ) {
-			$parray = \@apnic;
 		} elsif ($reg eq "RIPENCC" ) {
-			$parray = \@ripencc;
 		} elsif ($reg eq "IANA" ) {
-			$parray = \@iana;
 		} elsif ($reg eq "LACNIC" ) {
-			$parray = \@lacnic;
 		} elsif ($reg eq "AFRINIC" ) {
-			$parray = \@afrinic;
 		} else {
 			die "Unsupported registry: " . $reg;
 		};
 
-
 		# convert IPv4 address to decimal
 		my $ipv4_dec = &ipv4_to_dec($ipv4);
 
-		my $check_length;
-		$flag_proceeded = 0;
-		# check numbers maching
-		for ($check_length = 1; $check_length <= 32; $check_length++) {
-			if ( $subnet_powers{$check_length}->{'numbers'} == $numbers ) {
-				# case 1: numbers = 2^x
-				
-				if ( ( $ipv4_dec & $subnet_powers{$check_length}->{'mask'} ) == $ipv4_dec ) {
-					# case 1a: easy, subnet(numbers) matches given network
-					push @$parray, $ipv4 . "/" . $check_length;
-					#printf "%s/%d=%s (case 1a)\n", $ipv4, $check_length, $reg;
-					$flag_proceeded = 1;
-					
-					last;
-				} else {
-					#printf "%s/%d=%s (case 1b)\n", $ipv4, $check_length, $reg;
-					$check_length++;
-					$flag_proceeded = 2;
-					last;
-				};
-			} elsif ( $subnet_powers{$check_length}->{'numbers'} < $numbers ) {
-				# case 2: numbers != 2^x
-				#printf "%s=%s (case 2: %d)\n", $ipv4, $reg, $numbers;
-				$flag_proceeded = 3;
-				last;
-			};
-		};
+		printf "data  : reg=%-10s ipv4 =%08x numbers=%08x\n", $reg, $ipv4_dec, $numbers if ($debug & 0x01);
 
-		if ($flag_proceeded == 1) {
-			# next one...
-			next;
-		} elsif ($flag_proceeded == 0) {
-			die "Shouldn't happen";
-		};
+		if ($start == -1) {
+			# set start & distance
+			printf "init  : reg=%-10s start=%08x distance=%08x\n", $reg, $start, $distance if ($debug & 0x01);
+			$start = $ipv4_dec;
+			$distance = $numbers;
 
-		# now the harder work...
-		my $newnumbers = $numbers;
-		while ($newnumbers > 0) {
-			printf "Newnumbers: %d   Length: %d (ipv4=$ipv4)\n", $newnumbers, $check_length if ($debug);
+		} elsif (($start + $distance) == $ipv4_dec) {
+			# extend distance
+			printf "extend: reg=%-10s start=%08x distance=%08x\n", $reg, $start, $distance if ($debug & 0x01);
+			$distance += $numbers;
 
-			while ( $newnumbers < $subnet_powers{$check_length}->{'numbers'} ) {
-				$check_length++;
-			};
+		} else {
+			printf "store : reg=%-10s start=%08x distance=%08x\n", $reg, $start, $distance if ($debug & 0x02);
+			$assignments{$start}->{'distance'} = $distance;
+			$assignments{$start}->{'registry'} = $reg;
 
-			if ( ( $ipv4_dec & (~ $subnet_powers{$check_length}->{'mask'}) ) == 0 ) {
-				push @$parray, dec_to_ipv4($ipv4_dec) . "/" . $check_length;
-				printf "%s/%d=%s (partially catch case 1b or 2: %d)\n", &dec_to_ipv4($ipv4_dec), $check_length, $reg, $subnet_powers{$check_length}->{'numbers'} if ($debug);
-				$newnumbers -= $subnet_powers{$check_length}->{'numbers'};
-				$ipv4_dec += $subnet_powers{$check_length}->{'numbers'};
-
-				next;
-			} else {
-				#printf "Newnumbers: %d   Length: %d (ipv4=$ipv4)\n", $newnumbers, $check_length;
-				$check_length++;
-				if ($check_length > 32) {
-					die "Shouldn't happen";
-				};
-			};
+			# set new start
+			printf "init  : reg=%-10s start=%08x distance=%08x\n", $reg, $start, $distance if ($debug & 0x01);
+			$start = $ipv4_dec;
+			$distance = $numbers;
 		};
 	};
 
 	close(FILE);
+
+	# store last found entry
+	printf "store : reg=%-10s start=%08x distance=%08x\n", $reg, $start, $distance if ($debug & 0x02);
+	$assignments{$start}->{'distance'} = $distance;
+	$assignments{$start}->{'registry'} = $reg;
 
 	if ($flag_found_date != 1) {
 		die("no date line found, unsupported file format");
 	};
 };
 
-sub proceed_array($$) {
-	my $parray = shift || die "missing array pointer";
-	my $parray_agg = shift || die "missing array pointer";
-
-	scalar(@$parray) == 0 && die "array empty!";
-
-	print "Start proceeding array with 'aggregate' (Entries: " . scalar(@$parray) . ")\n";
-
-	my $pid = open2(AGGREGATE_READ, AGGREGATE_WRITE, "aggregate -t") || die "cannot for: $!";
-	
-	foreach my $entry (@$parray) {
-		print AGGREGATE_WRITE $entry . "\n";
-		print "DEBUG : write to aggregate: $entry\n" if ($debug);
-	};
-	close(AGGREGATE_WRITE);
-
-	while (<AGGREGATE_READ>) {
-		my $line = $_;
-		chomp $line;
-		print "DEBUG : read from aggregate: $line\n" if ($debug);
-		push @$parray_agg, $line;
-	};
-
-	close(AGGREGATE_READ);
-
-	print "End proceeding array with 'aggregate' (Entries: " . scalar(@$parray_agg) . ")\n";
-};
+## check whether gaps can be closed with IANA assignment
+#			my $start_iana = &find_start_iana($start);
+#			my $ipv4_dec_iana = &find_start_iana($ipv4_dec);
+#
+#			if (defined $start_iana && defined $ipv4_dec_iana) {
+#				if ($start_iana == $ipv4_dec_iana) {
+#					# same IANA assignment
+#					$distance = $ipv4_dec + $numbers - $start;
+#
+#					printf "extend: reg=%-10s start=%08x distance=%08x (IANA based gap closing)\n", $reg, $start, $distance if ($debug & 0x10);
+#					next;
+#				};
+#			};
 
 
-
-print "Aggregate RIPENCC\n";
-&proceed_array(\@ripencc, \@ripencc_agg);
-
-print "Aggregate APNIC\n";
-&proceed_array(\@apnic, \@apnic_agg);
-
-#print "Aggregate IANA\n";
-#&proceed_array(\@iana, \@iana_agg);
-
-print "Aggregate LACNIC\n";
-&proceed_array(\@lacnic, \@lacnic_agg);
-
-print "Aggregate AFRINIC\n";
-&proceed_array(\@afrinic, \@afrinic_agg);
-
-if (1 == 0) {
-	# Look for maximum used prefix length
-	my ($net, $length);
-	for my $entry (@ripencc_agg, @apnic_agg, @iana_agg) {
-		my ($net, $length) = split /\//, $entry;
-		if ($length > $max_prefixlength_not_arin) {
-			$max_prefixlength_not_arin = $length;
-		};
-	};
-
-	print "Maximum used prefix length by not ARIN: " . $max_prefixlength_not_arin . "\n";
-
-	## Run filter of ARIN entries
-	print "Run filter on ARIN entries\n";
-	# 1. overwrite prefix length and network
-	for (my $i = 0; $i < $#arin; $i++) {
-		my ($net, $length) = split /\//, $arin[$i];
-		if ($length > $max_prefixlength_not_arin) {
-			$arin[$i] = &dec_to_ipv4(&ipv4_to_dec($net) & $subnet_powers{$max_prefixlength_not_arin}->{'mask'}) . "\/" . $max_prefixlength_not_arin;
-		};
-	};
-	# 2. remove duplicates
-	my @arin_new;
-	push @arin_new, $arin[0];	
-	for (my $i = 1; $i < $#arin; $i++) {
-		if ($arin[$i] eq $arin[$i - 1]) {
-			next;
-		} else {
-			push @arin_new, $arin[$i];	
-		};
-	};
-	print "End of filter on ARIN entries\n";
-};
-
-print "Aggregate ARIN (this can take some time...)\n";
-&proceed_array(\@arin, \@arin_agg);
-
-
-# Create header file
+## Create header file
 
 
 print "Create outfile now: " . $OUTFILE . "\n";
@@ -453,50 +318,21 @@ for my $reg (sort keys %date_created) {
 };
 print OUT "\/\*\@unused\@\*\/ static const char* dbipv4addr_registry_status __attribute__ ((__unused__)) = \"$string\";\n";
 
-
-# Create hash
-my %data;
-
-sub fill_data($$) {
-	my $parray = shift || die "missing array pointer";
-	my $reg = shift || die "missing registry";
-
-	foreach my $entry (sort @$parray) {
-		my ($ipv4, $length) = split /\//, $entry;
-
-		my $ipv4_hex = sprintf("%08x", &ipv4_to_dec($ipv4));
-		my $mask_hex = sprintf("%08x", &length_to_dec($length));
-		my $mask_length = sprintf("%2d", $length);
-		
-		$data{$ipv4_hex}->{'ipv4'} = &ipv4_to_dec($ipv4);
-		$data{$ipv4_hex}->{'mask'} = &length_to_dec($length);
-		$data{$ipv4_hex}->{'mask_hex'} = $mask_hex;
-		$data{$ipv4_hex}->{'mask_length'} = $mask_length;
-		$data{$ipv4_hex}->{'reg'} = $reg;
-
-		printf "ipv4_hex=0x%s, mask_hex=0x%s, reg=\"%s\" length=%d\n", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'reg'}, $length if ($debug);
-		#die if ($debug);
-	};
-};
-
-&fill_data(\@apnic_agg, "APNIC");
-&fill_data(\@ripencc_agg, "RIPENCC");
-&fill_data(\@arin_agg, "ARIN");
-&fill_data(\@lacnic_agg, "LACNIC");
-&fill_data(\@afrinic_agg, "AFRINIC");
-#&fill_data(\@iana_agg, "IANA");
-
 # Main data structure
 print OUT qq|
 static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 |;
 
-foreach my $ipv4_hex (sort keys %data) {
-	printf OUT "\t{ 0x%s, 0x%s, %2d, REGISTRY_%-10s },\n", $ipv4_hex, $data{$ipv4_hex}->{'mask_hex'}, $data{$ipv4_hex}->{'mask_length'}, $data{$ipv4_hex}->{'reg'};
+printf OUT "\t//first     , last      , registry  \n";
+
+foreach my $ipv4 (sort { $a <=> $b } keys %assignments) {
+	my $distance = $assignments{$ipv4}->{'distance'};
+	my $registry = $assignments{$ipv4}->{'registry'};
+
+	printf OUT "\t{ 0x%08x, 0x%08x, REGISTRY_%-10s }, // %-15s - %-15s\n", $ipv4, ($ipv4 + $distance - 1), $registry, &dec_to_ipv4($ipv4), &dec_to_ipv4($ipv4 + $distance - 1);
 };
 
-print OUT qq|
-};
+print OUT qq|};
 |;
 
 # IANA assignment
@@ -504,12 +340,16 @@ print OUT qq|
 static const s_ipv4addr_assignment dbipv4addr_assignment_iana[] = {
 |;
 
-foreach my $ipv4_hex (sort keys %assignments_iana) {
-	printf OUT "\t{ 0x%s, %s, %2d, REGISTRY_%-10s },\n", $ipv4_hex, "0xff000000", "8", $assignments_iana{$ipv4_hex};
+printf OUT "\t//first     , last      , registry  \n";
+
+foreach my $ipv4 (sort { $a <=> $b } keys %assignments_iana) {
+	my $distance = $assignments_iana{$ipv4}->{'distance'};
+	my $registry = $assignments_iana{$ipv4}->{'registry'};
+
+	printf OUT "\t{ 0x%08x, 0x%08x, REGISTRY_%-10s }, // %-15s - %-15s\n", $ipv4, ($ipv4 + $distance - 1), $registry, &dec_to_ipv4($ipv4), &dec_to_ipv4($ipv4 + $distance - 1);
 };
 
-print OUT qq|
-};
+print OUT qq|};
 |;
 
 print "Finished\n";

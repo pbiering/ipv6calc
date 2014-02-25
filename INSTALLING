@@ -76,12 +76,14 @@ Execute:
 UPDATE OF DATABASES
 -------------------
 ipv6calc contains several databases, currently
-* OUI type (IEEE)
+* OUI (24/36) type (IEEE)
 * IAB type (IEEE)
 * IPv4 address space assignment
 * IPv6 address space assignment
+* AS
+* CC
 to update this database before compilation you need:
-- install perl, wget, aggregate
+- install perl, wget
 - run "make update"
 
 See also:
@@ -90,6 +92,7 @@ See also:
  ./databases/ipv6-assignment/README
  ./databases/ieee-iab/README
  ./databases/ieee-oui/README
+ ./databases/ieee-oui36/README
 
 
 IP2LOCATION LIBRARY
@@ -160,4 +163,4 @@ If you want to install the binary use "make install".
 Peter Bieringer
 <pb (at) bieringer.de>
 
-$Id: INSTALLING,v 1.20 2013/05/12 07:34:04 ds6peter Exp $
+$Id: INSTALLING,v 1.21 2014/02/25 20:49:16 ds6peter Exp $

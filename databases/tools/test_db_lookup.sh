@@ -2,12 +2,15 @@
 #
 # Project    : ipv6calc
 # File       : test_db_lookup.sh
-# Version    : $Id: test_db_lookup.sh,v 1.3 2014/02/11 06:51:05 ds6peter Exp $
+# Version    : $Id: test_db_lookup.sh,v 1.4 2014/02/25 20:49:18 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test raw database entries against ipv6calc output (to check, whether BuiltIn databases are correctly aggregated)
 #
 # Execution only required after lookup code changes
+
+renice -n 19 -p $$
+ionice -c idle -p $$
 
 
 ipv6calc="../../ipv6calc/ipv6calc"
@@ -189,7 +192,6 @@ if [ -z "$1" ]; then
 	exit 0
 fi
 
-
 while getopts ":a4" opt; do
         case $opt in
             a)
@@ -208,7 +210,12 @@ done
 
 shift $[ $OPTIND - 1 ]
 
-[ "$test_asn"  = "1" ] && test_asn_registry  || exit 1
-[ "$test_ipv4" = "1" ] && test_ipv6_registry || exit 1
+if [ "$test_asn"  = "1" ]; then
+	test_asn_registry  || exit 1
+fi
+
+if [ "$test_ipv4" = "1" ]; then
+	test_ipv4_registry || exit 1
+fi
 
 echo "INFO  : all defined database tests successful"

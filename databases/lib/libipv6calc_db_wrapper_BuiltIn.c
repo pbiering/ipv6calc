@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.10 2014/02/10 07:34:41 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.11 2014/02/25 20:49:18 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -542,12 +542,12 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 	// binary search in dbipv4addr_assignment
 	i = max / 2;
 	while (i_old != i) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search in dbipv4addr_assignment for ipv4=%08x base=%08x mask=%08x i=%d i_min=%d i_max=%d", ipv4, (unsigned int) dbipv4addr_assignment[i].ipv4addr, (unsigned int) dbipv4addr_assignment[i].ipv4mask, i, i_min, i_max);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search in dbipv4addr_assignment for ipv4=%08x first=%08x last=%08x i=%d i_min=%d i_max=%d", ipv4, (unsigned int) dbipv4addr_assignment[i].first, (unsigned int) dbipv4addr_assignment[i].last, i, i_min, i_max);
 
-		if (ipv4 < dbipv4addr_assignment[i].ipv4addr) {
+		if (ipv4 < dbipv4addr_assignment[i].first) {
 			// to high in array, jump down
 			i_max = i;
-		} else if (ipv4 > (dbipv4addr_assignment[i].ipv4addr | (~ dbipv4addr_assignment[i].ipv4mask))) {
+		} else if (ipv4 > dbipv4addr_assignment[i].last) {
 			// to low in array, jump up
 			i_min = i;
 		} else {
@@ -577,12 +577,12 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 		// binary search in dbipv4addr_assignment_iana (fallback)
 		i = max / 2;
 		while (i_old != i) {
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search in dbipv4addr_assignment_iana for ipv4=%08x ipv4_base=%08x ipv4_mask=%08x i=%d i_min=%d i_max=%d", ipv4, (unsigned int) dbipv4addr_assignment_iana[i].ipv4addr, (unsigned int) dbipv4addr_assignment_iana[i].ipv4mask, i, i_min, i_max);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search in dbipv4addr_assignment_iana for ipv4=%08x first=%08x last=%08x i=%d i_min=%d i_max=%d", ipv4, (unsigned int) dbipv4addr_assignment_iana[i].first, (unsigned int) dbipv4addr_assignment_iana[i].last, i, i_min, i_max);
 
-			if (ipv4 < dbipv4addr_assignment_iana[i].ipv4addr) {
+			if (ipv4 < dbipv4addr_assignment_iana[i].first) {
 				// to high in array, jump down
 				i_max = i;
-			} else if (ipv4 > (dbipv4addr_assignment_iana[i].ipv4addr | (~ dbipv4addr_assignment_iana[i].ipv4mask))) {
+			} else if (ipv4 > dbipv4addr_assignment_iana[i].last) {
 				// to low in array, jump up
 				i_min = i;
 			} else {
