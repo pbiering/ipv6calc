@@ -2,9 +2,9 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.10 2014/02/04 07:32:28 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.11 2014/02/28 06:46:36 ds6peter Exp $
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
-#              2005-2013 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
+#              2005-2014 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
 # License    : GNU GPL v2
 #
 # Information:
@@ -17,12 +17,16 @@ use Net::IP;
 use Math::BigInt;
 use XML::Simple;
 
-my $debug = (0xffff &  ~(0x10 | 0x20 | 0x100 | 0x40));
+my $debug = 0;
+
 # Debugging
-#  0x0010: proceed registry files
+#$debug |= 0x0010; #  0x0010: proceed registry files
 #  0x0020: proceed global file
 #  0x0040: fill data
 #  0x0100: subnet mask generation
+
+# $debug |= 0x0200; # parse lines
+$debug |= 0x0400; # store
 
 my $OUTFILE = "dbipv6addr_assignment.h";
 
@@ -137,6 +141,8 @@ proceed_global();
 foreach my $file (@files) {
 	print "Proceed file: " . $file . "\n";
 
+	my $counter = 0;
+
 	open(FILE, "<$file") || die "Cannot open file: $file";
 
 	my $line;
@@ -147,6 +153,8 @@ foreach my $file (@files) {
 	while (<FILE>) {
 		$line = $_;
 		chomp $line;
+
+		$counter++;
 
 		# catch date line
 		if ($line =~ /^2(\.[0-9])?\|([^\|]+)\|.*\|([0-9]{8})\|[^\|]*$/o) {
@@ -160,7 +168,7 @@ foreach my $file (@files) {
 		if ( ! ( $line =~ /\|ipv6\|/ ) ) { next; };
 		if ( $line =~ /\|\*\|/ ) { next; };
 
-		#print $line . "\n";
+		print $line . "\n" if ($debug & 0x0200);
 
 		my ($reg, $tld, $token, $ipv6, $prefixlen, $date, $status, $other) = split /\|/, $line;
 
@@ -188,7 +196,7 @@ foreach my $file (@files) {
 			die "Unsupported registry: " . $reg;
 		};
 
-		print "reg=" . $reg . " ipv6=" . $ipv6 . "/" . $prefixlen . "\n" if ($debug & 0x10);
+		print "check: reg=" . $reg . " ipv6=" . $ipv6 . "/" . $prefixlen . "\n" if ($debug & 0x10);
 
 		# Check for already included in range:
 		my $ip_ipv6 = new Net::IP($ipv6) || die "Can't create IPv6 object from ipv6=$ipv6";
@@ -200,7 +208,7 @@ Label_restart:
 		for (my $i = 0; $i < scalar(@$parray); $i++) {
 			my $ipv6_check = $$parray[$i];
 
-			print " check against ipv6=" . $ipv6_check if ($debug & 0x10);
+			print "check: check against ipv6=" . $ipv6_check if ($debug & 0x10);
 
 			if (defined $cache{$ipv6_check}) {
 				$ip_ipv6_check = $cache{$ipv6_check};
@@ -236,6 +244,8 @@ Label_restart:
 		if ($prefixlen > 64) {
 			die "Currently unsupported prefix length (>64): $ipv6/$prefixlen";
 		};
+
+		print "store: reg=" . $reg . " ipv6=" . $ipv6 . "/" . $prefixlen . "\n" if ($debug & 0x0400);
 
 		# Push into array
 		push @$parray, $ipv6 . "/" . $prefixlen;
@@ -321,7 +331,7 @@ print OUT qq| * Generated     : $now_string
  *  Additional header file for databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  */
 
-#include "libipv6calc.h"
+#include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
 |;
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.76 2014/02/04 07:32:28 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.77 2014/02/28 06:46:36 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -174,15 +174,14 @@ typedef struct {
 	int flag_scopeid;		/* =1: scope ID value set */
 } ipv6calc_ipv6addr;
 
-/* IPv6 address assignment structure */
+
+/* IPv6 filter structure */
 typedef struct {
-	const uint32_t ipv6addr_00_31;
-	const uint32_t ipv6addr_32_63;
-	const uint32_t ipv6mask_00_31;
-	const uint32_t ipv6mask_32_63;
-	const uint8_t  prefixlength;	/* prefix length (0-128) 8 bit*/
-	const uint8_t  registry;
-} s_ipv6addr_assignment;
+	int active;
+	uint32_t typeinfo_must_have;
+	uint32_t typeinfo_may_not_have;
+	/* others coming next */
+} s_ipv6calc_filter_ipv6addr;
 
 
 /* IID statistics */
@@ -218,15 +217,6 @@ typedef struct {
 	15	// fit to 1 million
 };
 
-
-/* filter */
-typedef struct {
-	int active;
-	uint32_t typeinfo_must_have;
-	uint32_t typeinfo_may_not_have;
-
-	/* others coming next */
-} s_ipv6calc_filter_ipv6addr;
 
 
 /* IPv6 address type definitions 

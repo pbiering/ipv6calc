@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.33 2014/02/25 20:49:16 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.34 2014/02/28 06:46:35 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -20,10 +20,10 @@ use warnings;
 my $debug = 0;
 
 #$debug |= 0x01;
-$debug |= 0x02;
+#$debug |= 0x02;
 #$debug |= 0x04; # assignments_iana
 #$debug |= 0x08; # assignments_iana
-$debug |= 0x10; # assignments gap closing
+#$debug |= 0x10; # assignments gap closing
 
 
 my $OUTFILE = "dbipv4addr_assignment.h";
@@ -157,7 +157,7 @@ sub proceed_global() {
 						die "Unsupported registry extracted from whois entry: " . $reg;
 					};
 				} else {
-					print "Missing whois entry for: " . $start . " (fallback to ARIN)\n"; 
+					print "Missing whois entry for: " . &dec_to_ipv4($start) . " (fallback to ARIN)\n"; 
 					$reg = "ARIN";
 				};
 			};
@@ -304,7 +304,7 @@ print OUT qq| * Generated     : $now_string
  *  Additional header file for databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  */
 
-#include "libipv6calc.h"
+#include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
 |;
 

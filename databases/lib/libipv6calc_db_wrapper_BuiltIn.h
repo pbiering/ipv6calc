@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.h
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.h,v 1.5 2014/02/02 17:08:21 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.h,v 1.6 2014/02/28 06:46:36 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -39,6 +39,25 @@ typedef struct {
 typedef struct {
 	const uint8_t  registry;
 } s_cc_index_reg_assignment;
+
+
+/* IPv4 address assignment structure */
+typedef struct {
+	const uint32_t first;
+	const uint32_t last;
+	const uint8_t  registry;
+} s_ipv4addr_assignment;
+
+
+/* IPv6 address assignment structure */
+typedef struct {
+	const uint32_t ipv6addr_00_31;
+	const uint32_t ipv6addr_32_63;
+	const uint32_t ipv6mask_00_31;
+	const uint32_t ipv6mask_32_63;
+	const uint8_t  prefixlength;	/* prefix length (0-128) 8 bit*/
+	const uint8_t  registry;
+} s_ipv6addr_assignment;
 
 #endif
 

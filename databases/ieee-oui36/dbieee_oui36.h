@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.10 2014/02/11 06:51:05 ds6peter Exp $
- * Generated     : Tue Feb 11 07:12:19 2014
+ * Version       : $Id: dbieee_oui36.h,v 1.11 2014/02/28 06:46:35 ds6peter Exp $
+ * Generated     : Fri Feb 28 07:07:37 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140210";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140228";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -270,5 +270,30 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x3F1000, 0x3F1FFF, "Olympus NDT Canada", "OLYMPUS-NDT-CANADA" },
 	{ 0x70B3D5, 0xCE9000, 0xCE9FFF, "KINEMETRICS", "KINEMETRICS" },
 	{ 0x70B3D5, 0xA0B000, 0xA0BFFF, "ambiHome GmbH", "AMBIHOME" },
+	{ 0x70B3D5, 0x1AC000, 0x1ACFFF, "SVP Broadcast Microwave S.L.", "SVP-BROADCAST-MICROWAVE-S-L" },
+	{ 0x70B3D5, 0xD86000, 0xD86FFF, "WPGSYS Pte Ltd", "WPGSYS-PTE" },
+	{ 0x70B3D5, 0x625000, 0x625FFF, "VX Instruments GmbH", "VX-INSTRUMENTS" },
+	{ 0x70B3D5, 0xD4E000, 0xD4EFFF, "FLSmidth", "FLSMIDTH" },
+	{ 0x70B3D5, 0xA0E000, 0xA0EFFF, "Vetaphone A/S", "VETAPHONE-A/S" },
+	{ 0x70B3D5, 0xE08000, 0xE08FFF, "Olssen", "OLSSEN" },
+	{ 0x70B3D5, 0x433000, 0x433FFF, "Flexsolution APS", "FLEXSOLUTION-APS" },
+	{ 0x70B3D5, 0xF34000, 0xF34FFF, "MacGray Services", "MACGRAY-SERVICES" },
+	{ 0x70B3D5, 0xF61000, 0xF61FFF, "Power Diagnostic Service", "POWER-DIAGNOSTIC-SERVICE" },
+	{ 0x70B3D5, 0x4C1000, 0x4C1FFF, "QUERCUS TECHNOLOGIES, S. L.", "QUERCUS-TECHNOLOGIES-S-L" },
+	{ 0x70B3D5, 0xFB0000, 0xFB0FFF, "Rohde&Schwarz Topex SA", "ROHDE-SCHWARZ-TOPEX" },
+	{ 0x70B3D5, 0x077000, 0x077FFF, "InAccess Networks SA", "INACCESS-NETWORKS" },
+	{ 0x70B3D5, 0x80F000, 0x80FFFF, "Quickware Eng & Des LLC", "QUICKWARE-ENG-DES-LLC" },
+	{ 0x70B3D5, 0x0F0000, 0x0F0FFF, "Avionica", "AVIONICA" },
+	{ 0x70B3D5, 0xC27000, 0xC27FFF, "GENERAL DYNAMICS C4 SYSTEMS", "GENERAL-DYNAMICS-C4" },
+	{ 0x70B3D5, 0x51D000, 0x51DFFF, "Tecnint HTE Srl", "TECNINT-HTE-SRL" },
+	{ 0x70B3D5, 0x51E000, 0x51EFFF, "Fundación Cardiovascular de Colombia", "FUNDACIóN-CARDIOVASCULAR-DE-COLOMBIA" },
+	{ 0x70B3D5, 0x61F000, 0x61FFFF, "Labotect Labor-Technik-Göttingen GmbH", "LABOTECT-LABOR-TECHNIK-GöTTINGEN" },
+	{ 0x70B3D5, 0xEB0000, 0xEB0FFF, "Nautel Limted", "NAUTEL-LIMTED" },
+	{ 0x70B3D5, 0xB2A000, 0xB2AFFF, "Myro Control, LLC", "MYRO-CONTROL-LLC" },
+	{ 0x70B3D5, 0x79A000, 0x79AFFF, "Innerspec Technologies Inc.", "INNERSPEC-TECHNOLOGIES" },
+	{ 0x70B3D5, 0xBB2000, 0xBB2FFF, "Mettler-Toledo Hi-Speed", "METTLER-TOLEDO-HI-SPEED" },
+	{ 0x70B3D5, 0xB15000, 0xB15FFF, "Eta Beta Srl", "ETA-BETA-SRL" },
+	{ 0x70B3D5, 0xD47000, 0xD47FFF, "YotaScope Technologies Co., Ltd.", "YOTASCOPE-TECHNOLOGIES" },
+	{ 0x70B3D5, 0x35F000, 0x35FFFF, "Aplex Technology Inc.", "APLEX" },
 
 };
