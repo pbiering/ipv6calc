@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : create_ieee_headerfile.pl
-# Version    : $Id: create_ieee_headerfile.pl,v 1.2 2013/04/09 20:22:15 ds6peter Exp $
-# Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: create_ieee_headerfile.pl,v 1.3 2014/03/31 19:48:34 ds6peter Exp $
+# Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE files
 #
@@ -74,7 +74,7 @@ print OUT qq| * Generated     : $now_string
  * Data copyright: IEEE
  *
  * Information:
- *  Additional header file for libieee.c
+ *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
 |;
@@ -187,6 +187,15 @@ while (<IN>) {
 
 		# remove trailling '-'
 		$oui =~ s/-+$//ig;
+
+		# translate umlauts
+		$oui =~ s/Ä/AE/g;
+		$oui =~ s/Ö/OE/g;
+		$oui =~ s/Ü/UE/g;
+		$oui =~ s/ä/AE/g;
+		$oui =~ s/ö/OE/g;
+		$oui =~ s/ü/UE/g;
+		$oui =~ s/ß/SS/g;
 	
 		#print $oui . "\n";
 

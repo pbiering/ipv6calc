@@ -1,12 +1,12 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.11 2014/02/28 06:46:35 ds6peter Exp $
- * Generated     : Fri Feb 28 07:07:37 2014
+ * Version       : $Id: dbieee_oui36.h,v 1.12 2014/03/31 19:48:34 ds6peter Exp $
+ * Generated     : Fri Feb 28 23:00:16 2014
  * Data copyright: IEEE
  *
  * Information:
- *  Additional header file for libieee.c
+ *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
 /*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140228";
@@ -287,7 +287,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0xC27000, 0xC27FFF, "GENERAL DYNAMICS C4 SYSTEMS", "GENERAL-DYNAMICS-C4" },
 	{ 0x70B3D5, 0x51D000, 0x51DFFF, "Tecnint HTE Srl", "TECNINT-HTE-SRL" },
 	{ 0x70B3D5, 0x51E000, 0x51EFFF, "Fundación Cardiovascular de Colombia", "FUNDACIóN-CARDIOVASCULAR-DE-COLOMBIA" },
-	{ 0x70B3D5, 0x61F000, 0x61FFFF, "Labotect Labor-Technik-Göttingen GmbH", "LABOTECT-LABOR-TECHNIK-GöTTINGEN" },
+	{ 0x70B3D5, 0x61F000, 0x61FFFF, "Labotect Labor-Technik-Göttingen GmbH", "LABOTECT-LABOR-TECHNIK-GOETTINGEN" },
 	{ 0x70B3D5, 0xEB0000, 0xEB0FFF, "Nautel Limted", "NAUTEL-LIMTED" },
 	{ 0x70B3D5, 0xB2A000, 0xB2AFFF, "Myro Control, LLC", "MYRO-CONTROL-LLC" },
 	{ 0x70B3D5, 0x79A000, 0x79AFFF, "Innerspec Technologies Inc.", "INNERSPEC-TECHNOLOGIES" },
