@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.107 2014/03/31 19:48:34 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.108 2014/04/01 20:17:24 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -120,8 +120,8 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV6CALC_VERSION=x.y          : Version of ipv6calc\n");
 	fprintf(stderr, " IPV6CALC_COPYRIGHT=\"...\"      : Copyright string\n");
 	fprintf(stderr, " IPV6CALC_OUTPUT_VERSION=x     : Version of output format\n");
-	fprintf(stderr, " IPV6CALC_FEATURES=\"...\"     : Feature string of ipv6calc -v\n");
-	fprintf(stderr, " IPV6CALC_SETTINGS_ANON=\"...\": Anonymizer settings\n");
+	fprintf(stderr, " IPV6CALC_FEATURES=\"...\"       : Feature string of ipv6calc -v\n");
+	fprintf(stderr, " IPV6CALC_SETTINGS_ANON=\"...\"  : Anonymizer settings\n");
 };
 
 /*
