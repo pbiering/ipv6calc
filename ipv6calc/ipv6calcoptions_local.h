@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calc/ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions_local.h,v 1.3 2013/10/28 07:25:31 ds6peter Exp $
- * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calcoptions_local.h,v 1.4 2014/04/01 20:11:57 ds6peter Exp $
+ * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options for ipv6calc
@@ -111,4 +111,32 @@ static struct option ipv6calc_longopts[] = {
 	/* 6rd_prefix options */
 	{ "6rd_relay_prefix"	, 1, NULL, CMD_6rd_relay_prefix },
 	{ "6rd_prefix"		, 1, NULL, CMD_6rd_prefix },
-};                
+}; 
+
+
+/* map between short and long options */
+static s_ipv6calc_longopts_shortopts_map ipv6calc_longopts_shortopts_map[] = {
+	{ 'r',	CMD_addr_to_ip6int					, "-O revnibbles.int"		},
+	{ 'a',	CMD_addr_to_ip6arpa					, "-O revnibbles.arpa"		},
+	{ 'b',	CMD_addr_to_bitstring					, "-O bitstring"		},
+	{ 'i',	CMD_showinfo						, NULL				},
+	{ 'l',	FORMATOPTION_NUM_printlowercase + FORMATOPTION_NUM_HEAD , "--printlowercase"		},
+	{ 'u',	FORMATOPTION_NUM_printuppercase + FORMATOPTION_NUM_HEAD	, "--printuppercase"		},
+	{ 'C',	FORMATOPTION_NUM_printcompressed + FORMATOPTION_NUM_HEAD, "--printcompressed"	},
+	{ 'F',	FORMATOPTION_NUM_printfulluncompressed + FORMATOPTION_NUM_HEAD, "--printfulluncompressed"	},
+	{ 'I',	CMD_inputtype						, NULL				},
+	{ 'O',	CMD_outputtype						, NULL				},
+	{ 'A',	CMD_actiontype						, NULL				},
+	{ 'm',	FORMATOPTION_NUM_machinereadable + FORMATOPTION_NUM_HEAD, NULL				},
+	{ '\0',	CMD_addr_to_compressed					, "--printcompressed"		},
+	{ '\0',	CMD_addr_to_uncompressed				, "--printuncompressed"		},
+	{ '\0',	CMD_addr_to_fulluncompressed				, "--printfulluncompressed"	},
+	{ '\0',	CMD_addr_to_base85					, "-I ipv6addr -O base85"	},
+	{ '\0',	CMD_base85_to_addr					, "-I base85 -O ipv6addr"	},
+	{ '\0',	CMD_mac_to_eui64					, "-I mac -O eui64"	},
+	{ '\0',	CMD_addr_to_ifinet6					, "-I ipv6addr -O ifinet6"	},
+	{ '\0',	CMD_ifinet6_to_compressed				, "-I ifinet6 -O ipv6addr --printcompressed"},
+	{ '\0',	CMD_ipv4_to_6to4addr					, "-I ipv4 -O ipv6addr -A conv6to4"},
+	{ '\0',	CMD_eui64_to_privacy					, "-I iid_token -O iid_token -A genprivacyiid"},
+	{ '\0',	0, NULL } // end marker
+};

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.105 2014/02/11 07:09:56 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.106 2014/04/01 20:11:57 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -568,7 +568,11 @@ int main(int argc, char *argv[]) {
 			printhelp_outputtypes(inputtype, formatoptions);
 			exit(EXIT_FAILURE);
 		} else if (inputtype == FORMAT_auto) {
-			printhelp_inputtypes(formatoptions);
+			if (outputtype == FORMAT_undefined) {
+				printhelp_inputtypes(formatoptions);
+			} else {
+				printhelp_output_dispatcher(outputtype);
+			};
 			exit(EXIT_FAILURE);
 		} else if (action == ACTION_auto) {
 			printhelp_actiontypes(formatoptions, ipv6calc_longopts);
@@ -607,7 +611,7 @@ int main(int argc, char *argv[]) {
 	};
 
 	if (command == CMD_printoldoptions) {
-		printhelp_oldoptions(longopts);
+		printhelp_oldoptions(longopts, ipv6calc_longopts_shortopts_map);
 		exit(EXIT_FAILURE);
 	};
 	

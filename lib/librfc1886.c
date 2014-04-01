@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.19 2014/02/03 20:48:04 ds6peter Exp $
+ * Version    : $Id: librfc1886.c,v 1.20 2014/04/01 20:11:57 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -46,7 +46,8 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 	DEBUGPRINT_WA(DEBUG_librfc1886, "flag_prefixuse %d", (*ipv6addrp).flag_prefixuse);
 
 	/* 20100909: take care of prefix length before printing the nibbles, but break old behavior */
-	if ((*ipv6addrp).flag_prefixuse != 0) {
+	/* 20140331: mask prefix only in case of no printsuffix,printstart,printend */
+	if ((*ipv6addrp).flag_prefixuse != 0 && ((formatoptions & (FORMATOPTION_printsuffix | FORMATOPTION_printstart | FORMATOPTION_printend)) == 0)) {
 		ipv6addrstruct_maskprefix(ipv6addrp);
 	};
 
@@ -58,12 +59,12 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 	} else if ( (*ipv6addrp).flag_startend_use != 0 ) {
 		/* check start and end */
 		if ( (((*ipv6addrp).bit_start - 1) & 0x03) != 0 ) {
-			snprintf(resultstring, NI_MAXHOST - 1, "Start bit number '%u' not dividable by 4 aren't supported because of non unique representation", (unsigned int) (*ipv6addrp).bit_start);
+			snprintf(resultstring, NI_MAXHOST - 1, "Start bit number '%u' is not supported because of non-unique representation (value-1 must be dividable by 4)", (unsigned int) (*ipv6addrp).bit_start);
 			retval = 1;
 			return (retval);
 		};
 		if ( ((*ipv6addrp).bit_end & 0x03) != 0 ) {
-			snprintf(resultstring, NI_MAXHOST - 1, "End bit number '%u' not dividable by 4 aren't supported because of non unique representation", (unsigned int) (*ipv6addrp).bit_end);
+			snprintf(resultstring, NI_MAXHOST - 1, "End bit number '%u' is not supported because of non-unique representation (value must be dividable by 4)", (unsigned int) (*ipv6addrp).bit_end);
 			retval = 1;
 			return (retval);
 		};

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.51 2014/02/03 07:07:04 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.52 2014/04/01 20:11:57 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -87,7 +87,7 @@ void printhelp_inputtypes(const uint32_t formatoptions) {
 	};
 
 	/* look for longest type definition */
-	for (j = 0; j < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); j++) {
+	for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_formatstrings); j++) {
 		if (strlen(ipv6calc_formatstrings[j].token) > maxlen) {
 			maxlen = strlen(ipv6calc_formatstrings[j].token);
 		};
@@ -209,7 +209,7 @@ void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoption
 
 	if ((formatoptions & FORMATOPTION_machinereadable) == 0) {
 		fprintf(stderr, "\n For examples and available format options use:\n");
-		fprintf(stderr, "    --out <type> --examples\n");
+		fprintf(stderr, "    -O|--out <type> --examples\n");
 		fprintf(stderr, "\n");
 	};
 };
@@ -339,8 +339,11 @@ void printhelp_common(void) {
 	return;
 };
 
-void printhelp_oldoptions(const struct option longopts[]) {
+void printhelp_oldoptions(const struct option longopts[], const s_ipv6calc_longopts_shortopts_map longopts_shortopts_map[]) {
 	int i = 0;
+	int j;
+	char c;
+	const char *info;
 	
 	printversion();
 	printcopyright();
@@ -350,7 +353,32 @@ void printhelp_oldoptions(const struct option longopts[]) {
 
 	while(longopts[i].name != NULL) {
 		if (longopts[i].val >= CMD_shortcut_start && longopts[i].val <= CMD_shortcut_end) {
-			fprintf(stderr, "  --%s\n", longopts[i].name);
+			c = '\0';
+			info = NULL;
+
+			DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Search in longopts_shortopts_map for %08x", longopts[i].val);
+			j = 0;
+			while (longopts_shortopts_map[j].val > 0) {
+				DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Check against longopts_shortopts_map entry %d:%08x", j, longopts_shortopts_map[j].val);
+				if (longopts[i].val == longopts_shortopts_map[j].val) {
+					c = longopts_shortopts_map[j].c;
+					info = longopts_shortopts_map[j].info;
+					break;
+				};
+				j++;
+			};
+
+			if (c != '\0') {
+				fprintf(stderr, "  -%c|--%s", c, longopts[i].name);
+			} else {
+				fprintf(stderr, "     --%s", longopts[i].name);
+			};
+
+			if (info != NULL) {
+				fprintf(stderr, " (%s)", info);
+			};
+
+			fprintf(stderr, "\n");
 		};
 		i++;
 	};

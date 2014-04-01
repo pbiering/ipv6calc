@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions.h,v 1.28 2013/10/28 20:10:17 ds6peter Exp $
- * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calcoptions.h,v 1.29 2014/04/01 20:11:57 ds6peter Exp $
+ * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options
@@ -20,6 +20,13 @@
 #define _ipv6calcoptions_h_
 
 #define MAXLONGOPTIONS	100
+
+/* map between longopts and shortopts */
+typedef struct {
+        const char c;
+        const int  val;
+	const char *info;
+} s_ipv6calc_longopts_shortopts_map;
 
 #endif
 

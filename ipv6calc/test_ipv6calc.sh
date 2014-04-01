@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.45 2014/02/02 19:33:21 ds6peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.46 2014/04/01 20:11:57 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -37,6 +37,9 @@ cat <<END | grep -v '^#'
 -a --uppercase 3ffe::1/64						=0.0.0.0.0.0.0.0.0.0.0.0.E.F.F.3.IP6.ARPA.
 -a -u 3ffe::1/64							=0.0.0.0.0.0.0.0.0.0.0.0.E.F.F.3.IP6.ARPA.
 --out revnibbles.arpa abcd:1234:5678:abcd:1234:1234:1234:1234/125	=0.3.2.1.4.3.2.1.4.3.2.1.4.3.2.1.d.c.b.a.8.7.6.5.4.3.2.1.d.c.b.a.ip6.arpa.
+-a --printstart 49 --printend 64 2001:a60:1168:0001:489c:1212:34fd:130f/64 	=1.0.0.0
+-a --printprefix 2001:a60:1168:0001:489c:1212:34fd:130f/64 			=1.0.0.0.8.6.1.1.0.6.a.0.1.0.0.2.ip6.arpa.
+-a --printsuffix 2001:a60:1168:0001:489c:1212:34fd:130f/64 			=f.0.3.1.d.f.4.3.2.1.2.1.c.9.8.4
 ## to uncompressed
 --addr_to_compressed 3ffe:ffff:0100:f101:0000:0000:0000:0001		=3ffe:ffff:100:f101::1
 --in ipv6 --out ipv6 --printcompressed 3ffe:ffff:0100:f101:0000:0000:0000:0001 =3ffe:ffff:100:f101::1

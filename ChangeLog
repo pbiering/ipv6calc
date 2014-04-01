@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.323 2014/02/25 20:49:15 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.324 2014/04/01 20:11:56 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20140331/PB
+	RFC1886 printout (reverse nibbles): mask prefix only in case of no printsuffix,printstart,printend
+
 20140225/PB
 	databases/ipv4-assignment: change from aggregated ip/networt to first-last structure, saving some space & getting rid of use of 'aggregate'
 

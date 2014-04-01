@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calchelp_local.c
- * Version    : $Id: ipv6calchelp_local.c,v 1.2 2013/10/28 07:25:31 ds6peter Exp $
- * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calchelp_local.c,v 1.3 2014/04/01 20:11:57 ds6peter Exp $
+ * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -110,7 +110,7 @@ void ipv6calc_printhelp(void) {
 	fprintf(stderr, "  --showinfo|-i --show_types            : show available types on '-m'\n");
 
 	fprintf(stderr, "\n");
-	fprintf(stderr, " To see old-style option use: --printoldoptions\n");
+	fprintf(stderr, " To see old-style/shortcut options use: --printoldoptions\n");
 	fprintf(stderr, "\n");
 	return;
 };
