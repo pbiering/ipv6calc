@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.106 2014/04/01 20:11:57 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.107 2014/04/02 06:11:55 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -246,11 +246,6 @@ int main(int argc, char *argv[]) {
 			case CMD_printexamples:
 				command = CMD_printexamples;
 				break;
-
-			case CMD_printoldoptions:
-				command = CMD_printoldoptions;
-				break;
-
 
 			/* backward compatibility/shortcut commands */
 			case 'r':
@@ -533,7 +528,7 @@ int main(int argc, char *argv[]) {
 				
 			default:
 				fprintf(stderr, "Usage: (see '%s --command -?|-h|--help' for more help)\n", PROGRAM_NAME);
-				ipv6calc_printhelp();
+				ipv6calc_printhelp(longopts, ipv6calc_longopts_shortopts_map);
 				exit(EXIT_FAILURE);
 		};
 	};
@@ -559,7 +554,7 @@ int main(int argc, char *argv[]) {
 	/* print help handling */
 	if (command == CMD_printhelp) {
 		if ( (outputtype == FORMAT_undefined) && (inputtype == FORMAT_undefined) && (action == ACTION_undefined)) {
-			ipv6calc_printhelp();
+			ipv6calc_printhelp(longopts, ipv6calc_longopts_shortopts_map);
 			exit(EXIT_FAILURE);
 		} else if (outputtype == FORMAT_auto) {
 			if (inputtype == FORMAT_undefined) {
@@ -610,11 +605,6 @@ int main(int argc, char *argv[]) {
 		};
 	};
 
-	if (command == CMD_printoldoptions) {
-		printhelp_oldoptions(longopts, ipv6calc_longopts_shortopts_map);
-		exit(EXIT_FAILURE);
-	};
-	
 	if (argc > 0) {
 		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Got input %s", argv[0]);
 	} else {

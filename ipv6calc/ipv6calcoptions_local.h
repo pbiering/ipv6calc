@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calc/ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions_local.h,v 1.4 2014/04/01 20:11:57 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions_local.h,v 1.5 2014/04/02 06:11:55 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -13,6 +13,7 @@
 
 #include "ipv6calctypes.h"
 #include "ipv6calccommands.h"
+#include "ipv6calcoptions.h"
 
 
 /* Options */
@@ -42,8 +43,6 @@ static struct option ipv6calc_longopts[] = {
 	{"help"           , 0, NULL, (int) 'h'},
 	{"examples"       , 0, NULL, CMD_printexamples   },
 	{"printexamples"  , 0, NULL, CMD_printexamples   },
-	{"printoldoptions", 0, NULL, CMD_printoldoptions },
-	{"old"            , 0, NULL, CMD_printoldoptions },
 
 	/* backward compatibility/shortcut commands */
 	{"addr2ip6_int"             , 0, NULL, CMD_addr_to_ip6int },

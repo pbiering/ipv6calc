@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calchelp_local.c
- * Version    : $Id: ipv6calchelp_local.c,v 1.3 2014/04/01 20:11:57 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp_local.c,v 1.4 2014/04/02 06:11:55 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -11,9 +11,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <getopt.h>
 #include "ipv6calc.h"
 #include "ipv6calctypes.h"
-#include "ipv6calccommands.h"
+#include "ipv6calcoptions.h"
 #include "ipv6calchelp.h"
 #include "config.h"
 
@@ -75,12 +76,12 @@ void ipv6calc_printinfo(void)  {
 };
 
 /* print global help */
-void ipv6calc_printhelp(void) {
+void ipv6calc_printhelp(const struct option longopts[], const s_ipv6calc_longopts_shortopts_map longopts_shortopts_map[]) {
 	printversion();
 	printcopyright();
 	fprintf(stderr, "\n");
 
-	fprintf(stderr, "This program formats and calculates IPv6 addresses and can do many more tricky things\n");
+	fprintf(stderr, "This program formats and calculates IPv6/IPv4/MAC addresses and can do many more tricky things\n");
 
 	fprintf(stderr, "\n");
 
@@ -109,8 +110,8 @@ void ipv6calc_printhelp(void) {
 	fprintf(stderr, "  --showinfo|-i [--machine_readable|-m] : show information about input data\n");
 	fprintf(stderr, "  --showinfo|-i --show_types            : show available types on '-m'\n");
 
-	fprintf(stderr, "\n");
-	fprintf(stderr, " To see old-style/shortcut options use: --printoldoptions\n");
+	printhelp_shortcut_options(longopts, longopts_shortopts_map);
+
 	fprintf(stderr, "\n");
 	return;
 };

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.53 2014/04/01 20:17:24 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.54 2014/04/02 06:11:55 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -339,16 +339,15 @@ void printhelp_common(void) {
 	return;
 };
 
-void printhelp_oldoptions(const struct option longopts[], const s_ipv6calc_longopts_shortopts_map longopts_shortopts_map[]) {
+void printhelp_shortcut_options(const struct option longopts[], const s_ipv6calc_longopts_shortopts_map longopts_shortopts_map[]) {
 	int i = 0;
 	int j;
 	char c;
 	const char *info;
 	
-	printversion();
-	printcopyright();
-	fprintf(stderr, " Usage with old style (shortcut) options (going obsolete):\n");
-	fprintf(stderr, "  <shortcut option> [<format option> ...] <input data> [...]\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr, " Usage with shortcut options: <shortcut option> [<format option> ...] <input data>\n");
+	fprintf(stderr, "  for more information and available format options use: <shortcut option> -?|-h|--help\n");
 	fprintf(stderr, "\n");
 
 	while(longopts[i].name != NULL) {
@@ -356,16 +355,18 @@ void printhelp_oldoptions(const struct option longopts[], const s_ipv6calc_longo
 			c = '\0';
 			info = NULL;
 
-			DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Search in longopts_shortopts_map for %08x", longopts[i].val);
-			j = 0;
-			while (longopts_shortopts_map[j].val > 0) {
-				DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Check against longopts_shortopts_map entry %d:%08x", j, longopts_shortopts_map[j].val);
-				if (longopts[i].val == longopts_shortopts_map[j].val) {
-					c = longopts_shortopts_map[j].c;
-					info = longopts_shortopts_map[j].info;
-					break;
+			if (longopts_shortopts_map != NULL) {
+				DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Search in longopts_shortopts_map for %08x", longopts[i].val);
+				j = 0;
+				while (longopts_shortopts_map[j].val > 0) {
+					DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Check against longopts_shortopts_map entry %d:%08x", j, longopts_shortopts_map[j].val);
+					if (longopts[i].val == longopts_shortopts_map[j].val) {
+						c = longopts_shortopts_map[j].c;
+						info = longopts_shortopts_map[j].info;
+						break;
+					};
+					j++;
 				};
-				j++;
 			};
 
 			if (c != '\0') {
