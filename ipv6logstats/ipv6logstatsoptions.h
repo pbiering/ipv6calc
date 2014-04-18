@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstatsoptions.h
- * Version    : $Id: ipv6logstatsoptions.h,v 1.10 2014/04/18 10:25:46 ds6peter Exp $
+ * Version    : $Id: ipv6logstatsoptions.h,v 1.11 2014/04/18 11:07:57 ds6peter Exp $
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -32,7 +32,7 @@ static struct option ipv6logstats_longopts[] = {
 	/* normal options */
 	{"unknown"	, 0, 0, (int) 'u'},
 	{"columns"	, 0, 0, (int) 'c'},
-	{"prefix"	, 0, 0, (int) 'p'},
+	{"prefix"	, 1, 0, (int) 'p'},
 	{"noheader"	, 0, 0, (int) 'n'},
 	{"onlyheader"	, 0, 0, (int) 'o'},
 	{"simple"	, 0, 0, (int) 's'},

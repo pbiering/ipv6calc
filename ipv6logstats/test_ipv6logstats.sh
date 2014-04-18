@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
-# Version    : $Id: test_ipv6logstats.sh,v 1.14 2013/11/04 20:30:50 ds6peter Exp $
+# Version    : $Id: test_ipv6logstats.sh,v 1.15 2014/04/18 11:07:57 ds6peter Exp $
 # Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"
@@ -174,6 +174,5 @@ testscenarios_match | while read ip match; do
 		exit 1
 	fi
 done || exit 1
-
 
 echo "All tests were successfully done!"

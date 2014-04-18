@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.50 2014/02/02 17:08:22 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.51 2014/04/18 11:07:57 ds6peter Exp $
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -176,7 +176,13 @@ int main(int argc,char *argv[]) {
 				break;
 
 			case 'p':
-				snprintf(opt_token, sizeof(opt_token) - 1, "%s", optarg);
+				DEBUGPRINT_WA(DEBUG_ipv6logstats_general, "Given prefix token: %s (%d)", optarg, strlen(optarg));
+				if (strlen(optarg) < sizeof(opt_token)) {
+					snprintf(opt_token, sizeof(opt_token), "%s", optarg);
+				} else {
+					fprintf(stderr, " Prefix token too long: %s\n", optarg);
+					exit(EXIT_FAILURE);
+				};
 				break;
 
 			case 'u':
@@ -203,11 +209,11 @@ int main(int argc,char *argv[]) {
 				break;
 
 			case 'w':
-				if (strlen(optarg) < NI_MAXHOST) {
-					strcpy(file_out, optarg);
+				if (strlen(optarg) < sizeof(file_out)) {
+					snprintf(file_out, sizeof(file_out), "%s", optarg);
 					file_out_flag = 1;
 				} else {
-					fprintf(stderr, " Output file too long: %s\n", optarg);
+					fprintf(stderr, " Output file name too long: %s\n", optarg);
 					exit(EXIT_FAILURE);
 				};
 				break;
