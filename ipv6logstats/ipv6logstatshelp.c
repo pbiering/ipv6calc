@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstatshelp.c
- * Version    : $Id: ipv6logstatshelp.c,v 1.12 2013/11/04 20:30:50 ds6peter Exp $
- * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logstatshelp.c,v 1.13 2014/04/18 10:25:46 ds6peter Exp $
+ * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -70,9 +70,9 @@ void ipv6logstats_printhelp(void) {
 
 	fprintf(stderr, "\n");
 	fprintf(stderr, "  [-u|--unknown]             : print unknown IP addresses to stderr\n");
-	fprintf(stderr, "  [-c|--colums]              : print statistics in colums (1)\n");
-	fprintf(stderr, "  [-n|--noheader]            : don't print header in colums mode (1)\n");
-	fprintf(stderr, "  [-o|--onlyheader]          : print only header in colums mode (1)\n");
+	fprintf(stderr, "  [-c|--columns]             : print statistics in columns (1)\n");
+	fprintf(stderr, "  [-n|--noheader]            : don't print header in columns mode (1)\n");
+	fprintf(stderr, "  [-o|--onlyheader]          : print only header in columns mode (1)\n");
 	fprintf(stderr, "  [-p|--prefix <token>]      : print token as prefix (1)\n");
 	fprintf(stderr, "  [-q|--quiet]               : be more quiet\n");
 	fprintf(stderr, "  [-s|--simple]              : disable extended statistic (CountryCode/ASN)\n");

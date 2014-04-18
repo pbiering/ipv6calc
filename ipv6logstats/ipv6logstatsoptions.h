@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstatsoptions.h
- * Version    : $Id: ipv6logstatsoptions.h,v 1.9 2013/11/04 20:30:50 ds6peter Exp $
- * Copyright  : 2003-2012 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logstatsoptions.h,v 1.10 2014/04/18 10:25:46 ds6peter Exp $
+ * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing optios for ipvlogstats.c
@@ -31,7 +31,7 @@ static struct option ipv6logstats_longopts[] = {
 
 	/* normal options */
 	{"unknown"	, 0, 0, (int) 'u'},
-	{"colums"	, 0, 0, (int) 'c'},
+	{"columns"	, 0, 0, (int) 'c'},
 	{"prefix"	, 0, 0, (int) 'p'},
 	{"noheader"	, 0, 0, (int) 'n'},
 	{"onlyheader"	, 0, 0, (int) 'o'},
