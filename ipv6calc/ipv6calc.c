@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.107 2014/04/02 06:11:55 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.108 2014/04/18 14:04:16 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1421,6 +1421,13 @@ PIPE_input:
 				retval = libipv6addr_to_hex(&ipv6addr, resultstring, formatoptions);
 			};
 			break;
+
+		case FORMAT_ipv4hex:
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_ipv4hex");
+			if (ipv4addr.flag_valid == 1) {
+				retval = libipv4addr_to_hex(&ipv4addr, resultstring, formatoptions);
+			};
+			break;
 				
 		case FORMAT_revnibbles_int:
 		case FORMAT_revnibbles_arpa:
@@ -1494,7 +1501,7 @@ PIPE_input:
 			if (ipv4addr.flag_valid != 1) { fprintf(stderr, "No valid IPv4 address given!\n"); exit(EXIT_FAILURE); };
 			retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, resultstring, formatoptions);
 			break;
-			
+
 		case FORMAT_eui64:
 			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_eui64");
 

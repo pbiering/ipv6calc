@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.37 2014/02/09 18:45:07 ds6peter Exp $
- * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calctypes.h,v 1.38 2014/04/18 14:04:16 ds6peter Exp $
+ * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for ipv6calctypes.c
@@ -135,10 +135,10 @@ typedef struct {
 	{ FORMAT_revnibbles_int , 0x5ff },
 	{ FORMAT_revnibbles_arpa, 0x5ff },
 	{ FORMAT_bitstring      , 0x5ff },
-	{ FORMAT_ipv6addr       , FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ipv6addr | FORMAT_base85 | FORMAT_ifinet6 | FORMAT_octal | FORMAT_ipv6literal },
+	{ FORMAT_ipv6addr       , FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ipv6addr | FORMAT_base85 | FORMAT_ifinet6 | FORMAT_octal | FORMAT_ipv6literal | FORMAT_hex },
 	{ FORMAT_ipv6literal    , FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ipv6addr | FORMAT_base85 | FORMAT_ifinet6 | FORMAT_octal | FORMAT_ipv6literal },
-	{ FORMAT_ipv4addr       , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex },
-	{ FORMAT_ipv4hex        , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex },
+	{ FORMAT_ipv4addr       , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex | FORMAT_hex },
+	{ FORMAT_ipv4hex        , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex | FORMAT_hex },
 	{ FORMAT_ipv4revhex     , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex },
 	{ FORMAT_mac            , FORMAT_eui64 },
 	{ FORMAT_eui64          , FORMAT_eui64 },
