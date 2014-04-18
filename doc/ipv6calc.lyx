@@ -3565,17 +3565,17 @@ ipv6logstats: version 0.95.0.rc.1 STAT_REG STAT_CC STAT_AS
 
 \begin_layout Code
 
-  [-c|--colums]              : print statistics in colums (1)
+  [-c|--columns]              : print statistics in columns (1)
 \end_layout
 
 \begin_layout Code
 
-  [-n|--noheader]            : don't print header in colums mode (1)
+  [-n|--noheader]            : don't print header in columns mode (1)
 \end_layout
 
 \begin_layout Code
 
-  [-o|--onlyheader]          : print only header in colums mode (1)
+  [-o|--onlyheader]          : print only header in columns mode (1)
 \end_layout
 
 \begin_layout Code
