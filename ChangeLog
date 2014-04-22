@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.325 2014/04/22 05:52:49 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.326 2014/04/22 20:29:19 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20140423/PB
+	Add dedicated support for 6bone address anonymization
+
 20140422/PB
 	Small bugfix in ipv6calc test scripts
 

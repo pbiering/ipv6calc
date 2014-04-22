@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.103 2014/02/03 20:48:04 ds6peter Exp $
- * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv6addr.c,v 1.104 2014/04/22 20:29:19 ds6peter Exp $
+ * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Function library for IPv6 address handling
@@ -618,6 +618,9 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 	int p;
 	uint32_t mask_0_15, mask_16_31;
 
+	uint32_t as_num32, cc_index;
+	int r1, r2;
+
 	ipv6calc_ipv4addr ipv4addr;
 	ipv6calc_ipv6addr ipv6addr;
 
@@ -650,7 +653,16 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 				fprintf(stderr, "%s/%s: checksum ok - anonymized prefix found\n", __FILE__, __func__);
 			};
 
-			type |= IPV6_NEW_ADDR_PRODUCTIVE | IPV6_NEW_ADDR_AGU | IPV6_ADDR_UNICAST | IPV6_ADDR_ANONYMIZED_PREFIX;
+			type |= IPV6_NEW_ADDR_AGU | IPV6_ADDR_UNICAST | IPV6_ADDR_ANONYMIZED_PREFIX;
+
+			r1 = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_CCINDEX, &cc_index);
+			r2 = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_ASN32, &as_num32);
+
+			if ((r1 == 0) && (r2 == 0) && (cc_index == ANON_PREFIX_CCINDEX_6BONE) && (as_num32 == 0)) {
+				type |= IPV6_NEW_ADDR_6BONE;
+			} else {
+				type |= IPV6_NEW_ADDR_PRODUCTIVE;
+			};
 		} else {
 			if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
 				fprintf(stderr, "%s/%s: checksum NOT ok - no anonymized prefix found\n", __FILE__, __func__);
@@ -2309,10 +2321,18 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 			};
 
 			// switch to prefix anonymization
-			libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6addrp, resultstring, 0);
+			if ((ipv6addrp->scope & IPV6_NEW_ADDR_6BONE) != 0) {
+				cc_index = ANON_PREFIX_CCINDEX_6BONE;
+				as_num32 = 0;
+			} else {
+				libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6addrp, resultstring, 0);
 
-			cc_index = libipv6calc_db_wrapper_cc_index_by_addr(resultstring, 6);
-			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(resultstring, 6);
+				cc_index = libipv6calc_db_wrapper_cc_index_by_addr(resultstring, 6);
+				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(resultstring, 6);
+			};
+
+			DEBUGPRINT_WA(DEBUG_libipv6addr, "cc_index=%d (0x%03x) as_num32=%d (0x%08x)", cc_index, cc_index, as_num32, as_num32);
+
 			flags = 0x0;
 
 			ipv6_prefix[0] = 0; ipv6_prefix[1] = 0;

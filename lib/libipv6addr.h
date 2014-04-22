@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.77 2014/02/28 06:46:36 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.78 2014/04/22 20:29:19 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -49,7 +49,8 @@
  * Prefix anonymization in case of method=kp: p=0x0f
  * a909:ccca:aaaa:aaaC  (C = 4-bit checksum)
  *                      ccc      -> 10-bit Country Code mapping [A-Z]*[A-Z0-9] (936)
- *                                   0x3FF = unknown country
+ *                                   0x3FE = unknown country
+ *                                   0x3FD & ASN=0 = 6bone
  *                                   0x000-0x3A7: c1= c / 36, c2 = c % 36
  *                      aaaaaaaa -> 32-bit ASN
  */
@@ -154,6 +155,8 @@
 #define ANON_PREFIX_TOKEN_MASK		0xffff
 #define ANON_PREFIX_TOKEN_XOR		0x0
 #define ANON_PREFIX_TOKEN_VALUE		0xa909		// fix
+
+#define ANON_PREFIX_CCINDEX_6BONE	0x3fd
 
 // Payload selector
 #define ANON_PREFIX_PAYLOAD_CCINDEX	1
