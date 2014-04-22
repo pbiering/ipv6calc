@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.32 2013/10/28 07:25:31 ds6peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.33 2014/04/22 05:52:49 ds6peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -134,8 +134,8 @@ testscenarios_showinfo | while read address output; do
 
 	echo "Test: $address for $output"
 	output_escaped="${output//./\\.}"
-	output_escaped="${output_escaped//[/\[}"
-	output_escaped="${output_escaped//]/\]}"
+	output_escaped="${output_escaped//[/\\[}"
+	output_escaped="${output_escaped//]/\\]}"
 	if ! ./ipv6calc -q -i -m $address | grep "^$output_escaped$"; then
 		echo "ERROR: unexpected result ($output_escaped)"
 		./ipv6calc -q -i -m $address
@@ -191,8 +191,8 @@ if ./ipv6calc -v 2>&1 | grep -qw GeoIP; then
 		fi
 		echo "Test: $address for $output"
 		output_escaped="${output//./\\.}"
-		output_escaped="${output_escaped//[/\[}"
-		output_escaped="${output_escaped//]/\]}"
+		output_escaped="${output_escaped//[/\\[}"
+		output_escaped="${output_escaped//]/\\]}"
 		if ! ./ipv6calc -q -i -m $address | grep "^$output_escaped$"; then
 			echo "ERROR: unexpected result ($output_escaped)"
 			./ipv6calc -q -i -m $address
@@ -227,8 +227,8 @@ if ./ipv6calc -v 2>&1 | grep -qw IP2Location; then
 		fi
 		echo "Test: $address for $output"
 		output_escaped="${output//./\\.}"
-		output_escaped="${output_escaped//[/\[}"
-		output_escaped="${output_escaped//]/\]}"
+		output_escaped="${output_escaped//[/\\[}"
+		output_escaped="${output_escaped//]/\\]}"
 		if ! ./ipv6calc -q -i -m $address | grep "^$output_escaped$"; then
 			echo "ERROR: unexpected result ($output_escaped)"
 			./ipv6calc -q -i -m $address

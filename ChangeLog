@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.324 2014/04/01 20:11:56 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.325 2014/04/22 05:52:49 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20140422/PB
+	Small bugfix in ipv6calc test scripts
+
 20140331/PB
 	RFC1886 printout (reverse nibbles): mask prefix only in case of no printsuffix,printstart,printend
 
