@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.33 2014/04/22 05:52:49 ds6peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.34 2014/04/22 05:56:38 ds6peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -153,7 +153,7 @@ if ./ipv6calc -v 2>&1 | grep -qw GeoIP; then
 	echo "Run GeoIP tests"
 	getexamples_GeoIP | while read address; do
 		echo "Run GeoIP showinfo on: $address"
-		if ./ipv6calc -q -i -m -G $address | grep ^GEOIP; then
+		if ./ipv6calc -q -i -m $address | grep ^GEOIP; then
 			true
 		else
 			if echo "$address" | grep -q ":"; then
@@ -161,13 +161,13 @@ if ./ipv6calc -v 2>&1 | grep -qw GeoIP; then
 					echo "Expected result (missing GEOIP) because of missing IPv6 support in GeoIP)"
 					true
 				else
-					echo "Unexpected result (missing GEOIP): ./ipv6calc -q -i -m -G $address"
-					./ipv6calc -q -i -m -G $address
+					echo "Unexpected result (missing GEOIP): ./ipv6calc -q -i -m $address"
+					./ipv6calc -q -i -m $address
 					exit 1
 				fi
 			else
-				echo "Unexpected result (missing GEOIP): ./ipv6calc -q -i -m -G $address"
-				./ipv6calc -q -i -m -G $address
+				echo "Unexpected result (missing GEOIP): ./ipv6calc -q -i -m $address"
+				./ipv6calc -q -i -m $address
 				exit 1
 			fi
 		fi
@@ -209,11 +209,11 @@ if ./ipv6calc -v 2>&1 | grep -qw IP2Location; then
 	echo "Run IP2Location tests"
 	getexamples_IP2Location | while read address; do
 		echo "Run IP2Location showinfo on: $address"
-		if ./ipv6calc -q -i -m -L $address | egrep -v '=This (record|parameter) ' | grep ^IP2LOCATION; then
+		if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep ^IP2LOCATION; then
 			true
 		else
-			echo "Unexpected result (missing IP2LOCATION): ./ipv6calc -q -i -m -L $address"
-			./ipv6calc -q -i -m -L $address
+			echo "Unexpected result (missing IP2LOCATION): ./ipv6calc -q -i -m $address"
+			./ipv6calc -q -i -m $address
 			exit 1
 		fi
 	done || exit 1
