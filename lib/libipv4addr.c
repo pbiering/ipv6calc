@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.51 2014/04/22 06:18:00 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.52 2014/04/23 05:52:58 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -725,12 +725,14 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 	uint16_t cc_index, c;
 	int i;
 
-	if ((method != ANON_METHOD_KEEPTYPEASNCC) || ((ipv4addrp->scope & (IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL)) != (IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL))) {
+	if ((ipv4addrp->scope & IPV4_ADDR_BROADCAST) != 0) {
+
+		DEBUGPRINT_NA(DEBUG_libipv4addr, "skip anonymize (broadcast address)");
+
+	} else if ((method != ANON_METHOD_KEEPTYPEASNCC) || ((ipv4addrp->scope & (IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL)) != (IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL))) {
 		// not ANON_METHOD_KEEPTYPEASNCC or not a global address
 
-		if ( (ipv6calc_debug & DEBUG_libipv4addr) != 0 ) {
-			fprintf(stderr, "%s/%s: anonymize by masking\n", __FILE__, __func__);
-		};
+		DEBUGPRINT_NA(DEBUG_libipv4addr, "anonymize by masking");
 
 		if (mask == 0) {
 			/* clear IPv4 address: 0.0.0.0 */

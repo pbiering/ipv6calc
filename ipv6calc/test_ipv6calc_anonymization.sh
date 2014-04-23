@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc_anonymization.sh
-# Version    : $Id: test_ipv6calc_anonymization.sh,v 1.4 2014/04/22 20:29:19 ds6peter Exp $
-# Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6calc_anonymization.sh,v 1.5 2014/04/23 05:52:58 ds6peter Exp $
+# Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test ipv6calc anonymization
 
@@ -108,11 +108,31 @@ run_anon_options_tests() {
 testscenarios_kp() {
 	testscenarios_anonymization_options_kp | while IFS="=" read input result; do
 		echo "$input" | awk '{ print $NF }'
-	done
+	done | sort | uniq
 
-	test_list | ./ipv6calc -E ipv4,ipv6 | while read input filter; do
+	testscenarios_anonymization_options | while IFS="=" read input result; do
+		echo "$input" | awk '{ print $NF }'
+	done | sort | uniq
+
+	test_list | while read input filter; do
 		echo "$input"
-	done
+	done | sort | uniq
+
+	testscenarios_filter | while read input filter; do
+		echo "$input"
+	done | sort | uniq
+
+	testscenarios_ipv4_reserved | while read input filter; do
+		echo "$input"
+	done | sort | uniq
+
+	testscenarios_ipv6_reserved | while read input filter; do
+		echo "$input"
+	done | sort | uniq
+
+	testscenarios_auto_good | while read input filter; do
+		echo "$input"
+	done | sort | uniq
 }
 
 run_anon_options_kp_tests() {
@@ -144,7 +164,7 @@ run_anon_options_kp_tests() {
 	done
 
 	echo "Run 'ipv6calc' anonymization option kp TYPE tests..."
-	testscenarios_kp | while read input result; do
+	testscenarios_kp | ./ipv6calc -E ipv4,ipv6 | while read input result; do
 		output=$(./ipv6calc -q -A anonymize --anonymize-preset kp $input)
 
 		type_orig="`./ipv6calc -m -i -q "$input"  | grep "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
@@ -171,11 +191,17 @@ run_anon_options_kp_tests() {
 		type_anon_compare="$(echo "$type_anon_compare" | perl -p -e 's/,+/,/g')"
 		type_orig_compare="$(echo "$type_orig_compare" | perl -p -e 's/,+/,/g')"
 
-		type_anon_compare="$(echo "$type_anon_compare" | perl -p -e 's/,$//g')"
-		type_orig_compare="$(echo "$type_orig_compare" | perl -p -e 's/,$//g')"
+		type_anon_compare="$(echo "$type_anon_compare" | perl -p -e 's/(^,|,$)//g')"
+		type_orig_compare="$(echo "$type_orig_compare" | perl -p -e 's/(^,|,$)//g')"
 
-		type_anon_compare="$(echo "$type_anon_compare" | perl -p -e 's/^,//g')"
-		type_orig_compare="$(echo "$type_orig_compare" | perl -p -e 's/^,//g')"
+		if [ -z "$type_orig_compare" ]; then
+			echo "ERROR : something went wrong reducing IPVx_TYPE for $input"
+			exit 1
+		fi
+		if [ -z "$type_anon_compare" ]; then
+			echo "ERROR : something went wrong reducing IPVx_TYPE for $output"
+			exit 1
+		fi
 
 		echo "DEBUG : IPVx      orig: $input"
 		echo "DEBUG : IPVx      anon: $output"
@@ -190,9 +216,11 @@ run_anon_options_kp_tests() {
 		fi
 
 	done || return 1
+	echo "All anonymization method kp tests successful!"
 }
 
 
 run_anon_options_tests || exit 1
 run_anon_options_kp_tests || exit 1
 run_anon_tests || exit 1
+echo "All anonymization tests successful!"
