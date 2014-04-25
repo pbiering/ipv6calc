@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calcdebug.h
- * Version    : $Id: libipv6calcdebug.h,v 1.17 2014/02/03 20:48:04 ds6peter Exp $
+ * Version    : $Id: libipv6calcdebug.h,v 1.18 2014/04/25 20:50:00 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -73,6 +73,10 @@
 /* error print no args */
 #define ERRORPRINT_NA(t)		\
 	fprintf(stderr, "%s/%s: " t "\n", __FILE__, __func__);
+
+/* begin/end of debug section */
+#define DEBUGSECTION_BEGIN(d)	if ((ipv6calc_debug & d) != 0) {
+#define DEBUGSECTION_END	};
 
 
 #endif

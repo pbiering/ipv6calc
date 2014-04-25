@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.h
- * Version    : $Id: ipv6loganon.h,v 1.5 2013/10/28 07:25:31 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.h,v 1.6 2014/04/25 20:50:00 ds6peter Exp $
  * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
@@ -17,6 +17,8 @@
 #define CACHE_LRU_SIZE 200
 
 #define DEBUG_ipv6loganon_general      0x00000001l
+
+#define DEBUG_ipv6loganon_cache        0x00000004l
 
 /* prototyping */
 extern int cache_lru_limit;

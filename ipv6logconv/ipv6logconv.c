@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.30 2014/02/02 17:08:22 ds6peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.31 2014/04/25 20:50:00 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -108,9 +108,7 @@ int main(int argc,char *argv[]) {
 
 	/* Fetch the command-line arguments. */
 	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {
-		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "%s/%s: Parsing option: 0x%08x\n", __FILE__, __func__, i);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6logconv_general, "Parsing option: 0x%08x", i);
 
 		/* catch common options */
 		result = ipv6calcoptions_common_basic(i, optarg, longopts);
@@ -185,9 +183,7 @@ int main(int argc,char *argv[]) {
 		exit(EXIT_FAILURE);
 	};
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "Debug value:%lx  command:%lx  inputtype:%lx   outputtype:%lx  action:%lx\n", (unsigned long) ipv6calc_debug, command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action); 
-	};
+	DEBUGPRINT_WA(DEBUG_ipv6logconv_general, "Debug value:%lx  command:%lx  inputtype:%lx   outputtype:%lx  action:%lx", (unsigned long) ipv6calc_debug, command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action);
 	
 	/* do work depending on selection */
 	if (command == CMD_printversion) {
@@ -235,9 +231,7 @@ static void lineparser(const long int outputtype) {
 			};
 		};
 		
-		if (ipv6calc_debug == 1) {
-			fprintf(stderr, "Line: %d\r", linecounter);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6logconv_processing, "Line counter: %d", linecounter);
 
 		if (strlen(linebuffer) >= LINEBUFFER) {
 			fprintf(stderr, "Line too long: %d\n", linecounter);
@@ -373,17 +367,13 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 	/* use cache ? */
 	if (flag_nocache == 0 && cache_lru_max > 0) {
 		/* check last seen one first */
-		if ((ipv6calc_debug & 0x4) != 0) {
-			fprintf(stderr, "LRU cache: look for key=%s\n", token);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6logconv_processing, "LRU cache: look for key=%s", token);
 
 		if (cache_lru_key_outputtype[cache_lru_last - 1] == outputtype) {
 			if (strcmp(cache_lru_key_token[cache_lru_last - 1], token) == 0) {
 				snprintf(resultstring, LINEBUFFER - 1, "%s", cache_lru_value[cache_lru_last - 1]);
 				cache_lru_statistics[0]++;
-				if ((ipv6calc_debug & 0x4) != 0) {
-					fprintf(stderr, "LRU cache: hit last line=%d key_token=%s key_outputtype=%lx value=%s\n", cache_lru_last - 1, token, outputtype, resultstring);
-				};
+				DEBUGPRINT_WA(DEBUG_ipv6logconv_processing, "LRU cache: hit last line=%d key_token=%s key_outputtype=%lx value=%s", cache_lru_last - 1, token, outputtype, resultstring);
 				return (0);
 			};
 		} else {
@@ -394,9 +384,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 						if (strcmp(cache_lru_key_token[i - 1], token) == 0) {
 							snprintf(resultstring, LINEBUFFER - 1, "%s", cache_lru_value[i - 1]);
 							cache_lru_statistics[cache_lru_last - i]++;
-							if ((ipv6calc_debug & 0x4) != 0) {
-								fprintf(stderr, "LRU cache: hit line=%d key_token=%s key_outputtype=%lx value=%s\n", i - 1, token, outputtype, resultstring);
-							};
+							DEBUGPRINT_WA(DEBUG_ipv6logconv_processing, "LRU cache: hit line=%d key_token=%s key_outputtype=%lx value=%s", i - 1, token, outputtype, resultstring);
 							return (0);
 						};
 					};
@@ -409,9 +397,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 						if (strcmp(cache_lru_key_token[i - 1], token) == 0) {
 							snprintf(resultstring, LINEBUFFER - 1, "%s", cache_lru_value[i - 1]);
 							cache_lru_statistics[cache_lru_max - i + cache_lru_last]++;
-							if ((ipv6calc_debug & 0x4) != 0) {
-								fprintf(stderr, "LRU cache: hit line=%d key_token=%s key_outputtype=%lx value=%s\n", i - 1, token, outputtype, resultstring);
-							};
+							DEBUGPRINT_WA(DEBUG_ipv6logconv_processing, "LRU cache: hit line=%d key_token=%s key_outputtype=%lx value=%s", i - 1, token, outputtype, resultstring);
 							return (0);
 						};
 					};
@@ -428,19 +414,19 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 	/* autodetection */
 	inputtype = libipv6calc_autodetectinput(token);
 
-	if (ipv6calc_debug != 0) {
+	DEBUGSECTION_BEGIN(DEBUG_ipv6logconv_processing)
 		if (inputtype >= 0) {
 			for (i = 0; i < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); i++) {
 				if (inputtype == ipv6calc_formatstrings[i].number) {
-					fprintf(stderr, "%s/%s: Found type: %s\n", __FILE__, __func__, ipv6calc_formatstrings[i].token);
+					DEBUGPRINT_WA(DEBUG_ipv6logconv_processing, "Found type: %s", ipv6calc_formatstrings[i].token);
 				};
 				break;
 			};
 		} else {
-			fprintf(stderr, "%s/%s: Input type unknown\n", __FILE__, __func__);
+			DEBUGPRINT_NA(DEBUG_ipv6logconv_processing, "Input type unknown");
 			return (1);
 		};
-	};
+	DEBUGSECTION_END
 
 	/* proceed input depending on type */	
 	switch (inputtype) {
@@ -684,9 +670,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 		snprintf(cache_lru_key_token[cache_lru_last - 1], NI_MAXHOST - 1, "%s", token);
 		cache_lru_key_outputtype[cache_lru_last - 1] = outputtype;
 		snprintf(cache_lru_value[cache_lru_last - 1], NI_MAXHOST - 1, "%s", resultstring);
-		if ((ipv6calc_debug & 0x4) != 0) {
-			fprintf(stderr, "LRU cache: fill line=%d key_token=%s key_outputtype=%lx value=%s\n", cache_lru_last - 1, cache_lru_key_token[cache_lru_last - 1], cache_lru_key_outputtype[cache_lru_last - 1], cache_lru_value[cache_lru_last - 1]);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6logconv_processing, "LRU cache: fill line=%d key_token=%s key_outputtype=%lx value=%s", cache_lru_last - 1, cache_lru_key_token[cache_lru_last - 1], cache_lru_key_outputtype[cache_lru_last - 1], cache_lru_value[cache_lru_last - 1]);
 	};
 
 	return (0);

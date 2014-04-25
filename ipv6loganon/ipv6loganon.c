@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.27 2013/10/30 20:04:25 ds6peter Exp $
- * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6loganon.c,v 1.28 2014/04/25 20:50:00 ds6peter Exp $
+ * Copyright  : 2007-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile anonymization
@@ -90,7 +90,6 @@ void printversion_verbose(const int level) {
 
 /**************************************************/
 /* main */
-#define DEBUG_function_name "ipv6loganon/main"
 int main(int argc,char *argv[]) {
 	int i, lop, result;
 	uint32_t command = 0;
@@ -119,9 +118,7 @@ int main(int argc,char *argv[]) {
 
 	/* Fetch the command-line arguments. */
 	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {
-		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "%s/%s: Parsing option: 0x%08x\n", __FILE__, __func__, i);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "Parsing option: 0x%08x", i);
 
 		/* catch common options */
 		result = ipv6calcoptions_common_basic(i, optarg, longopts);
@@ -247,22 +244,14 @@ int main(int argc,char *argv[]) {
 	};
 
 	if (file_out_flag == 1) {
-		if (ipv6calc_debug > 0) {
-			fprintf(stderr, "Output file specified: %s\n", file_out);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "Output file specified: %s", file_out);
 
 		FILE_OUT = fopen(file_out, file_out_mode);
 		if (! FILE_OUT) {
 			fprintf(stderr, "Can't open Output file: %s\n", file_out);
 			exit(EXIT_FAILURE);
 		} else {
-			if (ipv6calc_debug > 0) {
-				if (strcmp(file_out_mode, "a") == 0) {
-					fprintf(stderr, "Output file opened successfully in append mode: %s\n", file_out);
-				} else {
-					fprintf(stderr, "Output file opened successfully in write mode: %s\n", file_out);
-				};
-			};
+			DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "Output file opened successfully in %s mode: %s", (strcmp(file_out_mode, "a") == 0) ? "append" : "write", file_out);
 			file_out_flag = 2;
 		};
 	};
@@ -270,9 +259,7 @@ int main(int argc,char *argv[]) {
 	lineparser();
 
 	if (file_out_flag == 2) {
-		if (ipv6calc_debug > 0) {
-			fprintf(stderr, "Output file is closed now: %s\n", file_out);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "Output file is closed now: %s", file_out);
 		fflush(FILE_OUT);
 		fclose(FILE_OUT);
 	} else {
@@ -281,13 +268,11 @@ int main(int argc,char *argv[]) {
 
 	exit(EXIT_SUCCESS);
 };
-#undef DEBUG_function_name
 
 
 /*
  * Line parser
  */
-#define DEBUG_function_name "ipv6loganon/lineparser"
 static void lineparser(void) {
 	char linebuffer[LINEBUFFER];
 	char token[LINEBUFFER];
@@ -317,10 +302,8 @@ static void lineparser(void) {
 				fprintf(stderr, "Ok, proceeding stdin...\n");
 			};
 		};
-		
-		if (ipv6calc_debug == 1) {
-			fprintf(stderr, "Line: %d\r", linecounter);
-		};
+	
+		DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "Line number: %d", linecounter);
 
 		if (strlen(linebuffer) >= LINEBUFFER) {
 			fprintf(stderr, "Line too long: %d\n", linecounter);
@@ -332,9 +315,7 @@ static void lineparser(void) {
 			continue;
 		};
 		
-		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "%s: Got line: '%s'\n", DEBUG_function_name, linebuffer);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "Got line: '%s'", linebuffer);
 
 		/* look for first token */
 		charptr = strtok_r(linebuffer, " \t\n", ptrptr);
@@ -351,9 +332,7 @@ static void lineparser(void) {
 
 		snprintf(token, sizeof(token) - 1, "%s", charptr);
 		
-		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "%s: Token 1: '%s'\n", DEBUG_function_name, token);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "Token 1: '%s'", token);
 		
 		/* call anonymizer now */
 		retval = anonymizetoken(resultstring, charptr);
@@ -398,13 +377,11 @@ static void lineparser(void) {
 	};
 	return;
 };
-#undef DEBUG_function_name
 
 
 /*
  * Anonymize token
  */
-#define DEBUG_function_name "ipv6loganon/anonymizetoken"
 static int anonymizetoken(char *resultstring, const char *token) {
 	long int inputtype = -1;
 	int retval = 1, i;
@@ -415,9 +392,7 @@ static int anonymizetoken(char *resultstring, const char *token) {
 	ipv6calc_macaddr   macaddr;
 	ipv6calc_eui64addr eui64addr;
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: Token: '%s'\n", DEBUG_function_name, token);
-	};
+	DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "Token: '%s'", token);
 
        	/* clear resultstring */
 	resultstring[0] = '\0';
@@ -429,16 +404,12 @@ static int anonymizetoken(char *resultstring, const char *token) {
 	/* use cache ? */
 	if (flag_nocache == 0 && cache_lru_max > 0) {
 		/* check last seen one first */
-		if ((ipv6calc_debug & 0x4) != 0) {
-			fprintf(stderr, "LRU cache: look for key=%s\n", token);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6loganon_cache, "LRU cache: look for key=%s", token);
 
 		if (strcmp(cache_lru_key_token[cache_lru_last - 1], token) == 0) {
 			snprintf(resultstring, LINEBUFFER - 1, "%s", cache_lru_value[cache_lru_last - 1]);
 			cache_lru_statistics[0]++;
-			if ((ipv6calc_debug & 0x4) != 0) {
-				fprintf(stderr, "LRU cache: hit last line=%d key_token=%s value=%s\n", cache_lru_last - 1, token, resultstring);
-			};
+			DEBUGPRINT_WA(DEBUG_ipv6loganon_cache, "LRU cache: hit last line=%d key_token=%s value=%s", cache_lru_last - 1, token, resultstring);
 			return (0);
 		};
 		/* run backwards to first entry */
@@ -447,9 +418,7 @@ static int anonymizetoken(char *resultstring, const char *token) {
 				if (strcmp(cache_lru_key_token[i - 1], token) == 0) {
 					snprintf(resultstring, LINEBUFFER - 1, "%s", cache_lru_value[i - 1]);
 					cache_lru_statistics[cache_lru_last - i]++;
-					if ((ipv6calc_debug & 0x4) != 0) {
-						fprintf(stderr, "LRU cache: hit line=%d key_token=%s value=%s\n", i - 1, token, resultstring);
-					};
+					DEBUGPRINT_WA(DEBUG_ipv6loganon_cache, "LRU cache: hit line=%d key_token=%s value=%s", i - 1, token, resultstring);
 					return (0);
 				};
 			};
@@ -460,9 +429,7 @@ static int anonymizetoken(char *resultstring, const char *token) {
 				if (strcmp(cache_lru_key_token[i - 1], token) == 0) {
 					snprintf(resultstring, LINEBUFFER - 1, "%s", cache_lru_value[i - 1]);
 					cache_lru_statistics[cache_lru_max - i + cache_lru_last]++;
-					if ((ipv6calc_debug & 0x4) != 0) {
-						fprintf(stderr, "LRU cache: hit line=%d key_token=%s value=%s\n", i - 1, token, resultstring);
-					};
+					DEBUGPRINT_WA(DEBUG_ipv6loganon_cache, "LRU cache: hit line=%d key_token=%s value=%s", i - 1, token, resultstring);
 					return (0);
 				};
 			};
@@ -477,19 +444,19 @@ static int anonymizetoken(char *resultstring, const char *token) {
 	/* autodetection */
 	inputtype = libipv6calc_autodetectinput(token);
 
-	if (ipv6calc_debug != 0) {
+	DEBUGSECTION_BEGIN(DEBUG_ipv6loganon_general)
 		if (inputtype >= 0) {
 			for (i = 0; i < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); i++) {
 				if (inputtype == ipv6calc_formatstrings[i].number) {
-					fprintf(stderr, "%s: Found type: %s\n", DEBUG_function_name, ipv6calc_formatstrings[i].token);
+					DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "Found type: %s", ipv6calc_formatstrings[i].token);
 				};
 				break;
 			};
 		} else {
-			fprintf(stderr, "%s: Input type unknown\n", DEBUG_function_name);
+			DEBUGPRINT_NA(DEBUG_ipv6loganon_general, "Input type unknown");
 			return (1);
 		};
-	};
+	DEBUGSECTION_END
 
 	/* proceed input depending on type */	
 	switch (inputtype) {
@@ -515,15 +482,11 @@ static int anonymizetoken(char *resultstring, const char *token) {
 		return 1;
 	};
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: Token: '%s'\n", DEBUG_function_name, token);
-	};
+	DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "Token: '%s'", token);
 
 	/***** postprocessing input *****/
 	
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: Start of postprocessing input\n", DEBUG_function_name);
-	};
+	DEBUGPRINT_NA(DEBUG_ipv6loganon_general, "Start of postprocessing input");
 
 	if (ipv6addr.flag_valid == 1) {
 		/* anonymize IPv6 address according to settings */
@@ -577,12 +540,8 @@ static int anonymizetoken(char *resultstring, const char *token) {
 		/* store key and value */
 		snprintf(cache_lru_key_token[cache_lru_last - 1], NI_MAXHOST - 1, "%s", token);
 		snprintf(cache_lru_value[cache_lru_last - 1], NI_MAXHOST - 1, "%s", resultstring);
-		if ((ipv6calc_debug & 0x4) != 0) {
-			fprintf(stderr, "LRU cache: fill line=%d key_token=%s value=%s\n", cache_lru_last - 1, cache_lru_key_token[cache_lru_last - 1], cache_lru_value[cache_lru_last - 1]);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6loganon_cache, "LRU cache: fill line=%d key_token=%s value=%s", cache_lru_last - 1, cache_lru_key_token[cache_lru_last - 1], cache_lru_value[cache_lru_last - 1]);
 	};
 
 	return (0);
 };
-#undef DEBUG_function_name
-
