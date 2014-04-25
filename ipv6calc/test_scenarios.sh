@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.38 2014/02/02 19:33:21 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.39 2014/04/25 05:48:12 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -127,7 +127,7 @@ testscenarios_ipv6_reserved() {
 	cat <<END | grep -v '^#'
 ::			RFC4291#2.5.2
 ::1			RFC4291#2.5.3
-::0.0.0.2		RFC4291#2.5.5.1
+::0.0.0.2		RFC4291#2.5.5.1			skip-anon-test
 ::255.255.255.255	RFC4291#2.5.5.1
 ::ffff:0.0.0.0		RFC4291#2.5.5.2
 ::ffff:255.255.255.255	RFC4291#2.5.5.2

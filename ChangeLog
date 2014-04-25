@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.326 2014/04/22 20:29:19 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.327 2014/04/25 05:48:12 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20140425/PB
+	Introduce new functions for countrycode,AS and registry lookup covering also anonymized addresses
+
 20140423/PB
 	Add dedicated support for 6bone address anonymization
 

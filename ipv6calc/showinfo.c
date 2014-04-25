@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.108 2014/04/01 20:17:24 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.109 2014/04/25 05:48:12 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -465,6 +465,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	ipv6calc_ipv4addr ipv4addr_anon, *ipv4addr_anon_ptr;
 	uint16_t cc_index = COUNTRYCODE_INDEX_UNKNOWN;
 	char *as_text = NULL;
+	int registry;
 
 	ipv4addr_anon_ptr = &ipv4addr_anon;
 
@@ -475,6 +476,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	retval = libipv4addr_ipv4addrstruct_to_string(ipv4addrp, tempipv4string, 0);
 	if ( retval != 0 ) {
 		fprintf(stderr, "Error converting IPv4 address: %s\n", tempipv4string);
+		return;
 	};
 
 	if ((formatoptions & FORMATOPTION_printembedded) != 0) {
@@ -554,12 +556,9 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	};	
 
 	/* get AS Information */
-	if ((typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
-		DEBUGPRINT_NA(DEBUG_showinfo, "Call ipv4addr_anonymized_get_as_num32");
-		as_num32 = ipv4addr_anonymized_get_as_num32(ipv4addrp);
-	} else {
+	as_num32 = libipv4addr_as_num32_by_addr(ipv4addrp);
+	if ((typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS) == 1) {
-			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(tempipv4string, 4);
 			as_text = libipv6calc_db_wrapper_as_text_by_addr(tempipv4string, 4);
 		};
 	};
@@ -585,48 +584,32 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	};
 
 	/* get CountryCode Information */
-	if ((typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
-		cc_index = ipv4addr_anonymized_get_cc_index(ipv4addrp);
+	cc_index = libipv4addr_cc_index_by_addr(ipv4addrp);
+
+	libipv6calc_db_wrapper_country_code_by_cc_index(tempstring2, sizeof(tempstring2),cc_index);
+	if ( machinereadable != 0 ) {
+		snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_COUNTRYCODE%s=%s", embeddedipv4string, tempstring2);
+		printout(tempstring);
 	} else {
-		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC) == 1) {
-			cc_index = libipv6calc_db_wrapper_cc_index_by_addr(tempipv4string, 4);
-		};
+		fprintf(stdout, "Country Code: %s\n", tempstring2);
 	};
 
-	if (cc_index != COUNTRYCODE_INDEX_UNKNOWN) {
-		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_COUNTRYCODE%s=%c%c", embeddedipv4string, COUNTRYCODE_INDEX_TO_CHAR1(cc_index), COUNTRYCODE_INDEX_TO_CHAR2(cc_index));
-			printout(tempstring);
-		} else {
-			fprintf(stdout, "Country Code: %c%c\n", COUNTRYCODE_INDEX_TO_CHAR1(cc_index), COUNTRYCODE_INDEX_TO_CHAR2(cc_index));
-		};
+
+	DEBUGPRINT_NA(DEBUG_showinfo, "get registry");
+
+	if ((typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
+		registry = libipv4addr_registry_num_by_addr(ipv4addrp);
+		snprintf(tempstring2, sizeof(tempstring2), "%s", libipv6calc_registry_string_by_num(registry));
+	} else {
+		libipv6calc_db_wrapper_registry_string_by_ipv4addr(ipv4addrp, tempstring);
+		snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
 	};
 
-	if ((typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
-		/* get registry string */
-		// TODO: get registry by AS, if possible
-		retval = libipv6calc_db_wrapper_registry_string_by_ipv4addr(ipv4addrp, helpstring);
-		if (retval == 1) {
-			if (machinereadable == 0) {
-				fprintf(stderr, "Error getting registry string for IPv4 address: %s (%s)\n", helpstring, tempipv4string);
-			};
-		} else {
-			if (machinereadable != 0) {
-					snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY%s=%s", embeddedipv4string, helpstring);
-					printout(tempstring);
-			} else {
-				fprintf(stdout, "IPv4 registry%s: %s\n", embeddedipv4string, helpstring);
-			};
-		};
-	} else if (as_num32 != ASNUM_AS_UNKNOWN) {
-		int registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
-
-		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY%s=%s", embeddedipv4string, libipv6calc_registry_string_by_num(registry));
-			printout(tempstring);
-		} else {
-			fprintf(stdout, "Registry for address: %s\n", ipv6calc_registries[j].token);
-		};
+	if ( machinereadable != 0 ) {
+		snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY%s=%s", embeddedipv4string, tempstring2);
+		printout(tempstring);
+	} else {
+		fprintf(stdout, "IPv4 registry%s: %s\n", embeddedipv4string, tempstring2);
 	};
 
 
@@ -826,7 +809,6 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	int retval = 1, i, j, flag_prefixuse, registry, r, retval_anon = 1;;
 	char tempstring[NI_MAXHOST] = "", tempstring2[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
 	char ipv6addrstring[NI_MAXHOST] = "";
-	const char *cc;
 	ipv6calc_ipv6addr ipv6addr, ipv6addr_anon, *ipv6addrp, *ipv6addr_anon_ptr;
 	ipv6calc_ipv4addr ipv4addr, ipv4addr2;
 	ipv6calc_macaddr macaddr;
@@ -835,6 +817,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	uint32_t typeinfo;
 	uint32_t machinereadable = ( formatoptions & FORMATOPTION_machinereadable);
 	uint32_t payload, as_num32, cc_index;
+	char *as_text = NULL;
 
 	ipv6addr_anon_ptr = &ipv6addr_anon;
 
@@ -842,9 +825,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	ipv6addr_copy(ipv6addrp, ipv6addrp1); /* copy structure */
 
 	typeinfo = ipv6addr_gettype(ipv6addrp);
-	registry = libipv6calc_db_wrapper_registry_num_by_ipv6addr(ipv6addrp);
 
-	DEBUGPRINT_WA(DEBUG_showinfo, "result of 'ipv6addr_getregistry': %d", registry);
 	DEBUGPRINT_WA(DEBUG_showinfo, "%08x (result of 'ipv6addr_gettype')", (unsigned int) typeinfo);
 
 	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
@@ -922,8 +903,78 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			};
 		};
 		fprintf(stdout, "\n");
-	};	
+	};
 
+	/* CountryCode */
+	DEBUGPRINT_NA(DEBUG_showinfo, "get country code");
+	cc_index = libipv6addr_cc_index_by_addr(ipv6addrp);
+
+	if (cc_index > COUNTRYCODE_INDEX_MAX) {
+		if ( machinereadable != 0 ) {
+			fprintf(stderr, "Error getting CountryCode for IPv6 address\n");
+		};
+	} else {
+		libipv6calc_db_wrapper_country_code_by_cc_index(tempstring2, sizeof(tempstring2),cc_index);
+		if ( machinereadable != 0 ) {
+			snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_COUNTRYCODE=%s" , tempstring2);
+			printout(tempstring);
+		} else {
+			fprintf(stdout, "Country Code: %s\n", tempstring2);
+		};
+	};
+
+	/* AS */
+	DEBUGPRINT_NA(DEBUG_showinfo, "get AS number/text");
+	if ((typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) == 0) {
+		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS) == 1) {
+			as_text = libipv6calc_db_wrapper_as_text_by_addr(ipv6addrstring, 6);
+		};
+	};
+
+	as_num32 = libipv6addr_as_num32_by_addr(ipv6addrp);
+
+	if ((as_num32 == 0) && (machinereadable == 0)) {
+		fprintf(stderr, "Error getting AS number from anonymized IPv6 address\n");
+	} else {
+		if ( machinereadable != 0 ) {
+			if (as_num32 == 0) {
+				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=(unknown)");
+			} else {
+				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=%d", as_num32);
+			};
+			printout(tempstring);
+
+			if (as_text != NULL) {
+				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_TEXT=%s", as_text);
+				printout(tempstring);
+			};
+
+		} else {
+			fprintf(stdout, "ASN for address: %d\n", as_num32);
+		};
+	};
+
+
+	/* IPv6 Registry */
+	DEBUGPRINT_NA(DEBUG_showinfo, "get registry");
+	if (((typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) != 0) \
+		&& ((ipv6addrp->scope & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX) == 0)) {
+		registry = libipv6addr_registry_num_by_addr(ipv6addrp);
+		snprintf(tempstring2, sizeof(tempstring2), "%s", libipv6calc_registry_string_by_num(registry));
+	} else {
+		libipv6calc_db_wrapper_registry_string_by_ipv6addr(ipv6addrp, tempstring);
+		snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+	};
+
+	if ( machinereadable != 0 ) {
+		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_REGISTRY=%s", tempstring2);
+		printout(tempstring);
+	} else {
+		fprintf(stdout, "Registry for address: %s\n", tempstring2);
+	};
+
+
+	/* 6to4 */
 	if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
 		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 1);
 
@@ -950,6 +1001,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		};
 	};
 
+	/* Teredo */
 	if ( (typeinfo & IPV6_NEW_ADDR_TEREDO) != 0 ) {
 		/* extract Teredo client IPv4 address */
 		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 1);
@@ -1011,125 +1063,6 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		};
 	};
 	
-	/* IPv6 Registry, CountryCode, AS? */
-	if ((typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) == 0) {
-		/* no anonymized address */
-		DEBUGPRINT_WA(DEBUG_showinfo, "Check registry: %d", registry);
-
-		/* get registry string */
-		retval = libipv6calc_db_wrapper_registry_string_by_ipv6addr(ipv6addrp, helpstring);
-		if ( retval == 1  && machinereadable == 0 ) {
-			fprintf(stderr, "Error getting registry string for IPv6 address: %s\n", helpstring);
-		} else {
-			if ( machinereadable != 0 ) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_REGISTRY=%s", helpstring);
-				printout(tempstring);
-			} else {
-				fprintf(stdout, "Registry for address: %s\n", helpstring);
-			};
-		};
-
-		if ((typeinfo & IPV6_NEW_ADDR_AGU) != 0) {
-			/* global address */
-
-			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_CC) == 1) {
-				/* get country code */
-				cc = libipv6calc_db_wrapper_country_code_by_addr(ipv6addrstring, 6);
-				if ((cc == NULL)  && (machinereadable == 0)) {
-					fprintf(stderr, "Error getting country code for IPv6 address\n");
-				} else {
-					if ( machinereadable != 0 ) {
-						snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_COUNTRYCODE=%s", (cc != NULL ? cc : "(unknown)"));
-						printout(tempstring);
-					} else {
-						fprintf(stdout, "Country Code: %s\n", cc);
-					};
-				};
-			};
-
-			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_AS) == 1) {
-				/* get AS Number */
-				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(ipv6addrstring, 6);
-				if ((as_num32 == 0)  && (machinereadable == 0)) {
-					fprintf(stderr, "Error getting AS number for IPv6 address\n");
-				} else {
-					if ( machinereadable != 0 ) {
-						if (as_num32 == 0) {
-							snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=(unknown)");
-						} else {
-							snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=%d", as_num32);
-						};
-						printout(tempstring);
-					} else {
-						fprintf(stdout, "ASN for address: %d\n", as_num32);
-					};
-				};
-			};
-		};
-	} else {
-		/* retrieve CountryCodeIndex from anonymization value */
-		r = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_CCINDEX, &cc_index);
-
-		if (r == 0) {
-			if (cc_index > COUNTRYCODE_INDEX_MAX) {
-				if ( machinereadable != 0 ) {
-					fprintf(stderr, "Error getting CountryCode from anonymized IPv6 address\n");
-				};
-			} else if (cc_index == COUNTRYCODE_INDEX_UNKNOWN) {
-				if ( machinereadable != 0 ) {
-					snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_COUNTRYCODE=(unknown)");
-					printout(tempstring);
-				} else {
-					fprintf(stdout, "Country Code: (unknown)\n");
-				};
-			} else if (cc_index <= COUNTRYCODE_INDEX_LETTER_MAX) {
-				if ( machinereadable != 0 ) {
-					snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_COUNTRYCODE=%c%c", COUNTRYCODE_INDEX_TO_CHAR1(cc_index), COUNTRYCODE_INDEX_TO_CHAR2(cc_index));
-					printout(tempstring);
-				} else {
-					fprintf(stdout, "Country Code: %c%c\n", COUNTRYCODE_INDEX_TO_CHAR1(cc_index), COUNTRYCODE_INDEX_TO_CHAR2(cc_index));
-				};
-			} else {
-				if ( machinereadable != 0 ) {
-					snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_COUNTRYCODE=(unsupported)");
-					printout(tempstring);
-				} else {
-					fprintf(stdout, "Country Code: (unsupported)\n");
-				};
-			};
-
-			registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
-
-			if ( machinereadable != 0 ) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_REGISTRY=%s", libipv6calc_registry_string_by_num(registry));
-				printout(tempstring);
-			} else {
-				fprintf(stdout, "Registry for address: %s\n", libipv6calc_registry_string_by_num(registry));
-			};
-		};
-
-		/* retrieve ASN from anonymization value */
-		r = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_ASN32, &as_num32);
-
-		if (r == 0) {
-			if ((as_num32 == 0) && (machinereadable == 0)) {
-				fprintf(stderr, "Error getting AS number from anonymized IPv6 address\n");
-			} else {
-				if ( machinereadable != 0 ) {
-					if (as_num32 == 0) {
-						snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=(unknown)");
-					} else {
-						snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=%d", as_num32);
-					};
-					printout(tempstring);
-				} else {
-					fprintf(stdout, "ASN for address: %d\n", as_num32);
-				};
-			};
-		};
-
-
-  	};
 
 	/* Proper solicited node link-local multicast address? */
 	if ( (typeinfo & IPV6_NEW_ADDR_SOLICITED_NODE) != 0 ) {

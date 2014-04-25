@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.78 2014/04/22 20:29:19 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.79 2014/04/25 05:48:13 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -156,8 +156,6 @@
 #define ANON_PREFIX_TOKEN_XOR		0x0
 #define ANON_PREFIX_TOKEN_VALUE		0xa909		// fix
 
-#define ANON_PREFIX_CCINDEX_6BONE	0x3fd
-
 // Payload selector
 #define ANON_PREFIX_PAYLOAD_CCINDEX	1
 #define ANON_PREFIX_PAYLOAD_ASN32	2
@@ -282,9 +280,9 @@ typedef struct {
 #define IPV6_NEW_ADDR_IID_LOCAL			(uint32_t) 0x40000000U	/* IPv6 address with local generated IID */
 #define IPV6_NEW_ADDR_IID_GLOBAL		(uint32_t) 0x80000000U	/* IPv6 address with global IID */
 
-#define IPV6_ADDR_HAS_PUBLIC_IPV4		(IPV6_NEW_ADDR_NAT64 | IPV6_NEW_ADDR_6TO4 | IPV6_NEW_ADDR_TEREDO | IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)
 #define IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX	(IPV6_NEW_ADDR_6TO4 | IPV6_NEW_ADDR_TEREDO)
 #define IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID	(IPV6_NEW_ADDR_NAT64 | IPV6_NEW_ADDR_TEREDO | IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED | IPV6_NEW_ADDR_6TO4_MICROSOFT)
+#define IPV6_ADDR_HAS_PUBLIC_IPV4		(IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID | IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX)
 
 /* text representations */
 /*@unused@*/ static const s_type ipv6calc_ipv6addrtypestrings[] = {
@@ -398,3 +396,7 @@ extern int  ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char
 extern void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter);
 
 extern int  libipv6addr_get_included_ipv4addr(const ipv6calc_ipv6addr *ipv6addrp, ipv6calc_ipv4addr *ipv4addrp, const int selector);
+
+extern uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp);
+extern uint32_t libipv6addr_as_num32_by_addr(const ipv6calc_ipv6addr *ipv6addrp);
+extern int libipv6addr_registry_num_by_addr(const ipv6calc_ipv6addr *ipv6addrp);

@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libifinet6.c
- * Version    : $Id: libifinet6.c,v 1.7 2014/02/03 20:48:03 ds6peter Exp $
- * Copyright  : 2001-2009 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libifinet6.c,v 1.8 2014/04/25 05:48:13 ds6peter Exp $
+ * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function to converts a address string like shown in 
@@ -133,9 +133,7 @@ int libifinet6_ipv6addrstruct_to_ifinet6(ipv6calc_ipv6addr *ipv6addrp, char *res
 		snprintf(resultstring,NI_MAXHOST - 1, "%s", tempstring);
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libifinet6) != 0 ) {
-		fprintf(stderr, "addr_to_ifinet6: Print out: %s\n", resultstring);
-	};
+	DEBUGPRINT_WA(DEBUG_libifinet6, "print out: %s", resultstring);
 
 	retval = 0;
 	return (retval);

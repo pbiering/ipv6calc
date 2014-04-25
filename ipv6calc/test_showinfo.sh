@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.34 2014/04/22 05:56:38 ds6peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.35 2014/04/25 05:48:13 ds6peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -62,7 +62,7 @@ getexamples | while read address separator comment; do
 done || exit 1
 
 # Test reserved IPv4 addresses
-testscenarios_ipv4_reserved | while read address rfc; do
+testscenarios_ipv4_reserved | while read address rfc rest; do
 	echo "$rfc: $address"
 	case $rfc in
 	    RFC*)
@@ -84,7 +84,7 @@ testscenarios_ipv4_reserved | while read address rfc; do
 done || exit 1
 
 # Test reserved IPv6 addresses
-testscenarios_ipv6_reserved | while read address rfc; do
+testscenarios_ipv6_reserved | while read address rfc rest; do
 	echo "$rfc: $address"
 	if ! ./ipv6calc -q -i -m $address | grep ^IPV6_REGISTRY | grep "$rfc"; then
 		echo "ERROR: unexpected result (should: $rfc)"

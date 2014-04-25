@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.19 2014/02/02 17:08:21 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.20 2014/04/25 05:48:12 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -64,8 +64,11 @@ static const s_type ipv6calc_db_features[] = {
 #define COUNTRYCODE_LETTER1_MAX          26     // A-Z
 #define COUNTRYCODE_LETTER2_MAX          36     // 0-9A-Z
 #define COUNTRYCODE_INDEX_LETTER_MAX     (COUNTRYCODE_LETTER1_MAX * COUNTRYCODE_LETTER2_MAX - 1)
-#define COUNTRYCODE_INDEX_MAX            1023
-#define COUNTRYCODE_INDEX_UNKNOWN        1022
+#define COUNTRYCODE_INDEX_MAX            1023	// 0x3ff
+#define COUNTRYCODE_INDEX_UNKNOWN        1022	// 0x3fe
+
+#define COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MAX   (COUNTRYCODE_INDEX_UNKNOWN - 1)
+#define COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN   (COUNTRYCODE_INDEX_UNKNOWN - 16)
 
 // macros for mapping index to chars and vice-versa
 #define COUNTRYCODE_INDEX_TO_CHAR1(index)  ((index % COUNTRYCODE_LETTER1_MAX) + 'A')

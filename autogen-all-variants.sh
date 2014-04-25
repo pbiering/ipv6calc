@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.19 2014/02/25 20:49:16 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.20 2014/04/25 05:48:12 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -43,7 +43,7 @@ else
 	echo "INFO  : status file found: $status_file"
 
 	if grep -q ":END:" $status_file; then
-		echo "NOTICE: all runs successful, nothing more to do"
+		echo "NOTICE: all runs successful, nothing more to do (remove status file for clean re-run: $status_file)"
 		exit 0
 	fi
 fi

@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.20 2014/02/02 17:08:22 ds6peter Exp $
- * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libieee.c,v 1.21 2014/04/25 05:48:13 ds6peter Exp $
+ * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for IEEE information
@@ -86,23 +86,17 @@ int libieee_unmap_oui36_iab(const uint32_t map_value, uint32_t *bits_00_23_p, ui
 	*bits_00_23_p = 0;
 	*bits_24_36_p = 0;
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s/%s: called with map_value=%08x\n", __FILE__, __func__, map_value);
-	};
+	DEBUGPRINT_WA(DEBUG_libieee, "called with map_value=%08x", map_value);
 
 	/* run through map */
 	for (i = 0; i < (int) (sizeof(ieee_mapping) / sizeof(ieee_mapping[0])); i++) {
 		if (ieee_mapping[i].mapping == map_index) {
-			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "%s/%s: found entry in map: %06x\n", __FILE__, __func__, map_index);
-			};
+			DEBUGPRINT_WA(DEBUG_libieee, "found entry in map: %06x", map_index);
 
 			*bits_00_23_p = ieee_mapping[i].bits_00_23;
 			*bits_24_36_p = map_value & 0xfff;
 
-			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "%s/%s: mapped to bits_00_23=%06x bits_24_36=%03x\n", __FILE__, __func__, *bits_00_23_p, *bits_24_36_p);
-			};
+			DEBUGPRINT_WA(DEBUG_libieee, "mapped to bits_00_23=%06x bits_24_36=%03x", *bits_00_23_p, *bits_24_36_p);
 
 			return (0);
 		};
@@ -124,9 +118,7 @@ uint32_t libieee_map_oui_macaddr(const ipv6calc_macaddr *macaddrp) {
 	oui = (macaddrp->addr[0] << 16) | (macaddrp->addr[1] << 8) | macaddrp->addr[2];
 	ven = (macaddrp->addr[3] << 4)  | (macaddrp->addr[4] >> 4);
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s/%s: called with OUI: %06x\n", __FILE__, __func__, oui);
-	};
+	DEBUGPRINT_WA(DEBUG_libieee, "called with OUI: %06x", oui);
 
 	return (libieee_map_oui36_iab(oui, ven));
 };
@@ -143,9 +135,7 @@ uint32_t libieee_map_oui_eui64addr(const ipv6calc_eui64addr *eui64addrp) {
 	oui = (eui64addrp->addr[0] << 16) | (eui64addrp->addr[1] << 8) | eui64addrp->addr[2];
 	ven = (eui64addrp->addr[3] << 4)  | (eui64addrp->addr[4] >> 4);
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s/%s: called with OUI: %06x\n", __FILE__, __func__, oui);
-	};
+	DEBUGPRINT_WA(DEBUG_libieee, "called with OUI: %06x", oui);
 
 	return (libieee_map_oui36_iab(oui, ven));
 };
@@ -162,9 +152,7 @@ int libieee_unmap_oui_macaddr(ipv6calc_macaddr *macaddrp, uint32_t map_value) {
 
 	mac_clearall(macaddrp);
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s/%s: called\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libieee, "called");
 
 	libieee_unmap_oui36_iab(map_value, &bits_00_23, &bits_24_36);
 
@@ -191,9 +179,7 @@ int libieee_unmap_oui_eui64addr(ipv6calc_eui64addr *eui64addrp, uint32_t map_val
 
 	libeui64_clearall(eui64addrp);
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s/%s: called\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libieee, "called");
 
 	libieee_unmap_oui36_iab(map_value, &bits_00_23, &bits_24_36);
 

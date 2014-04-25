@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.38 2014/04/18 14:04:16 ds6peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.39 2014/04/25 05:48:13 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -171,6 +171,7 @@ typedef struct {
 #define FORMATOPTION_NUM_forceprefix		15	// 00010000
 #define FORMATOPTION_NUM_literal		16	// 00020000
 #define FORMATOPTION_NUM_print_iid_var		17	// 00040000
+#define FORMATOPTION_NUM_no_prefixlength	18	// 00080000
 
 #define FORMATOPTION_NUM_printembedded		31	// special
 
@@ -191,6 +192,7 @@ typedef struct {
 #define FORMATOPTION_forceprefix		(uint32_t) (1 << FORMATOPTION_NUM_forceprefix)
 #define FORMATOPTION_literal			(uint32_t) (1 << FORMATOPTION_NUM_literal)
 #define FORMATOPTION_print_iid_var		(uint32_t) (1 << FORMATOPTION_NUM_print_iid_var)
+#define FORMATOPTION_no_prefixlength		(uint32_t) (1 << FORMATOPTION_NUM_no_prefixlength)
 
 #define FORMATOPTION_printembedded		(uint32_t) (1 << FORMATOPTION_NUM_printembedded)
 

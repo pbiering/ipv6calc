@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.11 2014/02/25 20:49:18 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.12 2014/04/25 05:48:12 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -244,14 +244,13 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_cc_index(const uint16_t cc_in
 
 	if (cc_index > COUNTRYCODE_INDEX_MAX) {
 		goto END_libipv6calc_db_wrapper;
-	};
-
-	if (cc_index > MAXENTRIES_ARRAY(cc_index_reg_assignment)) {
+	} else if (cc_index > MAXENTRIES_ARRAY(cc_index_reg_assignment)) {
 		goto END_libipv6calc_db_wrapper;
-	};
-
-	if (cc_index == COUNTRYCODE_INDEX_UNKNOWN) {
+	} else if (cc_index == COUNTRYCODE_INDEX_UNKNOWN) {
 		result = REGISTRY_IANA;
+		goto END_libipv6calc_db_wrapper;
+	} else if ((cc_index >= COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN) && (cc_index <= COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MAX)) {
+		result = cc_index - COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN;
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -713,12 +712,16 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6a
 	
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given ipv6 prefix: %08x%08x", (unsigned int) ipv6_00_31, (unsigned int) ipv6_32_63);
 
+	if ((ipv6addrp->scope & IPV6_NEW_ADDR_6BONE) != 0) {
+		return(IPV6_ADDR_REGISTRY_6BONE);
+	};
+
 	int result = IPV6_ADDR_REGISTRY_UNKNOWN;
 
 	const char *info = libipv6calc_db_wrapper_BuiltIn_reserved_string_by_ipv6addr(ipv6addrp);
 
 	if (info != NULL) {
-		return(IPV6_ADDR_REGISTRY_RESERVED);
+		return(REGISTRY_RESERVED);
 	};
 
 #ifdef SUPPORT_DB_IPV6

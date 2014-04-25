@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc_anonymization.sh
-# Version    : $Id: test_ipv6calc_anonymization.sh,v 1.5 2014/04/23 05:52:58 ds6peter Exp $
+# Version    : $Id: test_ipv6calc_anonymization.sh,v 1.6 2014/04/25 05:48:12 ds6peter Exp $
 # Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test ipv6calc anonymization
@@ -122,15 +122,15 @@ testscenarios_kp() {
 		echo "$input"
 	done | sort | uniq
 
-	testscenarios_ipv4_reserved | while read input filter; do
+	testscenarios_ipv4_reserved | grep -vw "skip-anon-test" | while read input filter rest; do
 		echo "$input"
 	done | sort | uniq
 
-	testscenarios_ipv6_reserved | while read input filter; do
+	testscenarios_ipv6_reserved | grep -vw "skip-anon-test" | while read input filter rest; do
 		echo "$input"
 	done | sort | uniq
 
-	testscenarios_auto_good | while read input filter; do
+	testscenarios_auto_good | while read input filter rest; do
 		echo "$input"
 	done | sort | uniq
 }
@@ -163,7 +163,7 @@ run_anon_options_kp_tests() {
 		fi
 	done
 
-	echo "Run 'ipv6calc' anonymization option kp TYPE tests..."
+	echo "Run 'ipv6calc' anonymization option kp TYPE/REGISTRY/CC tests..."
 	testscenarios_kp | ./ipv6calc -E ipv4,ipv6 | while read input result; do
 		output=$(./ipv6calc -q -A anonymize --anonymize-preset kp $input)
 
@@ -171,19 +171,19 @@ run_anon_options_kp_tests() {
 		type_anon="`./ipv6calc -m -i -q "$output" | grep "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
 
 		if [ -z "$type_orig" ]; then
-			echo "ERROR : something went wrong retrieving EUIxx/IPVx_TYPE for $input"
+			echo "ERROR : something went wrong retrieving IPVx_TYPE for $input"
 			exit 1
 		fi
 		if [ -z "$type_anon" ]; then
-			echo "ERROR : something went wrong retrieving EUIxx/IPVx_TYPE for $output"
+			echo "ERROR : something went wrong retrieving IPVx_TYPE for $output"
 			exit 1
 		fi
 
 		type_anon_compare="${type_anon}"
 		type_orig_compare="${type_orig}"
 
-		echo "DEBUG : IPVx_TYPE orig not reduced: $type_orig_compare"
-		echo "DEBUG : IPVx_TYPE anon not reduced: $type_anon_compare"
+		#echo "DEBUG : IPVx_TYPE orig not reduced: $type_orig_compare"
+		#echo "DEBUG : IPVx_TYPE anon not reduced: $type_anon_compare"
 
 		type_anon_compare="$(echo "$type_anon_compare" | perl -p -e 's/(anonymized-prefix|anonymized-iid|anonymized)//g')"
 		type_orig_compare="$(echo "$type_orig_compare" | perl -p -e 's/(anonymized-prefix|anonymized-iid|anonymized)//g')"
@@ -213,6 +213,71 @@ run_anon_options_kp_tests() {
 			exit 1
 		else
 			echo "Result ok!"
+		fi
+
+		# Registry
+		reg_orig="`./ipv6calc -m -i -q "$input"  | grep "^IPV._REGISTRY=" | sed 's/IPV._REGISTRY=//'`"
+		reg_anon="`./ipv6calc -m -i -q "$output" | grep "^IPV._REGISTRY=" | sed 's/IPV._REGISTRY=//'`"
+
+		if [ -z "$reg_orig" ]; then
+			echo "ERROR : something went wrong retrieving IPVx_REGISTRY for $input"
+			exit 1
+		fi
+		if [ -z "$reg_anon" ]; then
+			echo "ERROR : something went wrong retrieving IPVx_REGISTRY for $output"
+			exit 1
+		fi
+
+		echo "DEBUG : IPVx          orig: $input"
+		echo "DEBUG : IPVx          anon: $output"
+		echo "DEBUG : IPVx_REGISTRY orig: $reg_orig"
+		echo "DEBUG : IPVx_REGISTRY anon: $reg_anon"
+
+		if [ -z "$reg_orig" -a -z "$reg_anon" ]; then
+			# everything is ok, both have no registry
+			true
+		elif [ -z "$reg_orig" -a -n "$reg_anon" ]; then
+			echo "ERROR : something went wrong, anon has registry while orig hasn't"
+			exit 1
+		elif [ -n "$reg_orig" -a -z "$reg_anon" ]; then
+			echo "ERROR : something went wrong, orig has registry while anon hasn't"
+			exit 1
+		else
+			# Check result
+			if [ "$reg_orig" != "$reg_anon" ]; then
+				echo "ERROR : IPVx_REGISTRY not equal:"
+				exit 1
+			else
+				echo "Result ok!"
+			fi
+		fi
+
+		# Country Code (optional)
+		cc_orig="`./ipv6calc -m -i -q "$input"  | grep "^IPV._COUNTRYCODE=" | sed 's/IPV._COUNTRYCODE=//'`"
+		cc_anon="`./ipv6calc -m -i -q "$output" | grep "^IPV._COUNTRYCODE=" | sed 's/IPV._COUNTRYCODE=//'`"
+
+		echo "DEBUG : IPVx             orig: $input"
+		echo "DEBUG : IPVx             anon: $output"
+		echo "DEBUG : IPVx_COUNTRYCODE orig: $cc_orig"
+		echo "DEBUG : IPVx_COUNTRYCODE anon: $cc_anon"
+
+		if [ -z "$cc_orig" -a -z "$cc_anon" ]; then
+			# everything is ok, both have no CC
+			true
+		elif [ -z "$cc_orig" -a -n "$cc_anon" ]; then
+			echo "ERROR : something went wrong, anon has country code while orig hasn't"
+			exit 1
+		elif [ -n "$cc_orig" -a -z "$cc_anon" ]; then
+			echo "ERROR : something went wrong, orig has country code while anon hasn't"
+			exit 1
+		else
+			# Check result
+			if [ "$cc_orig" != "$cc_anon" ]; then
+				echo "ERROR : IPVx_COUNTRYCODE not equal:"
+				exit 1
+			else
+				echo "Result ok!"
+			fi
 		fi
 
 	done || return 1
