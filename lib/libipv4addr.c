@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.54 2014/04/26 16:16:32 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.55 2014/04/26 16:26:29 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -727,8 +727,6 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 	uint32_t as_num32, as_num32_comp17, as_num32_decomp17, ipv4addr_anon, p;
 	uint16_t cc_index, c;
 	int i;
-
-	DEBUGPRINT_WA(DEBUG_libipv4addr, "type=0x%08x", ipv4addrp->scope);
 
 	if ((ipv4addrp->scope & IPV4_ADDR_ANONYMIZED) != 0) {
 		DEBUGPRINT_NA(DEBUG_libipv4addr, "skip already anonymized address");
