@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.12 2014/04/25 05:48:12 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.13 2014/04/26 13:03:56 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -742,14 +742,12 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6a
 			};
 		};
 
-		if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Found match: prefix=%08x%08x mask=%08x%08x  registry=%s (entry: %d)", \
-				(unsigned int) dbipv6addr_assignment[i].ipv6addr_00_31, \
-				(unsigned int) dbipv6addr_assignment[i].ipv6addr_32_63, \
-				(unsigned int) dbipv6addr_assignment[i].ipv6mask_00_31, \
-				(unsigned int) dbipv6addr_assignment[i].ipv6mask_32_63, \
-				libipv6calc_registry_string_by_num(dbipv6addr_assignment[i].registry), i);
-		};
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Found match: prefix=%08x%08x mask=%08x%08x  registry=%s (entry: %d)", \
+			(unsigned int) dbipv6addr_assignment[i].ipv6addr_00_31, \
+			(unsigned int) dbipv6addr_assignment[i].ipv6addr_32_63, \
+			(unsigned int) dbipv6addr_assignment[i].ipv6mask_00_31, \
+			(unsigned int) dbipv6addr_assignment[i].ipv6mask_32_63, \
+			libipv6calc_registry_string_by_num(dbipv6addr_assignment[i].registry), i);
 		match = i;
 	};
 

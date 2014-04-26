@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calcdebug.h
- * Version    : $Id: libipv6calcdebug.h,v 1.18 2014/04/25 20:50:00 ds6peter Exp $
+ * Version    : $Id: libipv6calcdebug.h,v 1.19 2014/04/26 13:03:56 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -48,7 +48,7 @@
 
 /* debug print with args */
 #define DEBUGPRINT_WA(d, t, ...)	\
-	if ((ipv6calc_debug & d) != 0) { \
+	if ((ipv6calc_debug & (d)) != 0) { \
 		if (ipv6calc_debug == DEBUG_ipv6calc_ALL) { \
 			fprintf(stderr, "%s/%s[0x%08lx]: " t "\n", __FILE__, __func__, d, __VA_ARGS__); \
 		} else { \
@@ -58,7 +58,7 @@
 
 /* debug print no args */
 #define DEBUGPRINT_NA(d, t)		\
-	if ((ipv6calc_debug & d) != 0) { \
+	if ((ipv6calc_debug & (d)) != 0) { \
 		if (ipv6calc_debug == DEBUG_ipv6calc_ALL) { \
 			fprintf(stderr, "%s/%s[0x%08lx]: " t "\n", __FILE__, __func__, d); \
 		} else { \
@@ -75,7 +75,8 @@
 	fprintf(stderr, "%s/%s: " t "\n", __FILE__, __func__);
 
 /* begin/end of debug section */
-#define DEBUGSECTION_BEGIN(d)	if ((ipv6calc_debug & d) != 0) {
+#define DEBUGSECTION_BEGIN(d)	if ((ipv6calc_debug & (d)) != 0) {
+#define DEBUGSECTION_ELSE	} else {
 #define DEBUGSECTION_END	};
 
 

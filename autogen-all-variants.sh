@@ -1,8 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.20 2014/04/25 05:48:12 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.21 2014/04/26 13:03:56 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -30,22 +30,44 @@ autgen_variants() {
 END
 }
 
+while getopts ":f" opt; do
+	case $opt in
+	    'f')
+		force=1
+		echo "DEBUG : option found: -f"
+		;;
+	    \?)
+		echo "Invalid option: -$OPTARG" >&2
+		exit 1
+		;;
+	esac
+done
+
+shift $[ $OPTIND - 1 ]
+
 options_add="$*"
 
 if [ -n "$options_add" ]; then
 	echo "INFO  : additional options: $options_add"
 fi
 
-if [ ! -f "$status_file" ]; then
-	echo "INFO  : status file missing, create: $status_file"
-	date "+%s:START:" >$status_file
-else
+if [ -f "$status_file" ]; then
 	echo "INFO  : status file found: $status_file"
 
 	if grep -q ":END:" $status_file; then
-		echo "NOTICE: all runs successful, nothing more to do (remove status file for clean re-run: $status_file)"
-		exit 0
+		if [ "$force" = "1" ]; then
+			echo "NOTICE: all runs successful, option -f given, status file removed (re-run)"
+			rm $status_file
+		else
+			echo "NOTICE: all runs successful, nothing more to do (use -f for force a re-run)"
+			exit 0
+		fi
 	fi
+fi
+
+if [ ! -f "$status_file" ]; then
+	echo "INFO  : status file missing, create: $status_file"
+	date "+%s:START:" >$status_file
 fi
 
 if grep -q ":FINISHED:basic:$options_add:" $status_file; then

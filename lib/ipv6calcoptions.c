@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.12 2014/02/03 20:48:03 ds6peter Exp $
- * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calcoptions.c,v 1.13 2014/04/26 13:03:56 ds6peter Exp $
+ * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  supporting common options
@@ -20,7 +20,7 @@
 
 #include "databases/lib/libipv6calc_db_wrapper.h"
 
-extern long int ipv6calc_debug;
+extern long int ipv6calc_debug; // ipv6calc_debug usage ok
 int ipv6calc_quiet;
 
 
@@ -31,14 +31,14 @@ static long int parse_dec_hex_val(const char *string) {
 	if ((strlen(string) > 2) && ((strncmp(string, "0x", 2) == 0) || (strncmp(string, "0X", 2)) == 0)) {
 		// convert hex
 		if (sscanf(string + 2, "%lx", &value) == 0) {
-			ipv6calc_debug = 0;
-			fprintf(stderr, "%s/%s: can't parse value for debug option: %s\n", __FILE__, __func__, string);
+			ipv6calc_debug = 0; // ipv6calc_debug usage ok
+			ERRORPRINT_WA("can't parse value for debug option: %s", string);
 		};
 	} else {
 		// convert dec
 		if (sscanf(string, "%ld", &value) == 0) {
-			ipv6calc_debug = 0;
-			fprintf(stderr, "%s/%s: can't parse value for debug option: %s\n", __FILE__, __func__, string);
+			ipv6calc_debug = 0; // ipv6calc_debug usage ok
+			ERRORPRINT_WA("can't parse value for debug option: %s", string);
 		};
 	};
 
@@ -54,13 +54,13 @@ void ipv6calc_debug_from_env(void) {
         ipv6calc_debug_env = getenv("IPV6CALC_DEBUG");
 
 	if (ipv6calc_debug_env != 0) {
-		fprintf(stderr, "%s/%s: IPV6CALC_DEBUG found in environment: %s\n", __FILE__, __func__, ipv6calc_debug_env);
+		ERRORPRINT_WA("IPV6CALC_DEBUG found in environment: %s", ipv6calc_debug_env);
 
 		ipv6calc_debug_val = parse_dec_hex_val(ipv6calc_debug_env);
 
 		if (ipv6calc_debug_val != 0) {
-			ipv6calc_debug = ipv6calc_debug_val;
-			fprintf(stderr, "%s/%s: IPV6CALC_DEBUG proper parsed: %08lx\n", __FILE__, __func__, ipv6calc_debug);
+			ipv6calc_debug = ipv6calc_debug_val; // ipv6calc_debug usage ok
+			ERRORPRINT_WA("IPV6CALC_DEBUG proper parsed: %08lx", ipv6calc_debug); // ipv6calc_debug usage ok
 		};
 	};
 };
@@ -181,7 +181,7 @@ int ipv6calcoptions_common_basic(const int opt, const char *optarg, const struct
 		case 'd':
 			DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Found debug option with value: %s", optarg);
 			ipv6calc_debug = parse_dec_hex_val(optarg);
-			fprintf(stderr, "%s/%s: given debug value: %lx\n", __FILE__, __func__, ipv6calc_debug);
+			ERRORPRINT_WA("given debug value: %lx", ipv6calc_debug);
 			result = 0;
 			break;
 

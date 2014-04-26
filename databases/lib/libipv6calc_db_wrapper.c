@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.33 2014/04/25 05:48:12 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.34 2014/04/26 13:03:56 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -115,9 +115,7 @@ int libipv6calc_db_wrapper_init(void) {
 int libipv6calc_db_wrapper_cleanup(void) {
 	int result = 0, r;
 
-	if ( (ipv6calc_debug & DEBUG_libipv6calc_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
 #ifdef SUPPORT_GEOIP
 	// Call GeoIP wrapper
@@ -149,9 +147,7 @@ int libipv6calc_db_wrapper_cleanup(void) {
 
 /* function get info strings */
 void libipv6calc_db_wrapper_info(char *string, const size_t size) {
-	if ( (ipv6calc_debug & DEBUG_libipv6calc_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
 #ifdef SUPPORT_GEOIP
 	// Call GeoIP wrapper
@@ -168,9 +164,7 @@ void libipv6calc_db_wrapper_info(char *string, const size_t size) {
 	libipv6calc_db_wrapper_BuiltIn_wrapper_info(string, size);
 #endif
 
-	if ( (ipv6calc_debug & DEBUG_libipv6calc_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Result: %s\n", __FILE__, __func__, string);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s", string);
 
 	return;
 };
@@ -182,9 +176,7 @@ void libipv6calc_db_wrapper_features(char *string, const size_t size) {
 	char tempstring[NI_MAXHOST];
 	char *separator;
 
-	if ( (ipv6calc_debug & DEBUG_libipv6calc_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
 	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_db_features); i++) {
 		if (wrapper_features & ipv6calc_db_features[i].number) {
@@ -198,9 +190,7 @@ void libipv6calc_db_wrapper_features(char *string, const size_t size) {
 		};
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv6calc_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Return\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Return");
 
 	return;
 };
@@ -208,9 +198,7 @@ void libipv6calc_db_wrapper_features(char *string, const size_t size) {
 
 /* function print db info */
 void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *prefix_string) {
-	if ( (ipv6calc_debug & DEBUG_libipv6calc_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Called\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
 	printf("%sDB features: 0x%08x\n", prefix_string, wrapper_features);
 
@@ -229,9 +217,7 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 	libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(level_verbose, prefix_string);
 #endif
 
-	if ( (ipv6calc_debug & DEBUG_libipv6calc_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Return\n", __FILE__, __func__);
-	};
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Return");
 
 	return;
 };
@@ -336,9 +322,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 		result = 0;
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv6calc_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Return with result: %d\n", __FILE__, __func__, result);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Return with result: %d", result);
 
 	return(result);
 };
@@ -548,9 +532,7 @@ uint16_t libipv6calc_db_wrapper_as_num16_by_addr(const char *addr, const int pro
 
 	as_num16 = (uint16_t) (as_num32 < 65536 ? as_num32 : ASNUM_AS_TRANS);
 
-	if ( (ipv6calc_debug & DEBUG_libipv6calc_db_wrapper) != 0 ) {
-		fprintf(stderr, "%s/%s: Result: %d (0x%04x)\n", __FILE__, __func__, as_num16, as_num16);
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %d (0x%04x)", as_num16, as_num16);
 
 	// return 16-bit ASN or AS_TRANS in case of > 16-bit
 	return(as_num16);

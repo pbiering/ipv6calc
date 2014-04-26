@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.46 2014/04/01 20:11:57 ds6peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.47 2014/04/26 13:03:56 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -26,6 +26,10 @@ source ./test_scenarios.sh
 testscenarios() {
 # Command								Expected result (no space between "=" and result)
 cat <<END | grep -v '^#'
+## Machine readable format
+-m -F ::1								=IPV6=0000:0000:0000:0000:0000:0000:0000:0001
+-m ::1									=IPV6=::1
+-m 1.2.3.4								=IPV4=1.2.3.4
 ## ip6.int.
 --addr_to_ip6int 3ffe:ffff:100:f101::1					=1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
 --in ipv6 --out revnibbles.int 3ffe:ffff:100:f101::1			=1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
@@ -250,7 +254,7 @@ testscenarios | sed 's/NOPIPETEST//' | while read line; do
 
 	# extract result
 	command="`echo $line | awk -F= '{ print $1 }' | sed 's/ $//g'`"
-	result="`echo $line | awk -F= '{ print $2 }'`"
+	result="`echo $line | awk -F= '{ for (i=2; i <= NF; i++) printf "%s%s", $i, (i<NF) ? "=" : ""; }'`"
 	if [ -z "$result" -o -z "$command" ]; then
 		echo "Something is wrong in line '$line'"
 		exit 1
@@ -405,7 +409,7 @@ echo "Run 'ipv6calc' pipe tests (2)"
 testscenarios | grep -v "^NOPIPETEST" | while read line; do
 	# extract result
 	command="`echo "$line" | awk -F= '{ print $1 }' | sed 's/ $//g'`"
-	result="`echo "$line" | awk -F= '{ print $2 }'`"
+	result="`echo "$line" | awk -F= '{ for (i=2; i <= NF; i++) printf "%s%s", $i, (i<NF) ? "=" : ""; }'`"
 	#echo "command=$command" >&2
 	stdin="`echo "$command" | awk '{ print $NF }'`"
 	options="`echo "$command" | awk '{ for (i=1; i < NF; i++) printf "%s ", $i; }'`"

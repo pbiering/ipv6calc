@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.53 2014/04/25 15:54:02 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.54 2014/04/26 13:03:56 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -284,18 +284,20 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	geoip_num_db_types = NUM_DB_TYPES;
 #endif // SUPPORT_GEOIP_DYN
 
-	if ( (ipv6calc_debug & (DEBUG_libipv6calc_db_wrapper_GeoIP | DEBUG_libipv6calc_db_wrapper_GeoIP_verbose)) != 0 ) {
+	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper_GeoIP)
 		int i;
 		if (geoip_num_db_types > 0) {
 			for (i = 0; i < geoip_num_db_types; i++) {
-				if ((ipv6calc_debug & DEBUG_libipv6calc_db_wrapper_GeoIP_verbose) != 0) { fprintf(stderr, "GeoIP(verbose): GeoIPDBDescription Entry #%d: %s\n", i, libipv6calc_db_wrapper_GeoIPDBDescription[i]); } else {
+				DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper_GeoIP_verbose)
+					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP_verbose, "GeoIP(verbose): GeoIPDBDescription Entry #%d: %s", i, libipv6calc_db_wrapper_GeoIPDBDescription[i]);
+				DEBUGSECTION_ELSE
 					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIPDBDescription Entry #%d: %s", i, libipv6calc_db_wrapper_GeoIPDBDescription[i]);
-				};
+				DEBUGSECTION_END
 			};
 		} else {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIPDBDescription Entries can't be displayed, number of entries can't be retrieved (missing support)");
 		};
-	};
+	DEBUGSECTION_END
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Call libipv6calc_db_wrapper_GeoIP_setup_custom_directory");
 
@@ -681,24 +683,24 @@ END_libipv6calc_db_wrapper:
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Returned from libipv6calc_db_wrapper_GeoIP_db_avail with result: %d", r);
 
-	if ( (ipv6calc_debug & (DEBUG_libipv6calc_db_wrapper_GeoIP | DEBUG_libipv6calc_db_wrapper_GeoIP_verbose)) != 0 ) {
+	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper_GeoIP)
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "List now available GeoIPDBFilename Entries (max:%d)", geoip_num_db_types - 1);
 
 		if (geoip_num_db_types > 0) {
 			int i;
 			for (i = 0; i < geoip_num_db_types; i++) {
-				if ((ipv6calc_debug & DEBUG_libipv6calc_db_wrapper_GeoIP_verbose) != 0) {
-					fprintf(stderr, "GeoIP(verbose): GeoIPDBFileName Entry #%d: %s\n", i, (*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i]);
-				} else {
+				DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper_GeoIP_verbose)
+					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP_verbose, "GeoIP(verbose): GeoIPDBFileName Entry #%d: %s", i, (*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i]);
+				DEBUGSECTION_ELSE
 					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIPDBFileName Entry #%d: %s", i, (*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i]);
-				};
+				DEBUGSECTION_END
 			};
 		} else {
-			fprintf(stderr, "%s/%s: GeoIPDBDescription Entries can't be displayed, number of entries can't be retrieved (missing support)\n", __FILE__, __func__);
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIPDBDescription Entries can't be displayed, number of entries can't be retrieved (missing support)");
 		};
-	};
+	DEBUGSECTION_END
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Finished: %s with dir: %s\n", wrapper_geoip_info, dir);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Finished: %s with dir: %s", wrapper_geoip_info, dir);
 	return;
 };
 
@@ -765,13 +767,13 @@ END_libipv6calc_db_wrapper:
 	int r = GeoIP_db_avail(type);
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Returned from GeoIP_db_avail result=%d", r);
 
-	if ( (ipv6calc_debug & DEBUG_libipv6calc_db_wrapper_GeoIP) != 0 ) {
+	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper_GeoIP)
 		if ((*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[type] == NULL) {
-			fprintf(stderr, "%s/%s: Finished: %s type=%d (still unknown) (r=%d)\n", __FILE__, __func__, wrapper_geoip_info, type, r);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Finished: %s type=%d (still unknown) (r=%d)", wrapper_geoip_info, type, r);
 		} else {
-			fprintf(stderr, "%s/%s: Finished: %s type=%d (%s) (r=%d)\n", __FILE__, __func__, wrapper_geoip_info, type, (*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[type], r);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Finished: %s type=%d (%s) (r=%d)", wrapper_geoip_info, type, (*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[type], r);
 		};
-	};
+	DEBUGSECTION_END
 
 	return(r);
 #endif
@@ -1270,7 +1272,7 @@ GeoIPRecord *libipv6calc_db_wrapper_GeoIP_record_by_addr_v6(GeoIP *gi, const cha
 	};
 
 	if (dl_status_GeoIP_record_by_addr_v6 == IPV6CALC_DL_STATUS_UNKNOWN) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Call dlsym: %s\n", dl_symbol);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Call dlsym: %s", dl_symbol);
 
 		dlerror();    /* Clear any existing error */
 

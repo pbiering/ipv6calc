@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1884.c
- * Version    : $Id: librfc1884.c,v 1.20 2014/02/03 20:48:04 ds6peter Exp $
- * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc1884.c,v 1.21 2014/04/26 13:03:56 ds6peter Exp $
+ * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for conversions defined in RFC 1884
@@ -302,6 +302,11 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 		/* nothing to do */
 	} else if ( (formatoptions & FORMATOPTION_printuppercase) != 0 ) {
 		string_to_upcase(resultstring);
+	};
+
+	if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
+		snprintf(temp2string, sizeof(temp2string), "IPV6=%s", resultstring);
+		snprintf(resultstring, NI_MAXHOST, "%s", temp2string);
 	};
 
 	DEBUGPRINT_WA(DEBUG_librfc1884, "Result: '%s'", resultstring);

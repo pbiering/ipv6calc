@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.108 2014/04/18 14:04:16 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.109 2014/04/26 13:03:56 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -64,7 +64,7 @@
 #endif
 
 
-long int ipv6calc_debug = 0;
+long int ipv6calc_debug = 0; // ipv6calc_debug usage ok
 
 /* pipe support */
 int input_is_pipe = 0;
@@ -81,7 +81,6 @@ int feature_kp      = 0; // will be checked later
 
 /**************************************************/
 /* main */
-#define DEBUG_function_name "ipv6calc/main"
 int main(int argc, char *argv[]) {
 	char resultstring[NI_MAXHOST] = "";
 	char resultstring2[NI_MAXHOST] = "";
@@ -141,7 +140,7 @@ int main(int argc, char *argv[]) {
 	int    longopts_maxentries = 0;
 
 	/* initialize debug value from environment for bootstrap debugging */
-	ipv6calc_debug_from_env();
+	ipv6calc_debug_from_env(); // ipv6calc_debug usage ok
 
 	/* add options */
 	ipv6calc_options_add_common_anon(shortopts, sizeof(shortopts), longopts, &longopts_maxentries);
@@ -161,20 +160,17 @@ int main(int argc, char *argv[]) {
 	};
 
 	/* Fetch the command-line arguments. */
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s/%s: Start parsing options: shortopts=%s\n", __FILE__, __func__, shortopts);
-
+	DEBUGSECTION_BEGIN(DEBUG_ipv6calc_general) 
+		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Start parsing options: shortopts=%s", shortopts); 
 		i = 0;
 		while(longopts[i].name != NULL) {
-			fprintf(stderr, "%s/%s: Long option: %s/%d/%08x\n", __FILE__, __func__, longopts[i].name, longopts[i].has_arg, longopts[i].val);
+			DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Long option: %s/%d/%08x", longopts[i].name, longopts[i].has_arg, longopts[i].val);
 			i++;
 		};
-	};
+	DEBUGSECTION_END
 	
 	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {
-		if (ipv6calc_debug != 0) {
-			fprintf(stderr, "%s/%s: Parsing option: 0x%08x\n", __FILE__, __func__, i);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Parsing option: 0x%08x", i);
 
 		/* catch "common basic" options */
 		result = ipv6calcoptions_common_basic(i, optarg, longopts);
@@ -214,9 +210,7 @@ int main(int argc, char *argv[]) {
 			case 'h':
 			case '?':
 				command |= CMD_printhelp;
-				if (ipv6calc_debug != 0) {
-					fprintf(stderr, "%s: help option detected\n", DEBUG_function_name);
-				};
+				DEBUGPRINT_NA(DEBUG_ipv6calc_general, "help option detected");
 				break;
 				
 			case 'L':
@@ -397,7 +391,7 @@ int main(int argc, char *argv[]) {
 				break;
 				
 			case FORMATOPTION_NUM_forceprefix + FORMATOPTION_NUM_HEAD:
-				if (ipv6calc_debug != 0) fprintf(stderr, "%s: format option 'forceprefix' selected\n", DEBUG_function_name);
+				DEBUGPRINT_NA(DEBUG_ipv6calc_general, "format option 'forceprefix' selected");
 				if ((atoi(optarg) >= 1) && (atoi(optarg) <= 128)) {
 					force_prefix = atoi(optarg);
 					formatoptions |= FORMATOPTION_forceprefix;
@@ -408,7 +402,7 @@ int main(int argc, char *argv[]) {
 				break;
 				
 			case FORMATOPTION_NUM_printstart + FORMATOPTION_NUM_HEAD:
-				if (ipv6calc_debug != 0) fprintf(stderr, "%s: format option 'printstart' selected\n", DEBUG_function_name);
+				DEBUGPRINT_NA(DEBUG_ipv6calc_general, "format option 'printstart' selected");
 				if ((atoi(optarg) >= 1) && (atoi(optarg) <= 128)) {
 					bit_start = atoi(optarg);
 					formatoptions |= FORMATOPTION_printstart;
@@ -419,7 +413,7 @@ int main(int argc, char *argv[]) {
 				break;
 				
 			case FORMATOPTION_NUM_printend + FORMATOPTION_NUM_HEAD:
-				if (ipv6calc_debug != 0) fprintf(stderr, "%s: format option 'printend' selected\n", DEBUG_function_name);
+				DEBUGPRINT_NA(DEBUG_ipv6calc_general, "format option 'printend' selected");
 				if ((atoi(optarg) >= 1) && (atoi(optarg) <= 128)) {
 					bit_end = atoi(optarg);
 					formatoptions |= FORMATOPTION_printend;
@@ -450,9 +444,7 @@ int main(int argc, char *argv[]) {
 			/* new options */
 			case 'I':	
 			case CMD_inputtype:
-				if (ipv6calc_debug != 0) {
-					fprintf(stderr, "%s: Got input string: %s\n", DEBUG_function_name, optarg);
-				};
+				DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Got input string: %s", optarg);
 				if ((strcmp(optarg, "-?") == 0) || (strcmp(optarg, "-h") == 0) || (strcmp(optarg, "--help") == 0) ) {
 					inputtype = FORMAT_auto;
 					command = CMD_printhelp;
@@ -470,9 +462,7 @@ int main(int argc, char *argv[]) {
 				
 			case 'O':	
 			case CMD_outputtype:
-				if (ipv6calc_debug != 0) {
-					fprintf(stderr, "%s: Got output string: %s\n", DEBUG_function_name, optarg);
-				};
+				DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Got output string: %s", optarg);
 				if ((strcmp(optarg, "-?") == 0) || (strcmp(optarg, "-h") == 0) || (strcmp(optarg, "--help") == 0) ) {
 					outputtype = FORMAT_auto;
 					command = CMD_printhelp;
@@ -585,7 +575,7 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_FAILURE);
 	};
 
-	DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Debug value:%08lx command:%08lx inputtype:%08lx outputtype:%08lx action:%08lx formatoptions:%08lx", (unsigned long) ipv6calc_debug, (unsigned long) command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, (unsigned long) formatoptions);
+	DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Debug value:%08lx command:%08lx inputtype:%08lx outputtype:%08lx action:%08lx formatoptions:%08lx", (unsigned long) ipv6calc_debug, (unsigned long) command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, (unsigned long) formatoptions); // ipv6calc_debug usage ok
 
 	/* do work depending on selection */
 	if ((command & CMD_printversion) != 0) {
@@ -650,7 +640,7 @@ PIPE_input:
 		linecounter++;
 
 		if (linecounter == 1) {
-			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Ok, proceeding stdin...\n");
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Ok, proceeding stdin...");
 		};
 		
 		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Line: %d", linecounter);
@@ -1343,14 +1333,10 @@ PIPE_input:
 		exit(EXIT_FAILURE);
 	};
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: End of action\n", DEBUG_function_name);
-	};
+	DEBUGPRINT_NA(DEBUG_ipv6calc_general, "End of action");
 
 	/***** output type *****/
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: Process output (outputtype: 0x%08lx)\n", DEBUG_function_name, (unsigned long) outputtype);
-	};
+	DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Process output (outputtype: 0x%08lx)", (unsigned long) outputtype);
 	
 	/* catch showinfo */	
 	if (command == CMD_showinfo) {
@@ -1390,22 +1376,20 @@ PIPE_input:
 			break;
 
 		case FORMAT_base85:
-			if (ipv6calc_debug != 0) { fprintf(stderr, "%s: Start of output handling for FORMAT_base85\n", DEBUG_function_name); }
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_base85");
 			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
 			retval = ipv6addrstruct_to_base85(&ipv6addr, resultstring);
 			break;
 				
 		case FORMAT_bitstring:
-			if (ipv6calc_debug != 0) { fprintf(stderr, "%s: Start of output handling for FORMAT_bitstring\n", DEBUG_function_name); }
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_bitstring");
 			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
-			if (ipv6calc_debug != 0) {
-				fprintf(stderr, "%s: Call 'librfc2874_addr_to_bitstring'\n", DEBUG_function_name);
-			};
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Call 'librfc2874_addr_to_bitstring'");
 			retval = librfc2874_addr_to_bitstring(&ipv6addr, resultstring, formatoptions);
 			break;
 			
 		case FORMAT_octal:
-			if (ipv6calc_debug != 0) { fprintf(stderr, "%s: Start of output handling for FORMAT_octal\n", DEBUG_function_name); }
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_octal");
 			if (ipv4addr.flag_valid == 1) {
 				retval = libipv4addr_to_octal(&ipv4addr, resultstring, formatoptions);
 			} else if (ipv6addr.flag_valid == 1) {
@@ -1414,7 +1398,7 @@ PIPE_input:
 			break;
 				
 		case FORMAT_hex:
-			if (ipv6calc_debug != 0) { fprintf(stderr, "%s: Start of output handling for FORMAT_hex\n", DEBUG_function_name); }
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_hex");
 			if (ipv4addr.flag_valid == 1) {
 				retval = libipv4addr_to_hex(&ipv4addr, resultstring, formatoptions);
 			} else if (ipv6addr.flag_valid == 1) {
@@ -1431,7 +1415,7 @@ PIPE_input:
 				
 		case FORMAT_revnibbles_int:
 		case FORMAT_revnibbles_arpa:
-			if (ipv6calc_debug != 0) { fprintf(stderr, "%s: Start of output handling for FORMAT_revnibbles_int/arpa\n", DEBUG_function_name); }
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_revnibbles_int/arpa");
 			if (ipv6addr.flag_valid == 1) {
 				switch (outputtype) {
 					case FORMAT_revnibbles_int:
@@ -1447,7 +1431,7 @@ PIPE_input:
 			break;
 				
 		case FORMAT_revipv4:
-			if (ipv6calc_debug != 0) { fprintf(stderr, "%s: Start of output handling for FORMAT_revipv4\n", DEBUG_function_name); }
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_revipv4");
 			if (ipv4addr.flag_valid == 1) {
 				retval = libipv4addr_to_reversestring(&ipv4addr, resultstring, formatoptions);
 			} else {
@@ -1456,13 +1440,13 @@ PIPE_input:
 			break;
 			
 		case FORMAT_ifinet6:
-			if (ipv6calc_debug != 0) { fprintf(stderr, "%s: Start of output handling for FORMAT_ifinet6\n", DEBUG_function_name); }
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_ifinet6");
 			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
 			retval = libifinet6_ipv6addrstruct_to_ifinet6(&ipv6addr, resultstring);
 			break;
 
 		case FORMAT_ipv6addr:
-			if (ipv6calc_debug != 0) { fprintf(stderr, "%s: Start of output handling for FORMAT_ipv6addr\n", DEBUG_function_name); }
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_ipv6addr");
 			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
 			if ((formatoptions & (FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed | FORMATOPTION_printprefix | FORMATOPTION_printsuffix)) != 0) {
 				retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, formatoptions);
@@ -1486,7 +1470,7 @@ PIPE_input:
 			break;
 
 		case FORMAT_ipv6literal:
-			if (ipv6calc_debug != 0) { fprintf(stderr, "%s: Start of output handling for FORMAT_ipv6literal\n", DEBUG_function_name); }
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_ipv6literal");
 			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
 			if ((formatoptions & (FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed)) != 0) {
 				retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, formatoptions | FORMATOPTION_literal);
@@ -1497,7 +1481,7 @@ PIPE_input:
 			
 			
 		case FORMAT_ipv4addr:
-			if (ipv6calc_debug != 0) { fprintf(stderr, "%s: Start of output handling for FORMAT_ipv4addr\n", DEBUG_function_name); }
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_ipv4addr");
 			if (ipv4addr.flag_valid != 1) { fprintf(stderr, "No valid IPv4 address given!\n"); exit(EXIT_FAILURE); };
 			retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, resultstring, formatoptions);
 			break;
@@ -1518,13 +1502,13 @@ PIPE_input:
 			break;
 			
 		case FORMAT_mac:
-			if (ipv6calc_debug != 0) { fprintf(stderr, "%s: Start of output handling for FORMAT_mac\n", DEBUG_function_name); }
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_mac");
 			if (macaddr.flag_valid != 1) { fprintf(stderr, "No valid MAC address given!\n"); exit(EXIT_FAILURE); };
 			retval = macaddrstruct_to_string(&macaddr, resultstring, formatoptions);
 			break;
 			
 		case FORMAT_iid_token:
-			if (ipv6calc_debug != 0) { fprintf(stderr, "%s: Start of output handling for FORMAT_iid_token\n", DEBUG_function_name); }
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_iid_token");
 			if (ipv6addr.flag_valid != 1 || ipv6addr2.flag_valid != 1) { fprintf(stderr, "No valid IPv6 addresses given!\n"); exit(EXIT_FAILURE); };
 			/* get interface identifier */
 			retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring2, formatoptions | FORMATOPTION_printsuffix);
@@ -1543,9 +1527,7 @@ PIPE_input:
 			exit(EXIT_FAILURE);
 	};
 
-	if (ipv6calc_debug != 0) {
-		fprintf(stderr, "%s: End of output handling\n", DEBUG_function_name);
-	};
+	DEBUGPRINT_NA(DEBUG_ipv6calc_general, "End of output handling");
 
 RESULT_print:
 	/* print result */
@@ -1566,4 +1548,3 @@ RESULT_print:
 
 	exit(retval);
 };
-#undef DEBUG_function_name

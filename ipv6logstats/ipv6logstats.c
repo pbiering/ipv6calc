@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.51 2014/04/18 11:07:57 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.52 2014/04/26 13:03:56 ds6peter Exp $
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -36,7 +36,7 @@
 
 #define LINEBUFFER	16384
 
-long int ipv6calc_debug = 0;
+long int ipv6calc_debug = 0;	// ipv6calc_debug usage ok
 int ipv6calc_quiet = 0;
 
 static int opt_unknown = 0;
@@ -138,7 +138,7 @@ int main(int argc,char *argv[]) {
 	};
 
 	/* initialize debug value from environment for bootstrap debugging */
-	ipv6calc_debug_from_env();
+	ipv6calc_debug_from_env(); // ipv6calc_debug usage ok
 
 	/* add options */
 	ipv6calc_options_add_common_basic(shortopts, sizeof(shortopts), longopts, &longopts_maxentries);
@@ -407,9 +407,7 @@ static void lineparser(void) {
 			};
 		};
 		
-		if (ipv6calc_debug == 1) {
-			fprintf(stderr, "Line: %d\r", linecounter);
-		};
+		DEBUGPRINT_WA(DEBUG_ipv6logstats_processing, "Line counter: %d", linecounter);
 
 		if (strlen(linebuffer) >= LINEBUFFER) {
 			fprintf(stderr, "Line too long: %d\n", linecounter);

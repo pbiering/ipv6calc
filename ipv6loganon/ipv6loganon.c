@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.28 2014/04/25 20:50:00 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.29 2014/04/26 13:03:56 ds6peter Exp $
  * Copyright  : 2007-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -43,7 +43,7 @@
 
 #define LINEBUFFER	16384
 
-long int ipv6calc_debug = 0;
+long int ipv6calc_debug = 0; // ipv6calc_debug usage ok
 int flag_nocache = 0;
 
 /* anonymization default values */
@@ -102,7 +102,7 @@ int main(int argc,char *argv[]) {
 	ipv6calc_quiet = 1; //default for ipv6loganon
 
 	/* initialize debug value from environment for bootstrap debugging */
-	ipv6calc_debug_from_env();
+	ipv6calc_debug_from_env(); // ipv6calc_debug usage ok
 
 	/* add options */
 	ipv6calc_options_add_common_anon(shortopts, sizeof(shortopts), longopts, &longopts_maxentries);

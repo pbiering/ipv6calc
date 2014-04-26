@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.105 2014/04/25 05:48:13 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.106 2014/04/26 13:03:56 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -1307,7 +1307,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_
 static int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions) {
 	int retval = 1;
 	int i;
-	char tempstring[NI_MAXHOST];
+	char tempstring[NI_MAXHOST], temp2string[NI_MAXHOST];
 	
 	/* print array */
 	if ( ((ipv6addrp->scope & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED | IPV6_ADDR_IID_32_63_HAS_IPV4)) != 0) && ((ipv6addrp->scope & IPV6_ADDR_ANONYMIZED_IID) == 0)) {
@@ -1388,6 +1388,11 @@ static int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char
 				snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
 			};
 		};
+	};
+
+	if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
+		snprintf(temp2string, sizeof(temp2string), "IPV6=%s", resultstring);
+		snprintf(resultstring, NI_MAXHOST, "%s", temp2string);
 	};
 
 	retval = 0;	

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.31 2014/04/25 20:50:00 ds6peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.32 2014/04/26 13:03:56 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -41,7 +41,7 @@
 
 #define LINEBUFFER	16384
 
-long int ipv6calc_debug = 0;
+long int ipv6calc_debug = 0; // ipv6calc_debug usage ok
 int flag_nocache = 0;
 
 /* supported output types:
@@ -95,7 +95,7 @@ int main(int argc,char *argv[]) {
 	};
 
 	/* initialize debug value from environment for bootstrap debugging */
-	ipv6calc_debug_from_env();
+	ipv6calc_debug_from_env(); // ipv6calc_debug usage ok
 
 	/* add options */
 	ipv6calc_options_add_common_basic(shortopts, sizeof(shortopts), longopts, &longopts_maxentries);
@@ -183,7 +183,7 @@ int main(int argc,char *argv[]) {
 		exit(EXIT_FAILURE);
 	};
 
-	DEBUGPRINT_WA(DEBUG_ipv6logconv_general, "Debug value:%lx  command:%lx  inputtype:%lx   outputtype:%lx  action:%lx", (unsigned long) ipv6calc_debug, command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action);
+	DEBUGPRINT_WA(DEBUG_ipv6logconv_general, "Debug value:%lx  command:%lx  inputtype:%lx   outputtype:%lx  action:%lx", (unsigned long) ipv6calc_debug, command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action); // ipv6calc_debug usage ok
 	
 	/* do work depending on selection */
 	if (command == CMD_printversion) {
