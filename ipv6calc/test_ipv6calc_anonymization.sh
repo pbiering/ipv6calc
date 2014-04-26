@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc_anonymization.sh
-# Version    : $Id: test_ipv6calc_anonymization.sh,v 1.6 2014/04/25 05:48:12 ds6peter Exp $
+# Version    : $Id: test_ipv6calc_anonymization.sh,v 1.7 2014/04/26 16:16:31 ds6peter Exp $
 # Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test ipv6calc anonymization
@@ -103,36 +103,6 @@ run_anon_options_tests() {
 			echo "INFO  : $command -> test ok"
 		fi
 	done || return 1
-}
-
-testscenarios_kp() {
-	testscenarios_anonymization_options_kp | while IFS="=" read input result; do
-		echo "$input" | awk '{ print $NF }'
-	done | sort | uniq
-
-	testscenarios_anonymization_options | while IFS="=" read input result; do
-		echo "$input" | awk '{ print $NF }'
-	done | sort | uniq
-
-	test_list | while read input filter; do
-		echo "$input"
-	done | sort | uniq
-
-	testscenarios_filter | while read input filter; do
-		echo "$input"
-	done | sort | uniq
-
-	testscenarios_ipv4_reserved | grep -vw "skip-anon-test" | while read input filter rest; do
-		echo "$input"
-	done | sort | uniq
-
-	testscenarios_ipv6_reserved | grep -vw "skip-anon-test" | while read input filter rest; do
-		echo "$input"
-	done | sort | uniq
-
-	testscenarios_auto_good | while read input filter rest; do
-		echo "$input"
-	done | sort | uniq
 }
 
 run_anon_options_kp_tests() {

@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.328 2014/04/26 13:03:56 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.329 2014/04/26 16:16:31 ds6peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,9 @@ Info:
 --------------------------------------------------------------------
 20140426/PB
 	Add missing support for machinereadable output for IPv6 addresses (format flag allowed, but was not supported)
+	ipv6logstats: add support for AFRINIC, change major output version to 4
+	ipv6logconv: add support of anonymized addresses
+	ipv6logstats: improve support of anonymized addresses
 
 20140425/PB
 	Introduce new functions for countrycode,AS and registry lookup covering also anonymized addresses

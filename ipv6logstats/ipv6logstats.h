@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.19 2013/11/04 20:30:50 ds6peter Exp $
- * Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logstats.h,v 1.20 2014/04/26 16:16:32 ds6peter Exp $
+ * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Main header file
@@ -12,7 +12,7 @@
 #define PROGRAM_NAME "ipv6logstats"
 #define PROGRAM_COPYRIGHT "(P) & (C) 2003-" COPYRIGHT_YEAR " by Peter Bieringer <pb (at) bieringer.de>"
 
-#define STATS_VERSION_MAJOR	3
+#define STATS_VERSION_MAJOR	4
 #define STATS_VERSION_MINOR	0
 
 #define STATS_ALL		0x00
@@ -25,6 +25,7 @@
 #define STATS_IPV4_ARIN		0x14
 #define STATS_IPV4_RIPE		0x15
 #define STATS_IPV4_LACNIC	0x16
+#define STATS_IPV4_AFRINIC	0x17
 #define STATS_IPV4_RESERVED	0x1e
 #define STATS_IPV4_UNKNOWN	0x1f
 
@@ -34,6 +35,7 @@
 #define STATS_IPV6_ARIN		0x24
 #define STATS_IPV6_RIPE		0x25
 #define STATS_IPV6_LACNIC	0x26
+#define STATS_IPV6_AFRINIC	0x27
 #define STATS_IPV6_RESERVED	0x2e
 #define STATS_IPV6_UNKNOWN	0x2f
 

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.23 2013/10/30 20:04:25 ds6peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.24 2014/04/26 16:16:31 ds6peter Exp $
 # Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -19,6 +19,8 @@ if [ $? -ne 1 ]; then
 	echo "ERROR : something wrong in option definition"
 	exit 1
 fi
+
+source ../ipv6calc/test_scenarios.sh
 
 testscenarios_standard() {
 # Address
@@ -214,18 +216,52 @@ run_loganon_reliability_tests() {
 		return 1
 	fi
 
+	if [ ! -x ../ipv6logconv/ipv6logconv ]; then
+		echo "ERROR : missing binary: ../ipv6logconv/ipv6logconv (check build process)"
+		return 1
+	fi
+
+	if ! ../ipv6logstats/ipv6logstats -v | grep -w STAT_REG; then
+		echo "NOTICE: ipv6logstats misses basic database, skip tests"
+		return 0
+	fi
+
+	if ! ../ipv6logconv/ipv6logconv -v | grep -w CONV_REG; then
+		echo "NOTICE: ipv6logconv misses basic database, skip tests"
+		return 0
+	fi
+
 	local options="$*"
 
-	echo "INFO  : run 'ipv6loganon' reliability tests with options: $options" >&2
-	list="`testscenarios_standard | awk '{ print $1 }'`"
+	if [ "$options" == "--anonymize-preset kp" ]; then
+		list="`testscenarios_kp | ../ipv6calc/ipv6calc -E ipv4,ipv6`"
+	else
+		list="`testscenarios_standard | awk '{ print $1 }'`"
+	fi
+
+	if [ -z "$list" ]; then
+		echo "ERROR : list empty in run_loganon_reliability_tests"
+		return 1
+	fi
 	list="$list
 	`testscenarios_special | awk '{ print $1 }'`"
 	sortlist="`echo "$list" | sort -u`"
 
+	echo "INFO  : run ipv6loganon/ipv6logstats reliability tests with options: $options" >&2
 	for entry in $sortlist; do
 		echo "DEBUG : test: $entry"
 		nonanonymized="`echo "$entry" | ../ipv6logstats/ipv6logstats -q | grep -v "Time:"`"
 		anonymized="`echo "$entry" | ./ipv6loganon -q $options | ../ipv6logstats/ipv6logstats -q | grep -v "Time:"`"
+
+		if [ -z "$nonanonymized" ]; then
+			echo "ERROR : result empty: nonanonymized"
+			return 1
+		fi
+
+		if [ -z "$anonymized" ]; then
+			echo "ERROR : result empty: anonymized"
+			return 1
+		fi
 
 		entry_anon="`echo "$entry" | ./ipv6loganon -q $options`"
 
@@ -234,7 +270,35 @@ run_loganon_reliability_tests() {
 			export anonymized
 			export nonanonymized
 			diff -u <(echo "$nonanonymized") <(echo "$anonymized")
-			echo "ERROR : result not equal between anonymized and non-anonymized statistics: $entry_anon"
+			echo "ERROR : result not equal between anonymized and non-anonymized ipv6logstats: $entry <-> $entry_anon (options: $options)"
+			return 1
+		fi
+	done
+
+	echo "INFO  : run ipv6loganon/ipv6logconv reliability tests with options: $options" >&2
+	for entry in $sortlist; do
+		echo "DEBUG : test: $entry"
+		nonanonymized="`echo "$entry" | ../ipv6logconv/ipv6logconv -q --out any | grep -v "Time:"`"
+		anonymized="`echo "$entry" | ./ipv6loganon -q $options | ../ipv6logconv/ipv6logconv -q --out any | grep -v "Time:"`"
+
+		if [ -z "$nonanonymized" ]; then
+			echo "ERROR : result empty: nonanonymized"
+			return 1
+		fi
+
+		if [ -z "$anonymized" ]; then
+			echo "ERROR : result empty: anonymized"
+			return 1
+		fi
+
+		entry_anon="`echo "$entry" | ./ipv6loganon -q $options`"
+
+		if [ "$nonanonymized" != "$anonymized" ]; then
+			echo "ERROR : result not equal: $entry_anon"
+			export anonymized
+			export nonanonymized
+			diff -u <(echo "$nonanonymized") <(echo "$anonymized")
+			echo "ERROR : result not equal between anonymized and non-anonymized ipv6logconv: $entry_anon"
 			return 1
 		fi
 	done

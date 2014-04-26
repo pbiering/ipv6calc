@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.52 2014/04/26 13:03:56 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.53 2014/04/26 16:16:32 ds6peter Exp $
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -63,6 +63,7 @@ static stat_entries ipv6logstats_statentries[] = {
 	{ STATS_IPV4_ARIN	, 0, "IPv4/ARIN" },
 	{ STATS_IPV4_RIPE	, 0, "IPv4/RIPE" },
 	{ STATS_IPV4_LACNIC	, 0, "IPv4/LACNIC" },
+	{ STATS_IPV4_AFRINIC	, 0, "IPv4/AFRINIC" },
 	{ STATS_IPV4_UNKNOWN	, 0, "IPv4/UNKNOWN" },
 	{ STATS_IPV6_6BONE	, 0, "IPv6/6bone" },
 	{ STATS_IPV6_IANA	, 0, "IPv6/IANA" },
@@ -70,6 +71,7 @@ static stat_entries ipv6logstats_statentries[] = {
 	{ STATS_IPV6_ARIN	, 0, "IPv6/ARIN" },
 	{ STATS_IPV6_RIPE	, 0, "IPv6/RIPE" },
 	{ STATS_IPV6_LACNIC	, 0, "IPv6/LACNIC" },
+	{ STATS_IPV6_AFRINIC	, 0, "IPv6/AFRINIC" },
 	{ STATS_IPV6_RESERVED	, 0, "IPv6/RESERVED" },
 	{ STATS_IPV6_UNKNOWN	, 0, "IPv6/UNKNOWN" },
 	{ STATS_IPV6_6TO4_BASE + REGISTRY_IANA    , 0, "IPv6/6to4/IANA"     },
@@ -77,6 +79,7 @@ static stat_entries ipv6logstats_statentries[] = {
 	{ STATS_IPV6_6TO4_BASE + REGISTRY_ARIN    , 0, "IPv6/6to4/ARIN"     },
 	{ STATS_IPV6_6TO4_BASE + REGISTRY_RIPE    , 0, "IPv6/6to4/RIPE"     },
 	{ STATS_IPV6_6TO4_BASE + REGISTRY_LACNIC  , 0, "IPv6/6to4/LACNIC"   },
+	{ STATS_IPV6_6TO4_BASE + REGISTRY_AFRINIC , 0, "IPv6/6to4/AFRINIC"  },
 	{ STATS_IPV6_6TO4_BASE + REGISTRY_RESERVED, 0, "IPv6/6to4/RESERVED" },
 	{ STATS_IPV6_6TO4_BASE + REGISTRY_UNKNOWN , 0, "IPv6/6to4/UNKNOWN"  },
 	{ STATS_IPV6_TEREDO_BASE + REGISTRY_IANA    , 0, "IPv6/Teredo/IANA"     },
@@ -84,6 +87,7 @@ static stat_entries ipv6logstats_statentries[] = {
 	{ STATS_IPV6_TEREDO_BASE + REGISTRY_ARIN    , 0, "IPv6/Teredo/ARIN"     },
 	{ STATS_IPV6_TEREDO_BASE + REGISTRY_RIPE    , 0, "IPv6/Teredo/RIPE"     },
 	{ STATS_IPV6_TEREDO_BASE + REGISTRY_LACNIC  , 0, "IPv6/Teredo/LACNIC"   },
+	{ STATS_IPV6_TEREDO_BASE + REGISTRY_AFRINIC , 0, "IPv6/Teredo/AFRINIC"  },
 	{ STATS_IPV6_TEREDO_BASE + REGISTRY_RESERVED, 0, "IPv6/Teredo/RESERVED" },
 	{ STATS_IPV6_TEREDO_BASE + REGISTRY_UNKNOWN , 0, "IPv6/Teredo/UNKNOWN"  },
 	{ STATS_IPV6_NAT64_BASE + REGISTRY_IANA    , 0, "IPv6/NAT64/IANA"     },
@@ -91,6 +95,7 @@ static stat_entries ipv6logstats_statentries[] = {
 	{ STATS_IPV6_NAT64_BASE + REGISTRY_ARIN    , 0, "IPv6/NAT64/ARIN"     },
 	{ STATS_IPV6_NAT64_BASE + REGISTRY_RIPE    , 0, "IPv6/NAT64/RIPE"     },
 	{ STATS_IPV6_NAT64_BASE + REGISTRY_LACNIC  , 0, "IPv6/NAT64/LACNIC"   },
+	{ STATS_IPV6_NAT64_BASE + REGISTRY_AFRINIC , 0, "IPv6/NAT64/AFRINIC"  },
 	{ STATS_IPV6_NAT64_BASE + REGISTRY_RESERVED, 0, "IPv6/NAT64/RESERVED" },
 	{ STATS_IPV6_NAT64_BASE + REGISTRY_UNKNOWN , 0, "IPv6/NAT64/UNKNOWN"  },
 	{ STATS_IPV6_IID_GLOBAL, 0, "IPv6/IID/Global" },
@@ -370,7 +375,6 @@ static void lineparser(void) {
 	int index;
 	uint16_t cc_index = COUNTRYCODE_INDEX_UNKNOWN;
 	uint32_t as_num32 = ASNUM_AS_UNKNOWN;
-	uint32_t payload;
 	long unsigned int c_all, c_ipv4, c_ipv6;
 
 	// clear counters
@@ -514,31 +518,9 @@ static void lineparser(void) {
 						continue;
 					};
 
-					if ((ipv4addr.scope & IPV4_ADDR_ANONYMIZED) != 0) {
-						cc_index = ipv4addr_anonymized_get_cc_index(&ipv4addr);
-						as_num32 = ipv4addr_anonymized_get_as_num32(&ipv4addr);
-
-						/* get registry */
-						registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
-					} else {
-						if ((feature_cc == 1) || (feature_as == 1)) {
-							// create text represenation
-							r = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, token, 0);
-
-							if (feature_cc == 1) {
-								/* get country code */
-								cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 4);
-							};
-
-							if (feature_as == 1) {
-								/* get AS */
-								as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 4);
-							};
-						};
-
-						/* get registry */
-						registry = libipv6calc_db_wrapper_registry_num_by_ipv4addr(&ipv4addr);
-					};
+					cc_index = libipv4addr_cc_index_by_addr(&ipv4addr);
+					as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr);
+					registry = libipv4addr_registry_num_by_addr(&ipv4addr);
 
 					if (feature_cc == 1) {
 						stat_inc_country_code(cc_index, 4);
@@ -575,6 +557,9 @@ static void lineparser(void) {
 							case IPV4_ADDR_REGISTRY_LACNIC:
 								stat_inc(stat_registry_base + REGISTRY_LACNIC);
 								break;
+							case IPV4_ADDR_REGISTRY_AFRINIC:
+								stat_inc(stat_registry_base + REGISTRY_AFRINIC);
+								break;
 							case IPV4_ADDR_REGISTRY_RESERVED:
 								stat_inc(stat_registry_base + REGISTRY_RESERVED);
 								break;
@@ -591,33 +576,17 @@ static void lineparser(void) {
 						};
 					};
 				} else {
-					if ((ipv6addr.scope & IPV6_ADDR_ANONYMIZED_PREFIX) != 0) {
-						DEBUGPRINT_NA(DEBUG_ipv6logstats_processing, "Anonymized IPv6 prefix found");
-
-						ipv6addr_get_payload_anonymized_prefix(&ipv6addr, ANON_PREFIX_PAYLOAD_CCINDEX, &payload);
-						cc_index = payload;
-
-						ipv6addr_get_payload_anonymized_prefix(&ipv6addr, ANON_PREFIX_PAYLOAD_ASN32, &payload);
-						as_num32 = payload;
-
-						/* get registry */
-						registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
-
-						DEBUGPRINT_WA(DEBUG_ipv6logstats_processing, "Anonymized IPv6 prefix information cc_index=%u as_num32=%u registry=%u", cc_index, as_num32, registry);
-					} else {
-						/* get registry */
-						registry = libipv6calc_db_wrapper_registry_num_by_ipv6addr(&ipv6addr);
-					};
+					cc_index = libipv6addr_cc_index_by_addr(&ipv6addr);
+					as_num32 = libipv6addr_as_num32_by_addr(&ipv6addr);
+					registry = libipv6addr_registry_num_by_addr(&ipv6addr);
 
 					if (feature_cc == 1) {
 						/* country code */
-						cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 6);
 						stat_inc_country_code(cc_index, 6);
 					};
 
 					if (feature_as == 1) {
 						/* asnum */
-						as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 6);
 						stat_inc_asnum(as_num32, 6);
 					};
 
@@ -639,6 +608,9 @@ static void lineparser(void) {
 							break;
 						case IPV6_ADDR_REGISTRY_LACNIC:
 							stat_inc(STATS_IPV6_LACNIC);
+							break;
+						case IPV6_ADDR_REGISTRY_AFRINIC:
+							stat_inc(STATS_IPV6_AFRINIC);
 							break;
 						case IPV6_ADDR_REGISTRY_RESERVED:
 							stat_inc(STATS_IPV6_RESERVED);
@@ -672,26 +644,9 @@ static void lineparser(void) {
 				/* is IPv4 address */
 				stat_inc(STATS_IPV4);
 
-				if ((ipv4addr.scope & IPV4_ADDR_ANONYMIZED) != 0) {
-					cc_index = ipv4addr_anonymized_get_cc_index(&ipv4addr);
-					as_num32 = ipv4addr_anonymized_get_as_num32(&ipv4addr);
-
-					/* get registry */
-					registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
-				} else {
-					if (feature_cc == 1) {
-						/* get country code */
-						cc_index = libipv6calc_db_wrapper_cc_index_by_addr(token, 4);
-					};
-
-					if (feature_as == 1) {
-						/* get AS */
-						as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(token, 4);
-					};
-
-					/* get registry */
-					registry = libipv6calc_db_wrapper_registry_num_by_ipv4addr(&ipv4addr);
-				};
+				cc_index = libipv4addr_cc_index_by_addr(&ipv4addr);
+				as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr);
+				registry = libipv4addr_registry_num_by_addr(&ipv4addr);
 
 				stat_inc_country_code(cc_index, 4);
 				stat_inc_asnum(as_num32, 4);
@@ -711,6 +666,9 @@ static void lineparser(void) {
 						break;
 					case IPV4_ADDR_REGISTRY_LACNIC:
 						stat_inc(STATS_IPV4_LACNIC);
+						break;
+					case IPV4_ADDR_REGISTRY_AFRINIC:
+						stat_inc(STATS_IPV4_AFRINIC);
 						break;
 					case IPV4_ADDR_REGISTRY_RESERVED:
 						stat_inc(STATS_IPV4_RESERVED);

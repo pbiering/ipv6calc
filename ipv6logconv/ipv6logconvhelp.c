@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconvhelp.c
- * Version    : $Id: ipv6logconvhelp.c,v 1.8 2006/07/10 11:38:19 peter Exp $
- * Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logconvhelp.c,v 1.9 2014/04/26 16:16:32 ds6peter Exp $
+ * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
  * Information:
@@ -20,7 +20,17 @@
 
 /* display info */
 void printversion(void) {
-	fprintf(stderr, "%s: version %s\n", PROGRAM_NAME, PACKAGE_VERSION);
+	fprintf(stderr, "%s: version %s", PROGRAM_NAME, PACKAGE_VERSION);
+
+	if (feature_reg == 1) {
+		fprintf(stderr, " CONV_REG");
+	};
+
+	if (feature_ieee == 1) {
+		fprintf(stderr, " CONV_IEEE");
+	};
+
+	fprintf(stderr, "\n");
 };
 
 void printcopyright(void) {
@@ -48,13 +58,16 @@ void ipv6logconv_printhelp(void) {
 	fprintf(stderr, "                               maximum: %d\n", CACHE_LRU_SIZE);
 	fprintf(stderr, " Output:\n");
 	fprintf(stderr, "  [--out <output type>] : specify output type\n");
-	fprintf(stderr, "   addrtype       : Address type\n");
-	fprintf(stderr, "   ouitype        : OUI (IEEE) type\n");
+	fprintf(stderr, "   addrtype       : Address type%s\n", (feature_reg == 0) ? "  (NOT-SUPPORTED)" : "");
+	fprintf(stderr, "   ouitype        : OUI (IEEE) type%s\n", (feature_ieee == 0) ? "  (NOT-SUPPORTED)" : "");
 	fprintf(stderr, "   ipv6addrtype   : IPv6 address type\n");
-	fprintf(stderr, "   any            : any type\n");
+	fprintf(stderr, "   any            : any type%s\n", ((feature_reg == 0) || (feature_ieee == 0)) ? "  (NOT-SUPPORTED)" : "");
+	fprintf(stderr, "\n");
+	if ((feature_reg == 0) || (feature_ieee == 0)) {
+			fprintf(stderr, " NOT-SUPPORTED means either database missing or support not compiled-in\n");
+	};
 	fprintf(stderr, "\n");
 	fprintf(stderr, " Takes data from stdin, proceed it to stdout\n");
-	fprintf(stderr, "\n");
 	fprintf(stderr, "\n");
 
 	return;

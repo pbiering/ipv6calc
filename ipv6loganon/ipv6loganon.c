@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.29 2014/04/26 13:03:56 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.30 2014/04/26 16:16:31 ds6peter Exp $
  * Copyright  : 2007-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -446,7 +446,7 @@ static int anonymizetoken(char *resultstring, const char *token) {
 
 	DEBUGSECTION_BEGIN(DEBUG_ipv6loganon_general)
 		if (inputtype >= 0) {
-			for (i = 0; i < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); i++) {
+			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_formatstrings); i++) {
 				if (inputtype == ipv6calc_formatstrings[i].number) {
 					DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "Found type: %s", ipv6calc_formatstrings[i].token);
 				};

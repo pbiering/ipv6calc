@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.53 2014/04/25 05:48:13 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.54 2014/04/26 16:16:32 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -728,6 +728,8 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 	uint16_t cc_index, c;
 	int i;
 
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "type=0x%08x", ipv4addrp->scope);
+
 	if ((ipv4addrp->scope & IPV4_ADDR_ANONYMIZED) != 0) {
 		DEBUGPRINT_NA(DEBUG_libipv4addr, "skip already anonymized address");
 
@@ -1053,12 +1055,16 @@ int libipv4addr_registry_num_by_addr(const ipv6calc_ipv4addr *ipv4addrp) {
 	uint16_t cc_index;
 
 	if ((ipv4addrp->scope & IPV4_ADDR_ANONYMIZED) != 0) {
-			/* retrieve registry via cc_index from anonymized address (simple) */
-			cc_index = libipv4addr_cc_index_by_addr(ipv4addrp);
-			registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
+		DEBUGPRINT_NA(DEBUG_libipv4addr, "IPv4 is anonymized, extract registry from anonymized data");
+		/* retrieve registry via cc_index from anonymized address (simple) */
+		cc_index = libipv4addr_cc_index_by_addr(ipv4addrp);
+		registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_REGISTRY) == 1) {
+			DEBUGPRINT_NA(DEBUG_libipv4addr, "Get registry from IPV6CALC_DB_IPV4_TO_REGISTRY");
 			registry = libipv6calc_db_wrapper_registry_num_by_ipv4addr(ipv4addrp);
+		} else {
+			DEBUGPRINT_NA(DEBUG_libipv4addr, "No support available for IPV6CALC_DB_IPV4_TO_REGISTRY");
 		};
 	};
 

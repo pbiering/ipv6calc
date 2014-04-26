@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.39 2014/04/25 05:48:12 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.40 2014/04/26 16:16:31 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -410,4 +410,34 @@ testscenarios_showinfo_anonymized_info() {
 1.2.3.4;--db-geoip-disable --db-ip2location-disable;match;IPV4_ANON=1.2.3.0
 1.2.3.4;--db-geoip-disable --db-ip2location-disable;key-no-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
 END
+}
+
+testscenarios_kp() {
+	testscenarios_anonymization_options_kp | while IFS="=" read input result; do
+		echo "$input" | awk '{ print $NF }'
+	done | sort | uniq
+
+	testscenarios_anonymization_options | while IFS="=" read input result; do
+		echo "$input" | awk '{ print $NF }'
+	done | sort | uniq
+
+	test_list | while read input filter; do
+		echo "$input"
+	done | sort | uniq
+
+	testscenarios_filter | while read input filter; do
+		echo "$input"
+	done | sort | uniq
+
+	testscenarios_ipv4_reserved | grep -vw "skip-anon-test" | while read input filter rest; do
+		echo "$input"
+	done | sort | uniq
+
+	testscenarios_ipv6_reserved | grep -vw "skip-anon-test" | while read input filter rest; do
+		echo "$input"
+	done | sort | uniq
+
+	testscenarios_auto_good | while read input filter rest; do
+		echo "$input"
+	done | sort | uniq
 }

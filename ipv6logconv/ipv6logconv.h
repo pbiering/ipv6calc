@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.h
- * Version    : $Id: ipv6logconv.h,v 1.8 2013/11/04 20:55:00 ds6peter Exp $
- * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logconv.h,v 1.9 2014/04/26 16:16:31 ds6peter Exp $
+ * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
  * Information:
@@ -22,3 +22,6 @@
 
 /* prototyping */
 int cache_lru_limit;
+
+extern int feature_reg;
+extern int feature_ieee;
