@@ -21,7 +21,6 @@
 long int ipv6calc_debug = 0;
 
 /* main */
-#define DEBUG_function_name "registry-assignment-to-list/main"
 int main(int argc,char *argv[]) {
 	char resultstring[NI_MAXHOST] = "";
 	int retval;

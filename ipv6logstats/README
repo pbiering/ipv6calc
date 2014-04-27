@@ -1,15 +1,29 @@
-$Id: README,v 1.7 2013/07/08 07:04:13 ds6peter Exp $
-
-Gnuplot:
-Homepage: http://www.gnuplot.info/
-Gnuplot is normally contained by Linux distribution
-
-
-GRI:
-Homepage: http://gri.sourceforge.net/
+$Id: README,v 1.8 2014/04/27 09:16:50 ds6peter Exp $
 
 Output format
-*Verion			$MAJOR.$MINOR
+=============
+
+Statistics in rows
+------------------
+*Version		$MAJOR.$MINOR
+
+
+Statistics in columns
+---------------------
+Last column contains output version number (since 4.0) prepended with '#'
+
+
+
+Changes
+-------
+
+Output format version 4.0 extended with:
+
+- stat by rows:
+    - new rows for AfriNIC
+- stat by columns:
+    - new columns for AfriNIC
+    - version number on end of line
 
 
 Output format version 3.0 extended with:
@@ -58,3 +72,16 @@ NOTE: ASN "0" is "unknown"
 
 
 Output format in future versions will be introduced with *$MAJOR*
+
+
+
+External software:
+
+Gnuplot:
+Homepage: http://www.gnuplot.info/
+Gnuplot is normally contained by Linux distribution
+
+
+GRI:
+Homepage: http://gri.sourceforge.net/
+

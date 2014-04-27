@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.53 2014/04/26 16:16:32 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.54 2014/04/27 09:16:50 ds6peter Exp $
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -806,25 +806,26 @@ static void lineparser(void) {
 					printf("%s ", opt_token);
 				};
 			};
-			for (i = 1; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
+			for (i = 1; i < MAXENTRIES_ARRAY(ipv6logstats_statentries); i++) {
 				if (i > 0) {
 					printf(" ");
 				};
 				printf("%s", ipv6logstats_statentries[i].token);
 			};
-			printf("\n");
+			printf(" #Version(%d.%d)\n", STATS_VERSION_MAJOR, STATS_VERSION_MINOR);
 		};
 		if (opt_onlyheader == 0) {
 			if (strlen(opt_token) > 0) {
 				printf("%s ", opt_token);
 			};
-			for (i = 1; i < (int) (sizeof(ipv6logstats_statentries) / sizeof(ipv6logstats_statentries[0])); i++) {
+			for (i = 1; i < MAXENTRIES_ARRAY(ipv6logstats_statentries); i++) {
 				if (i > 0) {
 					printf(" ");
 				};
 				printf("%lu", ipv6logstats_statentries[i].counter);
 			};
-			printf("\n");
+
+			printf(" #%d.%d\n", STATS_VERSION_MAJOR, STATS_VERSION_MINOR);
 		};
 	};
 
