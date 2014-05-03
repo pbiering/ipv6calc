@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.330 2014/04/27 09:16:50 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.331 2014/05/03 10:59:20 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,9 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20140503/PB
+	libipv4addr.c: improve registry retrievement for anonymized IPv4 addresses
+
 20140426/PB
 	Add missing support for machinereadable output for IPv6 addresses (format flag allowed, but was not supported)
 	ipv6logstats: add support for AFRINIC, change major output version to 4

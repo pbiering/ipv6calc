@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.56 2014/05/03 07:09:41 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.57 2014/05/03 10:59:21 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -1050,13 +1050,24 @@ END_libipv4addr_as_num32_by_addr:
  */
 int libipv4addr_registry_num_by_addr(const ipv6calc_ipv4addr *ipv4addrp) {
 	int registry = IPV4_ADDR_REGISTRY_UNKNOWN;
+	uint32_t as_num32;
 	uint16_t cc_index;
 
 	if ((ipv4addrp->scope & IPV4_ADDR_ANONYMIZED) != 0) {
 		DEBUGPRINT_NA(DEBUG_libipv4addr, "IPv4 is anonymized, extract registry from anonymized data");
-		/* retrieve registry via cc_index from anonymized address (simple) */
-		cc_index = libipv4addr_cc_index_by_addr(ipv4addrp);
-		registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
+		// ASN -> Registry
+		// CC  -> Registry
+
+		/* retrieve registry via AS number from anonymized address (simple) */
+		as_num32 = libipv4addr_as_num32_by_addr(ipv4addrp);
+		if (as_num32 != ASNUM_AS_UNKNOWN) {
+			registry = libipv6calc_db_wrapper_registry_num_by_as_num32(as_num32);
+		};
+		if ((as_num32 == ASNUM_AS_UNKNOWN) || (registry == IPV4_ADDR_REGISTRY_ARIN)) {
+			/* retrieve registry via cc_index from anonymized address (simple, fallback) */
+			cc_index = libipv4addr_cc_index_by_addr(ipv4addrp);
+			registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
+		};
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_REGISTRY) == 1) {
 			DEBUGPRINT_NA(DEBUG_libipv4addr, "Get registry from IPV6CALC_DB_IPV4_TO_REGISTRY");

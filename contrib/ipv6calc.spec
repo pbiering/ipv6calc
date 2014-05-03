@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2014 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.160 2014/04/26 16:26:29 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.161 2014/05/03 10:59:21 ds6peter Exp $
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
@@ -195,7 +195,7 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
-* Sat Feb 02 2014 Peter Bieringer <pb@bieringer.de>
+* Sun Feb 02 2014 Peter Bieringer <pb@bieringer.de>
 - add support for optional shared-library build
 
 * Tue Nov 12 2013 Peter Bieringer <pb@bieringer.de>
