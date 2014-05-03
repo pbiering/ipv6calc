@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.106 2014/04/26 13:03:56 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.107 2014/05/03 07:09:41 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -185,7 +185,7 @@ void ipv6addr_setdword(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numdword
 void ipv6addr_clear(ipv6calc_ipv6addr *ipv6addrp) {
 	int i;
 
-	for (i = 0; i < (int) (sizeof(ipv6addrp->in6_addr.s6_addr) / sizeof(ipv6addrp->in6_addr.s6_addr[0])); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6addrp->in6_addr.s6_addr); i++) {
 		ipv6addrp->in6_addr.s6_addr[i] = 0;
 	};
 	
@@ -1958,7 +1958,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 
 		j = 0;
 		snprintf(tempstring, sizeof(tempstring) - 1, "TYPE=");
-		for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
+		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
 			if ((ipv6addrp->scope & ipv6calc_ipv6addrtypestrings[i].number) != 0 ) {
 				if (j != 0) {
 					snprintf(helpstring, sizeof(helpstring) - 1, "%s,", tempstring);
@@ -2482,7 +2482,7 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 		return(1);
 	};
 
-	for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
 		DEBUGPRINT_WA(DEBUG_libipv6addr, "check token against: %s", ipv6calc_ipv6addrtypestrings[i].token);
 
 		if (strcmp(ipv6calc_ipv6addrtypestrings[i].token, token + offset) == 0) {

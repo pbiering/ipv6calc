@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.109 2014/04/25 05:48:12 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.110 2014/05/03 07:09:41 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -59,7 +59,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, "\nAvailable tokens for machine-readable output (printed in one line):\n");
 	fprintf(stderr, " IPV6_TYPE=...                 : type of IPv6 address (commata separated)\n");
 	fprintf(stderr, " ");
-	for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
 		fprintf(stderr, " %s", ipv6calc_ipv6addrtypestrings[i].token);
 	};
 	fprintf(stderr, "\n");
@@ -545,7 +545,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 		fprintf(stdout, "IPv4 address type: ");
 		j = 0;
-		for (i = 0; i < (int) (sizeof(ipv6calc_ipv4addrtypestrings) / sizeof(ipv6calc_ipv4addrtypestrings[0])); i++ ) {
+		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv4addrtypestrings); i++ ) {
 			if ( (typeinfo & ipv6calc_ipv4addrtypestrings[i].number) != 0 ) {
 				if ( j != 0 ) { fprintf(stdout, ", "); };
 				fprintf(stdout, "%s", ipv6calc_ipv4addrtypestrings[i].token);
@@ -880,7 +880,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 
 		j = 0;
 		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_TYPE=");
-		for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
+		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
 			if ( (typeinfo & ipv6calc_ipv6addrtypestrings[i].number) != 0 ) {
 				if (j != 0) {
 					snprintf(helpstring, sizeof(helpstring) - 1, "%s,", tempstring);
@@ -895,7 +895,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	} else {
 		fprintf(stdout, "Address type: ");
 		j = 0;
-		for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
+		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
 			if ( (typeinfo & ipv6calc_ipv6addrtypestrings[i].number) != 0 ) {
 				if ( j != 0 ) { fprintf(stdout, ", "); };
 				fprintf(stdout, "%s", ipv6calc_ipv6addrtypestrings[i].token);

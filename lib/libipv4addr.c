@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.55 2014/04/26 16:26:29 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.56 2014/05/03 07:09:41 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -913,7 +913,7 @@ int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token)
 		return(1);
 	};
 
-	for (i = 0; i < (int) (sizeof(ipv6calc_ipv4addrtypestrings) / sizeof(ipv6calc_ipv4addrtypestrings[0])); i++ ) {
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv4addrtypestrings); i++ ) {
 		DEBUGPRINT_WA(DEBUG_libipv4addr, "check token against: %s", ipv6calc_ipv4addrtypestrings[i].token);
 
 		if (strcmp(ipv6calc_ipv4addrtypestrings[i].token, token + offset) == 0) {

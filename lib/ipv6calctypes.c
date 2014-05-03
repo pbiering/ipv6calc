@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.c
- * Version    : $Id: ipv6calctypes.c,v 1.4 2014/02/03 20:48:03 ds6peter Exp $
- * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calctypes.c,v 1.5 2014/05/03 07:09:41 ds6peter Exp $
+ * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Format and type handling
@@ -29,7 +29,7 @@ uint32_t ipv6calctypes_checktype(const char *string) {
 	
 	DEBUGPRINT_WA(DEBUG_libipv6calctypes, "Got string: %s", string);
 
-	for (i = 0; i < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_formatstrings); i++) {
 		DEBUGPRINT_WA(DEBUG_libipv6calctypes, "Compare against: %s", ipv6calc_formatstrings[i].token);
 
 		/* check main token */
@@ -88,7 +88,7 @@ uint32_t ipv6calctypes_checkaction(const char *string) {
 	
 	DEBUGPRINT_WA(DEBUG_libipv6calctypes, "Got string: %s", string);
 
-	for (i = 0; i < (int) (sizeof(ipv6calc_actionstrings) / sizeof(ipv6calc_actionstrings[0])); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_actionstrings); i++) {
 		DEBUGPRINT_WA(DEBUG_libipv6calctypes, "Compare against: %s", ipv6calc_actionstrings[i].token);
 
 		/* check main token */

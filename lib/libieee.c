@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libieee.c
- * Version    : $Id: libieee.c,v 1.21 2014/04/25 05:48:13 ds6peter Exp $
+ * Version    : $Id: libieee.c,v 1.22 2014/05/03 07:09:41 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -89,7 +89,7 @@ int libieee_unmap_oui36_iab(const uint32_t map_value, uint32_t *bits_00_23_p, ui
 	DEBUGPRINT_WA(DEBUG_libieee, "called with map_value=%08x", map_value);
 
 	/* run through map */
-	for (i = 0; i < (int) (sizeof(ieee_mapping) / sizeof(ieee_mapping[0])); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(ieee_mapping); i++) {
 		if (ieee_mapping[i].mapping == map_index) {
 			DEBUGPRINT_WA(DEBUG_libieee, "found entry in map: %06x", map_index);
 

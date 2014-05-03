@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.33 2014/04/26 16:16:31 ds6peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.34 2014/05/03 07:09:41 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -445,7 +445,7 @@ static int converttoken(char *resultstring, const char *token, const long int ou
 
 	DEBUGSECTION_BEGIN(DEBUG_ipv6logconv_processing)
 		if (inputtype >= 0) {
-			for (i = 0; i < (int) (sizeof(ipv6calc_formatstrings) / sizeof(ipv6calc_formatstrings[0])); i++) {
+			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_formatstrings); i++) {
 				if (inputtype == ipv6calc_formatstrings[i].number) {
 					DEBUGPRINT_WA(DEBUG_ipv6logconv_processing, "Found type: %s", ipv6calc_formatstrings[i].token);
 				};

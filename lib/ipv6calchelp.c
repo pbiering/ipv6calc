@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.55 2014/04/26 13:03:56 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.56 2014/05/03 07:09:41 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -215,7 +215,7 @@ void printhelp_actiontypes(const uint32_t formatoptions, const struct option lon
 	};
 
 	/* look for longest type definition */
-	for (j = 0; j < (int) (sizeof(ipv6calc_actionstrings) / sizeof(ipv6calc_actionstrings[0])); j++) {
+	for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_actionstrings); j++) {
 		if (strlen(ipv6calc_actionstrings[j].token) > maxlen) {
 			maxlen = strlen(ipv6calc_actionstrings[j].token);
 		};
@@ -662,14 +662,14 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "\n");
 			fprintf(stderr, "  IPv6 address filter tokens:\n");
 			fprintf(stderr, "   ipv6 ");
-			for (i = 0; i < (int) (sizeof(ipv6calc_ipv6addrtypestrings) / sizeof(ipv6calc_ipv6addrtypestrings[0])); i++ ) {
+			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
 				fprintf(stderr, " %s", ipv6calc_ipv6addrtypestrings[i].token);
 			};
 			fprintf(stderr, "\n");
 			fprintf(stderr, "\n");
 			fprintf(stderr, "  IPv4 address filter tokens:\n");
 			fprintf(stderr, "   ipv4 ");
-			for (i = 0; i < (int) (sizeof(ipv6calc_ipv4addrtypestrings) / sizeof(ipv6calc_ipv4addrtypestrings[0])); i++ ) {
+			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv4addrtypestrings); i++ ) {
 				fprintf(stderr, " %s", ipv6calc_ipv4addrtypestrings[i].token);
 			};
 			fprintf(stderr, "\n");
