@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.54 2014/04/27 09:16:50 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.55 2014/05/03 07:28:31 ds6peter Exp $
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -181,7 +181,7 @@ int main(int argc,char *argv[]) {
 				break;
 
 			case 'p':
-				DEBUGPRINT_WA(DEBUG_ipv6logstats_general, "Given prefix token: %s (%d)", optarg, strlen(optarg));
+				DEBUGPRINT_WA(DEBUG_ipv6logstats_general, "Given prefix token: %s (%d)", optarg, (int) strlen(optarg));
 				if (strlen(optarg) < sizeof(opt_token)) {
 					snprintf(opt_token, sizeof(opt_token), "%s", optarg);
 				} else {
