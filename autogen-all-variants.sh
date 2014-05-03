@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.23 2014/05/03 07:26:21 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.24 2014/05/03 09:47:07 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -71,11 +71,19 @@ if [ ! -f "$status_file" ]; then
 	date "+%s:START:" >$status_file
 fi
 
+IONICE="ionice -c 3"
+
+if ! $IONICE true; then
+	echo "NOTICE: disable use of ionice, not supported"
+	IONICE=""
+fi
+
+
 if grep -q ":FINISHED:basic:$options_add:" $status_file; then
 	echo "NOTICE : skip basic run with: $options_add"
 else
 	# basic defaults
-	nice -n 20 ionice -c 3 ./autogen.sh $options_add
+	nice -n 20 $IONICE ./autogen.sh $options_add
 	if [ $? -ne 0 ]; then
 		echo "ERROR : 'autogen.sh (basic) $options_add' reports an error"
 		exit 1
@@ -101,7 +109,7 @@ for liboption in "normal" "shared"; do
 		if grep -q ":FINISHED:variants:$options:" $status_file; then
 			echo "NOTICE : skip variant run with: $options"
 		else
-			nice -n 20 ionice -c 3 ./autogen.sh $options
+			nice -n 20 $IONICE ./autogen.sh $options
 			if [ $? -ne 0 ]; then
 				echo "ERROR : 'autogen.sh reports an error with options: $options"
 				exit 1
