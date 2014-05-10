@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.26 2014/05/10 09:21:07 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.27 2014/05/10 12:36:45 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -36,6 +36,7 @@ $0
 	-h|-?	this online help
 	-f	force run, remove status file
 	-W	add option -W (warning) to autogen.sh
+	-N	add --no-static-build to autogen.sh
 END
 }
 
@@ -47,14 +48,14 @@ while getopts ":fW?h" opt; do
 		echo "DEBUG : option found: -f"
 		;;
 	    'W')
-		options_add="-W"
+		options_add="$options_add -W"
+		;;
+	    'N')
+		options_add="$options_add --no-static-build"
 		;;
 	    \?|h)
 		help
 		exit 1
-		;;
-	    'W')
-		options_add="-W"
 		;;
 	    *)
 		echo "Invalid option: -$OPTARG" >&2
