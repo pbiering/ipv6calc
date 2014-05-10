@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.36 2014/05/10 09:21:38 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.37 2014/05/10 12:34:32 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -64,6 +64,10 @@ while [ "$1" != "$LAST" ]; do
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-shared"
 		SKIP_STATIC=1
 		;;
+	    '--no-static-build')
+		shift
+		SKIP_STATIC=1
+		;;
 	    '--enable-bundled-md5'|'--enable-bundled-getopt')
 		# whitelisted
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $1"
@@ -96,6 +100,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --disable-db-ipv6   : disable built-in IPv6 database"
 		echo "   --geoip-ipv6-compat : enable GeoIP IPv6 compatibility mode"
 		echo "   -S                  : enable shared library mode"
+		echo "   -no-static-build    : skip static build"
 		exit 1
 	esac
 done
