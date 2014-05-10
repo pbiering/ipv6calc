@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.28 2014/05/10 12:38:23 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.29 2014/05/10 12:51:38 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -12,21 +12,21 @@ status_file="autogen-all-variants.status"
 autgen_variants() {
 	cat <<END | grep -v ^#
 # default (no options)
---enable-bundled-md5 --enable-bundled-getopt
--i
--i --ip2location-dyn
--g
--g --geoip-dyn
--g --geoip-ipv6-compat
--g --geoip-ipv6-compat --geoip-dyn
--a
---disable-db-ieee
---disable-db-ipv4
---disable-db-ipv6
---disable-db-ipv6 --disable-db-ipv4
---disable-db-ipv6 --disable-db-ipv4 --disable-db-ieee
---disable-db-ipv6 --disable-db-ieee
---disable-db-ipv4 --disable-db-ieee
+NONE#--enable-bundled-md5 --enable-bundled-getopt
+IP2LOCATION#-i
+IP2LOCATION#-i --ip2location-dyn
+GEOIP#-g
+GEOIP#-g --geoip-dyn
+GEOIP#-g --geoip-ipv6-compat
+GEOIP#-g --geoip-ipv6-compat --geoip-dyn
+IP2LOCATION GEOIP#-a
+NONE#--disable-db-ieee
+NONE#--disable-db-ipv4
+NONE#--disable-db-ipv6
+NONE#--disable-db-ipv6 --disable-db-ipv4
+NONE#--disable-db-ipv6 --disable-db-ipv4 --disable-db-ieee
+NONE#--disable-db-ipv6 --disable-db-ieee
+NONE#--disable-db-ipv4 --disable-db-ieee
 END
 }
 
@@ -37,11 +37,12 @@ $0
 	-f	force run, remove status file
 	-W	add option -W (warning) to autogen.sh
 	-N	add --no-static-build to autogen.sh
+	-I	skip IP2Location builds
 END
 }
 
 
-while getopts ":NfW?h" opt; do
+while getopts ":NIfW?h" opt; do
 	case $opt in
 	    'f')
 		force=1
@@ -52,6 +53,9 @@ while getopts ":NfW?h" opt; do
 		;;
 	    'N')
 		options_add="$options_add --no-static-build"
+		;;
+	    'I')
+		skip_token="IP2LOCATION"
 		;;
 	    \?|h)
 		help
@@ -112,7 +116,7 @@ fi
 
 # variants
 for liboption in "normal" "shared"; do
-	autgen_variants | while read buildoptions; do
+	autgen_variants | while read token buildoptions; do
 		if [ -n "$options_add" ]; then
 			options="$buildoptions $options_add"
 		else
@@ -124,9 +128,15 @@ for liboption in "normal" "shared"; do
 			;;
 		esac
 
-		if grep -q ":FINISHED:variants:$options:" $status_file; then
+		if egrep -q ":FINISHED:variants:$options:" $status_file; then
 			echo "NOTICE : skip variant run with: $options"
 		else
+			if echo "$token" | egrep -wq "$skip_token"; then
+				echo "NOTICE : skip variant because of token: $token"
+				date "+%s:FINISHED:variants:$options:SKIPPED" >>$status_file
+				continue
+			fi
+
 			nice -n 20 $IONICE ./autogen.sh $options
 			if [ $? -ne 0 ]; then
 				echo "ERROR : 'autogen.sh reports an error with options: $options"
