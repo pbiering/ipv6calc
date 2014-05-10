@@ -1,8 +1,8 @@
  /*
  * Project       : ipv6calc
  * File          : dbasn_assignment.h
- * Version       : $Id: dbasn_assignment.h,v 1.5 2014/02/28 06:46:35 ds6peter Exp $
- * Generated     : Fri Feb 28 07:08:11 2014
+ * Version       : $Id: dbasn_assignment.h,v 1.6 2014/05/10 12:34:59 ds6peter Exp $
+ * Generated     : Sat May  3 15:37:32 2014
  * Data copyright: IANA
  *
  * Information:
@@ -11,7 +11,7 @@
 
 #include "libipv6calc.h"
 
-/*@unused@*/ static const char* dbasn_registry_status __attribute__ ((__unused__)) = "IANA/20130911";
+/*@unused@*/ static const char* dbasn_registry_status __attribute__ ((__unused__)) = "IANA/20140319";
 
 static const s_asn_assignment dbasn_assignment[] = {
 	{          1,          6, REGISTRY_ARIN       },
@@ -2285,9 +2285,12 @@ static const s_asn_assignment dbasn_assignment[] = {
 	{     197632,     198655, REGISTRY_RIPE       },
 	{     198656,     199679, REGISTRY_RIPE       },
 	{     199680,     200191, REGISTRY_RIPE       },
+	{     200192,     201215, REGISTRY_RIPE       },
+	{     201216,     202239, REGISTRY_RIPE       },
 	{     262144,     263167, REGISTRY_LACNIC     },
 	{     263168,     263679, REGISTRY_LACNIC     },
 	{     327680,     328703, REGISTRY_AFRINIC    },
 	{     393216,     394239, REGISTRY_ARIN       },
 
 };
+

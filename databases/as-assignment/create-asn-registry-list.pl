@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/as-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-asn-registry-list.pl,v 1.2 2013/10/13 16:18:44 ds6peter Exp $
+# Version    : $Id: create-asn-registry-list.pl,v 1.3 2014/05/10 12:34:59 ds6peter Exp $
 # Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -132,6 +132,7 @@ for ($i = 0; $i < $entry; $i++) {
 
 print OUT qq|
 };
+
 |;
 
 
