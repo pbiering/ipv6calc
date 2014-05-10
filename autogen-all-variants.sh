@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.25 2014/05/10 09:20:38 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.26 2014/05/10 09:21:07 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -30,7 +30,6 @@ autgen_variants() {
 END
 }
 
-<<<<<<< autogen-all-variants.sh
 help() {
 	cat <<END
 $0

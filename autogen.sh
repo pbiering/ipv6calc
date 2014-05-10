@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.35 2014/05/03 10:28:04 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.36 2014/05/10 09:21:38 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -76,7 +76,7 @@ while [ "$1" != "$LAST" ]; do
 		if [ -n "$gcc_date" ]; then
 			if [ $gcc_date -gt 20080704 ]; then
 				# > CentOS/RHEL 5
-				EXTRA_CFLAGS="$EXTRA_CFLAGS Werror -Werror=format-security"
+				EXTRA_CFLAGS="$EXTRA_CFLAGS -Werror -Werror=format-security"
 			fi
 		fi
 		echo "INFO  : option -W enables EXTRA_CFLAGS=$EXTRA_CFLAGS"
