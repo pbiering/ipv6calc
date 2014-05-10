@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.14 2014/04/26 13:03:56 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.15 2014/05/10 11:38:50 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -846,7 +846,7 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(char *addr
 	IP2LocationRecord *record;
 
 	int IP2Location_type = 0;
-	char *IP2Location_result_ptr;
+	char *IP2Location_result_ptr = NULL;
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with addr=%s proto=%d", addr, proto);
 
@@ -855,35 +855,42 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(char *addr
 	} else if (proto == 6) {
 		IP2Location_type = IP2LOCATION_DB_IPV6_COUNTRY;
 	} else {
-		return (NULL);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Unsupported proto: %d", proto);
+		goto END_libipv6calc_db_wrapper;
 	};
 
 	loc = libipv6calc_db_wrapper_IP2Location_open_type(IP2Location_type);
 
 	if (loc == NULL) {
-		return (NULL);
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Error opening IP2Location by type");
+		goto END_libipv6calc_db_wrapper;
 	};
 
 	record = libipv6calc_db_wrapper_IP2Location_get_country_short(loc, addr);
 
 	if (record == NULL) {
-		return (NULL);
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "libipv6calc_db_wrapper_IP2Location_get_country_short did not return a record");
+		goto END_libipv6calc_db_wrapper_close;
 	};
 
 	IP2Location_result_ptr = record->country_short;
 
 	if (IP2Location_result_ptr == NULL) {
-		return (NULL);
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "libipv6calc_db_wrapper_IP2Location_get_country_short did not contain a country_short code");
+		goto END_libipv6calc_db_wrapper_close;
 	};
 
 	if (strlen(IP2Location_result_ptr) > 2) {
-		return (NULL);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "libipv6calc_db_wrapper_IP2Location_get_country_short did not return a proper country_short code (length > 2): %s", IP2Location_result_ptr);
+		goto END_libipv6calc_db_wrapper_close;
 	};
 
 	IP2LOCATION_DB_USAGE_MAP_TAG(IP2Location_type);
 
+END_libipv6calc_db_wrapper_close:
 	libipv6calc_db_wrapper_IP2Location_close(loc);
 
+END_libipv6calc_db_wrapper:
 	return(IP2Location_result_ptr);
 };
 
