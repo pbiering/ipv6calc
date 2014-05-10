@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.24 2014/05/03 09:47:07 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.25 2014/05/10 09:20:38 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -30,7 +30,18 @@ autgen_variants() {
 END
 }
 
-while getopts ":fW" opt; do
+<<<<<<< autogen-all-variants.sh
+help() {
+	cat <<END
+$0
+	-h|-?	this online help
+	-f	force run, remove status file
+	-W	add option -W (warning) to autogen.sh
+END
+}
+
+
+while getopts ":fW?h" opt; do
 	case $opt in
 	    'f')
 		force=1
@@ -39,7 +50,14 @@ while getopts ":fW" opt; do
 	    'W')
 		options_add="-W"
 		;;
-	    \?)
+	    \?|h)
+		help
+		exit 1
+		;;
+	    'W')
+		options_add="-W"
+		;;
+	    *)
 		echo "Invalid option: -$OPTARG" >&2
 		exit 1
 		;;
