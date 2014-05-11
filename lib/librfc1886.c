@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1886.c
- * Version    : $Id: librfc1886.c,v 1.20 2014/04/01 20:11:57 ds6peter Exp $
- * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc1886.c,v 1.21 2014/05/11 09:49:38 ds6peter Exp $
+ * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  RFC 1886 conform reverse nibble format string
@@ -36,7 +36,7 @@
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */
-int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const uint32_t formatoptions, char* domain) {
+int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions, const char *domain) {
 	int retval = 1;
 	unsigned int nibble;
 	int bit_start, bit_end, nbit;
@@ -59,12 +59,12 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 	} else if ( (*ipv6addrp).flag_startend_use != 0 ) {
 		/* check start and end */
 		if ( (((*ipv6addrp).bit_start - 1) & 0x03) != 0 ) {
-			snprintf(resultstring, NI_MAXHOST - 1, "Start bit number '%u' is not supported because of non-unique representation (value-1 must be dividable by 4)", (unsigned int) (*ipv6addrp).bit_start);
+			snprintf(resultstring, resultstring_length, "Start bit number '%u' is not supported because of non-unique representation (value-1 must be dividable by 4)", (unsigned int) (*ipv6addrp).bit_start);
 			retval = 1;
 			return (retval);
 		};
 		if ( ((*ipv6addrp).bit_end & 0x03) != 0 ) {
-			snprintf(resultstring, NI_MAXHOST - 1, "End bit number '%u' is not supported because of non-unique representation (value must be dividable by 4)", (unsigned int) (*ipv6addrp).bit_end);
+			snprintf(resultstring, resultstring_length, "End bit number '%u' is not supported because of non-unique representation (value must be dividable by 4)", (unsigned int) (*ipv6addrp).bit_end);
 			retval = 1;
 			return (retval);
 		};
@@ -94,27 +94,27 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 		
 		DEBUGPRINT_WA(DEBUG_librfc1886, "bit: %d = noctet: %u, nnibble: %u, octet: %02x, value: %x", nbit, noctet, nnibble, (unsigned int) (*ipv6addrp).in6_addr.s6_addr[noctet], nibble);
 
-		snprintf(tempstring, sizeof(tempstring) - 1, "%s%x", resultstring, nibble);
+		snprintf(tempstring, sizeof(tempstring), "%s%x", resultstring, nibble);
 		if ((nbit < bit_start) && (bit_start != 1)) {
 			/* don't print trailing "." on middle part end */
-			snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
+			snprintf(resultstring, resultstring_length, "%s", tempstring);
 		} else {
-			snprintf(resultstring, NI_MAXHOST - 1, "%s.", tempstring);
+			snprintf(resultstring, resultstring_length, "%s.", tempstring);
 		};
 	};
 
 	if (bit_start == 1) {
-		snprintf(tempstring, sizeof(tempstring) - 1, "%s%s", resultstring, domain);
+		snprintf(tempstring, sizeof(tempstring), "%s%s", resultstring, domain);
 	};
 
-	snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
+	snprintf(resultstring, resultstring_length, "%s", tempstring);
 
 	if ( (formatoptions & FORMATOPTION_printuppercase) != 0 ) {
 		string_to_upcase(resultstring);
 	};
 
 	if ( (formatoptions & FORMATOPTION_printmirrored) != 0 ) {
-		string_to_reverse_dotted(resultstring);
+		string_to_reverse_dotted(resultstring, resultstring_length);
 	};
 		
 	DEBUGPRINT_WA(DEBUG_librfc1886, "Print out: %s", resultstring);
@@ -131,7 +131,7 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
  * mod: *ipv6addrp = IPv6 address structure
  * ret: ==0: ok, !=0: error
  */
-int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length) {
 	int retval = 1;
 	char tempstring[NI_MAXHOST], *token, *cptr, **ptrptr;
 	int flag_tld = 0, flag_nld = 0, tokencounter = 0;
@@ -141,7 +141,7 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 	if ((strlen(inputstring) < 4) || (strlen(inputstring) > 73)) {
 		/* min: .int */
 		/* max: f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.f.ip6.arpa. */
-		snprintf(resultstring, NI_MAXHOST - 1, "Error in given nibble string, has not 4 to 73 chars!");
+		snprintf(resultstring, resultstring_length, "Error in given nibble string, has not 4 to 73 chars!");
 		return (1);
 	};
 
@@ -151,11 +151,11 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 	ipv6addr_clearall(ipv6addrp);
 
 	/* reverse copy of string */
-	snprintf(tempstring, sizeof(tempstring) - 1, "%s", inputstring);
+	snprintf(tempstring, sizeof(tempstring), "%s", inputstring);
 	string_to_lowcase(tempstring);
 
 	/* check string */
-	retval = librfc1886_formatcheck(tempstring, resultstring);
+	retval = librfc1886_formatcheck(tempstring, resultstring, resultstring_length);
 	if (retval != 0) {
 		return (1);
 	};
@@ -173,7 +173,7 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 				flag_tld = 1;
 				goto NEXT_token_nibblestring_to_ipv6addrstruct;
 			} else {
-				snprintf(resultstring, NI_MAXHOST - 1, "Top level domain 'arpa' is in wrong place");
+				snprintf(resultstring, resultstring_length, "Top level domain 'arpa' is in wrong place");
 				return (1);
 			};
 		};
@@ -182,7 +182,7 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 				flag_tld = 1;
 				goto NEXT_token_nibblestring_to_ipv6addrstruct;
 			} else {
-				snprintf(resultstring, NI_MAXHOST - 1, "Top level domain 'int' is in wrong place");
+				snprintf(resultstring, resultstring_length, "Top level domain 'int' is in wrong place");
 				return (1);
 			};
 		};
@@ -191,7 +191,7 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 				flag_nld = 1;
 				goto NEXT_token_nibblestring_to_ipv6addrstruct;
 			} else {
-				snprintf(resultstring, NI_MAXHOST - 1, "Next level domain 'ip6' is in wrong place or missing");
+				snprintf(resultstring, resultstring_length, "Next level domain 'ip6' is in wrong place or missing");
 				return (1);
 			};
 		};
@@ -199,30 +199,30 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 		/* now proceed nibbles */
 		if (strlen(token) > 1) {
 			string_to_reverse(token);
-			snprintf(resultstring, NI_MAXHOST - 1, "Nibble '%s' on dot position %d (from right side) is longer than one char", token, tokencounter + 1);
+			snprintf(resultstring, resultstring_length, "Nibble '%s' on dot position %d (from right side) is longer than one char", token, tokencounter + 1);
 			return (1);
 		};
 		
 		if (! isxdigit((int) token[0])) {
-			snprintf(resultstring, NI_MAXHOST - 1, "Nibble '%s' on dot position %d (from right side) is not a valid hexdigit", token, tokencounter + 1);
+			snprintf(resultstring, resultstring_length, "Nibble '%s' on dot position %d (from right side) is not a valid hexdigit", token, tokencounter + 1);
 			return (1);
 		};
 
 		retval = sscanf(token, "%x", &xdigit);
 		if (retval != 1) {
-			snprintf(resultstring, NI_MAXHOST - 1, "Nibble '%s' on dot position %d (from right side) cannot be parsed", token, tokencounter + 1);
+			snprintf(resultstring, resultstring_length, "Nibble '%s' on dot position %d (from right side) cannot be parsed", token, tokencounter + 1);
 			return (1);
 		};
 
 		if ( xdigit < 0 || xdigit > 0xf ) {
-			snprintf(resultstring, NI_MAXHOST - 1, "Nibble '%s' on dot position %d (from right side) is out of range", token, tokencounter + 1);
+			snprintf(resultstring, resultstring_length, "Nibble '%s' on dot position %d (from right side) is out of range", token, tokencounter + 1);
 			return (1);
 		};
 
 		noctet = nibblecounter >> 1; /* divided by 2 */
 		
 		if (noctet > 15) {
-			snprintf(resultstring, NI_MAXHOST - 1, "Too many nibbles");
+			snprintf(resultstring, resultstring_length, "Too many nibbles");
 			return (1);
 		};
 
@@ -255,7 +255,7 @@ NEXT_token_nibblestring_to_ipv6addrstruct:
  * in : string
  * ret: ==0: ok, !=0: error
  */
-int librfc1886_formatcheck(const char *string, char *infostring) {
+int librfc1886_formatcheck(const char *string, char *infostring, const size_t infostring_length) {
 	int nibblecounter = 0, flag_tld = 0, flag_nld = 0, tokencounter = 0;
 	char tempstring[NI_MAXHOST], *token, *cptr, **ptrptr;
 
@@ -263,12 +263,12 @@ int librfc1886_formatcheck(const char *string, char *infostring) {
 
 	infostring[0] = '\0'; /* clear string */
 
-        if (strlen(string) > sizeof(tempstring) - 1) {
+        if (strlen(string) >= sizeof(tempstring)) {
 		fprintf(stderr, "Input too long: %s\n", string);
 		return (1);
 	};
 
-	snprintf(tempstring, sizeof(tempstring) - 1, "%s", string);
+	snprintf(tempstring, sizeof(tempstring), "%s", string);
 	
 	DEBUGPRINT_WA(DEBUG_librfc1886, "check %s", tempstring);
 
@@ -288,7 +288,7 @@ int librfc1886_formatcheck(const char *string, char *infostring) {
 				flag_tld = 1;
 				goto NEXT_librfc1886_formatcheck;
 			} else {
-				snprintf(infostring, NI_MAXHOST - 1, "Top level domain 'arpa' is in wrong place");
+				snprintf(infostring, infostring_length, "Top level domain 'arpa' is in wrong place");
 				return (1);
 			};
 		};
@@ -300,7 +300,7 @@ int librfc1886_formatcheck(const char *string, char *infostring) {
 				flag_tld = 1;
 				goto NEXT_librfc1886_formatcheck;
 			} else {
-				snprintf(infostring, NI_MAXHOST - 1, "Top level domain 'int' is in wrong place");
+				snprintf(infostring, infostring_length, "Top level domain 'int' is in wrong place");
 				return (1);
 			};
 		};
@@ -312,7 +312,7 @@ int librfc1886_formatcheck(const char *string, char *infostring) {
 				flag_nld = 1;
 				goto NEXT_librfc1886_formatcheck;
 			} else {
-				snprintf(infostring, NI_MAXHOST - 1, "Next level domain 'ip6' is in wrong place or missing");
+				snprintf(infostring, infostring_length, "Next level domain 'ip6' is in wrong place or missing");
 				return (1);
 			};
 		};
@@ -320,19 +320,19 @@ int librfc1886_formatcheck(const char *string, char *infostring) {
 		/* now proceed nibbles */
 		if (strlen(token) > 1) {
 			string_to_reverse(token);
-			snprintf(infostring, NI_MAXHOST - 1, "Nibble '%s' on dot position %d (from right side) is longer than one char", token, tokencounter + 1);
+			snprintf(infostring, infostring_length, "Nibble '%s' on dot position %d (from right side) is longer than one char", token, tokencounter + 1);
 			return (1);
 		};
 		
 		if (! isxdigit((int) token[0])) {
-			snprintf(infostring, NI_MAXHOST - 1, "Nibble '%s' on dot position %d (from right side) is not a valid hexdigit", token, tokencounter + 1);
+			snprintf(infostring, infostring_length, "Nibble '%s' on dot position %d (from right side) is not a valid hexdigit", token, tokencounter + 1);
 			return (1);
 		};
 
 		nibblecounter++;
 		
 		if (nibblecounter > 32) {
-			snprintf(infostring, NI_MAXHOST - 1, "Too many nibbles (more than 32)");
+			snprintf(infostring, infostring_length, "Too many nibbles (more than 32)");
 			return (1);
 		};
 		

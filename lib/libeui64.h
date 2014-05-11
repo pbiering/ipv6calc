@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libeui64.h
- * Version    : $Id: libeui64.h,v 1.6 2013/10/30 20:04:25 ds6peter Exp $
+ * Version    : $Id: libeui64.h,v 1.7 2014/05/11 09:49:38 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -33,9 +33,9 @@ typedef struct {
 
 /* prototypes */
 extern int create_eui64_from_mac(ipv6calc_ipv6addr *ipv6addrp, ipv6calc_macaddr *macaddrp);
-extern int libeui64_addr_to_eui64addrstruct(const char *addrstring, char *resultstring, ipv6calc_eui64addr *eui64addrp);
+extern int libeui64_addr_to_eui64addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_eui64addr *eui64addrp);
 extern void libeui64_clear(ipv6calc_eui64addr *eui64addrp);
 extern void libeui64_clearall(ipv6calc_eui64addr *eui64addrp);
 
 extern void libeui64_anonymize(ipv6calc_eui64addr *eui64addrp, const s_ipv6calc_anon_set *ipv6calc_anon_set_p);
-extern int libeui64_eui64addrstruct_to_string(const ipv6calc_eui64addr *eui64addr_p, char *resultstring, const uint32_t formatoptions);
+extern int libeui64_eui64addrstruct_to_string(const ipv6calc_eui64addr *eui64addr_p, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions);

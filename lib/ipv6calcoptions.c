@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.13 2014/04/26 13:03:56 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.14 2014/05/11 09:49:38 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -334,7 +334,7 @@ int ipv6calcoptions_common_anon(const int opt, const char *optarg, const struct 
 			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_anon_methods); i++) {
 				if (strcmp(ipv6calc_anon_methods[i].name, optarg) == 0) {
 					ipv6calc_anon_set_p->method = ipv6calc_anon_methods[i].method;
-					snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name) -1, "%s", "custom");
+					snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
 					break;
 				};
 			};

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.56 2014/05/03 07:09:41 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.57 2014/05/11 09:49:38 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -99,9 +99,9 @@ void printhelp_inputtypes(const uint32_t formatoptions) {
 	};
 
 	if ((formatoptions & FORMATOPTION_machinereadable) == 0) {	
-		snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds : %%s\n", (int) maxlen);
+		snprintf(printformatstring, sizeof(printformatstring), "  %%-%ds : %%s\n", (int) maxlen);
 	} else {
-		snprintf(printformatstring, sizeof(printformatstring) - 1, "%%-%ds\n", (int) maxlen);
+		snprintf(printformatstring, sizeof(printformatstring), "%%-%ds\n", (int) maxlen);
 	}
 
 	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Format string: %s", printformatstring);
@@ -154,9 +154,9 @@ void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoption
 	};
 
 	if ((formatoptions & FORMATOPTION_machinereadable) == 0) {	
-		snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds : %%s\n", (int) maxlen);
+		snprintf(printformatstring, sizeof(printformatstring), "  %%-%ds : %%s\n", (int) maxlen);
 	} else {
-		snprintf(printformatstring, sizeof(printformatstring) - 1, "%%-%ds\n", (int) maxlen);
+		snprintf(printformatstring, sizeof(printformatstring), "%%-%ds\n", (int) maxlen);
 	};
 
 	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Format string: %s", printformatstring);
@@ -227,13 +227,13 @@ void printhelp_actiontypes(const uint32_t formatoptions, const struct option lon
 	};
 
 	if ((formatoptions & FORMATOPTION_machinereadable) == 0) {
-		snprintf(printformatstring, sizeof(printformatstring) - 1, "  %%-%ds : %%s\n", (int) maxlen);
+		snprintf(printformatstring, sizeof(printformatstring), "  %%-%ds : %%s\n", (int) maxlen);
 	} else {
-		snprintf(printformatstring, sizeof(printformatstring) - 1, "%%-%ds\n", (int) maxlen);
+		snprintf(printformatstring, sizeof(printformatstring), "%%-%ds\n", (int) maxlen);
 	};
 
-	snprintf(printformatstring2, sizeof(printformatstring2) - 1, "  %%-%ds%%s\n", (int) maxlen + 4);
-	snprintf(printformatstring3, sizeof(printformatstring3) - 1, "  %%-%ds--%%s", (int) maxlen + 5);
+	snprintf(printformatstring2, sizeof(printformatstring2), "  %%-%ds%%s\n", (int) maxlen + 4);
+	snprintf(printformatstring3, sizeof(printformatstring3), "  %%-%ds--%%s", (int) maxlen + 5);
 
 	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Format string: %s", printformatstring);
 
@@ -618,11 +618,11 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "  Available presets (shortcut names) [--anonymize-preset PRESET-NAME]:\n");
 
 			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_anon_set_list); i++) {
-				snprintf(method_name, sizeof(method_name) - 1, "%s", "unknown"); // default
+				snprintf(method_name, sizeof(method_name), "%s", "unknown"); // default
 
 				for (j = 0; j < sizeof(ipv6calc_anon_methods) / sizeof(s_ipv6calc_anon_methods); j++) {
 					if (ipv6calc_anon_methods[j].method == ipv6calc_anon_set_list[i].method) {
-						snprintf(method_name, sizeof(method_name) - 1, "%s", ipv6calc_anon_methods[j].name);
+						snprintf(method_name, sizeof(method_name), "%s", ipv6calc_anon_methods[j].name);
 						break;
 					};
 				};

@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3056.c
- * Version    : $Id: librfc3056.c,v 1.9 2014/02/03 20:48:04 ds6peter Exp $
- * Copyright  : 2001-2003 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc3056.c,v 1.10 2014/05/11 09:49:38 ds6peter Exp $
+ * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for conversions defined in RFC 3056
@@ -56,13 +56,13 @@ int librfc3056_ipv4addr_to_ipv6to4addr(ipv6calc_ipv6addr *ipv6addrp, const ipv6c
  * out: *ipv4addrp = IPv4 address
  * ret: ==0: ok, !=0: error
  */
-int librfc3056_ipv6addr_to_ipv4addr(ipv6calc_ipv4addr *ipv4addrp, const ipv6calc_ipv6addr *ipv6addrp, char* resultstring) {
+int librfc3056_ipv6addr_to_ipv4addr(ipv6calc_ipv4addr *ipv4addrp, const ipv6calc_ipv6addr *ipv6addrp, char* resultstring, const size_t resultstring_length) {
 	int retval = 1;
 	unsigned int i;
 
 	/* check scope */
 	if ( (ipv6addrp->scope & IPV6_NEW_ADDR_6TO4) == 0 ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "IPv6 address is not a 6to4 one!");
+		snprintf(resultstring, resultstring_length, "IPv6 address is not a 6to4 one!");
 		return(retval);	
 	};
 

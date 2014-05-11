@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.c
- * Version    : $Id: ipv6calctypes.c,v 1.5 2014/05/03 07:09:41 ds6peter Exp $
+ * Version    : $Id: ipv6calctypes.c,v 1.6 2014/05/11 09:49:38 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -45,7 +45,7 @@ uint32_t ipv6calctypes_checktype(const char *string) {
 
 		DEBUGPRINT_WA(DEBUG_libipv6calctypes, "Compare against aliases in string: %s", ipv6calc_formatstrings[i].aliases);
 
-		snprintf(tokenlist, sizeof(tokenlist) - 1, "%s", ipv6calc_formatstrings[i].aliases);
+		snprintf(tokenlist, sizeof(tokenlist), "%s", ipv6calc_formatstrings[i].aliases);
 
 		token = strtok_r(tokenlist, " ", ptrptr);
 
@@ -104,7 +104,7 @@ uint32_t ipv6calctypes_checkaction(const char *string) {
 
 		DEBUGPRINT_WA(DEBUG_libipv6calctypes, "Compare against aliases in string: %s", ipv6calc_actionstrings[i].aliases);
 
-		snprintf(tokenlist, sizeof(tokenlist) - 1, "%s", ipv6calc_formatstrings[i].aliases);
+		snprintf(tokenlist, sizeof(tokenlist), "%s", ipv6calc_formatstrings[i].aliases);
 
 		token = strtok_r(tokenlist, " ", ptrptr);
 

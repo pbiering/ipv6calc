@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.110 2014/05/03 07:09:41 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.111 2014/05/11 09:49:38 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -313,35 +313,35 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 #define TEST_IP2LOCATION_AVAILABLE(v)	((strstr(v, "unavailable") == NULL) && (strstr(v, "demo database") == NULL))
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->region)) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_REGION%s=%s", additionalstring, record->region);
+				snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_REGION%s=%s", additionalstring, record->region);
 				printout(tempstring);
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->city)) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_CITY%s=%s", additionalstring, record->city);
+				snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_CITY%s=%s", additionalstring, record->city);
 				printout(tempstring);
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->isp)) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ISP%s=%s", additionalstring, record->isp);
+				snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_ISP%s=%s", additionalstring, record->isp);
 				printout(tempstring);
 			};
 
 			if ((record->latitude != 0) && (record->longitude != 0)) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LATITUDE%s=%f", additionalstring, record->latitude);
+				snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_LATITUDE%s=%f", additionalstring, record->latitude);
 				printout(tempstring);
-				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_LONGITUDE%s=%f", additionalstring, record->longitude);
+				snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_LONGITUDE%s=%f", additionalstring, record->longitude);
 				printout(tempstring);
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->domain)) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_DOMAIN%s=%s", additionalstring, record->domain);
+				snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_DOMAIN%s=%s", additionalstring, record->domain);
 				printout(tempstring);
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->zipcode)) {
 				if (strcmp(record->zipcode, "-") != 0) {
-					snprintf(tempstring, sizeof(tempstring) - 1, "IP2LOCATION_ZIPCODE%s=%s", additionalstring, record->zipcode);
+					snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_ZIPCODE%s=%s", additionalstring, record->zipcode);
 					printout(tempstring);
 				};
 			};
@@ -381,7 +381,7 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 	as_text = libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(addrstring, version);
 	if (as_text != NULL) {
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_AS_TEXT%s=%s", additionalstring, as_text);
+			snprintf(tempstring, sizeof(tempstring), "GEOIP_AS_TEXT%s=%s", additionalstring, as_text);
 			printout(tempstring);
 		};
 	};
@@ -392,11 +392,11 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 		DEBUGPRINT_WA(DEBUG_showinfo, "GeoIP IPv%d country database result", version);
 
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_COUNTRY_SHORT%s=%s", additionalstring, returnedCountry);
+			snprintf(tempstring, sizeof(tempstring), "GEOIP_COUNTRY_SHORT%s=%s", additionalstring, returnedCountry);
 			printout(tempstring);
 
 			if (returnedCountryName != NULL) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_COUNTRY_LONG%s=%s", additionalstring, returnedCountryName);
+				snprintf(tempstring, sizeof(tempstring), "GEOIP_COUNTRY_LONG%s=%s", additionalstring, returnedCountryName);
 				printout(tempstring);
 			} else {
 				DEBUGPRINT_NA(DEBUG_showinfo, "returnedCountryName=NULL");
@@ -424,25 +424,25 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 
 		if ( machinereadable != 0 ) {
 			if (gir->region != NULL) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_REGION%s=%s", additionalstring, gir->region);
+				snprintf(tempstring, sizeof(tempstring), "GEOIP_REGION%s=%s", additionalstring, gir->region);
 				printout(tempstring);
 			};
 			if (gir->city != NULL) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_CITY%s=%s", additionalstring, gir->city);
+				snprintf(tempstring, sizeof(tempstring), "GEOIP_CITY%s=%s", additionalstring, gir->city);
 				printout(tempstring);
 			};
 			if (gir->postal_code != NULL) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_ZIPCODE%s=%s", additionalstring, gir->postal_code);
+				snprintf(tempstring, sizeof(tempstring), "GEOIP_ZIPCODE%s=%s", additionalstring, gir->postal_code);
 				printout(tempstring);
 			};
-			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_LATITUDE%s=%f", additionalstring, gir->latitude);
+			snprintf(tempstring, sizeof(tempstring), "GEOIP_LATITUDE%s=%f", additionalstring, gir->latitude);
 			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_LONGITUDE%s=%f", additionalstring, gir->longitude);
+			snprintf(tempstring, sizeof(tempstring), "GEOIP_LONGITUDE%s=%f", additionalstring, gir->longitude);
 			printout(tempstring);
 			/*
-			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_DMACODE%s=%d", additionalstring, gir->dma_code);
+			snprintf(tempstring, sizeof(tempstring), "GEOIP_DMACODE%s=%d", additionalstring, gir->dma_code);
 			printout(tempstring);
-			snprintf(tempstring, sizeof(tempstring) - 1, "GEOIP_AREACODE%s=%d", additionalstring, gir->area_code);
+			snprintf(tempstring, sizeof(tempstring), "GEOIP_AREACODE%s=%d", additionalstring, gir->area_code);
 			printout(tempstring);
 			*/
 		} else {
@@ -473,14 +473,14 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 	DEBUGPRINT_WA(DEBUG_showinfo, "result of 'ipv4addr_gettype': 0x%08x", (unsigned int) typeinfo);
 
-	retval = libipv4addr_ipv4addrstruct_to_string(ipv4addrp, tempipv4string, 0);
+	retval = libipv4addr_ipv4addrstruct_to_string(ipv4addrp, tempipv4string, sizeof(tempipv4string), 0);
 	if ( retval != 0 ) {
 		fprintf(stderr, "Error converting IPv4 address: %s\n", tempipv4string);
 		return;
 	};
 
 	if ((formatoptions & FORMATOPTION_printembedded) != 0) {
-		snprintf(embeddedipv4string, sizeof(embeddedipv4string) - 1, "[%s]", tempipv4string);
+		snprintf(embeddedipv4string, sizeof(embeddedipv4string), "[%s]", tempipv4string);
 	};
 
 	ipv4addr_copy(ipv4addr_anon_ptr, ipv4addrp); /* copy structure */
@@ -489,7 +489,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		retval_anon = libipv4addr_anonymize(ipv4addr_anon_ptr, ipv6calc_anon_set.mask_ipv4, ipv6calc_anon_set.method);
 
 		if (retval_anon == 0) {
-			retval = libipv4addr_ipv4addrstruct_to_string(ipv4addr_anon_ptr, tempstring2, 0);
+			retval = libipv4addr_ipv4addrstruct_to_string(ipv4addr_anon_ptr, tempstring2, sizeof(tempstring2), 0);
 			if ( retval != 0 ) {
 				fprintf(stderr, "Error uncompressing IPv4 address: %s\n", tempstring2);
 				retval = 1;
@@ -501,41 +501,41 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	if ( machinereadable != 0 ) {
 		/* given source string */
 		if ((string != NULL) && (strlen(string) > 0)) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_SOURCE%s=%s", embeddedipv4string, string);
+			snprintf(tempstring, sizeof(tempstring), "IPV4_SOURCE%s=%s", embeddedipv4string, string);
 			printout(tempstring);
 		};
 
 		/* address */
-		snprintf(tempstring, sizeof(tempstring) - 1, "IPV4%s=%s", embeddedipv4string, tempipv4string);
+		snprintf(tempstring, sizeof(tempstring), "IPV4%s=%s", embeddedipv4string, tempipv4string);
 		printout(tempstring);
 
 		if ((typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {	
 			if (retval_anon == 0 ) {	
 				/* anonymized address */
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_ANON%s=%s", embeddedipv4string, tempstring2);
+				snprintf(tempstring, sizeof(tempstring), "IPV4_ANON%s=%s", embeddedipv4string, tempstring2);
 				printout(tempstring);
 			} else {
 				// TODO: only show this on verbose (must be implemented)
-				// snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_ANON%s=(unsupported, too less DB features available)", embeddedipv4string);
+				// snprintf(tempstring, sizeof(tempstring), "IPV4_ANON%s=(unsupported, too less DB features available)", embeddedipv4string);
 				// printout(tempstring);
 			};
 		};
 
 		if (ipv4addrp->flag_prefixuse == 1) {	
-			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_PREFIXLENGTH%s=%d", embeddedipv4string, (int) ipv4addrp->prefixlength);
+			snprintf(tempstring, sizeof(tempstring), "IPV4_PREFIXLENGTH%s=%d", embeddedipv4string, (int) ipv4addrp->prefixlength);
 			printout(tempstring);
 		};
 
 		j = 0;
-		snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_TYPE%s=", embeddedipv4string);
+		snprintf(tempstring, sizeof(tempstring), "IPV4_TYPE%s=", embeddedipv4string);
 		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv4addrtypestrings); i++ ) {
 			if ( (typeinfo & ipv6calc_ipv4addrtypestrings[i].number) != 0 ) {
 				if (j != 0) {
-					snprintf(helpstring, sizeof(helpstring) - 1, "%s,", tempstring);
-					snprintf(tempstring, sizeof(tempstring) - 1, "%s", helpstring);
+					snprintf(helpstring, sizeof(helpstring), "%s,", tempstring);
+					snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
 				};
-				snprintf(helpstring, sizeof(helpstring) - 1, "%s%s", tempstring, ipv6calc_ipv4addrtypestrings[i].token);
-				snprintf(tempstring, sizeof(tempstring) - 1, "%s", helpstring);
+				snprintf(helpstring, sizeof(helpstring), "%s%s", tempstring, ipv6calc_ipv4addrtypestrings[i].token);
+				snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
 				j = 1;
 			};
 		};
@@ -565,11 +565,11 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 	if (as_num32 != ASNUM_AS_UNKNOWN) {
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_AS_NUM%s=%d", embeddedipv4string, as_num32);
+			snprintf(tempstring, sizeof(tempstring), "IPV4_AS_NUM%s=%d", embeddedipv4string, as_num32);
 			printout(tempstring);
 
 			if (as_text != NULL) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_AS_TEXT%s=%s", embeddedipv4string, as_text);
+				snprintf(tempstring, sizeof(tempstring), "IPV4_AS_TEXT%s=%s", embeddedipv4string, as_text);
 				printout(tempstring);
 			};
 		} else {
@@ -588,7 +588,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 	libipv6calc_db_wrapper_country_code_by_cc_index(tempstring2, sizeof(tempstring2),cc_index);
 	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_COUNTRYCODE%s=%s", embeddedipv4string, tempstring2);
+		snprintf(tempstring, sizeof(tempstring), "IPV4_COUNTRYCODE%s=%s", embeddedipv4string, tempstring2);
 		printout(tempstring);
 	} else {
 		fprintf(stdout, "Country Code: %s\n", tempstring2);
@@ -601,12 +601,12 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		registry = libipv4addr_registry_num_by_addr(ipv4addrp);
 		snprintf(tempstring2, sizeof(tempstring2), "%s", libipv6calc_registry_string_by_num(registry));
 	} else {
-		libipv6calc_db_wrapper_registry_string_by_ipv4addr(ipv4addrp, tempstring);
+		libipv6calc_db_wrapper_registry_string_by_ipv4addr(ipv4addrp, tempstring, sizeof(tempstring));
 		snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
 	};
 
 	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring) - 1, "IPV4_REGISTRY%s=%s", embeddedipv4string, tempstring2);
+		snprintf(tempstring, sizeof(tempstring), "IPV4_REGISTRY%s=%s", embeddedipv4string, tempstring2);
 		printout(tempstring);
 	} else {
 		fprintf(stdout, "IPv4 registry%s: %s\n", embeddedipv4string, tempstring2);
@@ -668,10 +668,10 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 	ipv6calc_ipv4addr ipv4addr;
 
 	/* EUI-48/MAC address */
-	snprintf(helpstring, sizeof(helpstring) - 1, "%02x:%02x:%02x:%02x:%02x:%02x", (unsigned int) macaddrp->addr[0], (unsigned int) macaddrp->addr[1], (unsigned int) macaddrp->addr[2], (unsigned int) macaddrp->addr[3], (unsigned int) macaddrp->addr[4], (unsigned int) macaddrp->addr[5]);
+	snprintf(helpstring, sizeof(helpstring), "%02x:%02x:%02x:%02x:%02x:%02x", (unsigned int) macaddrp->addr[0], (unsigned int) macaddrp->addr[1], (unsigned int) macaddrp->addr[2], (unsigned int) macaddrp->addr[3], (unsigned int) macaddrp->addr[4], (unsigned int) macaddrp->addr[5]);
 
 	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring) - 1, "EUI48=%s", helpstring);
+		snprintf(tempstring, sizeof(tempstring), "EUI48=%s", helpstring);
 		printout(tempstring);
 	} else {
 		fprintf(stdout, "EUI-48/MAC address: %s\n", helpstring);
@@ -717,10 +717,10 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 	};
 	
 	/* vendor string */
-	result = libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(helpstring, macaddrp);
+	result = libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(helpstring, sizeof(helpstring), macaddrp);
 	if (result == 0) {
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "OUI=\"%s\"", helpstring);
+			snprintf(tempstring, sizeof(tempstring), "OUI=\"%s\"", helpstring);
 			printout(tempstring);
 		} else {
 			fprintf(stdout, "OUI is: %s\n", helpstring);
@@ -757,10 +757,10 @@ static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t for
 	ipv6calc_macaddr macaddr;
 
 	/* EUI-64 address */
-	snprintf(helpstring, sizeof(helpstring) - 1, "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x", (unsigned int) eui64addrp->addr[0], (unsigned int) eui64addrp->addr[1], (unsigned int) eui64addrp->addr[2], (unsigned int) eui64addrp->addr[3], (unsigned int) eui64addrp->addr[4], (unsigned int) eui64addrp->addr[5], (unsigned int) eui64addrp->addr[6], (unsigned int) eui64addrp->addr[7]);
+	snprintf(helpstring, sizeof(helpstring), "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x", (unsigned int) eui64addrp->addr[0], (unsigned int) eui64addrp->addr[1], (unsigned int) eui64addrp->addr[2], (unsigned int) eui64addrp->addr[3], (unsigned int) eui64addrp->addr[4], (unsigned int) eui64addrp->addr[5], (unsigned int) eui64addrp->addr[6], (unsigned int) eui64addrp->addr[7]);
 
 	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring) - 1, "EUI64=%s", helpstring);
+		snprintf(tempstring, sizeof(tempstring), "EUI64=%s", helpstring);
 		printout(tempstring);
 	} else {
 		fprintf(stdout, "EUI-64 identifier: %s\n", helpstring);
@@ -786,10 +786,10 @@ static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t for
 		macaddr.addr[i] = eui64addrp->addr[i];
 	};
 
-	result = libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(helpstring, &macaddr);
+	result = libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(helpstring, sizeof(helpstring), &macaddr);
 	if (result == 0) {
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "OUI=\"%s\"", helpstring);
+			snprintf(tempstring, sizeof(tempstring), "OUI=\"%s\"", helpstring);
 			printout(tempstring);
 		} else {
 			fprintf(stdout, "OUI is: %s\n", tempstring);
@@ -835,7 +835,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	/* get full uncompressed IPv6 address */
 	flag_prefixuse = ipv6addrp->flag_prefixuse;
 	ipv6addrp->flag_prefixuse = 0;
-	retval = libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6addrp, ipv6addrstring, FORMATOPTION_printfulluncompressed);
+	retval = libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6addrp, ipv6addrstring, sizeof(ipv6addrstring), FORMATOPTION_printfulluncompressed);
 	if ( retval != 0 ) {
 		fprintf(stderr, "Error uncompressing IPv6 address: %s\n", ipv6addrstring);
 		retval = 1;
@@ -850,7 +850,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		retval_anon = libipv6addr_anonymize(ipv6addr_anon_ptr, &ipv6calc_anon_set);
 
 		if (retval_anon == 0) {
-			retval = libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6addr_anon_ptr, tempstring2, FORMATOPTION_printfulluncompressed);
+			retval = libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6addr_anon_ptr, tempstring2, sizeof(tempstring2), FORMATOPTION_printfulluncompressed);
 			if ( retval != 0 ) {
 				fprintf(stderr, "Error uncompressing IPv6 address: %s\n", tempstring2);
 				retval = 1;
@@ -860,34 +860,34 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	};
 	
 	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6=%s", ipv6addrstring);
+		snprintf(tempstring, sizeof(tempstring), "IPV6=%s", ipv6addrstring);
 		printout(tempstring);
 	
 		if ((typeinfo & (IPV6_ADDR_ANONYMIZED_PREFIX | IPV6_ADDR_ANONYMIZED_IID | IPV6_ADDR_LOOPBACK)) == 0 ) {
 			if (retval_anon == 0) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_ANON=%s", tempstring2);
+				snprintf(tempstring, sizeof(tempstring), "IPV6_ANON=%s", tempstring2);
 			} else {
 				// TODO: only show this on verbose (must be implemented)
-				// snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_ANON=(unsupported, too less DB features available)");
+				// snprintf(tempstring, sizeof(tempstring), "IPV6_ANON=(unsupported, too less DB features available)");
 			};
 			printout(tempstring);
 		};
 
 		if (ipv6addrp->flag_prefixuse == 1) {	
-			snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_PREFIXLENGTH=%d", (int) ipv6addrp->prefixlength);
+			snprintf(tempstring, sizeof(tempstring), "IPV6_PREFIXLENGTH=%d", (int) ipv6addrp->prefixlength);
 			printout(tempstring);
 		};
 
 		j = 0;
-		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_TYPE=");
+		snprintf(tempstring, sizeof(tempstring), "IPV6_TYPE=");
 		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
 			if ( (typeinfo & ipv6calc_ipv6addrtypestrings[i].number) != 0 ) {
 				if (j != 0) {
-					snprintf(helpstring, sizeof(helpstring) - 1, "%s,", tempstring);
-					snprintf(tempstring, sizeof(tempstring) - 1, "%s", helpstring);
+					snprintf(helpstring, sizeof(helpstring), "%s,", tempstring);
+					snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
 				};
-				snprintf(helpstring, sizeof(helpstring) - 1, "%s%s", tempstring, ipv6calc_ipv6addrtypestrings[i].token);
-				snprintf(tempstring, sizeof(tempstring) - 1, "%s", helpstring);
+				snprintf(helpstring, sizeof(helpstring), "%s%s", tempstring, ipv6calc_ipv6addrtypestrings[i].token);
+				snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
 				j = 1;
 			};
 		};
@@ -916,7 +916,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	} else {
 		libipv6calc_db_wrapper_country_code_by_cc_index(tempstring2, sizeof(tempstring2),cc_index);
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_COUNTRYCODE=%s" , tempstring2);
+			snprintf(tempstring, sizeof(tempstring), "IPV6_COUNTRYCODE=%s" , tempstring2);
 			printout(tempstring);
 		} else {
 			fprintf(stdout, "Country Code: %s\n", tempstring2);
@@ -938,14 +938,14 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	} else {
 		if ( machinereadable != 0 ) {
 			if (as_num32 == 0) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=(unknown)");
+				snprintf(tempstring, sizeof(tempstring), "IPV6_AS_NUM=(unknown)");
 			} else {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_NUM=%d", as_num32);
+				snprintf(tempstring, sizeof(tempstring), "IPV6_AS_NUM=%d", as_num32);
 			};
 			printout(tempstring);
 
 			if (as_text != NULL) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_AS_TEXT=%s", as_text);
+				snprintf(tempstring, sizeof(tempstring), "IPV6_AS_TEXT=%s", as_text);
 				printout(tempstring);
 			};
 
@@ -962,12 +962,12 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		registry = libipv6addr_registry_num_by_addr(ipv6addrp);
 		snprintf(tempstring2, sizeof(tempstring2), "%s", libipv6calc_registry_string_by_num(registry));
 	} else {
-		libipv6calc_db_wrapper_registry_string_by_ipv6addr(ipv6addrp, tempstring);
+		libipv6calc_db_wrapper_registry_string_by_ipv6addr(ipv6addrp, tempstring, sizeof(tempstring));
 		snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
 	};
 
 	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring) - 1, "IPV6_REGISTRY=%s", tempstring2);
+		snprintf(tempstring, sizeof(tempstring), "IPV6_REGISTRY=%s", tempstring2);
 		printout(tempstring);
 	} else {
 		fprintf(stdout, "Registry for address: %s\n", tempstring2);
@@ -979,7 +979,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 1);
 
 		if (r == 0) {
-			retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, helpstring, 0);
+			retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, helpstring, sizeof(helpstring), 0);
 			if ( retval != 0 ) {
 				fprintf(stderr, "Error converting IPv4 address to string\n");
 				retval = 1;
@@ -993,7 +993,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			};
 
 			/* get registry string */
-			retval = libipv6calc_db_wrapper_registry_string_by_ipv4addr(&ipv4addr, helpstring);
+			retval = libipv6calc_db_wrapper_registry_string_by_ipv4addr(&ipv4addr, helpstring, sizeof(helpstring));
 			if ( machinereadable != 0 ) {
 			} else {
 				fprintf(stdout, "IPv4 registry for 6to4 address: %s\n", helpstring);
@@ -1013,7 +1013,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 				print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "TEREDO-CLIENT");
 				print_ipv4addr(&ipv4addr2, formatoptions | FORMATOPTION_printembedded, "TEREDO-SERVER");
 
-				retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr2, helpstring, 0);
+				retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr2, helpstring, sizeof(helpstring), 0);
 				if ( retval != 0 ) {
 					fprintf(stderr, "Error converting IPv4 address to string\n");
 					retval = 1;
@@ -1024,14 +1024,14 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 				port = (uint16_t) (((uint16_t) ipv6addr_getoctet(ipv6addrp, (unsigned int) 10) << 8 | (uint16_t) ipv6addr_getoctet(ipv6addrp, (unsigned int) 11)) ^ 0xffff);
 
 				if ( machinereadable != 0 ) {
-					snprintf(tempstring, sizeof(tempstring) - 1, "TEREDO_PORT_CLIENT=%u", (unsigned int) port);
+					snprintf(tempstring, sizeof(tempstring), "TEREDO_PORT_CLIENT=%u", (unsigned int) port);
 					printout(tempstring);
 				} else {
 					fprintf(stdout, "Address type is Teredo and included IPv4 server address is: %s and client port: %u\n", helpstring, (unsigned int) port);
 				};
 
 				/* get registry string */
-				retval = libipv6calc_db_wrapper_registry_string_by_ipv4addr(&ipv4addr2, helpstring);
+				retval = libipv6calc_db_wrapper_registry_string_by_ipv4addr(&ipv4addr2, helpstring, sizeof(helpstring));
 				
 				if ( machinereadable != 0 ) {
 				} else {
@@ -1056,7 +1056,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	/* SLA prefix included? */
 	if ( ((typeinfo & ( IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_ADDR_ULUA )) != 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID | IPV6_ADDR_ANONYMIZED_PREFIX)) == 0)) {
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "SLA=%04x", (unsigned int) ipv6addr_getword(ipv6addrp, 3));
+			snprintf(tempstring, sizeof(tempstring), "SLA=%04x", (unsigned int) ipv6addr_getword(ipv6addrp, 3));
 			printout(tempstring);
 		} else {
 			fprintf(stdout, "Address type has SLA: %04x\n", (unsigned int) ipv6addr_getword(ipv6addrp, 3));
@@ -1095,7 +1095,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	/* Interface identifier included */
 	if ( ( ((typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_ADDR_ULUA )) != 0) || ((typeinfo & (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) == (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) ) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID)) == 0) ) {
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "IID=%04x:%04x:%04x:%04x", (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addr_getword(ipv6addrp, 6), (unsigned int) ipv6addr_getword(ipv6addrp, 7));
+			snprintf(tempstring, sizeof(tempstring), "IID=%04x:%04x:%04x:%04x", (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addr_getword(ipv6addrp, 6), (unsigned int) ipv6addr_getword(ipv6addrp, 7));
 			printout(tempstring);
 		} else {
 			fprintf(stdout, "Interface identifier: %04x:%04x:%04x:%04x\n", (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addr_getword(ipv6addrp, 6), (unsigned int) ipv6addr_getword(ipv6addrp, 7));
@@ -1164,7 +1164,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			} else {
 				if ( (typeinfo & IPV6_NEW_ADDR_SOLICITED_NODE) != 0 ) {
 					if ( machinereadable != 0 ) {
-						snprintf(tempstring, sizeof(tempstring) - 1, "EUI64=??:??:??:??:??:%02x:%02x:%02x", (unsigned int) ipv6addr_getoctet(ipv6addrp, 13), (unsigned int) ipv6addr_getoctet(ipv6addrp, 14), (unsigned int) ipv6addr_getoctet(ipv6addrp, 15));
+						snprintf(tempstring, sizeof(tempstring), "EUI64=??:??:??:??:??:%02x:%02x:%02x", (unsigned int) ipv6addr_getoctet(ipv6addrp, 13), (unsigned int) ipv6addr_getoctet(ipv6addrp, 14), (unsigned int) ipv6addr_getoctet(ipv6addrp, 15));
 						printout(tempstring);
 					} else {
 						fprintf(stdout, "Generated from the extension identifier of an EUI-48 (MAC): ...:%02x:%02x:%02x\n", (unsigned int) ipv6addr_getoctet(ipv6addrp, 13), (unsigned int) ipv6addr_getoctet(ipv6addrp, 14), (unsigned int) ipv6addr_getoctet(ipv6addrp, 15));
@@ -1252,14 +1252,14 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		ipv6addr_setword(ipv6addrp, 0, 0x0000);
 		ipv6addr_setword(ipv6addrp, 1, ipv6addr_getword(ipv6addrp, 1) & 0x000F);
 
-		retval = libipv6addr_to_hex(ipv6addrp, ipv6addrstring, 0);
+		retval = libipv6addr_to_hex(ipv6addrp, ipv6addrstring, sizeof(ipv6addrstring), 0);
 
 		if ( machinereadable != 0 ) {
 		} else {
 			if ((typeinfo & IPV6_ADDR_ANONYMIZED_IID) != 0) {
-				snprintf(tempstring, sizeof(tempstring) - 1, "n/a (previosly anonymized)");
+				snprintf(tempstring, sizeof(tempstring), "n/a (previosly anonymized)");
 			} else {
-				snprintf(tempstring, sizeof(tempstring) - 1, "%s", ipv6addrstring+7);
+				snprintf(tempstring, sizeof(tempstring), "%s", ipv6addrstring+7);
 			};
 			fprintf(stdout, "ORCHID hash (100 bits): %s\n", tempstring);
 		};

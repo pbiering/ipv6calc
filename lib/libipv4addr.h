@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.35 2014/04/25 05:48:13 ds6peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.36 2014/05/11 09:49:38 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
@@ -148,15 +148,15 @@ extern void ipv4addr_copy(ipv6calc_ipv4addr *ipv4addrp_dst, const ipv6calc_ipv4a
 
 extern uint32_t ipv4addr_gettype(const ipv6calc_ipv4addr *ipv4addrp);
 
-extern int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv4addr *ipv4addrp);
-extern int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv4addr *ipv4addrp, int flag_reverse);
+extern int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv4addr *ipv4addrp);
+extern int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv4addr *ipv4addrp, const int flag_reverse);
 
-extern int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions);
+extern int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions);
 
-extern int libipv4addr_to_reversestring(ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions);
+extern int libipv4addr_to_reversestring(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions);
 
-extern int libipv4addr_to_octal(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions);
-extern int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const uint32_t formatoptions);
+extern int libipv4addr_to_octal(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions);
+extern int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions);
 
 extern int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, const unsigned int mask, const int method);
 extern uint32_t ipv4addr_anonymized_get_as_num32(const ipv6calc_ipv4addr *ipv4addrp);

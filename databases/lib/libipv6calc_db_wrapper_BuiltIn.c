@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.13 2014/04/26 13:03:56 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.14 2014/05/11 09:49:38 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -269,7 +269,7 @@ END_libipv6calc_db_wrapper:
  * mod: resultstring
  * out: 0=found, 1=not found
  */
-int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(char *resultstring, const ipv6calc_macaddr *macaddrp) {
+int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(char *resultstring, const size_t resultstring_length, const ipv6calc_macaddr *macaddrp) {
 	int retval = 1;
 
 #ifdef SUPPORT_DB_IEEE
@@ -282,7 +282,7 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(char *resultstr
 	/* catch special ones */
 	if ((macaddrp->addr[0] == 0xfc && macaddrp->addr[1] == 0xfc)) {
 		/* Linux special OUI for ISDN-NET or PLIP interfaces */
-		snprintf(resultstring, NI_MAXHOST - 1, "Linux ISDN-NET/PLIP");
+		snprintf(resultstring, resultstring_length, "Linux ISDN-NET/PLIP");
 		return (0);
 	};
 
@@ -300,7 +300,7 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(char *resultstr
 		if (libieee_iab[i].id == idval) {
 			/* major id match */
 			if (libieee_iab[i].subid_begin <= subidval && libieee_iab[i].subid_end >= subidval) {
-				snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_iab[i].string_owner);
+				snprintf(resultstring, resultstring_length, "%s", libieee_iab[i].string_owner);
 				return (0);
 			};
 		};
@@ -311,7 +311,7 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(char *resultstr
 		if (libieee_oui36[i].id == idval) {
 			/* major id match */
 			if (libieee_oui36[i].subid_begin <= subidval && libieee_oui36[i].subid_end >= subidval) {
-				snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_oui36[i].string_owner);
+				snprintf(resultstring, resultstring_length, "%s", libieee_oui36[i].string_owner);
 				return (0);
 			};
 		};
@@ -321,12 +321,12 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(char *resultstr
 	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui); i++) {
 		if (libieee_oui[i].id == idval) {
 			/* match */
-			snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_oui[i].string_owner);
+			snprintf(resultstring, resultstring_length, "%s", libieee_oui[i].string_owner);
 			return (0);
 		};
 	};
 #else
-	snprintf(resultstring, NI_MAXHOST - 1, "(IEEE databases not compiled in)");
+	snprintf(resultstring, resultstring_length, "(IEEE databases not compiled in)");
 	return (0);
 #endif
 
@@ -342,7 +342,7 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(char *resultstr
  * mod: resultstring
  * out: 0=found, 1=not found
  */
-int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(char *resultstring, const ipv6calc_macaddr *macaddrp) {
+int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(char *resultstring, const size_t resultstring_length, const ipv6calc_macaddr *macaddrp) {
 	int retval = 1;
 
 #ifdef SUPPORT_DB_IEEE
@@ -355,7 +355,7 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(char *res
 	/* catch special ones */
 	if ((macaddrp->addr[0] == 0xfc && macaddrp->addr[1] == 0xfc)) {
 		/* Linux special OUI for ISDN-NET or PLIP interfaces */
-		snprintf(resultstring, NI_MAXHOST - 1, "Linux-ISDN-NET+PLIP");
+		snprintf(resultstring, resultstring_length, "Linux-ISDN-NET+PLIP");
 		return (0);
 	};
 	
@@ -373,7 +373,7 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(char *res
 		if (libieee_iab[i].id == idval) {
 			/* major id match */
 			if (libieee_iab[i].subid_begin <= subidval && libieee_iab[i].subid_end >= subidval) {
-				snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_iab[i].shortstring_owner);
+				snprintf(resultstring, resultstring_length, "%s", libieee_iab[i].shortstring_owner);
 				return (0);
 			};
 		};
@@ -384,7 +384,7 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(char *res
 		if (libieee_oui36[i].id == idval) {
 			/* major id match */
 			if (libieee_oui36[i].subid_begin <= subidval && libieee_oui36[i].subid_end >= subidval) {
-				snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_oui36[i].shortstring_owner);
+				snprintf(resultstring, resultstring_length, "%s", libieee_oui36[i].shortstring_owner);
 				return (0);
 			};
 		};
@@ -394,12 +394,12 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(char *res
 	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui); i++) {
 		if (libieee_oui[i].id == idval) {
 			/* match */
-			snprintf(resultstring, NI_MAXHOST - 1, "%s", libieee_oui[i].shortstring_owner);
+			snprintf(resultstring, resultstring_length, "%s", libieee_oui[i].shortstring_owner);
 			return (0);
 		};
 	};
 #else
-	snprintf(resultstring, NI_MAXHOST - 1, "(IEEE databases not compiled in)");
+	snprintf(resultstring, resultstring_length, "(IEEE databases not compiled in)");
 	return (0);
 #endif
 
@@ -487,22 +487,22 @@ static const char *libipv6calc_db_wrapper_BuiltIn_reserved_string_by_ipv4addr(co
  * out: *resultstring = Registry string
  * ret: 0: ok, 1: unknown, 2: reserved
  */
-int libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring) {
+int libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const size_t resultstring_length) {
 	const char *info = libipv6calc_db_wrapper_BuiltIn_reserved_string_by_ipv4addr(ipv4addrp);
 
 	if (info != NULL) {
 		// is reserved
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", info);
+		snprintf(resultstring, resultstring_length, "%s", info);
 		return (2);
 	};
 	
 #ifdef SUPPORT_DB_IPV4
 	int registry = libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(ipv4addrp);
 
-	snprintf(resultstring, NI_MAXHOST - 1, "%s", libipv6calc_registry_string_by_num(registry));
+	snprintf(resultstring, resultstring_length, "%s", libipv6calc_registry_string_by_num(registry));
 	return(0);
 #else
-	snprintf(resultstring, NI_MAXHOST - 1, "%s", "(IPv4 database not compiled in)");
+	snprintf(resultstring, resultstring_length, "%s", "(IPv4 database not compiled in)");
 	return(1);
 #endif
 };
@@ -678,22 +678,22 @@ static const char *libipv6calc_db_wrapper_BuiltIn_reserved_string_by_ipv6addr(co
  * mod: resultstring
  * ret: 0: ok, 1: unknown, 2: reserved
  */
-int libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+int libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length) {
 	const char *info = libipv6calc_db_wrapper_BuiltIn_reserved_string_by_ipv6addr(ipv6addrp);
 
 	if (info != NULL) {
 		// is reserved
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", info);
+		snprintf(resultstring, resultstring_length, "%s", info);
 		return (2);
 	};
 
 #ifdef SUPPORT_DB_IPV6
 	int registry = libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(ipv6addrp);
 
-	snprintf(resultstring, NI_MAXHOST - 1, "%s", libipv6calc_registry_string_by_num(registry));
+	snprintf(resultstring, resultstring_length, "%s", libipv6calc_registry_string_by_num(registry));
 	return(0);
 #else
-	snprintf(resultstring, NI_MAXHOST - 1, "%s", "(IPv6 database not compiled in)");
+	snprintf(resultstring, resultstring_length, "%s", "(IPv6 database not compiled in)");
 	return(1);
 #endif
 };

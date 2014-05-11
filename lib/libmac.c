@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.24 2013/10/31 21:24:46 ds6peter Exp $
- * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libmac.c,v 1.25 2014/05/11 09:49:38 ds6peter Exp $
+ * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library MAC address handling
@@ -26,14 +26,14 @@ static char ChSet[] = "0123456789abcdefABCDEF:- .";
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */
-int mac_to_macaddrstruct(const char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp) {
+int mac_to_macaddrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_macaddr *macaddrp) {
 	int retval = 1, result, i, ccolons = 0, cdashes = 0, cspaces = 0, cdots = 0;
 	size_t cnt;
 	int temp[6];
 
 	/* check length */
 	if ( ( strlen(addrstring) < 11 ) || ( strlen(addrstring) > 17 ) ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "Error in given 48-bit MAC address, has not 11 to 17 chars!");
+		snprintf(resultstring, resultstring_length, "Error in given 48-bit MAC address, has not 11 to 17 chars!");
 		retval = 1;
 		return (retval);
 	};
@@ -41,7 +41,7 @@ int mac_to_macaddrstruct(const char *addrstring, char *resultstring, ipv6calc_ma
 	/* check for hex chars and ":"/"-"/" " only content */
 	cnt = strspn(addrstring, ChSet);
 	if ( cnt < strlen(addrstring) ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "Illegal character in given MAC address '%s' on position %d (%c)!", addrstring, (int) cnt+1, addrstring[cnt]);
+		snprintf(resultstring, resultstring_length, "Illegal character in given MAC address '%s' on position %d (%c)!", addrstring, (int) cnt+1, addrstring[cnt]);
 		retval = 1;
 		return (retval);
 		
@@ -67,7 +67,7 @@ int mac_to_macaddrstruct(const char *addrstring, char *resultstring, ipv6calc_ma
 		   || (ccolons == 0 && cdashes == 1 && cspaces == 0 && strlen(addrstring) == 13 && cdots == 0)
 		   || (ccolons == 0 && cdashes == 0 && cspaces == 0 && strlen(addrstring) == 12 && cdots == 0))
 	   ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "Error, given MAC address '%s' is not valid (number of colons/dashes/spaces is not 5 or number of dashes is not 1)!", addrstring);
+		snprintf(resultstring, resultstring_length, "Error, given MAC address '%s' is not valid (number of colons/dashes/spaces is not 5 or number of dashes is not 1)!", addrstring);
 		retval = 1;
 		return (retval);
 	};
@@ -86,13 +86,13 @@ int mac_to_macaddrstruct(const char *addrstring, char *resultstring, ipv6calc_ma
 	} else if ( cdashes == 0 ) {
 		result = sscanf(addrstring, "%2x%2x%2x%2x%2x%2x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5]);
 	} else {
-		snprintf(resultstring, NI_MAXHOST - 1, "Error, unexpected failure on scanning MAC address '%s'!", addrstring);
+		snprintf(resultstring, resultstring_length, "Error, unexpected failure on scanning MAC address '%s'!", addrstring);
 		retval = 1;
 		return (retval);
 	};
 
 	if ( result != 6 ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "Error splitting address %s, got %d items instead of 6!", addrstring, result);
+		snprintf(resultstring, resultstring_length, "Error splitting address %s, got %d items instead of 6!", addrstring, result);
 		retval = 1;
 		return (retval);
 	};
@@ -100,7 +100,7 @@ int mac_to_macaddrstruct(const char *addrstring, char *resultstring, ipv6calc_ma
 	/* check address words range */
 	for ( i = 0; i <= 5; i++ ) {
 		if ( ( temp[i] < 0x0 ) || ( temp[i] > 0xff ) )    {
-			snprintf(resultstring, NI_MAXHOST - 1, "Error, given MAC address '%s' is not valid on position %d!", addrstring, i);
+			snprintf(resultstring, resultstring_length, "Error, given MAC address '%s' is not valid on position %d!", addrstring, i);
 			retval = 1;
 			return (retval);
 		};
@@ -119,8 +119,8 @@ int mac_to_macaddrstruct(const char *addrstring, char *resultstring, ipv6calc_ma
 
 
 /* compatible name */
-int addr_to_macaddrstruct(const char *addrstring, char *resultstring, ipv6calc_macaddr *macaddrp) {
-	return (mac_to_macaddrstruct(addrstring, resultstring, macaddrp));
+int addr_to_macaddrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_macaddr *macaddrp) {
+	return (mac_to_macaddrstruct(addrstring, resultstring, resultstring_length, macaddrp));
 };
 
 /* 
@@ -160,16 +160,16 @@ void mac_clearall(ipv6calc_macaddr *macaddrp) {
  * out: *resultstring = MAC address string
  * ret: ==0: ok, !=0: error
  */
-int macaddrstruct_to_string(const ipv6calc_macaddr *macaddrp, char *resultstring, const uint32_t formatoptions) {
+int macaddrstruct_to_string(const ipv6calc_macaddr *macaddrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST];
 
 	/* address */
-	snprintf(tempstring, sizeof(tempstring) - 1, "%02x:%02x:%02x:%02x:%02x:%02x", (unsigned int) macaddrp->addr[0], (unsigned int) macaddrp->addr[1], (unsigned int) macaddrp->addr[2], (unsigned int) macaddrp->addr[3], (unsigned int) macaddrp->addr[4], (unsigned int) macaddrp->addr[5]);
+	snprintf(tempstring, sizeof(tempstring), "%02x:%02x:%02x:%02x:%02x:%02x", (unsigned int) macaddrp->addr[0], (unsigned int) macaddrp->addr[1], (unsigned int) macaddrp->addr[2], (unsigned int) macaddrp->addr[3], (unsigned int) macaddrp->addr[4], (unsigned int) macaddrp->addr[5]);
 
 	if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "MAC=%s", tempstring);
+		snprintf(resultstring, resultstring_length, "MAC=%s", tempstring);
 	} else {
-		snprintf(resultstring, NI_MAXHOST - 1, "%s", tempstring);
+		snprintf(resultstring, resultstring_length, "%s", tempstring);
 	};
 
 	return(0);
@@ -177,8 +177,8 @@ int macaddrstruct_to_string(const ipv6calc_macaddr *macaddrp, char *resultstring
 
 
 /* compatible name */
-int libmacaddr_macaddrstruct_to_string(const ipv6calc_macaddr *macaddrp, char *resultstring, const uint32_t formatoptions) {
-	return (macaddrstruct_to_string(macaddrp, resultstring, formatoptions));
+int libmacaddr_macaddrstruct_to_string(const ipv6calc_macaddr *macaddrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
+	return (macaddrstruct_to_string(macaddrp, resultstring, resultstring_length, formatoptions));
 };
 
 

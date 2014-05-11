@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.34 2014/04/26 13:03:56 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.35 2014/05/11 09:49:38 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -606,10 +606,10 @@ uint32_t libipv6calc_db_wrapper_as_num32_decomp17(const uint32_t as_num32_comp17
  * mod: resultstring
  * out: 0=found, 1=not found
  */
-int libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(char *resultstring, const ipv6calc_macaddr *macaddrp) {
+int libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(char *resultstring, const size_t resultstring_length, const ipv6calc_macaddr *macaddrp) {
 	int retval = 1;
 #ifdef SUPPORT_BUILTIN
-	retval = libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(resultstring, macaddrp);
+	retval = libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(resultstring, resultstring_length, macaddrp);
 #endif
 	return (retval);
 };
@@ -621,10 +621,10 @@ int libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(char *resultstring, con
  * mod: resultstring
  * out: 0=found, 1=not found
  */
-int libipv6calc_db_wrapper_ieee_vendor_string_short_by_macaddr(char *resultstring, const ipv6calc_macaddr *macaddrp) {
+int libipv6calc_db_wrapper_ieee_vendor_string_short_by_macaddr(char *resultstring, const size_t resultstring_length, const ipv6calc_macaddr *macaddrp) {
 	int retval = 1;
 #ifdef SUPPORT_BUILTIN
-	retval = libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(resultstring, macaddrp);
+	retval = libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(resultstring, resultstring_length, macaddrp);
 #endif
 	return (retval);
 };
@@ -637,10 +637,10 @@ int libipv6calc_db_wrapper_ieee_vendor_string_short_by_macaddr(char *resultstrin
  * out: *resultstring = Registry string
  * ret: 0: ok, 1: unknown, 2: reserved
  */
-int libipv6calc_db_wrapper_registry_string_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring) {
+int libipv6calc_db_wrapper_registry_string_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const size_t resultstring_length) {
 	int retval = 1;
 #ifdef SUPPORT_BUILTIN
-	retval = libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv4addr(ipv4addrp, resultstring);
+	retval = libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv4addr(ipv4addrp, resultstring, resultstring_length);
 #endif
 	return (retval);
 };
@@ -668,10 +668,10 @@ int libipv6calc_db_wrapper_registry_num_by_ipv4addr(const ipv6calc_ipv4addr *ipv
  * out: *resultstring = Registry string
  * ret: 0: ok, 1: unknown, 2: reserved
  */
-int libipv6calc_db_wrapper_registry_string_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+int libipv6calc_db_wrapper_registry_string_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length) {
 	int retval = 1;
 #ifdef SUPPORT_BUILTIN
-	retval = libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv6addr(ipv6addrp, resultstring);
+	retval = libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv6addr(ipv6addrp, resultstring, resultstring_length);
 #endif
 	return (retval);
 };

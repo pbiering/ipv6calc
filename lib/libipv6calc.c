@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.37 2014/02/03 20:48:04 ds6peter Exp $
- * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calc.c,v 1.38 2014/05/11 09:49:38 ds6peter Exp $
+ * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for some tools
@@ -86,7 +86,7 @@ void string_to_reverse(char *string) {
  * dotted-reverse string
  * in : pointer to a string
  */
-void string_to_reverse_dotted(char *string) {
+void string_to_reverse_dotted(char *string, const size_t string_length) {
 	char resultstring[NI_MAXHOST], tempstring[NI_MAXHOST];
 	char *token, *cptr, **ptrptr;
 	int flag_first = 1;
@@ -94,34 +94,34 @@ void string_to_reverse_dotted(char *string) {
 	ptrptr = &cptr;
 
 	/* clear result string */
-	snprintf(resultstring, sizeof(resultstring) - 1 , "%s", "");
+	snprintf(resultstring, sizeof(resultstring), "%s", "");
 
 	/* check for starting dot */
 	if ( string[0] == '.' ) {
-		snprintf(tempstring, sizeof(tempstring) - 1, "%s.", resultstring);
-		snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
+		snprintf(tempstring, sizeof(tempstring), "%s.", resultstring);
+		snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
 	};
 
 	token = strtok_r(string, ".", ptrptr);
 
 	while (token != NULL) {
 		if (flag_first == 1) {
-			snprintf(tempstring, sizeof(tempstring) - 1, "%s%s", token, resultstring);
+			snprintf(tempstring, sizeof(tempstring), "%s%s", token, resultstring);
 			flag_first = 0;
 		} else {
-			snprintf(tempstring, sizeof(tempstring) - 1, "%s.%s", token, resultstring);
+			snprintf(tempstring, sizeof(tempstring), "%s.%s", token, resultstring);
 		};
-		snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
+		snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
 
 		token = strtok_r(NULL, ".", ptrptr);
 	};
 	
 	if ( string[strlen(string) - 1] == '.' ) {
-		snprintf(tempstring, sizeof(tempstring) - 1, ".%s", resultstring);
-		snprintf(resultstring, sizeof(resultstring) - 1, "%s", tempstring);
+		snprintf(tempstring, sizeof(tempstring), ".%s", resultstring);
+		snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
 	};
 
-	snprintf(string, NI_MAXHOST - 1, ".%s", resultstring);
+	snprintf(string, string_length, ".%s", resultstring);
 	
 	return;
 };
@@ -205,7 +205,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 	if ( length == 20 && numdots == 0 && numcolons == 0 ) {
 	        /* probably a base85 one */
 		DEBUGPRINT_NA(DEBUG_libipv6calc, " check FORMAT_base85");
-		result = librfc1924_formatcheck(string, resultstring);	
+		result = librfc1924_formatcheck(string, resultstring, sizeof(resultstring));
 	        if ( result == 0 ) {
 			/* ok: base85 */
 			type = FORMAT_base85;
@@ -222,7 +222,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 	if ( strncmp(string, "\\[", 2) == 0 ) {
 		/* check for Bitstring label: \[x..../dd] */
 		DEBUGPRINT_NA(DEBUG_libipv6calc, " check FORMAT_bitstring");
-		result = librfc2874_formatcheck(string, resultstring);	
+		result = librfc2874_formatcheck(string, resultstring, strlen(resultstring));	
 	        if ( result == 0 ) {
 			/* ok: bitstring label */
 			type = FORMAT_bitstring;
@@ -371,7 +371,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 	if (numcolons == 0 && numdots > 0 && numslashes == 0 && numspaces == 0 && (numalnums + numdots) == length) {
 		/* check for reverse nibble string */
 		DEBUGPRINT_NA(DEBUG_libipv6calc, " check FORMAT_revnibbels_int");
-		result = librfc1886_formatcheck(string, resultstring);	
+		result = librfc1886_formatcheck(string, resultstring, sizeof(resultstring));
 	        if ( result == 0 ) {
 			/* ok: reverse nibble string */
 			type = FORMAT_revnibbles_int;
@@ -436,7 +436,7 @@ int libipv6calc_filter_parse(const char *expression, s_ipv6calc_filter_master *f
 	ptrptr = &cptr;
 	int r, token_used, result = 0;
 
-	snprintf(tempstring, NI_MAXHOST - 1, "%s", expression);
+	snprintf(tempstring, sizeof(tempstring), "%s", expression);
 
 	/* split expression */
 	charptr = strtok_r(tempstring, ",", ptrptr);
@@ -536,7 +536,7 @@ const char *libipv6calc_anon_method_name(const s_ipv6calc_anon_set *ipv6calc_ano
 void libipv6calc_anon_infostring(char *string, const int stringlength, const s_ipv6calc_anon_set *ipv6calc_anon_set) {
 	const char *method_name = libipv6calc_anon_method_name(ipv6calc_anon_set);
 
-	snprintf(string, stringlength - 1, "set=%s,mask-ipv6=%d,mask-ipv4=%d,mask-eui64=%d,mask-mac=%d,method=%s", ipv6calc_anon_set->name, ipv6calc_anon_set->mask_ipv6, ipv6calc_anon_set->mask_ipv4, ipv6calc_anon_set->mask_eui64, ipv6calc_anon_set->mask_mac, (method_name == NULL ? "unknown" : method_name));
+	snprintf(string, stringlength, "set=%s,mask-ipv6=%d,mask-ipv4=%d,mask-eui64=%d,mask-mac=%d,method=%s", ipv6calc_anon_set->name, ipv6calc_anon_set->mask_ipv6, ipv6calc_anon_set->mask_ipv4, ipv6calc_anon_set->mask_eui64, ipv6calc_anon_set->mask_mac, (method_name == NULL ? "unknown" : method_name));
 
 	return;
 };

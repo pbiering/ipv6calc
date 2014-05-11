@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.55 2014/05/03 07:28:31 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.56 2014/05/11 09:49:38 ds6peter Exp $
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -444,7 +444,7 @@ static void lineparser(void) {
 			continue;
 		};
 
-		snprintf(token, sizeof(token) - 1, "%s", charptr);
+		snprintf(token, sizeof(token), "%s", charptr);
 		
 		DEBUGPRINT_WA(DEBUG_ipv6logstats_processing, "Token 1: '%s'", token);
 
@@ -463,11 +463,11 @@ static void lineparser(void) {
 		/* fill related structure */
 		switch (inputtype) {
 			case FORMAT_ipv6addr:
-				retval = addr_to_ipv6addrstruct(token, resultstring, &ipv6addr);
+				retval = addr_to_ipv6addrstruct(token, resultstring, sizeof(resultstring), &ipv6addr);
 				break;
 
 			case FORMAT_ipv4addr:
-				retval = addr_to_ipv4addrstruct(token, resultstring, &ipv4addr);
+				retval = addr_to_ipv4addrstruct(token, resultstring, sizeof(resultstring), &ipv4addr);
 				break;
 
 			default:
@@ -494,7 +494,7 @@ static void lineparser(void) {
 					inputtype = FORMAT_ipv4addr;
 
 					// create text represenation
-					r = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, token, 0);
+					r = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, token, sizeof(token), 0);
 				};
 				break;
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.54 2014/04/26 13:03:56 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.55 2014/05/11 09:49:38 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -1841,7 +1841,7 @@ const char *libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(const char
 			ipv6calc_ipv6addr ipv6addr;
 			char tempstring[NI_MAXHOST] = "";
 			int result = 0;
-			result = addr_to_ipv6addrstruct(addr, tempstring, &ipv6addr);
+			result = addr_to_ipv6addrstruct(addr, tempstring, sizeof(tempstring), &ipv6addr);
 			if (result != 0) {
 				goto END_libipv6calc_db_wrapper;
 			};
@@ -1899,7 +1899,7 @@ const char *libipv6calc_db_wrapper_GeoIP_wrapper_country_name_by_addr(const char
 			ipv6calc_ipv6addr ipv6addr;
 			char tempstring[NI_MAXHOST] = "";
 			int result = 0;
-			result = addr_to_ipv6addrstruct(addr, tempstring, &ipv6addr);
+			result = addr_to_ipv6addrstruct(addr, tempstring, sizeof(tempstring), &ipv6addr);
 			if (result != 0) {
 				goto END_libipv6calc_db_wrapper;
 			};

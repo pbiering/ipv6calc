@@ -52,7 +52,7 @@ int main(int argc,char *argv[]) {
 				break;
 
 			case 'r':
-				snprintf(registry, sizeof(registry) - 1, "%s", optarg);
+				snprintf(registry, sizeof(registry), "%s", optarg);
 				break;
 
 			default:

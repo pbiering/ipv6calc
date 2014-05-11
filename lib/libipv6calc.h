@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.23 2014/02/09 18:45:07 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.24 2014/05/11 09:49:38 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -108,7 +108,7 @@ extern void string_to_upcase(char *string);
 extern void string_to_lowcase(char *string);
 
 extern void string_to_reverse(char *string);
-extern void string_to_reverse_dotted(char *string);
+extern void string_to_reverse_dotted(char *string, const size_t string_length);
 
 extern uint32_t libipv6calc_autodetectinput(const char *string);
 

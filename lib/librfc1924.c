@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1924.c
- * Version    : $Id: librfc1924.c,v 1.12 2014/02/03 20:48:04 ds6peter Exp $
- * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: librfc1924.c,v 1.13 2014/05/11 09:49:38 ds6peter Exp $
+ * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *              and 2006 by Niko Tyni <ntyni (at) iki.fi>
  *
  * Information:
@@ -114,7 +114,7 @@ void unpk85(char *b, uint16_t *ret)
  * ret: ==0: ok, !=0: error
  */
 
-int ipv6addrstruct_to_base85(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring) {
+int ipv6addrstruct_to_base85(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length) {
 	int retval = 1, i;
 
 	uint16_t words[8];
@@ -126,7 +126,7 @@ int ipv6addrstruct_to_base85(const ipv6calc_ipv6addr *ipv6addrp, char *resultstr
 
 	/* convert */
 	pk85(words, ret);
-	snprintf(resultstring, NI_MAXHOST - 1, "%s", ret);	
+	snprintf(resultstring, resultstring_length, "%s", ret);	
 
 	retval = 0;	
 	return (retval);
@@ -140,24 +140,24 @@ int ipv6addrstruct_to_base85(const ipv6calc_ipv6addr *ipv6addrp, char *resultstr
  * ret: ==0: ok, !=0: error
  */
 
-int base85_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6calc_ipv6addr *ipv6addrp) {
+int base85_to_ipv6addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1, i;
 	char tempstring[NI_MAXHOST];
 	uint16_t result[8];
 
-	retval = librfc1924_formatcheck(addrstring, resultstring);
+	retval = librfc1924_formatcheck(addrstring, resultstring, resultstring_length);
 
 	if (retval != 0) {
 		/* format check fails */
 		return (1);
 	};
 
-	if (strlen(addrstring) > sizeof(tempstring) - 1) {
+	if (strlen(addrstring) >= sizeof(tempstring)) {
 		fprintf(stderr, "Input too long: %s\n", addrstring);
 		return (1);
 	};
 
-	snprintf(tempstring, sizeof(tempstring) - 1, "%s", addrstring);
+	snprintf(tempstring, sizeof(tempstring), "%s", addrstring);
 		
 	unpk85(tempstring, result);
 
@@ -185,7 +185,7 @@ int base85_to_ipv6addrstruct(const char *addrstring, char *resultstring, ipv6cal
  * in : string
  * ret: ==0: ok, !=0: error
  */
-int librfc1924_formatcheck(const char *string, char *infostring) {
+int librfc1924_formatcheck(const char *string, char *infostring, const size_t infostring_length) {
 	size_t length, cnt;
 
 	/* clear result string */
@@ -195,14 +195,14 @@ int librfc1924_formatcheck(const char *string, char *infostring) {
 
 	/* check length */
 	if ( length != 20 ) {
-		snprintf(infostring, NI_MAXHOST - 1, "Given base85 formatted address has not 20 chars!");
+		snprintf(infostring, infostring_length, "Given base85 formatted address has not 20 chars!");
 		return (1);
 	};
 
 	/* check for base85 chars only content */
 	cnt = strspn(string, librfc1924_charset);
 	if ( cnt != 20 ) {
-		snprintf(infostring, NI_MAXHOST - 1, "Illegal character in given base85 formatted address on position %d (%c)!", (int) cnt + 1, string[cnt]);
+		snprintf(infostring, infostring_length, "Illegal character in given base85 formatted address on position %d (%c)!", (int) cnt + 1, string[cnt]);
 		return (1);
 	};
 

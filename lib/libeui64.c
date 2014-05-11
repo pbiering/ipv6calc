@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libeui64.c
- * Version    : $Id: libeui64.c,v 1.10 2013/11/02 16:41:01 ds6peter Exp $
- * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libeui64.c,v 1.11 2014/05/11 09:49:38 ds6peter Exp $
+ * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library EUI-64 identifier handling
@@ -64,7 +64,7 @@ int create_eui64_from_mac(ipv6calc_ipv6addr *ipv6addrp, ipv6calc_macaddr *macadd
  * out: *resultstring = EUI-64 address string
  * ret: ==0: ok, !=0: error
  */
-int libeui64_eui64addrstruct_to_string(const ipv6calc_eui64addr *eui64addr_p, char *resultstring, const uint32_t formatoptions) {
+int libeui64_eui64addrstruct_to_string(const ipv6calc_eui64addr *eui64addr_p, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST];
 
 	/* address */
@@ -79,9 +79,9 @@ int libeui64_eui64addrstruct_to_string(const ipv6calc_eui64addr *eui64addr_p, ch
 		(unsigned int) eui64addr_p->addr[7]);
 
 	if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
-		snprintf(resultstring, NI_MAXHOST, "EUI64=%s", tempstring);
+		snprintf(resultstring, resultstring_length, "EUI64=%s", tempstring);
 	} else {
-		snprintf(resultstring, NI_MAXHOST, "%s", tempstring);
+		snprintf(resultstring, resultstring_length, "%s", tempstring);
 	};
 
 	return(0);
@@ -94,7 +94,7 @@ int libeui64_eui64addrstruct_to_string(const ipv6calc_eui64addr *eui64addr_p, ch
  * out: *resultstring = result
  * ret: ==0: ok, !=0: error
  */
-int libeui64_addr_to_eui64addrstruct(const char *addrstring, char *resultstring, ipv6calc_eui64addr *eui64addrp) {
+int libeui64_addr_to_eui64addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_eui64addr *eui64addrp) {
 	int retval = 1, result, i, ccolons = 0, cdashes = 0, cspaces = 0;
 	size_t cnt;
 	int temp[8];
@@ -103,7 +103,7 @@ int libeui64_addr_to_eui64addrstruct(const char *addrstring, char *resultstring,
 
 	/* check length */
 	if ( ( strlen(addrstring) < 15 ) || ( strlen(addrstring) > 23 ) ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "Error in given 64-bit EUI-64 address, has not 15 to 21 chars!");
+		snprintf(resultstring, resultstring_length, "Error in given 64-bit EUI-64 address, has not 15 to 21 chars!");
 		retval = 1;
 		return (retval);
 	};
@@ -111,7 +111,7 @@ int libeui64_addr_to_eui64addrstruct(const char *addrstring, char *resultstring,
 	/* check for hex chars and ":"/"-"/" " only content */
 	cnt = strspn(addrstring, ChSet);
 	if ( cnt < strlen(addrstring) ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "Illegal character in given EUI-64 address '%s' on position %d (%c)!", addrstring, (int) cnt+1, addrstring[cnt]);
+		snprintf(resultstring, resultstring_length, "Illegal character in given EUI-64 address '%s' on position %d (%c)!", addrstring, (int) cnt+1, addrstring[cnt]);
 		retval = 1;
 		return (retval);
 		
@@ -129,7 +129,7 @@ int libeui64_addr_to_eui64addrstruct(const char *addrstring, char *resultstring,
 	};
 
 	if ( ! ( (ccolons == 7 && cdashes == 0 && cspaces == 0) || (ccolons == 0 && cdashes == 5 && cspaces == 0)  || (ccolons == 0 && cdashes == 0 && cspaces == 7) || (ccolons == 0 && cdashes == 0 && cspaces == 0 && strlen(addrstring) == 16)) ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "Error, given EUI-64 address '%s' is not valid (number of colons/dashes/spaces is not 5 or number of dashes is not 1)!", addrstring);
+		snprintf(resultstring, resultstring_length, "Error, given EUI-64 address '%s' is not valid (number of colons/dashes/spaces is not 5 or number of dashes is not 1)!", addrstring);
 		retval = 1;
 		return (retval);
 	};
@@ -144,13 +144,13 @@ int libeui64_addr_to_eui64addrstruct(const char *addrstring, char *resultstring,
 	} else if ( cdashes == 0 ) {
 		result = sscanf(addrstring, "%2x%2x%2x%2x%2x%2x%2x%2x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5], &temp[6], &temp[7]);
 	} else {
-		snprintf(resultstring, NI_MAXHOST - 1, "Error, unexpected failure on scanning EUI-64 address '%s'!", addrstring);
+		snprintf(resultstring, resultstring_length, "Error, unexpected failure on scanning EUI-64 address '%s'!", addrstring);
 		retval = 1;
 		return (retval);
 	};
 
 	if ( result != 8 ) {
-		snprintf(resultstring, NI_MAXHOST - 1, "Error splitting address %s, got %d items instead of 8!", addrstring, result);
+		snprintf(resultstring, resultstring_length, "Error splitting address %s, got %d items instead of 8!", addrstring, result);
 		retval = 1;
 		return (retval);
 	};
@@ -158,7 +158,7 @@ int libeui64_addr_to_eui64addrstruct(const char *addrstring, char *resultstring,
 	/* check address words range */
 	for ( i = 0; i <= 7; i++ ) {
 		if ( ( temp[i] < 0x0 ) || ( temp[i] > 0xff ) )    {
-			snprintf(resultstring, NI_MAXHOST - 1, "Error, given EUI-64 address '%s' is not valid on position %d!", addrstring, i);
+			snprintf(resultstring, resultstring_length, "Error, given EUI-64 address '%s' is not valid on position %d!", addrstring, i);
 			retval = 1;
 			return (retval);
 		};

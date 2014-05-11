@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.20 2014/04/25 05:48:12 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.21 2014/05/11 09:49:38 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -106,13 +106,13 @@ extern int         libipv6calc_db_wrapper_registry_num_by_as_num32(const uint32_
 extern int         libipv6calc_db_wrapper_registry_num_by_cc_index(const uint16_t cc_index);
 
 // IEEE
-extern int libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(char *resultstring, const ipv6calc_macaddr *macaddrp);
-extern int libipv6calc_db_wrapper_ieee_vendor_string_short_by_macaddr(char *resultstring, const ipv6calc_macaddr *macaddrp);
+extern int libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(char *resultstring, const size_t resultstring_length, const ipv6calc_macaddr *macaddrp);
+extern int libipv6calc_db_wrapper_ieee_vendor_string_short_by_macaddr(char *resultstring, const size_t resultstring_length, const ipv6calc_macaddr *macaddrp);
 
 // IPv4 Registry
-extern int libipv6calc_db_wrapper_registry_string_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring);
+extern int libipv6calc_db_wrapper_registry_string_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const size_t resultstring_length);
 extern int libipv6calc_db_wrapper_registry_num_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp);
 
 // IPv6 Registry
-extern int libipv6calc_db_wrapper_registry_string_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring);
+extern int libipv6calc_db_wrapper_registry_string_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length);
 extern int libipv6calc_db_wrapper_registry_num_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp);
