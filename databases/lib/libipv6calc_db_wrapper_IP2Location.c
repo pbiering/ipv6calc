@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.15 2014/05/10 11:38:50 ds6peter Exp $
- * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.16 2014/05/16 20:34:02 ds6peter Exp $
+ * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc IP2Location database wrapper
@@ -334,7 +334,7 @@ const char * libipv6calc_db_wrapper_IP2Location_lib_version(void) {
 	if (dl_IP2Location_handle == NULL) {
 		result_IP2Location_lib_version = "LIBARY-NOT-LOADED";
 	} else {
-		result_IP2Location_lib_version = "version-unknown";
+		result_IP2Location_lib_version = "version-not-provided";
 	};
 
 	return(result_IP2Location_lib_version);

@@ -1,5 +1,5 @@
-#LyX 2.0 created this file. For more info see http://www.lyx.org/
-\lyxformat 413
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
 \begin_document
 \begin_header
 \textclass docbook
@@ -12,13 +12,13 @@
 \font_roman default
 \font_sans default
 \font_typewriter default
+\font_math auto
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
 \font_sf_scale 100
 \font_tt_scale 100
-
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -29,15 +29,24 @@
 \use_hyperref false
 \papersize default
 \use_geometry false
-\use_amsmath 1
-\use_esint 0
-\use_mhchem 1
-\use_mathdots 1
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 0
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
 \cite_engine basic
+\cite_engine_type default
+\biblio_style plain
 \use_bibtopic false
 \use_indices false
 \paperorientation portrait
 \suppress_date false
+\justification true
 \use_refstyle 0
 \index Index
 \shortcut idx
@@ -99,7 +108,7 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>4.1</revnumber> <date>2014-02-13</date> <authorinitials>PB<
+<revision> <revnumber>4.2</revnumber> <date>2014-05-16</date> <authorinitials>PB<
 /authorinitials></revision>
 \end_layout
 
@@ -164,7 +173,7 @@ Latest version
 \end_layout
 
 \begin_layout Standard
-Latest version since last update of this page is 0.96.0 (released 2014-02-13)
+Latest version since last update of this page is 0.97.0 (released 2014-05-xx)
 \end_layout
 
 \begin_layout Subsection
@@ -537,12 +546,19 @@ CentOS 5 and CentOS 6 are also platforms for regression tests.
 \end_layout
 
 \begin_layout Subsubsection
-Mandrake Linux
+Gentoo/Funtoo
 \end_layout
 
 \begin_layout Standard
-Linux Mandrake is very similar to Red Hat Linux, therefore a rebuild should
- work, too.
+Package is maintained
+\end_layout
+
+\begin_layout Subsubsection
+Ubuntu
+\end_layout
+
+\begin_layout Standard
+Package is maintained
 \end_layout
 
 \begin_layout Subsubsection
@@ -854,7 +870,12 @@ $ ./autogen.sh -h
 
 \begin_layout Code
 
-Supported options:    -?|-h|--help        : this help
+Supported options:
+\end_layout
+
+\begin_layout Code
+
+   -?|-h|--help        : this help
 \end_layout
 
 \begin_layout Code
@@ -904,17 +925,22 @@ Supported options:    -?|-h|--help        : this help
 
 \begin_layout Code
 
-   --disable-db-ipv6   : disable builtin IPv6 database
+   --disable-db-ipv6   : disable built-in IPv6 database
 \end_layout
 
 \begin_layout Code
 
-   --geoip-ipv6-compat : enable GeoIP IPv6 compatibility mode 
+   --geoip-ipv6-compat : enable GeoIP IPv6 compatibility mode
 \end_layout
 
 \begin_layout Code
 
-   -S                  : enable shared library mode 
+   -S                  : enable shared library mode
+\end_layout
+
+\begin_layout Code
+
+   -no-static-build    : skip static build
 \end_layout
 
 \begin_layout Section
@@ -1036,12 +1062,12 @@ Option
 
 \begin_layout Code
 
-$ ./ipv6calc/ipv6calc -v 
+$ ipv6calc -v
 \end_layout
 
 \begin_layout Code
 
-ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
+ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
 S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE
  ANON_KEEP-TYPE-ASN-CC
 \end_layout
@@ -1061,18 +1087,14 @@ Option
 
 \begin_layout Code
 
-$ ./ipv6calc/ipv6calc -v -v
+$ ipv6calc -vv
 \end_layout
 
 \begin_layout Code
 
-ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
+ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
 S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE
  ANON_KEEP-TYPE-ASN-CC
-\end_layout
-
-\begin_layout Code
-
 \end_layout
 
 \begin_layout Code
@@ -1098,7 +1120,7 @@ IP2Location support by dynamic library load
 \begin_layout Code
 
 IP2Location configured dynamic library file and version: libIP2Location.so
- version-unknown
+ version-not-provided
 \end_layout
 
 \begin_layout Code
@@ -1125,28 +1147,28 @@ GeoIP: info of available databases in directory: /usr/share/GeoIP (max:
 \begin_layout Code
 
 GeoIP: GeoIP Country Edition            :[ 1] /usr/share/GeoIP/GeoIP.dat
-               (GEO-106FREE 20131001 Build 1 Copyright (c) 2013 MaxMind
+               (GEO-106FREE 20140506 Build 1 Copyright (c) 2014 MaxMind
  Inc All Rights Reserved)
 \end_layout
 
 \begin_layout Code
 
 GeoIP: GeoIP City Edition, Rev 1        :[ 2] /usr/share/GeoIP/GeoIPCity.dat
-           (GEO-533LITE 20131001 Build 1 Copyright (c) 2013 MaxMind Inc
+           (GEO-533LITE 20140506 Build 1 Copyright (c) 2014 MaxMind Inc
  All Rights Reserved)
 \end_layout
 
 \begin_layout Code
 
 GeoIP: GeoIP ASNum Edition              :[ 9] /usr/share/GeoIP/GeoIPASNum.dat
-          (GEO-117 20130926 Build 1 Copyright (c) 2013 MaxMind Inc All Rights
+          (GEO-117 20130611 Build 1 Copyright (c) 2013 MaxMind Inc All Rights
  Reserved)
 \end_layout
 
 \begin_layout Code
 
 GeoIP: GeoIP Country V6 Edition         :[12] /usr/share/GeoIP/GeoIPv6.dat
-             (GEO-106FREE 20131001 Build 1 Copyright (c) 2013 MaxMind Inc
+             (GEO-106FREE 20140506 Build 1 Copyright (c) 2014 MaxMind Inc
  All Rights Reserved)
 \end_layout
 
@@ -1160,7 +1182,7 @@ GeoIP: GeoIP ASNum V6 Edition           :[21] /usr/share/GeoIP/GeoIPASNumv6.dat
 \begin_layout Code
 
 GeoIP: GeoIP City Edition V6, Rev 1     :[30] /usr/share/GeoIP/GeoIPCityv6.dat
-         (GEO-536LITE 20131001 Build 1 Copyright (c) 2013 MaxMind Inc All
+         (GEO-536LITE 20140506 Build 1 Copyright (c) 2014 MaxMind Inc All
  Rights Reserved)
 \end_layout
 
@@ -1177,7 +1199,7 @@ IP2Location: info of available databases in directory: /usr/share/IP2Location
 \begin_layout Code
 
 IP2Location: IPv4 Country               : /usr/share/IP2Location/IP-COUNTRY.BIN
-    (IP2L-DB24 20130411 Copyright (c) 2013 IP2Location All Rights Reserved)
+    (IP2L-DB24 20140115 Copyright (c) 2014 IP2Location All Rights Reserved)
 \end_layout
 
 \begin_layout Code
@@ -1198,30 +1220,30 @@ BuiltIn: info of available databases
 
 \begin_layout Code
 
-BuiltIn: ASN  : IANA/20130730
+BuiltIn: ASN  : IANA/20140319
 \end_layout
 
 \begin_layout Code
 
-BuiltIn: CC   : AFRINIC/20130806 APNIC/20130805 ARIN/20130805 LACNIC/20130805
- RIPENCC/20130805
+BuiltIn: CC   : AFRINIC/20140503 APNIC/20140502 ARIN/20140502 LACNIC/20140502
+ RIPENCC/20140502
 \end_layout
 
 \begin_layout Code
 
-BuiltIn: IPv4 : AFRINIC/20131014 APNIC/20131014 ARIN/20131014 IANA/20130520
- LACNIC/20131014 RIPENCC/20131014
+BuiltIn: IPv4 : AFRINIC/20140503 APNIC/20140502 ARIN/20140502 IANA/20140501
+ LACNIC/20140502 RIPENCC/20140502
 \end_layout
 
 \begin_layout Code
 
-BuiltIn: IPv6 : AFRINIC/20131015 APNIC/20131014 ARIN/20131014 IANA/20130215
- LACNIC/20131014 RIPENCC/20131014
+BuiltIn: IPv6 : AFRINIC/20140503 APNIC/20140502 ARIN/20140502 IANA/20140319
+ LACNIC/20140502 RIPENCC/20140502
 \end_layout
 
 \begin_layout Code
 
-BuiltIn: IEEE : IAB/20131015 OUI/20131015 OUI36/20131015
+BuiltIn: IEEE : IAB/20140503 OUI/20140503 OUI36/20140503
 \end_layout
 
 \begin_layout Standard
@@ -1264,7 +1286,7 @@ A simple example is the conversion of an IPv6 address to a DNS PTR query
 
 \begin_layout Code
 
-$ ./ipv6calc --out revnibbles.arpa 2001:db8::1
+$ ipv6calc --out revnibbles.arpa 2001:db8::1
 \end_layout
 
 \begin_layout Code
@@ -1285,7 +1307,7 @@ Like you see, input format was autodetected.
 
 \begin_layout Code
 
-$ ./ipv6calc -q --out revnibbles.arpa 2001:db8::1/64
+$ ipv6calc -q --out revnibbles.arpa 2001:db8::1/64
 \end_layout
 
 \begin_layout Code
@@ -1311,7 +1333,7 @@ But ipv6calc can do many more for you! Next example shows you the extraction
 
 \begin_layout Code
 
-$ ./ipv6calc -q --action conv6to4 --in ipv6 2002:c0a8:fb61::1 --out ipv4
+$ ipv6calc -q --action conv6to4 --in ipv6 2002:c0a8:fb61::1 --out ipv4
 \end_layout
 
 \begin_layout Code
@@ -1325,7 +1347,7 @@ This also works vice-versa:
 
 \begin_layout Code
 
-$ ./ipv6calc -q --action conv6to4 --in ipv4 192.168.251.97 --out ipv6
+$ ipv6calc -q --action conv6to4 --in ipv4 192.168.251.97 --out ipv6
 \end_layout
 
 \begin_layout Code
@@ -1348,7 +1370,7 @@ Information about a simple IPv6 address:
 
 \begin_layout Code
 
-$ ./ipv6calc -q -i 3ffe:ffff::210:a4ff:fe01:2345
+$ ipv6calc -q -i 3ffe:ffff::210:a4ff:fe01:2345
 \end_layout
 
 \begin_layout Code
@@ -1397,7 +1419,7 @@ Information about a Teredo IPv6 address:
 
 \begin_layout Code
 
-$ ./ipv6calc -q -i 3ffe:831f:ce49:7601:8000:efff:af4a:86BF
+$ ipv6calc -q -i 3ffe:831f:ce49:7601:8000:efff:af4a:86BF
 \end_layout
 
 \begin_layout Code
@@ -1465,7 +1487,7 @@ target "http://www.maxmind.com/"
 
 \begin_layout Code
 
-$ ./ipv6calc -q -i -m 2a01:238:423d:8800:85b3:9e6b:3019:8909  
+$ ipv6calc -q -i -m 2a01:238:423d:8800:85b3:9e6b:3019:8909  
 \end_layout
 
 \begin_layout Code
@@ -1475,22 +1497,12 @@ IPV6=2a01:0238:423d:8800:85b3:9e6b:3019:8909
 
 \begin_layout Code
 
-IPV6_ANON=2a01:0238:423d:8809:a929:4941:0000:000c
+IPV6_ANON=a909:16fa:9091:a448:a909:4941:0000:0007
 \end_layout
 
 \begin_layout Code
 
 IPV6_TYPE=unicast,global-unicast,productive,iid-random,iid,iid-local
-\end_layout
-
-\begin_layout Code
-
-SLA=8800
-\end_layout
-
-\begin_layout Code
-
-IPV6_REGISTRY=RIPENCC
 \end_layout
 
 \begin_layout Code
@@ -1501,6 +1513,21 @@ IPV6_COUNTRYCODE=DE
 \begin_layout Code
 
 IPV6_AS_NUM=6724
+\end_layout
+
+\begin_layout Code
+
+IPV6_AS_TEXT=AS6724 STRATO STRATO AG
+\end_layout
+
+\begin_layout Code
+
+IPV6_REGISTRY=RIPENCC
+\end_layout
+
+\begin_layout Code
+
+SLA=8800
 \end_layout
 
 \begin_layout Code
@@ -1530,16 +1557,6 @@ GEOIP_AS_TEXT=AS6724 STRATO STRATO AG
 
 \begin_layout Code
 
-GEOIP_LATITUDE=51.000000
-\end_layout
-
-\begin_layout Code
-
-GEOIP_LONGITUDE=9.000000
-\end_layout
-
-\begin_layout Code
-
 GEOIP_COUNTRY_SHORT=DE
 \end_layout
 
@@ -1550,15 +1567,25 @@ GEOIP_COUNTRY_LONG=Germany
 
 \begin_layout Code
 
+GEOIP_LATITUDE=51.000000
+\end_layout
+
+\begin_layout Code
+
+GEOIP_LONGITUDE=9.000000
+\end_layout
+
+\begin_layout Code
+
 IP2LOCATION_DATABASE_INFO=IP2L-DB1 20130307 Copyright (c) 2013 IP2Location
  All Rights Reserved
 \end_layout
 
 \begin_layout Code
 
-GEOIP_DATABASE_INFO=GEO-106FREE 20131001 Build 1 Copyright (c) 2013 MaxMind
+GEOIP_DATABASE_INFO=GEO-106FREE 20140506 Build 1 Copyright (c) 2014 MaxMind
  Inc All Rights Reserved / GEO-117 20130306 Build 1 Copyright (c) 2013 MaxMind
- Inc All Rights Reserved / GEO-536LITE 20131001 Build 1 Copyright (c) 2013
+ Inc All Rights Reserved / GEO-536LITE 20140506 Build 1 Copyright (c) 2014
  MaxMind Inc All Rights Reserved
 \end_layout
 
@@ -1569,12 +1596,12 @@ IPV6CALC_NAME=ipv6calc
 
 \begin_layout Code
 
-IPV6CALC_VERSION=0.95.0.rc.1
+IPV6CALC_VERSION=0.97.0
 \end_layout
 
 \begin_layout Code
 
-IPV6CALC_COPYRIGHT="(P) & (C) 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
+IPV6CALC_COPYRIGHT="(P) & (C) 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 "
 \end_layout
 
@@ -1679,8 +1706,15 @@ and many more conversions were added.
 \end_layout
 
 \begin_layout Standard
-Up to version 0.39, only old-style options (which perhaps - but it's not
- planned at the moment - are going obsolete sometimes the future) were available.
+Up to version 0.39, only old-style options (aka 
+\begin_inset Quotes eld
+\end_inset
+
+shortcut
+\begin_inset Quotes erd
+\end_inset
+
+ options).
  They are one-in-all options, specifying input/action/output in one token.
  Internally this options will be converted into new-style options.
 \end_layout
@@ -1703,13 +1737,19 @@ IP2Location and GeoIP options only appear if compiled with such support.
 
 \begin_layout Code
 
-ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
-S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
+$ ipv6calc -h
 \end_layout
 
 \begin_layout Code
 
-(P) & (C) 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
+ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
+S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE
+ ANON_KEEP-TYPE-ASN-CC
+\end_layout
+
+\begin_layout Code
+
+(P) & (C) 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 \end_layout
 
 \begin_layout Code
@@ -1718,8 +1758,8 @@ S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE
 
 \begin_layout Code
 
-This program formats and calculates IPv6 addresses and can do many more
- tricky things
+This program formats and calculates IPv6/IPv4/MAC addresses and can do many
+ more tricky things
 \end_layout
 
 \begin_layout Code
@@ -1733,7 +1773,7 @@ This program formats and calculates IPv6 addresses and can do many more
 
 \begin_layout Code
 
-                                can also be set IPV6CALC_DEBUG environment
+                                can also be set by IPV6CALC_DEBUG environment
  value
 \end_layout
 
@@ -1766,6 +1806,10 @@ This program formats and calculates IPv6 addresses and can do many more
 
   [--db-ip2location-lib <file>]      : IP2Location library file (default:
  libIP2Location.so)
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -1887,12 +1931,122 @@ This program formats and calculates IPv6 addresses and can do many more
 
 \begin_layout Code
 
- 
 \end_layout
 
 \begin_layout Code
 
- To see old-style option use: --printoldoptions
+ Usage with shortcut options: <shortcut option> [<format option> ...] <input
+ data>
+\end_layout
+
+\begin_layout Code
+
+  for more information and available format options use: <shortcut option>
+ -?|-h|--help
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+  -r|--addr2ip6_int (-O revnibbles.int)
+\end_layout
+
+\begin_layout Code
+
+  -r|--addr_to_ip6int (-O revnibbles.int)
+\end_layout
+
+\begin_layout Code
+
+  -a|--addr2ip6_arpa (-O revnibbles.arpa)
+\end_layout
+
+\begin_layout Code
+
+  -a|--addr_to_ip6arpa (-O revnibbles.arpa)
+\end_layout
+
+\begin_layout Code
+
+  -b|--addr_to_bitstring (-O bitstring)
+\end_layout
+
+\begin_layout Code
+
+     --addr2compaddr (--printcompressed)
+\end_layout
+
+\begin_layout Code
+
+     --addr_to_compressed (--printcompressed)
+\end_layout
+
+\begin_layout Code
+
+     --addr2uncompaddr (--printuncompressed)
+\end_layout
+
+\begin_layout Code
+
+     --addr_to_uncompressed (--printuncompressed)
+\end_layout
+
+\begin_layout Code
+
+     --addr_to_base85 (-I ipv6addr -O base85)
+\end_layout
+
+\begin_layout Code
+
+     --base85_to_addr (-I base85 -O ipv6addr)
+\end_layout
+
+\begin_layout Code
+
+     --mac_to_eui64 (-I mac -O eui64)
+\end_layout
+
+\begin_layout Code
+
+     --addr2fulluncompaddr (--printfulluncompressed)
+\end_layout
+
+\begin_layout Code
+
+     --addr_to_fulluncompressed (--printfulluncompressed)
+\end_layout
+
+\begin_layout Code
+
+     --addr2if_inet6 (-I ipv6addr -O ifinet6)
+\end_layout
+
+\begin_layout Code
+
+     --addr_to_ifinet6 (-I ipv6addr -O ifinet6)
+\end_layout
+
+\begin_layout Code
+
+     --if_inet62addr (-I ifinet6 -O ipv6addr --printcompressed)
+\end_layout
+
+\begin_layout Code
+
+     --ifinet6_to_compressed (-I ifinet6 -O ipv6addr --printcompressed)
+\end_layout
+
+\begin_layout Code
+
+     --eui64_to_privacy (-I iid_token -O iid_token -A genprivacyiid)
+\end_layout
+
+\begin_layout Code
+
+     --ipv4_to_6to4addr (-I ipv4 -O ipv6addr -A conv6to4)
 \end_layout
 
 \begin_layout Subsubsection
@@ -1901,18 +2055,23 @@ Input-type options
 
 \begin_layout Code
 
-$ ./ipv6calc --in -?
+$ ipv6calc --in -?
 \end_layout
 
 \begin_layout Code
 
-ipv6calc: version 0.96.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
-S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
+ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
+S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE
+ ANON_KEEP-TYPE-ASN-CC
 \end_layout
 
 \begin_layout Code
 
 (P) & (C) 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -1972,6 +2131,11 @@ S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE
 
 \begin_layout Code
 
+  eui64           : EUI-64 identifier (64 bits)
+\end_layout
+
+\begin_layout Code
+
   base85          : Base-85 string
 \end_layout
 
@@ -2006,18 +2170,23 @@ Output-type options:
 
 \begin_layout Code
 
-$ ./ipv6calc --out -?
+$ ipv6calc --out -?
 \end_layout
 
 \begin_layout Code
 
-ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
-S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
+ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
+S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE
+ ANON_KEEP-TYPE-ASN-CC
 \end_layout
 
 \begin_layout Code
 
-(P) & (C) 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -2117,7 +2286,16 @@ S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE
 
 \begin_layout Code
 
+  hex             : IP address in hexadecimal format
+\end_layout
+
+\begin_layout Code
+
   ipv6literal     : IPv6 address in literal
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -2127,7 +2305,7 @@ S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE
 
 \begin_layout Code
 
-    --out <type> --examples
+    -O|--out <type> --examples
 \end_layout
 
 \begin_layout Subsubsection
@@ -2136,18 +2314,23 @@ Action-type options:
 
 \begin_layout Code
 
-$ ./ipv6calc --action -?
+$ ipv6calc --action -?
 \end_layout
 
 \begin_layout Code
 
-ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
-S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE 
+ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
+S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE
+ ANON_KEEP-TYPE-ASN-CC
 \end_layout
 
 \begin_layout Code
 
-(P) & (C) 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -2232,13 +2415,14 @@ filter
 
 \begin_layout Code
 
-$ ./ipv6calc --action filter -h
+$ ipv6calc --action filter -h
 \end_layout
 
 \begin_layout Code
 
-ipv6calc: version 0.95.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
-S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE
+ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
+S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE
+ ANON_KEEP-TYPE-ASN-CC
 \end_layout
 
 \begin_layout Code
@@ -2252,28 +2436,27 @@ S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE
 
 \begin_layout Code
 
-  echo '2001:db8::1' | ipv6calc -A filter -E iid-local
+  echo '2001:db8::1' | ipv6calc [-A filter] -E iid-local
 \end_layout
 
 \begin_layout Code
 
-  echo '2001:db8::1' | ipv6calc -A filter -E iid-local,global-unicast
+  echo '2001:db8::1' | ipv6calc [-A filter] -E iid-local,global-unicast
 \end_layout
 
 \begin_layout Code
 
-  echo '2001:db8::1' | ipv6calc -A filter -E ^iid-random
+  echo '2001:db8::1' | ipv6calc [-A filter] -E ^iid-randomy
 \end_layout
 
 \begin_layout Code
 
- 
 \end_layout
 
 \begin_layout Code
 
- (note: since version 0.95.0 '-A filter' is autoselected if option '-E' is
- given)
+ (note: since version 0.95.0 '-A filter' is autoselected if option '-E <filter
+ expression>' is given)
 \end_layout
 
 \begin_layout Code
@@ -2315,7 +2498,7 @@ S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE
 
 \begin_layout Code
 
-  MAC address filter tokens:
+  EUI-48/MAC address filter tokens:
 \end_layout
 
 \begin_layout Code
@@ -2337,140 +2520,6 @@ S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE
     IMPLEMENTATION MISSING
 \end_layout
 
-\begin_layout Subsubsection
-Because of historical issues, there exists also a support of the old-styled
- options: 
-\end_layout
-
-\begin_layout Code
-
-$ ./ipv6calc --printoldoptions
-\end_layout
-
-\begin_layout Code
-
-ipv6calc: version 0.81.0
-\end_layout
-
-\begin_layout Code
-
-(P) & (C) 2001-2011 by Peter Bieringer <pb (at) bieringer.de>
-\end_layout
-
-\begin_layout Code
-
- Usage with old style (shortcut) options (going obsolete): 
-\end_layout
-
-\begin_layout Code
-
-  <shortcut option> [<format option> ...] <input data> [...]
-\end_layout
-
-\begin_layout Code
-
-\end_layout
-
-\begin_layout Code
-
-  --addr2ip6_int 
-\end_layout
-
-\begin_layout Code
-
-  --addr_to_ip6int
-\end_layout
-
-\begin_layout Code
-
-  --addr2ip6_arpa
-\end_layout
-
-\begin_layout Code
-
-  --addr_to_ip6arpa
-\end_layout
-
-\begin_layout Code
-
-  --addr_to_bitstring
-\end_layout
-
-\begin_layout Code
-
-  --addr2compaddr
-\end_layout
-
-\begin_layout Code
-
-  --addr_to_compressed
-\end_layout
-
-\begin_layout Code
-
-  --addr2uncompaddr
-\end_layout
-
-\begin_layout Code
-
-  --addr_to_uncompressed
-\end_layout
-
-\begin_layout Code
-
-  --addr_to_base85
-\end_layout
-
-\begin_layout Code
-
-  --base85_to_addr
-\end_layout
-
-\begin_layout Code
-
-  --mac_to_eui64
-\end_layout
-
-\begin_layout Code
-
-  --addr2fulluncompaddr
-\end_layout
-
-\begin_layout Code
-
-  --addr_to_fulluncompressed
-\end_layout
-
-\begin_layout Code
-
-  --addr2if_inet6
-\end_layout
-
-\begin_layout Code
-
-  --addr_to_ifinet6
-\end_layout
-
-\begin_layout Code
-
-  --if_inet62addr
-\end_layout
-
-\begin_layout Code
-
-  --ifinet6_to_compressed
-\end_layout
-
-\begin_layout Code
-
-  --eui64_to_privacy
-\end_layout
-
-\begin_layout Code
-
-  --ipv4_to_6to4addr
-\end_layout
-
 \begin_layout Section
 Webserver log conversion helper program "ipv6logconv"
 \end_layout
@@ -2479,6 +2528,95 @@ Webserver log conversion helper program "ipv6logconv"
 This program parses address tokens of a given webserver logfile and converts
  them to special strings, useful for statistics (e.g.
  created by using "analog").
+\end_layout
+
+\begin_layout Subsection
+Supported options
+\end_layout
+
+\begin_layout Code
+
+$ ipv6logconv -h
+\end_layout
+
+\begin_layout Code
+
+ipv6logconv: version 0.97.0 CONV_REG CONV_IEEE
+\end_layout
+
+\begin_layout Code
+
+(P) & (C) 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+\end_layout
+
+\begin_layout Code
+
+ General:
+\end_layout
+
+\begin_layout Code
+
+  [-d|--debug <debug value>] : debug value (bitwise like)
+\end_layout
+
+\begin_layout Code
+
+  [-q|--quiet] : be more quiet
+\end_layout
+
+\begin_layout Code
+
+  [-n|--nocache] : disable caching
+\end_layout
+
+\begin_layout Code
+
+  [-c|--cachelimit <value>] : set cache limit
+\end_layout
+
+\begin_layout Code
+
+                               default: 20
+\end_layout
+
+\begin_layout Code
+
+                               maximum: 200
+\end_layout
+
+\begin_layout Code
+
+ Output:
+\end_layout
+
+\begin_layout Code
+
+  [--out <output type>] : specify output type
+\end_layout
+
+\begin_layout Code
+
+   addrtype       : Address type
+\end_layout
+
+\begin_layout Code
+
+   ouitype        : OUI (IEEE) type
+\end_layout
+
+\begin_layout Code
+
+   ipv6addrtype   : IPv6 address type
+\end_layout
+
+\begin_layout Code
+
+   any            : any type
+\end_layout
+
+\begin_layout Code
+
+ Takes data from stdin, proceed it to stdout
 \end_layout
 
 \begin_layout Subsection
@@ -2503,7 +2641,22 @@ Usage
 \end_layout
 
 \begin_layout Standard
-See examples inside the package.
+Example:
+\end_layout
+
+\begin_layout Code
+
+$ echo "2002:50b5:7940:0000:0000:0000:50b5:7940 - -" | ipv6logconv -q --out
+ any
+\end_layout
+
+\begin_layout Code
+
+RIPENCC.6to4.global-unicast.ipv6-addr.addrtype.ipv6calc
+\end_layout
+
+\begin_layout Standard
+See more examples inside the package.
 \end_layout
 
 \begin_layout Section
@@ -3046,12 +3199,17 @@ Supported options
 
 \begin_layout Code
 
-$ ipv6loganon: version 0.95.0 ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
+$ ipv6loganon -h
 \end_layout
 
 \begin_layout Code
 
-(P) & (C) 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
+ipv6loganon: version 0.97.0 ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
+\end_layout
+
+\begin_layout Code
+
+(P) & (C) 2007-2014 by Peter Bieringer <pb (at) bieringer.de>
 \end_layout
 
 \begin_layout Code
@@ -3075,7 +3233,7 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 
 \begin_layout Code
 
-                                can also be set IPV6CALC_DEBUG environment
+                                can also be set by IPV6CALC_DEBUG environment
  value
 \end_layout
 
@@ -3091,7 +3249,6 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 
 \begin_layout Code
 
- 
 \end_layout
 
 \begin_layout Code
@@ -3109,6 +3266,10 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 
   [--db-ip2location-lib <file>]      : IP2Location library file (default:
  libIP2Location.so)
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -3173,7 +3334,6 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 
 \begin_layout Code
 
-  
 \end_layout
 
 \begin_layout Code
@@ -3198,7 +3358,6 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 
 \begin_layout Code
 
-  
 \end_layout
 
 \begin_layout Code
@@ -3235,49 +3394,48 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 
 \begin_layout Code
 
-   anonymize-standard   (as): mask-ipv6= 56 mask-ipv4=24 mask-iid=40 mask-mac=24
- method=anonymize
+   anonymize-standard   (as): mask-ipv6= 56 mask-ipv4=24 mask-eui64=40 mask-mac=
+24 mask-autoadjust=yes method=anonymize
 \end_layout
 
 \begin_layout Code
 
-   anonymize-careful    (ac): mask-ipv6= 48 mask-ipv4=20 mask-iid=24 mask-mac=24
- method=anonymize
+   anonymize-careful    (ac): mask-ipv6= 48 mask-ipv4=20 mask-eui64=24 mask-mac=
+24 mask-autoadjust=yes method=anonymize
 \end_layout
 
 \begin_layout Code
 
-   anonymize-paranoid   (ap): mask-ipv6= 40 mask-ipv4=16 mask-iid= 0 mask-mac=24
- method=anonymize
+   anonymize-paranoid   (ap): mask-ipv6= 40 mask-ipv4=16 mask-eui64= 0 mask-mac=
+24 mask-autoadjust=no  method=anonymize
 \end_layout
 
 \begin_layout Code
 
-   zeroize-standard     (zs): mask-ipv6= 56 mask-ipv4=24 mask-iid=40 mask-mac=24
- method=zeroize
+   zeroize-standard     (zs): mask-ipv6= 56 mask-ipv4=24 mask-eui64=40 mask-mac=
+24 mask-autoadjust=yes method=zeroize
 \end_layout
 
 \begin_layout Code
 
-   zeroize-careful      (zc): mask-ipv6= 48 mask-ipv4=20 mask-iid=24 mask-mac=24
- method=zeroize
+   zeroize-careful      (zc): mask-ipv6= 48 mask-ipv4=20 mask-eui64=24 mask-mac=
+24 mask-autoadjust=yes method=zeroize
 \end_layout
 
 \begin_layout Code
 
-   zeroize-paranoid     (zp): mask-ipv6= 40 mask-ipv4=16 mask-iid= 0 mask-mac=24
- method=zeroize
+   zeroize-paranoid     (zp): mask-ipv6= 40 mask-ipv4=16 mask-eui64= 0 mask-mac=
+24 mask-autoadjust=no  method=zeroize
 \end_layout
 
 \begin_layout Code
 
-   keep-type-asn-cc     (kp): mask-ipv6= 56 mask-ipv4=24 mask-iid=40 mask-mac=24
- method=keep-type-asn-cc
+   keep-type-asn-cc     (kp): mask-ipv6= 56 mask-ipv4=24 mask-eui64=40 mask-mac=
+24 mask-autoadjust=yes method=keep-type-asn-cc
 \end_layout
 
 \begin_layout Code
 
- 
 \end_layout
 
 \begin_layout Code
@@ -3287,34 +3445,40 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 
 \begin_layout Code
 
-  --mask-ipv4 <bits>     : mask IPv4 address [0-32] (even if occurs in IPv6
- address)
+  --mask-ipv4  <bits>     : mask IPv4 address [0-32] (even if occurs in
+ IPv6 address)
 \end_layout
 
 \begin_layout Code
 
-  --mask-ipv6 <bits>     : mask IPv6 prefix [0-64] (only applied to related
+  --mask-ipv6  <bits>     : mask IPv6 prefix [0-64] (only applied to related
  address types)
 \end_layout
 
 \begin_layout Code
 
-  --mask-iid  <bits>     : mask IPv6 interface identifiers [0-64]
+  --mask-eui64 <bits>     : mask EUI-64 address or IPv6 interface identifier
+ [0-64]
 \end_layout
 
 \begin_layout Code
 
-  --mask-mac  <bits>     : mask MAC address [0-48]
+  --mask-mac   <bits>     : mask MAC address [0-48]
 \end_layout
 
 \begin_layout Code
 
- 
+  --mask-autoadjust yes|no: autoadjust mask to keep type/vendor information
+ regardless of less given mask
 \end_layout
 
 \begin_layout Code
 
-Takes data from stdin, outputs the processed data to stdout (default)
+\end_layout
+
+\begin_layout Code
+
+ Takes data from stdin, outputs the processed data to stdout (default)
 \end_layout
 
 \begin_layout Subsection
@@ -3466,17 +3630,21 @@ Supported options
 
 \begin_layout Code
 
-ipv6logstats: version 0.95.0.rc.1 STAT_REG STAT_CC STAT_AS
+$ ./ipv6logstats -h
 \end_layout
 
 \begin_layout Code
 
-(P) & (C) 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
+ipv6logstats: version 0.97.0 STAT_REG STAT_CC STAT_AS
 \end_layout
 
 \begin_layout Code
 
- 
+(P) & (C) 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -3492,7 +3660,6 @@ ipv6logstats: version 0.95.0.rc.1 STAT_REG STAT_CC STAT_AS
 
 \begin_layout Code
 
- 
 \end_layout
 
 \begin_layout Code
@@ -3502,7 +3669,7 @@ ipv6logstats: version 0.95.0.rc.1 STAT_REG STAT_CC STAT_AS
 
 \begin_layout Code
 
-                                can also be set IPV6CALC_DEBUG environment
+                                can also be set by IPV6CALC_DEBUG environment
  value
 \end_layout
 
@@ -3539,6 +3706,10 @@ ipv6logstats: version 0.95.0.rc.1 STAT_REG STAT_CC STAT_AS
 
 \begin_layout Code
 
+\end_layout
+
+\begin_layout Code
+
   [--db-geoip-disable              ] : GeoIP support disabled
 \end_layout
 
@@ -3555,7 +3726,6 @@ ipv6logstats: version 0.95.0.rc.1 STAT_REG STAT_CC STAT_AS
 
 \begin_layout Code
 
- 
 \end_layout
 
 \begin_layout Code
@@ -3565,7 +3735,7 @@ ipv6logstats: version 0.95.0.rc.1 STAT_REG STAT_CC STAT_AS
 
 \begin_layout Code
 
-  [-c|--columns]              : print statistics in columns (1)
+  [-c|--columns]             : print statistics in columns (1)
 \end_layout
 
 \begin_layout Code
@@ -3586,6 +3756,11 @@ ipv6logstats: version 0.95.0.rc.1 STAT_REG STAT_CC STAT_AS
 \begin_layout Code
 
   [-q|--quiet]               : be more quiet
+\end_layout
+
+\begin_layout Code
+
+  [-s|--simple]              : disable extended statistic (CountryCode/ASN)
 \end_layout
 
 \begin_layout Code

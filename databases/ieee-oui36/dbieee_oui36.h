@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.13 2014/05/10 12:34:59 ds6peter Exp $
- * Generated     : Sat May  3 15:31:52 2014
+ * Version       : $Id: dbieee_oui36.h,v 1.14 2014/05/16 20:34:02 ds6peter Exp $
+ * Generated     : Fri May 16 22:13:35 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140503";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140516";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -393,5 +393,26 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0xE26000, 0xE26FFF, "FEITIAN CO.,LTD.", "FEITIAN" },
 	{ 0x70B3D5, 0xE99000, 0xE99FFF, "Advitronics telecom bv", "ADVITRONICS-TELECOM" },
 	{ 0x70B3D5, 0xB8C000, 0xB8CFFF, "ePOINT Embedded Computing Limited", "EPOINT-EMBEDDED-COMPUTING" },
+	{ 0x70B3D5, 0xE9A000, 0xE9AFFF, "Meta Computing Services, Corp", "META-COMPUTING-SERVICES" },
+	{ 0x70B3D5, 0xB3C000, 0xB3CFFF, "DORLET SAU", "DORLET-SAU" },
+	{ 0x70B3D5, 0xD1E000, 0xD1EFFF, "Houston Radar LLC", "HOUSTON-RADAR-LLC" },
+	{ 0x70B3D5, 0xABC000, 0xABCFFF, "BKM-Micronic Richtfunkanlagen GmbH", "BKM-MICRONIC-RICHTFUNKANLAGEN" },
+	{ 0x70B3D5, 0x5F0000, 0x5F0FFF, "managee GmbH & Co KG", "MANAGEE" },
+	{ 0x70B3D5, 0x956000, 0x956FFF, "AeroVision Avionics, Inc.", "AEROVISION-AVIONICS" },
+	{ 0x70B3D5, 0x57B000, 0x57BFFF, "ELAMAKATO GmbH", "ELAMAKATO" },
+	{ 0x70B3D5, 0x19C000, 0x19CFFF, "Kubu, Inc.", "KUBU" },
+	{ 0x70B3D5, 0x03B000, 0x03BFFF, "SSL - Electrical Aerospace Ground Equipment Section", "SSL---ELECTRICAL-AEROSPACE-GROUND-EQUIPMENT-SECTION" },
+	{ 0x70B3D5, 0x2E3000, 0x2E3FFF, "Meiknologic GmbH", "MEIKNOLOGIC" },
+	{ 0x70B3D5, 0x755000, 0x755FFF, "LandmarkTech Systems Technology Co.,Ltd.", "LANDMARKTECH" },
+	{ 0x70B3D5, 0x6E5000, 0x6E5FFF, "DEUTA-WERKE GmbH", "DEUTA-WERKE" },
+	{ 0x70B3D5, 0x8F5000, 0x8F5FFF, "Stmovic", "STMOVIC" },
+	{ 0x70B3D5, 0xABF000, 0xABFFFF, "AGR International", "AGR" },
+	{ 0x70B3D5, 0x8DC000, 0x8DCFFF, "Niveo International BV", "NIVEO" },
+	{ 0x70B3D5, 0x34A000, 0x34AFFF, "PAVO TASARIM ÜRETİM TİC A.Ş.", "PAVO-TASARIM-UERETİM-TİC-A-Ş" },
+	{ 0x70B3D5, 0x95A000, 0x95AFFF, "Sigmann Elektronik GmbH", "SIGMANN-ELEKTRONIK" },
+	{ 0x70B3D5, 0x323000, 0x323FFF, "TATTILE SRL", "TATTILE-SRL" },
+	{ 0x70B3D5, 0x986000, 0x986FFF, "Aplex Technology Inc.", "APLEX" },
+	{ 0x70B3D5, 0x3CE000, 0x3CEFFF, "Aditec GmbH", "ADITEC" },
+	{ 0x70B3D5, 0x250000, 0x250FFF, "Datum Electronics Limited", "DATUM-ELECTRONICS" },
 
 };

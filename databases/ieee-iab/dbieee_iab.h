@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.64 2014/05/10 12:34:59 ds6peter Exp $
- * Generated     : Sat May  3 15:31:54 2014
+ * Version       : $Id: dbieee_iab.h,v 1.65 2014/05/16 20:34:02 ds6peter Exp $
+ * Generated     : Fri May 16 22:13:38 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20140503";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20140516";
 
 
 static const s_ieee_iab libieee_iab[] = {
