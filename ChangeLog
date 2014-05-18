@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.332 2014/05/11 09:49:38 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.333 2014/05/18 17:48:27 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,10 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20140518/PB
+	databases: update
+	tag version 0.97.0
+
 20140511/PB
 	(many files): replace NI_MAXHOST used in various functions by size_t option
 
