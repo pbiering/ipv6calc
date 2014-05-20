@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6logconv.sh
-# Version    : $Id: test_ipv6logconv.sh,v 1.10 2014/05/20 17:54:47 ds6peter Exp $
+# Version    : $Id: test_ipv6logconv.sh,v 1.11 2014/05/20 18:00:34 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logconv"
@@ -88,6 +88,13 @@ END_CACHE
 ## main ##
 echo "Run 'ipv6logconv' function tests..." >&2
 
+if ./ipv6logconv -v | grep -w "CONV_REG" | grep -w "CONV_IEEE"; then
+	true
+else
+	echo "NOTICE : ipv6logconv tests skipped, at least one required database feature is missing"
+	exit 0
+fi
+
 if [ "$1" != "bulk" ]; then
 	testscenarios | grep -v "^#" | while read line; do
 		echo
@@ -98,7 +105,7 @@ if [ "$1" != "bulk" ]; then
 			echo "Error executing 'ipv6logconv'!" >&2
 			exit 1
 		fi
-	done
+	done || exit 1
 	echo 
 else
 	shift
