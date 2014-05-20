@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/logstats
 # File       : example_ipv6logstats.sh
-# Version    : $Id: example_ipv6logstats.sh,v 1.5 2003/11/22 12:42:24 peter Exp $
-# Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: example_ipv6logstats.sh,v 1.6 2014/05/20 06:09:01 ds6peter Exp $
+# Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Example program for "ipv6logstats"
 
@@ -11,7 +11,7 @@
 # Print header line
 #./ipv6logstats -o -p "Date"
 
-# Find logfiles (here name in format hostname-log.%Y%m
+# Find logfiles (here name in format hostname-log.%Y%m(.token)(.gz|bz2)
 dir="$1"
 
 bin="./ipv6logstats"
@@ -29,27 +29,29 @@ if [ -n "$2" ]; then
 fi
 
 cat_file() {
-	local f="$1"
+	for f in $*; do
+		echo "Proceed file: $file" >&2
 
-	if [ -z "$f" ]; then
-		return 1
-	fi
-
-	if echo "$f" | grep -q "\.gz$"; then
-		zcat "$f"
-	elif echo "$f" | grep -q "\.bz2$"; then
-		bzcat "$f"
-	else
-		cat "$f"
-	fi
+		if echo "$f" | grep -q "\.gz$"; then
+			zcat "$f"
+		elif echo "$f" | grep -q "\.bz2$"; then
+			bzcat "$f"
+		else
+			cat "$f"
+		fi
+	done
 }
 
+echo "Analyze Year/Month of files" >&2
 find $dir -name '*-log.*' -type f | while read file; do
-	echo "Proceed file: $file" >&2
+	#echo "Analyze Year/Month of file: $file" >&2
 
 	# Extract %Y%m
-	yearmonth="`basename "$file" | sed 's/^.*-log\.//' | sed 's/\.gz$//' | sed 's/\.bz2$//'`"
-
-	# don't count mon checks
-	cat_file "$file" | grep -v "mon.d/http.monitor" | $bin -c -n -p "$yearmonth"
+	yearmonth="`basename "$file" | sed 's/.*\.\([0-9]\{6\}\)\..*/\1/'`"
+	if [ ${#yearmonth} -eq 6 ]; then
+		echo $yearmonth
+	fi
+done | sort -u | while read yearmonth; do
+	# don't count mon and check_http (from Nagios)
+	cat_file `find $dir -name "*-log.$yearmonth*" -type f` | egrep -v "(mon.d/http.monitor|check_http)" | $bin -c -n -p "$yearmonth" || exit 1
 done
