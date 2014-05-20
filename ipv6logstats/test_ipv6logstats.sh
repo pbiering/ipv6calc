@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
-# Version    : $Id: test_ipv6logstats.sh,v 1.15 2014/04/18 11:07:57 ds6peter Exp $
-# Copyright  : 2003-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6logstats.sh,v 1.16 2014/05/20 17:54:47 ds6peter Exp $
+# Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"
 
@@ -19,6 +19,8 @@ if [ $? -ne 1 ]; then
 	echo "ERROR : something wrong in option definition"
 	exit 1
 fi
+
+source ../ipv6calc/test_scenarios.sh
 
 
 testscenarios() {
@@ -174,5 +176,13 @@ testscenarios_match | while read ip match; do
 		exit 1
 	fi
 done || exit 1
+
+echo "INFO  : test scenario with huge amount of addresses..."
+testscenario_hugelist ipv4 | ./ipv6logstats -q >/dev/null
+if [ $? -ne 0 ]; then
+	echo "ERROR : exit code <> 0"
+	exit 1
+fi
+echo "INFO  : test scenario with huge amount of addresses: OK"
 
 echo "All tests were successfully done!"

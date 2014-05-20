@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.40 2014/04/26 16:16:31 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.41 2014/05/20 17:54:47 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -440,4 +440,12 @@ testscenarios_kp() {
 	testscenarios_auto_good | while read input filter rest; do
 		echo "$input"
 	done | sort | uniq
+}
+
+testscenario_hugelist() {
+	case $1 in
+	    ipv4)
+		perl -e '{ for ($i = 0; $i < 256; $i++) { for ($j = 0; $j < 256; $j++) { print "$i.$j.$j.$i\n" } } }';
+		;;
+	esac
 }

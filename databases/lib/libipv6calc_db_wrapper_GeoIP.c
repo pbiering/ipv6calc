@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.55 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.56 2014/05/20 17:54:47 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -1959,11 +1959,12 @@ char *libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(const char *addr, const
 	};
 
 	if (GeoIP_result_ptr == NULL) {
-		return(NULL);
+		goto END_libipv6calc_db_wrapper;
 	};
 
 	GEOIP_DB_USAGE_MAP_TAG(GeoIP_type);
 
+END_libipv6calc_db_wrapper:
 	libipv6calc_db_wrapper_GeoIP_delete(gi);
 
 	return(GeoIP_result_ptr);
@@ -2000,12 +2001,13 @@ GeoIPRecord *libipv6calc_db_wrapper_GeoIP_wrapper_record_city_by_addr(const char
 	};
 
 	if (GeoIP_result_ptr == NULL) {
-		return (NULL);
+		goto END_libipv6calc_db_wrapper;
 	};
 
-	libipv6calc_db_wrapper_GeoIP_delete(gi);
-
 	GEOIP_DB_USAGE_MAP_TAG(GeoIP_type);
+
+END_libipv6calc_db_wrapper:
+	libipv6calc_db_wrapper_GeoIP_delete(gi);
 
 	return(GeoIP_result_ptr);
 };

@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6logconv.sh
-# Version    : $Id: test_ipv6logconv.sh,v 1.9 2013/09/20 06:17:52 ds6peter Exp $
-# Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6logconv.sh,v 1.10 2014/05/20 17:54:47 ds6peter Exp $
+# Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logconv"
 
@@ -19,6 +19,8 @@ if [ $? -ne 1 ]; then
 	echo "ERROR : something wrong in option definition"
 	exit 1
 fi
+
+source ../ipv6calc/test_scenarios.sh
 
 testscenarios() {
 # Address
@@ -116,6 +118,15 @@ else
 	fi
 	echo
 fi
+
+echo "INFO  : test scenario with huge amount of addresses..."
+testscenario_hugelist ipv4 | awk '{ print $1 " token2 token3" }' | ./ipv6logconv -q --out any -q >/dev/null
+if [ $? -ne 0 ]; then
+	echo "ERROR : exit code <> 0"
+	exit 1
+fi
+
+echo "INFO  : test scenario with huge amount of addresses: OK"
 
 if [ $? -eq 0 ]; then
 	echo "All tests were successfully done!" >&2

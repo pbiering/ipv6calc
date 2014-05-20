@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.333 2014/05/18 17:48:27 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.334 2014/05/20 17:54:47 ds6peter Exp $ 
  */
 
 Info:
@@ -8,6 +8,11 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 --------------------------------------------------------------------
+20140520/PB
+	databases/lib/libipv6calc_db_wrapper_GeoIP.c: fix 2x improper GeoIP_delete call which causes trouble inside GeoIP library in case of a huge amount of calls
+	ipv6logstats,ipv6loganon,ipv6logconv: add new test for processing huge amount of addresses
+	tag version 0.97.1
+
 20140518/PB
 	databases: update
 	tag version 0.97.0

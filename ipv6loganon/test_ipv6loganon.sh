@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.24 2014/04/26 16:16:31 ds6peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.25 2014/05/20 17:54:47 ds6peter Exp $
 # Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -381,6 +381,14 @@ run_loganon_options_kp_tests() {
 	if [ $? -ne 0 ]; then
 		return 1
 	fi
+
+	echo "INFO  : test scenario with huge amount of addresses..."
+	testscenario_hugelist ipv4 | ./ipv6loganon --anonymize-preset kp >/dev/null
+	if [ $? -ne 0 ]; then
+		echo "ERROR : exit code <> 0"
+		exit 1
+	fi
+	echo "INFO  : test scenario with huge amount of addresses: OK"
 }
 
 
@@ -407,6 +415,7 @@ if [ $? -ne 0 ]; then
 	echo "ERROR : run_loganon_options_kp_tests failed"
 	exit 1
 fi
+
 
 echo "All tests were successfully done!" >&2
 
