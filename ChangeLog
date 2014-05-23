@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.335 2014/05/23 05:20:50 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.336 2014/05/23 18:28:04 ds6peter Exp $ 
  */
 
 Info:
@@ -12,6 +12,7 @@ Info:
 	ipv6logstats/ipv6logstats.c: skip cc/asn retrievement in case of simple and column mode (major speed up)
 	ipv6logstats/ipv6logstats.c: fix missing ALL in column mode (column 1), add option -N|--column-numbers
 	ipv6logstats/example_gnuplot.cmd: fix to run with newer gnuplot versions, extend with registries and IID pictures
+	tag version 0.97.2
 	
 20140520/PB
 	databases/lib/libipv6calc_db_wrapper_GeoIP.c: fix 2x improper GeoIP_delete call which causes trouble inside GeoIP library in case of a huge amount of calls
