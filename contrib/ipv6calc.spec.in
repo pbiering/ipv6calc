@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2014 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec.in,v 1.80 2014/05/03 07:09:41 ds6peter Exp $
+# $Id: ipv6calc.spec.in,v 1.81 2014/05/23 08:01:52 ds6peter Exp $
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
@@ -15,10 +15,16 @@ Source: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/ipv6calc-%{version}.tar.g
 
 BuildRoot: %{_tmppath}/ipv6calc-root
 
-%define enable_geoip 0
-%define enable_ip2location 0
-%define enable_geoip_dyn 0
-%define enable_ip2location_dyn 0
+%define require_geoip 0
+%define require_ip2location 0
+%define require_geoip_dyn 0
+%define require_ip2location_dyn 0
+
+%{?_with_geoip: %{expand: %%define require_geoip 1}}
+%{?_with_ip2location: %{expand: %%define require_ip2location 1}}
+
+%{?_with_geoip_dyn: %{expand: %%define require_geoip_dyn 1}}
+%{?_with_ip2location_dyn: %{expand: %%define require_ip2location_dyn 1}}
 
 %{?_with_geoip: %{expand: %%define enable_geoip 1}}
 %{?_with_ip2location: %{expand: %%define enable_ip2location 1}}
@@ -31,21 +37,21 @@ BuildRoot: %{_tmppath}/ipv6calc-root
 %{?_with_shared: %{expand: %%define enable_shared 1}}
 
 
-%if %{enable_geoip}
+%if %{require_geoip}
 BuildRequires: GeoIP-devel
-%if %{enable_geoip_dyn}
+%if %{require_geoip_dyn}
 #nothing required
 %else
 Requires: GeoIP
 %endif
 %endif
 
-%if %{enable_ip2location}
+%if %{require_ip2location}
 BuildRequires: ip2location-devel
-%if %{enable_ip2location_dyn}
+%if %{require_ip2location_dyn}
 #nothing required
 %else
-Requires: ip2location0 >= 2.1.3
+Requires: ip2Location >= 2.1.3
 %endif
 %endif
 
