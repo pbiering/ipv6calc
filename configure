@@ -2234,7 +2234,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 $as_echo "#define COPYRIGHT_YEAR \"2014\"" >>confdefs.h
 
 
-PACKAGE_VERSION="0.97.1"
+PACKAGE_VERSION="0.97.2"
 
 COPYRIGHT_YEAR=2014
 
