@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/logstats
 # File       : example_ipv6logstats.sh
-# Version    : $Id: example_ipv6logstats.sh,v 1.6 2014/05/20 06:09:01 ds6peter Exp $
+# Version    : $Id: example_ipv6logstats.sh,v 1.7 2014/05/23 05:20:50 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Example program for "ipv6logstats"
@@ -30,7 +30,7 @@ fi
 
 cat_file() {
 	for f in $*; do
-		echo "Proceed file: $file" >&2
+		echo "Proceed file: $f" >&2
 
 		if echo "$f" | grep -q "\.gz$"; then
 			zcat "$f"
@@ -53,5 +53,5 @@ find $dir -name '*-log.*' -type f | while read file; do
 	fi
 done | sort -u | while read yearmonth; do
 	# don't count mon and check_http (from Nagios)
-	cat_file `find $dir -name "*-log.$yearmonth*" -type f` | egrep -v "(mon.d/http.monitor|check_http)" | $bin -c -n -p "$yearmonth" || exit 1
+	cat_file `find $dir -name "*-log.$yearmonth*" -type f` | egrep -v "(mon.d/http.monitor|check_http)" | $bin -c -q -n -p "$yearmonth" || exit 1
 done

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.56 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.57 2014/05/23 05:20:50 ds6peter Exp $
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -41,6 +41,7 @@ int ipv6calc_quiet = 0;
 
 static int opt_unknown = 0;
 static int opt_simple = 0;
+static int opt_column_numbers = 0;
 static int opt_noheader = 0;
 static int opt_onlyheader = 0;
 static int opt_printdirection = 0; /* rows */
@@ -196,6 +197,10 @@ int main(int argc,char *argv[]) {
 
 			case 's':
 				opt_simple = 1;
+				break;
+
+			case 'N':
+				opt_column_numbers = 1;
 				break;
 
 			case 'n':
@@ -377,6 +382,8 @@ static void lineparser(void) {
 	uint32_t as_num32 = ASNUM_AS_UNKNOWN;
 	long unsigned int c_all, c_ipv4, c_ipv6;
 
+	int column_offset = 1;
+
 	// clear counters
 	for (i = 0; i < COUNTRYCODE_INDEX_MAX; i++) {
 		counter_country[i] = 0;
@@ -518,17 +525,19 @@ static void lineparser(void) {
 						continue;
 					};
 
-					cc_index = libipv4addr_cc_index_by_addr(&ipv4addr);
-					as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr);
+					if (opt_simple != 1) {
+						cc_index = libipv4addr_cc_index_by_addr(&ipv4addr);
+						as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr);
+						if (feature_cc == 1) {
+							stat_inc_country_code(cc_index, 4);
+						};
+
+						if (feature_as == 1) {
+							stat_inc_asnum(as_num32, 4);
+						};
+					};
+
 					registry = libipv4addr_registry_num_by_addr(&ipv4addr);
-
-					if (feature_cc == 1) {
-						stat_inc_country_code(cc_index, 4);
-					};
-
-					if (feature_as == 1) {
-						stat_inc_asnum(as_num32, 4);
-					};
 
 					if ((ipv6addr.scope & IPV6_NEW_ADDR_6TO4) != 0) {
 						stat_registry_base = STATS_IPV6_6TO4_BASE;
@@ -576,19 +585,22 @@ static void lineparser(void) {
 						};
 					};
 				} else {
-					cc_index = libipv6addr_cc_index_by_addr(&ipv6addr);
-					as_num32 = libipv6addr_as_num32_by_addr(&ipv6addr);
+					if (opt_simple != 1) {
+						cc_index = libipv6addr_cc_index_by_addr(&ipv6addr);
+						as_num32 = libipv6addr_as_num32_by_addr(&ipv6addr);
+
+						if (feature_cc == 1) {
+							/* country code */
+							stat_inc_country_code(cc_index, 6);
+						};
+
+						if (feature_as == 1) {
+							/* asnum */
+							stat_inc_asnum(as_num32, 6);
+						};
+					};
+
 					registry = libipv6addr_registry_num_by_addr(&ipv6addr);
-
-					if (feature_cc == 1) {
-						/* country code */
-						stat_inc_country_code(cc_index, 6);
-					};
-
-					if (feature_as == 1) {
-						/* asnum */
-						stat_inc_asnum(as_num32, 6);
-					};
 
 					switch (registry) {
 						case IPV6_ADDR_REGISTRY_6BONE:
@@ -644,12 +656,15 @@ static void lineparser(void) {
 				/* is IPv4 address */
 				stat_inc(STATS_IPV4);
 
-				cc_index = libipv4addr_cc_index_by_addr(&ipv4addr);
-				as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr);
-				registry = libipv4addr_registry_num_by_addr(&ipv4addr);
+				if (opt_simple != 1) {
+					cc_index = libipv4addr_cc_index_by_addr(&ipv4addr);
+					as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr);
 
-				stat_inc_country_code(cc_index, 4);
-				stat_inc_asnum(as_num32, 4);
+					stat_inc_country_code(cc_index, 4);
+					stat_inc_asnum(as_num32, 4);
+				};
+
+				registry = libipv4addr_registry_num_by_addr(&ipv4addr);
 
 				switch (registry) {
 					case IPV4_ADDR_REGISTRY_IANA:
@@ -800,17 +815,26 @@ static void lineparser(void) {
 		/* print in columns */
 		if (opt_noheader == 0) {
 			if (strlen(opt_token) > 0) {
+				column_offset++;
 				if (opt_onlyheader == 0) {
-					printf("Token ");
+					if (opt_column_numbers == 1) {
+						printf("Token(1) ");
+					} else {
+						printf("Token ");
+					}
 				} else {
 					printf("%s ", opt_token);
 				};
 			};
-			for (i = 1; i < MAXENTRIES_ARRAY(ipv6logstats_statentries); i++) {
+			for (i = 0; i < MAXENTRIES_ARRAY(ipv6logstats_statentries); i++) {
 				if (i > 0) {
 					printf(" ");
 				};
-				printf("%s", ipv6logstats_statentries[i].token);
+				if (opt_column_numbers == 1) {
+					printf("%s(%d)", ipv6logstats_statentries[i].token, i + column_offset);
+				} else {
+					printf("%s", ipv6logstats_statentries[i].token);
+				};
 			};
 			printf(" #Version(%d.%d)\n", STATS_VERSION_MAJOR, STATS_VERSION_MINOR);
 		};
@@ -818,7 +842,7 @@ static void lineparser(void) {
 			if (strlen(opt_token) > 0) {
 				printf("%s ", opt_token);
 			};
-			for (i = 1; i < MAXENTRIES_ARRAY(ipv6logstats_statentries); i++) {
+			for (i = 0; i < MAXENTRIES_ARRAY(ipv6logstats_statentries); i++) {
 				if (i > 0) {
 					printf(" ");
 				};

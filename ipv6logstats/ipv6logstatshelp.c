@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstatshelp.c
- * Version    : $Id: ipv6logstatshelp.c,v 1.13 2014/04/18 10:25:46 ds6peter Exp $
+ * Version    : $Id: ipv6logstatshelp.c,v 1.14 2014/05/23 05:20:50 ds6peter Exp $
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -71,6 +71,7 @@ void ipv6logstats_printhelp(void) {
 	fprintf(stderr, "\n");
 	fprintf(stderr, "  [-u|--unknown]             : print unknown IP addresses to stderr\n");
 	fprintf(stderr, "  [-c|--columns]             : print statistics in columns (1)\n");
+	fprintf(stderr, "  [-N|--column-numbers]      : print column numbers\n");
 	fprintf(stderr, "  [-n|--noheader]            : don't print header in columns mode (1)\n");
 	fprintf(stderr, "  [-o|--onlyheader]          : print only header in columns mode (1)\n");
 	fprintf(stderr, "  [-p|--prefix <token>]      : print token as prefix (1)\n");
