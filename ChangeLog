@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.336 2014/05/23 18:28:04 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.337 2014/06/11 05:00:34 ds6peter Exp $ 
  */
 
 Info:
@@ -7,7 +7,11 @@ Info:
 	NT = Niko Tyni <ntyni (at) iki dot fi>
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
+	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140611/PB
+	configure[.in]: apply suggested changes from AGB to fix improper use of AC_ARG_ENABLE
+
 20140523/PB
 	ipv6logstats/ipv6logstats.c: skip cc/asn retrievement in case of simple and column mode (major speed up)
 	ipv6logstats/ipv6logstats.c: fix missing ALL in column mode (column 1), add option -N|--column-numbers
