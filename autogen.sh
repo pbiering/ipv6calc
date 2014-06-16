@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.37 2014/05/10 12:34:32 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.38 2014/06/16 20:31:01 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -100,7 +100,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --disable-db-ipv6   : disable built-in IPv6 database"
 		echo "   --geoip-ipv6-compat : enable GeoIP IPv6 compatibility mode"
 		echo "   -S                  : enable shared library mode"
-		echo "   -no-static-build    : skip static build"
+		echo "   --no-static-build   : skip static build"
 		exit 1
 	esac
 done

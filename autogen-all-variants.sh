@@ -2,15 +2,45 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.30 2014/05/10 13:05:31 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.31 2014/06/16 20:31:01 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
 
 status_file="autogen-all-variants.status"
 
-autgen_variants() {
-	cat <<END | grep -v ^#
+geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.5.1" # 1.4.8 build is broken
+ip2location_versions="4.0.2 6.0.1  6.0.2"
+
+autogen_variants() {
+	if [ "$ip2location_versions_test" = "1" ]; then
+		for version in $ip2location_versions; do
+			case $version in
+			    4.*)
+				name="C-IP2Location"
+				;;
+			    6.0.1)
+				name="ip2location-c"
+				;;
+			    *)
+				# default
+				name="IP2Location-c"
+				;;
+			esac
+			echo "IP2LOCATION#--enable-ip2location --with-ip2location-headers=../$name-$version/libIP2Location --with-ip2location-lib=../$name-$version/libIP2Location/.libs"
+		done
+	fi
+	if [ "$geoip_versions_test" = "1" ]; then
+		for version in $geoip_versions; do
+			echo "GEOIP#--enable-geoip --with-geoip-headers=../GeoIP-$version/libGeoIP --with-geoip-lib=../GeoIP-$version/libGeoIP/.libs"
+		done
+	fi
+
+	if [ "$geoip_versions_test" = "1" -o "$ip2location_versions_test" = "1" ]; then
+		true
+		# nothing more to do
+	else
+		cat <<END | grep -v ^#
 # default (no options)
 NONE#--enable-bundled-md5 --enable-bundled-getopt
 IP2LOCATION#-i
@@ -28,6 +58,7 @@ NONE#--disable-db-ipv6 --disable-db-ipv4 --disable-db-ieee
 NONE#--disable-db-ipv6 --disable-db-ieee
 NONE#--disable-db-ipv4 --disable-db-ieee
 END
+	fi
 }
 
 help() {
@@ -38,11 +69,13 @@ $0
 	-W	add option -W (warning) to autogen.sh
 	-N	add --no-static-build to autogen.sh
 	-I	skip IP2Location builds
+	-g	run only through internal defined GeoIP versions
+	-i	run only through internal defined IP2Location versions
 END
 }
 
 
-while getopts ":NIfW?h" opt; do
+while getopts ":NigIfW?h" opt; do
 	case $opt in
 	    'f')
 		force=1
@@ -52,10 +85,22 @@ while getopts ":NIfW?h" opt; do
 		options_add="$options_add -W"
 		;;
 	    'N')
-		options_add="$options_add --no-static-build"
+		no_static_build=1
 		;;
 	    'I')
 		skip_token="IP2LOCATION"
+		;;
+	    'g')
+		geoip_versions_test="1"
+		skip_shared="1"
+		skip_basic="1"
+		no_static_build=1
+		;;
+	    'i')
+		ip2location_versions_test="1"
+		skip_shared="1"
+		skip_basic="1"
+		no_static_build=1
 		;;
 	    \?|h)
 		help
@@ -100,28 +145,42 @@ if ! $IONICE true; then
 	IONICE=""
 fi
 
-
-if grep -q ":FINISHED:basic:$options_add:" $status_file; then
-	echo "NOTICE : skip basic run with: $options_add"
-else
-	# basic defaults
-	nice -n 20 $IONICE ./autogen.sh $options_add
-	if [ $? -ne 0 ]; then
-		echo "ERROR : 'autogen.sh (basic) $options_add' reports an error"
-		exit 1
+if [ "$skip_basic" != "1" ]; then
+	if grep -q ":FINISHED:basic:$options_add:" $status_file; then
+		echo "NOTICE : skip basic run with: $options_add"
+	else
+		# basic defaults
+		nice -n 20 $IONICE ./autogen.sh $options_add
+		if [ $? -ne 0 ]; then
+			echo "ERROR : 'autogen.sh (basic) $options_add' reports an error"
+			exit 1
+		fi
+		# add entry in log
+		date "+%s:FINISHED:basic:$options_add:" >>$status_file
 	fi
-	# add entry in log
-	date "+%s:FINISHED:basic:$options_add:" >>$status_file
 fi
 
 # variants
 for liboption in "normal" "shared"; do
-	autgen_variants | while IFS="#" read token buildoptions; do
+	if [ "$skip_shared" = "1" -a "$liboption" = "shared" ]; then
+		continue
+	fi
+
+	autogen_variants | while IFS="#" read token buildoptions; do
 		if [ -n "$options_add" ]; then
-			options="$buildoptions $options_add"
+			if [ "$no_static_build" = "1" ]; then
+				options="--no-static-build $options_add $buildoptions"
+			else
+				options="$options_add $buildoptions"
+			fi
 		else
-			options="$buildoptions"
+			if [ "$no_static_build" = "1" ]; then
+				options="--no-static-build $buildoptions"
+			else
+				options="$buildoptions"
+			fi
 		fi
+
 		case $liboption in
 		    shared)
 			options="$options -S"
@@ -136,6 +195,8 @@ for liboption in "normal" "shared"; do
 				date "+%s:FINISHED:variants:$options:SKIPPED" >>$status_file
 				continue
 			fi
+
+			echo "INFO  : call: ./autogen.sh $options"
 
 			nice -n 20 $IONICE ./autogen.sh $options
 			if [ $? -ne 0 ]; then

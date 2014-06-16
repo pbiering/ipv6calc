@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.91 2014/06/11 05:00:34 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.92 2014/06/16 20:31:01 ds6peter Exp $
 dnl Copyright: 2001-2014 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -251,6 +251,8 @@ fi
 dnl *************************************************
 dnl IP2Location support
 dnl *************************************************
+IP2LOCATION_LIB_NAME="IP2Location"
+
 AC_ARG_ENABLE([ip2location], 
 	AS_HELP_STRING([--enable-ip2location],
 		[Enable IP2Location support (default: disabled)]),
@@ -264,14 +266,32 @@ AC_ARG_WITH([ip2location-headers],
 	AS_HELP_STRING([--with-ip2location-headers=DIR],
 		[IP2Location include files location]),
 	[
-		IP2LOCATION_INCLUDE="-I$with_ip2location_headers"
+		IP2LOCATION_INCLUDE_DIR="$with_ip2location_headers"
+		IP2LOCATION_INCLUDE="-I$IP2LOCATION_INCLUDE_DIR"
 	])
 
 AC_ARG_WITH([ip2location-lib],
 	AS_HELP_STRING([--with-ip2location-lib=FILE],
 		[IP2Location library location]),
 	[
-		IP2LOCATION_LIB="-L$with_ip2location_lib $IP2LOCATION_LIB"
+		if test -d "$with_ip2location_lib"; then 
+			IP2LOCATION_LIB_DIR="$with_ip2location_lib"
+			IP2LOCATION_LIB="-L$IP2LOCATION_LIB_DIR $IP2LOCATION_LIB"
+			AC_MSG_RESULT([IP2Location library directory given: $IP2LOCATION_LIB_DIR])
+		else
+			AC_MSG_ERROR([IP2Location library directory not found: $with_ip2location_lib])
+		fi
+	])
+
+AC_ARG_WITH([ip2location-lib-name],
+	AS_HELP_STRING([--with-ip2location-lib-name=NAME],
+		[IP2Location library name]),
+	[
+		IP2LOCATION_LIB_NAME="$with_geoip_lib_name"
+		IP2LOCATION_LIB="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB"
+		AC_MSG_RESULT([IP2Location library name given: $IP2LOCATION_LIB_NAME])
+        ],[
+		IP2LOCATION_LIB="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB"
 	])
 
 AC_ARG_WITH([ip2location-static],
@@ -316,10 +336,38 @@ AC_ARG_WITH([ip2location-dyn-lib],
 	])
 
 if test "$IP2LOCATION" = "yes"; then
+	AC_MSG_RESULT([**** IP2LOCATION_INCLUDE  : $IP2LOCATION_INCLUDE])
+	AC_MSG_RESULT([**** IP2LOCATION_LIB      : $IP2LOCATION_LIB])
+	AC_MSG_RESULT([**** IP2LOCATION_LIB_NAME : $IP2LOCATION_LIB_NAME])
+	AC_MSG_RESULT([**** IP2LOCATION_LIB_DIR  : $IP2LOCATION_LIB_DIR])
+
 	CPPFLAGS="$CPPFLAGS $IP2LOCATION_INCLUDE"
 	AC_MSG_RESULT([*** IP2Location support requested])
 
-	AC_CHECK_HEADER(IP2Location.h,,
+	AC_CHECK_HEADER(IP2Location.h, [
+		if test -n "$IP2LOCATION_INCLUDE_DIR"; then
+			if test -e "$IP2LOCATION_INCLUDE_DIR/IP2Location.h"; then
+				CPPFLAGS="$CPPFLAGS -include $IP2LOCATION_INCLUDE_DIR/IP2Location.h"
+			else
+				AC_MSG_ERROR([IP2Location library header file not found: $IP2LOCATION_INCLUDE_DIR/IP2Location.h])
+			fi
+		else
+			CPPFLAGS="$CPPFLAGS -include IP2Location.h"
+		fi
+
+		AC_CHECK_DECL([IP2Location_open],,
+			AC_MSG_ERROR([IP2Location library header file misses IP2Location_open]))
+
+		AC_CHECK_DECLS([
+			IP2Location_close,
+			IP2Location_get_country_short,
+			IP2Location_get_country_long
+		])
+
+		AC_CHECK_DECLS([
+			API_VERSION
+		])
+	],
 	[
 		AC_MSG_ERROR([IP2Location library header files not found])
 	])
@@ -328,28 +376,33 @@ if test "$IP2LOCATION" = "yes"; then
 	AC_DEFINE_UNQUOTED(IP2LOCATION_DB, "$ip2location_db", Define IP2Location database directory.)
 
 	if test "$IP2LOCATION_DYN" != "yes"; then
-		AC_CHECK_LIB(IP2Location,IP2Location_open,
-		[
-			AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location support.)
-		],
-		[
-			AC_MSG_ERROR([IP2Location library header files were found but the library was not found])
-		])
-
-		IP2LOCATION_LIB="-lIP2Location"
-		LDFLAGS="$LDFLAGS $IP2LOCATION_LIB"
-
 		if test "$IP2LOCATION_STATIC" = "yes"; then
 			AC_DEFINE(SUPPORT_IP2LOCATION_STATIC, 1, Define if you want IP2Location support statically linked - requires also additional linker options.)
 		fi
 
-		AC_CHECK_LIB(IP2Location, IP2Location_open,
+		CPPFLAGS="$CFLAGS"
+
+		if test -n "$IP2LOCATION_LIB_DIR"; then
+			if test -e "$IP2LOCATION_LIB_DIR/lib$IP2LOCATION_LIB_NAME.so"; then
+				LDFLAGS="$LDFLAGS -L$IP2LOCATION_LIB_DIR"
+				CFLAGS="$CFLAGS -L$IP2LOCATION_LIB_DIR"
+				LIBS="-L$IP2LOCATION_LIB_DIR"
+			else
+				AC_MSG_ERROR([IP2Location library file not found: $IP2LOCATION_INCLUDE_DIR/lib$IP2LOCATION_LIB_NAME.so])
+			fi
+		fi
+
+		AC_MSG_RESULT([***** CPPFLAGS=$CPPFLAGS])
+		AC_MSG_RESULT([***** CFLAGS  =$CFLAGS])
+		AC_MSG_RESULT([***** LDLAGS  =$LDLAGS])
+
+		AC_CHECK_LIB($IP2LOCATION_LIB_NAME, IP2Location_open,
 		[
 			AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location support.)
 			AC_MSG_RESULT([*** IP2Location support enabled])
 		],
 		[
-			AC_MSG_ERROR([IP2Location library header files were found but the library was not found])
+			AC_MSG_ERROR([IP2Location library header files were found but the library was not found, LDFLAGS=$LDFLAGS, CFLAGS=$CFLAGS])
 		])
 	else
 		# wrapper detects by itself the real support
@@ -371,6 +424,8 @@ AC_SUBST(IP2LOCATION_DYN_LIB)
 dnl *************************************************
 dnl GeoIP support
 dnl *************************************************
+GEOIP_LIB_NAME="GeoIP"
+
 AC_ARG_ENABLE([geoip], 
 	AS_HELP_STRING([--enable-geoip],
 	               [Enable GeoIP support (default: disabled)]),
@@ -384,16 +439,34 @@ AC_ARG_ENABLE([geoip],
 
 AC_ARG_WITH([geoip-headers],
 	AS_HELP_STRING([--with-geoip-headers=DIR],
-                   [GeoIP include files location]),
+		[GeoIP include files location]),
 	[
-		GEOIP_INCLUDE="-I$with_geoip_headers"
+		GEOIP_INCLUDE_DIR="$with_geoip_headers"
+		GEOIP_INCLUDE="-I$GEOIP_INCLUDE_DIR"
 	])
 
 AC_ARG_WITH([geoip-lib],
 	AS_HELP_STRING([--with-geoip-lib=DIR],
-                   [GeoIP library location]),
+		[GeoIP library location]),
 	[
-		GEOIP_LIB="-L$with_geoip_lib $GEOIP_LIB"
+		if test -d "$with_geoip_lib"; then 
+			GEOIP_LIB_DIR="$with_geoip_lib"
+			GEOIP_LIB="-L$GEOIP_LIB_DIR $GEOIP_LIB"
+			AC_MSG_RESULT([GeoIP library directory given: $GEOIP_LIB_DIR])
+		else
+			AC_MSG_ERROR([GeoIP library directory not found: $with_geoip_lib])
+		fi
+	])
+
+AC_ARG_WITH([geoip-lib-name],
+	AS_HELP_STRING([--with-geoip-lib-name=NAME],
+		[GeoIP library name]),
+	[
+		GEOIP_LIB_NAME="$with_geoip_lib_name"
+		GEOIP_LIB="-l$GEOIP_LIB_NAME $GEOIP_LIB"
+		AC_MSG_RESULT([GeoIP library name given: $GEOIP_LIB_NAME])
+        ],[
+		GEOIP_LIB="-l$GEOIP_LIB_NAME $GEOIP_LIB"
 	])
 
 AC_ARG_WITH([geoip-static],
@@ -467,15 +540,51 @@ AC_ARG_WITH([geoip-ipv6-compat],
 #fi
 
 if test "$GEOIP" = "yes"; then
+	AC_MSG_RESULT([**** GEOIP_INCLUDE       : $GEOIP_INCLUDE])
+	AC_MSG_RESULT([**** GEOIP_LIB           : $GEOIP_LIB])
+	AC_MSG_RESULT([**** GEOIP_LIB_NAME      : $GEOIP_LIB_NAME])
+	AC_MSG_RESULT([**** GEOIP_LIB_DIR       : $GEOIP_LIB_DIR])
+
 	CPPFLAGS="$CFLAGS $GEOIP_INCLUDE"
 	AC_MSG_RESULT([*** GeoIP support requested])
 
-	AC_CHECK_HEADER(GeoIP.h,,
+	AC_CHECK_HEADER(GeoIP.h, [
+		if test -n "$GEOIP_INCLUDE_DIR"; then
+			if test -e "$GEOIP_INCLUDE_DIR/GeoIP.h"; then
+				CPPFLAGS="$CPPFLAGS -include $GEOIP_INCLUDE_DIR/GeoIP.h"
+			else
+				AC_MSG_ERROR([GeoIP library header file not found: $GEOIP_INCLUDE_DIR/GeoIP.h])
+			fi
+		else
+			CPPFLAGS="$CPPFLAGS -include GeoIP.h"
+		fi
+
+		AC_CHECK_DECL([GeoIP_open],,
+			AC_MSG_ERROR([GeoIP library header file misses GeoIP_open]))
+
+		AC_CHECK_DECLS([
+			GeoIP_country_code_by_ipnum_v6,
+			GeoIP_lib_version,
+			GeoIP_country_code_by_addr_v6,
+			GeoIP_country_name_by_addr_v6,
+			GeoIP_cleanup
+		])
+
+		AC_CHECK_DECLS([
+			GEOIP_LARGE_COUNTRY_EDITION,
+			GEOIP_LARGE_COUNTRY_EDITION_V6,
+			GEOIP_CITY_EDITION_REV0_V6,
+			GEOIP_CITY_EDITION_REV1_V6,
+			GEOIP_ASNUM_EDITION,
+			GEOIP_ASNUM_EDITION_V6,
+			GEOIP_COUNTRY_EDITION_V6
+		])
+	],
 	[
 		AC_MSG_ERROR([GeoIP library header files not found])
 	])
 
-	AC_MSG_RESULT([*** GeoIP db: $geoip_db])
+	AC_MSG_RESULT([*** GeoIP database directory: $geoip_db])
 	AC_DEFINE_UNQUOTED(GEOIP_DB, "$geoip_db", Define GeoIP database directory.)
 
 	if test "$GEOIP_DYN" != "yes"; then
@@ -483,37 +592,50 @@ if test "$GEOIP" = "yes"; then
 			AC_DEFINE(SUPPORT_GEOIP_STATIC, 1, Define if you want GeoIP support statically linked - requires also additional linker options.)
 		fi
 
-		GEOIP_LIB="-lGeoIP"
-		LDFLAGS="$LDFLAGS $GEOIP_LIB"
+		CPPFLAGS="$CFLAGS"
 
-		AC_CHECK_LIB(GeoIP, GeoIP_open,
+		if test -n "$GEOIP_LIB_DIR"; then
+			if test -e "$GEOIP_LIB_DIR/lib$GEOIP_LIB_NAME.so"; then
+				LDFLAGS="$LDFLAGS -L$GEOIP_LIB_DIR"
+				CFLAGS="$CFLAGS -L$GEOIP_LIB_DIR"
+				LIBS="-L$GEOIP_LIB_DIR"
+			else
+				AC_MSG_ERROR([GeoIP library file not found: $GEOIP_INCLUDE_DIR/lib$GEOIP_LIB_NAME.so])
+			fi
+		fi
+
+		AC_MSG_RESULT([***** CPPFLAGS=$CPPFLAGS])
+		AC_MSG_RESULT([***** CFLAGS  =$CFLAGS])
+		AC_MSG_RESULT([***** LDLAGS  =$LDLAGS])
+
+		AC_CHECK_LIB($GEOIP_LIB_NAME, GeoIP_open,
 		[
 			AC_DEFINE(SUPPORT_GEOIP, 1, Define if you want GeoIP support.)
 			AC_MSG_RESULT([*** GeoIP support enabled])
 		],
 		[
-			AC_MSG_ERROR([GeoIP library header files were found but the library was not found])
+			AC_MSG_ERROR([GeoIP library header files given but the library was not found, LDFLAGS=$LDFLAGS])
 		])
 
-		AC_CHECK_LIB(GeoIP, GeoIP_country_code_by_ipnum_v6,
+		AC_CHECK_LIB($GEOIP_LIB_NAME, GeoIP_country_code_by_ipnum_v6,
 		[
 			AC_DEFINE(SUPPORT_GEOIP_V6, 1, Define if you want GeoIP IPv6 support.)
 			AC_MSG_RESULT([*** GeoIP IPv6 support enabled])
 		],
 		[
-			AC_MSG_WARN([GeoIP library header files were found but not supporting IPv6 (upgrade to GeoIP 1.4.5 or newer for enabling IPv6 support)])
+			AC_MSG_WARN([GeoIP library file were found but not supporting IPv6 (upgrade to GeoIP 1.4.5 or newer for enabling IPv6 support)])
 		])
 
 		if test "$GEOIP_COMPAT" = "no"; then
-			AC_CHECK_LIB(GeoIP, GeoIP_lib_version,
+			AC_CHECK_LIB($GEOIP_LIB_NAME, GeoIP_lib_version,
 			[
 				AC_DEFINE(SUPPORT_GEOIP_LIB_VERSION, 1, Define if your GeoIP version supports GeoIP_lib_version.)
 			],
 			[
-				AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_lib_version (upgrade to newer version for support).])
+		    		AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_lib_version (upgrade to newer version for support).])
 			])
 
-			AC_CHECK_LIB(GeoIP, GeoIP_country_code_by_addr_v6,
+			AC_CHECK_LIB($GEOIP_LIB_NAME, GeoIP_country_code_by_addr_v6,
 			[
 				AC_DEFINE(SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6, 1, Define if your GeoIP version supports GeoIP_country_code_by_addr_v6.)
 			],
@@ -521,7 +643,7 @@ if test "$GEOIP" = "yes"; then
 			    AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_country_code_by_addr_v6 (will use workaround).])
 			])
 
-			AC_CHECK_LIB(GeoIP, GeoIP_country_name_by_addr_v6,
+			AC_CHECK_LIB($GEOIP_LIB_NAME, GeoIP_country_name_by_addr_v6,
 			[
 				AC_DEFINE(SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6, 1, Define if your GeoIP version supports GeoIP_country_name_by_addr_v6.)
 			],
@@ -529,7 +651,7 @@ if test "$GEOIP" = "yes"; then
 				AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_country_name_by_addr_v6 (will use workaround).])
 			])
 
-			AC_CHECK_LIB(GeoIP, GeoIP_cleanup,
+			AC_CHECK_LIB($GEOIP_LIB_NAME, GeoIP_cleanup,
 			[
 				AC_DEFINE(SUPPORT_GEOIP_CLEANUP, 1, Define if your GeoIP version supports GeoIP_cleanup.)
 			],

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.41 2014/05/20 17:54:47 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.42 2014/06/16 20:31:01 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -386,7 +386,7 @@ testscenarios_showinfo_geoip() {
 ::1.2.3.4				IPV4_COUNTRYCODE[1.2.3.4]=AU
 ::ffff:1.2.3.4				IPV4_COUNTRYCODE[1.2.3.4]=AU
 # non-anonymized IPv6 prefix
-2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=DE
+2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=DE		DB_IPV6_CC
 2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_AS_NUM=8767		DB_IPV6_AS
 END
 }

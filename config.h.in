@@ -15,6 +15,70 @@
 /* Define GeoIP dynamic library. */
 #undef GEOIP_DYN_LIB
 
+/* Define to 1 if you have the declaration of `API_VERSION ', and to 0 if you
+   don't. */
+#undef HAVE_DECL_API_VERSION___
+
+/* Define to 1 if you have the declaration of `GEOIP_ASNUM_EDITION', and to 0
+   if you don't. */
+#undef HAVE_DECL_GEOIP_ASNUM_EDITION
+
+/* Define to 1 if you have the declaration of `GEOIP_ASNUM_EDITION_V6', and to
+   0 if you don't. */
+#undef HAVE_DECL_GEOIP_ASNUM_EDITION_V6
+
+/* Define to 1 if you have the declaration of `GEOIP_CITY_EDITION_REV0_V6',
+   and to 0 if you don't. */
+#undef HAVE_DECL_GEOIP_CITY_EDITION_REV0_V6
+
+/* Define to 1 if you have the declaration of `GEOIP_CITY_EDITION_REV1_V6',
+   and to 0 if you don't. */
+#undef HAVE_DECL_GEOIP_CITY_EDITION_REV1_V6
+
+/* Define to 1 if you have the declaration of `GeoIP_cleanup ', and to 0 if
+   you don't. */
+#undef HAVE_DECL_GEOIP_CLEANUP___
+
+/* Define to 1 if you have the declaration of `GeoIP_country_code_by_addr_v6',
+   and to 0 if you don't. */
+#undef HAVE_DECL_GEOIP_COUNTRY_CODE_BY_ADDR_V6
+
+/* Define to 1 if you have the declaration of
+   `GeoIP_country_code_by_ipnum_v6', and to 0 if you don't. */
+#undef HAVE_DECL_GEOIP_COUNTRY_CODE_BY_IPNUM_V6
+
+/* Define to 1 if you have the declaration of `GEOIP_COUNTRY_EDITION_V6 ', and
+   to 0 if you don't. */
+#undef HAVE_DECL_GEOIP_COUNTRY_EDITION_V6___
+
+/* Define to 1 if you have the declaration of `GeoIP_country_name_by_addr_v6',
+   and to 0 if you don't. */
+#undef HAVE_DECL_GEOIP_COUNTRY_NAME_BY_ADDR_V6
+
+/* Define to 1 if you have the declaration of `GEOIP_LARGE_COUNTRY_EDITION',
+   and to 0 if you don't. */
+#undef HAVE_DECL_GEOIP_LARGE_COUNTRY_EDITION
+
+/* Define to 1 if you have the declaration of
+   `GEOIP_LARGE_COUNTRY_EDITION_V6', and to 0 if you don't. */
+#undef HAVE_DECL_GEOIP_LARGE_COUNTRY_EDITION_V6
+
+/* Define to 1 if you have the declaration of `GeoIP_lib_version', and to 0 if
+   you don't. */
+#undef HAVE_DECL_GEOIP_LIB_VERSION
+
+/* Define to 1 if you have the declaration of `IP2Location_close', and to 0 if
+   you don't. */
+#undef HAVE_DECL_IP2LOCATION_CLOSE
+
+/* Define to 1 if you have the declaration of `IP2Location_get_country_long ',
+   and to 0 if you don't. */
+#undef HAVE_DECL_IP2LOCATION_GET_COUNTRY_LONG___
+
+/* Define to 1 if you have the declaration of `IP2Location_get_country_short',
+   and to 0 if you don't. */
+#undef HAVE_DECL_IP2LOCATION_GET_COUNTRY_SHORT
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 

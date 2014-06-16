@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.337 2014/06/11 05:00:34 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.338 2014/06/16 20:31:01 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140616/PB
+	configure[.in]: improve GeoIP include/library definition support
+
 20140611/PB
 	configure[.in]: apply suggested changes from AGB to fix improper use of AC_ARG_ENABLE
 

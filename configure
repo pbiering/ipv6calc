@@ -706,6 +706,7 @@ enable_db_ipv6
 enable_ip2location
 with_ip2location_headers
 with_ip2location_lib
+with_ip2location_lib_name
 with_ip2location_static
 with_ip2location_dynamic
 with_ip2location_db
@@ -713,6 +714,7 @@ with_ip2location_dyn_lib
 enable_geoip
 with_geoip_headers
 with_geoip_lib
+with_geoip_lib_name
 with_geoip_static
 with_geoip_dynamic
 with_geoip_db
@@ -1357,6 +1359,8 @@ Optional Packages:
                           IP2Location include files location
   --with-ip2location-lib=FILE
                           IP2Location library location
+  --with-ip2location-lib-name=NAME
+                          IP2Location library name
   --with-ip2location-static
                           Explicitly link IP2Location statically (default=no)
   --with-ip2location-dynamic
@@ -1371,6 +1375,8 @@ Optional Packages:
   --with-geoip-headers=DIR
                           GeoIP include files location
   --with-geoip-lib=DIR    GeoIP library location
+  --with-geoip-lib-name=NAME
+                          GeoIP library name
   --with-geoip-static     Explicitly link GeoIP statically (default=no)
   --with-geoip-dynamic    Enable use of dynamic loading of GeoIP library
                           (default=no)
@@ -1879,6 +1885,52 @@ fi
   eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
 
 } # ac_fn_c_check_header_mongrel
+
+# ac_fn_c_check_decl LINENO SYMBOL VAR INCLUDES
+# ---------------------------------------------
+# Tests whether SYMBOL is declared in INCLUDES, setting cache variable VAR
+# accordingly.
+ac_fn_c_check_decl ()
+{
+  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+  as_decl_name=`echo $2|sed 's/ *(.*//'`
+  as_decl_use=`echo $2|sed -e 's/(/((/' -e 's/)/) 0&/' -e 's/,/) 0& (/g'`
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether $as_decl_name is declared" >&5
+$as_echo_n "checking whether $as_decl_name is declared... " >&6; }
+if eval \${$3+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+$4
+int
+main ()
+{
+#ifndef $as_decl_name
+#ifdef __cplusplus
+  (void) $as_decl_use;
+#else
+  (void) $as_decl_name;
+#endif
+#endif
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  eval "$3=yes"
+else
+  eval "$3=no"
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+fi
+eval ac_res=\$$3
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+
+} # ac_fn_c_check_decl
 cat >config.log <<_ACEOF
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
@@ -4305,6 +4357,8 @@ $as_echo "#define SUPPORT_DB_IPV6 1" >>confdefs.h
 fi
 
 
+IP2LOCATION_LIB_NAME="IP2Location"
+
 # Check whether --enable-ip2location was given.
 if test "${enable_ip2location+set}" = set; then :
   enableval=$enable_ip2location;
@@ -4321,7 +4375,8 @@ fi
 # Check whether --with-ip2location-headers was given.
 if test "${with_ip2location_headers+set}" = set; then :
   withval=$with_ip2location_headers;
-		IP2LOCATION_INCLUDE="-I$with_ip2location_headers"
+		IP2LOCATION_INCLUDE_DIR="$with_ip2location_headers"
+		IP2LOCATION_INCLUDE="-I$IP2LOCATION_INCLUDE_DIR"
 
 fi
 
@@ -4330,7 +4385,30 @@ fi
 # Check whether --with-ip2location-lib was given.
 if test "${with_ip2location_lib+set}" = set; then :
   withval=$with_ip2location_lib;
-		IP2LOCATION_LIB="-L$with_ip2location_lib $IP2LOCATION_LIB"
+		if test -d "$with_ip2location_lib"; then
+			IP2LOCATION_LIB_DIR="$with_ip2location_lib"
+			IP2LOCATION_LIB="-L$IP2LOCATION_LIB_DIR $IP2LOCATION_LIB"
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: IP2Location library directory given: $IP2LOCATION_LIB_DIR" >&5
+$as_echo "IP2Location library directory given: $IP2LOCATION_LIB_DIR" >&6; }
+		else
+			as_fn_error $? "IP2Location library directory not found: $with_ip2location_lib" "$LINENO" 5
+		fi
+
+fi
+
+
+
+# Check whether --with-ip2location-lib-name was given.
+if test "${with_ip2location_lib_name+set}" = set; then :
+  withval=$with_ip2location_lib_name;
+		IP2LOCATION_LIB_NAME="$with_geoip_lib_name"
+		IP2LOCATION_LIB="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB"
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: IP2Location library name given: $IP2LOCATION_LIB_NAME" >&5
+$as_echo "IP2Location library name given: $IP2LOCATION_LIB_NAME" >&6; }
+
+else
+
+		IP2LOCATION_LIB="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB"
 
 fi
 
@@ -4388,12 +4466,85 @@ fi
 
 
 if test "$IP2LOCATION" = "yes"; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** IP2LOCATION_INCLUDE  : $IP2LOCATION_INCLUDE" >&5
+$as_echo "**** IP2LOCATION_INCLUDE  : $IP2LOCATION_INCLUDE" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** IP2LOCATION_LIB      : $IP2LOCATION_LIB" >&5
+$as_echo "**** IP2LOCATION_LIB      : $IP2LOCATION_LIB" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** IP2LOCATION_LIB_NAME : $IP2LOCATION_LIB_NAME" >&5
+$as_echo "**** IP2LOCATION_LIB_NAME : $IP2LOCATION_LIB_NAME" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** IP2LOCATION_LIB_DIR  : $IP2LOCATION_LIB_DIR" >&5
+$as_echo "**** IP2LOCATION_LIB_DIR  : $IP2LOCATION_LIB_DIR" >&6; }
+
 	CPPFLAGS="$CPPFLAGS $IP2LOCATION_INCLUDE"
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2Location support requested" >&5
 $as_echo "*** IP2Location support requested" >&6; }
 
 	ac_fn_c_check_header_mongrel "$LINENO" "IP2Location.h" "ac_cv_header_IP2Location_h" "$ac_includes_default"
 if test "x$ac_cv_header_IP2Location_h" = xyes; then :
+
+		if test -n "$IP2LOCATION_INCLUDE_DIR"; then
+			if test -e "$IP2LOCATION_INCLUDE_DIR/IP2Location.h"; then
+				CPPFLAGS="$CPPFLAGS -include $IP2LOCATION_INCLUDE_DIR/IP2Location.h"
+			else
+				as_fn_error $? "IP2Location library header file not found: $IP2LOCATION_INCLUDE_DIR/IP2Location.h" "$LINENO" 5
+			fi
+		else
+			CPPFLAGS="$CPPFLAGS -include IP2Location.h"
+		fi
+
+		ac_fn_c_check_decl "$LINENO" "IP2Location_open" "ac_cv_have_decl_IP2Location_open" "$ac_includes_default"
+if test "x$ac_cv_have_decl_IP2Location_open" = xyes; then :
+
+else
+  as_fn_error $? "IP2Location library header file misses IP2Location_open" "$LINENO" 5
+fi
+
+
+		ac_fn_c_check_decl "$LINENO" "IP2Location_close" "ac_cv_have_decl_IP2Location_close" "$ac_includes_default"
+if test "x$ac_cv_have_decl_IP2Location_close" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_IP2LOCATION_CLOSE $ac_have_decl
+_ACEOF
+ac_fn_c_check_decl "$LINENO" "IP2Location_get_country_short" "ac_cv_have_decl_IP2Location_get_country_short" "$ac_includes_default"
+if test "x$ac_cv_have_decl_IP2Location_get_country_short" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_IP2LOCATION_GET_COUNTRY_SHORT $ac_have_decl
+_ACEOF
+ac_fn_c_check_decl "$LINENO" "IP2Location_get_country_long
+		" "ac_cv_have_decl_IP2Location_get_country_long___" "$ac_includes_default"
+if test "x$ac_cv_have_decl_IP2Location_get_country_long___" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_IP2LOCATION_GET_COUNTRY_LONG___ $ac_have_decl
+_ACEOF
+
+
+		ac_fn_c_check_decl "$LINENO" "API_VERSION
+		" "ac_cv_have_decl_API_VERSION___" "$ac_includes_default"
+if test "x$ac_cv_have_decl_API_VERSION___" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_API_VERSION___ $ac_have_decl
+_ACEOF
+
 
 else
 
@@ -4412,71 +4563,39 @@ _ACEOF
 
 
 	if test "$IP2LOCATION_DYN" != "yes"; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for IP2Location_open in -lIP2Location" >&5
-$as_echo_n "checking for IP2Location_open in -lIP2Location... " >&6; }
-if ${ac_cv_lib_IP2Location_IP2Location_open+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lIP2Location  $LIBS"
-cat confdefs.h - <<_ACEOF >conftest.$ac_ext
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char IP2Location_open ();
-int
-main ()
-{
-return IP2Location_open ();
-  ;
-  return 0;
-}
-_ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_IP2Location_IP2Location_open=yes
-else
-  ac_cv_lib_IP2Location_IP2Location_open=no
-fi
-rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_IP2Location_IP2Location_open" >&5
-$as_echo "$ac_cv_lib_IP2Location_IP2Location_open" >&6; }
-if test "x$ac_cv_lib_IP2Location_IP2Location_open" = xyes; then :
-
-
-$as_echo "#define SUPPORT_IP2LOCATION 1" >>confdefs.h
-
-
-else
-
-			as_fn_error $? "IP2Location library header files were found but the library was not found" "$LINENO" 5
-
-fi
-
-
-		IP2LOCATION_LIB="-lIP2Location"
-		LDFLAGS="$LDFLAGS $IP2LOCATION_LIB"
-
 		if test "$IP2LOCATION_STATIC" = "yes"; then
 
 $as_echo "#define SUPPORT_IP2LOCATION_STATIC 1" >>confdefs.h
 
 		fi
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for IP2Location_open in -lIP2Location" >&5
-$as_echo_n "checking for IP2Location_open in -lIP2Location... " >&6; }
-if ${ac_cv_lib_IP2Location_IP2Location_open+:} false; then :
+		CPPFLAGS="$CFLAGS"
+
+		if test -n "$IP2LOCATION_LIB_DIR"; then
+			if test -e "$IP2LOCATION_LIB_DIR/lib$IP2LOCATION_LIB_NAME.so"; then
+				LDFLAGS="$LDFLAGS -L$IP2LOCATION_LIB_DIR"
+				CFLAGS="$CFLAGS -L$IP2LOCATION_LIB_DIR"
+				LIBS="-L$IP2LOCATION_LIB_DIR"
+			else
+				as_fn_error $? "IP2Location library file not found: $IP2LOCATION_INCLUDE_DIR/lib$IP2LOCATION_LIB_NAME.so" "$LINENO" 5
+			fi
+		fi
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** CPPFLAGS=$CPPFLAGS" >&5
+$as_echo "***** CPPFLAGS=$CPPFLAGS" >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** CFLAGS  =$CFLAGS" >&5
+$as_echo "***** CFLAGS  =$CFLAGS" >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** LDLAGS  =$LDLAGS" >&5
+$as_echo "***** LDLAGS  =$LDLAGS" >&6; }
+
+		as_ac_Lib=`$as_echo "ac_cv_lib_$IP2LOCATION_LIB_NAME''_IP2Location_open" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for IP2Location_open in -l$IP2LOCATION_LIB_NAME" >&5
+$as_echo_n "checking for IP2Location_open in -l$IP2LOCATION_LIB_NAME... " >&6; }
+if eval \${$as_ac_Lib+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lIP2Location  $LIBS"
+LIBS="-l$IP2LOCATION_LIB_NAME  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -4496,17 +4615,18 @@ return IP2Location_open ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_IP2Location_IP2Location_open=yes
+  eval "$as_ac_Lib=yes"
 else
-  ac_cv_lib_IP2Location_IP2Location_open=no
+  eval "$as_ac_Lib=no"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_IP2Location_IP2Location_open" >&5
-$as_echo "$ac_cv_lib_IP2Location_IP2Location_open" >&6; }
-if test "x$ac_cv_lib_IP2Location_IP2Location_open" = xyes; then :
+eval ac_res=\$$as_ac_Lib
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
 
 
 $as_echo "#define SUPPORT_IP2LOCATION 1" >>confdefs.h
@@ -4516,7 +4636,7 @@ $as_echo "*** IP2Location support enabled" >&6; }
 
 else
 
-			as_fn_error $? "IP2Location library header files were found but the library was not found" "$LINENO" 5
+			as_fn_error $? "IP2Location library header files were found but the library was not found, LDFLAGS=$LDFLAGS, CFLAGS=$CFLAGS" "$LINENO" 5
 
 fi
 
@@ -4547,6 +4667,8 @@ fi
 
 
 
+GEOIP_LIB_NAME="GeoIP"
+
 # Check whether --enable-geoip was given.
 if test "${enable_geoip+set}" = set; then :
   enableval=$enable_geoip;
@@ -4565,7 +4687,8 @@ fi
 # Check whether --with-geoip-headers was given.
 if test "${with_geoip_headers+set}" = set; then :
   withval=$with_geoip_headers;
-		GEOIP_INCLUDE="-I$with_geoip_headers"
+		GEOIP_INCLUDE_DIR="$with_geoip_headers"
+		GEOIP_INCLUDE="-I$GEOIP_INCLUDE_DIR"
 
 fi
 
@@ -4574,7 +4697,30 @@ fi
 # Check whether --with-geoip-lib was given.
 if test "${with_geoip_lib+set}" = set; then :
   withval=$with_geoip_lib;
-		GEOIP_LIB="-L$with_geoip_lib $GEOIP_LIB"
+		if test -d "$with_geoip_lib"; then
+			GEOIP_LIB_DIR="$with_geoip_lib"
+			GEOIP_LIB="-L$GEOIP_LIB_DIR $GEOIP_LIB"
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: GeoIP library directory given: $GEOIP_LIB_DIR" >&5
+$as_echo "GeoIP library directory given: $GEOIP_LIB_DIR" >&6; }
+		else
+			as_fn_error $? "GeoIP library directory not found: $with_geoip_lib" "$LINENO" 5
+		fi
+
+fi
+
+
+
+# Check whether --with-geoip-lib-name was given.
+if test "${with_geoip_lib_name+set}" = set; then :
+  withval=$with_geoip_lib_name;
+		GEOIP_LIB_NAME="$with_geoip_lib_name"
+		GEOIP_LIB="-l$GEOIP_LIB_NAME $GEOIP_LIB"
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: GeoIP library name given: $GEOIP_LIB_NAME" >&5
+$as_echo "GeoIP library name given: $GEOIP_LIB_NAME" >&6; }
+
+else
+
+		GEOIP_LIB="-l$GEOIP_LIB_NAME $GEOIP_LIB"
 
 fi
 
@@ -4668,12 +4814,165 @@ fi
 #fi
 
 if test "$GEOIP" = "yes"; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** GEOIP_INCLUDE       : $GEOIP_INCLUDE" >&5
+$as_echo "**** GEOIP_INCLUDE       : $GEOIP_INCLUDE" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** GEOIP_LIB           : $GEOIP_LIB" >&5
+$as_echo "**** GEOIP_LIB           : $GEOIP_LIB" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** GEOIP_LIB_NAME      : $GEOIP_LIB_NAME" >&5
+$as_echo "**** GEOIP_LIB_NAME      : $GEOIP_LIB_NAME" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** GEOIP_LIB_DIR       : $GEOIP_LIB_DIR" >&5
+$as_echo "**** GEOIP_LIB_DIR       : $GEOIP_LIB_DIR" >&6; }
+
 	CPPFLAGS="$CFLAGS $GEOIP_INCLUDE"
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GeoIP support requested" >&5
 $as_echo "*** GeoIP support requested" >&6; }
 
 	ac_fn_c_check_header_mongrel "$LINENO" "GeoIP.h" "ac_cv_header_GeoIP_h" "$ac_includes_default"
 if test "x$ac_cv_header_GeoIP_h" = xyes; then :
+
+		if test -n "$GEOIP_INCLUDE_DIR"; then
+			if test -e "$GEOIP_INCLUDE_DIR/GeoIP.h"; then
+				CPPFLAGS="$CPPFLAGS -include $GEOIP_INCLUDE_DIR/GeoIP.h"
+			else
+				as_fn_error $? "GeoIP library header file not found: $GEOIP_INCLUDE_DIR/GeoIP.h" "$LINENO" 5
+			fi
+		else
+			CPPFLAGS="$CPPFLAGS -include GeoIP.h"
+		fi
+
+		ac_fn_c_check_decl "$LINENO" "GeoIP_open" "ac_cv_have_decl_GeoIP_open" "$ac_includes_default"
+if test "x$ac_cv_have_decl_GeoIP_open" = xyes; then :
+
+else
+  as_fn_error $? "GeoIP library header file misses GeoIP_open" "$LINENO" 5
+fi
+
+
+		ac_fn_c_check_decl "$LINENO" "GeoIP_country_code_by_ipnum_v6" "ac_cv_have_decl_GeoIP_country_code_by_ipnum_v6" "$ac_includes_default"
+if test "x$ac_cv_have_decl_GeoIP_country_code_by_ipnum_v6" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GEOIP_COUNTRY_CODE_BY_IPNUM_V6 $ac_have_decl
+_ACEOF
+ac_fn_c_check_decl "$LINENO" "GeoIP_lib_version" "ac_cv_have_decl_GeoIP_lib_version" "$ac_includes_default"
+if test "x$ac_cv_have_decl_GeoIP_lib_version" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GEOIP_LIB_VERSION $ac_have_decl
+_ACEOF
+ac_fn_c_check_decl "$LINENO" "GeoIP_country_code_by_addr_v6" "ac_cv_have_decl_GeoIP_country_code_by_addr_v6" "$ac_includes_default"
+if test "x$ac_cv_have_decl_GeoIP_country_code_by_addr_v6" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GEOIP_COUNTRY_CODE_BY_ADDR_V6 $ac_have_decl
+_ACEOF
+ac_fn_c_check_decl "$LINENO" "GeoIP_country_name_by_addr_v6" "ac_cv_have_decl_GeoIP_country_name_by_addr_v6" "$ac_includes_default"
+if test "x$ac_cv_have_decl_GeoIP_country_name_by_addr_v6" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GEOIP_COUNTRY_NAME_BY_ADDR_V6 $ac_have_decl
+_ACEOF
+ac_fn_c_check_decl "$LINENO" "GeoIP_cleanup
+		" "ac_cv_have_decl_GeoIP_cleanup___" "$ac_includes_default"
+if test "x$ac_cv_have_decl_GeoIP_cleanup___" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GEOIP_CLEANUP___ $ac_have_decl
+_ACEOF
+
+
+		ac_fn_c_check_decl "$LINENO" "GEOIP_LARGE_COUNTRY_EDITION" "ac_cv_have_decl_GEOIP_LARGE_COUNTRY_EDITION" "$ac_includes_default"
+if test "x$ac_cv_have_decl_GEOIP_LARGE_COUNTRY_EDITION" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GEOIP_LARGE_COUNTRY_EDITION $ac_have_decl
+_ACEOF
+ac_fn_c_check_decl "$LINENO" "GEOIP_LARGE_COUNTRY_EDITION_V6" "ac_cv_have_decl_GEOIP_LARGE_COUNTRY_EDITION_V6" "$ac_includes_default"
+if test "x$ac_cv_have_decl_GEOIP_LARGE_COUNTRY_EDITION_V6" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GEOIP_LARGE_COUNTRY_EDITION_V6 $ac_have_decl
+_ACEOF
+ac_fn_c_check_decl "$LINENO" "GEOIP_CITY_EDITION_REV0_V6" "ac_cv_have_decl_GEOIP_CITY_EDITION_REV0_V6" "$ac_includes_default"
+if test "x$ac_cv_have_decl_GEOIP_CITY_EDITION_REV0_V6" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GEOIP_CITY_EDITION_REV0_V6 $ac_have_decl
+_ACEOF
+ac_fn_c_check_decl "$LINENO" "GEOIP_CITY_EDITION_REV1_V6" "ac_cv_have_decl_GEOIP_CITY_EDITION_REV1_V6" "$ac_includes_default"
+if test "x$ac_cv_have_decl_GEOIP_CITY_EDITION_REV1_V6" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GEOIP_CITY_EDITION_REV1_V6 $ac_have_decl
+_ACEOF
+ac_fn_c_check_decl "$LINENO" "GEOIP_ASNUM_EDITION" "ac_cv_have_decl_GEOIP_ASNUM_EDITION" "$ac_includes_default"
+if test "x$ac_cv_have_decl_GEOIP_ASNUM_EDITION" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GEOIP_ASNUM_EDITION $ac_have_decl
+_ACEOF
+ac_fn_c_check_decl "$LINENO" "GEOIP_ASNUM_EDITION_V6" "ac_cv_have_decl_GEOIP_ASNUM_EDITION_V6" "$ac_includes_default"
+if test "x$ac_cv_have_decl_GEOIP_ASNUM_EDITION_V6" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GEOIP_ASNUM_EDITION_V6 $ac_have_decl
+_ACEOF
+ac_fn_c_check_decl "$LINENO" "GEOIP_COUNTRY_EDITION_V6
+		" "ac_cv_have_decl_GEOIP_COUNTRY_EDITION_V6___" "$ac_includes_default"
+if test "x$ac_cv_have_decl_GEOIP_COUNTRY_EDITION_V6___" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_GEOIP_COUNTRY_EDITION_V6___ $ac_have_decl
+_ACEOF
+
 
 else
 
@@ -4683,8 +4982,8 @@ fi
 
 
 
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GeoIP db: $geoip_db" >&5
-$as_echo "*** GeoIP db: $geoip_db" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GeoIP database directory: $geoip_db" >&5
+$as_echo "*** GeoIP database directory: $geoip_db" >&6; }
 
 cat >>confdefs.h <<_ACEOF
 #define GEOIP_DB "$geoip_db"
@@ -4698,16 +4997,33 @@ $as_echo "#define SUPPORT_GEOIP_STATIC 1" >>confdefs.h
 
 		fi
 
-		GEOIP_LIB="-lGeoIP"
-		LDFLAGS="$LDFLAGS $GEOIP_LIB"
+		CPPFLAGS="$CFLAGS"
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GeoIP_open in -lGeoIP" >&5
-$as_echo_n "checking for GeoIP_open in -lGeoIP... " >&6; }
-if ${ac_cv_lib_GeoIP_GeoIP_open+:} false; then :
+		if test -n "$GEOIP_LIB_DIR"; then
+			if test -e "$GEOIP_LIB_DIR/lib$GEOIP_LIB_NAME.so"; then
+				LDFLAGS="$LDFLAGS -L$GEOIP_LIB_DIR"
+				CFLAGS="$CFLAGS -L$GEOIP_LIB_DIR"
+				LIBS="-L$GEOIP_LIB_DIR"
+			else
+				as_fn_error $? "GeoIP library file not found: $GEOIP_INCLUDE_DIR/lib$GEOIP_LIB_NAME.so" "$LINENO" 5
+			fi
+		fi
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** CPPFLAGS=$CPPFLAGS" >&5
+$as_echo "***** CPPFLAGS=$CPPFLAGS" >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** CFLAGS  =$CFLAGS" >&5
+$as_echo "***** CFLAGS  =$CFLAGS" >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** LDLAGS  =$LDLAGS" >&5
+$as_echo "***** LDLAGS  =$LDLAGS" >&6; }
+
+		as_ac_Lib=`$as_echo "ac_cv_lib_$GEOIP_LIB_NAME''_GeoIP_open" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GeoIP_open in -l$GEOIP_LIB_NAME" >&5
+$as_echo_n "checking for GeoIP_open in -l$GEOIP_LIB_NAME... " >&6; }
+if eval \${$as_ac_Lib+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGeoIP  $LIBS"
+LIBS="-l$GEOIP_LIB_NAME  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -4727,17 +5043,18 @@ return GeoIP_open ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_GeoIP_GeoIP_open=yes
+  eval "$as_ac_Lib=yes"
 else
-  ac_cv_lib_GeoIP_GeoIP_open=no
+  eval "$as_ac_Lib=no"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GeoIP_GeoIP_open" >&5
-$as_echo "$ac_cv_lib_GeoIP_GeoIP_open" >&6; }
-if test "x$ac_cv_lib_GeoIP_GeoIP_open" = xyes; then :
+eval ac_res=\$$as_ac_Lib
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
 
 
 $as_echo "#define SUPPORT_GEOIP 1" >>confdefs.h
@@ -4747,18 +5064,19 @@ $as_echo "*** GeoIP support enabled" >&6; }
 
 else
 
-			as_fn_error $? "GeoIP library header files were found but the library was not found" "$LINENO" 5
+			as_fn_error $? "GeoIP library header files given but the library was not found, LDFLAGS=$LDFLAGS" "$LINENO" 5
 
 fi
 
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GeoIP_country_code_by_ipnum_v6 in -lGeoIP" >&5
-$as_echo_n "checking for GeoIP_country_code_by_ipnum_v6 in -lGeoIP... " >&6; }
-if ${ac_cv_lib_GeoIP_GeoIP_country_code_by_ipnum_v6+:} false; then :
+		as_ac_Lib=`$as_echo "ac_cv_lib_$GEOIP_LIB_NAME''_GeoIP_country_code_by_ipnum_v6" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GeoIP_country_code_by_ipnum_v6 in -l$GEOIP_LIB_NAME" >&5
+$as_echo_n "checking for GeoIP_country_code_by_ipnum_v6 in -l$GEOIP_LIB_NAME... " >&6; }
+if eval \${$as_ac_Lib+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGeoIP  $LIBS"
+LIBS="-l$GEOIP_LIB_NAME  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -4778,17 +5096,18 @@ return GeoIP_country_code_by_ipnum_v6 ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_GeoIP_GeoIP_country_code_by_ipnum_v6=yes
+  eval "$as_ac_Lib=yes"
 else
-  ac_cv_lib_GeoIP_GeoIP_country_code_by_ipnum_v6=no
+  eval "$as_ac_Lib=no"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GeoIP_GeoIP_country_code_by_ipnum_v6" >&5
-$as_echo "$ac_cv_lib_GeoIP_GeoIP_country_code_by_ipnum_v6" >&6; }
-if test "x$ac_cv_lib_GeoIP_GeoIP_country_code_by_ipnum_v6" = xyes; then :
+eval ac_res=\$$as_ac_Lib
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
 
 
 $as_echo "#define SUPPORT_GEOIP_V6 1" >>confdefs.h
@@ -4798,20 +5117,21 @@ $as_echo "*** GeoIP IPv6 support enabled" >&6; }
 
 else
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GeoIP library header files were found but not supporting IPv6 (upgrade to GeoIP 1.4.5 or newer for enabling IPv6 support)" >&5
-$as_echo "$as_me: WARNING: GeoIP library header files were found but not supporting IPv6 (upgrade to GeoIP 1.4.5 or newer for enabling IPv6 support)" >&2;}
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GeoIP library file were found but not supporting IPv6 (upgrade to GeoIP 1.4.5 or newer for enabling IPv6 support)" >&5
+$as_echo "$as_me: WARNING: GeoIP library file were found but not supporting IPv6 (upgrade to GeoIP 1.4.5 or newer for enabling IPv6 support)" >&2;}
 
 fi
 
 
 		if test "$GEOIP_COMPAT" = "no"; then
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GeoIP_lib_version in -lGeoIP" >&5
-$as_echo_n "checking for GeoIP_lib_version in -lGeoIP... " >&6; }
-if ${ac_cv_lib_GeoIP_GeoIP_lib_version+:} false; then :
+			as_ac_Lib=`$as_echo "ac_cv_lib_$GEOIP_LIB_NAME''_GeoIP_lib_version" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GeoIP_lib_version in -l$GEOIP_LIB_NAME" >&5
+$as_echo_n "checking for GeoIP_lib_version in -l$GEOIP_LIB_NAME... " >&6; }
+if eval \${$as_ac_Lib+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGeoIP  $LIBS"
+LIBS="-l$GEOIP_LIB_NAME  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -4831,17 +5151,18 @@ return GeoIP_lib_version ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_GeoIP_GeoIP_lib_version=yes
+  eval "$as_ac_Lib=yes"
 else
-  ac_cv_lib_GeoIP_GeoIP_lib_version=no
+  eval "$as_ac_Lib=no"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GeoIP_GeoIP_lib_version" >&5
-$as_echo "$ac_cv_lib_GeoIP_GeoIP_lib_version" >&6; }
-if test "x$ac_cv_lib_GeoIP_GeoIP_lib_version" = xyes; then :
+eval ac_res=\$$as_ac_Lib
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
 
 
 $as_echo "#define SUPPORT_GEOIP_LIB_VERSION 1" >>confdefs.h
@@ -4849,19 +5170,20 @@ $as_echo "#define SUPPORT_GEOIP_LIB_VERSION 1" >>confdefs.h
 
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GeoIP library header files were found but not supporting GeoIP_lib_version (upgrade to newer version for support)." >&5
+		    		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GeoIP library header files were found but not supporting GeoIP_lib_version (upgrade to newer version for support)." >&5
 $as_echo "$as_me: WARNING: GeoIP library header files were found but not supporting GeoIP_lib_version (upgrade to newer version for support)." >&2;}
 
 fi
 
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GeoIP_country_code_by_addr_v6 in -lGeoIP" >&5
-$as_echo_n "checking for GeoIP_country_code_by_addr_v6 in -lGeoIP... " >&6; }
-if ${ac_cv_lib_GeoIP_GeoIP_country_code_by_addr_v6+:} false; then :
+			as_ac_Lib=`$as_echo "ac_cv_lib_$GEOIP_LIB_NAME''_GeoIP_country_code_by_addr_v6" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GeoIP_country_code_by_addr_v6 in -l$GEOIP_LIB_NAME" >&5
+$as_echo_n "checking for GeoIP_country_code_by_addr_v6 in -l$GEOIP_LIB_NAME... " >&6; }
+if eval \${$as_ac_Lib+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGeoIP  $LIBS"
+LIBS="-l$GEOIP_LIB_NAME  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -4881,17 +5203,18 @@ return GeoIP_country_code_by_addr_v6 ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_GeoIP_GeoIP_country_code_by_addr_v6=yes
+  eval "$as_ac_Lib=yes"
 else
-  ac_cv_lib_GeoIP_GeoIP_country_code_by_addr_v6=no
+  eval "$as_ac_Lib=no"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GeoIP_GeoIP_country_code_by_addr_v6" >&5
-$as_echo "$ac_cv_lib_GeoIP_GeoIP_country_code_by_addr_v6" >&6; }
-if test "x$ac_cv_lib_GeoIP_GeoIP_country_code_by_addr_v6" = xyes; then :
+eval ac_res=\$$as_ac_Lib
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
 
 
 $as_echo "#define SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6 1" >>confdefs.h
@@ -4905,13 +5228,14 @@ $as_echo "$as_me: WARNING: GeoIP library header files were found but not support
 fi
 
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GeoIP_country_name_by_addr_v6 in -lGeoIP" >&5
-$as_echo_n "checking for GeoIP_country_name_by_addr_v6 in -lGeoIP... " >&6; }
-if ${ac_cv_lib_GeoIP_GeoIP_country_name_by_addr_v6+:} false; then :
+			as_ac_Lib=`$as_echo "ac_cv_lib_$GEOIP_LIB_NAME''_GeoIP_country_name_by_addr_v6" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GeoIP_country_name_by_addr_v6 in -l$GEOIP_LIB_NAME" >&5
+$as_echo_n "checking for GeoIP_country_name_by_addr_v6 in -l$GEOIP_LIB_NAME... " >&6; }
+if eval \${$as_ac_Lib+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGeoIP  $LIBS"
+LIBS="-l$GEOIP_LIB_NAME  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -4931,17 +5255,18 @@ return GeoIP_country_name_by_addr_v6 ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_GeoIP_GeoIP_country_name_by_addr_v6=yes
+  eval "$as_ac_Lib=yes"
 else
-  ac_cv_lib_GeoIP_GeoIP_country_name_by_addr_v6=no
+  eval "$as_ac_Lib=no"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GeoIP_GeoIP_country_name_by_addr_v6" >&5
-$as_echo "$ac_cv_lib_GeoIP_GeoIP_country_name_by_addr_v6" >&6; }
-if test "x$ac_cv_lib_GeoIP_GeoIP_country_name_by_addr_v6" = xyes; then :
+eval ac_res=\$$as_ac_Lib
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
 
 
 $as_echo "#define SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6 1" >>confdefs.h
@@ -4955,13 +5280,14 @@ $as_echo "$as_me: WARNING: GeoIP library header files were found but not support
 fi
 
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GeoIP_cleanup in -lGeoIP" >&5
-$as_echo_n "checking for GeoIP_cleanup in -lGeoIP... " >&6; }
-if ${ac_cv_lib_GeoIP_GeoIP_cleanup+:} false; then :
+			as_ac_Lib=`$as_echo "ac_cv_lib_$GEOIP_LIB_NAME''_GeoIP_cleanup" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for GeoIP_cleanup in -l$GEOIP_LIB_NAME" >&5
+$as_echo_n "checking for GeoIP_cleanup in -l$GEOIP_LIB_NAME... " >&6; }
+if eval \${$as_ac_Lib+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lGeoIP  $LIBS"
+LIBS="-l$GEOIP_LIB_NAME  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -4981,17 +5307,18 @@ return GeoIP_cleanup ();
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_GeoIP_GeoIP_cleanup=yes
+  eval "$as_ac_Lib=yes"
 else
-  ac_cv_lib_GeoIP_GeoIP_cleanup=no
+  eval "$as_ac_Lib=no"
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_GeoIP_GeoIP_cleanup" >&5
-$as_echo "$ac_cv_lib_GeoIP_GeoIP_cleanup" >&6; }
-if test "x$ac_cv_lib_GeoIP_GeoIP_cleanup" = xyes; then :
+eval ac_res=\$$as_ac_Lib
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
 
 
 $as_echo "#define SUPPORT_GEOIP_CLEANUP 1" >>confdefs.h

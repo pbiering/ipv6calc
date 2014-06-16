@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.56 2014/05/20 17:54:47 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.57 2014/06/16 20:31:01 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -343,11 +343,13 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 		wrapper_features_GeoIP |= IPV6CALC_DB_IPV4_TO_CC;
 	};
 
+#ifdef SUPPORT_GEOIP_V6
 	if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_COUNTRY_EDITION_V6) == 1) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP database GEOIP_COUNTRY_EDITION_V6 available");
 		geoip_country_v6 = 1;
 		wrapper_features_GeoIP |= IPV6CALC_DB_IPV6_TO_CC;
 	};
+#endif
 
 	if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_ASNUM_EDITION) == 1) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP database GEOIP_ASNUM_EDITION available");
@@ -356,6 +358,7 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	};
 
 	if ((lib_features_GeoIP & (GEOIP_LIB_FEATURE_IPV6_CC_BY_ADDR | GEOIP_LIB_FEATURE_IPV6_CC_BY_ADDR)) != 0) {
+#ifdef GEOIP_ASNUM_EDITION_V6
 		if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_ASNUM_EDITION_V6) == 1) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP database GEOIP_ASNUM_EDITION_V6 available");
 			geoip_asnum_v6 = 1;
@@ -366,6 +369,7 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP database GEOIP_CITY_EDITION_REV1_V6 available");
 			geoip_city_v6 = 1;
 		};
+#endif
 	};
 
 	if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_CITY_EDITION_REV1) == 1) {
@@ -454,9 +458,13 @@ void libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(const int level_verbose,
 			if (gi == NULL) {
 				if (i == GEOIP_CITY_EDITION_REV0) { continue; };
 
-#ifdef SUPPORT_GEOIP_LIB_VERSION // >= 1.4.7
+#ifdef GEOIP_LARGE_COUNTRY_EDITION
 				if (i == GEOIP_LARGE_COUNTRY_EDITION) { continue; };
+#endif
+#ifdef GEOIP_CITY_EDITION_REV0_V6
 				if (i == GEOIP_CITY_EDITION_REV0_V6) { continue; };
+#endif
+#ifdef GEOIP_LARGE_COUNTRY_EDITION_V6
 				if (i == GEOIP_LARGE_COUNTRY_EDITION_V6) { continue; };
 #endif
 
@@ -1931,8 +1939,11 @@ char *libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(const char *addr, const
 			return(NULL);
 		};
 
-		/* TODO: workaround in case of old headerfile is used */
+#ifdef GEOIP_ASNUM_EDITION
 		GeoIP_type = GEOIP_ASNUM_EDITION;
+#else
+		return(NULL);
+#endif
 
 	} else if (proto == 6) {
 		if ((wrapper_features_GeoIP & IPV6CALC_DB_IPV6_TO_AS) == 0) {
@@ -1940,8 +1951,11 @@ char *libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(const char *addr, const
 			return(NULL);
 		};
 
-		/* TODO: workaround in case of old headerfile is used */
+#ifdef GEOIP_ASNUM_EDITION_V6
 		GeoIP_type = GEOIP_ASNUM_EDITION_V6;
+#else
+		return(NULL);
+#endif
 
 	} else {
 		return(NULL);
@@ -1983,7 +1997,11 @@ GeoIPRecord *libipv6calc_db_wrapper_GeoIP_wrapper_record_city_by_addr(const char
 		GeoIP_type = GEOIP_CITY_EDITION_REV1;
 	} else if (proto == 6) {
 		if ((lib_features_GeoIP & GEOIP_LIB_FEATURE_LIB_VERSION) != 0) {
+#ifdef GEOIP_CITY_EDITION_REV1_V6
 			GeoIP_type = GEOIP_CITY_EDITION_REV1_V6;
+#else
+			return (NULL);
+#endif
 		};
 	} else {
 		return (NULL);
