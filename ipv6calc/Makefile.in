@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : ipv6calc/Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.45 2014/02/23 15:54:49 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.46 2014/06/17 20:21:15 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -14,9 +14,9 @@ bindir		= @bindir@
 # Compiler and Linker Options
 DEFAULT_CFLAGS ?= -O2 -Wall -g
 
-INCLUDES= @MD5_INCLUDE@ @GETOPT_INCLUDE@ @IP2LOCATION_INCLUDE@ @GEOIP_INCLUDE@ -I../ -I../lib/ -I../databases/lib/
+INCLUDES= @MD5_INCLUDE@ @GETOPT_INCLUDE@ @IP2LOCATION_INCLUDE_L1@ @GEOIP_INCLUDE_L1@ -I../ -I../lib/ -I../databases/lib/
 
-LIBS = @IPV6CALC_LIB@ @IP2LOCATION_LIB@ @GEOIP_LIB@ @DYNLOAD_LIB@
+LIBS = @IPV6CALC_LIB@ @IP2LOCATION_LIB_L1@ @GEOIP_LIB_L1@ @DYNLOAD_LIB@
 
 GETOBJS = @LIBOBJS@
 

@@ -628,11 +628,19 @@ LDFLAGS_EXTRA
 DYNLOAD_LIB
 GEOIP_DYN_LIB
 GEOIP_DB
+GEOIP_LIB_L2
+GEOIP_LIB_L1
 GEOIP_LIB
+GEOIP_INCLUDE_L1
+GEOIP_INCLUDE_L2
 GEOIP_INCLUDE
 IP2LOCATION_DYN_LIB
 IP2LOCATION_DB
+IP2LOCATION_LIB_L2
+IP2LOCATION_LIB_L1
 IP2LOCATION_LIB
+IP2LOCATION_INCLUDE_L2
+IP2LOCATION_INCLUDE_L1
 IP2LOCATION_INCLUDE
 IPV6CALC_LIB
 SHARED_LIBRARY
@@ -706,7 +714,6 @@ enable_db_ipv6
 enable_ip2location
 with_ip2location_headers
 with_ip2location_lib
-with_ip2location_lib_name
 with_ip2location_static
 with_ip2location_dynamic
 with_ip2location_db
@@ -714,7 +721,6 @@ with_ip2location_dyn_lib
 enable_geoip
 with_geoip_headers
 with_geoip_lib
-with_geoip_lib_name
 with_geoip_static
 with_geoip_dynamic
 with_geoip_db
@@ -1359,8 +1365,6 @@ Optional Packages:
                           IP2Location include files location
   --with-ip2location-lib=FILE
                           IP2Location library location
-  --with-ip2location-lib-name=NAME
-                          IP2Location library name
   --with-ip2location-static
                           Explicitly link IP2Location statically (default=no)
   --with-ip2location-dynamic
@@ -1375,8 +1379,6 @@ Optional Packages:
   --with-geoip-headers=DIR
                           GeoIP include files location
   --with-geoip-lib=DIR    GeoIP library location
-  --with-geoip-lib-name=NAME
-                          GeoIP library name
   --with-geoip-static     Explicitly link GeoIP statically (default=no)
   --with-geoip-dynamic    Enable use of dynamic loading of GeoIP library
                           (default=no)
@@ -4376,7 +4378,15 @@ fi
 if test "${with_ip2location_headers+set}" = set; then :
   withval=$with_ip2location_headers;
 		IP2LOCATION_INCLUDE_DIR="$with_ip2location_headers"
-		IP2LOCATION_INCLUDE="-I$IP2LOCATION_INCLUDE_DIR"
+		IP2LOCATION_INCLUDE="-I$IP2LOCATION_INCLUDE_DIR -I$IP2LOCATION_INCLUDE_DIR/iMath"
+		if echo "$IP2LOCATION_INCLUDE_DIR" | grep -q "^/"; then
+			# absolute path
+			IP2LOCATION_INCLUDE_L1="-I$IP2LOCATION_INCLUDE_DIR -I$IP2LOCATION_INCLUDE_DIR/iMath"
+			IP2LOCATION_INCLUDE_L2="-I$IP2LOCATION_INCLUDE_DIR -I$IP2LOCATION_INCLUDE_DIR/iMath"
+		else
+			IP2LOCATION_INCLUDE_L1="-I../$IP2LOCATION_INCLUDE_DIR -I../$IP2LOCATION_INCLUDE_DIR/iMath"
+			IP2LOCATION_INCLUDE_L2="-I../../$IP2LOCATION_INCLUDE_DIR -I../../$IP2LOCATION_INCLUDE_DIR/iMath"
+		fi
 
 fi
 
@@ -4394,24 +4404,28 @@ $as_echo "IP2Location library directory given: $IP2LOCATION_LIB_DIR" >&6; }
 			as_fn_error $? "IP2Location library directory not found: $with_ip2location_lib" "$LINENO" 5
 		fi
 
-fi
-
-
-
-# Check whether --with-ip2location-lib-name was given.
-if test "${with_ip2location_lib_name+set}" = set; then :
-  withval=$with_ip2location_lib_name;
-		IP2LOCATION_LIB_NAME="$with_geoip_lib_name"
-		IP2LOCATION_LIB="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB"
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: IP2Location library name given: $IP2LOCATION_LIB_NAME" >&5
-$as_echo "IP2Location library name given: $IP2LOCATION_LIB_NAME" >&6; }
-
-else
-
-		IP2LOCATION_LIB="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB"
+		if echo "$IP2LOCATION_LIB_DIR" | grep -q "^/"; then
+			# absolute path
+			IP2LOCATION_LIB_L1="-I$IP2LOCATION_LIB_DIR"
+			IP2LOCATION_LIB_L2="-I$IP2LOCATION_LIB_DIR"
+		else
+			IP2LOCATION_LIB_L1="-I../$IP2LOCATION_LIB_DIR"
+			IP2LOCATION_LIB_L2="-I../../$IP2LOCATION_LIB_DIR"
+		fi
 
 fi
 
+
+# must be tested
+#AC_ARG_WITH([ip2location-lib-name],
+#	AS_HELP_STRING([--with-ip2location-lib-name=NAME],
+#		[IP2Location library name]),
+#	[
+#		IP2LOCATION_LIB_NAME="$with_geoip_lib_name"
+#		IP2LOCATION_LIB="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB"
+#		AC_MSG_RESULT([IP2Location library name given: $IP2LOCATION_LIB_NAME])
+#        ],[
+#	])
 
 
 # Check whether --with-ip2location-static was given.
@@ -4466,6 +4480,10 @@ fi
 
 
 if test "$IP2LOCATION" = "yes"; then
+	IP2LOCATION_LIB="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB"
+	IP2LOCATION_LIB_L1="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB_L1"
+	IP2LOCATION_LIB_L2="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB_L2"
+
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** IP2LOCATION_INCLUDE  : $IP2LOCATION_INCLUDE" >&5
 $as_echo "**** IP2LOCATION_INCLUDE  : $IP2LOCATION_INCLUDE" >&6; }
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** IP2LOCATION_LIB      : $IP2LOCATION_LIB" >&5
@@ -4476,8 +4494,16 @@ $as_echo "**** IP2LOCATION_LIB_NAME : $IP2LOCATION_LIB_NAME" >&6; }
 $as_echo "**** IP2LOCATION_LIB_DIR  : $IP2LOCATION_LIB_DIR" >&6; }
 
 	CPPFLAGS="$CPPFLAGS $IP2LOCATION_INCLUDE"
+
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2Location support requested" >&5
 $as_echo "*** IP2Location support requested" >&6; }
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** CPPFLAGS=$CPPFLAGS" >&5
+$as_echo "***** CPPFLAGS=$CPPFLAGS" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** CFLAGS  =$CFLAGS" >&5
+$as_echo "***** CFLAGS  =$CFLAGS" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** LDFLAGS =$LDFLAGS" >&5
+$as_echo "***** LDFLAGS =$LDFLAGS" >&6; }
 
 	ac_fn_c_check_header_mongrel "$LINENO" "IP2Location.h" "ac_cv_header_IP2Location_h" "$ac_includes_default"
 if test "x$ac_cv_header_IP2Location_h" = xyes; then :
@@ -4585,8 +4611,8 @@ $as_echo "#define SUPPORT_IP2LOCATION_STATIC 1" >>confdefs.h
 $as_echo "***** CPPFLAGS=$CPPFLAGS" >&6; }
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** CFLAGS  =$CFLAGS" >&5
 $as_echo "***** CFLAGS  =$CFLAGS" >&6; }
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** LDLAGS  =$LDLAGS" >&5
-$as_echo "***** LDLAGS  =$LDLAGS" >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** LDFLAGS =$LDFLAGS" >&5
+$as_echo "***** LDFLAGS =$LDFLAGS" >&6; }
 
 		as_ac_Lib=`$as_echo "ac_cv_lib_$IP2LOCATION_LIB_NAME''_IP2Location_open" | $as_tr_sh`
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for IP2Location_open in -l$IP2LOCATION_LIB_NAME" >&5
@@ -4667,6 +4693,10 @@ fi
 
 
 
+
+
+
+
 GEOIP_LIB_NAME="GeoIP"
 
 # Check whether --enable-geoip was given.
@@ -4689,6 +4719,14 @@ if test "${with_geoip_headers+set}" = set; then :
   withval=$with_geoip_headers;
 		GEOIP_INCLUDE_DIR="$with_geoip_headers"
 		GEOIP_INCLUDE="-I$GEOIP_INCLUDE_DIR"
+		if echo "$GEOIP_INCLUDE_DIR" | grep -q "^/"; then
+			# absolute path
+			GEOIP_INCLUDE_L1="-I$GEOIP_INCLUDE_DIR"
+			GEOIP_INCLUDE_L2="-I$GEOIP_INCLUDE_DIR"
+		else
+			GEOIP_INCLUDE_L1="-I../$GEOIP_INCLUDE_DIR"
+			GEOIP_INCLUDE_L2="-I../../$GEOIP_INCLUDE_DIR"
+		fi
 
 fi
 
@@ -4706,24 +4744,28 @@ $as_echo "GeoIP library directory given: $GEOIP_LIB_DIR" >&6; }
 			as_fn_error $? "GeoIP library directory not found: $with_geoip_lib" "$LINENO" 5
 		fi
 
-fi
-
-
-
-# Check whether --with-geoip-lib-name was given.
-if test "${with_geoip_lib_name+set}" = set; then :
-  withval=$with_geoip_lib_name;
-		GEOIP_LIB_NAME="$with_geoip_lib_name"
-		GEOIP_LIB="-l$GEOIP_LIB_NAME $GEOIP_LIB"
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: GeoIP library name given: $GEOIP_LIB_NAME" >&5
-$as_echo "GeoIP library name given: $GEOIP_LIB_NAME" >&6; }
-
-else
-
-		GEOIP_LIB="-l$GEOIP_LIB_NAME $GEOIP_LIB"
+		if echo "$GEOIP_LIB_DIR" | grep -q "^/"; then
+			# absolute path
+			GEOIP_LIB_L1="-L$GEOIP_LIB_DIR"
+			GEOIP_LIB_L2="-L$GEOIP_LIB_DIR"
+		else
+			GEOIP_LIB_L1="-L../$GEOIP_LIB_DIR"
+			GEOIP_LIB_L2="-L../../$GEOIP_LIB_DIR"
+		fi
 
 fi
 
+
+# must be tested
+#AC_ARG_WITH([geoip-lib-name],
+#	AS_HELP_STRING([--with-geoip-lib-name=NAME],
+#		[GeoIP library name]),
+#	[
+#		GEOIP_LIB_NAME="$with_geoip_lib_name"
+#		GEOIP_LIB="-l$GEOIP_LIB_NAME $GEOIP_LIB"
+#		AC_MSG_RESULT([GeoIP library name given: $GEOIP_LIB_NAME])
+#        ],[
+#	])
 
 
 # Check whether --with-geoip-static was given.
@@ -4814,6 +4856,10 @@ fi
 #fi
 
 if test "$GEOIP" = "yes"; then
+	GEOIP_LIB="-l$GEOIP_LIB_NAME $GEOIP_LIB"
+	GEOIP_LIB_L1="-l$GEOIP_LIB_NAME $GEOIP_LIB_L1"
+	GEOIP_LIB_L2="-l$GEOIP_LIB_NAME $GEOIP_LIB_L2"
+
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** GEOIP_INCLUDE       : $GEOIP_INCLUDE" >&5
 $as_echo "**** GEOIP_INCLUDE       : $GEOIP_INCLUDE" >&6; }
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** GEOIP_LIB           : $GEOIP_LIB" >&5
@@ -4823,9 +4869,17 @@ $as_echo "**** GEOIP_LIB_NAME      : $GEOIP_LIB_NAME" >&6; }
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** GEOIP_LIB_DIR       : $GEOIP_LIB_DIR" >&5
 $as_echo "**** GEOIP_LIB_DIR       : $GEOIP_LIB_DIR" >&6; }
 
-	CPPFLAGS="$CFLAGS $GEOIP_INCLUDE"
+	CPPFLAGS="$CPPLAGS $GEOIP_INCLUDE"
+
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GeoIP support requested" >&5
 $as_echo "*** GeoIP support requested" >&6; }
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** CPPFLAGS=$CPPFLAGS" >&5
+$as_echo "***** CPPFLAGS=$CPPFLAGS" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** CFLAGS  =$CFLAGS" >&5
+$as_echo "***** CFLAGS  =$CFLAGS" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** LDFLAGS =$LDFLAGS" >&5
+$as_echo "***** LDFLAGS =$LDFLAGS" >&6; }
 
 	ac_fn_c_check_header_mongrel "$LINENO" "GeoIP.h" "ac_cv_header_GeoIP_h" "$ac_includes_default"
 if test "x$ac_cv_header_GeoIP_h" = xyes; then :
@@ -5013,8 +5067,8 @@ $as_echo "#define SUPPORT_GEOIP_STATIC 1" >>confdefs.h
 $as_echo "***** CPPFLAGS=$CPPFLAGS" >&6; }
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** CFLAGS  =$CFLAGS" >&5
 $as_echo "***** CFLAGS  =$CFLAGS" >&6; }
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** LDLAGS  =$LDLAGS" >&5
-$as_echo "***** LDLAGS  =$LDLAGS" >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** LDFLAGS =$LDFLAGS" >&5
+$as_echo "***** LDFLAGS =$LDFLAGS" >&6; }
 
 		as_ac_Lib=`$as_echo "ac_cv_lib_$GEOIP_LIB_NAME''_GeoIP_open" | $as_tr_sh`
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for GeoIP_open in -l$GEOIP_LIB_NAME" >&5
@@ -5358,6 +5412,10 @@ $as_echo "#define SUPPORT_GEOIP_DYN 1" >>confdefs.h
 
 	fi
 fi
+
+
+
+
 
 
 
@@ -6672,8 +6730,8 @@ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS_EXTRA: $LDFLAGS_EXTRA" >&5
-$as_echo "*** LDFLAGS_EXTRA: $LDFLAGS_EXTRA" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH: $LD_LIBRARY_PATH" >&5
-$as_echo "*** LD_LIBRARY_PATH: $LD_LIBRARY_PATH" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS_EXTRA  = $LDFLAGS_EXTRA" >&5
+$as_echo "*** LDFLAGS_EXTRA  = $LDFLAGS_EXTRA" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH= $LD_LIBRARY_PATH" >&5
+$as_echo "*** LD_LIBRARY_PATH= $LD_LIBRARY_PATH" >&6; }
 

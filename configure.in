@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.92 2014/06/16 20:31:01 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.93 2014/06/17 20:21:15 ds6peter Exp $
 dnl Copyright: 2001-2014 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -267,7 +267,15 @@ AC_ARG_WITH([ip2location-headers],
 		[IP2Location include files location]),
 	[
 		IP2LOCATION_INCLUDE_DIR="$with_ip2location_headers"
-		IP2LOCATION_INCLUDE="-I$IP2LOCATION_INCLUDE_DIR"
+		IP2LOCATION_INCLUDE="-I$IP2LOCATION_INCLUDE_DIR -I$IP2LOCATION_INCLUDE_DIR/iMath"
+		if echo "$IP2LOCATION_INCLUDE_DIR" | grep -q "^/"; then
+			# absolute path
+			IP2LOCATION_INCLUDE_L1="-I$IP2LOCATION_INCLUDE_DIR -I$IP2LOCATION_INCLUDE_DIR/iMath"
+			IP2LOCATION_INCLUDE_L2="-I$IP2LOCATION_INCLUDE_DIR -I$IP2LOCATION_INCLUDE_DIR/iMath"
+		else
+			IP2LOCATION_INCLUDE_L1="-I../$IP2LOCATION_INCLUDE_DIR -I../$IP2LOCATION_INCLUDE_DIR/iMath"
+			IP2LOCATION_INCLUDE_L2="-I../../$IP2LOCATION_INCLUDE_DIR -I../../$IP2LOCATION_INCLUDE_DIR/iMath"
+		fi
 	])
 
 AC_ARG_WITH([ip2location-lib],
@@ -281,18 +289,27 @@ AC_ARG_WITH([ip2location-lib],
 		else
 			AC_MSG_ERROR([IP2Location library directory not found: $with_ip2location_lib])
 		fi
+
+		if echo "$IP2LOCATION_LIB_DIR" | grep -q "^/"; then
+			# absolute path
+			IP2LOCATION_LIB_L1="-I$IP2LOCATION_LIB_DIR"
+			IP2LOCATION_LIB_L2="-I$IP2LOCATION_LIB_DIR"
+		else
+			IP2LOCATION_LIB_L1="-I../$IP2LOCATION_LIB_DIR"
+			IP2LOCATION_LIB_L2="-I../../$IP2LOCATION_LIB_DIR"
+		fi
 	])
 
-AC_ARG_WITH([ip2location-lib-name],
-	AS_HELP_STRING([--with-ip2location-lib-name=NAME],
-		[IP2Location library name]),
-	[
-		IP2LOCATION_LIB_NAME="$with_geoip_lib_name"
-		IP2LOCATION_LIB="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB"
-		AC_MSG_RESULT([IP2Location library name given: $IP2LOCATION_LIB_NAME])
-        ],[
-		IP2LOCATION_LIB="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB"
-	])
+# must be tested
+#AC_ARG_WITH([ip2location-lib-name],
+#	AS_HELP_STRING([--with-ip2location-lib-name=NAME],
+#		[IP2Location library name]),
+#	[
+#		IP2LOCATION_LIB_NAME="$with_geoip_lib_name"
+#		IP2LOCATION_LIB="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB"
+#		AC_MSG_RESULT([IP2Location library name given: $IP2LOCATION_LIB_NAME])
+#        ],[
+#	])
 
 AC_ARG_WITH([ip2location-static],
 	AS_HELP_STRING([--with-ip2location-static],
@@ -336,13 +353,22 @@ AC_ARG_WITH([ip2location-dyn-lib],
 	])
 
 if test "$IP2LOCATION" = "yes"; then
+	IP2LOCATION_LIB="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB"
+	IP2LOCATION_LIB_L1="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB_L1"
+	IP2LOCATION_LIB_L2="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB_L2"
+
 	AC_MSG_RESULT([**** IP2LOCATION_INCLUDE  : $IP2LOCATION_INCLUDE])
 	AC_MSG_RESULT([**** IP2LOCATION_LIB      : $IP2LOCATION_LIB])
 	AC_MSG_RESULT([**** IP2LOCATION_LIB_NAME : $IP2LOCATION_LIB_NAME])
 	AC_MSG_RESULT([**** IP2LOCATION_LIB_DIR  : $IP2LOCATION_LIB_DIR])
 
 	CPPFLAGS="$CPPFLAGS $IP2LOCATION_INCLUDE"
+
 	AC_MSG_RESULT([*** IP2Location support requested])
+
+	AC_MSG_RESULT([***** CPPFLAGS=$CPPFLAGS])
+	AC_MSG_RESULT([***** CFLAGS  =$CFLAGS])
+	AC_MSG_RESULT([***** LDFLAGS =$LDFLAGS])
 
 	AC_CHECK_HEADER(IP2Location.h, [
 		if test -n "$IP2LOCATION_INCLUDE_DIR"; then
@@ -394,7 +420,7 @@ if test "$IP2LOCATION" = "yes"; then
 
 		AC_MSG_RESULT([***** CPPFLAGS=$CPPFLAGS])
 		AC_MSG_RESULT([***** CFLAGS  =$CFLAGS])
-		AC_MSG_RESULT([***** LDLAGS  =$LDLAGS])
+		AC_MSG_RESULT([***** LDFLAGS =$LDFLAGS])
 
 		AC_CHECK_LIB($IP2LOCATION_LIB_NAME, IP2Location_open,
 		[
@@ -416,7 +442,11 @@ if test "$IP2LOCATION" = "yes"; then
 fi
 
 AC_SUBST(IP2LOCATION_INCLUDE)
+AC_SUBST(IP2LOCATION_INCLUDE_L1)
+AC_SUBST(IP2LOCATION_INCLUDE_L2)
 AC_SUBST(IP2LOCATION_LIB)
+AC_SUBST(IP2LOCATION_LIB_L1)
+AC_SUBST(IP2LOCATION_LIB_L2)
 AC_SUBST(IP2LOCATION_DB)
 AC_SUBST(IP2LOCATION_DYN_LIB)
 
@@ -443,6 +473,14 @@ AC_ARG_WITH([geoip-headers],
 	[
 		GEOIP_INCLUDE_DIR="$with_geoip_headers"
 		GEOIP_INCLUDE="-I$GEOIP_INCLUDE_DIR"
+		if echo "$GEOIP_INCLUDE_DIR" | grep -q "^/"; then
+			# absolute path
+			GEOIP_INCLUDE_L1="-I$GEOIP_INCLUDE_DIR"
+			GEOIP_INCLUDE_L2="-I$GEOIP_INCLUDE_DIR"
+		else
+			GEOIP_INCLUDE_L1="-I../$GEOIP_INCLUDE_DIR"
+			GEOIP_INCLUDE_L2="-I../../$GEOIP_INCLUDE_DIR"
+		fi
 	])
 
 AC_ARG_WITH([geoip-lib],
@@ -456,18 +494,27 @@ AC_ARG_WITH([geoip-lib],
 		else
 			AC_MSG_ERROR([GeoIP library directory not found: $with_geoip_lib])
 		fi
+
+		if echo "$GEOIP_LIB_DIR" | grep -q "^/"; then
+			# absolute path
+			GEOIP_LIB_L1="-L$GEOIP_LIB_DIR"
+			GEOIP_LIB_L2="-L$GEOIP_LIB_DIR"
+		else
+			GEOIP_LIB_L1="-L../$GEOIP_LIB_DIR"
+			GEOIP_LIB_L2="-L../../$GEOIP_LIB_DIR"
+		fi
 	])
 
-AC_ARG_WITH([geoip-lib-name],
-	AS_HELP_STRING([--with-geoip-lib-name=NAME],
-		[GeoIP library name]),
-	[
-		GEOIP_LIB_NAME="$with_geoip_lib_name"
-		GEOIP_LIB="-l$GEOIP_LIB_NAME $GEOIP_LIB"
-		AC_MSG_RESULT([GeoIP library name given: $GEOIP_LIB_NAME])
-        ],[
-		GEOIP_LIB="-l$GEOIP_LIB_NAME $GEOIP_LIB"
-	])
+# must be tested
+#AC_ARG_WITH([geoip-lib-name],
+#	AS_HELP_STRING([--with-geoip-lib-name=NAME],
+#		[GeoIP library name]),
+#	[
+#		GEOIP_LIB_NAME="$with_geoip_lib_name"
+#		GEOIP_LIB="-l$GEOIP_LIB_NAME $GEOIP_LIB"
+#		AC_MSG_RESULT([GeoIP library name given: $GEOIP_LIB_NAME])
+#        ],[
+#	])
 
 AC_ARG_WITH([geoip-static],
 	AS_HELP_STRING([--with-geoip-static],
@@ -540,13 +587,22 @@ AC_ARG_WITH([geoip-ipv6-compat],
 #fi
 
 if test "$GEOIP" = "yes"; then
+	GEOIP_LIB="-l$GEOIP_LIB_NAME $GEOIP_LIB"
+	GEOIP_LIB_L1="-l$GEOIP_LIB_NAME $GEOIP_LIB_L1"
+	GEOIP_LIB_L2="-l$GEOIP_LIB_NAME $GEOIP_LIB_L2"
+
 	AC_MSG_RESULT([**** GEOIP_INCLUDE       : $GEOIP_INCLUDE])
 	AC_MSG_RESULT([**** GEOIP_LIB           : $GEOIP_LIB])
 	AC_MSG_RESULT([**** GEOIP_LIB_NAME      : $GEOIP_LIB_NAME])
 	AC_MSG_RESULT([**** GEOIP_LIB_DIR       : $GEOIP_LIB_DIR])
 
-	CPPFLAGS="$CFLAGS $GEOIP_INCLUDE"
+	CPPFLAGS="$CPPLAGS $GEOIP_INCLUDE"
+
 	AC_MSG_RESULT([*** GeoIP support requested])
+
+	AC_MSG_RESULT([***** CPPFLAGS=$CPPFLAGS])
+	AC_MSG_RESULT([***** CFLAGS  =$CFLAGS])
+	AC_MSG_RESULT([***** LDFLAGS =$LDFLAGS])
 
 	AC_CHECK_HEADER(GeoIP.h, [
 		if test -n "$GEOIP_INCLUDE_DIR"; then
@@ -606,7 +662,7 @@ if test "$GEOIP" = "yes"; then
 
 		AC_MSG_RESULT([***** CPPFLAGS=$CPPFLAGS])
 		AC_MSG_RESULT([***** CFLAGS  =$CFLAGS])
-		AC_MSG_RESULT([***** LDLAGS  =$LDLAGS])
+		AC_MSG_RESULT([***** LDFLAGS =$LDFLAGS])
 
 		AC_CHECK_LIB($GEOIP_LIB_NAME, GeoIP_open,
 		[
@@ -674,7 +730,11 @@ if test "$GEOIP" = "yes"; then
 fi
 
 AC_SUBST(GEOIP_INCLUDE)
+AC_SUBST(GEOIP_INCLUDE_L2)
+AC_SUBST(GEOIP_INCLUDE_L1)
 AC_SUBST(GEOIP_LIB)
+AC_SUBST(GEOIP_LIB_L1)
+AC_SUBST(GEOIP_LIB_L2)
 AC_SUBST(GEOIP_DB)
 AC_SUBST(GEOIP_DYN_LIB)
 
@@ -717,6 +777,6 @@ AC_OUTPUT([
 		VERSION
 	])
 
-AC_MSG_RESULT([*** LDFLAGS_EXTRA: $LDFLAGS_EXTRA])
-AC_MSG_RESULT([*** LD_LIBRARY_PATH: $LD_LIBRARY_PATH])
+AC_MSG_RESULT([*** LDFLAGS_EXTRA  = $LDFLAGS_EXTRA])
+AC_MSG_RESULT([*** LD_LIBRARY_PATH= $LD_LIBRARY_PATH])
 

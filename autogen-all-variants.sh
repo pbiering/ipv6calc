@@ -2,31 +2,87 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.31 2014/06/16 20:31:01 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.32 2014/06/17 20:21:15 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
+#
+# can run also through various version of GeoIP (-g) and IP2Location (-i) libraries using following directory layout:
+#
+# builddir/ipv6calc
+#          C-IP2Location-4.0.2
+#          ip2location-c-6.0.1
+#          IP2Location-c-6.0.2
+#          GeoIP-1.4.4
+#          GeoIP-1.4.5
+#          GeoIP-1.4.6
+#          GeoIP-1.4.7
+#          GeoIP-1.4.8 (broken)
+#          GeoIP-1.5.1
 
 status_file="autogen-all-variants.status"
 
 geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.5.1" # 1.4.8 build is broken
-ip2location_versions="4.0.2 6.0.1  6.0.2"
+ip2location_versions="4.0.2 6.0.1 6.0.2"
 
+geoip_version_latest=$(echo "$geoip_versions" | awk '{ print $NF }')
+ip2location_version_latest=$(echo "$ip2location_versions" | awk '{ print $NF }')
+
+
+## retrieve IP2Location source package name from version
+ip2location_name_from_version() {
+	local version="$1"
+
+	case $version in
+	    4.*)
+		local name="C-IP2Location"
+		;;
+	    6.0.1)
+		local name="ip2location-c"
+		;;
+	    *)
+		# default
+		local name="IP2Location-c"
+		;;
+	esac
+
+	echo "$name"
+}
+
+# try fallback
+if [ ! -e "/usr/include/GeoIP.h" ]; then
+	echo "NOTICE: /usr/include/GeoIP.h is missing, check for local availability"
+
+	dir="../GeoIP-$geoip_version_latest"
+
+	if [ -d "$dir" ]; then
+		echo "INFO  : found at least directory: $dir"
+		geoip_options_extra="--with-geoip-headers=$dir/libGeoIP --with-geoip-lib=$dir/libGeoIP/.libs"
+	else
+		echo "NOTICE: did not find directory: $dir"
+	fi
+fi
+
+if [ ! -e "/usr/include/IP2Location.h" ]; then
+	echo "NOTICE: /usr/include/IP2Location.h is missing, check for local availability"
+
+	name="$(ip2location_name_from_version $ip2location_version_latest)"
+	dir="../$name-$ip2location_version_latest"
+
+	if [ -d "$dir" ]; then
+		echo "INFO  : found at least directory: $dir"
+		ip2location_options_extra="--with-ip2location-headers=$dir/libIP2Location --with-ip2location-lib=$dir/libIP2Location/.libs"
+	else
+		echo "NOTICE: did not find directory: $dir"
+	fi
+fi
+
+
+## Generate configure variants
 autogen_variants() {
 	if [ "$ip2location_versions_test" = "1" ]; then
 		for version in $ip2location_versions; do
-			case $version in
-			    4.*)
-				name="C-IP2Location"
-				;;
-			    6.0.1)
-				name="ip2location-c"
-				;;
-			    *)
-				# default
-				name="IP2Location-c"
-				;;
-			esac
+			name=$(ip2location_name_from_version $version)
 			echo "IP2LOCATION#--enable-ip2location --with-ip2location-headers=../$name-$version/libIP2Location --with-ip2location-lib=../$name-$version/libIP2Location/.libs"
 		done
 	fi
@@ -130,6 +186,11 @@ if [ -f "$status_file" ]; then
 			echo "NOTICE: all runs successful, nothing more to do (use -f for force a re-run)"
 			exit 0
 		fi
+	else
+		if [ "$force" = "1" ]; then
+			echo "NOTICE: option -f for forcing a re-run is useless, last run was not finished"
+			exit 0
+		fi
 	fi
 fi
 
@@ -187,6 +248,20 @@ for liboption in "normal" "shared"; do
 			;;
 		esac
 
+		# extend options in fallback case
+		if [ -n "$ip2location_options_extra" ]; then
+			if echo "$token" | egrep -wq "IP2LOCATION"; then
+				options="$options $ip2location_options_extra"
+			fi
+		fi
+
+		if [ -n "$geoip_options_extra" ]; then
+			if echo "$token" | egrep -wq "GEOIP"; then
+				options="$options $geoip_options_extra"
+			fi
+		fi
+
+		# check for already executed option combination
 		if egrep -q ":FINISHED:variants:$options:" $status_file; then
 			echo "NOTICE : skip variant run with: $options"
 		else
@@ -196,6 +271,7 @@ for liboption in "normal" "shared"; do
 				continue
 			fi
 
+			# run autogen
 			echo "INFO  : call: ./autogen.sh $options"
 
 			nice -n 20 $IONICE ./autogen.sh $options
