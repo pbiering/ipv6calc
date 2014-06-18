@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.1 2014/06/18 06:16:53 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.2 2014/06/18 06:18:58 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -12,7 +12,7 @@
 #          GeoIP-1.4.5
 #          GeoIP-1.4.6
 #          GeoIP-1.4.7
-#          GeoIP-1.4.8 (broken)
+#          GeoIP-1.4.8
 #          GeoIP-1.5.1
 #
 # $BASE_DEVEL_IP2LCATION/   (default if unset: "..")
@@ -23,7 +23,7 @@
 #### Definitions
 
 ## List of GeoIP versions (append newest one rightmost!)
-geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.5.1" # 1.4.8 build is broken
+geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.4.8 1.5.1"
 
 ## List of IP2Location versions (append newest one rightmost!)
 ip2location_versions="4.0.2 6.0.1 6.0.2"
