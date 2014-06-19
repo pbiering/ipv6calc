@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.38 2014/06/16 20:31:01 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.39 2014/06/19 08:01:22 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -21,26 +21,32 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --enable-ip2location"
 		SKIP_STATIC=1
+		use_geoip=1
+		use_ip2location=1
 		;;
 	    '--geoip'|'-g')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip"
 		SKIP_STATIC=1
+		use_geoip=1
 		;;
 	    '--geoip-dyn'|'-G')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --with-geoip-dynamic"
 		SKIP_STATIC=1
+		use_geoip=1
 		;;
 	    '--ip2location'|'-i')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location"
 		SKIP_STATIC=1
+		use_ip2location=1
 		;;
 	    '--ip2location-dyn'|'-I')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --with-ip2location-dynamic"
 		SKIP_STATIC=1
+		use_ip2location=1
 		;;
 	    '--disable-db-ieee')
 		shift
@@ -104,6 +110,16 @@ while [ "$1" != "$LAST" ]; do
 		exit 1
 	esac
 done
+
+source ./autogen-support.sh "source"
+
+if [ "$use_geoip" = "1" ]; then
+	OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $(fallback_options_from_name GeoIP)"
+fi
+
+if [ "$use_ip2location" = "1" ]; then
+	OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $(fallback_options_from_name IP2Location)"
+fi
 
 if [ -f Makefile ]; then
 	echo "*** cleanup"

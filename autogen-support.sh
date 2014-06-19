@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.2 2014/06/18 06:18:58 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.3 2014/06/19 08:01:22 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -73,71 +73,81 @@ nameversion_from_name_version() {
 	echo "$nameversion"
 }
 
+## retrieve GeoIP/IP2Location options from version
+options_from_name_version() {
+	local name="$1"
+	local version="$2"
 
-## fallback for GeoIP
-fallback_GeoIP() {
-	if [ -e "/usr/include/GeoIP.h" ]; then
-		echo "NOTICE: /usr/include/GeoIP.h is existing, no fallback required"
-		return 0
-	fi
+	local nameversion=$(nameversion_from_name_version $name $version)
 
-	echo "NOTICE: /usr/include/GeoIP.h is missing, check for local availability"
-
-	geoip_options_extra=""
-
-	for version in $(echo "$geoip_versions" | awk '{ for (i=NF;i>0;i--) print $i }'); do
-		echo "DEBUG : check for GeoIP version: $version"
-
-		dir="$BASE_DEVEL_GEOIP/$(nameversion_from_name_version GeoIP $version)"
-
-		if [ -d "$dir" ]; then
-			echo "INFO  : found at least directory: $dir"
-			geoip_options_extra="--with-geoip-headers=$dir/libGeoIP --with-geoip-lib=$dir/libGeoIP/.libs"
-			break
-		else
-			echo "NOTICE: did not find directory: $dir (try next)"
-		fi
-	done
-
-	if [ -z "$geoip_options_extra" ]; then
-		echo "ERROR : can't find any local GeoIP source in: $BASE_DEVEL_GEOIP"
+	case $name in
+	    GeoIP)
+		local dir="$BASE_DEVEL_GEOIP/$nameversion"
+		result="--with-geoip-headers=$dir/libGeoIP --with-geoip-lib=$dir/libGeoIP/.libs"
+		;;
+	    IP2Location)
+		local dir="$BASE_DEVEL_IP2LOCATION/$nameversion"
+		result="--with-ip2location-headers=$dir/libIP2Location --with-ip2location-lib=$dir/libIP2Location/.libs"
+		;;
+	    *)
+		echo "ERROR : unsupported: $name" >&2
 		return 1
-	else
-		echo "INFO  : geoip_options_extra=$geoip_options_extra"
-	fi
+		;;
+	esac
+	echo "$result"
 }
 
-## fallback for IP2Location
-fallback_IP2Location() {
-	if [ -e "/usr/include/IP2Location.h" ]; then
-		echo "NOTICE: /usr/include/IP2Location.h is existing, no fallback required"
+## fallback for GeoIP/IP2Location
+fallback_options_from_name() {
+	local name="$1"
+
+	local file_header=""
+	local versions=""
+
+	case $name in
+	    GeoIP)
+		file_header="/usr/include/GeoIP.h"
+		versions="$geoip_versions"
+		dir_base="$BASE_DEVEL_GEOIP"
+		;;
+	    IP2Location)
+		file_header="/usr/include/IP2Location.h"
+		versions="$ip2location_versions"
+		dir_base="$BASE_DEVEL_IP2LOCATION"
+		;;
+	    *)
+		echo "ERROR : unsupported: $name" >&2
+		return 1
+		;;
+	esac
+
+	if [ -e "$file_header" ]; then
+		echo "NOTICE: file is existing, no fallback required for $name: $file_header" >&2
 		return 0
 	fi
 
-	echo "NOTICE: /usr/include/IP2Location.h is missing, check for local availability"
+	echo "NOTICE: file is missing, check for local availability for $name: $file_header" >&2
 
-	ip2location_options_extra=""
+	for version in $(echo "$versions" | awk '{ for (i=NF;i>0;i--) print $i }'); do
+		echo "DEBUG : check for version for $name: $version" >&2
 
-	for version in $(echo "$ip2location_versions" | awk '{ for (i=NF;i>0;i--) print $i }'); do
-		echo "DEBUG : check for IP2Location version: $version"
-
-		dir="${BASE_DEVEL_IP2LOCATION}/$(nameversion_from_name_version IP2Location $version)"
+		dir="$dir_base/$(nameversion_from_name_version $name $version)"
 
 		if [ -d "$dir" ]; then
-			echo "INFO  : found at least directory: $dir"
-			ip2location_options_extra="--with-ip2location-headers=$dir/libIP2Location --with-ip2location-lib=$dir/libIP2Location/.libs"
+			echo "INFO  : found at least directory for name $name: $dir" >&2
+			result="$(options_from_name_version $name $version)"
 			break
 		else
-			echo "NOTICE: did not find directory: $dir (try next)"
+			echo "NOTICE: did not find directory for name $name: $dir (try next)"
 		fi
 	done
 
-	if [ -z "$ip2location_options_extra" ]; then
-		echo "ERROR : can't find any local IP2Location source in $BASE_DEVEL_IP2LOCATION"
+	if [ -z "$result" ]; then
+		echo "ERROR : can't find any local source for $name in: $dir_base"
 		return 1
-	else
-		echo "INFO  : ip2location_options_extra=$ip2location_options_extra"
 	fi
+
+	echo "$result"
 }
 
 
@@ -214,36 +224,33 @@ $0 [-F|B]
 END
 }
 
+if [ "$1" != "source" ]; then
+	# use script not only as source (function-mode)
 
-#### Main
-while getopts ":FB?h" opt; do
-	case $opt in
-	    'F')
-		fallback_GeoIP
-		fallback_IP2Location
-		exit 0
-		;;
-	    'B')
-		build_library GeoIP || exit 1
-		build_library IP2Location || exit 1
-		echo "INFO  : following libaries were built successful: $build_library_status"
-		exit 0
-		;;
-	    \?|h)
-		help
-		exit 1
-		;;
-	    *)
-		echo "Invalid option: -$OPTARG" >&2
-		exit 1
-		;;
-	esac
-done
+	#### Main
+	while getopts ":FB?h" opt; do
+		case $opt in
+		    'F')
+			fallback_options_from_name GeoIP
+			fallback_options_from_name IP2Location
+			exit 0
+			;;
+		    'B')
+			build_library GeoIP || exit 1
+			build_library IP2Location || exit 1
+			echo "INFO  : following libaries were built successful: $build_library_status"
+			exit 0
+			;;
+		    \?|h)
+			help
+			exit 1
+			;;
+		    *)
+			echo "Invalid option: -$OPTARG" >&2
+			exit 1
+			;;
+		esac
+	done
 
-shift $[ $OPTIND - 1 ]
-
-if [ -z "$1" ]; then
-	echo "missing option"
-	help
-	exit 1
+	shift $[ $OPTIND - 1 ]
 fi
