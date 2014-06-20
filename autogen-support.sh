@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.3 2014/06/19 08:01:22 ds6peter Exp $
-# Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: autogen-support.sh,v 1.4 2014/06/20 17:59:51 ds6peter Exp $
+# Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
 #
@@ -24,9 +24,13 @@
 
 ## List of GeoIP versions (append newest one rightmost!)
 geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.4.8 1.5.1"
+geoip_versions_download="$geoip_versions"
+geoip_url_base="http://geolite.maxmind.com/download/geoip/api/c/"
 
 ## List of IP2Location versions (append newest one rightmost!)
 ip2location_versions="4.0.2 6.0.1 6.0.2"
+ip2location_versions_download="6.0.1 6.0.2" # older versions are no longer available for download?
+ip2location_url_base="https://www.ip2location.com/downloads/"
 
 #### NO CHANGES BELOW
 
@@ -39,10 +43,11 @@ BASE_DEVEL_IP2LOCATION=${BASE_DEVEL_IP2LOCATION:-..}
 
 ### Functions Definitions
 
-## retrieve GeoIP/IP2Location source package name from version
+## generate GeoIP/IP2Location source package name from version
 nameversion_from_name_version() {
 	local name="$1"
 	local version="$2"
+	local mode="$3" # optional
 
 	local nameversion=""
 
@@ -55,13 +60,21 @@ nameversion_from_name_version() {
 		    4.*)
 			nameversion="C-IP2Location-$version"
 			;;
-		    6.0.1)
-			nameversion="ip2location-c-$version"
-			;;
 		    *)
 			# default
-			nameversion="IP2Location-c-$version"
-			;;
+			if [ "$mode" = "download" ]; then
+				nameversion="ip2location-c-$version"
+			else
+				case $version in
+				    6.0.1)
+					nameversion="ip2location-c-$version"
+					;;
+				    *)
+					# default
+					nameversion="IP2Location-c-$version"
+					;;
+				esac
+			fi
 		esac
 		;;
 	    *)
@@ -212,12 +225,128 @@ build_library() {
 }
 
 
+## extract GeoIP/IP2Location source packages
+extract_versions() {
+	local name="$1"
+
+	case $name in
+	    GeoIP)
+		versions="$geoip_versions"
+		base_devel="$BASE_DEVEL_GEOIP"
+		;;
+	    IP2Location)
+		versions="$ip2location_versions"
+		base_devel="$BASE_DEVEL_IP2LOCATION"
+		;;
+	    *)
+		echo "ERROR : unsupported: $name"
+		return 1
+		;;
+	esac
+
+	result_all=0
+
+	for version in $versions; do
+		local nameversion=$(nameversion_from_name_version $name $version download)
+		local file="$base_devel/$nameversion.tar.gz"
+
+		if [ ! -f "$file" ]; then
+			echo "NOTICE: file not existing, can't extract: $file"
+			continue
+		fi
+
+		if [ "$dry_run" = "1" ]; then
+			echo "INFO  : would extract source package (dry-run): $name-$version ($nameversion) from $file"
+			continue
+		else
+			echo "INFO  : extract source package: $name-$version ($nameversion): $file"
+		fi
+
+		if [ ! -d "$base_devel" ]; then
+			echo "ERROR : can't change to directory: $base_devel (skip)"
+			continue
+		fi
+
+		tar xzf "$file" -C $base_devel
+		result=$?
+
+		if [ $result -ne 0 ]; then
+			echo "ERROR : trouble during extract of $name-$version ($nameversion) from $file"
+			result_all=1
+			break
+		else
+			echo "INFO  : successful extract of $name-$version ($nameversion) from $file"
+		fi
+	done
+
+	return $result_all
+}
+## retrieve GeoIP/IP2Location source packages
+download_versions() {
+	local name="$1"
+
+	case $name in
+	    GeoIP)
+		versions="$geoip_versions_download"
+		base_devel="$BASE_DEVEL_GEOIP"
+		base_url="$geoip_url_base"
+		;;
+	    IP2Location)
+		versions="$ip2location_versions_download"
+		base_devel="$BASE_DEVEL_IP2LOCATION"
+		base_url="$ip2location_url_base"
+		;;
+	    *)
+		echo "ERROR : unsupported: $name"
+		return 1
+		;;
+	esac
+
+	result_all=0
+
+	for version in $versions; do
+		local nameversion=$(nameversion_from_name_version $name $version download)
+		local url="$base_url$nameversion.tar.gz"
+
+		if [ "$dry_run" = "1" ]; then
+			echo "INFO  : would download source package (dry-run): $name-$version ($nameversion) from $url"
+			continue
+		else
+			echo "INFO  : download source package: $name-$version ($nameversion)"
+		fi
+
+		pushd $base_devel >/dev/null
+		if [ $? -ne 0 ]; then
+			echo "ERROR : can't change to directory: $base_devel (skip)"
+			continue
+		fi
+
+		wget -c -q $url
+		result=$?
+
+		popd >/dev/null
+
+		if [ $result -ne 0 ]; then
+			echo "ERROR : trouble during downloading of $name-$version ($nameversion) from $url"
+			result_all=1
+			break
+		else
+			echo "INFO  : successful downloaded of $name-$version ($nameversion) from $url"
+		fi
+	done
+
+	return $result_all
+}
+
 ## help
 help() {
 	cat <<END
-$0 [-F|B]
+$0 [-F|B|D] [-n]
 	-F  : fill GeoIP/IP2Location fallback options in case system has no default
 	-B  : build GeoIP/IP2Location libraries for fallback and all-variants
+	-D  : download GeoIP/IP2Location source packages
+	-X  : extract GeoIP/IP2Location source packages
+	-n  : dry-run
 
 	BASE_DEVEL_GEOIP=$BASE_DEVEL_GEOIP
 	BASE_DEVEL_IP2LOCATION=$BASE_DEVEL_IP2LOCATION
@@ -228,18 +357,23 @@ if [ "$1" != "source" ]; then
 	# use script not only as source (function-mode)
 
 	#### Main
-	while getopts ":FB?h" opt; do
+	while getopts ":DXFnB?h" opt; do
 		case $opt in
+		    'n')
+			dry_run=1
+			echo "NOTICE: dry-run selected"
+			;;
+		    'D')
+			action="download"
+			;;
+		    'X')
+			action="extract"
+			;;
 		    'F')
-			fallback_options_from_name GeoIP
-			fallback_options_from_name IP2Location
-			exit 0
+			action="fallback"
 			;;
 		    'B')
-			build_library GeoIP || exit 1
-			build_library IP2Location || exit 1
-			echo "INFO  : following libaries were built successful: $build_library_status"
-			exit 0
+			action="build"
 			;;
 		    \?|h)
 			help
@@ -254,3 +388,23 @@ if [ "$1" != "source" ]; then
 
 	shift $[ $OPTIND - 1 ]
 fi
+
+case $action in
+    'download')
+	download_versions GeoIP
+	download_versions IP2Location
+	;;
+    'extract')
+	extract_versions GeoIP
+	extract_versions IP2Location
+	;;
+    'fallback')
+	fallback_options_from_name GeoIP
+	fallback_options_from_name IP2Location
+	;;
+    'build')
+	build_library GeoIP || exit 1
+	build_library IP2Location || exit 1
+	echo "INFO  : following libaries were built successful: $build_library_status"
+	;;
+esac

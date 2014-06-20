@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.340 2014/06/19 08:01:22 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.341 2014/06/20 17:59:51 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140620/PB
+	autogen-support.sh: add download and extract feature for GeoIP/IP2Location
+
 20140619/PB
 	autogen-support.sh: new, centralize support for autogen.sh and autogen-all-variants.sh
 	autogen-all-variants.sh/autogen.sh: improvments for regression tests
