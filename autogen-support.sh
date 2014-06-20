@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.4 2014/06/20 17:59:51 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.5 2014/06/20 20:55:51 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -192,10 +192,17 @@ build_library() {
 		local nameversion=$(nameversion_from_name_version $name $version)
 		echo "INFO  : build library: $name-$version ($nameversion)"
 
-		pushd $base_devel/$nameversion
+		pushd $base_devel/$nameversion >/dev/null
 		if [ $? -ne 0 ]; then
 			echo "ERROR : can't change to directory: $base_devel/$nameversion (skip)"
 			continue
+		fi
+
+		if [ "$dry_run" = "1" ]; then
+			echo "INFO  : would build library (dry-run): $name-$version ($nameversion)"
+			continue
+		else
+			echo "INFO  : build library: $name-$version ($nameversion)"
 		fi
 
 		case $name in
@@ -209,7 +216,7 @@ build_library() {
 			;;
 		esac
 
-		popd
+		popd >/dev/null
 
 		if [ $result -ne 0 ]; then
 			echo "ERROR : trouble during build of $name-$version ($nameversion)"
@@ -276,6 +283,7 @@ extract_versions() {
 			break
 		else
 			echo "INFO  : successful extract of $name-$version ($nameversion) from $file"
+			extract_library_status="$extract_library_status $nameversion"
 		fi
 	done
 
@@ -332,6 +340,7 @@ download_versions() {
 			break
 		else
 			echo "INFO  : successful downloaded of $name-$version ($nameversion) from $url"
+			download_library_status="$download_library_status $nameversion"
 		fi
 	done
 
@@ -341,11 +350,15 @@ download_versions() {
 ## help
 help() {
 	cat <<END
-$0 [-F|B|D] [-n]
+$0 [-F]
+$0 [-D] [-X] [-B] [-n]
+$0 [-A] [-n]
 	-F  : fill GeoIP/IP2Location fallback options in case system has no default
-	-B  : build GeoIP/IP2Location libraries for fallback and all-variants
+
 	-D  : download GeoIP/IP2Location source packages
 	-X  : extract GeoIP/IP2Location source packages
+	-B  : build GeoIP/IP2Location libraries
+	-A  : download/extract/build
 	-n  : dry-run
 
 	BASE_DEVEL_GEOIP=$BASE_DEVEL_GEOIP
@@ -363,17 +376,26 @@ if [ "$1" != "source" ]; then
 			dry_run=1
 			echo "NOTICE: dry-run selected"
 			;;
+		    'A')
+			action="prepare"
+			do_download="1"
+			do_extract="1"
+			do_build="1"
+			;;
 		    'D')
-			action="download"
+			action="prepare"
+			do_download="1"
 			;;
 		    'X')
-			action="extract"
+			action="prepare"
+			do_extract="1"
+			;;
+		    'B')
+			action="prepare"
+			do_build="1"
 			;;
 		    'F')
 			action="fallback"
-			;;
-		    'B')
-			action="build"
 			;;
 		    \?|h)
 			help
@@ -390,21 +412,25 @@ if [ "$1" != "source" ]; then
 fi
 
 case $action in
-    'download')
-	download_versions GeoIP
-	download_versions IP2Location
-	;;
-    'extract')
-	extract_versions GeoIP
-	extract_versions IP2Location
+    'prepare')
+	if [ "$do_download" = "1" ]; then
+		download_versions GeoIP || exit 1
+		download_versions IP2Location || exit 1
+		echo "INFO  : following libaries were successfully downloaded: $download_library_status"
+	fi
+	if [ "$do_extract" = "1" ]; then
+		extract_versions GeoIP || exit 1
+		extract_versions IP2Location || exit 1
+		echo "INFO  : following libaries were successfully extracted: $extract_library_status"
+	fi
+	if [ "$do_build" = "1" ]; then
+		build_library GeoIP || exit 1
+		build_library IP2Location || exit 1
+		echo "INFO  : following libaries were successfully built: $build_library_status"
+	fi
 	;;
     'fallback')
 	fallback_options_from_name GeoIP
 	fallback_options_from_name IP2Location
-	;;
-    'build')
-	build_library GeoIP || exit 1
-	build_library IP2Location || exit 1
-	echo "INFO  : following libaries were built successful: $build_library_status"
 	;;
 esac
