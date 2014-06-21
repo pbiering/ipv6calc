@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.8 2014/06/21 12:19:37 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.9 2014/06/21 12:23:14 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -213,7 +213,7 @@ build_library() {
 			result=$?
 			;;
 		    IP2Location)
-			autoreconf -i && ./configure && make clean && make
+			autoreconf -fi && ./configure && make clean && make
 			result=$?
 			;;
 		esac
