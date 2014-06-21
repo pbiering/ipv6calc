@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.14 2014/06/21 12:52:06 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.15 2014/06/21 12:52:38 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -245,7 +245,7 @@ build_library() {
 
 
 ## clean GeoIP/IP2Location libraries
-clean_library() {
+clean_versions() {
 	local name="$1"
 	local version_selected="$2"
 
