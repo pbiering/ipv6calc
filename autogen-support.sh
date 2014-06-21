@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.15 2014/06/21 12:52:38 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.16 2014/06/21 12:53:20 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -527,7 +527,7 @@ if [ "$1" != "source" ]; then
 			else
 				clean_versions $* || exit 1
 			fi
-			echo "INFO  : following libaries were successfully cleaned: $extract_library_status"
+			echo "INFO  : following libaries were successfully cleaned: $clean_library_status"
 		fi
 		if [ "$do_extract" = "1" ]; then
 			if [ -z "$*" ]; then
