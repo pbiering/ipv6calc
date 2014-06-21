@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.11 2014/06/21 12:39:20 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.12 2014/06/21 12:44:00 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -198,7 +198,11 @@ build_library() {
 		fi
 
 		local nameversion=$(nameversion_from_name_version $name $version)
-		echo "INFO  : build library: $name-$version ($nameversion)"
+
+		if [ ! -d "$base_devel/$nameversion" ]; then
+			echo "ERROR : devel directory missing: $base_devel/$nameversion (forgot to extract?)"
+			return 1
+		fi
 
 		pushd $base_devel/$nameversion >/dev/null
 		if [ $? -ne 0 ]; then
@@ -378,7 +382,7 @@ help() {
 $0 [-h|-?]
 $0 source
 $0 [-D] [-X] [-B] [-n] [GeoIP|IP2Location <version>]
-$0 [-A] [-n] [GeoIP|IP2Location <version>]
+$0 [-A] [-n] [GeoIP|IP2Location [<specific version>]]
 
 	source: source mode (using functions only in main script)
 
@@ -445,28 +449,28 @@ if [ "$1" != "source" ]; then
 			if [ -z "$*" ]; then
 				download_versions GeoIP || exit 1
 				download_versions IP2Location || exit 1
-				echo "INFO  : following libaries were successfully downloaded: $download_library_status"
 			else
 				download_versions $* || exit 1
 			fi
+			echo "INFO  : following libaries were successfully downloaded: $download_library_status"
 		fi
 		if [ "$do_extract" = "1" ]; then
 			if [ -z "$*" ]; then
 				extract_versions GeoIP || exit 1
 				extract_versions IP2Location || exit 1
-				echo "INFO  : following libaries were successfully extracted: $extract_library_status"
 			else
 				extract_versions $* || exit 1
 			fi
+			echo "INFO  : following libaries were successfully extracted: $extract_library_status"
 		fi
 		if [ "$do_build" = "1" ]; then
 			if [ -z "$*" ]; then
 				build_library GeoIP || exit 1
 				build_library IP2Location || exit 1
-				echo "INFO  : following libaries were successfully built: $build_library_status"
 			else
 				build_library $* || exit 1
 			fi
+			echo "INFO  : following libaries were successfully built: $build_library_status"
 		fi
 		;;
 	    *)
