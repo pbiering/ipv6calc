@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.6 2014/06/21 11:55:11 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.7 2014/06/21 12:16:15 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -272,8 +272,8 @@ extract_versions() {
 		fi
 
 		if [ ! -d "$base_devel" ]; then
-			echo "ERROR : can't change to directory: $base_devel (skip)"
-			continue
+			echo "ERROR : can't change to directory: $base_devel"
+			return 1
 		fi
 
 		tar xzf "$file" -C $base_devel
@@ -327,8 +327,8 @@ download_versions() {
 
 		pushd $BASE_SOURCES >/dev/null
 		if [ $? -ne 0 ]; then
-			echo "ERROR : can't change to directory: $BASE_SOURCES (BASE_SOURCES) (skip)"
-			continue
+			echo "ERROR : can't change to directory: $BASE_SOURCES (BASE_SOURCES)"
+			return 1
 		fi
 
 		wget -c -q $url
@@ -433,5 +433,8 @@ case $action in
 		build_library IP2Location || exit 1
 		echo "INFO  : following libaries were successfully built: $build_library_status"
 	fi
+	;;
+    *)
+	help
 	;;
 esac
