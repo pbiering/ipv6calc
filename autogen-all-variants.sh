@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.33 2014/06/19 08:01:22 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.34 2014/06/21 11:55:11 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -60,12 +60,12 @@ $0
 	-g	run through internal defined GeoIP versions
 	-i	run through internal defined IP2Location versions
 	-M	skip main tests
-	-D	dry-run, show only what would be build
+	-n	dry-run, show only what would be build
 END
 }
 
 
-while getopts ":NMigrIfWD?h" opt; do
+while getopts ":NMigrIfWn?h" opt; do
 	case $opt in
 	    'f')
 		force=1
@@ -79,7 +79,7 @@ while getopts ":NMigrIfWD?h" opt; do
 	    'N')
 		no_static_build=1
 		;;
-	    'D')
+	    'n')
 		dry_run=1
 		;;
 	    'M')

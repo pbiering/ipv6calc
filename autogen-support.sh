@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.5 2014/06/20 20:55:51 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.6 2014/06/21 11:55:11 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -37,8 +37,10 @@ ip2location_url_base="https://www.ip2location.com/downloads/"
 ### Automatic Definitions
 
 ### base directory for GeoIP/IP2Location
-BASE_DEVEL_GEOIP=${BASE_DEVEL_GEOIP:-..}
-BASE_DEVEL_IP2LOCATION=${BASE_DEVEL_IP2LOCATION:-..}
+BASE_SOURCES=${BASE_SOURCES:-~/Downloads}
+
+BASE_DEVEL_GEOIP=${BASE_DEVEL_GEOIP:-~/tmp}
+BASE_DEVEL_IP2LOCATION=${BASE_DEVEL_IP2LOCATION:-~/tmp}
 
 
 ### Functions Definitions
@@ -255,7 +257,7 @@ extract_versions() {
 
 	for version in $versions; do
 		local nameversion=$(nameversion_from_name_version $name $version download)
-		local file="$base_devel/$nameversion.tar.gz"
+		local file="$BASE_SOURCES/$nameversion.tar.gz"
 
 		if [ ! -f "$file" ]; then
 			echo "NOTICE: file not existing, can't extract: $file"
@@ -282,7 +284,7 @@ extract_versions() {
 			result_all=1
 			break
 		else
-			echo "INFO  : successful extract of $name-$version ($nameversion) from $file"
+			echo "INFO  : successful extract of $name-$version ($nameversion) from $file to $base_devel"
 			extract_library_status="$extract_library_status $nameversion"
 		fi
 	done
@@ -323,9 +325,9 @@ download_versions() {
 			echo "INFO  : download source package: $name-$version ($nameversion)"
 		fi
 
-		pushd $base_devel >/dev/null
+		pushd $BASE_SOURCES >/dev/null
 		if [ $? -ne 0 ]; then
-			echo "ERROR : can't change to directory: $base_devel (skip)"
+			echo "ERROR : can't change to directory: $BASE_SOURCES (BASE_SOURCES) (skip)"
 			continue
 		fi
 
@@ -339,7 +341,7 @@ download_versions() {
 			result_all=1
 			break
 		else
-			echo "INFO  : successful downloaded of $name-$version ($nameversion) from $url"
+			echo "INFO  : successful downloaded of $name-$version ($nameversion) from $url to $BASE_SOURCES"
 			download_library_status="$download_library_status $nameversion"
 		fi
 	done
@@ -350,19 +352,25 @@ download_versions() {
 ## help
 help() {
 	cat <<END
-$0 [-F]
+$0 [-h|-?]
+$0 source
 $0 [-D] [-X] [-B] [-n]
 $0 [-A] [-n]
-	-F  : fill GeoIP/IP2Location fallback options in case system has no default
+
+	source: source mode (using functions only in main script)
 
 	-D  : download GeoIP/IP2Location source packages
 	-X  : extract GeoIP/IP2Location source packages
 	-B  : build GeoIP/IP2Location libraries
-	-A  : download/extract/build
+	-A  : whole chain: download/extract/build
 	-n  : dry-run
 
-	BASE_DEVEL_GEOIP=$BASE_DEVEL_GEOIP
-	BASE_DEVEL_IP2LOCATION=$BASE_DEVEL_IP2LOCATION
+	-h|?: this online help
+
+	used values from environment (or defaults):
+	  BASE_SOURCES=$BASE_SOURCES
+	  BASE_DEVEL_GEOIP=$BASE_DEVEL_GEOIP
+	  BASE_DEVEL_IP2LOCATION=$BASE_DEVEL_IP2LOCATION
 END
 }
 
@@ -393,9 +401,6 @@ if [ "$1" != "source" ]; then
 		    'B')
 			action="prepare"
 			do_build="1"
-			;;
-		    'F')
-			action="fallback"
 			;;
 		    \?|h)
 			help
@@ -428,9 +433,5 @@ case $action in
 		build_library IP2Location || exit 1
 		echo "INFO  : following libaries were successfully built: $build_library_status"
 	fi
-	;;
-    'fallback')
-	fallback_options_from_name GeoIP
-	fallback_options_from_name IP2Location
 	;;
 esac
