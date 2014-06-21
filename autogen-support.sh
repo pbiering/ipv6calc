@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.9 2014/06/21 12:23:14 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.10 2014/06/21 12:38:00 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -169,6 +169,7 @@ fallback_options_from_name() {
 ## build GeoIP/IP2Location libraries
 build_library() {
 	local name="$1"
+	local version_selected="$2"
 
 	local versions=""
 	local base_devel=""
@@ -191,6 +192,10 @@ build_library() {
 	result_all=0
 
 	for version in $versions; do
+		if [ -n "$version_selected" -a "$version" != "$version_selected" ]; then
+			echo "NOTICE: skip not selected version: $version"
+		fi
+
 		local nameversion=$(nameversion_from_name_version $name $version)
 		echo "INFO  : build library: $name-$version ($nameversion)"
 
@@ -237,6 +242,7 @@ build_library() {
 ## extract GeoIP/IP2Location source packages
 extract_versions() {
 	local name="$1"
+	local version_selected="$2"
 
 	case $name in
 	    GeoIP)
@@ -256,6 +262,10 @@ extract_versions() {
 	result_all=0
 
 	for version in $versions; do
+		if [ -n "$version_selected" -a "$version" != "$version_selected" ]; then
+			echo "NOTICE: skip not selected version: $version"
+		fi
+
 		local nameversion=$(nameversion_from_name_version $name $version download)
 		local file="$BASE_SOURCES/$nameversion.tar.gz"
 
@@ -294,6 +304,7 @@ extract_versions() {
 ## retrieve GeoIP/IP2Location source packages
 download_versions() {
 	local name="$1"
+	local version_selected="$2"
 
 	case $name in
 	    GeoIP)
@@ -315,6 +326,10 @@ download_versions() {
 	result_all=0
 
 	for version in $versions; do
+		if [ -n "$version_selected" -a "$version" != "$version_selected" ]; then
+			echo "NOTICE: skip not selected version: $version"
+		fi
+
 		local nameversion=$(nameversion_from_name_version $name $version download)
 		local url="$base_url$nameversion.tar.gz"
 
@@ -359,8 +374,8 @@ help() {
 	cat <<END
 $0 [-h|-?]
 $0 source
-$0 [-D] [-X] [-B] [-n]
-$0 [-A] [-n]
+$0 [-D] [-X] [-B] [-n] [GeoIP|IP2Location <version>]
+$0 [-A] [-n] [GeoIP|IP2Location <version>]
 
 	source: source mode (using functions only in main script)
 
@@ -369,6 +384,7 @@ $0 [-A] [-n]
 	-B  : build GeoIP/IP2Location libraries
 	-A  : whole chain: download/extract/build
 	-n  : dry-run
+	(optionally, type and version can be specified)
 
 	-h|?: this online help
 
@@ -419,27 +435,39 @@ if [ "$1" != "source" ]; then
 	done
 
 	shift $[ $OPTIND - 1 ]
-fi
 
-case $action in
-    'prepare')
-	if [ "$do_download" = "1" ]; then
-		download_versions GeoIP || exit 1
-		download_versions IP2Location || exit 1
-		echo "INFO  : following libaries were successfully downloaded: $download_library_status"
-	fi
-	if [ "$do_extract" = "1" ]; then
-		extract_versions GeoIP || exit 1
-		extract_versions IP2Location || exit 1
-		echo "INFO  : following libaries were successfully extracted: $extract_library_status"
-	fi
-	if [ "$do_build" = "1" ]; then
-		build_library GeoIP || exit 1
-		build_library IP2Location || exit 1
-		echo "INFO  : following libaries were successfully built: $build_library_status"
-	fi
-	;;
-    *)
-	help
-	;;
-esac
+	case $action in
+	    'prepare')
+		if [ "$do_download" = "1" ]; then
+			if [ -z "$*" ]; then
+				download_versions GeoIP || exit 1
+				download_versions IP2Location || exit 1
+				echo "INFO  : following libaries were successfully downloaded: $download_library_status"
+			else
+				download_versions $* || exit 1
+			fi
+		fi
+		if [ "$do_extract" = "1" ]; then
+			if [ -z "$*" ]; then
+				extract_versions GeoIP || exit 1
+				extract_versions IP2Location || exit 1
+				echo "INFO  : following libaries were successfully extracted: $extract_library_status"
+			else
+				extract_versions $* || exit 1
+			fi
+		fi
+		if [ "$do_build" = "1" ]; then
+			if [ -z "$*" ]; then
+				build_library GeoIP || exit 1
+				build_library IP2Location || exit 1
+				echo "INFO  : following libaries were successfully built: $build_library_status"
+			else
+				build_library $* || exit 1
+			fi
+		fi
+		;;
+	    *)
+		help
+		;;
+	esac
+fi
