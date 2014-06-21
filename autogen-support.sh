@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.12 2014/06/21 12:44:00 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.13 2014/06/21 12:51:35 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -244,6 +244,66 @@ build_library() {
 }
 
 
+## clean GeoIP/IP2Location libraries
+clean_library() {
+	local name="$1"
+	local version_selected="$2"
+
+	local versions=""
+	local base_devel=""
+
+	case $name in
+	    GeoIP)
+		versions="$geoip_versions"
+		base_devel="$BASE_DEVEL_GEOIP"
+		;;
+	    IP2Location)
+		versions="$ip2location_versions"
+		base_devel="$BASE_DEVEL_IP2LOCATION"
+		;;
+	    *)
+		echo "ERROR : unsupported: $name"
+		return 1
+		;;
+	esac
+
+	result_all=0
+
+	for version in $versions; do
+		if [ -n "$version_selected" -a "$version" != "$version_selected" ]; then
+			echo "NOTICE: skip not selected version: $version"
+			continue
+		fi
+
+		local nameversion=$(nameversion_from_name_version $name $version)
+
+		if [ ! -d "$base_devel/$nameversion" ]; then
+			echo "ERROR : devel directory missing: $base_devel/$nameversion (forgot to extract?)"
+			continue
+		fi
+
+		if [ "$dry_run" = "1" ]; then
+			echo "INFO  : would remove: $base_devel/$nameversion"
+			continue
+		else
+			echo "INFO  : remove: $base_devel/$nameversion"
+		fi
+
+		rm -rf $base_devel/$nameversion
+		result=$?
+
+		if [ $result -ne 0 ]; then
+			echo "ERROR : trouble during remove of of $name-$version ($nameversion)"
+			result_all=1
+			break
+		else
+			echo "INFO  : successful remove of $name-$version ($nameversion)"
+			clean_library_status="$clean_library_status $nameversion"
+		fi
+	done
+
+	return $result_all
+}
 ## extract GeoIP/IP2Location source packages
 extract_versions() {
 	local name="$1"
@@ -387,6 +447,7 @@ $0 [-A] [-n] [GeoIP|IP2Location [<specific version>]]
 	source: source mode (using functions only in main script)
 
 	-D  : download GeoIP/IP2Location source packages
+	-C  : clean GeoIP/IP2Location source packages
 	-X  : extract GeoIP/IP2Location source packages
 	-B  : build GeoIP/IP2Location libraries
 	-A  : whole chain: download/extract/build
@@ -415,8 +476,13 @@ if [ "$1" != "source" ]; then
 		    'A')
 			action="prepare"
 			do_download="1"
+			do_clean="1"
 			do_extract="1"
 			do_build="1"
+			;;
+		    'C')
+			action="prepare"
+			do_clean="1"
 			;;
 		    'D')
 			action="prepare"
@@ -453,6 +519,15 @@ if [ "$1" != "source" ]; then
 				download_versions $* || exit 1
 			fi
 			echo "INFO  : following libaries were successfully downloaded: $download_library_status"
+		fi
+		if [ "$do_clean" = "1" ]; then
+			if [ -z "$*" ]; then
+				clean_versions GeoIP || exit 1
+				clean_versions IP2Location || exit 1
+			else
+				clean_versions $* || exit 1
+			fi
+			echo "INFO  : following libaries were successfully cleaned: $extract_library_status"
 		fi
 		if [ "$do_extract" = "1" ]; then
 			if [ -z "$*" ]; then
