@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.10 2014/06/21 12:38:00 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.11 2014/06/21 12:39:20 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -194,6 +194,7 @@ build_library() {
 	for version in $versions; do
 		if [ -n "$version_selected" -a "$version" != "$version_selected" ]; then
 			echo "NOTICE: skip not selected version: $version"
+			continue
 		fi
 
 		local nameversion=$(nameversion_from_name_version $name $version)
@@ -264,6 +265,7 @@ extract_versions() {
 	for version in $versions; do
 		if [ -n "$version_selected" -a "$version" != "$version_selected" ]; then
 			echo "NOTICE: skip not selected version: $version"
+			continue
 		fi
 
 		local nameversion=$(nameversion_from_name_version $name $version download)
@@ -328,6 +330,7 @@ download_versions() {
 	for version in $versions; do
 		if [ -n "$version_selected" -a "$version" != "$version_selected" ]; then
 			echo "NOTICE: skip not selected version: $version"
+			continue
 		fi
 
 		local nameversion=$(nameversion_from_name_version $name $version download)
