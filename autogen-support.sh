@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.7 2014/06/21 12:16:15 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.8 2014/06/21 12:19:37 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -272,7 +272,7 @@ extract_versions() {
 		fi
 
 		if [ ! -d "$base_devel" ]; then
-			echo "ERROR : can't change to directory: $base_devel"
+			echo "ERROR : base devel directory missing: $base_devel"
 			return 1
 		fi
 
@@ -323,6 +323,11 @@ download_versions() {
 			continue
 		else
 			echo "INFO  : download source package: $name-$version ($nameversion)"
+		fi
+
+		if [ ! -d "$BASE_SOURCES" ]; then
+			echo "ERROR : base source directory missing: $BASE_SOURCES (BASE_SOURCES)"
+			return 1
 		fi
 
 		pushd $BASE_SOURCES >/dev/null
