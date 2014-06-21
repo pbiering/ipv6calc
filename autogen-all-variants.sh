@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.34 2014/06/21 11:55:11 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.35 2014/06/21 13:31:22 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -117,7 +117,7 @@ if [ -n "$options_add" ]; then
 	echo "INFO  : additional options: $options_add"
 fi
 
-if [ -f "$status_file" ]; then
+if [ -f "$status_file" -a "$dry_run" != "1" ]; then
 	echo "INFO  : status file found: $status_file"
 
 	if [ "$force" = "1" ]; then

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.58 2014/06/17 20:21:15 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.59 2014/06/21 13:31:22 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -270,7 +270,7 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	} else if ((lib_features_GeoIP & GEOIP_LIB_FEATURE_IPV6_CC_BY_IPNUM) != 0) {
 		geoip_num_db_types = 12 + 1; // >= 1.4.5
 	} else {
-		geoip_num_db_types = 11 + 1; // <= 1.45
+		geoip_num_db_types = 11 + 1; // <= 1.4.5
 	};
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Estimation of geoip_num_db_types on dyn-load: %d", geoip_num_db_types - 1);
