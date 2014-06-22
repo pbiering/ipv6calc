@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.47 2014/04/26 13:03:56 ds6peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.48 2014/06/22 09:49:25 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -19,6 +19,25 @@ if [ $? -ne 1 ]; then
 	echo "ERROR : something wrong in option definition"
 	exit 1
 fi
+
+## version
+echo "Run 'ipv6calc' version test..."
+./ipv6calc -vvv
+retval=$?
+if [ $retval -ne 0 ]; then
+	echo "Error executing 'ipv6calc -vvv'!"
+	exit 1
+fi
+echo 
+
+echo "Run 'ipv6calc' version test in debug mode..."
+./ipv6calc -vvv -d -1
+retval=$?
+if [ $retval -ne 0 ]; then
+	echo "Error executing 'ipv6calc -vvv -d -1'!"
+	exit 1
+fi
+echo 
 
 # Test Scenarios for autodetection "good case"
 source ./test_scenarios.sh

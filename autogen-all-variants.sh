@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.35 2014/06/21 13:31:22 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.36 2014/06/22 09:49:25 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -37,13 +37,25 @@ END
 
 	if [ "$ip2location_versions_test" = "1" ]; then
 		for version in $ip2location_versions; do
-			echo "IP2LOCATION#--enable-ip2location $(options_from_name_version IP2Location $version)"
+			local testlist=""
+			for version_test in $ip2location_versions; do
+				if ip2location_cross_version_test_blacklist $version $version_test; then
+					testlist="$testlist I:$version_test"
+				fi
+			done
+			echo "IP2LOCATION#--enable-ip2location $(options_from_name_version IP2Location $version)#$testlist"
 		done
 	fi
 
 	if [ "$geoip_versions_test" = "1" ]; then
 		for version in $geoip_versions; do
-			echo "GEOIP#--enable-geoip $(options_from_name_version GeoIP $version)"
+			local testlist=""
+			for version_test in $geoip_versions; do
+				if geoip_cross_version_test_blacklist $version $version_test; then
+					testlist="$testlist G:$version_test"
+				fi
+			done
+			echo "GEOIP#--enable-geoip $(options_from_name_version GeoIP $version)#$testlist"
 		done
 	fi
 }
@@ -65,7 +77,7 @@ END
 }
 
 
-while getopts ":NMigrIfWn?h" opt; do
+while getopts ":cNMigrIfWn?h" opt; do
 	case $opt in
 	    'f')
 		force=1
@@ -97,6 +109,9 @@ while getopts ":NMigrIfWn?h" opt; do
 		ip2location_versions_test="1"
 		skip_shared="1"
 		no_static_build=1
+		;;
+	    'c')
+		cross_versions_test="1"
 		;;
 	    \?|h)
 		help
@@ -161,7 +176,7 @@ for liboption in "normal" "shared"; do
 		continue
 	fi
 
-	autogen_variants | while IFS="#" read token buildoptions; do
+	autogen_variants | while IFS="#" read token buildoptions testlist; do
 		if [ -n "$options_add" ]; then
 			if [ "$no_static_build" = "1" ]; then
 				options="--no-static-build $options_add $buildoptions"
@@ -212,16 +227,37 @@ for liboption in "normal" "shared"; do
 		fi
 
 		if [ "$dry_run" = "1" ]; then
-			echo "INFO  : would call(dry-run): ./autogen.sh $options"
+			if [ -n "$testlist" ]; then
+				echo "INFO  : would call(dry-run): ./autogen.sh $options (testlist: $testlist)"
+			else
+				echo "INFO  : would call(dry-run): ./autogen.sh $options"
+			fi
 		else
 			# run autogen
 			echo "INFO  : call: ./autogen.sh $options"
 
 			nice -n 20 $IONICE ./autogen.sh $options
 			if [ $? -ne 0 ]; then
-				echo "ERROR : 'autogen.sh reports an error with options: $options"
+				echo "ERROR : autogen.sh reports an error with options: $options"
 				exit 1
 			fi
+
+			if [ -n "$testlist" ]; then
+				for entry in $testlist; do
+					name=${testlist/:*}
+					version=${testlist/*:}
+					lib=$(options_from_name_version $name $version "only-lib")
+
+					echo "INFO  : call: LD_PRELOAD=$lib make test"
+					LD_PRELOAD="$lib" make test
+					if [ $? -ne 0 ]; then
+						echo "ERROR : autogen.sh reports an error with options: $options during testlist entry: $entry"
+						exit 1
+					fi
+					date "+%s:FINISHED:variants:$options:TESTLIST-ENTRY=$entry" >>$status_file
+				done
+			fi
+
 			# add entry in log
 			date "+%s:FINISHED:variants:$options:OK" >>$status_file
 		fi

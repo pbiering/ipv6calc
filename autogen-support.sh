@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.16 2014/06/21 12:53:20 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.17 2014/06/22 09:49:25 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -27,10 +27,32 @@ geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.4.8 1.5.1"
 geoip_versions_download="$geoip_versions"
 geoip_url_base="http://geolite.maxmind.com/download/geoip/api/c/"
 
+geoip_cross_version_test_blacklist() {
+	local version_have=$(echo $1 | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
+	local version_test=$(echo $2 | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
+
+	if [ $version_have -eq $version_test ]; then
+		# same version
+		return 1
+	fi
+
+	if [ $version_have -ge 10407 -a $version_test -lt 10407 ]; then
+		# missing GeoIP_cleanup
+		return 1
+	fi
+
+	return 0
+}
+
+
 ## List of IP2Location versions (append newest one rightmost!)
 ip2location_versions="4.0.2 6.0.1 6.0.2"
 ip2location_versions_download="6.0.1 6.0.2" # older versions are no longer available for download?
 ip2location_url_base="https://www.ip2location.com/downloads/"
+
+ip2location_cross_version_test_blacklist() {
+	return 0
+}
 
 #### NO CHANGES BELOW
 
@@ -92,24 +114,37 @@ nameversion_from_name_version() {
 options_from_name_version() {
 	local name="$1"
 	local version="$2"
+	local output="$3"
 
 	local nameversion=$(nameversion_from_name_version $name $version)
 
 	case $name in
 	    GeoIP)
 		local dir="$BASE_DEVEL_GEOIP/$nameversion"
-		result="--with-geoip-headers=$dir/libGeoIP --with-geoip-lib=$dir/libGeoIP/.libs"
+		libdir="$dir/libGeoIP/.libs"
+		lib="$libdir/GeoIP.so"
+		result="--with-geoip-headers=$dir/libGeoIP --with-geoip-lib=$libdir"
 		;;
 	    IP2Location)
 		local dir="$BASE_DEVEL_IP2LOCATION/$nameversion"
-		result="--with-ip2location-headers=$dir/libIP2Location --with-ip2location-lib=$dir/libIP2Location/.libs"
+		libdir="$dir/libIP2Location/.libs"
+		lib="$libdir/IP2Location.so"
+		result="--with-ip2location-headers=$dir/libIP2Location --with-ip2location-lib=$libdir"
 		;;
 	    *)
 		echo "ERROR : unsupported: $name" >&2
 		return 1
 		;;
 	esac
-	echo "$result"
+
+	case $output in
+	    'only-lib')
+		echo "$lib"
+		;;
+	    *)
+		echo "$result"
+		;;
+	esac
 }
 
 ## fallback for GeoIP/IP2Location
@@ -454,6 +489,8 @@ $0 [-A] [-n] [GeoIP|IP2Location [<specific version>]]
 	-n  : dry-run
 	(optionally, type and version can be specified)
 
+	-t  : GeoIP/IP2Location cross-version tests
+
 	-h|?: this online help
 
 	used values from environment (or defaults):
@@ -467,7 +504,7 @@ if [ "$1" != "source" ]; then
 	# use script not only as source (function-mode)
 
 	#### Main
-	while getopts ":DCXFnB?h" opt; do
+	while getopts ":DCXtFnB?h" opt; do
 		case $opt in
 		    'n')
 			dry_run=1

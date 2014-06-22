@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.59 2014/06/21 13:31:22 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.60 2014/06/22 09:49:25 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -260,29 +260,43 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	libipv6calc_db_wrapper_GeoIPDBFileName_ptr = dl_GeoIPDBFileName_ptr;
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Assigned dlsym: %s", "GeoIPDBFileName");
 
+#else // SUPPORT_GEOIP_DYN
+
+#ifdef SUPPORT_GEOIP_LIB_VERSION
+		lib_features_GeoIP |= GEOIP_LIB_FEATURE_LIB_VERSION;
+#endif // SUPPORT_GEOIP_LIB_VERSION
+
+#if defined SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6 && defined SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6
+		lib_features_GeoIP |= (GEOIP_LIB_FEATURE_IPV6_CC_BY_ADDR | GEOIP_LIB_FEATURE_IPV6_CN_BY_ADDR);
+#else // SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6 && SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6
+#ifdef SUPPORT_GEOIP_V6
+		lib_features_GeoIP |= (GEOIP_LIB_FEATURE_IPV6_CC_BY_IPNUM | GEOIP_LIB_FEATURE_IPV6_CN_BY_IPNUM);
+#endif // SUPPORT_GEOIP_V6
+#endif // SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6 && SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6
+
+	libipv6calc_db_wrapper_GeoIPDBDescription = GeoIPDBDescription;
+	libipv6calc_db_wrapper_GeoIPDBFileName_ptr = &GeoIPDBFileName;
+	geoip_num_db_types = NUM_DB_TYPES;
+#endif // SUPPORT_GEOIP_DYN
+
 #ifdef GEOIP_WORKAROUND_NUM_DB_TYPES
 	// workaround to determine NUM_DB_TYPES until GeoIP API provides a function
 	
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Try to estimate geoip_num_db_types on dyn-load");
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Try to estimate minimum geoip_num_db_types (to avoid segfaults)");
 
 	if ((lib_features_GeoIP & GEOIP_LIB_FEATURE_LIB_VERSION) != 0) {
 		geoip_num_db_types = 31 + 1; // >= 1.4.7
 	} else if ((lib_features_GeoIP & GEOIP_LIB_FEATURE_IPV6_CC_BY_IPNUM) != 0) {
 		geoip_num_db_types = 12 + 1; // >= 1.4.5
 	} else {
-		geoip_num_db_types = 11 + 1; // <= 1.4.5
+		geoip_num_db_types = 11 + 1; // < 1.4.5
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Estimation of geoip_num_db_types on dyn-load: %d", geoip_num_db_types - 1);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Estimation of minimum geoip_num_db_types: %d", geoip_num_db_types - 1);
 #else
-	geoip_num_db_types = 0; // FUTURE: call function
+	geoip_num_db_types = 0; // TODO: call function, once provided via GeoIP API
 #endif
 
-#else // SUPPORT_GEOIP_DYN
-	libipv6calc_db_wrapper_GeoIPDBDescription = GeoIPDBDescription;
-	libipv6calc_db_wrapper_GeoIPDBFileName_ptr = &GeoIPDBFileName;
-	geoip_num_db_types = NUM_DB_TYPES;
-#endif // SUPPORT_GEOIP_DYN
 
 	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper_GeoIP)
 		int i;
@@ -314,17 +328,6 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 
 #else // SUPPORT_GEOIP_DYN
 
-#ifdef SUPPORT_GEOIP_LIB_VERSION
-		lib_features_GeoIP |= GEOIP_LIB_FEATURE_LIB_VERSION;
-#endif // SUPPORT_GEOIP_LIB_VERSION
-
-#if defined SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6 && defined SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6
-		lib_features_GeoIP |= (GEOIP_LIB_FEATURE_IPV6_CC_BY_ADDR | GEOIP_LIB_FEATURE_IPV6_CN_BY_ADDR);
-#else // SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6 && SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6
-#ifdef SUPPORT_GEOIP_V6
-		lib_features_GeoIP |= (GEOIP_LIB_FEATURE_IPV6_CC_BY_IPNUM | GEOIP_LIB_FEATURE_IPV6_CN_BY_IPNUM);
-#endif // SUPPORT_GEOIP_V6
-#endif // SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6 && SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6
 #endif // SUPPORT_GEOIP_DYN
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP library features: 0x%04x", lib_features_GeoIP);
@@ -692,7 +695,7 @@ END_libipv6calc_db_wrapper:
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Returned from libipv6calc_db_wrapper_GeoIP_db_avail with result: %d", r);
 
 	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper_GeoIP)
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "List now available GeoIPDBFilename Entries (max:%d)", geoip_num_db_types - 1);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "List now available GeoIPDBFilename Entries (max: %d)", geoip_num_db_types - 1);
 
 		if (geoip_num_db_types > 0) {
 			int i;
