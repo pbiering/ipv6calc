@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.39 2014/06/19 08:01:22 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.40 2014/06/23 20:09:06 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -74,6 +74,10 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		SKIP_STATIC=1
 		;;
+	    '--no-test')
+		shift
+		SKIP_TEST=1
+		;;
 	    '--enable-bundled-md5'|'--enable-bundled-getopt')
 		# whitelisted
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $1"
@@ -107,6 +111,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --geoip-ipv6-compat : enable GeoIP IPv6 compatibility mode"
 		echo "   -S                  : enable shared library mode"
 		echo "   --no-static-build   : skip static build"
+		echo "   --no-test           : skip 'make test'"
 		exit 1
 	esac
 done
@@ -146,8 +151,12 @@ make clean || exit 1
 
 export EXTRA_CFLAGS
 
-echo "*** run: make test"
-make test || exit 1
+if [ "$SKIP_TEST" = "1" ]; then
+	echo "*** skip: make test"
+else
+	echo "*** run: make test"
+	make test || exit 1
+fi
 
 if [ "$SKIP_STATIC" != "1" ]; then
 	echo "*** run: make static"

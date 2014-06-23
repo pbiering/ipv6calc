@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.343 2014/06/22 09:49:24 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.344 2014/06/23 20:09:05 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140623/PB
+	autogen-support.sh/autogen-all-variants.sh: skip default 'make test' on GeoIP/IP2Location cross version checks
+
 20140622/PB
 	databases/lib/libipv6calc_db_wrapper_GeoIP.c: improve detection of maximum database types
 	autogen-support.sh/autogen-all-variants.sh: add support for GeoIP/IP2Location cross version checks

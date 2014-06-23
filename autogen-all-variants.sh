@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.36 2014/06/22 09:49:25 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.37 2014/06/23 20:09:05 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -213,13 +213,13 @@ for liboption in "normal" "shared"; do
 		# check for already executed option combination
 		if [ -f "$status_file" ]; then
 			if egrep -q ":FINISHED:variants:$options:" $status_file; then
-				echo "NOTICE : skip variant run with: $options"
+				echo "NOTICE: skip variant run (already finished) with: $options"
 				continue
 			fi
 		fi
 
 		if echo "$token" | egrep -wq "$skip_token"; then
-			echo "NOTICE : skip variant because of token: $token"
+			echo "NOTICE: skip variant because of token: $token"
 			if [ "$dry_run" = "1" ]; then
 				date "+%s:FINISHED:variants:$options:SKIPPED" >>$status_file
 			fi
@@ -233,10 +233,15 @@ for liboption in "normal" "shared"; do
 				echo "INFO  : would call(dry-run): ./autogen.sh $options"
 			fi
 		else
-			# run autogen
-			echo "INFO  : call: ./autogen.sh $options"
+			options_test=""
+			if [ -n "$testlist" ]; then
+				options_test="--no-test"
+			fi
 
-			nice -n 20 $IONICE ./autogen.sh $options
+			# run autogen
+			echo "INFO  : call: ./autogen.sh $options_test $options"
+
+			nice -n 20 $IONICE ./autogen.sh $options_test $options
 			if [ $? -ne 0 ]; then
 				echo "ERROR : autogen.sh reports an error with options: $options"
 				exit 1
