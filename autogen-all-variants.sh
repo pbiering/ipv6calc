@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.37 2014/06/23 20:09:05 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.38 2014/06/24 06:19:02 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -43,7 +43,7 @@ END
 					testlist="$testlist I:$version_test"
 				fi
 			done
-			echo "IP2LOCATION#--enable-ip2location $(options_from_name_version IP2Location $version)#$testlist"
+			echo "NONE#--enable-ip2location $(options_from_name_version IP2Location $version)#$testlist"
 		done
 	fi
 
@@ -55,7 +55,7 @@ END
 					testlist="$testlist G:$version_test"
 				fi
 			done
-			echo "GEOIP#--enable-geoip $(options_from_name_version GeoIP $version)#$testlist"
+			echo "NONE#--enable-geoip $(options_from_name_version GeoIP $version)#$testlist"
 		done
 	fi
 }
@@ -68,7 +68,8 @@ $0
 	-r	force re-run, after finished one, remove status file
 	-W	add option -W (warning) to autogen.sh
 	-N	add --no-static-build to autogen.sh
-	-I	skip IP2Location builds
+	-I	skip IP2Location builds using system wide available library
+	-G	skip GeoIP builds using system wide available library
 	-g	run through internal defined GeoIP versions
 	-i	run through internal defined IP2Location versions
 	-M	skip main tests
@@ -77,7 +78,7 @@ END
 }
 
 
-while getopts ":cNMigrIfWn?h" opt; do
+while getopts ":cNMigrIGfWn?h" opt; do
 	case $opt in
 	    'f')
 		force=1
@@ -99,6 +100,9 @@ while getopts ":cNMigrIfWn?h" opt; do
 		;;
 	    'I')
 		skip_token="IP2LOCATION"
+		;;
+	    'G')
+		skip_token="GEOIP"
 		;;
 	    'g')
 		geoip_versions_test="1"
