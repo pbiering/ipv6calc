@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.21 2014/06/25 19:46:07 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.22 2014/06/25 19:49:36 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -282,7 +282,7 @@ build_library() {
 			echo "ERROR : can't change to directory: $base_devel/$nameversion (skip)"
 			continue
 		else
-			echo "INFO  : changed to directory: $base_devel/$nameversion (skip)"
+			echo "INFO  : changed to directory: $base_devel/$nameversion"
 		fi
 
 		if [ "$dry_run" = "1" ]; then
