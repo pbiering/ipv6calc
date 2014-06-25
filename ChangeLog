@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.345 2014/06/24 06:19:02 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.346 2014/06/25 06:43:28 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140625/PB
+	autogen-support.sh: add support for GeoIP 1.5.2/1.6.0
+
 20140624/PB
 	autogen-all-variants.sh: improve disabling GeoIP/IP2Location if system wide no libraries are available
 

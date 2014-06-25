@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.17 2014/06/22 09:49:25 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.18 2014/06/25 06:43:28 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -14,6 +14,8 @@
 #          GeoIP-1.4.7
 #          GeoIP-1.4.8
 #          GeoIP-1.5.1
+#          GeoIP-1.5.2
+#          GeoIP-1.6.0
 #
 # $BASE_DEVEL_IP2LCATION/   (default if unset: "..")
 #          C-IP2Location-4.0.2
@@ -23,9 +25,10 @@
 #### Definitions
 
 ## List of GeoIP versions (append newest one rightmost!)
-geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.4.8 1.5.1"
+geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.4.8 1.5.1 1.5.2 1.6.0"
 geoip_versions_download="$geoip_versions"
-geoip_url_base="http://geolite.maxmind.com/download/geoip/api/c/"
+geoip_url_maxmind="http://geolite.maxmind.com/download/geoip/api/c/"
+geoip_url_github="https://codeload.github.com/maxmind/geoip-api-c/tar.gz/"
 
 geoip_cross_version_test_blacklist() {
 	local version_have=$(echo $1 | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
@@ -68,16 +71,32 @@ BASE_DEVEL_IP2LOCATION=${BASE_DEVEL_IP2LOCATION:-~/tmp}
 ### Functions Definitions
 
 ## generate GeoIP/IP2Location source package name from version
+# in download mode provide full URL
 nameversion_from_name_version() {
 	local name="$1"
 	local version="$2"
-	local mode="$3" # optional
+	local mode="$3" # optional (download|extract)
 
 	local nameversion=""
 
+	local version_numeric=$(echo "$version" | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
+
 	case $name in
 	    GeoIP)
-		nameversion="GeoIP-$version"
+		if [ "$mode" = "download" ]; then
+			if [ $version_numeric -ge 10502 ]; then
+				# since 1.5.2 on github
+				nameversion="${geoip_url_github}v$version"
+			else
+				nameversion="${geoip_url_maxmind}GeoIP-$version.tar.gz"
+			fi
+		else
+			if [ $version_numeric -ge 10502 ]; then
+				nameversion="geoip-api-c-$version"
+			else
+				nameversion="GeoIP-$version"
+			fi
+		fi
 		;;
 	    IP2Location)
 		case $version in
@@ -87,7 +106,17 @@ nameversion_from_name_version() {
 		    *)
 			# default
 			if [ "$mode" = "download" ]; then
-				nameversion="ip2location-c-$version"
+				nameversion="${ip2location_url_base}ip2location-c-$version.tar.gz"
+			elif [ "$mode" = "extract" ]; then
+				case $version in
+				    6.0.1|6.0.2)
+					nameversion="ip2location-c-$version"
+					;;
+				    *)
+					# default
+					nameversion="IP2Location-c-$version"
+					;;
+				esac
 			else
 				case $version in
 				    6.0.1)
@@ -243,6 +272,8 @@ build_library() {
 		if [ $? -ne 0 ]; then
 			echo "ERROR : can't change to directory: $base_devel/$nameversion (skip)"
 			continue
+		else
+			echo "INFO  : changed to directory: $base_devel/$nameversion (skip)"
 		fi
 
 		if [ "$dry_run" = "1" ]; then
@@ -254,7 +285,7 @@ build_library() {
 
 		case $name in
 		    GeoIP)
-			./configure && make clean && make
+			autoreconf -fi && ./configure && make clean && make
 			result=$?
 			;;
 		    IP2Location)
@@ -367,7 +398,7 @@ extract_versions() {
 			continue
 		fi
 
-		local nameversion=$(nameversion_from_name_version $name $version download)
+		local nameversion=$(nameversion_from_name_version $name $version extract)
 		local file="$BASE_SOURCES/$nameversion.tar.gz"
 
 		if [ ! -f "$file" ]; then
@@ -411,12 +442,10 @@ download_versions() {
 	    GeoIP)
 		versions="$geoip_versions_download"
 		base_devel="$BASE_DEVEL_GEOIP"
-		base_url="$geoip_url_base"
 		;;
 	    IP2Location)
 		versions="$ip2location_versions_download"
 		base_devel="$BASE_DEVEL_IP2LOCATION"
-		base_url="$ip2location_url_base"
 		;;
 	    *)
 		echo "ERROR : unsupported: $name"
@@ -432,14 +461,13 @@ download_versions() {
 			continue
 		fi
 
-		local nameversion=$(nameversion_from_name_version $name $version download)
-		local url="$base_url$nameversion.tar.gz"
+		local url=$(nameversion_from_name_version $name $version download)
 
 		if [ "$dry_run" = "1" ]; then
-			echo "INFO  : would download source package (dry-run): $name-$version ($nameversion) from $url"
+			echo "INFO  : would download source package (dry-run): $name-$version from $url"
 			continue
 		else
-			echo "INFO  : download source package: $name-$version ($nameversion)"
+			echo "INFO  : download source package: $name-$version from $url"
 		fi
 
 		if [ ! -d "$BASE_SOURCES" ]; then
