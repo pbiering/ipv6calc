@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.19 2014/06/25 19:28:40 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.20 2014/06/25 19:41:53 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -75,7 +75,7 @@ BASE_DEVEL_IP2LOCATION=${BASE_DEVEL_IP2LOCATION:-~/tmp}
 nameversion_from_name_version() {
 	local name="$1"
 	local version="$2"
-	local mode="$3" # optional (download|extract)
+	local mode="$3" # optional (download|extract|outfile)
 
 	local nameversion=""
 
@@ -89,6 +89,13 @@ nameversion_from_name_version() {
 				nameversion="${geoip_url_github}v$version"
 			else
 				nameversion="${geoip_url_maxmind}GeoIP-$version.tar.gz"
+			fi
+		elif [ "$mode" = "outfile" ]; then
+			if [ $version_numeric -ge 10502 ]; then
+				# since 1.5.2 on github
+				nameversion="geoip-api-c-$version.tar.gz"
+			else
+				nameversion="GeoIP-$version.tar.gz"
 			fi
 		else
 			if [ $version_numeric -ge 10502 ]; then
@@ -107,6 +114,8 @@ nameversion_from_name_version() {
 			# default
 			if [ "$mode" = "download" ]; then
 				nameversion="${ip2location_url_base}ip2location-c-$version.tar.gz"
+			elif [ "$mode" = "outfile" ]; then
+				nameversion="ip2location-c-$version.tar.gz"
 			elif [ "$mode" = "extract" ]; then
 				case $version in
 				    6.0.1|6.0.2)
@@ -462,12 +471,14 @@ download_versions() {
 		fi
 
 		local url=$(nameversion_from_name_version $name $version download)
+		local outfile="$(nameversion_from_name_version $name $version outfile)"
 
-		if [ "$dry_run" = "1" ]; then
-			echo "INFO  : would download source package (dry-run): $name-$version from $url"
-			continue
-		else
-			echo "INFO  : download source package: $name-$version from $url"
+		local outfile_option=""
+		local outfile_option_info=""
+		if ! echo "$url" | grep -q "$outfile"; then
+			# URL does not contains outfile
+			outfile_option="-o $outfile"
+			outfile_option_info="($outfile_option)"
 		fi
 
 		if [ ! -d "$BASE_SOURCES" ]; then
@@ -481,7 +492,14 @@ download_versions() {
 			return 1
 		fi
 
-		wget -c -q $url
+		if [ "$dry_run" = "1" ]; then
+			echo "INFO  : would download source package (dry-run): $name-$version from $url $outfile_option_info"
+			continue
+		else
+			echo "INFO  : download source package: $name-$version from $url $outfile_option_info"
+		fi
+
+		wget -c -q "$url" $outfile_option
 		result=$?
 
 		popd >/dev/null
