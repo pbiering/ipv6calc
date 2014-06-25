@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.18 2014/06/25 06:43:28 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.19 2014/06/25 19:28:40 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -487,12 +487,12 @@ download_versions() {
 		popd >/dev/null
 
 		if [ $result -ne 0 ]; then
-			echo "ERROR : trouble during downloading of $name-$version ($nameversion) from $url"
+			echo "ERROR : trouble during downloading of $name-$version from $url"
 			result_all=1
 			break
 		else
-			echo "INFO  : successful downloaded of $name-$version ($nameversion) from $url to $BASE_SOURCES"
-			download_library_status="$download_library_status $nameversion"
+			echo "INFO  : successful downloaded of $name-$version from $url to $BASE_SOURCES"
+			download_library_status="$download_library_status $name-$version"
 		fi
 	done
 
