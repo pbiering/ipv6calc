@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.20 2014/06/25 19:41:53 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.21 2014/06/25 19:46:07 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -477,7 +477,7 @@ download_versions() {
 		local outfile_option_info=""
 		if ! echo "$url" | grep -q "$outfile"; then
 			# URL does not contains outfile
-			outfile_option="-o $outfile"
+			outfile_option="-O $outfile"
 			outfile_option_info="($outfile_option)"
 		fi
 
