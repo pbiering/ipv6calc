@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.94 2014/06/24 06:39:52 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.95 2014/06/26 21:58:30 ds6peter Exp $
 dnl Copyright: 2001-2014 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -294,9 +294,11 @@ AC_ARG_WITH([ip2location-lib],
 			# absolute path
 			IP2LOCATION_LIB_L1="-L$IP2LOCATION_LIB_DIR"
 			IP2LOCATION_LIB_L2="-L$IP2LOCATION_LIB_DIR"
+			LD_LIBRARY_PATH=$IP2LOCATION_LIB_DIR:$LD_LIBRARY_PATH
 		else
 			IP2LOCATION_LIB_L1="-L../$IP2LOCATION_LIB_DIR"
 			IP2LOCATION_LIB_L2="-L../../$IP2LOCATION_LIB_DIR"
+			LD_LIBRARY_PATH=../$IP2LOCATION_LIB_DIR:$LD_LIBRARY_PATH
 		fi
 	])
 
@@ -499,9 +501,11 @@ AC_ARG_WITH([geoip-lib],
 			# absolute path
 			GEOIP_LIB_L1="-L$GEOIP_LIB_DIR"
 			GEOIP_LIB_L2="-L$GEOIP_LIB_DIR"
+			LD_LIBRARY_PATH=$GEOIP_LIB_DIR:$LD_LIBRARY_PATH
 		else
 			GEOIP_LIB_L1="-L../$GEOIP_LIB_DIR"
 			GEOIP_LIB_L2="-L../../$GEOIP_LIB_DIR"
+			LD_LIBRARY_PATH=../$GEOIP_LIB_DIR:$LD_LIBRARY_PATH
 		fi
 	])
 

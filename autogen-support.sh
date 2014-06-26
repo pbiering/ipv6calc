@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.22 2014/06/25 19:49:36 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.23 2014/06/26 21:58:30 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -522,8 +522,8 @@ help() {
 	cat <<END
 $0 [-h|-?]
 $0 source
-$0 [-D] [-X] [-B] [-n] [GeoIP|IP2Location <version>]
-$0 [-A] [-n] [GeoIP|IP2Location [<specific version>]]
+$0 [-D] [-X] [-B] [-n] [GeoIP|IP2Location [<version>]]
+$0 [-A] [-n] [GeoIP|IP2Location [<version>]]
 
 	source: source mode (using functions only in main script)
 
