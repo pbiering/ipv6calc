@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6logconv
 # File       : ipv6logconv/Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.28 2014/06/17 20:21:15 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.29 2014/06/27 06:09:20 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -61,7 +61,7 @@ clean:
 		rm -f ipv6logconv ipv6logconv-static *.o
 
 test:		ipv6logconv
-		LD_LIBRARY_PATH=@LD_LIBRARY_PATH@ ./test_ipv6logconv.sh
+		LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):@LD_LIBRARY_PATH@ ./test_ipv6logconv.sh
 
 test-minimal:
 		${MAKE} test
