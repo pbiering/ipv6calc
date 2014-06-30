@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.29 2014/06/30 15:07:44 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.30 2014/06/30 15:23:58 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -26,7 +26,6 @@
 
 ## List of GeoIP versions (append newest one rightmost!)
 geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.4.8 1.5.1 1.5.2 1.6.0"
-geoip_versions_download="$geoip_versions"
 geoip_url_maxmind="http://geolite.maxmind.com/download/geoip/api/c/"
 geoip_url_github="https://codeload.github.com/maxmind/geoip-api-c/tar.gz/"
 
@@ -48,6 +47,8 @@ if which autoconf >/dev/null 2>&1; then
 		done	
 	fi
 fi
+
+geoip_versions_download="$geoip_versions"
 
 geoip_cross_version_test_blacklist() {
 	local version_have=$(echo $1 | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
