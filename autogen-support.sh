@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.23 2014/06/26 21:58:30 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.24 2014/06/30 15:01:22 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -29,6 +29,25 @@ geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.4.8 1.5.1 1.5.2 1.6.0"
 geoip_versions_download="$geoip_versions"
 geoip_url_maxmind="http://geolite.maxmind.com/download/geoip/api/c/"
 geoip_url_github="https://codeload.github.com/maxmind/geoip-api-c/tar.gz/"
+
+# reduce version on known issues
+if which autoconf >/dev/null 2>&1; then
+	autoconf_version=$(autoconf -V |grep autoconf | awk '{ print $NF }' | awk -F. '{ print $1 * 1000 + $2 }')
+	if [ -n "$autoconf_version" -a $autoconf_version -lt 2065 ]; then
+		# autoconf >= 2.65 is required for GeoIP >= 1.5.2
+		geoip_versions_orig="$geoip_versions"
+		geoip_versions=""
+		for version in $geoip_versions_orig; do
+			[ -n "$geoip_versions" ] && geoip_versions="$geoip_versions "
+			prefix=""
+			version_num=$(echo $version | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
+			if [ $version_num -gt 10502 ]; then
+				prefix="!"
+			fi
+			geoip_versions="$prefix$geoip_versions"
+		done	
+	fi
+fi
 
 geoip_cross_version_test_blacklist() {
 	local version_have=$(echo $1 | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
@@ -534,6 +553,10 @@ $0 [-A] [-n] [GeoIP|IP2Location [<version>]]
 	-A  : whole chain: download/extract/build
 	-n  : dry-run
 	(optionally, type and version can be specified)
+
+	GeoIP: $geoip_versions
+	IP2Location: $ip2location_versions
+	Prefix '!' means not supported on this platform
 
 	-t  : GeoIP/IP2Location cross-version tests
 
