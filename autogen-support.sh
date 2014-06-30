@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.31 2014/06/30 15:45:28 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.32 2014/06/30 15:52:34 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -327,8 +327,15 @@ build_library() {
 
 		case $name in
 		    GeoIP)
-			if [ -n "$autoconf_version" -a $autoconf_version -eq 2059 -a $version_numeric -eq 10407 ]; then
-				# on CentOS 5 with autoreconf 2.59 somehow broken
+			skip_autoreconf=0
+			if [ -n "$autoconf_version" -a $autoconf_version -eq 2059 ]; then
+				if [ $version_numeric -eq 10407 -o $version_numeric -eq 10501 ]; then
+					# on CentOS 5 with autoreconf 2.59 somehow broken for 1.4.7 and 1.5.1
+					skip_autoreconf=1
+				fi
+			fi
+
+			if [ $skip_autoreconf -eq 1 ]; then
 				./configure && make clean && make
 				result=$?
 			else

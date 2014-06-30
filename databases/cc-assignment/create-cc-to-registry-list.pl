@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/cc-assignment
 # File       : create-cc-to-registry-list.pl
-# Version    : $Id: create-cc-to-registry-list.pl,v 1.3 2014/02/09 18:45:06 ds6peter Exp $
+# Version    : $Id: create-cc-to-registry-list.pl,v 1.4 2014/06/30 15:55:13 ds6peter Exp $
 # Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -195,6 +195,6 @@ for (my $i = 0; $i < 1024; $i++) {
 	printf OUT "\t{ REGISTRY_%-8s }, // %4d  %s\n", $reg, $i, $cc_print;
 };
 
-print OUT "};";
+print OUT "};\n";
 
 print "Finished\n";
