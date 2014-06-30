@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.30 2014/06/30 15:23:58 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.31 2014/06/30 15:45:28 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -289,6 +289,8 @@ build_library() {
 
 	result_all=0
 
+	autoreconf_version=$(autoreconf -V |grep autoreconf | awk '{ print $NF }' | awk -F. '{ print $1 * 1000 + $2 }')
+
 	for version in $versions; do
 		if [ ${version:0:1} = "!" ]; then
 			echo "NOTICE: skip blacklisted version: $version"
@@ -300,6 +302,7 @@ build_library() {
 			continue
 		fi
 
+		local version_numeric=$(echo "$version" | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
 		local nameversion=$(nameversion_from_name_version $name $version)
 
 		if [ ! -d "$base_devel/$nameversion" ]; then
@@ -324,8 +327,14 @@ build_library() {
 
 		case $name in
 		    GeoIP)
-			autoreconf -fi && ./configure && make clean && make
-			result=$?
+			if [ -n "$autoconf_version" -a $autoconf_version -eq 2059 -a $version_numeric -eq 10407 ]; then
+				# on CentOS 5 with autoreconf 2.59 somehow broken
+				./configure && make clean && make
+				result=$?
+			else
+				autoreconf -fi && ./configure && make clean && make
+				result=$?
+			fi
 			;;
 		    IP2Location)
 			autoreconf -fi && ./configure && make clean && make
