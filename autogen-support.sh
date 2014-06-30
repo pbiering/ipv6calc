@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.28 2014/06/30 15:05:33 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.29 2014/06/30 15:07:44 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -236,6 +236,11 @@ fallback_options_from_name() {
 	echo "NOTICE: file is missing, check for local availability for $name: $file_header" >&2
 
 	for version in $(echo "$versions" | awk '{ for (i=NF;i>0;i--) print $i }'); do
+		if [ ${version:0:1} = "!" ]; then
+			echo "NOTICE: skip blacklisted version: $version"
+			continue
+		fi
+
 		echo "DEBUG : check for version for $name: $version" >&2
 
 		dir="$dir_base/$(nameversion_from_name_version $name $version)"
@@ -284,6 +289,11 @@ build_library() {
 	result_all=0
 
 	for version in $versions; do
+		if [ ${version:0:1} = "!" ]; then
+			echo "NOTICE: skip blacklisted version: $version"
+			continue
+		fi
+
 		if [ -n "$version_selected" -a "$version" != "$version_selected" ]; then
 			echo "NOTICE: skip not selected version: $version"
 			continue
@@ -364,6 +374,11 @@ clean_versions() {
 	result_all=0
 
 	for version in $versions; do
+		if [ ${version:0:1} = "!" ]; then
+			echo "NOTICE: skip blacklisted version: $version"
+			continue
+		fi
+
 		if [ -n "$version_selected" -a "$version" != "$version_selected" ]; then
 			echo "NOTICE: skip not selected version: $version"
 			continue
@@ -421,6 +436,11 @@ extract_versions() {
 	result_all=0
 
 	for version in $versions; do
+		if [ ${version:0:1} = "!" ]; then
+			echo "NOTICE: skip blacklisted version: $version"
+			continue
+		fi
+
 		if [ -n "$version_selected" -a "$version" != "$version_selected" ]; then
 			echo "NOTICE: skip not selected version: $version"
 			continue
@@ -484,6 +504,11 @@ download_versions() {
 	result_all=0
 
 	for version in $versions; do
+		if [ ${version:0:1} = "!" ]; then
+			echo "NOTICE: skip blacklisted version: $version"
+			continue
+		fi
+
 		if [ -n "$version_selected" -a "$version" != "$version_selected" ]; then
 			echo "NOTICE: skip not selected version: $version"
 			continue
