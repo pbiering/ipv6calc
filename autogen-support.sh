@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.26 2014/06/30 15:04:08 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.27 2014/06/30 15:04:33 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -41,7 +41,7 @@ if which autoconf >/dev/null 2>&1; then
 			[ -n "$geoip_versions" ] && geoip_versions="$geoip_versions "
 			prefix=""
 			version_num=$(echo $version | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
-			if [ $version_num -gt 10502 ]; then
+			if [ $version_num -ge 10502 ]; then
 				prefix="!"
 			fi
 			geoip_versions="$geoip_versions$prefix$version"
