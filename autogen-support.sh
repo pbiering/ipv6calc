@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.27 2014/06/30 15:04:33 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.28 2014/06/30 15:05:33 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -573,7 +573,7 @@ if [ "$1" != "source" ]; then
 	# use script not only as source (function-mode)
 
 	#### Main
-	while getopts ":DCXtFnB?h" opt; do
+	while getopts ":ADCXtFnB?h" opt; do
 		case $opt in
 		    'n')
 			dry_run=1
