@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.39 2014/06/30 14:10:10 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.40 2014/06/30 15:02:43 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -37,8 +37,10 @@ END
 
 	if [ "$ip2location_versions_test" = "1" ]; then
 		for version in $ip2location_versions; do
+			[ ${version:0:1} = "!" ] && continue
 			local testlist=""
 			for version_test in $ip2location_versions; do
+				[ ${version_test:0:1} = "!" ] && continue
 				if ip2location_cross_version_test_blacklist $version $version_test; then
 					testlist="$testlist I:$version_test"
 				fi
@@ -49,8 +51,10 @@ END
 
 	if [ "$geoip_versions_test" = "1" ]; then
 		for version in $geoip_versions; do
+			[ ${version:0:1} = "!" ] && continue
 			local testlist=""
 			for version_test in $geoip_versions; do
+				[ ${version_test:0:1} = "!" ] && continue
 				if geoip_cross_version_test_blacklist $version $version_test; then
 					testlist="$testlist G:$version_test"
 				fi
