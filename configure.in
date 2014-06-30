@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.95 2014/06/26 21:58:30 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.96 2014/06/30 14:10:10 ds6peter Exp $
 dnl Copyright: 2001-2014 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -155,6 +155,7 @@ if test "$enable_shared" = "yes"; then
 	AC_DEFINE(SHARED_LIBRARY, 1, Define if you want ipv6calc binaries compiled with shared library libipv6calc)
 	LDFLAGS_EXTRA="../lib/libipv6calc.so.$PACKAGE_VERSION ../databases/lib/libipv6calc_db_wrapper.so.$PACKAGE_VERSION $LDFLAGS_EXTRA"
 	LD_LIBRARY_PATH=../lib:../databases/lib:$LD_LIBRARY_PATH
+	LD_LIBRARY_PATH_BASIC=../lib:../databases/lib:$LD_LIBRARY_PATH_BASIC
 else
 	SHARED_LIBRARY="no"
 	IPV6CALC_LIB="-L../lib/ -L../databases/lib/ -lipv6calc -lipv6calc_db_wrapper"
@@ -763,6 +764,7 @@ dnl *************************************************
 AC_SUBST(LDFLAGS_EXTRA)
 AC_SUBST(LDFLAGS_EXTRA_STATIC)
 AC_SUBST(LD_LIBRARY_PATH)
+AC_SUBST(LD_LIBRARY_PATH_BASIC)
 
 AC_OUTPUT([
 		Makefile
@@ -781,6 +783,7 @@ AC_OUTPUT([
 		VERSION
 	])
 
-AC_MSG_RESULT([*** LDFLAGS_EXTRA  = $LDFLAGS_EXTRA])
-AC_MSG_RESULT([*** LD_LIBRARY_PATH= $LD_LIBRARY_PATH])
+AC_MSG_RESULT([*** LDFLAGS_EXTRA        = $LDFLAGS_EXTRA])
+AC_MSG_RESULT([*** LD_LIBRARY_PATH      = $LD_LIBRARY_PATH])
+AC_MSG_RESULT([*** LD_LIBRARY_PATH_BASIC= $LD_LIBRARY_PATH_BASIC])
 

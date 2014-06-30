@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.38 2014/06/24 06:19:02 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.39 2014/06/30 14:10:10 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -257,7 +257,7 @@ for liboption in "normal" "shared"; do
 					version=${testlist/*:}
 					lib=$(options_from_name_version $name $version "only-lib")
 
-					echo "INFO  : call: LD_PRELOAD=$lib make test"
+					echo "INFO  : call: LD_PRELOAD=$lib make test-ldlibpath"
 					LD_PRELOAD="$lib" make test
 					if [ $? -ne 0 ]; then
 						echo "ERROR : autogen.sh reports an error with options: $options during testlist entry: $entry"

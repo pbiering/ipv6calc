@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.83 2014/02/23 16:36:24 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.84 2014/06/30 14:10:10 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -164,6 +164,14 @@ test:
 		echo "ALL TESTS SUCCESSFUL"
 
 test-minimal:
+		for dir in ipv6calc ipv6logconv ipv6logstats ipv6loganon ipv6calcweb; do \
+			ocwd=`pwd`; \
+			cd $$dir || exit 1; \
+			${MAKE} $@ ; r=$$?; \
+			cd $$ocwd ; if [ $$r -ne 0 ]; then echo "Result: $$r"; exit $$r; fi; \
+		done
+
+test-ldlibpath:
 		for dir in ipv6calc ipv6logconv ipv6logstats ipv6loganon ipv6calcweb; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \

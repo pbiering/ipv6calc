@@ -1,6 +1,6 @@
 # Project    : ipv6calc/ipv6logstats
 # File       : Makefile
-# Version    : $Id: Makefile.in,v 1.29 2014/06/27 06:09:20 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.30 2014/06/30 14:10:11 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -61,10 +61,13 @@ clean:
 		rm -f ipv6logstats ipv6logstats-static *.o
 
 test:		ipv6logstats
-		LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):@LD_LIBRARY_PATH@ ./test_ipv6logstats.sh
+		LD_LIBRARY_PATH=@LD_LIBRARY_PATH@ ./test_ipv6logstats.sh
 
 test-minimal:
 		${MAKE} test
+
+test-ldlibpath:	ipv6logstats
+		LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):@LD_LIBRARY_PATH_BASIC@ ./test_ipv6logstats.sh
 
 codecheck:
 		${MAKE} splint

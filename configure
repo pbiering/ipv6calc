@@ -622,6 +622,7 @@ ac_includes_default="\
 #endif"
 
 ac_subst_vars='LTLIBOBJS
+LD_LIBRARY_PATH_BASIC
 LD_LIBRARY_PATH
 LDFLAGS_EXTRA_STATIC
 LDFLAGS_EXTRA
@@ -4256,6 +4257,7 @@ $as_echo "#define SHARED_LIBRARY 1" >>confdefs.h
 
 	LDFLAGS_EXTRA="../lib/libipv6calc.so.$PACKAGE_VERSION ../databases/lib/libipv6calc_db_wrapper.so.$PACKAGE_VERSION $LDFLAGS_EXTRA"
 	LD_LIBRARY_PATH=../lib:../databases/lib:$LD_LIBRARY_PATH
+	LD_LIBRARY_PATH_BASIC=../lib:../databases/lib:$LD_LIBRARY_PATH_BASIC
 else
 	SHARED_LIBRARY="no"
 	IPV6CALC_LIB="-L../lib/ -L../databases/lib/ -lipv6calc -lipv6calc_db_wrapper"
@@ -5435,6 +5437,7 @@ $as_echo "*** Dynamic loading of libraries is ENABLED" >&6; }
 		DYNLOAD_LIB="-rdynamic -ldl"
 	fi
 fi
+
 
 
 
@@ -6734,8 +6737,10 @@ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS_EXTRA  = $LDFLAGS_EXTRA" >&5
-$as_echo "*** LDFLAGS_EXTRA  = $LDFLAGS_EXTRA" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH= $LD_LIBRARY_PATH" >&5
-$as_echo "*** LD_LIBRARY_PATH= $LD_LIBRARY_PATH" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS_EXTRA        = $LDFLAGS_EXTRA" >&5
+$as_echo "*** LDFLAGS_EXTRA        = $LDFLAGS_EXTRA" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH      = $LD_LIBRARY_PATH" >&5
+$as_echo "*** LD_LIBRARY_PATH      = $LD_LIBRARY_PATH" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH_BASIC= $LD_LIBRARY_PATH_BASIC" >&5
+$as_echo "*** LD_LIBRARY_PATH_BASIC= $LD_LIBRARY_PATH_BASIC" >&6; }
 
