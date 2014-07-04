@@ -4122,9 +4122,8 @@ $as_echo "*** use of system MD5 library forced" >&6; }
 
 else
 
-		as_ac_Header=`$as_echo "ac_cv_header_"openssl/md5.h"" | $as_tr_sh`
-ac_fn_c_check_header_mongrel "$LINENO" ""openssl/md5.h"" "$as_ac_Header" "$ac_includes_default"
-if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
+		ac_fn_c_check_header_mongrel "$LINENO" "openssl/md5.h" "ac_cv_header_openssl_md5_h" "$ac_includes_default"
+if test "x$ac_cv_header_openssl_md5_h" = xyes; then :
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** openssl/md5.h header file found" >&5
 $as_echo "*** openssl/md5.h header file found" >&6; }
