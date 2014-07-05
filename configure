@@ -626,6 +626,7 @@ LD_LIBRARY_PATH_BASIC
 LD_LIBRARY_PATH
 LDFLAGS_EXTRA_STATIC
 LDFLAGS_EXTRA
+CFLAGS_EXTRA
 DYNLOAD_LIB
 GEOIP_DYN_LIB
 GEOIP_DB
@@ -705,6 +706,7 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+enable_compiler_warning_to_error
 enable_bundled_getopt
 enable_bundled_md5
 enable_shared
@@ -1346,6 +1348,9 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --disable-compiler-warning-to-error
+                          Disable extra CFLAGS for mapping warnings to errors
+                          during compilation
   --enable-bundled-getopt Enable bundled getopt library (default:
                           autoselected)
   --enable-bundled-md5    Enable bundled MD5 library (default: autoselected)
@@ -4056,6 +4061,48 @@ fi
 done
 
 
+# Check whether --enable-compiler-warning-to-error was given.
+if test "${enable_compiler_warning_to_error+set}" = set; then :
+  enableval=$enable_compiler_warning_to_error;
+
+else
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** check for CFLAGS: -Werror=format-security" >&5
+$as_echo "*** check for CFLAGS: -Werror=format-security" >&6; }
+		CFLAGS_SAVE="$CFLAGS"
+		CFLAGS="$CFLAGS -Wformat -Werror -Werror=format-security"
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+int a=1;
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** CFLAGS supported: -Werror=format-security" >&5
+$as_echo "*** CFLAGS supported: -Werror=format-security" >&6; }
+				CFLAGS_EXTRA="-Wformat -Werror -Werror=format-security"
+
+else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: *** missing CFLAGS support: -Werror=format-security" >&5
+$as_echo "$as_me: WARNING: *** missing CFLAGS support: -Werror=format-security" >&2;}
+				CFLAGS_EXTRA="-Wformat"
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+		CFLAGS="$CFLAGS_SAVE"
+
+fi
+
+
+
 # Check whether --enable-bundled-getopt was given.
 if test "${enable_bundled_getopt+set}" = set; then :
   enableval=$enable_bundled_getopt;
@@ -5445,6 +5492,7 @@ fi
 
 
 
+
 ac_config_files="$ac_config_files Makefile md5/Makefile tools/Makefile getopt/Makefile ipv6calc/Makefile lib/Makefile man/Makefile databases/lib/Makefile ipv6logconv/Makefile ipv6loganon/Makefile ipv6logstats/Makefile ipv6calcweb/Makefile contrib/ipv6calc.spec VERSION"
 
 cat >confcache <<\_ACEOF
@@ -6736,6 +6784,8 @@ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** CFLAGS_EXTRA         = $CFLAGS_EXTRA" >&5
+$as_echo "*** CFLAGS_EXTRA         = $CFLAGS_EXTRA" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS_EXTRA        = $LDFLAGS_EXTRA" >&5
 $as_echo "*** LDFLAGS_EXTRA        = $LDFLAGS_EXTRA" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH      = $LD_LIBRARY_PATH" >&5

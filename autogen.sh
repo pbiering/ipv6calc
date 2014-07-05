@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.40 2014/06/23 20:09:06 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.41 2014/07/05 10:35:25 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -83,22 +83,9 @@ while [ "$1" != "$LAST" ]; do
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $1"
 		shift
 		;;
-	    '-W')
-		shift
-		EXTRA_CFLAGS="-Wformat"
-		gcc_date=$(gcc -v 2>&1 | grep -i version | sed 's/.*\s\([0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]\)\s.*/\1/g')
-		if [ -n "$gcc_date" ]; then
-			if [ $gcc_date -gt 20080704 ]; then
-				# > CentOS/RHEL 5
-				EXTRA_CFLAGS="$EXTRA_CFLAGS -Werror -Werror=format-security"
-			fi
-		fi
-		echo "INFO  : option -W enables EXTRA_CFLAGS=$EXTRA_CFLAGS"
-		;;
 	    '-?'|'-h'|'--help')
 		echo "Supported options:"
 		echo "   -?|-h|--help        : this help"
-		echo "   -W                  : use extra CFLAGS=-Werror"
 		echo "   -n|--no-make        : stop before running 'make'"
 		echo "   -a|--all            : enable GeoIP and IP2Location support"
 		echo "   -g|--geoip          : enable GeoIP support"
@@ -148,8 +135,6 @@ fi
 
 echo "*** run: make clean"
 make clean || exit 1
-
-export EXTRA_CFLAGS
 
 if [ "$SKIP_TEST" = "1" ]; then
 	echo "*** skip: make test"

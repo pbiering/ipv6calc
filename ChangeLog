@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.346 2014/06/25 06:43:28 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.347 2014/07/05 10:35:25 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,14 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140705/PB
+	configure[.in]: add option --disable-compiler-warning-to-error
+
+20140704/PB
+	several Makefile[.in]: add support for @CFLAGS_EXTRA@ defined by configure
+	configure[.in]: add check for compiler supporting -Werror=format-security
+	autogen.sh: remove support of -W (now handled automatically by configure)
+
 20140625/PB
 	autogen-support.sh: add support for GeoIP 1.5.2/1.6.0
 
