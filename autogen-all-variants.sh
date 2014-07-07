@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.40 2014/06/30 15:02:43 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.41 2014/07/07 05:23:11 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -261,8 +261,17 @@ for liboption in "normal" "shared"; do
 					version=${testlist/*:}
 					lib=$(options_from_name_version $name $version "only-lib")
 
+					if [ -z "$lib" ]; then
+						echo "ERROR : something wrong in call of: options_from_name_version $name $version 'only-lib'"
+						exit 1
+					fi
+					if [ ! -e "$lib" ]; then
+						echo "ERROR : library missing: $lib (got from: options_from_name_version $name $version 'only-lib')"
+						exit 1
+					fi
+
 					echo "INFO  : call: LD_PRELOAD=$lib make test-ldlibpath"
-					LD_PRELOAD="$lib" make test
+					LD_PRELOAD="$lib" make test-ldlibpath
 					if [ $? -ne 0 ]; then
 						echo "ERROR : autogen.sh reports an error with options: $options during testlist entry: $entry"
 						exit 1

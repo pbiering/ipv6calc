@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.32 2014/06/30 15:52:34 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.33 2014/07/07 05:23:12 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -102,7 +102,7 @@ nameversion_from_name_version() {
 	local version_numeric=$(echo "$version" | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
 
 	case $name in
-	    GeoIP)
+	    GeoIP|G)
 		if [ "$mode" = "download" ]; then
 			if [ $version_numeric -ge 10502 ]; then
 				# since 1.5.2 on github
@@ -125,7 +125,7 @@ nameversion_from_name_version() {
 			fi
 		fi
 		;;
-	    IP2Location)
+	    IP2Location|I)
 		case $version in
 		    4.*)
 			nameversion="C-IP2Location-$version"
@@ -177,16 +177,16 @@ options_from_name_version() {
 	local nameversion=$(nameversion_from_name_version $name $version)
 
 	case $name in
-	    GeoIP)
+	    GeoIP|G)
 		local dir="$BASE_DEVEL_GEOIP/$nameversion"
 		libdir="$dir/libGeoIP/.libs"
-		lib="$libdir/GeoIP.so"
+		lib="$libdir/libGeoIP.so"
 		result="--with-geoip-headers=$dir/libGeoIP --with-geoip-lib=$libdir"
 		;;
-	    IP2Location)
+	    IP2Location|I)
 		local dir="$BASE_DEVEL_IP2LOCATION/$nameversion"
 		libdir="$dir/libIP2Location/.libs"
-		lib="$libdir/IP2Location.so"
+		lib="$libdir/libIP2Location.so"
 		result="--with-ip2location-headers=$dir/libIP2Location --with-ip2location-lib=$libdir"
 		;;
 	    *)
@@ -213,12 +213,12 @@ fallback_options_from_name() {
 	local versions=""
 
 	case $name in
-	    GeoIP)
+	    GeoIP|G)
 		file_header="/usr/include/GeoIP.h"
 		versions="$geoip_versions"
 		dir_base="$BASE_DEVEL_GEOIP"
 		;;
-	    IP2Location)
+	    IP2Location|I)
 		file_header="/usr/include/IP2Location.h"
 		versions="$ip2location_versions"
 		dir_base="$BASE_DEVEL_IP2LOCATION"
@@ -273,11 +273,11 @@ build_library() {
 	local base_devel=""
 
 	case $name in
-	    GeoIP)
+	    GeoIP|G)
 		versions="$geoip_versions"
 		base_devel="$BASE_DEVEL_GEOIP"
 		;;
-	    IP2Location)
+	    IP2Location|I)
 		versions="$ip2location_versions"
 		base_devel="$BASE_DEVEL_IP2LOCATION"
 		;;
@@ -374,11 +374,11 @@ clean_versions() {
 	local base_devel=""
 
 	case $name in
-	    GeoIP)
+	    GeoIP|G)
 		versions="$geoip_versions"
 		base_devel="$BASE_DEVEL_GEOIP"
 		;;
-	    IP2Location)
+	    IP2Location|I)
 		versions="$ip2location_versions"
 		base_devel="$BASE_DEVEL_IP2LOCATION"
 		;;
@@ -436,11 +436,11 @@ extract_versions() {
 	local version_selected="$2"
 
 	case $name in
-	    GeoIP)
+	    GeoIP|G)
 		versions="$geoip_versions"
 		base_devel="$BASE_DEVEL_GEOIP"
 		;;
-	    IP2Location)
+	    IP2Location|I)
 		versions="$ip2location_versions"
 		base_devel="$BASE_DEVEL_IP2LOCATION"
 		;;
@@ -504,11 +504,11 @@ download_versions() {
 	local version_selected="$2"
 
 	case $name in
-	    GeoIP)
+	    GeoIP|G)
 		versions="$geoip_versions_download"
 		base_devel="$BASE_DEVEL_GEOIP"
 		;;
-	    IP2Location)
+	    IP2Location|I)
 		versions="$ip2location_versions_download"
 		base_devel="$BASE_DEVEL_IP2LOCATION"
 		;;
