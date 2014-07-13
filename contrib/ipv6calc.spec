@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2014 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.173 2014/07/05 10:35:26 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.174 2014/07/13 10:59:18 ds6peter Exp $
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc

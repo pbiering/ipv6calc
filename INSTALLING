@@ -27,7 +27,7 @@ For deinstalling use
 	rpm -e ipv6calc
 
 
-RPM is currently tested on CentOS 5 / CentOS 6 / Fedora 17
+RPM is currently tested on CentOS 5/6/7 / Fedora 20
 
 
 HACKERS WAY
@@ -163,4 +163,4 @@ If you want to install the binary use "make install".
 Peter Bieringer
 <pb (at) bieringer.de>
 
-$Id: INSTALLING,v 1.21 2014/02/25 20:49:16 ds6peter Exp $
+$Id: INSTALLING,v 1.22 2014/07/13 10:59:18 ds6peter Exp $
