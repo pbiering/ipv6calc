@@ -15,7 +15,7 @@
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freshmeat.net/projects/ipv6calc/">freshmeat / ipv6calc</ulink> page (not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 0.97.2 (released 2014-05-23)</para></sect2><sect2>
+<para>Latest version since last update of this page is 0.97.3 (released 2014-07-xx)</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
 <listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem></itemizedlist></sect2><sect2>
@@ -60,10 +60,12 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 <title>Fedora Linux</title>
 <para>Fedora 20 is the current developing platform, so use given hints above to create a RPM. Since Fedora 7 this package is included by default.</para></sect3><sect3>
 <title>Red Hat Enterprise Linux and clones</title>
-<para>It's tested by the developer that creation of the RPM is working fine on RHEL 4. Since RHEL 5 this package is included by default.</para>
-<para>CentOS 5 and CentOS 6 are also platforms for regression tests.</para></sect3><sect3>
+<para>It's tested by the developer that creation of the RPM is working fine on RHEL 4.</para>
+<para>RHEL/CentOS 5 has the package included by default.</para>
+<para>RHEL/CentOS 6/7: release on EPEL planned for August 2014.</para>
+<para>CentOS 5/6/7 are also platforms for regression tests.</para></sect3><sect3>
 <title>Gentoo/Funtoo</title>
-<para>Package is maintained</para></sect3><sect3>
+<para>Package is maintained, nevertheless, Funtoo is used as platform for regression tests.</para></sect3><sect3>
 <title>Ubuntu</title>
 <para>Package is maintained</para></sect3><sect3>
 <title>Debian GNU/Linux</title>
@@ -122,7 +124,6 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 <![CDATA[$ ./autogen.sh -h
 Supported options:
    -?|-h|--help        : this help
-   -W                  : use extra CFLAGS=-Werror
    -n|--no-make        : stop before running 'make'
    -a|--all            : enable GeoIP and IP2Location support
    -g|--geoip          : enable GeoIP support
@@ -135,6 +136,7 @@ Supported options:
    --geoip-ipv6-compat : enable GeoIP IPv6 compatibility mode
    -S                  : enable shared library mode
    -no-static-build    : skip static build
+   --no-test           : skip 'make test' 
 ]]></screen></sect2></sect1><sect1>
 <title>Mailling Lists</title>
 <sect2>
