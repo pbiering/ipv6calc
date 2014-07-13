@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.33 2014/07/07 05:23:12 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.34 2014/07/13 09:20:02 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -46,6 +46,9 @@ if which autoconf >/dev/null 2>&1; then
 			geoip_versions="$geoip_versions$prefix$version"
 		done	
 	fi
+else
+	echo "ERROR : missing executable in path: : autoconf" >&2
+	exit 1
 fi
 
 geoip_versions_download="$geoip_versions"
