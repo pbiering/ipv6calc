@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.42 2014/07/13 09:48:42 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.43 2014/07/13 10:28:05 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -143,9 +143,10 @@ else
 	make test || exit 1
 fi
 
-if [ ! -e /etc/redhat-release ]; then
+if [ "$SKIP_STATIC" != "1" -a ! -e /etc/redhat-release ]; then
 	# skip static on non Fedora/RedHat/CentOS systems
 	SKIP_STATIC="1"
+	echo "NOTICE: 'make static' skipped on non Fedora/RedHat/CentOS systems"
 fi
 
 if [ "$SKIP_STATIC" != "1" ]; then
