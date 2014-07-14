@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.347 2014/07/05 10:35:25 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.348 2014/07/14 06:20:02 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140714/PB
+	databases: update
+	tag version 0.97.3
+
 20140705/PB
 	configure[.in]: add option --disable-compiler-warning-to-error
 

@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.65 2014/05/16 20:34:02 ds6peter Exp $
- * Generated     : Fri May 16 22:13:38 2014
+ * Version       : $Id: dbieee_iab.h,v 1.66 2014/07/14 06:20:02 ds6peter Exp $
+ * Generated     : Mon Jul 14 08:12:49 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20140516";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20140714";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -2173,7 +2173,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x86F000, 0x86FFFF, "b-plus GmbH", "B-PLUS" },
 	{ 0x0050C2, 0x870000, 0x870FFF, "LOGEL S.R.L.", "LOGEL-S-R-L" },
 	{ 0x0050C2, 0x871000, 0x871FFF, "R-S-I Elektrotechnik GmbH & Co. KG", "R-S-I-ELEKTROTECHNIK" },
-	{ 0x0050C2, 0x872000, 0x872FFF, "Oliotalo - Objecthouse Oy", "OLIOTALO---OBJECTHOUSE-OY" },
+	{ 0x0050C2, 0x872000, 0x872FFF, "Oliotalo Oy", "OLIOTALO-OY" },
 	{ 0x0050C2, 0x873000, 0x873FFF, "XRONET Corporation", "XRONET" },
 	{ 0x0050C2, 0x874000, 0x874FFF, "Arcos Technologies Ltd.", "ARCOS-TECHNOLOGIES" },
 	{ 0x0050C2, 0x875000, 0x875FFF, "Phytec Messtechnik GmbH", "PHYTEC-MESSTECHNIK" },
