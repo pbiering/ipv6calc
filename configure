@@ -4241,8 +4241,8 @@ $as_echo "*** use of bundled MD5 library autoselected" >&6; }
 
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: crypto library header files were found but not supporting required MD5 functions (will us bundled MD5 function)." >&5
-$as_echo "$as_me: WARNING: crypto library header files were found but not supporting required MD5 functions (will us bundled MD5 function)." >&2;}
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: crypto library header files were found but not supporting required MD5 functions (will use bundled MD5 function)." >&5
+$as_echo "$as_me: WARNING: crypto library header files were found but not supporting required MD5 functions (will use bundled MD5 function)." >&2;}
 				ENABLE_BUNDLED_MD5=1
 
 fi
@@ -4250,8 +4250,8 @@ fi
 
 else
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: openssl/md5.h header file not found (will us bundled MD5 function)." >&5
-$as_echo "$as_me: WARNING: openssl/md5.h header file not found (will us bundled MD5 function)." >&2;}
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: openssl/md5.h header file not found (will use bundled MD5 function)." >&5
+$as_echo "$as_me: WARNING: openssl/md5.h header file not found (will use bundled MD5 function)." >&2;}
 			ENABLE_BUNDLED_MD5=1
 
 fi

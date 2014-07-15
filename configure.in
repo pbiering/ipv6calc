@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.98 2014/07/05 10:35:26 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.99 2014/07/15 05:44:53 ds6peter Exp $
 dnl Copyright: 2001-2014 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -133,11 +133,11 @@ AC_ARG_ENABLE(
 				fi
 			],
 			[
-				AC_MSG_WARN([crypto library header files were found but not supporting required MD5 functions (will us bundled MD5 function).])
+				AC_MSG_WARN([crypto library header files were found but not supporting required MD5 functions (will use bundled MD5 function).])
 				ENABLE_BUNDLED_MD5=1
 			])
 		], [
-			AC_MSG_WARN([openssl/md5.h header file not found (will us bundled MD5 function).])
+			AC_MSG_WARN([openssl/md5.h header file not found (will use bundled MD5 function).])
 			ENABLE_BUNDLED_MD5=1
 		])
 	],[
