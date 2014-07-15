@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2014 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec.in,v 1.82 2014/07/15 04:57:56 ds6peter Exp $
+# $Id: ipv6calc.spec.in,v 1.83 2014/07/15 05:31:32 ds6peter Exp $
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
@@ -62,7 +62,7 @@ in different ways.
 
 Install this package, if you want to retrieve information about a particular
 IPv4/IPv6/MAC address (-i ADDRESS) or make life easier in adding entries to
-everse IPv6 DNS zones (e.g. -a 2001:db8:1234::1/48).
+reverse IPv6 DNS zones (e.g. -a 2001:db8:1234::1/48).
 
 In addition many format and type conversions are supported, see online help
 and/or given URL for more.
