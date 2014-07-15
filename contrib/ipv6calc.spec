@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2014 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.175 2014/07/14 06:20:02 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.176 2014/07/15 04:57:56 ds6peter Exp $
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
@@ -57,18 +57,22 @@ Requires: ip2Location >= 2.1.3
 
 
 %description
-ipv6calc is a small utility which formats and calculates IPv6 addresses in
-different ways.
+ipv6calc is a small utility which formats and calculates IPv4/IPv6 addresses
+in different ways.
 
-Install this package, if you want to extend the existing address detection
-on IPv6 initscript setup or make life easier in adding reverse IPv6 zones to DNS
-or using in DNS queries like
- dig -t ANY `ipv6calc -r 2001:db8:1234::1/48`
-Many more format conversions are supported, see given URL for more.
+Install this package, if you want to retrieve information about a particular
+IPv4/IPv6/MAC address (-i ADDRESS) or make life easier in adding entries to
+everse IPv6 DNS zones (e.g. -a 2001:db8:1234::1/48).
 
-Also this package contains additional binaries (and some examples)
+In addition many format and type conversions are supported, see online help
+and/or given URL for more.
+
+Also this package contains additional executables
  - ipv6loganon: anonymizes Apache webserver logs
- - ipv6logstats: create statistics from list of IPv4/IPv6 addresses (can be used by analog)
+ - ipv6logconv: special Apache webserver log converter
+    (examples included for use with analog)
+ - ipv6logstats: create statistics from list of IPv4/IPv6 addresses
+    (examples included for use with gnuplot)
 
 Available rpmbuild rebuild options:
   --with ip2location
@@ -201,6 +205,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Jul 14 2014 Peter Bieringer <pb@bieringer.de>
+- review description
+
 * Sun Feb 02 2014 Peter Bieringer <pb@bieringer.de>
 - add support for optional shared-library build
 
