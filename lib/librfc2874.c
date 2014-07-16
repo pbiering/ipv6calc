@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.c
- * Version    : $Id: librfc2874.c,v 1.16 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: librfc2874.c,v 1.17 2014/07/16 06:03:07 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -132,7 +132,7 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 	length = (unsigned int) strlen(tempstring);
 
 	/* check content */
-	retval = librfc2874_formatcheck(tempstring, resultstring, sizeof(resultstring));
+	retval = librfc2874_formatcheck(tempstring, resultstring, resultstring_length);
 	
 	if (retval != 0) {
 		return (1);

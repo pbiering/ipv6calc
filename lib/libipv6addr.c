@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.108 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.109 2014/07/16 06:03:07 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -2625,7 +2625,7 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 			};
 		} else {
 			if ((ipv6addrp->scope & IPV6_NEW_ADDR_6TO4) != 0) {
-				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 0);
+				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 1);
 				if (retval != 0) {
 					fprintf(stderr, "Error getting included IPv4 address from anonymized IPv6 address\n");
 					goto END_libipv6addr_cc_index_by_addr;
@@ -2635,7 +2635,7 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 			};
 		};
 	} else if (((ipv6addrp->scope & IPV6_ADDR_ANONYMIZED_IID) != 0) && ((ipv6addrp->scope & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID) != 0)) {
-		retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 0);
+		retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 1);
 		if (retval != 0) {
 			fprintf(stderr, "Error getting included IPv4 address from anonymized IPv6 address\n");
 			goto END_libipv6addr_cc_index_by_addr;
@@ -2645,7 +2645,7 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC) == 1) {
 			if ((ipv6addrp->scope & IPV6_NEW_ADDR_NAT64) != 0) {
-				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 0);
+				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 1);
 				if (retval != 0) {
 					fprintf(stderr, "Error getting included IPv4 address from IPv6 address\n");
 					goto END_libipv6addr_cc_index_by_addr;
