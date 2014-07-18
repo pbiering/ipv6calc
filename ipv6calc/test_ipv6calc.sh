@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.48 2014/06/22 09:49:25 ds6peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.49 2014/07/18 06:19:55 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -328,11 +328,11 @@ echo "Run 'ipv6calc' input validation tests...(empty input)"
 		./ipv6calc -q --in $inputformat ""
 		retval=$?
 	fi
-	if [ $retval -ne 0 -a $retval -ne 1 ]; then
+	if [ $retval -ne 1 ]; then
 		echo "Error executing 'ipv6calc'!"
 		exit 1
 	fi
-done
+done || exit 1
 
 echo "Run 'ipv6calc' input validation tests...(too long input)"
 line="`perl -e 'print "x" x300'`"
@@ -346,11 +346,11 @@ line="`perl -e 'print "x" x300'`"
 		./ipv6calc -q --in $inputformat "$line"
 		retval=$?
 	fi
-	if [ $retval -ne 0 -a $retval -ne 1 ]; then
+	if [ $retval -ne 1 ]; then
 		echo "Error executing 'ipv6calc'!"
 		exit 1
 	fi
-done
+done || exit 1
 
 echo "Run 'ipv6calc' input validation tests...(strange input)"
 ./ipv6calc -m --in -? | while read inputformat; do
@@ -371,7 +371,7 @@ echo "Run 'ipv6calc' input validation tests...(strange input)"
 		./ipv6calc -q --in $inputformat "$line"
 		retval=$?
 	fi
-	if [ $retval -ne 0 -a $retval -ne 1 ]; then
+	if [ $retval -ne 1 ]; then
 		echo "Error executing 'ipv6calc'!"
 		exit 1
 	fi

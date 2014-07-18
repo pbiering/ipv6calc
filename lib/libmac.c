@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libmac.c
- * Version    : $Id: libmac.c,v 1.25 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: libmac.c,v 1.26 2014/07/18 06:19:55 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -67,7 +67,7 @@ int mac_to_macaddrstruct(const char *addrstring, char *resultstring, const size_
 		   || (ccolons == 0 && cdashes == 1 && cspaces == 0 && strlen(addrstring) == 13 && cdots == 0)
 		   || (ccolons == 0 && cdashes == 0 && cspaces == 0 && strlen(addrstring) == 12 && cdots == 0))
 	   ) {
-		snprintf(resultstring, resultstring_length, "Error, given MAC address '%s' is not valid (number of colons/dashes/spaces is not 5 or number of dashes is not 1)!", addrstring);
+		snprintf(resultstring, resultstring_length, "Error in given MAC address, '%s' is not valid (number of colons/dashes/spaces is not 5 or number of dashes is not 1)!", addrstring);
 		retval = 1;
 		return (retval);
 	};
@@ -86,13 +86,13 @@ int mac_to_macaddrstruct(const char *addrstring, char *resultstring, const size_
 	} else if ( cdashes == 0 ) {
 		result = sscanf(addrstring, "%2x%2x%2x%2x%2x%2x", &temp[0], &temp[1], &temp[2], &temp[3], &temp[4], &temp[5]);
 	} else {
-		snprintf(resultstring, resultstring_length, "Error, unexpected failure on scanning MAC address '%s'!", addrstring);
+		snprintf(resultstring, resultstring_length, "Error in given MAC address, unexpected failure on scanning '%s'!", addrstring);
 		retval = 1;
 		return (retval);
 	};
 
 	if ( result != 6 ) {
-		snprintf(resultstring, resultstring_length, "Error splitting address %s, got %d items instead of 6!", addrstring, result);
+		snprintf(resultstring, resultstring_length, "Error in given MAC address, splitting of '%s' returns %d items instead of 6!", addrstring, result);
 		retval = 1;
 		return (retval);
 	};
@@ -100,7 +100,7 @@ int mac_to_macaddrstruct(const char *addrstring, char *resultstring, const size_
 	/* check address words range */
 	for ( i = 0; i <= 5; i++ ) {
 		if ( ( temp[i] < 0x0 ) || ( temp[i] > 0xff ) )    {
-			snprintf(resultstring, resultstring_length, "Error, given MAC address '%s' is not valid on position %d!", addrstring, i);
+			snprintf(resultstring, resultstring_length, "Error in given MAC address, '%s' is not valid on position %d!", addrstring, i);
 			retval = 1;
 			return (retval);
 		};

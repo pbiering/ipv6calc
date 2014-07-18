@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc2874.c
- * Version    : $Id: librfc2874.c,v 1.17 2014/07/16 06:03:07 ds6peter Exp $
+ * Version    : $Id: librfc2874.c,v 1.18 2014/07/18 06:19:55 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -151,19 +151,19 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 		retval = sscanf(tempstring2, "%x", &xdigit);
 
 		if (retval != 1) {
-			snprintf(resultstring, resultstring_length, "Nibble '%s' at position %u cannot be parsed", tempstring2, index + 1);
+			snprintf(resultstring, resultstring_length, "Error in given bitstring label, nibble '%s' at position %u cannot be parsed", tempstring2, index + 1);
 			return (1);
 		};
 
 		if (xdigit > 0xf) {
-			snprintf(resultstring, resultstring_length, "Nibble '%s' at dot position %u is out of range", tempstring2, index + 1);
+			snprintf(resultstring, resultstring_length, "Error in given bitstring label, nibble '%s' at dot position %u is out of range", tempstring2, index + 1);
 			return (1);
 		};
 
 		noctet = nibblecounter >> 1; /* divided by 2 */
 		
 		if (noctet > 15) {
-			snprintf(resultstring, resultstring_length, "Too many nibbles");
+			snprintf(resultstring, resultstring_length, "Error in given bitstring label, too many nibbles");
 			return (1);
 		};
 
@@ -183,7 +183,7 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 	};
 	
 	if (index > length) {
-		snprintf(resultstring, resultstring_length, "Unexpected end of string");
+		snprintf(resultstring, resultstring_length, "Error in given bitstring label, unexpected end of string");
 		return (1);
 	};
 
@@ -199,19 +199,19 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 	index++;
 
 	if (index > length) {
-		snprintf(resultstring, resultstring_length, "Unexpected end of string");
+		snprintf(resultstring, resultstring_length, "Error in given bitstring label, unexpected end of string");
 		return (1);
 	};
 
 	/* proceed prefix length */
 	if (tempstring[index] == '/') {
-		snprintf(resultstring, resultstring_length, "Char '%c' not expected on position %u", tempstring[index], index + 1);
+		snprintf(resultstring, resultstring_length, "Error in given bitstring label, char '%c' not expected on position %u", tempstring[index], index + 1);
 		return (1);
 	};
 	index++;
 
 	if (index > length) {
-		snprintf(resultstring, resultstring_length, "Unexpected end of string");
+		snprintf(resultstring, resultstring_length, "Error in given bitstring address, unexpected end of string");
 		return (1);
 	};
 
@@ -243,7 +243,7 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 		retval = sscanf(tempstring2, "%u", &prefixlength);
 
 		if ( /*prefixlength < 0 || */ prefixlength > 128) {
-			snprintf(resultstring, resultstring_length, "Given prefix length '%u' is out of range", prefixlength);
+			snprintf(resultstring, resultstring_length, "Error in given bitstring label, given prefix length '%u' is out of range", prefixlength);
 			return (1);
 		};
 		
@@ -255,7 +255,7 @@ int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv
 		goto END_bitstring_to_ipv6addrstruct;
 	};
 
-	snprintf(resultstring, resultstring_length, "Char '%c' not expected on position %u", tempstring[index], index + 1);
+	snprintf(resultstring, resultstring_length, "Error in given bitstring label, char '%c' not expected on position %u", tempstring[index], index + 1);
 	return (1);
 
 END_bitstring_to_ipv6addrstruct:
@@ -288,19 +288,19 @@ int librfc2874_formatcheck(const char *string, char *infostring, const size_t in
 	
 	/* check start */
 	if (string[index] != '\\') {
-		snprintf(infostring, infostring_length, "Char '%c' not expected on position %u", string[index], index + 1);
+		snprintf(infostring, infostring_length, "Error in given bitstring label, char '%c' not expected on position %u", string[index], index + 1);
 		return (1);
 	};
 	index++;
 	
 	if (string[index] != '[') {
-		snprintf(infostring, infostring_length, "Char '%c' not expected on position %u", string[index], index + 1);
+		snprintf(infostring, infostring_length, "Error in given bitstring label, char '%c' not expected on position %u", string[index], index + 1);
 		return (1);
 	};
 	index++;
 	
 	if ( (char) tolower(string[index]) != 'x') {
-		snprintf(infostring, infostring_length, "Char '%c' not expected on position %u", string[index], index + 1);
+		snprintf(infostring, infostring_length, "Error in given bitstring label, char '%c' not expected on position %u", string[index], index + 1);
 		return (1);
 	};
 	index++;
@@ -310,7 +310,7 @@ int librfc2874_formatcheck(const char *string, char *infostring, const size_t in
 		nibblecounter++;
 
 		if (nibblecounter > 32) {
-			snprintf(infostring, infostring_length, "More than 32 nibbles on position %u", index + 1);
+			snprintf(infostring, infostring_length, "Error in given bitstring label, more than 32 nibbles on position %u", index + 1);
 			return (1);
 		};
 
@@ -321,7 +321,7 @@ int librfc2874_formatcheck(const char *string, char *infostring, const size_t in
 	};
 	
 	if (index >= length) {
-		snprintf(infostring, infostring_length, "Unexpected end of string (missing '/' or ']')");
+		snprintf(infostring, infostring_length, "Error in given bitstring label, unexpected end of string (missing '/' or ']')");
 		return (1);
 	};
 
@@ -332,13 +332,13 @@ int librfc2874_formatcheck(const char *string, char *infostring, const size_t in
 
 	/* proceed prefix length */
 	if (string[index] != '/') {
-		snprintf(infostring, infostring_length, "Char '%c' not expected on position %u", string[index], index + 1);
+		snprintf(infostring, infostring_length, "Error in given bitstring label, char '%c' not expected on position %u", string[index], index + 1);
 		return (1);
 	};
 	index++;
 
 	if (index >= length) {
-		snprintf(infostring, infostring_length, "Unexpected end of string (missing prefix length)");
+		snprintf(infostring, infostring_length, "Error in given bitstring label, unexpected end of string (missing prefix length)");
 		return (1);
 	};
 	
@@ -347,7 +347,7 @@ int librfc2874_formatcheck(const char *string, char *infostring, const size_t in
 		digitcounter++;
 
 		if (digitcounter > 3) {
-			snprintf(infostring, infostring_length, "More than 3 digits on position %u", index + 1);
+			snprintf(infostring, infostring_length, "Error in given bitstring label, more than 3 digits on position %u", index + 1);
 			return (1);
 		};
 
@@ -358,7 +358,7 @@ int librfc2874_formatcheck(const char *string, char *infostring, const size_t in
 	};
 	
 	if (index >= length) {
-		snprintf(infostring, infostring_length, "Unexpected end of string (missing ']')");
+		snprintf(infostring, infostring_length, "Error in given bitstring label, unexpected end of string (missing ']')");
 		return (1);
 	};
 	
@@ -367,7 +367,7 @@ int librfc2874_formatcheck(const char *string, char *infostring, const size_t in
 		return (0);
 	};
 	
-	snprintf(infostring, infostring_length, "Char '%c' not expected on position %u", string[index], index + 1);
+	snprintf(infostring, infostring_length, "Error in given bitstring label, char '%c' not expected on position %u", string[index], index + 1);
 
 	return (1);
 };

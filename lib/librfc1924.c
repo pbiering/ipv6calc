@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc1924.c
- * Version    : $Id: librfc1924.c,v 1.13 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: librfc1924.c,v 1.14 2014/07/18 06:19:55 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *              and 2006 by Niko Tyni <ntyni (at) iki.fi>
  *
@@ -195,14 +195,14 @@ int librfc1924_formatcheck(const char *string, char *infostring, const size_t in
 
 	/* check length */
 	if ( length != 20 ) {
-		snprintf(infostring, infostring_length, "Given base85 formatted address has not 20 chars!");
+		snprintf(infostring, infostring_length, "Error in given base85 formatted address, has not 20 chars!");
 		return (1);
 	};
 
 	/* check for base85 chars only content */
 	cnt = strspn(string, librfc1924_charset);
 	if ( cnt != 20 ) {
-		snprintf(infostring, infostring_length, "Illegal character in given base85 formatted address on position %d (%c)!", (int) cnt + 1, string[cnt]);
+		snprintf(infostring, infostring_length, "Error in given base85 formatted address, illegal char on position %d (%c)!", (int) cnt + 1, string[cnt]);
 		return (1);
 	};
 

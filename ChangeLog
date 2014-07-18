@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.349 2014/07/16 06:03:06 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.350 2014/07/18 06:19:54 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140718/PB
+	lib/libeui64.c,lib/libipv4addr.c,lib/libipv6addr.c,lib/libmac.c,lib/librfc1924.c,lib/librfc2874.c: align parser error messages
+	ipv6calc/test_ipv6calc.sh: check for proper exit code on invalid input tests
+
 20140716/PB
 	ipv6calc/showinfo: display CC/ASN only for global unicast addresses
 	lib/librfc2874.c: bugfix in snprintf

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.58 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.59 2014/07/18 06:19:55 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -388,14 +388,14 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const siz
 
 	/* check amount of ".", must be 3 */
 	if ( cpoints != 3 ) {
-		snprintf(resultstring, resultstring_length, "Error, given IPv4 address '%s' is not valid (only %d dots)!", addronlystring, cpoints);
+		snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (only %d dots)!", addronlystring, cpoints);
 		retval = 1;
 		return (retval);
 	};
 
 	/* amount of "." and digits must be length */
 	if (cdigits + cpoints != strlen(addronlystring)) {
-		snprintf(resultstring, resultstring_length, "Error, given IPv4 address '%s' is not valid!", addronlystring);
+		snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (illegal chars)!", addronlystring);
 		retval = 1;
 		return (retval);
 	};
@@ -410,7 +410,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const siz
 	
 	for ( i = 0; i <= 3; i++ ) {
 		if ( ( compat[i] < 0 ) || ( compat[i] > 255 ) )	{
-			snprintf(resultstring, resultstring_length, "Error, given IPv4 address '%s' is not valid (%d on position %d)!", addronlystring, compat[i], i+1);
+			snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (%d on position %d)!", addronlystring, compat[i], i+1);
 			retval = 1;
 			return (retval);
 		};
@@ -419,7 +419,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const siz
 	DEBUGPRINT_WA(DEBUG_libipv4addr, "reading into array, got items: %d", result);
 
 	if ( result != expecteditems ) {
-		snprintf(resultstring, resultstring_length, "Error splitting address %s, got %d items instead of %d!", addronlystring, result, expecteditems);
+		snprintf(resultstring, resultstring_length, "Error in given IPv4 address, splitting of %s returns %d items instead of %d!", addronlystring, result, expecteditems);
 		retval = 1;
 		return (retval);
 	};
@@ -489,7 +489,7 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, const 
 	if ( cp != NULL ) {
 		i = atoi(cp);
 		if (i < 0 || i > 32 ) {
-			snprintf(resultstring, resultstring_length, "Illegal prefix length: '%s'", cp);
+			snprintf(resultstring, resultstring_length, "Error in given hex notated IPv4 address, illegal prefix length: '%s'", cp);
 			retval = 1;
 			return (retval);
 		};
@@ -502,7 +502,7 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, const 
 
 	/* check length 3 */
 	if ((flag_reverse == 0 && (strlen(addronlystring) < 7 || strlen(addronlystring) > 8)) || (flag_reverse != 0 && strlen(addronlystring) != 8)) {
-		snprintf(resultstring, resultstring_length, "Error, given hexadecimal IPv4 address '%s' is not valid (not proper length)!", addronlystring);
+		snprintf(resultstring, resultstring_length, "Error in given hex notated IPv4 address, '%s' is not valid (not proper length)!", addronlystring);
 		retval = 1;
 		return (retval);
 	};
@@ -525,7 +525,7 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, const 
 	
 	for ( i = 0; i <= 3; i++ ) {
 		if ( ( compat[i] < 0 ) || ( compat[i] > 255 ) )	{
-			snprintf(resultstring, resultstring_length, "Error, given IPv4 address '%s' is not valid (%d on position %d)!", addronlystring, compat[i], i+1);
+			snprintf(resultstring, resultstring_length, "Error in given hex notated IPv4 address, '%s' is not valid (%d on position %d)!", addronlystring, compat[i], i+1);
 			retval = 1;
 			return (retval);
 		};
@@ -534,7 +534,7 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, const 
 	DEBUGPRINT_WA(DEBUG_libipv4addr, "reading into array, got items: %d", result);
 
 	if ( result != expecteditems ) {
-		snprintf(resultstring, resultstring_length, "Error splitting address %s, got %d items instead of %d!", addronlystring, result, expecteditems);
+		snprintf(resultstring, resultstring_length, "Error in given hex notated IPv4 address, splitting '%s' returns %d items instead of %d!", addronlystring, result, expecteditems);
 		retval = 1;
 		return (retval);
 	};

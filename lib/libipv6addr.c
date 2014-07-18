@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.109 2014/07/16 06:03:07 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.110 2014/07/18 06:19:55 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -1112,8 +1112,13 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, const siz
 
 	DEBUGPRINT_WA(DEBUG_libipv6addr, "Got input '%s'", addrstring);
 
+	if (strlen(addrstring) < 2) {
+		fprintf(stderr, "Error in given IPv6 address, has less than 2 chars!\n");
+		return (1);
+	};
+
 	if (strlen(addrstring) >= sizeof(tempstring)) {
-		fprintf(stderr, "Input too long: %s\n", addrstring);
+		fprintf(stderr, "Error in given IPv6 address, has too much chars: %s\n", addrstring);
 		return (1);
 	};
 
@@ -1240,7 +1245,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, const siz
 		/* check compat */
 		for ( i = 0; i <= 3; i++ ) {
 			if ( compat[i] > 255 )	{
-				snprintf(resultstring, resultstring_length, "Error, given compatv4/mapped address '%s' is not valid on position %d!", addrstring, i);
+				snprintf(resultstring, resultstring_length, "Error in given compatv4/mapped IPv6 address, '%s' is not valid on position %d!", addrstring, i);
 				retval = 1;
 				return (retval);
 			};
@@ -1257,7 +1262,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, const siz
 	DEBUGPRINT_WA(DEBUG_libipv6addr, "reading into array, got items: %d", result);
 
 	if ( result != expecteditems ) {
-		snprintf(resultstring, resultstring_length, "Error splitting address %s, got %d items instead of %d!", addronlystring, result, expecteditems);
+		snprintf(resultstring, resultstring_length, "Error in given IPv6 address, splitting of '%s' returns %d items instead of %d!", addronlystring, result, expecteditems);
 		retval = 1;
 		return (retval);
 	};
@@ -1265,7 +1270,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, const siz
 	/* check address words range */
 	for ( i = 0; i <= 7; i++ ) {
 		if ( (temp[i] < 0) || (temp[i] > 0xffff) )	{
-			snprintf(resultstring, resultstring_length, "Error, given address '%s' is not valid on position %d!", addronlystring, i);
+			snprintf(resultstring, resultstring_length, "Error in given IPv6 address, '%s' is not valid on position %d!", addronlystring, i);
 			retval = 1;
 			return (retval);
 		};
@@ -2573,7 +2578,7 @@ int libipv6addr_get_included_ipv4addr(const ipv6calc_ipv6addr *ipv6addrp, ipv6ca
 		} else if (selector == 2) {
 			begin = 4;
 		} else {
-			fprintf(stderr, "libipv6addr_get_included_ipv4addr FAILED (unsupported value of selector: %d)", selector);
+			fprintf(stderr, "libipv6addr_get_included_ipv4addr FAILED (unsupported value of selector: %d - FIX CALLING CODE)", selector);
 		};
 	} else if ((typeinfo & IPV6_NEW_ADDR_6TO4) != 0) {
 		begin = 2;
