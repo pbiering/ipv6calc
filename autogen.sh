@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.43 2014/07/13 10:28:05 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.44 2014/07/19 11:52:57 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -35,6 +35,7 @@ while [ "$1" != "$LAST" ]; do
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --with-geoip-dynamic"
 		SKIP_STATIC=1
 		use_geoip=1
+		use_geoip_dyn=1
 		;;
 	    '--ip2location'|'-i')
 		shift
@@ -47,6 +48,7 @@ while [ "$1" != "$LAST" ]; do
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --with-ip2location-dynamic"
 		SKIP_STATIC=1
 		use_ip2location=1
+		use_ip2location_dyn=1
 		;;
 	    '--disable-db-ieee')
 		shift
@@ -135,6 +137,20 @@ fi
 
 echo "*** run: make clean"
 make clean || exit 1
+
+if [ "$use_ip2location_dyn" = "1" ]; then
+	if ldd ./ipv6calc/ipv6calc | grep -i IPLocation; then
+		echo "ERROR : dynamic library mode enabled, but ldd of binary still reports reference to IP2Location"
+		exit 1
+	fi
+fi
+
+if [ "$use_geoip_dyn" = "1" ]; then
+	if ldd ./ipv6calc/ipv6calc | grep -i GeoIP; then
+		echo "ERROR : dynamic library mode enabled, but ldd of binary still reports reference to GeoIP"
+		exit 1
+	fi
+fi
 
 if [ "$SKIP_TEST" = "1" ]; then
 	echo "*** skip: make test"

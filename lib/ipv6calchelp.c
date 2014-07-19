@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.57 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.58 2014/07/19 11:52:57 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -737,11 +737,11 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 #else // SUPPORT_GEOIP_DYN
 #ifdef SUPPORT_GEOIP_V6
 	fprintf(stderr, "GeoIP support by dynamic library load, compiled with IPv4 & IPv6 support\n");
-#else
+#else  // SUPPORT_GEOIP_V6
 	fprintf(stderr, "GeoIP support by dynamic library load, compiled with IPv4 support only\n");
+#endif // SUPPORT_GEOIP_V6
+	fprintf(stderr, "GeoIP configured dynamic library file and detected version: %s %s\n", geoip_lib_file, libipv6calc_db_wrapper_GeoIP_lib_version());
 #endif // SUPPORT_GEOIP_DYN
-	fprintf(stderr, "GeoIP configured dynamic library file and version: %s %s\n", geoip_lib_file, libipv6calc_db_wrapper_GeoIP_lib_version());
-#endif
 
 	//TODO: list of GeoIP files
 #ifdef SUPPORT_GEOIP_V6
@@ -758,7 +758,7 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 	fprintf(stderr, "IP2Location support enabled, compiled with API version: %s\n", xmakestr(API_VERSION));
 #else
 	fprintf(stderr, "IP2Location support by dynamic library load\n");
-	fprintf(stderr, "IP2Location configured dynamic library file and version: %s %s\n", ip2location_lib_file, libipv6calc_db_wrapper_IP2Location_lib_version());
+	fprintf(stderr, "IP2Location configured dynamic library file and detected version: %s %s\n", ip2location_lib_file, libipv6calc_db_wrapper_IP2Location_lib_version());
 #endif
 	// TODO: show base directory
 	/*

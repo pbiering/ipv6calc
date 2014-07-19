@@ -715,17 +715,17 @@ enable_db_ieee
 enable_db_ipv4
 enable_db_ipv6
 enable_ip2location
+with_ip2location_dynamic
 with_ip2location_headers
 with_ip2location_lib
 with_ip2location_static
-with_ip2location_dynamic
 with_ip2location_db
 with_ip2location_dyn_lib
 enable_geoip
+with_geoip_dynamic
 with_geoip_headers
 with_geoip_lib
 with_geoip_static
-with_geoip_dynamic
 with_geoip_db
 with_geoip_dyn_lib
 with_geoip_ipv6_compat
@@ -1367,27 +1367,27 @@ Optional Features:
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-ip2location-dynamic
+                          Enable use of dynamic loading of IP2Location library
+                          (default=no)
   --with-ip2location-headers=DIR
                           IP2Location include files location
   --with-ip2location-lib=FILE
                           IP2Location library location
   --with-ip2location-static
                           Explicitly link IP2Location statically (default=no)
-  --with-ip2location-dynamic
-                          Enable use of dynamic loading of IP2Location library
-                          (default=no)
   --with-ip2location-db=DIR
                           Use specified IP2Location database directory,
                           default: /usr/share/IP2Location
   --with-ip2location-dyn-lib=NAME
                           Use specified IP2Location dynamic library, default:
                           libIP2Location.so
+  --with-geoip-dynamic    Enable use of dynamic loading of GeoIP library
+                          (default=no)
   --with-geoip-headers=DIR
                           GeoIP include files location
   --with-geoip-lib=DIR    GeoIP library location
   --with-geoip-static     Explicitly link GeoIP statically (default=no)
-  --with-geoip-dynamic    Enable use of dynamic loading of GeoIP library
-                          (default=no)
   --with-geoip-db=DIR     Use specified GeoIP database directory, default:
                           /usr/share/GeoIP
   --with-geoip-dyn-lib=NAME
@@ -4422,6 +4422,23 @@ fi
 
 
 
+# Check whether --with-ip2location-dynamic was given.
+if test "${with_ip2location_dynamic+set}" = set; then :
+  withval=$with_ip2location_dynamic;
+		if test "$enable_ip2location_dynamic" != "no"; then
+			IP2LOCATION_DYN="yes"
+		fi
+
+else
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** DEBUG: t3" >&5
+$as_echo "***** DEBUG: t3" >&6; }
+		true
+
+fi
+
+
+
 # Check whether --with-ip2location-headers was given.
 if test "${with_ip2location_headers+set}" = set; then :
   withval=$with_ip2location_headers;
@@ -4489,21 +4506,6 @@ fi
 
 
 
-# Check whether --with-ip2location-dynamic was given.
-if test "${with_ip2location_dynamic+set}" = set; then :
-  withval=$with_ip2location_dynamic;
-		if test "$enable_ip2location_dynamic" != "no"; then
-        		IP2LOCATION_DYN="$enable_ip2location_dynamic"
-		fi
-
-else
-
-		true
-
-fi
-
-
-
 # Check whether --with-ip2location-db was given.
 if test "${with_ip2location_db+set}" = set; then :
   withval=$with_ip2location_db;
@@ -4530,18 +4532,14 @@ fi
 
 
 if test "$IP2LOCATION" = "yes"; then
-	IP2LOCATION_LIB="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB"
-	IP2LOCATION_LIB_L1="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB_L1"
-	IP2LOCATION_LIB_L2="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB_L2"
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** IP2LOCATION_INCLUDE  : $IP2LOCATION_INCLUDE" >&5
-$as_echo "**** IP2LOCATION_INCLUDE  : $IP2LOCATION_INCLUDE" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** IP2LOCATION_LIB      : $IP2LOCATION_LIB" >&5
-$as_echo "**** IP2LOCATION_LIB      : $IP2LOCATION_LIB" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** IP2LOCATION_LIB_NAME : $IP2LOCATION_LIB_NAME" >&5
-$as_echo "**** IP2LOCATION_LIB_NAME : $IP2LOCATION_LIB_NAME" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** IP2LOCATION_LIB_DIR  : $IP2LOCATION_LIB_DIR" >&5
-$as_echo "**** IP2LOCATION_LIB_DIR  : $IP2LOCATION_LIB_DIR" >&6; }
+	if test "$IP2LOCATION_DYN" != "yes"; then
+		IP2LOCATION_LIB="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB"
+		IP2LOCATION_LIB_L1="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB_L1"
+		IP2LOCATION_LIB_L2="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB_L2"
+	else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: IP2Location dynamic load support enabled, disable IP2Location linker options" >&5
+$as_echo "$as_me: WARNING: IP2Location dynamic load support enabled, disable IP2Location linker options" >&2;}
+	fi
 
 	CPPFLAGS="$CPPFLAGS $IP2LOCATION_INCLUDE"
 
@@ -4764,6 +4762,21 @@ fi
 
 
 
+# Check whether --with-geoip-dynamic was given.
+if test "${with_geoip_dynamic+set}" = set; then :
+  withval=$with_geoip_dynamic;
+		if test "$with_geoip_dynamic" != "no"; then
+			GEOIP_DYN="yes"
+		fi
+
+else
+
+		true
+
+fi
+
+
+
 # Check whether --with-geoip-headers was given.
 if test "${with_geoip_headers+set}" = set; then :
   withval=$with_geoip_headers;
@@ -4836,21 +4849,6 @@ fi
 
 
 
-# Check whether --with-geoip-dynamic was given.
-if test "${with_geoip_dynamic+set}" = set; then :
-  withval=$with_geoip_dynamic;
-		if test "$with_geoip_dynamic" != "no"; then
-			GEOIP_DYN="$with_geoip_dynamic"
-		fi
-
-else
-
-		true
-
-fi
-
-
-
 # Check whether --with-geoip-db was given.
 if test "${with_geoip_db+set}" = set; then :
   withval=$with_geoip_db;
@@ -4908,18 +4906,14 @@ fi
 #fi
 
 if test "$GEOIP" = "yes"; then
-	GEOIP_LIB="-l$GEOIP_LIB_NAME $GEOIP_LIB"
-	GEOIP_LIB_L1="-l$GEOIP_LIB_NAME $GEOIP_LIB_L1"
-	GEOIP_LIB_L2="-l$GEOIP_LIB_NAME $GEOIP_LIB_L2"
-
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** GEOIP_INCLUDE       : $GEOIP_INCLUDE" >&5
-$as_echo "**** GEOIP_INCLUDE       : $GEOIP_INCLUDE" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** GEOIP_LIB           : $GEOIP_LIB" >&5
-$as_echo "**** GEOIP_LIB           : $GEOIP_LIB" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** GEOIP_LIB_NAME      : $GEOIP_LIB_NAME" >&5
-$as_echo "**** GEOIP_LIB_NAME      : $GEOIP_LIB_NAME" >&6; }
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** GEOIP_LIB_DIR       : $GEOIP_LIB_DIR" >&5
-$as_echo "**** GEOIP_LIB_DIR       : $GEOIP_LIB_DIR" >&6; }
+	if test "$GEOIP_DYN" != "yes"; then
+		GEOIP_LIB="-l$GEOIP_LIB_NAME $GEOIP_LIB"
+		GEOIP_LIB_L1="-l$GEOIP_LIB_NAME $GEOIP_LIB_L1"
+		GEOIP_LIB_L2="-l$GEOIP_LIB_NAME $GEOIP_LIB_L2"
+	else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GeoIP dynamic load support enabled, disable GeoIP linker options" >&5
+$as_echo "$as_me: WARNING: GeoIP dynamic load support enabled, disable GeoIP linker options" >&2;}
+	fi
 
 	CPPFLAGS="$CPPLAGS $GEOIP_INCLUDE"
 
@@ -6784,6 +6778,37 @@ $as_echo "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2;}
 fi
 
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** Summary" >&5
+$as_echo "***** Summary" >&6; }
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_DYN      = $IP2LOCATION_DYN" >&5
+$as_echo "*** IP2LOCATION_DYN      = $IP2LOCATION_DYN" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_INCLUDE  = $IP2LOCATION_INCLUDE" >&5
+$as_echo "*** IP2LOCATION_INCLUDE  = $IP2LOCATION_INCLUDE" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_LIB      = $IP2LOCATION_LIB" >&5
+$as_echo "*** IP2LOCATION_LIB      = $IP2LOCATION_LIB" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_LIB_NAME = $IP2LOCATION_LIB_NAME" >&5
+$as_echo "*** IP2LOCATION_LIB_NAME = $IP2LOCATION_LIB_NAME" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_LIB_DIR  = $IP2LOCATION_LIB_DIR" >&5
+$as_echo "*** IP2LOCATION_LIB_DIR  = $IP2LOCATION_LIB_DIR" >&6; }
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
+$as_echo "" >&6; }
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIPN_DYN           = $GEOIP_DYN" >&5
+$as_echo "*** GEOIPN_DYN           = $GEOIP_DYN" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_INCLUDE        = $GEOIP_INCLUDE" >&5
+$as_echo "*** GEOIP_INCLUDE        = $GEOIP_INCLUDE" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_LIB            = $GEOIP_LIB" >&5
+$as_echo "*** GEOIP_LIB            = $GEOIP_LIB" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_LIB_NAME       = $GEOIP_LIB_NAME" >&5
+$as_echo "*** GEOIP_LIB_NAME       = $GEOIP_LIB_NAME" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_LIB_DIR        = $GEOIP_LIB_DIR" >&5
+$as_echo "*** GEOIP_LIB_DIR        = $GEOIP_LIB_DIR" >&6; }
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
+$as_echo "" >&6; }
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** CFLAGS_EXTRA         = $CFLAGS_EXTRA" >&5
 $as_echo "*** CFLAGS_EXTRA         = $CFLAGS_EXTRA" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS_EXTRA        = $LDFLAGS_EXTRA" >&5
@@ -6793,3 +6818,12 @@ $as_echo "*** LD_LIBRARY_PATH      = $LD_LIBRARY_PATH" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH_BASIC= $LD_LIBRARY_PATH_BASIC" >&5
 $as_echo "*** LD_LIBRARY_PATH_BASIC= $LD_LIBRARY_PATH_BASIC" >&6; }
 
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
+$as_echo "" >&6; }
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** CPPLAGS              = $CPPLAGS" >&5
+$as_echo "*** CPPLAGS              = $CPPLAGS" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** CFLAGS               = $CFLAGS" >&5
+$as_echo "*** CFLAGS               = $CFLAGS" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS              = $LDFLAGS" >&5
+$as_echo "*** LDFLAGS              = $LDFLAGS" >&6; }

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.16 2014/05/16 20:34:02 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.17 2014/07/19 11:52:57 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -134,7 +134,7 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 	dl_IP2Location_handle = dlopen(ip2location_lib_file, RTLD_NOW | RTLD_LOCAL);
 
 	if (dl_IP2Location_handle == NULL) {
-		NONQUIETPRINT_WA("IP2Location dynamic library load failed: %s", dlerror());
+		NONQUIETPRINT_WA("IP2Location dynamic library load failed (disable support): %s", dlerror());
 		return(1);
 	};
 

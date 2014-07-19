@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.60 2014/06/22 09:49:25 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.61 2014/07/19 11:52:57 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -202,7 +202,7 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	dl_GeoIP_handle = dlopen(geoip_lib_file, RTLD_NOW | RTLD_LOCAL);
 
 	if (dl_GeoIP_handle == NULL) {
-		fprintf(stderr, "GeoIP dynamic library load failed: %s\n", dlerror());
+		fprintf(stderr, "GeoIP dynamic library load failed (disable support): %s\n", dlerror());
 		return(1);
 	};
 
