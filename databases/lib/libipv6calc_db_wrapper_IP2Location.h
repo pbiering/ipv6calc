@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.h
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.h,v 1.3 2013/10/18 06:23:42 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.h,v 1.4 2014/07/20 10:28:40 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -46,8 +46,8 @@ typedef struct {
 } db_file_desc;
 
 /*@unused@*/ static const db_file_desc libipv6calc_db_wrapper_IP2Location_db_file_desc[] = {
-	{ IP2LOCATION_DB_IP_COUNTRY                , "IP-COUNTRY.BIN"                , "IPv4 Country"                , IPV6CALC_DB_IPV4_TO_CC },
-	{ IP2LOCATION_DB_IPV6_COUNTRY              , "IPV6-COUNTRY.BIN"              , "IPv6 Country"                , IPV6CALC_DB_IPV6_TO_CC },
+	{ IP2LOCATION_DB_IP_COUNTRY                , "IP-COUNTRY.BIN"                , "IPv4 Country"                , IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IP2LOCATION_IPV4 },
+	{ IP2LOCATION_DB_IPV6_COUNTRY              , "IPV6-COUNTRY.BIN"              , "IPv6 Country"                , IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_IP2LOCATION_IPV6 },
 };
 
 // features

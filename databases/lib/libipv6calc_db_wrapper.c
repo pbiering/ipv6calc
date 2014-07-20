@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.35 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.36 2014/07/20 10:28:40 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -65,6 +65,8 @@ int libipv6calc_db_wrapper_init(void) {
 			wrapper_GeoIP_status = 1; // ok
 		};
 #endif // SUPPORT_GEOIP
+	} else {
+		NONQUIETPRINT_NA("Support for GeoIP disabled by option");
 	};
 
 	if (wrapper_IP2Location_disable != 1) {
@@ -85,6 +87,8 @@ int libipv6calc_db_wrapper_init(void) {
 			wrapper_IP2Location_status = 1; // ok
 		};
 #endif // SUPPORT_IP2LOCATION
+	} else {
+		NONQUIETPRINT_NA("Support for IP2Location disabled by option");
 	};
 
 #ifdef SUPPORT_BUILTIN
@@ -203,13 +207,17 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 	printf("%sDB features: 0x%08x\n", prefix_string, wrapper_features);
 
 #ifdef SUPPORT_GEOIP
-	// Call GeoIP wrapper
-	libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(level_verbose, prefix_string);
+	if (wrapper_GeoIP_disable != 1) {
+		// Call GeoIP wrapper
+		libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(level_verbose, prefix_string);
+	};
 #endif
 
 #ifdef SUPPORT_IP2LOCATION
-	// Call IP2Location wrapper
-	libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(level_verbose, prefix_string);
+	if (wrapper_IP2Location_disable != 1) {
+		// Call IP2Location wrapper
+		libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(level_verbose, prefix_string);
+	};
 #endif
 
 #ifdef SUPPORT_BUILTIN
@@ -257,13 +265,11 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 
 	switch(opt) {
 		case DB_ip2location_disable:
-			NONQUIETPRINT_NA("Support for IP2Location disabled by option");
 			wrapper_IP2Location_disable = 1;
 			result = 0;
 			break;
 
 		case DB_geoip_disable:
-			NONQUIETPRINT_NA("Support for GeoIP disabled by option");
 			wrapper_GeoIP_disable = 1;
 			result = 0;
 			break;

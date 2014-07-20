@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.351 2014/07/19 11:52:57 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.352 2014/07/20 10:28:40 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,14 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140720/PB
+	ipv6calc/ipv6calchelp_local.c
+	databases/lib/libipv6calc_db_wrapper_IP2Location.h
+	databases/lib/libipv6calc_db_wrapper_GeoIP.c
+	databases/lib/libipv6calc_db_wrapper.h
+	databases/lib/libipv6calc_db_wrapper.c
+		reorg feature string handling
+		
 20140719/PB
 	configure[.in]: fix broken IP2Location dynamic library support
 	autogen.sh: add ldd check for dynamic library support

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calchelp_local.c
- * Version    : $Id: ipv6calchelp_local.c,v 1.4 2014/04/02 06:11:55 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp_local.c,v 1.5 2014/07/20 10:28:40 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -29,17 +29,6 @@ void printversion(void) {
 	libipv6calc_db_wrapper_features(resultstring, sizeof(resultstring));
 
 	fprintf(stderr, "%s: version %s", PROGRAM_NAME, PACKAGE_VERSION);
-
-#ifdef SUPPORT_IP2LOCATION
-	fprintf(stderr, " IP2Location");
-#endif
-
-#ifdef SUPPORT_GEOIP
-	fprintf(stderr, " GeoIP");
-#ifdef SUPPORT_GEOIP_V6
-	fprintf(stderr, " GeoIPv6");
-#endif
-#endif
 
 	fprintf(stderr, " %s", resultstring);
 

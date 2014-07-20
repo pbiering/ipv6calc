@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.21 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.22 2014/07/20 10:28:40 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -33,7 +33,17 @@ extern uint32_t wrapper_features;
 
 #define IPV6CALC_DB_IEEE_TO_INFO		0x00001000
 
+#define IPV6CALC_DB_GEOIP_IPV4			0x00010000
+#define IPV6CALC_DB_GEOIP_IPV6			0x00020000
+
+#define IPV6CALC_DB_IP2LOCATION_IPV4		0x00100000
+#define IPV6CALC_DB_IP2LOCATION_IPV6		0x00200000
+
 static const s_type ipv6calc_db_features[] = {
+	{ IPV6CALC_DB_GEOIP_IPV4	, "GeoIP"	},
+	{ IPV6CALC_DB_GEOIP_IPV6	, "GeoIPv6"	},
+	{ IPV6CALC_DB_IP2LOCATION_IPV4	, "IP2Location"	},
+	{ IPV6CALC_DB_IP2LOCATION_IPV6	, "IP2Location6"},
 	{ IPV6CALC_DB_AS_TO_REGISTRY	, "DB_AS"	},
 	{ IPV6CALC_DB_IPV4_TO_REGISTRY	, "DB_IPV4"	},
 	{ IPV6CALC_DB_IPV6_TO_REGISTRY	, "DB_IPV6"	},
@@ -42,7 +52,7 @@ static const s_type ipv6calc_db_features[] = {
 	{ IPV6CALC_DB_IPV4_TO_CC	, "DB_IPV4_CC"	},
 	{ IPV6CALC_DB_IPV6_TO_CC	, "DB_IPV6_CC"	},
 	{ IPV6CALC_DB_CC_TO_REGISTRY	, "DB_CC_REG"	},
-	{ IPV6CALC_DB_IEEE_TO_INFO	, "DB_IEEE"	}
+	{ IPV6CALC_DB_IEEE_TO_INFO	, "DB_IEEE"	},
 };
 
 
