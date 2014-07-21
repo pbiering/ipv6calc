@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.112 2014/07/16 06:03:07 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.113 2014/07/21 06:14:27 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -541,7 +541,12 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		};
 		printout(tempstring);
 	} else {
-		fprintf(stdout, "IPv4 address: %s\n", tempipv4string);
+
+		if ((string != NULL) && (strlen(string) > 0)) {
+			fprintf(stdout, "IPv4 address: %s (%s)\n", tempipv4string, string);
+		} else {
+			fprintf(stdout, "IPv4 address: %s\n", tempipv4string);
+		};
 
 		fprintf(stdout, "IPv4 address type: ");
 		j = 0;

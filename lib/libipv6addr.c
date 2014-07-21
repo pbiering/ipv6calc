@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.110 2014/07/18 06:19:55 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.111 2014/07/21 06:14:27 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -2649,8 +2649,17 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 		cc_index = libipv4addr_cc_index_by_addr(&ipv4addr);
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC) == 1) {
-			if ((ipv6addrp->scope & IPV6_NEW_ADDR_NAT64) != 0) {
+			if ((ipv6addrp->scope & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID) != 0) {
+				/* retrieve CountryCodeIndex from IPv4 address inside */
 				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 1);
+				if (retval != 0) {
+					fprintf(stderr, "Error getting included IPv4 address from IPv6 address\n");
+					goto END_libipv6addr_cc_index_by_addr;
+				};
+
+				cc_index = libipv4addr_cc_index_by_addr(&ipv4addr);
+			} else if ((ipv6addrp->scope & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX) != 0) {
+				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 2);
 				if (retval != 0) {
 					fprintf(stderr, "Error getting included IPv4 address from IPv6 address\n");
 					goto END_libipv6addr_cc_index_by_addr;

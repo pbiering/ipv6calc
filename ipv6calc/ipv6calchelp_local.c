@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calchelp_local.c
- * Version    : $Id: ipv6calchelp_local.c,v 1.5 2014/07/20 10:28:40 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp_local.c,v 1.6 2014/07/21 06:14:27 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -46,6 +46,25 @@ void printversion(void) {
 
 	fprintf(stderr, "\n");
 };
+
+void printversion_help(void) {
+	char resultstring[NI_MAXHOST] = "";
+
+	libipv6calc_db_wrapper_features(resultstring, sizeof(resultstring));
+
+	fprintf(stderr, "\n");
+
+	fprintf(stderr, "Explanation of available(+)/possible(-) feature tokens\n");
+
+	libipv6calc_db_wrapper_features_help();
+
+	fprintf(stderr, "%-22s%c %s\n", "ANON_ZEROISE", (feature_zeroize == 1)? '+' : '-', "Anonymization method 'zeroize'");
+	fprintf(stderr, "%-22s%c %s\n", "ANON_ANONYMIZE", (feature_anon == 1) ? '+' : '-', "Anonymization method 'anonymize'");
+	fprintf(stderr, "%-22s%c %s\n", "ANON_KEEP-TYPE-ASN-CC", (feature_kp == 1) ? '+' : '-', "Anonymization method 'keep-type-asn-cc'");
+
+	fprintf(stderr, "\n");
+};
+
 
 void printversion_verbose(int level_verbose) {
 	printversion();

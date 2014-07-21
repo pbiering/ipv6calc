@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.h
- * Version    : $Id: ipv6calchelp.h,v 1.17 2014/04/02 06:11:55 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.h,v 1.18 2014/07/21 06:14:27 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -32,5 +32,4 @@ extern void printhelp_shortcut_options(const struct option longopts[], const s_i
 extern void printhelp_output_dispatcher(const uint32_t outputtype);
 extern void printhelp_action_dispatcher(const uint32_t action, const int embedded);
 
-extern void ipv6calc_print_features(void);
 extern void ipv6calc_print_features_verbose(const int level_vebose);

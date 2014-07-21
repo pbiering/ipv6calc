@@ -1359,8 +1359,10 @@ Optional Features:
   --disable-dynamic-load  Disable dynamic load of libraries (default: enabled)
 
   --disable-db-ieee       Disable built-in IEEE database (default: enabled)
-  --disable-db-ipv4       Disable built-in IPv4 database (default: enabled)
-  --disable-db-ipv6       Disable built-in IPv6 database (default: enabled)
+  --disable-db-ipv4       Disable built-in IPv4-to-Registry database (default:
+                          enabled)
+  --disable-db-ipv6       Disable built-in IPv6-to-Registry database (default:
+                          enabled)
   --enable-ip2location    Enable IP2Location support (default: disabled)
   --enable-geoip          Enable GeoIP support (default: disabled)
 
@@ -4383,7 +4385,7 @@ fi
 
 if test "$DB_IPV4" = "yes"; then
 
-$as_echo "#define SUPPORT_DB_IPV4 1" >>confdefs.h
+$as_echo "#define SUPPORT_DB_IPV4_REG 1" >>confdefs.h
 
 fi
 
@@ -4402,7 +4404,7 @@ fi
 
 if test "$DB_IPV6" = "yes"; then
 
-$as_echo "#define SUPPORT_DB_IPV6 1" >>confdefs.h
+$as_echo "#define SUPPORT_DB_IPV6_REG 1" >>confdefs.h
 
 fi
 

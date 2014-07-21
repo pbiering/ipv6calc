@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.14 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.15 2014/07/21 06:14:27 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -37,11 +37,11 @@ static int builtin_ieee       = 0;
 #include "../as-assignment/dbasn_assignment.h"
 #include "../cc-assignment/db_cc_reg_assignment.h"
 
-#ifdef SUPPORT_DB_IPV4
+#ifdef SUPPORT_DB_IPV4_REG
 #include "../ipv4-assignment/dbipv4addr_assignment.h"
 #endif
 
-#ifdef SUPPORT_DB_IPV6
+#ifdef SUPPORT_DB_IPV6_REG
 #include "../ipv6-assignment/dbipv6addr_assignment.h"
 #endif
 
@@ -70,12 +70,12 @@ int libipv6calc_db_wrapper_BuiltIn_wrapper_init(void) {
 	wrapper_features_BuiltIn |= IPV6CALC_DB_CC_TO_REGISTRY;
 	builtin_cc_reg     = 1;
 
-#ifdef SUPPORT_DB_IPV4
+#ifdef SUPPORT_DB_IPV4_REG
 	wrapper_features_BuiltIn |= IPV6CALC_DB_IPV4_TO_REGISTRY;
 	builtin_ipv4       = 1;
 #endif
 
-#ifdef SUPPORT_DB_IPV6
+#ifdef SUPPORT_DB_IPV6_REG
 	wrapper_features_BuiltIn |= IPV6CALC_DB_IPV6_TO_REGISTRY;
 	builtin_ipv6       = 1;
 #endif
@@ -120,7 +120,7 @@ void libipv6calc_db_wrapper_BuiltIn_wrapper_info(char* string, const size_t size
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
 #ifdef SUPPORT_BUILTIN
-	snprintf(string, size, "BuiltIn databases available: ASN=%d IPv4=%d IPv6=%d IEEE=%d CC_REG=%d", builtin_asn, builtin_ipv4, builtin_ipv6, builtin_ieee, builtin_cc_reg);
+	snprintf(string, size, "BuiltIn databases available: ASN_REG=%d IPV4_REG=%d IPV6_REG=%d IEEE=%d CC_REG=%d", builtin_asn, builtin_ipv4, builtin_ipv6, builtin_ieee, builtin_cc_reg);
 #else
 	snprintf(string, size, "No BuiltIn databases support compiled-in");
 #endif
@@ -158,13 +158,13 @@ void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level_verbos
 		printf("%sBuiltIn: %-5s: %s\n", prefix, "CC", db_cc_registry_status);
 	};
 
-#ifdef SUPPORT_DB_IPV4
+#ifdef SUPPORT_DB_IPV4_REG
 	if (wrapper_features_BuiltIn & IPV6CALC_DB_IPV4_TO_REGISTRY) {
 		printf("%sBuiltIn: %-5s: %s\n", prefix, "IPv4", dbipv4addr_registry_status);
 	};
 #endif
 
-#ifdef SUPPORT_DB_IPV6
+#ifdef SUPPORT_DB_IPV6_REG
 	if (wrapper_features_BuiltIn & IPV6CALC_DB_IPV6_TO_REGISTRY) {
 		printf("%sBuiltIn: %-5s: %s\n", prefix, "IPv6", dbipv6addr_registry_status);
 	};
@@ -496,7 +496,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv4addr(const ipv6calc_ip
 		return (2);
 	};
 	
-#ifdef SUPPORT_DB_IPV4
+#ifdef SUPPORT_DB_IPV4_REG
 	int registry = libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(ipv4addrp);
 
 	snprintf(resultstring, resultstring_length, "%s", libipv6calc_registry_string_by_num(registry));
@@ -527,7 +527,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 		return(IPV4_ADDR_REGISTRY_RESERVED);
 	};
 
-#ifdef SUPPORT_DB_IPV4
+#ifdef SUPPORT_DB_IPV4_REG
 	int i = -1;
 	int match = -1;
 	int i_min, i_max, i_old, max;
@@ -602,7 +602,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 		};
 	};
 
-#endif // SUPPORT_DB_IPV4
+#endif // SUPPORT_DB_IPV4_REG
 	return(result);
 };
 
@@ -687,7 +687,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv6addr(const ipv6calc_ip
 		return (2);
 	};
 
-#ifdef SUPPORT_DB_IPV6
+#ifdef SUPPORT_DB_IPV6_REG
 	int registry = libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(ipv6addrp);
 
 	snprintf(resultstring, resultstring_length, "%s", libipv6calc_registry_string_by_num(registry));
@@ -724,7 +724,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6a
 		return(REGISTRY_RESERVED);
 	};
 
-#ifdef SUPPORT_DB_IPV6
+#ifdef SUPPORT_DB_IPV6_REG
 	int match = -1;
 	int i;
 

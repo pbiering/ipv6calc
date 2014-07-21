@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.35 2014/04/25 05:48:13 ds6peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.36 2014/07/21 06:14:27 ds6peter Exp $
 # Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -101,12 +101,12 @@ if ./ipv6calc -v 2>&1 | grep -qw DB_IEEE; then
 fi
 
 ipv6calc_has_db_ipv4=0
-if ./ipv6calc -v 2>&1 | grep -qw DB_IPV4; then
+if ./ipv6calc -v 2>&1 | grep -qw DB_IPV4_REG; then
 	ipv6calc_has_db_ipv4=1
 fi
 
 ipv6calc_has_db_ipv6=0
-if ./ipv6calc -v 2>&1 | grep -qw DB_IPV6; then
+if ./ipv6calc -v 2>&1 | grep -qw DB_IPV6_REG; then
 	ipv6calc_has_db_ipv6=1
 fi
 
@@ -120,14 +120,14 @@ testscenarios_showinfo | while read address output; do
 
 	if echo "$output" | grep -q "^IPV4_REGISTRY="; then
 		if [ $ipv6calc_has_db_ipv4 -ne 1 ]; then
-			echo "Test: $address for $output SKIPPED (no DB_IPV4 compiled in)"
+			echo "Test: $address for $output SKIPPED (no DB_IPV4_REG compiled in)"
 			continue
 		fi
 	fi
 
 	if echo "$output" | grep -q "^IPV6_REGISTRY="; then
 		if [ $ipv6calc_has_db_ipv6 -ne 1 ]; then
-			echo "Test: $address for $output SKIPPED (no DB_IPV6 compiled in)"
+			echo "Test: $address for $output SKIPPED (no DB_IPV6_REG compiled in)"
 			continue
 		fi
 	fi

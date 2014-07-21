@@ -155,11 +155,11 @@
 /* Define if you want IEEE database included. */
 #undef SUPPORT_DB_IEEE
 
-/* Define if you want IPv4 database included. */
-#undef SUPPORT_DB_IPV4
+/* Define if you want IPv4-to-Registry database included. */
+#undef SUPPORT_DB_IPV4_REG
 
-/* Define if you want IPv6 database included. */
-#undef SUPPORT_DB_IPV6
+/* Define if you want IPv6-to-Registry database included. */
+#undef SUPPORT_DB_IPV6_REG
 
 /* Define if you want GeoIP support. */
 #undef SUPPORT_GEOIP

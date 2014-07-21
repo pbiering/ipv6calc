@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.352 2014/07/20 10:28:40 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.353 2014/07/21 06:14:27 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140721/PB
+	lib/libipv6addr.c: extend countrycode retrievement for included client IPv4 addresses
+	ipv6calc: extend online help for -v
+
 20140720/PB
 	ipv6calc/ipv6calchelp_local.c
 	databases/lib/libipv6calc_db_wrapper_IP2Location.h
@@ -16,6 +20,7 @@ Info:
 	databases/lib/libipv6calc_db_wrapper.h
 	databases/lib/libipv6calc_db_wrapper.c
 		reorg feature string handling
+	rename feature string DB_IPV{4,6} to DB_IPV{4,6}_REG
 		
 20140719/PB
 	configure[.in]: fix broken IP2Location dynamic library support

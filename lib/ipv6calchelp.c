@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.58 2014/07/19 11:52:57 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.59 2014/07/21 06:14:27 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -689,30 +689,8 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 
 
 /***************************
- * version information
+ * verbose feature information
  * *************************/
-
-void ipv6calc_print_features(void) {
-#ifdef SUPPORT_IP2LOCATION
-	fprintf(stderr, " IP2Location");
-#endif
-#ifdef SUPPORT_GEOIP
-	fprintf(stderr, " GeoIP");
-#ifdef SUPPORT_GEOIP_V6
-	fprintf(stderr, " GeoIPv6");
-#endif
-#endif
-#ifdef SUPPORT_DB_IEEE
-	fprintf(stderr, " DB_IEEE");
-#endif
-#ifdef SUPPORT_DB_IPV4
-	fprintf(stderr, " DB_IPV4");
-#endif
-#ifdef SUPPORT_DB_IPV6
-	fprintf(stderr, " DB_IPV6");
-#endif
-};
-
 
 /* display features in verbose mode */
 void ipv6calc_print_features_verbose(const int level_verbose) {

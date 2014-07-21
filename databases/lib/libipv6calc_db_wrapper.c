@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.36 2014/07/20 10:28:40 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.37 2014/07/21 06:14:27 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -197,6 +197,24 @@ void libipv6calc_db_wrapper_features(char *string, const size_t size) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Return");
 
 	return;
+};
+
+
+/* function print feature string help */
+void libipv6calc_db_wrapper_features_help(void) {
+	int i;
+
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
+
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_db_features); i++) {
+		fprintf(stderr, "%-22s%c %s\n", ipv6calc_db_features[i].token, (wrapper_features & ipv6calc_db_features[i].number) ? '+' : '-', ipv6calc_db_features[i].explanation);
+	};
+
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Return");
+
+	return;
+
+
 };
 
 
