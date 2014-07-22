@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calchelp_local.c
- * Version    : $Id: ipv6calchelp_local.c,v 1.6 2014/07/21 06:14:27 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp_local.c,v 1.7 2014/07/22 06:00:41 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -65,7 +65,6 @@ void printversion_help(void) {
 	fprintf(stderr, "\n");
 };
 
-
 void printversion_verbose(int level_verbose) {
 	printversion();
 	fprintf(stderr, "\n");
@@ -80,7 +79,9 @@ void ipv6calc_printinfo(void)  {
 	printversion();
 	printcopyright();
 	fprintf(stderr, "This program formats and calculates IPv6 addresses and can do many more tricky things\n");
-	fprintf(stderr, "See '%s -?|-h|--help or -v -v' for more details\n\n", PROGRAM_NAME);
+	fprintf(stderr, "See '%s -?|-h|--help for online help\n", PROGRAM_NAME);
+	fprintf(stderr, "See '%s -v|--version -?|-h|--help' for explanation of feature tokens\n", PROGRAM_NAME);
+	fprintf(stderr, "See '%s -vv or -vvv for more internal version/feature information\n\n", PROGRAM_NAME);
 };
 
 /* print global help */
@@ -91,11 +92,7 @@ void ipv6calc_printhelp(const struct option longopts[], const s_ipv6calc_longopt
 
 	fprintf(stderr, "This program formats and calculates IPv6/IPv4/MAC addresses and can do many more tricky things\n");
 
-	fprintf(stderr, "\n");
-
-	printhelp_common();
-
-	fprintf(stderr, "\n");
+	printhelp_common(IPV6CALC_HELP_ALL & (~(IPV6CALC_HELP_QUIET)));
 
 	fprintf(stderr, "  [-q|--quiet]               : be more quiet (auto-enabled in pipe mode)\n");
 	fprintf(stderr, "  [-f|--flush]               : flush each line in pipe mode\n");

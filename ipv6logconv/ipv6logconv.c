@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.35 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.36 2014/07/22 06:00:41 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -192,6 +192,17 @@ int main(int argc,char *argv[]) {
 		feature_ieee = 1;
 	};
 
+	/* do work depending on selection */
+	if ((command & CMD_printversion) != 0) {
+		printversion();
+
+		if ((command & CMD_printhelp) != 0) {
+			printversion_help();
+		};
+
+		exit(EXIT_SUCCESS);
+	};
+
 	/* print help handling */
 	if (command == CMD_printhelp) {
 		ipv6logconv_printhelp();
@@ -203,12 +214,6 @@ int main(int argc,char *argv[]) {
 
 	DEBUGPRINT_WA(DEBUG_ipv6logconv_general, "Debug value:%lx  command:%lx  inputtype:%lx   outputtype:%lx  action:%lx", (unsigned long) ipv6calc_debug, command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action); // ipv6calc_debug usage ok
 	
-	/* do work depending on selection */
-	if (command == CMD_printversion) {
-		printversion();
-		exit(EXIT_SUCCESS);
-	};
-
 	if ((outputtype == FORMAT_any) && ((feature_reg == 0) || (feature_ieee == 0))) {
 		fprintf(stderr, "Basic databases are missing for conversion and outputtype 'any'\n");
 		exit(EXIT_FAILURE);

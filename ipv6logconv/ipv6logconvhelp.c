@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconvhelp.c
- * Version    : $Id: ipv6logconvhelp.c,v 1.9 2014/04/26 16:16:32 ds6peter Exp $
+ * Version    : $Id: ipv6logconvhelp.c,v 1.10 2014/07/22 06:00:41 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
@@ -33,6 +33,17 @@ void printversion(void) {
 	fprintf(stderr, "\n");
 };
 
+void printversion_help(void) {
+	fprintf(stderr, "\n");
+
+	fprintf(stderr, "Explanation of available(+)/possible(-) feature tokens\n");
+
+	fprintf(stderr, "%-22s%c %s\n", "CONV_REG", (feature_reg == 1)? '+' : '-', "Conversion of IPv4/IPv6 address to Registry tokens");
+	fprintf(stderr, "%-22s%c %s\n", "CONV_IEEE", (feature_ieee == 1) ? '+' : '-', "Conversion of included MAC/EUI-64 adress to IEEE (vendor) name");
+
+	fprintf(stderr, "\n");
+};
+
 void printcopyright(void) {
         fprintf(stderr, "%s\n", PROGRAM_COPYRIGHT);
 };
@@ -41,18 +52,20 @@ void ipv6logconv_printinfo(void)  {
 	printversion();
 	printcopyright();
 	fprintf(stderr, "This program converts IPv4/IPv6 addresses in HTTP server log files\n");
-	fprintf(stderr, "See '%s -?' for more details\n\n", PROGRAM_NAME);
+	fprintf(stderr, "See '%s -?|-h|--help for online help\n", PROGRAM_NAME);
 };
 
 /* print global help */
 void ipv6logconv_printhelp(void) {
 	printversion();
 	printcopyright();
+
 	fprintf(stderr, "\n");
-	fprintf(stderr, " General:\n");
-	fprintf(stderr, "  [-d|--debug <debug value>] : debug value (bitwise like)\n");
-	fprintf(stderr, "  [-q|--quiet] : be more quiet\n");
-	fprintf(stderr, "  [-n|--nocache] : disable caching\n");
+	fprintf(stderr, "This program converts IPv4/IPv6 addresses in HTTP server log files\n");
+
+	printhelp_common(IPV6CALC_HELP_BASIC);
+
+	fprintf(stderr, "  [-n|--nocache]            : disable caching\n");
 	fprintf(stderr, "  [-c|--cachelimit <value>] : set cache limit\n");
 	fprintf(stderr, "                               default: %d\n", cache_lru_limit);
 	fprintf(stderr, "                               maximum: %d\n", CACHE_LRU_SIZE);

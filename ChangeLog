@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.353 2014/07/21 06:14:27 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.354 2014/07/22 06:00:41 ds6peter Exp $ 
  */
 
 Info:
@@ -9,9 +9,12 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140722/PB
+	harmonize online help of binaries
+
 20140721/PB
 	lib/libipv6addr.c: extend countrycode retrievement for included client IPv4 addresses
-	ipv6calc: extend online help for -v
+	ipv6calc/ipv6logconv/ipv6logstats/ipv6loganon: extend online help for -v
 
 20140720/PB
 	ipv6calc/ipv6calchelp_local.c

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.57 2014/05/23 05:20:50 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.58 2014/07/22 06:00:41 ds6peter Exp $
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -267,6 +267,11 @@ int main(int argc,char *argv[]) {
 		} else {
 			printversion();
 		};
+
+		if ((command & CMD_printhelp) != 0) {
+			printversion_help();
+		};
+
 		exit(EXIT_SUCCESS);
 	};
 
@@ -492,7 +497,7 @@ static void lineparser(void) {
 			case FORMAT_ipv6addr:
 				if ((ipv6addr.scope & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)) != 0) {
 					/* extract IPv4 address */
-					r = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, 1);
+					r = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 					if (r != 0) {
 						continue;
 					};
@@ -519,8 +524,8 @@ static void lineparser(void) {
 				if ((ipv6addr.scope & IPV6_ADDR_HAS_PUBLIC_IPV4) != 0) {
 					/* has public IPv4 address included */
 
-					// get IPv4 address
-					r = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, 1);
+					// get IPv4 address (in case of Teredo the client IP)
+					r = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 					if (r != 0) {
 						continue;
 					};

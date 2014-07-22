@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.31 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.32 2014/07/22 06:00:41 ds6peter Exp $
  * Copyright  : 2007-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -223,18 +223,23 @@ int main(int argc,char *argv[]) {
 	/* do work depending on selection */
 	DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "command=0x%08x", command);
 
-	if ((command & CMD_printhelp) != 0) {
-		ipv6loganon_printhelp();
-		exit(EXIT_FAILURE);
-	};
-
 	if ((command & CMD_printversion) != 0) {
 		if ((command & CMD_printversion_verbose) != 0) {
 			printversion_verbose(((command & CMD_printversion_verbose2) !=0) ? LEVEL_VERBOSE2 : LEVEL_VERBOSE);
 		} else {
 			printversion();
 		};
+
+		if ((command & CMD_printhelp) != 0) {
+			printversion_help();
+		};
+
 		exit(EXIT_SUCCESS);
+	};
+
+	if ((command & CMD_printhelp) != 0) {
+		ipv6loganon_printhelp();
+		exit(EXIT_FAILURE);
 	};
 
 	/* check requirements */

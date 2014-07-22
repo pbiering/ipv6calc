@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.112 2014/07/21 06:14:27 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.113 2014/07/22 06:00:41 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -588,6 +588,7 @@ int main(int argc, char *argv[]) {
 		if ((command & CMD_printhelp) != 0) {
 			printversion_help();
 		};
+
 		exit(EXIT_SUCCESS);
 	};
 

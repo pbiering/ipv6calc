@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.113 2014/07/21 06:14:27 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.114 2014/07/22 06:00:41 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -985,7 +985,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 
 	/* 6to4 */
 	if ( (typeinfo & IPV6_NEW_ADDR_6TO4) != 0 ) {
-		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 1);
+		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 
 		if (r == 0) {
 			retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, helpstring, sizeof(helpstring), 0);
@@ -1013,10 +1013,10 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	/* Teredo */
 	if ( (typeinfo & IPV6_NEW_ADDR_TEREDO) != 0 ) {
 		/* extract Teredo client IPv4 address */
-		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 1);
+		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 
 		if (r == 0) {
-			r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr2, 2);
+			r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr2, IPV6_ADDR_SELECT_IPV4_TEREDO_SERVER);
 
 			if (r == 0) {
 				print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "TEREDO-CLIENT");
@@ -1051,7 +1051,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	};
 
 	if ( (typeinfo & IPV6_NEW_ADDR_NAT64) != 0 )  {
-		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 0);
+		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 
 		if (r == 0) {
 			if ( machinereadable != 0 ) {
@@ -1089,7 +1089,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	
 	/* Compat or mapped */
 	if ( (typeinfo & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)) != 0 ) {
-		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 0);
+		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 
 		if (r == 0) {
 			if ( machinereadable != 0 ) {

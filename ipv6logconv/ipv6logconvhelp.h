@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconvhelp.h
- * Version    : $Id: ipv6logconvhelp.h,v 1.2 2005/02/13 11:50:30 peter Exp $
- * Copyright  : 2002-2005 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logconvhelp.h,v 1.3 2014/07/22 06:00:41 ds6peter Exp $
+ * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
  * Information:
@@ -10,5 +10,6 @@
  */
 
 extern void printversion(void);
+extern void printversion_help(void);
 extern void ipv6logconv_printinfo(void);
 extern void ipv6logconv_printhelp(void);

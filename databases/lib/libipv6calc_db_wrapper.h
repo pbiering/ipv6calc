@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.23 2014/07/21 06:14:27 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.24 2014/07/22 06:00:41 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -40,19 +40,19 @@ extern uint32_t wrapper_features;
 #define IPV6CALC_DB_IP2LOCATION_IPV6		0x00200000
 
 static const s_formatoption ipv6calc_db_features[] = {
-	{ IPV6CALC_DB_GEOIP_IPV4	, "GeoIP"	, "GeoIPv4 database"},
-	{ IPV6CALC_DB_GEOIP_IPV6	, "GeoIPv6"	, "GeoIPv6 database"},
-	{ IPV6CALC_DB_IP2LOCATION_IPV4	, "IP2Location"	, "IP2Location IPv4 database"},
-	{ IPV6CALC_DB_IP2LOCATION_IPV6	, "IP2Location6", "IP2Location IPv6 database"},
-	{ IPV6CALC_DB_AS_TO_REGISTRY	, "DB_AS_REG"	, "AS-Number to Registry database"},
-	{ IPV6CALC_DB_IPV4_TO_REGISTRY	, "DB_IPV4_REG"	, "IPv4 to Registry database"},
-	{ IPV6CALC_DB_IPV6_TO_REGISTRY	, "DB_IPV6_REG"	, "IPv6 to Registry database"},
+	{ IPV6CALC_DB_GEOIP_IPV4	, "GeoIP"	, "GeoIPv4 database (external)"},
+	{ IPV6CALC_DB_GEOIP_IPV6	, "GeoIPv6"	, "GeoIPv6 database (external)"},
+	{ IPV6CALC_DB_IP2LOCATION_IPV4	, "IP2Location"	, "IP2Location IPv4 database (external)"},
+	{ IPV6CALC_DB_IP2LOCATION_IPV6	, "IP2Location6", "IP2Location IPv6 database (external)"},
+	{ IPV6CALC_DB_AS_TO_REGISTRY	, "DB_AS_REG"	, "AS-Number to Registry database (BuiltIn)"},
+	{ IPV6CALC_DB_IPV4_TO_REGISTRY	, "DB_IPV4_REG"	, "IPv4 to Registry database (BuiltIn)"},
+	{ IPV6CALC_DB_IPV6_TO_REGISTRY	, "DB_IPV6_REG"	, "IPv6 to Registry database (BuiltIn)"},
 	{ IPV6CALC_DB_IPV4_TO_AS	, "DB_IPV4_AS"	, "IPv4 to AS database (provided by GeoIP)" },
-	{ IPV6CALC_DB_IPV6_TO_AS	, "DB_IPV6_AS"	, "IPv6 to AS database (provided by GeoIPv6" },
+	{ IPV6CALC_DB_IPV6_TO_AS	, "DB_IPV6_AS"	, "IPv6 to AS database (provided by GeoIPv6)" },
 	{ IPV6CALC_DB_IPV4_TO_CC	, "DB_IPV4_CC"	, "IPv4 to CountryCode database (provided by GeoIP/IP2Location)" },
 	{ IPV6CALC_DB_IPV6_TO_CC	, "DB_IPV6_CC"	, "IPv6 to CountryCode database (provided by GeoIPv6/IP2Location6)" },
-	{ IPV6CALC_DB_CC_TO_REGISTRY	, "DB_CC_REG"	, "CountryCode to Registry database" },
-	{ IPV6CALC_DB_IEEE_TO_INFO	, "DB_IEEE"	, "IEEE/OUI/OUI36 Number to Info database" },
+	{ IPV6CALC_DB_CC_TO_REGISTRY	, "DB_CC_REG"	, "CountryCode to Registry database (BuiltIn)" },
+	{ IPV6CALC_DB_IEEE_TO_INFO	, "DB_IEEE"	, "IEEE/OUI/OUI36 Vendor database (BuiltIn)" },
 };
 
 

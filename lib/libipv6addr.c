@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.111 2014/07/21 06:14:27 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.112 2014/07/22 06:00:41 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -807,7 +807,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 		ipv6addr_copy(&ipv6addr, ipv6addrp);
 		ipv6addr.scope = type; // store what we already have
 
-		r = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, 1);
+		r = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 		if (r == 0) {
 			if ((ipv4addr.scope & IPV4_ADDR_ANONYMIZED) != 0) {
 				if ((type & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX) != 0) {
@@ -823,7 +823,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 		ipv6addr_copy(&ipv6addr, ipv6addrp);
 		ipv6addr.scope = type; // store what we already have
 
-		r = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, 1);
+		r = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 		if (r == 0) {
 			if ((ipv4addr.scope & IPV4_ADDR_ANONYMIZED) != 0) {
 				type |= IPV6_ADDR_ANONYMIZED_IID;
@@ -834,7 +834,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 		ipv6addr_copy(&ipv6addr, ipv6addrp);
 		ipv6addr.scope = type; // store what we already have
 
-		r = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, 2);
+		r = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, IPV6_ADDR_SELECT_IPV4_TEREDO_SERVER);
 		if (r == 0) {
 			if ((ipv4addr.scope & IPV4_ADDR_ANONYMIZED) != 0) {
 				type |= IPV6_ADDR_ANONYMIZED_PREFIX;
@@ -2553,7 +2553,9 @@ int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_
 
 /* get included IPv4 address from an IPv6 address */
 /* in:	IPv6 address pointer (ro)
- *	selector: in case of Teredo: 1=client 2=server
+ *	selector: in case of Teredo (otherwise ignored):
+ *	 IPV6_ADDR_SELECT_IPV4_DEFAULT (TEREDO_CLIENT)
+ *	 IPV6_ADDR_SELECT_IPV4_TEREDO_SERVER
  * mod:	IPv4 address pointer (rw)
  * ret: 0=ok, !=0: no IPv4 adress included
  */
@@ -2571,11 +2573,12 @@ int libipv6addr_get_included_ipv4addr(const ipv6calc_ipv6addr *ipv6addrp, ipv6ca
 	if ((typeinfo & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED | IPV6_NEW_ADDR_NAT64)) != 0) {
 		begin = 12;
 	} else if ((typeinfo & IPV6_NEW_ADDR_TEREDO) != 0) {
-		if (selector == 1) {
+		if (selector == IPV6_ADDR_SELECT_IPV4_DEFAULT) {
 			// Teredo client
 			begin = 12;
 			xor   = 0xff;
-		} else if (selector == 2) {
+		} else if (selector == IPV6_ADDR_SELECT_IPV4_TEREDO_SERVER) {
+			// Teredo server
 			begin = 4;
 		} else {
 			fprintf(stderr, "libipv6addr_get_included_ipv4addr FAILED (unsupported value of selector: %d - FIX CALLING CODE)", selector);
@@ -2630,7 +2633,7 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 			};
 		} else {
 			if ((ipv6addrp->scope & IPV6_NEW_ADDR_6TO4) != 0) {
-				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 1);
+				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 				if (retval != 0) {
 					fprintf(stderr, "Error getting included IPv4 address from anonymized IPv6 address\n");
 					goto END_libipv6addr_cc_index_by_addr;
@@ -2640,7 +2643,7 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 			};
 		};
 	} else if (((ipv6addrp->scope & IPV6_ADDR_ANONYMIZED_IID) != 0) && ((ipv6addrp->scope & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID) != 0)) {
-		retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 1);
+		retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 		if (retval != 0) {
 			fprintf(stderr, "Error getting included IPv4 address from anonymized IPv6 address\n");
 			goto END_libipv6addr_cc_index_by_addr;
@@ -2651,7 +2654,7 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC) == 1) {
 			if ((ipv6addrp->scope & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID) != 0) {
 				/* retrieve CountryCodeIndex from IPv4 address inside */
-				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 1);
+				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 				if (retval != 0) {
 					fprintf(stderr, "Error getting included IPv4 address from IPv6 address\n");
 					goto END_libipv6addr_cc_index_by_addr;
@@ -2659,7 +2662,7 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 
 				cc_index = libipv4addr_cc_index_by_addr(&ipv4addr);
 			} else if ((ipv6addrp->scope & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX) != 0) {
-				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 2);
+				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 				if (retval != 0) {
 					fprintf(stderr, "Error getting included IPv4 address from IPv6 address\n");
 					goto END_libipv6addr_cc_index_by_addr;
@@ -2708,7 +2711,7 @@ uint32_t libipv6addr_as_num32_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 			};
 		} else {
 			if ((ipv6addrp->scope & IPV6_NEW_ADDR_6TO4) != 0) {
-				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, 0);
+				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 				if (retval != 0) {
 					fprintf(stderr, "Error getting included IPv4 address from anonymized IPv6 address\n");
 					goto END_libipv6addr_as_num32_by_addr;
