@@ -1,18 +1,56 @@
-.TH "ipv6logconv" "8" "0.0.1" "Matanuki@Goudge.org" ""
+.TH "ipv6logconv" "8" "0.97.4" "Peter Bieringer <pb@bieringer.de>" "system tools"
 .SH "NAME"
-.LP
-ipv6logconv \- a small IPv6 log converter written in C.
-.LP
-.SH "SYNTAX"
-.nf
-.fam C
- General:
-  [\-d|\-\-debug <debug value>] : debug value (bitwise like)
-  [\-q|\-\-quiet] : be more quiet
- Output:
-  [\-\-out <output type>] : specify output type
-  Available output types:  \-\-out \-?
-.SH "AUTHORS"
+ipv6logconv \- HTTP server log file converter for statistics
+.SH "SYNOPSIS"
+cat /var/log/httpd/access_log | \fBipv6logconv\fR [\fIOPTIONS\fR]
+.SH "DESCRIPTION"
+This program converts IPv4/IPv6 addresses in HTTP server log files
+
+The converted output can be used to create statistics with analog
+
+Takes data from stdin, proceed it to stdout
+.SH "OPTIONS"
 .LP 
+General options:
+.TP 
+\fB[\-d|\-\-debug \fIDEBUGVALUE\fR\fB]\fR : debug value (bitwise like) can also be set by IPV6CALC_DEBUG environment value
+.TP 
+\fB[\-v|\-\-version [\-v [\-v]]]\fR   : version information (2 optional detail levels)
+.TP 
+\fB[\-v|\-\-version \-h]\fR          : explanation of feature tokens
+.TP 
+\fB[\-h|\-\-help|\-?]\fR             : this online help
+.LP 
+Performance options:
+.TP 
+\fB[\-n|\-\-nocache]\fR            : disable caching
+.TP 
+\fB[\-c|\-\-cachelimit \fIVALUE\fR\fB]\fR : set cache limit
+.br 
+                      default: \fB20\fR
+.br 
+                      maximum: \fB200\fR
+.LP 
+Output options:
+.TP 
+\fB[\-\-out \fIOUTPUTTYPE\fR\fB]\fR : specify output type
+.br 
+   \fBaddrtype\fR       : Address type
+.br 
+   \fBouitype\fR        : OUI (IEEE) type
+.br 
+   \fBipv6addrtype\fR   : IPv6 address type
+.br 
+   \fBany\fR            : any type
+
+.SH "SEE ALSO"
+ipv6calc(8)
+.SH "REPORTING BUGS"
+Report bugs to <ipv6calc@lists.deepspace6.net> or to the authors.
+.br 
+Homepage: http://www.deepspace6.net/projects/ipv6calc.html
+.SH "COPYRIGHT"
+GPLv2
+.SH "AUTHORS"
 Peter Bieringer <pb@bieringer.de>
 

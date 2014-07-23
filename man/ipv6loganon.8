@@ -1,40 +1,8 @@
-.TH "ipv6loganon" "8" "2012-05-09" "Peter Bieringer <pb@bieringer.de>, Niko Tyni <ntyni@iki.fi>" ""
+.TH "ipv6loganon" "8" "0.97.4" "Peter Bieringer <pb@bieringer.de>" "system tools"
 .SH "NAME"
 ipv6loganon \- HTTP server log file anonymizer
 .SH "SYNOPSIS"
-.PP 
-.B ipv6loganon 
-[
-.B \-d
-.I value
-] [
-.B \-V
-] [
-.B \-n
-] [
-.B \-w
-.I file
-] [
-.B \-a
-.I file
-] [
-.B \-c 
-.I value
-] [
-.B \-\-mask\-ipv4
-.I bits
-] [
-.B \-\-mask\-ipv6
-.I bits
-] [
-.B \-\-no\-mask\-iid
-] [
-.B \-\-anonymize\-standard
-|
-.B \-\-anonymize\-careful
-|
-.B \-\-anonymize\-paranoid
-]
+cat /var/log/httpd/access_log | \fBipv6loganon\fR [\fIOPTIONS\fR]
 .SH "DESCRIPTION"
 .PP 
 .B ipv6loganon
@@ -44,9 +12,9 @@ It expects a log line on stdin with an IPv4/IPv6 address as first token.
 .PP 
 This token would be anonymized according to given/default options.
 .PP 
-The anonymizer would keep as much information as possible for IPv6 address types.
+The anonymizer would keep as much information as possible for IPv4/IPv6 address types.
 .PP 
-Client\-side IID would be anonymized by
+Depending on selected anonymization method: client\-side IID would be anonymized by
 .IP 
 \(bu EUI\-48 based: serial number would be zero'ed, keeping OID
 
@@ -75,57 +43,92 @@ Compat/Mapped IPv4 addresses would be anonymized by
 .PP 
 Afterwards, the modified address and the trailing line would be printed to stdout or given file.
 .SH "OPTIONS"
-.SS "GENERAL"
+.LP 
+General options:
 .TP 
-.B \-d, \-\-debug <debug value>
-debug value (bitwise like)
+\fB[\-d|\-\-debug \fIDEBUGVALUE\fR\fB]\fR : debug value (bitwise like) can also be set by IPV6CALC_DEBUG environment value
 .TP 
-.B \-V, \-\-verbose
-be verbose
+\fB[\-v|\-\-version [\-v [\-v]]]\fR   : version information (2 optional detail levels)
 .TP 
-.B \-w, \-\-write <file>
-write output to file instead of stdout
+\fB[\-v|\-\-version \-h]\fR          : explanation of feature tokens
 .TP 
-.B \-a, \-\-append <file>
-append output to file instead of stdout
+\fB[\-h|\-\-help|\-?]\fR             : this online help
+.LP 
+External database options (depending on compiled\-in suppport):
 .TP 
-.B \-f, \-\-flush
-flush output after each line	
+\fB[\-\-db\-ip2location\-disable      ]\fR : IP2Location support disabled
 .TP 
-.B \-n, \-\-nocache
-disable caching
+\fB[\-\-db\-ip2location\-dir\fR \fIDIRECTORY\fR\fB]\fR : IP2Location database directory (default: /usr/share/IP2Location)
 .TP 
-.B \-c, \-\-cachelimit
-set cache limit (default: 20, maximum: 200)
-.SS "OUTPUT ANONYMIZATION"
+\fB[\-\-db\-geoip\-disable            ]\fR : GeoIP support disabled
 .TP 
-.B \-\-mask\-ipv4 <bits>
-mask all IPv4 addresses [0\-32], default 24
- (applied also to IPv4 addresses inside IPv6 address)
+\fB[\-\-db\-geoip\-dir\fR       \fIDIRECTORY\fR\fB]\fR : GeoIP database directory (default: /usr/share/GeoIP)
+.LP 
+Input/output options:
 .TP 
-.B \-\-mask\-ipv6 <bits>
-mask IPv6 prefix [0\-63], default 48
- (only applied to related address types)
+\fB[\-w|\-\-write]\fR               : write output to file instead of stdout
 .TP 
-.B \-\-no\-mask\-iid
-do not mask non\-IPv4 based IPv6\-IID
+\fB[\-a|\-\-append]\fR              : append output to file instead of stdout
 .TP 
-.B \-\-anonymize\-standard
-(default) preset for standard anonymization
- mask\-ipv4=24 mask\-ipv6=48 mask\-iid
+\fB[\-f|\-\-flush]\fR               : flush output after each line
 .TP 
-.B \-\-anonymize\-careful
-preset for careful anonymization
- mask\-ipv4=20 mask\-ipv6=40 mask\-iid
+\fB[\-V|\-\-verbose]\fR             : be verbose
+Performance options:
 .TP 
-.B \-\-anonymize\-paranoid
-preset for paranoid anonymization
- mask\-ipv4=16 mask\-ipv6=32 mask\-iid
-.PP 
-
-
-.SH "EXAMPLE"
-.SS "OUTPUT"
+\fB[\-n|\-\-nocache]\fR            : disable caching
+.TP 
+\fB[\-c|\-\-cachelimit \fIVALUE\fR\fB]\fR : set cache limit
+.br 
+                      default: \fB20\fR
+.br 
+                      maximum: \fB200\fR
+.LP 
+Processing options:
+.LP 
+Shortcut for anonymization presets:
+.TP 
+\fB\-\-anonymize\-standard\fR (default)
+.TP 
+\fB\-\-anonymize\-careful\fR
+.TP 
+\fB\-\-anonymize\-paranoid\fR
+.LP 
+Supported methods \fB[\-\-anonymize\-method \fIMETHOD\fR\fB]\fR:
+.TP 
+\fBanonymize\fR : reliable anonymization, keep as much type information as possible
+.TP 
+\fBzeroize\fR   : simple zeroizing according to given masks, probably loose type information
+.TP 
+\fBkeep\-type\-asn\-cc\fR: special reliable anonymization, keep type & Autonomous System Number and CountryCode
+.LP 
+Available presets (shortcut names) [\-\-anonymize\-preset \fIPRESET\-NAME\fR]:
+.TP 
+\fBanonymize\-standard\fR   (\fBas\fR): mask\-ipv6= 56 mask\-ipv4=24 mask\-eui64=40 mask\-mac=24 mask\-autoadjust=yes method=anonymize
+.br 
+\fBanonymize\-careful\fR    (\fBac\fR): mask\-ipv6= 48 mask\-ipv4=20 mask\-eui64=24 mask\-mac=24 mask\-autoadjust=yes method=anonymize
+.br 
+\fBanonymize\-paranoid\fR   (\fBap\fR): mask\-ipv6= 40 mask\-ipv4=16 mask\-eui64= 0 mask\-mac=24 mask\-autoadjust=no  method=anonymize
+.br 
+\fBzeroize\-standard\fR     (\fBzs\fR): mask\-ipv6= 56 mask\-ipv4=24 mask\-eui64=40 mask\-mac=24 mask\-autoadjust=yes method=zeroize
+.br 
+\fBzeroize\-careful\fR      (\fBzc\fR): mask\-ipv6= 48 mask\-ipv4=20 mask\-eui64=24 mask\-mac=24 mask\-autoadjust=yes method=zeroize
+.br 
+\fBzeroize\-paranoid\fR     (\fBzp\fR): mask\-ipv6= 40 mask\-ipv4=16 mask\-eui64= 0 mask\-mac=24 mask\-autoadjust=no  method=zeroize
+.br 
+\fBkeep\-type\-asn\-cc\fR     (\fBkp\fR): mask\-ipv6= 56 mask\-ipv4=24 mask\-eui64=40 mask\-mac=24 mask\-autoadjust=yes method=keep\-type\-asn\-cc
+.LP 
+Custom control:
+.TP 
+\fB\-\-mask\-ipv4\fR  \fIBITS\fR     : mask IPv4 address [0\-32] (even if occurs in IPv6 address)
+.TP 
+\fB\-\-mask\-ipv6\fR  \fIBITS\fR     : mask IPv6 prefix [0\-64] (only applied to related address types)
+.TP 
+\fB\-\-mask\-eui64\fR \fIBITS\fR     : mask EUI\-64 address or IPv6 interface identifier [0\-64]
+.TP 
+\fB\-\-mask\-mac\fR   \fIBITS\fR     : mask MAC address [0\-48]
+.TP 
+\fB\-\-mask\-autoadjust yes|no\fR: autoadjust mask to keep type/vendor information regardless of less given mask
+.SH "EXAMPLES"
 Original lines (stdin):
 .PP 
 207.46.98.53 \- \- [01/Jan/2007:00:01:15 +0100] "GET /Linux+IPv6\-HOWTO/x1112.html HTTP/1.0" 200 6162 "\-" "msnbot/1.0 (+http://search.msn.com/msnbot.htm)" 253 6334
@@ -138,10 +141,22 @@ Modified lines (stdout):
 
 2002:52b6:6b00:0:216:17ff:fe00:0 \- \- [10/Jan/2007:15:04:28 +0100] "GET /favicon.ico HTTP/1.1" 200 4710 "http://www.bieringer.de/linux/IPv6/" "Mozilla/5.0 (X11; U; Linux i686; en\-US; rv:1.8.0.9) Gecko/20061219 Fedora/1.5.0.9\-1.fc6 Firefox/1.5.0.9 pango\-text" 413 5005
 
-.SS "OUTPUT"
-TODO
-.SH "AUTHORS"
-.PP 
-Peter Bieringer <pb@bieringer.de>
+
+.LP 
+Anonymization method: keep\-type\-asn\-cc
+.TP 
+echo "1.2.3.4" | ./ipv6loganon \-\-anonymize\-preset keep\-type\-asn\-cc
+246.24.59.65
+.TP 
+echo "2001:a60:1400:1201:221:70ff:fe01:2345" | ./ipv6loganon \-\-anonymize\-preset keep\-type\-asn\-cc
+a909:16fa:9092:23ff:a909:4291:4022:1708
 .SH "SEE ALSO"
-.B ipv6calc(8)
+ipv6calc(8)
+.SH "REPORTING BUGS"
+Report bugs to <ipv6calc@lists.deepspace6.net> or to the authors.
+.br 
+Homepage: http://www.deepspace6.net/projects/ipv6calc.html
+.SH "COPYRIGHT"
+GPLv2
+.SH "AUTHORS"
+Peter Bieringer <pb@bieringer.de>

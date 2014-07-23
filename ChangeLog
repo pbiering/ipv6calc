@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.354 2014/07/22 06:00:41 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.355 2014/07/23 20:20:28 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140723/PB
+	man/*: major review of man pages
+
 20140722/PB
 	harmonize online help of binaries
 
