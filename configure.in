@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.104 2014/07/29 18:27:46 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.105 2014/07/29 19:23:29 ds6peter Exp $
 dnl Copyright: 2001-2014 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -297,6 +297,7 @@ AC_ARG_WITH([ip2location-dynamic],
 			IP2LOCATION_DYN="yes"
 		fi
 	],[
+		true
 	])
 
 AC_ARG_WITH([ip2location-headers],
@@ -430,15 +431,11 @@ if test "$IP2LOCATION" = "yes"; then
 		AC_CHECK_DECL([IP2Location_open],,
 			AC_MSG_ERROR([IP2Location library header file misses IP2Location_open]))
 
-		AC_CHECK_DECLS([
-			IP2Location_close,
+		AC_CHECK_DECLS([IP2Location_close,
 			IP2Location_get_country_short,
-			IP2Location_get_country_long
-		])
+			IP2Location_get_country_long])
 
-		AC_CHECK_DECLS([
-			API_VERSION
-		])
+		AC_CHECK_DECLS([API_VERSION])
 	],
 	[
 		AC_MSG_ERROR([IP2Location library header files not found])
@@ -684,23 +681,31 @@ if test "$GEOIP" = "yes"; then
 		AC_CHECK_DECL([GeoIP_open],,
 			AC_MSG_ERROR([GeoIP library header file misses GeoIP_open]))
 
-		AC_CHECK_DECLS([
-			GeoIP_country_code_by_ipnum_v6,
+		AC_CHECK_DECLS([GeoIP_country_code_by_ipnum_v6,
 			GeoIP_lib_version,
 			GeoIP_country_code_by_addr_v6,
 			GeoIP_country_name_by_addr_v6,
-			GeoIP_cleanup
-		])
+			GeoIP_cleanup])
 
-		AC_CHECK_DECLS([
-			GEOIP_LARGE_COUNTRY_EDITION,
+		AC_CHECK_DECLS([GEOIP_LARGE_COUNTRY_EDITION,
 			GEOIP_LARGE_COUNTRY_EDITION_V6,
 			GEOIP_CITY_EDITION_REV0_V6,
 			GEOIP_CITY_EDITION_REV1_V6,
 			GEOIP_ASNUM_EDITION,
 			GEOIP_ASNUM_EDITION_V6,
-			GEOIP_COUNTRY_EDITION_V6
-		])
+			GEOIP_COUNTRY_EDITION_V6])
+
+		AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+			     [[geoipv6_t a;]])
+			],
+			[
+				AC_MSG_RESULT([typedef geoipv6_t defined])
+				AC_DEFINE(SUPPORT_GEOIP_IPV6_STRUCT, 1, Define if GeoIP support IPv6 structure.)
+			],
+			[
+				AC_MSG_WARN([typedef geoipv6_t missing, enable workaround])
+			])
+
 	],
 	[
 		AC_MSG_ERROR([GeoIP library header files not found])

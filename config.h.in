@@ -15,9 +15,9 @@
 /* Define GeoIP dynamic library. */
 #undef GEOIP_DYN_LIB
 
-/* Define to 1 if you have the declaration of `API_VERSION ', and to 0 if you
+/* Define to 1 if you have the declaration of `API_VERSION', and to 0 if you
    don't. */
-#undef HAVE_DECL_API_VERSION___
+#undef HAVE_DECL_API_VERSION
 
 /* Define to 1 if you have the declaration of `GEOIP_ASNUM_EDITION', and to 0
    if you don't. */
@@ -35,9 +35,9 @@
    and to 0 if you don't. */
 #undef HAVE_DECL_GEOIP_CITY_EDITION_REV1_V6
 
-/* Define to 1 if you have the declaration of `GeoIP_cleanup ', and to 0 if
-   you don't. */
-#undef HAVE_DECL_GEOIP_CLEANUP___
+/* Define to 1 if you have the declaration of `GeoIP_cleanup', and to 0 if you
+   don't. */
+#undef HAVE_DECL_GEOIP_CLEANUP
 
 /* Define to 1 if you have the declaration of `GeoIP_country_code_by_addr_v6',
    and to 0 if you don't. */
@@ -47,9 +47,9 @@
    `GeoIP_country_code_by_ipnum_v6', and to 0 if you don't. */
 #undef HAVE_DECL_GEOIP_COUNTRY_CODE_BY_IPNUM_V6
 
-/* Define to 1 if you have the declaration of `GEOIP_COUNTRY_EDITION_V6 ', and
+/* Define to 1 if you have the declaration of `GEOIP_COUNTRY_EDITION_V6', and
    to 0 if you don't. */
-#undef HAVE_DECL_GEOIP_COUNTRY_EDITION_V6___
+#undef HAVE_DECL_GEOIP_COUNTRY_EDITION_V6
 
 /* Define to 1 if you have the declaration of `GeoIP_country_name_by_addr_v6',
    and to 0 if you don't. */
@@ -71,9 +71,9 @@
    you don't. */
 #undef HAVE_DECL_IP2LOCATION_CLOSE
 
-/* Define to 1 if you have the declaration of `IP2Location_get_country_long ',
+/* Define to 1 if you have the declaration of `IP2Location_get_country_long',
    and to 0 if you don't. */
-#undef HAVE_DECL_IP2LOCATION_GET_COUNTRY_LONG___
+#undef HAVE_DECL_IP2LOCATION_GET_COUNTRY_LONG
 
 /* Define to 1 if you have the declaration of `IP2Location_get_country_short',
    and to 0 if you don't. */
@@ -176,6 +176,9 @@
 /* Define if you want GeoIP support with dynamic loading support - requires
    also additional linker options. */
 #undef SUPPORT_GEOIP_DYN
+
+/* Define if GeoIP support IPv6 structure. */
+#undef SUPPORT_GEOIP_IPV6_STRUCT
 
 /* Define if your GeoIP version supports GeoIP_lib_version. */
 #undef SUPPORT_GEOIP_LIB_VERSION

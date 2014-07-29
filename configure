@@ -4439,6 +4439,10 @@ if test "${with_ip2location_dynamic+set}" = set; then :
 			IP2LOCATION_DYN="yes"
 		fi
 
+else
+
+		true
+
 fi
 
 
@@ -4620,29 +4624,27 @@ fi
 cat >>confdefs.h <<_ACEOF
 #define HAVE_DECL_IP2LOCATION_GET_COUNTRY_SHORT $ac_have_decl
 _ACEOF
-ac_fn_c_check_decl "$LINENO" "IP2Location_get_country_long
-		" "ac_cv_have_decl_IP2Location_get_country_long___" "$ac_includes_default"
-if test "x$ac_cv_have_decl_IP2Location_get_country_long___" = xyes; then :
+ac_fn_c_check_decl "$LINENO" "IP2Location_get_country_long" "ac_cv_have_decl_IP2Location_get_country_long" "$ac_includes_default"
+if test "x$ac_cv_have_decl_IP2Location_get_country_long" = xyes; then :
   ac_have_decl=1
 else
   ac_have_decl=0
 fi
 
 cat >>confdefs.h <<_ACEOF
-#define HAVE_DECL_IP2LOCATION_GET_COUNTRY_LONG___ $ac_have_decl
+#define HAVE_DECL_IP2LOCATION_GET_COUNTRY_LONG $ac_have_decl
 _ACEOF
 
 
-		ac_fn_c_check_decl "$LINENO" "API_VERSION
-		" "ac_cv_have_decl_API_VERSION___" "$ac_includes_default"
-if test "x$ac_cv_have_decl_API_VERSION___" = xyes; then :
+		ac_fn_c_check_decl "$LINENO" "API_VERSION" "ac_cv_have_decl_API_VERSION" "$ac_includes_default"
+if test "x$ac_cv_have_decl_API_VERSION" = xyes; then :
   ac_have_decl=1
 else
   ac_have_decl=0
 fi
 
 cat >>confdefs.h <<_ACEOF
-#define HAVE_DECL_API_VERSION___ $ac_have_decl
+#define HAVE_DECL_API_VERSION $ac_have_decl
 _ACEOF
 
 
@@ -5036,16 +5038,15 @@ fi
 cat >>confdefs.h <<_ACEOF
 #define HAVE_DECL_GEOIP_COUNTRY_NAME_BY_ADDR_V6 $ac_have_decl
 _ACEOF
-ac_fn_c_check_decl "$LINENO" "GeoIP_cleanup
-		" "ac_cv_have_decl_GeoIP_cleanup___" "$ac_includes_default"
-if test "x$ac_cv_have_decl_GeoIP_cleanup___" = xyes; then :
+ac_fn_c_check_decl "$LINENO" "GeoIP_cleanup" "ac_cv_have_decl_GeoIP_cleanup" "$ac_includes_default"
+if test "x$ac_cv_have_decl_GeoIP_cleanup" = xyes; then :
   ac_have_decl=1
 else
   ac_have_decl=0
 fi
 
 cat >>confdefs.h <<_ACEOF
-#define HAVE_DECL_GEOIP_CLEANUP___ $ac_have_decl
+#define HAVE_DECL_GEOIP_CLEANUP $ac_have_decl
 _ACEOF
 
 
@@ -5109,17 +5110,45 @@ fi
 cat >>confdefs.h <<_ACEOF
 #define HAVE_DECL_GEOIP_ASNUM_EDITION_V6 $ac_have_decl
 _ACEOF
-ac_fn_c_check_decl "$LINENO" "GEOIP_COUNTRY_EDITION_V6
-		" "ac_cv_have_decl_GEOIP_COUNTRY_EDITION_V6___" "$ac_includes_default"
-if test "x$ac_cv_have_decl_GEOIP_COUNTRY_EDITION_V6___" = xyes; then :
+ac_fn_c_check_decl "$LINENO" "GEOIP_COUNTRY_EDITION_V6" "ac_cv_have_decl_GEOIP_COUNTRY_EDITION_V6" "$ac_includes_default"
+if test "x$ac_cv_have_decl_GEOIP_COUNTRY_EDITION_V6" = xyes; then :
   ac_have_decl=1
 else
   ac_have_decl=0
 fi
 
 cat >>confdefs.h <<_ACEOF
-#define HAVE_DECL_GEOIP_COUNTRY_EDITION_V6___ $ac_have_decl
+#define HAVE_DECL_GEOIP_COUNTRY_EDITION_V6 $ac_have_decl
 _ACEOF
+
+
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+geoipv6_t a;
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: typedef geoipv6_t defined" >&5
+$as_echo "typedef geoipv6_t defined" >&6; }
+
+$as_echo "#define SUPPORT_GEOIP_IPV6_STRUCT 1" >>confdefs.h
+
+
+else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: typedef geoipv6_t missing, enable workaround" >&5
+$as_echo "$as_me: WARNING: typedef geoipv6_t missing, enable workaround" >&2;}
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 
 else
