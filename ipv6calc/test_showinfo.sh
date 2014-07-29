@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.36 2014/07/21 06:14:27 ds6peter Exp $
-# Copyright  : 2002-2011 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_showinfo.sh,v 1.37 2014/07/29 18:52:46 ds6peter Exp $
+# Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
 
@@ -149,7 +149,7 @@ if [ "$1" = "minimal" ]; then
 	exit 0
 fi
 
-if ./ipv6calc -v 2>&1 | grep -qw GeoIP; then
+if ./ipv6calc -q -v 2>&1 | grep -qw GeoIP; then
 	echo "Run GeoIP tests"
 	getexamples_GeoIP | while read address; do
 		echo "Run GeoIP showinfo on: $address"
@@ -205,7 +205,7 @@ else
 	echo "GeoIP tests skipped"
 fi
 
-if ./ipv6calc -v 2>&1 | grep -qw IP2Location; then
+if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 	echo "Run IP2Location tests"
 	getexamples_IP2Location | while read address; do
 		echo "Run IP2Location showinfo on: $address"
