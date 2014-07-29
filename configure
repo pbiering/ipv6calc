@@ -4462,6 +4462,8 @@ if test "${with_ip2location_headers_fallback+set}" = set; then :
 		if test -n "$IP2LOCATION_INCLUDE_DIR"; then
 			as_fn_error $? "IP2Location include files location already set by --with-ip2location-headers, skip fallback" "$LINENO" 5
 		else
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2Location fallback headers activated" >&5
+$as_echo "*** IP2Location fallback headers activated" >&6; }
 			IP2LOCATION_INCLUDE_DIR="external-fallback/IP2Location"
 		fi
 
@@ -4820,6 +4822,8 @@ if test "${with_geoip_headers_fallback+set}" = set; then :
 		if test -n "$GEOIP_INCLUDE_DIR"; then
 			as_fn_error $? "GeoIP include files location already set by --with-geoip-headers, skip fallback" "$LINENO" 5
 		else
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GeoIP fallback headers activated" >&5
+$as_echo "*** GeoIP fallback headers activated" >&6; }
 			GEOIP_INCLUDE_DIR="external-fallback/GeoIP"
 		fi
 

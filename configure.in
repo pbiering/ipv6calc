@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.103 2014/07/29 17:35:22 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.104 2014/07/29 18:27:46 ds6peter Exp $
 dnl Copyright: 2001-2014 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -317,6 +317,7 @@ AC_ARG_WITH([ip2location-headers-fallback],
 		if test -n "$IP2LOCATION_INCLUDE_DIR"; then
 			AC_MSG_ERROR([IP2Location include files location already set by --with-ip2location-headers, skip fallback])
 		else
+			AC_MSG_RESULT([*** IP2Location fallback headers activated])
 			IP2LOCATION_INCLUDE_DIR="external-fallback/IP2Location"
 		fi
 	])
@@ -541,6 +542,7 @@ AC_ARG_WITH([geoip-headers-fallback],
 		if test -n "$GEOIP_INCLUDE_DIR"; then
 			AC_MSG_ERROR([GeoIP include files location already set by --with-geoip-headers, skip fallback])
 		else
+			AC_MSG_RESULT([*** GeoIP fallback headers activated])
 			GEOIP_INCLUDE_DIR="external-fallback/GeoIP"
 		fi
 	])

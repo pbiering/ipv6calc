@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2014 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.182 2014/07/29 17:35:22 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.183 2014/07/29 18:27:46 ds6peter Exp $
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
@@ -96,7 +96,7 @@ BuildRequires: perl(URI) perl(Digest::SHA1) perl(Digest::MD5)
 
 %description ipv6calcweb
 ipv6calcweb contains a CGI program and a configuration file for
-displaying information of IP addresses on a web page.
+displaying information of IP addresses on a web page using ipv6calc.
 
 
 %prep
