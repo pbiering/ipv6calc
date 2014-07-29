@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.49 2014/07/18 06:19:55 ds6peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.50 2014/07/29 19:52:32 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -38,6 +38,16 @@ if [ $retval -ne 0 ]; then
 	exit 1
 fi
 echo 
+
+echo "Run 'ipv6calc' version help test for feature tokens..."
+./ipv6calc -v -h
+retval=$?
+if [ $retval -ne 0 ]; then
+	echo "Error executing 'ipv6calc -v -h'!"
+	exit 1
+fi
+echo 
+
 
 # Test Scenarios for autodetection "good case"
 source ./test_scenarios.sh
