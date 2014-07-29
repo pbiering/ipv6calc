@@ -1,14 +1,14 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.102 2014/07/29 17:15:20 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.103 2014/07/29 17:35:22 ds6peter Exp $
 dnl Copyright: 2001-2014 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(ipv6calc, 0.97.3, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
+AC_INIT(ipv6calc, 0.97.4, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
 
 AC_DEFINE(COPYRIGHT_YEAR, "2014", [Copyright year])
 
-PACKAGE_VERSION="0.97.3"
+PACKAGE_VERSION="0.97.4"
 
 COPYRIGHT_YEAR=2014
 AC_SUBST(COPYRIGHT_YEAR)

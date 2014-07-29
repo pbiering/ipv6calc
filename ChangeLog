@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.356 2014/07/29 17:15:20 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.357 2014/07/29 17:35:22 ds6peter Exp $ 
  */
 
 Info:
@@ -10,7 +10,7 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
 20140729/PB
-	add external-fallback headers for GeoIP and IP2Location and add following config options:
+	add external-fallback headers for GeoIP (1.4.8) and IP2Location (6.0.2) and add following config options:
 	  --with-ip2location-headers-fallback, --with-geoip-headers-fallback (only usable with dynamic load option)
 
 20140723/PB
