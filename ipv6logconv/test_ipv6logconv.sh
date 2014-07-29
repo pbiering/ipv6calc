@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6logconv.sh
-# Version    : $Id: test_ipv6logconv.sh,v 1.11 2014/05/20 18:00:34 ds6peter Exp $
+# Version    : $Id: test_ipv6logconv.sh,v 1.12 2014/07/29 20:01:55 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logconv"
@@ -19,6 +19,15 @@ if [ $? -ne 1 ]; then
 	echo "ERROR : something wrong in option definition"
 	exit 1
 fi
+
+echo "Run 'ipv6logconv' version help test for feature tokens..."
+./ipv6logconv -v -h
+retval=$?
+if [ $retval -ne 0 ]; then
+        echo "Error executing 'ipv6logconv -v -h'!"
+        exit 1
+fi
+echo 
 
 source ../ipv6calc/test_scenarios.sh
 

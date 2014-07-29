@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
-# Version    : $Id: test_ipv6logstats.sh,v 1.17 2014/06/26 05:49:27 ds6peter Exp $
+# Version    : $Id: test_ipv6logstats.sh,v 1.18 2014/07/29 20:01:55 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"
@@ -19,6 +19,15 @@ if [ $? -ne 1 ]; then
 	echo "ERROR : something wrong in option definition"
 	exit 1
 fi
+
+echo "Run 'ipv6logstat' version help test for feature tokens..."
+./ipv6logstats -v -h
+retval=$?
+if [ $retval -ne 0 ]; then
+        echo "Error executing 'ipv6logstats -v -h'!"
+        exit 1
+fi
+echo 
 
 source ../ipv6calc/test_scenarios.sh
 

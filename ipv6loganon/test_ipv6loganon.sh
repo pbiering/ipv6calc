@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.25 2014/05/20 17:54:47 ds6peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.26 2014/07/29 20:01:55 ds6peter Exp $
 # Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -19,6 +19,15 @@ if [ $? -ne 1 ]; then
 	echo "ERROR : something wrong in option definition"
 	exit 1
 fi
+
+echo "Run 'ipv6loganon' version help test for feature tokens..."
+./ipv6loganon -v -h
+retval=$?
+if [ $retval -ne 0 ]; then
+        echo "Error executing 'ipv6loganon -v -h'!"
+        exit 1
+fi
+echo 
 
 source ../ipv6calc/test_scenarios.sh
 
