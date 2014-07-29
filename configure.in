@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.101 2014/07/21 06:14:27 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.102 2014/07/29 17:15:20 ds6peter Exp $
 dnl Copyright: 2001-2014 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -297,8 +297,6 @@ AC_ARG_WITH([ip2location-dynamic],
 			IP2LOCATION_DYN="yes"
 		fi
 	],[
-		AC_MSG_RESULT([***** DEBUG: t3])
-		true
 	])
 
 AC_ARG_WITH([ip2location-headers],
@@ -306,16 +304,34 @@ AC_ARG_WITH([ip2location-headers],
 		[IP2Location include files location]),
 	[
 		IP2LOCATION_INCLUDE_DIR="$with_ip2location_headers"
-		IP2LOCATION_INCLUDE="-I$IP2LOCATION_INCLUDE_DIR -I$IP2LOCATION_INCLUDE_DIR/iMath"
-		if echo "$IP2LOCATION_INCLUDE_DIR" | grep -q "^/"; then
-			# absolute path
-			IP2LOCATION_INCLUDE_L1="-I$IP2LOCATION_INCLUDE_DIR -I$IP2LOCATION_INCLUDE_DIR/iMath"
-			IP2LOCATION_INCLUDE_L2="-I$IP2LOCATION_INCLUDE_DIR -I$IP2LOCATION_INCLUDE_DIR/iMath"
+	])
+
+AC_ARG_WITH([ip2location-headers-fallback],
+	AS_HELP_STRING([--with-ip2location-headers-fallback],
+		[IP2Location include files from internal fallback location (only usable with dynamic load option)]),
+	[
+		if test "$IP2LOCATION_DYN" != "yes"; then
+			AC_MSG_ERROR([IP2Location fallback headers are only usable with dynamic load option set: --with-ip2location-dynamic])
+		fi
+	
+		if test -n "$IP2LOCATION_INCLUDE_DIR"; then
+			AC_MSG_ERROR([IP2Location include files location already set by --with-ip2location-headers, skip fallback])
 		else
-			IP2LOCATION_INCLUDE_L1="-I../$IP2LOCATION_INCLUDE_DIR -I../$IP2LOCATION_INCLUDE_DIR/iMath"
-			IP2LOCATION_INCLUDE_L2="-I../../$IP2LOCATION_INCLUDE_DIR -I../../$IP2LOCATION_INCLUDE_DIR/iMath"
+			IP2LOCATION_INCLUDE_DIR="external-fallback/IP2Location"
 		fi
 	])
+
+if test -n "$IP2LOCATION_INCLUDE_DIR"; then
+	IP2LOCATION_INCLUDE="-I$IP2LOCATION_INCLUDE_DIR -I$IP2LOCATION_INCLUDE_DIR/iMath"
+	if echo "$IP2LOCATION_INCLUDE_DIR" | grep -q "^/"; then
+		# absolute path
+		IP2LOCATION_INCLUDE_L1="-I$IP2LOCATION_INCLUDE_DIR -I$IP2LOCATION_INCLUDE_DIR/iMath"
+		IP2LOCATION_INCLUDE_L2="-I$IP2LOCATION_INCLUDE_DIR -I$IP2LOCATION_INCLUDE_DIR/iMath"
+	else
+		IP2LOCATION_INCLUDE_L1="-I../$IP2LOCATION_INCLUDE_DIR -I../$IP2LOCATION_INCLUDE_DIR/iMath"
+		IP2LOCATION_INCLUDE_L2="-I../../$IP2LOCATION_INCLUDE_DIR -I../../$IP2LOCATION_INCLUDE_DIR/iMath"
+	fi
+fi
 
 AC_ARG_WITH([ip2location-lib],
 	AS_HELP_STRING([--with-ip2location-lib=FILE],
@@ -512,16 +528,34 @@ AC_ARG_WITH([geoip-headers],
 		[GeoIP include files location]),
 	[
 		GEOIP_INCLUDE_DIR="$with_geoip_headers"
-		GEOIP_INCLUDE="-I$GEOIP_INCLUDE_DIR"
-		if echo "$GEOIP_INCLUDE_DIR" | grep -q "^/"; then
-			# absolute path
-			GEOIP_INCLUDE_L1="-I$GEOIP_INCLUDE_DIR"
-			GEOIP_INCLUDE_L2="-I$GEOIP_INCLUDE_DIR"
+	])
+
+AC_ARG_WITH([geoip-headers-fallback],
+	AS_HELP_STRING([--with-geoip-headers-fallback],
+		[GeoIP include files from internal fallback location (only usable with dynamic load option)]),
+	[
+		if test "$GEOIP_DYN" != "yes"; then
+			AC_MSG_ERROR([GeoIP fallback headers are only usable with dynamic load option set: --with-geoip-dynamic])
+		fi
+	
+		if test -n "$GEOIP_INCLUDE_DIR"; then
+			AC_MSG_ERROR([GeoIP include files location already set by --with-geoip-headers, skip fallback])
 		else
-			GEOIP_INCLUDE_L1="-I../$GEOIP_INCLUDE_DIR"
-			GEOIP_INCLUDE_L2="-I../../$GEOIP_INCLUDE_DIR"
+			GEOIP_INCLUDE_DIR="external-fallback/GeoIP"
 		fi
 	])
+
+if test -n "$GEOIP_INCLUDE_DIR"; then
+	GEOIP_INCLUDE="-I$GEOIP_INCLUDE_DIR"
+	if echo "$GEOIP_INCLUDE_DIR" | grep -q "^/"; then
+		# absolute path
+		GEOIP_INCLUDE_L1="-I$GEOIP_INCLUDE_DIR"
+		GEOIP_INCLUDE_L2="-I$GEOIP_INCLUDE_DIR"
+	else
+		GEOIP_INCLUDE_L1="-I../$GEOIP_INCLUDE_DIR"
+		GEOIP_INCLUDE_L2="-I../../$GEOIP_INCLUDE_DIR"
+	fi
+fi
 
 AC_ARG_WITH([geoip-lib],
 	AS_HELP_STRING([--with-geoip-lib=DIR],
@@ -811,6 +845,7 @@ AC_OUTPUT([
 
 AC_MSG_RESULT([***** Summary])
 
+AC_MSG_RESULT([*** IP2LOCATION          = $IP2LOCATION])
 AC_MSG_RESULT([*** IP2LOCATION_DYN      = $IP2LOCATION_DYN])
 AC_MSG_RESULT([*** IP2LOCATION_INCLUDE  = $IP2LOCATION_INCLUDE])
 AC_MSG_RESULT([*** IP2LOCATION_LIB      = $IP2LOCATION_LIB])
@@ -819,7 +854,8 @@ AC_MSG_RESULT([*** IP2LOCATION_LIB_DIR  = $IP2LOCATION_LIB_DIR])
 
 AC_MSG_RESULT([])
 
-AC_MSG_RESULT([*** GEOIPN_DYN           = $GEOIP_DYN])
+AC_MSG_RESULT([*** GEOIP                = $GEOIP])
+AC_MSG_RESULT([*** GEOIP_DYN            = $GEOIP_DYN])
 AC_MSG_RESULT([*** GEOIP_INCLUDE        = $GEOIP_INCLUDE])
 AC_MSG_RESULT([*** GEOIP_LIB            = $GEOIP_LIB])
 AC_MSG_RESULT([*** GEOIP_LIB_NAME       = $GEOIP_LIB_NAME])
