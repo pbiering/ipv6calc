@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.64 2014/07/29 19:27:14 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.65 2014/07/29 20:20:44 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -361,7 +361,7 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	};
 
 	if ((lib_features_GeoIP & (GEOIP_LIB_FEATURE_IPV6_CC_BY_ADDR | GEOIP_LIB_FEATURE_IPV6_CN_BY_ADDR)) != 0) {
-#ifdef HAVE_DECL_GEOIP_ASNUM_EDITION_V6
+#if HAVE_DECL_GEOIP_ASNUM_EDITION_V6 == 1
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP check for GEOIP_ASNUM_EDITION_V6 & GEOIP_CITY_EDITION_REV1_V6");
 		if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_ASNUM_EDITION_V6) == 1) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP database GEOIP_ASNUM_EDITION_V6 available");
@@ -468,13 +468,13 @@ void libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(const int level_verbose,
 			if (gi == NULL) {
 				if (i == GEOIP_CITY_EDITION_REV0) { continue; };
 
-#ifdef HAVE_DECL_GEOIP_LARGE_COUNTRY_EDITION
+#if HAVE_DECL_GEOIP_LARGE_COUNTRY_EDITION == 1
 				if (i == GEOIP_LARGE_COUNTRY_EDITION) { continue; };
 #endif
-#ifdef HAVE_DECL_GEOIP_CITY_EDITION_REV0_V6
+#if HAVE_DECL_GEOIP_CITY_EDITION_REV0_V6 == 1
 				if (i == GEOIP_CITY_EDITION_REV0_V6) { continue; };
 #endif
-#ifdef HAVE_DECL_GEOIP_LARGE_COUNTRY_EDITION_V6
+#if HAVE_DECL_GEOIP_LARGE_COUNTRY_EDITION_V6 == 1
 				if (i == GEOIP_LARGE_COUNTRY_EDITION_V6) { continue; };
 #endif
 
@@ -1965,7 +1965,7 @@ char *libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(const char *addr, const
 			return(NULL);
 		};
 
-#ifdef HAVE_DECL_GEOIP_ASNUM_EDITION
+#if HAVE_DECL_GEOIP_ASNUM_EDITION == 1
 		GeoIP_type = GEOIP_ASNUM_EDITION;
 #else
 		return(NULL);
@@ -1978,7 +1978,7 @@ char *libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(const char *addr, const
 			return(NULL);
 		};
 
-#ifdef HAVE_DECL_GEOIP_ASNUM_EDITION_V6
+#if HAVE_DECL_GEOIP_ASNUM_EDITION_V6 == 1
 		GeoIP_type = GEOIP_ASNUM_EDITION_V6;
 #else
 		return(NULL);
@@ -2028,7 +2028,7 @@ GeoIPRecord *libipv6calc_db_wrapper_GeoIP_wrapper_record_city_by_addr(const char
 #ifdef SUPPORT_GEOIP_V6
 	} else if (proto == 6) {
 		if ((lib_features_GeoIP & GEOIP_LIB_FEATURE_LIB_VERSION) != 0) {
-#ifdef HAVE_DECL_GEOIP_CITY_EDITION_REV1_V6
+#if HAVE_DECL_GEOIP_CITY_EDITION_REV1_V6 == 1
 			GeoIP_type = GEOIP_CITY_EDITION_REV1_V6;
 #else
 			return (NULL);

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.114 2014/07/22 06:00:41 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.115 2014/07/29 20:20:44 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -183,7 +183,7 @@ static void printfooter(const uint32_t formatoptions) {
 #ifdef SUPPORT_IP2LOCATION_STATIC
 		snprintf(tempstring2, sizeof(tempstring2), "%s IP2Location(static)", tempstring);
 #else
-		snprintf(tempstring2, sizeof(tempstring2), "%s IP2Location", tempstring);
+		snprintf(tempstring2, sizeof(tempstring2), "%s IP2Location(linked)", tempstring);
 #endif
 #endif
 		snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
@@ -196,14 +196,10 @@ static void printfooter(const uint32_t formatoptions) {
 #ifdef SUPPORT_GEOIP_STATIC
 		snprintf(tempstring2, sizeof(tempstring2), "%s GeoIP(static)", tempstring);
 #else
-		snprintf(tempstring2, sizeof(tempstring2), "%s GeoIP", tempstring);
+		snprintf(tempstring2, sizeof(tempstring2), "%s GeoIP(linked)", tempstring);
 #endif
 #endif
 		snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
-#ifdef SUPPORT_GEOIP_V6
-		snprintf(tempstring2, sizeof(tempstring2), "%s GeoIPv6", tempstring);
-		snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
-#endif
 #endif
 
 		if (feature_zeroize == 1) {
