@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.24 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.25 2014/07/30 20:31:43 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -103,6 +103,7 @@ typedef struct {
 
 /* prototypes */
 extern int ipv6calc_quiet;
+extern int ipv6calc_verbose;
 
 extern void string_to_upcase(char *string);
 extern void string_to_lowcase(char *string);

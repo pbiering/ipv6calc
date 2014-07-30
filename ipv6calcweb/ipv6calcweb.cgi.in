@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.68 2014/02/01 14:56:18 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.69 2014/07/30 20:31:43 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -96,6 +96,7 @@ my $debug = 0;
 # debug | 0x0080: print environment to stderr
 # debug | 0x0100: print Anti-DoS token infos to stderr
 # debug | 0x1000: skip Anti-DoS sleep
+# debug | 0x8000: print feature token hash
 
 if ( defined $ENV{'HTTP_IPV6CALCWEB_DEBUG'} ) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DEBUG'} =~ /^[0-9]+$/) {
@@ -1467,6 +1468,11 @@ if (scalar(@proxy_addresses) != scalar(@proxy_infos)) {
 
 ## check features
 $result = ipv6calc_exec("127.0.0.1", "***feature***", \%infoh_localhost4, \@sort_localhost4);
+if ($debug & 0x8000) {
+	foreach my $key (sort keys %ipv6calc_feature_hash) {
+		printf "DEBUG : feature " . $key . "=" . $ipv6calc_feature_hash{$key} . "\n";
+	};
+};
 if ($result != 0) {
 	&print_error();
 };

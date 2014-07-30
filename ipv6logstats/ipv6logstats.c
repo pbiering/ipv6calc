@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.58 2014/07/22 06:00:41 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.59 2014/07/30 20:31:43 ds6peter Exp $
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -37,7 +37,6 @@
 #define LINEBUFFER	16384
 
 long int ipv6calc_debug = 0;	// ipv6calc_debug usage ok
-int ipv6calc_quiet = 0;
 
 static int opt_unknown = 0;
 static int opt_simple = 0;

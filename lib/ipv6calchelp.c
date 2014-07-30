@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.60 2014/07/22 06:00:41 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.61 2014/07/30 20:31:43 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -300,6 +300,7 @@ void printhelp_common(const uint32_t help_features) {
 	fprintf(stderr, "                                can also be set by IPV6CALC_DEBUG environment value\n");
 	fprintf(stderr, "  [-v|--version [-v [-v]]]   : version information (2 optional detail levels)\n");
 	fprintf(stderr, "  [-v|--version -h]          : explanation of feature tokens\n");
+	fprintf(stderr, "  [-V|--verbose]             : be more verbose\n");
 	fprintf(stderr, "  [-h|--help|-?]             : this online help\n");
 
 	if ((help_features & IPV6CALC_HELP_QUIET) != 0) {
@@ -312,7 +313,7 @@ void printhelp_common(const uint32_t help_features) {
 		fprintf(stderr, "  [--db-ip2location-disable        ] : IP2Location support disabled\n");
 		fprintf(stderr, "  [--db-ip2location-dir <directory>] : IP2Location database directory (default: %s)\n", ip2location_db_dir);
 #ifdef SUPPORT_IP2LOCATION_DYN
-		fprintf(stderr, "  [--db-ip2location-lib <file>]      : IP2Location library file (default: %s)\n", ip2location_lib_file);
+		fprintf(stderr, "  [--db-ip2location-lib <file>     ] : IP2Location library file (default: %s)\n", ip2location_lib_file);
 #endif
 #endif
 	};
@@ -323,7 +324,7 @@ void printhelp_common(const uint32_t help_features) {
 		fprintf(stderr, "  [--db-geoip-disable              ] : GeoIP support disabled\n");
 		fprintf(stderr, "  [--db-geoip-dir       <directory>] : GeoIP database directory (default: %s)\n", geoip_db_dir);
 #ifdef SUPPORT_GEOIP_DYN
-		fprintf(stderr, "  [--db-geoip-lib       <file>]      : GeoIP library file (default: %s)\n", geoip_lib_file);
+		fprintf(stderr, "  [--db-geoip-lib       <file>     ] : GeoIP library file (default: %s)\n", geoip_lib_file);
 #endif
 #endif
 	};

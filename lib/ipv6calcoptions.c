@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.14 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.15 2014/07/30 20:31:43 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -21,7 +21,8 @@
 #include "databases/lib/libipv6calc_db_wrapper.h"
 
 extern long int ipv6calc_debug; // ipv6calc_debug usage ok
-int ipv6calc_quiet;
+int ipv6calc_quiet = 0;
+int ipv6calc_verbose = 0;
 
 
 /* parse value */
@@ -188,6 +189,11 @@ int ipv6calcoptions_common_basic(const int opt, const char *optarg, const struct
 		case 'q':
 			DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Found quiet option");
 			ipv6calc_quiet = 1;
+			result = 0;
+			break;
+		case 'V':
+			DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Found verbose option");
+			ipv6calc_verbose++;
 			result = 0;
 			break;
 		default:

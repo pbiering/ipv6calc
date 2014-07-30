@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions_common.h,v 1.9 2013/11/10 18:22:05 ds6peter Exp $
- * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calcoptions_common.h,v 1.10 2014/07/30 20:31:43 ds6peter Exp $
+ * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options
@@ -19,12 +19,13 @@
  */
 
 /* define common short options */
-static char *ipv6calc_shortopts_common = "d:q";
+static char *ipv6calc_shortopts_common = "d:qV";
 
 /* define common long options */
 static struct option ipv6calc_longopts_common[] = {
 	{"debug"  , 1, NULL, (int) 'd' },
 	{"quiet"  , 0, NULL, (int) 'q' },
+	{"verbose", 0, NULL, (int) 'V' },
 };
 
 #ifdef SUPPORT_IP2LOCATION
