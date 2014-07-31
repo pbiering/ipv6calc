@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.15 2014/07/30 20:31:43 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.16 2014/07/31 17:22:51 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -194,6 +194,7 @@ int ipv6calcoptions_common_basic(const int opt, const char *optarg, const struct
 		case 'V':
 			DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Found verbose option");
 			ipv6calc_verbose++;
+			ipv6calc_quiet = 0;
 			result = 0;
 			break;
 		default:
