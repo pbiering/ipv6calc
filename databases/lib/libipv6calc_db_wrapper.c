@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.38 2014/07/31 06:20:35 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.39 2014/07/31 19:20:24 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -454,7 +454,9 @@ char *libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int pr
 
 		result_char_ptr = (char *) libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(addr, proto);
 #endif
-	} else {
+	};
+
+	if (result_char_ptr == NULL) {
 		// fallback
 		if (wrapper_IP2Location_status == 1) {
 #ifdef SUPPORT_IP2LOCATION
