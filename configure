@@ -6860,8 +6860,12 @@ $as_echo "***** Summary" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION          = $IP2LOCATION" >&5
 $as_echo "*** IP2LOCATION          = $IP2LOCATION" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_DB       = $ip2location_db" >&5
+$as_echo "*** IP2LOCATION_DB       = $ip2location_db" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_DYN      = $IP2LOCATION_DYN" >&5
 $as_echo "*** IP2LOCATION_DYN      = $IP2LOCATION_DYN" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_DYN_LIB  = $ip2location_dyn_lib" >&5
+$as_echo "*** IP2LOCATION_DYN_LIB  = $ip2location_dyn_lib" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_INCLUDE  = $IP2LOCATION_INCLUDE" >&5
 $as_echo "*** IP2LOCATION_INCLUDE  = $IP2LOCATION_INCLUDE" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_LIB      = $IP2LOCATION_LIB" >&5
@@ -6876,8 +6880,12 @@ $as_echo "" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP                = $GEOIP" >&5
 $as_echo "*** GEOIP                = $GEOIP" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_DB             = $geoip_db" >&5
+$as_echo "*** GEOIP_DB             = $geoip_db" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_DYN            = $GEOIP_DYN" >&5
 $as_echo "*** GEOIP_DYN            = $GEOIP_DYN" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_DYN_LIB        = $geoip_dyn_lib" >&5
+$as_echo "*** GEOIP_DYN_LIB        = $geoip_dyn_lib" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_INCLUDE        = $GEOIP_INCLUDE" >&5
 $as_echo "*** GEOIP_INCLUDE        = $GEOIP_INCLUDE" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_LIB            = $GEOIP_LIB" >&5

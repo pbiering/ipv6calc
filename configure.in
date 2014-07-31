@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.106 2014/07/31 17:52:24 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.107 2014/07/31 19:57:02 ds6peter Exp $
 dnl Copyright: 2001-2014 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -853,7 +853,9 @@ AC_OUTPUT([
 AC_MSG_RESULT([***** Summary])
 
 AC_MSG_RESULT([*** IP2LOCATION          = $IP2LOCATION])
+AC_MSG_RESULT([*** IP2LOCATION_DB       = $ip2location_db])
 AC_MSG_RESULT([*** IP2LOCATION_DYN      = $IP2LOCATION_DYN])
+AC_MSG_RESULT([*** IP2LOCATION_DYN_LIB  = $ip2location_dyn_lib])
 AC_MSG_RESULT([*** IP2LOCATION_INCLUDE  = $IP2LOCATION_INCLUDE])
 AC_MSG_RESULT([*** IP2LOCATION_LIB      = $IP2LOCATION_LIB])
 AC_MSG_RESULT([*** IP2LOCATION_LIB_NAME = $IP2LOCATION_LIB_NAME])
@@ -862,7 +864,9 @@ AC_MSG_RESULT([*** IP2LOCATION_LIB_DIR  = $IP2LOCATION_LIB_DIR])
 AC_MSG_RESULT([])
 
 AC_MSG_RESULT([*** GEOIP                = $GEOIP])
+AC_MSG_RESULT([*** GEOIP_DB             = $geoip_db])
 AC_MSG_RESULT([*** GEOIP_DYN            = $GEOIP_DYN])
+AC_MSG_RESULT([*** GEOIP_DYN_LIB        = $geoip_dyn_lib])
 AC_MSG_RESULT([*** GEOIP_INCLUDE        = $GEOIP_INCLUDE])
 AC_MSG_RESULT([*** GEOIP_LIB            = $GEOIP_LIB])
 AC_MSG_RESULT([*** GEOIP_LIB_NAME       = $GEOIP_LIB_NAME])
