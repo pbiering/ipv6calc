@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.37 2014/07/21 06:14:27 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.38 2014/07/31 06:20:35 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -200,6 +200,69 @@ void libipv6calc_db_wrapper_features(char *string, const size_t size) {
 };
 
 
+/* function get capability string */
+void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
+	char tempstring[NI_MAXHOST];
+
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
+
+#ifdef SUPPORT_IP2LOCATION
+#ifdef SUPPORT_IP2LOCATION_DYN
+	snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(dyn-load)", string, strlen(string) > 0 ? " " : "");
+	snprintf(string, size, "%s", tempstring);
+#else // SUPPORT_IP2LOCATION_DYN
+#ifdef SUPPORT_IP2LOCATION_STATIC
+	snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(static)", string, strlen(string) > 0 ? " " : "");
+	snprintf(string, size, "%s", tempstring);
+#else // SUPPORT_IP2LOCATION_STATIC
+	snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(linked)", string, strlen(string) > 0 ? " " : "");
+	snprintf(string, size, "%s", tempstring);
+#endif // SUPPORT_IP2LOCATION_STATIC
+#endif //SUPPORT_IP2LOCATION_DYN
+#endif // SUPPORT_IP2LOCATION
+
+#ifdef SUPPORT_GEOIP
+#ifdef SUPPORT_GEOIP_DYN
+	snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(dyn-load)", string, strlen(string) > 0 ? " " : "");
+	snprintf(string, size, "%s", tempstring);
+#else // SUPPORT_GEOIP_DYN
+#ifdef SUPPORT_GEOIP_STATIC
+	snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(static)", string, strlen(string) > 0 ? " " : "");
+	snprintf(string, size, "%s", tempstring);
+#else // SUPPORT_GEOIP_STATIC
+	snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(linked)", string, strlen(string) > 0 ? " " : "");
+	snprintf(string, size, "%s", tempstring);
+#endif // SUPPORT_GEOIP_STATIC
+#endif // SUPPORT_GEOIP_DYN
+#endif // SUPPORT_GEOIP
+
+#ifdef SUPPORT_BUILTIN
+	snprintf(tempstring, sizeof(tempstring), "%s%sDB_AS_REG(BuiltIn)", string, strlen(string) > 0 ? " " : "");
+	snprintf(string, size, "%s", tempstring);
+	snprintf(tempstring, sizeof(tempstring), "%s%sDB_CC_REG(BuiltIn)", string, strlen(string) > 0 ? " " : "");
+	snprintf(string, size, "%s", tempstring);
+
+#ifdef SUPPORT_DB_IPV4_REG
+	snprintf(tempstring, sizeof(tempstring), "%s%sDB_IPV4_REG(BuiltIn)", string, strlen(string) > 0 ? " " : "");
+	snprintf(string, size, "%s", tempstring);
+#endif
+
+#ifdef SUPPORT_DB_IPV6_REG
+	snprintf(tempstring, sizeof(tempstring), "%s%sDB_IPV6_REG(BuiltIn)", string, strlen(string) > 0 ? " " : "");
+	snprintf(string, size, "%s", tempstring);
+#endif
+
+#ifdef SUPPORT_DB_IEEE
+	snprintf(tempstring, sizeof(tempstring), "%s%sDB_IEEE(BuiltIn)", string, strlen(string) > 0 ? " " : "");
+	snprintf(string, size, "%s", tempstring);
+#endif
+#endif // SUPPORT_BUILTIN
+
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Return");
+
+	return;
+};
+
 /* function print feature string help */
 void libipv6calc_db_wrapper_features_help(void) {
 	int i;
@@ -222,13 +285,14 @@ void libipv6calc_db_wrapper_features_help(void) {
 void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *prefix_string) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
-	printf("%sDB features: 0x%08x\n", prefix_string, wrapper_features);
+	printf("%sDB features: 0x%08x\n\n", prefix_string, wrapper_features);
 
 #ifdef SUPPORT_GEOIP
 	if (wrapper_GeoIP_disable != 1) {
 		// Call GeoIP wrapper
 		libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(level_verbose, prefix_string);
 	};
+	printf("\n");
 #endif
 
 #ifdef SUPPORT_IP2LOCATION
@@ -236,11 +300,13 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		// Call IP2Location wrapper
 		libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(level_verbose, prefix_string);
 	};
+	printf("\n");
 #endif
 
 #ifdef SUPPORT_BUILTIN
 	// Call BuiltIn wrapper
 	libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(level_verbose, prefix_string);
+	printf("\n");
 #endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Return");

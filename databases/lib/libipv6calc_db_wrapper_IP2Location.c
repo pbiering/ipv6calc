@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.18 2014/07/30 20:31:43 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.19 2014/07/31 06:20:35 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -86,8 +86,6 @@ static int wrapper_ip2location_ipv6_support = IP2LOCATION_IPV6_SUPPORT_UNKNOWN;
 #endif
 #endif // SUPPORT_IP2LOCATION_DYN
 
-static int ip2location_country_v4 = 0;
-static int ip2location_country_v6 = 0;
 static int ip2location_asnum_v4 = 0;
 static int ip2location_asnum_v6 = 0;
 static int ip2location_city_v4 = 0;
@@ -200,7 +198,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_info(char* string, const size_t 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
 #ifdef SUPPORT_IP2LOCATION
-	snprintf(string, size, "IP2Location available databases: Country4=%d Country6=%d ASN4=%d ASN6=%d City4=%d City6=%d", ip2location_country_v4, ip2location_country_v6, ip2location_asnum_v4, ip2location_asnum_v6, ip2location_city_v4, ip2location_city_v6);
+	snprintf(string, size, "IP2Location available databases: Country4=%d Country6=%d ASN4=%d ASN6=%d City4=%d City6=%d", (wrapper_features & IPV6CALC_DB_IPV4_TO_CC) ? 1 : 0, (wrapper_features & IPV6CALC_DB_IPV6_TO_CC) ? 1 : 0, ip2location_asnum_v4, ip2location_asnum_v6, ip2location_city_v4, ip2location_city_v6);
 #else
 	snprintf(string, size, "No IP2Location support built-in");
 #endif

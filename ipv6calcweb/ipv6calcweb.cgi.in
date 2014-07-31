@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.69 2014/07/30 20:31:43 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.70 2014/07/31 06:20:35 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -689,6 +689,8 @@ my $ipv6calc_copyright = "(P) & (C) by Peter Bieringer";
 my $ipv6calc_name = "ipv6calc";
 my $ipv6calc_features = "";
 my %ipv6calc_feature_hash;
+my $ipv6calc_capabilities = "";
+my %ipv6calc_capability_hash;
 my $ipv6calc_settings = "";
 my %ipv6calc_settings_hash;
 
@@ -1397,6 +1399,16 @@ sub ipv6calc_exec($$$$) {
 					$ipv6calc_feature_hash{$feature} = 1;
 				};
 			};
+			if ( $key eq "IPV6CALC_CAPABILITIES" ) {
+				$ipv6calc_capabilities = $content;
+				$ipv6calc_capabilities =~ s/^\"//;
+				$ipv6calc_capabilities =~ s/\"$//;
+				foreach my $capability (split / /, $ipv6calc_capabilities) {
+					# remove brackets
+					$capability =~ s/\([^)]*\)//g;
+					$ipv6calc_capability_hash{$capability} = 1;
+				};
+			};
 			if ( $key =~ /^IPV6CALC_SETTINGS_(.*)$/ ) {
 				if (! defined $ipv6calc_settings_hash{$1}) {
 					if (length($ipv6calc_settings) > 0) {
@@ -1470,21 +1482,35 @@ if (scalar(@proxy_addresses) != scalar(@proxy_infos)) {
 $result = ipv6calc_exec("127.0.0.1", "***feature***", \%infoh_localhost4, \@sort_localhost4);
 if ($debug & 0x8000) {
 	foreach my $key (sort keys %ipv6calc_feature_hash) {
-		printf "DEBUG : feature " . $key . "=" . $ipv6calc_feature_hash{$key} . "\n";
+		printf "DEBUG : feature    " . $key . "=" . $ipv6calc_feature_hash{$key} . "\n";
+	};
+	foreach my $key (sort keys %ipv6calc_capability_hash) {
+		printf "DEBUG : capability " . $key . "=" . $ipv6calc_capability_hash{$key} . "\n";
 	};
 };
 if ($result != 0) {
 	&print_error();
 };
 
-# add options depending of available features
-if (defined $ipv6calc_feature_hash{"GeoIP"} && $ipv6calc_feature_hash{"GeoIP"} == "1") {
-	$options_ipv6calc .= $options_ipv6calc_geoip;
+# add options depending of available capabilities (fallback: features)
+if (length($ipv6calc_capabilities) > 0) {
+ 	if (defined $ipv6calc_capability_hash{"GeoIP"} && ($ipv6calc_capability_hash{"GeoIP"} == 1)) {
+		$options_ipv6calc .= $options_ipv6calc_geoip;
+	};
+ 	if (defined $ipv6calc_capability_hash{"IP2Location"} && ($ipv6calc_capability_hash{"IP2Location"} == 1)) {
+		$options_ipv6calc .= $options_ipv6calc_ip2location;
+	};
+} else {
+	# fallback for ipv6calc < 0.97.4
+	if (defined $ipv6calc_feature_hash{"GeoIP"} && ($ipv6calc_feature_hash{"GeoIP"} == "1")) {
+		$options_ipv6calc .= $options_ipv6calc_geoip;
+	};
+
+	if (defined $ipv6calc_feature_hash{"IP2Location"} && $ipv6calc_feature_hash{"IP2Location"} == "1") {
+		$options_ipv6calc .= $options_ipv6calc_ip2location;
+	};
 };
 
-if (defined $ipv6calc_feature_hash{"IP2Location"} && $ipv6calc_feature_hash{"IP2Location"} == "1") {
-	$options_ipv6calc .= $options_ipv6calc_ip2location;
-};
 
 ## remote
 if ( defined $addr_remote ) {
@@ -1751,6 +1777,9 @@ if ($outputformat =~ /^html/o) {
 	if (length($ipv6calc_features) > 0) {
 		print " (features: " . $ipv6calc_features . ")";
 	};
+	if (length($ipv6calc_capabilities) > 0) {
+		print " (capabilities: " . $ipv6calc_capabilities . ")";
+	};
 	if (length($ipv6calc_settings) > 0) {
 		print " (settings: " . $ipv6calc_settings . ")";
 	};
@@ -1774,6 +1803,9 @@ if ($outputformat =~ /^html/o) {
 	print $chr_quote . $text{'powered'}->{$lang} . " " . $ipv6calc_name . " " . $ipv6calc_version . ", " . $ipv6calc_copyright . " (http://www.deepspace6.net/projects/ipv6calc.html)";
 	if (length($ipv6calc_features) > 0) {
 		print " (features: " . $ipv6calc_features . ")";
+	};
+	if (length($ipv6calc_capabilities) > 0) {
+		print " (capabilities: " . $ipv6calc_capabilities . ")";
 	};
 	if (length($ipv6calc_settings) > 0) {
 		print " (settings: " . $ipv6calc_settings . ")";

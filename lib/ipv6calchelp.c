@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.61 2014/07/30 20:31:43 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.62 2014/07/31 06:20:35 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -708,7 +708,10 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 
 /* display features in verbose mode */
 void ipv6calc_print_features_verbose(const int level_verbose) {
-	char string[NI_MAXHOST];
+	char string[NI_MAXHOST] = "";
+
+	libipv6calc_db_wrapper_capabilities(string, sizeof(string));
+	fprintf(stderr, "Capabilities: %s\n\n", string);
 
 #ifdef SUPPORT_GEOIP
 #ifndef SUPPORT_GEOIP_DYN
@@ -739,11 +742,9 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 #ifdef SUPPORT_GEOIP_V6
 	//TODO: list of GeoIP files
 #endif
-	libipv6calc_db_wrapper_GeoIP_wrapper_info(string, sizeof(string));
-	fprintf(stderr, "%s\n", string);
-#else
-	fprintf(stderr, "GeoIP support not enabled\n");
 #endif
+libipv6calc_db_wrapper_GeoIP_wrapper_info(string, sizeof(string));
+fprintf(stderr, "%s\n\n", string);
 
 #ifdef SUPPORT_IP2LOCATION
 #ifndef SUPPORT_IP2LOCATION_DYN
@@ -765,15 +766,16 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 		fprintf(stderr, "IP2Location IPv6 default file: not configured\n");
 	};
 	*/
-#else
-	fprintf(stderr, "IP2Location support not enabled\n");
 #endif
+
+libipv6calc_db_wrapper_IP2Location_wrapper_info(string, sizeof(string));
+fprintf(stderr, "%s\n\n", string);
 
 #ifdef SUPPORT_BUILTIN
 	libipv6calc_db_wrapper_BuiltIn_wrapper_info(string, sizeof(string));
-	fprintf(stderr, "%s\n", string);
+	fprintf(stderr, "%s\n\n", string);
 #else
-	fprintf(stderr, "BuiltIn support not enabled\n");
+	fprintf(stderr, "BuiltIn support not enabled\n\n");
 #endif
 
 	libipv6calc_db_wrapper_print_db_info(level_verbose, "");

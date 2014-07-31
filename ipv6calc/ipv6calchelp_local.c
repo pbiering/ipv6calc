@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calchelp_local.c
- * Version    : $Id: ipv6calchelp_local.c,v 1.7 2014/07/22 06:00:41 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp_local.c,v 1.8 2014/07/31 06:20:35 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -68,6 +68,7 @@ void printversion_help(void) {
 void printversion_verbose(int level_verbose) {
 	printversion();
 	fprintf(stderr, "\n");
+
 	ipv6calc_print_features_verbose(level_verbose);
 };
 

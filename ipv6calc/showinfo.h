@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.h
- * Version    : $Id: showinfo.h,v 1.21 2014/02/09 18:45:07 ds6peter Exp $
+ * Version    : $Id: showinfo.h,v 1.22 2014/07/31 06:20:35 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -30,15 +30,17 @@
 //      + IPV6_ANON
 //      + IPV4_ANON
 //      + SETTINGS_ANON
-// 7: 0.95.0 to current
+// 7: 0.95.0 to 0.97.3
 //      - GEOIP_DATABASE_INFO_IPV4
 //      - GEOIP_DATABASE_INFO_IPV6
 //      + GEOIP_DATABASE_INFO
 //      - IP2LOCATION_DATABASE_INFO_IPV4
 //      - IP2LOCATION_INFO_IPV6
 //      + IP2LOCATION_DATABASE_INFO
+// 8: 0.97.4 to current
+//      + IPV6CALC_CAPABILITIES
 
-#define IPV6CALC_OUTPUT_VERSION	7
+#define IPV6CALC_OUTPUT_VERSION	8
 
 /* prototypes */
 extern int  showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, const uint32_t formatoptions);

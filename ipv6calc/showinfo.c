@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.115 2014/07/29 20:20:44 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.116 2014/07/31 06:20:35 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -121,6 +121,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV6CALC_COPYRIGHT=\"...\"      : Copyright string\n");
 	fprintf(stderr, " IPV6CALC_OUTPUT_VERSION=x     : Version of output format\n");
 	fprintf(stderr, " IPV6CALC_FEATURES=\"...\"       : Feature string of ipv6calc -v\n");
+	fprintf(stderr, " IPV6CALC_CAPABILITIES=\"...\"   : Capability string of ipv6calc -v -v\n");
 	fprintf(stderr, " IPV6CALC_SETTINGS_ANON=\"...\"  : Anonymizer settings\n");
 };
 
@@ -138,7 +139,6 @@ static void printout(const char *string) {
 static void printfooter(const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST] = "";
 	char tempstring2[NI_MAXHOST] = "";
-	int i;
 
 #if defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP
 	char *string;
@@ -174,57 +174,36 @@ static void printfooter(const uint32_t formatoptions) {
 		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_SETTINGS_ANON=\"%s\"", tempstring2);
 		printout(tempstring);
 
+		/* features */
 		tempstring[0] = '\0'; /* clear tempstring */
 
-#ifdef SUPPORT_IP2LOCATION
-#ifdef SUPPORT_IP2LOCATION_DYN
-		snprintf(tempstring2, sizeof(tempstring2), "%s IP2Location(dyn-load)", tempstring);
-#else
-#ifdef SUPPORT_IP2LOCATION_STATIC
-		snprintf(tempstring2, sizeof(tempstring2), "%s IP2Location(static)", tempstring);
-#else
-		snprintf(tempstring2, sizeof(tempstring2), "%s IP2Location(linked)", tempstring);
-#endif
-#endif
-		snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
-#endif
-
-#ifdef SUPPORT_GEOIP
-#ifdef SUPPORT_GEOIP_DYN
-		snprintf(tempstring2, sizeof(tempstring2), "%s GeoIP(dyn-load)", tempstring);
-#else
-#ifdef SUPPORT_GEOIP_STATIC
-		snprintf(tempstring2, sizeof(tempstring2), "%s GeoIP(static)", tempstring);
-#else
-		snprintf(tempstring2, sizeof(tempstring2), "%s GeoIP(linked)", tempstring);
-#endif
-#endif
-		snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
-#endif
+		libipv6calc_db_wrapper_features(tempstring, sizeof(tempstring));
 
 		if (feature_zeroize == 1) {
-			snprintf(tempstring2, sizeof(tempstring2), "%s ANON_ZEROISE", tempstring);
+			snprintf(tempstring2, sizeof(tempstring2), "%s%sANON_ZEROISE", tempstring, strlen(tempstring) > 0 ? " " : "");
 			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
 		};
 
 		if (feature_anon == 1) {
-			snprintf(tempstring2, sizeof(tempstring2), "%s ANON_ANONYMIZE", tempstring);
+			snprintf(tempstring2, sizeof(tempstring2), "%s%sANON_ANONYMIZE", tempstring, strlen(tempstring) > 0 ? " " : "");
 			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
 		};
 
 		if (feature_kp == 1) {
-			snprintf(tempstring2, sizeof(tempstring2), "%s ANON_KEEP-TYPE-ASN-CC", tempstring);
+			snprintf(tempstring2, sizeof(tempstring2), "%s%sANON_KEEP-TYPE-ASN-CC", tempstring, strlen(tempstring) > 0 ? " " : "");
 			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
 		};
 
-		/* cut off first char */
-		for (i = 0; i < strlen(tempstring); i++) {
-			tempstring[i] = tempstring[i+1];
-		};
-
-		libipv6calc_db_wrapper_features(tempstring, sizeof(tempstring));
 	
 		snprintf(tempstring2, sizeof(tempstring2), "IPV6CALC_FEATURES=\"%s\"", tempstring);
+		printout(tempstring2);
+
+		/* capabilities */
+		tempstring[0] = '\0'; /* clear tempstring */
+
+		libipv6calc_db_wrapper_capabilities(tempstring, sizeof(tempstring));
+
+		snprintf(tempstring2, sizeof(tempstring2), "IPV6CALC_CAPABILITIES=\"%s\"", tempstring);
 		printout(tempstring2);
 	};
 };
