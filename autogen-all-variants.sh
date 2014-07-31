@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.41 2014/07/07 05:23:11 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.42 2014/07/31 18:55:42 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -251,7 +251,7 @@ for liboption in "normal" "shared"; do
 
 			nice -n 20 $IONICE ./autogen.sh $options_test $options
 			if [ $? -ne 0 ]; then
-				echo "ERROR : autogen.sh reports an error with options: $options"
+				echo "ERROR : autogen.sh reports an error with options: $options_test $options"
 				exit 1
 			fi
 
