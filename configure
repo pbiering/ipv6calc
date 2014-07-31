@@ -1402,7 +1402,7 @@ Optional Packages:
                           /usr/share/GeoIP
   --with-geoip-dyn-lib=NAME
                           Use specified GeoIP dynamic library, default:
-                          libGeoIP.so
+                          libGeoIP.so.1
   --with-geoip-ipv6-compat
                           Use IPv6 interface of GeoIP in compatibility mode
                           (supporting 1.4.5)
@@ -4294,7 +4294,7 @@ fi
 geoip_db_default="/usr/share/GeoIP"
 ip2location_db_default="/usr/share/IP2Location"
 
-geoip_dyn_lib_default="libGeoIP.so"
+geoip_dyn_lib_default="libGeoIP.so.1"
 ip2location_dyn_lib_default="libIP2Location.so"
 
 

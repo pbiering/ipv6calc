@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.107 2014/07/31 19:57:02 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.108 2014/07/31 21:10:06 ds6peter Exp $
 dnl Copyright: 2001-2014 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -162,7 +162,7 @@ dnl *************************************************
 geoip_db_default="/usr/share/GeoIP"
 ip2location_db_default="/usr/share/IP2Location"
 
-geoip_dyn_lib_default="libGeoIP.so"
+geoip_dyn_lib_default="libGeoIP.so.1"
 ip2location_dyn_lib_default="libIP2Location.so"
 
 
@@ -615,7 +615,7 @@ AC_ARG_WITH([geoip-db],
 
 AC_ARG_WITH([geoip-dyn-lib],
 	AS_HELP_STRING([--with-geoip-dyn-lib=NAME],
-		[Use specified GeoIP dynamic library, default: libGeoIP.so]),
+		[Use specified GeoIP dynamic library, default: libGeoIP.so.1]),
 	[
 		geoip_dyn_lib="$with_geoip_dyn_lib"
 	],
