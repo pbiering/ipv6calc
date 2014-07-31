@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.44 2014/07/19 11:52:57 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.45 2014/07/31 19:00:46 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -150,6 +150,11 @@ if [ "$use_geoip_dyn" = "1" ]; then
 		echo "ERROR : dynamic library mode enabled, but ldd of binary still reports reference to GeoIP"
 		exit 1
 	fi
+fi
+
+make
+if [ $? -ne 0 ]; then
+	echo "ERROR : make was not successful with configure options: $OPTIONS_CONFIGURE $*"
 fi
 
 if [ "$SKIP_TEST" = "1" ]; then
