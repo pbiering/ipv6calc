@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.34 2014/07/13 09:20:02 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.35 2014/07/31 19:07:50 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -241,7 +241,7 @@ fallback_options_from_name() {
 
 	for version in $(echo "$versions" | awk '{ for (i=NF;i>0;i--) print $i }'); do
 		if [ ${version:0:1} = "!" ]; then
-			echo "NOTICE: skip blacklisted version: $version"
+			echo "NOTICE: skip blacklisted version: $version" >&2
 			continue
 		fi
 
@@ -254,12 +254,12 @@ fallback_options_from_name() {
 			result="$(options_from_name_version $name $version)"
 			break
 		else
-			echo "NOTICE: did not find directory for name $name: $dir (try next)"
+			echo "NOTICE: did not find directory for name $name: $dir (try next)" >&2
 		fi
 	done
 
 	if [ -z "$result" ]; then
-		echo "ERROR : can't find any local source for $name in: $dir_base"
+		echo "ERROR : can't find any local source for $name in: $dir_base" >&2
 		return 1
 	fi
 
@@ -285,7 +285,7 @@ build_library() {
 		base_devel="$BASE_DEVEL_IP2LOCATION"
 		;;
 	    *)
-		echo "ERROR : unsupported: $name"
+		echo "ERROR : unsupported: $name" >&2
 		return 1
 		;;
 	esac
@@ -296,12 +296,12 @@ build_library() {
 
 	for version in $versions; do
 		if [ ${version:0:1} = "!" ]; then
-			echo "NOTICE: skip blacklisted version: $version"
+			echo "NOTICE: skip blacklisted version: $version" >&2
 			continue
 		fi
 
 		if [ -n "$version_selected" -a "$version" != "$version_selected" ]; then
-			echo "NOTICE: skip not selected version: $version"
+			echo "NOTICE: skip not selected version: $version" >&2
 			continue
 		fi
 
@@ -309,13 +309,13 @@ build_library() {
 		local nameversion=$(nameversion_from_name_version $name $version)
 
 		if [ ! -d "$base_devel/$nameversion" ]; then
-			echo "ERROR : devel directory missing: $base_devel/$nameversion (forgot to extract?)"
+			echo "ERROR : devel directory missing: $base_devel/$nameversion (forgot to extract?)" >&2
 			return 1
 		fi
 
 		pushd $base_devel/$nameversion >/dev/null
 		if [ $? -ne 0 ]; then
-			echo "ERROR : can't change to directory: $base_devel/$nameversion (skip)"
+			echo "ERROR : can't change to directory: $base_devel/$nameversion (skip)" >&2
 			continue
 		else
 			echo "INFO  : changed to directory: $base_devel/$nameversion"
@@ -355,11 +355,11 @@ build_library() {
 		popd >/dev/null
 
 		if [ $result -ne 0 ]; then
-			echo "ERROR : trouble during build of $name-$version ($nameversion)"
+			echo "ERROR : trouble during build of $name-$version ($nameversion)" >&2
 			result_all=1
 			break
 		else
-			echo "INFO  : successful build of $name-$version ($nameversion)"
+			echo "INFO  : successful build of $name-$version ($nameversion)" >&2
 			build_library_status="$build_library_status $nameversion"
 		fi
 	done
@@ -386,7 +386,7 @@ clean_versions() {
 		base_devel="$BASE_DEVEL_IP2LOCATION"
 		;;
 	    *)
-		echo "ERROR : unsupported: $name"
+		echo "ERROR : unsupported: $name" >&2
 		return 1
 		;;
 	esac
@@ -395,38 +395,38 @@ clean_versions() {
 
 	for version in $versions; do
 		if [ ${version:0:1} = "!" ]; then
-			echo "NOTICE: skip blacklisted version: $version"
+			echo "NOTICE: skip blacklisted version: $version" >&2
 			continue
 		fi
 
 		if [ -n "$version_selected" -a "$version" != "$version_selected" ]; then
-			echo "NOTICE: skip not selected version: $version"
+			echo "NOTICE: skip not selected version: $version" >&2
 			continue
 		fi
 
 		local nameversion=$(nameversion_from_name_version $name $version)
 
 		if [ ! -d "$base_devel/$nameversion" ]; then
-			echo "ERROR : devel directory missing: $base_devel/$nameversion (forgot to extract?)"
+			echo "ERROR : devel directory missing: $base_devel/$nameversion (forgot to extract?)" >&2
 			continue
 		fi
 
 		if [ "$dry_run" = "1" ]; then
-			echo "INFO  : would remove: $base_devel/$nameversion"
+			echo "INFO  : would remove: $base_devel/$nameversion" >&2
 			continue
 		else
-			echo "INFO  : remove: $base_devel/$nameversion"
+			echo "INFO  : remove: $base_devel/$nameversion" >&2
 		fi
 
 		rm -rf $base_devel/$nameversion
 		result=$?
 
 		if [ $result -ne 0 ]; then
-			echo "ERROR : trouble during remove of of $name-$version ($nameversion)"
+			echo "ERROR : trouble during remove of of $name-$version ($nameversion)" >&2
 			result_all=1
 			break
 		else
-			echo "INFO  : successful remove of $name-$version ($nameversion)"
+			echo "INFO  : successful remove of $name-$version ($nameversion)" >&2
 			clean_library_status="$clean_library_status $nameversion"
 		fi
 	done
@@ -448,7 +448,7 @@ extract_versions() {
 		base_devel="$BASE_DEVEL_IP2LOCATION"
 		;;
 	    *)
-		echo "ERROR : unsupported: $name"
+		echo "ERROR : unsupported: $name" >&2
 		return 1
 		;;
 	esac
@@ -457,12 +457,12 @@ extract_versions() {
 
 	for version in $versions; do
 		if [ ${version:0:1} = "!" ]; then
-			echo "NOTICE: skip blacklisted version: $version"
+			echo "NOTICE: skip blacklisted version: $version" >&2
 			continue
 		fi
 
 		if [ -n "$version_selected" -a "$version" != "$version_selected" ]; then
-			echo "NOTICE: skip not selected version: $version"
+			echo "NOTICE: skip not selected version: $version" >&2
 			continue
 		fi
 
@@ -470,19 +470,19 @@ extract_versions() {
 		local file="$BASE_SOURCES/$nameversion.tar.gz"
 
 		if [ ! -f "$file" ]; then
-			echo "NOTICE: file not existing, can't extract: $file"
+			echo "NOTICE: file not existing, can't extract: $file" >&2
 			continue
 		fi
 
 		if [ "$dry_run" = "1" ]; then
-			echo "INFO  : would extract source package (dry-run): $name-$version ($nameversion) from $file"
+			echo "INFO  : would extract source package (dry-run): $name-$version ($nameversion) from $file" >&2
 			continue
 		else
-			echo "INFO  : extract source package: $name-$version ($nameversion): $file"
+			echo "INFO  : extract source package: $name-$version ($nameversion): $file" >&2
 		fi
 
 		if [ ! -d "$base_devel" ]; then
-			echo "ERROR : base devel directory missing: $base_devel"
+			echo "ERROR : base devel directory missing: $base_devel" >&2
 			return 1
 		fi
 
@@ -490,11 +490,11 @@ extract_versions() {
 		result=$?
 
 		if [ $result -ne 0 ]; then
-			echo "ERROR : trouble during extract of $name-$version ($nameversion) from $file"
+			echo "ERROR : trouble during extract of $name-$version ($nameversion) from $file" >&2
 			result_all=1
 			break
 		else
-			echo "INFO  : successful extract of $name-$version ($nameversion) from $file to $base_devel"
+			echo "INFO  : successful extract of $name-$version ($nameversion) from $file to $base_devel" >&2
 			extract_library_status="$extract_library_status $nameversion"
 		fi
 	done
@@ -516,7 +516,7 @@ download_versions() {
 		base_devel="$BASE_DEVEL_IP2LOCATION"
 		;;
 	    *)
-		echo "ERROR : unsupported: $name"
+		echo "ERROR : unsupported: $name" >&2
 		return 1
 		;;
 	esac
@@ -525,12 +525,12 @@ download_versions() {
 
 	for version in $versions; do
 		if [ ${version:0:1} = "!" ]; then
-			echo "NOTICE: skip blacklisted version: $version"
+			echo "NOTICE: skip blacklisted version: $version" >&2
 			continue
 		fi
 
 		if [ -n "$version_selected" -a "$version" != "$version_selected" ]; then
-			echo "NOTICE: skip not selected version: $version"
+			echo "NOTICE: skip not selected version: $version" >&2
 			continue
 		fi
 
@@ -546,21 +546,21 @@ download_versions() {
 		fi
 
 		if [ ! -d "$BASE_SOURCES" ]; then
-			echo "ERROR : base source directory missing: $BASE_SOURCES (BASE_SOURCES)"
+			echo "ERROR : base source directory missing: $BASE_SOURCES (BASE_SOURCES)" >&2
 			return 1
 		fi
 
 		pushd $BASE_SOURCES >/dev/null
 		if [ $? -ne 0 ]; then
-			echo "ERROR : can't change to directory: $BASE_SOURCES (BASE_SOURCES)"
+			echo "ERROR : can't change to directory: $BASE_SOURCES (BASE_SOURCES)" >&2
 			return 1
 		fi
 
 		if [ "$dry_run" = "1" ]; then
-			echo "INFO  : would download source package (dry-run): $name-$version from $url $outfile_option_info"
+			echo "INFO  : would download source package (dry-run): $name-$version from $url $outfile_option_info" >&2
 			continue
 		else
-			echo "INFO  : download source package: $name-$version from $url $outfile_option_info"
+			echo "INFO  : download source package: $name-$version from $url $outfile_option_info" >&2
 		fi
 
 		wget -c -q "$url" $outfile_option
@@ -569,11 +569,11 @@ download_versions() {
 		popd >/dev/null
 
 		if [ $result -ne 0 ]; then
-			echo "ERROR : trouble during downloading of $name-$version from $url"
+			echo "ERROR : trouble during downloading of $name-$version from $url" >&2
 			result_all=1
 			break
 		else
-			echo "INFO  : successful downloaded of $name-$version from $url to $BASE_SOURCES"
+			echo "INFO  : successful downloaded of $name-$version from $url to $BASE_SOURCES" >&2
 			download_library_status="$download_library_status $name-$version"
 		fi
 	done
@@ -622,7 +622,7 @@ if [ "$1" != "source" ]; then
 		case $opt in
 		    'n')
 			dry_run=1
-			echo "NOTICE: dry-run selected"
+			echo "NOTICE: dry-run selected" >&2
 			;;
 		    'A')
 			action="prepare"
@@ -669,7 +669,7 @@ if [ "$1" != "source" ]; then
 			else
 				download_versions $* || exit 1
 			fi
-			echo "INFO  : following libaries were successfully downloaded: $download_library_status"
+			echo "INFO  : following libaries were successfully downloaded: $download_library_status" >&2
 		fi
 		if [ "$do_clean" = "1" ]; then
 			if [ -z "$*" ]; then
@@ -678,7 +678,7 @@ if [ "$1" != "source" ]; then
 			else
 				clean_versions $* || exit 1
 			fi
-			echo "INFO  : following libaries were successfully cleaned: $clean_library_status"
+			echo "INFO  : following libaries were successfully cleaned: $clean_library_status" >&2
 		fi
 		if [ "$do_extract" = "1" ]; then
 			if [ -z "$*" ]; then
@@ -687,7 +687,7 @@ if [ "$1" != "source" ]; then
 			else
 				extract_versions $* || exit 1
 			fi
-			echo "INFO  : following libaries were successfully extracted: $extract_library_status"
+			echo "INFO  : following libaries were successfully extracted: $extract_library_status" >&2
 		fi
 		if [ "$do_build" = "1" ]; then
 			if [ -z "$*" ]; then
@@ -696,7 +696,7 @@ if [ "$1" != "source" ]; then
 			else
 				build_library $* || exit 1
 			fi
-			echo "INFO  : following libaries were successfully built: $build_library_status"
+			echo "INFO  : following libaries were successfully built: $build_library_status" >&2
 		fi
 		;;
 	    *)

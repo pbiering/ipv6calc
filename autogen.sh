@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.47 2014/07/31 19:02:50 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.48 2014/07/31 19:07:50 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -154,7 +154,7 @@ fi
 
 make
 if [ $? -ne 0 ]; then
-	echo "ERROR : 'make' was not successful with configure options: $OPTIONS_CONFIGURE $*"
+	echo "ERROR : 'make' was not successful with configure options: $OPTIONS_CONFIGURE"
 	exit 1
 fi
 
@@ -164,7 +164,7 @@ else
 	echo "*** run: make test"
 	make test
 	if [ $? -ne 0 ]; then
-		echo "ERROR : 'make test' was not successful with configure options: $OPTIONS_CONFIGURE $*"
+		echo "ERROR : 'make test' was not successful with configure options: $OPTIONS_CONFIGURE"
 		exit 1
 	fi
 fi
