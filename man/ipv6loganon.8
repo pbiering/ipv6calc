@@ -4,44 +4,38 @@ ipv6loganon \- HTTP server log file anonymizer
 .SH "SYNOPSIS"
 cat /var/log/httpd/access_log | \fBipv6loganon\fR [\fIOPTIONS\fR]
 .SH "DESCRIPTION"
-.PP 
-.B ipv6loganon
-is a HTTP server log file anonymizer
-.PP 
-It expects a log line on stdin with an IPv4/IPv6 address as first token.
-.PP 
-This token would be anonymized according to given/default options.
-.PP 
-The anonymizer would keep as much information as possible for IPv4/IPv6 address types.
-.PP 
-Depending on selected anonymization method: client\-side IID would be anonymized by
-.IP 
-\(bu EUI\-48 based: serial number would be zero'ed, keeping OID
+This program anonymizes IPv4/IPv6 addresses in HTTP server log files
 
-\(bu EUI\-64 based: serial number would be zero'ed, keeping OID
+Takes data from stdin, proceed it to stdout
 
-\(bu ISATAP: client IPv4 address would be anonymized by given IPv4 mask
+Depending on the anonymization method, address parts (prefix/interface identifier) are
 
-\(bu TEREDO: client IPv4 address would be anonymized by given IPv4 mask,
-client port would be zero'ed
+.TP 
+  simply \fBzeroized\fR by given masks
+.TP 
+  \fBanonymized\fR by zeroizing only required bits (partially depending on given masks)
+    IID:
+      EUI\-48/64: serial number would be zero'ed, keeping OID
+      ISATAP:    client IPv4 address would be anonymized by given IPv4 mask
+      TEREDO:    client IPv4 address would be anonymized by given IPv4 mask, client port would be zero'ed
+      6to4(Microsoft): client IPv4 address would be anonymized by given IPv4 mask
+      local: whole IID would be zero'ed (except if privacy extension was detected, then replaced by a special token)
+    Prefix:
+      IPv6 addresses including IPv4 address of client would be anonymized by given IPv4 mask
+.PP 
+.TP 
+  anonymized by try to keep for IPv4 and IPv6 addresses (\fBkeep\-type\-asn\-cc\fR)
+    \fBtype\fR of address
+    Autonomous System Number (\fBASN\fR)
+    Country Code (\fBCC\fR)
 
-\(bu 6to4(Microsoft): client IPv4 address would be anonymized by given IPv4 mask
+    This method requires an IPv4/IPv6 to Country Code and ASN resolution, provided by GeoIP
 
-\(bu local: whole IID would be zero'ed (except if privacy extension was detected, then replaced by a special token)
-.PP 
-Client\-side SLA would be anonymized by 
-.IP 
-\(bu SLA would be zero'ed
-.PP 
-Prefix would be anonymized by
-.IP 
-\(bu 6to4: client IPv4 address would be anonymized by given IPv4 mask
-.PP 
-Compat/Mapped IPv4 addresses would be anonymized by
-.IP 
-\(bu IPv4 address would be anonymized by given IPv4 mask
-.PP 
-Afterwards, the modified address and the trailing line would be printed to stdout or given file.
+    Big advantage: ipv6logstats(8) result should be the same as with raw data
+
+    Anonymized IPv4 addresses are from experimental range \fB240.0.0.0/8\fR
+    Anonymized IPv6 addresses are using (currently hijacked) prefix \fBa909::/16\fR
+    Anonymized IPv6 IID is starting with \fBa9x9\fR (x = anonymized nibbles of SLA)
 .SH "OPTIONS"
 .LP 
 General options:
@@ -51,6 +45,8 @@ General options:
 \fB[\-v|\-\-version [\-v [\-v]]]\fR   : version information (2 optional detail levels)
 .TP 
 \fB[\-v|\-\-version \-h]\fR          : explanation of feature tokens
+<TP
+\fB[\-V|\-\-verbose]\fR             : be more verbose
 .TP 
 \fB[\-h|\-\-help|\-?]\fR             : this online help
 .LP 
@@ -151,7 +147,7 @@ echo "1.2.3.4" | ./ipv6loganon \-\-anonymize\-preset keep\-type\-asn\-cc
 echo "2001:a60:1400:1201:221:70ff:fe01:2345" | ./ipv6loganon \-\-anonymize\-preset keep\-type\-asn\-cc
 a909:16fa:9092:23ff:a909:4291:4022:1708
 .SH "SEE ALSO"
-ipv6calc(8)
+ipv6calc(8), ipv6logstat(8)
 .SH "REPORTING BUGS"
 Report bugs to <ipv6calc@lists.deepspace6.net> or to the authors.
 .br 
