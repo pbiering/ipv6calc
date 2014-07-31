@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2014 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec.in,v 1.84 2014/07/29 18:27:46 ds6peter Exp $
+# $Id: ipv6calc.spec.in,v 1.85 2014/07/31 18:20:42 ds6peter Exp $
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
@@ -67,12 +67,12 @@ reverse IPv6 DNS zones (e.g. -a 2001:db8:1234::1/48).
 In addition many format and type conversions are supported, see online help
 and/or given URL for more.
 
-Also this package contains additional executables
- - ipv6loganon: anonymizes Apache webserver logs
- - ipv6logconv: special Apache webserver log converter
+Also this package contains additional programs
+ - ipv6loganon: anonymize Apache web server logs
+ - ipv6logconv: special Apache web server log converter
     (examples included for use with analog)
  - ipv6logstats: create statistics from list of IPv4/IPv6 addresses
-    (examples included for use with gnuplot)
+    (examples included for use with gnu-plot)
 
 Available rpmbuild rebuild options:
   --with ip2location
@@ -90,7 +90,7 @@ Available rpmbuild rebuild options:
 
 %package ipv6calcweb
 Summary: IP address information web utility
-Group: Web/Applications
+Group: Applications/Internet
 Requires: perl(URI) perl(Digest::SHA1) perl(Digest::MD5)
 BuildRequires: perl(URI) perl(Digest::SHA1) perl(Digest::MD5)
 
