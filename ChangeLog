@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.358 2014/07/31 06:20:34 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.359 2014/07/31 18:39:42 ds6peter Exp $ 
  */
 
 Info:
@@ -11,6 +11,7 @@ Info:
 --------------------------------------------------------------------
 20140731/PB
 	add new output item on showinfo -i: IPV6CALC_CAPABILITIES
+	databases: update
 
 20140729/PB
 	add external-fallback headers for GeoIP (1.4.8) and IP2Location (6.0.2) and add following config options:
