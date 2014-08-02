@@ -108,7 +108,7 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>4.4</revnumber> <date>2014-05-23</date> <authorinitials>PB<
+<revision> <revnumber>4.5</revnumber> <date>2014-08-02</date> <authorinitials>PB<
 /authorinitials></revision>
 \end_layout
 
@@ -173,7 +173,7 @@ Latest version
 \end_layout
 
 \begin_layout Standard
-Latest version since last update of this page is 0.97.3 (released 2014-07-xx)
+Latest version since last update of this page is 0.97.4 (released 2014-08-xx)
 \end_layout
 
 \begin_layout Subsection
@@ -730,35 +730,47 @@ ipc6calc
 
 \begin_layout Code
 
---with-ip2location-headers=DIR  IP2Location include files location
+--with-ip2location-headers=DIR      IP2Location include files location
 \end_layout
 
 \begin_layout Code
 
---with-ip2location-lib=FILE     IP2Location library location
+--with-ip2location-headers-fallback IP2Location include files from internal
+ fallback location
 \end_layout
 
 \begin_layout Code
 
---with-ip2location-static       Explicitly link IP2Location statically (default=
-no)
+                                     (only usable with dynamic load option)
+ 
 \end_layout
 
 \begin_layout Code
 
---with-ip2location-dynamic      Enable use of dynamic loading of IP2Location
+--with-ip2location-lib=FILE         IP2Location library location
+\end_layout
+
+\begin_layout Code
+
+--with-ip2location-static           Explicitly link IP2Location statically
+ (default=no)
+\end_layout
+
+\begin_layout Code
+
+--with-ip2location-dynamic          Enable use of dynamic loading of IP2Location
  library (default=no)
 \end_layout
 
 \begin_layout Code
 
---with-ip2location-db=DIR       Use specified IP2Location database directory,
- default: /usr/share/IP2Location
+--with-ip2location-db=DIR           Use specified IP2Location database directory
+, default: /usr/share/IP2Location
 \end_layout
 
 \begin_layout Code
 
---with-ip2location-dyn-lib=NAME Use specified IP2Location dynamic library,
+--with-ip2location-dyn-lib=NAME     Use specified IP2Location dynamic library,
  default: libIP2Location.so
 \end_layout
 
@@ -769,6 +781,18 @@ no)
 \begin_layout Code
 
 --with-geoip-headers=DIR        GeoIP include files location
+\end_layout
+
+\begin_layout Code
+
+--with-geoip-headers-fallback   GeoIP include files from internal fallback
+ location
+\end_layout
+
+\begin_layout Code
+
+                                 (only usable with dynamic load option)
+ 
 \end_layout
 
 \begin_layout Code
@@ -1089,8 +1113,8 @@ Option
 \begin_inset Quotes erd
 \end_inset
 
- (since 0.91.0) shows built-in features in detail, depending on configuration
- before compiling:
+ (since 0.91.0) shows built-in features and capabilities in detail, depending
+ on configuration before compiling:
 \end_layout
 
 \begin_layout Code
@@ -1255,7 +1279,118 @@ BuiltIn: IEEE : IAB/20140503 OUI/20140503 OUI36/20140503
 \end_layout
 
 \begin_layout Standard
-Since version 0.95.0 the internal layer for database usage was abstracted
+Option 
+\begin_inset Quotes eld
+\end_inset
+
+-v -h
+\begin_inset Quotes erd
+\end_inset
+
+ (since 0.97.4) shows explanation of feature tokens
+\end_layout
+
+\begin_layout Code
+
+$ ./ipv6calc/ipv6calc -v -h
+\end_layout
+
+\begin_layout Code
+
+ipv6calc: version 0.97.4 GeoIP GeoIPv6 IP2Location IP2Location6 DB_AS_REG
+ DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG
+ DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
+\end_layout
+
+\begin_layout Code
+
+Explanation of available(+)/possible(-) feature tokens
+\end_layout
+
+\begin_layout Code
+
+GeoIP                 + GeoIPv4 database (external)
+\end_layout
+
+\begin_layout Code
+
+GeoIPv6               + GeoIPv6 database (external)
+\end_layout
+
+\begin_layout Code
+
+IP2Location           + IP2Location IPv4 database (external)
+\end_layout
+
+\begin_layout Code
+
+IP2Location6          + IP2Location IPv6 database (external)
+\end_layout
+
+\begin_layout Code
+
+DB_AS_REG             + AS-Number to Registry database (BuiltIn)
+\end_layout
+
+\begin_layout Code
+
+DB_IPV4_REG           + IPv4 to Registry database (BuiltIn)
+\end_layout
+
+\begin_layout Code
+
+DB_IPV6_REG           + IPv6 to Registry database (BuiltIn)
+\end_layout
+
+\begin_layout Code
+
+DB_IPV4_AS            + IPv4 to AS database (provided by GeoIP)
+\end_layout
+
+\begin_layout Code
+
+DB_IPV6_AS            + IPv6 to AS database (provided by GeoIPv6)
+\end_layout
+
+\begin_layout Code
+
+DB_IPV4_CC            + IPv4 to CountryCode database (provided by GeoIP/IP2Locat
+ion)
+\end_layout
+
+\begin_layout Code
+
+DB_IPV6_CC            + IPv6 to CountryCode database (provided by GeoIPv6/IP2Loc
+ation6)
+\end_layout
+
+\begin_layout Code
+
+DB_CC_REG             + CountryCode to Registry database (BuiltIn)
+\end_layout
+
+\begin_layout Code
+
+DB_IEEE               + IEEE/OUI/OUI36 Vendor database (BuiltIn)
+\end_layout
+
+\begin_layout Code
+
+ANON_ZEROISE          + Anonymization method 'zeroize'
+\end_layout
+
+\begin_layout Code
+
+ANON_ANONYMIZE        + Anonymization method 'anonymize'
+\end_layout
+
+\begin_layout Code
+
+ANON_KEEP-TYPE-ASN-CC + Anonymization method 'keep-type-asn-cc'
+\end_layout
+
+\begin_layout Standard
+Note: since version 0.95.0 the internal layer for database usage was abstracted
  and each database 
 \begin_inset Quotes eld
 \end_inset

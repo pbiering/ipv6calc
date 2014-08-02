@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
-<!-- XML file was created by LyX 2.1.0
+<!-- XML file was created by LyX 2.1.1
   See http://www.lyx.org/ for more information -->
 <article lang="en_US">
 <articleinfo>
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>4.4</revnumber> <date>2014-05-23</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>4.5</revnumber> <date>2014-08-02</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freshmeat.net/projects/ipv6calc/">freshmeat / ipv6calc</ulink> page (not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 0.97.3 (released 2014-07-xx)</para></sect2><sect2>
+<para>Latest version since last update of this page is 0.97.4 (released 2014-08-xx)</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
 <listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem></itemizedlist></sect2><sect2>
@@ -91,14 +91,18 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 --enable-ip2location    Enable IP2Location support (default: disabled)
 --enable-geoip          Enable GeoIP support (default: disabled) 
 
---with-ip2location-headers=DIR  IP2Location include files location
---with-ip2location-lib=FILE     IP2Location library location
---with-ip2location-static       Explicitly link IP2Location statically (default=no)
---with-ip2location-dynamic      Enable use of dynamic loading of IP2Location library (default=no)
---with-ip2location-db=DIR       Use specified IP2Location database directory, default: /usr/share/IP2Location
---with-ip2location-dyn-lib=NAME Use specified IP2Location dynamic library, default: libIP2Location.so
+--with-ip2location-headers=DIR      IP2Location include files location
+--with-ip2location-headers-fallback IP2Location include files from internal fallback location
+                                     (only usable with dynamic load option) 
+--with-ip2location-lib=FILE         IP2Location library location
+--with-ip2location-static           Explicitly link IP2Location statically (default=no)
+--with-ip2location-dynamic          Enable use of dynamic loading of IP2Location library (default=no)
+--with-ip2location-db=DIR           Use specified IP2Location database directory, default: /usr/share/IP2Location
+--with-ip2location-dyn-lib=NAME     Use specified IP2Location dynamic library, default: libIP2Location.so
 
 --with-geoip-headers=DIR        GeoIP include files location
+--with-geoip-headers-fallback   GeoIP include files from internal fallback location
+                                 (only usable with dynamic load option) 
 --with-geoip-lib=DIR            GeoIP library location
 --with-geoip-static             Explicitly link GeoIP statically (default=no)
 --with-geoip-dynamic            Enable use of dynamic loading of GeoIP library (default=no)
@@ -156,7 +160,7 @@ Supported options:
 <para>Option &ldquo;-v&rdquo; shows built-in features, depending on configuration before compiling:</para><screen>
 <![CDATA[$ ipv6calc -v
 ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
-]]></screen><para>Option &ldquo;-v -v&rdquo; (since 0.91.0) shows built-in features in detail, depending on configuration before compiling:</para><screen>
+]]></screen><para>Option &ldquo;-v -v&rdquo; (since 0.91.0) shows built-in features and capabilities in detail, depending on configuration before compiling:</para><screen>
 <![CDATA[$ ipv6calc -vv
 ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 GeoIP support by dynamic library load, compiled with IPv4 & IPv6 support
@@ -185,7 +189,27 @@ BuiltIn: CC   : AFRINIC/20140503 APNIC/20140502 ARIN/20140502 LACNIC/20140502 RI
 BuiltIn: IPv4 : AFRINIC/20140503 APNIC/20140502 ARIN/20140502 IANA/20140501 LACNIC/20140502 RIPENCC/20140502
 BuiltIn: IPv6 : AFRINIC/20140503 APNIC/20140502 ARIN/20140502 IANA/20140319 LACNIC/20140502 RIPENCC/20140502
 BuiltIn: IEEE : IAB/20140503 OUI/20140503 OUI36/20140503
-]]></screen><para>Since version 0.95.0 the internal layer for database usage was abstracted and each database &ldquo;plugin&rdquo; is initialized reporting then its supporting features in binary representation. This makes implementation of other external databases easier in the future. There are at least plans to create an overlay to built-in databases by publishing and use some &ldquo;precompiled&rdquo; newer databases replacing the need of recompilation for updated built-in databases.</para></sect2><sect2>
+]]></screen><para>Option &ldquo;-v -h&rdquo; (since 0.97.4) shows explanation of feature tokens</para><screen>
+<![CDATA[$ ./ipv6calc/ipv6calc -v -h
+ipv6calc: version 0.97.4 GeoIP GeoIPv6 IP2Location IP2Location6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
+Explanation of available(+)/possible(-) feature tokens
+GeoIP                 + GeoIPv4 database (external)
+GeoIPv6               + GeoIPv6 database (external)
+IP2Location           + IP2Location IPv4 database (external)
+IP2Location6          + IP2Location IPv6 database (external)
+DB_AS_REG             + AS-Number to Registry database (BuiltIn)
+DB_IPV4_REG           + IPv4 to Registry database (BuiltIn)
+DB_IPV6_REG           + IPv6 to Registry database (BuiltIn)
+DB_IPV4_AS            + IPv4 to AS database (provided by GeoIP)
+DB_IPV6_AS            + IPv6 to AS database (provided by GeoIPv6)
+DB_IPV4_CC            + IPv4 to CountryCode database (provided by GeoIP/IP2Location)
+DB_IPV6_CC            + IPv6 to CountryCode database (provided by GeoIPv6/IP2Location6)
+DB_CC_REG             + CountryCode to Registry database (BuiltIn)
+DB_IEEE               + IEEE/OUI/OUI36 Vendor database (BuiltIn)
+ANON_ZEROISE          + Anonymization method 'zeroize'
+ANON_ANONYMIZE        + Anonymization method 'anonymize'
+ANON_KEEP-TYPE-ASN-CC + Anonymization method 'keep-type-asn-cc'
+]]></screen><para>Note: since version 0.95.0 the internal layer for database usage was abstracted and each database &ldquo;plugin&rdquo; is initialized reporting then its supporting features in binary representation. This makes implementation of other external databases easier in the future. There are at least plans to create an overlay to built-in databases by publishing and use some &ldquo;precompiled&rdquo; newer databases replacing the need of recompilation for updated built-in databases.</para></sect2><sect2>
 <title>Examples</title>
 <sect3>
 <title>Conversion</title>
