@@ -635,6 +635,7 @@ GEOIP_LIB_L1
 GEOIP_LIB
 GEOIP_INCLUDE_L1
 GEOIP_INCLUDE_L2
+GEOIP_INCLUDE_VERSION
 GEOIP_INCLUDE
 IP2LOCATION_DYN_LIB
 IP2LOCATION_DB
@@ -4418,6 +4419,7 @@ fi
 
 
 IP2LOCATION_LIB_NAME="IP2Location"
+IP2LOCATION_INCLUDE_VERSION=""
 
 # Check whether --enable-ip2location was given.
 if test "${enable_ip2location+set}" = set; then :
@@ -4469,6 +4471,7 @@ if test "${with_ip2location_headers_fallback+set}" = set; then :
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2Location fallback headers activated" >&5
 $as_echo "*** IP2Location fallback headers activated" >&6; }
 			IP2LOCATION_INCLUDE_DIR="external-fallback/IP2Location"
+			IP2LOCATION_INCLUDE_VERSION=$(cat external-fallback/IP2Location/VERSION-IP2Location)
 		fi
 
 fi
@@ -4567,8 +4570,8 @@ if test "$IP2LOCATION" = "yes"; then
 		IP2LOCATION_LIB_L1="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB_L1"
 		IP2LOCATION_LIB_L2="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB_L2"
 	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: IP2Location dynamic load support enabled, disable IP2Location linker options" >&5
-$as_echo "$as_me: WARNING: IP2Location dynamic load support enabled, disable IP2Location linker options" >&2;}
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** IP2Location dynamic load support enabled, disable IP2Location linker options" >&5
+$as_echo "**** IP2Location dynamic load support enabled, disable IP2Location linker options" >&6; }
 	fi
 
 	CPPFLAGS="$CPPFLAGS $IP2LOCATION_INCLUDE"
@@ -4772,8 +4775,17 @@ fi
 
 
 
+if test -n "$IP2LOCATION_INCLUDE_VERSION"; then
+
+cat >>confdefs.h <<_ACEOF
+#define IP2LOCATION_INCLUDE_VERSION "$IP2LOCATION_INCLUDE_VERSION"
+_ACEOF
+
+fi
+
 
 GEOIP_LIB_NAME="GeoIP"
+GEOIP_INCLUDE_VERSION=""
 
 # Check whether --enable-geoip was given.
 if test "${enable_geoip+set}" = set; then :
@@ -4827,6 +4839,7 @@ if test "${with_geoip_headers_fallback+set}" = set; then :
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GeoIP fallback headers activated" >&5
 $as_echo "*** GeoIP fallback headers activated" >&6; }
 			GEOIP_INCLUDE_DIR="external-fallback/GeoIP"
+			GEOIP_INCLUDE_VERSION=$(cat external-fallback/GeoIP/VERSION-GeoIP)
 		fi
 
 fi
@@ -4961,8 +4974,8 @@ if test "$GEOIP" = "yes"; then
 		GEOIP_LIB_L1="-l$GEOIP_LIB_NAME $GEOIP_LIB_L1"
 		GEOIP_LIB_L2="-l$GEOIP_LIB_NAME $GEOIP_LIB_L2"
 	else
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: GeoIP dynamic load support enabled, disable GeoIP linker options" >&5
-$as_echo "$as_me: WARNING: GeoIP dynamic load support enabled, disable GeoIP linker options" >&2;}
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GeoIP dynamic load support enabled, disable GeoIP linker options" >&5
+$as_echo "*** GeoIP dynamic load support enabled, disable GeoIP linker options" >&6; }
 	fi
 
 	CPPFLAGS="$CPPLAGS $GEOIP_INCLUDE"
@@ -5545,6 +5558,14 @@ fi
 
 
 
+
+if test -n "$GEOIP_INCLUDE_VERSION"; then
+
+cat >>confdefs.h <<_ACEOF
+#define GEOIP_INCLUDE_VERSION "$GEOIP_INCLUDE_VERSION"
+_ACEOF
+
+fi
 
 if test "$DYNAMIC_LOAD" = "yes"; then
 	if test "$GEOIP_DYN" = "yes" -o "$IP2LOCATION_DYN" = "yes"; then
@@ -6858,61 +6879,65 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** Summary" >&5
 $as_echo "***** Summary" >&6; }
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION          = $IP2LOCATION" >&5
-$as_echo "*** IP2LOCATION          = $IP2LOCATION" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_DB       = $ip2location_db" >&5
-$as_echo "*** IP2LOCATION_DB       = $ip2location_db" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_DYN      = $IP2LOCATION_DYN" >&5
-$as_echo "*** IP2LOCATION_DYN      = $IP2LOCATION_DYN" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_DYN_LIB  = $ip2location_dyn_lib" >&5
-$as_echo "*** IP2LOCATION_DYN_LIB  = $ip2location_dyn_lib" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_INCLUDE  = $IP2LOCATION_INCLUDE" >&5
-$as_echo "*** IP2LOCATION_INCLUDE  = $IP2LOCATION_INCLUDE" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_LIB      = $IP2LOCATION_LIB" >&5
-$as_echo "*** IP2LOCATION_LIB      = $IP2LOCATION_LIB" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_LIB_NAME = $IP2LOCATION_LIB_NAME" >&5
-$as_echo "*** IP2LOCATION_LIB_NAME = $IP2LOCATION_LIB_NAME" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_LIB_DIR  = $IP2LOCATION_LIB_DIR" >&5
-$as_echo "*** IP2LOCATION_LIB_DIR  = $IP2LOCATION_LIB_DIR" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION                =$IP2LOCATION" >&5
+$as_echo "*** IP2LOCATION                =$IP2LOCATION" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_DB             =$ip2location_db" >&5
+$as_echo "*** IP2LOCATION_DB             =$ip2location_db" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_DYN            =$IP2LOCATION_DYN" >&5
+$as_echo "*** IP2LOCATION_DYN            =$IP2LOCATION_DYN" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_DYN_LIB        =$ip2location_dyn_lib" >&5
+$as_echo "*** IP2LOCATION_DYN_LIB        =$ip2location_dyn_lib" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_INCLUDE        =$IP2LOCATION_INCLUDE" >&5
+$as_echo "*** IP2LOCATION_INCLUDE        =$IP2LOCATION_INCLUDE" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_INCLUDE_VERSION=$IP2LOCATION_INCLUDE_VERSION" >&5
+$as_echo "*** IP2LOCATION_INCLUDE_VERSION=$IP2LOCATION_INCLUDE_VERSION" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_LIB            =$IP2LOCATION_LIB" >&5
+$as_echo "*** IP2LOCATION_LIB            =$IP2LOCATION_LIB" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_LIB_NAME       =$IP2LOCATION_LIB_NAME" >&5
+$as_echo "*** IP2LOCATION_LIB_NAME       =$IP2LOCATION_LIB_NAME" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_LIB_DIR        =$IP2LOCATION_LIB_DIR" >&5
+$as_echo "*** IP2LOCATION_LIB_DIR        =$IP2LOCATION_LIB_DIR" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
 $as_echo "" >&6; }
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP                = $GEOIP" >&5
-$as_echo "*** GEOIP                = $GEOIP" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_DB             = $geoip_db" >&5
-$as_echo "*** GEOIP_DB             = $geoip_db" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_DYN            = $GEOIP_DYN" >&5
-$as_echo "*** GEOIP_DYN            = $GEOIP_DYN" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_DYN_LIB        = $geoip_dyn_lib" >&5
-$as_echo "*** GEOIP_DYN_LIB        = $geoip_dyn_lib" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_INCLUDE        = $GEOIP_INCLUDE" >&5
-$as_echo "*** GEOIP_INCLUDE        = $GEOIP_INCLUDE" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_LIB            = $GEOIP_LIB" >&5
-$as_echo "*** GEOIP_LIB            = $GEOIP_LIB" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_LIB_NAME       = $GEOIP_LIB_NAME" >&5
-$as_echo "*** GEOIP_LIB_NAME       = $GEOIP_LIB_NAME" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_LIB_DIR        = $GEOIP_LIB_DIR" >&5
-$as_echo "*** GEOIP_LIB_DIR        = $GEOIP_LIB_DIR" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP                      =$GEOIP" >&5
+$as_echo "*** GEOIP                      =$GEOIP" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_DB                   =$geoip_db" >&5
+$as_echo "*** GEOIP_DB                   =$geoip_db" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_DYN                  =$GEOIP_DYN" >&5
+$as_echo "*** GEOIP_DYN                  =$GEOIP_DYN" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_DYN_LIB              =$geoip_dyn_lib" >&5
+$as_echo "*** GEOIP_DYN_LIB              =$geoip_dyn_lib" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_INCLUDE              =$GEOIP_INCLUDE" >&5
+$as_echo "*** GEOIP_INCLUDE              =$GEOIP_INCLUDE" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_INCLUDE_VERSION      =$GEOIP_INCLUDE_VERSION" >&5
+$as_echo "*** GEOIP_INCLUDE_VERSION      =$GEOIP_INCLUDE_VERSION" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_LIB                  =$GEOIP_LIB" >&5
+$as_echo "*** GEOIP_LIB                  =$GEOIP_LIB" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_LIB_NAME             =$GEOIP_LIB_NAME" >&5
+$as_echo "*** GEOIP_LIB_NAME             =$GEOIP_LIB_NAME" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_LIB_DIR              =$GEOIP_LIB_DIR" >&5
+$as_echo "*** GEOIP_LIB_DIR              =$GEOIP_LIB_DIR" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
 $as_echo "" >&6; }
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** CFLAGS_EXTRA         = $CFLAGS_EXTRA" >&5
-$as_echo "*** CFLAGS_EXTRA         = $CFLAGS_EXTRA" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS_EXTRA        = $LDFLAGS_EXTRA" >&5
-$as_echo "*** LDFLAGS_EXTRA        = $LDFLAGS_EXTRA" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH      = $LD_LIBRARY_PATH" >&5
-$as_echo "*** LD_LIBRARY_PATH      = $LD_LIBRARY_PATH" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH_BASIC= $LD_LIBRARY_PATH_BASIC" >&5
-$as_echo "*** LD_LIBRARY_PATH_BASIC= $LD_LIBRARY_PATH_BASIC" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** CFLAGS_EXTRA               =$CFLAGS_EXTRA" >&5
+$as_echo "*** CFLAGS_EXTRA               =$CFLAGS_EXTRA" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS_EXTRA              =$LDFLAGS_EXTRA" >&5
+$as_echo "*** LDFLAGS_EXTRA              =$LDFLAGS_EXTRA" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH            =$LD_LIBRARY_PATH" >&5
+$as_echo "*** LD_LIBRARY_PATH            =$LD_LIBRARY_PATH" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH_BASIC      =$LD_LIBRARY_PATH_BASIC" >&5
+$as_echo "*** LD_LIBRARY_PATH_BASIC      =$LD_LIBRARY_PATH_BASIC" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
 $as_echo "" >&6; }
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** CPPLAGS              = $CPPLAGS" >&5
-$as_echo "*** CPPLAGS              = $CPPLAGS" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** CFLAGS               = $CFLAGS" >&5
-$as_echo "*** CFLAGS               = $CFLAGS" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS              = $LDFLAGS" >&5
-$as_echo "*** LDFLAGS              = $LDFLAGS" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** CPPLAGS                    =$CPPLAGS" >&5
+$as_echo "*** CPPLAGS                    =$CPPLAGS" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** CFLAGS                     =$CFLAGS" >&5
+$as_echo "*** CFLAGS                     =$CFLAGS" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS                    =$LDFLAGS" >&5
+$as_echo "*** LDFLAGS                    =$LDFLAGS" >&6; }
