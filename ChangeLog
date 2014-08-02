@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.359 2014/07/31 18:39:42 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.360 2014/08/02 06:55:18 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140802/PB
+	tag version 0.97.4
+
 20140731/PB
 	add new output item on showinfo -i: IPV6CALC_CAPABILITIES
 	databases: update
