@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.50 2014/07/29 19:52:32 ds6peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.51 2014/08/27 04:44:23 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -221,6 +221,21 @@ NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 --out ipv6literal -F --in ipv6addr fe80::1%0				=fe80-0000-0000-0000-0000-0000-0000-0001s0.ipv6-literal.net
 --out ipv6addr -U --in ipv6addr fe80::1%eth0				=fe80:0:0:0:0:0:0:1%eth0
 --out ipv6addr -F --in ipv6addr fe80::1%eth0				=fe80:0000:0000:0000:0000:0000:0000:0001%eth0
+# hex
+-O hex 0123:4567:89ab:cdef:0000:1111:2222:3333					=0123456789abcdef0000111122223333
+-O hex -u 0123:4567:89ab:cdef:0000:1111:2222:3333				=0123456789ABCDEF0000111122223333
+-O hex --forceprefix 32 --printsuffix 0123:4567:89ab:cdef:0000:1111:2222:3333	=89abcdef0000111122223333
+-O hex --forceprefix 32 --printprefix 0123:4567:89ab:cdef:0000:1111:2222:3333	=01234567
+-O hex --forceprefix 64 --printsuffix 0123:4567:89ab:cdef:0000:1111:2222:3333	=0000111122223333
+-O hex --forceprefix 64 --printprefix 0123:4567:89ab:cdef:0000:1111:2222:3333	=0123456789abcdef
+-O hex 1.2.3.4									=01020304
+-O hex --forceprefix 8 --printsuffix 1.2.3.4					=020304
+-O hex --forceprefix 8 --printprefix 1.2.3.4					=01
+-O hex --forceprefix 16 --printsuffix 1.2.3.4					=0304
+-O hex --forceprefix 16 --printprefix 1.2.3.4					=0102
+-O hex --forceprefix 24 --printsuffix 1.2.3.4					=04
+-O hex --forceprefix 24 --printprefix 1.2.3.4					=010203
+-O hex -u 192.168.1.1								=C0A80101
 END
 }
 
@@ -246,8 +261,8 @@ END
 # Test Scenarios for pipe handling
 testscenarios_pipe() {
 	cat <<END
-3ffe::1:ff00:1234,--in ipv6addr --out ipv6addr -h --printuncompressed,3ffe:0:0:0:0:1:ff00:1234
-3ffe::1:ff00:1234,--in ipv6addr --out ipv6addr -h --printuncompressed --printprefix --forceprefix 96,3ffe:0:0:0:0:1
+3ffe::1:ff00:1234,--in ipv6addr --out ipv6addr --printuncompressed,3ffe:0:0:0:0:1:ff00:1234
+3ffe::1:ff00:1234,--in ipv6addr --out ipv6addr --printuncompressed --printprefix --forceprefix 96,3ffe:0:0:0:0:1
 END
 
 }

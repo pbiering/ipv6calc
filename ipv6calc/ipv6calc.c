@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.113 2014/07/22 06:00:41 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.114 2014/08/27 04:44:23 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -542,6 +542,10 @@ int main(int argc, char *argv[]) {
 	};
 
 	/* print help handling */
+	if ((outputtype_given == 1) && (command & CMD_printhelp)) {
+		command = CMD_printexamples;
+	};
+
 	if (command == CMD_printhelp) {
 		if ( (outputtype == FORMAT_undefined) && (inputtype == FORMAT_undefined) && (action == ACTION_undefined)) {
 			ipv6calc_printhelp(longopts, ipv6calc_longopts_shortopts_map);
@@ -975,6 +979,14 @@ PIPE_input:
 	/***** postprocessing input *****/
 	
 	DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of postprocessing input");
+
+	if (ipv4addr.flag_valid == 1) {
+		/* force prefix */
+		if ((formatoptions & (FORMATOPTION_forceprefix)) != 0) {
+			ipv4addr.flag_prefixuse = 1;
+			ipv4addr.prefixlength = force_prefix;
+		};
+	};
 
 	if (ipv6addr.flag_valid == 1) {
 		/* force prefix */
