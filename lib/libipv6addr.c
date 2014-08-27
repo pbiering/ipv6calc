@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.112 2014/07/22 06:00:41 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.113 2014/08/27 04:45:04 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -1820,6 +1820,7 @@ int libipv6addr_to_octal(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring,
  */
 int libipv6addr_to_hex(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
 	int retval = 1;
+	int i;
 	char tempstring[NI_MAXHOST];
 
 	snprintf(tempstring, sizeof(tempstring), "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
@@ -1842,6 +1843,24 @@ int libipv6addr_to_hex(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, c
 		);
 
 	snprintf(resultstring, resultstring_length, "%s", tempstring);
+
+	if ((formatoptions & FORMATOPTION_printprefix) && (ipv6addrp->flag_prefixuse == 1)) {
+		// shorten string
+		resultstring[ipv6addrp->prefixlength / 4] = '\0';
+	} else if ((formatoptions & FORMATOPTION_printsuffix) && (ipv6addrp->flag_prefixuse == 1)) {
+		// move string
+		for (i = 0; i < 32 - (ipv6addrp->prefixlength / 4); i++) {
+			resultstring[i] = resultstring[i + (ipv6addrp->prefixlength / 4)];
+		};
+		resultstring[32 - (ipv6addrp->prefixlength / 4)] = '\0';
+	};
+
+	if (formatoptions & FORMATOPTION_printuppercase) {
+		for (i = 0; i < strlen(resultstring); i++) {
+			resultstring[i] = toupper(resultstring[i]);
+		};
+	};
+
 	retval = 0;	
 	return (retval);
 };

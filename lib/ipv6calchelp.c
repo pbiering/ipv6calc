@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.64 2014/08/02 06:45:14 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.65 2014/08/27 04:45:04 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -422,6 +422,13 @@ static void printhelp_output_ipv6literal(void) {
 	fprintf(stderr, "   fe80::1%%0    -> fe80--1s0.ipv6-literal.net\n");
 };
 
+static void printhelp_output_hex(void) {
+	fprintf(stderr, " Print a given IPv4/v6 address in hex format depending on format options:\n");
+	fprintf(stderr, "  without any format option, e.g.\n");
+	fprintf(stderr, "   0123:4567:89ab:cdef:0000:1111:2222:3333 -> 0123456789abcdef0000111122223333\n");
+	fprintf(stderr, "   1.2.3.4                                 -> 01020304\n");
+};
+
 static void printhelp_output_eui64(void) {
 	fprintf(stderr, " Print a generated EUI-64 identifier, e.g.:\n");
 	fprintf(stderr, "  00:50:BF:06:B4:F5 -> 0250:bfff:fe06:b4f5\n");
@@ -555,6 +562,10 @@ void printhelp_output_dispatcher(const uint32_t outputtype) {
 			
 		case FORMAT_octal:
 			printhelp_output_octal();
+			break;
+
+		case FORMAT_hex:
+			printhelp_output_hex();
 			break;
 			
 		default:

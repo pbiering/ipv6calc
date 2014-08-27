@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.59 2014/07/18 06:19:55 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.60 2014/08/27 04:45:04 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -693,8 +693,11 @@ int libipv4addr_to_octal(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring,
  * out: *resultstring = IPv4 address (modified)
  * ret: ==0: ok, !=0: error
  */
-int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const size_t resultstring_length, /*@unused@*/ const uint32_t formatoptions) {
+int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "called, formatoptions=0x%08x", formatoptions);
+
 	int retval = 1;
+	int i;
 	char tempstring[NI_MAXHOST];
 
 	snprintf(tempstring, sizeof(tempstring), "%02x%02x%02x%02x",
@@ -705,6 +708,25 @@ int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, c
 	);
 
 	snprintf(resultstring, resultstring_length, "%s", tempstring);
+
+
+	if ((formatoptions & FORMATOPTION_printprefix) && (ipv4addrp->flag_prefixuse == 1)) {
+		// shorten string
+		resultstring[ipv4addrp->prefixlength / 4] = '\0';
+	} else if ((formatoptions & FORMATOPTION_printsuffix) && (ipv4addrp->flag_prefixuse == 1)) {
+		// move string
+		for (i = 0; i < 8 - (ipv4addrp->prefixlength / 4); i++) {
+			resultstring[i] = resultstring[i + (ipv4addrp->prefixlength / 4)];
+		};
+		resultstring[8 - (ipv4addrp->prefixlength / 4)] = '\0';
+	};
+
+	if (formatoptions & FORMATOPTION_printuppercase) {
+		for (i = 0; i < strlen(resultstring); i++) {
+			resultstring[i] = toupper(resultstring[i]);
+		};
+	};
+
 	retval = 0;	
 	return (retval);
 };

@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.360 2014/08/02 06:55:18 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.361 2014/08/27 04:45:17 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140826/PB
+	implement for output type 'hex' prefix/suffix/uppercase print
+	improve online help
+
 20140802/PB
 	tag version 0.97.4
 
