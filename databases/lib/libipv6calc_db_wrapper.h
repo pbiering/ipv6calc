@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.25 2014/07/31 06:20:35 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.26 2014/08/27 06:48:55 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -39,11 +39,16 @@ extern uint32_t wrapper_features;
 #define IPV6CALC_DB_IP2LOCATION_IPV4		0x00100000
 #define IPV6CALC_DB_IP2LOCATION_IPV6		0x00200000
 
+#define IPV6CALC_DB_DBIP_IPV4			0x01000000
+#define IPV6CALC_DB_DBIP_IPV6			0x02000000
+
 static const s_formatoption ipv6calc_db_features[] = {
 	{ IPV6CALC_DB_GEOIP_IPV4	, "GeoIP"	, "GeoIPv4 database (external)"},
 	{ IPV6CALC_DB_GEOIP_IPV6	, "GeoIPv6"	, "GeoIPv6 database (external)"},
 	{ IPV6CALC_DB_IP2LOCATION_IPV4	, "IP2Location"	, "IP2Location IPv4 database (external)"},
 	{ IPV6CALC_DB_IP2LOCATION_IPV6	, "IP2Location6", "IP2Location IPv6 database (external)"},
+	{ IPV6CALC_DB_DBIP_IPV4		, "DBIPv4"	, "DB-IP IPv4 database (external)"},
+	{ IPV6CALC_DB_DBIP_IPV6		, "DBIPv6"	, "DB-IP IPv6 database (external)"},
 	{ IPV6CALC_DB_AS_TO_REGISTRY	, "DB_AS_REG"	, "AS-Number to Registry database (BuiltIn)"},
 	{ IPV6CALC_DB_IPV4_TO_REGISTRY	, "DB_IPV4_REG"	, "IPv4 to Registry database (BuiltIn)"},
 	{ IPV6CALC_DB_IPV6_TO_REGISTRY	, "DB_IPV6_REG"	, "IPv6 to Registry database (BuiltIn)"},
@@ -56,9 +61,19 @@ static const s_formatoption ipv6calc_db_features[] = {
 };
 
 
+// database names and descriptions
+typedef struct {
+	const unsigned int number;
+	const char        *filename;
+	const char        *description;
+	const uint32_t     feature;
+} db_file_desc;
+
+
 // define internal API versions
 #define IPV6CALC_DB_API_GEOIP		1
 #define IPV6CALC_DB_API_IP2LOCATION	1
+#define IPV6CALC_DB_API_DBIP		1
 #define IPV6CALC_DB_API_IEEE		1
 #define IPV6CALC_DB_API_REGISTRIES	1
 

@@ -6,6 +6,9 @@
 /* Copyright year */
 #undef COPYRIGHT_YEAR
 
+/* Define DB-IP database directory. */
+#undef DBIP_DB
+
 /* Define if bundled MD5 should be used */
 #undef ENABLE_BUNDLED_MD5
 
@@ -157,6 +160,9 @@
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
+
+/* Define if you want DB-IP.com support included. */
+#undef SUPPORT_DBIP
 
 /* Define if you want IEEE database included. */
 #undef SUPPORT_DB_IEEE

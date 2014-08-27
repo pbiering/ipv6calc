@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.19 2014/07/31 06:20:35 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.20 2014/08/27 06:48:55 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -319,7 +319,7 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used(void) {
 #ifdef SUPPORT_IP2LOCATION
 
 /*******************************
- * Wrapper extensenion functions for IP2Location
+ * Wrapper extension functions for IP2Location
  * because of missing support in library itself
  *******************************/
 

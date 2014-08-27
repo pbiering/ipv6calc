@@ -1,14 +1,14 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.109 2014/08/02 06:45:14 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.110 2014/08/27 06:48:55 ds6peter Exp $
 dnl Copyright: 2001-2014 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
-AC_INIT(ipv6calc, 0.97.4, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
+AC_INIT(ipv6calc, 0.98.0alpha, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
 
 AC_DEFINE(COPYRIGHT_YEAR, "2014", [Copyright year])
 
-PACKAGE_VERSION="0.97.4"
+PACKAGE_VERSION="0.98.0alpha"
 
 COPYRIGHT_YEAR=2014
 AC_SUBST(COPYRIGHT_YEAR)
@@ -161,6 +161,7 @@ dnl defaults
 dnl *************************************************
 geoip_db_default="/usr/share/GeoIP"
 ip2location_db_default="/usr/share/IP2Location"
+dbip_db_default="/usr/share/DBIP"
 
 geoip_dyn_lib_default="libGeoIP.so.1"
 ip2location_dyn_lib_default="libIP2Location.so"
@@ -274,6 +275,38 @@ if test "$DB_IPV6" = "yes"; then
 	AC_DEFINE(SUPPORT_DB_IPV6_REG, 1, Define if you want IPv6-to-Registry database included.)
 fi
 
+
+dnl *************************************************
+dnl disable built-in DB-IP.com support
+dnl *************************************************
+AC_ARG_ENABLE([dbip], 
+	AS_HELP_STRING([--disable-dbip],
+	               [Disable built-in DB-IP.com support (default: enabled)]),
+	[
+		DBIP="$enable_dbip"
+	],
+	[
+		DBIP="yes"
+	])
+
+dnl defaults for database directories
+AC_ARG_WITH([dbbip-db],
+	AS_HELP_STRING([--with-dbip-db=DIR],
+               [Use specified DB-IP database directory, default: /usr/share/DBIP]),
+	[
+		dbip_db="$with_ip2location_db"
+	],
+	[
+		dbip_db=$dbip_db_default
+	])
+
+if test "$DBIP" = "yes"; then
+	require_libdb="yes"
+
+	AC_DEFINE(SUPPORT_DBIP, 1, Define if you want DB-IP.com support included.)
+	AC_MSG_RESULT([*** DB-IP db dir: $dbip_db])
+	AC_DEFINE_UNQUOTED(DBIP_DB, "$dbip_db", Define DB-IP database directory.)
+fi
 
 dnl *************************************************
 dnl IP2Location support
@@ -835,6 +868,25 @@ fi
 
 AC_SUBST(DYNLOAD_LIB)
 
+dnl *************************************************
+dnl libdb required
+dnl *************************************************
+if test "$require_libdb" = "yes"; then
+	AC_CHECK_HEADER(db.h, [
+		AC_CHECK_LIB(db, db_create,
+		[
+		],
+		[
+			AC_MSG_ERROR([db library file misses db_create])
+		])
+	],
+	[
+		AC_MSG_ERROR([db library header files not found])
+	])
+
+	LDFLAGS_EXTRA="$LDFLAGS_EXTRA -ldb"
+fi
+
 
 dnl *************************************************
 dnl Files to create from <file>.in
@@ -885,6 +937,11 @@ AC_MSG_RESULT([*** GEOIP_INCLUDE_VERSION      =$GEOIP_INCLUDE_VERSION])
 AC_MSG_RESULT([*** GEOIP_LIB                  =$GEOIP_LIB])
 AC_MSG_RESULT([*** GEOIP_LIB_NAME             =$GEOIP_LIB_NAME])
 AC_MSG_RESULT([*** GEOIP_LIB_DIR              =$GEOIP_LIB_DIR])
+
+AC_MSG_RESULT([])
+
+AC_MSG_RESULT([*** DBIP                       =$DBIP])
+AC_MSG_RESULT([*** DBIP_DB                    =$dbip_db])
 
 AC_MSG_RESULT([])
 

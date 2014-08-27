@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.39 2014/07/31 19:20:24 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.40 2014/08/27 06:48:55 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -24,6 +24,7 @@
 #include "libipv6calc_db_wrapper.h"
 #include "libipv6calc_db_wrapper_GeoIP.h"
 #include "libipv6calc_db_wrapper_IP2Location.h"
+#include "libipv6calc_db_wrapper_DBIP.h"
 #include "libipv6calc_db_wrapper_BuiltIn.h"
 
 static int wrapper_GeoIP_disable = 0;
@@ -91,6 +92,21 @@ int libipv6calc_db_wrapper_init(void) {
 		NONQUIETPRINT_NA("Support for IP2Location disabled by option");
 	};
 
+#ifdef SUPPORT_DBIP
+	// Call DBIP wrapper
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call libipv6calc_db_wrapper_DBIP_wrapper_init");
+
+	r = libipv6calc_db_wrapper_DBIP_wrapper_init();
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "DBIP_wrapper_init result: %d wrapper_features=0x%08x", r, wrapper_features);
+
+	if (r != 0) {
+		result = 1;
+	} else {
+		wrapper_BuiltIn_status = 1; // ok
+	};
+#endif
+
 #ifdef SUPPORT_BUILTIN
 	// Call BuiltIn wrapper
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call libipv6calc_db_wrapper_BuiltIn_wrapper_init");
@@ -137,6 +153,14 @@ int libipv6calc_db_wrapper_cleanup(void) {
 	};
 #endif
 
+#ifdef SUPPORT_DBIP
+	// Call DBIP wrapper
+	r = libipv6calc_db_wrapper_DBIP_wrapper_cleanup();
+	if (r != 0) {
+		result = 1;
+	};
+#endif
+
 #ifdef SUPPORT_BUILTIN
 	// Call BuiltIn wrapper
 	r = libipv6calc_db_wrapper_BuiltIn_wrapper_cleanup();
@@ -161,6 +185,11 @@ void libipv6calc_db_wrapper_info(char *string, const size_t size) {
 #ifdef SUPPORT_IP2LOCATION
 	// Call IP2Location wrapper
 	libipv6calc_db_wrapper_IP2Location_wrapper_info(string, size);
+#endif
+
+#ifdef SUPPORT_DBIP
+	// Call DBIP wrapper
+	libipv6calc_db_wrapper_BuiltIn_wrapper_info(string, size);
 #endif
 
 #ifdef SUPPORT_BUILTIN
@@ -236,6 +265,10 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 #endif // SUPPORT_GEOIP_DYN
 #endif // SUPPORT_GEOIP
 
+#ifdef SUPPORT_DBIP
+	// TODO
+#endif
+
 #ifdef SUPPORT_BUILTIN
 	snprintf(tempstring, sizeof(tempstring), "%s%sDB_AS_REG(BuiltIn)", string, strlen(string) > 0 ? " " : "");
 	snprintf(string, size, "%s", tempstring);
@@ -300,6 +333,12 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		// Call IP2Location wrapper
 		libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(level_verbose, prefix_string);
 	};
+	printf("\n");
+#endif
+
+#ifdef SUPPORT_DBIP
+	// Call DBIP wrapper
+	libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(level_verbose, prefix_string);
 	printf("\n");
 #endif
 
