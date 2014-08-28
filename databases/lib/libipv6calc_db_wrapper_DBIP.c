@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.2 2014/08/28 07:17:43 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.3 2014/08/28 20:29:48 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -496,6 +496,7 @@ char *libipv6calc_db_wrapper_DBIP_database_info(DB *dbp) {
 char *libipv6calc_db_wrapper_DBIP_get_country_short(DB *dbp, char *ip) {
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: %s ip=%s", wrapper_dbip_info, ip);
 
+
 	//return(DBIP_get_country_short(loc, ip));
 	return(NULL);
 };
@@ -530,17 +531,33 @@ char *libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(char *addr, const
 	DB *dbp;
 	char *cc;
 
+	static char resultstring[NI_MAXHOST];
+
 	int DBIP_type = 0;
 	char *DBIP_result_ptr = NULL;
+
+	ipv6calc_ipv4addr ipv4addr;
+	ipv6calc_ipv6addr ipv6addr;
+
+	int result;
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with addr=%s proto=%d", addr, proto);
 
 	if (proto == 4) {
 		DBIP_type = DBIP_DB_IPV4_COUNTRY;
+		// convert char to structure
+		result = addr_to_ipv4addrstruct(addr, resultstring, sizeof(resultstring), &ipv4addr);
 	} else if (proto == 6) {
 		DBIP_type = DBIP_DB_IPV6_COUNTRY;
+		// convert char to structure
+		result = addr_to_ipv6addrstruct(addr, resultstring, sizeof(resultstring), &ipv6addr);
 	} else {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Unsupported proto: %d", proto);
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	if (result != 0) {
+		ERRORPRINT_WA("error converting address string for proto %d: %s", proto, addr);
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -551,7 +568,13 @@ char *libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(char *addr, const
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	cc = libipv6calc_db_wrapper_DBIP_get_country_short(dbp, addr);
+	if (proto == 4) {
+		result = libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(&ipv4addr, dbp, 1, resultstring, sizeof(resultstring));
+	} else if (proto == 6) {
+
+	};
+
+	cc = resultstring;
 
 	if (cc == NULL) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "libipv6calc_db_wrapper_DBIP_get_country_short did not return a record");

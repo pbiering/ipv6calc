@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.26 2014/08/27 06:48:55 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.27 2014/08/28 20:29:48 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -143,3 +143,9 @@ extern int libipv6calc_db_wrapper_registry_num_by_ipv4addr(const ipv6calc_ipv4ad
 // IPv6 Registry
 extern int libipv6calc_db_wrapper_registry_string_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length);
 extern int libipv6calc_db_wrapper_registry_num_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp);
+
+#ifdef HAVE_BERKELEY_DB_SUPPORT
+#include <db.h>
+
+int libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, DB *dbp, const int db_format, char *resultstring, const size_t resultstring_length);
+#endif // HAVE_BERKELEY_DB_SUPPORT

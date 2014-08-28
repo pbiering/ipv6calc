@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.40 2014/08/27 06:48:55 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.41 2014/08/28 20:29:48 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -32,6 +32,7 @@ static int wrapper_IP2Location_disable = 0;
 
 static int wrapper_GeoIP_status = 0;
 static int wrapper_IP2Location_status = 0;
+static int wrapper_DBIP_status = 0;
 static int wrapper_BuiltIn_status = 0;
 
 uint32_t wrapper_features = 0;
@@ -103,7 +104,7 @@ int libipv6calc_db_wrapper_init(void) {
 	if (r != 0) {
 		result = 1;
 	} else {
-		wrapper_BuiltIn_status = 1; // ok
+		wrapper_DBIP_status = 1; // ok
 	};
 #endif
 
@@ -504,6 +505,17 @@ char *libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int pr
 			result_char_ptr = libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr((char *) addr, proto);
 #endif
 		};
+
+		if (result_char_ptr == NULL) {
+			// fallback
+			if (wrapper_DBIP_status == 1) {
+#ifdef SUPPORT_DBIP
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now DBIP");;
+
+				result_char_ptr = libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr((char *) addr, proto);
+#endif
+			};
+	};
 	};
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s", result_char_ptr);
@@ -821,3 +833,155 @@ int libipv6calc_db_wrapper_registry_num_by_ipv6addr(const ipv6calc_ipv6addr *ipv
 #endif
 	return (retval);
 };
+
+
+#ifdef HAVE_BERKELEY_DB_SUPPORT
+/*
+ * generic Berkeley DB lookup function for IPv4
+ * 
+ * in:  DB, ipv4addrp
+ * out: database entry matching ipv4addrp
+ *
+ * database format
+ * Version 1
+ *  RECNO: ipv4_first;ipv4_last;data
+ */
+int libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, DB *dbp, const int db_format, char *resultstring, const size_t resultstring_length) {
+	int retval = -1;
+
+	char datastring[NI_MAXHOST];
+
+	if (db_format != 1) {
+		ERRORPRINT_WA("unsupported database format: %d", db_format);
+		goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv4addr;
+	};
+
+	uint32_t ipv4 = ipv4addr_getdword(ipv4addrp);
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv4 address: %08x", (unsigned int) ipv4);
+
+	int i = -1;
+	int match = -1;
+	int i_min, i_max, i_old, max = 0;
+
+	DBT key, data;
+	DBC *dbcp;
+	int ret;
+	uint32_t recno, recno_max;
+
+	char *token, *cptr, **ptrptr;
+	ptrptr = &cptr;
+
+	int token_counter;
+	char *db_data = NULL;
+
+	uint32_t ipv4_first = 0, ipv4_last = 0;
+
+	i_min = 0; i_max = max; i_old = -1;
+
+	memset(&key, 0, sizeof(key));
+	memset(&data, 0, sizeof(data));
+
+	/* Acquire a cursor for the database. */
+	if ((ret = dbp->cursor(dbp, NULL, &dbcp, 0)) != 0) {
+		dbp->err(dbp, ret, "DB->cursor");
+		goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv4addr;
+	};
+
+	/* Walk through the database and print out the key/data pairs. */
+	while ((ret = dbcp->c_get(dbcp, &key, &data, DB_NEXT)) == 0) {
+		// run through whole database
+	};
+
+	if ((ret = dbcp->c_close(dbcp)) != 0) {
+		dbp->err(dbp, ret, "DBcursor->close");
+		goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv4addr;
+	};
+
+	recno_max = *(uint32_t *)key.data;
+
+	max = recno_max - 1;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with ipv4=%08x max=%d", ipv4, max);
+
+	// binary search in DB
+	i = max / 2;
+	while (i_old != i) {
+		memset(&key, 0, sizeof(key));
+		memset(&data, 0, sizeof(data));
+
+		recno = i + 1;
+
+		key.data = &recno;
+		key.size = sizeof(recno);
+
+		if ((ret = dbp->get(dbp, NULL, &key, &data, 0)) != 0) {
+			dbp->err(dbp, ret, "DB->get");
+			goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv4addr;
+                };
+
+		snprintf(datastring, (data.size + 1) >= sizeof(datastring) ? sizeof(datastring) : data.size + 1, "%s", (char *) data.data);
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database entry %lu: %s (%d)", (long unsigned int) recno, datastring, data.size);
+
+
+		// split data string
+		token = strtok_r(datastring, ";", ptrptr);
+		token_counter = 0;
+		while (token != NULL) {
+			token_counter++;
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "token %d found: %s", token_counter, token);
+
+			if (token_counter == 1) {
+				ipv4_first = atoi(token);
+			} else if (token_counter == 2) {
+				ipv4_last = atoi(token);
+			} else if (token_counter == 3) {
+				db_data = token;
+			} else {
+				ERRORPRINT_WA("corrupted database, data has more than expected tokens: %d", token_counter);
+				goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv4addr;
+			};
+
+			/* get next token */
+			token = strtok_r(NULL, ";", ptrptr);
+		};
+
+		if (token_counter != 3) {
+			ERRORPRINT_WA("corrupted database, data has less than expected tokens: %d", token_counter);
+			goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv4addr;
+		};
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search in DB for ipv4=%08x first=%08x last=%08x i=%d i_min=%d i_max=%d", ipv4, (unsigned int) ipv4_first, (unsigned int) ipv4_last, i, i_min, i_max);
+
+		if (ipv4 < ipv4_first) {
+			// to high in array, jump down
+			i_max = i;
+		} else if (ipv4 > ipv4_last) {
+			// to low in array, jump up
+			i_min = i;
+		} else {
+			// hit
+			match = i;
+			break;
+		};
+
+		i_old = i;
+		i = (i_max - i_min) / 2 + i_min;
+	};
+
+	if (match != -1) {
+		if (db_data != NULL) {
+			snprintf(resultstring, resultstring_length, "%s", db_data);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Finished with success result (DB): match=%d data=%s", match, resultstring);
+			retval = 0;
+		};
+	};
+
+END_libipv6calc_db_wrapper_get_dbentry_by_ipv4addr:
+	return (retval);
+};
+
+
+
+#endif // HAVE_BERKELEY_DB_SUPPORT

@@ -5683,6 +5683,9 @@ fi
 
 
 	LDFLAGS_EXTRA="$LDFLAGS_EXTRA -ldb"
+
+$as_echo "#define HAVE_BERKELEY_DB_SUPPORT 1" >>confdefs.h
+
 fi
 
 

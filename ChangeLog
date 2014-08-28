@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.363 2014/08/28 07:17:43 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.364 2014/08/28 20:29:47 ds6peter Exp $ 
  */
 
 Info:
@@ -12,6 +12,7 @@ Info:
 20140828/PB
 	further DBIP support
 	proper detection of options with missing arguments
+	implement IPv4 country code lookup for DBIP
 
 20140827/PB
 	start implementation of DBIP support

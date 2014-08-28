@@ -21,6 +21,9 @@
 /* GeoIP include file version. */
 #undef GEOIP_INCLUDE_VERSION
 
+/* Define if Berkeley DB support is required. */
+#undef HAVE_BERKELEY_DB_SUPPORT
+
 /* Define to 1 if you have the declaration of `API_VERSION', and to 0 if you
    don't. */
 #undef HAVE_DECL_API_VERSION

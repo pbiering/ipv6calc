@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.111 2014/08/28 07:17:43 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.112 2014/08/28 20:29:47 ds6peter Exp $
 dnl Copyright: 2001-2014 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -885,6 +885,7 @@ if test "$require_libdb" = "yes"; then
 	])
 
 	LDFLAGS_EXTRA="$LDFLAGS_EXTRA -ldb"
+	AC_DEFINE(HAVE_BERKELEY_DB_SUPPORT, 1, Define if Berkeley DB support is required.)
 fi
 
 
