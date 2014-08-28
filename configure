@@ -1368,8 +1368,7 @@ Optional Features:
                           enabled)
   --disable-db-ipv6       Disable built-in IPv6-to-Registry database (default:
                           enabled)
-  --disable-dbip          Disable built-in DB-IP.com support (default:
-                          enabled)
+  --enable-dbip           Enable DB-IP.com support (default: disabled)
   --enable-ip2location    Enable IP2Location support (default: disabled)
   --enable-geoip          Enable GeoIP support (default: disabled)
 
@@ -4432,7 +4431,7 @@ if test "${enable_dbip+set}" = set; then :
 
 else
 
-		DBIP="yes"
+		DBIP="no"
 
 fi
 

@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.362 2014/08/27 06:48:55 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.363 2014/08/28 07:17:43 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140828/PB
+	further DBIP support
+	proper detection of options with missing arguments
+
 20140827/PB
 	start implementation of DBIP support
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.114 2014/08/27 04:44:23 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.115 2014/08/28 07:17:43 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -86,6 +86,7 @@ int main(int argc, char *argv[]) {
 	char resultstring2[NI_MAXHOST] = "";
 	char resultstring3[NI_MAXHOST] = "";
 	int retval = 1, i, j, lop, result;
+	extern int optopt;
 	uint32_t command = 0;
 	int bit_start = 0, bit_end = 0, force_prefix = 0;
 	char *input1 = NULL, *input2 = NULL;
@@ -172,6 +173,10 @@ int main(int argc, char *argv[]) {
 	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {
 		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Parsing option: 0x%08x", i);
 
+		if ((i == '?') && (optopt != 0)) {
+			exit(EXIT_FAILURE);
+		};
+
 		/* catch "common basic" options */
 		result = ipv6calcoptions_common_basic(i, optarg, longopts);
 		if (result == 0) {
@@ -187,8 +192,11 @@ int main(int argc, char *argv[]) {
 		};
 
 		/* specific options */
+		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Parsing option locally: 0x%08x", i);
+
 		switch (i) {
 			case -1:
+				DEBUGPRINT_NA(DEBUG_ipv6calc_general, "end of options");
 				break;
 
 			case 'v':

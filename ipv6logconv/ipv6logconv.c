@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.36 2014/07/22 06:00:41 ds6peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.37 2014/08/28 07:17:43 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -87,6 +87,7 @@ int main(int argc,char *argv[]) {
 	struct option longopts[MAXLONGOPTIONS];
 	char   shortopts[NI_MAXHOST] = "";
 	int    longopts_maxentries = 0;
+	extern int optopt;
 
 	/* check for UID */
 	if (getuid() == 0) {
@@ -112,6 +113,10 @@ int main(int argc,char *argv[]) {
 	/* Fetch the command-line arguments. */
 	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {
 		DEBUGPRINT_WA(DEBUG_ipv6logconv_general, "Parsing option: 0x%08x", i);
+
+		if ((i == '?') && (optopt != 0)) {
+			exit(EXIT_FAILURE);
+		};
 
 		/* catch common options */
 		result = ipv6calcoptions_common_basic(i, optarg, longopts);

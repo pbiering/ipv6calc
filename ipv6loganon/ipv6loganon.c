@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.33 2014/07/31 17:22:51 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.34 2014/08/28 07:17:43 ds6peter Exp $
  * Copyright  : 2007-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -98,6 +98,7 @@ int main(int argc,char *argv[]) {
 	struct option longopts[MAXLONGOPTIONS];
 	char   shortopts[NI_MAXHOST] = "";
 	int    longopts_maxentries = 0;
+	extern int optopt;
 
 	ipv6calc_quiet = 1; //default for ipv6loganon
 
@@ -119,6 +120,10 @@ int main(int argc,char *argv[]) {
 	/* Fetch the command-line arguments. */
 	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {
 		DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "Parsing option: 0x%08x", i);
+
+		if ((i == '?') && (optopt != 0)) {
+			exit(EXIT_FAILURE);
+		};
 
 		/* catch common options */
 		result = ipv6calcoptions_common_basic(i, optarg, longopts);

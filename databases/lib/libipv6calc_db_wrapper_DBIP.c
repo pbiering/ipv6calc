@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.1 2014/08/27 06:48:55 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.2 2014/08/28 07:17:43 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -385,18 +385,19 @@ uint32_t libipv6calc_db_wrapper_DBIP_close(DB *dbp) {
  */
 char *libipv6calc_db_wrapper_DBIP_database_info(DB *dbp) {
 	static char resultstring[NI_MAXHOST];
-	static char dbyear[5];
+	static char dbyear[5]; // YYYY + '\0'
+	static char dbdate[9]; // YYYYMMDD + '\0'
+	static char dbtype[5]; // DDDD + '\0'
+	//char *dbusage, *dbformat, *dbdate, *dbtype, *dbproto, *dbcreated;
 
 	DBT key, data;
-	int ret, recno;
+	DBC *dbcp;
+	int ret;
 
-	int i;
+	u_long recno, recno_max;
 
 	char *token, *cptr, **ptrptr;
 	ptrptr = &cptr;
-
-	//char *dbusage, *dbformat, *dbdate, *dbtype, *dbproto, *dbcreated;
-	char *dbdate = '\0', *dbtype = '\0';
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: %s", wrapper_dbip_info);
 
@@ -424,16 +425,17 @@ char *libipv6calc_db_wrapper_DBIP_database_info(DB *dbp) {
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database info string token/value pair found: %s", token);
 
 			if (strncmp(token, "dbdate=", strlen("dbdate=")) == 0) {
-				dbdate = token + strlen("dbdate=");
+				strncpy(dbdate, token + strlen("dbdate="), sizeof(dbdate) - 1);
+				dbdate[sizeof(dbdate) - 1] = '\0';
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database info string token/value found: %s=%s", "dbdate", dbdate);
 
-				for (i = 0; i < 4; i++) {
-					dbyear[i] = dbdate[i];
-				};
+				strncpy(dbyear, token + strlen("dbdate="), sizeof(dbyear) - 1);
+				dbyear[sizeof(dbyear) - 1] = '\0';
 			};
 
 			if (strncmp(token, "dbtype=", strlen("dbtype=")) == 0) {
-				dbtype = token + strlen("dbtype=");
+				strncpy(dbtype, token + strlen("dbdate="), sizeof(dbtype) - 1);
+				dbtype[sizeof(dbtype) - 1] = '\0';
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database info string token/value found: %s=%s", "dbtype", dbtype);
 			};
 
@@ -441,10 +443,46 @@ char *libipv6calc_db_wrapper_DBIP_database_info(DB *dbp) {
 			token = strtok_r(NULL, ";", ptrptr);
 		};
 
-		snprintf(resultstring, sizeof(resultstring), "DBIP-DB%s %8s Copyright (c) %4s DBIP All Rights Reserved", 
+		/* Acquire a cursor for the database. */
+		if ((ret = dbp->cursor(dbp, NULL, &dbcp, 0)) != 0) {
+			dbp->err(dbp, ret, "DB->cursor");
+			return (NULL);
+		};
+
+		/* Re-initialize the key/data pair. */
+		memset(&key, 0, sizeof(key));
+		memset(&data, 0, sizeof(data));
+
+		/* Walk through the database and print out the key/data pairs. */
+		while ((ret = dbcp->c_get(dbcp, &key, &data, DB_NEXT)) == 0) {
+			// printf("%lu : %.*s\n", *(u_long *)key.data, (int)data.size, (char *)data.data);
+			if (ret != DB_NOTFOUND) {
+				// dbp->err(dbp, ret, "DBcursor->get");
+			};
+		};
+		recno_max = *(u_long *)key.data;
+
+		/* Close the cursor. */
+		if ((ret = dbcp->c_close(dbcp)) != 0) {
+			dbp->err(dbp, ret, "DBcursor->close"); return (NULL);
+		};
+
+		/* get last line */
+		key.data = &recno_max;
+		key.size = sizeof(recno_max);
+
+		if ((ret = dbp->get(dbp, NULL, &key, &data, 0)) != 0) {
+			dbp->err(dbp, ret, "DB->get");
+			return(NULL);
+		};
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database last entry key=%lu data=%.*s", *(u_long *)key.data, (int)data.size, (char *)data.data);
+
+		snprintf(resultstring, sizeof(resultstring), "DBIP-DB%s %8s Copyright (c) %4s DBIP All Rights Reserved Entries:%lu", 
                                 dbtype,
 				dbdate,
-				dbyear
+				dbyear,
+				recno_max
 		);
 	};
 

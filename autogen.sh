@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.48 2014/07/31 19:07:50 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.49 2014/08/28 07:17:43 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -23,6 +23,7 @@ while [ "$1" != "$LAST" ]; do
 		SKIP_STATIC=1
 		use_geoip=1
 		use_ip2location=1
+		use_dbip=1
 		;;
 	    '--geoip'|'-g')
 		shift
@@ -49,6 +50,11 @@ while [ "$1" != "$LAST" ]; do
 		SKIP_STATIC=1
 		use_ip2location=1
 		use_ip2location_dyn=1
+		;;
+	    '--dbip'|'-d')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-dbip"
+		use_dbip=1
 		;;
 	    '--disable-db-ieee')
 		shift
@@ -89,11 +95,12 @@ while [ "$1" != "$LAST" ]; do
 		echo "Supported options:"
 		echo "   -?|-h|--help        : this help"
 		echo "   -n|--no-make        : stop before running 'make'"
-		echo "   -a|--all            : enable GeoIP and IP2Location support"
+		echo "   -a|--all            : enable GeoIP/IP2Location/DB-IP.com support"
 		echo "   -g|--geoip          : enable GeoIP support"
 		echo "   --geoip-dyn|-G      : switch to dynamic library loading of GeoIP"
 		echo "   -i|--ip2location    : enable IP2Location support"
 		echo "   --ip2location-dyn|-I: switch to dynamic library loading of IP2Location"
+		echo "   -d|--dbip           : enable DB-IP.com support"
 		echo "   --disable-db-ieee   : disable built-in IEEE database"
 		echo "   --disable-db-ipv4   : disable built-in IPv4 database"
 		echo "   --disable-db-ipv6   : disable built-in IPv6 database"
