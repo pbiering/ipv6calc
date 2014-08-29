@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.116 2014/07/31 06:20:35 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.117 2014/08/29 06:11:35 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -909,7 +909,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		/* AS */
 		DEBUGPRINT_NA(DEBUG_showinfo, "get AS number/text");
 		if ((typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) == 0) {
-			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS) == 1) {
+			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_AS) == 1) {
 				as_text = libipv6calc_db_wrapper_as_text_by_addr(ipv6addrstring, 6);
 			};
 		};

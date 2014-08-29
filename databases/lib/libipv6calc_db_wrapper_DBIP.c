@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.3 2014/08/28 20:29:48 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.4 2014/08/29 06:11:35 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -407,7 +407,7 @@ char *libipv6calc_db_wrapper_DBIP_database_info(DB *dbp) {
 		memset(&key, 0, sizeof(key));
 		memset(&data, 0, sizeof(data));
 
-		recno = 1;
+		recno = 1; // info
 
 		key.data = &recno;
 		key.size = sizeof(recno);
@@ -443,29 +443,29 @@ char *libipv6calc_db_wrapper_DBIP_database_info(DB *dbp) {
 			token = strtok_r(NULL, ";", ptrptr);
 		};
 
+		/* Re-initialize the key/data pair. */
+		memset(&key, 0, sizeof(key));
+		memset(&data, 0, sizeof(data));
+
 		/* Acquire a cursor for the database. */
 		if ((ret = dbp->cursor(dbp, NULL, &dbcp, 0)) != 0) {
 			dbp->err(dbp, ret, "DB->cursor");
 			return (NULL);
 		};
 
-		/* Re-initialize the key/data pair. */
-		memset(&key, 0, sizeof(key));
-		memset(&data, 0, sizeof(data));
-
-		/* Walk through the database and print out the key/data pairs. */
-		while ((ret = dbcp->c_get(dbcp, &key, &data, DB_NEXT)) == 0) {
-			// printf("%lu : %.*s\n", *(u_long *)key.data, (int)data.size, (char *)data.data);
-			if (ret != DB_NOTFOUND) {
-				// dbp->err(dbp, ret, "DBcursor->get");
-			};
+		/* Jump to last entry of the database */
+		if ((ret = dbcp->c_get(dbcp, &key, &data, DB_LAST)) != 0) {
+			dbp->err(dbp, ret, "DB->cursor/DB_LAST");
+			return (NULL);
 		};
-		recno_max = *(u_long *)key.data;
 
 		/* Close the cursor. */
 		if ((ret = dbcp->c_close(dbcp)) != 0) {
-			dbp->err(dbp, ret, "DBcursor->close"); return (NULL);
+			dbp->err(dbp, ret, "DBcursor->close");
+			return (NULL);
 		};
+
+		recno_max = *(long unsigned int *)key.data;
 
 		/* get last line */
 		key.data = &recno_max;
@@ -478,11 +478,10 @@ char *libipv6calc_db_wrapper_DBIP_database_info(DB *dbp) {
 
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database last entry key=%lu data=%.*s", *(u_long *)key.data, (int)data.size, (char *)data.data);
 
-		snprintf(resultstring, sizeof(resultstring), "DBIP-DB%s %8s Copyright (c) %4s DBIP All Rights Reserved Entries:%lu", 
+		snprintf(resultstring, sizeof(resultstring), "DBIP-DB%s %8s Copyright (c) %4s DBIP All Rights Reserved", 
                                 dbtype,
 				dbdate,
-				dbyear,
-				recno_max
+				dbyear
 		);
 	};
 
@@ -571,7 +570,7 @@ char *libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(char *addr, const
 	if (proto == 4) {
 		result = libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(&ipv4addr, dbp, 1, resultstring, sizeof(resultstring));
 	} else if (proto == 6) {
-
+		result = libipv6calc_db_wrapper_get_dbentry_by_ipv6addr(&ipv6addr, dbp, 1, resultstring, sizeof(resultstring));
 	};
 
 	cc = resultstring;

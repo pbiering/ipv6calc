@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.41 2014/08/28 20:29:48 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.42 2014/08/29 06:11:35 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -267,7 +267,8 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 #endif // SUPPORT_GEOIP
 
 #ifdef SUPPORT_DBIP
-	// TODO
+	snprintf(tempstring, sizeof(tempstring), "%s%sDBIP", string, strlen(string) > 0 ? " " : "");
+	snprintf(string, size, "%s", tempstring);
 #endif
 
 #ifdef SUPPORT_BUILTIN
@@ -867,7 +868,7 @@ int libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(const ipv6calc_ipv4addr *ipv4
 	DBT key, data;
 	DBC *dbcp;
 	int ret;
-	uint32_t recno, recno_max;
+	long unsigned int recno, recno_max;
 
 	char *token, *cptr, **ptrptr;
 	ptrptr = &cptr;
@@ -879,6 +880,7 @@ int libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(const ipv6calc_ipv4addr *ipv4
 
 	i_min = 0; i_max = max; i_old = -1;
 
+	// get amount of entries in database
 	memset(&key, 0, sizeof(key));
 	memset(&data, 0, sizeof(data));
 
@@ -889,16 +891,20 @@ int libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(const ipv6calc_ipv4addr *ipv4
 	};
 
 	/* Walk through the database and print out the key/data pairs. */
-	while ((ret = dbcp->c_get(dbcp, &key, &data, DB_NEXT)) == 0) {
-		// run through whole database
+	if ((ret = dbcp->c_get(dbcp, &key, &data, DB_LAST)) != 0) {
+		dbp->err(dbp, ret, "DB->cursor/DB_LAST");
+		goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv4addr;
 	};
 
+	/* Close the cursor. */
 	if ((ret = dbcp->c_close(dbcp)) != 0) {
 		dbp->err(dbp, ret, "DBcursor->close");
 		goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv4addr;
 	};
 
-	recno_max = *(uint32_t *)key.data;
+	recno_max = *(long unsigned int *)key.data;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database amount of entries found: %lu", recno_max);
 
 	max = recno_max - 1;
 
@@ -910,7 +916,7 @@ int libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(const ipv6calc_ipv4addr *ipv4
 		memset(&key, 0, sizeof(key));
 		memset(&data, 0, sizeof(data));
 
-		recno = i + 1;
+		recno = i + 2; // 1 is info
 
 		key.data = &recno;
 		key.size = sizeof(recno);
@@ -922,8 +928,7 @@ int libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(const ipv6calc_ipv4addr *ipv4
 
 		snprintf(datastring, (data.size + 1) >= sizeof(datastring) ? sizeof(datastring) : data.size + 1, "%s", (char *) data.data);
 
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database entry %lu: %s (%d)", (long unsigned int) recno, datastring, data.size);
-
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database entry %lu: %s (%d)", recno, datastring, data.size);
 
 		// split data string
 		token = strtok_r(datastring, ";", ptrptr);
@@ -979,6 +984,168 @@ int libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(const ipv6calc_ipv4addr *ipv4
 	};
 
 END_libipv6calc_db_wrapper_get_dbentry_by_ipv4addr:
+	return (retval);
+};
+
+
+/*
+ * generic Berkeley DB lookup function for IPv6
+ * 
+ * in:  DB, ipv6addrp
+ * out: database entry matching ipv6addrp
+ *
+ * database format
+ * Version 1
+ *  RECNO: ipv6_first_0_31;ipv6_first_32_63;ipv6_last_0_31;ipv6_last_32_63;data
+ */
+int libipv6calc_db_wrapper_get_dbentry_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, DB *dbp, const int db_format, char *resultstring, const size_t resultstring_length) {
+	int retval = -1;
+
+	char datastring[NI_MAXHOST];
+
+	if (db_format != 1) {
+		ERRORPRINT_WA("unsupported database format: %d", db_format);
+		goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv6addr;
+	};
+
+	uint32_t ipv6_00_31 = ipv6addr_getdword(ipv6addrp, 0);
+	uint32_t ipv6_32_63 = ipv6addr_getdword(ipv6addrp, 1);
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given ipv6 prefix: %08x%08x", (unsigned int) ipv6_00_31, (unsigned int) ipv6_32_63);
+
+	int i = -1;
+	int match = -1;
+	// int i_min, i_max, i_old, max = 0; // TODO: implmement binary search
+
+	DBT key, data;
+	DBC *dbcp;
+	int ret;
+	long unsigned int recno, recno_max;
+
+	char *token, *cptr, **ptrptr;
+	ptrptr = &cptr;
+
+	int token_counter;
+	char *db_data = NULL;
+
+	uint32_t ipv6_first_00_31 = 0, ipv6_first_32_63 = 0, ipv6_last_00_31 = 0, ipv6_last_32_63 = 0;
+
+	// get amount of entries in database
+	memset(&key, 0, sizeof(key));
+	memset(&data, 0, sizeof(data));
+
+	/* Acquire a cursor for the database. */
+	if ((ret = dbp->cursor(dbp, NULL, &dbcp, 0)) != 0) {
+		dbp->err(dbp, ret, "DB->cursor");
+		goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv6addr;
+	};
+
+	/* Walk through the database and print out the key/data pairs. */
+	if ((ret = dbcp->c_get(dbcp, &key, &data, DB_LAST)) != 0) {
+		dbp->err(dbp, ret, "DB->cursor/DB_LAST");
+		goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv6addr;
+	};
+
+	/* Close the cursor. */
+	if ((ret = dbcp->c_close(dbcp)) != 0) {
+		dbp->err(dbp, ret, "DBcursor->close");
+		goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv6addr;
+	};
+
+	recno_max = *(long unsigned int *)key.data;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database amount of entries found: %lu", recno_max);
+
+	for (i = 0; i < recno_max - 1; i++) {
+		/* run sequentially through database array */
+
+		memset(&key, 0, sizeof(key));
+		memset(&data, 0, sizeof(data));
+
+		recno = i + 2; // 1 is info
+
+		key.data = &recno;
+		key.size = sizeof(recno);
+
+		if ((ret = dbp->get(dbp, NULL, &key, &data, 0)) != 0) {
+			dbp->err(dbp, ret, "DB->get");
+			goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv6addr;
+                };
+
+		snprintf(datastring, (data.size + 1) >= sizeof(datastring) ? sizeof(datastring) : data.size + 1, "%s", (char *) data.data);
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database entry %lu: %s (%d)", recno, datastring, data.size);
+
+		// split data string
+		token = strtok_r(datastring, ";", ptrptr);
+		token_counter = 0;
+		while (token != NULL) {
+			token_counter++;
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "token %d found: %s", token_counter, token);
+
+			if (token_counter == 1) {
+				ipv6_first_00_31 = atoi(token);
+			} else if (token_counter == 2) {
+				ipv6_first_32_63 = atoi(token);
+			} else if (token_counter == 3) {
+				ipv6_last_00_31 = atoi(token);
+			} else if (token_counter == 4) {
+				ipv6_last_32_63 = atoi(token);
+			} else if (token_counter == 5) {
+				db_data = token;
+			} else {
+				ERRORPRINT_WA("corrupted database, data has more than expected tokens: %d", token_counter);
+				goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv6addr;
+			};
+
+			/* get next token */
+			token = strtok_r(NULL, ";", ptrptr);
+		};
+
+		if (token_counter != 5) {
+			ERRORPRINT_WA("corrupted database, data has less than expected tokens: %d", token_counter);
+			goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv6addr;
+		};
+
+		//DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search in DB for ipv6=%08x%08x first=%08x%08x last=%08x%08x i=%d i_min=%d i_max=%d", // TODO Binary search
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search in DB for ipv6=%08x%08x first=%08x%08x last=%08x%08x i=%d",
+			(unsigned int) ipv6_00_31,
+			(unsigned int) ipv6_32_63,
+			(unsigned int) ipv6_first_00_31,
+			(unsigned int) ipv6_first_32_63,
+			(unsigned int) ipv6_last_00_31,
+			(unsigned int) ipv6_last_32_63,
+			//i, i_min, i_max); // TODO Binary search
+			i);
+
+		if ((ipv6_00_31 < ipv6_first_00_31) || (ipv6_00_31 > ipv6_last_00_31)) {
+			/* MSB 00-31 too less or too high */
+			continue;
+		};
+
+		if ((ipv6_00_31 == ipv6_first_00_31) && (ipv6_32_63 < ipv6_first_32_63)) {
+			/* MSB 00-31 match first, but MSB 32-63 too less */
+			continue;
+		};
+
+		if ((ipv6_00_31 == ipv6_last_00_31) && (ipv6_32_63 > ipv6_last_32_63)) {
+			/* MSB 00-31 match last, but MSB 32-63 too high */
+			continue;
+		};
+
+		match = i;
+		break;
+	};
+
+	if (match != -1) {
+		if (db_data != NULL) {
+			snprintf(resultstring, resultstring_length, "%s", db_data);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Finished with success result (DB): match=%d data=%s", match, resultstring);
+			retval = 0;
+		};
+	};
+
+END_libipv6calc_db_wrapper_get_dbentry_by_ipv6addr:
 	return (retval);
 };
 
