@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.42 2014/08/29 06:11:35 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.43 2014/08/30 00:38:53 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -944,8 +944,9 @@ int libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(const ipv6calc_ipv4addr *ipv4
 			} else if (token_counter == 3) {
 				db_data = token;
 			} else {
-				ERRORPRINT_WA("corrupted database, data has more than expected tokens: %d", token_counter);
-				goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv4addr;
+				ERRORPRINT_WA("corrupted database, data has more than expected tokens: %d (%s)", token_counter, (char *) data.data);
+				exit(1);
+				//goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv4addr;
 			};
 
 			/* get next token */
@@ -953,8 +954,9 @@ int libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(const ipv6calc_ipv4addr *ipv4
 		};
 
 		if (token_counter != 3) {
-			ERRORPRINT_WA("corrupted database, data has less than expected tokens: %d", token_counter);
-			goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv4addr;
+			ERRORPRINT_WA("corrupted database, data has less than expected tokens: %d (%s)", token_counter, (char *) data.data);
+			exit(1);
+			//goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv4addr;
 		};
 
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search in DB for ipv4=%08x first=%08x last=%08x i=%d i_min=%d i_max=%d", ipv4, (unsigned int) ipv4_first, (unsigned int) ipv4_last, i, i_min, i_max);
@@ -1094,8 +1096,10 @@ int libipv6calc_db_wrapper_get_dbentry_by_ipv6addr(const ipv6calc_ipv6addr *ipv6
 			} else if (token_counter == 5) {
 				db_data = token;
 			} else {
-				ERRORPRINT_WA("corrupted database, data has more than expected tokens: %d", token_counter);
-				goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv6addr;
+				ERRORPRINT_WA("corrupted database, data has more than expected tokens: %d (%s)", token_counter, (char *) data.data);
+				exit(1);
+				//ERRORPRINT_WA("corrupted database, data has more than expected tokens: %d", token_counter);
+				//goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv6addr;
 			};
 
 			/* get next token */
@@ -1103,8 +1107,9 @@ int libipv6calc_db_wrapper_get_dbentry_by_ipv6addr(const ipv6calc_ipv6addr *ipv6
 		};
 
 		if (token_counter != 5) {
-			ERRORPRINT_WA("corrupted database, data has less than expected tokens: %d", token_counter);
-			goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv6addr;
+			ERRORPRINT_WA("corrupted database, data has less than expected tokens: %d (%s)", token_counter, (char *) data.data);
+			exit(1);
+			//goto END_libipv6calc_db_wrapper_get_dbentry_by_ipv6addr;
 		};
 
 		//DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search in DB for ipv6=%08x%08x first=%08x%08x last=%08x%08x i=%d i_min=%d i_max=%d", // TODO Binary search
