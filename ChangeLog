@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.365 2014/08/29 06:11:35 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.366 2014/08/30 23:06:47 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140831/PB
+	implement IPv6 city code lookup for DBIP, add DBIP output to DBIP_COUNTRY_SHORT, DBIP_CITY, DBIP_DATABASE_INFO
+
 20140829/PB
 	implement IPv6 country code lookup for DBIP
 

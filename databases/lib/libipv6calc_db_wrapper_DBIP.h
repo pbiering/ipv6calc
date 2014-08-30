@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.h
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.h,v 1.2 2014/08/28 20:29:48 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.h,v 1.3 2014/08/30 23:06:47 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -81,7 +81,8 @@ extern void        libipv6calc_db_wrapper_DBIP_wrapper_info(char* string, const 
 extern void        libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
 extern char       *libipv6calc_db_wrapper_DBIP_wrapper_db_info_used(void);
 
-extern char       *libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(char *addr, const int proto);
+extern char       *libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(const char *addr, const int proto);
+extern char       *libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const char *addr, const int proto);
 
 extern int         libipv6calc_db_wrapper_DBIP_has_features(uint32_t features);
 

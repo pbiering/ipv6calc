@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.117 2014/08/29 06:11:35 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.118 2014/08/30 23:06:47 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -28,6 +28,7 @@
 #include "../databases/lib/libipv6calc_db_wrapper.h"
 #include "../databases/lib/libipv6calc_db_wrapper_GeoIP.h"
 #include "../databases/lib/libipv6calc_db_wrapper_IP2Location.h"
+#include "../databases/lib/libipv6calc_db_wrapper_DBIP.h"
 
 #ifdef SUPPORT_IP2LOCATION
 #include "IP2Location.h"
@@ -116,6 +117,11 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " GEOIP_AS_TEXT=...             : Autonomous System information\n");
 	fprintf(stderr, " GEOIP_DATABASE_INFO=...       : Information about the used databases\n");
 #endif
+#ifdef SUPPORT_DBIP
+	fprintf(stderr, " DBIP_COUNTRY_SHORT=.. .       : Country code of IP address\n");
+	fprintf(stderr, " DBIP_CITY=...                 : City of IP address\n");
+	fprintf(stderr, " DBIP_DATABASE_INFO=.. .       : Information about the used databases\n");
+#endif
 	fprintf(stderr, " IPV6CALC_NAME=name            : Name of ipv6calc\n");
 	fprintf(stderr, " IPV6CALC_VERSION=x.y          : Version of ipv6calc\n");
 	fprintf(stderr, " IPV6CALC_COPYRIGHT=\"...\"      : Copyright string\n");
@@ -140,7 +146,7 @@ static void printfooter(const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST] = "";
 	char tempstring2[NI_MAXHOST] = "";
 
-#if defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP || defined SUPPORT_DBIP
 	char *string;
 #endif
 
@@ -157,6 +163,14 @@ static void printfooter(const uint32_t formatoptions) {
 		string = libipv6calc_db_wrapper_GeoIP_wrapper_db_info_used();
 		if ((string != NULL) && (strlen(string) > 0)) {
 			snprintf(tempstring, sizeof(tempstring), "GEOIP_DATABASE_INFO=%s", string);
+			printout(tempstring);
+		};
+#endif
+
+#ifdef SUPPORT_DBIP
+		string = libipv6calc_db_wrapper_DBIP_wrapper_db_info_used();
+		if ((string != NULL) && (strlen(string) > 0)) {
+			snprintf(tempstring, sizeof(tempstring), "DBIP_DATABASE_INFO=%s", string);
 			printout(tempstring);
 		};
 #endif
@@ -428,6 +442,52 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 };
 #endif
 
+#ifdef SUPPORT_DBIP
+/* print DBIP information */
+static void print_dbip(const char *addrstring, const uint32_t formatoptions, const char *additionalstring, int version) {
+	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
+
+	if (wrapper_features_DBIP == 0) {
+		DEBUGPRINT_NA(DEBUG_showinfo, "DBIP support not active");
+		return;
+	};
+
+	const char *returnedCountry = NULL;
+	const char *returnedCity    = NULL;
+
+	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable);
+	char tempstring[NI_MAXHOST] = "";
+
+	returnedCountry     = libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(addrstring, version);
+	if (returnedCountry != NULL) {
+		DEBUGPRINT_WA(DEBUG_showinfo, "DBIP IPv%d country database result", version);
+
+		if ( machinereadable != 0 ) {
+			snprintf(tempstring, sizeof(tempstring), "DBIP_COUNTRY_SHORT%s=%s", additionalstring, returnedCountry);
+			printout(tempstring);
+		} else {
+			if (strlen(additionalstring) > 0) {
+				fprintf(stdout, "DBIP country code for %s: %s\n", additionalstring, returnedCountry);
+			} else {
+				fprintf(stdout, "DBIP country code: %s\n", returnedCountry);
+			};
+		};
+	};
+
+	returnedCity = libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(addrstring, version);
+	if (returnedCity != NULL) {
+		DEBUGPRINT_WA(DEBUG_showinfo, "DBIP IPv%d city database result", version);
+
+		if ( machinereadable != 0 ) {
+			snprintf(tempstring, sizeof(tempstring), "DBIP_CITY%s=%s", additionalstring, returnedCity);
+			printout(tempstring);
+		} else {
+			fprintf(stdout, " DBIP not machinereadable output currently only limited supported\n");
+		};
+	};
+};
+#endif
+
 
 /* print IPv4 address */
 static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formatoptions, const char *string) {
@@ -604,6 +664,11 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 #ifdef SUPPORT_GEOIP
 		/* GeoIP information */
 		print_geoip(tempipv4string, formatoptions, embeddedipv4string, 4);
+#endif
+
+#ifdef SUPPORT_DBIP
+		/* DBIP.com information */
+		print_dbip(tempipv4string, formatoptions, embeddedipv4string, 4);
 #endif
 	};
 
@@ -1253,15 +1318,20 @@ END:
 	i = libipv6calc_db_wrapper_registry_num_by_ipv6addr(ipv6addrp);
 	if ((i != IPV6_ADDR_REGISTRY_RESERVED) && (i != IPV6_ADDR_REGISTRY_6BONE)) {
 		if ( ((typeinfo & IPV6_NEW_ADDR_AGU) != 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID | IPV6_ADDR_ANONYMIZED_PREFIX)) == 0) ) {
-	#ifdef SUPPORT_IP2LOCATION
+#ifdef SUPPORT_IP2LOCATION
 			/* IP2Location information */
 			print_ip2location(ipv6addrstring, formatoptions, "", 6);
-	#endif
+#endif
 
-	#ifdef SUPPORT_GEOIP
+#ifdef SUPPORT_GEOIP
 			/* GeoIP information */
 			print_geoip(ipv6addrstring, formatoptions, "", 6);
-	#endif
+#endif
+
+#ifdef SUPPORT_DBIP
+			/* DBIP.com information */
+			print_dbip(ipv6addrstring, formatoptions, "", 6);
+#endif
 		};
 	};
 

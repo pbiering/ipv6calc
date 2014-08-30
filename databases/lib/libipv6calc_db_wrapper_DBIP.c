@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.4 2014/08/29 06:11:35 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.5 2014/08/30 23:06:47 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -394,6 +394,8 @@ char *libipv6calc_db_wrapper_DBIP_database_info(DB *dbp) {
 	DBC *dbcp;
 	int ret;
 
+	char datastring[NI_MAXHOST];
+
 	u_long recno, recno_max;
 
 	char *token, *cptr, **ptrptr;
@@ -414,13 +416,17 @@ char *libipv6calc_db_wrapper_DBIP_database_info(DB *dbp) {
 
 		if ((ret = dbp->get(dbp, NULL, &key, &data, 0)) != 0) {
 			dbp->err(dbp, ret, "DB->get");
-			return(NULL);
+			snprintf(resultstring, sizeof(resultstring), "CORRUPT DB FILE"); 
+			return(resultstring);
+			//return(NULL);
 		}
 
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database info string: %s", (char *) data.data);
+		snprintf(datastring, (data.size + 1) >= sizeof(datastring) ? sizeof(datastring) : data.size + 1, "%s", (char *) data.data);
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database info string: %s", datastring);
 
 		// split info string
-		token = strtok_r(data.data, ";", ptrptr);
+		token = strtok_r(datastring, ";", ptrptr);
 		while (token != NULL) {
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database info string token/value pair found: %s", token);
 
@@ -526,7 +532,7 @@ int libipv6calc_db_wrapper_DBIP_has_features(uint32_t features) {
 };
 
 /* country_code */
-char *libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(char *addr, const int proto) {
+char *libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(const char *addr, const int proto) {
 	DB *dbp;
 	char *cc;
 
@@ -568,27 +574,104 @@ char *libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(char *addr, const
 	};
 
 	if (proto == 4) {
-		result = libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(&ipv4addr, dbp, 1, resultstring, sizeof(resultstring));
+		result = libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(&ipv4addr, dbp, IPV6CALC_BDB_FORMAT_CHECK_FIRST_LAST | IPV6CALC_BDB_FORMAT_CHECK_32 | 0x01 | 0x10, resultstring, sizeof(resultstring));
 	} else if (proto == 6) {
-		result = libipv6calc_db_wrapper_get_dbentry_by_ipv6addr(&ipv6addr, dbp, 1, resultstring, sizeof(resultstring));
+		result = libipv6calc_db_wrapper_get_dbentry_by_ipv6addr(&ipv6addr, dbp, IPV6CALC_BDB_FORMAT_CHECK_FIRST_LAST | IPV6CALC_BDB_FORMAT_CHECK_64 | 0x01 | 0x10, resultstring, sizeof(resultstring));
 	};
 
 	cc = resultstring;
 
 	if (cc == NULL) {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "libipv6calc_db_wrapper_DBIP_get_country_short did not return a record");
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "did not return a record");
 		goto END_libipv6calc_db_wrapper_close;
 	};
 
 	DBIP_result_ptr = cc;
 
 	if (DBIP_result_ptr == NULL) {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "libipv6calc_db_wrapper_DBIP_get_country_short did not contain a country_short code");
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "did not contain a country_short code");
 		goto END_libipv6calc_db_wrapper_close;
 	};
 
 	if (strlen(DBIP_result_ptr) > 2) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "libipv6calc_db_wrapper_DBIP_get_country_short did not return a proper country_short code (length > 2): %s", DBIP_result_ptr);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "did not return a proper country_short code (length > 2): %s", DBIP_result_ptr);
+		goto END_libipv6calc_db_wrapper_close;
+	};
+
+	DBIP_DB_USAGE_MAP_TAG(DBIP_type);
+
+END_libipv6calc_db_wrapper_close:
+	libipv6calc_db_wrapper_DBIP_close(dbp);
+
+END_libipv6calc_db_wrapper:
+	return(DBIP_result_ptr);
+};
+
+/* country_code */
+char *libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const char *addr, const int proto) {
+	DB *dbp;
+
+	char *city;
+
+	static char resultstring[NI_MAXHOST];
+
+	int DBIP_type = 0;
+	char *DBIP_result_ptr = NULL;
+
+	ipv6calc_ipv4addr ipv4addr;
+	ipv6calc_ipv6addr ipv6addr;
+
+	int result;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with addr=%s proto=%d", addr, proto);
+
+	if (proto == 4) {
+		DBIP_type = DBIP_DB_IPV4_CITY;
+		// convert char to structure
+		result = addr_to_ipv4addrstruct(addr, resultstring, sizeof(resultstring), &ipv4addr);
+	} else if (proto == 6) {
+		DBIP_type = DBIP_DB_IPV6_CITY;
+		// convert char to structure
+		result = addr_to_ipv6addrstruct(addr, resultstring, sizeof(resultstring), &ipv6addr);
+	} else {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Unsupported proto: %d", proto);
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	if (result != 0) {
+		ERRORPRINT_WA("error converting address string for proto %d: %s", proto, addr);
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	dbp = libipv6calc_db_wrapper_DBIP_open_type(DBIP_type);
+
+	if (dbp == NULL) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Error opening DBIP by type");
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	if (proto == 4) {
+		result = libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(&ipv4addr, dbp, IPV6CALC_BDB_FORMAT_CHECK_FIRST_LAST | IPV6CALC_BDB_FORMAT_CHECK_32 | 0x03 | 0x30, resultstring, sizeof(resultstring));
+	} else if (proto == 6) {
+		result = libipv6calc_db_wrapper_get_dbentry_by_ipv6addr(&ipv6addr, dbp, IPV6CALC_BDB_FORMAT_CHECK_FIRST_LAST | IPV6CALC_BDB_FORMAT_CHECK_64 | 0x03 | 0x30, resultstring, sizeof(resultstring));
+	};
+
+	city = resultstring;
+
+	if (city == NULL) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "did not return a record");
+		goto END_libipv6calc_db_wrapper_close;
+	};
+
+	DBIP_result_ptr = city;
+
+	if (DBIP_result_ptr == NULL) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "did not contain a country_short code");
+		goto END_libipv6calc_db_wrapper_close;
+	};
+
+	if (strlen(DBIP_result_ptr) > 2) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "did not return a proper country_short code (length > 2): %s", DBIP_result_ptr);
 		goto END_libipv6calc_db_wrapper_close;
 	};
 
