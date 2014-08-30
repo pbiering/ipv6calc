@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.49 2014/08/28 07:17:43 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.50 2014/08/30 23:38:37 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -54,6 +54,7 @@ while [ "$1" != "$LAST" ]; do
 	    '--dbip'|'-d')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-dbip"
+		SKIP_STATIC=1
 		use_dbip=1
 		;;
 	    '--disable-db-ieee')

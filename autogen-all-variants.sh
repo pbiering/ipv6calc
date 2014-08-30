@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.42 2014/07/31 18:55:42 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.43 2014/08/30 23:38:37 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -18,13 +18,14 @@ autogen_variants() {
 		cat <<END | grep -v ^#
 NONE#
 NONE#--enable-bundled-md5 --enable-bundled-getopt
+DBIP#-d
 IP2LOCATION#-i
 IP2LOCATION#-i --ip2location-dyn
 GEOIP#-g
 GEOIP#-g --geoip-dyn
 GEOIP#-g --geoip-ipv6-compat
 GEOIP#-g --geoip-ipv6-compat --geoip-dyn
-IP2LOCATION GEOIP#-a
+IP2LOCATION GEOIP DBIP#-a
 NONE#--disable-db-ieee
 NONE#--disable-db-ipv4
 NONE#--disable-db-ipv6

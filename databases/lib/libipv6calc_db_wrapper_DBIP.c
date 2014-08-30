@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.5 2014/08/30 23:06:47 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.6 2014/08/30 23:38:37 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -484,7 +484,7 @@ char *libipv6calc_db_wrapper_DBIP_database_info(DB *dbp) {
 
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database last entry key=%lu data=%.*s", *(u_long *)key.data, (int)data.size, (char *)data.data);
 
-		snprintf(resultstring, sizeof(resultstring), "DBIP-DB%s %8s Copyright (c) %4s DBIP All Rights Reserved", 
+		snprintf(resultstring, sizeof(resultstring), "DBIP-DB%s %8s Copyright (c) %4s db-ip.com All Rights Reserved", 
                                 dbtype,
 				dbdate,
 				dbyear
