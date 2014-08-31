@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.h
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.h,v 1.4 2014/08/31 10:27:40 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.h,v 1.5 2014/08/31 12:55:40 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -35,8 +35,8 @@
 /*@unused@*/ static const db_file_desc libipv6calc_db_wrapper_DBIP_db_file_desc[] = {
 	{ DBIP_DB_IPV4_COUNTRY    , "ipv6calc-dbip-country-ipv4.db"      , "IPv4 Country" , IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_DBIP_IPV4 },
 	{ DBIP_DB_IPV6_COUNTRY    , "ipv6calc-dbip-country-ipv6.db"      , "IPv6 Country" , IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6 },
-	{ DBIP_DB_IPV4_CITY       , "ipv6calc-dbip-city-ipv4.db"         , "IPv4 City"    , IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_DBIP_IPV4 },
-	{ DBIP_DB_IPV6_CITY       , "ipv6calc-dbip-city-ipv6.db"         , "IPv6 City"    , IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6 },
+	{ DBIP_DB_IPV4_CITY       , "ipv6calc-dbip-city-ipv4.db"         , "IPv4 City"    , IPV6CALC_DB_IPV4_TO_CITY | IPV6CALC_DB_DBIP_IPV4 },
+	{ DBIP_DB_IPV6_CITY       , "ipv6calc-dbip-city-ipv6.db"         , "IPv6 City"    , IPV6CALC_DB_IPV6_TO_CITY | IPV6CALC_DB_DBIP_IPV6 },
 };
 
 // features

@@ -1368,7 +1368,7 @@ Optional Features:
                           enabled)
   --disable-db-ipv6       Disable built-in IPv6-to-Registry database (default:
                           enabled)
-  --enable-dbip           Enable DB-IP.com support (default: disabled)
+  --enable-dbip           Enable db-ip.com support (default: disabled)
   --enable-ip2location    Enable IP2Location support (default: disabled)
   --enable-geoip          Enable GeoIP support (default: disabled)
 

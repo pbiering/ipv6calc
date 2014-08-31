@@ -4,7 +4,7 @@
 #
 # Project    : ipv6calc/DBIP
 # File       : DBIP-update.sh
-# Version    : $Id: DBIP-update.sh,v 1.1 2014/08/31 10:27:40 ds6peter Exp $
+# Version    : $Id: DBIP-update.sh,v 1.2 2014/08/31 12:55:40 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
@@ -14,6 +14,22 @@ DBIP_DAT_DIR="${DBIP_DAT_DIR:-/var/local/share/DBIP/}"
 DBIP_DAT_URL_BASE="http://download.db-ip.com/free/"
 
 DBIP_DAT_FILES="dbip-country-%Y-%m.csv.gz dbip-city-%Y-%m.csv.gz"
+
+DBIP_GENERATOR_LIST="./DBIP-generate-db.pl /usr/share/ipv6calc/tools/DBIP-generate-db.pl"
+
+for entry in $DBIP_GENERATOR_LIST; do
+	if [ -e "$entry" -a -x "$entry" ]; then
+		generate_db="$entry"
+		break
+	fi
+done
+
+if [ -z "$generate_db" ]; then
+	echo "ERROR : no DBIP database generator found from list: $DBIP_GENERATOR_LIST"
+	exit 1
+else
+	echo "INFO  : selected DBIP database generator: $generate_db"
+fi
 
 if [ ! -t 0 ]; then
 	options_generate="-q"
@@ -65,6 +81,6 @@ if [ "$download_result" = "1" ]; then
 
 		file_input="$DBIP_DAT_DIR/`basename "$file"`"
 
-		./DBIP-generate-db.pl $options_generate -I "$file_input" -O "$DBIP_DAT_DIR"
+		$generate_db $options_generate -I "$file_input" -O "$DBIP_DAT_DIR"
 	done
 fi

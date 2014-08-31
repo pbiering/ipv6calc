@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.113 2014/08/31 10:31:07 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.114 2014/08/31 12:55:40 ds6peter Exp $
 dnl Copyright: 2001-2014 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -281,7 +281,7 @@ dnl disable built-in DB-IP.com support
 dnl *************************************************
 AC_ARG_ENABLE([dbip], 
 	AS_HELP_STRING([--enable-dbip],
-	               [Enable DB-IP.com support (default: disabled)]),
+	               [Enable db-ip.com support (default: disabled)]),
 	[
 		DBIP="$enable_dbip"
 	],

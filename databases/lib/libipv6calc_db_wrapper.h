@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.30 2014/08/31 10:27:40 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.31 2014/08/31 12:55:40 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -30,6 +30,8 @@ extern uint32_t wrapper_features;
 
 #define IPV6CALC_DB_IPV4_TO_CC			0x00000100
 #define IPV6CALC_DB_IPV6_TO_CC			0x00000200
+#define IPV6CALC_DB_IPV4_TO_CITY		0x00000400
+#define IPV6CALC_DB_IPV6_TO_CITY		0x00000800
 
 #define IPV6CALC_DB_IEEE_TO_INFO		0x00001000
 

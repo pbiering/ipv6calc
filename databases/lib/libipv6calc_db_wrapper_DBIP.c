@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.7 2014/08/31 10:27:40 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.8 2014/08/31 12:55:40 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -342,8 +342,6 @@ DB *libipv6calc_db_wrapper_DBIP_open_type(int type) {
  * Wrapper functions for DBIP
  *******************************/
 
-
-
 /*
  * wrapper: DBIP_open
  */
@@ -354,11 +352,17 @@ DB *libipv6calc_db_wrapper_DBIP_open(char *db) {
 	int ret;
 
 	if ((ret = db_create(&dbp, NULL, 0)) != 0) {
-		fprintf(stderr, "db_create: %s\n", db_strerror(ret));
+		if (ipv6calc_quiet == 0) {
+			fprintf(stderr, "db_create: %s\n", db_strerror(ret));
+		};
 		return(NULL);
 	};
+
 	if ((ret = dbp->open(dbp, NULL, db, NULL, DB_RECNO, DB_RDONLY, 0444)) != 0) {
-		dbp->err(dbp, ret, "%s", db);
+		if (ipv6calc_quiet == 0) {
+			dbp->err(dbp, ret, "%s", db);
+		};
+		exit(1);
 		return(NULL);
 	};
 
@@ -631,10 +635,20 @@ char *libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const char *addr, const i
 
 	if (proto == 4) {
 		DBIP_type = DBIP_DB_IPV4_CITY;
+
+		if ((wrapper_features_DBIP & IPV6CALC_DB_IPV4_TO_CITY) == 0) {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "No DBIP database supporting IPv4 city/region available");
+			goto END_libipv6calc_db_wrapper;
+		};
 		// convert char to structure
 		result = addr_to_ipv4addrstruct(addr, resultstring, sizeof(resultstring), &ipv4addr);
 	} else if (proto == 6) {
 		DBIP_type = DBIP_DB_IPV6_CITY;
+
+		if ((wrapper_features_DBIP & IPV6CALC_DB_IPV6_TO_CITY) == 0) {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "No DBIP database supporting IPv6 city/region available");
+			goto END_libipv6calc_db_wrapper;
+		};
 		// convert char to structure
 		result = addr_to_ipv6addrstruct(addr, resultstring, sizeof(resultstring), &ipv6addr);
 	} else {
@@ -704,10 +718,19 @@ char *libipv6calc_db_wrapper_DBIP_wrapper_region_by_addr(const char *addr, const
 
 	if (proto == 4) {
 		DBIP_type = DBIP_DB_IPV4_CITY;
+
+		if ((wrapper_features_DBIP & IPV6CALC_DB_IPV4_TO_CITY) == 0) {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "No DBIP database supporting IPv4 city/region available");
+			goto END_libipv6calc_db_wrapper;
+		};
 		// convert char to structure
 		result = addr_to_ipv4addrstruct(addr, resultstring, sizeof(resultstring), &ipv4addr);
 	} else if (proto == 6) {
 		DBIP_type = DBIP_DB_IPV6_CITY;
+		if ((wrapper_features_DBIP & IPV6CALC_DB_IPV6_TO_CITY) == 0) {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "No DBIP database supporting IPv6 city/region available");
+			goto END_libipv6calc_db_wrapper;
+		};
 		// convert char to structure
 		result = addr_to_ipv6addrstruct(addr, resultstring, sizeof(resultstring), &ipv6addr);
 	} else {
