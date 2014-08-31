@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.366 2014/08/30 23:06:47 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.367 2014/08/31 10:27:40 ds6peter Exp $ 
  */
 
 Info:
@@ -10,6 +10,11 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
 20140831/PB
+	add DBIP update tools: DBIP-generate-db.pl, DBIP-update.sh
+	implement also output of DBIP_REGION
+	add support for DBIP to ipv6calcweb.cgi
+
+20140830/PB
 	implement IPv6 city code lookup for DBIP, add DBIP output to DBIP_COUNTRY_SHORT, DBIP_CITY, DBIP_DATABASE_INFO
 
 20140829/PB
@@ -21,7 +26,7 @@ Info:
 	implement IPv4 country code lookup for DBIP
 
 20140827/PB
-	start implementation of DBIP support
+	start implementation of db-ip.com (DBIP) support
 
 20140826/PB
 	implement for output type 'hex' prefix/suffix/uppercase print

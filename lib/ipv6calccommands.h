@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calccommands.h
- * Version    : $Id: ipv6calccommands.h,v 1.19 2014/04/02 06:11:55 ds6peter Exp $
+ * Version    : $Id: ipv6calccommands.h,v 1.20 2014/08/31 10:27:40 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -69,6 +69,9 @@
 #define DB_geoip_disable		0x0002010
 #define DB_geoip_dir			0x0002015
 #define DB_geoip_lib			0x0002016
+
+#define DB_dbip_disable			0x0002020
+#define DB_dbip_dir			0x0002025
 
 /* address anonymizer options */
 #define CMD_ANON_PRESET_STANDARD	0x0003001

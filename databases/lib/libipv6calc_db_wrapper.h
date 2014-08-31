@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.29 2014/08/30 23:06:47 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.30 2014/08/31 10:27:40 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -47,8 +47,8 @@ static const s_formatoption ipv6calc_db_features[] = {
 	{ IPV6CALC_DB_GEOIP_IPV6	, "GeoIPv6"	, "GeoIPv6 database (external)"},
 	{ IPV6CALC_DB_IP2LOCATION_IPV4	, "IP2Location"	, "IP2Location IPv4 database (external)"},
 	{ IPV6CALC_DB_IP2LOCATION_IPV6	, "IP2Location6", "IP2Location IPv6 database (external)"},
-	{ IPV6CALC_DB_DBIP_IPV4		, "DBIPv4"	, "DB-IP IPv4 database (external)"},
-	{ IPV6CALC_DB_DBIP_IPV6		, "DBIPv6"	, "DB-IP IPv6 database (external)"},
+	{ IPV6CALC_DB_DBIP_IPV4		, "DBIPv4"	, "db-ip.com IPv4 database (external)"},
+	{ IPV6CALC_DB_DBIP_IPV6		, "DBIPv6"	, "db-ip.com IPv6 database (external)"},
 	{ IPV6CALC_DB_AS_TO_REGISTRY	, "DB_AS_REG"	, "AS-Number to Registry database (BuiltIn)"},
 	{ IPV6CALC_DB_IPV4_TO_REGISTRY	, "DB_IPV4_REG"	, "IPv4 to Registry database (BuiltIn)"},
 	{ IPV6CALC_DB_IPV6_TO_REGISTRY	, "DB_IPV6_REG"	, "IPv6 to Registry database (BuiltIn)"},

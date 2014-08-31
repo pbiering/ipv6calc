@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.70 2014/07/31 06:20:35 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.71 2014/08/31 10:27:40 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -37,8 +37,9 @@
 #  HTTP_IPV6CALCWEB_BIN_IPV6CALC        : path to ipv6calc binary (optional)
 #  HTTP_IPV6CALCWEB_DB_IP2LOCATION_DIR  : IP2Location database directory (optional)
 #  HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB  : IP2Location library name (optional dyn-load support)
-#  HTTP_IPV6CALCWEB_DB_GEOIP_DIR        : GeoIPv4 database directory (optional)
-#  HTTP_IPV6CALCWEB_DB_GEOIP_LIB        : GeoIPv4 library name (optional in dyn-load support)
+#  HTTP_IPV6CALCWEB_DB_GEOIP_DIR        : GeoIP database directory (optional)
+#  HTTP_IPV6CALCWEB_DB_GEOIP_LIB        : GeoIP library name (optional in dyn-load support)
+#  HTTP_IPV6CALCWEB_DB_DBIP_DIR         : db-ip.com database directory (optional)
 #  HTTP_IPV6CALCWEB_OUTPUT_FORMAT       : html (default if SERVER_PROTOCOL=INCLUDED), htmlfull (default), text, textkeyvalue
 
 ## special output format "textkeyvalue"
@@ -144,6 +145,11 @@ my @list_database_ip2location_dir = (
 my @list_database_geoip_dir = (
 	"/var/local/share/GeoIP",
 	"/usr/share/GeoIP",
+);
+
+my @list_database_dbip_dir = (
+	"/var/local/share/DBIP",
+	"/usr/share/DBIP",
 );
 
 sub find_file(@) {
@@ -546,6 +552,18 @@ my %text = (
 		'de' => "Autonomous System der IPv6 Adresse",
 		'en' => "Autonomous System of IPv6 address",
 	},
+	'DBIP_COUNTRY_SHORT' => {
+		'de' => "db-ip.com Laenderkennung",
+		'en' => "db-ip.com country code",
+	},
+	'DBIP_REGION' => {
+		'de' => "db-ip.com Region",
+		'en' => "db-ip.com region",
+	},
+	'DBIP_CITY' => {
+		'de' => "db-ip.com Stadt",
+		'en' => "db-ip.com city",
+	},
 	'SETTINGS_ANON' => {
 		'de' => "Einstellungen der Anonymisierung",
 		'en' => "Anoymizer settings",
@@ -566,11 +584,17 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_BIN_IPV6CALC'}) {
 };
 
 my $options_ipv6calc = "-m -i -q";
-my $options_ipv6calc_ip2location = "";
-my $options_ipv6calc_geoip = "";
 
-# Location of database files
+
+
+## Location of database files
+
+# IP2Location
+my $options_ipv6calc_ip2location = "";
+my %db_info_ip2location;
 my $database_ip2location_dir;
+my $database_ip2location_lib;
+
 if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_DIR'}) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_DIR'} =~ /^([[:alnum:]\.\-\/]+)$/) {
 		$database_ip2location_dir = $1;
@@ -582,7 +606,6 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_DIR'}) {
 	$database_ip2location_dir = find_dir(@list_database_ip2location_dir);
 };
 
-my $database_ip2location_lib;
 if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB'}) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB'} =~ /^([[:alnum:]\.\-\/]+)$/) {
 		$database_ip2location_lib = $1;
@@ -592,10 +615,13 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB'}) {
 	};
 };
 
-my %db_info_ip2location;
+# GeoIP
+my $options_ipv6calc_geoip = "";
 my %db_info_geoip;
-
+my $info_geoip_string;
 my $database_geoip_dir;
+my $database_geoip_lib;
+
 if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_DIR'}) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_DIR'} =~ /^([[:alnum:]\.\-\/]+)$/) {
 		$database_geoip_dir = $1;
@@ -607,7 +633,6 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_DIR'}) {
 	$database_geoip_dir = find_dir(@list_database_geoip_dir);
 };
 
-my $database_geoip_lib;
 if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_LIB'}) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_LIB'} =~ /^([[:alnum:].-]+)$/) {
 		$database_geoip_lib = $1;
@@ -617,8 +642,25 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_LIB'}) {
 	};
 };
 
-my $info_geoip_string;
+# db-ip.com
+my $options_ipv6calc_dbip = "";
+my %db_info_dbip;
+my $database_dbip_dir;
+my $info_dbip_string;
 
+if (defined $ENV{'HTTP_IPV6CALCWEB_DB_DBIP_DIR'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_DB_DBIP_DIR'} =~ /^([[:alnum:]\.\-\/]+)$/) {
+		$database_dbip_dir = $1;
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_DB_DBIP_DIR found, but not containing proper chars");
+		&print_error();
+	};
+} else {
+	$database_dbip_dir = find_dir(@list_database_dbip_dir);
+};
+
+## external database ipv6calc option handling
+# IP2Location
 if (defined $database_ip2location_dir) {
 	$options_ipv6calc_ip2location .= " --db-ip2location-dir $database_ip2location_dir";
 };
@@ -627,12 +669,18 @@ if (defined $database_ip2location_lib) {
 	$options_ipv6calc_ip2location .= " --db-ip2location-lib $database_ip2location_lib";
 };
 
+# GeoIP
 if (defined $database_geoip_dir) {
 	$options_ipv6calc_geoip .= " --db-geoip-dir $database_geoip_dir";
 };
 
 if (defined $database_geoip_lib) {
 	$options_ipv6calc_geoip .= " --db-geoip-lib $database_geoip_lib";
+};
+
+# DBIP
+if (defined $database_dbip_dir) {
+	$options_ipv6calc_dbip .= " --db-dbip-dir $database_dbip_dir";
 };
 
 ###### Normally nothing to change here
@@ -809,6 +857,14 @@ sub print_infohash ($$$;$) {
 			next;
 		};
 
+		if ($key eq "DBIP_DATABASE_INFO") {
+			$info_dbip_string = $$phash{$key};
+			# strip non-ascii chars
+			$info_dbip_string =~ s/[\200-\377]//g;
+			split_store(\%db_info_dbip, $info_dbip_string);
+			# skipped, will be shown in footer
+			next;
+		};
 		# catch internal keys
 		if ( $key =~ /^IPV6CALC_/ ) {
 			# skipped, will be shown in footer
@@ -1500,6 +1556,9 @@ if (length($ipv6calc_capabilities) > 0) {
  	if (defined $ipv6calc_capability_hash{"IP2Location"} && ($ipv6calc_capability_hash{"IP2Location"} == 1)) {
 		$options_ipv6calc .= $options_ipv6calc_ip2location;
 	};
+ 	if (defined $ipv6calc_capability_hash{"DBIP"} && ($ipv6calc_capability_hash{"DBIP"} == 1)) {
+		$options_ipv6calc .= $options_ipv6calc_dbip;
+	};
 } else {
 	# fallback for ipv6calc < 0.97.4
 	if (defined $ipv6calc_feature_hash{"GeoIP"} && ($ipv6calc_feature_hash{"GeoIP"} == "1")) {
@@ -1795,6 +1854,11 @@ if ($outputformat =~ /^html/o) {
 		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.maxmind.com\">MaxMind</a> " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_geoip) . "</font>\n";
 	};
 
+	if (scalar(keys %db_info_dbip) > 0) {
+		print "<br>\n";
+		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.db-ip.com\">db-ip.com</a> " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_dbip) . "</font>\n";
+	};
+
 } else {
 	# text output
 	print "INFO__GENERATED=" if ($outputformat eq "textkeyvalue");
@@ -1820,6 +1884,11 @@ if ($outputformat =~ /^html/o) {
 	if (scalar(keys %db_info_geoip) > 0) {
 		print "INFO__POWEREDBY_GEOIP=" if ($outputformat eq "textkeyvalue");
 		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_geoip) . " (http://www.maxmind.com)" . $chr_quote . "\n";
+	};
+
+	if (scalar(keys %db_info_dbip) > 0) {
+		print "INFO__POWEREDBY_DBIP=" if ($outputformat eq "textkeyvalue");
+		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_dbip) . " (http://www.db-ip.com)" . $chr_quote . "\n";
 	};
 };
 

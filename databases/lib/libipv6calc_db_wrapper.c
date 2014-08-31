@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.44 2014/08/30 23:06:47 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.45 2014/08/31 10:27:40 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -29,6 +29,7 @@
 
 static int wrapper_GeoIP_disable = 0;
 static int wrapper_IP2Location_disable = 0;
+static int wrapper_DBIP_disable = 0;
 
 static int wrapper_GeoIP_status = 0;
 static int wrapper_IP2Location_status = 0;
@@ -382,11 +383,10 @@ int libipv6calc_db_wrapper_has_features(uint32_t features) {
  * Option handling
  * return < 0: error
  *********************************************/
-
 int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const struct option longopts[]) {
 	int result = -1;
 
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with option: %08x", opt);
 
 	switch(opt) {
 		case DB_ip2location_disable:
@@ -396,6 +396,11 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 
 		case DB_geoip_disable:
 			wrapper_GeoIP_disable = 1;
+			result = 0;
+			break;
+
+		case DB_dbip_disable:
+			wrapper_DBIP_disable = 1;
 			result = 0;
 			break;
 
@@ -431,6 +436,15 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			result = snprintf(geoip_db_dir, sizeof(geoip_db_dir), "%s", optarg);
 #else
 			NONQUIETPRINT_WA("Support for GeoIP not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+
+		case DB_dbip_dir:
+#ifdef SUPPORT_DBIP
+			result = snprintf(dbip_db_dir, sizeof(dbip_db_dir), "%s", optarg);
+#else
+			NONQUIETPRINT_WA("Support for db-ip.com not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
 			result = 0;
 			break;
@@ -957,7 +971,6 @@ int libipv6calc_db_wrapper_get_dbentry_generic(const uint32_t value_00_31, const
 
 			if (token_counter == token_counter_data) {
 				db_data = token;
-				break;
 			} else if (token_counter == 1) {
 				value_first_00_31 = atoi(token);
 			} else if (token_counter == 2) {

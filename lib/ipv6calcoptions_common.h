@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions_common.h,v 1.10 2014/07/30 20:31:43 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions_common.h,v 1.11 2014/08/31 10:27:40 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -44,9 +44,9 @@ static struct option ipv6calc_longopts_ip2location[] = {
 	{"db-ip2location-dir"          , 1, NULL, DB_ip2location_dir     },
 #ifdef SUPPORT_IP2LOCATION_DYN
 	{"db-ip2location-lib"          , 1, NULL, DB_ip2location_lib     },
-#endif
+#endif // SUPPORT_IP2LOCATION_DYN
 };
-#endif
+#endif // SUPPORT_IP2LOCATION
 
 #ifdef SUPPORT_GEOIP
 static char *ipv6calc_shortopts_geoip = "G";
@@ -65,9 +65,19 @@ static struct option ipv6calc_longopts_geoip[] = {
 	{"db-geoip-dir"                , 1, NULL, DB_geoip_dir           },
 #ifdef SUPPORT_GEOIP_DYN
 	{"db-geoip-lib"                , 1, NULL, DB_geoip_lib           },
-#endif
-};                
-#endif
+#endif // SUPPORT_GEOIP_DYN
+};
+#endif // SUPPORT_GEOIP
+
+#ifdef SUPPORT_DBIP
+static char *ipv6calc_shortopts_dbip = "D";
+
+static struct option ipv6calc_longopts_dbip[] = {
+	/* database options (new) */
+	{"db-dbip-disable"             , 0, NULL, DB_dbip_disable       },
+	{"db-dbip-dir"                 , 1, NULL, DB_dbip_dir           },
+};
+#endif // SUPPORT_DBIP
 
 
 /* define common anonymization short options */

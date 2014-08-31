@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.65 2014/08/27 04:45:04 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.66 2014/08/31 10:27:40 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -22,6 +22,7 @@
 #include "databases/lib/libipv6calc_db_wrapper.h"
 #include "databases/lib/libipv6calc_db_wrapper_GeoIP.h"
 #include "databases/lib/libipv6calc_db_wrapper_IP2Location.h"
+#include "databases/lib/libipv6calc_db_wrapper_DBIP.h"
 #include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
 
@@ -326,6 +327,14 @@ void printhelp_common(const uint32_t help_features) {
 #ifdef SUPPORT_GEOIP_DYN
 		fprintf(stderr, "  [--db-geoip-lib       <file>     ] : GeoIP library file (default: %s)\n", geoip_lib_file);
 #endif
+#endif
+	};
+
+	if ((help_features & IPV6CALC_HELP_DBIP) != 0) {
+#ifdef SUPPORT_DBIP
+		fprintf(stderr, "\n");
+		fprintf(stderr, "  [--db-dbip-disable               ] : db-ip.com support disabled\n");
+		fprintf(stderr, "  [--db-dbip-dir        <directory>] : db-ip.com database directory (default: %s)\n", dbip_db_dir);
 #endif
 	};
 

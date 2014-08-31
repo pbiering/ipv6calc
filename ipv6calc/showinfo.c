@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.118 2014/08/30 23:06:47 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.119 2014/08/31 10:27:40 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -454,6 +454,7 @@ static void print_dbip(const char *addrstring, const uint32_t formatoptions, con
 
 	const char *returnedCountry = NULL;
 	const char *returnedCity    = NULL;
+	const char *returnedRegion  = NULL;
 
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable);
 	char tempstring[NI_MAXHOST] = "";
@@ -480,6 +481,18 @@ static void print_dbip(const char *addrstring, const uint32_t formatoptions, con
 
 		if ( machinereadable != 0 ) {
 			snprintf(tempstring, sizeof(tempstring), "DBIP_CITY%s=%s", additionalstring, returnedCity);
+			printout(tempstring);
+		} else {
+			fprintf(stdout, " DBIP not machinereadable output currently only limited supported\n");
+		};
+	};
+
+	returnedRegion = libipv6calc_db_wrapper_DBIP_wrapper_region_by_addr(addrstring, version);
+	if (returnedCity != NULL) {
+		DEBUGPRINT_WA(DEBUG_showinfo, "DBIP IPv%d region database result", version);
+
+		if ( machinereadable != 0 ) {
+			snprintf(tempstring, sizeof(tempstring), "DBIP_REGION%s=%s", additionalstring, returnedRegion);
 			printout(tempstring);
 		} else {
 			fprintf(stdout, " DBIP not machinereadable output currently only limited supported\n");

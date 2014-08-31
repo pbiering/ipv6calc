@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.16 2014/07/31 17:22:51 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.17 2014/08/31 10:27:40 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -152,6 +152,9 @@ void ipv6calc_options_add_common_basic(char *shortopts_p, const int shortopts_ma
 	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_geoip, ipv6calc_longopts_geoip, MAXENTRIES_ARRAY(ipv6calc_longopts_geoip));
 #endif
 
+#ifdef SUPPORT_DBIP
+	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_dbip, ipv6calc_longopts_dbip, MAXENTRIES_ARRAY(ipv6calc_longopts_dbip));
+#endif
 	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Finished");
 };
 
