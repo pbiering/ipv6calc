@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : lib/Makefile
-# Version    : $Id: Makefile.in,v 1.14 2014/08/27 06:48:55 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.15 2014/09/01 05:57:49 ds6peter Exp $
 # Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -17,6 +17,12 @@ CFLAGS += -D__EXTENSIONS__ -fPIC
 INCLUDES= -I../../lib -I../.. @GEOIP_INCLUDE_L2@ @IP2LOCATION_INCLUDE_L2@
 
 SHARED_LIBRARY=@SHARED_LIBRARY@
+
+ifeq ($(shell uname), Darwin)
+	SO_NAME_FLAGS=-install_name
+else
+	SO_NAME_FLAGS=-soname
+endif
 
 CC	= @CC@
 AR	= ar
@@ -56,7 +62,7 @@ libipv6calc_db_wrapper.a:	$(OBJS)
 
 libipv6calc_db_wrapper.so.@PACKAGE_VERSION@:	$(OBJS)
 		echo "Create shared library (.so)"
-		$(CC) -o libipv6calc_db_wrapper.so.@PACKAGE_VERSION@ $(OBJS) $(CFLAGS) $(LDFLAGS) -shared -Wl,-soname,libipv6calc_db_wrapper.so.@PACKAGE_VERSION@
+		$(CC) -o libipv6calc_db_wrapper.so.@PACKAGE_VERSION@ $(OBJS) $(CFLAGS) $(LDFLAGS) -shared -Wl,$(SO_NAME_FLAGS),libipv6calc_db_wrapper.so.@PACKAGE_VERSION@
 
 distclean:
 		${MAKE} clean

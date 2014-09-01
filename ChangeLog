@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.367 2014/08/31 10:27:40 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.368 2014/09/01 05:57:49 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140901/PB
+	[databases/]lib/Makefile[.in]: support different options for so library on OSX
+
 20140831/PB
 	add DBIP update tools: DBIP-generate-db.pl, DBIP-update.sh
 	implement also output of DBIP_REGION
