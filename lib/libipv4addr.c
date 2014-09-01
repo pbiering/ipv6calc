@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.60 2014/08/27 04:45:04 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.61 2014/09/01 19:46:12 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -1014,6 +1014,8 @@ uint16_t libipv4addr_cc_index_by_addr(const ipv6calc_ipv4addr *ipv4addrp) {
 	if ((ipv4addrp->scope & IPV4_ADDR_ANONYMIZED) != 0) {
 		cc_index = ipv4addr_anonymized_get_cc_index(ipv4addrp);
 	} else if ((ipv4addrp->scope & IPV4_ADDR_RESERVED) != 0) {
+		cc_index = COUNTRYCODE_INDEX_UNKNOWN;
+	} else if ((ipv4addrp->scope & IPV4_ADDR_GLOBAL) == 0) {
 		cc_index = COUNTRYCODE_INDEX_UNKNOWN;
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC) == 1) {
