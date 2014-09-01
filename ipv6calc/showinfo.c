@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.119 2014/08/31 10:27:40 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.120 2014/09/01 19:56:39 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -460,7 +460,7 @@ static void print_dbip(const char *addrstring, const uint32_t formatoptions, con
 	char tempstring[NI_MAXHOST] = "";
 
 	returnedCountry     = libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(addrstring, version);
-	if (returnedCountry != NULL) {
+	if ((returnedCountry != NULL) && (strlen(returnedCountry) > 0)) {
 		DEBUGPRINT_WA(DEBUG_showinfo, "DBIP IPv%d country database result", version);
 
 		if ( machinereadable != 0 ) {
@@ -476,7 +476,7 @@ static void print_dbip(const char *addrstring, const uint32_t formatoptions, con
 	};
 
 	returnedCity = libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(addrstring, version);
-	if (returnedCity != NULL) {
+	if ((returnedCity != NULL) && (strlen(returnedCity) > 0)) {
 		DEBUGPRINT_WA(DEBUG_showinfo, "DBIP IPv%d city database result", version);
 
 		if ( machinereadable != 0 ) {
@@ -488,7 +488,7 @@ static void print_dbip(const char *addrstring, const uint32_t formatoptions, con
 	};
 
 	returnedRegion = libipv6calc_db_wrapper_DBIP_wrapper_region_by_addr(addrstring, version);
-	if (returnedCity != NULL) {
+	if ((returnedCity != NULL) && (strlen(returnedCity) > 0)) {
 		DEBUGPRINT_WA(DEBUG_showinfo, "DBIP IPv%d region database result", version);
 
 		if ( machinereadable != 0 ) {
