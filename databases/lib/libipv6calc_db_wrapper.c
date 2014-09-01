@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.45 2014/08/31 10:27:40 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.46 2014/09/01 19:25:59 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -12,6 +12,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <errno.h>
 
 #include "config.h"
 
@@ -888,7 +889,7 @@ int libipv6calc_db_wrapper_get_dbentry_generic(const uint32_t value_00_31, const
 	DBT key, data;
 	DBC *dbcp;
 	int ret;
-	long unsigned int recno, recno_max;
+	long unsigned int recno, recno_max, value;
 
 	char *token, *cptr, **ptrptr;
 	ptrptr = &cptr;
@@ -962,6 +963,9 @@ int libipv6calc_db_wrapper_get_dbentry_generic(const uint32_t value_00_31, const
 
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database entry %lu: %s (%d)", recno, datastring, data.size);
 
+		value_first_00_31 = 0, value_last_00_31 = 0;
+		value_first_32_63 = 0, value_last_32_63 = 0;
+
 		// split data string
 		token = strtok_r(datastring, ";", ptrptr);
 		token_counter = 0;
@@ -971,21 +975,31 @@ int libipv6calc_db_wrapper_get_dbentry_generic(const uint32_t value_00_31, const
 
 			if (token_counter == token_counter_data) {
 				db_data = token;
-			} else if (token_counter == 1) {
-				value_first_00_31 = atoi(token);
-			} else if (token_counter == 2) {
-				if (db_format & IPV6CALC_BDB_FORMAT_CHECK_32) {
-					value_last_00_31 = atoi(token);
-				} else if (db_format & IPV6CALC_BDB_FORMAT_CHECK_64) {
-					value_first_32_63 = atoi(token);
+			} else if (token_counter <= 4 ) {
+				// convert to unsigned long integer
+				errno = 0;
+				value = strtoul(token, NULL, 0);
+				if (errno != 0) {
+					NONQUIETPRINT_WA("token %d found: %s, but value not parsable", token_counter, token);
+					goto END_libipv6calc_db_wrapper_get_dbentry_generic;
 				};
-			} else if (token_counter == 3) {
-				if (db_format & IPV6CALC_BDB_FORMAT_CHECK_64) {
-					value_last_00_31 = atoi(token);
-				};
-			} else if (token_counter == 4) {
-				if (db_format & IPV6CALC_BDB_FORMAT_CHECK_64) {
-					value_last_32_63 = atoi(token);
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "token %d found: %s and value is: %08x", token_counter, token, (unsigned int) value);
+				if (token_counter == 1 ) {
+					value_first_00_31 = value;
+				} else if (token_counter == 2) {
+					if (db_format & IPV6CALC_BDB_FORMAT_CHECK_32) {
+						value_last_00_31 = value;
+					} else if (db_format & IPV6CALC_BDB_FORMAT_CHECK_64) {
+						value_first_32_63 = value;
+					};
+				} else if (token_counter == 3) {
+					if (db_format & IPV6CALC_BDB_FORMAT_CHECK_64) {
+						value_last_00_31 = value;
+					};
+				} else if (token_counter == 4) {
+					if (db_format & IPV6CALC_BDB_FORMAT_CHECK_64) {
+						value_last_32_63 = value;
+					};
 				};
 			};
 
@@ -1001,9 +1015,17 @@ int libipv6calc_db_wrapper_get_dbentry_generic(const uint32_t value_00_31, const
 
 		if (db_format & IPV6CALC_BDB_FORMAT_CHECK_32) {
 			if (db_format & IPV6CALC_BDB_FORMAT_CHECK_FIRST_LAST) {
-				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Test %08x range %08x - %08x i=%d i_min=%d i_max=%d", value_00_31, (unsigned int) value_first_00_31, (unsigned int) value_last_00_31, i, i_min, i_max);
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Test %08x range %08x - %08x i=%d i_min=%d i_max=%d",
+					(unsigned int) value_00_31,
+					(unsigned int) value_first_00_31,
+					(unsigned int) value_last_00_31,
+					i, i_min, i_max);
 			} else if (db_format & IPV6CALC_BDB_FORMAT_CHECK_BASE_MASK) {
-				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Test %08x mask %08x/%08x i=%d i_min=%d i_max=%d", value_00_31, (unsigned int) value_first_00_31, (unsigned int) value_last_00_31, i, i_min, i_max);
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Test %08x mask %08x/%08x i=%d i_min=%d i_max=%d",
+					(unsigned int) value_00_31,
+					(unsigned int) value_first_00_31,
+					(unsigned int) value_last_00_31,
+					 i, i_min, i_max);
 			};
 		} else if (db_format & IPV6CALC_BDB_FORMAT_CHECK_64) {
 			if (db_format & IPV6CALC_BDB_FORMAT_CHECK_FIRST_LAST) {
