@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.42 2014/06/16 20:31:01 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.43 2014/09/02 06:25:02 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -399,6 +399,30 @@ testscenarios_showinfo_ip2location() {
 # non-anonymized IPv6 prefix
 2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=DE
 2001:a60:113a:0123:0123:4567:89ab:cdef	IP2LOCATION_COUNTRY_SHORT=DE
+END
+}
+
+testscenarios_showinfo_DBIPv4() {
+	cat <<END | grep -v '^#'
+# match first valid entry in database
+1.0.0.0					IPV4_COUNTRYCODE=AU
+# match first entry in database
+223.255.255.255				IPV4_COUNTRYCODE=AU
+# non-anonymized IPv4 address
+46.244.223.233				IPV4_COUNTRYCODE=DE
+46.244.223.233				DBIP_COUNTRY_SHORT=DE
+END
+}
+
+testscenarios_showinfo_DBIPv6() {
+	cat <<END | grep -v '^#'
+# match first entry in database (db-ip.com assigns unusued range to US)
+2000:000:0000:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=US
+# match first entry in database (db-ip.com assigns unusued range to US)
+3fff:000:0000:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=US
+# non-anonymized IPv6 prefix
+2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=DE
+2001:a60:113a:0123:0123:4567:89ab:cdef	DBIP_COUNTRY_SHORT=DE
 END
 }
 

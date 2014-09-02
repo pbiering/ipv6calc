@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.50 2014/08/30 23:38:37 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.51 2014/09/02 06:25:02 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -19,7 +19,7 @@ while [ "$1" != "$LAST" ]; do
 		;;
 	    '--all'|'-a')
 		shift
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --enable-ip2location"
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --enable-ip2location --enable-dbip"
 		SKIP_STATIC=1
 		use_geoip=1
 		use_ip2location=1

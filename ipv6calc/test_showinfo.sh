@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.38 2014/07/29 18:54:06 ds6peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.39 2014/09/02 06:25:02 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -52,6 +52,18 @@ getexamples_IP2Location() {
 	cat <<END
 2001:a60:9002:1::186:6
 212.18.21.186
+END
+}
+
+getexamples_DBIPv4() {
+	cat <<END
+212.18.21.186
+END
+}
+
+getexamples_DBIPv6() {
+	cat <<END
+2001:a60:9002:1::186:6
 END
 }
 
@@ -145,7 +157,7 @@ testscenarios_showinfo | while read address output; do
 done || exit 1
 
 if [ "$1" = "minimal" ]; then
-	echo "GeoIP & IP2Location tests skipped (option 'minimal' used)"
+	echo "GeoIP/IP2Location/DBIP tests skipped (option 'minimal' used)"
 	exit 0
 fi
 
@@ -239,6 +251,78 @@ if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 	echo "IP2Location tests were successful"
 else
 	echo "IP2Location tests skipped"
+fi
+
+if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv4; then
+	echo "Run db-ip.com IPv4 tests"
+	getexamples_DBIPv4 | while read address; do
+		echo "Run IP2Location showinfo on: $address"
+		if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep ^DBIP; then
+			true
+		else
+			echo "Unexpected result (missing DBIP): ./ipv6calc -q -i -m $address"
+			./ipv6calc -q -i -m $address
+			exit 1
+		fi
+	done || exit 1
+
+	testscenarios_showinfo_DBIPv4 | while read address output; do
+		if echo "$output" | grep -q "^OUI="; then
+			if [ $ipv6calc_has_db_ieee -ne 1 ]; then
+				echo "Test: $address for $output SKIPPED (no DB_IEEE compiled in)"
+				continue
+			fi
+		fi
+		echo "Test: $address for $output"
+		output_escaped="${output//./\\.}"
+		output_escaped="${output_escaped//[/\\[}"
+		output_escaped="${output_escaped//]/\\]}"
+		if ! ./ipv6calc -q -i -m $address | grep "^$output_escaped$"; then
+			echo "ERROR: unexpected result ($output_escaped)"
+			./ipv6calc -q -i -m $address
+			exit 1	
+		fi
+		echo
+	done || exit 1
+	echo "db-ip.com IPv4 tests were successful"
+else
+	echo "db-ip.com IPv4 tests skipped"
+fi
+
+if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv6; then
+	echo "Run db-ip.com IPv6 tests"
+	getexamples_DBIPv6 | while read address; do
+		echo "Run IP2Location showinfo on: $address"
+		if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep ^DBIP; then
+			true
+		else
+			echo "Unexpected result (missing DBIP): ./ipv6calc -q -i -m $address"
+			./ipv6calc -q -i -m $address
+			exit 1
+		fi
+	done || exit 1
+
+	testscenarios_showinfo_DBIPv6 | while read address output; do
+		if echo "$output" | grep -q "^OUI="; then
+			if [ $ipv6calc_has_db_ieee -ne 1 ]; then
+				echo "Test: $address for $output SKIPPED (no DB_IEEE compiled in)"
+				continue
+			fi
+		fi
+		echo "Test: $address for $output"
+		output_escaped="${output//./\\.}"
+		output_escaped="${output_escaped//[/\\[}"
+		output_escaped="${output_escaped//]/\\]}"
+		if ! ./ipv6calc -q -i -m $address | grep "^$output_escaped$"; then
+			echo "ERROR: unexpected result ($output_escaped)"
+			./ipv6calc -q -i -m $address
+			exit 1	
+		fi
+		echo
+	done || exit 1
+	echo "db-ip.com IPv6 tests were successful"
+else
+	echo "db-ip.com IPv6 tests skipped"
 fi
 
 if ./ipv6calc -v 2>&1 | grep -qw "ANON_KEEP-TYPE-ASN-CC"; then
