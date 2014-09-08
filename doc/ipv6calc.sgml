@@ -12,7 +12,7 @@
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>4.5</revnumber> <date>2014-08-02</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>4.6</revnumber> <date>2014-09-08</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
@@ -64,10 +64,8 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 <title>Fedora Linux</title>
 <para>Fedora 20 is the current developing platform, so use given hints above to create a RPM. Since Fedora 7 this package is included by default.</para></sect3><sect3>
 <title>Red Hat Enterprise Linux and clones</title>
-<para>It's tested by the developer that creation of the RPM is working fine on RHEL 4.</para>
-<para>RHEL/CentOS 5 has the package included by default.</para>
-<para>RHEL/CentOS 6/7: release on EPEL planned for August 2014.</para>
-<para>CentOS 5/6/7 are also platforms for regression tests.</para></sect3><sect3>
+<para>It's tested by the developer that creation of the RPM is working fine on RHEL 4.</para><itemizedlist>
+<listitem><para>RHEL/CentOS 5 has the package included by default (but an rather old version - there are plans to provide newer releases via EPEL, too)</para></listitem><listitem><para>RHEL/CentOS 6/7: available since September 2014 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject/EPEL</ulink> EPEL</para></listitem></itemizedlist><para>CentOS 5/6/7 are also platforms for regression tests.</para></sect3><sect3>
 <title>Gentoo/Funtoo</title>
 <para>Package is maintained, nevertheless, Funtoo is used as platform for regression tests.</para></sect3><sect3>
 <title>Ubuntu</title>
