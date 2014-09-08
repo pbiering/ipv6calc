@@ -523,6 +523,18 @@ Fedora 20 is the current developing platform, so use given hints above to
  Since Fedora 7 this package is included by default.
 \end_layout
 
+\begin_layout Standard
+See also 
+\begin_inset CommandInset href
+LatexCommand href
+name "FedoraProject / Package / ipv6calc"
+target "https://admin.fedoraproject.org/pkgdb/package/ipv6calc/"
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Subsubsection
 Red Hat Enterprise Linux and clones
 \end_layout
@@ -541,7 +553,7 @@ RHEL/CentOS 5 has the package included by default (but an rather old version
 RHEL/CentOS 6/7: available since September 2014 on 
 \begin_inset CommandInset href
 LatexCommand href
-name "FedoraProject/EPEL"
+name "FedoraProject / EPEL"
 target "https://fedoraproject.org/wiki/EPEL"
 
 \end_inset

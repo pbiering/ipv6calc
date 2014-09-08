@@ -58,10 +58,11 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 <title>Ready to use packages for several operating systems:</title>
 <sect3>
 <title>Fedora Linux</title>
-<para>Fedora 20 is the current developing platform, so use given hints above to create a RPM. Since Fedora 7 this package is included by default.</para></sect3><sect3>
+<para>Fedora 20 is the current developing platform, so use given hints above to create a RPM. Since Fedora 7 this package is included by default.</para>
+<para>See also <ulink url="https://admin.fedoraproject.org/pkgdb/package/ipv6calc/">FedoraProject / Package / ipv6calc</ulink></para></sect3><sect3>
 <title>Red Hat Enterprise Linux and clones</title>
 <para>It's tested by the developer that creation of the RPM is working fine on RHEL 4.</para><itemizedlist>
-<listitem><para>RHEL/CentOS 5 has the package included by default (but an rather old version - there are plans to provide newer releases via EPEL, too)</para></listitem><listitem><para>RHEL/CentOS 6/7: available since September 2014 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject/EPEL</ulink> EPEL</para></listitem></itemizedlist><para>CentOS 5/6/7 are also platforms for regression tests.</para></sect3><sect3>
+<listitem><para>RHEL/CentOS 5 has the package included by default (but an rather old version - there are plans to provide newer releases via EPEL, too)</para></listitem><listitem><para>RHEL/CentOS 6/7: available since September 2014 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink> EPEL</para></listitem></itemizedlist><para>CentOS 5/6/7 are also platforms for regression tests.</para></sect3><sect3>
 <title>Gentoo/Funtoo</title>
 <para>Package is maintained, nevertheless, Funtoo is used as platform for regression tests.</para></sect3><sect3>
 <title>Ubuntu</title>
