@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.11 2014/02/28 06:46:36 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.12 2014/09/13 21:15:06 ds6peter Exp $
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
 #              2005-2014 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
 # License    : GNU GPL v2
@@ -20,7 +20,7 @@ use XML::Simple;
 my $debug = 0;
 
 # Debugging
-#$debug |= 0x0010; #  0x0010: proceed registry files
+# $debug |= 0x0010; #  0x0010: proceed registry files
 #  0x0020: proceed global file
 #  0x0040: fill data
 #  0x0100: subnet mask generation
@@ -165,17 +165,17 @@ foreach my $file (@files) {
 		};
 
 		# skip not proper lines
-		if ( ! ( $line =~ /\|ipv6\|/ ) ) { next; };
-		if ( $line =~ /\|\*\|/ ) { next; };
+		if ( ! ( $line =~ /\|ipv6\|/o ) ) { next; };
+		if ( $line =~ /\|\*\|/o ) { next; };
 
 		print $line . "\n" if ($debug & 0x0200);
 
-		my ($reg, $tld, $token, $ipv6, $prefixlen, $date, $status, $other) = split /\|/, $line;
+		my ($reg, $tld, $token, $ipv6, $prefixlen, $date, $status, $other) = split /\|/o, $line;
 
 		if ( $token ne "ipv6" ) { next; };
 
 		$reg = uc($reg);
-		$reg =~ s/\wRIPE\w/RIPENCC/g;
+		$reg =~ s/\wRIPE\w/RIPENCC/og;
 
 		# get registry array
 		my $parray;
@@ -245,10 +245,11 @@ Label_restart:
 			die "Currently unsupported prefix length (>64): $ipv6/$prefixlen";
 		};
 
-		print "store: reg=" . $reg . " ipv6=" . $ipv6 . "/" . $prefixlen . "\n" if ($debug & 0x0400);
+		my $ip_ipv6 = new Net::IP($ipv6);
+		print "store: reg=" . $reg . " ipv6=" . $ip_ipv6->ip() . "/" . $prefixlen . "\n" if ($debug & 0x0400);
 
 		# Push into array
-		push @$parray, $ipv6 . "/" . $prefixlen;
+		push @$parray, $ip_ipv6->ip() . "/" . $prefixlen;
 	};
 
 	close(FILE);
@@ -270,7 +271,7 @@ sub fill_data($$) {
 	print "Fill data for registry: $reg\n";
 
 	foreach my $entry (sort @$parray) {
-		my ($ipv6, $length) = split /\//, $entry;
+		my ($ipv6, $length) = split /\//o, $entry;
 
 		my $ip_ipv6 = new Net::IP($entry);
 

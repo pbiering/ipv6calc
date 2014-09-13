@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.15 2014/07/21 06:14:27 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.16 2014/09/13 21:15:07 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -508,6 +508,60 @@ int libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv4addr(const ipv6calc_ip
 };
 
 
+#ifdef SUPPORT_DB_IPV4_REG
+/*
+ * dbipv4addr_assignment / get row (callback function for retrieving value from array)
+ */
+int libipv6calc_db_wrapper_BuiltIn_get_row_dbipv4addr_assignment(const uint32_t row, uint32_t *key_first_00_31_ptr, uint32_t *key_first_32_63_ptr, uint32_t *key_last_00_31_ptr, uint32_t *key_last_32_63_ptr) {
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called fetching row: %lu", (unsigned long int) row);
+
+	if (row >= MAXENTRIES_ARRAY(dbipv4addr_assignment)) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "row out of range: %lu (maximum: %lu)", (unsigned long int) row, (unsigned long int) MAXENTRIES_ARRAY(dbipv4addr_assignment) - 1);
+		return(1);
+	};
+
+	*key_first_00_31_ptr = dbipv4addr_assignment[row].first;
+	*key_last_00_31_ptr  = dbipv4addr_assignment[row].last;
+	*key_first_32_63_ptr = 0;
+	*key_last_32_63_ptr  = 0;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Keys for row: %lu key_first_00_31_ptr=%08lx key_last_00_31_ptr=%08lxu",
+		(unsigned long int) row,
+		(unsigned long int) *key_first_00_31_ptr,
+		(unsigned long int) *key_last_00_31_ptr
+	);
+
+	return(0);
+};
+
+
+/*
+ * dbipv4addr_assignment_iana / get row (callback function for retrieving value from array)
+ */
+int libipv6calc_db_wrapper_BuiltIn_get_row_dbipv4addr_assignment_iana(const uint32_t row, uint32_t *key_first_00_31_ptr, uint32_t *key_first_32_63_ptr, uint32_t *key_last_00_31_ptr, uint32_t *key_last_32_63_ptr) {
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called fetching row: %lu", (unsigned long int) row);
+
+	if (row >= MAXENTRIES_ARRAY(dbipv4addr_assignment_iana)) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "row out of range: %lu (maximum: %lu)", (unsigned long int) row, (unsigned long int) MAXENTRIES_ARRAY(dbipv4addr_assignment_iana) - 1);
+		return(1);
+	};
+
+	*key_first_00_31_ptr = dbipv4addr_assignment_iana[row].first;
+	*key_last_00_31_ptr  = dbipv4addr_assignment_iana[row].last;
+	*key_first_32_63_ptr = 0;
+	*key_last_32_63_ptr  = 0;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Keys for row: %lu key_first_00_31_ptr=%08lx key_last_00_31_ptr=%08lxu",
+		(unsigned long int) row,
+		(unsigned long int) *key_first_00_31_ptr,
+		(unsigned long int) *key_last_00_31_ptr
+	);
+
+	return(0);
+};
+#endif // SUPPORT_DB_IPV4_REG
+
+
 /*
  * get registry number of an IPv4 address
  *
@@ -528,38 +582,23 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 	};
 
 #ifdef SUPPORT_DB_IPV4_REG
-	int i = -1;
 	int match = -1;
-	int i_min, i_max, i_old, max;
 
-	max = MAXENTRIES_ARRAY(dbipv4addr_assignment);
+	match = libipv6calc_db_wrapper_get_entry_generic(
+		NULL,							// pointer to data
+		IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY,			// type of data_ptr
+		IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_FIRST_LAST,		// key type
+		32,							// key length
+		IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY,		// search type
+		0,							// number of first usable row (begin)
+		MAXENTRIES_ARRAY(dbipv4addr_assignment) - 1,		// number of last usable row (end)
+		ipv4,							// lookup key MSB
+		0,							// lookup key LSB
+		NULL,							// data ptr (not used in IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY)
+		libipv6calc_db_wrapper_BuiltIn_get_row_dbipv4addr_assignment	// function pointer
+	);
 
-	i_min = 0; i_max = max; i_old = -1;
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with ipv4=%08x max=%d", ipv4, max);
-
-	// binary search in dbipv4addr_assignment
-	i = max / 2;
-	while (i_old != i) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search in dbipv4addr_assignment for ipv4=%08x first=%08x last=%08x i=%d i_min=%d i_max=%d", ipv4, (unsigned int) dbipv4addr_assignment[i].first, (unsigned int) dbipv4addr_assignment[i].last, i, i_min, i_max);
-
-		if (ipv4 < dbipv4addr_assignment[i].first) {
-			// to high in array, jump down
-			i_max = i;
-		} else if (ipv4 > dbipv4addr_assignment[i].last) {
-			// to low in array, jump up
-			i_min = i;
-		} else {
-			// hit
-			match = i;
-			break;
-		};
-
-		i_old = i;
-		i = (i_max - i_min) / 2 + i_min;
-	};
-
-	if (match != -1) {
+	if (match > -1) {
 		result = dbipv4addr_assignment[match].registry;
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Finished with success result (dbipv4addr_assignment): match=%d reg=%d", match, result);
 	};
@@ -567,42 +606,29 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 	if (result == IPV4_ADDR_REGISTRY_UNKNOWN) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Nothing found in dbipv4addr_assignment, fallback now to dbipv4addr_assignment_iana");
 
-		max = MAXENTRIES_ARRAY(dbipv4addr_assignment_iana);
+		match = libipv6calc_db_wrapper_get_entry_generic(
+			NULL,							// pointer to data
+			IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY,			// type of data_ptr
+			IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_FIRST_LAST,		// key type
+			32,							// key length
+			IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY,		// search type
+			0,							// number of first usable row (begin)
+			MAXENTRIES_ARRAY(dbipv4addr_assignment_iana) - 1,	// number of last usable row (end)
+			ipv4,							// lookup key MSB
+			0,							// lookup key LSB
+			NULL,							// data ptr (not used in IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY)
+			libipv6calc_db_wrapper_BuiltIn_get_row_dbipv4addr_assignment_iana	// function pointer
+		);
 
-		i_min = 0; i_max = max; i_old = -1;
-
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with ipv4=%08x max=%d", ipv4, max);
-
-		// binary search in dbipv4addr_assignment_iana (fallback)
-		i = max / 2;
-		while (i_old != i) {
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search in dbipv4addr_assignment_iana for ipv4=%08x first=%08x last=%08x i=%d i_min=%d i_max=%d", ipv4, (unsigned int) dbipv4addr_assignment_iana[i].first, (unsigned int) dbipv4addr_assignment_iana[i].last, i, i_min, i_max);
-
-			if (ipv4 < dbipv4addr_assignment_iana[i].first) {
-				// to high in array, jump down
-				i_max = i;
-			} else if (ipv4 > dbipv4addr_assignment_iana[i].last) {
-				// to low in array, jump up
-				i_min = i;
-			} else {
-				// hit
-				match = i;
-				break;
-			};
-
-			i_old = i;
-			i = (i_max - i_min) / 2 + i_min;
-		};
-
-		if (match != -1) {
+		if (match > -1) {
 			result = dbipv4addr_assignment_iana[match].registry;
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Finished with success result (dbipv4addr_assignment_iana): match=%d reg=%d", match, result);
 		} else {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Finished without success");
 		};
 	};
-
 #endif // SUPPORT_DB_IPV4_REG
+
 	return(result);
 };
 
@@ -699,6 +725,35 @@ int libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv6addr(const ipv6calc_ip
 };
 
 
+#ifdef SUPPORT_DB_IPV6_REG
+/*
+ * dbipv6addr_assignment / get row (callback function for retrieving value from array)
+ */
+int libipv6calc_db_wrapper_BuiltIn_get_row_dbipv6addr_assignment(const uint32_t row, uint32_t *key_base_00_31_ptr, uint32_t *key_base_32_63_ptr, uint32_t *key_mask_00_31_ptr, uint32_t *key_mask_32_63_ptr) {
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called fetching row: %lu", (unsigned long int) row);
+
+	if (row >= MAXENTRIES_ARRAY(dbipv6addr_assignment)) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "row out of range: %lu (maximum: %lu)", (unsigned long int) row, (unsigned long int) MAXENTRIES_ARRAY(dbipv6addr_assignment) - 1);
+		return(-1);
+	};
+
+	*key_base_00_31_ptr = dbipv6addr_assignment[row].ipv6addr_00_31;
+	*key_base_32_63_ptr = dbipv6addr_assignment[row].ipv6addr_32_63;
+	*key_mask_00_31_ptr = dbipv6addr_assignment[row].ipv6mask_00_31;
+	*key_mask_32_63_ptr = dbipv6addr_assignment[row].ipv6mask_32_63;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Keys for row: %lu key_base_00_31_ptr=%08lx key_base_32_63_ptr=%08lx key_mask_00_31_ptr=%08lxu key_mask_32_63_ptr=%08lxu seqlongest=%d",
+		(unsigned long int) row,
+		(unsigned long int) *key_base_00_31_ptr,
+		(unsigned long int) *key_base_32_63_ptr,
+		(unsigned long int) *key_mask_00_31_ptr,
+		(unsigned long int) *key_mask_32_63_ptr,
+		dbipv6addr_assignment[row].prefixlength
+	);
+
+	return(dbipv6addr_assignment[row].prefixlength);
+};
+#endif // SUPPORT_DB_IPV6_REG
 
 /*
  * get registry number of an IPv6 address
@@ -726,30 +781,20 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6a
 
 #ifdef SUPPORT_DB_IPV6_REG
 	int match = -1;
-	int i;
 
-	for (i = 0; i < MAXENTRIES_ARRAY(dbipv6addr_assignment); i++) {
-		/* run through database array */
-		if ( (ipv6_00_31 & dbipv6addr_assignment[i].ipv6mask_00_31) != dbipv6addr_assignment[i].ipv6addr_00_31 ) {
-			/* MSB 00-31 do not match */
-			continue;
-		};
-
-		if ( dbipv6addr_assignment[i].ipv6mask_32_63 != 0 ) {
-			if ( (ipv6_32_63 & dbipv6addr_assignment[i].ipv6mask_32_63) != dbipv6addr_assignment[i].ipv6addr_32_63 ) {
-				/* MSB 32-63 do not match */
-				continue;
-			};
-		};
-
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Found match: prefix=%08x%08x mask=%08x%08x  registry=%s (entry: %d)", \
-			(unsigned int) dbipv6addr_assignment[i].ipv6addr_00_31, \
-			(unsigned int) dbipv6addr_assignment[i].ipv6addr_32_63, \
-			(unsigned int) dbipv6addr_assignment[i].ipv6mask_00_31, \
-			(unsigned int) dbipv6addr_assignment[i].ipv6mask_32_63, \
-			libipv6calc_registry_string_by_num(dbipv6addr_assignment[i].registry), i);
-		match = i;
-	};
+	match = libipv6calc_db_wrapper_get_entry_generic(
+		NULL,							// pointer to data
+		IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY,			// type of data_ptr
+		IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_BASE_MASK,		// key type
+		64,							// key length
+		IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST,		// search type
+		0,							// number of first usable row (begin)
+		MAXENTRIES_ARRAY(dbipv6addr_assignment) - 1,		// number of last usable row (end)
+		ipv6_00_31,						// lookup key MSB
+		ipv6_32_63,						// lookup key LSB
+		NULL,							// data ptr (not used in IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY)
+		libipv6calc_db_wrapper_BuiltIn_get_row_dbipv6addr_assignment	// function pointer
+	);
 
 	/* result */
 	if ( match > -1 ) {

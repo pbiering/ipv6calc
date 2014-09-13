@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.31 2014/08/31 12:55:40 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.32 2014/09/13 21:15:06 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -62,6 +62,24 @@ static const s_formatoption ipv6calc_db_features[] = {
 	{ IPV6CALC_DB_IEEE_TO_INFO	, "DB_IEEE"	, "IEEE/OUI/OUI36 Vendor database (BuiltIn)" },
 };
 
+// data sources
+#define IPV6CALC_DB_UNKNOWN			0
+#define IPV6CALC_DB_IP2LOCATION			1
+#define IPV6CALC_DB_GEOIP			2
+#define IPV6CALC_DB_DBIP			3
+#define IPV6CALC_DB_BUILTIN			4
+
+typedef struct {
+	const unsigned int number;
+	const char        *name;
+} s_data_sources;
+
+static const s_data_sources data_sources[] = {
+	{ IPV6CALC_DB_GEOIP		, "GeoIP"},
+	{ IPV6CALC_DB_IP2LOCATION	, "IP2Location"},
+	{ IPV6CALC_DB_DBIP		, "db-ip.com"},
+	{ IPV6CALC_DB_BUILTIN		, "BuiltIn"}
+};
 
 // database names and descriptions
 typedef struct {
@@ -102,10 +120,36 @@ typedef struct {
 #define COUNTRYCODE_INDEX_TO_CHAR2(index)  ((index / COUNTRYCODE_LETTER1_MAX) > 9) ? ((index / COUNTRYCODE_LETTER1_MAX) - 10 + 'A') : ((index / COUNTRYCODE_LETTER1_MAX) + '0')
 
 
+// generic database lookup function
+#define IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY		1	 // array TODO: structure
+
+#ifdef HAVE_BERKELEY_DB_SUPPORT
+#define IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB		2	 // Berkeley DB
+#endif // HAVE_BERKELEY_DB_SUPPORT
+
+// data storage type
+#define IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_FIRST_LAST	1	 // key is first-last
+#define IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_BASE_MASK	2	 // key is base/mask
+
+// data search type
+#define IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY	1	 // binary search
+#define IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST	2	 // sequential longest match
+
+// bdb lookup function
+#ifdef HAVE_BERKELEY_DB_SUPPORT
+#define IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x2		0
+#define IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x4		1
+#define IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x2		2
+#define IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x4		3
+#define IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_PREF_32x2	4
+#define IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_PREF_32x4	5
+#endif // HAVE_BERKELEY_DB_SUPPORT
+
 #endif
 
 
 extern int  libipv6calc_db_wrapper_init(void);
+extern int  libipv6calc_db_wrapper_cleanup(void);
 extern void libipv6calc_db_wrapper_info(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_features(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_capabilities(char *string, const size_t size);
@@ -117,8 +161,8 @@ extern int  libipv6calc_db_wrapper_options(const int opt, const char *optarg, co
 /* functional wrappers */
 
 // CountryCode Text/Number
-extern char       *libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int proto);
-extern uint16_t    libipv6calc_db_wrapper_cc_index_by_addr(const char *addr, const int proto);
+extern char       *libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int proto, unsigned int *data_source_ptr);
+extern uint16_t    libipv6calc_db_wrapper_cc_index_by_addr(const char *addr, const int proto, unsigned int *data_source_ptr);
 
 extern int         libipv6calc_db_wrapper_country_code_by_cc_index(char *string, int length, const uint16_t cc_index);
 
@@ -158,6 +202,21 @@ extern int libipv6calc_db_wrapper_registry_num_by_ipv6addr(const ipv6calc_ipv6ad
 #define IPV6CALC_BDB_FORMAT_DATA_FIELD_SELECT_MASK	0x000000f0
 #define IPV6CALC_BDB_FORMAT_DATA_FIELD_SELECT_SHIFT	4
 
-int libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, DB *dbp, const uint32_t db_format, char *resultstring, const size_t resultstring_length);
-int libipv6calc_db_wrapper_get_dbentry_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, DB *dbp, const uint32_t db_format, char *resultstring, const size_t resultstring_length);
+extern int libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, DB *dbp, const uint32_t db_format, char *data_ptr);
+extern int libipv6calc_db_wrapper_get_dbentry_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, DB *dbp, const uint32_t db_format, char *data_ptr);
 #endif // HAVE_BERKELEY_DB_SUPPORT
+
+// generic DB lookup
+extern int libipv6calc_db_wrapper_get_entry_generic(
+	void 		*db_ptr,		// pointer to database in case of IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB, otherwise NULL
+	const uint8_t	data_ptr_type,		// type of data_ptr
+	const uint8_t	data_key_type,		// key type
+	const uint8_t	data_key_length,	// key length
+	const uint8_t	data_search_type,	// search type
+	const long int	data_key_row_min,	// number of first usable row (begin)
+	const long int	data_key_row_max,	// number of last usable row (end)
+	const uint32_t	lookup_key_00_31,	// lookup key MSB
+	const uint32_t	lookup_key_32_63,	// lookup key LSB
+	void            *data_ptr,		// pointer to DB data in case of IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB, otherwise NULL
+	int  (*get_array_row)()			// function to get array row
+	);

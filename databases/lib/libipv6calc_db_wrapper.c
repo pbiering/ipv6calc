@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.46 2014/09/01 19:25:59 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.47 2014/09/13 21:15:06 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -95,20 +95,24 @@ int libipv6calc_db_wrapper_init(void) {
 		NONQUIETPRINT_NA("Support for IP2Location disabled by option");
 	};
 
+	if (wrapper_DBIP_disable != 1) {
 #ifdef SUPPORT_DBIP
-	// Call DBIP wrapper
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call libipv6calc_db_wrapper_DBIP_wrapper_init");
+		// Call DBIP wrapper
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call libipv6calc_db_wrapper_DBIP_wrapper_init");
 
-	r = libipv6calc_db_wrapper_DBIP_wrapper_init();
+		r = libipv6calc_db_wrapper_DBIP_wrapper_init();
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "DBIP_wrapper_init result: %d wrapper_features=0x%08x", r, wrapper_features);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "DBIP_wrapper_init result: %d wrapper_features=0x%08x", r, wrapper_features);
 
-	if (r != 0) {
-		result = 1;
+		if (r != 0) {
+			result = 1;
+		} else {
+			wrapper_DBIP_status = 1; // ok
+		};
+#endif // SUPPORT_DBIP
 	} else {
-		wrapper_DBIP_status = 1; // ok
+		NONQUIETPRINT_NA("Support for db-ip.com disabled by option");
 	};
-#endif
 
 #ifdef SUPPORT_BUILTIN
 	// Call BuiltIn wrapper
@@ -123,7 +127,7 @@ int libipv6calc_db_wrapper_init(void) {
 	} else {
 		wrapper_BuiltIn_status = 1; // ok
 	};
-#endif
+#endif // SUPPORT_BUILTIN
 
 	return(result);
 };
@@ -238,40 +242,46 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
-#ifdef SUPPORT_IP2LOCATION
-#ifdef SUPPORT_IP2LOCATION_DYN
-	snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(dyn-load)", string, strlen(string) > 0 ? " " : "");
-	snprintf(string, size, "%s", tempstring);
-#else // SUPPORT_IP2LOCATION_DYN
-#ifdef SUPPORT_IP2LOCATION_STATIC
-	snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(static)", string, strlen(string) > 0 ? " " : "");
-	snprintf(string, size, "%s", tempstring);
-#else // SUPPORT_IP2LOCATION_STATIC
-	snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(linked)", string, strlen(string) > 0 ? " " : "");
-	snprintf(string, size, "%s", tempstring);
-#endif // SUPPORT_IP2LOCATION_STATIC
-#endif //SUPPORT_IP2LOCATION_DYN
-#endif // SUPPORT_IP2LOCATION
-
+	if (wrapper_GeoIP_disable != 1) {
 #ifdef SUPPORT_GEOIP
 #ifdef SUPPORT_GEOIP_DYN
-	snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(dyn-load)", string, strlen(string) > 0 ? " " : "");
-	snprintf(string, size, "%s", tempstring);
+		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(dyn-load)", string, strlen(string) > 0 ? " " : "");
+		snprintf(string, size, "%s", tempstring);
 #else // SUPPORT_GEOIP_DYN
 #ifdef SUPPORT_GEOIP_STATIC
-	snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(static)", string, strlen(string) > 0 ? " " : "");
-	snprintf(string, size, "%s", tempstring);
+		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(static)", string, strlen(string) > 0 ? " " : "");
+		snprintf(string, size, "%s", tempstring);
 #else // SUPPORT_GEOIP_STATIC
-	snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(linked)", string, strlen(string) > 0 ? " " : "");
-	snprintf(string, size, "%s", tempstring);
+		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(linked)", string, strlen(string) > 0 ? " " : "");
+		snprintf(string, size, "%s", tempstring);
 #endif // SUPPORT_GEOIP_STATIC
 #endif // SUPPORT_GEOIP_DYN
 #endif // SUPPORT_GEOIP
+	};
 
+	if (wrapper_IP2Location_disable != 1) {
+#ifdef SUPPORT_IP2LOCATION
+#ifdef SUPPORT_IP2LOCATION_DYN
+		snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(dyn-load)", string, strlen(string) > 0 ? " " : "");
+		snprintf(string, size, "%s", tempstring);
+#else // SUPPORT_IP2LOCATION_DYN
+#ifdef SUPPORT_IP2LOCATION_STATIC
+		snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(static)", string, strlen(string) > 0 ? " " : "");
+		snprintf(string, size, "%s", tempstring);
+#else // SUPPORT_IP2LOCATION_STATIC
+		snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(linked)", string, strlen(string) > 0 ? " " : "");
+		snprintf(string, size, "%s", tempstring);
+#endif // SUPPORT_IP2LOCATION_STATIC
+#endif //SUPPORT_IP2LOCATION_DYN
+#endif // SUPPORT_IP2LOCATION
+	};
+
+	if (wrapper_DBIP_disable != 1) {
 #ifdef SUPPORT_DBIP
-	snprintf(tempstring, sizeof(tempstring), "%s%sDBIP", string, strlen(string) > 0 ? " " : "");
-	snprintf(string, size, "%s", tempstring);
+		snprintf(tempstring, sizeof(tempstring), "%s%sDBIP", string, strlen(string) > 0 ? " " : "");
+		snprintf(string, size, "%s", tempstring);
 #endif
+	};
 
 #ifdef SUPPORT_BUILTIN
 	snprintf(tempstring, sizeof(tempstring), "%s%sDB_AS_REG(BuiltIn)", string, strlen(string) > 0 ? " " : "");
@@ -328,6 +338,8 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 	if (wrapper_GeoIP_disable != 1) {
 		// Call GeoIP wrapper
 		libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(level_verbose, prefix_string);
+	} else {
+		printf("GeoIP support available but disabled by option\n");
 	};
 	printf("\n");
 #endif
@@ -336,13 +348,19 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 	if (wrapper_IP2Location_disable != 1) {
 		// Call IP2Location wrapper
 		libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(level_verbose, prefix_string);
+	} else {
+		printf("IP2Location support available but disabled by option\n");
 	};
 	printf("\n");
 #endif
 
 #ifdef SUPPORT_DBIP
-	// Call DBIP wrapper
-	libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(level_verbose, prefix_string);
+	if (wrapper_DBIP_disable != 1) {
+		// Call DBIP wrapper
+		libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(level_verbose, prefix_string);
+	} else {
+		printf("db-ip.com support available but disabled by option\n");
+	};
 	printf("\n");
 #endif
 
@@ -498,9 +516,15 @@ int libipv6calc_db_wrapper_registry_num_by_cc_index(const uint16_t cc_index) {
 
 /*
  * get CountryCode in text form
+ * TODO: add support for DB priority
  */
-char *libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int proto) {
+char *libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int proto, unsigned int *data_source_ptr) {
 	char *result_char_ptr = NULL;
+	unsigned int data_source = IPV6CALC_DB_UNKNOWN;
+
+#ifdef SUPPORT_DBIP
+	static char country_code[256] = "";
+#endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
@@ -509,32 +533,60 @@ char *libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int pr
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now GeoIP");
 
 		result_char_ptr = (char *) libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(addr, proto);
+
+		if (result_char_ptr != NULL) {
+			data_source = IPV6CALC_DB_GEOIP;
+			goto END_libipv6calc_db_wrapper; // ok
+		} else {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called GeoIP did not return a valid country_code");
+		};
 #endif
 	};
 
-	if (result_char_ptr == NULL) {
-		// fallback
-		if (wrapper_IP2Location_status == 1) {
+	if (wrapper_IP2Location_status == 1) {
 #ifdef SUPPORT_IP2LOCATION
-			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now IP2Location");;
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now IP2Location");
 
-			result_char_ptr = libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr((char *) addr, proto);
+		result_char_ptr = libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr((char *) addr, proto);
+
+		if (result_char_ptr != NULL) {
+			data_source = IPV6CALC_DB_IP2LOCATION;
+			goto END_libipv6calc_db_wrapper; // ok
+		} else {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called IP2Location did not return a valid country_code");
+		};
 #endif
+	};
+
+	if (wrapper_DBIP_status == 1) {
+#ifdef SUPPORT_DBIP
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now DBIP");
+
+		country_code[0] = '\0'; // clear contents			
+
+		int ret = libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr((char *) addr, proto, country_code, sizeof(country_code));
+		if (ret == 0) {
+			result_char_ptr = country_code;
 		};
 
-		if (result_char_ptr == NULL) {
-			// fallback
-			if (wrapper_DBIP_status == 1) {
-#ifdef SUPPORT_DBIP
-				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now DBIP");;
-
-				result_char_ptr = libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr((char *) addr, proto);
+		if (result_char_ptr != NULL) {
+			data_source = IPV6CALC_DB_DBIP;
+			goto END_libipv6calc_db_wrapper; // ok
+		} else {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called db-ip.com did not return a valid country_code");
+		};
 #endif
-			};
-	};
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s", result_char_ptr);
+	goto END_libipv6calc_db_wrapper; // dummy goto in case no db is enabled
+
+END_libipv6calc_db_wrapper:
+	if (data_source_ptr != NULL) {
+		// set data_source if pointer not NULL
+		*data_source_ptr = data_source;
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s (data_source=%d)", result_char_ptr, data_source);
 
 	return(result_char_ptr);
 };
@@ -543,10 +595,10 @@ char *libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int pr
 /*
  * get CountryCode in special internal form (index) [A-Z] (26) x [0-9A-Z] (36)
  */
-uint16_t libipv6calc_db_wrapper_cc_index_by_addr(const char *addr, const int proto) {
+uint16_t libipv6calc_db_wrapper_cc_index_by_addr(const char *addr, const int proto, unsigned int *data_source_ptr) {
 	uint16_t index = COUNTRYCODE_INDEX_UNKNOWN;
 
-	const char *cc_text = libipv6calc_db_wrapper_country_code_by_addr(addr, proto);
+	const char *cc_text = libipv6calc_db_wrapper_country_code_by_addr(addr, proto, data_source_ptr);
 	uint8_t c1, c2;
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
@@ -853,194 +905,326 @@ int libipv6calc_db_wrapper_registry_num_by_ipv6addr(const ipv6calc_ipv6addr *ipv
 
 #ifdef HAVE_BERKELEY_DB_SUPPORT
 /*
- * generic Berkeley DB lookup function
- * 
- * in:  DB, value_00_31, value_32_63 (can be empty)
- * out: database entry matching
- *
- * database format
- *
- * IPV6CALC_BDB_FORMAT_CHECK_FIRST_LAST
- *
- *   IPV6CALC_BDB_FORMAT_CHECK_32
- *     RECNO: first;last;data[;data...]
- *
- *   IPV6CALC_BDB_FORMAT_CHECK_64
- *     RECNO: first_00_31;first_32_63;last_00_31;last_32_64;data[;data...]
- *
- * amount of data fields (1..15)
- *   (a & IPV6CALC_BDB_FORMAT_DATA_FIELDS_MASK)
- *
- * data selector (1..15)
- *   (d << IPV6CALC_BDB_FORMAT_DATA_FIELD_SELECT_SHIFT) & IPV6CALC_BDB_FORMAT_DATA_FIELD_SELECT_MASK
- *
+ * generic fetch of a Berkeley DB row
  */
-int libipv6calc_db_wrapper_get_dbentry_generic(const uint32_t value_00_31, const uint32_t value_32_63, DB *dbp, const uint32_t db_format, char *resultstring, const size_t resultstring_length) {
+int libipv6calc_db_wrapper_bdb_fetch_row(
+	DB 			*db_ptr,		// pointer to DB
+	const uint8_t		db_format,		// DB format
+	const long int		row,			// row number
+	uint32_t		*data_1_00_31_ptr,	// data 1 (MSB in case of 64 bits)
+	uint32_t		*data_1_32_63_ptr,	// data 1 (LSB in case of 64 bits)
+	uint32_t		*data_2_00_31_ptr,	// data 2 (MSB in case of 64 bits)
+	uint32_t		*data_2_32_63_ptr,	// data 2 (LSB in case of 64 bits)
+	void			*data_ptr		// pointer to data
+	) {
+
 	int retval = -1;
+
+	const char *db_format_row[] = {
+		"%lu;%lu;%[^%]",			// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x2
+		"%lu;%lu;%lu;%lu;%[^%]",		// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x4
+		"%lx;%lx;%[^%]",			// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x2
+		"%lx;%lx;%lx;%lx;%[^%]",		// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x4
+		"0x%lx;0x%lx;%[^%]",			// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_PREF_32x2
+		"0x%lx;0x%lx;0x%lx;0x%lx;%[^%]",	// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_PREF_32x4
+	};
+
+	const int db_format_values[] = {
+		3,	// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x2
+		5,	// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x4
+		3,	// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x2
+		5,	// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x4
+		3,	// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_PREF_32x2
+		5,	// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_PREF_32x4
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called db_ptr=%p, data_ptr=%p", db_ptr, data_ptr);
+
+	if (MAXENTRIES_ARRAY(db_format_row) != MAXENTRIES_ARRAY(db_format_values)) {
+		ERRORPRINT_NA("inconsistent array definition (FIX CODE)");
+		exit(EXIT_FAILURE);
+	};
+
+	if (db_format >= MAXENTRIES_ARRAY(db_format_row)) {
+		ERRORPRINT_WA("unsupported db_format (FIX CODE): %u", db_format);
+		exit(EXIT_FAILURE);
+	};
 
 	char datastring[NI_MAXHOST];
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with value_00_31=%08x value_32_63=%08x db_format=%08x", (unsigned int) value_00_31, (unsigned int) value_32_63, db_format);
-
-	int i = -1;
-	int match = -1;
-	int i_min, i_max, i_old, max = 0;
-
 	DBT key, data;
-	DBC *dbcp;
+
+	long int recno = row;
+
+	memset(&key, 0, sizeof(key));
+	memset(&data, 0, sizeof(data));
+
+	key.data = &recno;
+	key.size = sizeof(recno);
+
 	int ret;
-	long unsigned int recno, recno_max, value;
 
-	char *token, *cptr, **ptrptr;
-	ptrptr = &cptr;
+	// DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Try to get row");
 
-	int token_counter, token_counter_max = 0, token_counter_data = 0;
-	char *db_data = NULL;
+	ret = db_ptr->get(db_ptr, NULL, &key, &data, 0);
+
+	// DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "get executed");
+
+	if (ret != 0) {
+		db_ptr->err(db_ptr, ret, "DB->get");
+		goto END_libipv6calc_db_wrapper_bdb_fetch_row;
+	};
+
+	// DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Got row");
+
+	snprintf(datastring, (data.size + 1) >= sizeof(datastring) ? sizeof(datastring) : data.size + 1, "%s", (char *) data.data);
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "database row %lu: %s (size=%d) data_ptr=%p", recno, datastring, data.size, data_ptr);
+
+	if (db_format_values[db_format] == 3) {
+		ret = sscanf(datastring, db_format_row[db_format], data_1_00_31_ptr, data_2_00_31_ptr, (char *) data_ptr);
+		*data_1_32_63_ptr = 0;
+		*data_2_32_63_ptr = 0;
+	} else if (db_format_values[db_format] == 5) {
+		ret = sscanf(datastring, db_format_row[db_format], data_1_00_31_ptr, data_1_32_63_ptr, data_2_00_31_ptr, data_2_32_63_ptr, (char *) data_ptr);
+	} else {
+		ERRORPRINT_WA("unsupported db_format_values (FIX CODE): %u", db_format_values[db_format]);
+		exit(EXIT_FAILURE);
+	};
+
+	if (ret != db_format_values[db_format]) {
+		ERRORPRINT_WA("row parsing error, corrupted database: %s (ret=%d format=%s expectedvalues=%d)", datastring, ret, db_format_row[db_format], db_format_values[db_format]);
+		goto END_libipv6calc_db_wrapper_bdb_fetch_row;
+	};
+
+	retval = 0; // ok
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "database row %lu parsed: data_1_00_31=%08x data_1_32_63=%08x data_2_00_31=%08x data_2_32_63=%08x value=%s)", row, *data_1_00_31_ptr, *data_1_32_63_ptr, *data_2_00_31_ptr, *data_2_32_63_ptr, (char *) data_ptr);
+	
+END_libipv6calc_db_wrapper_bdb_fetch_row:
+	return(retval);
+};
+#endif // HAVE_BERKELEY_DB_SUPPORT
+
+
+/*
+ * generic internal/external database lookup function
+ * return:	 -1 : no lookup result
+ * 		>= 0: matching row
+ */
+int libipv6calc_db_wrapper_get_entry_generic(
+	void 		*db_ptr,		// pointer to database in case of IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB, otherwise NULL
+	const uint8_t	data_ptr_type,		// type of data_ptr
+	const uint8_t	data_key_type,		// key type
+	const uint8_t	data_key_length,	// key length
+	const uint8_t	data_search_type,	// search type
+	const long int	data_key_row_min,	// number of first usable row (begin)
+	const long int	data_key_row_max,	// number of last usable row (end)
+	const uint32_t	lookup_key_00_31,	// lookup key MSB
+	const uint32_t	lookup_key_32_63,	// lookup key LSB
+	void            *data_ptr,		// pointer to DB data in case of IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB, otherwise NULL
+	int  (*get_array_row)()			// function to get array row
+	) {
+
+	int retval = -1;
 
 	uint32_t value_first_00_31 = 0, value_last_00_31 = 0;
 	uint32_t value_first_32_63 = 0, value_last_32_63 = 0;
 
+#ifdef HAVE_BERKELEY_DB_SUPPORT
+	uint8_t	db_format = 255;
+
+	DB *dbp = NULL;
+
+	char db_value[NI_MAXHOST];
+#endif // HAVE_BERKELEY_DB_SUPPORT
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with data_ptr_type=%u data_key_type=%u data_key_length=%u data_key_row_min=%lu data_key_row_max=%lu lookup_key_00_31=%08lx lookup_key_32_63=%08lx db_ptr=%p, data_ptr=%p",
+		data_ptr_type,
+		data_key_type,
+		data_key_length,
+		(long unsigned int) data_key_row_min,
+		(long unsigned int) data_key_row_max,
+		(long unsigned int) lookup_key_00_31,
+		(long unsigned int) lookup_key_32_63,
+		db_ptr,
+		data_ptr
+	);
+
+	/* check row min/max */
+	if (data_key_row_min < 0) {
+		ERRORPRINT_WA("unsupported data_key_row_min (FIX CODE): %ld", data_key_row_min);
+		exit(EXIT_FAILURE);
+	};
+
+	if (data_key_row_max < 1) {
+		ERRORPRINT_WA("unsupported data_key_row_max (FIX CODE): %ld", data_key_row_max);
+		exit(EXIT_FAILURE);
+	};
+
+	if (data_key_row_max < data_key_row_min) {
+		ERRORPRINT_WA("unsupported data_key_row_max < data_key_row_min (FIX CODE): %ld / %ld", data_key_row_max, data_key_row_min);
+		exit(EXIT_FAILURE);
+	};
+
+	/* check data_key_length */
+	switch(data_key_length) {
+	    case 32:
+	    case 64:
+		// supported
+		break;
+
+	    default:
+		ERRORPRINT_WA("unsupported data_key_length (FIX CODE): %d", data_key_length);
+		exit(EXIT_FAILURE);
+	};
+
+	/* check data search type */
+	switch(data_search_type) {
+	    case IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY:
+	    case IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST:
+		// supported
+		break;
+
+	    default:
+		ERRORPRINT_WA("unsupported data_search_type (FIX CODE): %d", data_search_type);
+		exit(EXIT_FAILURE);
+	};
+
+	/* check data_ptr_type */
+	if (data_ptr_type == IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY) {
+		if (get_array_row == NULL) {
+			ERRORPRINT_NA("get_array_row function is unexpected NULL (FIX CODE)");
+			exit(EXIT_FAILURE);
+		};
+
+		if (data_ptr != NULL) {
+			ERRORPRINT_NA("data_ptr is unexpected NOT NULL - not supported on IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY (FIX CODE)");
+			exit(EXIT_FAILURE);
+		};
+#ifdef HAVE_BERKELEY_DB_SUPPORT
+	} else if (data_ptr_type == IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB) {
+		if (get_array_row != NULL) {
+			ERRORPRINT_NA("get_array_row function is unexpected NOT NULL (FIX CODE)");
+			exit(EXIT_FAILURE);
+		};
+
+		// supported
+		dbp = (DB *) db_ptr; // map db_ptr to DB ptr
+
+		if (data_key_length == 32) {
+			db_format = IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x2;
+		} else if (data_key_length == 64) {
+			db_format = IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x4;
+		};
+#endif // HAVE_BERKELEY_DB_SUPPORT
+	} else {
+		ERRORPRINT_WA("unsupported data_ptr_type (FIX CODE): %u", data_ptr_type);
+		exit(EXIT_FAILURE);
+	};
+
+	/* check data_key_type */
+	switch(data_key_type) {
+	    case IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_FIRST_LAST:
+	    case IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_BASE_MASK:
+		// supported
+		break;
+
+	    default:
+		ERRORPRINT_WA("unsupported data_key_type (FIX CODE): %u", data_key_type);
+		exit(EXIT_FAILURE);
+	};
+
+
+	int i = -1;
+	int match = -1;
+	int seqlongest = -1;
+	int i_min, i_max, i_old, max = 0;
+
+	int ret;
+
+	long unsigned int recno;
+
+#ifdef HAVE_BERKELEY_DB_SUPPORT
+	// empty
+#endif // HAVE_BERKELEY_DB_SUPPORT
+
 	i_min = 0; i_max = max; i_old = -1;
 
-	// get amount of entries in database
-	memset(&key, 0, sizeof(key));
-	memset(&data, 0, sizeof(data));
+	max = data_key_row_max;
 
-	/* Acquire a cursor for the database. */
-	if ((ret = dbp->cursor(dbp, NULL, &dbcp, 0)) != 0) {
-		dbp->err(dbp, ret, "DB->cursor");
-		goto END_libipv6calc_db_wrapper_get_dbentry_generic;
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Start binary search over entries: max=%d", max);
+
+	if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
+		// binary search in provided data
+		i_max = max;
+		i = i_max / 2;
+	} else if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST) {
+		// sequential search in provided data
+		i_old = max;
+		i_max = max;
+		i = 0;
 	};
-
-	/* Walk through the database and print out the key/data pairs. */
-	if ((ret = dbcp->c_get(dbcp, &key, &data, DB_LAST)) != 0) {
-		dbp->err(dbp, ret, "DB->cursor/DB_LAST");
-		goto END_libipv6calc_db_wrapper_get_dbentry_generic;
-	};
-
-	/* Close the cursor. */
-	if ((ret = dbcp->c_close(dbcp)) != 0) {
-		dbp->err(dbp, ret, "DBcursor->close");
-		goto END_libipv6calc_db_wrapper_get_dbentry_generic;
-	};
-
-	recno_max = *(long unsigned int *)key.data;
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database amount of entries found: %lu", recno_max);
-
-	if (db_format & IPV6CALC_BDB_FORMAT_CHECK_32) {
-		token_counter_max = 2;
-	} else if (db_format & IPV6CALC_BDB_FORMAT_CHECK_64) {
-		token_counter_max = 4;
-	};
-
-	token_counter_data = token_counter_max + ((db_format & IPV6CALC_BDB_FORMAT_DATA_FIELD_SELECT_MASK) >> IPV6CALC_BDB_FORMAT_DATA_FIELD_SELECT_SHIFT);
-	token_counter_max += (db_format & IPV6CALC_BDB_FORMAT_DATA_FIELDS_MASK);
-
-	max = recno_max - 1;
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Start binary search over entries: max=%d token_counter_max=%d, token_counter_data=%d", max, token_counter_max, token_counter_data);
-
-	// binary search in DB
-	i = max / 2;
-	i_max = max;
 
 	while (i_old != i) {
-		memset(&key, 0, sizeof(key));
-		memset(&data, 0, sizeof(data));
+		recno = i + data_key_row_min;
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Analyze recno=%ld", recno);
 
-		recno = i + 2; // 1 is info
+		if (data_ptr_type == IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY) {
+			ret = get_array_row(recno, &value_first_00_31, &value_first_32_63, &value_last_00_31, &value_last_32_63);
+			if (ret < 0) {
+				ERRORPRINT_WA("can't retrieve keys from array for row: %lu", recno);
+				exit(EXIT_FAILURE);
+			};	
+#ifdef HAVE_BERKELEY_DB_SUPPORT	
+		} else if (data_ptr_type == IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB) {
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Try to get row from Berkeley DB dbp=%p recno=%ld", dbp, recno);
+			ret = libipv6calc_db_wrapper_bdb_fetch_row(
+				dbp,			// pointer to DB
+				db_format,		// DB format
+				recno,			// row number
+				&value_first_00_31,	// data 1 (MSB in case of 64 bits)
+				&value_first_32_63,	// data 1 (LSB in case of 64 bits)
+				&value_last_00_31,	// data 2 (MSB in case of 64 bits)
+				&value_last_32_63,	// data 2 (LSB in case of 64 bits)
+				data_ptr		// pointer to data
+			);
 
-		key.data = &recno;
-		key.size = sizeof(recno);
-
-		if ((ret = dbp->get(dbp, NULL, &key, &data, 0)) != 0) {
-			dbp->err(dbp, ret, "DB->get");
-			goto END_libipv6calc_db_wrapper_get_dbentry_generic;
-                };
-
-		snprintf(datastring, (data.size + 1) >= sizeof(datastring) ? sizeof(datastring) : data.size + 1, "%s", (char *) data.data);
-
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database entry %lu: %s (%d)", recno, datastring, data.size);
-
-		value_first_00_31 = 0, value_last_00_31 = 0;
-		value_first_32_63 = 0, value_last_32_63 = 0;
-
-		// split data string
-		token = strtok_r(datastring, ";", ptrptr);
-		token_counter = 0;
-		while (token != NULL) {
-			token_counter++;
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "token %d found: %s", token_counter, token);
-
-			if (token_counter == token_counter_data) {
-				db_data = token;
-			} else if (token_counter <= 4 ) {
-				// convert to unsigned long integer
-				errno = 0;
-				value = strtoul(token, NULL, 0);
-				if (errno != 0) {
-					NONQUIETPRINT_WA("token %d found: %s, but value not parsable", token_counter, token);
-					goto END_libipv6calc_db_wrapper_get_dbentry_generic;
-				};
-				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "token %d found: %s and value is: %08x", token_counter, token, (unsigned int) value);
-				if (token_counter == 1 ) {
-					value_first_00_31 = value;
-				} else if (token_counter == 2) {
-					if (db_format & IPV6CALC_BDB_FORMAT_CHECK_32) {
-						value_last_00_31 = value;
-					} else if (db_format & IPV6CALC_BDB_FORMAT_CHECK_64) {
-						value_first_32_63 = value;
-					};
-				} else if (token_counter == 3) {
-					if (db_format & IPV6CALC_BDB_FORMAT_CHECK_64) {
-						value_last_00_31 = value;
-					};
-				} else if (token_counter == 4) {
-					if (db_format & IPV6CALC_BDB_FORMAT_CHECK_64) {
-						value_last_32_63 = value;
-					};
-				};
+			if (ret != 0) {
+				ERRORPRINT_WA("can't retrieve keys from data for row: %lu", recno);
+				exit(EXIT_FAILURE);
 			};
-
-			/* get next token */
-			token = strtok_r(NULL, ";", ptrptr);
+#endif // HAVE_BERKELEY_DB_SUPPORT
 		};
 
-		if (token_counter != token_counter_max) {
-			ERRORPRINT_WA("corrupted database, data has non expected amount of tokens: %d / %d (%s)", token_counter, token_counter_max, (char *) data.data);
-			exit(1);
-			//goto END_libipv6calc_db_wrapper_get_dbentry_generic;
-		};
-
-		if (db_format & IPV6CALC_BDB_FORMAT_CHECK_32) {
-			if (db_format & IPV6CALC_BDB_FORMAT_CHECK_FIRST_LAST) {
+		if (data_key_length == 32) {
+			if (data_key_type == IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_FIRST_LAST) {
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Test %08x range %08x - %08x i=%d i_min=%d i_max=%d",
-					(unsigned int) value_00_31,
+					(unsigned int) lookup_key_00_31,
 					(unsigned int) value_first_00_31,
 					(unsigned int) value_last_00_31,
 					i, i_min, i_max);
-			} else if (db_format & IPV6CALC_BDB_FORMAT_CHECK_BASE_MASK) {
+			} else if (data_key_type == IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_BASE_MASK) {
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Test %08x mask %08x/%08x i=%d i_min=%d i_max=%d",
-					(unsigned int) value_00_31,
+					(unsigned int) lookup_key_00_31,
 					(unsigned int) value_first_00_31,
 					(unsigned int) value_last_00_31,
 					 i, i_min, i_max);
 			};
-		} else if (db_format & IPV6CALC_BDB_FORMAT_CHECK_64) {
-			if (db_format & IPV6CALC_BDB_FORMAT_CHECK_FIRST_LAST) {
+		} else if (data_key_length == 64) {
+			if (data_key_type == IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_FIRST_LAST) {
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Test %08x:%08x range %08x:%08x - %08x:%08x i=%d i_min=%d i_max=%d",
-					(unsigned int) value_00_31,
-					(unsigned int) value_32_63,
+					(unsigned int) lookup_key_00_31,
+					(unsigned int) lookup_key_32_63,
 					(unsigned int) value_first_00_31,
 					(unsigned int) value_first_32_63,
 					(unsigned int) value_last_00_31,
 					(unsigned int) value_last_32_63,
 					 i, i_min, i_max);
-			} else if (db_format & IPV6CALC_BDB_FORMAT_CHECK_BASE_MASK) {
+			} else if (data_key_type == IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_BASE_MASK) {
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Test %08x:%08x mask %08x:%08x/%08x:%08x i=%d i_min=%d i_max=%d",
-					(unsigned int) value_00_31,
-					(unsigned int) value_32_63,
+					(unsigned int) lookup_key_00_31,
+					(unsigned int) lookup_key_32_63,
 					(unsigned int) value_first_00_31,
 					(unsigned int) value_first_32_63,
 					(unsigned int) value_last_00_31,
@@ -1049,124 +1233,152 @@ int libipv6calc_db_wrapper_get_dbentry_generic(const uint32_t value_00_31, const
 			};
 		};
 
-		if (db_format & IPV6CALC_BDB_FORMAT_CHECK_32) {
-			if (db_format & IPV6CALC_BDB_FORMAT_CHECK_FIRST_LAST) {
-				if (value_00_31 < value_first_00_31) {
+		if (data_key_length == 32) {
+			if (data_key_type == IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_FIRST_LAST) {
+				if (lookup_key_00_31 < value_first_00_31) {
 					// to high in array, jump down
 					i_max = i;
-				} else if (value_00_31 > value_last_00_31) {
+				} else if (lookup_key_00_31 > value_last_00_31) {
 					// to low in array, jump up
 					i_min = i;
 				} else {
 					// hit
 					match = i;
-					break;
+					if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
+						// binary search in provided data
+						break;
+					} else if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST) {
+						// sequential search in provided data
+						if (ret > seqlongest) {
+							seqlongest = ret;
+						};
+					};
 				};
-			} else if (db_format & IPV6CALC_BDB_FORMAT_CHECK_BASE_MASK) {
-				if ((value_00_31 & value_last_00_31) < value_first_00_31) {
+			} else if (data_key_type == IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_BASE_MASK) {
+				if ((lookup_key_00_31 & value_last_00_31) < value_first_00_31) {
 					// to high in array, jump down
 					i_max = i;
-				} else if ((value_00_31 & value_last_00_31) > value_first_00_31) {
+				} else if ((lookup_key_00_31 & value_last_00_31) > value_first_00_31) {
 					// to low in array, jump up
 					i_min = i;
 				} else {
 					// hit
 					match = i;
-					break;
+					if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
+						// binary search in provided data
+						break;
+					} else if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST) {
+						// sequential search in provided data
+						if (ret > seqlongest) {
+							seqlongest = ret;
+						};
+					};
 				};
 			};
-		} else if (db_format & IPV6CALC_BDB_FORMAT_CHECK_64) {
-			if (db_format & IPV6CALC_BDB_FORMAT_CHECK_FIRST_LAST) {
-				if (value_00_31 < value_first_00_31) {
-					/* to high in array, jump down */
-					i_max = i;
-				} else if (value_00_31 > value_last_00_31) {
-					// to low in array, jump up
-					i_min = i;
-				} else if ((value_00_31 == value_first_00_31) && (value_32_63 < value_first_32_63)) {
-					/* to high in array, jump down */
-					i_max = i;
-				} else if ((value_00_31 == value_last_00_31) && (value_32_63 > value_last_32_63)) {
-					// to low in array, jump up
-					i_min = i;
+		} else if (data_key_length == 64) {
+			if (data_key_type == IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_FIRST_LAST) {
+				if (lookup_key_00_31 < value_first_00_31) {
+					if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
+						/* to high in array, jump down */
+						i_max = i;
+					};
+				} else if (lookup_key_00_31 > value_last_00_31) {
+					if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
+						// to low in array, jump up
+						i_min = i;
+					};
+				} else if ((lookup_key_00_31 == value_first_00_31) && (lookup_key_32_63 < value_first_32_63)) {
+					if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
+						/* to high in array, jump down */
+						i_max = i;
+					};
+				} else if ((lookup_key_00_31 == value_last_00_31) && (lookup_key_32_63 > value_last_32_63)) {
+					if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
+						// to low in array, jump up
+						i_min = i;
+					};
 				} else {
 					// hit
 					match = i;
-					break;
+					if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
+						// binary search in provided data
+						break;
+					} else if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST) {
+						// sequential search in provided data
+						if (ret > seqlongest) {
+							seqlongest = ret;
+						};
+					};
 				};
-			} else if (db_format & IPV6CALC_BDB_FORMAT_CHECK_BASE_MASK) {
-				if ((value_00_31 & value_last_00_31) < value_first_00_31) {
-					/* to high in array, jump down */
-					i_max = i;
-				} else if ((value_00_31 & value_last_00_31) > value_first_00_31) {
-					// to low in array, jump up
-					i_min = i;
-				} else if (((value_00_31 & value_last_00_31) == value_first_00_31) && ((value_32_63 & value_last_32_63) < value_first_32_63)) {
-					/* to high in array, jump down */
-					i_max = i;
-				} else if (((value_00_31 & value_last_00_31) == value_first_00_31) && ((value_32_63 & value_last_32_63) > value_first_32_63)) {
-					// to low in array, jump up
-					i_min = i;
+			} else if (data_key_type == IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_BASE_MASK) {
+				if ((lookup_key_00_31 & value_last_00_31) < value_first_00_31) {
+					if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
+						/* to high in array, jump down */
+						i_max = i;
+					};
+				} else if ((lookup_key_00_31 & value_last_00_31) > value_first_00_31) {
+					if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
+						// to low in array, jump up
+						i_min = i;
+					};
+				} else if (((lookup_key_00_31 & value_last_00_31) == value_first_00_31) && ((lookup_key_32_63 & value_last_32_63) < value_first_32_63)) {
+					if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
+						/* to high in array, jump down */
+						i_max = i;
+					};
+				} else if (((lookup_key_00_31 & value_last_00_31) == value_first_00_31) && ((lookup_key_32_63 & value_last_32_63) > value_first_32_63)) {
+					if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
+						// to low in array, jump up
+						i_min = i;
+					};
 				} else {
 					// hit
 					match = i;
-					break;
+					if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
+						// binary search in provided data
+						break;
+					} else if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST) {
+						// sequential search in provided data
+						if (ret > seqlongest) {
+							seqlongest = ret;
+						};
+					};
 				};
 			};
 		};
 
-		i_old = i;
-		i = (i_max - i_min) / 2 + i_min;
+		if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
+			// binary search in provided data
+			i_old = i;
+			i = (i_max - i_min) / 2 + i_min;
+		} else if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST) {
+			// sequential search in provided data
+			i++;
+		};
 	};
 
 	if (match != -1) {
-		if (db_data != NULL) {
-			snprintf(resultstring, resultstring_length, "%s", db_data);
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Finished with success result (DB): match=%d data=%s", match, resultstring);
-			retval = 0;
+		retval = match;
+
+		if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Matched: %d", i);
+			if (data_ptr_type == IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY) {
+#ifdef HAVE_BERKELEY_DB_SUPPORT
+			} else if (data_ptr_type == IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB) {
+				data_ptr = db_value;
+#endif // HAVE_BERKELEY_DB_SUPPORT
+			};
+		} else if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST) {
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Matched: %d", match);
+		};
+
+		if (data_ptr != NULL) {
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Finished with success result (DB): match=%d", match);
 		};
 	} else {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Finished with NO SUCCESS result (DB)");
 	};
 
-END_libipv6calc_db_wrapper_get_dbentry_generic:
-	return (retval);
+//END_libipv6calc_db_wrapper_get_entry_generic:
+	return(retval);
 };
-/*
- * generic Berkeley DB lookup function for IPv4
- * 
- * in:  DB, ipv4addrp
- * out: database entry matching ipv4addrp
- */
-int libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, DB *dbp, const uint32_t db_format, char *resultstring, const size_t resultstring_length) {
-	int retval = -1;
-
-	uint32_t ipv4 = ipv4addr_getdword(ipv4addrp);
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv4 address: %08x", (unsigned int) ipv4);
-
-	retval = libipv6calc_db_wrapper_get_dbentry_generic(ipv4, 0, dbp, db_format, resultstring, resultstring_length);
-
-	return (retval);
-};
-
-
-/*
- * generic Berkeley DB lookup function for IPv6
- * 
- * in:  DB, ipv6addrp
- * out: database entry matching ipv6addrp
- */
-int libipv6calc_db_wrapper_get_dbentry_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, DB *dbp, const uint32_t db_format, char *resultstring, const size_t resultstring_length) {
-	int retval = -1;
-
-	uint32_t ipv6_00_31 = ipv6addr_getdword(ipv6addrp, 0);
-	uint32_t ipv6_32_63 = ipv6addr_getdword(ipv6addrp, 1);
-
-	retval = libipv6calc_db_wrapper_get_dbentry_generic(ipv6_00_31, ipv6_32_63, dbp, db_format, resultstring, resultstring_length);
-
-	return (retval);
-};
-
-
-#endif // HAVE_BERKELEY_DB_SUPPORT

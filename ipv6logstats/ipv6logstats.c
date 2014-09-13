@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.60 2014/08/28 07:17:43 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.61 2014/09/13 21:15:08 ds6peter Exp $
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -293,6 +293,8 @@ int main(int argc,char *argv[]) {
 	/* call lineparser */
 	lineparser();
 
+	libipv6calc_db_wrapper_cleanup();
+
 	exit(EXIT_SUCCESS);
 };
 
@@ -536,7 +538,7 @@ static void lineparser(void) {
 					};
 
 					if (opt_simple != 1) {
-						cc_index = libipv4addr_cc_index_by_addr(&ipv4addr);
+						cc_index = libipv4addr_cc_index_by_addr(&ipv4addr, NULL);
 						as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr);
 						if (feature_cc == 1) {
 							stat_inc_country_code(cc_index, 4);
@@ -596,7 +598,7 @@ static void lineparser(void) {
 					};
 				} else {
 					if (opt_simple != 1) {
-						cc_index = libipv6addr_cc_index_by_addr(&ipv6addr);
+						cc_index = libipv6addr_cc_index_by_addr(&ipv6addr, NULL);
 						as_num32 = libipv6addr_as_num32_by_addr(&ipv6addr);
 
 						if (feature_cc == 1) {
@@ -667,7 +669,7 @@ static void lineparser(void) {
 				stat_inc(STATS_IPV4);
 
 				if (opt_simple != 1) {
-					cc_index = libipv4addr_cc_index_by_addr(&ipv4addr);
+					cc_index = libipv4addr_cc_index_by_addr(&ipv4addr, NULL);
 					as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr);
 
 					stat_inc_country_code(cc_index, 4);

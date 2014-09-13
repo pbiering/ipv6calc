@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.115 2014/08/28 07:17:43 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.116 2014/09/13 21:15:08 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1570,6 +1570,8 @@ RESULT_print:
 		};
 		goto PIPE_input;
 	};
+
+	libipv6calc_db_wrapper_cleanup();
 
 	exit(retval);
 };

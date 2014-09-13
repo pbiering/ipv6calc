@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.81 2014/07/22 06:00:41 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.82 2014/09/13 21:15:09 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -400,6 +400,6 @@ extern void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter);
 
 extern int  libipv6addr_get_included_ipv4addr(const ipv6calc_ipv6addr *ipv6addrp, ipv6calc_ipv4addr *ipv4addrp, const int selector);
 
-extern uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp);
+extern uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsigned int *data_source_ptr);
 extern uint32_t libipv6addr_as_num32_by_addr(const ipv6calc_ipv6addr *ipv6addrp);
 extern int libipv6addr_registry_num_by_addr(const ipv6calc_ipv6addr *ipv6addrp);

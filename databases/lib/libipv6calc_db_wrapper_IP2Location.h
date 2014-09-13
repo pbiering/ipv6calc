@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.h
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.h,v 1.5 2014/08/27 06:48:55 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.h,v 1.6 2014/09/13 21:15:08 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -85,7 +85,7 @@ extern int                libipv6calc_db_wrapper_IP2Location_db_avail(int type);
 extern const char        *libipv6calc_db_wrapper_IP2Location_lib_version(void);
 extern IP2Location       *libipv6calc_db_wrapper_IP2Location_open(char *db);
 extern IP2Location       *libipv6calc_db_wrapper_IP2Location_open_type(int type);
-extern uint32_t           libipv6calc_db_wrapper_IP2Location_close(IP2Location *loc);
+extern int                libipv6calc_db_wrapper_IP2Location_close(IP2Location *loc);
 extern IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_all(IP2Location *loc, char *ip);
 void                      libipv6calc_db_wrapper_IP2Location_free_record(IP2LocationRecord *record);
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.37 2014/08/28 07:17:43 ds6peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.38 2014/09/13 21:15:08 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -232,6 +232,8 @@ int main(int argc,char *argv[]) {
 
 	/* call lineparser */
 	lineparser(outputtype);
+
+	libipv6calc_db_wrapper_cleanup();
 
 	exit(EXIT_SUCCESS);
 };

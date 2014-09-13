@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.61 2014/09/01 19:46:12 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.62 2014/09/13 21:15:08 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -807,7 +807,7 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 		DEBUGPRINT_WA(DEBUG_libipv4addr, "result of AS number decompression: 0x%08x (%d)", as_num32_decomp17, as_num32_decomp17);
 
 		// get countrycode
-		cc_index = libipv6calc_db_wrapper_cc_index_by_addr(resultstring, 4);
+		cc_index = libipv6calc_db_wrapper_cc_index_by_addr(resultstring, 4, NULL);
 		if (cc_index == COUNTRYCODE_INDEX_UNKNOWN) {
 			// on unknown country, map registry value
 			cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + libipv6calc_db_wrapper_registry_num_by_ipv4addr(ipv4addrp);
@@ -1004,7 +1004,7 @@ int ipv4addr_filter(const ipv6calc_ipv4addr *ipv4addrp, const s_ipv6calc_filter_
  * in : *ipv4addrp = IPv4 address structure
  * out: country code index
  */
-uint16_t libipv4addr_cc_index_by_addr(const ipv6calc_ipv4addr *ipv4addrp) {
+uint16_t libipv4addr_cc_index_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsigned int *data_source_ptr) {
 	uint16_t cc_index = COUNTRYCODE_INDEX_UNKNOWN;
 	char tempipv4string[NI_MAXHOST] = "";
 	int retval;
@@ -1025,7 +1025,7 @@ uint16_t libipv4addr_cc_index_by_addr(const ipv6calc_ipv4addr *ipv4addrp) {
 				goto END_libipv4addr_cc_index_by_addr;
 			};
 
-			cc_index = libipv6calc_db_wrapper_cc_index_by_addr(tempipv4string, 4);
+			cc_index = libipv6calc_db_wrapper_cc_index_by_addr(tempipv4string, 4, data_source_ptr);
 		};
 	};
 
@@ -1089,7 +1089,7 @@ int libipv4addr_registry_num_by_addr(const ipv6calc_ipv4addr *ipv4addrp) {
 		};
 		if ((as_num32 == ASNUM_AS_UNKNOWN) || (registry == IPV4_ADDR_REGISTRY_ARIN)) {
 			/* retrieve registry via cc_index from anonymized address (simple, fallback) */
-			cc_index = libipv4addr_cc_index_by_addr(ipv4addrp);
+			cc_index = libipv4addr_cc_index_by_addr(ipv4addrp, NULL);
 			registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
 		};
 	} else {

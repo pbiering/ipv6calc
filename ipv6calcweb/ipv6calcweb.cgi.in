@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.71 2014/08/31 10:27:40 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.72 2014/09/13 21:15:08 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -280,6 +280,10 @@ my %text = (
 		'de' => "Ländercode der IPv6 Adresse",
 		'en' => "Country Code of IPv6 address",
 	},
+	'IPV6_COUNTRYCODE_SOURCE' => {
+		'de' => "Quelle des Ländercode der IPv6 Adresse",
+		'en' => "Source of Country Code of IPv6 address",
+	},
 	'IPV6_AS_NUM' => {
 		'de' => "Autonomous System Nummer der IPv6 Adresse",
 		'en' => "Autonomous System Number of IPv6 address",
@@ -311,6 +315,10 @@ my %text = (
 	'IPV4_COUNTRYCODE' => {
 		'de' => "Ländercode der IPv4 Adresse",
 		'en' => "Country Code of IPv4 address",
+	},
+	'IPV4_COUNTRYCODE_SOURCE' => {
+		'de' => "Quelle des Ländercode der IPv4 Adresse",
+		'en' => "Source of Country Code of IPv4 address",
 	},
 	'IPV4_AS_NUM' => {
 		'de' => "Autonomous System Nummer der IPv4 Adresse",

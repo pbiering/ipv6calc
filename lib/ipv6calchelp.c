@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.66 2014/08/31 10:27:40 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.67 2014/09/13 21:15:08 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -311,6 +311,7 @@ void printhelp_common(const uint32_t help_features) {
 	if ((help_features & IPV6CALC_HELP_IP2LOCATION) != 0) {
 #ifdef SUPPORT_IP2LOCATION
 		fprintf(stderr, "\n");
+		fprintf(stderr, "  [--disable-ip2location           ] : IP2Location support disabled\n");
 		fprintf(stderr, "  [--db-ip2location-disable        ] : IP2Location support disabled\n");
 		fprintf(stderr, "  [--db-ip2location-dir <directory>] : IP2Location database directory (default: %s)\n", ip2location_db_dir);
 #ifdef SUPPORT_IP2LOCATION_DYN
@@ -322,6 +323,7 @@ void printhelp_common(const uint32_t help_features) {
 	if ((help_features & IPV6CALC_HELP_GEOIP) != 0) {
 #ifdef SUPPORT_GEOIP
 		fprintf(stderr, "\n");
+		fprintf(stderr, "  [--disable-geoip                 ] : GeoIP support disabled\n");
 		fprintf(stderr, "  [--db-geoip-disable              ] : GeoIP support disabled\n");
 		fprintf(stderr, "  [--db-geoip-dir       <directory>] : GeoIP database directory (default: %s)\n", geoip_db_dir);
 #ifdef SUPPORT_GEOIP_DYN
@@ -333,6 +335,7 @@ void printhelp_common(const uint32_t help_features) {
 	if ((help_features & IPV6CALC_HELP_DBIP) != 0) {
 #ifdef SUPPORT_DBIP
 		fprintf(stderr, "\n");
+		fprintf(stderr, "  [--disable-dbip                  ] : db-ip.com support disabled\n");
 		fprintf(stderr, "  [--db-dbip-disable               ] : db-ip.com support disabled\n");
 		fprintf(stderr, "  [--db-dbip-dir        <directory>] : db-ip.com database directory (default: %s)\n", dbip_db_dir);
 #endif
@@ -649,7 +652,7 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			};
 			fprintf(stderr, "\n");
 
-			fprintf(stderr, "  Available presets (shortcut names) [--anonymize-preset PRESET-NAME]:\n");
+			fprintf(stderr, "  Available presets (shortcut names) [--anonymize-preset|ap PRESET-NAME]:\n");
 
 			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_anon_set_list); i++) {
 				snprintf(method_name, sizeof(method_name), "%s", "unknown"); // default

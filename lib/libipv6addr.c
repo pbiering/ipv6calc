@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.113 2014/08/27 04:45:04 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.114 2014/09/13 21:15:08 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -2344,7 +2344,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 			} else {
 				libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6addrp, resultstring, sizeof(resultstring), 0);
 
-				cc_index = libipv6calc_db_wrapper_cc_index_by_addr(resultstring, 6);
+				cc_index = libipv6calc_db_wrapper_cc_index_by_addr(resultstring, 6, NULL);
 				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(resultstring, 6);
 
 				if (cc_index == COUNTRYCODE_INDEX_UNKNOWN) {
@@ -2634,7 +2634,7 @@ int libipv6addr_get_included_ipv4addr(const ipv6calc_ipv6addr *ipv6addrp, ipv6ca
  * in : *ipv6addrp = IPv6 address structure
  * out: country code index
  */
-uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
+uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsigned int *data_source_ptr) {
 	uint32_t cc_index = COUNTRYCODE_INDEX_UNKNOWN;
 	ipv6calc_ipv4addr ipv4addr;
 	char tempipv6string[NI_MAXHOST] = "";
@@ -2658,7 +2658,7 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 					goto END_libipv6addr_cc_index_by_addr;
 				};
 
-				cc_index = libipv4addr_cc_index_by_addr(&ipv4addr);
+				cc_index = libipv4addr_cc_index_by_addr(&ipv4addr, NULL);
 			};
 		};
 	} else if (((ipv6addrp->scope & IPV6_ADDR_ANONYMIZED_IID) != 0) && ((ipv6addrp->scope & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID) != 0)) {
@@ -2668,7 +2668,7 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 			goto END_libipv6addr_cc_index_by_addr;
 		};
 
-		cc_index = libipv4addr_cc_index_by_addr(&ipv4addr);
+		cc_index = libipv4addr_cc_index_by_addr(&ipv4addr, data_source_ptr);
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC) == 1) {
 			if ((ipv6addrp->scope & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID) != 0) {
@@ -2679,7 +2679,7 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 					goto END_libipv6addr_cc_index_by_addr;
 				};
 
-				cc_index = libipv4addr_cc_index_by_addr(&ipv4addr);
+				cc_index = libipv4addr_cc_index_by_addr(&ipv4addr, data_source_ptr);
 			} else if ((ipv6addrp->scope & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX) != 0) {
 				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 				if (retval != 0) {
@@ -2687,7 +2687,9 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 					goto END_libipv6addr_cc_index_by_addr;
 				};
 
-				cc_index = libipv4addr_cc_index_by_addr(&ipv4addr);
+				cc_index = libipv4addr_cc_index_by_addr(&ipv4addr, data_source_ptr);
+			} else if ((ipv6addrp->scope & IPV6_NEW_ADDR_6BONE) != 0) {
+				cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + IPV6_ADDR_REGISTRY_6BONE;
 			} else {
 				retval = libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6addrp, tempipv6string, sizeof(tempipv6string), FORMATOPTION_no_prefixlength);
 				if ( retval != 0 ) {
@@ -2695,7 +2697,7 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 					goto END_libipv6addr_cc_index_by_addr;
 				};
 
-				cc_index = libipv6calc_db_wrapper_cc_index_by_addr(tempipv6string, 6);
+				cc_index = libipv6calc_db_wrapper_cc_index_by_addr(tempipv6string, 6, data_source_ptr);
 			};
 		};
 	};
@@ -2739,6 +2741,9 @@ uint32_t libipv6addr_as_num32_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 				as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr);
 			};
 		};
+	} else if ((ipv6addrp->scope & IPV6_NEW_ADDR_6BONE) != 0) {
+		as_num32 = ASNUM_AS_UNKNOWN;
+		goto END_libipv6addr_as_num32_by_addr;
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS) == 1) {
 			retval = libipv6addr_ipv6addrstruct_to_uncompaddr(ipv6addrp, tempipv6string, sizeof(tempipv6string), FORMATOPTION_no_prefixlength);
@@ -2770,7 +2775,7 @@ int libipv6addr_registry_num_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 	if (((ipv6addrp->scope & IPV6_ADDR_ANONYMIZED_PREFIX) != 0) \
 		&& ((ipv6addrp->scope & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX) == 0)) {
 			/* retrieve registry via cc_index from anonymized address (simple) */
-			cc_index = libipv6addr_cc_index_by_addr(ipv6addrp);
+			cc_index = libipv6addr_cc_index_by_addr(ipv6addrp, NULL);
 			registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_REGISTRY) == 1) {

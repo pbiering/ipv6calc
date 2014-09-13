@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.h
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.h,v 1.5 2014/08/31 12:55:40 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.h,v 1.6 2014/09/13 21:15:07 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -29,7 +29,7 @@
 #define DBIP_DB_IPV6_COUNTRY				2
 #define DBIP_DB_IPV4_CITY				3
 #define DBIP_DB_IPV6_CITY				4
-#define DBIP_DB_MAX					DBIP_DB_IPV6_CITY
+#define DBIP_DB_MAX					(DBIP_DB_IPV6_CITY + 1)
 
 
 /*@unused@*/ static const db_file_desc libipv6calc_db_wrapper_DBIP_db_file_desc[] = {
@@ -81,9 +81,8 @@ extern void        libipv6calc_db_wrapper_DBIP_wrapper_info(char* string, const 
 extern void        libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
 extern char       *libipv6calc_db_wrapper_DBIP_wrapper_db_info_used(void);
 
-extern char       *libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(const char *addr, const int proto);
-extern char       *libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const char *addr, const int proto);
-extern char       *libipv6calc_db_wrapper_DBIP_wrapper_region_by_addr(const char *addr, const int proto);
+extern int         libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(const char *addr, const int proto, char *country, const size_t country_len);
+extern int	   libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const char *addr, const int proto, char *city, const size_t city_len, char *region, const size_t region_len); 
 
 extern int         libipv6calc_db_wrapper_DBIP_has_features(uint32_t features);
 
@@ -97,9 +96,7 @@ extern char dbip_db_dir[NI_MAXHOST];
 
 extern int          libipv6calc_db_wrapper_DBIP_db_avail(int type);
 extern const char  *libipv6calc_db_wrapper_DBIP_lib_version(void);
-extern DB          *libipv6calc_db_wrapper_DBIP_open(char *db);
-extern DB          *libipv6calc_db_wrapper_DBIP_open_type(int type);
-extern uint32_t     libipv6calc_db_wrapper_DBIP_close(DB *dbp);
+extern DB          *libipv6calc_db_wrapper_DBIP_open_type(const int type, long int *db_recno_max_ptr);
 extern char        *libipv6calc_db_wrapper_DBIP_get_all(DB *dbp, char *ip);
 
 extern const char  *libipv6calc_db_wrapper_DBIP_dbdescription(int type);

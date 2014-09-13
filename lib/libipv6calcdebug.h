@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calcdebug.h
- * Version    : $Id: libipv6calcdebug.h,v 1.20 2014/08/27 04:45:04 ds6peter Exp $
+ * Version    : $Id: libipv6calcdebug.h,v 1.21 2014/09/13 21:15:09 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -52,9 +52,9 @@
 #define DEBUGPRINT_WA(d, t, ...)	\
 	if ((ipv6calc_debug & (d)) != 0) { \
 		if (ipv6calc_debug == DEBUG_ipv6calc_ALL) { \
-			fprintf(stderr, "%s/%s[0x%08lx]: " t "\n", __FILE__, __func__, d, __VA_ARGS__); \
+			fprintf(stderr, "%s/%s:%d[0x%08lx]: " t "\n", __FILE__, __func__, __LINE__, d, __VA_ARGS__); \
 		} else { \
-			fprintf(stderr, "%s/%s: " t "\n", __FILE__, __func__, __VA_ARGS__); \
+			fprintf(stderr, "%s/%s:%d: " t "\n", __FILE__, __func__, __LINE__, __VA_ARGS__); \
 		}; \
 	};
 
@@ -62,19 +62,19 @@
 #define DEBUGPRINT_NA(d, t)		\
 	if ((ipv6calc_debug & (d)) != 0) { \
 		if (ipv6calc_debug == DEBUG_ipv6calc_ALL) { \
-			fprintf(stderr, "%s/%s[0x%08lx]: " t "\n", __FILE__, __func__, d); \
+			fprintf(stderr, "%s/%s:%d[0x%08lx]: " t "\n", __FILE__, __func__, __LINE__, d); \
 		} else { \
-			fprintf(stderr, "%s/%s: " t "\n", __FILE__, __func__); \
+			fprintf(stderr, "%s/%s:%d: " t "\n", __FILE__, __func__, __LINE__); \
 		}; \
 	};
 
 /* error print with args */
 #define ERRORPRINT_WA(t, ...)	\
-	fprintf(stderr, "%s/%s: " t "\n", __FILE__, __func__, __VA_ARGS__);
+	fprintf(stderr, "%s/%s:%d: " t "\n", __FILE__, __func__, __LINE__, __VA_ARGS__);
 
 /* error print no args */
 #define ERRORPRINT_NA(t)		\
-	fprintf(stderr, "%s/%s: " t "\n", __FILE__, __func__);
+	fprintf(stderr, "%s/%s:%d: " t "\n", __FILE__, __func__, __LINE__);
 
 /* begin/end of debug section */
 #define DEBUGSECTION_BEGIN(d)	if ((ipv6calc_debug & (d)) != 0) {

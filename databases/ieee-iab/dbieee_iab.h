@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.67 2014/07/31 18:39:42 ds6peter Exp $
- * Generated     : Thu Jul 31 20:34:28 2014
+ * Version       : $Id: dbieee_iab.h,v 1.68 2014/09/13 21:15:04 ds6peter Exp $
+ * Generated     : Fri Sep  5 07:04:31 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20140731";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20140905";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -1389,7 +1389,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x55F000, 0x55FFFF, "Moog Broad Reach", "MOOG-BROAD-REACH" },
 	{ 0x0050C2, 0x560000, 0x560FFF, "Procon Electronics", "PROCON-ELECTRONICS" },
 	{ 0x0050C2, 0x561000, 0x561FFF, "Seitec Elektronik GmbH", "SEITEC-ELEKTRONIK" },
-	{ 0x0050C2, 0x562000, 0x562FFF, "C21 Technology Limited", "C21" },
+	{ 0x0050C2, 0x562000, 0x562FFF, "C21 Systems Limited", "C21" },
 	{ 0x0050C2, 0x563000, 0x563FFF, "ORTRAT, S.L.", "ORTRAT-S-L" },
 	{ 0x0050C2, 0x564000, 0x564FFF, "Last Mile Gear", "LAST-MILE-GEAR" },
 	{ 0x0050C2, 0x565000, 0x565FFF, "WORKPOWER TECNOLOGIA ELETRONICA LTDA-EPP", "WORKPOWER-TECNOLOGIA-ELETRONICA-LTDA-EPP" },

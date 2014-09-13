@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.43 2014/09/02 06:25:02 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.44 2014/09/13 21:15:08 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -80,7 +80,7 @@ testscenarios_ipv4_reserved() {
 169.253.255.255		noRFC
 169.254.0.0		RFC3927#1
 169.254.255.255		RFC3927#1
-169.255.0.0		noRFC
+169.255.0.0		noRFC		skip-anon-test
 172.15.255.255		noRFC
 172.16.0.0		RFC1918#3
 172.31.255.255		RFC1918#3
@@ -108,7 +108,7 @@ testscenarios_ipv4_reserved() {
 198.51.99.255		noRFC
 198.51.100.0		RFC5737#3
 198.51.100.255		RFC5737#3
-198.51.101.0		noRFC
+198.51.101.0		noRFC		skip-anon-test
 203.0.112.255		noRFC
 203.0.113.0		RFC5737#3
 203.0.113.255		RFC5737#3
@@ -373,6 +373,8 @@ a909:16fa:9092:23ff:a909:4941::7	IPV6_REGISTRY=RIPENCC
 246.24.59.65				IPV4_COUNTRYCODE=AU
 ::246.24.59.65				IPV4_COUNTRYCODE[246.24.59.65]=AU
 ::ffff:246.24.59.65			IPV4_COUNTRYCODE[246.24.59.65]=AU
+2001:07fa:0:1::1			IPV6_REGISTRY=APNIC
+2001:07fa:0:0::1			IPV6_REGISTRY=RIPENCC
 END
 }
 
