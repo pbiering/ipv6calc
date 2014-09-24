@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.32 2014/09/13 21:15:06 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.33 2014/09/24 09:07:57 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -17,24 +17,55 @@
 #include "libipv4addr.h"
 #include "libipv6addr.h"
 
+#ifdef HAVE_BERKELEY_DB_SUPPORT
+#include <db.h>
+#endif // HAVE_BERKELEY_DB_SUPPORT
+
 extern uint32_t wrapper_features;
+extern uint32_t wrapper_features_by_source[];
+extern uint32_t wrapper_features_by_source_implemented[];
 
-// define features
-#define IPV6CALC_DB_AS_TO_REGISTRY		0x00000001
-#define IPV6CALC_DB_IPV4_TO_REGISTRY		0x00000002
-#define IPV6CALC_DB_IPV6_TO_REGISTRY		0x00000004
-#define IPV6CALC_DB_CC_TO_REGISTRY		0x00000008
+#define IPV6CALC_PROTO_IPV4				4
+#define IPV6CALC_PROTO_IPV6				6
 
-#define IPV6CALC_DB_IPV4_TO_AS			0x00000010
-#define IPV6CALC_DB_IPV6_TO_AS			0x00000020
+// define generic feature numbers
+#define IPV6CALC_DB_FEATURE_NUM_MIN			0
+#define IPV6CALC_DB_FEATURE_NUM_AS_TO_REGISTRY		0
+#define IPV6CALC_DB_FEATURE_NUM_CC_TO_REGISTRY		1
+#define IPV6CALC_DB_FEATURE_NUM_IPV4_TO_REGISTRY	2
+#define IPV6CALC_DB_FEATURE_NUM_IPV6_TO_REGISTRY	3
+#define IPV6CALC_DB_FEATURE_NUM_IPV4_TO_AS		4
+#define IPV6CALC_DB_FEATURE_NUM_IPV6_TO_AS		5
+#define IPV6CALC_DB_FEATURE_NUM_IPV4_TO_CC		6
+#define IPV6CALC_DB_FEATURE_NUM_IPV6_TO_CC		7
+#define IPV6CALC_DB_FEATURE_NUM_IPV4_TO_CITY		8
+#define IPV6CALC_DB_FEATURE_NUM_IPV6_TO_CITY		9
+#define IPV6CALC_DB_FEATURE_NUM_IPV4_TO_REGION		10
+#define IPV6CALC_DB_FEATURE_NUM_IPV6_TO_REGION		11
+#define IPV6CALC_DB_FEATURE_NUM_IEEE_TO_INFO		12
+#define IPV6CALC_DB_FEATURE_NUM_MAX			IPV6CALC_DB_FEATURE_NUM_IEEE_TO_INFO
 
-#define IPV6CALC_DB_IPV4_TO_CC			0x00000100
-#define IPV6CALC_DB_IPV6_TO_CC			0x00000200
-#define IPV6CALC_DB_IPV4_TO_CITY		0x00000400
-#define IPV6CALC_DB_IPV6_TO_CITY		0x00000800
+// define generic features
+#define IPV6CALC_DB_AS_TO_REGISTRY		(1 << IPV6CALC_DB_FEATURE_NUM_AS_TO_REGISTRY)
+#define IPV6CALC_DB_CC_TO_REGISTRY		(1 << IPV6CALC_DB_FEATURE_NUM_CC_TO_REGISTRY)
+#define IPV6CALC_DB_IPV4_TO_REGISTRY		(1 << IPV6CALC_DB_FEATURE_NUM_IPV4_TO_REGISTRY)
+#define IPV6CALC_DB_IPV6_TO_REGISTRY		(1 << IPV6CALC_DB_FEATURE_NUM_IPV6_TO_REGISTRY)
 
-#define IPV6CALC_DB_IEEE_TO_INFO		0x00001000
+#define IPV6CALC_DB_IPV4_TO_AS			(1 << IPV6CALC_DB_FEATURE_NUM_IPV4_TO_AS)
+#define IPV6CALC_DB_IPV6_TO_AS			(1 << IPV6CALC_DB_FEATURE_NUM_IPV6_TO_AS)
 
+#define IPV6CALC_DB_IPV4_TO_CC			(1 << IPV6CALC_DB_FEATURE_NUM_IPV4_TO_CC)
+#define IPV6CALC_DB_IPV6_TO_CC			(1 << IPV6CALC_DB_FEATURE_NUM_IPV6_TO_CC)
+
+#define IPV6CALC_DB_IPV4_TO_CITY		(1 << IPV6CALC_DB_FEATURE_NUM_IPV4_TO_CITY)
+#define IPV6CALC_DB_IPV6_TO_CITY		(1 << IPV6CALC_DB_FEATURE_NUM_IPV6_TO_CITY)
+
+#define IPV6CALC_DB_IPV4_TO_REGION		(1 << IPV6CALC_DB_FEATURE_NUM_IPV4_TO_REGION)
+#define IPV6CALC_DB_IPV6_TO_REGION		(1 << IPV6CALC_DB_FEATURE_NUM_IPV6_TO_REGION)
+
+#define IPV6CALC_DB_IEEE_TO_INFO		(1 << IPV6CALC_DB_FEATURE_NUM_IEEE_TO_INFO)
+
+// define database specific generic features
 #define IPV6CALC_DB_GEOIP_IPV4			0x00010000
 #define IPV6CALC_DB_GEOIP_IPV6			0x00020000
 
@@ -44,41 +75,58 @@ extern uint32_t wrapper_features;
 #define IPV6CALC_DB_DBIP_IPV4			0x01000000
 #define IPV6CALC_DB_DBIP_IPV6			0x02000000
 
+#define IPV6CALC_DB_EXTERNAL_IPV4		0x10000000
+#define IPV6CALC_DB_EXTERNAL_IPV6		0x20000000
+
+
 static const s_formatoption ipv6calc_db_features[] = {
-	{ IPV6CALC_DB_GEOIP_IPV4	, "GeoIP"	, "GeoIPv4 database (external)"},
-	{ IPV6CALC_DB_GEOIP_IPV6	, "GeoIPv6"	, "GeoIPv6 database (external)"},
-	{ IPV6CALC_DB_IP2LOCATION_IPV4	, "IP2Location"	, "IP2Location IPv4 database (external)"},
-	{ IPV6CALC_DB_IP2LOCATION_IPV6	, "IP2Location6", "IP2Location IPv6 database (external)"},
-	{ IPV6CALC_DB_DBIP_IPV4		, "DBIPv4"	, "db-ip.com IPv4 database (external)"},
-	{ IPV6CALC_DB_DBIP_IPV6		, "DBIPv6"	, "db-ip.com IPv6 database (external)"},
-	{ IPV6CALC_DB_AS_TO_REGISTRY	, "DB_AS_REG"	, "AS-Number to Registry database (BuiltIn)"},
-	{ IPV6CALC_DB_IPV4_TO_REGISTRY	, "DB_IPV4_REG"	, "IPv4 to Registry database (BuiltIn)"},
-	{ IPV6CALC_DB_IPV6_TO_REGISTRY	, "DB_IPV6_REG"	, "IPv6 to Registry database (BuiltIn)"},
-	{ IPV6CALC_DB_IPV4_TO_AS	, "DB_IPV4_AS"	, "IPv4 to AS database (provided by GeoIP)" },
-	{ IPV6CALC_DB_IPV6_TO_AS	, "DB_IPV6_AS"	, "IPv6 to AS database (provided by GeoIPv6)" },
-	{ IPV6CALC_DB_IPV4_TO_CC	, "DB_IPV4_CC"	, "IPv4 to CountryCode database (provided by GeoIP/IP2Location)" },
-	{ IPV6CALC_DB_IPV6_TO_CC	, "DB_IPV6_CC"	, "IPv6 to CountryCode database (provided by GeoIPv6/IP2Location6)" },
-	{ IPV6CALC_DB_CC_TO_REGISTRY	, "DB_CC_REG"	, "CountryCode to Registry database (BuiltIn)" },
-	{ IPV6CALC_DB_IEEE_TO_INFO	, "DB_IEEE"	, "IEEE/OUI/OUI36 Vendor database (BuiltIn)" },
+	{ IPV6CALC_DB_GEOIP_IPV4	, "GeoIP"		, "GeoIPv4 database"},
+	{ IPV6CALC_DB_GEOIP_IPV6	, "GeoIPv6"		, "GeoIPv6 database"},
+	{ IPV6CALC_DB_IP2LOCATION_IPV4	, "IP2Location"		, "IP2Location IPv4 database"},
+	{ IPV6CALC_DB_IP2LOCATION_IPV6	, "IP2Location6"	, "IP2Location IPv6 database"},
+	{ IPV6CALC_DB_DBIP_IPV4		, "DBIPv4"		, "db-ip.com IPv4 database"},
+	{ IPV6CALC_DB_DBIP_IPV6		, "DBIPv6"		, "db-ip.com IPv6 database"},
+	{ IPV6CALC_DB_AS_TO_REGISTRY	, "DB_AS_REG"		, "AS-Number to Registry database"},
+	{ IPV6CALC_DB_IPV4_TO_REGISTRY	, "DB_IPV4_REG"		, "IPv4 to Registry database"},
+	{ IPV6CALC_DB_IPV6_TO_REGISTRY	, "DB_IPV6_REG"		, "IPv6 to Registry database"},
+	{ IPV6CALC_DB_IPV4_TO_AS	, "DB_IPV4_AS"		, "IPv4 to AS database" },
+	{ IPV6CALC_DB_IPV6_TO_AS	, "DB_IPV6_AS"		, "IPv6 to AS database" },
+	{ IPV6CALC_DB_IPV4_TO_CC	, "DB_IPV4_CC"		, "IPv4 to CountryCode database" },
+	{ IPV6CALC_DB_IPV6_TO_CC	, "DB_IPV6_CC"		, "IPv6 to CountryCode database" },
+	{ IPV6CALC_DB_IPV4_TO_CITY	, "DB_IPV4_CITY"	, "IPv4 to City database" },
+	{ IPV6CALC_DB_IPV6_TO_CITY	, "DB_IPV6_CITY"	, "IPv6 to City database" },
+	{ IPV6CALC_DB_IPV4_TO_REGION	, "DB_IPV4_REGION"	, "IPv4 to Region database" },
+	{ IPV6CALC_DB_IPV6_TO_REGION	, "DB_IPV6_REGION"	, "IPv6 to Region database" },
+	{ IPV6CALC_DB_CC_TO_REGISTRY	, "DB_CC_REG"		, "CountryCode to Registry database" },
+	{ IPV6CALC_DB_IEEE_TO_INFO	, "DB_IEEE"		, "IEEE/OUI/OUI36 Vendor database" },
 };
 
 // data sources
-#define IPV6CALC_DB_UNKNOWN			0
-#define IPV6CALC_DB_IP2LOCATION			1
-#define IPV6CALC_DB_GEOIP			2
-#define IPV6CALC_DB_DBIP			3
-#define IPV6CALC_DB_BUILTIN			4
+#define IPV6CALC_DB_SOURCE_UNKNOWN		0
+
+#define IPV6CALC_DB_SOURCE_MIN			1
+
+#define IPV6CALC_DB_SOURCE_GEOIP		1
+#define IPV6CALC_DB_SOURCE_IP2LOCATION		2
+#define IPV6CALC_DB_SOURCE_DBIP			3
+#define IPV6CALC_DB_SOURCE_EXTERNAL		4
+#define IPV6CALC_DB_SOURCE_BUILTIN		5
+
+#define IPV6CALC_DB_SOURCE_MAX			5
+
+#define IPV6CALC_DB_PRIO_MAX			IPV6CALC_DB_SOURCE_MAX
 
 typedef struct {
-	const unsigned int number;
-	const char        *name;
+	const int  number;
+	const char *name;
 } s_data_sources;
 
 static const s_data_sources data_sources[] = {
-	{ IPV6CALC_DB_GEOIP		, "GeoIP"},
-	{ IPV6CALC_DB_IP2LOCATION	, "IP2Location"},
-	{ IPV6CALC_DB_DBIP		, "db-ip.com"},
-	{ IPV6CALC_DB_BUILTIN		, "BuiltIn"}
+	{ IPV6CALC_DB_SOURCE_GEOIP	, "GeoIP"},
+	{ IPV6CALC_DB_SOURCE_IP2LOCATION, "IP2Location"},
+	{ IPV6CALC_DB_SOURCE_DBIP	, "db-ip.com"},
+	{ IPV6CALC_DB_SOURCE_BUILTIN	, "BuiltIn"},
+	{ IPV6CALC_DB_SOURCE_EXTERNAL	, "External"}
 };
 
 // database names and descriptions
@@ -86,7 +134,7 @@ typedef struct {
 	const unsigned int number;
 	const char        *filename;
 	const char        *description;
-	const uint32_t     feature;
+	const uint32_t     features;
 } db_file_desc;
 
 
@@ -100,6 +148,24 @@ typedef struct {
 #define IPV6CALC_DL_STATUS_OK		1
 #define IPV6CALC_DL_STATUS_UNKNOWN	0
 #define IPV6CALC_DL_STATUS_ERROR	-1
+
+// db-info macro
+#define IPV6CALC_DB_FEATURE_INFO(prefix, data_source) \
+        printf("%s%s: features available/implemented: 0x%08x/0x%08x", \
+		prefix, \
+		libipv6calc_db_wrapper_get_data_source_name_by_number(data_source), \
+		wrapper_features_by_source[data_source], \
+		wrapper_features_by_source_implemented[data_source]); \
+	if (strlen(prefix) == 0) { \
+		int wrapper_features_by_source_bitcount = libipv6calc_bitcount_uint32_t(wrapper_features_by_source[data_source]); \
+		int wrapper_features_by_source_implemented_bitcount = libipv6calc_bitcount_uint32_t(wrapper_features_by_source_implemented[data_source]); \
+		if (wrapper_features_by_source_implemented_bitcount == 0) { \
+			printf(" (NONE)"); \
+		} else { \
+			printf(" (%d%%)", (wrapper_features_by_source_bitcount * 100) / wrapper_features_by_source_implemented_bitcount); \
+		}; \
+	}; \
+	printf("\n");
 
 // AS Number handling
 #define ASNUM_AS_UNKNOWN 0
@@ -121,7 +187,7 @@ typedef struct {
 
 
 // generic database lookup function
-#define IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY		1	 // array TODO: structure
+#define IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY		1	 // array
 
 #ifdef HAVE_BERKELEY_DB_SUPPORT
 #define IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB		2	 // Berkeley DB
@@ -135,14 +201,24 @@ typedef struct {
 #define IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY	1	 // binary search
 #define IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST	2	 // sequential longest match
 
-// bdb lookup function
+// Berkeley DB  lookup function
 #ifdef HAVE_BERKELEY_DB_SUPPORT
 #define IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x2		0
 #define IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x4		1
 #define IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x2		2
 #define IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x4		3
-#define IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_PREF_32x2	4
-#define IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_PREF_32x4	5
+#define IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_VALUE_32x2	4
+#define IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_VALUE_32x4	5
+#define IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_PREFIX_32x2	6
+#define IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_PREFIX_32x4	7
+
+// database info/data
+typedef struct {
+	DB *db_info_ptr;
+	DB *db_data_ptr;
+	long int db_data_max;
+} s_db_info_data;
+
 #endif // HAVE_BERKELEY_DB_SUPPORT
 
 #endif
@@ -157,6 +233,7 @@ extern void libipv6calc_db_wrapper_features_help(void);
 extern void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
 extern int  libipv6calc_db_wrapper_has_features(uint32_t features);
 extern int  libipv6calc_db_wrapper_options(const int opt, const char *optarg, const struct option longopts[]);
+extern const char *libipv6calc_db_wrapper_get_data_source_name_by_number(const int number);
 
 /* functional wrappers */
 
@@ -191,17 +268,7 @@ extern int libipv6calc_db_wrapper_registry_string_by_ipv6addr(const ipv6calc_ipv
 extern int libipv6calc_db_wrapper_registry_num_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp);
 
 #ifdef HAVE_BERKELEY_DB_SUPPORT
-#include <db.h>
-
-#define IPV6CALC_BDB_FORMAT_CHECK_FIRST_LAST		0x00010000
-#define IPV6CALC_BDB_FORMAT_CHECK_BASE_MASK		0x00020000
-#define IPV6CALC_BDB_FORMAT_CHECK_32			0x00040000
-#define IPV6CALC_BDB_FORMAT_CHECK_64			0x00080000
-
-#define IPV6CALC_BDB_FORMAT_DATA_FIELDS_MASK		0x0000000f
-#define IPV6CALC_BDB_FORMAT_DATA_FIELD_SELECT_MASK	0x000000f0
-#define IPV6CALC_BDB_FORMAT_DATA_FIELD_SELECT_SHIFT	4
-
+extern int libipv6calc_db_wrapper_bdb_get_data_by_key(DB *dbp, char *token, char *value, const size_t value_size);
 extern int libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, DB *dbp, const uint32_t db_format, char *data_ptr);
 extern int libipv6calc_db_wrapper_get_dbentry_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, DB *dbp, const uint32_t db_format, char *data_ptr);
 #endif // HAVE_BERKELEY_DB_SUPPORT
@@ -211,6 +278,7 @@ extern int libipv6calc_db_wrapper_get_entry_generic(
 	void 		*db_ptr,		// pointer to database in case of IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB, otherwise NULL
 	const uint8_t	data_ptr_type,		// type of data_ptr
 	const uint8_t	data_key_type,		// key type
+	const uint8_t   data_key_format,        // key format
 	const uint8_t	data_key_length,	// key length
 	const uint8_t	data_search_type,	// search type
 	const long int	data_key_row_min,	// number of first usable row (begin)

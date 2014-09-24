@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.34 2014/02/28 06:46:35 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.35 2014/09/24 09:07:56 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -11,11 +11,15 @@
 # Requires:
 #  XML::Simple
 
+use strict;
+use warnings;
 
 use IPC::Open2;
 use XML::Simple;
-use strict;
-use warnings;
+
+use Getopt::Std;
+use BerkeleyDB;
+use POSIX qw(strftime);
 
 my $debug = 0;
 
@@ -25,8 +29,8 @@ my $debug = 0;
 #$debug |= 0x08; # assignments_iana
 #$debug |= 0x10; # assignments gap closing
 
-
 my $OUTFILE = "dbipv4addr_assignment.h";
+
 
 my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time - 48*60*60);
 
@@ -318,6 +322,8 @@ for my $reg (sort keys %date_created) {
 };
 print OUT "\/\*\@unused\@\*\/ static const char* dbipv4addr_registry_status __attribute__ ((__unused__)) = \"$string\";\n";
 
+print OUT "\/\*\@unused\@\*\/ static const time_t dbipv4addr_registry_unixtime __attribute__ ((__unused__)) = " . time . ";\n";
+
 # Main data structure
 print OUT qq|
 static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
@@ -352,4 +358,61 @@ foreach my $ipv4 (sort { $a <=> $b } keys %assignments_iana) {
 print OUT qq|};
 |;
 
-print "Finished\n";
+print "Finished creation of header file\n";
+
+print "Start creation of DB file\n";
+
+# external database
+my $type = "2024"; # BuiltIn Registry->IPv4
+my $date = $string;
+$now_string = strftime "%Y%m%d-%H%M%S%z", gmtime;
+my $info_ipv4 = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=4;dbcreated=$now_string";
+my $filename_ipv4 = "ipv6calc-external-registry-ipv4.db";
+
+if (-f $filename_ipv4) {
+        unlink($filename_ipv4) || die "Can't delete old file: $filename_ipv4";
+};
+
+print "INFO  : create db from input: IPv4=$filename_ipv4\n";
+
+my %h_ipv4_info;
+
+tie %h_ipv4_info, 'BerkeleyDB::Hash', -Filename => $filename_ipv4, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename_ipv4: $! $BerkeleyDB::Error\n";
+
+$h_ipv4_info{'dbusage'} = "ipv6calc";
+$h_ipv4_info{'dbformat'} = "1"; # ';' separated values
+$h_ipv4_info{'dbdate'} = $date;
+$h_ipv4_info{'dbtype'} = $type;
+$h_ipv4_info{'dbcreated'} = $now_string;
+$h_ipv4_info{'dbcreated_unixtime'} = time + 1;
+
+
+untie %h_ipv4_info;
+
+my @a_ipv4;
+
+tie @a_ipv4, 'BerkeleyDB::Recno', -Filename => $filename_ipv4, -Subname => 'data', -Flags => DB_CREATE || die "Cannot open file $filename_ipv4: $! $BerkeleyDB::Error\n";
+
+foreach my $ipv4 (sort { $a <=> $b } keys %assignments) {
+	my $distance = $assignments{$ipv4}->{'distance'};
+	my $registry = $assignments{$ipv4}->{'registry'};
+
+	push @a_ipv4, sprintf("%08x;%08x;%s",$ipv4, ($ipv4 + $distance - 1), "REGISTRY_" . $registry);
+};
+
+untie @a_ipv4;
+
+my @a_ipv4_iana;
+
+tie @a_ipv4_iana, 'BerkeleyDB::Recno', -Filename => $filename_ipv4, -Subname => 'data-iana', -Flags => DB_CREATE || die "Cannot open file $filename_ipv4: $! $BerkeleyDB::Error\n";
+
+foreach my $ipv4 (sort { $a <=> $b } keys %assignments_iana) {
+	my $distance = $assignments_iana{$ipv4}->{'distance'};
+	my $registry = $assignments_iana{$ipv4}->{'registry'};
+
+	push @a_ipv4_iana, sprintf("%08x;%08x;%s",$ipv4, ($ipv4 + $distance - 1), "REGISTRY_" . $registry);
+};
+
+untie @a_ipv4_iana;
+
+print "INFO  : db created from input: IPv4=$filename_ipv4\n";

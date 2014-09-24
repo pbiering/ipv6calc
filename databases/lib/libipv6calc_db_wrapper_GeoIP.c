@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.67 2014/09/13 21:15:07 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.68 2014/09/24 09:07:57 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -31,7 +31,6 @@
 #define GEOIP_WORKAROUND_NUM_DB_TYPES_MAX NUM_DB_TYPES
 #endif
 
-uint32_t wrapper_features_GeoIP = 0;
 uint32_t lib_features_GeoIP = 0;
 
 char geoip_db_dir[NI_MAXHOST] = GEOIP_DB;
@@ -352,27 +351,30 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 		exit(1);
 	};
 
+	// add features to implemented
+	wrapper_features_by_source_implemented[IPV6CALC_DB_SOURCE_GEOIP] |= IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_GEOIP_IPV4 | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_GEOIP_IPV6 | IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_IPV6_TO_AS | IPV6CALC_DB_IPV4_TO_CITY | IPV6CALC_DB_IPV6_TO_CITY;
+
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Check for standard GeoIP databases");
 
 	/* check required databases for resolution */
 	if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_COUNTRY_EDITION) == 1) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP database GEOIP_COUNTRY_EDITION available");
 		geoip_country_v4 = 1;
-		wrapper_features_GeoIP |= IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_GEOIP_IPV4;
+		wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP] |= IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_GEOIP_IPV4;
 	};
 
 #ifdef SUPPORT_GEOIP_V6
 	if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_COUNTRY_EDITION_V6) == 1) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP database GEOIP_COUNTRY_EDITION_V6 available");
 		geoip_country_v6 = 1;
-		wrapper_features_GeoIP |= IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_GEOIP_IPV6;
+		wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP] |= IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_GEOIP_IPV6;
 	};
 #endif
 
 	if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_ASNUM_EDITION) == 1) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP database GEOIP_ASNUM_EDITION available");
 		geoip_asnum_v4 = 1;
-		wrapper_features_GeoIP |= IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_GEOIP_IPV4;
+		wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP] |= IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_GEOIP_IPV4;
 	};
 
 	if ((lib_features_GeoIP & (GEOIP_LIB_FEATURE_IPV6_CC_BY_ADDR | GEOIP_LIB_FEATURE_IPV6_CN_BY_ADDR)) != 0) {
@@ -381,13 +383,13 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 		if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_ASNUM_EDITION_V6) == 1) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP database GEOIP_ASNUM_EDITION_V6 available");
 			geoip_asnum_v6 = 1;
-			wrapper_features_GeoIP |= IPV6CALC_DB_IPV6_TO_AS | IPV6CALC_DB_GEOIP_IPV6;
+			wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP] |= IPV6CALC_DB_IPV6_TO_AS | IPV6CALC_DB_GEOIP_IPV6;
 		};
 
 		if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_CITY_EDITION_REV1_V6) == 1) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP database GEOIP_CITY_EDITION_REV1_V6 available");
 			geoip_city_v6 = 1;
-			wrapper_features_GeoIP |= IPV6CALC_DB_GEOIP_IPV6;
+			wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP] |= IPV6CALC_DB_GEOIP_IPV6;
 		};
 #else
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP check skipped for GEOIP_ASNUM_EDITION_V6 & GEOIP_CITY_EDITION_REV1_V6");
@@ -399,10 +401,18 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_CITY_EDITION_REV1) == 1) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP database GEOIP_CITY_EDITION_REV1 available");
 		geoip_city_v4 = 1;
-		wrapper_features_GeoIP |= IPV6CALC_DB_GEOIP_IPV4;
+		wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP] |= IPV6CALC_DB_GEOIP_IPV4 | IPV6CALC_DB_IPV4_TO_CITY;
 	};
 
-	wrapper_features |= wrapper_features_GeoIP;
+#ifdef SUPPORT_GEOIP_V6
+	if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_CITY_EDITION_REV1_V6) == 1) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP database GEOIP_CITY_EDITION_REV1_V6 available");
+		geoip_city_v4 = 1;
+		wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP] |= IPV6CALC_DB_GEOIP_IPV6 | IPV6CALC_DB_IPV6_TO_CITY;
+	};
+#endif // SUPPORT_GEOIP_V6
+
+	wrapper_features |= wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP];
 
 	return 0;
 };
@@ -498,7 +508,7 @@ void libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(const int level_verbose,
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Called");
 
-	printf("%sGeoIP: features: 0x%08x\n", prefix, wrapper_features_GeoIP);
+	IPV6CALC_DB_FEATURE_INFO(prefix, IPV6CALC_DB_SOURCE_GEOIP)
 
 #ifdef SUPPORT_GEOIP
 
@@ -911,13 +921,13 @@ GeoIP *libipv6calc_db_wrapper_GeoIP_open_type(int type, int flags) {
 #endif
 
 	if (gi == NULL) {
-		NONQUIETPRINT_WA("Database can't be openend type=%d", type);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Database can't be openend type=%d", type);
 		goto END_libipv6calc_db_wrapper;
 	};
 
 	// fill cache
 	db_ptr_cache[type] = gi;
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Database successfully opened (fill-cache), gi=%p type=%d", gi, type)
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Database successfully opened (fill-cache), gi=%p type=%d", gi, type)
 
 END_libipv6calc_db_wrapper:
 	return(gi);
@@ -1894,7 +1904,7 @@ int libipv6calc_db_wrapper_GeoIP_has_features(uint32_t features) {
 	int result = -1;
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Called with feature value to test: 0x%08x",features);
 
-	if ((wrapper_features_GeoIP & features) == features) {
+	if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP] & features) == features) {
 		result = 1;
 	} else {
 		result = 0;
@@ -2029,7 +2039,7 @@ char *libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(const char *addr, const
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Called with addr=%s proto=%d", addr, proto);
 
 	if (proto == 4) {
-		if ((wrapper_features_GeoIP & IPV6CALC_DB_IPV4_TO_AS) == 0) {
+		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP] & IPV6CALC_DB_IPV4_TO_AS) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Database/Support not available: GEOIP_ASNUM_EDITION");
 			goto END_libipv6calc_db_wrapper;
 		};
@@ -2042,7 +2052,7 @@ char *libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(const char *addr, const
 
 #ifdef SUPPORT_GEOIP_V6
 	} else if (proto == 6) {
-		if ((wrapper_features_GeoIP & IPV6CALC_DB_IPV6_TO_AS) == 0) {
+		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP] & IPV6CALC_DB_IPV6_TO_AS) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Database/Support not available: GEOIP_ASNUM_EDITION_V6");
 			goto END_libipv6calc_db_wrapper;
 		};

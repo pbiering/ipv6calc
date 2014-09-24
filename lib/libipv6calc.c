@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.38 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.39 2014/09/24 09:07:58 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -583,6 +583,9 @@ int libipv6calc_anon_supported(const s_ipv6calc_anon_set *ipv6calc_anon_set) {
  */
 const char *libipv6calc_registry_string_by_num(const int registry) {
 	int j = -1, i;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc, "Called with registry=%d", registry);
+
 	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_registries); i++ ) {
 		if (ipv6calc_registries[i].number == registry) {
 			j = i;
@@ -596,4 +599,21 @@ const char *libipv6calc_registry_string_by_num(const int registry) {
 	};
 
 	return(ipv6calc_registries[j].token);
+};
+
+
+/*
+ * bit counter
+ */
+int libipv6calc_bitcount_uint32_t(const uint32_t value) {
+	int i, count = 0;
+	uint32_t mask = 0x1;
+	
+	for (i = 0; i < 32; i++) {
+		if (value & mask) {
+			count++;
+		};
+		mask = mask << 1;
+	};
+	return(count);
 };

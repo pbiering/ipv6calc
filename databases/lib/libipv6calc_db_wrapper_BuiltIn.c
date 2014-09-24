@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.16 2014/09/13 21:15:07 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.17 2014/09/24 09:07:57 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <dlfcn.h>
 #include <string.h>
+#include <time.h>
 
 #include "config.h"
 
@@ -24,15 +25,13 @@
 
 #include "libieee.h"
 
-uint32_t wrapper_features_BuiltIn = 0;
-
+#ifdef SUPPORT_BUILTIN
 static int builtin_asn        = 0;
 static int builtin_cc_reg     = 0;
 static int builtin_ipv4       = 0;
 static int builtin_ipv6       = 0;
 static int builtin_ieee       = 0;
 
-#ifdef SUPPORT_BUILTIN
 // load all built-in databases
 #include "../as-assignment/dbasn_assignment.h"
 #include "../cc-assignment/db_cc_reg_assignment.h"
@@ -61,35 +60,42 @@ static int builtin_ieee       = 0;
  * out: 0=ok, 1=error
  */
 int libipv6calc_db_wrapper_BuiltIn_wrapper_init(void) {
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called");
+
+	// add features to implemented
+	wrapper_features_by_source_implemented[IPV6CALC_DB_SOURCE_BUILTIN] |= IPV6CALC_DB_AS_TO_REGISTRY | IPV6CALC_DB_CC_TO_REGISTRY | IPV6CALC_DB_IPV4_TO_REGISTRY | IPV6CALC_DB_IPV6_TO_REGISTRY | IPV6CALC_DB_IEEE_TO_INFO;
 
 #ifdef SUPPORT_BUILTIN
-	wrapper_features_BuiltIn |= IPV6CALC_DB_AS_TO_REGISTRY;
+#ifdef SUPPORT_DB_AS_REG
+	wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] |= IPV6CALC_DB_AS_TO_REGISTRY;
 	builtin_asn        = 1;
+#endif
 
-	wrapper_features_BuiltIn |= IPV6CALC_DB_CC_TO_REGISTRY;
+#ifdef SUPPORT_DB_CC_REG
+	wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] |= IPV6CALC_DB_CC_TO_REGISTRY;
 	builtin_cc_reg     = 1;
+#endif
 
 #ifdef SUPPORT_DB_IPV4_REG
-	wrapper_features_BuiltIn |= IPV6CALC_DB_IPV4_TO_REGISTRY;
+	wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] |= IPV6CALC_DB_IPV4_TO_REGISTRY;
 	builtin_ipv4       = 1;
 #endif
 
 #ifdef SUPPORT_DB_IPV6_REG
-	wrapper_features_BuiltIn |= IPV6CALC_DB_IPV6_TO_REGISTRY;
+	wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] |= IPV6CALC_DB_IPV6_TO_REGISTRY;
 	builtin_ipv6       = 1;
 #endif
 
 #ifdef SUPPORT_DB_IEEE
-	wrapper_features_BuiltIn |= IPV6CALC_DB_IEEE_TO_INFO;
+	wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] |= IPV6CALC_DB_IEEE_TO_INFO;
 	builtin_ieee       = 1;
 #endif
 
-	wrapper_features |= wrapper_features_BuiltIn;
+	wrapper_features |= wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN];
 
 #endif
 
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Finished");
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Finished");
 	return 0;
 };
 
@@ -101,11 +107,11 @@ int libipv6calc_db_wrapper_BuiltIn_wrapper_init(void) {
  * out: 0=ok, 1=error
  */
 int libipv6calc_db_wrapper_BuiltIn_wrapper_cleanup(void) {
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called");
 
 	// currently nothing to do
 
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Finished");
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Finished");
 	return 0;
 };
 
@@ -117,7 +123,7 @@ int libipv6calc_db_wrapper_BuiltIn_wrapper_cleanup(void) {
  * out: modified string;
  */
 void libipv6calc_db_wrapper_BuiltIn_wrapper_info(char* string, const size_t size) {
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called");
 
 #ifdef SUPPORT_BUILTIN
 	snprintf(string, size, "BuiltIn databases available: ASN_REG=%d IPV4_REG=%d IPV6_REG=%d IEEE=%d CC_REG=%d", builtin_asn, builtin_ipv4, builtin_ipv6, builtin_ieee, builtin_cc_reg);
@@ -125,7 +131,7 @@ void libipv6calc_db_wrapper_BuiltIn_wrapper_info(char* string, const size_t size
 	snprintf(string, size, "No BuiltIn databases support compiled-in");
 #endif
 
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Finished");
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Finished");
 	return;
 };
 
@@ -139,49 +145,108 @@ void libipv6calc_db_wrapper_BuiltIn_wrapper_info(char* string, const size_t size
 void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level_verbose, const char *prefix_string) {
 	const char *prefix = "\0";
 
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called");
 
 	if (prefix_string != NULL) {
 		prefix = prefix_string;
 	};
 
-	printf("%sBuiltIn: features: 0x%08x\n", prefix, wrapper_features_BuiltIn);
+	IPV6CALC_DB_FEATURE_INFO(prefix, IPV6CALC_DB_SOURCE_BUILTIN)
 
 #ifdef SUPPORT_BUILTIN
+#if defined SUPPORT_DB_IPV4_REG || defined SUPPORT_DB_IPV6_REG
+	char tempstring[NI_MAXHOST];
+#endif
+
 	printf("%sBuiltIn: info of available databases\n", prefix);
 
-	if (wrapper_features_BuiltIn & IPV6CALC_DB_AS_TO_REGISTRY) {
+#ifdef SUPPORT_DB_AS_REG
+	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] & IPV6CALC_DB_AS_TO_REGISTRY) {
 		printf("%sBuiltIn: %-5s: %s\n", prefix, "ASN", dbasn_registry_status);
 	};
+#endif
 
-	if (wrapper_features_BuiltIn & IPV6CALC_DB_CC_TO_REGISTRY) {
+#ifdef SUPPORT_DB_CC_REG
+	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] & IPV6CALC_DB_CC_TO_REGISTRY) {
 		printf("%sBuiltIn: %-5s: %s\n", prefix, "CC", db_cc_registry_status);
 	};
+#endif
 
 #ifdef SUPPORT_DB_IPV4_REG
-	if (wrapper_features_BuiltIn & IPV6CALC_DB_IPV4_TO_REGISTRY) {
-		printf("%sBuiltIn: %-5s: %s\n", prefix, "IPv4", dbipv4addr_registry_status);
+	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] & IPV6CALC_DB_IPV4_TO_REGISTRY) {
+		strftime(tempstring, sizeof(tempstring), "%Y%m%d-%H%M%S UTC", gmtime(&dbipv4addr_registry_unixtime));
+		printf("%sBuiltIn: %-5s: %s (created: %s)\n", prefix, "IPv4", dbipv4addr_registry_status, tempstring);
 	};
 #endif
 
 #ifdef SUPPORT_DB_IPV6_REG
-	if (wrapper_features_BuiltIn & IPV6CALC_DB_IPV6_TO_REGISTRY) {
-		printf("%sBuiltIn: %-5s: %s\n", prefix, "IPv6", dbipv6addr_registry_status);
+	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] & IPV6CALC_DB_IPV6_TO_REGISTRY) {
+		strftime(tempstring, sizeof(tempstring), "%Y%m%d-%H%M%S UTC", gmtime(&dbipv6addr_registry_unixtime));
+		printf("%sBuiltIn: %-5s: %s (created: %s)\n", prefix, "IPv6", dbipv6addr_registry_status, tempstring);
 	};
 #endif
 
 #ifdef SUPPORT_DB_IEEE
-	if (wrapper_features_BuiltIn & IPV6CALC_DB_IEEE_TO_INFO) {
+	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] & IPV6CALC_DB_IEEE_TO_INFO) {
 		printf("%sBuiltIn: %-5s: %s %s %s\n", prefix, "IEEE", libieee_iab_status, libieee_oui_status, libieee_oui36_status);
 	};
 #endif
 
 #else
-	snprintf(string, size, "%sNo BuiltIn support compiled-in", prefix);
+	printf("%sNo BuiltIn support compiled-in\n", prefix);
 #endif
 
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Finished");
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Finished");
 	return;
+};
+
+/*********************************************
+ * Abstract functions
+ * *******************************************/
+
+/* query for available features
+ * ret=-1: unknown
+ * 0 : not matching
+ * 1 : ok
+ */
+int libipv6calc_db_wrapper_BuiltIn_has_features(uint32_t features) {
+	int result = -1;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called with feature value to test: 0x%08x", features);
+
+	if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] & features) == features) {
+		result = 1;
+	} else {
+		result = 0;
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Return with result: %d", result);
+	return(result);
+};
+
+
+/* query db_unixtime by feature
+ * ret=-1: unknown
+ * 0 : not matching
+ * 1 : ok
+ */
+time_t libipv6calc_db_wrapper_BuiltIn_db_unixtime_by_feature(uint32_t feature) {
+	time_t result = 0;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called with feature value to get db_unixtime: 0x%08x", feature);
+
+	if ((IPV6CALC_DB_IPV4_TO_REGISTRY & feature) == feature) {
+#ifdef SUPPORT_DB_IPV4_REG
+		result = dbipv4addr_registry_unixtime;
+#endif
+	} else if ((IPV6CALC_DB_IPV6_TO_REGISTRY & feature) == feature) {
+#ifdef SUPPORT_DB_IPV6_REG
+		result = dbipv6addr_registry_unixtime;
+#endif
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Return for feature=0x%08x db_unixtime=%ld", feature, (long int) result);
+	return(result);
 };
 
 
@@ -193,11 +258,13 @@ void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level_verbos
 
 // get registry number by AS number
 int libipv6calc_db_wrapper_BuiltIn_registry_num_by_as_num32(const uint32_t as_num32) {
+	int result = REGISTRY_UNKNOWN;
 
 	int max = MAXENTRIES_ARRAY(dbasn_assignment);
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with as_num32=%d max=%d", as_num32, max);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called with as_num32=%d max=%d", as_num32, max);
 
+#ifdef SUPPORT_DB_AS_REG
 	// binary search
 	int i, r = -1;
 	int i_min = 0;
@@ -206,7 +273,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_as_num32(const uint32_t as_nu
 
 	i = max / 2;
 	while (i_old != i) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Search for as_num32=%d max=%d i=%d start=%d stop=%d", as_num32, max, i, dbasn_assignment[i].asn_start, dbasn_assignment[i].asn_stop);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Search for as_num32=%d max=%d i=%d start=%d stop=%d", as_num32, max, i, dbasn_assignment[i].asn_start, dbasn_assignment[i].asn_stop);
 
 		if (as_num32 < dbasn_assignment[i].asn_start) {
 			// to high in array, jump down
@@ -225,14 +292,15 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_as_num32(const uint32_t as_nu
 	};
 
 	if (r != -1) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Finished with success result: %d", dbasn_assignment[r].registry);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Finished with success result: %d", dbasn_assignment[r].registry);
 
-		return(dbasn_assignment[r].registry);
+		result = dbasn_assignment[r].registry;
 	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Finished without success");
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Finished without success");
 
-		return(REGISTRY_UNKNOWN);
 	};
+#endif
+	return(result);
 };
 
 
@@ -240,7 +308,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_as_num32(const uint32_t as_nu
 int libipv6calc_db_wrapper_BuiltIn_registry_num_by_cc_index(const uint16_t cc_index) {
 	int result = REGISTRY_UNKNOWN;
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with cc_index=%d", cc_index);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called with cc_index=%d", cc_index);
 
 	if (cc_index > COUNTRYCODE_INDEX_MAX) {
 		goto END_libipv6calc_db_wrapper;
@@ -254,10 +322,12 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_cc_index(const uint16_t cc_in
 		goto END_libipv6calc_db_wrapper;
 	};
 
+#ifdef SUPPORT_DB_AS_REG
 	result = cc_index_reg_assignment[cc_index].registry;
+#endif
 
 END_libipv6calc_db_wrapper:
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Return registry=%s (%d) (cc_index=%d)", libipv6calc_registry_string_by_num(result), result, cc_index);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Return registry=%s (%d) (cc_index=%d)", libipv6calc_registry_string_by_num(result), result, cc_index);
 
 	return(result);
 };
@@ -409,114 +479,15 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(char *res
 };
 
 
-/*
- * Get reserved IPv4 address information as string
- * ret: NULL: not reserved, !=NULL: pointer to string
- */
-static const char *libipv6calc_db_wrapper_BuiltIn_reserved_string_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp) {
-	const char *info = NULL;
-
-	uint32_t ipv4 = ipv4addr_getdword(ipv4addrp);
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv4 address: %08x", (unsigned int) ipv4);
-
-	if ((ipv4 & 0xff000000u) == 0x00000000u) {
-		// 0.0.0.0/8 (RFC 1122)
-		info = "reserved(RFC1122#3.2.1.3)";
-	} else if ((ipv4 & 0xff000000u) == 0x0a000000u) {
-		// 10.0.0.0/8 (RFC 1918)
-		info = "reserved(RFC1918#3)";
-	} else if ((ipv4 & 0xffc00000u) == 0x64400000u) {
-		// 100.64.0.0/10 (RFC 6598)
-		info = "reserved(RFC6598)";
-	} else if ((ipv4 & 0xff000000u) == 0x7f000000u) {
-		// 127.0.0.0/8 (RFC 1122)
-		info = "reserved(RFC1122#3.2.1.3)";
-	} else if ((ipv4 & 0xffff0000u) == 0xa9fe0000u) {
-		// 169.254.0.0/16 (RFC 1918)
-		info = "reserved(RFC3927#1)";
-	} else if ((ipv4 & 0xfff00000u) == 0xac100000u) {
-		// 172.16.0.0/12 (RFC 1918)
-		info = "reserved(RFC1918#3)";
-	} else if ((ipv4 & 0xffff0000u) == 0xc0a80000u) {
-		// 192.168.0.0/16 (RFC 1918)
-		info = "reserved(RFC1918#3)";
-	} else if ((ipv4 & 0xffffff00u) == 0xc0000000u) {
-		// 192.0.0.0/24 (RFC 5736)
-		info = "reserved(RFC5736#1)";
-	} else if ((ipv4 & 0xffffff00u) == 0xc0000200u) {
-		// 192.0.2.0/24 (RFC 3330)
-		info = "reserved(RFC5737#1)";
-	} else if ((ipv4 & 0xffffff00u) == 0xc0586300u) {
-		// 192.88.99.0/24 (RFC 3068)
-		info = "reserved(RFC3068#2.3)";
-	} else if ((ipv4 & 0xfffe0000u) == 0xc6120000u) {
-		// 198.18.0.0/15 (RFC 2544)
-		info = "reserved(RFC2544#C.2.2)";
-	} else if ((ipv4 & 0xffffff00u) == 0xc6336400u) {
-		// 198.51.100.0/24 (RFC 5737)
-		info = "reserved(RFC5737#3)";
-	} else if ((ipv4 & 0xffffff00u) == 0xcb007100u) {
-		// 203.0.113.0/24 (RFC 5737)
-		info = "reserved(RFC5737#3)";
-	} else if ((ipv4 & 0xf0000000u) == 0xe0000000u) {
-		// 224.0.0.0/4 (RFC 3171)
-		info = "reserved(RFC3171#2)";
-	} else if ((ipv4 & 0xffffffffu) == 0xffffffffu) {
-		// 255.255.255.255/32
-		info = "reserved(RFC919#7)";
-	} else if ((ipv4 & 0xf0000000u) == 0xf0000000u) {
-		// 240.0.0.0/4 (RFC 1112)
-		info = "reserved(RFC1112#4)";
-	}; 
-
-	if (info == NULL) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv4 address is not reserved: %08x", (unsigned int) ipv4);
-	} else {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv4 address is reserved: %08x (%s)", (unsigned int) ipv4, info);
-	};
-
-	return(info);
-};
-
-
-/*
- * get registry string of an IPv4 address
- *
- * in:  ipv4addr = IPv4 address structure
- * out: *resultstring = Registry string
- * ret: 0: ok, 1: unknown, 2: reserved
- */
-int libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const size_t resultstring_length) {
-	const char *info = libipv6calc_db_wrapper_BuiltIn_reserved_string_by_ipv4addr(ipv4addrp);
-
-	if (info != NULL) {
-		// is reserved
-		snprintf(resultstring, resultstring_length, "%s", info);
-		return (2);
-	};
-	
-#ifdef SUPPORT_DB_IPV4_REG
-	int registry = libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(ipv4addrp);
-
-	snprintf(resultstring, resultstring_length, "%s", libipv6calc_registry_string_by_num(registry));
-	return(0);
-#else
-	snprintf(resultstring, resultstring_length, "%s", "(IPv4 database not compiled in)");
-	return(1);
-#endif
-};
-
-
 #ifdef SUPPORT_DB_IPV4_REG
 /*
  * dbipv4addr_assignment / get row (callback function for retrieving value from array)
  */
 int libipv6calc_db_wrapper_BuiltIn_get_row_dbipv4addr_assignment(const uint32_t row, uint32_t *key_first_00_31_ptr, uint32_t *key_first_32_63_ptr, uint32_t *key_last_00_31_ptr, uint32_t *key_last_32_63_ptr) {
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called fetching row: %lu", (unsigned long int) row);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called fetching row: %lu", (unsigned long int) row);
 
 	if (row >= MAXENTRIES_ARRAY(dbipv4addr_assignment)) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "row out of range: %lu (maximum: %lu)", (unsigned long int) row, (unsigned long int) MAXENTRIES_ARRAY(dbipv4addr_assignment) - 1);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "row out of range: %lu (maximum: %lu)", (unsigned long int) row, (unsigned long int) MAXENTRIES_ARRAY(dbipv4addr_assignment) - 1);
 		return(1);
 	};
 
@@ -525,7 +496,7 @@ int libipv6calc_db_wrapper_BuiltIn_get_row_dbipv4addr_assignment(const uint32_t 
 	*key_first_32_63_ptr = 0;
 	*key_last_32_63_ptr  = 0;
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Keys for row: %lu key_first_00_31_ptr=%08lx key_last_00_31_ptr=%08lxu",
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Keys for row: %lu key_first_00_31_ptr=%08lx key_last_00_31_ptr=%08lxu",
 		(unsigned long int) row,
 		(unsigned long int) *key_first_00_31_ptr,
 		(unsigned long int) *key_last_00_31_ptr
@@ -539,10 +510,10 @@ int libipv6calc_db_wrapper_BuiltIn_get_row_dbipv4addr_assignment(const uint32_t 
  * dbipv4addr_assignment_iana / get row (callback function for retrieving value from array)
  */
 int libipv6calc_db_wrapper_BuiltIn_get_row_dbipv4addr_assignment_iana(const uint32_t row, uint32_t *key_first_00_31_ptr, uint32_t *key_first_32_63_ptr, uint32_t *key_last_00_31_ptr, uint32_t *key_last_32_63_ptr) {
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called fetching row: %lu", (unsigned long int) row);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called fetching row: %lu", (unsigned long int) row);
 
 	if (row >= MAXENTRIES_ARRAY(dbipv4addr_assignment_iana)) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "row out of range: %lu (maximum: %lu)", (unsigned long int) row, (unsigned long int) MAXENTRIES_ARRAY(dbipv4addr_assignment_iana) - 1);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "row out of range: %lu (maximum: %lu)", (unsigned long int) row, (unsigned long int) MAXENTRIES_ARRAY(dbipv4addr_assignment_iana) - 1);
 		return(1);
 	};
 
@@ -551,7 +522,7 @@ int libipv6calc_db_wrapper_BuiltIn_get_row_dbipv4addr_assignment_iana(const uint
 	*key_first_32_63_ptr = 0;
 	*key_last_32_63_ptr  = 0;
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Keys for row: %lu key_first_00_31_ptr=%08lx key_last_00_31_ptr=%08lxu",
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Keys for row: %lu key_first_00_31_ptr=%08lx key_last_00_31_ptr=%08lxu",
 		(unsigned long int) row,
 		(unsigned long int) *key_first_00_31_ptr,
 		(unsigned long int) *key_last_00_31_ptr
@@ -571,15 +542,9 @@ int libipv6calc_db_wrapper_BuiltIn_get_row_dbipv4addr_assignment_iana(const uint
 int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp) {
 	uint32_t ipv4 = ipv4addr_getdword(ipv4addrp);
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv4 address: %08x", (unsigned int) ipv4);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Given IPv4 address: %08x", (unsigned int) ipv4);
 
 	int result = IPV4_ADDR_REGISTRY_UNKNOWN;
-
-	const char *info = libipv6calc_db_wrapper_BuiltIn_reserved_string_by_ipv4addr(ipv4addrp);
-
-	if (info != NULL) {
-		return(IPV4_ADDR_REGISTRY_RESERVED);
-	};
 
 #ifdef SUPPORT_DB_IPV4_REG
 	int match = -1;
@@ -588,6 +553,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 		NULL,							// pointer to data
 		IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY,			// type of data_ptr
 		IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_FIRST_LAST,		// key type
+		0,							// key format (not relevant)
 		32,							// key length
 		IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY,		// search type
 		0,							// number of first usable row (begin)
@@ -600,16 +566,17 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 
 	if (match > -1) {
 		result = dbipv4addr_assignment[match].registry;
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Finished with success result (dbipv4addr_assignment): match=%d reg=%d", match, result);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Finished with success result (dbipv4addr_assignment): match=%d reg=%d", match, result);
 	};
 
 	if (result == IPV4_ADDR_REGISTRY_UNKNOWN) {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Nothing found in dbipv4addr_assignment, fallback now to dbipv4addr_assignment_iana");
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Nothing found in dbipv4addr_assignment, fallback now to dbipv4addr_assignment_iana");
 
 		match = libipv6calc_db_wrapper_get_entry_generic(
 			NULL,							// pointer to data
 			IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY,			// type of data_ptr
 			IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_FIRST_LAST,		// key type
+			0,							// key format (not relevant)
 			32,							// key length
 			IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY,		// search type
 			0,							// number of first usable row (begin)
@@ -622,9 +589,9 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 
 		if (match > -1) {
 			result = dbipv4addr_assignment_iana[match].registry;
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Finished with success result (dbipv4addr_assignment_iana): match=%d reg=%d", match, result);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Finished with success result (dbipv4addr_assignment_iana): match=%d reg=%d", match, result);
 		} else {
-			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Finished without success");
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Finished without success");
 		};
 	};
 #endif // SUPPORT_DB_IPV4_REG
@@ -633,107 +600,15 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 };
 
 
-/*
- * Get reserved IPv6 address information as string
- * ret: NULL: not reserved, !=NULL: pointer to string
- */
-static const char *libipv6calc_db_wrapper_BuiltIn_reserved_string_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp) {
-	const char *info = NULL;
-
-	uint32_t ipv6_00_31 = ipv6addr_getdword(ipv6addrp, 0);
-	uint32_t ipv6_32_63 = ipv6addr_getdword(ipv6addrp, 1);
-	uint32_t ipv6_64_95 = ipv6addr_getdword(ipv6addrp, 2);
-	uint32_t ipv6_96_127 = ipv6addr_getdword(ipv6addrp, 3);
-	
-	uint16_t ipv6_00_15 = ipv6addr_getword(ipv6addrp, 0);
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given ipv6 prefix: %08x%08x", (unsigned int) ipv6_00_31, (unsigned int) ipv6_32_63);
-
-	if ((ipv6_00_31 == 0) && (ipv6_32_63 == 0) && (ipv6_64_95 == 0) && (ipv6_96_127 == 0)) {
-		// :: (RFC 4291)
-		info = "reserved(RFC4291#2.5.2)";
-	} else if ((ipv6_00_31 == 0) && (ipv6_32_63 == 0) && (ipv6_64_95 == 0) && (ipv6_96_127 == 1)) {
-		// ::1 (RFC 4291)
-		info = "reserved(RFC4291#2.5.3)";
-	} else if ((ipv6_00_31 == 0) && (ipv6_32_63 == 0) && (ipv6_64_95 == 0)) {
-		// ::x.x.x.x (RFC 4291)
-		info = "reserved(RFC4291#2.5.5.1)";
-	} else if ((ipv6_00_31 == 0) && (ipv6_32_63 == 0) && (ipv6_64_95 == 0x0000ffff)) {
-		// ::ffff:x.x.x.x (RFC 4291)
-		info = "reserved(RFC4291#2.5.5.2)";
-	} else if (ipv6_00_31 == 0x20010000) {
-		// 2001:0000::/32 (RFC 4380)
-		info = "reserved(RFC4380#6)";
-	} else if ((ipv6_00_31 & 0xfffffff0) == 0x20010010) {
-		// 2001:0010::/28 (RFC 4843)
-		info = "reserved(RFC4843#2)";
-	} else if (ipv6_00_31 == 0x20010db8) {
-		// 2001:0db8::/32 (RFC 3849)
-		info = "reserved(RFC3849#4)";
-	} else if ((ipv6_00_15 & 0xffff) == 0x2002) {
-		// 2002::/16 (RFC 3056)
-		info = "reserved(RFC3056#2)";
-	} else if ((ipv6_00_15 & 0xfe00) == 0xfc00) {
-		// fc00::/7 (RFC 4193)
-		info = "reserved(RFC4193#3.1)";
-	} else if ((ipv6_00_15 & 0xffe0) == 0xfe80) {
-		// fe80::/10 (RFC 4291)
-		info = "reserved(RFC4291#2.5.6)";
-	} else if ((ipv6_00_15 & 0xffe0) == 0xfec0) {
-		// fec0::/10 (RFC 4291)
-		info = "reserved(RFC4291#2.5.7)";
-	} else if ((ipv6_00_15 & 0xff00) == 0xff00) {
-		// ffxx::/8 (RFC 4291)
-		info = "reserved(RFC4291#2.7)";
-	};
-
-	if (info == NULL) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv6 address is not reserved: %08x%08x%08x%08x", (unsigned int) ipv6_00_31, (unsigned int) ipv6_32_63, (unsigned int) ipv6_64_95, (unsigned int) ipv6_96_127);
-	} else {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv6 address is reserved: %08x%08x%08x%08x (%s)", (unsigned int) ipv6_00_31, (unsigned int) ipv6_32_63, (unsigned int) ipv6_64_95, (unsigned int) ipv6_96_127, info);
-	};
-
-	return(info);
-};
-
-
-/*
- * Get IPv6 address assignement information as string
- *
- * in : ipv6addrp = pointer to IPv6 address structure
- * mod: resultstring
- * ret: 0: ok, 1: unknown, 2: reserved
- */
-int libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length) {
-	const char *info = libipv6calc_db_wrapper_BuiltIn_reserved_string_by_ipv6addr(ipv6addrp);
-
-	if (info != NULL) {
-		// is reserved
-		snprintf(resultstring, resultstring_length, "%s", info);
-		return (2);
-	};
-
-#ifdef SUPPORT_DB_IPV6_REG
-	int registry = libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(ipv6addrp);
-
-	snprintf(resultstring, resultstring_length, "%s", libipv6calc_registry_string_by_num(registry));
-	return(0);
-#else
-	snprintf(resultstring, resultstring_length, "%s", "(IPv6 database not compiled in)");
-	return(1);
-#endif
-};
-
-
 #ifdef SUPPORT_DB_IPV6_REG
 /*
  * dbipv6addr_assignment / get row (callback function for retrieving value from array)
  */
 int libipv6calc_db_wrapper_BuiltIn_get_row_dbipv6addr_assignment(const uint32_t row, uint32_t *key_base_00_31_ptr, uint32_t *key_base_32_63_ptr, uint32_t *key_mask_00_31_ptr, uint32_t *key_mask_32_63_ptr) {
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called fetching row: %lu", (unsigned long int) row);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called fetching row: %lu", (unsigned long int) row);
 
 	if (row >= MAXENTRIES_ARRAY(dbipv6addr_assignment)) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "row out of range: %lu (maximum: %lu)", (unsigned long int) row, (unsigned long int) MAXENTRIES_ARRAY(dbipv6addr_assignment) - 1);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "row out of range: %lu (maximum: %lu)", (unsigned long int) row, (unsigned long int) MAXENTRIES_ARRAY(dbipv6addr_assignment) - 1);
 		return(-1);
 	};
 
@@ -742,7 +617,7 @@ int libipv6calc_db_wrapper_BuiltIn_get_row_dbipv6addr_assignment(const uint32_t 
 	*key_mask_00_31_ptr = dbipv6addr_assignment[row].ipv6mask_00_31;
 	*key_mask_32_63_ptr = dbipv6addr_assignment[row].ipv6mask_32_63;
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Keys for row: %lu key_base_00_31_ptr=%08lx key_base_32_63_ptr=%08lx key_mask_00_31_ptr=%08lxu key_mask_32_63_ptr=%08lxu seqlongest=%d",
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Keys for row: %lu key_base_00_31_ptr=%08lx key_base_32_63_ptr=%08lx key_mask_00_31_ptr=%08lxu key_mask_32_63_ptr=%08lxu seqlongest=%d",
 		(unsigned long int) row,
 		(unsigned long int) *key_base_00_31_ptr,
 		(unsigned long int) *key_base_32_63_ptr,
@@ -755,6 +630,7 @@ int libipv6calc_db_wrapper_BuiltIn_get_row_dbipv6addr_assignment(const uint32_t 
 };
 #endif // SUPPORT_DB_IPV6_REG
 
+
 /*
  * get registry number of an IPv6 address
  *
@@ -765,19 +641,13 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6a
 	uint32_t ipv6_00_31 = ipv6addr_getdword(ipv6addrp, 0);
 	uint32_t ipv6_32_63 = ipv6addr_getdword(ipv6addrp, 1);
 	
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given ipv6 prefix: %08x%08x", (unsigned int) ipv6_00_31, (unsigned int) ipv6_32_63);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Given ipv6 prefix: %08x%08x", (unsigned int) ipv6_00_31, (unsigned int) ipv6_32_63);
 
 	if ((ipv6addrp->scope & IPV6_NEW_ADDR_6BONE) != 0) {
 		return(IPV6_ADDR_REGISTRY_6BONE);
 	};
 
 	int result = IPV6_ADDR_REGISTRY_UNKNOWN;
-
-	const char *info = libipv6calc_db_wrapper_BuiltIn_reserved_string_by_ipv6addr(ipv6addrp);
-
-	if (info != NULL) {
-		return(REGISTRY_RESERVED);
-	};
 
 #ifdef SUPPORT_DB_IPV6_REG
 	int match = -1;
@@ -786,6 +656,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6a
 		NULL,							// pointer to data
 		IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY,			// type of data_ptr
 		IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_BASE_MASK,		// key type
+		0,							// key format (not relevant)
 		64,							// key length
 		IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST,		// search type
 		0,							// number of first usable row (begin)
@@ -803,7 +674,5 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6a
 #endif
 	return(result);
 };
-
-
 
 #endif		// SUPPORT_BUILTIN

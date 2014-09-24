@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.25 2014/07/30 20:31:43 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.26 2014/09/24 09:07:58 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -48,7 +48,6 @@ typedef struct {
 
 /* Registries */
 #define REGISTRY_APNIC        0x02
-#define REGISTRY_RIPE         0x03
 #define REGISTRY_RIPENCC      0x03
 #define REGISTRY_LACNIC       0x04
 #define REGISTRY_AFRINIC      0x05
@@ -61,17 +60,17 @@ typedef struct {
 #define REGISTRY_UNKNOWN      0x0f
 
 // new array (try to remove old arrays)
-/*@unused@*/ static const s_type ipv6calc_registries[] = {
-        { REGISTRY_6BONE      , "6BONE"     },
-        { REGISTRY_IANA       , "IANA"      },
-        { REGISTRY_APNIC      , "APNIC"     },
-        { REGISTRY_ARIN       , "ARIN"      },
-        { REGISTRY_RIPE       , "RIPENCC"   },
-        { REGISTRY_LACNIC     , "LACNIC"    },
-        { REGISTRY_AFRINIC    , "AFRINIC"   },
-        { REGISTRY_6TO4       , "6TO4"      },
-        { REGISTRY_RESERVED   , "reserved"  },
-        { REGISTRY_UNKNOWN    , "unknown"   }
+/*@unused@*/ static const s_type2 ipv6calc_registries[] = {
+        { REGISTRY_6BONE      , "6BONE"     , "REGISTRY_6BONE"   },
+        { REGISTRY_IANA       , "IANA"      , "REGISTRY_IANA"    },
+        { REGISTRY_APNIC      , "APNIC"     , "REGISTRY_APNIC"   },
+        { REGISTRY_ARIN       , "ARIN"      , "REGISTRY_ARIN"    },
+        { REGISTRY_RIPENCC    , "RIPENCC"   , "REGISTRY_RIPENCC" },
+        { REGISTRY_LACNIC     , "LACNIC"    , "REGISTRY_LACNIC"  },
+        { REGISTRY_AFRINIC    , "AFRINIC"   , "REGISTRY_AFRINIC" },
+        { REGISTRY_6TO4       , "6TO4"      , "REGISTRY_6TO4"    },
+        { REGISTRY_RESERVED   , "reserved"  , "REGISTRY_RESERVED"},
+        { REGISTRY_UNKNOWN    , "unknown"   , "REGISTRY_UNKNOWN" }
 };
 
 
@@ -122,4 +121,6 @@ extern const char *libipv6calc_anon_method_name(const s_ipv6calc_anon_set *ipv6c
 extern int   libipv6calc_anon_supported(const s_ipv6calc_anon_set *ipv6calc_anon_set);
 
 extern const char *libipv6calc_registry_string_by_num(const int registry);
+
+extern int libipv6calc_bitcount_uint32_t(const uint32_t value);
 

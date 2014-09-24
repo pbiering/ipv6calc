@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.67 2014/09/13 21:15:08 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.68 2014/09/24 09:07:57 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -24,6 +24,7 @@
 #include "databases/lib/libipv6calc_db_wrapper_IP2Location.h"
 #include "databases/lib/libipv6calc_db_wrapper_DBIP.h"
 #include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
+#include "databases/lib/libipv6calc_db_wrapper_External.h"
 
 
 #ifdef SUPPORT_IP2LOCATION
@@ -338,6 +339,23 @@ void printhelp_common(const uint32_t help_features) {
 		fprintf(stderr, "  [--disable-dbip                  ] : db-ip.com support disabled\n");
 		fprintf(stderr, "  [--db-dbip-disable               ] : db-ip.com support disabled\n");
 		fprintf(stderr, "  [--db-dbip-dir        <directory>] : db-ip.com database directory (default: %s)\n", dbip_db_dir);
+#endif
+	};
+
+	if ((help_features & IPV6CALC_HELP_EXTERNAL) != 0) {
+#ifdef SUPPORT_EXTERNAL
+		fprintf(stderr, "\n");
+		fprintf(stderr, "  [--disable-external              ] : External support disabled\n");
+		fprintf(stderr, "  [--db-external-disable           ] : External support disabled\n");
+		fprintf(stderr, "  [--db-external-dir    <directory>] : External database directory (default: %s)\n", external_db_dir);
+#endif
+	};
+
+	if ((help_features & IPV6CALC_HELP_BUILTIN) != 0) {
+#ifdef SUPPORT_BUILTIN
+		fprintf(stderr, "\n");
+		fprintf(stderr, "  [--disable-builtin               ] : BuiltIn support disabled\n");
+		fprintf(stderr, "  [--db-builtin-disable            ] : BuiltIn support disabled\n");
 #endif
 	};
 

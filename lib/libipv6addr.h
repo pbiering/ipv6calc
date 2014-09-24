@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.82 2014/09/13 21:15:09 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.83 2014/09/24 09:07:58 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -332,24 +332,18 @@ typedef struct {
 #define IPV6_ADDR_REGISTRY_IANA		REGISTRY_IANA
 #define IPV6_ADDR_REGISTRY_APNIC	REGISTRY_APNIC
 #define IPV6_ADDR_REGISTRY_ARIN		REGISTRY_ARIN
-#define IPV6_ADDR_REGISTRY_RIPE		REGISTRY_RIPE
+#define IPV6_ADDR_REGISTRY_RIPENCC	REGISTRY_RIPENCC
 #define IPV6_ADDR_REGISTRY_LACNIC	REGISTRY_LACNIC
 #define IPV6_ADDR_REGISTRY_AFRINIC	REGISTRY_AFRINIC
 #define IPV6_ADDR_REGISTRY_RESERVED	REGISTRY_RESERVED
 #define IPV6_ADDR_REGISTRY_UNKNOWN	REGISTRY_UNKNOWN
-
-typedef struct {
-	const int number;
-	const char *token;
-	const char *tokensimple;
-} s_type2;
 
 /*@unused@*/ static const s_type2 ipv6calc_ipv6addrregistry[] = {
 	{ IPV6_ADDR_REGISTRY_6BONE	, "6BONE"	, "6BONE" 	},
 	{ IPV6_ADDR_REGISTRY_IANA	, "IANA"	, "IANA" 	},
 	{ IPV6_ADDR_REGISTRY_APNIC	, "APNIC"	, "APNIC" 	},
 	{ IPV6_ADDR_REGISTRY_ARIN	, "ARIN" 	, "ARIN"	},
-	{ IPV6_ADDR_REGISTRY_RIPE	, "RIPE NCC"	, "RIPENCC"	},
+	{ IPV6_ADDR_REGISTRY_RIPENCC	, "RIPE NCC"	, "RIPENCC"	},
 	{ IPV6_ADDR_REGISTRY_LACNIC	, "LACNIC"	, "LACNIC"	},
 	{ IPV6_ADDR_REGISTRY_AFRINIC	, "AFRINIC"	, "AFRINIC"	},
 	{ IPV6_ADDR_REGISTRY_RESERVED	, "reserved"	, "reserved"	},

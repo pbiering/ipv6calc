@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.10 2014/09/13 21:15:07 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.11 2014/09/24 09:07:57 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -31,15 +31,8 @@
 
 char dbip_db_dir[NI_MAXHOST] = DBIP_DB;
 
-
-uint32_t wrapper_features_DBIP = 0;
-
 static const char* wrapper_dbip_info = "DBIP";
 
-static int dbip_asnum_v4 = 0;
-static int dbip_asnum_v6 = 0;
-static int dbip_city_v4 = 0;
-static int dbip_city_v6 = 0;
 
 /* database usage map */
 #define DBIP_DB_MAX_BLOCKS_32	2	// 0-63
@@ -79,10 +72,14 @@ int libipv6calc_db_wrapper_DBIP_wrapper_init(void) {
 
 	/* check available databases for resolution */
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_DBIP_db_file_desc); i++) {
+
+		// add features to implemented
+		wrapper_features_by_source_implemented[IPV6CALC_DB_SOURCE_DBIP] |= libipv6calc_db_wrapper_DBIP_db_file_desc[i].features;
+
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "DBIP database test for availability: %s", libipv6calc_db_wrapper_DBIP_db_file_desc[i].filename);
 		if (libipv6calc_db_wrapper_DBIP_db_avail(libipv6calc_db_wrapper_DBIP_db_file_desc[i].number) == 1) {
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "DBIP database available: %s", libipv6calc_db_wrapper_DBIP_db_file_desc[i].description);
-			wrapper_features_DBIP |= libipv6calc_db_wrapper_DBIP_db_file_desc[i].feature;
+			wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP] |= libipv6calc_db_wrapper_DBIP_db_file_desc[i].features;
 		};
 
 		// clean local cache
@@ -92,7 +89,7 @@ int libipv6calc_db_wrapper_DBIP_wrapper_init(void) {
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "custom directory: %s", dbip_db_dir);
 
-	wrapper_features |= wrapper_features_DBIP;
+	wrapper_features |= wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP];
 
 	return 0;
 };
@@ -157,7 +154,7 @@ void libipv6calc_db_wrapper_DBIP_wrapper_info(char* string, const size_t size) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "Called");
 
 #ifdef SUPPORT_DBIP
-	snprintf(string, size, "DBIP available databases: Country4=%d Country6=%d ASN4=%d ASN6=%d City4=%d City6=%d", (wrapper_features & IPV6CALC_DB_IPV4_TO_CC) ? 1 : 0, (wrapper_features & IPV6CALC_DB_IPV6_TO_CC) ? 1 : 0, dbip_asnum_v4, dbip_asnum_v6, dbip_city_v4, dbip_city_v6);
+	snprintf(string, size, "DBIP available databases: Country4=%d Country6=%d City4=%d City6=%d", (wrapper_features & IPV6CALC_DB_IPV4_TO_CC) ? 1 : 0, (wrapper_features & IPV6CALC_DB_IPV6_TO_CC) ? 1 : 0, (wrapper_features & IPV6CALC_DB_IPV4_TO_CITY) ? 1 : 0, (wrapper_features & IPV6CALC_DB_IPV6_TO_CITY) ? 1 : 0);
 #else
 	snprintf(string, size, "No DBIP support built-in");
 #endif
@@ -183,7 +180,7 @@ void libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(const int level_verbose, 
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "Called");
 
-	printf("%sDBIP: features: 0x%08x\n", prefix, wrapper_features_DBIP);
+	IPV6CALC_DB_FEATURE_INFO(prefix, IPV6CALC_DB_SOURCE_DBIP)
 
 #ifdef SUPPORT_DBIP
 	printf("%sDBIP: info of available databases in directory: %s\n", prefix, dbip_db_dir);
@@ -615,7 +612,7 @@ int libipv6calc_db_wrapper_DBIP_has_features(uint32_t features) {
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Called with feature value to test: 0x%08x", features);
 
-	if ((wrapper_features_DBIP & features) == features) {
+	if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP] & features) == features) {
 		result = 1;
 	} else {
 		result = 0;
@@ -649,7 +646,7 @@ int libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(const char *addr, c
 	if (proto == 4) {
 		DBIP_type = DBIP_DB_IPV4_COUNTRY;
 
-		if ((wrapper_features_DBIP & IPV6CALC_DB_IPV4_TO_CC) == 0) {
+		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP] & IPV6CALC_DB_IPV4_TO_CC) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "No DBIP database supporting IPv4 country available");
 			goto END_libipv6calc_db_wrapper;
 		};
@@ -658,7 +655,7 @@ int libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(const char *addr, c
 	} else if (proto == 6) {
 		DBIP_type = DBIP_DB_IPV6_COUNTRY;
 
-		if ((wrapper_features_DBIP & IPV6CALC_DB_IPV6_TO_CC) == 0) {
+		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP] & IPV6CALC_DB_IPV6_TO_CC) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "No DBIP database supporting IPv6 country available");
 			goto END_libipv6calc_db_wrapper;
 		};
@@ -695,6 +692,7 @@ int libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(const char *addr, c
 		(void *) dbp,						// pointer to database
 		IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB,			// type of data_ptr
 		IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_FIRST_LAST,		// key type
+		(proto == 4) ? IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x2 : IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x4,	// key format
 		(proto == 4) ? 32 : 64,					// key length
 		IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY,		// search type
 		2,							// number of first usable row (begin)
@@ -780,7 +778,7 @@ int libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const char *addr, const int
 	if (proto == 4) {
 		DBIP_type = DBIP_DB_IPV4_CITY;
 
-		if ((wrapper_features_DBIP & IPV6CALC_DB_IPV4_TO_CITY) == 0) {
+		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP] & IPV6CALC_DB_IPV4_TO_CITY) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "No DBIP database supporting IPv4 city/region available");
 			goto END_libipv6calc_db_wrapper;
 		};
@@ -789,7 +787,7 @@ int libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const char *addr, const int
 	} else if (proto == 6) {
 		DBIP_type = DBIP_DB_IPV6_CITY;
 
-		if ((wrapper_features_DBIP & IPV6CALC_DB_IPV6_TO_CITY) == 0) {
+		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP] & IPV6CALC_DB_IPV6_TO_CITY) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "No DBIP database supporting IPv6 city/region available");
 			goto END_libipv6calc_db_wrapper;
 		};
@@ -824,6 +822,7 @@ int libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const char *addr, const int
 		(void *) dbp,						// pointer to database
 		IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB,			// type of data_ptr
 		IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_FIRST_LAST,		// key type
+		(proto == 4) ? IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x2 : IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x4,	// key format
 		(proto == 4) ? 32 : 64,					// key length
 		IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY,		// search type
 		2,							// number of first usable row (begin)

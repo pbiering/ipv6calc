@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.h
- * Version    : $Id: ipv6calchelp.h,v 1.20 2014/08/31 10:27:40 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.h,v 1.21 2014/09/24 09:07:57 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -16,8 +16,10 @@
 #define _ipv6calchelp_h 1
 
 #define IPV6CALC_HELP_GEOIP		0x0010
-#define IPV6CALC_HELP_IP2LOCATION	0x0100
-#define IPV6CALC_HELP_DBIP		0x1000
+#define IPV6CALC_HELP_IP2LOCATION	0x0020
+#define IPV6CALC_HELP_DBIP		0x0040
+#define IPV6CALC_HELP_EXTERNAL		0x0080
+#define IPV6CALC_HELP_BUILTIN		0x0100
 #define IPV6CALC_HELP_ALL		0xffff
 #define IPV6CALC_HELP_BASIC		0x0000
 #define IPV6CALC_HELP_QUIET		0x0001

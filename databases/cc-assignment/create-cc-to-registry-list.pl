@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/cc-assignment
 # File       : create-cc-to-registry-list.pl
-# Version    : $Id: create-cc-to-registry-list.pl,v 1.4 2014/06/30 15:55:13 ds6peter Exp $
+# Version    : $Id: create-cc-to-registry-list.pl,v 1.5 2014/09/24 09:07:56 ds6peter Exp $
 # Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -73,9 +73,8 @@ foreach my $file (@files) {
 		$tld = uc($tld);
 
 		$reg = uc($reg);
-		$reg =~ s/RIPENCC/RIPE/o;
 
-		if ($reg !~ /^(ARIN|APNIC|RIPE|IANA|LACNIC|AFRINIC)$/o) {
+		if ($reg !~ /^(ARIN|APNIC|RIPENCC|IANA|LACNIC|AFRINIC)$/o) {
 			print "Unsupported registry: " . $reg . "\n";
 			next;
 		};

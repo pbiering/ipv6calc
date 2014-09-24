@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calcdebug.h
- * Version    : $Id: libipv6calcdebug.h,v 1.21 2014/09/13 21:15:09 ds6peter Exp $
+ * Version    : $Id: libipv6calcdebug.h,v 1.22 2014/09/24 09:07:58 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -47,6 +47,8 @@
 #define DEBUG_libipv6addr_anonymization_unknown_break	0x02000000l
 
 #define DEBUG_libipv6calc_db_wrapper_DBIP		0x10000000l
+#define DEBUG_libipv6calc_db_wrapper_External		0x20000000l
+#define DEBUG_libipv6calc_db_wrapper_BuiltIn		0x40000000l
 
 /* debug print with args */
 #define DEBUGPRINT_WA(d, t, ...)	\

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.61 2014/09/13 21:15:08 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.62 2014/09/24 09:07:57 ds6peter Exp $
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -61,7 +61,7 @@ static stat_entries ipv6logstats_statentries[] = {
 	{ STATS_UNKNOWN		, 0, "UNKNOWN" },
 	{ STATS_IPV4_APNIC	, 0, "IPv4/APNIC" },
 	{ STATS_IPV4_ARIN	, 0, "IPv4/ARIN" },
-	{ STATS_IPV4_RIPE	, 0, "IPv4/RIPE" },
+	{ STATS_IPV4_RIPENCC	, 0, "IPv4/RIPE" },
 	{ STATS_IPV4_LACNIC	, 0, "IPv4/LACNIC" },
 	{ STATS_IPV4_AFRINIC	, 0, "IPv4/AFRINIC" },
 	{ STATS_IPV4_UNKNOWN	, 0, "IPv4/UNKNOWN" },
@@ -69,7 +69,7 @@ static stat_entries ipv6logstats_statentries[] = {
 	{ STATS_IPV6_IANA	, 0, "IPv6/IANA" },
 	{ STATS_IPV6_APNIC	, 0, "IPv6/APNIC" },
 	{ STATS_IPV6_ARIN	, 0, "IPv6/ARIN" },
-	{ STATS_IPV6_RIPE	, 0, "IPv6/RIPE" },
+	{ STATS_IPV6_RIPENCC    , 0, "IPv6/RIPE" },
 	{ STATS_IPV6_LACNIC	, 0, "IPv6/LACNIC" },
 	{ STATS_IPV6_AFRINIC	, 0, "IPv6/AFRINIC" },
 	{ STATS_IPV6_RESERVED	, 0, "IPv6/RESERVED" },
@@ -77,7 +77,7 @@ static stat_entries ipv6logstats_statentries[] = {
 	{ STATS_IPV6_6TO4_BASE + REGISTRY_IANA    , 0, "IPv6/6to4/IANA"     },
 	{ STATS_IPV6_6TO4_BASE + REGISTRY_APNIC   , 0, "IPv6/6to4/APNIC"    },
 	{ STATS_IPV6_6TO4_BASE + REGISTRY_ARIN    , 0, "IPv6/6to4/ARIN"     },
-	{ STATS_IPV6_6TO4_BASE + REGISTRY_RIPE    , 0, "IPv6/6to4/RIPE"     },
+	{ STATS_IPV6_6TO4_BASE + REGISTRY_RIPENCC , 0, "IPv6/6to4/RIPE"     },
 	{ STATS_IPV6_6TO4_BASE + REGISTRY_LACNIC  , 0, "IPv6/6to4/LACNIC"   },
 	{ STATS_IPV6_6TO4_BASE + REGISTRY_AFRINIC , 0, "IPv6/6to4/AFRINIC"  },
 	{ STATS_IPV6_6TO4_BASE + REGISTRY_RESERVED, 0, "IPv6/6to4/RESERVED" },
@@ -85,7 +85,7 @@ static stat_entries ipv6logstats_statentries[] = {
 	{ STATS_IPV6_TEREDO_BASE + REGISTRY_IANA    , 0, "IPv6/Teredo/IANA"     },
 	{ STATS_IPV6_TEREDO_BASE + REGISTRY_APNIC   , 0, "IPv6/Teredo/APNIC"    },
 	{ STATS_IPV6_TEREDO_BASE + REGISTRY_ARIN    , 0, "IPv6/Teredo/ARIN"     },
-	{ STATS_IPV6_TEREDO_BASE + REGISTRY_RIPE    , 0, "IPv6/Teredo/RIPE"     },
+	{ STATS_IPV6_TEREDO_BASE + REGISTRY_RIPENCC , 0, "IPv6/Teredo/RIPE"     },
 	{ STATS_IPV6_TEREDO_BASE + REGISTRY_LACNIC  , 0, "IPv6/Teredo/LACNIC"   },
 	{ STATS_IPV6_TEREDO_BASE + REGISTRY_AFRINIC , 0, "IPv6/Teredo/AFRINIC"  },
 	{ STATS_IPV6_TEREDO_BASE + REGISTRY_RESERVED, 0, "IPv6/Teredo/RESERVED" },
@@ -93,7 +93,7 @@ static stat_entries ipv6logstats_statentries[] = {
 	{ STATS_IPV6_NAT64_BASE + REGISTRY_IANA    , 0, "IPv6/NAT64/IANA"     },
 	{ STATS_IPV6_NAT64_BASE + REGISTRY_APNIC   , 0, "IPv6/NAT64/APNIC"    },
 	{ STATS_IPV6_NAT64_BASE + REGISTRY_ARIN    , 0, "IPv6/NAT64/ARIN"     },
-	{ STATS_IPV6_NAT64_BASE + REGISTRY_RIPE    , 0, "IPv6/NAT64/RIPE"     },
+	{ STATS_IPV6_NAT64_BASE + REGISTRY_RIPENCC , 0, "IPv6/NAT64/RIPE"     },
 	{ STATS_IPV6_NAT64_BASE + REGISTRY_LACNIC  , 0, "IPv6/NAT64/LACNIC"   },
 	{ STATS_IPV6_NAT64_BASE + REGISTRY_AFRINIC , 0, "IPv6/NAT64/AFRINIC"  },
 	{ STATS_IPV6_NAT64_BASE + REGISTRY_RESERVED, 0, "IPv6/NAT64/RESERVED" },
@@ -572,8 +572,8 @@ static void lineparser(void) {
 							case IPV4_ADDR_REGISTRY_ARIN:
 								stat_inc(stat_registry_base + REGISTRY_ARIN);
 								break;
-							case IPV4_ADDR_REGISTRY_RIPE:
-								stat_inc(stat_registry_base + REGISTRY_RIPE);
+							case IPV4_ADDR_REGISTRY_RIPENCC:
+								stat_inc(stat_registry_base + REGISTRY_RIPENCC);
 								break;
 							case IPV4_ADDR_REGISTRY_LACNIC:
 								stat_inc(stat_registry_base + REGISTRY_LACNIC);
@@ -627,8 +627,8 @@ static void lineparser(void) {
 						case IPV6_ADDR_REGISTRY_ARIN:
 							stat_inc(STATS_IPV6_ARIN);
 							break;
-						case IPV6_ADDR_REGISTRY_RIPE:
-							stat_inc(STATS_IPV6_RIPE);
+						case IPV6_ADDR_REGISTRY_RIPENCC:
+							stat_inc(STATS_IPV6_RIPENCC);
 							break;
 						case IPV6_ADDR_REGISTRY_LACNIC:
 							stat_inc(STATS_IPV6_LACNIC);
@@ -688,8 +688,8 @@ static void lineparser(void) {
 					case IPV4_ADDR_REGISTRY_ARIN:
 						stat_inc(STATS_IPV4_ARIN);
 						break;
-					case IPV4_ADDR_REGISTRY_RIPE:
-						stat_inc(STATS_IPV4_RIPE);
+					case IPV4_ADDR_REGISTRY_RIPENCC:
+						stat_inc(STATS_IPV4_RIPENCC);
 						break;
 					case IPV4_ADDR_REGISTRY_LACNIC:
 						stat_inc(STATS_IPV4_LACNIC);

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.51 2014/09/02 06:25:02 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.52 2014/09/24 09:07:55 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -19,11 +19,12 @@ while [ "$1" != "$LAST" ]; do
 		;;
 	    '--all'|'-a')
 		shift
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --enable-ip2location --enable-dbip"
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --enable-ip2location --enable-dbip --enable-external"
 		SKIP_STATIC=1
 		use_geoip=1
 		use_ip2location=1
 		use_dbip=1
+		use_external=1
 		;;
 	    '--geoip'|'-g')
 		shift
@@ -56,6 +57,12 @@ while [ "$1" != "$LAST" ]; do
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-dbip"
 		SKIP_STATIC=1
 		use_dbip=1
+		;;
+	    '--external'|'-e')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-external"
+		SKIP_STATIC=1
+		use_external=1
 		;;
 	    '--disable-db-ieee')
 		shift
@@ -96,12 +103,13 @@ while [ "$1" != "$LAST" ]; do
 		echo "Supported options:"
 		echo "   -?|-h|--help        : this help"
 		echo "   -n|--no-make        : stop before running 'make'"
-		echo "   -a|--all            : enable GeoIP/IP2Location/DB-IP.com support"
+		echo "   -a|--all            : enable GeoIP/IP2Location/db-ip.com/External support"
 		echo "   -g|--geoip          : enable GeoIP support"
 		echo "   --geoip-dyn|-G      : switch to dynamic library loading of GeoIP"
 		echo "   -i|--ip2location    : enable IP2Location support"
 		echo "   --ip2location-dyn|-I: switch to dynamic library loading of IP2Location"
-		echo "   -d|--dbip           : enable DB-IP.com support"
+		echo "   -d|--dbip           : enable db-ip.com support"
+		echo "   -e|--external       : enable external database support"
 		echo "   --disable-db-ieee   : disable built-in IEEE database"
 		echo "   --disable-db-ipv4   : disable built-in IPv4 database"
 		echo "   --disable-db-ipv6   : disable built-in IPv6 database"

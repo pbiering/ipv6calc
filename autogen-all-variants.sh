@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.43 2014/08/30 23:38:37 ds6peter Exp $
+# Version    : $Id: autogen-all-variants.sh,v 1.44 2014/09/24 09:07:55 ds6peter Exp $
 # Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
@@ -31,6 +31,9 @@ NONE#--disable-db-ipv4
 NONE#--disable-db-ipv6
 NONE#--disable-db-ipv6 --disable-db-ipv4
 NONE#--disable-db-ipv6 --disable-db-ipv4 --disable-db-ieee
+NONE#--disable-db-ipv6 --disable-db-ipv4 --disable-db-ieee --disable-as-registry
+NONE#--disable-db-ipv6 --disable-db-ipv4 --disable-db-ieee --disable-cc-registry
+NONE#--disable-db-ipv6 --disable-db-ipv4 --disable-db-ieee --disable-as-registry --disable-cc-registry
 NONE#--disable-db-ipv6 --disable-db-ieee
 NONE#--disable-db-ipv4 --disable-db-ieee
 END

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.41 2014/08/27 04:45:04 ds6peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.42 2014/09/24 09:07:58 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -24,9 +24,15 @@ extern uint32_t ipv6calctypes_checkaction(const char *string);
 
 /* text representations for defines */
 typedef struct {
-	const uint32_t number;
+	const int number;
 	const char *token;
 } s_type;
+
+typedef struct {
+        const int number;
+        const char *token;
+        const char *tokensimple;
+} s_type2;
 
 
 /*

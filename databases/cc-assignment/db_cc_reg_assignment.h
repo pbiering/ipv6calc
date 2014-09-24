@@ -1,40 +1,40 @@
  /*
  * Project       : ipv6calc
  * File          : db_cc_reg_assignment.h
- * Version       : $Id: db_cc_reg_assignment.h,v 1.10 2014/09/13 21:15:04 ds6peter Exp $
- * Generated     : Fri Sep  5 07:10:32 2014
+ * Version       : $Id: db_cc_reg_assignment.h,v 1.11 2014/09/24 09:07:56 ds6peter Exp $
+ * Generated     : Mon Sep 22 21:34:57 2014
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
  *  Additional header file for databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  */
 
-static const char *db_cc_registry_status = "AFRINIC/20140829 APNIC/20140904 ARIN/20140904 LACNIC/20140904 RIPENCC/20140904";
+static const char *db_cc_registry_status = "AFRINIC/20140919 APNIC/20140922 ARIN/20140922 LACNIC/20140919 RIPENCC/20140921";
 
 static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "", REGISTRY_ARIN     },
-	{ "AD", REGISTRY_RIPE     },
-	{ "AE", REGISTRY_RIPE     },
+	{ "AD", REGISTRY_RIPENCC  },
+	{ "AE", REGISTRY_RIPENCC  },
 	{ "AF", REGISTRY_APNIC    },
 	{ "AG", REGISTRY_ARIN     },
 	{ "AI", REGISTRY_ARIN     },
-	{ "AL", REGISTRY_RIPE     },
-	{ "AM", REGISTRY_RIPE     },
+	{ "AL", REGISTRY_RIPENCC  },
+	{ "AM", REGISTRY_RIPENCC  },
 	{ "AO", REGISTRY_AFRINIC  },
 	{ "AP", REGISTRY_APNIC    },
 	{ "AR", REGISTRY_LACNIC   },
 	{ "AS", REGISTRY_APNIC    },
-	{ "AT", REGISTRY_RIPE     },
+	{ "AT", REGISTRY_RIPENCC  },
 	{ "AU", REGISTRY_APNIC    },
 	{ "AW", REGISTRY_LACNIC   },
-	{ "AZ", REGISTRY_RIPE     },
-	{ "BA", REGISTRY_RIPE     },
+	{ "AZ", REGISTRY_RIPENCC  },
+	{ "BA", REGISTRY_RIPENCC  },
 	{ "BB", REGISTRY_ARIN     },
 	{ "BD", REGISTRY_APNIC    },
-	{ "BE", REGISTRY_RIPE     },
+	{ "BE", REGISTRY_RIPENCC  },
 	{ "BF", REGISTRY_AFRINIC  },
-	{ "BG", REGISTRY_RIPE     },
-	{ "BH", REGISTRY_RIPE     },
+	{ "BG", REGISTRY_RIPENCC  },
+	{ "BH", REGISTRY_RIPENCC  },
 	{ "BI", REGISTRY_AFRINIC  },
 	{ "BJ", REGISTRY_AFRINIC  },
 	{ "BL", REGISTRY_ARIN     },
@@ -46,13 +46,13 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "BS", REGISTRY_ARIN     },
 	{ "BT", REGISTRY_APNIC    },
 	{ "BW", REGISTRY_AFRINIC  },
-	{ "BY", REGISTRY_RIPE     },
+	{ "BY", REGISTRY_RIPENCC  },
 	{ "BZ", REGISTRY_LACNIC   },
 	{ "CA", REGISTRY_ARIN     },
 	{ "CD", REGISTRY_AFRINIC  },
 	{ "CF", REGISTRY_AFRINIC  },
 	{ "CG", REGISTRY_AFRINIC  },
-	{ "CH", REGISTRY_RIPE     },
+	{ "CH", REGISTRY_RIPENCC  },
 	{ "CI", REGISTRY_AFRINIC  },
 	{ "CK", REGISTRY_APNIC    },
 	{ "CL", REGISTRY_LACNIC   },
@@ -63,102 +63,102 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "CU", REGISTRY_LACNIC   },
 	{ "CV", REGISTRY_AFRINIC  },
 	{ "CW", REGISTRY_LACNIC   },
-	{ "CY", REGISTRY_RIPE     },
-	{ "CZ", REGISTRY_RIPE     },
-	{ "DE", REGISTRY_RIPE     },
+	{ "CY", REGISTRY_RIPENCC  },
+	{ "CZ", REGISTRY_RIPENCC  },
+	{ "DE", REGISTRY_RIPENCC  },
 	{ "DJ", REGISTRY_AFRINIC  },
-	{ "DK", REGISTRY_RIPE     },
+	{ "DK", REGISTRY_RIPENCC  },
 	{ "DM", REGISTRY_ARIN     },
 	{ "DO", REGISTRY_LACNIC   },
 	{ "DZ", REGISTRY_AFRINIC  },
 	{ "EC", REGISTRY_LACNIC   },
-	{ "EE", REGISTRY_RIPE     },
+	{ "EE", REGISTRY_RIPENCC  },
 	{ "EG", REGISTRY_AFRINIC  },
 	{ "ER", REGISTRY_AFRINIC  },
-	{ "ES", REGISTRY_RIPE     },
+	{ "ES", REGISTRY_RIPENCC  },
 	{ "ET", REGISTRY_AFRINIC  },
-	{ "EU", REGISTRY_RIPE     },
-	{ "FI", REGISTRY_RIPE     },
+	{ "EU", REGISTRY_RIPENCC  },
+	{ "FI", REGISTRY_RIPENCC  },
 	{ "FJ", REGISTRY_APNIC    },
 	{ "FM", REGISTRY_APNIC    },
-	{ "FO", REGISTRY_RIPE     },
-	{ "FR", REGISTRY_RIPE     },
+	{ "FO", REGISTRY_RIPENCC  },
+	{ "FR", REGISTRY_RIPENCC  },
 	{ "GA", REGISTRY_AFRINIC  },
-	{ "GB", REGISTRY_RIPE     },
+	{ "GB", REGISTRY_RIPENCC  },
 	{ "GD", REGISTRY_ARIN     },
-	{ "GE", REGISTRY_RIPE     },
+	{ "GE", REGISTRY_RIPENCC  },
 	{ "GF", REGISTRY_LACNIC   },
-	{ "GG", REGISTRY_RIPE     },
+	{ "GG", REGISTRY_RIPENCC  },
 	{ "GH", REGISTRY_AFRINIC  },
-	{ "GI", REGISTRY_RIPE     },
-	{ "GL", REGISTRY_RIPE     },
+	{ "GI", REGISTRY_RIPENCC  },
+	{ "GL", REGISTRY_RIPENCC  },
 	{ "GM", REGISTRY_AFRINIC  },
 	{ "GN", REGISTRY_AFRINIC  },
 	{ "GP", REGISTRY_ARIN     },
 	{ "GQ", REGISTRY_AFRINIC  },
-	{ "GR", REGISTRY_RIPE     },
+	{ "GR", REGISTRY_RIPENCC  },
 	{ "GT", REGISTRY_LACNIC   },
 	{ "GU", REGISTRY_APNIC    },
 	{ "GW", REGISTRY_AFRINIC  },
 	{ "GY", REGISTRY_LACNIC   },
 	{ "HK", REGISTRY_APNIC    },
 	{ "HN", REGISTRY_LACNIC   },
-	{ "HR", REGISTRY_RIPE     },
+	{ "HR", REGISTRY_RIPENCC  },
 	{ "HT", REGISTRY_LACNIC   },
-	{ "HU", REGISTRY_RIPE     },
+	{ "HU", REGISTRY_RIPENCC  },
 	{ "ID", REGISTRY_APNIC    },
-	{ "IE", REGISTRY_RIPE     },
-	{ "IL", REGISTRY_RIPE     },
-	{ "IM", REGISTRY_RIPE     },
+	{ "IE", REGISTRY_RIPENCC  },
+	{ "IL", REGISTRY_RIPENCC  },
+	{ "IM", REGISTRY_RIPENCC  },
 	{ "IN", REGISTRY_APNIC    },
 	{ "IO", REGISTRY_APNIC    },
-	{ "IQ", REGISTRY_RIPE     },
-	{ "IR", REGISTRY_RIPE     },
-	{ "IS", REGISTRY_RIPE     },
-	{ "IT", REGISTRY_RIPE     },
-	{ "JE", REGISTRY_RIPE     },
+	{ "IQ", REGISTRY_RIPENCC  },
+	{ "IR", REGISTRY_RIPENCC  },
+	{ "IS", REGISTRY_RIPENCC  },
+	{ "IT", REGISTRY_RIPENCC  },
+	{ "JE", REGISTRY_RIPENCC  },
 	{ "JM", REGISTRY_ARIN     },
-	{ "JO", REGISTRY_RIPE     },
+	{ "JO", REGISTRY_RIPENCC  },
 	{ "JP", REGISTRY_APNIC    },
 	{ "KE", REGISTRY_AFRINIC  },
-	{ "KG", REGISTRY_RIPE     },
+	{ "KG", REGISTRY_RIPENCC  },
 	{ "KH", REGISTRY_APNIC    },
 	{ "KI", REGISTRY_APNIC    },
 	{ "KM", REGISTRY_AFRINIC  },
 	{ "KN", REGISTRY_ARIN     },
 	{ "KP", REGISTRY_APNIC    },
 	{ "KR", REGISTRY_APNIC    },
-	{ "KW", REGISTRY_RIPE     },
+	{ "KW", REGISTRY_RIPENCC  },
 	{ "KY", REGISTRY_ARIN     },
-	{ "KZ", REGISTRY_RIPE     },
+	{ "KZ", REGISTRY_RIPENCC  },
 	{ "LA", REGISTRY_APNIC    },
-	{ "LB", REGISTRY_RIPE     },
+	{ "LB", REGISTRY_RIPENCC  },
 	{ "LC", REGISTRY_ARIN     },
-	{ "LI", REGISTRY_RIPE     },
+	{ "LI", REGISTRY_RIPENCC  },
 	{ "LK", REGISTRY_APNIC    },
 	{ "LR", REGISTRY_AFRINIC  },
 	{ "LS", REGISTRY_AFRINIC  },
-	{ "LT", REGISTRY_RIPE     },
-	{ "LU", REGISTRY_RIPE     },
-	{ "LV", REGISTRY_RIPE     },
+	{ "LT", REGISTRY_RIPENCC  },
+	{ "LU", REGISTRY_RIPENCC  },
+	{ "LV", REGISTRY_RIPENCC  },
 	{ "LY", REGISTRY_AFRINIC  },
 	{ "MA", REGISTRY_AFRINIC  },
-	{ "MC", REGISTRY_RIPE     },
-	{ "MD", REGISTRY_RIPE     },
-	{ "ME", REGISTRY_RIPE     },
+	{ "MC", REGISTRY_RIPENCC  },
+	{ "MD", REGISTRY_RIPENCC  },
+	{ "ME", REGISTRY_RIPENCC  },
 	{ "MF", REGISTRY_ARIN     },
 	{ "MG", REGISTRY_AFRINIC  },
 	{ "MH", REGISTRY_APNIC    },
-	{ "MK", REGISTRY_RIPE     },
+	{ "MK", REGISTRY_RIPENCC  },
 	{ "ML", REGISTRY_AFRINIC  },
 	{ "MM", REGISTRY_APNIC    },
 	{ "MN", REGISTRY_APNIC    },
 	{ "MO", REGISTRY_APNIC    },
 	{ "MP", REGISTRY_APNIC    },
-	{ "MQ", REGISTRY_RIPE     },
+	{ "MQ", REGISTRY_RIPENCC  },
 	{ "MR", REGISTRY_AFRINIC  },
 	{ "MS", REGISTRY_ARIN     },
-	{ "MT", REGISTRY_RIPE     },
+	{ "MT", REGISTRY_RIPENCC  },
 	{ "MU", REGISTRY_AFRINIC  },
 	{ "MV", REGISTRY_APNIC    },
 	{ "MW", REGISTRY_AFRINIC  },
@@ -171,42 +171,42 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "NF", REGISTRY_APNIC    },
 	{ "NG", REGISTRY_AFRINIC  },
 	{ "NI", REGISTRY_LACNIC   },
-	{ "NL", REGISTRY_RIPE     },
-	{ "NO", REGISTRY_RIPE     },
+	{ "NL", REGISTRY_RIPENCC  },
+	{ "NO", REGISTRY_RIPENCC  },
 	{ "NP", REGISTRY_APNIC    },
 	{ "NR", REGISTRY_APNIC    },
 	{ "NU", REGISTRY_APNIC    },
 	{ "NZ", REGISTRY_APNIC    },
-	{ "OM", REGISTRY_RIPE     },
+	{ "OM", REGISTRY_RIPENCC  },
 	{ "PA", REGISTRY_LACNIC   },
 	{ "PE", REGISTRY_LACNIC   },
 	{ "PF", REGISTRY_APNIC    },
 	{ "PG", REGISTRY_APNIC    },
 	{ "PH", REGISTRY_APNIC    },
 	{ "PK", REGISTRY_APNIC    },
-	{ "PL", REGISTRY_RIPE     },
+	{ "PL", REGISTRY_RIPENCC  },
 	{ "PM", REGISTRY_ARIN     },
 	{ "PR", REGISTRY_ARIN     },
-	{ "PS", REGISTRY_RIPE     },
-	{ "PT", REGISTRY_RIPE     },
+	{ "PS", REGISTRY_RIPENCC  },
+	{ "PT", REGISTRY_RIPENCC  },
 	{ "PW", REGISTRY_APNIC    },
 	{ "PY", REGISTRY_LACNIC   },
-	{ "QA", REGISTRY_RIPE     },
+	{ "QA", REGISTRY_RIPENCC  },
 	{ "RE", REGISTRY_AFRINIC  },
-	{ "RO", REGISTRY_RIPE     },
-	{ "RS", REGISTRY_RIPE     },
-	{ "RU", REGISTRY_RIPE     },
+	{ "RO", REGISTRY_RIPENCC  },
+	{ "RS", REGISTRY_RIPENCC  },
+	{ "RU", REGISTRY_RIPENCC  },
 	{ "RW", REGISTRY_AFRINIC  },
-	{ "SA", REGISTRY_RIPE     },
+	{ "SA", REGISTRY_RIPENCC  },
 	{ "SB", REGISTRY_APNIC    },
 	{ "SC", REGISTRY_AFRINIC  },
 	{ "SD", REGISTRY_AFRINIC  },
-	{ "SE", REGISTRY_RIPE     },
+	{ "SE", REGISTRY_RIPENCC  },
 	{ "SG", REGISTRY_APNIC    },
-	{ "SI", REGISTRY_RIPE     },
-	{ "SK", REGISTRY_RIPE     },
+	{ "SI", REGISTRY_RIPENCC  },
+	{ "SK", REGISTRY_RIPENCC  },
 	{ "SL", REGISTRY_AFRINIC  },
-	{ "SM", REGISTRY_RIPE     },
+	{ "SM", REGISTRY_RIPENCC  },
 	{ "SN", REGISTRY_AFRINIC  },
 	{ "SO", REGISTRY_AFRINIC  },
 	{ "SR", REGISTRY_LACNIC   },
@@ -214,29 +214,29 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "ST", REGISTRY_AFRINIC  },
 	{ "SV", REGISTRY_LACNIC   },
 	{ "SX", REGISTRY_LACNIC   },
-	{ "SY", REGISTRY_RIPE     },
+	{ "SY", REGISTRY_RIPENCC  },
 	{ "SZ", REGISTRY_AFRINIC  },
 	{ "TC", REGISTRY_ARIN     },
 	{ "TD", REGISTRY_AFRINIC  },
 	{ "TG", REGISTRY_AFRINIC  },
 	{ "TH", REGISTRY_APNIC    },
-	{ "TJ", REGISTRY_RIPE     },
+	{ "TJ", REGISTRY_RIPENCC  },
 	{ "TK", REGISTRY_APNIC    },
 	{ "TL", REGISTRY_APNIC    },
-	{ "TM", REGISTRY_RIPE     },
+	{ "TM", REGISTRY_RIPENCC  },
 	{ "TN", REGISTRY_AFRINIC  },
 	{ "TO", REGISTRY_APNIC    },
-	{ "TR", REGISTRY_RIPE     },
+	{ "TR", REGISTRY_RIPENCC  },
 	{ "TT", REGISTRY_LACNIC   },
 	{ "TV", REGISTRY_APNIC    },
 	{ "TW", REGISTRY_APNIC    },
 	{ "TZ", REGISTRY_AFRINIC  },
-	{ "UA", REGISTRY_RIPE     },
+	{ "UA", REGISTRY_RIPENCC  },
 	{ "UG", REGISTRY_AFRINIC  },
 	{ "US", REGISTRY_ARIN     },
 	{ "UY", REGISTRY_LACNIC   },
-	{ "UZ", REGISTRY_RIPE     },
-	{ "VA", REGISTRY_RIPE     },
+	{ "UZ", REGISTRY_RIPENCC  },
+	{ "VA", REGISTRY_RIPENCC  },
 	{ "VC", REGISTRY_ARIN     },
 	{ "VE", REGISTRY_LACNIC   },
 	{ "VG", REGISTRY_ARIN     },
@@ -245,7 +245,7 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "VU", REGISTRY_APNIC    },
 	{ "WF", REGISTRY_APNIC    },
 	{ "WS", REGISTRY_APNIC    },
-	{ "YE", REGISTRY_RIPE     },
+	{ "YE", REGISTRY_RIPENCC  },
 	{ "YT", REGISTRY_AFRINIC  },
 	{ "ZA", REGISTRY_AFRINIC  },
 	{ "ZM", REGISTRY_AFRINIC  },
@@ -514,7 +514,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  258  Y9
 	{ REGISTRY_UNKNOWN  }, //  259  Z9
 	{ REGISTRY_UNKNOWN  }, //  260  AA
-	{ REGISTRY_RIPE     }, //  261  BA
+	{ REGISTRY_RIPENCC  }, //  261  BA
 	{ REGISTRY_ARIN     }, //  262  CA
 	{ REGISTRY_UNKNOWN  }, //  263  DA
 	{ REGISTRY_UNKNOWN  }, //  264  EA
@@ -529,12 +529,12 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_AFRINIC  }, //  273  NA
 	{ REGISTRY_UNKNOWN  }, //  274  OA
 	{ REGISTRY_LACNIC   }, //  275  PA
-	{ REGISTRY_RIPE     }, //  276  QA
+	{ REGISTRY_RIPENCC  }, //  276  QA
 	{ REGISTRY_UNKNOWN  }, //  277  RA
-	{ REGISTRY_RIPE     }, //  278  SA
+	{ REGISTRY_RIPENCC  }, //  278  SA
 	{ REGISTRY_UNKNOWN  }, //  279  TA
-	{ REGISTRY_RIPE     }, //  280  UA
-	{ REGISTRY_RIPE     }, //  281  VA
+	{ REGISTRY_RIPENCC  }, //  280  UA
+	{ REGISTRY_RIPENCC  }, //  281  VA
 	{ REGISTRY_UNKNOWN  }, //  282  WA
 	{ REGISTRY_UNKNOWN  }, //  283  XA
 	{ REGISTRY_UNKNOWN  }, //  284  YA
@@ -545,12 +545,12 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  289  DB
 	{ REGISTRY_UNKNOWN  }, //  290  EB
 	{ REGISTRY_UNKNOWN  }, //  291  FB
-	{ REGISTRY_RIPE     }, //  292  GB
+	{ REGISTRY_RIPENCC  }, //  292  GB
 	{ REGISTRY_UNKNOWN  }, //  293  HB
 	{ REGISTRY_UNKNOWN  }, //  294  IB
 	{ REGISTRY_UNKNOWN  }, //  295  JB
 	{ REGISTRY_UNKNOWN  }, //  296  KB
-	{ REGISTRY_RIPE     }, //  297  LB
+	{ REGISTRY_RIPENCC  }, //  297  LB
 	{ REGISTRY_UNKNOWN  }, //  298  MB
 	{ REGISTRY_UNKNOWN  }, //  299  NB
 	{ REGISTRY_UNKNOWN  }, //  300  OB
@@ -577,7 +577,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  321  JC
 	{ REGISTRY_UNKNOWN  }, //  322  KC
 	{ REGISTRY_ARIN     }, //  323  LC
-	{ REGISTRY_RIPE     }, //  324  MC
+	{ REGISTRY_RIPENCC  }, //  324  MC
 	{ REGISTRY_APNIC    }, //  325  NC
 	{ REGISTRY_UNKNOWN  }, //  326  OC
 	{ REGISTRY_UNKNOWN  }, //  327  PC
@@ -591,7 +591,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  335  XC
 	{ REGISTRY_UNKNOWN  }, //  336  YC
 	{ REGISTRY_UNKNOWN  }, //  337  ZC
-	{ REGISTRY_RIPE     }, //  338  AD
+	{ REGISTRY_RIPENCC  }, //  338  AD
 	{ REGISTRY_APNIC    }, //  339  BD
 	{ REGISTRY_AFRINIC  }, //  340  CD
 	{ REGISTRY_UNKNOWN  }, //  341  DD
@@ -603,7 +603,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  347  JD
 	{ REGISTRY_UNKNOWN  }, //  348  KD
 	{ REGISTRY_UNKNOWN  }, //  349  LD
-	{ REGISTRY_RIPE     }, //  350  MD
+	{ REGISTRY_RIPENCC  }, //  350  MD
 	{ REGISTRY_UNKNOWN  }, //  351  ND
 	{ REGISTRY_UNKNOWN  }, //  352  OD
 	{ REGISTRY_UNKNOWN  }, //  353  PD
@@ -617,31 +617,31 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  361  XD
 	{ REGISTRY_UNKNOWN  }, //  362  YD
 	{ REGISTRY_UNKNOWN  }, //  363  ZD
-	{ REGISTRY_RIPE     }, //  364  AE
-	{ REGISTRY_RIPE     }, //  365  BE
+	{ REGISTRY_RIPENCC  }, //  364  AE
+	{ REGISTRY_RIPENCC  }, //  365  BE
 	{ REGISTRY_UNKNOWN  }, //  366  CE
-	{ REGISTRY_RIPE     }, //  367  DE
-	{ REGISTRY_RIPE     }, //  368  EE
+	{ REGISTRY_RIPENCC  }, //  367  DE
+	{ REGISTRY_RIPENCC  }, //  368  EE
 	{ REGISTRY_UNKNOWN  }, //  369  FE
-	{ REGISTRY_RIPE     }, //  370  GE
+	{ REGISTRY_RIPENCC  }, //  370  GE
 	{ REGISTRY_UNKNOWN  }, //  371  HE
-	{ REGISTRY_RIPE     }, //  372  IE
-	{ REGISTRY_RIPE     }, //  373  JE
+	{ REGISTRY_RIPENCC  }, //  372  IE
+	{ REGISTRY_RIPENCC  }, //  373  JE
 	{ REGISTRY_AFRINIC  }, //  374  KE
 	{ REGISTRY_UNKNOWN  }, //  375  LE
-	{ REGISTRY_RIPE     }, //  376  ME
+	{ REGISTRY_RIPENCC  }, //  376  ME
 	{ REGISTRY_AFRINIC  }, //  377  NE
 	{ REGISTRY_UNKNOWN  }, //  378  OE
 	{ REGISTRY_LACNIC   }, //  379  PE
 	{ REGISTRY_UNKNOWN  }, //  380  QE
 	{ REGISTRY_AFRINIC  }, //  381  RE
-	{ REGISTRY_RIPE     }, //  382  SE
+	{ REGISTRY_RIPENCC  }, //  382  SE
 	{ REGISTRY_UNKNOWN  }, //  383  TE
 	{ REGISTRY_UNKNOWN  }, //  384  UE
 	{ REGISTRY_LACNIC   }, //  385  VE
 	{ REGISTRY_UNKNOWN  }, //  386  WE
 	{ REGISTRY_UNKNOWN  }, //  387  XE
-	{ REGISTRY_RIPE     }, //  388  YE
+	{ REGISTRY_RIPENCC  }, //  388  YE
 	{ REGISTRY_UNKNOWN  }, //  389  ZE
 	{ REGISTRY_APNIC    }, //  390  AF
 	{ REGISTRY_AFRINIC  }, //  391  BF
@@ -670,16 +670,16 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  414  YF
 	{ REGISTRY_UNKNOWN  }, //  415  ZF
 	{ REGISTRY_ARIN     }, //  416  AG
-	{ REGISTRY_RIPE     }, //  417  BG
+	{ REGISTRY_RIPENCC  }, //  417  BG
 	{ REGISTRY_AFRINIC  }, //  418  CG
 	{ REGISTRY_UNKNOWN  }, //  419  DG
 	{ REGISTRY_AFRINIC  }, //  420  EG
 	{ REGISTRY_UNKNOWN  }, //  421  FG
-	{ REGISTRY_RIPE     }, //  422  GG
+	{ REGISTRY_RIPENCC  }, //  422  GG
 	{ REGISTRY_UNKNOWN  }, //  423  HG
 	{ REGISTRY_UNKNOWN  }, //  424  IG
 	{ REGISTRY_UNKNOWN  }, //  425  JG
-	{ REGISTRY_RIPE     }, //  426  KG
+	{ REGISTRY_RIPENCC  }, //  426  KG
 	{ REGISTRY_UNKNOWN  }, //  427  LG
 	{ REGISTRY_AFRINIC  }, //  428  MG
 	{ REGISTRY_AFRINIC  }, //  429  NG
@@ -696,8 +696,8 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  440  YG
 	{ REGISTRY_UNKNOWN  }, //  441  ZG
 	{ REGISTRY_UNKNOWN  }, //  442  AH
-	{ REGISTRY_RIPE     }, //  443  BH
-	{ REGISTRY_RIPE     }, //  444  CH
+	{ REGISTRY_RIPENCC  }, //  443  BH
+	{ REGISTRY_RIPENCC  }, //  444  CH
 	{ REGISTRY_UNKNOWN  }, //  445  DH
 	{ REGISTRY_UNKNOWN  }, //  446  EH
 	{ REGISTRY_UNKNOWN  }, //  447  FH
@@ -726,20 +726,20 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_AFRINIC  }, //  470  CI
 	{ REGISTRY_UNKNOWN  }, //  471  DI
 	{ REGISTRY_UNKNOWN  }, //  472  EI
-	{ REGISTRY_RIPE     }, //  473  FI
-	{ REGISTRY_RIPE     }, //  474  GI
+	{ REGISTRY_RIPENCC  }, //  473  FI
+	{ REGISTRY_RIPENCC  }, //  474  GI
 	{ REGISTRY_UNKNOWN  }, //  475  HI
 	{ REGISTRY_UNKNOWN  }, //  476  II
 	{ REGISTRY_UNKNOWN  }, //  477  JI
 	{ REGISTRY_APNIC    }, //  478  KI
-	{ REGISTRY_RIPE     }, //  479  LI
+	{ REGISTRY_RIPENCC  }, //  479  LI
 	{ REGISTRY_UNKNOWN  }, //  480  MI
 	{ REGISTRY_LACNIC   }, //  481  NI
 	{ REGISTRY_UNKNOWN  }, //  482  OI
 	{ REGISTRY_UNKNOWN  }, //  483  PI
 	{ REGISTRY_UNKNOWN  }, //  484  QI
 	{ REGISTRY_UNKNOWN  }, //  485  RI
-	{ REGISTRY_RIPE     }, //  486  SI
+	{ REGISTRY_RIPENCC  }, //  486  SI
 	{ REGISTRY_UNKNOWN  }, //  487  TI
 	{ REGISTRY_UNKNOWN  }, //  488  UI
 	{ REGISTRY_ARIN     }, //  489  VI
@@ -766,7 +766,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  510  QJ
 	{ REGISTRY_UNKNOWN  }, //  511  RJ
 	{ REGISTRY_UNKNOWN  }, //  512  SJ
-	{ REGISTRY_RIPE     }, //  513  TJ
+	{ REGISTRY_RIPENCC  }, //  513  TJ
 	{ REGISTRY_UNKNOWN  }, //  514  UJ
 	{ REGISTRY_UNKNOWN  }, //  515  VJ
 	{ REGISTRY_UNKNOWN  }, //  516  WJ
@@ -776,7 +776,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  520  AK
 	{ REGISTRY_UNKNOWN  }, //  521  BK
 	{ REGISTRY_APNIC    }, //  522  CK
-	{ REGISTRY_RIPE     }, //  523  DK
+	{ REGISTRY_RIPENCC  }, //  523  DK
 	{ REGISTRY_UNKNOWN  }, //  524  EK
 	{ REGISTRY_UNKNOWN  }, //  525  FK
 	{ REGISTRY_UNKNOWN  }, //  526  GK
@@ -785,13 +785,13 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  529  JK
 	{ REGISTRY_UNKNOWN  }, //  530  KK
 	{ REGISTRY_APNIC    }, //  531  LK
-	{ REGISTRY_RIPE     }, //  532  MK
+	{ REGISTRY_RIPENCC  }, //  532  MK
 	{ REGISTRY_UNKNOWN  }, //  533  NK
 	{ REGISTRY_UNKNOWN  }, //  534  OK
 	{ REGISTRY_APNIC    }, //  535  PK
 	{ REGISTRY_UNKNOWN  }, //  536  QK
 	{ REGISTRY_UNKNOWN  }, //  537  RK
-	{ REGISTRY_RIPE     }, //  538  SK
+	{ REGISTRY_RIPENCC  }, //  538  SK
 	{ REGISTRY_APNIC    }, //  539  TK
 	{ REGISTRY_UNKNOWN  }, //  540  UK
 	{ REGISTRY_UNKNOWN  }, //  541  VK
@@ -799,22 +799,22 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  543  XK
 	{ REGISTRY_UNKNOWN  }, //  544  YK
 	{ REGISTRY_UNKNOWN  }, //  545  ZK
-	{ REGISTRY_RIPE     }, //  546  AL
+	{ REGISTRY_RIPENCC  }, //  546  AL
 	{ REGISTRY_ARIN     }, //  547  BL
 	{ REGISTRY_LACNIC   }, //  548  CL
 	{ REGISTRY_UNKNOWN  }, //  549  DL
 	{ REGISTRY_UNKNOWN  }, //  550  EL
 	{ REGISTRY_UNKNOWN  }, //  551  FL
-	{ REGISTRY_RIPE     }, //  552  GL
+	{ REGISTRY_RIPENCC  }, //  552  GL
 	{ REGISTRY_UNKNOWN  }, //  553  HL
-	{ REGISTRY_RIPE     }, //  554  IL
+	{ REGISTRY_RIPENCC  }, //  554  IL
 	{ REGISTRY_UNKNOWN  }, //  555  JL
 	{ REGISTRY_UNKNOWN  }, //  556  KL
 	{ REGISTRY_UNKNOWN  }, //  557  LL
 	{ REGISTRY_AFRINIC  }, //  558  ML
-	{ REGISTRY_RIPE     }, //  559  NL
+	{ REGISTRY_RIPENCC  }, //  559  NL
 	{ REGISTRY_UNKNOWN  }, //  560  OL
-	{ REGISTRY_RIPE     }, //  561  PL
+	{ REGISTRY_RIPENCC  }, //  561  PL
 	{ REGISTRY_UNKNOWN  }, //  562  QL
 	{ REGISTRY_UNKNOWN  }, //  563  RL
 	{ REGISTRY_AFRINIC  }, //  564  SL
@@ -825,7 +825,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  569  XL
 	{ REGISTRY_UNKNOWN  }, //  570  YL
 	{ REGISTRY_UNKNOWN  }, //  571  ZL
-	{ REGISTRY_RIPE     }, //  572  AM
+	{ REGISTRY_RIPENCC  }, //  572  AM
 	{ REGISTRY_ARIN     }, //  573  BM
 	{ REGISTRY_AFRINIC  }, //  574  CM
 	{ REGISTRY_ARIN     }, //  575  DM
@@ -833,18 +833,18 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_APNIC    }, //  577  FM
 	{ REGISTRY_AFRINIC  }, //  578  GM
 	{ REGISTRY_UNKNOWN  }, //  579  HM
-	{ REGISTRY_RIPE     }, //  580  IM
+	{ REGISTRY_RIPENCC  }, //  580  IM
 	{ REGISTRY_ARIN     }, //  581  JM
 	{ REGISTRY_AFRINIC  }, //  582  KM
 	{ REGISTRY_UNKNOWN  }, //  583  LM
 	{ REGISTRY_APNIC    }, //  584  MM
 	{ REGISTRY_UNKNOWN  }, //  585  NM
-	{ REGISTRY_RIPE     }, //  586  OM
+	{ REGISTRY_RIPENCC  }, //  586  OM
 	{ REGISTRY_ARIN     }, //  587  PM
 	{ REGISTRY_UNKNOWN  }, //  588  QM
 	{ REGISTRY_UNKNOWN  }, //  589  RM
-	{ REGISTRY_RIPE     }, //  590  SM
-	{ REGISTRY_RIPE     }, //  591  TM
+	{ REGISTRY_RIPENCC  }, //  590  SM
+	{ REGISTRY_RIPENCC  }, //  591  TM
 	{ REGISTRY_UNKNOWN  }, //  592  UM
 	{ REGISTRY_UNKNOWN  }, //  593  VM
 	{ REGISTRY_UNKNOWN  }, //  594  WM
@@ -882,19 +882,19 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_LACNIC   }, //  626  CO
 	{ REGISTRY_LACNIC   }, //  627  DO
 	{ REGISTRY_UNKNOWN  }, //  628  EO
-	{ REGISTRY_RIPE     }, //  629  FO
+	{ REGISTRY_RIPENCC  }, //  629  FO
 	{ REGISTRY_UNKNOWN  }, //  630  GO
 	{ REGISTRY_UNKNOWN  }, //  631  HO
 	{ REGISTRY_APNIC    }, //  632  IO
-	{ REGISTRY_RIPE     }, //  633  JO
+	{ REGISTRY_RIPENCC  }, //  633  JO
 	{ REGISTRY_UNKNOWN  }, //  634  KO
 	{ REGISTRY_UNKNOWN  }, //  635  LO
 	{ REGISTRY_APNIC    }, //  636  MO
-	{ REGISTRY_RIPE     }, //  637  NO
+	{ REGISTRY_RIPENCC  }, //  637  NO
 	{ REGISTRY_UNKNOWN  }, //  638  OO
 	{ REGISTRY_UNKNOWN  }, //  639  PO
 	{ REGISTRY_UNKNOWN  }, //  640  QO
-	{ REGISTRY_RIPE     }, //  641  RO
+	{ REGISTRY_RIPENCC  }, //  641  RO
 	{ REGISTRY_AFRINIC  }, //  642  SO
 	{ REGISTRY_APNIC    }, //  643  TO
 	{ REGISTRY_UNKNOWN  }, //  644  UO
@@ -937,11 +937,11 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  681  FQ
 	{ REGISTRY_AFRINIC  }, //  682  GQ
 	{ REGISTRY_UNKNOWN  }, //  683  HQ
-	{ REGISTRY_RIPE     }, //  684  IQ
+	{ REGISTRY_RIPENCC  }, //  684  IQ
 	{ REGISTRY_UNKNOWN  }, //  685  JQ
 	{ REGISTRY_UNKNOWN  }, //  686  KQ
 	{ REGISTRY_UNKNOWN  }, //  687  LQ
-	{ REGISTRY_RIPE     }, //  688  MQ
+	{ REGISTRY_RIPENCC  }, //  688  MQ
 	{ REGISTRY_UNKNOWN  }, //  689  NQ
 	{ REGISTRY_UNKNOWN  }, //  690  OQ
 	{ REGISTRY_UNKNOWN  }, //  691  PQ
@@ -960,10 +960,10 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_LACNIC   }, //  704  CR
 	{ REGISTRY_UNKNOWN  }, //  705  DR
 	{ REGISTRY_AFRINIC  }, //  706  ER
-	{ REGISTRY_RIPE     }, //  707  FR
-	{ REGISTRY_RIPE     }, //  708  GR
-	{ REGISTRY_RIPE     }, //  709  HR
-	{ REGISTRY_RIPE     }, //  710  IR
+	{ REGISTRY_RIPENCC  }, //  707  FR
+	{ REGISTRY_RIPENCC  }, //  708  GR
+	{ REGISTRY_RIPENCC  }, //  709  HR
+	{ REGISTRY_RIPENCC  }, //  710  IR
 	{ REGISTRY_UNKNOWN  }, //  711  JR
 	{ REGISTRY_APNIC    }, //  712  KR
 	{ REGISTRY_AFRINIC  }, //  713  LR
@@ -974,7 +974,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  718  QR
 	{ REGISTRY_UNKNOWN  }, //  719  RR
 	{ REGISTRY_LACNIC   }, //  720  SR
-	{ REGISTRY_RIPE     }, //  721  TR
+	{ REGISTRY_RIPENCC  }, //  721  TR
 	{ REGISTRY_UNKNOWN  }, //  722  UR
 	{ REGISTRY_UNKNOWN  }, //  723  VR
 	{ REGISTRY_UNKNOWN  }, //  724  WR
@@ -985,20 +985,20 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_ARIN     }, //  729  BS
 	{ REGISTRY_UNKNOWN  }, //  730  CS
 	{ REGISTRY_UNKNOWN  }, //  731  DS
-	{ REGISTRY_RIPE     }, //  732  ES
+	{ REGISTRY_RIPENCC  }, //  732  ES
 	{ REGISTRY_UNKNOWN  }, //  733  FS
 	{ REGISTRY_UNKNOWN  }, //  734  GS
 	{ REGISTRY_UNKNOWN  }, //  735  HS
-	{ REGISTRY_RIPE     }, //  736  IS
+	{ REGISTRY_RIPENCC  }, //  736  IS
 	{ REGISTRY_UNKNOWN  }, //  737  JS
 	{ REGISTRY_UNKNOWN  }, //  738  KS
 	{ REGISTRY_AFRINIC  }, //  739  LS
 	{ REGISTRY_ARIN     }, //  740  MS
 	{ REGISTRY_UNKNOWN  }, //  741  NS
 	{ REGISTRY_UNKNOWN  }, //  742  OS
-	{ REGISTRY_RIPE     }, //  743  PS
+	{ REGISTRY_RIPENCC  }, //  743  PS
 	{ REGISTRY_UNKNOWN  }, //  744  QS
-	{ REGISTRY_RIPE     }, //  745  RS
+	{ REGISTRY_RIPENCC  }, //  745  RS
 	{ REGISTRY_AFRINIC  }, //  746  SS
 	{ REGISTRY_UNKNOWN  }, //  747  TS
 	{ REGISTRY_ARIN     }, //  748  US
@@ -1007,7 +1007,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  751  XS
 	{ REGISTRY_UNKNOWN  }, //  752  YS
 	{ REGISTRY_UNKNOWN  }, //  753  ZS
-	{ REGISTRY_RIPE     }, //  754  AT
+	{ REGISTRY_RIPENCC  }, //  754  AT
 	{ REGISTRY_APNIC    }, //  755  BT
 	{ REGISTRY_UNKNOWN  }, //  756  CT
 	{ REGISTRY_UNKNOWN  }, //  757  DT
@@ -1015,14 +1015,14 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  759  FT
 	{ REGISTRY_LACNIC   }, //  760  GT
 	{ REGISTRY_LACNIC   }, //  761  HT
-	{ REGISTRY_RIPE     }, //  762  IT
+	{ REGISTRY_RIPENCC  }, //  762  IT
 	{ REGISTRY_UNKNOWN  }, //  763  JT
 	{ REGISTRY_UNKNOWN  }, //  764  KT
-	{ REGISTRY_RIPE     }, //  765  LT
-	{ REGISTRY_RIPE     }, //  766  MT
+	{ REGISTRY_RIPENCC  }, //  765  LT
+	{ REGISTRY_RIPENCC  }, //  766  MT
 	{ REGISTRY_UNKNOWN  }, //  767  NT
 	{ REGISTRY_UNKNOWN  }, //  768  OT
-	{ REGISTRY_RIPE     }, //  769  PT
+	{ REGISTRY_RIPENCC  }, //  769  PT
 	{ REGISTRY_UNKNOWN  }, //  770  QT
 	{ REGISTRY_UNKNOWN  }, //  771  RT
 	{ REGISTRY_AFRINIC  }, //  772  ST
@@ -1037,20 +1037,20 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  781  BU
 	{ REGISTRY_LACNIC   }, //  782  CU
 	{ REGISTRY_UNKNOWN  }, //  783  DU
-	{ REGISTRY_RIPE     }, //  784  EU
+	{ REGISTRY_RIPENCC  }, //  784  EU
 	{ REGISTRY_UNKNOWN  }, //  785  FU
 	{ REGISTRY_APNIC    }, //  786  GU
-	{ REGISTRY_RIPE     }, //  787  HU
+	{ REGISTRY_RIPENCC  }, //  787  HU
 	{ REGISTRY_UNKNOWN  }, //  788  IU
 	{ REGISTRY_UNKNOWN  }, //  789  JU
 	{ REGISTRY_UNKNOWN  }, //  790  KU
-	{ REGISTRY_RIPE     }, //  791  LU
+	{ REGISTRY_RIPENCC  }, //  791  LU
 	{ REGISTRY_AFRINIC  }, //  792  MU
 	{ REGISTRY_APNIC    }, //  793  NU
 	{ REGISTRY_UNKNOWN  }, //  794  OU
 	{ REGISTRY_UNKNOWN  }, //  795  PU
 	{ REGISTRY_UNKNOWN  }, //  796  QU
-	{ REGISTRY_RIPE     }, //  797  RU
+	{ REGISTRY_RIPENCC  }, //  797  RU
 	{ REGISTRY_UNKNOWN  }, //  798  SU
 	{ REGISTRY_UNKNOWN  }, //  799  TU
 	{ REGISTRY_UNKNOWN  }, //  800  UU
@@ -1070,7 +1070,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  814  IV
 	{ REGISTRY_UNKNOWN  }, //  815  JV
 	{ REGISTRY_UNKNOWN  }, //  816  KV
-	{ REGISTRY_RIPE     }, //  817  LV
+	{ REGISTRY_RIPENCC  }, //  817  LV
 	{ REGISTRY_APNIC    }, //  818  MV
 	{ REGISTRY_UNKNOWN  }, //  819  NV
 	{ REGISTRY_UNKNOWN  }, //  820  OV
@@ -1095,7 +1095,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  839  HW
 	{ REGISTRY_UNKNOWN  }, //  840  IW
 	{ REGISTRY_UNKNOWN  }, //  841  JW
-	{ REGISTRY_RIPE     }, //  842  KW
+	{ REGISTRY_RIPENCC  }, //  842  KW
 	{ REGISTRY_UNKNOWN  }, //  843  LW
 	{ REGISTRY_AFRINIC  }, //  844  MW
 	{ REGISTRY_UNKNOWN  }, //  845  NW
@@ -1138,8 +1138,8 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  882  YX
 	{ REGISTRY_UNKNOWN  }, //  883  ZX
 	{ REGISTRY_UNKNOWN  }, //  884  AY
-	{ REGISTRY_RIPE     }, //  885  BY
-	{ REGISTRY_RIPE     }, //  886  CY
+	{ REGISTRY_RIPENCC  }, //  885  BY
+	{ REGISTRY_RIPENCC  }, //  886  CY
 	{ REGISTRY_UNKNOWN  }, //  887  DY
 	{ REGISTRY_UNKNOWN  }, //  888  EY
 	{ REGISTRY_UNKNOWN  }, //  889  FY
@@ -1155,7 +1155,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_LACNIC   }, //  899  PY
 	{ REGISTRY_UNKNOWN  }, //  900  QY
 	{ REGISTRY_UNKNOWN  }, //  901  RY
-	{ REGISTRY_RIPE     }, //  902  SY
+	{ REGISTRY_RIPENCC  }, //  902  SY
 	{ REGISTRY_UNKNOWN  }, //  903  TY
 	{ REGISTRY_LACNIC   }, //  904  UY
 	{ REGISTRY_UNKNOWN  }, //  905  VY
@@ -1163,9 +1163,9 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  907  XY
 	{ REGISTRY_UNKNOWN  }, //  908  YY
 	{ REGISTRY_UNKNOWN  }, //  909  ZY
-	{ REGISTRY_RIPE     }, //  910  AZ
+	{ REGISTRY_RIPENCC  }, //  910  AZ
 	{ REGISTRY_LACNIC   }, //  911  BZ
-	{ REGISTRY_RIPE     }, //  912  CZ
+	{ REGISTRY_RIPENCC  }, //  912  CZ
 	{ REGISTRY_AFRINIC  }, //  913  DZ
 	{ REGISTRY_UNKNOWN  }, //  914  EZ
 	{ REGISTRY_UNKNOWN  }, //  915  FZ
@@ -1173,7 +1173,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  917  HZ
 	{ REGISTRY_UNKNOWN  }, //  918  IZ
 	{ REGISTRY_UNKNOWN  }, //  919  JZ
-	{ REGISTRY_RIPE     }, //  920  KZ
+	{ REGISTRY_RIPENCC  }, //  920  KZ
 	{ REGISTRY_UNKNOWN  }, //  921  LZ
 	{ REGISTRY_AFRINIC  }, //  922  MZ
 	{ REGISTRY_APNIC    }, //  923  NZ
@@ -1183,7 +1183,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  927  RZ
 	{ REGISTRY_AFRINIC  }, //  928  SZ
 	{ REGISTRY_AFRINIC  }, //  929  TZ
-	{ REGISTRY_RIPE     }, //  930  UZ
+	{ REGISTRY_RIPENCC  }, //  930  UZ
 	{ REGISTRY_UNKNOWN  }, //  931  VZ
 	{ REGISTRY_UNKNOWN  }, //  932  WZ
 	{ REGISTRY_UNKNOWN  }, //  933  XZ

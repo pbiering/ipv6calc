@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.12 2014/09/13 21:15:06 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.13 2014/09/24 09:07:57 ds6peter Exp $
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
 #              2005-2014 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
 # License    : GNU GPL v2
@@ -16,6 +16,9 @@ use strict;
 use Net::IP;
 use Math::BigInt;
 use XML::Simple;
+
+use BerkeleyDB;
+use POSIX qw(strftime);
 
 my $debug = 0;
 
@@ -245,7 +248,7 @@ Label_restart:
 			die "Currently unsupported prefix length (>64): $ipv6/$prefixlen";
 		};
 
-		my $ip_ipv6 = new Net::IP($ipv6);
+		$ip_ipv6 = new Net::IP($ipv6);
 		print "store: reg=" . $reg . " ipv6=" . $ip_ipv6->ip() . "/" . $prefixlen . "\n" if ($debug & 0x0400);
 
 		# Push into array
@@ -346,6 +349,8 @@ for my $reg (sort keys %date_created) {
 };
 print OUT "\/\*\@unused\@\*\/ static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = \"$string\";\n";
 
+print OUT "\/\*\@unused\@\*\/ static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = " . time . ";\n";
+
 # Main data structure
 print OUT qq|
 static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
@@ -362,4 +367,46 @@ print OUT qq|};
 close(OUT);
 
 print "Finished\n";
+
+
+print "Start creation of DB file\n";
+
+# external database
+my $type = "2026"; # BuiltIn Registry->IPv4
+my $date = $string;
+$now_string = strftime "%Y%m%d-%H%M%S%z", gmtime;
+my $info = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=6;dbcreated=$now_string";
+my $filename = "ipv6calc-external-registry-ipv6.db";
+
+if (-f $filename) {
+        unlink($filename) || die "Can't delete old file: $filename";
+};
+
+print "INFO  : create db from input: IPv6=$filename\n";
+
+my %h_info;
+
+tie %h_info, 'BerkeleyDB::Hash', -Filename => $filename, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
+
+$h_info{'dbusage'} = "ipv6calc";
+$h_info{'dbformat'} = "1"; # ';' separated values
+$h_info{'dbdate'} = $date;
+$h_info{'dbtype'} = $type;
+$h_info{'dbcreated'} = $now_string;
+$h_info{'dbcreated_unixtime'} = time + 1;
+
+
+untie %h_info;
+
+my @a;
+
+tie @a, 'BerkeleyDB::Recno', -Filename => $filename, -Subname => 'data', -Flags => DB_CREATE || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
+
+foreach my $ipv6 (sort keys %data) {
+	push @a, sprintf("%s;%s;%s;%s;%d;REGISTRY_%s", $data{$ipv6}->{'ipv6_00_31'}, $data{$ipv6}->{'ipv6_32_63'}, $data{$ipv6}->{'mask_00_31'}, $data{$ipv6}->{'mask_32_63'}, $data{$ipv6}->{'mask_length'}, $data{$ipv6}->{'reg'});
+};
+
+untie @a;
+
+print "INFO  : db created from input: IPv6=$filename\n";
 

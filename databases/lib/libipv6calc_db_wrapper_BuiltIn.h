@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.h
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.h,v 1.7 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.h,v 1.8 2014/09/24 09:07:57 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -16,8 +16,6 @@
 #ifndef _libipv6calc_db_wrapper_BuiltIn_h
 
 #define _libipv6calc_db_wrapper_BuiltIn_h 1
-
-#define SUPPORT_BUILTIN  // default
 
 // features
 extern uint32_t wrapper_features_BuiltIn;
@@ -67,6 +65,9 @@ extern int  libipv6calc_db_wrapper_BuiltIn_wrapper_cleanup(void);
 extern void libipv6calc_db_wrapper_BuiltIn_wrapper_info(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
 
+extern int libipv6calc_db_wrapper_BuiltIn_has_features(uint32_t features);
+extern time_t libipv6calc_db_wrapper_BuiltIn_db_unixtime_by_feature(uint32_t feature);
+
 extern int libipv6calc_db_wrapper_BuiltIn_registry_num_by_as_num32(const uint32_t as_num32);
 extern int libipv6calc_db_wrapper_BuiltIn_registry_num_by_cc_index(const uint16_t cc_index);
 
@@ -75,9 +76,7 @@ extern int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(char *re
 extern int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(char *resultstring, const size_t resultstring_length, const ipv6calc_macaddr *macaddrp); 
 
 // IPv4 Registry
-extern int libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const size_t resultstring_length);
 extern int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp);
 
 // IPv6 Registry
-extern int libipv6calc_db_wrapper_BuiltIn_registry_string_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length);
 extern int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp);

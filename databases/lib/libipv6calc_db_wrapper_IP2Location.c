@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.21 2014/09/13 21:15:08 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.22 2014/09/24 09:07:57 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -35,9 +35,6 @@ char ip2location_db_dir[NI_MAXHOST] = IP2LOCATION_DB;
  */
 #define makestr(x) #x
 #define xmakestr(x) makestr(x)
-
-
-uint32_t wrapper_features_IP2Location = 0;
 
 #ifdef SUPPORT_IP2LOCATION_DYN
 char ip2location_lib_file[NI_MAXHOST] = IP2LOCATION_DYN_LIB;
@@ -155,16 +152,19 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 
 	/* check available databases for resolution */
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_IP2Location_db_file_desc); i++) {
+		// add features to implemented
+		wrapper_features_by_source_implemented[IPV6CALC_DB_SOURCE_IP2LOCATION] |= libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features;
+
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "IP2Location database test for availability: %s", libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename);
 		if (libipv6calc_db_wrapper_IP2Location_db_avail(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number) == 1) {
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "IP2Location database available: %s", libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description);
-			wrapper_features_IP2Location |= libipv6calc_db_wrapper_IP2Location_db_file_desc[i].feature;
+			wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] |= libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features;
 		};
 	};
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Version of linked library: %s / IPv6 support: %s / custom directory: %s", libipv6calc_db_wrapper_IP2Location_lib_version(), libipv6calc_db_wrapper_IP2Location_IPv6_support[wrapper_ip2location_ipv6_support].token, ip2location_db_dir);
 
-	wrapper_features |= wrapper_features_IP2Location;
+	wrapper_features |= wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION];
 
 	return 0;
 };
@@ -274,7 +274,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called");
 
-	printf("%sIP2Location: features: 0x%08x\n", prefix, wrapper_features_IP2Location);
+	IPV6CALC_DB_FEATURE_INFO(prefix, IPV6CALC_DB_SOURCE_IP2LOCATION)
 
 #ifdef SUPPORT_IP2LOCATION
 	printf("%sIP2Location: info of available databases in directory: %s\n", prefix, ip2location_db_dir);
@@ -845,7 +845,7 @@ int libipv6calc_db_wrapper_IP2Location_has_features(uint32_t features) {
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called with feature value to test: 0x%08x", features);
 
-	if ((wrapper_features_IP2Location & features) == features) {
+	if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] & features) == features) {
 		result = 1;
 	} else {
 		result = 0;

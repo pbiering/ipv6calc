@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.369 2014/09/13 21:15:03 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.370 2014/09/24 09:07:54 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140924/PB
+	databases: update
+	implement "External" database lookups (superseeding BuiltIn databases for IP->Registry lookups)
+
 20140913/PB
 	libipv6addr.c: suppress ASN / country code lookup for IPV6_NEW_ADDR_6BONE
 	showinfo.c: add IPV6_COUNTRYCODE_SOURCE, IPV4_COUNTRYCODE_SOURCE

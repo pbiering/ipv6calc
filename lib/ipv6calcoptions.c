@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.18 2014/09/13 21:15:08 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.19 2014/09/24 09:07:57 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -86,7 +86,7 @@ void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct 
 		/* check for duplicates */
 		for (j = 0; j < *maxentries_p; j++) {
 			if (strcmp(longopts[j].name, longopts_custom[i].name) == 0) {
-				fprintf(stderr, "FATAL error, can't add options - DUPLICATE NAME FOUND: %s\n", longopts[j].name);
+				fprintf(stderr, "FATAL error, can't add options - DUPLICATE NAME FOUND: j=%d/%s i=%d/%s\n", j, longopts[j].name, i,  longopts_custom[i].name);
 				exit(2);
 			};
 		};
@@ -145,15 +145,28 @@ void ipv6calc_options_add_common_basic(char *shortopts_p, const int shortopts_ma
 	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_common, ipv6calc_longopts_common, MAXENTRIES_ARRAY(ipv6calc_longopts_common));
 
 #ifdef SUPPORT_IP2LOCATION
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "SUPPORT_IP2LOCATION");
 	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_ip2location, ipv6calc_longopts_ip2location, MAXENTRIES_ARRAY(ipv6calc_longopts_ip2location));
 #endif
 
 #ifdef SUPPORT_GEOIP
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "SUPPORT_GEOIP");
 	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_geoip, ipv6calc_longopts_geoip, MAXENTRIES_ARRAY(ipv6calc_longopts_geoip));
 #endif
 
 #ifdef SUPPORT_DBIP
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "SUPPORT_DBIP");
 	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_dbip, ipv6calc_longopts_dbip, MAXENTRIES_ARRAY(ipv6calc_longopts_dbip));
+#endif
+
+#ifdef SUPPORT_EXTERNAL
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "SUPPORT_EXTERNAL");
+	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_external, ipv6calc_longopts_external, MAXENTRIES_ARRAY(ipv6calc_longopts_external));
+#endif
+
+#ifdef SUPPORT_BUILTIN
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "SUPPORT_BUILTIN");
+	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_builtin, ipv6calc_longopts_builtin, MAXENTRIES_ARRAY(ipv6calc_longopts_builtin));
 #endif
 
 	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Finished");

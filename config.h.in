@@ -6,11 +6,14 @@
 /* Copyright year */
 #undef COPYRIGHT_YEAR
 
-/* Define DB-IP database directory. */
+/* Define db-ip.com database directory. */
 #undef DBIP_DB
 
 /* Define if bundled MD5 should be used */
 #undef ENABLE_BUNDLED_MD5
+
+/* Define external database directory. */
+#undef EXTERNAL_DB
 
 /* Define GeoIP database directory. */
 #undef GEOIP_DB
@@ -164,8 +167,17 @@
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
 
-/* Define if you want DB-IP.com support included. */
+/* Define if you want general BuiltIn database included. */
+#undef SUPPORT_BUILTIN
+
+/* Define if you want db-ip.com support included. */
 #undef SUPPORT_DBIP
+
+/* Define if you want AS-to-Registry database included. */
+#undef SUPPORT_DB_AS_REG
+
+/* Define if you want CC-to-Registry database included. */
+#undef SUPPORT_DB_CC_REG
 
 /* Define if you want IEEE database included. */
 #undef SUPPORT_DB_IEEE
@@ -175,6 +187,9 @@
 
 /* Define if you want IPv6-to-Registry database included. */
 #undef SUPPORT_DB_IPV6_REG
+
+/* Define if you want external support included. */
+#undef SUPPORT_EXTERNAL
 
 /* Define if you want GeoIP support. */
 #undef SUPPORT_GEOIP

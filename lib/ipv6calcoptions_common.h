@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions_common.h,v 1.12 2014/09/13 21:15:08 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions_common.h,v 1.13 2014/09/24 09:07:58 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -72,7 +72,7 @@ static struct option ipv6calc_longopts_geoip[] = {
 #endif // SUPPORT_GEOIP
 
 #ifdef SUPPORT_DBIP
-static char *ipv6calc_shortopts_dbip = "D";
+static char *ipv6calc_shortopts_dbip = "";
 
 static struct option ipv6calc_longopts_dbip[] = {
 	{"disable-dbip"                , 0, NULL, DB_dbip_disable       },
@@ -81,6 +81,24 @@ static struct option ipv6calc_longopts_dbip[] = {
 };
 #endif // SUPPORT_DBIP
 
+#ifdef SUPPORT_EXTERNAL
+static char *ipv6calc_shortopts_external = "";
+
+static struct option ipv6calc_longopts_external[] = {
+	{"disable-external"            , 0, NULL, DB_external_disable   },
+	{"db-external-disable"         , 0, NULL, DB_external_disable   },
+	{"db-external-dir"             , 1, NULL, DB_external_dir       },
+};
+#endif // SUPPORT_EXTERNAL
+
+#ifdef SUPPORT_BUILTIN
+static char *ipv6calc_shortopts_builtin = "";
+
+static struct option ipv6calc_longopts_builtin[] = {
+	{"disable-builtin"             , 0, NULL, DB_builtin_disable    },
+	{"db-builtin-disable"          , 0, NULL, DB_builtin_disable    },
+};
+#endif // SUPPORT_BUILTIN
 
 /* define common anonymization short options */
 static char *ipv6calc_shortopts_common_anon = "";

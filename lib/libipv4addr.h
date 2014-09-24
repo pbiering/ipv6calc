@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.37 2014/09/13 21:15:08 ds6peter Exp $
+ * Version    : $Id: libipv4addr.h,v 1.38 2014/09/24 09:07:58 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
@@ -82,7 +82,7 @@ typedef struct {
 #define IPV4_ADDR_REGISTRY_IANA		REGISTRY_IANA
 #define IPV4_ADDR_REGISTRY_APNIC	REGISTRY_APNIC
 #define IPV4_ADDR_REGISTRY_ARIN		REGISTRY_ARIN
-#define IPV4_ADDR_REGISTRY_RIPE		REGISTRY_RIPE
+#define IPV4_ADDR_REGISTRY_RIPENCC	REGISTRY_RIPENCC
 #define IPV4_ADDR_REGISTRY_LACNIC	REGISTRY_LACNIC
 #define IPV4_ADDR_REGISTRY_AFRINIC	REGISTRY_AFRINIC
 #define IPV4_ADDR_REGISTRY_RESERVED	REGISTRY_RESERVED

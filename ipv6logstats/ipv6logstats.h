@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.20 2014/04/26 16:16:32 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.h,v 1.21 2014/09/24 09:07:57 ds6peter Exp $
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -23,7 +23,7 @@
 #define STATS_IPV4_IANA		0x12
 #define STATS_IPV4_APNIC	0x13
 #define STATS_IPV4_ARIN		0x14
-#define STATS_IPV4_RIPE		0x15
+#define STATS_IPV4_RIPENCC	0x15
 #define STATS_IPV4_LACNIC	0x16
 #define STATS_IPV4_AFRINIC	0x17
 #define STATS_IPV4_RESERVED	0x1e
@@ -33,7 +33,7 @@
 #define STATS_IPV6_IANA		0x22
 #define STATS_IPV6_APNIC	0x23
 #define STATS_IPV6_ARIN		0x24
-#define STATS_IPV6_RIPE		0x25
+#define STATS_IPV6_RIPENCC	0x25
 #define STATS_IPV6_LACNIC	0x26
 #define STATS_IPV6_AFRINIC	0x27
 #define STATS_IPV6_RESERVED	0x2e

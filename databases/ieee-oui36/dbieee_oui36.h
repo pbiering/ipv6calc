@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.17 2014/09/13 21:15:05 ds6peter Exp $
- * Generated     : Fri Sep  5 07:04:29 2014
+ * Version       : $Id: dbieee_oui36.h,v 1.18 2014/09/24 09:07:56 ds6peter Exp $
+ * Generated     : Mon Sep 22 21:28:48 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140905";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140922";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -393,23 +393,41 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x6F6000, 0x6F6FFF, "Acco Brands Europe", "ACCO-BRANDS-EUROPE" },
 	{ 0x70B3D5, 0xA25000, 0xA25FFF, "PulseTor LLC", "PULSETOR-LLC" },
 	{ 0x70B3D5, 0xD8F000, 0xD8FFFF, "Molu Technology Inc., LTD.", "MOLU" },
+	{ 0x70B3D5, 0xA5A000, 0xA5AFFF, "RCS Energy Management Ltd", "RCS-ENERGY-MANAGEMENT" },
 	{ 0x70B3D5, 0x3E1000, 0x3E1FFF, "Barnstormer Softworks", "BARNSTORMER-SOFTWORKS" },
+	{ 0x70B3D5, 0xF92000, 0xF92FFF, "TechOne", "TECHONE" },
 	{ 0x70B3D5, 0x5B5000, 0x5B5FFF, "Lehigh Electric Products Co", "LEHIGH-ELECTRIC-PRODUCTS" },
+	{ 0x70B3D5, 0xDCF000, 0xDCFFFF, "KLS Netherlands B.V.", "KLS-NETHERLANDS" },
 	{ 0x70B3D5, 0xC58000, 0xC58FFF, "RMI Laser LLC", "RMI-LASER-LLC" },
+	{ 0x70B3D5, 0xEA3000, 0xEA3FFF, "Gridless Power Corperation", "GRIDLESS-POWER-CORPERATION" },
 	{ 0x70B3D5, 0x507000, 0x507FFF, "Human Oriented Technology, Inc.", "HUMAN-ORIENTED" },
+	{ 0x70B3D5, 0x22E000, 0x22EFFF, "PRIVATE", "PRIVATE" },
 	{ 0x70B3D5, 0xCB7000, 0xCB7FFF, "HKC Limited", "HKC" },
+	{ 0x70B3D5, 0x181000, 0x181FFF, "Task Sistemas", "TASK-SISTEMAS" },
 	{ 0x70B3D5, 0xEF2000, 0xEF2FFF, "Kongsberg Intergrated Tactical Systems", "KONGSBERG-INTERGRATED-TACTICAL" },
+	{ 0x70B3D5, 0xC56000, 0xC56FFF, "TELETASK", "TELETASK" },
 	{ 0x70B3D5, 0xEE4000, 0xEE4FFF, "O-Net Automation Technology (Shenzhen)Limited", "O-NET-AUTOMATION-SHENZHEN" },
+	{ 0x70B3D5, 0xFC6000, 0xFC6FFF, "Tecnint HTE Srl", "TECNINT-HTE-SRL" },
 	{ 0x70B3D5, 0x60B000, 0x60BFFF, "Edgeware AB", "EDGEWARE-AB" },
+	{ 0x70B3D5, 0xF39000, 0xF39FFF, "Zenros ApS", "ZENROS-APS" },
 	{ 0x70B3D5, 0x2F0000, 0x2F0FFF, "Clock-O-Matic", "CLOCK-O-MATIC" },
+	{ 0x70B3D5, 0x36C000, 0x36CFFF, "Sicon srl", "SICON-SRL" },
 	{ 0x70B3D5, 0x60C000, 0x60CFFF, "IST ElektronikgesmbH", "IST-ELEKTRONIKGESMBH" },
+	{ 0x70B3D5, 0xC9B000, 0xC9BFFF, "Tieto Sweden AB", "TIETO-SWEDEN-AB" },
 	{ 0x70B3D5, 0x7A9000, 0x7A9FFF, "adidas AG", "ADIDAS" },
+	{ 0x70B3D5, 0x4F0000, 0x4F0FFF, "Li Seng Technology Ltd.,", "LI-SENG" },
 	{ 0x70B3D5, 0x936000, 0x936FFF, "FARO TECHNOLOGIES, INC.", "FARO-TECHNOLOGIES" },
+	{ 0x70B3D5, 0x58E000, 0x58EFFF, "Veilux Inc.", "VEILUX" },
 	{ 0x70B3D5, 0xFD3000, 0xFD3FFF, "AKIS technologies", "AKIS-TECHNOLOGIES" },
+	{ 0x70B3D5, 0x63A000, 0x63AFFF, "DAVE SRL", "DAVE-SRL" },
 	{ 0x70B3D5, 0xC81000, 0xC81FFF, "DSP DESIGN", "DSP-DESIGN" },
+	{ 0x70B3D5, 0x3D2000, 0x3D2FFF, "Imagine Inc.", "IMAGINE" },
 	{ 0x70B3D5, 0xFA1000, 0xFA1FFF, "BBI Engineering, Inc.", "BBI-ENGINEERING" },
+	{ 0x70B3D5, 0x4CD000, 0x4CDFFF, "Power Electronics Espana, S.L.", "POWER-ELECTRONICS-ESPANA-S-L" },
 	{ 0x70B3D5, 0xE53000, 0xE53FFF, "MI INC.", "MI" },
+	{ 0x70B3D5, 0xAE3000, 0xAE3FFF, "Zhejiang Wellsun Electric Meter Co.,Ltd", "ZHEJIANG-WELLSUN-ELECTRIC-METER" },
 	{ 0x70B3D5, 0xE74000, 0xE74FFF, "Exfrontier Co., Ltd.", "EXFRONTIER" },
+	{ 0x70B3D5, 0xBEF000, 0xBEFFFF, "Sensortech Systems Inc.", "SENSORTECH" },
 	{ 0x70B3D5, 0xEFA000, 0xEFAFFF, "NextEra Energy Resources, LLC", "NEXTERA-ENERGY-RESOURCES-LLC" },
 	{ 0x70B3D5, 0x2D4000, 0x2D4FFF, "CT Company", "CT-COMPANY" },
 	{ 0x70B3D5, 0xC96000, 0xC96FFF, "UNI DIMENXI SDN BHD", "UNI-DIMENXI-SDN-BHD" },

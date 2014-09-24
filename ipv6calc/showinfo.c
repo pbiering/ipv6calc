@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.122 2014/09/13 21:15:08 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.123 2014/09/24 09:07:57 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -231,7 +231,7 @@ static void printfooter(const uint32_t formatoptions) {
 static void print_ip2location(char *addrstring, const uint32_t formatoptions, const char *additionalstring, int version) {
 	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
 
-	if (wrapper_features_IP2Location == 0) {
+	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] == 0) {
 		DEBUGPRINT_NA(DEBUG_showinfo, "IP2Location support not active");
 		return;
 	};
@@ -357,7 +357,7 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 static void print_geoip(const char *addrstring, const uint32_t formatoptions, const char *additionalstring, int version) {
 	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
 
-	if (wrapper_features_GeoIP == 0) {
+	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP] == 0) {
 		DEBUGPRINT_NA(DEBUG_showinfo, "GeoIP support not active");
 		return;
 	};
@@ -450,7 +450,7 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 static void print_dbip(const char *addrstring, const uint32_t formatoptions, const char *additionalstring, int version) {
 	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
 
-	if (wrapper_features_DBIP == 0) {
+	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP] == 0) {
 		DEBUGPRINT_NA(DEBUG_showinfo, "DBIP support not active");
 		return;
 	};
@@ -519,7 +519,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	char *as_text = NULL;
 	int registry;
 
-	unsigned int data_source = IPV6CALC_DB_UNKNOWN;
+	unsigned int data_source = IPV6CALC_DB_SOURCE_UNKNOWN;
 
 	ipv4addr_anon_ptr = &ipv4addr_anon;
 
@@ -652,7 +652,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 				snprintf(tempstring, sizeof(tempstring), "IPV4_COUNTRYCODE%s=%s", embeddedipv4string, tempstring2);
 				printout(tempstring);
 
-				if (data_source != IPV6CALC_DB_UNKNOWN) {
+				if (data_source != IPV6CALC_DB_SOURCE_UNKNOWN) {
 					for (i = 0; i < MAXENTRIES_ARRAY(data_sources); i++ ) {
 						if (data_source == data_sources[i].number) {
 							snprintf(tempstring, sizeof(tempstring), "IPV4_COUNTRYCODE_SOURCE%s=%s" , embeddedipv4string, data_sources[i].name);
@@ -898,7 +898,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	uint32_t machinereadable = ( formatoptions & FORMATOPTION_machinereadable);
 	uint32_t payload, as_num32, cc_index;
 	char *as_text = NULL;
-	unsigned int data_source = IPV6CALC_DB_UNKNOWN;
+	unsigned int data_source = IPV6CALC_DB_SOURCE_UNKNOWN;
 
 	ipv6addr_anon_ptr = &ipv6addr_anon;
 
@@ -1002,7 +1002,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 					snprintf(tempstring, sizeof(tempstring), "IPV6_COUNTRYCODE=%s" , tempstring2);
 					printout(tempstring);
 
-					if (data_source != IPV6CALC_DB_UNKNOWN) {
+					if (data_source != IPV6CALC_DB_SOURCE_UNKNOWN) {
 						for (i = 0; i < MAXENTRIES_ARRAY(data_sources); i++ ) {
 							if (data_source == data_sources[i].number) {
 								snprintf(tempstring, sizeof(tempstring), "IPV6_COUNTRYCODE_SOURCE=%s" , data_sources[i].name);

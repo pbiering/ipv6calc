@@ -1,8 +1,8 @@
  /*
  * Project       : ipv6calc
  * File          : dbipv6_assignment.h
- * Version       : $Id: dbipv6addr_assignment.h,v 1.58 2014/09/13 21:15:06 ds6peter Exp $
- * Generated     : Fri Sep  5 08:04:52 2014
+ * Version       : $Id: dbipv6addr_assignment.h,v 1.59 2014/09/24 09:07:57 ds6peter Exp $
+ * Generated     : Wed Sep 24 10:02:44 2014
  * Data copyright: IANA ARIN RIPENCC APNIC LACNIC AFRINIC
  *
  * Information:
@@ -11,7 +11,8 @@
 
 #include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
-/*@unused@*/ static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20140829 APNIC/20140904 ARIN/20140904 IANA/20140520 LACNIC/20140904 RIPENCC/20140904";
+/*@unused@*/ static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20140919 APNIC/20140922 ARIN/20140922 IANA/20140520 LACNIC/20140919 RIPENCC/20140921";
+/*@unused@*/ static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = 1411545764;
 
 static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 	{ 0x20010000, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_IANA       },

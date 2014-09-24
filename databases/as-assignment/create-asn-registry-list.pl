@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/as-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-asn-registry-list.pl,v 1.3 2014/05/10 12:34:59 ds6peter Exp $
+# Version    : $Id: create-asn-registry-list.pl,v 1.4 2014/09/24 09:07:56 ds6peter Exp $
 # Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -61,9 +61,9 @@ sub proceed_file($$) {
 		#print $line . "\n";
 
 		$reg = uc($reg);
-		$reg =~ s/RIPENCC/RIPE/;
+		$reg =~ s/RIPE/RIPENCC/go;
 
-		if ( $reg ne "ARIN" && $reg ne "APNIC" && $reg ne "RIPE" && $reg ne "IANA" && $reg ne "LACNIC" && $reg ne "AFRINIC") {
+		if ( $reg ne "ARIN" && $reg ne "APNIC" && $reg ne "RIPENCC" && $reg ne "IANA" && $reg ne "LACNIC" && $reg ne "AFRINIC") {
 			print "Unsupported registry: " . $reg . "\n";
 			next;
 		};
