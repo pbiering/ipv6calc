@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.370 2014/09/24 09:07:54 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.371 2014/09/26 20:58:40 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20140926/PB
+	ipv6calcweb/ipv6calcweb.conf: extend with
+	ipv6calcweb/ipv6calcweb.cgi[.in]: implement optional database subcolumn mode
+
 20140924/PB
 	databases: update
 	implement "External" database lookups (superseeding BuiltIn databases for IP->Registry lookups)

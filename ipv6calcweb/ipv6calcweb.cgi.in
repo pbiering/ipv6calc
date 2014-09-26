@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.72 2014/09/13 21:15:08 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.73 2014/09/26 20:58:40 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -36,11 +36,12 @@
 #  HTTP_IPV6CALCWEB_DEBUG               : 0 (default)
 #  HTTP_IPV6CALCWEB_BIN_IPV6CALC        : path to ipv6calc binary (optional)
 #  HTTP_IPV6CALCWEB_DB_IP2LOCATION_DIR  : IP2Location database directory (optional)
-#  HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB  : IP2Location library name (optional dyn-load support)
+#  HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB  : IP2Location library name (optional in dyn-load support)
 #  HTTP_IPV6CALCWEB_DB_GEOIP_DIR        : GeoIP database directory (optional)
 #  HTTP_IPV6CALCWEB_DB_GEOIP_LIB        : GeoIP library name (optional in dyn-load support)
 #  HTTP_IPV6CALCWEB_DB_DBIP_DIR         : db-ip.com database directory (optional)
 #  HTTP_IPV6CALCWEB_OUTPUT_FORMAT       : html (default if SERVER_PROTOCOL=INCLUDED), htmlfull (default), text, textkeyvalue
+#  HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB: sequential (default), subcolumns
 
 ## special output format "textkeyvalue"
 #  INFO__OUTPUTVERSION="1"			: current output format version
@@ -78,6 +79,15 @@ my $time_range_min   = 5; # seconds
 my $mask_remote_address = 0; # disabled (0), enabled (1)
 
 my $returncode = 0;
+
+my $mode_db_entries_in_subcolumns = 0;
+my $db_columns = 0;
+my @key_db_tokens;
+my %key_values_db_tokens;
+
+my $disable_db_GeoIP = 0;
+my $disable_db_IP2Location = 0;
+my $disable_db_DBIP = 0;
 
 
 ## Debug value
@@ -217,6 +227,9 @@ my $lang = $lang_default;
 #my $outputformat = "text";
 #my $outputformat = "html";
 my $outputformat = "htmlfull"; # switched to "html", if called by SSI
+
+## Output format for databases: sequential, subcolumns
+my $outputformat_html_db = "sequential"; # default
 
 ## Output type
 # full = with description
@@ -557,8 +570,8 @@ my %text = (
 		'en' => "GeoIP database information",
 	},
 	'GEOIP_AS_TEXT' => {
-		'de' => "Autonomous System der IPv6 Adresse",
-		'en' => "Autonomous System of IPv6 address",
+		'de' => "Autonomous System der IP Adresse",
+		'en' => "Autonomous System of IP address",
 	},
 	'DBIP_COUNTRY_SHORT' => {
 		'de' => "db-ip.com Laenderkennung",
@@ -575,6 +588,46 @@ my %text = (
 	'SETTINGS_ANON' => {
 		'de' => "Einstellungen der Anonymisierung",
 		'en' => "Anoymizer settings",
+	},
+	'COUNTRY_SHORT' => {
+		'de' => "Laenderkennung",
+		'en' => "Country Code",
+	},
+	'COUNTRY_LONG' => {
+		'de' => "Land",
+		'en' => "Country",
+	},
+	'REGION' => {
+		'de' => "Region",
+		'en' => "Region",
+	},
+	'CITY' => {
+		'de' => "Stadt",
+		'en' => "City",
+	},
+	'ISP' => {
+		'de' => "ISP",
+		'en' => "ISP",
+	},
+	'LATITUDE' => {
+		'de' => "IP2Location Breitengrad",
+		'en' => "Latitude",
+	},
+	'LONGITUDE' => {
+		'de' => "Laengengrad",
+		'en' => "Longitude",
+	},
+	'DOMAIN' => {
+		'de' => "Domain",
+		'en' => "Domain",
+	},
+	'ZIPCODE' => {
+		'de' => "Postleitzahl",
+		'en' => "ZIP code",
+	},
+	'AS_TEXT' => {
+		'de' => "Autonomous System der IP Adresse",
+		'en' => "Autonomous System of IP address",
 	},
 );
 
@@ -817,7 +870,7 @@ sub print_infohash ($$$;$) {
 
 	if ( ! defined \$phash ) {
 		&print_tagoutput ( "      <tr>\n" );
-		&print_tagoutput ( "        <td colspan=\"3\">" );
+		&print_tagoutput ( "        <td colspan=\"" . ($db_columns + 3) . "\">" );
 		print $text{'nodata'}->{$lang};
 		&print_textonly ("\n");
 		&print_tagoutput ( "</td>\n" );
@@ -904,6 +957,15 @@ sub print_infohash ($$$;$) {
 			$flag_tt = 1;
 		};
 
+		if ($mode_db_entries_in_subcolumns == 1) {
+			# suppress db based keys, store them in hash for later printout
+			$key =~ /^([A-Z0-9]+)_(.*)$/o;
+			if (grep(/^$1/i, @key_db_tokens)) {
+				$key_values_db_tokens{$2} = $1;
+				next;
+			};
+		};
+
 		# print key
 		if ($count_key_embedded > 0) {
 			if ($count_key_embedded & 1) {
@@ -968,9 +1030,9 @@ sub print_infohash ($$$;$) {
 
 		# set background color
 		if ($color ne "") {
-			&print_tagoutput ( "        <td style=\"background-color: " . $color . ";\">" );
+			&print_tagoutput ( "        <td colspan=\"" . ($db_columns + 1) . "\" style=\"background-color: " . $color . ";\">" );
 		} else {
-			&print_tagoutput ( "        <td>" );
+			&print_tagoutput ( "        <td colspan=\"" . ($db_columns + 1) . "\">" );
 		};
 
 		if ($flag_tt) {
@@ -1029,6 +1091,49 @@ sub print_infohash ($$$;$) {
 			&print_tagoutput ( "</tt>" );
 		};
 		&print_tagoutput ( "</td>\n" );
+		&print_tagoutput ( "      </tr>\n" );
+		&print_textonly ("\n");
+	};
+
+	if ($mode_db_entries_in_subcolumns != 1) {
+		# nothing more to do
+		return;
+	};
+
+	## database subcolumns mode
+	# print header
+	&print_tagoutput ( "      <tr>\n" );
+	&print_tagoutput ( "        <td align=\"center\" colspan=\"2\"><font size=\"-1\">Information from databases</font></td>\n" );
+	for my $key (sort @key_db_tokens) {
+		&print_tagoutput ( "        <td><font size=\"-1\"><b>$key</b></font></td>\n" );
+	};
+	&print_tagoutput ( "      </tr>\n" );
+
+	for my $key (sort keys %key_values_db_tokens) {
+		&print_tagoutput ( "      <tr>\n" );
+		&print_tagoutput ( "        <td><font size=\"-1\"><b>$key</b></font></td>\n" );
+
+		# print description
+		if ($outputtype ne "simple") {
+			&print_tagoutput ( "        <td><font size=\"-1\">" );
+			if (defined $text{$key}->{$lang}) {
+				print $text{$key}->{$lang};
+			} else {
+			};
+			&print_tagoutput ( "</font></td>\n" );
+		};
+
+		for my $db (sort @key_db_tokens) {
+			&print_tagoutput ( "        <td><font size=\"-1\">" );
+
+			my $key_result = $db . "_" . $key;
+			if (defined $$phash{$key_result}) {
+				print $$phash{$key_result};
+			} else {
+				print "-";
+			};
+			&print_tagoutput ( "</font></td>\n" );
+		};
 		&print_tagoutput ( "      </tr>\n" );
 		&print_textonly ("\n");
 	};
@@ -1373,9 +1478,24 @@ if ( defined $ENV{'HTTP_IPV6CALCWEB_OUTPUT_FORMAT'} ) {
 	};
 };
 
+if ( defined $ENV{'HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB'} ) {
+	if ($ENV{'HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB'} =~ /^(sequential|subcolumns)$/o) {
+		$outputformat_html_db = $ENV{'HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB'};
+	};
+};
+
+if ($outputformat_html_db eq "subcolumns") {
+	$mode_db_entries_in_subcolumns = 1;
+};
+
 if ($outputformat eq "textkeyvalue") {
 	$outputtype = "simple";
 	$chr_quote = "\"";
+};
+
+if (($outputformat ne "html") && ($outputformat ne "htmlfull")) {
+	# no html format, disable subcolumn mode
+	$mode_db_entries_in_subcolumns = 0;
 };
 
 ## Check for binary ipv6calc exists and is executable
@@ -1559,23 +1679,61 @@ if ($result != 0) {
 # add options depending of available capabilities (fallback: features)
 if (length($ipv6calc_capabilities) > 0) {
  	if (defined $ipv6calc_capability_hash{"GeoIP"} && ($ipv6calc_capability_hash{"GeoIP"} == 1)) {
-		$options_ipv6calc .= $options_ipv6calc_geoip;
+		if ($disable_db_GeoIP == 1) {
+			$options_ipv6calc .= " --db-geoip-disable";
+		} else {
+			$options_ipv6calc .= $options_ipv6calc_geoip;
+			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
+			push @key_db_tokens, "GEOIP";
+		};
 	};
  	if (defined $ipv6calc_capability_hash{"IP2Location"} && ($ipv6calc_capability_hash{"IP2Location"} == 1)) {
-		$options_ipv6calc .= $options_ipv6calc_ip2location;
+		if ($disable_db_IP2Location == 1) {
+			$options_ipv6calc .= " --db-ip2location-disable";
+		} else {
+			$options_ipv6calc .= $options_ipv6calc_ip2location;
+			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
+			push @key_db_tokens, "IP2LOCATION";
+		};
 	};
  	if (defined $ipv6calc_capability_hash{"DBIP"} && ($ipv6calc_capability_hash{"DBIP"} == 1)) {
-		$options_ipv6calc .= $options_ipv6calc_dbip;
+		if ($disable_db_DBIP == 1) {
+			$options_ipv6calc .= " --db-dbip-disable";
+		} else {
+			$options_ipv6calc .= $options_ipv6calc_dbip;
+			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
+			push @key_db_tokens, "DBIP";
+		};
 	};
 } else {
 	# fallback for ipv6calc < 0.97.4
 	if (defined $ipv6calc_feature_hash{"GeoIP"} && ($ipv6calc_feature_hash{"GeoIP"} == "1")) {
-		$options_ipv6calc .= $options_ipv6calc_geoip;
+		if ($disable_db_GeoIP == 1) {
+			$options_ipv6calc .= " --db-geoip-disable";
+		} else {
+			$options_ipv6calc .= $options_ipv6calc_geoip;
+			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
+			push @key_db_tokens, "GEOIP";
+		};
 	};
 
-	if (defined $ipv6calc_feature_hash{"IP2Location"} && $ipv6calc_feature_hash{"IP2Location"} == "1") {
-		$options_ipv6calc .= $options_ipv6calc_ip2location;
+	if (defined $ipv6calc_feature_hash{"IP2Location"} && ($ipv6calc_feature_hash{"IP2Location"} == "1")) {
+		if ($disable_db_IP2Location == 1) {
+			$options_ipv6calc .= " --db-ip2location-disable";
+		} else {
+			$options_ipv6calc .= $options_ipv6calc_ip2location;
+			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
+			push @key_db_tokens, "IP2LOCATION";
+		};
 	};
+};
+
+if ($db_columns == 0) {
+	# no databases, disable subcolumn mode
+	$mode_db_entries_in_subcolumns = 0;
+} elsif ($db_columns > 0) {
+	# one column is always available
+	$db_columns--;
 };
 
 
@@ -1726,7 +1884,16 @@ if (defined $error) {
 };
 
 
-&print_tagoutput ( "    <table border CELLSPACING=0>\n" );
+&print_tagoutput ( "    <table border CELLSPACING=0 width=\"100%\">\n" );
+&print_tagoutput ( "     <colgroup width=\"40%\" span=\"2\">\n" );
+&print_tagoutput ( "      <col width=\"20%\">\n" );
+&print_tagoutput ( "      <col width=\"20%\">\n" );
+&print_tagoutput ( "     </colgroup>\n" );
+&print_tagoutput ( "     <colgroup width=\"60%\" span=\"" . ($db_columns + 1) . "\">\n" );
+for (my $i = 0; $i < $db_columns + 1; $i++) {
+	&print_tagoutput ( "      <col width=\"" . int(60 / ($db_columns + 1)) . "%\">\n" );
+};
+&print_tagoutput ( "     </colgroup>\n" );
 
 if ($mode eq "form" || $mode eq "mixed") {
 	# sleep 500 ms
@@ -1735,7 +1902,7 @@ if ($mode eq "form" || $mode eq "mixed") {
 	# Input
 	&print_textonly ("\n");
 	&print_tagoutput ( "      <tr>\n" );
-	&print_tagoutput ( "        <th colspan=\"3\">\n" );
+	&print_tagoutput ( "        <th colspan=\"" . ($db_columns + 3) . "\">\n" );
 	&print_tagoutput ( "          <form action=\"" . $script_name . "\" method=\"get\">\n" );
 	if (!defined $input) {
 		$input = "::1";
@@ -1757,7 +1924,7 @@ if ($mode eq "form" || $mode eq "mixed") {
 
 	if (defined $input && !defined $input_default) {
 		&print_tagoutput ( "      <tr>\n" );
-		&print_tagoutput ( "        <th style=\"background-color:#DDDDFF;\" align=\"right\" colspan=\"2\">" );
+		&print_tagoutput ( "        <th style=\"background-color:#DDDDFF;\" align=\"right\" colspan=\"" . ($db_columns + 2) . "\">" );
 		print $text{'INPUT'}->{$lang};
 		&print_textonly (" ");
 		&print_tagoutput ( "        </th>\n" );
@@ -1776,7 +1943,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 	# Client
 	&print_textonly ("\n") if ($outputformat ne "textkeyvalue");
 	&print_tagoutput ( "      <tr>\n" );
-	&print_tagoutput ( "        <th style=\"background-color:#FFDDDD;\" colspan=\"3\">" );
+	&print_tagoutput ( "        <th style=\"background-color:#FFDDDD;\" colspan=\"" . ($db_columns + 3) . "\">" );
 	print $text{'REMOTE'}->{$lang} if ($outputformat ne "textkeyvalue");
 	&print_textonly ("\n");
 	&print_tagoutput ( "        </th>\n" );
@@ -1809,7 +1976,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 
 			&print_textonly ("\n") if ($outputformat ne "textkeyvalue");
 			&print_tagoutput ( "      <tr>\n" );
-			&print_tagoutput ( "        <th style=\"background-color:#EEDDDD;\" colspan=\"3\">" );
+			&print_tagoutput ( "        <th style=\"background-color:#EEDDDD;\" colspan=\"" . ($db_columns + 3) . "\">" );
 			print $text{'PROXY'}->{$lang} . " #" . $proxy_count if ($outputformat ne "textkeyvalue");
 			&print_textonly ("\n");
 			&print_tagoutput ( "        </th>\n" );
@@ -1822,7 +1989,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 		# Server
 		&print_textonly ("\n") if ($outputformat ne "textkeyvalue");
 		&print_tagoutput ( "      <tr>\n" );
-		&print_tagoutput ( "        <th style=\"background-color:#DDFFDD;\" colspan=\"3\">" );
+		&print_tagoutput ( "        <th style=\"background-color:#DDFFDD;\" colspan=\"" . ($db_columns + 3) . "\">" );
 		print $text{'SERVER'}->{$lang} if ($outputformat ne "textkeyvalue");
 		&print_textonly ("\n");
 		&print_tagoutput ( "        </th>\n" );
@@ -1834,7 +2001,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 # Footer
 &print_textonly ("\n");
 &print_tagoutput ( "      <tr>\n" );
-&print_tagoutput ( "        <td style=\"background-color:#DDDDDD;\" colspan=\"3\">\n" );
+&print_tagoutput ( "        <td style=\"background-color:#DDDDDD;\" colspan=\"" . ($db_columns + 3) . "\">\n" );
 
 my $datetime = POSIX::strftime("%Y-%m-%d %H:%M:%S", gmtime) . " UTC";
 
