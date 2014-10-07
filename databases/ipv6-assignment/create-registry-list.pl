@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.13 2014/09/24 09:07:57 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.14 2014/10/07 20:25:23 ds6peter Exp $
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
 #              2005-2014 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
 # License    : GNU GPL v2
@@ -25,11 +25,13 @@ my $debug = 0;
 # Debugging
 # $debug |= 0x0010; #  0x0010: proceed registry files
 #  0x0020: proceed global file
-#  0x0040: fill data
 #  0x0100: subnet mask generation
 
+# $debug |= 0x0040; # fill data
 # $debug |= 0x0200; # parse lines
-$debug |= 0x0400; # store
+$debug |= 0x0400; # store registry
+#$debug |= 0x4000; # store countrycode
+#$debug |= 0x0080; # skip optimizer
 
 my $OUTFILE = "dbipv6addr_assignment.h";
 
@@ -50,6 +52,8 @@ my @files = (
 );
 
 my (@arin, @apnic, @ripencc, @iana, @lacnic, @afrinic, @reserved, @s6to4, @s6bone);
+
+my @cc_array;
 
 my %date_created;
 
@@ -173,12 +177,14 @@ foreach my $file (@files) {
 
 		print $line . "\n" if ($debug & 0x0200);
 
-		my ($reg, $tld, $token, $ipv6, $prefixlen, $date, $status, $other) = split /\|/o, $line;
+		my ($reg, $cc, $token, $ipv6, $prefixlen, $date, $status, $other) = split /\|/o, $line;
 
 		if ( $token ne "ipv6" ) { next; };
 
 		$reg = uc($reg);
 		$reg =~ s/\wRIPE\w/RIPENCC/og;
+
+		$cc = uc($cc);
 
 		# get registry array
 		my $parray;
@@ -199,11 +205,21 @@ foreach my $file (@files) {
 			die "Unsupported registry: " . $reg;
 		};
 
-		print "check: reg=" . $reg . " ipv6=" . $ipv6 . "/" . $prefixlen . "\n" if ($debug & 0x10);
-
-		# Check for already included in range:
 		my $ip_ipv6 = new Net::IP($ipv6) || die "Can't create IPv6 object from ipv6=$ipv6";
 
+		# store in CountryCode array
+		if ($cc =~ /^[A-Z][A-Z]$/o) {
+			# Push into array
+			print "store: cc=" . $cc . " ipv6=" . $ip_ipv6->ip() . "/" . $prefixlen . "\n" if ($debug & 0x4000);
+			push @cc_array, $ip_ipv6->ip() . "/" . $prefixlen . "/" . $cc;
+		};
+
+		## Check registry assignment
+		print "check: reg=" . $reg . " ipv6=" . $ipv6 . "/" . $prefixlen . "\n" if ($debug & 0x10);
+
+		goto("Label_finished") if ($debug & 0x80);
+
+		# Check for already included in range:
 		my $flag = 0;
 		my $ip_ipv6_check;
 		my $test;
@@ -243,6 +259,7 @@ Label_restart:
 			next;
 		};
 
+Label_finished:
 		# Check for > /64
 		if ($prefixlen > 64) {
 			die "Currently unsupported prefix length (>64): $ipv6/$prefixlen";
@@ -266,19 +283,32 @@ Label_restart:
 
 # Create hash
 my %data;
+my %data_cc;
 
-sub fill_data($$) {
+sub fill_data($$$) {
 	my $parray = shift || die "missing array pointer";
 	my $reg = shift || die "missing registry";
+	my $pdata = shift || die "missing hash pointer";
 
-	print "Fill data for registry: $reg\n";
+	if ($reg ne "CC") {
+		print "Fill data for registry: $reg\n";
+	} else {
+		print "Fill data for CountryCode assignment\n";
+	};
 
 	foreach my $entry (sort @$parray) {
-		my ($ipv6, $length) = split /\//o, $entry;
+		my ($ipv6, $length, $data);
 
-		my $ip_ipv6 = new Net::IP($entry);
+		if ($reg ne "CC") {
+			($ipv6, $length) = split /\//o, $entry;
+			$data = $reg;
+		} else {
+			($ipv6, $length, $data) = split /\//o, $entry;
+		};
 
-		print " ipv6=$entry" if ($debug & 0x40);
+		print " raw=$entry ipv6=$ipv6 length=$length data=$data" if ($debug & 0x40);
+
+		my $ip_ipv6 = new Net::IP($ipv6 . "/" . $length);
 
 		my $ip_ipv6_int = $ip_ipv6->intip();
 		my $ip_ipv6_int_32_63 = $ip_ipv6_int->copy();
@@ -292,28 +322,31 @@ sub fill_data($$) {
 		$ip_ipv6_int_32_63->band("0xffffffff");
 		my $ipv6_hex_32_63 = sprintf("%08x", $ip_ipv6_int_32_63);
 
-		$data{$ipv6}->{'ipv6_00_31'} = $ipv6_hex_00_31;
-		$data{$ipv6}->{'ipv6_32_63'} = $ipv6_hex_32_63;
+		$$pdata{$ipv6}->{'ipv6_00_31'} = $ipv6_hex_00_31;
+		$$pdata{$ipv6}->{'ipv6_32_63'} = $ipv6_hex_32_63;
 
 		my $mask_00_31 = $subnet_masks{$ip_ipv6->prefixlen()}->{'mask_00_31'};
 		my $mask_32_63 = $subnet_masks{$ip_ipv6->prefixlen()}->{'mask_32_63'};
 
-		$data{$ipv6}->{'mask_00_31'} = $mask_00_31;
-		$data{$ipv6}->{'mask_32_63'} = $mask_32_63;
-		$data{$ipv6}->{'mask_length'} = $length;
-		$data{$ipv6}->{'reg'} = $reg;
-		print " ipv6_hex_00_31=$ipv6_hex_00_31 ipv6_hex_32_63=$ipv6_hex_32_63 mask_00_31=$mask_00_31 mask_00_31=$mask_32_63 hex reg=$reg\n" if ($debug & 0x40);
+		$$pdata{$ipv6}->{'mask_00_31'} = $mask_00_31;
+		$$pdata{$ipv6}->{'mask_32_63'} = $mask_32_63;
+		$$pdata{$ipv6}->{'mask_length'} = $length;
+
+		$$pdata{$ipv6}->{'reg'} = $data;
+		print " ipv6_hex_00_31=$ipv6_hex_00_31 ipv6_hex_32_63=$ipv6_hex_32_63 mask_00_31=$mask_00_31 mask_00_31=$mask_32_63 data=$data\n" if ($debug & 0x40);
 	};
 };
 
-&fill_data(\@apnic  , "APNIC");
-&fill_data(\@ripencc, "RIPENCC");
-&fill_data(\@arin   , "ARIN");
-&fill_data(\@lacnic , "LACNIC");
-&fill_data(\@afrinic, "AFRINIC");
-&fill_data(\@iana   , "IANA");
-&fill_data(\@s6to4  , "6TO4");
-&fill_data(\@s6bone , "6BONE");
+&fill_data(\@apnic  , "APNIC"  , \%data);
+&fill_data(\@ripencc, "RIPENCC", \%data);
+&fill_data(\@arin   , "ARIN"   , \%data);
+&fill_data(\@lacnic , "LACNIC" , \%data);
+&fill_data(\@afrinic, "AFRINIC", \%data);
+&fill_data(\@iana   , "IANA"   , \%data);
+&fill_data(\@s6to4  , "6TO4"   , \%data);
+&fill_data(\@s6bone , "6BONE"  , \%data);
+
+&fill_data(\@cc_array, "CC"  , \%data_cc);
 
 # Create header file
 
@@ -376,7 +409,7 @@ my $type = "2026"; # BuiltIn Registry->IPv4
 my $date = $string;
 $now_string = strftime "%Y%m%d-%H%M%S%z", gmtime;
 my $info = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=6;dbcreated=$now_string";
-my $filename = "ipv6calc-external-registry-ipv6.db";
+my $filename = "ipv6calc-external-ipv6-registry.db";
 
 if (-f $filename) {
         unlink($filename) || die "Can't delete old file: $filename";
@@ -409,4 +442,40 @@ foreach my $ipv6 (sort keys %data) {
 untie @a;
 
 print "INFO  : db created from input: IPv6=$filename\n";
+
+
+## IP -> CountryCode
+print "INFO  : start creation of DB file: IPv6->CountryCode: $filename\n";
+
+# external database
+$type = "2036"; # External IPv4->CountryCode
+$date = localtime;
+$now_string = strftime "%Y%m%d-%H%M%S%z", gmtime;
+$info = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=6;dbcreated=$now_string";
+$filename = "ipv6calc-external-ipv6-countrycode.db";
+
+if (-f $filename) {
+        unlink($filename) || die "Can't delete old file: $filename";
+};
+
+tie %h_info, 'BerkeleyDB::Hash', -Filename => $filename, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
+
+$h_info{'dbusage'} = "ipv6calc";
+$h_info{'dbformat'} = "1"; # ';' separated values
+$h_info{'dbdate'} = $date;
+$h_info{'dbtype'} = $type;
+$h_info{'dbcreated'} = $now_string;
+$h_info{'dbcreated_unixtime'} = time + 1;
+
+
+untie %h_info;
+
+tie @a, 'BerkeleyDB::Recno', -Filename => $filename, -Subname => 'data', -Flags => DB_CREATE || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
+
+foreach my $ipv6 (sort keys %data_cc) {
+	push @a, sprintf("%s;%s;%s;%s;%s", $data_cc{$ipv6}->{'ipv6_00_31'}, $data_cc{$ipv6}->{'ipv6_32_63'}, $data_cc{$ipv6}->{'mask_00_31'}, $data_cc{$ipv6}->{'mask_32_63'}, $data_cc{$ipv6}->{'reg'});
+};
+
+untie @a;
+print "INFO  : db created from input: $filename\n";
 

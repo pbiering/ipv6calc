@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.35 2014/07/31 19:07:50 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.36 2014/10/07 20:25:21 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -16,16 +16,20 @@
 #          GeoIP-1.5.1
 #          GeoIP-1.5.2
 #          GeoIP-1.6.0
+#          GeoIP-1.6.1
+#          GeoIP-1.6.2
 #
 # $BASE_DEVEL_IP2LCATION/   (default if unset: "..")
 #          C-IP2Location-4.0.2
 #          ip2location-c-6.0.1
 #          IP2Location-c-6.0.2
+#          ip2location-c-6.0.3	# 20141003
+#          ip2location-c-7.0.0	# 20141003
 
 #### Definitions
 
 ## List of GeoIP versions (append newest one rightmost!)
-geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.4.8 1.5.1 1.5.2 1.6.0"
+geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.4.8 1.5.1 1.5.2 1.6.0 1.6.1 1.6.2"
 geoip_url_maxmind="http://geolite.maxmind.com/download/geoip/api/c/"
 geoip_url_github="https://codeload.github.com/maxmind/geoip-api-c/tar.gz/"
 
@@ -57,11 +61,6 @@ geoip_cross_version_test_blacklist() {
 	local version_have=$(echo $1 | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
 	local version_test=$(echo $2 | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
 
-	if [ $version_have -eq $version_test ]; then
-		# same version
-		return 1
-	fi
-
 	if [ $version_have -ge 10407 -a $version_test -lt 10407 ]; then
 		# missing GeoIP_cleanup
 		return 1
@@ -72,11 +71,30 @@ geoip_cross_version_test_blacklist() {
 
 
 ## List of IP2Location versions (append newest one rightmost!)
-ip2location_versions="4.0.2 6.0.1 6.0.2"
-ip2location_versions_download="6.0.1 6.0.2" # older versions are no longer available for download?
+# 7.0.0 has IPv6 database incompatibility issues, not tested so far
+ip2location_versions="4.0.2 6.0.1 6.0.2 6.0.3"
+ip2location_versions_download="6.0.1 6.0.2 6.0.3" # older versions are no longer available for download?
 ip2location_url_base="https://www.ip2location.com/downloads/"
 
 ip2location_cross_version_test_blacklist() {
+	local version_have=$(echo $1 | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
+	local version_test=$(echo $2 | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
+
+	if [ $version_have -ge 60003 -a $version_test -lt 60003 ]; then
+		# incompatible (library name got suffix .1)
+		return 1
+	fi
+
+	if [ $version_have -ge 70000 -a $version_test -lt 60000 ]; then
+		# incompatible
+		return 1
+	fi
+
+	if [ $version_have -ge 70000 -a $version_test -lt 70000 ]; then
+		# incompatible
+		return 1
+	fi
+
 	return 0
 }
 
@@ -141,7 +159,7 @@ nameversion_from_name_version() {
 				nameversion="ip2location-c-$version.tar.gz"
 			elif [ "$mode" = "extract" ]; then
 				case $version in
-				    6.0.1|6.0.2)
+				    6.0.1|6.0.2|6.0.3|7.0.0)
 					nameversion="ip2location-c-$version"
 					;;
 				    *)
@@ -151,7 +169,7 @@ nameversion_from_name_version() {
 				esac
 			else
 				case $version in
-				    6.0.1)
+				    6.0.1|6.0.3|7.0.0)
 					nameversion="ip2location-c-$version"
 					;;
 				    *)
@@ -347,6 +365,12 @@ build_library() {
 			fi
 			;;
 		    IP2Location)
+			case $version in
+			    6.0.3)
+				echo "NOTICE: $name-$version requires patching of Makefile.am"
+				perl -pi -e 's/data/ /g' Makefile.am
+				;;
+			esac
 			autoreconf -fi && ./configure && make clean && make
 			result=$?
 			;;

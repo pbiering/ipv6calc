@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.39 2014/09/02 06:25:02 ds6peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.40 2014/10/07 20:25:23 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -50,7 +50,7 @@ END
 
 getexamples_IP2Location() {
 	cat <<END
-2001:a60:9002:1::186:6
+2001:4dd0:f838:a006::3
 212.18.21.186
 END
 }

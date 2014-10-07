@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.26 2014/09/24 09:07:58 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.27 2014/10/07 20:25:23 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -12,6 +12,7 @@
 #include "ipv6calctypes.h"
 #include "libipv4addr.h"
 #include "libipv6addr.h"
+#include "libipaddr.h"
 #include "libmac.h"
 
 
@@ -73,6 +74,9 @@ typedef struct {
         { REGISTRY_UNKNOWN    , "unknown"   , "REGISTRY_UNKNOWN" }
 };
 
+/* some generic defines */
+#define IPV6CALC_PROTO_IPV4		4
+#define IPV6CALC_PROTO_IPV6		6
 
 /* some generic macros */
 

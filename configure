@@ -4337,7 +4337,7 @@ $as_echo "#define SHARED_LIBRARY 1" >>confdefs.h
 	LD_LIBRARY_PATH_BASIC=../lib:../databases/lib:$LD_LIBRARY_PATH_BASIC
 else
 	SHARED_LIBRARY="no"
-	IPV6CALC_LIB="-L../lib/ -L../databases/lib/ -lipv6calc -lipv6calc_db_wrapper"
+	IPV6CALC_LIB="-L../lib/ -L../databases/lib/ -lipv6calc_db_wrapper -lipv6calc"
 fi
 
 

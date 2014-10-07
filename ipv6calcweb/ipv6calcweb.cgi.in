@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.74 2014/09/27 11:08:37 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.75 2014/10/07 20:25:23 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -502,6 +502,10 @@ my %text = (
 		'de' => "IP2Location Postleitzahl",
 		'en' => "IP2Location ZIP code",
 	},
+	'IP2LOCATION_AREACODE' => {
+		'de' => "IP2Location Area code",
+		'en' => "IP2Location Area code",
+	},
 	'IP2LOCATION_DATABASE_INFO' => {
 		'de' => "IP2Location Datenbank-Information",
 		'en' => "IP2Location database information",
@@ -543,12 +547,12 @@ my %text = (
 		'en' => "GeoIP ZIP code",
 	},
 	'GEOIP_DMACODE' => {
-		'de' => "GeoIP DMACODE",
-		'en' => "GeoIP DMACODE",
+		'de' => "GeoIP DMA/Metro code",
+		'en' => "GeoIP DMA/Metro code",
 	},
 	'GEOIP_AREACODE' => {
-		'de' => "GeoIP AREACODE",
-		'en' => "GeoIP AREACODE",
+		'de' => "GeoIP Area code",
+		'en' => "GeoIP Area code",
 	},
 	'GEOIP_DATABASE_INFO_IPV4' => {
 		'de' => "GeoIP IPv4 Datenbank-Information",
@@ -617,6 +621,14 @@ my %text = (
 	'ZIPCODE' => {
 		'de' => "Postleitzahl",
 		'en' => "ZIP code",
+	},
+	'AREACODE' => {
+		'de' => "Area code",
+		'en' => "Area code",
+	},
+	'DMACODE' => {
+		'de' => "DMA/Metro code",
+		'en' => "DMA/Metro code",
 	},
 	'AS_TEXT' => {
 		'de' => "Autonomous System der IP Adresse",

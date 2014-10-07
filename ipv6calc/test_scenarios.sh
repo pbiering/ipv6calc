@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.44 2014/09/13 21:15:08 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.45 2014/10/07 20:25:23 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -399,8 +399,8 @@ testscenarios_showinfo_ip2location() {
 46.244.223.233				IPV4_COUNTRYCODE=DE
 46.244.223.233				IP2LOCATION_COUNTRY_SHORT=DE
 # non-anonymized IPv6 prefix
-2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=DE
-2001:a60:113a:0123:0123:4567:89ab:cdef	IP2LOCATION_COUNTRY_SHORT=DE
+2001:4dd0:f838:a006::3			IPV6_COUNTRYCODE=DE
+2001:4dd0:f838:a006::3			IP2LOCATION_COUNTRY_SHORT=DE
 END
 }
 

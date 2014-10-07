@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.42 2014/09/24 09:07:58 ds6peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.43 2014/10/07 20:25:23 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -323,4 +323,4 @@ typedef struct {
 	const char description[128];
 } s_ipv6calc_anon_methods;
 
-#endif
+#endif // _ipv6calctypes_h_

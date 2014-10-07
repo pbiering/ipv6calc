@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.52 2014/09/24 09:07:55 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.53 2014/10/07 20:25:21 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -94,11 +94,6 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		SKIP_TEST=1
 		;;
-	    '--enable-bundled-md5'|'--enable-bundled-getopt')
-		# whitelisted
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $1"
-		shift
-		;;
 	    '-?'|'-h'|'--help')
 		echo "Supported options:"
 		echo "   -?|-h|--help        : this help"
@@ -118,6 +113,11 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --no-static-build   : skip static build"
 		echo "   --no-test           : skip 'make test'"
 		exit 1
+		;;
+	    *)
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $1"
+		shift
+		;;
 	esac
 done
 

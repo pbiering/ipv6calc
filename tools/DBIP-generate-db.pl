@@ -4,7 +4,7 @@
 #
 # Project    : ipv6calc/DBIP
 # File       : DBIP-generate-db.pl
-# Version    : $Id: DBIP-generate-db.pl,v 1.1 2014/08/31 10:27:40 ds6peter Exp $
+# Version    : $Id: DBIP-generate-db.pl,v 1.2 2014/10/07 20:25:23 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 #
@@ -90,8 +90,8 @@ if ($type_string eq "country") {
 print "INFO  : input file: $file_input type=$type date=$date\n" if (! defined $opts{'q'});
 
 
-my $filename_ipv4 = "$dir_output/ipv6calc-dbip-$type_string-ipv4.db";
-my $filename_ipv6 = "$dir_output/ipv6calc-dbip-$type_string-ipv6.db";
+my $filename_ipv4 = "$dir_output/ipv6calc-dbip-ipv4-$type_string.db";
+my $filename_ipv6 = "$dir_output/ipv6calc-dbip-ipv6-$type_string.db";
 
 my @a_ipv4;
 my @a_ipv6;
@@ -105,16 +105,35 @@ if (-f $filename_ipv6) {
 
 print "INFO  : create db from input: IPv4=$filename_ipv4 IPv6=$filename_ipv6 INPUT=$file_input\n";
 
-tie @a_ipv4, 'BerkeleyDB::Recno', -Filename => $filename_ipv4, -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename_ipv4: $! $BerkeleyDB::Error\n";
-tie @a_ipv6, 'BerkeleyDB::Recno', -Filename => $filename_ipv6, -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename_ipv6: $! $BerkeleyDB::Error\n";
-
 my $now_string = strftime "%Y%m%d-%H%M%S%z", gmtime;
-my $info_ipv4 = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . ($type+4) . ";dbproto=4;dbcreated=$now_string";
-my $info_ipv6 = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . ($type+6) . ";dbproto=6;dbcreated=$now_string";
 
-# Add a few key/value pairs to the file
-$a_ipv4[0] = $info_ipv4;
-$a_ipv6[0] = $info_ipv6;
+my %h_info4;
+my %h_info6;
+
+tie %h_info4, 'BerkeleyDB::Hash', -Filename => $filename_ipv4, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename_ipv4: $! $BerkeleyDB::Error\n";
+tie %h_info6, 'BerkeleyDB::Hash', -Filename => $filename_ipv6, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename_ipv6: $! $BerkeleyDB::Error\n";
+
+$h_info4{'dbusage'} = "ipv6calc";
+$h_info4{'dbformat'} = "1"; # ';' separated values
+$h_info4{'dbdate'} = $date;
+$h_info4{'dbtype'} = $type + 4;
+$h_info4{'dbproto'} = '4';
+$h_info4{'dbcreated'} = $now_string;
+$h_info4{'dbcreated_unixtime'} = time;
+
+$h_info6{'dbusage'} = "ipv6calc";
+$h_info6{'dbformat'} = "1"; # ';' separated values
+$h_info6{'dbdate'} = $date;
+$h_info6{'dbtype'} = $type + 6;
+$h_info6{'dbproto'} = '6';
+$h_info6{'dbcreated'} = $now_string;
+$h_info6{'dbcreated_unixtime'} = time;
+
+untie %h_info4;
+untie %h_info6;
+
+tie @a_ipv4, 'BerkeleyDB::Recno', -Filename => $filename_ipv4, -Subname => 'data', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename_ipv4: $! $BerkeleyDB::Error\n";
+tie @a_ipv6, 'BerkeleyDB::Recno', -Filename => $filename_ipv6, -Subname => 'data', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename_ipv6: $! $BerkeleyDB::Error\n";
 
 my $linecounter = 0;
 my $counter_ipv4 = 0;
@@ -124,7 +143,7 @@ my $FILE;
 my $buffer;
 
 if ($file_type eq "cvs.gz") {
-	print "INFO : create handle for gzip'ed file: $file_input\n" if (defined $opts{'d'});
+	print "INFO  : create handle for gzip'ed file: $file_input\n" if (defined $opts{'d'});
 	$FILE = new IO::Uncompress::Gunzip $file_input or die "IO::Uncompress::Gunzip failed: $GunzipError\n";
 } else {
 	open($FILE, "<$file_input") || die "Can't open file: $file_input";
@@ -136,7 +155,7 @@ while (<$FILE>) {
 	$linecounter++;
 
 	if ((($linecounter % 100000) == 0) || (defined $opts{'d'})) {
-		print "INFO : linecounter=$linecounter: $line\n" if (! defined $opts{'q'});
+		print "INFO  : linecounter=$linecounter: $line\n" if (! defined $opts{'q'});
 	};
 
 	my $start;
@@ -145,7 +164,6 @@ while (<$FILE>) {
 
 	my $city;
 	my $region;
-
 
 	if ($type == 1010) {
 		# city
@@ -208,9 +226,9 @@ while (<$FILE>) {
 		#print "INFO : IPv4: $start " . sprintf("(%08x)", $start_value) . " $end " . sprintf("(%08x)", $end_value) . " $cc\n";
 
 		if ($type == 1010) {
-			push @a_ipv4, $start_value . ";" . $end_value . ";" . $cc . ";" . $region . ";" . $city;
+			push @a_ipv4, sprintf("%08x", $start_value) . ";" . sprintf("%08x", $end_value) . ";" . $cc . ";" . $region . ";" . $city;
 		} else {
-			push @a_ipv4, $start_value . ";" . $end_value . ";" . $cc;
+			push @a_ipv4, sprintf("%08x", $start_value) . ";" . sprintf("%08x", $end_value) . ";" . $cc;
 		};
 	} else {
 		$counter_ipv6++;
@@ -218,10 +236,10 @@ while (<$FILE>) {
 		# IPv6
 		$start_value = `ipv6calc -q -O hex $start`; 
 		$end_value   = `ipv6calc -q -O hex $end`;
-		$start_value_0_15  = hex(substr($start_value, 0, 8)); # 1st 8 nibbles = 32 bits
-		$start_value_16_31 = hex(substr($start_value, 8, 8)); # 1st 8 nibbles = 32 bits
-		$end_value_0_15    = hex(substr($end_value, 0, 8)); # 1st 8 nibbiles = 32 bits
-		$end_value_16_31   = hex(substr($end_value, 8, 8)); # 1st 8 nibbiles = 32 bits
+		$start_value_0_15  = substr($start_value, 0, 8); # 1st 8 nibbles = 32 bits
+		$start_value_16_31 = substr($start_value, 8, 8); # 1st 8 nibbles = 32 bits
+		$end_value_0_15    = substr($end_value, 0, 8); # 1st 8 nibbiles = 32 bits
+		$end_value_16_31   = substr($end_value, 8, 8); # 1st 8 nibbiles = 32 bits
 
 		#print "INFO : IPv6: $start " . sprintf("(%08x:%08x)", hex($start_value_0_15), hex($start_value_16_31)) . " $end " . sprintf("(%08x:%08x)", hex($end_value_0_15), hex($end_value_16_31)) . " $cc\n";
 
@@ -241,9 +259,6 @@ if (! defined $opts{'q'}) {
 
 	print "INFO  : IPv4 array elements: " . scalar @a_ipv4 . "\n";
 	print "INFO  : IPv6 array elements: " . scalar @a_ipv6 . "\n";
-
-	print "INFO  : IPv4 database info string: " . $a_ipv4[0] . "\n";
-	print "INFO  : IPv6 database info string: " . $a_ipv6[0] . "\n";
 
 	print "INFO  : IPv4 database first entry: " . $a_ipv4[1] . "\n";
 	print "INFO  : IPv4 database last  entry: " . $a_ipv4[-1] . "\n";

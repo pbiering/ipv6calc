@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.22 2014/09/24 09:07:57 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.23 2014/10/07 20:25:23 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -775,7 +775,9 @@ END_libipv6calc_db_wrapper:
  * wrapper: IP2Location_get_all
  */
 IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_all(IP2Location *loc, char *ip) {
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called: %s", wrapper_ip2location_info);
+	IP2LocationRecord *result_IP2Location_get_all = NULL;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called: %s with ip=%s", wrapper_ip2location_info, ip);
 
 	if (loc == NULL) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "loc==NULL, return NULL");
@@ -783,7 +785,6 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_all(IP2Location *loc, 
 	};
 
 #ifdef SUPPORT_IP2LOCATION_DYN
-	IP2LocationRecord *result_IP2Location_get_all = NULL;
 	const char *dl_symbol = "IP2Location_get_all";
 	char *error;
 
@@ -824,10 +825,11 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_all(IP2Location *loc, 
 	};
 
 END_libipv6calc_db_wrapper:
-	return(result_IP2Location_get_all);
 #else
-	return(IP2Location_get_all(loc, ip));
+	result_IP2Location_get_all = IP2Location_get_all(loc, ip);
 #endif
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished IP2Location_get_all=%p", result_IP2Location_get_all);
+	return(result_IP2Location_get_all);
 };
 
 
@@ -940,12 +942,14 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_country_name_by_addr(char *addr
 	record = libipv6calc_db_wrapper_IP2Location_get_country_long(loc, addr);
 
 	if (record == NULL) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "did not return a record");
 		goto END_libipv6calc_db_wrapper;
 	};
 
 	IP2Location_result_ptr = record->country_long;
 
 	if (IP2Location_result_ptr == NULL) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "did not return a country_long");
 		goto END_libipv6calc_db_wrapper;
 	};
 

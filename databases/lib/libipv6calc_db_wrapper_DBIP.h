@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.h
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.h,v 1.7 2014/09/24 09:07:57 ds6peter Exp $
- * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.h,v 1.8 2014/10/07 20:25:23 ds6peter Exp $
+ * Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_DBIP.c
@@ -23,10 +23,10 @@
 
 
 /*@unused@*/ static const db_file_desc libipv6calc_db_wrapper_DBIP_db_file_desc[] = {
-	{ DBIP_DB_IPV4_COUNTRY    , "ipv6calc-dbip-country-ipv4.db"      , "IPv4 Country" , IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_DBIP_IPV4 },
-	{ DBIP_DB_IPV6_COUNTRY    , "ipv6calc-dbip-country-ipv6.db"      , "IPv6 Country" , IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6 },
-	{ DBIP_DB_IPV4_CITY       , "ipv6calc-dbip-city-ipv4.db"         , "IPv4 City"    , IPV6CALC_DB_IPV4_TO_CITY | IPV6CALC_DB_DBIP_IPV4 },
-	{ DBIP_DB_IPV6_CITY       , "ipv6calc-dbip-city-ipv6.db"         , "IPv6 City"    , IPV6CALC_DB_IPV6_TO_CITY | IPV6CALC_DB_DBIP_IPV6 },
+	{ DBIP_DB_IPV4_COUNTRY    , "ipv6calc-dbip-ipv4-country.db"      , "IPv4 CountryCode" , IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_DBIP_IPV4 },
+	{ DBIP_DB_IPV6_COUNTRY    , "ipv6calc-dbip-ipv6-country.db"      , "IPv6 CountryCode" , IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6 },
+	{ DBIP_DB_IPV4_CITY       , "ipv6calc-dbip-ipv4-city.db"         , "IPv4 City/Region/CountryCode", IPV6CALC_DB_IPV4_TO_CITY | IPV6CALC_DB_IPV4_TO_REGION | IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_DBIP_IPV4 },
+	{ DBIP_DB_IPV6_CITY       , "ipv6calc-dbip-ipv6-city.db"         , "IPv6 City/Region/CountryCode", IPV6CALC_DB_IPV6_TO_CITY | IPV6CALC_DB_IPV6_TO_REGION | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6 },
 };
 
 // features
@@ -54,10 +54,10 @@ extern void        libipv6calc_db_wrapper_DBIP_wrapper_info(char* string, const 
 extern void        libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
 extern char       *libipv6calc_db_wrapper_DBIP_wrapper_db_info_used(void);
 
-extern int         libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(const char *addr, const int proto, char *country, const size_t country_len);
-extern int	   libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const char *addr, const int proto, char *city, const size_t city_len, char *region, const size_t region_len); 
+extern int         libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp, char *country, const size_t country_len);
+extern int	   libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const ipv6calc_ipaddr *ipaddrp, char *city, const size_t city_len, char *region, const size_t region_len); 
 
-extern int         libipv6calc_db_wrapper_DBIP_has_features(uint32_t features);
+extern int         libipv6calc_db_wrapper_DBIP_has_features(const uint32_t features);
 
 
 #ifdef SUPPORT_DBIP
@@ -66,10 +66,10 @@ extern int         libipv6calc_db_wrapper_DBIP_has_features(uint32_t features);
 
 extern char dbip_db_dir[NI_MAXHOST];
 
-extern int          libipv6calc_db_wrapper_DBIP_db_avail(int type);
-extern DB          *libipv6calc_db_wrapper_DBIP_open_type(const int type, long int *db_recno_max_ptr);
+extern int          libipv6calc_db_wrapper_DBIP_db_avail(const int type);
+extern DB          *libipv6calc_db_wrapper_DBIP_open_type(const int type_flag, long int *db_recno_max_ptr);
 
-extern const char  *libipv6calc_db_wrapper_DBIP_dbdescription(int type);
-extern char        *libipv6calc_db_wrapper_DBIP_database_info(DB *dbp);
+extern const char  *libipv6calc_db_wrapper_DBIP_dbdescription(const int type);
+extern char        *libipv6calc_db_wrapper_DBIP_database_info(const int type);
 
 #endif

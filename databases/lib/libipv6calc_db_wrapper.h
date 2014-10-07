@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.33 2014/09/24 09:07:57 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.34 2014/10/07 20:25:23 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -38,11 +38,13 @@ extern uint32_t wrapper_features_by_source_implemented[];
 #define IPV6CALC_DB_FEATURE_NUM_IPV6_TO_AS		5
 #define IPV6CALC_DB_FEATURE_NUM_IPV4_TO_CC		6
 #define IPV6CALC_DB_FEATURE_NUM_IPV6_TO_CC		7
-#define IPV6CALC_DB_FEATURE_NUM_IPV4_TO_CITY		8
-#define IPV6CALC_DB_FEATURE_NUM_IPV6_TO_CITY		9
-#define IPV6CALC_DB_FEATURE_NUM_IPV4_TO_REGION		10
-#define IPV6CALC_DB_FEATURE_NUM_IPV6_TO_REGION		11
-#define IPV6CALC_DB_FEATURE_NUM_IEEE_TO_INFO		12
+#define IPV6CALC_DB_FEATURE_NUM_IPV4_TO_COUNTRY		8
+#define IPV6CALC_DB_FEATURE_NUM_IPV6_TO_COUNTRY		9
+#define IPV6CALC_DB_FEATURE_NUM_IPV4_TO_CITY		10
+#define IPV6CALC_DB_FEATURE_NUM_IPV6_TO_CITY		11
+#define IPV6CALC_DB_FEATURE_NUM_IPV4_TO_REGION		12
+#define IPV6CALC_DB_FEATURE_NUM_IPV6_TO_REGION		13
+#define IPV6CALC_DB_FEATURE_NUM_IEEE_TO_INFO		14
 #define IPV6CALC_DB_FEATURE_NUM_MAX			IPV6CALC_DB_FEATURE_NUM_IEEE_TO_INFO
 
 // define generic features
@@ -56,6 +58,9 @@ extern uint32_t wrapper_features_by_source_implemented[];
 
 #define IPV6CALC_DB_IPV4_TO_CC			(1 << IPV6CALC_DB_FEATURE_NUM_IPV4_TO_CC)
 #define IPV6CALC_DB_IPV6_TO_CC			(1 << IPV6CALC_DB_FEATURE_NUM_IPV6_TO_CC)
+
+#define IPV6CALC_DB_IPV4_TO_COUNTRY		(1 << IPV6CALC_DB_FEATURE_NUM_IPV4_TO_COUNTRY)
+#define IPV6CALC_DB_IPV6_TO_COUNTRY		(1 << IPV6CALC_DB_FEATURE_NUM_IPV6_TO_COUNTRY)
 
 #define IPV6CALC_DB_IPV4_TO_CITY		(1 << IPV6CALC_DB_FEATURE_NUM_IPV4_TO_CITY)
 #define IPV6CALC_DB_IPV6_TO_CITY		(1 << IPV6CALC_DB_FEATURE_NUM_IPV6_TO_CITY)
@@ -93,6 +98,8 @@ static const s_formatoption ipv6calc_db_features[] = {
 	{ IPV6CALC_DB_IPV6_TO_AS	, "DB_IPV6_AS"		, "IPv6 to AS database" },
 	{ IPV6CALC_DB_IPV4_TO_CC	, "DB_IPV4_CC"		, "IPv4 to CountryCode database" },
 	{ IPV6CALC_DB_IPV6_TO_CC	, "DB_IPV6_CC"		, "IPv6 to CountryCode database" },
+	{ IPV6CALC_DB_IPV4_TO_COUNTRY	, "DB_IPV4_COUNTRY"	, "IPv4 to Country database" },
+	{ IPV6CALC_DB_IPV6_TO_COUNTRY	, "DB_IPV6_COUNTRY"	, "IPv6 to Country database" },
 	{ IPV6CALC_DB_IPV4_TO_CITY	, "DB_IPV4_CITY"	, "IPv4 to City database" },
 	{ IPV6CALC_DB_IPV6_TO_CITY	, "DB_IPV6_CITY"	, "IPv6 to City database" },
 	{ IPV6CALC_DB_IPV4_TO_REGION	, "DB_IPV4_REGION"	, "IPv4 to Region database" },
@@ -181,7 +188,7 @@ typedef struct {
 #define COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MAX   (COUNTRYCODE_INDEX_UNKNOWN - 1)
 #define COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN   (COUNTRYCODE_INDEX_UNKNOWN - 16)
 
-// macros for mapping index to chars and vice-versa
+// macros for mapping index to chars
 #define COUNTRYCODE_INDEX_TO_CHAR1(index)  ((index % COUNTRYCODE_LETTER1_MAX) + 'A')
 #define COUNTRYCODE_INDEX_TO_CHAR2(index)  ((index / COUNTRYCODE_LETTER1_MAX) > 9) ? ((index / COUNTRYCODE_LETTER1_MAX) - 10 + 'A') : ((index / COUNTRYCODE_LETTER1_MAX) + '0')
 
@@ -235,18 +242,18 @@ extern int  libipv6calc_db_wrapper_has_features(uint32_t features);
 extern int  libipv6calc_db_wrapper_options(const int opt, const char *optarg, const struct option longopts[]);
 extern const char *libipv6calc_db_wrapper_get_data_source_name_by_number(const int number);
 
+
 /* functional wrappers */
 
 // CountryCode Text/Number
-extern char       *libipv6calc_db_wrapper_country_code_by_addr(const char *addr, const int proto, unsigned int *data_source_ptr);
-extern uint16_t    libipv6calc_db_wrapper_cc_index_by_addr(const char *addr, const int proto, unsigned int *data_source_ptr);
-
+extern char       *libipv6calc_db_wrapper_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr);
 extern int         libipv6calc_db_wrapper_country_code_by_cc_index(char *string, int length, const uint16_t cc_index);
+extern uint16_t    libipv6calc_db_wrapper_cc_index_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr);
 
 // Autonomous System Text/Number
-extern char       *libipv6calc_db_wrapper_as_text_by_addr(const char *addr, const int proto);
-extern uint32_t    libipv6calc_db_wrapper_as_num32_by_addr(const char *addr, const int proto);
-extern uint16_t    libipv6calc_db_wrapper_as_num16_by_addr(const char *addr, const int proto);
+extern char       *libipv6calc_db_wrapper_as_text_by_addr(const ipv6calc_ipaddr *ipaddrp);
+extern uint32_t    libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp);
+extern uint16_t    libipv6calc_db_wrapper_as_num16_by_addr(const ipv6calc_ipaddr *ipaddrp);
 
 extern uint32_t    libipv6calc_db_wrapper_as_num32_comp17(const uint32_t as_num32);
 extern uint32_t    libipv6calc_db_wrapper_as_num32_decomp17(const uint32_t as_num32_comp17);
@@ -269,8 +276,6 @@ extern int libipv6calc_db_wrapper_registry_num_by_ipv6addr(const ipv6calc_ipv6ad
 
 #ifdef HAVE_BERKELEY_DB_SUPPORT
 extern int libipv6calc_db_wrapper_bdb_get_data_by_key(DB *dbp, char *token, char *value, const size_t value_size);
-extern int libipv6calc_db_wrapper_get_dbentry_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, DB *dbp, const uint32_t db_format, char *data_ptr);
-extern int libipv6calc_db_wrapper_get_dbentry_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, DB *dbp, const uint32_t db_format, char *data_ptr);
 #endif // HAVE_BERKELEY_DB_SUPPORT
 
 // generic DB lookup

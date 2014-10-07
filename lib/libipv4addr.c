@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.62 2014/09/13 21:15:08 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.63 2014/10/07 20:25:23 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -745,9 +745,9 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 	DEBUGPRINT_WA(DEBUG_libipv4addr, "called, method=%d mask=%d type=0x%08x", method, mask, ipv4addrp->scope);
 
 	/* anonymize IPv4 address according to settings */
-	char resultstring[NI_MAXHOST];
 	uint32_t as_num32, as_num32_comp17, as_num32_decomp17, ipv4addr_anon, p;
 	uint16_t cc_index, c;
+	ipv6calc_ipaddr ipaddr;
 	int i;
 
 	if ((ipv4addrp->scope & IPV4_ADDR_ANONYMIZED) != 0) {
@@ -794,10 +794,10 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 
 		DEBUGPRINT_NA(DEBUG_libipv4addr, "anonymize by keep information");
 
-		libipv4addr_ipv4addrstruct_to_string(ipv4addrp, resultstring, sizeof(resultstring), 0);
+		CONVERT_IPV4ADDRP_IPADDR(ipv4addrp, ipaddr);
 
 		// get AS number
-		as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(resultstring, 4);
+		as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr);
 		DEBUGPRINT_WA(DEBUG_libipv4addr, "result of AS number  retrievement: 0x%08x (%d)", as_num32, as_num32);
 
 		as_num32_comp17 = libipv6calc_db_wrapper_as_num32_comp17(as_num32);
@@ -807,7 +807,7 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 		DEBUGPRINT_WA(DEBUG_libipv4addr, "result of AS number decompression: 0x%08x (%d)", as_num32_decomp17, as_num32_decomp17);
 
 		// get countrycode
-		cc_index = libipv6calc_db_wrapper_cc_index_by_addr(resultstring, 4, NULL);
+		cc_index = libipv6calc_db_wrapper_cc_index_by_addr(&ipaddr, NULL);
 		if (cc_index == COUNTRYCODE_INDEX_UNKNOWN) {
 			// on unknown country, map registry value
 			cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + libipv6calc_db_wrapper_registry_num_by_ipv4addr(ipv4addrp);
@@ -1006,8 +1006,7 @@ int ipv4addr_filter(const ipv6calc_ipv4addr *ipv4addrp, const s_ipv6calc_filter_
  */
 uint16_t libipv4addr_cc_index_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsigned int *data_source_ptr) {
 	uint16_t cc_index = COUNTRYCODE_INDEX_UNKNOWN;
-	char tempipv4string[NI_MAXHOST] = "";
-	int retval;
+	ipv6calc_ipaddr ipaddr;
 
 	DEBUGPRINT_NA(DEBUG_libipv4addr, "start");
 
@@ -1019,17 +1018,11 @@ uint16_t libipv4addr_cc_index_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsign
 		cc_index = COUNTRYCODE_INDEX_UNKNOWN;
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC) == 1) {
-			retval = libipv4addr_ipv4addrstruct_to_string(ipv4addrp, tempipv4string, sizeof(tempipv4string), 0);
-			if ( retval != 0 ) {
-				fprintf(stderr, "Error converting IPv4 address: %s\n", tempipv4string);
-				goto END_libipv4addr_cc_index_by_addr;
-			};
-
-			cc_index = libipv6calc_db_wrapper_cc_index_by_addr(tempipv4string, 4, data_source_ptr);
+			CONVERT_IPV4ADDRP_IPADDR(ipv4addrp, ipaddr);
+			cc_index = libipv6calc_db_wrapper_cc_index_by_addr(&ipaddr, data_source_ptr);
 		};
 	};
 
-END_libipv4addr_cc_index_by_addr:
 	DEBUGPRINT_WA(DEBUG_libipv4addr, "cc_index=%d (0x%03x)", cc_index, cc_index);
 	return(cc_index);
 };
@@ -1043,24 +1036,17 @@ END_libipv4addr_cc_index_by_addr:
  */
 uint32_t libipv4addr_as_num32_by_addr(const ipv6calc_ipv4addr *ipv4addrp) {
 	uint32_t as_num32 = ASNUM_AS_UNKNOWN;
-	char tempipv4string[NI_MAXHOST] = "";
-	int retval;
+	ipv6calc_ipaddr ipaddr;
 
 	if ((ipv4addrp->scope & IPV4_ADDR_ANONYMIZED) != 0) {
 		as_num32 = ipv4addr_anonymized_get_as_num32(ipv4addrp);
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS) == 1) {
-			retval = libipv4addr_ipv4addrstruct_to_string(ipv4addrp, tempipv4string, sizeof(tempipv4string), 0);
-			if ( retval != 0 ) {
-				fprintf(stderr, "Error converting IPv4 address: %s\n", tempipv4string);
-				goto END_libipv4addr_as_num32_by_addr;
-			};
-
-			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(tempipv4string, 4);
+			CONVERT_IPV4ADDRP_IPADDR(ipv4addrp, ipaddr);
+			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr);
 		};
 	};
 
-END_libipv4addr_as_num32_by_addr:
 	DEBUGPRINT_WA(DEBUG_libipv4addr, "as_num32=%d (0x%08x)", as_num32, as_num32);
 	return(as_num32);
 };

@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.18 2014/09/24 09:07:56 ds6peter Exp $
- * Generated     : Mon Sep 22 21:28:48 2014
+ * Version       : $Id: dbieee_oui36.h,v 1.19 2014/10/07 20:25:22 ds6peter Exp $
+ * Generated     : Sat Sep 27 13:15:22 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140922";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140927";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -429,9 +429,13 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0xE74000, 0xE74FFF, "Exfrontier Co., Ltd.", "EXFRONTIER" },
 	{ 0x70B3D5, 0xBEF000, 0xBEFFFF, "Sensortech Systems Inc.", "SENSORTECH" },
 	{ 0x70B3D5, 0xEFA000, 0xEFAFFF, "NextEra Energy Resources, LLC", "NEXTERA-ENERGY-RESOURCES-LLC" },
+	{ 0x70B3D5, 0xD97000, 0xD97FFF, "BRS Sistemas Eletronicos", "BRS-SISTEMAS-ELETRONICOS" },
 	{ 0x70B3D5, 0x2D4000, 0x2D4FFF, "CT Company", "CT-COMPANY" },
+	{ 0x70B3D5, 0x99F000, 0x99FFFF, "Confed Holding B.V.", "CONFED-HOLDING" },
 	{ 0x70B3D5, 0xC96000, 0xC96FFF, "UNI DIMENXI SDN BHD", "UNI-DIMENXI-SDN-BHD" },
+	{ 0x70B3D5, 0x18B000, 0x18BFFF, "Aplex Technology Inc.", "APLEX" },
 	{ 0x70B3D5, 0x39B000, 0x39BFFF, "IROC AB", "IROC-AB" },
+	{ 0x70B3D5, 0x2CF000, 0x2CFFFF, "MB Connect Line GmbH", "MB-CONNECT-LINE" },
 	{ 0x70B3D5, 0x28E000, 0x28EFFF, "TEX COMPUTER SRL", "TEX-SRL" },
 	{ 0x70B3D5, 0x655000, 0x655FFF, "AOT System GmbH", "AOT-SYSTEM" },
 	{ 0x70B3D5, 0x5AA000, 0x5AAFFF, "Chugoku Electric Manufacturing Co.,Inc", "CHUGOKU-ELECTRIC-MANUFACTURING" },

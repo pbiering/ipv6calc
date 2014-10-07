@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.h
- * Version    : $Id: showinfo.h,v 1.24 2014/09/13 21:15:08 ds6peter Exp $
+ * Version    : $Id: showinfo.h,v 1.25 2014/10/07 20:25:23 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -45,6 +45,9 @@
 //      + DBIP_DATABASE_INFO
 //      + IPV4_COUNTRYCODE_SOURCE
 //      + IPV6_COUNTRYCODE_SOURCE
+//      + GEOP_AREACODE
+//      + GEOP_DMACODE
+//      + IP2LOCATION_AREACODE
 
 #define IPV6CALC_OUTPUT_VERSION	9
 

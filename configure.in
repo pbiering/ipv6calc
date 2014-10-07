@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.118 2014/09/24 09:07:55 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.119 2014/10/07 20:25:21 ds6peter Exp $
 dnl Copyright: 2001-2014 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -186,7 +186,7 @@ if test "$enable_shared" = "yes"; then
 	LD_LIBRARY_PATH_BASIC=../lib:../databases/lib:$LD_LIBRARY_PATH_BASIC
 else
 	SHARED_LIBRARY="no"
-	IPV6CALC_LIB="-L../lib/ -L../databases/lib/ -lipv6calc -lipv6calc_db_wrapper"
+	IPV6CALC_LIB="-L../lib/ -L../databases/lib/ -lipv6calc_db_wrapper -lipv6calc"
 fi
 
 AC_SUBST(SHARED_LIBRARY)

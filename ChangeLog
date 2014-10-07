@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.372 2014/09/27 11:08:37 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.373 2014/10/07 20:25:21 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,15 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20141007/PB
+	adjust DBIP generation tool for new db format: DBIP-generate-db.p
+
+20141005/PB
+	lib/libipaddr.[ch]: new generic library introduced to simplify code
+
+20141003/PB
+	autogen-support.sh: add GeoIP 1.6.1 1.6.2, IP2Location 6.0.3
+
 20140927/PB
 	ipv6calcweb/ipv6calcweb.cgi[.in]: minor bugfix, use background colors for optional database subcolumn mode
 

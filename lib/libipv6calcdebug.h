@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calcdebug.h
- * Version    : $Id: libipv6calcdebug.h,v 1.22 2014/09/24 09:07:58 ds6peter Exp $
+ * Version    : $Id: libipv6calcdebug.h,v 1.23 2014/10/07 20:25:23 ds6peter Exp $
  * Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -37,6 +37,7 @@
 #define DEBUG_libeui64					0x00008000l
 
 #define DEBUG_libmac					0x00010000l
+#define DEBUG_libipaddr					0x00020000l
 
 #define DEBUG_libipv6calc_db_wrapper			0x00100000l
 #define DEBUG_libipv6calc_db_wrapper_GeoIP		0x00200000l

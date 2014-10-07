@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : lib/Makefile
-# Version    : $Id: Makefile.in,v 1.16 2014/09/01 05:57:49 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.17 2014/10/07 20:25:23 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -31,6 +31,7 @@ RANLIB	= @RANLIB@
 OBJS	=	libipv6calc.o  \
 		libipv6addr.o  \
 		libipv4addr.o  \
+		libipaddr.o    \
 		libieee.o      \
 		libeui64.o     \
 		libmac.o       \
@@ -57,6 +58,7 @@ $(OBJS):	libipv6calcdebug.h  \
 		libipv6calc.h       \
 		libipv6addr.h       \
 		libipv4addr.h       \
+		libipaddr.h         \
 		libieee.h           \
 		libeui64.h          \
 		libmac.h            \
