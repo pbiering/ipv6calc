@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.75 2014/10/07 20:25:23 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.76 2014/10/09 19:52:00 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -50,6 +50,7 @@
 ## general
 use strict;
 use URI::Escape;
+use HTML::Entities;
 use POSIX;
 use warnings;
 
@@ -82,8 +83,6 @@ my $returncode = 0;
 
 my $mode_db_entries_in_subcolumns = 0;
 my $db_columns = 0;
-my @key_db_tokens;
-my %key_values_db_tokens;
 
 # currently only for internal use (TODO: make switchable by environment variables)
 my $disable_db_GeoIP = 0;
@@ -502,10 +501,6 @@ my %text = (
 		'de' => "IP2Location Postleitzahl",
 		'en' => "IP2Location ZIP code",
 	},
-	'IP2LOCATION_AREACODE' => {
-		'de' => "IP2Location Area code",
-		'en' => "IP2Location Area code",
-	},
 	'IP2LOCATION_DATABASE_INFO' => {
 		'de' => "IP2Location Datenbank-Information",
 		'en' => "IP2Location database information",
@@ -547,12 +542,12 @@ my %text = (
 		'en' => "GeoIP ZIP code",
 	},
 	'GEOIP_DMACODE' => {
-		'de' => "GeoIP DMA/Metro code",
-		'en' => "GeoIP DMA/Metro code",
+		'de' => "GeoIP DMACODE",
+		'en' => "GeoIP DMACODE",
 	},
 	'GEOIP_AREACODE' => {
-		'de' => "GeoIP Area code",
-		'en' => "GeoIP Area code",
+		'de' => "GeoIP AREACODE",
+		'en' => "GeoIP AREACODE",
 	},
 	'GEOIP_DATABASE_INFO_IPV4' => {
 		'de' => "GeoIP IPv4 Datenbank-Information",
@@ -621,14 +616,6 @@ my %text = (
 	'ZIPCODE' => {
 		'de' => "Postleitzahl",
 		'en' => "ZIP code",
-	},
-	'AREACODE' => {
-		'de' => "Area code",
-		'en' => "Area code",
-	},
-	'DMACODE' => {
-		'de' => "DMA/Metro code",
-		'en' => "DMA/Metro code",
 	},
 	'AS_TEXT' => {
 		'de' => "Autonomous System der IP Adresse",
@@ -797,6 +784,8 @@ my $input;
 my $input_default;
 my $token;
 
+my @key_db_tokens;
+
 # default values
 my $ipv6calc_version = "";
 my $ipv6calc_copyright = "(P) & (C) by Peter Bieringer";
@@ -866,6 +855,8 @@ sub print_infohash ($$$;$) {
 	my $parray = $_[1];
 	my $colormode = $_[2];
 	my $counter = $_[3];
+
+	my %key_values_db_tokens;
 
 	if (! defined $phash) { return; };
 
@@ -941,17 +932,33 @@ sub print_infohash ($$$;$) {
 		$flag_whoisurl = 0;
 
 		# extract lookup key
-		$key =~ /^([^[]+)(\[[^]]*\])?$/;;
+		$key =~ /^([^[]+)(\[[^]]*\])?$/;
 		my $key_lookup = $1;
 		my $key_embedded = "";
+		my $embedded_changed = 0;
 		if (defined $2) {
 			$key_embedded = $2;
 			if ($last_key_embedded eq "") {
 				$last_key_embedded = $key_embedded;
 				$count_key_embedded++;
+				$embedded_changed = 1;
 			} elsif ( $last_key_embedded ne $key_embedded) {
 				$last_key_embedded = $key_embedded;
 				$count_key_embedded++;
+				$embedded_changed = 1;
+			};
+			if (($outputformat eq "html") || ($outputformat eq "htmlfull")) {
+				if ($embedded_changed == 1) {
+					if ($count_key_embedded & 1) {
+						&print_tagoutput ( "      <tr style=\"background-color: rgb(240, 240, 240);\">\n" );
+					} else {
+						&print_tagoutput ( "      <tr style=\"background-color: rgb(216, 216, 216);\">\n" );
+					};
+					my $entry = "Embedded IPv4 address <b>" . $key_embedded . "</b>";
+					$entry =~ s/[\[\]]//g;
+					&print_tagoutput ( "        <td align=\"left\" colspan=\"" . ($db_columns + 3) . "\"><font size=\"-1\">" . $entry . "</font></td>\n" );
+					&print_tagoutput ( "      </tr>\n");
+				};
 			};
 		} else {
 			$count_key_embedded = 0;
@@ -966,7 +973,15 @@ sub print_infohash ($$$;$) {
 			# suppress db based keys, store them in hash for later printout
 			$key =~ /^([A-Z0-9]+)_(.*)$/o;
 			if (grep(/^$1/i, @key_db_tokens)) {
-				$key_values_db_tokens{$2} = $1;
+				my $dbprovider = $1;
+				my $subkey = $2;
+
+				# check for embedded information
+				$subkey =~ /^([^[]+)(\[[^]]*\])?$/;
+				my $subkey_stripped = $1;
+				my $embedded = $2;
+				if (! defined $embedded) { $embedded = "default"; };
+				$key_values_db_tokens{$embedded}->{$subkey_stripped} = $dbprovider;
 				next;
 			};
 		};
@@ -976,26 +991,33 @@ sub print_infohash ($$$;$) {
 			if ($count_key_embedded & 1) {
 				&print_tagoutput ( "      <tr style=\"background-color: rgb(240, 240, 240);\">\n" );
 			} else {
-				&print_tagoutput ( "      <tr style=\"background-color: rgb(224, 224, 224);\">\n" );
+				&print_tagoutput ( "      <tr style=\"background-color: rgb(216, 216, 216);\">\n" );
 			};
 		} else {
 			&print_tagoutput ( "      <tr>\n" );
 		};
 		&print_tagoutput ( "        <td><b>" );
+		&print_tagoutput ( "<font size=\"-1\">" ) if ($count_key_embedded > 0);
 		print uc($colormode) . "__" if ($outputformat eq "textkeyvalue");
 		# reduce duplicate information
 		my $key_print = $key;
 		$key_print =~ s/^($colormode)_//i if ($outputformat eq "textkeyvalue");
+		if ((($outputformat eq "html") || ($outputformat eq "htmlfull")) && ($key_embedded ne "")) {
+			$key_print =~ /^([^[]+)(\[[^]]*\])?$/;
+			$key_print = $1;
+		};
 		print $key_print;
 		&print_textonly (' ' x ($length_max_key - length($key)) ) if ($outputformat ne "textkeyvalue");
 		&print_textonly (" | ") if ($outputformat ne "textkeyvalue");
 		&print_textonly ("[" . $counter . "]") if (($outputformat eq "textkeyvalue") && (defined $counter));
 		&print_textonly ("=") if ($outputformat eq "textkeyvalue");
+		&print_tagoutput ( "</font>" ) if ($count_key_embedded > 0);
 		&print_tagoutput ( "</b></td>\n" );
 
 		# print description
 		if ($outputtype ne "simple") {
 			&print_tagoutput ( "        <td>" );
+			&print_tagoutput ( "<font size=\"-1\">" ) if ($count_key_embedded > 0);
 			if (defined $text{$key_lookup}->{$lang}) {
 				print $text{$key_lookup}->{$lang};
 				&print_textonly (' ' x ($length_max_description - length($text{$key_lookup}->{$lang})) );
@@ -1003,6 +1025,7 @@ sub print_infohash ($$$;$) {
 				&print_textonly (' ' x ($length_max_description) );
 			};
 			&print_textonly (" | ");
+			&print_tagoutput ( "</font>" ) if ($count_key_embedded > 0);
 			&print_tagoutput ( "</td>\n" );
 		};
 
@@ -1086,7 +1109,9 @@ sub print_infohash ($$$;$) {
 			};
 		};
 		
+		&print_tagoutput ( "<font size=\"-1\">" ) if ($count_key_embedded > 0);
 		print $chr_quote . $$phash{$key} . $chr_quote;
+		&print_tagoutput ( "</font>" ) if ($count_key_embedded > 0);
 
 		if ( $flag_whoisurl == 1 ) {
 			&print_tagoutput ( "</a>" );
@@ -1107,45 +1132,63 @@ sub print_infohash ($$$;$) {
 
 	## database subcolumns mode
 	# print header
-	my ($r, $g, $b) = (240, 240, 255);
+	my ($r, $g, $b);
 	my $shift;
 
-	&print_tagoutput ( "      <tr>\n" );
-	&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 224);\" align=\"center\" colspan=\"2\"><font size=\"-1\"><i>Information from databases</i></font></td>\n" );
-	for my $key (sort @key_db_tokens) {
-		&print_tagoutput ( "        <td style=\"background-color: rgb(" . $r . "," . $g . "," . $b . ");\"><font size=\"-1\"><b>$key</b></font></td>\n" );
-		$shift = $r; $r = $g; $g = $b; $b = $shift;	
-	};
-	&print_tagoutput ( "      </tr>\n" );
+	# loop through all embedded
+	for my $embedded (keys %key_values_db_tokens) {
+		my $entry = " for <b>$embedded</b>";
+		$entry =~ s/[\[\]]//g;
 
-	for my $key (sort keys %key_values_db_tokens) {
-		&print_tagoutput ( "      <tr>\n" );
-		&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 224);\"><font size=\"-1\"><b>$key</b></font></td>\n" );
-
-		# print description
-		if ($outputtype ne "simple") {
-			&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 224);\"><font size=\"-1\">" );
-			if (defined $text{$key}->{$lang}) {
-				print $text{$key}->{$lang};
-			} else {
-			};
-			&print_tagoutput ( "</font></td>\n" );
+		if ($embedded eq "default") {
+			$entry = "";
 		};
 
 		($r, $g, $b) = (240, 240, 255);
-		for my $db (sort @key_db_tokens) {
-			&print_tagoutput ( "        <td style=\"background-color: rgb(" . $r . "," . $g . "," . $b . ");\" ><font size=\"-1\">" );
-			my $key_result = $db . "_" . $key;
-			if (defined $$phash{$key_result}) {
-				print $$phash{$key_result};
-			} else {
-				print "-";
-			};
-			&print_tagoutput ( "</font></td>\n" );
+		&print_tagoutput ( "      <tr>\n" );
+		&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 224);\" align=\"center\" colspan=\"2\"><font size=\"-1\"><i>Information from databases</i>$entry</font></td>\n" );
+		for my $key (sort @key_db_tokens) {
+			&print_tagoutput ( "        <td style=\"background-color: rgb(" . $r . "," . $g . "," . $b . ");\"><font size=\"-1\"><b>$key</b></font></td>\n" );
 			$shift = $r; $r = $g; $g = $b; $b = $shift;	
 		};
 		&print_tagoutput ( "      </tr>\n" );
-		&print_textonly ("\n");
+
+		for my $key_lookup (sort keys %{$key_values_db_tokens{$embedded}}) {
+			&print_tagoutput ( "      <tr>\n" );
+			&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 224);\"><font size=\"-1\"><b>$key_lookup</b></font></td>\n" );
+
+			my $key;
+			if ($embedded eq "default") {
+				$key = $key_lookup;
+			} else {
+				$key = $key_lookup . $embedded;
+			};
+
+			# print description
+			if ($outputtype ne "simple") {
+				&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 224);\"><font size=\"-1\">" );
+				if (defined $text{$key_lookup}->{$lang}) {
+					print $text{$key_lookup}->{$lang};
+				} else {
+				};
+				&print_tagoutput ( "</font></td>\n" );
+			};
+
+			($r, $g, $b) = (240, 240, 255);
+			for my $db (sort @key_db_tokens) {
+				&print_tagoutput ( "        <td style=\"background-color: rgb(" . $r . "," . $g . "," . $b . ");\"><font size=\"-1\">" );
+				my $key_result = $db . "_" . $key;
+				if (defined $$phash{$key_result}) {
+					print $$phash{$key_result};
+				} else {
+					print "-";
+				};
+				&print_tagoutput ( "</font></td>\n" );
+				$shift = $r; $r = $g; $g = $b; $b = $shift;	
+			};
+			&print_tagoutput ( "      </tr>\n" );
+			&print_textonly ("\n");
+		};
 	};
 };
 
@@ -1934,14 +1977,10 @@ if ($mode eq "form" || $mode eq "mixed") {
 
 	if (defined $input && !defined $input_default) {
 		&print_tagoutput ( "      <tr>\n" );
-		&print_tagoutput ( "        <th style=\"background-color:#DDDDFF;\" align=\"right\" colspan=\"2\">" );
-		print $text{'INPUT'}->{$lang};
-		&print_textonly (" ");
-		&print_tagoutput ( "        </th>\n" );
-		&print_tagoutput ( "        <th style=\"background-color:#DDDDFF;\" align=\"left\" colspan=\"" . ($db_columns + 1) . "\">" );
-		print $input;
+		&print_tagoutput ( "        <th style=\"background-color:#DDDDFF;\" align=\"center\" colspan=\"" . ($db_columns + 3) . "\">" );
+		print $text{'INPUT'}->{$lang} . " " . $input;
 		&print_textonly ("\n");
-		&print_tagoutput ( "        </th>\n" );
+		&print_tagoutput ( "</th>\n" );
 		&print_tagoutput ( "      </tr>\n" );
 		&print_infohash (\%infoh_input, \@sort_input, 'form');
 	};
@@ -1956,7 +1995,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 	&print_tagoutput ( "        <th style=\"background-color:#FFDDDD;\" colspan=\"" . ($db_columns + 3) . "\">" );
 	print $text{'REMOTE'}->{$lang} if ($outputformat ne "textkeyvalue");
 	&print_textonly ("\n");
-	&print_tagoutput ( "        </th>\n" );
+	&print_tagoutput ( "</th>\n" );
 	&print_tagoutput ( "      </tr>\n" );
 	&print_infohash (\%infoh_remote, \@sort_remote, 'client');
 
@@ -2002,7 +2041,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 		&print_tagoutput ( "        <th style=\"background-color:#DDFFDD;\" colspan=\"" . ($db_columns + 3) . "\">" );
 		print $text{'SERVER'}->{$lang} if ($outputformat ne "textkeyvalue");
 		&print_textonly ("\n");
-		&print_tagoutput ( "        </th>\n" );
+		&print_tagoutput ( "</th>\n" );
 		&print_tagoutput ( "      </tr>\n" );
 		&print_infohash (\%infoh_server, \@sort_server, 'server');
 	};
@@ -2016,8 +2055,9 @@ if ($mode eq "info" || $mode eq "mixed") {
 my $datetime = POSIX::strftime("%Y-%m-%d %H:%M:%S", gmtime) . " UTC";
 
 if ($outputformat =~ /^html/o) {
-	print "          <font size=-2>" . $text{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . " " . $text{'at'}->{$lang} . " " . $datetime . "</font><br>\n";
-	print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.deepspace6.net/projects/ipv6calc.html\">" . $ipv6calc_name . "</a> " . $ipv6calc_version . ", " . $ipv6calc_copyright;
+	print "          <font size=\"-2\">" . $text{'generated'}->{$lang} . " " . encode_entities($program_name) . " " . encode_entities($program_version) . ", " . encode_entities($program_copyright) . " " . $text{'at'}->{$lang} . " " . $datetime . "</font>\n";
+	print "          <br>\n";
+	print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.deepspace6.net/projects/ipv6calc.html\">" . encode_entities($ipv6calc_name) . "</a> " . encode_entities($ipv6calc_version) . ", " . encode_entities($ipv6calc_copyright);
 	if (length($ipv6calc_features) > 0) {
 		print " (features: " . $ipv6calc_features . ")";
 	};
@@ -2030,18 +2070,18 @@ if ($outputformat =~ /^html/o) {
 	print "</font>\n";
 
 	if (scalar(keys %db_info_ip2location) > 0) {
-		print "<br>\n";
-		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.ip2location.com\">IP2Location</a> " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_ip2location) . ")</font>\n";
+		print "          <br>\n";
+		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.ip2location.com\">IP2Location</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_ip2location)) . "</font>\n";
 	};
 
 	if (scalar(keys %db_info_geoip) > 0) {
-		print "<br>\n";
-		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.maxmind.com\">MaxMind</a> " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_geoip) . "</font>\n";
+		print "          <br>\n";
+		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.maxmind.com\">MaxMind</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_geoip)) . "</font>\n";
 	};
 
 	if (scalar(keys %db_info_dbip) > 0) {
-		print "<br>\n";
-		print "          <font size=-2>" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.db-ip.com\">db-ip.com</a> " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_dbip) . "</font>\n";
+		print "          <br>\n";
+		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.db-ip.com\">db-ip.com</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_dbip)) . "</font>\n";
 	};
 
 } else {
@@ -2062,7 +2102,7 @@ if ($outputformat =~ /^html/o) {
 	print $chr_quote . "\n";
 
 	if (scalar(keys %db_info_ip2location) > 0) {
-		print "INFO__POWEREDBY_IP2LoCATION=" if ($outputformat eq "textkeyvalue");
+		print "INFO__POWEREDBY_IP2LOCATION=" if ($outputformat eq "textkeyvalue");
 		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_ip2location) . " (http://www.ip2location.com)" . $chr_quote . "\n";
 	};
 

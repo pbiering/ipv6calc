@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.17 2014/09/24 09:07:57 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.18 2014/10/09 19:52:00 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -556,8 +556,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 		0,							// key format (not relevant)
 		32,							// key length
 		IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY,		// search type
-		0,							// number of first usable row (begin)
-		MAXENTRIES_ARRAY(dbipv4addr_assignment) - 1,		// number of last usable row (end)
+		MAXENTRIES_ARRAY(dbipv4addr_assignment),		// number of rows
 		ipv4,							// lookup key MSB
 		0,							// lookup key LSB
 		NULL,							// data ptr (not used in IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY)
@@ -579,8 +578,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 			0,							// key format (not relevant)
 			32,							// key length
 			IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY,		// search type
-			0,							// number of first usable row (begin)
-			MAXENTRIES_ARRAY(dbipv4addr_assignment_iana) - 1,	// number of last usable row (end)
+			MAXENTRIES_ARRAY(dbipv4addr_assignment_iana),		// number of rows
 			ipv4,							// lookup key MSB
 			0,							// lookup key LSB
 			NULL,							// data ptr (not used in IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY)
@@ -659,8 +657,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6a
 		0,							// key format (not relevant)
 		64,							// key length
 		IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST,		// search type
-		0,							// number of first usable row (begin)
-		MAXENTRIES_ARRAY(dbipv6addr_assignment) - 1,		// number of last usable row (end)
+		MAXENTRIES_ARRAY(dbipv6addr_assignment),		// number of rows
 		ipv6_00_31,						// lookup key MSB
 		ipv6_32_63,						// lookup key LSB
 		NULL,							// data ptr (not used in IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY)

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.12 2014/10/07 20:25:23 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.13 2014/10/09 19:52:00 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -650,13 +650,17 @@ int libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(const ipv6calc_ipad
 		(ipaddrp->proto == IPV6CALC_PROTO_IPV4) ? IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x2 : IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x4,	// key format
 		(ipaddrp->proto == IPV6CALC_PROTO_IPV4) ? 32 : 64,	// key length
 		IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY,		// search type
-		1,							// number of first usable row (begin)
-		recno_max,						// number of last usable row (end)
-		ipaddrp->addr[0],						// lookup key MSB
-		ipaddrp->addr[1],						// lookup key LSB
+		recno_max,						// number of rows
+		ipaddrp->addr[0],					// lookup key MSB
+		ipaddrp->addr[1],					// lookup key LSB
 		resultstring,						// data ptr
 		NULL							// function pointer
 	);
+
+	if (result < 0) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "no match found");
+		goto END_libipv6calc_db_wrapper;
+	};
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "resultstring=%s", resultstring);
 
@@ -758,13 +762,17 @@ int libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const ipv6calc_ipaddr *ipad
 		(ipaddrp->proto == IPV6CALC_PROTO_IPV4) ? IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x2 : IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x4,	// key format
 		(ipaddrp->proto == IPV6CALC_PROTO_IPV4) ? 32 : 64,	// key length
 		IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY,		// search type
-		1,							// number of first usable row (begin)
-		recno_max,						// number of last usable row (end)
+		recno_max,						// number of rows
 		ipaddrp->addr[0],					// lookup key MSB
 		ipaddrp->addr[1],					// lookup key LSB
 		resultstring,						// data ptr
 		NULL							// function pointer
 	);
+
+	if (result < 0) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "no match found");
+		goto END_libipv6calc_db_wrapper;
+	};
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "resultstring=%s", resultstring);
 

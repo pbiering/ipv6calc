@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.34 2014/10/07 20:25:23 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.35 2014/10/09 19:52:00 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -279,15 +279,14 @@ extern int libipv6calc_db_wrapper_bdb_get_data_by_key(DB *dbp, char *token, char
 #endif // HAVE_BERKELEY_DB_SUPPORT
 
 // generic DB lookup
-extern int libipv6calc_db_wrapper_get_entry_generic(
+extern long int libipv6calc_db_wrapper_get_entry_generic(
 	void 		*db_ptr,		// pointer to database in case of IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB, otherwise NULL
 	const uint8_t	data_ptr_type,		// type of data_ptr
 	const uint8_t	data_key_type,		// key type
 	const uint8_t   data_key_format,        // key format
 	const uint8_t	data_key_length,	// key length
 	const uint8_t	data_search_type,	// search type
-	const long int	data_key_row_min,	// number of first usable row (begin)
-	const long int	data_key_row_max,	// number of last usable row (end)
+	const long int	data_num_rows,		// number of rows
 	const uint32_t	lookup_key_00_31,	// lookup key MSB
 	const uint32_t	lookup_key_32_63,	// lookup key LSB
 	void            *data_ptr,		// pointer to DB data in case of IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB, otherwise NULL

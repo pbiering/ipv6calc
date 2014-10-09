@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.49 2014/10/07 20:25:23 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.50 2014/10/09 19:52:00 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -1671,15 +1671,14 @@ END_libipv6calc_db_wrapper_bdb_fetch_row:
  * return:	 -1 : no lookup result
  * 		>= 0: matching row
  */
-int libipv6calc_db_wrapper_get_entry_generic(
+long int libipv6calc_db_wrapper_get_entry_generic(
 	void 		*db_ptr,		// pointer to database in case of IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB, otherwise NULL
 	const uint8_t	data_ptr_type,		// type of data_ptr
 	const uint8_t	data_key_type,		// key type
 	const uint8_t	data_key_format,	// key format
 	const uint8_t	data_key_length,	// key length
 	const uint8_t	data_search_type,	// search type
-	const long int	data_key_row_min,	// number of first usable row (begin)
-	const long int	data_key_row_max,	// number of last usable row (end)
+	const long int	data_num_rows,		// number of rows
 	const uint32_t	lookup_key_00_31,	// lookup key MSB
 	const uint32_t	lookup_key_32_63,	// lookup key LSB
 	void            *data_ptr,		// pointer to DB data in case of IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB, otherwise NULL
@@ -1695,27 +1694,26 @@ int libipv6calc_db_wrapper_get_entry_generic(
 	DB *dbp = NULL;
 #endif // HAVE_BERKELEY_DB_SUPPORT
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with data_ptr_type=%u data_key_type=%u data_key_format=%u, data_key_length=%u data_key_row_min=%lu data_key_row_max=%lu lookup_key_00_31=%08lx lookup_key_32_63=%08lx db_ptr=%p, data_ptr=%p",
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with data_ptr_type=%u data_key_type=%u data_key_format=%u, data_key_length=%u data_num_rows=%lu lookup_key_00_31=%08lx lookup_key_32_63=%08lx db_ptr=%p, data_ptr=%p",
 		data_ptr_type,
 		data_key_type,
 		data_key_format,
 		data_key_length,
-		(long unsigned int) data_key_row_min,
-		(long unsigned int) data_key_row_max,
+		(long unsigned int) data_num_rows,
 		(long unsigned int) lookup_key_00_31,
 		(long unsigned int) lookup_key_32_63,
 		db_ptr,
 		data_ptr
 	);
 
+	if (data_num_rows < 1) {
+		ERRORPRINT_WA("unsupported data_key_num_rows (FIX CODE): %ld", data_num_rows);
+		exit(EXIT_FAILURE);
+	};
+
 	/* check data_ptr_type */
 	switch(data_ptr_type) {
 	    case IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY:
-		if (data_key_row_min < 0) {
-			ERRORPRINT_WA("unsupported data_key_row_min (FIX CODE): %ld", data_key_row_min);
-			exit(EXIT_FAILURE);
-		};
-
 		if (get_array_row == NULL) {
 			ERRORPRINT_NA("get_array_row function is unexpected NULL (FIX CODE)");
 			exit(EXIT_FAILURE);
@@ -1729,11 +1727,6 @@ int libipv6calc_db_wrapper_get_entry_generic(
 
 #ifdef HAVE_BERKELEY_DB_SUPPORT
 	    case IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB:
-		if (data_key_row_min < 1) {
-			ERRORPRINT_WA("unsupported data_key_row_min (FIX CODE): %ld", data_key_row_min);
-			exit(EXIT_FAILURE);
-		};
-
 		if (get_array_row != NULL) {
 			ERRORPRINT_NA("get_array_row function is unexpected NOT NULL (FIX CODE)");
 			exit(EXIT_FAILURE);
@@ -1753,12 +1746,6 @@ int libipv6calc_db_wrapper_get_entry_generic(
 		ERRORPRINT_WA("unsupported data_ptr_type (FIX CODE): %u", data_ptr_type);
 		exit(EXIT_FAILURE);
 		break;
-	};
-
-	/* check row min/max */
-	if (data_key_row_max < data_key_row_min) {
-		ERRORPRINT_WA("unsupported data_key_row_max < data_key_row_min (FIX CODE): %ld / %ld", data_key_row_max, data_key_row_min);
-		exit(EXIT_FAILURE);
 	};
 
 	/* check data_key_length */
@@ -1801,59 +1788,53 @@ int libipv6calc_db_wrapper_get_entry_generic(
 	long int i = -1;
 	long int match = -1;
 	int seqlongest = -1;
-	long int i_min, i_max, i_old, max = 0;
+	long int i_min, i_max, i_old;
 
 	int ret = -1;
 
-	long unsigned int recno;
+	i_min = 0; i_max = data_num_rows - 1; i_old = -1;
 
-#ifdef HAVE_BERKELEY_DB_SUPPORT
-	// empty
-#endif // HAVE_BERKELEY_DB_SUPPORT
-
-	i_min = 0; i_max = max; i_old = -1;
-
-	max = data_key_row_max;
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Start binary search over entries: max=%ld", max);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Start binary search over entries: data_num_rows=%ld", data_num_rows);
 
 	if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
 		// binary search in provided data
-		i_max = max;
 		i = i_max / 2;
 	} else if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST) {
 		// sequential search in provided data
-		i_old = max;
-		i_max = max;
+		i_old = i_max;
 		i = 0;
 	};
 
 	while (i_old != i) {
-		recno = i + data_key_row_min;
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Analyze recno=%ld", recno);
+		if ((i >= data_num_rows) || (i < 0)) {
+			ERRORPRINT_WA("i out of range (FIX CODE): i=%ld data_num_rows=%ld", i, data_num_rows);
+			exit(EXIT_FAILURE);
+		};
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Analyze entry i=%ld", i);
 
 		if (data_ptr_type == IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY) {
-			ret = get_array_row(recno, &value_first_00_31, &value_first_32_63, &value_last_00_31, &value_last_32_63);
+			ret = get_array_row(i, &value_first_00_31, &value_first_32_63, &value_last_00_31, &value_last_32_63);
 			if (ret < 0) {
-				ERRORPRINT_WA("can't retrieve keys from array for row: %lu", recno);
+				ERRORPRINT_WA("can't retrieve keys from array for row: %lu", i);
 				exit(EXIT_FAILURE);
 			};	
 #ifdef HAVE_BERKELEY_DB_SUPPORT	
 		} else if (data_ptr_type == IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB) {
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Try to get row from Berkeley DB dbp=%p recno=%ld", dbp, recno);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Try to get row from Berkeley DB dbp=%p row=%ld", dbp, i + 1);
 			ret = libipv6calc_db_wrapper_bdb_fetch_row(
-				dbp,			// pointer to DB
-				data_key_format,	// DB format
-				recno,			// row number
-				&value_first_00_31,	// data 1 (MSB in case of 64 bits)
-				&value_first_32_63,	// data 1 (LSB in case of 64 bits)
-				&value_last_00_31,	// data 2 (MSB in case of 64 bits)
-				&value_last_32_63,	// data 2 (LSB in case of 64 bits)
-				data_ptr		// pointer to data
+				dbp,				// pointer to DB
+				data_key_format,		// DB format
+				(long unsigned int) i + 1,	// row number (BDB starts always with 1, so add offset)
+				&value_first_00_31,		// data 1 (MSB in case of 64 bits)
+				&value_first_32_63,		// data 1 (LSB in case of 64 bits)
+				&value_last_00_31,		// data 2 (MSB in case of 64 bits)
+				&value_last_32_63,		// data 2 (LSB in case of 64 bits)
+				data_ptr			// pointer to data
 			);
 
 			if (ret < 0) {
-				ERRORPRINT_WA("can't retrieve keys from data for row: %lu", recno);
+				ERRORPRINT_WA("can't retrieve keys from data for row: %ld", i);
 				exit(EXIT_FAILURE);
 			};
 #endif // HAVE_BERKELEY_DB_SUPPORT
@@ -2042,6 +2023,14 @@ int libipv6calc_db_wrapper_get_entry_generic(
 			// binary search in provided data
 			i_old = i;
 			i = (i_max - i_min) / 2 + i_min;
+
+			// jump to last entry in special way if needed, otherwise it's not reachable
+			if ((i == i_old) && ((i + 1) == (data_num_rows - 1))) {
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "workaround for last entry activated");
+				i = i_max;
+			};
+
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "i_old=%ld i_min=%ld i_max=%ld i=%ld", i_old, i_min, i_max, i);
 		} else if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST) {
 			// sequential search in provided data
 			i++;
@@ -2071,7 +2060,7 @@ int libipv6calc_db_wrapper_get_entry_generic(
 				ret = libipv6calc_db_wrapper_bdb_fetch_row(
 					dbp,			// pointer to DB
 					data_key_format,	// DB format
-					match + data_key_row_min,// row number
+					match + 1,		// row number
 					&value_first_00_31,	// data 1 (MSB in case of 64 bits)
 					&value_first_32_63,	// data 1 (LSB in case of 64 bits)
 					&value_last_00_31,	// data 2 (MSB in case of 64 bits)
@@ -2095,5 +2084,6 @@ int libipv6calc_db_wrapper_get_entry_generic(
 	};
 
 //END_libipv6calc_db_wrapper_get_entry_generic:
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Return: %d", retval);
 	return(retval);
 };

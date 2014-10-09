@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.70 2014/10/07 20:25:22 ds6peter Exp $
- * Generated     : Sat Sep 27 13:15:24 2014
+ * Version       : $Id: dbieee_iab.h,v 1.71 2014/10/09 19:51:59 ds6peter Exp $
+ * Generated     : Wed Oct  8 22:03:51 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20140927";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20141008";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -880,7 +880,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x362000, 0x362FFF, "AZD Praha s.r.o.", "AZD-PRAHA-S-R-O" },
 	{ 0x0050C2, 0x363000, 0x363FFF, "Septentrio nv/sa", "SEPTENTRIO-NV/" },
 	{ 0x0050C2, 0x364000, 0x364FFF, "TATTILE SRL", "TATTILE-SRL" },
-	{ 0x0050C2, 0x365000, 0x365FFF, "Vishay Nobel AB", "VISHAY-NOBEL-AB" },
+	{ 0x0050C2, 0x365000, 0x365FFF, "VPG", "VPG" },
 	{ 0x0050C2, 0x366000, 0x366FFF, "Vanguard Technology Corp.", "VANGUARD" },
 	{ 0x0050C2, 0x367000, 0x367FFF, "CANMAX Technology Ltd.", "CANMAX" },
 	{ 0x0050C2, 0x368000, 0x368FFF, "ASPEL S.A.", "ASPEL" },
@@ -1415,7 +1415,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x579000, 0x579FFF, "Gastager Systemtechnik GmbH", "GASTAGER-SYSTEMTECHNIK" },
 	{ 0x0050C2, 0x57A000, 0x57AFFF, "Pigeon Point Systems LLC", "PIGEON-POINT-LLC" },
 	{ 0x0050C2, 0x57B000, 0x57BFFF, "ptswitch", "PTSWITCH" },
-	{ 0x0050C2, 0x57C000, 0x57CFFF, "CYBERSYS", "CYBERSYS" },
+	{ 0x0050C2, 0x57C000, 0x57CFFF, "éolane", "éOLANE" },
 	{ 0x0050C2, 0x57D000, 0x57DFFF, "Sierra Video Systems", "SIERRA-VIDEO" },
 	{ 0x0050C2, 0x57E000, 0x57EFFF, "Digital Way", "DIGITAL-WAY" },
 	{ 0x0050C2, 0x57F000, 0x57FFFF, "Orderite, Inc.", "ORDERITE" },
@@ -4323,7 +4323,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x0DB000, 0x0DBFFF, "Top Connect OU", "TOP-CONNECT-OU" },
 	{ 0x40D855, 0x0DC000, 0x0DCFFF, "NVS Technologies Inc", "NVS-TECHNOLOGIES" },
 	{ 0x40D855, 0x0DD000, 0x0DDFFF, "Embed Limited", "EMBED" },
-	{ 0x40D855, 0x0DE000, 0x0DEFFF, "Vishay Nobel AB", "VISHAY-NOBEL-AB" },
+	{ 0x40D855, 0x0DE000, 0x0DEFFF, "VPG", "VPG" },
 	{ 0x40D855, 0x0DF000, 0x0DFFFF, "Xadi Inc", "XADI" },
 	{ 0x40D855, 0x0E0000, 0x0E0FFF, "Richter", "RICHTER" },
 	{ 0x40D855, 0x0E1000, 0x0E1FFF, "STV Electronic GmbH", "STV" },

@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.19 2014/10/07 20:25:22 ds6peter Exp $
- * Generated     : Sat Sep 27 13:15:22 2014
+ * Version       : $Id: dbieee_oui36.h,v 1.20 2014/10/09 19:51:59 ds6peter Exp $
+ * Generated     : Wed Oct  8 22:03:49 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20140927";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20141008";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -437,19 +437,33 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x39B000, 0x39BFFF, "IROC AB", "IROC-AB" },
 	{ 0x70B3D5, 0x2CF000, 0x2CFFFF, "MB Connect Line GmbH", "MB-CONNECT-LINE" },
 	{ 0x70B3D5, 0x28E000, 0x28EFFF, "TEX COMPUTER SRL", "TEX-SRL" },
+	{ 0x70B3D5, 0xD7F000, 0xD7FFFF, "ConectaIP Tecnologia S.L.", "CONECTAIP-TECNOLOGIA-S-L" },
 	{ 0x70B3D5, 0x655000, 0x655FFF, "AOT System GmbH", "AOT-SYSTEM" },
+	{ 0x70B3D5, 0x3DB000, 0x3DBFFF, "KST technology", "KST" },
 	{ 0x70B3D5, 0x5AA000, 0x5AAFFF, "Chugoku Electric Manufacturing Co.,Inc", "CHUGOKU-ELECTRIC-MANUFACTURING" },
+	{ 0x70B3D5, 0xEC6000, 0xEC6FFF, "ESII", "ESII" },
 	{ 0x70B3D5, 0x7E7000, 0x7E7FFF, "Atessa, Inc.", "ATESSA" },
+	{ 0x70B3D5, 0x665000, 0x665FFF, "CertUsus GmbH", "CERTUSUS" },
 	{ 0x70B3D5, 0xE4A000, 0xE4AFFF, "ICP NewTech Ltd", "ICP-NEWTECH" },
+	{ 0x70B3D5, 0x186000, 0x186FFF, "Rohde&Schwarz Topex", "ROHDE-SCHWARZ-TOPEX" },
 	{ 0x70B3D5, 0xE07000, 0xE07FFF, "Baader Planetarium GmbH", "BAADER-PLANETARIUM" },
+	{ 0x70B3D5, 0xD46000, 0xD46FFF, "Contineo s.r.o.", "CONTINEO-S-R-O" },
 	{ 0x70B3D5, 0x0D6000, 0x0D6FFF, "TATTILE SRL", "TATTILE-SRL" },
+	{ 0x70B3D5, 0x417000, 0x417FFF, "Figment Design Laboratories", "FIGMENT-DESIGN-LABORATORIES" },
 	{ 0x70B3D5, 0xB39000, 0xB39FFF, "MB Connect Line GmbH", "MB-CONNECT-LINE" },
+	{ 0x70B3D5, 0xCF6000, 0xCF6FFF, "Tornado Modular Systems", "TORNADO-MODULAR" },
 	{ 0x70B3D5, 0x2A5000, 0x2A5FFF, "Taitotekniikka", "TAITOTEKNIIKKA" },
+	{ 0x70B3D5, 0x7B8000, 0x7B8FFF, "SerEnergy A/S", "SERENERGY-A/S" },
 	{ 0x70B3D5, 0xC24000, 0xC24FFF, "Elbit Systems of America", "ELBIT-OF-AMERICA" },
+	{ 0x70B3D5, 0x10C000, 0x10CFFF, "Vocality International", "VOCALITY" },
 	{ 0x70B3D5, 0x564000, 0x564FFF, "christmann informationstechnik + medien GmbH & Co. KG", "CHRISTMANN-INFORMATIONSTECHNIK-+-MEDIEN" },
+	{ 0x70B3D5, 0xD48000, 0xD48FFF, "HEADROOM Broadcast GmbH", "HEADROOM-BROADCAST" },
 	{ 0x70B3D5, 0xC78000, 0xC78FFF, "NETA Elektronik AS", "NETA-ELEKTRONIK-AS" },
+	{ 0x70B3D5, 0xC5A000, 0xC5AFFF, "Commsignia Ltd.", "COMMSIGNIA" },
 	{ 0x70B3D5, 0xF2A000, 0xF2AFFF, "WIBOND Informationssysteme GmbH", "WIBOND-INFORMATIONSSYSTEME" },
+	{ 0x70B3D5, 0xA97000, 0xA97FFF, "Bizwerks, LLC", "BIZWERKS-LLC" },
 	{ 0x70B3D5, 0x86D000, 0x86DFFF, "Census Digital Incorporated", "CENSUS-DIGITAL-INCORPORATED" },
+	{ 0x70B3D5, 0x9DB000, 0x9DBFFF, "CAS Medical Systems, Inc", "CAS-MEDICAL" },
 	{ 0x70B3D5, 0xAC8000, 0xAC8FFF, "Heartland.Data Inc.", "HEARTLAND-DATA" },
 	{ 0x70B3D5, 0x634000, 0x634FFF, "idaqs Co.,Ltd.", "IDAQS" },
 	{ 0x70B3D5, 0x010000, 0x010FFF, "Hanwa Electronic Ind.Co.,Ltd.", "HANWA-IND" },

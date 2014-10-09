@@ -1,8 +1,8 @@
  /*
  * Project       : ipv6calc
  * File          : dbipv4_assignment.h
- * Version       : $Id: dbipv4addr_assignment.h,v 1.78 2014/10/07 20:25:22 ds6peter Exp $
- * Generated     : Mon Sep 29 20:13:37 2014
+ * Version       : $Id: dbipv4addr_assignment.h,v 1.79 2014/10/09 19:51:59 ds6peter Exp $
+ * Generated     : Wed Oct  8 22:04:24 2014
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
@@ -11,8 +11,8 @@
 
 #include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
-/*@unused@*/ static const char* dbipv4addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20140927 APNIC/20140926 ARIN/20140927 IANA/20140520 LACNIC/20140926 RIPENCC/20140926";
-/*@unused@*/ static const time_t dbipv4addr_registry_unixtime __attribute__ ((__unused__)) = 1412014417;
+/*@unused@*/ static const char* dbipv4addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20141008 APNIC/20141008 ARIN/20141008 IANA/20140520 LACNIC/20141007 RIPENCC/20141007";
+/*@unused@*/ static const time_t dbipv4addr_registry_unixtime __attribute__ ((__unused__)) = 1412798664;
 
 static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	//first     , last      , registry  
@@ -135,7 +135,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x2bf00000, 0x2bf314ff, REGISTRY_APNIC      }, // 43.240.0.0      - 43.243.20.255  
 	{ 0x2bf31800, 0x2bf383ff, REGISTRY_APNIC      }, // 43.243.24.0     - 43.243.131.255 
 	{ 0x2bf38800, 0x2bf663ff, REGISTRY_APNIC      }, // 43.243.136.0    - 43.246.99.255  
-	{ 0x2bf70000, 0x2bf8d3ff, REGISTRY_APNIC      }, // 43.247.0.0      - 43.248.211.255 
+	{ 0x2bf70000, 0x2bf97bff, REGISTRY_APNIC      }, // 43.247.0.0      - 43.249.123.255 
 	{ 0x2bfc0000, 0x2bffffff, REGISTRY_APNIC      }, // 43.252.0.0      - 43.255.255.255 
 	{ 0x2c000000, 0x2d01ffff, REGISTRY_ARIN       }, // 44.0.0.0        - 45.1.255.255   
 	{ 0x2d100000, 0x2d3fffff, REGISTRY_ARIN       }, // 45.16.0.0       - 45.63.255.255  
@@ -676,7 +676,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x5bd41500, 0x5bd41aff, REGISTRY_RIPENCC    }, // 91.212.21.0     - 91.212.26.255  
 	{ 0x5bd41c00, 0x5bd425ff, REGISTRY_RIPENCC    }, // 91.212.28.0     - 91.212.37.255  
 	{ 0x5bd42700, 0x5bd428ff, REGISTRY_RIPENCC    }, // 91.212.39.0     - 91.212.40.255  
-	{ 0x5bd42a00, 0x5bd430ff, REGISTRY_RIPENCC    }, // 91.212.42.0     - 91.212.48.255  
+	{ 0x5bd42a00, 0x5bd42cff, REGISTRY_RIPENCC    }, // 91.212.42.0     - 91.212.44.255  
+	{ 0x5bd42e00, 0x5bd430ff, REGISTRY_RIPENCC    }, // 91.212.46.0     - 91.212.48.255  
 	{ 0x5bd43200, 0x5bd432ff, REGISTRY_RIPENCC    }, // 91.212.50.0     - 91.212.50.255  
 	{ 0x5bd43400, 0x5bd435ff, REGISTRY_RIPENCC    }, // 91.212.52.0     - 91.212.53.255  
 	{ 0x5bd43800, 0x5bd440ff, REGISTRY_RIPENCC    }, // 91.212.56.0     - 91.212.64.255  
@@ -881,7 +882,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x6709b800, 0x670a09ff, REGISTRY_APNIC      }, // 103.9.184.0     - 103.10.9.255   
 	{ 0x670a0b00, 0x670a2bff, REGISTRY_APNIC      }, // 103.10.11.0     - 103.10.43.255  
 	{ 0x670a3000, 0x670a6cff, REGISTRY_APNIC      }, // 103.10.48.0     - 103.10.108.255 
-	{ 0x670a6e00, 0x670aebff, REGISTRY_APNIC      }, // 103.10.110.0    - 103.10.235.255 
+	{ 0x670a6e00, 0x670addff, REGISTRY_APNIC      }, // 103.10.110.0    - 103.10.221.255 
+	{ 0x670adf00, 0x670aebff, REGISTRY_APNIC      }, // 103.10.223.0    - 103.10.235.255 
 	{ 0x670af000, 0x670affff, REGISTRY_APNIC      }, // 103.10.240.0    - 103.10.255.255 
 	{ 0x670b0400, 0x670b14ff, REGISTRY_APNIC      }, // 103.11.4.0      - 103.11.20.255  
 	{ 0x670b1600, 0x670b47ff, REGISTRY_APNIC      }, // 103.11.22.0     - 103.11.71.255  
@@ -940,7 +942,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x671a7800, 0x671a83ff, REGISTRY_APNIC      }, // 103.26.120.0    - 103.26.131.255 
 	{ 0x671a8800, 0x671b2fff, REGISTRY_APNIC      }, // 103.26.136.0    - 103.27.47.255  
 	{ 0x671b3400, 0x671b4bff, REGISTRY_APNIC      }, // 103.27.52.0     - 103.27.75.255  
-	{ 0x671b5000, 0x671c33ff, REGISTRY_APNIC      }, // 103.27.80.0     - 103.28.51.255  
+	{ 0x671b5000, 0x671bfdff, REGISTRY_APNIC      }, // 103.27.80.0     - 103.27.253.255 
+	{ 0x671bff00, 0x671c33ff, REGISTRY_APNIC      }, // 103.27.255.0    - 103.28.51.255  
 	{ 0x671c3600, 0x671cd3ff, REGISTRY_APNIC      }, // 103.28.54.0     - 103.28.211.255 
 	{ 0x671cd800, 0x671cf3ff, REGISTRY_APNIC      }, // 103.28.216.0    - 103.28.243.255 
 	{ 0x671cf800, 0x671d29ff, REGISTRY_APNIC      }, // 103.28.248.0    - 103.29.41.255  
@@ -952,15 +955,16 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x671ee400, 0x671febff, REGISTRY_APNIC      }, // 103.30.228.0    - 103.31.235.255 
 	{ 0x671ff000, 0x672333ff, REGISTRY_APNIC      }, // 103.31.240.0    - 103.35.51.255  
 	{ 0x67240000, 0x6726ebff, REGISTRY_APNIC      }, // 103.36.0.0      - 103.38.235.255 
-	{ 0x6726f000, 0x6727faff, REGISTRY_APNIC      }, // 103.38.240.0    - 103.39.250.255 
-	{ 0x6727fc00, 0x672833ff, REGISTRY_APNIC      }, // 103.39.252.0    - 103.40.51.255  
+	{ 0x6726f000, 0x6728cfff, REGISTRY_APNIC      }, // 103.38.240.0    - 103.40.207.255 
 	{ 0x67e00000, 0x67e484ff, REGISTRY_APNIC      }, // 103.224.0.0     - 103.228.132.255
 	{ 0x67e48800, 0x67e663ff, REGISTRY_APNIC      }, // 103.228.136.0   - 103.230.99.255 
-	{ 0x67e66500, 0x67eacfff, REGISTRY_APNIC      }, // 103.230.101.0   - 103.234.207.255
+	{ 0x67e66500, 0x67e6a3ff, REGISTRY_APNIC      }, // 103.230.101.0   - 103.230.163.255
+	{ 0x67e6a600, 0x67eacfff, REGISTRY_APNIC      }, // 103.230.166.0   - 103.234.207.255
 	{ 0x67ead800, 0x67ec63ff, REGISTRY_APNIC      }, // 103.234.216.0   - 103.236.99.255 
 	{ 0x67ed0000, 0x67f077ff, REGISTRY_APNIC      }, // 103.237.0.0     - 103.240.119.255
 	{ 0x67f07c00, 0x67f1e3ff, REGISTRY_APNIC      }, // 103.240.124.0   - 103.241.227.255
-	{ 0x67f1e800, 0x67f50fff, REGISTRY_APNIC      }, // 103.241.232.0   - 103.245.15.255 
+	{ 0x67f1e800, 0x67f473ff, REGISTRY_APNIC      }, // 103.241.232.0   - 103.244.115.255
+	{ 0x67f47800, 0x67f50fff, REGISTRY_APNIC      }, // 103.244.120.0   - 103.245.15.255 
 	{ 0x67f51400, 0x67f627ff, REGISTRY_APNIC      }, // 103.245.20.0    - 103.246.39.255 
 	{ 0x67f62c00, 0x67f668ff, REGISTRY_APNIC      }, // 103.246.44.0    - 103.246.104.255
 	{ 0x67f66a00, 0x67f6bfff, REGISTRY_APNIC      }, // 103.246.106.0   - 103.246.191.255
@@ -978,7 +982,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x67f98800, 0x67f99bff, REGISTRY_APNIC      }, // 103.249.136.0   - 103.249.155.255
 	{ 0x67f9a000, 0x67f9d7ff, REGISTRY_APNIC      }, // 103.249.160.0   - 103.249.215.255
 	{ 0x67f9dc00, 0x67f9ffff, REGISTRY_APNIC      }, // 103.249.220.0   - 103.249.255.255
-	{ 0x67fa0400, 0x67fbbfff, REGISTRY_APNIC      }, // 103.250.4.0     - 103.251.191.255
+	{ 0x67fa0400, 0x67fa23ff, REGISTRY_APNIC      }, // 103.250.4.0     - 103.250.35.255 
+	{ 0x67fa2800, 0x67fbbfff, REGISTRY_APNIC      }, // 103.250.40.0    - 103.251.191.255
 	{ 0x67fbc400, 0x67ffffff, REGISTRY_APNIC      }, // 103.251.196.0   - 103.255.255.255
 	{ 0x68000000, 0x68ffffff, REGISTRY_ARIN       }, // 104.0.0.0       - 104.255.255.255
 	{ 0x69000000, 0x69ffffff, REGISTRY_AFRINIC    }, // 105.0.0.0       - 105.255.255.255
@@ -1031,8 +1036,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x74d53000, 0x74fe67ff, REGISTRY_APNIC      }, // 116.213.48.0    - 116.254.103.255
 	{ 0x74fe7000, 0x753527ff, REGISTRY_APNIC      }, // 116.254.112.0   - 117.53.39.255  
 	{ 0x75353000, 0x75358fff, REGISTRY_APNIC      }, // 117.53.48.0     - 117.53.143.255 
-	{ 0x75359800, 0x75671fff, REGISTRY_APNIC      }, // 117.53.152.0    - 117.103.31.255 
-	{ 0x75672800, 0x757837ff, REGISTRY_APNIC      }, // 117.103.40.0    - 117.120.55.255 
+	{ 0x75359800, 0x757837ff, REGISTRY_APNIC      }, // 117.53.152.0    - 117.120.55.255 
 	{ 0x75784000, 0x76679fff, REGISTRY_APNIC      }, // 117.120.64.0    - 118.103.159.255
 	{ 0x7667c000, 0x766bafff, REGISTRY_APNIC      }, // 118.103.192.0   - 118.107.175.255
 	{ 0x766bb800, 0x77a15fff, REGISTRY_APNIC      }, // 118.107.184.0   - 119.161.95.255 
@@ -1329,26 +1333,24 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x83700000, 0x8371ffff, REGISTRY_APNIC      }, // 131.112.0.0     - 131.113.255.255
 	{ 0x83720000, 0x83757fff, REGISTRY_RIPENCC    }, // 131.114.0.0     - 131.117.127.255
 	{ 0x83758000, 0x8375ffff, REGISTRY_RIPENCC    }, // 131.117.128.0   - 131.117.255.255
-	{ 0x83760000, 0x8381ffff, REGISTRY_ARIN       }, // 131.118.0.0     - 131.129.255.255
+	{ 0x83760000, 0x8380ffff, REGISTRY_ARIN       }, // 131.118.0.0     - 131.128.255.255
 	{ 0x83810000, 0x8381ffff, REGISTRY_APNIC      }, // 131.129.0.0     - 131.129.255.255
 	{ 0x83820000, 0x8382ffff, REGISTRY_RIPENCC    }, // 131.130.0.0     - 131.130.255.255
-	{ 0x83830000, 0x8397ffff, REGISTRY_ARIN       }, // 131.131.0.0     - 131.151.255.255
+	{ 0x83830000, 0x8392ffff, REGISTRY_ARIN       }, // 131.131.0.0     - 131.146.255.255
 	{ 0x83930000, 0x8393ffff, REGISTRY_APNIC      }, // 131.147.0.0     - 131.147.255.255
+	{ 0x83940000, 0x8397ffff, REGISTRY_ARIN       }, // 131.148.0.0     - 131.151.255.255
 	{ 0x83980000, 0x8398ffff, REGISTRY_RIPENCC    }, // 131.152.0.0     - 131.152.255.255
 	{ 0x83990000, 0x8399ffff, REGISTRY_ARIN       }, // 131.153.0.0     - 131.153.255.255
 	{ 0x839a0000, 0x839bffff, REGISTRY_RIPENCC    }, // 131.154.0.0     - 131.155.255.255
 	{ 0x839c0000, 0x839effff, REGISTRY_ARIN       }, // 131.156.0.0     - 131.158.255.255
 	{ 0x839f0000, 0x83a0ffff, REGISTRY_RIPENCC    }, // 131.159.0.0     - 131.160.255.255
-	{ 0x83a10000, 0x83a11fff, REGISTRY_LACNIC     }, // 131.161.0.0     - 131.161.31.255 
-	{ 0x83a12800, 0x83a143ff, REGISTRY_LACNIC     }, // 131.161.40.0    - 131.161.67.255 
-	{ 0x83a14800, 0x83a153ff, REGISTRY_LACNIC     }, // 131.161.72.0    - 131.161.83.255 
-	{ 0x83a15800, 0x83a15bff, REGISTRY_LACNIC     }, // 131.161.88.0    - 131.161.91.255 
-	{ 0x83a16400, 0x83a167ff, REGISTRY_LACNIC     }, // 131.161.100.0   - 131.161.103.255
-	{ 0x83a16c00, 0x83a19bff, REGISTRY_LACNIC     }, // 131.161.108.0   - 131.161.155.255
-	{ 0x83a1a000, 0x83a1a3ff, REGISTRY_LACNIC     }, // 131.161.160.0   - 131.161.163.255
-	{ 0x83a1a800, 0x83a1b3ff, REGISTRY_LACNIC     }, // 131.161.168.0   - 131.161.179.255
-	{ 0x83a1b800, 0x83a1bbff, REGISTRY_LACNIC     }, // 131.161.184.0   - 131.161.187.255
-	{ 0x83a1c800, 0x83a1cbff, REGISTRY_LACNIC     }, // 131.161.200.0   - 131.161.203.255
+	{ 0x83a10000, 0x83a123ff, REGISTRY_LACNIC     }, // 131.161.0.0     - 131.161.35.255 
+	{ 0x83a12800, 0x83a167ff, REGISTRY_LACNIC     }, // 131.161.40.0    - 131.161.103.255
+	{ 0x83a16c00, 0x83a1a3ff, REGISTRY_LACNIC     }, // 131.161.108.0   - 131.161.163.255
+	{ 0x83a1a800, 0x83a1c3ff, REGISTRY_LACNIC     }, // 131.161.168.0   - 131.161.195.255
+	{ 0x83a1c800, 0x83a1e3ff, REGISTRY_LACNIC     }, // 131.161.200.0   - 131.161.227.255
+	{ 0x83a1e800, 0x83a1f3ff, REGISTRY_LACNIC     }, // 131.161.232.0   - 131.161.243.255
+	{ 0x83a1f800, 0x83a1fbff, REGISTRY_LACNIC     }, // 131.161.248.0   - 131.161.251.255
 	{ 0x83a20000, 0x83a3ffff, REGISTRY_ARIN       }, // 131.162.0.0     - 131.163.255.255
 	{ 0x83a40000, 0x83a6ffff, REGISTRY_RIPENCC    }, // 131.164.0.0     - 131.166.255.255
 	{ 0x83a70000, 0x83a8ffff, REGISTRY_ARIN       }, // 131.167.0.0     - 131.168.255.255
@@ -1374,11 +1376,16 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x83cf0000, 0x83cfffff, REGISTRY_RIPENCC    }, // 131.207.0.0     - 131.207.255.255
 	{ 0x83d00000, 0x83d2ffff, REGISTRY_ARIN       }, // 131.208.0.0     - 131.210.255.255
 	{ 0x83d30000, 0x83d3ffff, REGISTRY_RIPENCC    }, // 131.211.0.0     - 131.211.255.255
-	{ 0x83d40000, 0x83d8ffff, REGISTRY_ARIN       }, // 131.212.0.0     - 131.216.255.255
+	{ 0x83d40000, 0x83d4ffff, REGISTRY_ARIN       }, // 131.212.0.0     - 131.212.255.255
 	{ 0x83d50000, 0x83d5ffff, REGISTRY_APNIC      }, // 131.213.0.0     - 131.213.255.255
+	{ 0x83d60000, 0x83d8ffff, REGISTRY_ARIN       }, // 131.214.0.0     - 131.216.255.255
 	{ 0x83d90000, 0x83d9ffff, REGISTRY_APNIC      }, // 131.217.0.0     - 131.217.255.255
 	{ 0x83da0000, 0x83dbffff, REGISTRY_ARIN       }, // 131.218.0.0     - 131.219.255.255
 	{ 0x83dc0000, 0x83dcffff, REGISTRY_RIPENCC    }, // 131.220.0.0     - 131.220.255.255
+	{ 0x83dd0800, 0x83dd0fff, REGISTRY_LACNIC     }, // 131.221.8.0     - 131.221.15.255 
+	{ 0x83dd1800, 0x83dd1bff, REGISTRY_LACNIC     }, // 131.221.24.0    - 131.221.27.255 
+	{ 0x83dd2800, 0x83dd2bff, REGISTRY_LACNIC     }, // 131.221.40.0    - 131.221.43.255 
+	{ 0x83dd3400, 0x83dd37ff, REGISTRY_LACNIC     }, // 131.221.52.0    - 131.221.55.255 
 	{ 0x83de0000, 0x83dfffff, REGISTRY_ARIN       }, // 131.222.0.0     - 131.223.255.255
 	{ 0x83e00000, 0x83e0ffff, REGISTRY_RIPENCC    }, // 131.224.0.0     - 131.224.255.255
 	{ 0x83e10000, 0x83e2ffff, REGISTRY_ARIN       }, // 131.225.0.0     - 131.226.255.255
@@ -1602,6 +1609,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x89450000, 0x8948ffff, REGISTRY_ARIN       }, // 137.69.0.0      - 137.72.255.255 
 	{ 0x89490000, 0x8949ffff, REGISTRY_RIPENCC    }, // 137.73.0.0      - 137.73.255.255 
 	{ 0x894a0000, 0x894affff, REGISTRY_APNIC      }, // 137.74.0.0      - 137.74.255.255 
+	{ 0x894b0000, 0x894bffff, REGISTRY_ARIN       }, // 137.75.0.0      - 137.75.255.255 
 	{ 0x894c0000, 0x894cffff, REGISTRY_APNIC      }, // 137.76.0.0      - 137.76.255.255 
 	{ 0x894d0000, 0x895bffff, REGISTRY_ARIN       }, // 137.77.0.0      - 137.91.255.255 
 	{ 0x895c0000, 0x895cffff, REGISTRY_APNIC      }, // 137.92.0.0      - 137.92.255.255 
@@ -2714,12 +2722,12 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x9a416000, 0x9a426fff, REGISTRY_AFRINIC    }, // 154.65.96.0     - 154.66.111.255 
 	{ 0x9a427400, 0x9a447fff, REGISTRY_AFRINIC    }, // 154.66.116.0    - 154.68.127.255 
 	{ 0x9a44c000, 0x9a464fff, REGISTRY_AFRINIC    }, // 154.68.192.0    - 154.70.79.255  
-	{ 0x9a466000, 0x9a499fff, REGISTRY_AFRINIC    }, // 154.70.96.0     - 154.73.159.255 
+	{ 0x9a466000, 0x9a49a7ff, REGISTRY_AFRINIC    }, // 154.70.96.0     - 154.73.167.255 
 	{ 0x9a49b800, 0x9a49d7ff, REGISTRY_AFRINIC    }, // 154.73.184.0    - 154.73.215.255 
 	{ 0x9a49dc00, 0x9a49ffff, REGISTRY_AFRINIC    }, // 154.73.220.0    - 154.73.255.255 
 	{ 0x9a4c0000, 0x9a70ffff, REGISTRY_AFRINIC    }, // 154.76.0.0      - 154.112.255.255
 	{ 0x9a740000, 0x9a74ffff, REGISTRY_AFRINIC    }, // 154.116.0.0     - 154.116.255.255
-	{ 0x9a772000, 0x9a773fff, REGISTRY_AFRINIC    }, // 154.119.32.0    - 154.119.63.255 
+	{ 0x9a770000, 0x9a774fff, REGISTRY_AFRINIC    }, // 154.119.0.0     - 154.119.79.255 
 	{ 0x9a776000, 0x9a7bffff, REGISTRY_AFRINIC    }, // 154.119.96.0    - 154.123.255.255
 	{ 0x9a7e0000, 0x9a7fffff, REGISTRY_AFRINIC    }, // 154.126.0.0     - 154.127.255.255
 	{ 0x9b010000, 0x9b03ffff, REGISTRY_ARIN       }, // 155.1.0.0       - 155.3.255.255  
@@ -2727,11 +2735,15 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0x9b050000, 0x9b0affff, REGISTRY_ARIN       }, // 155.5.0.0       - 155.10.255.255 
 	{ 0x9b0d0000, 0x9b1fffff, REGISTRY_ARIN       }, // 155.13.0.0      - 155.31.255.255 
 	{ 0x9b200000, 0x9b20ffff, REGISTRY_APNIC      }, // 155.32.0.0      - 155.32.255.255 
-	{ 0x9b210000, 0x9b2cffff, REGISTRY_ARIN       }, // 155.33.0.0      - 155.44.255.255 
+	{ 0x9b210000, 0x9b2300ff, REGISTRY_ARIN       }, // 155.33.0.0      - 155.35.0.255   
 	{ 0x9b230100, 0x9b2301ff, REGISTRY_APNIC      }, // 155.35.1.0      - 155.35.1.255   
+	{ 0x9b230200, 0x9b2321ff, REGISTRY_ARIN       }, // 155.35.2.0      - 155.35.33.255  
 	{ 0x9b232200, 0x9b2323ff, REGISTRY_APNIC      }, // 155.35.34.0     - 155.35.35.255  
+	{ 0x9b232400, 0x9b232dff, REGISTRY_ARIN       }, // 155.35.36.0     - 155.35.45.255  
 	{ 0x9b232e00, 0x9b232fff, REGISTRY_APNIC      }, // 155.35.46.0     - 155.35.47.255  
+	{ 0x9b233000, 0x9b23e7ff, REGISTRY_ARIN       }, // 155.35.48.0     - 155.35.231.255 
 	{ 0x9b23e800, 0x9b23e8ff, REGISTRY_APNIC      }, // 155.35.232.0    - 155.35.232.255 
+	{ 0x9b23e900, 0x9b2cffff, REGISTRY_ARIN       }, // 155.35.233.0    - 155.44.255.255 
 	{ 0x9b2d0000, 0x9b2dffff, REGISTRY_RIPENCC    }, // 155.45.0.0      - 155.45.255.255 
 	{ 0x9b2e0000, 0x9b35ffff, REGISTRY_ARIN       }, // 155.46.0.0      - 155.53.255.255 
 	{ 0x9b360000, 0x9b38ffff, REGISTRY_RIPENCC    }, // 155.54.0.0      - 155.56.255.255 
@@ -3785,8 +3797,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xa9ff1000, 0xa9ff13ff, REGISTRY_AFRINIC    }, // 169.255.16.0    - 169.255.19.255 
 	{ 0xa9ff1800, 0xa9ff1bff, REGISTRY_AFRINIC    }, // 169.255.24.0    - 169.255.27.255 
 	{ 0xa9ff2000, 0xa9ff23ff, REGISTRY_AFRINIC    }, // 169.255.32.0    - 169.255.35.255 
-	{ 0xa9ff2800, 0xa9ff2bff, REGISTRY_AFRINIC    }, // 169.255.40.0    - 169.255.43.255 
-	{ 0xa9ff3000, 0xa9ff33ff, REGISTRY_AFRINIC    }, // 169.255.48.0    - 169.255.51.255 
+	{ 0xa9ff2800, 0xa9ff37ff, REGISTRY_AFRINIC    }, // 169.255.40.0    - 169.255.55.255 
 	{ 0xaa010000, 0xaa11ffff, REGISTRY_ARIN       }, // 170.1.0.0       - 170.17.255.255 
 	{ 0xaa120000, 0xaa12ffff, REGISTRY_LACNIC     }, // 170.18.0.0      - 170.18.255.255 
 	{ 0xaa130000, 0xaa18ffff, REGISTRY_ARIN       }, // 170.19.0.0      - 170.24.255.255 
@@ -3942,13 +3953,15 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xb9210400, 0xb9257fff, REGISTRY_RIPENCC    }, // 185.33.4.0      - 185.37.127.255 
 	{ 0xb9258400, 0xb92803ff, REGISTRY_RIPENCC    }, // 185.37.132.0    - 185.40.3.255   
 	{ 0xb9280800, 0xb9289bff, REGISTRY_RIPENCC    }, // 185.40.8.0      - 185.40.155.255 
-	{ 0xb928a000, 0xb94337ff, REGISTRY_RIPENCC    }, // 185.40.160.0    - 185.67.55.255  
+	{ 0xb928a000, 0xb9411fff, REGISTRY_RIPENCC    }, // 185.40.160.0    - 185.65.31.255  
+	{ 0xb9412400, 0xb94337ff, REGISTRY_RIPENCC    }, // 185.65.36.0     - 185.67.55.255  
 	{ 0xb9433c00, 0xb9462fff, REGISTRY_RIPENCC    }, // 185.67.60.0     - 185.70.47.255  
-	{ 0xb9463400, 0xb9476fff, REGISTRY_RIPENCC    }, // 185.70.52.0     - 185.71.111.255 
+	{ 0xb9463400, 0xb9489bff, REGISTRY_RIPENCC    }, // 185.70.52.0     - 185.72.155.255 
 	{ 0xba000000, 0xba008fff, REGISTRY_LACNIC     }, // 186.0.0.0       - 186.0.143.255  
 	{ 0xba009800, 0xba02f7ff, REGISTRY_LACNIC     }, // 186.0.152.0     - 186.2.247.255  
 	{ 0xba02fc00, 0xba4167ff, REGISTRY_LACNIC     }, // 186.2.252.0     - 186.65.103.255 
-	{ 0xba416c00, 0xbae867ff, REGISTRY_LACNIC     }, // 186.65.108.0    - 186.232.103.255
+	{ 0xba416c00, 0xba94bfff, REGISTRY_LACNIC     }, // 186.65.108.0    - 186.148.191.255
+	{ 0xba94c800, 0xbae867ff, REGISTRY_LACNIC     }, // 186.148.200.0   - 186.232.103.255
 	{ 0xbae86c00, 0xbafa8fff, REGISTRY_LACNIC     }, // 186.232.108.0   - 186.250.143.255
 	{ 0xbafa9400, 0xbb318fff, REGISTRY_LACNIC     }, // 186.250.148.0   - 187.49.143.255 
 	{ 0xbb31c000, 0xbb49afff, REGISTRY_LACNIC     }, // 187.49.192.0    - 187.73.175.255 
@@ -3978,11 +3991,14 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xbd71c000, 0xbd7dffff, REGISTRY_LACNIC     }, // 189.113.192.0   - 189.125.255.255
 	{ 0xbd7e1000, 0xbe023fff, REGISTRY_LACNIC     }, // 189.126.16.0    - 190.2.63.255   
 	{ 0xbe024800, 0xbe039fff, REGISTRY_LACNIC     }, // 190.2.72.0      - 190.3.159.255  
-	{ 0xbe03a800, 0xbe52ffff, REGISTRY_LACNIC     }, // 190.3.168.0     - 190.82.255.255 
+	{ 0xbe03a800, 0xbe089fff, REGISTRY_LACNIC     }, // 190.3.168.0     - 190.8.159.255  
+	{ 0xbe08a400, 0xbe52ffff, REGISTRY_LACNIC     }, // 190.8.164.0     - 190.82.255.255 
 	{ 0xbe538000, 0xbe58ffff, REGISTRY_LACNIC     }, // 190.83.128.0    - 190.88.255.255 
-	{ 0xbe5a0000, 0xbe5db3ff, REGISTRY_LACNIC     }, // 190.90.0.0      - 190.93.179.255 
+	{ 0xbe5a0000, 0xbe5d1fff, REGISTRY_LACNIC     }, // 190.90.0.0      - 190.93.31.255  
+	{ 0xbe5d2400, 0xbe5db3ff, REGISTRY_LACNIC     }, // 190.93.36.0     - 190.93.179.255 
 	{ 0xbe5dc000, 0xbe61abff, REGISTRY_LACNIC     }, // 190.93.192.0    - 190.97.171.255 
-	{ 0xbe61b000, 0xbe6b9fff, REGISTRY_LACNIC     }, // 190.97.176.0    - 190.107.159.255
+	{ 0xbe61b000, 0xbe6adfff, REGISTRY_LACNIC     }, // 190.97.176.0    - 190.106.223.255
+	{ 0xbe6af000, 0xbe6b9fff, REGISTRY_LACNIC     }, // 190.106.240.0   - 190.107.159.255
 	{ 0xbe6bb000, 0xbe6f5fff, REGISTRY_LACNIC     }, // 190.107.176.0   - 190.111.95.255 
 	{ 0xbe6f7000, 0xbe6f7fff, REGISTRY_LACNIC     }, // 190.111.112.0   - 190.111.127.255
 	{ 0xbe6fc000, 0xbe707fff, REGISTRY_LACNIC     }, // 190.111.192.0   - 190.112.127.255
@@ -4021,6 +4037,11 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc005ff00, 0xc008b2ff, REGISTRY_ARIN       }, // 192.5.255.0     - 192.8.178.255  
 	{ 0xc008b300, 0xc008b3ff, REGISTRY_APNIC      }, // 192.8.179.0     - 192.8.179.255  
 	{ 0xc008b400, 0xc00c00ff, REGISTRY_ARIN       }, // 192.8.180.0     - 192.12.0.255   
+	{ 0xc008de00, 0xc008deff, REGISTRY_APNIC      }, // 192.8.222.0     - 192.8.222.255  
+	{ 0xc008e500, 0xc008e5ff, REGISTRY_APNIC      }, // 192.8.229.0     - 192.8.229.255  
+	{ 0xc008ed00, 0xc008edff, REGISTRY_APNIC      }, // 192.8.237.0     - 192.8.237.255  
+	{ 0xc008fa00, 0xc008faff, REGISTRY_APNIC      }, // 192.8.250.0     - 192.8.250.255  
+	{ 0xc008ff00, 0xc008ffff, REGISTRY_APNIC      }, // 192.8.255.0     - 192.8.255.255  
 	{ 0xc00c0100, 0xc00c01ff, REGISTRY_RIPENCC    }, // 192.12.1.0      - 192.12.1.255   
 	{ 0xc00c0200, 0xc00c2eff, REGISTRY_ARIN       }, // 192.12.2.0      - 192.12.46.255  
 	{ 0xc00c2f00, 0xc00c2fff, REGISTRY_RIPENCC    }, // 192.12.47.0     - 192.12.47.255  
@@ -5810,7 +5831,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc0997300, 0xc09973ff, REGISTRY_ARIN       }, // 192.153.115.0   - 192.153.115.255
 	{ 0xc0997400, 0xc09974ff, REGISTRY_RIPENCC    }, // 192.153.116.0   - 192.153.116.255
 	{ 0xc0997500, 0xc09976ff, REGISTRY_ARIN       }, // 192.153.117.0   - 192.153.118.255
-	{ 0xc0997700, 0xc09977ff, REGISTRY_LACNIC     }, // 192.153.119.0   - 192.153.119.255
+	{ 0xc0997700, 0xc09978ff, REGISTRY_LACNIC     }, // 192.153.119.0   - 192.153.120.255
 	{ 0xc0997900, 0xc0997eff, REGISTRY_ARIN       }, // 192.153.121.0   - 192.153.126.255
 	{ 0xc0997f00, 0xc0997fff, REGISTRY_RIPENCC    }, // 192.153.127.0   - 192.153.127.255
 	{ 0xc0998000, 0xc09998ff, REGISTRY_ARIN       }, // 192.153.128.0   - 192.153.152.255
@@ -5947,6 +5968,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc0a05f00, 0xc0a060ff, REGISTRY_RIPENCC    }, // 192.160.95.0    - 192.160.96.255 
 	{ 0xc0a06100, 0xc0a06cff, REGISTRY_ARIN       }, // 192.160.97.0    - 192.160.108.255
 	{ 0xc0a06d00, 0xc0a06eff, REGISTRY_RIPENCC    }, // 192.160.109.0   - 192.160.110.255
+	{ 0xc0a06f00, 0xc0a06fff, REGISTRY_LACNIC     }, // 192.160.111.0   - 192.160.111.255
 	{ 0xc0a07000, 0xc0a07aff, REGISTRY_ARIN       }, // 192.160.112.0   - 192.160.122.255
 	{ 0xc0a07b00, 0xc0a07bff, REGISTRY_RIPENCC    }, // 192.160.123.0   - 192.160.123.255
 	{ 0xc0a07c00, 0xc0a07dff, REGISTRY_ARIN       }, // 192.160.124.0   - 192.160.125.255
@@ -6569,7 +6591,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc1173600, 0xc11736ff, REGISTRY_RIPENCC    }, // 193.23.54.0     - 193.23.54.255  
 	{ 0xc1173800, 0xc1173bff, REGISTRY_RIPENCC    }, // 193.23.56.0     - 193.23.59.255  
 	{ 0xc1173d00, 0xc11775ff, REGISTRY_RIPENCC    }, // 193.23.61.0     - 193.23.117.255 
-	{ 0xc1177700, 0xc1177eff, REGISTRY_RIPENCC    }, // 193.23.119.0    - 193.23.126.255 
+	{ 0xc1177700, 0xc1177cff, REGISTRY_RIPENCC    }, // 193.23.119.0    - 193.23.124.255 
+	{ 0xc1177e00, 0xc1177eff, REGISTRY_RIPENCC    }, // 193.23.126.0    - 193.23.126.255 
 	{ 0xc1178400, 0xc11784ff, REGISTRY_RIPENCC    }, // 193.23.132.0    - 193.23.132.255 
 	{ 0xc1178600, 0xc11786ff, REGISTRY_RIPENCC    }, // 193.23.134.0    - 193.23.134.255 
 	{ 0xc1178800, 0xc1179fff, REGISTRY_RIPENCC    }, // 193.23.136.0    - 193.23.159.255 
@@ -6690,7 +6713,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc11f3d00, 0xc11f3dff, REGISTRY_RIPENCC    }, // 193.31.61.0     - 193.31.61.255  
 	{ 0xc11f3f00, 0xc11ff7ff, REGISTRY_RIPENCC    }, // 193.31.63.0     - 193.31.247.255 
 	{ 0xc11ffc00, 0xc11ffdff, REGISTRY_RIPENCC    }, // 193.31.252.0    - 193.31.253.255 
-	{ 0xc1200200, 0xc12003ff, REGISTRY_RIPENCC    }, // 193.32.2.0      - 193.32.3.255   
+	{ 0xc1200300, 0xc12003ff, REGISTRY_RIPENCC    }, // 193.32.3.0      - 193.32.3.255   
 	{ 0xc1200600, 0xc12007ff, REGISTRY_RIPENCC    }, // 193.32.6.0      - 193.32.7.255   
 	{ 0xc1200900, 0xc12009ff, REGISTRY_RIPENCC    }, // 193.32.9.0      - 193.32.9.255   
 	{ 0xc1200c00, 0xc1200fff, REGISTRY_RIPENCC    }, // 193.32.12.0     - 193.32.15.255  
@@ -6738,7 +6761,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc123e800, 0xc12402ff, REGISTRY_RIPENCC    }, // 193.35.232.0    - 193.36.2.255   
 	{ 0xc1240400, 0xc1242fff, REGISTRY_RIPENCC    }, // 193.36.4.0      - 193.36.47.255  
 	{ 0xc1244000, 0xc12447ff, REGISTRY_RIPENCC    }, // 193.36.64.0     - 193.36.71.255  
-	{ 0xc1244900, 0xc12457ff, REGISTRY_RIPENCC    }, // 193.36.73.0     - 193.36.87.255  
+	{ 0xc1244900, 0xc12453ff, REGISTRY_RIPENCC    }, // 193.36.73.0     - 193.36.83.255  
+	{ 0xc1245600, 0xc12457ff, REGISTRY_RIPENCC    }, // 193.36.86.0     - 193.36.87.255  
 	{ 0xc1246000, 0xc1247fff, REGISTRY_RIPENCC    }, // 193.36.96.0     - 193.36.127.255 
 	{ 0xc1248200, 0xc12483ff, REGISTRY_RIPENCC    }, // 193.36.130.0    - 193.36.131.255 
 	{ 0xc1248500, 0xc12485ff, REGISTRY_RIPENCC    }, // 193.36.133.0    - 193.36.133.255 
@@ -6769,7 +6793,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc1263800, 0xc12682ff, REGISTRY_RIPENCC    }, // 193.38.56.0     - 193.38.130.255 
 	{ 0xc1268c00, 0xc1268fff, REGISTRY_RIPENCC    }, // 193.38.140.0    - 193.38.143.255 
 	{ 0xc126a000, 0xc126dfff, REGISTRY_RIPENCC    }, // 193.38.160.0    - 193.38.223.255 
-	{ 0xc1270000, 0xc12709ff, REGISTRY_RIPENCC    }, // 193.39.0.0      - 193.39.9.255   
+	{ 0xc1270000, 0xc12706ff, REGISTRY_RIPENCC    }, // 193.39.0.0      - 193.39.6.255   
+	{ 0xc1270800, 0xc12709ff, REGISTRY_RIPENCC    }, // 193.39.8.0      - 193.39.9.255   
 	{ 0xc1270b00, 0xc1270eff, REGISTRY_RIPENCC    }, // 193.39.11.0     - 193.39.14.255  
 	{ 0xc1271000, 0xc1275cff, REGISTRY_RIPENCC    }, // 193.39.16.0     - 193.39.92.255  
 	{ 0xc1275e00, 0xc1279fff, REGISTRY_RIPENCC    }, // 193.39.94.0     - 193.39.159.255 
@@ -7010,7 +7035,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc16d4400, 0xc16d4dff, REGISTRY_RIPENCC    }, // 193.109.68.0    - 193.109.77.255 
 	{ 0xc16d5000, 0xc16d53ff, REGISTRY_RIPENCC    }, // 193.109.80.0    - 193.109.83.255 
 	{ 0xc16d5600, 0xc16d5bff, REGISTRY_RIPENCC    }, // 193.109.86.0    - 193.109.91.255 
-	{ 0xc16d5d00, 0xc16d63ff, REGISTRY_RIPENCC    }, // 193.109.93.0    - 193.109.99.255 
+	{ 0xc16d5d00, 0xc16d5dff, REGISTRY_RIPENCC    }, // 193.109.93.0    - 193.109.93.255 
+	{ 0xc16d5f00, 0xc16d63ff, REGISTRY_RIPENCC    }, // 193.109.95.0    - 193.109.99.255 
 	{ 0xc16d6800, 0xc16d6bff, REGISTRY_RIPENCC    }, // 193.109.104.0   - 193.109.107.255
 	{ 0xc16d7000, 0xc16d77ff, REGISTRY_RIPENCC    }, // 193.109.112.0   - 193.109.119.255
 	{ 0xc16d7900, 0xc16d87ff, REGISTRY_RIPENCC    }, // 193.109.121.0   - 193.109.135.255
@@ -7080,7 +7106,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc18e7600, 0xc18e7dff, REGISTRY_RIPENCC    }, // 193.142.118.0   - 193.142.125.255
 	{ 0xc18e7f00, 0xc18e7fff, REGISTRY_RIPENCC    }, // 193.142.127.0   - 193.142.127.255
 	{ 0xc18e8800, 0xc18e8fff, REGISTRY_RIPENCC    }, // 193.142.136.0   - 193.142.143.255
-	{ 0xc18e9100, 0xc18e97ff, REGISTRY_RIPENCC    }, // 193.142.145.0   - 193.142.151.255
+	{ 0xc18e9100, 0xc18e91ff, REGISTRY_RIPENCC    }, // 193.142.145.0   - 193.142.145.255
+	{ 0xc18e9300, 0xc18e97ff, REGISTRY_RIPENCC    }, // 193.142.147.0   - 193.142.151.255
 	{ 0xc18e9900, 0xc18e99ff, REGISTRY_RIPENCC    }, // 193.142.153.0   - 193.142.153.255
 	{ 0xc18e9d00, 0xc18ebbff, REGISTRY_RIPENCC    }, // 193.142.157.0   - 193.142.187.255
 	{ 0xc18ec400, 0xc18ec4ff, REGISTRY_RIPENCC    }, // 193.142.196.0   - 193.142.196.255
@@ -7157,12 +7184,10 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc1a17800, 0xc1a17fff, REGISTRY_RIPENCC    }, // 193.161.120.0   - 193.161.127.255
 	{ 0xc1a18a00, 0xc1a18bff, REGISTRY_RIPENCC    }, // 193.161.138.0   - 193.161.139.255
 	{ 0xc1a19000, 0xc1a192ff, REGISTRY_RIPENCC    }, // 193.161.144.0   - 193.161.146.255
-	{ 0xc1a19600, 0xc1a196ff, REGISTRY_RIPENCC    }, // 193.161.150.0   - 193.161.150.255
 	{ 0xc1a19800, 0xc1a19bff, REGISTRY_RIPENCC    }, // 193.161.152.0   - 193.161.155.255
 	{ 0xc1a19e00, 0xc1a1c3ff, REGISTRY_RIPENCC    }, // 193.161.158.0   - 193.161.195.255
-	{ 0xc1a1c800, 0xc1a1cbff, REGISTRY_RIPENCC    }, // 193.161.200.0   - 193.161.203.255
 	{ 0xc1a1cd00, 0xc1a1cdff, REGISTRY_RIPENCC    }, // 193.161.205.0   - 193.161.205.255
-	{ 0xc1a1cf00, 0xc1a1d5ff, REGISTRY_RIPENCC    }, // 193.161.207.0   - 193.161.213.255
+	{ 0xc1a1cf00, 0xc1a1d3ff, REGISTRY_RIPENCC    }, // 193.161.207.0   - 193.161.211.255
 	{ 0xc1a1d800, 0xc1a1dbff, REGISTRY_RIPENCC    }, // 193.161.216.0   - 193.161.219.255
 	{ 0xc1a1e000, 0xc1a1fdff, REGISTRY_RIPENCC    }, // 193.161.224.0   - 193.161.253.255
 	{ 0xc1a20000, 0xc1a3ffff, REGISTRY_RIPENCC    }, // 193.162.0.0     - 193.163.255.255
@@ -7198,7 +7223,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc1a9fc00, 0xc1a9ffff, REGISTRY_RIPENCC    }, // 193.169.252.0   - 193.169.255.255
 	{ 0xc1aa0000, 0xc1afffff, REGISTRY_RIPENCC    }, // 193.170.0.0     - 193.175.255.255
 	{ 0xc1b00000, 0xc1b000ff, REGISTRY_RIPENCC    }, // 193.176.0.0     - 193.176.0.255  
-	{ 0xc1b00200, 0xc1b00fff, REGISTRY_RIPENCC    }, // 193.176.2.0     - 193.176.15.255 
+	{ 0xc1b00300, 0xc1b00fff, REGISTRY_RIPENCC    }, // 193.176.3.0     - 193.176.15.255 
 	{ 0xc1b02000, 0xc1b027ff, REGISTRY_RIPENCC    }, // 193.176.32.0    - 193.176.39.255 
 	{ 0xc1b02b00, 0xc1b03fff, REGISTRY_RIPENCC    }, // 193.176.43.0    - 193.176.63.255 
 	{ 0xc1b06000, 0xc1b06fff, REGISTRY_RIPENCC    }, // 193.176.96.0    - 193.176.111.255
@@ -7231,7 +7256,9 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc1b30000, 0xc1b9ffff, REGISTRY_RIPENCC    }, // 193.179.0.0     - 193.185.255.255
 	{ 0xc1ba0000, 0xc1ba0aff, REGISTRY_RIPENCC    }, // 193.186.0.0     - 193.186.10.255 
 	{ 0xc1ba0c00, 0xc1ba0dff, REGISTRY_RIPENCC    }, // 193.186.12.0    - 193.186.13.255 
-	{ 0xc1ba0f00, 0xc1ba9fff, REGISTRY_RIPENCC    }, // 193.186.15.0    - 193.186.159.255
+	{ 0xc1ba0f00, 0xc1ba47ff, REGISTRY_RIPENCC    }, // 193.186.15.0    - 193.186.71.255 
+	{ 0xc1ba4800, 0xc1ba57ff, REGISTRY_RIPENCC    }, // 193.186.72.0    - 193.186.87.255 
+	{ 0xc1ba5800, 0xc1ba9fff, REGISTRY_RIPENCC    }, // 193.186.88.0    - 193.186.159.255
 	{ 0xc1baa100, 0xc1babfff, REGISTRY_RIPENCC    }, // 193.186.161.0   - 193.186.191.255
 	{ 0xc1bad000, 0xc1bad2ff, REGISTRY_RIPENCC    }, // 193.186.208.0   - 193.186.210.255
 	{ 0xc1bad400, 0xc1bad6ff, REGISTRY_RIPENCC    }, // 193.186.212.0   - 193.186.214.255
@@ -7332,7 +7359,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc1ca1000, 0xc1ca1eff, REGISTRY_RIPENCC    }, // 193.202.16.0    - 193.202.30.255 
 	{ 0xc1ca2000, 0xc1ca27ff, REGISTRY_RIPENCC    }, // 193.202.32.0    - 193.202.39.255 
 	{ 0xc1ca2e00, 0xc1ca49ff, REGISTRY_RIPENCC    }, // 193.202.46.0    - 193.202.73.255 
-	{ 0xc1ca4b00, 0xc1ca6fff, REGISTRY_RIPENCC    }, // 193.202.75.0    - 193.202.111.255
+	{ 0xc1ca4d00, 0xc1ca6fff, REGISTRY_RIPENCC    }, // 193.202.77.0    - 193.202.111.255
 	{ 0xc1ca7100, 0xc1cb01ff, REGISTRY_RIPENCC    }, // 193.202.113.0   - 193.203.1.255  
 	{ 0xc1cb0400, 0xc1cb07ff, REGISTRY_RIPENCC    }, // 193.203.4.0     - 193.203.7.255  
 	{ 0xc1cb1200, 0xc1cb15ff, REGISTRY_RIPENCC    }, // 193.203.18.0    - 193.203.21.255 
@@ -7358,7 +7385,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc1da7a00, 0xc1da7aff, REGISTRY_RIPENCC    }, // 193.218.122.0   - 193.218.122.255
 	{ 0xc1da7c00, 0xc1da9bff, REGISTRY_RIPENCC    }, // 193.218.124.0   - 193.218.155.255
 	{ 0xc1da9c00, 0xc1daafff, REGISTRY_RIPENCC    }, // 193.218.156.0   - 193.218.175.255
-	{ 0xc1dab000, 0xc1dac8ff, REGISTRY_RIPENCC    }, // 193.218.176.0   - 193.218.200.255
+	{ 0xc1dab000, 0xc1dac7ff, REGISTRY_RIPENCC    }, // 193.218.176.0   - 193.218.199.255
 	{ 0xc1daca00, 0xc1dacaff, REGISTRY_RIPENCC    }, // 193.218.202.0   - 193.218.202.255
 	{ 0xc1dacd00, 0xc1dacfff, REGISTRY_RIPENCC    }, // 193.218.205.0   - 193.218.207.255
 	{ 0xc1dad000, 0xc1daddff, REGISTRY_RIPENCC    }, // 193.218.208.0   - 193.218.221.255
@@ -7375,7 +7402,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc1dd7c00, 0xc1ddbfff, REGISTRY_RIPENCC    }, // 193.221.124.0   - 193.221.191.255
 	{ 0xc1ddd400, 0xc1ddd9ff, REGISTRY_RIPENCC    }, // 193.221.212.0   - 193.221.217.255
 	{ 0xc1ddda00, 0xc1dddaff, REGISTRY_AFRINIC    }, // 193.221.218.0   - 193.221.218.255
-	{ 0xc1dddb00, 0xc1de6eff, REGISTRY_RIPENCC    }, // 193.221.219.0   - 193.222.110.255
+	{ 0xc1dddb00, 0xc1dddcff, REGISTRY_RIPENCC    }, // 193.221.219.0   - 193.221.220.255
+	{ 0xc1dde000, 0xc1de6eff, REGISTRY_RIPENCC    }, // 193.221.224.0   - 193.222.110.255
 	{ 0xc1de7000, 0xc1de8fff, REGISTRY_RIPENCC    }, // 193.222.112.0   - 193.222.143.255
 	{ 0xc1de9400, 0xc1debbff, REGISTRY_RIPENCC    }, // 193.222.148.0   - 193.222.187.255
 	{ 0xc1debe00, 0xc1df3fff, REGISTRY_RIPENCC    }, // 193.222.190.0   - 193.223.63.255 
@@ -7401,7 +7429,9 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc1e3ee00, 0xc1e3f1ff, REGISTRY_RIPENCC    }, // 193.227.238.0   - 193.227.241.255
 	{ 0xc1e3f400, 0xc1e42fff, REGISTRY_RIPENCC    }, // 193.227.244.0   - 193.228.47.255 
 	{ 0xc1e43200, 0xc1e447ff, REGISTRY_RIPENCC    }, // 193.228.50.0    - 193.228.71.255 
-	{ 0xc1e45000, 0xc1e47bff, REGISTRY_RIPENCC    }, // 193.228.80.0    - 193.228.123.255
+	{ 0xc1e45000, 0xc1e46fff, REGISTRY_RIPENCC    }, // 193.228.80.0    - 193.228.111.255
+	{ 0xc1e47000, 0xc1e47aff, REGISTRY_RIPENCC    }, // 193.228.112.0   - 193.228.122.255
+	{ 0xc1e47b00, 0xc1e47bff, REGISTRY_RIPENCC    }, // 193.228.123.0   - 193.228.123.255
 	{ 0xc1e48d00, 0xc1e490ff, REGISTRY_RIPENCC    }, // 193.228.141.0   - 193.228.144.255
 	{ 0xc1e49200, 0xc1e493ff, REGISTRY_RIPENCC    }, // 193.228.146.0   - 193.228.147.255
 	{ 0xc1e49500, 0xc1e4acff, REGISTRY_RIPENCC    }, // 193.228.149.0   - 193.228.172.255
@@ -7470,7 +7500,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc200e000, 0xc200e3ff, REGISTRY_RIPENCC    }, // 194.0.224.0     - 194.0.227.255  
 	{ 0xc200e500, 0xc200e6ff, REGISTRY_RIPENCC    }, // 194.0.229.0     - 194.0.230.255  
 	{ 0xc200e800, 0xc200f2ff, REGISTRY_RIPENCC    }, // 194.0.232.0     - 194.0.242.255  
-	{ 0xc200f500, 0xc200f7ff, REGISTRY_RIPENCC    }, // 194.0.245.0     - 194.0.247.255  
+	{ 0xc200f600, 0xc200f7ff, REGISTRY_RIPENCC    }, // 194.0.246.0     - 194.0.247.255  
 	{ 0xc200f900, 0xc201b0ff, REGISTRY_RIPENCC    }, // 194.0.249.0     - 194.1.176.255  
 	{ 0xc201b200, 0xc201b2ff, REGISTRY_RIPENCC    }, // 194.1.178.0     - 194.1.178.255  
 	{ 0xc201b400, 0xc201b9ff, REGISTRY_RIPENCC    }, // 194.1.180.0     - 194.1.185.255  
@@ -7494,8 +7524,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc2056400, 0xc20567ff, REGISTRY_RIPENCC    }, // 194.5.100.0     - 194.5.103.255  
 	{ 0xc2056c00, 0xc2057eff, REGISTRY_RIPENCC    }, // 194.5.108.0     - 194.5.126.255  
 	{ 0xc2058000, 0xc20597ff, REGISTRY_RIPENCC    }, // 194.5.128.0     - 194.5.151.255  
-	{ 0xc205a200, 0xc205a2ff, REGISTRY_RIPENCC    }, // 194.5.162.0     - 194.5.162.255  
-	{ 0xc205a400, 0xc205b1ff, REGISTRY_RIPENCC    }, // 194.5.164.0     - 194.5.177.255  
+	{ 0xc205a600, 0xc205b1ff, REGISTRY_RIPENCC    }, // 194.5.166.0     - 194.5.177.255  
 	{ 0xc205b400, 0xc205bfff, REGISTRY_RIPENCC    }, // 194.5.180.0     - 194.5.191.255  
 	{ 0xc205c200, 0xc205d0ff, REGISTRY_RIPENCC    }, // 194.5.194.0     - 194.5.208.255  
 	{ 0xc205d200, 0xc205d3ff, REGISTRY_RIPENCC    }, // 194.5.210.0     - 194.5.211.255  
@@ -7562,7 +7591,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc20f0000, 0xc20f1fff, REGISTRY_RIPENCC    }, // 194.15.0.0      - 194.15.31.255  
 	{ 0xc20f4000, 0xc20f97ff, REGISTRY_RIPENCC    }, // 194.15.64.0     - 194.15.151.255 
 	{ 0xc20f9a00, 0xc20fdfff, REGISTRY_RIPENCC    }, // 194.15.154.0    - 194.15.223.255 
-	{ 0xc20fe400, 0xc20fffff, REGISTRY_RIPENCC    }, // 194.15.228.0    - 194.15.255.255 
+	{ 0xc20fe400, 0xc20ff9ff, REGISTRY_RIPENCC    }, // 194.15.228.0    - 194.15.249.255 
+	{ 0xc20ffc00, 0xc20fffff, REGISTRY_RIPENCC    }, // 194.15.252.0    - 194.15.255.255 
 	{ 0xc2100000, 0xc217ffff, REGISTRY_RIPENCC    }, // 194.16.0.0      - 194.23.255.255 
 	{ 0xc2180000, 0xc218a1ff, REGISTRY_RIPENCC    }, // 194.24.0.0      - 194.24.161.255 
 	{ 0xc218a400, 0xc218a5ff, REGISTRY_RIPENCC    }, // 194.24.164.0    - 194.24.165.255 
@@ -7591,7 +7621,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc21d4000, 0xc21d7fff, REGISTRY_RIPENCC    }, // 194.29.64.0     - 194.29.127.255 
 	{ 0xc21d8000, 0xc21ddfff, REGISTRY_RIPENCC    }, // 194.29.128.0    - 194.29.223.255 
 	{ 0xc21de000, 0xc21e9fff, REGISTRY_RIPENCC    }, // 194.29.224.0    - 194.30.159.255 
-	{ 0xc21ea000, 0xc21ea4ff, REGISTRY_RIPENCC    }, // 194.30.160.0    - 194.30.164.255 
+	{ 0xc21ea000, 0xc21ea0ff, REGISTRY_RIPENCC    }, // 194.30.160.0    - 194.30.160.255 
+	{ 0xc21ea200, 0xc21ea4ff, REGISTRY_RIPENCC    }, // 194.30.162.0    - 194.30.164.255 
 	{ 0xc21ea600, 0xc21eafff, REGISTRY_RIPENCC    }, // 194.30.166.0    - 194.30.175.255 
 	{ 0xc21eb200, 0xc21eb6ff, REGISTRY_RIPENCC    }, // 194.30.178.0    - 194.30.182.255 
 	{ 0xc21eb800, 0xc21ebfff, REGISTRY_RIPENCC    }, // 194.30.184.0    - 194.30.191.255 
@@ -7600,7 +7631,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc21f3800, 0xc21f3fff, REGISTRY_RIPENCC    }, // 194.31.56.0     - 194.31.63.255  
 	{ 0xc21f4100, 0xc21f56ff, REGISTRY_RIPENCC    }, // 194.31.65.0     - 194.31.86.255  
 	{ 0xc21f5800, 0xc21f7fff, REGISTRY_RIPENCC    }, // 194.31.88.0     - 194.31.127.255 
-	{ 0xc21fc000, 0xc21fccff, REGISTRY_RIPENCC    }, // 194.31.192.0    - 194.31.204.255 
+	{ 0xc21fc000, 0xc21fcbff, REGISTRY_RIPENCC    }, // 194.31.192.0    - 194.31.203.255 
 	{ 0xc21fce00, 0xc21fd6ff, REGISTRY_RIPENCC    }, // 194.31.206.0    - 194.31.214.255 
 	{ 0xc21fd800, 0xc21febff, REGISTRY_RIPENCC    }, // 194.31.216.0    - 194.31.235.255 
 	{ 0xc21fee00, 0xc21ff4ff, REGISTRY_RIPENCC    }, // 194.31.238.0    - 194.31.244.255 
@@ -7609,7 +7640,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc2204500, 0xc22045ff, REGISTRY_RIPENCC    }, // 194.32.69.0     - 194.32.69.255  
 	{ 0xc2204700, 0xc2205fff, REGISTRY_RIPENCC    }, // 194.32.71.0     - 194.32.95.255  
 	{ 0xc2206e00, 0xc2206eff, REGISTRY_RIPENCC    }, // 194.32.110.0    - 194.32.110.255 
-	{ 0xc2207000, 0xc220a7ff, REGISTRY_RIPENCC    }, // 194.32.112.0    - 194.32.167.255 
+	{ 0xc2207000, 0xc220a4ff, REGISTRY_RIPENCC    }, // 194.32.112.0    - 194.32.164.255 
+	{ 0xc220a600, 0xc220a7ff, REGISTRY_RIPENCC    }, // 194.32.166.0    - 194.32.167.255 
 	{ 0xc220aa00, 0xc220adff, REGISTRY_RIPENCC    }, // 194.32.170.0    - 194.32.173.255 
 	{ 0xc220b000, 0xc220dbff, REGISTRY_RIPENCC    }, // 194.32.176.0    - 194.32.219.255 
 	{ 0xc220dd00, 0xc2210aff, REGISTRY_RIPENCC    }, // 194.32.221.0    - 194.33.10.255  
@@ -7626,7 +7658,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc2226800, 0xc2227fff, REGISTRY_RIPENCC    }, // 194.34.104.0    - 194.34.127.255 
 	{ 0xc2228800, 0xc222a2ff, REGISTRY_RIPENCC    }, // 194.34.136.0    - 194.34.162.255 
 	{ 0xc222a400, 0xc222a7ff, REGISTRY_RIPENCC    }, // 194.34.164.0    - 194.34.167.255 
-	{ 0xc222ac00, 0xc222bfff, REGISTRY_RIPENCC    }, // 194.34.172.0    - 194.34.191.255 
+	{ 0xc222ac00, 0xc222aeff, REGISTRY_RIPENCC    }, // 194.34.172.0    - 194.34.174.255 
+	{ 0xc222b000, 0xc222bfff, REGISTRY_RIPENCC    }, // 194.34.176.0    - 194.34.191.255 
 	{ 0xc222c600, 0xc2230dff, REGISTRY_RIPENCC    }, // 194.34.198.0    - 194.35.13.255  
 	{ 0xc2231000, 0xc22330ff, REGISTRY_RIPENCC    }, // 194.35.16.0     - 194.35.48.255  
 	{ 0xc2233200, 0xc22332ff, REGISTRY_RIPENCC    }, // 194.35.50.0     - 194.35.50.255  
@@ -7644,13 +7677,14 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc2245200, 0xc22453ff, REGISTRY_RIPENCC    }, // 194.36.82.0     - 194.36.83.255  
 	{ 0xc2245c00, 0xc2245fff, REGISTRY_RIPENCC    }, // 194.36.92.0     - 194.36.95.255  
 	{ 0xc2247000, 0xc22473ff, REGISTRY_RIPENCC    }, // 194.36.112.0    - 194.36.115.255 
-	{ 0xc2247500, 0xc22477ff, REGISTRY_RIPENCC    }, // 194.36.117.0    - 194.36.119.255 
+	{ 0xc2247500, 0xc22475ff, REGISTRY_RIPENCC    }, // 194.36.117.0    - 194.36.117.255 
 	{ 0xc2247900, 0xc2248fff, REGISTRY_RIPENCC    }, // 194.36.121.0    - 194.36.143.255 
 	{ 0xc2249800, 0xc224a6ff, REGISTRY_RIPENCC    }, // 194.36.152.0    - 194.36.166.255 
 	{ 0xc224a800, 0xc224b7ff, REGISTRY_RIPENCC    }, // 194.36.168.0    - 194.36.183.255 
 	{ 0xc224c000, 0xc224cfff, REGISTRY_RIPENCC    }, // 194.36.192.0    - 194.36.207.255 
 	{ 0xc224d200, 0xc224dcff, REGISTRY_RIPENCC    }, // 194.36.210.0    - 194.36.220.255 
-	{ 0xc224df00, 0xc2254fff, REGISTRY_RIPENCC    }, // 194.36.223.0    - 194.37.79.255  
+	{ 0xc224df00, 0xc22500ff, REGISTRY_RIPENCC    }, // 194.36.223.0    - 194.37.0.255   
+	{ 0xc2250200, 0xc2254fff, REGISTRY_RIPENCC    }, // 194.37.2.0      - 194.37.79.255  
 	{ 0xc2255400, 0xc22557ff, REGISTRY_RIPENCC    }, // 194.37.84.0     - 194.37.87.255  
 	{ 0xc2256800, 0xc225ffff, REGISTRY_RIPENCC    }, // 194.37.104.0    - 194.37.255.255 
 	{ 0xc2264000, 0xc226ffff, REGISTRY_RIPENCC    }, // 194.38.64.0     - 194.38.255.255 
@@ -7680,25 +7714,29 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc22ac000, 0xc22adfff, REGISTRY_RIPENCC    }, // 194.42.192.0    - 194.42.223.255 
 	{ 0xc22ae000, 0xc22fffff, REGISTRY_RIPENCC    }, // 194.42.224.0    - 194.47.255.255 
 	{ 0xc2300000, 0xc230aeff, REGISTRY_RIPENCC    }, // 194.48.0.0      - 194.48.174.255 
-	{ 0xc230b000, 0xc230f3ff, REGISTRY_RIPENCC    }, // 194.48.176.0    - 194.48.243.255 
+	{ 0xc230b000, 0xc230d2ff, REGISTRY_RIPENCC    }, // 194.48.176.0    - 194.48.210.255 
+	{ 0xc230d400, 0xc230f3ff, REGISTRY_RIPENCC    }, // 194.48.212.0    - 194.48.243.255 
 	{ 0xc230f800, 0xc230feff, REGISTRY_RIPENCC    }, // 194.48.248.0    - 194.48.254.255 
-	{ 0xc2310000, 0xc23104ff, REGISTRY_RIPENCC    }, // 194.49.0.0      - 194.49.4.255   
+	{ 0xc2310100, 0xc23104ff, REGISTRY_RIPENCC    }, // 194.49.1.0      - 194.49.4.255   
 	{ 0xc2310600, 0xc23110ff, REGISTRY_RIPENCC    }, // 194.49.6.0      - 194.49.16.255  
-	{ 0xc2311300, 0xc23137ff, REGISTRY_RIPENCC    }, // 194.49.19.0     - 194.49.55.255  
+	{ 0xc2311300, 0xc23133ff, REGISTRY_RIPENCC    }, // 194.49.19.0     - 194.49.51.255  
+	{ 0xc2313600, 0xc23137ff, REGISTRY_RIPENCC    }, // 194.49.54.0     - 194.49.55.255  
 	{ 0xc2313b00, 0xc23141ff, REGISTRY_RIPENCC    }, // 194.49.59.0     - 194.49.65.255  
 	{ 0xc2314500, 0xc23150ff, REGISTRY_RIPENCC    }, // 194.49.69.0     - 194.49.80.255  
 	{ 0xc2315200, 0xc23155ff, REGISTRY_RIPENCC    }, // 194.49.82.0     - 194.49.85.255  
 	{ 0xc2315c00, 0xc2315cff, REGISTRY_RIPENCC    }, // 194.49.92.0     - 194.49.92.255  
 	{ 0xc2315e00, 0xc23163ff, REGISTRY_RIPENCC    }, // 194.49.94.0     - 194.49.99.255  
 	{ 0xc2316500, 0xc2316bff, REGISTRY_RIPENCC    }, // 194.49.101.0    - 194.49.107.255 
-	{ 0xc2316e00, 0xc231ffff, REGISTRY_RIPENCC    }, // 194.49.110.0    - 194.49.255.255 
+	{ 0xc2316e00, 0xc2316eff, REGISTRY_RIPENCC    }, // 194.49.110.0    - 194.49.110.255 
+	{ 0xc2317000, 0xc231ffff, REGISTRY_RIPENCC    }, // 194.49.112.0    - 194.49.255.255 
 	{ 0xc2320200, 0xc23202ff, REGISTRY_RIPENCC    }, // 194.50.2.0      - 194.50.2.255   
 	{ 0xc2320600, 0xc23207ff, REGISTRY_RIPENCC    }, // 194.50.6.0      - 194.50.7.255   
 	{ 0xc2320900, 0xc2320bff, REGISTRY_RIPENCC    }, // 194.50.9.0      - 194.50.11.255  
 	{ 0xc2321800, 0xc2322dff, REGISTRY_RIPENCC    }, // 194.50.24.0     - 194.50.45.255  
 	{ 0xc2322f00, 0xc2322fff, REGISTRY_RIPENCC    }, // 194.50.47.0     - 194.50.47.255  
 	{ 0xc2323100, 0xc23233ff, REGISTRY_RIPENCC    }, // 194.50.49.0     - 194.50.51.255  
-	{ 0xc2323500, 0xc23248ff, REGISTRY_RIPENCC    }, // 194.50.53.0     - 194.50.72.255  
+	{ 0xc2323500, 0xc2323aff, REGISTRY_RIPENCC    }, // 194.50.53.0     - 194.50.58.255  
+	{ 0xc2323c00, 0xc23248ff, REGISTRY_RIPENCC    }, // 194.50.60.0     - 194.50.72.255  
 	{ 0xc2324b00, 0xc23251ff, REGISTRY_RIPENCC    }, // 194.50.75.0     - 194.50.81.255  
 	{ 0xc2325300, 0xc2325bff, REGISTRY_RIPENCC    }, // 194.50.83.0     - 194.50.91.255  
 	{ 0xc2325d00, 0xc2325dff, REGISTRY_RIPENCC    }, // 194.50.93.0     - 194.50.93.255  
@@ -7707,7 +7745,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc232b500, 0xc232b7ff, REGISTRY_RIPENCC    }, // 194.50.181.0    - 194.50.183.255 
 	{ 0xc232ba00, 0xc232bbff, REGISTRY_RIPENCC    }, // 194.50.186.0    - 194.50.187.255 
 	{ 0xc232bd00, 0xc232c8ff, REGISTRY_RIPENCC    }, // 194.50.189.0    - 194.50.200.255 
-	{ 0xc232ca00, 0xc232dbff, REGISTRY_RIPENCC    }, // 194.50.202.0    - 194.50.219.255 
+	{ 0xc232ca00, 0xc232cbff, REGISTRY_RIPENCC    }, // 194.50.202.0    - 194.50.203.255 
+	{ 0xc232cd00, 0xc232dbff, REGISTRY_RIPENCC    }, // 194.50.205.0    - 194.50.219.255 
 	{ 0xc232de00, 0xc232eaff, REGISTRY_RIPENCC    }, // 194.50.222.0    - 194.50.234.255 
 	{ 0xc232ec00, 0xc232edff, REGISTRY_RIPENCC    }, // 194.50.236.0    - 194.50.237.255 
 	{ 0xc232ef00, 0xc232f5ff, REGISTRY_RIPENCC    }, // 194.50.239.0    - 194.50.245.255 
@@ -7715,7 +7754,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc232fc00, 0xc232fcff, REGISTRY_RIPENCC    }, // 194.50.252.0    - 194.50.252.255 
 	{ 0xc232fe00, 0xc232ffff, REGISTRY_RIPENCC    }, // 194.50.254.0    - 194.50.255.255 
 	{ 0xc2330000, 0xc234ffff, REGISTRY_RIPENCC    }, // 194.51.0.0      - 194.52.255.255 
-	{ 0xc2350000, 0xc23554ff, REGISTRY_RIPENCC    }, // 194.53.0.0      - 194.53.84.255  
+	{ 0xc2350000, 0xc23541ff, REGISTRY_RIPENCC    }, // 194.53.0.0      - 194.53.65.255  
+	{ 0xc2354300, 0xc23554ff, REGISTRY_RIPENCC    }, // 194.53.67.0     - 194.53.84.255  
 	{ 0xc2355600, 0xc23567ff, REGISTRY_RIPENCC    }, // 194.53.86.0     - 194.53.103.255 
 	{ 0xc2357000, 0xc23577ff, REGISTRY_RIPENCC    }, // 194.53.112.0    - 194.53.119.255 
 	{ 0xc2357900, 0xc2358fff, REGISTRY_RIPENCC    }, // 194.53.121.0    - 194.53.143.255 
@@ -7736,7 +7776,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc237ac00, 0xc237b9ff, REGISTRY_RIPENCC    }, // 194.55.172.0    - 194.55.185.255 
 	{ 0xc237bc00, 0xc237eeff, REGISTRY_RIPENCC    }, // 194.55.188.0    - 194.55.238.255 
 	{ 0xc237f000, 0xc237feff, REGISTRY_RIPENCC    }, // 194.55.240.0    - 194.55.254.255 
-	{ 0xc2380000, 0xc238ddff, REGISTRY_RIPENCC    }, // 194.56.0.0      - 194.56.221.255 
+	{ 0xc2380000, 0xc23847ff, REGISTRY_RIPENCC    }, // 194.56.0.0      - 194.56.71.255  
+	{ 0xc2386000, 0xc238ddff, REGISTRY_RIPENCC    }, // 194.56.96.0     - 194.56.221.255 
 	{ 0xc238df00, 0xc238e5ff, REGISTRY_RIPENCC    }, // 194.56.223.0    - 194.56.229.255 
 	{ 0xc238e700, 0xc238f1ff, REGISTRY_RIPENCC    }, // 194.56.231.0    - 194.56.241.255 
 	{ 0xc238f300, 0xc238f4ff, REGISTRY_RIPENCC    }, // 194.56.243.0    - 194.56.244.255 
@@ -7745,8 +7786,9 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc2390000, 0xc23affff, REGISTRY_RIPENCC    }, // 194.57.0.0      - 194.58.255.255 
 	{ 0xc23b0000, 0xc23b05ff, REGISTRY_RIPENCC    }, // 194.59.0.0      - 194.59.5.255   
 	{ 0xc23b0700, 0xc23b2dff, REGISTRY_RIPENCC    }, // 194.59.7.0      - 194.59.45.255  
-	{ 0xc23b2f00, 0xc23b9aff, REGISTRY_RIPENCC    }, // 194.59.47.0     - 194.59.154.255 
-	{ 0xc23b9c00, 0xc23b9dff, REGISTRY_RIPENCC    }, // 194.59.156.0    - 194.59.157.255 
+	{ 0xc23b2f00, 0xc23b87ff, REGISTRY_RIPENCC    }, // 194.59.47.0     - 194.59.135.255 
+	{ 0xc23b8e00, 0xc23b9aff, REGISTRY_RIPENCC    }, // 194.59.142.0    - 194.59.154.255 
+	{ 0xc23b9c00, 0xc23b9cff, REGISTRY_RIPENCC    }, // 194.59.156.0    - 194.59.156.255 
 	{ 0xc23b9f00, 0xc23ba5ff, REGISTRY_RIPENCC    }, // 194.59.159.0    - 194.59.165.255 
 	{ 0xc23ba700, 0xc23ba9ff, REGISTRY_RIPENCC    }, // 194.59.167.0    - 194.59.169.255 
 	{ 0xc23bab00, 0xc23bafff, REGISTRY_RIPENCC    }, // 194.59.171.0    - 194.59.175.255 
@@ -7764,14 +7806,18 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc23cc900, 0xc23cc9ff, REGISTRY_RIPENCC    }, // 194.60.201.0    - 194.60.201.255 
 	{ 0xc23ccb00, 0xc23cccff, REGISTRY_RIPENCC    }, // 194.60.203.0    - 194.60.204.255 
 	{ 0xc23cce00, 0xc23ccfff, REGISTRY_RIPENCC    }, // 194.60.206.0    - 194.60.207.255 
-	{ 0xc23cd800, 0xc23d7bff, REGISTRY_RIPENCC    }, // 194.60.216.0    - 194.61.123.255 
+	{ 0xc23cd800, 0xc23d47ff, REGISTRY_RIPENCC    }, // 194.60.216.0    - 194.61.71.255  
+	{ 0xc23d4c00, 0xc23d7bff, REGISTRY_RIPENCC    }, // 194.61.76.0     - 194.61.123.255 
 	{ 0xc23d7f00, 0xc23d8bff, REGISTRY_RIPENCC    }, // 194.61.127.0    - 194.61.139.255 
 	{ 0xc23d9000, 0xc23d9eff, REGISTRY_RIPENCC    }, // 194.61.144.0    - 194.61.158.255 
 	{ 0xc23da000, 0xc23de7ff, REGISTRY_RIPENCC    }, // 194.61.160.0    - 194.61.231.255 
 	{ 0xc23df000, 0xc23e00ff, REGISTRY_RIPENCC    }, // 194.61.240.0    - 194.62.0.255   
 	{ 0xc23e0200, 0xc23e0fff, REGISTRY_RIPENCC    }, // 194.62.2.0      - 194.62.15.255  
-	{ 0xc23e1400, 0xc23e7dff, REGISTRY_RIPENCC    }, // 194.62.20.0     - 194.62.125.255 
-	{ 0xc23e7f00, 0xc23e9cff, REGISTRY_RIPENCC    }, // 194.62.127.0    - 194.62.156.255 
+	{ 0xc23e1400, 0xc23e41ff, REGISTRY_RIPENCC    }, // 194.62.20.0     - 194.62.65.255  
+	{ 0xc23e4300, 0xc23e79ff, REGISTRY_RIPENCC    }, // 194.62.67.0     - 194.62.121.255 
+	{ 0xc23e7c00, 0xc23e7dff, REGISTRY_RIPENCC    }, // 194.62.124.0    - 194.62.125.255 
+	{ 0xc23e7f00, 0xc23e93ff, REGISTRY_RIPENCC    }, // 194.62.127.0    - 194.62.147.255 
+	{ 0xc23e9800, 0xc23e9cff, REGISTRY_RIPENCC    }, // 194.62.152.0    - 194.62.156.255 
 	{ 0xc23eac00, 0xc23eb3ff, REGISTRY_RIPENCC    }, // 194.62.172.0    - 194.62.179.255 
 	{ 0xc23eb800, 0xc23ebdff, REGISTRY_RIPENCC    }, // 194.62.184.0    - 194.62.189.255 
 	{ 0xc23ec000, 0xc23ec7ff, REGISTRY_RIPENCC    }, // 194.62.192.0    - 194.62.199.255 
@@ -7790,7 +7836,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc245cc00, 0xc245cdff, REGISTRY_RIPENCC    }, // 194.69.204.0    - 194.69.205.255 
 	{ 0xc245cf00, 0xc245dfff, REGISTRY_RIPENCC    }, // 194.69.207.0    - 194.69.223.255 
 	{ 0xc245e000, 0xc24bffff, REGISTRY_RIPENCC    }, // 194.69.224.0    - 194.75.255.255 
-	{ 0xc24c0000, 0xc24c11ff, REGISTRY_RIPENCC    }, // 194.76.0.0      - 194.76.17.255  
+	{ 0xc24c0100, 0xc24c11ff, REGISTRY_RIPENCC    }, // 194.76.1.0      - 194.76.17.255  
 	{ 0xc24c1300, 0xc24c2bff, REGISTRY_RIPENCC    }, // 194.76.19.0     - 194.76.43.255  
 	{ 0xc24c2d00, 0xc24c39ff, REGISTRY_RIPENCC    }, // 194.76.45.0     - 194.76.57.255  
 	{ 0xc24c3b00, 0xc24cd9ff, REGISTRY_RIPENCC    }, // 194.76.59.0     - 194.76.217.255 
@@ -7810,7 +7856,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc2500000, 0xc257ffff, REGISTRY_RIPENCC    }, // 194.80.0.0      - 194.87.255.255 
 	{ 0xc2580000, 0xc25805ff, REGISTRY_RIPENCC    }, // 194.88.0.0      - 194.88.5.255   
 	{ 0xc2580800, 0xc2580aff, REGISTRY_RIPENCC    }, // 194.88.8.0      - 194.88.10.255  
-	{ 0xc2580c00, 0xc2581fff, REGISTRY_RIPENCC    }, // 194.88.12.0     - 194.88.31.255  
+	{ 0xc2580c00, 0xc2580cff, REGISTRY_RIPENCC    }, // 194.88.12.0     - 194.88.12.255  
+	{ 0xc2580e00, 0xc2581fff, REGISTRY_RIPENCC    }, // 194.88.14.0     - 194.88.31.255  
 	{ 0xc2582000, 0xc2587fff, REGISTRY_RIPENCC    }, // 194.88.32.0     - 194.88.127.255 
 	{ 0xc2588000, 0xc2589fff, REGISTRY_RIPENCC    }, // 194.88.128.0    - 194.88.159.255 
 	{ 0xc258a000, 0xc258bfff, REGISTRY_RIPENCC    }, // 194.88.160.0    - 194.88.191.255 
@@ -7825,13 +7872,15 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc2630900, 0xc26332ff, REGISTRY_RIPENCC    }, // 194.99.9.0      - 194.99.50.255  
 	{ 0xc2633400, 0xc26342ff, REGISTRY_RIPENCC    }, // 194.99.52.0     - 194.99.66.255  
 	{ 0xc2634400, 0xc26349ff, REGISTRY_RIPENCC    }, // 194.99.68.0     - 194.99.73.255  
-	{ 0xc2634b00, 0xc26364ff, REGISTRY_RIPENCC    }, // 194.99.75.0     - 194.99.100.255 
+	{ 0xc2634b00, 0xc2635aff, REGISTRY_RIPENCC    }, // 194.99.75.0     - 194.99.90.255  
+	{ 0xc2635c00, 0xc26364ff, REGISTRY_RIPENCC    }, // 194.99.92.0     - 194.99.100.255 
 	{ 0xc2636800, 0xc26372ff, REGISTRY_RIPENCC    }, // 194.99.104.0    - 194.99.114.255 
 	{ 0xc2637400, 0xc2639bff, REGISTRY_RIPENCC    }, // 194.99.116.0    - 194.99.155.255 
 	{ 0xc2639d00, 0xc263ffff, REGISTRY_RIPENCC    }, // 194.99.157.0    - 194.99.255.255 
 	{ 0xc2640000, 0xc267ffff, REGISTRY_RIPENCC    }, // 194.100.0.0     - 194.103.255.255
 	{ 0xc2680000, 0xc2680fff, REGISTRY_RIPENCC    }, // 194.104.0.0     - 194.104.15.255 
-	{ 0xc2681400, 0xc2685bff, REGISTRY_RIPENCC    }, // 194.104.20.0    - 194.104.91.255 
+	{ 0xc2681400, 0xc26854ff, REGISTRY_RIPENCC    }, // 194.104.20.0    - 194.104.84.255 
+	{ 0xc2685800, 0xc2685bff, REGISTRY_RIPENCC    }, // 194.104.88.0    - 194.104.91.255 
 	{ 0xc2685d00, 0xc26876ff, REGISTRY_RIPENCC    }, // 194.104.93.0    - 194.104.118.255
 	{ 0xc2687800, 0xc2687dff, REGISTRY_RIPENCC    }, // 194.104.120.0   - 194.104.125.255
 	{ 0xc2687f00, 0xc2688fff, REGISTRY_RIPENCC    }, // 194.104.127.0   - 194.104.143.255
@@ -7847,7 +7896,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc26ac000, 0xc26ac9ff, REGISTRY_RIPENCC    }, // 194.106.192.0   - 194.106.201.255
 	{ 0xc26acc00, 0xc26adfff, REGISTRY_RIPENCC    }, // 194.106.204.0   - 194.106.223.255
 	{ 0xc26ae000, 0xc26affff, REGISTRY_RIPENCC    }, // 194.106.224.0   - 194.106.255.255
-	{ 0xc26b0000, 0xc26b7cff, REGISTRY_RIPENCC    }, // 194.107.0.0     - 194.107.124.255
+	{ 0xc26b0000, 0xc26b5bff, REGISTRY_RIPENCC    }, // 194.107.0.0     - 194.107.91.255 
+	{ 0xc26b5d00, 0xc26b7cff, REGISTRY_RIPENCC    }, // 194.107.93.0    - 194.107.124.255
 	{ 0xc26b7e00, 0xc26bafff, REGISTRY_RIPENCC    }, // 194.107.126.0   - 194.107.175.255
 	{ 0xc26bb800, 0xc26bcdff, REGISTRY_RIPENCC    }, // 194.107.184.0   - 194.107.205.255
 	{ 0xc26bcf00, 0xc26be6ff, REGISTRY_RIPENCC    }, // 194.107.207.0   - 194.107.230.255
@@ -7855,11 +7905,12 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc26c0000, 0xc26dffff, REGISTRY_RIPENCC    }, // 194.108.0.0     - 194.109.255.255
 	{ 0xc26e0000, 0xc26e02ff, REGISTRY_RIPENCC    }, // 194.110.0.0     - 194.110.2.255  
 	{ 0xc26e0500, 0xc26e07ff, REGISTRY_RIPENCC    }, // 194.110.5.0     - 194.110.7.255  
-	{ 0xc26e0e00, 0xc26e10ff, REGISTRY_RIPENCC    }, // 194.110.14.0    - 194.110.16.255 
-	{ 0xc26e1200, 0xc26e15ff, REGISTRY_RIPENCC    }, // 194.110.18.0    - 194.110.21.255 
+	{ 0xc26e0e00, 0xc26e0eff, REGISTRY_RIPENCC    }, // 194.110.14.0    - 194.110.14.255 
+	{ 0xc26e1000, 0xc26e10ff, REGISTRY_RIPENCC    }, // 194.110.16.0    - 194.110.16.255 
+	{ 0xc26e1200, 0xc26e13ff, REGISTRY_RIPENCC    }, // 194.110.18.0    - 194.110.19.255 
 	{ 0xc26e1700, 0xc26e1bff, REGISTRY_RIPENCC    }, // 194.110.23.0    - 194.110.27.255 
-	{ 0xc26e1d00, 0xc26e1dff, REGISTRY_RIPENCC    }, // 194.110.29.0    - 194.110.29.255 
-	{ 0xc26e1f00, 0xc26e47ff, REGISTRY_RIPENCC    }, // 194.110.31.0    - 194.110.71.255 
+	{ 0xc26e1f00, 0xc26e3bff, REGISTRY_RIPENCC    }, // 194.110.31.0    - 194.110.59.255 
+	{ 0xc26e3e00, 0xc26e47ff, REGISTRY_RIPENCC    }, // 194.110.62.0    - 194.110.71.255 
 	{ 0xc26e4900, 0xc26e49ff, REGISTRY_RIPENCC    }, // 194.110.73.0    - 194.110.73.255 
 	{ 0xc26e4b00, 0xc26e50ff, REGISTRY_RIPENCC    }, // 194.110.75.0    - 194.110.80.255 
 	{ 0xc26e5200, 0xc26e53ff, REGISTRY_RIPENCC    }, // 194.110.82.0    - 194.110.83.255 
@@ -7882,15 +7933,19 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc2711a00, 0xc2711aff, REGISTRY_RIPENCC    }, // 194.113.26.0    - 194.113.26.255 
 	{ 0xc2711c00, 0xc2712aff, REGISTRY_RIPENCC    }, // 194.113.28.0    - 194.113.42.255 
 	{ 0xc2712d00, 0xc2712eff, REGISTRY_RIPENCC    }, // 194.113.45.0    - 194.113.46.255 
-	{ 0xc2713000, 0xc27139ff, REGISTRY_RIPENCC    }, // 194.113.48.0    - 194.113.57.255 
-	{ 0xc2713b00, 0xc27147ff, REGISTRY_RIPENCC    }, // 194.113.59.0    - 194.113.71.255 
+	{ 0xc2713000, 0xc27135ff, REGISTRY_RIPENCC    }, // 194.113.48.0    - 194.113.53.255 
+	{ 0xc2713800, 0xc27139ff, REGISTRY_RIPENCC    }, // 194.113.56.0    - 194.113.57.255 
+	{ 0xc2713b00, 0xc27140ff, REGISTRY_RIPENCC    }, // 194.113.59.0    - 194.113.64.255 
+	{ 0xc2714200, 0xc27147ff, REGISTRY_RIPENCC    }, // 194.113.66.0    - 194.113.71.255 
 	{ 0xc2714c00, 0xc2715dff, REGISTRY_RIPENCC    }, // 194.113.76.0    - 194.113.93.255 
 	{ 0xc2716000, 0xc27171ff, REGISTRY_RIPENCC    }, // 194.113.96.0    - 194.113.113.255
 	{ 0xc2717300, 0xc27175ff, REGISTRY_RIPENCC    }, // 194.113.115.0   - 194.113.117.255
-	{ 0xc2717800, 0xc2718fff, REGISTRY_RIPENCC    }, // 194.113.120.0   - 194.113.143.255
+	{ 0xc2717800, 0xc2717fff, REGISTRY_RIPENCC    }, // 194.113.120.0   - 194.113.127.255
+	{ 0xc2718400, 0xc2718fff, REGISTRY_RIPENCC    }, // 194.113.132.0   - 194.113.143.255
 	{ 0xc2719100, 0xc27191ff, REGISTRY_RIPENCC    }, // 194.113.145.0   - 194.113.145.255
 	{ 0xc2719400, 0xc27196ff, REGISTRY_RIPENCC    }, // 194.113.148.0   - 194.113.150.255
-	{ 0xc2719a00, 0xc271c4ff, REGISTRY_RIPENCC    }, // 194.113.154.0   - 194.113.196.255
+	{ 0xc2719a00, 0xc2719aff, REGISTRY_RIPENCC    }, // 194.113.154.0   - 194.113.154.255
+	{ 0xc2719c00, 0xc271c4ff, REGISTRY_RIPENCC    }, // 194.113.156.0   - 194.113.196.255
 	{ 0xc271c800, 0xc271f4ff, REGISTRY_RIPENCC    }, // 194.113.200.0   - 194.113.244.255
 	{ 0xc271f600, 0xc271f8ff, REGISTRY_RIPENCC    }, // 194.113.246.0   - 194.113.248.255
 	{ 0xc271fa00, 0xc27293ff, REGISTRY_RIPENCC    }, // 194.113.250.0   - 194.114.147.255
@@ -7902,7 +7957,9 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc2748c00, 0xc27499ff, REGISTRY_RIPENCC    }, // 194.116.140.0   - 194.116.153.255
 	{ 0xc2749c00, 0xc274abff, REGISTRY_RIPENCC    }, // 194.116.156.0   - 194.116.171.255
 	{ 0xc274ae00, 0xc274bdff, REGISTRY_RIPENCC    }, // 194.116.174.0   - 194.116.189.255
-	{ 0xc274c000, 0xc274d5ff, REGISTRY_RIPENCC    }, // 194.116.192.0   - 194.116.213.255
+	{ 0xc274c000, 0xc274c1ff, REGISTRY_RIPENCC    }, // 194.116.192.0   - 194.116.193.255
+	{ 0xc274c200, 0xc274c3ff, REGISTRY_RIPENCC    }, // 194.116.194.0   - 194.116.195.255
+	{ 0xc274c400, 0xc274d5ff, REGISTRY_RIPENCC    }, // 194.116.196.0   - 194.116.213.255
 	{ 0xc274da00, 0xc274e3ff, REGISTRY_RIPENCC    }, // 194.116.218.0   - 194.116.227.255
 	{ 0xc274e600, 0xc274e9ff, REGISTRY_RIPENCC    }, // 194.116.230.0   - 194.116.233.255
 	{ 0xc274ea00, 0xc274ebff, REGISTRY_RIPENCC    }, // 194.116.234.0   - 194.116.235.255
@@ -7910,14 +7967,16 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc274fc00, 0xc274ffff, REGISTRY_RIPENCC    }, // 194.116.252.0   - 194.116.255.255
 	{ 0xc2750000, 0xc27531ff, REGISTRY_RIPENCC    }, // 194.117.0.0     - 194.117.49.255 
 	{ 0xc2753200, 0xc27534ff, REGISTRY_RIPENCC    }, // 194.117.50.0    - 194.117.52.255 
-	{ 0xc2753580, 0xc27537ff, REGISTRY_RIPENCC    }, // 194.117.53.128  - 194.117.55.255 
+	{ 0xc2753580, 0xc27536ff, REGISTRY_RIPENCC    }, // 194.117.53.128  - 194.117.54.255 
+	{ 0xc2753780, 0xc27537ff, REGISTRY_RIPENCC    }, // 194.117.55.128  - 194.117.55.255 
 	{ 0xc2753800, 0xc275dfff, REGISTRY_RIPENCC    }, // 194.117.56.0    - 194.117.223.255
 	{ 0xc275e200, 0xc275edff, REGISTRY_RIPENCC    }, // 194.117.226.0   - 194.117.237.255
 	{ 0xc275f000, 0xc275f9ff, REGISTRY_RIPENCC    }, // 194.117.240.0   - 194.117.249.255
 	{ 0xc275fc00, 0xc275ffff, REGISTRY_RIPENCC    }, // 194.117.252.0   - 194.117.255.255
 	{ 0xc2760000, 0xc27bffff, REGISTRY_RIPENCC    }, // 194.118.0.0     - 194.123.255.255
 	{ 0xc27c0000, 0xc27c8fff, REGISTRY_RIPENCC    }, // 194.124.0.0     - 194.124.143.255
-	{ 0xc27c9100, 0xc27ceaff, REGISTRY_RIPENCC    }, // 194.124.145.0   - 194.124.234.255
+	{ 0xc27c9100, 0xc27ccbff, REGISTRY_RIPENCC    }, // 194.124.145.0   - 194.124.203.255
+	{ 0xc27cce00, 0xc27ceaff, REGISTRY_RIPENCC    }, // 194.124.206.0   - 194.124.234.255
 	{ 0xc27cec00, 0xc27cecff, REGISTRY_RIPENCC    }, // 194.124.236.0   - 194.124.236.255
 	{ 0xc27cee00, 0xc27cf6ff, REGISTRY_RIPENCC    }, // 194.124.238.0   - 194.124.246.255
 	{ 0xc27cf800, 0xc27cfeff, REGISTRY_RIPENCC    }, // 194.124.248.0   - 194.124.254.255
@@ -7933,7 +7992,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc27ea400, 0xc27eafff, REGISTRY_RIPENCC    }, // 194.126.164.0   - 194.126.175.255
 	{ 0xc27eb400, 0xc27ec9ff, REGISTRY_RIPENCC    }, // 194.126.180.0   - 194.126.201.255
 	{ 0xc27ecb00, 0xc27edaff, REGISTRY_RIPENCC    }, // 194.126.203.0   - 194.126.218.255
-	{ 0xc27edc00, 0xc27ee8ff, REGISTRY_RIPENCC    }, // 194.126.220.0   - 194.126.232.255
+	{ 0xc27edc00, 0xc27ee2ff, REGISTRY_RIPENCC    }, // 194.126.220.0   - 194.126.226.255
+	{ 0xc27ee400, 0xc27ee8ff, REGISTRY_RIPENCC    }, // 194.126.228.0   - 194.126.232.255
 	{ 0xc27eea00, 0xc27eeeff, REGISTRY_RIPENCC    }, // 194.126.234.0   - 194.126.238.255
 	{ 0xc27eef00, 0xc27eefff, REGISTRY_RIPENCC    }, // 194.126.239.0   - 194.126.239.255
 	{ 0xc27ef000, 0xc27ef4ff, REGISTRY_RIPENCC    }, // 194.126.240.0   - 194.126.244.255
@@ -7944,10 +8004,13 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc27f7800, 0xc27f80ff, REGISTRY_RIPENCC    }, // 194.127.120.0   - 194.127.128.255
 	{ 0xc27f8200, 0xc27f9eff, REGISTRY_RIPENCC    }, // 194.127.130.0   - 194.127.158.255
 	{ 0xc27fa000, 0xc27fa2ff, REGISTRY_RIPENCC    }, // 194.127.160.0   - 194.127.162.255
-	{ 0xc27fa400, 0xc27fb1ff, REGISTRY_RIPENCC    }, // 194.127.164.0   - 194.127.177.255
+	{ 0xc27fa400, 0xc27fadff, REGISTRY_RIPENCC    }, // 194.127.164.0   - 194.127.173.255
+	{ 0xc27faf00, 0xc27fb1ff, REGISTRY_RIPENCC    }, // 194.127.175.0   - 194.127.177.255
 	{ 0xc27fb400, 0xc27fcdff, REGISTRY_RIPENCC    }, // 194.127.180.0   - 194.127.205.255
 	{ 0xc27fcf00, 0xc27fefff, REGISTRY_RIPENCC    }, // 194.127.207.0   - 194.127.239.255
-	{ 0xc27ff100, 0xc27fffff, REGISTRY_RIPENCC    }, // 194.127.241.0   - 194.127.255.255
+	{ 0xc27ff100, 0xc27ff3ff, REGISTRY_RIPENCC    }, // 194.127.241.0   - 194.127.243.255
+	{ 0xc27ff600, 0xc27ff7ff, REGISTRY_RIPENCC    }, // 194.127.246.0   - 194.127.247.255
+	{ 0xc27ffe00, 0xc27fffff, REGISTRY_RIPENCC    }, // 194.127.254.0   - 194.127.255.255
 	{ 0xc2800000, 0xc289ffff, REGISTRY_RIPENCC    }, // 194.128.0.0     - 194.137.255.255
 	{ 0xc28a0000, 0xc28affff, REGISTRY_RIPENCC    }, // 194.138.0.0     - 194.138.255.255
 	{ 0xc28b0000, 0xc28cdfff, REGISTRY_RIPENCC    }, // 194.139.0.0     - 194.140.223.255
@@ -7962,7 +8025,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc2912000, 0xc2916fff, REGISTRY_RIPENCC    }, // 194.145.32.0    - 194.145.111.255
 	{ 0xc2917200, 0xc2917eff, REGISTRY_RIPENCC    }, // 194.145.114.0   - 194.145.126.255
 	{ 0xc2918000, 0xc29187ff, REGISTRY_RIPENCC    }, // 194.145.128.0   - 194.145.135.255
-	{ 0xc2918c00, 0xc29197ff, REGISTRY_RIPENCC    }, // 194.145.140.0   - 194.145.151.255
+	{ 0xc2918c00, 0xc2918dff, REGISTRY_RIPENCC    }, // 194.145.140.0   - 194.145.141.255
+	{ 0xc2919000, 0xc29197ff, REGISTRY_RIPENCC    }, // 194.145.144.0   - 194.145.151.255
 	{ 0xc2919900, 0xc291d1ff, REGISTRY_RIPENCC    }, // 194.145.153.0   - 194.145.209.255
 	{ 0xc291d600, 0xc291ffff, REGISTRY_RIPENCC    }, // 194.145.214.0   - 194.145.255.255
 	{ 0xc2920200, 0xc29207ff, REGISTRY_RIPENCC    }, // 194.146.2.0     - 194.146.7.255  
@@ -8004,7 +8068,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc2939100, 0xc29397ff, REGISTRY_RIPENCC    }, // 194.147.145.0   - 194.147.151.255
 	{ 0xc293a000, 0xc293a5ff, REGISTRY_RIPENCC    }, // 194.147.160.0   - 194.147.165.255
 	{ 0xc293a800, 0xc293edff, REGISTRY_RIPENCC    }, // 194.147.168.0   - 194.147.237.255
-	{ 0xc293ef00, 0xc293ffff, REGISTRY_RIPENCC    }, // 194.147.239.0   - 194.147.255.255
+	{ 0xc293f000, 0xc293f0ff, REGISTRY_RIPENCC    }, // 194.147.240.0   - 194.147.240.255
+	{ 0xc293f500, 0xc293ffff, REGISTRY_RIPENCC    }, // 194.147.245.0   - 194.147.255.255
 	{ 0xc2940000, 0xc29547ff, REGISTRY_RIPENCC    }, // 194.148.0.0     - 194.149.71.255 
 	{ 0xc2954800, 0xc29558ff, REGISTRY_RIPENCC    }, // 194.149.72.0    - 194.149.88.255 
 	{ 0xc2955a00, 0xc2955aff, REGISTRY_RIPENCC    }, // 194.149.90.0    - 194.149.90.255 
@@ -8046,20 +8111,23 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc29c1c00, 0xc29c1cff, REGISTRY_RIPENCC    }, // 194.156.28.0    - 194.156.28.255 
 	{ 0xc29c2000, 0xc29c3fff, REGISTRY_RIPENCC    }, // 194.156.32.0    - 194.156.63.255 
 	{ 0xc29c8000, 0xc29c83ff, REGISTRY_RIPENCC    }, // 194.156.128.0   - 194.156.131.255
-	{ 0xc29c8500, 0xc29c8fff, REGISTRY_RIPENCC    }, // 194.156.133.0   - 194.156.143.255
+	{ 0xc29c8500, 0xc29c85ff, REGISTRY_RIPENCC    }, // 194.156.133.0   - 194.156.133.255
+	{ 0xc29c8700, 0xc29c8fff, REGISTRY_RIPENCC    }, // 194.156.135.0   - 194.156.143.255
 	{ 0xc29c9100, 0xc29c99ff, REGISTRY_RIPENCC    }, // 194.156.145.0   - 194.156.153.255
 	{ 0xc29c9c00, 0xc29ca1ff, REGISTRY_RIPENCC    }, // 194.156.156.0   - 194.156.161.255
-	{ 0xc29ca300, 0xc29cafff, REGISTRY_RIPENCC    }, // 194.156.163.0   - 194.156.175.255
-	{ 0xc29cb400, 0xc29cb8ff, REGISTRY_RIPENCC    }, // 194.156.180.0   - 194.156.184.255
+	{ 0xc29ca400, 0xc29cafff, REGISTRY_RIPENCC    }, // 194.156.164.0   - 194.156.175.255
+	{ 0xc29cb800, 0xc29cb8ff, REGISTRY_RIPENCC    }, // 194.156.184.0   - 194.156.184.255
 	{ 0xc29cba00, 0xc29cbfff, REGISTRY_RIPENCC    }, // 194.156.186.0   - 194.156.191.255
-	{ 0xc29cc300, 0xc29cd5ff, REGISTRY_RIPENCC    }, // 194.156.195.0   - 194.156.213.255
+	{ 0xc29cc300, 0xc29cc7ff, REGISTRY_RIPENCC    }, // 194.156.195.0   - 194.156.199.255
+	{ 0xc29cca00, 0xc29cd5ff, REGISTRY_RIPENCC    }, // 194.156.202.0   - 194.156.213.255
 	{ 0xc29cd800, 0xc29ce2ff, REGISTRY_RIPENCC    }, // 194.156.216.0   - 194.156.226.255
 	{ 0xc29ce400, 0xc29ce6ff, REGISTRY_RIPENCC    }, // 194.156.228.0   - 194.156.230.255
 	{ 0xc29ce800, 0xc29cf7ff, REGISTRY_RIPENCC    }, // 194.156.232.0   - 194.156.247.255
 	{ 0xc29cfb00, 0xc29cffff, REGISTRY_RIPENCC    }, // 194.156.251.0   - 194.156.255.255
 	{ 0xc29d0000, 0xc2a4ffff, REGISTRY_RIPENCC    }, // 194.157.0.0     - 194.164.255.255
 	{ 0xc2a50000, 0xc2a503ff, REGISTRY_RIPENCC    }, // 194.165.0.0     - 194.165.3.255  
-	{ 0xc2a50600, 0xc2a522ff, REGISTRY_RIPENCC    }, // 194.165.6.0     - 194.165.34.255 
+	{ 0xc2a50600, 0xc2a509ff, REGISTRY_RIPENCC    }, // 194.165.6.0     - 194.165.9.255  
+	{ 0xc2a50c00, 0xc2a522ff, REGISTRY_RIPENCC    }, // 194.165.12.0    - 194.165.34.255 
 	{ 0xc2a52400, 0xc2a537ff, REGISTRY_RIPENCC    }, // 194.165.36.0    - 194.165.55.255 
 	{ 0xc2a53900, 0xc2a539ff, REGISTRY_RIPENCC    }, // 194.165.57.0    - 194.165.57.255 
 	{ 0xc2a53b00, 0xc2a53fff, REGISTRY_RIPENCC    }, // 194.165.59.0    - 194.165.63.255 
@@ -8068,12 +8136,13 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc2a93200, 0xc2a932ff, REGISTRY_RIPENCC    }, // 194.169.50.0    - 194.169.50.255 
 	{ 0xc2a93400, 0xc2a937ff, REGISTRY_RIPENCC    }, // 194.169.52.0    - 194.169.55.255 
 	{ 0xc2a94000, 0xc2a954ff, REGISTRY_RIPENCC    }, // 194.169.64.0    - 194.169.84.255 
-	{ 0xc2a95600, 0xc2a95bff, REGISTRY_RIPENCC    }, // 194.169.86.0    - 194.169.91.255 
+	{ 0xc2a95800, 0xc2a95bff, REGISTRY_RIPENCC    }, // 194.169.88.0    - 194.169.91.255 
 	{ 0xc2a96000, 0xc2a99eff, REGISTRY_RIPENCC    }, // 194.169.96.0    - 194.169.158.255
 	{ 0xc2a9a000, 0xc2a9b7ff, REGISTRY_RIPENCC    }, // 194.169.160.0   - 194.169.183.255
 	{ 0xc2a9bf00, 0xc2a9c0ff, REGISTRY_RIPENCC    }, // 194.169.191.0   - 194.169.192.255
 	{ 0xc2a9c200, 0xc2a9d4ff, REGISTRY_RIPENCC    }, // 194.169.194.0   - 194.169.212.255
-	{ 0xc2a9d600, 0xc2a9e5ff, REGISTRY_RIPENCC    }, // 194.169.214.0   - 194.169.229.255
+	{ 0xc2a9d600, 0xc2a9deff, REGISTRY_RIPENCC    }, // 194.169.214.0   - 194.169.222.255
+	{ 0xc2a9e000, 0xc2a9e5ff, REGISTRY_RIPENCC    }, // 194.169.224.0   - 194.169.229.255
 	{ 0xc2a9e700, 0xc2a9ecff, REGISTRY_RIPENCC    }, // 194.169.231.0   - 194.169.236.255
 	{ 0xc2a9ee00, 0xc2a9f1ff, REGISTRY_RIPENCC    }, // 194.169.238.0   - 194.169.241.255
 	{ 0xc2a9f300, 0xc2a9fcff, REGISTRY_RIPENCC    }, // 194.169.243.0   - 194.169.252.255
@@ -8095,14 +8164,17 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc2b43300, 0xc2b43dff, REGISTRY_RIPENCC    }, // 194.180.51.0    - 194.180.61.255 
 	{ 0xc2b43f00, 0xc2b469ff, REGISTRY_RIPENCC    }, // 194.180.63.0    - 194.180.105.255
 	{ 0xc2b46c00, 0xc2b49fbf, REGISTRY_RIPENCC    }, // 194.180.108.0   - 194.180.159.191
-	{ 0xc2b49fe0, 0xc2b4bcff, REGISTRY_RIPENCC    }, // 194.180.159.224 - 194.180.188.255
+	{ 0xc2b49fe0, 0xc2b4adff, REGISTRY_RIPENCC    }, // 194.180.159.224 - 194.180.173.255
+	{ 0xc2b4af00, 0xc2b4afff, REGISTRY_RIPENCC    }, // 194.180.175.0   - 194.180.175.255
+	{ 0xc2b4bc00, 0xc2b4bcff, REGISTRY_RIPENCC    }, // 194.180.188.0   - 194.180.188.255
 	{ 0xc2b4be00, 0xc2b4d01f, REGISTRY_RIPENCC    }, // 194.180.190.0   - 194.180.208.31 
 	{ 0xc2b4d040, 0xc2b4d0bf, REGISTRY_RIPENCC    }, // 194.180.208.64  - 194.180.208.191
 	{ 0xc2b4d0e0, 0xc2b4dbff, REGISTRY_RIPENCC    }, // 194.180.208.224 - 194.180.219.255
 	{ 0xc2b4e000, 0xc2b4e28f, REGISTRY_RIPENCC    }, // 194.180.224.0   - 194.180.226.143
 	{ 0xc2b4e298, 0xc2b4e2bf, REGISTRY_RIPENCC    }, // 194.180.226.152 - 194.180.226.191
 	{ 0xc2b4e2e0, 0xc2b4e3ff, REGISTRY_RIPENCC    }, // 194.180.226.224 - 194.180.227.255
-	{ 0xc2b4e700, 0xc2b4ecbf, REGISTRY_RIPENCC    }, // 194.180.231.0   - 194.180.236.191
+	{ 0xc2b4e700, 0xc2b4ec3f, REGISTRY_RIPENCC    }, // 194.180.231.0   - 194.180.236.63 
+	{ 0xc2b4ec80, 0xc2b4ecbf, REGISTRY_RIPENCC    }, // 194.180.236.128 - 194.180.236.191
 	{ 0xc2b4ee00, 0xc2b4ffff, REGISTRY_RIPENCC    }, // 194.180.238.0   - 194.180.255.255
 	{ 0xc2b50000, 0xc2baffff, REGISTRY_RIPENCC    }, // 194.181.0.0     - 194.186.255.255
 	{ 0xc2bb0000, 0xc2bb17ff, REGISTRY_RIPENCC    }, // 194.187.0.0     - 194.187.23.255 
@@ -8187,7 +8259,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc30c3400, 0xc30c3fff, REGISTRY_RIPENCC    }, // 195.12.52.0     - 195.12.63.255  
 	{ 0xc30c4000, 0xc30d1fff, REGISTRY_RIPENCC    }, // 195.12.64.0     - 195.13.31.255  
 	{ 0xc30d2000, 0xc30d2bff, REGISTRY_RIPENCC    }, // 195.13.32.0     - 195.13.43.255  
-	{ 0xc30d2d00, 0xc30d2eff, REGISTRY_RIPENCC    }, // 195.13.45.0     - 195.13.46.255  
+	{ 0xc30d2e00, 0xc30d2eff, REGISTRY_RIPENCC    }, // 195.13.46.0     - 195.13.46.255  
 	{ 0xc30d3000, 0xc30d3fff, REGISTRY_RIPENCC    }, // 195.13.48.0     - 195.13.63.255  
 	{ 0xc30d4000, 0xc30dffff, REGISTRY_RIPENCC    }, // 195.13.64.0     - 195.13.255.255 
 	{ 0xc30e0000, 0xc30e06ff, REGISTRY_RIPENCC    }, // 195.14.0.0      - 195.14.6.255   
@@ -8251,7 +8323,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc3236820, 0xc32375ff, REGISTRY_RIPENCC    }, // 195.35.104.32   - 195.35.117.255 
 	{ 0xc3237800, 0xc3237fff, REGISTRY_RIPENCC    }, // 195.35.120.0    - 195.35.127.255 
 	{ 0xc3238000, 0xc325ffff, REGISTRY_RIPENCC    }, // 195.35.128.0    - 195.37.255.255 
-	{ 0xc3260c00, 0xc3261fff, REGISTRY_RIPENCC    }, // 195.38.12.0     - 195.38.31.255  
+	{ 0xc3260c00, 0xc32614ff, REGISTRY_RIPENCC    }, // 195.38.12.0     - 195.38.20.255  
+	{ 0xc3261600, 0xc3261fff, REGISTRY_RIPENCC    }, // 195.38.22.0     - 195.38.31.255  
 	{ 0xc3262000, 0xc327bfff, REGISTRY_RIPENCC    }, // 195.38.32.0     - 195.39.191.255 
 	{ 0xc327c000, 0xc327c1ff, REGISTRY_RIPENCC    }, // 195.39.192.0    - 195.39.193.255 
 	{ 0xc327c400, 0xc327c7ff, REGISTRY_RIPENCC    }, // 195.39.196.0    - 195.39.199.255 
@@ -8315,7 +8388,9 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc33e1800, 0xc33e55ff, REGISTRY_RIPENCC    }, // 195.62.24.0     - 195.62.85.255  
 	{ 0xc33e5800, 0xc33e5fff, REGISTRY_RIPENCC    }, // 195.62.88.0     - 195.62.95.255  
 	{ 0xc33e6000, 0xc3407fff, REGISTRY_RIPENCC    }, // 195.62.96.0     - 195.64.127.255 
-	{ 0xc3408200, 0xc34097ff, REGISTRY_RIPENCC    }, // 195.64.130.0    - 195.64.151.255 
+	{ 0xc3408200, 0xc3408dff, REGISTRY_RIPENCC    }, // 195.64.130.0    - 195.64.141.255 
+	{ 0xc3408e00, 0xc3408fff, REGISTRY_RIPENCC    }, // 195.64.142.0    - 195.64.143.255 
+	{ 0xc3409000, 0xc34097ff, REGISTRY_RIPENCC    }, // 195.64.144.0    - 195.64.151.255 
 	{ 0xc3409a00, 0xc340a7ff, REGISTRY_RIPENCC    }, // 195.64.154.0    - 195.64.167.255 
 	{ 0xc340aa00, 0xc340bfff, REGISTRY_RIPENCC    }, // 195.64.170.0    - 195.64.191.255 
 	{ 0xc340c000, 0xc341ffff, REGISTRY_RIPENCC    }, // 195.64.192.0    - 195.65.255.255 
@@ -8364,7 +8439,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc355c300, 0xc355c4ff, REGISTRY_RIPENCC    }, // 195.85.195.0    - 195.85.196.255 
 	{ 0xc355c600, 0xc355c8ff, REGISTRY_RIPENCC    }, // 195.85.198.0    - 195.85.200.255 
 	{ 0xc355ca00, 0xc355ceff, REGISTRY_RIPENCC    }, // 195.85.202.0    - 195.85.206.255 
-	{ 0xc355d000, 0xc355d9ff, REGISTRY_RIPENCC    }, // 195.85.208.0    - 195.85.217.255 
+	{ 0xc355d000, 0xc355d7ff, REGISTRY_RIPENCC    }, // 195.85.208.0    - 195.85.215.255 
+	{ 0xc355d900, 0xc355d9ff, REGISTRY_RIPENCC    }, // 195.85.217.0    - 195.85.217.255 
 	{ 0xc355db00, 0xc355deff, REGISTRY_RIPENCC    }, // 195.85.219.0    - 195.85.222.255 
 	{ 0xc355e000, 0xc355e1ff, REGISTRY_RIPENCC    }, // 195.85.224.0    - 195.85.225.255 
 	{ 0xc355e300, 0xc355f4ff, REGISTRY_RIPENCC    }, // 195.85.227.0    - 195.85.244.255 
@@ -8395,7 +8471,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc35dba00, 0xc35dcfff, REGISTRY_RIPENCC    }, // 195.93.186.0    - 195.93.207.255 
 	{ 0xc35dd200, 0xc35dffff, REGISTRY_RIPENCC    }, // 195.93.210.0    - 195.93.255.255 
 	{ 0xc35e0000, 0xc35f7fff, REGISTRY_RIPENCC    }, // 195.94.0.0      - 195.95.127.255 
-	{ 0xc35f8000, 0xc35f81ff, REGISTRY_RIPENCC    }, // 195.95.128.0    - 195.95.129.255 
+	{ 0xc35f8100, 0xc35f81ff, REGISTRY_RIPENCC    }, // 195.95.129.0    - 195.95.129.255 
 	{ 0xc35f8300, 0xc35f85ff, REGISTRY_RIPENCC    }, // 195.95.131.0    - 195.95.133.255 
 	{ 0xc35f8700, 0xc35f91ff, REGISTRY_RIPENCC    }, // 195.95.135.0    - 195.95.145.255 
 	{ 0xc35f9200, 0xc35f92ff, REGISTRY_RIPENCC    }, // 195.95.146.0    - 195.95.146.255 
@@ -8481,7 +8557,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc3aaa600, 0xc3aaa6ff, REGISTRY_RIPENCC    }, // 195.170.166.0   - 195.170.166.255
 	{ 0xc3aaa800, 0xc3aabfff, REGISTRY_RIPENCC    }, // 195.170.168.0   - 195.170.191.255
 	{ 0xc3aac000, 0xc3b13fff, REGISTRY_RIPENCC    }, // 195.170.192.0   - 195.177.63.255 
-	{ 0xc3b14000, 0xc3b16bff, REGISTRY_RIPENCC    }, // 195.177.64.0    - 195.177.107.255
+	{ 0xc3b14000, 0xc3b157ff, REGISTRY_RIPENCC    }, // 195.177.64.0    - 195.177.87.255 
+	{ 0xc3b15c00, 0xc3b16bff, REGISTRY_RIPENCC    }, // 195.177.92.0    - 195.177.107.255
 	{ 0xc3b17400, 0xc3b17fff, REGISTRY_RIPENCC    }, // 195.177.116.0   - 195.177.127.255
 	{ 0xc3b18000, 0xc3b1bfff, REGISTRY_RIPENCC    }, // 195.177.128.0   - 195.177.191.255
 	{ 0xc3b1c000, 0xc3b1c1ff, REGISTRY_RIPENCC    }, // 195.177.192.0   - 195.177.193.255
@@ -8509,7 +8586,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc3bda600, 0xc3bda7ff, REGISTRY_RIPENCC    }, // 195.189.166.0   - 195.189.167.255
 	{ 0xc3bdaa00, 0xc3bdadff, REGISTRY_RIPENCC    }, // 195.189.170.0   - 195.189.173.255
 	{ 0xc3bdb000, 0xc3bdb7ff, REGISTRY_RIPENCC    }, // 195.189.176.0   - 195.189.183.255
-	{ 0xc3bdba00, 0xc3be1fff, REGISTRY_RIPENCC    }, // 195.189.186.0   - 195.190.31.255 
+	{ 0xc3bdba00, 0xc3bdbdff, REGISTRY_RIPENCC    }, // 195.189.186.0   - 195.189.189.255
+	{ 0xc3bdc000, 0xc3be1fff, REGISTRY_RIPENCC    }, // 195.189.192.0   - 195.190.31.255 
 	{ 0xc3be2000, 0xc3be7fff, REGISTRY_RIPENCC    }, // 195.190.32.0    - 195.190.127.255
 	{ 0xc3be8000, 0xc3be8aff, REGISTRY_RIPENCC    }, // 195.190.128.0   - 195.190.138.255
 	{ 0xc3be8c00, 0xc3be8fff, REGISTRY_RIPENCC    }, // 195.190.140.0   - 195.190.143.255
@@ -8558,7 +8636,9 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc3de8000, 0xc3e11fff, REGISTRY_RIPENCC    }, // 195.222.128.0   - 195.225.31.255 
 	{ 0xc3e12000, 0xc3e13fff, REGISTRY_RIPENCC    }, // 195.225.32.0    - 195.225.63.255 
 	{ 0xc3e14400, 0xc3e1b3ff, REGISTRY_RIPENCC    }, // 195.225.68.0    - 195.225.179.255
-	{ 0xc3e1b800, 0xc3e1f7ff, REGISTRY_RIPENCC    }, // 195.225.184.0   - 195.225.247.255
+	{ 0xc3e1b800, 0xc3e1e3ff, REGISTRY_RIPENCC    }, // 195.225.184.0   - 195.225.227.255
+	{ 0xc3e1e400, 0xc3e1e7ff, REGISTRY_RIPENCC    }, // 195.225.228.0   - 195.225.231.255
+	{ 0xc3e1e800, 0xc3e1f7ff, REGISTRY_RIPENCC    }, // 195.225.232.0   - 195.225.247.255
 	{ 0xc3e1f800, 0xc3e1fbff, REGISTRY_RIPENCC    }, // 195.225.248.0   - 195.225.251.255
 	{ 0xc3e1fc00, 0xc3e1ffff, REGISTRY_RIPENCC    }, // 195.225.252.0   - 195.225.255.255
 	{ 0xc3e20000, 0xc3e2bfff, REGISTRY_RIPENCC    }, // 195.226.0.0     - 195.226.191.255
@@ -8600,7 +8680,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc3eee000, 0xc3eee6ff, REGISTRY_RIPENCC    }, // 195.238.224.0   - 195.238.230.255
 	{ 0xc3eee800, 0xc3eef1ff, REGISTRY_RIPENCC    }, // 195.238.232.0   - 195.238.241.255
 	{ 0xc3eef400, 0xc3eef6ff, REGISTRY_RIPENCC    }, // 195.238.244.0   - 195.238.246.255
-	{ 0xc3eef900, 0xc3eeffff, REGISTRY_RIPENCC    }, // 195.238.249.0   - 195.238.255.255
+	{ 0xc3eef900, 0xc3eefbff, REGISTRY_RIPENCC    }, // 195.238.249.0   - 195.238.251.255
+	{ 0xc3eefd00, 0xc3eeffff, REGISTRY_RIPENCC    }, // 195.238.253.0   - 195.238.255.255
 	{ 0xc3ef0000, 0xc3f23fff, REGISTRY_RIPENCC    }, // 195.239.0.0     - 195.242.63.255 
 	{ 0xc3f24000, 0xc3f249ff, REGISTRY_RIPENCC    }, // 195.242.64.0    - 195.242.73.255 
 	{ 0xc3f24c00, 0xc3f263ff, REGISTRY_RIPENCC    }, // 195.242.76.0    - 195.242.99.255 
@@ -8609,7 +8690,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc3f29600, 0xc3f2b0ff, REGISTRY_RIPENCC    }, // 195.242.150.0   - 195.242.176.255
 	{ 0xc3f2b200, 0xc3f2b5ff, REGISTRY_RIPENCC    }, // 195.242.178.0   - 195.242.181.255
 	{ 0xc3f2b700, 0xc3f2baff, REGISTRY_RIPENCC    }, // 195.242.183.0   - 195.242.186.255
-	{ 0xc3f2bc00, 0xc3f2d3ff, REGISTRY_RIPENCC    }, // 195.242.188.0   - 195.242.211.255
+	{ 0xc3f2bc00, 0xc3f2cfff, REGISTRY_RIPENCC    }, // 195.242.188.0   - 195.242.207.255
 	{ 0xc3f2d400, 0xc3f2d7ff, REGISTRY_RIPENCC    }, // 195.242.212.0   - 195.242.215.255
 	{ 0xc3f2d800, 0xc3f2efff, REGISTRY_RIPENCC    }, // 195.242.216.0   - 195.242.239.255
 	{ 0xc3f2f400, 0xc3f2ffff, REGISTRY_RIPENCC    }, // 195.242.244.0   - 195.242.255.255
@@ -8786,7 +8867,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc4c07c00, 0xc4c07cff, REGISTRY_AFRINIC    }, // 196.192.124.0   - 196.192.124.255
 	{ 0xc4c08c00, 0xc4c08fff, REGISTRY_AFRINIC    }, // 196.192.140.0   - 196.192.143.255
 	{ 0xc4c0c000, 0xc4c8cfff, REGISTRY_AFRINIC    }, // 196.192.192.0   - 196.200.207.255
-	{ 0xc4c90000, 0xc4c903ff, REGISTRY_AFRINIC    }, // 196.201.0.0     - 196.201.3.255  
+	{ 0xc4c90100, 0xc4c903ff, REGISTRY_AFRINIC    }, // 196.201.1.0     - 196.201.3.255  
 	{ 0xc4c90600, 0xc4c907ff, REGISTRY_AFRINIC    }, // 196.201.6.0     - 196.201.7.255  
 	{ 0xc4c91000, 0xc4c95fff, REGISTRY_AFRINIC    }, // 196.201.16.0    - 196.201.95.255 
 	{ 0xc4c98000, 0xc4c99fff, REGISTRY_AFRINIC    }, // 196.201.128.0   - 196.201.159.255
@@ -8995,7 +9076,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc7f89000, 0xc7f890ff, REGISTRY_LACNIC     }, // 199.248.144.0   - 199.248.144.255
 	{ 0xc7f89100, 0xc7ffffff, REGISTRY_ARIN       }, // 199.248.145.0   - 199.255.255.255
 	{ 0xc8000000, 0xc8003fff, REGISTRY_LACNIC     }, // 200.0.0.0       - 200.0.63.255   
-	{ 0xc8004100, 0xc80054ff, REGISTRY_LACNIC     }, // 200.0.65.0      - 200.0.84.255   
+	{ 0xc8004100, 0xc80042ff, REGISTRY_LACNIC     }, // 200.0.65.0      - 200.0.66.255   
+	{ 0xc8004400, 0xc80054ff, REGISTRY_LACNIC     }, // 200.0.68.0      - 200.0.84.255   
 	{ 0xc8005800, 0xc80058ff, REGISTRY_LACNIC     }, // 200.0.88.0      - 200.0.88.255   
 	{ 0xc8005a00, 0xc8005dff, REGISTRY_LACNIC     }, // 200.0.90.0      - 200.0.93.255   
 	{ 0xc8005e00, 0xc8005eff, REGISTRY_ARIN       }, // 200.0.94.0      - 200.0.94.255   
@@ -9091,7 +9173,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc80cf000, 0xc80d53ff, REGISTRY_LACNIC     }, // 200.12.240.0    - 200.13.83.255  
 	{ 0xc80d5800, 0xc80e23ff, REGISTRY_LACNIC     }, // 200.13.88.0     - 200.14.35.255  
 	{ 0xc80e2500, 0xc80e37ff, REGISTRY_LACNIC     }, // 200.14.37.0     - 200.14.55.255  
-	{ 0xc80e4000, 0xc80e77ff, REGISTRY_LACNIC     }, // 200.14.64.0     - 200.14.119.255 
+	{ 0xc80e4000, 0xc80e50ff, REGISTRY_LACNIC     }, // 200.14.64.0     - 200.14.80.255  
+	{ 0xc80e5200, 0xc80e77ff, REGISTRY_LACNIC     }, // 200.14.82.0     - 200.14.119.255 
 	{ 0xc80e8000, 0xc80effff, REGISTRY_LACNIC     }, // 200.14.128.0    - 200.14.255.255 
 	{ 0xc80f0000, 0xc80fffff, REGISTRY_ARIN       }, // 200.15.0.0      - 200.15.255.255 
 	{ 0xc8100000, 0xc81007ff, REGISTRY_LACNIC     }, // 200.16.0.0      - 200.16.7.255   
@@ -9166,8 +9249,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xc947d000, 0xc94d5fff, REGISTRY_LACNIC     }, // 201.71.208.0    - 201.77.95.255  
 	{ 0xc94d7000, 0xc94d8fff, REGISTRY_LACNIC     }, // 201.77.112.0    - 201.77.143.255 
 	{ 0xc94da000, 0xc98309ff, REGISTRY_LACNIC     }, // 201.77.160.0    - 201.131.9.255  
-	{ 0xc9830c00, 0xc98325ff, REGISTRY_LACNIC     }, // 201.131.12.0    - 201.131.37.255 
-	{ 0xc9832800, 0xc98329ff, REGISTRY_LACNIC     }, // 201.131.40.0    - 201.131.41.255 
+	{ 0xc9830c00, 0xc98329ff, REGISTRY_LACNIC     }, // 201.131.12.0    - 201.131.41.255 
 	{ 0xc9832c00, 0xc9832cff, REGISTRY_LACNIC     }, // 201.131.44.0    - 201.131.44.255 
 	{ 0xc9833000, 0xc98330ff, REGISTRY_LACNIC     }, // 201.131.48.0    - 201.131.48.255 
 	{ 0xc9833400, 0xc98341ff, REGISTRY_LACNIC     }, // 201.131.52.0    - 201.131.65.255 
@@ -9266,7 +9348,8 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xca596400, 0xca596bff, REGISTRY_APNIC      }, // 202.89.100.0    - 202.89.107.255 
 	{ 0xca597000, 0xca5976ff, REGISTRY_APNIC      }, // 202.89.112.0    - 202.89.118.255 
 	{ 0xca597800, 0xca5a0fff, REGISTRY_APNIC      }, // 202.89.120.0    - 202.90.15.255  
-	{ 0xca5a2000, 0xca5a5fff, REGISTRY_APNIC      }, // 202.90.32.0     - 202.90.95.255  
+	{ 0xca5a2000, 0xca5a24ff, REGISTRY_APNIC      }, // 202.90.32.0     - 202.90.36.255  
+	{ 0xca5a2600, 0xca5a5fff, REGISTRY_APNIC      }, // 202.90.38.0     - 202.90.95.255  
 	{ 0xca5a7000, 0xca5ac0ff, REGISTRY_APNIC      }, // 202.90.112.0    - 202.90.192.255 
 	{ 0xca5ac200, 0xca5accff, REGISTRY_APNIC      }, // 202.90.194.0    - 202.90.204.255 
 	{ 0xca5ace00, 0xca5dffff, REGISTRY_APNIC      }, // 202.90.206.0    - 202.93.255.255 
@@ -9370,7 +9453,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	{ 0xcb99d200, 0xcba02fff, REGISTRY_APNIC      }, // 203.153.210.0   - 203.160.47.255 
 	{ 0xcba03800, 0xcba083ff, REGISTRY_APNIC      }, // 203.160.56.0    - 203.160.131.255
 	{ 0xcba08800, 0xcba1b6ff, REGISTRY_APNIC      }, // 203.160.136.0   - 203.161.182.255
-	{ 0xcba1b800, 0xcba707ff, REGISTRY_APNIC      }, // 203.161.184.0   - 203.167.7.255  
+	{ 0xcba1ba00, 0xcba707ff, REGISTRY_APNIC      }, // 203.161.186.0   - 203.167.7.255  
 	{ 0xcba72000, 0xcbaa57ff, REGISTRY_APNIC      }, // 203.167.32.0    - 203.170.87.255 
 	{ 0xcbaa5a00, 0xcbabcfff, REGISTRY_APNIC      }, // 203.170.90.0    - 203.171.207.255
 	{ 0xcbabd100, 0xcbae05ff, REGISTRY_APNIC      }, // 203.171.209.0   - 203.174.5.255  
