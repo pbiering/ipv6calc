@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.13 2014/10/09 19:52:00 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.14 2014/10/09 20:23:11 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -533,7 +533,7 @@ char *libipv6calc_db_wrapper_DBIP_database_info(const int type) {
 		snprintf(resultstring, sizeof(resultstring), "%s", "can't retrieve 'dbdate', unsupported db file");
 		goto END_libipv6calc_db_wrapper_close;
 	};
-	snprintf(resultstring, sizeof(resultstring), "DBIP/%s", datastring);
+	snprintf(resultstring, sizeof(resultstring), "DBIP-%d/%s", type, datastring);
 
 	// get dbcreated_unixtime
 	ret = libipv6calc_db_wrapper_bdb_get_data_by_key(dbp, "dbcreated_unixtime", datastring, sizeof(datastring));
