@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2014 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec.in,v 1.86 2014/10/10 20:34:30 ds6peter Exp $
+# $Id: ipv6calc.spec.in,v 1.87 2014/10/10 20:40:09 ds6peter Exp $
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
@@ -141,7 +141,7 @@ popd
 
 # tools
 install -d $RPM_BUILD_ROOT%{_datadir}/%{name}/tools
-for tool in GeoIP-update.sh IP2Location-update.sh; do
+for tool in GeoIP-update.sh IP2Location-update.sh DBIP-update.sh DBIP-generate-db.pl; do
 	install -m 755 tools/$tool $RPM_BUILD_ROOT%{_datadir}/%{name}/tools
 done
 
@@ -205,6 +205,9 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Fri Oct 10 2014 Peter Bieringer <pb@bieringer.de>
+- add DBIP-update.sh DBIP-generate-db.pl
+
 * Mon Jul 14 2014 Peter Bieringer <pb@bieringer.de>
 - review description
 
