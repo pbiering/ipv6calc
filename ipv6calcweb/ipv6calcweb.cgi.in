@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.76 2014/10/09 19:52:00 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.77 2014/10/11 19:08:05 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -293,6 +293,10 @@ my %text = (
 		'de' => "Ländercode der IPv6 Adresse",
 		'en' => "Country Code of IPv6 address",
 	},
+	'IPV6_COUNTRYCODE_SOURCE' => {
+		'de' => "Quelle des Ländercode der IPv6 Adresse",
+		'en' => "Source of Country Code of IPv6 address",
+	},
 	'IPV6_AS_NUM' => {
 		'de' => "Autonomous System Nummer der IPv6 Adresse",
 		'en' => "Autonomous System Number of IPv6 address",
@@ -324,6 +328,10 @@ my %text = (
 	'IPV4_COUNTRYCODE' => {
 		'de' => "Ländercode der IPv4 Adresse",
 		'en' => "Country Code of IPv4 address",
+	},
+	'IPV4_COUNTRYCODE_SOURCE' => {
+		'de' => "Quelle des Ländercode der IPv4 Adresse",
+		'en' => "Source of Country Code of IPv4 address",
 	},
 	'IPV4_AS_NUM' => {
 		'de' => "Autonomous System Nummer der IPv4 Adresse",
@@ -549,6 +557,10 @@ my %text = (
 		'de' => "GeoIP AREACODE",
 		'en' => "GeoIP AREACODE",
 	},
+	'GEOIP_CONTINENTCODE' => {
+		'de' => "GeoIP Kontinent-Code",
+		'en' => "GeoIP Continent Code",
+	},
 	'GEOIP_DATABASE_INFO_IPV4' => {
 		'de' => "GeoIP IPv4 Datenbank-Information",
 		'en' => "GeoIP IPv4 database information",
@@ -620,6 +632,10 @@ my %text = (
 	'AS_TEXT' => {
 		'de' => "Autonomous System der IP Adresse",
 		'en' => "Autonomous System of IP address",
+	},
+	'CONTINENTCODE' => {
+		'de' => "Kontinent-Code",
+		'en' => "Continent Code",
 	},
 );
 
