@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.53 2014/10/11 11:24:22 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.54 2014/10/11 11:26:37 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -1565,14 +1565,14 @@ int libipv6calc_db_wrapper_bdb_fetch_row(
 	int retval = -1;
 
 	const char *db_format_row[] = {
-		"%lu;%lu;%[^%]",			// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x2
-		"%lu;%lu;%lu;%lu;%[^%]",		// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x4
-		"%lx;%lx;%[^%]",			// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x2
-		"%lx;%lx;%lx;%lx;%[^%]",		// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x4
-		"%lx;%lx;%d;%[^%]",			// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_VALUE_32x2
-		"%lx;%lx;%lx;%lx;%d;%[^%]",		// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_VALUE_32x4
-		"0x%lx;0x%lx;%[^%]",			// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_PREF_32x2
-		"0x%lx;0x%lx;0x%lx;0x%lx;%[^%]",	// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_PREF_32x4
+		"%u;%u;%[^%]",			// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x2
+		"%u;%u;%u;%u;%[^%]",		// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x4
+		"%x;%x;%[^%]",			// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x2
+		"%x;%x;%x;%x;%[^%]",		// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x4
+		"%x;%x;%d;%[^%]",			// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_VALUE_32x2
+		"%x;%x;%x;%x;%d;%[^%]",		// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_VALUE_32x4
+		"0x%x;0x%x;%[^%]",			// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_PREF_32x2
+		"0x%x;0x%x;0x%x;0x%x;%[^%]",	// IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_WITH_PREF_32x4
 	};
 
 	const int db_format_values[] = {
