@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.c
- * Version    : $Id: libipv6calc_db_wrapper_External.c,v 1.2 2014/10/11 11:17:19 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_External.c,v 1.3 2014/10/11 11:33:41 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -418,7 +418,7 @@ DB *libipv6calc_db_wrapper_External_open_type(const int type_flag, long int *db_
 			*db_recno_max_ptr = db_recno_max_cache[entry][subdb];
 		};
 
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Database already opened (cached) dbp=%p type=%d subdb=%d recno_max: %ld", dbp, type, subdb, db_recno_max_cache[entry][subdb]);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Database already opened (cached) dbp=%p type=%d subdb=%d recno_max: %u", dbp, type, subdb, db_recno_max_cache[entry][subdb]);
 
 		goto END_libipv6calc_db_wrapper;
 	};
