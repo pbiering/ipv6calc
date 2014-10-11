@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.50 2014/10/09 19:52:00 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.51 2014/10/11 11:02:50 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -1602,7 +1602,7 @@ int libipv6calc_db_wrapper_bdb_fetch_row(
 
 	DBT key, data;
 
-	long int recno = row;
+	db_recno_t recno = row;
 
 	memset(&key, 0, sizeof(key));
 	memset(&data, 0, sizeof(data));
@@ -1627,7 +1627,7 @@ int libipv6calc_db_wrapper_bdb_fetch_row(
 
 	snprintf(datastring, (data.size + 1) >= sizeof(datastring) ? sizeof(datastring) : data.size + 1, "%s", (char *) data.data);
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "database row %lu: %s (size=%d) data_ptr=%p", recno, datastring, data.size, data_ptr);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "database row %lu: %s (size=%d) data_ptr=%p", (unsigned long int) recno, datastring, data.size, data_ptr);
 
 	if (db_format_values[db_format] == 3) {
 		ret = sscanf(datastring, db_format_row[db_format], data_1_00_31_ptr, data_2_00_31_ptr, (char *) data_ptr);
