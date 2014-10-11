@@ -1389,7 +1389,7 @@ Optional Packages:
   --with-dbip-db=DIR      Use specified db-ip.com database directory, default:
                           /usr/share/DBIP
   --with-external-db=DIR  Use specified external database directory, default:
-                          /usr/share/ipv6calc
+                          /usr/share/ipv6calc/db
   --with-ip2location-dynamic
                           Enable use of dynamic loading of IP2Location library
                           (default=no)
@@ -5768,17 +5768,19 @@ fi
 $as_echo "$ac_cv_lib_db_db_create" >&6; }
 if test "x$ac_cv_lib_db_db_create" = xyes; then :
 
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** Berkeley DB library found and usable" >&5
+$as_echo "*** Berkeley DB library found and usable" >&6; }
 
 else
 
-			as_fn_error $? "db library file misses db_create" "$LINENO" 5
+			as_fn_error $? "Berkeley DB library file misses db_create" "$LINENO" 5
 
 fi
 
 
 else
 
-		as_fn_error $? "db library header files not found" "$LINENO" 5
+		as_fn_error $? "Berkeley DB library header files not found (perhaps missing db4-devel/libdb-devel package)" "$LINENO" 5
 
 fi
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.51 2014/10/11 11:02:50 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.52 2014/10/11 11:17:19 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -1627,7 +1627,7 @@ int libipv6calc_db_wrapper_bdb_fetch_row(
 
 	snprintf(datastring, (data.size + 1) >= sizeof(datastring) ? sizeof(datastring) : data.size + 1, "%s", (char *) data.data);
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "database row %lu: %s (size=%d) data_ptr=%p", (unsigned long int) recno, datastring, data.size, data_ptr);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "database row %u: %s (size=%d) data_ptr=%p", recno, datastring, data.size, data_ptr);
 
 	if (db_format_values[db_format] == 3) {
 		ret = sscanf(datastring, db_format_row[db_format], data_1_00_31_ptr, data_2_00_31_ptr, (char *) data_ptr);
@@ -1678,7 +1678,7 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 	const uint8_t	data_key_format,	// key format
 	const uint8_t	data_key_length,	// key length
 	const uint8_t	data_search_type,	// search type
-	const long int	data_num_rows,		// number of rows
+	const uint32_t	data_num_rows,		// number of rows
 	const uint32_t	lookup_key_00_31,	// lookup key MSB
 	const uint32_t	lookup_key_32_63,	// lookup key LSB
 	void            *data_ptr,		// pointer to DB data in case of IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB, otherwise NULL
@@ -1694,12 +1694,12 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 	DB *dbp = NULL;
 #endif // HAVE_BERKELEY_DB_SUPPORT
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with data_ptr_type=%u data_key_type=%u data_key_format=%u, data_key_length=%u data_num_rows=%lu lookup_key_00_31=%08lx lookup_key_32_63=%08lx db_ptr=%p, data_ptr=%p",
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with data_ptr_type=%u data_key_type=%u data_key_format=%u, data_key_length=%u data_num_rows=%u lookup_key_00_31=%08lx lookup_key_32_63=%08lx db_ptr=%p, data_ptr=%p",
 		data_ptr_type,
 		data_key_type,
 		data_key_format,
 		data_key_length,
-		(long unsigned int) data_num_rows,
+		data_num_rows,
 		(long unsigned int) lookup_key_00_31,
 		(long unsigned int) lookup_key_32_63,
 		db_ptr,
@@ -1707,7 +1707,7 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 	);
 
 	if (data_num_rows < 1) {
-		ERRORPRINT_WA("unsupported data_key_num_rows (FIX CODE): %ld", data_num_rows);
+		ERRORPRINT_WA("unsupported data_key_num_rows (FIX CODE): %u", data_num_rows);
 		exit(EXIT_FAILURE);
 	};
 
@@ -1794,7 +1794,7 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 
 	i_min = 0; i_max = data_num_rows - 1; i_old = -1;
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Start binary search over entries: data_num_rows=%ld", data_num_rows);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Start binary search over entries: data_num_rows=%u", data_num_rows);
 
 	if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
 		// binary search in provided data
@@ -1807,7 +1807,7 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 
 	while (i_old != i) {
 		if ((i >= data_num_rows) || (i < 0)) {
-			ERRORPRINT_WA("i out of range (FIX CODE): i=%ld data_num_rows=%ld", i, data_num_rows);
+			ERRORPRINT_WA("i out of range (FIX CODE): i=%ld data_num_rows=%u", i, data_num_rows);
 			exit(EXIT_FAILURE);
 		};
 

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.c
- * Version    : $Id: libipv6calc_db_wrapper_External.c,v 1.1 2014/10/10 20:35:45 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_External.c,v 1.2 2014/10/11 11:17:19 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -51,7 +51,7 @@ char external_db_usage_string[NI_MAXHOST] = "";
 // local cache
 #define IPV6CALC_DBD_SUBDB_MAX 2
 static DB *db_ptr_cache[MAXENTRIES_ARRAY(libipv6calc_db_wrapper_External_db_file_desc)][IPV6CALC_DBD_SUBDB_MAX];
-static long int db_recno_max_cache[MAXENTRIES_ARRAY(libipv6calc_db_wrapper_External_db_file_desc)][IPV6CALC_DBD_SUBDB_MAX];
+static db_recno_t db_recno_max_cache[MAXENTRIES_ARRAY(libipv6calc_db_wrapper_External_db_file_desc)][IPV6CALC_DBD_SUBDB_MAX];
 
 // creation time of databases
 time_t wrapper_db_unixtime_External[MAXENTRIES_ARRAY(libipv6calc_db_wrapper_External_db_file_desc)];
@@ -470,7 +470,7 @@ DB *libipv6calc_db_wrapper_External_open_type(const int type_flag, long int *db_
 			goto END_libipv6calc_db_wrapper_close_error;
 		};
 
-		db_recno_max_cache[entry][subdb] = *(long int *)key.data;
+		db_recno_max_cache[entry][subdb] = *(db_recno_t *)key.data;
 
 		if (db_recno_max_cache[entry][subdb] < 2) {
 			goto END_libipv6calc_db_wrapper_close_error;
@@ -480,7 +480,7 @@ DB *libipv6calc_db_wrapper_External_open_type(const int type_flag, long int *db_
 			*db_recno_max_ptr = db_recno_max_cache[entry][subdb];
 		};
 
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Database successfully opened (fill-cache), dbp=%p type=%d subdb=%d recno_max=%ld", dbp, type, subdb, db_recno_max_cache[entry][subdb]);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Database successfully opened (fill-cache), dbp=%p type=%d subdb=%d recno_max=%u", dbp, type, subdb, db_recno_max_cache[entry][subdb]);
 	} else {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Database successfully opened, dbp=%p type=%d (info)", dbp, type);
 	};

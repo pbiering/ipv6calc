@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.14 2014/10/09 20:23:11 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.15 2014/10/11 11:17:19 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -50,7 +50,7 @@ char dbip_db_usage_string[NI_MAXHOST] = "";
 
 // local cache
 static DB*      db_ptr_cache[MAXENTRIES_ARRAY(libipv6calc_db_wrapper_DBIP_db_file_desc)];
-static long int db_recno_max_cache[MAXENTRIES_ARRAY(libipv6calc_db_wrapper_DBIP_db_file_desc)];
+static db_recno_t db_recno_max_cache[MAXENTRIES_ARRAY(libipv6calc_db_wrapper_DBIP_db_file_desc)];
 
 // creation time of databases
 time_t wrapper_db_unixtime_DBIP[MAXENTRIES_ARRAY(libipv6calc_db_wrapper_DBIP_db_file_desc)];
@@ -395,7 +395,7 @@ DB *libipv6calc_db_wrapper_DBIP_open_type(const int type_flag, long int *db_recn
 			*db_recno_max_ptr = db_recno_max_cache[entry];
 		};
 
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Database already opened (cached) dbp=%p type=%d recno_max: %ld", dbp, type, db_recno_max_cache[entry]);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Database already opened (cached) dbp=%p type=%d recno_max: %u", dbp, type, db_recno_max_cache[entry]);
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -446,7 +446,7 @@ DB *libipv6calc_db_wrapper_DBIP_open_type(const int type_flag, long int *db_recn
 			goto END_libipv6calc_db_wrapper_close_error;
 		};
 
-		db_recno_max_cache[entry] = *(long int *)key.data;
+		db_recno_max_cache[entry] = *(db_recno_t *)key.data;
 
 		if (db_recno_max_cache[entry] < 2) {
 			goto END_libipv6calc_db_wrapper_close_error;
@@ -456,7 +456,7 @@ DB *libipv6calc_db_wrapper_DBIP_open_type(const int type_flag, long int *db_recn
 			*db_recno_max_ptr = db_recno_max_cache[entry];
 		};
 
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Database successfully opened (fill-cache), dbp=%p type=%d recno_max=%ld", dbp, type, db_recno_max_cache[entry]);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Database successfully opened (fill-cache), dbp=%p type=%d recno_max=%u", dbp, type, db_recno_max_cache[entry]);
 	} else {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Database successfully opened, dbp=%p type=%d (info)", dbp, type);
 	};

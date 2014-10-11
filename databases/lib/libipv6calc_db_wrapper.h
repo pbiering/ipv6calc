@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.35 2014/10/09 19:52:00 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.36 2014/10/11 11:17:19 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -286,7 +286,7 @@ extern long int libipv6calc_db_wrapper_get_entry_generic(
 	const uint8_t   data_key_format,        // key format
 	const uint8_t	data_key_length,	// key length
 	const uint8_t	data_search_type,	// search type
-	const long int	data_num_rows,		// number of rows
+	const uint32_t	data_num_rows,		// number of rows
 	const uint32_t	lookup_key_00_31,	// lookup key MSB
 	const uint32_t	lookup_key_32_63,	// lookup key LSB
 	void            *data_ptr,		// pointer to DB data in case of IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB, otherwise NULL
