@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.16 2014/10/11 11:38:09 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.17 2014/10/11 11:41:47 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -416,7 +416,7 @@ DB *libipv6calc_db_wrapper_DBIP_open_type(const int type_flag, long int *db_recn
 
 	if ((ret = dbp->open(dbp, NULL, filename, (info_selector == 0) ? "data" : "info", (info_selector == 0) ? DB_RECNO : DB_HASH, DB_RDONLY, 0444)) != 0) {
 		if (ipv6calc_quiet == 0) {
-			dbp->err(dbp, ret, "%s", filename);
+			fprintf(stderr, "db->open failed: %s (%s)\n", db_strerror(ret), filename);
 		};
 		return(NULL);
 	};
