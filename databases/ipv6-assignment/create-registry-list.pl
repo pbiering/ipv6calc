@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.14 2014/10/07 20:25:23 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.15 2014/10/11 18:57:57 ds6peter Exp $
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
 #              2005-2014 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
 # License    : GNU GPL v2
@@ -419,7 +419,7 @@ print "INFO  : create db from input: IPv6=$filename\n";
 
 my %h_info;
 
-tie %h_info, 'BerkeleyDB::Hash', -Filename => $filename, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
+tie %h_info, 'BerkeleyDB::Btree', -Filename => $filename, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
 
 $h_info{'dbusage'} = "ipv6calc";
 $h_info{'dbformat'} = "1"; # ';' separated values
@@ -458,7 +458,7 @@ if (-f $filename) {
         unlink($filename) || die "Can't delete old file: $filename";
 };
 
-tie %h_info, 'BerkeleyDB::Hash', -Filename => $filename, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
+tie %h_info, 'BerkeleyDB::Btree', -Filename => $filename, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
 
 $h_info{'dbusage'} = "ipv6calc";
 $h_info{'dbformat'} = "1"; # ';' separated values

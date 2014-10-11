@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.17 2014/10/11 11:41:47 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.18 2014/10/11 18:57:57 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -195,7 +195,7 @@ void libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(const int level_verbose, 
 			// DBIP returned that database is available
 			dbp = libipv6calc_db_wrapper_DBIP_open_type(type | 0x10000, NULL);
 			if (dbp == NULL) {
-				printf("%sDBIP: %-27s: %-40s (CAN'T OPEN)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_dbfilename(type));
+				printf("%sDBIP: %-27s: %-40s (CAN'T OPEN database information)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_dbfilename(type));
 			} else {
 				printf("%sDBIP: %-27s: %-40s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_dbfilename(type), libipv6calc_db_wrapper_DBIP_database_info(type));
 				libipv6calc_db_wrapper_DBIP_close(dbp);
@@ -414,7 +414,7 @@ DB *libipv6calc_db_wrapper_DBIP_open_type(const int type_flag, long int *db_recn
 		return(NULL);
 	};
 
-	if ((ret = dbp->open(dbp, NULL, filename, (info_selector == 0) ? "data" : "info", (info_selector == 0) ? DB_RECNO : DB_HASH, DB_RDONLY, 0444)) != 0) {
+	if ((ret = dbp->open(dbp, NULL, filename, (info_selector == 0) ? "data" : "info", (info_selector == 0) ? DB_RECNO : DB_BTREE, DB_RDONLY, 0444)) != 0) {
 		if (ipv6calc_quiet == 0) {
 			fprintf(stderr, "db->open failed: %s (%s)\n", db_strerror(ret), filename);
 		};
@@ -511,7 +511,7 @@ char *libipv6calc_db_wrapper_DBIP_database_info(const int type) {
 	dbp = libipv6calc_db_wrapper_DBIP_open_type(type | 0x10000, NULL);
 
 	if (dbp == NULL) {
-		snprintf(resultstring, sizeof(resultstring), "%s", "(CAN'T OPEN)");
+		snprintf(resultstring, sizeof(resultstring), "%s", "(CAN'T OPEN database information)");
 		goto END_libipv6calc_db_wrapper;
 	};
 

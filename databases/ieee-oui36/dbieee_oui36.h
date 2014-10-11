@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.20 2014/10/09 19:51:59 ds6peter Exp $
- * Generated     : Wed Oct  8 22:03:49 2014
+ * Version       : $Id: dbieee_oui36.h,v 1.21 2014/10/11 18:57:56 ds6peter Exp $
+ * Generated     : Sat Oct 11 19:21:55 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20141008";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20141011";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -465,9 +465,13 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x86D000, 0x86DFFF, "Census Digital Incorporated", "CENSUS-DIGITAL-INCORPORATED" },
 	{ 0x70B3D5, 0x9DB000, 0x9DBFFF, "CAS Medical Systems, Inc", "CAS-MEDICAL" },
 	{ 0x70B3D5, 0xAC8000, 0xAC8FFF, "Heartland.Data Inc.", "HEARTLAND-DATA" },
+	{ 0x70B3D5, 0xCB8000, 0xCB8FFF, "Verti Tecnologia", "VERTI-TECNOLOGIA" },
 	{ 0x70B3D5, 0x634000, 0x634FFF, "idaqs Co.,Ltd.", "IDAQS" },
+	{ 0x70B3D5, 0xEB1000, 0xEB1FFF, "CP contech electronic GmbH", "CP-CONTECH" },
 	{ 0x70B3D5, 0x010000, 0x010FFF, "Hanwa Electronic Ind.Co.,Ltd.", "HANWA-IND" },
+	{ 0x70B3D5, 0x44E000, 0x44EFFF, "Solace Systems Inc.", "SOLACE" },
 	{ 0x70B3D5, 0x2DA000, 0x2DAFFF, "Skywave Networks Private Limited", "SKYWAVE-NETWORKS-PRIVATE" },
+	{ 0x70B3D5, 0x13F000, 0x13FFFF, "Farmobile", "FARMOBILE" },
 	{ 0x70B3D5, 0xBBD000, 0xBBDFFF, "Providius Corp", "PROVIDIUS" },
 	{ 0x70B3D5, 0xCBC000, 0xCBCFFF, "Procon Electronics Pty Ltd", "PROCON-ELECTRONICS-PTY" },
 	{ 0x70B3D5, 0x305000, 0x305FFF, "CAITRON Industrial Solutions GmbH", "CAITRON-INDUSTRIAL-SOLUTIONS" },

@@ -4,7 +4,7 @@
 #
 # Project    : ipv6calc/DBIP
 # File       : DBIP-generate-db.pl
-# Version    : $Id: DBIP-generate-db.pl,v 1.2 2014/10/07 20:25:23 ds6peter Exp $
+# Version    : $Id: DBIP-generate-db.pl,v 1.3 2014/10/11 18:57:57 ds6peter Exp $
 # Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 #
@@ -110,8 +110,8 @@ my $now_string = strftime "%Y%m%d-%H%M%S%z", gmtime;
 my %h_info4;
 my %h_info6;
 
-tie %h_info4, 'BerkeleyDB::Hash', -Filename => $filename_ipv4, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename_ipv4: $! $BerkeleyDB::Error\n";
-tie %h_info6, 'BerkeleyDB::Hash', -Filename => $filename_ipv6, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename_ipv6: $! $BerkeleyDB::Error\n";
+tie %h_info4, 'BerkeleyDB::Btree', -Filename => $filename_ipv4, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename_ipv4: $! $BerkeleyDB::Error\n";
+tie %h_info6, 'BerkeleyDB::Btree', -Filename => $filename_ipv6, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename_ipv6: $! $BerkeleyDB::Error\n";
 
 $h_info4{'dbusage'} = "ipv6calc";
 $h_info4{'dbformat'} = "1"; # ';' separated values

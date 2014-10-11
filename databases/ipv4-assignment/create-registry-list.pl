@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.36 2014/10/07 20:25:22 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.37 2014/10/11 18:57:56 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -417,7 +417,7 @@ print "INFO  : create db from input: IPv4=$filename\n";
 
 my %h_ipv4_info;
 
-tie %h_ipv4_info, 'BerkeleyDB::Hash', -Filename => $filename, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
+tie %h_ipv4_info, 'BerkeleyDB::Btree', -Filename => $filename, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
 
 $h_ipv4_info{'dbusage'} = "ipv6calc";
 $h_ipv4_info{'dbformat'} = "1"; # ';' separated values
@@ -477,7 +477,7 @@ print "INFO  : create db from input: IPv4=$filename\n";
 
 my %h_info;
 
-tie %h_info, 'BerkeleyDB::Hash', -Filename => $filename, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
+tie %h_info, 'BerkeleyDB::Btree', -Filename => $filename, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
 
 $h_info{'dbusage'} = "ipv6calc";
 $h_info{'dbformat'} = "1"; # ';' separated values

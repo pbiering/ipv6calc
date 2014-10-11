@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui.h
- * Version       : $Id: dbieee_oui.h,v 1.87 2014/10/09 19:51:59 ds6peter Exp $
- * Generated     : Wed Oct  8 22:03:47 2014
+ * Version       : $Id: dbieee_oui.h,v 1.88 2014/10/11 18:57:56 ds6peter Exp $
+ * Generated     : Sat Oct 11 19:21:53 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libieee.c
  */
 
-/*@unused@*/ static const char* libieee_oui_status __attribute__ ((__unused__)) = "OUI/20141008";
+/*@unused@*/ static const char* libieee_oui_status __attribute__ ((__unused__)) = "OUI/20141011";
 
 
 static const s_ieee_oui libieee_oui[] = {
@@ -1981,7 +1981,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x0007AC, "Eolring", "EOLRING" },
 	{ 0x0007AD, "Pentacon GmbH Foto-und Feinwerktechnik", "PENTACON-FOTO-UND-FEINWERKTECHNIK" },
 	{ 0x0007AE, "Britestream Networks, Inc.", "BRITESTREAM-NETWORKS" },
-	{ 0x0007AF, "N-TRON Corporation", "N-TRON" },
+	{ 0x0007AF, "Red Lion Controls, LP", "RED-LION-CONTROLS-LP" },
 	{ 0x0007B0, "Office Details, Inc.", "OFFICE-DETAILS" },
 	{ 0x0007B1, "Equator Technologies", "EQUATOR-TECHNOLOGIES" },
 	{ 0x0007B2, "Transaccess S.A.", "TRANSACCESS" },
@@ -4030,7 +4030,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x000FC9, "Allnet GmbH", "ALLNET" },
 	{ 0x000FCA, "A-JIN TECHLINE CO, LTD", "A-JIN-TECHLINE" },
 	{ 0x000FCB, "3Com Ltd", "3COM" },
-	{ 0x000FCC, "Netopia, Inc.", "NETOPIA" },
+	{ 0x000FCC, "ARRIS Group, Inc.", "ARRIS-GROUP" },
 	{ 0x000FCD, "Nortel Networks", "NORTEL-NETWORKS" },
 	{ 0x000FCE, "Kikusui Electronics Corp.", "KIKUSUI-ELECTRONICS" },
 	{ 0x000FCF, "Datawind Research", "DATAWIND-RESEARCH" },
@@ -4921,7 +4921,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x001344, "Fargo Electronics Inc.", "FARGO-ELECTRONICS" },
 	{ 0x001345, "Eaton Corporation", "EATON" },
 	{ 0x001346, "D-Link Corporation", "D-LINK" },
-	{ 0x001347, "BlueTree Wireless Data Inc.", "BLUETREE-WIRELESS-DATA" },
+	{ 0x001347, "Red Lion Controls, LP", "RED-LION-CONTROLS-LP" },
 	{ 0x001348, "Artila Electronics Co., Ltd.", "ARTILA-ELECTRONICS" },
 	{ 0x001349, "ZyXEL Communications Corporation", "ZYXEL-COMMUNICATION" },
 	{ 0x00134A, "Engim, Inc.", "ENGIM" },
@@ -10999,7 +10999,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x0060D7, "ECOLE POLYTECHNIQUE FEDERALE DE LAUSANNE (EPFL)", "ECOLE-POLYTECHNIQUE-FEDERALE-DE-LAUSANNE-EPFL" },
 	{ 0x0060D8, "ELMIC SYSTEMS, INC.", "ELMIC" },
 	{ 0x0060D9, "TRANSYS NETWORKS INC.", "TRANSYS-NETWORKS" },
-	{ 0x0060DA, "JBM ELECTRONICS CO.", "JBM-ELECTRONICS" },
+	{ 0x0060DA, "Red Lion Controls, LP", "RED-LION-CONTROLS-LP" },
 	{ 0x0060DB, "NTP ELEKTRONIK A/S", "NTP-ELEKTRONIK-A/S" },
 	{ 0x0060DC, "Toyo Network Systems & System Integration Co. LTD", "TOYO-NETWORK-SYSTEM-INTEGRATION" },
 	{ 0x0060DD, "MYRICOM, INC.", "MYRICOM" },
@@ -11614,7 +11614,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x00A01A, "BINAR ELEKTRONIK AB", "BINAR-ELEKTRONIK-AB" },
 	{ 0x00A01B, "PREMISYS COMMUNICATIONS, INC.", "PREMISYS-COMMUNICATION" },
 	{ 0x00A01C, "NASCENT NETWORKS CORPORATION", "NASCENT-NETWORKS" },
-	{ 0x00A01D, "SIXNET", "SIXNET" },
+	{ 0x00A01D, "Red Lion Controls, LP", "RED-LION-CONTROLS-LP" },
 	{ 0x00A01E, "EST CORPORATION", "EST" },
 	{ 0x00A01F, "TRICORD SYSTEMS, INC.", "TRICORD" },
 	{ 0x00A020, "CITICORP/TTI", "CITICORP/TTI" },
@@ -13401,6 +13401,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x14893E, "VIXTEL TECHNOLOGIES LIMTED", "VIXTEL-TECHNOLOGIES-LIMTED" },
 	{ 0x1489FD, "Samsung Electronics", "SAMSUNG-ELECTRONICS" },
 	{ 0x148A70, "ADS GmbH", "ADS" },
+	{ 0x148F21, "Garmin International", "GARMIN" },
 	{ 0x148FC6, "Apple", "APPLE" },
 	{ 0x149090, "KongTop industrial(shen zhen)CO.,LTD", "KONGTOP-INDUSTRIAL-SHEN-ZHEN" },
 	{ 0x149448, "BLU CASTLE S.A.", "BLU-CASTLE" },
@@ -13563,6 +13564,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x18FB7B, "Dell Inc", "DELL" },
 	{ 0x18FC9F, "Changhe Electronics Co., Ltd.", "CHANGHE-ELECTRONICS" },
 	{ 0x18FE34, "Espressif Inc.", "ESPRESSIF" },
+	{ 0x18FF0F, "Intel Corporate", "INTEL-CORPORATE" },
 	{ 0x18FF2E, "Shenzhen Rui Ying Da Technology Co., Ltd", "SHENZHEN-RUI-YING-DA" },
 	{ 0x1C0656, "IDY Corporation", "IDY" },
 	{ 0x1C08C1, "Lg Innotek", "LG-INNOTEK" },
@@ -13926,6 +13928,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x2872F0, "ATHENA", "ATHENA" },
 	{ 0x287994, "Realplay Digital Technology(Shenzhen) Co.,Ltd", "REALPLAY-DIGITAL-SHENZHEN" },
 	{ 0x288023, "Hewlett Packard", "HEWLETT-PACKARD" },
+	{ 0x2884FA, "SHARP Corporation", "SHARP" },
 	{ 0x28852D, "Touch Networks", "TOUCH-NETWORKS" },
 	{ 0x288915, "CashGuard Sverige AB", "CASHGUARD-SVERIGE-AB" },
 	{ 0x288A1C, "Juniper networks", "JUNIPER-NETWORKS" },
@@ -14757,6 +14760,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x44ED57, "Longicorn, inc.", "LONGICORN" },
 	{ 0x44EE30, "Budelmann Elektronik GmbH", "BUDELMANN-ELEKTRONIK" },
 	{ 0x44F459, "Samsung Electronics", "SAMSUNG-ELECTRONICS" },
+	{ 0x44F477, "Juniper Networks", "JUNIPER-NETWORKS" },
 	{ 0x44F849, "Union Pacific Railroad", "UNION-PACIFIC-RAILROAD" },
 	{ 0x44FB42, "Apple", "APPLE" },
 	{ 0x48022A, "B-Link Electronic Limited", "B-LINK" },
@@ -14922,6 +14926,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x4CA515, "Baikal Electronics JSC", "BAIKAL-ELECTRONICS-JSC" },
 	{ 0x4CA56D, "Samsung Electronics Co.,Ltd", "SAMSUNG-ELECTRONICS" },
 	{ 0x4CA74B, "Alcatel Lucent", "ALCATEL-LUCENT" },
+	{ 0x4CA928, "Insensi", "INSENSI" },
 	{ 0x4CAA16, "AzureWave Technologies (Shanghai) Inc.", "AZUREWAVE-TECHNOLOGIES-SHANGHAI" },
 	{ 0x4CAB33, "KST technology", "KST" },
 	{ 0x4CAC0A, "ZTE Corporation", "ZTE" },
@@ -15824,6 +15829,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x6CC1D2, "ARRIS Group, Inc.", "ARRIS-GROUP" },
 	{ 0x6CC217, "Hewlett Packard", "HEWLETT-PACKARD" },
 	{ 0x6CC26B, "Apple", "APPLE" },
+	{ 0x6CCA08, "ARRIS Group, Inc.", "ARRIS-GROUP" },
 	{ 0x6CD032, "LG Electronics", "LG-ELECTRONICS" },
 	{ 0x6CD146, "Smartek d.o.o.", "SMARTEK-D-O-O" },
 	{ 0x6CD1B0, "WING SING ELECTRONICS HONG KONG LIMITED", "WING-SING-ELECTRONICS-HONG-KONG" },
@@ -16415,7 +16421,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x809B20, "Intel Corporate", "INTEL-CORPORATE" },
 	{ 0x80A1D7, "Shanghai DareGlobal Technologies Co.,Ltd", "SHANGHAI-DAREGLOBAL-TECHNOLOGIES" },
 	{ 0x80AAA4, "USAG", "USAG" },
-	{ 0x80AD67, "Kasda Digital Technology Co.,Ltd", "KASDA-DIGITAL" },
+	{ 0x80AD67, "Kasda Networks Inc", "KASDA-NETWORKS" },
 	{ 0x80B219, "ELEKTRON TECHNOLOGY UK LIMITED", "ELEKTRON-UK" },
 	{ 0x80B289, "Forworld Electronics Ltd.", "FORWORLD-ELECTRONICS" },
 	{ 0x80B32A, "Alstom Grid", "ALSTOM-GRID" },
@@ -16497,6 +16503,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x845787, "DVR C&C Co., Ltd.", "DVR-C-C" },
 	{ 0x845C93, "Chabrier Services", "CHABRIER-SERVICES" },
 	{ 0x845DD7, "Shenzhen Netcom Electronics Co.,Ltd", "SHENZHEN-NETCOM-ELECTRONICS" },
+	{ 0x8461A0, "ARRIS Group, Inc.", "ARRIS-GROUP" },
 	{ 0x846223, "Shenzhen Coship Electronics Co., Ltd.", "SHENZHEN-COSHIP-ELECTRONICS" },
 	{ 0x8462A6, "EuroCB (Phils), Inc.", "EUROCB-PHILS" },
 	{ 0x8463D6, "Microsoft Corporation", "MICROSOFT" },
@@ -17154,6 +17161,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x9C65B0, "Samsung Electronics Co.,Ltd", "SAMSUNG-ELECTRONICS" },
 	{ 0x9C65F9, "AcSiP Technology Corp.", "ACSIP" },
 	{ 0x9C6650, "Glodio Technolies Co.,Ltd Tianjin Branch", "GLODIO-TECHNOLIES-TIANJIN-BRANCH" },
+	{ 0x9C685B, "Octonion SA", "OCTONION" },
 	{ 0x9C6ABE, "QEES ApS.", "QEES-APS" },
 	{ 0x9C7514, "Wildix srl", "WILDIX-SRL" },
 	{ 0x9C77AA, "NADASNV", "NADASNV" },
@@ -19070,6 +19078,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xE08177, "GreenBytes, Inc.", "GREENBYTES" },
 	{ 0xE087B1, "Nata-Info Ltd.", "NATA-INFO" },
 	{ 0xE0885D, "Technicolor CH USA Inc", "TECHNICOLOR-CH-USA" },
+	{ 0xE0899D, "Cisco", "CISCO" },
 	{ 0xE08A7E, "Exponent", "EXPONENT" },
 	{ 0xE08FEC, "REPOTEC CO., LTD.", "REPOTEC" },
 	{ 0xE09153, "XAVi Technologies Corp.", "XAVI-TECHNOLOGIES" },
@@ -19423,6 +19432,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xECDE3D, "Lamprey Networks, Inc.", "LAMPREY-NETWORKS" },
 	{ 0xECE09B, "Samsung electronics CO., LTD", "SAMSUNG-ELECTRONICS" },
 	{ 0xECE1A9, "Cisco", "CISCO" },
+	{ 0xECE2FD, "SKG Electric Group(Thailand) Co., Ltd.", "SKG-ELECTRIC-GROUP-THAILAND" },
 	{ 0xECE512, "tado GmbH", "TADO" },
 	{ 0xECE555, "Hirschmann Automation", "HIRSCHMANN-AUTOMATION" },
 	{ 0xECE744, "Omntec mfg. inc", "OMNTEC-MFG" },

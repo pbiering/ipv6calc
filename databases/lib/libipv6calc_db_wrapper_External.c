@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.c
- * Version    : $Id: libipv6calc_db_wrapper_External.c,v 1.5 2014/10/11 11:41:47 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_External.c,v 1.6 2014/10/11 18:57:57 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -438,7 +438,7 @@ DB *libipv6calc_db_wrapper_External_open_type(const int type_flag, long int *db_
 		return(NULL);
 	};
 
-	if ((ret = dbp->open(dbp, NULL, filename, (info_selector == 0) ? ((data_iana_selector == 0) ? "data" : "data-iana") : "info", (info_selector == 0) ? DB_RECNO : DB_HASH, DB_RDONLY, 0444)) != 0) {
+	if ((ret = dbp->open(dbp, NULL, filename, (info_selector == 0) ? ((data_iana_selector == 0) ? "data" : "data-iana") : "info", (info_selector == 0) ? DB_RECNO : DB_BTREE, DB_RDONLY, 0444)) != 0) {
 		if (ipv6calc_quiet == 0) {
 			fprintf(stderr, "db->open failed: %s (%s)\n", db_strerror(ret), filename);
 		};
@@ -530,7 +530,7 @@ char *libipv6calc_db_wrapper_External_database_info(const int type) {
 	dbp = libipv6calc_db_wrapper_External_open_type(type | 0x10000, NULL);
 
 	if (dbp == NULL) {
-		snprintf(resultstring, sizeof(resultstring), "%s", "(CAN'T OPEN)");
+		snprintf(resultstring, sizeof(resultstring), "%s", "(CAN'T OPEN database information)");
 		goto END_libipv6calc_db_wrapper;
 	};
 
