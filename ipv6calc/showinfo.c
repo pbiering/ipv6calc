@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.125 2014/10/24 06:20:34 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.126 2014/10/24 18:07:13 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -768,6 +768,11 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 #ifdef SUPPORT_DBIP
 		/* db-ip.com information */
 		print_dbip(&ipaddr, formatoptions, embeddedipv4string);
+#endif
+
+#ifdef SUPPORT_EXTERNAL
+		/* External DB information */
+		print_external(&ipaddr, formatoptions, embeddedipv4string);
 #endif
 	};
 
