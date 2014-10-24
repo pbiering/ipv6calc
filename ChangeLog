@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.375 2014/10/11 18:57:56 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.376 2014/10/24 06:20:33 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,12 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20141024/PB
+	recognize RFC6666 addresses
+	databases: update
+	ipv6calc/showinfo.c: add EXTERNAL db information
+	ipv6calcweb/ipv6calcweb.cgi[.in]: support EXTERNAL db information
+
 20141011/PB
 	switch in DBIP and External db info from hash to btree (improves db compatibility)
 

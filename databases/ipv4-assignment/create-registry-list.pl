@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.37 2014/10/11 18:57:56 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.38 2014/10/24 06:20:34 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -403,10 +403,9 @@ print "Finished creation of header file\n";
 print "Start creation of DB file\n";
 
 # external database
-my $type = "2024"; # BuiltIn Registry->IPv4
+my $type = "2024"; # External IPv4->Registry
 my $date = $string;
 $now_string = strftime "%Y%m%d-%H%M%S%z", gmtime;
-my $info_ipv4 = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=4;dbcreated=$now_string";
 my $filename = "ipv6calc-external-ipv4-registry.db";
 
 if (-f $filename) {
@@ -464,7 +463,7 @@ print "Start creation of DB file: IPv4->CountryCode\n";
 
 # external database
 $type = "2034"; # External IPv4->CountryCode
-$date = localtime;
+$date = $string;
 $now_string = strftime "%Y%m%d-%H%M%S%z", gmtime;
 my $info = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=4;dbcreated=$now_string";
 $filename = "ipv6calc-external-ipv4-countrycode.db";

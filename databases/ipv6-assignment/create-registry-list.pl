@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.15 2014/10/11 18:57:57 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.16 2014/10/24 06:20:34 ds6peter Exp $
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
 #              2005-2014 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
 # License    : GNU GPL v2
@@ -405,7 +405,7 @@ print "Finished\n";
 print "Start creation of DB file\n";
 
 # external database
-my $type = "2026"; # BuiltIn Registry->IPv4
+my $type = "2026"; # External IPv6->Registry
 my $date = $string;
 $now_string = strftime "%Y%m%d-%H%M%S%z", gmtime;
 my $info = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=6;dbcreated=$now_string";
@@ -448,8 +448,8 @@ print "INFO  : db created from input: IPv6=$filename\n";
 print "INFO  : start creation of DB file: IPv6->CountryCode: $filename\n";
 
 # external database
-$type = "2036"; # External IPv4->CountryCode
-$date = localtime;
+$type = "2036"; # External IPv6->CountryCode
+$date = $string;
 $now_string = strftime "%Y%m%d-%H%M%S%z", gmtime;
 $info = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=6;dbcreated=$now_string";
 $filename = "ipv6calc-external-ipv6-countrycode.db";

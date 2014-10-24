@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.69 2014/10/07 20:25:23 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.70 2014/10/24 06:20:34 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -2022,12 +2022,19 @@ const char *libipv6calc_db_wrapper_GeoIP_wrapper_country_name_by_addr(const char
 #endif // SUPPORT_GEOIP_V6
 	};
 
+	if (GeoIP_result_ptr == NULL) {
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	if (strlen(GeoIP_result_ptr) == 0) {
+		GeoIP_result_ptr = NULL;
+		goto END_libipv6calc_db_wrapper;
+	};
+
 	GEOIP_DB_USAGE_MAP_TAG(GeoIP_type);
 
-#ifdef SUPPORT_GEOIP_V6
 END_libipv6calc_db_wrapper:
-#endif // SUPPORT_GEOIP_V6
-
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Result for addr=%s proto=%d: %s", addr, proto, GeoIP_result_ptr);
 	return(GeoIP_result_ptr);
 };
 

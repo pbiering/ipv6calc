@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.77 2014/10/11 19:08:05 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.78 2014/10/24 06:20:34 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -88,6 +88,7 @@ my $db_columns = 0;
 my $disable_db_GeoIP = 0;
 my $disable_db_IP2Location = 0;
 my $disable_db_DBIP = 0;
+my $disable_db_External = 0;
 
 
 ## Debug value
@@ -589,6 +590,10 @@ my %text = (
 		'de' => "db-ip.com Stadt",
 		'en' => "db-ip.com city",
 	},
+	'EXTERNAL_COUNTRY_SHORT' => {
+		'de' => "External DB Laenderkennung",
+		'en' => "External DB country code",
+	},
 	'SETTINGS_ANON' => {
 		'de' => "Einstellungen der Anonymisierung",
 		'en' => "Anoymizer settings",
@@ -716,6 +721,12 @@ my $options_ipv6calc_dbip = "";
 my %db_info_dbip;
 my $database_dbip_dir;
 my $info_dbip_string;
+
+# External DB
+my $options_ipv6calc_external = "";
+my %db_info_external;
+my $database_external_dir;
+my $info_external_string;
 
 if (defined $ENV{'HTTP_IPV6CALCWEB_DB_DBIP_DIR'}) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DB_DBIP_DIR'} =~ /^([[:alnum:]\.\-\/]+)$/) {
@@ -938,6 +949,16 @@ sub print_infohash ($$$;$) {
 			# skipped, will be shown in footer
 			next;
 		};
+
+		if ($key eq "EXTERNAL_DATABASE_INFO") {
+			$info_external_string = $$phash{$key};
+			# strip non-ascii chars
+			$info_external_string =~ s/[\200-\377]//g;
+			split_store(\%db_info_external, $info_external_string);
+			# skipped, will be shown in footer
+			next;
+		};
+
 		# catch internal keys
 		if ( $key =~ /^IPV6CALC_/ ) {
 			# skipped, will be shown in footer
@@ -1774,6 +1795,15 @@ if (length($ipv6calc_capabilities) > 0) {
 			push @key_db_tokens, "DBIP";
 		};
 	};
+ 	if (defined $ipv6calc_capability_hash{"External"} && ($ipv6calc_capability_hash{"External"} == 1)) {
+		if ($disable_db_External == 1) {
+			$options_ipv6calc .= " --db-external-disable";
+		} else {
+			$options_ipv6calc .= $options_ipv6calc_external;
+			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
+			push @key_db_tokens, "EXTERNAL";
+		};
+	};
 } else {
 	# fallback for ipv6calc < 0.97.4
 	if (defined $ipv6calc_feature_hash{"GeoIP"} && ($ipv6calc_feature_hash{"GeoIP"} == "1")) {
@@ -2100,6 +2130,11 @@ if ($outputformat =~ /^html/o) {
 		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.db-ip.com\">db-ip.com</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_dbip)) . "</font>\n";
 	};
 
+	if (scalar(keys %db_info_external) > 0) {
+		print "          <br>\n";
+		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_external)) . "</font>\n";
+	};
+
 } else {
 	# text output
 	print "INFO__GENERATED=" if ($outputformat eq "textkeyvalue");
@@ -2130,6 +2165,11 @@ if ($outputformat =~ /^html/o) {
 	if (scalar(keys %db_info_dbip) > 0) {
 		print "INFO__POWEREDBY_DBIP=" if ($outputformat eq "textkeyvalue");
 		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_dbip) . " (http://www.db-ip.com)" . $chr_quote . "\n";
+	};
+
+	if (scalar(keys %db_info_external) > 0) {
+		print "INFO__POWEREDBY_EXTERNAL=" if ($outputformat eq "textkeyvalue");
+		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_external) . $chr_quote . "\n";
 	};
 };
 

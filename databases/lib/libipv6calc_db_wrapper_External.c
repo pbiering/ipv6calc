@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.c
- * Version    : $Id: libipv6calc_db_wrapper_External.c,v 1.6 2014/10/11 18:57:57 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_External.c,v 1.7 2014/10/24 06:20:34 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -509,6 +509,7 @@ END_libipv6calc_db_wrapper:
 char *libipv6calc_db_wrapper_External_database_info(const int type) {
 	static char resultstring[NI_MAXHOST] = "";
 	char datastring[NI_MAXHOST];
+	char tempstring[NI_MAXHOST];
 	int ret, i, entry = -1;
 	DB *dbp;
 
@@ -554,6 +555,8 @@ char *libipv6calc_db_wrapper_External_database_info(const int type) {
 		goto END_libipv6calc_db_wrapper_close;
 	};
 
+	snprintf(resultstring, sizeof(resultstring), "EXTDB-%d/%s", type, datastring);
+
 	// get dbcreated_unixtime
 	ret = libipv6calc_db_wrapper_bdb_get_data_by_key(dbp, "dbcreated_unixtime", datastring, sizeof(datastring));
 	if (ret != 0) {
@@ -571,7 +574,8 @@ char *libipv6calc_db_wrapper_External_database_info(const int type) {
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "wrapper_db_unixtime_External=%ld", (long int) wrapper_db_unixtime_External[entry]);
 
 	strftime(datastring, sizeof(datastring), "%Y%m%d-%H%M%S UTC", gmtime(&wrapper_db_unixtime_External[entry]));
-	snprintf(resultstring, sizeof(resultstring), "created: %s", datastring);
+	snprintf(tempstring, sizeof(tempstring), "%s, created: %s", resultstring, datastring);
+	snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
 
 END_libipv6calc_db_wrapper_close:
 	libipv6calc_db_wrapper_External_close(dbp);

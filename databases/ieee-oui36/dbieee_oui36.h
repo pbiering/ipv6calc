@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.21 2014/10/11 18:57:56 ds6peter Exp $
- * Generated     : Sat Oct 11 19:21:55 2014
+ * Version       : $Id: dbieee_oui36.h,v 1.22 2014/10/24 06:20:34 ds6peter Exp $
+ * Generated     : Fri Oct 24 07:20:16 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20141011";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20141024";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -473,22 +473,39 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x2DA000, 0x2DAFFF, "Skywave Networks Private Limited", "SKYWAVE-NETWORKS-PRIVATE" },
 	{ 0x70B3D5, 0x13F000, 0x13FFFF, "Farmobile", "FARMOBILE" },
 	{ 0x70B3D5, 0xBBD000, 0xBBDFFF, "Providius Corp", "PROVIDIUS" },
+	{ 0x70B3D5, 0xED5000, 0xED5FFF, "hangzhou battle link technology Co.,Ltd", "HANGZHOU-BATTLE-LINK" },
 	{ 0x70B3D5, 0xCBC000, 0xCBCFFF, "Procon Electronics Pty Ltd", "PROCON-ELECTRONICS-PTY" },
+	{ 0x70B3D5, 0xDF6000, 0xDF6FFF, "Tiab Limited", "TIAB" },
 	{ 0x70B3D5, 0x305000, 0x305FFF, "CAITRON Industrial Solutions GmbH", "CAITRON-INDUSTRIAL-SOLUTIONS" },
+	{ 0x70B3D5, 0x5C8000, 0x5C8FFF, "YUYAMA MFG Co.,Ltd", "YUYAMA-MFG" },
 	{ 0x70B3D5, 0x8AB000, 0x8ABFFF, "EMAC, Inc.", "EMAC" },
+	{ 0x70B3D5, 0x3E3000, 0x3E3FFF, "Head", "HEAD" },
 	{ 0x70B3D5, 0x819000, 0x819FFF, "«Intellect module» LLC", "«INTELLECT-MODULE»-LLC" },
+	{ 0x70B3D5, 0x285000, 0x285FFF, "Bentec GmbH Drilling & Oilfield Systems", "BENTEC-DRILLING-OILFIELD" },
 	{ 0x70B3D5, 0x029000, 0x029FFF, "Marimo electronics Co.,Ltd.", "MARIMO-ELECTRONICS" },
+	{ 0x70B3D5, 0x1AF000, 0x1AFFFF, "Teenage Engineering AB", "TEENAGE-ENGINEERING-AB" },
 	{ 0x70B3D5, 0x2FD000, 0x2FDFFF, "Special Projects Group, Inc", "SPECIAL-PROJECTS-GROUP" },
+	{ 0x70B3D5, 0xA81000, 0xA81FFF, "Sienda New Media Technologies GmbH", "SIENDA-NEW-MEDIA-TECHNOLOGIES" },
 	{ 0x70B3D5, 0xC6A000, 0xC6AFFF, "PRIVATE", "PRIVATE" },
+	{ 0x70B3D5, 0xD0D000, 0xD0DFFF, "Logiwaste AB", "LOGIWASTE-AB" },
 	{ 0x70B3D5, 0xA7A000, 0xA7AFFF, "Fluid Management Technology", "FLUID-MANAGEMENT" },
+	{ 0x70B3D5, 0x46F000, 0x46FFFF, "serva transport systems GmbH", "SERVA-TRANSPORT" },
 	{ 0x70B3D5, 0x83B000, 0x83BFFF, "Telefonix Incorporated", "TELEFONIX-INCORPORATED" },
+	{ 0x70B3D5, 0xA00000, 0xA00FFF, "ATX NETWORKS LTD", "ATX-NETWORKS" },
 	{ 0x70B3D5, 0x204000, 0x204FFF, "TWC", "TWC" },
+	{ 0x70B3D5, 0xEFB000, 0xEFBFFF, "PXM", "PXM" },
 	{ 0x70B3D5, 0x099000, 0x099FFF, "Schwer+Kopka GmbH", "SCHWER+KOPKA" },
+	{ 0x70B3D5, 0x729000, 0x729FFF, "EMAC, Inc.", "EMAC" },
 	{ 0x70B3D5, 0x54E000, 0x54EFFF, "RFL Electronics, Inc.", "RFL-ELECTRONICS" },
+	{ 0x70B3D5, 0x6DA000, 0x6DAFFF, "Enovative Networks, Inc.", "ENOVATIVE-NETWORKS" },
 	{ 0x70B3D5, 0xB16000, 0xB16FFF, "XI'AN SHENMING ELECTRON TECHNOLOGY CO.,LTD", "XI-AN-SHENMING-ELECTRON" },
+	{ 0x70B3D5, 0xB29000, 0xB29FFF, "WiViCom Co., Ltd.", "WIVICOM" },
 	{ 0x70B3D5, 0xECF000, 0xECFFFF, "Ipitek", "IPITEK" },
+	{ 0x70B3D5, 0x0D7000, 0x0D7FFF, "Russian Telecom Equipment Company", "RUSSIAN-TELECOM-EQUIPMENT-COMPANY" },
 	{ 0x70B3D5, 0xB33000, 0xB33FFF, "Aplex Technology Inc.", "APLEX" },
+	{ 0x70B3D5, 0xF7E000, 0xF7EFFF, "Alpha Elettronica s.r.l.", "ALPHA-ELETTRONICA-S-R-L" },
 	{ 0x70B3D5, 0xA40000, 0xA40FFF, "STRACK LIFT AUTOMATION GmbH", "STRACK-LIFT-AUTOMATION" },
+	{ 0x70B3D5, 0x41E000, 0x41EFFF, "Redler Computers", "REDLER-COMPUTERS" },
 	{ 0x70B3D5, 0xDEC000, 0xDECFFF, "Condev-Automation GmbH", "CONDEV-AUTOMATION" },
 	{ 0x70B3D5, 0x016000, 0x016FFF, "Guardian Controls International Ltd", "GUARDIAN-CONTROLS" },
 	{ 0x70B3D5, 0x710000, 0x710FFF, "Guardian Controls International Ltd", "GUARDIAN-CONTROLS" },

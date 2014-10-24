@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.45 2014/10/07 20:25:23 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.46 2014/10/24 06:20:34 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -88,15 +88,15 @@ testscenarios_ipv4_reserved() {
 191.255.255.255		noRFC
 192.0.0.0		RFC5736#1
 192.0.0.255		RFC5736#1
-192.0.1.0		noRFC
-192.0.1.255		noRFC
+192.0.1.0		noRFC		skip-anon-test
+192.0.1.255		noRFC		skip-anon-test
 192.0.2.0		RFC5737#1
 192.0.2.255		RFC5737#1
 192.0.3.0		noRFC
 192.88.98.255		noRFC
 192.88.99.0		RFC3068#2.3
 192.88.99.255		RFC3068#2.3
-192.88.100.0		noRFC
+192.88.100.0		noRFC		skip-anon-test
 192.167.255.255		noRFC
 192.168.0.0		RFC1918#3
 192.168.255.255		RFC1918#3
@@ -131,6 +131,9 @@ testscenarios_ipv6_reserved() {
 ::255.255.255.255	RFC4291#2.5.5.1
 ::ffff:0.0.0.0		RFC4291#2.5.5.2
 ::ffff:255.255.255.255	RFC4291#2.5.5.2
+0100::					RFC6666
+0100:0000:0000:0000:ffff:ffff:ffff:ffff	RFC6666
+0100:0000:0000:0001::			noRFC
 2001:0000::				RFC4380#6
 2001:0000:ffff:ffff:ffff:ffff:ffff:ffff	RFC4380#6
 2001:0010::				RFC4843#2

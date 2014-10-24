@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.54 2014/10/11 11:26:37 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.55 2014/10/24 06:20:34 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -1189,6 +1189,8 @@ static const char *libipv6calc_db_wrapper_reserved_string_by_ipv4addr(const ipv6
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv4 address: %08x", (unsigned int) ipv4);
 
+	// see also: https://en.wikipedia.org/wiki/Reserved_IP_addresses
+
 	if ((ipv4 & 0xff000000u) == 0x00000000u) {
 		// 0.0.0.0/8 (RFC 1122)
 		info = "reserved(RFC1122#3.2.1.3)";
@@ -1265,6 +1267,8 @@ static const char *libipv6calc_db_wrapper_reserved_string_by_ipv6addr(const ipv6
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given ipv6 prefix: %08x%08x", (unsigned int) ipv6_00_31, (unsigned int) ipv6_32_63);
 
+	// see also: https://en.wikipedia.org/wiki/Reserved_IP_addresses
+	//
 	if ((ipv6_00_31 == 0) && (ipv6_32_63 == 0) && (ipv6_64_95 == 0) && (ipv6_96_127 == 0)) {
 		// :: (RFC 4291)
 		info = "reserved(RFC4291#2.5.2)";
@@ -1277,6 +1281,9 @@ static const char *libipv6calc_db_wrapper_reserved_string_by_ipv6addr(const ipv6
 	} else if ((ipv6_00_31 == 0) && (ipv6_32_63 == 0) && (ipv6_64_95 == 0x0000ffff)) {
 		// ::ffff:x.x.x.x (RFC 4291)
 		info = "reserved(RFC4291#2.5.5.2)";
+	} else if ((ipv6_00_31 == 0x01000000) && (ipv6_32_63 == 0)) {
+		// 0100::0/64 (RFC 6666)
+		info = "reserved(RFC6666)";
 	} else if (ipv6_00_31 == 0x20010000) {
 		// 2001:0000::/32 (RFC 4380)
 		info = "reserved(RFC4380#6)";
