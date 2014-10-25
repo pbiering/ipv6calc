@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.78 2014/10/24 06:20:34 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.79 2014/10/25 12:47:10 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -510,6 +510,10 @@ my %text = (
 		'de' => "IP2Location Postleitzahl",
 		'en' => "IP2Location ZIP code",
 	},
+	'IP2LOCATION_AREACODE' => {
+		'de' => "IP2Location Area-Code",
+		'en' => "IP2Location Area Code",
+	},
 	'IP2LOCATION_DATABASE_INFO' => {
 		'de' => "IP2Location Datenbank-Information",
 		'en' => "IP2Location database information",
@@ -554,10 +558,6 @@ my %text = (
 		'de' => "GeoIP DMACODE",
 		'en' => "GeoIP DMACODE",
 	},
-	'GEOIP_AREACODE' => {
-		'de' => "GeoIP AREACODE",
-		'en' => "GeoIP AREACODE",
-	},
 	'GEOIP_CONTINENTCODE' => {
 		'de' => "GeoIP Kontinent-Code",
 		'en' => "GeoIP Continent Code",
@@ -593,6 +593,14 @@ my %text = (
 	'EXTERNAL_COUNTRY_SHORT' => {
 		'de' => "External DB Laenderkennung",
 		'en' => "External DB country code",
+	},
+	'EXTERNAL_DATABASE_INFO' => {
+		'de' => "External Datenbank-Information",
+		'en' => "External database information",
+	},
+	'BUILTIN_DATABASE_INFO' => {
+		'de' => "Eingebaute Datenbank-Information",
+		'en' => "BuiltIn database information",
 	},
 	'SETTINGS_ANON' => {
 		'de' => "Einstellungen der Anonymisierung",
@@ -641,6 +649,10 @@ my %text = (
 	'CONTINENTCODE' => {
 		'de' => "Kontinent-Code",
 		'en' => "Continent Code",
+	},
+	'AREACODE' => {
+		'de' => "Area-Code",
+		'en' => "Area Code",
 	},
 );
 
@@ -727,6 +739,12 @@ my $options_ipv6calc_external = "";
 my %db_info_external;
 my $database_external_dir;
 my $info_external_string;
+
+# BuiltIn DB
+my $options_ipv6calc_builtin = "";
+my %db_info_builtin;
+my $database_builtin_dir;
+my $info_builtin_string;
 
 if (defined $ENV{'HTTP_IPV6CALCWEB_DB_DBIP_DIR'}) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DB_DBIP_DIR'} =~ /^([[:alnum:]\.\-\/]+)$/) {
@@ -955,6 +973,15 @@ sub print_infohash ($$$;$) {
 			# strip non-ascii chars
 			$info_external_string =~ s/[\200-\377]//g;
 			split_store(\%db_info_external, $info_external_string);
+			# skipped, will be shown in footer
+			next;
+		};
+
+		if ($key eq "BUILTIN_DATABASE_INFO") {
+			$info_builtin_string = $$phash{$key};
+			# strip non-ascii chars
+			$info_builtin_string =~ s/[\200-\377]//g;
+			split_store(\%db_info_builtin, $info_builtin_string);
 			# skipped, will be shown in footer
 			next;
 		};
@@ -2132,7 +2159,12 @@ if ($outputformat =~ /^html/o) {
 
 	if (scalar(keys %db_info_external) > 0) {
 		print "          <br>\n";
-		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_external)) . "</font>\n";
+		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " External " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_external)) . "</font>\n";
+	};
+
+	if (scalar(keys %db_info_builtin) > 0) {
+		print "          <br>\n";
+		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " BuiltIn " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_builtin)) . "</font>\n";
 	};
 
 } else {
@@ -2170,6 +2202,11 @@ if ($outputformat =~ /^html/o) {
 	if (scalar(keys %db_info_external) > 0) {
 		print "INFO__POWEREDBY_EXTERNAL=" if ($outputformat eq "textkeyvalue");
 		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_external) . $chr_quote . "\n";
+	};
+
+	if (scalar(keys %db_info_builtin) > 0) {
+		print "INFO__POWEREDBY_BUILTIN=" if ($outputformat eq "textkeyvalue");
+		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_builtin) . $chr_quote . "\n";
 	};
 };
 

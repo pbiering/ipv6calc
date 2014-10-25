@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.h
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.h,v 1.8 2014/09/24 09:07:57 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.h,v 1.9 2014/10/25 12:47:10 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -16,6 +16,16 @@
 #ifndef _libipv6calc_db_wrapper_BuiltIn_h
 
 #define _libipv6calc_db_wrapper_BuiltIn_h 1
+
+// database types
+#define BUILTIN_DB_IPV4_REGISTRY				1
+#define BUILTIN_DB_IPV6_REGISTRY				2
+#define BUILTIN_DB_IAB						3
+#define BUILTIN_DB_OUI						4
+#define BUILTIN_DB_OUI36					5
+#define BUILTIN_DB_CC_REG					6
+#define BUILTIN_DB_AS_REG					7
+#define BUILTIN_DB_MAX						(7 + 1)
 
 // features
 extern uint32_t wrapper_features_BuiltIn;
@@ -64,6 +74,7 @@ extern int  libipv6calc_db_wrapper_BuiltIn_wrapper_init(void);
 extern int  libipv6calc_db_wrapper_BuiltIn_wrapper_cleanup(void);
 extern void libipv6calc_db_wrapper_BuiltIn_wrapper_info(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
+extern char *libipv6calc_db_wrapper_BuiltIn_wrapper_db_info_used(void);
 
 extern int libipv6calc_db_wrapper_BuiltIn_has_features(uint32_t features);
 extern time_t libipv6calc_db_wrapper_BuiltIn_db_unixtime_by_feature(uint32_t feature);

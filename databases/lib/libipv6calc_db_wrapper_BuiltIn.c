@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.18 2014/10/09 19:52:00 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.19 2014/10/25 12:47:10 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -51,6 +51,20 @@ static int builtin_ieee       = 0;
 #endif
 
 #endif
+
+/* database usage map */
+#define BUILTIN_DB_MAX_BLOCKS_32	2	// 0-63
+static uint32_t builtin_db_usage_map[BUILTIN_DB_MAX_BLOCKS_32];
+
+#define BUILTIN_DB_USAGE_MAP_TAG(db)	if (db < (32 * BUILTIN_DB_MAX_BLOCKS_32)) { \
+							DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Tag usage for db: %d", db); \
+							builtin_db_usage_map[db / 32] |= 1 << (db % 32); \
+						} else { \
+							fprintf(stderr, "FIXME: unsupported db value (exceed limit): %d (%d)\n", db, 32 * BUILTIN_DB_MAX_BLOCKS_32 - 1); \
+							exit(1); \
+						};
+
+char builtin_db_usage_string[NI_MAXHOST] = "";
 
 
 /*
@@ -200,6 +214,95 @@ void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level_verbos
 	return;
 };
 
+
+/*
+ * wrapper: string regarding used database infos
+ */
+char *libipv6calc_db_wrapper_BuiltIn_wrapper_db_info_used(void) {
+	int type, i;
+	char tempstring[NI_MAXHOST];
+	char tempstring2[NI_MAXHOST];
+	char *info;
+
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called");
+
+	for (i = 0; i < BUILTIN_DB_MAX_BLOCKS_32; i++) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "builtin_db_usage_map[%d]=%08x", i, (unsigned int) builtin_db_usage_map[i]);
+	};
+
+	for (type = 0; type < 32 * BUILTIN_DB_MAX_BLOCKS_32; type++) {
+		if ((builtin_db_usage_map[type / 32] & (1 << (type % 32))) != 0) {
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "DB type used: %d", type);
+
+			info = NULL;
+
+			switch(type) {
+#ifdef SUPPORT_DB_IPV4_REG
+			    case BUILTIN_DB_IPV4_REGISTRY:
+				snprintf(tempstring2, sizeof(tempstring2), "IPv4-REG:%s", dbipv4addr_registry_status);
+				info = tempstring2;
+				break;
+#endif
+#ifdef SUPPORT_DB_IPV6_REG
+			    case BUILTIN_DB_IPV6_REGISTRY:
+				snprintf(tempstring2, sizeof(tempstring2), "IPv6-REG:%s", dbipv6addr_registry_status);
+				info = tempstring2;
+				break;
+#endif
+#ifdef SUPPORT_DB_IEEE
+			    case BUILTIN_DB_IAB:
+				snprintf(tempstring2, sizeof(tempstring2), "IEEE:%s", libieee_iab_status);
+				info = tempstring2;
+				break;
+			    case BUILTIN_DB_OUI:
+				snprintf(tempstring2, sizeof(tempstring2), "IEEE:%s", libieee_oui_status);
+				info = tempstring2;
+				break;
+			    case BUILTIN_DB_OUI36:
+				snprintf(tempstring2, sizeof(tempstring2), "IEEE:%s", libieee_oui36_status);
+				info = tempstring2;
+				break;
+#endif
+#ifdef SUPPORT_DB_AS_REG
+			    case BUILTIN_DB_AS_REG:
+				snprintf(tempstring2, sizeof(tempstring2), "AS-REG:%s", dbasn_registry_status);
+				info = tempstring2;
+				break;
+#endif
+#ifdef SUPPORT_DB_CC_REG
+			    case BUILTIN_DB_CC_REG:
+				snprintf(tempstring2, sizeof(tempstring2), "CC-REG:%s", db_cc_registry_status);
+				info = tempstring2;
+				break;
+#endif
+			};
+
+			if (info == NULL) { continue; }; // NULL pointer returned
+
+			if (strlen(info) == 0) { continue; }; // empty string returned
+
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "type=%d info=%s", type, info);
+
+			if (strlen(builtin_db_usage_string) > 0) {
+				if (strstr(builtin_db_usage_string, info) != NULL) {
+					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "type=%d info=%s (skip, already displayed)", type, info);
+					continue;
+				}; // string already included
+
+				snprintf(tempstring, sizeof(tempstring), "%s / %s", builtin_db_usage_string, info);
+			} else {
+				snprintf(tempstring, sizeof(tempstring), "%s", info);
+			};
+
+			snprintf(builtin_db_usage_string, sizeof(builtin_db_usage_string), "%s", tempstring);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "type=%d builtin_db_usage_string=%s", type, builtin_db_usage_string);
+		};
+	};
+
+	return(builtin_db_usage_string);
+};
+
+
 /*********************************************
  * Abstract functions
  * *******************************************/
@@ -295,6 +398,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_as_num32(const uint32_t as_nu
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Finished with success result: %d", dbasn_assignment[r].registry);
 
 		result = dbasn_assignment[r].registry;
+		BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_AS_REG);
 	} else {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Finished without success");
 
@@ -322,8 +426,9 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_cc_index(const uint16_t cc_in
 		goto END_libipv6calc_db_wrapper;
 	};
 
-#ifdef SUPPORT_DB_AS_REG
+#ifdef SUPPORT_DB_CC_REG
 	result = cc_index_reg_assignment[cc_index].registry;
+	BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_CC_REG);
 #endif
 
 END_libipv6calc_db_wrapper:
@@ -371,6 +476,7 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(char *resultstr
 			/* major id match */
 			if (libieee_iab[i].subid_begin <= subidval && libieee_iab[i].subid_end >= subidval) {
 				snprintf(resultstring, resultstring_length, "%s", libieee_iab[i].string_owner);
+				BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_IAB);
 				return (0);
 			};
 		};
@@ -382,6 +488,7 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(char *resultstr
 			/* major id match */
 			if (libieee_oui36[i].subid_begin <= subidval && libieee_oui36[i].subid_end >= subidval) {
 				snprintf(resultstring, resultstring_length, "%s", libieee_oui36[i].string_owner);
+				BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_OUI36);
 				return (0);
 			};
 		};
@@ -392,6 +499,7 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(char *resultstr
 		if (libieee_oui[i].id == idval) {
 			/* match */
 			snprintf(resultstring, resultstring_length, "%s", libieee_oui[i].string_owner);
+			BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_OUI);
 			return (0);
 		};
 	};
@@ -444,6 +552,7 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(char *res
 			/* major id match */
 			if (libieee_iab[i].subid_begin <= subidval && libieee_iab[i].subid_end >= subidval) {
 				snprintf(resultstring, resultstring_length, "%s", libieee_iab[i].shortstring_owner);
+				BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_IAB);
 				return (0);
 			};
 		};
@@ -455,6 +564,7 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(char *res
 			/* major id match */
 			if (libieee_oui36[i].subid_begin <= subidval && libieee_oui36[i].subid_end >= subidval) {
 				snprintf(resultstring, resultstring_length, "%s", libieee_oui36[i].shortstring_owner);
+				BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_OUI36);
 				return (0);
 			};
 		};
@@ -465,6 +575,7 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(char *res
 		if (libieee_oui[i].id == idval) {
 			/* match */
 			snprintf(resultstring, resultstring_length, "%s", libieee_oui[i].shortstring_owner);
+			BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_OUI);
 			return (0);
 		};
 	};
@@ -566,6 +677,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 	if (match > -1) {
 		result = dbipv4addr_assignment[match].registry;
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Finished with success result (dbipv4addr_assignment): match=%d reg=%d", match, result);
+		BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_IPV4_REGISTRY);
 	};
 
 	if (result == IPV4_ADDR_REGISTRY_UNKNOWN) {
@@ -588,6 +700,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 		if (match > -1) {
 			result = dbipv4addr_assignment_iana[match].registry;
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Finished with success result (dbipv4addr_assignment_iana): match=%d reg=%d", match, result);
+			BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_IPV4_REGISTRY);
 		} else {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Finished without success");
 		};
@@ -667,6 +780,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6a
 	/* result */
 	if ( match > -1 ) {
 		result = dbipv6addr_assignment[match].registry;
+		BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_IPV6_REGISTRY);
 	};
 #endif
 	return(result);

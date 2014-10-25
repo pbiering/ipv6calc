@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.126 2014/10/24 18:07:13 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.127 2014/10/25 12:47:10 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -30,6 +30,7 @@
 #include "../databases/lib/libipv6calc_db_wrapper_IP2Location.h"
 #include "../databases/lib/libipv6calc_db_wrapper_DBIP.h"
 #include "../databases/lib/libipv6calc_db_wrapper_External.h"
+#include "../databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
 #ifdef SUPPORT_IP2LOCATION
 #include "IP2Location.h"
@@ -131,7 +132,10 @@ void showinfo_availabletypes(void) {
 #endif
 #ifdef SUPPORT_EXTERNAL
 	fprintf(stderr, " EXTERNAL_COUNTRY_SHORT=.. .   : Country code of IP address\n");
-	fprintf(stderr, " EXTERNAL_DATABASE_INFO=.. .       : Information about the used databases\n");
+	fprintf(stderr, " EXTERNAL_DATABASE_INFO=.. .   : Information about the used databases\n");
+#endif
+#ifdef SUPPORT_BUILTIN
+	fprintf(stderr, " BUILTIN_DATABASE_INFO=.. .    : Information about the used databases\n");
 #endif
 	fprintf(stderr, " IPV6CALC_NAME=name            : Name of ipv6calc\n");
 	fprintf(stderr, " IPV6CALC_VERSION=x.y          : Version of ipv6calc\n");
@@ -157,7 +161,7 @@ static void printfooter(const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST] = "";
 	char tempstring2[NI_MAXHOST] = "";
 
-#if defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP || defined SUPPORT_DBIP
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN
 	char *string;
 #endif
 
@@ -190,6 +194,14 @@ static void printfooter(const uint32_t formatoptions) {
 		string = libipv6calc_db_wrapper_External_wrapper_db_info_used();
 		if ((string != NULL) && (strlen(string) > 0)) {
 			snprintf(tempstring, sizeof(tempstring), "EXTERNAL_DATABASE_INFO=%s", string);
+			printout(tempstring);
+		};
+#endif
+
+#ifdef SUPPORT_BUILTIN
+		string = libipv6calc_db_wrapper_BuiltIn_wrapper_db_info_used();
+		if ((string != NULL) && (strlen(string) > 0)) {
+			snprintf(tempstring, sizeof(tempstring), "BUILTIN_DATABASE_INFO=%s", string);
 			printout(tempstring);
 		};
 #endif
@@ -1237,7 +1249,6 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			fprintf(stdout, "Address type has SLA: %04x\n", (unsigned int) ipv6addr_getword(ipv6addrp, 3));
 		};
 	};
-	
 
 	/* Proper solicited node link-local multicast address? */
 	if ( (typeinfo & IPV6_NEW_ADDR_SOLICITED_NODE) != 0 ) {
