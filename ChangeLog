@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.377 2014/11/27 07:05:59 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.378 2014/11/27 07:07:01 ds6peter Exp $ 
  */
 
 Info:
@@ -11,6 +11,7 @@ Info:
 --------------------------------------------------------------------
 20141127/PB
 	lib/ipv6calcoptions.c: replace improper use of the MAXINTARRAY macro
+	configure[.in]: add -Wsizeof-array-argument to CFLAGS if supported
 
 20141024/PB
 	recognize RFC6666 addresses
