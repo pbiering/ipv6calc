@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.19 2014/09/24 09:07:57 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions.c,v 1.20 2014/11/27 07:06:00 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -75,9 +75,9 @@ void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct 
 	int i, j, k;
 	char tempstring[NI_MAXHOST];
 
-	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Called");
+	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Called: longopts_custom_entries=%d shortopts=%s", longopts_custom_entries, shortopts_p);
 
-	if (*maxentries_p + MAXENTRIES_ARRAY(longopts_custom) >= (MAXLONGOPTIONS - 1)) {
+	if (*maxentries_p + longopts_custom_entries >= (MAXLONGOPTIONS - 1)) {
 		fprintf(stderr, "FATAL error, can't add options - FIX CODE by increasing MAXLONGOPTIONS\n");
 		exit(2);
 	};

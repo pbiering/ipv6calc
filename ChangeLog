@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.376 2014/10/24 06:20:33 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.377 2014/11/27 07:05:59 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20141127/PB
+	lib/ipv6calcoptions.c: replace improper use of the MAXINTARRAY macro
+
 20141024/PB
 	recognize RFC6666 addresses
 	databases: update

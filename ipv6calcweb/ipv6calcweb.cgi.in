@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.79 2014/10/25 12:47:10 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.80 2014/11/27 07:06:00 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -2034,7 +2034,7 @@ if ($mode eq "form" || $mode eq "mixed") {
 		$input = "::1";
 		$input_default = 1;
 	};
-	&print_tagoutput ( "            <p>" . $text{'Address'}->{$lang} . ": <input name=\"input\" type=\"text\" size=\"64\" maxlength=\" $maxenvlength\" value=\"$input\">\n" );
+	&print_tagoutput ( "            <p>IPv4/IPv6/MAC/EUI-64 " . $text{'Address'}->{$lang} . ": <input name=\"input\" type=\"text\" size=\"64\" maxlength=\" $maxenvlength\" value=\"$input\">\n" );
 	&print_tagoutput ( "            <input type=\"text\" size=\"128\" maxlength=\"128\" name=\"tokenhash\" value=\"" . $tokenhash . "\" hidden>\n" );
 	&print_tagoutput ( "            <input type=\"text\" size=\"128\" maxlength=\"128\" name=\"tokentime\" value=\"" . $tokentime . "\" hidden>\n" );
 	&print_tagoutput ( "            <input name=\"lang\" type=\"text\" size=\"128\" maxlength=\"128\" value=\"$lang\" hidden>\n" );
