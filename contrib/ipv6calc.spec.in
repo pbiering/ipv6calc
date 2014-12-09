@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2014 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec.in,v 1.90 2014/12/09 21:14:29 ds6peter Exp $
+# $Id: ipv6calc.spec.in,v 1.91 2014/12/09 21:24:51 ds6peter Exp $
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
@@ -115,7 +115,7 @@ databases and their update/generation tools for ipv6calc.
 
 
 %build
-./configure --bindir=%{_bindir} --mandir=%{_mandir} --libdir=%{_libdir} %{?enable_ip2location:--enable-ip2location} %{?enable_geoip:--enable-geoip} %{?enable_ip2location_dyn:--with-ip2location-dynamic} %{?enable_geoip_dyn:--with-geoip-dynamic} %{?enable_shared:--enable-shared}
+./configure --bindir=%{_bindir} --mandir=%{_mandir} --libdir=%{_libdir} %{?enable_ip2location:--enable-ip2location} %{?enable_geoip:--enable-geoip} %{?enable_ip2location_dyn:--with-ip2location-dynamic} %{?enable_geoip_dyn:--with-geoip-dynamic} %{?enable_shared:--enable-shared} --enable-external
 make clean
 make
 make test-minimal
@@ -227,6 +227,10 @@ rm -rf $RPM_BUILD_ROOT
 
 
 %changelog
+* Tue Dec 09 2014 Peter Bieringer <pb@bieringer.de>
+- create new sub-package: db with all related tools
+- configure: --enable-external
+
 * Sat Oct 25 2014 Peter Bieringer <pb@bieringer.de>
 - add /usr/share/ipv6calc/db directory
 
