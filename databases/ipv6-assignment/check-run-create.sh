@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : check-run-create.sh
-# Version    : $Id: check-run-create.sh,v 1.4 2012/02/05 09:33:55 peter Exp $
-# Copyright  : 2005-2012 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: check-run-create.sh,v 1.5 2014/12/09 21:03:51 ds6peter Exp $
+# Copyright  : 2005-2014 by Peter Bieringer <pb (at) bieringer.de>
 
 flag_update=0
 
@@ -25,7 +25,7 @@ else
 fi
 
 if [ $flag_update -eq 1 ]; then
-	./create-registry-list.pl
+	./create-registry-list.pl -H
 else
 	echo " Nothing to do!"
 fi

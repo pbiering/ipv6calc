@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : create_ieee_headerfile.pl
-# Version    : $Id: create_ieee_headerfile.pl,v 1.3 2014/03/31 19:48:34 ds6peter Exp $
+# Version    : $Id: create_ieee_headerfile.pl,v 1.4 2014/12/09 21:03:51 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE files
@@ -124,6 +124,8 @@ while (<IN>) {
 		$line =~ s/^ *//g;
 		# kill trailing spaces
 		$line =~ s/ *$//g;
+		# kill \r
+		$line =~ s/\r//g;
 
 		#print $line . "\n";
 		my ($t1, $t2, $t3) = split / /, $line, 3;

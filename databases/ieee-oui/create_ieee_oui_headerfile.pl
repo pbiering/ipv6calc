@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : create_ieee_oui_headerfile.pl
-# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.13 2013/04/08 19:34:56 ds6peter Exp $
-# Copyright  : 2002-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: create_ieee_oui_headerfile.pl,v 1.14 2014/12/09 21:03:50 ds6peter Exp $
+# Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE/oui.txt
 #
@@ -79,6 +79,8 @@ while (<IN>) {
 		$line =~ s/^ *//g;
 		# kill trailing spaces
 		$line =~ s/ *$//g;
+		# kill \r
+		$line =~ s/\r//g;
 
 		$m++;
 		print STDERR "$m\r" if ($debug == 0);

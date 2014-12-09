@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.73 2014/10/24 06:20:34 ds6peter Exp $
- * Generated     : Fri Oct 24 07:20:19 2014
+ * Version       : $Id: dbieee_iab.h,v 1.74 2014/12/09 21:03:50 ds6peter Exp $
+ * Generated     : Tue Dec  9 21:35:45 2014
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20141024";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20141209";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -526,7 +526,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x200000, 0x200FFF, "Whittier Mailing Products, Inc.", "WHITTIER-MAILING-PRODUCTS" },
 	{ 0x0050C2, 0x201000, 0x201FFF, "OlympusNDT", "OLYMPUSNDT" },
 	{ 0x0050C2, 0x202000, 0x202FFF, "Audio Riders Oy", "AUDIO-RIDERS-OY" },
-	{ 0x0050C2, 0x203000, 0x203FFF, "PRIVATE", "PRIVATE" },
+	{ 0x0050C2, 0x203000, 0x203FFF, "Vocality International Ltd", "VOCALITY" },
 	{ 0x0050C2, 0x204000, 0x204FFF, "Algodue Elettronica srl", "ALGODUE-ELETTRONICA-SRL" },
 	{ 0x0050C2, 0x205000, 0x205FFF, "SystIng", "SYSTING" },
 	{ 0x0050C2, 0x206000, 0x206FFF, "Windmill Innovations", "WINDMILL-INNOVATIONS" },
@@ -1567,7 +1567,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x611000, 0x611FFF, "Brookhaven National Laboratory", "BROOKHAVEN-NATIONAL-LABORATORY" },
 	{ 0x0050C2, 0x612000, 0x612FFF, "IHP-GmbH", "IHP" },
 	{ 0x0050C2, 0x613000, 0x613FFF, "TATTILE SRL", "TATTILE-SRL" },
-	{ 0x0050C2, 0x614000, 0x614FFF, "SICOM AS", "SICOM-AS" },
+	{ 0x0050C2, 0x614000, 0x614FFF, "Proserv", "PROSERV" },
 	{ 0x0050C2, 0x615000, 0x615FFF, "Axis Electronics", "AXIS-ELECTRONICS" },
 	{ 0x0050C2, 0x616000, 0x616FFF, "Honeywell", "HONEYWELL" },
 	{ 0x0050C2, 0x617000, 0x617FFF, "NARINET, INC.", "NARINET" },
@@ -1650,7 +1650,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x664000, 0x664FFF, "Westel Wireless Systems", "WESTEL-WIRELESS" },
 	{ 0x0050C2, 0x665000, 0x665FFF, "NetworkSound, Inc", "NETWORKSOUND" },
 	{ 0x0050C2, 0x666000, 0x666FFF, "Xworks NZ Limited", "XWORKS-NZ" },
-	{ 0x0050C2, 0x667000, 0x667FFF, "PRIVATE", "PRIVATE" },
+	{ 0x0050C2, 0x667000, 0x667FFF, "Vocality International Ltd", "VOCALITY" },
 	{ 0x0050C2, 0x668000, 0x668FFF, "Keith & Koep GmbH", "KEITH-KOEP" },
 	{ 0x0050C2, 0x669000, 0x669FFF, "DSP DESIGN", "DSP-DESIGN" },
 	{ 0x0050C2, 0x66A000, 0x66AFFF, "ABB Xiamen Transmission and Distribution Automation Equipmen", "ABB-XIAMEN-TRANSMISSION-AND-DISTRIBUTION-AUTOMATION-EQUIPMEN" },
@@ -2822,7 +2822,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xAF8000, 0xAF8FFF, "Global Satellite Engineering", "GLOBAL-SATELLITE-ENGINEERING" },
 	{ 0x0050C2, 0xAF9000, 0xAF9FFF, "Ingenieurbuero Bickele und Buehler GmbH", "INGENIEURBUERO-BICKELE-UND-BUEHLER" },
 	{ 0x0050C2, 0xAFA000, 0xAFAFFF, "Absolute Fire Solutions Inc.", "ABSOLUTE-FIRE-SOLUTIONS" },
-	{ 0x0050C2, 0xAFB000, 0xAFBFFF, "PRIVATE", "PRIVATE" },
+	{ 0x0050C2, 0xAFB000, 0xAFBFFF, "Vocality International Ltd", "VOCALITY" },
 	{ 0x0050C2, 0xAFC000, 0xAFCFFF, "Odus Technologies SA", "ODUS-TECHNOLOGIES" },
 	{ 0x0050C2, 0xAFD000, 0xAFDFFF, "HomeScenario, Inc.", "HOMESCENARIO" },
 	{ 0x0050C2, 0xAFE000, 0xAFEFFF, "Trolex Limited", "TROLEX" },
@@ -3494,7 +3494,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xD9B000, 0xD9BFFF, "Intuitive Surgical, Inc", "INTUITIVE-SURGICAL" },
 	{ 0x0050C2, 0xD9C000, 0xD9CFFF, "Gamber Johnson LLC", "GAMBER-JOHNSON-LLC" },
 	{ 0x0050C2, 0xD9D000, 0xD9DFFF, "Mistral Solutions Pvt. Ltd", "MISTRAL-SOLUTIONS-PVT" },
-	{ 0x0050C2, 0xD9E000, 0xD9EFFF, "PRIVATE", "PRIVATE" },
+	{ 0x0050C2, 0xD9E000, 0xD9EFFF, "Vocality International", "VOCALITY" },
 	{ 0x0050C2, 0xD9F000, 0xD9FFFF, "BitWise Controls", "BITWISE-CONTROLS" },
 	{ 0x0050C2, 0xDA0000, 0xDA0FFF, "Precision Remotes", "PRECISION-REMOTES" },
 	{ 0x0050C2, 0xDA1000, 0xDA1FFF, "MangoDSP", "MANGODSP" },
@@ -3608,7 +3608,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xE0E000, 0xE0EFFF, "PMAC JAPAN", "PMAC-JAPAN" },
 	{ 0x0050C2, 0xE0F000, 0xE0FFFF, "Trentino Systems", "TRENTINO" },
 	{ 0x0050C2, 0xE10000, 0xE10FFF, "Radinetworks Co., Ltd", "RADINETWORKS" },
-	{ 0x0050C2, 0xE11000, 0xE11FFF, "RF Neulink", "RF-NEULINK" },
+	{ 0x0050C2, 0xE11000, 0xE11FFF, "RadioMobile Inc", "RADIOMOBILE" },
 	{ 0x0050C2, 0xE12000, 0xE12FFF, "Kago Electronics BV", "KAGO-ELECTRONICS" },
 	{ 0x0050C2, 0xE13000, 0xE13FFF, "Automation Assist Japan Company", "AUTOMATION-ASSIST-JAPAN-COMPANY" },
 	{ 0x0050C2, 0xE14000, 0xE14FFF, "Calixto Systems Pvt Ltd", "CALIXTO-PVT" },
@@ -3649,7 +3649,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xE37000, 0xE37FFF, "FUJI DATA SYSTEM Co., Ltd", "FUJI-DATA-SYSTEM" },
 	{ 0x0050C2, 0xE38000, 0xE38FFF, "Aesir Copenhagen", "AESIR-COPENHAGEN" },
 	{ 0x0050C2, 0xE39000, 0xE39FFF, "Telemetrics Inc.", "TELEMETRICS" },
-	{ 0x0050C2, 0xE3A000, 0xE3AFFF, "PRIVATE", "PRIVATE" },
+	{ 0x0050C2, 0xE3A000, 0xE3AFFF, "Vocality International", "VOCALITY" },
 	{ 0x0050C2, 0xE3B000, 0xE3BFFF, "Nanosolution Inc.", "NANOSOLUTION" },
 	{ 0x0050C2, 0xE3C000, 0xE3CFFF, "Grupo Epelsa S.L.", "GRUPO-EPELSA-S-L" },
 	{ 0x0050C2, 0xE3D000, 0xE3DFFF, "Baudisch Electronic GmbH", "BAUDISCH" },
@@ -4432,7 +4432,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x148000, 0x148FFF, "SEIKO TIME SYSTEMS INC.", "SEIKO-TIME" },
 	{ 0x40D855, 0x149000, 0x149FFF, "Engage Technologies", "ENGAGE-TECHNOLOGIES" },
 	{ 0x40D855, 0x14A000, 0x14AFFF, "GENERAL DYNAMICS C4 SYSTEMS", "GENERAL-DYNAMICS-C4" },
-	{ 0x40D855, 0x14B000, 0x14BFFF, "PRIVATE", "PRIVATE" },
+	{ 0x40D855, 0x14B000, 0x14BFFF, "Vocality International", "VOCALITY" },
 	{ 0x40D855, 0x14C000, 0x14CFFF, "PLT", "PLT" },
 	{ 0x40D855, 0x14D000, 0x14DFFF, "SOMFY SAS", "SOMFY-SAS" },
 	{ 0x40D855, 0x14E000, 0x14EFFF, "Marposs S.p.A", "MARPOSS-S-P-A" },

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.38 2014/10/24 06:20:34 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.39 2014/12/09 21:03:50 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -21,6 +21,8 @@ use Getopt::Std;
 use BerkeleyDB;
 use POSIX qw(strftime);
 
+my $progname = $0;
+
 my $debug = 0;
 
 #$debug |= 0x01;
@@ -30,24 +32,86 @@ my $debug = 0;
 #$debug |= 0x10; # assignments gap closing
 #$debug |= 0x1000; # TLD store
 
-my $OUTFILE = "dbipv4addr_assignment.h";
+sub help {
+	print qq|
+Usage: $progname [-S <SRC-DIR>] [-D <DST-DIR>] [-H] [-B]
+	-S <SRC-DIR>	source directory
+	-D <DST-DIR>	destination directory
+	-H		create header file(s)
+	-B		create Berkeley DB file(s)
+
+	-h		this online help
+
+|;
+	exit 0;
+};
+
+# parse options
+our ($opt_h, $opt_S, $opt_D, $opt_B, $opt_H);
+getopts('hS:D:BH') || help();
+
+if (defined $opt_h) {
+	help();
+};
+
+unless (defined $opt_H || defined $opt_B) {
+	print "WARN  : nothing to do (missing -H|-B)\n";
+	exit 1;
+};
 
 
-my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time - 48*60*60);
+## locations
+my $file_dst_h;
+my $dir_src;
+my $dir_dst;
+my $global_file;
+my @files;
 
-$year = 1900 + $year;
-$mon = sprintf "%02d", $mon + 1;
-$mday = sprintf "%02d", $mday;
+## source file handling
+if (defined $opt_S) {
+	$dir_src = $opt_S;
+	$dir_src .= "/" if ($dir_src !~ /\/$/o);
 
-my @files = (
-	"../registries/arin/delegated-arin-extended-latest",
-	"../registries/ripencc/delegated-ripencc-latest",
-	"../registries/apnic/delegated-apnic-latest",
-	"../registries/lacnic/delegated-lacnic-latest",
-	"../registries/afrinic/delegated-afrinic-latest"
-);
+	$global_file = $dir_src . "ipv4-address-space.xml";
 
-my $global_file = "../registries/iana/ipv4-address-space.xml";
+	@files = (
+		$dir_src . "delegated-arin-extended-latest",
+		$dir_src . "delegated-ripencc-latest",
+		$dir_src . "delegated-apnic-latest",
+		$dir_src . "delegated-lacnic-latest",
+		$dir_src . "delegated-afrinic-latest"
+	);
+} else {
+	# default
+	$dir_src = "../registries/";
+
+	$global_file = $dir_src . "iana/ipv4-address-space.xml";
+
+	@files = (
+		$dir_src . "arin/delegated-arin-extended-latest",
+		$dir_src . "ripencc/delegated-ripencc-latest",
+		$dir_src . "apnic/delegated-apnic-latest",
+		$dir_src . "lacnic/delegated-lacnic-latest",
+		$dir_src . "afrinic/delegated-afrinic-latest"
+	);
+};
+
+## destination file handling
+if (defined $opt_D) {
+	$dir_dst = $opt_D;
+
+} else {
+	# default
+	$dir_dst = ".";
+};
+
+$file_dst_h = $dir_dst . "/dbipv4addr_assignment.h";
+my $file_dst_db_reg = $dir_dst . "/ipv6calc-external-ipv4-registry.db";
+my $file_dst_db_cc  = $dir_dst . "/ipv6calc-external-ipv4-countrycode.db";
+
+print "INFO  : destination file for header: " . $file_dst_h  . "\n" if (defined $opt_H);
+print "INFO  : destination file for DB (Registry): " . $file_dst_db_reg . "\n" if (defined $opt_B);
+print "INFO  : destination file for DB (CountryCode): " . $file_dst_db_cc  . "\n" if (defined $opt_B);
 
 my %assignments;
 my %assignments_iana;
@@ -58,7 +122,7 @@ my %date_created;
 
 
 # convert a dotted IPv4 address into 32-bit decimal
-sub ipv4_to_dec($) {
+sub ipv4_to_dec {
 	my $ipv4 = shift || die "Missing IPv4 address";
 
 	my ($t1, $t2, $t3, $t4) = split /\./, $ipv4;
@@ -69,7 +133,7 @@ sub ipv4_to_dec($) {
 };
 
 # convert a 32-bit decimal to dotted IPv4 address
-sub dec_to_ipv4($) {
+sub dec_to_ipv4 {
 	my $dec = shift;
 
  	my $t1 = ($dec & 0xff000000) >> 24;
@@ -84,7 +148,7 @@ sub dec_to_ipv4($) {
 
 
 # find start of ipv4 in %assignments_iana
-sub find_start_iana($) {
+sub find_start_iana {
 	my $ipv4 = shift || die "Missing IPv4 address";
 
 	for my $key (keys %assignments_iana) {
@@ -104,12 +168,12 @@ sub find_start_iana($) {
 
 
 # Should't be used, a little bit obsolete
-sub proceed_global() {
+sub proceed_global {
 	my $ipv4; my $length;
 	my ($start, $distance);
 
 	# Proceed first global IANA file
-	print "Proceed file (XML): " . $global_file . "\n";
+	print "INFO  : proceed file (XML): " . $global_file . "\n";
 
 	my $xs = XML::Simple->new();
 	my $xd = $xs->XMLin($global_file) || die "Cannot open/parse file: $global_file";
@@ -117,7 +181,7 @@ sub proceed_global() {
 	for my $e1 ($xd->{'updated'}) {
 		$e1 =~ s/-//go;
 		$date_created{'IANA'} = $e1;
-		print "Found create date: " . $e1 . "\n";
+		print "DEBUG : found create date: " . $e1 . "\n";
 		last;
 	};
 
@@ -181,10 +245,10 @@ sub proceed_global() {
 
 ## proceed files of each registry
 foreach my $file (@files) {
-	print "Proceed file: " . $file . "\n";
+	print "INFO  : proceed file: " . $file . "\n";
 
 
-	open(FILE, "<$file") || die "Cannot open file: $file";
+	open(my $FILE, "<", $file) || die "Cannot open file: $file";
 
 	my $line;
 	my $flag_proceeded;
@@ -198,14 +262,14 @@ foreach my $file (@files) {
 
 	my ($reg, $cc, $token, $ipv4, $numbers, $date, $status, $other);
 
-	while (<FILE>) {
+	while (<$FILE>) {
 		$line = $_;
 		chomp $line;
 
 		# catch date line
 		if ($line =~ /^2(\.[0-9])?\|([^\|]+)\|.*\|([0-9]{8})\|[^\|]*$/o) {
 			$date_created{uc($2)} = $3;
-			print "Found create date: " . $3 . "\n";
+			print "DEBUG : found create date: " . $3 . "\n";
 			$flag_found_date = 1;
 			next;
 		};
@@ -305,7 +369,7 @@ foreach my $file (@files) {
 		};
 	};
 
-	close(FILE);
+	close($FILE);
 
 
 	if ($start_reg != -1) {
@@ -327,21 +391,29 @@ foreach my $file (@files) {
 	};
 };
 
+my $now_string = strftime "%Y%m%d-%H%M%S%z %Z", localtime;
+my $string = "";
+for my $reg (sort keys %date_created) {
+	if (length($string) > 0) {
+		$string .= " ";
+	};
+	$string .= $reg . "/" . $date_created{$reg};
+};
+
 
 ## Create header file IP->Registry
-#
-print "Create outfile now: " . $OUTFILE . "\n";
-open(OUT, ">$OUTFILE") || die "Cannot open outfile: $OUTFILE";
+if (defined $opt_H) {
+	print "INFO  : create outfile now: " . $file_dst_h . "\n";
+	open(my $OUT, ">", $file_dst_h) || die "Cannot open outfile: $file_dst_h";
 
-# Header
-my $now_string = localtime;
-print OUT qq| /*
+	# Header
+	print $OUT qq|/*
  * Project       : ipv6calc
  * File          : dbipv4_assignment.h
 |;
-print OUT " * Version       : \$I";
-print OUT "d:\$\n";
-print OUT qq| * Generated     : $now_string
+	print $OUT " * Version       : \$I";
+	print $OUT "d:\$\n";
+	print $OUT qq| * Generated     : $now_string
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
@@ -352,153 +424,149 @@ print OUT qq| * Generated     : $now_string
 
 |;
 
-# print creation dates
-my $string = "";
-for my $reg (sort keys %date_created) {
-	if (length($string) > 0) {
-		$string .= " ";
-	};
-	$string .= $reg . "/" . $date_created{$reg};
-};
-print OUT "\/\*\@unused\@\*\/ static const char* dbipv4addr_registry_status __attribute__ ((__unused__)) = \"$string\";\n";
+	# print creation dates
+	print $OUT "\/\*\@unused\@\*\/ static const char* dbipv4addr_registry_status __attribute__ ((__unused__)) = \"$string\";\n";
 
-print OUT "\/\*\@unused\@\*\/ static const time_t dbipv4addr_registry_unixtime __attribute__ ((__unused__)) = " . time . ";\n";
+	print $OUT "\/\*\@unused\@\*\/ static const time_t dbipv4addr_registry_unixtime __attribute__ ((__unused__)) = " . time . ";\n";
 
-# Main data structure
-print OUT qq|
+	# Main data structure
+	print $OUT qq|
 static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 |;
 
-printf OUT "\t//first     , last      , registry  \n";
+	printf $OUT "\t//first     , last      , registry  \n";
 
-foreach my $ipv4 (sort { $a <=> $b } keys %assignments) {
-	my $distance = $assignments{$ipv4}->{'distance'};
-	my $registry = $assignments{$ipv4}->{'registry'};
+	foreach my $ipv4 (sort { $a <=> $b } keys %assignments) {
+		my $distance = $assignments{$ipv4}->{'distance'};
+		my $registry = $assignments{$ipv4}->{'registry'};
 
-	printf OUT "\t{ 0x%08x, 0x%08x, REGISTRY_%-10s }, // %-15s - %-15s\n", $ipv4, ($ipv4 + $distance - 1), $registry, &dec_to_ipv4($ipv4), &dec_to_ipv4($ipv4 + $distance - 1);
+		printf $OUT "\t{ 0x%08x, 0x%08x, REGISTRY_%-10s }, // %-15s - %-15s\n", $ipv4, ($ipv4 + $distance - 1), $registry, &dec_to_ipv4($ipv4), &dec_to_ipv4($ipv4 + $distance - 1);
+	};
+
+	print $OUT qq|};
+	|;
+
+	# IANA assignment
+	print $OUT qq|
+	static const s_ipv4addr_assignment dbipv4addr_assignment_iana[] = {
+	|;
+
+	printf $OUT "\t//first     , last      , registry  \n";
+
+	foreach my $ipv4 (sort { $a <=> $b } keys %assignments_iana) {
+		my $distance = $assignments_iana{$ipv4}->{'distance'};
+		my $registry = $assignments_iana{$ipv4}->{'registry'};
+
+		printf $OUT "\t{ 0x%08x, 0x%08x, REGISTRY_%-10s }, // %-15s - %-15s\n", $ipv4, ($ipv4 + $distance - 1), $registry, &dec_to_ipv4($ipv4), &dec_to_ipv4($ipv4 + $distance - 1);
+	};
+
+	print $OUT qq|};
+	|;
+
+	print "INFO  : finished creation of header file: " . $file_dst_h . "\n";
 };
 
-print OUT qq|};
-|;
+## Create DB file
+if (defined $opt_B) {
+	## IPv4->Registry
+	print "INFO  : start creation of DB file IPv4->Registry: " . $file_dst_db_cc . "\n";
 
-# IANA assignment
-print OUT qq|
-static const s_ipv4addr_assignment dbipv4addr_assignment_iana[] = {
-|;
+	# external database
+	my $type = "2024"; # External IPv4->Registry
+	my $date = $string;
+	my $filename = "ipv6calc-external-ipv4-registry.db";
 
-printf OUT "\t//first     , last      , registry  \n";
+	if (-f $filename) {
+		unlink($filename) || die "Can't delete old file: $filename";
+	};
 
-foreach my $ipv4 (sort { $a <=> $b } keys %assignments_iana) {
-	my $distance = $assignments_iana{$ipv4}->{'distance'};
-	my $registry = $assignments_iana{$ipv4}->{'registry'};
+	print "INFO  : create db from input: IPv4=$filename\n";
 
-	printf OUT "\t{ 0x%08x, 0x%08x, REGISTRY_%-10s }, // %-15s - %-15s\n", $ipv4, ($ipv4 + $distance - 1), $registry, &dec_to_ipv4($ipv4), &dec_to_ipv4($ipv4 + $distance - 1);
+	my %h_ipv4_info;
+
+	tie %h_ipv4_info, 'BerkeleyDB::Btree', -Filename => $filename, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
+
+	$h_ipv4_info{'dbusage'} = "ipv6calc";
+	$h_ipv4_info{'dbformat'} = "1"; # ';' separated values
+	$h_ipv4_info{'dbdate'} = $date;
+	$h_ipv4_info{'dbtype'} = $type;
+	$h_ipv4_info{'dbcreated'} = $now_string;
+	$h_ipv4_info{'dbcreated_unixtime'} = time + 1;
+
+
+	untie %h_ipv4_info;
+
+	my @a_ipv4;
+
+	tie @a_ipv4, 'BerkeleyDB::Recno', -Filename => $filename, -Subname => 'data', -Flags => DB_CREATE || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
+
+	foreach my $ipv4 (sort { $a <=> $b } keys %assignments) {
+		my $distance = $assignments{$ipv4}->{'distance'};
+		my $registry = $assignments{$ipv4}->{'registry'};
+
+		push @a_ipv4, sprintf("%08x;%08x;%s",$ipv4, ($ipv4 + $distance - 1), "REGISTRY_" . $registry);
+	};
+
+	untie @a_ipv4;
+
+	my @a_ipv4_iana;
+
+	tie @a_ipv4_iana, 'BerkeleyDB::Recno', -Filename => $filename, -Subname => 'data-iana', -Flags => DB_CREATE || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
+
+	foreach my $ipv4 (sort { $a <=> $b } keys %assignments_iana) {
+		my $distance = $assignments_iana{$ipv4}->{'distance'};
+		my $registry = $assignments_iana{$ipv4}->{'registry'};
+
+		push @a_ipv4_iana, sprintf("%08x;%08x;%s",$ipv4, ($ipv4 + $distance - 1), "REGISTRY_" . $registry);
+	};
+
+	untie @a_ipv4_iana;
+
+	print "INFO  : db created from input IPv4->Registry: $file_dst_db_reg\n";
+
+
+	## IPv4->CountryCode
+	print "INFO  : start creation of DB file: IPv4->CountryCode: " . $file_dst_db_cc . "\n";
+
+	# external database
+	$type = "2034"; # External IPv4->CountryCode
+	$date = $string;
+	$now_string = strftime "%Y%m%d-%H%M%S%z", gmtime;
+	my $info = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=4;dbcreated=$now_string";
+	$file_dst_db_cc = "ipv6calc-external-ipv4-countrycode.db";
+
+	if (-f $file_dst_db_cc) {
+		unlink($file_dst_db_cc) || die "Can't delete old file: $file_dst_db_cc";
+	};
+
+	print "INFO  : create db from input: IPv4=$file_dst_db_cc\n";
+
+	my %h_info;
+
+	tie %h_info, 'BerkeleyDB::Btree', -Filename => $file_dst_db_cc, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $file_dst_db_cc: $! $BerkeleyDB::Error\n";
+
+	$h_info{'dbusage'} = "ipv6calc";
+	$h_info{'dbformat'} = "1"; # ';' separated values
+	$h_info{'dbdate'} = $date;
+	$h_info{'dbtype'} = $type;
+	$h_info{'dbcreated'} = $now_string;
+	$h_info{'dbcreated_unixtime'} = time + 1;
+
+
+	untie %h_info;
+
+	my @a;
+
+	tie @a, 'BerkeleyDB::Recno', -Filename => $file_dst_db_cc, -Subname => 'data', -Flags => DB_CREATE || die "Cannot open file $file_dst_db_cc: $! $BerkeleyDB::Error\n";
+
+	foreach my $ipv4 (sort { $a <=> $b } keys %ip_countrycode) {
+		my $distance = $ip_countrycode{$ipv4}->{'distance'};
+		my $cc = $ip_countrycode{$ipv4}->{'cc'};
+
+		push @a, sprintf("%08x;%08x;%s",$ipv4, ($ipv4 + $distance - 1), $cc);
+	};
+
+	untie @a;
+
+	print "INFO  : DB file created from input IPv4->CountryCode: " . $file_dst_db_cc . "\n";
 };
-
-print OUT qq|};
-|;
-
-print "Finished creation of header file\n";
-
-print "Start creation of DB file\n";
-
-# external database
-my $type = "2024"; # External IPv4->Registry
-my $date = $string;
-$now_string = strftime "%Y%m%d-%H%M%S%z", gmtime;
-my $filename = "ipv6calc-external-ipv4-registry.db";
-
-if (-f $filename) {
-        unlink($filename) || die "Can't delete old file: $filename";
-};
-
-print "INFO  : create db from input: IPv4=$filename\n";
-
-my %h_ipv4_info;
-
-tie %h_ipv4_info, 'BerkeleyDB::Btree', -Filename => $filename, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
-
-$h_ipv4_info{'dbusage'} = "ipv6calc";
-$h_ipv4_info{'dbformat'} = "1"; # ';' separated values
-$h_ipv4_info{'dbdate'} = $date;
-$h_ipv4_info{'dbtype'} = $type;
-$h_ipv4_info{'dbcreated'} = $now_string;
-$h_ipv4_info{'dbcreated_unixtime'} = time + 1;
-
-
-untie %h_ipv4_info;
-
-my @a_ipv4;
-
-tie @a_ipv4, 'BerkeleyDB::Recno', -Filename => $filename, -Subname => 'data', -Flags => DB_CREATE || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
-
-foreach my $ipv4 (sort { $a <=> $b } keys %assignments) {
-	my $distance = $assignments{$ipv4}->{'distance'};
-	my $registry = $assignments{$ipv4}->{'registry'};
-
-	push @a_ipv4, sprintf("%08x;%08x;%s",$ipv4, ($ipv4 + $distance - 1), "REGISTRY_" . $registry);
-};
-
-untie @a_ipv4;
-
-my @a_ipv4_iana;
-
-tie @a_ipv4_iana, 'BerkeleyDB::Recno', -Filename => $filename, -Subname => 'data-iana', -Flags => DB_CREATE || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
-
-foreach my $ipv4 (sort { $a <=> $b } keys %assignments_iana) {
-	my $distance = $assignments_iana{$ipv4}->{'distance'};
-	my $registry = $assignments_iana{$ipv4}->{'registry'};
-
-	push @a_ipv4_iana, sprintf("%08x;%08x;%s",$ipv4, ($ipv4 + $distance - 1), "REGISTRY_" . $registry);
-};
-
-untie @a_ipv4_iana;
-
-
-## IP -> CountryCode
-print "INFO  : db created from input: IPv4=$filename\n";
-
-
-print "Start creation of DB file: IPv4->CountryCode\n";
-
-# external database
-$type = "2034"; # External IPv4->CountryCode
-$date = $string;
-$now_string = strftime "%Y%m%d-%H%M%S%z", gmtime;
-my $info = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=4;dbcreated=$now_string";
-$filename = "ipv6calc-external-ipv4-countrycode.db";
-
-if (-f $filename) {
-        unlink($filename) || die "Can't delete old file: $filename";
-};
-
-print "INFO  : create db from input: IPv4=$filename\n";
-
-my %h_info;
-
-tie %h_info, 'BerkeleyDB::Btree', -Filename => $filename, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
-
-$h_info{'dbusage'} = "ipv6calc";
-$h_info{'dbformat'} = "1"; # ';' separated values
-$h_info{'dbdate'} = $date;
-$h_info{'dbtype'} = $type;
-$h_info{'dbcreated'} = $now_string;
-$h_info{'dbcreated_unixtime'} = time + 1;
-
-
-untie %h_info;
-
-my @a;
-
-tie @a, 'BerkeleyDB::Recno', -Filename => $filename, -Subname => 'data', -Flags => DB_CREATE || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
-
-foreach my $ipv4 (sort { $a <=> $b } keys %ip_countrycode) {
-	my $distance = $ip_countrycode{$ipv4}->{'distance'};
-	my $cc = $ip_countrycode{$ipv4}->{'cc'};
-
-	push @a, sprintf("%08x;%08x;%s",$ipv4, ($ipv4 + $distance - 1), $cc);
-};
-
-untie @a;
-
-print "INFO  : db created from input: IPv4=$filename\n";

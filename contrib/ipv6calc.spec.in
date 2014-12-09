@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2014 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec.in,v 1.88 2014/11/27 07:06:00 ds6peter Exp $
+# $Id: ipv6calc.spec.in,v 1.89 2014/12/09 21:03:50 ds6peter Exp $
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
@@ -55,6 +55,8 @@ Requires: ip2Location >= 2.1.3
 %endif
 %endif
 
+BuildRequires: perl-BerkeleyDB
+
 
 %description
 ipv6calc is a small utility which formats and calculates IPv4/IPv6 addresses
@@ -97,6 +99,15 @@ BuildRequires: perl(URI) perl(Digest::SHA1) perl(Digest::MD5)
 %description ipv6calcweb
 ipv6calcweb contains a CGI program and a configuration file for
 displaying information of IP addresses on a web page using ipv6calc.
+
+
+%package db
+Summary: IP address information databases and tools
+Group: Applications/Internet
+Requires: perl-BerkeleyDB
+
+%description db
+databases and their update/generation tools for ipv6calc.
 
 
 %prep
@@ -145,6 +156,11 @@ for tool in GeoIP-update.sh IP2Location-update.sh DBIP-update.sh DBIP-generate-d
 	install -m 755 tools/$tool $RPM_BUILD_ROOT%{_datadir}/%{name}/tools
 done
 
+cp databases/registries/update-registries.sh $RPM_BUILD_ROOT%{_datadir}/%{name}/tools
+cp databases/ipv4-assignment/create-registry-list.pl $RPM_BUILD_ROOT%{_datadir}/%{name}/tools/ipv4-create-registry-list.pl
+cp databases/ipv6-assignment/create-registry-list.pl $RPM_BUILD_ROOT%{_datadir}/%{name}/tools/ipv6-create-registry-list.pl
+
+
 # db directory
 install -d %{buildroot}%{_datadir}/%{name}/db
 
@@ -163,9 +179,6 @@ for f in ChangeLog README CREDITS TODO COPYING LICENSE USAGE doc/ipv6calc.lyx do
 	cp $f $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/
 done
 
-for f in tools/GeoIP-update.sh tools/IP2Location-update.sh; do
-	cp $f $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/
-done
 
 # Remove all CVS files
 find $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} -type d -name CVS |xargs rm -rf
@@ -190,12 +203,6 @@ rm -rf $RPM_BUILD_ROOT
 # man pages
 %{_mandir}/man8/*
 
-# tools
-%{_datadir}/%{name}/tools/*
-
-# db
-%{_datadir}/%{name}/db
-
 # docs, examples and helper
 %doc %{_docdir}/%{name}-%{version}/*
 
@@ -209,6 +216,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_localstatedir}/www/cgi-bin/ipv6calcweb.cgi
 %doc %{_docdir}/%{name}-%{version}/ipv6calcweb/*
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
+
+%files db
+# tools
+%{_datadir}/%{name}/tools/*
+
+# db
+%{_datadir}/%{name}/db
 
 
 %changelog

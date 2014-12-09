@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.16 2014/10/24 06:20:34 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.17 2014/12/09 21:03:51 ds6peter Exp $
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
 #              2005-2014 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
 # License    : GNU GPL v2
@@ -12,13 +12,18 @@
 #  Uses code from ipv4-assignment
 
 use strict;
+use warnings;
 
 use Net::IP;
 use Math::BigInt;
 use XML::Simple;
 
+use Getopt::Std;
+
 use BerkeleyDB;
 use POSIX qw(strftime);
+
+my $progname = $0;
 
 my $debug = 0;
 
@@ -29,28 +34,92 @@ my $debug = 0;
 
 # $debug |= 0x0040; # fill data
 # $debug |= 0x0200; # parse lines
-$debug |= 0x0400; # store registry
+#$debug |= 0x0400; # store registry
 #$debug |= 0x4000; # store countrycode
 #$debug |= 0x0080; # skip optimizer
 
-my $OUTFILE = "dbipv6addr_assignment.h";
+sub help {
+	print qq|
+Usage: $progname [-S <SRC-DIR>] [-D <DST-DIR>] [-H] [-B]
+	-S <SRC-DIR>	source directory
+	-D <DST-DIR>	destination directory
+	-H		create header file(s)
+	-B		create Berkeley DB file(s)
 
-my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time - 48*60*60);
+	-h		this online help
 
-$year = 1900 + $year;
-$mon = sprintf "%02d", $mon + 1;
-$mday = sprintf "%02d", $mday;
+|;
+	exit 0;
+};
 
-my $global_file = "../registries/iana/ipv6-unicast-address-assignments.xml";
+## parse options
+our ($opt_h, $opt_S, $opt_D, $opt_B, $opt_H);
+getopts('hS:D:BH') || help();
 
-my @files = (
-	"../registries/arin/delegated-arin-extended-latest",
-	"../registries/ripencc/delegated-ripencc-latest",
-	"../registries/apnic/delegated-apnic-latest",
-	"../registries/lacnic/delegated-lacnic-latest",
-	"../registries/afrinic/delegated-afrinic-latest"
-);
+if (defined $opt_h) {
+	help();
+};
 
+unless (defined $opt_H || defined $opt_B) {
+	print "WARN  : nothing to do (missing -H|-B)\n";
+	exit 1;
+};
+
+## locations
+my $file_dst_h;
+my $dir_src;
+my $dir_dst;
+my $global_file;
+my @files;
+
+## source file handling
+if (defined $opt_S) {
+	$dir_src = $opt_S;
+	$dir_src .= "/" if ($dir_src !~ /\/$/o);
+
+	$global_file = $dir_src . "ipv6-unicast-address-assignments.xml";
+
+	@files = (
+		$dir_src . "delegated-arin-extended-latest",
+		$dir_src . "delegated-ripencc-latest",
+		$dir_src . "delegated-apnic-latest",
+		$dir_src . "delegated-lacnic-latest",
+		$dir_src . "delegated-afrinic-latest"
+	);
+} else {
+	# default
+	$dir_src = "../registries/";
+
+	$global_file = $dir_src . "iana/ipv6-unicast-address-assignments.xml";
+
+	@files = (
+		$dir_src . "arin/delegated-arin-extended-latest",
+		$dir_src . "ripencc/delegated-ripencc-latest",
+		$dir_src . "apnic/delegated-apnic-latest",
+		$dir_src . "lacnic/delegated-lacnic-latest",
+		$dir_src . "afrinic/delegated-afrinic-latest"
+	);
+};
+
+## destination file handling
+if (defined $opt_D) {
+	$dir_dst = $opt_D;
+
+} else {
+	# default
+	$dir_dst = ".";
+};
+
+$file_dst_h = $dir_dst . "/dbipv6addr_assignment.h";
+my $file_dst_db_reg = $dir_dst . "/ipv6calc-external-ipv6-registry.db";
+my $file_dst_db_cc  = $dir_dst . "/ipv6calc-external-ipv6-countrycode.db";
+
+print "INFO  : destination file for header: " . $file_dst_h  . "\n" if (defined $opt_H);
+print "INFO  : destination file for DB (Registry): " . $file_dst_db_reg . "\n" if (defined $opt_B);
+print "INFO  : destination file for DB (CountryCode): " . $file_dst_db_cc  . "\n" if (defined $opt_B);
+
+
+## Read data
 my (@arin, @apnic, @ripencc, @iana, @lacnic, @afrinic, @reserved, @s6to4, @s6bone);
 
 my @cc_array;
@@ -61,7 +130,7 @@ my %date_created;
 # Generate subnet powers
 my %subnet_masks;
 
-print "Generate subnet masks\n";
+print "DEBUG : generate subnet masks\n";
 for (my $i = 0; $i <= 64; $i++) {
 	my $mask;
 	$mask = Math::BigInt->new("0xffffffffffffffff");
@@ -82,9 +151,9 @@ for (my $i = 0; $i <= 64; $i++) {
 };
 
 # Fill global assignement (IPv6 should be more hierarchical than IPv4)
-sub proceed_global() {
+sub proceed_global {
 	# Proceed first global IANA file
-	print "Proceed file (XML): " . $global_file . "\n";
+	print "INFO  : proceed file (XML): " . $global_file . "\n";
 
 	my $xs = XML::Simple->new();
 	my $xd = $xs->XMLin($global_file) || die "Cannot open/parse file: $global_file";
@@ -92,7 +161,7 @@ sub proceed_global() {
 	for my $e1 ($xd->{'updated'}) {
 		$e1 =~ s/-//go;
 		$date_created{'IANA'} = $e1;
-		print "Found create date: " . $e1 . "\n";
+		print "DEBUG : found create date: " . $e1 . "\n";
 		last;
 	};
 
@@ -146,18 +215,18 @@ sub proceed_global() {
 proceed_global();
 
 foreach my $file (@files) {
-	print "Proceed file: " . $file . "\n";
+	print "INFO  : proceed file: " . $file . "\n";
 
 	my $counter = 0;
 
-	open(FILE, "<$file") || die "Cannot open file: $file";
+	open(my $FILE, "<", $file) || die "Cannot open file: $file";
 
 	my $line;
 	my %cache;
 	my $flag_found_date = 0;
 	my $version;
 
-	while (<FILE>) {
+	while (<$FILE>) {
 		$line = $_;
 		chomp $line;
 
@@ -166,7 +235,7 @@ foreach my $file (@files) {
 		# catch date line
 		if ($line =~ /^2(\.[0-9])?\|([^\|]+)\|.*\|([0-9]{8})\|[^\|]*$/o) {
 			$date_created{uc($2)} = $3;
-			print "Found create date: " . $3 . "\n";
+			print "DEBUG : found create date: " . $3 . "\n";
 			$flag_found_date = 1;
 			next;
 		};
@@ -272,7 +341,7 @@ Label_finished:
 		push @$parray, $ip_ipv6->ip() . "/" . $prefixlen;
 	};
 
-	close(FILE);
+	close($FILE);
 
 	if ($flag_found_date != 1) {
 		die("no date line found, unsupported file format");
@@ -285,15 +354,15 @@ Label_finished:
 my %data;
 my %data_cc;
 
-sub fill_data($$$) {
+sub fill_data {
 	my $parray = shift || die "missing array pointer";
 	my $reg = shift || die "missing registry";
 	my $pdata = shift || die "missing hash pointer";
 
 	if ($reg ne "CC") {
-		print "Fill data for registry: $reg\n";
+		print "INFO  : fill data for registry: $reg\n";
 	} else {
-		print "Fill data for CountryCode assignment\n";
+		print "INFO  : fill data for CountryCode assignment\n";
 	};
 
 	foreach my $entry (sort @$parray) {
@@ -348,20 +417,28 @@ sub fill_data($$$) {
 
 &fill_data(\@cc_array, "CC"  , \%data_cc);
 
-# Create header file
+my $now_string = strftime "%Y%m%d-%H%M%S%z %Z", localtime;
+my $string = "";
+for my $reg (sort keys %date_created) {
+	if (length($string) > 0) {
+		$string .= " ";
+	};
+	$string .= $reg . "/" . $date_created{$reg};
+};
 
-print "Create outfile now: " . $OUTFILE . "\n";
-open(OUT, ">$OUTFILE") || die "Cannot open outfile: $OUTFILE";
+## Create header file
+if (defined $opt_H) {
+	print "INFO  : create header file now: " . $file_dst_h . "\n";
+	open(my $OUT, ">", $file_dst_h) || die "Cannot open outfile: $file_dst_h";
 
-# Header
-my $now_string = localtime;
-print OUT qq| /*
+	# Header
+	print $OUT qq|/*
  * Project       : ipv6calc
  * File          : dbipv6_assignment.h
 |;
-print OUT " * Version       : \$I";
-print OUT "d:\$\n";
-print OUT qq| * Generated     : $now_string
+	print $OUT " * Version       : \$I";
+	print $OUT "d:\$\n";
+	print $OUT qq| * Generated     : $now_string
  * Data copyright: IANA ARIN RIPENCC APNIC LACNIC AFRINIC
  *
  * Information:
@@ -372,110 +449,101 @@ print OUT qq| * Generated     : $now_string
 
 |;
 
-# print creation dates
-my $string = "";
-for my $reg (sort keys %date_created) {
-	if (length($string) > 0) {
-		$string .= " ";
-	};
-	$string .= $reg . "/" . $date_created{$reg};
-};
-print OUT "\/\*\@unused\@\*\/ static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = \"$string\";\n";
+	# print creation dates
+	print $OUT "\/\*\@unused\@\*\/ static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = \"$string\";\n";
 
-print OUT "\/\*\@unused\@\*\/ static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = " . time . ";\n";
+	print $OUT "\/\*\@unused\@\*\/ static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = " . time . ";\n";
 
-# Main data structure
-print OUT qq|
+	# Main data structure
+	print $OUT qq|
 static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 |;
 
 
-foreach my $ipv6 (sort keys %data) {
-	printf OUT "\t{ 0x%s, 0x%s, 0x%s, 0x%s, %3d, REGISTRY_%-10s },\n", $data{$ipv6}->{'ipv6_00_31'}, $data{$ipv6}->{'ipv6_32_63'}, $data{$ipv6}->{'mask_00_31'}, $data{$ipv6}->{'mask_32_63'}, $data{$ipv6}->{'mask_length'}, $data{$ipv6}->{'reg'};
+	printf $OUT "\t//%-10s, %-10s, %-10s, %-10s, %-s, %-10s\n", "ipv6_00_31", "ipv6_32_63", "mask_00_31", "mask_32_63", "mask_length", "registry";
+
+	foreach my $ipv6 (sort keys %data) {
+		printf $OUT "\t{ 0x%s, 0x%s, 0x%s, 0x%s, %3d, REGISTRY_%-10s },\n", $data{$ipv6}->{'ipv6_00_31'}, $data{$ipv6}->{'ipv6_32_63'}, $data{$ipv6}->{'mask_00_31'}, $data{$ipv6}->{'mask_32_63'}, $data{$ipv6}->{'mask_length'}, $data{$ipv6}->{'reg'};
+	};
+
+	print $OUT qq|};
+	|;
+
+	close($OUT);
+
+	print "INFO  : header file created from input: " . $file_dst_h . "\n";
 };
 
-print OUT qq|};
-|;
 
-close(OUT);
+## Create DB file
+if (defined $opt_B) {
+	## IPv6->Registry
+	print "INFO  : start creation of DB file IPv6->Registry: " . $file_dst_db_cc . "\n";
 
-print "Finished\n";
+	# external database
+	my $type = "2026"; # External IPv6->Registry
+	my $date = $string;
+	my $info = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=6;dbcreated=$now_string";
+
+	if (-f $file_dst_db_reg) {
+		unlink($file_dst_db_reg) || die "Can't delete old file: $file_dst_db_reg";
+	};
+
+	my %h_info;
+
+	tie %h_info, 'BerkeleyDB::Btree', -Filename => $file_dst_db_reg, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $file_dst_db_reg: $! $BerkeleyDB::Error\n";
+
+	$h_info{'dbusage'} = "ipv6calc";
+	$h_info{'dbformat'} = "1"; # ';' separated values
+	$h_info{'dbdate'} = $date;
+	$h_info{'dbtype'} = $type;
+	$h_info{'dbcreated'} = $now_string;
+	$h_info{'dbcreated_unixtime'} = time + 1;
+
+	untie %h_info;
+
+	my @a;
+
+	tie @a, 'BerkeleyDB::Recno', -Filename => $file_dst_db_reg, -Subname => 'data', -Flags => DB_CREATE || die "Cannot open file $file_dst_db_reg: $! $BerkeleyDB::Error\n";
+
+	foreach my $ipv6 (sort keys %data) {
+		push @a, sprintf("%s;%s;%s;%s;%d;REGISTRY_%s", $data{$ipv6}->{'ipv6_00_31'}, $data{$ipv6}->{'ipv6_32_63'}, $data{$ipv6}->{'mask_00_31'}, $data{$ipv6}->{'mask_32_63'}, $data{$ipv6}->{'mask_length'}, $data{$ipv6}->{'reg'});
+	};
+
+	untie @a;
+
+	print "INFO  : DB created from input IPv6->Registry: " . $file_dst_db_reg . "\n";
 
 
-print "Start creation of DB file\n";
+	## IPv6->CountryCode
+	print "INFO  : start creation of DB file IPv6->CountryCode: " . $file_dst_db_cc . "\n";
 
-# external database
-my $type = "2026"; # External IPv6->Registry
-my $date = $string;
-$now_string = strftime "%Y%m%d-%H%M%S%z", gmtime;
-my $info = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=6;dbcreated=$now_string";
-my $filename = "ipv6calc-external-ipv6-registry.db";
+	# external database
+	$type = "2036"; # External IPv6->CountryCode
+	$date = $string;
+	$info = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=6;dbcreated=$now_string";
 
-if (-f $filename) {
-        unlink($filename) || die "Can't delete old file: $filename";
+	if (-f $file_dst_db_cc) {
+		unlink($file_dst_db_cc) || die "Can't delete old file: $file_dst_db_cc";
+	};
+
+	tie %h_info, 'BerkeleyDB::Btree', -Filename => $file_dst_db_cc, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $file_dst_db_cc: $! $BerkeleyDB::Error\n";
+
+	$h_info{'dbusage'} = "ipv6calc";
+	$h_info{'dbformat'} = "1"; # ';' separated values
+	$h_info{'dbdate'} = $date;
+	$h_info{'dbtype'} = $type;
+	$h_info{'dbcreated'} = $now_string;
+	$h_info{'dbcreated_unixtime'} = time + 1;
+
+	untie %h_info;
+
+	tie @a, 'BerkeleyDB::Recno', -Filename => $file_dst_db_cc, -Subname => 'data', -Flags => DB_CREATE || die "Cannot open file $file_dst_db_cc: $! $BerkeleyDB::Error\n";
+
+	foreach my $ipv6 (sort keys %data_cc) {
+		push @a, sprintf("%s;%s;%s;%s;%s", $data_cc{$ipv6}->{'ipv6_00_31'}, $data_cc{$ipv6}->{'ipv6_32_63'}, $data_cc{$ipv6}->{'mask_00_31'}, $data_cc{$ipv6}->{'mask_32_63'}, $data_cc{$ipv6}->{'reg'});
+	};
+
+	untie @a;
+	print "INFO  : DB file created from input IPv6->CountryCode: " . $file_dst_db_cc . "\n";
 };
-
-print "INFO  : create db from input: IPv6=$filename\n";
-
-my %h_info;
-
-tie %h_info, 'BerkeleyDB::Btree', -Filename => $filename, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
-
-$h_info{'dbusage'} = "ipv6calc";
-$h_info{'dbformat'} = "1"; # ';' separated values
-$h_info{'dbdate'} = $date;
-$h_info{'dbtype'} = $type;
-$h_info{'dbcreated'} = $now_string;
-$h_info{'dbcreated_unixtime'} = time + 1;
-
-
-untie %h_info;
-
-my @a;
-
-tie @a, 'BerkeleyDB::Recno', -Filename => $filename, -Subname => 'data', -Flags => DB_CREATE || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
-
-foreach my $ipv6 (sort keys %data) {
-	push @a, sprintf("%s;%s;%s;%s;%d;REGISTRY_%s", $data{$ipv6}->{'ipv6_00_31'}, $data{$ipv6}->{'ipv6_32_63'}, $data{$ipv6}->{'mask_00_31'}, $data{$ipv6}->{'mask_32_63'}, $data{$ipv6}->{'mask_length'}, $data{$ipv6}->{'reg'});
-};
-
-untie @a;
-
-print "INFO  : db created from input: IPv6=$filename\n";
-
-
-## IP -> CountryCode
-print "INFO  : start creation of DB file: IPv6->CountryCode: $filename\n";
-
-# external database
-$type = "2036"; # External IPv6->CountryCode
-$date = $string;
-$now_string = strftime "%Y%m%d-%H%M%S%z", gmtime;
-$info = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=6;dbcreated=$now_string";
-$filename = "ipv6calc-external-ipv6-countrycode.db";
-
-if (-f $filename) {
-        unlink($filename) || die "Can't delete old file: $filename";
-};
-
-tie %h_info, 'BerkeleyDB::Btree', -Filename => $filename, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
-
-$h_info{'dbusage'} = "ipv6calc";
-$h_info{'dbformat'} = "1"; # ';' separated values
-$h_info{'dbdate'} = $date;
-$h_info{'dbtype'} = $type;
-$h_info{'dbcreated'} = $now_string;
-$h_info{'dbcreated_unixtime'} = time + 1;
-
-
-untie %h_info;
-
-tie @a, 'BerkeleyDB::Recno', -Filename => $filename, -Subname => 'data', -Flags => DB_CREATE || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
-
-foreach my $ipv6 (sort keys %data_cc) {
-	push @a, sprintf("%s;%s;%s;%s;%s", $data_cc{$ipv6}->{'ipv6_00_31'}, $data_cc{$ipv6}->{'ipv6_32_63'}, $data_cc{$ipv6}->{'mask_00_31'}, $data_cc{$ipv6}->{'mask_32_63'}, $data_cc{$ipv6}->{'reg'});
-};
-
-untie @a;
-print "INFO  : db created from input: $filename\n";
-

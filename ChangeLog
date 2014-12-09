@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.378 2014/11/27 07:07:01 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.379 2014/12/09 21:03:50 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,13 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20141209/PB
+	databases: update
+	databases/registries/update-registries.sh: add dst directory option, some review
+	databases/ipv4-assignment/create-registry-list.pl: add src/dst directory option, some review
+	databases/ipv6-assignment/create-registry-list.pl: add src/dst directory option, some review
+	databases/tools/ipv6calc-db-update.sh: new
+
 20141127/PB
 	lib/ipv6calcoptions.c: replace improper use of the MAXINTARRAY macro
 	configure[.in]: add -Wsizeof-array-argument to CFLAGS if supported
