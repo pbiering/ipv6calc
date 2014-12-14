@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.39 2014/12/09 21:03:50 ds6peter Exp $
+# Version    : $Id: create-registry-list.pl,v 1.40 2014/12/14 07:57:35 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -517,7 +517,7 @@ if (defined $opt_B) {
 		my $distance = $assignments_iana{$ipv4}->{'distance'};
 		my $registry = $assignments_iana{$ipv4}->{'registry'};
 
-		push @a_ipv4_iana, sprintf("%08x;%08x;%s",$ipv4, ($ipv4 + $distance - 1), "REGISTRY_" . $registry);
+		push @a_ipv4_iana, sprintf("%08x;%08x;%s", $ipv4, ($ipv4 + $distance - 1), "REGISTRY_" . $registry);
 	};
 
 	untie @a_ipv4_iana;
@@ -563,7 +563,7 @@ if (defined $opt_B) {
 		my $distance = $ip_countrycode{$ipv4}->{'distance'};
 		my $cc = $ip_countrycode{$ipv4}->{'cc'};
 
-		push @a, sprintf("%08x;%08x;%s",$ipv4, ($ipv4 + $distance - 1), $cc);
+		push @a, sprintf("%08x;%08x;%s", $ipv4, ($ipv4 + $distance - 1), $cc);
 	};
 
 	untie @a;
