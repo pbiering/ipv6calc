@@ -4,8 +4,8 @@
 #
 # Project    : ipv6calc/DBIP
 # File       : DBIP-update.sh
-# Version    : $Id: DBIP-update.sh,v 1.2 2014/08/31 12:55:40 ds6peter Exp $
-# Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: DBIP-update.sh,v 1.3 2015/01/23 19:49:45 ds6peter Exp $
+# Copyright  : 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
 
@@ -81,6 +81,6 @@ if [ "$download_result" = "1" ]; then
 
 		file_input="$DBIP_DAT_DIR/`basename "$file"`"
 
-		$generate_db $options_generate -I "$file_input" -O "$DBIP_DAT_DIR"
+		nice -n 19 $generate_db $options_generate -I "$file_input" -O "$DBIP_DAT_DIR"
 	done
 fi
