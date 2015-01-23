@@ -4,7 +4,7 @@
 #
 # Project    : ipv6calc/GeoIP
 # File       : GeoIP-update.sh
-# Version    : $Id: GeoIP-update.sh,v 1.2 2013/11/16 17:09:42 ds6peter Exp $
+# Version    : $Id: GeoIP-update.sh,v 1.3 2015/01/23 20:06:00 ds6peter Exp $
 # Copyright  : 2012-2013 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
@@ -27,7 +27,9 @@ fi
 
 # Download and unpack files
 for file in $GEOIP_DAT_FILES; do
-	file_dest="$GEOIP_DAT_DIR/`basename "$file"`"
+	file_basename="`basename "$file"`"
+	file_basename_decomp="`basename "$file" .gz`"
+	file_dest="$GEOIP_DAT_DIR/$file_basename"
 
 	echo "INFO  : try to download file: $file ($file_dest)"
 	wget -q -O "$file_dest" "$GEOIP_DAT_URL_BASE$file"
@@ -43,4 +45,21 @@ for file in $GEOIP_DAT_FILES; do
 		continue
 	fi
 	echo "INFO  : unzip of file successful: $file_dest"
+
+	# check for softlinks
+	case "$file_basename_decomp" in
+	    GeoLiteCity.dat)
+		softlinkdst="GeoIPCity.dat" 
+		;;
+	    GeoLiteCityv6.dat)
+		softlinkdst="GeoIPCityv6.dat" 
+		;;
+	    *)
+		softlinkdst="" 
+        esac
+
+	if [ -n "$softlinkdst" -a ! -e "$GEOIP_DAT_DIR/$softlinkdst" ]; then
+		echo "NOTICE: softlink missing, create: $softlinkdst"
+		ln -s "$file_basename_decomp" "$GEOIP_DAT_DIR/$softlinkdst"
+	fi
 done
