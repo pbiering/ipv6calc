@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.23 2014/10/07 20:25:23 ds6peter Exp $
- * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.24 2015/01/23 07:57:48 ds6peter Exp $
+ * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc IP2Location database wrapper
@@ -214,6 +214,8 @@ int libipv6calc_db_wrapper_IP2Location_close(IP2Location *loc) {
 	} else {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
+
+	dlerror();    /* Clear any existing error */
 
 	result = (*dl_IP2Location_close.func)(loc);
 
@@ -570,6 +572,8 @@ IP2Location *libipv6calc_db_wrapper_IP2Location_open(char *db) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
 
+	dlerror();    /* Clear any existing error */
+
 	loc = (*dl_IP2Location_open.func)(db);
 
 	if ((error = dlerror()) != NULL)  {
@@ -647,6 +651,8 @@ void libipv6calc_db_wrapper_IP2Location_free_record(IP2LocationRecord *record) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
 
+	dlerror();    /* Clear any existing error */
+
 	(*dl_IP2Location_free_record.func)(record);
 
 	if ((error = dlerror()) != NULL)  {
@@ -700,6 +706,8 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_country_short(IP2Locat
 	} else {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
+
+	dlerror();    /* Clear any existing error */
 
 	result_IP2Location_get_country_short = (*dl_IP2Location_get_country_short.func)(loc, ip);
 
@@ -755,6 +763,8 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_country_long(IP2Locati
 	} else {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
+
+	dlerror();    /* Clear any existing error */
 
 	result_IP2Location_get_country_long = (*dl_IP2Location_get_country_long.func)(loc, ip);
 
@@ -816,6 +826,8 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_all(IP2Location *loc, 
 	} else {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
+
+	dlerror();    /* Clear any existing error */
 
 	result_IP2Location_get_all = (*dl_IP2Location_get_all.func)(loc, ip);
 

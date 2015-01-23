@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc_anonymization.sh
-# Version    : $Id: test_ipv6calc_anonymization.sh,v 1.7 2014/04/26 16:16:31 ds6peter Exp $
+# Version    : $Id: test_ipv6calc_anonymization.sh,v 1.8 2015/01/23 07:57:48 ds6peter Exp $
 # Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test ipv6calc anonymization
@@ -40,13 +40,13 @@ run_anon_tests() {
 
 		echo "INFO  : anonymized: $output"
 
-		type_orig="`./ipv6calc -q -i "$input" -m | grep "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
-		type_anon="`./ipv6calc -q -i "$output" -m | grep "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
+		type_orig="`./ipv6calc -q -i "$input" -m | grep -a "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
+		type_anon="`./ipv6calc -q -i "$output" -m | grep -a "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
 
 		if [ -z "$type_orig" -a -z "$type_anon" ]; then
 			# fallback EUI*
-			type_orig="`./ipv6calc -q -i "$input" -m | grep "^EUI.._TYPE=" | sed 's/EUI.._TYPE=//'`"
-			type_anon="`./ipv6calc -q -i "$output" -m | grep "^EUI.._TYPE=" | sed 's/EUI.._TYPE=//'`"
+			type_orig="`./ipv6calc -q -i "$input" -m | grep -a "^EUI.._TYPE=" | sed 's/EUI.._TYPE=//'`"
+			type_anon="`./ipv6calc -q -i "$output" -m | grep -a "^EUI.._TYPE=" | sed 's/EUI.._TYPE=//'`"
 		fi
 
 		if [ -z "$type_orig" ]; then
@@ -137,8 +137,8 @@ run_anon_options_kp_tests() {
 	testscenarios_kp | ./ipv6calc -E ipv4,ipv6 | while read input result; do
 		output=$(./ipv6calc -q -A anonymize --anonymize-preset kp $input)
 
-		type_orig="`./ipv6calc -m -i -q "$input"  | grep "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
-		type_anon="`./ipv6calc -m -i -q "$output" | grep "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
+		type_orig="`./ipv6calc -m -i -q "$input"  | grep -a "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
+		type_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
 
 		if [ -z "$type_orig" ]; then
 			echo "ERROR : something went wrong retrieving IPVx_TYPE for $input"
@@ -186,8 +186,8 @@ run_anon_options_kp_tests() {
 		fi
 
 		# Registry
-		reg_orig="`./ipv6calc -m -i -q "$input"  | grep "^IPV._REGISTRY=" | sed 's/IPV._REGISTRY=//'`"
-		reg_anon="`./ipv6calc -m -i -q "$output" | grep "^IPV._REGISTRY=" | sed 's/IPV._REGISTRY=//'`"
+		reg_orig="`./ipv6calc -m -i -q "$input"  | grep -a "^IPV._REGISTRY=" | sed 's/IPV._REGISTRY=//'`"
+		reg_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._REGISTRY=" | sed 's/IPV._REGISTRY=//'`"
 
 		if [ -z "$reg_orig" ]; then
 			echo "ERROR : something went wrong retrieving IPVx_REGISTRY for $input"
@@ -223,8 +223,8 @@ run_anon_options_kp_tests() {
 		fi
 
 		# Country Code (optional)
-		cc_orig="`./ipv6calc -m -i -q "$input"  | grep "^IPV._COUNTRYCODE=" | sed 's/IPV._COUNTRYCODE=//'`"
-		cc_anon="`./ipv6calc -m -i -q "$output" | grep "^IPV._COUNTRYCODE=" | sed 's/IPV._COUNTRYCODE=//'`"
+		cc_orig="`./ipv6calc -m -i -q "$input"  | grep -a "^IPV._COUNTRYCODE=" | sed 's/IPV._COUNTRYCODE=//'`"
+		cc_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._COUNTRYCODE=" | sed 's/IPV._COUNTRYCODE=//'`"
 
 		echo "DEBUG : IPVx             orig: $input"
 		echo "DEBUG : IPVx             anon: $output"

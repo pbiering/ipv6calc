@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.70 2014/10/24 06:20:34 ds6peter Exp $
- * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.71 2015/01/23 07:57:48 ds6peter Exp $
+ * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc GeoIP database wrapper
@@ -675,6 +675,8 @@ const char *libipv6calc_db_wrapper_GeoIP_lib_version(void) {
 			goto END_libipv6calc_db_wrapper;
 		};
 
+		dlerror();    /* Clear any existing error */
+
 		result_GeoIP_lib_version = (*dl_GeoIP_lib_version.func)();
 
 		if ((error = dlerror()) != NULL)  {
@@ -742,6 +744,8 @@ void libipv6calc_db_wrapper_GeoIP_setup_custom_directory(char *dir) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Returned from libipv6calc_db_wrapper_GeoIP_cleanup");
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Call dl_GeoIP_setup_custom_directory: %s", dir);
+
+	dlerror();    /* Clear any existing error */
 
 	(*dl_GeoIP_setup_custom_directory.func)(dir);
 
@@ -824,6 +828,8 @@ int libipv6calc_db_wrapper_GeoIP_db_avail(int type) {
 	} else {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
+
+	dlerror();    /* Clear any existing error */
 
 	result_GeoIP_db_avail = (*dl_GeoIP_db_avail.func)(type);
 
@@ -912,6 +918,8 @@ GeoIP *libipv6calc_db_wrapper_GeoIP_open_type(int type, int flags) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
 
+	dlerror();    /* Clear any existing error */
+
 	gi = (*dl_GeoIP_open_type.func)(type, flags);
 
 	if ((error = dlerror()) != NULL)  {
@@ -975,6 +983,8 @@ GeoIP* libipv6calc_db_wrapper_GeoIP_open(const char * filename, int flags) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
 
+	dlerror();    /* Clear any existing error */
+
 	gi = (*dl_GeoIP_open.func)(filename, flags);
 
 	if ((error = dlerror()) != NULL)  {
@@ -1029,6 +1039,8 @@ unsigned char libipv6calc_db_wrapper_GeoIP_database_edition (GeoIP* gi) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
 
+	dlerror();    /* Clear any existing error */
+
 	result_GeoIP_database_edition = (*dl_GeoIP_database_edition.func)(gi);
 
 	if ((error = dlerror()) != NULL)  {
@@ -1082,6 +1094,8 @@ char *libipv6calc_db_wrapper_GeoIP_database_info(GeoIP *gi) {
 	} else {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
+
+	dlerror();    /* Clear any existing error */
 
 	result_GeoIP_database_info = (*dl_GeoIP_database_info.func)(gi);
 
@@ -1177,6 +1191,8 @@ void libipv6calc_db_wrapper_GeoIP_delete(GeoIP* gi) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
 
+	dlerror();    /* Clear any existing error */
+
 	(*dl_GeoIP_delete.func)(gi);
 
 	if ((error = dlerror()) != NULL)  {
@@ -1232,6 +1248,8 @@ const char* libipv6calc_db_wrapper_GeoIP_country_code_by_addr (GeoIP* gi, const 
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
 
+	dlerror();    /* Clear any existing error */
+
 	result_GeoIP_country_code_by_addr = (*dl_GeoIP_country_code_by_addr.func)(gi, addr);
 
 	if ((error = dlerror()) != NULL)  {
@@ -1285,6 +1303,8 @@ const char* libipv6calc_db_wrapper_GeoIP_country_name_by_addr (GeoIP* gi, const 
 	} else {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
+
+	dlerror();    /* Clear any existing error */
 
 	result_GeoIP_country_name_by_addr = (*dl_GeoIP_country_name_by_addr.func)(gi, addr);
 
@@ -1340,6 +1360,8 @@ GeoIPRecord *libipv6calc_db_wrapper_GeoIP_record_by_addr(GeoIP *gi, const char *
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
 
+	dlerror();    /* Clear any existing error */
+
 	result_GeoIP_record_by_addr = (*dl_GeoIP_record_by_addr.func)(gi, addr);
 
 	if ((error = dlerror()) != NULL)  {
@@ -1394,6 +1416,8 @@ GeoIPRecord *libipv6calc_db_wrapper_GeoIP_record_by_addr_v6(GeoIP *gi, const cha
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
 
+	dlerror();    /* Clear any existing error */
+
 	result_GeoIP_record_by_addr_v6 = (*dl_GeoIP_record_by_addr_v6.func)(gi, addr);
 
 	if ((error = dlerror()) != NULL)  {
@@ -1447,6 +1471,8 @@ void libipv6calc_db_wrapper_GeoIPRecord_delete (GeoIPRecord *gir) {
 	} else {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
+
+	dlerror();    /* Clear any existing error */
 
 	(*dl_GeoIPRecord_delete.func)(gir);
 
@@ -1620,6 +1646,8 @@ char* libipv6calc_db_wrapper_GeoIP_name_by_addr (GeoIP* gi, const char *addr) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
 
+	dlerror();    /* Clear any existing error */
+
 	result_GeoIP_name_by_addr = (*dl_GeoIP_name_by_addr.func)(gi, addr);
 
 	if ((error = dlerror()) != NULL)  {
@@ -1674,6 +1702,8 @@ char* libipv6calc_db_wrapper_GeoIP_name_by_addr_v6 (GeoIP* gi, const char *addr)
 	} else {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Previous call of dlsym already successful: %s", dl_symbol);
 	};
+
+	dlerror();    /* Clear any existing error */
 
 	result_GeoIP_name_by_addr_v6 = (*dl_GeoIP_name_by_addr_v6.func)(gi, addr);
 
