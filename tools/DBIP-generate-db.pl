@@ -4,7 +4,7 @@
 #
 # Project    : ipv6calc/DBIP
 # File       : DBIP-generate-db.pl
-# Version    : $Id: DBIP-generate-db.pl,v 1.4 2015/01/24 14:30:03 ds6peter Exp $
+# Version    : $Id: DBIP-generate-db.pl,v 1.5 2015/01/24 15:22:02 ds6peter Exp $
 # Copyright  : 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 #
@@ -261,6 +261,9 @@ while (<$FILE>) {
 		# IPv6
 		$start_value = Net::IP::ip_expand_address($start, 6);
 		$end_value   = Net::IP::ip_expand_address($end  , 6);
+
+		$start_value =~ s/://go;
+		$end_value =~ s/://go;
 
 		$start_value_0_15  = substr($start_value, 0, 8); # 1st 8 nibbles = 32 bits
 		$start_value_16_31 = substr($start_value, 8, 8); # 1st 8 nibbles = 32 bits
