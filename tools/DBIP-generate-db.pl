@@ -4,8 +4,8 @@
 #
 # Project    : ipv6calc/DBIP
 # File       : DBIP-generate-db.pl
-# Version    : $Id: DBIP-generate-db.pl,v 1.3 2014/10/11 18:57:57 ds6peter Exp $
-# Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: DBIP-generate-db.pl,v 1.4 2015/01/24 14:30:03 ds6peter Exp $
+# Copyright  : 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 #
 
@@ -16,21 +16,27 @@ use Getopt::Std;
 use BerkeleyDB;
 use POSIX qw(strftime);
 use IO::Uncompress::Gunzip qw(gunzip $GunzipError);
+use Net::IP;
 
 my %opts;
-getopts ("qdO:I:h?", \%opts);
+getopts ("qdAS:O:I:h?", \%opts);
 
 my $file_input;
 my $dir_output = ".";
+my $suffix = "";
+my $suffix_orig;
 my $file_type = "cvs";
+my $atomic = 0;
 
 if (defined $opts{'h'} || defined $opts{'?'}) {
         print qq|
-Usage:  PROGNAME -I <input file>
+Usage:  PROGNAME -I <input file> [-O <output directory>] [-S <suffix>] [-A]
 
 Options:
         -I <input file>        DB-IP.com CSV input file
-        -O <output directory>  output directory for DB files
+        -O <output directory>  optional output directory for DB files, default: .
+        -S <suffix>            optional suffix
+        -A                     atomic operation (generate .new and move on success)
         -d                     debug
         -q                     quiet
 |;
@@ -39,12 +45,24 @@ Options:
 
 
 if (defined $opts{'I'}){
-       $file_input = $opts{'I'};
+	$file_input = $opts{'I'};
 };
 
 if (defined $opts{'O'}){
-       $dir_output = $opts{'O'};
+	$dir_output = $opts{'O'};
 };
+
+if (defined $opts{'S'}){
+	$suffix = $opts{'S'};
+};
+
+$suffix_orig = $suffix;
+
+if (defined $opts{'A'}){
+	$suffix = $suffix . strftime(".%s", gmtime());
+	$atomic = 1;
+};
+
 
 if (! defined $file_input) {
 	print "ERROR : no input file given (-I <FILENAME>)\n";
@@ -90,8 +108,11 @@ if ($type_string eq "country") {
 print "INFO  : input file: $file_input type=$type date=$date\n" if (! defined $opts{'q'});
 
 
-my $filename_ipv4 = "$dir_output/ipv6calc-dbip-ipv4-$type_string.db";
-my $filename_ipv6 = "$dir_output/ipv6calc-dbip-ipv6-$type_string.db";
+my $filename_ipv4 = "$dir_output/ipv6calc-dbip-ipv4-$type_string.db" . $suffix;
+my $filename_ipv6 = "$dir_output/ipv6calc-dbip-ipv6-$type_string.db" . $suffix;
+
+my $filename_ipv4_orig = "$dir_output/ipv6calc-dbip-ipv4-$type_string.db" . $suffix_orig;
+my $filename_ipv6_orig = "$dir_output/ipv6calc-dbip-ipv6-$type_string.db" . $suffix_orig;
 
 my @a_ipv4;
 my @a_ipv6;
@@ -149,6 +170,8 @@ if ($file_type eq "cvs.gz") {
 	open($FILE, "<$file_input") || die "Can't open file: $file_input";
 };
 
+my %stats_city;
+
 while (<$FILE>) {
 	my $line = $_;
         chomp $line;
@@ -179,12 +202,14 @@ while (<$FILE>) {
 		$city  = $5;
 
 		if ((! defined $city) || ($city eq "")) {
-			print "NOTICE: emtpy city found on linecounter=$linecounter\n" if (! defined $opts{'q'});
+			print "DEBUG: empty city found on linecounter=$linecounter\n" if (defined $opts{'d'});
 			$city = "-";
+			$stats_city{'empty-city'}++;
 		};
 		if ((! defined $region) || ($region eq "")) {
-			print "NOTICE: emtpy region found on linecounter=$linecounter\n" if (! defined $opts{'q'});
+			print "DEBUG: empty region found on linecounter=$linecounter\n" if (defined $opts{'d'});
 			$region = "-";
+			$stats_city{'empty-region'}++;
 		};
 	} else {
 		# country
@@ -234,8 +259,9 @@ while (<$FILE>) {
 		$counter_ipv6++;
 
 		# IPv6
-		$start_value = `ipv6calc -q -O hex $start`; 
-		$end_value   = `ipv6calc -q -O hex $end`;
+		$start_value = Net::IP::ip_expand_address($start, 6);
+		$end_value   = Net::IP::ip_expand_address($end  , 6);
+
 		$start_value_0_15  = substr($start_value, 0, 8); # 1st 8 nibbles = 32 bits
 		$start_value_16_31 = substr($start_value, 8, 8); # 1st 8 nibbles = 32 bits
 		$end_value_0_15    = substr($end_value, 0, 8); # 1st 8 nibbiles = 32 bits
@@ -248,7 +274,6 @@ while (<$FILE>) {
 		} else {
 			push @a_ipv6, $start_value_0_15 . ";" . $start_value_16_31 . ";" . $end_value_0_15 . ";" . $end_value_16_31 . ";" . $cc;
 		};
-		#die;
 	};
 
 };
@@ -269,3 +294,17 @@ if (! defined $opts{'q'}) {
 
 untie @a_ipv4;
 untie @a_ipv6;
+
+if ($atomic == "1") {
+	rename $filename_ipv4, $filename_ipv4_orig;
+	if ($? != 0) {
+		print "ERROR : can't rename file to: $filename_ipv4_orig ($!) - delete: $filename_ipv4";
+		unlink $filename_ipv4;
+	};
+
+	rename $filename_ipv6, $filename_ipv6_orig;
+	if ($? != 0) {
+		print "ERROR : can't rename file to: $filename_ipv6_orig ($!) - delete: $filename_ipv6";
+		unlink $filename_ipv6;
+	};
+};
