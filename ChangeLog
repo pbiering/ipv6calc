@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.380 2015/01/23 07:57:48 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.381 2015/02/11 07:35:34 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20150211/PB
+	databases: update
+
 20150123/PB
 	databases/lib/libipv6calc_db_wrapper_GeoIP|IP2Location.c: add some missing dlerror calls
 

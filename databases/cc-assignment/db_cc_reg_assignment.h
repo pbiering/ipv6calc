@@ -1,15 +1,15 @@
  /*
  * Project       : ipv6calc
  * File          : db_cc_reg_assignment.h
- * Version       : $Id: db_cc_reg_assignment.h,v 1.15 2014/10/24 06:20:34 ds6peter Exp $
- * Generated     : Fri Oct 24 07:30:43 2014
+ * Version       : $Id: db_cc_reg_assignment.h,v 1.16 2015/02/11 07:35:34 ds6peter Exp $
+ * Generated     : Wed Feb 11 08:05:12 2015
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
  *  Additional header file for databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  */
 
-static const char *db_cc_registry_status = "AFRINIC/20141023 APNIC/20141023 ARIN/20141023 LACNIC/20141023 RIPENCC/20141023";
+static const char *db_cc_registry_status = "AFRINIC/20150211 APNIC/20150210 ARIN/20150210 LACNIC/20150210 RIPENCC/20150210";
 
 static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "", REGISTRY_ARIN     },
@@ -239,7 +239,7 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "VA", REGISTRY_RIPENCC  },
 	{ "VC", REGISTRY_ARIN     },
 	{ "VE", REGISTRY_LACNIC   },
-	{ "VG", REGISTRY_ARIN     },
+	{ "VG", REGISTRY_RIPENCC  },
 	{ "VI", REGISTRY_ARIN     },
 	{ "VN", REGISTRY_APNIC    },
 	{ "VU", REGISTRY_APNIC    },
@@ -690,7 +690,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_APNIC    }, //  434  SG
 	{ REGISTRY_AFRINIC  }, //  435  TG
 	{ REGISTRY_AFRINIC  }, //  436  UG
-	{ REGISTRY_ARIN     }, //  437  VG
+	{ REGISTRY_RIPENCC  }, //  437  VG
 	{ REGISTRY_UNKNOWN  }, //  438  WG
 	{ REGISTRY_UNKNOWN  }, //  439  XG
 	{ REGISTRY_UNKNOWN  }, //  440  YG

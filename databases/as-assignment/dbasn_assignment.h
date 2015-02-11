@@ -1,8 +1,8 @@
  /*
  * Project       : ipv6calc
  * File          : dbasn_assignment.h
- * Version       : $Id: dbasn_assignment.h,v 1.15 2014/10/24 06:20:34 ds6peter Exp $
- * Generated     : Fri Oct 24 07:30:41 2014
+ * Version       : $Id: dbasn_assignment.h,v 1.16 2015/02/11 07:35:34 ds6peter Exp $
+ * Generated     : Wed Feb 11 08:05:11 2015
  * Data copyright: IANA
  *
  * Information:
