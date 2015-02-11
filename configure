@@ -4148,7 +4148,7 @@ if ac_fn_c_try_compile "$LINENO"; then :
 
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** CFLAGS supported: -Wsizeof-array-argument" >&5
 $as_echo "*** CFLAGS supported: -Wsizeof-array-argument" >&6; }
-				CFLAGS_EXTRA="$CFLAGS_EXTRA= -Wsizeof-array-argument"
+				CFLAGS_EXTRA="$CFLAGS_EXTRA -Wsizeof-array-argument"
 
 else
 

@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2014 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.227 2015/01/23 07:57:48 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.228 2015/02/11 08:01:26 ds6peter Exp $
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
@@ -56,6 +56,7 @@ Requires: ip2Location >= 2.1.3
 %endif
 
 BuildRequires: perl-BerkeleyDB
+Requires: perl-Net-IP
 
 
 %description
