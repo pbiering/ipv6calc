@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.71 2015/01/23 07:57:48 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.72 2015/02/12 07:27:04 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -389,7 +389,7 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 		if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_CITY_EDITION_REV1_V6) == 1) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP database GEOIP_CITY_EDITION_REV1_V6 available");
 			geoip_city_v6 = 1;
-			wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP] |= IPV6CALC_DB_GEOIP_IPV6;
+			wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP] |= IPV6CALC_DB_GEOIP_IPV6 | IPV6CALC_DB_IPV6_TO_CITY | IPV6CALC_DB_IPV6_TO_REGION;
 		};
 #else
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP check skipped for GEOIP_ASNUM_EDITION_V6 & GEOIP_CITY_EDITION_REV1_V6");
