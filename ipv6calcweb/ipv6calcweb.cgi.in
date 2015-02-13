@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.80 2014/11/27 07:06:00 ds6peter Exp $
-# Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.81 2015/02/13 06:46:28 ds6peter Exp $
+# Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
 # Simple Perl web interface and security wrapper
@@ -40,6 +40,7 @@
 #  HTTP_IPV6CALCWEB_DB_GEOIP_DIR        : GeoIP database directory (optional)
 #  HTTP_IPV6CALCWEB_DB_GEOIP_LIB        : GeoIP library name (optional in dyn-load support)
 #  HTTP_IPV6CALCWEB_DB_DBIP_DIR         : db-ip.com database directory (optional)
+#  HTTP_IPV6CALCWEB_DB_EXTERNAL_DIR     : external database directory (optional)
 #  HTTP_IPV6CALCWEB_OUTPUT_FORMAT       : html (default if SERVER_PROTOCOL=INCLUDED), htmlfull (default), text, textkeyvalue
 #  HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB: sequential (default), subcolumns
 
@@ -161,6 +162,11 @@ my @list_database_geoip_dir = (
 my @list_database_dbip_dir = (
 	"/var/local/share/DBIP",
 	"/usr/share/DBIP",
+);
+
+my @list_database_external_dir = (
+	"/var/local/share/ipv6calc/db",
+	"/usr/share/ipv6calc/db",
 );
 
 sub find_file(@) {
@@ -734,18 +740,6 @@ my %db_info_dbip;
 my $database_dbip_dir;
 my $info_dbip_string;
 
-# External DB
-my $options_ipv6calc_external = "";
-my %db_info_external;
-my $database_external_dir;
-my $info_external_string;
-
-# BuiltIn DB
-my $options_ipv6calc_builtin = "";
-my %db_info_builtin;
-my $database_builtin_dir;
-my $info_builtin_string;
-
 if (defined $ENV{'HTTP_IPV6CALCWEB_DB_DBIP_DIR'}) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DB_DBIP_DIR'} =~ /^([[:alnum:]\.\-\/]+)$/) {
 		$database_dbip_dir = $1;
@@ -756,6 +750,30 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_DB_DBIP_DIR'}) {
 } else {
 	$database_dbip_dir = find_dir(@list_database_dbip_dir);
 };
+
+# External DB
+my $options_ipv6calc_external = "";
+my %db_info_external;
+my $database_external_dir;
+my $info_external_string;
+
+if (defined $ENV{'HTTP_IPV6CALCWEB_DB_EXTERNAL_DIR'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_DB_EXTERNAL_DIR'} =~ /^([[:alnum:]\.\-\/]+)$/) {
+		$database_external_dir = $1;
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_DB_EXTERNAL_DIR found, but not containing proper chars");
+		&print_error();
+	};
+} else {
+	$database_external_dir = find_dir(@list_database_external_dir);
+};
+
+# BuiltIn DB
+my $options_ipv6calc_builtin = "";
+my %db_info_builtin;
+my $database_builtin_dir;
+my $info_builtin_string;
+
 
 ## external database ipv6calc option handling
 # IP2Location
@@ -779,6 +797,11 @@ if (defined $database_geoip_lib) {
 # DBIP
 if (defined $database_dbip_dir) {
 	$options_ipv6calc_dbip .= " --db-dbip-dir $database_dbip_dir";
+};
+
+# External DB
+if (defined $database_external_dir) {
+	$options_ipv6calc_external .= " --db-external-dir $database_external_dir";
 };
 
 ###### Normally nothing to change here

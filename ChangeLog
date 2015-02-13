@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.381 2015/02/11 07:35:34 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.382 2015/02/13 06:46:28 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20150213/PB
+	ipv6calcweb/ipv6calcweb.cgi[.in]: add support for EXTERNAL db directory
+	ipv6calcweb/ipv6calcweb.conf: add default ACL restriction to localhost
+
 20150211/PB
 	databases: update
 
