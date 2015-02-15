@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.40 2014/12/14 07:57:35 ds6peter Exp $
-# Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: ipv6calc-create-registry-list-ipv4.pl,v 1.1 2015/02/15 20:19:37 ds6peter Exp $
+# Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
 # Information:
@@ -34,11 +34,12 @@ my $debug = 0;
 
 sub help {
 	print qq|
-Usage: $progname [-S <SRC-DIR>] [-D <DST-DIR>] [-H] [-B]
+Usage: $progname [-S <SRC-DIR>] [-D <DST-DIR>] [-H] [-B [-A]]
 	-S <SRC-DIR>	source directory
 	-D <DST-DIR>	destination directory
 	-H		create header file(s)
 	-B		create Berkeley DB file(s)
+	-A		atomic operation (generate .new and move on success)
 
 	-h		this online help
 
@@ -47,8 +48,8 @@ Usage: $progname [-S <SRC-DIR>] [-D <DST-DIR>] [-H] [-B]
 };
 
 # parse options
-our ($opt_h, $opt_S, $opt_D, $opt_B, $opt_H);
-getopts('hS:D:BH') || help();
+our ($opt_h, $opt_S, $opt_D, $opt_B, $opt_H, $opt_A);
+getopts('hS:D:BHA') || help();
 
 if (defined $opt_h) {
 	help();
@@ -108,6 +109,9 @@ if (defined $opt_D) {
 $file_dst_h = $dir_dst . "/dbipv4addr_assignment.h";
 my $file_dst_db_reg = $dir_dst . "/ipv6calc-external-ipv4-registry.db";
 my $file_dst_db_cc  = $dir_dst . "/ipv6calc-external-ipv4-countrycode.db";
+
+my $file_dst_db_reg_orig;
+my $file_dst_db_cc_orig;
 
 print "INFO  : destination file for header: " . $file_dst_h  . "\n" if (defined $opt_H);
 print "INFO  : destination file for DB (Registry): " . $file_dst_db_reg . "\n" if (defined $opt_B);
@@ -469,22 +473,26 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 ## Create DB file
 if (defined $opt_B) {
 	## IPv4->Registry
-	print "INFO  : start creation of DB file IPv4->Registry: " . $file_dst_db_cc . "\n";
+	print "INFO  : start creation of DB file IPv4->Registry: " . $file_dst_db_reg . "\n";
 
 	# external database
 	my $type = "2024"; # External IPv4->Registry
 	my $date = $string;
-	my $filename = "ipv6calc-external-ipv4-registry.db";
 
-	if (-f $filename) {
-		unlink($filename) || die "Can't delete old file: $filename";
+	if (defined $opt_A) {
+		$file_dst_db_reg_orig = $file_dst_db_reg;
+		$file_dst_db_reg .= ".new";
+	} else {
+		if (-f $file_dst_db_reg) {
+			unlink($file_dst_db_reg) || die "Can't delete old file: $file_dst_db_reg";
+		};
 	};
 
-	print "INFO  : create db from input: IPv4=$filename\n";
+	print "INFO  : create db from input: IPv4=$file_dst_db_reg\n";
 
 	my %h_ipv4_info;
 
-	tie %h_ipv4_info, 'BerkeleyDB::Btree', -Filename => $filename, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
+	tie %h_ipv4_info, 'BerkeleyDB::Btree', -Filename => $file_dst_db_reg, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $file_dst_db_reg: $! $BerkeleyDB::Error\n";
 
 	$h_ipv4_info{'dbusage'} = "ipv6calc";
 	$h_ipv4_info{'dbformat'} = "1"; # ';' separated values
@@ -493,12 +501,11 @@ if (defined $opt_B) {
 	$h_ipv4_info{'dbcreated'} = $now_string;
 	$h_ipv4_info{'dbcreated_unixtime'} = time + 1;
 
-
 	untie %h_ipv4_info;
 
 	my @a_ipv4;
 
-	tie @a_ipv4, 'BerkeleyDB::Recno', -Filename => $filename, -Subname => 'data', -Flags => DB_CREATE || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
+	tie @a_ipv4, 'BerkeleyDB::Recno', -Filename => $file_dst_db_reg, -Subname => 'data', -Flags => DB_CREATE || die "Cannot open file $file_dst_db_reg: $! $BerkeleyDB::Error\n";
 
 	foreach my $ipv4 (sort { $a <=> $b } keys %assignments) {
 		my $distance = $assignments{$ipv4}->{'distance'};
@@ -511,7 +518,7 @@ if (defined $opt_B) {
 
 	my @a_ipv4_iana;
 
-	tie @a_ipv4_iana, 'BerkeleyDB::Recno', -Filename => $filename, -Subname => 'data-iana', -Flags => DB_CREATE || die "Cannot open file $filename: $! $BerkeleyDB::Error\n";
+	tie @a_ipv4_iana, 'BerkeleyDB::Recno', -Filename => $file_dst_db_reg, -Subname => 'data-iana', -Flags => DB_CREATE || die "Cannot open file $file_dst_db_reg: $! $BerkeleyDB::Error\n";
 
 	foreach my $ipv4 (sort { $a <=> $b } keys %assignments_iana) {
 		my $distance = $assignments_iana{$ipv4}->{'distance'};
@@ -524,8 +531,18 @@ if (defined $opt_B) {
 
 	print "INFO  : db created from input IPv4->Registry: $file_dst_db_reg\n";
 
+	if (defined $opt_A) {
+		rename $file_dst_db_reg, $file_dst_db_reg_orig;
+		if ($? != 0) {
+			print "ERROR : can't rename file to: $file_dst_db_reg_orig ($!) - delete: $file_dst_db_reg\n";
+			unlink $file_dst_db_reg;
+		} else {
+			print "INFO  : successful rename file to: $file_dst_db_reg_orig\n";
+		};
+	};
 
-	## IPv4->CountryCode
+
+	#### IPv4->CountryCode
 	print "INFO  : start creation of DB file: IPv4->CountryCode: " . $file_dst_db_cc . "\n";
 
 	# external database
@@ -533,10 +550,14 @@ if (defined $opt_B) {
 	$date = $string;
 	$now_string = strftime "%Y%m%d-%H%M%S%z", gmtime;
 	my $info = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=4;dbcreated=$now_string";
-	$file_dst_db_cc = "ipv6calc-external-ipv4-countrycode.db";
 
-	if (-f $file_dst_db_cc) {
-		unlink($file_dst_db_cc) || die "Can't delete old file: $file_dst_db_cc";
+	if (defined $opt_A) {
+		$file_dst_db_cc_orig = $file_dst_db_cc;
+		$file_dst_db_cc .= ".new";
+	} else {
+		if (-f $file_dst_db_cc) {
+			unlink($file_dst_db_cc) || die "Can't delete old file: $file_dst_db_cc";
+		};
 	};
 
 	print "INFO  : create db from input: IPv4=$file_dst_db_cc\n";
@@ -569,4 +590,14 @@ if (defined $opt_B) {
 	untie @a;
 
 	print "INFO  : DB file created from input IPv4->CountryCode: " . $file_dst_db_cc . "\n";
+
+	if (defined $opt_A) {
+		rename $file_dst_db_cc, $file_dst_db_cc_orig;
+		if ($? != 0) {
+			print "ERROR : can't rename file to: $file_dst_db_cc_orig ($!) - delete: $file_dst_db_cc\n";
+			unlink $file_dst_db_cc;
+		} else {
+			print "INFO  : successful rename file to: $file_dst_db_cc_orig\n";
+		};
+	};
 };

@@ -4,7 +4,7 @@
 #
 # Project    : ipv6calc/DBIP
 # File       : DBIP-generate-db.pl
-# Version    : $Id: DBIP-generate-db.pl,v 1.5 2015/01/24 15:22:02 ds6peter Exp $
+# Version    : $Id: DBIP-generate-db.pl,v 1.6 2015/02/15 20:19:37 ds6peter Exp $
 # Copyright  : 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 #
@@ -301,13 +301,13 @@ untie @a_ipv6;
 if ($atomic == "1") {
 	rename $filename_ipv4, $filename_ipv4_orig;
 	if ($? != 0) {
-		print "ERROR : can't rename file to: $filename_ipv4_orig ($!) - delete: $filename_ipv4";
+		print "ERROR : can't rename file to: $filename_ipv4_orig ($!) - delete: $filename_ipv4\n";
 		unlink $filename_ipv4;
 	};
 
 	rename $filename_ipv6, $filename_ipv6_orig;
 	if ($? != 0) {
-		print "ERROR : can't rename file to: $filename_ipv6_orig ($!) - delete: $filename_ipv6";
+		print "ERROR : can't rename file to: $filename_ipv6_orig ($!) - delete: $filename_ipv6\n";
 		unlink $filename_ipv6;
 	};
 };

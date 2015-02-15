@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2014 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.229 2015/02/13 06:46:28 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.230 2015/02/15 20:19:36 ds6peter Exp $
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
@@ -160,10 +160,9 @@ for tool in GeoIP-update.sh IP2Location-update.sh DBIP-update.sh DBIP-generate-d
 	install -m 755 tools/$tool $RPM_BUILD_ROOT%{_datadir}/%{name}/tools
 done
 
-cp databases/tools/ipv6calc-db-update.sh $RPM_BUILD_ROOT%{_datadir}/%{name}/tools/
-cp databases/registries/update-registries.sh $RPM_BUILD_ROOT%{_datadir}/%{name}/tools
-cp databases/ipv4-assignment/create-registry-list.pl $RPM_BUILD_ROOT%{_datadir}/%{name}/tools/ipv4-create-registry-list.pl
-cp databases/ipv6-assignment/create-registry-list.pl $RPM_BUILD_ROOT%{_datadir}/%{name}/tools/ipv6-create-registry-list.pl
+for tool in ipv6calc-create-registry-list-ipv4.pl ipv6calc-create-registry-list-ipv6.pl ipv6calc-db-update.sh ipv6calc-registries-check-run-create.sh ipv6calc-update-registries.sh; do
+	install -m 755 tools/$tool $RPM_BUILD_ROOT%{_datadir}/%{name}/tools
+done
 
 
 # db directory

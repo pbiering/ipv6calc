@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.24 2015/02/11 07:35:34 ds6peter Exp $
- * Generated     : Wed Feb 11 07:55:27 2015
+ * Version       : $Id: dbieee_oui36.h,v 1.25 2015/02/15 20:19:37 ds6peter Exp $
+ * Generated     : Sun Feb 15 19:52:33 2015
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20150203";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20150213";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -261,40 +261,58 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0xAD6000, 0xAD6FFF, "Lemonade Lab Inc", "LEMONADE-LAB" },
 	{ 0x70B3D5, 0x994000, 0x994FFF, "KeFF Networks", "KEFF-NETWORKS" },
 	{ 0x70B3D5, 0xFDE000, 0xFDEFFF, "AERONAUTICAL & GENERAL INSTRUMENTS LTD.", "AERONAUTICAL-GENERAL-INSTRUMENTS" },
+	{ 0x70B3D5, 0x2F1000, 0x2F1FFF, "Inspike S.R.L.", "INSPIKE-S-R-L" },
 	{ 0x70B3D5, 0x0E0000, 0x0E0FFF, "PLCiS", "PLCIS" },
 	{ 0x70B3D5, 0x1A1000, 0x1A1FFF, "HMicro Inc", "HMICRO" },
+	{ 0x70B3D5, 0xCFD000, 0xCFDFFF, "iLOQ Oy", "ILOQ-OY" },
 	{ 0x70B3D5, 0xAE9000, 0xAE9FFF, "Cari Electronic", "CARI" },
 	{ 0x70B3D5, 0x76E000, 0x76EFFF, "Grupo Epelsa S.L.", "GRUPO-EPELSA-S-L" },
+	{ 0x70B3D5, 0x789000, 0x789FFF, "SEMEX-EngCon GmbH", "SEMEX-ENGCON" },
 	{ 0x70B3D5, 0x6D3000, 0x6D3FFF, "DEUTA-WERKE GmbH", "DEUTA-WERKE" },
 	{ 0x70B3D5, 0x882000, 0x882FFF, "SIMON TECH, S.L.", "SIMON-TECH-S-L" },
+	{ 0x70B3D5, 0xB47000, 0xB47FFF, "DSIT Solutions LTD", "DSIT-SOLUTIONS" },
 	{ 0x70B3D5, 0x139000, 0x139FFF, "Tunstall A/S", "TUNSTALL-A/S" },
 	{ 0x70B3D5, 0x35D000, 0x35DFFF, "Fresh Idea Factory BV", "FRESH-IDEA-FACTORY" },
+	{ 0x70B3D5, 0xE36000, 0xE36FFF, "Guidance Navigation Limited", "GUIDANCE-NAVIGATION" },
 	{ 0x70B3D5, 0x908000, 0x908FFF, "Accusonic", "ACCUSONIC" },
 	{ 0x70B3D5, 0x344000, 0x344FFF, "IHI Inspection & Instrumentation Co., Ltd.", "IHI-INSPECTION-INSTRUMENTATION" },
+	{ 0x70B3D5, 0xA1C000, 0xA1CFFF, "MECA SYSTEM", "MECA-SYSTEM" },
 	{ 0x70B3D5, 0x871000, 0x871FFF, "Oso Technologies", "OSO-TECHNOLOGIES" },
 	{ 0x70B3D5, 0xB7E000, 0xB7EFFF, "Elbit Systems of America - FMF Operations", "ELBIT-OF-AMERICA---FMF-OPERATIONS" },
+	{ 0x70B3D5, 0xE55000, 0xE55FFF, "BELT S.r.l.", "BELT-S-R-L" },
 	{ 0x70B3D5, 0x814000, 0x814FFF, "Ingenieurbuero SOMTRONIK", "INGENIEURBUERO-SOMTRONIK" },
 	{ 0x70B3D5, 0x092000, 0x092FFF, "inomed Medizintechnik GmbH", "INOMED-MEDIZINTECHNIK" },
+	{ 0x70B3D5, 0x1A5000, 0x1A5FFF, "METRONIC APARATURA KONTROLNO - POMIAROWA", "METRONIC-APARATURA-KONTROLNO---POMIAROWA" },
 	{ 0x70B3D5, 0x183000, 0x183FFF, "Evco S.p.a.", "EVCO-S-P-A" },
 	{ 0x70B3D5, 0x6F8000, 0x6F8FFF, "SENSEON Corporation", "SENSEON" },
+	{ 0x70B3D5, 0xF4C000, 0xF4CFFF, "Global Lightning Protection Services A(S", "GLOBAL-LIGHTNING-PROTECTION-SERVICES-A-S" },
 	{ 0x70B3D5, 0x28F000, 0x28FFFF, "Overline Systems", "OVERLINE" },
 	{ 0x70B3D5, 0xD3B000, 0xD3BFFF, "NimbeLink Corp", "NIMBELINK" },
+	{ 0x70B3D5, 0xB8B000, 0xB8BFFF, "Profound Medical Inc.", "PROFOUND-MEDICAL" },
 	{ 0x70B3D5, 0x6B6000, 0x6B6FFF, "INRADIOS GmbH", "INRADIOS" },
 	{ 0x70B3D5, 0x84A000, 0x84AFFF, "MOG Laboratories Pty Ltd", "MOG-LABORATORIES-PTY" },
+	{ 0x70B3D5, 0x4F4000, 0x4F4FFF, "WiTagg, Inc", "WITAGG" },
 	{ 0x70B3D5, 0x29D000, 0x29DFFF, "XTech2 SIA", "XTECH2-SIA" },
 	{ 0x70B3D5, 0x9F5000, 0x9F5FFF, "Vickers Electronics Ltd", "VICKERS-ELECTRONICS" },
+	{ 0x70B3D5, 0x3F9000, 0x3F9FFF, "Herrick Tech Labs", "HERRICK-TECH-LABS" },
 	{ 0x70B3D5, 0x109000, 0x109FFF, "DiTEST Fahrzeugdiagnose GmbH", "DITEST-FAHRZEUGDIAGNOSE" },
 	{ 0x70B3D5, 0xD0C000, 0xD0CFFF, "Connor Winfield LTD", "CONNOR-WINFIELD" },
+	{ 0x70B3D5, 0xF8E000, 0xF8EFFF, "Isabellenhütte Heusler Gmbh &Co KG", "ISABELLENHUETTE-HEUSLER" },
 	{ 0x70B3D5, 0x184000, 0x184FFF, "XV360 Optical Information Systems Ltd.", "XV360-OPTICAL-INFORMATION" },
 	{ 0x70B3D5, 0x7CD000, 0x7CDFFF, "Molekuler Goruntuleme A.S.", "MOLEKULER-GORUNTULEME-A-S" },
+	{ 0x70B3D5, 0x08F000, 0x08FFFF, "DEUTA-WERKE GmbH", "DEUTA-WERKE" },
 	{ 0x70B3D5, 0x35C000, 0x35CFFF, "ACS electronics srl", "ACS-ELECTRONICS-SRL" },
 	{ 0x70B3D5, 0x1F4000, 0x1F4FFF, "Hangzhou Woosiyuan Communication Co.,Ltd.", "HANGZHOU-WOOSIYUAN-COMMUNICATION" },
+	{ 0x70B3D5, 0xFA2000, 0xFA2FFF, "Sarokal Test Systems Oy", "SAROKAL-TEST-OY" },
 	{ 0x70B3D5, 0x40A000, 0x40AFFF, "Monroe Electronics, Inc.", "MONROE-ELECTRONICS" },
 	{ 0x70B3D5, 0xDE7000, 0xDE7FFF, "Innominds Software Private Limited", "INNOMINDS-SOFTWARE-PRIVATE" },
+	{ 0x70B3D5, 0x4B1000, 0x4B1FFF, "LACE LLC.", "LACE-LLC" },
 	{ 0x70B3D5, 0x190000, 0x190FFF, "Fantom Wireless, Inc.", "FANTOM-WIRELESS" },
 	{ 0x70B3D5, 0x2D5000, 0x2D5FFF, "Teuco Guzzini", "TEUCO-GUZZINI" },
+	{ 0x70B3D5, 0xFE7000, 0xFE7FFF, "VEILUX INC.", "VEILUX" },
 	{ 0x70B3D5, 0x308000, 0x308FFF, "DSD MICROTECHNOLOGY,INC.", "DSD-MICROTECHNOLOGY" },
 	{ 0x70B3D5, 0x44B000, 0x44BFFF, "Open System Solutions Limited", "OPEN-SYSTEM-SOLUTIONS" },
+	{ 0x70B3D5, 0x7AF000, 0x7AFFFF, "Hessware GmbH", "HESSWARE" },
 	{ 0x70B3D5, 0x9F4000, 0x9F4FFF, "Tband srl", "TBAND-SRL" },
 	{ 0x70B3D5, 0xFF5000, 0xFF5FFF, "Prolan Process Control Co.", "PROLAN-PROCESS-CONTROL" },
 	{ 0x70B3D5, 0xECD000, 0xECDFFF, "SBS-Feintechnik GmbH & Co. KG", "SBS-FEINTECHNIK" },

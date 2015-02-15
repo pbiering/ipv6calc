@@ -2,9 +2,9 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-registry-list.pl,v 1.17 2014/12/09 21:03:51 ds6peter Exp $
+# Version    : $Id: ipv6calc-create-registry-list-ipv6.pl,v 1.1 2015/02/15 20:19:37 ds6peter Exp $
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
-#              2005-2014 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
+#              2005-2015 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
 # License    : GNU GPL v2
 #
 # Information:
@@ -40,11 +40,12 @@ my $debug = 0;
 
 sub help {
 	print qq|
-Usage: $progname [-S <SRC-DIR>] [-D <DST-DIR>] [-H] [-B]
+Usage: $progname [-S <SRC-DIR>] [-D <DST-DIR>] [-H] [-B [-A]]
 	-S <SRC-DIR>	source directory
 	-D <DST-DIR>	destination directory
 	-H		create header file(s)
 	-B		create Berkeley DB file(s)
+	-A		atomic operation (generate .new and move on success)
 
 	-h		this online help
 
@@ -53,8 +54,8 @@ Usage: $progname [-S <SRC-DIR>] [-D <DST-DIR>] [-H] [-B]
 };
 
 ## parse options
-our ($opt_h, $opt_S, $opt_D, $opt_B, $opt_H);
-getopts('hS:D:BH') || help();
+our ($opt_h, $opt_S, $opt_D, $opt_B, $opt_H, $opt_A);
+getopts('hS:D:BHA') || help();
 
 if (defined $opt_h) {
 	help();
@@ -113,6 +114,9 @@ if (defined $opt_D) {
 $file_dst_h = $dir_dst . "/dbipv6addr_assignment.h";
 my $file_dst_db_reg = $dir_dst . "/ipv6calc-external-ipv6-registry.db";
 my $file_dst_db_cc  = $dir_dst . "/ipv6calc-external-ipv6-countrycode.db";
+
+my $file_dst_db_reg_orig; 
+my $file_dst_db_cc_orig;
 
 print "INFO  : destination file for header: " . $file_dst_h  . "\n" if (defined $opt_H);
 print "INFO  : destination file for DB (Registry): " . $file_dst_db_reg . "\n" if (defined $opt_B);
@@ -477,17 +481,24 @@ static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 
 ## Create DB file
 if (defined $opt_B) {
-	## IPv6->Registry
-	print "INFO  : start creation of DB file IPv6->Registry: " . $file_dst_db_cc . "\n";
+	#### IPv6->Registry
+	print "INFO  : start creation of DB file IPv6->Registry: " . $file_dst_db_reg . "\n";
 
 	# external database
 	my $type = "2026"; # External IPv6->Registry
 	my $date = $string;
 	my $info = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=6;dbcreated=$now_string";
 
-	if (-f $file_dst_db_reg) {
-		unlink($file_dst_db_reg) || die "Can't delete old file: $file_dst_db_reg";
+	if (defined $opt_A) {
+		$file_dst_db_reg_orig = $file_dst_db_reg;
+		$file_dst_db_reg .= ".new";
+	} else {
+		if (-f $file_dst_db_reg) {
+			unlink($file_dst_db_reg) || die "Can't delete old file: $file_dst_db_reg";
+		};
 	};
+
+	print "INFO  : create db from input: IPv6=$file_dst_db_reg\n";
 
 	my %h_info;
 
@@ -514,8 +525,18 @@ if (defined $opt_B) {
 
 	print "INFO  : DB created from input IPv6->Registry: " . $file_dst_db_reg . "\n";
 
+	if (defined $opt_A) {
+		rename $file_dst_db_reg, $file_dst_db_reg_orig;
+		if ($? != 0) {
+			print "ERROR : can't rename file to: $file_dst_db_reg_orig ($!) - delete: $file_dst_db_reg\n";
+			unlink $file_dst_db_reg;
+		} else {
+			print "INFO  : successful rename file to: $file_dst_db_reg_orig\n";
+		};
+	};
 
-	## IPv6->CountryCode
+
+	#### IPv6->CountryCode
 	print "INFO  : start creation of DB file IPv6->CountryCode: " . $file_dst_db_cc . "\n";
 
 	# external database
@@ -523,8 +544,13 @@ if (defined $opt_B) {
 	$date = $string;
 	$info = "dbusage=ipv6calc;dbformat=1;dbdate=$date;dbtype=" . $type . ";dbproto=6;dbcreated=$now_string";
 
-	if (-f $file_dst_db_cc) {
-		unlink($file_dst_db_cc) || die "Can't delete old file: $file_dst_db_cc";
+	if (defined $opt_A) {
+		$file_dst_db_cc_orig = $file_dst_db_cc;
+		$file_dst_db_cc .= ".new";
+	} else {
+		if (-f $file_dst_db_cc) {
+			unlink($file_dst_db_cc) || die "Can't delete old file: $file_dst_db_cc";
+		};
 	};
 
 	tie %h_info, 'BerkeleyDB::Btree', -Filename => $file_dst_db_cc, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $file_dst_db_cc: $! $BerkeleyDB::Error\n";
@@ -546,4 +572,14 @@ if (defined $opt_B) {
 
 	untie @a;
 	print "INFO  : DB file created from input IPv6->CountryCode: " . $file_dst_db_cc . "\n";
+
+	if (defined $opt_A) {
+		rename $file_dst_db_cc, $file_dst_db_cc_orig;
+		if ($? != 0) {
+			print "ERROR : can't rename file to: $file_dst_db_cc_orig ($!) - delete: $file_dst_db_cc\n";
+			unlink $file_dst_db_cc;
+		} else {
+			print "INFO  : successful rename file to: $file_dst_db_cc_orig\n";
+		};
+	};
 };

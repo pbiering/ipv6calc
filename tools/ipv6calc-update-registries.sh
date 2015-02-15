@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/registries
 # File       : update-registries.sh
-# Version    : $Id: update-registries.sh,v 1.12 2014/12/09 21:03:51 ds6peter Exp $
+# Version    : $Id: ipv6calc-update-registries.sh,v 1.1 2015/02/15 20:19:37 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces ../ipv4-assignment/update-ipv4-assignment.sh
 #               replaces ../ipv6-assignment/update-ipv6-assignment.sh
@@ -109,11 +109,15 @@ get_urls | while read subdir url filename format flag; do
 		;;
             'xml')
 		# fix buggy encoding
+		mod_time=$(stat -c %Y "$filename")
 		perl -pi -e "s/^(.*encoding=')ASCII('.*)$/\1US-ASCII\2/" $filename || exit 1
+		touch -d "@$mod_time" "$filename"
 		;;
 	    'bz2')
 		# decompress
+		mod_time=$(stat -c %Y "$filename")
 		bzip2 -f -d -k $filename || exit 1
+		touch -d "@$mod_time" "$filename"
 		;;
 	    *)
 		echo "ERROR: unsupported format: $format - fix code"

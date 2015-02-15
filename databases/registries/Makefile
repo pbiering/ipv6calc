@@ -1,7 +1,7 @@
 # Project    : ipv6calc/databases/registries
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.7 2014/02/09 18:45:07 ds6peter Exp $
-# Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile,v 1.8 2015/02/15 20:19:37 ds6peter Exp $
+# Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces parts of ../ipv4-assignment/Makefile
 #               replaces parts of ../ipv6-assignment/Makefile
 #
@@ -16,7 +16,7 @@ install:
 
 download:
 		echo "Download new version of files"
-		./update-registries.sh
+		../../tools/ipv6calc-update-registries.sh
 
 update-only:
 		echo "Create database files for IPv4"
