@@ -9,7 +9,7 @@
 #
 # Project    : ipv6calc/IP2Location
 # File       : IP2Location-update.sh
-# Version    : $Id: IP2Location-update.sh,v 1.4 2015/02/16 20:22:23 ds6peter Exp $
+# Version    : $Id: IP2Location-update.sh,v 1.5 2015/02/16 20:26:59 ds6peter Exp $
 # Copyright  : 2012-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 

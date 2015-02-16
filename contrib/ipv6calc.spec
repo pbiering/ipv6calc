@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Copyright  : 2001-2014 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.230 2015/02/15 20:19:36 ds6peter Exp $
+# Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
+# $Id: ipv6calc.spec,v 1.231 2015/02/16 20:26:59 ds6peter Exp $
 
 Summary: IP address format change and calculation utility
 Name: ipv6calc
@@ -30,9 +30,12 @@ BuildRoot: %{_tmppath}/ipv6calc-root
 %{?_with_ip2location: %{expand: %%define enable_ip2location 1}}
 
 %{?_with_geoip_dyn: %{expand: %%define enable_geoip_dyn 1}}
-%{?_with_ip2location_dyn: %{expand: %%define enable_ip2location_dyn 1}}
 %{?_with_geoip_dyn: %{expand: %%define enable_geoip 1}}
+
+%{?_with_ip2location_dyn: %{expand: %%define enable_ip2location_dyn 1}}
 %{?_with_ip2location_dyn: %{expand: %%define enable_ip2location 1}}
+
+%{?_with_dbip: %{expand: %%define enable_dbip 1}}
 
 %{?_with_shared: %{expand: %%define enable_shared 1}}
 
@@ -82,12 +85,15 @@ Available rpmbuild rebuild options:
   --with ip2location-dyn
   --with geoip
   --with geoip-dyn
+  --with geoip-dyn
+  --with dbip
   --with shared
 
 %{?enable_geoip: %{expand: Built with GeoIP support}}
 %{?enable_geoip_dyn: %{expand: Built with GeoIP dynamic-library-load support}}
 %{?enable_ip2location: %{expand: Built with IP2Location suppport}}
 %{?enable_ip2location_dyn: %{expand: Built with IP2Location dynamic-library-load suppport}}
+%{?enable_dbip: %{expand: Built with DB-IP.com support}}
 %{?enable_shared: %{expand: Built with shared-library}}
 
 
@@ -113,13 +119,35 @@ Requires: perl-BerkeleyDB
 %description db
 databases and their update/generation tools for ipv6calc.
 
+ipv6calc "external" databases:
+%{_localstatedir}/share/%{name}/db
+
+ipv6calc DB-IP.com databases:
+%{_localstatedir}/share/%{name}/DBIP
+
+ipv6calc IP2Location databases:
+%{_localstatedir}/share/%{name}/IP2Location
+
+ipv6calc GeoIP databases:
+%{_localstatedir}/share/GeoIP
 
 %prep
 %setup -q -n ipv6calc-%{version}
 
 
 %build
-./configure --bindir=%{_bindir} --mandir=%{_mandir} --libdir=%{_libdir} %{?enable_ip2location:--enable-ip2location} %{?enable_geoip:--enable-geoip} %{?enable_ip2location_dyn:--with-ip2location-dynamic} %{?enable_geoip_dyn:--with-geoip-dynamic} %{?enable_shared:--enable-shared} --enable-external
+./configure --bindir=%{_bindir} --mandir=%{_mandir} --libdir=%{_libdir} \
+	%{?enable_ip2location:--enable-ip2location} \
+	%{?enable_ip2location:----with-ip2location-db=%{_localstatedir}/share/%{name}/IP2Location} \
+	%{?enable_ip2location_dyn:--with-ip2location-dynamic} \
+	%{?enable_geoip:--enable-geoip} \
+	%{?enable_geoip:--with-geoip-db=%{_localstatedir}/share/GeoIP} \
+	%{?enable_geoip_dyn:--with-geoip-dynamic} \
+	%{?enable_dbip:--enable-dbip} \
+	%{?enable_dbip:--with-dbip-db=%{_localstatedir}/share/%{name}/DBIP} \
+	%{?enable_shared:--enable-shared} \
+	--enable-external \
+	--with-external-db=%{_localstatedir}/share/%{name}/db
 make clean
 make
 make test-minimal
@@ -165,8 +193,28 @@ for tool in ipv6calc-create-registry-list-ipv4.pl ipv6calc-create-registry-list-
 done
 
 
-# db directory
-install -d %{buildroot}%{_datadir}/%{name}/db
+# db
+for subdir in db DBIP IP2Location; do
+	install -d %{buildroot}%{_localstatedir}/share/%{name}/$subdir
+	ln -s %{_localstatedir}/share/%{name}/$subdir %{buildroot}%{_datadir}/%{name}/$subdir
+	readme_file="%{buildroot}%{_localstatedir}/share/%{name}/$subdir/README"
+	echo "Files in this specific database directory can be created/updated using" >$readme_file
+	case $subdir in
+	    DBIP)
+		echo "%{_datadir}/%{name}/tools/DBIP-update.sh (and additional support script)" >>$readme_file
+		;;
+	    IP2Location)
+		echo "%{_datadir}/%{name}/tools/IP2Location-update.sh (valid account data required)" >>$readme_file
+		;;
+	    db)
+		echo "%{_datadir}/%{name}/tools/ipv6calc-db-update.sh (and additional support scripts)" >>$readme_file
+		;;
+	    *)
+		echo "Missing support for README for subdir: $subdir"
+		exit 1
+		;;
+	esac
+done
 
 
 # ipv6calcweb
@@ -226,10 +274,25 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/%{name}/tools/*
 
 # db
+%dir %attr(2775,root,wheel) %{_localstatedir}/share/%{name}/db
+%{_localstatedir}/share/%{name}/db/README
 %{_datadir}/%{name}/db
+
+# DB-IP.com
+%dir %attr(2775,root,wheel) %{_localstatedir}/share/%{name}/DBIP
+%{_localstatedir}/share/%{name}/DBIP/README
+%{_datadir}/%{name}/DBIP
+
+# IP2Location
+%dir %attr(2775,root,wheel) %{_localstatedir}/share/%{name}/IP2Location
+%{_localstatedir}/share/%{name}/IP2Location/README
+%{_datadir}/%{name}/IP2Location
 
 
 %changelog
+* Sun Feb 15 2015 Peter Bieringer <pb@bieringer.de>
+- extend sub-package db
+
 * Tue Dec 09 2014 Peter Bieringer <pb@bieringer.de>
 - create new sub-package: db with all related tools
 - configure: --enable-external

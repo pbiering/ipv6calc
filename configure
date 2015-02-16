@@ -645,6 +645,8 @@ IP2LOCATION_LIB
 IP2LOCATION_INCLUDE_L2
 IP2LOCATION_INCLUDE_L1
 IP2LOCATION_INCLUDE
+EXTERNAL_DB
+DBIP_DB
 IPV6CALC_LIB
 SHARED_LIBRARY
 ENABLE_BUNDLED_MD5
@@ -4555,6 +4557,9 @@ _ACEOF
 
 fi
 
+DBIP_DB=$dbip_db
+
+
 
 # Check whether --enable-external was given.
 if test "${enable_external+set}" = set; then :
@@ -4595,6 +4600,9 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 fi
+
+EXTERNAL_DB=$external_db
+
 
 
 IP2LOCATION_LIB_NAME="IP2Location"
@@ -4945,6 +4953,7 @@ $as_echo "#define SUPPORT_IP2LOCATION_DYN 1" >>confdefs.h
 	fi
 fi
 
+IP2LOCATION_DB=$ip2location_db
 
 
 
@@ -5728,6 +5737,7 @@ $as_echo "#define SUPPORT_GEOIP_DYN 1" >>confdefs.h
 	fi
 fi
 
+GEOIP_DB=$geoip_db
 
 
 
@@ -5830,7 +5840,7 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile md5/Makefile tools/Makefile getopt/Makefile ipv6calc/Makefile lib/Makefile man/Makefile databases/lib/Makefile ipv6logconv/Makefile ipv6loganon/Makefile ipv6logstats/Makefile ipv6calcweb/Makefile contrib/ipv6calc.spec VERSION"
+ac_config_files="$ac_config_files Makefile md5/Makefile tools/Makefile getopt/Makefile ipv6calc/Makefile lib/Makefile man/Makefile databases/lib/Makefile ipv6logconv/Makefile ipv6loganon/Makefile ipv6logstats/Makefile ipv6calcweb/Makefile contrib/ipv6calc.spec tools/ipv6calc-db-update.sh tools/DBIP-update.sh tools/IP2Location-update.sh tools/GeoIP-update.sh VERSION"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -6538,6 +6548,10 @@ do
     "ipv6logstats/Makefile") CONFIG_FILES="$CONFIG_FILES ipv6logstats/Makefile" ;;
     "ipv6calcweb/Makefile") CONFIG_FILES="$CONFIG_FILES ipv6calcweb/Makefile" ;;
     "contrib/ipv6calc.spec") CONFIG_FILES="$CONFIG_FILES contrib/ipv6calc.spec" ;;
+    "tools/ipv6calc-db-update.sh") CONFIG_FILES="$CONFIG_FILES tools/ipv6calc-db-update.sh" ;;
+    "tools/DBIP-update.sh") CONFIG_FILES="$CONFIG_FILES tools/DBIP-update.sh" ;;
+    "tools/IP2Location-update.sh") CONFIG_FILES="$CONFIG_FILES tools/IP2Location-update.sh" ;;
+    "tools/GeoIP-update.sh") CONFIG_FILES="$CONFIG_FILES tools/GeoIP-update.sh" ;;
     "VERSION") CONFIG_FILES="$CONFIG_FILES VERSION" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
@@ -7126,8 +7140,8 @@ $as_echo "***** Summary" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION                =$IP2LOCATION" >&5
 $as_echo "*** IP2LOCATION                =$IP2LOCATION" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_DB             =$ip2location_db" >&5
-$as_echo "*** IP2LOCATION_DB             =$ip2location_db" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_DB             =$IP2LOCATION_DB" >&5
+$as_echo "*** IP2LOCATION_DB             =$IP2LOCATION_DB" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_DYN            =$IP2LOCATION_DYN" >&5
 $as_echo "*** IP2LOCATION_DYN            =$IP2LOCATION_DYN" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_DYN_LIB        =$ip2location_dyn_lib" >&5
@@ -7148,8 +7162,8 @@ $as_echo "" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP                      =$GEOIP" >&5
 $as_echo "*** GEOIP                      =$GEOIP" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_DB                   =$geoip_db" >&5
-$as_echo "*** GEOIP_DB                   =$geoip_db" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_DB                   =$GEOIP_DB" >&5
+$as_echo "*** GEOIP_DB                   =$GEOIP_DB" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_DYN                  =$GEOIP_DYN" >&5
 $as_echo "*** GEOIP_DYN                  =$GEOIP_DYN" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** GEOIP_DYN_LIB              =$geoip_dyn_lib" >&5
@@ -7170,16 +7184,16 @@ $as_echo "" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** DBIP                       =$DBIP" >&5
 $as_echo "*** DBIP                       =$DBIP" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** DBIP_DB                    =$dbip_db" >&5
-$as_echo "*** DBIP_DB                    =$dbip_db" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** DBIP_DB                    =$DBIP_DB" >&5
+$as_echo "*** DBIP_DB                    =$DBIP_DB" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
 $as_echo "" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** EXTERNAL                   =$EXTERNAL" >&5
 $as_echo "*** EXTERNAL                   =$EXTERNAL" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** EXTERNAL_DB                =$external_db" >&5
-$as_echo "*** EXTERNAL_DB                =$external_db" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** EXTERNAL_DB                =$EXTERNAL_DB" >&5
+$as_echo "*** EXTERNAL_DB                =$EXTERNAL_DB" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
 $as_echo "" >&6; }

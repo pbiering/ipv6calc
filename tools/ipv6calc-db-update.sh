@@ -4,7 +4,7 @@
 #
 # Project    : ipv6calc/databases
 # File       : ipv6calc-db-update.sh
-# Version    : $Id: ipv6calc-db-update.sh,v 1.2 2015/02/16 20:22:23 ds6peter Exp $
+# Version    : $Id: ipv6calc-db-update.sh,v 1.3 2015/02/16 20:26:59 ds6peter Exp $
 # Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 

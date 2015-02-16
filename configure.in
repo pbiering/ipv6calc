@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.128 2015/02/11 08:01:26 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.129 2015/02/16 20:26:59 ds6peter Exp $
 dnl Copyright: 2001-2014 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -369,6 +369,9 @@ if test "$DBIP" = "yes"; then
 	AC_DEFINE_UNQUOTED(DBIP_DB, "$dbip_db", Define db-ip.com database directory.)
 fi
 
+DBIP_DB=$dbip_db
+AC_SUBST(DBIP_DB)
+
 
 dnl *************************************************
 dnl External ipv6calc db support
@@ -401,6 +404,9 @@ if test "$EXTERNAL" = "yes"; then
 	AC_MSG_RESULT([*** external db dir: $dbip_db])
 	AC_DEFINE_UNQUOTED(EXTERNAL_DB, "$external_db", Define external database directory.)
 fi
+
+EXTERNAL_DB=$external_db
+AC_SUBST(EXTERNAL_DB)
 
 
 dnl *************************************************
@@ -614,6 +620,7 @@ if test "$IP2LOCATION" = "yes"; then
 	fi
 fi
 
+IP2LOCATION_DB=$ip2location_db
 AC_SUBST(IP2LOCATION_INCLUDE)
 AC_SUBST(IP2LOCATION_INCLUDE_L1)
 AC_SUBST(IP2LOCATION_INCLUDE_L2)
@@ -936,6 +943,7 @@ if test "$GEOIP" = "yes"; then
 	fi
 fi
 
+GEOIP_DB=$geoip_db
 AC_SUBST(GEOIP_INCLUDE)
 AC_SUBST(GEOIP_INCLUDE_VERSION)
 AC_SUBST(GEOIP_INCLUDE_L2)
@@ -1008,13 +1016,17 @@ AC_OUTPUT([
 		ipv6logstats/Makefile
 		ipv6calcweb/Makefile
 		contrib/ipv6calc.spec
+		tools/ipv6calc-db-update.sh
+		tools/DBIP-update.sh
+		tools/IP2Location-update.sh
+		tools/GeoIP-update.sh
 		VERSION
 	])
 
 AC_MSG_RESULT([***** Summary])
 
 AC_MSG_RESULT([*** IP2LOCATION                =$IP2LOCATION])
-AC_MSG_RESULT([*** IP2LOCATION_DB             =$ip2location_db])
+AC_MSG_RESULT([*** IP2LOCATION_DB             =$IP2LOCATION_DB])
 AC_MSG_RESULT([*** IP2LOCATION_DYN            =$IP2LOCATION_DYN])
 AC_MSG_RESULT([*** IP2LOCATION_DYN_LIB        =$ip2location_dyn_lib])
 AC_MSG_RESULT([*** IP2LOCATION_INCLUDE        =$IP2LOCATION_INCLUDE])
@@ -1026,7 +1038,7 @@ AC_MSG_RESULT([*** IP2LOCATION_LIB_DIR        =$IP2LOCATION_LIB_DIR])
 AC_MSG_RESULT([])
 
 AC_MSG_RESULT([*** GEOIP                      =$GEOIP])
-AC_MSG_RESULT([*** GEOIP_DB                   =$geoip_db])
+AC_MSG_RESULT([*** GEOIP_DB                   =$GEOIP_DB])
 AC_MSG_RESULT([*** GEOIP_DYN                  =$GEOIP_DYN])
 AC_MSG_RESULT([*** GEOIP_DYN_LIB              =$geoip_dyn_lib])
 AC_MSG_RESULT([*** GEOIP_INCLUDE              =$GEOIP_INCLUDE])
@@ -1038,12 +1050,12 @@ AC_MSG_RESULT([*** GEOIP_LIB_DIR              =$GEOIP_LIB_DIR])
 AC_MSG_RESULT([])
 
 AC_MSG_RESULT([*** DBIP                       =$DBIP])
-AC_MSG_RESULT([*** DBIP_DB                    =$dbip_db])
+AC_MSG_RESULT([*** DBIP_DB                    =$DBIP_DB])
 
 AC_MSG_RESULT([])
 
 AC_MSG_RESULT([*** EXTERNAL                   =$EXTERNAL])
-AC_MSG_RESULT([*** EXTERNAL_DB                =$external_db])
+AC_MSG_RESULT([*** EXTERNAL_DB                =$EXTERNAL_DB])
 
 AC_MSG_RESULT([])
 

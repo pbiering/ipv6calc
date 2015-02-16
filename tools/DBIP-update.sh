@@ -4,7 +4,7 @@
 #
 # Project    : ipv6calc/DBIP
 # File       : DBIP-update.sh
-# Version    : $Id: DBIP-update.sh,v 1.5 2015/02/16 20:22:23 ds6peter Exp $
+# Version    : $Id: DBIP-update.sh,v 1.6 2015/02/16 20:26:59 ds6peter Exp $
 # Copyright  : 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
