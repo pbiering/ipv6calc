@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.c
- * Version    : $Id: libipv6calc_db_wrapper_External.c,v 1.7 2014/10/24 06:20:34 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_External.c,v 1.8 2015/02/18 21:47:17 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -431,6 +431,11 @@ DB *libipv6calc_db_wrapper_External_open_type(const int type_flag, long int *db_
 		return(NULL);
 	};
 
+	if (libipv6calc_db_wrapper_External_db_avail(type) != 1) {
+		return(NULL);
+
+	};
+
 	if ((ret = db_create(&dbp, NULL, 0)) != 0) {
 		if (ipv6calc_quiet == 0) {
 			fprintf(stderr, "db_create: %s\n", db_strerror(ret));
@@ -809,6 +814,11 @@ int libipv6calc_db_wrapper_External_registry_num_by_addr(const ipv6calc_ipaddr *
 	// data (standard)
 	dbp = libipv6calc_db_wrapper_External_open_type(External_type, &recno_max);
 
+	if (dbp == NULL) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Error opening External by type");
+		goto END_libipv6calc_db_wrapper;
+	};
+
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "database opened type=%d recno_max=%ld dbp=%p", External_type, recno_max, dbp);
 
 	result = libipv6calc_db_wrapper_get_entry_generic(
@@ -845,6 +855,11 @@ int libipv6calc_db_wrapper_External_registry_num_by_addr(const ipv6calc_ipaddr *
 
 	// data-iana (fallback for IPv4 only)
 	dbp_iana = libipv6calc_db_wrapper_External_open_type(External_type | 0x20000, &recno_max);
+
+	if (dbp == NULL) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Error opening External by type");
+		goto END_libipv6calc_db_wrapper;
+	};
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "database opened type=%d (data-iana) recno_max=%ld", External_type, recno_max);
 
@@ -965,6 +980,11 @@ int libipv6calc_db_wrapper_External_country_code_by_addr(const ipv6calc_ipaddr *
 
 	// data (standard)
 	dbp = libipv6calc_db_wrapper_External_open_type(External_type, &recno_max);
+
+	if (dbp == NULL) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Error opening External by type");
+		goto END_libipv6calc_db_wrapper;
+	};
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "database opened type=%d recno_max=%ld dbp=%p", External_type, recno_max, dbp);
 
