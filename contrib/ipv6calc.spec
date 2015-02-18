@@ -1,65 +1,60 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.231 2015/02/16 20:26:59 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.232 2015/02/18 21:14:39 ds6peter Exp $
 
-Summary: IP address format change and calculation utility
-Name: ipv6calc
-Version: 0.98.0rc2
-Release: 1%dist
-Group: System Environment/Base
-URL: http://www.deepspace6.net/projects/ipv6calc.html
-License: GNU GPL version 2
+Summary:	IPv6 address format change and calculation utility
+Name:		ipv6calc
+Version:	0.98.0rc2
+Release: 	1%{?dist}
+Group:		Applications/Text
+URL:		http://www.deepspace6.net/projects/%{name}.html
+License:	GPLv2
+Source:		ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/%{name}-%{version}.tar.gz
+BuildRequires:	openssl-devel
+BuildRequires:	perl(Digest::MD5), perl(Digest::SHA1), perl(URI::Escape)
+BuildRequires:	perl(strict), perl(warnings)
+Requires:	perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 
-Source: ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/ipv6calc-%{version}.tar.gz
-
-BuildRoot: %{_tmppath}/ipv6calc-root
-
-%define require_geoip 0
-%define require_ip2location 0
-%define require_geoip_dyn 0
-%define require_ip2location_dyn 0
-
-%{?_with_geoip: %{expand: %%define require_geoip 1}}
-%{?_with_ip2location: %{expand: %%define require_ip2location 1}}
-
-%{?_with_geoip_dyn: %{expand: %%define require_geoip_dyn 1}}
-%{?_with_ip2location_dyn: %{expand: %%define require_ip2location_dyn 1}}
-
-%{?_with_geoip: %{expand: %%define enable_geoip 1}}
-%{?_with_ip2location: %{expand: %%define enable_ip2location 1}}
-
-%{?_with_geoip_dyn: %{expand: %%define enable_geoip_dyn 1}}
-%{?_with_geoip_dyn: %{expand: %%define enable_geoip 1}}
-
-%{?_with_ip2location_dyn: %{expand: %%define enable_ip2location_dyn 1}}
-%{?_with_ip2location_dyn: %{expand: %%define enable_ip2location 1}}
-
-%{?_with_dbip: %{expand: %%define enable_dbip 1}}
-
-%{?_with_shared: %{expand: %%define enable_shared 1}}
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 
-%if %{require_geoip}
-BuildRequires: GeoIP-devel
-%if %{require_geoip_dyn}
-#nothing required
+# database support (deselectable)
+%if "%{?_without_ip2location:0}%{?!_without_ip2location:1}" == "1"
+%define enable_ip2location 1
+%endif
+
+%if "%{?_without_geoip:0}%{?!_without_geoip:1}" == "1"
+%define enable_geoip 1
+%endif
+
+%if "%{?_without_dbip:0}%{?!_without_dbip:1}" == "1"
+%define enable_dbip 1
+%endif
+
+%if "%{?_without_external:0}%{?!_without_external:1}" == "1"
+%define enable_external 1
+%endif
+
+%if "%{?_without_shared:0}%{?!_without_shared:1}" == "1"
+%define enable_shared 1
+%endif
+
+
+# database locations
+%define ip2location_db %{_datadir}/IP2Location
+%define geoip_db       %{_datadir}/GeoIP
+%define dbip_db        %{_datadir}/DBIP
+%define external_db    %{_datadir}/%{name}/db
+
+
+# Berkeley DB selector
+%define require_db4 %(echo "%{dist}" | egrep -q '^\.el(5|6)$' && echo 1 || echo 0)
+%if %{require_db4}
+BuildRequires:	db4-devel
 %else
-Requires: GeoIP
+BuildRequires:	libdb-devel
 %endif
-%endif
-
-%if %{require_ip2location}
-BuildRequires: ip2location-devel
-%if %{require_ip2location_dyn}
-#nothing required
-%else
-Requires: ip2Location >= 2.1.3
-%endif
-%endif
-
-BuildRequires: perl-BerkeleyDB
-Requires: perl-Net-IP
 
 
 %description
@@ -80,28 +75,38 @@ Also this package contains additional programs
  - ipv6logstats: create statistics from list of IPv4/IPv6 addresses
     (examples included for use with gnu-plot)
 
-Available rpmbuild rebuild options:
-  --with ip2location
-  --with ip2location-dyn
-  --with geoip
-  --with geoip-dyn
-  --with geoip-dyn
-  --with dbip
-  --with shared
+Support for following databases
+ - IP2Location	%{?enable_ip2location:ENABLED}%{?!enable_ip2location:DISABLED}
+		default directory for downloaded db files: %{ip2location_db}
+		(requires also external library on system)
 
-%{?enable_geoip: %{expand: Built with GeoIP support}}
-%{?enable_geoip_dyn: %{expand: Built with GeoIP dynamic-library-load support}}
-%{?enable_ip2location: %{expand: Built with IP2Location suppport}}
-%{?enable_ip2location_dyn: %{expand: Built with IP2Location dynamic-library-load suppport}}
-%{?enable_dbip: %{expand: Built with DB-IP.com support}}
-%{?enable_shared: %{expand: Built with shared-library}}
+ - GeoIP	%{?enable_geoip:ENABLED}%{?!enable_geoip:DISABLED}
+		default directory for downloaded db files: %{geoip_db}
+		(requires also external library on system)
+
+ - db-ip.com 	%{?enable_dbip:ENABLED}%{?!enable_dbip:DISABLED}
+		(once generated database files are found on system)
+		default directory for generated db files: %{dbip_db}
+
+ - External	%{?enable_external:ENABLED}%{?!enable_external:DISABLED}
+		default directory for generated db files: %{external_db}
+
+Built %{?enable_shared:WITH}%{?!enable_shared:WITHOUT} shared-library
+
+Available rpmbuild rebuild options:
+  --without ip2location
+  --without geoip
+  --without dbip
+  --without external
+  --without shared
 
 
 %package ipv6calcweb
-Summary: IP address information web utility
-Group: Applications/Internet
-Requires: perl(URI) perl(Digest::SHA1) perl(Digest::MD5)
-BuildRequires: perl(URI) perl(Digest::SHA1) perl(Digest::MD5)
+Summary: 	IP address information web utility
+Group:		Applications/Internet
+Requires:	ipv6calc httpd
+Requires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities)
+BuildRequires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities)
 
 %description ipv6calcweb
 ipv6calcweb contains a CGI program and a configuration file for
@@ -111,143 +116,97 @@ Check/addjust %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
 Default restricts access to localhost
 
 
-%package db
-Summary: IP address information databases and tools
-Group: Applications/Internet
-Requires: perl-BerkeleyDB
-
-%description db
-databases and their update/generation tools for ipv6calc.
-
-ipv6calc "external" databases:
-%{_localstatedir}/share/%{name}/db
-
-ipv6calc DB-IP.com databases:
-%{_localstatedir}/share/%{name}/DBIP
-
-ipv6calc IP2Location databases:
-%{_localstatedir}/share/%{name}/IP2Location
-
-ipv6calc GeoIP databases:
-%{_localstatedir}/share/GeoIP
-
 %prep
-%setup -q -n ipv6calc-%{version}
+%setup -q
+%configure \
+	%{?enable_ip2location:--enable-ip2location} \
+	%{?enable_ip2location:--with-ip2location-dynamic --with-ip2location-headers-fallback} \
+	--with-ip2location-db=%{ip2location_db} \
+	%{?enable_geoip:--enable-geoip} \
+	%{?enable_geoip:--with-geoip-dynamic --with-geoip-headers-fallback} \
+	--with-geoip-db=%{geoip_db} \
+	%{?enable_dbip:--enable-dbip} \
+	--with-dbip-db=%{dbip_db} \
+	%{?enable_external:--enable-external} \
+	--with-external-db=%{external_db} \
+	%{?enable_shared:--enable-shared}
 
 
 %build
-./configure --bindir=%{_bindir} --mandir=%{_mandir} --libdir=%{_libdir} \
-	%{?enable_ip2location:--enable-ip2location} \
-	%{?enable_ip2location:----with-ip2location-db=%{_localstatedir}/share/%{name}/IP2Location} \
-	%{?enable_ip2location_dyn:--with-ip2location-dynamic} \
-	%{?enable_geoip:--enable-geoip} \
-	%{?enable_geoip:--with-geoip-db=%{_localstatedir}/share/GeoIP} \
-	%{?enable_geoip_dyn:--with-geoip-dynamic} \
-	%{?enable_dbip:--enable-dbip} \
-	%{?enable_dbip:--with-dbip-db=%{_localstatedir}/share/%{name}/DBIP} \
-	%{?enable_shared:--enable-shared} \
-	--enable-external \
-	--with-external-db=%{_localstatedir}/share/%{name}/db
 make clean
-make
-make test-minimal
+make %{?_smp_mflags} COPTS="$RPM_OPT_FLAGS"
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
-
-make install DESTDIR=$RPM_BUILD_ROOT
-
+rm -rf %{buildroot}
+make install DESTDIR=%{buildroot}
 
 ## Install examples and helper files
-
-mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/
-
-# ipv6logconv
-mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logconv
-cp -r examples/analog/* $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logconv
-
-# ipv6loganon
-mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6loganon
-pushd ipv6loganon
-cp README $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6loganon/
-popd
-
-# ipv6logstats
-mkdir -p $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logstats
-pushd ipv6logstats
-cp example_* collect_ipv6logstats.pl README $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logstats/
-for dir in examples-data examples-gri; do
-	cp -r $dir $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6logstats/
-done
-popd
+install -d -p %{buildroot}%{_docdir}/%{name}-%{version}/
 
 # tools
-install -d $RPM_BUILD_ROOT%{_datadir}/%{name}/tools
-for tool in GeoIP-update.sh IP2Location-update.sh DBIP-update.sh DBIP-generate-db.pl; do
-	install -m 755 tools/$tool $RPM_BUILD_ROOT%{_datadir}/%{name}/tools
+install -d %{buildroot}%{_datadir}/%{name}/tools
+cat <<END | while read tool; do install -m 755 tools/$tool %{buildroot}%{_datadir}/%{name}/tools; done
+GeoIP-update.sh
+IP2Location-update.sh
+DBIP-update.sh
+DBIP-generate-db.pl
+ipv6calc-create-registry-list-ipv4.pl
+ipv6calc-create-registry-list-ipv6.pl
+ipv6calc-db-update.sh
+ipv6calc-registries-check-run-create.sh
+ipv6calc-update-registries.sh
+END
+
+## examples
+install -d %{buildroot}%{_datadir}/%{name}/examples/
+
+# ipv6logconv
+install -d %{buildroot}%{_datadir}/%{name}/examples/ipv6logconv
+for file in examples/analog/*.{cfg,txt,tab,sh}; do
+	install $file %{buildroot}%{_datadir}/%{name}/examples/ipv6logconv/
 done
 
-for tool in ipv6calc-create-registry-list-ipv4.pl ipv6calc-create-registry-list-ipv6.pl ipv6calc-db-update.sh ipv6calc-registries-check-run-create.sh ipv6calc-update-registries.sh; do
-	install -m 755 tools/$tool $RPM_BUILD_ROOT%{_datadir}/%{name}/tools
+# ipv6loganon
+install -d %{buildroot}%{_datadir}/%{name}/examples/ipv6loganon
+for file in ipv6loganon/README; do
+	install $file %{buildroot}%{_datadir}/%{name}/examples/ipv6loganon/
+done
+
+# ipv6logstats
+install -d %{buildroot}%{_datadir}/%{name}/examples/ipv6logstats
+for file in ipv6logstats/README ipv6logstats/example_* ipv6logstats/collect_ipv6logstats.pl; do
+	install $file %{buildroot}%{_datadir}/%{name}/examples/ipv6logstats/
 done
 
 
-# db
-for subdir in db DBIP IP2Location; do
-	install -d %{buildroot}%{_localstatedir}/share/%{name}/$subdir
-	ln -s %{_localstatedir}/share/%{name}/$subdir %{buildroot}%{_datadir}/%{name}/$subdir
-	readme_file="%{buildroot}%{_localstatedir}/share/%{name}/$subdir/README"
-	echo "Files in this specific database directory can be created/updated using" >$readme_file
-	case $subdir in
-	    DBIP)
-		echo "%{_datadir}/%{name}/tools/DBIP-update.sh (and additional support script)" >>$readme_file
-		;;
-	    IP2Location)
-		echo "%{_datadir}/%{name}/tools/IP2Location-update.sh (valid account data required)" >>$readme_file
-		;;
-	    db)
-		echo "%{_datadir}/%{name}/tools/ipv6calc-db-update.sh (and additional support scripts)" >>$readme_file
-		;;
-	    *)
-		echo "Missing support for README for subdir: $subdir"
-		exit 1
-		;;
-	esac
-done
+# db directory
+install -d %{buildroot}%{external_db}
 
 
 # ipv6calcweb
-install -d $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6calcweb
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d
-install -d $RPM_BUILD_ROOT%{_localstatedir}/www/cgi-bin
+install -d %{buildroot}%{_sysconfdir}/httpd/conf.d
+install -d %{buildroot}%{_localstatedir}/www/cgi-bin
 
-install -m 644 ipv6calcweb/USAGE            $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/ipv6calcweb
-install -m 644 ipv6calcweb/ipv6calcweb.conf $RPM_BUILD_ROOT%{_sysconfdir}/httpd/conf.d
-install -m 555 ipv6calcweb/ipv6calcweb.cgi  $RPM_BUILD_ROOT%{_localstatedir}/www/cgi-bin
-
-# Docs
-for f in ChangeLog README CREDITS TODO COPYING LICENSE USAGE doc/ipv6calc.lyx doc/ipv6calc.sgml doc/ipv6calc.html; do
-	cp $f $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version}/
-done
-
-
-# Remove all CVS files
-find $RPM_BUILD_ROOT%{_docdir}/%{name}-%{version} -type d -name CVS |xargs rm -rf
+install ipv6calcweb/ipv6calcweb.conf %{buildroot}%{_sysconfdir}/httpd/conf.d
+install -m 555 ipv6calcweb/ipv6calcweb.cgi  %{buildroot}%{_localstatedir}/www/cgi-bin
 
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
-%post
 
-%preun
-  
+%check
+%ifnarch ppc64
+	make test
+%endif
+
+
 %files
-%defattr(-,root,root)
+%doc ChangeLog README CREDITS TODO COPYING LICENSE USAGE doc/ipv6calc.{lyx,sgml,html,xml}
 
 # binaries
-%{_bindir}/ipv6calc
+%{_bindir}/%{name}
 %{_bindir}/ipv6logconv
 %{_bindir}/ipv6logstats
 %{_bindir}/ipv6loganon
@@ -255,41 +214,30 @@ rm -rf $RPM_BUILD_ROOT
 # man pages
 %{_mandir}/man8/*
 
-# docs, examples and helper
-%doc %{_docdir}/%{name}-%{version}/*
-
-%if "%{enable_shared}" == "1"
-%{_libdir}/*
-%endif
-
-%files ipv6calcweb
-%defattr(-,root,root)
-
-%{_localstatedir}/www/cgi-bin/ipv6calcweb.cgi
-%doc %{_docdir}/%{name}-%{version}/ipv6calcweb/*
-%config(noreplace) %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
-
-%files db
 # tools
 %{_datadir}/%{name}/tools/*
 
-# db
-%dir %attr(2775,root,wheel) %{_localstatedir}/share/%{name}/db
-%{_localstatedir}/share/%{name}/db/README
-%{_datadir}/%{name}/db
+# examples
+%{_datadir}/%{name}/examples/*
 
-# DB-IP.com
-%dir %attr(2775,root,wheel) %{_localstatedir}/share/%{name}/DBIP
-%{_localstatedir}/share/%{name}/DBIP/README
-%{_datadir}/%{name}/DBIP
+# shared library
+%{?enable_shared:%{_libdir}/*}
 
-# IP2Location
-%dir %attr(2775,root,wheel) %{_localstatedir}/share/%{name}/IP2Location
-%{_localstatedir}/share/%{name}/IP2Location/README
-%{_datadir}/%{name}/IP2Location
+# database directory
+%{external_db}
+
+
+%files ipv6calcweb
+%doc ipv6calcweb/README ipv6calcweb/USAGE
+
+%attr(555,-,-) %{_localstatedir}/www/cgi-bin/ipv6calcweb.cgi
+%config(noreplace) %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
 
 
 %changelog
+* Wed Feb 18 2015 Peter Bieringer <pb@bieringer.de>
+- delete subpackage db, major spec file alignment with Fedora-SCM version
+
 * Sun Feb 15 2015 Peter Bieringer <pb@bieringer.de>
 - extend sub-package db
 

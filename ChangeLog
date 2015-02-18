@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.383 2015/02/15 20:19:36 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.384 2015/02/18 21:14:38 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20150218/PB
+	spec file: align with fedora-scm spec
+	tools/*: remove now by autoconf generated scripts
+
 20150215/PB
 	tools/ipv6calc-db-update.sh: new for dedicated database update capability
 	tools/ipv6calc-create-registry-list-ipv4.pl: migration from database dir

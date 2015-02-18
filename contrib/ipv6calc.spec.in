@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec.in,v 1.96 2015/02/18 07:46:53 ds6peter Exp $
+# $Id: ipv6calc.spec.in,v 1.97 2015/02/18 21:14:39 ds6peter Exp $
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
@@ -102,10 +102,11 @@ Available rpmbuild rebuild options:
 
 
 %package ipv6calcweb
-Summary: IP address information web utility
-Group: Applications/Internet
-Requires: perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities)
-BuildRequires: perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities)
+Summary: 	IP address information web utility
+Group:		Applications/Internet
+Requires:	ipv6calc httpd
+Requires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities)
+BuildRequires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities)
 
 %description ipv6calcweb
 ipv6calcweb contains a CGI program and a configuration file for
@@ -116,7 +117,7 @@ Default restricts access to localhost
 
 
 %prep
-%setup -q -n ipv6calc-%{version}
+%setup -q
 %configure \
 	%{?enable_ip2location:--enable-ip2location} \
 	%{?enable_ip2location:--with-ip2location-dynamic --with-ip2location-headers-fallback} \
@@ -139,7 +140,6 @@ make %{?_smp_mflags} COPTS="$RPM_OPT_FLAGS"
 %install
 rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
-
 
 ## Install examples and helper files
 install -d -p %{buildroot}%{_docdir}/%{name}-%{version}/
@@ -206,7 +206,7 @@ rm -rf %{buildroot}
 %doc ChangeLog README CREDITS TODO COPYING LICENSE USAGE doc/ipv6calc.{lyx,sgml,html,xml}
 
 # binaries
-%{_bindir}/ipv6calc
+%{_bindir}/%{name}
 %{_bindir}/ipv6logconv
 %{_bindir}/ipv6logstats
 %{_bindir}/ipv6loganon
@@ -226,13 +226,11 @@ rm -rf %{buildroot}
 # database directory
 %{external_db}
 
-%{?enable_shared:%{_libdir}/*}
-
 
 %files ipv6calcweb
 %doc ipv6calcweb/README ipv6calcweb/USAGE
 
-%attr(555,root,root) %{_localstatedir}/www/cgi-bin/ipv6calcweb.cgi
+%attr(555,-,-) %{_localstatedir}/www/cgi-bin/ipv6calcweb.cgi
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
 
 
