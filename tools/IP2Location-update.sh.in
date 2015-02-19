@@ -9,39 +9,57 @@
 #
 # Project    : ipv6calc/IP2Location
 # File       : IP2Location-update.sh
-# Version    : $Id: IP2Location-update.sh.in,v 1.1 2015/02/16 20:22:23 ds6peter Exp $
+# Version    : $Id: IP2Location-update.sh.in,v 1.2 2015/02/19 06:46:33 ds6peter Exp $
 # Copyright  : 2012-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
 IP2LOCATION_DAT_DIR_DEFAULT="@IP2LOCATION_DB@"
-
 [ -z "$IP2LOCATION_DAT_DIR" ] && IP2LOCATION_DAT_DIR="$IP2LOCATION_DAT_DIR_DEFAULT"
 
-IP2LOCATION_DAT_FILES="IPV6BIN"
+IP2LOCATION_DAT_URL_BASE="http://www.ip2location.com/download?login=@LOGIN@&password=@PASSWORD@"
+IP2LOCATION_DAT_URL_BASE_SAMPLE="http://www.ip2location.com/downloads"
 
+IP2LOCATION_DAT_FILES="IPV6BIN"
 IP2LOCATION_DAT_FILES_SAMPLE="20"
 
 
-# source credentials (must provide login= and password=)
-if [ -f "$HOME/.ip2location" ]; then
-	source "$HOME/.ip2location"
-else
-	echo "ERROR : missing credential file: $HOME/.ip2location"
-	exit 1
-fi
+help() {
+	cat <<END
+Usage: $(basename "$0") [-D <dir>]
+	-D <dir>	database directory (optional)
 
-for token in login password; do
-	if [ -z "${!token}" ]; then
-		echo "ERROR : credential file has not set: $token ($HOME/.ip2location)"
+	database directory: $IP2LOCATION_DAT_DIR (default: $IP2LOCATION_DAT_DIR_DEFAULT)
+
+	it honors externally set environment value: IP2LOCATION_DAT_DIR
+
+ this script will download data from ip2location.com
+ into given/set database directory
+
+ Samples:
+ IP2LOCATION_DAT_URL_BASE_SAMPLE=$IP2LOCATION_DAT_URL_BASE_SAMPLE
+ IP2LOCATION_DAT_FILES_SAMPLE=$IP2LOCATION_DAT_FILES_SAMPLE
+ (create also softlink to IP-COUNTRY.BIN if not existing)
+
+ With authentication (requires login/password in \$HOME/.ip2location) and a valid subscription
+ IP2LOCATION_DAT_URL_BASE=$IP2LOCATION_DAT_URL_BASE
+ IP2LOCATION_DAT_FILES=$IP2LOCATION_DAT_FILES
+END
+}
+
+while getopts "D:h\?" opt; do
+	case $opt in
+	    D)
+		IP2LOCATION_DAT_DIR=$OPTARG
+		;;
+	    *)
+		help
 		exit 1
-	fi
+		;;
+	esac
 done
 
-IP2LOCATION_DAT_URL_BASE="http://www.ip2location.com/download?login=$login&password=$password"
-IP2LOCATION_DAT_URL_BASE_SAMPLE="http://www.ip2location.com/downloads"
 
-
-
+# directory check
 if [ ! -d "$IP2LOCATION_DAT_DIR" ]; then
 	echo "ERROR : missing directory: $IP2LOCATION_DAT_DIR"
 	exit 1
@@ -50,6 +68,24 @@ fi
 if [ ! -w "$IP2LOCATION_DAT_DIR" ]; then
 	echo "ERROR : missing write permissions on directory: $IP2LOCATION_DAT_DIR"
 	exit 1
+fi
+
+# source credentials (must provide login= and password=)
+if [ -f "$HOME/.ip2location" ]; then
+	source "$HOME/.ip2location"
+
+	for token in login password; do
+		if [ -z "${!token}" ]; then
+			echo "ERROR : credential file has not set: $token ($HOME/.ip2location)"
+			exit 1
+		fi
+	done
+
+	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@LOGIN@/$login}
+	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@PASSWORD@/$password}
+else
+	echo "NOTICE: missing credential file: $HOME/.ip2location (skip authenticated download)"
+	IP2LOCATION_DAT_FILES=""
 fi
 
 # Download and unpack non-sample files
@@ -100,6 +136,17 @@ for number in $IP2LOCATION_DAT_FILES_SAMPLE; do
 		continue
 	fi
 	echo "INFO  : unzip of file successful: $file_dest"
+
+	# get unzipped file
+	file=$(unzip -l "$file_dest" | grep ".BIN$" | awk '{ print $4 }')
+
+	if [ ! -e "$IP2LOCATION_DAT_DIR/IP-COUNTRY.BIN" ]; then
+		echo "NOTICE: create softlink: IP-COUNTRY.BIN -> $file"
+		ln -s "$file" "$IP2LOCATION_DAT_DIR/IP-COUNTRY.BIN"
+		if [ $? -ne 0 ]; then
+			echo "ERROR : can't create softlink ($!)"
+		fi
+	fi
 done
 
 # Adjust permissions

@@ -4,7 +4,7 @@
 #
 # Project    : ipv6calc/DBIP
 # File       : DBIP-generate-db.pl
-# Version    : $Id: DBIP-generate-db.pl,v 1.6 2015/02/15 20:19:37 ds6peter Exp $
+# Version    : $Id: DBIP-generate-db.pl,v 1.7 2015/02/19 06:46:33 ds6peter Exp $
 # Copyright  : 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 #
@@ -59,7 +59,7 @@ if (defined $opts{'S'}){
 $suffix_orig = $suffix;
 
 if (defined $opts{'A'}){
-	$suffix = $suffix . strftime(".%s", gmtime());
+	$suffix = $suffix . "new";
 	$atomic = 1;
 };
 

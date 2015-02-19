@@ -4,19 +4,52 @@
 #
 # Project    : ipv6calc/DBIP
 # File       : DBIP-update.sh
-# Version    : $Id: DBIP-update.sh.in,v 1.1 2015/02/16 20:22:23 ds6peter Exp $
+# Version    : $Id: DBIP-update.sh.in,v 1.2 2015/02/19 06:46:33 ds6peter Exp $
 # Copyright  : 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
 DBIP_DAT_DIR_DEFAULT="@DBIP_DB@"
-
 [ -z "$DBIP_DAT_DIR" ] && DBIP_DAT_DIR="$DBIP_DAT_DIR_DEFAULT"
 
 DBIP_DAT_URL_BASE="http://download.db-ip.com/free/"
-
 DBIP_DAT_FILES="dbip-country-%Y-%m.csv.gz dbip-city-%Y-%m.csv.gz"
-
 DBIP_GENERATOR_LIST="./DBIP-generate-db.pl /usr/share/ipv6calc/tools/DBIP-generate-db.pl"
+
+
+help() {
+	cat <<END
+Usage: $(basename "$0") [-s] [-D <dir>]
+	-s		skip download
+	-D <dir>	database directory (optional)
+
+	database directory: $DBIP_DAT_DIR (default: $DBIP_DAT_DIR_DEFAULT)
+
+ it honors externally set environment value: DBIP_DAT_DIR
+
+ this script (and its helper scripts) will download data from
+ DB-IP.com (free versions) and generate Berkeley DB files for ipv6calc
+ "DBIP" database support
+
+ DBIP_DAT_URL_BASE=$DBIP_DAT_URL_BASE
+ DBIP_DAT_FILES=$DBIP_DAT_FILES
+END
+}
+
+while getopts "D:sh\?" opt; do
+	case $opt in
+	    s)
+		skip_download=1
+		;;
+	    D)
+		DBIP_DAT_DIR=$OPTARG
+		;;
+	    *)
+		help
+		exit 1
+		;;
+	esac
+done
+
 
 for entry in $DBIP_GENERATOR_LIST; do
 	if [ -e "$entry" -a -x "$entry" ]; then
@@ -48,7 +81,7 @@ fi
 
 # Download files
 download_result=1
-if [ "$1" != "skip-download" ]; then
+if [ "$skip_download" != "1" ]; then
 	for file in $DBIP_DAT_FILES; do
 		# convert tokens
 		year=$(date +%Y)
