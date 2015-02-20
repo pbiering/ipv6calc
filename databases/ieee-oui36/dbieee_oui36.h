@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.25 2015/02/15 20:19:37 ds6peter Exp $
- * Generated     : Sun Feb 15 19:52:33 2015
+ * Version       : $Id: dbieee_oui36.h,v 1.26 2015/02/20 07:00:22 ds6peter Exp $
+ * Generated     : Fri Feb 20 07:39:33 2015
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20150213";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20150218";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -315,22 +315,31 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x7AF000, 0x7AFFFF, "Hessware GmbH", "HESSWARE" },
 	{ 0x70B3D5, 0x9F4000, 0x9F4FFF, "Tband srl", "TBAND-SRL" },
 	{ 0x70B3D5, 0xFF5000, 0xFF5FFF, "Prolan Process Control Co.", "PROLAN-PROCESS-CONTROL" },
+	{ 0x70B3D5, 0xE20000, 0xE20FFF, "Signature Control Systems, LLC.", "SIGNATURE-CONTROL-LLC" },
 	{ 0x70B3D5, 0xECD000, 0xECDFFF, "SBS-Feintechnik GmbH & Co. KG", "SBS-FEINTECHNIK" },
 	{ 0x70B3D5, 0xE75000, 0xE75FFF, "Nke", "NKE" },
+	{ 0x70B3D5, 0x0A6000, 0x0A6FFF, "PA CONSULTING SERVICES", "PA-CONSULTING-SERVICES" },
 	{ 0x70B3D5, 0x918000, 0x918FFF, "Glova Rail A/S", "GLOVA-RAIL-A/S" },
 	{ 0x70B3D5, 0x030000, 0x030FFF, "Tresent Technologies", "TRESENT-TECHNOLOGIES" },
+	{ 0x70B3D5, 0x958000, 0x958FFF, "pureLiFi Ltd", "PURELIFI" },
 	{ 0x70B3D5, 0x42F000, 0x42FFFF, "SINTOKOGIO, LTD", "SINTOKOGIO" },
 	{ 0x70B3D5, 0x412000, 0x412FFF, "TATTILE SRL", "TATTILE-SRL" },
+	{ 0x70B3D5, 0x342000, 0x342FFF, "Solectrix", "SOLECTRIX" },
 	{ 0x70B3D5, 0xC8D000, 0xC8DFFF, "KST Technology", "KST" },
 	{ 0x70B3D5, 0xEFE000, 0xEFEFFF, "MEIDEN SYSTEM SOLUTIONS", "MEIDEN-SYSTEM-SOLUTIONS" },
+	{ 0x70B3D5, 0x3E2000, 0x3E2FFF, "AVI Pty Ltd", "AVI-PTY" },
 	{ 0x70B3D5, 0x702000, 0x702FFF, "Sensor Highway Ltd", "SENSOR-HIGHWAY" },
 	{ 0x70B3D5, 0xECE000, 0xECEFFF, "COMM-connect A/S", "COMM-CONNECT-A/S" },
+	{ 0x70B3D5, 0x0DF000, 0x0DFFFF, "B.E.A. sa", "B-E-A" },
 	{ 0x70B3D5, 0x044000, 0x044FFF, "Don Electronics Ltd", "DON-ELECTRONICS" },
 	{ 0x70B3D5, 0x610000, 0x610FFF, "POLVISION", "POLVISION" },
+	{ 0x70B3D5, 0xC2A000, 0xC2AFFF, "Array Telepresence", "ARRAY-TELEPRESENCE" },
 	{ 0x70B3D5, 0xDDD000, 0xDDDFFF, "BIO RAD LABORATORIES", "BIO-RAD-LABORATORIES" },
 	{ 0x70B3D5, 0xAFA000, 0xAFAFFF, "Power Security Systems Ltd.", "POWER-SECURITY" },
+	{ 0x70B3D5, 0x431000, 0x431FFF, "Power Electronics Espana, S.L.", "POWER-ELECTRONICS-ESPANA-S-L" },
 	{ 0x70B3D5, 0xC2C000, 0xC2CFFF, "Dromont S.p.A.", "DROMONT-S-P-A" },
 	{ 0x70B3D5, 0x3D9000, 0x3D9FFF, "Aplex Technology Inc.", "APLEX" },
+	{ 0x70B3D5, 0xFE8000, 0xFE8FFF, "PCME Ltd.", "PCME" },
 	{ 0x70B3D5, 0xFD1000, 0xFD1FFF, "RedRat Ltd", "REDRAT" },
 	{ 0x70B3D5, 0x05F000, 0x05FFFF, "UNISOR MULTISYSTEMS LTD", "UNISOR-MULTISYSTEMS" },
 	{ 0x70B3D5, 0x5A8000, 0x5A8FFF, "Farmobile", "FARMOBILE" },
