@@ -1,6 +1,6 @@
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.7 2015/02/15 20:22:05 ds6peter Exp $
+# Version    : $Id: Makefile,v 1.8 2015/02/20 07:35:54 ds6peter Exp $
 # Copyright  : 2005-2015 by Peter Bieringer <pb (at) bieringer.de>
 #               Initial copy from ../ipv4-assignment/Makefile & adaption for IPv6 by Simon Arlott
 #
@@ -9,9 +9,6 @@
 
 all:
 		test -f dbipv6addr_assignment.h || ${MAKE} update
-
-db:
-		test -f ipv6calc-external-ipv6-registry.db || ${MAKE} update
 
 install:
 		echo "Nothing to do"

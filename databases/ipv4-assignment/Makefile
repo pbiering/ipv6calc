@@ -1,6 +1,6 @@
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.22 2015/02/15 20:22:05 ds6peter Exp $
+# Version    : $Id: Makefile,v 1.23 2015/02/20 07:35:54 ds6peter Exp $
 # Copyright  : 2005-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -8,9 +8,6 @@
 
 all:
 		test -f dbipv4addr_assignment.h || ${MAKE} update
-
-db:
-		test -f ipv6calc-external-ipv4-registry.db || ${MAKE} update
 
 install:
 		echo "Nothing to do"
