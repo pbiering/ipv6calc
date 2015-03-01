@@ -1,12 +1,12 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.237 2015/02/20 07:35:54 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.238 2015/03/01 21:45:17 ds6peter Exp $
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
-Version:	0.98.0rc4
-Release: 	1%{?dist}
+Version:	0.98.0
+Release: 	9%{?dist}
 Group:		Applications/Text
 URL:		http://www.deepspace6.net/projects/%{name}.html
 License:	GPLv2
@@ -205,29 +205,30 @@ rm -rf %{buildroot}
 %files
 %doc ChangeLog README CREDITS TODO COPYING LICENSE USAGE doc/ipv6calc.{lyx,sgml,html,xml}
 
+%defattr(644,root,root,755)
+
 # binaries
-%{_bindir}/%{name}
-%{_bindir}/ipv6logconv
-%{_bindir}/ipv6logstats
-%{_bindir}/ipv6loganon
+%attr(755,-,-) %{_bindir}/*
 
 # man pages
 %{_mandir}/man8/*
 
 # tools
-%{_datadir}/%{name}/tools/*
-
-# examples
-%{_datadir}/%{name}/examples/*
+%attr(755,-,-) %{_datadir}/%{name}/tools/*
 
 # shared library
-%{?enable_shared:%{_libdir}/*}
+%{?enable_shared:%attr(755,-,-) %{_libdir}/*}
 
 # database directory
 %{external_db}
 
+# examples
+%{_datadir}/%{name}/examples/*
+
 
 %files ipv6calcweb
+%defattr(644,root,root,755)
+
 %doc ipv6calcweb/README ipv6calcweb/USAGE
 
 %attr(555,-,-) %{_localstatedir}/www/cgi-bin/ipv6calcweb.cgi
@@ -235,6 +236,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sun Mar 01 2015 Peter Bieringer <pb@bieringer.de>
+- remove not necessary x-bits for some files by proper definition in %files section
+
 * Wed Feb 18 2015 Peter Bieringer <pb@bieringer.de>
 - delete subpackage db, major spec file alignment with Fedora-SCM version
 

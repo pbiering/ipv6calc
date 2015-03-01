@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.385 2015/02/20 07:00:22 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.386 2015/03/01 21:45:17 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,11 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20150301/PB
+	spec file: rebase with fedora-scm spec
+	fix VERSION (still containing rc4)
+	retag version 0.98.0
+	
 20150220/PB
 	doc/*: update
 	databases: update
