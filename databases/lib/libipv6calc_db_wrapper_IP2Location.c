@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.26 2015/04/16 08:42:44 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.27 2015/04/16 20:40:08 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -651,7 +651,9 @@ char *libipv6calc_db_wrapper_IP2Location_lib_version(void) {
 	snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d", IP2LOCATION_API_VERSION, libipv6calc_db_wrapper_IP2Location_library_version_major());
 #endif
 
+#ifdef SUPPORT_IP2LOCATION_DYN
 END_libipv6calc_db_wrapper:
+#endif
 	return(result_IP2Location_lib_version);
 };
 
