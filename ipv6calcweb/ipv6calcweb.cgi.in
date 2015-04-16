@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.82 2015/04/16 06:23:20 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.83 2015/04/16 08:53:32 ds6peter Exp $
 # Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -699,6 +699,46 @@ my %text = (
 	'AREACODE' => {
 		'de' => "Area-Code",
 		'en' => "Area Code",
+	},
+	'TIMEZONE' => {
+		'de' => "Zeitzone",
+		'en' => "Time Zone",
+	},
+	'NETSPEED' => {
+		'de' => "Netzgeschwindigkeit",
+		'en' => "Net Speed",
+	},
+	'WEATHERSTATIONNAME' => {
+		'de' => "Name der Wetterstation",
+		'en' => "Weather Station Name",
+	},
+	'WEATHERSTATIONCODE' => {
+		'de' => "Code der Wetterstation",
+		'en' => "Weather Station Code",
+	},
+	'IDDCODE' => {
+		'de' => "Landesvorwahl",
+		'en' => "Internation Direct Dialing",
+	},
+	'ELEVATION' => {
+		'de' => "Hoehe ueber Meeresspiegel [m]",
+		'en' => "High above Sealevel [m]",
+	},
+	'USAGETYPE' => {
+		'de' => "Art der Benutzung",
+		'en' => "Usage Type Classification",
+	},
+	'MOBILEBRAND' => {
+		'de' => "Mobile Brand",
+		'en' => "Mobile Brand",
+	},
+	'MNC' => {
+		'de' => "Mobile Network Code",
+		'en' => "Mobile Network Code",
+	},
+	'MCC' => {
+		'de' => "Mobile Country Code",
+		'en' => "Mobile Country Code",
 	},
 );
 
