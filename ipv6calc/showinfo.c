@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.128 2015/04/16 06:23:20 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.129 2015/04/16 08:42:44 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -306,7 +306,7 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 
 	if (record != NULL) {
 		if ( machinereadable != 0 ) {
-#define TEST_IP2LOCATION_AVAILABLE(v)	((v != NULL) && (strstr(v, "unavailable") == NULL) && (strstr(v, "demo database") == NULL) && (strstr(v, "This is demo") == NULL) && (strstr(v, "INVALID") == NULL))
+#define TEST_IP2LOCATION_AVAILABLE(v)	((v != NULL) && (strstr(v, "unavailable") == NULL) && (strstr(v, "demo database") == NULL) && (strstr(v, "This is demo") == NULL) && (strstr(v, "INVALID") == NULL) && (strstr(v, "-") == NULL))
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->region)) {
 				snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_REGION%s=%s", additionalstring, record->region);

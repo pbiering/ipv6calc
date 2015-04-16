@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.25 2015/04/16 06:23:20 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.26 2015/04/16 08:42:44 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -15,6 +15,8 @@
 #include <dlfcn.h>
 #include <unistd.h>
 #include <errno.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include "config.h"
 
@@ -90,10 +92,6 @@ static int wrapper_ip2location_ipv6_support = IP2LOCATION_IPV6_SUPPORT_UNKNOWN;
 #endif
 #endif // SUPPORT_IP2LOCATION_DYN
 
-static int ip2location_asnum_v4 = 0;
-static int ip2location_asnum_v6 = 0;
-static int ip2location_city_v4 = 0;
-static int ip2location_city_v6 = 0;
 
 // DB used for resolution after automatic election, which is currently done by checking for DB files and the sequence in the header file
 static int ip2location_db_country_v4 = 0;
@@ -420,7 +418,14 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_info(char* string, const size_t 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called");
 
 #ifdef SUPPORT_IP2LOCATION
-	snprintf(string, size, "IP2Location available databases: Country4=%d Country6=%d ASN4=%d ASN6=%d City4=%d City6=%d", (wrapper_features & IPV6CALC_DB_IPV4_TO_CC) ? 1 : 0, (wrapper_features & IPV6CALC_DB_IPV6_TO_CC) ? 1 : 0, ip2location_asnum_v4, ip2location_asnum_v6, ip2location_city_v4, ip2location_city_v6);
+	snprintf(string, size, "IP2Location available databases: Country4=%d Country6=%d ASN4=%d ASN6=%d City4=%d City6=%d"
+		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] & IPV6CALC_DB_IPV4_TO_CC)   ? 1 : 0
+		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] & IPV6CALC_DB_IPV6_TO_CC)   ? 1 : 0
+		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] & IPV6CALC_DB_IPV4_TO_AS)   ? 1 : 0
+		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] & IPV6CALC_DB_IPV6_TO_AS)   ? 1 : 0
+		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] & IPV6CALC_DB_IPV4_TO_CITY) ? 1 : 0
+		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] & IPV6CALC_DB_IPV6_TO_CITY) ? 1 : 0
+	);
 #else
 	snprintf(string, size, "No IP2Location support built-in");
 #endif
@@ -437,7 +442,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_info(char* string, const size_t 
  */
 void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_verbose, const char *prefix_string) {
 	IP2Location *loc;
-	int i, type, count = 0;
+	int i, type, count = 0, r;
 
 	const char *prefix = "\0";
 	if (prefix_string != NULL) {
@@ -469,18 +474,27 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 			};
 		} else {
 #endif // SUPPORT_IP2LOCATION_DYN
-		if (libipv6calc_db_wrapper_IP2Location_db_avail(type)) {
+		r = libipv6calc_db_wrapper_IP2Location_db_avail(type);
+		if (r == 2) {
+			printf("%sIP2Location: %s %-43s:[%3d] %-35s (UNSUPPORTED SOFTLINK)\n", prefix,
+				((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) == (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) ? "IPvx" : (((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0) ? "IPv6" : "IPv4"),
+				libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description,
+				libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number,
+				libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename);
+		} else if (r == 1) {
 			// IP2Location returned that database is available
 			loc = libipv6calc_db_wrapper_IP2Location_open_type(type);
 			if (loc == NULL) {
-				printf("%sIP2Location: %s %-43s: %-35s (CAN'T OPEN)\n", prefix,
+				printf("%sIP2Location: %s %-43s:[%3d] %-35s (CAN'T OPEN)\n", prefix,
 					((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) == (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) ? "IPvx" : (((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0) ? "IPv6" : "IPv4"),
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description,
+					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number,
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename);
 			} else { 
-				printf("%sIP2Location: %s %-43s: %-35s (%s)\n", prefix,
+				printf("%sIP2Location: %s %-43s:[%3d] %-35s (%s)\n", prefix,
 					((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) == (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) ? "IPvx" : (((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0) ? "IPv6" : "IPv4"),
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description,
+					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number,
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename,
 					libipv6calc_db_wrapper_IP2Location_database_info(loc, level_verbose, i, 0));
 				libipv6calc_db_wrapper_IP2Location_close(loc);
@@ -488,9 +502,10 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 			};
 		} else {
 			if (level_verbose == LEVEL_VERBOSE2) {
-				printf("%sIP2Location: %s %-43s: %-35s (%s)\n", prefix,
+				printf("%sIP2Location: %s %-43s:[%3d] %-35s (%s)\n", prefix,
 					((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) == (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) ? "IPvx" : (((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0) ? "IPv6" : "IPv4"),
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description,
+					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number,
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename,
 					strerror(errno));
 			};
@@ -504,10 +519,15 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 	if (count == 0) {
 		printf("%sIP2Location: NO available databases found in directory: %s\n", prefix, ip2location_db_dir);
 	} else {
-		if (level_verbose == LEVEL_VERBOSE2) {
-			printf("%sIP2Location: Selected databases SAMPLE  Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_sample_v4, ip2location_db_country_sample_v6, ip2location_db_region_city_sample_v4, ip2location_db_region_city_sample_v6);
-			printf("%sIP2Location: Selected databases LITE    Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_lite_v4, ip2location_db_country_lite_v6, ip2location_db_region_city_lite_v4, ip2location_db_region_city_lite_v6);
-			printf("%sIP2Location: Selected databases (final) Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_v4, ip2location_db_country_v6, ip2location_db_region_city_v4, ip2location_db_region_city_v6);
+		if (level_verbose >= LEVEL_VERBOSE) {
+			printf("%sIP2Location: Detected databases SAMPLE  Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_sample_v4, ip2location_db_country_sample_v6, ip2location_db_region_city_sample_v4, ip2location_db_region_city_sample_v6);
+			printf("%sIP2Location: Detected databases LITE    Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_lite_v4, ip2location_db_country_lite_v6, ip2location_db_region_city_lite_v4, ip2location_db_region_city_lite_v6);
+
+			if (ip2location_db_region_city_lite_to_sample_autoswitch == 1) {
+				printf("%sIP2Location: Selected databases (norm)  Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d (autoswitch to samples enabled)\n", prefix, ip2location_db_country_v4, ip2location_db_country_v6, ip2location_db_region_city_v4, ip2location_db_region_city_v6);
+			} else {
+				printf("%sIP2Location: Selected databases         Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_v4, ip2location_db_country_v6, ip2location_db_region_city_v4, ip2location_db_region_city_v6);
+			};
 		};
 	};
 #else // SUPPORT_IP2LOCATION
@@ -691,12 +711,13 @@ const char *libipv6calc_db_wrapper_IP2Location_dbdescription(int type) {
 
 /*
  * wrapper extension: IP2Location_db_avail
- * ret: 1=avail  0=not-avail
+ * ret: 1=avail  0=not-avail 2=softlink (unsupported)
  */
 int libipv6calc_db_wrapper_IP2Location_db_avail(int type) {
 	char *filename;
-	int r = 0;
+	int r, result = 0;
 	IP2Location *loc;
+	struct stat st;
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called: %s type=%d", wrapper_ip2location_info, type);
 
@@ -706,35 +727,33 @@ int libipv6calc_db_wrapper_IP2Location_db_avail(int type) {
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	r = (access(filename, R_OK) == 0) ? 1:0;
+	if (access(filename, R_OK) != 0) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished: %s type=%d (not readable) (%s)", wrapper_ip2location_info, type, strerror(errno));
+		goto END_libipv6calc_db_wrapper;
+	};
 
-	if (r == 0) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished: %s type=%d (still unknown) (r=%d: %s)", wrapper_ip2location_info, type, r, strerror(errno));
+	r = lstat(filename, &st);
+	if (r != 0) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished: %s type=%d (lstat problem) (r=%d)", wrapper_ip2location_info, type, r);
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	if (S_ISLNK(st.st_mode)) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished: %s type=%d (unsupported softlink)", wrapper_ip2location_info, type);
+		result = 2;
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	loc = libipv6calc_db_wrapper_IP2Location_open_type(type);
+	if (loc == NULL) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished: %s type=%d (can't open)", wrapper_ip2location_info, type);
 	} else {
-		loc = libipv6calc_db_wrapper_IP2Location_open_type(type);
-		if (loc == NULL) {
-			r = 0;
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished: %s type=%d (can't open)", wrapper_ip2location_info, type);
-		} else {
-			// extend feature flags depending on DB version
-			if (loc->databasetype >= 3) {
-				// DB version >= 3 supports CITY+REGION
-				// TODO: migrate this code to more sophisticated selection on other parts here
-				if (loc->ipversion == 0) {
-					// IPv4
-					ip2location_city_v4 = 1;
-				} else {
-					// IPv6
-					ip2location_city_v6 = 1;
-				};
-
-			};
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished: %s type=%d (%s) (r=%d)", wrapper_ip2location_info, type, filename, r);
-		};
+		result = 1;
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished: %s type=%d (%s) (r=%d)", wrapper_ip2location_info, type, filename, r);
 	};
 
 END_libipv6calc_db_wrapper:
-	return(r);
+	return(result);
 };
 
 
@@ -968,7 +987,7 @@ char *libipv6calc_db_wrapper_IP2Location_database_info(IP2Location *loc, const i
 #endif // SUPPORT_IP2LOCATION_DYN
 
 			if (flag_copyright != 0) {
-				snprintf(resultstring, sizeof(resultstring), "IP2L-DB%d %s%s%04d%02d%02d Copyright (c) %04d IP2Location All Rights Reserved IPv4=%u IPv6=%u type=%d%s", 
+				snprintf(resultstring, sizeof(resultstring), "IP2L-DB%d %s%s%04d%02d%02d Copyright (c) %04d IP2Location All Rights Reserved IPv4=%u IPv6=%u %s", 
 					loc->databasetype,
 					(features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0 ? "IPv6 " : "IPv4 ",
 					((internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LITE) != 0 ? "LITE " : ((internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE) != 0 ? "SAMPLE " : (internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_FREE) != 0 ? "FREE " : "" )),
@@ -978,11 +997,10 @@ char *libipv6calc_db_wrapper_IP2Location_database_info(IP2Location *loc, const i
 					loc->databaseyear + 2000,
 					entries_ipv4,
 					entries_ipv6,
-					type,
 					(libipv6calc_db_wrapper_IP2Location_db_compatible(type) != 0) ? " INCOMPATIBLE" : ""
 				);
 			} else {
-				snprintf(resultstring, sizeof(resultstring), "IP2L-DB%d %s%s%04d%02d%02d IPv4=%u IPv6=%u type=%d%s", 
+				snprintf(resultstring, sizeof(resultstring), "IP2L-DB%d %s%s%04d%02d%02d IPv4=%u IPv6=%u %s", 
 					loc->databasetype,
 					(features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0 ? "IPv6 " : "IPv4 ",
 					((internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LITE) != 0 ? "LITE " : ((internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE) != 0 ? "SAMPLE " : (internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_FREE) != 0 ? "FREE " : "" )),
@@ -991,7 +1009,6 @@ char *libipv6calc_db_wrapper_IP2Location_database_info(IP2Location *loc, const i
 					loc->databaseday,
 					entries_ipv4,
 					entries_ipv6,
-					type,
 					(libipv6calc_db_wrapper_IP2Location_db_compatible(type) != 0) ? " INCOMPATIBLE" : ""
 				);
 			};

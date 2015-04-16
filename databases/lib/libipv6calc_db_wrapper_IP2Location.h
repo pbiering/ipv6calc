@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.h
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.h,v 1.7 2015/04/16 06:23:20 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.h,v 1.8 2015/04/16 08:42:44 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -556,7 +556,7 @@ extern uint32_t wrapper_features_IP2Location;
 
 /* IP2Location Usage Type explanation
     see also: http://www.ip2location.com/databases/db24-ip-country-region-city-latitude-longitude-zipcode-timezone-isp-domain-netspeed-areacode-weather-mobile-elevation-usagetype
-*/ 
+*/
 static const s_type2 libipv6calc_db_wrapper_IP2Location_UsageType[] = {
 	{ 0,  "Commercial"                     , "COM" },
 	{ 1,  "Organization"                   , "ORG" },
