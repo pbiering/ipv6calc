@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.69 2015/04/16 06:23:20 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.70 2015/04/16 06:23:51 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -734,7 +734,7 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "  IPv4/v6 address filter tokens based on databases:\n");
 			fprintf(stderr, "   [^][ipv4.|ipv6.]db.cc=<CC>|unknown (Country Code [2 chars])\n");
 			fprintf(stderr, "   [^][ipv4.|ipv6.]db.asn=<ASN>|unknown (Autonomous System Number [numeric])\n");
-			fprintf(stderr, "   [^][ipv4.|ipv6.]db.reg=<REGISTRY>|unknown (Registry)\n");
+			fprintf(stderr, "   [^][ipv4.|ipv6.]db.reg=<REGISTRY> (Registry)\n");
 			fprintf(stderr, "    Registry tokens:");
 			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_registries); i++ ) {
 				fprintf(stderr, " %s", ipv6calc_registries[i].token);
