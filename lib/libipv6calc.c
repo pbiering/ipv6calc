@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.39 2014/09/24 09:07:58 ds6peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.40 2015/04/16 06:23:20 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -411,7 +411,7 @@ END_libipv6calc_autodetectinput:
 
 
 /*
- * clear filter master address
+ * clear filter master structure
  *
  * in : *filter    = filter structure
  */
@@ -419,6 +419,68 @@ void libipv6calc_filter_clear(s_ipv6calc_filter_master *filter_master) {
 	ipv4addr_filter_clear(&filter_master->filter_ipv4addr);
 	ipv6addr_filter_clear(&filter_master->filter_ipv6addr);
         macaddr_filter_clear(&filter_master->filter_macaddr);
+	return;
+};
+
+/*
+ * clear filter sub structure db_cc
+ *
+ * in : *filter    = filter structure
+ */
+void libipv6calc_filter_clear_db_cc(s_ipv6calc_filter_db_cc *filter_db_cc) {
+	int i;
+
+	filter_db_cc->active = 0;
+	filter_db_cc->cc_must_have_max = 0;
+	filter_db_cc->cc_may_not_have_max = 0;
+
+	for (i = 0; i < IPV6CALC_FILTER_DB_CC_MAX; i++) {
+		filter_db_cc->cc_must_have[i] = 0;
+		filter_db_cc->cc_may_not_have[i] = 0;
+	};
+
+	return;
+};
+
+
+/*
+ * clear filter sub structure db_asn
+ *
+ * in : *filter    = filter structure
+ */
+void libipv6calc_filter_clear_db_asn(s_ipv6calc_filter_db_asn *filter_db_asn) {
+	int i;
+
+	filter_db_asn->active = 0;
+	filter_db_asn->asn_must_have_max = 0;
+	filter_db_asn->asn_may_not_have_max = 0;
+
+	for (i = 0; i < IPV6CALC_FILTER_DB_ASN_MAX; i++) {
+		filter_db_asn->asn_must_have[i] = 0;
+		filter_db_asn->asn_may_not_have[i] = 0;
+	};
+
+	return;
+};
+
+
+/*
+ * clear filter sub structure db_registry
+ *
+ * in : *filter    = filter structure
+ */
+void libipv6calc_filter_clear_db_registry(s_ipv6calc_filter_db_registry *filter_db_registry) {
+	int i;
+
+	filter_db_registry->active = 0;
+	filter_db_registry->registry_must_have_max = 0;
+	filter_db_registry->registry_may_not_have_max = 0;
+
+	for (i = 0; i < IPV6CALC_FILTER_DB_REGISTRY_MAX; i++) {
+		filter_db_registry->registry_must_have[i] = 0;
+		filter_db_registry->registry_may_not_have[i] = 0;
+	};
+
 	return;
 };
 
@@ -436,6 +498,8 @@ int libipv6calc_filter_parse(const char *expression, s_ipv6calc_filter_master *f
 	ptrptr = &cptr;
 	int r, token_used, result = 0;
 
+	DEBUGPRINT_WA(DEBUG_libipv6calc, "called with: %s", expression);
+
 	snprintf(tempstring, sizeof(tempstring), "%s", expression);
 
 	/* split expression */
@@ -448,7 +512,7 @@ int libipv6calc_filter_parse(const char *expression, s_ipv6calc_filter_master *f
 			token_used = 1;
 		} else if (r == 2) {
 			result = 1;
-			fprintf(stderr, "Unrecognized filter token: %s\n", charptr);
+			ERRORPRINT_WA("Unrecognized filter token (ipv4): %s", charptr);
 		};
 
 		r = ipv6addr_filter_parse(&filter_master->filter_ipv6addr, charptr);
@@ -456,18 +520,47 @@ int libipv6calc_filter_parse(const char *expression, s_ipv6calc_filter_master *f
 			token_used = 1;
 		} else if (r == 2) {
 			result = 1;
-			fprintf(stderr, "Unrecognized filter token: %s\n", charptr);
+			ERRORPRINT_WA("Unrecognized filter token (ipv6): %s", charptr);
 		};
 
-		// r += macaddr_filter_parse(&filter_macaddr, charptr);
+		// r += macaddr_filter_parse(&filter_macaddr, charptr); // missing implementation
 
 		/* overall check */
-		if (token_used == 0) {
+		if ((token_used == 0) && (result != 1)) {
 			result = 1;
-			fprintf(stderr, "Unrecognized filter token: %s\n", charptr);
+			ERRORPRINT_WA("Unrecognized filter token (general): %s", charptr);
 		};
 
 		charptr = strtok_r(NULL, ",", ptrptr);
+	};
+
+	return (result);
+};
+
+
+/*
+ * function checks ipv6calc filter expression
+ *
+ * in: master filter structure
+ * ret: success
+ */
+int libipv6calc_filter_check(s_ipv6calc_filter_master *filter_master) {
+	int result = 0, r;
+
+	DEBUGPRINT_NA(DEBUG_libipv6calc, "called");
+
+	r = ipv4addr_filter_check(&filter_master->filter_ipv4addr);
+	if (r > 0) {
+		result = 1;
+	};
+
+	r = ipv6addr_filter_check(&filter_master->filter_ipv6addr);
+	if (r > 0) {
+		result = 1;
+	};
+
+	if (result == 1) {
+		ERRORPRINT_NA("filter check failed");
 	};
 
 	return (result);

@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.46 2014/10/24 06:20:34 ds6peter Exp $
-# Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_scenarios.sh,v 1.47 2015/04/16 06:23:20 ds6peter Exp $
+# Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
 
@@ -11,9 +11,9 @@
 testscenarios_auto_good() {
 	cat <<END | grep -v '^#'
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF						ipv6addr
-1.2.3.4										ipv4addr
-1.2.3.4/0									ipv4addr
-1.2.3.4/32									ipv4addr
+2.2.3.4										ipv4addr
+2.2.3.4/0									ipv4addr
+2.2.3.4/32									ipv4addr
 01:23:45:67:89:01								mac
 01-23-45-67-89-01								mac
 012345678901									mac
@@ -327,11 +327,11 @@ testscenarios_anonymization_options_kp() {
 	cat <<END | grep -v '^#'
 --anonymize-preset kp			46.244.223.233=242.222.34.63
 --anonymize-preset kp			2001:0a60:11e1:9501:e876:aee4:0721:e8ac=a909:16fa:9092:23ff:a909:4941::7
---anonymize-preset kp			::1.2.3.4=::246.24.59.65
---anonymize-preset kp			::ffff:1.2.3.4=::ffff:246.24.59.65
+--anonymize-preset kp			::2.2.3.4=::253.134.12.143
+--anonymize-preset kp			::ffff:2.2.3.4=::ffff:253.134.12.143
 --anonymize-preset kp			::1=::1
 --anonymize-preset kp			3ffe:831f:ce49:7601:8000:efff:af4a:86bf=3ffe:831f:ce49:7601:8000:ffff:a0b:f33a
---anonymize-preset kp			64:ff9b::0102:0304=64:ff9b::f618:3b41
+--anonymize-preset kp			64:ff9b::0202:0304=64:ff9b::fd86:c8f
 --anonymize-preset kp			2001:0db8:0000:0000:81c0:0f3f:c807:1455=2001:db8::a909:4941:0:7
 END
 }
@@ -387,9 +387,9 @@ testscenarios_showinfo_geoip() {
 46.244.223.233				GEOIP_COUNTRY_SHORT=DE
 46.244.223.233				IPV4_AS_NUM=8767		DB_IPV4_AS
 46.244.223.233				IPV4_REGISTRY=RIPENCC
-1.2.3.4					IPV4_COUNTRYCODE=AU
-::1.2.3.4				IPV4_COUNTRYCODE[1.2.3.4]=AU
-::ffff:1.2.3.4				IPV4_COUNTRYCODE[1.2.3.4]=AU
+2.2.3.4					IPV4_COUNTRYCODE=FR
+::2.2.3.4				IPV4_COUNTRYCODE[2.2.3.4]=FR
+::ffff:2.2.3.4				IPV4_COUNTRYCODE[2.2.3.4]=FR
 # non-anonymized IPv6 prefix
 2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=DE		DB_IPV6_CC
 2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_AS_NUM=8767		DB_IPV6_AS
@@ -401,9 +401,14 @@ testscenarios_showinfo_ip2location() {
 # non-anonymized IPv4 address
 46.244.223.233				IPV4_COUNTRYCODE=DE
 46.244.223.233				IP2LOCATION_COUNTRY_SHORT=DE
+END
+}
+
+testscenarios_showinfo_ip2location6() {
+	cat <<END | grep -v '^#'
 # non-anonymized IPv6 prefix
-2001:4dd0:f838:a006::3			IPV6_COUNTRYCODE=DE
-2001:4dd0:f838:a006::3			IP2LOCATION_COUNTRY_SHORT=DE
+2a04::1					IPV6_COUNTRYCODE=DE
+2a04::1					IP2LOCATION_COUNTRY_SHORT=DE
 END
 }
 
@@ -434,10 +439,10 @@ END
 testscenarios_showinfo_anonymized_info() {
 	cat <<END | grep -v '^#'
 # IPv4 address
-1.2.3.4;;match;IPV4_ANON=246.24.59.65
-1.2.3.4;;key-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
-1.2.3.4;--db-geoip-disable --db-ip2location-disable;match;IPV4_ANON=1.2.3.0
-1.2.3.4;--db-geoip-disable --db-ip2location-disable;key-no-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
+2.2.3.4;;match;IPV4_ANON=253.134.12.143
+2.2.3.4;;key-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
+2.2.3.4;--db-geoip-disable --db-ip2location-disable;match;IPV4_ANON=2.2.3.0
+2.2.3.4;--db-geoip-disable --db-ip2location-disable;key-no-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
 END
 }
 

@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Version    : $Id: autogen-all-variants.sh,v 1.45 2014/10/07 20:25:21 ds6peter Exp $
-# Copyright  : 2011-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: autogen-all-variants.sh,v 1.46 2015/04/16 06:23:20 ds6peter Exp $
+# Copyright  : 2011-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
 #
@@ -43,13 +43,20 @@ END
 		for version in $ip2location_versions; do
 			[ ${version:0:1} = "!" ] && continue
 			local testlist=""
+			local option=""
 			for version_test in $ip2location_versions; do
-				[ ${version_test:0:1} = "!" ] && continue
-				if ip2location_cross_version_test_blacklist $version $version_test; then
+				if [ "$dynamic_load" = "1" ]; then
+					option="--ip2location-dyn"
+					# unconditionally test all versions
 					testlist="$testlist I:$version_test"
+				else
+					[ ${version_test:0:1} = "!" ] && continue
+					if ip2location_cross_version_test_blacklist $version $version_test; then
+						testlist="$testlist I:$version_test"
+					fi
 				fi
 			done
-			echo "NONE#--enable-ip2location $(options_from_name_version IP2Location $version)#$testlist"
+			echo "NONE#--enable-ip2location $option $(options_from_name_version IP2Location $version)#$testlist"
 		done
 	fi
 
@@ -57,13 +64,20 @@ END
 		for version in $geoip_versions; do
 			[ ${version:0:1} = "!" ] && continue
 			local testlist=""
+			local option=""
 			for version_test in $geoip_versions; do
-				[ ${version_test:0:1} = "!" ] && continue
-				if geoip_cross_version_test_blacklist $version $version_test; then
+				if [ "$dynamic_load" = "1" ]; then
+					option="--geoip-dyn"
+					# unconditionally test all versions
 					testlist="$testlist G:$version_test"
+				else
+					[ ${version_test:0:1} = "!" ] && continue
+					if geoip_cross_version_test_blacklist $version $version_test; then
+						testlist="$testlist G:$version_test"
+					fi
 				fi
 			done
-			echo "NONE#--enable-geoip $(options_from_name_version GeoIP $version)#$testlist"
+			echo "NONE#--enable-geoip $option $(options_from_name_version GeoIP $version)#$testlist"
 		done
 	fi
 }
@@ -74,28 +88,25 @@ $0
 	-h|-?	this online help
 	-f	force new run, remove status file unconditionally
 	-r	force re-run, after finished one, remove status file
-	-W	add option -W (warning) to autogen.sh
 	-N	add --no-static-build to autogen.sh
 	-I	skip IP2Location builds using system wide available library
 	-G	skip GeoIP builds using system wide available library
 	-g	run through internal defined GeoIP versions
 	-i	run through internal defined IP2Location versions
+	-D	enable dynamic library loading in run through versions	
 	-M	skip main tests
 	-n	dry-run, show only what would be build
 END
 }
 
 
-while getopts ":cNMigrIGfWn?h" opt; do
+while getopts ":cDNMigrIGfWn?h" opt; do
 	case $opt in
 	    'f')
 		force=1
 		;;
 	    'r')
 		rerun=1
-		;;
-	    'W')
-		options_add="$options_add -W"
 		;;
 	    'N')
 		no_static_build=1
@@ -124,6 +135,9 @@ while getopts ":cNMigrIGfWn?h" opt; do
 		;;
 	    'c')
 		cross_versions_test="1"
+		;;
+	    'D')
+		dynamic_load="1"
 		;;
 	    \?|h)
 		help
@@ -224,9 +238,13 @@ for liboption in "normal" "shared"; do
 
 		# check for already executed option combination
 		if [ -f "$status_file" ]; then
-			if egrep -q ":FINISHED:variants:$options:" $status_file; then
-				echo "NOTICE: skip variant run (already finished) with: $options"
-				continue
+			if [ -z "$testlist" ]; then
+				if egrep -q ":FINISHED:variants:$options:" $status_file; then
+					echo "NOTICE: skip variant run (already finished) with: $options"
+					continue
+				fi
+			else
+				echo "NOTICE: testlist not empty, check dedicated build (testlist: $testlist) with: $options"
 			fi
 		fi
 
@@ -238,18 +256,18 @@ for liboption in "normal" "shared"; do
 			continue
 		fi
 
+		options_test=""
+
+		if [ -n "$testlist" ]; then
+			options_test="--no-test"
+		fi
+
 		if [ "$dry_run" = "1" ]; then
-			if [ -n "$testlist" ]; then
-				echo "INFO  : would call(dry-run): ./autogen.sh $options (testlist: $testlist)"
-			else
-				echo "INFO  : would call(dry-run): ./autogen.sh $options"
+			echo "INFO  : would call(dry-run): ./autogen.sh $options_test $options"
+			if [ -z "$testlist" ]; then
+				continue
 			fi
 		else
-			options_test=""
-			if [ -n "$testlist" ]; then
-				options_test="--no-test"
-			fi
-
 			# run autogen
 			echo "INFO  : call: ./autogen.sh $options_test $options"
 
@@ -258,36 +276,88 @@ for liboption in "normal" "shared"; do
 				echo "ERROR : autogen.sh reports an error with options: $options_test $options"
 				exit 1
 			fi
-
-			if [ -n "$testlist" ]; then
-				for entry in $testlist; do
-					name=${entry/:*}
-					version=${entry/*:}
-					lib=$(options_from_name_version $name $version "only-lib")
-
-					if [ -z "$lib" ]; then
-						echo "ERROR : something wrong in call of: options_from_name_version $name $version 'only-lib'"
-						exit 1
-					fi
-					if [ ! -e "$lib" ]; then
-						echo "ERROR : library missing: $lib (got from: options_from_name_version $name $version 'only-lib')"
-						exit 1
-					fi
-
-					echo "INFO  : call: LD_PRELOAD=$lib make test-ldlibpath"
-					LD_PRELOAD="$lib" make test-ldlibpath
-					if [ $? -ne 0 ]; then
-						echo "ERROR : autogen.sh reports an error with options: $options during testlist entry: $entry"
-						echo "NOTICE: executed command: LD_PRELOAD="$lib" make test-ldlibpath"
-						exit 1
-					fi
-					date "+%s:FINISHED:variants:$options:TESTLIST-ENTRY=$entry" >>$status_file
-				done
-			fi
-
-			# add entry in log
-			date "+%s:FINISHED:variants:$options:OK" >>$status_file
 		fi
+
+		if [ -n "$testlist" ]; then
+			for entry in $testlist; do
+				if egrep -q ":FINISHED:variants:$options:TESTLIST-ENTRY=$entry" $status_file; then
+					echo "NOTICE: skip variant test (already finished) with: $options and $entry"
+					continue
+				fi
+
+				if [ "$dry_run" = "1" ]; then
+					echo "INFO  : would call(dry-run): ./autogen.sh $options (testlist entry: $entry)"
+					continue
+				fi
+
+				name=${entry/:*}
+				version=${entry/*:}
+				lib=$(options_from_name_version $name $version "only-lib")
+				libdir=$(options_from_name_version $name $version "only-libdir")
+
+				if [ -z "$lib" ]; then
+					echo "ERROR : something wrong in call of: options_from_name_version $name $version 'only-lib'"
+					exit 1
+				fi
+
+				if [ -z "$libdir" ]; then
+					echo "ERROR : something wrong in call of: options_from_name_version $name $version 'only-libdir'"
+					exit 1
+				fi
+
+				if [ ! -e "$lib" ]; then
+					echo "ERROR : library missing: $lib (got from: options_from_name_version $name $version 'only-lib')"
+					exit 1
+				fi
+
+				if [ ! -d "$libdir" ]; then
+					echo "ERROR : library directory missing: $libdir (got from: options_from_name_version $name $version 'only-libdir')"
+					exit 1
+				fi
+
+				if [ "$dynamic_load" = "1" ]; then
+					case $name in
+					    I*)
+						feature_string="IP2Location"
+						;;
+					    G*)
+						feature_string="GeoIP"
+						;;
+					esac
+
+					# check for feature dynamic load
+					echo "INFO  : call: LD_LIBRARY_PATH=$libdir ./ipv6calc/ipv6calc -v"
+					if ! LD_LIBRARY_PATH="$libdir" ./ipv6calc/ipv6calc -v 2>&1 | grep version | grep -qw $feature_string; then
+						echo "ERROR : call has not included required feature string '$feature_string': LD_LIBRARY_PATH=$libdir ./ipv6calc/ipv6calc -v"
+						exit 1
+					fi
+
+					echo "INFO  : call: LD_LIBRARY_PATH=$libdir make test-ldlibpath"
+					LD_LIBRARY_PATH="$libdir" make test-ldlibpath
+					result=$?
+				else
+					echo "INFO  : call: LD_PRELOAD=$lib make test-ldlibpath"
+					LD_LIBRARY_PATH="$libdir" make test-ldlibpath
+					result=$?
+				fi
+
+				if [ $result -ne 0 ]; then
+					echo "ERROR : autogen.sh reports an error with options: $options during testlist entry: $entry"
+					if [ "$dynamic_load" = "1" ]; then
+						echo "NOTICE: executed command: LD_LIBRARY_PATH=$libdir make test-ldlibpath"
+					else
+						echo "NOTICE: executed command: LD_PRELOAD="$lib" make test-ldlibpath"
+					fi
+					exit 1
+				fi
+
+				date "+%s:FINISHED:variants:$options:TESTLIST-ENTRY=$entry" >>$status_file
+			done
+		fi
+
+		# add entry in log
+		date "+%s:FINISHED:variants:$options:OK" >>$status_file
+
 	done || exit 1
 done
 

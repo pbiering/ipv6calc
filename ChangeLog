@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.386 2015/03/01 21:45:17 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.387 2015/04/16 06:23:19 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,21 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20150415/PB
+	autogen-support.sh: add IP2Location 7.0.1
+	IP2Location: add support for 7.0.1
+
+20150414/PB
+	autogen-support.sh: add GeoIP 1.6.2 1.6.3 1.6.4 1.6.5
+
+20150409/PB
+	fallback compatibility for EOL IP2Location 4.x/6.x libraries (incompatible database layout for IPv6)
+	ipv6calcweb.cgi: add additional IP2Location output (version 10)
+
+20150406/PB
+	IP2Location: add support for LITE databases and improve db autodetection
+	ipv6calc action filter: add support for CountryCode and ASN filter
+
 20150301/PB
 	spec file: rebase with fedora-scm spec
 	fix VERSION (still containing rc4)

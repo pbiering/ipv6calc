@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.h
- * Version    : $Id: showinfo.h,v 1.26 2014/10/25 12:47:10 ds6peter Exp $
+ * Version    : $Id: showinfo.h,v 1.27 2015/04/16 06:23:20 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -51,8 +51,19 @@
 //      + EXTERNAL_COUNTRY_SHORT
 //      + EXTERNAL_DATABASE_INFO
 //      + BUILTIN_DATABASE_INFO
+// 10: 0.99.0 to current
+// 	+ IP2LOCATION_TIMEZONE
+// 	+ IP2LOCATION_NETSPEED
+// 	+ IP2LOCATION_WEATHERSTATIONNAME
+// 	+ IP2LOCATION_WEATHERSTATIONCODE
+// 	+ IP2LOCATION_ELEVATION
+// 	+ IP2LOCATION_USAGETYPE
+// 	+ IP2LOCATION_MOBILEBRAND
+// 	+ IP2LOCATION_MNC
+// 	+ IP2LOCATION_MCC
+// 	+ IP2LOCATION_IDDCODE
 
-#define IPV6CALC_OUTPUT_VERSION	9
+#define IPV6CALC_OUTPUT_VERSION	10
 
 /* prototypes */
 extern int  showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, const uint32_t formatoptions);

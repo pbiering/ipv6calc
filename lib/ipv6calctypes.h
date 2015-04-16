@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.43 2014/10/07 20:25:23 ds6peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.44 2015/04/16 06:23:20 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -322,5 +322,49 @@ typedef struct {
 	const int method;
 	const char description[128];
 } s_ipv6calc_anon_methods;
+
+
+/**** filter structures ****/
+#define IPV6CALC_FILTER_DB_CC_MAX	16
+#define IPV6CALC_FILTER_DB_ASN_MAX	16
+#define IPV6CALC_FILTER_DB_REGISTRY_MAX	8
+
+/* DB CC (CountryCode) filter structure */
+typedef struct {
+	int active;
+	int cc_must_have_max;
+	int cc_may_not_have_max;
+	uint16_t cc_must_have[IPV6CALC_FILTER_DB_CC_MAX];
+	uint16_t cc_may_not_have[IPV6CALC_FILTER_DB_CC_MAX];
+} s_ipv6calc_filter_db_cc;
+
+
+/* DB ASN (Autonomous System Number) filter structure */
+typedef struct {
+	int active;
+	int asn_must_have_max;
+	int asn_may_not_have_max;
+	uint32_t asn_must_have[IPV6CALC_FILTER_DB_ASN_MAX];
+	uint32_t asn_may_not_have[IPV6CALC_FILTER_DB_ASN_MAX];
+} s_ipv6calc_filter_db_asn;
+
+
+/* DB Registry filter structure */
+typedef struct {
+	int active;
+	int registry_must_have_max;
+	int registry_may_not_have_max;
+	uint32_t registry_must_have[IPV6CALC_FILTER_DB_REGISTRY_MAX];
+	uint32_t registry_may_not_have[IPV6CALC_FILTER_DB_REGISTRY_MAX];
+} s_ipv6calc_filter_db_registry;
+
+
+/* typeinfo filter structure */
+typedef struct {
+	int active;
+	uint32_t typeinfo_must_have;
+	uint32_t typeinfo_may_not_have;
+} s_ipv6calc_filter_typeinfo;
+
 
 #endif // _ipv6calctypes_h_

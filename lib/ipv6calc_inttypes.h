@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc_inttypes.h
- * Version    : $Id: ipv6calc_inttypes.h,v 1.2 2014/10/07 20:25:23 ds6peter Exp $
+ * Version    : $Id: ipv6calc_inttypes.h,v 1.3 2015/04/16 06:23:20 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -24,9 +24,10 @@
 
 
 /* max string length */
-#define NI_MAXHOST      1024
+#define NI_MAXHOST      		1024
 #define IPV6CALC_ADDR_STRING_MAX	256
 #define IPV6CALC_SCOPEID_STRING_MAX	64
+#define IPV6CALC_COUNTRYCODE_STRING_MAX	16
 
 
 #endif // _ipv6calc_inttypes_h

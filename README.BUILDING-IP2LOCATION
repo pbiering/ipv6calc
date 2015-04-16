@@ -1,3 +1,24 @@
+GENERAL
+-------
+IP2Location changed the API layer at least 2 times
+	2.x (no longer in scope)
+	4.x -> 6.x
+	6.x -> 7.x
+
+To avoid issues caused by undetectable incompatibilities (no library version function provided so far),
+ program will not start in case of dynamic linking an incompatible library.
+
+Supported so far:
+	compiled with 4.0.2, supported library: 4.0.2 - 6.0.3 
+	compiled with 6.0.x, supported library: 6.0.1 - 6.0.3 
+	compiled with 7.0.0, supported library: 7.0.0
+
+In dynamic load configuration, this will detected and features will be deactivated
+
+Description of the various fields:
+http://www.ip2location.com/databases/db24-ip-country-region-city-latitude-longitude-zipcode-timezone-isp-domain-netspeed-areacode-weather-mobile-elevation-usagetype
+
+
 BUILDING IP2LOCATION
 --------------------
 If you want to use the IP2Location library with ipv6calc, you will

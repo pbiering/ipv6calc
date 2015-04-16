@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.53 2014/10/07 20:25:21 ds6peter Exp $
-# Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: autogen.sh,v 1.54 2015/04/16 06:23:20 ds6peter Exp $
+# Copyright  : 2003-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
 
@@ -124,11 +124,15 @@ done
 source ./autogen-support.sh "source"
 
 if [ "$use_geoip" = "1" ]; then
-	OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $(fallback_options_from_name GeoIP)"
+	if ! echo "$OPTIONS_CONFIGURE" | grep -q 'with-geoip-headers='; then
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $(fallback_options_from_name GeoIP)"
+	fi
 fi
 
 if [ "$use_ip2location" = "1" ]; then
-	OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $(fallback_options_from_name IP2Location)"
+	if ! echo "$OPTIONS_CONFIGURE" | grep -q 'with-ip2location-headers='; then
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $(fallback_options_from_name IP2Location)"
+	fi
 fi
 
 if [ -f Makefile ]; then

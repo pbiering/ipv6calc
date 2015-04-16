@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.55 2014/10/24 06:20:34 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.56 2015/04/16 06:23:20 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -2093,4 +2093,652 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 //END_libipv6calc_db_wrapper_get_entry_generic:
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Return: %d", retval);
 	return(retval);
+};
+
+
+/*********** generic function **********************/
+uint16_t libipv6calc_db_cc_to_index(const char *cc_text) {
+	uint16_t index = COUNTRYCODE_INDEX_UNKNOWN;
+	uint8_t c1, c2;
+
+	if (cc_text == NULL) {
+		ERRORPRINT_NA("input is NULL");
+		goto END_libipv6calc_db_cc_to_index; // something wrong
+	};
+
+	if (strlen(cc_text) != 2) {
+		ERRORPRINT_WA("input is not string with length 2: %s", cc_text);
+		goto END_libipv6calc_db_cc_to_index; // something wrong
+	};
+
+	if ((! isalpha(cc_text[0])) || (! isalnum(cc_text[1]))) {
+		ERRORPRINT_WA("input is not valid country code: %s", cc_text);
+		goto END_libipv6calc_db_cc_to_index; // something wrong
+	};
+
+	c1 = toupper(cc_text[0]);
+	if (! (c1 >= 'A' && c1 <= 'Z')) {
+		ERRORPRINT_WA("input char 1 is not part of a valid country code: %s", cc_text);
+		goto END_libipv6calc_db_cc_to_index; // something wrong
+	};
+	c1 -= 'A';
+
+	c2 = toupper(cc_text[1]);
+	if (c2 >= '0' && c2 <= '9') {
+		c2 -= '0';
+	} else if (c2 >= 'A' && c2 <= 'Z') {
+		c2 -= 'A';
+		c2 += 10;
+	} else {
+		ERRORPRINT_WA("input char 2 is not part of a valid country code: %s", cc_text);
+		goto END_libipv6calc_db_cc_to_index; // something wrong
+	};
+
+	index = c1 + c2 * COUNTRYCODE_LETTER1_MAX;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "c1=%d c2=%d index=%d (0x%03x) -> test: %c%c", c1, c2, index, index, COUNTRYCODE_INDEX_TO_CHAR1(index), COUNTRYCODE_INDEX_TO_CHAR2(index));
+
+	if (index >= COUNTRYCODE_INDEX_MAX) {
+		index = COUNTRYCODE_INDEX_UNKNOWN; // failsafe
+		ERRORPRINT_WA("unexpected index (too high): %d", index);
+	};
+
+END_libipv6calc_db_cc_to_index:
+	return(index);
+};
+
+
+/***********************************************************/
+/*********** filter based on database **********************/
+/***********************************************************/
+
+/*********** DB CC **********************/
+
+/*
+ * parse filter DB CC
+ *
+ * in : *filter    = filter structure
+ * ret: 0:found 1:skip 2:problem
+ */
+int libipv6calc_db_cc_filter_parse(s_ipv6calc_filter_db_cc *filter, const char *token, const int negate_flag) {
+	int result = 1, negate = negate_flag, offset = 0;
+	const char *filter_token = "cc=";
+	const char *prefixdot = "db.";
+
+	uint16_t cc_index;
+
+	if (token == NULL) {
+		return (result);
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "input: %s", token);
+
+	if (token[0] == '^') {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "found negate prefix in token: %s", token);
+
+		negate = 1;
+		offset += 1;
+	};
+
+	if (strncmp(token + offset, prefixdot, strlen(prefixdot)) == 0) {
+		/* prefix with dot found */
+		offset += strlen(prefixdot);
+		result = 2; /* token with prefix, result into problem if not found */
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "token with prefix, suffix: %s", token + offset);
+	} else {
+		/* prefix dot is required */
+		// no match
+		goto END_ipv6calc_db_cc_filter_parse;
+	};
+
+	if (strncmp(token + offset, filter_token, strlen(filter_token)) == 0) {
+		/* filter token found */
+		offset += strlen(filter_token);
+		result = 2; /* filter token found */
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "filter token found, suffix: %s", token + offset);
+	} else {
+		// no match
+		goto END_ipv6calc_db_cc_filter_parse;
+	};
+
+	if (strcmp(token + offset, "unknown") == 0) {
+		cc_index = COUNTRYCODE_INDEX_UNKNOWN;
+	} else {
+		if (strlen(token + offset) != 2) {
+			ERRORPRINT_WA("filter token 'cc=' requires 2 char country code: %s:", token + offset);
+			goto END_ipv6calc_db_cc_filter_parse;
+		};
+
+		cc_index = libipv6calc_db_cc_to_index(token + offset);
+
+		if (cc_index == COUNTRYCODE_INDEX_UNKNOWN) {
+			ERRORPRINT_WA("filter token 'cc=' requires a valid country code: %s:", token + offset);
+			goto END_ipv6calc_db_cc_filter_parse;
+		};
+	};
+
+	if (negate == 1) {
+		if (filter->cc_may_not_have_max < IPV6CALC_FILTER_DB_CC_MAX) {
+			filter->cc_may_not_have[filter->cc_may_not_have_max] = cc_index;
+			filter->cc_may_not_have_max++;
+		} else {
+			ERRORPRINT_WA("filter token 'cc=' maxmimum reached for 'may not have': %d", filter->cc_may_not_have_max);
+			goto END_ipv6calc_db_cc_filter_parse;
+		};
+	} else {
+		if (filter->cc_must_have_max < IPV6CALC_FILTER_DB_CC_MAX) {
+			filter->cc_must_have[filter->cc_must_have_max] = cc_index;
+			filter->cc_must_have_max++;
+		} else {
+			ERRORPRINT_WA("filter token 'cc=' maxmimum reached for 'must have': %d", filter->cc_must_have_max);
+			goto END_ipv6calc_db_cc_filter_parse;
+		};
+	};
+	filter->active = 1;
+	result = 0;
+
+END_ipv6calc_db_cc_filter_parse:
+	return (result);
+};
+
+
+/*
+ * check filter DB CC
+ *
+ * in : *filter    = filter structure
+ * ret: 0:found 1:problem
+ */
+int libipv6calc_db_cc_filter_check(s_ipv6calc_filter_db_cc *filter, const int proto) {
+	int result = 0, r;
+	char cc[IPV6CALC_COUNTRYCODE_STRING_MAX];
+
+	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper)
+	char tempstring[NI_MAXHOST];
+	char tempstring2[NI_MAXHOST];
+	int i;
+
+	if (filter->cc_must_have_max > 0) {
+		tempstring2[0] = '\0';
+		for (i = 0; i < filter->cc_must_have_max; i++) {
+			libipv6calc_db_wrapper_country_code_by_cc_index(cc, sizeof(cc), filter->cc_must_have[i]);
+			snprintf(tempstring, sizeof(tempstring), "%s%s%s", tempstring2, (i > 0) ? " " : "", cc);
+			snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+		};
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.cc filter 'must_have'   : %s", tempstring2);
+	} else {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.cc filter 'must_have'   : --"); 
+	};
+
+	if (filter->cc_may_not_have_max > 0) {
+		tempstring2[0] = '\0';
+		for (i = 0; i < filter->cc_may_not_have_max; i++) {
+			libipv6calc_db_wrapper_country_code_by_cc_index(cc, sizeof(cc), filter->cc_may_not_have[i]);
+			snprintf(tempstring, sizeof(tempstring), "%s%s%s", tempstring2, (i > 0) ? " " : "", cc);
+			snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+		};
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.cc filter 'may_not_have': %s", tempstring2);
+	} else {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.cc filter 'may_not_have': --"); 
+	};
+	DEBUGSECTION_END
+
+	if (proto == IPV6CALC_PROTO_IPV4) {
+		r = libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC);
+	} else if (proto == IPV6CALC_PROTO_IPV6) {
+		r = libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_CC);
+	} else {
+		ERRORPRINT_WA("unsupported proto (FIX CODE): %d", proto);
+		result = 1;
+		goto END_ipv6calc_db_cc_filter_check;
+	};
+
+	if (r == 1) {
+		// ok
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "database layer supports IPv%d->CountryCode", proto);
+	} else {
+		ERRORPRINT_WA("database layer don't support IPv%d->CountryCode", proto);
+		result = 1;
+	};
+
+END_ipv6calc_db_cc_filter_check:
+	return(result);
+};
+
+
+/*
+ * filter for CC
+ *
+ * in : cc_index   = country code
+ * in : *filter    = filter structure
+ * ret: 0=match 1=not match -1=neutral
+ */
+int libipv6calc_db_cc_filter(const uint16_t cc_index, const s_ipv6calc_filter_db_cc *filter) {
+	int i, result = -1;
+
+	char cc1[IPV6CALC_COUNTRYCODE_STRING_MAX], cc2[IPV6CALC_COUNTRYCODE_STRING_MAX];
+
+	libipv6calc_db_wrapper_country_code_by_cc_index(cc1, sizeof(cc1), cc_index);
+
+	if (filter->cc_must_have_max > 0) {
+		result = 1;
+
+		for (i = 0; i < filter->cc_must_have_max; i++) {
+			libipv6calc_db_wrapper_country_code_by_cc_index(cc2, sizeof(cc2), filter->cc_must_have[i]);
+
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.cc filter: check %s against must-have: %s", cc1, cc2);
+			if (cc_index == filter->cc_must_have[i]) {
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.cc filter: %s hits must-have: %s", cc1, cc2);
+				// match MUST-HAVE
+				result = 0;
+				break;
+			};
+		};
+	} else {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.cc filter: no must-have defined");
+	};
+
+	if (filter->cc_may_not_have_max > 0) {
+		for (i = 0; i < filter->cc_may_not_have_max; i++) {
+			libipv6calc_db_wrapper_country_code_by_cc_index(cc2, sizeof(cc2), filter->cc_may_not_have[i]);
+
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.cc filter: check %s against may-not-have: %s", cc1, cc2);
+			if (cc_index == filter->cc_may_not_have[i]) {
+				// match MAY-NOT-HAVE
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.cc filter: %s hits may-not-have: %s", cc1, cc2);
+				result = 1;
+				break;
+			};
+		};
+	} else {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.cc filter: no may-not-have defined");
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.cc filter final result: %d", result);
+	return (result);
+};
+
+
+/*********** DB ASN **********************/
+
+/*
+ * parse filter DB ASN
+ *
+ * in : *filter    = filter structure
+ * ret: 0:found 1:skip 2:problem
+ */
+int libipv6calc_db_asn_filter_parse(s_ipv6calc_filter_db_asn *filter, const char *token, const int negate_flag) {
+	int result = 1, negate = negate_flag, offset = 0;
+	const char *filter_token = "asn=";
+	const char *prefixdot = "db.";
+
+	uint32_t asn;
+
+	if (token == NULL) {
+		return (result);
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "input: %s", token);
+
+	if (token[0] == '^') {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "found negate prefix in token: %s", token);
+
+		negate = 1;
+		offset += 1;
+	};
+
+	if (strncmp(token + offset, prefixdot, strlen(prefixdot)) == 0) {
+		/* prefix with dot found */
+		offset += strlen(prefixdot);
+		result = 2; /* token with prefix, result into problem if not found */
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "token with prefix, suffix: %s", token + offset);
+	} else {
+		/* prefix dot is required */
+		// no match
+		goto END_ipv6calc_db_asn_filter_parse;
+	};
+
+	if (strncmp(token + offset, filter_token, strlen(filter_token)) == 0) {
+		/* filter token found */
+		offset += strlen(filter_token);
+		result = 2; /* filter token found */
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "filter token found, suffix: %s", token + offset);
+	} else {
+		// no match
+		goto END_ipv6calc_db_asn_filter_parse;
+	};
+
+	if (strcmp(token + offset, "unknown") == 0) {
+		asn = ASNUM_AS_UNKNOWN;
+	} else {
+		asn = (uint32_t) strtol(token + offset, NULL, 10);
+
+		if (errno == ERANGE) {
+			ERRORPRINT_WA("filter token 'asn=' requires a valid decimal number between 0 and %ul: %s:", (2^32) - 1, token + offset);
+			goto END_ipv6calc_db_asn_filter_parse;
+		};
+	};
+
+	if (negate == 1) {
+		if (filter->asn_may_not_have_max < IPV6CALC_FILTER_DB_ASN_MAX) {
+			filter->asn_may_not_have[filter->asn_may_not_have_max] = asn;
+			filter->asn_may_not_have_max++;
+		} else {
+			ERRORPRINT_WA("filter token 'asn=' maxmimum reached for 'may not have': %d", filter->asn_may_not_have_max);
+			goto END_ipv6calc_db_asn_filter_parse;
+		};
+	} else {
+		if (filter->asn_must_have_max < IPV6CALC_FILTER_DB_ASN_MAX) {
+			filter->asn_must_have[filter->asn_must_have_max] = asn;
+			filter->asn_must_have_max++;
+		} else {
+			ERRORPRINT_WA("filter token 'asn=' maxmimum reached for 'must have': %d", filter->asn_must_have_max);
+			goto END_ipv6calc_db_asn_filter_parse;
+		};
+	};
+	filter->active = 1;
+	result = 0;
+
+END_ipv6calc_db_asn_filter_parse:
+	return (result);
+};
+
+
+/*
+ * check filter DB ASN
+ *
+ * in : *filter    = filter structure
+ * ret: 0:found 1:problem
+ */
+int libipv6calc_db_asn_filter_check(s_ipv6calc_filter_db_asn *filter, const int proto) {
+	int result = 0, r;
+
+	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper)
+	char tempstring[NI_MAXHOST];
+	char tempstring2[NI_MAXHOST];
+	int i;
+	if (filter->asn_must_have_max > 0) {
+		tempstring2[0] = '\0';
+		for (i = 0; i < filter->asn_must_have_max; i++) {
+			snprintf(tempstring, sizeof(tempstring), "%s%s%u", tempstring2, (i > 0) ? " " : "", filter->asn_must_have[i]);
+			snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+		};
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.asn filter 'must_have'   : %s", tempstring2);
+	} else {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.asn filter 'must_have'   : --"); 
+	};
+
+	if (filter->asn_may_not_have_max > 0) {
+		tempstring2[0] = '\0';
+		for (i = 0; i < filter->asn_may_not_have_max; i++) {
+			snprintf(tempstring, sizeof(tempstring), "%s%s%u", tempstring2, (i > 0) ? " " : "", filter->asn_may_not_have[i]);
+			snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+		};
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.asn filter 'may_not_have': %s", tempstring2);
+	} else {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.asn filter 'may_not_have': --"); 
+	};
+	DEBUGSECTION_END
+
+	if (proto == IPV6CALC_PROTO_IPV4) {
+		r = libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS);
+	} else if (proto == IPV6CALC_PROTO_IPV6) {
+		r = libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_AS);
+	} else {
+		ERRORPRINT_WA("unsupported proto (FIX CODE): %d", proto);
+		result = 1;
+		goto END_ipv6calc_db_asn_filter_check;
+	};
+
+	if (r == 1) {
+		// ok
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "database layer supports IPv%d->ASN", proto);
+	} else {
+		ERRORPRINT_WA("database layer don't support IPv%d->ASN", proto);
+		result = 1;
+	};
+
+END_ipv6calc_db_asn_filter_check:
+	return(result);
+};
+
+
+/*
+ * filter ASN
+ *
+ * in : asn        = ASN
+ * in : *filter    = filter structure
+ * ret: 0=match 1=not match -1=neutral
+ */
+int libipv6calc_db_asn_filter(const uint32_t asn, const s_ipv6calc_filter_db_asn *filter) {
+	int i, result = -1;
+
+	if (filter->asn_must_have_max > 0) {
+		result = 1;
+
+		for (i = 0; i < filter->asn_must_have_max; i++) {
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.asn filter: check %u against must-have: %u", asn, filter->asn_must_have[i]);
+			if (asn == filter->asn_must_have[i]) {
+				// match MUST-HAVE
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.asn filter: %u hits must-have: %u", asn, filter->asn_must_have[i]);
+				result = 0;
+			};
+		};
+	} else {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.asn filter: no must-have defined");
+	};
+
+	if (filter->asn_may_not_have_max > 0) {
+		for (i = 0; i < filter->asn_may_not_have_max; i++) {
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.asn filter: check %u against must-have: %u", asn, filter->asn_may_not_have[i]);
+			if (asn == filter->asn_may_not_have[i]) {
+				// match MAY-NOT-HAVE
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.asn filter: %u hits may-not-have: %u", asn, filter->asn_may_not_have[i]);
+				result = 1;
+			};
+		};
+	} else {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.asn filter: no may-not-have defined");
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.asn filter final result: %d", result);
+	return (result);
+};
+
+
+/*********** DB Registry **********************/
+
+/*
+ * parse filter DB Registry
+ *
+ * in : *filter    = filter structure
+ * ret: 0:found 1:skip 2:problem
+ */
+int libipv6calc_db_registry_filter_parse(s_ipv6calc_filter_db_registry *filter, const char *token, const int negate_flag) {
+	int result = 1, negate = negate_flag, offset = 0;
+	const char *filter_token = "reg=";
+	const char *prefixdot = "db.";
+
+	int registry = 0, i;
+
+	if (token == NULL) {
+		return (result);
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "input: %s", token);
+
+	if (token[0] == '^') {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "found negate prefix in token: %s", token);
+
+		negate = 1;
+		offset += 1;
+	};
+
+	if (strncmp(token + offset, prefixdot, strlen(prefixdot)) == 0) {
+		/* prefix with dot found */
+		offset += strlen(prefixdot);
+		result = 2; /* token with prefix, result into problem if not found */
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "token with prefix, suffix: %s", token + offset);
+	} else {
+		/* prefix dot is required */
+		// no match
+		goto END_ipv6calc_db_registry_filter_parse;
+	};
+
+	if (strncmp(token + offset, filter_token, strlen(filter_token)) == 0) {
+		/* filter token found */
+		offset += strlen(filter_token);
+		result = 2; /* filter token found */
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "filter token found, suffix: %s", token + offset);
+	} else {
+		// no match
+		goto END_ipv6calc_db_registry_filter_parse;
+	};
+
+	if (strcmp(token + offset, "unknown") == 0) {
+		registry = REGISTRY_UNKNOWN;
+	} else {
+		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_registries); i++) {
+			if (strcmp(token + offset, ipv6calc_registries[i].token) == 0) {
+				registry = ipv6calc_registries[i].number;
+				break;
+			};
+		};
+
+		if (registry == 0) {
+			ERRORPRINT_WA("filter token 'reg=' requires a valid registry token: %s:", token + offset);
+			goto END_ipv6calc_db_registry_filter_parse;
+		};
+	};
+
+	if (negate == 1) {
+		if (filter->registry_may_not_have_max < IPV6CALC_FILTER_DB_REGISTRY_MAX) {
+			filter->registry_may_not_have[filter->registry_may_not_have_max] = registry;
+			filter->registry_may_not_have_max++;
+		} else {
+			ERRORPRINT_WA("filter token 'reg=' maxmimum reached for 'may not have': %d", filter->registry_may_not_have_max);
+			goto END_ipv6calc_db_registry_filter_parse;
+		};
+	} else {
+		if (filter->registry_must_have_max < IPV6CALC_FILTER_DB_REGISTRY_MAX) {
+			filter->registry_must_have[filter->registry_must_have_max] = registry;
+			filter->registry_must_have_max++;
+		} else {
+			ERRORPRINT_WA("filter token 'reg=' maxmimum reached for 'must have': %d", filter->registry_must_have_max);
+			goto END_ipv6calc_db_registry_filter_parse;
+		};
+	};
+	filter->active = 1;
+	result = 0;
+
+END_ipv6calc_db_registry_filter_parse:
+	return (result);
+};
+
+
+/*
+ * check filter DB Registry
+ *
+ * in : *filter    = filter structure
+ * ret: 0:found 1:problem
+ */
+int libipv6calc_db_registry_filter_check(s_ipv6calc_filter_db_registry *filter, const int proto) {
+	int result = 0, r;
+
+	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper)
+	char tempstring[NI_MAXHOST];
+	char tempstring2[NI_MAXHOST];
+	int i;
+	if (filter->registry_must_have_max > 0) {
+		tempstring2[0] = '\0';
+		for (i = 0; i < filter->registry_must_have_max; i++) {
+			snprintf(tempstring, sizeof(tempstring), "%s%s%s", tempstring2, (i > 0) ? " " : "", libipv6calc_registry_string_by_num(filter->registry_must_have[i]));
+			snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+		};
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.registry filter 'must_have'   : %s", tempstring2);
+	} else {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.registry filter 'must_have'   : --"); 
+	};
+
+	if (filter->registry_may_not_have_max > 0) {
+		tempstring2[0] = '\0';
+		for (i = 0; i < filter->registry_may_not_have_max; i++) {
+			snprintf(tempstring, sizeof(tempstring), "%s%s%s", tempstring2, (i > 0) ? " " : "", libipv6calc_registry_string_by_num(filter->registry_may_not_have[i]));
+			snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+		};
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.registry filter 'may_not_have': %s", tempstring2);
+	} else {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.registry filter 'may_not_have': --"); 
+	};
+	DEBUGSECTION_END
+
+	if (proto == IPV6CALC_PROTO_IPV4) {
+		r = libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_REGISTRY);
+	} else if (proto == IPV6CALC_PROTO_IPV6) {
+		r = libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_REGISTRY);
+	} else {
+		ERRORPRINT_WA("unsupported proto (FIX CODE): %d", proto);
+		result = 1;
+		goto END_ipv6calc_db_registry_filter_check;
+	};
+
+	if (r == 1) {
+		// ok
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "database layer supports IPv%d->Registry", proto);
+	} else {
+		ERRORPRINT_WA("database layer don't support IPv%d->Registry", proto);
+		result = 1;
+	};
+
+END_ipv6calc_db_registry_filter_check:
+	return(result);
+};
+
+
+
+/*
+ * filter Registry
+ *
+ * in : registry        = Registry
+ * in : *filter    = filter structure
+ * ret: 0=match 1=not match -1=neutral
+ */
+int libipv6calc_db_registry_filter(const int registry, const s_ipv6calc_filter_db_registry *filter) {
+	int i, result = -1;
+
+	if (filter->registry_must_have_max > 0) {
+		result = 1;
+
+		for (i = 0; i < filter->registry_must_have_max; i++) {
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.reg filter: check %s against must-have: %s", libipv6calc_registry_string_by_num(registry), libipv6calc_registry_string_by_num(filter->registry_must_have[i]));
+			if (registry == filter->registry_must_have[i]) {
+				// match MUST-HAVE
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.reg filter: %s hits must-have: %s", libipv6calc_registry_string_by_num(registry), libipv6calc_registry_string_by_num(filter->registry_must_have[i]));
+				result = 0;
+			};
+		};
+	} else {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.registry filter: no must-have defined");
+	};
+
+	if (filter->registry_may_not_have_max > 0) {
+		for (i = 0; i < filter->registry_may_not_have_max; i++) {
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.reg filter: check %s against must-have: %s", libipv6calc_registry_string_by_num(registry), libipv6calc_registry_string_by_num(filter->registry_may_not_have[i]));
+			if (registry == filter->registry_may_not_have[i]) {
+				// match MAY-NOT-HAVE
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.reg filter: %s hits may-not-have: %s", libipv6calc_registry_string_by_num(registry), libipv6calc_registry_string_by_num(filter->registry_may_not_have[i]));
+				result = 1;
+			};
+		};
+	} else {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.reg filter: no may-not-have defined");
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.reg filter final result: %d", result);
+	return (result);
 };

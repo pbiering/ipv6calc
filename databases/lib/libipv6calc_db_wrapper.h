@@ -1,12 +1,16 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.36 2014/10/11 11:17:19 ds6peter Exp $
- * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.37 2015/04/16 06:23:20 ds6peter Exp $
+ * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper.c
  */
+
+#ifdef HAVE_BERKELEY_DB_SUPPORT
+#include <db.h>
+#endif // HAVE_BERKELEY_DB_SUPPORT
 
 #ifndef _libipv6calc_db_wrapper_h
 
@@ -16,10 +20,6 @@
 #include "libmac.h"
 #include "libipv4addr.h"
 #include "libipv6addr.h"
-
-#ifdef HAVE_BERKELEY_DB_SUPPORT
-#include <db.h>
-#endif // HAVE_BERKELEY_DB_SUPPORT
 
 extern uint32_t wrapper_features;
 extern uint32_t wrapper_features_by_source[];
@@ -143,6 +143,14 @@ typedef struct {
 	const char        *description;
 	const uint32_t     features;
 } db_file_desc;
+
+typedef struct {
+	const unsigned int number;
+	const char        *filename;
+	const char        *description;
+	const uint32_t     features;
+	const uint32_t     internal;
+} db_file_desc2;
 
 
 // define internal API versions
@@ -292,3 +300,16 @@ extern long int libipv6calc_db_wrapper_get_entry_generic(
 	void            *data_ptr,		// pointer to DB data in case of IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB, otherwise NULL
 	int  (*get_array_row)()			// function to get array row
 	);
+
+/* filter powered by database */
+extern int libipv6calc_db_cc_filter_parse(s_ipv6calc_filter_db_cc *filter, const char *token, const int negate_flag);
+extern int libipv6calc_db_cc_filter_check(s_ipv6calc_filter_db_cc *filter, const int proto);
+extern int libipv6calc_db_cc_filter(const uint16_t cc_index, const s_ipv6calc_filter_db_cc *filter);
+
+extern int libipv6calc_db_asn_filter_parse(s_ipv6calc_filter_db_asn *filter, const char *token, const int negate_flag);
+extern int libipv6calc_db_asn_filter_check(s_ipv6calc_filter_db_asn *filter, const int proto);
+extern int libipv6calc_db_asn_filter(const uint32_t asn, const s_ipv6calc_filter_db_asn *filter);
+
+extern int libipv6calc_db_registry_filter_parse(s_ipv6calc_filter_db_registry *filter, const char *token, const int negate_flag);
+extern int libipv6calc_db_registry_filter_check(s_ipv6calc_filter_db_registry *filter, const int proto);
+extern int libipv6calc_db_registry_filter(const int registry, const s_ipv6calc_filter_db_registry *filter);

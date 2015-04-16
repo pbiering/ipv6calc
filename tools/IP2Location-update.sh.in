@@ -9,7 +9,7 @@
 #
 # Project    : ipv6calc/IP2Location
 # File       : IP2Location-update.sh
-# Version    : $Id: IP2Location-update.sh.in,v 1.4 2015/02/20 07:00:23 ds6peter Exp $
+# Version    : $Id: IP2Location-update.sh.in,v 1.5 2015/04/16 06:23:20 ds6peter Exp $
 # Copyright  : 2012-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
@@ -19,14 +19,28 @@ IP2LOCATION_DAT_DIR_DEFAULT="@IP2LOCATION_DB@"
 IP2LOCATION_DAT_URL_BASE="http://www.ip2location.com/download?login=@LOGIN@&password=@PASSWORD@"
 IP2LOCATION_DAT_URL_BASE_SAMPLE="http://www.ip2location.com/downloads"
 
-IP2LOCATION_DAT_FILES="IPV6BIN"
-IP2LOCATION_DAT_FILES_SAMPLE="20"
+# (free) subscription is required for LITE DB-Number > 1
+# Format: Proto:DB-Number
+IP2LOCATION_DAT_FILES_LITE_IPV4="IPv4:1 IPv4:3 IPv4:5 IPv4:9 IPv4:11"
+IP2LOCATION_DAT_FILES_LITE_IPV6="IPv6:1 IPv6:3 IPv6:5 IPv6:9 IPv6:11"
+
+# list of LITE
+IP2LOCATION_DAT_FILES_LITE="$IP2LOCATION_DAT_FILES_LITE_IPV4 $IP2LOCATION_DAT_FILES_LITE_IPV6"
+
+# list of normal (purchased subscription required)
+IP2LOCATION_DAT_FILES=""
+
+# list of SAMPLE
+#IP2LOCATION_DAT_FILES_SAMPLE="IPv4:20 IPv6:20"
 
 
 help() {
 	cat <<END
-Usage: $(basename "$0") [-D <dir>]
+Usage: $(basename "$0") [-D <dir>] [-f]
 	-D <dir>	database directory (optional)
+	-f		overwrite existing softlinks (optional)
+	-n		no action (dry-run)
+	-s		skip already successfully downloaded files
 
 	database directory: $IP2LOCATION_DAT_DIR (default: $IP2LOCATION_DAT_DIR_DEFAULT)
 
@@ -46,10 +60,19 @@ Usage: $(basename "$0") [-D <dir>]
 END
 }
 
-while getopts "D:h\?" opt; do
+while getopts "fsnD:h\?" opt; do
 	case $opt in
 	    D)
 		IP2LOCATION_DAT_DIR=$OPTARG
+		;;
+	    f)
+		OVERWRITE_SOFTLINK=1
+		;;
+	    n)
+		NO_ACTION=1
+		;;
+	    s)
+		SKIP_OK=1
 		;;
 	    *)
 		help
@@ -89,41 +112,136 @@ else
 fi
 
 # Download and unpack non-sample files
-for file in $IP2LOCATION_DAT_FILES; do
-	file_dest="$IP2LOCATION_DAT_DIR/`basename "$file".zip`"
-
-	echo "INFO  : try to download file: $file ($file_dest)"
-	wget -q -O "$file_dest" "$IP2LOCATION_DAT_URL_BASE&productcode=$file"
-	if [ $? -ne 0 ]; then
-		echo "ERROR : download of file not successful: $file ($file_dest)"
-		continue
-	fi
-	echo "INFO  : download of file successful: $file ($file_dest)"
-
-	if ! file "$file_dest" | grep -q "Zip archive data"; then
-		echo "ERROR : downloaded file is not a ZIP archive: $file_dest"
+for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES; do
+	if [ -z "${!list}" ]; then
+		echo "NOTICE: empty list, skip: $list"
 		continue
 	fi
 
-	unzip -o -d "$IP2LOCATION_DAT_DIR" "$file_dest" '*.BIN'
-	if [ $? -ne 0 ]; then
-		echo "ERROR : unzip of file not successful: $file_dest"
-		continue
-	fi
-	echo "INFO  : unzip of file successful: $file_dest"
+	echo "INFO  : download list $list: ${!list}"
+
+	case $list in
+	    *_LITE)
+		code_suffix="LITEBIN"
+		file_prefix="IP2LOCATION-LITE"
+		;;
+	    *)
+		code_suffix="BIN"
+		file_prefix="IP2LOCATION"
+		;;
+	esac
+
+	for token in ${!list}; do
+		proto=${token/:*}
+		number=${token/*:}
+
+		case $proto in
+		    IPv4)
+			code="DB${number}${code_suffix}"
+			file="${file_prefix}-DB${number}.BIN.ZIP"
+			;;
+		    IPv6)
+			code="DB${number}${code_suffix}IPV6"
+			file="${file_prefix}-DB${number}.IPV6.BIN.ZIP"
+			;;
+		    *)
+			echo "ERROR : unsupported proto in token: $token"
+			exit 1
+			;;
+		esac
+
+		file_dest="$IP2LOCATION_DAT_DIR/$file"
+
+		if [ "$NO_ACTION" = "1" ]; then
+			echo "NOTICE: download skipped by option: $code ($file_dest)"
+			continue
+		fi
+
+		if [ "$SKIP_OK" = "1" ]; then
+			if file "$file_dest" | grep -q "Zip archive data"; then
+				echo "NOTICE: download skipped by option because file already existing and is a ZIP file: $code ($file_dest)"
+
+				file_unzip=$(unzip -l "$file_dest" '*.BIN' | grep "\.BIN$" | awk '{ print $NF }' | head -1)
+
+				if [ -n "$file_unzip" ]; then
+					if [ ! -f "$IP2LOCATION_DAT_DIR/$file_unzip" ]; then
+						unzip -o -d "$IP2LOCATION_DAT_DIR" "$file_dest" '*.BIN'
+						if [ $? -ne 0 ]; then
+							echo "ERROR : unzip of file not successful: $file_dest"
+							continue
+						else
+							echo "INFO  : unzip of file successful: $file_dest"
+						fi
+					else
+						echo "INFO  : skip unzip because unzipped file already existing: $code ($file_dest)"
+					fi
+				fi
+				continue
+			fi
+		fi
+
+		echo "INFO  : try to download file (with credentials): $code ($file_dest)"
+		wget -q -O "$file_dest" "$IP2LOCATION_DAT_URL_BASE&productcode=$code"
+		if [ $? -ne 0 ]; then
+			echo "ERROR : download of file not successful: $code ($file_dest) ($!)"
+			continue
+		fi
+		echo "INFO  : download of file successful: $code ($file_dest)"
+
+		if [ ! -s "$file_dest" ]; then
+			echo "ERROR : downloaded file has ZERO size: $file_dest"
+			continue
+		fi
+
+		if ! file "$file_dest" | grep -q "Zip archive data"; then
+			if file "$file_dest" | grep -q "ASCII text"; then
+				echo "ERROR : downloaded file is not a ZIP archive: $file_dest ($(head -1 "$file_dest"))"
+			else
+				echo "ERROR : downloaded file is not a ZIP archive: $file_dest"
+			fi
+			continue
+		fi
+
+		unzip -o -d "$IP2LOCATION_DAT_DIR" "$file_dest" '*.BIN'
+		if [ $? -ne 0 ]; then
+			echo "ERROR : unzip of file not successful: $file_dest"
+			continue
+		fi
+		echo "INFO  : unzip of file successful: $file_dest"
+	done
 done
 
 # Download and unpack sample files
-for number in $IP2LOCATION_DAT_FILES_SAMPLE; do
-	file_dest="$IP2LOCATION_DAT_DIR/sample.bin.db$number.zip"
+for token in $IP2LOCATION_DAT_FILES_SAMPLE; do
+	proto=${token/:*}
+	number=${token/*:}
 
-	echo "INFO  : try to download sample db: $number ($file_dest)"
-	wget -q -O "$file_dest" "$IP2LOCATION_DAT_URL_BASE_SAMPLE/sample.bin.db$number.zip"
+	case $proto in
+	    IPv4)
+		proto=""
+		softlink="IP-COUNTRY.BIN"
+		;;
+	    IPv6)
+		proto="6"
+		softlink="IPV6-COUNTRY.BIN"
+		;;
+	    *)
+		echo "ERROR : unsupported proto in token: $token"
+		exit 1
+		;;
+	esac
+
+	file="sample${proto}.bin.db${number}.zip"
+
+	file_dest="$IP2LOCATION_DAT_DIR/$file"
+
+	echo "INFO  : try to download sample db: IPv${proto}/DB$number ($file_dest)"
+	wget -q -O "$file_dest" "$IP2LOCATION_DAT_URL_BASE_SAMPLE/$file"
 	if [ $? -ne 0 ]; then
-		echo "ERROR : download of file not successful: DB$number ($file_dest)"
+		echo "ERROR : download of file not successful: IPv${proto}/DB$number ($file_dest)"
 		continue
 	fi
-	echo "INFO  : download of file successful: DB$number ($file_dest)"
+	echo "INFO  : download of file successful: IPv${proto}/DB$number ($file_dest)"
 
 	if ! file "$file_dest" | grep -q "Zip archive data"; then
 		echo "ERROR : downloaded file is not a ZIP archive: $file_dest"
@@ -140,28 +258,48 @@ for number in $IP2LOCATION_DAT_FILES_SAMPLE; do
 	# get unzipped file
 	file=$(unzip -l "$file_dest" | grep ".BIN$" | awk '{ print $4 }')
 
-	if [ ! -e "$IP2LOCATION_DAT_DIR/IP-COUNTRY.BIN" ]; then
-		echo "NOTICE: create softlink: IP-COUNTRY.BIN -> $file"
-		ln -s "$file" "$IP2LOCATION_DAT_DIR/IP-COUNTRY.BIN"
+	if [ ! -e "$IP2LOCATION_DAT_DIR/$softlink" ]; then
+		echo "NOTICE: create softlink: $softlink -> $file"
+		ln -s "$file" "$IP2LOCATION_DAT_DIR/$softlink"
 		if [ $? -ne 0 ]; then
 			echo "ERROR : can't create softlink ($!)"
+			exit 1
 		fi
+		echo "INFO  : softlink successfully created: $file -> $IP2LOCATION_DAT_DIR/$softlink"
 	else
-		if [ -L "$IP2LOCATION_DAT_DIR/IP-COUNTRY.BIN" ]; then
-			link=$(readlink "$IP2LOCATION_DAT_DIR/IP-COUNTRY.BIN")
+		if [ -L "$IP2LOCATION_DAT_DIR/$softlink" ]; then
+			link=$(readlink "$IP2LOCATION_DAT_DIR/$softlink")
 			if [ "$link" = "$file" ]; then
-				echo "INFO  : $IP2LOCATION_DAT_DIR/IP-COUNTRY.BIN exists and is a softlink to: $link"
+				echo "INFO  : $IP2LOCATION_DAT_DIR/$softlink exists and is a softlink to: $link"
 			else
-				echo "WARN  : $IP2LOCATION_DAT_DIR/IP-COUNTRY.BIN exists but is not a softlink to: $file ($link instead)"
+				if [ "$OVERWRITE_SOFTLINK" = "1" ]; then
+					echo "NOTICE: $IP2LOCATION_DAT_DIR/$softlink exists but is not a softlink to: $file ($link instead) - overwrite enabled"
+					echo "NOTICE: remove old softlink: $IP2LOCATION_DAT_DIR/$softlink"
+					rm -f "$IP2LOCATION_DAT_DIR/$softlink"
+					if [ $? -ne 0 ]; then
+						echo "ERROR : can't remove existing softlink: $IP2LOCATION_DAT_DIR/$softlink"
+						exit 1
+					fi
+					ln -s "$file" "$IP2LOCATION_DAT_DIR/$softlink"
+					if [ $? -ne 0 ]; then
+						echo "ERROR : can't create softlink ($!)"
+						exit 1
+					fi
+					echo "INFO  : softlink successfully created: $file -> $IP2LOCATION_DAT_DIR/$softlink"
+				else
+					echo "WARN  : $IP2LOCATION_DAT_DIR/$softlink exists but is not a softlink to: $file ($link instead)"
+				fi
 			fi
-		elif [ "$file" = "IP-COUNTRY.BIN" ]; then
+		elif [ "$file" = "$softlink" ]; then
 			# nothing to do
 			true
 		else
-			echo "WARN  : $IP2LOCATION_DAT_DIR/IP-COUNTRY.BIN is not a softlink but also not the extracted one"
+			echo "WARN  : $IP2LOCATION_DAT_DIR/$softlink is not a softlink but also not the extracted one"
 		fi
 	fi
 done
 
 # Adjust permissions
-chmod 644 $IP2LOCATION_DAT_DIR/*.BIN
+if [ "$NO_ACTION" != "1" ]; then
+	chmod 644 $IP2LOCATION_DAT_DIR/*.BIN
+fi

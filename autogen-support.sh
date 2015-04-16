@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.36 2014/10/07 20:25:21 ds6peter Exp $
-# Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: autogen-support.sh,v 1.37 2015/04/16 06:23:20 ds6peter Exp $
+# Copyright  : 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
 #
@@ -18,18 +18,22 @@
 #          GeoIP-1.6.0
 #          GeoIP-1.6.1
 #          GeoIP-1.6.2
+#          GeoIP-1.6.3
+#          GeoIP-1.6.4
+#          GeoIP-1.6.5
 #
 # $BASE_DEVEL_IP2LCATION/   (default if unset: "..")
-#          C-IP2Location-4.0.2
+#          C-IP2Location-4.0.2  # dropped with version 0.99
 #          ip2location-c-6.0.1
 #          IP2Location-c-6.0.2
 #          ip2location-c-6.0.3	# 20141003
 #          ip2location-c-7.0.0	# 20141003
+#          ip2location-c-7.0.1	# 20150416
 
 #### Definitions
 
 ## List of GeoIP versions (append newest one rightmost!)
-geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.4.8 1.5.1 1.5.2 1.6.0 1.6.1 1.6.2"
+geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.4.8 1.5.1 1.5.2 1.6.0 1.6.1 1.6.2 1.6.3 1.6.4 1.6.5"
 geoip_url_maxmind="http://geolite.maxmind.com/download/geoip/api/c/"
 geoip_url_github="https://codeload.github.com/maxmind/geoip-api-c/tar.gz/"
 
@@ -71,26 +75,30 @@ geoip_cross_version_test_blacklist() {
 
 
 ## List of IP2Location versions (append newest one rightmost!)
-# 7.0.0 has IPv6 database incompatibility issues, not tested so far
-ip2location_versions="4.0.2 6.0.1 6.0.2 6.0.3"
-ip2location_versions_download="6.0.1 6.0.2 6.0.3" # older versions are no longer available for download?
+ip2location_versions="4.0.2 6.0.1 6.0.2 6.0.3 7.0.0 7.0.1"
+ip2location_versions_download="6.0.1 6.0.2 6.0.3 7.0.0 7.0.1"
 ip2location_url_base="https://www.ip2location.com/downloads/"
 
 ip2location_cross_version_test_blacklist() {
 	local version_have=$(echo $1 | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
 	local version_test=$(echo $2 | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
 
+	if [ $version_have -ge 60000 -a $version_test -lt 60000 ]; then
+		# incompatible API
+		return 1
+	fi
+
 	if [ $version_have -ge 60003 -a $version_test -lt 60003 ]; then
 		# incompatible (library name got suffix .1)
 		return 1
 	fi
 
-	if [ $version_have -ge 70000 -a $version_test -lt 60000 ]; then
+	if [ $version_have -ge 70000 -a $version_test -lt 70000 ]; then
 		# incompatible
 		return 1
 	fi
 
-	if [ $version_have -ge 70000 -a $version_test -lt 70000 ]; then
+	if [ $version_have -lt 70000 -a $version_test -ge 70000 ]; then
 		# incompatible
 		return 1
 	fi
@@ -159,7 +167,7 @@ nameversion_from_name_version() {
 				nameversion="ip2location-c-$version.tar.gz"
 			elif [ "$mode" = "extract" ]; then
 				case $version in
-				    6.0.1|6.0.2|6.0.3|7.0.0)
+				    6.0.1|6.0.2|6.0.3|7.*)
 					nameversion="ip2location-c-$version"
 					;;
 				    *)
@@ -169,7 +177,7 @@ nameversion_from_name_version() {
 				esac
 			else
 				case $version in
-				    6.0.1|6.0.3|7.0.0)
+				    6.0.1|6.0.3|7.*)
 					nameversion="ip2location-c-$version"
 					;;
 				    *)
@@ -220,6 +228,9 @@ options_from_name_version() {
 	    'only-lib')
 		echo "$lib"
 		;;
+	    'only-libdir')
+		echo "$libdir"
+		;;
 	    *)
 		echo "$result"
 		;;
@@ -255,7 +266,7 @@ fallback_options_from_name() {
 		return 0
 	fi
 
-	echo "NOTICE: file is missing, check for local availability for $name: $file_header" >&2
+	echo "NOTICE: file is missing $file_header, check for local availability for $name: $file_header" >&2
 
 	for version in $(echo "$versions" | awk '{ for (i=NF;i>0;i--) print $i }'); do
 		if [ ${version:0:1} = "!" ]; then
@@ -510,6 +521,21 @@ extract_versions() {
 			return 1
 		fi
 
+		# check contents of tgz
+		base_dir=$(tar tzf "$file" | head -1 | awk -F /  '{ print $1 }')
+		if [ -z "$base_dir" ]; then
+			echo "ERROR : can't extract base_dir from: $file" >&2
+			return 1
+		fi
+
+		echo "INFO  : file contains base_dir: $base_dir" >&2
+		base_file=$(basename "$file" .tar.gz)
+
+		if [ "$base_file" != "$base_dir" ]; then
+			echo "ERROR : base_file is not matching base_dir: $base_file <=> $base_dir (download broken or workaround required)"
+			return 1
+		fi
+
 		tar xzf "$file" -C $base_devel
 		result=$?
 
@@ -598,7 +624,7 @@ download_versions() {
 			break
 		else
 			echo "INFO  : successful downloaded of $name-$version from $url to $BASE_SOURCES" >&2
-			download_library_status="$download_library_status $name-$version"
+			download_library_status="$download_library_status $name:$version"
 		fi
 	done
 

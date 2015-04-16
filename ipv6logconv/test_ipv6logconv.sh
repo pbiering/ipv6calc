@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6logconv.sh
-# Version    : $Id: test_ipv6logconv.sh,v 1.12 2014/07/29 20:01:55 ds6peter Exp $
+# Version    : $Id: test_ipv6logconv.sh,v 1.13 2015/04/16 06:23:20 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logconv"
@@ -41,8 +41,8 @@ ff02::1:ff00:1234 - -
 ff01::1:ff00:1234 - -
 3ffe::1:ff00:1234 - -
 ::1 - -
-::1.2.3.4 - -
-::ffff:1.2.3.4 - -
+::2.2.3.4 - -
+::ffff:2.2.3.4 - -
 2002:0102:0204::1 - -
 fe80::210:a4ff:fe01:2345 - -
 fe80::210:a489:ab01:2345 - -
@@ -52,7 +52,7 @@ fe80::210:a489:ab01:2345 - -
 3ffe:ffff::000:a489:ab01:2345 - -
 3ffe:ffff::000:0250:c2ff:fe00:3011 - - "Microsoft"
 fe80::fefc:acff:fe10:fe01 - -
-1.2.3.4 - -
+2.2.3.4 - -
 2002:50b5:7940:0000:0000:0000:50b5:7940 - - "Microsoft 6to4 address"
 fd00:1234:5678:9abc::1 - - "Unique Local IPv6 Unicast Address"
 fd00:1234:5678:9abc:210:a489:ab01:2345 - - "Unique Local IPv6 Unicast Address"
@@ -76,15 +76,14 @@ cat <<END_CACHE | grep -v "^#"
 195.226.187.50	- - "IPv4 address"
 3ffe:ffff::1	- - "IPv6 address/6bone test"
 3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - 
-1.2.3.4 - -
-1.2.3.4 - -
+2.2.3.4 - -
+2.2.3.4 - -
 195.226.187.50	- - "IPv4 address"
-::ffff:1.2.3.4 - -
+::ffff:2.2.3.4 - -
 2002:0102:0204::1 - -
 fe80::210:a4ff:fe01:2345 - -
 fe80::210:a489:ab01:2345 - -
 3ffe:ffff::210:a4ff:fe01:2345 - -
-1.2.3.4 - -
 2.2.3.4 - -
 3.2.3.4 - -
 4.2.3.4 - -

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.116 2014/09/13 21:15:08 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.117 2015/04/16 06:23:20 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -608,6 +608,13 @@ int main(int argc, char *argv[]) {
 		/* check requirements */
 		if (libipv6calc_anon_supported(&ipv6calc_anon_set) == 0) {
 			fprintf(stderr, "ipv6calc anonymization method not supported: %s\n", libipv6calc_anon_method_name(&ipv6calc_anon_set));
+			exit(EXIT_FAILURE);
+		};
+	};
+
+	if (action == ACTION_filter) {
+		if (libipv6calc_filter_check(&filter_master) != 0) {
+			fprintf(stderr, "ipv6calc filter check causes a problem\n");
 			exit(EXIT_FAILURE);
 		};
 	};
@@ -1333,9 +1340,9 @@ PIPE_input:
 				fprintf(stderr, "Action-type isn't currently implemented for inputtype\n");
 			};
 
-			if (result != 0) {
+			if (result > 0) {
 				/* skip everything */
-				DEBUGPRINT_WA(DEBUG_ipv6calc_general, "filter result SKIP: '%s'", linebuffer);
+				DEBUGPRINT_WA(DEBUG_ipv6calc_general, "filter result SKIP (%d): '%s'", result, linebuffer);
 			} else {
 				snprintf(resultstring, sizeof(resultstring), "%s", linebuffer);
 			};

@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.38 2014/09/24 09:07:58 ds6peter Exp $
- * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv4addr.h,v 1.39 2015/04/16 06:23:20 ds6peter Exp $
+ * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -29,9 +29,11 @@ typedef struct {
 
 /* IPv4 filter structure */
 typedef struct {
-	int active;	
-	uint32_t typeinfo_must_have;
-	uint32_t typeinfo_may_not_have;
+	int active;
+	s_ipv6calc_filter_typeinfo    filter_typeinfo;
+	s_ipv6calc_filter_db_cc       filter_db_cc;        // Country Code filter
+	s_ipv6calc_filter_db_asn      filter_db_asn;       // Autonomous System Number filter
+	s_ipv6calc_filter_db_registry filter_db_registry;  // Registry filter
 	/* others coming next */
 } s_ipv6calc_filter_ipv4addr;
 
@@ -134,11 +136,11 @@ typedef struct {
 
 
 /* prototypes */
-extern uint8_t  ipv4addr_getoctet(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int numoctett);
+extern uint8_t  ipv4addr_getoctet(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int numoctet);
 extern uint16_t ipv4addr_getword(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword);
 extern uint32_t ipv4addr_getdword(const ipv6calc_ipv4addr *ipv4addrp);
 
-extern void ipv4addr_setoctet(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numocett, const uint8_t value);
+extern void ipv4addr_setoctet(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numoctet, const uint8_t value);
 extern void ipv4addr_setword(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numword, const uint16_t value);
 extern void ipv4addr_setdword(ipv6calc_ipv4addr *ipv4addrp, const uint32_t value);
 
@@ -164,6 +166,7 @@ extern uint16_t ipv4addr_anonymized_get_cc_index(const ipv6calc_ipv4addr *ipv4ad
 
 extern int ipv4addr_filter(const ipv6calc_ipv4addr *ipv4addrp, const s_ipv6calc_filter_ipv4addr *filter);
 extern int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token);
+extern int ipv4addr_filter_check(s_ipv6calc_filter_ipv4addr *filter);
 extern void ipv4addr_filter_clear(s_ipv6calc_filter_ipv4addr *filter);
 
 extern uint16_t libipv4addr_cc_index_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsigned int *data_source_ptr);

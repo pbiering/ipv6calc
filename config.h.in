@@ -91,6 +91,10 @@
    and to 0 if you don't. */
 #undef HAVE_DECL_IP2LOCATION_GET_COUNTRY_SHORT
 
+/* Define to 1 if you have the declaration of `USAGETYPE', and to 0 if you
+   don't. */
+#undef HAVE_DECL_USAGETYPE
+
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
@@ -223,9 +227,15 @@
 /* Define if you want IP2Location support. */
 #undef SUPPORT_IP2LOCATION
 
+/* Define if your IP2Location supports only reduced set of databases. */
+#undef SUPPORT_IP2LOCATION_ALL_COMPAT
+
 /* Define if you want IP2Location support with dynamic loading support -
    requires also additional linker options. */
 #undef SUPPORT_IP2LOCATION_DYN
+
+/* Define if your IP2Location supports IPv6 only in old manner. */
+#undef SUPPORT_IP2LOCATION_IPV6_COMPAT
 
 /* Define if you want IP2Location support statically linked - requires also
    additional linker options. */

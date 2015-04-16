@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.51 2014/08/27 04:44:23 ds6peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.52 2015/04/16 06:23:20 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -58,7 +58,7 @@ cat <<END | grep -v '^#'
 ## Machine readable format
 -m -F ::1								=IPV6=0000:0000:0000:0000:0000:0000:0000:0001
 -m ::1									=IPV6=::1
--m 1.2.3.4								=IPV4=1.2.3.4
+-m 2.2.3.4								=IPV4=2.2.3.4
 ## ip6.int.
 --addr_to_ip6int 3ffe:ffff:100:f101::1					=1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
 --in ipv6 --out revnibbles.int 3ffe:ffff:100:f101::1			=1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
@@ -78,7 +78,7 @@ cat <<END | grep -v '^#'
 --in ipv6 --out ipv6 --printcompressed 3ffe:ffff:0100:f101:0000:0000:0000:0001 =3ffe:ffff:100:f101::1
 -I ipv6 -O ipv6 -C 3ffe:ffff:0100:f101:0000:0000:0000:0001 		=3ffe:ffff:100:f101::1
 --addr_to_compressed 3ffe:ffff:0100:f101:0000:0000:0000:0001/64		=3ffe:ffff:100:f101::1/64
---addr_to_compressed 0:0:1:2:3:4:0:0					=::1:2:3:4:0:0
+--addr_to_compressed 0:0:2:2:3:4:0:0					=::2:2:3:4:0:0
 --addr_to_compressed 0:0:1:0:0:1:0:0					=::1:0:0:1:0:0
 --addr_to_compressed 0:0:0:2:3:0:0:0					=::2:3:0:0:0
 --addr_to_compressed 0:0:0:0:3:0:0:0					=::3:0:0:0
@@ -244,8 +244,8 @@ END
 testscenarios_auto_bad() {
 cat <<END | grep -v '^#'
 1.2.3.r4									ipv4addr
-1.2.3.4/-1									ipv4addr
-1.2.3.4/33									ipv4addr
+2.2.3.4/-1									ipv4addr
+2.2.3.4/33									ipv4addr
 01:23:r5:67:89:01								mac
 2002:102:304::r1								ipv6addr
 2002:102:304::1/-1								ipv6addr

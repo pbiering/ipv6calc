@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.41 2014/10/24 06:20:34 ds6peter Exp $
-# Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_showinfo.sh,v 1.42 2015/04/16 06:23:20 ds6peter Exp $
+# Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
 
@@ -17,8 +17,8 @@ ff02::1:ff00:1234			# Solicited node link-local multicast address
 ff01::1:ff00:1234			# Solicited node link-local multicast address
 3ffe::1:ff00:1234			# Solicited node 6bone multicast address
 ::1					# localhost
-::1.2.3.4				# compat IPv4
-::ffff:1.2.3.4				# mapped IPv4
+::2.2.3.4				# compat IPv4
+::ffff:2.2.3.4				# mapped IPv4
 2002:0102:0204::1			# 6to4
 fe80::210:a4ff:fe01:2345		# link-local autoconfig EUI-48
 fe80::210:a489:ab01:2345		# link-local autoconfig EUI-64
@@ -50,8 +50,13 @@ END
 
 getexamples_IP2Location() {
 	cat <<END
-2001:4dd0:f838:a006::3
 212.18.21.186
+END
+}
+
+getexamples_IP2Location6() {
+	cat <<END
+2a04::1
 END
 }
 
@@ -230,8 +235,9 @@ fi
 
 if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 	echo "Run IP2Location tests"
+
 	getexamples_IP2Location | while read address; do
-		echo "Run IP2Location showinfo on: $address"
+		echo "Run IP2Location IPv4 showinfo on: $address"
 		if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep ^IP2LOCATION; then
 			true
 		else
@@ -259,6 +265,39 @@ if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 		fi
 		echo
 	done || exit 1
+
+	if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location6; then
+		getexamples_IP2Location6 | while read address; do
+			echo "Run IP2Location IPv6 showinfo on: $address"
+			if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep ^IP2LOCATION; then
+				true
+			else
+				echo "Unexpected result (missing IP2LOCATION): ./ipv6calc -q -i -m $address"
+				./ipv6calc -q -i -m $address
+				exit 1
+			fi
+		done || exit 1
+
+		testscenarios_showinfo_ip2location6 | while read address output; do
+			if echo "$output" | grep -q "^OUI="; then
+				if [ $ipv6calc_has_db_ieee -ne 1 ]; then
+					echo "Test: $address for $output SKIPPED (no DB_IEEE compiled in)"
+					continue
+				fi
+			fi
+			echo "Test: $address for $output"
+			output_escaped="${output//./\\.}"
+			output_escaped="${output_escaped//[/\\[}"
+			output_escaped="${output_escaped//]/\\]}"
+			if ! ./ipv6calc -q -i -m $address | grep "^$output_escaped$"; then
+				echo "ERROR: unexpected result ($output_escaped)"
+				./ipv6calc -q -i -m $address
+				exit 1	
+			fi
+			echo
+		done || exit 1
+	fi
+
 	echo "IP2Location tests were successful"
 else
 	echo "IP2Location tests skipped"

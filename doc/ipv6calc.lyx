@@ -1276,7 +1276,7 @@ IP2Location support by dynamic library load
 \begin_layout Code
 
 IP2Location configured dynamic library file and detected version: libIP2Location.
-so LIBARY-NOT-LOADED
+so LIBRARY-NOT-LOADED
 \end_layout
 
 \begin_layout Code

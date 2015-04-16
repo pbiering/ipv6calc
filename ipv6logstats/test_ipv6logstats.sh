@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
-# Version    : $Id: test_ipv6logstats.sh,v 1.18 2014/07/29 20:01:55 ds6peter Exp $
+# Version    : $Id: test_ipv6logstats.sh,v 1.19 2015/04/16 06:23:20 ds6peter Exp $
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"
@@ -49,19 +49,19 @@ END
 testscenarios_match() {
 	cat <<END | grep -v "^#"
 # Non-Anonymized IPv4
-1.2.3.4						AS-num-proto/15169/IPv4
-1.2.3.4						CC-proto-code/IPv4/AU
-::1.2.3.4					AS-num-proto/15169/IPv4
-::1.2.3.4					CC-proto-code/IPv4/AU
-::ffff:1.2.3.4					AS-num-proto/15169/IPv4
-::ffff:1.2.3.4					CC-proto-code/IPv4/AU
+2.2.3.4						AS-num-proto/3215/IPv4
+2.2.3.4						CC-proto-code/IPv4/FR
+::2.2.3.4					AS-num-proto/3215/IPv4
+::2.2.3.4					CC-proto-code/IPv4/FR
+::ffff:2.2.3.4					AS-num-proto/3215/IPv4
+::ffff:2.2.3.4					CC-proto-code/IPv4/FR
 # Anonymized IPv4
-246.24.59.65					AS-num-proto/15169/IPv4
-246.24.59.65					CC-proto-code/IPv4/AU
-::246.24.59.65					AS-num-proto/15169/IPv4
-::246.24.59.65					CC-proto-code/IPv4/AU
-::ffff:246.24.59.65				AS-num-proto/15169/IPv4
-::ffff:246.24.59.65				CC-proto-code/IPv4/AU
+253.134.12.143					AS-num-proto/3215/IPv4
+253.134.12.143					CC-proto-code/IPv4/FR
+::253.134.12.143				AS-num-proto/3215/IPv4
+::253.134.12.143				CC-proto-code/IPv4/FR
+::ffff:253.134.12.143				AS-num-proto/3215/IPv4
+::ffff:253.134.12.143				CC-proto-code/IPv4/FR
 # Teredo
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF		CC-code-proto/IT/IPv4
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF		AS-num-proto/3269/IPv4
@@ -73,15 +73,15 @@ testscenarios_match() {
 # 6to4
 2002:c0a8:f900:9:a929:4291:4021:132d		IPv6/6to4/RESERVED
 2002:c0a8:f900:9:a929:4291:4021:132d		CC-code-proto/unknown/IPv4
-2002:0102:0304:0:ed08:d22b:6c15:3401		CC-proto-code/IPv4/AU
-2002:0102:0304:0:ed08:d22b:6c15:3401		AS-num-proto/15169/IPv4
+2002:0202:0304:0:ed08:d22b:6c15:3401		CC-proto-code/IPv4/FR
+2002:0202:0304:0:ed08:d22b:6c15:3401		AS-num-proto/3215/IPv4
 # 6to4 (anonymized)
 2002:f618:3b41:9:a929:4941::c			CC-proto-code/IPv4/AU
 2002:f618:3b41:9:a929:4941::c			AS-num-proto/15169/IPv4
 # NAT64
-64:ff9b::0102:0304				CC-proto-code/IPv4/AU
-64:ff9b::0102:0304				AS-num-proto/15169/IPv4
-64:ff9b::0102:0304				IPv6/NAT64/APNIC
+64:ff9b::0202:0304				CC-proto-code/IPv4/FR
+64:ff9b::0202:0304				AS-num-proto/3215/IPv4
+64:ff9b::0202:0304				IPv6/NAT64/RIPE
 # NAT64 (anonmyized)
 64:ff9b::f618:3b41				CC-proto-code/IPv4/AU
 64:ff9b::f618:3b41				AS-num-proto/15169/IPv4

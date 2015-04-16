@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.27 2014/10/07 20:25:23 ds6peter Exp $
- * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calc.h,v 1.28 2015/04/16 06:23:20 ds6peter Exp $
+ * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc.c
@@ -10,11 +10,11 @@
 
 #include "ipv6calc_inttypes.h"
 #include "ipv6calctypes.h"
-#include "libipv4addr.h"
-#include "libipv6addr.h"
 #include "libipaddr.h"
 #include "libmac.h"
-
+#include "databases/lib/libipv6calc_db_wrapper.h"
+#include "libipv4addr.h"
+#include "libipv6addr.h"
 
 /* typedefs */
 
@@ -117,7 +117,11 @@ extern void string_to_reverse_dotted(char *string, const size_t string_length);
 extern uint32_t libipv6calc_autodetectinput(const char *string);
 
 extern int  libipv6calc_filter_parse(const char *expression, s_ipv6calc_filter_master *filter_master);
+extern int  libipv6calc_filter_check(s_ipv6calc_filter_master *filter_master);
 extern void libipv6calc_filter_clear(s_ipv6calc_filter_master *filter_master);
+extern void libipv6calc_filter_clear_db_cc(s_ipv6calc_filter_db_cc *filter_db_cc);
+extern void libipv6calc_filter_clear_db_asn(s_ipv6calc_filter_db_asn *filter_db_asn);
+extern void libipv6calc_filter_clear_db_registry(s_ipv6calc_filter_db_registry *filter_db_registry);
 
 extern int   libipv6calc_anon_set_by_name(s_ipv6calc_anon_set *ipv6calc_anon_set, const char* name);
 extern void  libipv6calc_anon_infostring(char* string, const int stringlength, const s_ipv6calc_anon_set *ipv6calc_anon_set);

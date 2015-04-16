@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.84 2014/10/07 20:25:23 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.85 2015/04/16 06:23:20 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -179,8 +179,10 @@ typedef struct {
 /* IPv6 filter structure */
 typedef struct {
 	int active;
-	uint32_t typeinfo_must_have;
-	uint32_t typeinfo_may_not_have;
+	s_ipv6calc_filter_typeinfo    filter_typeinfo;
+	s_ipv6calc_filter_db_cc       filter_db_cc;        // Country Code filter
+	s_ipv6calc_filter_db_asn      filter_db_asn;       // Autonomous System Number filter
+	s_ipv6calc_filter_db_registry filter_db_registry;  // Registry filter
 	/* others coming next */
 } s_ipv6calc_filter_ipv6addr;
 
@@ -357,7 +359,7 @@ extern uint8_t  ipv6addr_getoctet(const ipv6calc_ipv6addr *ipv6addrp, const unsi
 extern uint16_t ipv6addr_getword(const ipv6calc_ipv6addr *ipv6addrp, const unsigned int numword);
 extern uint32_t ipv6addr_getdword(const ipv6calc_ipv6addr *ipv6addrp, const unsigned int numdword);
 
-extern void ipv6addr_setoctet(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numocett, unsigned int value);
+extern void ipv6addr_setoctet(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numoctet, unsigned int value);
 extern void ipv6addr_setword(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numword, unsigned int value);
 extern void ipv6addr_setdword(ipv6calc_ipv6addr *ipv6addrp, const unsigned int numdword, unsigned int value);
 
@@ -390,6 +392,7 @@ extern int ipv6addr_iidrandomdetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 
 extern int  ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_ipv6addr *filter);
 extern int  ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token);
+extern int  ipv6addr_filter_check(s_ipv6calc_filter_ipv6addr *filter);
 extern void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter);
 
 extern int  libipv6addr_get_included_ipv4addr(const ipv6calc_ipv6addr *ipv6addrp, ipv6calc_ipv4addr *ipv4addrp, const int selector);

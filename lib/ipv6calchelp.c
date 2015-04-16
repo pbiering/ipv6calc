@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.68 2014/09/24 09:07:57 ds6peter Exp $
- * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calchelp.c,v 1.69 2015/04/16 06:23:20 ds6peter Exp $
+ * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -711,9 +711,11 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, " Filter given addresses from stdout by filter expression, e.g.\n");
 			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A filter] -E iid-local\n");
 			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A filter] -E iid-local,global-unicast\n");
-			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A filter] -E ^iid-randomy\n");
+			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A filter] -E ^iid-random\n");
 			fprintf(stderr, "\n");
 			fprintf(stderr, " (note: since version 0.95.0 '-A filter' is autoselected if option '-E <filter expression>' is given)\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, " negation of filter expression with prefix: ^\n");
 			fprintf(stderr, "\n");
 			fprintf(stderr, "  IPv6 address filter tokens:\n");
 			fprintf(stderr, "   ipv6 ");
@@ -726,6 +728,16 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "   ipv4 ");
 			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv4addrtypestrings); i++ ) {
 				fprintf(stderr, " %s", ipv6calc_ipv4addrtypestrings[i].token);
+			};
+			fprintf(stderr, "\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, "  IPv4/v6 address filter tokens based on databases:\n");
+			fprintf(stderr, "   [^][ipv4.|ipv6.]db.cc=<CC>|unknown (Country Code [2 chars])\n");
+			fprintf(stderr, "   [^][ipv4.|ipv6.]db.asn=<ASN>|unknown (Autonomous System Number [numeric])\n");
+			fprintf(stderr, "   [^][ipv4.|ipv6.]db.reg=<REGISTRY>|unknown (Registry)\n");
+			fprintf(stderr, "    Registry tokens:");
+			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_registries); i++ ) {
+				fprintf(stderr, " %s", ipv6calc_registries[i].token);
 			};
 			fprintf(stderr, "\n");
 			fprintf(stderr, "\n");

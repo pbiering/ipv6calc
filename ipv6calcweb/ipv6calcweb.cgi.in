@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.81 2015/02/13 06:46:28 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.82 2015/04/16 06:23:20 ds6peter Exp $
 # Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -520,6 +520,46 @@ my %text = (
 		'de' => "IP2Location Area-Code",
 		'en' => "IP2Location Area Code",
 	},
+	'IP2LOCATION_TIMEZONE' => {
+		'de' => "IP2Location Zeitzone",
+		'en' => "IP2Location Time Zone",
+	},
+	'IP2LOCATION_NETSPEED' => {
+		'de' => "IP2Location Netzgeschwindigkeit",
+		'en' => "IP2Location Net Speed",
+	},
+	'IP2LOCATION_WEATHERSTATIONNAME' => {
+		'de' => "IP2Location Name der Wetterstation",
+		'en' => "IP2Location Weather Station Name",
+	},
+	'IP2LOCATION_WEATHERSTATIONCODE' => {
+		'de' => "IP2Location Code der Wetterstation",
+		'en' => "IP2Location Weather Station Code",
+	},
+	'IP2LOCATION_IDDCODE' => {
+		'de' => "IP2Location Landesvorwahl",
+		'en' => "IP2Location Internation Direct Dialing",
+	},
+	'IP2LOCATION_ELEVATION' => {
+		'de' => "IP2Location Hoehe ueber Meeresspiegel [m]",
+		'en' => "IP2Location High above Sealevel [m]",
+	},
+	'IP2LOCATION_USAGETYPE' => {
+		'de' => "IP2Location Art der Benutzung",
+		'en' => "IP2Location Usage Type Classification",
+	},
+	'IP2LOCATION_MOBILEBRAND' => {
+		'de' => "IP2Location Mobile Brand",
+		'en' => "IP2Location Mobile Brand",
+	},
+	'IP2LOCATION_MNC' => {
+		'de' => "IP2Location Mobile Network Code",
+		'en' => "IP2Location Mobile Network Code",
+	},
+	'IP2LOCATION_MCC' => {
+		'de' => "IP2Location Mobile Country Code",
+		'en' => "IP2Location Mobile Country Code",
+	},
 	'IP2LOCATION_DATABASE_INFO' => {
 		'de' => "IP2Location Datenbank-Information",
 		'en' => "IP2Location database information",
@@ -661,6 +701,7 @@ my %text = (
 		'en' => "Area Code",
 	},
 );
+
 
 # Location of binary
 my $bin_ipv6calc;
@@ -1197,7 +1238,10 @@ sub print_infohash ($$$;$) {
 		};
 		
 		&print_tagoutput ( "<font size=\"-1\">" ) if ($count_key_embedded > 0);
-		print $chr_quote . $$phash{$key} . $chr_quote;
+
+		my $value = $$phash{$key};
+
+		print $chr_quote . $value . $chr_quote;
 		&print_tagoutput ( "</font>" ) if ($count_key_embedded > 0);
 
 		if ( $flag_whoisurl == 1 ) {
@@ -2166,8 +2210,11 @@ if ($outputformat =~ /^html/o) {
 	print "</font>\n";
 
 	if (scalar(keys %db_info_ip2location) > 0) {
+		# search for LITE token and add URL
+		my $string = encode_entities(join(" / ", sort keys %db_info_ip2location));
+		$string =~ s/LITE/<a target="_blank" href="http:\/\/lite.ip2location.com">LITE<\/a>/g;
 		print "          <br>\n";
-		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.ip2location.com\">IP2Location</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_ip2location)) . "</font>\n";
+		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.ip2location.com\">IP2Location</a> " . $text{'database'}->{$lang} . " " . $string . "</font>\n";
 	};
 
 	if (scalar(keys %db_info_geoip) > 0) {

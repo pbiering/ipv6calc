@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.72 2015/02/12 07:27:04 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.73 2015/04/16 06:23:20 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -41,52 +41,42 @@ static const char* wrapper_geoip_info = "dyn-load";
 
 /* define status and dynamic load functions */
 static int dl_status_GeoIP_open = IPV6CALC_DL_STATUS_UNKNOWN;
-//static GeoIP* (*dl_GeoIP_open)(const char * filename, int flags) = NULL;
 typedef GeoIP *(*dl_GeoIP_open_t)(const char * filename, int flags);
 static union { dl_GeoIP_open_t func; void * obj; } dl_GeoIP_open;
 
 static int dl_status_GeoIP_open_type = IPV6CALC_DL_STATUS_UNKNOWN;
-//static GeoIP* (*dl_GeoIP_open_type)(int type, int flags) = NULL;
 typedef GeoIP *(*dl_GeoIP_open_type_t)(int type, int flags);
 static union { dl_GeoIP_open_type_t func; void * obj; } dl_GeoIP_open_type;
 
 static int dl_status_GeoIP_db_avail = IPV6CALC_DL_STATUS_UNKNOWN;
-//static int (*dl_GeoIP_db_avail)(int type) = NULL;
 typedef int (*dl_GeoIP_db_avail_t)(int type);
 static union { dl_GeoIP_db_avail_t func; void * obj; } dl_GeoIP_db_avail;
 
 static int dl_status_GeoIP_database_edition = IPV6CALC_DL_STATUS_UNKNOWN;
-//static unsigned char (*dl_GeoIP_database_edition)(GeoIP* gi) = NULL;
 typedef unsigned char (*dl_GeoIP_database_edition_t)(GeoIP* gi);
 static union { dl_GeoIP_database_edition_t func; void * obj; } dl_GeoIP_database_edition;
 
 static int dl_status_GeoIP_delete = IPV6CALC_DL_STATUS_UNKNOWN;
-//static void (*dl_GeoIP_delete)(GeoIP* gi) = NULL;
 typedef void (*dl_GeoIP_delete_t)(GeoIP* gi);
 static union { dl_GeoIP_delete_t func; void * obj; } dl_GeoIP_delete;
 
 static int dl_status_GeoIP_database_info = IPV6CALC_DL_STATUS_UNKNOWN;
-//static char* (*dl_GeoIP_database_info)(GeoIP* gi) = NULL;
 typedef char *(*dl_GeoIP_database_info_t)(GeoIP* gi);
 static union { dl_GeoIP_database_info_t func; void * obj; } dl_GeoIP_database_info;
 
 static int dl_status_GeoIP_country_code_by_addr = IPV6CALC_DL_STATUS_UNKNOWN;
-//static char* (*dl_GeoIP_country_code_by_addr)(GeoIP* gi, const char *addr) = NULL;
 typedef char *(*dl_GeoIP_country_code_by_addr_t)(GeoIP* gi, const char *addr);
 static union { dl_GeoIP_country_code_by_addr_t func; void * obj; } dl_GeoIP_country_code_by_addr;
 
 static int dl_status_GeoIP_country_name_by_addr = IPV6CALC_DL_STATUS_UNKNOWN;
-//static char* (*dl_GeoIP_country_name_by_addr)(GeoIP* gi, const char *addr) = NULL;
 typedef char *(*dl_GeoIP_country_name_by_addr_t)(GeoIP* gi, const char *addr);
 static union { dl_GeoIP_country_name_by_addr_t func; void * obj; } dl_GeoIP_country_name_by_addr;
 
 static int dl_status_GeoIP_name_by_addr = IPV6CALC_DL_STATUS_UNKNOWN;
-//static char* (*dl_GeoIP_name_by_addr)(GeoIP* gi, const char *addr) = NULL;
 typedef char *(*dl_GeoIP_name_by_addr_t)(GeoIP* gi, const char *addr);
 static union { dl_GeoIP_name_by_addr_t func; void * obj; } dl_GeoIP_name_by_addr;
 
 static int dl_status_GeoIP_record_by_addr = IPV6CALC_DL_STATUS_UNKNOWN;
-//static GeoIPRecord* (*dl_GeoIP_record_by_addr)(GeoIP* gi, const char *addr) = NULL;
 typedef GeoIPRecord *(*dl_GeoIP_record_by_addr_t)(GeoIP* gi, const char *addr);
 static union { dl_GeoIP_record_by_addr_t func; void * obj; } dl_GeoIP_record_by_addr;
 
@@ -95,41 +85,33 @@ typedef GeoIPRecord *(*dl_GeoIP_record_by_addr_v6_t)(GeoIP *gi, const char *addr
 static union { dl_GeoIP_record_by_addr_v6_t func; void * obj; } dl_GeoIP_record_by_addr_v6;
 
 static int dl_status_GeoIPRecord_delete = IPV6CALC_DL_STATUS_UNKNOWN;
-//static void (*dl_GeoIPRecord_delete)(GeoIPRecord *gir) = NULL;
 typedef void (*dl_GeoIPRecord_delete_t)(GeoIPRecord *gir);
 static union { dl_GeoIPRecord_delete_t func; void * obj; } dl_GeoIPRecord_delete;
 
 static int dl_status_GeoIP_country_code_by_addr_v6 = IPV6CALC_DL_STATUS_UNKNOWN;
-//static char* (*dl_GeoIP_country_code_by_addr_v6)(GeoIP* gi, const char *addr) = NULL;
 typedef char *(*dl_GeoIP_country_code_by_addr_v6_t)(GeoIP* gi, const char *addr);
 static union { dl_GeoIP_country_code_by_addr_v6_t func; void * obj; } dl_GeoIP_country_code_by_addr_v6;
 
 static int dl_status_GeoIP_country_name_by_addr_v6 = IPV6CALC_DL_STATUS_UNKNOWN;
-//static char* (*dl_GeoIP_country_name_by_addr_v6)(GeoIP* gi, const char *addr) = NULL;
 typedef char *(*dl_GeoIP_country_name_by_addr_v6_t)(GeoIP* gi, const char *addr);
 static union { dl_GeoIP_country_name_by_addr_v6_t func; void * obj; } dl_GeoIP_country_name_by_addr_v6;
 
 static int dl_status_GeoIP_name_by_addr_v6 = IPV6CALC_DL_STATUS_UNKNOWN;
-//static char* (*dl_GeoIP_name_by_addr_v6)(GeoIP* gi, const char *addr) = NULL;
 typedef char *(*dl_GeoIP_name_by_addr_v6_t)(GeoIP* gi, const char *addr);
 static union { dl_GeoIP_name_by_addr_v6_t func; void * obj; } dl_GeoIP_name_by_addr_v6;
 
 static int dl_status_GeoIP_lib_version = IPV6CALC_DL_STATUS_UNKNOWN;
-//static char* (*dl_GeoIP_lib_version)() = NULL;
 typedef char *(*dl_GeoIP_lib_version_t)(void);
 static union { dl_GeoIP_lib_version_t func; void * obj; } dl_GeoIP_lib_version;
 
 static int dl_status_GeoIP_cleanup = IPV6CALC_DL_STATUS_UNKNOWN;
-//static int (*dl_GeoIP_cleanup)() = NULL;
 typedef int (*dl_GeoIP_cleanup_t)(void);
 static union { dl_GeoIP_cleanup_t func; void * obj; } dl_GeoIP_cleanup;
 
 static int dl_status_GeoIP_setup_custom_directory = IPV6CALC_DL_STATUS_UNKNOWN;
-//static void (*dl_GeoIP_setup_custom_directory)(char *dir) = NULL;
 typedef void (*dl_GeoIP_setup_custom_director_t)(char *dir);
 static union { dl_GeoIP_setup_custom_director_t func; void * obj; } dl_GeoIP_setup_custom_directory;
 
-//static const char **dl_GeoIPDBDescription = NULL;
 typedef const char **(dl_GeoIPDBDescription_t);
 static union { dl_GeoIPDBDescription_t val; void * obj; } dl_GeoIPDBDescription;
 
@@ -206,6 +188,8 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	char *error;
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Load library: %s", geoip_lib_file);
+
+	dlerror();    /* Clear any existing error */
 
 	dl_GeoIP_handle = dlopen(geoip_lib_file, RTLD_NOW | RTLD_LOCAL);
 

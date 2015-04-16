@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.26 2014/07/29 20:01:55 ds6peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.27 2015/04/16 06:23:20 ds6peter Exp $
 # Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -41,8 +41,8 @@ cat <<END | grep -v "^#"
 ff02::1:ff00:1234 - - Solicited Node		=ff02::1:ff00:0 - - Solicited Node
 3ffe::1:ff00:1234 - - Solicited Node		=3ffe::1:ff00:0 - - Solicited Node
 ::1 - - loopback				=::1 - - loopback
-::1.2.3.4 - - compatible IPv4			=::1.2.3.0 - - compatible IPv4
-::ffff:1.2.3.4 - - mapped IPv4			=::ffff:1.2.3.0 - - mapped IPv4
+::2.2.3.4 - - compatible IPv4			=::2.2.3.0 - - compatible IPv4
+::ffff:2.2.3.4 - - mapped IPv4			=::ffff:2.2.3.0 - - mapped IPv4
 2002:0102:0204::1 - - 6to4 local		=2002:102:200:9:a929:4291:c02d:5d15 - - 6to4 local
 2002:50b5:7940::50b5:7940 - - 6to4 Microsoft	=2002:50b5:7900:9:a929:4291:850b:5794 - - 6to4 Microsoft
 fe80::210:a4ff:fe01:2345 - - link local EUI-48	=fe80::a909:4291:4021:a4c - - link local EUI-48
@@ -74,15 +74,14 @@ cat <<END_CACHE | grep -v "^#"
 195.226.187.50	- - "IPv4 address"
 3ffe:ffff::1	- - "IPv6 address/6bone test"
 3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - 
-1.2.3.4 - -
-1.2.3.4 - -
+2.2.3.4 - -
+2.2.3.4 - -
 195.226.187.50	- - "IPv4 address"
-::ffff:1.2.3.4 - -
+::ffff:2.2.3.4 - -
 2002:0102:0204::1 - -
 fe80::210:a4ff:fe01:2345 - -
 fe80::210:a489:ab01:2345 - -
 3ffe:ffff::210:a4ff:fe01:2345 - -
-1.2.3.4 - -
 2.2.3.4 - -
 3.2.3.4 - -
 4.2.3.4 - -
