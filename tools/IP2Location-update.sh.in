@@ -9,12 +9,13 @@
 #
 # Project    : ipv6calc/IP2Location
 # File       : IP2Location-update.sh
-# Version    : $Id: IP2Location-update.sh.in,v 1.6 2015/04/16 08:42:44 ds6peter Exp $
+# Version    : $Id: IP2Location-update.sh.in,v 1.7 2015/04/16 20:34:48 ds6peter Exp $
 # Copyright  : 2012-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
 # 20150416: remove softlink support, no longer needed
 
+IP2LOCATION_CONFIG=${IP2LOCATION_CONFIG:-"$HOME/.ip2location"}
 
 IP2LOCATION_DAT_DIR_DEFAULT="@IP2LOCATION_DB@"
 [ -z "$IP2LOCATION_DAT_DIR" ] && IP2LOCATION_DAT_DIR="$IP2LOCATION_DAT_DIR_DEFAULT"
@@ -22,25 +23,25 @@ IP2LOCATION_DAT_DIR_DEFAULT="@IP2LOCATION_DB@"
 IP2LOCATION_DAT_URL_BASE="http://www.ip2location.com/download?login=@LOGIN@&password=@PASSWORD@"
 IP2LOCATION_DAT_URL_BASE_SAMPLE="http://www.ip2location.com/downloads"
 
-# (free) subscription is required for LITE DB-Number > 1
 # Format: Proto:DB-Number
-IP2LOCATION_DAT_FILES_LITE_IPV4="IPv4:1 IPv4:11"
-IP2LOCATION_DAT_FILES_LITE_IPV6="IPv6:1 IPv6:11"
 
-# list of LITE
-IP2LOCATION_DAT_FILES_LITE="$IP2LOCATION_DAT_FILES_LITE_IPV4 $IP2LOCATION_DAT_FILES_LITE_IPV6"
+# free downloads
+IP2LOCATION_DAT_FILES_LITE=${IP2LOCATION_DAT_FILES_LITE:-"IPv4:1 IPv6:1"}
+
+# (free) subscription is required for LITE DB-Number > 1
+IP2LOCATION_DAT_FILES_LITE_SUBSCRIPTION=${IP2LOCATION_DAT_FILES_LITE_SUBSCRIPTION:-"IPv4:11 IPv6:11"}
 
 # list of normal (purchased subscription required)
-IP2LOCATION_DAT_FILES=""
+IP2LOCATION_DAT_FILES="${IP2LOCATION_DAT_FILES}"
 
-# list of SAMPLE
-IP2LOCATION_DAT_FILES_SAMPLE="IPv4:20 IPv6:20 IPv4:24 IPv6:24"
+# list of recommended SAMPLE
+IP2LOCATION_DAT_FILES_SAMPLE=${IP2LOCATION_DAT_FILES_SAMPLE:-"IPv4:20 IPv6:20 IPv4:24 IPv6:24"}
 
 
 help() {
 	cat <<END
-Usage: $(basename "$0") [-D <dir>] [-f]
-	-D <dir>	database directory (optional)
+Usage: $(basename "$0") [-D <dir>] [-n] [-s]
+	-D <dir>	database destination directory (optional)
 	-n		no action (dry-run)
 	-s		skip already successfully downloaded files
 
@@ -49,18 +50,55 @@ Usage: $(basename "$0") [-D <dir>] [-f]
 	it honors externally defined environment value: IP2LOCATION_DAT_DIR
 
  this script will download data from ip2location.com
- into given/set database directory
+  into given/set database directory
 
- Samples:
- IP2LOCATION_DAT_URL_BASE_SAMPLE=$IP2LOCATION_DAT_URL_BASE_SAMPLE
- IP2LOCATION_DAT_FILES_SAMPLE=$IP2LOCATION_DAT_FILES_SAMPLE
+ Sample databases:
+  IP2LOCATION_DAT_FILES_SAMPLE=$IP2LOCATION_DAT_FILES_SAMPLE
 
- With authentication (requires login/password in \$HOME/.ip2location) and a valid subscription
- IP2LOCATION_DAT_URL_BASE=$IP2LOCATION_DAT_URL_BASE
+ Lite (free) databases:
+ IP2LOCATION_DAT_FILES_LITE=$IP2LOCATION_DAT_FILES_LITE
+
+ With authentication (requires login/password in $IP2LOCATION_CONFIG) and a valid subscription
  IP2LOCATION_DAT_FILES=$IP2LOCATION_DAT_FILES
+
+ Credentials must be defined in \$HOME/.ip2location by
+  login=IP2LOCATION-LOGIN
+  password=IP2LOCATION-PASSWORD
+
+ In addition settings from above can be overwritten by setting related variables
 END
 }
 
+# source credentials (must provide login= and password=)
+if [ -f "$IP2LOCATION_CONFIG" ]; then
+	source "$IP2LOCATION_CONFIG"
+
+	authenticated=1
+	for token in login password; do
+		if [ -z "${!token}" ]; then
+			echo "NOTICE: missing credential token in: $IP2LOCATION_CONFIG [$token=<VALUE>] (skip authenticated downloads)"
+			authenticated=0
+		fi
+	done
+
+	if [ $authenticated -ne 0 ]; then
+		# extend LITE files with default recommended for subscription
+		echo "NOTICE : IP2Location credential file found, expand IP2LOCATION_DAT_FILES_LITE"
+		IP2LOCATION_DAT_FILES_LITE="$IP2LOCATION_DAT_FILES_LITE $IP2LOCATION_DAT_FILES_LITE_SUBSCRIPTION"
+
+		# replace placeholders
+		IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@LOGIN@/$login}
+		IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@PASSWORD@/$password}
+	else
+		# clear commercial file list
+		IP2LOCATION_DAT_FILES=""
+	fi
+else
+	echo "NOTICE: missing credential file: $IP2LOCATION_CONFIG (skip authenticated downloads)"
+	IP2LOCATION_DAT_FILES=""
+fi
+
+# option parsing
 while getopts "fsnD:h\?" opt; do
 	case $opt in
 	    D)
@@ -91,23 +129,6 @@ if [ ! -w "$IP2LOCATION_DAT_DIR" ]; then
 	exit 1
 fi
 
-# source credentials (must provide login= and password=)
-if [ -f "$HOME/.ip2location" ]; then
-	source "$HOME/.ip2location"
-
-	for token in login password; do
-		if [ -z "${!token}" ]; then
-			echo "NOTICE: missing credential token in: $HOME/.ip2location [$token=<VALUE>] (skip authenticated download)"
-			IP2LOCATION_DAT_FILES=""
-		fi
-	done
-
-	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@LOGIN@/$login}
-	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@PASSWORD@/$password}
-else
-	echo "NOTICE: missing credential file: $HOME/.ip2location (skip authenticated download)"
-	IP2LOCATION_DAT_FILES=""
-fi
 
 # Download and unpack non-sample files
 for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES; do
