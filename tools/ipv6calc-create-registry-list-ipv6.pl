@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: ipv6calc-create-registry-list-ipv6.pl,v 1.1 2015/02/15 20:19:37 ds6peter Exp $
+# Version    : $Id: ipv6calc-create-registry-list-ipv6.pl,v 1.2 2015/04/18 08:04:20 ds6peter Exp $
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
 #              2005-2015 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
 # License    : GNU GPL v2
@@ -470,8 +470,7 @@ static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 		printf $OUT "\t{ 0x%s, 0x%s, 0x%s, 0x%s, %3d, REGISTRY_%-10s },\n", $data{$ipv6}->{'ipv6_00_31'}, $data{$ipv6}->{'ipv6_32_63'}, $data{$ipv6}->{'mask_00_31'}, $data{$ipv6}->{'mask_32_63'}, $data{$ipv6}->{'mask_length'}, $data{$ipv6}->{'reg'};
 	};
 
-	print $OUT qq|};
-	|;
+	print $OUT "};\n";
 
 	close($OUT);
 

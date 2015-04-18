@@ -9,7 +9,7 @@
 #
 # Project    : ipv6calc/IP2Location
 # File       : IP2Location-update.sh
-# Version    : $Id: IP2Location-update.sh.in,v 1.7 2015/04/16 20:34:48 ds6peter Exp $
+# Version    : $Id: IP2Location-update.sh.in,v 1.8 2015/04/18 08:04:20 ds6peter Exp $
 # Copyright  : 2012-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
@@ -22,14 +22,15 @@ IP2LOCATION_DAT_DIR_DEFAULT="@IP2LOCATION_DB@"
 
 IP2LOCATION_DAT_URL_BASE="http://www.ip2location.com/download?login=@LOGIN@&password=@PASSWORD@"
 IP2LOCATION_DAT_URL_BASE_SAMPLE="http://www.ip2location.com/downloads"
+IP2LOCATION_DAT_URL_BASE_LITE_FREE="http://download.ip2location.com/lite"
 
 # Format: Proto:DB-Number
 
 # free downloads
-IP2LOCATION_DAT_FILES_LITE=${IP2LOCATION_DAT_FILES_LITE:-"IPv4:1 IPv6:1"}
+IP2LOCATION_DAT_FILES_LITE_FREE=${IP2LOCATION_DAT_FILES_LITE_FREE:-"IPv4:1 IPv6:1"}
 
 # (free) subscription is required for LITE DB-Number > 1
-IP2LOCATION_DAT_FILES_LITE_SUBSCRIPTION=${IP2LOCATION_DAT_FILES_LITE_SUBSCRIPTION:-"IPv4:11 IPv6:11"}
+IP2LOCATION_DAT_FILES_LITE=${IP2LOCATION_DAT_FILES_LITE:-"IPv4:11 IPv6:11"}
 
 # list of normal (purchased subscription required)
 IP2LOCATION_DAT_FILES="${IP2LOCATION_DAT_FILES}"
@@ -56,10 +57,11 @@ Usage: $(basename "$0") [-D <dir>] [-n] [-s]
   IP2LOCATION_DAT_FILES_SAMPLE=$IP2LOCATION_DAT_FILES_SAMPLE
 
  Lite (free) databases:
- IP2LOCATION_DAT_FILES_LITE=$IP2LOCATION_DAT_FILES_LITE
+  IP2LOCATION_DAT_FILES_LITE_FREE=$IP2LOCATION_DAT_FILES_LITE_FREE
 
  With authentication (requires login/password in $IP2LOCATION_CONFIG) and a valid subscription
- IP2LOCATION_DAT_FILES=$IP2LOCATION_DAT_FILES
+  IP2LOCATION_DAT_FILES_LITE=$IP2LOCATION_DAT_FILES_LITE
+  IP2LOCATION_DAT_FILES=$IP2LOCATION_DAT_FILES
 
  Credentials must be defined in \$HOME/.ip2location by
   login=IP2LOCATION-LOGIN
@@ -70,10 +72,10 @@ END
 }
 
 # source credentials (must provide login= and password=)
+authenticated=1
 if [ -f "$IP2LOCATION_CONFIG" ]; then
 	source "$IP2LOCATION_CONFIG"
 
-	authenticated=1
 	for token in login password; do
 		if [ -z "${!token}" ]; then
 			echo "NOTICE: missing credential token in: $IP2LOCATION_CONFIG [$token=<VALUE>] (skip authenticated downloads)"
@@ -82,20 +84,20 @@ if [ -f "$IP2LOCATION_CONFIG" ]; then
 	done
 
 	if [ $authenticated -ne 0 ]; then
-		# extend LITE files with default recommended for subscription
-		echo "NOTICE : IP2Location credential file found, expand IP2LOCATION_DAT_FILES_LITE"
-		IP2LOCATION_DAT_FILES_LITE="$IP2LOCATION_DAT_FILES_LITE $IP2LOCATION_DAT_FILES_LITE_SUBSCRIPTION"
-
 		# replace placeholders
 		IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@LOGIN@/$login}
 		IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@PASSWORD@/$password}
-	else
-		# clear commercial file list
-		IP2LOCATION_DAT_FILES=""
 	fi
 else
-	echo "NOTICE: missing credential file: $IP2LOCATION_CONFIG (skip authenticated downloads)"
+	authenticated=0
+fi
+
+if [ $authenticated -eq 0 ]; then
+	echo "NOTICE: IP2Location credential file not found, clear IP2LOCATION_DAT_FILES"
 	IP2LOCATION_DAT_FILES=""
+
+	echo "NOTICE: IP2Location credential file not found, clear IP2LOCATION_DAT_FILES_LITE"
+	IP2LOCATION_DAT_FILES_LITE=""
 fi
 
 # option parsing
@@ -120,7 +122,7 @@ done
 
 # directory check
 if [ ! -d "$IP2LOCATION_DAT_DIR" ]; then
-	echo "ERROR : missing directory: $IP2LOCATION_DAT_DIR"
+	echo "ERROR : missing directory: $IP2LOCATION_DAT_DIR (check option -D or set IP2LOCATION_DAT_DIR)"
 	exit 1
 fi
 
@@ -131,7 +133,7 @@ fi
 
 
 # Download and unpack non-sample files
-for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES; do
+for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FILES_LITE_FREE IP2LOCATION_DAT_FILES_SAMPLE; do
 	if [ -z "${!list}" ]; then
 		echo "NOTICE: empty list, skip: $list"
 		continue
@@ -139,10 +141,21 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES; do
 
 	echo "INFO  : download list $list: ${!list}"
 
+	url_base="$IP2LOCATION_DAT_URL_BASE"
+
 	case $list in
-	    *_LITE)
+	    *_LITE|*_LITE_FREE)
 		code_suffix="LITEBIN"
 		file_prefix="IP2LOCATION-LITE"
+
+		case $list in
+		    *_LITE_FREE)
+			url_base="$IP2LOCATION_DAT_URL_BASE_LITE_FREE"
+			;;
+		esac
+		;;
+	    *_SAMPLE)
+		url_base="$IP2LOCATION_DAT_URL_BASE_SAMPLE"
 		;;
 	    *)
 		code_suffix="BIN"
@@ -150,29 +163,61 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES; do
 		;;
 	esac
 
+	file_dest="$IP2LOCATION_DAT_DIR/$file"
+
 	for token in ${!list}; do
 		proto=${token/:*}
 		number=${token/*:}
 
-		case $proto in
-		    IPv4)
-			code="DB${number}${code_suffix}"
-			file="${file_prefix}-DB${number}.BIN.ZIP"
-			;;
-		    IPv6)
-			code="DB${number}${code_suffix}IPV6"
-			file="${file_prefix}-DB${number}.IPV6.BIN.ZIP"
+		case $list in
+		    *_SAMPLE)
+			case $proto in
+			    IPv4)
+				prototoken=""
+				;;
+			    IPv6)
+				prototoken="6"
+				;;
+			    *)
+				echo "ERROR : unsupported proto in token: $token"
+				exit 1
+				;;
+			esac
+
+			file="sample${prototoken}.bin.db${number}.zip"
 			;;
 		    *)
-			echo "ERROR : unsupported proto in token: $token"
-			exit 1
+			case $proto in
+			    IPv4)
+				code="DB${number}${code_suffix}"
+				file="${file_prefix}-DB${number}.BIN.ZIP"
+				;;
+			    IPv6)
+				code="DB${number}${code_suffix}IPV6"
+				file="${file_prefix}-DB${number}.IPV6.BIN.ZIP"
+				;;
+			    *)
+				echo "ERROR : unsupported proto in token: $token"
+				exit 1
+				;;
+			esac
+
+			;;
+		esac
+
+		case $list in
+		    *_SAMPLE|*_LITE_FREE)
+			url="$url_base/$file"
+			;;
+		    *)
+			url="$url_base&productcode=$code"
 			;;
 		esac
 
 		file_dest="$IP2LOCATION_DAT_DIR/$file"
 
 		if [ "$NO_ACTION" = "1" ]; then
-			echo "NOTICE: download skipped by option: $code ($file_dest)"
+			echo "NOTICE: download skipped by option: $uri ($file_dest)"
 			continue
 		fi
 
@@ -199,13 +244,15 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES; do
 			fi
 		fi
 
-		echo "INFO  : try to download file (with credentials): $code ($file_dest)"
-		wget -q -O "$file_dest" "$IP2LOCATION_DAT_URL_BASE&productcode=$code"
-		if [ $? -ne 0 ]; then
-			echo "ERROR : download of file not successful: $code ($file_dest) ($!)"
+		echo "INFO  : try to download URL: $url ($file_dest)"
+		wget -q -O "$file_dest" "$url"
+		result=$?
+			
+		if [ $result -ne 0 ]; then
+			echo "ERROR : download of file not successful: $file_dest ($!)"
 			continue
 		fi
-		echo "INFO  : download of file successful: $code ($file_dest)"
+		echo "INFO  : download of file successful: $file_dest"
 
 		if [ ! -s "$file_dest" ]; then
 			echo "ERROR : downloaded file has ZERO size: $file_dest"
@@ -226,60 +273,9 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES; do
 			echo "ERROR : unzip of file not successful: $file_dest"
 			continue
 		fi
-		echo "INFO  : unzip of file successful: $file_dest"
+		echo "INFO  : unzip of file successful: $file_dest (remove downloaded file now)"
+		rm -f "$file_dest"
 	done
-done
-
-# Download and unpack sample files
-echo "INFO  : download sample list: ${IP2LOCATION_DAT_FILES_SAMPLE}"
-for token in $IP2LOCATION_DAT_FILES_SAMPLE; do
-
-	proto=${token/:*}
-	number=${token/*:}
-
-	case $proto in
-	    IPv4)
-		prototoken=""
-		softlink="IP-COUNTRY.BIN"
-		;;
-	    IPv6)
-		prototoken="6"
-		softlink="IPV6-COUNTRY.BIN"
-		;;
-	    *)
-		echo "ERROR : unsupported proto in token: $token"
-		exit 1
-		;;
-	esac
-
-	file="sample${prototoken}.bin.db${number}.zip"
-
-	file_dest="$IP2LOCATION_DAT_DIR/$file"
-
-	if [ "$NO_ACTION" = "1" ]; then
-		echo "NOTICE: download skipped by option: $token ($file_dest)"
-		continue
-	fi
-
-	echo "INFO  : try to download sample db: ${proto}/DB$number ($file_dest)"
-	wget -q -O "$file_dest" "$IP2LOCATION_DAT_URL_BASE_SAMPLE/$file"
-	if [ $? -ne 0 ]; then
-		echo "ERROR : download of file not successful: ${proto}/DB$number ($file_dest)"
-		continue
-	fi
-	echo "INFO  : download of file successful: ${proto}/DB$number ($file_dest)"
-
-	if ! file "$file_dest" | grep -q "Zip archive data"; then
-		echo "ERROR : downloaded file is not a ZIP archive: $file_dest"
-		continue
-	fi
-
-	unzip -o -d "$IP2LOCATION_DAT_DIR" "$file_dest" '*.BIN'
-	if [ $? -ne 0 ]; then
-		echo "ERROR : unzip of file not successful: $file_dest"
-		continue
-	fi
-	echo "INFO  : unzip of file successful: $file_dest"
 done
 
 # Adjust permissions

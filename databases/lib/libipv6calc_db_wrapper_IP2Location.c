@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.27 2015/04/16 20:40:08 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.28 2015/04/18 08:04:20 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -524,7 +524,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 			printf("%sIP2Location: Detected databases LITE    Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_lite_v4, ip2location_db_country_lite_v6, ip2location_db_region_city_lite_v4, ip2location_db_region_city_lite_v6);
 
 			if (ip2location_db_region_city_lite_to_sample_autoswitch == 1) {
-				printf("%sIP2Location: Selected databases (norm)  Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d (autoswitch to samples enabled)\n", prefix, ip2location_db_country_v4, ip2location_db_country_v6, ip2location_db_region_city_v4, ip2location_db_region_city_v6);
+				printf("%sIP2Location: Selected databases (norm)  Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d (autoswitch to SAMPLE enabled)\n", prefix, ip2location_db_country_v4, ip2location_db_country_v6, ip2location_db_region_city_v4, ip2location_db_region_city_v6);
 			} else {
 				printf("%sIP2Location: Selected databases         Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_v4, ip2location_db_country_v6, ip2location_db_region_city_v4, ip2location_db_region_city_v6);
 			};

@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: ipv6calc-create-registry-list-ipv4.pl,v 1.1 2015/02/15 20:19:37 ds6peter Exp $
+# Version    : $Id: ipv6calc-create-registry-list-ipv4.pl,v 1.2 2015/04/18 08:04:20 ds6peter Exp $
 # Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
@@ -464,8 +464,7 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 		printf $OUT "\t{ 0x%08x, 0x%08x, REGISTRY_%-10s }, // %-15s - %-15s\n", $ipv4, ($ipv4 + $distance - 1), $registry, &dec_to_ipv4($ipv4), &dec_to_ipv4($ipv4 + $distance - 1);
 	};
 
-	print $OUT qq|};
-	|;
+	print $OUT "};\n";
 
 	print "INFO  : finished creation of header file: " . $file_dst_h . "\n";
 };
