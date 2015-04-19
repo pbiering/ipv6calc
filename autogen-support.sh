@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.37 2015/04/16 06:23:20 ds6peter Exp $
+# Version    : $Id: autogen-support.sh,v 1.38 2015/04/19 10:42:18 ds6peter Exp $
 # Copyright  : 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support funtions to autogen.sh/autogen-all-variants.sh
@@ -301,6 +301,8 @@ build_library() {
 	local name="$1"
 	local version_selected="$2"
 
+	echo "INFO  : build: name=$name version=$version_selected" >&2
+
 	local versions=""
 	local base_devel=""
 
@@ -408,6 +410,8 @@ clean_versions() {
 	local name="$1"
 	local version_selected="$2"
 
+	echo "INFO  : clean: name=$name version=$version_selected" >&2
+
 	local versions=""
 	local base_devel=""
 
@@ -442,7 +446,7 @@ clean_versions() {
 		local nameversion=$(nameversion_from_name_version $name $version)
 
 		if [ ! -d "$base_devel/$nameversion" ]; then
-			echo "ERROR : devel directory missing: $base_devel/$nameversion (forgot to extract?)" >&2
+			echo "NOTICE: devel directory missing: $base_devel/$nameversion (nothing to clean)" >&2
 			continue
 		fi
 
@@ -473,6 +477,8 @@ extract_versions() {
 	local name="$1"
 	local version_selected="$2"
 
+	echo "INFO  : extract: name=$name version=$version_selected" >&2
+
 	case $name in
 	    GeoIP|G)
 		versions="$geoip_versions"
@@ -502,6 +508,8 @@ extract_versions() {
 		fi
 
 		local nameversion=$(nameversion_from_name_version $name $version extract)
+
+		local nameversion_internal=$(nameversion_from_name_version $name $version)
 		local file="$BASE_SOURCES/$nameversion.tar.gz"
 
 		if [ ! -f "$file" ]; then
@@ -522,17 +530,16 @@ extract_versions() {
 		fi
 
 		# check contents of tgz
-		base_dir=$(tar tzf "$file" | head -1 | awk -F /  '{ print $1 }')
+		base_dir=$(tar tzf "$file" | head -1 | sed 's/^\.\///g' | awk -F /  '{ print $1 }')
 		if [ -z "$base_dir" ]; then
 			echo "ERROR : can't extract base_dir from: $file" >&2
 			return 1
 		fi
 
 		echo "INFO  : file contains base_dir: $base_dir" >&2
-		base_file=$(basename "$file" .tar.gz)
 
-		if [ "$base_file" != "$base_dir" ]; then
-			echo "ERROR : base_file is not matching base_dir: $base_file <=> $base_dir (download broken or workaround required)"
+		if [ "$nameversion_internal" != "$base_dir" ]; then
+			echo "ERROR : nameversion is not matching base_dir: $nameversion_internal <=> $base_dir (download broken or workaround required)"
 			return 1
 		fi
 
@@ -555,6 +562,8 @@ extract_versions() {
 download_versions() {
 	local name="$1"
 	local version_selected="$2"
+
+	echo "INFO  : download: name=$name version=$version_selected" >&2
 
 	case $name in
 	    GeoIP|G)

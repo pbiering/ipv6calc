@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.73 2015/04/16 06:23:20 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.74 2015/04/19 10:42:19 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -131,12 +131,10 @@ typedef struct in6_addr geoipv6_t;
 #endif // SUPPORT_GEOIP_IPV6_STRUCT
 
 static int dl_status_GeoIP_country_name_by_ipnum_v6 = IPV6CALC_DL_STATUS_UNKNOWN;
-//static char* (*dl_GeoIP_country_name_by_ipnum_v6)(GeoIP* gi, geoipv6_t ipnum);
 typedef char *(*dl_GeoIP_country_name_by_ipnum_v6_t)(GeoIP* gi, geoipv6_t ipnum);
 static union { dl_GeoIP_country_name_by_ipnum_v6_t func; void * obj; } dl_GeoIP_country_name_by_ipnum_v6;
 
 static int dl_status_GeoIP_country_code_by_ipnum_v6 = IPV6CALC_DL_STATUS_UNKNOWN;
-//static char* (*dl_GeoIP_country_code_by_ipnum_v6)(GeoIP* gi, geoipv6_t ipnum) = NULL;
 typedef char *(*dl_GeoIP_country_code_by_ipnum_v6_t)(GeoIP* gi, geoipv6_t ipnum);
 static union { dl_GeoIP_country_code_by_ipnum_v6_t func; void * obj; } dl_GeoIP_country_code_by_ipnum_v6;
 
@@ -348,11 +346,13 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 	};
 
 #ifdef SUPPORT_GEOIP_V6
+#if HAVE_DECL_GEOIP_COUNTRY_EDITION_V6 == 1
 	if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_COUNTRY_EDITION_V6) == 1) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "GeoIP database GEOIP_COUNTRY_EDITION_V6 available");
 		geoip_country_v6 = 1;
 		wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP] |= IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_GEOIP_IPV6 | IPV6CALC_DB_IPV6_TO_COUNTRY;
 	};
+#endif
 #endif
 
 	if (libipv6calc_db_wrapper_GeoIP_db_avail(GEOIP_ASNUM_EDITION) == 1) {
@@ -1941,8 +1941,10 @@ const char *libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(const char
 	if (proto == 4) {
 		GeoIP_type = GEOIP_COUNTRY_EDITION;
 #ifdef SUPPORT_GEOIP_V6
+#if HAVE_DECL_GEOIP_COUNTRY_EDITION_V6 == 1
 	} else if (proto == 6) {
 		GeoIP_type = GEOIP_COUNTRY_EDITION_V6;
+#endif
 #endif // SUPPORT_GEOIP_V6
 	} else {
 		goto END_libipv6calc_db_wrapper;
@@ -2002,8 +2004,10 @@ const char *libipv6calc_db_wrapper_GeoIP_wrapper_country_name_by_addr(const char
 	if (proto == 4) {
 		GeoIP_type = GEOIP_COUNTRY_EDITION;
 #ifdef SUPPORT_GEOIP_V6
+#if HAVE_DECL_GEOIP_COUNTRY_EDITION_V6 == 1
 	} else if (proto == 6) {
 		GeoIP_type = GEOIP_COUNTRY_EDITION_V6;
+#endif
 #endif // SUPPORT_GEOIP_V6
 	} else {
 		return (NULL);
