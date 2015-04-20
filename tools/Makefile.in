@@ -1,14 +1,16 @@
 # Project    : ipv6calc/ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.3 2014/02/02 12:04:44 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.4 2015/04/20 06:37:07 ds6peter Exp $
 # Copyright  : 2006 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for various tools
 #
 
-prefix		= /usr/local
-exec_prefix	= ${prefix}
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+datadir         = @datadir@
+
 
 # Compiler and Linker Options
 DEFAULT_CFLAGS ?= -O2 -Wall -g
@@ -27,7 +29,7 @@ SPLINT_OPT_OUTSIDE = -warnposix -nullassign -uniondef -compdef -usedef -formatco
 SPLINT_TODO_LATER = -unrecog  -retvalint
 
 
-all:		registry-assignment-to-list
+all:	
 
 .c.o:
 		$(CC) -c $< $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES)
@@ -37,17 +39,16 @@ $(OBJS):	../config.h
 libipv6calc.a:	
 		cd ../ && ${MAKE} lib-make
 
-registry-assignment-to-list:	$(OBJS) libipv6calc.a
-		$(CC) -o registry-assignment-to-list $(OBJS) $(GETOBJS) $(DEFAULT_CFLAGS) $(CFLAGS) -lipv6calc -L../lib/ $(LDFLAGS)
-
 distclean:
 		${MAKE} clean
+		for f in *.sh; do if [ -f $$f.in ]; then rm -f $$f; fi; done
+		
 
 autoclean:
 		${MAKE} distclean
 
 clean:
-		rm -f registry-assignment-to-list *.o
+		rm -f *.o
 
 test:
 
@@ -55,3 +56,5 @@ splint:
 		splint *.c ../lib/*.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)
 
 install:	
+		if [ ! -d $(DESTDIR)$(datadir)/ipv6calc/tools ]; then install -d -m 755 $(DESTDIR)$(datadir)/ipv6calc/tools; fi
+		for f in *.sh; do install -m 755 $$f $$(DESTDIR)$(datadir)/ipv6calc/tools; done
