@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.86 2014/09/24 09:07:55 ds6peter Exp $
-# Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile.in,v 1.87 2015/04/20 06:38:46 ds6peter Exp $
+# Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Main Makefile for ipv6calc project
@@ -51,7 +51,7 @@ distclean:
 		${MAKE} clean
 		rm -f config.cache config.status config.log
 		rm -rf autom4te.cache
-		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt databases/lib databases/ieee-oui36 databases/lib databases/ieee-oui databases/ieee-iab databases/ipv4-assignment databases/ipv6-assignment databases/registries databases/as-assignment databases/cc-assignment; do \
+		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib md5 getopt databases/lib databases/ieee-oui36 databases/lib databases/ieee-oui databases/ieee-iab databases/ipv4-assignment databases/ipv6-assignment databases/registries databases/as-assignment databases/cc-assignment tools; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} $@ ; r=$$?; \
@@ -64,7 +64,7 @@ autoclean:
 		rm -f Makefile
 		rm -f contrib/ipv6calc.spec
 		rm -f config.h
-		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib databases/lib md5 getopt; do \
+		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib databases/lib md5 getopt tools; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} $@ ; r=$$?; \
@@ -72,7 +72,7 @@ autoclean:
 		done || exit 1
 
 clean:
-		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib databases/lib md5 getopt; do \
+		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib databases/lib md5 getopt tools; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} $@ ; r=$$?; \
@@ -80,7 +80,7 @@ clean:
 		done || exit 1
 
 install:
-		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib databases/lib; do \
+		for dir in ipv6logconv ipv6loganon ipv6logstats ipv6calcweb ipv6calc man lib databases/lib tools; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} install; r=$$?; \

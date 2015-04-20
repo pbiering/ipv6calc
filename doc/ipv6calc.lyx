@@ -108,7 +108,7 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>5.1</revnumber> <date>2015-04-16</date> <authorinitials>PB<
+<revision> <revnumber>5.1</revnumber> <date>2015-04-19</date> <authorinitials>PB<
 /authorinitials></revision>
 \end_layout
 
@@ -173,7 +173,7 @@ Latest version
 \end_layout
 
 \begin_layout Standard
-Latest version since last update of this page is 0.98.0 (released 2015-02-21)
+Latest version since last update of this page is 0.99.0 (released 2015-04-xx)
 \end_layout
 
 \begin_layout Subsection
@@ -281,17 +281,66 @@ If enabled during compiling the tool, following external (but local stored)
 \end_layout
 
 \begin_layout Itemize
-GeoIP IPv4, IPv6 (since 0.90.0, req.
+\begin_inset CommandInset href
+LatexCommand href
+name "GeoIP"
+target "http://www.maxmind.com/"
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+IPv4
+\end_layout
+
+\begin_layout Itemize
+IPv6 (since 0.90.0, req.
  GeoIP >= 1.4.5)
 \end_layout
 
+\end_deeper
 \begin_layout Itemize
-IP2Location IPv4, IPv6
+\begin_inset CommandInset href
+LatexCommand href
+name "IP2Location"
+target "http://www.ip2.location.com/"
+
+\end_inset
+
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+IPv4
 \end_layout
 
 \begin_layout Itemize
-DB-IP.com (since 0.98.0), based on local Berkeley DB files generated from downloade
-d CSV files
+IPv6 (
+\begin_inset CommandInset href
+LatexCommand href
+name "LITE"
+target "http://lite.ip2location.com/"
+
+\end_inset
+
+ databases since 0.99.0)
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+\begin_inset CommandInset href
+LatexCommand href
+name "DB-IP.com"
+target "http://www.db-ip.com/"
+
+\end_inset
+
+ (since 0.98.0), based on local Berkeley DB files generated from downloaded
+ CSV files
 \end_layout
 
 \begin_layout Itemize
@@ -314,6 +363,13 @@ Since version 0.95.0 the tool can be compiled to use dynamically loading of
  or GeoIP libraries are not existing.
  On such system, the support is simply disabled then and some capabilities/featu
 res which requires the databases are disabled.
+\end_layout
+
+\begin_layout Standard
+Since version 0.97.4 also fallback code for GeoIP and IP2Location is included
+ in the source package, means that support of dynamically loading of library
+ can be included during compilation without having related development sources
+ on the system.
 \end_layout
 
 \begin_layout Section
@@ -3110,6 +3166,129 @@ ipv6calc: version 0.99.0 GeoIP GeoIPv6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG
     IMPLEMENTATION MISSING
 \end_layout
 
+\begin_layout Standard
+
+Example for some filter expressions:
+\end_layout
+
+\begin_layout Code
+
+$ cat ip.bieringer.de-log.201504 | ipv6calc -E ipv6.db.cc=DE | wc -l
+\end_layout
+
+\begin_layout Code
+
+5068
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+$ cat ip.bieringer.de-log.201504 | ipv6calc -E ipv6.db.cc=US | wc -l
+\end_layout
+
+\begin_layout Code
+
+305
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+$ cat ip.bieringer.de-log.201504 | ipv6calc -E ipv6.db.reg=ARIN | wc -l
+\end_layout
+
+\begin_layout Code
+
+306
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+$ cat ip.bieringer.de-log.201504 | ipv6calc -E iid-random | wc -l
+\end_layout
+
+\begin_layout Code
+
+4806
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+$ cat ip.bieringer.de-log.201504 | ipv6calc -E ipv6.db.cc=US,iid-random | wc
+ -l
+\end_layout
+
+\begin_layout Code
+
+16
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+$ cat ip.bieringer.de-log.201504 | ipv6calc -A filter -E ipv6.db.cc=US,iid-random,ipv
+4.db.cc=US | wc -l
+\end_layout
+
+\begin_layout Code
+
+1842
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+$ cat ip.bieringer.de-log.201504 | ipv6calc -A filter -E db.asn=8767 | wc -l
+\end_layout
+
+\begin_layout Code
+
+2363
+\end_layout
+
+\begin_layout Code
+
+$ cat ip.bieringer.de-log.201504 | ipv6calc -A filter -E ipv6.db.asn=8767 | wc
+ -l
+\end_layout
+
+\begin_layout Code
+
+1452
+\end_layout
+
+\begin_layout Code
+
+$ cat ip.bieringer.de-log.201504 | ipv6calc -A filter -E ipv4.db.asn=8767 | wc
+ -l
+\end_layout
+
+\begin_layout Code
+
+911
+\end_layout
+
 \begin_layout Section
 Webserver log conversion helper program "ipv6logconv"
 \end_layout
@@ -4162,11 +4341,6 @@ $ /usr/share/ipv6calc/tools/IP2Location-update.sh -h
 
 \begin_layout Code
 
-NOTICE : IP2Location credential file found, expand IP2LOCATION_DAT_FILES_LITE
-\end_layout
-
-\begin_layout Code
-
 Usage: IP2Location-update.sh [-D <dir>] [-n] [-s]
 \end_layout
 
@@ -4242,26 +4416,28 @@ Usage: IP2Location-update.sh [-D <dir>] [-n] [-s]
 
 \begin_layout Code
 
- IP2LOCATION_DAT_FILES_LITE=IPv4:1 IPv6:1 IPv4:11 IPv6:11
+  IP2LOCATION_DAT_FILES_LITE_FREE=IPv4:1 IPv6:1
 \end_layout
 
 \begin_layout Code
 
+ 
 \end_layout
 
 \begin_layout Code
 
- With authentication (requires login/password in /home/peter/.ip2location)
+ With authentication (requires login/password in /home/compile/.ip2location)
  and a valid subscription
 \end_layout
 
 \begin_layout Code
 
- IP2LOCATION_DAT_FILES=
+  IP2LOCATION_DAT_FILES_LITE=
 \end_layout
 
 \begin_layout Code
 
+ 
 \end_layout
 
 \begin_layout Code
@@ -5356,7 +5532,15 @@ Major extensions/changes are listed here
 \end_layout
 
 \begin_layout Itemize
-Add support for DB-IP.com (by generated Berkeley DB files) (>= 0.98.0)
+Add support for 
+\begin_inset CommandInset href
+LatexCommand href
+name "DB-IP.com"
+target "http://www.db-ip.com/"
+
+\end_inset
+
+ databases (by generated Berkeley DB files) (>= 0.98.0)
 \end_layout
 
 \begin_layout Itemize
@@ -5374,6 +5558,18 @@ External
 
 \begin_layout Itemize
 Extend filter options with support of CountryCode, ASN or Registry (>= 0.99.0)
+\end_layout
+
+\begin_layout Itemize
+Add support for 
+\begin_inset CommandInset href
+LatexCommand href
+name "IP2Location LITE"
+target "http://lite.ip2location.com/"
+
+\end_inset
+
+ databases (>= 0.99.0)
 \end_layout
 
 \begin_layout Subsection
