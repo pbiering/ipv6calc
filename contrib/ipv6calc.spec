@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.245 2015/04/20 06:38:46 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.246 2015/04/21 06:08:46 ds6peter Exp $
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
@@ -143,20 +143,6 @@ make install DESTDIR=%{buildroot}
 
 ## Install examples and helper files
 install -d -p %{buildroot}%{_docdir}/%{name}-%{version}/
-
-# tools
-install -d %{buildroot}%{_datadir}/%{name}/tools
-cat <<END | while read tool; do install -m 755 tools/$tool %{buildroot}%{_datadir}/%{name}/tools; done
-GeoIP-update.sh
-IP2Location-update.sh
-DBIP-update.sh
-DBIP-generate-db.pl
-ipv6calc-create-registry-list-ipv4.pl
-ipv6calc-create-registry-list-ipv6.pl
-ipv6calc-db-update.sh
-ipv6calc-registries-check-run-create.sh
-ipv6calc-update-registries.sh
-END
 
 ## examples
 install -d %{buildroot}%{_datadir}/%{name}/examples/
