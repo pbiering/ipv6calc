@@ -1,4 +1,4 @@
-.TH "ipv6calc" "8" "0.97.4" "Peter Bieringer <pb@bieringer.de>" "system administration"
+.TH "ipv6calc" "8" "0.99.0" "Peter Bieringer <pb@bieringer.de>" "system administration"
 .SH "NAME"
 ipv6calc
 .SH "SYNOPSIS"
@@ -9,7 +9,7 @@ or in pipe mode
 echo \fB<input data>\fR | ipv6calc [\fIOPTIONS\fP]
 .SH "DESCRIPTION"
 .LP 
-This program formats and calculates IPv6/IPv4/MAC addresses and can do many more tricky things.
+This program formats and calculates IPv6/IPv4/MAC addresses and can do many more tricky things, e.g. includes a pipe filter capability.
 .SH "OPTIONS"
 .LP 
 General options:
@@ -107,6 +107,8 @@ for more information and available format options use: <shortcut option> \-?|\-h
 \fB   \-\-eui64_to_privacy\fR (\-I iid_token \-O iid_token \-A genprivacyiid)
 .TP 
 \fB   \-\-ipv4_to_6to4addr\fR (\-I ipv4 \-O ipv6addr \-A conv6to4)
+.LP 
+See inline help or documentation for more.
 .SH "REPORTING BUGS"
 Report bugs to <ipv6calc@lists.deepspace6.net> or to the authors.
 .br 
@@ -123,6 +125,10 @@ ipv6calc \-\-showinfo \-\-show_types
 ipv6calc \-\-ipv4_to_6to4addr 127.0.0.1
 .TP 
 ipv6calc \-\-addr_to_uncompressed ::1
+.LP 
+Usage of filters in pipe mode:
+.TP 
+cat <Apache\-Logfile> | ipv6calc \-E ipv6.db.cc=US,iid\-random
 .SH "COPYRIGHT"
 GPLv2
 .SH "AUTHORS"
