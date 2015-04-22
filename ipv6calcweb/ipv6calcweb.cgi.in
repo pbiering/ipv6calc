@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.83 2015/04/16 08:53:32 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.84 2015/04/22 05:54:52 ds6peter Exp $
 # Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -90,6 +90,10 @@ my $disable_db_GeoIP = 0;
 my $disable_db_IP2Location = 0;
 my $disable_db_DBIP = 0;
 my $disable_db_External = 0;
+
+my $db_IP2Location_lite_used = 0;
+my $db_IP2Location_lite_disclaimer_text = "This site or product includes IP2Location LITE data available http://lite.ip2location.com.";
+my $db_IP2Location_lite_disclaimer_html = "This site or product includes IP2Location LITE data available from <a href=\"http://lite.ip2location.com\">http://lite.ip2location.com</a>.";
 
 
 ## Debug value
@@ -1780,6 +1784,11 @@ sub ipv6calc_exec($$$$) {
 				# $content = "n/a";
 				next;
 			};
+
+			# detect LITE database usage (required for disclaimer later)
+			if ($content =~ /LITE/o) {
+				$db_IP2Location_lite_used = 1;
+			};
 		};
 
 		# catch internal keys
@@ -2250,11 +2259,8 @@ if ($outputformat =~ /^html/o) {
 	print "</font>\n";
 
 	if (scalar(keys %db_info_ip2location) > 0) {
-		# search for LITE token and add URL
-		my $string = encode_entities(join(" / ", sort keys %db_info_ip2location));
-		$string =~ s/LITE/<a target="_blank" href="http:\/\/lite.ip2location.com">LITE<\/a>/g;
 		print "          <br>\n";
-		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.ip2location.com\">IP2Location</a> " . $text{'database'}->{$lang} . " " . $string . "</font>\n";
+		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.ip2location.com\">IP2Location</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_ip2location)) . "</font>\n";
 	};
 
 	if (scalar(keys %db_info_geoip) > 0) {
@@ -2277,6 +2283,11 @@ if ($outputformat =~ /^html/o) {
 		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " BuiltIn " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_builtin)) . "</font>\n";
 	};
 
+	# add disclaimer
+	if ($db_IP2Location_lite_used == 1) {
+		print "          <br>\n";
+		print "          <font size=\"-2\">" . $db_IP2Location_lite_disclaimer_html . "</font>\n";
+	};
 } else {
 	# text output
 	print "INFO__GENERATED=" if ($outputformat eq "textkeyvalue");
@@ -2317,6 +2328,12 @@ if ($outputformat =~ /^html/o) {
 	if (scalar(keys %db_info_builtin) > 0) {
 		print "INFO__POWEREDBY_BUILTIN=" if ($outputformat eq "textkeyvalue");
 		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_builtin) . $chr_quote . "\n";
+	};
+
+	# add disclaimer
+	if ($db_IP2Location_lite_used == 1) {
+		print "DISCLAIMER_IP2LOCATION=" if ($outputformat eq "textkeyvalue");
+		print $chr_quote . $db_IP2Location_lite_disclaimer_text . $chr_quote . "\n";
 	};
 };
 
