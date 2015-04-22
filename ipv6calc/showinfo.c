@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.129 2015/04/16 08:42:44 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.130 2015/04/22 19:30:37 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -175,47 +175,67 @@ static void printfooter(const uint32_t formatoptions) {
 	char *string;
 #endif
 
-	if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
 #ifdef SUPPORT_IP2LOCATION
-		string = libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used();
-		if ((string != NULL) && (strlen(string) > 0)) {
+	string = libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used();
+	if ((string != NULL) && (strlen(string) > 0)) {
+		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
 			snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_DATABASE_INFO=%s", string);
-			printout(tempstring);
+		} else {
+			snprintf(tempstring, sizeof(tempstring), "IP2Location database: %s", string);
 		};
+		printout(tempstring);
+	};
 #endif
 
 #ifdef SUPPORT_GEOIP
-		string = libipv6calc_db_wrapper_GeoIP_wrapper_db_info_used();
-		if ((string != NULL) && (strlen(string) > 0)) {
+	string = libipv6calc_db_wrapper_GeoIP_wrapper_db_info_used();
+	if ((string != NULL) && (strlen(string) > 0)) {
+		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
 			snprintf(tempstring, sizeof(tempstring), "GEOIP_DATABASE_INFO=%s", string);
-			printout(tempstring);
+		} else {
+			snprintf(tempstring, sizeof(tempstring), "GeoIP database: %s", string);
 		};
+		printout(tempstring);
+	};
 #endif
 
 #ifdef SUPPORT_DBIP
-		string = libipv6calc_db_wrapper_DBIP_wrapper_db_info_used();
-		if ((string != NULL) && (strlen(string) > 0)) {
+	string = libipv6calc_db_wrapper_DBIP_wrapper_db_info_used();
+	if ((string != NULL) && (strlen(string) > 0)) {
+		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
 			snprintf(tempstring, sizeof(tempstring), "DBIP_DATABASE_INFO=%s", string);
-			printout(tempstring);
+		} else {
+			snprintf(tempstring, sizeof(tempstring), "DB-IP.com database: %s", string);
 		};
+		printout(tempstring);
+	};
 #endif
 
 #ifdef SUPPORT_EXTERNAL
-		string = libipv6calc_db_wrapper_External_wrapper_db_info_used();
-		if ((string != NULL) && (strlen(string) > 0)) {
+	string = libipv6calc_db_wrapper_External_wrapper_db_info_used();
+	if ((string != NULL) && (strlen(string) > 0)) {
+		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
 			snprintf(tempstring, sizeof(tempstring), "EXTERNAL_DATABASE_INFO=%s", string);
-			printout(tempstring);
+		} else {
+			snprintf(tempstring, sizeof(tempstring), "External database: %s", string);
 		};
+		printout(tempstring);
+	};
 #endif
 
 #ifdef SUPPORT_BUILTIN
-		string = libipv6calc_db_wrapper_BuiltIn_wrapper_db_info_used();
-		if ((string != NULL) && (strlen(string) > 0)) {
+	string = libipv6calc_db_wrapper_BuiltIn_wrapper_db_info_used();
+	if ((string != NULL) && (strlen(string) > 0)) {
+		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
 			snprintf(tempstring, sizeof(tempstring), "BUILTIN_DATABASE_INFO=%s", string);
-			printout(tempstring);
+		} else {
+			snprintf(tempstring, sizeof(tempstring), "Built-In database: %s", string);
 		};
+		printout(tempstring);
+	};
 #endif
 
+	if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
 		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_NAME=%s", PROGRAM_NAME);
 		printout(tempstring);
 		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_VERSION=%s", PACKAGE_VERSION);

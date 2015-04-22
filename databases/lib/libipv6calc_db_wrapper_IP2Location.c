@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.28 2015/04/18 08:04:20 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.29 2015/04/22 19:30:37 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -548,6 +548,8 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used(void) {
 	char tempstring[NI_MAXHOST];
 	char *info;
 
+	int db_lite_used = 0;
+
 	for (db = 0; db < 32 * IP2LOCATION_DB_MAX_BLOCKS_32; db++) {
 		if ((ip2location_db_usage_map[db / 32] & (1 << (db % 32))) != 0) {
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "DB used: %d", db);
@@ -565,7 +567,7 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used(void) {
 
 			if (entry < 0) {
 				// should not happen
-				return NULL;
+				continue;
 			};
 
 			info = libipv6calc_db_wrapper_IP2Location_database_info(loc, 0, entry, 1);
@@ -573,6 +575,10 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used(void) {
 			if (info == NULL) { continue; }; // NULL pointer returned
 
 			if (strlen(info) == 0) { continue; }; // empty string returned
+
+			if (libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LITE) {
+				db_lite_used = 1;
+			};
 
 			if (strlen(ip2location_db_usage_string) > 0) {
 				if (strstr(ip2location_db_usage_string, info) != NULL) { continue; }; // string already included
@@ -584,6 +590,11 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used(void) {
 
 			snprintf(ip2location_db_usage_string, sizeof(ip2location_db_usage_string), "%s", tempstring);
 		};
+	};
+
+	if (db_lite_used == 1) {
+		snprintf(tempstring, sizeof(tempstring), "%s / This site or product includes IP2Location LITE data available from http://lite.ip2location.com", ip2location_db_usage_string);
+		snprintf(ip2location_db_usage_string, sizeof(ip2location_db_usage_string), "%s", tempstring);
 	};
 
 	return(ip2location_db_usage_string);
