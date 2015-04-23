@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.h
- * Version    : $Id: showinfo.h,v 1.27 2015/04/16 06:23:20 ds6peter Exp $
+ * Version    : $Id: showinfo.h,v 1.28 2015/04/23 06:32:45 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -62,6 +62,7 @@
 // 	+ IP2LOCATION_MNC
 // 	+ IP2LOCATION_MCC
 // 	+ IP2LOCATION_IDDCODE
+// 	quote all output in case it contains spaces
 
 #define IPV6CALC_OUTPUT_VERSION	10
 

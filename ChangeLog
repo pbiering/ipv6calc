@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.389 2015/04/18 08:04:18 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.390 2015/04/23 06:32:45 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20150423/PB
+	add extension for IP2Location LITE disclaimer
+	improve quoting of machinereadable ipv6calc output
+
 20150417/PB
 	internal databases: updates
 

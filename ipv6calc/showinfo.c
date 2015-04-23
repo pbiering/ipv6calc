@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.130 2015/04/22 19:30:37 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.131 2015/04/23 06:32:45 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -159,12 +159,26 @@ void showinfo_availabletypes(void) {
 /*
  * print one information
  */
-static void printout(const char *string) {
-	const char *prefix = "";
-	/* const char *prefix = "ipv6calc_"; */
+static void printout(const char *token, const char *value) {
 	const char *suffix = "\n";
-	
-	fprintf(stdout, "%s%s%s", prefix, string, suffix);
+
+	if ((strstr(value, " ") == NULL) && (strcmp(token, "IPV6CALC_SETTINGS_ANON") != 0)) {
+		// no space in value
+		fprintf(stdout, "%s=%s%s", token, value, suffix);
+	} else {
+		fprintf(stdout, "%s=\"%s\"%s", token, value, suffix);
+	};
+};
+
+static void printout2(const char *token, const char *additional, const char *value) {
+	const char *suffix = "\n";
+
+	if (strstr(value, " ") == NULL) {
+		// no space in value
+		fprintf(stdout, "%s%s=%s%s", token, additional, value, suffix);
+	} else {
+		fprintf(stdout, "%s%s=\"%s\"%s", token, additional, value, suffix);
+	};
 };
 
 static void printfooter(const uint32_t formatoptions) {
@@ -179,11 +193,10 @@ static void printfooter(const uint32_t formatoptions) {
 	string = libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used();
 	if ((string != NULL) && (strlen(string) > 0)) {
 		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_DATABASE_INFO=%s", string);
+			printout("IP2LOCATION_DATABASE_INFO", string);
 		} else {
-			snprintf(tempstring, sizeof(tempstring), "IP2Location database: %s", string);
+			fprintf(stdout, "IP2Location database: %s\n", string);
 		};
-		printout(tempstring);
 	};
 #endif
 
@@ -191,11 +204,10 @@ static void printfooter(const uint32_t formatoptions) {
 	string = libipv6calc_db_wrapper_GeoIP_wrapper_db_info_used();
 	if ((string != NULL) && (strlen(string) > 0)) {
 		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "GEOIP_DATABASE_INFO=%s", string);
+			printout("GEOIP_DATABASE_INFO", string);
 		} else {
-			snprintf(tempstring, sizeof(tempstring), "GeoIP database: %s", string);
+			fprintf(stdout, "GeoIP database: %s", string);
 		};
-		printout(tempstring);
 	};
 #endif
 
@@ -203,11 +215,10 @@ static void printfooter(const uint32_t formatoptions) {
 	string = libipv6calc_db_wrapper_DBIP_wrapper_db_info_used();
 	if ((string != NULL) && (strlen(string) > 0)) {
 		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "DBIP_DATABASE_INFO=%s", string);
+			printout("DBIP_DATABASE_INFO", string);
 		} else {
-			snprintf(tempstring, sizeof(tempstring), "DB-IP.com database: %s", string);
+			fprintf(stdout, "DB-IP.com database: %s", string);
 		};
-		printout(tempstring);
 	};
 #endif
 
@@ -215,11 +226,10 @@ static void printfooter(const uint32_t formatoptions) {
 	string = libipv6calc_db_wrapper_External_wrapper_db_info_used();
 	if ((string != NULL) && (strlen(string) > 0)) {
 		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "EXTERNAL_DATABASE_INFO=%s", string);
+			printout("EXTERNAL_DATABASE_INFO", string);
 		} else {
-			snprintf(tempstring, sizeof(tempstring), "External database: %s", string);
+			fprintf(stdout, "External database: %s", string);
 		};
-		printout(tempstring);
 	};
 #endif
 
@@ -227,27 +237,23 @@ static void printfooter(const uint32_t formatoptions) {
 	string = libipv6calc_db_wrapper_BuiltIn_wrapper_db_info_used();
 	if ((string != NULL) && (strlen(string) > 0)) {
 		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "BUILTIN_DATABASE_INFO=%s", string);
+			printout("BUILTIN_DATABASE_INFO", string);
 		} else {
-			snprintf(tempstring, sizeof(tempstring), "Built-In database: %s", string);
+			fprintf(stdout, "Built-In database: %s", string);
 		};
-		printout(tempstring);
 	};
 #endif
 
 	if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
-		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_NAME=%s", PROGRAM_NAME);
-		printout(tempstring);
-		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_VERSION=%s", PACKAGE_VERSION);
-		printout(tempstring);
-		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_COPYRIGHT=\"%s\"", PROGRAM_COPYRIGHT);
-		printout(tempstring);
-		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_OUTPUT_VERSION=%d", IPV6CALC_OUTPUT_VERSION);
-		printout(tempstring);
+		printout("IPV6CALC_NAME"          , PROGRAM_NAME);
+		printout("IPV6CALC_VERSION"       , PACKAGE_VERSION);
+		printout("IPV6CALC_COPYRIGHT"     , PROGRAM_COPYRIGHT);
+
+		snprintf(tempstring, sizeof(tempstring), "%d", IPV6CALC_OUTPUT_VERSION);
+		printout("IPV6CALC_OUTPUT_VERSION", tempstring);
 
 		libipv6calc_anon_infostring(tempstring2, sizeof(tempstring2), &ipv6calc_anon_set);
-		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_SETTINGS_ANON=\"%s\"", tempstring2);
-		printout(tempstring);
+		printout("IPV6CALC_SETTINGS_ANON", tempstring2);
 
 		/* features */
 		tempstring[0] = '\0'; /* clear tempstring */
@@ -269,17 +275,14 @@ static void printfooter(const uint32_t formatoptions) {
 			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
 		};
 
-	
-		snprintf(tempstring2, sizeof(tempstring2), "IPV6CALC_FEATURES=\"%s\"", tempstring);
-		printout(tempstring2);
+		printout("IPV6CALC_FEATURES", tempstring);
 
 		/* capabilities */
 		tempstring[0] = '\0'; /* clear tempstring */
 
 		libipv6calc_db_wrapper_capabilities(tempstring, sizeof(tempstring));
 
-		snprintf(tempstring2, sizeof(tempstring2), "IPV6CALC_CAPABILITIES=\"%s\"", tempstring);
-		printout(tempstring2);
+		printout("IPV6CALC_CAPABILITIES", tempstring);
 	};
 };
 
@@ -305,21 +308,18 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 
 	if (machinereadable != 0) {
 		if (CountryCode != NULL) {
-			snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_COUNTRY_SHORT%s=%s", additionalstring, CountryCode);
-			printout(tempstring);
+			printout2("IP2LOCATION_COUNTRY_SHORT", additionalstring, CountryCode);
 		};
 
 		if (CountryName != NULL) {
-			snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_COUNTRY_LONG%s=%s", additionalstring, CountryName);
-			printout(tempstring);
+			printout2("IP2LOCATION_COUNTRY_LONG", additionalstring, CountryName);
 		};
 	} else {
 		if (strlen(additionalstring) > 0) {
-			snprintf(tempstring, sizeof(tempstring), "IP2Location reports for %s country %s (%s)", additionalstring, (CountryName != NULL ? CountryName : "UNKNOWN"), (CountryCode != NULL ? CountryCode : "??"));
+			fprintf(stdout, "IP2Location reports for %s country %s (%s)", additionalstring, (CountryName != NULL ? CountryName : "UNKNOWN"), (CountryCode != NULL ? CountryCode : "??"));
 		} else {
-			snprintf(tempstring, sizeof(tempstring), "IP2Location country name and code: %s (%s)", (CountryName != NULL ? CountryName : "UNKNOWN"), (CountryCode != NULL ? CountryCode : "??"));
+			fprintf(stdout, "IP2Location country name and code: %s (%s)", (CountryName != NULL ? CountryName : "UNKNOWN"), (CountryCode != NULL ? CountryCode : "??"));
 		};
-		printout(tempstring);
 	};
 
 	IP2LocationRecord *record = libipv6calc_db_wrapper_IP2Location_wrapper_record_city_by_addr((char*) addrstring, version);
@@ -329,99 +329,86 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 #define TEST_IP2LOCATION_AVAILABLE(v)	((v != NULL) && (strstr(v, "unavailable") == NULL) && (strstr(v, "demo database") == NULL) && (strstr(v, "This is demo") == NULL) && (strstr(v, "INVALID") == NULL) && (strstr(v, "-") == NULL))
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->region)) {
-				snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_REGION%s=%s", additionalstring, record->region);
-				printout(tempstring);
+				printout2("IP2LOCATION_REGION", additionalstring, record->region);
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->city)) {
-				snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_CITY%s=%s", additionalstring, record->city);
-				printout(tempstring);
+				printout2("IP2LOCATION_CITY", additionalstring, record->city);
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->isp)) {
-				snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_ISP%s=%s", additionalstring, record->isp);
-				printout(tempstring);
+				printout2("IP2LOCATION_ISP", additionalstring, record->isp);
 			};
 
 			if ((record->latitude != 0) && (record->longitude != 0)) {
-				snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_LATITUDE%s=%f", additionalstring, record->latitude);
-				printout(tempstring);
-				snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_LONGITUDE%s=%f", additionalstring, record->longitude);
-				printout(tempstring);
+				snprintf(tempstring, sizeof(tempstring), "%f", record->latitude);
+				printout2("IP2LOCATION_LATITUDE", additionalstring, tempstring);
+
+				snprintf(tempstring, sizeof(tempstring), "%f", record->longitude);
+				printout2("IP2LOCATION_LONGITUDE", additionalstring, tempstring);
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->domain)) {
-				snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_DOMAIN%s=%s", additionalstring, record->domain);
-				printout(tempstring);
+				printout2("IP2LOCATION_DOMAIN", additionalstring, record->domain);
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->zipcode)) {
 				if (strcmp(record->zipcode, "-") != 0) {
-					snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_ZIPCODE%s=%s", additionalstring, record->zipcode);
-					printout(tempstring);
+					printout2("IP2LOCATION_ZIPCODE", additionalstring, record->zipcode);
 				};
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->areacode)) {
 				if (strcmp(record->areacode, "-") != 0) {
-					snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_AREACODE%s=%s", additionalstring, record->areacode);
-					printout(tempstring);
+					printout2("IP2LOCATION_AREACODE", additionalstring, record->areacode);
 				};
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->timezone)) {
 				if (strcmp(record->timezone, "-") != 0) {
-					snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_TIMEZONE%s=%s", additionalstring, record->timezone);
-					printout(tempstring);
+					printout2("IP2LOCATION_TIMEZONE", additionalstring, record->timezone);
 				};
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->netspeed)) {
 				if (strcmp(record->netspeed, "-") != 0) {
-					snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_NETSPEED%s=%s", additionalstring, record->netspeed);
-					printout(tempstring);
+					printout2("IP2LOCATION_NETSPEED", additionalstring, record->netspeed);
 				};
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->iddcode)) {
 				if (strcmp(record->iddcode, "-") != 0) {
-					snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_IDDCODE%s=%s", additionalstring, record->iddcode);
-					printout(tempstring);
+					printout2("IP2LOCATION_IDDCODE", additionalstring, record->iddcode);
 				};
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->weatherstationcode)) {
 				if (strcmp(record->weatherstationcode, "-") != 0) {
-					snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_WEATHERSTATIONCODE%s=%s", additionalstring, record->weatherstationcode);
-					printout(tempstring);
+					printout2("IP2LOCATION_WEATHERSTATIONCODE", additionalstring, record->weatherstationcode);
 				};
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->weatherstationname)) {
 				if (strcmp(record->weatherstationname, "-") != 0) {
-					snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_WEATHERSTATIONNAME%s=%s", additionalstring, record->weatherstationname);
-					printout(tempstring);
+					printout2("IP2LOCATION_WEATHERSTATIONNAME", additionalstring, record->weatherstationname);
 				};
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->mnc)) {
 				if (strcmp(record->mnc, "-") != 0) {
-					snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_MNC%s=%s", additionalstring, record->mnc);
-					printout(tempstring);
+					printout2("IP2LOCATION_MNC", additionalstring, record->mnc);
 				};
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->mcc)) {
 				if (strcmp(record->mnc, "-") != 0) {
-					snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_MNC%s=%s", additionalstring, record->mcc);
-					printout(tempstring);
+					printout2("IP2LOCATION_MNC", additionalstring, record->mcc);
 				};
 			};
 
 			if (TEST_IP2LOCATION_AVAILABLE(record->mobilebrand)) {
 				if (strcmp(record->mobilebrand, "-") != 0) {
-					snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_MOBILEBRAND%s=%s", additionalstring, record->mobilebrand);
-					printout(tempstring);
+					printout2("IP2LOCATION_MOBILEBRAND", additionalstring, record->mobilebrand);
 				};
 			};
 
@@ -432,17 +419,17 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 						// get description
 						const char *desc = libipv6calc_db_wrapper_IP2Location_UsageType_description(record->usagetype);
 						if (desc != NULL) {
-							snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_USAGETYPE%s=%s (%s)", additionalstring, record->usagetype, desc);
+							snprintf(tempstring, sizeof(tempstring), "%s (%s)", record->usagetype, desc);
+							printout2("IP2LOCATION_USAGETYPE", additionalstring, tempstring);
 						} else {
-							snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_USAGETYPE%s=%s", additionalstring, record->usagetype);
+							printout2("IP2LOCATION_USAGETYPE", additionalstring, record->usagetype);
 						};
-						printout(tempstring);
 					};
 				};
 
 				if (record->elevation != 0) {
-					snprintf(tempstring, sizeof(tempstring), "IP2LOCATION_ELEVATION%s=%f", additionalstring, record->elevation);
-					printout(tempstring);
+					snprintf(tempstring, sizeof(tempstring), "%f", record->elevation);
+					printout2("IP2LOCATION_ELEVATION", additionalstring, tempstring);
 				};
 			};
 #endif // SUPPORT_IP2LOCATION_ALL_COMPAT
@@ -478,8 +465,7 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 	as_text = libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(addrstring, version);
 	if (as_text != NULL) {
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "GEOIP_AS_TEXT%s=%s", additionalstring, as_text);
-			printout(tempstring);
+			printout2("GEOIP_AS_TEXT", additionalstring, as_text);
 		};
 	};
 
@@ -489,12 +475,10 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 		DEBUGPRINT_WA(DEBUG_showinfo, "GeoIP IPv%d country database result", version);
 
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "GEOIP_COUNTRY_SHORT%s=%s", additionalstring, returnedCountry);
-			printout(tempstring);
+			printout2("GEOIP_COUNTRY_SHORT", additionalstring, returnedCountry);
 
 			if (returnedCountryName != NULL) {
-				snprintf(tempstring, sizeof(tempstring), "GEOIP_COUNTRY_LONG%s=%s", additionalstring, returnedCountryName);
-				printout(tempstring);
+				printout2("GEOIP_COUNTRY_LONG", additionalstring, returnedCountryName);
 			} else {
 				DEBUGPRINT_NA(DEBUG_showinfo, "returnedCountryName=NULL");
 			};
@@ -521,34 +505,31 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 
 		if ( machinereadable != 0 ) {
 			if (gir->region != NULL) {
-				snprintf(tempstring, sizeof(tempstring), "GEOIP_REGION%s=%s", additionalstring, gir->region);
-				printout(tempstring);
+				printout2("GEOIP_REGION", additionalstring, gir->region);
 			};
 			if (gir->city != NULL) {
-				snprintf(tempstring, sizeof(tempstring), "GEOIP_CITY%s=%s", additionalstring, gir->city);
-				printout(tempstring);
+				printout2("GEOIP_CITY", additionalstring, gir->city);
 			};
 			if (gir->postal_code != NULL) {
-				snprintf(tempstring, sizeof(tempstring), "GEOIP_ZIPCODE%s=%s", additionalstring, gir->postal_code);
-				printout(tempstring);
+				printout2("GEOIP_ZIPCODE", additionalstring, gir->postal_code);
 			};
 			if ((gir->latitude != 0) && (gir->longitude != 0)) {
-				snprintf(tempstring, sizeof(tempstring), "GEOIP_LATITUDE%s=%f", additionalstring, gir->latitude);
-				printout(tempstring);
-				snprintf(tempstring, sizeof(tempstring), "GEOIP_LONGITUDE%s=%f", additionalstring, gir->longitude);
-				printout(tempstring);
+				snprintf(tempstring, sizeof(tempstring), "%f", gir->latitude);
+				printout2("GEOIP_LATITUDE", additionalstring, tempstring);
+
+				snprintf(tempstring, sizeof(tempstring), "%f", gir->longitude);
+				printout2("GEOIP_LONGITUDE", additionalstring, tempstring);
 			};
 			if (gir->continent_code != NULL) {
-				snprintf(tempstring, sizeof(tempstring), "GEOIP_CONTINENTCODE%s=%s", additionalstring, gir->continent_code);
-				printout(tempstring);
+				printout2("GEOIP_CONTINENTCODE", additionalstring, gir->continent_code);
 			};
 			if (gir->dma_code != 0) {
-				snprintf(tempstring, sizeof(tempstring), "GEOIP_DMACODE%s=%d", additionalstring, gir->dma_code);
-				printout(tempstring);
+				snprintf(tempstring, sizeof(tempstring), "%d", gir->dma_code);
+				printout2("GEOIP_DMACODE", additionalstring, tempstring);
 			};
 			if (gir->area_code != 0) {
-				snprintf(tempstring, sizeof(tempstring), "GEOIP_AREACODE%s=%d", additionalstring, gir->area_code);
-				printout(tempstring);
+				snprintf(tempstring, sizeof(tempstring), "%d", gir->area_code);
+				printout2("GEOIP_AREACODE", additionalstring, tempstring);
 			};
 		} else {
 			fprintf(stdout, " GeoIP not machinereadable output currently only limited supported\n");
@@ -575,15 +556,13 @@ static void print_dbip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatopti
 	char returnedRegion[256] = "";
 
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable);
-	char tempstring[NI_MAXHOST] = "";
 
 	ret = libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(ipaddrp, returnedCountry, sizeof(returnedCountry));
 	if ((ret == 0) && (strlen(returnedCountry) > 0)) {
 		DEBUGPRINT_WA(DEBUG_showinfo, "DBIP IPv%d country database result", ipaddrp->proto);
 
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "DBIP_COUNTRY_SHORT%s=%s", additionalstring, returnedCountry);
-			printout(tempstring);
+			printout2("DBIP_COUNTRY_SHORT", additionalstring, returnedCountry);
 		} else {
 			if (strlen(additionalstring) > 0) {
 				fprintf(stdout, "DBIP country code for %s: %s\n", additionalstring, returnedCountry);
@@ -598,8 +577,7 @@ static void print_dbip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatopti
 		DEBUGPRINT_WA(DEBUG_showinfo, "DBIP IPv%d city database result", ipaddrp->proto);
 
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "DBIP_CITY%s=%s", additionalstring, returnedCity);
-			printout(tempstring);
+			printout2("DBIP_CITY", additionalstring, returnedCity);
 		} else {
 			fprintf(stdout, " DBIP not machinereadable output currently only limited supported\n");
 		};
@@ -609,8 +587,7 @@ static void print_dbip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatopti
 		DEBUGPRINT_WA(DEBUG_showinfo, "DBIP IPv%d region database result", ipaddrp->proto);
 
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "DBIP_REGION%s=%s", additionalstring, returnedRegion);
-			printout(tempstring);
+			printout2("DBIP_REGION", additionalstring, returnedRegion);
 		} else {
 			fprintf(stdout, " DBIP not machinereadable output currently only limited supported\n");
 		};
@@ -633,15 +610,13 @@ static void print_external(const ipv6calc_ipaddr *ipaddrp, const uint32_t format
 	char returnedCountry[256] = "";
 
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable);
-	char tempstring[NI_MAXHOST] = "";
 
 	ret = libipv6calc_db_wrapper_External_country_code_by_addr(ipaddrp, returnedCountry, sizeof(returnedCountry));
 	if ((ret == 0) && (strlen(returnedCountry) > 0)) {
 		DEBUGPRINT_WA(DEBUG_showinfo, "External IPv%d country database result", ipaddrp->proto);
 
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "EXTERNAL_COUNTRY_SHORT%s=%s", additionalstring, returnedCountry);
-			printout(tempstring);
+			printout2("EXTERNAL_COUNTRY_SHORT", additionalstring, returnedCountry);
 		} else {
 			if (strlen(additionalstring) > 0) {
 				fprintf(stdout, "External DB country code for %s: %s\n", additionalstring, returnedCountry);
@@ -705,19 +680,16 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	if ( machinereadable != 0 ) {
 		/* given source string */
 		if ((string != NULL) && (strlen(string) > 0)) {
-			snprintf(tempstring, sizeof(tempstring), "IPV4_SOURCE%s=%s", embeddedipv4string, string);
-			printout(tempstring);
+			printout2("IPV4_SOURCE", embeddedipv4string, string);
 		};
 
 		/* address */
-		snprintf(tempstring, sizeof(tempstring), "IPV4%s=%s", embeddedipv4string, tempipv4string);
-		printout(tempstring);
+		printout2("IPV4", embeddedipv4string, tempipv4string);
 
 		if ((typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {	
 			if (retval_anon == 0 ) {	
 				/* anonymized address */
-				snprintf(tempstring, sizeof(tempstring), "IPV4_ANON%s=%s", embeddedipv4string, tempstring2);
-				printout(tempstring);
+				printout2("IPV4_ANON", embeddedipv4string, tempstring2);
 			} else {
 				// TODO: only show this on verbose (must be implemented)
 				// snprintf(tempstring, sizeof(tempstring), "IPV4_ANON%s=(unsupported, too less DB features available)", embeddedipv4string);
@@ -726,12 +698,13 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		};
 
 		if (ipv4addrp->flag_prefixuse == 1) {	
-			snprintf(tempstring, sizeof(tempstring), "IPV4_PREFIXLENGTH%s=%d", embeddedipv4string, (int) ipv4addrp->prefixlength);
-			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring), "%d", (int) ipv4addrp->prefixlength);
+			printout2("IPV4_PREFIXLENGTH", embeddedipv4string, tempstring);
 		};
 
 		j = 0;
-		snprintf(tempstring, sizeof(tempstring), "IPV4_TYPE%s=", embeddedipv4string);
+
+		snprintf(tempstring, sizeof(tempstring), "%s", "");
 		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv4addrtypestrings); i++ ) {
 			if ( (typeinfo & ipv6calc_ipv4addrtypestrings[i].number) != 0 ) {
 				if (j != 0) {
@@ -743,7 +716,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 				j = 1;
 			};
 		};
-		printout(tempstring);
+		printout2("IPV4_TYPE", embeddedipv4string, tempstring);
 	} else {
 
 		if ((string != NULL) && (strlen(string) > 0)) {
@@ -775,12 +748,11 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 		if (as_num32 != ASNUM_AS_UNKNOWN) {
 			if ( machinereadable != 0 ) {
-				snprintf(tempstring, sizeof(tempstring), "IPV4_AS_NUM%s=%d", embeddedipv4string, as_num32);
-				printout(tempstring);
+				snprintf(tempstring, sizeof(tempstring), "%d", as_num32);
+				printout2("IPV4_AS_NUM", embeddedipv4string, tempstring);
 
 				if (as_text != NULL) {
-					snprintf(tempstring, sizeof(tempstring), "IPV4_AS_TEXT%s=%s", embeddedipv4string, as_text);
-					printout(tempstring);
+					printout2("IPV4_AS_TEXT", embeddedipv4string, as_text);
 				};
 			} else {
 				if (as_text != NULL) {
@@ -799,14 +771,12 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		if (cc_index < COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN) {
 			libipv6calc_db_wrapper_country_code_by_cc_index(tempstring2, sizeof(tempstring2), cc_index);
 			if ( machinereadable != 0 ) {
-				snprintf(tempstring, sizeof(tempstring), "IPV4_COUNTRYCODE%s=%s", embeddedipv4string, tempstring2);
-				printout(tempstring);
+				printout2("IPV4_COUNTRYCODE", embeddedipv4string, tempstring2);
 
 				if (data_source != IPV6CALC_DB_SOURCE_UNKNOWN) {
 					for (i = 0; i < MAXENTRIES_ARRAY(data_sources); i++ ) {
 						if (data_source == data_sources[i].number) {
-							snprintf(tempstring, sizeof(tempstring), "IPV4_COUNTRYCODE_SOURCE%s=%s" , embeddedipv4string, data_sources[i].name);
-							printout(tempstring);
+							printout2("IPV4_COUNTRYCODE_SOURCE" , embeddedipv4string, data_sources[i].name);
 							break;
 						};
 					};
@@ -831,8 +801,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	};
 
 	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring), "IPV4_REGISTRY%s=%s", embeddedipv4string, tempstring2);
-		printout(tempstring);
+		printout2("IPV4_REGISTRY", embeddedipv4string, tempstring2);
 	} else {
 		fprintf(stdout, "IPv4 registry%s: %s\n", embeddedipv4string, tempstring2);
 	};
@@ -868,23 +837,21 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
  * print ASN information
  */
 static void print_asn(const uint32_t asn, const uint32_t formatoptions) {
-	char tempstring[NI_MAXHOST], helpstring[NI_MAXHOST];
+	char helpstring[NI_MAXHOST];
 	uint32_t machinereadable = ( formatoptions & FORMATOPTION_machinereadable);
 	int registry;
 
 	snprintf(helpstring, sizeof(helpstring), "%d", asn);
 
 	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring), "AS_NUM=%s", helpstring);
-		printout(tempstring);
+		printout("AS_NUM", helpstring);
 	} else {
 		fprintf(stdout, "Autonomous System Number: %s\n", helpstring);
 	};
 
 	registry = libipv6calc_db_wrapper_registry_num_by_as_num32(asn);	
 	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring), "AS_NUM_REGISTRY=%s", libipv6calc_registry_string_by_num(registry));
-		printout(tempstring);
+		printout("AS_NUM_REGISTRY", libipv6calc_registry_string_by_num(registry));
 	} else {
 		fprintf(stdout, "Registry of Autonomous System Number: %s\n", libipv6calc_registry_string_by_num(registry));
 	};
@@ -897,7 +864,7 @@ static void print_asn(const uint32_t asn, const uint32_t formatoptions) {
  * print EUI-48/MAC information
  */
 static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formatoptions) {
-	char tempstring[NI_MAXHOST], helpstring[NI_MAXHOST];
+	char helpstring[NI_MAXHOST];
 	uint32_t machinereadable = ( formatoptions & FORMATOPTION_machinereadable);
 	int i, result;
 	ipv6calc_ipv4addr ipv4addr;
@@ -906,8 +873,7 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 	snprintf(helpstring, sizeof(helpstring), "%02x:%02x:%02x:%02x:%02x:%02x", (unsigned int) macaddrp->addr[0], (unsigned int) macaddrp->addr[1], (unsigned int) macaddrp->addr[2], (unsigned int) macaddrp->addr[3], (unsigned int) macaddrp->addr[4], (unsigned int) macaddrp->addr[5]);
 
 	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring), "EUI48=%s", helpstring);
-		printout(tempstring);
+		printout("EUI48", helpstring);
 	} else {
 		fprintf(stdout, "EUI-48/MAC address: %s\n", helpstring);
 	};
@@ -915,13 +881,13 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 	/* scope */	
 	if ( (macaddrp->addr[0] & 0x02) == 0 ) {
 		if ( machinereadable != 0 ) {
-			printout("EUI48_SCOPE=global");
+			printout("EUI48_SCOPE", "global");
 		} else {
 			fprintf(stdout, "MAC is a global unique one\n");
 		};
 	} else {
 		if ( machinereadable != 0 ) {
-			printout("EUI48_SCOPE=local");
+			printout("EUI48_SCOPE", "local");
 		} else {
 			fprintf(stdout, "MAC is a local one\n");
 		};
@@ -930,20 +896,20 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 	/* unicast/multicast/broadcast */	
 	if ( (macaddrp->addr[0] & 0x01) == 0 ) {
 		if ( machinereadable != 0 ) {
-			printout("EUI48_TYPE=unicast");
+			printout("EUI48_TYPE", "unicast");
 		} else {
 			fprintf(stdout, "MAC is an unicast one\n");
 		};
 	} else {
 		if ( (macaddrp->addr[0] == 0xff) && (macaddrp->addr[1] == 0xff) && (macaddrp->addr[2] == 0xff) && (macaddrp->addr[3] == 0xff) && (macaddrp->addr[4] == 0xff) && (macaddrp->addr[5] == 0xff) ) {
 			if ( machinereadable != 0 ) {
-				printout("EUI48_TYPE=broadcast");
+				printout("EUI48_TYPE", "broadcast");
 			} else {
 				fprintf(stdout, "MAC is a broadcast one\n");
 			};
 		} else {
 			if ( machinereadable != 0 ) {
-				printout("EUI48_TYPE=multicast");
+				printout("EUI48_TYPE", "multicast");
 			} else {
 				fprintf(stdout, "MAC is a multicast one\n");
 			};
@@ -955,8 +921,7 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 	result = libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(helpstring, sizeof(helpstring), macaddrp);
 	if (result == 0) {
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "OUI=\"%s\"", helpstring);
-			printout(tempstring);
+			printout("OUI", helpstring);
 		} else {
 			fprintf(stdout, "OUI is: %s\n", helpstring);
 		};
@@ -995,8 +960,7 @@ static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t for
 	snprintf(helpstring, sizeof(helpstring), "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x", (unsigned int) eui64addrp->addr[0], (unsigned int) eui64addrp->addr[1], (unsigned int) eui64addrp->addr[2], (unsigned int) eui64addrp->addr[3], (unsigned int) eui64addrp->addr[4], (unsigned int) eui64addrp->addr[5], (unsigned int) eui64addrp->addr[6], (unsigned int) eui64addrp->addr[7]);
 
 	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring), "EUI64=%s", helpstring);
-		printout(tempstring);
+		printout("EUI64", helpstring);
 	} else {
 		fprintf(stdout, "EUI-64 identifier: %s\n", helpstring);
 	};
@@ -1004,13 +968,13 @@ static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t for
 	/* scope */	
 	if ( (eui64addrp->addr[0] & 0x02) == 0 ) {
 		if ( machinereadable != 0 ) {
-			printout("EUI64_SCOPE=global");
+			printout("EUI64_SCOPE", "global");
 		} else {
 			fprintf(stdout, "EUI-64 identifier is a global unique one\n");
 		};
 	} else {
 		if ( machinereadable != 0 ) {
-			printout("EUI64_SCOPE=local");
+			printout("EUI64_SCOPE", "local");
 		} else {
 			fprintf(stdout, "EUI-64 identifier is a local one\n");
 		};
@@ -1024,8 +988,7 @@ static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t for
 	result = libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(helpstring, sizeof(helpstring), &macaddr);
 	if (result == 0) {
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "OUI=\"%s\"", helpstring);
-			printout(tempstring);
+			printout("OUI", helpstring);
 		} else {
 			fprintf(stdout, "OUI is: %s\n", tempstring);
 		};
@@ -1099,26 +1062,24 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	};
 	
 	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring), "IPV6=%s", ipv6addrstring);
-		printout(tempstring);
+		printout("IPV6", ipv6addrstring);
 	
 		if ((typeinfo & (IPV6_ADDR_ANONYMIZED_PREFIX | IPV6_ADDR_ANONYMIZED_IID | IPV6_ADDR_LOOPBACK)) == 0 ) {
 			if (retval_anon == 0) {
-				snprintf(tempstring, sizeof(tempstring), "IPV6_ANON=%s", tempstring2);
+				printout("IPV6_ANON", tempstring2);
 			} else {
 				// TODO: only show this on verbose (must be implemented)
 				// snprintf(tempstring, sizeof(tempstring), "IPV6_ANON=(unsupported, too less DB features available)");
 			};
-			printout(tempstring);
 		};
 
 		if (ipv6addrp->flag_prefixuse == 1) {	
-			snprintf(tempstring, sizeof(tempstring), "IPV6_PREFIXLENGTH=%d", (int) ipv6addrp->prefixlength);
-			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring), "%d", (int) ipv6addrp->prefixlength);
+			printout("IPV6_PREFIXLENGTH", tempstring);
 		};
 
 		j = 0;
-		snprintf(tempstring, sizeof(tempstring), "IPV6_TYPE=");
+		snprintf(tempstring, sizeof(tempstring), "%s", "");
 		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
 			if ( (typeinfo & ipv6calc_ipv6addrtypestrings[i].number) != 0 ) {
 				if (j != 0) {
@@ -1130,7 +1091,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 				j = 1;
 			};
 		};
-		printout(tempstring);
+		printout("IPV6_TYPE", tempstring);
 	} else {
 		fprintf(stdout, "Address type: ");
 		j = 0;
@@ -1157,14 +1118,12 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			if (cc_index < COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN) {
 				libipv6calc_db_wrapper_country_code_by_cc_index(tempstring2, sizeof(tempstring2),cc_index);
 				if ( machinereadable != 0 ) {
-					snprintf(tempstring, sizeof(tempstring), "IPV6_COUNTRYCODE=%s" , tempstring2);
-					printout(tempstring);
+					printout("IPV6_COUNTRYCODE" , tempstring2);
 
 					if (data_source != IPV6CALC_DB_SOURCE_UNKNOWN) {
 						for (i = 0; i < MAXENTRIES_ARRAY(data_sources); i++ ) {
 							if (data_source == data_sources[i].number) {
-								snprintf(tempstring, sizeof(tempstring), "IPV6_COUNTRYCODE_SOURCE=%s" , data_sources[i].name);
-								printout(tempstring);
+								printout("IPV6_COUNTRYCODE_SOURCE=%s" , data_sources[i].name);
 								break;
 							};
 						};
@@ -1193,15 +1152,14 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			if (as_num32 != ASNUM_AS_UNKNOWN) {
 				if ( machinereadable != 0 ) {
 					if (as_num32 == 0) {
-						snprintf(tempstring, sizeof(tempstring), "IPV6_AS_NUM=(unknown)");
+						snprintf(tempstring, sizeof(tempstring), "(unknown)");
 					} else {
-						snprintf(tempstring, sizeof(tempstring), "IPV6_AS_NUM=%d", as_num32);
+						snprintf(tempstring, sizeof(tempstring), "%d", as_num32);
 					};
-					printout(tempstring);
+					printout("IPV6_AS_NUM" ,tempstring);
 
 					if (as_text != NULL) {
-						snprintf(tempstring, sizeof(tempstring), "IPV6_AS_TEXT=%s", as_text);
-						printout(tempstring);
+						printout("IPV6_AS_TEXT", as_text);
 					};
 
 				} else {
@@ -1226,8 +1184,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	};
 
 	if ( machinereadable != 0 ) {
-		snprintf(tempstring, sizeof(tempstring), "IPV6_REGISTRY=%s", tempstring2);
-		printout(tempstring);
+		printout("IPV6_REGISTRY", tempstring2);
 	} else {
 		fprintf(stdout, "Registry for address: %s\n", tempstring2);
 	};
@@ -1283,8 +1240,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 				port = (uint16_t) (((uint16_t) ipv6addr_getoctet(ipv6addrp, (unsigned int) 10) << 8 | (uint16_t) ipv6addr_getoctet(ipv6addrp, (unsigned int) 11)) ^ 0xffff);
 
 				if ( machinereadable != 0 ) {
-					snprintf(tempstring, sizeof(tempstring), "TEREDO_PORT_CLIENT=%u", (unsigned int) port);
-					printout(tempstring);
+					snprintf(tempstring, sizeof(tempstring), "%u", (unsigned int) port);
+					printout("TEREDO_PORT_CLIENT", tempstring);
 				} else {
 					fprintf(stdout, "Address type is Teredo and included IPv4 server address is: %s and client port: %u\n", helpstring, (unsigned int) port);
 				};
@@ -1315,8 +1272,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	/* SLA prefix included? */
 	if ( ((typeinfo & ( IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_ADDR_ULUA )) != 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID | IPV6_ADDR_ANONYMIZED_PREFIX)) == 0)) {
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "SLA=%04x", (unsigned int) ipv6addr_getword(ipv6addrp, 3));
-			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring), "%04x", (unsigned int) ipv6addr_getword(ipv6addrp, 3));
+			printout("SLA", tempstring);
 		} else {
 			fprintf(stdout, "Address type has SLA: %04x\n", (unsigned int) ipv6addr_getword(ipv6addrp, 3));
 		};
@@ -1353,8 +1310,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	/* Interface identifier included */
 	if ( ( ((typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_ADDR_ULUA )) != 0) || ((typeinfo & (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) == (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) ) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID)) == 0) ) {
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "IID=%04x:%04x:%04x:%04x", (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addr_getword(ipv6addrp, 6), (unsigned int) ipv6addr_getword(ipv6addrp, 7));
-			printout(tempstring);
+			snprintf(tempstring, sizeof(tempstring), "%04x:%04x:%04x:%04x", (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addr_getword(ipv6addrp, 6), (unsigned int) ipv6addr_getword(ipv6addrp, 7));
+			printout("IID", tempstring);
 		} else {
 			fprintf(stdout, "Interface identifier: %04x:%04x:%04x:%04x\n", (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addr_getword(ipv6addrp, 6), (unsigned int) ipv6addr_getword(ipv6addrp, 7));
 		};
@@ -1422,8 +1379,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			} else {
 				if ( (typeinfo & IPV6_NEW_ADDR_SOLICITED_NODE) != 0 ) {
 					if ( machinereadable != 0 ) {
-						snprintf(tempstring, sizeof(tempstring), "EUI64=??:??:??:??:??:%02x:%02x:%02x", (unsigned int) ipv6addr_getoctet(ipv6addrp, 13), (unsigned int) ipv6addr_getoctet(ipv6addrp, 14), (unsigned int) ipv6addr_getoctet(ipv6addrp, 15));
-						printout(tempstring);
+						snprintf(tempstring, sizeof(tempstring), "??:??:??:??:??:%02x:%02x:%02x", (unsigned int) ipv6addr_getoctet(ipv6addrp, 13), (unsigned int) ipv6addr_getoctet(ipv6addrp, 14), (unsigned int) ipv6addr_getoctet(ipv6addrp, 15));
+						printout("EUI64", tempstring);
 					} else {
 						fprintf(stdout, "Generated from the extension identifier of an EUI-48 (MAC): ...:%02x:%02x:%02x\n", (unsigned int) ipv6addr_getoctet(ipv6addrp, 13), (unsigned int) ipv6addr_getoctet(ipv6addrp, 14), (unsigned int) ipv6addr_getoctet(ipv6addrp, 15));
 					};
@@ -1485,11 +1442,11 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 				} else {
 					if ( machinereadable != 0 ) {
 						if ((typeinfo & IPV6_NEW_ADDR_6TO4_MICROSOFT) != 0) {
-							printout("EUI64_SCOPE=local-6to4-microsoft");
+							printout("EUI64_SCOPE", "local-6to4-microsoft");
 						} else if ((typeinfo & IPV6_NEW_ADDR_IID_RANDOM) != 0) {
-							printout("EUI64_SCOPE=local-random");
+							printout("EUI64_SCOPE", "local-random");
 						} else {
-							printout("EUI64_SCOPE=local");
+							printout("EUI64_SCOPE", "local");
 						};
 					} else {
 						if ((typeinfo & IPV6_NEW_ADDR_6TO4_MICROSOFT) != 0) {
