@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calc/ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions_local.h,v 1.6 2014/07/21 06:14:27 ds6peter Exp $
- * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calcoptions_local.h,v 1.7 2015/04/23 20:49:04 ds6peter Exp $
+ * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options for ipv6calc
@@ -97,6 +97,11 @@ static struct option ipv6calc_longopts[] = {
 	
 	{ "machine_readable"     , 0, NULL, FORMATOPTION_NUM_machinereadable + FORMATOPTION_NUM_HEAD },
 	// { "quiet"                , 0, NULL, FORMATOPTION_NUM_quiet + FORMATOPTION_NUM_HEAD }, strange duplicate
+	/* machine readable format/filter */
+	{ "mrqva"                , 0, NULL, FORMATOPTION_NUM_mr_quote_always + FORMATOPTION_NUM_HEAD },
+	{ "mrqvn"                , 0, NULL, FORMATOPTION_NUM_mr_quote_never  + FORMATOPTION_NUM_HEAD },
+	{ "mrtvo"                , 1, NULL, FORMATOPTION_NUM_mr_value_only   + FORMATOPTION_NUM_HEAD },
+	{ "mrft"                 , 1, NULL, FORMATOPTION_NUM_mr_filter_token + FORMATOPTION_NUM_HEAD },
 	
 	{ "printmirrored"        , 0, NULL, FORMATOPTION_NUM_printmirrored + FORMATOPTION_NUM_HEAD },
 

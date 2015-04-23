@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.44 2015/04/16 06:23:20 ds6peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.45 2015/04/23 20:49:04 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -174,10 +174,14 @@ typedef struct {
 #define FORMATOPTION_NUM_machinereadable	12	// 00001000
 #define FORMATOPTION_NUM_quiet			13	// 00002000
 #define FORMATOPTION_NUM_printmirrored		14	// 00004000
-#define FORMATOPTION_NUM_forceprefix		15	// 00010000
-#define FORMATOPTION_NUM_literal		16	// 00020000
-#define FORMATOPTION_NUM_print_iid_var		17	// 00040000
-#define FORMATOPTION_NUM_no_prefixlength	18	// 00080000
+#define FORMATOPTION_NUM_forceprefix		15	// 00008000
+#define FORMATOPTION_NUM_literal		16	// 00010000
+#define FORMATOPTION_NUM_print_iid_var		17	// 00020000
+#define FORMATOPTION_NUM_no_prefixlength	18	// 00040000
+#define FORMATOPTION_NUM_mr_quote_always	19	// 00080000
+#define FORMATOPTION_NUM_mr_quote_never		20	// 00100000
+#define FORMATOPTION_NUM_mr_value_only		21	// 00200000
+#define FORMATOPTION_NUM_mr_filter_token	22	// 00400000
 
 #define FORMATOPTION_NUM_printembedded		31	// special
 
@@ -199,6 +203,10 @@ typedef struct {
 #define FORMATOPTION_literal			(uint32_t) (1 << FORMATOPTION_NUM_literal)
 #define FORMATOPTION_print_iid_var		(uint32_t) (1 << FORMATOPTION_NUM_print_iid_var)
 #define FORMATOPTION_no_prefixlength		(uint32_t) (1 << FORMATOPTION_NUM_no_prefixlength)
+#define FORMATOPTION_mr_quote_always		(uint32_t) (1 << FORMATOPTION_NUM_mr_quote_always)
+#define FORMATOPTION_mr_quote_never		(uint32_t) (1 << FORMATOPTION_NUM_mr_quote_never)
+#define FORMATOPTION_mr_value_only		(uint32_t) (1 << FORMATOPTION_NUM_mr_value_only)
+#define FORMATOPTION_mr_filter_token		(uint32_t) (1 << FORMATOPTION_NUM_mr_filter_token)
 
 #define FORMATOPTION_printembedded		(uint32_t) (1 << FORMATOPTION_NUM_printembedded)
 

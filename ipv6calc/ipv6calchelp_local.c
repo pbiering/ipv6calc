@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calchelp_local.c
- * Version    : $Id: ipv6calchelp_local.c,v 1.8 2014/07/31 06:20:35 ds6peter Exp $
- * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calchelp_local.c,v 1.9 2015/04/23 20:49:04 ds6peter Exp $
+ * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -114,7 +114,11 @@ void ipv6calc_printhelp(const struct option longopts[], const s_ipv6calc_longopt
 	fprintf(stderr, "\n");
 	fprintf(stderr, " Other usage:\n");
 	fprintf(stderr, "  --showinfo|-i [--machine_readable|-m] : show information about input data\n");
-	fprintf(stderr, "  --showinfo|-i --show_types            : show available types on '-m'\n");
+	fprintf(stderr, "  --showinfo|-i --mrqva                 : Machine Readable Quote Values Always\n");
+	fprintf(stderr, "  --showinfo|-i --mrqvn                 : Machine Readable Quote Values Never\n");
+	fprintf(stderr, "  --showinfo|-i --mrft <TOKEN>          : Machine Readable Filter Token\n");
+	fprintf(stderr, "  --showinfo|-i --mrtvo <TOKEN>         : Machine Readable Token Value Only\n");
+	fprintf(stderr, "  --showinfo|-i --show_types            : show available tokens (aka types) on '-m'\n");
 
 	printhelp_shortcut_options(longopts, longopts_shortopts_map);
 

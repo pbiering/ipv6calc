@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id: test_showinfo.sh,v 1.42 2015/04/16 06:23:20 ds6peter Exp $
+# Version    : $Id: test_showinfo.sh,v 1.43 2015/04/23 20:49:04 ds6peter Exp $
 # Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
@@ -138,7 +138,12 @@ if ./ipv6calc -v 2>&1 | grep -qw DB_IPV6_REG; then
 	ipv6calc_has_db_ipv6=1
 fi
 
-testscenarios_showinfo | while read address output; do
+testscenarios_showinfo | while read address output_options; do
+	# separate options from output
+	output=${output_options/\|*/}
+	options=${output_options/*\|/}
+	[ "$options" = "$output" ] && options=""
+
 	if echo "$output" | grep -q "^OUI="; then
 		if [ $ipv6calc_has_db_ieee -ne 1 ]; then
 			echo "Test: $address for $output SKIPPED (no DB_IEEE compiled in)"
@@ -160,13 +165,13 @@ testscenarios_showinfo | while read address output; do
 		fi
 	fi
 
-	echo "Test: $address for $output"
+	echo "Test: $address for $output ($options)"
 	output_escaped="${output//./\\.}"
 	output_escaped="${output_escaped//[/\\[}"
 	output_escaped="${output_escaped//]/\\]}"
-	if ! ./ipv6calc -q -i -m $address | grep "^$output_escaped$"; then
+	if ! ./ipv6calc $options -q -i -m $address | grep "^$output_escaped$"; then
 		echo "ERROR: unexpected result ($output_escaped)"
-		./ipv6calc -q -i -m $address
+		./ipv6calc $options -q -i -m $address
 		exit 1	
 	fi
 	echo

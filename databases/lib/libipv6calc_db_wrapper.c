@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.56 2015/04/16 06:23:20 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.57 2015/04/23 20:49:04 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -2604,7 +2604,7 @@ int libipv6calc_db_registry_filter_parse(s_ipv6calc_filter_db_registry *filter, 
 		registry = REGISTRY_UNKNOWN;
 	} else {
 		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_registries); i++) {
-			if (strcmp(token + offset, ipv6calc_registries[i].token) == 0) {
+			if (strcasecmp(token + offset, ipv6calc_registries[i].token) == 0) {
 				registry = ipv6calc_registries[i].number;
 				break;
 			};

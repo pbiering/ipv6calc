@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc_filter.sh
-# Version    : $Id: test_ipv6calc_filter.sh,v 1.3 2013/11/15 07:18:39 ds6peter Exp $
+# Version    : $Id: test_ipv6calc_filter.sh,v 1.4 2015/04/23 20:49:04 ds6peter Exp $
 # Copyright  : 2012-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc filter
@@ -17,12 +17,23 @@ source ./test_scenarios.sh
 
 echo "Run 'ipv6calc' filter tests..."
 
-testscenarios_filter | tr A-Z a-z | while read input filter; do
-	if [ -z "$input" -o -z "$filter" ]; then
+testscenarios_filter | while read input filter_feature; do
+	if [ -z "$input" -o -z "$filter_feature" ]; then
 		# end
 		continue
 	fi
 
+	filter=${filter_feature/\#*/}
+	feature=${filter_feature/*\#/}
+	[ "$feature" = "$filter_feature" ] && feature=""
+
+	if [ -n "$feature" ]; then
+		if ! ./ipv6calc -v 2>&1 | grep -qw "$feature"; then
+			echo "Skip './ipv6calc -A filter -E $filter' for: $input (missing feature: $feature)"
+			continue
+		fi
+	fi
+		
 	echo "Test './ipv6calc -A filter -E $filter' for: $input"
 	output="`echo "$input" | ./ipv6calc -A filter -E $filter`"
 	retval=$?

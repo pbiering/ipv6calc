@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.117 2015/04/16 06:23:20 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.118 2015/04/23 20:49:04 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -77,6 +77,9 @@ s_ipv6calc_anon_set ipv6calc_anon_set;
 int feature_zeroize = 1; // always supported
 int feature_anon    = 1; // always supported
 int feature_kp      = 0; // will be checked later
+
+/* showinfo machine readable filter */
+char showinfo_machine_readable_filter[32] = "";
 
 
 /**************************************************/
@@ -430,7 +433,33 @@ int main(int argc, char *argv[]) {
 					exit(EXIT_FAILURE);
 				};
 				break;
+
+			case FORMATOPTION_NUM_mr_quote_always + FORMATOPTION_NUM_HEAD:
+				formatoptions |= (FORMATOPTION_mr_quote_always | FORMATOPTION_machinereadable);
+				break;
+
+			case FORMATOPTION_NUM_mr_quote_never + FORMATOPTION_NUM_HEAD:
+				formatoptions |= (FORMATOPTION_mr_quote_never | FORMATOPTION_machinereadable);
+				break;
+
+			case FORMATOPTION_NUM_mr_value_only + FORMATOPTION_NUM_HEAD:
+				if (strlen(showinfo_machine_readable_filter) >= sizeof(showinfo_machine_readable_filter)) {
+					fprintf(stderr, " Argument of option 'mrvo' is too long: %s\n", optarg);
+					exit(EXIT_FAILURE);
+				};
+				snprintf(showinfo_machine_readable_filter, sizeof(showinfo_machine_readable_filter), "%s", optarg);
+				formatoptions |= (FORMATOPTION_mr_filter_token | FORMATOPTION_mr_value_only | FORMATOPTION_machinereadable);
+				break;
 				
+			case FORMATOPTION_NUM_mr_filter_token + FORMATOPTION_NUM_HEAD:
+				if (strlen(showinfo_machine_readable_filter) >= sizeof(showinfo_machine_readable_filter)) {
+					fprintf(stderr, " Argument of option 'mrvo' is too long: %s\n", optarg);
+					exit(EXIT_FAILURE);
+				};
+				snprintf(showinfo_machine_readable_filter, sizeof(showinfo_machine_readable_filter), "%s", optarg);
+				formatoptions |= (FORMATOPTION_mr_filter_token | FORMATOPTION_machinereadable);
+				break;
+
 			case 'm':	
 			case FORMATOPTION_NUM_machinereadable + FORMATOPTION_NUM_HEAD:
 				formatoptions |= FORMATOPTION_machinereadable;

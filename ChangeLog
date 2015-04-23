@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.390 2015/04/23 06:32:45 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.391 2015/04/23 20:49:04 ds6peter Exp $ 
  */
 
 Info:
@@ -11,7 +11,9 @@ Info:
 --------------------------------------------------------------------
 20150423/PB
 	add extension for IP2Location LITE disclaimer
-	improve quoting of machinereadable ipv6calc output
+	improve quoting of machine readable ipv6calc output
+	add additional options for controlling quoting and filter machine readable output
+	add all database fields to non-machinereadable output
 
 20150417/PB
 	internal databases: updates

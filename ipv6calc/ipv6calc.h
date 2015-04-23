@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.h
- * Version    : $Id: ipv6calc.h,v 1.16 2013/10/28 07:25:31 ds6peter Exp $
+ * Version    : $Id: ipv6calc.h,v 1.17 2015/04/23 20:49:04 ds6peter Exp $
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -27,3 +27,5 @@
 extern int feature_zeroize;
 extern int feature_anon;
 extern int feature_kp;
+
+extern char showinfo_machine_readable_filter[];

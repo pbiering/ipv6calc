@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.47 2015/04/16 06:23:20 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.48 2015/04/23 20:49:04 ds6peter Exp $
 # Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -216,6 +216,10 @@ a909:16fa:9092:23ff:a909:4941::7		anonymized-prefix
 2002:f618:3b41:0009:a929:4291:8f61:83b0		anonymized-prefix
 3ffe:831f:ce49:7601:8000:ffff:0a0b:f33a		anonymized-iid
 3ffe:831f:ce49:7601:8000:ffff:0a0b:f33a		^anonymized-prefix
+2.2.3.4						ipv4
+2.2.3.4						ipv4.db.reg=RIPENCC#DB_IPV4_REG
+2.2.3.4						ipv4.db.cc=FR#DB_IPV4_CC
+2.2.3.4						ipv4.db.asn=3215#DB_IPV4_AS
 END
 }
 
@@ -378,6 +382,11 @@ a909:16fa:9092:23ff:a909:4941::7	IPV6_REGISTRY=RIPENCC
 ::ffff:246.24.59.65			IPV4_COUNTRYCODE[246.24.59.65]=AU
 2001:07fa:0:1::1			IPV6_REGISTRY=APNIC
 2001:07fa:0:0::1			IPV6_REGISTRY=RIPENCC
+# output variations
+1.2.3.4					1.2.3.4|--mrtvo IPV4
+1.2.3.4					"1.2.3.4"|--mrtvo IPV4 --mrqva
+1.2.3.4					IPV4=1.2.3.4|--mrft IPV4
+1.2.3.4					IPV4="1.2.3.4"|--mrft IPV4 --mrqva
 END
 }
 
