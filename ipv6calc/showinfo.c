@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.132 2015/04/23 20:49:04 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.133 2015/04/24 06:18:58 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -205,6 +205,8 @@ static void printout2(const char *token, const char *additional, const char *val
 	if (formatoptions & FORMATOPTION_mr_filter_token) {
 		// skip not matching token
 		if (strcmp(showinfo_machine_readable_filter, token) != 0) return;
+		// skip in case additional is not empty
+		if ((additional != NULL) && (strlen(additional) > 0)) return;
 	};
 
 	if (strstr(value, " ") != NULL) {
