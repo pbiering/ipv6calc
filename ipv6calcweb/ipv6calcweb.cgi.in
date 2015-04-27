@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Version    : $Id: ipv6calcweb.cgi.in,v 1.85 2015/04/22 19:30:37 ds6peter Exp $
+# Version    : $Id: ipv6calcweb.cgi.in,v 1.86 2015/04/27 19:03:43 ds6peter Exp $
 # Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
@@ -1781,35 +1781,29 @@ sub ipv6calc_exec($$$$) {
 			};
 		};
 
+		# remove quotes around contents
+		$content =~ s/^\"//;
+		$content =~ s/\"$//;
+
 		# catch internal keys
 		if ( $key =~ /^IPV6CALC_/ ) {
 			if ( $key eq "IPV6CALC_COPYRIGHT" ) {
 				$ipv6calc_copyright = $content;
-				$ipv6calc_copyright =~ s/^\"//;
-				$ipv6calc_copyright =~ s/\"$//;
 			};
 			if ( $key eq "IPV6CALC_VERSION" ) {
 				$ipv6calc_version = $content;
-				$ipv6calc_version =~ s/^\"//;
-				$ipv6calc_version =~ s/\"$//;
 			};
 			if ( $key eq "IPV6CALC_NAME" ) {
 				$ipv6calc_name = $content;
-				$ipv6calc_name =~ s/^\"//;
-				$ipv6calc_name =~ s/\"$//;
 			};
 			if ( $key eq "IPV6CALC_FEATURES" ) {
 				$ipv6calc_features = $content;
-				$ipv6calc_features =~ s/^\"//;
-				$ipv6calc_features =~ s/\"$//;
 				foreach my $feature (split / /, $ipv6calc_features) {
 					$ipv6calc_feature_hash{$feature} = 1;
 				};
 			};
 			if ( $key eq "IPV6CALC_CAPABILITIES" ) {
 				$ipv6calc_capabilities = $content;
-				$ipv6calc_capabilities =~ s/^\"//;
-				$ipv6calc_capabilities =~ s/\"$//;
 				foreach my $capability (split / /, $ipv6calc_capabilities) {
 					# remove brackets
 					$capability =~ s/\([^)]*\)//g;
@@ -1823,9 +1817,6 @@ sub ipv6calc_exec($$$$) {
 					};
 
 					my $t = $1;
-
-					$content =~ s/"$//o;
-					$content =~ s/^"//o;
 
 					$ipv6calc_settings_hash{$t} = $content;
 					$ipv6calc_settings .= $t . ":" . $content;

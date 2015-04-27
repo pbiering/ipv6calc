@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.133 2015/04/24 06:18:58 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.134 2015/04/27 19:03:42 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1292,7 +1292,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 					if (data_source != IPV6CALC_DB_SOURCE_UNKNOWN) {
 						for (i = 0; i < MAXENTRIES_ARRAY(data_sources); i++ ) {
 							if (data_source == data_sources[i].number) {
-								printout("IPV6_COUNTRYCODE_SOURCE=%s" , data_sources[i].name, formatoptions);
+								printout("IPV6_COUNTRYCODE_SOURCE" , data_sources[i].name, formatoptions);
 								break;
 							};
 						};
