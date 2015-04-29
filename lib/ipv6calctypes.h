@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.45 2015/04/23 20:49:04 ds6peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.46 2015/04/29 20:22:48 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -181,7 +181,9 @@ typedef struct {
 #define FORMATOPTION_NUM_mr_quote_always	19	// 00080000
 #define FORMATOPTION_NUM_mr_quote_never		20	// 00100000
 #define FORMATOPTION_NUM_mr_value_only		21	// 00200000
-#define FORMATOPTION_NUM_mr_filter_token	22	// 00400000
+#define FORMATOPTION_NUM_mr_select_token	22	// 00400000
+#define FORMATOPTION_NUM_mr_select_token_pa	23	// 00800000
+#define FORMATOPTION_NUM_mr_match_token		24	// 01000000
 
 #define FORMATOPTION_NUM_printembedded		31	// special
 
@@ -206,7 +208,9 @@ typedef struct {
 #define FORMATOPTION_mr_quote_always		(uint32_t) (1 << FORMATOPTION_NUM_mr_quote_always)
 #define FORMATOPTION_mr_quote_never		(uint32_t) (1 << FORMATOPTION_NUM_mr_quote_never)
 #define FORMATOPTION_mr_value_only		(uint32_t) (1 << FORMATOPTION_NUM_mr_value_only)
-#define FORMATOPTION_mr_filter_token		(uint32_t) (1 << FORMATOPTION_NUM_mr_filter_token)
+#define FORMATOPTION_mr_select_token		(uint32_t) (1 << FORMATOPTION_NUM_mr_select_token)
+#define FORMATOPTION_mr_select_token_pa		(uint32_t) (1 << FORMATOPTION_NUM_mr_select_token_pa)
+#define FORMATOPTION_mr_match_token		(uint32_t) (1 << FORMATOPTION_NUM_mr_match_token)
 
 #define FORMATOPTION_printembedded		(uint32_t) (1 << FORMATOPTION_NUM_printembedded)
 

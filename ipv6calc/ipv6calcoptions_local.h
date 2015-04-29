@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calc/ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions_local.h,v 1.7 2015/04/23 20:49:04 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions_local.h,v 1.8 2015/04/29 20:22:48 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -76,6 +76,7 @@ static struct option ipv6calc_longopts[] = {
 	
 	{ "showinfo"                , 0, NULL, CMD_showinfo },
 	{ "show_types"              , 0, NULL, CMD_showinfotypes },
+	{ "show-tokens"             , 0, NULL, CMD_showinfotypes },
 
 	/* format options */
 	{ "maskprefix"           , 0, NULL, FORMATOPTION_NUM_maskprefix + FORMATOPTION_NUM_HEAD },
@@ -101,7 +102,9 @@ static struct option ipv6calc_longopts[] = {
 	{ "mrqva"                , 0, NULL, FORMATOPTION_NUM_mr_quote_always + FORMATOPTION_NUM_HEAD },
 	{ "mrqvn"                , 0, NULL, FORMATOPTION_NUM_mr_quote_never  + FORMATOPTION_NUM_HEAD },
 	{ "mrtvo"                , 1, NULL, FORMATOPTION_NUM_mr_value_only   + FORMATOPTION_NUM_HEAD },
-	{ "mrft"                 , 1, NULL, FORMATOPTION_NUM_mr_filter_token + FORMATOPTION_NUM_HEAD },
+	{ "mrst"                 , 1, NULL, FORMATOPTION_NUM_mr_select_token + FORMATOPTION_NUM_HEAD },
+	{ "mrstpa"               , 1, NULL, FORMATOPTION_NUM_mr_select_token_pa + FORMATOPTION_NUM_HEAD },
+	{ "mrmt"                 , 1, NULL, FORMATOPTION_NUM_mr_match_token  + FORMATOPTION_NUM_HEAD },
 	
 	{ "printmirrored"        , 0, NULL, FORMATOPTION_NUM_printmirrored + FORMATOPTION_NUM_HEAD },
 

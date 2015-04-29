@@ -2026,24 +2026,8 @@ Registry for address: reserved
 
 \begin_layout Standard
 There exists also a machine readable output (e.g.
- used by 'ipv6calcweb.cgi') - in addition, 
-\begin_inset CommandInset href
-LatexCommand href
-name "IP2Location"
-target "http://www.ip2location.com/"
-
-\end_inset
-
- and/or 
-\begin_inset CommandInset href
-LatexCommand href
-name "GeoIP"
-target "http://www.maxmind.com/"
-
-\end_inset
-
- information can be displayed, if databases are located on the system and
- supported.
+ used by 'ipv6calcweb.cgi') - in addition, database related information can
+ be displayed, if databases are located on the system and supported.
 \end_layout
 
 \begin_layout Code
@@ -2073,12 +2057,17 @@ IPV6_COUNTRYCODE=DE
 
 \begin_layout Code
 
+IPV6_COUNTRYCODE_SOURCE=GeoIP
+\end_layout
+
+\begin_layout Code
+
 IPV6_AS_NUM=6724
 \end_layout
 
 \begin_layout Code
 
-IPV6_AS_TEXT=AS6724 STRATO STRATO AG
+IPV6_AS_TEXT="AS6724 STRATO AG"
 \end_layout
 
 \begin_layout Code
@@ -2108,12 +2097,42 @@ IP2LOCATION_COUNTRY_SHORT=DE
 
 \begin_layout Code
 
-IP2LOCATION_COUNTRY_LONG=GERMANY
+IP2LOCATION_COUNTRY_LONG=Germany
 \end_layout
 
 \begin_layout Code
 
-GEOIP_AS_TEXT=AS6724 STRATO STRATO AG
+IP2LOCATION_REGION=Berlin
+\end_layout
+
+\begin_layout Code
+
+IP2LOCATION_CITY=Berlin
+\end_layout
+
+\begin_layout Code
+
+IP2LOCATION_LATITUDE=52.524368
+\end_layout
+
+\begin_layout Code
+
+IP2LOCATION_LONGITUDE=13.410530
+\end_layout
+
+\begin_layout Code
+
+IP2LOCATION_ZIPCODE=10178
+\end_layout
+
+\begin_layout Code
+
+IP2LOCATION_TIMEZONE=+01:00
+\end_layout
+
+\begin_layout Code
+
+GEOIP_AS_TEXT="AS6724 STRATO AG"
 \end_layout
 
 \begin_layout Code
@@ -2138,16 +2157,61 @@ GEOIP_LONGITUDE=9.000000
 
 \begin_layout Code
 
-IP2LOCATION_DATABASE_INFO=IP2L-DB1 20130307 Copyright (c) 2013 IP2Location
- All Rights Reserved
+GEOIP_CONTINENTCODE=EU
 \end_layout
 
 \begin_layout Code
 
-GEOIP_DATABASE_INFO=GEO-106FREE 20140506 Build 1 Copyright (c) 2014 MaxMind
- Inc All Rights Reserved / GEO-117 20130306 Build 1 Copyright (c) 2013 MaxMind
- Inc All Rights Reserved / GEO-536LITE 20140506 Build 1 Copyright (c) 2014
- MaxMind Inc All Rights Reserved
+DBIP_COUNTRY_SHORT=DE
+\end_layout
+
+\begin_layout Code
+
+DBIP_CITY=Berlin
+\end_layout
+
+\begin_layout Code
+
+DBIP_REGION=Berlin
+\end_layout
+
+\begin_layout Code
+
+EXTERNAL_COUNTRY_SHORT=DE
+\end_layout
+
+\begin_layout Code
+
+IP2LOCATION_DATABASE_INFO="IP2L-DB11 IPv6 LITE 20150329 Copyright (c) 2015
+ IP2Location All Rights Reserved / This site or product includes IP2Location
+ LITE data available from http://lite.ip2location.com"
+\end_layout
+
+\begin_layout Code
+
+GEOIP_DATABASE_INFO="GEO-106FREE 20150407 Build 1 Copyright (c) 2015 MaxMind
+ Inc All Rights Reserved / GEO-117 20150405 Build 1 Copyright (c) 2015 MaxMind
+ Inc All Rights Reserved / GEO-536LITE 20150407 Build 1 Copyright (c) 2015
+ MaxMind Inc All Rights Reserved"
+\end_layout
+
+\begin_layout Code
+
+DBIP_DATABASE_INFO="DBIP-2/20150301, created: 20150304-183312 UTC / DBIP-4/20150
+301, created: 20150304-183330 UTC"
+\end_layout
+
+\begin_layout Code
+
+EXTERNAL_DATABASE_INFO="EXTDB-4/AFRINIC/20150215 APNIC/20150213 ARIN/20150215
+ IANA/20140520 LACNIC/20150213 RIPENCC/20150214, created: 20150215-170924
+ UTC"
+\end_layout
+
+\begin_layout Code
+
+BUILTIN_DATABASE_INFO="IPv6-REG:AFRINIC/20150418 APNIC/20150417 ARIN/20150418
+ IANA/20150324 LACNIC/20150417 RIPENCC/20150417"
 \end_layout
 
 \begin_layout Code
@@ -2157,18 +2221,18 @@ IPV6CALC_NAME=ipv6calc
 
 \begin_layout Code
 
-IPV6CALC_VERSION=0.97.0
+IPV6CALC_VERSION=0.99.0
 \end_layout
 
 \begin_layout Code
 
-IPV6CALC_COPYRIGHT="(P) & (C) 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+IPV6CALC_COPYRIGHT="(P) & (C) 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
 "
 \end_layout
 
 \begin_layout Code
 
-IPV6CALC_OUTPUT_VERSION=7
+IPV6CALC_OUTPUT_VERSION=10
 \end_layout
 
 \begin_layout Code
@@ -2179,9 +2243,196 @@ IPV6CALC_SETTINGS_ANON="set=keep-type-asn-cc,mask-ipv6=56,mask-ipv4=24,mask-eui6
 
 \begin_layout Code
 
-IPV6CALC_FEATURES="IP2Location(dyn-load) GeoIP(dyn-load) GeoIPv6 ANON_ZEROISE
- ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_A
-S DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE"
+IPV6CALC_FEATURES="GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
+ DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC
+ DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION
+ DB_IPV6_REGION DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN
+-CC"
+\end_layout
+
+\begin_layout Code
+
+IPV6CALC_CAPABILITIES="GeoIP(linked) IP2Location(linked) DBIP External DB_AS_REG
+(BuiltIn) DB_CC_REG(BuiltIn) DB_IPV4_REG(BuiltIn) DB_IPV6_REG(BuiltIn) DB_IEEE(B
+uiltIn)"
+\end_layout
+
+\begin_layout Paragraph*
+Special machine readable output options (>= 0.99.0)
+\end_layout
+
+\begin_layout Subparagraph
+Output filter by selecting a token (>= 0.99.0)
+\end_layout
+
+\begin_layout Standard
+Using option --mrst <TOKEN> (Machine Readable Select Token) can be used
+ to display only token
+\end_layout
+
+\begin_layout Code
+
+$ ipv6calc -q -i --mrst IPV6_TYPE 2a01:238:423d:8800:85b3:9e6b:3019:8909
+ 
+\end_layout
+
+\begin_layout Code
+
+IPV6_TYPE=unicast,global-unicast,productive,iid-random,iid,iid-local
+\end_layout
+
+\begin_layout Subparagraph
+Output filter by matching token (>= 0.99.0)
+\end_layout
+
+\begin_layout Standard
+Using option --mrmt <TOKEN> (Machine Readable Match Token) can be used to
+ display only matching tokens
+\end_layout
+
+\begin_layout Code
+
+$ ipv6calc -q -i --mrmt IP2LOCATION 2a01:238:423d:8800:85b3:9e6b:3019:8909
+ 
+\end_layout
+
+\begin_layout Code
+
+IP2LOCATION_COUNTRY_SHORT=DE
+\end_layout
+
+\begin_layout Code
+
+IP2LOCATION_COUNTRY_LONG=Germany
+\end_layout
+
+\begin_layout Code
+
+IP2LOCATION_REGION=Berlin
+\end_layout
+
+\begin_layout Code
+
+IP2LOCATION_CITY=Berlin
+\end_layout
+
+\begin_layout Code
+
+IP2LOCATION_LATITUDE=52.524368
+\end_layout
+
+\begin_layout Code
+
+IP2LOCATION_LONGITUDE=13.410530
+\end_layout
+
+\begin_layout Code
+
+IP2LOCATION_ZIPCODE=10178
+\end_layout
+
+\begin_layout Code
+
+IP2LOCATION_TIMEZONE=+01:00
+\end_layout
+
+\begin_layout Code
+
+IP2LOCATION_DATABASE_INFO="IP2L-DB11 IPv6 LITE 20150329 Copyright (c) 2015
+ IP2Location All Rights Reserved / This site or product includes IP2Location
+ LITE data available from http://lite.ip2location.com"
+\end_layout
+
+\begin_layout Subparagraph
+Output filter by selecting a value of a token token (>= 0.99.0)
+\end_layout
+
+\begin_layout Standard
+Using option --mrtvo <TOKEN> (Machine Readable Token Value Only) can be
+ used to display only value of a token
+\end_layout
+
+\begin_layout Code
+
+$ ipv6calc -q -i --mrtvo IPV6_TYPE 2a01:238:423d:8800:85b3:9e6b:3019:8909
+ 
+\end_layout
+
+\begin_layout Code
+
+unicast,global-unicast,productive,iid-random,iid,iid-local
+\end_layout
+
+\begin_layout Subparagraph
+Output adjustment by unconditional quoting of values (>= 0.99.0)
+\end_layout
+
+\begin_layout Standard
+Using option --mrqva (Machine Readable Quote Values Always) can be used
+ to quote values always
+\end_layout
+
+\begin_layout Code
+
+$ ipv6calc -q -i --mrqva --mrtvo IPV6_TYPE 2a01:238:423d:8800:85b3:9e6b:3019:890
+9 
+\end_layout
+
+\begin_layout Code
+
+"unicast,global-unicast,productive,iid-random,iid,iid-local"
+\end_layout
+
+\begin_layout Subparagraph
+Output adjustment by unconditional disabling quoted values (>= 0.99.0)
+\end_layout
+
+\begin_layout Standard
+Using option --mrqvn (Machine Readable Quote Values Never) can be used to
+ never quote values
+\end_layout
+
+\begin_layout Code
+
+$ ipv6calc -q -i --mrqvn --mrst IPV6_AS_TEXT 2a01:238:423d:8800:85b3:9e6b:3019:8
+909 
+\end_layout
+
+\begin_layout Code
+
+IPV6_AS_TEXT=AS6724 STRATO AG
+\end_layout
+
+\begin_layout Subparagraph
+Output adjustment by unconditional print token in case of empty value (>=
+ 0.99.0)
+\end_layout
+
+\begin_layout Standard
+Using option --mrstpq (Machine Readable Select Token Print Always) can be
+ used to print always token/value regardless it's contained
+\end_layout
+
+\begin_layout Code
+
+$ ipv6calc -q -i --mrqva --mrstpa IPV4 2a01:238:423d:8800:85b3:9e6b:3019:8909
+ 
+\end_layout
+
+\begin_layout Code
+
+IPV4=""
+\end_layout
+
+\begin_layout Code
+
+$ ipv6calc -q -i --mrqvn --mrst IPV4 2a01:238:423d:8800:85b3:9e6b:3019:8909
+ 
+\end_layout
+
+\begin_layout Code
+
+(no output)
 \end_layout
 
 \begin_layout Subsubsection
@@ -2516,7 +2767,7 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 
 \begin_layout Code
 
-Other usage:
+ Other usage:
 \end_layout
 
 \begin_layout Code
@@ -2526,7 +2777,41 @@ Other usage:
 
 \begin_layout Code
 
-  --showinfo|-i --show_types            : show available types on '-m'
+  --showinfo|-i --mrqva                 : Machine Readable Quote Values
+ Always
+\end_layout
+
+\begin_layout Code
+
+  --showinfo|-i --mrqvn                 : Machine Readable Quote Values
+ Never
+\end_layout
+
+\begin_layout Code
+
+  --showinfo|-i --mrst <TOKEN>          : Machine Readable Select Token
+\end_layout
+
+\begin_layout Code
+
+  --showinfo|-i --mrstpa <TOKEN>        : Machine Readable Select Token
+ Print Always
+\end_layout
+
+\begin_layout Code
+
+  --showinfo|-i --mrmt <TOKEN>          : Machine Readable Match Token
+\end_layout
+
+\begin_layout Code
+
+  --showinfo|-i --mrtvo <TOKEN>         : Machine Readable Token Value Only
+\end_layout
+
+\begin_layout Code
+
+  --showinfo|-i --show-tokens           : show available tokens (aka types)
+ on '-m'
 \end_layout
 
 \begin_layout Code
@@ -3167,7 +3452,6 @@ ipv6calc: version 0.99.0 GeoIP GeoIPv6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG
 \end_layout
 
 \begin_layout Standard
-
 Example for some filter expressions:
 \end_layout
 

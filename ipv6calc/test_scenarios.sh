@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.48 2015/04/23 20:49:04 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.49 2015/04/29 20:22:48 ds6peter Exp $
 # Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -385,8 +385,12 @@ a909:16fa:9092:23ff:a909:4941::7	IPV6_REGISTRY=RIPENCC
 # output variations
 1.2.3.4					1.2.3.4|--mrtvo IPV4
 1.2.3.4					"1.2.3.4"|--mrtvo IPV4 --mrqva
-1.2.3.4					IPV4=1.2.3.4|--mrft IPV4
-1.2.3.4					IPV4="1.2.3.4"|--mrft IPV4 --mrqva
+1.2.3.4					IPV4=1.2.3.4|--mrst IPV4
+1.2.3.4					IPV4="1.2.3.4"|--mrst IPV4 --mrqva
+2a01:238:423d:8800:85b3:9e6b:3019:8909	IPV4=""|--mrstpa IPV4 --mrqva
+2a01:238:423d:8800:85b3:9e6b:3019:8909	"unicast,global-unicast,productive,iid-random,iid,iid-local"|--mrqva --mrtvo IPV6_TYPE
+2a01:238:423d:8800:85b3:9e6b:3019:8909	unicast,global-unicast,productive,iid-random,iid,iid-local|--mrqvn --mrtvo IPV6_TYPE
+2a01:238:423d:8800:85b3:9e6b:3019:8909	IPV6_TYPE=unicast,global-unicast,productive,iid-random,iid,iid-local|--mrst IPV6_TYPE
 END
 }
 

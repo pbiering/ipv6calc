@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
-<!-- XML file was created by LyX 2.1.2
+<!-- XML file was created by LyX 2.1.3
   See http://www.lyx.org/ for more information -->
 <article lang="en_US">
 <articleinfo>
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>5.0</revnumber> <date>2015-02-20</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>5.1</revnumber> <date>2015-04-19</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freshmeat.net/projects/ipv6calc/">freshmeat / ipv6calc</ulink> page (not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 0.98.0 (released 2015-02-21)</para></sect2><sect2>
+<para>Latest version since last update of this page is 0.99.0 (released 2015-04-xx)</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
 <listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem></itemizedlist></sect2><sect2>
@@ -24,7 +24,10 @@
 <listitem><para>IEEE IAB, OUI, OUI-36 databases (for decoding vendor part of MAC/EUI-48/EUI-64)</para></listitem><listitem><para>IPv4 assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for selecting proper registry in ipv6calcweb.cgi and IPv4 anonymization)</para></listitem><listitem><para>IPv6 assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for selecting proper registry in ipv6calcweb.cgi and IPv6 anonymization)</para></listitem><listitem><para>ASN assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for IP anonymization)</para></listitem></itemizedlist></sect2><sect2>
 <title>Possible external databases</title>
 <para>If enabled during compiling the tool, following external (but local stored) databases can be used</para><itemizedlist>
-<listitem><para>GeoIP IPv4, IPv6 (since 0.90.0, req. GeoIP &gt;= 1.4.5)</para></listitem><listitem><para>IP2Location IPv4, IPv6</para></listitem><listitem><para>DB-IP.com (since 0.98.0), based on local Berkeley DB files generated from downloaded CSV files</para></listitem><listitem><para>&ldquo;External&rdquo; (since 0.98.0), based on local Berkeley DB files, generated from downloaded TXT/XML files (registries assignment databases). Supporting IPv4/IPv6 to Registries and IPv4/IPv6 to CountryCode. If newer, overruling the related included databases.</para></listitem></itemizedlist><para>Since version 0.95.0 the tool can be compiled to use dynamically loading of library, means the binaries can be also used on systems where IP2Location or GeoIP libraries are not existing. On such system, the support is simply disabled then and some capabilities/features which requires the databases are disabled.</para></sect2></sect1><sect1>
+<listitem><para><ulink url="http://www.maxmind.com/">GeoIP</ulink></para><itemizedlist>
+<listitem><para>IPv4</para></listitem><listitem><para>IPv6 (since 0.90.0, req. GeoIP &gt;= 1.4.5)</para></listitem></itemizedlist></listitem><listitem><para><ulink url="http://www.ip2.location.com/">IP2Location</ulink></para><itemizedlist>
+<listitem><para>IPv4</para></listitem><listitem><para>IPv6 (<ulink url="http://lite.ip2location.com/">LITE</ulink> databases since 0.99.0)</para></listitem></itemizedlist></listitem><listitem><para><ulink url="http://www.db-ip.com/">DB-IP.com</ulink> (since 0.98.0), based on local Berkeley DB files generated from downloaded CSV files</para></listitem><listitem><para>&ldquo;External&rdquo; (since 0.98.0), based on local Berkeley DB files, generated from downloaded TXT/XML files (registries assignment databases). Supporting IPv4/IPv6 to Registries and IPv4/IPv6 to CountryCode. If newer, overruling the related included databases.</para></listitem></itemizedlist><para>Since version 0.95.0 the tool can be compiled to use dynamically loading of library, means the binaries can be also used on systems where IP2Location or GeoIP libraries are not existing. On such system, the support is simply disabled then and some capabilities/features which requires the databases are disabled.</para>
+<para>Since version 0.97.4 also fallback code for GeoIP and IP2Location is included in the source package, means that support of dynamically loading of library can be included during compilation without having related development sources on the system.</para></sect2></sect1><sect1>
 <title>License</title>
 <para>The program is published under the GNU GPL version 2.</para></sect1><sect1>
 <title>Copyright</title>
@@ -183,7 +186,7 @@ GeoIP available databases: Country4=1 Country6=1 ASN4=1 ASN6=1 City4=1 City6=1
 IP2Location support enabled, compiled with include file version: 6.0.2
 IP2Location support enabled, compiled with API version: 4.0.0
 IP2Location support by dynamic library load
-IP2Location configured dynamic library file and detected version: libIP2Location.so LIBARY-NOT-LOADED
+IP2Location configured dynamic library file and detected version: libIP2Location.so LIBRARY-NOT-LOADED
 IP2Location available databases: Country4=1 Country6=1 ASN4=0 ASN6=0 City4=0 City6=0
 
 BuiltIn databases available: ASN_REG=1 IPV4_REG=1 IPV6_REG=1 IEEE=1 CC_REG=1
@@ -312,34 +315,90 @@ IPv4 registry[206.73.118.1]: ARIN
 Address type is Teredo and included IPv4 server address is: 80.181.121.64 and client port: 4096
 IPv4 registry for Teredo server address: ARIN
 Registry for address: reserved
-]]></screen><para>There exists also a machine readable output (e.g. used by 'ipv6calcweb.cgi') - in addition, <ulink url="http://www.ip2location.com/">IP2Location</ulink> and/or <ulink url="http://www.maxmind.com/">GeoIP</ulink> information can be displayed, if databases are located on the system and supported.</para><screen>
+]]></screen><para>There exists also a machine readable output (e.g. used by 'ipv6calcweb.cgi') - in addition, database related information can be displayed, if databases are located on the system and supported.</para><screen>
 <![CDATA[$ ipv6calc -q -i -m 2a01:238:423d:8800:85b3:9e6b:3019:8909  
 IPV6=2a01:0238:423d:8800:85b3:9e6b:3019:8909
 IPV6_ANON=a909:16fa:9091:a448:a909:4941:0000:0007
 IPV6_TYPE=unicast,global-unicast,productive,iid-random,iid,iid-local
 IPV6_COUNTRYCODE=DE
+IPV6_COUNTRYCODE_SOURCE=GeoIP
 IPV6_AS_NUM=6724
-IPV6_AS_TEXT=AS6724 STRATO STRATO AG
+IPV6_AS_TEXT="AS6724 STRATO AG"
 IPV6_REGISTRY=RIPENCC
 SLA=8800
 IID=85b3:9e6b:3019:8909
 EUI64_SCOPE=local-random
 IP2LOCATION_COUNTRY_SHORT=DE
-IP2LOCATION_COUNTRY_LONG=GERMANY
-GEOIP_AS_TEXT=AS6724 STRATO STRATO AG
+IP2LOCATION_COUNTRY_LONG=Germany
+IP2LOCATION_REGION=Berlin
+IP2LOCATION_CITY=Berlin
+IP2LOCATION_LATITUDE=52.524368
+IP2LOCATION_LONGITUDE=13.410530
+IP2LOCATION_ZIPCODE=10178
+IP2LOCATION_TIMEZONE=+01:00
+GEOIP_AS_TEXT="AS6724 STRATO AG"
 GEOIP_COUNTRY_SHORT=DE
 GEOIP_COUNTRY_LONG=Germany
 GEOIP_LATITUDE=51.000000
 GEOIP_LONGITUDE=9.000000
-IP2LOCATION_DATABASE_INFO=IP2L-DB1 20130307 Copyright (c) 2013 IP2Location All Rights Reserved
-GEOIP_DATABASE_INFO=GEO-106FREE 20140506 Build 1 Copyright (c) 2014 MaxMind Inc All Rights Reserved / GEO-117 20130306 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved / GEO-536LITE 20140506 Build 1 Copyright (c) 2014 MaxMind Inc All Rights Reserved
+GEOIP_CONTINENTCODE=EU
+DBIP_COUNTRY_SHORT=DE
+DBIP_CITY=Berlin
+DBIP_REGION=Berlin
+EXTERNAL_COUNTRY_SHORT=DE
+IP2LOCATION_DATABASE_INFO="IP2L-DB11 IPv6 LITE 20150329 Copyright (c) 2015 IP2Location All Rights Reserved / This site or product includes IP2Location LITE data available from http://lite.ip2location.com"
+GEOIP_DATABASE_INFO="GEO-106FREE 20150407 Build 1 Copyright (c) 2015 MaxMind Inc All Rights Reserved / GEO-117 20150405 Build 1 Copyright (c) 2015 MaxMind Inc All Rights Reserved / GEO-536LITE 20150407 Build 1 Copyright (c) 2015 MaxMind Inc All Rights Reserved"
+DBIP_DATABASE_INFO="DBIP-2/20150301, created: 20150304-183312 UTC / DBIP-4/20150301, created: 20150304-183330 UTC"
+EXTERNAL_DATABASE_INFO="EXTDB-4/AFRINIC/20150215 APNIC/20150213 ARIN/20150215 IANA/20140520 LACNIC/20150213 RIPENCC/20150214, created: 20150215-170924 UTC"
+BUILTIN_DATABASE_INFO="IPv6-REG:AFRINIC/20150418 APNIC/20150417 ARIN/20150418 IANA/20150324 LACNIC/20150417 RIPENCC/20150417"
 IPV6CALC_NAME=ipv6calc
-IPV6CALC_VERSION=0.97.0
-IPV6CALC_COPYRIGHT="(P) & (C) 2001-2014 by Peter Bieringer <pb (at) bieringer.de>"
-IPV6CALC_OUTPUT_VERSION=7
+IPV6CALC_VERSION=0.99.0
+IPV6CALC_COPYRIGHT="(P) & (C) 2001-2015 by Peter Bieringer <pb (at) bieringer.de>"
+IPV6CALC_OUTPUT_VERSION=10
 IPV6CALC_SETTINGS_ANON="set=keep-type-asn-cc,mask-ipv6=56,mask-ipv4=24,mask-eui64=40,mask-mac=24,method=keep-type-asn-cc"
-IPV6CALC_FEATURES="IP2Location(dyn-load) GeoIP(dyn-load) GeoIPv6 ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE"
-]]></screen></sect3><sect3>
+IPV6CALC_FEATURES="GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC"
+IPV6CALC_CAPABILITIES="GeoIP(linked) IP2Location(linked) DBIP External DB_AS_REG(BuiltIn) DB_CC_REG(BuiltIn) DB_IPV4_REG(BuiltIn) DB_IPV6_REG(BuiltIn) DB_IEEE(BuiltIn)"
+]]></screen><bridgehead renderas="sect4">Special machine readable output options (&gt;= 0.99.0)</bridgehead><sect5>
+<title>Output filter by selecting a token (&gt;= 0.99.0)</title>
+<para>Using option --mrst &lt;TOKEN&gt; (Machine Readable Select Token) can be used to display only token</para><screen>
+<![CDATA[$ ipv6calc -q -i --mrst IPV6_TYPE 2a01:238:423d:8800:85b3:9e6b:3019:8909 
+IPV6_TYPE=unicast,global-unicast,productive,iid-random,iid,iid-local
+]]></screen></sect5><sect5>
+<title>Output filter by matching token (&gt;= 0.99.0)</title>
+<para>Using option --mrmt &lt;TOKEN&gt; (Machine Readable Match Token) can be used to display only matching tokens</para><screen>
+<![CDATA[$ ipv6calc -q -i --mrmt IP2LOCATION 2a01:238:423d:8800:85b3:9e6b:3019:8909 
+IP2LOCATION_COUNTRY_SHORT=DE
+IP2LOCATION_COUNTRY_LONG=Germany
+IP2LOCATION_REGION=Berlin
+IP2LOCATION_CITY=Berlin
+IP2LOCATION_LATITUDE=52.524368
+IP2LOCATION_LONGITUDE=13.410530
+IP2LOCATION_ZIPCODE=10178
+IP2LOCATION_TIMEZONE=+01:00
+IP2LOCATION_DATABASE_INFO="IP2L-DB11 IPv6 LITE 20150329 Copyright (c) 2015 IP2Location All Rights Reserved / This site or product includes IP2Location LITE data available from http://lite.ip2location.com"
+]]></screen></sect5><sect5>
+<title>Output filter by selecting a value of a token token (&gt;= 0.99.0)</title>
+<para>Using option --mrtvo &lt;TOKEN&gt; (Machine Readable Token Value Only) can be used to display only value of a token</para><screen>
+<![CDATA[$ ipv6calc -q -i --mrtvo IPV6_TYPE 2a01:238:423d:8800:85b3:9e6b:3019:8909 
+unicast,global-unicast,productive,iid-random,iid,iid-local
+]]></screen></sect5><sect5>
+<title>Output adjustment by unconditional quoting of values (&gt;= 0.99.0)</title>
+<para>Using option --mrqva (Machine Readable Quote Values Always) can be used to quote values always</para><screen>
+<![CDATA[$ ipv6calc -q -i --mrqva --mrtvo IPV6_TYPE 2a01:238:423d:8800:85b3:9e6b:3019:8909 
+"unicast,global-unicast,productive,iid-random,iid,iid-local"
+]]></screen></sect5><sect5>
+<title>Output adjustment by unconditional disabling quoted values (&gt;= 0.99.0)</title>
+<para>Using option --mrqvn (Machine Readable Quote Values Never) can be used to never quote values</para><screen>
+<![CDATA[$ ipv6calc -q -i --mrqvn --mrst IPV6_AS_TEXT 2a01:238:423d:8800:85b3:9e6b:3019:8909 
+IPV6_AS_TEXT=AS6724 STRATO AG
+]]></screen></sect5><sect5>
+<title>Output adjustment by unconditional print token in case of empty value (&gt;= 0.99.0)</title>
+<para>Using option --mrstpq (Machine Readable Select Token Print Always) can be used to print always token/value regardless it's contained</para><screen>
+<![CDATA[$ ipv6calc -q -i --mrqva --mrstpa IPV4 2a01:238:423d:8800:85b3:9e6b:3019:8909 
+IPV4=""
+$ ipv6calc -q -i --mrqvn --mrst IPV4 2a01:238:423d:8800:85b3:9e6b:3019:8909 
+(no output)
+]]></screen></sect5></sect3><sect3>
 <title>Filter mode</title>
 <para>&ldquo;ipv6calc&rdquo; can run in filter mode to be able to extract from a huge list of IPv4/IPv6 addresses ones which are interesting or ones which are not interesting (see printout of online help below).</para>
 <para>Filter tokens are the ones which are listed on &ldquo;TYPE&rdquo; lines shown in &ldquo;-m -i&rdquo; information mode.</para>
@@ -397,9 +456,15 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many more
   Available output types:  [-m] -O|--out    -?|-h|--help
   Available action types:  [-m] -A|--action -?|-h|--help
 
-Other usage:
+ Other usage:
   --showinfo|-i [--machine_readable|-m] : show information about input data
-  --showinfo|-i --show_types            : show available types on '-m'
+  --showinfo|-i --mrqva                 : Machine Readable Quote Values Always
+  --showinfo|-i --mrqvn                 : Machine Readable Quote Values Never
+  --showinfo|-i --mrst <TOKEN>          : Machine Readable Select Token
+  --showinfo|-i --mrstpa <TOKEN>        : Machine Readable Select Token Print Always
+  --showinfo|-i --mrmt <TOKEN>          : Machine Readable Match Token
+  --showinfo|-i --mrtvo <TOKEN>         : Machine Readable Token Value Only
+  --showinfo|-i --show-tokens           : show available tokens (aka types) on '-m'
 
 Usage with shortcut options: <shortcut option> [<format option> ...] <input data>
   for more information and available format options use: <shortcut option> -?|-h|--help
@@ -498,17 +563,20 @@ ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4
                        --6rd_prefix ...
                        --6rd_relay_prefix ...
   filter           : Filter addresses related to filter options
-]]></screen><para>Special action &ldquo;filter&rdquo;:</para><screen>
-<![CDATA[
-$ ipv6calc --action filter -h
-ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
+]]></screen></sect3><sect3>
+<title>Special action &ldquo;filter&rdquo;:</title>
+<para>Special action &ldquo;filter&rdquo; can be used especially in pipe mode to filter IP addresses related to their type and since 0.99.0 also related to database results (CountryCode, ASN or Registry).</para><screen>
+<![CDATA[$ ipv6calc --action filter -h
+ipv6calc: version 0.99.0 GeoIP GeoIPv6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 
  Filter given addresses from stdout by filter expression, e.g.
   echo '2001:db8::1' | ipv6calc [-A filter] -E iid-local
   echo '2001:db8::1' | ipv6calc [-A filter] -E iid-local,global-unicast
-  echo '2001:db8::1' | ipv6calc [-A filter] -E ^iid-randomy
+  echo '2001:db8::1' | ipv6calc [-A filter] -E ^iid-random
 
  (note: since version 0.95.0 '-A filter' is autoselected if option '-E <filter expression>' is given)
+
+ negation of filter expression with prefix: ^
 
   IPv6 address filter tokens:
    ipv6  unknown unicast multicast anycast loopback link-local site-local compat-v4 mapped reserved unique-local-unicast anonymized-iid anonymized-prefix 6to4 6bone global-unicast unspecified solicited-node productive 6to4-microsoft teredo orchid link-local-teredo nat64 iid-random iid iid-local iid-global iid-teredo iid-eui48 iid-eui64 iid-isatap iid-includes-ipv4
@@ -516,11 +584,42 @@ ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4
   IPv4 address filter tokens:
    ipv4  any unicast multicast anycast broadcast loopback unspecified unknown reserved zeroconf site-local anonymized global 6to4relay
 
+  IPv4/v6 address filter tokens based on databases:
+   [^][ipv4.|ipv6.]db.cc=<CC>|unknown (Country Code [2 chars])
+   [^][ipv4.|ipv6.]db.asn=<ASN>|unknown (Autonomous System Number [numeric])
+   [^][ipv4.|ipv6.]db.reg=<REGISTRY> (Registry)
+    Registry tokens: 6BONE IANA APNIC ARIN RIPENCC LACNIC AFRINIC 6TO4 reserved unknown
+
   EUI-48/MAC address filter tokens:
     IMPLEMENTATION MISSING
 
   EUI-64 address filter tokens:
     IMPLEMENTATION MISSING
+]]></screen><para>Example for some filter expressions:</para><screen>
+<![CDATA[$ cat ip.bieringer.de-log.201504 | ipv6calc -E ipv6.db.cc=DE | wc -l
+5068
+
+$ cat ip.bieringer.de-log.201504 | ipv6calc -E ipv6.db.cc=US | wc -l
+305
+
+$ cat ip.bieringer.de-log.201504 | ipv6calc -E ipv6.db.reg=ARIN | wc -l
+306
+
+$ cat ip.bieringer.de-log.201504 | ipv6calc -E iid-random | wc -l
+4806
+
+$ cat ip.bieringer.de-log.201504 | ipv6calc -E ipv6.db.cc=US,iid-random | wc -l
+16
+
+$ cat ip.bieringer.de-log.201504 | ipv6calc -A filter -E ipv6.db.cc=US,iid-random,ipv4.db.cc=US | wc -l
+1842
+
+$ cat ip.bieringer.de-log.201504 | ipv6calc -A filter -E db.asn=8767 | wc -l
+2363
+$ cat ip.bieringer.de-log.201504 | ipv6calc -A filter -E ipv6.db.asn=8767 | wc -l
+1452
+$ cat ip.bieringer.de-log.201504 | ipv6calc -A filter -E ipv4.db.asn=8767 | wc -l
+911
 ]]></screen></sect3></sect2></sect1><sect1>
 <title>Webserver log conversion helper program "ipv6logconv"</title>
 <para>This program parses address tokens of a given webserver logfile and converts them to special strings, useful for statistics (e.g. created by using "analog").</para><sect2>
@@ -722,24 +821,32 @@ This program anonymizes IPv4/IPv6 addresses in e.g. HTTP server log files
 <title>IP2Location</title>
 <screen>
 <![CDATA[$ /usr/share/ipv6calc/tools/IP2Location-update.sh -h
-Usage: IP2Location-update.sh [-D <dir>]
-	-D <dir>	database directory (optional)
+Usage: IP2Location-update.sh [-D <dir>] [-n] [-s]
+	-D <dir>	database destination directory (optional)
+	-n		no action (dry-run)
+	-s		skip already successfully downloaded files
 
 	database directory: /usr/share/IP2Location (default: /usr/share/IP2Location)
 
 	it honors externally defined environment value: IP2LOCATION_DAT_DIR
 
  this script will download data from ip2location.com
- into given/set database directory
+  into given/set database directory
 
- Samples:
- IP2LOCATION_DAT_URL_BASE_SAMPLE=http://www.ip2location.com/downloads
- IP2LOCATION_DAT_FILES_SAMPLE=20
- (create also softlink to IP-COUNTRY.BIN if not existing)
+ Sample databases:
+  IP2LOCATION_DAT_FILES_SAMPLE=IPv4:20 IPv6:20 IPv4:24 IPv6:24
 
- With authentication (requires login/password in $HOME/.ip2location) and a valid subscription
- IP2LOCATION_DAT_URL_BASE=http://www.ip2location.com/download?login=@LOGIN@&password=@PASSWORD@
- IP2LOCATION_DAT_FILES=IPV6BIN
+ Lite (free) databases:
+  IP2LOCATION_DAT_FILES_LITE_FREE=IPv4:1 IPv6:1
+ 
+ With authentication (requires login/password in /home/compile/.ip2location) and a valid subscription
+  IP2LOCATION_DAT_FILES_LITE=
+ 
+ Credentials must be defined in $HOME/.ip2location by
+  login=IP2LOCATION-LOGIN
+  password=IP2LOCATION-PASSWORD
+
+ In addition settings from above can be overwritten by setting related variables
 ]]></screen></sect2><sect2>
 <title>GeoIP</title>
 <screen>
@@ -952,7 +1059,7 @@ ALL  46233 62292 0 2397 3525 40198 97 16 0 0 129 839 61074 0 0 0 0 0 16 51 0 0 0
 <para>Major extensions/changes are listed here</para><sect2>
 <title>2015</title>
 <itemizedlist>
-<listitem><para>Add support for DB-IP.com (by generated Berkeley DB files)</para></listitem><listitem><para>Add support for &ldquo;External&rdquo; database files (generated Berkeley DB files), superseeding (if newer) built-in IPv4/IPv6-&gt;Registry and adding IPv4/IPv6-&gt;CountryCode support</para></listitem></itemizedlist></sect2><sect2>
+<listitem><para>Add support for <ulink url="http://www.db-ip.com/">DB-IP.com</ulink> databases (by generated Berkeley DB files) (&gt;= 0.98.0)</para></listitem><listitem><para>Add support for &ldquo;External&rdquo; database files (generated Berkeley DB files), superseeding (if newer) built-in IPv4/IPv6-&gt;Registry and adding IPv4/IPv6-&gt;CountryCode support (&gt;= 0.98.0)</para></listitem><listitem><para>Extend filter options with support of CountryCode, ASN or Registry (&gt;= 0.99.0)</para></listitem><listitem><para>Add support for <ulink url="http://lite.ip2location.com/">IP2Location LITE</ulink> databases (&gt;= 0.99.0)</para></listitem></itemizedlist></sect2><sect2>
 <title>2014</title>
 <itemizedlist>
 <listitem><para>Shared library mode supported (reduces size of binaries)</para></listitem></itemizedlist></sect2><sect2>

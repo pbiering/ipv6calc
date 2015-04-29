@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.391 2015/04/23 20:49:04 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.392 2015/04/29 20:22:47 ds6peter Exp $ 
  */
 
 Info:
@@ -9,10 +9,13 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20150429/PB
+	add filter for token match and empty value on machine readable output
+
 20150423/PB
 	add extension for IP2Location LITE disclaimer
 	improve quoting of machine readable ipv6calc output
-	add additional options for controlling quoting and filter machine readable output
+	add additional options for controling quoting and filter machine readable output
 	add all database fields to non-machinereadable output
 
 20150417/PB

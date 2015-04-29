@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.134 2015/04/27 19:03:42 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.135 2015/04/29 20:22:48 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -46,8 +46,6 @@
 #ifdef SUPPORT_GEOIP
 #include "GeoIP.h"
 #include "GeoIPCity.h"
-extern int use_geoip_ipv4;
-extern int use_geoip_ipv6;
 #endif
 
 /* from anonymizer */
@@ -169,9 +167,16 @@ void showinfo_availabletypes(void) {
 static void printout(const char *token, const char *value, const uint32_t formatoptions) {
 	int quote = 0;
 
-	if (formatoptions & FORMATOPTION_mr_filter_token) {
-		// skip not matching token
+	if (formatoptions & FORMATOPTION_mr_select_token) {
+		// skip not matching token (equal)
 		if (strcmp(showinfo_machine_readable_filter, token) != 0) return;
+
+		showinfo_machine_readable_filter_used = 1;
+	};
+
+	if (formatoptions & FORMATOPTION_mr_match_token) {
+		// skip not matching token (begin)
+		if (strncmp(showinfo_machine_readable_filter, token, strlen(showinfo_machine_readable_filter)) != 0) return;
 	};
 
 	if (strstr(value, " ") != NULL) {
@@ -202,11 +207,22 @@ static void printout(const char *token, const char *value, const uint32_t format
 static void printout2(const char *token, const char *additional, const char *value, const uint32_t formatoptions) {
 	int quote = 0;
 
-	if (formatoptions & FORMATOPTION_mr_filter_token) {
-		// skip not matching token
-		if (strcmp(showinfo_machine_readable_filter, token) != 0) return;
+	if (formatoptions & FORMATOPTION_mr_select_token) {
 		// skip in case additional is not empty
 		if ((additional != NULL) && (strlen(additional) > 0)) return;
+
+		// skip not matching token
+		if (strcmp(showinfo_machine_readable_filter, token) != 0) return;
+
+		showinfo_machine_readable_filter_used = 1;
+	};
+
+	if (formatoptions & FORMATOPTION_mr_match_token) {
+		// skip in case additional is not empty
+		if ((additional != NULL) && (strlen(additional) > 0)) return;
+
+		// skip not matching token (begin)
+		if (strncmp(showinfo_machine_readable_filter, token, strlen(showinfo_machine_readable_filter)) != 0) return;
 	};
 
 	if (strstr(value, " ") != NULL) {
@@ -234,6 +250,10 @@ static void printout2(const char *token, const char *additional, const char *val
 static void printfooter(const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST] = "";
 	char tempstring2[NI_MAXHOST] = "";
+
+	if ((formatoptions & FORMATOPTION_mr_select_token_pa) && (showinfo_machine_readable_filter_used == 0)) {
+		printout(showinfo_machine_readable_filter, "", formatoptions);
+	};
 
 #if defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN
 	char *string;
