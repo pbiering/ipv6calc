@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.18 2014/10/11 18:57:57 ds6peter Exp $
- * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.19 2015/04/30 18:52:41 ds6peter Exp $
+ * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc DB-IP.com database wrapper
@@ -195,15 +195,15 @@ void libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(const int level_verbose, 
 			// DBIP returned that database is available
 			dbp = libipv6calc_db_wrapper_DBIP_open_type(type | 0x10000, NULL);
 			if (dbp == NULL) {
-				printf("%sDBIP: %-27s: %-40s (CAN'T OPEN database information)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_dbfilename(type));
+				printf("%sDBIP: %-30s: %-30s (CAN'T OPEN database information)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_dbfilename(type));
 			} else {
-				printf("%sDBIP: %-27s: %-40s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_dbfilename(type), libipv6calc_db_wrapper_DBIP_database_info(type));
+				printf("%sDBIP: %-30s: %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_db_file_desc[i].filename, libipv6calc_db_wrapper_DBIP_database_info(type));
 				libipv6calc_db_wrapper_DBIP_close(dbp);
 				count++;
 			};
 		} else {
 			if (level_verbose == LEVEL_VERBOSE2) {
-				printf("%sDBIP: %-27s: %-40s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_dbfilename(type), strerror(errno));
+				printf("%sDBIP: %-30s: %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_dbfilename(type), strerror(errno));
 			};
 			continue;
 		};

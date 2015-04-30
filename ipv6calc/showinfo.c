@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.135 2015/04/29 20:22:48 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.136 2015/04/30 18:52:41 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -146,7 +146,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " BUILTIN_DATABASE_INFO=.. .    : Information about the used databases\n");
 #endif
 	fprintf(stderr, " IPV6CALC_NAME=name            : Name of ipv6calc\n");
-	fprintf(stderr, " IPV6CALC_VERSION=x.y          : Version of ipv6calc\n");
+	fprintf(stderr, " IPV6CALC_VERSION=x.y.z        : Version of ipv6calc\n");
 	fprintf(stderr, " IPV6CALC_COPYRIGHT=\"...\"      : Copyright string\n");
 	fprintf(stderr, " IPV6CALC_OUTPUT_VERSION=x     : Version of output format\n");
 	fprintf(stderr, " IPV6CALC_FEATURES=\"...\"       : Feature string of ipv6calc -v\n");
@@ -154,10 +154,11 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV6CALC_SETTINGS_ANON=\"...\"  : Anonymizer settings\n");
 
 	fprintf(stderr, "\n");
-	fprintf(stderr, "Notes: quoting is autodetected by default\n");
-	fprintf(stderr, "       quoting can be controlled via\n");
+	fprintf(stderr, "Notes: quoting of values can be controlled via\n");
 	fprintf(stderr, "          --mrqva (always) --mrqvn (never)\n");
-	fprintf(stderr, "       specific token can be filtered using --mrft <TOKEN>\n");
+	fprintf(stderr, "       specific token can be selected using --mrst <TOKEN>\n");
+	fprintf(stderr, "         even in case of no/empty output: --mrstpa <TOKEN>\n");
+	fprintf(stderr, "       matching tokens can be selected using --mrmt <TOKEN>\n");
 	fprintf(stderr, "       value of a specific token can be displayed using --mrtvo <TOKEN>\n");
 };
 
@@ -179,11 +180,13 @@ static void printout(const char *token, const char *value, const uint32_t format
 		if (strncmp(showinfo_machine_readable_filter, token, strlen(showinfo_machine_readable_filter)) != 0) return;
 	};
 
+	/* automatic quoting disabled
 	if (strstr(value, " ") != NULL) {
 		quote = 1;
 	};
+	*/
 
-	if (strcmp(token, "IPV6CALC_SETTINGS_ANON") == 0) {
+	if ((formatoptions & FORMATOPTION_mr_quote_default) != 0) {
 		quote = 1;
 	};
 
@@ -225,7 +228,13 @@ static void printout2(const char *token, const char *additional, const char *val
 		if (strncmp(showinfo_machine_readable_filter, token, strlen(showinfo_machine_readable_filter)) != 0) return;
 	};
 
+	/* automatic quoting disabled
 	if (strstr(value, " ") != NULL) {
+		quote = 1;
+	};
+	*/
+
+	if ((formatoptions & FORMATOPTION_mr_quote_default) != 0) {
 		quote = 1;
 	};
 
@@ -317,13 +326,13 @@ static void printfooter(const uint32_t formatoptions) {
 	if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
 		printout("IPV6CALC_NAME"     , PROGRAM_NAME, formatoptions);
 		printout("IPV6CALC_VERSION"  , PACKAGE_VERSION, formatoptions);
-		printout("IPV6CALC_COPYRIGHT", PROGRAM_COPYRIGHT, formatoptions);
+		printout("IPV6CALC_COPYRIGHT", PROGRAM_COPYRIGHT, formatoptions | FORMATOPTION_mr_quote_default);
 
 		snprintf(tempstring, sizeof(tempstring), "%d", IPV6CALC_OUTPUT_VERSION);
 		printout("IPV6CALC_OUTPUT_VERSION", tempstring, formatoptions);
 
 		libipv6calc_anon_infostring(tempstring2, sizeof(tempstring2), &ipv6calc_anon_set);
-		printout("IPV6CALC_SETTINGS_ANON", tempstring2, formatoptions);
+		printout("IPV6CALC_SETTINGS_ANON", tempstring2, formatoptions | FORMATOPTION_mr_quote_default);
 
 		/* features */
 		tempstring[0] = '\0'; /* clear tempstring */
@@ -345,14 +354,14 @@ static void printfooter(const uint32_t formatoptions) {
 			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
 		};
 
-		printout("IPV6CALC_FEATURES", tempstring, formatoptions);
+		printout("IPV6CALC_FEATURES", tempstring, formatoptions | FORMATOPTION_mr_quote_default);
 
 		/* capabilities */
 		tempstring[0] = '\0'; /* clear tempstring */
 
 		libipv6calc_db_wrapper_capabilities(tempstring, sizeof(tempstring));
 
-		printout("IPV6CALC_CAPABILITIES", tempstring, formatoptions);
+		printout("IPV6CALC_CAPABILITIES", tempstring, formatoptions | FORMATOPTION_mr_quote_default);
 	};
 };
 
@@ -1110,7 +1119,7 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
 	result = libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(helpstring, sizeof(helpstring), macaddrp);
 	if (result == 0) {
 		if ( machinereadable != 0 ) {
-			printout("OUI", helpstring, formatoptions);
+			printout("OUI", helpstring, formatoptions | FORMATOPTION_mr_quote_default);
 		} else {
 			fprintf(stdout, "OUI is: %s\n", helpstring);
 		};
@@ -1177,7 +1186,7 @@ static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t for
 	result = libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(helpstring, sizeof(helpstring), &macaddr);
 	if (result == 0) {
 		if ( machinereadable != 0 ) {
-			printout("OUI", helpstring, formatoptions);
+			printout("OUI", helpstring, formatoptions | FORMATOPTION_mr_quote_default);
 		} else {
 			fprintf(stdout, "OUI is: %s\n", tempstring);
 		};

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.29 2015/04/22 19:30:37 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.30 2015/04/30 18:52:41 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -109,7 +109,8 @@ static int ip2location_db_country_sample_v6 = 0;
 static int ip2location_db_region_city_sample_v4 = 0;
 static int ip2location_db_region_city_sample_v6 = 0;
 
-static int ip2location_db_region_city_lite_to_sample_autoswitch = 1; // select automagically sample databases in case available and matching
+// select automagically sample databases in case available and matching
+static int ip2location_db_lite_to_sample_autoswitch = 1;
 
 
 #ifdef SUPPORT_IP2LOCATION_DYN
@@ -523,7 +524,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 			printf("%sIP2Location: Detected databases SAMPLE  Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_sample_v4, ip2location_db_country_sample_v6, ip2location_db_region_city_sample_v4, ip2location_db_region_city_sample_v6);
 			printf("%sIP2Location: Detected databases LITE    Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_lite_v4, ip2location_db_country_lite_v6, ip2location_db_region_city_lite_v4, ip2location_db_region_city_lite_v6);
 
-			if (ip2location_db_region_city_lite_to_sample_autoswitch == 1) {
+			if (ip2location_db_lite_to_sample_autoswitch == 1) {
 				printf("%sIP2Location: Selected databases (norm)  Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d (autoswitch to SAMPLE enabled)\n", prefix, ip2location_db_country_v4, ip2location_db_country_v6, ip2location_db_region_city_v4, ip2location_db_region_city_v6);
 			} else {
 				printf("%sIP2Location: Selected databases         Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_v4, ip2location_db_country_v6, ip2location_db_region_city_v4, ip2location_db_region_city_v6);
@@ -1323,8 +1324,28 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(char *addr
 
 	if (proto == 4) {
 		IP2Location_type = ip2location_db_country_v4;
+
+		if (ip2location_db_lite_to_sample_autoswitch == 1) {
+			if ((IP2Location_type == ip2location_db_country_lite_v4) && (ip2location_db_country_sample_v4 > 0)) {
+				// lite database selected, sample database available (supporting 0.0.0.0-99.255.255.255)
+				if ((addr[1] == '.') || (addr[2] == '.')) {
+					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_country_sample_v4);
+					IP2Location_type = ip2location_db_country_sample_v4;
+				};
+			};
+		};
 	} else if (proto == 6) {
 		IP2Location_type = ip2location_db_country_v6;
+
+		if (ip2location_db_lite_to_sample_autoswitch == 1) {
+			if ((IP2Location_type == ip2location_db_country_lite_v6) && (ip2location_db_country_sample_v6 > 0)) {
+				// lite database selected, sample database available (supporting 2A04:0:0:0:0:0:0:0-2A04:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF)
+				if (strncmp(addr, "2a04", 4) == 0) {
+					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_country_sample_v6);
+					IP2Location_type = ip2location_db_country_sample_v6;
+				};
+			};
+		};
 	} else {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Unsupported proto: %d", proto);
 		goto END_libipv6calc_db_wrapper;
@@ -1396,8 +1417,28 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_country_name_by_addr(char *addr
 
 	if (proto == 4) {
 		IP2Location_type = ip2location_db_country_v4;
+
+		if (ip2location_db_lite_to_sample_autoswitch == 1) {
+			if ((IP2Location_type == ip2location_db_country_lite_v4) && (ip2location_db_country_sample_v4 > 0)) {
+				// lite database selected, sample database available (supporting 0.0.0.0-99.255.255.255)
+				if ((addr[1] == '.') || (addr[2] == '.')) {
+					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_country_sample_v4);
+					IP2Location_type = ip2location_db_country_sample_v4;
+				};
+			};
+		};
 	} else if (proto == 6) {
 		IP2Location_type = ip2location_db_country_v6;
+
+		if (ip2location_db_lite_to_sample_autoswitch == 1) {
+			if ((IP2Location_type == ip2location_db_country_lite_v6) && (ip2location_db_country_sample_v6 > 0)) {
+				// lite database selected, sample database available (supporting 2A04:0:0:0:0:0:0:0-2A04:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF)
+				if (strncmp(addr, "2a04", 4) == 0) {
+					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_country_sample_v6);
+					IP2Location_type = ip2location_db_country_sample_v6;
+				};
+			};
+		};
 	} else {
 		return (NULL);
 	};
@@ -1450,7 +1491,7 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_wrapper_record_city_by_add
 	if (proto == 4) {
 		IP2Location_type = ip2location_db_region_city_v4;
 
-		if (ip2location_db_region_city_lite_to_sample_autoswitch == 1) {
+		if (ip2location_db_lite_to_sample_autoswitch == 1) {
 			if ((IP2Location_type == ip2location_db_region_city_lite_v4) && (ip2location_db_region_city_sample_v4 > 0)) {
 				// lite database selected, sample database available (supporting 0.0.0.0-99.255.255.255)
 				if ((addr[1] == '.') || (addr[2] == '.')) {
@@ -1462,7 +1503,7 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_wrapper_record_city_by_add
 	} else if (proto == 6) {
 		IP2Location_type = ip2location_db_region_city_v6;
 
-		if (ip2location_db_region_city_lite_to_sample_autoswitch == 1) {
+		if (ip2location_db_lite_to_sample_autoswitch == 1) {
 			if ((IP2Location_type == ip2location_db_region_city_lite_v6) && (ip2location_db_region_city_sample_v6 > 0)) {
 				// lite database selected, sample database available (supporting 2A04:0:0:0:0:0:0:0-2A04:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF)
 				if (strncmp(addr, "2a04", 4) == 0) {

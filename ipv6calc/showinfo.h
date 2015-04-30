@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.h
- * Version    : $Id: showinfo.h,v 1.28 2015/04/23 06:32:45 ds6peter Exp $
+ * Version    : $Id: showinfo.h,v 1.29 2015/04/30 18:52:41 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -39,7 +39,7 @@
 //      + IP2LOCATION_DATABASE_INFO
 // 8: 0.97.4
 //      + IPV6CALC_CAPABILITIES
-// 9: 0.98.0 to current
+// 9: 0.98.0
 //      + DBIP_COUNTRY_SHORT
 //      + DBIP_CITY
 //      + DBIP_DATABASE_INFO
@@ -62,7 +62,6 @@
 // 	+ IP2LOCATION_MNC
 // 	+ IP2LOCATION_MCC
 // 	+ IP2LOCATION_IDDCODE
-// 	quote all output in case it contains spaces
 
 #define IPV6CALC_OUTPUT_VERSION	10
 

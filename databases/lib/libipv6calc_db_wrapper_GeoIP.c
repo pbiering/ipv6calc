@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.74 2015/04/19 10:42:19 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.75 2015/04/30 18:52:41 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -524,11 +524,11 @@ void libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(const int level_verbose,
 #endif
 
 				if (level_verbose == LEVEL_VERBOSE2) {
-					printf("%sGeoIP: %-33s:[%2d] %-40s (CAN'T OPEN)\n", prefix, libipv6calc_db_wrapper_GeoIPDBDescription[i], i, (*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i]);
+					printf("%sGeoIP: %-33s:[%2d] %-20s (CAN'T OPEN)\n", prefix, libipv6calc_db_wrapper_GeoIPDBDescription[i], i, rindex((*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i], '/') + 1);
 				};
 			} else {
 				count++;
-				printf("%sGeoIP: %-33s:[%2d] %-40s (%s)\n", prefix, libipv6calc_db_wrapper_GeoIPDBDescription[i], i, (*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i], libipv6calc_db_wrapper_GeoIP_database_info(gi));
+				printf("%sGeoIP: %-33s:[%2d] %-20s (%s)\n", prefix, libipv6calc_db_wrapper_GeoIPDBDescription[i], i, rindex((*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i], '/') + 1, libipv6calc_db_wrapper_GeoIP_database_info(gi));
 			};
 		} else {
 			if (geoip_num_db_types > 0) {

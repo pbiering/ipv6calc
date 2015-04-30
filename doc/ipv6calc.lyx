@@ -1242,10 +1242,11 @@ $ ipv6calc -v
 
 \begin_layout Code
 
-ipv6calc: version 0.98.0 GeoIP GeoIPv6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG
- DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY
- DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION
- DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC 
+ipv6calc: version 0.99.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
+ DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC
+ DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION
+ DB_IPV6_REGION DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN
+-CC
 \end_layout
 
 \begin_layout Standard
@@ -1268,10 +1269,11 @@ $ ipv6calc -vv
 
 \begin_layout Code
 
-ipv6calc: version 0.98.0 GeoIP GeoIPv6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG
- DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY
- DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION
- DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
+ipv6calc: version 0.99.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
+ DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC
+ DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION
+ DB_IPV6_REGION DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN
+-CC
 \end_layout
 
 \begin_layout Code
@@ -1280,9 +1282,8 @@ ipv6calc: version 0.98.0 GeoIP GeoIPv6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG
 
 \begin_layout Code
 
-Capabilities: GeoIP(dyn-load) IP2Location(dyn-load) DBIP External DB_AS_REG(Buil
-tIn) DB_CC_REG(BuiltIn) DB_IPV4_REG(BuiltIn) DB_IPV6_REG(BuiltIn) DB_IEEE(BuiltI
-n)
+Capabilities: GeoIP(linked) IP2Location(linked) DBIP External DB_AS_REG(BuiltIn)
+ DB_CC_REG(BuiltIn) DB_IPV4_REG(BuiltIn) DB_IPV6_REG(BuiltIn) DB_IEEE(BuiltIn)
 \end_layout
 
 \begin_layout Code
@@ -1291,18 +1292,12 @@ n)
 
 \begin_layout Code
 
-GeoIP support enabled, compiled with include file version: 1.4.8
+GeoIP support enabled, compiled with IPv4 & IPv6 support
 \end_layout
 
 \begin_layout Code
 
-GeoIP support by dynamic library load, compiled with IPv4 & IPv6 support
-\end_layout
-
-\begin_layout Code
-
-GeoIP configured dynamic library file and detected version: libGeoIP.so.1
- 1.5.1
+GeoIP dynamic library version (on this system): 1.6.5
 \end_layout
 
 \begin_layout Code
@@ -1316,29 +1311,13 @@ GeoIP available databases: Country4=1 Country6=1 ASN4=1 ASN6=1 City4=1 City6=1
 
 \begin_layout Code
 
-IP2Location support enabled, compiled with include file version: 6.0.2
+IP2Location support enabled, compiled with API version: 7.0.1
 \end_layout
 
 \begin_layout Code
 
-IP2Location support enabled, compiled with API version: 4.0.0
-\end_layout
-
-\begin_layout Code
-
-IP2Location support by dynamic library load
-\end_layout
-
-\begin_layout Code
-
-IP2Location configured dynamic library file and detected version: libIP2Location.
-so LIBRARY-NOT-LOADED
-\end_layout
-
-\begin_layout Code
-
-IP2Location available databases: Country4=1 Country6=1 ASN4=0 ASN6=0 City4=0
- City6=0
+IP2Location available databases: Country4=1 Country6=1 ASN4=0 ASN6=0 City4=1
+ City6=1
 \end_layout
 
 \begin_layout Code
@@ -1356,7 +1335,7 @@ BuiltIn databases available: ASN_REG=1 IPV4_REG=1 IPV6_REG=1 IEEE=1 CC_REG=1
 
 \begin_layout Code
 
-DB features: 0x33037fff
+DB features: 0x33337fff
 \end_layout
 
 \begin_layout Code
@@ -1376,44 +1355,38 @@ GeoIP: info of available databases in directory: /usr/share/GeoIP (max:
 
 \begin_layout Code
 
-GeoIP: GeoIP Country Edition            :[ 1] /usr/share/GeoIP/GeoIP.dat
-               (GEO-106FREE 20140805 Build 1 Copyright (c) 2014 MaxMind
- Inc All Rights Reserved)
+GeoIP: GeoIP Country Edition            :[ 1] GeoIP.dat            (GEO-106FREE
+ 20150303 Build 1 Copyright (c) 2015 MaxMind Inc All Rights Reserved)
 \end_layout
 
 \begin_layout Code
 
-GeoIP: GeoIP City Edition, Rev 1        :[ 2] /usr/share/GeoIP/GeoIPCity.dat
-           (GEO-533LITE 20150203 Build 1 Copyright (c) 2015 MaxMind Inc
- All Rights Reserved)
+GeoIP: GeoIP City Edition, Rev 1        :[ 2] GeoIPCity.dat        (GEO-533LITE
+ 20150407 Build 1 Copyright (c) 2015 MaxMind Inc All Rights Reserved)
 \end_layout
 
 \begin_layout Code
 
-GeoIP: GeoIP ASNum Edition              :[ 9] /usr/share/GeoIP/GeoIPASNum.dat
-          (GEO-117 20140217 Build 1 Copyright (c) 2014 MaxMind Inc All Rights
- Reserved)
+GeoIP: GeoIP ASNum Edition              :[ 9] GeoIPASNum.dat       (GEO-117
+ 20150405 Build 1 Copyright (c) 2015 MaxMind Inc All Rights Reserved)
 \end_layout
 
 \begin_layout Code
 
-GeoIP: GeoIP Country V6 Edition         :[12] /usr/share/GeoIP/GeoIPv6.dat
-             (GEO-106FREE 20150203 Build 1 Copyright (c) 2015 MaxMind Inc
- All Rights Reserved)
+GeoIP: GeoIP Country V6 Edition         :[12] GeoIPv6.dat          (GEO-106FREE
+ 20150407 Build 1 Copyright (c) 2015 MaxMind Inc All Rights Reserved)
 \end_layout
 
 \begin_layout Code
 
-GeoIP: GeoIP ASNum V6 Edition           :[21] /usr/share/GeoIP/GeoIPASNumv6.dat
-        (GEO-117 20150210 Build 1 Copyright (c) 2015 MaxMind Inc All Rights
- Reserved)
+GeoIP: GeoIP ASNum V6 Edition           :[21] GeoIPASNumv6.dat     (GEO-117
+ 20150405 Build 1 Copyright (c) 2015 MaxMind Inc All Rights Reserved)
 \end_layout
 
 \begin_layout Code
 
-GeoIP: GeoIP City Edition V6, Rev 1     :[30] /usr/share/GeoIP/GeoIPCityv6.dat
-         (GEO-536LITE 20150204 Build 1 Copyright (c) 2015 MaxMind Inc All
- Rights Reserved)
+GeoIP: GeoIP City Edition V6, Rev 1     :[30] GeoIPCityv6.dat      (GEO-536LITE
+ 20150407 Build 1 Copyright (c) 2015 MaxMind Inc All Rights Reserved)
 \end_layout
 
 \begin_layout Code
@@ -1422,7 +1395,7 @@ GeoIP: GeoIP City Edition V6, Rev 1     :[30] /usr/share/GeoIP/GeoIPCityv6.dat
 
 \begin_layout Code
 
-IP2Location: features available/implemented: 0x00000000/0x00000000 (NONE)
+IP2Location: features available/implemented: 0x00303fc0/0x00303fc0 (100%)
 \end_layout
 
 \begin_layout Code
@@ -1432,19 +1405,411 @@ IP2Location: info of available databases in directory: /usr/share/IP2Location
 
 \begin_layout Code
 
-IP2Location: IPv4 Country               : /usr/share/IP2Location/IP-COUNTRY.BIN
-    (LIBRARY-NOT-LOADED)
+IP2Location: Copyright (c) IP2Location All Rights Reserved
 \end_layout
 
 \begin_layout Code
 
-IP2Location: IPv6 Country               : /usr/share/IP2Location/IPV6-COUNTRY.BIN
-  (LIBRARY-NOT-LOADED)
+IP2Location: IPv4 Country                                    :[ 49] IP-COUNTRY-S
+AMPLE.BIN               (IP2L-DB1 IPv4 SAMPLE 20141218)
 \end_layout
 
 \begin_layout Code
 
-IP2Location: NO available databases found in directory: /usr/share/IP2Location
+IP2Location: IPv4 Country/ISP                                :[ 50] IP-COUNTRY-I
+SP-SAMPLE.BIN           (IP2L-DB2 IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Country/Region/City                        :[ 51] IP-COUNTRY-R
+EGION-CITY-SAMPLE.BIN   (IP2L-DB3 IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Country/Region/City/ISP                    :[ 52] IP-COUNTRY-R
+EGION-CITY-ISP-SAMPLE.BIN (IP2L-DB4 IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Country/Region/City/LongitudeLattitude     :[ 53] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-SAMPLE.BIN (IP2L-DB5 IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Country/Region/City/LongLatt/ISP           :[ 54] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-ISP-SAMPLE.BIN (IP2L-DB6 IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/ISP/Domain                        :[ 55] IP-COUNTRY-R
+EGION-CITY-ISP-DOMAIN-SAMPLE.BIN (IP2L-DB7 IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LattLong/ISP/Domain               :[ 56] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-ISP-DOMAIN-SAMPLE.BIN (IP2L-DB8 IPv4 SAMPLE
+ 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LattLong/ZIP                      :[ 57] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-SAMPLE.BIN (IP2L-DB9 IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LattLong/ZIP/ISP/Domain           :[ 58] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-ISP-DOMAIN-SAMPLE.BIN (IP2L-DB10 IPv4
+ SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LattLong/ZIP/TZ                   :[ 59] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-SAMPLE.BIN (IP2L-DB11 IPv4
+ SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LaLo/ZI/TZ/IS/Domain              :[ 60] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-SAMPLE.BIN (IP2L-DB12
+ IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LaLo/TZ/NetSpeed                  :[ 61] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-TIMEZONE-NETSPEED-SAMPLE.BIN (IP2L-DB13 IPv4
+ SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LaLo/ZI/TZ/ISP/Do/Netspeed        :[ 62] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-SAMPLE.BIN
+ (IP2L-DB14 IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LaLo/ZIP/TZ/Area                  :[ 63] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-AREACODE-SAMPLE.BIN (IP2L-DB15
+ IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Net/Area         :[ 64] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-SAMP
+LE.BIN (IP2L-DB16 IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LaLo/TZ/Net/Weather               :[ 65] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-TIMEZONE-NETSPEED-WEATHER-SAMPLE.BIN (IP2L-DB17
+ IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/Weather    :[ 66] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEAT
+HER-SAMPLE.BIN (IP2L-DB18 IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LaLo/ISP/Dom/Mobile               :[ 67] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-ISP-DOMAIN-MOBILE-SAMPLE.BIN (IP2L-DB19 IPv4
+ SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo      :[ 68] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEAT
+HER-MOBILE-SAMPLE.BIN (IP2L-DB20 IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LaLo/ZI/TZ/Area/Elevation         :[ 69] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-AREACODE-ELEVATION-SAMPLE.BIN
+ (IP2L-DB21 IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo/El   :[ 70] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEAT
+HER-MOBILE-ELEVATION-SAMPLE.BIN (IP2L-DB22 IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LaLo/ISP/Dom/Mobile/Usagetype     :[ 71] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-ISP-DOMAIN-MOBILE-USAGETYPE-SAMPLE.BIN (IP2L-DB23
+ IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo/El/Us:[ 72] IP-COUNTRY-R
+EGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEAT
+HER-MOBILE-ELEVATION-USAGETYPE-SAMPLE.BIN (IP2L-DB24 IPv4 SAMPLE 20141218)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Country                                    :[ 73] IPV6-COUNTRY.
+SAMPLE.BIN             (IP2L-DB1 IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Country/ISP                                :[ 74] IPV6-COUNTRY
+-ISP.SAMPLE.BIN         (IP2L-DB2 IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Country/Region/City                        :[ 75] IPV6-COUNTRY
+-REGION-CITY.SAMPLE.BIN (IP2L-DB3 IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Country/Region/City/ISP                    :[ 76] IPV6-COUNTRY
+-REGION-CITY-ISP.SAMPLE.BIN (IP2L-DB4 IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Country/Region/City/LongitudeLattitude     :[ 77] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE.SAMPLE.BIN (IP2L-DB5 IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Country/Region/City/LongLatt/ISP           :[ 78] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-ISP.SAMPLE.BIN (IP2L-DB6 IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/ISP/Domain                        :[ 79] IPV6-COUNTRY
+-REGION-CITY-ISP-DOMAIN.SAMPLE.BIN (IP2L-DB7 IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LattLong/ISP/Domain               :[ 80] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-ISP-DOMAIN.SAMPLE.BIN (IP2L-DB8 IPv6 SAMPLE
+ 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LattLong/ZIP                      :[ 81] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE.SAMPLE.BIN (IP2L-DB9 IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LattLong/ZIP/ISP/Domain           :[ 82] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-ISP-DOMAIN.SAMPLE.BIN (IP2L-DB10 IPv6
+ SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LattLong/ZIP/TZ                   :[ 83] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE.SAMPLE.BIN (IP2L-DB11 IPv6
+ SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LaLo/ZI/TZ/IS/Domain              :[ 84] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN.SAMPLE.BIN (IP2L-DB12
+ IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LaLo/TZ/NetSpeed                  :[ 85] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-TIMEZONE-NETSPEED.SAMPLE.BIN (IP2L-DB13 IPv6
+ SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LaLo/ZI/TZ/ISP/Do/Netspeed        :[ 86] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED.SAMPLE.BIN
+ (IP2L-DB14 IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LaLo/ZIP/TZ/Area                  :[ 87] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-AREACODE.SAMPLE.BIN (IP2L-DB15
+ IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Net/Area         :[ 88] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE.SAM
+PLE.BIN (IP2L-DB16 IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LaLo/TZ/Net/Weather               :[ 89] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-TIMEZONE-NETSPEED-WEATHER.SAMPLE.BIN (IP2L-DB17
+ IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/Weather    :[ 90] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WE
+ATHER.SAMPLE.BIN (IP2L-DB18 IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LaLo/ISP/Dom/Mobile               :[ 91] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-ISP-DOMAIN-MOBILE.SAMPLE.BIN (IP2L-DB19 IPv6
+ SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo      :[ 92] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WE
+ATHER-MOBILE.SAMPLE.BIN (IP2L-DB20 IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LaLo/ZI/TZ/Area/Elevation         :[ 93] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-AREACODE-ELEVATION.SAMPLE.BIN
+ (IP2L-DB21 IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo/El   :[ 94] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WE
+ATHER-MOBILE-ELEVATION.SAMPLE.BIN (IP2L-DB22 IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LaLo/ISP/Dom/Mobile/Usagetype     :[ 95] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-ISP-DOMAIN-MOBILE-USAGETYPE.SAMPLE.BIN (IP2L-DB23
+ IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo/El/Us:[ 96] IPV6-COUNTRY
+-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WE
+ATHER-MOBILE-ELEVATION-USAGETYPE.SAMPLE.BIN (IP2L-DB24 IPv6 SAMPLE 20140722)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Country                                    :[100] IP2LOCATION-
+LITE-DB1.BIN            (IP2L-DB1 IPv4 LITE 20150329)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Country/Region/City                        :[102] IP2LOCATION-
+LITE-DB3.BIN            (IP2L-DB3 IPv4 LITE 20150329)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Country/Region/City/LongitudeLattitude     :[104] IP2LOCATION-
+LITE-DB5.BIN            (IP2L-DB5 IPv4 LITE 20150329)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LattLong/ZIP                      :[106] IP2LOCATION-
+LITE-DB9.BIN            (IP2L-DB9 IPv4 LITE 20150329)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv4 Co/Re/Ci/LattLong/ZIP/TZ                   :[108] IP2LOCATION-
+LITE-DB11.BIN           (IP2L-DB11 IPv4 LITE 20150329)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPvx Country                                    :[101] IP2LOCATION-
+LITE-DB1.IPV6.BIN       (IP2L-DB1 IPv6 LITE 20150329)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPvx Country/ISP                                :[103] IP2LOCATION-
+LITE-DB3.IPV6.BIN       (IP2L-DB3 IPv6 LITE 20150329)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPvx Country/Region/City/LongitudeLattitude     :[105] IP2LOCATION-
+LITE-DB5.IPV6.BIN       (IP2L-DB5 IPv6 LITE 20150329)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPvx Co/Re/Ci/LattLong/ZIP                      :[107] IP2LOCATION-
+LITE-DB9.IPV6.BIN       (IP2L-DB9 IPv6 LITE 20150329)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPvx Co/Re/Ci/LattLong/ZIP/TZ                   :[109] IP2LOCATION-
+LITE-DB11.IPV6.BIN      (IP2L-DB11 IPv6 LITE 20150329)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: IPv6 Country                                    :[120] IPV6-COUNTRY
+-FREE.BIN               (IP2L-DB1 IPv6 FREE 20140723 INCOMPATIBLE)
+\end_layout
+
+\begin_layout Code
+
+IP2Location: Detected databases SAMPLE  Country4=72  Country6=96  City4=72
+  City6=96 
+\end_layout
+
+\begin_layout Code
+
+IP2Location: Detected databases LITE    Country4=109 Country6=109 City4=109
+ City6=109
+\end_layout
+
+\begin_layout Code
+
+IP2Location: Selected databases (norm)  Country4=109 Country6=109 City4=109
+ City6=109 (autoswitch to SAMPLE enabled)
 \end_layout
 
 \begin_layout Code
@@ -1463,26 +1828,26 @@ DBIP: info of available databases in directory: /usr/share/DBIP
 
 \begin_layout Code
 
-DBIP: IPv4 CountryCode           : /usr/share/DBIP/ipv6calc-dbip-ipv4-country.db
- (DBIP-1/20150101, created: 20150124-152244 UTC)
+DBIP: IPv4 CountryCode              : ipv6calc-dbip-ipv4-country.db  (DBIP-1/2015
+0301, created: 20150304-183312 UTC)
 \end_layout
 
 \begin_layout Code
 
-DBIP: IPv6 CountryCode           : /usr/share/DBIP/ipv6calc-dbip-ipv6-country.db
- (DBIP-2/20150101, created: 20150124-152244 UTC)
+DBIP: IPv6 CountryCode              : ipv6calc-dbip-ipv6-country.db  (DBIP-2/2015
+0301, created: 20150304-183312 UTC)
 \end_layout
 
 \begin_layout Code
 
-DBIP: IPv4 City/Region/CountryCode: /usr/share/DBIP/ipv6calc-dbip-ipv4-city.db
- (DBIP-3/20150101, created: 20150124-152300 UTC)
+DBIP: IPv4 City/Region/CountryCode  : ipv6calc-dbip-ipv4-city.db     (DBIP-3/2015
+0301, created: 20150304-183330 UTC)
 \end_layout
 
 \begin_layout Code
 
-DBIP: IPv6 City/Region/CountryCode: /usr/share/DBIP/ipv6calc-dbip-ipv6-city.db
- (DBIP-4/20150101, created: 20150124-152300 UTC)
+DBIP: IPv6 City/Region/CountryCode  : ipv6calc-dbip-ipv6-city.db     (DBIP-4/2015
+0301, created: 20150304-183330 UTC)
 \end_layout
 
 \begin_layout Code
@@ -1501,32 +1866,30 @@ External: info of available databases in directory: /usr/share/ipv6calc/db
 
 \begin_layout Code
 
-External: IPv4 Registry              : /usr/share/ipv6calc/db/ipv6calc-external-
-ipv4-registry.db (EXTDB-1/AFRINIC/20150215 APNIC/20150213 ARIN/20150215 IANA/2014
-1014 LACNIC/20150213 RIPENCC/20150214, created: 20150215-170218 UTC)
+External: IPv4 Registry              : ipv6calc-external-ipv4-registry.db
+       (EXTDB-1/AFRINIC/20150215 APNIC/20150213 ARIN/20150215 IANA/20141014
+ LACNIC/20150213 RIPENCC/20150214, created: 20150215-170218 UTC)
 \end_layout
 
 \begin_layout Code
 
-External: IPv6 Registry              : /usr/share/ipv6calc/db/ipv6calc-external-
-ipv6-registry.db (EXTDB-2/AFRINIC/20150215 APNIC/20150213 ARIN/20150215 IANA/2014
-0520 LACNIC/20150213 RIPENCC/20150214, created: 20150215-170924 UTC)
+External: IPv6 Registry              : ipv6calc-external-ipv6-registry.db
+       (EXTDB-2/AFRINIC/20150215 APNIC/20150213 ARIN/20150215 IANA/20140520
+ LACNIC/20150213 RIPENCC/20150214, created: 20150215-170924 UTC)
 \end_layout
 
 \begin_layout Code
 
-External: IPv4 CountryCode           : /usr/share/ipv6calc/db/ipv6calc-external-
-ipv4-countrycode.db (EXTDB-3/AFRINIC/20150215 APNIC/20150213 ARIN/20150215
- IANA/20141014 LACNIC/20150213 RIPENCC/20150214, created: 20150215-170219
- UTC)
+External: IPv4 CountryCode           : ipv6calc-external-ipv4-countrycode.db
+    (EXTDB-3/AFRINIC/20150215 APNIC/20150213 ARIN/20150215 IANA/20141014
+ LACNIC/20150213 RIPENCC/20150214, created: 20150215-170219 UTC)
 \end_layout
 
 \begin_layout Code
 
-External: IPv6 CountryCode           : /usr/share/ipv6calc/db/ipv6calc-external-
-ipv6-countrycode.db (EXTDB-4/AFRINIC/20150215 APNIC/20150213 ARIN/20150215
- IANA/20140520 LACNIC/20150213 RIPENCC/20150214, created: 20150215-170924
- UTC)
+External: IPv6 CountryCode           : ipv6calc-external-ipv6-countrycode.db
+    (EXTDB-4/AFRINIC/20150215 APNIC/20150213 ARIN/20150215 IANA/20140520
+ LACNIC/20150213 RIPENCC/20150214, created: 20150215-170924 UTC)
 \end_layout
 
 \begin_layout Code
@@ -1550,25 +1913,25 @@ BuiltIn: ASN  : IANA/20140905
 
 \begin_layout Code
 
-BuiltIn: CC   : AFRINIC/20150215 APNIC/20150215 ARIN/20150215 LACNIC/20150213
- RIPENCC/20150214
+BuiltIn: CC   : AFRINIC/20150418 APNIC/20150417 ARIN/20150418 LACNIC/20150417
+ RIPENCC/20150417
 \end_layout
 
 \begin_layout Code
 
-BuiltIn: IPv4 : AFRINIC/20150215 APNIC/20150215 ARIN/20150215 IANA/20141014
- LACNIC/20150213 RIPENCC/20150214 (created: 20150215-185302 UTC)
+BuiltIn: IPv4 : AFRINIC/20150418 APNIC/20150417 ARIN/20150418 IANA/20141014
+ LACNIC/20150417 RIPENCC/20150417 (created: 20150418-061822 UTC)
 \end_layout
 
 \begin_layout Code
 
-BuiltIn: IPv6 : AFRINIC/20150215 APNIC/20150215 ARIN/20150215 IANA/20140520
- LACNIC/20150213 RIPENCC/20150214 (created: 20150215-190001 UTC)
+BuiltIn: IPv6 : AFRINIC/20150418 APNIC/20150417 ARIN/20150418 IANA/20150324
+ LACNIC/20150417 RIPENCC/20150417 (created: 20150418-062530 UTC)
 \end_layout
 
 \begin_layout Code
 
-BuiltIn: IEEE : IAB/20150213 OUI/20150213 OUI36/20150213
+BuiltIn: IEEE : IAB/20150418 OUI/20150418 OUI36/20150418
 \end_layout
 
 \begin_layout Code
@@ -1612,42 +1975,44 @@ DB_IPV6_AS (IPv6 to AS database): GeoIP
 
 \begin_layout Code
 
-DB_IPV4_CC (IPv4 to CountryCode database): GeoIP->db-ip.com->External
+DB_IPV4_CC (IPv4 to CountryCode database): GeoIP->IP2Location->db-ip.com->Externa
+l
 \end_layout
 
 \begin_layout Code
 
-DB_IPV6_CC (IPv6 to CountryCode database): GeoIP->db-ip.com->External
+DB_IPV6_CC (IPv6 to CountryCode database): GeoIP->IP2Location->db-ip.com->Externa
+l
 \end_layout
 
 \begin_layout Code
 
-DB_IPV4_COUNTRY (IPv4 to Country database): GeoIP
+DB_IPV4_COUNTRY (IPv4 to Country database): GeoIP->IP2Location
 \end_layout
 
 \begin_layout Code
 
-DB_IPV6_COUNTRY (IPv6 to Country database): GeoIP
+DB_IPV6_COUNTRY (IPv6 to Country database): GeoIP->IP2Location
 \end_layout
 
 \begin_layout Code
 
-DB_IPV4_CITY (IPv4 to City database): GeoIP->db-ip.com
+DB_IPV4_CITY (IPv4 to City database): GeoIP->IP2Location->db-ip.com
 \end_layout
 
 \begin_layout Code
 
-DB_IPV6_CITY (IPv6 to City database): GeoIP->db-ip.com
+DB_IPV6_CITY (IPv6 to City database): GeoIP->IP2Location->db-ip.com
 \end_layout
 
 \begin_layout Code
 
-DB_IPV4_REGION (IPv4 to Region database): GeoIP->db-ip.com
+DB_IPV4_REGION (IPv4 to Region database): GeoIP->IP2Location->db-ip.com
 \end_layout
 
 \begin_layout Code
 
-DB_IPV6_REGION (IPv6 to Region database): GeoIP->db-ip.com
+DB_IPV6_REGION (IPv6 to Region database): GeoIP->IP2Location->db-ip.com
 \end_layout
 
 \begin_layout Code
@@ -1674,10 +2039,15 @@ $ ./ipv6calc/ipv6calc -v -h
 
 \begin_layout Code
 
-ipv6calc: version 0.98.0 GeoIP GeoIPv6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG
- DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY
- DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION
- DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
+ipv6calc: version 0.99.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
+ DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC
+ DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION
+ DB_IPV6_REGION DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN
+-CC
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -1697,12 +2067,12 @@ GeoIPv6               + GeoIPv6 database (provided by GeoIP)
 
 \begin_layout Code
 
-IP2Location           - IP2Location IPv4 database
+IP2Location           + IP2Location IPv4 database (provided by IP2Location)
 \end_layout
 
 \begin_layout Code
 
-IP2Location6          - IP2Location IPv6 database
+IP2Location6          + IP2Location IPv6 database (provided by IP2Location)
 \end_layout
 
 \begin_layout Code
@@ -1742,44 +2112,48 @@ DB_IPV6_AS            + IPv6 to AS database (provided by GeoIP)
 
 \begin_layout Code
 
-DB_IPV4_CC            + IPv4 to CountryCode database (provided by GeoIP,db-ip.com
-,External)
+DB_IPV4_CC            + IPv4 to CountryCode database (provided by GeoIP,IP2Locat
+ion,db-ip.com,External)
 \end_layout
 
 \begin_layout Code
 
-DB_IPV6_CC            + IPv6 to CountryCode database (provided by GeoIP,db-ip.com
-,External)
+DB_IPV6_CC            + IPv6 to CountryCode database (provided by GeoIP,IP2Locat
+ion,db-ip.com,External)
 \end_layout
 
 \begin_layout Code
 
-DB_IPV4_COUNTRY       + IPv4 to Country database (provided by GeoIP)
+DB_IPV4_COUNTRY       + IPv4 to Country database (provided by GeoIP,IP2Location)
 \end_layout
 
 \begin_layout Code
 
-DB_IPV6_COUNTRY       + IPv6 to Country database (provided by GeoIP)
+DB_IPV6_COUNTRY       + IPv6 to Country database (provided by GeoIP,IP2Location)
 \end_layout
 
 \begin_layout Code
 
-DB_IPV4_CITY          + IPv4 to City database (provided by GeoIP,db-ip.com)
+DB_IPV4_CITY          + IPv4 to City database (provided by GeoIP,IP2Location,db-
+ip.com)
 \end_layout
 
 \begin_layout Code
 
-DB_IPV6_CITY          + IPv6 to City database (provided by GeoIP,db-ip.com)
+DB_IPV6_CITY          + IPv6 to City database (provided by GeoIP,IP2Location,db-
+ip.com)
 \end_layout
 
 \begin_layout Code
 
-DB_IPV4_REGION        + IPv4 to Region database (provided by GeoIP,db-ip.com)
+DB_IPV4_REGION        + IPv4 to Region database (provided by GeoIP,IP2Location,d
+b-ip.com)
 \end_layout
 
 \begin_layout Code
 
-DB_IPV6_REGION        + IPv6 to Region database (provided by GeoIP,db-ip.com)
+DB_IPV6_REGION        + IPv6 to Region database (provided by GeoIP,IP2Location,d
+b-ip.com)
 \end_layout
 
 \begin_layout Code
@@ -1926,6 +2300,10 @@ Information
 \end_layout
 
 \begin_layout Standard
+Depending on available databases output can vary.
+\end_layout
+
+\begin_layout Paragraph
 Information about a simple IPv6 address:
 \end_layout
 
@@ -1974,7 +2352,7 @@ MAC is an unicast one
 OUI is: XIRCOM
 \end_layout
 
-\begin_layout Standard
+\begin_layout Paragraph
 Information about a Teredo IPv6 address:
 \end_layout
 
@@ -2024,6 +2402,10 @@ IPv4 registry for Teredo server address: ARIN
 Registry for address: reserved
 \end_layout
 
+\begin_layout Paragraph
+Machine readable output
+\end_layout
+
 \begin_layout Standard
 There exists also a machine readable output (e.g.
  used by 'ipv6calcweb.cgi') - in addition, database related information can
@@ -2067,7 +2449,7 @@ IPV6_AS_NUM=6724
 
 \begin_layout Code
 
-IPV6_AS_TEXT="AS6724 STRATO AG"
+IPV6_AS_TEXT=AS6724 STRATO AG
 \end_layout
 
 \begin_layout Code
@@ -2132,7 +2514,7 @@ IP2LOCATION_TIMEZONE=+01:00
 
 \begin_layout Code
 
-GEOIP_AS_TEXT="AS6724 STRATO AG"
+GEOIP_AS_TEXT=AS6724 STRATO AG
 \end_layout
 
 \begin_layout Code
@@ -2182,36 +2564,36 @@ EXTERNAL_COUNTRY_SHORT=DE
 
 \begin_layout Code
 
-IP2LOCATION_DATABASE_INFO="IP2L-DB11 IPv6 LITE 20150329 Copyright (c) 2015
+IP2LOCATION_DATABASE_INFO=IP2L-DB11 IPv6 LITE 20150329 Copyright (c) 2015
  IP2Location All Rights Reserved / This site or product includes IP2Location
- LITE data available from http://lite.ip2location.com"
+ LITE data available from http://lite.ip2location.com
 \end_layout
 
 \begin_layout Code
 
-GEOIP_DATABASE_INFO="GEO-106FREE 20150407 Build 1 Copyright (c) 2015 MaxMind
+GEOIP_DATABASE_INFO=GEO-106FREE 20150407 Build 1 Copyright (c) 2015 MaxMind
  Inc All Rights Reserved / GEO-117 20150405 Build 1 Copyright (c) 2015 MaxMind
  Inc All Rights Reserved / GEO-536LITE 20150407 Build 1 Copyright (c) 2015
- MaxMind Inc All Rights Reserved"
+ MaxMind Inc All Rights Reserved
 \end_layout
 
 \begin_layout Code
 
-DBIP_DATABASE_INFO="DBIP-2/20150301, created: 20150304-183312 UTC / DBIP-4/20150
-301, created: 20150304-183330 UTC"
+DBIP_DATABASE_INFO=DBIP-2/20150301, created: 20150304-183312 UTC / DBIP-4/201503
+01, created: 20150304-183330 UTC
 \end_layout
 
 \begin_layout Code
 
-EXTERNAL_DATABASE_INFO="EXTDB-4/AFRINIC/20150215 APNIC/20150213 ARIN/20150215
+EXTERNAL_DATABASE_INFO=EXTDB-4/AFRINIC/20150215 APNIC/20150213 ARIN/20150215
  IANA/20140520 LACNIC/20150213 RIPENCC/20150214, created: 20150215-170924
- UTC"
+ UTC
 \end_layout
 
 \begin_layout Code
 
-BUILTIN_DATABASE_INFO="IPv6-REG:AFRINIC/20150418 APNIC/20150417 ARIN/20150418
- IANA/20150324 LACNIC/20150417 RIPENCC/20150417"
+BUILTIN_DATABASE_INFO=IPv6-REG:AFRINIC/20150418 APNIC/20150417 ARIN/20150418
+ IANA/20150324 LACNIC/20150417 RIPENCC/20150417
 \end_layout
 
 \begin_layout Code
@@ -2426,7 +2808,7 @@ IPV4=""
 
 \begin_layout Code
 
-$ ipv6calc -q -i --mrqvn --mrst IPV4 2a01:238:423d:8800:85b3:9e6b:3019:8909
+$ ipv6calc -q -i --mrqva --mrst IPV4 2a01:238:423d:8800:85b3:9e6b:3019:8909
  
 \end_layout
 

@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.c
- * Version    : $Id: libipv6calc_db_wrapper_External.c,v 1.8 2015/02/18 21:47:17 ds6peter Exp $
- * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calc_db_wrapper_External.c,v 1.9 2015/04/30 18:52:41 ds6peter Exp $
+ * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc External (superseeding BuiltIn) database wrapper
@@ -218,7 +218,7 @@ void libipv6calc_db_wrapper_External_wrapper_print_db_info(const int level_verbo
 		type = libipv6calc_db_wrapper_External_db_file_desc[i].number;
 
 		if (libipv6calc_db_wrapper_External_db_avail(type)) {
-			printf("%sExternal: %-27s: %-40s (%s)\n", prefix, libipv6calc_db_wrapper_External_db_file_desc[i].description, libipv6calc_db_wrapper_External_dbfilename(type), libipv6calc_db_wrapper_External_database_info(type));
+			printf("%sExternal: %-27s: %-40s (%s)\n", prefix, libipv6calc_db_wrapper_External_db_file_desc[i].description, libipv6calc_db_wrapper_External_db_file_desc[i].filename, libipv6calc_db_wrapper_External_database_info(type));
 			count++;
 		} else {
 			if (level_verbose == LEVEL_VERBOSE2) {
