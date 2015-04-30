@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.30 2015/04/30 18:52:41 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.31 2015/04/30 19:28:32 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -521,13 +521,13 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 		printf("%sIP2Location: NO available databases found in directory: %s\n", prefix, ip2location_db_dir);
 	} else {
 		if (level_verbose >= LEVEL_VERBOSE) {
-			printf("%sIP2Location: Detected databases SAMPLE  Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_sample_v4, ip2location_db_country_sample_v6, ip2location_db_region_city_sample_v4, ip2location_db_region_city_sample_v6);
-			printf("%sIP2Location: Detected databases LITE    Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_lite_v4, ip2location_db_country_lite_v6, ip2location_db_region_city_lite_v4, ip2location_db_region_city_lite_v6);
+			printf("%sIP2Location: detected databases SAMPLE  Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_sample_v4, ip2location_db_country_sample_v6, ip2location_db_region_city_sample_v4, ip2location_db_region_city_sample_v6);
+			printf("%sIP2Location: detected databases LITE    Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_lite_v4, ip2location_db_country_lite_v6, ip2location_db_region_city_lite_v4, ip2location_db_region_city_lite_v6);
 
 			if (ip2location_db_lite_to_sample_autoswitch == 1) {
-				printf("%sIP2Location: Selected databases (norm)  Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d (autoswitch to SAMPLE enabled)\n", prefix, ip2location_db_country_v4, ip2location_db_country_v6, ip2location_db_region_city_v4, ip2location_db_region_city_v6);
+				printf("%sIP2Location: selected databases (norm)  Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d (autoswitch to SAMPLE enabled)\n", prefix, ip2location_db_country_v4, ip2location_db_country_v6, ip2location_db_region_city_v4, ip2location_db_region_city_v6);
 			} else {
-				printf("%sIP2Location: Selected databases         Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_v4, ip2location_db_country_v6, ip2location_db_region_city_v4, ip2location_db_region_city_v6);
+				printf("%sIP2Location: selected databases         Country4=%-3d Country6=%-3d City4=%-3d City6=%-3d\n", prefix, ip2location_db_country_v4, ip2location_db_country_v6, ip2location_db_region_city_v4, ip2location_db_region_city_v6);
 			};
 		};
 	};
