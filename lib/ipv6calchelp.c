@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.70 2015/04/16 06:23:51 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.71 2015/05/01 06:01:37 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -318,6 +318,7 @@ void printhelp_common(const uint32_t help_features) {
 #ifdef SUPPORT_IP2LOCATION_DYN
 		fprintf(stderr, "  [--db-ip2location-lib <file>     ] : IP2Location library file (default: %s)\n", ip2location_lib_file);
 #endif
+		fprintf(stderr, "  [--db-ip2location-no-lite-to-sample-autoswitch]: do not autoswitch from lite to sample databases (if possible)\n");
 #endif
 	};
 

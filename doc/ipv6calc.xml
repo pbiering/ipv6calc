@@ -476,33 +476,42 @@ $ ipv6calc -q -i --mrqva --mrst IPV4 2a01:238:423d:8800:85b3:9e6b:3019:8909
 <title>Online help</title>
 <para>Online help always shows the currently implemented features.</para><sect3>
 <title>Main online help:</title>
-<para>IP2Location and GeoIP options only appear if compiled with such support.</para><screen>
+<para>External database options only appear if compiled with related support.</para><screen>
 <![CDATA[$ ipv6calc -h
-ipv6calc: version 0.98.0 GeoIP GeoIPv6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
+ipv6calc: version 0.99.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 (P) & (C) 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
+
 This program formats and calculates IPv6/IPv4/MAC addresses and can do many more tricky things
+
   [-d|--debug <debug value>] : debug value (bitwise like)
                                 can also be set by IPV6CALC_DEBUG environment value
   [-v|--version [-v [-v]]]   : version information (2 optional detail levels)
   [-v|--version -h]          : explanation of feature tokens
   [-V|--verbose]             : be more verbose
   [-h|--help|-?]             : this online help
+
   [--disable-ip2location           ] : IP2Location support disabled
   [--db-ip2location-disable        ] : IP2Location support disabled
   [--db-ip2location-dir <directory>] : IP2Location database directory (default: /usr/share/IP2Location)
   [--db-ip2location-lib <file>     ] : IP2Location library file (default: libIP2Location.so)
+  [--db-ip2location-no-lite-to-sample-autoswitch]: do not autoswitch from lite to sample databases (if possible)
+
   [--disable-geoip                 ] : GeoIP support disabled
   [--db-geoip-disable              ] : GeoIP support disabled
   [--db-geoip-dir       <directory>] : GeoIP database directory (default: /usr/share/GeoIP)
   [--db-geoip-lib       <file>     ] : GeoIP library file (default: libGeoIP.so.1)
+
   [--disable-dbip                  ] : db-ip.com support disabled
   [--db-dbip-disable               ] : db-ip.com support disabled
   [--db-dbip-dir        <directory>] : db-ip.com database directory (default: /usr/share/DBIP)
+
   [--disable-external              ] : External support disabled
   [--db-external-disable           ] : External support disabled
   [--db-external-dir    <directory>] : External database directory (default: /usr/share/ipv6calc/db)
+
   [--disable-builtin               ] : BuiltIn support disabled
   [--db-builtin-disable            ] : BuiltIn support disabled
+
   [-q|--quiet]               : be more quiet (auto-enabled in pipe mode)
   [-f|--flush]               : flush each line in pipe mode
 
@@ -515,10 +524,11 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many more
                              (default: format conversion, sometimes: autodetect)
   [<format option> ...] : specify format options
   <input data> [...]    : input data
-  Available input  types:  [-m] -I|--in     -?|-h|--help
+  
+ Available input  types:  [-m] -I|--in     -?|-h|--help
   Available output types:  [-m] -O|--out    -?|-h|--help
   Available action types:  [-m] -A|--action -?|-h|--help
-
+ 
  Other usage:
   --showinfo|-i [--machine_readable|-m] : show information about input data
   --showinfo|-i --mrqva                 : Machine Readable Quote Values Always
@@ -528,10 +538,11 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many more
   --showinfo|-i --mrmt <TOKEN>          : Machine Readable Match Token
   --showinfo|-i --mrtvo <TOKEN>         : Machine Readable Token Value Only
   --showinfo|-i --show-tokens           : show available tokens (aka types) on '-m'
-
-Usage with shortcut options: <shortcut option> [<format option> ...] <input data>
+ 
+ Usage with shortcut options: <shortcut option> [<format option> ...] <input data>
   for more information and available format options use: <shortcut option> -?|-h|--help
-  -r|--addr2ip6_int (-O revnibbles.int)
+
+ -r|--addr2ip6_int (-O revnibbles.int)
   -r|--addr_to_ip6int (-O revnibbles.int)
   -a|--addr2ip6_arpa (-O revnibbles.arpa)
   -a|--addr_to_ip6arpa (-O revnibbles.arpa)

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.57 2015/04/23 20:49:04 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.58 2015/05/01 06:01:37 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -737,6 +737,16 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			NONQUIETPRINT_WA("Obsolete option skipped: --%s <file>, use instead: --%s <dir>", ipv6calcoption_name(opt, longopts), ipv6calcoption_name(DB_geoip_dir, longopts));
 			result = 0;
 			break;
+
+		case DB_ip2location_no_lite_to_sample_autoswitch:
+#ifdef SUPPORT_IP2LOCATION
+			ip2location_db_lite_to_sample_autoswitch = 0;
+#else
+			NONQUIETPRINT_WA("Support for IP2Location not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+			
 	};
 
 	if (result > 0) {
