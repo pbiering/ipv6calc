@@ -1844,6 +1844,12 @@ IP2Location: selected best databases method: COMM older than 12 months are
 
 \begin_layout Code
 
+IP2Location: selected best databases method: COMM/LITE/SAMPLE with more
+ features are only selected in case not older than 1 months
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -3444,14 +3450,12 @@ Best
 \end_layout
 
 \begin_layout Itemize
-
 --db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>: switches
  from LITE to SAMPLE databases in case of
 \end_layout
 
 \begin_deeper
 \begin_layout Itemize
-
 existing SAMPLE database
 \end_layout
 
@@ -3474,19 +3478,16 @@ reason for implementation: show maximum possible IP2Location features
 
 \end_deeper
 \begin_layout Itemize
-
 --db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>: switches
  from COMMercial to LITE databases in case of
 \end_layout
 
 \begin_deeper
 \begin_layout Itemize
-
 existing LITE database
 \end_layout
 
 \begin_layout Itemize
-
 COMMercial database is default/given MONTHS older than the LITE database
 \end_layout
 

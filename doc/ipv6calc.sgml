@@ -272,6 +272,7 @@ IP2Location: selected best databases LI->SA*Country4=72   Country6=96   City4=72
 IP2Location: selected best databases normal Country4=109  Country6=109  City4=109  City6=109
 IP2Location: selected best databases method: * = autoswitch from LITE to SAMPLE enabled in case not older than 12 months
 IP2Location: selected best databases method: COMM older than 12 months are deselected in case of LITE is available
+IP2Location: selected best databases method: COMM/LITE/SAMPLE with more features are only selected in case not older than 1 months
 
 db-ip.com: features available/implemented: 0x03003cc0/0x03003cc0 (100%)
 DBIP: info of available databases in directory: /usr/share/DBIP
