@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
- * Version       : $Id: dbieee_oui36.h,v 1.27 2015/04/18 08:04:19 ds6peter Exp $
- * Generated     : Sat Apr 18 08:17:51 2015
+ * Version       : $Id: dbieee_oui36.h,v 1.28 2015/05/02 11:11:27 ds6peter Exp $
+ * Generated     : Sat May  2 12:59:06 2015
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20150418";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20150502";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -573,44 +573,64 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x903000, 0x903FFF, "Cymtec Ltd", "CYMTEC" },
 	{ 0x70B3D5, 0x2A5000, 0x2A5FFF, "Taitotekniikka", "TAITOTEKNIIKKA" },
 	{ 0x70B3D5, 0x7B8000, 0x7B8FFF, "SerEnergy A/S", "SERENERGY-A/S" },
+	{ 0x70B3D5, 0x088000, 0x088FFF, "OptiScan Biomedical Corp.", "OPTISCAN-BIOMEDICAL" },
 	{ 0x70B3D5, 0xC24000, 0xC24FFF, "Elbit Systems of America", "ELBIT-OF-AMERICA" },
 	{ 0x70B3D5, 0x10C000, 0x10CFFF, "Vocality International", "VOCALITY" },
+	{ 0x70B3D5, 0x2A7000, 0x2A7FFF, "Plasmability, LLC", "PLASMABILITY-LLC" },
 	{ 0x70B3D5, 0x564000, 0x564FFF, "christmann informationstechnik + medien GmbH & Co. KG", "CHRISTMANN-INFORMATIONSTECHNIK-+-MEDIEN" },
 	{ 0x70B3D5, 0xD48000, 0xD48FFF, "HEADROOM Broadcast GmbH", "HEADROOM-BROADCAST" },
+	{ 0x70B3D5, 0x827000, 0x827FFF, "Metromatics Pty Ltd", "METROMATICS-PTY" },
 	{ 0x70B3D5, 0xC78000, 0xC78FFF, "NETA Elektronik AS", "NETA-ELEKTRONIK-AS" },
 	{ 0x70B3D5, 0xC5A000, 0xC5AFFF, "Commsignia Ltd.", "COMMSIGNIA" },
+	{ 0x70B3D5, 0x2E0000, 0x2E0FFF, "Peter Huber", "PETER-HUBER" },
 	{ 0x70B3D5, 0xF2A000, 0xF2AFFF, "WIBOND Informationssysteme GmbH", "WIBOND-INFORMATIONSSYSTEME" },
 	{ 0x70B3D5, 0xA97000, 0xA97FFF, "Bizwerks, LLC", "BIZWERKS-LLC" },
+	{ 0x70B3D5, 0x628000, 0x628FFF, "MECT S.R.L.", "MECT-S-R-L" },
 	{ 0x70B3D5, 0x86D000, 0x86DFFF, "Census Digital Incorporated", "CENSUS-DIGITAL-INCORPORATED" },
 	{ 0x70B3D5, 0x9DB000, 0x9DBFFF, "CAS Medical Systems, Inc", "CAS-MEDICAL" },
+	{ 0x70B3D5, 0xC21000, 0xC21FFF, "Aplex Technology Inc.", "APLEX" },
 	{ 0x70B3D5, 0xAC8000, 0xAC8FFF, "Heartland.Data Inc.", "HEARTLAND-DATA" },
 	{ 0x70B3D5, 0xCB8000, 0xCB8FFF, "Verti Tecnologia", "VERTI-TECNOLOGIA" },
+	{ 0x70B3D5, 0xFBB000, 0xFBBFFF, "Vena Engineering Corporation", "VENA-ENGINEERING" },
 	{ 0x70B3D5, 0x634000, 0x634FFF, "idaqs Co.,Ltd.", "IDAQS" },
 	{ 0x70B3D5, 0xEB1000, 0xEB1FFF, "CP contech electronic GmbH", "CP-CONTECH" },
+	{ 0x70B3D5, 0x654000, 0x654FFF, "EMAC, Inc.", "EMAC" },
 	{ 0x70B3D5, 0x010000, 0x010FFF, "Hanwa Electronic Ind.Co.,Ltd.", "HANWA-IND" },
 	{ 0x70B3D5, 0x44E000, 0x44EFFF, "Solace Systems Inc.", "SOLACE" },
+	{ 0x70B3D5, 0x714000, 0x714FFF, "Alturna Networks", "ALTURNA-NETWORKS" },
 	{ 0x70B3D5, 0x2DA000, 0x2DAFFF, "Skywave Networks Private Limited", "SKYWAVE-NETWORKS-PRIVATE" },
 	{ 0x70B3D5, 0x13F000, 0x13FFFF, "Farmobile", "FARMOBILE" },
+	{ 0x70B3D5, 0xD8C000, 0xD8CFFF, "Damerell Design Limited (DCL)", "DAMERELL-DESIGN-DCL" },
 	{ 0x70B3D5, 0xBBD000, 0xBBDFFF, "Providius Corp", "PROVIDIUS" },
 	{ 0x70B3D5, 0xED5000, 0xED5FFF, "hangzhou battle link technology Co.,Ltd", "HANGZHOU-BATTLE-LINK" },
+	{ 0x70B3D5, 0x9C8000, 0x9C8FFF, "Applied Systems Engineering, Inc.", "APPLIED-ENGINEERING" },
 	{ 0x70B3D5, 0xCBC000, 0xCBCFFF, "Procon Electronics Pty Ltd", "PROCON-ELECTRONICS-PTY" },
 	{ 0x70B3D5, 0xDF6000, 0xDF6FFF, "Tiab Limited", "TIAB" },
+	{ 0x70B3D5, 0xB91000, 0xB91FFF, "Dynetics, Inc.", "DYNETICS" },
 	{ 0x70B3D5, 0x305000, 0x305FFF, "CAITRON Industrial Solutions GmbH", "CAITRON-INDUSTRIAL-SOLUTIONS" },
 	{ 0x70B3D5, 0x5C8000, 0x5C8FFF, "YUYAMA MFG Co.,Ltd", "YUYAMA-MFG" },
+	{ 0x70B3D5, 0x4DE000, 0x4DEFFF, "Oso Technologies, Inc.", "OSO-TECHNOLOGIES" },
 	{ 0x70B3D5, 0x8AB000, 0x8ABFFF, "EMAC, Inc.", "EMAC" },
 	{ 0x70B3D5, 0x3E3000, 0x3E3FFF, "Head", "HEAD" },
+	{ 0x70B3D5, 0x835000, 0x835FFF, "CommBox P/L", "COMMBOX-P/L" },
 	{ 0x70B3D5, 0x819000, 0x819FFF, "«Intellect module» LLC", "«INTELLECT-MODULE»-LLC" },
 	{ 0x70B3D5, 0x285000, 0x285FFF, "Bentec GmbH Drilling & Oilfield Systems", "BENTEC-DRILLING-OILFIELD" },
+	{ 0x70B3D5, 0xFCD000, 0xFCDFFF, "Engage Technologies", "ENGAGE-TECHNOLOGIES" },
 	{ 0x70B3D5, 0x029000, 0x029FFF, "Marimo electronics Co.,Ltd.", "MARIMO-ELECTRONICS" },
 	{ 0x70B3D5, 0x1AF000, 0x1AFFFF, "Teenage Engineering AB", "TEENAGE-ENGINEERING-AB" },
+	{ 0x70B3D5, 0x4DB000, 0x4DBFFF, "Temperature@lert", "TEMPERATURE@LERT" },
 	{ 0x70B3D5, 0x2FD000, 0x2FDFFF, "Special Projects Group, Inc", "SPECIAL-PROJECTS-GROUP" },
 	{ 0x70B3D5, 0xA81000, 0xA81FFF, "Sienda New Media Technologies GmbH", "SIENDA-NEW-MEDIA-TECHNOLOGIES" },
+	{ 0x70B3D5, 0x230000, 0x230FFF, "CT Company", "CT-COMPANY" },
 	{ 0x70B3D5, 0xC6A000, 0xC6AFFF, "PRIVATE", "PRIVATE" },
 	{ 0x70B3D5, 0xD0D000, 0xD0DFFF, "Logiwaste AB", "LOGIWASTE-AB" },
+	{ 0x70B3D5, 0x0FC000, 0x0FCFFF, "vitalcare", "VITALCARE" },
 	{ 0x70B3D5, 0xA7A000, 0xA7AFFF, "Fluid Management Technology", "FLUID-MANAGEMENT" },
 	{ 0x70B3D5, 0x46F000, 0x46FFFF, "serva transport systems GmbH", "SERVA-TRANSPORT" },
+	{ 0x70B3D5, 0xF4D000, 0xF4DFFF, "Honeywell International Inc.", "HONEYWELL" },
 	{ 0x70B3D5, 0x83B000, 0x83BFFF, "Telefonix Incorporated", "TELEFONIX-INCORPORATED" },
 	{ 0x70B3D5, 0xA00000, 0xA00FFF, "ATX NETWORKS LTD", "ATX-NETWORKS" },
+	{ 0x70B3D5, 0x88F000, 0x88FFFF, "Quaesta Instruments, LLC", "QUAESTA-INSTRUMENTS-LLC" },
 	{ 0x70B3D5, 0x204000, 0x204FFF, "TWC", "TWC" },
 	{ 0x70B3D5, 0xEFB000, 0xEFBFFF, "PXM sp.k.", "PXM-SP-K" },
 	{ 0x70B3D5, 0x099000, 0x099FFF, "Schwer+Kopka GmbH", "SCHWER+KOPKA" },

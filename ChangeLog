@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.394 2015/05/02 10:25:32 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.395 2015/05/02 11:11:27 ds6peter Exp $ 
  */
 
 Info:
@@ -12,6 +12,7 @@ Info:
 20150502/PB
 	add option: --db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>
 	add option: --db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>
+	internal databases: updates
 
 20150429/PB
 	add filter for token match and empty value on machine readable output
