@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.33 2015/05/02 10:25:32 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.34 2015/05/02 10:57:34 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -125,6 +125,10 @@ int ip2location_db_lite_to_sample_autoswitch_max_delta_months = 12;
 
 // select LITE database if COMM is older than given months
 int ip2location_db_comm_to_lite_switch_min_delta_months = 12;
+
+// select better database of same product (COMM/LITE/SAMPLE) only if not older than given months
+int ip2location_db_better_max_delta_months = 1;
+
 
 #define IP2L_PACK_YM(loc) (loc->databaseyear * 12 + (loc->databasemonth -1))
 #define IP2L_UNPACK_YM(dbym) ((dbym > 0) ? ((dbym % 12) + 1 + ((dbym / 12) + 2000) * 100) : 0)
@@ -272,7 +276,7 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 			  (best.num == 0) \
 			  || ( \
 				(best.dbym > 0) \
-				  && ((best.dbym - dbym) <= ip2location_db_comm_to_lite_switch_min_delta_months) \
+				  && ((best.dbym - dbym) <= ip2location_db_better_max_delta_months) \
 			     ) \
 			) { \
 				best.num = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number; \
@@ -597,43 +601,55 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 		printf("%sIP2Location: NO available databases found in directory: %s\n", prefix, ip2location_db_dir);
 	} else {
 		if (level_verbose >= LEVEL_VERBOSE2) {
-			printf("%sIP2Location: detected best databases SAMPLE Country4=%-3d %6d  Country6=%-3d %6d  City4=%-3d %6d  City6=%-3d %6d\n"
+			printf("%sIP2Location: detected best databases SAMPLE  Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d\n"
 				, prefix
 				, ip2location_db_country_v4_best[IP2L_SAMPLE].num
+				, ip2location_db_country_v4_best[IP2L_SAMPLE].dbtype
 				, IP2L_UNPACK_YM(ip2location_db_country_v4_best[IP2L_SAMPLE].dbym)
 				, ip2location_db_country_v6_best[IP2L_SAMPLE].num
+				, ip2location_db_country_v6_best[IP2L_SAMPLE].dbtype
 				, IP2L_UNPACK_YM(ip2location_db_country_v6_best[IP2L_SAMPLE].dbym)
 				, ip2location_db_region_city_v4_best[IP2L_SAMPLE].num
+				, ip2location_db_region_city_v4_best[IP2L_SAMPLE].dbtype
 				, IP2L_UNPACK_YM(ip2location_db_region_city_v4_best[IP2L_SAMPLE].dbym)
 				, ip2location_db_region_city_v6_best[IP2L_SAMPLE].num
+				, ip2location_db_region_city_v6_best[IP2L_SAMPLE].dbtype
 				, IP2L_UNPACK_YM(ip2location_db_region_city_v6_best[IP2L_SAMPLE].dbym)
 			);
 
-			printf("%sIP2Location: detected best databases LITE   Country4=%-3d %6d  Country6=%-3d %6d  City4=%-3d %6d  City6=%-3d %6d\n"
+			printf("%sIP2Location: detected best databases LITE    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d\n"
 				, prefix
 				, ip2location_db_country_v4_best[IP2L_LITE].num
+				, ip2location_db_country_v4_best[IP2L_LITE].dbtype
 				, IP2L_UNPACK_YM(ip2location_db_country_v4_best[IP2L_LITE].dbym)
 				, ip2location_db_country_v6_best[IP2L_LITE].num
+				, ip2location_db_country_v6_best[IP2L_LITE].dbtype
 				, IP2L_UNPACK_YM(ip2location_db_country_v6_best[IP2L_LITE].dbym)
 				, ip2location_db_region_city_v4_best[IP2L_LITE].num
+				, ip2location_db_region_city_v4_best[IP2L_LITE].dbtype
 				, IP2L_UNPACK_YM(ip2location_db_region_city_v4_best[IP2L_LITE].dbym)
 				, ip2location_db_region_city_v6_best[IP2L_LITE].num
+				, ip2location_db_region_city_v6_best[IP2L_LITE].dbtype
 				, IP2L_UNPACK_YM(ip2location_db_region_city_v6_best[IP2L_LITE].dbym)
 			);
 
-			printf("%sIP2Location: detected best databases COMM   Country4=%-3d %6d  Country6=%-3d %6d  City4=%-3d %6d  City6=%-3d %6d\n"
+			printf("%sIP2Location: detected best databases COMM    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d\n"
 				, prefix
 				, ip2location_db_country_v4_best[IP2L_COMM].num
+				, ip2location_db_country_v4_best[IP2L_COMM].dbtype
 				, IP2L_UNPACK_YM(ip2location_db_country_v4_best[IP2L_COMM].dbym)
 				, ip2location_db_country_v6_best[IP2L_COMM].num
+				, ip2location_db_country_v6_best[IP2L_COMM].dbtype
 				, IP2L_UNPACK_YM(ip2location_db_country_v6_best[IP2L_COMM].dbym)
 				, ip2location_db_region_city_v4_best[IP2L_COMM].num
+				, ip2location_db_region_city_v4_best[IP2L_COMM].dbtype
 				, IP2L_UNPACK_YM(ip2location_db_region_city_v4_best[IP2L_COMM].dbym)
 				, ip2location_db_region_city_v6_best[IP2L_COMM].num
+				, ip2location_db_region_city_v6_best[IP2L_COMM].dbtype
 				, IP2L_UNPACK_YM(ip2location_db_region_city_v6_best[IP2L_COMM].dbym)
 			);
 		} else if (level_verbose >= LEVEL_VERBOSE) {
-			printf("%sIP2Location: detected best databases SAMPLE Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
+			printf("%sIP2Location: detected best databases SAMPLE  Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
 				, prefix
 				, ip2location_db_country_v4_best[IP2L_SAMPLE].num
 				, ip2location_db_country_v6_best[IP2L_SAMPLE].num
@@ -641,7 +657,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 				, ip2location_db_region_city_v6_best[IP2L_SAMPLE].num
 			);
 
-			printf("%sIP2Location: detected best databases LITE   Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
+			printf("%sIP2Location: detected best databases LITE    Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
 				, prefix
 				, ip2location_db_country_v4_best[IP2L_LITE].num
 				, ip2location_db_country_v6_best[IP2L_LITE].num
@@ -649,7 +665,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 				, ip2location_db_region_city_v6_best[IP2L_LITE].num
 			);
 
-			printf("%sIP2Location: detected best databases COMM   Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
+			printf("%sIP2Location: detected best databases COMM    Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
 				, prefix
 				, ip2location_db_country_v4_best[IP2L_COMM].num
 				, ip2location_db_country_v6_best[IP2L_COMM].num
@@ -661,26 +677,26 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 
 		if (level_verbose >= LEVEL_VERBOSE) {
 			if (ip2location_db_lite_to_sample_autoswitch_max_delta_months > 0) {
-				printf("%sIP2Location: selected best databases LI->SA*Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d\n"
+				printf("%sIP2Location: selected best databases LI->SA* Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d\n"
 					, prefix
 					, ip2location_db_country_sample_v4_lite_autoswitch
-					, (level_verbose >= LEVEL_VERBOSE2) ? "       " : ""
+					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
 					, ip2location_db_country_sample_v6_lite_autoswitch
-					, (level_verbose >= LEVEL_VERBOSE2) ? "       " : ""
+					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
 					, ip2location_db_region_city_sample_v4_lite_autoswitch
-					, (level_verbose >= LEVEL_VERBOSE2) ? "       " : ""
+					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
 					, ip2location_db_region_city_sample_v6_lite_autoswitch
 				);
 			};
 
-			printf("%sIP2Location: selected best databases normal Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d\n"
+			printf("%sIP2Location: selected best databases normal  Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d\n"
 				, prefix
 				, ip2location_db_country_v4
-				, (level_verbose >= LEVEL_VERBOSE2) ? "       " : ""
+				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
 				, ip2location_db_country_v6
-				, (level_verbose >= LEVEL_VERBOSE2) ? "       " : ""
+				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
 				, ip2location_db_region_city_v4
-				, (level_verbose >= LEVEL_VERBOSE2) ? "       " : ""
+				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
 				, ip2location_db_region_city_v6
 			);
 
@@ -690,10 +706,18 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 					, ip2location_db_lite_to_sample_autoswitch_max_delta_months
 				);
 			};
+
 			if (ip2location_db_comm_to_lite_switch_min_delta_months > 0) {
 				printf("%sIP2Location: selected best databases method: COMM older than %d months are deselected in case of LITE is available\n"
 					, prefix
 					, ip2location_db_comm_to_lite_switch_min_delta_months
+				);
+			};
+
+			if (ip2location_db_better_max_delta_months > 0) {
+				printf("%sIP2Location: selected best databases method: COMM/LITE/SAMPLE with more features are only selected in case not older than %d months\n"
+					, prefix
+					, ip2location_db_better_max_delta_months
 				);
 			};
 		};
