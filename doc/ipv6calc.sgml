@@ -12,14 +12,14 @@
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>5.1</revnumber> <date>2015-04-30</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>5.1</revnumber> <date>2015-05-02</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freshmeat.net/projects/ipv6calc/">freshmeat / ipv6calc</ulink> page (not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 0.99.0 (released 2015-05-xx)</para></sect2><sect2>
+<para>Latest version since last update of this page is 0.99.0 (released 2015-05-02)</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
 <listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem></itemizedlist></sect2><sect2>
@@ -263,6 +263,7 @@ IP2Location: IPvx Country/ISP                                :[103] IP2LOCATION-
 IP2Location: IPvx Country/Region/City/LongitudeLattitude     :[105] IP2LOCATION-LITE-DB5.IPV6.BIN       (IP2L-DB5 IPv6 LITE 20150329)
 IP2Location: IPvx Co/Re/Ci/LattLong/ZIP                      :[107] IP2LOCATION-LITE-DB9.IPV6.BIN       (IP2L-DB9 IPv6 LITE 20150329)
 IP2Location: IPvx Co/Re/Ci/LattLong/ZIP/TZ                   :[109] IP2LOCATION-LITE-DB11.IPV6.BIN      (IP2L-DB11 IPv6 LITE 20150329)
+IP2Location: IPv4 Country                                    :[  1] IP-COUNTRY.BIN                      (SOFTLINK IS UNSUPPORTED) 
 IP2Location: IPv6 Country                                    :[ 25] IPV6-COUNTRY.BIN                    (IP2L-DB1 IPv6 20060918)
 IP2Location: IPv6 Country                                    :[120] IPV6-COUNTRY-FREE.BIN               (IP2L-DB1 IPv6 FREE 20140723 INCOMPATIBLE)
 IP2Location: detected best databases SAMPLE Country4=72   Country6=96   City4=72   City6=96 
@@ -270,9 +271,10 @@ IP2Location: detected best databases LITE   Country4=109  Country6=109  City4=10
 IP2Location: detected best databases COMM   Country4=0    Country6=25   City4=0    City6=0  
 IP2Location: selected best databases LI->SA*Country4=72   Country6=96   City4=72   City6=96 
 IP2Location: selected best databases normal Country4=109  Country6=109  City4=109  City6=109
-IP2Location: selected best databases method: * = autoswitch from LITE to SAMPLE enabled in case not older than 12 months
+IP2Location: selected best databases method: * = autoswitch from LITE to SAMPLE enabled in case not older than 12 months and having more features
 IP2Location: selected best databases method: COMM older than 12 months are deselected in case of LITE is available
-IP2Location: selected best databases method: COMM/LITE/SAMPLE with more features are only selected in case not older than 1 months
+IP2Location: selected best databases method: COMM/LITE/SAMPLE with more features are only selected in case not older than 1 months of already found COMM/LITE/SAMPLE
+IP2Location: selected best databases method: softlinks: skipped-by-default 
 
 db-ip.com: features available/implemented: 0x03003cc0/0x03003cc0 (100%)
 DBIP: info of available databases in directory: /usr/share/DBIP
@@ -504,6 +506,8 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many more
   [--db-ip2location-disable        ] : IP2Location support disabled
   [--db-ip2location-dir <directory>] : IP2Location database directory (default: /usr/share/IP2Location)
   [--db-ip2location-lib <file>     ] : IP2Location library file (default: libIP2Location.so)
+  [--db-ip2location-only-type <TYPE>]: IP2Location database only selected type (1-24)
+  [--db-ip2location-allow-softlinks] : IP2Location database softlinks allowed
   [--db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>]:
      autoswitch from LITE to SAMPLE databases if possible and delta is not more than 12 months (0=disabled)
   [--db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>]:
@@ -583,7 +587,11 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many more
 <para>IP2location database directory can contain a bunch of files, the best ones are selected automatically (since 0.99.0). &ldquo;Best&rdquo; can be controlled via two options:</para><itemizedlist>
 <listitem><para>--db-ip2location-lite-to-sample-autoswitch-max-delta-months &lt;MONTHS&gt;: switches from LITE to SAMPLE databases in case of</para><itemizedlist>
 <listitem><para>existing SAMPLE database</para></listitem><listitem><para>SAMPLE database not older than default/given MONTHS than the LITE database</para></listitem><listitem><para>IP address is in range of SAMPLE database (IPv4: 0.0.0.0-99.255.255.255, IPv6: 2a04::/16)</para></listitem><listitem><para>autoswitch can be disabled by using MONTHS=0</para></listitem><listitem><para>reason for implementation: show maximum possible IP2Location features</para></listitem></itemizedlist></listitem><listitem><para>--db-ip2location-comm-to-lite-switch-min-delta-months &lt;MONTHS&gt;: switches from COMMercial to LITE databases in case of</para><itemizedlist>
-<listitem><para>existing LITE database</para></listitem><listitem><para>COMMercial database is default/given MONTHS older than the LITE database</para></listitem><listitem><para>switch can be disabled by using MONTHS=0</para></listitem><listitem><para>reason for implementation: avoid using old COMMercial databases</para></listitem></itemizedlist></listitem></itemizedlist><para>use &ldquo;ipv6calc -vv&rdquo; for verification, which databases are selected finally.</para></sect4></sect3><sect3>
+<listitem><para>existing LITE database</para></listitem><listitem><para>COMMercial database is default/given MONTHS older than the LITE database</para></listitem><listitem><para>switch can be disabled by using MONTHS=0</para></listitem><listitem><para>reason for implementation: avoid using old COMMercial databases</para></listitem></itemizedlist></listitem><listitem><para>--db-ip2location-only-type &lt;TYPE&gt;: only selects databases of given type</para><itemizedlist>
+<listitem><para>reason for implementation: be able to select a specific database type</para></listitem></itemizedlist></listitem><listitem><para>--db-ip2location-allow-softlinks: allow softlinked IP2Location database files</para><itemizedlist>
+<listitem><para>by default, softlinked database files are skipped, because it's hard to detect whether one is COMMercial, LITE or SAMPLE</para></listitem></itemizedlist></listitem></itemizedlist><screen>
+<![CDATA[
+]]></screen><para>use &ldquo;ipv6calc -vv&rdquo; or &ldquo;ipv6calc -vvv&rdquo; for verification, which databases are selected finally.</para></sect4></sect3><sect3>
 <title>Input-type options</title>
 <screen>
 <![CDATA[$ ipv6calc --in -?
@@ -1154,7 +1162,7 @@ ALL  46233 62292 0 2397 3525 40198 97 16 0 0 129 839 61074 0 0 0 0 0 16 51 0 0 0
 <para>Major extensions/changes are listed here</para><sect2>
 <title>2015</title>
 <itemizedlist>
-<listitem><para>Add support for <ulink url="http://www.db-ip.com/">DB-IP.com</ulink> databases (by generated Berkeley DB files) (&gt;= 0.98.0)</para></listitem><listitem><para>Add support for &ldquo;External&rdquo; database files (generated Berkeley DB files), superseeding (if newer) built-in IPv4/IPv6-&gt;Registry and adding IPv4/IPv6-&gt;CountryCode support (&gt;= 0.98.0)</para></listitem><listitem><para>Extend filter options with support of CountryCode, ASN or Registry (&gt;= 0.99.0)</para></listitem><listitem><para>Add support for <ulink url="http://lite.ip2location.com/">IP2Location LITE</ulink> databases (&gt;= 0.99.0)</para></listitem></itemizedlist></sect2><sect2>
+<listitem><para>Add support for <ulink url="http://www.db-ip.com/">DB-IP.com</ulink> databases (by generated Berkeley DB files) (&gt;= 0.98.0)</para></listitem><listitem><para>Add support for &ldquo;External&rdquo; database files (generated Berkeley DB files), superseeding (if newer) built-in IPv4/IPv6-&gt;Registry and adding IPv4/IPv6-&gt;CountryCode support (&gt;= 0.98.0)</para></listitem><listitem><para>Extend filter options with support of CountryCode, ASN or Registry (&gt;= 0.99.0)</para></listitem><listitem><para>Add support for <ulink url="http://lite.ip2location.com/">IP2Location LITE</ulink> databases (&gt;= 0.99.0), add configurable IP2Location database autoselection support</para></listitem></itemizedlist></sect2><sect2>
 <title>2014</title>
 <itemizedlist>
 <listitem><para>Shared library mode supported (reduces size of binaries)</para></listitem></itemizedlist></sect2><sect2>

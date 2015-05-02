@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.72 2015/05/02 10:25:32 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.73 2015/05/02 15:25:33 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -318,6 +318,9 @@ void printhelp_common(const uint32_t help_features) {
 #ifdef SUPPORT_IP2LOCATION_DYN
 		fprintf(stderr, "  [--db-ip2location-lib <file>     ] : IP2Location library file (default: %s)\n", ip2location_lib_file);
 #endif
+		fprintf(stderr, "  [--db-ip2location-only-type <TYPE>]: IP2Location database only selected type (1-%d)\n", IP2LOCATION_DB_MAX);
+		fprintf(stderr, "  [--db-ip2location-allow-softlinks] : IP2Location database softlinks allowed\n");
+		fprintf(stderr, "     by default they are ignored because it is hard to autodetect COMM/LITE/SAMPLE\n");
 		fprintf(stderr, "  [--db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>]:\n");
 		fprintf(stderr, "     autoswitch from LITE to SAMPLE databases if possible and delta is not more than %d months (0=disabled)\n", ip2location_db_lite_to_sample_autoswitch_max_delta_months);
 		fprintf(stderr, "  [--db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>]:\n");

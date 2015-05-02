@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.59 2015/05/02 10:25:32 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.60 2015/05/02 15:25:32 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -761,6 +761,29 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 				fprintf(stderr, " Argument of option 'db-ip2location-comm-to-lite-switch-min-delta-months' is out or range (0-99999): %d\n", atoi(optarg));
 				exit(EXIT_FAILURE);
 			};
+#else
+			NONQUIETPRINT_WA("Support for IP2Location not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+
+		case DB_ip2location_only_type:
+#ifdef SUPPORT_IP2LOCATION
+			if ((atoi(optarg) >= 1) && (atoi(optarg) <= IP2LOCATION_DB_MAX)) {
+				ip2location_db_only_type = atoi(optarg);
+			} else {
+				fprintf(stderr, " Argument of option 'db-ip2location-only-type' is out or range (1-%d): %d\n", IP2LOCATION_DB_MAX, atoi(optarg));
+				exit(EXIT_FAILURE);
+			};
+#else
+			NONQUIETPRINT_WA("Support for IP2Location not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+
+		case DB_ip2location_allow_softlinks:
+#ifdef SUPPORT_IP2LOCATION
+			ip2location_db_allow_softlinks = 1;
 #else
 			NONQUIETPRINT_WA("Support for IP2Location not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif

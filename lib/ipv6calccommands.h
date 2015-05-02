@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calccommands.h
- * Version    : $Id: ipv6calccommands.h,v 1.23 2015/05/02 10:25:32 ds6peter Exp $
+ * Version    : $Id: ipv6calccommands.h,v 1.24 2015/05/02 15:25:33 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -56,29 +56,31 @@
 #define DB_ip2location_ipv6		0x0002002
 #define DB_ip2location_ipv4_default	0x0002003
 #define DB_ip2location_ipv6_default	0x0002004
-#define DB_geoip_ipv4			0x0002011
-#define DB_geoip_ipv6			0x0002012
-#define DB_geoip_ipv4_default		0x0002013
-#define DB_geoip_ipv6_default		0x0002014
+#define DB_geoip_ipv4			0x0002101
+#define DB_geoip_ipv6			0x0002102
+#define DB_geoip_ipv4_default		0x0002103
+#define DB_geoip_ipv6_default		0x0002104
 
 /* database options (new) */
 #define DB_ip2location_disable		0x0002000
 #define DB_ip2location_dir		0x0002005
 #define DB_ip2location_lib		0x0002006
-#define DB_ip2location_lite_to_sample_autoswitch_max_delta_months	0x0002007
-#define DB_ip2location_comm_to_lite_switch_min_delta_months		0x0002008
+#define DB_ip2location_lite_to_sample_autoswitch_max_delta_months	0x0002010
+#define DB_ip2location_comm_to_lite_switch_min_delta_months		0x0002011
+#define DB_ip2location_only_type	0x0002012
+#define DB_ip2location_allow_softlinks	0x0002013
 
-#define DB_geoip_disable		0x0002010
-#define DB_geoip_dir			0x0002015
-#define DB_geoip_lib			0x0002016
+#define DB_geoip_disable		0x0002100
+#define DB_geoip_dir			0x0002105
+#define DB_geoip_lib			0x0002106
 
-#define DB_dbip_disable			0x0002020
-#define DB_dbip_dir			0x0002025
+#define DB_dbip_disable			0x0002200
+#define DB_dbip_dir			0x0002205
 
-#define DB_external_disable		0x0002030
-#define DB_external_dir			0x0002035
+#define DB_external_disable		0x0002300
+#define DB_external_dir			0x0002305
 
-#define DB_builtin_disable		0x0002040
+#define DB_builtin_disable		0x0002400
 
 
 /* address anonymizer options */

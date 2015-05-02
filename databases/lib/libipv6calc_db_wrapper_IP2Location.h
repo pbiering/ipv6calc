@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.h
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.h,v 1.10 2015/05/02 10:25:32 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.h,v 1.11 2015/05/02 15:25:33 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -29,6 +29,7 @@
 #define IP2LOCATION_IPV6_SUPPORT_NOTEXISTS	3
 
 // database types
+#define IP2LOCATION_DB_MAX	 24
 
 /*** Commercial ***/
 #define IP2LOCATION_IPV4_DB1	 1
@@ -611,5 +612,8 @@ extern const char *libipv6calc_db_wrapper_IP2Location_UsageType_description(char
 
 extern int ip2location_db_lite_to_sample_autoswitch_max_delta_months;
 extern int ip2location_db_comm_to_lite_switch_min_delta_months;
+extern int ip2location_db_only_type;
+extern int ip2location_db_allow_softlinks;
+
 
 #endif

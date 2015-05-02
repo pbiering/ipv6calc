@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions_common.h,v 1.15 2015/05/02 10:25:32 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions_common.h,v 1.16 2015/05/02 15:25:33 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -47,6 +47,8 @@ static struct option ipv6calc_longopts_ip2location[] = {
 	/* database selection control */
 	{"db-ip2location-lite-to-sample-autoswitch-max-delta-months", 1, NULL, DB_ip2location_lite_to_sample_autoswitch_max_delta_months },
 	{"db-ip2location-comm-to-lite-switch-min-delta-months", 1, NULL, DB_ip2location_comm_to_lite_switch_min_delta_months },
+	{"db-ip2location-only-type", 1, NULL, DB_ip2location_only_type },
+	{"db-ip2location-allow-softlinks", 0, NULL, DB_ip2location_allow_softlinks },
 
 #ifdef SUPPORT_IP2LOCATION_DYN
 	{"db-ip2location-lib"          , 1, NULL, DB_ip2location_lib     },

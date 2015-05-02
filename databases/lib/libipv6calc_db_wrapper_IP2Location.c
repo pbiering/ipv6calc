@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.34 2015/05/02 10:57:34 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.35 2015/05/02 15:25:33 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -129,6 +129,11 @@ int ip2location_db_comm_to_lite_switch_min_delta_months = 12;
 // select better database of same product (COMM/LITE/SAMPLE) only if not older than given months
 int ip2location_db_better_max_delta_months = 1;
 
+// select only a specific IP2Location db type
+int ip2location_db_only_type = 0;
+
+// allow soft links (usually skipped)
+int ip2location_db_allow_softlinks = 0;
 
 #define IP2L_PACK_YM(loc) (loc->databaseyear * 12 + (loc->databasemonth -1))
 #define IP2L_UNPACK_YM(dbym) ((dbym > 0) ? ((dbym % 12) + 1 + ((dbym / 12) + 2000) * 100) : 0)
@@ -189,7 +194,7 @@ static int       libipv6calc_db_wrapper_IP2Location_db_compatible(const int type
  * out: 0=ok, 1=error
  */
 int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
-	int i, dbym, product, dbtype;
+	int i, dbym, product, dbtype, result;
 	IP2Location *loc;
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called");
@@ -247,7 +252,8 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 		wrapper_features_by_source_implemented[IPV6CALC_DB_SOURCE_IP2LOCATION] |= libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features;
 
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "IP2Location database test for availability: %s", libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename);
-		if (libipv6calc_db_wrapper_IP2Location_db_avail(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number) != 1) {
+		result = libipv6calc_db_wrapper_IP2Location_db_avail(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number);
+		if ((result != 1) && (result != 3)) {
 			// db not available
 			continue;
 		};
@@ -262,6 +268,11 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 		loc = libipv6calc_db_wrapper_IP2Location_open_type(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number);
 		dbym = IP2L_PACK_YM(loc);
 		dbtype = loc->databasetype;
+
+		if ((ip2location_db_only_type > 0) && (ip2location_db_only_type != dbtype)) {
+			// not selected
+			continue;
+		};
 
 		if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE) != 0) {
 			product = IP2L_SAMPLE;
@@ -559,7 +570,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 				libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description,
 				libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number,
 				libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename);
-		} else if (r == 1) {
+		} else if ((r == 1) || (r == 3)) {
 			// IP2Location returned that database is available
 			loc = libipv6calc_db_wrapper_IP2Location_open_type(type);
 			if (loc == NULL) {
@@ -570,12 +581,13 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename
 				);
 			} else { 
-				printf("%sIP2Location: %s %-43s:[%3d] %-35s (%s)\n", prefix,
+				printf("%sIP2Location: %s %-43s:[%3d] %-35s (%s%s)\n", prefix,
 					((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) == (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) ? "IPvx" : (((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0) ? "IPv6" : "IPv4"),
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description,
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number,
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename,
-					libipv6calc_db_wrapper_IP2Location_database_info(loc, level_verbose, i, 0)
+					libipv6calc_db_wrapper_IP2Location_database_info(loc, level_verbose, i, 0),
+					(r == 3) ? " SOFTLINK" : ""
 				);
 				libipv6calc_db_wrapper_IP2Location_close(loc);
 				count++;
@@ -701,7 +713,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 			);
 
 			if (ip2location_db_lite_to_sample_autoswitch_max_delta_months > 0) {
-				printf("%sIP2Location: selected best databases method: * = autoswitch from LITE to SAMPLE enabled in case not older than %d months\n"
+				printf("%sIP2Location: selected best databases method: * = autoswitch from LITE to SAMPLE enabled in case not older than %d months and having more features\n"
 					, prefix
 					, ip2location_db_lite_to_sample_autoswitch_max_delta_months
 				);
@@ -715,11 +727,24 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 			};
 
 			if (ip2location_db_better_max_delta_months > 0) {
-				printf("%sIP2Location: selected best databases method: COMM/LITE/SAMPLE with more features are only selected in case not older than %d months\n"
+				printf("%sIP2Location: selected best databases method: COMM/LITE/SAMPLE with more features are only selected in case not older than %d months of already found COMM/LITE/SAMPLE\n"
 					, prefix
 					, ip2location_db_better_max_delta_months
 				);
 			};
+
+			if (ip2location_db_only_type > 0) {
+				printf("%sIP2Location: selected best databases method: by applying given DB type filter: %d\n"
+					, prefix
+					, ip2location_db_only_type
+				);
+			};
+
+			printf("%sIP2Location: selected best databases method: softlinks: %s\n"
+				, prefix
+				, (ip2location_db_allow_softlinks == 0) ? "skipped-by-default" : "allowed-by-option"
+			);
+
 		};
 
 	};
@@ -917,7 +942,7 @@ const char *libipv6calc_db_wrapper_IP2Location_dbdescription(int type) {
 
 /*
  * wrapper extension: IP2Location_db_avail
- * ret: 1=avail  0=not-avail 2=softlink (unsupported)
+ * ret: 1=avail  0=not-avail 2=softlink (in case not allowed) 3=softlink (allowed)
  */
 int libipv6calc_db_wrapper_IP2Location_db_avail(int type) {
 	char *filename;
@@ -945,16 +970,22 @@ int libipv6calc_db_wrapper_IP2Location_db_avail(int type) {
 	};
 
 	if (S_ISLNK(st.st_mode)) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished: %s type=%d (unsupported softlink)", wrapper_ip2location_info, type);
-		result = 2;
-		goto END_libipv6calc_db_wrapper;
+		if ((ip2location_db_allow_softlinks == 0)) {
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished: %s type=%d (unsupported softlink)", wrapper_ip2location_info, type);
+			result = 2;
+			goto END_libipv6calc_db_wrapper;
+		} else {
+			result = 3;
+		};
 	};
 
 	loc = libipv6calc_db_wrapper_IP2Location_open_type(type);
 	if (loc == NULL) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished: %s type=%d (can't open)", wrapper_ip2location_info, type);
 	} else {
-		result = 1;
+		if (result == 0) {
+			result = 1;
+		};
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished: %s type=%d (%s) (r=%d)", wrapper_ip2location_info, type, filename, r);
 	};
 

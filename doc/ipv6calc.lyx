@@ -108,7 +108,7 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>5.1</revnumber> <date>2015-04-30</date> <authorinitials>PB<
+<revision> <revnumber>5.1</revnumber> <date>2015-05-02</date> <authorinitials>PB<
 /authorinitials></revision>
 \end_layout
 
@@ -173,7 +173,7 @@ Latest version
 \end_layout
 
 \begin_layout Standard
-Latest version since last update of this page is 0.99.0 (released 2015-05-xx)
+Latest version since last update of this page is 0.99.0 (released 2015-05-02)
 \end_layout
 
 \begin_layout Subsection
@@ -1790,6 +1790,12 @@ LITE-DB11.IPV6.BIN      (IP2L-DB11 IPv6 LITE 20150329)
 
 \begin_layout Code
 
+IP2Location: IPv4 Country                                    :[  1] IP-COUNTRY.BI
+N                      (SOFTLINK IS UNSUPPORTED) 
+\end_layout
+
+\begin_layout Code
+
 IP2Location: IPv6 Country                                    :[ 25] IPV6-COUNTRY.
 BIN                    (IP2L-DB1 IPv6 20060918)
 \end_layout
@@ -1833,7 +1839,7 @@ IP2Location: selected best databases normal Country4=109  Country6=109
 \begin_layout Code
 
 IP2Location: selected best databases method: * = autoswitch from LITE to
- SAMPLE enabled in case not older than 12 months
+ SAMPLE enabled in case not older than 12 months and having more features
 \end_layout
 
 \begin_layout Code
@@ -1845,7 +1851,14 @@ IP2Location: selected best databases method: COMM older than 12 months are
 \begin_layout Code
 
 IP2Location: selected best databases method: COMM/LITE/SAMPLE with more
- features are only selected in case not older than 1 months
+ features are only selected in case not older than 1 months of already found
+ COMM/LITE/SAMPLE
+\end_layout
+
+\begin_layout Code
+
+IP2Location: selected best databases method: softlinks: skipped-by-default
+ 
 \end_layout
 
 \begin_layout Code
@@ -3057,6 +3070,17 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 
 \begin_layout Code
 
+  [--db-ip2location-only-type <TYPE>]: IP2Location database only selected
+ type (1-24)
+\end_layout
+
+\begin_layout Code
+
+  [--db-ip2location-allow-softlinks] : IP2Location database softlinks allowed
+\end_layout
+
+\begin_layout Code
+
   [--db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>]:
 \end_layout
 
@@ -3500,12 +3524,46 @@ reason for implementation: avoid using old COMMercial databases
 \end_layout
 
 \end_deeper
+\begin_layout Itemize
+--db-ip2location-only-type <TYPE>: only selects databases of given type
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+reason for implementation: be able to select a specific database type
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+--db-ip2location-allow-softlinks: allow softlinked IP2Location database
+ files
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+by default, softlinked database files are skipped, because it's hard to
+ detect whether one is COMMercial, LITE or SAMPLE
+\end_layout
+
+\end_deeper
+\begin_layout Code
+
+\end_layout
+
 \begin_layout Standard
 use 
 \begin_inset Quotes eld
 \end_inset
 
 ipv6calc -vv
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+ipv6calc -vvv
 \begin_inset Quotes erd
 \end_inset
 
@@ -6435,7 +6493,8 @@ target "http://lite.ip2location.com/"
 
 \end_inset
 
- databases (>= 0.99.0)
+ databases (>= 0.99.0), add configurable IP2Location database autoselection
+ support
 \end_layout
 
 \begin_layout Subsection
