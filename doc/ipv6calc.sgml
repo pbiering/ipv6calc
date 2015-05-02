@@ -552,7 +552,7 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many more
   --showinfo|-i --mrqvn                 : Machine Readable Quote Values Never
   --showinfo|-i --mrst <TOKEN>          : Machine Readable Select Token
   --showinfo|-i --mrstpa <TOKEN>        : Machine Readable Select Token Print Always
-  --showinfo|-i --mrmt <TOKEN>          : Machine Readable Match Token
+  --showinfo|-i --mrmt <TOKENPREFIX>    : Machine Readable Match Token Prefix
   --showinfo|-i --mrtvo <TOKEN>         : Machine Readable Token Value Only
   --showinfo|-i --show-tokens           : show available tokens (aka types) on '-m'
  
