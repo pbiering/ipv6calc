@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.h
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.h,v 1.9 2015/05/01 06:01:37 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.h,v 1.10 2015/05/02 10:25:32 ds6peter Exp $
  * Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -609,6 +609,7 @@ extern IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_wrapper_record_city
 
 extern const char *libipv6calc_db_wrapper_IP2Location_UsageType_description(char *UsageType);
 
-extern int ip2location_db_lite_to_sample_autoswitch;
+extern int ip2location_db_lite_to_sample_autoswitch_max_delta_months;
+extern int ip2location_db_comm_to_lite_switch_min_delta_months;
 
 #endif

@@ -1790,26 +1790,56 @@ LITE-DB11.IPV6.BIN      (IP2L-DB11 IPv6 LITE 20150329)
 
 \begin_layout Code
 
+IP2Location: IPv6 Country                                    :[ 25] IPV6-COUNTRY.
+BIN                    (IP2L-DB1 IPv6 20060918)
+\end_layout
+
+\begin_layout Code
+
 IP2Location: IPv6 Country                                    :[120] IPV6-COUNTRY
 -FREE.BIN               (IP2L-DB1 IPv6 FREE 20140723 INCOMPATIBLE)
 \end_layout
 
 \begin_layout Code
 
-IP2Location: Detected databases SAMPLE  Country4=72  Country6=96  City4=72
-  City6=96 
+IP2Location: detected best databases SAMPLE Country4=72   Country6=96  
+ City4=72   City6=96 
 \end_layout
 
 \begin_layout Code
 
-IP2Location: Detected databases LITE    Country4=109 Country6=109 City4=109
- City6=109
+IP2Location: detected best databases LITE   Country4=109  Country6=109 
+ City4=109  City6=109
 \end_layout
 
 \begin_layout Code
 
-IP2Location: Selected databases (norm)  Country4=109 Country6=109 City4=109
- City6=109 (autoswitch to SAMPLE enabled)
+IP2Location: detected best databases COMM   Country4=0    Country6=25  
+ City4=0    City6=0  
+\end_layout
+
+\begin_layout Code
+
+IP2Location: selected best databases LI->SA*Country4=72   Country6=96  
+ City4=72   City6=96 
+\end_layout
+
+\begin_layout Code
+
+IP2Location: selected best databases normal Country4=109  Country6=109 
+ City4=109  City6=109
+\end_layout
+
+\begin_layout Code
+
+IP2Location: selected best databases method: * = autoswitch from LITE to
+ SAMPLE enabled in case not older than 12 months
+\end_layout
+
+\begin_layout Code
+
+IP2Location: selected best databases method: COMM older than 12 months are
+ deselected in case of LITE is available
 \end_layout
 
 \begin_layout Code
@@ -3021,8 +3051,24 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 
 \begin_layout Code
 
-  [--db-ip2location-no-lite-to-sample-autoswitch]: do not autoswitch from
- lite to sample databases (if possible)
+  [--db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>]:
+\end_layout
+
+\begin_layout Code
+
+     autoswitch from LITE to SAMPLE databases if possible and delta is not
+ more than 12 months (0=disabled)
+\end_layout
+
+\begin_layout Code
+
+  [--db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>]:
+\end_layout
+
+\begin_layout Code
+
+     switch from COMM to LITE databases if possible and delta more than
+ 12 months (0=disabled)
 \end_layout
 
 \begin_layout Code
@@ -3360,6 +3406,109 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 \begin_layout Code
 
      --ipv4_to_6to4addr (-I ipv4 -O ipv6addr -A conv6to4)
+\end_layout
+
+\begin_layout Subsubsection
+Database options
+\end_layout
+
+\begin_layout Itemize
+each internal/external database can be disabled by option
+\end_layout
+
+\begin_layout Itemize
+directory of database files can be given via related option
+\end_layout
+
+\begin_layout Itemize
+databases requiring external library the library file can be given in case
+ of dynamic load and linking
+\end_layout
+
+\begin_layout Paragraph
+IP2Location
+\end_layout
+
+\begin_layout Standard
+IP2location database directory can contain a bunch of files, the best ones
+ are selected automatically (since 0.99.0).
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Best
+\begin_inset Quotes erd
+\end_inset
+
+ can be controlled via two options:
+\end_layout
+
+\begin_layout Itemize
+
+--db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>: switches
+ from LITE to SAMPLE databases in case of
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+existing SAMPLE database
+\end_layout
+
+\begin_layout Itemize
+SAMPLE database not older than default/given MONTHS than the LITE database
+\end_layout
+
+\begin_layout Itemize
+IP address is in range of SAMPLE database (IPv4: 0.0.0.0-99.255.255.255, IPv6:
+ 2a04::/16)
+\end_layout
+
+\begin_layout Itemize
+autoswitch can be disabled by using MONTHS=0
+\end_layout
+
+\begin_layout Itemize
+reason for implementation: show maximum possible IP2Location features
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+
+--db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>: switches
+ from COMMercial to LITE databases in case of
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+
+existing LITE database
+\end_layout
+
+\begin_layout Itemize
+
+COMMercial database is default/given MONTHS older than the LITE database
+\end_layout
+
+\begin_layout Itemize
+switch can be disabled by using MONTHS=0
+\end_layout
+
+\begin_layout Itemize
+reason for implementation: avoid using old COMMercial databases
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+use 
+\begin_inset Quotes eld
+\end_inset
+
+ipv6calc -vv
+\begin_inset Quotes erd
+\end_inset
+
+ for verification, which databases are selected finally.
 \end_layout
 
 \begin_layout Subsubsection

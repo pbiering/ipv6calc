@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calccommands.h
- * Version    : $Id: ipv6calccommands.h,v 1.22 2015/05/01 06:01:37 ds6peter Exp $
+ * Version    : $Id: ipv6calccommands.h,v 1.23 2015/05/02 10:25:32 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -65,7 +65,8 @@
 #define DB_ip2location_disable		0x0002000
 #define DB_ip2location_dir		0x0002005
 #define DB_ip2location_lib		0x0002006
-#define DB_ip2location_no_lite_to_sample_autoswitch	0x0002007
+#define DB_ip2location_lite_to_sample_autoswitch_max_delta_months	0x0002007
+#define DB_ip2location_comm_to_lite_switch_min_delta_months		0x0002008
 
 #define DB_geoip_disable		0x0002010
 #define DB_geoip_dir			0x0002015

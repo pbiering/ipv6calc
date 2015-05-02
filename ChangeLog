@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.393 2015/05/01 06:01:37 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.394 2015/05/02 10:25:32 ds6peter Exp $ 
  */
 
 Info:
@@ -9,8 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
-20150501/PB
-	add option --db-ip2location-no-lite-to-sample-autoswitch
+20150502/PB
+	add option: --db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>
+	add option: --db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>
 
 20150429/PB
 	add filter for token match and empty value on machine readable output

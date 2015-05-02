@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.136 2015/04/30 18:52:41 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.137 2015/05/02 10:25:32 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1345,7 +1345,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		as_num32 = libipv6addr_as_num32_by_addr(ipv6addrp);
 
 		if ((as_num32 == 0) && (machinereadable == 0)) {
-			fprintf(stderr, "Error getting AS number from IPv6 address\n");
+			// fprintf(stderr, "Error getting AS number from IPv6 address\n");
 		} else {
 			if (as_num32 != ASNUM_AS_UNKNOWN) {
 				if ( machinereadable != 0 ) {

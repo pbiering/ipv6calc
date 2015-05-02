@@ -231,154 +231,154 @@ HREF="#AEN321"
 ></DD
 ><DT
 >10. <A
-HREF="#AEN343"
+HREF="#AEN381"
 >Webserver log conversion helper program "ipv6logconv"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >10.1. <A
-HREF="#AEN346"
+HREF="#AEN384"
 >Supported options</A
 ></DT
 ><DT
 >10.2. <A
-HREF="#AEN349"
+HREF="#AEN387"
 >Examples</A
 ></DT
 ><DT
 >10.3. <A
-HREF="#AEN353"
+HREF="#AEN391"
 >Usage</A
 ></DT
 ></DL
 ></DD
 ><DT
 >11. <A
-HREF="#AEN358"
+HREF="#AEN396"
 >Webserver log anonymization helper program "ipv6loganon"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >11.1. <A
-HREF="#AEN363"
+HREF="#AEN401"
 >Anonymization details</A
 ></DT
 ><DT
 >11.2. <A
-HREF="#AEN408"
+HREF="#AEN446"
 >Supported log file formats</A
 ></DT
 ><DT
 >11.3. <A
-HREF="#AEN415"
+HREF="#AEN453"
 >Supported options</A
 ></DT
 ><DT
 >11.4. <A
-HREF="#AEN418"
+HREF="#AEN456"
 >Usage</A
 ></DT
 ></DL
 ></DD
 ><DT
 >12. <A
-HREF="#AEN437"
+HREF="#AEN475"
 >External database update helper scripts</A
 ></DT
 ><DD
 ><DL
 ><DT
 >12.1. <A
-HREF="#AEN440"
+HREF="#AEN478"
 >IP2Location</A
 ></DT
 ><DT
 >12.2. <A
-HREF="#AEN443"
+HREF="#AEN481"
 >GeoIP</A
 ></DT
 ><DT
 >12.3. <A
-HREF="#AEN446"
+HREF="#AEN484"
 >DB-IP.com</A
 ></DT
 ><DT
 >12.4. <A
-HREF="#AEN449"
+HREF="#AEN487"
 >External</A
 ></DT
 ></DL
 ></DD
 ><DT
 >13. <A
-HREF="#AEN452"
+HREF="#AEN490"
 >Perl CGI wrapper program "ipv6calcweb.cgi"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >13.1. <A
-HREF="#AEN455"
+HREF="#AEN493"
 >Examples</A
 ></DT
 ></DL
 ></DD
 ><DT
 >14. <A
-HREF="#AEN471"
+HREF="#AEN509"
 >Webserver log statistics helper program "ipv6logstats"</A
 ></DT
 ><DD
 ><DL
 ><DT
 >14.1. <A
-HREF="#AEN475"
+HREF="#AEN513"
 >Supported options</A
 ></DT
 ><DT
 >14.2. <A
-HREF="#AEN478"
+HREF="#AEN516"
 >Usage</A
 ></DT
 ><DT
 >14.3. <A
-HREF="#AEN512"
+HREF="#AEN550"
 >Examples</A
 ></DT
 ></DL
 ></DD
 ><DT
 >15. <A
-HREF="#AEN516"
+HREF="#AEN554"
 >History</A
 ></DT
 ><DD
 ><DL
 ><DT
 >15.1. <A
-HREF="#AEN519"
+HREF="#AEN557"
 >2015</A
 ></DT
 ><DT
 >15.2. <A
-HREF="#AEN532"
+HREF="#AEN570"
 >2014</A
 ></DT
 ><DT
 >15.3. <A
-HREF="#AEN537"
+HREF="#AEN575"
 >2013</A
 ></DT
 ><DT
 >15.4. <A
-HREF="#AEN546"
+HREF="#AEN584"
 >2011</A
 ></DT
 ><DT
 >15.5. <A
-HREF="#AEN563"
+HREF="#AEN601"
 >2010 and older</A
 ></DT
 ></DL
@@ -1358,10 +1358,15 @@ IP2Location: IPvx Country/ISP                                :[103] IP2LOCATION-
 IP2Location: IPvx Country/Region/City/LongitudeLattitude     :[105] IP2LOCATION-LITE-DB5.IPV6.BIN       (IP2L-DB5 IPv6 LITE 20150329)
 IP2Location: IPvx Co/Re/Ci/LattLong/ZIP                      :[107] IP2LOCATION-LITE-DB9.IPV6.BIN       (IP2L-DB9 IPv6 LITE 20150329)
 IP2Location: IPvx Co/Re/Ci/LattLong/ZIP/TZ                   :[109] IP2LOCATION-LITE-DB11.IPV6.BIN      (IP2L-DB11 IPv6 LITE 20150329)
+IP2Location: IPv6 Country                                    :[ 25] IPV6-COUNTRY.BIN                    (IP2L-DB1 IPv6 20060918)
 IP2Location: IPv6 Country                                    :[120] IPV6-COUNTRY-FREE.BIN               (IP2L-DB1 IPv6 FREE 20140723 INCOMPATIBLE)
-IP2Location: Detected databases SAMPLE  Country4=72  Country6=96  City4=72  City6=96 
-IP2Location: Detected databases LITE    Country4=109 Country6=109 City4=109 City6=109
-IP2Location: Selected databases (norm)  Country4=109 Country6=109 City4=109 City6=109 (autoswitch to SAMPLE enabled)
+IP2Location: detected best databases SAMPLE Country4=72   Country6=96   City4=72   City6=96 
+IP2Location: detected best databases LITE   Country4=109  Country6=109  City4=109  City6=109
+IP2Location: detected best databases COMM   Country4=0    Country6=25   City4=0    City6=0  
+IP2Location: selected best databases LI-&#62;SA*Country4=72   Country6=96   City4=72   City6=96 
+IP2Location: selected best databases normal Country4=109  Country6=109  City4=109  City6=109
+IP2Location: selected best databases method: * = autoswitch from LITE to SAMPLE enabled in case not older than 12 months
+IP2Location: selected best databases method: COMM older than 12 months are deselected in case of LITE is available
 
 db-ip.com: features available/implemented: 0x03003cc0/0x03003cc0 (100%)
 DBIP: info of available databases in directory: /usr/share/DBIP
@@ -1965,7 +1970,7 @@ NAME="AEN324"
 >9.5.1. Main online help:</A
 ></H4
 ><P
->IP2Location and GeoIP options only appear if compiled with such support.</P
+>External database options only appear if compiled with related support.</P
 ><TABLE
 BORDER="1"
 BGCOLOR="#E0E0E0"
@@ -1977,31 +1982,43 @@ COLOR="#000000"
 ><PRE
 CLASS="SCREEN"
 >$ ipv6calc -h
-ipv6calc: version 0.98.0 GeoIP GeoIPv6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
+ipv6calc: version 0.99.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 (P) &#38; (C) 2001-2015 by Peter Bieringer &#60;pb (at) bieringer.de&#62;
+
 This program formats and calculates IPv6/IPv4/MAC addresses and can do many more tricky things
+
   [-d|--debug &#60;debug value&#62;] : debug value (bitwise like)
                                 can also be set by IPV6CALC_DEBUG environment value
   [-v|--version [-v [-v]]]   : version information (2 optional detail levels)
   [-v|--version -h]          : explanation of feature tokens
   [-V|--verbose]             : be more verbose
   [-h|--help|-?]             : this online help
+
   [--disable-ip2location           ] : IP2Location support disabled
   [--db-ip2location-disable        ] : IP2Location support disabled
   [--db-ip2location-dir &#60;directory&#62;] : IP2Location database directory (default: /usr/share/IP2Location)
   [--db-ip2location-lib &#60;file&#62;     ] : IP2Location library file (default: libIP2Location.so)
+  [--db-ip2location-lite-to-sample-autoswitch-max-delta-months &#60;MONTHS&#62;]:
+     autoswitch from LITE to SAMPLE databases if possible and delta is not more than 12 months (0=disabled)
+  [--db-ip2location-comm-to-lite-switch-min-delta-months &#60;MONTHS&#62;]:
+     switch from COMM to LITE databases if possible and delta more than 12 months (0=disabled)
+
   [--disable-geoip                 ] : GeoIP support disabled
   [--db-geoip-disable              ] : GeoIP support disabled
   [--db-geoip-dir       &#60;directory&#62;] : GeoIP database directory (default: /usr/share/GeoIP)
   [--db-geoip-lib       &#60;file&#62;     ] : GeoIP library file (default: libGeoIP.so.1)
+
   [--disable-dbip                  ] : db-ip.com support disabled
   [--db-dbip-disable               ] : db-ip.com support disabled
   [--db-dbip-dir        &#60;directory&#62;] : db-ip.com database directory (default: /usr/share/DBIP)
+
   [--disable-external              ] : External support disabled
   [--db-external-disable           ] : External support disabled
   [--db-external-dir    &#60;directory&#62;] : External database directory (default: /usr/share/ipv6calc/db)
+
   [--disable-builtin               ] : BuiltIn support disabled
   [--db-builtin-disable            ] : BuiltIn support disabled
+
   [-q|--quiet]               : be more quiet (auto-enabled in pipe mode)
   [-f|--flush]               : flush each line in pipe mode
 
@@ -2014,10 +2031,11 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many more
                              (default: format conversion, sometimes: autodetect)
   [&#60;format option&#62; ...] : specify format options
   &#60;input data&#62; [...]    : input data
-  Available input  types:  [-m] -I|--in     -?|-h|--help
+  
+ Available input  types:  [-m] -I|--in     -?|-h|--help
   Available output types:  [-m] -O|--out    -?|-h|--help
   Available action types:  [-m] -A|--action -?|-h|--help
-
+ 
  Other usage:
   --showinfo|-i [--machine_readable|-m] : show information about input data
   --showinfo|-i --mrqva                 : Machine Readable Quote Values Always
@@ -2027,10 +2045,11 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many more
   --showinfo|-i --mrmt &#60;TOKEN&#62;          : Machine Readable Match Token
   --showinfo|-i --mrtvo &#60;TOKEN&#62;         : Machine Readable Token Value Only
   --showinfo|-i --show-tokens           : show available tokens (aka types) on '-m'
-
-Usage with shortcut options: &#60;shortcut option&#62; [&#60;format option&#62; ...] &#60;input data&#62;
+ 
+ Usage with shortcut options: &#60;shortcut option&#62; [&#60;format option&#62; ...] &#60;input data&#62;
   for more information and available format options use: &#60;shortcut option&#62; -?|-h|--help
-  -r|--addr2ip6_int (-O revnibbles.int)
+
+ -r|--addr2ip6_int (-O revnibbles.int)
   -r|--addr_to_ip6int (-O revnibbles.int)
   -a|--addr2ip6_arpa (-O revnibbles.arpa)
   -a|--addr_to_ip6arpa (-O revnibbles.arpa)
@@ -2061,7 +2080,101 @@ CLASS="SECT3"
 CLASS="SECT3"
 ><A
 NAME="AEN328"
->9.5.2. Input-type options</A
+>9.5.2. Database options</A
+></H4
+><P
+></P
+><UL
+><LI
+><P
+>each internal/external database can be disabled by option</P
+></LI
+><LI
+><P
+>directory of database files can be given via related option</P
+></LI
+><LI
+><P
+>databases requiring external library the library file can be given in case of dynamic load and linking</P
+></LI
+></UL
+><DIV
+CLASS="SECT4"
+><HR><H5
+CLASS="SECT4"
+><A
+NAME="AEN337"
+>9.5.2.1. IP2Location</A
+></H5
+><P
+>IP2location database directory can contain a bunch of files, the best ones are selected automatically (since 0.99.0). &#8220;Best&#8221; can be controlled via two options:</P
+><P
+></P
+><UL
+><LI
+><P
+>--db-ip2location-lite-to-sample-autoswitch-max-delta-months &#60;MONTHS&#62;: switches from LITE to SAMPLE databases in case of</P
+><P
+></P
+><UL
+><LI
+><P
+>existing SAMPLE database</P
+></LI
+><LI
+><P
+>SAMPLE database not older than default/given MONTHS than the LITE database</P
+></LI
+><LI
+><P
+>IP address is in range of SAMPLE database (IPv4: 0.0.0.0-99.255.255.255, IPv6: 2a04::/16)</P
+></LI
+><LI
+><P
+>autoswitch can be disabled by using MONTHS=0</P
+></LI
+><LI
+><P
+>reason for implementation: show maximum possible IP2Location features</P
+></LI
+></UL
+></LI
+><LI
+><P
+>--db-ip2location-comm-to-lite-switch-min-delta-months &#60;MONTHS&#62;: switches from COMMercial to LITE databases in case of</P
+><P
+></P
+><UL
+><LI
+><P
+>existing LITE database</P
+></LI
+><LI
+><P
+>COMMercial database is default/given MONTHS older than the LITE database</P
+></LI
+><LI
+><P
+>switch can be disabled by using MONTHS=0</P
+></LI
+><LI
+><P
+>reason for implementation: avoid using old COMMercial databases</P
+></LI
+></UL
+></LI
+></UL
+><P
+>use &#8220;ipv6calc -vv&#8221; for verification, which databases are selected finally.</P
+></DIV
+></DIV
+><DIV
+CLASS="SECT3"
+><HR><H4
+CLASS="SECT3"
+><A
+NAME="AEN366"
+>9.5.3. Input-type options</A
 ></H4
 ><TABLE
 BORDER="1"
@@ -2105,8 +2218,8 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN331"
->9.5.3. Output-type options:</A
+NAME="AEN369"
+>9.5.4. Output-type options:</A
 ></H4
 ><TABLE
 BORDER="1"
@@ -2156,8 +2269,8 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN334"
->9.5.4. Action-type options:</A
+NAME="AEN372"
+>9.5.5. Action-type options:</A
 ></H4
 ><TABLE
 BORDER="1"
@@ -2195,8 +2308,8 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN337"
->9.5.5. Special action &#8220;filter&#8221;:</A
+NAME="AEN375"
+>9.5.6. Special action &#8220;filter&#8221;:</A
 ></H4
 ><P
 >Special action &#8220;filter&#8221; can be used especially in pipe mode to filter IP addresses related to their type and since 0.99.0 also related to database results (CountryCode, ASN or Registry).</P
@@ -2291,7 +2404,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN343"
+NAME="AEN381"
 >10. Webserver log conversion helper program "ipv6logconv"</A
 ></H2
 ><P
@@ -2301,7 +2414,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN346"
+NAME="AEN384"
 >10.1. Supported options</A
 ></H3
 ><TABLE
@@ -2341,7 +2454,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN349"
+NAME="AEN387"
 >10.2. Examples</A
 ></H3
 ><P
@@ -2356,7 +2469,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN353"
+NAME="AEN391"
 >10.3. Usage</A
 ></H3
 ><P
@@ -2386,7 +2499,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN358"
+NAME="AEN396"
 >11. Webserver log anonymization helper program "ipv6loganon"</A
 ></H2
 ><P
@@ -2400,7 +2513,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN363"
+NAME="AEN401"
 >11.1. Anonymization details</A
 ></H3
 ><DIV
@@ -2408,7 +2521,7 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
-NAME="AEN365"
+NAME="AEN403"
 >11.1.1. Method &#8220;zeroize&#8221;</A
 ></H4
 ><P
@@ -2479,7 +2592,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN394"
+NAME="AEN432"
 >11.1.2. Method &#8220;anonmize&#8221;</A
 ></H4
 ><P
@@ -2544,7 +2657,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN401"
+NAME="AEN439"
 >11.1.3. Method &#8220;keep-type-asn-cc&#8221;</A
 ></H4
 ><P
@@ -2631,7 +2744,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN408"
+NAME="AEN446"
 >11.2. Supported log file formats</A
 ></H3
 ><P
@@ -2652,7 +2765,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN415"
+NAME="AEN453"
 >11.3. Supported options</A
 ></H3
 ><TABLE
@@ -2730,7 +2843,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN418"
+NAME="AEN456"
 >11.4. Usage</A
 ></H3
 ><DIV
@@ -2738,7 +2851,7 @@ CLASS="SECT3"
 ><H4
 CLASS="SECT3"
 ><A
-NAME="AEN420"
+NAME="AEN458"
 >11.4.1. Offline anonymization</A
 ></H4
 ><TABLE
@@ -2762,7 +2875,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN423"
+NAME="AEN461"
 >11.4.2. On-the-fly online anonymization for Apache Webserver</A
 ></H4
 ><P
@@ -2840,7 +2953,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN437"
+NAME="AEN475"
 >12. External database update helper scripts</A
 ></H2
 ><P
@@ -2850,7 +2963,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN440"
+NAME="AEN478"
 >12.1. IP2Location</A
 ></H3
 ><TABLE
@@ -2900,7 +3013,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN443"
+NAME="AEN481"
 >12.2. GeoIP</A
 ></H3
 ><TABLE
@@ -2936,7 +3049,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN446"
+NAME="AEN484"
 >12.3. DB-IP.com</A
 ></H3
 ><TABLE
@@ -2974,7 +3087,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN449"
+NAME="AEN487"
 >12.4. External</A
 ></H3
 ><TABLE
@@ -3011,7 +3124,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN452"
+NAME="AEN490"
 >13. Perl CGI wrapper program "ipv6calcweb.cgi"</A
 ></H2
 ><P
@@ -3021,7 +3134,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN455"
+NAME="AEN493"
 >13.1. Examples</A
 ></H3
 ><P
@@ -3069,7 +3182,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN471"
+NAME="AEN509"
 >14. Webserver log statistics helper program "ipv6logstats"</A
 ></H2
 ><P
@@ -3081,7 +3194,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN475"
+NAME="AEN513"
 >14.1. Supported options</A
 ></H3
 ><TABLE
@@ -3133,7 +3246,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN478"
+NAME="AEN516"
 >14.2. Usage</A
 ></H3
 ><P
@@ -3143,7 +3256,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN481"
+NAME="AEN519"
 >14.2.1. Line-by-line output</A
 ></H4
 ><P
@@ -3381,7 +3494,7 @@ CLASS="SECT3"
 ><HR><H4
 CLASS="SECT3"
 ><A
-NAME="AEN506"
+NAME="AEN544"
 >14.2.2. Column output</A
 ></H4
 ><P
@@ -3428,7 +3541,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN512"
+NAME="AEN550"
 >14.3. Examples</A
 ></H3
 ><P
@@ -3444,7 +3557,7 @@ CLASS="SECT1"
 ><HR><H2
 CLASS="SECT1"
 ><A
-NAME="AEN516"
+NAME="AEN554"
 >15. History</A
 ></H2
 ><P
@@ -3454,7 +3567,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN519"
+NAME="AEN557"
 >15.1. 2015</A
 ></H3
 ><P
@@ -3491,7 +3604,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN532"
+NAME="AEN570"
 >15.2. 2014</A
 ></H3
 ><P
@@ -3508,7 +3621,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN537"
+NAME="AEN575"
 >15.3. 2013</A
 ></H3
 ><P
@@ -3533,7 +3646,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN546"
+NAME="AEN584"
 >15.4. 2011</A
 ></H3
 ><P
@@ -3574,7 +3687,7 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN563"
+NAME="AEN601"
 >15.5. 2010 and older</A
 ></H3
 ><P

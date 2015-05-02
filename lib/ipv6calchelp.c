@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.71 2015/05/01 06:01:37 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.72 2015/05/02 10:25:32 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -318,7 +318,10 @@ void printhelp_common(const uint32_t help_features) {
 #ifdef SUPPORT_IP2LOCATION_DYN
 		fprintf(stderr, "  [--db-ip2location-lib <file>     ] : IP2Location library file (default: %s)\n", ip2location_lib_file);
 #endif
-		fprintf(stderr, "  [--db-ip2location-no-lite-to-sample-autoswitch]: do not autoswitch from lite to sample databases (if possible)\n");
+		fprintf(stderr, "  [--db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>]:\n");
+		fprintf(stderr, "     autoswitch from LITE to SAMPLE databases if possible and delta is not more than %d months (0=disabled)\n", ip2location_db_lite_to_sample_autoswitch_max_delta_months);
+		fprintf(stderr, "  [--db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>]:\n");
+		fprintf(stderr, "     switch from COMM to LITE databases if possible and delta more than %d months (0=disabled)\n", ip2location_db_comm_to_lite_switch_min_delta_months);
 #endif
 	};
 

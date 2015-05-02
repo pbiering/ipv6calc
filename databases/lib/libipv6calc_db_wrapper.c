@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.58 2015/05/01 06:01:37 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.59 2015/05/02 10:25:32 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -738,15 +738,34 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			result = 0;
 			break;
 
-		case DB_ip2location_no_lite_to_sample_autoswitch:
+
+		case DB_ip2location_lite_to_sample_autoswitch_max_delta_months:
 #ifdef SUPPORT_IP2LOCATION
-			ip2location_db_lite_to_sample_autoswitch = 0;
+			if ((atoi(optarg) >= 0) && (atoi(optarg) <= 99999)) {
+				ip2location_db_lite_to_sample_autoswitch_max_delta_months = atoi(optarg);
+			} else {
+				fprintf(stderr, " Argument of option 'db-ip2location-lite-to-sample-autoswitch-max-delta-months' is out or range (0-99999): %d\n", atoi(optarg));
+				exit(EXIT_FAILURE);
+			};
 #else
 			NONQUIETPRINT_WA("Support for IP2Location not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
 			result = 0;
 			break;
-			
+
+		case DB_ip2location_comm_to_lite_switch_min_delta_months:
+#ifdef SUPPORT_IP2LOCATION
+			if ((atoi(optarg) >= 0) && (atoi(optarg) <= 99999)) {
+				ip2location_db_comm_to_lite_switch_min_delta_months = atoi(optarg);
+			} else {
+				fprintf(stderr, " Argument of option 'db-ip2location-comm-to-lite-switch-min-delta-months' is out or range (0-99999): %d\n", atoi(optarg));
+				exit(EXIT_FAILURE);
+			};
+#else
+			NONQUIETPRINT_WA("Support for IP2Location not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
 	};
 
 	if (result > 0) {

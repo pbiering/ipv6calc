@@ -263,10 +263,15 @@ IP2Location: IPvx Country/ISP                                :[103] IP2LOCATION-
 IP2Location: IPvx Country/Region/City/LongitudeLattitude     :[105] IP2LOCATION-LITE-DB5.IPV6.BIN       (IP2L-DB5 IPv6 LITE 20150329)
 IP2Location: IPvx Co/Re/Ci/LattLong/ZIP                      :[107] IP2LOCATION-LITE-DB9.IPV6.BIN       (IP2L-DB9 IPv6 LITE 20150329)
 IP2Location: IPvx Co/Re/Ci/LattLong/ZIP/TZ                   :[109] IP2LOCATION-LITE-DB11.IPV6.BIN      (IP2L-DB11 IPv6 LITE 20150329)
+IP2Location: IPv6 Country                                    :[ 25] IPV6-COUNTRY.BIN                    (IP2L-DB1 IPv6 20060918)
 IP2Location: IPv6 Country                                    :[120] IPV6-COUNTRY-FREE.BIN               (IP2L-DB1 IPv6 FREE 20140723 INCOMPATIBLE)
-IP2Location: Detected databases SAMPLE  Country4=72  Country6=96  City4=72  City6=96 
-IP2Location: Detected databases LITE    Country4=109 Country6=109 City4=109 City6=109
-IP2Location: Selected databases (norm)  Country4=109 Country6=109 City4=109 City6=109 (autoswitch to SAMPLE enabled)
+IP2Location: detected best databases SAMPLE Country4=72   Country6=96   City4=72   City6=96 
+IP2Location: detected best databases LITE   Country4=109  Country6=109  City4=109  City6=109
+IP2Location: detected best databases COMM   Country4=0    Country6=25   City4=0    City6=0  
+IP2Location: selected best databases LI->SA*Country4=72   Country6=96   City4=72   City6=96 
+IP2Location: selected best databases normal Country4=109  Country6=109  City4=109  City6=109
+IP2Location: selected best databases method: * = autoswitch from LITE to SAMPLE enabled in case not older than 12 months
+IP2Location: selected best databases method: COMM older than 12 months are deselected in case of LITE is available
 
 db-ip.com: features available/implemented: 0x03003cc0/0x03003cc0 (100%)
 DBIP: info of available databases in directory: /usr/share/DBIP
@@ -498,7 +503,10 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many more
   [--db-ip2location-disable        ] : IP2Location support disabled
   [--db-ip2location-dir <directory>] : IP2Location database directory (default: /usr/share/IP2Location)
   [--db-ip2location-lib <file>     ] : IP2Location library file (default: libIP2Location.so)
-  [--db-ip2location-no-lite-to-sample-autoswitch]: do not autoswitch from lite to sample databases (if possible)
+  [--db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>]:
+     autoswitch from LITE to SAMPLE databases if possible and delta is not more than 12 months (0=disabled)
+  [--db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>]:
+     switch from COMM to LITE databases if possible and delta more than 12 months (0=disabled)
 
   [--disable-geoip                 ] : GeoIP support disabled
   [--db-geoip-disable              ] : GeoIP support disabled
@@ -567,6 +575,14 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many more
      --eui64_to_privacy (-I iid_token -O iid_token -A genprivacyiid)
      --ipv4_to_6to4addr (-I ipv4 -O ipv6addr -A conv6to4)
 ]]></screen></sect3><sect3>
+<title>Database options</title>
+<itemizedlist>
+<listitem><para>each internal/external database can be disabled by option</para></listitem><listitem><para>directory of database files can be given via related option</para></listitem><listitem><para>databases requiring external library the library file can be given in case of dynamic load and linking</para></listitem></itemizedlist><sect4>
+<title>IP2Location</title>
+<para>IP2location database directory can contain a bunch of files, the best ones are selected automatically (since 0.99.0). &ldquo;Best&rdquo; can be controlled via two options:</para><itemizedlist>
+<listitem><para>--db-ip2location-lite-to-sample-autoswitch-max-delta-months &lt;MONTHS&gt;: switches from LITE to SAMPLE databases in case of</para><itemizedlist>
+<listitem><para>existing SAMPLE database</para></listitem><listitem><para>SAMPLE database not older than default/given MONTHS than the LITE database</para></listitem><listitem><para>IP address is in range of SAMPLE database (IPv4: 0.0.0.0-99.255.255.255, IPv6: 2a04::/16)</para></listitem><listitem><para>autoswitch can be disabled by using MONTHS=0</para></listitem><listitem><para>reason for implementation: show maximum possible IP2Location features</para></listitem></itemizedlist></listitem><listitem><para>--db-ip2location-comm-to-lite-switch-min-delta-months &lt;MONTHS&gt;: switches from COMMercial to LITE databases in case of</para><itemizedlist>
+<listitem><para>existing LITE database</para></listitem><listitem><para>COMMercial database is default/given MONTHS older than the LITE database</para></listitem><listitem><para>switch can be disabled by using MONTHS=0</para></listitem><listitem><para>reason for implementation: avoid using old COMMercial databases</para></listitem></itemizedlist></listitem></itemizedlist><para>use &ldquo;ipv6calc -vv&rdquo; for verification, which databases are selected finally.</para></sect4></sect3><sect3>
 <title>Input-type options</title>
 <screen>
 <![CDATA[$ ipv6calc --in -?

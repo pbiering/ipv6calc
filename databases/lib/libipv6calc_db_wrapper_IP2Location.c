@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.32 2015/05/01 06:01:37 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.33 2015/05/02 10:25:32 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -99,18 +99,35 @@ static int ip2location_db_country_v6 = 0;
 static int ip2location_db_region_city_v4 = 0;
 static int ip2location_db_region_city_v6 = 0;
 
-static int ip2location_db_country_lite_v4 = 0;
-static int ip2location_db_country_lite_v6 = 0;
-static int ip2location_db_region_city_lite_v4 = 0;
-static int ip2location_db_region_city_lite_v6 = 0;
+typedef struct {
+	int num;
+	int dbtype;
+	int dbym;
+} s_ipv6calc_ip2location_db;
 
-static int ip2location_db_country_sample_v4 = 0;
-static int ip2location_db_country_sample_v6 = 0;
-static int ip2location_db_region_city_sample_v4 = 0;
-static int ip2location_db_region_city_sample_v6 = 0;
+#define IP2L_SAMPLE	0
+#define IP2L_LITE	1
+#define IP2L_COMM	2
+#define	IP2L_MAX	3
 
-// select automagically sample databases in case available and matching
-int ip2location_db_lite_to_sample_autoswitch = 1;
+static s_ipv6calc_ip2location_db ip2location_db_country_v4_best[IP2L_MAX];
+static s_ipv6calc_ip2location_db ip2location_db_country_v6_best[IP2L_MAX];
+static s_ipv6calc_ip2location_db ip2location_db_region_city_v4_best[IP2L_MAX];
+static s_ipv6calc_ip2location_db ip2location_db_region_city_v6_best[IP2L_MAX];
+
+static int ip2location_db_country_sample_v4_lite_autoswitch = 0;
+static int ip2location_db_country_sample_v6_lite_autoswitch = 0;
+static int ip2location_db_region_city_sample_v4_lite_autoswitch = 0;
+static int ip2location_db_region_city_sample_v6_lite_autoswitch = 0;
+
+// select automagically SAMPLE databases in case available and matching and not older than given months
+int ip2location_db_lite_to_sample_autoswitch_max_delta_months = 12;
+
+// select LITE database if COMM is older than given months
+int ip2location_db_comm_to_lite_switch_min_delta_months = 12;
+
+#define IP2L_PACK_YM(loc) (loc->databaseyear * 12 + (loc->databasemonth -1))
+#define IP2L_UNPACK_YM(dbym) ((dbym > 0) ? ((dbym % 12) + 1 + ((dbym / 12) + 2000) * 100) : 0)
 
 
 #ifdef SUPPORT_IP2LOCATION_DYN
@@ -168,7 +185,8 @@ static int       libipv6calc_db_wrapper_IP2Location_db_compatible(const int type
  * out: 0=ok, 1=error
  */
 int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
-	int i;
+	int i, dbym, product, dbtype;
+	IP2Location *loc;
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called");
 
@@ -237,58 +255,113 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 			continue;
 		};
 
-		if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & IPV6CALC_DB_IPV4_TO_CC) != 0) {
-			ip2location_db_country_v4 = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number;
+		loc = libipv6calc_db_wrapper_IP2Location_open_type(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number);
+		dbym = IP2L_PACK_YM(loc);
+		dbtype = loc->databasetype;
 
-			if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE) != 0) {
-				ip2location_db_country_sample_v4 = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number;
+		if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE) != 0) {
+			product = IP2L_SAMPLE;
+		} else if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LITE) != 0) {
+			product = IP2L_LITE;
+		} else {
+			product = IP2L_COMM;
+		};
+
+#define IP2L_DB_SELECT_BETTER(best) \
+			if ( \
+			  (best.num == 0) \
+			  || ( \
+				(best.dbym > 0) \
+				  && ((best.dbym - dbym) <= ip2location_db_comm_to_lite_switch_min_delta_months) \
+			     ) \
+			) { \
+				best.num = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number; \
+				best.dbym = dbym; \
+				best.dbtype = dbtype; \
 			};
-			if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LITE) != 0) {
-				ip2location_db_country_lite_v4 = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number;
-			};
+		
+
+		// note: databases are listed in sequence "less data" before "more data"
+		if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & IPV6CALC_DB_IPV4_TO_CC) != 0) {
+			IP2L_DB_SELECT_BETTER(ip2location_db_country_v4_best[product])
 		};
 
 		if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & IPV6CALC_DB_IPV6_TO_CC) != 0) {
-			ip2location_db_country_v6 = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number;
-
-			if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE) != 0) {
-				ip2location_db_country_sample_v6 = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number;
-			};
-			if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LITE) != 0) {
-				ip2location_db_country_lite_v6 = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number;
-			};
+			IP2L_DB_SELECT_BETTER(ip2location_db_country_v6_best[product])
 		};
 
 		if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & (IPV6CALC_DB_IPV4_TO_REGION | IPV6CALC_DB_IPV4_TO_CITY)) != 0) {
-			ip2location_db_region_city_v4 = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number;
-
-			if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE) != 0) {
-				ip2location_db_region_city_sample_v4 = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number;
-			};
-			if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LITE) != 0) {
-				ip2location_db_region_city_lite_v4 = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number;
-			};
+			IP2L_DB_SELECT_BETTER(ip2location_db_region_city_v4_best[product])
 		};
 
 		if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & (IPV6CALC_DB_IPV6_TO_REGION | IPV6CALC_DB_IPV6_TO_CITY)) != 0) {
-			ip2location_db_region_city_v6 = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number;
-
-			if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE) != 0) {
-				ip2location_db_region_city_sample_v6 = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number;
-			};
-			if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LITE) != 0) {
-				ip2location_db_region_city_lite_v6 = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number;
-			};
+			IP2L_DB_SELECT_BETTER(ip2location_db_region_city_v6_best[product])
 		};
 
 		wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] |= libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features;
 	};
 
+	// select databases for lite->sample autoswitch
+	if (ip2location_db_lite_to_sample_autoswitch_max_delta_months > 0) {
+		// select best sample db for autoswitch lite->sample
+#define SELECT_LITE_SAMPLE_AUTOSWITCH(sample, lite, autoswitch) \
+		if ((sample.num > 0) && (lite.num > 0)) { \
+			if (sample.dbtype > lite.dbtype) { \
+				if (lite.dbym - sample.dbym <= ip2location_db_lite_to_sample_autoswitch_max_delta_months) { \
+						autoswitch = sample.num; \
+				}; \
+			}; \
+		};
+
+		SELECT_LITE_SAMPLE_AUTOSWITCH(ip2location_db_country_v4_best[IP2L_SAMPLE], ip2location_db_country_v4_best[IP2L_LITE], ip2location_db_country_sample_v4_lite_autoswitch)
+		SELECT_LITE_SAMPLE_AUTOSWITCH(ip2location_db_country_v6_best[IP2L_SAMPLE], ip2location_db_country_v6_best[IP2L_LITE], ip2location_db_country_sample_v6_lite_autoswitch)
+		SELECT_LITE_SAMPLE_AUTOSWITCH(ip2location_db_region_city_v4_best[IP2L_SAMPLE], ip2location_db_region_city_v4_best[IP2L_LITE], ip2location_db_region_city_sample_v4_lite_autoswitch)
+		SELECT_LITE_SAMPLE_AUTOSWITCH(ip2location_db_region_city_v6_best[IP2L_SAMPLE], ip2location_db_region_city_v6_best[IP2L_LITE], ip2location_db_region_city_sample_v6_lite_autoswitch)
+	};
+
+	// select lite instead of comm, if comm is outdated and lite available
+	if (ip2location_db_comm_to_lite_switch_min_delta_months > 0) {
+#define SELECT_LITE_INSTEAD_OF_COMM(lite, comm, final) \
+	if ((lite.num > 0) && (comm.num > 0)) { \
+		if (lite.dbym - comm.dbym > ip2location_db_comm_to_lite_switch_min_delta_months) { \
+			final = lite.num; \
+		}; \
+	};
+		SELECT_LITE_INSTEAD_OF_COMM(ip2location_db_country_v4_best[IP2L_LITE], ip2location_db_country_v4_best[IP2L_COMM], ip2location_db_country_v4)
+		SELECT_LITE_INSTEAD_OF_COMM(ip2location_db_country_v6_best[IP2L_LITE], ip2location_db_country_v6_best[IP2L_COMM], ip2location_db_country_v6)
+		SELECT_LITE_INSTEAD_OF_COMM(ip2location_db_region_city_v4_best[IP2L_LITE], ip2location_db_region_city_v4_best[IP2L_COMM], ip2location_db_region_city_v4)
+		SELECT_LITE_INSTEAD_OF_COMM(ip2location_db_region_city_v6_best[IP2L_LITE], ip2location_db_region_city_v6_best[IP2L_COMM], ip2location_db_region_city_v6)
+	};
+
+#define FILL_EMPTY(product, final) \
+	if ((product.num > 0) && (final == 0)) { \
+		final = product.num; \
+	};
+
+	// fill empty ones with comm
+	FILL_EMPTY(ip2location_db_country_v4_best[IP2L_COMM], ip2location_db_country_v4)
+	FILL_EMPTY(ip2location_db_country_v6_best[IP2L_COMM], ip2location_db_country_v6)
+	FILL_EMPTY(ip2location_db_region_city_v4_best[IP2L_COMM], ip2location_db_region_city_v4)
+	FILL_EMPTY(ip2location_db_region_city_v6_best[IP2L_COMM], ip2location_db_region_city_v6)
+
+	// fill empty ones with lite
+	FILL_EMPTY(ip2location_db_country_v4_best[IP2L_LITE], ip2location_db_country_v4)
+	FILL_EMPTY(ip2location_db_country_v6_best[IP2L_LITE], ip2location_db_country_v6)
+	FILL_EMPTY(ip2location_db_region_city_v4_best[IP2L_LITE], ip2location_db_region_city_v4)
+	FILL_EMPTY(ip2location_db_region_city_v6_best[IP2L_LITE], ip2location_db_region_city_v6)
+
+	// fill empty ones with sample
+	FILL_EMPTY(ip2location_db_country_v4_best[IP2L_SAMPLE], ip2location_db_country_v4)
+	FILL_EMPTY(ip2location_db_country_v6_best[IP2L_SAMPLE], ip2location_db_country_v6)
+	FILL_EMPTY(ip2location_db_region_city_v4_best[IP2L_SAMPLE], ip2location_db_region_city_v4)
+	FILL_EMPTY(ip2location_db_region_city_v6_best[IP2L_SAMPLE], ip2location_db_region_city_v6)
+
+
 #ifdef SUPPORT_IP2LOCATION_DYN
 	// nothing to set for the moment
 #else
 #if ! defined SUPPORT_IP2LOCATION_ALL_COMPAT || defined SUPPORT_IP2LOCATION_IPV6_COMPAT
-	IP2Location *loc;
+	//IP2Location *loc;
 #ifndef SUPPORT_IP2LOCATION_ALL_COMPAT
 	IP2LocationRecord *record;
 #endif
@@ -477,7 +550,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 #endif // SUPPORT_IP2LOCATION_DYN
 		r = libipv6calc_db_wrapper_IP2Location_db_avail(type);
 		if (r == 2) {
-			printf("%sIP2Location: %s %-43s:[%3d] %-35s (UNSUPPORTED SOFTLINK)\n", prefix,
+			printf("%sIP2Location: %s %-43s:[%3d] %-35s (SOFTLINK IS UNSUPPORTED)\n", prefix,
 				((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) == (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) ? "IPvx" : (((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0) ? "IPv6" : "IPv4"),
 				libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description,
 				libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number,
@@ -490,14 +563,16 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 					((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) == (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) ? "IPvx" : (((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0) ? "IPv6" : "IPv4"),
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description,
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number,
-					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename);
+					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename
+				);
 			} else { 
 				printf("%sIP2Location: %s %-43s:[%3d] %-35s (%s)\n", prefix,
 					((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) == (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) ? "IPvx" : (((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0) ? "IPv6" : "IPv4"),
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description,
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number,
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename,
-					libipv6calc_db_wrapper_IP2Location_database_info(loc, level_verbose, i, 0));
+					libipv6calc_db_wrapper_IP2Location_database_info(loc, level_verbose, i, 0)
+				);
 				libipv6calc_db_wrapper_IP2Location_close(loc);
 				count++;
 			};
@@ -508,7 +583,8 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description,
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number,
 					libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename,
-					strerror(errno));
+					strerror(errno)
+				);
 			};
 			continue;
 		};
@@ -520,36 +596,108 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 	if (count == 0) {
 		printf("%sIP2Location: NO available databases found in directory: %s\n", prefix, ip2location_db_dir);
 	} else {
+		if (level_verbose >= LEVEL_VERBOSE2) {
+			printf("%sIP2Location: detected best databases SAMPLE Country4=%-3d %6d  Country6=%-3d %6d  City4=%-3d %6d  City6=%-3d %6d\n"
+				, prefix
+				, ip2location_db_country_v4_best[IP2L_SAMPLE].num
+				, IP2L_UNPACK_YM(ip2location_db_country_v4_best[IP2L_SAMPLE].dbym)
+				, ip2location_db_country_v6_best[IP2L_SAMPLE].num
+				, IP2L_UNPACK_YM(ip2location_db_country_v6_best[IP2L_SAMPLE].dbym)
+				, ip2location_db_region_city_v4_best[IP2L_SAMPLE].num
+				, IP2L_UNPACK_YM(ip2location_db_region_city_v4_best[IP2L_SAMPLE].dbym)
+				, ip2location_db_region_city_v6_best[IP2L_SAMPLE].num
+				, IP2L_UNPACK_YM(ip2location_db_region_city_v6_best[IP2L_SAMPLE].dbym)
+			);
+
+			printf("%sIP2Location: detected best databases LITE   Country4=%-3d %6d  Country6=%-3d %6d  City4=%-3d %6d  City6=%-3d %6d\n"
+				, prefix
+				, ip2location_db_country_v4_best[IP2L_LITE].num
+				, IP2L_UNPACK_YM(ip2location_db_country_v4_best[IP2L_LITE].dbym)
+				, ip2location_db_country_v6_best[IP2L_LITE].num
+				, IP2L_UNPACK_YM(ip2location_db_country_v6_best[IP2L_LITE].dbym)
+				, ip2location_db_region_city_v4_best[IP2L_LITE].num
+				, IP2L_UNPACK_YM(ip2location_db_region_city_v4_best[IP2L_LITE].dbym)
+				, ip2location_db_region_city_v6_best[IP2L_LITE].num
+				, IP2L_UNPACK_YM(ip2location_db_region_city_v6_best[IP2L_LITE].dbym)
+			);
+
+			printf("%sIP2Location: detected best databases COMM   Country4=%-3d %6d  Country6=%-3d %6d  City4=%-3d %6d  City6=%-3d %6d\n"
+				, prefix
+				, ip2location_db_country_v4_best[IP2L_COMM].num
+				, IP2L_UNPACK_YM(ip2location_db_country_v4_best[IP2L_COMM].dbym)
+				, ip2location_db_country_v6_best[IP2L_COMM].num
+				, IP2L_UNPACK_YM(ip2location_db_country_v6_best[IP2L_COMM].dbym)
+				, ip2location_db_region_city_v4_best[IP2L_COMM].num
+				, IP2L_UNPACK_YM(ip2location_db_region_city_v4_best[IP2L_COMM].dbym)
+				, ip2location_db_region_city_v6_best[IP2L_COMM].num
+				, IP2L_UNPACK_YM(ip2location_db_region_city_v6_best[IP2L_COMM].dbym)
+			);
+		} else if (level_verbose >= LEVEL_VERBOSE) {
+			printf("%sIP2Location: detected best databases SAMPLE Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
+				, prefix
+				, ip2location_db_country_v4_best[IP2L_SAMPLE].num
+				, ip2location_db_country_v6_best[IP2L_SAMPLE].num
+				, ip2location_db_region_city_v4_best[IP2L_SAMPLE].num
+				, ip2location_db_region_city_v6_best[IP2L_SAMPLE].num
+			);
+
+			printf("%sIP2Location: detected best databases LITE   Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
+				, prefix
+				, ip2location_db_country_v4_best[IP2L_LITE].num
+				, ip2location_db_country_v6_best[IP2L_LITE].num
+				, ip2location_db_region_city_v4_best[IP2L_LITE].num
+				, ip2location_db_region_city_v6_best[IP2L_LITE].num
+			);
+
+			printf("%sIP2Location: detected best databases COMM   Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
+				, prefix
+				, ip2location_db_country_v4_best[IP2L_COMM].num
+				, ip2location_db_country_v6_best[IP2L_COMM].num
+				, ip2location_db_region_city_v4_best[IP2L_COMM].num
+				, ip2location_db_region_city_v6_best[IP2L_COMM].num
+			);
+
+		};
+
 		if (level_verbose >= LEVEL_VERBOSE) {
-			printf("%sIP2Location: detected databases SAMPLE  Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
-				, prefix
-				, ip2location_db_country_sample_v4
-				, ip2location_db_country_sample_v6
-				, ip2location_db_region_city_sample_v4
-				, ip2location_db_region_city_sample_v6
-			);
+			if (ip2location_db_lite_to_sample_autoswitch_max_delta_months > 0) {
+				printf("%sIP2Location: selected best databases LI->SA*Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d\n"
+					, prefix
+					, ip2location_db_country_sample_v4_lite_autoswitch
+					, (level_verbose >= LEVEL_VERBOSE2) ? "       " : ""
+					, ip2location_db_country_sample_v6_lite_autoswitch
+					, (level_verbose >= LEVEL_VERBOSE2) ? "       " : ""
+					, ip2location_db_region_city_sample_v4_lite_autoswitch
+					, (level_verbose >= LEVEL_VERBOSE2) ? "       " : ""
+					, ip2location_db_region_city_sample_v6_lite_autoswitch
+				);
+			};
 
-			printf("%sIP2Location: detected databases LITE    Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
-				, prefix
-				, ip2location_db_country_lite_v4
-				, ip2location_db_country_lite_v6
-				, ip2location_db_region_city_lite_v4
-				, ip2location_db_region_city_lite_v6
-			);
-
-			printf("%sIP2Location: selected databases         Country4=%-3d%s Country6=%-3d%s City4=%-3d%s City6=%-3d%s%s\n"
+			printf("%sIP2Location: selected best databases normal Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d\n"
 				, prefix
 				, ip2location_db_country_v4
-				, ((ip2location_db_lite_to_sample_autoswitch == 1) && (ip2location_db_country_v4 == ip2location_db_country_lite_v4) & (ip2location_db_country_sample_v4 > 0)) ? "*" : " "
+				, (level_verbose >= LEVEL_VERBOSE2) ? "       " : ""
 				, ip2location_db_country_v6
-				, ((ip2location_db_lite_to_sample_autoswitch == 1) && (ip2location_db_country_v6 == ip2location_db_country_lite_v6) & (ip2location_db_country_sample_v6 > 0)) ? "*" : " "
+				, (level_verbose >= LEVEL_VERBOSE2) ? "       " : ""
 				, ip2location_db_region_city_v4
-				, ((ip2location_db_lite_to_sample_autoswitch == 1) && (ip2location_db_region_city_v4 == ip2location_db_region_city_lite_v4) & (ip2location_db_region_city_sample_v4 > 0)) ? "*" : " "
+				, (level_verbose >= LEVEL_VERBOSE2) ? "       " : ""
 				, ip2location_db_region_city_v6
-				, ((ip2location_db_lite_to_sample_autoswitch == 1) && (ip2location_db_region_city_v6 == ip2location_db_region_city_lite_v6) & (ip2location_db_region_city_sample_v6 > 0)) ? "*" : " "
-				, (ip2location_db_lite_to_sample_autoswitch == 1) ? "  (*: autoswitch to SAMPLE enabled)" : ""
 			);
+
+			if (ip2location_db_lite_to_sample_autoswitch_max_delta_months > 0) {
+				printf("%sIP2Location: selected best databases method: * = autoswitch from LITE to SAMPLE enabled in case not older than %d months\n"
+					, prefix
+					, ip2location_db_lite_to_sample_autoswitch_max_delta_months
+				);
+			};
+			if (ip2location_db_comm_to_lite_switch_min_delta_months > 0) {
+				printf("%sIP2Location: selected best databases method: COMM older than %d months are deselected in case of LITE is available\n"
+					, prefix
+					, ip2location_db_comm_to_lite_switch_min_delta_months
+				);
+			};
 		};
+
 	};
 #else // SUPPORT_IP2LOCATION
 	snprintf(string, size, "%sNo IP2Location support built-in", prefix);
@@ -1345,25 +1493,21 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(char *addr
 	if (proto == 4) {
 		IP2Location_type = ip2location_db_country_v4;
 
-		if (ip2location_db_lite_to_sample_autoswitch == 1) {
-			if ((IP2Location_type == ip2location_db_country_lite_v4) && (ip2location_db_country_sample_v4 > 0)) {
-				// lite database selected, sample database available (supporting 0.0.0.0-99.255.255.255)
-				if ((addr[1] == '.') || (addr[2] == '.')) {
-					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_country_sample_v4);
-					IP2Location_type = ip2location_db_country_sample_v4;
-				};
+		if (ip2location_db_country_sample_v4_lite_autoswitch > 0) {
+			// lite database selected, sample database available (supporting 0.0.0.0-99.255.255.255)
+			if ((addr[1] == '.') || (addr[2] == '.')) {
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_country_sample_v4_lite_autoswitch);
+				IP2Location_type = ip2location_db_country_sample_v4_lite_autoswitch;
 			};
 		};
 	} else if (proto == 6) {
 		IP2Location_type = ip2location_db_country_v6;
 
-		if (ip2location_db_lite_to_sample_autoswitch == 1) {
-			if ((IP2Location_type == ip2location_db_country_lite_v6) && (ip2location_db_country_sample_v6 > 0)) {
-				// lite database selected, sample database available (supporting 2A04:0:0:0:0:0:0:0-2A04:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF)
-				if (strncmp(addr, "2a04", 4) == 0) {
-					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_country_sample_v6);
-					IP2Location_type = ip2location_db_country_sample_v6;
-				};
+		if (ip2location_db_country_sample_v6_lite_autoswitch > 0) {
+			// lite database selected, sample database available (supporting 2A04:0:0:0:0:0:0:0-2A04:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF)
+			if (strncmp(addr, "2a04", 4) == 0) {
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_country_sample_v6_lite_autoswitch);
+				IP2Location_type = ip2location_db_country_sample_v6_lite_autoswitch;
 			};
 		};
 	} else {
@@ -1438,25 +1582,21 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_country_name_by_addr(char *addr
 	if (proto == 4) {
 		IP2Location_type = ip2location_db_country_v4;
 
-		if (ip2location_db_lite_to_sample_autoswitch == 1) {
-			if ((IP2Location_type == ip2location_db_country_lite_v4) && (ip2location_db_country_sample_v4 > 0)) {
-				// lite database selected, sample database available (supporting 0.0.0.0-99.255.255.255)
-				if ((addr[1] == '.') || (addr[2] == '.')) {
-					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_country_sample_v4);
-					IP2Location_type = ip2location_db_country_sample_v4;
-				};
+		if (ip2location_db_country_sample_v4_lite_autoswitch > 0) {
+			// lite database selected, sample database available (supporting 0.0.0.0-99.255.255.255)
+			if ((addr[1] == '.') || (addr[2] == '.')) {
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_country_sample_v4_lite_autoswitch);
+				IP2Location_type = ip2location_db_country_sample_v4_lite_autoswitch;
 			};
 		};
 	} else if (proto == 6) {
 		IP2Location_type = ip2location_db_country_v6;
 
-		if (ip2location_db_lite_to_sample_autoswitch == 1) {
-			if ((IP2Location_type == ip2location_db_country_lite_v6) && (ip2location_db_country_sample_v6 > 0)) {
-				// lite database selected, sample database available (supporting 2A04:0:0:0:0:0:0:0-2A04:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF)
-				if (strncmp(addr, "2a04", 4) == 0) {
-					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_country_sample_v6);
-					IP2Location_type = ip2location_db_country_sample_v6;
-				};
+		if (ip2location_db_country_sample_v6_lite_autoswitch > 0) {
+			// lite database selected, sample database available (supporting 2A04:0:0:0:0:0:0:0-2A04:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF)
+			if (strncmp(addr, "2a04", 4) == 0) {
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_country_sample_v6_lite_autoswitch);
+				IP2Location_type = ip2location_db_country_sample_v6_lite_autoswitch;
 			};
 		};
 	} else {
@@ -1511,25 +1651,21 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_wrapper_record_city_by_add
 	if (proto == 4) {
 		IP2Location_type = ip2location_db_region_city_v4;
 
-		if (ip2location_db_lite_to_sample_autoswitch == 1) {
-			if ((IP2Location_type == ip2location_db_region_city_lite_v4) && (ip2location_db_region_city_sample_v4 > 0)) {
-				// lite database selected, sample database available (supporting 0.0.0.0-99.255.255.255)
-				if ((addr[1] == '.') || (addr[2] == '.')) {
-					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_region_city_sample_v4);
-					IP2Location_type = ip2location_db_region_city_sample_v4;
-				};
+		if (ip2location_db_region_city_sample_v4_lite_autoswitch > 0) {
+			// lite database selected, sample database available (supporting 2A04:0:0:0:0:0:0:0-2A04:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF)
+			if ((addr[1] == '.') || (addr[2] == '.')) {
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_region_city_sample_v4_lite_autoswitch);
+				IP2Location_type = ip2location_db_region_city_sample_v4_lite_autoswitch;
 			};
 		};
 	} else if (proto == 6) {
 		IP2Location_type = ip2location_db_region_city_v6;
 
-		if (ip2location_db_lite_to_sample_autoswitch == 1) {
-			if ((IP2Location_type == ip2location_db_region_city_lite_v6) && (ip2location_db_region_city_sample_v6 > 0)) {
-				// lite database selected, sample database available (supporting 2A04:0:0:0:0:0:0:0-2A04:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF)
-				if (strncmp(addr, "2a04", 4) == 0) {
-					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_region_city_sample_v6);
-					IP2Location_type = ip2location_db_region_city_sample_v6;
-				};
+		if (ip2location_db_region_city_sample_v6_lite_autoswitch > 0) {
+			// lite database selected, sample database available (supporting 2A04:0:0:0:0:0:0:0-2A04:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF)
+			if (strncmp(addr, "2a04", 4) == 0) {
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_region_city_sample_v6_lite_autoswitch);
+				IP2Location_type = ip2location_db_region_city_sample_v6_lite_autoswitch;
 			};
 		};
 	} else {
