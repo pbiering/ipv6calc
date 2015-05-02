@@ -1,28 +1,19 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.26 2014/02/13 21:55:18 ds6peter Exp $
+# Version: $Id: TODO,v 1.27 2015/05/02 17:46:22 ds6peter Exp $
 
 TODO list
 =========
 
 Next
 ----------
-Show on -vv whether md5 and getopt were compiled in or shared lib is used
+Show on -vv whether md5 and getopt were compiled in
 
 Short term
 ----------
 
-Data libraries
-* support external db files for BuiltIn databases (targeted for 0.97.0)
-
-
 Middle term
 -----------
-
-Features:
-* showinfo/machinereadable:
-    should be able to switch between multiline and single line mode (source is already prepared)
-    should be able to print a prefix on tokens (source is already prepared)A
 
 Format:
 * octal:
@@ -30,8 +21,6 @@ Format:
 
 IEEE/OUI library:
 * perhaps more filtering of unnecessary information
-
-Creating a dedicated output library
 
 Code cleanup:
 * finish splint
