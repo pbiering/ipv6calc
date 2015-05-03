@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.37 2015/04/16 06:23:20 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.38 2015/05/03 13:28:59 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -239,7 +239,7 @@ typedef struct {
 #endif
 
 
-extern int  libipv6calc_db_wrapper_init(void);
+extern int  libipv6calc_db_wrapper_init(const char *prefix_string);
 extern int  libipv6calc_db_wrapper_cleanup(void);
 extern void libipv6calc_db_wrapper_info(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_features(char *string, const size_t size);

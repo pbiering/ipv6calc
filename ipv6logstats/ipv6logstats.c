@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.62 2014/09/24 09:07:57 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.63 2015/05/03 13:28:59 ds6peter Exp $
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -243,7 +243,7 @@ int main(int argc,char *argv[]) {
 	argc -= optind;
 
         /* initialise database wrapper */
-	result = libipv6calc_db_wrapper_init();
+	result = libipv6calc_db_wrapper_init("*3*DB-Info: ");
 	if (result != 0) {
 		exit(EXIT_FAILURE);
 	};

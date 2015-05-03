@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.38 2014/09/13 21:15:08 ds6peter Exp $
+ * Version    : $Id: ipv6logconv.c,v 1.39 2015/05/03 13:28:59 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -183,7 +183,7 @@ int main(int argc,char *argv[]) {
 	argc -= optind;
 
 	/* initialise database wrapper */
-	result = libipv6calc_db_wrapper_init();
+	result = libipv6calc_db_wrapper_init("");
 	if (result != 0) {
 		exit(EXIT_FAILURE);
 	};

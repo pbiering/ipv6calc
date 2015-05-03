@@ -1,7 +1,7 @@
 # Project    : ipv6calc/ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.6 2015/04/21 06:13:44 ds6peter Exp $
-# Copyright  : 2006 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: Makefile.in,v 1.7 2015/05/03 13:28:59 ds6peter Exp $
+# Copyright  : 2006-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for various tools
@@ -10,6 +10,7 @@
 prefix		= @prefix@
 exec_prefix	= @exec_prefix@
 datadir         = @datadir@
+datarootdir     = @datarootdir@
 
 
 # Compiler and Linker Options
