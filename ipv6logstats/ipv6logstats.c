@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.63 2015/05/03 13:28:59 ds6peter Exp $
- * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logstats.c,v 1.64 2015/05/03 16:39:51 ds6peter Exp $
+ * Copyright  : 2003-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile statistics
@@ -33,6 +33,11 @@
 #include "libifinet6.h"
 
 #include "../databases/lib/libipv6calc_db_wrapper.h"
+#include "../databases/lib/libipv6calc_db_wrapper_GeoIP.h"
+#include "../databases/lib/libipv6calc_db_wrapper_IP2Location.h"
+#include "../databases/lib/libipv6calc_db_wrapper_DBIP.h"
+#include "../databases/lib/libipv6calc_db_wrapper_External.h"
+#include "../databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
 #define LINEBUFFER	16384
 
@@ -863,6 +868,50 @@ static void lineparser(void) {
 
 			printf(" #%d.%d\n", STATS_VERSION_MAJOR, STATS_VERSION_MINOR);
 		};
+	};
+
+
+	if (opt_printdirection == 0) {
+		/* print used database only in row mode */
+
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN
+		char *string;
+#endif
+
+#ifdef SUPPORT_IP2LOCATION
+		string = libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used();
+		if ((string != NULL) && (strlen(string) > 0)) {
+			printf("*3*DB-Used: %s\n", string);
+		};
+#endif
+
+#ifdef SUPPORT_GEOIP
+		string = libipv6calc_db_wrapper_GeoIP_wrapper_db_info_used();
+		if ((string != NULL) && (strlen(string) > 0)) {
+			printf("*3*DB-Used: %s\n", string);
+		};
+#endif
+
+#ifdef SUPPORT_DBIP
+		string = libipv6calc_db_wrapper_DBIP_wrapper_db_info_used();
+		if ((string != NULL) && (strlen(string) > 0)) {
+			printf("*3*DB-Used: %s\n", string);
+		};
+#endif
+
+#ifdef SUPPORT_EXTERNAL
+		string = libipv6calc_db_wrapper_External_wrapper_db_info_used();
+		if ((string != NULL) && (strlen(string) > 0)) {
+			printf("*3*DB-Used: %s\n", string);
+		};
+#endif
+
+#ifdef SUPPORT_BUILTIN
+		string = libipv6calc_db_wrapper_BuiltIn_wrapper_db_info_used();
+		if ((string != NULL) && (strlen(string) > 0)) {
+			printf("*3*DB-Used: %s\n", string);
+		};
+#endif
 	};
 
 	return;

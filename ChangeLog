@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.397 2015/05/03 13:28:59 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.398 2015/05/03 16:39:51 ds6peter Exp $ 
  */
 
 Info:
@@ -11,6 +11,7 @@ Info:
 --------------------------------------------------------------------
 20150503/PB
 	fix missing prefix informational DB output on ipv6logstats
+	add used DB info in row mode on ipv6logstats
 
 20150502/PB
 	add option: --db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>
