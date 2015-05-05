@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.116 2015/04/16 06:23:20 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.117 2015/05/05 20:40:47 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -231,6 +231,40 @@ void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6addr *ip
 	*(ipv6addrp_dst) = *(ipv6addrp_src);
 	
 	return;
+};
+
+
+/*
+ * function compares the IPv6 structure
+ *
+ * in:  ipv6addrp1  = pointer to IPv6 address structure
+ * in:  ipv6addrp2  = pointer to IPv6 address structure
+ * in:  compare_flags: 0=honor prefix length on addr1 TODO: add more support if required
+ * returns: 0 = addr2 equal with addr1 or covered by addr1
+ */
+int ipv6addr_compare(const ipv6calc_ipv6addr *ipv6addrp1, const ipv6calc_ipv6addr *ipv6addrp2, const uint16_t compare_flags) {
+	int i;
+	uint32_t mask;
+
+	for (i = 0; i < 4; i++) {
+		if ((ipv6addrp1->flag_prefixuse == 0)
+		  || ((ipv6addrp1->flag_prefixuse == 1) && (ipv6addrp1->prefixlength >= (i + 1) * 32))) {
+			DEBUGPRINT_WA(DEBUG_libipv6addr, "compare dword %i (prefixuse=%d)", i, ipv6addrp1->flag_prefixuse);
+			/* compare 32 bits */
+			if (ipv6addr_getdword(ipv6addrp1, i) != ipv6addr_getdword(ipv6addrp2, i)) {
+				return(1);
+			};
+		} else if (ipv6addrp1->flag_prefixuse == 1) {
+			mask = ~(0xffffffffu >> (ipv6addrp1->prefixlength - i * 32));
+			DEBUGPRINT_WA(DEBUG_libipv6addr, "compare dword %i with mask 0x%08x", i, mask);
+			if ((ipv6addr_getdword(ipv6addrp1, i) & mask) != (ipv6addr_getdword(ipv6addrp2, i) & mask)) {
+				return(1);
+			} else {
+				return(0);
+			};
+		};
+	};
+	return(0);
 };
 
 
@@ -2461,6 +2495,10 @@ void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter) {
 	libipv6calc_filter_clear_db_asn(&filter->filter_db_asn);
 	libipv6calc_filter_clear_db_registry(&filter->filter_db_registry);
 
+	filter->filter_addr.active = 0;
+	filter->filter_addr.addr_must_have_max = 0;
+	filter->filter_addr.addr_may_not_have_max = 0;
+
 	return;
 };
 
@@ -2476,6 +2514,10 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 	const char *prefix = "ipv6";
 	const char *prefixdot = "ipv6.";
 	const char *prefixdbdot = "db.";
+	const char *prefixaddreq = "addr=";
+	ipv6calc_ipv6addr ipv6addr;
+	char resultstring[NI_MAXHOST];
+	int db = 0, addr = 0;
 
 	if (token == NULL) {
 		return (result);
@@ -2519,43 +2561,86 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 		return(1);
 	};
 
-	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
-		DEBUGPRINT_WA(DEBUG_libipv6addr, "check token against: %s", ipv6calc_ipv6addrtypestrings[i].token);
+	if (strncmp(token + offset, prefixaddreq, strlen(prefixaddreq)) == 0) {
+		/* prefixaddr with = found */
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "found 'addr=' prefix in token: %s", token);
+		addr = 1;
+		offset += strlen(prefixaddreq);
+	};
 
-		if (strcmp(ipv6calc_ipv6addrtypestrings[i].token, token + offset) == 0) {
-			DEBUGPRINT_WA(DEBUG_libipv6addr, "token match: %s", ipv6calc_ipv6addrtypestrings[i].token);
+	if ((db == 0) && (addr == 0)) {
+		// typeinfo token
+		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
+			DEBUGPRINT_WA(DEBUG_libipv6addr, "check token against: %s", ipv6calc_ipv6addrtypestrings[i].token);
 
-			if (negate == 1) {
-				filter->filter_typeinfo.typeinfo_may_not_have |= ipv6calc_ipv6addrtypestrings[i].number;
-			} else {
-				filter->filter_typeinfo.typeinfo_must_have |= ipv6calc_ipv6addrtypestrings[i].number;
+			if (strcmp(ipv6calc_ipv6addrtypestrings[i].token, token + offset) == 0) {
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "token match: %s", ipv6calc_ipv6addrtypestrings[i].token);
+
+				if (negate == 1) {
+					filter->filter_typeinfo.typeinfo_may_not_have |= ipv6calc_ipv6addrtypestrings[i].number;
+				} else {
+					filter->filter_typeinfo.typeinfo_must_have |= ipv6calc_ipv6addrtypestrings[i].number;
+				};
+				filter->filter_typeinfo.active = 1;
+				filter->active = 1;
+				result = 0;
+				break;
 			};
-			filter->filter_typeinfo.active = 1;
-			filter->active = 1;
-			result = 0;
-			break;
 		};
 	};
 
-	// DB CC filter
-	r = libipv6calc_db_cc_filter_parse(&filter->filter_db_cc, token + offset, negate);
-	if (r == 0) {
-		result = 0;
-		filter->active = 1;
+	if (db == 1) {
+		// DB CC filter
+		r = libipv6calc_db_cc_filter_parse(&filter->filter_db_cc, token + offset, negate);
+		if (r == 0) {
+			result = 0;
+			filter->active = 1;
+		};
+
+		// DB ASN filter
+		r = libipv6calc_db_asn_filter_parse(&filter->filter_db_asn, token + offset, negate);
+		if (r == 0) {
+			result = 0;
+			filter->active = 1;
+		};
+
+		// DB registry filter
+		r = libipv6calc_db_registry_filter_parse(&filter->filter_db_registry, token + offset, negate);
+		if (r == 0) {
+			result = 0;
+			filter->active = 1;
+		};
 	};
 
-	// DB ASN filter
-	r = libipv6calc_db_asn_filter_parse(&filter->filter_db_asn, token + offset, negate);
-	if (r == 0) {
-		result = 0;
-		filter->active = 1;
-	};
 
-	// DB registry filter
-	r = libipv6calc_db_registry_filter_parse(&filter->filter_db_registry, token + offset, negate);
-	if (r == 0) {
-		result = 0;
-		filter->active = 1;
+	if (addr == 1) {
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "try to parse IPv6 address: %s", token + offset);
+		r = addr_to_ipv6addrstruct(token + offset, resultstring, sizeof(resultstring), &ipv6addr);
+		if (r == 0) {
+			DEBUGPRINT_WA(DEBUG_libipv6addr, "successfully parsed IPv6 address: %s", token + offset);
+
+			if (negate == 1) {
+				if (filter->filter_addr.addr_may_not_have_max < IPV6CALC_FILTER_IPV6ADDR) {
+					ipv6addr_copy(&filter->filter_addr.ipv6addr_may_not_have[filter->filter_addr.addr_may_not_have_max], &ipv6addr);
+        				filter->filter_addr.addr_may_not_have_max++;
+					filter->filter_addr.active = 1;
+					filter->active = 1;
+					result = 0;
+				} else {
+					ERRORPRINT_WA("filter token 'addr=' maxmimum reached for 'may not have': %d", filter->filter_addr.addr_may_not_have_max);
+				};
+			} else {
+				if (filter->filter_addr.addr_must_have_max < IPV6CALC_FILTER_IPV6ADDR) {
+					ipv6addr_copy(&filter->filter_addr.ipv6addr_must_have[filter->filter_addr.addr_must_have_max], &ipv6addr); 
+        				filter->filter_addr.addr_must_have_max++;
+					filter->filter_addr.active = 1;
+					filter->active = 1;
+					result = 0;
+				} else {
+					ERRORPRINT_WA("filter token 'addr=' maxmimum reached for 'must have': %d", filter->filter_addr.addr_must_have_max);
+				};
+			};
+		};
 	};
 
 	if (result != 0) {
@@ -2575,29 +2660,46 @@ END_ipv6addr_filter_parse:
  * ret: 0:ok 1:problem
  */
 int ipv6addr_filter_check(s_ipv6calc_filter_ipv6addr *filter) {
-	int result = 0, r;
+	int result = 0, r, i;
+	char resultstring[NI_MAXHOST];
 
-	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter general 'active'       : %d", filter->active);
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter general active         : %d", filter->active);
 
-	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter typeinfo 'active'      : %d", filter->filter_typeinfo.active);
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'typeinfo' active      : %d", filter->filter_typeinfo.active);
 	if (filter->filter_typeinfo.active > 0) {
-		DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter typeinfo 'must_have'   : 0x%08x", filter->filter_typeinfo.typeinfo_must_have);
-		DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter typeinfo 'may_not_have': 0x%08x", filter->filter_typeinfo.typeinfo_may_not_have);
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'typeinfo/must_have'   : 0x%08x", filter->filter_typeinfo.typeinfo_must_have);
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'typeinfo/may_not_have': 0x%08x", filter->filter_typeinfo.typeinfo_may_not_have);
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter db.cc  'active'        : %d", filter->filter_db_cc.active);
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'addr' active          : %d", filter->filter_addr.active);
+	if (filter->filter_addr.active > 0) {
+		if (filter->filter_addr.addr_must_have_max > 0) {
+			for (i = 0; i < filter->filter_addr.addr_must_have_max; i++) {
+				ipv6addrstruct_to_compaddr(&filter->filter_addr.ipv6addr_must_have[i], resultstring, sizeof(resultstring));
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'addr/must_have'       : %s", resultstring);
+			};
+		};
+		if (filter->filter_addr.addr_may_not_have_max > 0) {
+			for (i = 0; i < filter->filter_addr.addr_may_not_have_max; i++) {
+				ipv6addrstruct_to_compaddr(&filter->filter_addr.ipv6addr_may_not_have[i], resultstring, sizeof(resultstring));
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'addr/may_not_have'    : %s", resultstring);
+			};
+		};
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'db.cc' active         : %d", filter->filter_db_cc.active);
 	if (filter->filter_db_cc.active > 0) {
 		r = libipv6calc_db_cc_filter_check(&filter->filter_db_cc, IPV6CALC_PROTO_IPV6);
 		if (r > 0) { result = 1; };
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter db.asn 'active'        : %d", filter->filter_db_asn.active);
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'db.asn' active        : %d", filter->filter_db_asn.active);
 	if (filter->filter_db_asn.active > 0) {
 		r = libipv6calc_db_asn_filter_check(&filter->filter_db_asn, IPV6CALC_PROTO_IPV6);
 		if (r > 0) { result = 1; };
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter db.registry 'active'   : %d", filter->filter_db_registry.active);
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'db.registry' active   : %d", filter->filter_db_registry.active);
 	if (filter->filter_db_registry.active > 0) {
 		r = libipv6calc_db_registry_filter_check(&filter->filter_db_registry, IPV6CALC_PROTO_IPV6);
 		if (r > 0) { result = 1; };
@@ -2617,7 +2719,7 @@ int ipv6addr_filter_check(s_ipv6calc_filter_ipv6addr *filter) {
  */
 int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_ipv6addr *filter) {
 	uint32_t typeinfo;
-	int result = 0;
+	int result = 0, r, i;
 
 	if (filter->active == 0) {
 		DEBUGPRINT_NA(DEBUG_libipv6addr, "No filter active (SKIP)");
@@ -2643,6 +2745,36 @@ int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_
 		};
 	};
 
+	if (filter->filter_addr.active > 0) {
+		if (filter->filter_addr.addr_must_have_max > 0) {
+			DEBUGPRINT_NA(DEBUG_libipv6addr, "compare against ipv6addr/must_have");
+			r = 0;
+			for (i = 0; i < filter->filter_addr.addr_must_have_max; i++) {
+				if (ipv6addr_compare(&filter->filter_addr.ipv6addr_must_have[i], ipv6addrp, 0) == 0) {
+					/* match must_have */
+					r = 1;
+				};
+			};
+			if (r == 0) {
+				/* no match */
+				result = 1;
+			};
+		};
+		if (filter->filter_addr.addr_may_not_have_max > 0) {
+			DEBUGPRINT_NA(DEBUG_libipv6addr, "compare against ipv6addr/may_not_have");
+			r = 0;
+			for (i = 0; i < filter->filter_addr.addr_may_not_have_max; i++) {
+				if (ipv6addr_compare(&filter->filter_addr.ipv6addr_may_not_have[i], ipv6addrp, 0) == 0) {
+					/* match may_not_have */
+					r = 1;
+				};
+			};
+			if (r == 1) {
+				/* match may_not_have*/
+				result = 1;
+			};
+		};
+	};
 
 	if (filter->filter_db_cc.active > 0) {
 		uint16_t cc_index = libipv6addr_cc_index_by_addr(ipv6addrp, NULL);

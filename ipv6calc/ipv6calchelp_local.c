@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calchelp_local.c
- * Version    : $Id: ipv6calchelp_local.c,v 1.11 2015/05/02 17:35:57 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp_local.c,v 1.12 2015/05/05 20:40:47 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -111,6 +111,8 @@ void ipv6calc_printhelp(const struct option longopts[], const s_ipv6calc_longopt
 	fprintf(stderr, "  Available input  types:  [-m] -I|--in     -?|-h|--help\n");
 	fprintf(stderr, "  Available output types:  [-m] -O|--out    -?|-h|--help\n");
 	fprintf(stderr, "  Available action types:  [-m] -A|--action -?|-h|--help\n");
+	fprintf(stderr, "\n");
+	fprintf(stderr, "  Special filter action :  -E -?|-h|--help\n");
 	fprintf(stderr, "\n");
 	fprintf(stderr, " Other usage:\n");
 	fprintf(stderr, "  --showinfo|-i [--machine_readable|-m] : show information about input data\n");

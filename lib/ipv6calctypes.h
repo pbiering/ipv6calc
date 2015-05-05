@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.47 2015/04/30 18:52:41 ds6peter Exp $
- * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calctypes.h,v 1.48 2015/05/05 20:40:47 ds6peter Exp $
+ * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for ipv6calctypes.c
@@ -342,6 +342,8 @@ typedef struct {
 #define IPV6CALC_FILTER_DB_CC_MAX	16
 #define IPV6CALC_FILTER_DB_ASN_MAX	16
 #define IPV6CALC_FILTER_DB_REGISTRY_MAX	8
+#define IPV6CALC_FILTER_IPV4ADDR	16
+#define IPV6CALC_FILTER_IPV6ADDR	16
 
 /* DB CC (CountryCode) filter structure */
 typedef struct {
@@ -371,7 +373,6 @@ typedef struct {
 	uint32_t registry_must_have[IPV6CALC_FILTER_DB_REGISTRY_MAX];
 	uint32_t registry_may_not_have[IPV6CALC_FILTER_DB_REGISTRY_MAX];
 } s_ipv6calc_filter_db_registry;
-
 
 /* typeinfo filter structure */
 typedef struct {

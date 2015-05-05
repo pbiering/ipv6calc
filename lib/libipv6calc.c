@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.40 2015/04/16 06:23:20 ds6peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.41 2015/05/05 20:40:47 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -512,7 +512,7 @@ int libipv6calc_filter_parse(const char *expression, s_ipv6calc_filter_master *f
 			token_used = 1;
 		} else if (r == 2) {
 			result = 1;
-			ERRORPRINT_WA("Unrecognized filter token (ipv4): %s", charptr);
+			ERRORPRINT_WA("Unrecognized filter token (ipv4.xxx): %s", charptr);
 		};
 
 		r = ipv6addr_filter_parse(&filter_master->filter_ipv6addr, charptr);
@@ -520,7 +520,7 @@ int libipv6calc_filter_parse(const char *expression, s_ipv6calc_filter_master *f
 			token_used = 1;
 		} else if (r == 2) {
 			result = 1;
-			ERRORPRINT_WA("Unrecognized filter token (ipv6): %s", charptr);
+			ERRORPRINT_WA("Unrecognized filter token (ipv6.xxx): %s", charptr);
 		};
 
 		// r += macaddr_filter_parse(&filter_macaddr, charptr); // missing implementation

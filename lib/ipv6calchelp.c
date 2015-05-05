@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.73 2015/05/02 15:25:33 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.74 2015/05/05 20:40:47 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -740,13 +740,17 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "\n");
 			fprintf(stderr, "  IPv4/v6 address filter tokens based on databases:\n");
 			fprintf(stderr, "   [^][ipv4.|ipv6.]db.cc=<CC>|unknown (Country Code [2 chars])\n");
-			fprintf(stderr, "   [^][ipv4.|ipv6.]db.asn=<ASN>|unknown (Autonomous System Number [numeric])\n");
-			fprintf(stderr, "   [^][ipv4.|ipv6.]db.reg=<REGISTRY> (Registry)\n");
+			fprintf(stderr, "   [^][ipv4.|ipv6.]db.asn=<ASN>|unknown (Autonomous System Number)\n");
+			fprintf(stderr, "   [^][ipv4.|ipv6.]db.reg=<REGISTRY>\n");
 			fprintf(stderr, "    Registry tokens:");
 			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_registries); i++ ) {
 				fprintf(stderr, " %s", ipv6calc_registries[i].token);
 			};
 			fprintf(stderr, "\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, "  IPv4/v6 address filter tokens based on address/mask:\n");
+			fprintf(stderr, "   [^]ipv4.addr=<IPV4-ADDRESS>[<PREFIX-LENGTH>]\n");
+			fprintf(stderr, "   [^]ipv6.addr=<IPV6-ADDRESS>[<PREFIX-LENGTH>]\n");
 			fprintf(stderr, "\n");
 			fprintf(stderr, "  EUI-48/MAC address filter tokens:\n");
 			fprintf(stderr, "   ");
@@ -772,6 +776,18 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 
 	libipv6calc_db_wrapper_capabilities(string, sizeof(string));
 	fprintf(stderr, "Capabilities: %s\n\n", string);
+
+#if defined ENABLE_BUNDLED_MD5 || defined ENABLE_BUNDLED_GETOPT
+	fprintf(stderr, "Bundled with:");
+#ifdef ENABLE_BUNDLED_MD5
+	fprintf(stderr, " MD5");
+#endif
+#ifdef ENABLE_BUNDLED_GETOPT
+	fprintf(stderr, " GETOPT");
+#endif
+	fprintf(stderr, "\n\n");
+#endif
+
 
 #ifdef SUPPORT_GEOIP
 #ifdef GEOIP_INCLUDE_VERSION

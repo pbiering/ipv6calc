@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.85 2015/04/16 06:23:20 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.86 2015/05/05 20:40:47 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -175,6 +175,14 @@ typedef struct {
 	int flag_scopeid;		/* =1: scope ID value set */
 } ipv6calc_ipv6addr;
 
+/* IPv6 Address filter structure */
+typedef struct {
+        int active;
+        int addr_must_have_max;
+        int addr_may_not_have_max;
+        ipv6calc_ipv6addr ipv6addr_must_have[IPV6CALC_FILTER_IPV4ADDR];
+        ipv6calc_ipv6addr ipv6addr_may_not_have[IPV6CALC_FILTER_IPV6ADDR];
+} s_ipv6calc_filter_addr_ipv6;
 
 /* IPv6 filter structure */
 typedef struct {
@@ -183,6 +191,7 @@ typedef struct {
 	s_ipv6calc_filter_db_cc       filter_db_cc;        // Country Code filter
 	s_ipv6calc_filter_db_asn      filter_db_asn;       // Autonomous System Number filter
 	s_ipv6calc_filter_db_registry filter_db_registry;  // Registry filter
+	s_ipv6calc_filter_addr_ipv6   filter_addr;         // IPv6 Address filter
 	/* others coming next */
 } s_ipv6calc_filter_ipv6addr;
 
@@ -366,6 +375,8 @@ extern void ipv6addr_setdword(ipv6calc_ipv6addr *ipv6addrp, const unsigned int n
 extern void ipv6addr_clear(ipv6calc_ipv6addr *ipv6addrp);
 extern void ipv6addr_clearall(ipv6calc_ipv6addr *ipv6addrp);
 extern void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6addr *ipv6addrp_src);
+
+extern int ipv6addr_compare(const ipv6calc_ipv6addr *ipv6addrp1, const ipv6calc_ipv6addr *ipv6addrp2, const uint16_t compare_flags);
 
 extern uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp);
 

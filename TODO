@@ -1,13 +1,12 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.27 2015/05/02 17:46:22 ds6peter Exp $
+# Version: $Id: TODO,v 1.28 2015/05/05 20:40:47 ds6peter Exp $
 
 TODO list
 =========
 
 Next
 ----------
-Show on -vv whether md5 and getopt were compiled in
 
 Short term
 ----------

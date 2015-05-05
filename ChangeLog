@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.398 2015/05/03 16:39:51 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.399 2015/05/05 20:40:47 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,12 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20150505/PB
+	add support for IPv4/IPv6 address/mask filtering for option -E
+
+20150504/PB
+	display on -vv whether MD5 or GETOPT are bundled
+
 20150503/PB
 	fix missing prefix informational DB output on ipv6logstats
 	add used DB info in row mode on ipv6logstats
