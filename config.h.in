@@ -9,6 +9,9 @@
 /* Define db-ip.com database directory. */
 #undef DBIP_DB
 
+/* Define if bundled GETOPT should be used */
+#undef ENABLE_BUNDLED_GETOPT
+
 /* Define if bundled MD5 should be used */
 #undef ENABLE_BUNDLED_MD5
 
@@ -145,6 +148,36 @@
 
 /* IP2Location include file version. */
 #undef IP2LOCATION_INCLUDE_VERSION
+
+/* "API version Bugfix" */
+#undef IPV6CALC_API_VERSION_BUGFIX
+
+/* "API version Major" */
+#undef IPV6CALC_API_VERSION_MAJOR
+
+/* "API version Minor" */
+#undef IPV6CALC_API_VERSION_MINOR
+
+/* "API version numeric" */
+#undef IPV6CALC_API_VERSION_NUMERIC
+
+/* "API version as string" */
+#undef IPV6CALC_API_VERSION_STRING
+
+/* "Program version Bugfix" */
+#undef IPV6CALC_PACKAGE_VERSION_BUGFIX
+
+/* "Program version Major" */
+#undef IPV6CALC_PACKAGE_VERSION_MAJOR
+
+/* "Program version Minor" */
+#undef IPV6CALC_PACKAGE_VERSION_MINOR
+
+/* "Package version numeric" */
+#undef IPV6CALC_PACKAGE_VERSION_NUMERIC
+
+/* "PACKAGE version as string" */
+#undef IPV6CALC_PACKAGE_VERSION_STRING
 
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.41 2015/05/05 20:40:47 ds6peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.42 2015/05/07 06:19:27 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -12,6 +12,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+
+#include "config.h"
 
 #include "ipv6calctypes.h"
 #include "libipv6calc.h"
@@ -709,4 +711,33 @@ int libipv6calc_bitcount_uint32_t(const uint32_t value) {
 		mask = mask << 1;
 	};
 	return(count);
+};
+
+/*
+ * return library version numeric
+ */
+const uint32_t libipv6calc_lib_version_numeric(void) {
+	return(IPV6CALC_PACKAGE_VERSION_NUMERIC);
+}; 
+
+/*
+ * return library version as string
+ */
+const char *libipv6calc_lib_version_string(void) {
+	return(IPV6CALC_PACKAGE_VERSION_STRING);
+
+};
+
+/*
+ * return API version numeric
+ */
+const uint32_t libipv6calc_api_version_numeric(void) {
+	return(IPV6CALC_API_VERSION_NUMERIC);
+};
+
+/*
+ * return API version as string
+ */
+const char *libipv6calc_api_version_string(void) {
+	return(IPV6CALC_API_VERSION_STRING);
 };

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.65 2015/05/05 20:40:47 ds6peter Exp $
+ * Version    : $Id: libipv4addr.c,v 1.66 2015/05/07 06:19:27 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -981,6 +981,15 @@ int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token)
 		offset += strlen(prefixdot);
 		result = 2; /* token with prefix, result into problem if not found */
 
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "token with prefix, suffix: %s", token + offset);
+	};
+
+	if (strncmp(token + offset, prefixaddreq, strlen(prefixaddreq)) == 0) {
+		/* prefixaddr with = found */
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "found 'addr=' prefix in token: %s", token);
+		addr = 1;
+		offset += strlen(prefixaddreq);
+
 	} else if (strncmp(token + offset, prefixdbdot, strlen(prefixdbdot)) == 0) {
 		/* prefixdb with dot found */
 		DEBUGPRINT_WA(DEBUG_libipv4addr, "found 'db.' prefix in token: %s", token);
@@ -992,12 +1001,6 @@ int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token)
 		return(1);
 	};
 
-	if (strncmp(token + offset, prefixaddreq, strlen(prefixaddreq)) == 0) {
-		/* prefixaddr with = found */
-		DEBUGPRINT_WA(DEBUG_libipv4addr, "found 'addr=' prefix in token: %s", token);
-		addr = 1;
-		offset += strlen(prefixaddreq);
-	};
 
 	if ((db == 0) && (addr == 0)) {
 		// typeinfo token

@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.120 2015/05/03 13:28:59 ds6peter Exp $
- * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calc.c,v 1.121 2015/05/07 06:19:26 ds6peter Exp $
+ * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
@@ -14,6 +14,8 @@
 #include <stdlib.h> 
 #include <getopt.h> 
 #include <unistd.h>
+
+#include "config.h"
 
 #include "ipv6calc.h"
 #include "libipv6calc.h"
@@ -40,7 +42,6 @@
 #include "librfc3041.h"
 #include "librfc5569.h"
 #include "libeui64.h"
-#include "config.h"
 #include "libieee.h"
 #include "libipv4addr.h"
 #include "libipv6addr.h"
@@ -86,6 +87,8 @@ int showinfo_machine_readable_filter_used = 0;
 /**************************************************/
 /* main */
 int main(int argc, char *argv[]) {
+	IPV6CALC_LIB_VERSION_CHECK_EXIT(IPV6CALC_PACKAGE_VERSION_NUMERIC, IPV6CALC_PACKAGE_VERSION_STRING)
+
 	char resultstring[NI_MAXHOST] = "";
 	char resultstring2[NI_MAXHOST] = "";
 	char resultstring3[NI_MAXHOST] = "";

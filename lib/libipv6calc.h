@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.28 2015/04/16 06:23:20 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.29 2015/05/07 06:19:27 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -101,7 +101,14 @@ typedef struct {
 /* non-quiet print no args */
 #define NONQUIETPRINT_NA(t)             if (ipv6calc_quiet == 0) { fprintf(stderr, t "\n"); };
 
-#endif
+
+#define IPV6CALC_LIB_VERSION_CHECK_EXIT(version_numeric, version_string) \
+	if (version_numeric != libipv6calc_lib_version_numeric()) { \
+		fprintf(stderr, "Library version is not matching: has:%s required:%s", libipv6calc_lib_version_string(), version_string); \
+		exit(1); \
+	};
+
+#endif // _libipv6calc_h
 
 
 /* prototypes */
@@ -132,3 +139,7 @@ extern const char *libipv6calc_registry_string_by_num(const int registry);
 
 extern int libipv6calc_bitcount_uint32_t(const uint32_t value);
 
+extern const uint32_t libipv6calc_lib_version_numeric(void);
+extern const char    *libipv6calc_lib_version_string(void);
+extern const uint32_t libipv6calc_api_version_numeric(void);
+extern const char    *libipv6calc_api_version_string(void);

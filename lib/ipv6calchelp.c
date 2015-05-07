@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.74 2015/05/05 20:40:47 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.75 2015/05/07 06:19:27 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -776,6 +776,8 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 
 	libipv6calc_db_wrapper_capabilities(string, sizeof(string));
 	fprintf(stderr, "Capabilities: %s\n\n", string);
+
+	fprintf(stderr, "Internal versions: library:%s (%d)  API:%s (%d)\n\n", libipv6calc_lib_version_string(), libipv6calc_lib_version_numeric(), libipv6calc_api_version_string(), libipv6calc_api_version_numeric());
 
 #if defined ENABLE_BUNDLED_MD5 || defined ENABLE_BUNDLED_GETOPT
 	fprintf(stderr, "Bundled with:");

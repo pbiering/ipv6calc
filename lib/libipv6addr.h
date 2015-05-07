@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.86 2015/05/05 20:40:47 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.87 2015/05/07 06:19:27 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -192,7 +192,7 @@ typedef struct {
 	s_ipv6calc_filter_db_asn      filter_db_asn;       // Autonomous System Number filter
 	s_ipv6calc_filter_db_registry filter_db_registry;  // Registry filter
 	s_ipv6calc_filter_addr_ipv6   filter_addr;         // IPv6 Address filter
-	/* others coming next */
+	/* others may come next */
 } s_ipv6calc_filter_ipv6addr;
 
 
