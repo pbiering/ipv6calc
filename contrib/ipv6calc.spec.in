@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec.in,v 1.99 2015/04/21 06:08:46 ds6peter Exp $
+# $Id: ipv6calc.spec.in,v 1.100 2015/05/08 06:26:11 ds6peter Exp $
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
@@ -189,7 +189,8 @@ rm -rf %{buildroot}
 
 
 %files
-%doc ChangeLog README CREDITS TODO COPYING LICENSE USAGE doc/ipv6calc.{lyx,sgml,html,xml}
+%doc ChangeLog README CREDITS TODO USAGE doc/ipv6calc.{lyx,sgml,html,xml}
+%license COPYING LICENSE
 
 %defattr(644,root,root,755)
 
@@ -216,12 +217,16 @@ rm -rf %{buildroot}
 %defattr(644,root,root,755)
 
 %doc ipv6calcweb/README ipv6calcweb/USAGE
+%license COPYING
 
 %attr(555,-,-) %{_localstatedir}/www/cgi-bin/ipv6calcweb.cgi
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
 
 
 %changelog
+* Thu Mar 07 2015 Peter Bieringer <pb@bieringer.de>
+- take use of license macro
+
 * Sun Mar 01 2015 Peter Bieringer <pb@bieringer.de>
 - remove not necessary x-bits for some files by proper definition in %files section
 

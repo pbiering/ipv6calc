@@ -1,4 +1,4 @@
-0. The program "ipv6calc" is produced and copyright 2001-2014 by Peter Bieringer <pb (at) bieringer.de>, except
+0. The program "ipv6calc" is produced and copyright 2001-2015 by Peter Bieringer <pb (at) bieringer.de>, except
    * some codelines regarding address type resolving, which were directly copied from Linux kernel source (also GPL license)
 	related files are:
 	- libipv6addr.c
@@ -14,6 +14,10 @@
 	- getopt/getopt.h
 	- getopt/getopt1.c
 
+   * external databases fallback code (header files only)
+	IP2Location (7.0.1): LGPL version 3
+	GeoIP (1.4.8): LGPL version 2.1
+
    -> see directory "samplecode" in the source file for original versions
 
    * source data of databases
@@ -24,4 +28,4 @@
     (see COPYING file for more)
 
 
-2014-05-18, Peter Bieringer <pb@bieringer.de>
+2015-05-07, Peter Bieringer <pb@bieringer.de>

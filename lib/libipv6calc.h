@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.29 2015/05/07 06:19:27 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.30 2015/05/08 06:26:11 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -104,7 +104,7 @@ typedef struct {
 
 #define IPV6CALC_LIB_VERSION_CHECK_EXIT(version_numeric, version_string) \
 	if (version_numeric != libipv6calc_lib_version_numeric()) { \
-		fprintf(stderr, "Library version is not matching: has:%s required:%s", libipv6calc_lib_version_string(), version_string); \
+		ERRORPRINT_WA("Library version is not matching: has:%s required:%s", libipv6calc_lib_version_string(), version_string); \
 		exit(1); \
 	};
 

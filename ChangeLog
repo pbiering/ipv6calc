@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.399 2015/05/05 20:40:47 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.400 2015/05/08 06:26:10 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,11 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20150508/PB
+	add internal library version checks for future usage
+	lib/libipv6calc.c: fix bug in IPv4 address autodetection (e.g. 253.134.12.143/0)
+	introduce new defines regarding program and API versions major/minor/bugfix
+
 20150505/PB
 	add support for IPv4/IPv6 address/mask filtering for option -E
 

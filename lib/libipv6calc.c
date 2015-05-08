@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.42 2015/05/07 06:19:27 ds6peter Exp $
+ * Version    : $Id: libipv6calc.c,v 1.43 2015/05/08 06:26:11 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -215,8 +215,10 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		} else DEBUGPRINT_WA(DEBUG_libipv6calc, " check FORMAT_base85 not successful, result: %s", resultstring);
 	};
 	
-	if (length >= 7 && length <= 15 && numdots == 3 && numcolons == 0 && numdigits == numxdigits && numdigits >= 4 && numdigits <= 12 && numslashes <= 1 && (numdots + numdigits + numslashes) == length) {
-		/* IPv4: ddd.ddd.ddd.ddd */
+	if (((length >= 7 && length <= 15 && numdots == 3 && numcolons == 0 && numdigits == numxdigits && numdigits >= 4 && numdigits <= 12 && numslashes == 0 )
+	    || ((length >= 9 && length <= 18 && numdots == 3 && numcolons == 0 && numdigits == numxdigits && numdigits >= 5 && numdigits <= 14 && numslashes == 1)))
+	    && (numdots + numdigits + numslashes) == length) {
+		/* IPv4: d{1-3}.d{1-3}.d{1-3}.d{1-3} or d{1-3}.d{1-3}.d{1-3}.d{1-3}/d{1-2} */
 		type = FORMAT_ipv4addr;
 		goto END_libipv6calc_autodetectinput;
 	};

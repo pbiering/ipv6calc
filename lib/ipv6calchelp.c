@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.75 2015/05/07 06:19:27 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.76 2015/05/08 06:26:11 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -777,7 +777,25 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 	libipv6calc_db_wrapper_capabilities(string, sizeof(string));
 	fprintf(stderr, "Capabilities: %s\n\n", string);
 
-	fprintf(stderr, "Internal versions: library:%s (%d)  API:%s (%d)\n\n", libipv6calc_lib_version_string(), libipv6calc_lib_version_numeric(), libipv6calc_api_version_string(), libipv6calc_api_version_numeric());
+	fprintf(stderr, "Internal main     library version: %s  API: %s  (%s)\n"
+		, libipv6calc_lib_version_string()
+		, libipv6calc_api_version_string()
+#ifdef SHARED_LIBRARY
+		, "shared"
+#else  // SHARED_LIBRARY
+		, "built-in"
+#endif // SHARED_LIBRARY
+	);
+
+	fprintf(stderr, "Internal database library version: %s  API: %s  (%s)\n\n"
+		, libipv6calc_db_lib_version_string()
+		, libipv6calc_db_api_version_string()
+#ifdef SHARED_LIBRARY
+		, "shared"
+#else  // SHARED_LIBRARY
+		, "built-in"
+#endif // SHARED_LIBRARY
+	);
 
 #if defined ENABLE_BUNDLED_MD5 || defined ENABLE_BUNDLED_GETOPT
 	fprintf(stderr, "Bundled with:");
@@ -789,6 +807,8 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 #endif
 	fprintf(stderr, "\n\n");
 #endif
+
+	fprintf(stderr, "Compiled: %s  %s\n\n", __DATE__, __TIME__);
 
 
 #ifdef SUPPORT_GEOIP

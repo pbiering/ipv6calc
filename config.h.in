@@ -164,19 +164,19 @@
 /* "API version as string" */
 #undef IPV6CALC_API_VERSION_STRING
 
-/* "Program version Bugfix" */
+/* "Package version Bugfix" */
 #undef IPV6CALC_PACKAGE_VERSION_BUGFIX
 
-/* "Program version Major" */
+/* "Package version Major" */
 #undef IPV6CALC_PACKAGE_VERSION_MAJOR
 
-/* "Program version Minor" */
+/* "Package version Minor" */
 #undef IPV6CALC_PACKAGE_VERSION_MINOR
 
 /* "Package version numeric" */
 #undef IPV6CALC_PACKAGE_VERSION_NUMERIC
 
-/* "PACKAGE version as string" */
+/* "Package version as string" */
 #undef IPV6CALC_PACKAGE_VERSION_STRING
 
 /* Define to the address where bug reports for this package should be sent. */

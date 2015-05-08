@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.38 2015/05/03 13:28:59 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.39 2015/05/08 06:26:11 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -236,7 +236,13 @@ typedef struct {
 
 #endif // HAVE_BERKELEY_DB_SUPPORT
 
-#endif
+#define IPV6CALC_DB_LIB_VERSION_CHECK_EXIT(version_numeric, version_string) \
+	if (version_numeric != libipv6calc_db_lib_version_numeric()) { \
+		ERRORPRINT_WA("Database library version is not matching: has:%s required:%s", libipv6calc_db_lib_version_string(), version_string); \
+		exit(1); \
+	};
+
+#endif // _libipv6calc_db_wrapper_h
 
 
 extern int  libipv6calc_db_wrapper_init(const char *prefix_string);
@@ -313,3 +319,8 @@ extern int libipv6calc_db_asn_filter(const uint32_t asn, const s_ipv6calc_filter
 extern int libipv6calc_db_registry_filter_parse(s_ipv6calc_filter_db_registry *filter, const char *token, const int negate_flag);
 extern int libipv6calc_db_registry_filter_check(s_ipv6calc_filter_db_registry *filter, const int proto);
 extern int libipv6calc_db_registry_filter(const int registry, const s_ipv6calc_filter_db_registry *filter);
+
+extern const uint32_t libipv6calc_db_lib_version_numeric(void);
+extern const char    *libipv6calc_db_lib_version_string(void);
+extern const uint32_t libipv6calc_db_api_version_numeric(void);
+extern const char    *libipv6calc_db_api_version_string(void);

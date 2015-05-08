@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.121 2015/05/07 06:19:26 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.122 2015/05/08 06:26:11 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -87,7 +87,11 @@ int showinfo_machine_readable_filter_used = 0;
 /**************************************************/
 /* main */
 int main(int argc, char *argv[]) {
+	/* check compatibility */
+#ifdef SHARED_LIBRARY
 	IPV6CALC_LIB_VERSION_CHECK_EXIT(IPV6CALC_PACKAGE_VERSION_NUMERIC, IPV6CALC_PACKAGE_VERSION_STRING)
+	IPV6CALC_DB_LIB_VERSION_CHECK_EXIT(IPV6CALC_PACKAGE_VERSION_NUMERIC, IPV6CALC_PACKAGE_VERSION_STRING)
+#endif // SHARED_LIBRARY
 
 	char resultstring[NI_MAXHOST] = "";
 	char resultstring2[NI_MAXHOST] = "";
