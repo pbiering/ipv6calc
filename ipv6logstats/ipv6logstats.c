@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.64 2015/05/03 16:39:51 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.65 2015/05/08 06:27:53 ds6peter Exp $
  * Copyright  : 2003-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -130,6 +130,12 @@ static void lineparser(void);
 /**************************************************/
 /* main */
 int main(int argc,char *argv[]) {
+	/* check compatibility */
+#ifdef SHARED_LIBRARY
+	IPV6CALC_LIB_VERSION_CHECK_EXIT(IPV6CALC_PACKAGE_VERSION_NUMERIC, IPV6CALC_PACKAGE_VERSION_STRING)
+	IPV6CALC_DB_LIB_VERSION_CHECK_EXIT(IPV6CALC_PACKAGE_VERSION_NUMERIC, IPV6CALC_PACKAGE_VERSION_STRING)
+#endif // SHARED_LIBRARY
+
 	int i, lop, result;
 	unsigned long int command = 0;
 

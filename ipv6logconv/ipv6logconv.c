@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.39 2015/05/03 13:28:59 ds6peter Exp $
- * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6logconv.c,v 1.40 2015/05/08 06:27:53 ds6peter Exp $
+ * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile conversions
@@ -72,6 +72,12 @@ int feature_ieee = 0;
 /**************************************************/
 /* main */
 int main(int argc,char *argv[]) {
+	/* check compatibility */
+#ifdef SHARED_LIBRARY
+	IPV6CALC_LIB_VERSION_CHECK_EXIT(IPV6CALC_PACKAGE_VERSION_NUMERIC, IPV6CALC_PACKAGE_VERSION_STRING)
+	IPV6CALC_DB_LIB_VERSION_CHECK_EXIT(IPV6CALC_PACKAGE_VERSION_NUMERIC, IPV6CALC_PACKAGE_VERSION_STRING)
+#endif // SHARED_LIBRARY
+
 	int i, lop, result;
 	unsigned long int command = 0;
 
