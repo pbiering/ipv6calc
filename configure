@@ -627,6 +627,7 @@ LD_LIBRARY_PATH
 LDFLAGS_EXTRA_STATIC
 LDFLAGS_EXTRA
 CFLAGS_EXTRA
+APXS
 DYNLOAD_LIB
 GEOIP_DYN_LIB
 GEOIP_DB
@@ -6002,13 +6003,28 @@ $as_echo "#define HAVE_BERKELEY_DB_SUPPORT 1" >>confdefs.h
 fi
 
 
+APXS=$(which apxs)
+if test "$APXS" = ""; then
+	# fallback to apxs2
+	APXS=$(which apxs2)
+
+	if test "$APXS" = ""; then
+		as_fn_error $? "No APXS binary found: cannot create Apache module" "$LINENO" 5
+	fi
+fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: APXS binary found: $APXS" >&5
+$as_echo "APXS binary found: $APXS" >&6; }
 
 
 
 
 
 
-ac_config_files="$ac_config_files Makefile md5/Makefile tools/Makefile getopt/Makefile ipv6calc/Makefile lib/Makefile man/Makefile databases/lib/Makefile ipv6logconv/Makefile ipv6loganon/Makefile ipv6logstats/Makefile ipv6calcweb/Makefile contrib/ipv6calc.spec tools/ipv6calc-db-update.sh tools/DBIP-update.sh tools/IP2Location-update.sh tools/GeoIP-update.sh VERSION"
+
+
+
+ac_config_files="$ac_config_files Makefile md5/Makefile tools/Makefile getopt/Makefile ipv6calc/Makefile lib/Makefile man/Makefile databases/lib/Makefile ipv6logconv/Makefile ipv6loganon/Makefile ipv6logstats/Makefile ipv6calcweb/Makefile contrib/ipv6calc.spec tools/ipv6calc-db-update.sh tools/DBIP-update.sh tools/IP2Location-update.sh tools/GeoIP-update.sh mod_ipv6calc/Makefile VERSION"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -6720,6 +6736,7 @@ do
     "tools/DBIP-update.sh") CONFIG_FILES="$CONFIG_FILES tools/DBIP-update.sh" ;;
     "tools/IP2Location-update.sh") CONFIG_FILES="$CONFIG_FILES tools/IP2Location-update.sh" ;;
     "tools/GeoIP-update.sh") CONFIG_FILES="$CONFIG_FILES tools/GeoIP-update.sh" ;;
+    "mod_ipv6calc/Makefile") CONFIG_FILES="$CONFIG_FILES mod_ipv6calc/Makefile" ;;
     "VERSION") CONFIG_FILES="$CONFIG_FILES VERSION" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
@@ -7404,3 +7421,9 @@ $as_echo "*** CPPLAGS                    =$CPPLAGS" >&6; }
 $as_echo "*** CFLAGS                     =$CFLAGS" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS                    =$LDFLAGS" >&5
 $as_echo "*** LDFLAGS                    =$LDFLAGS" >&6; }
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
+$as_echo "" >&6; }
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** APXS                       =$APXS" >&5
+$as_echo "*** APXS                       =$APXS" >&6; }

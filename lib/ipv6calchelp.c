@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.76 2015/05/08 06:26:11 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.77 2015/05/13 05:51:38 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -850,7 +850,7 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 #endif
 
 #ifdef SUPPORT_IP2LOCATION
-#ifdef GEOIP_INCLUDE_VERSION
+#ifdef IP2LOCATION_INCLUDE_VERSION
 	fprintf(stderr, "IP2Location support enabled, compiled with include file version: %s\n", IP2LOCATION_INCLUDE_VERSION);
 #endif
 	fprintf(stderr, "IP2Location support enabled, compiled with API version: %s\n", xmakestr(API_VERSION));

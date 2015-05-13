@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.137 2015/05/08 06:26:10 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.138 2015/05/13 05:51:38 ds6peter Exp $
 dnl Copyright: 2001-2015 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -1089,6 +1089,23 @@ fi
 
 
 dnl *************************************************
+dnl apxs - APache eXtenSion tool
+dnl *************************************************
+APXS=$(which apxs)
+if test "$APXS" = ""; then
+	# fallback to apxs2
+	APXS=$(which apxs2)
+
+	if test "$APXS" = ""; then
+		AC_MSG_ERROR([No APXS binary found: cannot create Apache module])
+	fi
+fi
+
+AC_MSG_RESULT([APXS binary found: $APXS])
+AC_SUBST(APXS)
+
+
+dnl *************************************************
 dnl Files to create from <file>.in
 dnl *************************************************
 AC_SUBST(CFLAGS_EXTRA)
@@ -1115,6 +1132,7 @@ AC_OUTPUT([
 		tools/DBIP-update.sh
 		tools/IP2Location-update.sh
 		tools/GeoIP-update.sh
+		mod_ipv6calc/Makefile
 		VERSION
 	])
 
@@ -1175,3 +1193,7 @@ AC_MSG_RESULT([])
 AC_MSG_RESULT([*** CPPLAGS                    =$CPPLAGS])
 AC_MSG_RESULT([*** CFLAGS                     =$CFLAGS])
 AC_MSG_RESULT([*** LDFLAGS                    =$LDFLAGS])
+
+AC_MSG_RESULT([])
+
+AC_MSG_RESULT([*** APXS                       =$APXS])

@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id: libipv6calc.c,v 1.43 2015/05/08 06:26:11 ds6peter Exp $
- * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipv6calc.c,v 1.44 2015/05/13 05:51:38 ds6peter Exp $
+ * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for some tools

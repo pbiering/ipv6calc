@@ -1,0 +1,75 @@
+# Project    : ipv6calc
+# File       : mod_ipv6calc/Makefile[.in]
+# Version    : $Id: Makefile.in,v 1.1 2015/05/13 05:51:38 ds6peter Exp $
+# Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
+#
+# Information:
+#  Makefile for ipv6calc
+#
+
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+bindir		= @bindir@
+
+# Compiler and Linker Options
+DEFAULT_CFLAGS ?= -O2 -Wall -g @CFLAGS_EXTRA@
+
+INCLUDES= @MD5_INCLUDE@ @GETOPT_INCLUDE@ @IP2LOCATION_INCLUDE_L1@ @GEOIP_INCLUDE_L1@ -I../ -I../lib/ -I../databases/lib/
+
+LIBS = @IPV6CALC_LIB@ @IP2LOCATION_LIB_L1@ @GEOIP_LIB_L1@ @DYNLOAD_LIB@
+
+GETOBJS = @LIBOBJS@
+
+APXS	= @APXS@
+
+LDFLAGS_EXTRA = @LDFLAGS_EXTRA@
+LDFLAGS_EXTRA_STATIC = @LDFLAGS_EXTRA_STATIC@
+
+# splint
+SPLINT_OPT_OUTSIDE = -warnposix -nullassign -uniondef -compdef -usedef -formatconst -exportlocal
+#SPLINT_OPT_OUTSIDE = -uniondef +matchanyintegral --nullassign +ignoresigns -compdef -usedef -modobserver -formatconst -warnposix -exportlocal
+SPLINT_TODO_LATER = -unrecog  -retvalint
+
+
+all:		mod_ipv6calc
+
+libipv6calc:
+		cd ../ && ${MAKE} lib-make
+
+libipv6calc_db_wrapper:
+		cd ../ && ${MAKE} lib-make
+
+mod_ipv6calc.la: mod_ipv6calc.slo
+		$(SH_LINK) -rpath $(libexecdir) -module -avoid-version  mod_ipv6calc.lo
+shared =  mod_ipv6calc.la
+
+
+mod_ipv6calc:	mod_ipv6calc.c ../lib/libipv6calc.h ../config.h libipv6calc libipv6calc_db_wrapper
+		$(APXS) $(LIBS) $(INCLUDES) -c mod_ipv6calc.c
+
+static:		
+
+distclean:
+		${MAKE} clean
+
+autoclean:
+		${MAKE} distclean
+
+clean:
+		rm -f mod_ipv6calc.o mod_ipv6calc.lo mod_ipv6calc.slo mod_ipv6calc.la .libs/*
+
+test:		mod_ipv6calc
+
+test-minimal:	mod_ipv6calc
+
+test-ldlibpath:	mod_ipv6calc
+
+codecheck:
+		${MAKE} splint
+
+splint:		
+		splint *.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)
+
+install:	mod_ipv6calc
+		#if [ ! -d $(DESTDIR)$(bindir) ]; then install -d -m 755 $(DESTDIR)$(bindir); fi
+		#install -m 755 ipv6calc $(DESTDIR)$(bindir)

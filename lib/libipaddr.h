@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipaddr.h
- * Version    : $Id: libipaddr.h,v 1.1 2014/10/10 20:36:24 ds6peter Exp $
+ * Version    : $Id: libipaddr.h,v 1.2 2015/05/13 05:51:38 ds6peter Exp $
  * Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -73,4 +73,5 @@ typedef struct {
 #endif
 
 
-extern int libipaddr_ipaddrstruct_to_string(const ipv6calc_ipaddr *ipaddrp, char *resultstring, const size_t resultstring_length);
+extern int libipaddr_ipaddrstruct_to_string(const ipv6calc_ipaddr *ipaddrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions);
+extern void libipaddr_clearall(ipv6calc_ipaddr *ipaddrp);

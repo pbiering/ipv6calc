@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libipaddr.c
- * Version    : $Id: libipaddr.c,v 1.1 2014/10/10 20:36:24 ds6peter Exp $
- * Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: libipaddr.c,v 1.2 2015/05/13 05:51:38 ds6peter Exp $
+ * Copyright  : 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for generic IPv4/6 address handling
@@ -18,6 +18,7 @@
 #include "ipv6calctypes.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
+#include "librfc1884.h"
 
 
 /*
@@ -27,7 +28,7 @@
  * out: *resultstring = IPv4/6 address (modified)
  * ret: ==0: ok, !=0: error
  */
-int libipaddr_ipaddrstruct_to_string(const ipv6calc_ipaddr *ipaddrp, char *resultstring, const size_t resultstring_length) {
+int libipaddr_ipaddrstruct_to_string(const ipv6calc_ipaddr *ipaddrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
 	int retval = 1;
 
 	ipv6calc_ipv4addr ipv4addr;
@@ -37,7 +38,7 @@ int libipaddr_ipaddrstruct_to_string(const ipv6calc_ipaddr *ipaddrp, char *resul
 	    case IPV6CALC_PROTO_IPV4:
 		ipv4addr_clearall(&ipv4addr);
 		ipv4addr_setdword(&ipv4addr, ipaddrp->addr[0]);
-		libipv4addr_ipv4addrstruct_to_string(&ipv4addr, resultstring, resultstring_length, 0);
+		libipv4addr_ipv4addrstruct_to_string(&ipv4addr, resultstring, resultstring_length, formatoptions);
 		break;
 
 	    case IPV6CALC_PROTO_IPV6:
@@ -46,7 +47,12 @@ int libipaddr_ipaddrstruct_to_string(const ipv6calc_ipaddr *ipaddrp, char *resul
 		ipv6addr_setdword(&ipv6addr, 1, ipaddrp->addr[1]);
 		ipv6addr_setdword(&ipv6addr, 2, ipaddrp->addr[2]);
 		ipv6addr_setdword(&ipv6addr, 3, ipaddrp->addr[3]);
-		libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, resultstring_length, 0);
+
+		if ((formatoptions & (FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed)) != 0) {
+			libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, resultstring_length, formatoptions);
+		} else {
+			librfc1884_ipv6addrstruct_to_compaddr(&ipv6addr, resultstring, resultstring_length, formatoptions);
+		};
 		break;
 
 	    default:
@@ -59,4 +65,29 @@ int libipaddr_ipaddrstruct_to_string(const ipv6calc_ipaddr *ipaddrp, char *resul
 	
 	retval = 0;	
 	return (retval);
+};
+
+
+/*
+ * function clears the IPv6 structure
+ *
+ * mod: ipaddrp = pointer to IP address structure
+ */
+extern void libipaddr_clearall(ipv6calc_ipaddr *ipaddrp) {
+        /* Clear IP address */
+	ipaddrp->addr[0] = 0;
+	ipaddrp->addr[1] = 0;
+	ipaddrp->addr[2] = 0;
+	ipaddrp->addr[3] = 0;
+
+        /* Clear IP address scope */
+        ipaddrp->scope = 0;
+
+	/* Clear proto */
+	ipaddrp->proto = 0;
+
+        /* Clear valid flag */
+        ipaddrp->flag_valid = 0;
+
+	return;
 };

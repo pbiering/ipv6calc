@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.118 2015/05/07 06:19:27 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.119 2015/05/13 05:51:38 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -2849,11 +2849,14 @@ int libipv6addr_get_included_ipv4addr(const ipv6calc_ipv6addr *ipv6addrp, ipv6ca
 	if (begin > 0) {
 		DEBUGPRINT_WA(DEBUG_libipv6addr, "IPv6 address contains IPv4 address in octets %d-%d", begin, begin+3);
 
+		ipv4addr_clearall(ipv4addrp);
+
 		for (i = 0; i <= 3; i++) {
 			ipv4addr_setoctet(ipv4addrp, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) (i + begin)) ^ xor);
 		};
 
 		ipv4addrp->scope = ipv4addr_gettype(ipv4addrp);
+		ipv4addrp->flag_valid = 1;
 
 		result = 0;
 	};

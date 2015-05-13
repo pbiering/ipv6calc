@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : lib/Makefile
-# Version    : $Id: Makefile.in,v 1.17 2014/10/07 20:25:23 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.18 2015/05/13 05:51:38 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -74,7 +74,7 @@ $(OBJS):	libipv6calcdebug.h  \
 		ipv6calcoptions.h   \
 		ipv6calcoptions_common.h \
 		ipv6calccommands.h  \
-		ipv6calc_inttypes.h
+		ipv6calc_inttypes.h \
 
 libipv6calc.a:	$(OBJS)
 		cd ../ && ${MAKE} db-ieee-oui-make

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.62 2015/05/08 06:26:11 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.63 2015/05/13 05:51:38 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -860,7 +860,7 @@ char *libipv6calc_db_wrapper_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp
 		    case IPV6CALC_DB_SOURCE_IP2LOCATION:
 			// need IP address as string
 			if (strlen(tempstring) == 0) {
-				libipaddr_ipaddrstruct_to_string(ipaddrp, tempstring, sizeof(tempstring));
+				libipaddr_ipaddrstruct_to_string(ipaddrp, tempstring, sizeof(tempstring), 0);
 			};
 		};
 #endif
@@ -1054,7 +1054,7 @@ char *libipv6calc_db_wrapper_as_text_by_addr(const ipv6calc_ipaddr *ipaddrp) {
 #ifdef SUPPORT_GEOIP
 		// conversion sto string needed for GeoIP
 		if (strlen(tempstring) == 0) {
-			libipaddr_ipaddrstruct_to_string(ipaddrp, tempstring, sizeof(tempstring));
+			libipaddr_ipaddrstruct_to_string(ipaddrp, tempstring, sizeof(tempstring), 0);
 		};
 
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Call now GeoIP with addr=%s proto=%d)", tempstring, ipaddrp->proto);
