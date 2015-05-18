@@ -1,15 +1,26 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.1 2015/05/13 05:51:38 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.2 2015/05/18 06:20:58 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc Apache module
  *
  *  Currently supporting:
- *   - client IP address anonymization by setting IPV6CALC_CLIENT_IP_ANON
- *   	options: ipv6calcAnonPreset
+ *   - client IP address anonymization by setting environment IPV6CALC_CLIENT_IP_ANON
+ *
+ *  module/ipv6calc behavior can be controlled by config, e.g
+ *   ipv6calcOption debug                   0x8
+ *   ipv6calcOption anonymize-preset        keep-type-asn-cc
+ *   ipv6calcOption disable-external        yes
+ *   ipv6calcOption disable-ip2location     yes
+ *   ipv6calcOption mask-ipv4               16
+ *   ipv6calcOption mask-ipv6               32
+ *
+ *   see also
+ *    ipv6calc -h
+ *    ipv6calc -A anonymize -h
  */
 
 // Apache/APR related includes
@@ -27,17 +38,19 @@ int feature_zeroize = 1; // always supported
 int feature_anon    = 1; // always supported
 int feature_kp      = 0; // will be checked later
 
+/* options (only used via the option parser) */
+struct option longopts[IPV6CALC_MAXLONGOPTIONS];
+char   shortopts[NI_MAXHOST] = "";
+int    longopts_maxentries = 0;
 
-#define MODULENAME "mod_ipv6calc"
+long int ipv6calc_debug = 0; // ipv6calc_debug usage
 
 
 /***************************
  * Prototyping
  ***************************/
 static const char *set_ipv6calc_enable(cmd_parms *cmd, void *dummy, int arg);
-static const char *set_ipv6calc_anonpreset(cmd_parms *cmd, void *dummy, const char *anon_preset, int arg);
-
-long int ipv6calc_debug = 0; // ipv6calc_debug usage
+static const char *set_ipv6calc_option(cmd_parms *cmd, void *dummy, const char *name, const char *value, int arg);
 
 
 /***************************
@@ -56,12 +69,23 @@ typedef struct {
 } ipv6calc_server_config;
 
 
+/* module options forwarded to ipv6calc during init */
+typedef struct {
+	char name[NI_MAXHOST];
+	char value[NI_MAXHOST];
+} ipv6calc_option;
+
+#define mod_ipv6calc_options_max IPV6CALC_MAXLONGOPTIONS
+ipv6calc_option ipv6calc_option_list[mod_ipv6calc_options_max]; 
+int ipv6calc_option_list_entries = 0;
+
+
 /*
  * Config options (ipv6calc_cmds)
  */
 static const command_rec ipv6calc_cmds[] = {
 	AP_INIT_FLAG("ipv6calcEnable"    , set_ipv6calc_enable, NULL, OR_FILEINFO, "Turn on mod_ipv6calc"),
-	AP_INIT_TAKE1("ipv6calcAnonPreset",  (const char *(*)()) set_ipv6calc_anonpreset, NULL, OR_FILEINFO, "Define mod_ipv6calc anonymization method as ac ap zs zc zp kp"),
+	AP_INIT_TAKE2("ipv6calcOption",  (const char *(*)()) set_ipv6calc_option, NULL, OR_FILEINFO, "Define ipv6calc option: <key> <value>"),
 	{NULL} 
 };
 
@@ -79,27 +103,68 @@ static apr_status_t ipv6calc_cleanup(void *cfgdata) {
 	return APR_SUCCESS;
 }
 
+
 /*
  * ipv6calc_child_init
  */
 static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
 	char string[NI_MAXHOST] = "";
-	int result;
+	int result, i;
+
+#ifdef SHARED_LIBRARY
+	IPV6CALC_LIB_VERSION_CHECK_EXIT(IPV6CALC_PACKAGE_VERSION_NUMERIC, IPV6CALC_PACKAGE_VERSION_STRING)
+	IPV6CALC_DB_LIB_VERSION_CHECK_EXIT(IPV6CALC_PACKAGE_VERSION_NUMERIC, IPV6CALC_PACKAGE_VERSION_STRING)
+#endif // SHARED_LIBRARY
 
 	apr_pool_cleanup_register(p, NULL, ipv6calc_cleanup, ipv6calc_cleanup);
 
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(s->module_config, &ipv6calc_module);
 
 	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-		, "%s: ipv6calc_child_init"
-		, MODULENAME
+		, "ipv6calc_child_init"
+	);
+
+	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+		, "start option handling"
+	);
+
+	/* add options */
+	ipv6calc_options_add_common_anon(shortopts, sizeof(shortopts), longopts, &longopts_maxentries);
+	ipv6calc_options_add_common_basic(shortopts, sizeof(shortopts), longopts, &longopts_maxentries);
+
+	ipv6calc_quiet = 1; // be quiet by default
+
+	/* initialize ipv6calc options from list retrieved via APR config parser */
+	if (ipv6calc_option_list_entries > 0) {
+		for (i = 0; i < ipv6calc_option_list_entries; i++) {
+			result = ipv6calc_set_option(longopts, ipv6calc_option_list[i].name, ipv6calc_option_list[i].value, &config->ipv6calc_anon_set);
+
+			ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+				, "ipv6calc option %s: %s=%s"
+				, (result == 0) ? "successfully set" : "NOT UNDERSTOOD"
+				, ipv6calc_option_list[i].name
+				, ipv6calc_option_list[i].value
+			);
+
+			if ((result == 0) &&
+			  (
+			       (strcmp(ipv6calc_option_list[i].name, "anonymize-preset") == 0)
+			    || (strcmp(ipv6calc_option_list[i].name, "anonymize-method") == 0)
+			  )
+			) {
+				config->anon_set_default = 0;
+			};
+		};
+	};
+
+	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+		, "start ipv6calc database wrapper init"
 	);
 
 	result = libipv6calc_db_wrapper_init("");
 	if (result != 0) {
 		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-			, "%s: database wrapper initialization failed (disable module now): %d"
-			, MODULENAME
+			, "database wrapper initialization failed (disable module now): %d"
 			, result
 		);
 
@@ -115,22 +180,19 @@ static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
 	string[0] = '\0';
 	libipv6calc_db_wrapper_features(string, sizeof(string));
 	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-		, "%s: features: %s"
-		, MODULENAME
+		, "features: %s"
 		, string
 	);
 
 	string[0] = '\0';
 	libipv6calc_db_wrapper_capabilities(string, sizeof(string));
 	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-		, "%s: capabilities: %s"
-		, MODULENAME
+		, "capabilities: %s"
 		, string
 	);
 
 	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-		, "%s: internal main     library version: %s  API: %s  (%s)"
-		, MODULENAME
+		, "internal main     library version: %s  API: %s  (%s)"
 		, libipv6calc_lib_version_string()
 		, libipv6calc_api_version_string()
 #ifdef SHARED_LIBRARY
@@ -141,8 +203,7 @@ static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
 	);
 
 	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-		, "%s: internal database library version: %s  API: %s  (%s)"
-		, MODULENAME
+		, "internal database library version: %s  API: %s  (%s)"
 		, libipv6calc_db_lib_version_string()
 		, libipv6calc_db_api_version_string()
 #ifdef SHARED_LIBRARY
@@ -153,34 +214,52 @@ static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
 	);
 
 	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-		, "%s: supported anonymization methods:%s%s%s"
-		, MODULENAME
+		, "supported anonymization methods:%s%s%s"
 		, (feature_zeroize == 1) ? " ANON_ZEROISE" : ""
 		, (feature_anon    == 1) ? " ANON_ANONYMIZE" : ""
 		, (feature_kp      == 1) ? " ANON_KEEP-TYPE-ASN-CC" : ""
 	);
 
-	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-		, "%s: %s anonymization preset: %s%s"
-		, MODULENAME
-		, (config->anon_set_default == 1) ? "default" : "configured"
-		, libipv6calc_anon_method_name(&config->ipv6calc_anon_set)
-		, ((feature_kp == 0) && (config->ipv6calc_anon_set.method == ANON_METHOD_KEEPTYPEASNCC)) ? " NOT-SUPPORTED" : ""
-	);
-
-	if ((feature_kp == 0) && (config->ipv6calc_anon_set.method == ANON_METHOD_KEEPTYPEASNCC)) {
-		// fallback
-		libipv6calc_anon_set_by_name(&config->ipv6calc_anon_set, "as"); // anonymize standard
-
+	if (config->ipv6calc_anon_set.method != ANON_METHOD_KEEPTYPEASNCC) {
 		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-			, "%s: fallback anonymization preset: %s"
-			, MODULENAME
+			, "%s anonymization method: %s mask_ipv4=%d mask_ipv6=%d mask_eui64=%d mask_mac=%d mask_autoadjust=%s"
+			, (config->anon_set_default == 1) ? "default" : "configured"
 			, libipv6calc_anon_method_name(&config->ipv6calc_anon_set)
+			, config->ipv6calc_anon_set.mask_ipv4
+			, config->ipv6calc_anon_set.mask_ipv6
+			, config->ipv6calc_anon_set.mask_eui64
+			, config->ipv6calc_anon_set.mask_mac
+			, (config->ipv6calc_anon_set.mask_autoadjust > 0) ? "yes" : "no"
 		);
+	} else {
+		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+			, "%s anonymization method: %s%s"
+			, (config->anon_set_default == 1) ? "default" : "configured"
+			, libipv6calc_anon_method_name(&config->ipv6calc_anon_set)
+			, ((feature_kp == 0) && (config->ipv6calc_anon_set.method == ANON_METHOD_KEEPTYPEASNCC)) ? " NOT-SUPPORTED" : ""
+		);
+
+		if (feature_kp == 0) {
+			// fallback
+			libipv6calc_anon_set_by_name(&config->ipv6calc_anon_set, "as"); // anonymize standard
+
+			ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+				, "fallback anonymization method: %s mask_ipv4=%d mask_ipv6=%d mask_eui64=%d mask_mac=%d mask_autoadjust=%s"
+				, libipv6calc_anon_method_name(&config->ipv6calc_anon_set)
+				, config->ipv6calc_anon_set.mask_ipv4
+				, config->ipv6calc_anon_set.mask_ipv6
+				, config->ipv6calc_anon_set.mask_eui64
+				, config->ipv6calc_anon_set.mask_mac
+				, (config->ipv6calc_anon_set.mask_autoadjust > 0) ? "yes" : "no"
+			);
+		};
 	};
+
+	//libipv6calc_db_wrapper_print_db_info(0, "");
 
 	return;
 };
+
 
 /*
  * ipv6calc_post_read_request
@@ -216,8 +295,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 	client_addr_p = r->connection->client_addr;
 
 	ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-		, "%s: client IP address (string): %s  family: %d"
-		, MODULENAME
+		, "client IP address (string): %s  family: %d"
 		, r->connection->client_ip
 		, client_addr_p->family
 	);
@@ -248,8 +326,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 			result = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, 0);
 
 			ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-				, "%s: mapped IPv4 address found in IPv6 address, status of extract: %d"
-				, MODULENAME
+				, "mapped IPv4 address found in IPv6 address, status of extract: %d"
 				, result
 			);
 
@@ -272,8 +349,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 	if (result == 0) {
 		ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-			, "%s: client IP address anonymized(string): %s"
-			, MODULENAME
+			, "client IP address anonymized(string): %s"
 			, client_addr_string_anonymized
 		);
 		apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP_ANON", client_addr_string_anonymized); 
@@ -302,27 +378,33 @@ static const char *set_ipv6calc_enable(cmd_parms *cmd, void *dummy, int arg) {
 
 
 /*
- * set_ipv6calc_anonpreset
+ * set_ipv6calc_option
+ * set generic ipv6calc option
  */
-static const char *set_ipv6calc_anonpreset(cmd_parms *cmd, void *dummy, const char *anon_preset, int arg) {
+static const char *set_ipv6calc_option(cmd_parms *cmd, void *dummy, const char *name, const char *value, int arg) {
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
-	int result;
-	
+
 	if (!config) {
 		return NULL;
 	};
-	
-	result = libipv6calc_anon_set_by_name(&config->ipv6calc_anon_set, apr_pstrdup(cmd->pool, anon_preset));
 
-	if (result != 0) {
-		return "Unsupported anonymization preset";
+	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, cmd->server
+		, "store ipv6calc config option for module initialization: %s=%s"
+		, name
+		, value
+	);
 
+	if (ipv6calc_option_list_entries < mod_ipv6calc_options_max) {
+		snprintf(ipv6calc_option_list[ipv6calc_option_list_entries].name, sizeof(ipv6calc_option_list[0].name), "%s", name);
+		snprintf(ipv6calc_option_list[ipv6calc_option_list_entries].value, sizeof(ipv6calc_option_list[0].value), "%s", value);
+		ipv6calc_option_list_entries++;
+	} else {
+		return "Too many ipv6calc options (limit reached)";
 	};
 
-	config->anon_set_default = 0;
-
 	return NULL;
-}
+};
+
 
 /*
  * ipv6calc_create_svr_conf
@@ -343,15 +425,15 @@ static void *ipv6calc_create_svr_conf(apr_pool_t* pool, server_rec* svr) {
  * ipv6calc_register_hooks
  */
 static void ipv6calc_register_hooks(apr_pool_t *p) {
-	ap_hook_child_init(ipv6calc_child_init, NULL, NULL, APR_HOOK_MIDDLE );
-	ap_hook_post_read_request(ipv6calc_post_read_request, NULL, NULL, APR_HOOK_MIDDLE );
-}
+	ap_hook_child_init(ipv6calc_child_init, NULL, NULL, APR_HOOK_MIDDLE);
+	ap_hook_post_read_request(ipv6calc_post_read_request, NULL, NULL, APR_HOOK_MIDDLE);
+};
 
 
 /*
  * mod_ipv6calc API hooks
  */
-module AP_MODULE_DECLARE_DATA ipv6calc_module = {
+AP_DECLARE_MODULE(ipv6calc) = {
 	STANDARD20_MODULE_STUFF, 
 	NULL,                        /* create per-dir    config structures */
 	NULL,                        /* merge  per-dir    config structures */
