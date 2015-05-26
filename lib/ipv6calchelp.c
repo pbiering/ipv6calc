@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.78 2015/05/26 15:50:04 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.79 2015/05/26 17:13:12 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -273,6 +273,9 @@ void printhelp_actiontypes(const uint32_t formatoptions, const struct option lon
 									fprintf(stderr, printformatstring3, "", longopts[o].name);
 									if (longopts[o].has_arg > 0) {
 										fprintf(stderr, " ...");
+									};
+									if (ipv6calc_actionoptionmap[i][2] > 0) {
+										fprintf(stderr, " (optional)");
 									};
 									fprintf(stderr, "\n");
 								};

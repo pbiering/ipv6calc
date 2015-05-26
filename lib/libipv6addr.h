@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.88 2015/05/26 15:50:04 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.89 2015/05/26 17:13:12 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -298,7 +298,7 @@ typedef struct {
 #define IPV6_ADDR_HAS_PUBLIC_IPV4		(IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID | IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX)
 
 // typeinfo2
-#define IPV6_ADDR_TYPE2_6RD			(uint32_t) 0x00000001U	/* IPv6 Rapid Deployment address */
+#define IPV6_ADDR_TYPE2_6RD			(uint32_t) 0x00000001U	/* IPv6 Rapid Deployment address (RFC5569), not autodetectable (triggered by --6rd_prefixlength) */
 
 // IPv4 address extractor selector
 #define IPV6_ADDR_SELECT_IPV4_DEFAULT		0

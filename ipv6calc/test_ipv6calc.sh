@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.52 2015/04/16 06:23:20 ds6peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.53 2015/05/26 17:13:12 ds6peter Exp $
 # Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -210,6 +210,11 @@ NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 --in ipv6addr --out ipv6addr 2001:DB8:0:0:1:0:0:1		 	=2001:db8::1:0:0:1
 # 6rd
 --action 6rd_local_prefix --6rd_prefix 2607:fedc:ff40::/43 --6rd_relay_prefix 6.230.0.0/15 6.231.32.33	=2607:fedc:ff52:210::/60
+--action 6rd_local_prefix --6rd_prefix 2001:0b4f::/28 192.0.2.1		=2001:b4c:0:2010::/60
+--action 6rd_local_prefix --6rd_prefix 2001:0b4f::/29 192.0.2.1		=2001:b4e:0:1008::/61
+--action 6rd_local_prefix --6rd_prefix 2001:0b4f::/30 192.0.2.1		=2001:b4f:0:804::/62
+--action 6rd_local_prefix --6rd_prefix 2001:0b4f::/31 192.0.2.1		=2001:b4f:8000:402::/63
+--action 6rd_local_prefix --6rd_prefix 2001:0b4f::/32 192.0.2.1		=2001:b4f:c000:201::/64
 # IPv6 literal
 --in ipv6literal fe80--1.IPV6-LITERAL.NET				=fe80::1
 --in ipv6literal fe80--1.IPV6-liTERal.NET				=fe80::1

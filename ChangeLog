@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.402 2015/05/26 15:50:03 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.403 2015/05/26 17:13:12 ds6peter Exp $ 
  */
 
 Info:
@@ -11,6 +11,7 @@ Info:
 --------------------------------------------------------------------
 20150526/PB
 	ipv6calc: add option --6rd_prefixlength <num> to specify a length of the 6RD prefix
+	ipv6calc: --6rd_relay_prefix is now optional
 
 201505xx/PB
 	databases/lib/libipv6calc_db_wrapper.c: implementation of database priority selector

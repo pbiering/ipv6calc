@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.49 2015/04/29 20:22:48 ds6peter Exp $
+# Version    : $Id: test_scenarios.sh,v 1.50 2015/05/26 17:13:12 ds6peter Exp $
 # Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
@@ -391,6 +391,12 @@ a909:16fa:9092:23ff:a909:4941::7	IPV6_REGISTRY=RIPENCC
 2a01:238:423d:8800:85b3:9e6b:3019:8909	"unicast,global-unicast,productive,iid-random,iid,iid-local"|--mrqva --mrtvo IPV6_TYPE
 2a01:238:423d:8800:85b3:9e6b:3019:8909	unicast,global-unicast,productive,iid-random,iid,iid-local|--mrqvn --mrtvo IPV6_TYPE
 2a01:238:423d:8800:85b3:9e6b:3019:8909	IPV6_TYPE=unicast,global-unicast,productive,iid-random,iid,iid-local|--mrst IPV6_TYPE
+# 6rd
+2001:b4c:0:2010::/60			IPV4[192.0.2.1]=192.0.2.1|--6rd_prefixlength 28
+2001:b4e:0:1008::/61			IPV4[192.0.2.1]=192.0.2.1|--6rd_prefixlength 29
+2001:b4f:0:804::/62			IPV4[192.0.2.1]=192.0.2.1|--6rd_prefixlength 30
+2001:b4f:8000:402::/63			IPV4[192.0.2.1]=192.0.2.1|--6rd_prefixlength 31
+2001:b4f:c000:201::/64			IPV4[192.0.2.1]=192.0.2.1|--6rd_prefixlength 32
 END
 }
 

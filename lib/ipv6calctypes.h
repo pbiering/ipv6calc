@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.49 2015/05/26 15:50:04 ds6peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.50 2015/05/26 17:13:12 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -306,18 +306,17 @@ typedef struct {
 	{ ACTION_filter	              , "filter"          , "Filter addresses related to filter options", "" },
 };
 
-/* Possible action option map */
-/*@unused@*/ static const uint32_t ipv6calc_actionoptionmap[8][2]  = {
-	{ ACTION_auto			, 0 },
-	{ ACTION_mac_to_eui64		, 0 },
-	{ ACTION_ipv4_to_6to4addr	, 0 },
-	{ ACTION_iid_token_to_privacy	, 0 },
-	{ ACTION_prefix_mac_to_ipv6	, 0 },
-	{ ACTION_anonymize		, 0 },
-	{ ACTION_6rd_local_prefix	, CMD_6rd_prefix },
-	{ ACTION_6rd_local_prefix	, CMD_6rd_relay_prefix }
+/* Possible action option map (required) */
+/*@unused@*/ static const uint32_t ipv6calc_actionoptionmap[8][3]  = {
+	{ ACTION_auto			, 0 , 0},
+	{ ACTION_mac_to_eui64		, 0 , 0},
+	{ ACTION_ipv4_to_6to4addr	, 0 , 0},
+	{ ACTION_iid_token_to_privacy	, 0 , 0},
+	{ ACTION_prefix_mac_to_ipv6	, 0 , 0},
+	{ ACTION_anonymize		, 0 , 0},
+	{ ACTION_6rd_local_prefix	, CMD_6rd_prefix , 0},
+	{ ACTION_6rd_local_prefix	, CMD_6rd_relay_prefix , 1 }
 };
-
 
 /* anonymization set */
 typedef struct {

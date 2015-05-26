@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.120 2015/05/26 15:50:04 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.121 2015/05/26 17:13:12 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -2870,7 +2870,7 @@ int libipv6addr_get_included_ipv4addr(const ipv6calc_ipv6addr *ipv6addrp, ipv6ca
 				int ipv6_p = ipv6addr_getoctet(ipv6addrp, i + begin);
 
 				DEBUGPRINT_WA(DEBUG_libipv6addr, "IPv6[%d]=%02x", i + begin, ipv6_p);
-				ipv6_p = (ipv6_p << shift);
+				ipv6_p <<= shift;
 
 				if (ipv6_p > 0xff) {
 					if (i > 0) {
