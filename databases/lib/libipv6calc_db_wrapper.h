@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.39 2015/05/08 06:26:11 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.40 2015/05/26 15:50:04 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -126,14 +126,15 @@ static const s_formatoption ipv6calc_db_features[] = {
 typedef struct {
 	const int  number;
 	const char *name;
+	const char *shortname;
 } s_data_sources;
 
 static const s_data_sources data_sources[] = {
-	{ IPV6CALC_DB_SOURCE_GEOIP	, "GeoIP"},
-	{ IPV6CALC_DB_SOURCE_IP2LOCATION, "IP2Location"},
-	{ IPV6CALC_DB_SOURCE_DBIP	, "db-ip.com"},
-	{ IPV6CALC_DB_SOURCE_BUILTIN	, "BuiltIn"},
-	{ IPV6CALC_DB_SOURCE_EXTERNAL	, "External"}
+	{ IPV6CALC_DB_SOURCE_GEOIP	, "GeoIP"      , "GeoIP"       },
+	{ IPV6CALC_DB_SOURCE_IP2LOCATION, "IP2Location", "IP2Location" },
+	{ IPV6CALC_DB_SOURCE_DBIP	, "db-ip.com"  , "DBIP"        },
+	{ IPV6CALC_DB_SOURCE_EXTERNAL	, "External"   , "External"    },
+	{ IPV6CALC_DB_SOURCE_BUILTIN	, "BuiltIn"    , "BuiltIn"     },
 };
 
 // database names and descriptions
@@ -260,8 +261,8 @@ extern const char *libipv6calc_db_wrapper_get_data_source_name_by_number(const i
 /* functional wrappers */
 
 // CountryCode Text/Number
-extern char       *libipv6calc_db_wrapper_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr);
-extern int         libipv6calc_db_wrapper_country_code_by_cc_index(char *string, int length, const uint16_t cc_index);
+extern int         libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr);
+extern int         libipv6calc_db_wrapper_country_code_by_cc_index(char *string, const int length, const uint16_t cc_index);
 extern uint16_t    libipv6calc_db_wrapper_cc_index_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr);
 
 // Autonomous System Text/Number

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.63 2015/05/13 05:51:38 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.64 2015/05/26 15:50:03 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -19,7 +19,6 @@
 #include "libipv6calcdebug.h"
 #include "libipv6calc.h"
 
-#define _ipv6calcoptions_h_ 1	// don't read options
 #include "ipv6calcoptions.h"
 
 #include "libipv6calc_db_wrapper.h"
@@ -45,7 +44,9 @@ uint32_t wrapper_features = 0;
 uint32_t wrapper_features_by_source[IPV6CALC_DB_SOURCE_MAX + 1];
 uint32_t wrapper_features_by_source_implemented[IPV6CALC_DB_SOURCE_MAX + 1];
 
-int wrapper_features_selector[IPV6CALC_DB_FEATURE_NUM_MAX + 1][IPV6CALC_DB_PRIO_MAX + 1];
+int wrapper_features_selector[IPV6CALC_DB_FEATURE_NUM_MAX + 1][IPV6CALC_DB_PRIO_MAX];
+int wrapper_source_priority_selector[IPV6CALC_DB_SOURCE_MAX + 1];
+int wrapper_source_priority_selector_by_option = -1; // -1: uninitialized, 0: initialized, > 0: touched by option
 
 
 /*
@@ -55,7 +56,7 @@ int wrapper_features_selector[IPV6CALC_DB_FEATURE_NUM_MAX + 1][IPV6CALC_DB_PRIO_
  * out: 0=ok, 1=error
  */
 int libipv6calc_db_wrapper_init(const char *prefix_string) {
-	int result = 0, f, p, s;
+	int result = 0, f, p, s, j;
 
 #if defined SUPPORT_GEOIP || defined SUPPORT_IP2LOCATION || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN
 	int r;
@@ -63,7 +64,7 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
-	// clear selector
+	// clear feature selector
 	for (f = IPV6CALC_DB_FEATURE_NUM_MIN; f <= IPV6CALC_DB_FEATURE_NUM_MAX; f++) {
 		for (p = 0; p < IPV6CALC_DB_PRIO_MAX; p++) {
 			wrapper_features_selector[f][p] = 0;
@@ -72,6 +73,51 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 
 	for (s = 0; s <= IPV6CALC_DB_SOURCE_MAX; s++) {
 		wrapper_features_by_source[s] = 0;
+	};
+
+	// initialize priority selector
+	if (wrapper_source_priority_selector_by_option < 0) {
+		for (s = 0; s <= IPV6CALC_DB_SOURCE_MAX; s++) {
+			wrapper_source_priority_selector[s] = 0;
+		};
+		wrapper_source_priority_selector_by_option = 0;
+	};
+
+	// initialize priority
+	if (wrapper_source_priority_selector_by_option == 0) {
+		// default
+		for (s = IPV6CALC_DB_SOURCE_MIN; s <= IPV6CALC_DB_SOURCE_MAX; s++) {
+			wrapper_source_priority_selector[s] = s;
+		};
+	} else {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database priorization already given by option, fill missing ones: %d", wrapper_source_priority_selector_by_option);
+
+		for (j = IPV6CALC_DB_SOURCE_MIN; j <= wrapper_source_priority_selector_by_option; j++) {
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database priorization/defined by option entry %d: %s", j, libipv6calc_db_wrapper_get_data_source_name_by_number(wrapper_source_priority_selector[j]));
+		};
+
+		// already touched by option, fill not mentioned ones
+		for (j = 0; j < MAXENTRIES_ARRAY(data_sources); j++) {
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database priorization/test source: %s", data_sources[j].shortname);
+			for (s = IPV6CALC_DB_SOURCE_MIN; s <= wrapper_source_priority_selector_by_option; s++) {
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database priorization/check: %s", libipv6calc_db_wrapper_get_data_source_name_by_number(wrapper_source_priority_selector[s]));
+				if (wrapper_source_priority_selector[s] == data_sources[j].number) {
+					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database priorization/source already defined: %s", data_sources[j].shortname);
+					// already set, skip
+					break;
+				};
+			};
+
+			if (s > wrapper_source_priority_selector_by_option) {
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database priorization/source missing, add: %s", data_sources[j].shortname);
+				wrapper_source_priority_selector_by_option++;
+				wrapper_source_priority_selector[wrapper_source_priority_selector_by_option] = data_sources[j].number;
+			};
+		};
+	};
+
+	for (j = IPV6CALC_DB_SOURCE_MIN; j <= wrapper_source_priority_selector_by_option; j++) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database priorization/defined by option entry %d: %s", j, libipv6calc_db_wrapper_get_data_source_name_by_number(wrapper_source_priority_selector[j]));
 	};
 
 	if (wrapper_GeoIP_disable != 1) {
@@ -180,8 +226,10 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 	for (f = IPV6CALC_DB_FEATURE_NUM_MIN; f <= IPV6CALC_DB_FEATURE_NUM_MAX; f++) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "check feature f=%d", f);
 		// run through sources
-		for (s = IPV6CALC_DB_SOURCE_MIN; s <= IPV6CALC_DB_SOURCE_MAX; s++) {
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "check feature by source f=%d s=%d", f, s);
+		int sp;
+		for (sp = IPV6CALC_DB_SOURCE_MIN; sp <= IPV6CALC_DB_SOURCE_MAX; sp++) {
+			s = wrapper_source_priority_selector[sp];
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "check feature by source f=%d s=%d sp=%d", f, s, sp);
 			if ((wrapper_features_by_source[s] & (1 << f)) != 0) {
 				// supported, run through prio array
 				for (p = 0; p < IPV6CALC_DB_PRIO_MAX; p++) {
@@ -587,6 +635,21 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 
 	// summary
 	printf("%sDatabase selection or priorization ('->': subsequential calls)\n", prefix_string);
+
+	printf("%sDatabase priorization %s: "
+		, prefix_string
+		, (wrapper_source_priority_selector_by_option > 0) ? "by option" : "default"
+	);
+
+	int sp;
+	for (sp = IPV6CALC_DB_SOURCE_MIN; sp <= IPV6CALC_DB_SOURCE_MAX; sp++) {
+		printf("%s%s"
+			, (sp == IPV6CALC_DB_SOURCE_MIN) ? "" : "->"
+			, libipv6calc_db_wrapper_get_data_source_name_by_number(wrapper_source_priority_selector[sp])
+		);
+	};
+	printf("\n");
+
 	for (f = IPV6CALC_DB_FEATURE_NUM_MIN; f <= IPV6CALC_DB_FEATURE_NUM_MAX; f++) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "f=%d", f);
 
@@ -642,6 +705,15 @@ int libipv6calc_db_wrapper_has_features(uint32_t features) {
  *********************************************/
 int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const struct option longopts[]) {
 	int result = -1;
+	int s;
+
+	// initialize priority selector
+	if (wrapper_source_priority_selector_by_option < 0) {
+		for (s = 0; s <= IPV6CALC_DB_SOURCE_MAX; s++) {
+			wrapper_source_priority_selector[s] = 0;
+		};
+		wrapper_source_priority_selector_by_option = 0;
+	};
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with option: %08x", opt);
 
@@ -789,6 +861,61 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 #endif
 			result = 0;
 			break;
+
+		case DB_common_priorization:
+#if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP || defined SUPPORT_GEOIP || SUPPORT_IP2LOCATION
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Parse database priorization string: %s", optarg);
+			char tempstring[NI_MAXHOST];
+			char *token, *cptr, **ptrptr;
+			ptrptr = &cptr;
+			int i, j;
+			snprintf(tempstring, sizeof(tempstring), "%s", optarg);
+
+			s = IPV6CALC_DB_SOURCE_MIN;
+
+			token = strtok_r(tempstring, ":", ptrptr);
+			while (token != NULL) {
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Parsing of token: %s", token);
+				for (i = 0; i < MAXENTRIES_ARRAY(data_sources); i++) {
+					if (strcasecmp(data_sources[i].shortname, token) == 0) {
+						DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Token found: %s (%d)", token, data_sources[i].number);
+						break;
+					};
+				};
+
+				if (i == MAXENTRIES_ARRAY(data_sources)) {
+					ERRORPRINT_WA("Database priorization token not supported: %s", token);
+					exit(EXIT_FAILURE);
+				};
+
+				/* check for duplicate */
+				if (s > IPV6CALC_DB_SOURCE_MIN) {
+					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Check for duplicate: %s", token);
+					for (j = IPV6CALC_DB_SOURCE_MIN; j <= s; j++) {
+						if (wrapper_source_priority_selector[j] == data_sources[i].number) {
+							ERRORPRINT_WA("Database duplicate priorization token found: %s", token);
+							exit(EXIT_FAILURE);
+						};
+					};
+				};
+
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Set token on entry %d: %s", s, token);
+				wrapper_source_priority_selector[s] = data_sources[i].number;
+				wrapper_source_priority_selector_by_option = s;
+				s++;
+	
+				/* get next token */
+				token = strtok_r(NULL, ":", ptrptr);
+			};
+
+			for (j = IPV6CALC_DB_SOURCE_MIN; j <= wrapper_source_priority_selector_by_option; j++) {
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database priorization/defined by option entry %d: %s", j, libipv6calc_db_wrapper_get_data_source_name_by_number(wrapper_source_priority_selector[j]));
+			};
+#else
+			NONQUIETPRINT_WA("Support for database priorization not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
 	};
 
 	if (result > 0) {
@@ -825,21 +952,30 @@ int libipv6calc_db_wrapper_registry_num_by_cc_index(const uint16_t cc_index) {
 
 /*
  * get CountryCode in text form
+ * in: ipaddrp, length
+ * mod: string, data_source_ptr (if != NULL)
+ * return: 0=ok
  */
-char *libipv6calc_db_wrapper_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr) {
-	char *result_char_ptr = NULL;
+int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr) {
 	unsigned int data_source = IPV6CALC_DB_SOURCE_UNKNOWN;
-	int f = 0, p;
+	int f = 0, p, result = -1;
 
 #if defined SUPPORT_GEOIP || defined SUPPORT_IP2LOCATION
 	char tempstring[IPV6CALC_ADDR_STRING_MAX] = "";
-#endif
-
-#if defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL
-	static char country_code[256] = "";
+	char *result_char_ptr = NULL;
 #endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
+
+	if (string == NULL) {
+		ERRORPRINT_NA("given pointer 'string' is NULL (FIX CODE)");
+		exit(EXIT_FAILURE);
+	};
+
+	if (length < 3) {
+		ERRORPRINT_NA("given 'length' < 3 (FIX CODE)");
+		exit(EXIT_FAILURE);
+	};
 
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
 		f = IPV6CALC_DB_FEATURE_NUM_IPV4_TO_CC;
@@ -879,6 +1015,8 @@ char *libipv6calc_db_wrapper_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp
 				result_char_ptr = (char *) libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(tempstring, ipaddrp->proto);
 
 				if (result_char_ptr != NULL) {
+					snprintf(string, length, "%s", result_char_ptr);
+					result = 0;
 					data_source = IPV6CALC_DB_SOURCE_GEOIP;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
@@ -894,8 +1032,11 @@ char *libipv6calc_db_wrapper_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Call now IP2Location with %s", tempstring);
 
 				result_char_ptr = libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(tempstring, ipaddrp->proto);
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called IP2Location returned: %s", result_char_ptr);
 
 				if (result_char_ptr != NULL) {
+					snprintf(string, length, "%s", result_char_ptr);
+					result = 0;
 					data_source = IPV6CALC_DB_SOURCE_IP2LOCATION;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
@@ -910,14 +1051,9 @@ char *libipv6calc_db_wrapper_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp
 #ifdef SUPPORT_DBIP
 				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now DBIP");
 
-				country_code[0] = '\0'; // clear contents			
-
-				int ret = libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(ipaddrp, country_code, sizeof(country_code));
+				int ret = libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(ipaddrp, string, length);
 				if (ret == 0) {
-					result_char_ptr = country_code;
-				};
-
-				if (result_char_ptr != NULL) {
+					result = 0;
 					data_source = IPV6CALC_DB_SOURCE_DBIP;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
@@ -932,15 +1068,10 @@ char *libipv6calc_db_wrapper_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp
 #ifdef SUPPORT_EXTERNAL
 				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now External");
 
-				country_code[0] = '\0'; // clear contents			
-
-				int ret = libipv6calc_db_wrapper_External_country_code_by_addr(ipaddrp, country_code, sizeof(country_code));
+				int ret = libipv6calc_db_wrapper_External_country_code_by_addr(ipaddrp, string, length);
 
 				if (ret == 0) {
-					result_char_ptr = country_code;
-				};
-
-				if (result_char_ptr != NULL) {
+					result = 0;
 					data_source = IPV6CALC_DB_SOURCE_EXTERNAL;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
@@ -957,14 +1088,19 @@ char *libipv6calc_db_wrapper_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp
 	};
 
 END_libipv6calc_db_wrapper:
-	if (data_source_ptr != NULL) {
-		// set data_source if pointer not NULL
-		*data_source_ptr = data_source;
+	if (result == 0) {
+		if (data_source_ptr != NULL) {
+			// set data_source if pointer not NULL
+			*data_source_ptr = data_source;
+		};
+	} else {
+		// clear string
+		snprintf(string, length, "%s", "");
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s (data_source=%d)", result_char_ptr, data_source);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s (data_source=%d)", string, data_source);
 
-	return(result_char_ptr);
+	return(result);
 };
 
 
@@ -973,13 +1109,19 @@ END_libipv6calc_db_wrapper:
  */
 uint16_t libipv6calc_db_wrapper_cc_index_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr) {
 	uint16_t index = COUNTRYCODE_INDEX_UNKNOWN;
-
-	const char *cc_text = libipv6calc_db_wrapper_country_code_by_addr(ipaddrp, data_source_ptr);
+	char cc_text[256] = "";
 	uint8_t c1, c2;
+	int r;
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
-	if ((cc_text != NULL) && (strlen(cc_text) == 2)) {
+	r = libipv6calc_db_wrapper_country_code_by_addr(cc_text, sizeof(cc_text), ipaddrp, data_source_ptr);
+
+	if (r != 0) {
+		goto END_libipv6calc_db_wrapper_cc_index_by_addr; // something wrong
+	};
+
+	if (strlen(cc_text) == 2) {
 		if (isalpha(cc_text[0]) && isalnum(cc_text[1])) {
 			c1 = toupper(cc_text[0]);
 			if (! (c1 >= 'A' && c1 <= 'Z')) {
@@ -1018,7 +1160,7 @@ END_libipv6calc_db_wrapper_cc_index_by_addr:
 /*
  * get country code string by index
  */
-int libipv6calc_db_wrapper_country_code_by_cc_index(char *string, int length, const uint16_t cc_index) {
+int libipv6calc_db_wrapper_country_code_by_cc_index(char *string, const int length, const uint16_t cc_index) {
 	int result = 0;
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with cc_index=%d", cc_index);

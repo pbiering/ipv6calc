@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id: showinfo.c,v 1.137 2015/05/02 10:25:32 ds6peter Exp $
+ * Version    : $Id: showinfo.c,v 1.138 2015/05/26 15:50:04 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1210,7 +1210,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	ipv6calc_macaddr macaddr;
 	ipv6calc_eui64addr eui64addr;
 	uint16_t port;
-	uint32_t typeinfo;
+	uint32_t typeinfo, typeinfo2;
 	uint32_t machinereadable = ( formatoptions & FORMATOPTION_machinereadable);
 	uint32_t payload, as_num32, cc_index;
 	char *as_text = NULL;
@@ -1223,8 +1223,9 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	ipv6addr_copy(ipv6addrp, ipv6addrp1); /* copy structure */
 
 	typeinfo = ipv6addr_gettype(ipv6addrp);
+	typeinfo2 = ipv6addrp->typeinfo2;
 
-	DEBUGPRINT_WA(DEBUG_showinfo, "%08x (result of 'ipv6addr_gettype')", (unsigned int) typeinfo);
+	DEBUGPRINT_WA(DEBUG_showinfo, "%08x-%0x8 (result of 'ipv6addr_gettype')", (unsigned int) typeinfo, (unsigned int) typeinfo2);
 
 	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
 		DEBUGPRINT_WA(DEBUG_showinfo, "test: %08x : %s", (unsigned int) ipv6calc_ipv6addrtypestrings[i].number, ipv6calc_ipv6addrtypestrings[i].token);
@@ -1285,6 +1286,17 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 					snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
 				};
 				snprintf(helpstring, sizeof(helpstring), "%s%s", tempstring, ipv6calc_ipv6addrtypestrings[i].token);
+				snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
+				j = 1;
+			};
+		};
+		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addr_type2_strings); i++ ) {
+			if ( (typeinfo2 & ipv6calc_ipv6addr_type2_strings[i].number) != 0 ) {
+				if (j != 0) {
+					snprintf(helpstring, sizeof(helpstring), "%s,", tempstring);
+					snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
+				};
+				snprintf(helpstring, sizeof(helpstring), "%s%s", tempstring, ipv6calc_ipv6addr_type2_strings[i].token);
 				snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
 				j = 1;
 			};
@@ -1410,7 +1422,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			retval = libipv6calc_db_wrapper_registry_string_by_ipv4addr(&ipv4addr, helpstring, sizeof(helpstring));
 			if ( machinereadable != 0 ) {
 			} else {
-				fprintf(stdout, "IPv4 registry for 6to4 address: %s\n", helpstring);
+				fprintf(stdout, "IPv4 registry of 6to4 address: %s\n", helpstring);
 			};
 		};
 	};
@@ -1449,12 +1461,41 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 				
 				if ( machinereadable != 0 ) {
 				} else {
-					fprintf(stdout, "IPv4 registry for Teredo server address: %s\n", helpstring);
+					fprintf(stdout, "IPv4 registry of Teredo server address: %s\n", helpstring);
 				};
 			};
 		};
 	};
 
+	/* 6rd */
+	if ((typeinfo2 & IPV6_ADDR_TYPE2_6RD) != 0) {
+		DEBUGPRINT_WA(DEBUG_showinfo, "6rd found with prefix: %d", ipv6addrp->prefix2length);
+		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_PREFIX2_LENGTH);
+
+		if (r == 0) {
+			retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, helpstring, sizeof(helpstring), 0);
+			if ( retval != 0 ) {
+				fprintf(stderr, "Error converting IPv4 address to string\n");
+				retval = 1;
+				goto END;
+			};	
+
+			if ( machinereadable != 0 ) {
+				print_ipv4addr(&ipv4addr, formatoptions | FORMATOPTION_printembedded, "6RD");
+			} else {
+				fprintf(stdout, "Address type is IPv6 Rapid Deployment and included IPv4 address is: %s\n", helpstring);
+			};
+
+			/* get registry string */
+			retval = libipv6calc_db_wrapper_registry_string_by_ipv4addr(&ipv4addr, helpstring, sizeof(helpstring));
+			if ( machinereadable != 0 ) {
+			} else {
+				fprintf(stdout, "IPv4 registry of IPv6 Rapid Deployment address: %s\n", helpstring);
+			};
+		};
+	};
+
+	/* NAT64 */
 	if ( (typeinfo & IPV6_NEW_ADDR_NAT64) != 0 )  {
 		r = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 
@@ -1469,11 +1510,25 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 
 	/* SLA prefix included? */
 	if ( ((typeinfo & ( IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_ADDR_ULUA )) != 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID | IPV6_ADDR_ANONYMIZED_PREFIX)) == 0)) {
+		uint16_t sla = ipv6addr_getword(ipv6addrp, 3);
+		uint16_t sla_mask = 0xffff;
+
+		if ((typeinfo2 & IPV6_ADDR_TYPE2_6RD) != 0) {
+			DEBUGPRINT_WA(DEBUG_showinfo, "6rd found with prefix: %d", ipv6addrp->prefix2length);
+			// reduced SLA, mask value
+			if ((ipv6addrp->prefix2length + 32) > 48) {
+				// more than 48 bits used for 6RD prefix + included IPv4 address
+				sla_mask = sla_mask >> (ipv6addrp->prefix2length - 16);
+			};
+
+			sla &= sla_mask;
+		};
+			
 		if ( machinereadable != 0 ) {
-			snprintf(tempstring, sizeof(tempstring), "%04x", (unsigned int) ipv6addr_getword(ipv6addrp, 3));
+			snprintf(tempstring, sizeof(tempstring), "%04x", (unsigned int) sla);
 			printout("SLA", tempstring, formatoptions);
 		} else {
-			fprintf(stdout, "Address type has SLA: %04x\n", (unsigned int) ipv6addr_getword(ipv6addrp, 3));
+			fprintf(stdout, "Address type has SLA: %04x\n", (unsigned int) sla);
 		};
 	};
 

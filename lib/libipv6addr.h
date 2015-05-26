@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.87 2015/05/07 06:19:27 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.88 2015/05/26 15:50:04 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -164,15 +164,17 @@
 /* IPv6 address storage structure */
 typedef struct {
 	struct in6_addr in6_addr;	/* in6_addr structure */
-	uint8_t prefixlength;		/* prefix length (0-128) 8 bit*/
+	uint8_t prefixlength;		/* prefix length (0-128) 8 bit */
 	int flag_prefixuse;		/* =1 prefix length in use */
 	uint32_t scope;			/* address typeinfo/scope */
+	uint32_t typeinfo2;		/* address typeinfo2 */
 	uint8_t bit_start;		/* start of bit */
 	uint8_t bit_end;		/* end of bit */
 	int flag_startend_use;		/* =1 start or end of bit in use */
 	int flag_valid;			/* address structure filled */
 	char scopeid[IPV6CALC_SCOPEID_STRING_MAX];	/* scope ID value */
 	int flag_scopeid;		/* =1: scope ID value set */
+	uint8_t prefix2length;		/* prefix 2 length (0-128) 8 bit (usage depends on typeinfo/typeinfo2)*/
 } ipv6calc_ipv6addr;
 
 /* IPv6 Address filter structure */
@@ -295,8 +297,13 @@ typedef struct {
 #define IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID	(IPV6_NEW_ADDR_NAT64 | IPV6_NEW_ADDR_TEREDO | IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED | IPV6_NEW_ADDR_6TO4_MICROSOFT)
 #define IPV6_ADDR_HAS_PUBLIC_IPV4		(IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID | IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX)
 
+// typeinfo2
+#define IPV6_ADDR_TYPE2_6RD			(uint32_t) 0x00000001U	/* IPv6 Rapid Deployment address */
+
+// IPv4 address extractor selector
 #define IPV6_ADDR_SELECT_IPV4_DEFAULT		0
 #define IPV6_ADDR_SELECT_IPV4_TEREDO_SERVER	1
+#define IPV6_ADDR_SELECT_IPV4_PREFIX2_LENGTH	2
 
 /* text representations */
 /*@unused@*/ static const s_type ipv6calc_ipv6addrtypestrings[] = {
@@ -335,6 +342,10 @@ typedef struct {
 	{ IPV6_ADDR_IID_32_63_HAS_IPV4	, "iid-includes-ipv4" }
 };
 
+/* text representations */
+/*@unused@*/ static const s_type ipv6calc_ipv6addr_type2_strings[] = {
+	{ IPV6_ADDR_TYPE2_6RD		, "6rd" },
+};
 
 /* Registries */
 #include "libipv6calc.h"
@@ -379,6 +390,7 @@ extern void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6a
 extern int ipv6addr_compare(const ipv6calc_ipv6addr *ipv6addrp1, const ipv6calc_ipv6addr *ipv6addrp2, const uint16_t compare_flags);
 
 extern uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp);
+extern uint32_t ipv6addr_gettype2(const ipv6calc_ipv6addr *ipv6addrp);
 
 extern int  addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp);
 extern int  addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp);

@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.401 2015/05/13 05:51:38 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.402 2015/05/26 15:50:03 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,12 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20150526/PB
+	ipv6calc: add option --6rd_prefixlength <num> to specify a length of the 6RD prefix
+
+201505xx/PB
+	databases/lib/libipv6calc_db_wrapper.c: implementation of database priority selector
+
 20150513/PB
 	mod_ipv6calc: new
 

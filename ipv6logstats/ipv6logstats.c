@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.65 2015/05/08 06:27:53 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.66 2015/05/26 15:50:04 ds6peter Exp $
  * Copyright  : 2003-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -140,7 +140,7 @@ int main(int argc,char *argv[]) {
 	unsigned long int command = 0;
 
 	/* options */
-	struct option longopts[MAXLONGOPTIONS];
+	struct option longopts[IPV6CALC_MAXLONGOPTIONS];
 	char   shortopts[NI_MAXHOST] = "";
 	int    longopts_maxentries = 0;
 	extern int optopt;
@@ -160,6 +160,9 @@ int main(int argc,char *argv[]) {
 	/* add options */
 	ipv6calc_options_add_common_basic(shortopts, sizeof(shortopts), longopts, &longopts_maxentries);
 	ipv6calc_options_add(shortopts, sizeof(shortopts), longopts, &longopts_maxentries, ipv6logstats_shortopts, ipv6logstats_longopts, MAXENTRIES_ARRAY(ipv6logstats_longopts));
+
+	/* initialize options from environment */
+	ipv6calc_common_options_from_env(longopts, NULL);
 
 	/* Fetch the command-line arguments. */
 	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {

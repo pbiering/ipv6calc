@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
- * Version    : $Id: ipv6calcoptions.c,v 1.20 2014/11/27 07:06:00 ds6peter Exp $
- * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calcoptions.c,v 1.21 2015/05/26 15:50:04 ds6peter Exp $
+ * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  supporting common options
@@ -54,7 +54,7 @@ void ipv6calc_debug_from_env(void) {
 
         ipv6calc_debug_env = getenv("IPV6CALC_DEBUG");
 
-	if (ipv6calc_debug_env != 0) {
+	if (ipv6calc_debug_env != NULL) {
 		ERRORPRINT_WA("IPV6CALC_DEBUG found in environment: %s", ipv6calc_debug_env);
 
 		ipv6calc_debug_val = parse_dec_hex_val(ipv6calc_debug_env);
@@ -77,8 +77,8 @@ void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct 
 
 	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Called: longopts_custom_entries=%d shortopts=%s", longopts_custom_entries, shortopts_p);
 
-	if (*maxentries_p + longopts_custom_entries >= (MAXLONGOPTIONS - 1)) {
-		fprintf(stderr, "FATAL error, can't add options - FIX CODE by increasing MAXLONGOPTIONS\n");
+	if (*maxentries_p + longopts_custom_entries >= (IPV6CALC_MAXLONGOPTIONS - 1)) {
+		fprintf(stderr, "FATAL error, can't add options - FIX CODE by increasing IPV6CALC_MAXLONGOPTIONS\n");
 		exit(2);
 	};
 
@@ -167,6 +167,11 @@ void ipv6calc_options_add_common_basic(char *shortopts_p, const int shortopts_ma
 #ifdef SUPPORT_BUILTIN
 	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "SUPPORT_BUILTIN");
 	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_builtin, ipv6calc_longopts_builtin, MAXENTRIES_ARRAY(ipv6calc_longopts_builtin));
+#endif
+
+#if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP || defined SUPPORT_GEOIP || SUPPORT_IP2LOCATION
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "DB_COMMON");
+	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_db_common, ipv6calc_longopts_db_common, MAXENTRIES_ARRAY(ipv6calc_longopts_db_common));
 #endif
 
 	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Finished");
@@ -394,4 +399,136 @@ const char *ipv6calcoption_name(const int opt, const struct option longopts[]) {
 	};
 
 	return("UNKNOWN");
+};
+
+
+/* get common options from environment */
+void ipv6calc_common_options_from_env(const struct option longopts[], s_ipv6calc_anon_set *ipv6calc_anon_set_p) {
+	int i, j, result;
+	char tempstring[NI_MAXHOST];
+	char *environment_value;
+
+	i = 0;
+	while(longopts[i].name != NULL) {
+		// convert long option name to environment name
+		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_%s", longopts[i].name);
+		for (j = 0; j < strlen(tempstring); j++) {
+			switch(tempstring[j]) {
+			    case '-':
+				tempstring[j] = '_';
+				break;
+
+			    default:
+				tempstring[j] = toupper(tempstring[j]);
+				break;
+			};
+		};
+
+		DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Long option: %s/%d/%08x env=%s", longopts[i].name, longopts[i].has_arg, longopts[i].val, tempstring);
+
+		environment_value = getenv(tempstring);
+
+		if (environment_value != NULL) {
+			DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "found in environment: %s=%s (%08x)", tempstring, environment_value, longopts[i].val);
+
+			if (longopts[i].has_arg == 0) {
+				if (
+				       (strcasecmp(environment_value, "no") == 0)
+				    || (strcasecmp(environment_value, "off") == 0)
+				    || (strcasecmp(environment_value, "0") == 0)
+				) {
+					goto NEXT_in_environment;
+					// skip
+				};
+
+				if (
+				       (strcasecmp(environment_value, "yes") != 0)
+				    && (strcasecmp(environment_value, "on") != 0)
+				    && (strcasecmp(environment_value, "1") != 0)
+				) {
+					fprintf(stderr, "value for environment can only be yes|on|1 or no|off|0: %s=%s\n", tempstring, environment_value);
+					exit(EXIT_FAILURE);
+				};
+			};
+
+			result = ipv6calcoptions_common_basic(longopts[i].val, environment_value, longopts);
+			if (result == 0) {
+				// found
+				goto NEXT_in_environment;
+			};
+
+			if (ipv6calc_anon_set_p != NULL) {
+				result = ipv6calcoptions_common_anon(longopts[i].val, environment_value, longopts, ipv6calc_anon_set_p);
+				if (result == 0) {
+					// found
+					goto NEXT_in_environment;
+				};
+			};
+		};
+NEXT_in_environment:
+		i++;
+	};
+};
+
+
+/*
+ * set a particular (common) option by name/value
+ * in : longopts, name, value, ipv6calc_anon_set_p
+ * out: 0: found/set  <>0: not found
+ */
+int ipv6calc_set_option(const struct option longopts[], const char *name, const char *value, s_ipv6calc_anon_set *ipv6calc_anon_set_p) {
+	int i, result = -1;
+
+	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "called with option: %s=%s", name, value);
+
+	i = 0;
+	while(longopts[i].name != NULL) {
+		DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "check option: %s/%d/%08x", longopts[i].name, longopts[i].has_arg, longopts[i].val);
+
+		if (strcmp(name, longopts[i].name) != 0) {
+			// no match
+			goto NEXT_option;
+		};
+
+		DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "found option: %s=%s (%08x)", longopts[i].name, value, longopts[i].val);
+
+		if ((longopts[i].has_arg == 0) && (value != NULL)) {
+			// check value of toggle
+			if (
+			       (strcasecmp(value, "no") == 0)
+			    || (strcasecmp(value, "off") == 0)
+			    || (strcasecmp(value, "0") == 0)
+			) {
+				// skip
+				break;
+			};
+
+			if (
+			       (strcasecmp(value, "yes") != 0)
+			    && (strcasecmp(value, "on") != 0)
+			    && (strcasecmp(value, "1") != 0)
+			) {
+				fprintf(stderr, "value for option can only be yes|on|1 or no|off|0: %s=%s\n", longopts[i].name, value);
+				exit(EXIT_FAILURE);
+			};
+		};
+
+		result = ipv6calcoptions_common_basic(longopts[i].val, value, longopts);
+		if (result == 0) {
+			// found
+			break;
+		};
+
+		if (ipv6calc_anon_set_p != NULL) {
+			result = ipv6calcoptions_common_anon(longopts[i].val, value, longopts, ipv6calc_anon_set_p);
+			if (result == 0) {
+				// found
+				break;
+			};
+		};
+NEXT_option:
+		i++;
+	};
+
+	return(result);
 };

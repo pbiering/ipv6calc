@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calccommands.h
- * Version    : $Id: ipv6calccommands.h,v 1.24 2015/05/02 15:25:33 ds6peter Exp $
+ * Version    : $Id: ipv6calccommands.h,v 1.25 2015/05/26 15:50:04 ds6peter Exp $
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -82,6 +82,8 @@
 
 #define DB_builtin_disable		0x0002400
 
+#define DB_common_priorization		0x0002fff
+
 
 /* address anonymizer options */
 #define CMD_ANON_PRESET_STANDARD	0x0003001
@@ -99,5 +101,6 @@
 /* 6rd options */
 #define CMD_6rd_prefix			0x0004001
 #define CMD_6rd_relay_prefix		0x0004002
+#define CMD_6rd_prefixlength		0x0004003
 
 #endif

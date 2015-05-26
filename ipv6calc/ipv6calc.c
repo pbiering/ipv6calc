@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.122 2015/05/08 06:26:11 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.123 2015/05/26 15:50:04 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -104,6 +104,8 @@ int main(int argc, char *argv[]) {
 	int inputc;
 	int inputtype_given = 0, outputtype_given = 0, action_given = 0;
 
+	int ipv6rd_prefixlength = -1;
+
 	/* new option style storage */	
 	uint32_t inputtype  = FORMAT_undefined;
 	uint32_t outputtype = FORMAT_undefined;
@@ -147,7 +149,7 @@ int main(int argc, char *argv[]) {
 	int flush_mode = 0;
 
 	/* options */
-	struct option longopts[MAXLONGOPTIONS];
+	struct option longopts[IPV6CALC_MAXLONGOPTIONS];
 	char   shortopts[NI_MAXHOST] = "";
 	int    longopts_maxentries = 0;
 
@@ -180,6 +182,9 @@ int main(int argc, char *argv[]) {
 			i++;
 		};
 	DEBUGSECTION_END
+
+	/* initialize options from environment */
+	ipv6calc_common_options_from_env(longopts, &ipv6calc_anon_set);
 	
 	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {
 		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Parsing option: 0x%08x", i);
@@ -365,6 +370,16 @@ int main(int argc, char *argv[]) {
 
 			case CMD_6rd_prefix:
 				retval = addr_to_ipv6addrstruct(optarg, resultstring, sizeof(resultstring), &ipv6addr);
+				break;
+
+			case CMD_6rd_prefixlength:
+				DEBUGPRINT_NA(DEBUG_ipv6calc_general, "format option 'forceprefix' selected");
+				if ((atoi(optarg) >= 1) && (atoi(optarg) <= 32)) {
+					ipv6rd_prefixlength = atoi(optarg);
+				} else {
+					fprintf(stderr, " Argument of option '6rd_prefixlength' is out or range (1-32): %d\n", atoi(optarg));
+					exit(EXIT_FAILURE);
+				};
 				break;
 
 			/* format options */
@@ -1060,6 +1075,12 @@ PIPE_input:
 	};
 
 	if (ipv6addr.flag_valid == 1) {
+		/* honor 6rd prefix length option */
+		if (ipv6rd_prefixlength > 0) {
+			ipv6addr.typeinfo2 |= IPV6_ADDR_TYPE2_6RD;
+			ipv6addr.prefix2length = ipv6rd_prefixlength;
+		};
+
 		/* force prefix */
 		if ((formatoptions & (FORMATOPTION_forceprefix)) != 0) {
 			ipv6addr.flag_prefixuse = 1;

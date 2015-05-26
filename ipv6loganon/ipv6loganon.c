@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id: ipv6loganon.c,v 1.37 2015/05/08 06:27:53 ds6peter Exp $
+ * Version    : $Id: ipv6loganon.c,v 1.38 2015/05/26 15:50:04 ds6peter Exp $
  * Copyright  : 2007-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -101,7 +101,7 @@ int main(int argc,char *argv[]) {
 	uint32_t command = 0;
 
 	/* options */
-	struct option longopts[MAXLONGOPTIONS];
+	struct option longopts[IPV6CALC_MAXLONGOPTIONS];
 	char   shortopts[NI_MAXHOST] = "";
 	int    longopts_maxentries = 0;
 	extern int optopt;
@@ -122,6 +122,9 @@ int main(int argc,char *argv[]) {
 		fprintf(stderr, "major problem, ipv6calc anonymization default preset not found: anonymize-standard\n");
 		exit(EXIT_FAILURE);
 	};
+
+	/* initialize options from environment */
+	ipv6calc_common_options_from_env(longopts, &ipv6calc_anon_set);
 
 	/* Fetch the command-line arguments. */
 	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {

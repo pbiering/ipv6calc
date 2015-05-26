@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.77 2015/05/13 05:51:38 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.78 2015/05/26 15:50:04 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -363,6 +363,17 @@ void printhelp_common(const uint32_t help_features) {
 		fprintf(stderr, "\n");
 		fprintf(stderr, "  [--disable-builtin               ] : BuiltIn support disabled\n");
 		fprintf(stderr, "  [--db-builtin-disable            ] : BuiltIn support disabled\n");
+#endif
+
+#if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP || defined SUPPORT_GEOIP || SUPPORT_IP2LOCATION
+		fprintf(stderr, "\n");
+		fprintf(stderr, "  [--db-priorization <entry1>[:...]] : Database priorization order list (overwrites default)\n");
+		fprintf(stderr, "                                         colon separated:");
+		int i;
+		for (i = 0; i < MAXENTRIES_ARRAY(data_sources); i++) {
+			fprintf(stderr, " %s", data_sources[i].shortname);
+		};
+		fprintf(stderr, "\n");
 #endif
 	};
 

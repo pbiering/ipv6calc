@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.48 2015/05/05 20:40:47 ds6peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.49 2015/05/26 15:50:04 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -66,6 +66,7 @@ typedef struct {
 #define FORMAT_NUM_octal		21
 #define FORMAT_NUM_hex			22
 #define FORMAT_NUM_ipv6literal		23
+#define FORMAT_NUM_ipv6rd		24
 #define FORMAT_NUM_asn			29
 #define FORMAT_NUM_auto_noresult	30
 #define FORMAT_NUM_undefined		31

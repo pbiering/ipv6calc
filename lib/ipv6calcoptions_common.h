@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions_common.h,v 1.16 2015/05/02 15:25:33 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions_common.h,v 1.17 2015/05/26 15:50:04 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -106,6 +106,14 @@ static struct option ipv6calc_longopts_builtin[] = {
 	{"db-builtin-disable"          , 0, NULL, DB_builtin_disable    },
 };
 #endif // SUPPORT_BUILTIN
+
+#if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP || defined SUPPORT_GEOIP || SUPPORT_IP2LOCATION
+static char *ipv6calc_shortopts_db_common = "";
+
+static struct option ipv6calc_longopts_db_common[] = {
+	{"db-priorization"             , 1, NULL, DB_common_priorization },
+};
+#endif
 
 /* define common anonymization short options */
 static char *ipv6calc_shortopts_common_anon = "";

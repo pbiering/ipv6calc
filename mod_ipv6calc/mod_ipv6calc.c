@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.2 2015/05/18 06:20:58 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.3 2015/05/26 15:50:04 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -51,6 +51,11 @@ long int ipv6calc_debug = 0; // ipv6calc_debug usage
  ***************************/
 static const char *set_ipv6calc_enable(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_option(cmd_parms *cmd, void *dummy, const char *name, const char *value, int arg);
+
+
+/***************************
+ * Cache
+ ***************************/
 
 
 /***************************
@@ -266,6 +271,7 @@ static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
  */
 static int ipv6calc_post_read_request(request_rec *r) {
 	// *** definitions
+	//
 	// Apache/APR related includes
 	apr_sockaddr_t *client_addr_p; // structure defined in apr_network_io.h
 	ipv6calc_server_config* config;
@@ -279,7 +285,13 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 	// workflow related
 	char client_addr_string_anonymized[APRMAXHOSTLEN];
+	char cc[256];
+	unsigned int data_source;
+
 	int result;
+
+	int ipv6calc_action_country_code = 1;
+	int ipv6calc_action_anonymize = 1;
 
 
 	// *** workflow
@@ -295,19 +307,18 @@ static int ipv6calc_post_read_request(request_rec *r) {
 	client_addr_p = r->connection->client_addr;
 
 	ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-		, "client IP address (string): %s  family: %d"
+		, "client IP address: %s  family: %d"
 		, r->connection->client_ip
 		, client_addr_p->family
 	);
 
+	// convert address into ipv6calc structure
 	libipaddr_clearall(&ipaddr);
 
 	if (client_addr_p->family == APR_INET) {
 		// IPv4
 		ipv4addr.in_addr = client_addr_p->sa.sin.sin_addr;
 		ipv4addr.flag_valid = 1;
-
-		libipv4addr_anonymize(&ipv4addr, config->ipv6calc_anon_set.mask_ipv4, config->ipv6calc_anon_set.method);
 
 		CONVERT_IPV4ADDRP_IPADDR(&ipv4addr, ipaddr);
 #if APR_HAVE_IPV6
@@ -330,12 +341,8 @@ static int ipv6calc_post_read_request(request_rec *r) {
 				, result
 			);
 
-			libipv4addr_anonymize(&ipv4addr, config->ipv6calc_anon_set.mask_ipv4, config->ipv6calc_anon_set.method);
-
 			CONVERT_IPV4ADDRP_IPADDR(&ipv4addr, ipaddr);
 		} else {
-			libipv6addr_anonymize(&ipv6addr, &config->ipv6calc_anon_set);
-
 			CONVERT_IPV6ADDRP_IPADDR(&ipv6addr, ipaddr);
 		};
 #endif
@@ -344,21 +351,55 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		return OK;
 	};
 
-	// get address string
-	result = libipaddr_ipaddrstruct_to_string(&ipaddr, client_addr_string_anonymized, sizeof(client_addr_string_anonymized), 0); 
 
-	if (result == 0) {
-		ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-			, "client IP address anonymized(string): %s"
-			, client_addr_string_anonymized
-		);
-		apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP_ANON", client_addr_string_anonymized); 
-	} else {
-		apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP_ANON", r->connection->client_ip); 
+	// set country code of IP in environment
+	if (ipv6calc_action_country_code == 1) {
+		result = libipv6calc_db_wrapper_country_code_by_addr(cc, sizeof(cc), &ipaddr, &data_source);
+
+		if ((result == 0) && (strlen(cc) > 0)) {
+			ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
+				, "client IP country code: %s (%s)"
+				, cc
+				, libipv6calc_db_wrapper_get_data_source_name_by_number(data_source)
+			);
+
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_COUNTRYCODE", cc); 
+		};
+	};
+
+	// set anonymized IP address in environment
+	if (ipv6calc_action_anonymize == 1) {
+		if (client_addr_p->family == APR_INET) {
+			libipv4addr_anonymize(&ipv4addr, config->ipv6calc_anon_set.mask_ipv4, config->ipv6calc_anon_set.method);
+			CONVERT_IPV4ADDRP_IPADDR(&ipv4addr, ipaddr);
+#if APR_HAVE_IPV6
+		} else if (client_addr_p->family == APR_INET6) {
+			if ((ipv6addr.scope & IPV6_ADDR_MAPPED) == IPV6_ADDR_MAPPED) {
+				libipv4addr_anonymize(&ipv4addr, config->ipv6calc_anon_set.mask_ipv4, config->ipv6calc_anon_set.method);
+				CONVERT_IPV4ADDRP_IPADDR(&ipv4addr, ipaddr);
+			} else {
+				libipv6addr_anonymize(&ipv6addr, &config->ipv6calc_anon_set);
+				CONVERT_IPV6ADDRP_IPADDR(&ipv6addr, ipaddr);
+			};
+#endif
+		};
+
+		// get address string
+		result = libipaddr_ipaddrstruct_to_string(&ipaddr, client_addr_string_anonymized, sizeof(client_addr_string_anonymized), 0); 
+
+		if (result == 0) {
+			ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
+				, "client IP address anonymized: %s"
+				, client_addr_string_anonymized
+			);
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP_ANON", client_addr_string_anonymized); 
+		} else {
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP_ANON", r->connection->client_ip); 
+		};
 	};
 
 	return OK;
-}
+};
 
 
 /*
