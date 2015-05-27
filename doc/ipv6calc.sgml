@@ -651,7 +651,7 @@ ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4
 <title>Action-type options: </title>
 <screen>
 <![CDATA[$ ipv6calc --action -?
-ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
+ipv6calc: version 0.99.1 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 (P) & (C) 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
 
  Available action types:
@@ -661,10 +661,13 @@ ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4
   genprivacyiid    : Generates a privacy interface ID out of a given one (arg1) and a token (arg2)
   prefixmac2ipv6   : Generates an IPv6 address out of a prefix and a MAC address
   anonymize        : Anonymize IPv4/IPv6 address without loosing much information
-  6rd_local_prefix : Calculate the 6rd prefix from given IPv6 prefix & relay prefix and IPv4
-                      Required options:
-                       --6rd_prefix ...
-                       --6rd_relay_prefix ...
+  6rd_local_prefix : Calculate the 6rd prefix from given IPv6 prefix (& relay prefix) and IPv4
+                      Options:
+                       --6rd_prefix ... (required)
+                       --6rd_relay_prefix ... (optional)
+  6rd_extract_ipv4 : Extract from 6rd address the include IPv4 address
+                      Options:
+                       --6rd_prefixlength ... (required)
   filter           : Filter addresses related to filter options
 ]]></screen></sect3><sect3>
 <title>Special action &ldquo;filter&rdquo;:</title>

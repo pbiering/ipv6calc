@@ -3848,7 +3848,7 @@ $ ipv6calc --action -?
 
 \begin_layout Code
 
-ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
+ipv6calc: version 0.99.1 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
 S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE
  ANON_KEEP-TYPE-ASN-CC
 \end_layout
@@ -3902,23 +3902,41 @@ n
 
 \begin_layout Code
 
-  6rd_local_prefix : Calculate the 6rd prefix from given IPv6 prefix & relay
- prefix and IPv4
+  6rd_local_prefix : Calculate the 6rd prefix from given IPv6 prefix (&
+ relay prefix) and IPv4
 \end_layout
 
 \begin_layout Code
 
-                      Required options:
+                      Options:
 \end_layout
 
 \begin_layout Code
 
                        --6rd_prefix ...
+ (required)
 \end_layout
 
 \begin_layout Code
 
                        --6rd_relay_prefix ...
+ (optional)
+\end_layout
+
+\begin_layout Code
+
+  6rd_extract_ipv4 : Extract from 6rd address the include IPv4 address
+\end_layout
+
+\begin_layout Code
+
+                      Options:
+\end_layout
+
+\begin_layout Code
+
+                       --6rd_prefixlength ...
+ (required)
 \end_layout
 
 \begin_layout Code

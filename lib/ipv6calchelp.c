@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.80 2015/05/27 06:17:50 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.81 2015/05/27 13:30:07 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -207,7 +207,7 @@ void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoption
 
 /* list of action types */
 void printhelp_actiontypes(const uint32_t formatoptions, const struct option longopts[]) {
-	int i, j, o, test, has_options = 0;
+	int i, j, o, test, has_options;
 	size_t maxlen = 0;
 	char printformatstring[20], printformatstring2[20], printformatstring3[20];
 	
@@ -248,9 +248,10 @@ void printhelp_actiontypes(const uint32_t formatoptions, const struct option lon
 			fprintf(stderr, printformatstring, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
 
 			test = 2;
+			has_options = 0;
 			while (test != 0) {
 				if (test == 1) {	
-					fprintf(stderr, printformatstring2, "", "Required options:");
+					fprintf(stderr, printformatstring2, "", "Options:");
 				};
 
 				/* search for defined options */
@@ -277,6 +278,8 @@ void printhelp_actiontypes(const uint32_t formatoptions, const struct option lon
 									};
 									if (ipv6calc_actionoptionmap[i][2] > 0) {
 										fprintf(stderr, " (optional)");
+									} else {
+										fprintf(stderr, " (required)");
 									};
 									fprintf(stderr, "\n");
 								};
