@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.79 2015/05/26 17:13:12 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.80 2015/05/27 06:17:50 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -207,7 +207,7 @@ void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoption
 
 /* list of action types */
 void printhelp_actiontypes(const uint32_t formatoptions, const struct option longopts[]) {
-	int i, j, o, test = 2, has_options = 0;
+	int i, j, o, test, has_options = 0;
 	size_t maxlen = 0;
 	char printformatstring[20], printformatstring2[20], printformatstring3[20];
 	
@@ -237,16 +237,17 @@ void printhelp_actiontypes(const uint32_t formatoptions, const struct option lon
 	snprintf(printformatstring2, sizeof(printformatstring2), "  %%-%ds%%s\n", (int) maxlen + 4);
 	snprintf(printformatstring3, sizeof(printformatstring3), "  %%-%ds--%%s", (int) maxlen + 5);
 
-	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Format string: %s", printformatstring);
+	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Action string: %s", printformatstring);
 
 	if ((formatoptions & FORMATOPTION_machinereadable) == 0) fprintf(stderr, "\n Available action types:\n");
 
 	for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_actionstrings); j++) {
-		DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Format-Row %d: %08x - %s - %s", j, (unsigned int) ipv6calc_actionstrings[j].number, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
+		DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Action-Row %d: %08x - %s - %s", j, (unsigned int) ipv6calc_actionstrings[j].number, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
 
 		if ((formatoptions & FORMATOPTION_machinereadable) == 0) {
 			fprintf(stderr, printformatstring, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
 
+			test = 2;
 			while (test != 0) {
 				if (test == 1) {	
 					fprintf(stderr, printformatstring2, "", "Required options:");

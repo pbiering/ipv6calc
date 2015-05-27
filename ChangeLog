@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.403 2015/05/26 17:13:12 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.404 2015/05/27 06:17:50 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20150527/PB
+	ipv6calc: add action --6rd_extract_ipv4
+
 20150526/PB
 	ipv6calc: add option --6rd_prefixlength <num> to specify a length of the 6RD prefix
 	ipv6calc: --6rd_relay_prefix is now optional

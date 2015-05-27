@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calc/ipv6calcoptions.h
- * Version    : $Id: ipv6calcoptions_local.h,v 1.9 2015/05/26 15:50:04 ds6peter Exp $
+ * Version    : $Id: ipv6calcoptions_local.h,v 1.10 2015/05/27 06:17:50 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -119,7 +119,7 @@ static struct option ipv6calc_longopts[] = {
 	{ "6rd_relay_prefix"	, 1, NULL, CMD_6rd_relay_prefix },
 	{ "6rd_prefix"		, 1, NULL, CMD_6rd_prefix },
 
-	/* 6rd_prefix options for showinfo */
+	/* 6rd_prefix options for showinfo/action */
 	{ "6rd_prefixlength"	, 1, NULL, CMD_6rd_prefixlength },
 }; 
 

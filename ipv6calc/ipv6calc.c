@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.124 2015/05/26 17:13:12 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.125 2015/05/27 06:17:50 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -373,7 +373,7 @@ int main(int argc, char *argv[]) {
 				break;
 
 			case CMD_6rd_prefixlength:
-				DEBUGPRINT_NA(DEBUG_ipv6calc_general, "format option 'forceprefix' selected");
+				DEBUGPRINT_NA(DEBUG_ipv6calc_general, "special option '6rd_prefixlength' selected");
 				if ((atoi(optarg) >= 1) && (atoi(optarg) <= 32)) {
 					ipv6rd_prefixlength = atoi(optarg);
 				} else {
@@ -1214,6 +1214,8 @@ PIPE_input:
 			outputtype = FORMAT_ipv6addr;
 		} else if ( (inputtype == FORMAT_ipv4addr) && (action == ACTION_6rd_local_prefix) ) {
 			outputtype = FORMAT_ipv6addr;
+		} else if ( (inputtype == FORMAT_ipv6addr) && (action == ACTION_6rd_extract_ipv4) ) {
+			outputtype = FORMAT_ipv4addr;
 		};
 
 		if ( outputtype != FORMAT_undefined ) {
@@ -1392,6 +1394,33 @@ PIPE_input:
 			};
 
 			retval = librfc5569_calc_6rd_local_prefix(&ipv6addr, &ipv4addr2, &ipv4addr, resultstring, sizeof(resultstring));
+			break;
+
+		case ACTION_6rd_extract_ipv4:
+			/* check formats */
+			if ( outputtype != FORMAT_ipv4addr ) {
+				fprintf(stderr, "output type incompatible (no IPv4 address)!\n");
+				exit(EXIT_FAILURE);
+			};
+	
+			if ( inputtype != FORMAT_ipv6addr ) {
+				fprintf(stderr, "input type incompatible (no IPv6 address)!\n");
+				exit(EXIT_FAILURE);
+			};
+	
+			/* check IPv6 address */
+			if ( ipv6addr.flag_valid != 1 ) {
+				fprintf(stderr, "No valid IPv6 address given!\n");
+				exit(EXIT_FAILURE);
+			};
+
+			/* check IPv4 relay prefix */
+			if (ipv6rd_prefixlength < 1) {
+				fprintf(stderr, "No IPv6 Rapid Deployment prefix length given!\n");
+				exit(EXIT_FAILURE);
+			};
+
+			retval = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, IPV6_ADDR_SELECT_IPV4_PREFIX2_LENGTH);
 			break;
 
 		case ACTION_filter:
