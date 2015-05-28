@@ -6003,7 +6003,7 @@ $as_echo "#define HAVE_BERKELEY_DB_SUPPORT 1" >>confdefs.h
 fi
 
 
-APXS=$(which apxs)
+APXS=$(PATH=$PATH:/usr/local/sbin:/usr/sbin; which apxs)
 if test "$APXS" = ""; then
 	# fallback to apxs2
 	APXS=$(which apxs2)

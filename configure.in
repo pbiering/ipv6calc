@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.138 2015/05/13 05:51:38 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.139 2015/05/28 20:18:11 ds6peter Exp $
 dnl Copyright: 2001-2015 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -1091,10 +1091,10 @@ fi
 dnl *************************************************
 dnl apxs - APache eXtenSion tool
 dnl *************************************************
-APXS=$(which apxs)
+APXS=$(PATH=$PATH:/usr/local/sbin:/usr/sbin; which apxs)
 if test "$APXS" = ""; then
 	# fallback to apxs2
-	APXS=$(which apxs2)
+	APXS=$(PATH=$PATH:/usr/local/sbin:/usr/sbin; which apxs2)
 
 	if test "$APXS" = ""; then
 		AC_MSG_ERROR([No APXS binary found: cannot create Apache module])
