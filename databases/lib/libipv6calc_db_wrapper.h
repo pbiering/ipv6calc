@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.40 2015/05/26 15:50:04 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.41 2015/05/28 20:21:27 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -321,7 +321,7 @@ extern int libipv6calc_db_registry_filter_parse(s_ipv6calc_filter_db_registry *f
 extern int libipv6calc_db_registry_filter_check(s_ipv6calc_filter_db_registry *filter, const int proto);
 extern int libipv6calc_db_registry_filter(const int registry, const s_ipv6calc_filter_db_registry *filter);
 
-extern const uint32_t libipv6calc_db_lib_version_numeric(void);
+extern       uint32_t libipv6calc_db_lib_version_numeric(void);
 extern const char    *libipv6calc_db_lib_version_string(void);
-extern const uint32_t libipv6calc_db_api_version_numeric(void);
+extern       uint32_t libipv6calc_db_api_version_numeric(void);
 extern const char    *libipv6calc_db_api_version_string(void);

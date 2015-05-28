@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.64 2015/05/26 15:50:03 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.65 2015/05/28 20:21:27 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -2941,7 +2941,7 @@ int libipv6calc_db_registry_filter(const int registry, const s_ipv6calc_filter_d
 /*
  * return library version numeric
  */
-const uint32_t libipv6calc_db_lib_version_numeric(void) {
+uint32_t libipv6calc_db_lib_version_numeric(void) {
 	return(IPV6CALC_PACKAGE_VERSION_NUMERIC);
 }; 
 
@@ -2958,7 +2958,7 @@ const char *libipv6calc_db_lib_version_string(void) {
 /*
  * return API version numeric
  */
-const uint32_t libipv6calc_db_api_version_numeric(void) {
+uint32_t libipv6calc_db_api_version_numeric(void) {
 	return(IPV6CALC_API_VERSION_NUMERIC);
 };
 

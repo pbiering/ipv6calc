@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.31 2015/05/26 15:50:04 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.32 2015/05/28 20:22:40 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -140,7 +140,7 @@ extern const char *libipv6calc_registry_string_by_num(const int registry);
 
 extern int libipv6calc_bitcount_uint32_t(const uint32_t value);
 
-extern const uint32_t libipv6calc_lib_version_numeric(void);
+extern       uint32_t libipv6calc_lib_version_numeric(void);
 extern const char    *libipv6calc_lib_version_string(void);
-extern const uint32_t libipv6calc_api_version_numeric(void);
+extern       uint32_t libipv6calc_api_version_numeric(void);
 extern const char    *libipv6calc_api_version_string(void);
