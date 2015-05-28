@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.4 2015/05/28 20:29:16 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.5 2015/05/28 20:32:58 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -486,7 +486,11 @@ static void ipv6calc_register_hooks(apr_pool_t *p) {
 /*
  * mod_ipv6calc API hooks
  */
+#if (((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER >= 4)) || (AP_SERVER_MAJORVERSION_NUMBER > 2))
 AP_DECLARE_MODULE(ipv6calc) = {
+#else
+module AP_MODULE_DECLARE_DATA ipv6calc = {
+#endif
 	STANDARD20_MODULE_STUFF, 
 	NULL,                        /* create per-dir    config structures */
 	NULL,                        /* merge  per-dir    config structures */
