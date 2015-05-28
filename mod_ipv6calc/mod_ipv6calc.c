@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.3 2015/05/26 15:50:04 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.4 2015/05/28 20:29:16 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -304,11 +304,19 @@ static int ipv6calc_post_read_request(request_rec *r) {
 	};
 
 	// get client address (aka REMOTE_IP)
+#if (((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER >= 4)) || (AP_SERVER_MAJORVERSION_NUMBER > 2))
 	client_addr_p = r->connection->client_addr;
+#else
+	client_addr_p = r->connection->remote_addr;
+#endif
 
 	ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
 		, "client IP address: %s  family: %d"
+#if (((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER >= 4)) || (AP_SERVER_MAJORVERSION_NUMBER > 2))
 		, r->connection->client_ip
+#else
+		, r->connection->remote_ip
+#endif
 		, client_addr_p->family
 	);
 
@@ -394,7 +402,11 @@ static int ipv6calc_post_read_request(request_rec *r) {
 			);
 			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP_ANON", client_addr_string_anonymized); 
 		} else {
+#if (((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER >= 4)) || (AP_SERVER_MAJORVERSION_NUMBER > 2))
 			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP_ANON", r->connection->client_ip); 
+#else
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP_ANON", r->connection->remote_ip); 
+#endif
 		};
 	};
 
