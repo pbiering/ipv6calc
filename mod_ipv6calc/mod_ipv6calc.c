@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.8 2015/05/29 05:53:00 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.9 2015/05/29 05:57:26 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -327,6 +327,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		// IPv4
 		ipv4addr_clearall(&ipv4addr);
 		ipv4addr.in_addr = client_addr_p->sa.sin.sin_addr;
+		ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
 		ipv4addr.flag_valid = 1;
 
 		CONVERT_IPV4ADDRP_IPADDR(&ipv4addr, ipaddr);
@@ -340,7 +341,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 		if ((ipv6addr.scope & IPV6_ADDR_MAPPED) == IPV6_ADDR_MAPPED) {
 			// IPv4 address stored as mapped in IPv6 address
-			ipv4addr_clear(&ipv4addr);
+			ipv4addr_clearall(&ipv4addr);
 
 			result = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, 0);
 
