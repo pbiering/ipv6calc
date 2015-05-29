@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.66 2015/05/07 06:19:27 ds6peter Exp $
- * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id: libipv4addr.c,v 1.67 2015/05/29 05:42:07 ds6peter Exp $
+ * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Function library for IPv4 address handling
@@ -33,11 +33,11 @@ uint8_t ipv4addr_getoctet(const ipv6calc_ipv4addr *ipv4addrp, const unsigned int
 	uint8_t retval;
 	
 	if ( numoctet > 3 ) {
-		fprintf(stderr, "%s/%s: given octet number '%u' is out of range!\n", __FILE__, __func__, numoctet);
+		ERRORPRINT_WA("given octet number '%u' is out of range!\n", numoctet);
 		exit(EXIT_FAILURE);
 	};
 
-	retval = (uint8_t) ( (ipv4addrp->in_addr.s_addr >> ( (unsigned int) (3 - numoctet) << 3)) & 0xff );
+	retval = (uint8_t) ( (ipv4addrp->in_addr.s_addr >> ( numoctet << 3)) & 0xff );
 
 	return (retval);
 };
@@ -94,8 +94,8 @@ void ipv4addr_setoctet(ipv6calc_ipv4addr *ipv4addrp, const unsigned int numoctet
 		exit(EXIT_FAILURE);
 	};
 	
-	ipv4addrp->in_addr.s_addr &= ~ (0xff << ((unsigned int) (3 - numoctet) << 3) );
-	ipv4addrp->in_addr.s_addr |= (value & 0xff) << ((unsigned int) (3 - numoctet) << 3);
+	ipv4addrp->in_addr.s_addr &= ~ (0xff << (numoctet << 3) );
+	ipv4addrp->in_addr.s_addr |= (value & 0xff) << (numoctet << 3);
 
 	return;
 };

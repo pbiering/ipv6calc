@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc5569.c
- * Version    : $Id: librfc5569.c,v 1.3 2015/05/26 17:13:12 ds6peter Exp $
+ * Version    : $Id: librfc5569.c,v 1.4 2015/05/29 05:42:07 ds6peter Exp $
  * Copyright  : 2011 by Raphaël Assénat <raph (at) raphnet.net>
  *  Extensions: 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
@@ -50,7 +50,7 @@ int librfc5569_calc_6rd_local_prefix(ipv6calc_ipv6addr *sixrd_prefix, const ipv6
 		return (1);
 	}
 
-	local_ip_bits = local_ip->in_addr.s_addr;
+	local_ip_bits = ipv4addr_getdword(local_ip);
 
 	if (sixrd_relay_prefix->flag_valid == 1) {
 		local_ip_bits <<= sixrd_relay_prefix->prefixlength;
