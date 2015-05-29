@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.7 2015/05/29 05:50:42 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.8 2015/05/29 05:53:00 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -325,7 +325,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 	if (client_addr_p->family == APR_INET) {
 		// IPv4
-		ipv4addr_clear(&ipv4addr);
+		ipv4addr_clearall(&ipv4addr);
 		ipv4addr.in_addr = client_addr_p->sa.sin.sin_addr;
 		ipv4addr.flag_valid = 1;
 
@@ -333,7 +333,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 #if APR_HAVE_IPV6
 	} else if (client_addr_p->family == APR_INET6) {
 		// IPv6
-		ipv6addr_clear(&ipv6addr);
+		ipv6addr_clearall(&ipv6addr);
 		ipv6addr.in6_addr = client_addr_p->sa.sin6.sin6_addr;
 		ipv6addr.scope = ipv6addr_gettype(&ipv6addr);
 		ipv6addr.flag_valid = 1;
