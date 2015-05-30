@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.12 2015/05/30 16:32:52 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.13 2015/05/30 16:40:38 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -706,7 +706,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 			    &&  ((ipv6calc_cache_lri_checked[pi] % config->cache_statistics_interval) == 0)
 			) {
 				for (i = 0; i < config->cache_limit; i++) {
-					ap_log_rerror(APLOG_MARK, APLOG_INFO, 0, r
+					ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
 						, "cache hit statistics for IPv%s: distance %3d: %lu / %lu (%2lu%%)"
 						, (pi == 0) ? "4" : "6"
 						, i

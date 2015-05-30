@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.89 2015/05/26 17:13:12 ds6peter Exp $
+ * Version    : $Id: libipv6addr.h,v 1.90 2015/05/30 16:42:32 ds6peter Exp $
  * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -296,6 +296,8 @@ typedef struct {
 #define IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX	(IPV6_NEW_ADDR_6TO4 | IPV6_NEW_ADDR_TEREDO)
 #define IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID	(IPV6_NEW_ADDR_NAT64 | IPV6_NEW_ADDR_TEREDO | IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED | IPV6_NEW_ADDR_6TO4_MICROSOFT)
 #define IPV6_ADDR_HAS_PUBLIC_IPV4		(IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID | IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX)
+
+#define IPV6_ADDR_GLOBAL			(IPV6_NEW_ADDR_PRODUCTIVE)
 
 // typeinfo2
 #define IPV6_ADDR_TYPE2_6RD			(uint32_t) 0x00000001U	/* IPv6 Rapid Deployment address (RFC5569), not autodetectable (triggered by --6rd_prefixlength) */
