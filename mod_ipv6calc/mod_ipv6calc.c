@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.13 2015/05/30 16:40:38 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.14 2015/05/30 17:04:13 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -336,7 +336,7 @@ static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t 
 		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
 			, "module cache: ON (default)  limit=%d (%s)  statistics_interval=%lu (%s)"
 			, config->cache_limit
-			, (config->cache_limit == IPV6CALC_CACHE_LRI_LIMIT_MIN) ? "default/min" : "configured"
+			, (config->cache_limit == IPV6CALC_CACHE_LRI_LIMIT_MIN) ? "default/minimum" : "configured"
 			, config->cache_statistics_interval
 			, (config->cache_statistics_interval == 0) ? "default" : "configured"
 		);

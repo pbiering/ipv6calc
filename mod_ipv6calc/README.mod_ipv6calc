@@ -1,4 +1,4 @@
-$Id: README.mod_ipv6calc,v 1.3 2015/05/30 16:32:52 ds6peter Exp $
+$Id: README.mod_ipv6calc,v 1.4 2015/05/30 17:04:13 ds6peter Exp $
 
 Apache module tested on
 	- 2.2 (CentOS 5)
@@ -14,6 +14,7 @@ Installation
 		# cp ipv6calc.conf /etc/httpd/conf.d/
 
  - review config /etc/httpd/conf.d/ipv6calc.conf
+
 
 Restart Apache
 
@@ -37,3 +38,8 @@ Anonymized log file according to example LogFormat looks then like:
 a909:16fa:9092:23ff:a909:4941::7 "DE" - [30/May/2015:18:14:59 +0200] "GET / HTTP/1.1" 403 4609 "-" "curl/7.40.0"
 a909:16fa:9092:23ff:a909:4941::7 "DE" - [30/May/2015:18:15:01 +0200] "GET / HTTP/1.1" 403 4609 "-" "curl/7.40.0"
 127.0.0.0 "-" - [30/May/2015:18:15:02 +0200] "HEAD / HTTP/1.0" 403 - "-" "-"
+
+
+Troubleshooting:
+ ipv6calc -vv shows proper database setup while Apache has issues
+	=> check/adjust SELinux (temporary set to permissive)
