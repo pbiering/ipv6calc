@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.11 2015/05/30 13:00:58 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.12 2015/05/30 16:32:52 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -75,6 +75,7 @@ int    longopts_maxentries = 0;
  * Prototyping
  ***************************/
 static const char *set_ipv6calc_enable(cmd_parms *cmd, void *dummy, int arg);
+static const char *set_ipv6calc_no_fallback(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_cache(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_cache_limit(cmd_parms *cmd, void *dummy, const char *value, int arg);
 static const char *set_ipv6calc_cache_statistics_interval(cmd_parms *cmd, void *dummy, const char *value, int arg);
@@ -117,7 +118,7 @@ module AP_MODULE_DECLARE_DATA ipv6calc_module;
 typedef struct {
 	int enabled;
 
-	int config_logged; // flag to log config only once
+	int no_fallback;
 
 	int cache;
 	int cache_limit;
@@ -152,6 +153,7 @@ int ipv6calc_option_list_entries = 0;
  */
 static const command_rec ipv6calc_cmds[] = {
 	AP_INIT_FLAG("ipv6calcEnable", set_ipv6calc_enable, NULL, OR_FILEINFO, "Turn on mod_ipv6calc"),
+	AP_INIT_FLAG("ipv6calcNoFallback", set_ipv6calc_no_fallback, NULL, OR_FILEINFO, "Do not fallback in case of issues with mod_ipv6calc"),
 	AP_INIT_FLAG("ipv6calcCache", set_ipv6calc_cache, NULL, OR_FILEINFO, "Turn off mod_ipv6calc cache"),
 	AP_INIT_TAKE1("ipv6calcCacheLimit",  (const char *(*)()) set_ipv6calc_cache_limit, NULL, OR_FILEINFO, "mod_ipv6calc cache limit: <value>"),
 	AP_INIT_TAKE1("ipv6calcCacheStatisticsInterval",  (const char *(*)()) set_ipv6calc_cache_statistics_interval, NULL, OR_FILEINFO, "mod_ipv6calc cache statistics interval: <value> (0=disabled)"),
@@ -164,7 +166,106 @@ static const command_rec ipv6calc_cmds[] = {
 
 
 /***************************
- * Functions / Hooks
+ * Support functions
+ ***************************/
+static int ipv6calc_support_init(server_rec *s) {
+	int i, result;
+	static int ipv6calc_options_added = 0;
+
+	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(s->module_config, &ipv6calc_module);
+
+	int mod_ipv6calc_APLOG_DEBUG = (config->debuglevel & IPV6CALC_DEBUG_MAP_DEBUG_TO_NOTICE) ? APLOG_NOTICE : APLOG_DEBUG;
+
+	ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
+		, "start ipv6calc initialization"
+	);
+
+	/* add options */
+	if (ipv6calc_options_added == 0) {
+		ipv6calc_options_add_common_anon(shortopts, sizeof(shortopts), longopts, &longopts_maxentries);
+		ipv6calc_options_add_common_basic(shortopts, sizeof(shortopts), longopts, &longopts_maxentries);
+		ipv6calc_options_added = 1;
+	};
+
+	ipv6calc_quiet = 1; // be quiet by default
+
+	/* initialize ipv6calc options from list retrieved via APR config parser */
+	ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
+		, "apply ipv6calc options"
+	);
+
+	if (ipv6calc_option_list_entries > 0) {
+		for (i = 0; i < ipv6calc_option_list_entries; i++) {
+			result = ipv6calc_set_option(longopts, ipv6calc_option_list[i].name, ipv6calc_option_list[i].value, &config->ipv6calc_anon_set);
+
+			if (result == 0) {
+				ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
+					, "ipv6calc option %s: %s=%s"
+					, "successfully set"
+					, ipv6calc_option_list[i].name
+					, ipv6calc_option_list[i].value
+				);
+			} else {
+				ap_log_error(APLOG_MARK, APLOG_WARNING, 0, s
+					, "ipv6calc option %s: %s=%s"
+					, "NOT UNDERSTOOD"
+					, ipv6calc_option_list[i].name
+					, ipv6calc_option_list[i].value
+				);
+			};
+
+			if ((result == 0) &&
+			  (
+			       (strcmp(ipv6calc_option_list[i].name, "anonymize-preset") == 0)
+			    || (strcmp(ipv6calc_option_list[i].name, "anonymize-method") == 0)
+			  )
+			) {
+				config->anon_set_default = 0;
+			};
+		};
+	};
+
+	ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
+		, "start ipv6calc database wrapper initialization"
+	);
+
+	result = libipv6calc_db_wrapper_init("");
+	if (result != 0) {
+		config->enabled = 0;
+
+		if (config->no_fallback) {
+			ap_log_error(APLOG_MARK, APLOG_ERR, 0, s
+				, "database wrapper initialization failed (NO-FALLBACK activated, STOP NOW): %d"
+				, result
+			);
+
+			return(1);
+		} else {
+			ap_log_error(APLOG_MARK, APLOG_WARNING, 0, s
+				, "database wrapper initialization failed (disable module now): %d"
+				, result
+			);
+
+			return(0);
+		};
+	} else {
+		ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
+			, "ipv6calc database wrapper initialization finished"
+		);
+	};
+
+	/* check for KeepTypeAsnCC support */
+	if ((libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV4_REQ_DB) == 1) \
+	    && (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV6_REQ_DB) == 1)) {
+		feature_kp = 1;
+	};
+
+	return(0);
+};
+
+
+/***************************
+ * Hooks functions
  ***************************/
 
 /*
@@ -180,15 +281,16 @@ static apr_status_t ipv6calc_cleanup(void *cfgdata) {
  * ipv6calc_post_config
  */
 static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t *ptemp, server_rec *s) {
-	ap_log_error(APLOG_MARK, APLOG_INFO, 0, s
-		, "ipv6calc_post_config"
-	);
+	char string[NI_MAXHOST] = "";
+	int result;
 
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(s->module_config, &ipv6calc_module);
 
-	if (config->config_logged == 1) {
-		return(0);
-	};
+	int mod_ipv6calc_APLOG_DEBUG = (config->debuglevel & IPV6CALC_DEBUG_MAP_DEBUG_TO_NOTICE) ? APLOG_NOTICE : APLOG_DEBUG;
+
+	ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
+		, "ipv6calc_post_config"
+	);
 
 	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
 		, "internal main     library version: %s  API: %s  (%s)"
@@ -240,99 +342,10 @@ static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t 
 		);
 	};
 
-	config->config_logged = 1;
+	result = ipv6calc_support_init(s);
 
-	return(0);
-};
-
-
-
-/*
- * ipv6calc_child_init
- */
-static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
-	char string[NI_MAXHOST] = "";
-	int result, i;
-
-	int mod_ipv6calc_APLOG_DEBUG = APLOG_DEBUG;
-
-#ifdef SHARED_LIBRARY
-	IPV6CALC_LIB_VERSION_CHECK_EXIT(IPV6CALC_PACKAGE_VERSION_NUMERIC, IPV6CALC_PACKAGE_VERSION_STRING)
-	IPV6CALC_DB_LIB_VERSION_CHECK_EXIT(IPV6CALC_PACKAGE_VERSION_NUMERIC, IPV6CALC_PACKAGE_VERSION_STRING)
-#endif // SHARED_LIBRARY
-
-	apr_pool_cleanup_register(p, NULL, ipv6calc_cleanup, ipv6calc_cleanup);
-
-	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(s->module_config, &ipv6calc_module);
-
-	if (config->debuglevel & IPV6CALC_DEBUG_MAP_DEBUG_TO_NOTICE) {
-		mod_ipv6calc_APLOG_DEBUG = APLOG_NOTICE;
-	};
-
-	ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
-		, "ipv6calc_child_init"
-	);
-
-	ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
-		, "start option handling"
-	);
-
-	/* add options */
-	ipv6calc_options_add_common_anon(shortopts, sizeof(shortopts), longopts, &longopts_maxentries);
-	ipv6calc_options_add_common_basic(shortopts, sizeof(shortopts), longopts, &longopts_maxentries);
-
-	ipv6calc_quiet = 1; // be quiet by default
-
-	/* initialize ipv6calc options from list retrieved via APR config parser */
-	if (ipv6calc_option_list_entries > 0) {
-		for (i = 0; i < ipv6calc_option_list_entries; i++) {
-			result = ipv6calc_set_option(longopts, ipv6calc_option_list[i].name, ipv6calc_option_list[i].value, &config->ipv6calc_anon_set);
-
-			if (result == 0) {
-				ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
-					, "ipv6calc option %s: %s=%s"
-					, "successfully set"
-					, ipv6calc_option_list[i].name
-					, ipv6calc_option_list[i].value
-				);
-			} else {
-				ap_log_error(APLOG_MARK, APLOG_WARNING, 0, s
-					, "ipv6calc option %s: %s=%s"
-					, "NOT UNDERSTOOD"
-					, ipv6calc_option_list[i].name
-					, ipv6calc_option_list[i].value
-				);
-			};
-
-			if ((result == 0) &&
-			  (
-			       (strcmp(ipv6calc_option_list[i].name, "anonymize-preset") == 0)
-			    || (strcmp(ipv6calc_option_list[i].name, "anonymize-method") == 0)
-			  )
-			) {
-				config->anon_set_default = 0;
-			};
-		};
-	};
-
-	ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
-		, "start ipv6calc database wrapper init"
-	);
-
-	result = libipv6calc_db_wrapper_init("");
 	if (result != 0) {
-		ap_log_error(APLOG_MARK, APLOG_WARNING, 0, s
-			, "database wrapper initialization failed (disable module now): %d"
-			, result
-		);
-
-		config->enabled = 0;
-	};
-
-	/* check for KeepTypeAsnCC support */
-	if ((libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV4_REQ_DB) == 1) \
-	    && (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV6_REQ_DB) == 1)) {
-		feature_kp = 1;
+		return(1);
 	};
 
 	string[0] = '\0';
@@ -348,6 +361,10 @@ static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
 		, "capabilities: %s"
 		, string
 	);
+
+	if (config->debuglevel && IPV6CALC_DEBUG_SHOW_DB_INFO) {
+		libipv6calc_db_wrapper_print_db_info(0, "");
+	};
 
 	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
 		, "supported anonymization methods:%s%s%s"
@@ -376,6 +393,15 @@ static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
 		);
 
 		if (feature_kp == 0) {
+			if (config->no_fallback) {
+				ap_log_error(APLOG_MARK, APLOG_ERR, 0, s
+					, "%s anonymization method: %s NOT-SUPPORTED, NO-FALLBACK activated - STOP NOW"
+					, (config->anon_set_default == 1) ? "default" : "configured"
+					, libipv6calc_anon_method_name(&config->ipv6calc_anon_set)
+				);
+				return(1);
+			};
+
 			// fallback
 			libipv6calc_anon_set_by_name(&config->ipv6calc_anon_set, "as"); // anonymize standard
 
@@ -391,8 +417,46 @@ static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
 		};
 	};
 
-	if (config->debuglevel && IPV6CALC_DEBUG_SHOW_DB_INFO) {
-		libipv6calc_db_wrapper_print_db_info(0, "");
+	return(0);
+};
+
+
+
+/*
+ * ipv6calc_child_init
+ */
+static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
+
+#ifdef SHARED_LIBRARY
+	IPV6CALC_LIB_VERSION_CHECK_EXIT(IPV6CALC_PACKAGE_VERSION_NUMERIC, IPV6CALC_PACKAGE_VERSION_STRING)
+	IPV6CALC_DB_LIB_VERSION_CHECK_EXIT(IPV6CALC_PACKAGE_VERSION_NUMERIC, IPV6CALC_PACKAGE_VERSION_STRING)
+#endif // SHARED_LIBRARY
+
+	apr_pool_cleanup_register(p, NULL, ipv6calc_cleanup, ipv6calc_cleanup);
+
+	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(s->module_config, &ipv6calc_module);
+
+	int mod_ipv6calc_APLOG_DEBUG = (config->debuglevel & IPV6CALC_DEBUG_MAP_DEBUG_TO_NOTICE) ? APLOG_NOTICE : APLOG_DEBUG;
+
+	ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
+		, "ipv6calc_child_init"
+	);
+
+	ipv6calc_support_init(s);
+
+	/* check for KeepTypeAsnCC support */
+	if ((libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV4_REQ_DB) == 1) \
+	    && (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV6_REQ_DB) == 1)) {
+		feature_kp = 1;
+	};
+
+	if (config->ipv6calc_anon_set.method != ANON_METHOD_KEEPTYPEASNCC) {
+		// nothing to do
+	} else {
+		if (feature_kp == 0) {
+			// fallback
+			libipv6calc_anon_set_by_name(&config->ipv6calc_anon_set, "as"); // anonymize standard
+		};
 	};
 
 	return;
@@ -849,6 +913,22 @@ static const char *set_ipv6calc_enable(cmd_parms *cmd, void *dummy, int arg) {
 
 
 /*
+ * set_ipv6calc_no_fallback
+ */
+static const char *set_ipv6calc_no_fallback(cmd_parms *cmd, void *dummy, int arg) {
+	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
+	
+	if (!config) {
+		return NULL;
+	};
+	
+	config->no_fallback = arg;
+	
+	return NULL;
+};
+
+
+/*
  * set_ipv6calc_cache
  */
 static const char *set_ipv6calc_cache(cmd_parms *cmd, void *dummy, int arg) {
@@ -945,12 +1025,21 @@ static const char *set_ipv6calc_debuglevel(cmd_parms *cmd, void *dummy, const ch
 		return NULL;
 	};
 
-	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, cmd->server
-		, "set module debug level: %s"
-		, value
-	);
+	long int debuglevel = strtol(value, NULL, 0);
 
-	config->debuglevel = atoi(value);
+	if (debuglevel < 0 || debuglevel > 0xffff) {
+		ap_log_error(APLOG_MARK, APLOG_WARNING, 0, cmd->server
+			, "given debug level is out-of-range (0-65535), skip: %s"
+			, value
+		);
+	} else {
+		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, cmd->server
+			, "set module debug level: %s"
+			, value
+		);
+	};
+
+	config->debuglevel = (int) debuglevel;
 
 	return NULL;
 };
@@ -1025,7 +1114,7 @@ static void *ipv6calc_create_svr_conf(apr_pool_t* pool, server_rec* svr) {
 	
 	svr_cfg->enabled = 0;
 
-	svr_cfg->config_logged = 0;
+	svr_cfg->no_fallback = 0;
 
 	// cache settings
 	svr_cfg->cache = 1; // default: on
