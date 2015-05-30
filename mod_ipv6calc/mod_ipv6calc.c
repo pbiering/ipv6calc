@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.10 2015/05/30 08:05:12 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.11 2015/05/30 13:00:58 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -14,6 +14,10 @@
  *  mode_ipv6calc behavior can be controlled by config, e.g.
  *   ipv6calcActionAnonymize		on
  *   ipv6calcActionCountrycode		on
+ *   ipv6calcCache			off (default: on)
+ *   ipv6calcCacheLimit			>= IPV6CALC_CACHE_LRI_LIMIT_MIN
+ *   ipv6calcCacheStatisticsInterval	0:disable 
+ *   ipv6calcDebuglevel			>0 (see defines below)
  *
  *  ipv6calc behavior can be controlled by config, e.g
  *   ipv6calcOption debug                   0x8
@@ -43,18 +47,38 @@ int feature_zeroize = 1; // always supported
 int feature_anon    = 1; // always supported
 int feature_kp      = 0; // will be checked later
 
+
+/***************************
+ * Module debugging
+ ***************************/
+#define IPV6CALC_DEBUG_MAP_DEBUG_TO_NOTICE	0x0001
+
+#define IPV6CALC_DEBUG_CACHE_LOOKUP		0x0010
+#define IPV6CALC_DEBUG_CACHE_ENTRIES		0x0020
+#define IPV6CALC_DEBUG_CACHE_STORE		0x0040
+
+#define IPV6CALC_DEBUG_SHOW_DB_INFO		0x0100
+
+
+/***************************
+ * ipv6calc library debugging and option handling
+ ***************************/
+long int ipv6calc_debug = 0; // ipv6calc_debug usage (possible set via option)
+
 /* options (only used via the option parser) */
 struct option longopts[IPV6CALC_MAXLONGOPTIONS];
 char   shortopts[NI_MAXHOST] = "";
 int    longopts_maxentries = 0;
-
-long int ipv6calc_debug = 0; // ipv6calc_debug usage
 
 
 /***************************
  * Prototyping
  ***************************/
 static const char *set_ipv6calc_enable(cmd_parms *cmd, void *dummy, int arg);
+static const char *set_ipv6calc_cache(cmd_parms *cmd, void *dummy, int arg);
+static const char *set_ipv6calc_cache_limit(cmd_parms *cmd, void *dummy, const char *value, int arg);
+static const char *set_ipv6calc_cache_statistics_interval(cmd_parms *cmd, void *dummy, const char *value, int arg);
+static const char *set_ipv6calc_debuglevel(cmd_parms *cmd, void *dummy, const char *value, int arg);
 static const char *set_ipv6calc_action_anonymize(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_action_countrycode(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_option(cmd_parms *cmd, void *dummy, const char *name, const char *value, int arg);
@@ -64,10 +88,7 @@ static const char *set_ipv6calc_option(cmd_parms *cmd, void *dummy, const char *
  * Cache (Last Recently Inserted)
  ***************************/
 #define IPV6CALC_CACHE_LRI_SIZE 200
-
-int		ipv6calc_cache_lri_limit = 20; /* optimum ?? */
-int		ipv6calc_cache_lri_enable = 1;
-long int        ipv6calc_cache_lri_statistics_interval = 10;
+#define IPV6CALC_CACHE_LRI_LIMIT_MIN 20
 
 static long int ipv6calc_cache_lri_checked[2] = {0, 0};
 
@@ -83,8 +104,6 @@ static struct in_addr  ipv6calc_cache_lri_ipv4_token[IPV6CALC_CACHE_LRI_SIZE];
 static struct in6_addr ipv6calc_cache_lri_ipv6_token[IPV6CALC_CACHE_LRI_SIZE];
 #endif
 
-//#define IPV6CALC_CACHE_DEBUG 1
-
 
 /***************************
  * Definitions
@@ -97,8 +116,18 @@ module AP_MODULE_DECLARE_DATA ipv6calc_module;
 /* define config structure */
 typedef struct {
 	int enabled;
+
+	int config_logged; // flag to log config only once
+
+	int cache;
+	int cache_limit;
+	unsigned long int cache_statistics_interval;
+
+	uint32_t debuglevel;
+
 	int action_anonymize;
 	int action_countrycode;
+
 	int anon_set_default;
 	s_ipv6calc_anon_set ipv6calc_anon_set;
 } ipv6calc_server_config;
@@ -114,13 +143,20 @@ typedef struct {
 ipv6calc_option ipv6calc_option_list[mod_ipv6calc_options_max]; 
 int ipv6calc_option_list_entries = 0;
 
+#define mod_ipv6calc_pi_IPV4	0
+#define mod_ipv6calc_pi_IPV6	1
+
 
 /*
  * Config options (ipv6calc_cmds)
  */
 static const command_rec ipv6calc_cmds[] = {
-	AP_INIT_FLAG("ipv6calcEnable"     , set_ipv6calc_enable   , NULL, OR_FILEINFO, "Turn on mod_ipv6calc"),
-	AP_INIT_FLAG("ipv6calcActionAnonymize"  , set_ipv6calc_action_anonymize, NULL, OR_FILEINFO, "Store anonymized IP address in IPV6CALC_CLIENT_IP_ANON"),
+	AP_INIT_FLAG("ipv6calcEnable", set_ipv6calc_enable, NULL, OR_FILEINFO, "Turn on mod_ipv6calc"),
+	AP_INIT_FLAG("ipv6calcCache", set_ipv6calc_cache, NULL, OR_FILEINFO, "Turn off mod_ipv6calc cache"),
+	AP_INIT_TAKE1("ipv6calcCacheLimit",  (const char *(*)()) set_ipv6calc_cache_limit, NULL, OR_FILEINFO, "mod_ipv6calc cache limit: <value>"),
+	AP_INIT_TAKE1("ipv6calcCacheStatisticsInterval",  (const char *(*)()) set_ipv6calc_cache_statistics_interval, NULL, OR_FILEINFO, "mod_ipv6calc cache statistics interval: <value> (0=disabled)"),
+	AP_INIT_TAKE1("ipv6calcDebuglevel",  (const char *(*)()) set_ipv6calc_debuglevel, NULL, OR_FILEINFO, "Debug level of module (binary or'ed): <value>"),
+	AP_INIT_FLAG("ipv6calcActionAnonymize", set_ipv6calc_action_anonymize, NULL, OR_FILEINFO, "Store anonymized IP address in IPV6CALC_CLIENT_IP_ANON"),
 	AP_INIT_FLAG("ipv6calcActionCountrycode", set_ipv6calc_action_countrycode, NULL, OR_FILEINFO, "Store Country Code of IP address in IPV6CALC_CLIENT_COUNTRYCODE"),
 	AP_INIT_TAKE2("ipv6calcOption",  (const char *(*)()) set_ipv6calc_option, NULL, OR_FILEINFO, "Define ipv6calc option: <key> <value>"),
 	{NULL} 
@@ -140,6 +176,76 @@ static apr_status_t ipv6calc_cleanup(void *cfgdata) {
 	return APR_SUCCESS;
 };
 
+/*
+ * ipv6calc_post_config
+ */
+static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t *ptemp, server_rec *s) {
+	ap_log_error(APLOG_MARK, APLOG_INFO, 0, s
+		, "ipv6calc_post_config"
+	);
+
+	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(s->module_config, &ipv6calc_module);
+
+	if (config->config_logged == 1) {
+		return(0);
+	};
+
+	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+		, "internal main     library version: %s  API: %s  (%s)"
+		, libipv6calc_lib_version_string()
+		, libipv6calc_api_version_string()
+#ifdef SHARED_LIBRARY
+		, "shared"
+#else  // SHARED_LIBRARY
+		, "built-in"
+#endif // SHARED_LIBRARY
+	);
+
+	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+		, "internal database library version: %s  API: %s  (%s)"
+		, libipv6calc_db_lib_version_string()
+		, libipv6calc_db_api_version_string()
+#ifdef SHARED_LIBRARY
+		, "shared"
+#else  // SHARED_LIBRARY
+		, "built-in"
+#endif // SHARED_LIBRARY
+	);
+
+	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+		, "%s module actions: anonymize=%s countrycode=%s"
+		, ((config->action_anonymize + config->action_countrycode) == 0) ? "default" : "configured"
+		, (config->action_anonymize > 0) ? "ON" : "OFF"
+		, (config->action_countrycode > 0) ? "ON" : "OFF"
+	);
+
+	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+		, "%s module debug level: 0x%08x (%d)"
+		, (config->debuglevel == 0) ? "default" : "configured"
+		, config->debuglevel
+		, config->debuglevel
+	);
+
+	if (config->cache == 0) {
+		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+			, "module cache: OFF (configured)"
+		);
+	} else {
+		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+			, "module cache: ON (default)  limit=%d (%s)  statistics_interval=%lu (%s)"
+			, config->cache_limit
+			, (config->cache_limit == IPV6CALC_CACHE_LRI_LIMIT_MIN) ? "default/min" : "configured"
+			, config->cache_statistics_interval
+			, (config->cache_statistics_interval == 0) ? "default" : "configured"
+		);
+	};
+
+	config->config_logged = 1;
+
+	return(0);
+};
+
+
 
 /*
  * ipv6calc_child_init
@@ -147,6 +253,8 @@ static apr_status_t ipv6calc_cleanup(void *cfgdata) {
 static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
 	char string[NI_MAXHOST] = "";
 	int result, i;
+
+	int mod_ipv6calc_APLOG_DEBUG = APLOG_DEBUG;
 
 #ifdef SHARED_LIBRARY
 	IPV6CALC_LIB_VERSION_CHECK_EXIT(IPV6CALC_PACKAGE_VERSION_NUMERIC, IPV6CALC_PACKAGE_VERSION_STRING)
@@ -157,11 +265,15 @@ static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
 
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(s->module_config, &ipv6calc_module);
 
-	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+	if (config->debuglevel & IPV6CALC_DEBUG_MAP_DEBUG_TO_NOTICE) {
+		mod_ipv6calc_APLOG_DEBUG = APLOG_NOTICE;
+	};
+
+	ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
 		, "ipv6calc_child_init"
 	);
 
-	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+	ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
 		, "start option handling"
 	);
 
@@ -176,12 +288,21 @@ static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
 		for (i = 0; i < ipv6calc_option_list_entries; i++) {
 			result = ipv6calc_set_option(longopts, ipv6calc_option_list[i].name, ipv6calc_option_list[i].value, &config->ipv6calc_anon_set);
 
-			ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-				, "ipv6calc option %s: %s=%s"
-				, (result == 0) ? "successfully set" : "NOT UNDERSTOOD"
-				, ipv6calc_option_list[i].name
-				, ipv6calc_option_list[i].value
-			);
+			if (result == 0) {
+				ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
+					, "ipv6calc option %s: %s=%s"
+					, "successfully set"
+					, ipv6calc_option_list[i].name
+					, ipv6calc_option_list[i].value
+				);
+			} else {
+				ap_log_error(APLOG_MARK, APLOG_WARNING, 0, s
+					, "ipv6calc option %s: %s=%s"
+					, "NOT UNDERSTOOD"
+					, ipv6calc_option_list[i].name
+					, ipv6calc_option_list[i].value
+				);
+			};
 
 			if ((result == 0) &&
 			  (
@@ -194,13 +315,13 @@ static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
 		};
 	};
 
-	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+	ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
 		, "start ipv6calc database wrapper init"
 	);
 
 	result = libipv6calc_db_wrapper_init("");
 	if (result != 0) {
-		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+		ap_log_error(APLOG_MARK, APLOG_WARNING, 0, s
 			, "database wrapper initialization failed (disable module now): %d"
 			, result
 		);
@@ -226,28 +347,6 @@ static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
 	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
 		, "capabilities: %s"
 		, string
-	);
-
-	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-		, "internal main     library version: %s  API: %s  (%s)"
-		, libipv6calc_lib_version_string()
-		, libipv6calc_api_version_string()
-#ifdef SHARED_LIBRARY
-		, "shared"
-#else  // SHARED_LIBRARY
-		, "built-in"
-#endif // SHARED_LIBRARY
-	);
-
-	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-		, "internal database library version: %s  API: %s  (%s)"
-		, libipv6calc_db_lib_version_string()
-		, libipv6calc_db_api_version_string()
-#ifdef SHARED_LIBRARY
-		, "shared"
-#else  // SHARED_LIBRARY
-		, "built-in"
-#endif // SHARED_LIBRARY
 	);
 
 	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
@@ -292,23 +391,23 @@ static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
 		};
 	};
 
-	//libipv6calc_db_wrapper_print_db_info(0, "");
-	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-		, "configured module actions: anonymize=%s countrycode=%s"
-		, (config->action_anonymize > 0) ? "ON" : "OFF"
-		, (config->action_countrycode > 0) ? "ON" : "OFF"
-	);
+	if (config->debuglevel && IPV6CALC_DEBUG_SHOW_DB_INFO) {
+		libipv6calc_db_wrapper_print_db_info(0, "");
+	};
 
 	return;
 };
 
 
 /*
- * ipv6calc_post_read_request
+ * ipv6calc_post_read_request  (ACTION CODE)
  */
 static int ipv6calc_post_read_request(request_rec *r) {
 	int i, hit;
 	int pi; // proto index (0:IPv4, 1:IPv6
+	int p_mapped; // proto mapped (IPv6 in IPv4)
+
+	int mod_ipv6calc_APLOG_DEBUG = APLOG_DEBUG;
 
 	// Apache/APR related includes
 	apr_sockaddr_t *client_addr_p; // structure defined in apr_network_io.h
@@ -337,6 +436,10 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		return OK;
 	};
 
+	if (config->debuglevel & IPV6CALC_DEBUG_MAP_DEBUG_TO_NOTICE) {
+		mod_ipv6calc_APLOG_DEBUG = APLOG_NOTICE;
+	};
+
 	// get client address (aka REMOTE_IP)
 #if (((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER >= 4)) || (AP_SERVER_MAJORVERSION_NUMBER > 2))
 	client_addr_p = r->connection->client_addr;
@@ -344,7 +447,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 	client_addr_p = r->connection->remote_addr;
 #endif
 
-	ap_log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r
+	ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
 		, "client IP address: %s  family: %d"
 #if (((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER >= 4)) || (AP_SERVER_MAJORVERSION_NUMBER > 2))
 		, r->connection->client_ip
@@ -360,11 +463,23 @@ static int ipv6calc_post_read_request(request_rec *r) {
 	/* store address */
 	if (client_addr_p->family == APR_INET) {
 		// IPv4
-		pi = 0;
+		pi = mod_ipv6calc_pi_IPV4;
+		p_mapped = 0;
 #if APR_HAVE_IPV6
 	} else if (client_addr_p->family == APR_INET6) {
 		// IPv6
-		pi = 1;
+		pi = mod_ipv6calc_pi_IPV6;
+
+		// check for compat/mapped
+		if (	client_addr_p->sa.sin6.sin6_addr.s6_addr32[0] == 0
+		    &&	client_addr_p->sa.sin6.sin6_addr.s6_addr32[1] == 0
+		    &&	client_addr_p->sa.sin6.sin6_addr.s6_addr32[2] == 0xffff0000
+		) {
+			pi = mod_ipv6calc_pi_IPV4;
+			p_mapped = 1;
+		} else {
+			p_mapped = 0;
+		};
 #endif
 	} else {
 		// unsupported family, do nothing
@@ -372,69 +487,79 @@ static int ipv6calc_post_read_request(request_rec *r) {
 	};
 
 	/* cache lookup */
-	if (ipv6calc_cache_lri_enable == 1) {
+	if (config->cache == 1) {
 		hit = -1;
 
+#if APR_HAVE_IPV6
 #define IPV6CALC_COMPARE(entry) \
-			     (    client_addr_p->family == APR_INET \
-			       && ipv6calc_cache_lri_ipv4_token[entry].s_addr == client_addr_p->sa.sin.sin_addr.s_addr \
+			     (    pi == mod_ipv6calc_pi_IPV4 \
+			       && ( \
+				      (p_mapped == 0 && ipv6calc_cache_lri_ipv4_token[entry].s_addr == client_addr_p->sa.sin.sin_addr.s_addr) \
+				   || (p_mapped == 1 && ipv6calc_cache_lri_ipv4_token[entry].s_addr == client_addr_p->sa.sin6.sin6_addr.s6_addr32[3]) \
+				  ) \
 			     ) \
-			  || (    client_addr_p->family == APR_INET6 \
+			  || (    pi == mod_ipv6calc_pi_IPV6 \
 			       && ipv6calc_cache_lri_ipv6_token[entry].s6_addr32[3] == client_addr_p->sa.sin6.sin6_addr.s6_addr32[3] \
 			       && ipv6calc_cache_lri_ipv6_token[entry].s6_addr32[2] == client_addr_p->sa.sin6.sin6_addr.s6_addr32[2] \
 			       && ipv6calc_cache_lri_ipv6_token[entry].s6_addr32[1] == client_addr_p->sa.sin6.sin6_addr.s6_addr32[1] \
 			       && ipv6calc_cache_lri_ipv6_token[entry].s6_addr32[0] == client_addr_p->sa.sin6.sin6_addr.s6_addr32[0] \
 			     )
+#else
+#define IPV6CALC_COMPARE(entry) \
+			     (    pi == mod_ipv6calc_pi_IPV4 \
+			       && ipv6calc_cache_lri_ipv4_token[entry].s_addr == client_addr_p->sa.sin.sin_addr.s_addr \
+			     )
+#endif
 
 
 		if (ipv6calc_cache_lri_max[pi] > 0) {
 			ipv6calc_cache_lri_checked[pi]++;
 
-#ifdef IPV6CALC_CACHE_DEBUG
-			/* debugging */
-			if (client_addr_p->family == APR_INET) {
-				ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-					, "IPv4 address to lookup   : %08x"
-					, client_addr_p->sa.sin.sin_addr.s_addr
-				);
-			} else if (client_addr_p->family == APR_INET6) {
-				ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-					, "IPv6 address to lookup   : %08x %08x %08x %08x"
-					, client_addr_p->sa.sin6.sin6_addr.s6_addr32[0]
-					, client_addr_p->sa.sin6.sin6_addr.s6_addr32[1]
-					, client_addr_p->sa.sin6.sin6_addr.s6_addr32[2]
-					, client_addr_p->sa.sin6.sin6_addr.s6_addr32[3]
-				);
-			};
-
-			/* cache entries */
-			for (i = 0; i < ipv6calc_cache_lri_max[pi]; i++) {
-				if (client_addr_p->family == APR_INET) {
+			if (config->debuglevel & IPV6CALC_DEBUG_CACHE_LOOKUP) {
+				if (pi == mod_ipv6calc_pi_IPV4) {
 					ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-						, "IPv4 address in cache %3d: %08x"
-						, i
-						, ipv6calc_cache_lri_ipv4_token[i].s_addr
+						, "IPv4 address to lookup in cache: %08x"
+						, (p_mapped == 0) ? client_addr_p->sa.sin.sin_addr.s_addr : client_addr_p->sa.sin6.sin6_addr.s6_addr32[3]
 					);
-				} else if (client_addr_p->family == APR_INET6) {
+				} else if (pi == mod_ipv6calc_pi_IPV6) {
 					ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-						, "IPv6 address in cache %3d: %08x %08x %08x %08x"
-						, i
-						, ipv6calc_cache_lri_ipv6_token[i].s6_addr32[0]
-						, ipv6calc_cache_lri_ipv6_token[i].s6_addr32[1]
-						, ipv6calc_cache_lri_ipv6_token[i].s6_addr32[2]
-						, ipv6calc_cache_lri_ipv6_token[i].s6_addr32[3]
+						, "IPv6 address to lookup in cache: %08x %08x %08x %08x"
+						, client_addr_p->sa.sin6.sin6_addr.s6_addr32[0]
+						, client_addr_p->sa.sin6.sin6_addr.s6_addr32[1]
+						, client_addr_p->sa.sin6.sin6_addr.s6_addr32[2]
+						, client_addr_p->sa.sin6.sin6_addr.s6_addr32[3]
 					);
 				};
 			};
-#endif // IPV6CALC_CACHE_DEBUG
 
-#ifdef IPV6CALC_CACHE_DEBUG
-			ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-				, "check for IPv%s address in cache on last inserted entry: %d"
-				, (pi == 0) ? "4" : "6"
-				, ipv6calc_cache_lri_last[pi] - 1
-			);
-#endif // IPV6CALC_CACHE_DEBUG
+			if (config->debuglevel & IPV6CALC_DEBUG_CACHE_ENTRIES) {
+				for (i = 0; i < ipv6calc_cache_lri_max[pi]; i++) {
+					if (pi == mod_ipv6calc_pi_IPV4) {
+						ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
+							, "IPv4 address in cache       %3d: %08x"
+							, i
+							, ipv6calc_cache_lri_ipv4_token[i].s_addr
+						);
+					} else if (pi == mod_ipv6calc_pi_IPV6) {
+						ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
+							, "IPv6 address in cache       %3d: %08x %08x %08x %08x"
+							, i
+							, ipv6calc_cache_lri_ipv6_token[i].s6_addr32[0]
+							, ipv6calc_cache_lri_ipv6_token[i].s6_addr32[1]
+							, ipv6calc_cache_lri_ipv6_token[i].s6_addr32[2]
+							, ipv6calc_cache_lri_ipv6_token[i].s6_addr32[3]
+						);
+					};
+				};
+			};
+
+			if (config->debuglevel & IPV6CALC_DEBUG_CACHE_LOOKUP) {
+				ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
+					, "check for IPv%s address in cache on last inserted entry: %d"
+					, (pi == 0) ? "4" : "6"
+					, ipv6calc_cache_lri_last[pi] - 1
+				);
+			};
 
 			/* check last seen one first */
 			if (IPV6CALC_COMPARE(ipv6calc_cache_lri_last[pi] - 1)) {
@@ -444,12 +569,12 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 			/* run backwards to first entry */
 			if ((hit < 0) && (ipv6calc_cache_lri_last[pi] > 1)) {
-#ifdef IPV6CALC_CACHE_DEBUG
-				ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-					, "check for IPv%s address in cache backwards to first entry"
-					, (pi == 0) ? "4" : "6"
-				);
-#endif // IPV6CALC_CACHE_DEBUG
+				if (config->debuglevel & IPV6CALC_DEBUG_CACHE_LOOKUP) {
+					ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
+						, "check for IPv%s address in cache backwards to first entry"
+						, (pi == 0) ? "4" : "6"
+					);
+				};
 
 				for (i = ipv6calc_cache_lri_last[pi] - 1; i > 0; i--) {
 					if (IPV6CALC_COMPARE(i - 1)) {
@@ -462,12 +587,12 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 			/* round robin */ 
 			if ((hit < 0) && (ipv6calc_cache_lri_last[pi] < ipv6calc_cache_lri_max[pi])) {
-#ifdef IPV6CALC_CACHE_DEBUG
-				ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-					, "check for IPv%s address in cache round robin from last entry"
-					, (pi == 0) ? "4" : "6"
-				);
-#endif // IPV6CALC_CACHE_DEBUG
+				if (config->debuglevel & IPV6CALC_DEBUG_CACHE_LOOKUP) {
+					ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
+						, "check for IPv%s address in cache round robin from last entry"
+						, (pi == 0) ? "4" : "6"
+					);
+				};
 
 				for (i = ipv6calc_cache_lri_max[pi]; i > ipv6calc_cache_lri_last[pi]; i--) {
 					if (IPV6CALC_COMPARE(i - 1)) {
@@ -479,14 +604,14 @@ static int ipv6calc_post_read_request(request_rec *r) {
 			};
 
 			if (hit >= 0) {
-				ap_log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r
+				ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
 					, "retrieve data of IPv%s address from cache position: %d"
 					, (pi == 0) ? "4" : "6"
 					, hit
 				);
 
 				if (config->action_countrycode == 1) {
-					ap_log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r
+					ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
 						, "client IP country code (from cache): %s"
 						, ipv6calc_cache_lri_value_cc[pi][hit]
 					);
@@ -498,7 +623,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 				};
 
 				if (config->action_anonymize == 1) {
-					ap_log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r
+					ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
 						, "client IP address anonymized (from cache): %s"
 						, ipv6calc_cache_lri_value_anon[pi][hit]
 					);
@@ -513,8 +638,10 @@ static int ipv6calc_post_read_request(request_rec *r) {
 			};
 
 			// print cache statistics
-			if ((ipv6calc_cache_lri_checked[pi] % ipv6calc_cache_lri_statistics_interval) == 0) {
-				for (i = 0; i < ipv6calc_cache_lri_limit; i++) {
+			if (	config->cache_statistics_interval > 0
+			    &&  ((ipv6calc_cache_lri_checked[pi] % config->cache_statistics_interval) == 0)
+			) {
+				for (i = 0; i < config->cache_limit; i++) {
 					ap_log_rerror(APLOG_MARK, APLOG_INFO, 0, r
 						, "cache hit statistics for IPv%s: distance %3d: %lu / %lu (%2lu%%)"
 						, (pi == 0) ? "4" : "6"
@@ -529,66 +656,61 @@ static int ipv6calc_post_read_request(request_rec *r) {
 	};
 
 	/* post cache lookup */
-	if (client_addr_p->family == APR_INET) {
+	if (pi == mod_ipv6calc_pi_IPV4) {
 		// IPv4
 		ipv4addr_clearall(&ipv4addr);
-		ipv4addr.in_addr = client_addr_p->sa.sin.sin_addr;
+
+		if (p_mapped == 0) {
+			ipv4addr.in_addr = client_addr_p->sa.sin.sin_addr;
+		} else {
+			ipv4addr.in_addr.s_addr = client_addr_p->sa.sin6.sin6_addr.s6_addr32[3];
+		};
 		ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
 		ipv4addr.flag_valid = 1;
 
 		CONVERT_IPV4ADDRP_IPADDR(&ipv4addr, ipaddr);
 #if APR_HAVE_IPV6
-	} else if (client_addr_p->family == APR_INET6) {
+	} else if (pi == mod_ipv6calc_pi_IPV6) {
 		// IPv6
 		ipv6addr_clearall(&ipv6addr);
 		ipv6addr.in6_addr = client_addr_p->sa.sin6.sin6_addr;
 		ipv6addr.scope = ipv6addr_gettype(&ipv6addr);
 		ipv6addr.flag_valid = 1;
 
-		if ((ipv6addr.scope & IPV6_ADDR_MAPPED) == IPV6_ADDR_MAPPED) {
-			// IPv4 address stored as mapped in IPv6 address
-			ipv4addr_clearall(&ipv4addr);
-
-			result = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, 0);
-
-			ap_log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r
-				, "mapped IPv4 address found in IPv6 address, status of extract: %d"
-				, result
-			);
-
-			CONVERT_IPV4ADDRP_IPADDR(&ipv4addr, ipaddr);
-		} else {
-			CONVERT_IPV6ADDRP_IPADDR(&ipv6addr, ipaddr);
-		};
+		CONVERT_IPV6ADDRP_IPADDR(&ipv6addr, ipaddr);
 #endif
 	};
 
-	/* store in cache */
-	if (ipv6calc_cache_lri_enable == 1) {
-		if (ipv6calc_cache_lri_max[pi] < ipv6calc_cache_lri_limit) {
+	/* store address in cache */
+	if (config->cache == 1) {
+		if (ipv6calc_cache_lri_max[pi] < config->cache_limit) {
 			ipv6calc_cache_lri_last[pi]++;
 			ipv6calc_cache_lri_max[pi]++;
 		} else {
-			if (ipv6calc_cache_lri_last[pi] == ipv6calc_cache_lri_limit) {
+			if (ipv6calc_cache_lri_last[pi] == config->cache_limit) {
 				ipv6calc_cache_lri_last[pi] = 1;
 			} else {
 				ipv6calc_cache_lri_last[pi]++;
 			};
 		};
 
-#ifdef IPV6CALC_CACHE_DEBUG
-		ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-			, "store IPv%s address in cache on position: %d"
-			, (pi == 0) ? "4" : "6"
-			, ipv6calc_cache_lri_last[pi] - 1
-		);
-#endif // IPV6CALC_CACHE_DEBUG
+		if (config->debuglevel & IPV6CALC_DEBUG_CACHE_STORE) {
+			ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
+				, "store IPv%s address in cache on position: %d"
+				, (pi == 0) ? "4" : "6"
+				, ipv6calc_cache_lri_last[pi] - 1
+			);
+		};
 
-		if (client_addr_p->family == APR_INET) {
+		if (pi == mod_ipv6calc_pi_IPV4) {
 			// store token
-			ipv6calc_cache_lri_ipv4_token[ipv6calc_cache_lri_last[pi] - 1] = client_addr_p->sa.sin.sin_addr;
+			if (p_mapped == 0) {
+				ipv6calc_cache_lri_ipv4_token[ipv6calc_cache_lri_last[pi] - 1] = client_addr_p->sa.sin.sin_addr;
+			} else {
+				ipv6calc_cache_lri_ipv4_token[ipv6calc_cache_lri_last[pi] - 1].s_addr = client_addr_p->sa.sin6.sin6_addr.s6_addr32[3];
+			};
 #if APR_HAVE_IPV6
-		} else if (client_addr_p->family == APR_INET6) {
+		} else if (pi == mod_ipv6calc_pi_IPV6) {
 			// store token
 			ipv6calc_cache_lri_ipv6_token[ipv6calc_cache_lri_last[pi] - 1] = client_addr_p->sa.sin6.sin6_addr;
 #endif
@@ -598,40 +720,62 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 	// set country code of IP in environment
 	if (config->action_countrycode == 1) {
-		result = libipv6calc_db_wrapper_country_code_by_addr(cc, sizeof(cc), &ipaddr, &data_source);
+		result = -1;
+		const char *data_source_string = "-";
+
+		if ((pi == mod_ipv6calc_pi_IPV6) && (ipv6addr.scope & IPV6_ADDR_HAS_PUBLIC_IPV4)) {
+			// extract IPv4 address and retrieve country code of that particular address
+			result = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
+
+			if (result == 0) {
+				if (ipv4addr.scope & IPV4_ADDR_GLOBAL) {
+					CONVERT_IPV4ADDRP_IPADDR(&ipv4addr, ipaddr);
+					result = libipv6calc_db_wrapper_country_code_by_addr(cc, sizeof(cc), &ipaddr, &data_source);
+				};
+			};
+		} else if (	((pi == mod_ipv6calc_pi_IPV4) && (ipv4addr.scope & IPV4_ADDR_GLOBAL))
+			    ||	((pi == mod_ipv6calc_pi_IPV6) && (ipv6addr.scope & IPV6_ADDR_GLOBAL))
+		) {
+			// retrieve country code only for global addresses
+			result = libipv6calc_db_wrapper_country_code_by_addr(cc, sizeof(cc), &ipaddr, &data_source);
+		};
 
 		if ((result == 0) && (strlen(cc) > 0)) {
-			ap_log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r
-				, "client IP country code: %s (%s)"
-				, cc
-				, libipv6calc_db_wrapper_get_data_source_name_by_number(data_source)
-			);
+			data_source_string = libipv6calc_db_wrapper_get_data_source_name_by_number(data_source);
 		} else {
-			snprintf(cc, sizeof(cc), "%s", "");
+			snprintf(cc, sizeof(cc), "%s", "-");
 		};
+
+		ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
+			, "client IP address country code: %s (%s)"
+			, cc
+			, data_source_string
+		);
 
 		apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_COUNTRYCODE", cc); 
 
-		if (ipv6calc_cache_lri_enable == 1) {
+		if (config->cache == 1) {
 			// store value
 			snprintf(ipv6calc_cache_lri_value_cc[pi][ipv6calc_cache_lri_last[pi] - 1], sizeof(ipv6calc_cache_lri_value_cc[pi][ipv6calc_cache_lri_last[pi] - 1]), "%s", cc);
-#ifdef IPV6CALC_CACHE_DEBUG
-			ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-				, "store CountryCode of IPv%s address in cache on position: %d"
-				, (pi == 0) ? "4" : "6"
-				, ipv6calc_cache_lri_last[pi] - 1
-			);
-#endif // IPV6CALC_CACHE_DEBUG
+			if (config->debuglevel & IPV6CALC_DEBUG_CACHE_STORE) {
+				ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
+					, "store CountryCode of IPv%s address in cache on position: %d"
+					, (pi == 0) ? "4" : "6"
+					, ipv6calc_cache_lri_last[pi] - 1
+				);
+			};
 		};
+	} else {
+		apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_COUNTRYCODE", "IPV6CALC_CLIENT_COUNTRYCODE=disabled"); 
 	};
 
 	// set anonymized IP address in environment
 	if (config->action_anonymize == 1) {
-		if (client_addr_p->family == APR_INET) {
+		if (pi == mod_ipv6calc_pi_IPV4) {
 			libipv4addr_anonymize(&ipv4addr, config->ipv6calc_anon_set.mask_ipv4, config->ipv6calc_anon_set.method);
 			CONVERT_IPV4ADDRP_IPADDR(&ipv4addr, ipaddr);
 #if APR_HAVE_IPV6
-		} else if (client_addr_p->family == APR_INET6) {
+		} else if (pi == mod_ipv6calc_pi_IPV6) {
 			if ((ipv6addr.scope & IPV6_ADDR_MAPPED) == IPV6_ADDR_MAPPED) {
 				libipv4addr_anonymize(&ipv4addr, config->ipv6calc_anon_set.mask_ipv4, config->ipv6calc_anon_set.method);
 				CONVERT_IPV4ADDRP_IPADDR(&ipv4addr, ipaddr);
@@ -648,7 +792,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		char *result_anon_p;
 
 		if (result == 0) {
-			ap_log_rerror(APLOG_MARK, APLOG_DEBUG, 0, r
+			ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
 				, "client IP address anonymized: %s"
 				, client_addr_string_anonymized
 			);
@@ -664,23 +808,29 @@ static int ipv6calc_post_read_request(request_rec *r) {
 #endif
 		};
 
-		if (ipv6calc_cache_lri_enable == 1) {
+		if (config->cache == 1) {
 			// store value
 			snprintf(ipv6calc_cache_lri_value_anon[pi][ipv6calc_cache_lri_last[pi] - 1], sizeof(ipv6calc_cache_lri_value_anon[pi][ipv6calc_cache_lri_last[pi] - 1]), "%s", result_anon_p);
 
-#ifdef IPV6CALC_CACHE_DEBUG
-			ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-				, "store anonymized IPv%s address in cache on position: %d"
-				, (pi == 0) ? "4" : "6"
-				, ipv6calc_cache_lri_last[pi] - 1
-			);
-#endif // IPV6CALC_CACHE_DEBUG
+			if (config->debuglevel & IPV6CALC_DEBUG_CACHE_STORE) {
+				ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
+					, "store anonymized IPv%s address in cache on position: %d"
+					, (pi == 0) ? "4" : "6"
+					, ipv6calc_cache_lri_last[pi] - 1
+				);
+			};
 		};
+	} else {
+		apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP_ANON", "IPV6CALC_CLIENT_IP_ANON=disabled"); 
 	};
 
 	return OK;
 };
 
+
+/***************************
+ * Module config option handlers
+ ***************************/
 
 /*
  * set_ipv6calc_enable
@@ -694,6 +844,114 @@ static const char *set_ipv6calc_enable(cmd_parms *cmd, void *dummy, int arg) {
 	
 	config->enabled = arg;
 	
+	return NULL;
+};
+
+
+/*
+ * set_ipv6calc_cache
+ */
+static const char *set_ipv6calc_cache(cmd_parms *cmd, void *dummy, int arg) {
+	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
+	
+	if (!config) {
+		return NULL;
+	};
+	
+	config->cache = arg;
+	
+	return NULL;
+};
+
+
+/*
+ * set_ipv6calc_cache_limit
+ */
+static const char *set_ipv6calc_cache_limit(cmd_parms *cmd, void *dummy, const char *value, int arg) {
+	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
+
+	if (!config) {
+		return NULL;
+	};
+
+	if (atoi(value) < IPV6CALC_CACHE_LRI_LIMIT_MIN) {
+		ap_log_error(APLOG_MARK, APLOG_WARNING, 0, cmd->server
+			, "given cache limit below minimum (%d), skip: %s"
+			, IPV6CALC_CACHE_LRI_LIMIT_MIN
+			, value
+		);
+
+		return NULL;
+	};
+
+	if (atoi(value) > IPV6CALC_CACHE_LRI_SIZE) {
+		ap_log_error(APLOG_MARK, APLOG_WARNING, 0, cmd->server
+			, "given cache limit below maximum (%d), skip: %s"
+			, IPV6CALC_CACHE_LRI_SIZE
+			, value
+		);
+
+		return NULL;
+	};
+
+	ap_log_error(APLOG_MARK, APLOG_INFO, 0, cmd->server
+		, "set cache limit: %s"
+		, value
+	);
+
+	config->cache_limit = atoi(value);
+
+	return NULL;
+};
+
+
+/*
+ * set_ipv6calc_cache_statistics_interval
+ */
+static const char *set_ipv6calc_cache_statistics_interval(cmd_parms *cmd, void *dummy, const char *value, int arg) {
+	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
+
+	if (!config) {
+		return NULL;
+	};
+
+	if (atoi(value) < 0) {
+		ap_log_error(APLOG_MARK, APLOG_WARNING, 0, cmd->server
+			, "given cache statistics interval below minimum (%d), skip: %s"
+			, 0
+			, value
+		);
+
+		return NULL;
+	};
+
+	ap_log_error(APLOG_MARK, APLOG_INFO, 0, cmd->server
+		, "set cache statistics interval: %s"
+		, value
+	);
+
+	config->cache_statistics_interval = atoi(value);
+
+	return NULL;
+};
+
+/*
+ * set_ipv6calc_debuglevel
+ */
+static const char *set_ipv6calc_debuglevel(cmd_parms *cmd, void *dummy, const char *value, int arg) {
+	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
+
+	if (!config) {
+		return NULL;
+	};
+
+	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, cmd->server
+		, "set module debug level: %s"
+		, value
+	);
+
+	config->debuglevel = atoi(value);
+
 	return NULL;
 };
 
@@ -729,6 +987,7 @@ static const char *set_ipv6calc_action_anonymize(cmd_parms *cmd, void *dummy, in
 	return NULL;
 };
 
+
 /*
  * set_ipv6calc_option
  *  set generic ipv6calc option
@@ -740,7 +999,7 @@ static const char *set_ipv6calc_option(cmd_parms *cmd, void *dummy, const char *
 		return NULL;
 	};
 
-	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, cmd->server
+	ap_log_error(APLOG_MARK, APLOG_INFO, 0, cmd->server
 		, "store ipv6calc config option for module initialization: %s=%s"
 		, name
 		, value
@@ -766,6 +1025,18 @@ static void *ipv6calc_create_svr_conf(apr_pool_t* pool, server_rec* svr) {
 	
 	svr_cfg->enabled = 0;
 
+	svr_cfg->config_logged = 0;
+
+	// cache settings
+	svr_cfg->cache = 1; // default: on
+	svr_cfg->cache_limit = IPV6CALC_CACHE_LRI_LIMIT_MIN; /* optimum ?? */
+	svr_cfg->cache_statistics_interval = 0; // disabled
+
+	svr_cfg->debuglevel = 0;
+
+	svr_cfg->action_anonymize = 0;
+	svr_cfg->action_countrycode = 0;
+
 	libipv6calc_anon_set_by_name(&svr_cfg->ipv6calc_anon_set, "as"); // anonymize standard
 	svr_cfg->anon_set_default = 1;
 
@@ -777,6 +1048,7 @@ static void *ipv6calc_create_svr_conf(apr_pool_t* pool, server_rec* svr) {
  * ipv6calc_register_hooks
  */
 static void ipv6calc_register_hooks(apr_pool_t *p) {
+	ap_hook_post_config(ipv6calc_post_config, NULL, NULL, APR_HOOK_MIDDLE);
 	ap_hook_child_init(ipv6calc_child_init, NULL, NULL, APR_HOOK_MIDDLE);
 	ap_hook_post_read_request(ipv6calc_post_read_request, NULL, NULL, APR_HOOK_MIDDLE);
 };

@@ -1,0 +1,30 @@
+Apache module tested on
+	- 2.2 (CentOS 5)
+	- 2.4 (CentOS 7, Fedora 22)
+
+Installation
+ - copy compiled module to Apache module directory
+	Fedora/Enterprise Linux
+		# cp .libs/mod_ipv6calc.so /etc/httpd/modules/
+
+ - copy default configuration to Apache configuration directory
+	Fedora/Enterprise Linux
+		# cp ipv6calc.conf /etc/httpd/conf.d/
+
+ - review config /etc/httpd/conf.d/ipv6calc.conf
+
+Restart Apache
+
+
+See summary after Apache startup in log for default/configured parameters, e.g.
+
+[Sat May 30 13:32:51.750441 2015] [ipv6calc:notice] [pid 10924] start ipv6calc database wrapper init
+[Sat May 30 13:32:51.754755 2015] [ipv6calc:notice] [pid 10924] features: GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE
+[Sat May 30 13:32:51.754802 2015] [ipv6calc:notice] [pid 10924] capabilities: GeoIP(linked) IP2Location(linked) DBIP External DB_AS_REG(BuiltIn) DB_CC_REG(BuiltIn) DB_IPV4_REG(BuiltIn) DB_IPV6_REG(BuiltIn) DB_IEEE(BuiltIn)
+[Sat May 30 13:32:51.754810 2015] [ipv6calc:notice] [pid 10924] internal main     library version: 0.99.1  API: 0.99.1  (built-in)
+[Sat May 30 13:32:51.754832 2015] [ipv6calc:notice] [pid 10924] internal database library version: 0.99.1  API: 0.99.1  (built-in)
+[Sat May 30 13:32:51.754839 2015] [ipv6calc:notice] [pid 10924] supported anonymization methods: ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
+[Sat May 30 13:32:51.754845 2015] [ipv6calc:notice] [pid 10924] configured anonymization method: keep-type-asn-cc
+[Sat May 30 13:32:51.754851 2015] [ipv6calc:notice] [pid 10924] configured module actions: anonymize=ON countrycode=ON
+[Sat May 30 13:32:51.754866 2015] [ipv6calc:notice] [pid 10924] configured module debug level: 0x00000001 (1)
+[Sat May 30 13:32:51.754873 2015] [ipv6calc:notice] [pid 10924] module cache: ON (default)  limit=40 (configured)  statistics_interval=10 (configured)
