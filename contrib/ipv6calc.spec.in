@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec.in,v 1.100 2015/05/08 06:26:11 ds6peter Exp $
+# $Id: ipv6calc.spec.in,v 1.101 2015/05/31 15:30:48 ds6peter Exp $
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
@@ -113,7 +113,27 @@ ipv6calcweb contains a CGI program and a configuration file for
 displaying information of IP addresses on a web page using ipv6calc.
 
 Check/addjust %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
-Default restricts access to localhost
+Default restricts access to localhost.
+
+
+%package mod_ipv6calc
+Summary: 	Apache module for ipv6calc
+Group:		Applications/Internet
+Requires:	ipv6calc httpd
+BuildRequires:	httpd-devel
+Requires:	httpd = @HTTPD_VERSION_MAJOR_MINOR@
+
+%description mod_ipv6calc
+mod_ipv6calc contains an Apache module and a default configuration
+file.
+
+Features:
+ - store anonymized IPv4/v6 address in environment variable
+ - store CountryCode of IPv4/v6 address in environment variable
+(environment variables can be used for custom log format)
+
+Check/addjust %{_sysconfdir}/httpd/conf.d/ipv6calc.conf
+By default the module is disabled.
 
 
 %prep

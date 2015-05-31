@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.139 2015/05/28 20:18:11 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.140 2015/05/31 15:30:48 ds6peter Exp $
 dnl Copyright: 2001-2015 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -1089,20 +1089,51 @@ fi
 
 
 dnl *************************************************
-dnl apxs - APache eXtenSion tool
+dnl apxs - APache eXtension tool
 dnl *************************************************
-APXS=$(PATH=$PATH:/usr/local/sbin:/usr/sbin; which apxs)
-if test "$APXS" = ""; then
-	# fallback to apxs2
-	APXS=$(PATH=$PATH:/usr/local/sbin:/usr/sbin; which apxs2)
+AC_ARG_WITH(apxs, AC_HELP_STRING([--with-apxs=NAME],
+            [name of the apxs executable (apxs)]),
+            [APXS="$with_apxs"])
 
-	if test "$APXS" = ""; then
-		AC_MSG_ERROR([No APXS binary found: cannot create Apache module])
-	fi
+if test -z "$APXS"; then
+	AC_PATH_PROGS(APXS, apxs2 apxs, [apxs], [$PATH:/usr/local/apache/bin:/usr/sbin])
 fi
 
-AC_MSG_RESULT([APXS binary found: $APXS])
+if test -z "$APXS"; then
+	AC_MSG_WARN([No APXS binary found: cannot create Apache module])
+else
+	AC_MSG_RESULT([APXS binary found: $APXS])
+
+	# partially taken from configure.ac from mod_wsgi
+	AC_MSG_CHECKING(Apache version)
+	HTTPD="`${APXS} -q SBINDIR`/`${APXS} -q TARGET`"
+	HTTPD_INCLUDEDIR="`${APXS} -q INCLUDEDIR`"
+	if test -x ${HTTPD}; then
+	    HTTPD_VERSION=`${HTTPD} -v | awk '/version/ {print $3}' \
+	     | awk -F/ '{print $2}'`
+	else
+	    if test -f ${HTTPD_INCLUDEDIR}/ap_release.h; then
+		HTTPD_VERSION=`grep '^#define AP_SERVER_MAJORVERSION_NUMBER ' \
+		 ${HTTPD_INCLUDEDIR}/ap_release.h | sed -e \
+		 's/^#define AP_SERVER_MAJORVERSION_NUMBER \([0-9]\).*/\1.X/'`
+	    else
+		if test -f ${HTTPD_INCLUDEDIR}/httpd.h; then
+		    HTTPD_VERSION=`grep '^#define APACHE_RELEASE ' \
+		     ${HTTPD_INCLUDEDIR}/httpd.h | sed -e \
+		     's/^#define APACHE_RELEASE \([0-9]\).*/\1.X/'`
+		else
+		    HTTPD_VERSION="2.?"
+		fi
+	    fi
+	fi
+
+	HTTPD_LIBEXECDIR="`${APXS} -q libexecdir`"
+	HTTPD_VERSION_MAJOR_MINOR=`echo "$HTTPD_VERSION" | awk -F. '{ print $1 "." $2 }'`
+fi
+
 AC_SUBST(APXS)
+AC_SUBST(HTTPD_LIBEXECDIR)
+AC_SUBST(HTTPD_VERSION_MAJOR_MINOR)
 
 
 dnl *************************************************
@@ -1197,3 +1228,6 @@ AC_MSG_RESULT([*** LDFLAGS                    =$LDFLAGS])
 AC_MSG_RESULT([])
 
 AC_MSG_RESULT([*** APXS                       =$APXS])
+AC_MSG_RESULT([*** HTTPD_LIBEXECDIR           =$HTTPD_LIBEXECDIR])
+AC_MSG_RESULT([*** HTTPD_VERSION              =$HTTPD_VERSION])
+AC_MSG_RESULT([*** HTTPD_VERSION_MAJOR_MINOR  =$HTTPD_VERSION_MAJOR_MINOR])

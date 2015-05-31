@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.14 2015/05/30 17:04:13 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.15 2015/05/31 15:30:48 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -33,11 +33,11 @@
  */
 
 // Apache/APR related includes
-#include "httpd.h"
-#include "http_config.h"
-#include "http_log.h"
-#include "http_protocol.h" 
-#include "apr_strings.h"
+#include <httpd.h>
+#include <http_config.h>
+#include <http_log.h>
+#include <http_protocol.h>
+#include <apr_strings.h>
 
 // ipv6calc related includes
 #include "libipv6calc.h"
