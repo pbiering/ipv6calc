@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Version    : $Id: ipv6logstats.c,v 1.66 2015/05/26 15:50:04 ds6peter Exp $
+ * Version    : $Id: ipv6logstats.c,v 1.67 2015/05/31 15:34:55 ds6peter Exp $
  * Copyright  : 2003-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -13,7 +13,6 @@
 #include <stdlib.h> 
 #include <getopt.h> 
 #include <unistd.h>
-#include <math.h>
 #include <time.h>
 
 #include "config.h"
