@@ -2347,7 +2347,7 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
-PACKAGE_VERSION_NUMERIC=$(echo "($PACKAGE_VERSION_MAJOR * 1000 + $PACKAGE_VERSION_MINOR) * 1000 + $PACKAGE_VERSION_BUGFIX" | bc)
+PACKAGE_VERSION_NUMERIC=$(echo "$PACKAGE_VERSION_MAJOR $PACKAGE_VERSION_MINOR $PACKAGE_VERSION_BUGFIX" | awk '{ print ( $1 * 1000 + $2 ) * 1000 + $3 }')
 PACKAGE_VERSION_STRING=$(echo "$PACKAGE_VERSION_MAJOR.$PACKAGE_VERSION_MINOR.$PACKAGE_VERSION_BUGFIX")
 
 
@@ -2376,7 +2376,7 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
-API_VERSION_NUMERIC=$(echo "($API_VERSION_MAJOR * 1000 + $API_VERSION_MINOR) * 1000 + $API_VERSION_BUGFIX" | bc)
+API_VERSION_NUMERIC=$(echo "$API_VERSION_MAJOR $API_VERSION_MINOR $API_VERSION_BUGFIX" | awk '{ print ( $1 * 1000 + $2 ) * 1000 + $3 }')
 API_VERSION_STRING=$(echo "$API_VERSION_MAJOR.$API_VERSION_MINOR.$API_VERSION_BUGFIX")
 
 
@@ -6098,7 +6098,12 @@ $as_echo_n "checking Apache version... " >&6; }
 
 	HTTPD_LIBEXECDIR="`${APXS} -q libexecdir`"
 	HTTPD_SYSCONFDIR="`${APXS} -q sysconfdir`.d"
-	HTTPD_VERSION_MAJOR_MINOR=`echo "$HTTPD_VERSION" | awk -F. '{ print $1 "." $2 }'`
+	if test -n "$HTTPD_SYSCONFDIR"; then
+		HTTPD_SYSCONFDIR="$HTTPD_SYSCONFDIR.d"
+	fi
+	if test -n "$HTTPD_VERSION"; then
+		HTTPD_VERSION_MAJOR_MINOR=`echo "$HTTPD_VERSION" | awk -F. '{ print $1 "." $2 }'`
+	fi
 fi
 
 
@@ -7510,6 +7515,18 @@ $as_echo "*** CPPLAGS                    =$CPPLAGS" >&6; }
 $as_echo "*** CFLAGS                     =$CFLAGS" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS                    =$LDFLAGS" >&5
 $as_echo "*** LDFLAGS                    =$LDFLAGS" >&6; }
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
+$as_echo "" >&6; }
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** PACKAGE_VERSION_NUMERIC    =$PACKAGE_VERSION_NUMERIC" >&5
+$as_echo "*** PACKAGE_VERSION_NUMERIC    =$PACKAGE_VERSION_NUMERIC" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** PACKAGE_VERSION_STRING     =$PACKAGE_VERSION_STRING" >&5
+$as_echo "*** PACKAGE_VERSION_STRING     =$PACKAGE_VERSION_STRING" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** API_VERSION_NUMERIC        =$API_VERSION_NUMERIC" >&5
+$as_echo "*** API_VERSION_NUMERIC        =$API_VERSION_NUMERIC" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** API_VERSION_STRING         =$API_VERSION_STRING" >&5
+$as_echo "*** API_VERSION_STRING         =$API_VERSION_STRING" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
 $as_echo "" >&6; }
