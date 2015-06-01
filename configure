@@ -6061,7 +6061,6 @@ fi
 
   test -n "$APXS" && break
 done
-test -n "$APXS" || APXS="apxs"
 
 fi
 
