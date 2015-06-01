@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.273 2015/05/31 15:34:55 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.274 2015/06/01 05:53:16 ds6peter Exp $
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
@@ -18,6 +18,9 @@ Requires:	perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+%{!?_httpd_apxs:    %{expand: %%global _httpd_apxs    %%{_sbindir}/apxs}}
+%{!?_httpd_moddir:  %{expand: %%global _httpd_moddir  %%{_libdir}/httpd/modules}}
+%{!?_httpd_confdir: %{expand: %%global _httpd_confdir %%{_sysconfdir}/httpd/conf.d}}
 
 # database support (deselectable)
 %if "%{?_without_ip2location:0}%{?!_without_ip2location:1}" == "1"
@@ -243,8 +246,16 @@ rm -rf %{buildroot}
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
 
 
+%files mod_ipv6calc
+%defattr(644,root,root,755)
+
+%doc mod_ipv6calc/README.mod_ipv6calc
+%config(noreplace) %{_httpd_modconfdir}/ipv6calc.conf
+%attr(755,-,-) %{_httpd_moddir}/mod_ipv6calc.so
+
+
 %changelog
-* Thu Mar 07 2015 Peter Bieringer <pb@bieringer.de>
+* Sat Mar 07 2015 Peter Bieringer <pb@bieringer.de>
 - take use of license macro
 
 * Sun Mar 01 2015 Peter Bieringer <pb@bieringer.de>
