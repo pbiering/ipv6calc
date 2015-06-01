@@ -6097,7 +6097,7 @@ $as_echo_n "checking Apache version... " >&6; }
 	fi
 
 	HTTPD_LIBEXECDIR="`${APXS} -q libexecdir`"
-	HTTPD_SYSCONFDIR="`${APXS} -q sysconfdir`"
+	HTTPD_SYSCONFDIR="`${APXS} -q sysconfdir`.d"
 	HTTPD_VERSION_MAJOR_MINOR=`echo "$HTTPD_VERSION" | awk -F. '{ print $1 "." $2 }'`
 fi
 

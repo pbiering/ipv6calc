@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec.in,v 1.102 2015/06/01 05:53:16 ds6peter Exp $
+# $Id: ipv6calc.spec.in,v 1.103 2015/06/01 06:07:22 ds6peter Exp $
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
@@ -250,11 +250,14 @@ rm -rf %{buildroot}
 %defattr(644,root,root,755)
 
 %doc mod_ipv6calc/README.mod_ipv6calc
-%config(noreplace) %{_httpd_modconfdir}/ipv6calc.conf
+%config(noreplace) %{_httpd_confdir}/ipv6calc.conf
 %attr(755,-,-) %{_httpd_moddir}/mod_ipv6calc.so
 
 
 %changelog
+* Mon Jun 01 2015 Peter Bieringer <pb@bieringer.de>
+- add subpackage mod_ipv6calc
+
 * Sat Mar 07 2015 Peter Bieringer <pb@bieringer.de>
 - take use of license macro
 
