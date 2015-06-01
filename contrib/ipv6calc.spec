@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.276 2015/06/01 06:07:22 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.277 2015/06/01 06:13:31 ds6peter Exp $
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
@@ -122,9 +122,10 @@ Default restricts access to localhost.
 %package mod_ipv6calc
 Summary: 	Apache module for ipv6calc
 Group:		Applications/Internet
-Requires:	ipv6calc httpd
 BuildRequires:	httpd-devel
-Requires:	httpd = 2.4
+Requires:	httpd >= 2.4.0
+Requires:	httpd <= 2.4.9999
+Requires:	ipv6calc = %{version}-%{release}
 
 %description mod_ipv6calc
 mod_ipv6calc contains an Apache module and a default configuration
