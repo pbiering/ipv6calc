@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.140 2015/05/31 15:30:48 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.141 2015/06/01 05:59:08 ds6peter Exp $
 dnl Copyright: 2001-2015 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -1128,11 +1128,13 @@ else
 	fi
 
 	HTTPD_LIBEXECDIR="`${APXS} -q libexecdir`"
+	HTTPD_SYSCONFDIR="`${APXS} -q sysconfdir`"
 	HTTPD_VERSION_MAJOR_MINOR=`echo "$HTTPD_VERSION" | awk -F. '{ print $1 "." $2 }'`
 fi
 
 AC_SUBST(APXS)
 AC_SUBST(HTTPD_LIBEXECDIR)
+AC_SUBST(HTTPD_SYSCONFDIR)
 AC_SUBST(HTTPD_VERSION_MAJOR_MINOR)
 
 
@@ -1228,6 +1230,7 @@ AC_MSG_RESULT([*** LDFLAGS                    =$LDFLAGS])
 AC_MSG_RESULT([])
 
 AC_MSG_RESULT([*** APXS                       =$APXS])
+AC_MSG_RESULT([*** HTTPD_SYSCONFDIR           =$HTTPD_SYSCONFDIR])
 AC_MSG_RESULT([*** HTTPD_LIBEXECDIR           =$HTTPD_LIBEXECDIR])
 AC_MSG_RESULT([*** HTTPD_VERSION              =$HTTPD_VERSION])
 AC_MSG_RESULT([*** HTTPD_VERSION_MAJOR_MINOR  =$HTTPD_VERSION_MAJOR_MINOR])

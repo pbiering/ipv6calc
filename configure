@@ -628,6 +628,7 @@ LDFLAGS_EXTRA_STATIC
 LDFLAGS_EXTRA
 CFLAGS_EXTRA
 HTTPD_VERSION_MAJOR_MINOR
+HTTPD_SYSCONFDIR
 HTTPD_LIBEXECDIR
 APXS
 DYNLOAD_LIB
@@ -6096,8 +6097,10 @@ $as_echo_n "checking Apache version... " >&6; }
 	fi
 
 	HTTPD_LIBEXECDIR="`${APXS} -q libexecdir`"
+	HTTPD_SYSCONFDIR="`${APXS} -q sysconfdir`"
 	HTTPD_VERSION_MAJOR_MINOR=`echo "$HTTPD_VERSION" | awk -F. '{ print $1 "." $2 }'`
 fi
+
 
 
 
@@ -7513,6 +7516,8 @@ $as_echo "" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** APXS                       =$APXS" >&5
 $as_echo "*** APXS                       =$APXS" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HTTPD_SYSCONFDIR           =$HTTPD_SYSCONFDIR" >&5
+$as_echo "*** HTTPD_SYSCONFDIR           =$HTTPD_SYSCONFDIR" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HTTPD_LIBEXECDIR           =$HTTPD_LIBEXECDIR" >&5
 $as_echo "*** HTTPD_LIBEXECDIR           =$HTTPD_LIBEXECDIR" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HTTPD_VERSION              =$HTTPD_VERSION" >&5
