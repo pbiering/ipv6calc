@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec.in,v 1.105 2015/06/01 06:21:14 ds6peter Exp $
+# $Id: ipv6calc.spec.in,v 1.106 2015/06/01 06:38:15 ds6peter Exp $
 
 # shared library support (deselectable)
 %if "%{?_without_shared:0}%{?!_without_shared:1}" == "1"
@@ -20,7 +20,7 @@ BuildRequires:	openssl-devel
 BuildRequires:	perl(Digest::MD5), perl(Digest::SHA1), perl(URI::Escape)
 BuildRequires:	perl(strict), perl(warnings)
 Requires:	perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
-%{?enable_shared:Provides: ipv6calc-lib = %%{version}-%%{release}}
+%{?enable_shared:Provides: ipv6calc-libs = %{version}-%{release}}
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -128,7 +128,7 @@ BuildRequires:	httpd-devel
 Requires:	httpd >= @HTTPD_VERSION_MAJOR_MINOR@.0
 Requires:	httpd <= @HTTPD_VERSION_MAJOR_MINOR@.99999
 Requires:	ipv6calc = %{version}-%{release}
-%{?enable_shared:Requires: ipv6calc-lib = %%{version}-%%{release}}
+%{?enable_shared:Requires: ipv6calc-libs = %{version}-%{release}}
 
 %description mod_ipv6calc
 mod_ipv6calc contains an Apache module and a default configuration
