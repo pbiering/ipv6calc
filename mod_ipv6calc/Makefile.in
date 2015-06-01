@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : mod_ipv6calc/Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.5 2015/06/01 05:59:08 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.6 2015/06/01 19:57:36 ds6peter Exp $
 # Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -44,6 +44,7 @@ shared =  mod_ipv6calc.la
 
 
 mod_ipv6calc:	mod_ipv6calc.c ../lib/libipv6calc.h ../config.h libipv6calc libipv6calc_db_wrapper
+		if test -z "$(APXS)"; then echo "no APXS found, can't build module"; exit 1; fi
 		$(APXS) $(LIBS) $(INCLUDES) -c mod_ipv6calc.c
 
 static:		
@@ -76,5 +77,6 @@ $(DESTDIR)$(SYSCONFDIR):
 		mkdir -p $@
 
 install:	mod_ipv6calc $(DESTDIR)$(LIBEXECDIR) $(DESTDIR)$(SYSCONFDIR)
+		if test -z "$(APXS)"; then echo "no APXS found, can't install module"; exit 1; fi
 		$(APXS) -i -S LIBEXECDIR=$(DESTDIR)$(LIBEXECDIR) -n 'mod_ipv6calc' mod_ipv6calc.la
 		install -m 644 ipv6calc.conf $(DESTDIR)$(SYSCONFDIR)
