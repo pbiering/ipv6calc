@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec.in,v 1.108 2015/06/07 19:38:48 ds6peter Exp $
+# $Id: ipv6calc.spec.in,v 1.109 2015/06/07 19:40:36 ds6peter Exp $
 
 # shared library support (deselectable)
 %if "%{?_without_shared:0}%{?!_without_shared:1}" == "1"
@@ -170,7 +170,7 @@ By default the module is disabled.
 	--with-dbip-db=%{dbip_db} \
 	%{?enable_external:--enable-external} \
 	--with-external-db=%{external_db} \
-	%{?enable_shared:--enable-shared}
+	%{?enable_shared:--enable-shared} \
 	%{?enable_mod_ipv6calc:--enable-mod_ipv6calc}
 
 
