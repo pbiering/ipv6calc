@@ -631,6 +631,7 @@ HTTPD_VERSION_MAJOR_MINOR
 HTTPD_SYSCONFDIR
 HTTPD_LIBEXECDIR
 APXS
+ENABLE_MOD_IPV6CALC
 DYNLOAD_LIB
 GEOIP_DYN_LIB
 GEOIP_DB
@@ -744,6 +745,7 @@ with_geoip_static
 with_geoip_db
 with_geoip_dyn_lib
 with_geoip_ipv6_compat
+enable_mod_ipv6calc
 with_apxs
 '
       ac_precious_vars='build_alias
@@ -1389,6 +1391,8 @@ Optional Features:
   --enable-external       Enable external db support (default: disabled)
   --enable-ip2location    Enable IP2Location support (default: disabled)
   --enable-geoip          Enable GeoIP support (default: disabled)
+  --enable-mod_ipv6calc   Enable build of mod_ipv6calc for Apache (default:
+                          disabled)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
@@ -6008,6 +6012,20 @@ $as_echo "#define HAVE_BERKELEY_DB_SUPPORT 1" >>confdefs.h
 fi
 
 
+# Check whether --enable-mod_ipv6calc was given.
+if test "${enable_mod_ipv6calc+set}" = set; then :
+  enableval=$enable_mod_ipv6calc;
+		ENABLE_MOD_IPV6CALC="1"
+
+else
+
+		ENABLE_MOD_IPV6CALC="0"
+
+fi
+
+
+
+
 
 # Check whether --with-apxs was given.
 if test "${with_apxs+set}" = set; then :
@@ -6015,8 +6033,12 @@ if test "${with_apxs+set}" = set; then :
 fi
 
 
-if test -z "$APXS"; then
-	for ac_prog in apxs2 apxs
+if test "$ENABLE_MOD_IPV6CALC" = "1"; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Build of mod_ipv6calc enabled" >&5
+$as_echo "Build of mod_ipv6calc enabled" >&6; }
+
+	if test -z "$APXS"; then
+		for ac_prog in apxs2 apxs
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
@@ -6062,53 +6084,57 @@ fi
   test -n "$APXS" && break
 done
 
-fi
+	fi
 
-if test -z "$APXS"; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No APXS binary found: cannot create Apache module" >&5
+	if test -z "$APXS"; then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No APXS binary found: cannot create Apache module" >&5
 $as_echo "$as_me: WARNING: No APXS binary found: cannot create Apache module" >&2;}
-else
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: APXS binary found: $APXS" >&5
+	else
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: APXS binary found: $APXS" >&5
 $as_echo "APXS binary found: $APXS" >&6; }
 
-	# partially taken from configure.ac from mod_wsgi
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Apache version" >&5
+		# partially taken from configure.ac from mod_wsgi
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: checking Apache version" >&5
 $as_echo_n "checking Apache version... " >&6; }
-	HTTPD="`${APXS} -q SBINDIR`/`${APXS} -q TARGET`"
-	HTTPD_INCLUDEDIR="`${APXS} -q INCLUDEDIR`"
-	if test -x ${HTTPD}; then
-	    HTTPD_VERSION=`${HTTPD} -v | awk '/version/ {print $3}' \
-	     | awk -F/ '{print $2}'`
-	else
-	    if test -f ${HTTPD_INCLUDEDIR}/ap_release.h; then
-		HTTPD_VERSION=`grep '^#define AP_SERVER_MAJORVERSION_NUMBER ' \
-		 ${HTTPD_INCLUDEDIR}/ap_release.h | sed -e \
-		 's/^#define AP_SERVER_MAJORVERSION_NUMBER \([0-9]\).*/\1.X/'`
-	    else
-		if test -f ${HTTPD_INCLUDEDIR}/httpd.h; then
-		    HTTPD_VERSION=`grep '^#define APACHE_RELEASE ' \
-		     ${HTTPD_INCLUDEDIR}/httpd.h | sed -e \
-		     's/^#define APACHE_RELEASE \([0-9]\).*/\1.X/'`
+		HTTPD="`${APXS} -q SBINDIR`/`${APXS} -q TARGET`"
+		HTTPD_INCLUDEDIR="`${APXS} -q INCLUDEDIR`"
+		if test -x ${HTTPD}; then
+		    HTTPD_VERSION=`${HTTPD} -v | awk '/version/ {print $3}' \
+		     | awk -F/ '{print $2}'`
 		else
-		    HTTPD_VERSION="2.?"
+		    if test -f ${HTTPD_INCLUDEDIR}/ap_release.h; then
+			HTTPD_VERSION=`grep '^#define AP_SERVER_MAJORVERSION_NUMBER ' \
+			 ${HTTPD_INCLUDEDIR}/ap_release.h | sed -e \
+			 's/^#define AP_SERVER_MAJORVERSION_NUMBER \([0-9]\).*/\1.X/'`
+		    else
+			if test -f ${HTTPD_INCLUDEDIR}/httpd.h; then
+			    HTTPD_VERSION=`grep '^#define APACHE_RELEASE ' \
+			     ${HTTPD_INCLUDEDIR}/httpd.h | sed -e \
+			     's/^#define APACHE_RELEASE \([0-9]\).*/\1.X/'`
+			else
+			    HTTPD_VERSION="2.?"
+			fi
+		    fi
 		fi
-	    fi
+
+		HTTPD_LIBEXECDIR="`${APXS} -q libexecdir`"
+		HTTPD_SYSCONFDIR="`${APXS} -q sysconfdir`.d"
+		if test -n "$HTTPD_SYSCONFDIR"; then
+			HTTPD_SYSCONFDIR="$HTTPD_SYSCONFDIR.d"
+		fi
+		if test -n "$HTTPD_VERSION"; then
+			HTTPD_VERSION_MAJOR_MINOR=`echo "$HTTPD_VERSION" | awk -F. '{ print $1 "." $2 }'`
+		fi
 	fi
 
-	HTTPD_LIBEXECDIR="`${APXS} -q libexecdir`"
-	HTTPD_SYSCONFDIR="`${APXS} -q sysconfdir`.d"
-	if test -n "$HTTPD_SYSCONFDIR"; then
-		HTTPD_SYSCONFDIR="$HTTPD_SYSCONFDIR.d"
-	fi
-	if test -n "$HTTPD_VERSION"; then
-		HTTPD_VERSION_MAJOR_MINOR=`echo "$HTTPD_VERSION" | awk -F. '{ print $1 "." $2 }'`
-	fi
+
+
+
+
+else
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Build of mod_ipv6calc NOT enabled" >&5
+$as_echo "$as_me: WARNING: Build of mod_ipv6calc NOT enabled" >&2;}
 fi
-
-
-
-
-
 
 
 
@@ -7530,13 +7556,17 @@ $as_echo "*** API_VERSION_STRING         =$API_VERSION_STRING" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
 $as_echo "" >&6; }
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** APXS                       =$APXS" >&5
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** ENABLE_MOD_IPV6CALC        =$ENABLE_MOD_IPV6CALC" >&5
+$as_echo "*** ENABLE_MOD_IPV6CALC        =$ENABLE_MOD_IPV6CALC" >&6; }
+if test "$ENABLE_MOD_IPV6CALC" = "1"; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** APXS                       =$APXS" >&5
 $as_echo "*** APXS                       =$APXS" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HTTPD_SYSCONFDIR           =$HTTPD_SYSCONFDIR" >&5
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HTTPD_SYSCONFDIR           =$HTTPD_SYSCONFDIR" >&5
 $as_echo "*** HTTPD_SYSCONFDIR           =$HTTPD_SYSCONFDIR" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HTTPD_LIBEXECDIR           =$HTTPD_LIBEXECDIR" >&5
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HTTPD_LIBEXECDIR           =$HTTPD_LIBEXECDIR" >&5
 $as_echo "*** HTTPD_LIBEXECDIR           =$HTTPD_LIBEXECDIR" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HTTPD_VERSION              =$HTTPD_VERSION" >&5
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HTTPD_VERSION              =$HTTPD_VERSION" >&5
 $as_echo "*** HTTPD_VERSION              =$HTTPD_VERSION" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HTTPD_VERSION_MAJOR_MINOR  =$HTTPD_VERSION_MAJOR_MINOR" >&5
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HTTPD_VERSION_MAJOR_MINOR  =$HTTPD_VERSION_MAJOR_MINOR" >&5
 $as_echo "*** HTTPD_VERSION_MAJOR_MINOR  =$HTTPD_VERSION_MAJOR_MINOR" >&6; }
+fi

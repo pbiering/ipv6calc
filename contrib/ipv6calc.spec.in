@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec.in,v 1.107 2015/06/01 19:28:28 ds6peter Exp $
+# $Id: ipv6calc.spec.in,v 1.108 2015/06/07 19:38:48 ds6peter Exp $
 
 # shared library support (deselectable)
 %if "%{?_without_shared:0}%{?!_without_shared:1}" == "1"
@@ -47,6 +47,10 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 %if "%{?_without_external:0}%{?!_without_external:1}" == "1"
 %define enable_external 1
+%endif
+
+%if "%{?_without_mod_ipv6calc:0}%{?!_without_mod_ipv6calc:1}" == "1"
+%define enable_mod_ipv6calc 1
 %endif
 
 
@@ -108,6 +112,7 @@ Available rpmbuild rebuild options:
   --without dbip
   --without external
   --without shared
+  --without mod_ipv6calc
 
 
 %package ipv6calcweb
@@ -125,6 +130,7 @@ Check/addjust %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
 Default restricts access to localhost.
 
 
+%if %{enable_mod_ipv6calc}
 %package mod_ipv6calc
 Summary: 	Apache module for ipv6calc
 Group:		Applications/Internet
@@ -148,6 +154,7 @@ Features:
 
 Check/addjust %{_sysconfdir}/httpd/conf.d/ipv6calc.conf
 By default the module is disabled.
+%endif
 
 
 %prep
@@ -164,6 +171,7 @@ By default the module is disabled.
 	%{?enable_external:--enable-external} \
 	--with-external-db=%{external_db} \
 	%{?enable_shared:--enable-shared}
+	%{?enable_mod_ipv6calc:--enable-mod_ipv6calc}
 
 
 %build
