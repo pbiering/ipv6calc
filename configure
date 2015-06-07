@@ -6118,7 +6118,7 @@ $as_echo_n "checking Apache version... " >&6; }
 		fi
 
 		HTTPD_LIBEXECDIR="`${APXS} -q libexecdir`"
-		HTTPD_SYSCONFDIR="`${APXS} -q sysconfdir`.d"
+		HTTPD_SYSCONFDIR="`${APXS} -q sysconfdir`"
 		if test -n "$HTTPD_SYSCONFDIR"; then
 			HTTPD_SYSCONFDIR="$HTTPD_SYSCONFDIR.d"
 		fi

@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.145 2015/06/07 19:38:47 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.146 2015/06/07 19:49:16 ds6peter Exp $
 dnl Copyright: 2001-2015 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -1142,7 +1142,7 @@ if test "$ENABLE_MOD_IPV6CALC" = "1"; then
 		fi
 
 		HTTPD_LIBEXECDIR="`${APXS} -q libexecdir`"
-		HTTPD_SYSCONFDIR="`${APXS} -q sysconfdir`.d"
+		HTTPD_SYSCONFDIR="`${APXS} -q sysconfdir`"
 		if test -n "$HTTPD_SYSCONFDIR"; then
 			HTTPD_SYSCONFDIR="$HTTPD_SYSCONFDIR.d"
 		fi
