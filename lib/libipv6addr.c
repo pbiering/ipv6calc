@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.121 2015/05/26 17:13:12 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.122 2015/06/08 06:36:43 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -1121,7 +1121,7 @@ int addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, co
 	DEBUGPRINT_WA(DEBUG_libipv6addr, "String converted to non-literal format: %s", tempstring);
 
 	/* call normal IPv6 parsing function */
-	retval = addr_to_ipv6addrstruct(tempstring, resultstring, sizeof(resultstring), ipv6addrp);
+	retval = addr_to_ipv6addrstruct(tempstring, resultstring, resultstring_length, ipv6addrp);
 
 	return (retval);
 };
@@ -1146,7 +1146,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, const siz
 
 	resultstring[0] = '\0'; /* clear result string */
 
-	DEBUGPRINT_WA(DEBUG_libipv6addr, "Got input '%s'", addrstring);
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "Got input '%s' (resultstring_length=%u)", addrstring, (unsigned int) resultstring_length);
 
 	if (strlen(addrstring) < 2) {
 		fprintf(stderr, "Error in given IPv6 address, has less than 2 chars!\n");
