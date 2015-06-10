@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.19 2014/10/25 12:47:10 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_BuiltIn.c,v 1.20 2015/06/10 05:53:57 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -172,42 +172,42 @@ void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level_verbos
 	char tempstring[NI_MAXHOST];
 #endif
 
-	printf("%sBuiltIn: info of available databases\n", prefix);
+	fprintf(stderr, "%sBuiltIn: info of available databases\n", prefix);
 
 #ifdef SUPPORT_DB_AS_REG
 	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] & IPV6CALC_DB_AS_TO_REGISTRY) {
-		printf("%sBuiltIn: %-5s: %s\n", prefix, "ASN", dbasn_registry_status);
+		fprintf(stderr, "%sBuiltIn: %-5s: %s\n", prefix, "ASN", dbasn_registry_status);
 	};
 #endif
 
 #ifdef SUPPORT_DB_CC_REG
 	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] & IPV6CALC_DB_CC_TO_REGISTRY) {
-		printf("%sBuiltIn: %-5s: %s\n", prefix, "CC", db_cc_registry_status);
+		fprintf(stderr, "%sBuiltIn: %-5s: %s\n", prefix, "CC", db_cc_registry_status);
 	};
 #endif
 
 #ifdef SUPPORT_DB_IPV4_REG
 	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] & IPV6CALC_DB_IPV4_TO_REGISTRY) {
 		strftime(tempstring, sizeof(tempstring), "%Y%m%d-%H%M%S UTC", gmtime(&dbipv4addr_registry_unixtime));
-		printf("%sBuiltIn: %-5s: %s (created: %s)\n", prefix, "IPv4", dbipv4addr_registry_status, tempstring);
+		fprintf(stderr, "%sBuiltIn: %-5s: %s (created: %s)\n", prefix, "IPv4", dbipv4addr_registry_status, tempstring);
 	};
 #endif
 
 #ifdef SUPPORT_DB_IPV6_REG
 	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] & IPV6CALC_DB_IPV6_TO_REGISTRY) {
 		strftime(tempstring, sizeof(tempstring), "%Y%m%d-%H%M%S UTC", gmtime(&dbipv6addr_registry_unixtime));
-		printf("%sBuiltIn: %-5s: %s (created: %s)\n", prefix, "IPv6", dbipv6addr_registry_status, tempstring);
+		fprintf(stderr, "%sBuiltIn: %-5s: %s (created: %s)\n", prefix, "IPv6", dbipv6addr_registry_status, tempstring);
 	};
 #endif
 
 #ifdef SUPPORT_DB_IEEE
 	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] & IPV6CALC_DB_IEEE_TO_INFO) {
-		printf("%sBuiltIn: %-5s: %s %s %s\n", prefix, "IEEE", libieee_iab_status, libieee_oui_status, libieee_oui36_status);
+		fprintf(stderr, "%sBuiltIn: %-5s: %s %s %s\n", prefix, "IEEE", libieee_iab_status, libieee_oui_status, libieee_oui36_status);
 	};
 #endif
 
 #else
-	printf("%sNo BuiltIn support compiled-in\n", prefix);
+	fprintf(stderr, "%sNo BuiltIn support compiled-in\n", prefix);
 #endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Finished");

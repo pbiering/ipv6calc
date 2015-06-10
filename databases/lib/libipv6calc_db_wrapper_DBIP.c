@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.19 2015/04/30 18:52:41 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_DBIP.c,v 1.20 2015/06/10 05:53:57 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -186,7 +186,7 @@ void libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(const int level_verbose, 
 	IPV6CALC_DB_FEATURE_INFO(prefix, IPV6CALC_DB_SOURCE_DBIP)
 
 #ifdef SUPPORT_DBIP
-	printf("%sDBIP: info of available databases in directory: %s\n", prefix, dbip_db_dir);
+	fprintf(stderr, "%sDBIP: info of available databases in directory: %s\n", prefix, dbip_db_dir);
 
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_DBIP_db_file_desc); i++) {
 		type = libipv6calc_db_wrapper_DBIP_db_file_desc[i].number;
@@ -195,25 +195,25 @@ void libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(const int level_verbose, 
 			// DBIP returned that database is available
 			dbp = libipv6calc_db_wrapper_DBIP_open_type(type | 0x10000, NULL);
 			if (dbp == NULL) {
-				printf("%sDBIP: %-30s: %-30s (CAN'T OPEN database information)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_dbfilename(type));
+				fprintf(stderr, "%sDBIP: %-30s: %-30s (CAN'T OPEN database information)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_dbfilename(type));
 			} else {
-				printf("%sDBIP: %-30s: %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_db_file_desc[i].filename, libipv6calc_db_wrapper_DBIP_database_info(type));
+				fprintf(stderr, "%sDBIP: %-30s: %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_db_file_desc[i].filename, libipv6calc_db_wrapper_DBIP_database_info(type));
 				libipv6calc_db_wrapper_DBIP_close(dbp);
 				count++;
 			};
 		} else {
 			if (level_verbose == LEVEL_VERBOSE2) {
-				printf("%sDBIP: %-30s: %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_dbfilename(type), strerror(errno));
+				fprintf(stderr, "%sDBIP: %-30s: %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_dbfilename(type), strerror(errno));
 			};
 			continue;
 		};
 	};
 
 	if (count == 0) {
-		printf("%sDBIP: NO available databases found in directory: %s\n", prefix, dbip_db_dir);
+		fprintf(stderr, "%sDBIP: NO available databases found in directory: %s\n", prefix, dbip_db_dir);
 	};
 #else // SUPPORT_DBIP
-	snprintf(string, size, "%sNo DBIP support built-in", prefix);
+	snfprintf(stderr, string, size, "%sNo DBIP support built-in", prefix);
 #endif // SUPPORT_DBIP
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "Finished");

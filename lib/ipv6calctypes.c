@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.c
- * Version    : $Id: ipv6calctypes.c,v 1.6 2014/05/11 09:49:38 ds6peter Exp $
- * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id: ipv6calctypes.c,v 1.7 2015/06/10 05:53:57 ds6peter Exp $
+ * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Format and type handling
@@ -129,4 +129,26 @@ uint32_t ipv6calctypes_checkaction(const char *string) {
 	};
 
 	return(number);
+};
+
+
+/*
+ * return format string
+ * in : format type
+ * ret: format string
+ */
+const char *ipv6calctypes_format_string_by_type(const uint32_t format_type) {
+	int i;
+	const char *format_string = NULL;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calctypes, "Got type: %08x", format_type);
+
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_formatstrings); i++) {
+		if (ipv6calc_formatstrings[i].number == format_type) {
+			format_string = ipv6calc_formatstrings[i].token;
+			break;
+		};
+	};
+
+	return(format_string);
 };

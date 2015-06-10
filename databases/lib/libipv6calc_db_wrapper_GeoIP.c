@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
- * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.75 2015/04/30 18:52:41 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_GeoIP.c,v 1.76 2015/06/10 05:53:57 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -500,11 +500,11 @@ void libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(const int level_verbose,
 
 #ifdef SUPPORT_GEOIP_DYN
 	if (dl_GeoIP_handle == NULL) {
-		printf("%sGeoIP: info of available databases in directory: %s LIBRARY-NOT-LOADED\n", prefix, geoip_db_dir);
+		fprintf(stderr, "%sGeoIP: info of available databases in directory: %s LIBRARY-NOT-LOADED\n", prefix, geoip_db_dir);
 	} else {
 #endif // SUPPORT_GEOIP_DYN
 
-	printf("%sGeoIP: info of available databases in directory: %s (max: %d)\n", prefix, geoip_db_dir, geoip_num_db_types - 1);
+	fprintf(stderr, "%sGeoIP: info of available databases in directory: %s (max: %d)\n", prefix, geoip_db_dir, geoip_num_db_types - 1);
 
 	for (i = 0; i < geoip_num_db_types; i++) {
 		if (libipv6calc_db_wrapper_GeoIP_db_avail(i)) {
@@ -524,11 +524,11 @@ void libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(const int level_verbose,
 #endif
 
 				if (level_verbose == LEVEL_VERBOSE2) {
-					printf("%sGeoIP: %-33s:[%2d] %-20s (CAN'T OPEN)\n", prefix, libipv6calc_db_wrapper_GeoIPDBDescription[i], i, rindex((*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i], '/') + 1);
+					fprintf(stderr, "%sGeoIP: %-33s:[%2d] %-20s (CAN'T OPEN)\n", prefix, libipv6calc_db_wrapper_GeoIPDBDescription[i], i, rindex((*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i], '/') + 1);
 				};
 			} else {
 				count++;
-				printf("%sGeoIP: %-33s:[%2d] %-20s (%s)\n", prefix, libipv6calc_db_wrapper_GeoIPDBDescription[i], i, rindex((*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i], '/') + 1, libipv6calc_db_wrapper_GeoIP_database_info(gi));
+				fprintf(stderr, "%sGeoIP: %-33s:[%2d] %-20s (%s)\n", prefix, libipv6calc_db_wrapper_GeoIPDBDescription[i], i, rindex((*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i], '/') + 1, libipv6calc_db_wrapper_GeoIP_database_info(gi));
 			};
 		} else {
 			if (geoip_num_db_types > 0) {
@@ -537,7 +537,7 @@ void libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(const int level_verbose,
 				};
 
 				if (level_verbose == LEVEL_VERBOSE2) {
-					// printf("%sGeoIP: %-33s: %-40s (MISSING FILE)\n", prefix, libipv6calc_db_wrapper_GeoIPDBDescription[i], (*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i]);
+					// fprintf(stderr, "%sGeoIP: %-33s: %-40s (MISSING FILE)\n", prefix, libipv6calc_db_wrapper_GeoIPDBDescription[i], (*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i]);
 				} else {
 					continue;
 				};
@@ -545,18 +545,18 @@ void libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(const int level_verbose,
 		};
 	};
 	if ((geoip_num_db_types == 0) && (level_verbose == LEVEL_VERBOSE2)) {
-		printf("%sGeoIP: other possible databases can't be displayed, number of entries can't be retrieved (missing support)\n", prefix);
+		fprintf(stderr, "%sGeoIP: other possible databases can't be displayed, number of entries can't be retrieved (missing support)\n", prefix);
 	};
 #ifdef SUPPORT_GEOIP_DYN
 	};
 #endif
 
 	if (count == 0) {
-		printf("%sGeoIP: No available databases found in directory: %s\n", prefix, geoip_db_dir);
+		fprintf(stderr, "%sGeoIP: No available databases found in directory: %s\n", prefix, geoip_db_dir);
 	};
 
 #else
-	snprintf(string, size, "%sNo GeoIP support built-in", prefix);
+	snfprintf(stderr, string, size, "%sNo GeoIP support built-in", prefix);
 #endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Finished");

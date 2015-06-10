@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.65 2015/05/28 20:21:27 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.66 2015/06/10 05:53:57 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -581,16 +581,16 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
-	printf("%sDB features: 0x%08x\n\n", prefix_string, wrapper_features);
+	fprintf(stderr, "%sDB features: 0x%08x\n\n", prefix_string, wrapper_features);
 
 #ifdef SUPPORT_GEOIP
 	if (wrapper_GeoIP_disable != 1) {
 		// Call GeoIP wrapper
 		libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(level_verbose, prefix_string);
 	} else {
-		printf("%sGeoIP support available but disabled by option\n", prefix_string);
+		fprintf(stderr, "%sGeoIP support available but disabled by option\n", prefix_string);
 	};
-	printf("\n");
+	fprintf(stderr, "\n");
 #endif
 
 #ifdef SUPPORT_IP2LOCATION
@@ -598,9 +598,9 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		// Call IP2Location wrapper
 		libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(level_verbose, prefix_string);
 	} else {
-		printf("%sIP2Location support available but disabled by option\n", prefix_string);
+		fprintf(stderr, "%sIP2Location support available but disabled by option\n", prefix_string);
 	};
-	printf("\n");
+	fprintf(stderr, "\n");
 #endif
 
 #ifdef SUPPORT_DBIP
@@ -608,9 +608,9 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		// Call DBIP wrapper
 		libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(level_verbose, prefix_string);
 	} else {
-		printf("%sdb-ip.com support available but disabled by option\n", prefix_string);
+		fprintf(stderr, "%sdb-ip.com support available but disabled by option\n", prefix_string);
 	};
-	printf("\n");
+	fprintf(stderr, "\n");
 #endif
 
 #ifdef SUPPORT_EXTERNAL
@@ -618,9 +618,9 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		// Call External wrapper
 		libipv6calc_db_wrapper_External_wrapper_print_db_info(level_verbose, prefix_string);
 	} else {
-		printf("%sExternal support available but disabled by option\n", prefix_string);
+		fprintf(stderr, "%sExternal support available but disabled by option\n", prefix_string);
 	};
-	printf("\n");
+	fprintf(stderr, "\n");
 #endif
 
 #ifdef SUPPORT_BUILTIN
@@ -628,48 +628,48 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		// Call BuiltIn wrapper
 		libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(level_verbose, prefix_string);
 	} else {
-		printf("%sBuiltIn support available but disabled by option\n", prefix_string);
+		fprintf(stderr, "%sBuiltIn support available but disabled by option\n", prefix_string);
 	};
-	printf("\n");
+	fprintf(stderr, "\n");
 #endif
 
 	// summary
-	printf("%sDatabase selection or priorization ('->': subsequential calls)\n", prefix_string);
+	fprintf(stderr, "%sDatabase selection or priorization ('->': subsequential calls)\n", prefix_string);
 
-	printf("%sDatabase priorization %s: "
+	fprintf(stderr, "%sDatabase priorization %s: "
 		, prefix_string
 		, (wrapper_source_priority_selector_by_option > 0) ? "by option" : "default"
 	);
 
 	int sp;
 	for (sp = IPV6CALC_DB_SOURCE_MIN; sp <= IPV6CALC_DB_SOURCE_MAX; sp++) {
-		printf("%s%s"
+		fprintf(stderr, "%s%s"
 			, (sp == IPV6CALC_DB_SOURCE_MIN) ? "" : "->"
 			, libipv6calc_db_wrapper_get_data_source_name_by_number(wrapper_source_priority_selector[sp])
 		);
 	};
-	printf("\n");
+	fprintf(stderr, "\n");
 
 	for (f = IPV6CALC_DB_FEATURE_NUM_MIN; f <= IPV6CALC_DB_FEATURE_NUM_MAX; f++) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "f=%d", f);
 
 		f_index = libipv6calc_db_wrapper_get_feature_index_by_feature(1 << f);
 
-		printf("%s%s (%s): ", prefix_string, ipv6calc_db_features[f_index].token, ipv6calc_db_features[f_index].explanation);
+		fprintf(stderr, "%s%s (%s): ", prefix_string, ipv6calc_db_features[f_index].token, ipv6calc_db_features[f_index].explanation);
 
 		if (wrapper_features_selector[f][0] == 0) {
-			printf("NO-DATABASE");
+			fprintf(stderr, "NO-DATABASE");
 		} else {
 			for (p = 0; p < IPV6CALC_DB_PRIO_MAX; p++) {
 				if (wrapper_features_selector[f][p] != 0) {
-					printf("%s%s", (p == 0) ? "" : "->", libipv6calc_db_wrapper_get_data_source_name_by_number(wrapper_features_selector[f][p]));
+					fprintf(stderr, "%s%s", (p == 0) ? "" : "->", libipv6calc_db_wrapper_get_data_source_name_by_number(wrapper_features_selector[f][p]));
 				};
 			};
 		};
-		printf("\n");
+		fprintf(stderr, "\n");
 	};
 
-	printf("\n");
+	fprintf(stderr, "\n");
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Return");
 

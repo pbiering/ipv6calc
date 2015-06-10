@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.41 2015/05/28 20:21:27 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.42 2015/06/10 05:53:57 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -167,7 +167,7 @@ typedef struct {
 
 // db-info macro
 #define IPV6CALC_DB_FEATURE_INFO(prefix, data_source) \
-        printf("%s%s: features available/implemented: 0x%08x/0x%08x", \
+        fprintf(stderr, "%s%s: features available/implemented: 0x%08x/0x%08x", \
 		prefix, \
 		libipv6calc_db_wrapper_get_data_source_name_by_number(data_source), \
 		wrapper_features_by_source[data_source], \
@@ -176,12 +176,12 @@ typedef struct {
 		int wrapper_features_by_source_bitcount = libipv6calc_bitcount_uint32_t(wrapper_features_by_source[data_source]); \
 		int wrapper_features_by_source_implemented_bitcount = libipv6calc_bitcount_uint32_t(wrapper_features_by_source_implemented[data_source]); \
 		if (wrapper_features_by_source_implemented_bitcount == 0) { \
-			printf(" (NONE)"); \
+			fprintf(stderr, " (NONE)"); \
 		} else { \
-			printf(" (%d%%)", (wrapper_features_by_source_bitcount * 100) / wrapper_features_by_source_implemented_bitcount); \
+			fprintf(stderr, " (%d%%)", (wrapper_features_by_source_bitcount * 100) / wrapper_features_by_source_implemented_bitcount); \
 		}; \
 	}; \
-	printf("\n");
+	fprintf(stderr, "\n");
 
 // AS Number handling
 #define ASNUM_AS_UNKNOWN 0

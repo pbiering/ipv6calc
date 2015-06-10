@@ -2,10 +2,24 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc_anonymization.sh
-# Version    : $Id: test_ipv6calc_anonymization.sh,v 1.8 2015/01/23 07:57:48 ds6peter Exp $
-# Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6calc_anonymization.sh,v 1.9 2015/06/10 05:53:57 ds6peter Exp $
+# Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test ipv6calc anonymization
+
+verbose=0
+while getopts "Vh\?" opt; do
+	case $opt in
+	    V)
+		verbose=1
+		;;
+	    *)
+		echo "$0 [-V]"
+		echo "    -V   verbose"
+		exit 1
+		;;
+	esac
+done
 
 if [ ! -x ./ipv6calc ]; then
 	echo "Binary './ipv6calc' missing or not executable"
@@ -22,14 +36,14 @@ test_list() {
 }
 
 run_anon_tests() {
-	echo "Run 'ipv6calc' anonymization tests..."
+	test="run 'ipv6calc' anonymization tests"
+	echo "INFO  : $test"
 	test_list | while read input filter; do
 		if [ -z "$input" ]; then
-			# end
 			continue
 		fi
 
-		echo "Test './ipv6calc -A anonymize' for: $input"
+		[ "$verbose" = "1" ] && echo "INFO: test './ipv6calc -A anonymize' for: $input"
 
 		output="`echo "$input" | ./ipv6calc -q -A anonymize`"
 		retval=$?
@@ -38,7 +52,7 @@ run_anon_tests() {
 			exit 1
 		fi
 
-		echo "INFO  : anonymized: $output"
+		[ "$verbose" = "1" ] && echo "INFO  : anonymized: $output"
 
 		type_orig="`./ipv6calc -q -i "$input" -m | grep -a "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
 		type_anon="`./ipv6calc -q -i "$output" -m | grep -a "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
@@ -67,20 +81,24 @@ run_anon_tests() {
 		type_anon_compare="${type_anon_compare/anonymized-prefix,}"
 		type_orig_compare="${type_orig_compare/anonymized-prefix,}"
 
-		echo "DEBUG : IPVx_TYPE orig: $type_orig_compare"
-		echo "DEBUG : IPVx_TYPE anon: $type_anon_compare"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx_TYPE orig: $type_orig_compare"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx_TYPE anon: $type_anon_compare"
 		# Check result
 		if [ "$type_orig_compare" != "$type_anon_compare" ]; then
 			echo "ERROR : IPVx_TYPE not equal:"
 			exit 1
 		else
-			echo "Result ok!"
+			[ "$verbose" = "1" ] && echo "INFO  : result ok!" || true
 		fi
+		[ "$verbose" = "1" ] || echo -n "."
 	done || return 1 
+	[ "$verbose" = "1" ] || echo
+	echo "INFO  : $test successful"
 }
 
 run_anon_options_tests() {
-	echo "Run 'ipv6calc' anonymization option tests..."
+	test="run 'ipv6calc' anonymization option tests"
+	echo "INFO  : $test"
 	testscenarios_anonymization_options | while IFS="=" read input result; do
 		if [ -z "$input" ]; then
 			continue
@@ -100,18 +118,22 @@ run_anon_options_tests() {
 			echo "ERROR : result expected: $result"
 			exit 1
 		else
-			echo "INFO  : $command -> test ok"
+			[ "$verbose" = "1" ] && echo "INFO  : $command -> test ok" || true
 		fi
+		[ "$verbose" = "1" ] || echo -n "."
 	done || return 1
+	[ "$verbose" = "1" ] || echo
+	echo "INFO  : $test successful"
 }
 
 run_anon_options_kp_tests() {
 	if ! ./ipv6calc -vv 2>&1| grep -q "Country4=1 Country6=1 ASN4=1 ASN6=1"; then
-		echo "NOTICE 'ipv6calc' has not required support for Country/ASN included, skip option kp tests..."
+		echo "NOTICE: 'ipv6calc' has not required support for Country/ASN included, skip option kp tests"
 		return 0
 	fi
 
-	echo "Run 'ipv6calc' anonymization option kp tests..."
+	test="run 'ipv6calc' anonymization option kp tests"
+	echo "INFO  : $test"
 	testscenarios_anonymization_options_kp | while IFS="=" read input result; do
 		if [ -z "$input" ]; then
 			continue
@@ -131,11 +153,25 @@ run_anon_options_kp_tests() {
 			echo "ERROR : result expected: $result"
 			exit 1
 		fi
-	done
+		[ "$verbose" = "1" ] || echo -n "."
+	done || return 1
+	[ "$verbose" = "1" ] || echo
+	echo "INFO  : $test successful"
 
-	echo "Run 'ipv6calc' anonymization option kp TYPE/REGISTRY/CC tests..."
-	testscenarios_kp | ./ipv6calc -E ipv4,ipv6 | while read input result; do
+	test="run 'ipv6calc' anonymization option kp TYPE/REGISTRY/CC tests"
+	echo "INFO  : $test"
+	testscenarios_kp | ./ipv6calc -q -E ipv4,ipv6 | while read input result; do
+		if [ -z "$input" ]; then
+			continue
+		fi
+
+		[ "$verbose" = "1" ] && echo "INFO  : run test with: $input"
+
 		output=$(./ipv6calc -q -A anonymize --anonymize-preset kp $input)
+		if [ $? -ne 0 -o -z "$output" ]; then
+			echo "ERROR : no proper result for input: $input"
+			exit 1
+		fi
 
 		type_orig="`./ipv6calc -m -i -q "$input"  | grep -a "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
 		type_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
@@ -173,16 +209,17 @@ run_anon_options_kp_tests() {
 			exit 1
 		fi
 
-		echo "DEBUG : IPVx      orig: $input"
-		echo "DEBUG : IPVx      anon: $output"
-		echo "DEBUG : IPVx_TYPE orig: $type_orig_compare"
-		echo "DEBUG : IPVx_TYPE anon: $type_anon_compare"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx      orig: $input"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx      anon: $output"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx_TYPE orig: $type_orig_compare"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx_TYPE anon: $type_anon_compare"
+
 		# Check result
 		if [ "$type_orig_compare" != "$type_anon_compare" ]; then
 			echo "ERROR : IPVx_TYPE not equal:"
 			exit 1
 		else
-			echo "Result ok!"
+			[ "$verbose" = "1" ] && echo "Result ok!" || true
 		fi
 
 		# Registry
@@ -198,10 +235,10 @@ run_anon_options_kp_tests() {
 			exit 1
 		fi
 
-		echo "DEBUG : IPVx          orig: $input"
-		echo "DEBUG : IPVx          anon: $output"
-		echo "DEBUG : IPVx_REGISTRY orig: $reg_orig"
-		echo "DEBUG : IPVx_REGISTRY anon: $reg_anon"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx          orig: $input"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx          anon: $output"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx_REGISTRY orig: $reg_orig"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx_REGISTRY anon: $reg_anon"
 
 		if [ -z "$reg_orig" -a -z "$reg_anon" ]; then
 			# everything is ok, both have no registry
@@ -218,7 +255,7 @@ run_anon_options_kp_tests() {
 				echo "ERROR : IPVx_REGISTRY not equal:"
 				exit 1
 			else
-				echo "Result ok!"
+				[ "$verbose" = "1" ] && echo "Result ok!" || true
 			fi
 		fi
 
@@ -226,10 +263,10 @@ run_anon_options_kp_tests() {
 		cc_orig="`./ipv6calc -m -i -q "$input"  | grep -a "^IPV._COUNTRYCODE=" | sed 's/IPV._COUNTRYCODE=//'`"
 		cc_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._COUNTRYCODE=" | sed 's/IPV._COUNTRYCODE=//'`"
 
-		echo "DEBUG : IPVx             orig: $input"
-		echo "DEBUG : IPVx             anon: $output"
-		echo "DEBUG : IPVx_COUNTRYCODE orig: $cc_orig"
-		echo "DEBUG : IPVx_COUNTRYCODE anon: $cc_anon"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx             orig: $input"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx             anon: $output"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx_COUNTRYCODE orig: $cc_orig"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx_COUNTRYCODE anon: $cc_anon"
 
 		if [ -z "$cc_orig" -a -z "$cc_anon" ]; then
 			# everything is ok, both have no CC
@@ -246,16 +283,17 @@ run_anon_options_kp_tests() {
 				echo "ERROR : IPVx_COUNTRYCODE not equal:"
 				exit 1
 			else
-				echo "Result ok!"
+				[ "$verbose" = "1" ] && echo "Result ok!" || true
 			fi
 		fi
-
+		[ "$verbose" = "1" ] || echo -n "."
 	done || return 1
-	echo "All anonymization method kp tests successful!"
+	[ "$verbose" = "1" ] || echo
+	echo "INFO  : $test successful"
 }
 
 
 run_anon_options_tests || exit 1
 run_anon_options_kp_tests || exit 1
 run_anon_tests || exit 1
-echo "All anonymization tests successful!"
+echo "INFO  : all anonymization tests successful!"

@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.286 2015/06/07 19:57:49 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.287 2015/06/10 05:53:57 ds6peter Exp $
 
 # shared library support (deselectable)
 %if "%{?_without_shared:0}%{?!_without_shared:1}" == "1"

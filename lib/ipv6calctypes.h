@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.51 2015/05/27 06:17:50 ds6peter Exp $
+ * Version    : $Id: ipv6calctypes.h,v 1.52 2015/06/10 05:53:57 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -12,10 +12,6 @@
 #include "ipv6calccommands.h"
 #include <getopt.h>
 
-
-/* prototypes */
-extern uint32_t ipv6calctypes_checktype(const char *string);
-extern uint32_t ipv6calctypes_checkaction(const char *string);
 
 /* defines */
 #ifndef _ipv6calctypes_h_
@@ -387,3 +383,10 @@ typedef struct {
 
 
 #endif // _ipv6calctypes_h_
+
+
+/* prototypes */
+extern uint32_t ipv6calctypes_checktype(const char *string);
+extern uint32_t ipv6calctypes_checkaction(const char *string);
+
+extern const char *ipv6calctypes_format_string_by_type(const uint32_t format_type);

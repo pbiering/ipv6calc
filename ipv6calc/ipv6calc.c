@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.125 2015/05/27 06:17:50 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.126 2015/06/10 05:53:57 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -1439,8 +1439,7 @@ PIPE_input:
 				/* call filter for MAC addresses */
 				result = macaddr_filter(&macaddr, &filter_master.filter_macaddr);
 			} else {
-				/* TODO: more specific notice */
-				fprintf(stderr, "Action-type isn't currently implemented for inputtype\n");
+				NONQUIETPRINT_WA("Action-type 'filter' isn't currently implemented for inputtype: %s", ipv6calctypes_format_string_by_type(inputtype));
 			};
 
 			if (result > 0) {

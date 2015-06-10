@@ -2,53 +2,30 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.55 2015/06/08 06:36:43 ds6peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.56 2015/06/10 05:53:57 ds6peter Exp $
 # Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 
 verbose=0
+while getopts "Vh\?" opt; do
+	case $opt in
+	    V)
+		verbose=1
+		;;
+	    *)
+		echo "$0 [-V]"
+		echo "    -V   verbose"
+		exit 1
+		;;
+	esac
+done
+	
 
 if [ ! -x ./ipv6calc ]; then
 	echo "Binary './ipv6calc' missing or not executable"
 	exit 1
 fi
-
-# Test proper option definitions
-echo "Test proper option definition"
-./ipv6calc -h >/dev/null
-if [ $? -ne 1 ]; then
-	echo "ERROR : something wrong in option definition"
-	exit 1
-fi
-
-## version
-echo "Run 'ipv6calc' version test..."
-./ipv6calc -vvv
-retval=$?
-if [ $retval -ne 0 ]; then
-	echo "Error executing 'ipv6calc -vvv'!"
-	exit 1
-fi
-echo 
-
-echo "Run 'ipv6calc' version test in debug mode..."
-./ipv6calc -vvv -d -1
-retval=$?
-if [ $retval -ne 0 ]; then
-	echo "Error executing 'ipv6calc -vvv -d -1'!"
-	exit 1
-fi
-echo 
-
-echo "Run 'ipv6calc' version help test for feature tokens..."
-./ipv6calc -v -h
-retval=$?
-if [ $retval -ne 0 ]; then
-	echo "Error executing 'ipv6calc -v -h'!"
-	exit 1
-fi
-echo 
 
 
 # Test Scenarios for autodetection "good case"
@@ -275,29 +252,97 @@ END
 
 }
 
-#set -x
 ## main ##
-echo "Run 'ipv6calc' basic tests..."
 
-echo "Test './ipv6calc -v'"
-output="`./ipv6calc -v`"
+# Test proper option definitions
+test="test proper option definition"
+echo "INFO  : $test"
+if [ "$verbose" = "1" ]; then
+	./ipv6calc -h
+	retval=$?
+else
+	./ipv6calc -h 2>/dev/null
+	retval=$?
+fi
+if [ $retval -ne 1 ]; then
+	echo "ERROR : something wrong in option definition"
+	exit 1
+fi
+echo "INFO  : $test successful"
+
+
+test="run 'ipv6calc' version test"
+echo "INFO  : $test"
+if [ "$verbose" = "1" ]; then
+	./ipv6calc -vvv
+	retval=$?
+else
+	./ipv6calc -vvv 2>/dev/null
+	retval=$?
+fi
+if [ $retval -ne 0 ]; then
+	echo "Error executing 'ipv6calc -vvv'!"
+	exit 1
+fi
+echo "INFO  : $test successful"
+
+
+test="run 'ipv6calc' version test in debug mode"
+echo "INFO  : $test"
+if [ "$verbose" = "1" ]; then
+	./ipv6calc -vvv -d -1
+	retval=$?
+else
+	./ipv6calc -vvv -d -1 >/dev/null 2>&1
+	retval=$?
+fi
+if [ $retval -ne 0 ]; then
+	echo "Error executing 'ipv6calc -vvv -d -1'!"
+	exit 1
+fi
+echo "INFO  : $test successful"
+
+
+test="run 'ipv6calc' version help test for feature tokens"
+echo "INFO  : $test"
+if [ "$verbose" = "1" ]; then
+	./ipv6calc -v -h
+	retval=$?
+else
+	./ipv6calc -v -h 2>/dev/null
+	retval=$?
+fi
+if [ $retval -ne 0 ]; then
+	echo "Error executing 'ipv6calc -v -h'!"
+	exit 1
+fi
+echo "INFO  : $test successful"
+
+
+test="test './ipv6calc -v'"
+echo "INFO  : $test"
+output="`./ipv6calc -v 2>&1`"
 retval=$?
 if [ $retval -ne 0 ]; then
 	echo "Error executing: ipv6calc -v: $output"
 	exit 1
 fi
+echo "INFO  : $test successful"
 
-echo "Test './ipv6calc -v -v'"
-output="`./ipv6calc -v -v`"
+
+test="test './ipv6calc -v -v'"
+echo "INFO  : $test"
+output="`./ipv6calc -v -v 2>&1`"
 retval=$?
 if [ $retval -ne 0 ]; then
 	echo "Error executing: ipv6calc -v -v: $output"
 	exit 1
 fi
+echo "INFO  : $test successful"
 
 
-echo "Run 'ipv6calc' function tests..."
-
+test="run 'ipv6calc' function tests"
+echo "INFO  : $test"
 testscenarios | sed 's/NOPIPETEST//' | while read line; do
 	if [ -z "$line" ]; then
 		# end
@@ -317,7 +362,7 @@ testscenarios | sed 's/NOPIPETEST//' | while read line; do
 
 	#continue
 	# get result
-	output="`./ipv6calc $command`"
+	output="`./ipv6calc -q $command`"
 	retval=$?
 	if [ $retval -ne 0 ]; then
 		[ "$verbose" = "1" ] || echo "$info"
@@ -332,15 +377,19 @@ testscenarios | sed 's/NOPIPETEST//' | while read line; do
 			exit 1
 		fi
 	fi
-done || exit 1 
+	[ "$verbose" = "1" ] || echo -n "."
+done || exit 1
+[ "$verbose" = "1" ] || echo
+echo "INFO  : $test successful"
 
 
-echo "Run 'ipv6calc' action 'genprivacyiid'..."
+test="run 'ipv6calc' action 'genprivacyiid'"
+echo "INFO  : $test"
 testscenarios_genprivacyiid | while read in1 in2 out1 out2; do
 	info="INFO  : test './ipv6calc -q -A genprivacyiid $in1 $in2'"
 	[ "$verbose" = "1" ] && echo "$info"
 
-	result="`./ipv6calc -A genprivacyiid $in1 $in2`"
+	result="`./ipv6calc -q -A genprivacyiid $in1 $in2`"
 	retval=$?
 
 	if [ $retval -ne 0 ]; then
@@ -356,51 +405,85 @@ testscenarios_genprivacyiid | while read in1 in2 out1 out2; do
 		echo "Result expected: $out1 $out2"
 		exit 1
 	fi
+	[ "$verbose" = "1" ] || echo -n "."
 done || exit 1
+[ "$verbose" = "1" ] || echo
+echo "INFO  : $test successful"
 
 
-echo "Run 'ipv6calc' input validation tests...(empty input)"
+test="run 'ipv6calc' input validation tests (empty input)"
+echo "INFO  : $test"
 ./ipv6calc -m --in -? | while read inputformat; do
 	if echo $inputformat | grep -q '+'; then
 		info="INFO  : test './ipv6calc -q --in $inputformat \"\" \"\"'"
 		[ "$verbose" = "1" ] && echo "$info"
-		./ipv6calc -q --in $inputformat "" ""
-		retval=$?
+		if [ "$verbose" = "1" ]; then
+			./ipv6calc -q --in $inputformat "" ""
+			retval=$?
+		else
+			./ipv6calc -q --in $inputformat "" "" 2>/dev/null
+			retval=$?
+		fi
 	else
 		info="INFO  : test './ipv6calc -q --in $inputformat \"\"'"
 		[ "$verbose" = "1" ] && echo "$info"
-		./ipv6calc -q --in $inputformat ""
-		retval=$?
+		if [ "$verbose" = "1" ]; then
+			./ipv6calc -q --in $inputformat ""
+			retval=$?
+		else
+			./ipv6calc -q --in $inputformat "" 2>/dev/null
+			retval=$?
+		fi
 	fi
 	if [ $retval -ne 1 ]; then
 		[ "$verbose" = "1" ] || echo "$info"
 		echo "Error executing 'ipv6calc'!"
 		exit 1
 	fi
+	[ "$verbose" = "1" ] || echo -n "."
 done || exit 1
+[ "$verbose" = "1" ] || echo
+echo "INFO  : $test successful"
 
-echo "Run 'ipv6calc' input validation tests...(too long input)"
+
+test="run 'ipv6calc' input validation tests (too long input)"
+echo "INFO  : $test"
 line="`perl -e 'print "x" x300'`"
 ./ipv6calc -m --in -? | while read inputformat; do
 	if echo $inputformat | grep -q '+'; then
 		info="INFO  : test './ipv6calc -q --in $inputformat \"$line\" \"$line\"'"
 		[ "$verbose" = "1" ] && echo "$info"
-		./ipv6calc -q --in $inputformat "$line" "$line"
-		retval=$?
+		if [ "$verbose" = "1" ]; then
+			./ipv6calc -q --in $inputformat "$line" "$line"
+			retval=$?
+		else
+			./ipv6calc -q --in $inputformat "$line" "$line" 2>/dev/null
+			retval=$?
+		fi
 	else
 		info="INFO  : test './ipv6calc -q --in $inputformat \"$line\"'"
 		[ "$verbose" = "1" ] && echo "$info"
-		./ipv6calc -q --in $inputformat "$line"
-		retval=$?
+		if [ "$verbose" = "1" ]; then
+			./ipv6calc -q --in $inputformat "$line"
+			retval=$?
+		else
+			./ipv6calc -q --in $inputformat "$line" 2>/dev/null
+			retval=$?
+		fi
 	fi
 	if [ $retval -ne 1 ]; then
 		[ "$verbose" = "1" ] || echo "$info"
 		echo "Error executing 'ipv6calc'!"
 		exit 1
 	fi
+	[ "$verbose" = "1" ] || echo -n "."
 done || exit 1
+[ "$verbose" = "1" ] || echo
+echo "INFO  : $test successful"
 
-echo "Run 'ipv6calc' input validation tests...(strange input)"
+
+test="run 'ipv6calc' input validation tests (strange input)"
+echo "INFO  : $test"
 ./ipv6calc -m --in -? | while read inputformat; do
 	case $inputformat in
 	    hex|ifinet6)
@@ -413,22 +496,37 @@ echo "Run 'ipv6calc' input validation tests...(strange input)"
 	if echo $inputformat | grep -q '+'; then
 		info="INFO  : test './ipv6calc -q --in $inputformat \"$line\" \"$line\"'"
 		[ "$verbose" = "1" ] && echo "$info"
-		./ipv6calc -q --in $inputformat "$line" "$line"
-		retval=$?
+		if [ "$verbose" = "1" ]; then
+			./ipv6calc -q --in $inputformat "$line" "$line"
+			retval=$?
+		else
+			./ipv6calc -q --in $inputformat "$line" "$line" 2>/dev/null
+			retval=$?
+		fi
 	else
 		info="INFO  : test './ipv6calc -q --in $inputformat \"$line\"'"
 		[ "$verbose" = "1" ] && echo "$info"
-		./ipv6calc -q --in $inputformat "$line"
-		retval=$?
+		if [ "$verbose" = "1" ]; then
+			./ipv6calc -q --in $inputformat "$line"
+			retval=$?
+		else
+			./ipv6calc -q --in $inputformat "$line" 2>/dev/null
+			retval=$?
+		fi
 	fi
 	if [ $retval -ne 1 ]; then
 		[ "$verbose" = "1" ] || echo "$info"
 		echo "Error executing 'ipv6calc'!"
 		exit 1
 	fi
+	[ "$verbose" = "1" ] || echo -n "."
 done || exit 1
+[ "$verbose" = "1" ] || echo
+echo "INFO  : $test successful"
 
-echo "Run 'ipv6calc' input autodetection tests...(good cases)"
+
+test="run 'ipv6calc' input autodetection tests (good cases)"
+echo "INFO  : $test"
 testscenarios_auto_good | while read input dummy; do
 	info="INFO  : test './ipv6calc -q \"$input\"'"
 	[ "$verbose" = "1" ] && echo "$info"
@@ -439,23 +537,36 @@ testscenarios_auto_good | while read input dummy; do
 		echo "Error executing 'ipv6calc'!"
 		exit 1
 	fi
+	[ "$verbose" = "1" ] || echo -n "."
 done || exit 1
+[ "$verbose" = "1" ] || echo
+echo "INFO  : $test successful"
 
-echo "Run 'ipv6calc' input autodetection tests...(bad cases)"
+
+test="run 'ipv6calc' input autodetection tests (bad cases)"
+echo "INFO  : $test"
 testscenarios_auto_bad | while read input dummy; do
-	verbose=1
 	info="INFO  : test './ipv6calc -q \"$input\"'"
 	[ "$verbose" = "1" ] && echo "$info"
-	./ipv6calc -q "$input" >/dev/null
-	retval=$?
+	if [ "$verbose" = "1" ]; then
+		./ipv6calc -q "$input"
+		retval=$?
+	else
+		./ipv6calc -q "$input" >/dev/null 2>&1
+		retval=$?
+	fi
 	if [ $retval -eq 0 ]; then
 		[ "$verbose" = "1" ] || echo "$info"
 		echo "Error executing 'ipv6calc' ($retval)!"
 		exit 1
 	fi
+	[ "$verbose" = "1" ] || echo -n "."
 done || exit 1
+[ "$verbose" = "1" ] || echo
+echo "INFO  : $test successful"
 
-echo "Run 'ipv6calc' input tests...(good cases)"
+test="run 'ipv6calc' input tests (good cases)"
+echo "INFO  : $test"
 testscenarios_auto_good | while read input type; do
 	info="INFO  : test './ipv6calc --in $type -q \"$input\"'"
 	[ "$verbose" = "1" ] && echo "$info"
@@ -466,9 +577,14 @@ testscenarios_auto_good | while read input type; do
 		echo "Error executing 'ipv6calc'!"
 		exit 1
 	fi
+	[ "$verbose" = "1" ] || echo -n "."
 done || exit 1
+[ "$verbose" = "1" ] || echo
+echo "INFO  : $test successful"
 
-echo "Run 'ipv6calc' pipe tests (1)"
+
+test="run 'ipv6calc' pipe tests (1)"
+echo "INFO  : $test"
 testscenarios_pipe | while IFS="," read input arguments result; do
 	info="INFO  : test 'echo $input | ./ipv6calc $arguments | grep \"^$result\$\"'"
 	[ "$verbose" = "1" ] && echo "$info"
@@ -480,11 +596,16 @@ testscenarios_pipe | while IFS="," read input arguments result; do
 		echo "Error executing 'ipv6calc' ($retval)!"
 		exit 1
 	fi
+	[ "$verbose" = "1" ] || echo -n "."
 done || exit 1
+[ "$verbose" = "1" ] || echo
+echo "INFO  : $test successful"
 
-echo "Run 'ipv6calc' pipe tests (2)"
-# reuse original test cases
+
+test="run 'ipv6calc' pipe tests (2)"
+echo "INFO  : $test"
 testscenarios | grep -v "^NOPIPETEST" | while read line; do
+	# reuse original test cases
 	# extract result
 	command="`echo "$line" | awk -F= '{ print $1 }' | sed 's/ $//g'`"
 	result="`echo "$line" | awk -F= '{ for (i=2; i <= NF; i++) printf "%s%s", $i, (i<NF) ? "=" : ""; }'`"
@@ -520,9 +641,14 @@ testscenarios | grep -v "^NOPIPETEST" | while read line; do
 			exit 1
 		fi
 	fi
+	[ "$verbose" = "1" ] || echo -n "."
 done || exit 1
+[ "$verbose" = "1" ] || echo
+echo "INFO  : $test successful"
 
-echo "Run 'ipv6calc' pipe mode input validation tests...(too long input)"
+
+test="run 'ipv6calc' pipe mode input validation tests (too long input)"
+echo "INFO  : $test"
 ./ipv6calc -m --in -? | while read inputformat; do
 	if echo $inputformat | grep -q '+'; then
 		info="INFO  : test '8192*x 8192*x | ./ipv6calc -q --in $inputformat"
@@ -541,14 +667,18 @@ echo "Run 'ipv6calc' pipe mode input validation tests...(too long input)"
 		echo "Error executing 'ipv6calc'!"
 		exit 1
 	fi
+	[ "$verbose" = "1" ] || echo -n "."
 done || exit 1
+[ "$verbose" = "1" ] || echo
+echo "INFO  : $test successful"
+
 
 retval=$?
 if [ $retval -eq 0 ]; then
-	echo "All tests were successfully done!"
+	echo "INFO  : all tests were successfully done!"
 	exit 0
 else
-	echo "Tests failed! (code $retval)"
+	echo "ERROR : tests failed! (code $retval)"
 	exit $retval
 fi
 
