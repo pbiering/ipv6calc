@@ -2,10 +2,24 @@
 #
 # Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
-# Version    : $Id: test_ipv6logstats.sh,v 1.20 2015/04/30 19:05:22 ds6peter Exp $
+# Version    : $Id: test_ipv6logstats.sh,v 1.21 2015/06/10 20:41:08 ds6peter Exp $
 # Copyright  : 2003-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"
+
+verbose=0
+while getopts "Vh\?" opt; do
+	case $opt in
+	    V)
+		verbose=1
+		;;
+	    *)
+		echo "$0 [-V]"
+		echo "    -V   verbose"
+		exit 1
+		;;
+	esac
+done
 
 if [ ! -x ./ipv6logstats ]; then
 	echo "Binary './ipv6logstats' missing or not executable"
@@ -101,8 +115,13 @@ fi
 echo 
 
 echo "Run 'ipv6logstats' version test in debug mode..."
-./ipv6logstats -vvv -d -1
-retval=$?
+if [ "$verbose" = "1" ]; then
+	./ipv6logstats -vvv -d -1
+	retval=$?
+else
+	./ipv6logstats -vvv -d -1 2>/dev/null
+	retval=$?
+fi
 if [ $retval -ne 0 ]; then
 	echo "Error executing 'ipv6logstats'!"
 	exit 1
@@ -121,32 +140,54 @@ fi
 echo "Run 'ipv6logstats' function tests..."
 
 #testscenarios
-testscenarios | ./ipv6logstats -q
-retval=$?
+test="run 'ipv6logstats' test #1"
+echo "INFO  : $test"
+if [ "$verbose" = "1" ]; then
+	testscenarios | ./ipv6logstats -q
+	retval=$?
+else
+	testscenarios | ./ipv6logstats -q >/dev/null 2>&1
+	retval=$?
+fi
 if [ $retval -ne 0 ]; then
 	echo "Error executing 'ipv6logstats'!"
 	exit 1
 fi
-echo 
+echo "INFO  : $test successful"
 
 
 #testscenarios (columns)
-testscenarios | ./ipv6logstats -q -c
-retval=$?
+test="run 'ipv6logstats' columns"
+echo "INFO  : $test"
+if [ "$verbose" = "1" ]; then
+	testscenarios | ./ipv6logstats -q -c
+	retval=$?
+else
+	testscenarios | ./ipv6logstats -q -c 2>/dev/null
+	retval=$?
+fi
 if [ $retval -ne 0 ]; then
 	echo "Error executing 'ipv6logstats'!"
 	exit 1
 fi
-echo
+echo "INFO  : $test successful"
 
 #testscenarios version 3
+test="run 'ipv6logstats' test #3"
+echo "INFO  : $test"
 if ./ipv6logstats -v 2>&1 | grep -qw "STAT_CC"; then
-	testscenarios | ./ipv6logstats -q | grep -q '\*3\*CC-proto-code-list/ALL'
-	retval=$?
+	if [ "$verbose" = "1" ]; then
+		testscenarios | ./ipv6logstats -q | grep -q '\*3\*CC-proto-code-list/ALL'
+		retval=$?
+	else
+		testscenarios | ./ipv6logstats -q 2>/dev/null | grep -q '\*3\*CC-proto-code-list/ALL'
+		retval=$?
+	fi
 	if [ $retval -ne 0 ]; then
 		echo "Error executing 'ipv6logstats' (version 3 test)"
 		exit 1
 	fi
+	echo "INFO  : $test successful"
 else
 	echo "Skip 'ipv6logstats' version 3 test (missing STAT_CC support)"
 fi
@@ -160,8 +201,10 @@ if ./ipv6logstats -v 2>&1 | grep -qw "STAT_AS"; then
 	feature_as=1
 fi
 
+test="run 'ipv6logstats' match test"
+echo "INFO  : $test"
 testscenarios_match | while read ip match; do
-	echo -n "INFO  : test $ip for match $match: "
+	[ "$verbose" = "1" ] && echo -n "INFO  : test $ip for match $match: "
 
 	if echo "$match" | grep -q "^AS"; then
 		if [ "$feature_as" != "1" ]; then
@@ -177,19 +220,31 @@ testscenarios_match | while read ip match; do
 		fi
 	fi
 
-	if echo "$ip" | ./ipv6logstats -q | grep -q "$match\W*1"; then
-		echo "OK"
+	if [ "$verbose" = "1" ]; then
+		echo "$ip" | ./ipv6logstats -q | grep -q "$match\W*1"
+		result=$?
 	else
+		echo "$ip" | ./ipv6logstats -q 2>/dev/null | grep -q "$match\W*1"
+		result=$?
+	fi
+	if [ $result -ne 0 ]; then
 		echo "ERROR, unexpected result:"
 		echo "$ip" | ./ipv6logstats -q | grep -v "DB-Info"
 		exit 1
 	fi
 done || exit 1
+echo "INFO  : $test successful"
 
 echo "INFO  : test scenario with huge amount of addresses..."
-testscenario_hugelist ipv4 | ./ipv6logstats -q >/dev/null
-if [ $? -ne 0 ]; then
-	echo "ERROR : exit code <> 0"
+if [ "$verbose" = "1" ]; then
+	testscenario_hugelist ipv4 | ./ipv6logstats -q >/dev/null
+	result=$?
+else
+	testscenario_hugelist ipv4 | ./ipv6logstats -q >/dev/null 2>/dev/null
+	result=$?
+fi
+if [ $result -ne 0 ]; then
+	echo "ERROR : exit code != 0"
 	exit 1
 fi
 echo "INFO  : test scenario with huge amount of addresses: OK"
