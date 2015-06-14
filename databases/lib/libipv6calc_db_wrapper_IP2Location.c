@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.36 2015/06/10 05:53:57 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.37 2015/06/14 20:14:49 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -1548,7 +1548,7 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(char *addr
 	if (proto == 4) {
 		IP2Location_type = ip2location_db_country_v4;
 
-		if (ip2location_db_country_sample_v4_lite_autoswitch > 0) {
+		if ((ip2location_db_country_sample_v4_lite_autoswitch > 0) && (ip2location_db_country_v4_best[IP2L_COMM].num != IP2Location_type)) {
 			// lite database selected, sample database available (supporting 0.0.0.0-99.255.255.255)
 			if ((addr[1] == '.') || (addr[2] == '.')) {
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_country_sample_v4_lite_autoswitch);
@@ -1558,7 +1558,7 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(char *addr
 	} else if (proto == 6) {
 		IP2Location_type = ip2location_db_country_v6;
 
-		if (ip2location_db_country_sample_v6_lite_autoswitch > 0) {
+		if ((ip2location_db_country_sample_v6_lite_autoswitch > 0) && (ip2location_db_country_v6_best[IP2L_COMM].num != IP2Location_type)) {
 			// lite database selected, sample database available (supporting 2A04:0:0:0:0:0:0:0-2A04:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF)
 			if (strncmp(addr, "2a04", 4) == 0) {
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_country_sample_v6_lite_autoswitch);
@@ -1637,7 +1637,7 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_country_name_by_addr(char *addr
 	if (proto == 4) {
 		IP2Location_type = ip2location_db_country_v4;
 
-		if (ip2location_db_country_sample_v4_lite_autoswitch > 0) {
+		if ((ip2location_db_country_sample_v4_lite_autoswitch > 0) && (ip2location_db_country_v4_best[IP2L_COMM].num != IP2Location_type)) {
 			// lite database selected, sample database available (supporting 0.0.0.0-99.255.255.255)
 			if ((addr[1] == '.') || (addr[2] == '.')) {
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_country_sample_v4_lite_autoswitch);
@@ -1647,7 +1647,7 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_country_name_by_addr(char *addr
 	} else if (proto == 6) {
 		IP2Location_type = ip2location_db_country_v6;
 
-		if (ip2location_db_country_sample_v6_lite_autoswitch > 0) {
+		if ((ip2location_db_country_sample_v6_lite_autoswitch > 0) && (ip2location_db_country_v6_best[IP2L_COMM].num != IP2Location_type)) {
 			// lite database selected, sample database available (supporting 2A04:0:0:0:0:0:0:0-2A04:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF)
 			if (strncmp(addr, "2a04", 4) == 0) {
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Overwrite IP2Location_type LITE %d with SAMPLE DB %d", IP2Location_type, ip2location_db_country_sample_v6_lite_autoswitch);

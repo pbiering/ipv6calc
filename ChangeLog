@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.404 2015/05/27 06:17:50 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.405 2015/06/14 20:14:48 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20150614/PB
+	databases/lib/libipv6calc_db_wrapper_IP2Location.c: some bugfixes regarding commercial DB file handling
+
 20150527/PB
 	ipv6calc: add action --6rd_extract_ipv4
 
