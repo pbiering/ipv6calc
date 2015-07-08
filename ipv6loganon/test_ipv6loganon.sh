@@ -2,10 +2,24 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.27 2015/04/16 06:23:20 ds6peter Exp $
-# Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6loganon.sh,v 1.28 2015/07/08 06:58:02 ds6peter Exp $
+# Copyright  : 2007-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
+
+verbose=0
+while getopts "Vh\?" opt; do
+	case $opt in
+	    V)
+		verbose=1
+		;;
+	    *)
+		echo "$0 [-V]"
+		echo "    -V   verbose"
+		exit 1
+		;;
+	esac
+done
 
 if [ ! -x ./ipv6loganon ]; then
 	echo "Binary './ipv6loganon' missing or not executable"
@@ -126,6 +140,8 @@ END
 echo "Run 'ipv6loganon' function tests..." >&2
 
 if [ "$1" != "bulk" ]; then
+	test="run 'ipv6loganon' standard tests"
+	echo "INFO  : $test"
 	testscenarios_standard | grep -v "^#" | while read line; do
 
 		# extract result
@@ -135,30 +151,41 @@ if [ "$1" != "bulk" ]; then
 			echo "Something is wrong in line '$line'"
 			exit 1
 		fi
-		echo "IN     : $input"
-		echo "CHECK  : $result"
+		[ "$verbose" = "1" ] && echo "IN     : $input"
+		[ "$verbose" = "1" ] && echo "CHECK  : $result"
 		# get result
 		output="`echo "$input" | ./ipv6loganon -q`"
-		echo "OUT    : $output"
 		retval=$?
+		[ "$verbose" = "1" ] && echo "OUT    : $output"
 		if [ $retval -ne 0 ]; then
 			echo "Error executing 'ipv6loganon'!"
+			[ "$verbose" = "1" ] || echo "IN     : $input"
+			[ "$verbose" = "1" ] || echo "CHECK  : $result"
+			[ "$verbose" = "1" ] || echo "OUT    : $output"
 			exit 1
 		fi
 		# Check result
 		if [ "$result" != "*" ]; then
 			if [ "$output" != "$result" ]; then
+				[ "$verbose" = "1" ] || echo "IN     : $input"
+				[ "$verbose" = "1" ] || echo "CHECK  : $result"
+				[ "$verbose" = "1" ] || echo "OUT    : $output"
 				echo "RESULT : fail"
 				exit 1
 			fi
 		fi
-		echo "RESULT : ok"
-		echo
+		[ "$verbose" = "1" ] && echo "RESULT : ok"
+		[ "$verbose" = "1" ] && echo
+		[ "$verbose" = "1" ] || echo -n "."
 	done
 	retval=$?
+	[ "$verbose" = "1" ] || echo
+	echo "INFO  : $test successful"
 
 	if [ $retval -eq 0 ]; then
 		# special tests
+		test="run 'ipv6loganon' special tests"
+		echo "INFO  : $test"
 		testscenarios_special | grep -v "^#" | while read line; do
 
 			# extract result
@@ -169,28 +196,37 @@ if [ "$1" != "bulk" ]; then
 				echo "Something is wrong in line '$line'"
 				exit 1
 			fi
-			echo "IN     : $input"
-			echo "OPTIONS: $options"
-			echo "CHECK  : $result"
+			[ "$verbose" = "1" ] && echo "IN     : $input"
+			[ "$verbose" = "1" ] && echo "OPTIONS: $options"
+			[ "$verbose" = "1" ] && echo "CHECK  : $result"
 			# get result
 			output="`echo "$input" | ./ipv6loganon -q $options`"
-			echo "OUT    : $output"
 			retval=$?
+			[ "$verbose" = "1" ] && echo "OUT    : $output"
 			if [ $retval -ne 0 ]; then
 				echo "Error executing 'ipv6loganon'!"
+				[ "$verbose" = "1" ] || echo "IN     : $input"
+				[ "$verbose" = "1" ] || echo "CHECK  : $result"
+				[ "$verbose" = "1" ] || echo "OUT    : $output"
 				exit 1
 			fi
 			# Check result
 			if [ "$result" != "*" ]; then
 				if [ "$output" != "$result" ]; then
+					[ "$verbose" = "1" ] || echo "IN     : $input"
+					[ "$verbose" = "1" ] || echo "CHECK  : $result"
+					[ "$verbose" = "1" ] || echo "OUT    : $output"
 					echo "RESULT : fail"
 					exit 1
 				fi
 			fi
-			echo "RESULT : ok"
-			echo
+			[ "$verbose" = "1" ] && echo "RESULT : ok"
+			[ "$verbose" = "1" ] && echo
+			[ "$verbose" = "1" ] || echo -n "."
 		done
 		retval=$?
+		[ "$verbose" = "1" ] || echo
+		echo "INFO  : $test successful"
 	fi
 	echo 
 else
@@ -229,12 +265,12 @@ run_loganon_reliability_tests() {
 		return 1
 	fi
 
-	if ! ../ipv6logstats/ipv6logstats -v | grep -w STAT_REG; then
+	if ! ../ipv6logstats/ipv6logstats -v | grep -qw STAT_REG; then
 		echo "NOTICE: ipv6logstats misses basic database, skip tests"
 		return 0
 	fi
 
-	if ! ../ipv6logconv/ipv6logconv -v | grep -w CONV_REG; then
+	if ! ../ipv6logconv/ipv6logconv -v | grep -qw CONV_REG; then
 		echo "NOTICE: ipv6logconv misses basic database, skip tests"
 		return 0
 	fi
@@ -313,7 +349,8 @@ run_loganon_reliability_tests() {
 }
 
 run_loganon_options_tests() {
-	echo "Run 'ipv6loganon' anonymization option tests..."
+	test="run 'ipv6loganon' anonymization option tests"
+	echo "INFO  : $test"
 	testscenarios_anonymization_options | while read line; do
 		if [ -z "$line" ]; then
 			continue
@@ -322,8 +359,8 @@ run_loganon_options_tests() {
 		options="`echo $line | awk '{ for ( i = 1; i < NF; i++) printf "%s ", $i }'`"
 		input_result="`echo $line | awk '{ print $NF }'`"
 
-		echo "DEBUG : options=$options"
-		echo "DEBUG : input_result=$input_result"
+		[ "$verbose" = "1" ] && echo "DEBUG : options=$options"
+		[ "$verbose" = "1" ] && echo "DEBUG : input_result=$input_result"
 
 		input=${input_result/=*/}
 		result=${input_result/*=/}
@@ -342,9 +379,12 @@ run_loganon_options_tests() {
 			echo "ERROR : result expected: $result"
 			exit 1
 		else
-			echo "INFO  : $command -> test ok"
+			[ "$verbose" = "1" ] && echo "INFO  : $command -> test ok"
 		fi
+		[ "$verbose" = "1" ] || echo -n "."
 	done || return 1
+	[ "$verbose" = "1" ] || echo
+	echo "INFO  : $test successful"
 }
 
 run_loganon_options_kp_tests() {

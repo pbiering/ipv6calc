@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.16 2015/06/01 05:40:11 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.17 2015/07/08 06:58:02 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -10,10 +10,14 @@
  *  Currently supporting:
  *   - client IP address anonymization by setting environment IPV6CALC_CLIENT_IP_ANON
  *   - client IP address country code retrievement by setting environment IPV6CALC_CLIENT_COUNTRYCODE
+ *   - client IP address ASN retrievement by setting environment IPV6CALC_CLIENT_ASN
+ *   - client IP address registry retrievement by setting environment IPV6CALC_CLIENT_REGISTRY
  *
  *  mode_ipv6calc behavior can be controlled by config, e.g.
  *   ipv6calcActionAnonymize		on
  *   ipv6calcActionCountrycode		on
+ *   ipv6calcActionAsn			on
+ *   ipv6calcActionRegistry		on
  *   ipv6calcCache			off (default: on)
  *   ipv6calcCacheLimit			>= IPV6CALC_CACHE_LRI_LIMIT_MIN
  *   ipv6calcCacheStatisticsInterval	0:disable 
@@ -56,6 +60,7 @@ int feature_kp      = 0; // will be checked later
 #define IPV6CALC_DEBUG_CACHE_LOOKUP		0x0010
 #define IPV6CALC_DEBUG_CACHE_ENTRIES		0x0020
 #define IPV6CALC_DEBUG_CACHE_STORE		0x0040
+#define IPV6CALC_DEBUG_RETRIEVE_DATA		0x0080
 
 #define IPV6CALC_DEBUG_SHOW_DB_INFO		0x0100
 
@@ -80,8 +85,12 @@ static const char *set_ipv6calc_cache(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_cache_limit(cmd_parms *cmd, void *dummy, const char *value, int arg);
 static const char *set_ipv6calc_cache_statistics_interval(cmd_parms *cmd, void *dummy, const char *value, int arg);
 static const char *set_ipv6calc_debuglevel(cmd_parms *cmd, void *dummy, const char *value, int arg);
+
 static const char *set_ipv6calc_action_anonymize(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_action_countrycode(cmd_parms *cmd, void *dummy, int arg);
+static const char *set_ipv6calc_action_asn(cmd_parms *cmd, void *dummy, int arg);
+static const char *set_ipv6calc_action_registry(cmd_parms *cmd, void *dummy, int arg);
+
 static const char *set_ipv6calc_option(cmd_parms *cmd, void *dummy, const char *name, const char *value, int arg);
 
 
@@ -99,6 +108,8 @@ static long int ipv6calc_cache_lri_statistics[2][IPV6CALC_CACHE_LRI_SIZE];
 
 static char     ipv6calc_cache_lri_value_anon[2][IPV6CALC_CACHE_LRI_SIZE][APRMAXHOSTLEN];
 static char     ipv6calc_cache_lri_value_cc[2][IPV6CALC_CACHE_LRI_SIZE][APRMAXHOSTLEN];
+static char     ipv6calc_cache_lri_value_asn[2][IPV6CALC_CACHE_LRI_SIZE][APRMAXHOSTLEN];
+static char     ipv6calc_cache_lri_value_registry[2][IPV6CALC_CACHE_LRI_SIZE][APRMAXHOSTLEN];
 
 static struct in_addr  ipv6calc_cache_lri_ipv4_token[IPV6CALC_CACHE_LRI_SIZE];
 #if APR_HAVE_IPV6
@@ -128,6 +139,8 @@ typedef struct {
 
 	int action_anonymize;
 	int action_countrycode;
+	int action_asn;
+	int action_registry;
 
 	int anon_set_default;
 	s_ipv6calc_anon_set ipv6calc_anon_set;
@@ -160,6 +173,8 @@ static const command_rec ipv6calc_cmds[] = {
 	AP_INIT_TAKE1("ipv6calcDebuglevel",  (const char *(*)()) set_ipv6calc_debuglevel, NULL, OR_FILEINFO, "Debug level of module (binary or'ed): <value>"),
 	AP_INIT_FLAG("ipv6calcActionAnonymize", set_ipv6calc_action_anonymize, NULL, OR_FILEINFO, "Store anonymized IP address in IPV6CALC_CLIENT_IP_ANON"),
 	AP_INIT_FLAG("ipv6calcActionCountrycode", set_ipv6calc_action_countrycode, NULL, OR_FILEINFO, "Store Country Code of IP address in IPV6CALC_CLIENT_COUNTRYCODE"),
+	AP_INIT_FLAG("ipv6calcActionAsn", set_ipv6calc_action_asn, NULL, OR_FILEINFO, "Store ASN of IP address in IPV6CALC_CLIENT_COUNTRYCODE"),
+	AP_INIT_FLAG("ipv6calcActionRegistry", set_ipv6calc_action_registry, NULL, OR_FILEINFO, "Store Registry of IP address in IPV6CALC_CLIENT_COUNTRYCODE"),
 	AP_INIT_TAKE2("ipv6calcOption",  (const char *(*)()) set_ipv6calc_option, NULL, OR_FILEINFO, "Define ipv6calc option: <key> <value>"),
 	{NULL} 
 };
@@ -320,10 +335,12 @@ static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t 
 	);
 
 	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-		, "%s module actions: anonymize=%s countrycode=%s"
+		, "%s module actions: anonymize=%s countrycode=%s asn=%s registry=%s"
 		, ((config->action_anonymize + config->action_countrycode) == 0) ? "default" : "configured"
 		, (config->action_anonymize > 0) ? "ON" : "OFF"
 		, (config->action_countrycode > 0) ? "ON" : "OFF"
+		, (config->action_asn > 0) ? "ON" : "OFF"
+		, (config->action_registry > 0) ? "ON" : "OFF"
 	);
 
 	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
@@ -487,6 +504,8 @@ static int ipv6calc_post_read_request(request_rec *r) {
 	// workflow related
 	char client_addr_string_anonymized[APRMAXHOSTLEN];
 	char cc[APRMAXHOSTLEN];
+	char asn[APRMAXHOSTLEN];
+	char registry[APRMAXHOSTLEN];
 	unsigned int data_source;
 
 	int result;
@@ -686,6 +705,30 @@ static int ipv6calc_post_read_request(request_rec *r) {
 					); 
 				};
 
+				if (config->action_asn == 1) {
+					ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
+						, "client IP ASN (from cache): %s"
+						, ipv6calc_cache_lri_value_asn[pi][hit]
+					);
+
+					apr_table_set(r->subprocess_env
+						, "IPV6CALC_CLIENT_ASN"
+						, ipv6calc_cache_lri_value_asn[pi][hit]
+					); 
+				};
+
+				if (config->action_asn == 1) {
+					ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
+						, "client IP Registry (from cache): %s"
+						, ipv6calc_cache_lri_value_registry[pi][hit]
+					);
+
+					apr_table_set(r->subprocess_env
+						, "IPV6CALC_CLIENT_ASN"
+						, ipv6calc_cache_lri_value_registry[pi][hit]
+					); 
+				};
+
 				if (config->action_anonymize == 1) {
 					ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
 						, "client IP address anonymized (from cache): %s"
@@ -781,11 +824,19 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		};
 	};
 
+	// retrieve data
+	int result_cc = -1;
+	int result_registry = -1;
+	const char *data_source_string = "-";
+	uint32_t asn_num = 0;
 
-	// set country code of IP in environment
-	if (config->action_countrycode == 1) {
-		result = -1;
-		const char *data_source_string = "-";
+	if (	(config->action_countrycode == 1)
+	     ||	(config->action_asn == 1)
+	     ||	(config->action_registry == 1)
+	) {
+		int retrieve_cc = 0;
+		int retrieve_asn = 0;
+		int retrieve_registry = 0;
 
 		if ((pi == mod_ipv6calc_pi_IPV6) && (ipv6addr.scope & IPV6_ADDR_HAS_PUBLIC_IPV4)) {
 			// extract IPv4 address and retrieve country code of that particular address
@@ -794,44 +845,139 @@ static int ipv6calc_post_read_request(request_rec *r) {
 			if (result == 0) {
 				if (ipv4addr.scope & IPV4_ADDR_GLOBAL) {
 					CONVERT_IPV4ADDRP_IPADDR(&ipv4addr, ipaddr);
-					result = libipv6calc_db_wrapper_country_code_by_addr(cc, sizeof(cc), &ipaddr, &data_source);
+
+					// retrieve country code only for global addresses
+					retrieve_cc = 1;
+
+					// retrieve ASN only for global addresses
+					retrieve_asn = 1;
 				};
+
+				retrieve_registry = 1;
 			};
 		} else if (	((pi == mod_ipv6calc_pi_IPV4) && (ipv4addr.scope & IPV4_ADDR_GLOBAL))
 			    ||	((pi == mod_ipv6calc_pi_IPV6) && (ipv6addr.scope & IPV6_ADDR_GLOBAL))
 		) {
 			// retrieve country code only for global addresses
-			result = libipv6calc_db_wrapper_country_code_by_addr(cc, sizeof(cc), &ipaddr, &data_source);
-		};
+			retrieve_cc = 1;
 
-		if ((result == 0) && (strlen(cc) > 0)) {
-			data_source_string = libipv6calc_db_wrapper_get_data_source_name_by_number(data_source);
+			// retrieve ASN only for global addresses
+			retrieve_asn = 1;
+
+			retrieve_registry = 1;
 		} else {
-			snprintf(cc, sizeof(cc), "%s", "-");
+			retrieve_registry = 1;
 		};
 
-		ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
-			, "client IP address country code: %s (%s)"
-			, cc
-			, data_source_string
-		);
+		if (config->debuglevel & IPV6CALC_DEBUG_RETRIEVE_DATA) {
+			ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
+				, "retrieve data retrieve_cc=%d retrieve_asn=%d retrieve_registry=%d"
+				, retrieve_cc
+				, retrieve_asn
+				, retrieve_registry
+			);
+		};
 
-		apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_COUNTRYCODE", cc); 
+		if ((config->action_countrycode == 1) && (retrieve_cc != 0)) {
+			result_cc = libipv6calc_db_wrapper_country_code_by_addr(cc, sizeof(cc), &ipaddr, &data_source);
+		};
 
-		if (config->cache == 1) {
-			// store value
-			snprintf(ipv6calc_cache_lri_value_cc[pi][ipv6calc_cache_lri_last[pi] - 1], sizeof(ipv6calc_cache_lri_value_cc[pi][ipv6calc_cache_lri_last[pi] - 1]), "%s", cc);
-			if (config->debuglevel & IPV6CALC_DEBUG_CACHE_STORE) {
-				ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-					, "store CountryCode of IPv%s address in cache on position: %d"
-					, (pi == 0) ? "4" : "6"
-					, ipv6calc_cache_lri_last[pi] - 1
-				);
+		if ((config->action_asn == 1) && (retrieve_asn != 0)) {
+			asn_num = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr);
+		};
+
+		if ((config->action_registry == 1) && (retrieve_registry != 0)) {
+			result_registry = libipv6calc_db_wrapper_registry_string_by_ipaddr(&ipaddr, registry, sizeof(registry));
+		};
+
+		// set country code of IP in environment
+		if (config->action_countrycode == 1) {
+			if ((result_cc == 0) && (strlen(cc) > 0)) {
+				data_source_string = libipv6calc_db_wrapper_get_data_source_name_by_number(data_source);
+			} else {
+				snprintf(cc, sizeof(cc), "%s", "-");
 			};
+
+			ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
+				, "client IP address country code: %s (%s)"
+				, cc
+				, data_source_string
+			);
+
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_COUNTRYCODE", cc); 
+
+			if (config->cache == 1) {
+				// store value
+				snprintf(ipv6calc_cache_lri_value_cc[pi][ipv6calc_cache_lri_last[pi] - 1], sizeof(ipv6calc_cache_lri_value_cc[pi][ipv6calc_cache_lri_last[pi] - 1]), "%s", cc);
+				if (config->debuglevel & IPV6CALC_DEBUG_CACHE_STORE) {
+					ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
+						, "store CountryCode of IPv%s address in cache on position: %d"
+						, (pi == 0) ? "4" : "6"
+						, ipv6calc_cache_lri_last[pi] - 1
+					);
+				};
+			};
+		} else {
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_COUNTRYCODE", "IPV6CALC_CLIENT_COUNTRYCODE=disabled"); 
 		};
-	} else {
-		apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_COUNTRYCODE", "IPV6CALC_CLIENT_COUNTRYCODE=disabled"); 
+
+		// set ASN of IP in environment
+		if (config->action_asn == 1) {
+			snprintf(asn, sizeof(asn), "%u", asn_num);
+
+			ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
+				, "client IP address ASN: %s"
+				, asn
+			);
+
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_ASN", asn); 
+
+			if (config->cache == 1) {
+				// store value
+				snprintf(ipv6calc_cache_lri_value_asn[pi][ipv6calc_cache_lri_last[pi] - 1], sizeof(ipv6calc_cache_lri_value_asn[pi][ipv6calc_cache_lri_last[pi] - 1]), "%s", asn);
+				if (config->debuglevel & IPV6CALC_DEBUG_CACHE_STORE) {
+					ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
+						, "store ASN of IPv%s address in cache on position: %d"
+						, (pi == 0) ? "4" : "6"
+						, ipv6calc_cache_lri_last[pi] - 1
+					);
+				};
+			};
+		} else {
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_ASN", "IPV6CALC_CLIENT_ASN=disabled"); 
+		};
+
+		// set Registry of IP in environment
+		if (config->action_registry == 1) {
+			if ((result_registry == 0) && (strlen(registry) > 0)) {
+				// everything ok
+			} else {
+				snprintf(registry, sizeof(registry), "%s", "-");
+			};
+
+			ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
+				, "client IP address registry: %s"
+				, registry
+			);
+
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_REGISTRY", registry); 
+
+			if (config->cache == 1) {
+				// store value
+				snprintf(ipv6calc_cache_lri_value_registry[pi][ipv6calc_cache_lri_last[pi] - 1], sizeof(ipv6calc_cache_lri_value_asn[pi][ipv6calc_cache_lri_last[pi] - 1]), "%s", registry);
+				if (config->debuglevel & IPV6CALC_DEBUG_CACHE_STORE) {
+					ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
+						, "store Registry of IPv%s address in cache on position: %d"
+						, (pi == 0) ? "4" : "6"
+						, ipv6calc_cache_lri_last[pi] - 1
+					);
+				};
+			};
+		} else {
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_REGISTRY", "IPV6CALC_CLIENT_REGISTRY=disabled"); 
+		};
 	};
+
 
 	// set anonymized IP address in environment
 	if (config->action_anonymize == 1) {
@@ -1027,12 +1173,16 @@ static const char *set_ipv6calc_debuglevel(cmd_parms *cmd, void *dummy, const ch
 
 	long int debuglevel = strtol(value, NULL, 0);
 
-	if (debuglevel < 0 || debuglevel > 0xffff) {
+	if (debuglevel < -1 || debuglevel > 0xffff) {
 		ap_log_error(APLOG_MARK, APLOG_WARNING, 0, cmd->server
-			, "given debug level is out-of-range (0-65535), skip: %s"
+			, "given debug level is out-of-range (-1|0-65535), skip: %s"
 			, value
 		);
 	} else {
+		if (debuglevel == -1) {
+			debuglevel = 0xffff;
+		};
+
 		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, cmd->server
 			, "set module debug level: %s"
 			, value
@@ -1058,9 +1208,41 @@ static const char *set_ipv6calc_action_countrycode(cmd_parms *cmd, void *dummy, 
 	config->action_countrycode = arg;
 	
 	return NULL;
-}
+};
 
-;
+
+/*
+ * set_ipv6calc_asn
+ */
+static const char *set_ipv6calc_action_asn(cmd_parms *cmd, void *dummy, int arg) {
+	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
+	
+	if (!config) {
+		return NULL;
+	};
+	
+	config->action_asn = arg;
+	
+	return NULL;
+};
+
+
+/*
+ * set_ipv6calc_registry
+ */
+static const char *set_ipv6calc_action_registry(cmd_parms *cmd, void *dummy, int arg) {
+	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
+	
+	if (!config) {
+		return NULL;
+	};
+	
+	config->action_registry = arg;
+	
+	return NULL;
+};
+
+
 /*
  * set_ipv6calc_anonymize
  */

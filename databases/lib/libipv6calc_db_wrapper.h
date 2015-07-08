@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Version    : $Id: libipv6calc_db_wrapper.h,v 1.42 2015/06/10 05:53:57 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.h,v 1.43 2015/07/08 06:58:02 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -276,6 +276,8 @@ extern uint32_t    libipv6calc_db_wrapper_as_num32_decomp17(const uint32_t as_nu
 // Registries
 extern int         libipv6calc_db_wrapper_registry_num_by_as_num32(const uint32_t as_num32);
 extern int         libipv6calc_db_wrapper_registry_num_by_cc_index(const uint16_t cc_index);
+extern int         libipv6calc_db_wrapper_registry_num_by_ipaddr(const ipv6calc_ipaddr *ipaddrp);
+extern int         libipv6calc_db_wrapper_registry_string_by_ipaddr(const ipv6calc_ipaddr *ipaddrp, char *resultstring, const size_t resultstring_length);
 
 // IEEE
 extern int libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(char *resultstring, const size_t resultstring_length, const ipv6calc_macaddr *macaddrp);

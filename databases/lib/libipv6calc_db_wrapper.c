@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.66 2015/06/10 05:53:57 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.67 2015/07/08 06:58:02 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -947,6 +947,44 @@ int libipv6calc_db_wrapper_registry_num_by_as_num32(const uint32_t as_num32) {
 int libipv6calc_db_wrapper_registry_num_by_cc_index(const uint16_t cc_index) {
 	// currently only supported by BuiltIn
 	return(libipv6calc_db_wrapper_BuiltIn_registry_num_by_cc_index(cc_index));
+};
+
+/*
+ * get registry number by IP address
+ */
+int libipv6calc_db_wrapper_registry_num_by_ipaddr(const ipv6calc_ipaddr *ipaddrp) {
+	ipv6calc_ipv4addr ipv4addr;
+	ipv6calc_ipv6addr ipv6addr;
+
+	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
+		CONVERT_IPADDRP_IPV4ADDR(ipaddrp, ipv4addr)
+		return(libipv6calc_db_wrapper_registry_num_by_ipv4addr(&ipv4addr));
+	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
+		CONVERT_IPADDRP_IPV6ADDR(ipaddrp, ipv6addr)
+		return(libipv6calc_db_wrapper_registry_num_by_ipv6addr(&ipv6addr));
+	} else {
+		ERRORPRINT_WA("unsupported proto=%d (FIX CODE)", ipaddrp->proto);
+		exit(EXIT_FAILURE);
+	};
+};
+
+/*
+ * get registry string by IP address
+ */
+int libipv6calc_db_wrapper_registry_string_by_ipaddr(const ipv6calc_ipaddr *ipaddrp, char *resultstring, const size_t resultstring_length) {
+	ipv6calc_ipv4addr ipv4addr;
+	ipv6calc_ipv6addr ipv6addr;
+
+	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
+		CONVERT_IPADDRP_IPV4ADDR(ipaddrp, ipv4addr)
+		return(libipv6calc_db_wrapper_registry_string_by_ipv4addr(&ipv4addr, resultstring, resultstring_length));
+	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
+		CONVERT_IPADDRP_IPV6ADDR(ipaddrp, ipv6addr)
+		return(libipv6calc_db_wrapper_registry_string_by_ipv6addr(&ipv6addr, resultstring, resultstring_length));
+	} else {
+		ERRORPRINT_WA("unsupported proto=%d (FIX CODE)", ipaddrp->proto);
+		exit(EXIT_FAILURE);
+	};
 };
 
 

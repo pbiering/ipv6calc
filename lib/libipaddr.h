@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipaddr.h
- * Version    : $Id: libipaddr.h,v 1.2 2015/05/13 05:51:38 ds6peter Exp $
+ * Version    : $Id: libipaddr.h,v 1.3 2015/07/08 06:58:02 ds6peter Exp $
  * Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -68,7 +68,20 @@ typedef struct {
 	ipaddrp->proto		= IPV6CALC_PROTO_IPV6;
 
 
+/* ipaddr ptr -> ipv4addr */
+#define CONVERT_IPADDRP_IPV4ADDR(ipaddrp, ipv4addr) \
+	ipv4addr_clearall(&ipv4addr); \
+	ipv4addr_setdword(&ipv4addr, ipaddrp->addr[0]); \
+	ipv4addr.flag_valid = 1;
 
+/* ipaddr ptr -> ipv6addr */
+#define CONVERT_IPADDRP_IPV6ADDR(ipaddrp, ipv6addr) \
+	ipv6addr_clearall(&ipv6addr); \
+	ipv6addr_setdword(&ipv6addr, 0, ipaddrp->addr[0]); \
+	ipv6addr_setdword(&ipv6addr, 1, ipaddrp->addr[1]); \
+	ipv6addr_setdword(&ipv6addr, 2, ipaddrp->addr[2]); \
+	ipv6addr_setdword(&ipv6addr, 3, ipaddrp->addr[3]); \
+	ipv6addr.flag_valid = 1;
 
 #endif
 

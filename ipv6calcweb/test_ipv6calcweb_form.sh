@@ -2,13 +2,26 @@
 #
 # Project    : ipv6calc/ipv6calcweb
 # File       : test_ipv6calcweb_form.sh
-# Version    : $Id: test_ipv6calcweb_form.sh,v 1.3 2013/10/15 20:07:13 ds6peter Exp $
-# Copyright  : 2012-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: test_ipv6calcweb_form.sh,v 1.4 2015/07/08 06:58:02 ds6peter Exp $
+# Copyright  : 2012-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Test script for form mode of ipv6calcweb
 #
 
+verbose=0
+while getopts "Vh\?" opt; do
+	case $opt in
+	    V)
+		verbose=1
+		;;
+	    *)
+		echo "$0 [-V]"
+		echo "    -V   verbose"
+		exit 1
+		;;
+	esac
+done
 
 # Test Scenarios for autodetection "good case"
 source ../ipv6calc/test_scenarios.sh
@@ -57,22 +70,29 @@ if [ ${#tokentime} -ne 10 ]; then
 	exit 1
 fi
 
-echo "DEBUG: extracted tokenhash: $tokenhash"
-echo "DEBUG: extracted tokentime: $tokentime"
+[ "$verbose" = "1" ] && echo "DEBUG: extracted tokenhash: $tokenhash"
+[ "$verbose" = "1" ] && echo "DEBUG: extracted tokentime: $tokentime"
 
+test="run 'ipv6calcweb.cgi ' good tests"
+echo "INFO  : $test"
 testscenarios_auto_good | grep -v "^#" | egrep -vw "(bitstring|base85)" | grep -v "%" | while read input type; do
 	input_escaped="$(perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' "$input")"
 	QUERY_STRING="input=$input_escaped&tokenhash=$tokenhash&tokentime=$tokentime"
 
-	echo "Test: $input ($input_escaped) ($type)"
-	echo "QUERY_STRING=$QUERY_STRING"
+	[ "$verbose" = "1" ] && echo "Test: $input ($input_escaped) ($type)"
+	[ "$verbose" = "1" ] && echo "QUERY_STRING=$QUERY_STRING"
 
 	export REMOTE_ADDR REMOTE_HOST HTTP_USER_AGENT SERVER_ADDR SERVER_NAME QUERY_STRING HTTP_IPV6CALCWEB_MODE
 
-	OUTPUT="`./ipv6calcweb.cgi`"
+	if [ "$verbose" = "1" ]; then 
+		OUTPUT="`./ipv6calcweb.cgi`"
+		result=$?
+	else
+		OUTPUT=$(./ipv6calcweb.cgi 2>/dev/null)
+		result=$?
+	fi
 
-	result=$?
-	echo "Result: $result"
+	[ "$verbose" = "1" ] && echo "Result: $result"
 
 	if [ $result -ne 0 ]; then
 		echo "TEST FAILED"
@@ -84,5 +104,7 @@ testscenarios_auto_good | grep -v "^#" | egrep -vw "(bitstring|base85)" | grep -
 			exit 1
 		fi
 	fi
+	[ "$verbose" = "1" ] || echo -n "."
 done || exit $?
-
+[ "$verbose" = "1" ] || echo
+echo "INFO  : $test successful"

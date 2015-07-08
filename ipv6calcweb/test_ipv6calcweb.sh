@@ -2,20 +2,30 @@
 #
 # Project    : ipv6calc/ipv6calcweb
 # File       : test_ipv6calcweb.sh
-# Version    : $Id: test_ipv6calcweb.sh,v 1.13 2014/02/01 14:56:18 ds6peter Exp $
+# Version    : $Id: test_ipv6calcweb.sh,v 1.14 2015/07/08 06:58:02 ds6peter Exp $
 # Copyright  : 2012-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Test script for ipv6calcweb
 #
 
-while getopts "f:d" opt; do
+while getopts "Vf:d" opt; do
 	case $opt in
 	    f)
 		opt_format="$OPTARG"
 		;;
 	    d)
 		opt_debug=1
+		;;
+	    V)
+		verbose=1
+		;;
+	    *)
+		echo "$0 [-V] [-d] [-f <format>]"
+		echo "    -d		debug"
+		echo "    -V		verbose"
+		echo "    -f <format>	format option"
+		exit 1
 		;;
 	esac
 done
@@ -35,26 +45,39 @@ if [ ! -x ipv6calcweb.cgi ]; then
 fi
 
 ## very basic output format tests
+test="run 'ipv6calc' very basic output format tests"
+echo "INFO  : $test"
 for format in textkeyvalue text html htmlfull; do
 	if [ -n "$opt_format" -a "$opt_format" != "$format" ]; then
 		echo "NOTICE: skip format: $format"
 		continue
 	fi
-	echo "INFO  : test format: $format"
-	echo "DEBUG : execute: HTTP_IPV6CALCWEB_DEBUG=0x1000 HTTP_IPV6CALCWEB_OUTPUT_FORMAT=\"$format\" ./ipv6calcweb.cgi"
+	[ "$verbose" = "1" ] && echo "INFO  : test format: $format"
+	[ "$verbose" = "1" ] && echo "DEBUG : execute: HTTP_IPV6CALCWEB_DEBUG=0x1000 HTTP_IPV6CALCWEB_OUTPUT_FORMAT=\"$format\" ./ipv6calcweb.cgi"
 	if [ "$opt_debug" = "1" ]; then
 		HTTP_IPV6CALCWEB_DEBUG="0x1000" HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi
+		rc=$?
 	else
-		HTTP_IPV6CALCWEB_DEBUG="0x1000" HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi >/dev/null
+		if [ "$verbose" = "1" ]; then
+			HTTP_IPV6CALCWEB_DEBUG="0x1000" HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi >/dev/null
+			rc=$?
+		else
+			HTTP_IPV6CALCWEB_DEBUG="0x1000" HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi >/dev/null 2>/dev/null
+			rc=$?
+		fi
 	fi
-	if [ $? -ne 0 ];then
+	if [ $rc -ne 0 ];then
 		echo "ERROR : output format reports an error: $format"
 		if [ "$opt_debug" != "1" ]; then
 			HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi
 		fi
 		exit 1
 	fi
+	[ "$verbose" = "1" ] || echo -n "."
 done || exit 1
+[ "$verbose" = "1" ] || echo
+echo "INFO  : $test successful"
+
 
 
 ## more sophisticated checks
@@ -75,6 +98,8 @@ HTTP_VIA="1.0 fred, 1.1 nowhere.com"
 
 export REMOTE_ADDR REMOTE_HOST HTTP_USER_AGENT SERVER_ADDR SERVER_NAME QUERY_STRING HTTP_IPV6CALCWEB_DEBUG HTTP_IPV6CALCWEB_INFO_SERVER HTTP_X_FORWARDED_FOR HTTP_VIA
 
+test="run 'ipv6calc' sophisticated tests"
+echo "INFO  : $test"
 for format in textkeyvalue text html htmlfull; do
 	if [ -n "$opt_format" -a "$opt_format" != "$format" ]; then
 		echo "NOTICE: skip format: $format"
@@ -84,12 +109,17 @@ for format in textkeyvalue text html htmlfull; do
 	HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format"
 	export HTTP_IPV6CALCWEB_OUTPUT_FORMAT
 
-	OUTPUT="`./ipv6calcweb.cgi`"
+	if [ "$verbose" = "1" ]; then
+		OUTPUT="`./ipv6calcweb.cgi`"
+		result=$?
+	else
+		OUTPUT="`./ipv6calcweb.cgi 2>&1`"
+		result=$?
+	fi
 	if [ "$opt_debug" = "1" ]; then
 		echo "$OUTPUT"
 	fi
 
-	result=$?
 	if [ $result -ne 0 ];then
 		echo "ERROR : output format reports an error: $format"
 		if [ "$opt_debug" != "1" ]; then
@@ -97,24 +127,27 @@ for format in textkeyvalue text html htmlfull; do
 		fi
 		exit 1
 	fi
+	[ "$verbose" = "1" ] || echo -n "."
 done || exit 1
+[ "$verbose" = "1" ] || echo
+echo "INFO  : $test successful"
 
-if [ $result -ne 0 ]; then
-	echo "TEST FAILED (exit code != 0)"
-	HTTP_IPV6CALCWEB_DEBUG="0xffff"
-	export HTTP_IPV6CALCWEB_DEBUG
-	./ipv6calcweb.cgi
-	exit 1
-else
-	# check output
-	if echo "$OUTPUT" | egrep -q "(ERROR|problem)"; then
-		echo "TEST FAILED (ERROR|problem) occurs"
-		HTTP_IPV6CALCWEB_DEBUG="0xffff"
-		export HTTP_IPV6CALCWEB_DEBUG
-		./ipv6calcweb.cgi
-		exit 1
-	fi
-	if echo "$OUTPUT" | egrep -q "(reserved)"; then
-		echo "$OUTPUT"
-	fi
-fi
+#if [ $result -ne 0 ]; then
+#	echo "TEST FAILED (exit code != 0)"
+#	HTTP_IPV6CALCWEB_DEBUG="0xffff"
+#	export HTTP_IPV6CALCWEB_DEBUG
+#	./ipv6calcweb.cgi
+#	exit 1
+#else
+#	# check output
+#	if echo "$OUTPUT" | egrep -q "(ERROR|problem)"; then
+#		echo "TEST FAILED (ERROR|problem) occurs"
+#		HTTP_IPV6CALCWEB_DEBUG="0xffff"
+#		export HTTP_IPV6CALCWEB_DEBUG
+#		./ipv6calcweb.cgi
+#		exit 1
+#	fi
+#	if echo "$OUTPUT" | egrep -q "(reserved)"; then
+#		[ "$verbose" = "1" ] || echo "$OUTPUT"
+#	fi
+#fi
