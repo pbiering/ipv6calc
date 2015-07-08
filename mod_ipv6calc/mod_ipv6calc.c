@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.17 2015/07/08 06:58:02 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.18 2015/07/08 20:32:06 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -949,7 +949,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 		// set Registry of IP in environment
 		if (config->action_registry == 1) {
-			if ((result_registry == 0) && (strlen(registry) > 0)) {
+			if (((result_registry == 0) || (result_registry == 2)) && (strlen(registry) > 0)) {
 				// everything ok
 			} else {
 				snprintf(registry, sizeof(registry), "%s", "-");

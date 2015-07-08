@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
-# Version    : $Id: test_mod_ipv6calc.sh,v 1.1 2015/07/08 06:58:02 ds6peter Exp $
+# Version    : $Id: test_mod_ipv6calc.sh,v 1.2 2015/07/08 20:32:06 ds6peter Exp $
 # Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -155,8 +155,12 @@ stop_apache() {
 exec_request() {
 	dst="$1"
 
-	echo "NOTICE : test: $1"
+	echo "NOTICE: test: $1"
 	curl -s "http://$1:8080/" >/dev/null
+	if [ $? -ne 0 ]; then
+		echo "ERROR : curl request to $1:8080 failed"
+		return 1
+	fi
 
 	echo "INFO  : access log entry"
 	tail -1 $dir_base/logs/access_log
@@ -177,19 +181,24 @@ exec_request() {
 run_test_requests() {
 	echo "NOTICE: run test requests"
 
-	exec_request 127.0.0.1
+	if [ -n "$address" ]; then
+		if echo "$address" | grep -q ":"; then
+			# IPv6
+			exec_request "[$address]"
+		else
+			# IPv4
+			exec_request "$address"
+		fi
+	else
+		for ipv4 in $(ip -o addr show |grep -w inet | grep -w global | grep -vw deprecated | awk '{ print $4 }' | awk -F/ '{ print $1 }'); do
+			exec_request "$ipv4" || return 1
+		done
 
-	for ipv4 in $(ip -o addr show |grep -w inet | grep -w global | grep -vw deprecated | awk '{ print $4 }' | awk -F/ '{ print $1 }'); do
-		exec_request "$ipv4" || return 1
-	done
-
-	# retrieve local IPv6 address
-	for ipv6 in $(ip -o addr show |grep -w inet6 | grep -w global | grep -vw deprecated | awk '{ print $4 }' | awk -F/ '{ print $1 }'); do
-		exec_request "[$ipv6]" || return 1
-	done
-
-
-	
+		# retrieve local IPv6 address
+		for ipv6 in $(ip -o addr show |grep -w inet6 | grep -w global | grep -vw deprecated | awk '{ print $4 }' | awk -F/ '{ print $1 }'); do
+			exec_request "[$ipv6]" || return 1
+		done
+	fi
 
 	sleep 2
 
@@ -198,7 +207,7 @@ run_test_requests() {
 
 
 #### Options
-while getopts "SKWb:mlh\?" opt; do
+while getopts "a:SKWb:mlh\?" opt; do
 	case $opt in
 	    b)
 		if [ -d "$OPTARG" ]; then
@@ -219,17 +228,20 @@ while getopts "SKWb:mlh\?" opt; do
 	    K)
 		stop_apache || exit 1
 		;;
+	    a)
+		address="$OPTARG"
+		;;
 	    W)
 		create_apache_root_and_start || exit 1
 		run_test_requests || exit 1
 		stop_apache || exit 1
 		;;
 	    *)
-		echo "$0 [-m] [-l] -S		start"
+		echo "$0 [-m] [-l] -S			start"
 		echo "      -m	enable debug module"
 		echo "      -l	enable debug library"
-		echo "$0 -K -b <base director>	stop"
-		echo "$0 [-m] [-l] -W		run workflow"
+		echo "$0 -K -b <base directory>		stop"
+		echo "$0 [-m] [-l] [-a <address>] -W	run workflow"
 		exit 1
 		;;
 	esac
