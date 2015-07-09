@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.37 2015/06/14 20:14:49 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper_IP2Location.c,v 1.38 2015/07/09 20:38:34 ds6peter Exp $
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -418,6 +418,25 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 
 #endif
 
+	/* close handles which are not necessary further on */
+	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_IP2Location_db_file_desc); i++) {
+		if (db_ptr_cache[i] != NULL) {
+			if (
+				(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number == ip2location_db_country_v4_best[IP2L_LITE].num)
+			    ||	(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number == ip2location_db_country_v4_best[IP2L_COMM].num)
+			    ||	(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number == ip2location_db_country_v4_best[IP2L_SAMPLE].num)
+			    ||	(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number == ip2location_db_country_v6_best[IP2L_LITE].num)
+			    ||	(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number == ip2location_db_country_v6_best[IP2L_COMM].num)
+			    ||	(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number == ip2location_db_country_v6_best[IP2L_SAMPLE].num)
+			) {
+				// database is in use
+				continue;
+			};
+
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Close further unused IP2Location: type=%d desc='%s'", libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number, libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description);
+			libipv6calc_db_wrapper_IP2Location_close(db_ptr_cache[i]);
+		};
+	};
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Version of linked library: %s / IPv6 support: %s / custom directory: %s", libipv6calc_db_wrapper_IP2Location_lib_version(), libipv6calc_db_wrapper_IP2Location_IPv6_support[wrapper_ip2location_ipv6_support].token, ip2location_db_dir);
 

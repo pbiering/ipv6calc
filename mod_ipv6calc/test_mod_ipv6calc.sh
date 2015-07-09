@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
-# Version    : $Id: test_mod_ipv6calc.sh,v 1.2 2015/07/08 20:32:06 ds6peter Exp $
+# Version    : $Id: test_mod_ipv6calc.sh,v 1.3 2015/07/09 20:38:35 ds6peter Exp $
 # Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -130,6 +130,9 @@ create_apache_root_and_start() {
 		grep ipv6calc $dir_base/logs/error_log
 		lines_error_log=$(cat "$dir_base/logs/error_log" | wc -l)
 	fi
+
+	echo "INFO  : list of open files of pid: $pid"
+	lsof -p $pid
 
 	echo "NOTICE: base directory is    : $dir_base"
 	echo "NOTICE: error log            : $dir_base/logs/error_log"
