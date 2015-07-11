@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.18 2015/07/08 20:32:06 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.19 2015/07/11 08:31:14 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -12,6 +12,7 @@
  *   - client IP address country code retrievement by setting environment IPV6CALC_CLIENT_COUNTRYCODE
  *   - client IP address ASN retrievement by setting environment IPV6CALC_CLIENT_ASN
  *   - client IP address registry retrievement by setting environment IPV6CALC_CLIENT_REGISTRY
+ *   - anonymization method by setting IPV6CALC_ANON_METHOD
  *
  *  mode_ipv6calc behavior can be controlled by config, e.g.
  *   ipv6calcActionAnonymize		on
@@ -115,6 +116,12 @@ static struct in_addr  ipv6calc_cache_lri_ipv4_token[IPV6CALC_CACHE_LRI_SIZE];
 #if APR_HAVE_IPV6
 static struct in6_addr ipv6calc_cache_lri_ipv6_token[IPV6CALC_CACHE_LRI_SIZE];
 #endif
+
+
+/***************************
+ * Static values
+ ***************************/
+static const char *anon_method_name = "-";
 
 
 /***************************
@@ -438,6 +445,8 @@ static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t 
 			);
 		};
 	};
+
+	anon_method_name = libipv6calc_anon_method_name(&config->ipv6calc_anon_set);
 
 	return(0);
 };
@@ -1008,6 +1017,8 @@ static int ipv6calc_post_read_request(request_rec *r) {
 			);
 			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP_ANON", client_addr_string_anonymized);
 			result_anon_p = client_addr_string_anonymized;
+
+			apr_table_set(r->subprocess_env, "IPV6CALC_ANON_METHOD", anon_method_name);
 		} else {
 #if (((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER >= 4)) || (AP_SERVER_MAJORVERSION_NUMBER > 2))
 			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP_ANON", r->connection->client_ip); 

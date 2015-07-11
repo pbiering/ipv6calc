@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
-# Version    : $Id: test_mod_ipv6calc.sh,v 1.3 2015/07/09 20:38:35 ds6peter Exp $
+# Version    : $Id: test_mod_ipv6calc.sh,v 1.4 2015/07/11 08:31:14 ds6peter Exp $
 # Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -93,8 +93,15 @@ create_apache_root_and_start() {
 
 	if [ "$debug_library" = "1" ]; then
 		# enable library debugging
-		perl -pi -e 's/#(ipv6calcOption).*/$1 debug -1/g' $dir_base/conf.d/ipv6calc.conf
+		perl -pi -e 's/#(ipv6calcOption\s+debug).*/$1 -1/g' $dir_base/conf.d/ipv6calc.conf
 	fi
+
+	## disable databases by option
+	[ "$disable_geoip" = "1" ]       && perl -pi -e 's/#(ipv6calcOption\s+db-geoip-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
+	[ "$disable_ip2location" = "1" ] && perl -pi -e 's/#(ipv6calcOption\s+db-ip2location-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
+	[ "$disable_dbip" = "1" ]        && perl -pi -e 's/#(ipv6calcOption\s+db-dbip-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
+	[ "$disable_external" = "1" ]    && perl -pi -e 's/#(ipv6calcOption\s+db-external-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
+
 
 	echo "INFO  : start httpd with ServerRoot $dir_base"
 	httpd -X -e info -d $dir_base &
@@ -131,13 +138,22 @@ create_apache_root_and_start() {
 		lines_error_log=$(cat "$dir_base/logs/error_log" | wc -l)
 	fi
 
-	echo "INFO  : list of open files of pid: $pid"
-	lsof -p $pid
+	
+	if [ "$debug_lsof" = "1" ]; then
+		echo "INFO  : list of open files of pid: $pid"
+		lsof -p $pid
+	fi
 
-	echo "NOTICE: base directory is    : $dir_base"
-	echo "NOTICE: error log            : $dir_base/logs/error_log"
-	echo "NOTICE: access log           : $dir_base/logs/access_log"
-	echo "NOTICE: anonymized access log: $dir_base/logs/access_anon_log"
+	if [ "$debug_config" = "1" ]; then
+		echo "INFO  : list effective module config"
+		grep -v "^\s*#" $dir_base/conf.d/ipv6calc.conf | grep -v "^\s*$"
+	fi
+
+	echo "NOTICE: base directory is     : $dir_base"
+	echo "NOTICE: ipv6calc module config: $dir_base/conf.d/ipv6calc.conf"
+	echo "NOTICE: error log             : $dir_base/logs/error_log"
+	echo "NOTICE: access log            : $dir_base/logs/access_log"
+	echo "NOTICE: anonymized access log : $dir_base/logs/access_anon_log"
 }
 
 stop_apache() {
@@ -210,7 +226,7 @@ run_test_requests() {
 
 
 #### Options
-while getopts "a:SKWb:mlh\?" opt; do
+while getopts "ca:fSKWb:mlgideh\?" opt; do
 	case $opt in
 	    b)
 		if [ -d "$OPTARG" ]; then
@@ -225,28 +241,64 @@ while getopts "a:SKWb:mlh\?" opt; do
 	    l)
 		debug_library=1
 		;;
+	    f)
+		debug_lsof=1
+		;;
+	    c)
+		debug_config=1
+		;;
+	    g)
+		disable_geoip=1
+		;;
+	    i)
+		disable_ip2location=1
+		;;
+	    d)
+		disable_dbip=1
+		;;
+	    e)
+		disable_external=1
+		;;
 	    S)
-		create_apache_root_and_start || exit 1
+		action="start"
 		;;
 	    K)
-		stop_apache || exit 1
+		action="kill"
 		;;
 	    a)
 		address="$OPTARG"
 		;;
 	    W)
-		create_apache_root_and_start || exit 1
-		run_test_requests || exit 1
-		stop_apache || exit 1
+		action="workflow"
 		;;
 	    *)
 		echo "$0 [-m] [-l] -S			start"
 		echo "      -m	enable debug module"
 		echo "      -l	enable debug library"
+		echo "      -f	list open files after start"
+		echo "      -c	show effective module config options"
+		echo "      -g	disable GeoIP"
+		echo "      -i	disable IP2Location"
+		echo "      -d	disable DBIP.com"
+		echo "      -e	disable external databases"
 		echo "$0 -K -b <base directory>		stop"
 		echo "$0 [-m] [-l] [-a <address>] -W	run workflow"
 		exit 1
 		;;
 	esac
 done
+
+case $action in
+    workflow)
+	create_apache_root_and_start || exit 1
+	run_test_requests || exit 1
+	stop_apache || exit 1
+	;;
+    kill)
+	stop_apache || exit 1
+	;;
+    start)
+	create_apache_root_and_start || exit 1
+	;;
+esac
 
