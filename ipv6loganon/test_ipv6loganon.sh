@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
-# Version    : $Id: test_ipv6loganon.sh,v 1.28 2015/07/08 06:58:02 ds6peter Exp $
+# Version    : $Id: test_ipv6loganon.sh,v 1.29 2015/07/12 09:28:22 ds6peter Exp $
 # Copyright  : 2007-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
@@ -53,7 +53,7 @@ cat <<END | grep -v "^#"
 3ffe:ffff::1 - - IPv6 address/6bone/static IID	=3ffe:ffff::9:a929:4291:c02d:5d15 - - IPv6 address/6bone/static IID
 3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - ISATAP	=3ffe:1a05:510:209:a929:5214:48ca:d81d - - ISATAP
 ff02::1:ff00:1234 - - Solicited Node		=ff02::1:ff00:0 - - Solicited Node
-3ffe::1:ff00:1234 - - Solicited Node		=3ffe::1:ff00:0 - - Solicited Node
+3ffe::1:ff00:1234 - - Solicited Node		=3ffe::9:0:1:ff00:0 - - Solicited Node
 ::1 - - loopback				=::1 - - loopback
 ::2.2.3.4 - - compatible IPv4			=::2.2.3.0 - - compatible IPv4
 ::ffff:2.2.3.4 - - mapped IPv4			=::ffff:2.2.3.0 - - mapped IPv4

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.123 2015/07/12 08:45:17 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.124 2015/07/12 09:28:22 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -1043,7 +1043,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp) {
 END_ANON_IID:
 				type |= IPV6_NEW_ADDR_IID_LOCAL;
 
-				if ((type & (IPV6_ADDR_IID_32_63_HAS_IPV4 | IPV6_NEW_ADDR_LINKLOCAL_TEREDO | IPV6_NEW_ADDR_IID_ISATAP | IPV6_NEW_ADDR_TEREDO)) == 0) {
+				if ((type & (IPV6_ADDR_IID_32_63_HAS_IPV4 | IPV6_NEW_ADDR_LINKLOCAL_TEREDO | IPV6_NEW_ADDR_IID_ISATAP | IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_SOLICITED_NODE)) == 0) {
 					DEBUGPRINT_WA(DEBUG_libipv6addr, "call IID random detection, type=%08xl", type);
 
 					/* fuzzy detection of random IID (e.g. privacy extension) */
@@ -2004,6 +2004,8 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 
 	uint8_t bit_ul = 0;
 
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "Called: addr=%08x %08x %08x %08x", ipv6addr_getdword(ipv6addrp, 0), ipv6addr_getdword(ipv6addrp, 1), ipv6addr_getdword(ipv6addrp, 2), ipv6addr_getdword(ipv6addrp, 3));
+
 	if (method == ANON_METHOD_ZEROIZE) {
 		zeroize_prefix = 1;
 	};
@@ -2089,9 +2091,10 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 		};
 	};
 
-	/* prefix included */
+	/* prefix handling */
 	if ( ((ipv6addrp->scope & (IPV6_ADDR_SITELOCAL | IPV6_ADDR_ULUA | IPV6_NEW_ADDR_AGU)) != 0) && ((ipv6addrp->scope & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID)) == 0) ) {
-		DEBUGPRINT_NA(DEBUG_libipv6addr, "Prefix included");
+		/* prefix included */
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "Prefix: pref=%08x %08x", ipv6addr_getdword(ipv6addrp, 0), ipv6addr_getdword(ipv6addrp, 1));
 
 		if (((ipv6addrp->scope & IPV6_NEW_ADDR_AGU) != 0) && ((ipv6addrp->scope & (IPV6_NEW_ADDR_6TO4)) == 0) && (method == ANON_METHOD_KEEPTYPEASNCC)) {
 			if (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV6_REQ_DB) == 0) {
@@ -2103,7 +2106,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 			r = libipv6calc_db_wrapper_registry_string_by_ipv6addr(ipv6addrp, helpstring, sizeof(helpstring));
 			if (r == 2) {
 				DEBUGPRINT_NA(DEBUG_libipv6addr, "IPv6 registry of prefix contains reserved, skip anonymization");
-				goto ChecksumCalc;
+				goto InterfaceIdentifier;
 			};
 
 			// switch to prefix anonymization
@@ -2190,8 +2193,12 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 		} else if ( ((ipv6addrp->scope & IPV6_ADDR_ULUA) != 0) && (mask_ipv6 < 7) ) {
 			ipv6addr_setoctet(ipv6addrp, 0, ipv6addr_getoctet(ipv6addrp, 0) | 0xfdu);
 		};
+
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "Prefix: pref=%08x %08x (anonymized)", ipv6addr_getdword(ipv6addrp, 0), ipv6addr_getdword(ipv6addrp, 1));
 	};
 
+InterfaceIdentifier:
+	/* interface identifier handling */
 	if ( ( ((ipv6addrp->scope & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_ADDR_ULUA )) != 0) || ((ipv6addrp->scope & (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) == (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) ) && ((ipv6addrp->scope & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID)) == 0) ) {
 		/* Interface identifier included */
 		if ((ipv6addrp->scope & IPV6_NEW_ADDR_IID_EUI48) != 0) {
@@ -2459,8 +2466,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 		ipv6addr_setoctet(ipv6addrp, 15, eui64addr.addr[7]);
 	};
 
-ChecksumCalc:
-
+	// checksumming
 	if (calculate_checksum == 1) {
 		if (anonymized_prefix_nibbles > 0) {
 			/* fill amount of nibbles into IID lead token */
@@ -2476,6 +2482,8 @@ ChecksumCalc:
 		ipv6addr_set_checksum_anonymized_prefix(ipv6addrp);
 		ipv6addrp->scope |= IPV6_ADDR_ANONYMIZED_PREFIX;
 	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "Result: addr=%08x %08x %08x %08x (anonymized)", ipv6addr_getdword(ipv6addrp, 0), ipv6addr_getdword(ipv6addrp, 1), ipv6addr_getdword(ipv6addrp, 2), ipv6addr_getdword(ipv6addrp, 3));
 
 	return(0);
 };
