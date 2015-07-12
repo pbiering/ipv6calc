@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.405 2015/06/14 20:14:48 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.406 2015/07/12 08:45:17 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20150712/PB
+	databases/lib/libipv6calc_db_wrapper.c: implement last use cache for cc_index, as_num32, registry
+
 20150614/PB
 	databases/lib/libipv6calc_db_wrapper_IP2Location.c: some bugfixes regarding commercial DB file handling
 

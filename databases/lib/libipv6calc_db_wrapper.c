@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id: libipv6calc_db_wrapper.c,v 1.67 2015/07/08 06:58:02 ds6peter Exp $
+ * Version    : $Id: libipv6calc_db_wrapper.c,v 1.68 2015/07/12 08:45:17 ds6peter Exp $
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <errno.h>
+#include <netinet/in.h>
 
 #include "config.h"
 
@@ -1151,45 +1152,79 @@ uint16_t libipv6calc_db_wrapper_cc_index_by_addr(const ipv6calc_ipaddr *ipaddrp,
 	uint8_t c1, c2;
 	int r;
 
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
+	int cache_hit = 0;
 
-	r = libipv6calc_db_wrapper_country_code_by_addr(cc_text, sizeof(cc_text), ipaddrp, data_source_ptr);
+	static ipv6calc_ipaddr ipaddr_cache_lastused;
+	static uint16_t cc_index_lastused;
+	static unsigned int data_source_lastused = IPV6CALC_DB_SOURCE_UNKNOWN;
+	static int ipaddr_cache_lastused_valid = 0;
 
-	if (r != 0) {
-		goto END_libipv6calc_db_wrapper_cc_index_by_addr; // something wrong
-	};
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x%08x%08x%08x proto=%d", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], ipaddrp->proto);
 
-	if (strlen(cc_text) == 2) {
-		if (isalpha(cc_text[0]) && isalnum(cc_text[1])) {
-			c1 = toupper(cc_text[0]);
-			if (! (c1 >= 'A' && c1 <= 'Z')) {
-				goto END_libipv6calc_db_wrapper_cc_index_by_addr; // something wrong
-			};
-			c1 -= 'A';
+	if ((ipaddr_cache_lastused_valid == 1)
+	    &&	(ipaddr_cache_lastused.proto == ipaddrp->proto)
+	    && 	(ipaddr_cache_lastused.addr[0] == ipaddrp->addr[0])
+	    && 	(ipaddr_cache_lastused.addr[1] == ipaddrp->addr[1])
+	    && 	(ipaddr_cache_lastused.addr[2] == ipaddrp->addr[2])
+	    && 	(ipaddr_cache_lastused.addr[3] == ipaddrp->addr[3])
+	) {
+		index = cc_index_lastused;
 
-			c2 = toupper(cc_text[1]);
-			if (c2 >= '0' && c2 <= '9') {
-				c2 -= '0';
-			} else if (c2 >= 'A' && c2 <= 'Z') {
-				c2 -= 'A';
-				c2 += 10;
-			} else {
-				goto END_libipv6calc_db_wrapper_cc_index_by_addr; // something wrong
-			};
-
-			index = c1 + c2 * COUNTRYCODE_LETTER1_MAX;
-
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "c1=%d c2=%d index=%d (0x%03x) -> test: %c%c", c1, c2, index, index, COUNTRYCODE_INDEX_TO_CHAR1(index), COUNTRYCODE_INDEX_TO_CHAR2(index));
-
-			if (index >= COUNTRYCODE_INDEX_MAX) {
-				index = COUNTRYCODE_INDEX_UNKNOWN; // failsafe
-				fprintf(stderr, "%s/%s: unexpected index (too high): %d\n", __FILE__, __func__, index);
-			};
+		// set only data_source from cache if caller request it
+		if (data_source_ptr != NULL) {
+			*data_source_ptr = data_source_lastused;
 		};
+
+		cache_hit = 1;
+		goto END_libipv6calc_db_wrapper_cached;
+	} else {
+		// retrieve always data_source for caching
+		r = libipv6calc_db_wrapper_country_code_by_addr(cc_text, sizeof(cc_text), ipaddrp, &data_source_lastused);
+		if (r != 0) {
+			goto END_libipv6calc_db_wrapper_cached; // something wrong
+		};
+
+		if (strlen(cc_text) == 2) {
+			if (isalpha(cc_text[0]) && isalnum(cc_text[1])) {
+				c1 = toupper(cc_text[0]);
+				if (! (c1 >= 'A' && c1 <= 'Z')) {
+					goto END_libipv6calc_db_wrapper_cached; // something wrong
+				};
+				c1 -= 'A';
+
+				c2 = toupper(cc_text[1]);
+				if (c2 >= '0' && c2 <= '9') {
+					c2 -= '0';
+				} else if (c2 >= 'A' && c2 <= 'Z') {
+					c2 -= 'A';
+					c2 += 10;
+				} else {
+					goto END_libipv6calc_db_wrapper_cached; // something wrong
+				};
+
+				index = c1 + c2 * COUNTRYCODE_LETTER1_MAX;
+
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "c1=%d c2=%d index=%d (0x%03x) -> test: %c%c", c1, c2, index, index, COUNTRYCODE_INDEX_TO_CHAR1(index), COUNTRYCODE_INDEX_TO_CHAR2(index));
+
+				if (index >= COUNTRYCODE_INDEX_MAX) {
+					index = COUNTRYCODE_INDEX_UNKNOWN; // failsafe
+					ERRORPRINT_WA("unexpected index (too high): %d", index);
+					goto END_libipv6calc_db_wrapper_cached; // something wrong
+				};
+			};
+		} else {
+			ERRORPRINT_WA("returned cc_text has not 2 chars: %s", cc_text);
+			goto END_libipv6calc_db_wrapper_cached; // something wrong
+		};
+
+		// store in last used cache
+		ipaddr_cache_lastused_valid = 1;
+		cc_index_lastused = index;
+		ipaddr_cache_lastused = *ipaddrp;
 	};
 
-END_libipv6calc_db_wrapper_cc_index_by_addr:
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Finished with %d (0x%x)", index, index);
+END_libipv6calc_db_wrapper_cached:
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: addr=%08x%08x%08x%08x cc_index=%d (0x%03x) %c%c%s", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], index, index, COUNTRYCODE_INDEX_TO_CHAR1(index), COUNTRYCODE_INDEX_TO_CHAR2(index), (cache_hit == 1 ? " (cached)" : ""));
 
 	return(index);
 };
@@ -1259,37 +1294,59 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp)
 	uint32_t as_num32 = ASNUM_AS_UNKNOWN; // default
 	int i, valid = 1;
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%04x%04x%04x%04x proto=%d", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], ipaddrp->proto);
+	int cache_hit = 0;
 
-	// TODO: switch mechanism depending on backend (GeoIP supports AS only by text representation)
-	as_text = libipv6calc_db_wrapper_as_text_by_addr(ipaddrp);
+	static ipv6calc_ipaddr ipaddr_cache_lastused;
+	static uint32_t as_num32_lastused;
+	static int ipaddr_cache_lastused_valid = 0;
 
-	if ((as_text != NULL) && (strncmp(as_text, "AS", 2) == 0) && (strlen(as_text) > 2)) {
-		// catch AS....
-		for (i = 0; i < (strlen(as_text) - 2); i++) {
-			if ((as_text[i+2] == ' ') || (as_text[i+2] == '\0')) {
-				break;
-			} else if (isdigit(as_text[i+2])) {
-				continue;
-			} else {
-				// something wrong
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x%08x%08x%08x proto=%d", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], ipaddrp->proto);
+
+	if ((ipaddr_cache_lastused_valid == 1)
+	    &&	(ipaddr_cache_lastused.proto == ipaddrp->proto)
+	    && 	(ipaddr_cache_lastused.addr[0] == ipaddrp->addr[0])
+	    && 	(ipaddr_cache_lastused.addr[1] == ipaddrp->addr[1])
+	    && 	(ipaddr_cache_lastused.addr[2] == ipaddrp->addr[2])
+	    && 	(ipaddr_cache_lastused.addr[3] == ipaddrp->addr[3])
+	) {
+		as_num32 = as_num32_lastused;
+		cache_hit = 1;
+	} else {
+		// TODO: switch mechanism depending on backend (GeoIP supports AS only by text representation)
+		as_text = libipv6calc_db_wrapper_as_text_by_addr(ipaddrp);
+
+		if ((as_text != NULL) && (strncmp(as_text, "AS", 2) == 0) && (strlen(as_text) > 2)) {
+			// catch AS....
+			for (i = 0; i < (strlen(as_text) - 2); i++) {
+				if ((as_text[i+2] == ' ') || (as_text[i+2] == '\0')) {
+					break;
+				} else if (isdigit(as_text[i+2])) {
+					continue;
+				} else {
+					// something wrong
+					valid = 0;
+					break;
+				};
+			};
+
+			if (i > 10) {
+				// too many digits
 				valid = 0;
-				break;
+			};
+
+			if (valid == 1) {
+				snprintf(as_number_string, 11, "%s", as_text + 2);
+				as_num32 = atol(as_number_string);
 			};
 		};
 
-		if (i > 10) {
-			// too many digits
-			valid = 0;
-		};
-
-		if (valid == 1) {
-			snprintf(as_number_string, 11, "%s", as_text + 2);
-			as_num32 = atol(as_number_string);
-		};
+		// store in last used cache
+		ipaddr_cache_lastused_valid = 1;
+		as_num32_lastused = as_num32;
+		ipaddr_cache_lastused = *ipaddrp;
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %d (0x%08x)", as_num32, as_num32);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: addr=%08x%08x%08x%08x as_num32=%d (0x%08x)%s", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], as_num32, as_num32, (cache_hit == 1 ? " (cached)" : ""));
 
 	return(as_num32);
 };
@@ -1301,7 +1358,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp)
 uint16_t libipv6calc_db_wrapper_as_num16_by_addr(const ipv6calc_ipaddr *ipaddrp) {
 	uint16_t as_num16 = 0;
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%04x%04x%04x%04x proto=%d", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], ipaddrp->proto);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x%08x%08x%08x proto=%d", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], ipaddrp->proto);
 
 	// get 32-bit ASN
 	uint32_t as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(ipaddrp);
@@ -1497,7 +1554,12 @@ static const char *libipv6calc_db_wrapper_reserved_string_by_ipv6addr(const ipv6
 	
 	uint16_t ipv6_00_15 = ipv6addr_getword(ipv6addrp, 0);
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given ipv6 prefix: %08x%08x", (unsigned int) ipv6_00_31, (unsigned int) ipv6_32_63);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x%08x%08x%08x"
+		, (unsigned int) ipv6_00_31
+		, (unsigned int) ipv6_32_63
+		, (unsigned int) ipv6_64_95
+		, (unsigned int) ipv6_96_127
+	);
 
 	// see also: https://en.wikipedia.org/wiki/Reserved_IP_addresses
 	//
@@ -1594,16 +1656,31 @@ int libipv6calc_db_wrapper_registry_string_by_ipv4addr(const ipv6calc_ipv4addr *
 int libipv6calc_db_wrapper_registry_num_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp) {
 	int retval = REGISTRY_UNKNOWN, p, f;
 
+	int cache_hit = 0;
+
+	static ipv6calc_ipv4addr cache_lu_ipv4addr;
+	static uint32_t cache_lu_ipv4addr_registry_num;
+	static int      cache_lu_ipv4addr_valid = 0;
+
 #if defined SUPPORT_EXTERNAL
 	ipv6calc_ipaddr ipaddr;
 #endif
 
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x", ipv4addr_getdword(ipv4addrp));
+
+	if ((cache_lu_ipv4addr_valid == 1)
+	    && 	(memcmp(&cache_lu_ipv4addr.in_addr, &ipv4addrp->in_addr, sizeof(struct in_addr)) == 0)
+	) {
+		retval= cache_lu_ipv4addr_registry_num;
+		cache_hit = 1;
+		goto END_libipv6calc_db_wrapper_cached;
+	};
 
 	const char *info = libipv6calc_db_wrapper_reserved_string_by_ipv4addr(ipv4addrp);
 
 	if (info != NULL) {
-		return(REGISTRY_RESERVED);
+		retval = REGISTRY_RESERVED;
+		goto END_libipv6calc_db_wrapper;
 	};
 
 	f = IPV6CALC_DB_FEATURE_NUM_IPV4_TO_REGISTRY;
@@ -1643,6 +1720,17 @@ int libipv6calc_db_wrapper_registry_num_by_ipv4addr(const ipv6calc_ipv4addr *ipv
 	};
 
 END_libipv6calc_db_wrapper:
+	// store in last used cache
+	cache_lu_ipv4addr_valid = 1;
+	cache_lu_ipv4addr_registry_num = retval;
+	cache_lu_ipv4addr.in_addr = ipv4addrp->in_addr;
+
+END_libipv6calc_db_wrapper_cached:
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: addr=%08x reg=%d%s"
+		, ipv4addr_getdword(ipv4addrp)
+		, retval
+		, (cache_hit == 1 ? " (cached)" : "")
+	);
 	return (retval);
 };
 
@@ -1690,21 +1778,37 @@ int libipv6calc_db_wrapper_registry_string_by_ipv6addr(const ipv6calc_ipv6addr *
 int libipv6calc_db_wrapper_registry_num_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = REGISTRY_UNKNOWN, p, f;
 
+	int cache_hit = 0;
+
+	static ipv6calc_ipv6addr cache_lu_ipv6addr;
+	static uint32_t cache_lu_ipv6addr_registry_num;
+	static int      cache_lu_ipv6addr_valid = 0;
+
 #if defined SUPPORT_EXTERNAL
 	ipv6calc_ipaddr ipaddr;
 #endif
 
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x%08x%08x%08x", ipv6addr_getdword(ipv6addrp, 0), ipv6addr_getdword(ipv6addrp, 1), ipv6addr_getdword(ipv6addrp, 2), ipv6addr_getdword(ipv6addrp, 3));
+
+	if ((cache_lu_ipv6addr_valid == 1)
+	    && 	(memcmp(&cache_lu_ipv6addr.in6_addr, &ipv6addrp->in6_addr, sizeof(struct in6_addr)) == 0)
+	) {
+		retval= cache_lu_ipv6addr_registry_num;
+		cache_hit = 1;
+		goto END_libipv6calc_db_wrapper_cached;
+	};
 
 	const char *info = libipv6calc_db_wrapper_reserved_string_by_ipv6addr(ipv6addrp);
 
 	if (info != NULL) {
-		return(REGISTRY_RESERVED);
+		retval = REGISTRY_RESERVED;
+		goto END_libipv6calc_db_wrapper;
 	};
 
 	if (ipv6addr_getword(ipv6addrp, 0) == 0x3ffe) {
 		// special handling of 6BONE
-		return(REGISTRY_6BONE);
+		retval = REGISTRY_6BONE;
+		goto END_libipv6calc_db_wrapper;
 	};
 
 	f = IPV6CALC_DB_FEATURE_NUM_IPV6_TO_REGISTRY;
@@ -1744,6 +1848,20 @@ int libipv6calc_db_wrapper_registry_num_by_ipv6addr(const ipv6calc_ipv6addr *ipv
 	};
 
 END_libipv6calc_db_wrapper:
+	// store in last used cache
+	cache_lu_ipv6addr_valid = 1;
+	cache_lu_ipv6addr_registry_num = retval;
+	cache_lu_ipv6addr.in6_addr = ipv6addrp->in6_addr;
+
+END_libipv6calc_db_wrapper_cached:
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: addr=%08x%08x%08x%08x reg=%d%s"
+		, ipv6addr_getdword(ipv6addrp, 0)
+		, ipv6addr_getdword(ipv6addrp, 1)
+		, ipv6addr_getdword(ipv6addrp, 2)
+		, ipv6addr_getdword(ipv6addrp, 3)
+		, retval
+		, (cache_hit == 1 ? " (cached)" : "")
+	);
 	return (retval);
 };
 

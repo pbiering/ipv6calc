@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.122 2015/06/08 06:36:43 ds6peter Exp $
+ * Version    : $Id: libipv6addr.c,v 1.123 2015/07/12 08:45:17 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
@@ -2089,6 +2089,109 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 		};
 	};
 
+	/* prefix included */
+	if ( ((ipv6addrp->scope & (IPV6_ADDR_SITELOCAL | IPV6_ADDR_ULUA | IPV6_NEW_ADDR_AGU)) != 0) && ((ipv6addrp->scope & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID)) == 0) ) {
+		DEBUGPRINT_NA(DEBUG_libipv6addr, "Prefix included");
+
+		if (((ipv6addrp->scope & IPV6_NEW_ADDR_AGU) != 0) && ((ipv6addrp->scope & (IPV6_NEW_ADDR_6TO4)) == 0) && (method == ANON_METHOD_KEEPTYPEASNCC)) {
+			if (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV6_REQ_DB) == 0) {
+				DEBUGPRINT_NA(DEBUG_libipv6addr, "anonymization method not supported, db_wrapper reports too less features");
+				return(1);
+			};
+
+			// check whether IPv6 address is reserved
+			r = libipv6calc_db_wrapper_registry_string_by_ipv6addr(ipv6addrp, helpstring, sizeof(helpstring));
+			if (r == 2) {
+				DEBUGPRINT_NA(DEBUG_libipv6addr, "IPv6 registry of prefix contains reserved, skip anonymization");
+				goto ChecksumCalc;
+			};
+
+			// switch to prefix anonymization
+			if ((ipv6addrp->scope & IPV6_NEW_ADDR_6BONE) != 0) {
+				cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + IPV6_ADDR_REGISTRY_6BONE;
+				as_num32 = 0;
+			} else {
+				CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
+
+				cc_index = libipv6calc_db_wrapper_cc_index_by_addr(&ipaddr, NULL);
+				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr);
+
+				if (cc_index == COUNTRYCODE_INDEX_UNKNOWN) {
+					// on unknown country, map registry value
+					cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + libipv6calc_db_wrapper_registry_num_by_ipv6addr(ipv6addrp);
+				};
+			};
+
+			DEBUGPRINT_WA(DEBUG_libipv6addr, "cc_index=%d (0x%03x) as_num32=%d (0x%08x)", cc_index, cc_index, as_num32, as_num32);
+
+			flags = 0x0;
+
+			ipv6_prefix[0] = 0; ipv6_prefix[1] = 0;
+
+			// store prefix
+			ipv6_prefix[ANON_PREFIX_TOKEN_DWORD] |= PACK_XMS(ANON_PREFIX_TOKEN_VALUE, ANON_PREFIX_TOKEN_XOR, ANON_PREFIX_TOKEN_MASK, ANON_PREFIX_TOKEN_SHIFT);
+
+			// store cc_index
+			ipv6_prefix[ANON_PREFIX_CCINDEX_DWORD] |= PACK_XMS(cc_index, ANON_PREFIX_CCINDEX_XOR, ANON_PREFIX_CCINDEX_MASK, ANON_PREFIX_CCINDEX_SHIFT);
+
+			// store as_num32
+			ipv6_prefix[ANON_PREFIX_ASN32_MSB_DWORD] |= PACK_XMS(as_num32 >> ANON_PREFIX_ASN32_LSB_AMOUNT, ANON_PREFIX_ASN32_MSB_XOR, ANON_PREFIX_ASN32_MSB_MASK, ANON_PREFIX_ASN32_MSB_SHIFT);
+			ipv6_prefix[ANON_PREFIX_ASN32_LSB_DWORD] |= PACK_XMS(as_num32 & ANON_PREFIX_ASN32_LSB_MASK, ANON_PREFIX_ASN32_LSB_XOR, ANON_PREFIX_ASN32_LSB_MASK, ANON_PREFIX_ASN32_LSB_SHIFT);
+
+			// store flags
+			ipv6_prefix[ANON_PREFIX_FLAGS_DWORD] |= PACK_XMS(flags, ANON_PREFIX_FLAGS_XOR, ANON_PREFIX_FLAGS_MASK, ANON_PREFIX_FLAGS_SHIFT);
+
+			DEBUGPRINT_WA(DEBUG_libipv6addr, "anonmized prefix for method=%d: %08x%08x", method, ipv6_prefix[0], ipv6_prefix[1]);
+
+			anonymized_prefix_nibbles = 0;
+
+			ipv6addr_setdword(ipv6addrp, 0, ipv6_prefix[0]);
+			ipv6addr_setdword(ipv6addrp, 1, ipv6_prefix[1]);
+			calculate_checksum_prefix = 1;
+
+		} else if (mask_ipv6 == 64) {
+			/* nothing to do */
+		} else if (mask_ipv6 < 16 || mask_ipv6 > 64) {
+			/* should not happen here */
+			fprintf(stderr, "%s/%s: 'mask_ipv6' has an unexpected illegal value: %d\n", __FILE__, __func__, mask_ipv6);
+			exit(EXIT_FAILURE);
+		} else {
+			DEBUGPRINT_WA(DEBUG_libipv6addr, "Mask prefix with mask: %d", mask_ipv6);
+
+			if (mask_ipv6 < 64 && mask_ipv6 > 32) {
+				if (zeroize_prefix != 0) {
+					ipv6addr_setdword(ipv6addrp, 1, ipv6addr_getdword(ipv6addrp, 1) & (0xffffffffu << ((unsigned int) 64 - mask_ipv6)));
+				} else {
+					ipv6addr_setdword(ipv6addrp, 1, (ipv6addr_getdword(ipv6addrp, 1) & (0xffffffffu << ((unsigned int) 64 - mask_ipv6))) | ((ANON_TOKEN_VALUE_00_31 | (ANON_TOKEN_VALUE_00_31 >> 16)) & ((0xffffffffu >> ((unsigned int) mask_ipv6 - 32)))));
+					anonymized_prefix_nibbles = (64 - mask_ipv6) / 4;
+				};
+			} else if (mask_ipv6 == 32) {
+				if (zeroize_prefix != 0) {
+					ipv6addr_setdword(ipv6addrp, 1, 0u);
+				} else {
+					ipv6addr_setdword(ipv6addrp, 1, ANON_TOKEN_VALUE_00_31 | (ANON_TOKEN_VALUE_00_31 >> 16));
+					anonymized_prefix_nibbles = 8;
+				};
+			} else if (mask_ipv6 < 32 && mask_ipv6 >= 16) {
+				if (zeroize_prefix != 0) {
+					ipv6addr_setdword(ipv6addrp, 1, 0u);
+					ipv6addr_setdword(ipv6addrp, 0, ipv6addr_getdword(ipv6addrp, 0) & (0xffffffffu << ((unsigned int) 32 - mask_ipv6)));
+				} else {
+					ipv6addr_setdword(ipv6addrp, 1, ANON_TOKEN_VALUE_00_31 | (ANON_TOKEN_VALUE_00_31 >> 16));
+					ipv6addr_setdword(ipv6addrp, 0, (ipv6addr_getdword(ipv6addrp, 0) & (0xffffffffu << ((unsigned int) 32 - mask_ipv6))) | ((ANON_TOKEN_VALUE_00_31 | (ANON_TOKEN_VALUE_00_31 >> 16)) & ((0xffffffffu >> ((unsigned int) mask_ipv6)))));
+					anonymized_prefix_nibbles = (64 - mask_ipv6) / 4;
+				};
+			};
+		};
+
+		/* restore prefix in special cases */
+		if ( ((ipv6addrp->scope & IPV6_ADDR_SITELOCAL) != 0) && (mask_ipv6 < 10) ) { 
+			ipv6addr_setword(ipv6addrp, 0, ipv6addr_getword(ipv6addrp, 1) | 0xfec0u);
+		} else if ( ((ipv6addrp->scope & IPV6_ADDR_ULUA) != 0) && (mask_ipv6 < 7) ) {
+			ipv6addr_setoctet(ipv6addrp, 0, ipv6addr_getoctet(ipv6addrp, 0) | 0xfdu);
+		};
+	};
+
 	if ( ( ((ipv6addrp->scope & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_ADDR_ULUA )) != 0) || ((ipv6addrp->scope & (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) == (IPV6_ADDR_LOOPBACK | IPV6_NEW_ADDR_SOLICITED_NODE)) ) && ((ipv6addrp->scope & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID)) == 0) ) {
 		/* Interface identifier included */
 		if ((ipv6addrp->scope & IPV6_NEW_ADDR_IID_EUI48) != 0) {
@@ -2354,109 +2457,6 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 		ipv6addr_setoctet(ipv6addrp, 13, eui64addr.addr[5]);
 		ipv6addr_setoctet(ipv6addrp, 14, eui64addr.addr[6]);
 		ipv6addr_setoctet(ipv6addrp, 15, eui64addr.addr[7]);
-	};
-
-	/* prefix included */
-	if ( ((ipv6addrp->scope & (IPV6_ADDR_SITELOCAL | IPV6_ADDR_ULUA | IPV6_NEW_ADDR_AGU)) != 0) && ((ipv6addrp->scope & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID)) == 0) ) {
-		DEBUGPRINT_NA(DEBUG_libipv6addr, "Prefix included");
-
-		if (((ipv6addrp->scope & IPV6_NEW_ADDR_AGU) != 0) && ((ipv6addrp->scope & (IPV6_NEW_ADDR_6TO4)) == 0) && (method == ANON_METHOD_KEEPTYPEASNCC)) {
-			if (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV6_REQ_DB) == 0) {
-				DEBUGPRINT_NA(DEBUG_libipv6addr, "anonymization method not supported, db_wrapper reports too less features");
-				return(1);
-			};
-
-			// check whether IPv6 address is reserved
-			r = libipv6calc_db_wrapper_registry_string_by_ipv6addr(ipv6addrp, helpstring, sizeof(helpstring));
-			if (r == 2) {
-				DEBUGPRINT_NA(DEBUG_libipv6addr, "IPv6 registry of prefix contains reserved, skip anonymization");
-				goto ChecksumCalc;
-			};
-
-			// switch to prefix anonymization
-			if ((ipv6addrp->scope & IPV6_NEW_ADDR_6BONE) != 0) {
-				cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + IPV6_ADDR_REGISTRY_6BONE;
-				as_num32 = 0;
-			} else {
-				CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
-
-				cc_index = libipv6calc_db_wrapper_cc_index_by_addr(&ipaddr, NULL);
-				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr);
-
-				if (cc_index == COUNTRYCODE_INDEX_UNKNOWN) {
-					// on unknown country, map registry value
-					cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + libipv6calc_db_wrapper_registry_num_by_ipv6addr(ipv6addrp);
-				};
-			};
-
-			DEBUGPRINT_WA(DEBUG_libipv6addr, "cc_index=%d (0x%03x) as_num32=%d (0x%08x)", cc_index, cc_index, as_num32, as_num32);
-
-			flags = 0x0;
-
-			ipv6_prefix[0] = 0; ipv6_prefix[1] = 0;
-
-			// store prefix
-			ipv6_prefix[ANON_PREFIX_TOKEN_DWORD] |= PACK_XMS(ANON_PREFIX_TOKEN_VALUE, ANON_PREFIX_TOKEN_XOR, ANON_PREFIX_TOKEN_MASK, ANON_PREFIX_TOKEN_SHIFT);
-
-			// store cc_index
-			ipv6_prefix[ANON_PREFIX_CCINDEX_DWORD] |= PACK_XMS(cc_index, ANON_PREFIX_CCINDEX_XOR, ANON_PREFIX_CCINDEX_MASK, ANON_PREFIX_CCINDEX_SHIFT);
-
-			// store as_num32
-			ipv6_prefix[ANON_PREFIX_ASN32_MSB_DWORD] |= PACK_XMS(as_num32 >> ANON_PREFIX_ASN32_LSB_AMOUNT, ANON_PREFIX_ASN32_MSB_XOR, ANON_PREFIX_ASN32_MSB_MASK, ANON_PREFIX_ASN32_MSB_SHIFT);
-			ipv6_prefix[ANON_PREFIX_ASN32_LSB_DWORD] |= PACK_XMS(as_num32 & ANON_PREFIX_ASN32_LSB_MASK, ANON_PREFIX_ASN32_LSB_XOR, ANON_PREFIX_ASN32_LSB_MASK, ANON_PREFIX_ASN32_LSB_SHIFT);
-
-			// store flags
-			ipv6_prefix[ANON_PREFIX_FLAGS_DWORD] |= PACK_XMS(flags, ANON_PREFIX_FLAGS_XOR, ANON_PREFIX_FLAGS_MASK, ANON_PREFIX_FLAGS_SHIFT);
-
-			DEBUGPRINT_WA(DEBUG_libipv6addr, "anonmized prefix for method=%d: %08x%08x", method, ipv6_prefix[0], ipv6_prefix[1]);
-
-			anonymized_prefix_nibbles = 0;
-
-			ipv6addr_setdword(ipv6addrp, 0, ipv6_prefix[0]);
-			ipv6addr_setdword(ipv6addrp, 1, ipv6_prefix[1]);
-			calculate_checksum_prefix = 1;
-
-		} else if (mask_ipv6 == 64) {
-			/* nothing to do */
-		} else if (mask_ipv6 < 16 || mask_ipv6 > 64) {
-			/* should not happen here */
-			fprintf(stderr, "%s/%s: 'mask_ipv6' has an unexpected illegal value: %d\n", __FILE__, __func__, mask_ipv6);
-			exit(EXIT_FAILURE);
-		} else {
-			DEBUGPRINT_WA(DEBUG_libipv6addr, "Mask prefix with mask: %d", mask_ipv6);
-
-			if (mask_ipv6 < 64 && mask_ipv6 > 32) {
-				if (zeroize_prefix != 0) {
-					ipv6addr_setdword(ipv6addrp, 1, ipv6addr_getdword(ipv6addrp, 1) & (0xffffffffu << ((unsigned int) 64 - mask_ipv6)));
-				} else {
-					ipv6addr_setdword(ipv6addrp, 1, (ipv6addr_getdword(ipv6addrp, 1) & (0xffffffffu << ((unsigned int) 64 - mask_ipv6))) | ((ANON_TOKEN_VALUE_00_31 | (ANON_TOKEN_VALUE_00_31 >> 16)) & ((0xffffffffu >> ((unsigned int) mask_ipv6 - 32)))));
-					anonymized_prefix_nibbles = (64 - mask_ipv6) / 4;
-				};
-			} else if (mask_ipv6 == 32) {
-				if (zeroize_prefix != 0) {
-					ipv6addr_setdword(ipv6addrp, 1, 0u);
-				} else {
-					ipv6addr_setdword(ipv6addrp, 1, ANON_TOKEN_VALUE_00_31 | (ANON_TOKEN_VALUE_00_31 >> 16));
-					anonymized_prefix_nibbles = 8;
-				};
-			} else if (mask_ipv6 < 32 && mask_ipv6 >= 16) {
-				if (zeroize_prefix != 0) {
-					ipv6addr_setdword(ipv6addrp, 1, 0u);
-					ipv6addr_setdword(ipv6addrp, 0, ipv6addr_getdword(ipv6addrp, 0) & (0xffffffffu << ((unsigned int) 32 - mask_ipv6)));
-				} else {
-					ipv6addr_setdword(ipv6addrp, 1, ANON_TOKEN_VALUE_00_31 | (ANON_TOKEN_VALUE_00_31 >> 16));
-					ipv6addr_setdword(ipv6addrp, 0, (ipv6addr_getdword(ipv6addrp, 0) & (0xffffffffu << ((unsigned int) 32 - mask_ipv6))) | ((ANON_TOKEN_VALUE_00_31 | (ANON_TOKEN_VALUE_00_31 >> 16)) & ((0xffffffffu >> ((unsigned int) mask_ipv6)))));
-					anonymized_prefix_nibbles = (64 - mask_ipv6) / 4;
-				};
-			};
-		};
-
-		/* restore prefix in special cases */
-		if ( ((ipv6addrp->scope & IPV6_ADDR_SITELOCAL) != 0) && (mask_ipv6 < 10) ) { 
-			ipv6addr_setword(ipv6addrp, 0, ipv6addr_getword(ipv6addrp, 1) | 0xfec0u);
-		} else if ( ((ipv6addrp->scope & IPV6_ADDR_ULUA) != 0) && (mask_ipv6 < 7) ) {
-			ipv6addr_setoctet(ipv6addrp, 0, ipv6addr_getoctet(ipv6addrp, 0) | 0xfdu);
-		};
 	};
 
 ChecksumCalc:
