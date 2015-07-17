@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
-# Version    : $Id: test_mod_ipv6calc.sh,v 1.9 2015/07/17 05:25:09 ds6peter Exp $
+# Version    : $Id: test_mod_ipv6calc.sh,v 1.10 2015/07/17 05:49:21 ds6peter Exp $
 # Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -108,7 +108,7 @@ create_apache_root_and_start() {
 	if [ $? -eq 0 ]; then
 		httpd_pid=$!
 		sleep 1
-		if ps -p $httpd_pid >/dev/null 2>&1; then
+		if ps -p $httpd_pid --no-headers >/dev/null 2>&1; then
                         echo "INFO  : httpd started in background (wait 10 seconds for pid file now)"
                 else
                         echo "ERROR : httpd did not start in background"
@@ -133,7 +133,7 @@ create_apache_root_and_start() {
 		return 1
 	fi
 
-	if ! ps -p $pid >/dev/null 2>&1; then
+	if ! ps -p $pid --no-headers >/dev/null 2>&1; then
 		echo "ERROR : httpd started with PID but no longer running: $pid"
 		return 1
 	fi
@@ -173,7 +173,7 @@ stop_apache() {
 		kill $pid
 
 		sleep 1
-		if ps -p $pid; then
+		if ps -p $pid --no-headers; then
 			echo "WARN  : process still running (kill now with -9)"
 			kill -9 $pid
 		fi
@@ -187,7 +187,7 @@ stop_apache() {
 		fi
 
 		sleep 1
-		if ps u -C httpd | grep "/tmp/mod_ipv6calc"; then
+		if ps u -C httpd --no-headers | grep "/tmp/mod_ipv6calc"; then
 			echo "WARN  : process still running (kill now with -9)"
 			/usr/bin/killall -9 httpd
 		fi
