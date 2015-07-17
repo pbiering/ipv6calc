@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
-# Version    : $Id: test_mod_ipv6calc.sh,v 1.7 2015/07/17 05:14:10 ds6peter Exp $
+# Version    : $Id: test_mod_ipv6calc.sh,v 1.8 2015/07/17 05:20:26 ds6peter Exp $
 # Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -106,7 +106,14 @@ create_apache_root_and_start() {
 	echo "INFO  : start httpd with ServerRoot $dir_base"
 	/usr/sbin/httpd -X -e info -d $dir_base &
 	if [ $? -eq 0 ]; then
-		echo "INFO  : httpd started in background"
+		httpd_pid=$!
+		sleep 1
+		if ps -p $httpd_pid >/dev/null 2>&1; then
+                        echo "INFO  : httpd started in background (wait 10 seconds for pid file now)"
+                else
+                        echo "ERROR : httpd did not start in background"
+                        return 1
+                fi
 	fi
 
 	limit=10
