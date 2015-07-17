@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
-# Version    : $Id: test_mod_ipv6calc.sh,v 1.10 2015/07/17 05:49:21 ds6peter Exp $
+# Version    : $Id: test_mod_ipv6calc.sh,v 1.11 2015/07/17 05:52:49 ds6peter Exp $
 # Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -178,6 +178,12 @@ stop_apache() {
 			kill -9 $pid
 		fi
 	else
+		if ! ps u -C httpd --no-headers | grep "/tmp/mod_ipv6calc"; then
+			# nothing to do
+			echo "INFO  : no related httpd process found to kill"
+			return 0
+		fi
+
 		if [ ! -x /usr/bin/killall ]; then
 			echo "ERROR : no httpd PID given, but no 'killall' available (provided by RPM: psmisc)"
 			echo "ERROR : you have to kill process manually"
@@ -218,7 +224,9 @@ exec_request() {
 	fi
 
 	echo "INFO  : error log entry"
-	tail -n +$[ $lines_error_log + 1 ] "$dir_base/logs/error_log"
+	tail -n +$[ $lines_error_log + 1 ] "$dir_base/logs/error_log" | grep "ipv6calc"
+	# update number of lines
+	lines_error_log=$(cat "$dir_base/logs/error_log" | wc -l)
 }
 
 
