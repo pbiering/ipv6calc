@@ -6087,8 +6087,7 @@ done
 	fi
 
 	if test -z "$APXS"; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: No APXS binary found: cannot create Apache module" >&5
-$as_echo "$as_me: WARNING: No APXS binary found: cannot create Apache module" >&2;}
+		as_fn_error $? "No APXS binary found: cannot create Apache module - missing httpd-devel?" "$LINENO" 5
 	else
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: APXS binary found: $APXS" >&5
 $as_echo "APXS binary found: $APXS" >&6; }
@@ -6118,7 +6117,15 @@ $as_echo_n "checking Apache version... " >&6; }
 		fi
 
 		HTTPD_LIBEXECDIR="`${APXS} -q libexecdir`"
+		if test -z "$HTTPD_LIBEXECDIR"; then
+			as_fn_error $? "${APXS} cannot retrieve libexecdir" "$LINENO" 5
+		fi
+
 		HTTPD_SYSCONFDIR="`${APXS} -q sysconfdir`"
+		if test -z "$HTTPD_SYSCONFDIR"; then
+			as_fn_error $? "${APXS} cannot retrieve sysconfdir" "$LINENO" 5
+		fi
+
 		if test -n "$HTTPD_SYSCONFDIR"; then
 			HTTPD_SYSCONFDIR="$HTTPD_SYSCONFDIR.d"
 		fi

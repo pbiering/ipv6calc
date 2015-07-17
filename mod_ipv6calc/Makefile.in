@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : mod_ipv6calc/Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.6 2015/06/01 19:57:36 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.7 2015/07/17 05:34:54 ds6peter Exp $
 # Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -16,7 +16,7 @@ DEFAULT_CFLAGS ?= -O2 -Wall -g @CFLAGS_EXTRA@
 
 INCLUDES= @MD5_INCLUDE@ @GETOPT_INCLUDE@ @IP2LOCATION_INCLUDE_L1@ @GEOIP_INCLUDE_L1@ -I../ -I../lib/ -I../databases/lib/
 
-LIBS = @IPV6CALC_LIB@ @IP2LOCATION_LIB_L1@ @GEOIP_LIB_L1@
+LIBS = @IPV6CALC_LIB@ @IP2LOCATION_LIB_L1@ @GEOIP_LIB_L1@ -lm
 
 GETOBJS = @LIBOBJS@
 

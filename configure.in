@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.147 2015/07/13 19:59:55 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.148 2015/07/17 05:34:54 ds6peter Exp $
 dnl Copyright: 2001-2015 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -1114,7 +1114,7 @@ if test "$ENABLE_MOD_IPV6CALC" = "1"; then
 	fi
 
 	if test -z "$APXS"; then
-		AC_MSG_ERROR([No APXS binary found: cannot create Apache module])
+		AC_MSG_ERROR([No APXS binary found: cannot create Apache module - missing httpd-devel?])
 	else
 		AC_MSG_RESULT([APXS binary found: $APXS])
 
