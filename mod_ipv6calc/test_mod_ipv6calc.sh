@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
-# Version    : $Id: test_mod_ipv6calc.sh,v 1.5 2015/07/17 04:06:00 ds6peter Exp $
+# Version    : $Id: test_mod_ipv6calc.sh,v 1.6 2015/07/17 05:08:42 ds6peter Exp $
 # Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -175,7 +175,7 @@ exec_request() {
 	dst="$1"
 
 	echo "NOTICE: test: $1"
-	curl -s "http://$1:8080/" >/dev/null
+	curl -g -s "http://$1:8080/" >/dev/null
 	if [ $? -ne 0 ]; then
 		echo "ERROR : curl request to $1:8080 failed"
 		return 1
