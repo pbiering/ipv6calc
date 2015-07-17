@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
-# Version    : $Id: test_mod_ipv6calc.sh,v 1.4 2015/07/11 08:31:14 ds6peter Exp $
+# Version    : $Id: test_mod_ipv6calc.sh,v 1.5 2015/07/17 04:06:00 ds6peter Exp $
 # Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -47,7 +47,7 @@ create_apache_root_and_start() {
 	fi
 
 	echo "INFO  : change log level to debug $dir_base/conf/httpd.conf"
-	perl -pi -e 's/^LogLevel/LogLevel debug/g' $dir_base/conf/httpd.conf
+	perl -pi -e 's/^LogLevel .*/LogLevel debug/g' $dir_base/conf/httpd.conf
 	if [ $? -ne 0 ]; then
 		echo "ERROR : can't define LogLevel: $dir_base/conf/httpd.conf"
 		return 1
@@ -104,7 +104,7 @@ create_apache_root_and_start() {
 
 
 	echo "INFO  : start httpd with ServerRoot $dir_base"
-	httpd -X -e info -d $dir_base &
+	/usr/sbin/httpd -X -e info -d $dir_base &
 	if [ $? -eq 0 ]; then
 		echo "INFO  : httpd started in background"
 	fi
@@ -209,12 +209,12 @@ run_test_requests() {
 			exec_request "$address"
 		fi
 	else
-		for ipv4 in $(ip -o addr show |grep -w inet | grep -w global | grep -vw deprecated | awk '{ print $4 }' | awk -F/ '{ print $1 }'); do
+		for ipv4 in $(/sbin/ip -o addr show |grep -w inet | grep -w global | grep -vw deprecated | awk '{ print $4 }' | awk -F/ '{ print $1 }'); do
 			exec_request "$ipv4" || return 1
 		done
 
 		# retrieve local IPv6 address
-		for ipv6 in $(ip -o addr show |grep -w inet6 | grep -w global | grep -vw deprecated | awk '{ print $4 }' | awk -F/ '{ print $1 }'); do
+		for ipv6 in $(/sbin/ip -o addr show |grep -w inet6 | grep -w global | grep -vw deprecated | awk '{ print $4 }' | awk -F/ '{ print $1 }'); do
 			exec_request "[$ipv6]" || return 1
 		done
 	fi
@@ -224,6 +224,28 @@ run_test_requests() {
 	return 0
 }
 
+#### Help
+help() {
+	cat <<END
+$(basname "$0") [<options>] [-S|-K|-W]
+	-S	start
+	-K	stop (kill)
+	-W	run workflow
+
+	-m	enable debug module
+	-l	enable debug library
+	-f	list open files after start
+	-c	show effective module config options
+	-g	disable GeoIP
+	-i	disable IP2Location
+	-d	disable DBIP.com
+	-e	disable external databases
+
+	-b <base directory
+
+	-a <address>	disable autoretrievement of local IP, use given one instead
+END
+}
 
 #### Options
 while getopts "ca:fSKWb:mlgideh\?" opt; do
@@ -271,19 +293,12 @@ while getopts "ca:fSKWb:mlgideh\?" opt; do
 	    W)
 		action="workflow"
 		;;
-	    *)
-		echo "$0 [-m] [-l] -S			start"
-		echo "      -m	enable debug module"
-		echo "      -l	enable debug library"
-		echo "      -f	list open files after start"
-		echo "      -c	show effective module config options"
-		echo "      -g	disable GeoIP"
-		echo "      -i	disable IP2Location"
-		echo "      -d	disable DBIP.com"
-		echo "      -e	disable external databases"
-		echo "$0 -K -b <base directory>		stop"
-		echo "$0 [-m] [-l] [-a <address>] -W	run workflow"
+	    h|\?)
+		help
 		exit 1
+		;;
+	    *)
+		echo "ERROR : unrecognized option: $opt"
 		;;
 	esac
 done
@@ -299,6 +314,10 @@ case $action in
 	;;
     start)
 	create_apache_root_and_start || exit 1
+	;;
+    *)
+	help
+	exit 1
 	;;
 esac
 
