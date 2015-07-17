@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
-# Version    : $Id: test_mod_ipv6calc.sh,v 1.8 2015/07/17 05:20:26 ds6peter Exp $
+# Version    : $Id: test_mod_ipv6calc.sh,v 1.9 2015/07/17 05:25:09 ds6peter Exp $
 # Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -171,6 +171,12 @@ stop_apache() {
 	if [ -n "$pid" ]; then
 		echo "NOTICE: kill started httpd with PID: $pid"
 		kill $pid
+
+		sleep 1
+		if ps -p $pid; then
+			echo "WARN  : process still running (kill now with -9)"
+			kill -9 $pid
+		fi
 	else
 		if [ ! -x /usr/bin/killall ]; then
 			echo "ERROR : no httpd PID given, but no 'killall' available (provided by RPM: psmisc)"
@@ -179,7 +185,12 @@ stop_apache() {
 			echo "WARN  : no httpd PID given, use killall"
 			/usr/bin/killall httpd
 		fi
-		
+
+		sleep 1
+		if ps u -C httpd | grep "/tmp/mod_ipv6calc"; then
+			echo "WARN  : process still running (kill now with -9)"
+			/usr/bin/killall -9 httpd
+		fi
 	fi
 }
 
