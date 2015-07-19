@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec.in,v 1.110 2015/07/17 05:34:54 ds6peter Exp $
+# $Id: ipv6calc.spec.in,v 1.111 2015/07/19 16:11:40 ds6peter Exp $
 
 # shared library support (deselectable)
 %if "%{?_without_shared:0}%{?!_without_shared:1}" == "1"
@@ -246,7 +246,7 @@ rm -rf %{buildroot}
 %attr(755,-,-) %{_datadir}/%{name}/tools/*
 
 # shared library
-%{?enable_shared:%attr(755,-,-) %{_libdir}/*}
+%{?enable_shared:%attr(755,-,-) %{_libdir}/libipv6calc*}
 
 # database directory
 %{external_db}

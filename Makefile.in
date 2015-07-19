@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.89 2015/06/07 19:38:47 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.90 2015/07/19 16:11:40 ds6peter Exp $
 # Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -163,7 +163,7 @@ static:		ipv6logconv-make ipv6loganon-make ipv6logstats-make ipv6calc-make
 		done || exit 1
 
 test:
-		for dir in ipv6calc ipv6logconv ipv6logstats ipv6loganon ipv6calcweb; do \
+		for dir in ipv6calc ipv6logconv ipv6logstats ipv6loganon ipv6calcweb $(MOD_IPV6CALC_DIR); do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} $@ ; r=$$?; \
