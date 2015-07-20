@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.19 2015/07/11 08:31:14 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.20 2015/07/20 20:24:31 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -45,12 +45,27 @@
 #include <apr_strings.h>
 
 // ipv6calc related includes
+#undef PACKAGE_BUGREPORT
+#undef PACKAGE_NAME
+#undef PACKAGE_STRING
+#undef PACKAGE_TARNAME
+#undef PACKAGE_URL
+#undef PACKAGE_VERSION
+#include "config.h"
 #include "libipv6calc.h"
 
 /* features */
 int feature_zeroize = 1; // always supported
 int feature_anon    = 1; // always supported
 int feature_kp      = 0; // will be checked later
+
+
+/***************************
+ * Module copyright
+ ***************************/
+/* global program related definitions */
+#define PROGRAM_NAME "mod_ipv6calc"
+#define PROGRAM_COPYRIGHT "(P) & (C) 2015-" COPYRIGHT_YEAR " by Peter Bieringer <pb (at) bieringer.de>"
 
 
 /***************************
@@ -1351,4 +1366,39 @@ module AP_MODULE_DECLARE_DATA ipv6calc_module = {
 	NULL,                        /* merge  per-server config structures */
 	ipv6calc_cmds,               /* table of config file commands       */
 	ipv6calc_register_hooks      /* register hooks                      */
+};
+
+
+/*
+ * ipv6calc copyright (to satisfy dynamic library load)
+ */
+void printcopyright(void) {
+	fprintf(stderr, "%s\n", PROGRAM_COPYRIGHT);
+};
+
+/* 
+ * ipv6calc version (to satisfy dynamic library load)
+ */
+void printversion(void) {
+	char resultstring[NI_MAXHOST] = "";
+
+	libipv6calc_db_wrapper_features(resultstring, sizeof(resultstring));
+
+	fprintf(stderr, "%s: version %s", PROGRAM_NAME, PACKAGE_VERSION);
+
+	fprintf(stderr, " %s", resultstring);
+
+	if (feature_zeroize == 1) {
+		fprintf(stderr, " ANON_ZEROISE");
+	};
+
+	if (feature_anon == 1) {
+		fprintf(stderr, " ANON_ANONYMIZE");
+	};
+
+	if (feature_kp == 1) {
+		fprintf(stderr, " ANON_KEEP-TYPE-ASN-CC");
+	};
+
+	fprintf(stderr, "\n");
 };

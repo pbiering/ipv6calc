@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id: libipv6calc.h,v 1.32 2015/05/28 20:22:40 ds6peter Exp $
+ * Version    : $Id: libipv6calc.h,v 1.33 2015/07/20 20:24:31 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -16,6 +16,7 @@
 #include "libipv4addr.h"
 #include "libipv6addr.h"
 #include "ipv6calcoptions.h"
+#include "libipv6calcdebug.h"
 
 /* typedefs */
 
