@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : mod_ipv6calc/Makefile[.in]
-# Version    : $Id: Makefile.in,v 1.9 2015/07/17 05:49:21 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.10 2015/07/20 06:51:30 ds6peter Exp $
 # Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -20,8 +20,7 @@ LIBS = @IPV6CALC_LIB@ @IP2LOCATION_LIB_L1@ @GEOIP_LIB_L1@ -lm
 
 GETOBJS = @LIBOBJS@
 
-LDFLAGS_EXTRA = @LDFLAGS_EXTRA@
-LDFLAGS_EXTRA_STATIC = @LDFLAGS_EXTRA_STATIC@
+LDFLAGS_EXTRA = @LDFLAGS_EXTRA_MOD_IPV6CALC@
 
 # splint
 SPLINT_OPT_OUTSIDE = -warnposix -nullassign -uniondef -compdef -usedef -formatconst -exportlocal
@@ -45,7 +44,7 @@ shared =  mod_ipv6calc.la
 
 mod_ipv6calc:	mod_ipv6calc.c ../lib/libipv6calc.h ../config.h libipv6calc libipv6calc_db_wrapper
 		if test -z "$(APXS)"; then echo "no APXS found, can't build module"; exit 1; fi
-		$(APXS) $(LIBS) $(INCLUDES) -c mod_ipv6calc.c
+		$(APXS) $(LIBS) $(INCLUDES) $(LDFLAGS_EXTRA) -c mod_ipv6calc.c
 
 static:		
 

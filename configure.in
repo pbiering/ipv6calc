@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.148 2015/07/17 05:34:54 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.149 2015/07/20 06:51:30 ds6peter Exp $
 dnl Copyright: 2001-2015 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -228,6 +228,7 @@ if test "$enable_shared" = "yes"; then
 	AC_MSG_RESULT([*** Shared library build enabled])
 	SHARED_LIBRARY="yes"
 	AC_DEFINE(SHARED_LIBRARY, 1, Define if you want ipv6calc binaries compiled with shared library libipv6calc)
+	LDFLAGS_EXTRA_MOD_IPV6CALC="-L../lib/ -L../databases/lib/ -lipv6calc_db_wrapper -lipv6calc $LDFLAGS_EXTRA"
 	LDFLAGS_EXTRA="../lib/libipv6calc.so.$PACKAGE_VERSION ../databases/lib/libipv6calc_db_wrapper.so.$PACKAGE_VERSION $LDFLAGS_EXTRA"
 	LD_LIBRARY_PATH=../lib:../databases/lib:$LD_LIBRARY_PATH
 	LD_LIBRARY_PATH_BASIC=../lib:../databases/lib:$LD_LIBRARY_PATH_BASIC
@@ -1173,6 +1174,7 @@ dnl Files to create from <file>.in
 dnl *************************************************
 AC_SUBST(CFLAGS_EXTRA)
 AC_SUBST(LDFLAGS_EXTRA)
+AC_SUBST(LDFLAGS_EXTRA_MOD_IPV6CALC)
 AC_SUBST(LDFLAGS_EXTRA_STATIC)
 AC_SUBST(LD_LIBRARY_PATH)
 AC_SUBST(LD_LIBRARY_PATH_BASIC)
@@ -1273,4 +1275,5 @@ if test "$ENABLE_MOD_IPV6CALC" = "1"; then
 	AC_MSG_RESULT([*** HTTPD_LIBEXECDIR           =$HTTPD_LIBEXECDIR])
 	AC_MSG_RESULT([*** HTTPD_VERSION              =$HTTPD_VERSION])
 	AC_MSG_RESULT([*** HTTPD_VERSION_MAJOR_MINOR  =$HTTPD_VERSION_MAJOR_MINOR])
+	AC_MSG_RESULT([*** LDFLAGS_EXTRA_MOD_IPV6CALC =$LDFLAGS_EXTRA_MOD_IPV6CALC])
 fi

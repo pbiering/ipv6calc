@@ -625,6 +625,7 @@ ac_subst_vars='LTLIBOBJS
 LD_LIBRARY_PATH_BASIC
 LD_LIBRARY_PATH
 LDFLAGS_EXTRA_STATIC
+LDFLAGS_EXTRA_MOD_IPV6CALC
 LDFLAGS_EXTRA
 CFLAGS_EXTRA
 HTTPD_VERSION_MAJOR_MINOR
@@ -4445,6 +4446,7 @@ $as_echo "*** Shared library build enabled" >&6; }
 
 $as_echo "#define SHARED_LIBRARY 1" >>confdefs.h
 
+	LDFLAGS_EXTRA_MOD_IPV6CALC="-L../lib/ -L../databases/lib/ -lipv6calc_db_wrapper -lipv6calc $LDFLAGS_EXTRA"
 	LDFLAGS_EXTRA="../lib/libipv6calc.so.$PACKAGE_VERSION ../databases/lib/libipv6calc_db_wrapper.so.$PACKAGE_VERSION $LDFLAGS_EXTRA"
 	LD_LIBRARY_PATH=../lib:../databases/lib:$LD_LIBRARY_PATH
 	LD_LIBRARY_PATH_BASIC=../lib:../databases/lib:$LD_LIBRARY_PATH_BASIC
@@ -6150,6 +6152,7 @@ fi
 
 
 
+
 ac_config_files="$ac_config_files Makefile md5/Makefile tools/Makefile getopt/Makefile ipv6calc/Makefile lib/Makefile man/Makefile databases/lib/Makefile ipv6logconv/Makefile ipv6loganon/Makefile ipv6logstats/Makefile ipv6calcweb/Makefile contrib/ipv6calc.spec tools/ipv6calc-db-update.sh tools/DBIP-update.sh tools/IP2Location-update.sh tools/GeoIP-update.sh mod_ipv6calc/Makefile VERSION"
 
 cat >confcache <<\_ACEOF
@@ -7576,4 +7579,6 @@ $as_echo "*** HTTPD_LIBEXECDIR           =$HTTPD_LIBEXECDIR" >&6; }
 $as_echo "*** HTTPD_VERSION              =$HTTPD_VERSION" >&6; }
 	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HTTPD_VERSION_MAJOR_MINOR  =$HTTPD_VERSION_MAJOR_MINOR" >&5
 $as_echo "*** HTTPD_VERSION_MAJOR_MINOR  =$HTTPD_VERSION_MAJOR_MINOR" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS_EXTRA_MOD_IPV6CALC =$LDFLAGS_EXTRA_MOD_IPV6CALC" >&5
+$as_echo "*** LDFLAGS_EXTRA_MOD_IPV6CALC =$LDFLAGS_EXTRA_MOD_IPV6CALC" >&6; }
 fi
