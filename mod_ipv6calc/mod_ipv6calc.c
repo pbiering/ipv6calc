@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.21 2015/07/21 06:01:15 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.22 2015/07/21 06:19:14 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -213,6 +213,14 @@ static int ipv6calc_support_init(server_rec *s) {
 
 	int mod_ipv6calc_APLOG_DEBUG = (config->debuglevel & IPV6CALC_DEBUG_MAP_DEBUG_TO_NOTICE) ? APLOG_NOTICE : APLOG_DEBUG;
 
+	// check enabled	
+	if (config->enabled == 0) {
+		ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
+			, "module is NOT enabled (check for 'ipv6calcEnable on')"
+		);
+		return 0;
+	};
+
 	ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
 		, "start ipv6calc initialization"
 	);
@@ -322,11 +330,12 @@ static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t 
 	int result;
 
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(s->module_config, &ipv6calc_module);
+
 	int mod_ipv6calc_APLOG_DEBUG = (config->debuglevel & IPV6CALC_DEBUG_MAP_DEBUG_TO_NOTICE) ? APLOG_NOTICE : APLOG_DEBUG;
 
 	// check enabled	
 	if (config->enabled == 0) {
-		ap_log_error(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, s
+		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
 			, "module is NOT enabled (check for 'ipv6calcEnable on')"
 		);
 		return 0;
@@ -483,6 +492,7 @@ static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
 	apr_pool_cleanup_register(p, NULL, ipv6calc_cleanup, ipv6calc_cleanup);
 
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(s->module_config, &ipv6calc_module);
+
 	int mod_ipv6calc_APLOG_DEBUG = (config->debuglevel & IPV6CALC_DEBUG_MAP_DEBUG_TO_NOTICE) ? APLOG_NOTICE : APLOG_DEBUG;
 
 	// check enabled	
