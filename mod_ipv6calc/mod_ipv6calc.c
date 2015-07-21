@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.22 2015/07/21 06:19:14 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.23 2015/07/21 06:32:05 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -765,14 +765,14 @@ static int ipv6calc_post_read_request(request_rec *r) {
 					); 
 				};
 
-				if (config->action_asn == 1) {
+				if (config->action_registry == 1) {
 					ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
 						, "client IP Registry (from cache): %s"
 						, ipv6calc_cache_lri_value_registry[pi][hit]
 					);
 
 					apr_table_set(r->subprocess_env
-						, "IPV6CALC_CLIENT_ASN"
+						, "IPV6CALC_CLIENT_REGISTRY"
 						, ipv6calc_cache_lri_value_registry[pi][hit]
 					); 
 				};
@@ -787,6 +787,8 @@ static int ipv6calc_post_read_request(request_rec *r) {
 						, "IPV6CALC_CLIENT_IP_ANON"
 						, ipv6calc_cache_lri_value_anon[pi][hit]
 					); 
+
+					apr_table_set(r->subprocess_env, "IPV6CALC_ANON_METHOD", anon_method_name);
 				};
 
 				return OK;
