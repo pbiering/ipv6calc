@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
-# Version    : $Id: test_mod_ipv6calc.sh,v 1.12 2015/07/22 03:57:38 ds6peter Exp $
+# Version    : $Id: test_mod_ipv6calc.sh,v 1.13 2015/07/22 04:09:40 ds6peter Exp $
 # Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -105,6 +105,7 @@ create_apache_root_and_start() {
 	[ "$action_asn" = "0" ]    && perl -pi -e 's/(ipv6calcActionAsn\s+).*$/$1 off/g'         $dir_base/conf.d/ipv6calc.conf
 	[ "$action_cc" = "0" ]     && perl -pi -e 's/(ipv6calcActionCountrycode\s+).*$/$1 off/g' $dir_base/conf.d/ipv6calc.conf
 	[ "$action_reg" = "0" ]    && perl -pi -e 's/(ipv6calcActionRegistry\s+).*$/$1 off/g'    $dir_base/conf.d/ipv6calc.conf
+	[ "$action_anon" = "0" ]   && perl -pi -e 's/(ipv6calcActionAnonymize\s+).*$/$1 off/g'   $dir_base/conf.d/ipv6calc.conf
 
 
 	echo "INFO  : start httpd with ServerRoot $dir_base"
@@ -273,13 +274,16 @@ $(basname "$0") [<options>] [-S|-K|-W]
 	-l	enable debug library
 	-f	list open files after start
 	-c	show effective module config options
+
 	-g	disable GeoIP
 	-i	disable IP2Location
 	-d	disable DBIP.com
 	-e	disable external databases
+
 	-A	disable action ASN
 	-C	disable action CountryCode
 	-R	disable action Registry
+	-N	disable action Anonymization
 
 	-b <base directory
 
@@ -288,7 +292,7 @@ END
 }
 
 #### Options
-while getopts "ACRca:fSKWb:mlgideh\?" opt; do
+while getopts "ACRNca:fSKWb:mlgideh\?" opt; do
 	case $opt in
 	    b)
 		if [ -d "$OPTARG" ]; then
@@ -341,6 +345,9 @@ while getopts "ACRca:fSKWb:mlgideh\?" opt; do
 		;;
 	    R)
 		action_reg="0"
+		;;
+	    N)
+		action_anon="0"
 		;;
 	    h|\?)
 		help
