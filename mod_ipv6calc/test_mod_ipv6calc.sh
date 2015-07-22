@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
-# Version    : $Id: test_mod_ipv6calc.sh,v 1.13 2015/07/22 04:09:40 ds6peter Exp $
+# Version    : $Id: test_mod_ipv6calc.sh,v 1.14 2015/07/22 06:13:06 ds6peter Exp $
 # Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -209,29 +209,43 @@ stop_apache() {
 exec_request() {
 	dst="$1"
 
-	echo "NOTICE: test: $1"
-	# curl-7.29.0-19.el7.x86_64 is broken, -g required
-	curl -g -s "http://$1:8080/" >/dev/null
-	if [ $? -ne 0 ]; then
-		echo "ERROR : curl request to $1:8080 failed"
-		return 1
-	fi
-
-	echo "INFO  : access log entry"
-	tail -1 $dir_base/logs/access_log
-
-	if [ -f "$dir_base/logs/access_anon_log" ]; then
-		echo "INFO  : anonymized access log entry"
-		tail -1 $dir_base/logs/access_anon_log
+	if [ -n "$repeat" ]; then
+		max=$[ $repeat + 1 ]
 	else
-		echo "ERROR : anonymized access log missing"
-		return 1
+		max=1
 	fi
 
-	echo "INFO  : error log entry"
-	tail -n +$[ $lines_error_log + 1 ] "$dir_base/logs/error_log" | grep "ipv6calc"
-	# update number of lines
-	lines_error_log=$(cat "$dir_base/logs/error_log" | wc -l)
+	count=0
+
+	while [ $count -lt $max ]; do
+		echo "NOTICE: test: $1"
+		# curl-7.29.0-19.el7.x86_64 is broken, -g required
+		curl -g -s "http://$1:8080/" >/dev/null
+		if [ $? -ne 0 ]; then
+			echo "ERROR : curl request to $1:8080 failed"
+			exit 1
+		fi
+
+		echo "INFO  : access log entry"
+		tail -1 $dir_base/logs/access_log
+
+		if [ -f "$dir_base/logs/access_anon_log" ]; then
+			echo "INFO  : anonymized access log entry"
+			tail -1 $dir_base/logs/access_anon_log
+		else
+			echo "ERROR : anonymized access log missing"
+			exit 1
+		fi
+
+		echo "INFO  : error log entry"
+		tail -n +$[ $lines_error_log + 1 ] "$dir_base/logs/error_log" | grep "ipv6calc"
+		# update number of lines
+		lines_error_log=$(cat "$dir_base/logs/error_log" | wc -l)
+
+		count=$[ $count + 1 ]	
+	done || return 1
+
+	return 0
 }
 
 
@@ -288,11 +302,12 @@ $(basname "$0") [<options>] [-S|-K|-W]
 	-b <base directory
 
 	-a <address>	disable autoretrievement of local IP, use given one instead
+	-r		repeat (1x)
 END
 }
 
 #### Options
-while getopts "ACRNca:fSKWb:mlgideh\?" opt; do
+while getopts "rACRNca:fSKWb:mlgideh\?" opt; do
 	case $opt in
 	    b)
 		if [ -d "$OPTARG" ]; then
@@ -348,6 +363,9 @@ while getopts "ACRNca:fSKWb:mlgideh\?" opt; do
 		;;
 	    N)
 		action_anon="0"
+		;;
+	    r)
+		repeat=1
 		;;
 	    h|\?)
 		help

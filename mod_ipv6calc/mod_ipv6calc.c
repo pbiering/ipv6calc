@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.25 2015/07/22 04:09:40 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.26 2015/07/22 06:13:06 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -929,20 +929,24 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		};
 
 		// set country code of IP in environment
-		if ((config->action_countrycode == 1) && (retrieve_cc != 0)) {
-			result_cc = libipv6calc_db_wrapper_country_code_by_addr(cc, sizeof(cc), &ipaddr, &data_source);
+		if (config->action_countrycode == 1) {
+			if (retrieve_cc != 0) {
+				result_cc = libipv6calc_db_wrapper_country_code_by_addr(cc, sizeof(cc), &ipaddr, &data_source);
 
-			if ((result_cc == 0) && (strlen(cc) > 0)) {
-				data_source_string = libipv6calc_db_wrapper_get_data_source_name_by_number(data_source);
+				if ((result_cc == 0) && (strlen(cc) > 0)) {
+					data_source_string = libipv6calc_db_wrapper_get_data_source_name_by_number(data_source);
+				} else {
+					snprintf(cc, sizeof(cc), "%s", "-");
+				};
+
+				ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
+					, "client IP address country code: %s (%s)"
+					, cc
+					, data_source_string
+				);
 			} else {
 				snprintf(cc, sizeof(cc), "%s", "-");
 			};
-
-			ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
-				, "client IP address country code: %s (%s)"
-				, cc
-				, data_source_string
-			);
 
 			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_COUNTRYCODE", cc); 
 
@@ -960,15 +964,19 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		};
 
 		// set ASN of IP in environment
-		if ((config->action_asn == 1) && (retrieve_asn != 0)) {
-			asn_num = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr);
+		if (config->action_asn == 1) {
+			if (retrieve_asn != 0) {
+				asn_num = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr);
 
-			snprintf(asn, sizeof(asn), "%u", asn_num);
+				snprintf(asn, sizeof(asn), "%u", asn_num);
 
-			ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
-				, "client IP address ASN: %s"
-				, asn
-			);
+				ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
+					, "client IP address ASN: %s"
+					, asn
+				);
+			} else {
+				snprintf(asn, sizeof(asn), "-");
+			};
 
 			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_ASN", asn); 
 
@@ -986,19 +994,23 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		};
 
 		// set Registry of IP in environment
-		if ((config->action_registry == 1) && (retrieve_registry != 0)) {
-			result_registry = libipv6calc_db_wrapper_registry_string_by_ipaddr(&ipaddr, registry, sizeof(registry));
+		if (config->action_registry == 1) {
+			if (retrieve_registry != 0) {
+				result_registry = libipv6calc_db_wrapper_registry_string_by_ipaddr(&ipaddr, registry, sizeof(registry));
 
-			if (((result_registry == 0) || (result_registry == 2)) && (strlen(registry) > 0)) {
-				// everything ok
+				if (((result_registry == 0) || (result_registry == 2)) && (strlen(registry) > 0)) {
+					// everything ok
+				} else {
+					snprintf(registry, sizeof(registry), "%s", "-");
+				};
+
+				ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
+					, "client IP address registry: %s"
+					, registry
+				);
 			} else {
 				snprintf(registry, sizeof(registry), "%s", "-");
 			};
-
-			ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
-				, "client IP address registry: %s"
-				, registry
-			);
 
 			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_REGISTRY", registry); 
 
