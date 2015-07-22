@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
-# Version    : $Id: test_mod_ipv6calc.sh,v 1.11 2015/07/17 05:52:49 ds6peter Exp $
+# Version    : $Id: test_mod_ipv6calc.sh,v 1.12 2015/07/22 03:57:38 ds6peter Exp $
 # Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -101,6 +101,10 @@ create_apache_root_and_start() {
 	[ "$disable_ip2location" = "1" ] && perl -pi -e 's/#(ipv6calcOption\s+db-ip2location-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
 	[ "$disable_dbip" = "1" ]        && perl -pi -e 's/#(ipv6calcOption\s+db-dbip-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
 	[ "$disable_external" = "1" ]    && perl -pi -e 's/#(ipv6calcOption\s+db-external-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
+
+	[ "$action_asn" = "0" ]    && perl -pi -e 's/(ipv6calcActionAsn\s+).*$/$1 off/g'         $dir_base/conf.d/ipv6calc.conf
+	[ "$action_cc" = "0" ]     && perl -pi -e 's/(ipv6calcActionCountrycode\s+).*$/$1 off/g' $dir_base/conf.d/ipv6calc.conf
+	[ "$action_reg" = "0" ]    && perl -pi -e 's/(ipv6calcActionRegistry\s+).*$/$1 off/g'    $dir_base/conf.d/ipv6calc.conf
 
 
 	echo "INFO  : start httpd with ServerRoot $dir_base"
@@ -273,6 +277,9 @@ $(basname "$0") [<options>] [-S|-K|-W]
 	-i	disable IP2Location
 	-d	disable DBIP.com
 	-e	disable external databases
+	-A	disable action ASN
+	-C	disable action CountryCode
+	-R	disable action Registry
 
 	-b <base directory
 
@@ -281,7 +288,7 @@ END
 }
 
 #### Options
-while getopts "ca:fSKWb:mlgideh\?" opt; do
+while getopts "ACRca:fSKWb:mlgideh\?" opt; do
 	case $opt in
 	    b)
 		if [ -d "$OPTARG" ]; then
@@ -325,6 +332,15 @@ while getopts "ca:fSKWb:mlgideh\?" opt; do
 		;;
 	    W)
 		action="workflow"
+		;;
+	    A)
+		action_asn="0"
+		;;
+	    C)
+		action_cc="0"
+		;;
+	    R)
+		action_reg="0"
 		;;
 	    h|\?)
 		help

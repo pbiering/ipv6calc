@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id: mod_ipv6calc.c,v 1.23 2015/07/21 06:32:05 ds6peter Exp $
+ * Version    : $Id: mod_ipv6calc.c,v 1.24 2015/07/22 03:57:38 ds6peter Exp $
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -967,8 +967,6 @@ static int ipv6calc_post_read_request(request_rec *r) {
 					);
 				};
 			};
-		} else {
-			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_COUNTRYCODE", "IPV6CALC_CLIENT_COUNTRYCODE=disabled"); 
 		};
 
 		// set ASN of IP in environment
@@ -993,8 +991,6 @@ static int ipv6calc_post_read_request(request_rec *r) {
 					);
 				};
 			};
-		} else {
-			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_ASN", "IPV6CALC_CLIENT_ASN=disabled"); 
 		};
 
 		// set Registry of IP in environment
@@ -1023,9 +1019,20 @@ static int ipv6calc_post_read_request(request_rec *r) {
 					);
 				};
 			};
-		} else {
-			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_REGISTRY", "IPV6CALC_CLIENT_REGISTRY=disabled"); 
 		};
+	};
+
+	// set special value if not enabled
+	if (config->action_countrycode == 0) {
+		apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_COUNTRYCODE", "disabled"); 
+	};
+
+	if (config->action_asn == 0) {
+		apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_ASN", "disabled"); 
+	};
+
+	if (config->action_registry == 0)  {
+		apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_REGISTRY", "disabled"); 
 	};
 
 
@@ -1083,7 +1090,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 			};
 		};
 	} else {
-		apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP_ANON", "IPV6CALC_CLIENT_IP_ANON=disabled"); 
+		apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP_ANON", "disabled"); 
 	};
 
 	return OK;
