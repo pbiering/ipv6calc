@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.55 2015/07/08 06:58:02 ds6peter Exp $
+# Version    : $Id: autogen.sh,v 1.56 2015/07/29 05:17:17 ds6peter Exp $
 # Copyright  : 2003-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -98,7 +98,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "Supported options:"
 		echo "   -?|-h|--help        : this help"
 		echo "   -n|--no-make        : stop before running 'make'"
-		echo "   -a|--all            : enable GeoIP/IP2Location/db-ip.com/External support"
+		echo "   -a|--all            : enable GeoIP/IP2Location/db-ip.com/External/mod_ipv6calc support"
 		echo "   -g|--geoip          : enable GeoIP support"
 		echo "   --geoip-dyn|-G      : switch to dynamic library loading of GeoIP"
 		echo "   -i|--ip2location    : enable IP2Location support"

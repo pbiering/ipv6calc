@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.297 2015/07/25 12:19:59 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.298 2015/07/29 05:17:17 ds6peter Exp $
 
 # shared library support (deselectable)
 %if "%{?_without_shared:0}%{?!_without_shared:1}" == "1"
@@ -69,6 +69,14 @@ BuildRequires:	db4-devel
 BuildRequires:	libdb-devel
 %endif
 
+# RPM license macro detector
+%if "%{license}" == "GPLv2"
+%define rpm_license_macro 0
+%else
+%define rpm_license_macro 1
+%endif
+
+
 
 %description
 ipv6calc is a small utility which formats and calculates IPv4/IPv6 addresses
@@ -135,8 +143,8 @@ Default restricts access to localhost.
 Summary: 	Apache module for ipv6calc
 Group:		Applications/Internet
 BuildRequires:	httpd-devel psmisc
-Requires:	httpd >= 2.4.0
-Requires:	httpd <= 2.4.99999
+Requires:	httpd >= .0
+Requires:	httpd <= .99999
 Requires:	ipv6calc = %{version}-%{release}
 %if %{enable_shared}
 Requires:	ipv6calc-libs = %{version}-%{release}}
@@ -231,8 +239,12 @@ rm -rf %{buildroot}
 
 
 %files
+%if %{rpm_license_macro}
 %doc ChangeLog README CREDITS TODO USAGE doc/ipv6calc.lyx doc/ipv6calc.sgml doc/ipv6calc.html doc/ipv6calc.xml
 %license COPYING LICENSE
+%else
+%doc ChangeLog README CREDITS TODO USAGE doc/ipv6calc.lyx doc/ipv6calc.sgml doc/ipv6calc.html doc/ipv6calc.xml COPYING LICENSE
+%endif
 
 %defattr(644,root,root,755)
 
@@ -256,20 +268,29 @@ rm -rf %{buildroot}
 
 
 %files ipv6calcweb
-%defattr(644,root,root,755)
-
+%if %{rpm_license_macro}
 %doc ipv6calcweb/README ipv6calcweb/USAGE
-%license COPYING
+%license COPYING LICENSE
+%else
+%doc ipv6calcweb/README ipv6calcweb/USAGE COPYING LICENSE
+%endif
+
+%defattr(644,root,root,755)
 
 %attr(555,-,-) %{_localstatedir}/www/cgi-bin/ipv6calcweb.cgi
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
 
 
 %files mod_ipv6calc
+%if %{rpm_license_macro}
+%doc mod_ipv6calc/README.mod_ipv6calc
+%license COPYING LICENSE
+%else
+%doc mod_ipv6calc/README.mod_ipv6calc COPYING LICENSE
+%endif
+
 %defattr(644,root,root,755)
 
-%doc mod_ipv6calc/README.mod_ipv6calc
-%license COPYING
 %config(noreplace) %{_httpd_confdir}/ipv6calc.conf
 %attr(755,-,-) %{_httpd_moddir}/mod_ipv6calc.so
 

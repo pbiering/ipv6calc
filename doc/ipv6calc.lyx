@@ -108,8 +108,8 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>5.2bis</revnumber> <date>2015-05-06</date> <authorinitials>
-PB</authorinitials></revision>
+<revision> <revnumber>6.0</revnumber> <date>2015-07-25</date> <authorinitials>PB<
+/authorinitials></revision>
 \end_layout
 
 \end_inset
@@ -173,7 +173,7 @@ Latest version
 \end_layout
 
 \begin_layout Standard
-Latest version since last update of this page is 0.99.0 (released 2015-05-02)
+Latest version since last update of this page is 0.99.1 (released > 2015-07-25)
 \end_layout
 
 \begin_layout Subsection
@@ -293,11 +293,11 @@ target "http://www.maxmind.com/"
 
 \begin_deeper
 \begin_layout Itemize
-IPv4 (since 0.61.0 released 2006)
+IPv4 (since 0.61.0, released 2006)
 \end_layout
 
 \begin_layout Itemize
-IPv6 (since 0.90.0 released 2011, req.
+IPv6 (since 0.90.0, released 2011, req.
  GeoIP >= 1.4.5)
 \end_layout
 
@@ -319,11 +319,11 @@ target "http://www.ip2.location.com/"
 
 \begin_deeper
 \begin_layout Itemize
-IPv4 (since 0.60.0 released 2006)
+IPv4 (since 0.60.0, released 2006)
 \end_layout
 
 \begin_layout Itemize
-IPv6 (since 0.70.0 released 2007, 
+IPv6 (since 0.70.0, released 2007, 
 \begin_inset CommandInset href
 LatexCommand href
 name "IP2Location LITE IPv6 Databases"
@@ -331,7 +331,7 @@ target "http://lite.ip2location.com/"
 
 \end_inset
 
- since 0.99.0 released 2015)
+ since 0.99.0, released 2015)
 \end_layout
 
 \begin_layout Itemize
@@ -347,7 +347,7 @@ target "http://www.db-ip.com/"
 
 \end_inset
 
- (since 0.98.0 released 2015), based on local Berkeley DB files generated
+ (since 0.98.0, released 2015), based on local Berkeley DB files generated
  from downloaded CSV files
 \end_layout
 
@@ -359,7 +359,7 @@ External
 \begin_inset Quotes erd
 \end_inset
 
- (since 0.98.0 released 2015), based on local Berkeley DB files, generated
+ (since 0.98.0, released 2015), based on local Berkeley DB files, generated
  from downloaded TXT/XML files (registries assignment databases).
  Supporting IPv4/IPv6 to Registries and IPv4/IPv6 to CountryCode.
  If newer, overruling the related included databases.
@@ -815,6 +815,18 @@ ipc6calc
 
 \begin_layout Code
 
+--disable-db-as-registry Disable built-in AS-to-Registry database (default:
+ enabled)
+\end_layout
+
+\begin_layout Code
+
+--disable-db-cc-registry Disable built-in CountryCode-to-Registry database
+ (default: enabled) 
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -835,6 +847,12 @@ ipc6calc
 \begin_layout Code
 
 --enable-geoip          Enable GeoIP support (default: disabled) 
+\end_layout
+
+\begin_layout Code
+
+--enable-mod_ipv6calc   Enable build of mod_ipv6calc for Apache (default:
+ disabled) 
 \end_layout
 
 \begin_layout Code
@@ -976,6 +994,15 @@ ipc6calc
 
 \begin_layout Code
 
+--with-apxs=NAME        name of the apxs executable (apxs) 
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
 --enable-shared                 Enable shared library build (default: disabled)
 \end_layout
 
@@ -1058,7 +1085,8 @@ Supported options:
 
 \begin_layout Code
 
-   -a|--all            : enable GeoIP and IP2Location support
+   -a|--all            : enable GeoIP/IP2Location/db-ip.com/External/mod_ipv6calc
+ support
 \end_layout
 
 \begin_layout Code
@@ -6470,6 +6498,335 @@ target "http://mirrors.bieringer.de/stats/timeline.html"
 \end_layout
 
 \begin_layout Section
+Apache web server module 
+\begin_inset Quotes eld
+\end_inset
+
+mod_ipv6calc
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This Apache web server module (since version 0.99.1, released 2015) interfaces
+ with internal ipv6calc library to support
+\end_layout
+
+\begin_layout Itemize
+Client IP address anonymization 
+\begin_inset Quotes eld
+\end_inset
+
+on-the-fly
+\begin_inset Quotes erd
+\end_inset
+
+, exported to IPV6CALC_CLIENT_IP_ANON
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+depending on the configured anonymization method 3rd party database is required
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Country code of client IP address, exported to IPV6CALC_CLIENT_COUNTRYCODE
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+requires 3rd party database: GeoIP or IP2Location or DB-IP.com
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Autonomous System Number (ASN) of client IP address, exported to IPV6CALC_CLIENT
+_ASN
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+requires 3rd party database: GeoIP
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Registry of client IP address, exported to IPV6CALC_CLIENT_REGISTRY
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+requires internal or 
+\begin_inset Quotes eld
+\end_inset
+
+external
+\begin_inset Quotes erd
+\end_inset
+
+ database
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Configured IP address anonymization method, exported to IPV6CALC_ANON_METHOD
+\end_layout
+
+\begin_layout Subsection
+Installation
+\end_layout
+
+\begin_layout Standard
+Install compiled Apache module 
+\begin_inset Quotes eld
+\end_inset
+
+mod_ipv6calc
+\begin_inset Quotes erd
+\end_inset
+
+ to Apache's module directory
+\end_layout
+
+\begin_layout Standard
+Install included default configuration file 
+\begin_inset Quotes eld
+\end_inset
+
+ipv6calc.conf
+\begin_inset Quotes erd
+\end_inset
+
+ to Apache's config directory (usually conf.d)
+\end_layout
+
+\begin_layout Subsection
+Configuration
+\end_layout
+
+\begin_layout Standard
+Enable in 
+\begin_inset Quotes eld
+\end_inset
+
+ipv6calc.conf
+\begin_inset Quotes erd
+\end_inset
+
+ loading of module
+\end_layout
+
+\begin_layout Code
+
+LoadModule ipv6calc_module modules/mod_ipv6calc.so
+\end_layout
+
+\begin_layout Standard
+Enable module itself 
+\end_layout
+
+\begin_layout Code
+
+ipv6calcEnable                         on
+\end_layout
+
+\begin_layout Standard
+Adjust configuration settings, if needed (see examples in 
+\begin_inset Quotes eld
+\end_inset
+
+ipv6calc.conf
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\begin_layout Standard
+Review predefined log format
+\end_layout
+
+\begin_layout Code
+
+LogFormat "%{IPV6CALC_CLIENT_IP_ANON}e 
+\backslash
+"%{IPV6CALC_CLIENT_COUNTRYCODE}e/%{IPV6CALC_CLIENT_ASN}e/%{IPV6CALC_CLIENT_REGIS
+TRY}e/%{IPV6CALC_ANON_METHOD}e
+\backslash
+" %u %t 
+\backslash
+"%r
+\backslash
+" %>s %b 
+\backslash
+"%{Referer}i
+\backslash
+" 
+\backslash
+"%{User-Agent}i
+\backslash
+"" combined_anon
+\end_layout
+
+\begin_layout Standard
+Enable custom log with anonymized information, using the predefined LogFormat
+\end_layout
+
+\begin_layout Code
+
+CustomLog logs/access_anon_log combined_anon
+\end_layout
+
+\begin_layout Standard
+Restart Apache web server, check error_log for any issues
+\end_layout
+
+\begin_layout Subsection
+Result
+\end_layout
+
+\begin_layout Standard
+The new log file contains anonymized requests like
+\end_layout
+
+\begin_layout Code
+
+252.176.92.172 "CN/23724/APNIC/keep-type-asn-cc" - [25/Jul/2015:13:20:25 +0200]
+ "GET / HTTP/1.1" 200 3569 "-" "Mozilla/5.0 (compatible; Baiduspider/2.0; +http://w
+ww.baidu.com/search/spider.html)"
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+a909:390a:909a:81d9:a909:4291:c02d:5d1d "CZ/43037/RIPENCC/keep-type-asn-cc"
+ - [25/Jul/2015:12:59:00 +0200] "GET /robots.txt HTTP/1.1" 200 33 "-" "Mozilla/5.0
+ (compatible; SeznamBot/3.2; +http://fulltext.sblog.cz/)" 
+\end_layout
+
+\begin_layout Subsection
+Post-analysis in case of anonymization method 
+\begin_inset Quotes eld
+\end_inset
+
+keep-type-asn-cc
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In case 
+\begin_inset Quotes eld
+\end_inset
+
+keep-type-asn-cc
+\begin_inset Quotes erd
+\end_inset
+
+ is configured and also working (required databases are available), related
+ information of anonymized IP addresses can be retrieved using 
+\begin_inset Quotes eld
+\end_inset
+
+ipv6calc
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+ipv6logstats
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Code
+
+$ ipv6calc -q -m -i 252.176.92.172
+\end_layout
+
+\begin_layout Code
+
+IPV4=252.176.92.172
+\end_layout
+
+\begin_layout Code
+
+IPV4_TYPE=unicast,anonymized,global
+\end_layout
+
+\begin_layout Code
+
+IPV4_AS_NUM=23724
+\end_layout
+
+\begin_layout Code
+
+IPV4_COUNTRYCODE=CN
+\end_layout
+
+\begin_layout Code
+
+IPV4_REGISTRY=APNIC 
+\end_layout
+
+\begin_layout Code
+
+...
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
+$ ipv6calc -q -m -i a909:390a:909a:81d9:a909:4291:c02d:5d1d
+\end_layout
+
+\begin_layout Code
+
+IPV6=a909:390a:909a:81d9:a909:4291:c02d:5d1d
+\end_layout
+
+\begin_layout Code
+
+IPV6_TYPE=unicast,anonymized-iid,anonymized-prefix,global-unicast,productive,iid
+,iid-local
+\end_layout
+
+\begin_layout Code
+
+IPV6_COUNTRYCODE=CZ
+\end_layout
+
+\begin_layout Code
+
+IPV6_AS_NUM=43037
+\end_layout
+
+\begin_layout Code
+
+IPV6_REGISTRY=RIPENCC
+\end_layout
+
+\begin_layout Code
+
+...
+\end_layout
+
+\begin_layout Section
 History
 \end_layout
 
@@ -6479,6 +6836,10 @@ Major extensions/changes are listed here
 
 \begin_layout Subsection
 2015
+\end_layout
+
+\begin_layout Itemize
+Introduce mod_ipv6calc for Apache web server (>= 0.99.1, released 2015)
 \end_layout
 
 \begin_layout Itemize

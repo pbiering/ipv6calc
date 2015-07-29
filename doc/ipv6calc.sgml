@@ -12,14 +12,14 @@
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>5.2bis</revnumber> <date>2015-05-06</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>6.0</revnumber> <date>2015-07-25</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freshmeat.net/projects/ipv6calc/">freshmeat / ipv6calc</ulink> page (not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 0.99.0 (released 2015-05-02)</para></sect2><sect2>
+<para>Latest version since last update of this page is 0.99.1 (released &gt; 2015-07-25)</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
 <listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem></itemizedlist></sect2><sect2>
@@ -29,8 +29,8 @@
 <title>Possible external databases</title>
 <para>If enabled during compiling the tool, following external (but local stored) databases can be used</para><itemizedlist>
 <listitem><para><ulink url="http://www.maxmind.com/">GeoIP</ulink></para><itemizedlist>
-<listitem><para>IPv4 (since 0.61.0 released 2006)</para></listitem><listitem><para>IPv6 (since 0.90.0 released 2011, req. GeoIP &gt;= 1.4.5)</para></listitem><listitem><para>release 0.99.0 is tested against GeoIP &gt;= 1.4.4</para></listitem></itemizedlist></listitem><listitem><para><ulink url="http://www.ip2.location.com/">IP2Location</ulink></para><itemizedlist>
-<listitem><para>IPv4 (since 0.60.0 released 2006)</para></listitem><listitem><para>IPv6 (since 0.70.0 released 2007, <ulink url="http://lite.ip2location.com/">IP2Location LITE IPv6 Databases</ulink> since 0.99.0 released 2015)</para></listitem><listitem><para>release 0.99.0 is tested against IP2Location &gt;= 4.0.2</para></listitem></itemizedlist></listitem><listitem><para><ulink url="http://www.db-ip.com/">DB-IP.com</ulink> (since 0.98.0 released 2015), based on local Berkeley DB files generated from downloaded CSV files</para></listitem><listitem><para>&ldquo;External&rdquo; (since 0.98.0 released 2015), based on local Berkeley DB files, generated from downloaded TXT/XML files (registries assignment databases). Supporting IPv4/IPv6 to Registries and IPv4/IPv6 to CountryCode. If newer, overruling the related included databases.</para></listitem></itemizedlist><para>Since version 0.95.0 the tool can be compiled to use dynamically loading of library, means the binaries can be also used on systems where IP2Location or GeoIP libraries are not existing. On such system, the support is simply disabled then and some capabilities/features which requires the databases are disabled.</para>
+<listitem><para>IPv4 (since 0.61.0, released 2006)</para></listitem><listitem><para>IPv6 (since 0.90.0, released 2011, req. GeoIP &gt;= 1.4.5)</para></listitem><listitem><para>release 0.99.0 is tested against GeoIP &gt;= 1.4.4</para></listitem></itemizedlist></listitem><listitem><para><ulink url="http://www.ip2.location.com/">IP2Location</ulink></para><itemizedlist>
+<listitem><para>IPv4 (since 0.60.0, released 2006)</para></listitem><listitem><para>IPv6 (since 0.70.0, released 2007, <ulink url="http://lite.ip2location.com/">IP2Location LITE IPv6 Databases</ulink> since 0.99.0, released 2015)</para></listitem><listitem><para>release 0.99.0 is tested against IP2Location &gt;= 4.0.2</para></listitem></itemizedlist></listitem><listitem><para><ulink url="http://www.db-ip.com/">DB-IP.com</ulink> (since 0.98.0, released 2015), based on local Berkeley DB files generated from downloaded CSV files</para></listitem><listitem><para>&ldquo;External&rdquo; (since 0.98.0, released 2015), based on local Berkeley DB files, generated from downloaded TXT/XML files (registries assignment databases). Supporting IPv4/IPv6 to Registries and IPv4/IPv6 to CountryCode. If newer, overruling the related included databases.</para></listitem></itemizedlist><para>Since version 0.95.0 the tool can be compiled to use dynamically loading of library, means the binaries can be also used on systems where IP2Location or GeoIP libraries are not existing. On such system, the support is simply disabled then and some capabilities/features which requires the databases are disabled.</para>
 <para>Since version 0.97.4 also fallback code for GeoIP and IP2Location is included in the source package, means that support of dynamically loading of library can be included during compilation without having related development sources on the system.</para></sect2></sect1><sect1>
 <title>License</title>
 <para>The program is published under the GNU GPL version 2.</para></sect1><sect1>
@@ -93,11 +93,14 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 --disable-db-ieee       Disable build-in IEEE database (default: enabled)
 --disable-db-ipv4       Disable build-in IPv4 database (default: enabled)
 --disable-db-ipv6       Disable build-in IPv6 database (default: enabled)
+--disable-db-as-registry Disable built-in AS-to-Registry database (default: enabled)
+--disable-db-cc-registry Disable built-in CountryCode-to-Registry database (default: enabled) 
 
 --enable-dbip           Enable db-ip.com support (default: disabled)
 --enable-external       Enable external db support (default: disabled) 
 --enable-ip2location    Enable IP2Location support (default: disabled)
 --enable-geoip          Enable GeoIP support (default: disabled) 
+--enable-mod_ipv6calc   Enable build of mod_ipv6calc for Apache (default: disabled) 
 
 --with-ip2location-headers=DIR      IP2Location include files location
 --with-ip2location-headers-fallback IP2Location include files from internal fallback location
@@ -124,6 +127,8 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 --with-external-db=DIR  Use specified external database directory, default:
                           /usr/share/ipv6calc/db 
 
+--with-apxs=NAME        name of the apxs executable (apxs) 
+
 --enable-shared                 Enable shared library build (default: disabled)
 
 --enable-bundled-getopt         Enable bundled getopt library (default: autoselected)
@@ -143,7 +148,7 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 Supported options:
    -?|-h|--help        : this help
    -n|--no-make        : stop before running 'make'
-   -a|--all            : enable GeoIP and IP2Location support
+   -a|--all            : enable GeoIP/IP2Location/db-ip.com/External/mod_ipv6calc support
    -g|--geoip          : enable GeoIP support
    --geoip-dyn|-G      : switch to dynamic library loading of GeoIP
    -i|--ip2location    : enable IP2Location support
@@ -1161,11 +1166,56 @@ ALL  46233 62292 0 2397 3525 40198 97 16 0 0 129 839 61074 0 0 0 0 0 16 51 0 0 0
 ]]></screen></sect3></sect2><sect2>
 <title>Examples</title>
 <para>A demonstration with real data is available at <ulink url="http://mirrors.bieringer.de/stats/timeline.html">http://mirrors.bieringer.de/stats/timeline.html</ulink>.</para></sect2></sect1><sect1>
+<title>Apache web server module &ldquo;mod_ipv6calc&rdquo;</title>
+<para>This Apache web server module (since version 0.99.1, released 2015) interfaces with internal ipv6calc library to support</para><itemizedlist>
+<listitem><para>Client IP address anonymization &ldquo;on-the-fly&rdquo;, exported to IPV6CALC_CLIENT_IP_ANON</para><itemizedlist>
+<listitem><para>depending on the configured anonymization method 3rd party database is required</para></listitem></itemizedlist></listitem><listitem><para>Country code of client IP address, exported to IPV6CALC_CLIENT_COUNTRYCODE</para><itemizedlist>
+<listitem><para>requires 3rd party database: GeoIP or IP2Location or DB-IP.com</para></listitem></itemizedlist></listitem><listitem><para>Autonomous System Number (ASN) of client IP address, exported to IPV6CALC_CLIENT_ASN</para><itemizedlist>
+<listitem><para>requires 3rd party database: GeoIP</para></listitem></itemizedlist></listitem><listitem><para>Registry of client IP address, exported to IPV6CALC_CLIENT_REGISTRY</para><itemizedlist>
+<listitem><para>requires internal or &ldquo;external&rdquo; database</para></listitem></itemizedlist></listitem><listitem><para>Configured IP address anonymization method, exported to IPV6CALC_ANON_METHOD</para></listitem></itemizedlist><sect2>
+<title>Installation</title>
+<para>Install compiled Apache module &ldquo;mod_ipv6calc&rdquo; to Apache's module directory</para>
+<para>Install included default configuration file &ldquo;ipv6calc.conf&rdquo; to Apache's config directory (usually conf.d)</para></sect2><sect2>
+<title>Configuration</title>
+<para>Enable in &ldquo;ipv6calc.conf&rdquo; loading of module</para><screen>
+<![CDATA[LoadModule ipv6calc_module modules/mod_ipv6calc.so
+]]></screen><para>Enable module itself </para><screen>
+<![CDATA[ipv6calcEnable                         on
+]]></screen><para>Adjust configuration settings, if needed (see examples in &ldquo;ipv6calc.conf&rdquo;)</para>
+<para>Review predefined log format</para><screen>
+<![CDATA[LogFormat "%{IPV6CALC_CLIENT_IP_ANON}e \"%{IPV6CALC_CLIENT_COUNTRYCODE}e/%{IPV6CALC_CLIENT_ASN}e/%{IPV6CALC_CLIENT_REGISTRY}e/%{IPV6CALC_ANON_METHOD}e\" %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined_anon
+]]></screen><para>Enable custom log with anonymized information, using the predefined LogFormat</para><screen>
+<![CDATA[CustomLog logs/access_anon_log combined_anon
+]]></screen><para>Restart Apache web server, check error_log for any issues</para></sect2><sect2>
+<title>Result</title>
+<para>The new log file contains anonymized requests like</para><screen>
+<![CDATA[252.176.92.172 "CN/23724/APNIC/keep-type-asn-cc" - [25/Jul/2015:13:20:25 +0200] "GET / HTTP/1.1" 200 3569 "-" "Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)"
+
+a909:390a:909a:81d9:a909:4291:c02d:5d1d "CZ/43037/RIPENCC/keep-type-asn-cc" - [25/Jul/2015:12:59:00 +0200] "GET /robots.txt HTTP/1.1" 200 33 "-" "Mozilla/5.0 (compatible; SeznamBot/3.2; +http://fulltext.sblog.cz/)" 
+]]></screen></sect2><sect2>
+<title>Post-Analysis in case of anonymization method &ldquo;keep-type-asn-cc&rdquo;</title>
+<para>In case &ldquo;keep-type-asn-cc&rdquo; is configured and also working (required databases are available), related information of anonymized IP addresses can be retrieved using &ldquo;ipv6calc&rdquo; or &ldquo;ipv6logstats&rdquo;.</para><screen>
+<![CDATA[$ ipv6calc -q -m -i 252.176.92.172
+IPV4=252.176.92.172
+IPV4_TYPE=unicast,anonymized,global
+IPV4_AS_NUM=23724
+IPV4_COUNTRYCODE=CN
+IPV4_REGISTRY=APNIC 
+...
+
+$ ipv6calc -q -m -i a909:390a:909a:81d9:a909:4291:c02d:5d1d
+IPV6=a909:390a:909a:81d9:a909:4291:c02d:5d1d
+IPV6_TYPE=unicast,anonymized-iid,anonymized-prefix,global-unicast,productive,iid,iid-local
+IPV6_COUNTRYCODE=CZ
+IPV6_AS_NUM=43037
+IPV6_REGISTRY=RIPENCC
+...
+]]></screen></sect2></sect1><sect1>
 <title>History</title>
 <para>Major extensions/changes are listed here</para><sect2>
 <title>2015</title>
 <itemizedlist>
-<listitem><para>Add support for <ulink url="http://www.db-ip.com/">DB-IP.com</ulink> databases (by generated Berkeley DB files) (&gt;= 0.98.0)</para></listitem><listitem><para>Add support for &ldquo;External&rdquo; database files (generated Berkeley DB files), superseeding (if newer) built-in IPv4/IPv6-&gt;Registry and adding IPv4/IPv6-&gt;CountryCode support (&gt;= 0.98.0)</para></listitem><listitem><para>Extend filter options with support of CountryCode, ASN or Registry (&gt;= 0.99.0)</para></listitem><listitem><para>Add support for <ulink url="http://lite.ip2location.com/">IP2Location LITE</ulink> databases (&gt;= 0.99.0), add configurable IP2Location database autoselection support</para></listitem></itemizedlist></sect2><sect2>
+<listitem><para>Introduce mod_ipv6calc for Apache web server (&gt;= 0.99.1, released 2015)</para></listitem><listitem><para>Add support for <ulink url="http://www.db-ip.com/">DB-IP.com</ulink> databases (by generated Berkeley DB files) (&gt;= 0.98.0)</para></listitem><listitem><para>Add support for &ldquo;External&rdquo; database files (generated Berkeley DB files), superseeding (if newer) built-in IPv4/IPv6-&gt;Registry and adding IPv4/IPv6-&gt;CountryCode support (&gt;= 0.98.0)</para></listitem><listitem><para>Extend filter options with support of CountryCode, ASN or Registry (&gt;= 0.99.0)</para></listitem><listitem><para>Add support for <ulink url="http://lite.ip2location.com/">IP2Location LITE</ulink> databases (&gt;= 0.99.0), add configurable IP2Location database autoselection support</para></listitem></itemizedlist></sect2><sect2>
 <title>2014</title>
 <itemizedlist>
 <listitem><para>Shared library mode supported (reduces size of binaries)</para></listitem></itemizedlist></sect2><sect2>
