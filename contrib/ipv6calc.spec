@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.298 2015/07/29 05:17:17 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.299 2015/07/30 19:45:17 ds6peter Exp $
 
 # shared library support (deselectable)
 %if "%{?_without_shared:0}%{?!_without_shared:1}" == "1"
@@ -70,12 +70,7 @@ BuildRequires:	libdb-devel
 %endif
 
 # RPM license macro detector
-%if "%{license}" == "GPLv2"
-%define rpm_license_macro 0
-%else
-%define rpm_license_macro 1
-%endif
-
+%define rpm_license_extra %(echo "%{_defaultlicensedir}" | grep -q defaultlicensedir && echo 0 || echo 1)
 
 
 %description
@@ -239,7 +234,7 @@ rm -rf %{buildroot}
 
 
 %files
-%if %{rpm_license_macro}
+%if %{rpm_license_extra}
 %doc ChangeLog README CREDITS TODO USAGE doc/ipv6calc.lyx doc/ipv6calc.sgml doc/ipv6calc.html doc/ipv6calc.xml
 %license COPYING LICENSE
 %else
@@ -268,7 +263,7 @@ rm -rf %{buildroot}
 
 
 %files ipv6calcweb
-%if %{rpm_license_macro}
+%if %{rpm_license_extra}
 %doc ipv6calcweb/README ipv6calcweb/USAGE
 %license COPYING LICENSE
 %else
@@ -282,7 +277,7 @@ rm -rf %{buildroot}
 
 
 %files mod_ipv6calc
-%if %{rpm_license_macro}
+%if %{rpm_license_extra}
 %doc mod_ipv6calc/README.mod_ipv6calc
 %license COPYING LICENSE
 %else
