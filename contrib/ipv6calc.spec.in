@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec.in,v 1.114 2015/07/30 19:45:17 ds6peter Exp $
+# $Id: ipv6calc.spec.in,v 1.115 2015/07/31 05:42:45 ds6peter Exp $
 
 # shared library support (deselectable)
 %if "%{?_without_shared:0}%{?!_without_shared:1}" == "1"
@@ -291,8 +291,11 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Thu Jul 30 2015 Peter Bieringer <pb@bieringer.de>
+- add automatic RPM license feature detection
+
 * Sat Jul 25 2015 Peter Bieringer <pb@bieringer.de>
-- Replace ipv6calc.{lyx,sgml,html,xml} by dedicated file.suffix
+- replace ipv6calc.{lyx,sgml,html,xml} by dedicated file.suffix
 
 * Mon Jun 01 2015 Peter Bieringer <pb@bieringer.de>
 - add subpackage mod_ipv6calc
