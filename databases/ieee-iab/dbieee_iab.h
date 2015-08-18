@@ -1,15 +1,15 @@
 /*
  * Project       : ipv6calc
  * File          : dbieee_iab.h
- * Version       : $Id: dbieee_iab.h,v 1.81 2015/08/02 07:40:09 ds6peter Exp $
- * Generated     : Sun Aug  2 09:18:02 2015
+ * Version       : $Id: dbieee_iab.h,v 1.82 2015/08/18 19:32:33 ds6peter Exp $
+ * Generated     : Tue Aug 18 07:18:43 2015
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20150802";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20150818";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -2389,7 +2389,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x947000, 0x947FFF, "IMEXHIGHWAY cvba", "IMEXHIGHWAY-CVBA" },
 	{ 0x0050C2, 0x948000, 0x948FFF, "ELECTRONIA", "ELECTRONIA" },
 	{ 0x0050C2, 0x949000, 0x949FFF, "taskit GmbH", "TASKIT" },
-	{ 0x0050C2, 0x94A000, 0x94AFFF, "TRUMEDIA TECHNOLOGIES", "TRUMEDIA-TECHNOLOGIES" },
+	{ 0x0050C2, 0x94A000, 0x94AFFF, "TruMedia Measurement Ltd.", "TRUMEDIA-MEASUREMENT" },
 	{ 0x0050C2, 0x94B000, 0x94BFFF, "Piller engineering Ltd.", "PILLER-ENGINEERING" },
 	{ 0x0050C2, 0x94C000, 0x94CFFF, "TEMIX", "TEMIX" },
 	{ 0x0050C2, 0x94D000, 0x94DFFF, "C&H technology ltd.", "C-H" },
