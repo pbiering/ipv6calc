@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.81 2015/05/27 13:30:07 ds6peter Exp $
+ * Version    : $Id: ipv6calchelp.c,v 1.82 2015/08/23 09:53:27 ds6peter Exp $
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
@@ -671,7 +671,19 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			break;
 			
 		case ACTION_ipv4_to_6to4addr:
-			fprintf(stderr, " help still missing - sorry.\n");
+			fprintf(stderr, "  Convert IPv4 to 6to4 prefix / extract IPv4 from 6to4 prefix\n");
+			fprintf(stderr, "   ipv6calc -A conv6to4 192.0.2.1\n");
+			fprintf(stderr, "    2002:c000:201::\n");
+			fprintf(stderr, "   ipv6calc -A conv6to4 2002:c000:201::\n");
+			fprintf(stderr, "    192.0.2.1\n");
+			break;
+
+		case ACTION_ipv4_to_nat64:
+			fprintf(stderr, "  Convert IPv4 to NAT64 address / extract IPv4 from NAT64 address\n");
+			fprintf(stderr, "   ipv6calc -A convnat64 192.0.2.1\n");
+			fprintf(stderr, "    64:ff9b::c000:201\n");
+			fprintf(stderr, "   ipv6calc -A convnat64 64:ff9b::c000:201\n");
+			fprintf(stderr, "    192.0.2.1\n");
 			break;
 
 		case ACTION_anonymize:

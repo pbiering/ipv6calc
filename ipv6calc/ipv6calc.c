@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.126 2015/06/10 05:53:57 ds6peter Exp $
+ * Version    : $Id: ipv6calc.c,v 1.127 2015/08/23 09:53:27 ds6peter Exp $
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
@@ -41,6 +41,7 @@
 #include "librfc3056.h"
 #include "librfc3041.h"
 #include "librfc5569.h"
+#include "librfc6052.h"
 #include "libeui64.h"
 #include "libieee.h"
 #include "libipv4addr.h"
@@ -1195,8 +1196,10 @@ PIPE_input:
 			fprintf(stderr, "No output type specified, try autodetection...");
 		};
 
-		if ( (inputtype == FORMAT_ipv4addr) && (action == ACTION_ipv4_to_6to4addr) ) {
+		if ( (inputtype == FORMAT_ipv4addr) && ((action == ACTION_ipv4_to_6to4addr) || (action == ACTION_ipv4_to_nat64)) ) {
 			outputtype = FORMAT_ipv6addr;
+		} else if ( (inputtype == FORMAT_ipv6addr) && ((action == ACTION_ipv4_to_6to4addr) || (action == ACTION_ipv4_to_nat64)) ) {
+			outputtype = FORMAT_ipv4addr;
 		} else if ( (inputtype == FORMAT_mac) && (action == ACTION_mac_to_eui64) ) {
 			outputtype = FORMAT_eui64;
 			formatoptions |= FORMATOPTION_printfulluncompressed;
@@ -1272,6 +1275,27 @@ PIPE_input:
 				retval = librfc3056_ipv6addr_to_ipv4addr(&ipv4addr, &ipv6addr, resultstring, sizeof(resultstring));
 			} else {
 				fprintf(stderr, "Unsupported 6to4 conversion!\n");
+				exit(EXIT_FAILURE);
+			};
+			break;
+
+		case ACTION_ipv4_to_nat64:
+			if (inputtype == FORMAT_ipv4addr && outputtype == FORMAT_ipv6addr) {
+				/* IPv4 -> IPv6 */
+				if (ipv4addr.flag_valid != 1) {
+					fprintf(stderr, "No valid IPv4 address given!\n");
+					exit(EXIT_FAILURE);
+				};
+				retval = librfc6052_ipv4addr_to_ipv6addr(&ipv6addr, &ipv4addr);
+			} else if (inputtype == FORMAT_ipv6addr && outputtype == FORMAT_ipv4addr) {
+				/* IPv6 -> IPv4 */
+				if (ipv6addr.flag_valid != 1) {
+					fprintf(stderr, "No valid IPv6 address given!\n");
+					exit(EXIT_FAILURE);
+				};
+				retval = librfc6052_ipv6addr_to_ipv4addr(&ipv4addr, &ipv6addr, resultstring, sizeof(resultstring));
+			} else {
+				fprintf(stderr, "Unsupported NAT64 conversion!\n");
 				exit(EXIT_FAILURE);
 			};
 			break;

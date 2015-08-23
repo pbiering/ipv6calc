@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.408 2015/08/18 19:32:31 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.409 2015/08/23 09:53:26 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20150823/PB
+	ipv6calc: autoselect IPv4 output on action 'conv6to4' if undefined
+	ipv6calc: add new action 'convnat64'
+
 20150818/PB
 	databases: update
 

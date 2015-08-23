@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
-# Version    : $Id: test_ipv6calc.sh,v 1.56 2015/06/10 05:53:57 ds6peter Exp $
+# Version    : $Id: test_ipv6calc.sh,v 1.57 2015/08/23 09:53:27 ds6peter Exp $
 # Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
@@ -143,8 +143,14 @@ NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 ## IPv4 -> IPv6 (6to4)
 --ipv4_to_6to4addr 11.12.13.14						=2002:b0c:d0e::
 --in ipv4 --out ipv6 --action conv6to4 11.12.13.14			=2002:b0c:d0e::
+--action conv6to4 192.0.2.1						=2002:c000:201::
 ## IPv6 -> IPv4 (6to4)
 --in ipv6 --out ipv4 --action conv6to4 2002:102:304::1			=1.2.3.4
+--action conv6to4 2002:c000:201::					=192.0.2.1
+## IPv4 -> IPv6 (NAT64)
+--action convnat64 192.0.2.1						=64:ff9b::c000:201
+## IPv6 -> IPv4 (NAT64)
+--action convnat64 64:ff9b::c000:201					=192.0.2.1
 ## Prefix + MAC -> IPv6
 --in prefix+mac fec0:0:0:1:: 01:23:45:67:89:01				=fec0::1:323:45ff:fe67:8901
 ## IPv4 -> reverse

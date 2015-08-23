@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : lib/Makefile
-# Version    : $Id: Makefile.in,v 1.18 2015/05/13 05:51:38 ds6peter Exp $
+# Version    : $Id: Makefile.in,v 1.19 2015/08/23 09:53:27 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
@@ -42,6 +42,7 @@ OBJS	=	libipv6calc.o  \
 		librfc3041.o   \
 		librfc3056.o   \
 		librfc5569.o   \
+		librfc6052.o   \
 		libifinet6.o   \
 		ipv6calchelp.o \
 		ipv6calcoptions.o \
@@ -68,6 +69,7 @@ $(OBJS):	libipv6calcdebug.h  \
 		librfc2874.h        \
 		librfc3041.h        \
 		librfc3056.h        \
+		librfc6052.h        \
 		libifinet6.h        \
 		ipv6calchelp.h      \
 		ipv6calctypes.h     \

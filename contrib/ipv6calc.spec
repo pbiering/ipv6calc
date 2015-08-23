@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.301 2015/08/18 19:32:33 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.302 2015/08/23 09:53:27 ds6peter Exp $
 
 # shared library support (deselectable)
 %if "%{?_without_shared:0}%{?!_without_shared:1}" == "1"
@@ -138,8 +138,8 @@ Default restricts access to localhost.
 Summary: 	Apache module for ipv6calc
 Group:		Applications/Internet
 BuildRequires:	httpd-devel psmisc
-Requires:	httpd >= .0
-Requires:	httpd <= .99999
+Requires:	httpd >= 2.4.0
+Requires:	httpd <= 2.4.99999
 Requires:	ipv6calc = %{version}-%{release}
 %if %{enable_shared}
 Requires:	ipv6calc-libs = %{version}-%{release}}
