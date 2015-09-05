@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : create_ieee_headerfile.pl
-# Version    : $Id: create_ieee_headerfile.pl,v 1.5 2015/09/05 06:14:59 ds6peter Exp $
-# Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: create_ieee_headerfile.pl,v 1.6 2015/09/05 06:25:03 ds6peter Exp $
+# Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE files
 #
@@ -131,7 +131,7 @@ while (<IN>) {
 
 		#print $line . "\n";
 		my ($t1, $t2, $t3) = split / /, $line, 3;
-	
+
 		my ($a, $b, $c) = split /-/, $t1;
 
 		# shorten OUI string
@@ -185,6 +185,11 @@ while (<IN>) {
 		$oui =~ s/"//ig;
 		$t3 =~ s/"//ig;
 
+                # kill leading spaces
+		$t3 =~ s/^ *//g;
+		# kill trailing spaces
+		$t3 =~ s/ *$//g;
+	
 		# Some final cleanup
 		$oui =~ s/-INT-L//ig;
 		$oui =~ s/-B-V//ig;
