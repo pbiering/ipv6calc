@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.302 2015/08/23 09:53:27 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.303 2015/09/05 06:02:37 ds6peter Exp $
 
 # shared library support (deselectable)
 %if "%{?_without_shared:0}%{?!_without_shared:1}" == "1"
@@ -28,6 +28,7 @@ Conflicts: 	ipv6calc-libs
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
+# mod_ipv6calc related
 %{!?_httpd_apxs:    %{expand: %%global _httpd_apxs    %%{_sbindir}/apxs}}
 %{!?_httpd_moddir:  %{expand: %%global _httpd_moddir  %%{_libdir}/httpd/modules}}
 %{!?_httpd_confdir: %{expand: %%global _httpd_confdir %%{_sysconfdir}/httpd/conf.d}}
@@ -55,18 +56,18 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 
 # database locations
-%define ip2location_db %{_datadir}/IP2Location
-%define geoip_db       %{_datadir}/GeoIP
-%define dbip_db        %{_datadir}/DBIP
-%define external_db    %{_datadir}/%{name}/db
+%define ip2location_db	%{_datadir}/IP2Location
+%define geoip_db	%{_datadir}/GeoIP
+%define dbip_db		%{_datadir}/DBIP
+%define external_db	%{_datadir}/%{name}/db
 
 
 # Berkeley DB selector
 %define require_db4 %(echo "%{dist}" | egrep -q '^\.el(5|6)$' && echo 1 || echo 0)
 %if %{require_db4}
-BuildRequires:	db4-devel
+BuildRequires: db4-devel
 %else
-BuildRequires:	libdb-devel
+BuildRequires: libdb-devel
 %endif
 
 # RPM license macro detector
@@ -100,7 +101,7 @@ Support for following databases
 		default directory for downloaded db files: %{geoip_db}
 		(requires also external library on system)
 
- - db-ip.com 	%{?enable_dbip:ENABLED}%{?!enable_dbip:DISABLED}
+ - db-ip.com	%{?enable_dbip:ENABLED}%{?!enable_dbip:DISABLED}
 		(once generated database files are found on system)
 		default directory for generated db files: %{dbip_db}
 
@@ -119,7 +120,7 @@ Available rpmbuild rebuild options:
 
 
 %package ipv6calcweb
-Summary: 	IP address information web utility
+Summary:	IP address information web utility
 Group:		Applications/Internet
 Requires:	ipv6calc httpd
 Requires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities)
@@ -130,7 +131,7 @@ ipv6calcweb contains a CGI program and a configuration file for
 displaying information of IP addresses on a web page using ipv6calc.
 
 Check/addjust %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
-Default restricts access to localhost.
+Default restricts access to localhost
 
 
 %if %{enable_mod_ipv6calc}
@@ -138,8 +139,8 @@ Default restricts access to localhost.
 Summary: 	Apache module for ipv6calc
 Group:		Applications/Internet
 BuildRequires:	httpd-devel psmisc
-Requires:	httpd >= 2.4.0
-Requires:	httpd <= 2.4.99999
+Requires:	httpd >= .0
+Requires:	httpd <= .99999
 Requires:	ipv6calc = %{version}-%{release}
 %if %{enable_shared}
 Requires:	ipv6calc-libs = %{version}-%{release}}
