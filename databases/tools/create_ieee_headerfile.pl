@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : create_ieee_headerfile.pl
-# Version    : $Id: create_ieee_headerfile.pl,v 1.4 2014/12/09 21:03:51 ds6peter Exp $
+# Version    : $Id: create_ieee_headerfile.pl,v 1.5 2015/09/05 06:14:59 ds6peter Exp $
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE files
@@ -107,6 +107,9 @@ while (<IN>) {
 
 	print "DEBUG : parse line: " . $line . "\n" if (defined $debug);
 
+	# kill "
+	$line =~ s/"//g;
+
 	if ($line =~ /\(hex\)/ ) {
 		print "DEBUG : found major entry line: " . $line . "\n" if (defined $debug);
 
@@ -116,7 +119,6 @@ while (<IN>) {
 
 		$i++;
 		print STDERR $i . "\r";
-
 
 		# kill spaces
 		$line =~ s/[ \t]+/ /g;
