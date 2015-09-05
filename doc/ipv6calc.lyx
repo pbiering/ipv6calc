@@ -5250,6 +5250,11 @@ $ cat /path/to/http_log | ./ipv6loganon >/path/to/http_log_anonymized
 On-the-fly online anonymization for Apache Webserver
 \end_layout
 
+\begin_layout Quotation
+Note: since 0.91.1 also an module for Apache Webserver is available (see below)
+ supporting anonymized logging
+\end_layout
+
 \begin_layout Standard
 (Supported since 0.90.0)
 \end_layout

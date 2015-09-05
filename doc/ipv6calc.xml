@@ -914,7 +914,9 @@ This program anonymizes IPv4/IPv6 addresses in e.g. HTTP server log files
 <![CDATA[$ cat /path/to/http_log | ./ipv6loganon >/path/to/http_log_anonymized
 ]]></screen></sect3><sect3>
 <title>On-the-fly online anonymization for Apache Webserver</title>
-<para>(Supported since 0.90.0)</para>
+<blockquote>
+<para>Note: since 0.91.1 also an module for Apache Webserver is available (see below) supporting anonymized logging</para>
+</blockquote><para>(Supported since 0.90.0)</para>
 <para>Adjust or add (note: more than one CustomLog directive is supported by Apache) httpd.conf like following:</para><screen>
 <![CDATA[CustomLog "|/usr/local/bin/ipv6loganon -a -f /var/log/httpd/access_log" combined
 ]]></screen><para>In case of &ldquo;cronolog&rdquo; is used on the system, configure like this:</para><itemizedlist>
