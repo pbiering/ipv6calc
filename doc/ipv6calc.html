@@ -55,10 +55,10 @@ COLSPAN="3"
 ><TR
 ><TD
 ALIGN="LEFT"
->Revision 5.2bis</TD
+>Revision 6.0</TD
 ><TD
 ALIGN="LEFT"
->2015-05-06</TD
+>2015-07-25</TD
 ><TD
 ALIGN="LEFT"
 >Revised by: PB</TD
@@ -352,33 +352,62 @@ HREF="#AEN565"
 ><DT
 >15. <A
 HREF="#AEN569"
->History</A
+>Apache web server module &#8220;mod_ipv6calc&#8221;</A
 ></DT
 ><DD
 ><DL
 ><DT
 >15.1. <A
-HREF="#AEN572"
->2015</A
+HREF="#AEN595"
+>Installation</A
 ></DT
 ><DT
 >15.2. <A
-HREF="#AEN585"
->2014</A
+HREF="#AEN599"
+>Configuration</A
 ></DT
 ><DT
 >15.3. <A
-HREF="#AEN590"
->2013</A
+HREF="#AEN611"
+>Result</A
 ></DT
 ><DT
 >15.4. <A
-HREF="#AEN599"
+HREF="#AEN615"
+>Post-analysis in case of anonymization method &#8220;keep-type-asn-cc&#8221;</A
+></DT
+></DL
+></DD
+><DT
+>16. <A
+HREF="#AEN619"
+>History</A
+></DT
+><DD
+><DL
+><DT
+>16.1. <A
+HREF="#AEN622"
+>2015</A
+></DT
+><DT
+>16.2. <A
+HREF="#AEN637"
+>2014</A
+></DT
+><DT
+>16.3. <A
+HREF="#AEN642"
+>2013</A
+></DT
+><DT
+>16.4. <A
+HREF="#AEN651"
 >2011</A
 ></DT
 ><DT
->15.5. <A
-HREF="#AEN616"
+>16.5. <A
+HREF="#AEN668"
 >2010 and older</A
 ></DT
 ></DL
@@ -412,7 +441,7 @@ NAME="AEN20"
 >1.1. Latest version</A
 ></H3
 ><P
->Latest version since last update of this page is 0.99.0 (released 2015-05-02)</P
+>Latest version since last update of this page is 0.99.1 (released &#62; 2015-09-05)</P
 ></DIV
 ><DIV
 CLASS="SECT2"
@@ -503,11 +532,11 @@ TARGET="_top"
 ><UL
 ><LI
 ><P
->IPv4 (since 0.61.0 released 2006)</P
+>IPv4 (since 0.61.0, released 2006)</P
 ></LI
 ><LI
 ><P
->IPv6 (since 0.90.0 released 2011, req. GeoIP &#62;= 1.4.5)</P
+>IPv6 (since 0.90.0, released 2011, req. GeoIP &#62;= 1.4.5)</P
 ></LI
 ><LI
 ><P
@@ -527,15 +556,15 @@ TARGET="_top"
 ><UL
 ><LI
 ><P
->IPv4 (since 0.60.0 released 2006)</P
+>IPv4 (since 0.60.0, released 2006)</P
 ></LI
 ><LI
 ><P
->IPv6 (since 0.70.0 released 2007, <A
+>IPv6 (since 0.70.0, released 2007, <A
 HREF="http://lite.ip2location.com/"
 TARGET="_top"
 >IP2Location LITE IPv6 Databases</A
-> since 0.99.0 released 2015)</P
+> since 0.99.0, released 2015)</P
 ></LI
 ><LI
 ><P
@@ -549,11 +578,11 @@ TARGET="_top"
 HREF="http://www.db-ip.com/"
 TARGET="_top"
 >DB-IP.com</A
-> (since 0.98.0 released 2015), based on local Berkeley DB files generated from downloaded CSV files</P
+> (since 0.98.0, released 2015), based on local Berkeley DB files generated from downloaded CSV files</P
 ></LI
 ><LI
 ><P
->&#8220;External&#8221; (since 0.98.0 released 2015), based on local Berkeley DB files, generated from downloaded TXT/XML files (registries assignment databases). Supporting IPv4/IPv6 to Registries and IPv4/IPv6 to CountryCode. If newer, overruling the related included databases.</P
+>&#8220;External&#8221; (since 0.98.0, released 2015), based on local Berkeley DB files, generated from downloaded TXT/XML files (registries assignment databases). Supporting IPv4/IPv6 to Registries and IPv4/IPv6 to CountryCode. If newer, overruling the related included databases.</P
 ></LI
 ></UL
 ><P
@@ -971,11 +1000,14 @@ CLASS="SCREEN"
 --disable-db-ieee       Disable build-in IEEE database (default: enabled)
 --disable-db-ipv4       Disable build-in IPv4 database (default: enabled)
 --disable-db-ipv6       Disable build-in IPv6 database (default: enabled)
+--disable-db-as-registry Disable built-in AS-to-Registry database (default: enabled)
+--disable-db-cc-registry Disable built-in CountryCode-to-Registry database (default: enabled) 
 
 --enable-dbip           Enable db-ip.com support (default: disabled)
 --enable-external       Enable external db support (default: disabled) 
 --enable-ip2location    Enable IP2Location support (default: disabled)
 --enable-geoip          Enable GeoIP support (default: disabled) 
+--enable-mod_ipv6calc   Enable build of mod_ipv6calc for Apache (default: disabled) 
 
 --with-ip2location-headers=DIR      IP2Location include files location
 --with-ip2location-headers-fallback IP2Location include files from internal fallback location
@@ -1001,6 +1033,8 @@ CLASS="SCREEN"
 
 --with-external-db=DIR  Use specified external database directory, default:
                           /usr/share/ipv6calc/db 
+
+--with-apxs=NAME        name of the apxs executable (apxs) 
 
 --enable-shared                 Enable shared library build (default: disabled)
 
@@ -1095,7 +1129,7 @@ CLASS="SCREEN"
 Supported options:
    -?|-h|--help        : this help
    -n|--no-make        : stop before running 'make'
-   -a|--all            : enable GeoIP and IP2Location support
+   -a|--all            : enable GeoIP/IP2Location/db-ip.com/External/mod_ipv6calc support
    -g|--geoip          : enable GeoIP support
    --geoip-dyn|-G      : switch to dynamic library loading of GeoIP
    -i|--ip2location    : enable IP2Location support
@@ -2336,12 +2370,13 @@ COLOR="#000000"
 CLASS="SCREEN"
 >$ ipv6calc --action -?
 ipv6calc: version 0.99.1 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
-(P) &#38; (C) 2001-2014 by Peter Bieringer &#60;pb (at) bieringer.de&#62;
+(P) &#38; (C) 2001-2015 by Peter Bieringer &#60;pb (at) bieringer.de&#62;
 
  Available action types:
   auto             : Automatic selection of action (default)
   geneui64         : Converts a MAC address to an EUI-64 address
   conv6to4         : Converts IPv4 address &#60;-&#62; 6to4 IPv6 address (prefix)
+  convnat64        : Converts IPv4 address &#60;-&#62; NAT64 IPv6 address
   genprivacyiid    : Generates a privacy interface ID out of a given one (arg1) and a token (arg2)
   prefixmac2ipv6   : Generates an IPv6 address out of a prefix and a MAC address
   anonymize        : Anonymize IPv4/IPv6 address without loosing much information
@@ -3613,7 +3648,236 @@ CLASS="SECT1"
 CLASS="SECT1"
 ><A
 NAME="AEN569"
->15. History</A
+>15. Apache web server module &#8220;mod_ipv6calc&#8221;</A
+></H2
+><P
+>This Apache web server module (since version 0.99.1, released 2015) interfaces with internal ipv6calc library to support</P
+><P
+></P
+><UL
+><LI
+><P
+>Client IP address anonymization &#8220;on-the-fly&#8221;, exported to IPV6CALC_CLIENT_IP_ANON</P
+><P
+></P
+><UL
+><LI
+><P
+>depending on the configured anonymization method 3rd party database is required</P
+></LI
+></UL
+></LI
+><LI
+><P
+>Country code of client IP address, exported to IPV6CALC_CLIENT_COUNTRYCODE</P
+><P
+></P
+><UL
+><LI
+><P
+>requires 3rd party database: GeoIP or IP2Location or DB-IP.com</P
+></LI
+></UL
+></LI
+><LI
+><P
+>Autonomous System Number (ASN) of client IP address, exported to IPV6CALC_CLIENT_ASN</P
+><P
+></P
+><UL
+><LI
+><P
+>requires 3rd party database: GeoIP</P
+></LI
+></UL
+></LI
+><LI
+><P
+>Registry of client IP address, exported to IPV6CALC_CLIENT_REGISTRY</P
+><P
+></P
+><UL
+><LI
+><P
+>requires internal or &#8220;external&#8221; database</P
+></LI
+></UL
+></LI
+><LI
+><P
+>Configured IP address anonymization method, exported to IPV6CALC_ANON_METHOD</P
+></LI
+></UL
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN595"
+>15.1. Installation</A
+></H3
+><P
+>Install compiled Apache module &#8220;mod_ipv6calc&#8221; to Apache's module directory</P
+><P
+>Install included default configuration file &#8220;ipv6calc.conf&#8221; to Apache's config directory (usually conf.d)</P
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN599"
+>15.2. Configuration</A
+></H3
+><P
+>Enable in &#8220;ipv6calc.conf&#8221; loading of module</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+>LoadModule ipv6calc_module modules/mod_ipv6calc.so</PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+>Enable module itself </P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+>ipv6calcEnable                         on</PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+>Adjust configuration settings, if needed (see examples in &#8220;ipv6calc.conf&#8221;)</P
+><P
+>Review predefined log format</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+>LogFormat "%{IPV6CALC_CLIENT_IP_ANON}e \"%{IPV6CALC_CLIENT_COUNTRYCODE}e/%{IPV6CALC_CLIENT_ASN}e/%{IPV6CALC_CLIENT_REGISTRY}e/%{IPV6CALC_ANON_METHOD}e\" %u %t \"%r\" %&#62;s %b \"%{Referer}i\" \"%{User-Agent}i\"" combined_anon</PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+>Enable custom log with anonymized information, using the predefined LogFormat</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+>CustomLog logs/access_anon_log combined_anon</PRE
+></FONT
+></TD
+></TR
+></TABLE
+><P
+>Restart Apache web server, check error_log for any issues</P
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN611"
+>15.3. Result</A
+></H3
+><P
+>The new log file contains anonymized requests like</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+>252.176.92.172 "CN/23724/APNIC/keep-type-asn-cc" - [25/Jul/2015:13:20:25 +0200] "GET / HTTP/1.1" 200 3569 "-" "Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)"
+
+a909:390a:909a:81d9:a909:4291:c02d:5d1d "CZ/43037/RIPENCC/keep-type-asn-cc" - [25/Jul/2015:12:59:00 +0200] "GET /robots.txt HTTP/1.1" 200 33 "-" "Mozilla/5.0 (compatible; SeznamBot/3.2; +http://fulltext.sblog.cz/)" </PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+><DIV
+CLASS="SECT2"
+><HR><H3
+CLASS="SECT2"
+><A
+NAME="AEN615"
+>15.4. Post-analysis in case of anonymization method &#8220;keep-type-asn-cc&#8221;</A
+></H3
+><P
+>In case &#8220;keep-type-asn-cc&#8221; is configured and also working (required databases are available), related information of anonymized IP addresses can be retrieved using &#8220;ipv6calc&#8221; or &#8220;ipv6logstats&#8221;.</P
+><TABLE
+BORDER="1"
+BGCOLOR="#E0E0E0"
+WIDTH="100%"
+><TR
+><TD
+><FONT
+COLOR="#000000"
+><PRE
+CLASS="SCREEN"
+>$ ipv6calc -q -m -i 252.176.92.172
+IPV4=252.176.92.172
+IPV4_TYPE=unicast,anonymized,global
+IPV4_AS_NUM=23724
+IPV4_COUNTRYCODE=CN
+IPV4_REGISTRY=APNIC 
+...
+
+$ ipv6calc -q -m -i a909:390a:909a:81d9:a909:4291:c02d:5d1d
+IPV6=a909:390a:909a:81d9:a909:4291:c02d:5d1d
+IPV6_TYPE=unicast,anonymized-iid,anonymized-prefix,global-unicast,productive,iid,iid-local
+IPV6_COUNTRYCODE=CZ
+IPV6_AS_NUM=43037
+IPV6_REGISTRY=RIPENCC
+...</PRE
+></FONT
+></TD
+></TR
+></TABLE
+></DIV
+></DIV
+><DIV
+CLASS="SECT1"
+><HR><H2
+CLASS="SECT1"
+><A
+NAME="AEN619"
+>16. History</A
 ></H2
 ><P
 >Major extensions/changes are listed here</P
@@ -3622,12 +3886,16 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN572"
->15.1. 2015</A
+NAME="AEN622"
+>16.1. 2015</A
 ></H3
 ><P
 ></P
 ><UL
+><LI
+><P
+>Introduce mod_ipv6calc for Apache web server (&#62;= 0.99.1, released 2015)</P
+></LI
 ><LI
 ><P
 >Add support for <A
@@ -3659,8 +3927,8 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN585"
->15.2. 2014</A
+NAME="AEN637"
+>16.2. 2014</A
 ></H3
 ><P
 ></P
@@ -3676,8 +3944,8 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN590"
->15.3. 2013</A
+NAME="AEN642"
+>16.3. 2013</A
 ></H3
 ><P
 ></P
@@ -3701,8 +3969,8 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN599"
->15.4. 2011</A
+NAME="AEN651"
+>16.4. 2011</A
 ></H3
 ><P
 ></P
@@ -3742,8 +4010,8 @@ CLASS="SECT2"
 ><HR><H3
 CLASS="SECT2"
 ><A
-NAME="AEN616"
->15.5. 2010 and older</A
+NAME="AEN668"
+>16.5. 2010 and older</A
 ></H3
 ><P
 >TODO</P

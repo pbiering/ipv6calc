@@ -5,7 +5,7 @@
 <!ENTITY % output.print.bmp "IGNORE">
  ]>
 
-<!-- SGML file was created by LyX 2.1.3
+<!-- SGML file was created by LyX 2.1.4
   See http://www.lyx.org/ for more information -->
 <article lang="en">
 <articleinfo>
@@ -19,7 +19,7 @@
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freshmeat.net/projects/ipv6calc/">freshmeat / ipv6calc</ulink> page (not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 0.99.1 (released &gt; 2015-07-25)</para></sect2><sect2>
+<para>Latest version since last update of this page is 0.99.1 (released &gt; 2015-09-05)</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
 <listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem></itemizedlist></sect2><sect2>
@@ -657,12 +657,13 @@ ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4
 <screen>
 <![CDATA[$ ipv6calc --action -?
 ipv6calc: version 0.99.1 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
-(P) & (C) 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
 
  Available action types:
   auto             : Automatic selection of action (default)
   geneui64         : Converts a MAC address to an EUI-64 address
   conv6to4         : Converts IPv4 address <-> 6to4 IPv6 address (prefix)
+  convnat64        : Converts IPv4 address <-> NAT64 IPv6 address
   genprivacyiid    : Generates a privacy interface ID out of a given one (arg1) and a token (arg2)
   prefixmac2ipv6   : Generates an IPv6 address out of a prefix and a MAC address
   anonymize        : Anonymize IPv4/IPv6 address without loosing much information
@@ -1193,7 +1194,7 @@ ALL  46233 62292 0 2397 3525 40198 97 16 0 0 129 839 61074 0 0 0 0 0 16 51 0 0 0
 
 a909:390a:909a:81d9:a909:4291:c02d:5d1d "CZ/43037/RIPENCC/keep-type-asn-cc" - [25/Jul/2015:12:59:00 +0200] "GET /robots.txt HTTP/1.1" 200 33 "-" "Mozilla/5.0 (compatible; SeznamBot/3.2; +http://fulltext.sblog.cz/)" 
 ]]></screen></sect2><sect2>
-<title>Post-Analysis in case of anonymization method &ldquo;keep-type-asn-cc&rdquo;</title>
+<title>Post-analysis in case of anonymization method &ldquo;keep-type-asn-cc&rdquo;</title>
 <para>In case &ldquo;keep-type-asn-cc&rdquo; is configured and also working (required databases are available), related information of anonymized IP addresses can be retrieved using &ldquo;ipv6calc&rdquo; or &ldquo;ipv6logstats&rdquo;.</para><screen>
 <![CDATA[$ ipv6calc -q -m -i 252.176.92.172
 IPV4=252.176.92.172

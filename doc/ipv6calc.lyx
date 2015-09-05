@@ -173,7 +173,7 @@ Latest version
 \end_layout
 
 \begin_layout Standard
-Latest version since last update of this page is 0.99.1 (released > 2015-07-25)
+Latest version since last update of this page is 0.99.1 (released > 2015-09-05)
 \end_layout
 
 \begin_layout Subsection
@@ -3883,7 +3883,7 @@ S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE
 
 \begin_layout Code
 
-(P) & (C) 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
 \end_layout
 
 \begin_layout Code
@@ -3908,6 +3908,11 @@ S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE
 \begin_layout Code
 
   conv6to4         : Converts IPv4 address <-> 6to4 IPv6 address (prefix)
+\end_layout
+
+\begin_layout Code
+
+  convnat64        : Converts IPv4 address <-> NAT64 IPv6 address
 \end_layout
 
 \begin_layout Code
