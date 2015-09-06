@@ -8,7 +8,7 @@
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>6.1</revnumber> <date>2015-09-05</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>6.2bis</revnumber> <date>2015-09-06</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
@@ -18,7 +18,7 @@
 <para>Latest version since last update of this page is 0.99.1 (released 2015-09-05)</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
-<listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem></itemizedlist></sect2><sect2>
+<listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;mod_ipv6calc&rdquo;: Apache module</para></listitem></itemizedlist></sect2><sect2>
 <title>Included databases</title>
 <para>If not disabled during compiling of the tool, following databases are statically included, since version 0.95.0 internally mentioned as &ldquo;BuiltIn&rdquo;:</para><itemizedlist>
 <listitem><para>IEEE IAB, OUI, OUI-36 databases (for decoding vendor part of MAC/EUI-48/EUI-64)</para></listitem><listitem><para>IPv4 assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for selecting proper registry in ipv6calcweb.cgi and IPv4 anonymization)</para></listitem><listitem><para>IPv6 assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for selecting proper registry in ipv6calcweb.cgi and IPv6 anonymization)</para></listitem><listitem><para>ASN assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for IPv4/IPv6 anonymization)</para></listitem></itemizedlist></sect2><sect2>
@@ -55,17 +55,19 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 --without dbip
 --without external
 --without shared
+--without mod_ipv6calc
 ]]></screen></sect3><sect3>
 <title>as RPM</title>
 <para>Currently only on <ulink url="http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc">rpmfind / ipv6calc</ulink>, but there are plans to publish at least source RPMS on <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink> some day.</para></sect3></sect2><sect2>
 <title>Ready to use packages for several operating systems:</title>
 <sect3>
 <title>Fedora Linux</title>
-<para>Fedora 21 is the current developing platform, so use given hints above to create a RPM. Since Fedora 7 this package is included by default.</para>
+<para>Fedora 22 is the current developing platform, so use given hints above to create a RPM. Since Fedora 7 this package is included by default.</para>
 <para>See also <ulink url="https://admin.fedoraproject.org/pkgdb/package/ipv6calc/">FedoraProject / Package / ipv6calc</ulink></para></sect3><sect3>
 <title>Red Hat Enterprise Linux and clones</title>
 <para>It's tested by the developer that creation of the RPM is working fine on RHEL 4.</para><itemizedlist>
-<listitem><para>RHEL/CentOS 5 has the package included by default (but an rather old version - there are plans to provide newer releases via EPEL, too)</para></listitem><listitem><para>RHEL/CentOS 6/7: available since September 2014 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink> EPEL</para></listitem></itemizedlist><para>CentOS 5/6/7 are also platforms for regression tests.</para></sect3><sect3>
+<listitem><para>RHEL/CentOS 5 has the package included by default (but an rather old version)</para><itemizedlist>
+<listitem><para>RPMs of newer releases are available as test builds on koji, see related URL in announcements <ulink url="https://lists.deepspace6.net/pipermail/ipv6calc-announce/">ipv6calc-announce / list archive</ulink></para></listitem></itemizedlist></listitem><listitem><para>RHEL/CentOS 6/7: available since September 2014 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink></para></listitem></itemizedlist><para>CentOS 5/6/7 are also platforms for regression tests.</para></sect3><sect3>
 <title>Gentoo/Funtoo</title>
 <para>Package is maintained, nevertheless, Funtoo is used as platform for regression tests.</para></sect3><sect3>
 <title>Ubuntu</title>
