@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.307 2015/09/05 10:06:06 ds6peter Exp $
+# $Id: ipv6calc.spec,v 1.308 2015/09/20 15:39:25 ds6peter Exp $
 
 # shared library support (deselectable)
 %if "%{?_without_shared:0}%{?!_without_shared:1}" == "1"
@@ -91,6 +91,7 @@ Also this package contains additional programs
     (examples included for use with analog)
  - ipv6logstats: create statistics from list of IPv4/IPv6 addresses
     (examples included for use with gnu-plot)
+ - mod_ipv6calc: Apache module for anonymization/information logging on-the-fly
 
 Support for following databases
  - IP2Location	%{?enable_ip2location:ENABLED}%{?!enable_ip2location:DISABLED}
@@ -139,8 +140,8 @@ Default restricts access to localhost
 Summary: 	Apache module for ipv6calc
 Group:		Applications/Internet
 BuildRequires:	httpd-devel psmisc curl
-Requires:	httpd >= 2.4.0
-Requires:	httpd <= 2.4.99999
+Requires:	httpd >= .0
+Requires:	httpd <= .99999
 Requires:	ipv6calc = %{version}-%{release}
 %if %{enable_shared}
 Requires:	ipv6calc-libs = %{version}-%{release}}

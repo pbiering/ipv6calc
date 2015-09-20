@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.411 2015/09/05 06:14:58 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.412 2015/09/20 15:39:25 ds6peter Exp $ 
  */
 
 Info:
@@ -11,6 +11,7 @@ Info:
 --------------------------------------------------------------------
 20150905/PB
 	databases: update, fix ieee parser ignoring "
+	tag version 0.99.1
 
 20150823/PB
 	ipv6calc: autoselect IPv4 output on action 'conv6to4' if undefined
