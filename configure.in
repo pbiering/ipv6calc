@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.150 2015/07/20 20:24:31 ds6peter Exp $
+dnl Version  : $Id: configure.in,v 1.151 2016/02/03 06:48:31 ds6peter Exp $
 dnl Copyright: 2001-2015 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
@@ -106,6 +106,25 @@ AC_ARG_ENABLE([compiler-warning-to-error],
 			])
 		CFLAGS="$CFLAGS_SAVE"
 	])
+
+dnl *************************************************
+dnl add -Wno-unused-const-variable if supported
+dnl *************************************************
+AC_MSG_RESULT([*** check for CFLAGS: -Wno-unused-const-variable])
+CFLAGS_SAVE="$CFLAGS"
+CFLAGS="$CFLAGS -Wno-unused-const-variable"
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+	     [[int a=1;]])
+	],
+	[
+		AC_MSG_RESULT([*** CFLAGS supported: -Wno-unused-const-variable])
+		CFLAGS_EXTRA="-Wno-unused-const-variable"
+	],
+	[
+		AC_MSG_WARN([*** missing CFLAGS support: -Wno-unused-const-variable])
+		CFLAGS_EXTRA="-Wformat"
+	])
+CFLAGS="$CFLAGS_SAVE"
 
 
 dnl *************************************************
