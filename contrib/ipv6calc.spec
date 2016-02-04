@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Copyright  : 2001-2015 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.310 2016/02/03 06:51:36 ds6peter Exp $
+# Copyright  : 2001-2016 by Peter Bieringer <pb@bieringer.de>
+# $Id: ipv6calc.spec,v 1.311 2016/02/04 07:07:59 ds6peter Exp $
 
 # shared library support (deselectable)
 %if "%{?_without_shared:0}%{?!_without_shared:1}" == "1"
@@ -11,7 +11,7 @@
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
 Version:	0.99.1
-Release: 	9%{?dist}
+Release: 	15%{?dist}
 Group:		Applications/Text
 URL:		http://www.deepspace6.net/projects/%{name}.html
 License:	GPLv2
@@ -21,9 +21,9 @@ BuildRequires:	perl(Digest::MD5), perl(Digest::SHA1), perl(URI::Escape)
 BuildRequires:	perl(strict), perl(warnings)
 Requires:	perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 %if %{enable_shared}
-Provides: 	ipv6calc-libs = %{version}-%{release}}
+Provides:	ipv6calc-libs = %{version}-%{release}}
 %else
-Conflicts: 	ipv6calc-libs
+Conflicts:	ipv6calc-libs
 %endif
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -137,7 +137,7 @@ Default restricts access to localhost
 
 %if %{enable_mod_ipv6calc}
 %package mod_ipv6calc
-Summary: 	Apache module for ipv6calc
+Summary:	Apache module for ipv6calc
 Group:		Applications/Internet
 BuildRequires:	httpd-devel psmisc curl
 Requires:	httpd >= .0
@@ -222,7 +222,7 @@ install -d %{buildroot}%{_sysconfdir}/httpd/conf.d
 install -d %{buildroot}%{_localstatedir}/www/cgi-bin
 
 install ipv6calcweb/ipv6calcweb.conf %{buildroot}%{_sysconfdir}/httpd/conf.d
-install -m 555 ipv6calcweb/ipv6calcweb.cgi  %{buildroot}%{_localstatedir}/www/cgi-bin
+install -m 755 ipv6calcweb/ipv6calcweb.cgi  %{buildroot}%{_localstatedir}/www/cgi-bin
 
 
 %clean
@@ -261,6 +261,8 @@ rm -rf %{buildroot}
 %{external_db}
 
 # examples
+%attr(755,-,-) %{_datadir}/%{name}/examples/*/*.pl
+%attr(755,-,-) %{_datadir}/%{name}/examples/*/*.sh
 %{_datadir}/%{name}/examples/*
 
 
@@ -274,7 +276,7 @@ rm -rf %{buildroot}
 
 %defattr(644,root,root,755)
 
-%attr(555,-,-) %{_localstatedir}/www/cgi-bin/ipv6calcweb.cgi
+%attr(755,-,-) %{_localstatedir}/www/cgi-bin/ipv6calcweb.cgi
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
 
 
@@ -292,7 +294,18 @@ rm -rf %{buildroot}
 %attr(755,-,-) %{_httpd_moddir}/mod_ipv6calc.so
 
 
+%post
+/usr/sbin/ldconfig
+
+
+%postun
+/usr/sbin/ldconfig
+
+
 %changelog
+* Thu Feb 04 2015 Peter Bieringer <pb@bieringer.de>
+- add post/postun, minor fixes
+
 * Thu Jul 30 2015 Peter Bieringer <pb@bieringer.de>
 - add automatic RPM license feature detection
 

@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.413 2016/02/03 06:48:31 ds6peter Exp $ 
+ *  $Id: ChangeLog,v 1.414 2016/02/04 07:07:59 ds6peter Exp $ 
  */
 
 Info:
@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20160204/PB
+	man/ipv6logstats.8: cosmetic fixes
+	contrib/ipv6calc.spec[.in]: add post/postun, minor fixes
+
 20160203/PB
 	use -Wno-unused-const-variable if available
 
