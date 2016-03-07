@@ -13,45 +13,57 @@ Takes data from stdin, proceed it to stdout
 .LP 
 General options:
 .TP 
-\fB[\-d|\-\-debug \fIDEBUGVALUE\fR\fB]\fR : debug value (bitwise like) can also be set by IPV6CALC_DEBUG environment value
+\fB[\-d|\-\-debug \fIDEBUGVALUE\fR\fB]\fR
+debug value (bitwise like) can also be set by IPV6CALC_DEBUG environment value
 .TP 
-\fB[\-v|\-\-version [\-v [\-v]]]\fR   : version information (2 optional detail levels)
+\fB[\-v|\-\-version [\-v [\-v]]]\fR
+version information (2 optional detail levels)
 .TP 
-\fB[\-v|\-\-version \-h]\fR          : explanation of feature tokens
-<TP
-\fB[\-V|\-\-verbose]\fR             : be more verbose
+\fB[\-v|\-\-version \-h]\fR
+explanation of feature tokens
+.TP
+\fB[\-V|\-\-verbose]\fR
+be more verbose
 .TP 
-\fB[\-h|\-\-help|\-?]\fR             : this online help
+\fB[\-h|\-\-help|\-?]\fR
+this online help
 .LP 
 Performance options:
 .TP 
-\fB[\-n|\-\-nocache]\fR            : disable caching
+\fB[\-n|\-\-nocache]\fR
+disable caching
 .TP 
-\fB[\-c|\-\-cachelimit \fIVALUE\fR\fB]\fR : set cache limit
-.br 
-                      default: \fB20\fR
-.br 
-                      maximum: \fB200\fR
+\fB[\-c|\-\-cachelimit \fIVALUE\fR\fB]\fR
+set cache limit; default: \fB20\fR, maximum: \fB200\fR.
 .LP 
 Output options:
 .TP 
-\fB[\-\-out \fIOUTPUTTYPE\fR\fB]\fR : specify output type
-.br 
-   \fBaddrtype\fR       : Address type
-.br 
-   \fBouitype\fR        : OUI (IEEE) type
-.br 
-   \fBipv6addrtype\fR   : IPv6 address type
-.br 
-   \fBany\fR            : any type
-
+\fB[\-\-out \fIOUTPUTTYPE\fR\fB]\fR
+Specify output type:
+.RS
+.TP
+\fBaddrtype\fR
+Address type
+.TP 
+\fBouitype\fR
+OUI (IEEE) type
+.TP
+\fBipv6addrtype\fR
+IPv6 address type
+.TP 
+\fBany\fR
+any type
+.RE
 .SH "SEE ALSO"
 ipv6calc(8)
 .SH "REPORTING BUGS"
 Report bugs to <ipv6calc@lists.deepspace6.net> or to the authors.
-.br 
-Homepage: http://www.deepspace6.net/projects/ipv6calc.html
-.SH "COPYRIGHT"
+.PP 
+Homepage:
+.UR http://www.deepspace6.net/projects/ipv6calc.html
+http://www.deepspace6.net/projects/ipv6calc.html
+.UE
+.SH "LICENSE"
 GPLv2
 .SH "AUTHORS"
 Peter Bieringer <pb@bieringer.de>

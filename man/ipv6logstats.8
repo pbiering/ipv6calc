@@ -6,48 +6,67 @@ cat /var/log/httpd/access_log | \fBipv6logstats\fR [\fIOPTIONS\fR]
 .SH "SYNTAX"
 ipv6logstats [logfile]
 .SH "DESCRIPTION"
-Takes web server log data (or any other data which has IPv4/v6 address in first column) from stdin and print statistics table/list (depending on option) to stdout
+Takes web server log data (or any other data which has IPv4/v6 address
+in first column) from stdin and print statistics table/list
+(depending on option) to stdout
 .SH "OPTIONS"
 .LP 
 General options:
 .TP 
-\fB[\-d|\-\-debug \fIDEBUGVALUE\fR\fB]\fR : debug value (bitwise like) can also be set by IPV6CALC_DEBUG environment value
+\fB[\-d|\-\-debug \fIDEBUGVALUE\fR\fB]\fR
+debug value (bitwise like) can also be set by IPV6CALC_DEBUG environment value
 .TP 
-\fB[\-v|\-\-version [\-v [\-v]]]\fR   : version information (2 optional detail levels)
+\fB[\-v|\-\-version [\-v [\-v]]]\fR
+version information (2 optional detail levels)
 .TP 
-\fB[\-v|\-\-version \-h]\fR          : explanation of feature tokens
-<TP
-\fB[\-V|\-\-verbose]\fR             : be more verbose
+\fB[\-v|\-\-version \-h]\fR
+explanation of feature tokens
+.TP
+\fB[\-V|\-\-verbose]\fR
+be more verbose
 .TP 
-\fB[\-h|\-\-help|\-?]\fR             : this online help
+\fB[\-h|\-\-help|\-?]\fR
+this online help
 .TP 
-\fB[\-q|\-\-quiet]\fR               : be more quiet
+\fB[\-q|\-\-quiet]\fR
+be more quiet
 .LP 
 External database options (depending on compiled\-in suppport):
 .TP 
-\fB[\-\-db\-ip2location\-disable      ]\fR : IP2Location support disabled
+\fB[\-\-db\-ip2location\-disable]\fR
+IP2Location support disabled
 .TP 
-\fB[\-\-db\-ip2location\-dir\fR \fIDIRECTORY\fR\fB]\fR : IP2Location database directory (default: /usr/share/IP2Location)
+\fB[\-\-db\-ip2location\-dir\fR \fIDIRECTORY\fR\fB]\fR
+IP2Location database directory (default: /usr/share/IP2Location)
 .TP 
-\fB[\-\-db\-geoip\-disable            ]\fR : GeoIP support disabled
+\fB[\-\-db\-geoip\-disable]\fR
+GeoIP support disabled
 .TP 
-\fB[\-\-db\-geoip\-dir\fR       \fIDIRECTORY\fR\fB]\fR : GeoIP database directory (default: /usr/share/GeoIP)
+\fB[\-\-db\-geoip\-dir\fR \fIDIRECTORY\fR\fB]\fR
+GeoIP database directory (default: /usr/share/GeoIP)
 .LP 
 Special options:
 .TP 
-\fB[\-u|\-\-unknown]\fR             : print unknown IP addresses to stderr
+\fB[\-u|\-\-unknown]\fR
+print unknown IP addresses to stderr
 .TP 
-\fB[\-c|\-\-columns]\fR             : print statistics in columns (1)
+\fB[\-c|\-\-columns]\fR
+print statistics in columns (1)
 .TP 
-\fB[\-N|\-\-column\-numbers]\fR      : print column numbers
+\fB[\-N|\-\-column\-numbers]\fR
+print column numbers
 .TP 
-\fB[\-n|\-\-noheader]\fR            : don't print header in columns mode (1)
+\fB[\-n|\-\-noheader]\fR
+don't print header in columns mode (1)
 .TP 
-\fB[\-o|\-\-onlyheader]\fR          : print only header in columns mode (1)
+\fB[\-o|\-\-onlyheader]\fR
+print only header in columns mode (1)
 .TP 
-\fB[\-p|\-\-prefix\fR \fITOKEN\fR\fB]\fR        : print token as prefix (1)
+\fB[\-p|\-\-prefix\fR \fITOKEN\fR\fB]\fR
+print token as prefix (1)
 .TP 
-\fB[\-s|\-\-simple]\fR              : disable extended statistic (CountryCode/ASN)
+\fB[\-s|\-\-simple]\fR
+disable extended statistic (CountryCode/ASN)
 .BR 
  (1) unsupported for CountryCode & ASN statistics
 
@@ -55,69 +74,48 @@ Special options:
 .SH "EXAMPLES"
 .LP 
 Column mode:
-.TP 
+.LP 
 echo "2001:a60:1400:1201:221:70ff:fe01:2345" | ./ipv6logstats \-c \-q
-.br 
+.nf 
 ALL IPv4 IPv6 UNKNOWN IPv4/APNIC IPv4/ARIN IPv4/RIPE IPv4/LACNIC IPv4/AFRINIC IPv4/UNKNOWN IPv6/6bone IPv6/IANA IPv6/APNIC IPv6/ARIN IPv6/RIPE IPv6/LACNIC IPv6/AFRINIC IPv6/RESERVED IPv6/UNKNOWN IPv6/6to4/IANA IPv6/6to4/APNIC IPv6/6to4/ARIN IPv6/6to4/RIPE IPv6/6to4/LACNIC IPv6/6to4/AFRINIC IPv6/6to4/RESERVED IPv6/6to4/UNKNOWN IPv6/Teredo/IANA IPv6/Teredo/APNIC IPv6/Teredo/ARIN IPv6/Teredo/RIPE IPv6/Teredo/LACNIC IPv6/Teredo/AFRINIC IPv6/Teredo/RESERVED IPv6/Teredo/UNKNOWN IPv6/NAT64/IANA IPv6/NAT64/APNIC IPv6/NAT64/ARIN IPv6/NAT64/RIPE IPv6/NAT64/LACNIC IPv6/NAT64/AFRINIC IPv6/NAT64/RESERVED IPv6/NAT64/UNKNOWN IPv6/IID/Global IPv6/IID/Random IPv6/IID/Manual IPv6/IID/ISATAP IPv6/IID/Unknown #Version(4.0)
-.br 
+ 
 1 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 #4.0
 .LP 
 Row mode:
-.TP 
+.nf
 echo "2001:a60:1400:1201:221:70ff:fe01:2345" | ./ipv6logstats \-q 
-.br 
 *Version             4.0
-.br 
 *DateTime: 2014:07:23 19:59:56+0000 GMT
-.br 
 *UnixTime: 1406145596
-.br 
-.br 
 ALL                  1
-.br 
 IPv4                 0
-.br 
 IPv6                 1
-.br 
-.br 
 IPv6/RIPE            1
-.br 
 IPv6/IID/Global      1
-.br 
-.br 
 *3*CC\-code\-proto/DE/ALL   1
-.br 
 *3*CC\-code\-proto/DE/IPv4  0
-.br 
 *3*CC\-code\-proto/DE/IPv6  1
-.br 
 *3*CC\-code\-proto\-list/DE  1 0 1
-.br 
 *3*CC\-proto\-code/ALL/DE   1
-.br 
 *3*CC\-proto\-code/IPv6/DE  1
-.br 
 *3*CC\-proto\-code\-list/ALL  1 0 1
-.br 
 *3*AS\-num\-proto/8767/ALL   1
-.br 
 *3*AS\-num\-proto/8767/IPv4  0
-.br 
 *3*AS\-num\-proto/8767/IPv6  1
-.br 
 *3*AS\-num\-proto\-list/8767  1 0 1
-.br 
 *3*AS\-proto\-num/ALL/8767   1
-.br 
 *3*AS\-proto\-num/IPv6/8767  1
-.br 
 *3*AS\-proto\-num\-list/ALL  1 0 1
+.fi
 .SH "SEE ALSO"
 ipv6calc(8)
 .SH "REPORTING BUGS"
 Report bugs to <ipv6calc@lists.deepspace6.net> or to the authors.
-.br 
-Homepage: http://www.deepspace6.net/projects/ipv6calc.html
+.PP 
+Homepage:
+.UR http://www.deepspace6.net/projects/ipv6calc.html
+http://www.deepspace6.net/projects/ipv6calc.html
+.UE
 .SH "COPYRIGHT"
 GPLv2
 .SH "AUTHORS"

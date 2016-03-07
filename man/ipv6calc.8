@@ -1,111 +1,136 @@
 .TH "ipv6calc" "8" "0.99.0" "Peter Bieringer <pb@bieringer.de>" "system administration"
 .SH "NAME"
-ipv6calc
+ipv6calc \- format and calculate IPv6/IPv4/MAC
 .SH "SYNOPSIS"
-ipv6calc [\fIOPTIONS\fP] \fB<input data>\fR
+ipv6calc [\fIOPTIONS\fP] [\fB<input data>\fR]
 
-or in pipe mode
-
-echo \fB<input data>\fR | ipv6calc [\fIOPTIONS\fP]
 .SH "DESCRIPTION"
-.LP 
-This program formats and calculates IPv6/IPv4/MAC addresses and can do many more tricky things, e.g. includes a pipe filter capability.
+.PP 
+This program formats and calculates IPv6/IPv4/MAC addresses and can do
+many more tricky things, e.g. includes a pipe filter capability.
 .SH "OPTIONS"
+If no data is presented as command-line arguments, data is read from
+standard input.
 .LP 
 General options:
 .TP 
-\fB[\-d|\-\-debug \fIDEBUGVALUE\fR\fB]\fR : debug value (bitwise like) can also be set by IPV6CALC_DEBUG environment value
+\fB[\-d|\-\-debug \fIDEBUGVALUE\fR\fB]\fR
+debug value (bitwise like) can also be set by IPV6CALC_DEBUG environment value
 .TP 
-\fB[\-v|\-\-version [\-v [\-v]]]\fR   : version information (2 optional detail levels)
+\fB[\-v|\-\-version [\-v [\-v]]]\fR
+version information (2 optional detail levels)
 .TP 
-\fB[\-v|\-\-version \-h]\fR          : explanation of feature tokens
-<TP
-\fB[\-V|\-\-verbose]\fR             : be more verbose
+\fB[\-v|\-\-version \-h]\fR
+explanation of feature tokens
+.TP
+\fB[\-V|\-\-verbose]\fR
+be more verbose
 .TP 
-\fB[\-h|\-\-help|\-?]\fR             : this online help
+\fB[\-h|\-\-help|\-?]\fR
+this online help
 .LP 
 External database options (depending on compiled\-in suppport):
 .TP 
-\fB[\-\-db\-ip2location\-disable      ]\fR : IP2Location support disabled
+\fB[\-\-db\-ip2location\-disable]\fR
+IP2Location support disabled
 .TP 
-\fB[\-\-db\-ip2location\-dir\fR \fIDIRECTORY\fR\fB]\fR : IP2Location database directory (default: /usr/share/IP2Location)
+\fB[\-\-db\-ip2location\-dir\fR \fIDIRECTORY\fR\fB]\fR
+IP2Location database directory (default: /usr/share/IP2Location)
 .TP 
-\fB[\-\-db\-geoip\-disable            ]\fR : GeoIP support disabled
+\fB[\-\-db\-geoip\-disable]\fR
+GeoIP support disabled
 .TP 
-\fB[\-\-db\-geoip\-dir\fR       \fIDIRECTORY\fR\fB]\fR : GeoIP database directory (default: /usr/share/GeoIP)
+\fB[\-\-db\-geoip\-dir\fR \fIDIRECTORY\fR\fB]\fR
+GeoIP database directory (default: /usr/share/GeoIP)
 .LP 
 Special options:
 .TP 
-\fB[\-q|\-\-quiet]\fR               : be more quiet (auto\-enabled in pipe mode)
+\fB[\-q|\-\-quiet]\fR
+be more quiet (auto\-enabled in pipe mode)
 .TP 
-\fB[\-f|\-\-flush]\fR               : flush each line in pipe mode
+\fB[\-f|\-\-flush]\fR
+flush each line in pipe mode
 .LP 
 Usage with new style options:
 .TP 
-\fB[\-\-in|\-I\fR \fIINPUT\-TYPE\fR\fB]\fR   : specify input  type (default: autodetect)
+\fB[\-\-in|\-I\fR \fIINPUT\-TYPE\fR\fB]\fR
+specify input  type (default: autodetect)
 .TP 
-\fB[\-\-out|\-O\fR \fIOUTPUT\-TYPE\fR\fB]\fR : specify output type (sometimes: autodetect)
+\fB[\-\-out|\-O\fR \fIOUTPUT\-TYPE\fR\fB]\fR
+specify output type (sometimes: autodetect)
 .TP 
-\fB[\-\-action|\-A\fR \fIACTION\fR\fB]\fR   : specify action (default: format conversion, sometimes: autodetect)
+\fB[\-\-action|\-A\fR \fIACTION\fR\fB]\fR
+specify action (default: format conversion, sometimes: autodetect)
 .TP 
-\fB[<format option> ...]\fR : specify format options
+\fB[<format option> ...]\fR
+specify format options
 .TP 
-\fB<input data> [...]\fR    : input data
+\fB<input data> [...]\fR
+input data
+.RS
 .TP 
-  Available input  types:  \fB[\-m] \-I|\-\-in     \-?|\-h|\-\-help\fR
+Available input  types:
+\fB[\-m] \-I|\-\-in     \-?|\-h|\-\-help\fR
 .TP 
-  Available output types:  \fB[\-m] \-O|\-\-out    \-?|\-h|\-\-help\fR
+Available output types:
+\fB[\-m] \-O|\-\-out    \-?|\-h|\-\-help\fR
 .TP 
-  Available action types:  \fB[\-m] \-A|\-\-action \-?|\-h|\-\-help\fR
+Available action types:
+\fB[\-m] \-A|\-\-action \-?|\-h|\-\-help\fR
+.RE
 .LP 
  Other usage:
 .TP 
-\fB\-\-showinfo|\-i [\-\-machine_readable|\-m]\fR : show information about input data
+\fB\-\-showinfo|\-i [\-\-machine_readable|\-m]\fR
+show information about input data
 .TP 
-\fB\-\-showinfo|\-i \-\-show_types\fR            : show available types on '\-m'
+\fB\-\-showinfo|\-i \-\-show_types\fR
+show available types on '\-m'
 .LP 
-Usage with shortcut options: <shortcut option> [<format option> ...] <input data>
-.br 
-for more information and available format options use: <shortcut option> \-?|\-h|\-\-help
-.TP 
+Usage with shortcut options:
+<shortcut option> [<format option> ...] <input data>
+.sp 
+For more information and available format options use:
+<shortcut option> \-?|\-h|\-\-help
+.PP 
 \fB\-r|\-\-addr2ip6_int\fR (\-O revnibbles.int)
-.TP 
+.PP 
 \fB\-r|\-\-addr_to_ip6int\fR (\-O revnibbles.int)
-.TP 
+.PP 
 \fB\-a|\-\-addr2ip6_arpa\fR (\-O revnibbles.arpa)
-.TP 
+.PP 
 \fB\-a|\-\-addr_to_ip6arpa\fR (\-O revnibbles.arpa)
-.TP 
+.PP 
 \fB\-b|\-\-addr_to_bitstring\fR (\-O bitstring)
-.TP 
+.PP 
 \fB   \-\-addr2compaddr\fR (\-\-printcompressed)
-.TP 
+.PP 
 \fB   \-\-addr_to_compressed\fR (\-\-printcompressed)
-.TP 
+.PP 
 \fB   \-\-addr2uncompaddr\fR (\-\-printuncompressed)
-.TP 
+.PP 
 \fB   \-\-addr_to_uncompressed\fR (\-\-printuncompressed)
-.TP 
+.PP 
 \fB   \-\-addr_to_base85\fR (\-I ipv6addr \-O base85)
-.TP 
+.PP 
 \fB   \-\-base85_to_addr\fR (\-I base85 \-O ipv6addr)
-.TP 
+.PP 
 \fB   \-\-mac_to_eui64\fR (\-I mac \-O eui64)
-.TP 
+.PP 
 \fB   \-\-addr2fulluncompaddr\fR (\-\-printfulluncompressed)
-.TP 
+.PP 
 \fB   \-\-addr_to_fulluncompressed\fR (\-\-printfulluncompressed)
-.TP 
+.PP 
 \fB   \-\-addr2if_inet6\fR (\-I ipv6addr \-O ifinet6)
-.TP 
+.PP 
 \fB   \-\-addr_to_ifinet6\fR (\-I ipv6addr \-O ifinet6)
-.TP 
+.PP 
 \fB   \-\-if_inet62addr\fR (\-I ifinet6 \-O ipv6addr \-\-printcompressed)
-.TP 
+.PP 
 \fB   \-\-ifinet6_to_compressed\fR (\-I ifinet6 \-O ipv6addr \-\-printcompressed)
-.TP 
+.PP 
 \fB   \-\-eui64_to_privacy\fR (\-I iid_token \-O iid_token \-A genprivacyiid)
-.TP 
+.PP 
 \fB   \-\-ipv4_to_6to4addr\fR (\-I ipv4 \-O ipv6addr \-A conv6to4)
 .LP 
 See inline help or documentation for more.
@@ -117,18 +142,19 @@ Homepage: http://www.deepspace6.net/projects/ipv6calc.html
 To run this program the standard way type:
 .LP 
 ipv6calc \-\-showinfo \-i \-m ::1
-.TP 
+.PP 
 ipv6calc \-\-showinfo \-m 127.0.0.1
-.TP 
+.PP 
 ipv6calc \-\-showinfo \-\-show_types
-.TP 
+.PP 
 ipv6calc \-\-ipv4_to_6to4addr 127.0.0.1
-.TP 
+.PP 
 ipv6calc \-\-addr_to_uncompressed ::1
 .LP 
 Usage of filters in pipe mode:
-.TP 
+.RS 
 cat <Apache\-Logfile> | ipv6calc \-E ipv6.db.cc=US,iid\-random
+.RE
 .SH "COPYRIGHT"
 GPLv2
 .SH "AUTHORS"
