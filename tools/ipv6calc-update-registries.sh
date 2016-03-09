@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/databases/registries
 # File       : update-registries.sh
-# Version    : $Id: ipv6calc-update-registries.sh,v 1.1 2015/02/15 20:19:37 ds6peter Exp $
-# Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id: ipv6calc-update-registries.sh,v 1.2 2016/03/09 21:21:24 ds6peter Exp $
+# Copyright  : 2002-2016 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces ../ipv4-assignment/update-ipv4-assignment.sh
 #               replaces ../ipv6-assignment/update-ipv6-assignment.sh
 #
@@ -27,10 +27,11 @@ END
 
 help() {
 	cat <<END
-Usage: $(basename "$0") [-D <DST-DIR>] [-h|?] [-d]
+Usage: $(basename "$0") [-D <DST-DIR>] [-h|?] [-d] [-q]
 	-D <DST-DIR>	destination directory (default: internal sub-directories)
 
 	-d		dry-run/debug
+	-q		more quiet (default if called by cron)
 	-h|?		this online help
 END
 }
@@ -40,7 +41,7 @@ dir_dst=""
 dry_run=0
 
 ## parse options
-while getopts "\?hdD:" opt; do 
+while getopts "\?hdqD:" opt; do 
 	case $opt in
 	    D)
 		if [ -d "$OPTARG" ]; then
@@ -53,6 +54,9 @@ while getopts "\?hdD:" opt; do
 	    d)
 		dry_run=1
 		;;
+	    q)
+		quiet=1
+		;;
 	    \?|h)
 		help
 		exit 1
@@ -63,6 +67,14 @@ while getopts "\?hdD:" opt; do
 		;;
 	esac
 done
+
+if [ ! -t 0 ]; then
+	quiet=1
+fi
+
+if [ "$quiet" = "1" ]; then
+	wget_options="--no-verbose"
+fi
 
 if [ -z "$dir_dst" ]; then
 	echo "INFO  : download new version of files to defined sub-directories"
@@ -83,10 +95,10 @@ get_urls | while read subdir url filename format flag; do
 	fi
 
 	if [ "$flag" = "out" ]; then
-		[ $dry_run -ne 1 ] && wget $url$filename -O $filename
+		[ $dry_run -ne 1 ] && wget $wget_options $url$filename -O $filename
 		retval=$?
 	else
-		[ $dry_run -ne 1 ] && wget $url$filename --timestamping --retr-symlinks
+		[ $dry_run -ne 1 ] && wget $wget_options $url$filename --timestamping --retr-symlinks
 		retval=$?
 	fi
 	popd >/dev/null
