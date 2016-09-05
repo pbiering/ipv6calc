@@ -1,7 +1,9 @@
-#LyX 2.1 created this file. For more info see http://www.lyx.org/
-\lyxformat 474
+#LyX 2.2 created this file. For more info see http://www.lyx.org/
+\lyxformat 508
 \begin_document
 \begin_header
+\save_transient_properties true
+\origin unavailable
 \textclass docbook
 \use_default_options false
 \maintain_unincluded_children false
@@ -9,16 +11,16 @@
 \language_package default
 \inputencoding auto
 \fontencoding global
-\font_roman default
-\font_sans default
-\font_typewriter default
-\font_math auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
 \font_default_family default
 \use_non_tex_fonts false
 \font_sc false
 \font_osf false
-\font_sf_scale 100
-\font_tt_scale 100
+\font_sf_scale 100 100
+\font_tt_scale 100 100
 \graphics default
 \default_output_format default
 \output_sync 0
@@ -300,6 +302,10 @@ target "http://www.maxmind.com/"
 \end_inset
 
 
+\begin_inset Separator latexpar
+\end_inset
+
+
 \end_layout
 
 \begin_deeper
@@ -323,6 +329,10 @@ LatexCommand href
 name "IP2Location"
 target "http://www.ip2.location.com/"
 
+\end_inset
+
+
+\begin_inset Separator latexpar
 \end_inset
 
 
@@ -404,7 +414,7 @@ Copyright
 \end_layout
 
 \begin_layout Standard
-(C) 2001 - 2015 by Dr.
+(C) 2001 - 2016 by Dr.
  Peter Bieringer
 \end_layout
 
@@ -436,39 +446,11 @@ Latest version of sources
 \end_layout
 
 \begin_layout Itemize
-Via CVS at 
+Via GitHub (since 2016-09-05) at 
 \begin_inset CommandInset href
 LatexCommand href
-name "DeepSpace6"
-target "http://www.deepspace6.net/"
-
-\end_inset
-
-: 
-\begin_inset CommandInset href
-LatexCommand href
-name "DeepSpace6 / CVS instructions"
-target "http://www.deepspace6.net/sections/cvs.html"
-
-\end_inset
-
-
-\end_layout
-
-\begin_layout Itemize
-Via web interface to CVS at 
-\begin_inset CommandInset href
-LatexCommand href
-name "DeepSpace6"
-target "http://www.deepspace6.net/"
-
-\end_inset
-
-: 
-\begin_inset CommandInset href
-LatexCommand href
-name "DeepSpace6 / CVS web interface"
-target "http://cvs.deepspace6.net/view/ipv6calc/"
+name "GitHub / ipv6calc"
+target "https://github.com/pbiering/ipv6calc"
 
 \end_inset
 
@@ -651,6 +633,10 @@ It's tested by the developer that creation of the RPM is working fine on
 
 \begin_layout Itemize
 RHEL/CentOS 5 has the package included by default (but an rather old version)
+\begin_inset Separator latexpar
+\end_inset
+
+
 \end_layout
 
 \begin_deeper
@@ -3542,6 +3528,10 @@ Best
 \begin_layout Itemize
 --db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>: switches
  from LITE to SAMPLE databases in case of
+\begin_inset Separator latexpar
+\end_inset
+
+
 \end_layout
 
 \begin_deeper
@@ -3570,6 +3560,10 @@ reason for implementation: show maximum possible IP2Location features
 \begin_layout Itemize
 --db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>: switches
  from COMMercial to LITE databases in case of
+\begin_inset Separator latexpar
+\end_inset
+
+
 \end_layout
 
 \begin_deeper
@@ -3592,6 +3586,10 @@ reason for implementation: avoid using old COMMercial databases
 \end_deeper
 \begin_layout Itemize
 --db-ip2location-only-type <TYPE>: only selects databases of given type
+\begin_inset Separator latexpar
+\end_inset
+
+
 \end_layout
 
 \begin_deeper
@@ -3603,6 +3601,10 @@ reason for implementation: be able to select a specific database type
 \begin_layout Itemize
 --db-ip2location-allow-softlinks: allow softlinked IP2Location database
  files
+\begin_inset Separator latexpar
+\end_inset
+
+
 \end_layout
 
 \begin_deeper
@@ -6564,6 +6566,10 @@ on-the-fly
 \end_inset
 
 , exported to IPV6CALC_CLIENT_IP_ANON
+\begin_inset Separator latexpar
+\end_inset
+
+
 \end_layout
 
 \begin_deeper
@@ -6574,6 +6580,10 @@ depending on the configured anonymization method 3rd party database is required
 \end_deeper
 \begin_layout Itemize
 Country code of client IP address, exported to IPV6CALC_CLIENT_COUNTRYCODE
+\begin_inset Separator latexpar
+\end_inset
+
+
 \end_layout
 
 \begin_deeper
@@ -6585,6 +6595,10 @@ requires 3rd party database: GeoIP or IP2Location or DB-IP.com
 \begin_layout Itemize
 Autonomous System Number (ASN) of client IP address, exported to IPV6CALC_CLIENT
 _ASN
+\begin_inset Separator latexpar
+\end_inset
+
+
 \end_layout
 
 \begin_deeper
@@ -6595,6 +6609,10 @@ requires 3rd party database: GeoIP
 \end_deeper
 \begin_layout Itemize
 Registry of client IP address, exported to IPV6CALC_CLIENT_REGISTRY
+\begin_inset Separator latexpar
+\end_inset
+
+
 \end_layout
 
 \begin_deeper

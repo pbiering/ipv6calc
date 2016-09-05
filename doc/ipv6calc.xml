@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
-<!-- XML file was created by LyX 2.1.4
+<!-- XML file was created by LyX 2.2.1
   See http://www.lyx.org/ for more information -->
 <article lang="en_US">
 <articleinfo>
@@ -24,14 +24,16 @@
 <listitem><para>IEEE IAB, OUI, OUI-36 databases (for decoding vendor part of MAC/EUI-48/EUI-64)</para></listitem><listitem><para>IPv4 assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for selecting proper registry in ipv6calcweb.cgi and IPv4 anonymization)</para></listitem><listitem><para>IPv6 assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for selecting proper registry in ipv6calcweb.cgi and IPv6 anonymization)</para></listitem><listitem><para>ASN assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for IPv4/IPv6 anonymization)</para></listitem></itemizedlist></sect2><sect2>
 <title>Possible external databases</title>
 <para>If enabled during compiling the tool, following external (but local stored) databases can be used</para><itemizedlist>
-<listitem><para><ulink url="http://www.maxmind.com/">GeoIP</ulink></para><itemizedlist>
-<listitem><para>IPv4 (since 0.61.0, released 2006)</para></listitem><listitem><para>IPv6 (since 0.90.0, released 2011, req. GeoIP &gt;= 1.4.5)</para></listitem><listitem><para>release 0.99.0 is tested against GeoIP &gt;= 1.4.4</para></listitem></itemizedlist></listitem><listitem><para><ulink url="http://www.ip2.location.com/">IP2Location</ulink></para><itemizedlist>
+<listitem><para><ulink url="http://www.maxmind.com/">GeoIP</ulink>
+</para><itemizedlist>
+<listitem><para>IPv4 (since 0.61.0, released 2006)</para></listitem><listitem><para>IPv6 (since 0.90.0, released 2011, req. GeoIP &gt;= 1.4.5)</para></listitem><listitem><para>release 0.99.0 is tested against GeoIP &gt;= 1.4.4</para></listitem></itemizedlist></listitem><listitem><para><ulink url="http://www.ip2.location.com/">IP2Location</ulink>
+</para><itemizedlist>
 <listitem><para>IPv4 (since 0.60.0, released 2006)</para></listitem><listitem><para>IPv6 (since 0.70.0, released 2007, <ulink url="http://lite.ip2location.com/">IP2Location LITE IPv6 Databases</ulink> since 0.99.0, released 2015)</para></listitem><listitem><para>release 0.99.0 is tested against IP2Location &gt;= 4.0.2</para></listitem></itemizedlist></listitem><listitem><para><ulink url="http://www.db-ip.com/">DB-IP.com</ulink> (since 0.98.0, released 2015), based on local Berkeley DB files generated from downloaded CSV files</para></listitem><listitem><para>&ldquo;External&rdquo; (since 0.98.0, released 2015), based on local Berkeley DB files, generated from downloaded TXT/XML files (registries assignment databases). Supporting IPv4/IPv6 to Registries and IPv4/IPv6 to CountryCode. If newer, overruling the related included databases.</para></listitem></itemizedlist><para>Since version 0.95.0 the tool can be compiled to use dynamically loading of library, means the binaries can be also used on systems where IP2Location or GeoIP libraries are not existing. On such system, the support is simply disabled then and some capabilities/features which requires the databases are disabled.</para>
 <para>Since version 0.97.4 also fallback code for GeoIP and IP2Location is included in the source package, means that support of dynamically loading of library can be included during compilation without having related development sources on the system.</para></sect2></sect1><sect1>
 <title>License</title>
 <para>The program is published under the GNU GPL version 2.</para></sect1><sect1>
 <title>Copyright</title>
-<para>(C) 2001 - 2015 by Dr. Peter Bieringer</para></sect1><sect1>
+<para>(C) 2001 - 2016 by Dr. Peter Bieringer</para></sect1><sect1>
 <title>Author</title>
 <para>The author of ipv6calc is</para><itemizedlist>
 <listitem><para><ulink url="mailto:pb@bieringer.de">Dr. Peter Bieringer</ulink> with some minor contribution by others</para></listitem></itemizedlist></sect1><sect1>
@@ -39,7 +41,7 @@
 <sect2>
 <title>Latest version of sources</title>
 <itemizedlist>
-<listitem><para>Via CVS at <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink>: <ulink url="http://www.deepspace6.net/sections/cvs.html">DeepSpace6 / CVS instructions</ulink></para></listitem><listitem><para>Via web interface to CVS at <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink>: <ulink url="http://cvs.deepspace6.net/view/ipv6calc/">DeepSpace6 / CVS web interface</ulink></para></listitem></itemizedlist></sect2><sect2>
+<listitem><para>Via GitHub (since 2016-09-05) at <ulink url="https://github.com/pbiering/ipv6calc">GitHub / ipv6calc</ulink></para></listitem></itemizedlist></sect2><sect2>
 <title>Releases</title>
 <sect3>
 <title>as tar.gz</title>
@@ -66,7 +68,8 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 <para>See also <ulink url="https://admin.fedoraproject.org/pkgdb/package/ipv6calc/">FedoraProject / Package / ipv6calc</ulink></para></sect3><sect3>
 <title>Red Hat Enterprise Linux and clones</title>
 <para>It's tested by the developer that creation of the RPM is working fine on RHEL 4.</para><itemizedlist>
-<listitem><para>RHEL/CentOS 5 has the package included by default (but an rather old version)</para><itemizedlist>
+<listitem><para>RHEL/CentOS 5 has the package included by default (but an rather old version)
+</para><itemizedlist>
 <listitem><para>RPMs of newer releases are available as test builds on koji, see related URL in announcements <ulink url="https://lists.deepspace6.net/pipermail/ipv6calc-announce/">ipv6calc-announce / list archive</ulink></para></listitem></itemizedlist></listitem><listitem><para>RHEL/CentOS 6/7: available since September 2014 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink></para></listitem></itemizedlist><para>CentOS 5/6/7 are also platforms for regression tests.</para></sect3><sect3>
 <title>Gentoo/Funtoo</title>
 <para>Package is maintained, nevertheless, Funtoo is used as platform for regression tests.</para></sect3><sect3>
@@ -588,10 +591,14 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many more
 <listitem><para>each internal/external database can be disabled by option</para></listitem><listitem><para>directory of database files can be given via related option</para></listitem><listitem><para>databases requiring external library the library file can be given in case of dynamic load and linking</para></listitem></itemizedlist><sect4>
 <title>IP2Location</title>
 <para>IP2location database directory can contain a bunch of files, the best ones are selected automatically (since 0.99.0). &ldquo;Best&rdquo; can be controlled via two options:</para><itemizedlist>
-<listitem><para>--db-ip2location-lite-to-sample-autoswitch-max-delta-months &lt;MONTHS&gt;: switches from LITE to SAMPLE databases in case of</para><itemizedlist>
-<listitem><para>existing SAMPLE database</para></listitem><listitem><para>SAMPLE database not older than default/given MONTHS than the LITE database</para></listitem><listitem><para>IP address is in range of SAMPLE database (IPv4: 0.0.0.0-99.255.255.255, IPv6: 2a04::/16)</para></listitem><listitem><para>autoswitch can be disabled by using MONTHS=0</para></listitem><listitem><para>reason for implementation: show maximum possible IP2Location features</para></listitem></itemizedlist></listitem><listitem><para>--db-ip2location-comm-to-lite-switch-min-delta-months &lt;MONTHS&gt;: switches from COMMercial to LITE databases in case of</para><itemizedlist>
-<listitem><para>existing LITE database</para></listitem><listitem><para>COMMercial database is default/given MONTHS older than the LITE database</para></listitem><listitem><para>switch can be disabled by using MONTHS=0</para></listitem><listitem><para>reason for implementation: avoid using old COMMercial databases</para></listitem></itemizedlist></listitem><listitem><para>--db-ip2location-only-type &lt;TYPE&gt;: only selects databases of given type</para><itemizedlist>
-<listitem><para>reason for implementation: be able to select a specific database type</para></listitem></itemizedlist></listitem><listitem><para>--db-ip2location-allow-softlinks: allow softlinked IP2Location database files</para><itemizedlist>
+<listitem><para>--db-ip2location-lite-to-sample-autoswitch-max-delta-months &lt;MONTHS&gt;: switches from LITE to SAMPLE databases in case of
+</para><itemizedlist>
+<listitem><para>existing SAMPLE database</para></listitem><listitem><para>SAMPLE database not older than default/given MONTHS than the LITE database</para></listitem><listitem><para>IP address is in range of SAMPLE database (IPv4: 0.0.0.0-99.255.255.255, IPv6: 2a04::/16)</para></listitem><listitem><para>autoswitch can be disabled by using MONTHS=0</para></listitem><listitem><para>reason for implementation: show maximum possible IP2Location features</para></listitem></itemizedlist></listitem><listitem><para>--db-ip2location-comm-to-lite-switch-min-delta-months &lt;MONTHS&gt;: switches from COMMercial to LITE databases in case of
+</para><itemizedlist>
+<listitem><para>existing LITE database</para></listitem><listitem><para>COMMercial database is default/given MONTHS older than the LITE database</para></listitem><listitem><para>switch can be disabled by using MONTHS=0</para></listitem><listitem><para>reason for implementation: avoid using old COMMercial databases</para></listitem></itemizedlist></listitem><listitem><para>--db-ip2location-only-type &lt;TYPE&gt;: only selects databases of given type
+</para><itemizedlist>
+<listitem><para>reason for implementation: be able to select a specific database type</para></listitem></itemizedlist></listitem><listitem><para>--db-ip2location-allow-softlinks: allow softlinked IP2Location database files
+</para><itemizedlist>
 <listitem><para>by default, softlinked database files are skipped, because it's hard to detect whether one is COMMercial, LITE or SAMPLE</para></listitem></itemizedlist></listitem></itemizedlist><screen>
 <![CDATA[
 ]]></screen><para>use &ldquo;ipv6calc -vv&rdquo; or &ldquo;ipv6calc -vvv&rdquo; for verification, which databases are selected finally.</para></sect4></sect3><sect3>
@@ -1169,10 +1176,14 @@ ALL  46233 62292 0 2397 3525 40198 97 16 0 0 129 839 61074 0 0 0 0 0 16 51 0 0 0
 <para>A demonstration with real data is available at <ulink url="http://mirrors.bieringer.de/stats/timeline.html">http://mirrors.bieringer.de/stats/timeline.html</ulink>.</para></sect2></sect1><sect1>
 <title>Apache web server module &ldquo;mod_ipv6calc&rdquo;</title>
 <para>This Apache web server module (since version 0.99.1, released 2015) interfaces with internal ipv6calc library to support</para><itemizedlist>
-<listitem><para>Client IP address anonymization &ldquo;on-the-fly&rdquo;, exported to IPV6CALC_CLIENT_IP_ANON</para><itemizedlist>
-<listitem><para>depending on the configured anonymization method 3rd party database is required</para></listitem></itemizedlist></listitem><listitem><para>Country code of client IP address, exported to IPV6CALC_CLIENT_COUNTRYCODE</para><itemizedlist>
-<listitem><para>requires 3rd party database: GeoIP or IP2Location or DB-IP.com</para></listitem></itemizedlist></listitem><listitem><para>Autonomous System Number (ASN) of client IP address, exported to IPV6CALC_CLIENT_ASN</para><itemizedlist>
-<listitem><para>requires 3rd party database: GeoIP</para></listitem></itemizedlist></listitem><listitem><para>Registry of client IP address, exported to IPV6CALC_CLIENT_REGISTRY</para><itemizedlist>
+<listitem><para>Client IP address anonymization &ldquo;on-the-fly&rdquo;, exported to IPV6CALC_CLIENT_IP_ANON
+</para><itemizedlist>
+<listitem><para>depending on the configured anonymization method 3rd party database is required</para></listitem></itemizedlist></listitem><listitem><para>Country code of client IP address, exported to IPV6CALC_CLIENT_COUNTRYCODE
+</para><itemizedlist>
+<listitem><para>requires 3rd party database: GeoIP or IP2Location or DB-IP.com</para></listitem></itemizedlist></listitem><listitem><para>Autonomous System Number (ASN) of client IP address, exported to IPV6CALC_CLIENT_ASN
+</para><itemizedlist>
+<listitem><para>requires 3rd party database: GeoIP</para></listitem></itemizedlist></listitem><listitem><para>Registry of client IP address, exported to IPV6CALC_CLIENT_REGISTRY
+</para><itemizedlist>
 <listitem><para>requires internal or &ldquo;external&rdquo; database</para></listitem></itemizedlist></listitem><listitem><para>Configured IP address anonymization method, exported to IPV6CALC_ANON_METHOD</para></listitem></itemizedlist><sect2>
 <title>Installation</title>
 <para>Install compiled Apache module &ldquo;mod_ipv6calc&rdquo; to Apache's module directory</para>
