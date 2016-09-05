@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id: ipv6calchelp.c,v 1.82 2015/08/23 09:53:27 ds6peter Exp $
- * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id$
+ * Copyright  : 2002-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -883,7 +883,11 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 #ifdef IP2LOCATION_INCLUDE_VERSION
 	fprintf(stderr, "IP2Location support enabled, compiled with include file version: %s\n", IP2LOCATION_INCLUDE_VERSION);
 #endif
-	fprintf(stderr, "IP2Location support enabled, compiled with API version: %s\n", xmakestr(API_VERSION));
+#if SUPPORT_IP2LOCATION_API_VERSION_STRING
+	fprintf(stderr, "IP2Location support enabled, compiled with API version: %s, dynamically linked with version: %s\n", xmakestr(API_VERSION), libipv6calc_db_wrapper_IP2Location_lib_version());
+#else
+	fprintf(stderr, "IP2Location support enabled, compiled with API version: %s (linked version not supported)\n", xmakestr(API_VERSION));
+#endif // SUPPORT_IP2LOCATION_API_VERSION_STRING
 #ifndef SUPPORT_IP2LOCATION_DYN
 #else
 	fprintf(stderr, "IP2Location support by dynamic library load\n");
