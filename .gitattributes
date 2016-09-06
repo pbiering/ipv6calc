@@ -1,0 +1,15 @@
+README* ident
+ChangeLog ident
+CHANGES ident
+COPYING ident
+CREDITS ident
+INSTALLING ident
+TODO ident
+USAGE ident
+VERSION* ident
+Makefile ident
+*.c ident
+*.h ident
+*.lyx ident
+*.sh ident
+*.in ident
