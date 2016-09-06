@@ -14,8 +14,30 @@ address detection on setup of IPv6 addresses
 
 * Also migrate "ip6_int" of Keith Owens <kaos@ocs.com.au> into this utility
 
+
 Known bugs:
 * ipv6calc is sure not the securest C program around the world
+
+
+Contents:
+* "ipv6calc": the main utility
+* "ipv6calcweb": CGI wrapper for ipv6calc's address information output
+* "ipv6logconv": log converter (IPv4/IPv6)
+* "ipv6loganon": log anonymizer (IPv4/IPv6)
+* "ipv6logstats": log statistic generator (IPv4/IPv6)
+* "mod_ipv6calc": Apache module
+
+
+Included internal databases:
+* IEEE IAB, OUI, OUI-36 databases (for decoding vendor part of MAC/EUI-48/EUI-64)
+* IPv4 assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for selecting proper registry in ipv6calcweb.cgi and IPv4 anonymization)
+* IPv6 assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for selecting proper registry in ipv6calcweb.cgi and IPv6 anonymization)
+* ASN assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for IPv4/IPv6 anonymization)
+
+Supporte external databases:
+* GeoIP
+* IP2Location
+* DB-IP.com
 
 
 Where to get:
@@ -59,6 +81,7 @@ Where to get:
     http://www.freshports.org/net-mgmt/ipv6calc/
    OpenBSD:
     http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/
+
 
 Mailing lists:
  ipv6calc-announce
