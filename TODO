@@ -1,6 +1,6 @@
 # Project: ipv6calc
 # File   : TODO
-# Version: $Id: TODO,v 1.28 2015/05/05 20:40:47 ds6peter Exp $
+# Version: $Id$
 
 TODO list
 =========
@@ -8,8 +8,12 @@ TODO list
 Next
 ----------
 
+* add option to support LMDB instead of Berkeley DB because of license change in version 6
+
+
 Short term
 ----------
+
 
 Middle term
 -----------
@@ -38,7 +42,7 @@ Features requested from others:
 
 -call no kernel-specific or userland-specific functions, just C.
 
-ipv6calc C library would contain routines to represent  the
+ipv6calc C library would contain routines to represent the
 following forms (and convert between them):
   -x:x:x:x:x:x:x:x                       
   -::                                    
