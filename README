@@ -59,10 +59,12 @@ Where to get:
    Fedora:
     Core 6: developing platform, so use given hint above to create a RPM
     since 7: package is included
-   Red Hat Enterprise Linux:
-    RHEL3: build from source package should work but not tested
-    RHEL4: build from source package tested, working
-    since RHEL5: package is included
+   Red Hat Enterprise Linux / CentOS:
+    EL3: build from source package should work but not tested
+    EL4: build from source package tested, working
+    EL5: package is included
+    EL6: package is available via EPEL
+    EL7: package is available via EPEL
    Mandrake:
     similar to Red Hat, rebuild should work, too
    Debian:
