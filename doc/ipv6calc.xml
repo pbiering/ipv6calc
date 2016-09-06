@@ -8,12 +8,12 @@
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>6.2bis</revnumber> <date>2015-09-06</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>6.2bis</revnumber> <date>2016-09-06</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
-<para>Note: this tool got also its <ulink url="http://freshmeat.net/projects/ipv6calc/">freshmeat / ipv6calc</ulink> page (not maintained by the author)</para><sect2>
+<para>Note: this tool got also its <ulink url="http://freecode.com/projects/ipv6calc/">freecode.com (former freshmeat) / ipv6calc</ulink> page (but this is not maintained by the author)</para><sect2>
 <title>Latest version</title>
 <para>Latest version since last update of this page is 0.99.1 (released 2015-09-05)</para></sect2><sect2>
 <title>Included programs</title>

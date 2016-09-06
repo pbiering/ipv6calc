@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: generate.sh,v 1.7 2013/10/22 18:59:55 ds6peter Exp $
+# $Id$
 
 # Requires: opensp
 
