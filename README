@@ -34,7 +34,7 @@ Included internal databases:
 * IPv6 assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for selecting proper registry in ipv6calcweb.cgi and IPv6 anonymization)
 * ASN assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for IPv4/IPv6 anonymization)
 
-Supporte external databases:
+Supported external databases:
 * GeoIP
 * IP2Location
 * DB-IP.com
