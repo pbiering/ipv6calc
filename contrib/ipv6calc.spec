@@ -131,7 +131,7 @@ BuildRequires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entitie
 ipv6calcweb contains a CGI program and a configuration file for
 displaying information of IP addresses on a web page using ipv6calc.
 
-Check/addjust %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
+Check/adjust %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
 Default restricts access to localhost
 
 
@@ -157,7 +157,7 @@ Features:
  - store CountryCode of IPv4/v6 address in environment variable
 (environment variables can be used for custom log format)
 
-Check/addjust %{_sysconfdir}/httpd/conf.d/ipv6calc.conf
+Check/adjust %{_sysconfdir}/httpd/conf.d/ipv6calc.conf
 By default the module is disabled.
 %endif
 
