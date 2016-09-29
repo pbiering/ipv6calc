@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc_filter.sh
-# Version    : $Id: test_ipv6calc_filter.sh,v 1.6 2015/06/14 20:14:49 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2012-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc filter
@@ -86,5 +86,48 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+test="run 'ipv6calc' test_prefix tests..."
+echo "INFO  : $test"
+
+# Pipe mode only
+echo -e "1.2.3.4" | ./ipv6calc -q --test_prefix 1.2.3.0/24
+if [ $? -ne 0 ]; then
+	echo "ERROR : something is going wrong with IPv4 test_prefix"
+	exit 1
+fi
+
+echo -e "1.2.3.4" | ./ipv6calc -q --test_prefix 1.2.4.0/24
+if [ $? -ne 1 ]; then
+	echo "ERROR : something is going wrong with IPv4 test_prefix"
+	exit 1
+fi
+
+echo -e "2001:db8::1" | ./ipv6calc -q --test_prefix 2001:db8::/32
+if [ $? -ne 0 ]; then
+	echo "ERROR : something is going wrong with IPv6 test_prefix"
+	exit 1
+fi
+
+echo -e "2001:db8::1" | ./ipv6calc -q --test_prefix 2001:db9::/32
+if [ $? -ne 1 ]; then
+	echo "ERROR : something is going wrong with IPv6 test_prefix"
+	exit 1
+fi
+
+echo -e "1.2.3.4" | ./ipv6calc -q --test_prefix 2001:db8::/32
+if [ $? -ne 2 ]; then
+	echo "ERROR : something is going wrong with IPv4 test_prefix"
+	exit 1
+fi
+
+echo -e "2001:db8::1" | ./ipv6calc -q --test_prefix 1.2.3.0/24
+if [ $? -ne 2 ]; then
+	echo "ERROR : something is going wrong with IPv6 test_prefix"
+	exit 1
+fi
+
+echo "INFO  : $test successful"
+
 echo "INFO  : all ipv6calc filter tests successful"
+
 exit 0
