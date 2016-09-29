@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.127 2015/08/23 09:53:27 ds6peter Exp $
- * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id$
+ * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
@@ -108,7 +108,7 @@ int main(int argc, char *argv[]) {
 	int ipv6rd_prefixlength = -1;
 
 	/* new option style storage */	
-	uint32_t inputtype  = FORMAT_undefined;
+	uint32_t inputtype  = FORMAT_undefined, inputtype2 = FORMAT_undefined;
 	uint32_t outputtype = FORMAT_undefined;
 	uint32_t action     = ACTION_undefined;
 
@@ -139,6 +139,7 @@ int main(int argc, char *argv[]) {
 	ipv6addr_clearall(&ipv6addr3);
 	ipv6addr_clearall(&ipv6addr4);
 	ipv4addr_clearall(&ipv4addr);
+	ipv4addr_clearall(&ipv4addr2);
 	mac_clearall(&macaddr);
 
 	/* pipe mode */
@@ -382,6 +383,34 @@ int main(int argc, char *argv[]) {
 					exit(EXIT_FAILURE);
 				};
 				break;
+
+			case CMD_test_prefix:
+				DEBUGPRINT_NA(DEBUG_ipv6calc_general, "special option 'test_prefix' selected");
+				// autodefine action
+				action = ACTION_test_prefix;
+				action_given = 1;
+				inputtype2 = libipv6calc_autodetectinput(optarg);
+				switch (inputtype2) {
+					case FORMAT_ipv6addr:
+						DEBUGPRINT_WA(DEBUG_ipv6calc_general, "special option 'test_prefix' has IPv6 address: %s", optarg);
+						retval = addr_to_ipv6addrstruct(optarg, resultstring, sizeof(resultstring), &ipv6addr2);
+						break;
+					case FORMAT_ipv4addr:
+						DEBUGPRINT_WA(DEBUG_ipv6calc_general, "special option 'test_prefix' has IPv4 address: %s", optarg);
+						retval = addr_to_ipv4addrstruct(optarg, resultstring, sizeof(resultstring), &ipv4addr2);
+						break;
+					default:
+						fprintf(stderr, "unsupported input type detected for 'test_prefix': %s\n", optarg);
+						exit(EXIT_FAILURE);
+				};
+
+				if (retval != 0) {
+					fprintf(stderr, " Argument of option 'test_prefix' is not a valid IPv4/6 address: %s\n", optarg);
+					exit(EXIT_FAILURE);
+				};
+
+				// save pointer for later
+				input2 = optarg;
 
 			/* format options */
 			case 'C':
@@ -691,6 +720,13 @@ int main(int argc, char *argv[]) {
 		};
 	};
 
+	if (action == ACTION_test_prefix) {
+		if ((ipv4addr2.flag_valid == 0) && (ipv6addr2.flag_valid == 0)) {
+			fprintf(stderr, "ipv6calc 'test_prefix' misses prefix for testing\n");
+			exit(EXIT_FAILURE);
+		};
+	};
+
 	if (argc > 0) {
 		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Got input %s", argv[0]);
 	} else {
@@ -802,20 +838,30 @@ PIPE_input:
 	};
 	
 	/* reset input type in case of action=filter and pipe mode */
-	if ((input_is_pipe == 1) && (action_given == 1) && (action == ACTION_filter)) {
+	if ((input_is_pipe == 1) && (action_given == 1) && ( (action == ACTION_filter) || (action == ACTION_test_prefix) ) ) {
 		DEBUGPRINT_NA(DEBUG_ipv6calc_general, "reset input type for later autodetection");
 		inputtype = FORMAT_auto;
+
+		if (action == ACTION_test_prefix) {
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "reset output type for later autodetection");
+			outputtype = FORMAT_auto;
+			// clear flags
+			ipv4addr.flag_valid = 0;
+			ipv6addr.flag_valid = 0;
+		};
 	};
 
 	/* autodetection */
 	if ((inputtype == FORMAT_undefined || inputtype == FORMAT_auto) && inputc > 0) {
-		DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Call input type autodetection");
+		DEBUGPRINT_NA(DEBUG_ipv6calc_general, "call input type autodetection");
 		/* no input type specified or automatic selected */
 		if ((formatoptions & FORMATOPTION_quiet) == 0) {
-			fprintf(stderr, "No input type specified, try autodetection...");
+			fprintf(stderr, "no input type specified, try autodetection...");
 		};
 		
 		inputtype = libipv6calc_autodetectinput(input1);
+
+		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "call input type autodetection resulted in 0x%08x", inputtype);
 
 		if ( inputtype != FORMAT_undefined ) {
 			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_formatstrings); i++) {
@@ -1203,9 +1249,9 @@ PIPE_input:
 		} else if ( (inputtype == FORMAT_mac) && (action == ACTION_mac_to_eui64) ) {
 			outputtype = FORMAT_eui64;
 			formatoptions |= FORMATOPTION_printfulluncompressed;
-		} else if ( (inputtype == FORMAT_ipv6addr) && ( (action == ACTION_undefined) || (action == ACTION_anonymize) ) ) {
+		} else if ( (inputtype == FORMAT_ipv6addr) && ( (action == ACTION_undefined) || (action == ACTION_anonymize) || (action == ACTION_test_prefix) ) ) {
 			outputtype = FORMAT_ipv6addr;
-		} else if ( (inputtype == FORMAT_ipv4addr) && (action == ACTION_anonymize) ) {
+		} else if ( (inputtype == FORMAT_ipv4addr) && ( (action == ACTION_anonymize) || (action == ACTION_test_prefix) ) ) {
 			outputtype = FORMAT_ipv4addr;
 		} else if ( ((inputtype == FORMAT_ipv4addr) || (inputtype == FORMAT_ipv4hex) || (inputtype == FORMAT_ipv4revhex)) && (action == ACTION_undefined || action == ACTION_anonymize) ) {
 			outputtype = FORMAT_ipv4addr;
@@ -1476,6 +1522,67 @@ PIPE_input:
 
 			break;
 
+		case ACTION_test_prefix:
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of action: test_prefix");
+
+			outputtype = inputtype;
+
+			if ((inputtype == FORMAT_ipv4addr || inputtype == FORMAT_ipv4hex || inputtype == FORMAT_ipv4revhex) && outputtype == FORMAT_ipv4addr) {
+				/* test IPv4 address */
+				if (ipv4addr.flag_valid != 1) {
+					fprintf(stderr, "No valid IPv4 address given!\n");
+					exit(EXIT_FAILURE);
+				};
+			} else if ((inputtype == FORMAT_ipv6addr || inputtype == FORMAT_bitstring || inputtype == FORMAT_revnibbles_int || inputtype == FORMAT_revnibbles_arpa || inputtype == FORMAT_base85 || inputtype == FORMAT_ipv6literal) && outputtype == FORMAT_ipv6addr) {
+				/* test IPv6 address */
+				if (ipv6addr.flag_valid != 1) {
+					fprintf(stderr, "No valid IPv6 address given!\n");
+					exit(EXIT_FAILURE);
+				};
+			} else {
+				fprintf(stderr, "Unsupported input type for 'test_prefix'!\n");
+				exit(EXIT_FAILURE);
+			};
+
+			if (ipv4addr.flag_valid == 1) {
+				DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_prefix' for IPv4: %s with %s", input1, input2);
+				if (ipv4addr2.flag_valid == 1) {
+					// compare with honor prefix length
+					retval = ipv4addr_compare(&ipv4addr2, &ipv4addr, 0);
+				} else {
+					retval = 2;
+				};
+			} else if (ipv6addr.flag_valid == 1) {
+				DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_prefix' for IPv6: %s with %s", input1, input2);
+				if (ipv6addr2.flag_valid == 1) {
+					// compare with honor prefix length
+					retval = ipv6addr_compare(&ipv6addr2, &ipv6addr, 0);
+				} else {
+					retval = 2;
+				};
+			};
+
+			DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_prefix' result: %x", retval);
+
+			if (input_is_pipe == 1) {
+				if (retval == 2) {
+					snprintf(resultstring, sizeof(resultstring), "%s uncomparable with %s", linebuffer, input2);
+				} else {
+					snprintf(resultstring, sizeof(resultstring), "%s %s %s", linebuffer, (retval == 0) ? "inside in" : "outside of", input2);
+				};
+			} else {
+				if ((formatoptions & FORMATOPTION_quiet) == 0) {
+					if (retval == 2) {
+						snprintf(resultstring, sizeof(resultstring), "%s uncomparable with %s", input1, input2);
+					} else {
+						snprintf(resultstring, sizeof(resultstring), "%s %s %s", input1, (retval == 0) ? "inside in" : "outside of", input2);
+					};
+				};
+			};
+
+			goto RESULT_print;
+			break;
+
 		case ACTION_undefined:
 			/* no action selected */
 			break;
@@ -1679,7 +1786,6 @@ PIPE_input:
 			snprintf(resultstring, sizeof(resultstring), "%s %s", resultstring2, resultstring3);
 			break;
 
-
 		default:
 			fprintf(stderr, " Outputtype isn't implemented: %8lx\n", (unsigned long) outputtype);
 			exit(EXIT_FAILURE);
@@ -1688,6 +1794,7 @@ PIPE_input:
 	DEBUGPRINT_NA(DEBUG_ipv6calc_general, "End of output handling");
 
 RESULT_print:
+	DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Print result");
 	/* print result */
 	if (strlen(resultstring) > 0) {
 		if ( retval == 0 ) {

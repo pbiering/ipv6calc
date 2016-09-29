@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
- * Version    : $Id: ipv6calctypes.h,v 1.53 2015/08/23 09:53:27 ds6peter Exp $
- * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id$
+ * Copyright  : 2002-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for ipv6calctypes.c
@@ -270,6 +270,7 @@ typedef struct {
 #define ACTION_NUM_6rd_extract_ipv4	7
 #define ACTION_NUM_ipv4_to_nat64	8
 #define ACTION_NUM_filter		15
+#define ACTION_NUM_test_prefix		16
 #define ACTION_NUM_undefined		31
 
 #define ACTION_auto			(uint32_t) 0x0
@@ -282,6 +283,7 @@ typedef struct {
 #define ACTION_6rd_extract_ipv4		(uint32_t) (1 << ACTION_NUM_6rd_extract_ipv4)
 #define ACTION_ipv4_to_nat64		(uint32_t) (1 << ACTION_NUM_ipv4_to_nat64)
 #define ACTION_filter			(uint32_t) (1 << ACTION_NUM_filter)
+#define ACTION_test_prefix		(uint32_t) (1 << ACTION_NUM_test_prefix)
 #define ACTION_undefined		(uint32_t) (1 << ACTION_NUM_undefined)
 
 #define ANON_METHOD_ANONYMIZE		1
@@ -306,10 +308,12 @@ typedef struct {
 	{ ACTION_6rd_local_prefix     , "6rd_local_prefix", "Calculate the 6rd prefix from given IPv6 prefix (& relay prefix) and IPv4", "" },
 	{ ACTION_6rd_extract_ipv4     , "6rd_extract_ipv4", "Extract from 6rd address the include IPv4 address", "" },
 	{ ACTION_filter	              , "filter"          , "Filter addresses related to filter options", "" },
+	{ ACTION_test_prefix          , "test_prefix"     , "Test address against given prefix", "" },
 };
 
 /* Possible action option map (required) */
 /*@unused@*/ static const uint32_t ipv6calc_actionoptionmap[][3]  = {
+	// action, command, 0=required, 1=optional
 	{ ACTION_auto			, 0 , 0},
 	{ ACTION_mac_to_eui64		, 0 , 0},
 	{ ACTION_ipv4_to_6to4addr	, 0 , 0},
@@ -320,6 +324,7 @@ typedef struct {
 	{ ACTION_6rd_local_prefix	, CMD_6rd_prefix, 0},
 	{ ACTION_6rd_local_prefix	, CMD_6rd_relay_prefix, 1 },
 	{ ACTION_6rd_extract_ipv4	, CMD_6rd_prefixlength, 0},
+	{ ACTION_test_prefix		, CMD_test_prefix, 0},
 };
 
 /* anonymization set */

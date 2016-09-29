@@ -745,7 +745,7 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			break;
 
 		case ACTION_filter:
-			fprintf(stderr, " Filter given addresses from stdout by filter expression, e.g.\n");
+			fprintf(stderr, " Filter given addresses from stdin by filter expression, e.g.\n");
 			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A filter] -E iid-local\n");
 			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A filter] -E iid-local,global-unicast\n");
 			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A filter] -E ^iid-random\n");
@@ -790,6 +790,17 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "  EUI-64 address filter tokens:\n");
 			fprintf(stderr, "   ");
 			fprintf(stderr, " IMPLEMENTATION MISSING");
+			fprintf(stderr, "\n");
+			break;
+
+		case ACTION_test_prefix:
+			fprintf(stderr, " Test given address(es) from stdin, e.g.\n");
+			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A test_prefix] --test_prefix 2001:db8::/32\n");
+			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A test_prefix] --test_prefix 2001:db9::/32\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, " Single address test, return code: 0=inside 1=outside 2=uncomparable\n");
+			fprintf(stderr, "  ipv6calc [-A test_prefix] --test_prefix 2001:db8::/32 2001:db8::1\n");
+			fprintf(stderr, "  ipv6calc [-A test_prefix] --test_prefix 2001:db9::/32 2001:db8::1\n");
 			fprintf(stderr, "\n");
 			break;
 	};
