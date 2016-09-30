@@ -1797,7 +1797,7 @@ RESULT_print:
 	DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Print result");
 	/* print result */
 	if (strlen(resultstring) > 0) {
-		if ( retval == 0 ) {
+		if ( (retval == 0) || (action == ACTION_test_prefix) ) {
 			fprintf(stdout, "%s\n", resultstring);
 		} else {
 			fprintf(stderr, "%s\n", resultstring);
