@@ -3,9 +3,9 @@
 # Project    : ipv6calc
 # File       : test_ipv6calc_filter.sh
 # Version    : $Id$
-# Copyright  : 2012-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2012-2016 by Peter Bieringer <pb (at) bieringer.de>
 #
-# Test patterns for ipv6calc filter
+# Test patterns for ipv6calc filter & test_prefix
 
 verbose=0
 while getopts "Vh\?" opt; do
