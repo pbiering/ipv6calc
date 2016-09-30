@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
- * Version    : $Id: ipv6calc.c,v 1.127 2015/08/23 09:53:27 ds6peter Exp $
- * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id$
+ * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
@@ -139,6 +139,7 @@ int main(int argc, char *argv[]) {
 	ipv6addr_clearall(&ipv6addr3);
 	ipv6addr_clearall(&ipv6addr4);
 	ipv4addr_clearall(&ipv4addr);
+	ipv4addr_clearall(&ipv4addr2);
 	mac_clearall(&macaddr);
 
 	/* pipe mode */
