@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id: test_scenarios.sh,v 1.50 2015/05/26 17:13:12 ds6peter Exp $
-# Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id$
+# Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc (functions only)
 
@@ -501,4 +501,22 @@ testscenario_hugelist() {
 		perl -e '{ for ($i = 0; $i < 256; $i++) { for ($j = 0; $j < 256; $j++) { print "$i.$j.$j.$i\n" } } }';
 		;;
 	esac
+}
+
+testscenario_action_test() {
+	# result|options|description
+	cat <<END | grep -v ^#
+0|--test_ge 2001:db8:: --test_le 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff 2001:db8::1
+1|--test_ge 2001:db9:: --test_le 2001:db9:ffff:ffff:ffff:ffff:ffff:ffff 2001:db8::1
+1|--test_ge 2001:db9:: --test_lt 2001:dba:: 2001:db8::1
+0|--test_ge 2001:db8:: --test_lt 2001:db9:: 2001:db8::1
+1|--test_gt 2001:db8::1 --test_lt 2001:db9:: 2001:db8::1
+0|--test_ge 2001:db8::1 --test_lt 2001:db9:: 2001:db8::1
+1|--test_gt 2001:db8::1 --test_lt 2001:db9::1 2001:db9::1
+0|--test_ge 2001:db8::1 --test_le 2001:db9::1 2001:db9::1
+0|--test_ge 1.2.3.0 --test_lt 1.2.3.5 1.2.3.0
+1|--test_ge 1.2.3.0 --test_lt 1.2.3.5 1.2.3.5
+0|--test_ge 1.2.3.0 --test_le 1.2.3.5 1.2.3.5
+1|--test_ge 1.2.3.1 --test_le 1.2.3.5 1.2.3.0
+END
 }

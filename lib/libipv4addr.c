@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id: libipv4addr.c,v 1.67 2015/05/29 05:42:07 ds6peter Exp $
- * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id$
+ * Copyright  : 2002-2016 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Function library for IPv4 address handling
@@ -218,28 +218,41 @@ void ipv4addr_copy(ipv6calc_ipv4addr *ipv4addrp_dst, const ipv6calc_ipv4addr *ip
  *
  * in:  ipv4addrp1  = pointer to IPv4 address structure
  * in:  ipv4addrp2  = pointer to IPv4 address structure
- * in:  compare_flags: 0=honor prefix length on addr1 TODO: add more support if required
- * returns: 0 = addr2 equal with addr1 or covered by addr1
+ * in:  compare_flags: 0=honor prefix length on addr1
+ *                     1=less than/equal/greater than
+ * returns: 0: addr2 equal with addr1 or covered by addr1/prefix (compare_flags == 0)
+ * returns: 0: addr2 equal with addr1, 1: addr1 > addr2, -1: addr1 < addr2 (compare_flags == 1)
  */
 int ipv4addr_compare(const ipv6calc_ipv4addr *ipv4addrp1, const ipv6calc_ipv4addr *ipv4addrp2, const uint16_t compare_flags) {
 	uint32_t ipv4addr1 = ipv4addr_getdword(ipv4addrp1);
 	uint32_t ipv4addr2 = ipv4addr_getdword(ipv4addrp2);
 
-	DEBUGPRINT_WA(DEBUG_libipv4addr, "compare addr1 with addr2 0x%08x/%d 0x%08x/%d", ipv4addr1, ipv4addrp1->prefixlength, ipv4addr2, ipv4addrp2->prefixlength);
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "compare addr1 with addr2 0x%08x/%d 0x%08x/%d (compare flags: %08x)", ipv4addr1, ipv4addrp1->prefixlength, ipv4addr2, ipv4addrp2->prefixlength, compare_flags);
 
-	if (ipv4addrp1->flag_prefixuse == 1) {
-		/* mask addr2 with prefix length of addr1 */
-		ipv4addr2 &= (0xffffffffu << ((unsigned int) 32 - ipv4addrp1->prefixlength));
-		/* mask addr1 with prefix length of addr1 */
-		ipv4addr1 &= (0xffffffffu << ((unsigned int) 32 - ipv4addrp1->prefixlength));
+	if (compare_flags == 0) {
+		// honors prefix of addr1
+		if (ipv4addrp1->flag_prefixuse == 1) {
+			/* mask addr2 with prefix length of addr1 */
+			ipv4addr2 &= (0xffffffffu << ((unsigned int) 32 - ipv4addrp1->prefixlength));
+			/* mask addr1 with prefix length of addr1 */
+			ipv4addr1 &= (0xffffffffu << ((unsigned int) 32 - ipv4addrp1->prefixlength));
+		};
+
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "compare addr1 with addr2 0x%08x 0x%08x (after masking with prefix length of addr1)", ipv4addr1, ipv4addr2);
+
+		if (ipv4addr1 != ipv4addr2) {
+			return(1);
+		};
+	} else if (compare_flags == 1) {
+		if (ipv4addr1 > ipv4addr2) {
+			return(1);
+		} else if (ipv4addr1 < ipv4addr2) {
+			return(-1);
+		} else {
+		};
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv4addr, "compare addr1 with addr2 0x%08x 0x%08x (after masking with prefix length of addr1)", ipv4addr1, ipv4addr2);
-
-	if (ipv4addr1 == ipv4addr2) {
-		return(0);
-	};
-	return(1);
+	return(0);
 };
 
 

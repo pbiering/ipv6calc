@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Version    : $Id: libipv6addr.c,v 1.124 2015/07/12 09:28:22 ds6peter Exp $
- * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id$
+ * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Function library for IPv6 address handling
@@ -241,31 +241,45 @@ void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6addr *ip
  *
  * in:  ipv6addrp1  = pointer to IPv6 address structure
  * in:  ipv6addrp2  = pointer to IPv6 address structure
- * in:  compare_flags: 0=honor prefix length on addr1 TODO: add more support if required
- * returns: 0 = addr2 equal with addr1 or covered by addr1
+ * in:  compare_flags: 0=honor prefix length on addr1
+ *                     1=less than/equal/greater than
+ *
+ * returns: 0: addr2 equal with addr1 or covered by addr1/prefix (compare_flags == 0)
+ * returns: 0: addr2 equal with addr1, 1: addr1 > addr2, -1: addr1 < addr2 (compare_flags == 1)
  */
 int ipv6addr_compare(const ipv6calc_ipv6addr *ipv6addrp1, const ipv6calc_ipv6addr *ipv6addrp2, const uint16_t compare_flags) {
 	int i;
 	uint32_t mask;
 
-	for (i = 0; i < 4; i++) {
-		if ((ipv6addrp1->flag_prefixuse == 0)
-		  || ((ipv6addrp1->flag_prefixuse == 1) && (ipv6addrp1->prefixlength >= (i + 1) * 32))) {
-			DEBUGPRINT_WA(DEBUG_libipv6addr, "compare dword %i (prefixuse=%d)", i, ipv6addrp1->flag_prefixuse);
-			/* compare 32 bits */
-			if (ipv6addr_getdword(ipv6addrp1, i) != ipv6addr_getdword(ipv6addrp2, i)) {
-				return(1);
+	if (compare_flags == 0) {
+		for (i = 0; i < 4; i++) {
+			if ((ipv6addrp1->flag_prefixuse == 0)
+			  || ((ipv6addrp1->flag_prefixuse == 1) && (ipv6addrp1->prefixlength >= (i + 1) * 32))) {
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "compare dword %i (prefixuse=%d): %08x <-> %08x", i, ipv6addrp1->flag_prefixuse, ipv6addr_getdword(ipv6addrp1, i), ipv6addr_getdword(ipv6addrp2, i));
+				/* compare 32 bits */
+				if (ipv6addr_getdword(ipv6addrp1, i) != ipv6addr_getdword(ipv6addrp2, i)) {
+					return(1);
+				};
+			} else if (ipv6addrp1->flag_prefixuse == 1) {
+				mask = ~(0xffffffffu >> (ipv6addrp1->prefixlength - i * 32));
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "compare dword %i with mask 0x%08x: %08x <-> %08x", i, mask, (ipv6addr_getdword(ipv6addrp1, i) & mask), (ipv6addr_getdword(ipv6addrp2, i) & mask));
+				if ((ipv6addr_getdword(ipv6addrp1, i) & mask) != (ipv6addr_getdword(ipv6addrp2, i) & mask)) {
+					return(1);
+				} else {
+					return(0);
+				};
 			};
-		} else if (ipv6addrp1->flag_prefixuse == 1) {
-			mask = ~(0xffffffffu >> (ipv6addrp1->prefixlength - i * 32));
-			DEBUGPRINT_WA(DEBUG_libipv6addr, "compare dword %i with mask 0x%08x", i, mask);
-			if ((ipv6addr_getdword(ipv6addrp1, i) & mask) != (ipv6addr_getdword(ipv6addrp2, i) & mask)) {
+		};
+	} else if (compare_flags == 1) {
+		for (i = 0; i < 4; i++) {
+			if (ipv6addr_getdword(ipv6addrp1, i) > ipv6addr_getdword(ipv6addrp2, i)) {
 				return(1);
-			} else {
-				return(0);
+			} else if (ipv6addr_getdword(ipv6addrp1, i) < ipv6addr_getdword(ipv6addrp2, i)) {
+				return(-1);
 			};
 		};
 	};
+
 	return(0);
 };
 

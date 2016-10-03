@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.h
- * Version    : $Id: ipv6calc.h,v 1.18 2015/04/29 20:22:48 ds6peter Exp $
- * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Version    : $Id$
+ * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Main header file
@@ -21,6 +21,13 @@
 #define ANONPRESET_DEFAULT "anonymize-standard"
 
 #define DEBUG_ipv6calc_general      0x00000001l
+
+#define IPV6CALC_TEST_PREFIX	0
+#define IPV6CALC_TEST_GT	1
+#define IPV6CALC_TEST_GE	2
+#define IPV6CALC_TEST_LT	3
+#define IPV6CALC_TEST_LE	4
+#define IPV6CALC_TEST_MAX_SUPPORTED	5
 
 #endif
 

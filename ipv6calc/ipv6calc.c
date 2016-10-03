@@ -121,6 +121,14 @@ int main(int argc, char *argv[]) {
 	ipv6calc_macaddr  macaddr;
 	ipv6calc_eui64addr  eui64addr;
 
+	/* arrays of structures and chars for "test" action */
+	#define ipv6calc_arrays 5
+	ipv6calc_ipv6addr ipv6addr_a[ipv6calc_arrays];
+	ipv6calc_ipv4addr ipv4addr_a[ipv6calc_arrays];
+	char *input_a[ipv6calc_arrays];
+	int a;
+	int result_a[ipv6calc_arrays];
+
 	/* used simple data */
 	uint32_t asn;
 	int asn_valid = 0;
@@ -138,9 +146,17 @@ int main(int argc, char *argv[]) {
 	ipv6addr_clearall(&ipv6addr2);
 	ipv6addr_clearall(&ipv6addr3);
 	ipv6addr_clearall(&ipv6addr4);
+
 	ipv4addr_clearall(&ipv4addr);
 	ipv4addr_clearall(&ipv4addr2);
+
 	mac_clearall(&macaddr);
+
+	for (a = 0; a < ipv6calc_arrays; a++) {
+		ipv6addr_clearall(&ipv6addr_a[a]);
+		ipv4addr_clearall(&ipv4addr_a[a]);
+		result_a[a] = -1;
+	};
 
 	/* pipe mode */
 	char linebuffer[LINEBUFFER];
@@ -384,33 +400,69 @@ int main(int argc, char *argv[]) {
 				};
 				break;
 
+			/* test command */
 			case CMD_test_prefix:
-				DEBUGPRINT_NA(DEBUG_ipv6calc_general, "special option 'test_prefix' selected");
+			case CMD_test_ge:
+			case CMD_test_gt:
+			case CMD_test_le:
+			case CMD_test_lt:
+				switch (i) {
+					case CMD_test_prefix:
+						a = IPV6CALC_TEST_PREFIX;
+						break;
+
+					case CMD_test_gt:
+						a = IPV6CALC_TEST_GT;
+						break;
+
+					case CMD_test_ge:
+						a = IPV6CALC_TEST_GE;
+						break;
+
+					case CMD_test_lt:
+						a = IPV6CALC_TEST_LT;
+						break;
+
+					case CMD_test_le:
+						a = IPV6CALC_TEST_LE;
+						break;
+				};
+
+				const char *test_text = "";
+				for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_longopts); i++) {
+					if (ipv6calc_longopts[i].val == i) {
+						test_text = ipv6calc_longopts[i].name;
+						break;
+					};
+				};
+				// retrieve text represtation
+				DEBUGPRINT_WA(DEBUG_ipv6calc_general, "special option '%s' selected", test_text);
+
 				// autodefine action
-				action = ACTION_test_prefix;
+				action = ACTION_test;
 				action_given = 1;
 				inputtype2 = libipv6calc_autodetectinput(optarg);
 				switch (inputtype2) {
 					case FORMAT_ipv6addr:
-						DEBUGPRINT_WA(DEBUG_ipv6calc_general, "special option 'test_prefix' has IPv6 address: %s", optarg);
-						retval = addr_to_ipv6addrstruct(optarg, resultstring, sizeof(resultstring), &ipv6addr2);
+						DEBUGPRINT_WA(DEBUG_ipv6calc_general, "special option '%s' has IPv6 address: %s", test_text, optarg);
+						retval = addr_to_ipv6addrstruct(optarg, resultstring, sizeof(resultstring), &ipv6addr_a[a]);
 						break;
 					case FORMAT_ipv4addr:
-						DEBUGPRINT_WA(DEBUG_ipv6calc_general, "special option 'test_prefix' has IPv4 address: %s", optarg);
-						retval = addr_to_ipv4addrstruct(optarg, resultstring, sizeof(resultstring), &ipv4addr2);
+						DEBUGPRINT_WA(DEBUG_ipv6calc_general, "special option '%s' has IPv4 address: %s", test_text, optarg);
+						retval = addr_to_ipv4addrstruct(optarg, resultstring, sizeof(resultstring), &ipv4addr_a[a]);
 						break;
 					default:
-						fprintf(stderr, "unsupported input type detected for 'test_prefix': %s\n", optarg);
+						fprintf(stderr, "unsupported input type detected for '%s': %s\n", test_text, optarg);
 						exit(EXIT_FAILURE);
 				};
 
 				if (retval != 0) {
-					fprintf(stderr, " Argument of option 'test_prefix' is not a valid IPv4/6 address: %s\n", optarg);
+					fprintf(stderr, " Argument of option '%s' is not a valid IPv4/6 address: %s\n", test_text, optarg);
 					exit(EXIT_FAILURE);
 				};
 
 				// save pointer for later
-				input2 = optarg;
+				input_a[a] = optarg;
 
 			/* format options */
 			case 'C':
@@ -720,15 +772,22 @@ int main(int argc, char *argv[]) {
 		};
 	};
 
-	if (action == ACTION_test_prefix) {
-		if ((ipv4addr2.flag_valid == 0) && (ipv6addr2.flag_valid == 0)) {
-			fprintf(stderr, "ipv6calc 'test_prefix' misses prefix for testing\n");
+	if (action == ACTION_test) {
+		// check whether at least one test option is given
+		result = 0;
+		for (a = 0; a < IPV6CALC_TEST_MAX_SUPPORTED; a++) {
+			if ((ipv4addr_a[a].flag_valid == 1) || (ipv6addr_a[a].flag_valid == 1)) {
+				result = 1;
+			};
+		};
+		if (result == 0) {
+			fprintf(stderr, "ipv6calc action 'test' misses prefix or begin/end for testing\n");
 			exit(EXIT_FAILURE);
 		};
 	};
 
 	if (argc > 0) {
-		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Got input %s", argv[0]);
+		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Got input: %s", argv[0]);
 	} else {
 		if (isatty (STDIN_FILENO)) {
 		} else {
@@ -838,11 +897,11 @@ PIPE_input:
 	};
 	
 	/* reset input type in case of action=filter and pipe mode */
-	if ((input_is_pipe == 1) && (action_given == 1) && ( (action == ACTION_filter) || (action == ACTION_test_prefix) ) ) {
+	if ((input_is_pipe == 1) && (action_given == 1) && ( (action == ACTION_filter) || (action == ACTION_test) ) ) {
 		DEBUGPRINT_NA(DEBUG_ipv6calc_general, "reset input type for later autodetection");
 		inputtype = FORMAT_auto;
 
-		if (action == ACTION_test_prefix) {
+		if (action == ACTION_test) {
 			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "reset output type for later autodetection");
 			outputtype = FORMAT_auto;
 			// clear flags
@@ -1249,9 +1308,9 @@ PIPE_input:
 		} else if ( (inputtype == FORMAT_mac) && (action == ACTION_mac_to_eui64) ) {
 			outputtype = FORMAT_eui64;
 			formatoptions |= FORMATOPTION_printfulluncompressed;
-		} else if ( (inputtype == FORMAT_ipv6addr) && ( (action == ACTION_undefined) || (action == ACTION_anonymize) || (action == ACTION_test_prefix) ) ) {
+		} else if ( (inputtype == FORMAT_ipv6addr) && ( (action == ACTION_undefined) || (action == ACTION_anonymize) || (action == ACTION_test) ) ) {
 			outputtype = FORMAT_ipv6addr;
-		} else if ( (inputtype == FORMAT_ipv4addr) && ( (action == ACTION_anonymize) || (action == ACTION_test_prefix) ) ) {
+		} else if ( (inputtype == FORMAT_ipv4addr) && ( (action == ACTION_anonymize) || (action == ACTION_test) ) ) {
 			outputtype = FORMAT_ipv4addr;
 		} else if ( ((inputtype == FORMAT_ipv4addr) || (inputtype == FORMAT_ipv4hex) || (inputtype == FORMAT_ipv4revhex)) && (action == ACTION_undefined || action == ACTION_anonymize) ) {
 			outputtype = FORMAT_ipv4addr;
@@ -1522,8 +1581,8 @@ PIPE_input:
 
 			break;
 
-		case ACTION_test_prefix:
-			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of action: test_prefix");
+		case ACTION_test:
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of action: test");
 
 			outputtype = inputtype;
 
@@ -1544,38 +1603,189 @@ PIPE_input:
 				exit(EXIT_FAILURE);
 			};
 
-			if (ipv4addr.flag_valid == 1) {
-				DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_prefix' for IPv4: %s with %s", input1, input2);
-				if (ipv4addr2.flag_valid == 1) {
+			retval = 0;
+			i = 0;
+
+			if (ipv4addr.flag_valid == 1) { // IPv4 address test
+				if (ipv4addr_a[IPV6CALC_TEST_PREFIX].flag_valid == 1) {
+					i++;
+					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_prefix' for IPv4: %s inside %s", input1, input_a[IPV6CALC_TEST_PREFIX]);
 					// compare with honor prefix length
-					retval = ipv4addr_compare(&ipv4addr2, &ipv4addr, 0);
-				} else {
-					retval = 2;
+					result = ipv4addr_compare(&ipv4addr_a[IPV6CALC_TEST_PREFIX], &ipv4addr, 0);
+					if (result == 0) {
+						result_a[IPV6CALC_TEST_PREFIX] = 0;
+					} else {
+						result_a[IPV6CALC_TEST_PREFIX] = 1;
+					};
 				};
-			} else if (ipv6addr.flag_valid == 1) {
-				DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_prefix' for IPv6: %s with %s", input1, input2);
-				if (ipv6addr2.flag_valid == 1) {
+
+				if (ipv4addr_a[IPV6CALC_TEST_GT].flag_valid == 1) {
+					i++;
+					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_gt' for IPv4: %s with %s", input1, input_a[IPV6CALC_TEST_GT]);
+					// compare
+					result = ipv4addr_compare(&ipv4addr, &ipv4addr_a[IPV6CALC_TEST_GT], 1);
+					if (result > 0) {
+						result_a[IPV6CALC_TEST_GT] = 0;
+					} else {
+						result_a[IPV6CALC_TEST_GT] = 1;
+					};
+				};
+
+				if (ipv4addr_a[IPV6CALC_TEST_GE].flag_valid == 1) {
+					i++;
+					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_ge' for IPv4: %s with %s", input1, input_a[IPV6CALC_TEST_GE]);
+					// compare
+					result = ipv4addr_compare(&ipv4addr, &ipv4addr_a[IPV6CALC_TEST_GE], 1);
+					if (result >= 0) {
+						result_a[IPV6CALC_TEST_GE] = 0;
+					} else {
+						result_a[IPV6CALC_TEST_GE] = 1;
+					}
+				};
+
+				if (ipv4addr_a[IPV6CALC_TEST_LT].flag_valid == 1) {
+					i++;
+					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_lt' for IPv4: %s with %s", input1, input_a[IPV6CALC_TEST_LT]);
+					// compare
+					result = ipv4addr_compare(&ipv4addr, &ipv4addr_a[IPV6CALC_TEST_LT], 1);
+					if (result < 0) {
+						result_a[IPV6CALC_TEST_LT] = 0;
+					} else {
+						result_a[IPV6CALC_TEST_LT] = 1;
+					};
+				};
+
+				if ((retval == 0) && (ipv4addr_a[IPV6CALC_TEST_LE].flag_valid == 1)) {
+					i++;
+					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_le' for IPv4: %s with %s", input1, input_a[IPV6CALC_TEST_LE]);
+					// compare
+					result = ipv4addr_compare(&ipv4addr, &ipv4addr_a[IPV6CALC_TEST_LE], 1);
+					if (result <= 0) {
+						result_a[IPV6CALC_TEST_LE] = 0;
+					} else {
+						result_a[IPV6CALC_TEST_LE] = 1;
+					};
+				};
+			} else if (ipv6addr.flag_valid == 1) { // IPv6 address
+				if (ipv6addr_a[IPV6CALC_TEST_PREFIX].flag_valid == 1) {
+					i++;
+					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_prefix' for IPv6: %s inside %s", input1, input_a[IPV6CALC_TEST_PREFIX]);
 					// compare with honor prefix length
-					retval = ipv6addr_compare(&ipv6addr2, &ipv6addr, 0);
-				} else {
-					retval = 2;
+					result = ipv6addr_compare(&ipv6addr_a[IPV6CALC_TEST_PREFIX], &ipv6addr, 0);
+					if (result == 0) {
+						result_a[IPV6CALC_TEST_PREFIX] = 0;
+					} else {
+						result_a[IPV6CALC_TEST_PREFIX] = 1;
+					};
+				};
+
+				if (ipv6addr_a[IPV6CALC_TEST_GT].flag_valid == 1) {
+					i++;
+					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_gt' for IPv6: %s with %s", input1, input_a[IPV6CALC_TEST_GT]);
+					// compare
+					result = ipv6addr_compare(&ipv6addr, &ipv6addr_a[IPV6CALC_TEST_GT], 1);
+					if (result > 0) {
+						result_a[IPV6CALC_TEST_GT] = 0;
+					} else {
+						result_a[IPV6CALC_TEST_GT] = 1;
+					};
+				};
+
+				if (ipv6addr_a[IPV6CALC_TEST_GE].flag_valid == 1) {
+					i++;
+					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_ge' for IPv6: %s with %s", input1, input_a[IPV6CALC_TEST_GE]);
+					// compare
+					result = ipv6addr_compare(&ipv6addr, &ipv6addr_a[IPV6CALC_TEST_GE], 1);
+					if (result >= 0) {
+						result_a[IPV6CALC_TEST_GE] = 0;
+					} else {
+						result_a[IPV6CALC_TEST_GE] = 1;
+					};
+				};
+
+				if (ipv6addr_a[IPV6CALC_TEST_LT].flag_valid == 1) {
+					i++;
+					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_lt' for IPv6: %s with %s", input1, input_a[IPV6CALC_TEST_LT]);
+					// compare
+					result = ipv6addr_compare(&ipv6addr, &ipv6addr_a[IPV6CALC_TEST_LT], 1);
+					if (result < 0) {
+						result_a[IPV6CALC_TEST_LT] = 0;
+					} else {
+						result_a[IPV6CALC_TEST_LT] = 1;
+					};
+				};
+
+				if (ipv6addr_a[IPV6CALC_TEST_LE].flag_valid == 1) {
+					i++;
+					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_le' for IPv6: %s with %s", input1, input_a[IPV6CALC_TEST_LE]);
+					// compare
+					result = ipv6addr_compare(&ipv6addr, &ipv6addr_a[IPV6CALC_TEST_LE], 1);
+					if (result <= 0) {
+						result_a[IPV6CALC_TEST_LE] = 0;
+					} else {
+						result_a[IPV6CALC_TEST_LE] = 1;
+					};
 				};
 			};
 
-			DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_prefix' result: %x", retval);
+			if (i == 0) {
+				retval = 2;
+			} else {
+				snprintf(resultstring2, sizeof(resultstring2), "%s", "");
+
+				// combine results
+				for (a = 0; a < IPV6CALC_TEST_MAX_SUPPORTED; a++) {
+					if (result_a[a] == 1) {
+						retval = 1;
+					};
+
+					// create result string
+					if (result_a[a] >= 0) {
+						switch (a) {
+							case IPV6CALC_TEST_PREFIX:
+								snprintf(resultstring2, sizeof(resultstring2), "%s  %s %s", resultstring3,
+									(result_a[a] == 0) ? "inside in" : "NOT inside in", input_a[a]);
+								break;
+
+							case IPV6CALC_TEST_GT:
+								snprintf(resultstring2, sizeof(resultstring2), "%s  %s %s", resultstring3,
+									(result_a[a] == 0) ? "greater than" : "NOT greater than", input_a[a]);
+								break;
+
+							case IPV6CALC_TEST_GE:
+								snprintf(resultstring2, sizeof(resultstring2), "%s  %s %s", resultstring3,
+									(result_a[a] == 0) ? "greater/equal than" : "not greater/equal than", input_a[a]);
+								break;
+
+							case IPV6CALC_TEST_LT:
+								snprintf(resultstring2, sizeof(resultstring2), "%s  %s %s", resultstring3,
+									(result_a[a] == 0) ? "less than" : "NOT less than", input_a[a]);
+								break;
+
+							case IPV6CALC_TEST_LE:
+								snprintf(resultstring2, sizeof(resultstring2), "%s  %s %s", resultstring3,
+									(result_a[a] == 0) ? "less/equal than" : "NOT less/equal than", input_a[a]);
+								break;
+						};
+						snprintf(resultstring3, sizeof(resultstring3), "%s", resultstring2);
+					};
+				};
+			};
+
+			DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_*' result: %x", retval);
 
 			if (input_is_pipe == 1) {
 				if (retval == 2) {
-					snprintf(resultstring, sizeof(resultstring), "%s uncomparable with %s", linebuffer, input2);
+					snprintf(resultstring, sizeof(resultstring), "%s uncomparable", linebuffer);
 				} else {
-					snprintf(resultstring, sizeof(resultstring), "%s %s %s", linebuffer, (retval == 0) ? "inside in" : "outside of", input2);
+					snprintf(resultstring, sizeof(resultstring), "%s %s", linebuffer, resultstring3);
 				};
 			} else {
 				if ((formatoptions & FORMATOPTION_quiet) == 0) {
 					if (retval == 2) {
-						snprintf(resultstring, sizeof(resultstring), "%s uncomparable with %s", input1, input2);
+						snprintf(resultstring, sizeof(resultstring), "%s uncomparable", input1);
 					} else {
-						snprintf(resultstring, sizeof(resultstring), "%s %s %s", input1, (retval == 0) ? "inside in" : "outside of", input2);
+						snprintf(resultstring, sizeof(resultstring), "%s %s", input1, resultstring3);
 					};
 				};
 			};
@@ -1797,7 +2007,7 @@ RESULT_print:
 	DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Print result");
 	/* print result */
 	if (strlen(resultstring) > 0) {
-		if ( (retval == 0) || (action == ACTION_test_prefix) ) {
+		if ( (retval == 0) || (action == ACTION_test) ) {
 			fprintf(stdout, "%s\n", resultstring);
 		} else {
 			fprintf(stderr, "%s\n", resultstring);

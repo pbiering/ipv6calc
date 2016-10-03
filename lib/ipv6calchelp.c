@@ -793,14 +793,23 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "\n");
 			break;
 
-		case ACTION_test_prefix:
-			fprintf(stderr, " Test given address(es) from stdin, e.g.\n");
-			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A test_prefix] --test_prefix 2001:db8::/32\n");
-			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A test_prefix] --test_prefix 2001:db9::/32\n");
+		case ACTION_test:
+			fprintf(stderr, " Test given address(es) against supported tests:\n");
+			fprintf(stderr, "  --test_prefix <PREFIX>       : inside a prefix\n");
+			fprintf(stderr, "  --test_gt|--test_ge <ADDRESS>: greater(/equal) than an address\n");
+			fprintf(stderr, "  --test_lt|--test_le <ADDRESS>: less(/equal) than an address\n");
 			fprintf(stderr, "\n");
-			fprintf(stderr, " Single address test, return code: 0=inside 1=outside 2=uncomparable\n");
-			fprintf(stderr, "  ipv6calc [-A test_prefix] --test_prefix 2001:db8::/32 2001:db8::1\n");
-			fprintf(stderr, "  ipv6calc [-A test_prefix] --test_prefix 2001:db9::/32 2001:db8::1\n");
+			fprintf(stderr, " Test given address(es) from stdin, e.g.\n");
+			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A test] --test_prefix 2001:db8::/32\n");
+			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A test] --test_prefix 2001:db9::/32\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, " Single address test, return code: 0=inside/matching 1=outside/not-matching 2=uncomparable\n");
+			fprintf(stderr, "  ipv6calc [-A test] --test_prefix 2001:db8::/32 2001:db8::1\n");
+			fprintf(stderr, "  ipv6calc [-A test] --test_prefix 2001:db9::/32 2001:db8::1\n");
+			fprintf(stderr, "  ipv6calc [-A test] --test_ge 2001:db8:: --test_le 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff 2001:db8::1\n");
+			fprintf(stderr, "  ipv6calc [-A test] --test_ge 2001:db9:: --test_le 2001:db9:ffff:ffff:ffff:ffff:ffff:ffff 2001:db8::1\n");
+			fprintf(stderr, "  ipv6calc [-A test] --test_ge 2001:db9:: --test_lt 2001:dba:: 2001:db8::1\n");
+			fprintf(stderr, "  ipv6calc [-A test] --test_ge 2001:db8:: --test_lt 2001:db9:: 2001:db8::1\n");
 			fprintf(stderr, "\n");
 			break;
 	};

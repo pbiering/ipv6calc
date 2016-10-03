@@ -126,6 +126,16 @@ if [ $? -ne 2 ]; then
 	exit 1
 fi
 
+testscenario_action_test | while IFS="|" read result options comment; do
+	./ipv6calc -q $options
+	rc=$?
+	if [ $rc -ne $result ]; then
+		echo "ERROR : something is going wrong with: $options (rc=$rc but should $result)"
+		exit 1
+	fi
+done
+
+
 echo "INFO  : $test successful"
 
 echo "INFO  : all ipv6calc filter tests successful"

@@ -122,8 +122,13 @@ static struct option ipv6calc_longopts[] = {
 	/* 6rd_prefix options for showinfo/action */
 	{ "6rd_prefixlength"	, 1, NULL, CMD_6rd_prefixlength },
 
-	/* test_prefix options action */
+	/* test_* options action */
 	{ "test_prefix"		, 1, NULL, CMD_test_prefix },
+	{ "test_ge"		, 1, NULL, CMD_test_ge },
+	{ "test_gt"		, 1, NULL, CMD_test_gt },
+	{ "test_le"		, 1, NULL, CMD_test_le },
+	{ "test_lt"		, 1, NULL, CMD_test_lt },
+
 }; 
 
 
