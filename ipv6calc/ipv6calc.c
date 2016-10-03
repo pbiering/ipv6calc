@@ -1754,7 +1754,7 @@ PIPE_input:
 
 							case IPV6CALC_TEST_GE:
 								snprintf(resultstring2, sizeof(resultstring2), "%s  %s %s", resultstring3,
-									(result_a[a] == 0) ? "greater/equal than" : "not greater/equal than", input_a[a]);
+									(result_a[a] == 0) ? "greater/equal than" : "NOT greater/equal than", input_a[a]);
 								break;
 
 							case IPV6CALC_TEST_LT:
