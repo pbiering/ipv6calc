@@ -65,7 +65,7 @@ testscenarios_filter | while read input filter_feature; do
 			[ "$verbose" = "1" ] && echo "INFO  : result ok!" || true
 		fi
 	else
-		echo "Result empty!"
+		echo "Result empty: echo $input | ./ipv6calc -A filter -E $filter"
 		exit 1
 	fi
 	[ "$verbose" = "1" ] || echo -n "."

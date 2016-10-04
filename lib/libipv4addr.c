@@ -967,6 +967,10 @@ int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token)
 	const char *prefixaddreq_lt = "addr<";
 	const char *prefixaddreq_ge = "addr>=";
 	const char *prefixaddreq_gt = "addr>";
+	const char *prefixaddreq_le2 = "addr=le=";
+	const char *prefixaddreq_lt2 = "addr=lt=";
+	const char *prefixaddreq_ge2 = "addr=ge=";
+	const char *prefixaddreq_gt2 = "addr=gt=";
 	ipv6calc_ipv4addr ipv4addr;
 	char resultstring[NI_MAXHOST];
 	int db = 0, addr = 0;
@@ -1006,14 +1010,7 @@ int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token)
 		DEBUGPRINT_WA(DEBUG_libipv4addr, "token with prefix, suffix: %s", token + offset);
 	};
 
-	if (strncmp(token + offset, prefixaddreq, strlen(prefixaddreq)) == 0) {
-		/* prefixaddr with = found */
-		DEBUGPRINT_WA(DEBUG_libipv4addr, "found 'addr=' prefix in token: %s", token);
-		addr = 1;
-		offset += strlen(prefixaddreq);
-		addr_test_method = IPV6CALC_TEST_PREFIX;
-
-	} else if (strncmp(token + offset, prefixaddreq_le, strlen(prefixaddreq_le)) == 0) {
+	if (strncmp(token + offset, prefixaddreq_le, strlen(prefixaddreq_le)) == 0) {
 		/* prefixaddr with = found */
 		DEBUGPRINT_WA(DEBUG_libipv4addr, "found 'addr<=' prefix in token: %s", token);
 		addr = 1;
@@ -1040,6 +1037,41 @@ int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token)
 		addr = 1;
 		offset += strlen(prefixaddreq_gt);
 		addr_test_method = IPV6CALC_TEST_GT;
+
+	} else if (strncmp(token + offset, prefixaddreq_le2, strlen(prefixaddreq_le2)) == 0) {
+		/* prefixaddr with = found */
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "found 'addr=le=' prefix in token: %s", token);
+		addr = 1;
+		offset += strlen(prefixaddreq_le2);
+		addr_test_method = IPV6CALC_TEST_LE;
+
+	} else if (strncmp(token + offset, prefixaddreq_lt2, strlen(prefixaddreq_lt2)) == 0) {
+		/* prefixaddr with = found */
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "found 'addr=lt=' prefix in token: %s", token);
+		addr = 1;
+		offset += strlen(prefixaddreq_lt2);
+		addr_test_method = IPV6CALC_TEST_LT;
+
+	} else if (strncmp(token + offset, prefixaddreq_ge2, strlen(prefixaddreq_ge2)) == 0) {
+		/* prefixaddr with = found */
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "found 'addr=ge=' prefix in token: %s", token);
+		addr = 1;
+		offset += strlen(prefixaddreq_ge2);
+		addr_test_method = IPV6CALC_TEST_GE;
+
+	} else if (strncmp(token + offset, prefixaddreq_gt2, strlen(prefixaddreq_gt2)) == 0) {
+		/* prefixaddr with = found */
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "found 'addr=gt=' prefix in token: %s", token);
+		addr = 1;
+		offset += strlen(prefixaddreq_gt2);
+		addr_test_method = IPV6CALC_TEST_GT;
+
+	} else if (strncmp(token + offset, prefixaddreq, strlen(prefixaddreq)) == 0) {
+		/* prefixaddr with = found */
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "found 'addr=' prefix in token: %s", token);
+		addr = 1;
+		offset += strlen(prefixaddreq);
+		addr_test_method = IPV6CALC_TEST_PREFIX;
 
 	} else if (strncmp(token + offset, prefixdbdot, strlen(prefixdbdot)) == 0) {
 		/* prefixdb with dot found */
@@ -1239,7 +1271,7 @@ int ipv4addr_filter(const ipv6calc_ipv4addr *ipv4addrp, const s_ipv6calc_filter_
 			r = 0;
 			for (i = 0; i < filter->filter_addr.addr_must_have_max; i++) {
 				t = ipv4addr_compare(ipv4addrp, &filter->filter_addr.ipv4addr_must_have[i],
-					(filter->filter_addr.ipv4addr_must_have[i].test_mode == IPV6CALC_TEST_PREFIX) ? 0 : 1);
+					(filter->filter_addr.ipv4addr_must_have[i].test_mode == IPV6CALC_TEST_PREFIX) ? 1 : 0);
 
 				switch (filter->filter_addr.ipv4addr_must_have[i].test_mode) {
 					case IPV6CALC_TEST_PREFIX:
@@ -1272,7 +1304,7 @@ int ipv4addr_filter(const ipv6calc_ipv4addr *ipv4addrp, const s_ipv6calc_filter_
 			r = 0;
 			for (i = 0; i < filter->filter_addr.addr_may_not_have_max; i++) {
 				t = ipv4addr_compare(ipv4addrp, &filter->filter_addr.ipv4addr_may_not_have[i],
-					(filter->filter_addr.ipv4addr_may_not_have[i].test_mode == IPV6CALC_TEST_PREFIX) ? 0 : 1);
+					(filter->filter_addr.ipv4addr_may_not_have[i].test_mode == IPV6CALC_TEST_PREFIX) ? 1 : 0);
 
 				switch (filter->filter_addr.ipv4addr_may_not_have[i].test_mode) {
 					case IPV6CALC_TEST_PREFIX:
