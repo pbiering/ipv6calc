@@ -234,6 +234,10 @@ a909:16fa:9092:23ff:a909:4941::7		anonymized-prefix
 1.2.3.4						^ipv4.addr=1.2.2.0/24
 2001:db8::2					ipv6.addr=2001:db8::/32
 2001:db8::2					^ipv6.addr=2001:db9::/32
+2001:db8::2					^ipv6.addr=ge=2001:db8::3
+2001:db8::2					^ipv6.addr=lt=2001:db8::1
+1.2.3.4						^ipv4.addr=gt=1.2.3.5
+1.2.3.4						^ipv4.addr=lt=1.2.3.3
 END
 }
 

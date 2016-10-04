@@ -255,6 +255,8 @@ int ipv6addr_compare(const ipv6calc_ipv6addr *ipv6addrp1, const ipv6calc_ipv6add
 	int i;
 	uint32_t mask;
 
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "compare addr1 with addr2 (compare flags: %08x)", compare_flags);
+
 	if (compare_flags == 1) {
 		for (i = 0; i < 4; i++) {
 			if ((ipv6addrp2->flag_prefixuse == 0)
@@ -2850,42 +2852,47 @@ int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_
 	if (filter->filter_addr.active > 0) {
 		if (filter->filter_addr.addr_must_have_max > 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6addr, "compare against ipv6addr/must_have");
-			r = 0;
+			r = 1;
 			for (i = 0; i < filter->filter_addr.addr_must_have_max; i++) {
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "compare against ipv6addr/must_have filter number: %d", i);
 				t = ipv6addr_compare(ipv6addrp, &filter->filter_addr.ipv6addr_must_have[i],
 					(filter->filter_addr.ipv6addr_must_have[i].test_mode == IPV6CALC_TEST_PREFIX) ? 1 : 0);
 
 				switch (filter->filter_addr.ipv6addr_must_have[i].test_mode) {
 					case IPV6CALC_TEST_PREFIX:
-						if (t == 0) { r = 1; }; break;
+						if (t != 0) { r = 0; }; break;
 
 					case IPV6CALC_TEST_LE:
-						if (t <= 0) { r = 1; }; break;
+						if (t >  0) { r = 0; }; break;
 
 					case IPV6CALC_TEST_LT:
-						if (t <  0) { r = 1; }; break;
+						if (t >= 0) { r = 0; }; break;
 
 					case IPV6CALC_TEST_GE:
-						if (t >= 0) { r = 1; }; break;
+						if (t <  0) { r = 0; }; break;
 
 					case IPV6CALC_TEST_GT:
-						if (t >  0) { r = 1; }; break;
+						if (t <= 0) { r = 0; }; break;
 
 					default:
 						ERRORPRINT_WA("unsupported test mode (FIX CODE): %d", filter->filter_addr.ipv6addr_must_have[i].test_mode);
 						break;
 				};
+
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "compare against ipv6addr/must_have result filter number: %d r=%d", i, r);
 			};
 			if (r == 0) {
 				/* no match */
 				result = 1;
 			};
+			DEBUGPRINT_WA(DEBUG_libipv6addr, "compare against ipv6addr/must_have result: r=%d result=%d", r, result);
 		};
 		if (filter->filter_addr.addr_may_not_have_max > 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6addr, "compare against ipv6addr/may_not_have");
 			r = 0;
 			for (i = 0; i < filter->filter_addr.addr_may_not_have_max; i++) {
-				t = ipv6addr_compare(&filter->filter_addr.ipv6addr_may_not_have[i], ipv6addrp,
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "compare against ipv6addr/may_not_have filter number: %d", i);
+				t = ipv6addr_compare(ipv6addrp, &filter->filter_addr.ipv6addr_may_not_have[i],
 					(filter->filter_addr.ipv6addr_may_not_have[i].test_mode == IPV6CALC_TEST_PREFIX) ? 1 : 0);
 
 				switch (filter->filter_addr.ipv6addr_may_not_have[i].test_mode) {
@@ -2908,6 +2915,7 @@ int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_
 						ERRORPRINT_WA("unsupported test mode (FIX CODE): %d", filter->filter_addr.ipv6addr_must_have[i].test_mode);
 						break;
 				};
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "compare against ipv6addr/may_not_have result filter number: %d r=%d", i, r);
 			};
 			if (r == 1) {
 				/* match may_not_have*/
