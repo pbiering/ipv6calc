@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
- * Version    : $Id: libipv4addr.h,v 1.41 2015/05/07 06:19:27 ds6peter Exp $
- * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id$
+ * Copyright  : 2002-2016 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -24,6 +24,7 @@ typedef struct {
 	int flag_prefixuse;		/* =1 prefix length in use (CIDR notation) */
 	uint32_t scope;			/* address typeinfo/scope */
 	int flag_valid;			/* address structure filled */
+	uint8_t test_mode;		/* test mode */
 } ipv6calc_ipv4addr;
 
 /* IPv4 Address filter structure */

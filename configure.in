@@ -1,23 +1,23 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Version  : $Id: configure.in,v 1.153 2016/03/09 21:21:24 ds6peter Exp $
+dnl Version  : $Id$
 dnl Copyright: 2001-2016 by Peter Bieringer <pb (at) bieringer.de>  
 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(ipv6calc, 0.99.1, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
+AC_INIT(ipv6calc, 0.99.2, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
 
 COPYRIGHT_YEAR=2016
 
 dnl Program/library version (align with version above)
 PACKAGE_VERSION_MAJOR=0
 PACKAGE_VERSION_MINOR=99
-PACKAGE_VERSION_BUGFIX=1
+PACKAGE_VERSION_BUGFIX=2
 
 dnl API version
 API_VERSION_MAJOR=0
 API_VERSION_MINOR=99
-API_VERSION_BUGFIX=1
+API_VERSION_BUGFIX=2
 
 
 dnl Generic data definitions

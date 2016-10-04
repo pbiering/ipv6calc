@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20161004/PB
+	ipv6calc: support <|<=|>=|> option in address filter strings
+
 20161003/PB
 	ipv6calc: add option --test_lt|gt|le|ge <IP address>
 

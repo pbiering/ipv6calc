@@ -782,6 +782,10 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "   [^]ipv4.addr=<IPV4-ADDRESS>[<PREFIX-LENGTH>]\n");
 			fprintf(stderr, "   [^]ipv6.addr=<IPV6-ADDRESS>[<PREFIX-LENGTH>]\n");
 			fprintf(stderr, "\n");
+			fprintf(stderr, "  IPv4/v6 address filter tokens based on address ranges (<=|<|>|>=):\n");
+			fprintf(stderr, "   [^]ipv4.addr>=<IPV4-ADDRESS>\n");
+			fprintf(stderr, "   [^]ipv6.addr<<IPV6-ADDRESS>\n");
+			fprintf(stderr, "\n");
 			fprintf(stderr, "  EUI-48/MAC address filter tokens:\n");
 			fprintf(stderr, "   ");
 			fprintf(stderr, " IMPLEMENTATION MISSING");

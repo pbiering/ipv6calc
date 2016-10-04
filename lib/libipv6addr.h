@@ -1,8 +1,8 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.h
- * Version    : $Id: libipv6addr.h,v 1.90 2015/05/30 16:42:32 ds6peter Exp $
- * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Version    : $Id$
+ * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  *
  * Information:
  *  Header file for libipv6addr.c
@@ -175,6 +175,7 @@ typedef struct {
 	char scopeid[IPV6CALC_SCOPEID_STRING_MAX];	/* scope ID value */
 	int flag_scopeid;		/* =1: scope ID value set */
 	uint8_t prefix2length;		/* prefix 2 length (0-128) 8 bit (usage depends on typeinfo/typeinfo2)*/
+	uint8_t test_mode;		/* address test mode */
 } ipv6calc_ipv6addr;
 
 /* IPv6 Address filter structure */

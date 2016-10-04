@@ -196,6 +196,9 @@ void ipv6addr_clear(ipv6calc_ipv6addr *ipv6addrp) {
 	/* Clear valid flag */
 	ipv6addrp->flag_valid = 0;
 
+	/* Clear test mode */
+	ipv6addrp->test_mode = 0;
+
 	return;
 };
 
@@ -241,36 +244,37 @@ void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6addr *ip
  *
  * in:  ipv6addrp1  = pointer to IPv6 address structure
  * in:  ipv6addrp2  = pointer to IPv6 address structure
- * in:  compare_flags: 0=honor prefix length on addr1
- *                     1=less than/equal/greater than
+ * in:  compare_flags:
+ *  0=less than/equal/greater than
+ *  1=honor prefix length on addr2
  *
- * returns: 0: addr2 equal with addr1 or covered by addr1/prefix (compare_flags == 0)
- * returns: 0: addr2 equal with addr1, 1: addr1 > addr2, -1: addr1 < addr2 (compare_flags == 1)
+ * returns: 0: addr1 equal with addr2, 1: addr1 > addr2, -1: addr1 < addr2 (compare_flags == 0)
+ * returns: 0: addr1 equal with addr2 or covered by addr2/prefix (compare_flags == 1)
  */
 int ipv6addr_compare(const ipv6calc_ipv6addr *ipv6addrp1, const ipv6calc_ipv6addr *ipv6addrp2, const uint16_t compare_flags) {
 	int i;
 	uint32_t mask;
 
-	if (compare_flags == 0) {
+	if (compare_flags == 1) {
 		for (i = 0; i < 4; i++) {
-			if ((ipv6addrp1->flag_prefixuse == 0)
-			  || ((ipv6addrp1->flag_prefixuse == 1) && (ipv6addrp1->prefixlength >= (i + 1) * 32))) {
-				DEBUGPRINT_WA(DEBUG_libipv6addr, "compare dword %i (prefixuse=%d): %08x <-> %08x", i, ipv6addrp1->flag_prefixuse, ipv6addr_getdword(ipv6addrp1, i), ipv6addr_getdword(ipv6addrp2, i));
+			if ((ipv6addrp2->flag_prefixuse == 0)
+			  || ((ipv6addrp2->flag_prefixuse == 1) && (ipv6addrp2->prefixlength >= (i + 1) * 32))) {
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "compare dword %i (prefixuse=%d): %08x <-> %08x", i, ipv6addrp2->flag_prefixuse, ipv6addr_getdword(ipv6addrp2, i), ipv6addr_getdword(ipv6addrp1, i));
 				/* compare 32 bits */
-				if (ipv6addr_getdword(ipv6addrp1, i) != ipv6addr_getdword(ipv6addrp2, i)) {
+				if (ipv6addr_getdword(ipv6addrp2, i) != ipv6addr_getdword(ipv6addrp1, i)) {
 					return(1);
 				};
-			} else if (ipv6addrp1->flag_prefixuse == 1) {
-				mask = ~(0xffffffffu >> (ipv6addrp1->prefixlength - i * 32));
-				DEBUGPRINT_WA(DEBUG_libipv6addr, "compare dword %i with mask 0x%08x: %08x <-> %08x", i, mask, (ipv6addr_getdword(ipv6addrp1, i) & mask), (ipv6addr_getdword(ipv6addrp2, i) & mask));
-				if ((ipv6addr_getdword(ipv6addrp1, i) & mask) != (ipv6addr_getdword(ipv6addrp2, i) & mask)) {
+			} else if (ipv6addrp2->flag_prefixuse == 1) {
+				mask = ~(0xffffffffu >> (ipv6addrp2->prefixlength - i * 32));
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "compare dword %i with mask 0x%08x: %08x <-> %08x", i, mask, (ipv6addr_getdword(ipv6addrp2, i) & mask), (ipv6addr_getdword(ipv6addrp1, i) & mask));
+				if ((ipv6addr_getdword(ipv6addrp2, i) & mask) != (ipv6addr_getdword(ipv6addrp1, i) & mask)) {
 					return(1);
 				} else {
 					return(0);
 				};
 			};
 		};
-	} else if (compare_flags == 1) {
+	} else if (compare_flags == 0) {
 		for (i = 0; i < 4; i++) {
 			if (ipv6addr_getdword(ipv6addrp1, i) > ipv6addr_getdword(ipv6addrp2, i)) {
 				return(1);
@@ -2539,9 +2543,14 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 	const char *prefixdot = "ipv6.";
 	const char *prefixdbdot = "db.";
 	const char *prefixaddreq = "addr=";
+	const char *prefixaddreq_le = "addr<=";
+	const char *prefixaddreq_lt = "addr<";
+	const char *prefixaddreq_ge = "addr>=";
+	const char *prefixaddreq_gt = "addr>";
 	ipv6calc_ipv6addr ipv6addr;
 	char resultstring[NI_MAXHOST];
 	int db = 0, addr = 0;
+	int addr_test_method;
 
 	if (token == NULL) {
 		return (result);
@@ -2582,6 +2591,35 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 		DEBUGPRINT_WA(DEBUG_libipv6addr, "found 'addr=' prefix in token: %s", token);
 		addr = 1;
 		offset += strlen(prefixaddreq);
+		addr_test_method = IPV6CALC_TEST_PREFIX;
+
+	} else if (strncmp(token + offset, prefixaddreq_le, strlen(prefixaddreq_le)) == 0) {
+		/* prefixaddr with = found */
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "found 'addr<=' prefix in token: %s", token);
+		addr = 1;
+		offset += strlen(prefixaddreq_le);
+		addr_test_method = IPV6CALC_TEST_LE;
+
+	} else if (strncmp(token + offset, prefixaddreq_lt, strlen(prefixaddreq_lt)) == 0) {
+		/* prefixaddr with = found */
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "found 'addr<' prefix in token: %s", token);
+		addr = 1;
+		offset += strlen(prefixaddreq_lt);
+		addr_test_method = IPV6CALC_TEST_LT;
+
+	} else if (strncmp(token + offset, prefixaddreq_ge, strlen(prefixaddreq_ge)) == 0) {
+		/* prefixaddr with = found */
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "found 'addr>=' prefix in token: %s", token);
+		addr = 1;
+		offset += strlen(prefixaddreq_ge);
+		addr_test_method = IPV6CALC_TEST_GE;
+
+	} else if (strncmp(token + offset, prefixaddreq_gt, strlen(prefixaddreq_gt)) == 0) {
+		/* prefixaddr with = found */
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "found 'addr>' prefix in token: %s", token);
+		addr = 1;
+		offset += strlen(prefixaddreq_gt);
+		addr_test_method = IPV6CALC_TEST_GT;
 
 	} else if (strncmp(token + offset, prefixdbdot, strlen(prefixdbdot)) == 0) {
 		/* prefixdb with dot found */
@@ -2643,8 +2681,12 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 	if (addr == 1) {
 		DEBUGPRINT_WA(DEBUG_libipv6addr, "try to parse IPv6 address: %s", token + offset);
 		r = addr_to_ipv6addrstruct(token + offset, resultstring, sizeof(resultstring), &ipv6addr);
+
 		if (r == 0) {
 			DEBUGPRINT_WA(DEBUG_libipv6addr, "successfully parsed IPv6 address: %s", token + offset);
+
+			// store address test method in 'flag_startend_use'
+			ipv6addr.test_mode = addr_test_method;
 
 			if (negate == 1) {
 				if (filter->filter_addr.addr_may_not_have_max < IPV6CALC_FILTER_IPV6ADDR) {
@@ -2746,7 +2788,7 @@ int ipv6addr_filter_check(s_ipv6calc_filter_ipv6addr *filter) {
  */
 int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_ipv6addr *filter) {
 	uint32_t typeinfo;
-	int result = 0, r, i;
+	int result = 0, r, i, t;
 
 	if (filter->active == 0) {
 		DEBUGPRINT_NA(DEBUG_libipv6addr, "No filter active (SKIP)");
@@ -2777,9 +2819,28 @@ int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_
 			DEBUGPRINT_NA(DEBUG_libipv6addr, "compare against ipv6addr/must_have");
 			r = 0;
 			for (i = 0; i < filter->filter_addr.addr_must_have_max; i++) {
-				if (ipv6addr_compare(&filter->filter_addr.ipv6addr_must_have[i], ipv6addrp, 0) == 0) {
-					/* match must_have */
-					r = 1;
+				t = ipv6addr_compare(ipv6addrp, &filter->filter_addr.ipv6addr_must_have[i],
+					(filter->filter_addr.ipv6addr_must_have[i].test_mode == IPV6CALC_TEST_PREFIX) ? 0 : 1);
+
+				switch (filter->filter_addr.ipv6addr_must_have[i].test_mode) {
+					case IPV6CALC_TEST_PREFIX:
+						if (t == 0) { r = 1; }; break;
+
+					case IPV6CALC_TEST_LE:
+						if (t <= 0) { r = 1; }; break;
+
+					case IPV6CALC_TEST_LT:
+						if (t <  0) { r = 1; }; break;
+
+					case IPV6CALC_TEST_GE:
+						if (t >= 0) { r = 1; }; break;
+
+					case IPV6CALC_TEST_GT:
+						if (t >  0) { r = 1; }; break;
+
+					default:
+						ERRORPRINT_WA("unsupported test mode (FIX CODE): %d", filter->filter_addr.ipv6addr_must_have[i].test_mode);
+						break;
 				};
 			};
 			if (r == 0) {
@@ -2791,9 +2852,28 @@ int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_
 			DEBUGPRINT_NA(DEBUG_libipv6addr, "compare against ipv6addr/may_not_have");
 			r = 0;
 			for (i = 0; i < filter->filter_addr.addr_may_not_have_max; i++) {
-				if (ipv6addr_compare(&filter->filter_addr.ipv6addr_may_not_have[i], ipv6addrp, 0) == 0) {
-					/* match may_not_have */
-					r = 1;
+				t = ipv6addr_compare(&filter->filter_addr.ipv6addr_may_not_have[i], ipv6addrp,
+					(filter->filter_addr.ipv6addr_may_not_have[i].test_mode == IPV6CALC_TEST_PREFIX) ? 0 : 1);
+
+				switch (filter->filter_addr.ipv6addr_may_not_have[i].test_mode) {
+					case IPV6CALC_TEST_PREFIX:
+						if (t == 0) { r = 1; }; break;
+
+					case IPV6CALC_TEST_LE:
+						if (t <= 0) { r = 1; }; break;
+
+					case IPV6CALC_TEST_LT:
+						if (t <  0) { r = 1; }; break;
+
+					case IPV6CALC_TEST_GE:
+						if (t >= 0) { r = 1; }; break;
+
+					case IPV6CALC_TEST_GT:
+						if (t >  0) { r = 1; }; break;
+
+					default:
+						ERRORPRINT_WA("unsupported test mode (FIX CODE): %d", filter->filter_addr.ipv6addr_must_have[i].test_mode);
+						break;
 				};
 			};
 			if (r == 1) {

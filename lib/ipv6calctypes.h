@@ -395,6 +395,15 @@ typedef struct {
 } s_ipv6calc_filter_typeinfo;
 
 
+#define IPV6CALC_TEST_PREFIX	1
+#define IPV6CALC_TEST_GT	2
+#define IPV6CALC_TEST_GE	3
+#define IPV6CALC_TEST_LT	4
+#define IPV6CALC_TEST_LE	5
+
+#define IPV6CALC_TEST_LIST_MIN	IPV6CALC_TEST_PREFIX
+#define IPV6CALC_TEST_LIST_MAX	IPV6CALC_TEST_LE
+
 #endif // _ipv6calctypes_h_
 
 

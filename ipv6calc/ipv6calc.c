@@ -122,7 +122,7 @@ int main(int argc, char *argv[]) {
 	ipv6calc_eui64addr  eui64addr;
 
 	/* arrays of structures and chars for "test" action */
-	#define ipv6calc_arrays 5
+	#define ipv6calc_arrays (IPV6CALC_TEST_LIST_MAX + 1)
 	ipv6calc_ipv6addr ipv6addr_a[ipv6calc_arrays];
 	ipv6calc_ipv4addr ipv4addr_a[ipv6calc_arrays];
 	char *input_a[ipv6calc_arrays];
@@ -775,7 +775,7 @@ int main(int argc, char *argv[]) {
 	if (action == ACTION_test) {
 		// check whether at least one test option is given
 		result = 0;
-		for (a = 0; a < IPV6CALC_TEST_MAX_SUPPORTED; a++) {
+		for (a = IPV6CALC_TEST_LIST_MIN; a <= IPV6CALC_TEST_LIST_MAX; a++) {
 			if ((ipv4addr_a[a].flag_valid == 1) || (ipv6addr_a[a].flag_valid == 1)) {
 				result = 1;
 			};
@@ -1611,7 +1611,7 @@ PIPE_input:
 					i++;
 					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_prefix' for IPv4: %s inside %s", input1, input_a[IPV6CALC_TEST_PREFIX]);
 					// compare with honor prefix length
-					result = ipv4addr_compare(&ipv4addr_a[IPV6CALC_TEST_PREFIX], &ipv4addr, 0);
+					result = ipv4addr_compare(&ipv4addr, &ipv4addr_a[IPV6CALC_TEST_PREFIX], 1);
 					if (result == 0) {
 						result_a[IPV6CALC_TEST_PREFIX] = 0;
 					} else {
@@ -1623,7 +1623,7 @@ PIPE_input:
 					i++;
 					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_gt' for IPv4: %s with %s", input1, input_a[IPV6CALC_TEST_GT]);
 					// compare
-					result = ipv4addr_compare(&ipv4addr, &ipv4addr_a[IPV6CALC_TEST_GT], 1);
+					result = ipv4addr_compare(&ipv4addr, &ipv4addr_a[IPV6CALC_TEST_GT], 0);
 					if (result > 0) {
 						result_a[IPV6CALC_TEST_GT] = 0;
 					} else {
@@ -1635,7 +1635,7 @@ PIPE_input:
 					i++;
 					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_ge' for IPv4: %s with %s", input1, input_a[IPV6CALC_TEST_GE]);
 					// compare
-					result = ipv4addr_compare(&ipv4addr, &ipv4addr_a[IPV6CALC_TEST_GE], 1);
+					result = ipv4addr_compare(&ipv4addr, &ipv4addr_a[IPV6CALC_TEST_GE], 0);
 					if (result >= 0) {
 						result_a[IPV6CALC_TEST_GE] = 0;
 					} else {
@@ -1647,7 +1647,7 @@ PIPE_input:
 					i++;
 					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_lt' for IPv4: %s with %s", input1, input_a[IPV6CALC_TEST_LT]);
 					// compare
-					result = ipv4addr_compare(&ipv4addr, &ipv4addr_a[IPV6CALC_TEST_LT], 1);
+					result = ipv4addr_compare(&ipv4addr, &ipv4addr_a[IPV6CALC_TEST_LT], 0);
 					if (result < 0) {
 						result_a[IPV6CALC_TEST_LT] = 0;
 					} else {
@@ -1659,7 +1659,7 @@ PIPE_input:
 					i++;
 					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_le' for IPv4: %s with %s", input1, input_a[IPV6CALC_TEST_LE]);
 					// compare
-					result = ipv4addr_compare(&ipv4addr, &ipv4addr_a[IPV6CALC_TEST_LE], 1);
+					result = ipv4addr_compare(&ipv4addr, &ipv4addr_a[IPV6CALC_TEST_LE], 0);
 					if (result <= 0) {
 						result_a[IPV6CALC_TEST_LE] = 0;
 					} else {
@@ -1671,7 +1671,7 @@ PIPE_input:
 					i++;
 					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_prefix' for IPv6: %s inside %s", input1, input_a[IPV6CALC_TEST_PREFIX]);
 					// compare with honor prefix length
-					result = ipv6addr_compare(&ipv6addr_a[IPV6CALC_TEST_PREFIX], &ipv6addr, 0);
+					result = ipv6addr_compare(&ipv6addr, &ipv6addr_a[IPV6CALC_TEST_PREFIX], 1);
 					if (result == 0) {
 						result_a[IPV6CALC_TEST_PREFIX] = 0;
 					} else {
@@ -1683,7 +1683,7 @@ PIPE_input:
 					i++;
 					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_gt' for IPv6: %s with %s", input1, input_a[IPV6CALC_TEST_GT]);
 					// compare
-					result = ipv6addr_compare(&ipv6addr, &ipv6addr_a[IPV6CALC_TEST_GT], 1);
+					result = ipv6addr_compare(&ipv6addr, &ipv6addr_a[IPV6CALC_TEST_GT], 0);
 					if (result > 0) {
 						result_a[IPV6CALC_TEST_GT] = 0;
 					} else {
@@ -1695,7 +1695,7 @@ PIPE_input:
 					i++;
 					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_ge' for IPv6: %s with %s", input1, input_a[IPV6CALC_TEST_GE]);
 					// compare
-					result = ipv6addr_compare(&ipv6addr, &ipv6addr_a[IPV6CALC_TEST_GE], 1);
+					result = ipv6addr_compare(&ipv6addr, &ipv6addr_a[IPV6CALC_TEST_GE], 0);
 					if (result >= 0) {
 						result_a[IPV6CALC_TEST_GE] = 0;
 					} else {
@@ -1707,7 +1707,7 @@ PIPE_input:
 					i++;
 					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_lt' for IPv6: %s with %s", input1, input_a[IPV6CALC_TEST_LT]);
 					// compare
-					result = ipv6addr_compare(&ipv6addr, &ipv6addr_a[IPV6CALC_TEST_LT], 1);
+					result = ipv6addr_compare(&ipv6addr, &ipv6addr_a[IPV6CALC_TEST_LT], 0);
 					if (result < 0) {
 						result_a[IPV6CALC_TEST_LT] = 0;
 					} else {
@@ -1719,7 +1719,7 @@ PIPE_input:
 					i++;
 					DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_le' for IPv6: %s with %s", input1, input_a[IPV6CALC_TEST_LE]);
 					// compare
-					result = ipv6addr_compare(&ipv6addr, &ipv6addr_a[IPV6CALC_TEST_LE], 1);
+					result = ipv6addr_compare(&ipv6addr, &ipv6addr_a[IPV6CALC_TEST_LE], 0);
 					if (result <= 0) {
 						result_a[IPV6CALC_TEST_LE] = 0;
 					} else {
@@ -1734,7 +1734,7 @@ PIPE_input:
 				snprintf(resultstring2, sizeof(resultstring2), "%s", "");
 
 				// combine results
-				for (a = 0; a < IPV6CALC_TEST_MAX_SUPPORTED; a++) {
+				for (a = IPV6CALC_TEST_LIST_MIN; a <= IPV6CALC_TEST_LIST_MAX; a++) {
 					if (result_a[a] == 1) {
 						retval = 1;
 					};
