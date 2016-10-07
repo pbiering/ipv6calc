@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2016 by Peter Bieringer <pb@bieringer.de>
-# $Id: ipv6calc.spec,v 1.312 2016/03/09 21:21:24 ds6peter Exp $
+# $Id: 0df17afba6c435c28b3c3d0323e0739d2f88678e $
 
 # shared library support (deselectable)
 %if "%{?_without_shared:0}%{?!_without_shared:1}" == "1"
@@ -10,7 +10,7 @@
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
-Version:	0.99.1
+Version:	0.99.2
 Release: 	15%{?dist}
 Group:		Applications/Text
 URL:		http://www.deepspace6.net/projects/%{name}.html
