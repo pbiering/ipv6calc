@@ -1298,7 +1298,7 @@ PIPE_input:
 	/***** automatic output handling *****/
 	if ( outputtype == FORMAT_undefined ) {
 		if ((formatoptions & FORMATOPTION_quiet) == 0) {
-			fprintf(stderr, "No output type specified, try autodetection...");
+			fprintf(stderr, "no output type specified, try autodetection...");
 		};
 
 		if ( (inputtype == FORMAT_ipv4addr) && ((action == ACTION_ipv4_to_6to4addr) || (action == ACTION_ipv4_to_nat64)) ) {
@@ -1732,6 +1732,7 @@ PIPE_input:
 				retval = 2;
 			} else {
 				snprintf(resultstring2, sizeof(resultstring2), "%s", "");
+				snprintf(resultstring3, sizeof(resultstring3), "%s", "");
 
 				// combine results
 				for (a = IPV6CALC_TEST_LIST_MIN; a <= IPV6CALC_TEST_LIST_MAX; a++) {
@@ -1744,7 +1745,7 @@ PIPE_input:
 						switch (a) {
 							case IPV6CALC_TEST_PREFIX:
 								snprintf(resultstring2, sizeof(resultstring2), "%s  %s %s", resultstring3,
-									(result_a[a] == 0) ? "inside in" : "NOT inside in", input_a[a]);
+									(result_a[a] == 0) ? "inside" : "NOT inside", input_a[a]);
 								break;
 
 							case IPV6CALC_TEST_GT:
