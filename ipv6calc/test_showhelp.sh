@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# $Id: test_showhelp.sh,v 1.1 2002/04/08 19:04:11 peter Exp $
+# $Id$
 
 echo "==Standard"
 ./ipv6calc -?

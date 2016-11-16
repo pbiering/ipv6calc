@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.h
- * Version    : $Id: ipv6loganon.h,v 1.6 2014/04/25 20:50:00 ds6peter Exp $
+ * Version    : $Id$
  * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *

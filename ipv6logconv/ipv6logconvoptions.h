@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconvoptions.h
- * Version    : $Id: ipv6logconvoptions.h,v 1.7 2013/09/28 20:32:40 ds6peter Exp $
+ * Version    : $Id$
  * Copyright  : 2002-2007 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:

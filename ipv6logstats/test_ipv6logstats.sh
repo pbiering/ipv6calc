@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
-# Version    : $Id: test_ipv6logstats.sh,v 1.21 2015/06/10 20:41:08 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2003-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"

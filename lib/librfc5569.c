@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc5569.c
- * Version    : $Id: librfc5569.c,v 1.4 2015/05/29 05:42:07 ds6peter Exp $
+ * Version    : $Id$
  * Copyright  : 2011 by Raphaël Assénat <raph (at) raphnet.net>
  *  Extensions: 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
  *

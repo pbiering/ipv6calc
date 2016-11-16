@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6logconv.sh
-# Version    : $Id: test_ipv6logconv.sh,v 1.13 2015/04/16 06:23:20 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logconv"

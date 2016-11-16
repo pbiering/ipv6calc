@@ -1,6 +1,6 @@
 # Project    : ipv6calc/databases/ieee-iab
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.5 2013/04/09 20:09:33 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2004-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
