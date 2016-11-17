@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calc.h
  * Version    : $Id$
- * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Main header file

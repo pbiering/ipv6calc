@@ -745,7 +745,7 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			break;
 
 		case ACTION_filter:
-			fprintf(stderr, " Filter given addresses from stdout by filter expression, e.g.\n");
+			fprintf(stderr, " Filter given addresses from stdin by filter expression, e.g.\n");
 			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A filter] -E iid-local\n");
 			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A filter] -E iid-local,global-unicast\n");
 			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A filter] -E ^iid-random\n");
@@ -782,6 +782,14 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "   [^]ipv4.addr=<IPV4-ADDRESS>[<PREFIX-LENGTH>]\n");
 			fprintf(stderr, "   [^]ipv6.addr=<IPV6-ADDRESS>[<PREFIX-LENGTH>]\n");
 			fprintf(stderr, "\n");
+			fprintf(stderr, "  IPv4/v6 address filter tokens based on address ranges (<=|<|>|>=):\n");
+			fprintf(stderr, "   [^]ipv4.addr(<=|<|>|>=)<IPV4-ADDRESS>\n");
+			fprintf(stderr, "   [^]ipv6.addr(<=|<|>|>=)<IPV6-ADDRESS>\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, "   as alternative in case <|> creating problems also supported: =(le|lt|gt|ge)=:\n");
+			fprintf(stderr, "   [^]ipv4.addr=(le|lt|gt|ge)=<IPV4-ADDRESS>\n");
+			fprintf(stderr, "   [^]ipv6.addr=(le|lt|gt|ge)=<IPV6-ADDRESS>\n");
+			fprintf(stderr, "\n");
 			fprintf(stderr, "  EUI-48/MAC address filter tokens:\n");
 			fprintf(stderr, "   ");
 			fprintf(stderr, " IMPLEMENTATION MISSING");
@@ -790,6 +798,26 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "  EUI-64 address filter tokens:\n");
 			fprintf(stderr, "   ");
 			fprintf(stderr, " IMPLEMENTATION MISSING");
+			fprintf(stderr, "\n");
+			break;
+
+		case ACTION_test:
+			fprintf(stderr, " Test given address(es) against supported tests:\n");
+			fprintf(stderr, "  --test_prefix <PREFIX>       : inside a prefix\n");
+			fprintf(stderr, "  --test_gt|--test_ge <ADDRESS>: greater(/equal) than an address\n");
+			fprintf(stderr, "  --test_lt|--test_le <ADDRESS>: less(/equal) than an address\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, " Test given address(es) from stdin, e.g.\n");
+			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A test] --test_prefix 2001:db8::/32\n");
+			fprintf(stderr, "  echo '2001:db8::1' | ipv6calc [-A test] --test_prefix 2001:db9::/32\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, " Single address test, return code: 0=inside/matching 1=outside/not-matching 2=uncomparable\n");
+			fprintf(stderr, "  ipv6calc [-A test] --test_prefix 2001:db8::/32 2001:db8::1\n");
+			fprintf(stderr, "  ipv6calc [-A test] --test_prefix 2001:db9::/32 2001:db8::1\n");
+			fprintf(stderr, "  ipv6calc [-A test] --test_ge 2001:db8:: --test_le 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff 2001:db8::1\n");
+			fprintf(stderr, "  ipv6calc [-A test] --test_ge 2001:db9:: --test_le 2001:db9:ffff:ffff:ffff:ffff:ffff:ffff 2001:db8::1\n");
+			fprintf(stderr, "  ipv6calc [-A test] --test_ge 2001:db9:: --test_lt 2001:dba:: 2001:db8::1\n");
+			fprintf(stderr, "  ipv6calc [-A test] --test_ge 2001:db8:: --test_lt 2001:db9:: 2001:db8::1\n");
 			fprintf(stderr, "\n");
 			break;
 	};
