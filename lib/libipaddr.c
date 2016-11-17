@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipaddr.c
- * Version    : $Id: libipaddr.c,v 1.2 2015/05/13 05:51:38 ds6peter Exp $
+ * Version    : $Id$
  * Copyright  : 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:

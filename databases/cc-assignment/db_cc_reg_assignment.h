@@ -1,7 +1,7 @@
  /*
  * Project       : ipv6calc
  * File          : db_cc_reg_assignment.h
- * Version       : $Id: db_cc_reg_assignment.h,v 1.23 2015/09/05 06:02:37 ds6peter Exp $
+ * Version       : $Id$
  * Generated     : Sat Sep  5 07:10:02 2015
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *

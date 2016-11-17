@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calchelp_local.h
- * Version    : $Id: ipv6calchelp_local.h,v 1.3 2014/07/21 06:14:27 ds6peter Exp $
+ * Version    : $Id$
  * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:

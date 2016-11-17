@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc6052.h
- * Version    : $Id: librfc6052.h,v 1.1 2015/08/23 09:53:27 ds6peter Exp $
+ * Version    : $Id$
  * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:

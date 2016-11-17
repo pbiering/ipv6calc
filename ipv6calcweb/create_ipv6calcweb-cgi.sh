@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ipv6calcweb
 # File       : create_ipv6calcweb.sh
-# Version    : $Id: create_ipv6calcweb-cgi.sh,v 1.3 2013/10/15 20:22:47 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:

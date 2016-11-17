@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : ipv6calc-registries-check-run-create.sh
-# Version    : $Id: ipv6calc-registries-check-run-create.sh,v 1.2 2015/04/30 19:43:32 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # 20150214/bie: combined databases/ipv{4,6}-assignment/check-run-create.sh

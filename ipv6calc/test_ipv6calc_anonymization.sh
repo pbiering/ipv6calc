@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc_anonymization.sh
-# Version    : $Id: test_ipv6calc_anonymization.sh,v 1.10 2015/06/14 20:14:49 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test ipv6calc anonymization

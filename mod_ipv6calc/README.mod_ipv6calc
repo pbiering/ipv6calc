@@ -1,4 +1,4 @@
-$Id: README.mod_ipv6calc,v 1.4 2015/05/30 17:04:13 ds6peter Exp $
+$Id$
 
 Apache module tested on
 	- 2.2 (CentOS 5)

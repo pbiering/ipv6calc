@@ -1,6 +1,6 @@
 # Project    : ipv6calc/databases/cc-assignment
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.1 2013/10/14 15:00:09 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:

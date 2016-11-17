@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/cc-assignment
 # File       : check-run-create.sh
-# Version    : $Id: check-run-create.sh,v 1.2 2015/02/15 20:19:36 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
 
 #set -x

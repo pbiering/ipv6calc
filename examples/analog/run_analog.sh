@@ -6,7 +6,7 @@
 #
 # Project    : ipv6calc/ipv6logconv
 # File       : run_analog.sh
-# Version    : $Id: run_analog.sh,v 1.5 2002/04/05 18:54:56 peter Exp $
+# Version    : $Id$
 # Copyright  : none
 # Procuded   : 2002 by Peter Bieringer <pb (at) bieringer.de>
 

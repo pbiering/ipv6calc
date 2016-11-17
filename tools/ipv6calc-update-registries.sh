@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/registries
 # File       : update-registries.sh
-# Version    : $Id: ipv6calc-update-registries.sh,v 1.2 2016/03/09 21:21:24 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2002-2016 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces ../ipv4-assignment/update-ipv4-assignment.sh
 #               replaces ../ipv6-assignment/update-ipv6-assignment.sh

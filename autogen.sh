@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.56 2015/07/29 05:17:17 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2003-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
