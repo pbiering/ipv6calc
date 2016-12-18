@@ -15,6 +15,7 @@ Info:
 	README.BUILDING-IP2LOCATION: updates
 	databases: update
 	autogen.sh: add option '--clang'
+	autogen-support.sh: add additional versions of GeoIP and IP2Location
 
 20160907/PB
 	README,doc/ipv6calc.*: replace CVS with GitHub URL

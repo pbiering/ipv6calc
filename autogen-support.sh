@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : autogen-support.sh
 # Version    : $Id$
-# Copyright  : 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2014-2016 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support functions to autogen.sh/autogen-all-variants.sh
 #
@@ -21,6 +21,10 @@
 #          GeoIP-1.6.3
 #          GeoIP-1.6.4
 #          GeoIP-1.6.5
+#          GeoIP-1.6.6	# 20161218
+#          GeoIP-1.6.7	# 20161218
+#          GeoIP-1.6.8	# 20161218
+#          GeoIP-1.6.9	# 20161218
 #
 # $BASE_DEVEL_IP2LCATION/   (default if unset: "..")
 #          C-IP2Location-4.0.2  # dropped with version 0.99
@@ -29,11 +33,14 @@
 #          ip2location-c-6.0.3	# 20141003
 #          ip2location-c-7.0.0	# 20141003
 #          ip2location-c-7.0.1	# 20150416
+#          ip2location-c-8.0.1	# 20161218
+#          ip2location-c-8.0.2	# 20161218
+#          ip2location-c-8.0.3	# 20161218
 
 #### Definitions
 
 ## List of GeoIP versions (append newest one rightmost!)
-geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.4.8 1.5.1 1.5.2 1.6.0 1.6.1 1.6.2 1.6.3 1.6.4 1.6.5"
+geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.4.8 1.5.1 1.5.2 1.6.0 1.6.1 1.6.2 1.6.3 1.6.4 1.6.5 1.6.6 1.6.7 1.6.8 1.6.9"
 geoip_url_maxmind="http://geolite.maxmind.com/download/geoip/api/c/"
 geoip_url_github="https://codeload.github.com/maxmind/geoip-api-c/tar.gz/"
 
@@ -75,9 +82,10 @@ geoip_cross_version_test_blacklist() {
 
 
 ## List of IP2Location versions (append newest one rightmost!)
-ip2location_versions="4.0.2 6.0.1 6.0.2 6.0.3 7.0.0 7.0.1"
-ip2location_versions_download="6.0.1 6.0.2 6.0.3 7.0.0 7.0.1"
+ip2location_versions="4.0.2 6.0.1 6.0.2 6.0.3 7.0.0 7.0.1 8.0.1 8.0.2 8.0.3"
+ip2location_versions_download="6.0.1 6.0.2 6.0.3 7.0.0 7.0.1 8.0.1 8.0.2 8.0.3"
 ip2location_url_base="https://www.ip2location.com/downloads/"
+ip2location_url_github="https://codeload.github.com/chrislim2888/IP2Location-C-Library/tar.gz/"
 
 ip2location_cross_version_test_blacklist() {
 	local version_have=$(echo $1 | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
@@ -162,12 +170,17 @@ nameversion_from_name_version() {
 		    *)
 			# default
 			if [ "$mode" = "download" ]; then
-				nameversion="${ip2location_url_base}ip2location-c-$version.tar.gz"
+				if [ $version_numeric -ge 80000 ]; then
+					# since 8.0.0 on github
+					nameversion="${ip2location_url_github}$version"
+				else
+					nameversion="${ip2location_url_base}ip2location-c-$version.tar.gz"
+				fi
 			elif [ "$mode" = "outfile" ]; then
 				nameversion="ip2location-c-$version.tar.gz"
 			elif [ "$mode" = "extract" ]; then
 				case $version in
-				    6.0.1|6.0.2|6.0.3|7.*)
+				    6.0.1|6.0.2|6.0.3|7.*|8.*)
 					nameversion="ip2location-c-$version"
 					;;
 				    *)
@@ -177,6 +190,9 @@ nameversion_from_name_version() {
 				esac
 			else
 				case $version in
+				    8.*)
+					nameversion="IP2Location-C-Library-$version"
+					;;
 				    6.0.1|6.0.3|7.*)
 					nameversion="ip2location-c-$version"
 					;;
