@@ -1,8 +1,8 @@
 /*
  * Project       : ipv6calc
  * File          : dbipv6_assignment.h
- * Version       : $Id: dbipv6addr_assignment.h,v 1.72 2015/09/05 06:02:37 ds6peter Exp $
- * Generated     : 20150905-071000+0200 CEST
+ * Version       : $Id$
+ * Generated     : 20161218-085008+0100 CET
  * Data copyright: IANA ARIN RIPENCC APNIC LACNIC AFRINIC
  *
  * Information:
@@ -11,12 +11,13 @@
 
 #include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
-/*@unused@*/ static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20150904 APNIC/20150904 ARIN/20150904 IANA/20150810 LACNIC/20150904 RIPENCC/20150904";
-/*@unused@*/ static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = 1441429800;
+/*@unused@*/ static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20161218 APNIC/20161216 ARIN/20161218 IANA/20160128 LACNIC/20161216 RIPENCC/20161217";
+/*@unused@*/ static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = 1482047408;
 
 static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 	//ipv6_00_31, ipv6_32_63, mask_00_31, mask_32_63, mask_length, registry  
 	{ 0x20010000, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_IANA       },
+	{ 0x20010005, 0x00000000, 0xffffffff, 0x00000000,  32, REGISTRY_RIPENCC    },
 	{ 0x20010200, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_APNIC      },
 	{ 0x20010400, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_ARIN       },
 	{ 0x20010600, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_RIPENCC    },

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc.h
- * Version    : $Id: ipv6calc.h,v 1.18 2015/04/29 20:22:48 ds6peter Exp $
+ * Version    : $Id$
  * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:

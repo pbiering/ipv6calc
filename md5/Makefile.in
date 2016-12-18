@@ -1,5 +1,5 @@
 # Adapted for use with project 'ipv6calc' by Peter Bieringer <pb (at) bieringer.de>
-# $Id: Makefile.in,v 1.1 2008/12/31 12:17:31 peter Exp $
+# $Id$
 
 CC = @CC@
 

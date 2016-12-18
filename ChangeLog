@@ -1,5 +1,5 @@
 /*
- *  $Id: ChangeLog,v 1.416 2016/03/09 21:21:24 ds6peter Exp $ 
+ *  $Id$
  */
 
 Info:
@@ -9,6 +9,21 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20161218/PB
+	ipv6calc/ipv6calc.c: remove unnecessary paranthesis to fulfill -Wparentheses-equality
+	configure[.in]: add conditional support for -Wparentheses-equality (seen on FreeBSD 12)
+	README.BUILDING-IP2LOCATION: updates
+	databases: update
+
+20160907/PB
+	README,doc/ipv6calc.*: replace CVS with GitHub URL
+	doc/ldp.dsl: original copy from TLDP
+	databases/lib/libipv6calc_db_wrapper_IP2Location.c: add support for version 8
+	lib/ipv6calchelp.c: add support for IP2Location API version feature (new in version 8)
+	TODO: update
+	README: updates
+	contrib/ipv6calc.spec: fix typos
+
 20160309/ESR
 	tools/ipv6calc-update-registries.sh: be more quiet in case called by cron
 

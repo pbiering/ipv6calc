@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2004/10/30 13:02:53 peter Exp $
+$Id$
 
 md5 was added because of replace the use of OpenSSL library for calculation (license issue)
 

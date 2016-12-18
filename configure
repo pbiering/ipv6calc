@@ -4239,6 +4239,37 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 		CFLAGS="$CFLAGS_SAVE"
 
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** check for CFLAGS: -Wparentheses-equality" >&5
+$as_echo "*** check for CFLAGS: -Wparentheses-equality" >&6; }
+		CFLAGS_SAVE="$CFLAGS"
+		CFLAGS="$CFLAGS -Wparentheses-equality"
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+int a=1;
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** CFLAGS supported: -Wparentheses-equality" >&5
+$as_echo "*** CFLAGS supported: -Wparentheses-equality" >&6; }
+				CFLAGS_EXTRA="$CFLAGS_EXTRA -Wparentheses-equality"
+
+else
+
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: *** missing CFLAGS support: -Wparentheses-equality" >&5
+$as_echo "$as_me: WARNING: *** missing CFLAGS support: -Wparentheses-equality" >&2;}
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+		CFLAGS="$CFLAGS_SAVE"
+
 fi
 
 

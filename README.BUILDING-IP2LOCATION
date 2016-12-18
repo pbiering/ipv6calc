@@ -4,6 +4,7 @@ IP2Location changed the API layer at least 2 times
 	2.x (no longer in scope)
 	4.x -> 6.x
 	6.x -> 7.x
+	7.x -> 8.x
 
 To avoid issues caused by undetectable incompatibilities (no library version function provided so far),
  program will not start in case of dynamic linking an incompatible library.
@@ -73,12 +74,13 @@ Instructions for version 6.0.1 building as RPM "on-top" of SRPMS for 4.0.2
 
 From source code:
 
-Download C Library from https://www.ip2location.com/developers/c
+See also instructions on https://www.ip2location.com/developers/c
+Note that sources are now available on GitHub
 
 Extract, configure & compile
 
-$ tar xzf C-IP2Location-4.0.2.tar.gz
-$ cd C-IP2Location-4.0.2
+$ unzip -l master.zip
+$ cd IP2Location-C-Library-master
 $ autoreconf -i && ./configure && make
 
 Install as user "root"

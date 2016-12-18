@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3041.h
- * Version    : $Id: librfc3041.h,v 1.5 2012/12/16 09:31:29 peter Exp $
+ * Version    : $Id$
  * Copyright  : 2001-2012 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
