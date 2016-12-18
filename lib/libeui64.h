@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libeui64.h
- * Version    : $Id: libeui64.h,v 1.7 2014/05/11 09:49:38 ds6peter Exp $
+ * Version    : $Id$
  * Copyright  : 2001-2013 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:

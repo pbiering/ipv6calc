@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6logconv.c
- * Version    : $Id: ipv6logconv.c,v 1.41 2015/05/26 15:50:04 ds6peter Exp $
+ * Version    : $Id$
  * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calc_inttypes.h
- * Version    : $Id: ipv6calc_inttypes.h,v 1.3 2015/04/16 06:23:20 ds6peter Exp $
+ * Version    : $Id$
  * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:

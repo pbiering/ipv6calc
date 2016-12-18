@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.h
- * Version    : $Id: ipv6logstats.h,v 1.21 2014/09/24 09:07:57 ds6peter Exp $
+ * Version    : $Id$
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:

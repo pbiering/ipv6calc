@@ -2,7 +2,8 @@
  * Project    : ipv6calc
  * File       : ipv6calccommands.h
  * Version    : $Id$
- * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * License    : GPLv2
  *
  * Information:
  *  Header file containing commands for ipv6calc
@@ -102,5 +103,12 @@
 #define CMD_6rd_prefix			0x0004001
 #define CMD_6rd_relay_prefix		0x0004002
 #define CMD_6rd_prefixlength		0x0004003
+
+/* address test options */
+#define CMD_test_prefix			0x0005001	// prefix
+#define CMD_test_gt			0x0005002	// greater than
+#define CMD_test_ge			0x0005003	// greater equal
+#define CMD_test_lt			0x0005004	// less than
+#define CMD_test_le			0x0005005	// less equal
 
 #endif

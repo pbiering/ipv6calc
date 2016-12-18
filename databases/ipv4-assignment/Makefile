@@ -1,6 +1,6 @@
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.23 2015/02/20 07:35:54 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2005-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:

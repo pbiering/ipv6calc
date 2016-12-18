@@ -3,9 +3,10 @@
 # Project    : ipv6calc
 # File       : test_ipv6calc_filter.sh
 # Version    : $Id$
-# Copyright  : 2012-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2012-2016 by Peter Bieringer <pb (at) bieringer.de>
+# License    : GPLv2
 #
-# Test patterns for ipv6calc filter
+# Test patterns for ipv6calc filter & test_prefix
 
 verbose=0
 while getopts "Vh\?" opt; do
@@ -65,7 +66,7 @@ testscenarios_filter | while read input filter_feature; do
 			[ "$verbose" = "1" ] && echo "INFO  : result ok!" || true
 		fi
 	else
-		echo "Result empty!"
+		echo "Result empty: echo $input | ./ipv6calc -A filter -E $filter"
 		exit 1
 	fi
 	[ "$verbose" = "1" ] || echo -n "."
@@ -86,5 +87,58 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
+test="run 'ipv6calc' test_prefix tests..."
+echo "INFO  : $test"
+
+# Pipe mode only
+echo -e "1.2.3.4" | ./ipv6calc -q --test_prefix 1.2.3.0/24
+if [ $? -ne 0 ]; then
+	echo "ERROR : something is going wrong with IPv4 test_prefix"
+	exit 1
+fi
+
+echo -e "1.2.3.4" | ./ipv6calc -q --test_prefix 1.2.4.0/24
+if [ $? -ne 1 ]; then
+	echo "ERROR : something is going wrong with IPv4 test_prefix"
+	exit 1
+fi
+
+echo -e "2001:db8::1" | ./ipv6calc -q --test_prefix 2001:db8::/32
+if [ $? -ne 0 ]; then
+	echo "ERROR : something is going wrong with IPv6 test_prefix"
+	exit 1
+fi
+
+echo -e "2001:db8::1" | ./ipv6calc -q --test_prefix 2001:db9::/32
+if [ $? -ne 1 ]; then
+	echo "ERROR : something is going wrong with IPv6 test_prefix"
+	exit 1
+fi
+
+echo -e "1.2.3.4" | ./ipv6calc -q --test_prefix 2001:db8::/32
+if [ $? -ne 2 ]; then
+	echo "ERROR : something is going wrong with IPv4 test_prefix"
+	exit 1
+fi
+
+echo -e "2001:db8::1" | ./ipv6calc -q --test_prefix 1.2.3.0/24
+if [ $? -ne 2 ]; then
+	echo "ERROR : something is going wrong with IPv6 test_prefix"
+	exit 1
+fi
+
+testscenario_action_test | while IFS="|" read result options comment; do
+	./ipv6calc -q $options
+	rc=$?
+	if [ $rc -ne $result ]; then
+		echo "ERROR : something is going wrong with: $options (rc=$rc but should $result)"
+		exit 1
+	fi
+done
+
+
+echo "INFO  : $test successful"
+
 echo "INFO  : all ipv6calc filter tests successful"
+
 exit 0

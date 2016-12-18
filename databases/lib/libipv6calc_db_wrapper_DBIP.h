@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.h
- * Version    : $Id: libipv6calc_db_wrapper_DBIP.h,v 1.8 2014/10/07 20:25:23 ds6peter Exp $
+ * Version    : $Id$
  * Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:

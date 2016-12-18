@@ -2,10 +2,10 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id: autogen-support.sh,v 1.38 2015/04/19 10:42:18 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
-# Information: provide support funtions to autogen.sh/autogen-all-variants.sh
+# Information: provide support functions to autogen.sh/autogen-all-variants.sh
 #
 # $BASE_DEVEL_GEOIP/  (default if unset: "..")
 #          GeoIP-1.4.4

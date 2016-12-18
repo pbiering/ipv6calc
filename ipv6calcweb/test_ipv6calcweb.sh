@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ipv6calcweb
 # File       : test_ipv6calcweb.sh
-# Version    : $Id: test_ipv6calcweb.sh,v 1.14 2015/07/08 06:58:02 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2012-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:

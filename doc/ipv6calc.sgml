@@ -12,7 +12,7 @@
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>6.2bis</revnumber> <date>2016-09-06</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>6.2bis</revnumber> <date>2016-10-07</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
@@ -490,7 +490,11 @@ $ ipv6calc -q -i --mrqva --mrst IPV4 2a01:238:423d:8800:85b3:9e6b:3019:8909
 <para>Example for searching for Teredo addresses:</para><screen>
 <![CDATA[$ cat ip.bieringer.de-log.201310 | awk '{ print $1 }' | sort | uniq | ipv6calc -A filter -E teredo
 2001:0:9d38:90d7:34f7:1a26:8599:e079
-]]></screen><para>Note: since version 0.95.0 '-A filter' is optional if option '-E &lt;filter expression&gt;' is given (autoselected action).</para></sect3></sect2><sect2>
+]]></screen><para>For more information see below</para>
+<para>Note: since version 0.95.0 '-A filter' is optional if option '-E &lt;filter expression&gt;' is given (autoselected action).</para></sect3><sect3>
+<title>Test mode</title>
+<para>Since 0.99.2 a test mode ('-A test', autoselected in case 'test_*' options are given) is implemented for address prefix or range</para>
+<para>For more information see below</para></sect3></sect2><sect2>
 <title>Option style</title>
 <para>Since version 0.40 new-style option handling was introduced, using</para><itemizedlist>
 <listitem><para>--in &lt;inputtype&gt;</para></listitem><listitem><para>--out &lt;outputtype&gt;</para></listitem><listitem><para>--action &lt;actiontype&gt;</para></listitem></itemizedlist><para>and many more conversions were added. A built-in check matrix should prevent misconversions.</para>
@@ -687,33 +691,33 @@ ipv6calc: version 0.99.1 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4
 ]]></screen></sect3><sect3>
 <title>Special action &ldquo;filter&rdquo;:</title>
 <para>Special action &ldquo;filter&rdquo; can be used especially in pipe mode to filter IP addresses related to their type and since 0.99.0 also related to database results (CountryCode, ASN or Registry).</para><screen>
-<![CDATA[$ ipv6calc --action filter -h
-ipv6calc: version 0.99.0 GeoIP GeoIPv6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
-
- Filter given addresses from stdout by filter expression, e.g.
+<![CDATA[$ ipv6calc: version 0.99.2 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE
+ Filter given addresses from stdin by filter expression, e.g.
   echo '2001:db8::1' | ipv6calc [-A filter] -E iid-local
   echo '2001:db8::1' | ipv6calc [-A filter] -E iid-local,global-unicast
   echo '2001:db8::1' | ipv6calc [-A filter] -E ^iid-random
-
  (note: since version 0.95.0 '-A filter' is autoselected if option '-E <filter expression>' is given)
-
  negation of filter expression with prefix: ^
-
   IPv6 address filter tokens:
    ipv6  unknown unicast multicast anycast loopback link-local site-local compat-v4 mapped reserved unique-local-unicast anonymized-iid anonymized-prefix 6to4 6bone global-unicast unspecified solicited-node productive 6to4-microsoft teredo orchid link-local-teredo nat64 iid-random iid iid-local iid-global iid-teredo iid-eui48 iid-eui64 iid-isatap iid-includes-ipv4
-
   IPv4 address filter tokens:
    ipv4  any unicast multicast anycast broadcast loopback unspecified unknown reserved zeroconf site-local anonymized global 6to4relay
-
   IPv4/v6 address filter tokens based on databases:
    [^][ipv4.|ipv6.]db.cc=<CC>|unknown (Country Code [2 chars])
-   [^][ipv4.|ipv6.]db.asn=<ASN>|unknown (Autonomous System Number [numeric])
-   [^][ipv4.|ipv6.]db.reg=<REGISTRY> (Registry)
+   [^][ipv4.|ipv6.]db.asn=<ASN>|unknown (Autonomous System Number)
+   [^][ipv4.|ipv6.]db.reg=<REGISTRY>
     Registry tokens: 6BONE IANA APNIC ARIN RIPENCC LACNIC AFRINIC 6TO4 reserved unknown
-
+  IPv4/v6 address filter tokens based on address/mask:
+   [^]ipv4.addr=<IPV4-ADDRESS>[<PREFIX-LENGTH>]
+   [^]ipv6.addr=<IPV6-ADDRESS>[<PREFIX-LENGTH>]
+  IPv4/v6 address filter tokens based on address ranges (<=|<|>|>=):
+   [^]ipv4.addr(<=|<|>|>=)<IPV4-ADDRESS>
+   [^]ipv6.addr(<=|<|>|>=)<IPV6-ADDRESS>
+   as alternative in case <|> creating problems also supported: =(le|lt|gt|ge)=:
+   [^]ipv4.addr=(le|lt|gt|ge)=<IPV4-ADDRESS>
+   [^]ipv6.addr=(le|lt|gt|ge)=<IPV6-ADDRESS>
   EUI-48/MAC address filter tokens:
     IMPLEMENTATION MISSING
-
   EUI-64 address filter tokens:
     IMPLEMENTATION MISSING
 ]]></screen><para>Example for some filter expressions:</para><screen>
@@ -741,6 +745,47 @@ $ cat ip.bieringer.de-log.201504 | ipv6calc -A filter -E ipv6.db.asn=8767 | wc -
 1452
 $ cat ip.bieringer.de-log.201504 | ipv6calc -A filter -E ipv4.db.asn=8767 | wc -l
 911
+]]></screen><para>Example for searching for addresses in a specific range (supported since 0.99.2):</para><screen>
+<![CDATA[$ cat ip.bieringer.de-log.201609 | awk '{ print $1 }' | sort | uniq | ipv6calc -E ipv6.addr=ge=2002::,ipv6.addr=lt=2003::
+2002:2518:0:1:2:3:4:5
+...
+2002:d950:0:1:2:3:4:5
+]]></screen></sect3><sect3>
+<title>Special action &ldquo;test&rdquo;:</title>
+<para>Special action &ldquo;test&rdquo; (since 0.99.2) can be used in command line or pipe mode (single address only) to test IP addresses related to a given prefix or range .</para><screen>
+<![CDATA[$ ./ipv6calc/ipv6calc -A test -h
+ipv6calc: version 0.99.2 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE
+
+ Test given address(es) against supported tests:
+  --test_prefix <PREFIX>       : inside a prefix
+  --test_gt|--test_ge <ADDRESS>: greater(/equal) than an address
+  --test_lt|--test_le <ADDRESS>: less(/equal) than an address
+
+ Test given address(es) from stdin, e.g.
+  echo '2001:db8::1' | ipv6calc [-A test] --test_prefix 2001:db8::/32
+  echo '2001:db8::1' | ipv6calc [-A test] --test_prefix 2001:db9::/32
+
+ Single address test, return code: 0=inside/matching 1=outside/not-matching 2=uncomparable
+  ipv6calc [-A test] --test_prefix 2001:db8::/32 2001:db8::1
+  ipv6calc [-A test] --test_prefix 2001:db9::/32 2001:db8::1
+  ipv6calc [-A test] --test_ge 2001:db8:: --test_le 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff 2001:db8::1
+  ipv6calc [-A test] --test_ge 2001:db9:: --test_le 2001:db9:ffff:ffff:ffff:ffff:ffff:ffff 2001:db8::1
+  ipv6calc [-A test] --test_ge 2001:db9:: --test_lt 2001:dba:: 2001:db8::1
+  ipv6calc [-A test] --test_ge 2001:db8:: --test_lt 2001:db9:: 2001:db8::1
+]]></screen><para>Example for command line mode:</para><screen>
+<![CDATA[$ ipv6calc --test_ge 2001:db8:: --test_le 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff 2001:db8::1; echo $?
+no input type specified, try autodetection...found type: ipv6addr
+no output type specified, try autodetection...found type: ipv6addr
+2001:db8::1   greater/equal than 2001:db8::  less/equal than 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff
+0
+]]></screen><para>Example for command line mode (quiet):</para><screen>
+<![CDATA[$ ipv6calc -q --test_ge 2001:db8:: --test_le 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff 2001:db8::1; echo $?
+2001:db8::1   greater/equal than 2001:db8::  less/equal than 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff
+0
+]]></screen><para>Example for pipe mode:</para><screen>
+<![CDATA[$ echo -e "1.2.3.4\n1.2.4.4" | ipv6calc --test_prefix 1.2.3.0/24
+1.2.3.4   inside 1.2.3.0/24
+1.2.4.4   NOT inside 1.2.3.0/24
 ]]></screen></sect3></sect2></sect1><sect1>
 <title>Webserver log conversion helper program "ipv6logconv"</title>
 <para>This program parses address tokens of a given webserver logfile and converts them to special strings, useful for statistics (e.g. created by using "analog").</para><sect2>
@@ -1229,6 +1274,9 @@ IPV6_REGISTRY=RIPENCC
 ]]></screen></sect2></sect1><sect1>
 <title>History</title>
 <para>Major extensions/changes are listed here</para><sect2>
+<title>2016</title>
+<itemizedlist>
+<listitem><para>implement action 'test' and extend action 'filter' with support of address ranges (&gt;= 0.99.2)</para></listitem></itemizedlist></sect2><sect2>
 <title>2015</title>
 <itemizedlist>
 <listitem><para>Introduce mod_ipv6calc for Apache web server (&gt;= 0.99.1, released 2015)</para></listitem><listitem><para>Add support for <ulink url="http://www.db-ip.com/">DB-IP.com</ulink> databases (by generated Berkeley DB files) (&gt;= 0.98.0)</para></listitem><listitem><para>Add support for &ldquo;External&rdquo; database files (generated Berkeley DB files), superseeding (if newer) built-in IPv4/IPv6-&gt;Registry and adding IPv4/IPv6-&gt;CountryCode support (&gt;= 0.98.0)</para></listitem><listitem><para>Extend filter options with support of CountryCode, ASN or Registry (&gt;= 0.99.0)</para></listitem><listitem><para>Add support for <ulink url="http://lite.ip2location.com/">IP2Location LITE</ulink> databases (&gt;= 0.99.0), add configurable IP2Location database autoselection support</para></listitem></itemizedlist></sect2><sect2>

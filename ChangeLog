@@ -14,6 +14,7 @@ Info:
 	configure[.in]: add conditional support for -Wparentheses-equality (seen on FreeBSD 12)
 	README.BUILDING-IP2LOCATION: updates
 	databases: update
+	autogen.sh: add option '--clang'
 
 20160907/PB
 	README,doc/ipv6calc.*: replace CVS with GitHub URL
@@ -23,6 +24,19 @@ Info:
 	TODO: update
 	README: updates
 	contrib/ipv6calc.spec: fix typos
+
+20161004/PB
+	ipv6calc: support (<|<=|>=|>) option in address filter strings
+	ipv6calc: support =(lt|le|ge|gt)= as an alternative option in address filter strings
+
+20161003/PB
+	ipv6calc: add option --test_lt|gt|le|ge <IP address>
+
+20160929/PB
+	ipv6calc: add option --test_prefix <PREFIX>
+
+20160902/PB
+	databases/lib/libipv6calc_db_wrapper_IP2Location.c, lib/ipv6calchelp.c: display IP2Location library version if provided by library
 
 20160309/ESR
 	tools/ipv6calc-update-registries.sh: be more quiet in case called by cron

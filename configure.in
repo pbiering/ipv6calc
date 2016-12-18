@@ -5,19 +5,19 @@ dnl Copyright: 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(ipv6calc, 0.99.1, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
+AC_INIT(ipv6calc, 0.99.2, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
 
 COPYRIGHT_YEAR=2016
 
 dnl Program/library version (align with version above)
 PACKAGE_VERSION_MAJOR=0
 PACKAGE_VERSION_MINOR=99
-PACKAGE_VERSION_BUGFIX=1
+PACKAGE_VERSION_BUGFIX=2
 
 dnl API version
 API_VERSION_MAJOR=0
 API_VERSION_MINOR=99
-API_VERSION_BUGFIX=1
+API_VERSION_BUGFIX=2
 
 
 dnl Generic data definitions
@@ -1282,6 +1282,7 @@ AC_MSG_RESULT([*** DB_CC_REG                  =$DB_CC_REG])
 
 AC_MSG_RESULT([])
 
+AC_MSG_RESULT([*** CC                         =$CC])
 AC_MSG_RESULT([*** CFLAGS_EXTRA               =$CFLAGS_EXTRA])
 AC_MSG_RESULT([*** LDFLAGS_EXTRA              =$LDFLAGS_EXTRA])
 AC_MSG_RESULT([*** LD_LIBRARY_PATH            =$LD_LIBRARY_PATH])

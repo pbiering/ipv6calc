@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ipv6calcweb
 # File       : test_ipv6calcweb_form.sh
-# Version    : $Id: test_ipv6calcweb_form.sh,v 1.4 2015/07/08 06:58:02 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2012-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:

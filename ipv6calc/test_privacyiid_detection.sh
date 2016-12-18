@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_privacyiid_detection.sh
-# Version    : $Id: test_privacyiid_detection.sh,v 1.5 2012/04/17 19:07:16 peter Exp $
+# Version    : $Id$
 # Copyright  : 2012-2012 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test script for detection of a privacy IID

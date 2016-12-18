@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id: autogen.sh,v 1.56 2015/07/29 05:17:17 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2003-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
@@ -94,6 +94,10 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		SKIP_TEST=1
 		;;
+	    '--clang')
+		shift
+		USE_CLANG=1
+		;;
 	    '-?'|'-h'|'--help')
 		echo "Supported options:"
 		echo "   -?|-h|--help        : this help"
@@ -112,6 +116,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   -S                  : enable shared library mode"
 		echo "   --no-static-build   : skip static build"
 		echo "   --no-test           : skip 'make test'"
+		echo "   --clang             : use 'clang' instead of default (usually 'gcc')"
 		exit 1
 		;;
 	    *)
@@ -138,6 +143,15 @@ fi
 if [ -f Makefile ]; then
 	echo "*** cleanup"
 	make autoclean
+fi
+
+if [ "$USE_CLANG" = "1" ]; then
+	if [ -x "/usr/bin/clang" ]; then
+		export CC=/usr/bin/clang
+	else
+		echo "ERROR : --clang selected but binary is missing: /usr/bin/clang"
+		exit 1
+	fi
 fi
 
 echo "*** run: autoheader"

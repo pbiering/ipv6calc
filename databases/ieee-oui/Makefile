@@ -1,6 +1,6 @@
 # Project    : ipv6calc/databases/ieee-oui
 # File       : Makefile
-# Version    : $Id: Makefile,v 1.12 2008/11/19 19:57:06 peter Exp $
+# Version    : $Id$
 # Copyright  : 2002-2008 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:

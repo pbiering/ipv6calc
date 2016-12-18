@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.c
- * Version    : $Id: libipv6calc_db_wrapper_External.c,v 1.10 2015/04/30 20:00:16 ds6peter Exp $
+ * Version    : $Id$
  * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:

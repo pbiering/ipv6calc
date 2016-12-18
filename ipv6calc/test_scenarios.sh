@@ -3,7 +3,8 @@
 # Project    : ipv6calc
 # File       : test_scenarios.sh
 # Version    : $Id$
-# Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
+# License    : GPLv2
 #
 # Test patterns for ipv6calc (functions only)
 
@@ -220,6 +221,24 @@ a909:16fa:9092:23ff:a909:4941::7		anonymized-prefix
 2.2.3.4						ipv4.db.reg=RIPENCC#DB_IPV4_REG
 2.2.3.4						ipv4.db.cc=FR#DB_IPV4_CC
 2.2.3.4						ipv4.db.asn=3215#DB_IPV4_AS
+1.2.3.4						ipv4.addr=le=1.2.3.4
+1.2.3.4						ipv4.addr=lt=1.2.3.5
+1.2.3.4						ipv4.addr=ge=1.2.3.4
+1.2.3.4						ipv4.addr=gt=1.2.3.3
+2001:db8::2					ipv6.addr=le=2001:db8::2
+2001:db8::2					ipv6.addr=lt=2001:db8::3
+2001:db8::2					ipv6.addr=ge=2001:db8::2
+2001:db8::2					ipv6.addr=gt=2001:db8::1
+2001:db8::2					ipv6.addr=gt=2001:db8::1,ipv6.addr=lt=2001:db8::3
+1.2.3.4						ipv4.addr=gt=1.2.3.3,ipv4.addr=lt=1.2.3.5
+1.2.3.4						ipv4.addr=1.2.3.0/24
+1.2.3.4						^ipv4.addr=1.2.2.0/24
+2001:db8::2					ipv6.addr=2001:db8::/32
+2001:db8::2					^ipv6.addr=2001:db9::/32
+2001:db8::2					^ipv6.addr=ge=2001:db8::3
+2001:db8::2					^ipv6.addr=lt=2001:db8::1
+1.2.3.4						^ipv4.addr=gt=1.2.3.5
+1.2.3.4						^ipv4.addr=lt=1.2.3.3
 END
 }
 
@@ -501,4 +520,22 @@ testscenario_hugelist() {
 		perl -e '{ for ($i = 0; $i < 256; $i++) { for ($j = 0; $j < 256; $j++) { print "$i.$j.$j.$i\n" } } }';
 		;;
 	esac
+}
+
+testscenario_action_test() {
+	# result|options|description
+	cat <<END | grep -v ^#
+0|--test_ge 2001:db8:: --test_le 2001:db8:ffff:ffff:ffff:ffff:ffff:ffff 2001:db8::1
+1|--test_ge 2001:db9:: --test_le 2001:db9:ffff:ffff:ffff:ffff:ffff:ffff 2001:db8::1
+1|--test_ge 2001:db9:: --test_lt 2001:dba:: 2001:db8::1
+0|--test_ge 2001:db8:: --test_lt 2001:db9:: 2001:db8::1
+1|--test_gt 2001:db8::1 --test_lt 2001:db9:: 2001:db8::1
+0|--test_ge 2001:db8::1 --test_lt 2001:db9:: 2001:db8::1
+1|--test_gt 2001:db8::1 --test_lt 2001:db9::1 2001:db9::1
+0|--test_ge 2001:db8::1 --test_le 2001:db9::1 2001:db9::1
+0|--test_ge 1.2.3.0 --test_lt 1.2.3.5 1.2.3.0
+1|--test_ge 1.2.3.0 --test_lt 1.2.3.5 1.2.3.5
+0|--test_ge 1.2.3.0 --test_le 1.2.3.5 1.2.3.5
+1|--test_ge 1.2.3.1 --test_le 1.2.3.5 1.2.3.0
+END
 }

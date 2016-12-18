@@ -2,7 +2,7 @@
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calc/ipv6calcoptions.h
  * Version    : $Id$
- * Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options for ipv6calc
@@ -121,6 +121,14 @@ static struct option ipv6calc_longopts[] = {
 
 	/* 6rd_prefix options for showinfo/action */
 	{ "6rd_prefixlength"	, 1, NULL, CMD_6rd_prefixlength },
+
+	/* test_* options action */
+	{ "test_prefix"		, 1, NULL, CMD_test_prefix },
+	{ "test_ge"		, 1, NULL, CMD_test_ge },
+	{ "test_gt"		, 1, NULL, CMD_test_gt },
+	{ "test_le"		, 1, NULL, CMD_test_le },
+	{ "test_lt"		, 1, NULL, CMD_test_lt },
+
 }; 
 
 
