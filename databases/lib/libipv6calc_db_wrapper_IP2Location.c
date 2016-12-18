@@ -1021,7 +1021,7 @@ int libipv6calc_db_wrapper_IP2Location_db_avail(int type) {
 	};
 
 	if (S_ISLNK(st.st_mode)) {
-		if ((ip2location_db_allow_softlinks == 0)) {
+		if (ip2location_db_allow_softlinks == 0) {
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished: %s type=%d (unsupported softlink)", wrapper_ip2location_info, type);
 			result = 2;
 			goto END_libipv6calc_db_wrapper;

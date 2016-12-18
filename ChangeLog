@@ -16,6 +16,7 @@ Info:
 	databases: update
 	autogen.sh: add option '--clang'
 	autogen-support.sh: add additional versions of GeoIP and IP2Location
+	databases/lib/libipv6calc_db_wrapper_IP2Location.c: remove unnecessary paranthesis to fulfill -Wparentheses-equality
 
 20160907/PB
 	README,doc/ipv6calc.*: replace CVS with GitHub URL
