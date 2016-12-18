@@ -216,7 +216,7 @@ run_anon_options_kp_tests() {
 
 		# Check result
 		if [ "$type_orig_compare" != "$type_anon_compare" ]; then
-			echo "ERROR : IPVx_TYPE not equal:"
+			echo "ERROR : IPVx_TYPE not equal: $input"
 			exit 1
 		else
 			[ "$verbose" = "1" ] && echo "Result ok!" || true
@@ -252,7 +252,7 @@ run_anon_options_kp_tests() {
 		else
 			# Check result
 			if [ "$reg_orig" != "$reg_anon" ]; then
-				echo "ERROR : IPVx_REGISTRY not equal:"
+				echo "ERROR : IPVx_REGISTRY not equal: $input"
 				exit 1
 			else
 				[ "$verbose" = "1" ] && echo "Result ok!" || true

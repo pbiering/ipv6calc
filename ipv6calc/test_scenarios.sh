@@ -221,24 +221,24 @@ a909:16fa:9092:23ff:a909:4941::7		anonymized-prefix
 2.2.3.4						ipv4.db.reg=RIPENCC#DB_IPV4_REG
 2.2.3.4						ipv4.db.cc=FR#DB_IPV4_CC
 2.2.3.4						ipv4.db.asn=3215#DB_IPV4_AS
-1.2.3.4						ipv4.addr=le=1.2.3.4
-1.2.3.4						ipv4.addr=lt=1.2.3.5
-1.2.3.4						ipv4.addr=ge=1.2.3.4
-1.2.3.4						ipv4.addr=gt=1.2.3.3
+2.2.3.4						ipv4.addr=le=2.2.3.4
+2.2.3.4						ipv4.addr=lt=2.2.3.5
+2.2.3.4						ipv4.addr=ge=2.2.3.4
+2.2.3.4						ipv4.addr=gt=2.2.3.3
 2001:db8::2					ipv6.addr=le=2001:db8::2
 2001:db8::2					ipv6.addr=lt=2001:db8::3
 2001:db8::2					ipv6.addr=ge=2001:db8::2
 2001:db8::2					ipv6.addr=gt=2001:db8::1
 2001:db8::2					ipv6.addr=gt=2001:db8::1,ipv6.addr=lt=2001:db8::3
-1.2.3.4						ipv4.addr=gt=1.2.3.3,ipv4.addr=lt=1.2.3.5
-1.2.3.4						ipv4.addr=1.2.3.0/24
-1.2.3.4						^ipv4.addr=1.2.2.0/24
+2.2.3.4						ipv4.addr=gt=2.2.3.3,ipv4.addr=lt=2.2.3.5
+2.2.3.4						ipv4.addr=2.2.3.0/24
+2.2.3.4						^ipv4.addr=2.2.2.0/24
 2001:db8::2					ipv6.addr=2001:db8::/32
 2001:db8::2					^ipv6.addr=2001:db9::/32
 2001:db8::2					^ipv6.addr=ge=2001:db8::3
 2001:db8::2					^ipv6.addr=lt=2001:db8::1
-1.2.3.4						^ipv4.addr=gt=1.2.3.5
-1.2.3.4						^ipv4.addr=lt=1.2.3.3
+2.2.3.4						^ipv4.addr=gt=2.2.3.5
+2.2.3.4						^ipv4.addr=lt=2.2.3.3
 END
 }
 
