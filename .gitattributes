@@ -13,3 +13,4 @@ Makefile ident
 *.lyx ident
 *.sh ident
 *.in ident
+*.pl ident

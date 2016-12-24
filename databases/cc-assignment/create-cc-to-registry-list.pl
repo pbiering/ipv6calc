@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/databases/cc-assignment
 # File       : create-cc-to-registry-list.pl
-# Version    : $Id: create-cc-to-registry-list.pl,v 1.5 2014/09/24 09:07:56 ds6peter Exp $
-# Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id$
+# Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
 # Information:
@@ -96,15 +96,15 @@ foreach my $tld (sort keys %assignments) {
 	my $reg;
 
 	# find biggest one
-	my $entries = scalar(keys $assignments{$tld});
+	my $entries = scalar(keys %{$assignments{$tld}});
 
 	if ($entries == 1) {
-		$reg = (keys $assignments{$tld})[0];
+		$reg = (keys %{$assignments{$tld}})[0];
 	} else {
 		# check for biggest one
 		my $max = 0;
 
-		for $reg_entry (keys $assignments{$tld}) {
+		for $reg_entry (keys %{$assignments{$tld}}) {
 			if ($assignments{$tld}->{$reg_entry} > $max) {
 				$max = $assignments{$tld}->{$reg_entry};
 				$reg = $reg_entry;

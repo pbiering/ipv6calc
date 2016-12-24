@@ -38,12 +38,16 @@ update:
 
 distclean:
 		echo "Delete data files"
-		cd iana    && rm -f ipv6-unicast-address-assignments.xml ipv4-address-space.xml as-numbers.txt
-		cd ripencc && rm -f delegated-ripencc-*
-		cd apnic   && rm -f delegated-apnic-*
-		cd arin    && rm -f delegated-arin-*
-		cd lacnic  && rm -f delegated-lacnic-*
-		cd afrinic && rm -f delegated-afrinic-*
+		if [ -d iana ]; then \
+			echo "Delete datafiles: iana"; \
+			rm -f iana/ipv6-unicast-address-assignments.xml iana/ipv4-address-space.xml iana/as-numbers.txt; \
+		fi
+		for d in ripencc apnic arin lacnic afrinic; do \
+			if [ -d $${d} ]; then \
+				echo "Delete datafiles: $${d}"; \
+				rm -f $${d}/delegated-$${d}-*; \
+			fi; \
+		done
 
 autoclean:
 		echo "Nothing to do"
