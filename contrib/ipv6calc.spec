@@ -6,7 +6,7 @@
 # enable the following for intermediate builds
 #%#define gitcommit d3a4108cb7aeb6f731bb07989f91d8a7f449f0f0
 
-%if %{gitcommit}
+%if 0%{?gitcommit:1}
 %global shortcommit %(c=%{gitcommit}; echo ${c:0:7})
 %define build_timestamp %(date +"%Y%m%d")
 %global gittag .%{build_timestamp}git%{shortcommit}
@@ -25,7 +25,7 @@ Release: 	16%{?gittag}%{?dist}
 Group:		Applications/Text
 URL:		http://www.deepspace6.net/projects/%{name}.html
 License:	GPLv2
-%if %{gitcommit}
+%if 0%{?gitcommit:1}
 Source:		https://github.com/pbiering/%{name}/archive/%{gitcommit}/%{name}-%{gitcommit}.tar.gz
 %else
 Source:		ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/%{name}-%{version}.tar.gz
@@ -179,7 +179,7 @@ By default the module is disabled.
 
 
 %prep
-%if %{gitcommit}
+%if 0%{?gitcommit:1}
 %setup -q -n %{name}-%{gitcommit}
 %else
 %setup -q
