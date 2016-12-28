@@ -13,6 +13,7 @@ Info:
 	configure[.in]: add conditional support for -Wextra (clang)
 	various *.c/*.h: fixes regarding -Wextra
 	TODO: update
+	contrib/ipv6calc.spec[.in]: add support for git commit hash
 
 20161224/PB
 	databases: update

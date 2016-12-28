@@ -3,6 +3,16 @@
 # Copyright  : 2001-2016 by Peter Bieringer <pb@bieringer.de>
 # $Id$
 
+# enable the following for intermediate builds
+#%#define gitcommit d3a4108cb7aeb6f731bb07989f91d8a7f449f0f0
+
+%if %{gitcommit}
+%global shortcommit %(c=%{gitcommit}; echo ${c:0:7})
+%define build_timestamp %(date +"%Y%m%d")
+%global gittag .%{build_timestamp}git%{shortcommit}
+%endif
+
+
 # shared library support (deselectable)
 %if "%{?_without_shared:0}%{?!_without_shared:1}" == "1"
 %define enable_shared 1
@@ -11,11 +21,15 @@
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
 Version:	@PACKAGE_VERSION@
-Release: 	15%{?dist}
+Release: 	16%{?gittag}%{?dist}
 Group:		Applications/Text
 URL:		http://www.deepspace6.net/projects/%{name}.html
 License:	GPLv2
+%if %{gitcommit}
+Source:		https://github.com/pbiering/%{name}/archive/%{gitcommit}/%{name}-%{gitcommit}.tar.gz
+%else
 Source:		ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/%{name}-%{version}.tar.gz
+%endif
 BuildRequires:	openssl-devel
 BuildRequires:	perl(Digest::MD5), perl(Digest::SHA1), perl(URI::Escape)
 BuildRequires:	perl(strict), perl(warnings)
@@ -27,6 +41,7 @@ Conflicts:	ipv6calc-libs
 %endif
 
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
 
 # mod_ipv6calc related
 %{!?_httpd_apxs:    %{expand: %%global _httpd_apxs    %%{_sbindir}/apxs}}
@@ -163,7 +178,12 @@ By default the module is disabled.
 
 
 %prep
+%if %{gitcommit}
+%setup -q -n %{name}-%{gitcommit}
+%else
 %setup -q
+%endif
+
 %configure \
 	%{?enable_ip2location:--enable-ip2location} \
 	%{?enable_ip2location:--with-ip2location-dynamic --with-ip2location-headers-fallback} \
@@ -303,7 +323,7 @@ rm -rf %{buildroot}
 
 
 %changelog
-* Thu Feb 04 2015 Peter Bieringer <pb@bieringer.de>
+* Thu Feb 04 2016 Peter Bieringer <pb@bieringer.de>
 - add post/postun, minor fixes
 
 * Thu Jul 30 2015 Peter Bieringer <pb@bieringer.de>
@@ -392,7 +412,7 @@ rm -rf %{buildroot}
 - add configure options
 
 * Mon Nov 11 2002 Peter Bieringer <pb@bieringer.de>
-- change IPv6 address in %description
+- change IPv6 address in description
 
 * Sat Apr 20 2002 Peter Bieringer <pb@bieringer.de>
 - Change URL
@@ -400,7 +420,7 @@ rm -rf %{buildroot}
 * Sun Apr 07 2002 Peter Bieringer <pb@bieringer.de>
 - add more analog example files
 
-* Sat Apr 06 2002 Peter Bieringer <pb@bieringer.de>
+* Fri Apr 06 2002 Peter Bieringer <pb@bieringer.de>
 - remove BuildRequires extension, not needed for normal build
 
 * Sun Mar 24 2002 Peter Bieringer <pb@bieringer.de>
@@ -429,13 +449,12 @@ rm -rf %{buildroot}
 - Fix permissions of doc files
 
 * Thu Mar 15 2001 Peter Bieringer <pb@bieringer.de>
-- Add doc directory also to %files to make sure the directory will be removed
-   on update or deinstall
+- Add doc directory also to files to make sure the directory will be removed on update or deinstall
 - change install permissions for entries in doc directory
-- change "make install" to "make installonly" (make test should be only executed once)" 
+- change "make install" to "make installonly" (make test should be only executed once)
 
 * Wed Mar 14 2001 Peter Bieringer <pb@bieringer.de>
-- Add "make clean" and "make test" on %build
+- Add "make clean" and "make test" on build
 
 * Tue Mar 13 2001 Peter Bieringer <pb@bieringer.de>
 - add CREDITS and TODO for install
