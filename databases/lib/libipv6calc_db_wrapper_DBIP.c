@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
  * Version    : $Id$
- * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc DB-IP.com database wrapper
@@ -57,7 +57,7 @@ static db_recno_t db_recno_max_cache[MAXENTRIES_ARRAY(libipv6calc_db_wrapper_DBI
 time_t wrapper_db_unixtime_DBIP[MAXENTRIES_ARRAY(libipv6calc_db_wrapper_DBIP_db_file_desc)];
 
 // local prototyping
-static char     *libipv6calc_db_wrapper_DBIP_dbfilename(int type); 
+static char     *libipv6calc_db_wrapper_DBIP_dbfilename(const unsigned int type); 
 
 
 /*
@@ -277,7 +277,7 @@ char *libipv6calc_db_wrapper_DBIP_wrapper_db_info_used(void) {
 /*
  * wrapper extension: DBIP_dbfilename
  */
-static char *libipv6calc_db_wrapper_DBIP_dbfilename(int type) {
+static char *libipv6calc_db_wrapper_DBIP_dbfilename(const unsigned int type) {
 	static char tempstring[NI_MAXHOST];
 	int  entry = -1, i;
 
@@ -305,12 +305,12 @@ static char *libipv6calc_db_wrapper_DBIP_dbfilename(int type) {
 /*
  * wrapper extension: DBIP_dbdescription
  */
-const char *libipv6calc_db_wrapper_DBIP_dbdescription(int type) {
+const char *libipv6calc_db_wrapper_DBIP_dbdescription(const unsigned int type) {
 	int  entry = -1, i;
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Called: %s type=%d", wrapper_dbip_info, type);
 
-	for (i = 0; i < sizeof(libipv6calc_db_wrapper_DBIP_db_file_desc) / sizeof(libipv6calc_db_wrapper_DBIP_db_file_desc[0]); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_DBIP_db_file_desc); i++) {
 		if (libipv6calc_db_wrapper_DBIP_db_file_desc[i].number == type) {
 			entry = i;
 			break;
@@ -331,7 +331,7 @@ const char *libipv6calc_db_wrapper_DBIP_dbdescription(int type) {
  * wrapper extension: DBIP_db_avail
  * ret: 1=avail  0=not-avail
  */
-int libipv6calc_db_wrapper_DBIP_db_avail(int type) {
+int libipv6calc_db_wrapper_DBIP_db_avail(const unsigned int type) {
 	char *filename;
 	int r = 0;
 
@@ -363,7 +363,7 @@ END_libipv6calc_db_wrapper:
  * 		if | 0x10000 -> info is opened and ptr is not cached
  * 	db_recno_max_ptr (set if not NULL)
  */
-DB *libipv6calc_db_wrapper_DBIP_open_type(const int type_flag, long int *db_recno_max_ptr) {
+DB *libipv6calc_db_wrapper_DBIP_open_type(const unsigned int type_flag, long int *db_recno_max_ptr) {
 	DB *dbp = NULL;
 	DBC *dbcp;
 	DBT key, data;
@@ -483,7 +483,7 @@ END_libipv6calc_db_wrapper:
 /*
  * wrapper: DBIP_database_info
  */
-char *libipv6calc_db_wrapper_DBIP_database_info(const int type) {
+char *libipv6calc_db_wrapper_DBIP_database_info(const unsigned int type) {
 	static char resultstring[NI_MAXHOST];
 	char datastring[NI_MAXHOST];
 	char tempstring[NI_MAXHOST];
@@ -570,7 +570,8 @@ END_libipv6calc_db_wrapper:
 char *libipv6calc_db_wrapper_DBIP_get_country_short(DB *dbp, char *ip) {
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Called: %s ip=%s", wrapper_dbip_info, ip);
 
-
+	// not implemented so far
+	if (dbp == NULL) { }; // make compiler happy (avoid unused "...")
 	//return(DBIP_get_country_short(loc, ip));
 	return(NULL);
 };

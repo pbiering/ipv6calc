@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.c
  * Version    : $Id$
- * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc GeoIP database wrapper
@@ -295,7 +295,7 @@ int libipv6calc_db_wrapper_GeoIP_wrapper_init(void) {
 
 
 	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper_GeoIP)
-		int i;
+		unsigned int i;
 		if (geoip_num_db_types > 0) {
 			for (i = 0; i < geoip_num_db_types; i++) {
 				DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper_GeoIP_verbose)
@@ -485,7 +485,8 @@ void libipv6calc_db_wrapper_GeoIP_wrapper_info(char* string, const size_t size) 
  */
 void libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(const int level_verbose, const char *prefix_string) {
 	GeoIP *gi;
-	int i, count = 0;
+	int count = 0;
+	unsigned int i;
 
 	const char *prefix = "\0";
 	if (prefix_string != NULL) {
@@ -755,7 +756,7 @@ END_libipv6calc_db_wrapper:
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "List now available GeoIPDBFilename Entries (max: %d)", geoip_num_db_types - 1);
 
 		if (geoip_num_db_types > 0) {
-			int i;
+			unsigned int i;
 			for (i = 0; i < geoip_num_db_types; i++) {
 				DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper_GeoIP_verbose)
 					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP_verbose, "GeoIP(verbose): GeoIPDBFileName Entry #%d: %s", i, (*libipv6calc_db_wrapper_GeoIPDBFileName_ptr)[i]);
@@ -911,6 +912,7 @@ GeoIP *libipv6calc_db_wrapper_GeoIP_open_type(int type, int flags) {
 		goto END_libipv6calc_db_wrapper;
 	};
 #else
+	if (flags == 0) { };  // make compiler happy (avoid unused "...")
 	gi = GeoIP_open_type(type, GEOIP_STANDARD);
 #endif
 
@@ -979,6 +981,7 @@ GeoIP* libipv6calc_db_wrapper_GeoIP_open(const char * filename, int flags) {
 END_libipv6calc_db_wrapper:
 	return(gi);
 #else
+	if (flags == 0) { };  // make compiler happy (avoid unused "...")
 	return(GeoIP_open(filename, GEOIP_STANDARD));
 #endif
 };
@@ -1501,6 +1504,8 @@ END_libipv6calc_db_wrapper:
 #ifdef SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6
 	return(GeoIP_country_code_by_addr_v6(gi, addr));
 #else
+	if (strlen(addr) == 0) { }; // make compiler happy (avoid unused "...")
+	if (gi == NULL) { }; // make compiler happy (avoid unused "...")
 	return(NULL);
 #endif
 #endif
@@ -1532,6 +1537,8 @@ END_libipv6calc_db_wrapper:
 #ifdef SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6
 	return(GeoIP_country_name_by_addr_v6(gi, addr));
 #else
+	if (strlen(addr) == 0) { }; // make compiler happy (avoid unused "...")
+	if (gi == NULL) { }; // make compiler happy (avoid unused "...")
 	return(NULL);
 #endif
 #endif

@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : librfc1884.c
  * Version    : $Id$
- * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for conversions defined in RFC 1884
@@ -122,6 +122,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 	char tempstring[NI_MAXHOST], temp2string[NI_MAXHOST];
 	int retval = 1;
 	int zstart = -1, zend = -1, tstart = -1, tend = -1, i, w_max = 7;
+	unsigned int s;
 
 	DEBUGPRINT_WA(DEBUG_librfc1884, "scope of IPv6 address: %08x", (unsigned int) ipv6addrp->scope);
 	
@@ -279,9 +280,9 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 	} else {
 		if ((formatoptions & FORMATOPTION_literal) != 0) {
 			/* replace : by - */
-			for (i =0; i < strlen(tempstring); i++) {
-				if (tempstring[i] == ':') {
-					tempstring[i] = '-';
+			for (s = 0; s < strlen(tempstring); s++) {
+				if (tempstring[s] == ':') {
+					tempstring[s] = '-';
 				};
 			};
 			if (ipv6addrp->flag_scopeid) {

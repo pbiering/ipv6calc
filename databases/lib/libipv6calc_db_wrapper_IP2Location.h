@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.h
  * Version    : $Id$
- * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_IP2Location.c
@@ -595,15 +595,15 @@ extern int         libipv6calc_db_wrapper_IP2Location_library_version_major(void
 extern char ip2location_lib_file[NI_MAXHOST];
 extern char ip2location_db_dir[NI_MAXHOST];
 
-extern int                libipv6calc_db_wrapper_IP2Location_db_avail(int type);
+extern int                libipv6calc_db_wrapper_IP2Location_db_avail(const unsigned int type);
 extern char              *libipv6calc_db_wrapper_IP2Location_lib_version(void);
 extern IP2Location       *libipv6calc_db_wrapper_IP2Location_open(char *db);
-extern IP2Location       *libipv6calc_db_wrapper_IP2Location_open_type(int type);
+extern IP2Location       *libipv6calc_db_wrapper_IP2Location_open_type(const unsigned int type);
 extern int                libipv6calc_db_wrapper_IP2Location_close(IP2Location *loc);
 extern IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_all(IP2Location *loc, char *ip);
 void                      libipv6calc_db_wrapper_IP2Location_free_record(IP2LocationRecord *record);
 
-extern const char  *libipv6calc_db_wrapper_IP2Location_dbdescription(int type);
+extern const char  *libipv6calc_db_wrapper_IP2Location_dbdescription(const unsigned int type);
 extern char        *libipv6calc_db_wrapper_IP2Location_database_info(IP2Location *loc, const int level_verbose, const int entry, const int flag_copyright);
 
 extern IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_wrapper_record_city_by_addr(char *addr, const int proto);

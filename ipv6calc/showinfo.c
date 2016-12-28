@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : showinfo.c
  * Version    : $Id$
- * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Function to show information about a given IPv6 address
@@ -765,7 +765,7 @@ static void print_dbip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatopti
 		};
 	};
 
-	if ((returnedRegion != NULL) && (strlen(returnedRegion) > 0)) {
+	if ((ret == 0) && (strlen(returnedRegion) > 0)) {
 		DEBUGPRINT_WA(DEBUG_showinfo, "DBIP IPv%d region database result", ipaddrp->proto);
 
 		if ( machinereadable != 0 ) {

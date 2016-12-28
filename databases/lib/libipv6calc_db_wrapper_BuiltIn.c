@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  * Version    : $Id$
- * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc BuiltIn database wrapper
@@ -158,6 +158,8 @@ void libipv6calc_db_wrapper_BuiltIn_wrapper_info(char* string, const size_t size
  */
 void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level_verbose, const char *prefix_string) {
 	const char *prefix = "\0";
+
+	if (level_verbose == 0) { }; // make compiler happy (avoid unused "...")
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called");
 

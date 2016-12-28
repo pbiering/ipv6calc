@@ -2,7 +2,7 @@
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
  * Version    : $Id$
- * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for some tools
@@ -136,8 +136,8 @@ void string_to_reverse_dotted(char *string, const size_t string_length) {
  */
 uint32_t libipv6calc_autodetectinput(const char *string) {
 	uint32_t type = FORMAT_auto_noresult;
-	int xdl, i, j = 0, result;
-	int numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, numdashes = 0, numspaces = 0, numslashes = 0, numalnums = 0, numchar_s = 0, numpercents = 0, numcolonsdouble = 0, xdigitlen_max = 0, xdigitlen_min = 0;
+	int i, j = 0, result;
+	unsigned int numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, numdashes = 0, numspaces = 0, numslashes = 0, numalnums = 0, numchar_s = 0, numpercents = 0, numcolonsdouble = 0, xdigitlen_max = 0, xdigitlen_min = 0, xdl;
 	char resultstring[NI_MAXHOST];
 	size_t length;
 
@@ -588,7 +588,7 @@ int libipv6calc_anon_set_by_name(s_ipv6calc_anon_set *ipv6calc_anon_set, const c
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc, "search for anonymization set with name: %s", name);
 
-	for (i = 0; i < sizeof(ipv6calc_anon_set_list) / sizeof(s_ipv6calc_anon_set); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_anon_set_list); i++) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc, "compare name: %s ? %s", name, ipv6calc_anon_set_list[i].name);
 
 		if ((strcmp(name, ipv6calc_anon_set_list[i].name) == 0) || (strcmp(name, ipv6calc_anon_set_list[i].name_short) == 0)) {

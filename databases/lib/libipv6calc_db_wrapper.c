@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
  * Version    : $Id$
- * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc database wrapper (for decoupling databases from main binary)
@@ -46,7 +46,7 @@ uint32_t wrapper_features_by_source[IPV6CALC_DB_SOURCE_MAX + 1];
 uint32_t wrapper_features_by_source_implemented[IPV6CALC_DB_SOURCE_MAX + 1];
 
 int wrapper_features_selector[IPV6CALC_DB_FEATURE_NUM_MAX + 1][IPV6CALC_DB_PRIO_MAX];
-int wrapper_source_priority_selector[IPV6CALC_DB_SOURCE_MAX + 1];
+unsigned int wrapper_source_priority_selector[IPV6CALC_DB_SOURCE_MAX + 1];
 int wrapper_source_priority_selector_by_option = -1; // -1: uninitialized, 0: initialized, > 0: touched by option
 
 
@@ -62,6 +62,7 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 #if defined SUPPORT_GEOIP || defined SUPPORT_IP2LOCATION || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN
 	int r;
 #endif
+	s = strlen(prefix_string); // make compiler happy (avoid unused "...")
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
@@ -516,7 +517,7 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
  * in: source number
  * out: source name
  */
-const char *libipv6calc_db_wrapper_get_data_source_name_by_number(const int number) {
+const char *libipv6calc_db_wrapper_get_data_source_name_by_number(const unsigned int number) {
 	int i;
 
 	for (i = 0; i < MAXENTRIES_ARRAY(data_sources); i++) {
@@ -534,7 +535,7 @@ const char *libipv6calc_db_wrapper_get_data_source_name_by_number(const int numb
  * in: feature number
  * out: index
  */
-static int libipv6calc_db_wrapper_get_feature_index_by_feature(const int feature) {
+static int libipv6calc_db_wrapper_get_feature_index_by_feature(const uint32_t feature) {
 	int i;
 
 	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_db_features); i++) {
@@ -914,6 +915,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			};
 #else
 			NONQUIETPRINT_WA("Support for database priorization not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+			s = strlen(optarg); // make compiler happy (avoid unused "...")
 #endif
 			result = 0;
 			break;
@@ -1292,7 +1294,8 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp)
 	char *as_text;
 	char as_number_string[11];  // max: 4294967295 = 10 digits + \0
 	uint32_t as_num32 = ASNUM_AS_UNKNOWN; // default
-	int i, valid = 1;
+	int valid = 1;
+	unsigned int s;
 
 	int cache_hit = 0;
 
@@ -1317,10 +1320,10 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp)
 
 		if ((as_text != NULL) && (strncmp(as_text, "AS", 2) == 0) && (strlen(as_text) > 2)) {
 			// catch AS....
-			for (i = 0; i < (strlen(as_text) - 2); i++) {
-				if ((as_text[i+2] == ' ') || (as_text[i+2] == '\0')) {
+			for (s = 0; s < (strlen(as_text) - 2); s++) {
+				if ((as_text[s+2] == ' ') || (as_text[s+2] == '\0')) {
 					break;
-				} else if (isdigit(as_text[i+2])) {
+				} else if (isdigit(as_text[s+2])) {
 					continue;
 				} else {
 					// something wrong
@@ -1329,7 +1332,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp)
 				};
 			};
 
-			if (i > 10) {
+			if (s > 10) {
 				// too many digits
 				valid = 0;
 			};
@@ -3058,7 +3061,7 @@ END_ipv6calc_db_registry_filter_check:
  * in : *filter    = filter structure
  * ret: 0=match 1=not match -1=neutral
  */
-int libipv6calc_db_registry_filter(const int registry, const s_ipv6calc_filter_db_registry *filter) {
+int libipv6calc_db_registry_filter(const uint32_t registry, const s_ipv6calc_filter_db_registry *filter) {
 	int i, result = -1;
 
 	if (filter->registry_must_have_max > 0) {

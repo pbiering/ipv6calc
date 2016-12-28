@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
  * Version    : $Id$
- * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  supporting common options
@@ -72,7 +72,8 @@ void ipv6calc_debug_from_env(void) {
  * hard exit code in case of troubles: 2
  */
 void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct option longopts[], int *maxentries_p, const char *shortopts_custom, const struct option longopts_custom[], const int longopts_custom_entries) {
-	int i, j, k;
+	int i, l;
+	unsigned int j, k;
 	char tempstring[NI_MAXHOST];
 
 	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Called: longopts_custom_entries=%d shortopts=%s", longopts_custom_entries, shortopts_p);
@@ -84,9 +85,9 @@ void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct 
 
 	for (i = 0; i < longopts_custom_entries; i++) {
 		/* check for duplicates */
-		for (j = 0; j < *maxentries_p; j++) {
-			if (strcmp(longopts[j].name, longopts_custom[i].name) == 0) {
-				fprintf(stderr, "FATAL error, can't add options - DUPLICATE NAME FOUND: j=%d/%s i=%d/%s\n", j, longopts[j].name, i,  longopts_custom[i].name);
+		for (l = 0; l < *maxentries_p; l++) {
+			if (strcmp(longopts[l].name, longopts_custom[i].name) == 0) {
+				fprintf(stderr, "FATAL error, can't add options - DUPLICATE NAME FOUND: l=%d/%s i=%d/%s\n", l, longopts[l].name, i,  longopts_custom[i].name);
 				exit(2);
 			};
 		};
@@ -244,6 +245,8 @@ int ipv6calcoptions_common_anon(const int opt, const char *optarg, const struct 
 	int mask_mac;
 
 	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Called opt=0x%08x", opt);
+
+	if (sizeof (*longopts) == 0) { }; // make compiler happy (avoid unused "...")
 
 	/* general options */
 	switch(opt) {
@@ -404,7 +407,8 @@ const char *ipv6calcoption_name(const int opt, const struct option longopts[]) {
 
 /* get common options from environment */
 void ipv6calc_common_options_from_env(const struct option longopts[], s_ipv6calc_anon_set *ipv6calc_anon_set_p) {
-	int i, j, result;
+	int i, result;
+	unsigned int s;
 	char tempstring[NI_MAXHOST];
 	char *environment_value;
 
@@ -412,14 +416,14 @@ void ipv6calc_common_options_from_env(const struct option longopts[], s_ipv6calc
 	while(longopts[i].name != NULL) {
 		// convert long option name to environment name
 		snprintf(tempstring, sizeof(tempstring), "IPV6CALC_%s", longopts[i].name);
-		for (j = 0; j < strlen(tempstring); j++) {
-			switch(tempstring[j]) {
+		for (s = 0; s < strlen(tempstring); s++) {
+			switch(tempstring[s]) {
 			    case '-':
-				tempstring[j] = '_';
+				tempstring[s] = '_';
 				break;
 
 			    default:
-				tempstring[j] = toupper(tempstring[j]);
+				tempstring[s] = toupper(tempstring[s]);
 				break;
 			};
 		};

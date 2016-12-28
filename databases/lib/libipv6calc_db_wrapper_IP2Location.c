@@ -98,7 +98,7 @@ static int ip2location_db_region_city_v4 = 0;
 static int ip2location_db_region_city_v6 = 0;
 
 typedef struct {
-	int num;
+	unsigned int num;
 	int dbtype;
 	int dbym;
 } s_ipv6calc_ip2location_db;
@@ -181,8 +181,8 @@ char ip2location_db_usage_string[NI_MAXHOST] = "";
 static IP2Location *db_ptr_cache[MAXENTRIES_ARRAY(libipv6calc_db_wrapper_IP2Location_db_file_desc)];
 
 // local prototyping
-static char     *libipv6calc_db_wrapper_IP2Location_dbfilename(const int type); 
-static int       libipv6calc_db_wrapper_IP2Location_db_compatible(const int type); 
+static char     *libipv6calc_db_wrapper_IP2Location_dbfilename(const unsigned int type); 
+static int       libipv6calc_db_wrapper_IP2Location_db_compatible(const unsigned int type); 
 
 
 /*
@@ -778,12 +778,12 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
  * wrapper: string regarding used database infos
  */
 char *libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used(void) {
-	int db;
+	unsigned int db;
 	IP2Location *loc;
 	char tempstring[NI_MAXHOST];
 	char *info;
 
-	int db_lite_used = 0;
+	unsigned int db_lite_used = 0;
 
 	for (db = 0; db < 32 * IP2LOCATION_DB_MAX_BLOCKS_32; db++) {
 		if ((ip2location_db_usage_map[db / 32] & (1 << (db % 32))) != 0) {
@@ -941,7 +941,7 @@ END_libipv6calc_db_wrapper:
 /*
  * wrapper extension: IP2Location_dbfilename
  */
-static char *libipv6calc_db_wrapper_IP2Location_dbfilename(const int type) {
+static char *libipv6calc_db_wrapper_IP2Location_dbfilename(const unsigned int type) {
 	static char tempstring[NI_MAXHOST];
 	int  entry = -1, i;
 
@@ -969,12 +969,12 @@ static char *libipv6calc_db_wrapper_IP2Location_dbfilename(const int type) {
 /*
  * wrapper extension: IP2Location_dbdescription
  */
-const char *libipv6calc_db_wrapper_IP2Location_dbdescription(int type) {
+const char *libipv6calc_db_wrapper_IP2Location_dbdescription(const unsigned int type) {
 	int  entry = -1, i;
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called: %s type=%d", wrapper_ip2location_info, type);
 
-	for (i = 0; i < sizeof(libipv6calc_db_wrapper_IP2Location_db_file_desc) / sizeof(libipv6calc_db_wrapper_IP2Location_db_file_desc[0]); i++) {
+	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_IP2Location_db_file_desc); i++) {
 		if (libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number == type) {
 			entry = i;
 			break;
@@ -995,7 +995,7 @@ const char *libipv6calc_db_wrapper_IP2Location_dbdescription(int type) {
  * wrapper extension: IP2Location_db_avail
  * ret: 1=avail  0=not-avail 2=softlink (in case not allowed) 3=softlink (allowed)
  */
-int libipv6calc_db_wrapper_IP2Location_db_avail(int type) {
+int libipv6calc_db_wrapper_IP2Location_db_avail(const unsigned int type) {
 	char *filename;
 	int r, result = 0;
 	IP2Location *loc;
@@ -1048,7 +1048,7 @@ END_libipv6calc_db_wrapper:
 /*
  * wrapper extension: IP2Location_open_type
  */
-IP2Location *libipv6calc_db_wrapper_IP2Location_open_type(int type) {
+IP2Location *libipv6calc_db_wrapper_IP2Location_open_type(const unsigned int type) {
 	IP2Location *loc;
 	char *filename;
 	int  entry = -1, i;
@@ -1591,7 +1591,7 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(char *addr
 	IP2Location *loc;
 	IP2LocationRecord *record;
 
-	int IP2Location_type = 0;
+	unsigned int IP2Location_type = 0;
 	char *IP2Location_result_ptr = NULL;
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called with addr=%s proto=%d", addr, proto);
@@ -1680,7 +1680,7 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_country_name_by_addr(char *addr
 	IP2Location *loc;
 	IP2LocationRecord *record;
 
-	int IP2Location_type = 0;
+	unsigned int IP2Location_type = 0;
 	char *IP2Location_result_ptr = NULL;
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called with addr=%s proto=%d", addr, proto);
@@ -1845,7 +1845,7 @@ int libipv6calc_db_wrapper_IP2Location_library_version_major(void) {
  * in : database type
  * out: =0:compatible !=0:not compatible
  */
-static int libipv6calc_db_wrapper_IP2Location_db_compatible(const int type) {
+static int libipv6calc_db_wrapper_IP2Location_db_compatible(const unsigned int type) {
 	int result = 0;
 	int i;
 

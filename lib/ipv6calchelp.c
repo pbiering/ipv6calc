@@ -269,7 +269,7 @@ void printhelp_actiontypes(const uint32_t formatoptions, const struct option lon
 						/* run through options */
 						o = 0;
 						while(longopts[o].name != NULL) {
-							if ((ipv6calc_actionoptionmap[i][1] == longopts[o].val)) {
+							if ((ipv6calc_actionoptionmap[i][1] == (uint32_t) longopts[o].val)) {
 								has_options = 1;
 								if (test == 1) {	
 									fprintf(stderr, printformatstring3, "", longopts[o].name);
@@ -702,7 +702,7 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "   --anonymize-paranoid\n");
 			fprintf(stderr, "\n");
 			fprintf(stderr, "  Supported methods [--anonymize-method METHOD]:\n");
-			for (i = 0; i < sizeof(ipv6calc_anon_methods) / sizeof(s_ipv6calc_anon_methods); i++) {
+			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_anon_methods); i++) {
 				fprintf(stderr, "   %-10s: %s\n", ipv6calc_anon_methods[i].name, ipv6calc_anon_methods[i].description);
 			};
 			fprintf(stderr, "\n");
@@ -712,7 +712,7 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_anon_set_list); i++) {
 				snprintf(method_name, sizeof(method_name), "%s", "unknown"); // default
 
-				for (j = 0; j < sizeof(ipv6calc_anon_methods) / sizeof(s_ipv6calc_anon_methods); j++) {
+				for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_anon_methods); j++) {
 					if (ipv6calc_anon_methods[j].method == ipv6calc_anon_set_list[i].method) {
 						snprintf(method_name, sizeof(method_name), "%s", ipv6calc_anon_methods[j].name);
 						break;

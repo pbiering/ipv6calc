@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.c
  * Version    : $Id$
- * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc External (superseeding BuiltIn) database wrapper
@@ -59,8 +59,8 @@ time_t wrapper_db_unixtime_External[MAXENTRIES_ARRAY(libipv6calc_db_wrapper_Exte
 
 
 // local prototyping
-static char     *libipv6calc_db_wrapper_External_dbfilename(int type); 
-static char     *libipv6calc_db_wrapper_External_database_info(int type);
+static char     *libipv6calc_db_wrapper_External_dbfilename(unsigned int type); 
+static char     *libipv6calc_db_wrapper_External_database_info(unsigned int type);
 
 
 /*
@@ -296,7 +296,7 @@ char *libipv6calc_db_wrapper_External_wrapper_db_info_used(void) {
 /*
  * wrapper extension: External_dbfilename
  */
-static char *libipv6calc_db_wrapper_External_dbfilename(int type) {
+static char *libipv6calc_db_wrapper_External_dbfilename(unsigned int type) {
 	static char tempstring[NI_MAXHOST];
 	int  entry = -1, i;
 
@@ -324,8 +324,9 @@ static char *libipv6calc_db_wrapper_External_dbfilename(int type) {
 /*
  * wrapper extension: External_dbdescription
  */
-const char *libipv6calc_db_wrapper_External_dbdescription(int type) {
-	int  entry = -1, i;
+const char *libipv6calc_db_wrapper_External_dbdescription(const unsigned int type) {
+	int  entry = -1;
+	unsigned int i;
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Called: %s type=%d", wrapper_external_info, type);
 
@@ -350,7 +351,7 @@ const char *libipv6calc_db_wrapper_External_dbdescription(int type) {
  * wrapper extension: External_db_avail
  * ret: 1=avail  0=not-avail
  */
-int libipv6calc_db_wrapper_External_db_avail(int type) {
+int libipv6calc_db_wrapper_External_db_avail(const unsigned int type) {
 	char *filename;
 	int r = 0;
 
@@ -383,7 +384,7 @@ END_libipv6calc_db_wrapper:
  * 		if | 0x20000 -> data-iana is opened and ptr is not cached (only IPv4)
  * 	db_recno_max_ptr (set if not NULL)
  */
-DB *libipv6calc_db_wrapper_External_open_type(const int type_flag, long int *db_recno_max_ptr) {
+DB *libipv6calc_db_wrapper_External_open_type(const unsigned int type_flag, long int *db_recno_max_ptr) {
 	DB *dbp = NULL;
 	DBC *dbcp;
 	DBT key, data;
@@ -511,7 +512,7 @@ END_libipv6calc_db_wrapper:
 /*
  * wrapper: External_database_info
  */
-char *libipv6calc_db_wrapper_External_database_info(const int type) {
+char *libipv6calc_db_wrapper_External_database_info(const unsigned int type) {
 	static char resultstring[NI_MAXHOST] = "";
 	char datastring[NI_MAXHOST];
 	char tempstring[NI_MAXHOST];

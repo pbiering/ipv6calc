@@ -372,7 +372,8 @@ END_ipv4addr_gettype:
  * ret: ==0: ok, !=0: error
  */
 int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv4addr *ipv4addrp) {
-	int retval = 1, result, i, cpoints = 0, cdigits = 0;
+	int retval = 1, result, i;
+	unsigned int cpoints = 0, cdigits = 0;
 	char *addronlystring, *cp;
 	int expecteditems = 0;
 	int compat[4];
@@ -750,6 +751,7 @@ int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, c
 
 	int retval = 1;
 	int i;
+	unsigned int s;
 	char tempstring[NI_MAXHOST];
 
 	snprintf(tempstring, sizeof(tempstring), "%02x%02x%02x%02x",
@@ -774,8 +776,8 @@ int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, c
 	};
 
 	if (formatoptions & FORMATOPTION_printuppercase) {
-		for (i = 0; i < strlen(resultstring); i++) {
-			resultstring[i] = toupper(resultstring[i]);
+		for (s = 0; s < strlen(resultstring); s++) {
+			resultstring[s] = toupper(resultstring[s]);
 		};
 	};
 

@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
  * Version    : $Id$
- * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper.c
@@ -124,7 +124,7 @@ static const s_formatoption ipv6calc_db_features[] = {
 #define IPV6CALC_DB_PRIO_MAX			IPV6CALC_DB_SOURCE_MAX
 
 typedef struct {
-	const int  number;
+	const unsigned int number;
 	const char *name;
 	const char *shortname;
 } s_data_sources;
@@ -255,7 +255,7 @@ extern void libipv6calc_db_wrapper_features_help(void);
 extern void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
 extern int  libipv6calc_db_wrapper_has_features(uint32_t features);
 extern int  libipv6calc_db_wrapper_options(const int opt, const char *optarg, const struct option longopts[]);
-extern const char *libipv6calc_db_wrapper_get_data_source_name_by_number(const int number);
+extern const char *libipv6calc_db_wrapper_get_data_source_name_by_number(const unsigned int number);
 
 
 /* functional wrappers */
@@ -321,7 +321,7 @@ extern int libipv6calc_db_asn_filter(const uint32_t asn, const s_ipv6calc_filter
 
 extern int libipv6calc_db_registry_filter_parse(s_ipv6calc_filter_db_registry *filter, const char *token, const int negate_flag);
 extern int libipv6calc_db_registry_filter_check(s_ipv6calc_filter_db_registry *filter, const int proto);
-extern int libipv6calc_db_registry_filter(const int registry, const s_ipv6calc_filter_db_registry *filter);
+extern int libipv6calc_db_registry_filter(const uint32_t registry, const s_ipv6calc_filter_db_registry *filter);
 
 extern       uint32_t libipv6calc_db_lib_version_numeric(void);
 extern const char    *libipv6calc_db_lib_version_string(void);

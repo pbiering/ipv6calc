@@ -54,3 +54,8 @@ following forms (and convert between them):
   -binary labels
   -comparing addresses, v4/v4, v4/v6
   -not use malloc or strxxx functions.
+
+
+External dependend
+------------------
+Use of "splint" once variadic macros are supported http://splint.org/faq.html#quest18b

@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.h
  * Version    : $Id$
- * Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2014-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_DBIP.c
@@ -66,10 +66,10 @@ extern int         libipv6calc_db_wrapper_DBIP_has_features(const uint32_t featu
 
 extern char dbip_db_dir[NI_MAXHOST];
 
-extern int          libipv6calc_db_wrapper_DBIP_db_avail(const int type);
-extern DB          *libipv6calc_db_wrapper_DBIP_open_type(const int type_flag, long int *db_recno_max_ptr);
+extern int          libipv6calc_db_wrapper_DBIP_db_avail(const unsigned int type);
+extern DB          *libipv6calc_db_wrapper_DBIP_open_type(const unsigned int type_flag, long int *db_recno_max_ptr);
 
-extern const char  *libipv6calc_db_wrapper_DBIP_dbdescription(const int type);
-extern char        *libipv6calc_db_wrapper_DBIP_database_info(const int type);
+extern const char  *libipv6calc_db_wrapper_DBIP_dbdescription(const unsigned int type);
+extern char        *libipv6calc_db_wrapper_DBIP_database_info(const unsigned int type);
 
 #endif

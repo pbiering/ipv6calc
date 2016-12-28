@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libmac.c
  * Version    : $Id$
- * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library MAC address handling
@@ -203,6 +203,10 @@ void macaddr_filter_clear(s_ipv6calc_filter_macaddr *filter) {
  * ret: 0=match 1=not match
  */
 int macaddr_filter(const ipv6calc_macaddr *macaddrp, const s_ipv6calc_filter_macaddr *filter) {
+
+	// still missing implementation
+	if (sizeof(filter) == 0) { }; // make compiler happy (avoid unused "...")
+	if (sizeof(macaddrp) == 0) { }; // make compiler happy (avoid unused "...")
 
 	return 1;
 };

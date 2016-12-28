@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libipv6calc.h
  * Version    : $Id$
- * Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc.c
@@ -95,7 +95,7 @@ typedef struct {
 #define U32_LSB16(v)	(v & 0xffff)
 
 // max entries of a const array
-#define MAXENTRIES_ARRAY(a)	(sizeof(a) / sizeof(a[0]))
+#define MAXENTRIES_ARRAY(a)	(signed long) (sizeof(a) / sizeof(a[0]))
 
 /* non-quiet print with args */
 #define NONQUIETPRINT_WA(t, ...)        if (ipv6calc_quiet == 0) { fprintf(stderr, t "\n", __VA_ARGS__); };

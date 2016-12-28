@@ -1096,7 +1096,8 @@ END_ANON_IID:
  * ret: ==0: ok, !=0: error
  */
 int addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp) {
-	int retval = 1, i;
+	int retval = 1;
+	unsigned int s;
 	char tempstring[NI_MAXHOST], tempstring2[NI_MAXHOST], *cptr;
 	const char *literalstring = ".ipv6-literal.net";
 
@@ -1105,9 +1106,9 @@ int addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, co
 	DEBUGPRINT_WA(DEBUG_libipv6addr, "Got input '%s'", addrstring);
 
 	/* lowercase string */
-	for (i = 0; i <= strlen(addrstring); i++) {
+	for (s = 0; s <= strlen(addrstring); s++) {
 		/* including trailing \0 */
-		tempstring2[i] = tolower(addrstring[i]);
+		tempstring2[s] = tolower(addrstring[s]);
 	}
 
 	/* search for literal string */
@@ -1131,11 +1132,11 @@ int addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, co
 	DEBUGPRINT_WA(DEBUG_libipv6addr, "String without literal suffix: %s", tempstring);
 
 	/* replace - with : */
-	for (i = 0; i < strlen(tempstring); i++) {
-		if (tempstring[i] == '-') {
-			tempstring[i] = ':';
-		} else if (tempstring[i] == 's') {
-			tempstring[i] = '%';
+	for (s = 0; s < strlen(tempstring); s++) {
+		if (tempstring[s] == '-') {
+			tempstring[s] = ':';
+		} else if (tempstring[s] == 's') {
+			tempstring[s] = '%';
 		};
 	};
 
@@ -1368,7 +1369,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, const siz
  */
 static int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
 	int retval = 1;
-	int i;
+	unsigned int s;
 	char tempstring[NI_MAXHOST], temp2string[NI_MAXHOST];
 	
 	/* print array */
@@ -1432,9 +1433,9 @@ static int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char
 	} else {
 		if ((formatoptions & FORMATOPTION_literal) != 0) {
 			/* replace : by - */
-			for (i =0; i < strlen(tempstring); i++) {
-				if (tempstring[i] == ':') {
-					tempstring[i] = '-';
+			for (s = 0; s < strlen(tempstring); s++) {
+				if (tempstring[s] == ':') {
+					tempstring[s] = '-';
 				};
 			};
 
@@ -1878,6 +1879,7 @@ int libipv6addr_to_octal(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring,
 int libipv6addr_to_hex(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
 	int retval = 1;
 	int i;
+	unsigned int s;
 	char tempstring[NI_MAXHOST];
 
 	snprintf(tempstring, sizeof(tempstring), "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
@@ -1913,8 +1915,8 @@ int libipv6addr_to_hex(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, c
 	};
 
 	if (formatoptions & FORMATOPTION_printuppercase) {
-		for (i = 0; i < strlen(resultstring); i++) {
-			resultstring[i] = toupper(resultstring[i]);
+		for (s = 0; s < strlen(resultstring); s++) {
+			resultstring[s] = toupper(resultstring[s]);
 		};
 	};
 
