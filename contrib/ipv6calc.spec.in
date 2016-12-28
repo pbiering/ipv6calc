@@ -31,6 +31,7 @@ Source:		https://github.com/pbiering/%{name}/archive/%{gitcommit}/%{name}-%{gitc
 Source:		ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/%{name}-%{version}.tar.gz
 %endif
 BuildRequires:	openssl-devel
+BuildRequires:	perl-generators
 BuildRequires:	perl(Digest::MD5), perl(Digest::SHA1), perl(URI::Escape)
 BuildRequires:	perl(strict), perl(warnings)
 Requires:	perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
