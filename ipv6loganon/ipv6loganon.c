@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6loganon.c
  * Version    : $Id$
- * Copyright  : 2007-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2007-2016 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile anonymization
@@ -464,7 +464,7 @@ static int anonymizetoken(char *resultstring, const size_t resultstring_length, 
 	DEBUGSECTION_BEGIN(DEBUG_ipv6loganon_general)
 		if (inputtype >= 0) {
 			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_formatstrings); i++) {
-				if (inputtype == ipv6calc_formatstrings[i].number) {
+				if ((uint32_t) inputtype == ipv6calc_formatstrings[i].number) {
 					DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "Found type: %s", ipv6calc_formatstrings[i].token);
 				};
 				break;
