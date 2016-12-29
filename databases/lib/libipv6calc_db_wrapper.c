@@ -2071,6 +2071,11 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 		exit(EXIT_FAILURE);
 	};
 
+	if (data_num_rows > INT32_MAX) {
+		ERRORPRINT_WA("unsupported data_key_num_rows (FIX CODE): %u", data_num_rows);
+		exit(EXIT_FAILURE);
+	};
+
 	/* check data_ptr_type */
 	switch(data_ptr_type) {
 	    case IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY:
@@ -2166,7 +2171,7 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 	};
 
 	while (i_old != i) {
-		if ((i >= data_num_rows) || (i < 0)) {
+		if ((i >= (int32_t) data_num_rows) || (i < 0)) {
 			ERRORPRINT_WA("i out of range (FIX CODE): i=%ld data_num_rows=%u", i, data_num_rows);
 			exit(EXIT_FAILURE);
 		};
@@ -2385,7 +2390,7 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 			i = (i_max - i_min) / 2 + i_min;
 
 			// jump to last entry in special way if needed, otherwise it's not reachable
-			if ((i == i_old) && ((i + 1) == (data_num_rows - 1))) {
+			if ((i == i_old) && ((i + 1) == ((int32_t) data_num_rows - 1))) {
 				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "workaround for last entry activated");
 				i = i_max;
 			};
