@@ -5,21 +5,21 @@
 <!ENTITY % output.print.bmp "IGNORE">
  ]>
 
-<!-- SGML file was created by LyX 2.2.1
+<!-- SGML file was created by LyX 2.2.2
   See http://www.lyx.org/ for more information -->
 <article lang="en">
 <articleinfo>
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>6.2bis</revnumber> <date>2016-10-07</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>6.3</revnumber> <date>2016-12-29</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freecode.com/projects/ipv6calc/">freecode.com (former freshmeat) / ipv6calc</ulink> page (but this is not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 0.99.1 (released 2015-09-05)</para></sect2><sect2>
+<para>Latest version since last update of this page is 0.99.2 (released 2016-12-29)</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
 <listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;mod_ipv6calc&rdquo;: Apache module</para></listitem></itemizedlist></sect2><sect2>
@@ -48,7 +48,10 @@
 <listitem><para>Via GitHub (since 2016-09-05) at <ulink url="https://github.com/pbiering/ipv6calc">GitHub / ipv6calc</ulink></para></listitem></itemizedlist></sect2><sect2>
 <title>Releases</title>
 <sect3>
-<title>as tar.gz</title>
+<title>as tar.gz or zip</title>
+<itemizedlist>
+<listitem><para>via HTTPS at <ulink url="https://github.com/pbiering/ipv6calc/releases">GitHub / ipv6calc / releases</ulink> </para></listitem></itemizedlist></sect3><sect3>
+<title>as tar.gz (signed)</title>
 <itemizedlist>
 <listitem><para>Via FTP at <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink>: <ulink url="ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/">DeepSpace6 / anonymous FTP</ulink></para></listitem><listitem><para>Via FTP at <ulink url="ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/">ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/</ulink></para></listitem></itemizedlist><para>Since version 0.95.0 packages are signed with new GPG key, also available here: <ulink url="ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/CODE-GPG-KEY-bieringer.de-2013">CODE-GPG-KEY-bieringer.de-2013 @ftp.bieringer.de</ulink> or <ulink url="ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/CODE-GPG-KEY-bieringer.de-2013">CODE-GPG-KEY-bieringer.de-2013 @ftp.deepspace6.net</ulink></para><screen>
 <![CDATA[Key fingerprint: AAB3 8CB7 97C7 50C7 78C6 08C6 DDEB 141D F738 0F61

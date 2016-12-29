@@ -110,8 +110,8 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>6.2bis</revnumber> <date>2016-10-07</date> <authorinitials>
-PB</authorinitials></revision>
+<revision> <revnumber>6.3</revnumber> <date>2016-12-29</date> <authorinitials>PB<
+/authorinitials></revision>
 \end_layout
 
 \end_inset
@@ -175,7 +175,7 @@ Latest version
 \end_layout
 
 \begin_layout Standard
-Latest version since last update of this page is 0.99.1 (released 2015-09-05)
+Latest version since last update of this page is 0.99.2 (released 2016-12-29)
 \end_layout
 
 \begin_layout Subsection
@@ -462,7 +462,23 @@ Releases
 \end_layout
 
 \begin_layout Subsubsection
-as tar.gz
+as tar.gz or zip
+\end_layout
+
+\begin_layout Itemize
+via HTTPS at 
+\begin_inset CommandInset href
+LatexCommand href
+name "GitHub / ipv6calc / releases"
+target "https://github.com/pbiering/ipv6calc/releases"
+
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Subsubsection
+as tar.gz (signed)
 \end_layout
 
 \begin_layout Itemize
@@ -2971,7 +2987,6 @@ $ cat ip.bieringer.de-log.201310 | awk '{ print $1 }' | sort | uniq | ipv6calc
 \end_layout
 
 \begin_layout Standard
-
 For more information see below
 \end_layout
 
@@ -2990,7 +3005,6 @@ Since 0.99.2 a test mode ('-A test', autoselected in case 'test_*' options
 \end_layout
 
 \begin_layout Standard
-
 For more information see below
 \end_layout
 
