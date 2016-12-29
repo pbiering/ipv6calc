@@ -395,7 +395,7 @@ END_line:
  * Convert token
  */
 static int converttoken(char *resultstring, const size_t resultstring_length, const char *token, const long int outputtype, const int flag_skipunknown) {
-	long int inputtype = -1;
+	uint32_t inputtype = FORMAT_undefined;
 	int retval = 1, i, registry;
 	uint32_t typeinfo, typeinfo_test;
 	char tempstring[NI_MAXHOST];
@@ -465,9 +465,9 @@ static int converttoken(char *resultstring, const size_t resultstring_length, co
 	inputtype = libipv6calc_autodetectinput(token);
 
 	DEBUGSECTION_BEGIN(DEBUG_ipv6logconv_processing)
-		if (inputtype >= 0) {
+		if (inputtype != FORMAT_undefined) {
 			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_formatstrings); i++) {
-				if ((uint32_t) inputtype == ipv6calc_formatstrings[i].number) {
+				if (inputtype == ipv6calc_formatstrings[i].number) {
 					DEBUGPRINT_WA(DEBUG_ipv6logconv_processing, "Found type: %s", ipv6calc_formatstrings[i].token);
 				};
 				break;
