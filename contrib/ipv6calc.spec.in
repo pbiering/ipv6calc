@@ -324,8 +324,9 @@ rm -rf %{buildroot}
 
 
 %changelog
-* Thu Feb 04 2016 Peter Bieringer <pb@bieringer.de>
-- add post/postun, minor fixes
+* Wed Dec 28 2016 Peter Bieringer <pb@bieringer.de>
+- add support for git commit hash
+- align RPM build requires with fedora-scm
 
 * Thu Jul 30 2015 Peter Bieringer <pb@bieringer.de>
 - add automatic RPM license feature detection
