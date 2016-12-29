@@ -422,7 +422,7 @@ rm -rf %{buildroot}
 * Sun Apr 07 2002 Peter Bieringer <pb@bieringer.de>
 - add more analog example files
 
-* Fri Apr 06 2002 Peter Bieringer <pb@bieringer.de>
+* Fri Apr 05 2002 Peter Bieringer <pb@bieringer.de>
 - remove BuildRequires extension, not needed for normal build
 
 * Sun Mar 24 2002 Peter Bieringer <pb@bieringer.de>
