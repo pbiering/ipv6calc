@@ -87,11 +87,15 @@ libipv6calc.a:	$(OBJS)
 		$(RANLIB) libipv6calc.a
 
 libipv6calc.so.@PACKAGE_VERSION@: $(OBJS)
+ifeq ($(SHARED_LIBRARY), yes)
 		cd ../ && ${MAKE} db-ieee-oui-make
 		cd ../ && ${MAKE} db-ipv4-assignment-make
 		cd ../ && ${MAKE} db-ipv6-assignment-make
 		echo "Creates shared library (.so)"
 		$(CC) -o libipv6calc.so.@PACKAGE_VERSION@ $(OBJS) $(CFLAGS) $(LDFLAGS) -shared -Wl,$(SO_NAME_FLAGS),libipv6calc.so.@PACKAGE_VERSION@
+else
+		echo "Nothing to do (shared libary mode is not enabled)"
+endif
 
 distclean:
 		${MAKE} clean
@@ -109,7 +113,7 @@ ifeq ($(SHARED_LIBRARY), yes)
 		install -m 755 libipv6calc.so.@PACKAGE_VERSION@ $(DESTDIR)$(libdir)
 		/sbin/ldconfig -n $(DESTDIR)$(libdir)
 else
-		echo "Nothing to do"
+		echo "Nothing to do (shared libary mode is not enabled)"
 endif
 
 test:
