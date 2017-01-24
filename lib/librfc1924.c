@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : librfc1924.c
  * Version    : $Id$
- * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
  *              and 2006 by Niko Tyni <ntyni (at) iki.fi>
  *
  * Information:
@@ -170,7 +170,7 @@ int base85_to_ipv6addrstruct(const char *addrstring, char *resultstring, const s
 	};
 	
 	/* Get scope */
-	ipv6addrp->scope = ipv6addr_gettype(ipv6addrp);
+	ipv6addrp->scope = ipv6addr_gettype(ipv6addrp, NULL);
 	
 	ipv6addrp->flag_valid = 1;
 

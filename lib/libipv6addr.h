@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libipv6addr.h
  * Version    : $Id$
- * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -303,6 +303,9 @@ typedef struct {
 
 // typeinfo2
 #define IPV6_ADDR_TYPE2_6RD			(uint32_t) 0x00000001U	/* IPv6 Rapid Deployment address (RFC5569), not autodetectable (triggered by --6rd_prefixlength) */
+#define IPV6_ADDR_TYPE2_LISP			(uint32_t) 0x00001000U	/* IPv6 LISP (RFC6830) */
+#define IPV6_ADDR_TYPE2_LISP_PETR		(uint32_t) 0x00002000U	/* IPv6 LISP Proxy Egress Tunnel Routers (PETRY) Anycast */
+#define IPV6_ADDR_TYPE2_LISP_MAP_RESOLVER	(uint32_t) 0x00004000U	/* IPv6 LISP Map Resolver Anycast */
 
 // IPv4 address extractor selector
 #define IPV6_ADDR_SELECT_IPV4_DEFAULT		0
@@ -349,6 +352,9 @@ typedef struct {
 /* text representations */
 /*@unused@*/ static const s_type ipv6calc_ipv6addr_type2_strings[] = {
 	{ IPV6_ADDR_TYPE2_6RD		, "6rd" },
+	{ IPV6_ADDR_TYPE2_LISP	 		, "lisp" },
+	{ IPV6_ADDR_TYPE2_LISP_PETR		, "lisp-proxyegresstunnelrouteranycast" },
+	{ IPV6_ADDR_TYPE2_LISP_MAP_RESOLVER	, "lisp-mapresolveranycast" },
 };
 
 /* Registries */
@@ -393,8 +399,7 @@ extern void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6a
 
 extern int ipv6addr_compare(const ipv6calc_ipv6addr *ipv6addrp1, const ipv6calc_ipv6addr *ipv6addrp2, const uint16_t compare_flags);
 
-extern uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp);
-extern uint32_t ipv6addr_gettype2(const ipv6calc_ipv6addr *ipv6addrp);
+extern uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp, uint32_t *typeinfo2p);
 
 extern int  addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp);
 extern int  addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp);

@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6logconv.c
  * Version    : $Id$
- * Copyright  : 2002-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile conversions
@@ -502,7 +502,7 @@ static int converttoken(char *resultstring, const size_t resultstring_length, co
 				snprintf(resultstring, resultstring_length, "ipv6-addr.addrtype.ipv6calc");
 
 				/* check for registry */
-				typeinfo = ipv6addr_gettype(&ipv6addr);
+				typeinfo = ipv6addr_gettype(&ipv6addr, NULL);
 
 				/* scope of IPv6 address */
 				/* init retval */
@@ -607,7 +607,7 @@ static int converttoken(char *resultstring, const size_t resultstring_length, co
 				};
 		       	};
 
-			typeinfo = ipv6addr_gettype(&ipv6addr);
+			typeinfo = ipv6addr_gettype(&ipv6addr, NULL);
 
 			/* check whether address has a OUI ID */
 			if ( (( typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4 | IPV6_ADDR_ULUA)) == 0) && ((typeinfo & (IPV6_NEW_ADDR_TEREDO)) == 0) )  {
@@ -667,7 +667,7 @@ static int converttoken(char *resultstring, const size_t resultstring_length, co
 				};
 		       	};
 
-			typeinfo = ipv6addr_gettype(&ipv6addr);
+			typeinfo = ipv6addr_gettype(&ipv6addr, NULL);
 
 		       	if ( (typeinfo & IPV6_ADDR_LINKLOCAL) != 0 ) {
 				snprintf(resultstring, resultstring_length, "link-local.ipv6addrtype.ipv6calc");

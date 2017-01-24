@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : showinfo.c
  * Version    : $Id$
- * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Function to show information about a given IPv6 address
@@ -1222,14 +1222,19 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	ipv6addrp = &ipv6addr;
 	ipv6addr_copy(ipv6addrp, ipv6addrp1); /* copy structure */
 
-	typeinfo = ipv6addr_gettype(ipv6addrp);
-	typeinfo2 = ipv6addrp->typeinfo2;
+	typeinfo = ipv6addr_gettype(ipv6addrp, &typeinfo2);
+	ipv6addrp->typeinfo2 = typeinfo2;
 
-	DEBUGPRINT_WA(DEBUG_showinfo, "%08x-%0x8 (result of 'ipv6addr_gettype')", (unsigned int) typeinfo, (unsigned int) typeinfo2);
+	DEBUGPRINT_WA(DEBUG_showinfo, "0x%08x-0x%08x (result of 'ipv6addr_gettype')", (unsigned int) typeinfo, (unsigned int) typeinfo2);
 
 	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
-		DEBUGPRINT_WA(DEBUG_showinfo, "test: %08x : %s", (unsigned int) ipv6calc_ipv6addrtypestrings[i].number, ipv6calc_ipv6addrtypestrings[i].token);
+		DEBUGPRINT_WA(DEBUG_showinfo, "test1: %08x : %s", (unsigned int) ipv6calc_ipv6addrtypestrings[i].number, ipv6calc_ipv6addrtypestrings[i].token);
 	};	
+
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addr_type2_strings); i++ ) {
+		DEBUGPRINT_WA(DEBUG_showinfo, "test2: %08x : %s", (unsigned int) ipv6calc_ipv6addr_type2_strings[i].number, ipv6calc_ipv6addr_type2_strings[i].token);
+	};
+
 
 	/* get full uncompressed IPv6 address */
 	flag_prefixuse = ipv6addrp->flag_prefixuse;
@@ -1309,6 +1314,13 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 			if ( (typeinfo & ipv6calc_ipv6addrtypestrings[i].number) != 0 ) {
 				if ( j != 0 ) { fprintf(stdout, ", "); };
 				fprintf(stdout, "%s", ipv6calc_ipv6addrtypestrings[i].token);
+				j = 1;
+			};
+		};
+		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addr_type2_strings); i++ ) {
+			if ( (typeinfo2 & ipv6calc_ipv6addr_type2_strings[i].number) != 0 ) {
+				if ( j != 0 ) { fprintf(stdout, ", "); };
+				fprintf(stdout, "%s", ipv6calc_ipv6addr_type2_strings[i].token);
 				j = 1;
 			};
 		};

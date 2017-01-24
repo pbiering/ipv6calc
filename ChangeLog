@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20170124/PB
+	lib/libipv6calc.[ch]: implement support for LISP-IPv6
+	ipv6calc/showinfo.c: add typeinfo2 also on human readable output
+
 20161231/PB
 	lib/Makefile.in,databases/lib/Makefile.in: skip build of shared library if not selected by configure option (https://github.com/pbiering/ipv6calc/issues/3)
 

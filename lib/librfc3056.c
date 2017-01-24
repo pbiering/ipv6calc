@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : librfc3056.c
  * Version    : $Id$
- * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for conversions defined in RFC 3056
@@ -42,7 +42,7 @@ int librfc3056_ipv4addr_to_ipv6to4addr(ipv6calc_ipv6addr *ipv6addrp, const ipv6c
 	ipv6addrp->prefixlength = 48;
 	ipv6addrp->flag_prefixuse = 0;
 	ipv6addrp->flag_valid = 1;
-	ipv6addrp->scope = ipv6addr_gettype(ipv6addrp);
+	ipv6addrp->scope = ipv6addr_gettype(ipv6addrp, NULL);
 
 	retval = 0;
 	return (retval);
