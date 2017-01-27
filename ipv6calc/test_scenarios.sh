@@ -239,6 +239,12 @@ a909:16fa:9092:23ff:a909:4941::7		anonymized-prefix
 2001:db8::2					^ipv6.addr=lt=2001:db8::1
 2.2.3.4						^ipv4.addr=gt=2.2.3.5
 2.2.3.4						^ipv4.addr=lt=2.2.3.3
+2610:00D0::1					lisp
+2001:67c:198::1					lisp-proxyegresstunnelrouteranycast,anycast
+2001:67c:28::1					lisp-mapresolveranycast,anycast
+153.16.0.1					lisp
+193.105.183.1					lisp-proxyegresstunnelrouteranycast,anycast
+91.220.201.1					lisp-mapresolveranycast,anycast
 END
 }
 

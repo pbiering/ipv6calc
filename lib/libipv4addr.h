@@ -2,7 +2,7 @@
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
  * Version    : $Id$
- * Copyright  : 2002-2016 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -54,10 +54,10 @@ typedef struct {
 
 #define IPV4_ADDR_ANY				(uint32_t) 0x00000000U
 
-#define IPV4_ADDR_UNICAST			(uint32_t) 0x00000001U	
-#define IPV4_ADDR_MULTICAST			(uint32_t) 0x00000002U	
-#define IPV4_ADDR_ANYCAST			(uint32_t) 0x00000004U	
-#define IPV4_ADDR_BROADCAST			(uint32_t) 0x00000008U	
+#define IPV4_ADDR_UNICAST			(uint32_t) 0x00000001U
+#define IPV4_ADDR_MULTICAST			(uint32_t) 0x00000002U
+#define IPV4_ADDR_ANYCAST			(uint32_t) 0x00000004U
+#define IPV4_ADDR_BROADCAST			(uint32_t) 0x00000008U
 #define IPV4_ADDR_LOOPBACK			(uint32_t) 0x00000010U
 #define IPV4_ADDR_UNSPECIFIED			(uint32_t) 0x00000020U
 #define IPV4_ADDR_ANONYMIZED			(uint32_t) 0x00000100U
@@ -69,6 +69,10 @@ typedef struct {
 #define IPV4_ADDR_SITELOCAL			(uint32_t) 0x00002000U
 
 #define IPV4_ADDR_6TO4RELAY			(uint32_t) 0x01000000U
+
+#define IPV4_ADDR_LISP				(uint32_t) 0x00010000U	/* IPv6 LISP (RFC6830) */
+#define IPV4_ADDR_LISP_PETR			(uint32_t) 0x00020000U	/* IPv6 LISP Proxy Egress Tunnel Routers (PETRY) Anycast */
+#define IPV4_ADDR_LISP_MAP_RESOLVER		(uint32_t) 0x00040000U	/* IPv6 LISP Map Resolver Anycast */
 
 
 /* text representation */
@@ -86,7 +90,10 @@ typedef struct {
 	{ IPV4_ADDR_SITELOCAL		, "site-local" },
 	{ IPV4_ADDR_ANONYMIZED		, "anonymized" },
 	{ IPV4_ADDR_GLOBAL		, "global" },
-	{ IPV4_ADDR_6TO4RELAY		, "6to4relay" }
+	{ IPV4_ADDR_6TO4RELAY		, "6to4relay" },
+	{ IPV4_ADDR_LISP	 	, "lisp" },
+	{ IPV4_ADDR_LISP_PETR		, "lisp-proxyegresstunnelrouteranycast" },
+	{ IPV4_ADDR_LISP_MAP_RESOLVER	, "lisp-mapresolveranycast" },
 };
 
 

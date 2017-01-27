@@ -2,7 +2,7 @@
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
  * Version    : $Id$
- * Copyright  : 2002-2016 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -340,6 +340,15 @@ uint32_t ipv4addr_gettype(const ipv6calc_ipv4addr *ipv4addrp) {
 	} else if ((ipv4 & 0xffffff00u) == 0xcb007100u) {
 		// 203.0.113.0/24 (RFC 5737)
 		type = IPV4_ADDR_UNICAST | IPV4_ADDR_RESERVED;
+	} else if ((ipv4 & 0xffff0000u) == 0x99100000u) {
+		// 153.16.0.0/16 (RFC6830)
+		type = IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL | IPV4_ADDR_LISP;
+	} else if ((ipv4 & 0xffffff00u) == 0xc169b700u) {
+		// 193.105.183.0/24 (RFC6830)
+		type = IPV4_ADDR_ANYCAST | IPV4_ADDR_GLOBAL | IPV4_ADDR_LISP_PETR;
+	} else if ((ipv4 & 0xffffff00u) == 0x5bdcc900u) {
+		// 91.220.201.0/24 (RFC6830)
+		type = IPV4_ADDR_ANYCAST | IPV4_ADDR_GLOBAL | IPV4_ADDR_LISP_MAP_RESOLVER;
 	} else if ((ipv4 & 0xf0000000u) == 0xe0000000u) {
 		// 224.0.0.0/4 (RFC 3171)
 		type = IPV4_ADDR_MULTICAST;

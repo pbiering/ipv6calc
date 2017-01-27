@@ -9,8 +9,12 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20170127/PB
+	lib/libipv6addr.[ch]: implement support for LISP-IPv4
+	lib/libipv6addr.[ch]: extend filter structure for typeinfo2
+
 20170124/PB
-	lib/libipv6calc.[ch]: implement support for LISP-IPv6
+	lib/libipv6addr.[ch]: implement support for LISP-IPv6
 	ipv6calc/showinfo.c: add typeinfo2 also on human readable output
 
 20161231/PB

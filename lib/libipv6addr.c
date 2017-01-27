@@ -798,13 +798,15 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp, uint32_t *typeinfo
 		type2 |= IPV6_ADDR_TYPE2_LISP;
 	};
 
-	if ((st == 0x2001067c) && ((st1 & 0xffff0000) == 0x01980000)) {
+	if ((st == 0x2001067c) && ((st1 & 0xffff0000u) == 0x01980000u)) {
 		/* 2001:67c:198::/48 -> LISP PETR (RFC 6830) */
 		type2 |= IPV6_ADDR_TYPE2_LISP_PETR;
+		type |= IPV6_ADDR_ANYCAST;
 	};
-	if ((st == 0x2001067c) && ((st1 & 0xffff0000) == 0x00280000)) {
+	if ((st == 0x2001067c) && ((st1 & 0xffff0000u) == 0x00280000u)) {
 		/* 2001:67c:28::/48 -> LISP Map Resolver (RFC 6830) */
 		type2 |= IPV6_ADDR_TYPE2_LISP_MAP_RESOLVER;
+		type |= IPV6_ADDR_ANYCAST;
 	};
 
 	if (((type & (IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4)) == 0) && ((st & 0xE0000000u) == 0x20000000u)) {
@@ -922,9 +924,12 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp, uint32_t *typeinfo
 	/* Consider all addresses with the first three bits different of
 	   000 and 111 as unicasts.
 	   also link-local,site-local,ULULA
+	   except LISP anycast
 	 */
 	if ((((st & 0xE0000000u) != 0x00000000u) && ((st & 0xE0000000u) != 0xE0000000u)) || ((st & 0xFC000000u) == 0xFC000000u)) {
-		type |= IPV6_ADDR_UNICAST;
+		if ((type2 & (IPV6_ADDR_TYPE2_LISP_PETR | IPV6_ADDR_TYPE2_LISP_MAP_RESOLVER)) == 0) {
+			type |= IPV6_ADDR_UNICAST;
+		};
 
 		if ((type & IPV6_NEW_ADDR_TEREDO) != 0) {
 			/* teredo has no IID */
@@ -2547,6 +2552,8 @@ void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter) {
 	filter->filter_typeinfo.active = 0;
 	filter->filter_typeinfo.typeinfo_must_have = 0;
 	filter->filter_typeinfo.typeinfo_may_not_have = 0;
+	filter->filter_typeinfo2.typeinfo_must_have = 0;
+	filter->filter_typeinfo2.typeinfo_may_not_have = 0;
 
 	libipv6calc_filter_clear_db_cc(&filter->filter_db_cc);
 	libipv6calc_filter_clear_db_asn(&filter->filter_db_asn);
@@ -2714,6 +2721,25 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 				break;
 			};
 		};
+
+		// typeinfo2 token
+		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addr_type2_strings); i++ ) {
+			DEBUGPRINT_WA(DEBUG_libipv6addr, "check token against: %s", ipv6calc_ipv6addr_type2_strings[i].token);
+
+			if (strcmp(ipv6calc_ipv6addr_type2_strings[i].token, token + offset) == 0) {
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "token match: %s", ipv6calc_ipv6addr_type2_strings[i].token);
+
+				if (negate == 1) {
+					filter->filter_typeinfo2.typeinfo_may_not_have |= ipv6calc_ipv6addr_type2_strings[i].number;
+				} else {
+					filter->filter_typeinfo2.typeinfo_must_have |= ipv6calc_ipv6addr_type2_strings[i].number;
+				};
+				filter->filter_typeinfo2.active = 1;
+				filter->active = 1;
+				result = 0;
+				break;
+			};
+		};
 	};
 
 	if (db == 1) {
@@ -2794,43 +2820,49 @@ int ipv6addr_filter_check(s_ipv6calc_filter_ipv6addr *filter) {
 	int result = 0, r, i;
 	char resultstring[NI_MAXHOST];
 
-	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter general active         : %d", filter->active);
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter general active          : %d", filter->active);
 
-	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'typeinfo' active      : %d", filter->filter_typeinfo.active);
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'typeinfo' active       : %d", filter->filter_typeinfo.active);
 	if (filter->filter_typeinfo.active > 0) {
-		DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'typeinfo/must_have'   : 0x%08x", filter->filter_typeinfo.typeinfo_must_have);
-		DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'typeinfo/may_not_have': 0x%08x", filter->filter_typeinfo.typeinfo_may_not_have);
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'typeinfo/must_have'    : 0x%08x", filter->filter_typeinfo.typeinfo_must_have);
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'typeinfo/may_not_have' : 0x%08x", filter->filter_typeinfo.typeinfo_may_not_have);
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'addr' active          : %d", filter->filter_addr.active);
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'typeinfo2' active      : %d", filter->filter_typeinfo2.active);
+	if (filter->filter_typeinfo2.active > 0) {
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'typeinfo2/must_have'   : 0x%08x", filter->filter_typeinfo2.typeinfo_must_have);
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'typeinfo2/may_not_have': 0x%08x", filter->filter_typeinfo2.typeinfo_may_not_have);
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'addr' active           : %d", filter->filter_addr.active);
 	if (filter->filter_addr.active > 0) {
 		if (filter->filter_addr.addr_must_have_max > 0) {
 			for (i = 0; i < filter->filter_addr.addr_must_have_max; i++) {
 				ipv6addrstruct_to_compaddr(&filter->filter_addr.ipv6addr_must_have[i], resultstring, sizeof(resultstring));
-				DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'addr/must_have'       : %s", resultstring);
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'addr/must_have'        : %s", resultstring);
 			};
 		};
 		if (filter->filter_addr.addr_may_not_have_max > 0) {
 			for (i = 0; i < filter->filter_addr.addr_may_not_have_max; i++) {
 				ipv6addrstruct_to_compaddr(&filter->filter_addr.ipv6addr_may_not_have[i], resultstring, sizeof(resultstring));
-				DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'addr/may_not_have'    : %s", resultstring);
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'addr/may_not_have'     : %s", resultstring);
 			};
 		};
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'db.cc' active         : %d", filter->filter_db_cc.active);
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'db.cc' active          : %d", filter->filter_db_cc.active);
 	if (filter->filter_db_cc.active > 0) {
 		r = libipv6calc_db_cc_filter_check(&filter->filter_db_cc, IPV6CALC_PROTO_IPV6);
 		if (r > 0) { result = 1; };
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'db.asn' active        : %d", filter->filter_db_asn.active);
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'db.asn' active         : %d", filter->filter_db_asn.active);
 	if (filter->filter_db_asn.active > 0) {
 		r = libipv6calc_db_asn_filter_check(&filter->filter_db_asn, IPV6CALC_PROTO_IPV6);
 		if (r > 0) { result = 1; };
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'db.registry' active   : %d", filter->filter_db_registry.active);
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter 'db.registry' active    : %d", filter->filter_db_registry.active);
 	if (filter->filter_db_registry.active > 0) {
 		r = libipv6calc_db_registry_filter_check(&filter->filter_db_registry, IPV6CALC_PROTO_IPV6);
 		if (r > 0) { result = 1; };
@@ -2849,7 +2881,7 @@ int ipv6addr_filter_check(s_ipv6calc_filter_ipv6addr *filter) {
  * ret: 0=match 1=not match
  */
 int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_ipv6addr *filter) {
-	uint32_t typeinfo;
+	uint32_t typeinfo, typeinfo2;
 	int result = 0, r, i, t;
 
 	if (filter->active == 0) {
@@ -2859,10 +2891,12 @@ int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_
 
 	DEBUGPRINT_NA(DEBUG_libipv6addr, "start");
 
-	if (filter->filter_typeinfo.active > 0) {
+	if ((filter->filter_typeinfo.active > 0) || (filter->filter_typeinfo2.active > 0)) {
 		/* get type */
-		typeinfo = ipv6addr_gettype(ipv6addrp, NULL);
+		typeinfo = ipv6addr_gettype(ipv6addrp, &typeinfo2);
+	};
 
+	if (filter->filter_typeinfo.active > 0) {
 		DEBUGPRINT_WA(DEBUG_libipv6addr, "compare typeinfo against must_have: 0x%08x/0x%08x", typeinfo, filter->filter_typeinfo.typeinfo_must_have);
 
 		if ((typeinfo & filter->filter_typeinfo.typeinfo_must_have) != filter->filter_typeinfo.typeinfo_must_have) {
@@ -2870,6 +2904,20 @@ int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_
 			result = 1;
 		} else {
 			if ((typeinfo & filter->filter_typeinfo.typeinfo_may_not_have) != 0) {
+				/* no match */
+				result = 1;
+			};
+		};
+	};
+
+	if (filter->filter_typeinfo2.active > 0) {
+		DEBUGPRINT_WA(DEBUG_libipv6addr, "compare typeinfo2 against must_have: 0x%08x/0x%08x", typeinfo2, filter->filter_typeinfo2.typeinfo_must_have);
+
+		if ((typeinfo2 & filter->filter_typeinfo2.typeinfo_must_have) != filter->filter_typeinfo2.typeinfo_must_have) {
+			/* no match */
+			result = 1;
+		} else {
+			if ((typeinfo & filter->filter_typeinfo2.typeinfo_may_not_have) != 0) {
 				/* no match */
 				result = 1;
 			};

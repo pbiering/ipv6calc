@@ -192,6 +192,7 @@ typedef struct {
 typedef struct {
 	int active;
 	s_ipv6calc_filter_typeinfo    filter_typeinfo;
+	s_ipv6calc_filter_typeinfo    filter_typeinfo2;
 	s_ipv6calc_filter_db_cc       filter_db_cc;        // Country Code filter
 	s_ipv6calc_filter_db_asn      filter_db_asn;       // Autonomous System Number filter
 	s_ipv6calc_filter_db_registry filter_db_registry;  // Registry filter
@@ -303,9 +304,9 @@ typedef struct {
 
 // typeinfo2
 #define IPV6_ADDR_TYPE2_6RD			(uint32_t) 0x00000001U	/* IPv6 Rapid Deployment address (RFC5569), not autodetectable (triggered by --6rd_prefixlength) */
-#define IPV6_ADDR_TYPE2_LISP			(uint32_t) 0x00001000U	/* IPv6 LISP (RFC6830) */
-#define IPV6_ADDR_TYPE2_LISP_PETR		(uint32_t) 0x00002000U	/* IPv6 LISP Proxy Egress Tunnel Routers (PETRY) Anycast */
-#define IPV6_ADDR_TYPE2_LISP_MAP_RESOLVER	(uint32_t) 0x00004000U	/* IPv6 LISP Map Resolver Anycast */
+#define IPV6_ADDR_TYPE2_LISP			(uint32_t) 0x00010000U	/* IPv6 LISP (RFC6830) */
+#define IPV6_ADDR_TYPE2_LISP_PETR		(uint32_t) 0x00020000U	/* IPv6 LISP Proxy Egress Tunnel Routers (PETRY) Anycast */
+#define IPV6_ADDR_TYPE2_LISP_MAP_RESOLVER	(uint32_t) 0x00040000U	/* IPv6 LISP Map Resolver Anycast */
 
 // IPv4 address extractor selector
 #define IPV6_ADDR_SELECT_IPV4_DEFAULT		0
