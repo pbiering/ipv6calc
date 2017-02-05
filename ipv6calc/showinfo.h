@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : showinfo.h
  * Version    : $Id$
- * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for showinfo.c

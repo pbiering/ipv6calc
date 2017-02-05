@@ -124,16 +124,16 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 	int zstart = -1, zend = -1, tstart = -1, tend = -1, i, w_max = 7;
 	unsigned int s;
 
-	DEBUGPRINT_WA(DEBUG_librfc1884, "scope of IPv6 address: %08x", (unsigned int) ipv6addrp->scope);
+	DEBUGPRINT_WA(DEBUG_librfc1884, "typeinfo of IPv6 address: %08x", (unsigned int) ipv6addrp->typeinfo);
 	
-	if ( (ipv6addrp->scope & IPV6_ADDR_COMPATv4) != 0 ) {
+	if ( (ipv6addrp->typeinfo & IPV6_ADDR_COMPATv4) != 0 ) {
 		/* compatv4 address */
 			
 		DEBUGPRINT_NA(DEBUG_librfc1884, "IPV6_ADDR_COMPATv4 type - fast conversion");
 	
 		snprintf(tempstring, sizeof(tempstring), "::%u.%u.%u.%u", (unsigned int) ipv6addrp->in6_addr.s6_addr[12], (unsigned int) ipv6addrp->in6_addr.s6_addr[13], (unsigned int) ipv6addrp->in6_addr.s6_addr[14], (unsigned int) ipv6addrp->in6_addr.s6_addr[15]);
 		retval = 0;
-	} else if ( (ipv6addrp->scope & IPV6_ADDR_MAPPED) != 0 ) {
+	} else if ( (ipv6addrp->typeinfo & IPV6_ADDR_MAPPED) != 0 ) {
 		/* mapped address */
 			
 		DEBUGPRINT_NA(DEBUG_librfc1884, "IPV6_ADDR_MAPPED type - fast conversion");
@@ -157,7 +157,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 	} else {
 		/* normal address */
 
-		if ( ((ipv6addrp->scope & IPV6_ADDR_IID_32_63_HAS_IPV4) != 0) && ((ipv6addrp->scope & IPV6_ADDR_ANONYMIZED_IID) == 0)) {
+		if ( ((ipv6addrp->typeinfo & IPV6_ADDR_IID_32_63_HAS_IPV4) != 0) && ((ipv6addrp->typeinfo & IPV6_ADDR_ANONYMIZED_IID) == 0)) {
 			w_max = 5;
 		};
 			
@@ -258,7 +258,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 			snprintf(tempstring, sizeof(tempstring), "%s", temp2string);
 		};
 		
-		if ( ((ipv6addrp->scope & IPV6_ADDR_IID_32_63_HAS_IPV4) != 0) && ((ipv6addrp->scope & IPV6_ADDR_ANONYMIZED_IID) == 0)) {
+		if ( ((ipv6addrp->typeinfo & IPV6_ADDR_IID_32_63_HAS_IPV4) != 0) && ((ipv6addrp->typeinfo & IPV6_ADDR_ANONYMIZED_IID) == 0)) {
 			/* append IPv4 address */
 			snprintf(temp2string, sizeof(temp2string), "%s:%u.%u.%u.%u", \
 				tempstring, \

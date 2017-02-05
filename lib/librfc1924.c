@@ -169,8 +169,7 @@ int base85_to_ipv6addrstruct(const char *addrstring, char *resultstring, const s
 		ipv6addr_setword(ipv6addrp, (unsigned int) i, (unsigned int) result[i]);
 	};
 	
-	/* Get scope */
-	ipv6addrp->scope = ipv6addr_gettype(ipv6addrp, NULL);
+	ipv6addr_settype(ipv6addrp, 1); /* Set typeinfo */
 	
 	ipv6addrp->flag_valid = 1;
 

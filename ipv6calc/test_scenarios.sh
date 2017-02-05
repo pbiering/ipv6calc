@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : test_scenarios.sh
 # Version    : $Id$
-# Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPLv2
 #
 # Test patterns for ipv6calc (functions only)
@@ -239,12 +239,13 @@ a909:16fa:9092:23ff:a909:4941::7		anonymized-prefix
 2001:db8::2					^ipv6.addr=lt=2001:db8::1
 2.2.3.4						^ipv4.addr=gt=2.2.3.5
 2.2.3.4						^ipv4.addr=lt=2.2.3.3
-2610:00D0::1					lisp
-2001:67c:198::1					lisp-proxyegresstunnelrouteranycast,anycast
-2001:67c:28::1					lisp-mapresolveranycast,anycast
-153.16.0.1					lisp
-193.105.183.1					lisp-proxyegresstunnelrouteranycast,anycast
-91.220.201.1					lisp-mapresolveranycast,anycast
+2610:00d0::1					lisp
+2001:67c:198::1					lisp-proxyegresstunnelrouter-anycast,anycast,^unicast
+2001:67c:28::1					lisp-mapresolver-anycast,anycast,^unicast
+153.16.0.1					lisp,unicast
+193.105.183.1					lisp,lisp-proxyegresstunnelrouter-anycast,anycast,^unicast
+91.220.201.1					lisp,lisp-mapresolver-anycast,anycast,^unicast
+192.88.99.1					anycast,^unicast,6to4relay
 END
 }
 
@@ -349,6 +350,19 @@ testscenarios_anonymization_options() {
 # EUI-48: global (OUI-36)
 --anonymize-preset zc		00:1b:c5:03:df:ff=00:1b:c5:03:d0:00
 --anonymize-preset zc --mask-mac 16 --mask-autoadjust no	00:1b:c5:03:df:ff=00:1b:00:00:00:00
+# LISP Anycast
+--mask-ipv6 16				2001:67c:198:f123:0123:4567:89ab:cdef=2001:67c:198:a909:a949:4291:c02d:5d13
+--mask-ipv6 24				2001:67c:198:f123:0123:4567:89ab:cdef=2001:67c:198:a909:a949:4291:c02d:5d13
+--mask-ipv6 32				2001:67c:198:f123:0123:4567:89ab:cdef=2001:67c:198:a909:a949:4291:c02d:5d13
+--mask-ipv6 40				2001:67c:198:f123:0123:4567:89ab:cdef=2001:67c:198:a909:a949:4291:c02d:5d13
+--mask-ipv6 48				2001:67c:198:f123:0123:4567:89ab:cdef=2001:67c:198:a909:a949:4291:c02d:5d13
+--mask-ipv6 56				2001:67c:198:f123:0123:4567:89ab:cdef=2001:67c:198:f109:a929:4291:c02d:5d15
+--mask-ipv6 16				2001:67c:28:f123:0123:4567:89ab:cdef=2001:67c:28:a909:a949:4291:c02d:5d13
+--mask-ipv6 24				2001:67c:28:f123:0123:4567:89ab:cdef=2001:67c:28:a909:a949:4291:c02d:5d13
+--mask-ipv6 32				2001:67c:28:f123:0123:4567:89ab:cdef=2001:67c:28:a909:a949:4291:c02d:5d13
+--mask-ipv6 40				2001:67c:28:f123:0123:4567:89ab:cdef=2001:67c:28:a909:a949:4291:c02d:5d13
+--mask-ipv6 48				2001:67c:28:f123:0123:4567:89ab:cdef=2001:67c:28:a909:a949:4291:c02d:5d13
+--mask-ipv6 56				2001:67c:28:f123:0123:4567:89ab:cdef=2001:67c:28:f109:a929:4291:c02d:5d15
 END
 }
 
@@ -362,6 +376,8 @@ testscenarios_anonymization_options_kp() {
 --anonymize-preset kp			3ffe:831f:ce49:7601:8000:efff:af4a:86bf=3ffe:831f:ce49:7601:8000:ffff:a0b:f33a
 --anonymize-preset kp			64:ff9b::0202:0304=64:ff9b::fd86:c8f
 --anonymize-preset kp			2001:0db8:0000:0000:81c0:0f3f:c807:1455=2001:db8::a909:4941:0:7
+# do not anonymize LISP anycast prefix
+--anonymize-preset kp			2001:67c:198::1=2001:67c:198::a909:4291:c02d:5d1d
 END
 }
 

@@ -822,7 +822,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		} else {
 			ipv4addr.in_addr.s_addr = client_addr_p->sa.sin6.sin6_addr.s6_addr32[3];
 		};
-		ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
+		ipv4addr_settype(&ipv4addr, 1);
 		ipv4addr.flag_valid = 1;
 
 		CONVERT_IPV4ADDRP_IPADDR(&ipv4addr, ipaddr);
@@ -831,7 +831,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		// IPv6
 		ipv6addr_clearall(&ipv6addr);
 		ipv6addr.in6_addr = client_addr_p->sa.sin6.sin6_addr;
-		ipv6addr.scope = ipv6addr_gettype(&ipv6addr);
+		ipv6addr_settype(&ipv6addr, 1);
 		ipv6addr.flag_valid = 1;
 
 		CONVERT_IPV6ADDRP_IPADDR(&ipv6addr, ipaddr);
@@ -888,12 +888,12 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		int retrieve_asn = 0;
 		int retrieve_registry = 0;
 
-		if ((pi == mod_ipv6calc_pi_IPV6) && (ipv6addr.scope & IPV6_ADDR_HAS_PUBLIC_IPV4)) {
+		if ((pi == mod_ipv6calc_pi_IPV6) && (ipv6addr.typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4)) {
 			// extract IPv4 address and retrieve country code of that particular address
 			result = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 
 			if (result == 0) {
-				if (ipv4addr.scope & IPV4_ADDR_GLOBAL) {
+				if (ipv4addr.typeinfo & IPV4_ADDR_GLOBAL) {
 					CONVERT_IPV4ADDRP_IPADDR(&ipv4addr, ipaddr);
 
 					// retrieve country code only for global addresses
@@ -905,8 +905,8 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 				retrieve_registry = 1;
 			};
-		} else if (	((pi == mod_ipv6calc_pi_IPV4) && (ipv4addr.scope & IPV4_ADDR_GLOBAL))
-			    ||	((pi == mod_ipv6calc_pi_IPV6) && (ipv6addr.scope & IPV6_ADDR_GLOBAL))
+		} else if (	((pi == mod_ipv6calc_pi_IPV4) && (ipv4addr.typeinfo & IPV4_ADDR_GLOBAL))
+			    ||	((pi == mod_ipv6calc_pi_IPV6) && (ipv6addr.typeinfo & IPV6_ADDR_GLOBAL))
 		) {
 			// retrieve country code only for global addresses
 			retrieve_cc = 1;
@@ -1049,7 +1049,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 			CONVERT_IPV4ADDRP_IPADDR(&ipv4addr, ipaddr);
 #if APR_HAVE_IPV6
 		} else if (pi == mod_ipv6calc_pi_IPV6) {
-			if ((ipv6addr.scope & IPV6_ADDR_MAPPED) == IPV6_ADDR_MAPPED) {
+			if ((ipv6addr.typeinfo & IPV6_ADDR_MAPPED) == IPV6_ADDR_MAPPED) {
 				libipv4addr_anonymize(&ipv4addr, config->ipv6calc_anon_set.mask_ipv4, config->ipv6calc_anon_set.method);
 				CONVERT_IPV4ADDRP_IPADDR(&ipv4addr, ipaddr);
 			} else {

@@ -578,7 +578,7 @@ static int converttoken(char *resultstring, const size_t resultstring_length, co
 						exit(EXIT_FAILURE);
 					};
 
-					ipv4addr.scope = ipv4addr_gettype(&ipv4addr);
+					ipv4addr_settype(&ipv4addr, 1); /* Set typeinfo */
 
 					/* IPv4 registry */
 					registry = libipv4addr_registry_num_by_addr(&ipv4addr);

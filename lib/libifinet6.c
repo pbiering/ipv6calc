@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libifinet6.c
  * Version    : $Id$
- * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function to converts a address string like shown in 
@@ -125,10 +125,10 @@ int libifinet6_ipv6addrstruct_to_ifinet6(const ipv6calc_ipv6addr *ipv6addrp, cha
 	char tempstring[NI_MAXHOST];
 
 	/* print out array */	
-	snprintf(tempstring, sizeof(tempstring), "%08x%08x%08x%08x %02x", (unsigned int) ipv6addr_getdword(ipv6addrp, 0), (unsigned int) ipv6addr_getdword(ipv6addrp, 1), (unsigned int) ipv6addr_getdword(ipv6addrp, 2), (unsigned int) ipv6addr_getdword(ipv6addrp, 3), (unsigned int) (*ipv6addrp).scope & IPV6_ADDR_SCOPE_MASK);
+	snprintf(tempstring, sizeof(tempstring), "%08x%08x%08x%08x %02x", (unsigned int) ipv6addr_getdword(ipv6addrp, 0), (unsigned int) ipv6addr_getdword(ipv6addrp, 1), (unsigned int) ipv6addr_getdword(ipv6addrp, 2), (unsigned int) ipv6addr_getdword(ipv6addrp, 3), (unsigned int) ipv6addrp->typeinfo & IPV6_ADDR_SCOPE_MASK);
 	
 	if ( (*ipv6addrp).flag_prefixuse == 1 ) {
-		snprintf(resultstring, resultstring_length, "%s %02x", tempstring, (unsigned int) (*ipv6addrp).prefixlength);
+		snprintf(resultstring, resultstring_length, "%s %02x", tempstring, (unsigned int) ipv6addrp->prefixlength);
 	} else {
 		snprintf(resultstring, resultstring_length, "%s", tempstring);
 	};

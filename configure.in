@@ -1,7 +1,7 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
 dnl Version  : $Id$
-dnl Copyright: 2001-2016 by Peter Bieringer <pb (at) bieringer.de>  
+dnl Copyright: 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
 
 dnl Process this file with autoconf to produce a configure script.
 

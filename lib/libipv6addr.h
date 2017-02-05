@@ -47,13 +47,17 @@
  *   		0 : no nibble of prefix is anonymized
  *   		f : Prefix anonymization with method=kp
  *
- * Prefix anonymization in case of method=kp: p=0x0f
+ * Prefix anonymization in case of method=kp: p=0x0f, but skipped for
+ *  - LISP anycast
  * a909:ccca:aaaa:aaaC  (C = 4-bit checksum)
  *                      ccc      -> 10-bit Country Code mapping [A-Z]*[A-Z0-9] (936)
  *                                   0x3FE = unknown country
- *                                   0x3FD & ASN=0 = 6bone
+ *                                   0x3FF - 16 + REGISTRY_6BONE && ASN=0 = 6bone
+ *                                   0x3FF - 16 + REGISTRY_LISP  = LISP
  *                                   0x000-0x3A7: c1= c / 36, c2 = c % 36
  *                      aaaaaaaa -> 32-bit ASN
+ *                      in case of LISP (6bone is EOL)
+ *                      ccc00000 
  */
 #define ANON_TOKEN_VALUE_00_31		(uint32_t) 0xa9090000u
 #define ANON_TOKEN_MASK_00_31		(uint32_t) 0xff0f0000u
@@ -164,19 +168,20 @@
 
 /* IPv6 address storage structure */
 typedef struct {
-	struct in6_addr in6_addr;	/* in6_addr structure */
-	uint8_t prefixlength;		/* prefix length (0-128) 8 bit */
-	int flag_prefixuse;		/* =1 prefix length in use */
-	uint32_t scope;			/* address typeinfo/scope */
+	struct   in6_addr in6_addr;	/* in6_addr structure */
+	uint8_t  prefixlength;		/* prefix length (0-128) 8 bit */
+	int      flag_prefixuse;	/* =1: prefix length in use */
+	uint32_t typeinfo;		/* address typeinfo/scope */
 	uint32_t typeinfo2;		/* address typeinfo2 */
-	uint8_t bit_start;		/* start of bit */
-	uint8_t bit_end;		/* end of bit */
-	int flag_startend_use;		/* =1 start or end of bit in use */
-	int flag_valid;			/* address structure filled */
-	char scopeid[IPV6CALC_SCOPEID_STRING_MAX];	/* scope ID value */
-	int flag_scopeid;		/* =1: scope ID value set */
-	uint8_t prefix2length;		/* prefix 2 length (0-128) 8 bit (usage depends on typeinfo/typeinfo2)*/
-	uint8_t test_mode;		/* address test mode */
+	int8_t   flag_typeinfo;		/* =1: typeinfo valid */
+	uint8_t  bit_start;		/* start of bit */
+	uint8_t  bit_end;		/* end of bit */
+	int8_t   flag_startend_use;	/* =1: start or end of bit in use */
+	int8_t   flag_valid;		/* address structure filled */
+	char     scopeid[IPV6CALC_SCOPEID_STRING_MAX];	/* scope ID value */
+	int8_t   flag_scopeid;		/* =1: scope ID value (above) set */
+	uint8_t  prefix2length;		/* prefix 2 length (0-128) 8 bit (usage depends on typeinfo/typeinfo2)*/
+	uint8_t  test_mode;		/* address test mode */
 } ipv6calc_ipv6addr;
 
 /* IPv6 Address filter structure */
@@ -354,14 +359,15 @@ typedef struct {
 /*@unused@*/ static const s_type ipv6calc_ipv6addr_type2_strings[] = {
 	{ IPV6_ADDR_TYPE2_6RD		, "6rd" },
 	{ IPV6_ADDR_TYPE2_LISP	 		, "lisp" },
-	{ IPV6_ADDR_TYPE2_LISP_PETR		, "lisp-proxyegresstunnelrouteranycast" },
-	{ IPV6_ADDR_TYPE2_LISP_MAP_RESOLVER	, "lisp-mapresolveranycast" },
+	{ IPV6_ADDR_TYPE2_LISP_PETR		, "lisp-proxyegresstunnelrouter-anycast" },
+	{ IPV6_ADDR_TYPE2_LISP_MAP_RESOLVER	, "lisp-mapresolver-anycast" },
 };
 
 /* Registries */
 #include "libipv6calc.h"
 
 #define IPV6_ADDR_REGISTRY_6BONE	REGISTRY_6BONE
+#define IPV6_ADDR_REGISTRY_LISP		REGISTRY_LISP
 #define IPV6_ADDR_REGISTRY_IANA		REGISTRY_IANA
 #define IPV6_ADDR_REGISTRY_APNIC	REGISTRY_APNIC
 #define IPV6_ADDR_REGISTRY_ARIN		REGISTRY_ARIN
@@ -401,6 +407,7 @@ extern void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6a
 extern int ipv6addr_compare(const ipv6calc_ipv6addr *ipv6addrp1, const ipv6calc_ipv6addr *ipv6addrp2, const uint16_t compare_flags);
 
 extern uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp, uint32_t *typeinfo2p);
+extern void ipv6addr_settype(ipv6calc_ipv6addr *ipv6addrp, int flag_reset);
 
 extern int  addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp);
 extern int  addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp);
@@ -425,7 +432,7 @@ extern int ipv6addr_iidrandomdetection(const ipv6calc_ipv6addr *ipv6addrp, s_iid
 
 extern int  ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_ipv6addr *filter);
 extern int  ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token);
-extern int  ipv6addr_filter_check(s_ipv6calc_filter_ipv6addr *filter);
+extern int  ipv6addr_filter_check(const s_ipv6calc_filter_ipv6addr *filter);
 extern void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter);
 
 extern int  libipv6addr_get_included_ipv4addr(const ipv6calc_ipv6addr *ipv6addrp, ipv6calc_ipv4addr *ipv4addrp, const int selector);

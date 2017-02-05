@@ -19,12 +19,14 @@
 
 /* IPv4 address structure */
 typedef struct {
-	struct in_addr in_addr;		/* in_addr structure */
-	uint8_t prefixlength;		/* prefix length (0-32) 8 bit */
-	int flag_prefixuse;		/* =1 prefix length in use (CIDR notation) */
-	uint32_t scope;			/* address typeinfo/scope */
-	int flag_valid;			/* address structure filled */
-	uint8_t test_mode;		/* test mode */
+	struct   in_addr in_addr;	/* in_addr structure */
+	uint8_t  prefixlength;		/* prefix length (0-32) 8 bit */
+	int      flag_prefixuse;	/* =1: prefix length in use (CIDR notation) */
+	uint32_t typeinfo;		/* address typeinfo/scope */
+	uint32_t typeinfo2;		/* address typeinfo/scope */
+	int8_t   flag_typeinfo;		/* =1: valid typeinfo */
+	int8_t   flag_valid;		/* address structure filled */
+	uint8_t  test_mode;		/* test mode */
 } ipv6calc_ipv4addr;
 
 /* IPv4 Address filter structure */
@@ -92,8 +94,8 @@ typedef struct {
 	{ IPV4_ADDR_GLOBAL		, "global" },
 	{ IPV4_ADDR_6TO4RELAY		, "6to4relay" },
 	{ IPV4_ADDR_LISP	 	, "lisp" },
-	{ IPV4_ADDR_LISP_PETR		, "lisp-proxyegresstunnelrouteranycast" },
-	{ IPV4_ADDR_LISP_MAP_RESOLVER	, "lisp-mapresolveranycast" },
+	{ IPV4_ADDR_LISP_PETR		, "lisp-proxyegresstunnelrouter-anycast" },
+	{ IPV4_ADDR_LISP_MAP_RESOLVER	, "lisp-mapresolver-anycast" },
 };
 
 
@@ -105,10 +107,11 @@ typedef struct {
 #define IPV4_ADDR_REGISTRY_LACNIC	REGISTRY_LACNIC
 #define IPV4_ADDR_REGISTRY_AFRINIC	REGISTRY_AFRINIC
 #define IPV4_ADDR_REGISTRY_RESERVED	REGISTRY_RESERVED
+#define IPV4_ADDR_REGISTRY_LISP 	REGISTRY_LISP
 #define IPV4_ADDR_REGISTRY_UNKNOWN	REGISTRY_UNKNOWN
 
 /* IPv4 address anonymization
- *  Global IPv4 addresses are anoymized by storing country code and AS number
+ *  Global IPv4 addresses are anonymized by storing country code and AS number
  *   and using prefix of experimental range (240-255.x.y.z)
  *
  *  3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 
@@ -118,7 +121,7 @@ typedef struct {
  *  Prefix                
  *    0xF
  *
- * Pariy Bit (odd parity)
+ * Parity Bit (odd parity)
  *         |P|
  *
  * Mapping of Country Code
@@ -145,6 +148,9 @@ typedef struct {
  *                                  1 0 0 = LACNIC
  *                                  1 0 1 = AFRINIC
  *                                  1 1 0 = ARIN
+ *
+ * Mapping of LISP
+ *                                1|r r r|1|1|0 0 0 0 0 0 0 0 0 0 0|
  */
 
 #define ANON_METHOD_KEEPTYPEASNCC_IPV4_REQ_DB   (IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV4_TO_AS)
@@ -168,6 +174,7 @@ extern void ipv4addr_copy(ipv6calc_ipv4addr *ipv4addrp_dst, const ipv6calc_ipv4a
 extern int ipv4addr_compare(const ipv6calc_ipv4addr *ipv4addrp1, const ipv6calc_ipv4addr *ipv4addrp2, const uint16_t compare_flags);
 
 extern uint32_t ipv4addr_gettype(const ipv6calc_ipv4addr *ipv4addrp);
+extern void ipv4addr_settype(ipv6calc_ipv4addr *ipv4addrp, int flag_reset);
 
 extern int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv4addr *ipv4addrp);
 extern int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv4addr *ipv4addrp, const int flag_reverse);
@@ -185,7 +192,7 @@ extern uint16_t ipv4addr_anonymized_get_cc_index(const ipv6calc_ipv4addr *ipv4ad
 
 extern int ipv4addr_filter(const ipv6calc_ipv4addr *ipv4addrp, const s_ipv6calc_filter_ipv4addr *filter);
 extern int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token);
-extern int ipv4addr_filter_check(s_ipv6calc_filter_ipv4addr *filter);
+extern int ipv4addr_filter_check(const s_ipv6calc_filter_ipv4addr *filter);
 extern void ipv4addr_filter_clear(s_ipv6calc_filter_ipv4addr *filter);
 
 extern uint16_t libipv4addr_cc_index_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsigned int *data_source_ptr);

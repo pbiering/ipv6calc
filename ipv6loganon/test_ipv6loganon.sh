@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
 # Version    : $Id$
-# Copyright  : 2007-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2007-2017 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
 
@@ -374,6 +374,7 @@ run_loganon_options_tests() {
 		fi
 
 		if [ "$result" != "$result_real" ]; then
+			[ "$verbose" = "1" ] || echo
 			echo "ERROR : result doesn't match on command: $command"
 			echo "ERROR : result is      : $result_real"
 			echo "ERROR : result expected: $result"
@@ -416,6 +417,7 @@ run_loganon_options_kp_tests() {
 		fi
 
 		if [ "$result" != "$result_real" ]; then
+			[ "$verbose" = "1" ] || echo
 			echo "ERROR : result doesn't match on command: $command"
 			echo "ERROR : result is      : $result_real"
 			echo "ERROR : result expected: $result"

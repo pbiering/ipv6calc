@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libeui64.c
  * Version    : $Id$
- * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library EUI-64 identifier handling
@@ -48,7 +48,6 @@ int create_eui64_from_mac(ipv6calc_ipv6addr *ipv6addrp, ipv6calc_macaddr *macadd
 
 	ipv6addrp->prefixlength = 64;
 	ipv6addrp->flag_prefixuse = 0;
-	ipv6addrp->scope = 0;
 	
 	ipv6addrp->flag_valid = 1;
 	

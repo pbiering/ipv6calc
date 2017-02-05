@@ -262,6 +262,31 @@ int ipv4addr_compare(const ipv6calc_ipv4addr *ipv4addrp1, const ipv6calc_ipv4add
 
 
 /*
+ * Set type of an IPv4 address
+ *
+ * in: ipv4addrp = pointer to IPv4 address structure
+ *     flag_reset = 1: redetect type
+ */
+void ipv4addr_settype(ipv6calc_ipv4addr *ipv4addrp, int flag_reset) {
+	uint32_t typeinfo = 0, typeinfo2 = 0;
+
+	if (flag_reset == 1) {
+		ipv4addrp->flag_typeinfo = 0;
+	};
+
+	if (ipv4addrp->flag_typeinfo == 0) {
+		//typeinfo = ipv4addr_gettype(ipv4addrp, &typeinfo2);
+		typeinfo = ipv4addr_gettype(ipv4addrp);
+
+		ipv4addrp->typeinfo = typeinfo;
+		ipv4addrp->typeinfo2 = typeinfo2;
+		ipv4addrp->flag_typeinfo = 1;
+	};
+	return;
+};
+
+
+/*
  * function gets type of an IPv4 address
  */
 uint32_t ipv4addr_gettype(const ipv6calc_ipv4addr *ipv4addrp) {
@@ -295,8 +320,14 @@ uint32_t ipv4addr_gettype(const ipv6calc_ipv4addr *ipv4addrp) {
 				DEBUGPRINT_NA(DEBUG_libipv4addr, "Address is an anonymized one");
 
 				type = IPV4_ADDR_ANONYMIZED | IPV4_ADDR_UNICAST| IPV4_ADDR_GLOBAL;
+
+				if ((ipv4 & 0x11800) == 0x11800) {
+					DEBUGPRINT_NA(DEBUG_libipv4addr, "Address is a LISP unicast one");
+					type |= IPV4_ADDR_LISP;
+				};
 				goto END_ipv4addr_gettype;
 			};
+
 		} else {
 				DEBUGPRINT_NA(DEBUG_libipv4addr, "Address is not an detected anonymized one");
 		};
@@ -345,10 +376,10 @@ uint32_t ipv4addr_gettype(const ipv6calc_ipv4addr *ipv4addrp) {
 		type = IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL | IPV4_ADDR_LISP;
 	} else if ((ipv4 & 0xffffff00u) == 0xc169b700u) {
 		// 193.105.183.0/24 (RFC6830)
-		type = IPV4_ADDR_ANYCAST | IPV4_ADDR_GLOBAL | IPV4_ADDR_LISP_PETR;
+		type = IPV4_ADDR_ANYCAST | IPV4_ADDR_GLOBAL | IPV4_ADDR_LISP | IPV4_ADDR_LISP_PETR;
 	} else if ((ipv4 & 0xffffff00u) == 0x5bdcc900u) {
 		// 91.220.201.0/24 (RFC6830)
-		type = IPV4_ADDR_ANYCAST | IPV4_ADDR_GLOBAL | IPV4_ADDR_LISP_MAP_RESOLVER;
+		type = IPV4_ADDR_ANYCAST | IPV4_ADDR_GLOBAL | IPV4_ADDR_LISP | IPV4_ADDR_LISP_MAP_RESOLVER;
 	} else if ((ipv4 & 0xf0000000u) == 0xe0000000u) {
 		// 224.0.0.0/4 (RFC 3171)
 		type = IPV4_ADDR_MULTICAST;
@@ -495,7 +526,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const siz
 
 	DEBUGPRINT_WA(DEBUG_libipv4addr, "Got typeinfo: 0x%08x", typeinfo);
 
-	ipv4addrp->scope = typeinfo;
+	ipv4addrp->typeinfo = typeinfo;
 	ipv4addrp->flag_valid = 1;
 
 	retval = 0;
@@ -610,7 +641,7 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, const 
 
 	DEBUGPRINT_WA(DEBUG_libipv4addr, "Got typeinfo: 0x%08x", typeinfo);
 
-	ipv4addrp->scope = typeinfo;
+	ipv4addrp->typeinfo = typeinfo;
 	ipv4addrp->flag_valid = 1;
 
 	retval = 0;
@@ -805,7 +836,7 @@ int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, c
  *      1:anonymization method not supported
  */
 int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const int method) {
-	DEBUGPRINT_WA(DEBUG_libipv4addr, "called, method=%d mask=%d type=0x%08x", method, mask, ipv4addrp->scope);
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "called, method=%d mask=%d type=0x%08x", method, mask, ipv4addrp->typeinfo);
 
 	/* anonymize IPv4 address according to settings */
 	uint32_t as_num32, as_num32_comp17, as_num32_decomp17, ipv4addr_anon, p;
@@ -813,14 +844,22 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 	ipv6calc_ipaddr ipaddr;
 	int i;
 
-	if ((ipv4addrp->scope & IPV4_ADDR_ANONYMIZED) != 0) {
+	ipv4addr_settype(ipv4addrp, 0); // set typeinfo if not already done
+
+	if ((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
 		DEBUGPRINT_NA(DEBUG_libipv4addr, "skip already anonymized address");
 
-	} else if ((ipv4addrp->scope & IPV4_ADDR_BROADCAST) != 0) {
+	} else if ((ipv4addrp->typeinfo & IPV4_ADDR_BROADCAST) != 0) {
 		DEBUGPRINT_NA(DEBUG_libipv4addr, "skip anonymize (broadcast address)");
 
-	} else if ((method != ANON_METHOD_KEEPTYPEASNCC) || ((ipv4addrp->scope & (IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL)) != (IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL))) {
+	} else if ((method != ANON_METHOD_KEEPTYPEASNCC) || ((ipv4addrp->typeinfo & (IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL)) != (IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL))) {
 		// not ANON_METHOD_KEEPTYPEASNCC or not a global address
+		if (((ipv4addrp->typeinfo & IPV4_ADDR_ANYCAST) != 0) && ((ipv4addrp->typeinfo & IPV4_ADDR_LISP) != 0)) {
+			if (mask < 24) {
+				mask = 24; // keeping address type
+			};
+			DEBUGPRINT_WA(DEBUG_libipv6addr, "Mask adjusted to: %d", mask);
+		};
 
 		DEBUGPRINT_NA(DEBUG_libipv4addr, "anonymize by masking");
 
@@ -859,15 +898,21 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 
 		CONVERT_IPV4ADDRP_IPADDR(ipv4addrp, ipaddr);
 
-		// get AS number
-		as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr);
-		DEBUGPRINT_WA(DEBUG_libipv4addr, "result of AS number  retrievement: 0x%08x (%d)", as_num32, as_num32);
+		if (((ipv4addrp->typeinfo & IPV4_ADDR_UNICAST) != 0) && ((ipv4addrp->typeinfo & IPV4_ADDR_LISP) != 0)) {
+			as_num32_comp17 = 0x11800;
+			as_num32_comp17 |= (libipv6calc_db_wrapper_registry_num_by_ipv4addr(ipv4addrp) & 0x7) << 12;
+			as_num32_comp17 |= 0x000; // TODO: map LISP information into 11 LSB
+		} else {
+			// get AS number
+			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr);
+			DEBUGPRINT_WA(DEBUG_libipv4addr, "result of AS number  retrievement: 0x%08x (%d)", as_num32, as_num32);
 
-		as_num32_comp17 = libipv6calc_db_wrapper_as_num32_comp17(as_num32);
-		DEBUGPRINT_WA(DEBUG_libipv4addr, "result of AS number   compression: 0x%05x", as_num32_comp17);
+			as_num32_comp17 = libipv6calc_db_wrapper_as_num32_comp17(as_num32);
+			DEBUGPRINT_WA(DEBUG_libipv4addr, "result of AS number   compression: 0x%05x", as_num32_comp17);
 
-		as_num32_decomp17 = libipv6calc_db_wrapper_as_num32_decomp17(as_num32_comp17);
-		DEBUGPRINT_WA(DEBUG_libipv4addr, "result of AS number decompression: 0x%08x (%d)", as_num32_decomp17, as_num32_decomp17);
+			as_num32_decomp17 = libipv6calc_db_wrapper_as_num32_decomp17(as_num32_comp17);
+			DEBUGPRINT_WA(DEBUG_libipv4addr, "result of AS number decompression: 0x%08x (%d)", as_num32_decomp17, as_num32_decomp17);
+		};
 
 		// get countrycode
 		cc_index = libipv6calc_db_wrapper_cc_index_by_addr(&ipaddr, NULL);
@@ -916,7 +961,7 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
  * ret: AS number 16-bit
  */
 uint32_t ipv4addr_anonymized_get_as_num32(const ipv6calc_ipv4addr *ipv4addrp) {
-	if ((ipv4addrp->scope & IPV4_ADDR_ANONYMIZED) == 0) {
+	if ((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
 		return(ASNUM_AS_UNKNOWN);
 	};
 
@@ -931,7 +976,7 @@ uint32_t ipv4addr_anonymized_get_as_num32(const ipv6calc_ipv4addr *ipv4addrp) {
  * ret: CountryCode index
  */
 uint16_t ipv4addr_anonymized_get_cc_index(const ipv6calc_ipv4addr *ipv4addrp) {
-	if ((ipv4addrp->scope & IPV4_ADDR_ANONYMIZED) == 0) {
+	if ((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
 		return(COUNTRYCODE_INDEX_UNKNOWN);
 	};
 
@@ -1192,7 +1237,7 @@ END_ipv4addr_filter_parse:
  * in : *filter    = filter structure
  * ret: 0:ok 1:problem
  */
-int ipv4addr_filter_check(s_ipv6calc_filter_ipv4addr *filter) {
+int ipv4addr_filter_check(const s_ipv6calc_filter_ipv4addr *filter) {
 	int result = 0, r, i;
 	char resultstring[NI_MAXHOST];
 
@@ -1251,7 +1296,6 @@ int ipv4addr_filter_check(s_ipv6calc_filter_ipv4addr *filter) {
  * ret: 0=match 1=not match
  */
 int ipv4addr_filter(const ipv6calc_ipv4addr *ipv4addrp, const s_ipv6calc_filter_ipv4addr *filter) {
-	uint32_t typeinfo;
 	int result = 0, r, i, t;
 
 	if (filter->active == 0) {
@@ -1262,16 +1306,18 @@ int ipv4addr_filter(const ipv6calc_ipv4addr *ipv4addrp, const s_ipv6calc_filter_
 	DEBUGPRINT_NA(DEBUG_libipv4addr, "start");
 
 	if (filter->filter_typeinfo.active > 0) {
-		/* get type */
-		typeinfo = ipv4addr_gettype(ipv4addrp);
+		if (ipv4addrp->flag_typeinfo == 0) {
+			fprintf(stderr, "FATAL error, typeinfo not valid - FIX CODE of caller\n");
+			exit(2);
+		};
 
-		DEBUGPRINT_WA(DEBUG_libipv4addr, "compare typeinfo against must_have: 0x%08x/0x%08x", typeinfo, filter->filter_typeinfo.typeinfo_must_have);
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "compare typeinfo against must_have: 0x%08x/0x%08x", ipv4addrp->typeinfo, filter->filter_typeinfo.typeinfo_must_have);
 
-		if ((typeinfo & filter->filter_typeinfo.typeinfo_must_have) != filter->filter_typeinfo.typeinfo_must_have) {
+		if ((ipv4addrp->typeinfo & filter->filter_typeinfo.typeinfo_must_have) != filter->filter_typeinfo.typeinfo_must_have) {
 			/* no match */
 			result = 1;
 		} else {
-			if ((typeinfo & filter->filter_typeinfo.typeinfo_may_not_have) != 0) {
+			if ((ipv4addrp->typeinfo & filter->filter_typeinfo.typeinfo_may_not_have) != 0) {
 				result = 1;
 			};
 		};
@@ -1393,11 +1439,11 @@ uint16_t libipv4addr_cc_index_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsign
 
 	DEBUGPRINT_NA(DEBUG_libipv4addr, "start");
 
-	if ((ipv4addrp->scope & IPV4_ADDR_ANONYMIZED) != 0) {
+	if ((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
 		cc_index = ipv4addr_anonymized_get_cc_index(ipv4addrp);
-	} else if ((ipv4addrp->scope & IPV4_ADDR_RESERVED) != 0) {
+	} else if ((ipv4addrp->typeinfo & IPV4_ADDR_RESERVED) != 0) {
 		cc_index = COUNTRYCODE_INDEX_UNKNOWN;
-	} else if ((ipv4addrp->scope & IPV4_ADDR_GLOBAL) == 0) {
+	} else if ((ipv4addrp->typeinfo & IPV4_ADDR_GLOBAL) == 0) {
 		cc_index = COUNTRYCODE_INDEX_UNKNOWN;
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC) == 1) {
@@ -1421,7 +1467,7 @@ uint32_t libipv4addr_as_num32_by_addr(const ipv6calc_ipv4addr *ipv4addrp) {
 	uint32_t as_num32 = ASNUM_AS_UNKNOWN;
 	ipv6calc_ipaddr ipaddr;
 
-	if ((ipv4addrp->scope & IPV4_ADDR_ANONYMIZED) != 0) {
+	if ((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
 		as_num32 = ipv4addr_anonymized_get_as_num32(ipv4addrp);
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS) == 1) {
@@ -1446,20 +1492,24 @@ int libipv4addr_registry_num_by_addr(const ipv6calc_ipv4addr *ipv4addrp) {
 	uint32_t as_num32;
 	uint16_t cc_index;
 
-	if ((ipv4addrp->scope & IPV4_ADDR_ANONYMIZED) != 0) {
+	if ((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
 		DEBUGPRINT_NA(DEBUG_libipv4addr, "IPv4 is anonymized, extract registry from anonymized data");
 		// ASN -> Registry
 		// CC  -> Registry
 
-		/* retrieve registry via AS number from anonymized address (simple) */
-		as_num32 = libipv4addr_as_num32_by_addr(ipv4addrp);
-		if (as_num32 != ASNUM_AS_UNKNOWN) {
-			registry = libipv6calc_db_wrapper_registry_num_by_as_num32(as_num32);
-		};
-		if ((as_num32 == ASNUM_AS_UNKNOWN) || (registry == IPV4_ADDR_REGISTRY_ARIN)) {
-			/* retrieve registry via cc_index from anonymized address (simple, fallback) */
-			cc_index = libipv4addr_cc_index_by_addr(ipv4addrp, NULL);
-			registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
+		if ((ipv4addrp->typeinfo & IPV4_ADDR_LISP) != 0) {
+			registry = IPV4_ADDR_REGISTRY_LISP;
+		} else {
+			/* retrieve registry via AS number from anonymized address (simple) */
+			as_num32 = libipv4addr_as_num32_by_addr(ipv4addrp);
+			if (as_num32 != ASNUM_AS_UNKNOWN) {
+				registry = libipv6calc_db_wrapper_registry_num_by_as_num32(as_num32);
+			};
+			if ((as_num32 == ASNUM_AS_UNKNOWN) || (registry == IPV4_ADDR_REGISTRY_ARIN)) {
+				/* retrieve registry via cc_index from anonymized address (simple, fallback) */
+				cc_index = libipv4addr_cc_index_by_addr(ipv4addrp, NULL);
+				registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
+			};
 		};
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_REGISTRY) == 1) {

@@ -2,7 +2,7 @@
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
  * Version    : $Id$
- * Copyright  : 2003-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2003-2017 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile statistics
@@ -515,7 +515,7 @@ static void lineparser(void) {
 		/* catch compat/mapped */
 		switch (inputtype) {
 			case FORMAT_ipv6addr:
-				if ((ipv6addr.scope & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)) != 0) {
+				if ((ipv6addr.typeinfo & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)) != 0) {
 					/* extract IPv4 address */
 					r = libipv6addr_get_included_ipv4addr(&ipv6addr, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 					if (r != 0) {
@@ -541,7 +541,7 @@ static void lineparser(void) {
 				/* is IPv6 address */
 				stat_inc(STATS_IPV6);
 
-				if ((ipv6addr.scope & IPV6_ADDR_HAS_PUBLIC_IPV4) != 0) {
+				if ((ipv6addr.typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4) != 0) {
 					/* has public IPv4 address included */
 
 					// get IPv4 address (in case of Teredo the client IP)
@@ -564,13 +564,13 @@ static void lineparser(void) {
 
 					registry = libipv4addr_registry_num_by_addr(&ipv4addr);
 
-					if ((ipv6addr.scope & IPV6_NEW_ADDR_6TO4) != 0) {
+					if ((ipv6addr.typeinfo & IPV6_NEW_ADDR_6TO4) != 0) {
 						stat_registry_base = STATS_IPV6_6TO4_BASE;
 
-					} else if ((ipv6addr.scope & IPV6_NEW_ADDR_TEREDO) != 0) {
+					} else if ((ipv6addr.typeinfo & IPV6_NEW_ADDR_TEREDO) != 0) {
 						stat_registry_base = STATS_IPV6_TEREDO_BASE;
 
-					} else if ((ipv6addr.scope & IPV6_NEW_ADDR_NAT64) != 0) {
+					} else if ((ipv6addr.typeinfo & IPV6_NEW_ADDR_NAT64) != 0) {
 						stat_registry_base = STATS_IPV6_NAT64_BASE;
 					};
 
@@ -660,14 +660,14 @@ static void lineparser(void) {
 							break;
 					};
 
-					if ((ipv6addr.scope & IPV6_NEW_ADDR_IID) == IPV6_NEW_ADDR_IID) {
-						if ((ipv6addr.scope & IPV6_NEW_ADDR_IID_RANDOM) != 0) {
+					if ((ipv6addr.typeinfo & IPV6_NEW_ADDR_IID) == IPV6_NEW_ADDR_IID) {
+						if ((ipv6addr.typeinfo & IPV6_NEW_ADDR_IID_RANDOM) != 0) {
 							stat_inc(STATS_IPV6_IID_RANDOM);
-						} else if ((ipv6addr.scope & IPV6_NEW_ADDR_IID_ISATAP) != 0) {
+						} else if ((ipv6addr.typeinfo & IPV6_NEW_ADDR_IID_ISATAP) != 0) {
 							stat_inc(STATS_IPV6_IID_ISATAP);
-						} else if ((ipv6addr.scope & IPV6_NEW_ADDR_IID_LOCAL) != 0) {
+						} else if ((ipv6addr.typeinfo & IPV6_NEW_ADDR_IID_LOCAL) != 0) {
 							stat_inc(STATS_IPV6_IID_MANUAL);
-						} else if ((ipv6addr.scope & IPV6_NEW_ADDR_IID_GLOBAL) != 0) {
+						} else if ((ipv6addr.typeinfo & IPV6_NEW_ADDR_IID_GLOBAL) != 0) {
 							stat_inc(STATS_IPV6_IID_GLOBAL);
 						} else {
 							stat_inc(STATS_IPV6_IID_UNKNOWN);

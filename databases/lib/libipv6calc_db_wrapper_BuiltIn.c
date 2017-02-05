@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  * Version    : $Id$
- * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc BuiltIn database wrapper
@@ -756,7 +756,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6a
 	
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Given ipv6 prefix: %08x%08x", (unsigned int) ipv6_00_31, (unsigned int) ipv6_32_63);
 
-	if ((ipv6addrp->scope & IPV6_NEW_ADDR_6BONE) != 0) {
+	if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_6BONE) != 0) {
 		return(IPV6_ADDR_REGISTRY_6BONE);
 	};
 

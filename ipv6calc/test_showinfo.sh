@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : test_showinfo.sh
 # Version    : $Id$
-# Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
 
@@ -101,6 +101,7 @@ getexamples | while read address separator comment; do
 		retval=$?
 	fi
 	if [ $retval -ne 0 ]; then
+		[ "$verbose" = "1" ] || echo
 		echo "ERROR : $comment: $address"
 		./ipv6calc -q -i -m $address
 		exit 1
@@ -119,6 +120,7 @@ testscenarios_ipv4_reserved | while read address rfc rest; do
 	case $rfc in
 	    RFC*)
 		if ! ./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY | grep $grepopt "$rfc"; then
+			[ "$verbose" = "1" ] || echo
 			echo "ERROR: unexpected result for $address (should: $rfc)"
 			./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY
 			exit 1	
@@ -126,6 +128,7 @@ testscenarios_ipv4_reserved | while read address rfc rest; do
 		;;
 	    noRFC)
 		if ./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY | grep $grepopt "RFC"; then
+			[ "$verbose" = "1" ] || echo
 			echo "ERROR: unexpected result for $address (should not contain RFC token)"
 			./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY
 			exit 1	
@@ -146,6 +149,7 @@ testscenarios_ipv6_reserved | while read address rfc rest; do
 	case $rfc in
 	    RFC*)
 		if ! ./ipv6calc -q -i -m $address | grep ^IPV6_REGISTRY | grep $grepopt "$rfc"; then
+			[ "$verbose" = "1" ] || echo
 			echo "ERROR: unexpected result (should: $rfc)"
 			./ipv6calc -q -i -m $address | grep ^IPV6_REGISTRY
 			exit 1	
@@ -153,6 +157,7 @@ testscenarios_ipv6_reserved | while read address rfc rest; do
 		;;
 	    noRFC)
 		if ./ipv6calc -q -i -m $address | grep ^IPV6_REGISTRY | grep $grepopt "RFC"; then
+			[ "$verbose" = "1" ] || echo
 			echo "ERROR: unexpected result (should not contain RFC token)"
 			./ipv6calc -q -i -m $address | grep ^IPV6_REGISTRY
 			exit 1	
@@ -191,6 +196,7 @@ testscenarios_showinfo | while read address output_options; do
 
 	if echo "$output" | grep -q "^OUI="; then
 		if [ $ipv6calc_has_db_ieee -ne 1 ]; then
+			[ "$verbose" = "1" ] || echo
 			echo "NOTICE: test $address for $output SKIPPED (no DB_IEEE compiled in)"
 			continue
 		fi
@@ -198,6 +204,7 @@ testscenarios_showinfo | while read address output_options; do
 
 	if echo "$output" | grep -q "^IPV4_REGISTRY="; then
 		if [ $ipv6calc_has_db_ipv4 -ne 1 ]; then
+			[ "$verbose" = "1" ] || echo
 			echo "NOTICE: test: $address for $output SKIPPED (no DB_IPV4_REG compiled in)"
 			continue
 		fi
@@ -205,6 +212,7 @@ testscenarios_showinfo | while read address output_options; do
 
 	if echo "$output" | grep -q "^IPV6_REGISTRY="; then
 		if [ $ipv6calc_has_db_ipv6 -ne 1 ]; then
+			[ "$verbose" = "1" ] || echo
 			echo "NOTICE: test: $address for $output SKIPPED (no DB_IPV6_REG compiled in)"
 			continue
 		fi
@@ -215,6 +223,7 @@ testscenarios_showinfo | while read address output_options; do
 	output_escaped="${output_escaped//[/\\[}"
 	output_escaped="${output_escaped//]/\\]}"
 	if ! ./ipv6calc $options -q -i -m $address | grep $grepopt "^$output_escaped$"; then
+		[ "$verbose" = "1" ] || echo
 		echo "ERROR: unexpected result for $address ($output_escaped)"
 		./ipv6calc $options -q -i -m $address
 		exit 1	
@@ -241,14 +250,17 @@ if ./ipv6calc -q -v 2>&1 | grep -qw GeoIP; then
 		else
 			if echo "$address" | grep -q ":"; then
 				if ./ipv6calc -q -v 2>&1 | grep -v -q "GeoIPv6"; then
+					[ "$verbose" = "1" ] || echo
 					echo "Expected result (missing GEOIP) because of missing IPv6 support in GeoIP)"
 					true
 				else
+					[ "$verbose" = "1" ] || echo
 					echo "Unexpected result (missing GEOIP): ./ipv6calc -q -i -m $address"
 					./ipv6calc -q -i -m $address
 					exit 1
 				fi
 			else
+				[ "$verbose" = "1" ] || echo
 				echo "Unexpected result (missing GEOIP): ./ipv6calc -q -i -m $address"
 				./ipv6calc -q -i -m $address
 				exit 1
@@ -282,6 +294,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw GeoIP; then
 		output_escaped="${output_escaped//[/\\[}"
 		output_escaped="${output_escaped//]/\\]}"
 		if ! ./ipv6calc -q -i -m $address | grep $grepopt "^$output_escaped$"; then
+			[ "$verbose" = "1" ] || echo
 			echo "ERROR: unexpected result for $address ($output_escaped)"
 			./ipv6calc -q -i -m $address
 			exit 1	
@@ -303,6 +316,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 		if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep $grepopt ^IP2LOCATION; then
 			true
 		else
+			[ "$verbose" = "1" ] || echo
 			echo "Unexpected result (missing IP2LOCATION): ./ipv6calc -q -i -m $address"
 			./ipv6calc -q -i -m $address
 			exit 1
@@ -369,6 +383,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 			output_escaped="${output_escaped//[/\\[}"
 			output_escaped="${output_escaped//]/\\]}"
 			if ! ./ipv6calc -q -i -m $address | grep $grepopt "^$output_escaped$"; then
+				[ "$verbose" = "1" ] || echo
 				echo "ERROR: unexpected result for $address ($output_escaped)"
 				./ipv6calc -q -i -m $address
 				exit 1	
@@ -392,6 +407,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv4; then
 		if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep $grepopt ^DBIP; then
 			true
 		else
+			[ "$verbose" = "1" ] || echo
 			echo "Unexpected result (missing DBIP): ./ipv6calc -q -i -m $address"
 			./ipv6calc -q -i -m $address
 			exit 1
@@ -438,6 +454,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv6; then
 		if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep $grepopt ^DBIP; then
 			true
 		else
+			[ "$verbose" = "1" ] || echo
 			echo "Unexpected result (missing DBIP): ./ipv6calc -q -i -m $address"
 			./ipv6calc -q -i -m $address
 			exit 1
@@ -462,6 +479,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv6; then
 		output_escaped="${output_escaped//[/\\[}"
 		output_escaped="${output_escaped//]/\\]}"
 		if ! ./ipv6calc -q -i -m $address | grep $grepopt "^$output_escaped$"; then
+			[ "$verbose" = "1" ] || echo
 			echo "ERROR: unexpected result ($output_escaped)"
 			./ipv6calc -q -i -m $address
 			exit 1	

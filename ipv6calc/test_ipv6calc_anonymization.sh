@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : test_ipv6calc_anonymization.sh
 # Version    : $Id$
-# Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test ipv6calc anonymization
 
@@ -85,7 +85,10 @@ run_anon_tests() {
 		[ "$verbose" = "1" ] && echo "DEBUG : IPVx_TYPE anon: $type_anon_compare"
 		# Check result
 		if [ "$type_orig_compare" != "$type_anon_compare" ]; then
-			echo "ERROR : IPVx_TYPE not equal:"
+			[ "$verbose" = "1" ] || echo
+			echo "ERROR : IPVx_TYPE not equal for: $input (anonymized: $output)"
+			echo "ERROR : IPVx_TYPE orig: $type_orig_compare"
+			echo "ERROR : IPVx_TYPE anon: $type_anon_compare"
 			exit 1
 		else
 			[ "$verbose" = "1" ] && echo "INFO  : result ok!" || true
@@ -113,6 +116,7 @@ run_anon_options_tests() {
 		fi
 
 		if [ "$result" != "$result_real" ]; then
+			[ "$verbose" = "1" ] || echo
 			echo "ERROR : result doesn't match on command: $command"
 			echo "ERROR : result is      : $result_real"
 			echo "ERROR : result expected: $result"
@@ -148,6 +152,7 @@ run_anon_options_kp_tests() {
 		fi
 
 		if [ "$result" != "$output" ]; then
+			[ "$verbose" = "1" ] || echo
 			echo "ERROR : result doesn't match on command: $command"
 			echo "ERROR : result is      : $output"
 			echo "ERROR : result expected: $result"
@@ -201,10 +206,12 @@ run_anon_options_kp_tests() {
 		type_orig_compare="$(echo "$type_orig_compare" | perl -p -e 's/(^,|,$)//g')"
 
 		if [ -z "$type_orig_compare" ]; then
+			[ "$verbose" = "1" ] || echo
 			echo "ERROR : something went wrong reducing IPVx_TYPE for $input"
 			exit 1
 		fi
 		if [ -z "$type_anon_compare" ]; then
+			[ "$verbose" = "1" ] || echo
 			echo "ERROR : something went wrong reducing IPVx_TYPE for $output"
 			exit 1
 		fi
@@ -216,7 +223,10 @@ run_anon_options_kp_tests() {
 
 		# Check result
 		if [ "$type_orig_compare" != "$type_anon_compare" ]; then
-			echo "ERROR : IPVx_TYPE not equal: $input"
+			[ "$verbose" = "1" ] || echo
+			echo "ERROR : IPVx_TYPE not equal for: $input (anonymized: $output)"
+			echo "ERROR : IPVx_TYPE orig: $type_orig_compare"
+			echo "ERROR : IPVx_TYPE anon: $type_anon_compare"
 			exit 1
 		else
 			[ "$verbose" = "1" ] && echo "Result ok!" || true
@@ -227,10 +237,12 @@ run_anon_options_kp_tests() {
 		reg_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._REGISTRY=" | sed 's/IPV._REGISTRY=//'`"
 
 		if [ -z "$reg_orig" ]; then
+			[ "$verbose" = "1" ] || echo
 			echo "ERROR : something went wrong retrieving IPVx_REGISTRY for $input"
 			exit 1
 		fi
 		if [ -z "$reg_anon" ]; then
+			[ "$verbose" = "1" ] || echo
 			echo "ERROR : something went wrong retrieving IPVx_REGISTRY for $output"
 			exit 1
 		fi
@@ -244,15 +256,20 @@ run_anon_options_kp_tests() {
 			# everything is ok, both have no registry
 			true
 		elif [ -z "$reg_orig" -a -n "$reg_anon" ]; then
+			[ "$verbose" = "1" ] || echo
 			echo "ERROR : something went wrong, anon has registry while orig hasn't"
 			exit 1
 		elif [ -n "$reg_orig" -a -z "$reg_anon" ]; then
+			[ "$verbose" = "1" ] || echo
 			echo "ERROR : something went wrong, orig has registry while anon hasn't"
 			exit 1
 		else
 			# Check result
 			if [ "$reg_orig" != "$reg_anon" ]; then
-				echo "ERROR : IPVx_REGISTRY not equal: $input"
+				[ "$verbose" = "1" ] || echo
+				echo "ERROR : IPVx_REGISTRY not equal for: $input (anonymized: $output)"
+				echo "ERROR : IPVx_REGISTRY orig: $reg_orig"
+				echo "ERROR : IPVx_REGISTRY anon: $reg_anon"
 				exit 1
 			else
 				[ "$verbose" = "1" ] && echo "Result ok!" || true
@@ -272,15 +289,26 @@ run_anon_options_kp_tests() {
 			# everything is ok, both have no CC
 			true
 		elif [ -z "$cc_orig" -a -n "$cc_anon" ]; then
+			[ "$verbose" = "1" ] || echo
+			echo "ERROR : IPVx_COUNTRYCODE not equal for: $input (anonymized: $output)"
+			echo "ERROR : IPVx_COUNTRYCODE orig: $cc_orig"
+			echo "ERROR : IPVx_COUNTRYCODE anon: $cc_anon"
 			echo "ERROR : something went wrong, anon has country code while orig hasn't"
 			exit 1
 		elif [ -n "$cc_orig" -a -z "$cc_anon" ]; then
+			[ "$verbose" = "1" ] || echo
+			echo "ERROR : IPVx_COUNTRYCODE not equal for: $input (anonymized: $output)"
+			echo "ERROR : IPVx_COUNTRYCODE orig: $cc_orig"
+			echo "ERROR : IPVx_COUNTRYCODE anon: $cc_anon"
 			echo "ERROR : something went wrong, orig has country code while anon hasn't"
 			exit 1
 		else
 			# Check result
 			if [ "$cc_orig" != "$cc_anon" ]; then
-				echo "ERROR : IPVx_COUNTRYCODE not equal:"
+				[ "$verbose" = "1" ] || echo
+				echo "ERROR : IPVx_COUNTRYCODE not equal for: $input (anonymized: $output)"
+				echo "ERROR : IPVx_COUNTRYCODE orig: $cc_orig"
+				echo "ERROR : IPVx_COUNTRYCODE anon: $cc_anon"
 				exit 1
 			else
 				[ "$verbose" = "1" ] && echo "Result ok!" || true

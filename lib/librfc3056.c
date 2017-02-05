@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : librfc3056.c
  * Version    : $Id$
- * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for conversions defined in RFC 3056
@@ -42,7 +42,7 @@ int librfc3056_ipv4addr_to_ipv6to4addr(ipv6calc_ipv6addr *ipv6addrp, const ipv6c
 	ipv6addrp->prefixlength = 48;
 	ipv6addrp->flag_prefixuse = 0;
 	ipv6addrp->flag_valid = 1;
-	ipv6addrp->scope = ipv6addr_gettype(ipv6addrp, NULL);
+	ipv6addr_settype(ipv6addrp, 1); /* Set typeinfo */
 
 	retval = 0;
 	return (retval);
@@ -61,7 +61,7 @@ int librfc3056_ipv6addr_to_ipv4addr(ipv6calc_ipv4addr *ipv4addrp, const ipv6calc
 	unsigned int i;
 
 	/* check scope */
-	if ( (ipv6addrp->scope & IPV6_NEW_ADDR_6TO4) == 0 ) {
+	if ( (ipv6addrp->typeinfo & IPV6_NEW_ADDR_6TO4) == 0 ) {
 		snprintf(resultstring, resultstring_length, "IPv6 address is not a 6to4 one!");
 		return(retval);	
 	};
@@ -77,7 +77,7 @@ int librfc3056_ipv6addr_to_ipv4addr(ipv6calc_ipv4addr *ipv4addrp, const ipv6calc
 	ipv4addrp->prefixlength = 32;
 	ipv4addrp->flag_prefixuse = 0;
 	ipv4addrp->flag_valid = 1;
-	ipv4addrp->scope = ipv4addr_gettype(ipv4addrp);
+	ipv4addr_settype(ipv4addrp, 1); /* Set typeinfo */
 
 	retval = 0;
 	return (retval);

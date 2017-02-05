@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
  * Version    : $Id$
- * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
@@ -1173,6 +1173,8 @@ PIPE_input:
 	DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of postprocessing input");
 
 	if (ipv4addr.flag_valid == 1) {
+		ipv4addr_settype(&ipv4addr, 1); /* Set typeinfo */
+
 		/* force prefix */
 		if ((formatoptions & (FORMATOPTION_forceprefix)) != 0) {
 			ipv4addr.flag_prefixuse = 1;
@@ -1181,6 +1183,8 @@ PIPE_input:
 	};
 
 	if (ipv6addr.flag_valid == 1) {
+		ipv6addr_settype(&ipv6addr, 1); /* Set typeinfo */
+
 		/* honor 6rd prefix length option */
 		if (ipv6rd_prefixlength > 0) {
 			ipv6addr.typeinfo2 |= IPV6_ADDR_TYPE2_6RD;

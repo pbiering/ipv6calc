@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
  * Version    : $Id$
- * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc database wrapper (for decoupling databases from main binary)
@@ -1686,6 +1686,12 @@ int libipv6calc_db_wrapper_registry_num_by_ipv4addr(const ipv6calc_ipv4addr *ipv
 		goto END_libipv6calc_db_wrapper;
 	};
 
+	if (((ipv4addrp->typeinfo & IPV4_ADDR_UNICAST) != 0) && (ipv4addrp->typeinfo & IPV4_ADDR_LISP) != 0) {
+		// special handling of LISP
+		retval = REGISTRY_LISP;
+		goto END_libipv6calc_db_wrapper;
+	};
+
 	f = IPV6CALC_DB_FEATURE_NUM_IPV4_TO_REGISTRY;
 
 	// run through priorities
@@ -1811,6 +1817,12 @@ int libipv6calc_db_wrapper_registry_num_by_ipv6addr(const ipv6calc_ipv6addr *ipv
 	if (ipv6addr_getword(ipv6addrp, 0) == 0x3ffe) {
 		// special handling of 6BONE
 		retval = REGISTRY_6BONE;
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	if (((ipv6addrp->typeinfo & IPV6_ADDR_UNICAST) != 0) && (ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_LISP) != 0) {
+		// special handling of LISP
+		retval = REGISTRY_LISP;
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -2608,7 +2620,7 @@ END_ipv6calc_db_cc_filter_parse:
  * in : *filter    = filter structure
  * ret: 0:found 1:problem
  */
-int libipv6calc_db_cc_filter_check(s_ipv6calc_filter_db_cc *filter, const int proto) {
+int libipv6calc_db_cc_filter_check(const s_ipv6calc_filter_db_cc *filter, const int proto) {
 	int result = 0, r;
 	char cc[IPV6CALC_COUNTRYCODE_STRING_MAX];
 
@@ -2811,7 +2823,7 @@ END_ipv6calc_db_asn_filter_parse:
  * in : *filter    = filter structure
  * ret: 0:found 1:problem
  */
-int libipv6calc_db_asn_filter_check(s_ipv6calc_filter_db_asn *filter, const int proto) {
+int libipv6calc_db_asn_filter_check(const s_ipv6calc_filter_db_asn *filter, const int proto) {
 	int result = 0, r;
 
 	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper)
@@ -3005,7 +3017,7 @@ END_ipv6calc_db_registry_filter_parse:
  * in : *filter    = filter structure
  * ret: 0:found 1:problem
  */
-int libipv6calc_db_registry_filter_check(s_ipv6calc_filter_db_registry *filter, const int proto) {
+int libipv6calc_db_registry_filter_check(const s_ipv6calc_filter_db_registry *filter, const int proto) {
 	int result = 0, r;
 
 	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper)

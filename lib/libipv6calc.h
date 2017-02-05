@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libipv6calc.h
  * Version    : $Id$
- * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc.c
@@ -49,7 +49,7 @@ typedef struct {
 	{ "keep-type-asn-cc" , 3, "special reliable anonymization, keep type & Autonomous System Number and CountryCode" }
 };
 
-/* Registries */
+/* Registries (main registries must below 8 for anonymization mapping) */
 #define REGISTRY_APNIC        0x02
 #define REGISTRY_RIPENCC      0x03
 #define REGISTRY_LACNIC       0x04
@@ -58,6 +58,7 @@ typedef struct {
 
 #define REGISTRY_6BONE        0x08
 #define REGISTRY_IANA         0x09
+#define REGISTRY_LISP         0x0a
 #define REGISTRY_6TO4         0x0c
 #define REGISTRY_RESERVED     0x0e
 #define REGISTRY_UNKNOWN      0x0f
@@ -72,6 +73,7 @@ typedef struct {
         { REGISTRY_LACNIC     , "LACNIC"    , "REGISTRY_LACNIC"  },
         { REGISTRY_AFRINIC    , "AFRINIC"   , "REGISTRY_AFRINIC" },
         { REGISTRY_6TO4       , "6TO4"      , "REGISTRY_6TO4"    },
+        { REGISTRY_LISP       , "LISP"      , "REGISTRY_LISP"    },
         { REGISTRY_RESERVED   , "reserved"  , "REGISTRY_RESERVED"},
         { REGISTRY_UNKNOWN    , "unknown"   , "REGISTRY_UNKNOWN" }
 };
