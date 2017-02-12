@@ -267,8 +267,10 @@ int ipv6calcoptions_common_anon(const int opt, const char *optarg, const struct 
 			break;
 
 		case CMD_ANON_MASK_IID:
-			fprintf(stderr, " option 'mask-iid' is deprecated, please use 'mask-eui64'\n");
 		case CMD_ANON_MASK_EUI64:
+			if (opt == CMD_ANON_MASK_IID) {
+				fprintf(stderr, " option 'mask-iid' is deprecated, please use 'mask-eui64'\n");
+			};
 			DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Found option: mask-eui=%s", optarg);
 			mask_eui64 = atoi(optarg);
 			if (mask_eui64 < 0 || mask_eui64 > 64) {

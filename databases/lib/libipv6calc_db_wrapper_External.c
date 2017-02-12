@@ -651,7 +651,7 @@ int libipv6calc_db_wrapper_External_wrapper_registry_by_addr(const char *addr, c
 
 	static char resultstring[NI_MAXHOST];
 
-	char *data_ptr = NULL;
+	char *data_ptr = "";
 
 	int External_type = 0;
 
@@ -788,7 +788,7 @@ int libipv6calc_db_wrapper_External_registry_num_by_addr(const ipv6calc_ipaddr *
 	DB *dbp, *dbp_iana;
 	long int recno_max;
 	static char resultstring[NI_MAXHOST];
-	char *data_ptr = NULL;
+	char *data_ptr = "";
 	int i, result;
 	int retval = REGISTRY_UNKNOWN;
 
@@ -955,7 +955,7 @@ int libipv6calc_db_wrapper_External_country_code_by_addr(const ipv6calc_ipaddr *
 	DB *dbp;
 	long int recno_max;
 	static char resultstring[NI_MAXHOST];
-	char *data_ptr = NULL;
+	char *data_ptr = "";
 	int result;
 	int retval = -1;
 

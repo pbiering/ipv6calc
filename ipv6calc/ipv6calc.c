@@ -463,6 +463,7 @@ int main(int argc, char *argv[]) {
 
 				// save pointer for later
 				input_a[a] = optarg;
+				break;
 
 			/* format options */
 			case 'C':

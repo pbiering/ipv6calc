@@ -609,7 +609,7 @@ int libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(const ipv6calc_ipad
 
 	static char resultstring[NI_MAXHOST];
 
-	char *data_ptr = NULL;
+	char *data_ptr = "";
 
 	int DBIP_type = 0;
 
@@ -723,7 +723,7 @@ int libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const ipv6calc_ipaddr *ipad
 
 	static char resultstring[NI_MAXHOST];
 
-	char *data_ptr = NULL;
+	char *data_ptr = "";
 
 	int DBIP_type = 0;
 
