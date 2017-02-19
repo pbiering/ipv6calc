@@ -11,10 +11,9 @@
 # Supported formats (https://db-ip.com/db/)
 #  IP to Country	(1000)
 #  IP to City		(1010)
+#  IP to Location	(1020) - UNTESTED
+#  IP to ISP		(1030) - UNTESTED
 #  IP to Location + ISP (1040)
-# Unsupported formats (missing examples)
-#  IP to Location
-#  IP to ISP
 
 use strict;
 use warnings;
@@ -105,12 +104,23 @@ $date = $3 . $4 . "01";
 
 $type_string = $2;
 
+my $csv_fields_required = 0;
+
 if ($type_string eq "country") {
 	$type = 1000;
+	$csv_fields_required = 3;
 } elsif ($type_string eq "city") {
 	$type = 1010;
+	$csv_fields_required = 5;
+} elsif ($type_string eq "location") {	# TODO verify string
+	$type = 1020;
+	$csv_fields_required = 12;
+} elsif ($type_string eq "isp") {	# TODO verify string
+	$type = 1030;
+	$csv_fields_required = 6;
 } elsif ($type_string eq "full") {
 	$type = 1040;
+	$csv_fields_required = 15;
 } else {
 	print "ERROR : unselected type (FIX CODE) for type_string: $type_string\n";
 	exit 1;
@@ -248,8 +258,8 @@ while (<$FILE>) {
 			$region = "-";
 			$stats_city{'empty-region'}++;
 		};
-	} elsif ($type == 1040) {
-		# full
+	} elsif ($type > 1010) {
+		# full/isp/location
 		if ($line !~ /^([0-9a-fA-F.:]*),([0-9a-fA-F.:]*),([A-Z]{0,2}),/o) {
 			print "ERROR : unexpected line in file (line: $linecounter): $line\n";
 			exit 1;	
@@ -267,8 +277,8 @@ while (<$FILE>) {
 			print "NOTICE: found number of entries per line: " . scalar(@entries) . "\n";
 		};
 
-		if (scalar(@entries) != 15) {
-			print "ERROR : unexpected line in file, number of entries " . scalar(@entries) . " are not expected (line: $linecounter): $line\n";
+		if (scalar(@entries) != $csv_fields_required) {
+			print "ERROR : unexpected line in file, number of entries " . scalar(@entries) . " are not expected, not equal to $csv_fields_required (line: $linecounter): $line\n";
 			exit 1;
 		};
 
@@ -276,28 +286,10 @@ while (<$FILE>) {
 		$start      = $entries[$f++];
 		$end        = $entries[$f++];
 		$cc         = $entries[$f++];
-		$region     = $entries[$f++];
-		$district   = $entries[$f++];
-		$city       = $entries[$f++];
-		$zipcode    = $entries[$f++];
-		$latitude   = $entries[$f++];
-		$longitude  = $entries[$f++];
-		$geoname_id = $entries[$f++];
-		$tz_offset  = $entries[$f++];
-		$tz_name    = $entries[$f++];
-		$isp_name   = $entries[$f++];
-		$conn_type  = $entries[$f++];
-		$orgname    = $entries[$f++];
 
-		if ((! defined $city) || ($city eq "")) {
-			print "DEBUG: empty city found on linecounter=$linecounter\n" if (defined $opts{'d'});
-			$city = "-";
-			$stats_city{'empty-city'}++;
-		};
-		if ((! defined $region) || ($region eq "")) {
-			print "DEBUG: empty region found on linecounter=$linecounter\n" if (defined $opts{'d'});
-			$region = "-";
-			$stats_city{'empty-region'}++;
+		# replace any semicolon in data with / to prevent separation issues
+		for ($f = 0; $f < scalar(@entries); $f++) {
+			$entries[$f] =~ s/;/\//g;
 		};
 	} else {
 		print "ERROR : unsupported type (FIX CODE) for parsing\n";
@@ -321,7 +313,7 @@ while (<$FILE>) {
 		$data = $cc;
 	} elsif ($type == 1010) {
 		$data = $cc . ";" . $region . ";" . $city;
-	} elsif ($type == 1040) {
+	} elsif ($type > 1010) {
 		shift @entries;
 		shift @entries;
 		$data = join(";", @entries);

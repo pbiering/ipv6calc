@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
  * Version    : $Id$
- * Copyright  : 2013-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options
@@ -85,6 +85,8 @@ static struct option ipv6calc_longopts_dbip[] = {
 	{"disable-dbip"                , 0, NULL, DB_dbip_disable       },
 	{"db-dbip-disable"             , 0, NULL, DB_dbip_disable       },
 	{"db-dbip-dir"                 , 1, NULL, DB_dbip_dir           },
+	{"db-dbip-comm-to-free-switch-min-delta-months", 1, NULL, DB_dbip_comm_to_free_switch_min_delta_months },
+	{"db-dbip-only-type", 1, NULL, DB_dbip_only_type },
 };
 #endif // SUPPORT_DBIP
 

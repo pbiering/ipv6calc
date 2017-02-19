@@ -11,6 +11,8 @@ Info:
 --------------------------------------------------------------------
 20170219/PB
 	tools/DBIP-generate-db.pl: add support for full version of DBIP.com
+	databases/lib/libipv6calc_db_wrapper_DBIP.[ch]: add support for full version of DBIP.com
+	databases/lib/libipv6calc_db_wrapper.c, lib/ipv6calchelp.c, lib/ipv6calccommands.h, lib/ipv6calcoptions_common.h: add support for DBIP.com DB selction options
 
 20170205/PB
 	databases/lib/libipv6calc_db_wrapper.c: add support for LISP

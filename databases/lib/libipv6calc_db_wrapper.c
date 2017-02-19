@@ -790,6 +790,34 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			result = 0;
 			break;
 
+		case DB_dbip_only_type:
+#ifdef SUPPORT_DBIP
+			if ((atoi(optarg) >= 1) && (atoi(optarg) <= DBIP_DB_MAX)) {
+				dbip_db_only_type = atoi(optarg);
+			} else {
+				fprintf(stderr, " Argument of option 'db-dbip-only-type' is out or range (1-%d): %d\n", DBIP_DB_MAX, atoi(optarg));
+				exit(EXIT_FAILURE);
+			};
+#else
+			NONQUIETPRINT_WA("Support for db-ip.com not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+
+		case DB_dbip_comm_to_free_switch_min_delta_months:
+#ifdef SUPPORT_DBIP
+			if ((atoi(optarg) >= 0) && (atoi(optarg) <= 99999)) {
+				dbip_db_comm_to_free_switch_min_delta_months = atoi(optarg);
+			} else {
+				fprintf(stderr, " Argument of option 'db-dbip-comm-to-free-switch-min-delta-months' is out or range (0-99999): %d\n", atoi(optarg));
+				exit(EXIT_FAILURE);
+			};
+#else
+			NONQUIETPRINT_WA("Support for db-ip.com not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+
 		case DB_external_dir:
 #ifdef SUPPORT_EXTERNAL
 			result = snprintf(external_db_dir, sizeof(external_db_dir), "%s", optarg);

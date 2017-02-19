@@ -35,6 +35,40 @@ char dbip_db_dir[NI_MAXHOST] = DBIP_DB;
 static const char* wrapper_dbip_info = "DBIP";
 
 
+// DB used for resolution after automatic election, which is currently done by checking for DB files and the sequence in the header file
+static int dbip_db_country_v4 = 0;
+static int dbip_db_country_v6 = 0;
+static int dbip_db_region_city_v4 = 0;
+static int dbip_db_region_city_v6 = 0;
+
+typedef struct {
+	unsigned int num;
+	int dbtype;
+	int dbym;
+} s_ipv6calc_dbip_db;
+
+#define DBIP_FREE	0
+#define DBIP_COMM	1
+#define	DBIP_MAX	2
+
+static s_ipv6calc_dbip_db dbip_db_country_v4_best[DBIP_MAX];
+static s_ipv6calc_dbip_db dbip_db_country_v6_best[DBIP_MAX];
+static s_ipv6calc_dbip_db dbip_db_region_city_v4_best[DBIP_MAX];
+static s_ipv6calc_dbip_db dbip_db_region_city_v6_best[DBIP_MAX];
+
+// select FREE database if COMM is older than given months
+int dbip_db_comm_to_free_switch_min_delta_months = 12;
+
+// select better database of same product (COMM/FREE) only if not older than given months
+int dbip_db_better_max_delta_months = 1;
+
+// select only a specific DBIP db type
+int dbip_db_only_type = 0;
+
+
+#define DBIP_UNPACK_YM(dbym) ((dbym > 0) ? ((dbym % 12) + 1 + ((dbym / 12) + 2000) * 100) : 0)
+
+
 /* database usage map */
 #define DBIP_DB_MAX_BLOCKS_32	2	// 0-63
 static uint32_t dbip_db_usage_map[DBIP_DB_MAX_BLOCKS_32];
@@ -58,6 +92,7 @@ time_t wrapper_db_unixtime_DBIP[MAXENTRIES_ARRAY(libipv6calc_db_wrapper_DBIP_db_
 
 // local prototyping
 static char     *libipv6calc_db_wrapper_DBIP_dbfilename(const unsigned int type); 
+static int libipv6calc_db_wrapper_DBIP_close(DB *dbp);
 
 
 /*
@@ -67,11 +102,16 @@ static char     *libipv6calc_db_wrapper_DBIP_dbfilename(const unsigned int type)
  * out: 0=ok, 1=error
  */
 int libipv6calc_db_wrapper_DBIP_wrapper_init(void) {
-	int i;
+	int i, dbym, dbtype, ret, product;
+	DB *dbp;
+	char datastring[NI_MAXHOST];
+	char resultstring[NI_MAXHOST];
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "Called");
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "Check for standard DBIP databases");
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "custom directory: %s", dbip_db_dir);
 
 	/* check available databases for resolution */
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_DBIP_db_file_desc); i++) {
@@ -83,14 +123,139 @@ int libipv6calc_db_wrapper_DBIP_wrapper_init(void) {
 		if (libipv6calc_db_wrapper_DBIP_db_avail(libipv6calc_db_wrapper_DBIP_db_file_desc[i].number) == 1) {
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "DBIP database available: %s", libipv6calc_db_wrapper_DBIP_db_file_desc[i].description);
 			wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP] |= libipv6calc_db_wrapper_DBIP_db_file_desc[i].features;
+		} else {
+			// db not available
+			continue;
 		};
 
 		// clean local cache
 		db_ptr_cache[i] = NULL;
 		db_recno_max_cache[i] = -1;
+
+		dbp = libipv6calc_db_wrapper_DBIP_open_type(libipv6calc_db_wrapper_DBIP_db_file_desc[i].number | 0x10000, NULL);
+		if (dbp == NULL) {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "Error opening DBIP by type");
+			continue;
+		};
+
+		// get dbcreated_unixtime
+		ret = libipv6calc_db_wrapper_bdb_get_data_by_key(dbp, "dbcreated_unixtime", datastring, sizeof(datastring));
+		if (ret != 0) {
+			snprintf(resultstring, sizeof(resultstring), "%s", "can't retrieve 'dbcreated_unixtime', unsupported db file");
+			continue;
+		};
+
+		dbym = atoi(datastring) / (60*60*24*30);
+
+		if (dbym == 0) {
+			snprintf(resultstring, sizeof(resultstring), "%s", "'dbcreated_unixtime' is not proper, unsupported db file");
+			continue;
+		};
+
+		// get dbtype
+		ret = libipv6calc_db_wrapper_bdb_get_data_by_key(dbp, "dbtype", datastring, sizeof(datastring));
+		if (ret != 0) {
+			snprintf(resultstring, sizeof(resultstring), "%s", "can't retrieve 'dbtype', unsupported db file");
+			continue;
+		};
+
+		dbtype = atoi(datastring);
+
+		if ((dbip_db_only_type > 0) && (dbip_db_only_type != dbtype)) {
+			// not selected
+			continue;
+		};
+
+		if ((libipv6calc_db_wrapper_DBIP_db_file_desc[i].internal & IPV6CALC_DB_DBIP_INTERNAL_FREE) != 0) {
+			product = DBIP_FREE;
+		} else {
+			product = DBIP_COMM;
+		};
+
+#define DBIP_DB_SELECT_BETTER(best) \
+			if ( \
+			  (best.num == 0) \
+			  || ( \
+				(best.dbym > 0) \
+				  && ((best.dbym - dbym) <= dbip_db_better_max_delta_months) \
+			     ) \
+			) { \
+				best.num = libipv6calc_db_wrapper_DBIP_db_file_desc[i].number; \
+				best.dbym = dbym; \
+				best.dbtype = dbtype; \
+			};
+
+
+		// note: databases are listed in sequence "less data" before "more data"
+		if ((libipv6calc_db_wrapper_DBIP_db_file_desc[i].features & IPV6CALC_DB_IPV4_TO_CC) != 0) {
+			DBIP_DB_SELECT_BETTER(dbip_db_country_v4_best[product])
+		};
+
+		if ((libipv6calc_db_wrapper_DBIP_db_file_desc[i].features & IPV6CALC_DB_IPV6_TO_CC) != 0) {
+			DBIP_DB_SELECT_BETTER(dbip_db_country_v6_best[product])
+		};
+
+		if ((libipv6calc_db_wrapper_DBIP_db_file_desc[i].features & (IPV6CALC_DB_IPV4_TO_REGION | IPV6CALC_DB_IPV4_TO_CITY)) != 0) {
+			DBIP_DB_SELECT_BETTER(dbip_db_region_city_v4_best[product])
+		};
+
+		if ((libipv6calc_db_wrapper_DBIP_db_file_desc[i].features & (IPV6CALC_DB_IPV6_TO_REGION | IPV6CALC_DB_IPV6_TO_CITY)) != 0) {
+			DBIP_DB_SELECT_BETTER(dbip_db_region_city_v6_best[product])
+		};
+
+		wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP] |= libipv6calc_db_wrapper_DBIP_db_file_desc[i].features;
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "custom directory: %s", dbip_db_dir);
+	// select free instead of comm, if comm is outdated and free available
+	if (dbip_db_comm_to_free_switch_min_delta_months > 0) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "DBIP database priority check (comm->free) after months: %d", dbip_db_comm_to_free_switch_min_delta_months);
+#define SELECT_FREE_INSTEAD_OF_COMM(free, comm, final) \
+	if ((free.num > 0) && (comm.num > 0)) { \
+		if (free.dbym - comm.dbym > dbip_db_comm_to_free_switch_min_delta_months) { \
+			final = free.num; \
+		}; \
+	};
+		SELECT_FREE_INSTEAD_OF_COMM(dbip_db_country_v4_best[DBIP_FREE], dbip_db_country_v4_best[DBIP_COMM], dbip_db_country_v4)
+		SELECT_FREE_INSTEAD_OF_COMM(dbip_db_country_v6_best[DBIP_FREE], dbip_db_country_v6_best[DBIP_COMM], dbip_db_country_v6)
+		SELECT_FREE_INSTEAD_OF_COMM(dbip_db_region_city_v4_best[DBIP_FREE], dbip_db_region_city_v4_best[DBIP_COMM], dbip_db_region_city_v4)
+		SELECT_FREE_INSTEAD_OF_COMM(dbip_db_region_city_v6_best[DBIP_FREE], dbip_db_region_city_v6_best[DBIP_COMM], dbip_db_region_city_v6)
+	};
+
+#define FILL_EMPTY(product, final) \
+	if ((product.num > 0) && (final == 0)) { \
+		final = product.num; \
+	};
+
+	// fill empty ones with comm
+	FILL_EMPTY(dbip_db_country_v4_best[DBIP_COMM], dbip_db_country_v4)
+	FILL_EMPTY(dbip_db_country_v6_best[DBIP_COMM], dbip_db_country_v6)
+	FILL_EMPTY(dbip_db_region_city_v4_best[DBIP_COMM], dbip_db_region_city_v4)
+	FILL_EMPTY(dbip_db_region_city_v6_best[DBIP_COMM], dbip_db_region_city_v6)
+
+	// fill empty ones with free
+	FILL_EMPTY(dbip_db_country_v4_best[DBIP_FREE], dbip_db_country_v4)
+	FILL_EMPTY(dbip_db_country_v6_best[DBIP_FREE], dbip_db_country_v6)
+	FILL_EMPTY(dbip_db_region_city_v4_best[DBIP_FREE], dbip_db_region_city_v4)
+	FILL_EMPTY(dbip_db_region_city_v6_best[DBIP_FREE], dbip_db_region_city_v6)
+
+
+	/* close handles which are not necessary further on */
+	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_DBIP_db_file_desc); i++) {
+		if (db_ptr_cache[i] != NULL) {
+			if (
+				(libipv6calc_db_wrapper_DBIP_db_file_desc[i].number == dbip_db_country_v4_best[DBIP_FREE].num)
+			    ||	(libipv6calc_db_wrapper_DBIP_db_file_desc[i].number == dbip_db_country_v4_best[DBIP_COMM].num)
+			    ||	(libipv6calc_db_wrapper_DBIP_db_file_desc[i].number == dbip_db_country_v6_best[DBIP_FREE].num)
+			    ||	(libipv6calc_db_wrapper_DBIP_db_file_desc[i].number == dbip_db_country_v6_best[DBIP_COMM].num)
+			) {
+				// database is in use
+				continue;
+			};
+
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Close further unused DBIP: type=%d desc='%s'", libipv6calc_db_wrapper_DBIP_db_file_desc[i].number, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description);
+			libipv6calc_db_wrapper_DBIP_close(db_ptr_cache[i]);
+		};
+	};
 
 	wrapper_features |= wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP];
 
@@ -211,6 +376,91 @@ void libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(const int level_verbose, 
 
 	if (count == 0) {
 		fprintf(stderr, "%sDBIP: NO available databases found in directory: %s\n", prefix, dbip_db_dir);
+	} else {
+		if (level_verbose >= LEVEL_VERBOSE2) {
+			fprintf(stderr, "%sDBIP: detected best databases FREE    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d\n"
+				, prefix
+				, dbip_db_country_v4_best[DBIP_FREE].num
+				, dbip_db_country_v4_best[DBIP_FREE].dbtype
+				, DBIP_UNPACK_YM(dbip_db_country_v4_best[DBIP_FREE].dbym)
+				, dbip_db_country_v6_best[DBIP_FREE].num
+				, dbip_db_country_v6_best[DBIP_FREE].dbtype
+				, DBIP_UNPACK_YM(dbip_db_country_v6_best[DBIP_FREE].dbym)
+				, dbip_db_region_city_v4_best[DBIP_FREE].num
+				, dbip_db_region_city_v4_best[DBIP_FREE].dbtype
+				, DBIP_UNPACK_YM(dbip_db_region_city_v4_best[DBIP_FREE].dbym)
+				, dbip_db_region_city_v6_best[DBIP_FREE].num
+				, dbip_db_region_city_v6_best[DBIP_FREE].dbtype
+				, DBIP_UNPACK_YM(dbip_db_region_city_v6_best[DBIP_FREE].dbym)
+			);
+
+			fprintf(stderr, "%sDBIP: detected best databases COMM    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d\n"
+				, prefix
+				, dbip_db_country_v4_best[DBIP_COMM].num
+				, dbip_db_country_v4_best[DBIP_COMM].dbtype
+				, DBIP_UNPACK_YM(dbip_db_country_v4_best[DBIP_COMM].dbym)
+				, dbip_db_country_v6_best[DBIP_COMM].num
+				, dbip_db_country_v6_best[DBIP_COMM].dbtype
+				, DBIP_UNPACK_YM(dbip_db_country_v6_best[DBIP_COMM].dbym)
+				, dbip_db_region_city_v4_best[DBIP_COMM].num
+				, dbip_db_region_city_v4_best[DBIP_COMM].dbtype
+				, DBIP_UNPACK_YM(dbip_db_region_city_v4_best[DBIP_COMM].dbym)
+				, dbip_db_region_city_v6_best[DBIP_COMM].num
+				, dbip_db_region_city_v6_best[DBIP_COMM].dbtype
+				, DBIP_UNPACK_YM(dbip_db_region_city_v6_best[DBIP_COMM].dbym)
+			);
+		} else if (level_verbose >= LEVEL_VERBOSE) {
+			fprintf(stderr, "%sDBIP: detected best databases FREE    Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
+				, prefix
+				, dbip_db_country_v4_best[DBIP_FREE].num
+				, dbip_db_country_v6_best[DBIP_FREE].num
+				, dbip_db_region_city_v4_best[DBIP_FREE].num
+				, dbip_db_region_city_v6_best[DBIP_FREE].num
+			);
+
+			fprintf(stderr, "%sDBIP: detected best databases COMM    Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
+				, prefix
+				, dbip_db_country_v4_best[DBIP_COMM].num
+				, dbip_db_country_v6_best[DBIP_COMM].num
+				, dbip_db_region_city_v4_best[DBIP_COMM].num
+				, dbip_db_region_city_v6_best[DBIP_COMM].num
+			);
+
+		};
+
+		if (level_verbose >= LEVEL_VERBOSE) {
+			fprintf(stderr, "%sDBIP: selected best databases normal  Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d\n"
+				, prefix
+				, dbip_db_country_v4
+				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, dbip_db_country_v6
+				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, dbip_db_region_city_v4
+				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, dbip_db_region_city_v6
+			);
+
+			if (dbip_db_comm_to_free_switch_min_delta_months > 0) {
+				fprintf(stderr, "%sDBIP: selected best databases method: COMM older than %d months are deselected in case of FREE is available\n"
+					, prefix
+					, dbip_db_comm_to_free_switch_min_delta_months
+				);
+			};
+
+			if (dbip_db_better_max_delta_months > 0) {
+				fprintf(stderr, "%sDBIP: selected best databases method: COMM/FREE with more features are only selected in case not older than %d months of already found COMM/FREE\n"
+					, prefix
+					, dbip_db_better_max_delta_months
+				);
+			};
+
+			if (dbip_db_only_type > 0) {
+				fprintf(stderr, "%sDBIP: selected best databases method: by applying given DB type filter: %d\n"
+					, prefix
+					, dbip_db_only_type
+				);
+			};
+		};
 	};
 #else // SUPPORT_DBIP
 	snfprintf(stderr, string, size, "%sNo DBIP support built-in", prefix);
@@ -618,14 +868,14 @@ int libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(const ipv6calc_ipad
 	//DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Called with addr=%s proto=%d", addr, proto);
 
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
-		DBIP_type = DBIP_DB_IPV4_COUNTRY;
+		DBIP_type = dbip_db_country_v4;
 
 		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP] & IPV6CALC_DB_IPV4_TO_CC) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "No DBIP database supporting IPv4 country available");
 			goto END_libipv6calc_db_wrapper;
 		};
 	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
-		DBIP_type = DBIP_DB_IPV6_COUNTRY;
+		DBIP_type = dbip_db_country_v6;
 
 		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP] & IPV6CALC_DB_IPV6_TO_CC) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "No DBIP database supporting IPv6 country available");
@@ -683,8 +933,13 @@ int libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(const ipv6calc_ipad
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Database entry found %d: %s", token_count, token);
 
 		if (token_count == 1) {
-			/* country */
-			snprintf(country, country_len, "%s", token);
+			/* country (is always 1st token) */
+			if (strlen(token) > 0) {
+				snprintf(country, country_len, "%s", token);
+			} else {
+				snprintf(country, country_len, "%s", "-");
+			};
+			break;
 		};
 
 		/* get next token */
@@ -729,17 +984,26 @@ int libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const ipv6calc_ipaddr *ipad
 
 	long int recno_max;
 
+	int region_token = 2; // default
+	int city_token = 3; // default
+
 	//DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Called with addr=%s proto=%d", addr, proto);
 
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
-		DBIP_type = DBIP_DB_IPV4_CITY;
+		DBIP_type = dbip_db_region_city_v4;
+		if ((DBIP_type == DBIP_DB_IPV4_LOCATION) || (DBIP_type == DBIP_DB_IPV4_FULL)) {
+			city_token++; // location/full have district inbetween;
+		};
 
 		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP] & IPV6CALC_DB_IPV4_TO_CITY) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "No DBIP database supporting IPv4 city/region available");
 			goto END_libipv6calc_db_wrapper;
 		};
 	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
-		DBIP_type = DBIP_DB_IPV6_CITY;
+		DBIP_type = dbip_db_region_city_v6;
+		if ((DBIP_type == DBIP_DB_IPV6_LOCATION) || (DBIP_type == DBIP_DB_IPV6_FULL)) {
+			city_token++; // location/full have district inbetween;
+		};
 
 		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP] & IPV6CALC_DB_IPV6_TO_CITY) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "No DBIP database supporting IPv6 city/region available");
@@ -794,19 +1058,28 @@ int libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const ipv6calc_ipaddr *ipad
 
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Database entry found %d: %s", token_count, token);
 
-		if (token_count == 2) {
+		if (token_count == region_token) {
 			/* region */
-			snprintf(region, region_len, "%s", token);
-		} else if (token_count == 3) {
+			if (strlen(token) > 0) {
+				snprintf(region, region_len, "%s", token);
+			} else {
+				snprintf(region, region_len, "%s", "-");
+			};
+		} else if (token_count == city_token) {
 			/* city */
-			snprintf(city, city_len, "%s", token);
+			if (strlen(token) > 0) {
+				snprintf(city, city_len, "%s", token);
+			} else {
+				snprintf(city, city_len, "%s", "-");
+			};
+			break;
 		};
 
 		/* get next token */
 		token = strtok_r(NULL, ";", ptrptr);
 	};
 
-	if (token_count != 3) {
+	if (token_count != city_token) {
 		ERRORPRINT_WA("data has more entries than expected, corrupt database: %d", token_count);
 		goto END_libipv6calc_db_wrapper_close;
 	};

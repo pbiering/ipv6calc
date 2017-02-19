@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
  * Version    : $Id$
- * Copyright  : 2002-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -353,6 +353,9 @@ void printhelp_common(const uint32_t help_features) {
 		fprintf(stderr, "  [--disable-dbip                  ] : db-ip.com support disabled\n");
 		fprintf(stderr, "  [--db-dbip-disable               ] : db-ip.com support disabled\n");
 		fprintf(stderr, "  [--db-dbip-dir        <directory>] : db-ip.com database directory (default: %s)\n", dbip_db_dir);
+		fprintf(stderr, "  [--db-dbip-only-type <TYPE>]       : db-ip.com database only selected type (1-%d)\n", DBIP_DB_MAX);
+		fprintf(stderr, "  [--db-dbip-comm-to-free-switch-min-delta-months <MONTHS>]:\n");
+		fprintf(stderr, "     switch from COMM to FREE databases if possible and delta more than %d months (0=disabled)\n", dbip_db_comm_to_free_switch_min_delta_months);
 #endif
 	};
 
