@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20170219/PB
+	tools/DBIP-generate-db.pl: add support for full version of DBIP.com
+
 20170205/PB
 	databases/lib/libipv6calc_db_wrapper.c: add support for LISP
 	internal: rename 'scope' to 'typeinfo'

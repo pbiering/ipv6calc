@@ -4,10 +4,17 @@
 #
 # Project    : ipv6calc/DBIP
 # File       : DBIP-generate-db.pl
-# Version    : $Id: DBIP-generate-db.pl,v 1.8 2015/04/30 20:02:11 ds6peter Exp $
-# Copyright  : 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id$
+# Copyright  : 2014-2017 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 #
+# Supported formats (https://db-ip.com/db/)
+#  IP to Country	(1000)
+#  IP to City		(1010)
+#  IP to Location + ISP (1040)
+# Unsupported formats (missing examples)
+#  IP to Location
+#  IP to ISP
 
 use strict;
 use warnings;
@@ -17,6 +24,7 @@ use BerkeleyDB;
 use POSIX qw(strftime);
 use IO::Uncompress::Gunzip qw(gunzip $GunzipError);
 use Net::IP;
+use Text::CSV_PP;
 
 my %opts;
 getopts ("qdAS:O:I:h?", \%opts);
@@ -83,7 +91,7 @@ my $type;
 my $date;
 my $type_string;
 
-if ($file_input !~ /^(.*\/)?dbip-(city|country)-([0-9]{4})-([0-9]{2}).csv(.gz)?$/o) {
+if ($file_input !~ /^(.*\/)?dbip-(city|country|full)-([0-9]{4})-([0-9]{2}).csv(.gz)?$/o) {
 	print "ERROR : input file name is not a valid dbip filename: $file_input\n";
 	exit 1;
 };
@@ -101,6 +109,11 @@ if ($type_string eq "country") {
 	$type = 1000;
 } elsif ($type_string eq "city") {
 	$type = 1010;
+} elsif ($type_string eq "full") {
+	$type = 1040;
+} else {
+	print "ERROR : unselected type (FIX CODE) for type_string: $type_string\n";
+	exit 1;
 };
 
 
@@ -172,6 +185,8 @@ if ($file_type eq "cvs.gz") {
 
 my %stats_city;
 
+my $csv = Text::CSV_PP->new();
+
 while (<$FILE>) {
 	my $line = $_;
         chomp $line;
@@ -187,8 +202,30 @@ while (<$FILE>) {
 
 	my $city;
 	my $region;
+	my $district;
+	my $zipcode;
+	my $latitude;
+	my $longitude;
+	my $geoname_id;
+	my $tz_offset;
+	my $tz_name;
+	my $isp_name;
+	my $conn_type;
+	my $orgname;
 
-	if ($type == 1010) {
+	my $status;
+	my @entries;
+
+	if ($type == 1000) {
+		# country
+		if ($line !~ /^"([0-9a-fA-F.:]*)","([0-9a-fA-F.:]*)","([A-Z]{0,2})"/o) {
+			print "ERROR : unexpected line in file (line: $linecounter): $line\n";
+			exit 1;	
+		};
+		$start = $1;
+		$end   = $2;
+		$cc    = $3;
+	} elsif ($type == 1010) {
 		# city
 		if ($line !~ /^"([0-9a-fA-F.:]*)","([0-9a-fA-F.:]*)","([A-Z]{0,2})","([^"]*)","([^"]*)"/o) {
 			print "ERROR : unexpected line in file (line: $linecounter): $line\n";
@@ -211,15 +248,60 @@ while (<$FILE>) {
 			$region = "-";
 			$stats_city{'empty-region'}++;
 		};
-	} else {
-		# country
-		if ($line !~ /^"([0-9a-fA-F.:]*)","([0-9a-fA-F.:]*)","([A-Z]{0,2})"/o) {
+	} elsif ($type == 1040) {
+		# full
+		if ($line !~ /^([0-9a-fA-F.:]*),([0-9a-fA-F.:]*),([A-Z]{0,2}),/o) {
 			print "ERROR : unexpected line in file (line: $linecounter): $line\n";
 			exit 1;	
 		};
-		$start = $1;
-		$end   = $2;
-		$cc    = $3;
+
+		# convert line into array
+		$status  = $csv->parse($line);
+		if ($status != 1) {
+			print "ERROR : can't parse line in file (line: $linecounter): $line\n";
+		};
+
+		@entries = $csv->fields();
+
+		if ($linecounter == 1) {
+			print "NOTICE: found number of entries per line: " . scalar(@entries) . "\n";
+		};
+
+		if (scalar(@entries) != 15) {
+			print "ERROR : unexpected line in file, number of entries " . scalar(@entries) . " are not expected (line: $linecounter): $line\n";
+			exit 1;
+		};
+
+		my $f = 0;
+		$start      = $entries[$f++];
+		$end        = $entries[$f++];
+		$cc         = $entries[$f++];
+		$region     = $entries[$f++];
+		$district   = $entries[$f++];
+		$city       = $entries[$f++];
+		$zipcode    = $entries[$f++];
+		$latitude   = $entries[$f++];
+		$longitude  = $entries[$f++];
+		$geoname_id = $entries[$f++];
+		$tz_offset  = $entries[$f++];
+		$tz_name    = $entries[$f++];
+		$isp_name   = $entries[$f++];
+		$conn_type  = $entries[$f++];
+		$orgname    = $entries[$f++];
+
+		if ((! defined $city) || ($city eq "")) {
+			print "DEBUG: empty city found on linecounter=$linecounter\n" if (defined $opts{'d'});
+			$city = "-";
+			$stats_city{'empty-city'}++;
+		};
+		if ((! defined $region) || ($region eq "")) {
+			print "DEBUG: empty region found on linecounter=$linecounter\n" if (defined $opts{'d'});
+			$region = "-";
+			$stats_city{'empty-region'}++;
+		};
+	} else {
+		print "ERROR : unsupported type (FIX CODE) for parsing\n";
+		exit 1;
 	};
 
 	if ((! defined $cc) || ($cc eq "")) {
@@ -234,6 +316,20 @@ while (<$FILE>) {
 	my $end_value_0_15;
 	my $end_value_16_31;
 
+	my $data;
+	if ($type == 1000) {
+		$data = $cc;
+	} elsif ($type == 1010) {
+		$data = $cc . ";" . $region . ";" . $city;
+	} elsif ($type == 1040) {
+		shift @entries;
+		shift @entries;
+		$data = join(";", @entries);
+	} else {
+		print "ERROR : unsupported type (FIX CODE) for creating data string\n";
+		exit 1;
+	};
+	
 	if ($start =~ /^([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})$/o) {
 		$counter_ipv4++;
 
@@ -248,13 +344,9 @@ while (<$FILE>) {
 			exit 1;	
 		};
 
-		#print "INFO : IPv4: $start " . sprintf("(%08x)", $start_value) . " $end " . sprintf("(%08x)", $end_value) . " $cc\n";
+		print "INFO : IPv4: $start " . sprintf("(%08x)", $start_value) . " $end " . sprintf("(%08x)", $end_value) . " $data\n" if (defined $opts{'d'});
 
-		if ($type == 1010) {
-			push @a_ipv4, sprintf("%08x", $start_value) . ";" . sprintf("%08x", $end_value) . ";" . $cc . ";" . $region . ";" . $city;
-		} else {
-			push @a_ipv4, sprintf("%08x", $start_value) . ";" . sprintf("%08x", $end_value) . ";" . $cc;
-		};
+		push @a_ipv4, sprintf("%08x", $start_value) . ";" . sprintf("%08x", $end_value) . ";" . $data;
 	} else {
 		$counter_ipv6++;
 
@@ -270,13 +362,9 @@ while (<$FILE>) {
 		$end_value_0_15    = substr($end_value, 0, 8); # 1st 8 nibbiles = 32 bits
 		$end_value_16_31   = substr($end_value, 8, 8); # 1st 8 nibbiles = 32 bits
 
-		#print "INFO : IPv6: $start " . sprintf("(%08x:%08x)", hex($start_value_0_15), hex($start_value_16_31)) . " $end " . sprintf("(%08x:%08x)", hex($end_value_0_15), hex($end_value_16_31)) . " $cc\n";
+		print "INFO : IPv6: $start " . sprintf("(%08x:%08x)", hex($start_value_0_15), hex($start_value_16_31)) . " $end " . sprintf("(%08x:%08x)", hex($end_value_0_15), hex($end_value_16_31)) . " $data\n" if (defined $opts{'d'});
 
-		if ($type == 1010) {
-			push @a_ipv6, $start_value_0_15 . ";" . $start_value_16_31 . ";" . $end_value_0_15 . ";" . $end_value_16_31 . ";" . $cc . ";" . $region . ";" .$city;
-		} else {
-			push @a_ipv6, $start_value_0_15 . ";" . $start_value_16_31 . ";" . $end_value_0_15 . ";" . $end_value_16_31 . ";" . $cc;
-		};
+		push @a_ipv6, $start_value_0_15 . ";" . $start_value_16_31 . ";" . $end_value_0_15 . ";" . $end_value_16_31 . ";" . $data;
 	};
 
 };
@@ -288,10 +376,10 @@ if (! defined $opts{'q'}) {
 	print "INFO  : IPv4 array elements: " . scalar @a_ipv4 . "\n";
 	print "INFO  : IPv6 array elements: " . scalar @a_ipv6 . "\n";
 
-	print "INFO  : IPv4 database first entry: " . $a_ipv4[1] . "\n";
+	print "INFO  : IPv4 database first entry: " . $a_ipv4[0] . "\n";
 	print "INFO  : IPv4 database last  entry: " . $a_ipv4[-1] . "\n";
 
-	print "INFO  : IPv6 database first entry: " . $a_ipv6[1] . "\n";
+	print "INFO  : IPv6 database first entry: " . $a_ipv6[0] . "\n";
 	print "INFO  : IPv6 database last  entry: " . $a_ipv6[-1] . "\n";
 };
 

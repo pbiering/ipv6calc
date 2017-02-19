@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.h
  * Version    : $Id$
- * Copyright  : 2014-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2014-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_DBIP.c
@@ -19,7 +19,9 @@
 #define DBIP_DB_IPV6_COUNTRY				2
 #define DBIP_DB_IPV4_CITY				3
 #define DBIP_DB_IPV6_CITY				4
-#define DBIP_DB_MAX					(DBIP_DB_IPV6_CITY + 1)
+#define DBIP_DB_IPV4_FULL				5
+#define DBIP_DB_IPV6_FULL				6
+#define DBIP_DB_MAX					(DBIP_DB_IPV6_FULL + 1)
 
 
 /*@unused@*/ static const db_file_desc libipv6calc_db_wrapper_DBIP_db_file_desc[] = {
@@ -27,6 +29,8 @@
 	{ DBIP_DB_IPV6_COUNTRY    , "ipv6calc-dbip-ipv6-country.db"      , "IPv6 CountryCode" , IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6 },
 	{ DBIP_DB_IPV4_CITY       , "ipv6calc-dbip-ipv4-city.db"         , "IPv4 City/Region/CountryCode", IPV6CALC_DB_IPV4_TO_CITY | IPV6CALC_DB_IPV4_TO_REGION | IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_DBIP_IPV4 },
 	{ DBIP_DB_IPV6_CITY       , "ipv6calc-dbip-ipv6-city.db"         , "IPv6 City/Region/CountryCode", IPV6CALC_DB_IPV6_TO_CITY | IPV6CALC_DB_IPV6_TO_REGION | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6 },
+	{ DBIP_DB_IPV4_FULL       , "ipv6calc-dbip-ipv4-full.db"         , "IPv4 Location/ISP", IPV6CALC_DB_IPV4_TO_CITY | IPV6CALC_DB_IPV4_TO_REGION | IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_DBIP_IPV4 | IPV6CALC_DB_IPV4_TO_COUNTRY },
+	{ DBIP_DB_IPV6_FULL       , "ipv6calc-dbip-ipv6-full.db"         , "IPv6 Location/ISP", IPV6CALC_DB_IPV6_TO_CITY | IPV6CALC_DB_IPV6_TO_REGION | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6 | IPV6CALC_DB_IPV6_TO_COUNTRY },
 };
 
 // features

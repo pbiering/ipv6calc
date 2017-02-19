@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
  * Version    : $Id$
- * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc DB-IP.com database wrapper
