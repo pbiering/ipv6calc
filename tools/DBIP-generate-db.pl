@@ -24,9 +24,11 @@ use POSIX qw(strftime);
 use IO::Uncompress::Gunzip qw(gunzip $GunzipError);
 use Net::IP;
 use Text::CSV_PP;
+use Data::Dumper;
+
 
 my %opts;
-getopts ("qdAS:O:I:h?", \%opts);
+getopts ("s:qdAS:O:I:h?", \%opts);
 
 my $file_input;
 my $dir_output = ".";
@@ -34,17 +36,19 @@ my $suffix = "";
 my $suffix_orig;
 my $file_type = "cvs";
 my $atomic = 0;
+my $line_start = 0;
 
 if (defined $opts{'h'} || defined $opts{'?'}) {
         print qq|
 Usage:  PROGNAME -I <input file> [-O <output directory>] [-S <suffix>] [-A]
 
 Options:
-        -I <input file>        DB-IP.com CSV input file
+        -I <input file>        DB-IP.com CSV input file (support also csv.gz)
         -O <output directory>  optional output directory for DB files, default: .
         -S <suffix>            optional suffix
         -A                     atomic operation (generate .new and move on success)
         -d                     debug
+        -s <line>              start from given line number (diagnostics)
         -q                     quiet
 |;
         exit 0;
@@ -61,6 +65,10 @@ if (defined $opts{'O'}){
 
 if (defined $opts{'S'}){
 	$suffix = $opts{'S'};
+};
+
+if (defined $opts{'s'}){
+	$line_start = $opts{'s'};
 };
 
 $suffix_orig = $suffix;
@@ -90,12 +98,12 @@ my $type;
 my $date;
 my $type_string;
 
-if ($file_input !~ /^(.*\/)?dbip-(city|country|full)-([0-9]{4})-([0-9]{2}).csv(.gz)?$/o) {
+if ($file_input !~ /^(.*\/)?dbip-(city|country|full)-([0-9]{4})-([0-9]{2})(-test)?.csv(.gz)?$/o) {
 	print "ERROR : input file name is not a valid dbip filename: $file_input\n";
 	exit 1;
 };
 
-if (defined $5) {
+if (defined $6) {
 	print "INFO  : .gz suffix found on: $file_input\n" if (! defined $opts{'q'});
 	$file_type = "cvs.gz";
 };
@@ -129,6 +137,10 @@ if ($type_string eq "country") {
 
 
 print "INFO  : input file: $file_input type=$type date=$date\n" if (! defined $opts{'q'});
+
+if ($line_start > 0) {
+	print "NOTICE: skip input lines (-s given) before line: $line_start\n";
+};
 
 
 my $filename_ipv4 = "$dir_output/ipv6calc-dbip-ipv4-$type_string.db" . $suffix;
@@ -195,7 +207,7 @@ if ($file_type eq "cvs.gz") {
 
 my %stats_city;
 
-my $csv = Text::CSV_PP->new();
+my $csv = Text::CSV_PP->new({ binary => 1 });
 
 while (<$FILE>) {
 	my $line = $_;
@@ -203,8 +215,27 @@ while (<$FILE>) {
 	$linecounter++;
 
 	if ((($linecounter % 100000) == 0) || (defined $opts{'d'})) {
-		print "INFO  : linecounter=$linecounter: $line\n" if (! defined $opts{'q'});
+		if (($line_start > 0) && ($linecounter < $line_start)) {
+			print "INFO  : (skip) linecounter=$linecounter: $line\n" if (! defined $opts{'q'});
+		} else {
+			print "INFO  : (progress) linecounter=$linecounter: $line\n" if (! defined $opts{'q'});
+		};
 	};
+
+	if (($line_start > 0) && ($linecounter == $line_start)) {
+		print "NOTICE: (skip finished, start now parsing) linecounter=$linecounter: $line\n" if (! defined $opts{'q'});
+	};
+
+	if ($linecounter < $line_start) {
+		next;
+	};
+
+	# replace escaped quotes to avoid confusing CSV parser
+	$line =~ s/\\\\\\"/'/g;
+
+	# replace double (partially escaped) quotes to avoid confusing CSV parser
+	$line =~ s/"\\"/"/g;
+	$line =~ s/\\""/"/g;
 
 	my $start;
 	my $end;
@@ -269,6 +300,8 @@ while (<$FILE>) {
 		$status  = $csv->parse($line);
 		if ($status != 1) {
 			print "ERROR : can't parse line in file (line: $linecounter): $line\n";
+			print "ERROR : CSV parser diagnostics: " . $csv->error_diag() . "\n";
+			exit 1;
 		};
 
 		@entries = $csv->fields();
@@ -279,6 +312,7 @@ while (<$FILE>) {
 
 		if (scalar(@entries) != $csv_fields_required) {
 			print "ERROR : unexpected line in file, number of entries " . scalar(@entries) . " are not expected, not equal to $csv_fields_required (line: $linecounter): $line\n";
+			print Dumper(@entries);
 			exit 1;
 		};
 
@@ -368,11 +402,15 @@ if (! defined $opts{'q'}) {
 	print "INFO  : IPv4 array elements: " . scalar @a_ipv4 . "\n";
 	print "INFO  : IPv6 array elements: " . scalar @a_ipv6 . "\n";
 
-	print "INFO  : IPv4 database first entry: " . $a_ipv4[0] . "\n";
-	print "INFO  : IPv4 database last  entry: " . $a_ipv4[-1] . "\n";
+	if (scalar(@a_ipv4) > 0) {
+		print "INFO  : IPv4 database first entry: " . $a_ipv4[0] . "\n";
+		print "INFO  : IPv4 database last  entry: " . $a_ipv4[-1] . "\n";
+	};
 
-	print "INFO  : IPv6 database first entry: " . $a_ipv6[0] . "\n";
-	print "INFO  : IPv6 database last  entry: " . $a_ipv6[-1] . "\n";
+	if (scalar(@a_ipv6) > 0) {
+		print "INFO  : IPv6 database first entry: " . $a_ipv6[0] . "\n";
+		print "INFO  : IPv6 database first entry: n/a (empty)\n";
+	};
 };
 
 untie @a_ipv4;
