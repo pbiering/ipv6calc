@@ -98,7 +98,7 @@ my $type;
 my $date;
 my $type_string;
 
-if ($file_input !~ /^(.*\/)?dbip-(city|country|full)-([0-9]{4})-([0-9]{2})(-test)?.csv(.gz)?$/o) {
+if ($file_input !~ /^(.*\/)?dbip-(city|country|full)-([0-9]{4})-([0-9]{2})(-(test|sample))?.csv(.gz)?$/o) {
 	print "ERROR : input file name is not a valid dbip filename: $file_input\n";
 	exit 1;
 };
@@ -409,7 +409,7 @@ if (! defined $opts{'q'}) {
 
 	if (scalar(@a_ipv6) > 0) {
 		print "INFO  : IPv6 database first entry: " . $a_ipv6[0] . "\n";
-		print "INFO  : IPv6 database first entry: n/a (empty)\n";
+		print "INFO  : IPv6 database last  entry: " . $a_ipv6[-1] . "\n";
 	};
 };
 
