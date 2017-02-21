@@ -723,6 +723,8 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 static void print_dbip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatoptions, const char *additionalstring) {
 	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
 
+#define TEST_DBIP_AVAILABLE(v)	((v != NULL) && (strlen(v) > 0))
+
 #define HUMAN_READABLE_DBIP(name, value) \
 				if (strlen(additionalstring) > 0) { \
 					fprintf(stdout, "DB-IP.com reports for %s %s: %s\n", additionalstring, name, value); \
@@ -738,8 +740,10 @@ static void print_dbip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatopti
 	int ret;
 
 	char returnedCountry[256] = "";
-	char returnedCity[256] = "";
-	char returnedRegion[256] = "";
+	//char returnedCity[256] = "";
+	//char returnedRegion[256] = "";
+	DBIP_Record record;
+	char tempstring[NI_MAXHOST];
 
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable);
 
@@ -754,6 +758,7 @@ static void print_dbip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatopti
 		};
 	};
 
+	/*
 	ret = libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(ipaddrp, returnedCity, sizeof(returnedCity), returnedRegion, sizeof(returnedRegion));
 	if ((ret == 0) && (strlen(returnedCity) > 0)) {
 		DEBUGPRINT_WA(DEBUG_showinfo, "DBIP IPv%d city database result", ipaddrp->proto);
@@ -772,6 +777,105 @@ static void print_dbip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatopti
 			printout2("DBIP_REGION", additionalstring, returnedRegion, formatoptions);
 		} else {
 			HUMAN_READABLE_DBIP("Region", returnedRegion)
+		};
+	};
+	*/
+
+	/* get all information */
+	ret = libipv6calc_db_wrapper_DBIP_all_by_addr(ipaddrp, &record);
+
+	if (ret == 0) {
+		if (TEST_DBIP_AVAILABLE(record.stateprov)) {
+			if ( machinereadable != 0 ) {
+				printout2("DBIP_REGION", additionalstring, record.stateprov, formatoptions);
+			} else {
+				HUMAN_READABLE_DBIP("Region", record.stateprov)
+			};
+		};
+
+		if (TEST_DBIP_AVAILABLE(record.district)) {
+			if ( machinereadable != 0 ) {
+				printout2("DBIP_DISTRICT", additionalstring, record.district, formatoptions);
+			} else {
+				HUMAN_READABLE_DBIP("District", record.district)
+			};
+		};
+
+		if (TEST_DBIP_AVAILABLE(record.city)) {
+			if ( machinereadable != 0 ) {
+				printout2("DBIP_CITY", additionalstring, record.city, formatoptions);
+			} else {
+				HUMAN_READABLE_DBIP("City", record.city)
+			};
+		};
+
+		if (TEST_DBIP_AVAILABLE(record.isp_name)) {
+			if ( machinereadable != 0 ) {
+				printout2("DBIP_ISP", additionalstring, record.isp_name, formatoptions);
+			} else {
+				HUMAN_READABLE_DBIP("ISP", record.isp_name)
+			};
+		};
+
+		if (record.latitude != 0) {
+			snprintf(tempstring, sizeof(tempstring), "%f", record.latitude);
+			if ( machinereadable != 0 ) {
+				printout2("DBIP_LATITUDE", additionalstring, tempstring, formatoptions);
+			} else {
+				HUMAN_READABLE_DBIP("Latitude", tempstring)
+			};
+		};
+
+		if (record.longitude != 0) {
+			snprintf(tempstring, sizeof(tempstring), "%f", record.longitude);
+			if ( machinereadable != 0 ) {
+				printout2("DBIP_LONGITUDE", additionalstring, tempstring, formatoptions);
+			} else {
+				HUMAN_READABLE_DBIP("Longitude", tempstring)
+			};
+		};
+
+		if (TEST_DBIP_AVAILABLE(record.zipcode)) {
+			if ( machinereadable != 0 ) {
+				printout2("DBIP_ZIPCODE", additionalstring, record.zipcode, formatoptions);
+			} else {
+				HUMAN_READABLE_DBIP("ZIP Code", record.zipcode)
+			};
+		};
+
+		if (TEST_DBIP_AVAILABLE(record.timezone_name)) {
+			// convert timezone offset into human readable value
+			snprintf(tempstring, sizeof(tempstring), "%+03d:%02d", (int) record.timezone_offset, (int) ((record.timezone_offset - (int) record.timezone_offset) * 60));
+			if ( machinereadable != 0 ) {
+				printout2("DBIP_TIMEZONE", additionalstring, tempstring, formatoptions);
+			} else {
+				HUMAN_READABLE_DBIP("Time Zone", tempstring)
+			};
+		};
+
+		if (TEST_DBIP_AVAILABLE(record.connection_type)) {
+			if ( machinereadable != 0 ) {
+				printout2("DBIP_NETSPEED", additionalstring, record.connection_type, formatoptions);
+			} else {
+				HUMAN_READABLE_DBIP("Network Speed", record.connection_type)
+			};
+		};
+
+		if (record.geoname_id != 0) {
+			snprintf(tempstring, sizeof(tempstring), "%d", record.geoname_id);
+			if ( machinereadable != 0 ) {
+				printout2("DBIP_GEONAMEID", additionalstring, tempstring, formatoptions);
+			} else {
+				HUMAN_READABLE_DBIP("Geoname ID", tempstring)
+			};
+		};
+
+		if (TEST_DBIP_AVAILABLE(record.organization_name)) {
+			if ( machinereadable != 0 ) {
+				printout2("DBIP_ORGNAME", additionalstring, record.organization_name, formatoptions);
+			} else {
+				HUMAN_READABLE_DBIP("Organization Name", record.organization_name)
+			};
 		};
 	};
 };
