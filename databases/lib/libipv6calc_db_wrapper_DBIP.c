@@ -859,8 +859,6 @@ int libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(const ipv6calc_ipad
 
 	static char resultstring[NI_MAXHOST];
 
-	char *data_ptr = "";
-
 	int DBIP_type = 0;
 
 	long int recno_max;
@@ -916,17 +914,14 @@ int libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(const ipv6calc_ipad
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "resultstring=%s", resultstring);
 
-	char datastring[NI_MAXHOST];
-
-	char *token, *cptr, **ptrptr;
-	ptrptr = &cptr;
+	char *token, *ptrptr;
 
 	int token_count = 0;
 
-	snprintf(datastring, sizeof(datastring), "%s", data_ptr);
-
 	// split result string
-	token = strtok_r(resultstring, ";", ptrptr);
+	ptrptr = resultstring;
+	token = strsep(&ptrptr, ";");
+
 	while (token != NULL) {
 		token_count++;
 
@@ -943,7 +938,7 @@ int libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(const ipv6calc_ipad
 		};
 
 		/* get next token */
-		token = strtok_r(NULL, ";", ptrptr);
+		token = strsep(&ptrptr, ";");
 	};
 
 	if (token_count != 1) {
@@ -977,8 +972,6 @@ int libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const ipv6calc_ipaddr *ipad
 	DB *dbp;
 
 	static char resultstring[NI_MAXHOST];
-
-	char *data_ptr = "";
 
 	int DBIP_type = 0;
 
@@ -1042,17 +1035,14 @@ int libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const ipv6calc_ipaddr *ipad
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "resultstring=%s", resultstring);
 
-	char datastring[NI_MAXHOST];
-
-	char *token, *cptr, **ptrptr;
-	ptrptr = &cptr;
+	char *token, *ptrptr;
 
 	int token_count = 0;
 
-	snprintf(datastring, sizeof(datastring), "%s", data_ptr);
-
 	// split result string
-	token = strtok_r(resultstring, ";", ptrptr);
+	ptrptr = resultstring;
+	token = strsep(&ptrptr, ";");
+
 	while (token != NULL) {
 		token_count++;
 
@@ -1076,7 +1066,7 @@ int libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const ipv6calc_ipaddr *ipad
 		};
 
 		/* get next token */
-		token = strtok_r(NULL, ";", ptrptr);
+		token = strsep(&ptrptr, ";");
 	};
 
 	if (token_count != city_token) {
@@ -1104,6 +1094,169 @@ END_libipv6calc_db_wrapper_close:
 	libipv6calc_db_wrapper_DBIP_close(dbp);
 
 END_libipv6calc_db_wrapper:
+	return(result);
+};
+
+
+/* all information */
+int libipv6calc_db_wrapper_DBIP_all_by_addr(const ipv6calc_ipaddr *ipaddrp, DBIP_Record *recordp) {
+	int result = -1;
+
+	DB *dbp;
+
+	static char resultstring[NI_MAXHOST];
+
+	int DBIP_type = 0;
+
+	long int recno_max;
+
+	// clear structure
+	snprintf(recordp->country  , DBIP_SIZE_COUNTRY  , "%s", "");
+	snprintf(recordp->stateprov, DBIP_SIZE_STATEPROV, "%s", "");
+	snprintf(recordp->district , DBIP_SIZE_DISTRICT , "%s", "");
+	snprintf(recordp->city     , DBIP_SIZE_CITY     , "%s", "");
+	snprintf(recordp->zipcode  , DBIP_SIZE_ZIPCODE  , "%s", "");
+	recordp->latitude = 0;
+	recordp->longitude = 0;
+	recordp->geoname_id = 0;
+	recordp->timezone_offset = 0;
+	snprintf(recordp->timezone_name    , DBIP_SIZE_TIMEZONE_NAME, "%s", "");
+	snprintf(recordp->isp_name         , DBIP_SIZE_ISP_NAME     , "%s", "");
+	snprintf(recordp->connection_type  , DBIP_SIZE_CONN_TYPE    , "%s", "");
+	snprintf(recordp->organization_name, DBIP_SIZE_ORG_NAME     , "%s", "");
+
+	int t_country = 1, t_stateprov = 0, t_district = 0, t_city = 0, t_zipcode = 0, t_latitude = 0 , t_longitude = 0, t_geoname_id = 0, \
+		t_timezone_offset = 0, t_timezone_name = 0, t_isp_name = 0, t_connection_type = 0, t_organization_name = 0;
+
+	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
+		DBIP_type = dbip_db_region_city_v4;
+	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
+		DBIP_type = dbip_db_region_city_v6;
+	} else {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Unsupported proto: %d", ipaddrp->proto);
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	// set token numbers
+	// country : country
+	// city    : country,stateprov,city
+	// location: country,stateprov,district,city,zipcode,latitude,longitude,geoname_id,timezone_offset,timezone_name
+	// isp     : country,isp_name,connection_type,organization_name
+	// full    : country,stateprov,district,city,zipcode,latitude,longitude,geoname_id,timezone_offset,timezone_name,isp_name,connection_type,organization_name
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "DBIP_type: %d", DBIP_type);
+	if ((DBIP_type == DBIP_DB_IPV4_CITY) || (DBIP_type == DBIP_DB_IPV6_CITY)) {
+		t_stateprov = 2;
+		t_city = 3;
+	} else if ((DBIP_type == DBIP_DB_IPV4_LOCATION) || (DBIP_type == DBIP_DB_IPV4_FULL) \
+                || (DBIP_type == DBIP_DB_IPV6_LOCATION) || (DBIP_type == DBIP_DB_IPV6_FULL)
+	) {
+		t_stateprov = 2;
+		t_district = 3;
+		t_city = 4;
+		t_zipcode = 5;
+		t_latitude = 6;
+		t_longitude = 7;
+		t_geoname_id = 8;
+		t_timezone_offset = 9;
+		t_timezone_name = 10;
+
+		if ((DBIP_type == DBIP_DB_IPV4_FULL) || (DBIP_type == DBIP_DB_IPV6_FULL)) {
+			t_isp_name = 11;
+			t_connection_type = 12;
+			t_organization_name = 13;
+		};
+	} else if ((DBIP_type == DBIP_DB_IPV4_ISP) || (DBIP_type == DBIP_DB_IPV6_ISP)) {
+		t_isp_name = 2;
+		t_connection_type = 3;
+		t_organization_name = 4;
+	} else {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Unsupported DBIP_type: %d", DBIP_type);
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	dbp = libipv6calc_db_wrapper_DBIP_open_type(DBIP_type, &recno_max);
+
+	if (dbp == NULL) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "Error opening DBIP by type");
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	result = libipv6calc_db_wrapper_get_entry_generic(
+		(void *) dbp,						// pointer to database
+		IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB,			// type of data_ptr
+		IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_FIRST_LAST,		// key type
+		(ipaddrp->proto == IPV6CALC_PROTO_IPV4) ? IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x2 : IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x4,	// key format
+		(ipaddrp->proto == IPV6CALC_PROTO_IPV4) ? 32 : 64,	// key length
+		IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY,		// search type
+		recno_max,						// number of rows
+		ipaddrp->addr[0],					// lookup key MSB
+		ipaddrp->addr[1],					// lookup key LSB
+		resultstring,						// data ptr
+		NULL							// function pointer
+	);
+
+	if (result < 0) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "no match found");
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "resultstring=%s", resultstring);
+
+	char *token, *ptrptr;
+
+	int token_count = 0;
+
+	// split result string
+	ptrptr = resultstring;
+	token = strsep(&ptrptr, ";");
+
+	while (token != NULL) {
+		token_count++;
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Database entry found %d: %s", token_count, token);
+
+		if (token_count == t_country) {
+			// country
+			snprintf(recordp->country  , DBIP_SIZE_COUNTRY  , "%s", token);
+		} else if (token_count == t_stateprov) {
+			snprintf(recordp->stateprov, DBIP_SIZE_STATEPROV, "%s", token);
+		} else if (token_count == t_district) {
+			snprintf(recordp->district , DBIP_SIZE_DISTRICT , "%s", token);
+		} else if (token_count == t_city) {
+			snprintf(recordp->city     , DBIP_SIZE_CITY     , "%s", token);
+		} else if (token_count == t_zipcode) {
+			snprintf(recordp->zipcode  , DBIP_SIZE_ZIPCODE  , "%s", token);
+		} else if (token_count == t_latitude) {
+			recordp->latitude = atof(token);
+		} else if (token_count == t_longitude) {
+			recordp->longitude = atof(token);
+		} else if (token_count == t_geoname_id) {
+			recordp->longitude = atol(token);
+		} else if (token_count == t_timezone_offset) {
+			recordp->timezone_offset = atof(token);
+		} else if (token_count == t_timezone_name) {
+			snprintf(recordp->timezone_name    , DBIP_SIZE_TIMEZONE_NAME, "%s", token);
+		} else if (token_count == t_isp_name) {
+			snprintf(recordp->isp_name         , DBIP_SIZE_ISP_NAME     , "%s", token);
+		} else if (token_count == t_connection_type) {
+			snprintf(recordp->connection_type  , DBIP_SIZE_CONN_TYPE    , "%s", token);
+		} else if (token_count == t_organization_name) {
+			snprintf(recordp->organization_name, DBIP_SIZE_ORG_NAME     , "%s", token);
+		};
+
+		/* get next token */
+		token = strsep(&ptrptr, ";");
+	};
+
+	result = 0;
+
+	DBIP_DB_USAGE_MAP_TAG(DBIP_type);
+
+	goto END_libipv6calc_db_wrapper; // keep db open
+
+END_libipv6calc_db_wrapper:
+
 	return(result);
 };
 

@@ -19,10 +19,10 @@
 #define DBIP_DB_IPV6_COUNTRY				2
 #define DBIP_DB_IPV4_CITY				3
 #define DBIP_DB_IPV6_CITY				4
-#define DBIP_DB_IPV4_LOCATION				5	// TODO testing
-#define DBIP_DB_IPV6_LOCATION				6	// TODO testing
-#define DBIP_DB_IPV4_ISP				7	// TODO testing
-#define DBIP_DB_IPV6_ISP				8	// TODO testing
+#define DBIP_DB_IPV4_ISP				5	// TODO testing
+#define DBIP_DB_IPV6_ISP				6	// TODO testing
+#define DBIP_DB_IPV4_LOCATION				7	// TODO testing
+#define DBIP_DB_IPV6_LOCATION				8	// TODO testing
 #define DBIP_DB_IPV4_FULL				9
 #define DBIP_DB_IPV6_FULL				10
 #define DBIP_DB_MAX					DBIP_DB_IPV6_FULL
@@ -60,6 +60,18 @@
 		, IPV6CALC_DB_DBIP_INTERNAL_FREE
 	},
 
+	// isp
+	{ DBIP_DB_IPV4_ISP
+		, "ipv6calc-dbip-ipv4-isp.db"
+		, "IPv4 ISP (COMM)", IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_DBIP_IPV4
+		, IPV6CALC_DB_DBIP_INTERNAL_COMM
+	},
+	{ DBIP_DB_IPV6_ISP
+		, "ipv6calc-dbip-ipv6-isp.db"
+		, "IPv6 ISP (COMM)", IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6
+		, IPV6CALC_DB_DBIP_INTERNAL_COMM
+	},
+
 	// location
 	{ DBIP_DB_IPV4_LOCATION
 		, "ipv6calc-dbip-ipv4-location.db"
@@ -71,18 +83,6 @@
 		, "ipv6calc-dbip-ipv6-location.db"
 		, "IPv6 Location (COMM)"
 		, IPV6CALC_DB_IPV6_TO_CITY | IPV6CALC_DB_IPV6_TO_REGION | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6 | IPV6CALC_DB_IPV6_TO_COUNTRY
-		, IPV6CALC_DB_DBIP_INTERNAL_COMM
-	},
-
-	// isp
-	{ DBIP_DB_IPV4_ISP
-		, "ipv6calc-dbip-ipv4-isp.db"
-		, "IPv4 ISP (COMM)", IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_DBIP_IPV4
-		, IPV6CALC_DB_DBIP_INTERNAL_COMM
-	},
-	{ DBIP_DB_IPV6_ISP
-		, "ipv6calc-dbip-ipv6-isp.db"
-		, "IPv6 ISP (COMM)", IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6
 		, IPV6CALC_DB_DBIP_INTERNAL_COMM
 	},
 
@@ -118,6 +118,34 @@ typedef struct
 } DBIP;
 
 
+// from https://db-ip.com/db/
+#define DBIP_SIZE_COUNTRY	2+1
+#define DBIP_SIZE_STATEPROV	80+1
+#define DBIP_SIZE_DISTRICT	80+1
+#define DBIP_SIZE_CITY		80+1
+#define DBIP_SIZE_ZIPCODE	20+1
+#define DBIP_SIZE_TIMEZONE_NAME	64+1
+#define DBIP_SIZE_ISP_NAME	128+1
+#define DBIP_SIZE_CONN_TYPE	8+1
+#define DBIP_SIZE_ORG_NAME	128+1
+typedef struct
+{
+	char     country[DBIP_SIZE_COUNTRY];
+	char     stateprov[DBIP_SIZE_STATEPROV];
+	char     district[DBIP_SIZE_CITY];
+	char     city[DBIP_SIZE_CITY];
+	char     zipcode[DBIP_SIZE_ZIPCODE];
+	float    latitude;
+	float    longitude;
+	uint32_t geoname_id;
+	float    timezone_offset;
+	char     timezone_name[DBIP_SIZE_TIMEZONE_NAME];
+	char     isp_name[DBIP_SIZE_ISP_NAME];
+	char     connection_type[DBIP_SIZE_CONN_TYPE];
+	char     organization_name[DBIP_SIZE_ORG_NAME];
+} DBIP_Record;
+
+
 #endif
 
 extern int         libipv6calc_db_wrapper_DBIP_wrapper_init(void);
@@ -146,5 +174,7 @@ extern char        *libipv6calc_db_wrapper_DBIP_database_info(const unsigned int
 
 extern int dbip_db_comm_to_free_switch_min_delta_months;
 extern int dbip_db_only_type;
+
+extern int          libipv6calc_db_wrapper_DBIP_all_by_addr(const ipv6calc_ipaddr *ipaddrp, DBIP_Record *recordp);
 
 #endif
