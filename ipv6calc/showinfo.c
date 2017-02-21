@@ -136,6 +136,16 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " DBIP_COUNTRY_SHORT=.. .       : Country code of IP address\n");
 	fprintf(stderr, " DBIP_CITY=...                 : City of IP address\n");
 	fprintf(stderr, " DBIP_REGION=...               : Region of IP address\n");
+	fprintf(stderr, " DBIP_DISTRICT=...             : District of IP address\n");
+	fprintf(stderr, " DBIP_ZIPCODE=...              : ZIP code of IP address\n");
+	fprintf(stderr, " DBIP_GEONAMEID=...            : GeoName ID of IP address\n");
+	fprintf(stderr, " DBIP_LATITUDE=...             : Latitude of IP address\n");
+	fprintf(stderr, " DBIP_LONGITUDE=...            : Longitude of IP address\n");
+	fprintf(stderr, " DBIP_TIMEZONE=...             : Time zone of IP address\n");
+	fprintf(stderr, " DBIP_TIMEZONE_NAME=...        : Time zone name of IP address\n");
+	fprintf(stderr, " DBIP_NETSPEED=...             : Net speed of IP address\n");
+	fprintf(stderr, " DBIP_ISP=...                  : ISP of IP address\n");
+	fprintf(stderr, " DBIP_ORGNAME=...              : Organization name of IP address\n");
 	fprintf(stderr, " DBIP_DATABASE_INFO=.. .       : Information about the used databases\n");
 #endif
 #ifdef SUPPORT_EXTERNAL
@@ -739,52 +749,23 @@ static void print_dbip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatopti
 
 	int ret;
 
-	char returnedCountry[256] = "";
-	//char returnedCity[256] = "";
-	//char returnedRegion[256] = "";
 	DBIP_Record record;
 	char tempstring[NI_MAXHOST];
 
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable);
 
-	ret = libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(ipaddrp, returnedCountry, sizeof(returnedCountry));
-	if ((ret == 0) && (strlen(returnedCountry) > 0)) {
-		DEBUGPRINT_WA(DEBUG_showinfo, "DBIP IPv%d country database result", ipaddrp->proto);
-
-		if ( machinereadable != 0 ) {
-			printout2("DBIP_COUNTRY_SHORT", additionalstring, returnedCountry, formatoptions);
-		} else {
-			HUMAN_READABLE_DBIP("Country Code", returnedCountry)
-		};
-	};
-
-	/*
-	ret = libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(ipaddrp, returnedCity, sizeof(returnedCity), returnedRegion, sizeof(returnedRegion));
-	if ((ret == 0) && (strlen(returnedCity) > 0)) {
-		DEBUGPRINT_WA(DEBUG_showinfo, "DBIP IPv%d city database result", ipaddrp->proto);
-
-		if ( machinereadable != 0 ) {
-			printout2("DBIP_CITY", additionalstring, returnedCity, formatoptions);
-		} else {
-			HUMAN_READABLE_DBIP("City", returnedCity)
-		};
-	};
-
-	if ((ret == 0) && (strlen(returnedRegion) > 0)) {
-		DEBUGPRINT_WA(DEBUG_showinfo, "DBIP IPv%d region database result", ipaddrp->proto);
-
-		if ( machinereadable != 0 ) {
-			printout2("DBIP_REGION", additionalstring, returnedRegion, formatoptions);
-		} else {
-			HUMAN_READABLE_DBIP("Region", returnedRegion)
-		};
-	};
-	*/
-
 	/* get all information */
 	ret = libipv6calc_db_wrapper_DBIP_all_by_addr(ipaddrp, &record);
 
 	if (ret == 0) {
+		if (TEST_DBIP_AVAILABLE(record.country)) {
+			if ( machinereadable != 0 ) {
+				printout2("DBIP_COUNTRY_SHORT", additionalstring, record.country, formatoptions);
+			} else {
+				HUMAN_READABLE_DBIP("Country Code", record.country)
+			};
+		};
+
 		if (TEST_DBIP_AVAILABLE(record.stateprov)) {
 			if ( machinereadable != 0 ) {
 				printout2("DBIP_REGION", additionalstring, record.stateprov, formatoptions);
@@ -844,6 +825,13 @@ static void print_dbip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatopti
 		};
 
 		if (TEST_DBIP_AVAILABLE(record.timezone_name)) {
+			if ( machinereadable != 0 ) {
+				printout2("DBIP_TIMEZONE_NAME", additionalstring, record.timezone_name, formatoptions);
+			} else {
+				HUMAN_READABLE_DBIP("Time Zone Name", record.timezone_name)
+			};
+
+			// timezone_name set -> timezone_offset considered as valid
 			// convert timezone offset into human readable value
 			snprintf(tempstring, sizeof(tempstring), "%+03d:%02d", (int) record.timezone_offset, (int) ((record.timezone_offset - (int) record.timezone_offset) * 60));
 			if ( machinereadable != 0 ) {
@@ -851,6 +839,7 @@ static void print_dbip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatopti
 			} else {
 				HUMAN_READABLE_DBIP("Time Zone", tempstring)
 			};
+
 		};
 
 		if (TEST_DBIP_AVAILABLE(record.connection_type)) {

@@ -3,7 +3,7 @@
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
 # Version    : $Id$
-# Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
 # Simple Perl web interface and security wrapper
@@ -635,6 +635,50 @@ my %text = (
 		'de' => "db-ip.com Stadt",
 		'en' => "db-ip.com city",
 	},
+	'DBIP_DISTRICT' => {
+		'de' => "db-ip.com Bezirk",
+		'en' => "db-ip.com district",
+	},
+	'DBIP_DISTRICT' => {
+		'de' => "db-ip.com Bezirk",
+		'en' => "db-ip.com district",
+	},
+	'DBIP_ZIPCODE' => {
+		'de' => "db-ip.com Postleitzahl",
+		'en' => "db-ip.com ZIP code",
+	},
+	'DBIP_TIMEZONE' => {
+		'de' => "db-ip.com Zeitzone",
+		'en' => "db-ip.com Time Zone",
+	},
+	'DBIP_TIMEZONE_NAME' => {
+		'de' => "db-ip.com Zeitzonen Name",
+		'en' => "db-ip.com Time Zone Name",
+	},
+	'DBIP_NETSPEED' => {
+		'de' => "db-ip.com Netzgeschwindigkeit",
+		'en' => "db-ip.com Net Speed",
+	},
+	'DBIP_LATITUDE' => {
+		'de' => "db-ip.com Breitengrad",
+		'en' => "db-ip.com latitude",
+	},
+	'DBIP_LONGITUDE' => {
+		'de' => "db-ip.com Laengengrad",
+		'en' => "db-ip.com longitude",
+	},
+	'DBIP_ISP' => {
+		'de' => "db-ip.com ISP",
+		'en' => "db-ip.com ISP",
+	},
+	'DBIP_GEONAMEID' => {
+		'de' => "db-ip.com GeoName ID",
+		'en' => "db-ip.com GeoName ID",
+	},
+	'DBIP_ORGNAME' => {
+		'de' => "db-ip.com Organisation",
+		'en' => "db-ip.com Organization",
+	},
 	'EXTERNAL_COUNTRY_SHORT' => {
 		'de' => "External DB Laenderkennung",
 		'en' => "External DB country code",
@@ -663,6 +707,10 @@ my %text = (
 		'de' => "Region",
 		'en' => "Region",
 	},
+	'DISTRICT' => {
+		'de' => "Bezirk",
+		'en' => "District",
+	},
 	'CITY' => {
 		'de' => "Stadt",
 		'en' => "City",
@@ -687,6 +735,14 @@ my %text = (
 		'de' => "Postleitzahl",
 		'en' => "ZIP code",
 	},
+	'GEONAMEID' => {
+		'de' => "GeoName ID",
+		'en' => "GeoName ID",
+	},
+	'ORGNAME' => {
+		'de' => "Organisation",
+		'en' => "Organization",
+	},
 	'AS_TEXT' => {
 		'de' => "Autonomous System der IP Adresse",
 		'en' => "Autonomous System of IP address",
@@ -702,6 +758,10 @@ my %text = (
 	'TIMEZONE' => {
 		'de' => "Zeitzone",
 		'en' => "Time Zone",
+	},
+	'TIMEZONE_NAME' => {
+		'de' => "Zeitzonen Name",
+		'en' => "Time Zone Name",
 	},
 	'NETSPEED' => {
 		'de' => "Netzgeschwindigkeit",
