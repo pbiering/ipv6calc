@@ -1,4 +1,8 @@
 Credits to
+
+* Paul Streander
+   for testing db-ip.com "full" database support
+
 * Nikoli
    for supplying compilation compatibility patches
 
@@ -83,4 +87,4 @@ Credits to
       17 years ]
 
 
-	Peter Bieringer, 2014-02-02
+	Peter Bieringer, 2017-02-21
