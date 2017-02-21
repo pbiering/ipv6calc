@@ -1232,7 +1232,7 @@ int libipv6calc_db_wrapper_DBIP_all_by_addr(const ipv6calc_ipaddr *ipaddrp, DBIP
 		} else if (token_count == t_longitude) {
 			recordp->longitude = atof(token);
 		} else if (token_count == t_geoname_id) {
-			recordp->longitude = atol(token);
+			recordp->geoname_id = atol(token);
 		} else if (token_count == t_timezone_offset) {
 			recordp->timezone_offset = atof(token);
 		} else if (token_count == t_timezone_name) {
