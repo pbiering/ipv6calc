@@ -98,19 +98,19 @@ my $type;
 my $date;
 my $type_string;
 
-if ($file_input !~ /^(.*\/)?dbip-(city|country|full)-([0-9]{4})-([0-9]{2})(-(test|sample))?.csv(.gz)?$/o) {
+if ($file_input !~ /^(.*\/)?dbip-(city|country|full)-([0-9]{4})-([0-9]{2})(-(test|sample))?\.csv(\.gz)?$/o) {
 	print "ERROR : input file name is not a valid dbip filename: $file_input\n";
 	exit 1;
 };
 
-if (defined $6) {
+$date = $3 . $4 . "01";
+$type_string = $2;
+
+if ($file_input =~ /\.gz$/o) {
 	print "INFO  : .gz suffix found on: $file_input\n" if (! defined $opts{'q'});
 	$file_type = "cvs.gz";
 };
 
-$date = $3 . $4 . "01";
-
-$type_string = $2;
 
 my $csv_fields_required = 0;
 
