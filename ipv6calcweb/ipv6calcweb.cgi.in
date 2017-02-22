@@ -192,6 +192,9 @@ sub find_dir(@) {
 # Base URL for RFCs
 my $url_rfc = "https://tools.ietf.org/html/";
 
+# Base URL for GeoName service
+my $url_geoname_by_id = "http://api.geonames.org/get?geonameId=#GEONAME_ID#&username=demo";
+
 # Whois server urls
 my %url_whoisservers = (
 	'RIPENCC' => {
@@ -671,7 +674,7 @@ my %text = (
 		'de' => "db-ip.com ISP",
 		'en' => "db-ip.com ISP",
 	},
-	'DBIP_GEONAMEID' => {
+	'DBIP_GEONAME_ID' => {
 		'de' => "db-ip.com GeoName ID",
 		'en' => "db-ip.com GeoName ID",
 	},
@@ -735,7 +738,7 @@ my %text = (
 		'de' => "Postleitzahl",
 		'en' => "ZIP code",
 	},
-	'GEONAMEID' => {
+	'GEONAME_ID' => {
 		'de' => "GeoName ID",
 		'en' => "GeoName ID",
 	},
@@ -1335,6 +1338,13 @@ sub print_infohash ($$$;$) {
 				$flag_whoisurl = 0;
 			};
 		};
+
+		if ($key =~ /GEONAME_ID/o) {
+			$url = $url_geoname_by_id;
+			$url =~ s/#GEONAME_ID#/$$phash{$key}/g;
+			&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
+			$flag_whoisurl = 1; # workaround to close a tag below
+		};
 		
 		&print_tagoutput ( "<font size=\"-1\">" ) if ($count_key_embedded > 0);
 
@@ -1404,12 +1414,25 @@ sub print_infohash ($$$;$) {
 				&print_tagoutput ( "</font></td>\n" );
 			};
 
+			# print value
 			($r, $g, $b) = (240, 240, 255);
 			for my $db (sort @key_db_tokens) {
 				&print_tagoutput ( "        <td style=\"background-color: rgb(" . $r . "," . $g . "," . $b . ");\"><font size=\"-1\">" );
 				my $key_result = $db . "_" . $key;
 				if (defined $$phash{$key_result}) {
+					my $flag = 0;
+					if ($key_lookup =~ /GEONAME_ID/o) {
+						my $url = $url_geoname_by_id;
+						$url =~ s/#GEONAME_ID#/$$phash{$key_result}/g;
+						&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
+						$flag = 1;
+					};
+
 					print $$phash{$key_result};
+
+					if ( $flag == 1 ) {
+						&print_tagoutput ( "</a>" );
+					};
 				} else {
 					print "-";
 				};

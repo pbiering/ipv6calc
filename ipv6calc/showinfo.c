@@ -138,7 +138,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " DBIP_REGION=...               : Region of IP address\n");
 	fprintf(stderr, " DBIP_DISTRICT=...             : District of IP address\n");
 	fprintf(stderr, " DBIP_ZIPCODE=...              : ZIP code of IP address\n");
-	fprintf(stderr, " DBIP_GEONAMEID=...            : GeoName ID of IP address\n");
+	fprintf(stderr, " DBIP_GEONAME_ID=...           : GeoName ID of IP address\n");
 	fprintf(stderr, " DBIP_LATITUDE=...             : Latitude of IP address\n");
 	fprintf(stderr, " DBIP_LONGITUDE=...            : Longitude of IP address\n");
 	fprintf(stderr, " DBIP_TIMEZONE=...             : Time zone of IP address\n");
@@ -853,7 +853,7 @@ static void print_dbip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatopti
 		if (record.geoname_id != 0) {
 			snprintf(tempstring, sizeof(tempstring), "%d", record.geoname_id);
 			if ( machinereadable != 0 ) {
-				printout2("DBIP_GEONAMEID", additionalstring, tempstring, formatoptions);
+				printout2("DBIP_GEONAME_ID", additionalstring, tempstring, formatoptions);
 			} else {
 				HUMAN_READABLE_DBIP("Geoname ID", tempstring)
 			};
