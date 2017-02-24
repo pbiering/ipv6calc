@@ -9,6 +9,9 @@ IPv4/IPv6 assignment databases:
  ftp://lacnic.net/pub/stats/lacnic/delegated-lacnic-latest
  ftp://ftp.afrinic.net/pub/stats/afrinic/delegated-afrinic-latest
 
+LISP
+ http://www.lisp4.net/lisp-site/site-db
+
 AS databases:
  https://www.iana.org/assignments/as-numbers/as-numbers.txt
 

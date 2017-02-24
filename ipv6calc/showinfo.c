@@ -905,11 +905,11 @@ static void print_external(const ipv6calc_ipaddr *ipaddrp, const uint32_t format
 
 /* print IPv4 address */
 static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formatoptions, const char *string) {
-	char tempstring[NI_MAXHOST] = "", tempstring2[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
+	char tempstring[NI_MAXHOST] = "", tempstring2[NI_MAXHOST] = "", tempstring3[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
 	char tempipv4string[NI_MAXHOST] = "";
 	char embeddedipv4string[NI_MAXHOST] = "";
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable), as_num32 = ASNUM_AS_UNKNOWN;
-	int retval, i, j, retval_anon = 1;
+	int retval, i, j, retval_anon = 1, r;
 	ipv6calc_ipv4addr ipv4addr_anon, *ipv4addr_anon_ptr;
 	uint16_t cc_index = COUNTRYCODE_INDEX_UNKNOWN;
 	char *as_text = NULL;
@@ -1085,6 +1085,14 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	} else {
 		libipv6calc_db_wrapper_registry_string_by_ipv4addr(ipv4addrp, tempstring, sizeof(tempstring));
 		snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+
+		DEBUGPRINT_NA(DEBUG_showinfo, "try to get additional information");
+		r = libipv6calc_db_wrapper_BuiltIn_info_by_ipv4addr(ipv4addrp, tempstring3, sizeof(tempstring3));
+		if (r == 0) {
+			// info found, append to registry
+			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
+			snprintf(tempstring2, sizeof(tempstring2), "%s(%s)", tempstring, tempstring3);
+		};
 	};
 
 	if (machinereadable != 0) {

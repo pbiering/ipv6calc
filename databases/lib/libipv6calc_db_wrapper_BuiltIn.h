@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.h
  * Version    : $Id$
- * Copyright  : 2013-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_BuiltIn.c
@@ -57,6 +57,14 @@ typedef struct {
 } s_ipv4addr_assignment;
 
 
+/* IPv4 address info structure */
+typedef struct {
+	const uint32_t first;
+	const uint32_t last;
+	const char*    info;
+} s_ipv4addr_info;
+
+
 /* IPv6 address assignment structure */
 typedef struct {
 	const uint32_t ipv6addr_00_31;
@@ -66,6 +74,17 @@ typedef struct {
 	const uint8_t  prefixlength;	/* prefix length (0-128) 8 bit*/
 	const uint8_t  registry;
 } s_ipv6addr_assignment;
+
+
+/* IPv6 address info structure */
+typedef struct {
+	const uint32_t ipv6addr_00_31;
+	const uint32_t ipv6addr_32_63;
+	const uint32_t ipv6mask_00_31;
+	const uint32_t ipv6mask_32_63;
+	const uint8_t  prefixlength;	/* prefix length (0-128) 8 bit*/
+	const char*    info;
+} s_ipv6addr_info;
 
 #endif
 
@@ -88,6 +107,7 @@ extern int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(ch
 
 // IPv4 Registry
 extern int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp);
+extern int libipv6calc_db_wrapper_BuiltIn_info_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, char *string, const size_t string_len);
 
 // IPv6 Registry
 extern int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp);

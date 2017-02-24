@@ -2,8 +2,8 @@
 #
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: ipv6calc-create-registry-list-ipv4.pl,v 1.2 2015/04/18 08:04:20 ds6peter Exp $
-# Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Version    : $Id$
+# Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #
 # Information:
@@ -30,29 +30,34 @@ my $debug = 0;
 #$debug |= 0x04; # assignments_iana
 #$debug |= 0x08; # assignments_iana
 #$debug |= 0x10; # assignments gap closing
+#$debug |= 0x100; # assignments LISP
 #$debug |= 0x1000; # TLD store
 
 sub help {
-	print qq|
-Usage: $progname [-S <SRC-DIR>] [-D <DST-DIR>] [-H] [-B [-A]]
+	print qq#
+Usage: $progname [-S <SRC-DIR>] [-D <DST-DIR>] -H|B [-A] [-d <debuglevel>]
 	-S <SRC-DIR>	source directory
 	-D <DST-DIR>	destination directory
 	-H		create header file(s)
 	-B		create Berkeley DB file(s)
 	-A		atomic operation (generate .new and move on success)
-
+	-d <debuglevel> debug level
 	-h		this online help
 
-|;
+#;
 	exit 0;
 };
 
 # parse options
-our ($opt_h, $opt_S, $opt_D, $opt_B, $opt_H, $opt_A);
-getopts('hS:D:BHA') || help();
+our ($opt_h, $opt_S, $opt_D, $opt_B, $opt_H, $opt_A, $opt_d);
+getopts('d:hS:D:BHA') || help();
 
 if (defined $opt_h) {
 	help();
+};
+
+if (defined $opt_d) {
+	$debug = $opt_d;
 };
 
 unless (defined $opt_H || defined $opt_B) {
@@ -66,6 +71,7 @@ my $file_dst_h;
 my $dir_src;
 my $dir_dst;
 my $global_file;
+my $lisp_file;
 my @files;
 
 ## source file handling
@@ -74,6 +80,7 @@ if (defined $opt_S) {
 	$dir_src .= "/" if ($dir_src !~ /\/$/o);
 
 	$global_file = $dir_src . "ipv4-address-space.xml";
+	$lisp_file = $dir_src . "site-db";
 
 	@files = (
 		$dir_src . "delegated-arin-extended-latest",
@@ -87,6 +94,7 @@ if (defined $opt_S) {
 	$dir_src = "../registries/";
 
 	$global_file = $dir_src . "iana/ipv4-address-space.xml";
+	$lisp_file = $dir_src . "lisp/site-db";
 
 	@files = (
 		$dir_src . "arin/delegated-arin-extended-latest",
@@ -170,8 +178,7 @@ sub find_start_iana {
 };
 
 
-
-# Should't be used, a little bit obsolete
+## global IANA assignment, last resort fallback
 sub proceed_global {
 	my $ipv4; my $length;
 	my ($start, $distance);
@@ -243,6 +250,82 @@ sub proceed_global {
 		$assignments_iana{$start}->{'distance'} = $distance;
 	    };
 	};
+};
+
+## LISP
+sub proceed_lisp {
+	# 1: map-server
+	# 2: site - site name
+	# 3: instance
+	# 4: eid - eid prefix
+	# 5: registered - yes or no
+	# 6: who - ip addr of who last registered, blank & -- mean none
+	# 7: proxy - yes or no (or blank)
+	# 8: ttl - in what ever format the map-server reports it
+	# 9: nrloc - how many rlocs in field 10
+	# 10: rlocs - seperated by ';' and with (up|down)
+	# 11: timestamp - when data was collected, in UTC 
+	#
+	# Example:
+	# cisco-sjc-mr-ms-1|akennedy-xtr|0|153.16.9.64/28|no||no||0||2017.0223.0600
+	# cisco-sjc-mr-ms-1|akennedy-xtr|0|2610:d0:1233::/48|no||no||0||2017.0223.0600
+
+	my $ipv4; my $length;
+	my ($start, $distance);
+
+	print "INFO  : proceed LISP data file (TXT): " . $lisp_file . "\n";
+
+	open(my $FILE, "<", $lisp_file) || die "Cannot open file: $lisp_file";
+
+	my ($map, $site, $instance, $eid, $registered, $who, $proxy, $ttl, $nrloc, $rloc, $timestamp);
+	my $reg = "LISP";
+	my $line;
+	my $line_number = 0;
+
+	while (<$FILE>) {
+		$line = $_;
+		$line_number++;
+		chomp $line;
+
+		printf "LISP read   : $line\n" if ($debug & 0x100);
+
+		($map, $site, $instance, $eid, $registered, $who, $proxy, $ttl, $nrloc, $rloc, $timestamp) = split /\|/, $line;
+
+		if ($line_number == 1) {
+			$timestamp =~ /^([0-9]{4})\.([0-9]{4})/o;
+			$date_created{$reg} = $1 . $2;
+		};
+
+		if ($eid !~ /^([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})\/([0-9]{1,2})$/o) {
+			# not IPv4
+			next;
+		};
+
+		printf "LISP process: $line\n" if ($debug & 0x100);
+
+		printf "LISP convert: IPv4=$1 mask=$2\n" if ($debug & 0x100);
+
+		# convert IPv4 address to decimal
+		my $start_reg = &ipv4_to_dec($1);
+		my $distance_reg = 2 ** (32 - $2);
+
+		printf "LISP check  : IPv4=$1 mask=$2\n" if ($debug & 0x100);
+		if (
+			(($start_reg & 0xffff0000) != 0x99100000)
+		) {
+			# not in assigned LISP space
+			printf "LISP skip  : IPv4=$start_reg mask=$distance_reg\n" if ($debug & 0x100);
+			next;
+		};
+
+
+		printf "LISP store  : reg=%-10s start=%08x distance=%08x\n", $reg, $start_reg, $distance_reg if ($debug & 0x100);
+		$assignments{$start_reg}->{'distance'} = $distance_reg;
+		$assignments{$start_reg}->{'registry'} = $reg;
+		$assignments{$start_reg}->{'info'} = $site;
+	};
+
+	close($FILE);
 };
 
 &proceed_global();
@@ -395,6 +478,8 @@ foreach my $file (@files) {
 	};
 };
 
+&proceed_lisp();
+
 my $now_string = strftime "%Y%m%d-%H%M%S%z %Z", localtime;
 my $string = "";
 for my $reg (sort keys %date_created) {
@@ -418,7 +503,7 @@ if (defined $opt_H) {
 	print $OUT " * Version       : \$I";
 	print $OUT "d:\$\n";
 	print $OUT qq| * Generated     : $now_string
- * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
+ * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC, LISP
  *
  * Information:
  *  Additional header file for databases/lib/libipv6calc_db_wrapper_BuiltIn.c
@@ -429,9 +514,9 @@ if (defined $opt_H) {
 |;
 
 	# print creation dates
-	print $OUT "\/\*\@unused\@\*\/ static const char* dbipv4addr_registry_status __attribute__ ((__unused__)) = \"$string\";\n";
+	print $OUT "static const char* dbipv4addr_registry_status __attribute__ ((__unused__)) = \"$string\";\n";
 
-	print $OUT "\/\*\@unused\@\*\/ static const time_t dbipv4addr_registry_unixtime __attribute__ ((__unused__)) = " . time . ";\n";
+	print $OUT "static const time_t dbipv4addr_registry_unixtime __attribute__ ((__unused__)) = " . time . ";\n";
 
 	# Main data structure
 	print $OUT qq|
@@ -444,16 +529,17 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 		my $distance = $assignments{$ipv4}->{'distance'};
 		my $registry = $assignments{$ipv4}->{'registry'};
 
-		printf $OUT "\t{ 0x%08x, 0x%08x, REGISTRY_%-10s }, // %-15s - %-15s\n", $ipv4, ($ipv4 + $distance - 1), $registry, &dec_to_ipv4($ipv4), &dec_to_ipv4($ipv4 + $distance - 1);
+		printf $OUT "\t{ 0x%08x, 0x%08x, REGISTRY_%-10s }, // %-15s - %s\n", $ipv4, ($ipv4 + $distance - 1), $registry, &dec_to_ipv4($ipv4), &dec_to_ipv4($ipv4 + $distance - 1);
 	};
 
 	print $OUT qq|};
 	|;
 
-	# IANA assignment
+
+	## IANA assignment
 	print $OUT qq|
-	static const s_ipv4addr_assignment dbipv4addr_assignment_iana[] = {
-	|;
+static const s_ipv4addr_assignment dbipv4addr_assignment_iana[] = {
+|;
 
 	printf $OUT "\t//first     , last      , registry  \n";
 
@@ -461,11 +547,32 @@ static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 		my $distance = $assignments_iana{$ipv4}->{'distance'};
 		my $registry = $assignments_iana{$ipv4}->{'registry'};
 
-		printf $OUT "\t{ 0x%08x, 0x%08x, REGISTRY_%-10s }, // %-15s - %-15s\n", $ipv4, ($ipv4 + $distance - 1), $registry, &dec_to_ipv4($ipv4), &dec_to_ipv4($ipv4 + $distance - 1);
+		printf $OUT "\t{ 0x%08x, 0x%08x, REGISTRY_%-10s }, // %-15s - %s\n", $ipv4, ($ipv4 + $distance - 1), $registry, &dec_to_ipv4($ipv4), &dec_to_ipv4($ipv4 + $distance - 1);
 	};
 
 	print $OUT "};\n";
 
+
+	## INFO table
+	print $OUT qq|
+static const s_ipv4addr_info dbipv4addr_info[] = {
+|;
+
+	printf $OUT "\t//first     , last      , registry  \n";
+
+	foreach my $ipv4 (sort { $a <=> $b } keys %assignments) {
+		next if (! defined $assignments{$ipv4}->{'info'});
+
+		my $distance = $assignments{$ipv4}->{'distance'};
+		my $info = $assignments{$ipv4}->{'info'};
+
+		printf $OUT "\t{ 0x%08x, 0x%08x, %-30s }, // %-15s - %s\n", $ipv4, ($ipv4 + $distance - 1), "\"" . $info . "\"", &dec_to_ipv4($ipv4), &dec_to_ipv4($ipv4 + $distance - 1);
+	};
+
+	print $OUT "};\n";
+
+
+	## END
 	print "INFO  : finished creation of header file: " . $file_dst_h . "\n";
 };
 

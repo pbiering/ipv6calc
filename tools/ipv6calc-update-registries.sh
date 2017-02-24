@@ -3,7 +3,7 @@
 # Project    : ipv6calc/databases/registries
 # File       : update-registries.sh
 # Version    : $Id$
-# Copyright  : 2002-2016 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces ../ipv4-assignment/update-ipv4-assignment.sh
 #               replaces ../ipv6-assignment/update-ipv6-assignment.sh
 #
@@ -22,6 +22,7 @@ apnic	http://ftp.apnic.net/stats/apnic/		delegated-apnic-latest			txt
 lacnic	http://ftp.lacnic.net/pub/stats/lacnic/		delegated-lacnic-latest			txt
 afrinic	http://ftp.afrinic.net/pub/stats/afrinic/	delegated-afrinic-latest		txt
 iana    https://www.iana.org/assignments/as-numbers/	as-numbers.txt				txt
+lisp	http://www.lisp4.net/lisp-site/			site-db					txt
 END
 }
 
@@ -32,6 +33,8 @@ Usage: $(basename "$0") [-D <DST-DIR>] [-h|?] [-d] [-q]
 
 	-d		dry-run/debug
 	-q		more quiet (default if called by cron)
+	-R <registry>	download only given registry:
+			 $(get_urls | awk '{ printf $1 " " }')
 	-h|?		this online help
 END
 }
@@ -41,7 +44,7 @@ dir_dst=""
 dry_run=0
 
 ## parse options
-while getopts "\?hdqD:" opt; do 
+while getopts "\?hdqR:D:" opt; do 
 	case $opt in
 	    D)
 		if [ -d "$OPTARG" ]; then
@@ -50,6 +53,9 @@ while getopts "\?hdqD:" opt; do
 			echo "ERROR : given destination directory doesn't exist: $OPTARG"
 			exit 1
 		fi
+		;;
+	    R)
+		registry="$OPTARG"
 		;;
 	    d)
 		dry_run=1
@@ -83,6 +89,11 @@ else
 fi
 
 get_urls | while read subdir url filename format flag; do
+	if [ -n "$registry" -a "$registry" != "$subdir" ]; then
+		echo "NOTICE: registry option specified, skip: $subdir"
+		continue
+	fi
+
 	if [ -z "$dir_dst" ]; then
 		echo "DEBUG : check for sub-directory: $subdir"
 		if [ ! -d "$subdir" ]; then
