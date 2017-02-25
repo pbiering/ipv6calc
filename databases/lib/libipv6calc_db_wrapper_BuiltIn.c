@@ -77,7 +77,7 @@ int libipv6calc_db_wrapper_BuiltIn_wrapper_init(void) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called");
 
 	// add features to implemented
-	wrapper_features_by_source_implemented[IPV6CALC_DB_SOURCE_BUILTIN] |= IPV6CALC_DB_AS_TO_REGISTRY | IPV6CALC_DB_CC_TO_REGISTRY | IPV6CALC_DB_IPV4_TO_REGISTRY | IPV6CALC_DB_IPV6_TO_REGISTRY | IPV6CALC_DB_IEEE_TO_INFO;
+	wrapper_features_by_source_implemented[IPV6CALC_DB_SOURCE_BUILTIN] |= IPV6CALC_DB_AS_TO_REGISTRY | IPV6CALC_DB_CC_TO_REGISTRY | IPV6CALC_DB_IPV4_TO_REGISTRY | IPV6CALC_DB_IPV6_TO_REGISTRY | IPV6CALC_DB_IEEE_TO_INFO | IPV6CALC_DB_IPV4_TO_INFO | IPV6CALC_DB_IPV6_TO_INFO;
 
 #ifdef SUPPORT_BUILTIN
 #ifdef SUPPORT_DB_AS_REG
@@ -91,12 +91,12 @@ int libipv6calc_db_wrapper_BuiltIn_wrapper_init(void) {
 #endif
 
 #ifdef SUPPORT_DB_IPV4_REG
-	wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] |= IPV6CALC_DB_IPV4_TO_REGISTRY;
+	wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] |= IPV6CALC_DB_IPV4_TO_REGISTRY | IPV6CALC_DB_IPV4_TO_INFO;
 	builtin_ipv4       = 1;
 #endif
 
 #ifdef SUPPORT_DB_IPV6_REG
-	wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] |= IPV6CALC_DB_IPV6_TO_REGISTRY;
+	wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] |= IPV6CALC_DB_IPV6_TO_REGISTRY | IPV6CALC_DB_IPV6_TO_INFO;
 	builtin_ipv6       = 1;
 #endif
 

@@ -35,8 +35,8 @@ typedef struct {
 
 /* ipv4addr ptr -> ipaddr */
 #define CONVERT_IPV4ADDRP_IPADDR(ipv4addrp, ipaddr) \
-	ipaddr.typeinfo1	= ipv4addrp->typeinfo; \
-	ipaddr.typeinfo2	= ipv4addrp->typeinfo2; \
+	ipaddr.typeinfo1	= (*ipv4addrp).typeinfo; \
+	ipaddr.typeinfo2	= (*ipv4addrp).typeinfo2; \
 	ipaddr.addr[0]		= ipv4addr_getdword(ipv4addrp); \
 	ipaddr.addr[1]		= 0; \
 	ipaddr.addr[2]		= 0; \
@@ -57,8 +57,8 @@ typedef struct {
 
 /* ipv6addr ptr -> ipaddr */
 #define CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr) \
-	ipaddr.typeinfo1	= ipv6addrp->typeinfo; \
-	ipaddr.typeinfo2	= ipv6addrp->typeinfo2; \
+	ipaddr.typeinfo1	= (*ipv6addrp).typeinfo; \
+	ipaddr.typeinfo2	= (*ipv6addrp).typeinfo2; \
 	ipaddr.addr[0]		= ipv6addr_getdword(ipv6addrp, 0); \
 	ipaddr.addr[1]		= ipv6addr_getdword(ipv6addrp, 1); \
 	ipaddr.addr[2]		= ipv6addr_getdword(ipv6addrp, 2); \

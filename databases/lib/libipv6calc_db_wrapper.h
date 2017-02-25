@@ -45,7 +45,9 @@ extern uint32_t wrapper_features_by_source_implemented[];
 #define IPV6CALC_DB_FEATURE_NUM_IPV4_TO_REGION		12
 #define IPV6CALC_DB_FEATURE_NUM_IPV6_TO_REGION		13
 #define IPV6CALC_DB_FEATURE_NUM_IEEE_TO_INFO		14
-#define IPV6CALC_DB_FEATURE_NUM_MAX			IPV6CALC_DB_FEATURE_NUM_IEEE_TO_INFO
+#define IPV6CALC_DB_FEATURE_NUM_IPV4_TO_INFO		15
+#define IPV6CALC_DB_FEATURE_NUM_IPV6_TO_INFO		16
+#define IPV6CALC_DB_FEATURE_NUM_MAX			IPV6CALC_DB_FEATURE_NUM_IPV6_TO_INFO
 
 // define generic features
 #define IPV6CALC_DB_AS_TO_REGISTRY		(1 << IPV6CALC_DB_FEATURE_NUM_AS_TO_REGISTRY)
@@ -70,18 +72,22 @@ extern uint32_t wrapper_features_by_source_implemented[];
 
 #define IPV6CALC_DB_IEEE_TO_INFO		(1 << IPV6CALC_DB_FEATURE_NUM_IEEE_TO_INFO)
 
+#define IPV6CALC_DB_IPV4_TO_INFO		(1 << IPV6CALC_DB_FEATURE_NUM_IPV4_TO_INFO)
+#define IPV6CALC_DB_IPV6_TO_INFO		(1 << IPV6CALC_DB_FEATURE_NUM_IPV6_TO_INFO)
+
+
 // define database specific generic features
-#define IPV6CALC_DB_GEOIP_IPV4			0x00010000
-#define IPV6CALC_DB_GEOIP_IPV6			0x00020000
+#define IPV6CALC_DB_GEOIP_IPV4			0x01000000
+#define IPV6CALC_DB_GEOIP_IPV6			0x02000000
 
-#define IPV6CALC_DB_IP2LOCATION_IPV4		0x00100000
-#define IPV6CALC_DB_IP2LOCATION_IPV6		0x00200000
+#define IPV6CALC_DB_IP2LOCATION_IPV4		0x04000000
+#define IPV6CALC_DB_IP2LOCATION_IPV6		0x08000000
 
-#define IPV6CALC_DB_DBIP_IPV4			0x01000000
-#define IPV6CALC_DB_DBIP_IPV6			0x02000000
+#define IPV6CALC_DB_DBIP_IPV4			0x10000000
+#define IPV6CALC_DB_DBIP_IPV6			0x20000000
 
-#define IPV6CALC_DB_EXTERNAL_IPV4		0x10000000
-#define IPV6CALC_DB_EXTERNAL_IPV6		0x20000000
+#define IPV6CALC_DB_EXTERNAL_IPV4		0x40000000
+#define IPV6CALC_DB_EXTERNAL_IPV6		0x80000000
 
 
 static const s_formatoption ipv6calc_db_features[] = {
@@ -106,6 +112,8 @@ static const s_formatoption ipv6calc_db_features[] = {
 	{ IPV6CALC_DB_IPV6_TO_REGION	, "DB_IPV6_REGION"	, "IPv6 to Region database" },
 	{ IPV6CALC_DB_CC_TO_REGISTRY	, "DB_CC_REG"		, "CountryCode to Registry database" },
 	{ IPV6CALC_DB_IEEE_TO_INFO	, "DB_IEEE"		, "IEEE/OUI/OUI36 Vendor database" },
+	{ IPV6CALC_DB_IPV4_TO_INFO	, "DB_IPV4_INFO"	, "IPv4 additional information" },
+	{ IPV6CALC_DB_IPV6_TO_INFO	, "DB_IPV6_INFO"	, "IPv6 additional information" },
 };
 
 // data sources
@@ -286,10 +294,13 @@ extern int libipv6calc_db_wrapper_ieee_vendor_string_short_by_macaddr(char *resu
 // IPv4 Registry
 extern int libipv6calc_db_wrapper_registry_string_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const size_t resultstring_length);
 extern int libipv6calc_db_wrapper_registry_num_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp);
+extern int libipv6calc_db_wrapper_info_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, char *string, const size_t string_len);
 
 // IPv6 Registry
 extern int libipv6calc_db_wrapper_registry_string_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length);
 extern int libipv6calc_db_wrapper_registry_num_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp);
+extern int libipv6calc_db_wrapper_info_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, char *string, const size_t string_len);
+
 
 #ifdef HAVE_BERKELEY_DB_SUPPORT
 extern int libipv6calc_db_wrapper_bdb_get_data_by_key(DB *dbp, char *token, char *value, const size_t value_size);

@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.h
  * Version    : $Id$
- * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_External.c
@@ -22,9 +22,9 @@
 #define EXTERNAL_DB_MAX						(4 + 1)
 
 
-/*@unused@*/ static const db_file_desc libipv6calc_db_wrapper_External_db_file_desc[] = {
-	{ EXTERNAL_DB_IPV4_REGISTRY   , "ipv6calc-external-ipv4-registry.db"      , "IPv4 Registry"    , IPV6CALC_DB_IPV4_TO_REGISTRY | IPV6CALC_DB_EXTERNAL_IPV4 },
-	{ EXTERNAL_DB_IPV6_REGISTRY   , "ipv6calc-external-ipv6-registry.db"      , "IPv6 Registry"    , IPV6CALC_DB_IPV6_TO_REGISTRY | IPV6CALC_DB_EXTERNAL_IPV6 },
+static const db_file_desc libipv6calc_db_wrapper_External_db_file_desc[] = {
+	{ EXTERNAL_DB_IPV4_REGISTRY   , "ipv6calc-external-ipv4-registry.db"      , "IPv4 Registry"    , IPV6CALC_DB_IPV4_TO_REGISTRY | IPV6CALC_DB_EXTERNAL_IPV4 | IPV6CALC_DB_IPV4_TO_INFO },
+	{ EXTERNAL_DB_IPV6_REGISTRY   , "ipv6calc-external-ipv6-registry.db"      , "IPv6 Registry"    , IPV6CALC_DB_IPV6_TO_REGISTRY | IPV6CALC_DB_EXTERNAL_IPV6 | IPV6CALC_DB_IPV6_TO_INFO },
 	{ EXTERNAL_DB_IPV4_COUNTRYCODE, "ipv6calc-external-ipv4-countrycode.db"   , "IPv4 CountryCode" , IPV6CALC_DB_IPV4_TO_CC       | IPV6CALC_DB_EXTERNAL_IPV4 },
 	{ EXTERNAL_DB_IPV6_COUNTRYCODE, "ipv6calc-external-ipv6-countrycode.db"   , "IPv6 CountryCode" , IPV6CALC_DB_IPV6_TO_CC       | IPV6CALC_DB_EXTERNAL_IPV6 },
 };
@@ -77,5 +77,8 @@ extern int libipv6calc_db_wrapper_External_registry_num_by_addr(const ipv6calc_i
 
 // IPv4/v6 CountryCode 
 extern int libipv6calc_db_wrapper_External_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp, char *country, const size_t country_len);
+
+// IPv4/v6 Info
+extern int libipv6calc_db_wrapper_External_info_by_ipaddr(const ipv6calc_ipaddr *ipaddrp, char *string, const size_t string_len);
 
 #endif

@@ -1087,7 +1087,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
 
 		DEBUGPRINT_NA(DEBUG_showinfo, "try to get additional information");
-		r = libipv6calc_db_wrapper_BuiltIn_info_by_ipv4addr(ipv4addrp, tempstring3, sizeof(tempstring3));
+		r = libipv6calc_db_wrapper_info_by_ipv4addr(ipv4addrp, tempstring3, sizeof(tempstring3));
 		if (r == 0) {
 			// info found, append to registry
 			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
@@ -1508,7 +1508,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
 
 		DEBUGPRINT_NA(DEBUG_showinfo, "try to get additional information");
-		r = libipv6calc_db_wrapper_BuiltIn_info_by_ipv6addr(ipv6addrp, tempstring3, sizeof(tempstring3));
+		r = libipv6calc_db_wrapper_info_by_ipv6addr(ipv6addrp, tempstring3, sizeof(tempstring3));
 		if (r == 0) {
 			// info found, append to registry
 			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);

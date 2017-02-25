@@ -917,7 +917,7 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 #if SUPPORT_IP2LOCATION_API_VERSION_STRING
 	fprintf(stderr, "IP2Location support enabled, compiled with API version: %s, dynamically linked with version: %s\n", xmakestr(API_VERSION), libipv6calc_db_wrapper_IP2Location_lib_version());
 #else
-	fprintf(stderr, "IP2Location support enabled, compiled with API version: %s (linked version not supported)\n", xmakestr(API_VERSION));
+	fprintf(stderr, "IP2Location support enabled, compiled with API version: %s (retrieving linked version not supported)\n", xmakestr(API_VERSION));
 #endif // SUPPORT_IP2LOCATION_API_VERSION_STRING
 #ifndef SUPPORT_IP2LOCATION_DYN
 #else

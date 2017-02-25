@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.c
  * Version    : $Id$
- * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc External (superseeding BuiltIn) database wrapper
@@ -50,7 +50,7 @@ static uint32_t external_db_usage_map[EXTERNAL_DB_MAX_BLOCKS_32];
 char external_db_usage_string[NI_MAXHOST] = "";
 
 // local cache
-#define IPV6CALC_DBD_SUBDB_MAX 2
+#define IPV6CALC_DBD_SUBDB_MAX 3
 static DB *db_ptr_cache[MAXENTRIES_ARRAY(libipv6calc_db_wrapper_External_db_file_desc)][IPV6CALC_DBD_SUBDB_MAX];
 static db_recno_t db_recno_max_cache[MAXENTRIES_ARRAY(libipv6calc_db_wrapper_External_db_file_desc)][IPV6CALC_DBD_SUBDB_MAX];
 
@@ -72,6 +72,8 @@ static char     *libipv6calc_db_wrapper_External_database_info(unsigned int type
 int libipv6calc_db_wrapper_External_wrapper_init(void) {
 	int i, j;
 	char *result;
+	DB *dbp;
+	long int recno_max;
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Called");
 
@@ -112,6 +114,21 @@ int libipv6calc_db_wrapper_External_wrapper_init(void) {
 
 		// finally mark database features as available
 		wrapper_features_by_source[IPV6CALC_DB_SOURCE_EXTERNAL] |= libipv6calc_db_wrapper_External_db_file_desc[i].features;
+
+		// more sophisticated check for "data-info"
+		if (libipv6calc_db_wrapper_External_db_file_desc[i].number == EXTERNAL_DB_IPV4_REGISTRY) {
+			dbp = libipv6calc_db_wrapper_External_open_type(EXTERNAL_DB_IPV4_REGISTRY | 0x40000, &recno_max);
+			if (dbp == NULL) {
+				// disable feature
+				wrapper_features_by_source[IPV6CALC_DB_SOURCE_EXTERNAL] &= ~IPV6CALC_DB_IPV4_TO_INFO;
+			};
+		} else if (libipv6calc_db_wrapper_External_db_file_desc[i].number == EXTERNAL_DB_IPV6_REGISTRY) {
+			dbp = libipv6calc_db_wrapper_External_open_type(EXTERNAL_DB_IPV6_REGISTRY | 0x40000, &recno_max);
+			if (dbp == NULL) {
+				// disable feature
+				wrapper_features_by_source[IPV6CALC_DB_SOURCE_EXTERNAL] &= ~IPV6CALC_DB_IPV6_TO_INFO;
+			};
+		};
 	};
 
 	wrapper_features |= wrapper_features_by_source[IPV6CALC_DB_SOURCE_EXTERNAL];
@@ -382,6 +399,7 @@ END_libipv6calc_db_wrapper:
  * 	type (mandatory)
  * 		if | 0x10000 -> info is opened and ptr is not cached
  * 		if | 0x20000 -> data-iana is opened and ptr is not cached (only IPv4)
+ * 		if | 0x40000 -> data-info is opened and ptr is not cached
  * 	db_recno_max_ptr (set if not NULL)
  */
 DB *libipv6calc_db_wrapper_External_open_type(const unsigned int type_flag, long int *db_recno_max_ptr) {
@@ -392,13 +410,25 @@ DB *libipv6calc_db_wrapper_External_open_type(const unsigned int type_flag, long
 	int type = (type_flag & 0xffff);
 	int info_selector = ((type_flag & 0x10000) != 0) ? 1 : 0;
 	int data_iana_selector = ((type_flag & 0x20000) != 0) ? 1 : 0;
-	int subdb = (data_iana_selector == 0) ? 0 : 1;
+	int data_info_selector = ((type_flag & 0x40000) != 0) ? 1 : 0;
+	int subdb = ((data_iana_selector == 0) && (data_info_selector == 0)) ? 0 : 1;
 
 	char *filename;
 	int entry = -1, i;
 	int ret;
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Called: %s type=%d (%s)", wrapper_external_info, type, (info_selector == 0) ? ((data_iana_selector == 0) ? "data" : "data-iana") : "info");
+	const char *type_text;
+	if (info_selector != 0) {
+		type_text = "info";
+	} else if (data_iana_selector != 0) {
+		type_text = "data-iana";
+	} else if (data_info_selector != 0) {
+		type_text = "data-info";
+	} else {
+		type_text = "data";
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Called: %s type=%d (%s)", wrapper_external_info, type, type_text);
 
 	// check for valid type
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_External_db_file_desc); i++) {
@@ -444,9 +474,9 @@ DB *libipv6calc_db_wrapper_External_open_type(const unsigned int type_flag, long
 		return(NULL);
 	};
 
-	if ((ret = dbp->open(dbp, NULL, filename, (info_selector == 0) ? ((data_iana_selector == 0) ? "data" : "data-iana") : "info", (info_selector == 0) ? DB_RECNO : DB_BTREE, DB_RDONLY, 0444)) != 0) {
-		if (ipv6calc_quiet == 0) {
-			fprintf(stderr, "db->open failed: %s (%s)\n", db_strerror(ret), filename);
+	if ((ret = dbp->open(dbp, NULL, filename, type_text, (info_selector == 0) ? DB_RECNO : DB_BTREE, DB_RDONLY, 0444)) != 0) {
+		if ((ipv6calc_quiet == 0) && (data_info_selector == 0)) {
+			fprintf(stderr, "db->open failed: %s (%s) subdb=%s\n", db_strerror(ret), filename, type_text);
 		};
 		return(NULL);
 	};
@@ -1068,6 +1098,134 @@ END_libipv6calc_db_wrapper:
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "retval=%d", retval);
 	return(retval);
 };
+
+
+/*
+ * get info of an IPv4/IPv6 address
+ *  stored in REGISTRY db in dedicated table
+ *
+ * in:  ipaddr
+ * mod: string
+ * out: 0=OK
+ */
+int libipv6calc_db_wrapper_External_info_by_ipaddr(const ipv6calc_ipaddr *ipaddrp, char *string, const size_t string_len) {
+	DB *dbp;
+	long int recno_max;
+	static char resultstring[NI_MAXHOST];
+	char *data_ptr = "";
+	int result;
+	int retval = -1;
+
+	int External_type;
+
+	switch (ipaddrp->proto) {
+	    case IPV6CALC_PROTO_IPV4:
+		External_type = EXTERNAL_DB_IPV4_REGISTRY;
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Given IPv4 address: %08x", (unsigned int) ipaddrp->addr[0]);
+		break;
+
+	    case IPV6CALC_PROTO_IPV6:
+		External_type = EXTERNAL_DB_IPV6_REGISTRY;
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Given IPv6 address prefix (0-63): %08x%08x", (unsigned int) ipaddrp->addr[0], (unsigned int) ipaddrp->addr[1]);
+		break;
+
+	    default:
+		ERRORPRINT_WA("unsupported protocol: %d (FIX CODE)", ipaddrp->proto);
+		exit(EXIT_FAILURE);
+		break;
+	};
+
+
+	// data-info
+	dbp = libipv6calc_db_wrapper_External_open_type(External_type | 0x40000, &recno_max);
+
+	if (dbp == NULL) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Error opening External by type");
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "database opened type=%d recno_max=%ld dbp=%p", External_type, recno_max, dbp);
+
+	result = libipv6calc_db_wrapper_get_entry_generic(
+		(void *) dbp,							// pointer to database
+		IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB,				// type of data_ptr
+		(ipaddrp->proto == IPV6CALC_PROTO_IPV4) \
+		  ? IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_FIRST_LAST \
+		  : IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_BASE_MASK,			// key type
+		(ipaddrp->proto == IPV6CALC_PROTO_IPV4) \
+		  ? IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x2 \
+		  : IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x4 ,	// key format
+		(ipaddrp->proto == IPV6CALC_PROTO_IPV4) \
+		  ? 32 \
+		  : 64,								// key length
+		IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY,			// search type
+		recno_max,							// number of rows
+		ipaddrp->addr[0],						// lookup key MSB
+		(ipaddrp->proto == IPV6CALC_PROTO_IPV4) \
+		  ? 0 \
+		  : ipaddrp->addr[1],						// lookup key LSB
+		resultstring,							// data ptr
+		NULL								// function pointer
+	);
+
+	if (result < 0) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "no match found");
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "resultstring=%s", resultstring);
+
+	char datastring[NI_MAXHOST];
+
+	char *token, *cptr, **ptrptr;
+	ptrptr = &cptr;
+
+	int token_count = 0;
+
+	snprintf(datastring, sizeof(datastring), "%s", data_ptr);
+
+	// split result string
+	token = strtok_r(resultstring, ";", ptrptr);
+	while (token != NULL) {
+		token_count++;
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Database entry found %d: %s", token_count, token);
+
+		if (token_count == 1) {
+			/* country */
+			snprintf(string, string_len, "%s", token);
+		};
+
+		/* get next token */
+		token = strtok_r(NULL, ";", ptrptr);
+	};
+
+	if (token_count != 1) {
+		ERRORPRINT_WA("data has more entries than expected, corrupt database: %d", token_count);
+		goto END_libipv6calc_db_wrapper_close;
+	};
+
+	if (strlen(string) == 0) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "did not return a record for 'Info'");
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	retval = 0;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "result Info=%s", string);
+
+	EXTERNAL_DB_USAGE_MAP_TAG(External_type);
+
+	goto END_libipv6calc_db_wrapper; // keep db open
+
+END_libipv6calc_db_wrapper_close:
+	libipv6calc_db_wrapper_External_close(dbp);
+
+END_libipv6calc_db_wrapper:
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "retval=%d", retval);
+	return(retval);
+};
+
 
 #endif //SUPPORT_EXTERNAL
 #endif //SUPPORT_EXTERNAL

@@ -1943,6 +1943,121 @@ END_libipv6calc_db_wrapper_cached:
 };
 
 
+/*
+ * get info string of an IPv4 address
+ *
+ * in:  ipv4addr = IPv4 address structure
+ * out: *resultstring = Registry string
+ * ret: 0: ok
+ */
+int libipv6calc_db_wrapper_info_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, char *string, const size_t string_len) {
+	int retval = 1, f, p;
+
+#if defined SUPPORT_EXTERNAL
+	ipv6calc_ipaddr ipaddr;
+#endif
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x", ipv4addr_getdword(ipv4addrp));
+
+	f = IPV6CALC_DB_FEATURE_NUM_IPV4_TO_INFO;
+
+	// run through priorities
+	for (p = 0; p < IPV6CALC_DB_PRIO_MAX; p++) {
+		switch(wrapper_features_selector[f][p]) {
+		    case 0:
+			// last
+			goto END_libipv6calc_db_wrapper; // ok
+			break;
+
+		    case IPV6CALC_DB_SOURCE_BUILTIN:
+			if (wrapper_BuiltIn_status == 1) {
+#ifdef SUPPORT_BUILTIN
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now BuiltIn");
+
+				retval = libipv6calc_db_wrapper_BuiltIn_info_by_ipv4addr(ipv4addrp, string, string_len);
+#endif
+			};
+			break;
+
+		    case IPV6CALC_DB_SOURCE_EXTERNAL:
+			if (wrapper_External_status == 1) {
+#ifdef SUPPORT_EXTERNAL
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now External");
+				CONVERT_IPV4ADDRP_IPADDR(ipv4addrp, ipaddr);
+				retval = libipv6calc_db_wrapper_External_info_by_ipaddr(&ipaddr, string, string_len);
+#endif
+			};
+			break;
+
+		    default:
+			goto END_libipv6calc_db_wrapper; // dummy goto in case no db is enabled
+			break;
+		};
+	};
+
+END_libipv6calc_db_wrapper:
+	return (retval);
+};
+
+
+/*
+ * get info string of an IPv6 address
+ *
+ * in:  ipv6addr = IPv6 address structure
+ * out: *resultstring = Registry string
+ * ret: 0: ok
+ */
+int libipv6calc_db_wrapper_info_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, char *string, const size_t string_len) {
+	int retval = 1, p, f;
+
+#if defined SUPPORT_EXTERNAL
+	ipv6calc_ipaddr ipaddr;
+#endif
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x%08x%08x%08x", ipv6addr_getdword(ipv6addrp, 0), ipv6addr_getdword(ipv6addrp, 1), ipv6addr_getdword(ipv6addrp, 2), ipv6addr_getdword(ipv6addrp, 3));
+
+	f = IPV6CALC_DB_FEATURE_NUM_IPV6_TO_INFO;
+
+	// run through priorities
+	for (p = 0; p < IPV6CALC_DB_PRIO_MAX; p++) {
+		switch(wrapper_features_selector[f][p]) {
+		    case 0:
+			// last
+			goto END_libipv6calc_db_wrapper; // ok
+			break;
+
+		    case IPV6CALC_DB_SOURCE_BUILTIN:
+			if (wrapper_BuiltIn_status == 1) {
+#ifdef SUPPORT_BUILTIN
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now BuiltIn");
+
+				retval = libipv6calc_db_wrapper_BuiltIn_info_by_ipv6addr(ipv6addrp, string, string_len);
+#endif
+			};
+			break;
+
+		    case IPV6CALC_DB_SOURCE_EXTERNAL:
+			if (wrapper_External_status == 1) {
+#ifdef SUPPORT_EXTERNAL
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now External");
+				CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
+				retval = libipv6calc_db_wrapper_External_info_by_ipaddr(&ipaddr, string, string_len);
+#endif
+			};
+			break;
+
+		    default:
+			goto END_libipv6calc_db_wrapper; // dummy goto in case no db is enabled
+			break;
+		};
+	};
+
+END_libipv6calc_db_wrapper:
+	return (retval);
+};
+
+
+
 #ifdef HAVE_BERKELEY_DB_SUPPORT
 /********************************************
  * some generic Berkeley DB helper functions

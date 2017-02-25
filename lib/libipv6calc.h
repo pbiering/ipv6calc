@@ -10,11 +10,11 @@
 
 #include "ipv6calc_inttypes.h"
 #include "ipv6calctypes.h"
-#include "libipaddr.h"
 #include "libmac.h"
-#include "databases/lib/libipv6calc_db_wrapper.h"
 #include "libipv4addr.h"
 #include "libipv6addr.h"
+#include "libipaddr.h"
+#include "databases/lib/libipv6calc_db_wrapper.h"
 #include "ipv6calcoptions.h"
 #include "libipv6calcdebug.h"
 

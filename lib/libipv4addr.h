@@ -23,7 +23,7 @@ typedef struct {
 	uint8_t  prefixlength;		/* prefix length (0-32) 8 bit */
 	int      flag_prefixuse;	/* =1: prefix length in use (CIDR notation) */
 	uint32_t typeinfo;		/* address typeinfo/scope */
-	uint32_t typeinfo2;		/* address typeinfo/scope */
+	uint32_t typeinfo2;		/* address typeinfo/scope #2 */
 	int8_t   flag_typeinfo;		/* =1: valid typeinfo */
 	int8_t   flag_valid;		/* address structure filled */
 	uint8_t  test_mode;		/* test mode */
