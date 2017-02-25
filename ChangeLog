@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20170225/PB
+	various files: add LISP support in BuiltIn database
+
 20170219/PB
 	tools/DBIP-generate-db.pl: add support for full version of DBIP.com
 	databases/lib/libipv6calc_db_wrapper_DBIP.[ch]: add support for full version of DBIP.com

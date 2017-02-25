@@ -812,6 +812,35 @@ int libipv6calc_db_wrapper_BuiltIn_get_row_dbipv6addr_assignment(const uint32_t 
 
 	return(dbipv6addr_assignment[row].prefixlength);
 };
+
+
+/*
+ * dbipv6addr_info / get row (callback function for retrieving value from array)
+ */
+int libipv6calc_db_wrapper_BuiltIn_get_row_dbipv6addr_info(const uint32_t row, uint32_t *key_base_00_31_ptr, uint32_t *key_base_32_63_ptr, uint32_t *key_mask_00_31_ptr, uint32_t *key_mask_32_63_ptr) {
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called fetching row: %lu", (unsigned long int) row);
+
+	if (row >= MAXENTRIES_ARRAY(dbipv6addr_info)) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "row out of range: %lu (maximum: %lu)", (unsigned long int) row, (unsigned long int) MAXENTRIES_ARRAY(dbipv6addr_info) - 1);
+		return(-1);
+	};
+
+	*key_base_00_31_ptr = dbipv6addr_info[row].ipv6addr_00_31;
+	*key_base_32_63_ptr = dbipv6addr_info[row].ipv6addr_32_63;
+	*key_mask_00_31_ptr = dbipv6addr_info[row].ipv6mask_00_31;
+	*key_mask_32_63_ptr = dbipv6addr_info[row].ipv6mask_32_63;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Keys for row: %lu key_base_00_31_ptr=%08lx key_base_32_63_ptr=%08lx key_mask_00_31_ptr=%08lxu key_mask_32_63_ptr=%08lxu seqlongest=%d",
+		(unsigned long int) row,
+		(unsigned long int) *key_base_00_31_ptr,
+		(unsigned long int) *key_base_32_63_ptr,
+		(unsigned long int) *key_mask_00_31_ptr,
+		(unsigned long int) *key_mask_32_63_ptr,
+		dbipv6addr_info[row].prefixlength
+	);
+
+	return(dbipv6addr_info[row].prefixlength);
+};
 #endif // SUPPORT_DB_IPV6_REG
 
 
@@ -856,6 +885,51 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6a
 		BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_IPV6_REGISTRY);
 	};
 #endif
+	return(result);
+};
+
+
+/*
+ * get info of an IPv6 address
+ *
+ * in:  ipv6addr = IPv6 address structure
+ * in:  char* and size to fill
+ * out: 0 = found, -1 = no result
+ */
+int libipv6calc_db_wrapper_BuiltIn_info_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, char *string, const size_t string_len) {
+	uint32_t ipv6_00_31 = ipv6addr_getdword(ipv6addrp, 0);
+	uint32_t ipv6_32_63 = ipv6addr_getdword(ipv6addrp, 1);
+	
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Given ipv6 prefix: %08x%08x", (unsigned int) ipv6_00_31, (unsigned int) ipv6_32_63);
+
+	int result = -1;
+
+#ifdef SUPPORT_DB_IPV6_REG
+	int match = -1;
+
+	match = libipv6calc_db_wrapper_get_entry_generic(
+		NULL,							// pointer to data
+		IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY,			// type of data_ptr
+		IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_BASE_MASK,		// key type
+		0,							// key format (not relevant)
+		64,							// key length
+		IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY,		// search type
+		MAXENTRIES_ARRAY(dbipv6addr_info),			// number of rows
+		ipv6_00_31,						// lookup key MSB
+		ipv6_32_63,						// lookup key LSB
+		NULL,							// data ptr (not used in IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_ARRAY)
+		libipv6calc_db_wrapper_BuiltIn_get_row_dbipv6addr_info	// function pointer
+	);
+
+	if (match > -1) {
+		snprintf(string, string_len, "%s", dbipv6addr_info[match].info);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Finished with success result (dbipv6addr_info): match=%d info=\"%s\"", match, string);
+		BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_IPV6_REGISTRY);
+		result = 0;
+	};
+
+#endif // SUPPORT_DB_IPV6_REG
+
 	return(result);
 };
 

@@ -193,8 +193,8 @@ fe80::5e01:2345:6789				iid-isatap
 3ffe:1a05:510:a909:a949:5214:48ca:d81d		iid-isatap
 3ffe:1a05:510:a909:a949:5214:48ca:d81d		^iid-random
 2001:4860:4801:2:3800:6006:1300:b075		^iid-random
-3ffe:ffff::a4ff:fe01:2345			iid-local
-3ffe:ffff::a4ff:fe01:2345			iid-eui48
+3ffe:ffff::a4ff:fe01:2345			iid-local,iid-eui48
+3ffe:ffff::0200:a4ff:fe01:2345			iid-global,iid-eui48
 fe80:0000:0000:0000:0200:5efe:192.0.2.143	^anonymized-iid
 fe80:0000:0000:0000:0000:5e01:2345:6789		^anonymized-iid
 fe80:0000:0000:0000:0000:5eff:fe01:2345		^anonymized-iid
@@ -246,6 +246,8 @@ a909:16fa:9092:23ff:a909:4941::7		anonymized-prefix
 193.105.183.1					lisp,lisp-proxyegresstunnelrouter-anycast,anycast,^unicast
 91.220.201.1					lisp,lisp-mapresolver-anycast,anycast,^unicast
 192.88.99.1					anycast,^unicast,6to4relay
+2001:0db8:0000:0000:81c0:0f3f:c807:1455 	iid-random,iid-local
+2001:0db8:0000:0000::1			 	iid-local,^iid-random
 END
 }
 
@@ -438,6 +440,9 @@ a909:16fa:9092:23ff:a909:4941::7	IPV6_REGISTRY=RIPENCC
 2001:b4f:0:804::/62			IPV4[192.0.2.1]=192.0.2.1|--6rd_prefixlength 30
 2001:b4f:8000:402::/63			IPV4[192.0.2.1]=192.0.2.1|--6rd_prefixlength 31
 2001:b4f:c000:201::/64			IPV4[192.0.2.1]=192.0.2.1|--6rd_prefixlength 32
+# LISP
+153.16.13.192				IPV4_REGISTRY=ARIN(LISP#aaronm-xtr)
+2610:00d0:1100::			IPV6_REGISTRY=ARIN(LISP#asp-xtr)
 END
 }
 

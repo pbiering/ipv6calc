@@ -34,8 +34,8 @@ my $debug = 0;
 #$debug |= 0x1000; # TLD store
 
 sub help {
-	print qq#
-Usage: $progname [-S <SRC-DIR>] [-D <DST-DIR>] -H|B [-A] [-d <debuglevel>]
+	print qq|
+Usage: $progname [-S <SRC-DIR>] [-D <DST-DIR>] [-H] [-B [-A]] [-d <debuglevel>]
 	-S <SRC-DIR>	source directory
 	-D <DST-DIR>	destination directory
 	-H		create header file(s)
@@ -44,7 +44,7 @@ Usage: $progname [-S <SRC-DIR>] [-D <DST-DIR>] -H|B [-A] [-d <debuglevel>]
 	-d <debuglevel> debug level
 	-h		this online help
 
-#;
+|;
 	exit 0;
 };
 
@@ -127,6 +127,7 @@ print "INFO  : destination file for DB (CountryCode): " . $file_dst_db_cc  . "\n
 
 my %assignments;
 my %assignments_iana;
+my %assignments_info;
 
 my %ip_countrycode;
 
@@ -320,9 +321,9 @@ sub proceed_lisp {
 
 
 		printf "LISP store  : reg=%-10s start=%08x distance=%08x\n", $reg, $start_reg, $distance_reg if ($debug & 0x100);
-		$assignments{$start_reg}->{'distance'} = $distance_reg;
-		$assignments{$start_reg}->{'registry'} = $reg;
-		$assignments{$start_reg}->{'info'} = $site;
+		$assignments_info{$start_reg}->{'distance'} = $distance_reg;
+		$assignments_info{$start_reg}->{'registry'} = $reg;
+		$assignments_info{$start_reg}->{'info'} = "LISP#" . $site;
 	};
 
 	close($FILE);
@@ -560,11 +561,11 @@ static const s_ipv4addr_info dbipv4addr_info[] = {
 
 	printf $OUT "\t//first     , last      , registry  \n";
 
-	foreach my $ipv4 (sort { $a <=> $b } keys %assignments) {
-		next if (! defined $assignments{$ipv4}->{'info'});
+	foreach my $ipv4 (sort { $a <=> $b } keys %assignments_info) {
+		next if (! defined $assignments_info{$ipv4}->{'info'});
 
-		my $distance = $assignments{$ipv4}->{'distance'};
-		my $info = $assignments{$ipv4}->{'info'};
+		my $distance = $assignments_info{$ipv4}->{'distance'};
+		my $info = $assignments_info{$ipv4}->{'info'};
 
 		printf $OUT "\t{ 0x%08x, 0x%08x, %-30s }, // %-15s - %s\n", $ipv4, ($ipv4 + $distance - 1), "\"" . $info . "\"", &dec_to_ipv4($ipv4), &dec_to_ipv4($ipv4 + $distance - 1);
 	};

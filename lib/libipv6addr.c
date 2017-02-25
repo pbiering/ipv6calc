@@ -747,6 +747,11 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp, uint32_t *typeinfo
 		type |= IPV6_ADDR_ANYCAST;
 	};
 
+	if (st == 0x20010db8) {
+		/* 2001:db8::/32 -> prefix for documentation (RFC 3849) */
+		type |= IPV6_ADDR_RESERVED;
+	};
+
 	if (UNPACK_XMS(st, ANON_PREFIX_TOKEN_XOR, ANON_PREFIX_TOKEN_MASK, ANON_PREFIX_TOKEN_SHIFT) == ANON_PREFIX_TOKEN_VALUE) {
 		// anonymized prefix ?
 		DEBUGPRINT_WA(DEBUG_libipv6addr, " probably anonymized prefix found: %04x:%04x:%04x:%04x", U32_MSB16(st), U32_LSB16(st), U32_MSB16(st1), U32_LSB16(st1));
@@ -762,7 +767,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp, uint32_t *typeinfo
 
 			if ((r1 == 0) && (r2 == 0) && (cc_index == COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + REGISTRY_6BONE)) {
 				type |= IPV6_NEW_ADDR_6BONE;
-			} else if ((r1 == 0) && (r2 == 0) && (cc_index == COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + REGISTRY_LISP)) {
+			} else if ((r1 == 0) && (r2 == 0) && (cc_index == 0x3fd)) {
 				type |= IPV6_NEW_ADDR_PRODUCTIVE;
 				type2 |= IPV6_ADDR_TYPE2_LISP;
 			} else {
@@ -998,7 +1003,7 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp, uint32_t *typeinfo
 					/* ISATAP is handled above */
 				} else if (((st2 & (uint32_t) 0x000000FFu) == (uint32_t) 0x000000FFu) && ((st3 & (uint32_t) 0xFE000000u) == (uint32_t) 0xFE000000u)) {
 					/* EUI-48 local scope based */
-					type |= IPV6_NEW_ADDR_IID_EUI48;
+					type |= IPV6_NEW_ADDR_IID_EUI48 | IPV6_NEW_ADDR_IID_LOCAL;
 				};
 
 				DEBUGPRINT_WA(DEBUG_libipv6addr, "check for anonymized IID: %04x:%04x:%04x:%04x", U32_MSB16(st2), U32_LSB16(st2), U32_MSB16(st3), U32_LSB16(st3));
@@ -1116,7 +1121,7 @@ END_ANON_IID:
 				type |= IPV6_NEW_ADDR_IID_LOCAL;
 
 				if ((type & (IPV6_ADDR_IID_32_63_HAS_IPV4 | IPV6_NEW_ADDR_LINKLOCAL_TEREDO | IPV6_NEW_ADDR_IID_ISATAP | IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_SOLICITED_NODE)) == 0) {
-					DEBUGPRINT_WA(DEBUG_libipv6addr, "call IID random detection, type=%08xl", type);
+					DEBUGPRINT_WA(DEBUG_libipv6addr, "call IID random detection, typeinfo=%08x", type);
 
 					/* fuzzy detection of random IID (e.g. privacy extension) */
 					r = ipv6addr_iidrandomdetection(ipv6addrp, &variances);
@@ -2195,7 +2200,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 				as_num32 = 0;
 			} else if ((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_LISP) != 0) {
 				DEBUGPRINT_NA(DEBUG_libipv6addr, "IPv6 is LISP unicast, special prefix anonymization");
-				cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + IPV6_ADDR_REGISTRY_LISP;
+				cc_index = 0x3fd;
 				CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
 				as_num32 = libipv6calc_db_wrapper_cc_index_by_addr(&ipaddr, NULL) << 20;
 			} else {
@@ -3314,13 +3319,9 @@ int libipv6addr_registry_num_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 
 	if (((ipv6addrp->typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) != 0) \
 		&& ((ipv6addrp->typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX) == 0)) {
-			if ((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_LISP) != 0) {
-				registry = IPV6_ADDR_REGISTRY_LISP;
-			} else {
-				/* retrieve registry via cc_index from anonymized address (simple) */
-				cc_index = libipv6addr_cc_index_by_addr(ipv6addrp, NULL);
-				registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
-			};
+			/* retrieve registry via cc_index from anonymized address (simple) */
+			cc_index = libipv6addr_cc_index_by_addr(ipv6addrp, NULL);
+			registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_REGISTRY) == 1) {
 			registry = libipv6calc_db_wrapper_registry_num_by_ipv6addr(ipv6addrp);

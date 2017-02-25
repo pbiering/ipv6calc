@@ -1,7 +1,7 @@
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : Makefile
 # Version    : $Id$
-# Copyright  : 2005-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2005-2017 by Peter Bieringer <pb (at) bieringer.de>
 #               Initial copy from ../ipv4-assignment/Makefile & adaption for IPv6 by Simon Arlott
 #
 # Information:
@@ -12,6 +12,10 @@ all:
 
 install:
 		echo "Nothing to do"
+
+force-update:
+		${MAKE} updateclean
+		${MAKE} update
 
 update:
 		echo "Generate new header file, if necessary"

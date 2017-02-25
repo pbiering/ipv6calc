@@ -1049,9 +1049,19 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
 		f = IPV6CALC_DB_FEATURE_NUM_IPV4_TO_CC;
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv4 address: %08x", (unsigned int) ipaddrp->addr[0]);
+		if ((ipaddrp->typeinfo1 & IPV4_ADDR_RESERVED) != 0) {
+			// reserved IPv4 address has no country
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv4 address: %08x is reserved (skip CountryCode lookup)", (unsigned int) ipaddrp->addr[0]);
+			goto END_libipv6calc_db_wrapper;
+		};
 	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
 		f = IPV6CALC_DB_FEATURE_NUM_IPV6_TO_CC;
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv6 address prefix (0-63): %08x%08x", (unsigned int) ipaddrp->addr[0], (unsigned int) ipaddrp->addr[1]);
+		if ((ipaddrp->typeinfo1 & IPV6_ADDR_RESERVED) != 0) {
+			// reserved IPv4 address has no country
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv6 address prefix (0-63): %08x%08x is reserved (skip CountryCode lookup)", (unsigned int) ipaddrp->addr[0], (unsigned int) ipaddrp->addr[1]);
+			goto END_libipv6calc_db_wrapper;
+		};
 	} else {
 		ERRORPRINT_WA("unsupported proto=%d (FIX CODE)", ipaddrp->proto);
 		exit(EXIT_FAILURE);
@@ -1287,13 +1297,30 @@ int libipv6calc_db_wrapper_country_code_by_cc_index(char *string, const int leng
  * get AS information in text form
  */
 char *libipv6calc_db_wrapper_as_text_by_addr(const ipv6calc_ipaddr *ipaddrp) {
-	char * result_char_ptr = NULL;
+	char *result_char_ptr = NULL;
 
 #if defined SUPPORT_GEOIP
 	char tempstring[IPV6CALC_ADDR_STRING_MAX] = "";
 #endif
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%04x%04x%04x%04x proto=%d", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], ipaddrp->proto);
+
+	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
+		if ((ipaddrp->typeinfo1 & IPV4_ADDR_RESERVED) != 0) {
+			// reserved IPv4 address has no AS
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv4 address: %08x is reserved (skip AS lookup)", (unsigned int) ipaddrp->addr[0]);
+			goto END_libipv6calc_db_wrapper;
+		};
+	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
+		if ((ipaddrp->typeinfo1 & IPV6_ADDR_RESERVED) != 0) {
+			// reserved IPv4 address has no AS
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv6 address prefix (0-63): %08x%08x is reserved (skip AS lookup)", (unsigned int) ipaddrp->addr[0], (unsigned int) ipaddrp->addr[1]);
+			goto END_libipv6calc_db_wrapper;
+		};
+	} else {
+		ERRORPRINT_WA("unsupported proto=%d (FIX CODE)", ipaddrp->proto);
+		exit(EXIT_FAILURE);
+	};
 
 	if (wrapper_GeoIP_status == 1) {
 #ifdef SUPPORT_GEOIP
@@ -1308,6 +1335,7 @@ char *libipv6calc_db_wrapper_as_text_by_addr(const ipv6calc_ipaddr *ipaddrp) {
 #endif
 	};
 
+END_libipv6calc_db_wrapper:
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s", result_char_ptr);
 
 	return(result_char_ptr);
@@ -1332,6 +1360,23 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp)
 	static int ipaddr_cache_lastused_valid = 0;
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x%08x%08x%08x proto=%d", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], ipaddrp->proto);
+
+	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
+		if ((ipaddrp->typeinfo1 & IPV4_ADDR_RESERVED) != 0) {
+			// reserved IPv4 address has no AS
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv4 address: %08x is reserved (skip AS lookup)", (unsigned int) ipaddrp->addr[0]);
+			goto END_libipv6calc_db_wrapper;
+		};
+	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
+		if ((ipaddrp->typeinfo1 & IPV6_ADDR_RESERVED) != 0) {
+			// reserved IPv4 address has no AS
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv6 address prefix (0-63): %08x%08x is reserved (skip AS lookup)", (unsigned int) ipaddrp->addr[0], (unsigned int) ipaddrp->addr[1]);
+			goto END_libipv6calc_db_wrapper;
+		};
+	} else {
+		ERRORPRINT_WA("unsupported proto=%d (FIX CODE)", ipaddrp->proto);
+		exit(EXIT_FAILURE);
+	};
 
 	if ((ipaddr_cache_lastused_valid == 1)
 	    &&	(ipaddr_cache_lastused.proto == ipaddrp->proto)
@@ -1377,6 +1422,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp)
 		ipaddr_cache_lastused = *ipaddrp;
 	};
 
+END_libipv6calc_db_wrapper:
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: addr=%08x%08x%08x%08x as_num32=%d (0x%08x)%s", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], as_num32, as_num32, (cache_hit == 1 ? " (cached)" : ""));
 
 	return(as_num32);
@@ -1714,12 +1760,6 @@ int libipv6calc_db_wrapper_registry_num_by_ipv4addr(const ipv6calc_ipv4addr *ipv
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	if (((ipv4addrp->typeinfo & IPV4_ADDR_UNICAST) != 0) && (ipv4addrp->typeinfo & IPV4_ADDR_LISP) != 0) {
-		// special handling of LISP
-		retval = REGISTRY_LISP;
-		goto END_libipv6calc_db_wrapper;
-	};
-
 	f = IPV6CALC_DB_FEATURE_NUM_IPV4_TO_REGISTRY;
 
 	// run through priorities
@@ -1845,12 +1885,6 @@ int libipv6calc_db_wrapper_registry_num_by_ipv6addr(const ipv6calc_ipv6addr *ipv
 	if (ipv6addr_getword(ipv6addrp, 0) == 0x3ffe) {
 		// special handling of 6BONE
 		retval = REGISTRY_6BONE;
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	if (((ipv6addrp->typeinfo & IPV6_ADDR_UNICAST) != 0) && (ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_LISP) != 0) {
-		// special handling of LISP
-		retval = REGISTRY_LISP;
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -2199,15 +2233,16 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 
 	i_min = 0; i_max = data_num_rows - 1; i_old = -1;
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Start binary search over entries: data_num_rows=%u", data_num_rows);
 
 	if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
 		// binary search in provided data
 		i = i_max / 2;
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Start binary search over entries: data_num_rows=%u", data_num_rows);
 	} else if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST) {
 		// sequential search in provided data
 		i_old = i_max;
 		i = 0;
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Start sequential search over entries: data_num_rows=%u", data_num_rows);
 	};
 
 	while (i_old != i) {

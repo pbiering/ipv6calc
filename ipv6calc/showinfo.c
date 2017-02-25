@@ -1304,8 +1304,8 @@ static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t for
  * ret: ==0: ok, !=0: error
  */
 int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t formatoptions) {
-	int retval = 1, i, j, flag_prefixuse, registry, r, retval_anon = 1;;
-	char tempstring[NI_MAXHOST] = "", tempstring2[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
+	int retval = 1, i, j, flag_prefixuse, registry, r, retval_anon = 1;
+	char tempstring[NI_MAXHOST] = "", tempstring2[NI_MAXHOST] = "", tempstring3[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
 	char ipv6addrstring[NI_MAXHOST] = "";
 	ipv6calc_ipv6addr ipv6addr, ipv6addr_anon, *ipv6addrp, *ipv6addr_anon_ptr;
 	ipv6calc_ipv4addr ipv4addr, ipv4addr2;
@@ -1506,6 +1506,14 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	} else {
 		libipv6calc_db_wrapper_registry_string_by_ipv6addr(ipv6addrp, tempstring, sizeof(tempstring));
 		snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+
+		DEBUGPRINT_NA(DEBUG_showinfo, "try to get additional information");
+		r = libipv6calc_db_wrapper_BuiltIn_info_by_ipv6addr(ipv6addrp, tempstring3, sizeof(tempstring3));
+		if (r == 0) {
+			// info found, append to registry
+			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
+			snprintf(tempstring2, sizeof(tempstring2), "%s(%s)", tempstring, tempstring3);
+		};
 	};
 
 	if ( machinereadable != 0 ) {

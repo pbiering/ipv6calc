@@ -218,10 +218,10 @@ testscenarios_showinfo | while read address output_options; do
 		fi
 	fi
 
-	[ "$verbose" = "1" ] && echo "INFO: test: $address for $output ($options)"
 	output_escaped="${output//./\\.}"
 	output_escaped="${output_escaped//[/\\[}"
 	output_escaped="${output_escaped//]/\\]}"
+	[ "$verbose" = "1" ] && echo "INFO: test: $address for $output ($options) (escaped: $output_escaped)"
 	if ! ./ipv6calc $options -q -i -m $address | grep $grepopt "^$output_escaped$"; then
 		[ "$verbose" = "1" ] || echo
 		echo "ERROR: unexpected result for $address ($output_escaped)"

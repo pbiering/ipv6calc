@@ -2,9 +2,9 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: ipv6calc-create-registry-list-ipv6.pl,v 1.2 2015/04/18 08:04:20 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
-#              2005-2015 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
+#              2005-2017 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
 # License    : GNU GPL v2
 #
 # Information:
@@ -32,21 +32,22 @@ my $debug = 0;
 #  0x0020: proceed global file
 #  0x0100: subnet mask generation
 
-# $debug |= 0x0040; # fill data
-# $debug |= 0x0200; # parse lines
+#$debug |= 0x0040; # fill data
+#$debug |= 0x0200; # parse lines
 #$debug |= 0x0400; # store registry
+#$debug |= 0x100; # assignments LISP
 #$debug |= 0x4000; # store countrycode
 #$debug |= 0x0080; # skip optimizer
 
 sub help {
 	print qq|
-Usage: $progname [-S <SRC-DIR>] [-D <DST-DIR>] [-H] [-B [-A]]
+Usage: $progname [-S <SRC-DIR>] [-D <DST-DIR>] [-H] [-B [-A]] [-d <debuglevel>]
 	-S <SRC-DIR>	source directory
 	-D <DST-DIR>	destination directory
 	-H		create header file(s)
 	-B		create Berkeley DB file(s)
 	-A		atomic operation (generate .new and move on success)
-
+	-d <debuglevel> debug level
 	-h		this online help
 
 |;
@@ -54,11 +55,15 @@ Usage: $progname [-S <SRC-DIR>] [-D <DST-DIR>] [-H] [-B [-A]]
 };
 
 ## parse options
-our ($opt_h, $opt_S, $opt_D, $opt_B, $opt_H, $opt_A);
-getopts('hS:D:BHA') || help();
+our ($opt_h, $opt_S, $opt_D, $opt_B, $opt_H, $opt_A, $opt_d);
+getopts('d:hS:D:BHA') || help();
 
 if (defined $opt_h) {
 	help();
+};
+
+if (defined $opt_d) {
+	$debug = $opt_d;
 };
 
 unless (defined $opt_H || defined $opt_B) {
@@ -71,6 +76,7 @@ my $file_dst_h;
 my $dir_src;
 my $dir_dst;
 my $global_file;
+my $lisp_file;
 my @files;
 
 ## source file handling
@@ -79,6 +85,7 @@ if (defined $opt_S) {
 	$dir_src .= "/" if ($dir_src !~ /\/$/o);
 
 	$global_file = $dir_src . "ipv6-unicast-address-assignments.xml";
+	$lisp_file = $dir_src . "site-db";
 
 	@files = (
 		$dir_src . "delegated-arin-extended-latest",
@@ -92,6 +99,7 @@ if (defined $opt_S) {
 	$dir_src = "../registries/";
 
 	$global_file = $dir_src . "iana/ipv6-unicast-address-assignments.xml";
+	$lisp_file = $dir_src . "lisp/site-db";
 
 	@files = (
 		$dir_src . "arin/delegated-arin-extended-latest",
@@ -127,6 +135,7 @@ print "INFO  : destination file for DB (CountryCode): " . $file_dst_db_cc  . "\n
 my (@arin, @apnic, @ripencc, @iana, @lacnic, @afrinic, @reserved, @s6to4, @s6bone);
 
 my @cc_array;
+my @info_array;
 
 my %date_created;
 
@@ -153,6 +162,7 @@ for (my $i = 0; $i <= 64; $i++) {
 	printf "Prefix length %3d: ",  $i if ($debug & 0x100);
 	printf "   mask_00_31=" . $subnet_masks{$i}->{'mask_00_31'} . " mask_32_63=" . $subnet_masks{$i}->{'mask_32_63'} . "\n" if ($debug & 0x100);
 };
+
 
 # Fill global assignement (IPv6 should be more hierarchical than IPv4)
 sub proceed_global {
@@ -215,10 +225,100 @@ sub proceed_global {
 };
 
 
+## LISP
+sub proceed_lisp {
+	# 1: map-server
+	# 2: site - site name
+	# 3: instance
+	# 4: eid - eid prefix
+	# 5: registered - yes or no
+	# 6: who - ip addr of who last registered, blank & -- mean none
+	# 7: proxy - yes or no (or blank)
+	# 8: ttl - in what ever format the map-server reports it
+	# 9: nrloc - how many rlocs in field 10
+	# 10: rlocs - seperated by ';' and with (up|down)
+	# 11: timestamp - when data was collected, in UTC 
+	#
+	# Example:
+	# cisco-sjc-mr-ms-1|akennedy-xtr|0|153.16.9.64/28|no||no||0||2017.0223.0600
+	# cisco-sjc-mr-ms-1|akennedy-xtr|0|2610:d0:1233::/48|no||no||0||2017.0223.0600
+
+	my $ipv6; my $length;
+	my ($start, $distance);
+
+	print "INFO  : proceed LISP data file (TXT): " . $lisp_file . "\n";
+
+	open(my $FILE, "<", $lisp_file) || die "Cannot open file: $lisp_file";
+
+	my ($map, $site, $instance, $eid, $registered, $who, $proxy, $ttl, $nrloc, $rloc, $timestamp);
+	my $reg = "LISP";
+	my $line;
+	my $line_number = 0;
+
+	my $ipv6_check = "2610:d0::/32"; # assigned for LISP
+	my $ip_ipv6_check = new Net::IP($ipv6_check) || die "Can't create IPv6 object from ipv6=$ipv6_check";
+
+	while (<$FILE>) {
+		$line = $_;
+		$line_number++;
+		chomp $line;
+
+		printf "LISP read   : $line\n" if ($debug & 0x100);
+
+		($map, $site, $instance, $eid, $registered, $who, $proxy, $ttl, $nrloc, $rloc, $timestamp) = split /\|/, $line;
+
+		if ($line_number == 1) {
+			$timestamp =~ /^([0-9]{4})\.([0-9]{4})/o;
+			$date_created{$reg} = $1 . $2;
+		};
+
+		if ($eid !~ /^([0-9a-f:]+)\/([0-9]{1,3})$/o) {
+			# not IPv6
+			printf "LISP skip !6: $line\n" if ($debug & 0x100);
+			next;
+		};
+
+		my $ipv6 = $1;
+		my $prefixlen = $2;
+
+		if ($prefixlen > 64) {
+			# only prefix length <= 64 is supported by lookup table
+			printf "LISP skip PL: $line\n" if ($debug & 0x100);
+			next;
+		};
+
+		printf "LISP process: $line\n" if ($debug & 0x100);
+
+		printf "LISP convert: IPv6=$ipv6/$prefixlen\n" if ($debug & 0x100);
+
+		# convert IPv6 address
+		my $ip_ipv6 = new Net::IP($ipv6 . "/". $prefixlen) || die "Can't create IPv6 object from ipv6=$ipv6";
+
+		my $test = $ip_ipv6->overlaps($ip_ipv6_check);
+
+		if ($test != $Net::IP::IP_A_IN_B_OVERLAP) {
+			printf "LISP skip (!L): $line\n" if ($debug & 0x100);
+			next;
+		};
+
+		printf "LISP store  : ipv6=%s info=%s\n", $ip_ipv6->ip() . "/" . $prefixlen, $site if ($debug & 0x100);
+		push @info_array, $ip_ipv6->ip() . "/" . $prefixlen . "/" . "LISP#" . $site;
+	};
+
+	close($FILE);
+};
+
+
 ## Main
-proceed_global();
+&proceed_lisp();
+&proceed_global();
 
 foreach my $file (@files) {
+	if ($debug & 0x100) {
+		print "NOTICE: skip registry files\n";
+		next;
+	};
+
 	print "INFO  : proceed file: " . $file . "\n";
 
 	my $counter = 0;
@@ -357,26 +457,29 @@ Label_finished:
 # Create hash
 my %data;
 my %data_cc;
+my %data_info;
 
 sub fill_data {
 	my $parray = shift || die "missing array pointer";
 	my $reg = shift || die "missing registry";
 	my $pdata = shift || die "missing hash pointer";
 
-	if ($reg ne "CC") {
-		print "INFO  : fill data for registry: $reg\n";
-	} else {
+	if ($reg eq "CC") {
 		print "INFO  : fill data for CountryCode assignment\n";
+	} elsif ($reg eq "INFO") {
+		print "INFO  : fill data for Info assignment\n";
+	} else {
+		print "INFO  : fill data for registry: $reg\n";
 	};
 
 	foreach my $entry (sort @$parray) {
 		my ($ipv6, $length, $data);
 
-		if ($reg ne "CC") {
+		if ($reg eq "CC" || $reg eq "INFO") {
+			($ipv6, $length, $data) = split /\//o, $entry;
+		} else {
 			($ipv6, $length) = split /\//o, $entry;
 			$data = $reg;
-		} else {
-			($ipv6, $length, $data) = split /\//o, $entry;
 		};
 
 		print " raw=$entry ipv6=$ipv6 length=$length data=$data" if ($debug & 0x40);
@@ -420,6 +523,7 @@ sub fill_data {
 &fill_data(\@s6bone , "6BONE"  , \%data);
 
 &fill_data(\@cc_array, "CC"  , \%data_cc);
+&fill_data(\@info_array, "INFO"  , \%data_info);
 
 my $now_string = strftime "%Y%m%d-%H%M%S%z %Z", localtime;
 my $string = "";
@@ -454,16 +558,14 @@ if (defined $opt_H) {
 |;
 
 	# print creation dates
-	print $OUT "\/\*\@unused\@\*\/ static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = \"$string\";\n";
+	print $OUT "static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = \"$string\";\n";
 
-	print $OUT "\/\*\@unused\@\*\/ static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = " . time . ";\n";
+	print $OUT "static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = " . time . ";\n";
 
 	# Main data structure
 	print $OUT qq|
 static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 |;
-
-
 	printf $OUT "\t//%-10s, %-10s, %-10s, %-10s, %-s, %-10s\n", "ipv6_00_31", "ipv6_32_63", "mask_00_31", "mask_32_63", "mask_length", "registry";
 
 	foreach my $ipv6 (sort keys %data) {
@@ -472,6 +574,17 @@ static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 
 	print $OUT "};\n";
 
+	# Info structure
+	print $OUT qq|
+static const s_ipv6addr_info dbipv6addr_info[] = {
+|;
+	printf $OUT "\t//%-10s, %-10s, %-10s, %-10s, %-s, %-10s\n", "ipv6_00_31", "ipv6_32_63", "mask_00_31", "mask_32_63", "mask_length", "info";
+
+	foreach my $ipv6 (sort keys %data_info) {
+		printf $OUT "\t{ 0x%s, 0x%s, 0x%s, 0x%s, %3d, \"%s\" },\n", $data_info{$ipv6}->{'ipv6_00_31'}, $data_info{$ipv6}->{'ipv6_32_63'}, $data_info{$ipv6}->{'mask_00_31'}, $data_info{$ipv6}->{'mask_32_63'}, $data_info{$ipv6}->{'mask_length'}, $data_info{$ipv6}->{'reg'};
+	};
+
+	print $OUT "};\n";
 	close($OUT);
 
 	print "INFO  : header file created from input: " . $file_dst_h . "\n";

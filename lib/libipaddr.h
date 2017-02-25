@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libipaddr.h
  * Version    : $Id$
- * Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2014-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipaddr.c
@@ -24,6 +24,8 @@ typedef struct {
 	uint8_t  flag_valid;		/* address structure filled */
 //	uint8_t  prefixlength;		/* prefix length (0-128) 8 bit*/ TODO LATER
 //	uint8_t  flag_prefixuse;	/* =1 prefix length in use */ TODO LATER
+	uint32_t typeinfo1;		/* typeinfo 1 */
+	uint32_t typeinfo2;		/* typeinfo 2 */
 } ipv6calc_ipaddr;
 
 
@@ -33,6 +35,8 @@ typedef struct {
 
 /* ipv4addr ptr -> ipaddr */
 #define CONVERT_IPV4ADDRP_IPADDR(ipv4addrp, ipaddr) \
+	ipaddr.typeinfo1	= ipv4addrp->typeinfo; \
+	ipaddr.typeinfo2	= ipv4addrp->typeinfo2; \
 	ipaddr.addr[0]		= ipv4addr_getdword(ipv4addrp); \
 	ipaddr.addr[1]		= 0; \
 	ipaddr.addr[2]		= 0; \
@@ -42,6 +46,8 @@ typedef struct {
 
 /* ipv4addr ptr -> ipaddr ptr */
 #define CONVERT_IPV4ADDRP_IPADDRP(ipv4addrp, ipaddrp) \
+	ipaddrp->typeinfo1	= ipv4addrp->typeinfo; \
+	ipaddrp->typeinfo2	= ipv4addrp->typeinfo2; \
 	ipaddrp->addr[0]	= ipv4addr_getdword(ipv4addrp); \
 	ipaddrp->addr[1]	= 0; \
 	ipaddrp->addr[2]	= 0; \
@@ -51,6 +57,8 @@ typedef struct {
 
 /* ipv6addr ptr -> ipaddr */
 #define CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr) \
+	ipaddr.typeinfo1	= ipv6addrp->typeinfo; \
+	ipaddr.typeinfo2	= ipv6addrp->typeinfo2; \
 	ipaddr.addr[0]		= ipv6addr_getdword(ipv6addrp, 0); \
 	ipaddr.addr[1]		= ipv6addr_getdword(ipv6addrp, 1); \
 	ipaddr.addr[2]		= ipv6addr_getdword(ipv6addrp, 2); \
@@ -60,6 +68,8 @@ typedef struct {
 
 /* ipv6addr ptr -> ipaddr ptr */
 #define CONVERT_IPV6ADDRP_IPADDRP(ipv6addrp, ipaddrp) \
+	ipaddrp->typeinfo1	= ipv6addrp->typeinfo; \
+	ipaddrp->typeinfo2	= ipv6addrp->typeinfo2; \
 	ipaddrp->addr[0]	= ipv6addr_getdword(ipv6addrp, 0); \
 	ipaddrp->addr[1]	= ipv6addr_getdword(ipv6addrp, 1); \
 	ipaddrp->addr[2]	= ipv6addr_getdword(ipv6addrp, 2); \
@@ -72,6 +82,8 @@ typedef struct {
 #define CONVERT_IPADDRP_IPV4ADDR(ipaddrp, ipv4addr) \
 	ipv4addr_clearall(&ipv4addr); \
 	ipv4addr_setdword(&ipv4addr, ipaddrp->addr[0]); \
+	ipv4addr.typeinfo   = ipaddrp->typeinfo1; \
+	ipv4addr.typeinfo2  = ipaddrp->typeinfo2; \
 	ipv4addr.flag_valid = 1;
 
 /* ipaddr ptr -> ipv6addr */
@@ -81,6 +93,8 @@ typedef struct {
 	ipv6addr_setdword(&ipv6addr, 1, ipaddrp->addr[1]); \
 	ipv6addr_setdword(&ipv6addr, 2, ipaddrp->addr[2]); \
 	ipv6addr_setdword(&ipv6addr, 3, ipaddrp->addr[3]); \
+	ipv6addr.typeinfo   = ipaddrp->typeinfo1; \
+	ipv6addr.typeinfo2  = ipaddrp->typeinfo2; \
 	ipv6addr.flag_valid = 1;
 
 #endif

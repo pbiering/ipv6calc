@@ -234,6 +234,9 @@ run_anon_options_kp_tests() {
 
 		# Registry
 		reg_orig="`./ipv6calc -m -i -q "$input"  | grep -a "^IPV._REGISTRY=" | sed 's/IPV._REGISTRY=//'`"
+		if echo "$reg_orig" | grep -q LISP; then
+			reg_orig=${reg_orig/(*} # cut lisp details
+		fi
 		reg_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._REGISTRY=" | sed 's/IPV._REGISTRY=//'`"
 
 		if [ -z "$reg_orig" ]; then

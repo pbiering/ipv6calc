@@ -51,13 +51,11 @@
  *  - LISP anycast
  * a909:ccca:aaaa:aaaC  (C = 4-bit checksum)
  *                      ccc      -> 10-bit Country Code mapping [A-Z]*[A-Z0-9] (936)
+ *                                   0x3FD = LISP
  *                                   0x3FE = unknown country
  *                                   0x3FF - 16 + REGISTRY_6BONE && ASN=0 = 6bone
- *                                   0x3FF - 16 + REGISTRY_LISP  = LISP
  *                                   0x000-0x3A7: c1= c / 36, c2 = c % 36
  *                      aaaaaaaa -> 32-bit ASN
- *                      in case of LISP (6bone is EOL)
- *                      ccc00000 
  */
 #define ANON_TOKEN_VALUE_00_31		(uint32_t) 0xa9090000u
 #define ANON_TOKEN_MASK_00_31		(uint32_t) 0xff0f0000u
@@ -367,7 +365,6 @@ typedef struct {
 #include "libipv6calc.h"
 
 #define IPV6_ADDR_REGISTRY_6BONE	REGISTRY_6BONE
-#define IPV6_ADDR_REGISTRY_LISP		REGISTRY_LISP
 #define IPV6_ADDR_REGISTRY_IANA		REGISTRY_IANA
 #define IPV6_ADDR_REGISTRY_APNIC	REGISTRY_APNIC
 #define IPV6_ADDR_REGISTRY_ARIN		REGISTRY_ARIN

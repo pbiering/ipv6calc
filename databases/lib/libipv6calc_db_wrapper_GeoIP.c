@@ -1091,6 +1091,8 @@ char *libipv6calc_db_wrapper_GeoIP_database_info(GeoIP *gi) {
 		goto END_libipv6calc_db_wrapper;
 	};
 
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Result of GeoIP_database_info (dyn-load): %s", result_GeoIP_database_info);
+
 END_libipv6calc_db_wrapper:
 	return(result_GeoIP_database_info);
 #else

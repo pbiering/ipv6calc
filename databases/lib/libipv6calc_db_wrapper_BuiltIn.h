@@ -27,6 +27,7 @@
 #define BUILTIN_DB_AS_REG					7
 #define BUILTIN_DB_MAX						(7 + 1)
 
+
 // features
 extern uint32_t wrapper_features_BuiltIn;
 
@@ -111,3 +112,4 @@ extern int libipv6calc_db_wrapper_BuiltIn_info_by_ipv4addr(const ipv6calc_ipv4ad
 
 // IPv6 Registry
 extern int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp);
+extern int libipv6calc_db_wrapper_BuiltIn_info_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, char *string, const size_t string_len);

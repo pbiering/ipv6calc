@@ -963,6 +963,9 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 uint32_t ipv4addr_anonymized_get_as_num32(const ipv6calc_ipv4addr *ipv4addrp) {
 	if ((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
 		return(ASNUM_AS_UNKNOWN);
+ 	} else if ((ipv4addrp->typeinfo & IPV4_ADDR_LISP) != 0) {
+		// anonymized LISP can't save AS number
+		return(ASNUM_AS_UNKNOWN);
 	};
 
 	return(libipv6calc_db_wrapper_as_num32_decomp17(ipv4addr_getdword(ipv4addrp) & 0x1ffff));
@@ -1497,19 +1500,15 @@ int libipv4addr_registry_num_by_addr(const ipv6calc_ipv4addr *ipv4addrp) {
 		// ASN -> Registry
 		// CC  -> Registry
 
-		if ((ipv4addrp->typeinfo & IPV4_ADDR_LISP) != 0) {
-			registry = IPV4_ADDR_REGISTRY_LISP;
-		} else {
-			/* retrieve registry via AS number from anonymized address (simple) */
-			as_num32 = libipv4addr_as_num32_by_addr(ipv4addrp);
-			if (as_num32 != ASNUM_AS_UNKNOWN) {
-				registry = libipv6calc_db_wrapper_registry_num_by_as_num32(as_num32);
-			};
-			if ((as_num32 == ASNUM_AS_UNKNOWN) || (registry == IPV4_ADDR_REGISTRY_ARIN)) {
-				/* retrieve registry via cc_index from anonymized address (simple, fallback) */
-				cc_index = libipv4addr_cc_index_by_addr(ipv4addrp, NULL);
-				registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
-			};
+		/* retrieve registry via AS number from anonymized address (simple) */
+		as_num32 = libipv4addr_as_num32_by_addr(ipv4addrp);
+		if (as_num32 != ASNUM_AS_UNKNOWN) {
+			registry = libipv6calc_db_wrapper_registry_num_by_as_num32(as_num32);
+		};
+		if ((as_num32 == ASNUM_AS_UNKNOWN) || (registry == IPV4_ADDR_REGISTRY_ARIN)) {
+			/* retrieve registry via cc_index from anonymized address (simple, fallback) */
+			cc_index = libipv4addr_cc_index_by_addr(ipv4addrp, NULL);
+			registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
 		};
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_REGISTRY) == 1) {

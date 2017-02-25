@@ -13,10 +13,11 @@ Usage: $0 -H|-B -4|-6 -C <command> [-u] [-S <dir>] [-D <dir>]
 	-S <dir>	destination directory
 	-D <dir>	source directory
 	-u		unconditional update
+	-d <debuglevel>	debug level
 END
 }
 
-while getopts "uS:D:HB46C:h\?" opt; do
+while getopts "d:uS:D:HB46C:h\?" opt; do
 	case $opt in
 	    u)
 		flag_update="1"
@@ -43,6 +44,9 @@ while getopts "uS:D:HB46C:h\?" opt; do
 		;;
 	    D)
 		dst_dir=$OPTARG
+		;;
+	    d)
+		debug=$OPTARG
 		;;
 	    *)
 		help
@@ -126,6 +130,7 @@ fi
 
 [ -n "$src_dir" ] && options="$options -S $src_dir"
 [ -n "$dst_dir" ] && options="$options -D $dst_dir"
+[ -n "$debug"   ] && options="$options -d $debug"
 options="$options -$option -A"
 
 if [ $flag_update -eq 1 ]; then
