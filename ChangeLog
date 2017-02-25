@@ -11,6 +11,7 @@ Info:
 --------------------------------------------------------------------
 20170225/PB
 	various files: add LISP support in BuiltIn database
+	ipv6calcweb/ipv6calcweb.cgi[.in]: add URL support for LISP and Longitude/Latitude (Openstreetmap)
 
 20170219/PB
 	tools/DBIP-generate-db.pl: add support for full version of DBIP.com

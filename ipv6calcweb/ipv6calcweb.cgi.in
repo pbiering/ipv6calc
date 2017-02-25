@@ -108,6 +108,7 @@ my $debug = 0;
 # debug | 0x0080: print environment to stderr
 # debug | 0x0100: print Anti-DoS token infos to stderr
 # debug | 0x1000: skip Anti-DoS sleep
+# debug | 0x2000: print lat/long URL infos to stderr
 # debug | 0x8000: print feature token hash
 
 if ( defined $ENV{'HTTP_IPV6CALCWEB_DEBUG'} ) {
@@ -192,8 +193,14 @@ sub find_dir(@) {
 # Base URL for RFCs
 my $url_rfc = "https://tools.ietf.org/html/";
 
+# Base URL for LISP
+my $url_lisp = "http://www.lisp4.net/lisp-site/";
+
 # Base URL for GeoName service
 my $url_geoname_by_id = "http://api.geonames.org/get?geonameId=#GEONAME_ID#&username=demo";
+
+# Base URL for Location Service
+my $url_openstreetmap_by_lat_lon = "http://www.openstreetmap.org/?mlat=#LATITUDE#&mlon=#LONGITUDE#&zoom=8";
 
 # Whois server urls
 my %url_whoisservers = (
@@ -1297,7 +1304,7 @@ sub print_infohash ($$$;$) {
 			&print_tagoutput ( "<tt>" );
 		};
 
-		if ( $key_lookup eq "IPV4" ) {
+		if ($key_lookup eq "IPV4" || $key_lookup eq "IPV4_REGISTRY") {
 			if ( defined $$phash{'IPV4_REGISTRY' . $key_embedded} ) {
 				$whois_registry = $$phash{'IPV4_REGISTRY' . $key_embedded};
 				$whois_type = "ipv4";
@@ -1308,7 +1315,7 @@ sub print_infohash ($$$;$) {
 				$whois_type = "ipv4";
 				$flag_whoisurl = 1;
 			};
-		} elsif ( $key_lookup eq "IPV6" ) {
+		} elsif ($key_lookup eq "IPV6" || $key_lookup eq "IPV6_REGISTRY") {
 			if ( defined $$phash{'IPV6_REGISTRY' . $key_embedded} ) {
 				$whois_registry = $$phash{'IPV6_REGISTRY' . $key_embedded};
 				$whois_type = "ipv6";
@@ -1324,6 +1331,10 @@ sub print_infohash ($$$;$) {
 				if (defined $section) {
 					$url .= "#section-" . $section;
 				};
+				&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
+			} elsif ( $whois_registry =~ /^.*\(LISP(#.*)\)$/o ) {
+				($section) = $1;
+				$url = $url_lisp . $section;
 				&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
 			} elsif ( defined $url_whoisservers{$whois_registry}->{$whois_type} ) {
 				if ( $url_whoisservers{$whois_registry}->{$whois_type} ne "" ) {
@@ -1344,6 +1355,37 @@ sub print_infohash ($$$;$) {
 			$url =~ s/#GEONAME_ID#/$$phash{$key}/g;
 			&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
 			$flag_whoisurl = 1; # workaround to close a tag below
+		} elsif ($key =~ /(LATITUDE|LONGITUDE)/o) {
+			my $combined_key;
+			my $combined_valid = 0;
+			$url = $url_openstreetmap_by_lat_lon;
+
+			if ($key =~ /LATITUDE/o) {
+				$url =~ s/#LATITUDE#/$$phash{$key}/g;
+				$combined_valid++;
+
+				$combined_key = $key;
+				$combined_key =~ s/LATITUDE/LONGITUDE/o;
+				if(defined $$phash{$combined_key}) {
+					$url =~ s/#LONGITUDE#/$$phash{$combined_key}/g;
+					$combined_valid++;
+				};
+			} elsif ($key =~ /LONGITUDE/o) {
+				$url =~ s/#LONGITUDE#/$$phash{$key}/g;
+				$combined_valid++;
+
+				$combined_key = $key;
+				$combined_key =~ s/LONGITUDE/LATITUDE/o;
+				if(defined $$phash{$combined_key}) {
+					$url =~ s/#LATITUDE#/$$phash{$combined_key}/g;
+					$combined_valid++;
+				};
+			};
+
+			if ($combined_valid == 2) {
+				&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
+				$flag_whoisurl = 1; # workaround to close a tag below
+			};
 		};
 		
 		&print_tagoutput ( "<font size=\"-1\">" ) if ($count_key_embedded > 0);
@@ -1364,6 +1406,7 @@ sub print_infohash ($$$;$) {
 		&print_tagoutput ( "      </tr>\n" );
 		&print_textonly ("\n");
 	};
+
 
 	if ($mode_db_entries_in_subcolumns != 1) {
 		# nothing more to do
@@ -1421,11 +1464,45 @@ sub print_infohash ($$$;$) {
 				my $key_result = $db . "_" . $key;
 				if (defined $$phash{$key_result}) {
 					my $flag = 0;
+					my $url;
 					if ($key_lookup =~ /GEONAME_ID/o) {
-						my $url = $url_geoname_by_id;
+						$url = $url_geoname_by_id;
 						$url =~ s/#GEONAME_ID#/$$phash{$key_result}/g;
 						&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
 						$flag = 1;
+					} elsif ($key =~ /(LATITUDE|LONGITUDE)/o) {
+						printf STDERR "DEBUG : found combination key master: %s\n", $key if ($debug & 0x2000);
+						my $combined_key;
+						my $combined_valid = 0;
+						$url = $url_openstreetmap_by_lat_lon;
+
+						if ($key_lookup =~ /LATITUDE/o) {
+							$url =~ s/#LATITUDE#/$$phash{$key_result}/g;
+							$combined_valid++;
+
+							$combined_key = $key_result;
+							$combined_key =~ s/LATITUDE/LONGITUDE/o;
+							printf STDERR "DEBUG : search for combination key slave: %s\n", $combined_key if ($debug & 0x2000);
+							if(defined $$phash{$combined_key}) {
+								$url =~ s/#LONGITUDE#/$$phash{$combined_key}/g;
+								$combined_valid++;
+							};
+						} elsif ($key_lookup =~ /LONGITUDE/o) {
+							$url =~ s/#LONGITUDE#/$$phash{$key_result}/g;
+							$combined_valid++;
+
+							$combined_key = $key_result;
+							$combined_key =~ s/LONGITUDE/LATITUDE/o;
+							if(defined $$phash{$combined_key}) {
+								$url =~ s/#LATITUDE#/$$phash{$combined_key}/g;
+								$combined_valid++;
+							};
+						};
+
+						if ($combined_valid == 2) {
+							&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
+							$flag = 1; # workaround to close a tag below
+						};
 					};
 
 					print $$phash{$key_result};
