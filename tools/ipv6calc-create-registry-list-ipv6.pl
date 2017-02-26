@@ -642,7 +642,7 @@ if (defined $opt_B) {
 	tie @a, 'BerkeleyDB::Recno', -Filename => $file_dst_db_reg, -Subname => 'data-info', -Flags => DB_CREATE || die "Cannot open file $file_dst_db_reg: $! $BerkeleyDB::Error\n";
 
 	foreach my $ipv6 (sort keys %data_info) {
-		push @a, sprintf("%s;%s;%s;%s;%d;%s", $data_info{$ipv6}->{'ipv6_00_31'}, $data_info{$ipv6}->{'ipv6_32_63'}, $data_info{$ipv6}->{'mask_00_31'}, $data_info{$ipv6}->{'mask_32_63'}, $data_info{$ipv6}->{'mask_length'}, $data_info{$ipv6}->{'reg'});
+		push @a, sprintf("%s;%s;%s;%s;%s", $data_info{$ipv6}->{'ipv6_00_31'}, $data_info{$ipv6}->{'ipv6_32_63'}, $data_info{$ipv6}->{'mask_00_31'}, $data_info{$ipv6}->{'mask_32_63'}, $data_info{$ipv6}->{'reg'});
 	};
 
 	untie @a;
