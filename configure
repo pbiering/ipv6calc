@@ -5102,6 +5102,104 @@ $as_echo "#define SUPPORT_IP2LOCATION_STATIC 1" >>confdefs.h
 			fi
 		fi
 
+		as_ac_Lib=`$as_echo "ac_cv_lib_$IP2LOCATION_LIB_NAME''_IP2Location_api_version_string" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for IP2Location_api_version_string in -l$IP2LOCATION_LIB_NAME" >&5
+$as_echo_n "checking for IP2Location_api_version_string in -l$IP2LOCATION_LIB_NAME... " >&6; }
+if eval \${$as_ac_Lib+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-l$IP2LOCATION_LIB_NAME  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char IP2Location_api_version_string ();
+int
+main ()
+{
+return IP2Location_api_version_string ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  eval "$as_ac_Lib=yes"
+else
+  eval "$as_ac_Lib=no"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+eval ac_res=\$$as_ac_Lib
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
+
+
+$as_echo "#define SUPPORT_IP2LOCATION_API_VERSION_STRING 1" >>confdefs.h
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2Location library supports API version string" >&5
+$as_echo "*** IP2Location library supports API version string" >&6; }
+
+fi
+
+
+		as_ac_Lib=`$as_echo "ac_cv_lib_$IP2LOCATION_LIB_NAME''_IP2Location_lib_version_string" | $as_tr_sh`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for IP2Location_lib_version_string in -l$IP2LOCATION_LIB_NAME" >&5
+$as_echo_n "checking for IP2Location_lib_version_string in -l$IP2LOCATION_LIB_NAME... " >&6; }
+if eval \${$as_ac_Lib+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-l$IP2LOCATION_LIB_NAME  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char IP2Location_lib_version_string ();
+int
+main ()
+{
+return IP2Location_lib_version_string ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  eval "$as_ac_Lib=yes"
+else
+  eval "$as_ac_Lib=no"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+eval ac_res=\$$as_ac_Lib
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
+
+
+$as_echo "#define SUPPORT_IP2LOCATION_LIB_VERSION_STRING 1" >>confdefs.h
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2Location library supports LIB version string" >&5
+$as_echo "*** IP2Location library supports LIB version string" >&6; }
+
+fi
+
+
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** CPPFLAGS=$CPPFLAGS" >&5
 $as_echo "***** CPPFLAGS=$CPPFLAGS" >&6; }
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ***** CFLAGS  =$CFLAGS" >&5
@@ -5162,6 +5260,27 @@ else
 fi
 
 	else
+		ac_fn_c_check_decl "$LINENO" "IP2Location_api_version_string" "ac_cv_have_decl_IP2Location_api_version_string" "$ac_includes_default"
+if test "x$ac_cv_have_decl_IP2Location_api_version_string" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_IP2LOCATION_API_VERSION_STRING $ac_have_decl
+_ACEOF
+if test $ac_have_decl = 1; then :
+
+
+$as_echo "#define SUPPORT_IP2LOCATION_API_VERSION_STRING 1" >>confdefs.h
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2Location header supports API version string" >&5
+$as_echo "*** IP2Location header supports API version string" >&6; }
+
+fi
+
+
 		# wrapper detects by itself the real support
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2Location dyn lib: $ip2location_dyn_lib" >&5
 $as_echo "*** IP2Location dyn lib: $ip2location_dyn_lib" >&6; }
