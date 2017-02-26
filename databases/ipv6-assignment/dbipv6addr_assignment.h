@@ -2,7 +2,7 @@
  * Project       : ipv6calc
  * File          : dbipv6_assignment.h
  * Version       : $Id$
- * Generated     : 20170225-085038+0100 CET
+ * Generated     : 20170226-170249+0100 CET
  * Data copyright: IANA ARIN RIPENCC APNIC LACNIC AFRINIC
  *
  * Information:
@@ -11,8 +11,8 @@
 
 #include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
-static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20170223 APNIC/20170222 ARIN/20170222 IANA/20170104 LACNIC/20170222 LISP/20170223 RIPENCC/20170222";
-static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = 1488009038;
+static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20170226 APNIC/20170226 ARIN/20170226 IANA/20170104 LACNIC/20170224 LISP/20170226 RIPENCC/20170225";
+static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = 1488124969;
 
 static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 	//ipv6_00_31, ipv6_32_63, mask_00_31, mask_32_63, mask_length, registry  
@@ -507,6 +507,7 @@ static const s_ipv6addr_info dbipv6addr_info[] = {
 	{ 0x261000d0, 0x22100000, 0xffffffff, 0xffff0000,  48, "LISP#kjaschultowski-xtr" },
 	{ 0x261000d0, 0x22110000, 0xffffffff, 0xffff0000,  48, "LISP#jwiegner-xtr" },
 	{ 0x261000d0, 0x22120000, 0xffffffff, 0xffff0000,  48, "LISP#wheinze-xtr" },
+	{ 0x261000d0, 0x22130000, 0xffffffff, 0xffff0000,  48, "LISP#bbernhard-xtr" },
 	{ 0x261000d0, 0x31000000, 0xffffffff, 0xffff0000,  48, "LISP#iij-xtr" },
 	{ 0x261000d0, 0x32000000, 0xffffffff, 0xffff0000,  48, "LISP#hughes-xtr" },
 	{ 0x261000d0, 0x32010000, 0xffffffff, 0xffff0000,  48, "LISP#apan-xtr" },
