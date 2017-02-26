@@ -1144,7 +1144,7 @@ int libipv6calc_db_wrapper_External_info_by_ipaddr(const ipv6calc_ipaddr *ipaddr
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "database opened type=%d recno_max=%ld dbp=%p", External_type, recno_max, dbp);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "database opened type=%x recno_max=%ld dbp=%p", External_type | 0x40000, recno_max, dbp);
 
 	result = libipv6calc_db_wrapper_get_entry_generic(
 		(void *) dbp,							// pointer to database
@@ -1192,7 +1192,7 @@ int libipv6calc_db_wrapper_External_info_by_ipaddr(const ipv6calc_ipaddr *ipaddr
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Database entry found %d: %s", token_count, token);
 
 		if (token_count == 1) {
-			/* country */
+			/* info */
 			snprintf(string, string_len, "%s", token);
 		};
 

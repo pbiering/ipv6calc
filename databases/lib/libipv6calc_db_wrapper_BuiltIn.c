@@ -778,6 +778,8 @@ int libipv6calc_db_wrapper_BuiltIn_info_by_ipv4addr(const ipv6calc_ipv4addr *ipv
 		result = 0;
 	};
 
+#else  // SUPPORT_DB_IPV4_REG
+	snprintf(string, string_len, "%s", "");
 #endif // SUPPORT_DB_IPV4_REG
 
 	return(result);
@@ -928,6 +930,8 @@ int libipv6calc_db_wrapper_BuiltIn_info_by_ipv6addr(const ipv6calc_ipv6addr *ipv
 		result = 0;
 	};
 
+#else  // SUPPORT_DB_IPV6_REG
+	snprintf(string, string_len, "%s", "");
 #endif // SUPPORT_DB_IPV6_REG
 
 	return(result);
