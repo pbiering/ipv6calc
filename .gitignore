@@ -25,3 +25,9 @@ tools/GeoIP-update.sh
 tools/IP2Location-update.sh
 tools/Makefile
 tools/ipv6calc-db-update.sh
+ipv6calc/ipv6calc
+ipv6calcweb/ipv6calcweb.cgi
+ipv6loganon/ipv6loganon
+ipv6logconv/ipv6logconv
+ipv6logstats/ipv6logstats
+databases/*/*.db
