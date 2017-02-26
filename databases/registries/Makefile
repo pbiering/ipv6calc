@@ -42,6 +42,10 @@ distclean:
 			echo "Delete datafiles: iana"; \
 			rm -f iana/ipv6-unicast-address-assignments.xml iana/ipv4-address-space.xml iana/as-numbers.txt; \
 		fi
+		if [ -d lisp ]; then \
+			echo "Delete datafiles: lisp"; \
+			rm -f lisp/site-db; \
+		fi
 		for d in ripencc apnic arin lacnic afrinic; do \
 			if [ -d $${d} ]; then \
 				echo "Delete datafiles: $${d}"; \
