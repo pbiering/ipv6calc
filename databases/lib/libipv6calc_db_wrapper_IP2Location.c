@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
  * Version    : $Id$
- * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc IP2Location database wrapper
@@ -79,6 +79,10 @@ static union { dl_IP2Location_api_version_num_t func; void * obj; } dl_IP2Locati
 static int dl_status_IP2Location_api_version_string = IPV6CALC_DL_STATUS_UNKNOWN;
 typedef char *(*dl_IP2Location_api_version_string_t)(void);
 static union { dl_IP2Location_api_version_string_t func; void * obj; } dl_IP2Location_api_version_string;
+
+static int dl_status_IP2Location_lib_version_string = IPV6CALC_DL_STATUS_UNKNOWN;
+typedef char *(*dl_IP2Location_lib_version_string_t)(void);
+static union { dl_IP2Location_lib_version_string_t func; void * obj; } dl_IP2Location_lib_version_string;
 
 
 #else // SUPPORT_IP2LOCATION_DYN
@@ -910,11 +914,38 @@ char *libipv6calc_db_wrapper_IP2Location_lib_version(void) {
 	};
 
 
+	const char *dl_symbol3 = "IP2Location_lib_version_string";
+
+	if (dl_status_IP2Location_lib_version_string == IPV6CALC_DL_STATUS_UNKNOWN) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Call dlsym: %s", dl_symbol3);
+
+		dlerror();    /* Clear any existing error */
+
+		*(void **) (&dl_IP2Location_lib_version_string.obj) = dlsym(dl_IP2Location_handle, dl_symbol3);
+
+		if ((error = dlerror()) != NULL)  {
+			dl_status_IP2Location_lib_version_string = IPV6CALC_DL_STATUS_ERROR;
+		} else {
+			dl_status_IP2Location_lib_version_string = IPV6CALC_DL_STATUS_OK;
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called dlsym successful: %s", dl_symbol3);
+		};
+	} else if (dl_status_IP2Location_lib_version_string == IPV6CALC_DL_STATUS_ERROR) {
+		/* already known issue */
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already failed: %s", dl_symbol3);
+	} else {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol3);
+	};
+
 
 	if (ip2location_ipv6_compat == 0) {
 		if (dl_status_IP2Location_api_version_string == IPV6CALC_DL_STATUS_OK) {
 			// take use of new (>= 7.0.1) function
-			snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d", (*dl_IP2Location_api_version_string.func)(), libipv6calc_db_wrapper_IP2Location_library_version_major());
+			if (dl_status_IP2Location_lib_version_string == IPV6CALC_DL_STATUS_OK) {
+				// take also use of new (>= 8.0.4) function
+				snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "%s API=%s Major=%d", (*dl_IP2Location_lib_version_string.func)(), (*dl_IP2Location_api_version_string.func)(), libipv6calc_db_wrapper_IP2Location_library_version_major());
+			} else {
+				snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d", (*dl_IP2Location_api_version_string.func)(), libipv6calc_db_wrapper_IP2Location_library_version_major());
+			};
 		} else {
 			// fallback
 			snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API>=7.0.0 Major=%d", libipv6calc_db_wrapper_IP2Location_library_version_major());
@@ -925,8 +956,12 @@ char *libipv6calc_db_wrapper_IP2Location_lib_version(void) {
 
 #else
 #ifdef SUPPORT_IP2LOCATION_API_VERSION_STRING
+#ifdef SUPPORT_IP2LOCATION_LIB_VERSION_STRING // (>= 8.0.4)
+	snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "%s API=%s Major=%d", IP2Location_lib_version_string(), IP2Location_api_version_string(), libipv6calc_db_wrapper_IP2Location_library_version_major());
+#else  // SUPPORT_IP2LOCATION_LIB_VERSION_STRING
 	snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d", IP2Location_api_version_string(), libipv6calc_db_wrapper_IP2Location_library_version_major());
-#else
+#endif // SUPPORT_IP2LOCATION_LIB_VERSION_STRING
+#else  // SUPPORT_IP2LOCATION_API_VERSION_STRING
 	snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d", IP2LOCATION_API_VERSION, libipv6calc_db_wrapper_IP2Location_library_version_major());
 #endif // SUPPORT_IP2LOCATION_API_VERSION_STRING
 #endif
