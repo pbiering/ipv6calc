@@ -12,17 +12,21 @@ all:
 install:
 		echo "Nothing to do"
 
-force-update:
-		${MAKE} updateclean
-		${MAKE} update
-
 update:
 		echo "Generate new header file, if necessary"
+		../../tools/ipv6calc-registries-check-run-create.sh -4 -H -C ../../tools/ipv6calc-create-registry-list-ipv4.pl
+
+force-update:
+		echo "Generate new header file"
 		../../tools/ipv6calc-registries-check-run-create.sh -4 -H -C ../../tools/ipv6calc-create-registry-list-ipv4.pl
 
 db:
 		echo "Generate new db files, if necessary"
 		../../tools/ipv6calc-registries-check-run-create.sh -4 -B -C ../../tools/ipv6calc-create-registry-list-ipv4.pl
+
+force-db:
+		echo "Generate new db files"
+		../../tools/ipv6calc-registries-check-run-create.sh -u -4 -B -C ../../tools/ipv6calc-create-registry-list-ipv4.pl
 
 updateclean:
 		echo "Delete header file"
