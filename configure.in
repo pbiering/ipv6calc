@@ -732,6 +732,18 @@ if test "$IP2LOCATION" = "yes"; then
 			fi
 		fi
 
+		AC_CHECK_LIB($IP2LOCATION_LIB_NAME, IP2Location_api_version_string,
+		[
+			AC_DEFINE(SUPPORT_IP2LOCATION_API_VERSION_STRING, 1, Define if you want IP2Location API version string support.)
+			AC_MSG_RESULT([*** IP2Location library supports API version string])
+		])
+
+		AC_CHECK_LIB($IP2LOCATION_LIB_NAME, IP2Location_lib_version_string,
+		[
+			AC_DEFINE(SUPPORT_IP2LOCATION_LIB_VERSION_STRING, 1, Define if you want IP2Location LIB version string support.)
+			AC_MSG_RESULT([*** IP2Location library supports LIB version string])
+		])
+
 		AC_MSG_RESULT([***** CPPFLAGS=$CPPFLAGS])
 		AC_MSG_RESULT([***** CFLAGS  =$CFLAGS])
 		AC_MSG_RESULT([***** LDFLAGS =$LDFLAGS])
@@ -745,6 +757,12 @@ if test "$IP2LOCATION" = "yes"; then
 			AC_MSG_ERROR([IP2Location library header files were found but the library was not found, LDFLAGS=$LDFLAGS, CFLAGS=$CFLAGS])
 		])
 	else
+		AC_CHECK_DECLS([IP2Location_api_version_string],
+		[
+			AC_DEFINE(SUPPORT_IP2LOCATION_API_VERSION_STRING, 1, Define if you want IP2Location API version string support.)
+			AC_MSG_RESULT([*** IP2Location header supports API version string])
+		])
+
 		# wrapper detects by itself the real support
 		AC_MSG_RESULT([*** IP2Location dyn lib: $ip2location_dyn_lib])
 		AC_DEFINE_UNQUOTED(IP2LOCATION_DYN_LIB, "$ip2location_dyn_lib", Define IP2Location dynamic library.)
