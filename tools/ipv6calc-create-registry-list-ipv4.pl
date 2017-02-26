@@ -597,6 +597,7 @@ if (defined $opt_B) {
 
 	print "INFO  : create db from input: IPv4=$file_dst_db_reg\n";
 
+	## SubDB: info
 	my %h_ipv4_info;
 
 	tie %h_ipv4_info, 'BerkeleyDB::Btree', -Filename => $file_dst_db_reg, -Subname => 'info', -Flags => DB_CREATE, -Mode => 0644 || die "Cannot open file $file_dst_db_reg: $! $BerkeleyDB::Error\n";
@@ -610,6 +611,8 @@ if (defined $opt_B) {
 
 	untie %h_ipv4_info;
 
+
+	## SubDB: data
 	my @a_ipv4;
 
 	tie @a_ipv4, 'BerkeleyDB::Recno', -Filename => $file_dst_db_reg, -Subname => 'data', -Flags => DB_CREATE || die "Cannot open file $file_dst_db_reg: $! $BerkeleyDB::Error\n";
@@ -623,6 +626,8 @@ if (defined $opt_B) {
 
 	untie @a_ipv4;
 
+
+	## SubDB: data-iana
 	my @a_ipv4_iana;
 
 	tie @a_ipv4_iana, 'BerkeleyDB::Recno', -Filename => $file_dst_db_reg, -Subname => 'data-iana', -Flags => DB_CREATE || die "Cannot open file $file_dst_db_reg: $! $BerkeleyDB::Error\n";
@@ -635,6 +640,22 @@ if (defined $opt_B) {
 	};
 
 	untie @a_ipv4_iana;
+
+
+	## SubDB: data-info
+	my @a_ipv4_info;
+
+	tie @a_ipv4_info, 'BerkeleyDB::Recno', -Filename => $file_dst_db_reg, -Subname => 'data-info', -Flags => DB_CREATE || die "Cannot open file $file_dst_db_reg: $! $BerkeleyDB::Error\n";
+
+	foreach my $ipv4 (sort { $a <=> $b } keys %assignments_info) {
+		my $distance = $assignments_info{$ipv4}->{'distance'};
+		my $info = $assignments_info{$ipv4}->{'info'};
+
+		push @a_ipv4_info, sprintf("%08x;%08x;%s", $ipv4, ($ipv4 + $distance - 1), $info);
+	};
+
+	untie @a_ipv4_info;
+
 
 	print "INFO  : db created from input IPv4->Registry: $file_dst_db_reg\n";
 

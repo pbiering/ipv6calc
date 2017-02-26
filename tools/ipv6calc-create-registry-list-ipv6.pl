@@ -574,7 +574,7 @@ static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 
 	print $OUT "};\n";
 
-	# Info structure
+	# data-info structure
 	print $OUT qq|
 static const s_ipv6addr_info dbipv6addr_info[] = {
 |;
@@ -625,8 +625,10 @@ if (defined $opt_B) {
 
 	untie %h_info;
 
+
 	my @a;
 
+	## SubDB: data
 	tie @a, 'BerkeleyDB::Recno', -Filename => $file_dst_db_reg, -Subname => 'data', -Flags => DB_CREATE || die "Cannot open file $file_dst_db_reg: $! $BerkeleyDB::Error\n";
 
 	foreach my $ipv6 (sort keys %data) {
@@ -634,6 +636,17 @@ if (defined $opt_B) {
 	};
 
 	untie @a;
+
+
+	## SubDB: data-info
+	tie @a, 'BerkeleyDB::Recno', -Filename => $file_dst_db_reg, -Subname => 'data-info', -Flags => DB_CREATE || die "Cannot open file $file_dst_db_reg: $! $BerkeleyDB::Error\n";
+
+	foreach my $ipv6 (sort keys %data_info) {
+		push @a, sprintf("%s;%s;%s;%s;%d;%s", $data_info{$ipv6}->{'ipv6_00_31'}, $data_info{$ipv6}->{'ipv6_32_63'}, $data_info{$ipv6}->{'mask_00_31'}, $data_info{$ipv6}->{'mask_32_63'}, $data_info{$ipv6}->{'mask_length'}, $data_info{$ipv6}->{'reg'});
+	};
+
+	untie @a;
+
 
 	print "INFO  : DB created from input IPv6->Registry: " . $file_dst_db_reg . "\n";
 
@@ -676,6 +689,8 @@ if (defined $opt_B) {
 
 	untie %h_info;
 
+
+	## SubDB: data
 	tie @a, 'BerkeleyDB::Recno', -Filename => $file_dst_db_cc, -Subname => 'data', -Flags => DB_CREATE || die "Cannot open file $file_dst_db_cc: $! $BerkeleyDB::Error\n";
 
 	foreach my $ipv6 (sort keys %data_cc) {
