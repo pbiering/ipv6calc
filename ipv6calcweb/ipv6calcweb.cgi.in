@@ -1323,22 +1323,43 @@ sub print_infohash ($$$;$) {
 			};
 		};
 
-		my ($rfc, $section, $url);
+		my ($info, $rfc, $section, $url, $url2);
 		if ( $flag_whoisurl == 1 ) {
-			if ( $whois_registry =~ /^reserved\((.*)\)$/o ) {
+			if ( $whois_registry =~ /^(.*)\(LISP(#.*)\)$/o ) {
+				($whois_registry, $section) = ($1, $2);
+
+				if ($key_lookup =~ /^IPV(4|6)_REGISTRY/o) {
+					$info = "LISP" . $section;
+					$url2 = $url_lisp . $section;
+				};
+			} elsif ( $whois_registry =~ /^reserved\((.*)\)$/o ) {
 				($rfc, $section) = split /#/, $1;
 				$url = $url_rfc . lc($rfc);
 				if (defined $section) {
 					$url .= "#section-" . $section;
 				};
 				&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
-			} elsif ( $whois_registry =~ /^.*\(LISP(#.*)\)$/o ) {
-				($section) = $1;
-				$url = $url_lisp . $section;
-				&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
-			} elsif ( defined $url_whoisservers{$whois_registry}->{$whois_type} ) {
+			};
+
+			if ( defined $url_whoisservers{$whois_registry}->{$whois_type} ) {
 				if ( $url_whoisservers{$whois_registry}->{$whois_type} ne "" ) {
-					&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url_whoisservers{$whois_registry}->{$whois_type} . $$phash{$key} . "\">" );
+					if ($key_lookup =~ /^IPV(4|6)_REGISTRY/o) {
+						my $ip;
+						if ($whois_type eq "ipv4") {
+							$ip = $$phash{'IPV4' . $key_embedded};
+						} elsif ($whois_type eq "ipv6") {
+							$ip = $$phash{'IPV6' . $key_embedded};
+						};
+
+						if (defined $ip) {
+							$url = $url_whoisservers{$whois_registry}->{$whois_type} . $ip;
+						} else {
+							# something strange happend
+							$flag_whoisurl = 0;
+						};
+					} else {
+						$url = $url_whoisservers{$whois_registry}->{$whois_type} . $$phash{$key};
+					};
 				} else {
 					$flag_whoisurl = 0;
 				};
@@ -1353,8 +1374,6 @@ sub print_infohash ($$$;$) {
 		if ($key =~ /GEONAME_ID/o) {
 			$url = $url_geoname_by_id;
 			$url =~ s/#GEONAME_ID#/$$phash{$key}/g;
-			&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
-			$flag_whoisurl = 1; # workaround to close a tag below
 		} elsif ($key =~ /(LATITUDE|LONGITUDE)/o) {
 			my $combined_key;
 			my $combined_valid = 0;
@@ -1382,22 +1401,34 @@ sub print_infohash ($$$;$) {
 				};
 			};
 
-			if ($combined_valid == 2) {
-				&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
-				$flag_whoisurl = 1; # workaround to close a tag below
+			if ($combined_valid != 2) {
+				$url = undef;
 			};
 		};
 		
+		print $chr_quote;
 		&print_tagoutput ( "<font size=\"-1\">" ) if ($count_key_embedded > 0);
 
-		my $value = $$phash{$key};
-
-		print $chr_quote . $value . $chr_quote;
-		&print_tagoutput ( "</font>" ) if ($count_key_embedded > 0);
-
-		if ( $flag_whoisurl == 1 ) {
+		if (defined $url && defined $url2) {
+			&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
+			print $whois_registry;
 			&print_tagoutput ( "</a>" );
+
+			print "(";
+			&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url2 . "\">" );
+			print $info;
+			&print_tagoutput ( "</a>" );
+			print ")";
+		} elsif (defined $url) {
+			&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
+			print $chr_quote . $$phash{$key} . $chr_quote;
+			&print_tagoutput ( "</a>" );
+		} else {
+			print $chr_quote . $$phash{$key} . $chr_quote;
 		};
+
+		&print_tagoutput ( "</font>" ) if ($count_key_embedded > 0);
+		print $chr_quote;
 
 		if ($flag_tt) {
 			&print_tagoutput ( "</tt>" );
