@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20170226/PB
+	various files: add LISP support in External database
+	IP2Location: add enhancements for upcoming 8.0.4
+
 20170225/PB
 	various files: add LISP support in BuiltIn database
 	ipv6calcweb/ipv6calcweb.cgi[.in]: add URL support for LISP and Longitude/Latitude (Openstreetmap)
