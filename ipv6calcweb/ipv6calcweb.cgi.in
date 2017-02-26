@@ -200,7 +200,7 @@ my $url_lisp = "http://www.lisp4.net/lisp-site/";
 my $url_geoname_by_id = "http://api.geonames.org/get?geonameId=#GEONAME_ID#&username=demo";
 
 # Base URL for Location Service
-my $url_openstreetmap_by_lat_lon = "http://www.openstreetmap.org/?mlat=#LATITUDE#&mlon=#LONGITUDE#&zoom=8";
+my $url_openstreetmap_by_lat_lon = "http://www.openstreetmap.org/?mlat=#LATITUDE#&mlon=#LONGITUDE#&zoom=5";
 
 # Whois server urls
 my %url_whoisservers = (
