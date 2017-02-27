@@ -2,6 +2,9 @@
 *.so
 *.so.*
 *.a
+*.la
+*.lo
+*.slo
 *~
 Makefile
 autogen-all-variants.status
@@ -31,3 +34,4 @@ ipv6loganon/ipv6loganon
 ipv6logconv/ipv6logconv
 ipv6logstats/ipv6logstats
 databases/*/*.db
+*/.libs/*
