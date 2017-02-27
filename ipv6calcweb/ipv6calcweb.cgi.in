@@ -1258,7 +1258,8 @@ sub print_infohash ($$$;$) {
 			$key_print = $1;
 		};
 
-		if ($key =~ /^([A-Z0-9]+)_(.+)$/o) {
+		# print url where available
+		if ((($outputformat eq "html") || ($outputformat eq "htmlfull")) && ($key =~ /^([A-Z0-9]+)_(.+)$/o)) {
 			if (defined $urls{$1}) {
 				# add URL
 				&print_tagoutput("<a href=\"" . $urls{$1} . "\">" . $key_print . "</a>");
@@ -1268,6 +1269,7 @@ sub print_infohash ($$$;$) {
 		} else {
 			print $key_print;
 		};
+
 		&print_textonly (' ' x ($length_max_key - length($key)) ) if ($outputformat ne "textkeyvalue");
 		&print_textonly (" | ") if ($outputformat ne "textkeyvalue");
 		&print_textonly ("[" . $counter . "]") if (($outputformat eq "textkeyvalue") && (defined $counter));
