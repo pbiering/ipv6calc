@@ -189,6 +189,12 @@ sub find_dir(@) {
 	return undef;
 };
 
+# URLs
+my %urls = (
+	"IP2LOCATION" => "http://www.ip2location.com",
+	"GEOIP" => "http://www.maxmind.com",
+	"DBIP"  => "http://www.db-ip.com",
+);
 
 # Base URL for RFCs
 my $url_rfc = "https://tools.ietf.org/html/";
@@ -610,8 +616,12 @@ my %text = (
 		'en' => "GeoIP ZIP code",
 	},
 	'GEOIP_DMACODE' => {
-		'de' => "GeoIP DMACODE",
-		'en' => "GeoIP DMACODE",
+		'de' => "GeoIP DMA Code",
+		'en' => "GeoIP DMA Code",
+	},
+	'GEOIP_AREACODE' => {
+		'de' => "GeoIP Area-Code",
+		'en' => "GeoIP Area Code",
 	},
 	'GEOIP_CONTINENTCODE' => {
 		'de' => "GeoIP Kontinent-Code",
@@ -764,6 +774,10 @@ my %text = (
 	'AREACODE' => {
 		'de' => "Area-Code",
 		'en' => "Area Code",
+	},
+	'DMACODE' => {
+		'de' => "DMA-Code",
+		'en' => "DMA Code",
 	},
 	'TIMEZONE' => {
 		'de' => "Zeitzone",
@@ -1243,7 +1257,17 @@ sub print_infohash ($$$;$) {
 			$key_print =~ /^([^[]+)(\[[^]]*\])?$/;
 			$key_print = $1;
 		};
-		print $key_print;
+
+		if ($key =~ /^([A-Z0-9]+)_(.+)$/o) {
+			if (defined $urls{$1}) {
+				# add URL
+				&print_tagoutput("<a href=\"" . $urls{$1} . "\">" . $key_print . "</a>");
+			} else {
+				&print_tagoutput($key_print);
+			};
+		} else {
+			print $key_print;
+		};
 		&print_textonly (' ' x ($length_max_key - length($key)) ) if ($outputformat ne "textkeyvalue");
 		&print_textonly (" | ") if ($outputformat ne "textkeyvalue");
 		&print_textonly ("[" . $counter . "]") if (($outputformat eq "textkeyvalue") && (defined $counter));
@@ -1462,7 +1486,14 @@ sub print_infohash ($$$;$) {
 		&print_tagoutput ( "      <tr>\n" );
 		&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 224);\" align=\"center\" colspan=\"2\"><font size=\"-1\"><i>Information from databases</i>$entry</font></td>\n" );
 		for my $key (sort @key_db_tokens) {
-			&print_tagoutput ( "        <td style=\"background-color: rgb(" . $r . "," . $g . "," . $b . ");\"><font size=\"-1\"><b>$key</b></font></td>\n" );
+			&print_tagoutput ("        <td style=\"background-color: rgb(" . $r . "," . $g . "," . $b . ");\"><font size=\"-1\"><b>");
+			if (defined $urls{$key}) {
+				# add URL
+				&print_tagoutput("<a href=\"" . $urls{$key} . "\">" . $key . "</a>");
+			} else {
+				&print_tagoutput($key);
+			};
+			&print_tagoutput("</b></font></td>\n");
 			$shift = $r; $r = $g; $g = $b; $b = $shift;	
 		};
 		&print_tagoutput ( "      </tr>\n" );
@@ -2439,17 +2470,17 @@ if ($outputformat =~ /^html/o) {
 
 	if (scalar(keys %db_info_ip2location) > 0) {
 		print "          <br>\n";
-		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.ip2location.com\">IP2Location</a> " . $text{'database'}->{$lang} . " " . create_uri(encode_entities(join(" / ", sort keys %db_info_ip2location))). "</font>\n";
+		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'IP2LOCATION'} . "\">IP2Location</a> " . $text{'database'}->{$lang} . " " . create_uri(encode_entities(join(" / ", sort keys %db_info_ip2location))). "</font>\n";
 	};
 
 	if (scalar(keys %db_info_geoip) > 0) {
 		print "          <br>\n";
-		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.maxmind.com\">MaxMind</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_geoip)) . "</font>\n";
+		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'GEOIP'} . "\">MaxMind</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_geoip)) . "</font>\n";
 	};
 
 	if (scalar(keys %db_info_dbip) > 0) {
 		print "          <br>\n";
-		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.db-ip.com\">db-ip.com</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_dbip)) . "</font>\n";
+		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'DBIP'} . "\">db-ip.com</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_dbip)) . "</font>\n";
 	};
 
 	if (scalar(keys %db_info_external) > 0) {
