@@ -687,7 +687,7 @@ DB *libipv6calc_db_wrapper_DBIP_open_type(const unsigned int type_flag, long int
 
 		/* Walk through the database and print out the key/data pairs. */
 		if ((ret = dbcp->c_get(dbcp, &key, &data, DB_LAST)) != 0) {
-			dbp->err(dbp, ret, "DB->cursor/DB_LAST");
+			// dbp->err(dbp, ret, "DB->cursor/DB_LAST"); // do not print error message if db is empty
 			goto END_libipv6calc_db_wrapper_close_error;
 		};
 
