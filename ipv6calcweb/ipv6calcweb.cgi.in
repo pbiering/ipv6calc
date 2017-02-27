@@ -1262,7 +1262,7 @@ sub print_infohash ($$$;$) {
 		if ((($outputformat eq "html") || ($outputformat eq "htmlfull")) && ($key =~ /^([A-Z0-9]+)_(.+)$/o)) {
 			if (defined $urls{$1}) {
 				# add URL
-				&print_tagoutput("<a href=\"" . $urls{$1} . "\">" . $key_print . "</a>");
+				&print_tagoutput("<a target=\"_blank\" href=\"" . $urls{$1} . "\">" . $key_print . "</a>");
 			} else {
 				&print_tagoutput($key_print);
 			};
@@ -1491,7 +1491,7 @@ sub print_infohash ($$$;$) {
 			&print_tagoutput ("        <td style=\"background-color: rgb(" . $r . "," . $g . "," . $b . ");\"><font size=\"-1\"><b>");
 			if (defined $urls{$key}) {
 				# add URL
-				&print_tagoutput("<a href=\"" . $urls{$key} . "\">" . $key . "</a>");
+				&print_tagoutput("<a target=\"_blank\" href=\"" . $urls{$key} . "\">" . $key . "</a>");
 			} else {
 				&print_tagoutput($key);
 			};
