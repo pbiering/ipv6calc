@@ -791,7 +791,7 @@ char *libipv6calc_db_wrapper_DBIP_database_info(const unsigned int type) {
 	snprintf(resultstring, sizeof(resultstring), "DBIP-%d/%s %s Copyright (c) %s db-ip.com All Rights Reserved"
 		, type
 		, datastring
-		, (type <= 2) ? "FREE" : "COMM"
+		, (type <= 4) ? "FREE" : "COMM"
 		, year
 	);
 

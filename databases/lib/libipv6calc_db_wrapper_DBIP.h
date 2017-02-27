@@ -19,12 +19,12 @@
 #define DBIP_DB_IPV6_COUNTRY				2
 #define DBIP_DB_IPV4_CITY				3
 #define DBIP_DB_IPV6_CITY				4
-#define DBIP_DB_IPV4_ISP				5	// TODO testing
-#define DBIP_DB_IPV6_ISP				6	// TODO testing
-#define DBIP_DB_IPV4_LOCATION				7	// TODO testing
-#define DBIP_DB_IPV6_LOCATION				8	// TODO testing
-#define DBIP_DB_IPV4_FULL				9
-#define DBIP_DB_IPV6_FULL				10
+#define DBIP_DB_IPV4_ISP				5	// commercial
+#define DBIP_DB_IPV6_ISP				6	// commercial
+#define DBIP_DB_IPV4_LOCATION				7	// commercial
+#define DBIP_DB_IPV6_LOCATION				8	// commercial
+#define DBIP_DB_IPV4_FULL				9	// commercial
+#define DBIP_DB_IPV6_FULL				10	// commercial
 #define DBIP_DB_MAX					DBIP_DB_IPV6_FULL
 
 #define IPV6CALC_DB_DBIP_INTERNAL_FREE		0x00000001
