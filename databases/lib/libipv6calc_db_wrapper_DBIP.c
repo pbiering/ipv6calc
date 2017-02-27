@@ -784,7 +784,15 @@ char *libipv6calc_db_wrapper_DBIP_database_info(const unsigned int type) {
 		snprintf(resultstring, sizeof(resultstring), "%s", "can't retrieve 'dbdate', unsupported db file");
 		goto END_libipv6calc_db_wrapper_close;
 	};
-	snprintf(resultstring, sizeof(resultstring), "DBIP-%d/%s", type, datastring);
+
+	char year[5];
+	strncpy(year, datastring, 4);
+	snprintf(resultstring, sizeof(resultstring), "DBIP-%d/%s %s Copyright (c) %s db-ip.com All Rights Reserved"
+		, type
+		, datastring
+		, (type <= 2) ? "FREE" : "COMM"
+		, year
+	);
 
 	// get dbcreated_unixtime
 	ret = libipv6calc_db_wrapper_bdb_get_data_by_key(dbp, "dbcreated_unixtime", datastring, sizeof(datastring));
