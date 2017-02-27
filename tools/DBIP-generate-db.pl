@@ -98,7 +98,7 @@ my $type;
 my $date;
 my $type_string;
 
-if ($file_input !~ /^(.*\/)?dbip-(city|country|full)-([0-9]{4})-([0-9]{2})(-(test|sample))?\.csv(\.gz)?$/o) {
+if ($file_input !~ /^(.*\/)?dbip-(city|country|isp|location|full)-([0-9]{4})-([0-9]{2})(-(test|sample))?\.csv(\.gz)?$/o) {
 	print "ERROR : input file name is not a valid dbip filename: $file_input\n";
 	exit 1;
 };

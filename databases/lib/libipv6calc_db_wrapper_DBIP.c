@@ -787,6 +787,7 @@ char *libipv6calc_db_wrapper_DBIP_database_info(const unsigned int type) {
 
 	char year[5];
 	strncpy(year, datastring, 4);
+	year[4] = '\0';
 	snprintf(resultstring, sizeof(resultstring), "DBIP-%d/%s %s Copyright (c) %s db-ip.com All Rights Reserved"
 		, type
 		, datastring
@@ -1138,8 +1139,18 @@ int libipv6calc_db_wrapper_DBIP_all_by_addr(const ipv6calc_ipaddr *ipaddrp, DBIP
 
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
 		DBIP_type = dbip_db_region_city_v4;
+
+		if (DBIP_type == 0) {
+			// fallback
+			DBIP_type = dbip_db_country_v4;
+		};
 	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
 		DBIP_type = dbip_db_region_city_v6;
+
+		if (DBIP_type == 0) {
+			// fallback
+			DBIP_type = dbip_db_country_v6;
+		};
 	} else {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Unsupported proto: %d", ipaddrp->proto);
 		goto END_libipv6calc_db_wrapper;

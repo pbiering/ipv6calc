@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20170227/PB
+	various files: bugfixes
+	tools/DBIP-generate-db.pl: add support for isp/location version of DBIP.com
+
 20170226/PB
 	various files: add LISP support in External database
 	IP2Location: add enhancements for upcoming 8.0.4
