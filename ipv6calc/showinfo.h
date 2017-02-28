@@ -62,8 +62,19 @@
 // 	+ IP2LOCATION_MNC
 // 	+ IP2LOCATION_MCC
 // 	+ IP2LOCATION_IDDCODE
+// 11: 0.99.2 to current
+// 	+ DBIP_DISTRICT
+// 	+ DBIP_ZIPCODE
+// 	+ DBIP_GEONAME_ID
+// 	+ DBIP_LATITUDE
+// 	+ DBIP_LONGITUDE
+// 	+ DBIP_TIMEZONE
+// 	+ DBIP_TIMEZONE_NAME
+// 	+ DBIP_NETSPEED
+// 	+ DBIP_ISP
+// 	+ DBIP_ORGNAME
 
-#define IPV6CALC_OUTPUT_VERSION	10
+#define IPV6CALC_OUTPUT_VERSION	11
 
 /* prototypes */
 extern int  showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, const uint32_t formatoptions);
