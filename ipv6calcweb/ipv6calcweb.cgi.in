@@ -1432,7 +1432,6 @@ sub print_infohash ($$$;$) {
 			};
 		};
 		
-		print $chr_quote;
 		&print_tagoutput ( "<font size=\"-1\">" ) if ($count_key_embedded > 0);
 
 		if (defined $url && defined $url2) {
@@ -1454,7 +1453,6 @@ sub print_infohash ($$$;$) {
 		};
 
 		&print_tagoutput ( "</font>" ) if ($count_key_embedded > 0);
-		print $chr_quote;
 
 		if ($flag_tt) {
 			&print_tagoutput ( "</tt>" );
