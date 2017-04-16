@@ -112,11 +112,12 @@ create_apache_root_and_start() {
 	/usr/sbin/httpd -X -e info -d $dir_base &
 	if [ $? -eq 0 ]; then
 		httpd_pid=$!
+		echo "INFO  : httpd started in background with pid=$httpd_pid"
 		sleep 1
-		if ps -p $httpd_pid --no-headers >/dev/null 2>&1; then
+		if /usr/bin/ps -p $httpd_pid --no-headers >/dev/null 2>&1; then
                         echo "INFO  : httpd started in background (wait 10 seconds for pid file now)"
                 else
-                        echo "ERROR : httpd did not start in background"
+                        echo "ERROR : httpd did not start in background (pid missing: $httpd_pid)"
                         return 1
                 fi
 	fi
@@ -138,7 +139,7 @@ create_apache_root_and_start() {
 		return 1
 	fi
 
-	if ! ps -p $pid --no-headers >/dev/null 2>&1; then
+	if ! /usr/bin/ps -p $pid --no-headers >/dev/null 2>&1; then
 		echo "ERROR : httpd started with PID but no longer running: $pid"
 		return 1
 	fi
@@ -178,12 +179,12 @@ stop_apache() {
 		kill $pid
 
 		sleep 1
-		if ps -p $pid --no-headers; then
+		if /usr/bin/ps -p $pid --no-headers; then
 			echo "WARN  : process still running (kill now with -9)"
 			kill -9 $pid
 		fi
 	else
-		if ! ps u -C httpd --no-headers | grep "/tmp/mod_ipv6calc"; then
+		if ! /usr/bin/ps u -C httpd --no-headers | grep "/tmp/mod_ipv6calc"; then
 			# nothing to do
 			echo "INFO  : no related httpd process found to kill"
 			return 0
@@ -198,7 +199,7 @@ stop_apache() {
 		fi
 
 		sleep 1
-		if ps u -C httpd --no-headers | grep "/tmp/mod_ipv6calc"; then
+		if /usr/bin/ps u -C httpd --no-headers | grep "/tmp/mod_ipv6calc"; then
 			echo "WARN  : process still running (kill now with -9)"
 			/usr/bin/killall -9 httpd
 		fi
@@ -279,7 +280,7 @@ run_test_requests() {
 #### Help
 help() {
 	cat <<END
-$(basname "$0") [<options>] [-S|-K|-W]
+$(basename "$0") [<options>] [-S|-K|-W]
 	-S	start
 	-K	stop (kill)
 	-W	run workflow
