@@ -25,8 +25,8 @@ Format:
 IEEE/OUI library:
 * perhaps more filtering of unnecessary information
 
-Code cleanup:
-* finish splint
+Code quality:
+* review & improvements
 
 Help:
 * add more examples in inline help
@@ -56,6 +56,6 @@ following forms (and convert between them):
   -not use malloc or strxxx functions.
 
 
-External dependend
-------------------
+External dependencies
+---------------------
 Use of "splint" once variadic macros are supported http://splint.org/faq.html#quest18b
