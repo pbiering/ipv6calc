@@ -14,5 +14,10 @@ to generate Berkeley DB files from this CSV data.
 
 Enabling db-ip.com support will enable code for using this generated DB files.
 
-For regular updates (looks like on monthly basis) download tool is also provided:
+For regular (looks like monthls) updates of the free available databases a download tool is also provided:
 	DBIP-update.sh
+
+Commercial databases need a subscription and must be downloaded manually like
+	$ cd /var/local/share/DBIP
+	$ wget http://download.db-ip.com/key/<key> -O dbip-full-$(date +'%Y-%m').csv.gz
+	$ /usr/share/ipv6calc/tools/DBIP-generate-db.pl -A -I dbip-full-$(date +'%Y-%m').csv.gz
