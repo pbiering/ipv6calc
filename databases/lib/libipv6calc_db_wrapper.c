@@ -14,6 +14,7 @@
 #include <ctype.h>
 #include <errno.h>
 #include <netinet/in.h>
+#include <math.h>
 
 #include "config.h"
 
@@ -2343,6 +2344,8 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 	long int match = -1;
 	int seqlongest = -1;
 	long int i_min, i_max, i_old;
+	int search_binary_count = 0;
+	int search_binary_count_max = (int) sqrt(data_num_rows);
 
 	int ret = -1;
 
@@ -2578,6 +2581,7 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 			// binary search in provided data
 			i_old = i;
 			i = (i_max - i_min) / 2 + i_min;
+			search_binary_count++;
 
 			// jump to last entry in special way if needed, otherwise it's not reachable
 			if ((i == i_old) && ((i + 1) == ((int32_t) data_num_rows - 1))) {
@@ -2585,7 +2589,11 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 				i = i_max;
 			};
 
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "i_old=%ld i_min=%ld i_max=%ld i=%ld", i_old, i_min, i_max, i);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "count=%d/%d i_old=%ld i_min=%ld i_max=%ld i=%ld", search_binary_count, search_binary_count_max, i_old, i_min, i_max, i);
+			if (search_binary_count > search_binary_count_max) {
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "limit of binary search reached, no match found");
+				break;
+			};
 		} else if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST) {
 			// sequential search in provided data
 			i++;

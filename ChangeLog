@@ -9,7 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
-20170706/PB
+20170613/PB
+	databases/lib/libipv6calc_db_wrapper.c: fix potential endless lookups in binary search in case database has holes
+
+20170r6706/PB
 	databases: update
 
 20170228/PB
