@@ -398,8 +398,8 @@ END_libipv6calc_db_wrapper:
  * input:
  * 	type (mandatory)
  * 		if | 0x10000 -> info is opened and ptr is not cached
- * 		if | 0x20000 -> data-iana is opened and ptr is not cached (only IPv4)
- * 		if | 0x40000 -> data-info is opened and ptr is not cached
+ * 		if | 0x20000 -> data-iana is opened
+ * 		if | 0x40000 -> data-info is opened
  * 	db_recno_max_ptr (set if not NULL)
  */
 DB *libipv6calc_db_wrapper_External_open_type(const unsigned int type_flag, long int *db_recno_max_ptr) {
@@ -411,7 +411,7 @@ DB *libipv6calc_db_wrapper_External_open_type(const unsigned int type_flag, long
 	int info_selector = ((type_flag & 0x10000) != 0) ? 1 : 0;
 	int data_iana_selector = ((type_flag & 0x20000) != 0) ? 1 : 0;
 	int data_info_selector = ((type_flag & 0x40000) != 0) ? 1 : 0;
-	int subdb = ((data_iana_selector == 0) && (data_info_selector == 0)) ? 0 : 1;
+	int subdb = 0; // data
 
 	char *filename;
 	int entry = -1, i;
@@ -422,8 +422,10 @@ DB *libipv6calc_db_wrapper_External_open_type(const unsigned int type_flag, long
 		type_text = "info";
 	} else if (data_iana_selector != 0) {
 		type_text = "data-iana";
+		subdb = 1;
 	} else if (data_info_selector != 0) {
 		type_text = "data-info";
+		subdb = 2;
 	} else {
 		type_text = "data";
 	};
@@ -877,6 +879,7 @@ int libipv6calc_db_wrapper_External_registry_num_by_addr(const ipv6calc_ipaddr *
 	);
 
 	if (result >= 0 ) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "found match in database type=%d", External_type);
 		goto END_libipv6calc_db_wrapper_match;
 	};
 
@@ -885,6 +888,7 @@ int libipv6calc_db_wrapper_External_registry_num_by_addr(const ipv6calc_ipaddr *
 	};
 
 	// data-iana (fallback for IPv4 only)
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "no found match in database type=%d, fallback to IANA data now for: %08x", External_type, ipaddrp->addr[0]);
 	dbp_iana = libipv6calc_db_wrapper_External_open_type(External_type | 0x20000, &recno_max);
 
 	if (dbp == NULL) {
@@ -902,7 +906,7 @@ int libipv6calc_db_wrapper_External_registry_num_by_addr(const ipv6calc_ipaddr *
 		32,							// key length
 		IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY,		// search type
 		recno_max,						// number of rows
-		ipaddrp->addr[0],							// lookup key MSB
+		ipaddrp->addr[0],					// lookup key MSB
 		0,							// lookup key LSB
 		resultstring,						// data ptr
 		NULL							// function pointer

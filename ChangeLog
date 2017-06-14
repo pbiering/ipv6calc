@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20170614/PB
+	databases/lib/libipv6calc_db_wrapper_External.c: fix caching wrong pointers of subdbs
+
 20170613/PB
 	databases/lib/libipv6calc_db_wrapper.c: fix potential endless lookups in binary search in case database has holes
 
