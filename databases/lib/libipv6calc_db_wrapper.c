@@ -2343,13 +2343,13 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 	long int i = -1;
 	long int match = -1;
 	int seqlongest = -1;
-	long int i_min, i_max, i_old;
+	long int i_min, i_max, i_old, i_old2;
 	int search_binary_count = 0;
 	int search_binary_count_max = (int) sqrt(data_num_rows);
 
 	int ret = -1;
 
-	i_min = 0; i_max = data_num_rows - 1; i_old = -1;
+	i_min = 0; i_max = data_num_rows - 1; i_old = -1; i_old2 = -1;
 
 
 	if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
@@ -2579,6 +2579,7 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 
 		if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY) {
 			// binary search in provided data
+			i_old2 = i_old;
 			i_old = i;
 			i = (i_max - i_min) / 2 + i_min;
 			search_binary_count++;
@@ -2589,11 +2590,18 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 				i = i_max;
 			};
 
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "count=%d/%d i_old=%ld i_min=%ld i_max=%ld i=%ld", search_binary_count, search_binary_count_max, i_old, i_min, i_max, i);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "count=%d/%d i_old2=%ld i_old=%ld i_min=%ld i_max=%ld i=%ld", search_binary_count, search_binary_count_max, i_old2, i_old, i_min, i_max, i);
+
+			if (i_old2 == i) {
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "loop in binary search detected, no match found");
+				break;
+			};
+
 			if (search_binary_count > search_binary_count_max) {
 				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "limit of binary search reached, no match found");
 				break;
 			};
+
 		} else if (data_search_type == IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_SEQLONGEST) {
 			// sequential search in provided data
 			i++;
