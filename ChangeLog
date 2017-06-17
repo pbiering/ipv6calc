@@ -12,6 +12,7 @@ Info:
 20170617/PB
 	external-fallback/IP2Location: update to version 8.0.4
 	databases/lib/libipv6calc_db_wrapper.c: improve the limiter of a binary search
+	autogen-support.sh: add GeoIP 1.6.10 1.6.11, IP2Location 8.0.4
 
 20170616/PB
 	databases/lib/libipv6calc_db_wrapper.c: detect loops in binary search earlier then reaching the limit
