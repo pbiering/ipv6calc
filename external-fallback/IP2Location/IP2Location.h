@@ -1,7 +1,7 @@
 /*
  * IP2Location C library is distributed under LGPL version 3
- * Copyright (c) 2013-2015 IP2Location.com. support at ip2location dot com 
- * 
+ * Copyright (c) 2013-2015 IP2Location.com. support at ip2location dot com
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -23,9 +23,9 @@ extern "C" {
 #endif
 
 #include <stdio.h>
-#include <stdlib.h> 
+#include <stdlib.h>
 #if !defined(__APPLE__)
-#include <stdlib.h> 
+#include <stdlib.h>
 #endif
 
 #ifdef WIN32
@@ -46,7 +46,7 @@ extern "C" {
 #define uint16_t short
 #endif
 
-#ifndef int32_t 
+#ifndef int32_t
 #define int32_t int
 #endif
 
@@ -65,12 +65,13 @@ extern "C" {
 
 #include "IP2Loc_DBInterface.h"
 
-#define API_VERSION   7.0.1
+/* API version changes only if functions are added (release) or changed (minor/major) */
+#define API_VERSION   8.0.4
 
 
-#define API_VERSION_MAJOR   7
+#define API_VERSION_MAJOR   8
 #define API_VERSION_MINOR   0
-#define API_VERSION_RELEASE 1
+#define API_VERSION_RELEASE 4
 #define API_VERSION_NUMERIC (((API_VERSION_MAJOR * 100) + API_VERSION_MINOR) * 100 + API_VERSION_RELEASE)
 
 #define MAX_IPV4_RANGE  4294967295U
@@ -85,10 +86,10 @@ extern "C" {
 #define  ISP                    0x00010
 #define  LATITUDE               0x00020
 #define  LONGITUDE              0x00040
-#define  DOMAIN                 0x00080
+#define  DOMAIN_                0x00080 // DOMAIN is a math.h macro
 #define  ZIPCODE                0x00100
 #define  TIMEZONE               0x00200
-#define  NETSPEED               0x00400 
+#define  NETSPEED               0x00400
 #define  IDDCODE                0x00800
 #define  AREACODE               0x01000
 #define  WEATHERSTATIONCODE     0x02000
@@ -99,7 +100,7 @@ extern "C" {
 #define  ELEVATION              0x40000
 #define  USAGETYPE              0x80000
 
-#define  ALL          COUNTRYSHORT | COUNTRYLONG | REGION | CITY | ISP | LATITUDE | LONGITUDE | DOMAIN | ZIPCODE | TIMEZONE | NETSPEED | IDDCODE | AREACODE | WEATHERSTATIONCODE | WEATHERSTATIONNAME | MCC | MNC | MOBILEBRAND | ELEVATION | USAGETYPE
+#define  ALL          COUNTRYSHORT | COUNTRYLONG | REGION | CITY | ISP | LATITUDE | LONGITUDE | DOMAIN_ | ZIPCODE | TIMEZONE | NETSPEED | IDDCODE | AREACODE | WEATHERSTATIONCODE | WEATHERSTATIONNAME | MCC | MNC | MOBILEBRAND | ELEVATION | USAGETYPE
 
 #define  DEFAULT	     0x0001
 #define  NO_EMPTY_STRING 0x0002
@@ -113,43 +114,45 @@ extern "C" {
 
 typedef struct
 {
-	FILE *filehandle;
-	uint8_t databasetype;
-	uint8_t databasecolumn;
-	uint8_t databaseday;
-	uint8_t databasemonth;
-	uint8_t databaseyear;
-	uint32_t databasecount;
-	uint32_t databaseaddr;
-	uint32_t ipversion;
-	uint32_t ipv4databasecount;
-	uint32_t ipv4databaseaddr;
-	uint32_t ipv6databasecount;
-	uint32_t ipv6databaseaddr;
+    FILE *filehandle;
+    uint8_t databasetype;
+    uint8_t databasecolumn;
+    uint8_t databaseday;
+    uint8_t databasemonth;
+    uint8_t databaseyear;
+    uint32_t databasecount;
+    uint32_t databaseaddr;
+    uint32_t ipversion;
+    uint32_t ipv4databasecount;
+    uint32_t ipv4databaseaddr;
+    uint32_t ipv6databasecount;
+    uint32_t ipv6databaseaddr;
+    uint32_t ipv4indexbaseaddr;
+    uint32_t ipv6indexbaseaddr;
 } IP2Location;
 
-typedef struct 
+typedef struct
 {
-	char *country_short;
-	char *country_long;
-	char *region;
-	char *city;
-	char *isp;
-	float latitude;
-	float longitude;
-	char *domain;
-	char *zipcode;
-	char *timezone;
-	char *netspeed;
-	char *iddcode;
-	char *areacode;
-	char *weatherstationcode;
-	char *weatherstationname;
-	char *mcc;
-	char *mnc;
-	char *mobilebrand;
-	float elevation;
-	char *usagetype;
+    char *country_short;
+    char *country_long;
+    char *region;
+    char *city;
+    char *isp;
+    float latitude;
+    float longitude;
+    char *domain;
+    char *zipcode;
+    char *timezone;
+    char *netspeed;
+    char *iddcode;
+    char *areacode;
+    char *weatherstationcode;
+    char *weatherstationname;
+    char *mcc;
+    char *mnc;
+    char *mobilebrand;
+    float elevation;
+    char *usagetype;
 } IP2LocationRecord;
 
 /*##################
@@ -183,6 +186,7 @@ void IP2Location_free_record(IP2LocationRecord *record);
 void IP2Location_delete_shm();
 unsigned long int IP2Location_api_version_num(void);
 char *IP2Location_api_version_string(void);
+char *IP2Location_lib_version_string(void);
 
 #ifdef __cplusplus
 }
