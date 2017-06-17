@@ -11,6 +11,7 @@ Info:
 --------------------------------------------------------------------
 20170617/PB
 	external-fallback/IP2Location: update to version 8.0.4
+	databases/lib/libipv6calc_db_wrapper.c: improve the limiter of a binary search
 
 20170616/PB
 	databases/lib/libipv6calc_db_wrapper.c: detect loops in binary search earlier then reaching the limit

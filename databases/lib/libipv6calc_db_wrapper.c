@@ -14,7 +14,6 @@
 #include <ctype.h>
 #include <errno.h>
 #include <netinet/in.h>
-#include <math.h>
 
 #include "config.h"
 
@@ -29,6 +28,21 @@
 #include "libipv6calc_db_wrapper_DBIP.h"
 #include "libipv6calc_db_wrapper_External.h"
 #include "libipv6calc_db_wrapper_BuiltIn.h"
+
+#ifdef DOMAIN
+// fallback for IP2Location.h < 8.0.0 where "DOMAIN" is defined
+// code taken from https://stackoverflow.com/questions/994593/how-to-do-an-integer-log2-in-c
+static int uint64_log2(uint64_t n) {
+	#define S(k) if (n >= (UINT64_C(1) << k)) { i += k; n >>= k; }
+
+	int i = -(n == 0); S(32); S(16); S(8); S(4); S(2); S(1); return i;
+
+	#undef S
+};
+#else
+#include <math.h>
+#define uint64_log2	log2
+#endif
 
 static int wrapper_GeoIP_disable       = 0;
 static int wrapper_IP2Location_disable = 0;
@@ -2345,7 +2359,7 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 	int seqlongest = -1;
 	long int i_min, i_max, i_old, i_old2;
 	int search_binary_count = 0;
-	int search_binary_count_max = (int) sqrt(data_num_rows);
+	int search_binary_count_max = (int) uint64_log2(data_num_rows) + 1;
 
 	int ret = -1;
 
