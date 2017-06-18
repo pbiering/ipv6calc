@@ -957,9 +957,12 @@ char *libipv6calc_db_wrapper_IP2Location_lib_version(void) {
 #else
 #ifdef SUPPORT_IP2LOCATION_API_VERSION_STRING
 #ifdef SUPPORT_IP2LOCATION_LIB_VERSION_STRING // (>= 8.0.4)
-	// IP2Location_lib_version_string unsupported in non-dynamic link mode (because older libs can be used by accident)
-	//snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "%s API=%s Major=%d", IP2Location_lib_version_string(), IP2Location_api_version_string(), libipv6calc_db_wrapper_IP2Location_library_version_major());
-	snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d", IP2Location_api_version_string(), libipv6calc_db_wrapper_IP2Location_library_version_major());
+	if (IP2Location_api_version_num() < 80004) {
+		// IP2Location_lib_version_string unsupported in non-dynamic link mode (because older libs can be used by accident)
+		snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d", IP2Location_api_version_string(), libipv6calc_db_wrapper_IP2Location_library_version_major());
+	} else {
+		snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "%s API=%s Major=%d", IP2Location_lib_version_string(), IP2Location_api_version_string(), libipv6calc_db_wrapper_IP2Location_library_version_major());
+	};
 #else  // SUPPORT_IP2LOCATION_LIB_VERSION_STRING
 	snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d", IP2Location_api_version_string(), libipv6calc_db_wrapper_IP2Location_library_version_major());
 #endif // SUPPORT_IP2LOCATION_LIB_VERSION_STRING
