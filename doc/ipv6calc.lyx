@@ -110,7 +110,7 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>6.4</revnumber> <date>2017-02-26</date> <authorinitials>PB<
+<revision> <revnumber>7.0</revnumber> <date>2017-06-18</date> <authorinitials>PB<
 /authorinitials></revision>
 \end_layout
 
@@ -175,7 +175,7 @@ Latest version
 \end_layout
 
 \begin_layout Standard
-Latest version since last update of this page is 0.99.3 (released pending)
+Latest version since last update of this page is 1.0.0 (released pending)
 \end_layout
 
 \begin_layout Subsection
@@ -6977,6 +6977,10 @@ target "http://www.db-ip.com/"
  databases
 \end_layout
 
+\begin_layout Itemize
+finally release 1.0.0 after 16 year of development
+\end_layout
+
 \begin_layout Subsection
 2016
 \end_layout
@@ -6991,7 +6995,7 @@ implement action 'test' and extend action 'filter' with support of address
 \end_layout
 
 \begin_layout Itemize
-Introduce mod_ipv6calc for Apache web server (>= 0.99.1, released 2015)
+Introduce mod_ipv6calc for Apache web server (>= 0.99.1)
 \end_layout
 
 \begin_layout Itemize
@@ -7108,11 +7112,27 @@ General: add configure options to disable built-in databases (reduce binary
 \end_layout
 
 \begin_layout Subsection
-2010 and older
+2002-2010
 \end_layout
 
 \begin_layout Standard
-TODO
+See 
+\begin_inset CommandInset href
+LatexCommand href
+name "ChangeLog@GitHub"
+target "https://raw.githubusercontent.com/pbiering/ipv6calc/master/ChangeLog"
+
+\end_inset
+
+ for now
+\end_layout
+
+\begin_layout Subsection
+2001
+\end_layout
+
+\begin_layout Itemize
+Start of development
 \end_layout
 
 \end_body

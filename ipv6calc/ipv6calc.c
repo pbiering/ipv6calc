@@ -205,9 +205,13 @@ int main(int argc, char *argv[]) {
 	ipv6calc_common_options_from_env(longopts, &ipv6calc_anon_set);
 	
 	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {
-		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Parsing option: 0x%08x", i);
+		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Parsing option: 0x%08x (%d: %s)", i, optind, argv[optind - 1]);
 
-		if ((i == '?') && (optopt != 0)) {
+		if ((i == '?') && (strcmp(argv[optind - 1], "-?") != 0)) {
+			exit(EXIT_FAILURE);
+		};
+
+		if (i == ':') {
 			exit(EXIT_FAILURE);
 		};
 
@@ -708,7 +712,7 @@ int main(int argc, char *argv[]) {
 		command = CMD_printexamples;
 	};
 
-	if (command == CMD_printhelp) {
+	if (command & CMD_printhelp) {
 		if ( (outputtype == FORMAT_undefined) && (inputtype == FORMAT_undefined) && (action == ACTION_undefined)) {
 			ipv6calc_printhelp(longopts, ipv6calc_longopts_shortopts_map);
 			exit(EXIT_FAILURE);

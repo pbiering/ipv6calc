@@ -5,19 +5,19 @@ dnl Copyright: 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(ipv6calc, 0.99.3.rc3, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
+AC_INIT(ipv6calc, 1.0.0, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
 
 COPYRIGHT_YEAR=2017
 
 dnl Program/library version (align with version above)
-PACKAGE_VERSION_MAJOR=0
-PACKAGE_VERSION_MINOR=99
-PACKAGE_VERSION_BUGFIX=3
+PACKAGE_VERSION_MAJOR=1
+PACKAGE_VERSION_MINOR=0
+PACKAGE_VERSION_BUGFIX=0
 
 dnl API version
-API_VERSION_MAJOR=0
-API_VERSION_MINOR=99
-API_VERSION_BUGFIX=3
+API_VERSION_MAJOR=1
+API_VERSION_MINOR=0
+API_VERSION_BUGFIX=0
 
 
 dnl Generic data definitions

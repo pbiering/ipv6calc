@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
-<!-- XML file was created by LyX 2.2.2
+<!-- XML file was created by LyX 2.2.3
   See http://www.lyx.org/ for more information -->
 <article lang="en_US">
 <articleinfo>
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>6.4</revnumber> <date>2017-02-26</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>7.0</revnumber> <date>2017-06-18</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freecode.com/projects/ipv6calc/">freecode.com (former freshmeat) / ipv6calc</ulink> page (but this is not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 0.99.3 (released pending)</para></sect2><sect2>
+<para>Latest version since last update of this page is 1.0.0 (released pending)</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
 <listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;mod_ipv6calc&rdquo;: Apache module</para></listitem></itemizedlist></sect2><sect2>
@@ -1248,13 +1248,13 @@ IPV6_REGISTRY=RIPENCC
 <para>Major extensions/changes are listed here</para><sect2>
 <title>2017</title>
 <itemizedlist>
-<listitem><para>add support for LISP detection</para></listitem><listitem><para>add support for non-free versions <ulink url="http://www.db-ip.com/">DB-IP.com</ulink> databases</para></listitem></itemizedlist></sect2><sect2>
+<listitem><para>add support for LISP detection</para></listitem><listitem><para>add support for non-free versions <ulink url="http://www.db-ip.com/">DB-IP.com</ulink> databases</para></listitem><listitem><para>finally release 1.0.0 after 16 year of development</para></listitem></itemizedlist></sect2><sect2>
 <title>2016</title>
 <itemizedlist>
 <listitem><para>implement action 'test' and extend action 'filter' with support of address ranges (&gt;= 0.99.2)</para></listitem></itemizedlist></sect2><sect2>
 <title>2015</title>
 <itemizedlist>
-<listitem><para>Introduce mod_ipv6calc for Apache web server (&gt;= 0.99.1, released 2015)</para></listitem><listitem><para>Add support for <ulink url="http://www.db-ip.com/">DB-IP.com</ulink> databases (by generated Berkeley DB files) (&gt;= 0.98.0)</para></listitem><listitem><para>Add support for &ldquo;External&rdquo; database files (generated Berkeley DB files), superseeding (if newer) built-in IPv4/IPv6-&gt;Registry and adding IPv4/IPv6-&gt;CountryCode support (&gt;= 0.98.0)</para></listitem><listitem><para>Extend filter options with support of CountryCode, ASN or Registry (&gt;= 0.99.0)</para></listitem><listitem><para>Add support for <ulink url="http://lite.ip2location.com/">IP2Location LITE</ulink> databases (&gt;= 0.99.0), add configurable IP2Location database autoselection support</para></listitem></itemizedlist></sect2><sect2>
+<listitem><para>Introduce mod_ipv6calc for Apache web server (&gt;= 0.99.1)</para></listitem><listitem><para>Add support for <ulink url="http://www.db-ip.com/">DB-IP.com</ulink> databases (by generated Berkeley DB files) (&gt;= 0.98.0)</para></listitem><listitem><para>Add support for &ldquo;External&rdquo; database files (generated Berkeley DB files), superseeding (if newer) built-in IPv4/IPv6-&gt;Registry and adding IPv4/IPv6-&gt;CountryCode support (&gt;= 0.98.0)</para></listitem><listitem><para>Extend filter options with support of CountryCode, ASN or Registry (&gt;= 0.99.0)</para></listitem><listitem><para>Add support for <ulink url="http://lite.ip2location.com/">IP2Location LITE</ulink> databases (&gt;= 0.99.0), add configurable IP2Location database autoselection support</para></listitem></itemizedlist></sect2><sect2>
 <title>2014</title>
 <itemizedlist>
 <listitem><para>Shared library mode supported (reduces size of binaries)</para></listitem></itemizedlist></sect2><sect2>
@@ -1264,5 +1264,8 @@ IPV6_REGISTRY=RIPENCC
 <title>2011</title>
 <itemizedlist>
 <listitem><para>ipv6calc/ipv6calcweb.cgi: enable included GeoIP support with IPv6 (usable with GeoIP &gt;= 1.4.5)</para></listitem><listitem><para>ipv6calc: extend for 6rd support (--action 6rd_local_prefix --6rd_prefix &lt;PREFIX&gt; --6rd_relay_prefix &lt;RELAY_PREFIX&gt;)</para></listitem><listitem><para>ipv6calc: enable stdin support for bulk transformation</para></listitem><listitem><para>ipv6calc: add support for NAT64 address type</para></listitem><listitem><para>ipv6calc: add option &ldquo;forceprefix &lt;LENGTH&gt;&rdquo; to print prefix of an address without a given prefix length</para></listitem><listitem><para>ipv6loganon: extend for pipe usage (e.g. in Apache log file directive) and write/append to specified file</para></listitem><listitem><para>General: add configure options to disable built-in databases (reduce binary size a lot, e.g. for embedded devices)</para></listitem></itemizedlist></sect2><sect2>
-<title>2010 and older</title>
-<para>TODO</para></sect2></sect1></article>
+<title>2002-2010</title>
+<para>See <ulink url="https://raw.githubusercontent.com/pbiering/ipv6calc/master/ChangeLog">ChangeLog@GitHub</ulink> for now</para></sect2><sect2>
+<title>2001</title>
+<itemizedlist>
+<listitem><para>Start of development</para></listitem></itemizedlist></sect2></sect1></article>

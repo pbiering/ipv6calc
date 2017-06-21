@@ -165,9 +165,9 @@ int main(int argc,char *argv[]) {
 
 	/* Fetch the command-line arguments. */
 	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {
-		DEBUGPRINT_WA(DEBUG_ipv6logstats_general, "Parsing option: 0x%08x", i);
+		DEBUGPRINT_WA(DEBUG_ipv6logstats_general, "Parsing option: 0x%08x (%d: %s)", i, optind, argv[optind - 1]);
 
-		if ((i == '?') && (optopt != 0)) {
+		if ((i == '?') && (strcmp(argv[optind - 1], "-?") != 0)) {
 			exit(EXIT_FAILURE);
 		};
 
@@ -293,7 +293,7 @@ int main(int argc,char *argv[]) {
 		exit(EXIT_SUCCESS);
 	};
 
-	if (command == CMD_printhelp) {
+	if (command & CMD_printhelp) {
 		ipv6logstats_printhelp();
 		exit(EXIT_FAILURE);
 	};

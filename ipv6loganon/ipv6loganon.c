@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6loganon.c
  * Version    : $Id$
- * Copyright  : 2007-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2007-2017 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile anonymization
@@ -128,9 +128,9 @@ int main(int argc,char *argv[]) {
 
 	/* Fetch the command-line arguments. */
 	while ((i = getopt_long(argc, argv, shortopts, longopts, &lop)) != EOF) {
-		DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "Parsing option: 0x%08x", i);
+		DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "Parsing option: 0x%08x (%d: %s)", i, optind, argv[optind - 1]);
 
-		if ((i == '?') && (optopt != 0)) {
+		if ((i == '?') && (strcmp(argv[optind - 1], "-?") != 0)) {
 			exit(EXIT_FAILURE);
 		};
 
