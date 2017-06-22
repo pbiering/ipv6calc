@@ -40,11 +40,11 @@ void printversion(void) {
 void printversion_help(void) {
 	fprintf(stderr, "\n");
 
-	fprintf(stderr, "Explanation of available(+)/possible(-) feature tokens\n");
+	fprintf(stderr, "Explanation of available(x)/possible(o) feature tokens\n");
 
-	fprintf(stderr, "%-22s%c %s\n", "ANON_ZEROISE", (feature_zeroize == 1)? '+' : '-', "Anonymization method 'zeroize'");
-	fprintf(stderr, "%-22s%c %s\n", "ANON_ANONYMIZE", (feature_anon == 1) ? '+' : '-', "Anonymization method 'anonymize'");
-	fprintf(stderr, "%-22s%c %s\n", "ANON_KEEP-TYPE-ASN-CC", (feature_kp == 1) ? '+' : '-', "Anonymization method 'keep-type-asn-cc'");
+	fprintf(stderr, "%-22s%c %s\n", "ANON_ZEROISE", (feature_zeroize == 1)? 'x' : 'o', "Anonymization method 'zeroize'");
+	fprintf(stderr, "%-22s%c %s\n", "ANON_ANONYMIZE", (feature_anon == 1) ? 'x' : 'o', "Anonymization method 'anonymize'");
+	fprintf(stderr, "%-22s%c %s\n", "ANON_KEEP-TYPE-ASN-CC", (feature_kp == 1) ? 'x' : 'o', "Anonymization method 'keep-type-asn-cc'");
 
 	fprintf(stderr, "\n");
 };

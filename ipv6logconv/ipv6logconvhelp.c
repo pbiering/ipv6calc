@@ -36,10 +36,10 @@ void printversion(void) {
 void printversion_help(void) {
 	fprintf(stderr, "\n");
 
-	fprintf(stderr, "Explanation of available(+)/possible(-) feature tokens\n");
+	fprintf(stderr, "Explanation of available(x)/possible(o) feature tokens\n");
 
-	fprintf(stderr, "%-22s%c %s\n", "CONV_REG", (feature_reg == 1)? '+' : '-', "Conversion of IPv4/IPv6 address to Registry tokens");
-	fprintf(stderr, "%-22s%c %s\n", "CONV_IEEE", (feature_ieee == 1) ? '+' : '-', "Conversion of included MAC/EUI-64 adress to IEEE (vendor) name");
+	fprintf(stderr, "%-22s%c %s\n", "CONV_REG", (feature_reg == 1)? 'x' : 'o', "Conversion of IPv4/IPv6 address to Registry tokens");
+	fprintf(stderr, "%-22s%c %s\n", "CONV_IEEE", (feature_ieee == 1) ? 'x' : 'o', "Conversion of included MAC/EUI-64 adress to IEEE (vendor) name");
 
 	fprintf(stderr, "\n");
 };

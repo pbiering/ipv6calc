@@ -41,11 +41,11 @@ void printversion(void) {
 void printversion_help(void) {
 	fprintf(stderr, "\n");
 
-	fprintf(stderr, "Explanation of available(+)/possible(-) feature tokens\n");
+	fprintf(stderr, "Explanation of available(x)/possible(o) feature tokens\n");
 
-	fprintf(stderr, "%-22s%c %s\n", "STAT_REG", (feature_reg == 1)? '+' : '-', "Statistics by Registry");
-	fprintf(stderr, "%-22s%c %s\n", "STAT_CC", (feature_cc == 1) ? '+' : '-', "Statistics by CountryCode");
-	fprintf(stderr, "%-22s%c %s\n", "STAT_AS", (feature_as == 1) ? '+' : '-', "Statistics by Autonomous System Number");
+	fprintf(stderr, "%-22s%c %s\n", "STAT_REG", (feature_reg == 1)? 'x' : 'o', "Statistics by Registry");
+	fprintf(stderr, "%-22s%c %s\n", "STAT_CC", (feature_cc == 1) ? 'x' : 'o', "Statistics by CountryCode");
+	fprintf(stderr, "%-22s%c %s\n", "STAT_AS", (feature_as == 1) ? 'x' : 'o', "Statistics by Autonomous System Number");
 
 	fprintf(stderr, "\n");
 };

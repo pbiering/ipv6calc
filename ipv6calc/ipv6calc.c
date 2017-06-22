@@ -707,6 +707,23 @@ int main(int argc, char *argv[]) {
 		feature_kp = 1;
 	};
 
+	DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Debug value:%08lx command:%08lx inputtype:%08lx outputtype:%08lx action:%08lx formatoptions:%08lx", (unsigned long) ipv6calc_debug, (unsigned long) command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, (unsigned long) formatoptions); // ipv6calc_debug usage ok
+
+	/* do work depending on selection */
+	if ((command & CMD_printversion) != 0) {
+		if ((command & CMD_printversion_verbose) != 0) {
+			printversion_verbose(((command & CMD_printversion_verbose2) !=0) ? LEVEL_VERBOSE2 : LEVEL_VERBOSE);
+		} else {
+			printversion();
+		};
+
+		if ((command & CMD_printhelp) != 0) {
+			printversion_help();
+		};
+
+		exit(EXIT_SUCCESS);
+	};
+
 	/* print help handling */
 	if ((outputtype_given == 1) && (command & CMD_printhelp)) {
 		command = CMD_printexamples;
@@ -743,23 +760,6 @@ int main(int argc, char *argv[]) {
 	} else if (command == CMD_showinfotypes) {
 		showinfo_availabletypes();
 		exit(EXIT_FAILURE);
-	};
-
-	DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Debug value:%08lx command:%08lx inputtype:%08lx outputtype:%08lx action:%08lx formatoptions:%08lx", (unsigned long) ipv6calc_debug, (unsigned long) command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, (unsigned long) formatoptions); // ipv6calc_debug usage ok
-
-	/* do work depending on selection */
-	if ((command & CMD_printversion) != 0) {
-		if ((command & CMD_printversion_verbose) != 0) {
-			printversion_verbose(((command & CMD_printversion_verbose2) !=0) ? LEVEL_VERBOSE2 : LEVEL_VERBOSE);
-		} else {
-			printversion();
-		};
-
-		if ((command & CMD_printhelp) != 0) {
-			printversion_help();
-		};
-
-		exit(EXIT_SUCCESS);
 	};
 
 	if (action == ACTION_anonymize) {
