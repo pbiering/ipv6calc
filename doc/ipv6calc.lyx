@@ -110,7 +110,7 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>7.0</revnumber> <date>2017-06-18</date> <authorinitials>PB<
+<revision> <revnumber>7.0</revnumber> <date>2017-06-25</date> <authorinitials>PB<
 /authorinitials></revision>
 \end_layout
 
@@ -162,7 +162,7 @@ pv6 library, used by initscripts-ipv6.
 Note: this tool got also its 
 \begin_inset CommandInset href
 LatexCommand href
-name "freecode.com (former freshmeat) / ipv6calc"
+name "freecode.com (former freshmeat, now also EOL) / ipv6calc"
 target "http://freecode.com/projects/ipv6calc/"
 
 \end_inset
@@ -175,7 +175,7 @@ Latest version
 \end_layout
 
 \begin_layout Standard
-Latest version since last update of this page is 1.0.0 (released pending)
+Latest version since last update of this page is 1.0.0
 \end_layout
 
 \begin_layout Subsection
@@ -647,8 +647,8 @@ Red Hat Enterprise Linux and clones
 \end_layout
 
 \begin_layout Standard
-It's tested by the developer that creation of the RPM is working fine on
- RHEL 4.
+It's tested by the developer that creation of the RPM is working fine starting
+ with RHEL 4.
 \end_layout
 
 \begin_layout Itemize
@@ -683,11 +683,19 @@ target "https://fedoraproject.org/wiki/EPEL"
 
 \end_inset
 
+, see also 
+\begin_inset CommandInset href
+LatexCommand href
+name "FedoraProject / Package / ipv6calc"
+target "https://admin.fedoraproject.org/pkgdb/package/ipv6calc/"
+
+\end_inset
+
 
 \end_layout
 
 \begin_layout Standard
-CentOS 5/6/7 are also platforms for regression tests.
+CentOS 6/7 are also platforms for regression tests.
 \end_layout
 
 \begin_layout Subsubsection
@@ -704,7 +712,15 @@ Ubuntu
 \end_layout
 
 \begin_layout Standard
-Package is maintained
+Package is maintained, more information can be found at 
+\begin_inset CommandInset href
+LatexCommand href
+name "https://packages.ubuntu.com/ipv6calc"
+target "https://packages.ubuntu.com/ipv6calc"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsubsection
@@ -747,8 +763,8 @@ NetBSD
 See here for more: 
 \begin_inset CommandInset href
 LatexCommand href
-name "http://www.netbsd.org/packages/net/ipv6calc/"
-target "http://www.netbsd.org/packages/net/ipv6calc/"
+name "ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/net/ipv6calc/README.html"
+target "ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/net/ipv6calc/README.html"
 
 \end_inset
 
@@ -763,8 +779,8 @@ FreeBSD
 See here for more: 
 \begin_inset CommandInset href
 LatexCommand href
-name "http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/"
-target "http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/"
+name "http://www.freshports.org/net-mgmt/ipv6calc/"
+target "http://www.freshports.org/net-mgmt/ipv6calc/"
 
 \end_inset
 
@@ -776,15 +792,7 @@ target "http://www.freebsd.org/cgi/query-pr.cgi?pr=34441"
 
 \end_inset
 
-), 
-\begin_inset CommandInset href
-LatexCommand href
-name "http://www.freshports.org/net-mgmt/ipv6calc/"
-target "http://www.freshports.org/net-mgmt/ipv6calc/"
-
-\end_inset
-
-
+)
 \end_layout
 
 \begin_layout Subsubsection

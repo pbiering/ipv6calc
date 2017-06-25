@@ -12,14 +12,14 @@
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>7.0</revnumber> <date>2017-06-18</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>7.0</revnumber> <date>2017-06-25</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
-<para>Note: this tool got also its <ulink url="http://freecode.com/projects/ipv6calc/">freecode.com (former freshmeat) / ipv6calc</ulink> page (but this is not maintained by the author)</para><sect2>
+<para>Note: this tool got also its <ulink url="http://freecode.com/projects/ipv6calc/">freecode.com (former freshmeat, now also EOL) / ipv6calc</ulink> page (but this is not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 1.0.0 (released pending)</para></sect2><sect2>
+<para>Latest version since last update of this page is 1.0.0</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
 <listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;mod_ipv6calc&rdquo;: Apache module</para></listitem></itemizedlist></sect2><sect2>
@@ -74,22 +74,22 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 <para>Fedora 22 is the current developing platform, so use given hints above to create a RPM. Since Fedora 7 this package is included by default.</para>
 <para>See also <ulink url="https://admin.fedoraproject.org/pkgdb/package/ipv6calc/">FedoraProject / Package / ipv6calc</ulink></para></sect3><sect3>
 <title>Red Hat Enterprise Linux and clones</title>
-<para>It's tested by the developer that creation of the RPM is working fine on RHEL 4.</para><itemizedlist>
+<para>It's tested by the developer that creation of the RPM is working fine starting with RHEL 4.</para><itemizedlist>
 <listitem><para>RHEL/CentOS 5 has the package included by default (but an rather old version)
 </para><itemizedlist>
-<listitem><para>RPMs of newer releases are available as test builds on koji, see related URL in announcements <ulink url="https://lists.deepspace6.net/pipermail/ipv6calc-announce/">ipv6calc-announce / list archive</ulink></para></listitem></itemizedlist></listitem><listitem><para>RHEL/CentOS 6/7: available since September 2014 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink></para></listitem></itemizedlist><para>CentOS 5/6/7 are also platforms for regression tests.</para></sect3><sect3>
+<listitem><para>RPMs of newer releases are available as test builds on koji, see related URL in announcements <ulink url="https://lists.deepspace6.net/pipermail/ipv6calc-announce/">ipv6calc-announce / list archive</ulink></para></listitem></itemizedlist></listitem><listitem><para>RHEL/CentOS 6/7: available since September 2014 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink>, see also <ulink url="https://admin.fedoraproject.org/pkgdb/package/ipv6calc/">FedoraProject / Package / ipv6calc</ulink></para></listitem></itemizedlist><para>CentOS 6/7 are also platforms for regression tests.</para></sect3><sect3>
 <title>Gentoo/Funtoo</title>
 <para>Package is maintained, nevertheless, Funtoo is used as platform for regression tests.</para></sect3><sect3>
 <title>Ubuntu</title>
-<para>Package is maintained</para></sect3><sect3>
+<para>Package is maintained, more information can be found at <ulink url="https://packages.ubuntu.com/ipv6calc">https://packages.ubuntu.com/ipv6calc</ulink></para></sect3><sect3>
 <title>Debian GNU/Linux</title>
 <para>Package is maintained, more information can be found at <ulink url="http://packages.debian.org/ipv6calc">http://packages.debian.org/ipv6calc</ulink></para></sect3><sect3>
 <title>openSUSE</title>
 <para>Package is maintained, more information can be found at <ulink url="http://download.opensuse.org/repositories/home:/uebelhacker/">http://download.opensuse.org/repositories/home:/uebelhacker/</ulink></para></sect3><sect3>
 <title>NetBSD</title>
-<para>See here for more: <ulink url="http://www.netbsd.org/packages/net/ipv6calc/">http://www.netbsd.org/packages/net/ipv6calc/</ulink></para></sect3><sect3>
+<para>See here for more: <ulink url="ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/net/ipv6calc/README.html">ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/net/ipv6calc/README.html</ulink></para></sect3><sect3>
 <title>FreeBSD</title>
-<para>See here for more: <ulink url="http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/">http://www.freebsd.org/cgi/cvsweb.cgi/ports/net/ipv6calc/</ulink> (<ulink url="http://www.freebsd.org/cgi/query-pr.cgi?pr=34441">http://www.freebsd.org/cgi/query-pr.cgi?pr=34441</ulink>), <ulink url="http://www.freshports.org/net-mgmt/ipv6calc/">http://www.freshports.org/net-mgmt/ipv6calc/</ulink></para></sect3><sect3>
+<para>See here for more: <ulink url="http://www.freshports.org/net-mgmt/ipv6calc/">http://www.freshports.org/net-mgmt/ipv6calc/</ulink> (<ulink url="http://www.freebsd.org/cgi/query-pr.cgi?pr=34441">http://www.freebsd.org/cgi/query-pr.cgi?pr=34441</ulink>)</para></sect3><sect3>
 <title>OpenBSD</title>
 <para>See here for more: <ulink url="http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/">http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/</ulink></para></sect3></sect2></sect1><sect1>
 <title>Configuring &amp; Compiling</title>
