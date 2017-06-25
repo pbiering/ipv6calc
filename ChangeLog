@@ -12,6 +12,7 @@ Info:
 20170625/PB
 	mod_ipv6calc/test_mod_ipv6calc.sh: add fallback path for ps binary
 	databases: update
+	tag version 1.0.0
 
 20170622/PB
 	various: cosmetics and fix help/version option handling
