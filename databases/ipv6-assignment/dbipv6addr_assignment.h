@@ -2,7 +2,7 @@
  * Project       : ipv6calc
  * File          : dbipv6_assignment.h
  * Version       : $Id$
- * Generated     : 20170608-075916+0200 CEST
+ * Generated     : 20170625-094748+0200 CEST
  * Data copyright: IANA ARIN RIPENCC APNIC LACNIC AFRINIC
  *
  * Information:
@@ -11,8 +11,8 @@
 
 #include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
-static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20170607 APNIC/20170607 ARIN/20170607 IANA/20170104 LACNIC/20170607 LISP/20170608 RIPENCC/20170607";
-static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = 1496901556;
+static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20170625 APNIC/20170624 ARIN/20170625 IANA/20170104 LACNIC/20170623 LISP/20170625 RIPENCC/20170624";
+static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = 1498376868;
 
 static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 	//ipv6_00_31, ipv6_32_63, mask_00_31, mask_32_63, mask_length, registry  
@@ -395,7 +395,6 @@ static const s_ipv6addr_info dbipv6addr_info[] = {
 	{ 0x261000d0, 0x21a00000, 0xffffffff, 0xffff0000,  48, "LISP#isah-xtr" },
 	{ 0x261000d0, 0x21a10000, 0xffffffff, 0xffff0000,  48, "LISP#lovison-xtr" },
 	{ 0x261000d0, 0x21a10101, 0xffffffff, 0xffffffff,  64, "LISP#lovison-xtr" },
-	{ 0x261000d0, 0x21a10102, 0xffffffff, 0xffffffff,  64, "LISP#lovison-xtr" },
 	{ 0x261000d0, 0x21a10103, 0xffffffff, 0xffffffff,  64, "LISP#lovison-xtr" },
 	{ 0x261000d0, 0x21a20000, 0xffffffff, 0xffff0000,  48, "LISP#jens-xtr" },
 	{ 0x261000d0, 0x21a30000, 0xffffffff, 0xffff0000,  48, "LISP#naundorf-xtr" },
@@ -509,7 +508,10 @@ static const s_ipv6addr_info dbipv6addr_info[] = {
 	{ 0x261000d0, 0x22110000, 0xffffffff, 0xffff0000,  48, "LISP#mbuescher-xtr" },
 	{ 0x261000d0, 0x22120000, 0xffffffff, 0xffff0000,  48, "LISP#wheinze-xtr" },
 	{ 0x261000d0, 0x22130000, 0xffffffff, 0xffff0000,  48, "LISP#ekoncel-xtr" },
+	{ 0x261000d0, 0x22140000, 0xffffffff, 0xffff0000,  48, "LISP#mklingspor-xtr" },
+	{ 0x261000d0, 0x22150000, 0xffffffff, 0xffff0000,  48, "LISP#gloss-xtr" },
 	{ 0x261000d0, 0x22160000, 0xffffffff, 0xffff0000,  48, "LISP#koandreasson-xtr" },
+	{ 0x261000d0, 0x22170000, 0xffffffff, 0xffff0000,  48, "LISP#hrenz-xtr" },
 	{ 0x261000d0, 0x22180000, 0xffffffff, 0xffff0000,  48, "LISP#uschledorn-xtr" },
 	{ 0x261000d0, 0x22190000, 0xffffffff, 0xffff0000,  48, "LISP#unitbv-xtr" },
 	{ 0x261000d0, 0x222a0000, 0xffffffff, 0xffff0000,  48, "LISP#hketele-xtr" },

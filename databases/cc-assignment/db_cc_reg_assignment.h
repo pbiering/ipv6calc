@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : db_cc_reg_assignment.h
  * Version       : $Id$
- * Generated     : Thu Jun  8 07:59:20 2017
+ * Generated     : Sun Jun 25 09:47:51 2017
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
  *  Additional header file for databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  */
 
-static const char *db_cc_registry_status = "AFRINIC/20170607 APNIC/20170607 ARIN/20170607 LACNIC/20170607 RIPENCC/20170607";
+static const char *db_cc_registry_status = "AFRINIC/20170625 APNIC/20170624 ARIN/20170625 LACNIC/20170623 RIPENCC/20170624";
 
 static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "", REGISTRY_ARIN     },
@@ -233,6 +233,7 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "TZ", REGISTRY_AFRINIC  },
 	{ "UA", REGISTRY_RIPENCC  },
 	{ "UG", REGISTRY_AFRINIC  },
+	{ "UM", REGISTRY_ARIN     },
 	{ "US", REGISTRY_ARIN     },
 	{ "UY", REGISTRY_LACNIC   },
 	{ "UZ", REGISTRY_RIPENCC  },
@@ -845,7 +846,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  589  RM
 	{ REGISTRY_RIPENCC  }, //  590  SM
 	{ REGISTRY_RIPENCC  }, //  591  TM
-	{ REGISTRY_UNKNOWN  }, //  592  UM
+	{ REGISTRY_ARIN     }, //  592  UM
 	{ REGISTRY_UNKNOWN  }, //  593  VM
 	{ REGISTRY_UNKNOWN  }, //  594  WM
 	{ REGISTRY_UNKNOWN  }, //  595  XM

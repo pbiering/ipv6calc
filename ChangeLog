@@ -11,6 +11,7 @@ Info:
 --------------------------------------------------------------------
 20170625/PB
 	mod_ipv6calc/test_mod_ipv6calc.sh: add fallback path for ps binary
+	databases: update
 
 20170622/PB
 	various: cosmetics and fix help/version option handling
@@ -36,7 +37,7 @@ Info:
 20170613/PB
 	databases/lib/libipv6calc_db_wrapper.c: fix potential endless lookups in binary search in case database has holes
 
-20170r6706/PB
+20170607/PB
 	databases: update
 
 20170228/PB

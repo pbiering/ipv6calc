@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Thu Jun  8 07:40:03 2017
+ * Generated     : Sun Jun 25 09:30:29 2017
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20170608";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20170625";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -1635,10 +1635,10 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xA47000, 0xA47FFF, "PRIMETECH ENGINEERING CORP.", "PRIMETECH-ENGINEERING" },
 	{ 0x0050C2, 0x126000, 0x126FFF, "MaxLinear Hispania S.L.U.", "MAXLINEAR-HISPANIA-S-L-U" },
 	{ 0x40D855, 0x0D7000, 0x0D7FFF, "Avant Technologies", "AVANT-TECHNOLOGIES" },
+	{ 0x0050C2, 0x459000, 0x459FFF, "Phytec Messtechnik GmbH", "PHYTEC-MESSTECHNIK" },
 	{ 0x0050C2, 0x144000, 0x144FFF, "Phytec Messtechnik GmbH", "PHYTEC-MESSTECHNIK" },
 	{ 0x0050C2, 0x1C3000, 0x1C3FFF, "TT electronics plc", "TT-ELECTRONICS-PLC" },
 	{ 0x0050C2, 0x5A7000, 0x5A7FFF, "Phytec Messtechnik GmbH", "PHYTEC-MESSTECHNIK" },
-	{ 0x0050C2, 0x459000, 0x459FFF, "Phytec Messtechnik GmbH", "PHYTEC-MESSTECHNIK" },
 	{ 0x0050C2, 0x34F000, 0x34FFFF, "North Pole Engineering, Inc.", "NORTH-POLE-ENGINEERING" },
 	{ 0x0050C2, 0xEA9000, 0xEA9FFF, "Mettler Toledo Hi-Speed", "METTLER-TOLEDO-HI-SPEED" },
 	{ 0x0050C2, 0x24D000, 0x24DFFF, "Mettler Toledo Hi-Speed", "METTLER-TOLEDO-HI-SPEED" },
@@ -3653,11 +3653,11 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x21C000, 0x21CFFF, "Fracarro srl", "FRACARRO-SRL" },
 	{ 0x0050C2, 0xB30000, 0xB30FFF, "Applied Micro Electronics AME bv", "APPLIED-MICRO-ELECTRONICS-AME" },
 	{ 0x0050C2, 0x531000, 0x531FFF, "Orion Technologies,LLC", "ORION-TECHNOLOGIES-LLC" },
+	{ 0x0050C2, 0x301000, 0x301FFF, "Delphi Display Systems, Inc.", "DELPHI-DISPLAY" },
+	{ 0x0050C2, 0x578000, 0x578FFF, "Delphi Display Systems, Inc.", "DELPHI-DISPLAY" },
 	{ 0x0050C2, 0x3E9000, 0x3E9FFF, "MedAvant Healthcare", "MEDAVANT-HEALTHCARE" },
 	{ 0x0050C2, 0x6C6000, 0x6C6FFF, "MedAvant Healthcare", "MEDAVANT-HEALTHCARE" },
 	{ 0x0050C2, 0x230000, 0x230FFF, "AutoTOOLS group Co. Ltd.", "AUTOTOOLS-GROUP" },
-	{ 0x0050C2, 0x301000, 0x301FFF, "Delphi Display Systems, Inc.", "DELPHI-DISPLAY" },
-	{ 0x0050C2, 0x578000, 0x578FFF, "Delphi Display Systems, Inc.", "DELPHI-DISPLAY" },
 	{ 0x0050C2, 0x32A000, 0x32AFFF, "Phytec Messtechnik GmbH", "PHYTEC-MESSTECHNIK" },
 	{ 0x0050C2, 0x782000, 0x782FFF, "Phytec Messtechnik GmbH", "PHYTEC-MESSTECHNIK" },
 	{ 0x0050C2, 0x2E0000, 0x2E0FFF, "Baxter International Inc", "BAXTER" },
@@ -4578,8 +4578,8 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x374000, 0x374FFF, "Owasys Advanced Wireless Devices", "OWASYS-ADVANCED-WIRELESS-DEVICES" },
 	{ 0x40D855, 0x0B1000, 0x0B1FFF, "Nanjing TIANSU Automation Control System Co., Ltd.", "NANJING-TIANSU-AUTOMATION-CONTROL-SYSTEM" },
 	{ 0x0050C2, 0xDDE000, 0xDDEFFF, "DRS Imaging and Targeting Solutions", "DRS-IMAGING-AND-TARGETING-SOLUTIONS" },
-	{ 0x0050C2, 0x5AF000, 0x5AFFFF, "DORLET SAU", "DORLET-SAU" },
 	{ 0x0050C2, 0x796000, 0x796FFF, "DORLET SAU", "DORLET-SAU" },
+	{ 0x0050C2, 0x5AF000, 0x5AFFFF, "DORLET SAU", "DORLET-SAU" },
 	{ 0x40D855, 0x00B000, 0x00BFFF, "Gogo BA", "GOGO-BA" },
 	{ 0x0050C2, 0xEF9000, 0xEF9FFF, "HORIBA ABX SAS", "HORIBA-ABX-SAS" },
 	{ 0x40D855, 0x1BD000, 0x1BDFFF, "HORIBA ABX SAS", "HORIBA-ABX-SAS" },
