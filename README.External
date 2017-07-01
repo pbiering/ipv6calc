@@ -1,0 +1,29 @@
+GENERAL
+-------
+ipv6calc's internal databases
+
+* IPv4 assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for selecting proper registry in ipv6calcweb.cgi and IPv4 anonymization)
+* IPv6 assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for selecting proper registry in ipv6calcweb.cgi and IPv6 anonymization)
+* ASN assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for IPv4/IPv6 anonymization)
+
+can be overruled by using updated ones converted into Berkeley DB format.
+
+Therefore ipv6calc package contains the tools
+	ipv6calc-create-registry-list-ipv4.pl
+	ipv6calc-create-registry-list-ipv6.pl
+	ipv6calc-update-registries.sh
+	ipv6calc-registries-check-run-create.sh
+to generate Berkeley DB files from various registry data
+
+
+ENABLING SUPPORT
+----------------
+If you want to use the 'external' databases with ipv6calc, you will
+have only to enable the support using configure:
+	--enable-external
+
+
+DATA UPDATE
+-----------
+For regular (monthls) updates of the free available databases a download tool is also provided:
+	ipv6calc-db-update.sh
