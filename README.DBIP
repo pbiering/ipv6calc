@@ -1,23 +1,26 @@
-BUILDING db-ip.com support
---------------------------
+GENERAL
+-------
+db-ip.com only publish gzip compressed CSV files with location data, no binary format
+
+Therefore ipv6calc package contains the tool
+	DBIP-generate-db.pl
+to generate Berkeley DB files from this CSV data.
+
+
+ENABLING SUPPORT
+----------------
 If you want to use the db-ip.com databases with ipv6calc, you will
 have only to enable the support using configure:
 	--enable-dbip
 
-Background:
 
-db-ip.com only publish gzip compressed CSV files with location data.
-
-ipv6calc package contains the tool
-	DBIP-generate-db.pl
-to generate Berkeley DB files from this CSV data.
-
-Enabling db-ip.com support will enable code for using this generated DB files.
-
-For regular (looks like monthls) updates of the free available databases a download tool is also provided:
+DATA UPDATE
+-----------
+For regular (monthls) updates of the free available databases a download tool is also provided:
 	DBIP-update.sh
 
-Commercial databases need a subscription and must be downloaded manually like
+
+Commercial databases need a subscription and must be downloaded and converted manually like
 	$ cd /var/local/share/DBIP
 	$ wget http://download.db-ip.com/key/<key> -O dbip-full-$(date +'%Y-%m').csv.gz
 	$ /usr/share/ipv6calc/tools/DBIP-generate-db.pl -A -I dbip-full-$(date +'%Y-%m').csv.gz

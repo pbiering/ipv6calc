@@ -1,26 +1,15 @@
-BUILDING GeoIP
---------------------
-If you want to use the GeoIP library with ipv6calc, you will
-have to build and install it yourself separately.
+GENERAL
+-------
+GeoIP extended the the API layer several times, ipv6calc autodetects this and enable features during runtime
 
-Instructions for current version (1.4.8)
+
+ENABLING SUPPORT
+----------------
+If you want to use the GeoIP library with ipv6calc, you will
+have to install related libraries and build files separately.
 
 install following RPMs (usually supported by distribution)
-
 	GeoIP GeoIP-devel
-
-Create as user "root" database directories:
-
-Install databases
-
-# mkdir -p /var/local/share/GeoIP
-
-Update databases (GeoLite databases do not require a license)
-
-# pushd /var/local/share/GeoIP/ || exit 1
-# wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz && gunzip -f GeoIP.dat.gz
-# wget http://geolite.maxmind.com/download/geoip/database/GeoIPv6.dat.gz && gunzip -f GeoIPv6.dat.gz
-
 
 Enable GeoIP support by using following configure options:
   --enable-geoip
@@ -30,5 +19,24 @@ Enable GeoIP support by using following configure options:
 
   Having GeoIP databases not stored in /usr/share/GeoIP (or a softlink created), add e.g.
      --with-geoip-db=/var/local/share/GeoIP
+	(there is also a runtime option for selecting a different directory)
 
   For more specifc options see ./configure --help
+
+
+DATA UPDATE
+---------------------
+Create as user "root" database custom data directories:
+
+# mkdir -p /var/local/share/GeoIP
+
+
+Manual databases update (GeoLite databases do not require a license)
+
+# pushd /var/local/share/GeoIP/ || exit 1
+# wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz && gunzip -f GeoIP.dat.gz
+# wget http://geolite.maxmind.com/download/geoip/database/GeoIPv6.dat.gz && gunzip -f GeoIPv6.dat.gz
+
+
+For regular (monthls) updates of the free available databases a download tool is also provided:
+        GeoIP-update.sh

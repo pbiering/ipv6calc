@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Copyright  : 2001-2016 by Peter Bieringer <pb@bieringer.de>
+# Copyright  : 2001-2017 by Peter Bieringer <pb@bieringer.de>
 # $Id: 0df17afba6c435c28b3c3d0323e0739d2f88678e $
 
 # enable the following for intermediate builds
@@ -20,8 +20,8 @@
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
-Version:	1.0.0
-Release: 	16%{?gittag}%{?dist}
+Version:	1.0.1.rc1
+Release: 	21%{?gittag}%{?dist}
 Group:		Applications/Text
 URL:		http://www.deepspace6.net/projects/%{name}.html
 License:	GPLv2
@@ -258,10 +258,10 @@ rm -rf %{buildroot}
 
 %files
 %if %{rpm_license_extra}
-%doc ChangeLog README CREDITS TODO USAGE doc/ipv6calc.lyx doc/ipv6calc.sgml doc/ipv6calc.html doc/ipv6calc.xml
+%doc ChangeLog README README.* CREDITS TODO USAGE doc/ipv6calc.lyx doc/ipv6calc.sgml doc/ipv6calc.html doc/ipv6calc.xml
 %license COPYING LICENSE
 %else
-%doc ChangeLog README CREDITS TODO USAGE doc/ipv6calc.lyx doc/ipv6calc.sgml doc/ipv6calc.html doc/ipv6calc.xml COPYING LICENSE
+%doc ChangeLog README README.* CREDITS TODO USAGE doc/ipv6calc.lyx doc/ipv6calc.sgml doc/ipv6calc.html doc/ipv6calc.xml COPYING LICENSE
 %endif
 
 %defattr(644,root,root,755)

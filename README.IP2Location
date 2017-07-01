@@ -13,6 +13,7 @@ Supported so far:
 	compiled with 4.0.2, supported library: 4.0.2 - 6.0.3 
 	compiled with 6.0.x, supported library: 6.0.1 - 6.0.3 
 	compiled with 7.0.0, supported library: 7.0.0
+	compiled with 8.0.4, supported library: 8.0.0 -
 
 In dynamic load configuration, this will detected and features will be deactivated
 
@@ -20,7 +21,7 @@ Description of the various fields:
 http://www.ip2location.com/databases/db24-ip-country-region-city-latitude-longitude-zipcode-timezone-isp-domain-netspeed-areacode-weather-mobile-elevation-usagetype
 
 
-BUILDING IP2LOCATION
+BUILDING IP2Location
 --------------------
 If you want to use the IP2Location library with ipv6calc, you will
 have to build and install it yourself separately.
@@ -122,3 +123,13 @@ Enable IP2Location support by using following configure options:
      --with-ip2location-db=/var/local/share/IP2Location
 
   For more specifc options see ./configure --help
+
+
+DATA UPDATE
+---------------------
+Create as user "root" database custom data directories:
+
+# mkdir -p /var/local/share/IP2Location
+
+For regular (monthls) updates of available free and permitted commercial databases a download tool is also provided:
+        IP2Location-update.sh
