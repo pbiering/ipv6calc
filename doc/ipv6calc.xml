@@ -8,7 +8,7 @@
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>7.0</revnumber> <date>2017-06-25</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>7.1</revnumber> <date>2017-08-27</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
@@ -67,7 +67,7 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 <title>Ready to use packages for several operating systems:</title>
 <sect3>
 <title>Fedora Linux</title>
-<para>Fedora 22 is the current developing platform, so use given hints above to create a RPM. Since Fedora 7 this package is included by default.</para>
+<para>Fedora 27 is the current developing platform, so use given hints above to create a RPM. Since Fedora 7 this package is included by default.</para>
 <para>See also <ulink url="https://admin.fedoraproject.org/pkgdb/package/ipv6calc/">FedoraProject / Package / ipv6calc</ulink></para></sect3><sect3>
 <title>Red Hat Enterprise Linux and clones</title>
 <para>It's tested by the developer that creation of the RPM is working fine starting with RHEL 4.</para><itemizedlist>
