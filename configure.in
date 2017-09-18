@@ -245,6 +245,7 @@ if test "$ENABLE_BUNDLED_MD5" = "1"; then
 	AC_DEFINE(ENABLE_BUNDLED_MD5, 1, Define if bundled MD5 should be used)
 else
 	LDFLAGS_EXTRA="-lcrypto $LDFLAGS_EXTRA"
+	LDFLAGS_EXTRA_MOD_IPV6CALC="-lcrypto $LDFLAGS_EXTRA_MOD_IPV6CALC"
 	LDFLAGS_EXTRA_STATIC="-lcrypto -lz -ldl $LDFLAGS_EXTRA_STATIC"
 fi
 
@@ -1151,7 +1152,8 @@ if test "$require_libdb" = "yes"; then
 		AC_MSG_ERROR([Berkeley DB library header files not found (perhaps missing db4-devel/libdb-devel package)])
 	])
 
-	LDFLAGS_EXTRA="$LDFLAGS_EXTRA -ldb"
+	LDFLAGS_EXTRA="-ldb $LDFLAGS_EXTRA"
+	LDFLAGS_EXTRA_MOD_IPV6CALC="-ldb $LDFLAGS_EXTRA_MOD_IPV6CALC"
 	AC_DEFINE(HAVE_BERKELEY_DB_SUPPORT, 1, Define if Berkeley DB support is required.)
 fi
 
