@@ -1,13 +1,13 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
 dnl Version  : $Id$
-dnl Copyright: 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
+dnl Copyright: 2001-2018 by Peter Bieringer <pb (at) bieringer.de>
 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(ipv6calc, 1.0.1.rc1, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
+AC_INIT(ipv6calc, 1.0.1.rc2, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
 
-COPYRIGHT_YEAR=2017
+COPYRIGHT_YEAR=2018
 
 dnl Program/library version (align with version above)
 PACKAGE_VERSION_MAJOR=1
@@ -68,7 +68,7 @@ AC_FUNC_MEMCMP
 AC_CHECK_FUNCS(strspn strstr)
 
 dnl *************************************************
-dnl check for compiler options -Werror -Werror=format-security
+dnl check for compiler options for several -W*
 dnl *************************************************
 AC_ARG_ENABLE([compiler-warning-to-error], 
 	AS_HELP_STRING([--disable-compiler-warning-to-error],
@@ -133,6 +133,22 @@ AC_ARG_ENABLE([compiler-warning-to-error],
 			],
 			[
 				AC_MSG_WARN([*** missing CFLAGS support: -Wextra])
+			])
+		CFLAGS="$CFLAGS_SAVE"
+
+		AC_MSG_RESULT([*** check for CFLAGS: -Werror=format-truncation])
+		CFLAGS_SAVE="$CFLAGS"
+		CFLAGS="$CFLAGS -Werror=format-truncation"
+		AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+			     [[int a=1;]])
+			],
+			[
+				AC_MSG_RESULT([*** CFLAGS supported: -Werror=format-truncation])
+				# disable errors related to format-truncation
+				CFLAGS_EXTRA="$CFLAGS_EXTRA -Werror=format-truncation=0"
+			],
+			[
+				AC_MSG_WARN([*** missing CFLAGS support: -Werror=format-truncation])
 			])
 		CFLAGS="$CFLAGS_SAVE"
 	])

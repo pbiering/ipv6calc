@@ -9,6 +9,14 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20180203/PB
+	ipv6calc/ipv6calc.c: replace sprintf with snprintf
+	configure[.in]: disable errors related to format-truncation
+	databases/lib/libipv6calc_db_wrapper_DBIP.c: replace strncpy with snprintf
+
+20170701/PB
+	minor update regarding database update information, pack database infos into RPM
+
 20171002/PB
 	tools/DBIP-update.sh[.in]: add option for URL to download "full" database
 
