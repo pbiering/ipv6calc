@@ -5,7 +5,7 @@
 # Project    : ipv6calc/DBIP
 # File       : DBIP-generate-db.pl
 # Version    : $Id$
-# Copyright  : 2014-2017 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2014-2018 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 #
 # Supported formats (https://db-ip.com/db/)
@@ -231,7 +231,7 @@ while (<$FILE>) {
 	};
 
 	# replace escaped quotes to avoid confusing CSV parser
-	$line =~ s/\\\\\\"/'/g;
+	#$line =~ s/\\\\\\"/'/g;
 
 	# replace double (partially escaped) quotes to avoid confusing CSV parser
 	$line =~ s/"\\"/"/g;
