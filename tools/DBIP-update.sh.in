@@ -5,7 +5,7 @@
 # Project    : ipv6calc/DBIP
 # File       : DBIP-update.sh
 # Version    : $Id$
-# Copyright  : 2014-2017 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2014-2018 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
 DBIP_DAT_DIR_DEFAULT="@DBIP_DB@"
@@ -148,10 +148,13 @@ if [ "$download_result" = "1" -a "$skip_generation" != "1" ]; then
 		time_delta=$[ $time_end - $time_begin ]
 		time_delta_min=$[ ($time_delta + 59) / 60 ]
 
+		echo "INFO  : processing time for $file: $time_delta sec ($time_delta_min min)"
+
 		if [ $result -ne 0 ]; then
-			echo "ERROR : processing of file was not successful"
+			echo "ERROR : processing of file was not successful, keep downloaded file: $file_input"
+		else
+			echo "INFO  : processing of file was successful, remove downloaded file now: $file_input"
+			rm -f "$file_input"
 		fi
-		echo "INFO  : processing time for $file: $time_delta sec ($time_delta_min min) (remove downloaded file now)"
-		rm -f "$file_input"
 	done
 fi
