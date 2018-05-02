@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20180502/PB
+	tools/DBIP-update.sh[.in]: keep downloaded file in case of error
+	tools/DBIP-generate-db.pl: remove special escaping, no longer necessary
+
 20180203/PB
 	ipv6calc/ipv6calc.c: replace sprintf with snprintf
 	configure[.in]: disable errors related to format-truncation
