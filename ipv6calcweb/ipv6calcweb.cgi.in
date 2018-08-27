@@ -43,6 +43,11 @@
 #  HTTP_IPV6CALCWEB_DB_EXTERNAL_DIR     : external database directory (optional)
 #  HTTP_IPV6CALCWEB_OUTPUT_FORMAT       : html (default if SERVER_PROTOCOL=INCLUDED), htmlfull (default), text, textkeyvalue
 #  HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB: sequential (default), subcolumns
+#
+#  HTTP_IPV6CALCWEB_ANTIDOS_LOAD1       : System load 1 limit to trigger DoS protection (default below)
+#  HTTP_IPV6CALCWEB_ANTIDOS_LOAD5       : System load 5 limit to trigger DoS protection (default below)
+#  HTTP_IPV6CALCWEB_ANTIDOS_LOAD15      : System load 15 limit to trigger DoS protection (default below)
+#  HTTP_IPV6CALCWEB_ANTIDOS_MAXPROC     : Max CGI processes to trigger DoS protection (default below)
 
 ## special output format "textkeyvalue"
 #  INFO__OUTPUTVERSION="1"			: current output format version
@@ -53,6 +58,7 @@ use strict;
 use URI::Escape;
 use HTML::Entities;
 use POSIX;
+use Proc::ProcessTable;
 use warnings;
 
 ## Defines
@@ -68,6 +74,13 @@ my $program_required_ipv6calc_output_version = 2;
 ## Prototyping
 sub logging($$);
 
+## defaults for Anti-DoS (generic) (load is normalized by number of CPU cores below)
+my $load1_max = 2;
+my $load5_max = 1.5;
+my $load15_max = 1;
+my $proc_max = 8;
+my $proc_pattern = "ipv6calcweb";
+
 ## defines for Anti-DoS (form or mixed mode only)
 my $tokenhash;
 my $tokenhash_verify;
@@ -81,6 +94,8 @@ my $time_range_min   = 5; # seconds
 my $mask_remote_address = 0; # disabled (0), enabled (1)
 
 my $returncode = 0;
+my $error;
+my $error_flag = 0;
 
 my $mode_db_entries_in_subcolumns = 0;
 my $db_columns = 0;
@@ -107,8 +122,9 @@ my $debug = 0;
 # debug | 0x0040: print form input/token to stderr
 # debug | 0x0080: print environment to stderr
 # debug | 0x0100: print Anti-DoS token infos to stderr
-# debug | 0x1000: skip Anti-DoS sleep
+# debug | 0x1000: skip Anti-DoS sleeps
 # debug | 0x2000: print lat/long URL infos to stderr
+# debug | 0x4000: skip system health checks (load)
 # debug | 0x8000: print feature token hash
 
 if ( defined $ENV{'HTTP_IPV6CALCWEB_DEBUG'} ) {
@@ -842,6 +858,43 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_BIN_IPV6CALC'}) {
 my $options_ipv6calc = "-m -i -q";
 
 
+## simple DoS protection
+if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD1'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD1'} =~ /^([[:digit:].]+)$/o) {
+		$load1_max = $1; # overwrite default from above
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_ANTIDOS_LOAD1 found, but not containing proper number");
+		&print_error();
+	};
+};
+
+if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD5'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD5'} =~ /^([[:digit:].]+)$/o) {
+		$load5_max = $1; # overwrite default from above
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_ANTIDOS_LOAD5 found, but not containing proper number");
+		&print_error();
+	};
+};
+
+if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD15'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD15'} =~ /^([[:digit:].]+)$/o) {
+		$load15_max = $1; # overwrite default from above
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_ANTIDOS_LOAD15 found, but not containing proper number");
+		&print_error();
+	};
+};
+
+if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX'} =~ /^([[:digit:]]+)$/o) {
+		$proc_max = $1; # overwrite default from above
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX found, but not containing proper number");
+		&print_error();
+	};
+};
+
 
 ## Location of database files
 
@@ -1007,7 +1060,6 @@ my $length_max_description = 0;
 my $query_string;
 my $script_name;
 my $uri = "";
-my $error;
 my $error_insert_input = 0;
 
 my $maxenvlength = 256;
@@ -1760,6 +1812,69 @@ if ( defined $ENV{'QUERY_STRING'} ) {
 	};
 };
 
+
+## check system health
+if (($debug & 0x4000) == 0) {
+	# check amount of CPU cores
+	my $cpu_cores = 0;
+	if (-r "/proc/cpuinfo") {
+		open my $h, "/proc/cpuinfo";
+		if ($h) {
+			my @info = <$h>;
+			close $h;
+			$cpu_cores = scalar(grep /^processor/, @info);
+			#logging("DEBUG", "System has CPU cores: $cpu_cores");
+		};
+	};
+
+	# check system load
+	if (-r "/proc/loadavg") {
+		open my $h, "/proc/loadavg";
+		if ($h) {
+			my @info = <$h>;
+			close $h;
+			my ($load1, $load5, $load15, $other) = (split / /, $info[0]);
+			my $overload = 0;
+
+			# normalized
+			my ($load1_norm, $load5_norm, $load15_norm) = ($load1, $load5, $load15);
+			if ($cpu_cores > 1) {
+				$load1_norm = $load1 / $cpu_cores;
+				$load5_norm = $load5 / $cpu_cores;
+				$load15_norm = $load15 / $cpu_cores;
+			};
+
+			if ($load15_norm > $load15_max) {
+				$overload = 15;
+			} elsif ($load5_norm > $load5_max) {
+				$overload = 5;
+			} elsif ($load1_norm > $load1_max) {
+				$overload = 1;
+			};
+
+			if ($overload > 0) {
+				logging("WARN", "System overloaded by load$overload load=$load1/$load5/$load15 load_norm=$load1_norm/$load5_norm/$load15_norm limit=$load1_max/$load5_max/$load15_max cpus=$cpu_cores");
+				$error = "System overloaded, please retry in $overload minutes - sorry";
+				$error_flag = 1; # no automatic redirect
+				&print_error();
+			};
+		};
+	};
+
+	# check amount of processes
+	my $t = Proc::ProcessTable->new;
+
+	my @proc_list = grep { $_->{cmndline} =~ /perl .* $proc_pattern/ } @{$t->table};
+	my $proc_count = scalar(@proc_list);
+	if ($proc_count > $proc_max) {
+		logging("WARN", "System has too much 'perl $proc_pattern' running in parallel: $proc_count limit=$proc_max");
+		$error = "System overloaded, please retry in 1 minute - sorry";
+		$error_flag = 1; # no automatic redirect
+		&print_error();
+	};
+};
+
+
 ## Get variables
 if ( defined $ENV{'REMOTE_ADDR'} ) {
 	logging("DEBUG", "found environment: REMOTE_ADDR") if ($debug & 0x80);
@@ -1964,6 +2079,10 @@ if ( ! -x $bin_ipv6calc ) {
 
 ## Get and fill information
 sub ipv6calc_exec($$$$) {
+	# Anti-DoS sleep 100-200 ms
+	my $sleep = 0.1 * (1 + rand(1));
+	select(undef, undef, undef, $sleep) if (! ($debug & 0x1000));
+
 	my $addr = $_[0];
 	my $debug_tag = $_[1];
 	my $p_hash = $_[2];
@@ -2268,7 +2387,6 @@ for my $key (keys %text) {
 goto("OUTPUT_BEGIN");
 
 OUTPUT_BEGIN_ERROR:
-my $error_flag = 0;
 if (!defined $error) {
 	$error = "$program_name: unexpected problem occurs";
 	$error_flag = 1;
@@ -2278,8 +2396,8 @@ if (!defined $error) {
 
 $returncode = 1;
 
-# delay error output
-sleep (5) if (! ($debug & 0x1000));
+# delay error output by sleeping 3-6 seconds
+select(undef, undef, undef, 3 * (1 + rand(1))) if (! ($debug & 0x1000));
 
 OUTPUT_BEGIN:
 
@@ -2341,8 +2459,8 @@ for (my $i = 0; $i < $db_columns + 1; $i++) {
 &print_tagoutput ( "     </colgroup>\n" );
 
 if ($mode eq "form" || $mode eq "mixed") {
-	# sleep 500 ms
-	select(undef, undef, undef, 0.5) if (! ($debug & 0x1000));
+	# sleep 500-1000 ms
+	select(undef, undef, undef, 0.5 * (1 + rand(1))) if (! ($debug & 0x1000));
 
 	# Input
 	&print_textonly ("\n");
