@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : db_cc_reg_assignment.h
  * Version       : $Id$
- * Generated     : Sun Jun 25 09:47:51 2017
+ * Generated     : Sat Sep  1 17:54:28 2018
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
  *  Additional header file for databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  */
 
-static const char *db_cc_registry_status = "AFRINIC/20170625 APNIC/20170624 ARIN/20170625 LACNIC/20170623 RIPENCC/20170624";
+static const char *db_cc_registry_status = "AFRINIC/20180901 APNIC/20180901 ARIN/20180901 LACNIC/20180831 RIPENCC/20180831";
 
 static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "", REGISTRY_ARIN     },
@@ -21,12 +21,12 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "AL", REGISTRY_RIPENCC  },
 	{ "AM", REGISTRY_RIPENCC  },
 	{ "AO", REGISTRY_AFRINIC  },
-	{ "AP", REGISTRY_APNIC    },
 	{ "AR", REGISTRY_LACNIC   },
 	{ "AS", REGISTRY_APNIC    },
 	{ "AT", REGISTRY_RIPENCC  },
 	{ "AU", REGISTRY_APNIC    },
 	{ "AW", REGISTRY_LACNIC   },
+	{ "AX", REGISTRY_RIPENCC  },
 	{ "AZ", REGISTRY_RIPENCC  },
 	{ "BA", REGISTRY_RIPENCC  },
 	{ "BB", REGISTRY_ARIN     },
@@ -80,6 +80,7 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "EU", REGISTRY_RIPENCC  },
 	{ "FI", REGISTRY_RIPENCC  },
 	{ "FJ", REGISTRY_APNIC    },
+	{ "FK", REGISTRY_RIPENCC  },
 	{ "FM", REGISTRY_APNIC    },
 	{ "FO", REGISTRY_RIPENCC  },
 	{ "FR", REGISTRY_RIPENCC  },
@@ -233,14 +234,13 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "TZ", REGISTRY_AFRINIC  },
 	{ "UA", REGISTRY_RIPENCC  },
 	{ "UG", REGISTRY_AFRINIC  },
-	{ "UM", REGISTRY_ARIN     },
 	{ "US", REGISTRY_ARIN     },
 	{ "UY", REGISTRY_LACNIC   },
 	{ "UZ", REGISTRY_RIPENCC  },
 	{ "VA", REGISTRY_RIPENCC  },
 	{ "VC", REGISTRY_ARIN     },
 	{ "VE", REGISTRY_LACNIC   },
-	{ "VG", REGISTRY_RIPENCC  },
+	{ "VG", REGISTRY_ARIN     },
 	{ "VI", REGISTRY_ARIN     },
 	{ "VN", REGISTRY_APNIC    },
 	{ "VU", REGISTRY_APNIC    },
@@ -691,7 +691,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_APNIC    }, //  434  SG
 	{ REGISTRY_AFRINIC  }, //  435  TG
 	{ REGISTRY_AFRINIC  }, //  436  UG
-	{ REGISTRY_RIPENCC  }, //  437  VG
+	{ REGISTRY_ARIN     }, //  437  VG
 	{ REGISTRY_UNKNOWN  }, //  438  WG
 	{ REGISTRY_UNKNOWN  }, //  439  XG
 	{ REGISTRY_UNKNOWN  }, //  440  YG
@@ -779,7 +779,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_APNIC    }, //  522  CK
 	{ REGISTRY_RIPENCC  }, //  523  DK
 	{ REGISTRY_UNKNOWN  }, //  524  EK
-	{ REGISTRY_UNKNOWN  }, //  525  FK
+	{ REGISTRY_RIPENCC  }, //  525  FK
 	{ REGISTRY_UNKNOWN  }, //  526  GK
 	{ REGISTRY_APNIC    }, //  527  HK
 	{ REGISTRY_UNKNOWN  }, //  528  IK
@@ -846,7 +846,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  589  RM
 	{ REGISTRY_RIPENCC  }, //  590  SM
 	{ REGISTRY_RIPENCC  }, //  591  TM
-	{ REGISTRY_ARIN     }, //  592  UM
+	{ REGISTRY_UNKNOWN  }, //  592  UM
 	{ REGISTRY_UNKNOWN  }, //  593  VM
 	{ REGISTRY_UNKNOWN  }, //  594  WM
 	{ REGISTRY_UNKNOWN  }, //  595  XM
@@ -904,7 +904,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  647  XO
 	{ REGISTRY_UNKNOWN  }, //  648  YO
 	{ REGISTRY_UNKNOWN  }, //  649  ZO
-	{ REGISTRY_APNIC    }, //  650  AP
+	{ REGISTRY_UNKNOWN  }, //  650  AP
 	{ REGISTRY_UNKNOWN  }, //  651  BP
 	{ REGISTRY_UNKNOWN  }, //  652  CP
 	{ REGISTRY_UNKNOWN  }, //  653  DP
@@ -1112,7 +1112,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  855  XW
 	{ REGISTRY_UNKNOWN  }, //  856  YW
 	{ REGISTRY_AFRINIC  }, //  857  ZW
-	{ REGISTRY_UNKNOWN  }, //  858  AX
+	{ REGISTRY_RIPENCC  }, //  858  AX
 	{ REGISTRY_UNKNOWN  }, //  859  BX
 	{ REGISTRY_UNKNOWN  }, //  860  CX
 	{ REGISTRY_UNKNOWN  }, //  861  DX

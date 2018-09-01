@@ -2,7 +2,7 @@
  * Project       : ipv6calc
  * File          : dbasn_assignment.h
  * Version       : $Id$
- * Generated     : Sun Jun 25 09:47:48 2017
+ * Generated     : Sat Sep  1 17:54:26 2018
  * Data copyright: IANA
  *
  * Information:
@@ -11,7 +11,7 @@
 
 #include "libipv6calc.h"
 
-/*@unused@*/ static const char* dbasn_registry_status __attribute__ ((__unused__)) = "IANA/20160908";
+/*@unused@*/ static const char* dbasn_registry_status __attribute__ ((__unused__)) = "IANA/20180820";
 
 static const s_asn_assignment dbasn_assignment[] = {
 	{          1,          6, REGISTRY_ARIN       },
@@ -2290,6 +2290,8 @@ static const s_asn_assignment dbasn_assignment[] = {
 	{     134557,     135580, REGISTRY_APNIC      },
 	{     135581,     136505, REGISTRY_APNIC      },
 	{     136506,     137529, REGISTRY_APNIC      },
+	{     137530,     138553, REGISTRY_APNIC      },
+	{     138554,     139577, REGISTRY_APNIC      },
 	{     196608,     197631, REGISTRY_RIPENCC    },
 	{     197632,     198655, REGISTRY_RIPENCC    },
 	{     198656,     199679, REGISTRY_RIPENCC    },
@@ -2301,16 +2303,23 @@ static const s_asn_assignment dbasn_assignment[] = {
 	{     204288,     205211, REGISTRY_RIPENCC    },
 	{     205212,     206235, REGISTRY_RIPENCC    },
 	{     206236,     207259, REGISTRY_RIPENCC    },
+	{     207260,     208283, REGISTRY_RIPENCC    },
+	{     208284,     209307, REGISTRY_RIPENCC    },
+	{     209308,     210331, REGISTRY_RIPENCC    },
 	{     262144,     263167, REGISTRY_LACNIC     },
 	{     263168,     263679, REGISTRY_LACNIC     },
 	{     263680,     264604, REGISTRY_LACNIC     },
 	{     264605,     265628, REGISTRY_LACNIC     },
 	{     265629,     266652, REGISTRY_LACNIC     },
+	{     266653,     267676, REGISTRY_LACNIC     },
+	{     267677,     268700, REGISTRY_LACNIC     },
 	{     327680,     328703, REGISTRY_AFRINIC    },
 	{     393216,     394239, REGISTRY_ARIN       },
 	{     394240,     395164, REGISTRY_ARIN       },
 	{     395165,     396188, REGISTRY_ARIN       },
 	{     396189,     397212, REGISTRY_ARIN       },
+	{     397213,     398236, REGISTRY_ARIN       },
+	{     398237,     399260, REGISTRY_ARIN       },
 
 };
 
