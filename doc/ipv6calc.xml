@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "https://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
-<!-- XML file was created by LyX 2.2.3
+<!-- XML file was created by LyX 2.3.0
   See http://www.lyx.org/ for more information -->
 <article lang="en_US">
 <articleinfo>
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>7.1</revnumber> <date>2017-08-27</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>7.2</revnumber> <date>2018-09-02</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freecode.com/projects/ipv6calc/">freecode.com (former freshmeat, now also EOL) / ipv6calc</ulink> page (but this is not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 1.0.0</para></sect2><sect2>
+<para>Latest version since last update of this page is 1.1.0</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
 <listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;mod_ipv6calc&rdquo;: Apache module</para></listitem></itemizedlist></sect2><sect2>
@@ -637,14 +637,16 @@ ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4
 <title>Action-type options: </title>
 <screen>
 <![CDATA[$ ipv6calc --action -?
-ipv6calc: version 0.99.1 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
-(P) & (C) 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
+ipv6calc: version 1.1.0 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO ANON_ZEROISE ANON_ANONYMIZE
+(P) & (C) 2001-2018 by Peter Bieringer <pb (at) bieringer.de>
 
  Available action types:
   auto             : Automatic selection of action (default)
   geneui64         : Converts a MAC address to an EUI-64 address
   conv6to4         : Converts IPv4 address <-> 6to4 IPv6 address (prefix)
   convnat64        : Converts IPv4 address <-> NAT64 IPv6 address
+  ipv6tomac        : Extracts MAC of an IPv6 address (if detected)
+  ipv6toeui64      : Extracts EUI64 of an IPv6 address (if detected)
   genprivacyiid    : Generates a privacy interface ID out of a given one (arg1) and a token (arg2)
   prefixmac2ipv6   : Generates an IPv6 address out of a prefix and a MAC address
   anonymize        : Anonymize IPv4/IPv6 address without loosing much information
@@ -656,6 +658,13 @@ ipv6calc: version 0.99.1 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4
                       Options:
                        --6rd_prefixlength ... (required)
   filter           : Filter addresses related to filter options
+  test             : Test address against given prefix or address
+                      Options:
+                       --test_prefix ... (optional)
+                       --test_gt ... (optional)
+                       --test_ge ... (optional)
+                       --test_lt ... (optional)
+                       --test_le ... (optional)
 ]]></screen></sect3><sect3>
 <title>Special action &ldquo;filter&rdquo;:</title>
 <para>Special action &ldquo;filter&rdquo; can be used especially in pipe mode to filter IP addresses related to their type and since 0.99.0 also related to database results (CountryCode, ASN or Registry).</para><screen>
