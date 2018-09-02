@@ -202,6 +202,11 @@ int ipv6calcoptions_common_basic(const int opt, const char *optarg, const struct
 
 	/* general options */
 	switch(opt) {
+		case OPTION_NOOP:
+			DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Found dummy option, skip");
+			result = 0;
+			break;
+
 		case 'd':
 			DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Found debug option with value: %s", optarg);
 			ipv6calc_debug = parse_dec_hex_val(optarg);
@@ -214,12 +219,14 @@ int ipv6calcoptions_common_basic(const int opt, const char *optarg, const struct
 			ipv6calc_quiet = 1;
 			result = 0;
 			break;
+
 		case 'V':
 			DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Found verbose option");
 			ipv6calc_verbose++;
 			ipv6calc_quiet = 0;
 			result = 0;
 			break;
+
 		default:
 			/* jump to other parsers */
 			DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Call sub-parser for opt=0x%08x", opt);

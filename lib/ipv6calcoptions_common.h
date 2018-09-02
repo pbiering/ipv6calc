@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
  * Version    : $Id$
- * Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2018 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options
@@ -26,6 +26,32 @@ static struct option ipv6calc_longopts_common[] = {
 	{"debug"  , 1, NULL, (int) 'd' },
 	{"quiet"  , 0, NULL, (int) 'q' },
 	{"verbose", 0, NULL, (int) 'V' },
+
+	/* dummy catch if support is not compiled in */
+#ifndef SUPPORT_IP2LOCATION
+	{"disable-ip2location"         , 0, NULL, OPTION_NOOP },
+	{"db-ip2location-disable"      , 0, NULL, OPTION_NOOP },
+#endif
+
+#ifndef SUPPORT_GEOIP
+	{"disable-geoip"               , 0, NULL, OPTION_NOOP },
+	{"db-geoip-disable"            , 0, NULL, OPTION_NOOP },
+#endif
+
+#ifndef SUPPORT_DBIP
+	{"disable-dbip"                , 0, NULL, OPTION_NOOP },
+	{"db-dbip-disable"             , 0, NULL, OPTION_NOOP },
+#endif
+
+#ifndef SUPPORT_EXTERNAL
+	{"disable-external"            , 0, NULL, OPTION_NOOP },
+	{"db-external-disable"         , 0, NULL, OPTION_NOOP },
+#endif
+
+#ifndef SUPPORT_BUILTIN
+	{"disable-builtin"             , 0, NULL, OPTION_NOOP },
+	{"db-builtin-disable"          , 0, NULL, OPTION_NOOP },
+#endif
 };
 
 #ifdef SUPPORT_IP2LOCATION

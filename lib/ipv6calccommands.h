@@ -113,4 +113,7 @@
 #define CMD_test_lt			0x0050040	// less than
 #define CMD_test_le			0x0050050	// less equal
 
+/* no operations (dummy) */
+#define OPTION_NOOP			0xfffffff
+
 #endif
