@@ -3,7 +3,7 @@
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
 # Version    : $Id$
-# Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2018 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
 # Simple Perl web interface and security wrapper
@@ -860,7 +860,7 @@ my $options_ipv6calc = "-m -i -q";
 
 ## simple DoS protection
 if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD1'}) {
-	if ($ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD1'} =~ /^([[:digit:].]+)$/o) {
+	if ($ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD1'} =~ /^(-?[[:digit:].]+)$/o) {
 		$load1_max = $1; # overwrite default from above
 	} else {
 		logging("ERROR", "HTTP_IPV6CALCWEB_ANTIDOS_LOAD1 found, but not containing proper number");
@@ -869,7 +869,7 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD1'}) {
 };
 
 if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD5'}) {
-	if ($ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD5'} =~ /^([[:digit:].]+)$/o) {
+	if ($ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD5'} =~ /^(-?[[:digit:].]+)$/o) {
 		$load5_max = $1; # overwrite default from above
 	} else {
 		logging("ERROR", "HTTP_IPV6CALCWEB_ANTIDOS_LOAD5 found, but not containing proper number");
@@ -878,7 +878,7 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD5'}) {
 };
 
 if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD15'}) {
-	if ($ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD15'} =~ /^([[:digit:].]+)$/o) {
+	if ($ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD15'} =~ /^(-?[[:digit:].]+)$/o) {
 		$load15_max = $1; # overwrite default from above
 	} else {
 		logging("ERROR", "HTTP_IPV6CALCWEB_ANTIDOS_LOAD15 found, but not containing proper number");
@@ -887,7 +887,7 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD15'}) {
 };
 
 if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX'}) {
-	if ($ENV{'HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX'} =~ /^([[:digit:]]+)$/o) {
+	if ($ENV{'HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX'} =~ /^(-?[[:digit:]]+)$/o) {
 		$proc_max = $1; # overwrite default from above
 	} else {
 		logging("ERROR", "HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX found, but not containing proper number");
@@ -1815,14 +1815,22 @@ if ( defined $ENV{'QUERY_STRING'} ) {
 
 ## check system health
 if (($debug & 0x4000) == 0) {
-	# check amount of CPU cores
-	my $cpu_cores = 0;
+	# retrieve amount of processes
+	my $t = Proc::ProcessTable->new;
+	my @proc_list = grep { $_->{cmndline} =~ /perl .*( |\/)$proc_pattern/ } @{$t->table};
+	my $proc_count = scalar(@proc_list);
+
+	# retrieve amount of CPU cores
+	my $cpu_cores = 1;
 	if (-r "/proc/cpuinfo") {
 		open my $h, "/proc/cpuinfo";
 		if ($h) {
 			my @info = <$h>;
 			close $h;
-			$cpu_cores = scalar(grep /^processor/, @info);
+			my $cpu_count = scalar(grep /^processor/, @info);
+			if ($cpu_count > 1) {
+				$cpu_cores = $cpu_count;
+			}; 
 			#logging("DEBUG", "System has CPU cores: $cpu_cores");
 		};
 	};
@@ -1838,11 +1846,9 @@ if (($debug & 0x4000) == 0) {
 
 			# normalized
 			my ($load1_norm, $load5_norm, $load15_norm) = ($load1, $load5, $load15);
-			if ($cpu_cores > 1) {
-				$load1_norm = $load1 / $cpu_cores;
-				$load5_norm = $load5 / $cpu_cores;
-				$load15_norm = $load15 / $cpu_cores;
-			};
+			$load1_norm = $load1 / $cpu_cores;
+			$load5_norm = $load5 / $cpu_cores;
+			$load15_norm = $load15 / $cpu_cores;
 
 			if ($load15_norm > $load15_max) {
 				$overload = 15;
@@ -1853,7 +1859,7 @@ if (($debug & 0x4000) == 0) {
 			};
 
 			if ($overload > 0) {
-				logging("WARN", "System overloaded by load$overload load=$load1/$load5/$load15 load_norm=$load1_norm/$load5_norm/$load15_norm limit=$load1_max/$load5_max/$load15_max cpus=$cpu_cores");
+				logging("WARN", "System overloaded by load$overload load=$load1/$load5/$load15 load_norm=$load1_norm/$load5_norm/$load15_norm limit=$load1_max/$load5_max/$load15_max cpus=$cpu_cores procs=$proc_count");
 				$error = "System overloaded, please retry in $overload minutes - sorry";
 				$error_flag = 1; # no automatic redirect
 				&print_error();
@@ -1862,10 +1868,6 @@ if (($debug & 0x4000) == 0) {
 	};
 
 	# check amount of processes
-	my $t = Proc::ProcessTable->new;
-
-	my @proc_list = grep { $_->{cmndline} =~ /perl .* $proc_pattern/ } @{$t->table};
-	my $proc_count = scalar(@proc_list);
 	if ($proc_count > $proc_max) {
 		logging("WARN", "System has too much 'perl $proc_pattern' running in parallel: $proc_count limit=$proc_max");
 		$error = "System overloaded, please retry in 1 minute - sorry";

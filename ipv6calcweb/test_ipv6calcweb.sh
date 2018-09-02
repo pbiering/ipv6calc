@@ -3,7 +3,7 @@
 # Project    : ipv6calc/ipv6calcweb
 # File       : test_ipv6calcweb.sh
 # Version    : $Id$
-# Copyright  : 2012-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2012-2018 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Test script for ipv6calcweb
@@ -45,24 +45,28 @@ if [ ! -x ipv6calcweb.cgi ]; then
 fi
 
 ## very basic output format tests
-test="run 'ipv6calc' very basic output format tests"
+test="run 'ipv6calcweb.cgi' very basic output format tests"
 echo "INFO  : $test"
 for format in textkeyvalue text html htmlfull; do
 	if [ -n "$opt_format" -a "$opt_format" != "$format" ]; then
 		echo "NOTICE: skip format: $format"
 		continue
 	fi
+
+	export HTTP_IPV6CALCWEB_DEBUG="0x5000" # no sleeps and no Anti-DoS
+
 	[ "$verbose" = "1" ] && echo "INFO  : test format: $format"
-	[ "$verbose" = "1" ] && echo "DEBUG : execute: HTTP_IPV6CALCWEB_DEBUG=0x1000 HTTP_IPV6CALCWEB_OUTPUT_FORMAT=\"$format\" ./ipv6calcweb.cgi"
+	[ "$verbose" = "1" ] && echo "DEBUG : execute: HTTP_IPV6CALCWEB_DEBUG=$HTTP_IPV6CALCWEB_DEBUG HTTP_IPV6CALCWEB_OUTPUT_FORMAT=\"$format\" ./ipv6calcweb.cgi"
+
 	if [ "$opt_debug" = "1" ]; then
-		HTTP_IPV6CALCWEB_DEBUG="0x1000" HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi
+		HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi
 		rc=$?
 	else
 		if [ "$verbose" = "1" ]; then
-			HTTP_IPV6CALCWEB_DEBUG="0x1000" HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi >/dev/null
+			HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi >/dev/null
 			rc=$?
 		else
-			HTTP_IPV6CALCWEB_DEBUG="0x1000" HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi >/dev/null 2>/dev/null
+			HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi >/dev/null 2>/dev/null
 			rc=$?
 		fi
 	fi
@@ -90,7 +94,7 @@ SERVER_NAME="server.domain.example"
 
 QUERY_STRING="$2"
 
-HTTP_IPV6CALCWEB_DEBUG="0x1000"
+HTTP_IPV6CALCWEB_DEBUG="0x5000" # no sleeps and no Anti-DoS
 HTTP_IPV6CALCWEB_INFO_SERVER="1"
 
 HTTP_X_FORWARDED_FOR="5.6.7.8, 9.10.11.12"
@@ -98,7 +102,7 @@ HTTP_VIA="1.0 fred, 1.1 nowhere.com"
 
 export REMOTE_ADDR REMOTE_HOST HTTP_USER_AGENT SERVER_ADDR SERVER_NAME QUERY_STRING HTTP_IPV6CALCWEB_DEBUG HTTP_IPV6CALCWEB_INFO_SERVER HTTP_X_FORWARDED_FOR HTTP_VIA
 
-test="run 'ipv6calc' sophisticated tests"
+test="run 'ipv6calcweb.cgi' sophisticated tests"
 echo "INFO  : $test"
 for format in textkeyvalue text html htmlfull; do
 	if [ -n "$opt_format" -a "$opt_format" != "$format" ]; then
@@ -131,6 +135,54 @@ for format in textkeyvalue text html htmlfull; do
 done || exit 1
 [ "$verbose" = "1" ] || echo
 echo "INFO  : $test successful"
+
+
+## test Anti-DoS implementation
+test="run 'ipv6calcweb.cgi' Anti-DoS tests"
+echo "INFO  : $test"
+for e in  1 5 15 p; do
+	unset HTTP_IPV6CALCWEB_ANTIDOS_LOAD1
+	unset HTTP_IPV6CALCWEB_ANTIDOS_LOAD5
+	unset HTTP_IPV6CALCWEB_ANTIDOS_LOAD15
+	unset HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX
+	case $e in
+	    1)
+		export HTTP_IPV6CALCWEB_ANTIDOS_LOAD1=-1
+		;;
+	    5)
+		export HTTP_IPV6CALCWEB_ANTIDOS_LOAD5=-1
+		;;
+	    15)
+		export HTTP_IPV6CALCWEB_ANTIDOS_LOAD15=-1
+		;;
+	    p)
+		export HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX=-1
+		;;
+	esac
+
+	export HTTP_IPV6CALCWEB_DEBUG="0x1000" # no sleeps
+	export HTTP_IPV6CALCWEB_OUTPUT_FORMAT="text"
+
+	echo "INFO  : Anti-DoS test: $e"
+
+	output=$(./ipv6calcweb.cgi)
+	rc=$?
+	if [ $rc -ne 1 ];then
+		echo "ERROR : Anti-DoS test reports unexpected error: rc=$rc"
+		echo "$output"
+		exit 1
+	fi
+	if echo "$output" | grep -q "System overloaded"; then
+		true
+	else
+		echo "ERROR : Anti-DoS test output not expected"
+		echo "$output" | head -5
+		exit 1
+	fi
+done || exit 1
+[ "$verbose" = "1" ] || echo
+echo "INFO  : $test successful"
+
 
 #if [ $result -ne 0 ]; then
 #	echo "TEST FAILED (exit code != 0)"
