@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
  * Version    : $Id$
- * Copyright  : 2002-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2018 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GPLv2
  *
  * Information:
@@ -270,6 +270,8 @@ typedef struct {
 #define ACTION_NUM_6rd_local_prefix	6
 #define ACTION_NUM_6rd_extract_ipv4	7
 #define ACTION_NUM_ipv4_to_nat64	8
+#define ACTION_NUM_ipv6_to_mac		9
+#define ACTION_NUM_ipv6_to_eui64	10
 #define ACTION_NUM_filter		15
 #define ACTION_NUM_test			16
 #define ACTION_NUM_undefined		31
@@ -283,6 +285,8 @@ typedef struct {
 #define ACTION_6rd_local_prefix		(uint32_t) (1 << ACTION_NUM_6rd_local_prefix)
 #define ACTION_6rd_extract_ipv4		(uint32_t) (1 << ACTION_NUM_6rd_extract_ipv4)
 #define ACTION_ipv4_to_nat64		(uint32_t) (1 << ACTION_NUM_ipv4_to_nat64)
+#define ACTION_ipv6_to_mac		(uint32_t) (1 << ACTION_NUM_ipv6_to_mac)
+#define ACTION_ipv6_to_eui64		(uint32_t) (1 << ACTION_NUM_ipv6_to_eui64)
 #define ACTION_filter			(uint32_t) (1 << ACTION_NUM_filter)
 #define ACTION_test			(uint32_t) (1 << ACTION_NUM_test)
 #define ACTION_undefined		(uint32_t) (1 << ACTION_NUM_undefined)
@@ -303,6 +307,8 @@ typedef struct {
 	{ ACTION_mac_to_eui64         , "geneui64"        , "Converts a MAC address to an EUI-64 address", "" },
 	{ ACTION_ipv4_to_6to4addr     , "conv6to4"        , "Converts IPv4 address <-> 6to4 IPv6 address (prefix)", "" },
 	{ ACTION_ipv4_to_nat64        , "convnat64"       , "Converts IPv4 address <-> NAT64 IPv6 address", "" },
+	{ ACTION_ipv6_to_mac          , "ipv6tomac"       , "Extracts MAC of an IPv6 address (if detected)", "" },
+	{ ACTION_ipv6_to_eui64        , "ipv6toeui64"     , "Extracts EUI64 of an IPv6 address (if detected)", "" },
 	{ ACTION_iid_token_to_privacy , "genprivacyiid"   , "Generates a privacy interface ID out of a given one (arg1) and a token (arg2)", "" },
 	{ ACTION_prefix_mac_to_ipv6   , "prefixmac2ipv6"  , "Generates an IPv6 address out of a prefix and a MAC address", "" },
 	{ ACTION_anonymize            , "anonymize"       , "Anonymize IPv4/IPv6 address without loosing much information", "" },
@@ -319,6 +325,8 @@ typedef struct {
 	{ ACTION_mac_to_eui64		, 0 , 0},
 	{ ACTION_ipv4_to_6to4addr	, 0 , 0},
 	{ ACTION_ipv4_to_nat64		, 0 , 0},
+	{ ACTION_ipv6_to_mac		, 0 , 0},
+	{ ACTION_ipv6_to_eui64		, 0 , 0},
 	{ ACTION_iid_token_to_privacy	, 0 , 0},
 	{ ACTION_prefix_mac_to_ipv6	, 0 , 0},
 	{ ACTION_anonymize		, 0 , 0},

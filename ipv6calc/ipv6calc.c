@@ -961,6 +961,10 @@ PIPE_input:
 			if ( outputtype == FORMAT_undefined ) {
 				outputtype = FORMAT_ipv6addr;
 			};
+		} else if ( (inputtype == FORMAT_ipv6addr && (input_is_pipe == 0 || inputtype_given == 1)) && (outputtype == FORMAT_mac && outputtype_given == 1) ) {
+			action = ACTION_ipv6_to_mac;
+		} else if ( (inputtype == FORMAT_ipv6addr && (input_is_pipe == 0 || inputtype_given == 1)) && (outputtype == FORMAT_eui64 && outputtype_given == 1) ) {
+			action = ACTION_ipv6_to_eui64;
 		};
 	};
 
@@ -1410,6 +1414,62 @@ PIPE_input:
 				retval = librfc6052_ipv6addr_to_ipv4addr(&ipv4addr, &ipv6addr, resultstring, sizeof(resultstring));
 			} else {
 				fprintf(stderr, "Unsupported NAT64 conversion!\n");
+				exit(EXIT_FAILURE);
+			};
+			break;
+
+		case ACTION_ipv6_to_eui64:
+			if (inputtype == FORMAT_ipv6addr && outputtype == FORMAT_eui64) {
+				/* IPv6 -> EUI64 extraction */
+				if (ipv6addr.flag_valid != 1) {
+					fprintf(stderr, "No valid IPv6 address given!\n");
+					exit(EXIT_FAILURE);
+				};
+
+				if ((ipv6addr.typeinfo & IPV6_NEW_ADDR_IID) == IPV6_NEW_ADDR_IID) {
+					DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Extract EUI-64 from IPv6 address");
+					eui64addr.addr[0] = ipv6addr_getoctet(&ipv6addr,  8) ^ 0x02;
+					eui64addr.addr[1] = ipv6addr_getoctet(&ipv6addr,  9);
+					eui64addr.addr[2] = ipv6addr_getoctet(&ipv6addr, 10);
+					eui64addr.addr[3] = ipv6addr_getoctet(&ipv6addr, 11);
+					eui64addr.addr[4] = ipv6addr_getoctet(&ipv6addr, 12);
+					eui64addr.addr[5] = ipv6addr_getoctet(&ipv6addr, 13);
+					eui64addr.addr[6] = ipv6addr_getoctet(&ipv6addr, 14);
+					eui64addr.addr[7] = ipv6addr_getoctet(&ipv6addr, 15);
+					eui64addr.flag_valid = 1;
+				} else {
+					fprintf(stderr, "IPv6 address is not containing EUI64 suffix!\n");
+					exit(EXIT_FAILURE);
+				};
+			} else {
+				fprintf(stderr, "Unsupported EUI64 extraction!\n");
+				exit(EXIT_FAILURE);
+			};
+			break;
+
+		case ACTION_ipv6_to_mac:
+			if (inputtype == FORMAT_ipv6addr && outputtype == FORMAT_mac) {
+				/* IPv6 -> MAC extraction */
+				if (ipv6addr.flag_valid != 1) {
+					fprintf(stderr, "No valid IPv6 address given!\n");
+					exit(EXIT_FAILURE);
+				};
+
+				if ((ipv6addr.typeinfo & IPV6_NEW_ADDR_IID_EUI48) == IPV6_NEW_ADDR_IID_EUI48) {
+					DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Extract MAC from IPv6 address");
+					macaddr.addr[0] = ipv6addr_getoctet(&ipv6addr,  8) ^ 0x02;
+					macaddr.addr[1] = ipv6addr_getoctet(&ipv6addr,  9);
+					macaddr.addr[2] = ipv6addr_getoctet(&ipv6addr, 10);
+					macaddr.addr[3] = ipv6addr_getoctet(&ipv6addr, 13);
+					macaddr.addr[4] = ipv6addr_getoctet(&ipv6addr, 14);
+					macaddr.addr[5] = ipv6addr_getoctet(&ipv6addr, 15);
+					macaddr.flag_valid = 1;
+				} else {
+					fprintf(stderr, "IPv6 address is not containing EUI64 suffix!\n");
+					exit(EXIT_FAILURE);
+				};
+			} else {
+				fprintf(stderr, "Unsupported EUI64 extraction!\n");
 				exit(EXIT_FAILURE);
 			};
 			break;
@@ -1979,7 +2039,7 @@ PIPE_input:
 				if (ipv6addr.prefixlength != 64) { fprintf(stderr, "No valid EUI-64 identifier given!\n"); exit(EXIT_FAILURE); };
 				formatoptions |= FORMATOPTION_printsuffix;
 				retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, sizeof(resultstring), formatoptions);
-			} else if (action == ACTION_anonymize) {
+			} else if ((action == ACTION_anonymize) || (action == ACTION_ipv6_to_eui64)) {
 				retval = libeui64_eui64addrstruct_to_string(&eui64addr, resultstring, sizeof(resultstring), formatoptions);
 			} else {
 				fprintf(stderr, "Specify proper action or input for output format: eui64\n"); exit(EXIT_FAILURE);

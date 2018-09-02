@@ -13,6 +13,7 @@ Info:
 	lib/{ipv6calccommands.h,ipv6calcoptions.c,ipv6calcoptions_common.h}: catch DB disable options even if support is not compiled in
 	ipv6calcweb/ipv6calcweb.cgi[.in],ipv6calcweb/test_ipv6calcweb.sh: implement test for Anti-DoS protection, minor adjustments
 	lib/libeui64.c: fix syntax checker
+	ipv6calc/ipv6calc.c,lib/ipv6calctypes.h: add support for new extract actions of MAC/EUI64 from IPv6 address
 
 20180901/PB
 	databases: update

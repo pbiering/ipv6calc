@@ -227,6 +227,9 @@ NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 -O hex --forceprefix 24 --printsuffix 1.2.3.4					=04
 -O hex --forceprefix 24 --printprefix 1.2.3.4					=010203
 -O hex -u 192.168.1.1								=C0A80101
+# Extraction
+NOPIPETEST--in ipv6 2001:db8::a8bb:ccff:fedd:eeff --out eui64                             =aa:bb:cc:ff:fe:dd:ee:ff
+NOPIPETEST--in ipv6 2001:db8::a8bb:ccff:fedd:eeff --out mac                               =aa:bb:cc:dd:ee:ff
 END
 }
 
