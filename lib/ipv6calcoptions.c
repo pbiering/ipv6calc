@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
  * Version    : $Id$
- * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2018 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  supporting common options

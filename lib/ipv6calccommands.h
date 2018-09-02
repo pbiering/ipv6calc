@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calccommands.h
  * Version    : $Id$
- * Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2018 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GPLv2
  *
  * Information:
