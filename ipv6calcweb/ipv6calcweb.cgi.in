@@ -74,11 +74,11 @@ my $program_required_ipv6calc_output_version = 2;
 ## Prototyping
 sub logging($$);
 
-## defaults for Anti-DoS (generic) (load is normalized by number of CPU cores below)
+## defaults for Anti-DoS (generic) (load/proc is normalized by number of CPU cores below)
 my $load1_max = 2;
 my $load5_max = 1.5;
 my $load15_max = 1;
-my $proc_max = 8;
+my $proc_max = 4;
 my $proc_pattern = "ipv6calcweb";
 
 ## defines for Anti-DoS (form or mixed mode only)
@@ -1868,8 +1868,9 @@ if (($debug & 0x4000) == 0) {
 	};
 
 	# check amount of processes
-	if ($proc_count > $proc_max) {
-		logging("WARN", "System has too much 'perl $proc_pattern' running in parallel: $proc_count limit=$proc_max");
+	my $proc_count_norm = $proc_count / $cpu_cores;
+	if ($proc_count_norm > $proc_max) {
+		logging("WARN", "System has too much 'perl $proc_pattern' running in parallel: procs=$proc_count procs_norm=$proc_count_norm limit=$proc_max");
 		$error = "System overloaded, please retry in 1 minute - sorry";
 		$error_flag = 1; # no automatic redirect
 		&print_error();
