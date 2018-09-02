@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libeui64.c
  * Version    : $Id$
- * Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2018 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library EUI-64 identifier handling
@@ -102,7 +102,7 @@ int libeui64_addr_to_eui64addrstruct(const char *addrstring, char *resultstring,
 
 	/* check length */
 	if ( ( strlen(addrstring) < 15 ) || ( strlen(addrstring) > 23 ) ) {
-		snprintf(resultstring, resultstring_length, "Error in given 64-bit EUI-64 address, has not 15 to 21 chars!");
+		snprintf(resultstring, resultstring_length, "Error in given 64-bit EUI-64 address, has not 15 to 23 chars!");
 		retval = 1;
 		return (retval);
 	};
@@ -127,8 +127,8 @@ int libeui64_addr_to_eui64addrstruct(const char *addrstring, char *resultstring,
 		};
 	};
 
-	if ( ! ( (ccolons == 7 && cdashes == 0 && cspaces == 0) || (ccolons == 0 && cdashes == 5 && cspaces == 0)  || (ccolons == 0 && cdashes == 0 && cspaces == 7) || (ccolons == 0 && cdashes == 0 && cspaces == 0 && strlen(addrstring) == 16)) ) {
-		snprintf(resultstring, resultstring_length, "Error in given EUI-64 address, '%s' is not valid (number of colons/dashes/spaces is not 5 or number of dashes is not 1)!", addrstring);
+	if ( ! ( (ccolons == 7 && cdashes == 0 && cspaces == 0) || (ccolons == 0 && cdashes == 7 && cspaces == 0)  || (ccolons == 0 && cdashes == 0 && cspaces == 7) || (ccolons == 0 && cdashes == 0 && cspaces == 0 && strlen(addrstring) == 16)) ) {
+		snprintf(resultstring, resultstring_length, "Error in given EUI-64 address, '%s' is not valid (number of colons/dashes/spaces is not 7)!", addrstring);
 		retval = 1;
 		return (retval);
 	};
