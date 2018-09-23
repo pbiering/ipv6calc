@@ -324,7 +324,7 @@ rm -rf %{buildroot}
 
 
 %changelog
-* Sat Sep 28 2018 Peter Bieringer <pb@bieringer.de>
+* Sun Sep 23 2018 Peter Bieringer <pb@bieringer.de>
 - subpackage ipv6calcweb: add dependency Perl(Proc::ProcessTable)
 
 * Wed Dec 28 2016 Peter Bieringer <pb@bieringer.de>
