@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Copyright  : 2001-2017 by Peter Bieringer <pb@bieringer.de>
+# Copyright  : 2001-2018 by Peter Bieringer <pb@bieringer.de>
 # $Id$
 
 # enable the following for intermediate builds
@@ -140,8 +140,8 @@ Available rpmbuild rebuild options:
 Summary:	IP address information web utility
 Group:		Applications/Internet
 Requires:	ipv6calc httpd
-Requires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities)
-BuildRequires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities)
+Requires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities) perl(Proc::ProcessTable)
+BuildRequires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities) perl(Proc::ProcessTable)
 
 %description ipv6calcweb
 ipv6calcweb contains a CGI program and a configuration file for
@@ -324,6 +324,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sat Sep 28 2018 Peter Bieringer <pb@bieringer.de>
+- subpackage ipv6calcweb: add dependency Perl(Proc::ProcessTable)
+
 * Wed Dec 28 2016 Peter Bieringer <pb@bieringer.de>
 - add support for git commit hash
 - align RPM build requires with fedora-scm
