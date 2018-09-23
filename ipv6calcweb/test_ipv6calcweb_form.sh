@@ -3,7 +3,7 @@
 # Project    : ipv6calc/ipv6calcweb
 # File       : test_ipv6calcweb_form.sh
 # Version    : $Id$
-# Copyright  : 2012-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2012-2018 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Test script for form mode of ipv6calcweb
@@ -39,7 +39,7 @@ SERVER_ADDR="192.0.2.1"
 SERVER_NAME="server.domain.example"
 
 HTTP_IPV6CALCWEB_MODE="form"
-HTTP_IPV6CALCWEB_DEBUG="0x1000"
+HTTP_IPV6CALCWEB_DEBUG="0x5000" # no sleeps and no Anti-DoS
 
 export REMOTE_ADDR REMOTE_HOST HTTP_USER_AGENT SERVER_ADDR SERVER_NAME QUERY_STRING HTTP_IPV6CALCWEB_MODE HTTP_IPV6CALCWEB_DEBUG
 
