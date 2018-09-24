@@ -21,7 +21,7 @@
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
 Version:	@PACKAGE_VERSION@
-Release: 	21%{?gittag}%{?dist}
+Release:	28%{?gittag}%{?dist}
 Group:		Applications/Text
 URL:		http://www.deepspace6.net/projects/%{name}.html
 License:	GPLv2
@@ -30,13 +30,14 @@ Source:		https://github.com/pbiering/%{name}/archive/%{gitcommit}/%{name}-%{gitc
 %else
 Source:		ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/%{name}-%{version}.tar.gz
 %endif
+BuildRequires:	gcc
 BuildRequires:	openssl-devel
 BuildRequires:	perl-generators
 BuildRequires:	perl(Digest::MD5), perl(Digest::SHA1), perl(URI::Escape)
 BuildRequires:	perl(strict), perl(warnings)
 Requires:	perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 %if %{enable_shared}
-Provides:	ipv6calc-libs = %{version}-%{release}}
+Provides:	ipv6calc-libs = %{version}-%{release}
 %else
 Conflicts:	ipv6calc-libs
 %endif
@@ -160,7 +161,7 @@ Requires:	httpd >= @HTTPD_VERSION_MAJOR_MINOR@.0
 Requires:	httpd <= @HTTPD_VERSION_MAJOR_MINOR@.99999
 Requires:	ipv6calc = %{version}-%{release}
 %if %{enable_shared}
-Requires:	ipv6calc-libs = %{version}-%{release}}
+Requires:	ipv6calc-libs = %{version}-%{release}
 %endif
 
 
