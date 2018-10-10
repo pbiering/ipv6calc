@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20181010/PB
+	tools/DBIP-update.sh[.in]: switch to 'lite' database files
+	tools/DBIP-generate-db.pl: accept also format of 'lite' databases without quotes
+
 20181003/PB
 	databases: update
 	tag version 1.1.0

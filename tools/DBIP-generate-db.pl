@@ -97,13 +97,15 @@ if (! -d $dir_output) {
 my $type;
 my $date;
 my $type_string;
+my $lite;
 
-if ($file_input !~ /^(.*\/)?dbip-(city|country|isp|location|full)-([0-9]{4})-([0-9]{2})(-(test|sample))?\.csv(\.gz)?$/o) {
+if ($file_input !~ /^(.*\/)?dbip-(city|country|isp|location|full)(-lite)?-([0-9]{4})-([0-9]{2})(-(test|sample))?\.csv(\.gz)?$/o) {
 	print "ERROR : input file name is not a valid dbip filename: $file_input\n";
 	exit 1;
 };
 
-$date = $3 . $4 . "01";
+$date = $4 . $5 . "01";
+$lite = $3;
 $type_string = $2;
 
 if ($file_input =~ /\.gz$/o) {
@@ -259,7 +261,7 @@ while (<$FILE>) {
 
 	if ($type == 1000) {
 		# country
-		if ($line !~ /^"([0-9a-fA-F.:]*)","([0-9a-fA-F.:]*)","([A-Z]{0,2})"/o) {
+		if ($line !~ /^"?([0-9a-fA-F.:]*)"?,"?([0-9a-fA-F.:]*)"?,"?([A-Z]{0,2})"?/o) {
 			print "ERROR : unexpected line in file (line: $linecounter): $line\n";
 			exit 1;	
 		};
@@ -268,7 +270,7 @@ while (<$FILE>) {
 		$cc    = $3;
 	} elsif ($type == 1010) {
 		# city
-		if ($line !~ /^"([0-9a-fA-F.:]*)","([0-9a-fA-F.:]*)","([A-Z]{0,2})","([^"]*)","([^"]*)"/o) {
+		if ($line !~ /^"?([0-9a-fA-F.:]*)"?,"?([0-9a-fA-F.:]*)"?,"?([A-Z]{0,2})"?,"?([^"]*)"?,"?([^"]*)"?/o) {
 			print "ERROR : unexpected line in file (line: $linecounter): $line\n";
 			exit 1;	
 		};

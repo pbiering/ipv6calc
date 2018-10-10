@@ -12,7 +12,7 @@ DBIP_DAT_DIR_DEFAULT="@DBIP_DB@"
 [ -z "$DBIP_DAT_DIR" ] && DBIP_DAT_DIR="$DBIP_DAT_DIR_DEFAULT"
 
 DBIP_DAT_URL_BASE="http://download.db-ip.com/free/"
-DBIP_DAT_FILES="dbip-country-%Y-%m.csv.gz dbip-city-%Y-%m.csv.gz"
+DBIP_DAT_FILES="dbip-country-lite-%Y-%m.csv.gz dbip-city-lite-%Y-%m.csv.gz"
 DBIP_GENERATOR_LIST="./DBIP-generate-db.pl /usr/share/ipv6calc/tools/DBIP-generate-db.pl"
 
 
