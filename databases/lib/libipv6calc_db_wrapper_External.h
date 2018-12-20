@@ -8,6 +8,7 @@
  *  Header file for libipv6calc_db_wrapper_External.c
  */
 
+#include <time.h>
 #include "ipv6calctypes.h"
 
 #ifndef _libipv6calc_db_wrapper_External_h

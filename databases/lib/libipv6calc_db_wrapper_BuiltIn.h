@@ -8,6 +8,7 @@
  *  Header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
+#include <time.h>
 #include "ipv6calctypes.h"
 #include "libmac.h"
 #include "libipv4addr.h"
