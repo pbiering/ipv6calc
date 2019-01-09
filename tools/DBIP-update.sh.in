@@ -5,7 +5,7 @@
 # Project    : ipv6calc/DBIP
 # File       : DBIP-update.sh
 # Version    : $Id$
-# Copyright  : 2014-2018 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2014-2019 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
 DBIP_DAT_DIR_DEFAULT="@DBIP_DB@"
@@ -108,16 +108,16 @@ if [ "$skip_download" != "1" ]; then
 			wget -q -O "$file_dest" "$DBIP_DAT_URL_BASE$file"
 			if [ $? -ne 0 ]; then
 				echo "ERROR : download of file not successful: $file ($file_dest)"
-				continue
 				download_result=0
+				continue
 			fi
 		else
 			echo "INFO  : try to download file: $DBIP_URL ($file_dest)"
 			wget -q -O "$file_dest" "$DBIP_URL"
 			if [ $? -ne 0 ]; then
 				echo "ERROR : download of file not successful: $DBIP_URL ($file_dest)"
-				continue
 				download_result=0
+				continue
 			fi
 		fi
 		echo "INFO  : download of file successful: $DBIP_URL ($file_dest)"
