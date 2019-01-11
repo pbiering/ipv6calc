@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/logstats
 # File       : collect_ipv6logstats.pl
-# Version    : $Id: collect_ipv6logstats.pl,v 1.1 2003/11/22 15:02:44 peter Exp $
+# Version    : $Id$
 # Copyright  : 2003 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Collect ipv6logstats data

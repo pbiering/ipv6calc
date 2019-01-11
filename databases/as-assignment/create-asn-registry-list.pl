@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/databases/as-assignment
 # File       : create-registry-list.pl
-# Version    : $Id: create-asn-registry-list.pl,v 1.4 2014/09/24 09:07:56 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL v2
 #

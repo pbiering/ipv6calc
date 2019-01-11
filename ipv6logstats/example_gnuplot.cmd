@@ -1,6 +1,6 @@
 # Project    : ipv6calc/logstats
 # File       : example_gnuplot.cmd
-# Version    : $Id: example_gnuplot.cmd,v 1.6 2014/05/23 06:56:58 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Command file for gnuplot

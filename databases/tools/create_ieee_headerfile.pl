@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : create_ieee_headerfile.pl
-# Version    : $Id: create_ieee_headerfile.pl,v 1.6 2015/09/05 06:25:03 ds6peter Exp $
+# Version    : $Id$
 # Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE files
