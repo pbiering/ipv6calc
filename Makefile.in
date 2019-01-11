@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
 # Version    : $Id$
-# Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Main Makefile for ipv6calc project
@@ -49,6 +49,7 @@ updateclean:
 			cd $$dir || exit 1; \
 			${MAKE} $@ ; r=$$?; \
 			rm -rf autom4te.cache; \
+			rm -rf autogen-all-variants.status; \
 			cd $$ocwd; if [ $$r -ne 0 ]; then echo "Result: $$r"; exit $$r; fi; \
 		done || exit 1
 
