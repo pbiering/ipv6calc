@@ -402,7 +402,7 @@ void libipv6calc_db_wrapper_info(char *string, const size_t size) {
 
 #ifdef SUPPORT_DBIP
 	// Call DBIP wrapper
-	libipv6calc_db_wrapper_BuiltIn_wrapper_info(string, size);
+	libipv6calc_db_wrapper_DBIP_wrapper_info(string, size);
 #endif
 
 #ifdef SUPPORT_BUILTIN
