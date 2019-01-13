@@ -944,9 +944,15 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 #endif
 
 #ifdef SUPPORT_DBIP
-	fprintf(stderr, "DBIP support enabled\n\n");
+	fprintf(stderr, "DBIP (generated BerkeleyDB) support enabled\n\n");
 #else
-	fprintf(stderr, "DBIP support not compiled-in\n\n");
+	fprintf(stderr, "DBIP (generated BerkeleyDB)) support not compiled-in\n\n");
+#endif
+
+#ifdef SUPPORT_EXTERNAL
+	fprintf(stderr, "External (generated BerkeleyDB) support enabled\n\n");
+#else
+	fprintf(stderr, "External (generated BerkeleyDB) support not compiled-in\n\n");
 #endif
 
 #ifdef SUPPORT_BUILTIN
