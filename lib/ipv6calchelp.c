@@ -943,6 +943,12 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 	fprintf(stderr, "IP2Location support not compiled-in\n\n");
 #endif
 
+#ifdef SUPPORT_DBIP
+	fprintf(stderr, "DBIP support enabled\n\n");
+#else
+	fprintf(stderr, "DBIP support not compiled-in\n\n");
+#endif
+
 #ifdef SUPPORT_BUILTIN
 	libipv6calc_db_wrapper_BuiltIn_wrapper_info(string, sizeof(string));
 	fprintf(stderr, "%s\n\n", string);
