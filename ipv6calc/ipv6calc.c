@@ -884,7 +884,7 @@ PIPE_input:
 		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Token 1: '%s'", input1);
 
 		/* check for second token */
-		if (*ptrptr[0] != '\0') {
+		if (ptrptr && ptrptr[0] && *ptrptr[0] != '\0') {
 			input2 = *ptrptr;
 			inputc = 2;
 
