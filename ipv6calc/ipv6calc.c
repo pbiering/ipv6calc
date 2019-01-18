@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
  * Version    : $Id$
- * Copyright  : 2001-2018 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
