@@ -298,14 +298,12 @@ int libipv6calc_db_wrapper_DBIP_wrapper_cleanup(void) {
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "Called");
 
-#ifdef SUPPORT_DBIP
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_DBIP_db_file_desc); i++) {
 		if (db_ptr_cache[i] != NULL) {
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Close DBIP: type=%d desc='%s'", libipv6calc_db_wrapper_DBIP_db_file_desc[i].number, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description);
 			libipv6calc_db_wrapper_DBIP_close(db_ptr_cache[i]);
 		};
 	};
-#endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "Finished");
 	return 0;
@@ -321,11 +319,7 @@ int libipv6calc_db_wrapper_DBIP_wrapper_cleanup(void) {
 void libipv6calc_db_wrapper_DBIP_wrapper_info(char* string, const size_t size) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "Called");
 
-#ifdef SUPPORT_DBIP
 	snprintf(string, size, "DBIP available databases: Country4=%d Country6=%d City4=%d City6=%d", (wrapper_features & IPV6CALC_DB_IPV4_TO_CC) ? 1 : 0, (wrapper_features & IPV6CALC_DB_IPV6_TO_CC) ? 1 : 0, (wrapper_features & IPV6CALC_DB_IPV4_TO_CITY) ? 1 : 0, (wrapper_features & IPV6CALC_DB_IPV6_TO_CITY) ? 1 : 0);
-#else
-	snprintf(string, size, "No DBIP support built-in");
-#endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "Finished");
 	return;
@@ -350,7 +344,6 @@ void libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(const int level_verbose, 
 
 	IPV6CALC_DB_FEATURE_INFO(prefix, IPV6CALC_DB_SOURCE_DBIP)
 
-#ifdef SUPPORT_DBIP
 	fprintf(stderr, "%sDBIP: info of available databases in directory: %s\n", prefix, dbip_db_dir);
 
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_DBIP_db_file_desc); i++) {
@@ -462,9 +455,6 @@ void libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(const int level_verbose, 
 			};
 		};
 	};
-#else // SUPPORT_DBIP
-	snfprintf(stderr, string, size, "%sNo DBIP support built-in", prefix);
-#endif // SUPPORT_DBIP
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "Finished");
 	return;
@@ -516,9 +506,6 @@ char *libipv6calc_db_wrapper_DBIP_wrapper_db_info_used(void) {
 	return(dbip_db_usage_string);
 };
 
-
-
-#ifdef SUPPORT_DBIP
 
 /*******************************
  * Wrapper extension functions for DBIP
@@ -1278,6 +1265,4 @@ END_libipv6calc_db_wrapper:
 	return(result);
 };
 
-
-#endif
 #endif
