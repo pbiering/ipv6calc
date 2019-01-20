@@ -3,19 +3,23 @@
 # Project    : ipv6calc
 # File       : test_ipv6calc_anonymization.sh
 # Version    : $Id$
-# Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test ipv6calc anonymization
 
 verbose=0
-while getopts "Vh\?" opt; do
+while getopts "VSh\?" opt; do
 	case $opt in
 	    V)
 		verbose=1
 		;;
+	    S)
+		stoponerror=1
+		;;
 	    *)
-		echo "$0 [-V]"
+		echo "$0 [-V] [-S]"
 		echo "    -V   verbose"
+		echo "    -S   stop-on-error"
 		exit 1
 		;;
 	esac
@@ -131,8 +135,9 @@ run_anon_options_tests() {
 }
 
 run_anon_options_kp_tests() {
-	if ! ./ipv6calc -vv 2>&1| grep -q "Country4=1 Country6=1 ASN4=1 ASN6=1"; then
-		echo "NOTICE: 'ipv6calc' has not required support for Country/ASN included, skip option kp tests"
+	if ! ./ipv6calc -v 2>&1| grep -wq "ANON_KEEP-TYPE-ASN-CC"; then
+		echo "NOTICE: 'ipv6calc' has not required support for Anonymization Type-ASN-CountryCode included, skip option kp tests"
+		[ "$stoponerror" = "1" ] && return 1
 		return 0
 	fi
 
