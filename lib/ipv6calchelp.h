@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calchelp.h
  * Version    : $Id$
- * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for ipv6calchelp.c
@@ -20,6 +20,7 @@
 #define IPV6CALC_HELP_DBIP		0x0040
 #define IPV6CALC_HELP_EXTERNAL		0x0080
 #define IPV6CALC_HELP_BUILTIN		0x0100
+#define IPV6CALC_HELP_MMDB		0x0200
 #define IPV6CALC_HELP_ALL		0xffff
 #define IPV6CALC_HELP_BASIC		0x0000
 #define IPV6CALC_HELP_QUIET		0x0001

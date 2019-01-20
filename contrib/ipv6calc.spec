@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2018 by Peter Bieringer <pb@bieringer.de>
-# $Id: 0df17afba6c435c28b3c3d0323e0739d2f88678e $
+# $Id: 14c55e02c404183d20337376ae3a55f42ffaab0e $
 
 # enable the following for intermediate builds
 #%#define gitcommit d3a4108cb7aeb6f731bb07989f91d8a7f449f0f0
@@ -20,7 +20,7 @@
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
-Version:	1.1.0
+Version:	2.0.0alpha1
 Release:	28%{?gittag}%{?dist}
 Group:		Applications/Text
 URL:		http://www.deepspace6.net/projects/%{name}.html

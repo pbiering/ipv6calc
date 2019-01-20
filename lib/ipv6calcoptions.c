@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calcoptions.c
  * Version    : $Id$
- * Copyright  : 2013-2018 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  supporting common options
@@ -145,6 +145,11 @@ void ipv6calc_options_add_common_basic(char *shortopts_p, const int shortopts_ma
 
 	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_common, ipv6calc_longopts_common, MAXENTRIES_ARRAY(ipv6calc_longopts_common));
 
+#ifdef SUPPORT_MMDB
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "SUPPORT_MMDB");
+	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_mmdb, ipv6calc_longopts_mmdb, MAXENTRIES_ARRAY(ipv6calc_longopts_mmdb));
+#endif
+
 #ifdef SUPPORT_IP2LOCATION
 	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "SUPPORT_IP2LOCATION");
 	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_ip2location, ipv6calc_longopts_ip2location, MAXENTRIES_ARRAY(ipv6calc_longopts_ip2location));
@@ -155,9 +160,19 @@ void ipv6calc_options_add_common_basic(char *shortopts_p, const int shortopts_ma
 	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_geoip, ipv6calc_longopts_geoip, MAXENTRIES_ARRAY(ipv6calc_longopts_geoip));
 #endif
 
+#ifdef SUPPORT_GEOIP2
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "SUPPORT_GEOIP2");
+	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_geoip2, ipv6calc_longopts_geoip2, MAXENTRIES_ARRAY(ipv6calc_longopts_geoip2));
+#endif
+
 #ifdef SUPPORT_DBIP
 	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "SUPPORT_DBIP");
 	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_dbip, ipv6calc_longopts_dbip, MAXENTRIES_ARRAY(ipv6calc_longopts_dbip));
+#endif
+
+#ifdef SUPPORT_DBIP2
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "SUPPORT_DBIP2");
+	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_dbip2, ipv6calc_longopts_dbip2, MAXENTRIES_ARRAY(ipv6calc_longopts_dbip2));
 #endif
 
 #ifdef SUPPORT_EXTERNAL
@@ -170,7 +185,7 @@ void ipv6calc_options_add_common_basic(char *shortopts_p, const int shortopts_ma
 	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_builtin, ipv6calc_longopts_builtin, MAXENTRIES_ARRAY(ipv6calc_longopts_builtin));
 #endif
 
-#if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP || defined SUPPORT_GEOIP || SUPPORT_IP2LOCATION
+#if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP || defined SUPPORT_GEOIP || SUPPORT_IP2LOCATION || defined SUPPORT_DBIP2 || defined SUPPORT_GEOIP2
 	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "DB_COMMON");
 	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_db_common, ipv6calc_longopts_db_common, MAXENTRIES_ARRAY(ipv6calc_longopts_db_common));
 #endif

@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : autogen.sh
 # Version    : $Id$
-# Copyright  : 2003-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2003-2019 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
 
@@ -38,6 +38,19 @@ while [ "$1" != "$LAST" ]; do
 		SKIP_STATIC=1
 		use_geoip=1
 		use_geoip_dyn=1
+		;;
+	    '--mmdb'|'-m')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-mmdb"
+		SKIP_STATIC=1
+		use_mmdb=1
+		;;
+	    '--mmdb-dyn'|'-M')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-mmdb --with-mmdb-dynamic"
+		SKIP_STATIC=1
+		use_mmdb=1
+		use_mmdb_dyn=1
 		;;
 	    '--ip2location'|'-i')
 		shift
@@ -98,6 +111,10 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		USE_CLANG=1
 		;;
+	    '--relax')
+		shift
+		RELAX=1
+		;;
 	    '-?'|'-h'|'--help')
 		echo "Supported options:"
 		echo "   -?|-h|--help        : this help"
@@ -105,6 +122,8 @@ while [ "$1" != "$LAST" ]; do
 		echo "   -a|--all            : enable GeoIP/IP2Location/db-ip.com/External/mod_ipv6calc support"
 		echo "   -g|--geoip          : enable GeoIP support"
 		echo "   --geoip-dyn|-G      : switch to dynamic library loading of GeoIP"
+		echo "   -m|--mmdb           : enable MaxMindDB support"
+		echo "   --mmdb-dyn|-M       : switch to dynamic library loading of MaxMindDB"
 		echo "   -i|--ip2location    : enable IP2Location support"
 		echo "   --ip2location-dyn|-I: switch to dynamic library loading of IP2Location"
 		echo "   -d|--dbip           : enable db-ip.com support"
@@ -117,6 +136,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --no-static-build   : skip static build"
 		echo "   --no-test           : skip 'make test'"
 		echo "   --clang             : use 'clang' instead of default (usually 'gcc')"
+		echo "   --relax             : don't stop on compiler warnings"
 		exit 1
 		;;
 	    *)
@@ -137,6 +157,12 @@ fi
 if [ "$use_ip2location" = "1" ]; then
 	if ! echo "$OPTIONS_CONFIGURE" | grep -q 'with-ip2location-headers='; then
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $(fallback_options_from_name IP2Location)"
+	fi
+fi
+
+if [ "$RELAX" = "1" ]; then
+	if ! echo "$OPTIONS_CONFIGURE" | grep -q 'disable-compiler-warning-to-error'; then
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --disable-compiler-warning-to-error"
 	fi
 fi
 

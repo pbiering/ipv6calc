@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : lib/Makefile
 # Version    : $Id$
-# Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calc libraries
@@ -14,7 +14,7 @@ libdir	= @libdir@
 DEFAULT_CFLAGS ?= -O2 -Wall
 CFLAGS += -D__EXTENSIONS__ -fPIC
 
-INCLUDES= -I. -I../ -I../databases/lib/ @GETOPT_INCLUDE@ @MD5_INCLUDE@ @GEOIP_INCLUDE_L1@ @IP2LOCATION_INCLUDE_L1@
+INCLUDES= -I. -I../ -I../databases/lib/ @GETOPT_INCLUDE@ @MD5_INCLUDE@ @MMDB_INCLUDE_L1@ @GEOIP_INCLUDE_L1@ @IP2LOCATION_INCLUDE_L1@
 
 ifeq ($(shell uname), Darwin)
 	SO_NAME_FLAGS=-install_name

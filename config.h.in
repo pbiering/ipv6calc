@@ -6,6 +6,9 @@
 /* Copyright year */
 #undef COPYRIGHT_YEAR
 
+/* Define db-ip.com (MaxMindDB) database directory. */
+#undef DBIP2_DB
+
 /* Define db-ip.com database directory. */
 #undef DBIP_DB
 
@@ -18,7 +21,10 @@
 /* Define external database directory. */
 #undef EXTERNAL_DB
 
-/* Define GeoIP database directory. */
+/* Define GeoIP (MaxMindDB) database directory. */
+#undef GEOIP2_DB
+
+/* Define GeoIP legacy database directory. */
 #undef GEOIP_DB
 
 /* Define GeoIP dynamic library. */
@@ -97,6 +103,10 @@
 /* Define to 1 if you have the declaration of `IP2Location_get_country_short',
    and to 0 if you don't. */
 #undef HAVE_DECL_IP2LOCATION_GET_COUNTRY_SHORT
+
+/* Define to 1 if you have the declaration of `MMDB_lib_version', and to 0 if
+   you don't. */
+#undef HAVE_DECL_MMDB_LIB_VERSION
 
 /* Define to 1 if you have the declaration of `USAGETYPE', and to 0 if you
    don't. */
@@ -183,6 +193,15 @@
 /* "Package version as string" */
 #undef IPV6CALC_PACKAGE_VERSION_STRING
 
+/* Define MaxMindDB database directory. */
+#undef MMDB_DB
+
+/* Define MaxMindDB dynamic library. */
+#undef MMDB_DYN_LIB
+
+/* MaxMindDB include file version. */
+#undef MMDB_INCLUDE_VERSION
+
 /* Define to the address where bug reports for this package should be sent. */
 #undef PACKAGE_BUGREPORT
 
@@ -214,6 +233,9 @@
 /* Define if you want db-ip.com support included. */
 #undef SUPPORT_DBIP
 
+/* Define if you want db-ip.com (MaxMindDB) support included. */
+#undef SUPPORT_DBIP2
+
 /* Define if you want AS-to-Registry database included. */
 #undef SUPPORT_DB_AS_REG
 
@@ -234,6 +256,9 @@
 
 /* Define if you want GeoIP support. */
 #undef SUPPORT_GEOIP
+
+/* Define if you want GeoIP (MaxMindDB) support. */
+#undef SUPPORT_GEOIP2
 
 /* Define if your GeoIP version supports GeoIP_cleanup. */
 #undef SUPPORT_GEOIP_CLEANUP
@@ -283,6 +308,13 @@
 /* Define if you want IP2Location support statically linked - requires also
    additional linker options. */
 #undef SUPPORT_IP2LOCATION_STATIC
+
+/* Define if you want MaxMindDB support. */
+#undef SUPPORT_MMDB
+
+/* Define if you want MaxMindDB support with dynamic loading support -
+   requires also additional linker options. */
+#undef SUPPORT_MMDB_DYN
 
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */

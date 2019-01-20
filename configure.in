@@ -5,7 +5,7 @@ dnl Copyright: 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(ipv6calc, 1.1.0, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
+AC_INIT(ipv6calc, 2.0.0alpha1, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
 
 COPYRIGHT_YEAR=2019
 
@@ -278,6 +278,7 @@ dbip_db_default="/usr/share/DBIP"
 external_db_default="/usr/share/ipv6calc/db"
 
 geoip_dyn_lib_default="libGeoIP.so.1"
+mmdb_dyn_lib_default="libmaxminddb.so"
 ip2location_dyn_lib_default="libIP2Location.so"
 
 
@@ -441,6 +442,182 @@ fi
 
 
 dnl *************************************************
+dnl MaxMindDB support (GeoIP2, DB-IP)
+dnl *************************************************
+MMDB_LIB_NAME="maxminddb"
+MMDB_INCLUDE_VERSION=""
+
+AC_ARG_ENABLE([mmdb],
+	AS_HELP_STRING([--enable-mmdb],
+	               [Enable MaxMindDB support (GeoIP/DB-IP) (default: disabled)]),
+	[
+		if test "$enable_mmdb" != "no"; then
+			MMDB="$enable_mmdb"
+		fi
+	],[
+		MMDB="no"
+	])
+
+AC_ARG_WITH([mmdb-dynamic],
+	AS_HELP_STRING([--with-mmdb-dynamic],
+                   [Enable use of dynamic loading of MaxMindDB library (default=no)]),
+	[
+		if test "$with_mmdb_dynamic" != "no"; then
+			MMDB_DYN="yes"
+		fi
+	],[
+		true
+	])
+
+AC_ARG_WITH([mmdb-headers],
+	AS_HELP_STRING([--with-mmdb-headers=DIR],
+		[MaxMindDB include files location]),
+	[
+		MMDB_INCLUDE_DIR="$with_mmdb_headers"
+	])
+
+if test -n "$MMDB_INCLUDE_DIR"; then
+	MMDB_INCLUDE="-I$MMDB_INCLUDE_DIR"
+	if echo "$MMDB_INCLUDE_DIR" | grep -q "^/"; then
+		# absolute path
+		MMDB_INCLUDE_L1="-I$MMDB_INCLUDE_DIR"
+		MMDB_INCLUDE_L2="-I$MMDB_INCLUDE_DIR"
+	else
+		MMDB_INCLUDE_L1="-I../$MMDB_INCLUDE_DIR"
+		MMDB_INCLUDE_L2="-I../../$MMDB_INCLUDE_DIR"
+	fi
+fi
+
+AC_ARG_WITH([mmdb-lib],
+	AS_HELP_STRING([--with-mmdb-lib=DIR],
+		[MaxMindDB library location]),
+	[
+		if test -d "$with_mmdb_lib"; then
+			MMDB_LIB_DIR="$with_mmdb_lib"
+			MMDB_LIB="-L$MMDB_LIB_DIR $MMDB_LIB"
+			AC_MSG_RESULT([MaxMindDB library directory given: $MMDB_LIB_DIR])
+		else
+			AC_MSG_ERROR([MaxMindDB library directory not found: $with_mmdb_lib])
+		fi
+
+		if echo "$MMDB_LIB_DIR" | grep -q "^/"; then
+			# absolute path
+			MMDB_LIB_L1="-L$MMDB_LIB_DIR"
+			MMDB_LIB_L2="-L$MMDB_LIB_DIR"
+			LD_LIBRARY_PATH=$MMDB_LIB_DIR:$LD_LIBRARY_PATH
+		else
+			MMDB_LIB_L1="-L../$MMDB_LIB_DIR"
+			MMDB_LIB_L2="-L../../$MMDB_LIB_DIR"
+			LD_LIBRARY_PATH=../$MMDB_LIB_DIR:$LD_LIBRARY_PATH
+		fi
+	])
+
+AC_ARG_WITH([mmdb-dyn-lib],
+	AS_HELP_STRING([--with-mmdb-dyn-lib=NAME],
+		[Use specified MaxMindDB dynamic library, default: libmaxminddb.so]),
+	[
+		mmdb_dyn_lib="$with_mmdb_dyn_lib"
+	],
+	[
+		mmdb_dyn_lib=$mmdb_dyn_lib_default
+	])
+
+if test "$MMDB" = "yes"; then
+	if test "$MMDB_DYN" != "yes"; then
+		MMDB_LIB="-l$MMDB_LIB_NAME $MMDB_LIB"
+		MMDB_LIB_L1="-l$MMDB_LIB_NAME $MMDB_LIB_L1"
+		MMDB_LIB_L2="-l$MMDB_LIB_NAME $MMDB_LIB_L2"
+	else
+		AC_MSG_RESULT([*** MaxMindDB dynamic load support enabled, disable MaxMindDB linker options])
+	fi
+
+	CPPFLAGS="$CPPLAGS $MMDB_INCLUDE"
+
+	AC_MSG_RESULT([*** MaxMindDB support requested])
+
+	AC_MSG_RESULT([***** CPPFLAGS=$CPPFLAGS])
+	AC_MSG_RESULT([***** CFLAGS  =$CFLAGS])
+	AC_MSG_RESULT([***** LDFLAGS =$LDFLAGS])
+
+	AC_CHECK_HEADER(maxminddb.h, [
+		if test -n "$MMDB_INCLUDE_DIR"; then
+			if test -e "$MMDB_INCLUDE_DIR/maxminddb.h"; then
+				CPPFLAGS="$CPPFLAGS -include $MMDB_INCLUDE_DIR/maxminddb.h"
+			else
+				AC_MSG_ERROR([MaxMindDB library header file not found: $MMDB_INCLUDE_DIR/maxminddb.h])
+			fi
+		else
+			CPPFLAGS="$CPPFLAGS -include maxminddb.h"
+		fi
+
+		AC_CHECK_DECL([MMDB_open],,
+			AC_MSG_ERROR([MaxMindDB library header file misses MMDB_open]))
+
+		AC_CHECK_DECLS([MMDB_lib_version])
+
+	],
+	[
+		AC_MSG_ERROR([MaxMindDB library header files not found])
+	])
+
+	AC_MSG_RESULT([*** MaxMindDB database directory: $mmdb_db])
+	AC_DEFINE_UNQUOTED(MMDB_DB, "$mmdb_db", Define MaxMindDB database directory.)
+
+	if test "$MMDB_DYN" != "yes"; then
+		CPPFLAGS="$CFLAGS"
+
+		if test -n "$MMDB_LIB_DIR"; then
+			if test -e "$MMDB_LIB_DIR/lib$MMDB_LIB_NAME.so"; then
+				LDFLAGS="$LDFLAGS -L$MMDB_LIB_DIR"
+				CFLAGS="$CFLAGS -L$MMDB_LIB_DIR"
+				LIBS="-L$MMDB_LIB_DIR"
+			else
+				AC_MSG_ERROR([MaxMindDB library file not found: $MMDB_INCLUDE_DIR/lib$MMDB_LIB_NAME.so])
+			fi
+		fi
+
+		AC_MSG_RESULT([***** CPPFLAGS=$CPPFLAGS])
+		AC_MSG_RESULT([***** CFLAGS  =$CFLAGS])
+		AC_MSG_RESULT([***** LDFLAGS =$LDFLAGS])
+
+		AC_CHECK_LIB($MMDB_LIB_NAME, MMDB_open,
+		[
+			AC_DEFINE(SUPPORT_MMDB, 1, Define if you want MaxMindDB support.)
+			AC_MSG_RESULT([*** MaxMindDB support enabled])
+		],
+		[
+			AC_MSG_ERROR([MaxMindDB library header files given but the library was not found, LDFLAGS=$LDFLAGS])
+		])
+	else
+		# wrapper detects by itself the real support
+		AC_MSG_RESULT([*** GeoIP dyn lib: $mmdb_dyn_lib])
+		AC_DEFINE_UNQUOTED(MMDB_DYN_LIB, "$mmdb_dyn_lib", Define MaxMindDB dynamic library.)
+
+		AC_MSG_RESULT([*** MaxMindDB support will be implemented by using dynamic load of library])
+		AC_DEFINE(SUPPORT_MMDB, 1, Define if you want MaxMindDB support.)
+		AC_DEFINE(SUPPORT_MMDB_DYN, 1, Define if you want MaxMindDB support with dynamic loading support - requires also additional linker options.)
+	fi
+
+	# autoenable GeoIPv2 and DBIPv2 support
+	GEOIP2="yes"
+	DBIP2="yes"
+fi
+
+AC_SUBST(MMDB_INCLUDE)
+AC_SUBST(MMDB_INCLUDE_VERSION)
+AC_SUBST(MMDB_INCLUDE_L2)
+AC_SUBST(MMDB_INCLUDE_L1)
+AC_SUBST(MMDB_LIB)
+AC_SUBST(MMDB_LIB_L1)
+AC_SUBST(MMDB_LIB_L2)
+AC_SUBST(MMDB_DYN_LIB)
+
+if test -n "$MMDB_INCLUDE_VERSION"; then
+	AC_DEFINE_UNQUOTED(MMDB_INCLUDE_VERSION, "$MMDB_INCLUDE_VERSION", MaxMindDB include file version.)
+fi
+
+
+dnl *************************************************
 dnl DB-IP.com support
 dnl *************************************************
 AC_ARG_ENABLE([dbip], 
@@ -468,12 +645,21 @@ if test "$DBIP" = "yes"; then
 	require_libdb="yes"
 
 	AC_DEFINE(SUPPORT_DBIP, 1, Define if you want db-ip.com support included.)
-	AC_MSG_RESULT([*** db-ip.com db dir: $dbip_db])
+	AC_MSG_RESULT([*** db-ip.com database directory: $dbip_db])
 	AC_DEFINE_UNQUOTED(DBIP_DB, "$dbip_db", Define db-ip.com database directory.)
 fi
 
+if test "$DBIP2" = "yes"; then
+	AC_MSG_RESULT([*** db-ip.com (MaxMindDB) support auotenabled"])
+	AC_DEFINE(SUPPORT_DBIP2, 1, Define if you want db-ip.com (MaxMindDB) support included.)
+	AC_MSG_RESULT([*** db-ip.com (MaxMindDB) database directory: $dbip_db])
+	AC_DEFINE_UNQUOTED(DBIP2_DB, "$dbip_db", Define db-ip.com (MaxMindDB) database directory.)
+fi
+
 DBIP_DB=$dbip_db
+DBIP2_DB=$dbip_db
 AC_SUBST(DBIP_DB)
+AC_SUBST(DBIP2_DB)
 
 
 dnl *************************************************
@@ -814,7 +1000,7 @@ fi
 
 
 dnl *************************************************
-dnl GeoIP support
+dnl GeoIP v1 support
 dnl *************************************************
 GEOIP_LIB_NAME="GeoIP"
 GEOIP_INCLUDE_VERSION=""
@@ -924,16 +1110,6 @@ AC_ARG_WITH([geoip-static],
 		GEOIP_STATIC="no"
 	])
 
-AC_ARG_WITH([geoip-db],
-	AS_HELP_STRING([--with-geoip-db=DIR],
-		[Use specified GeoIP database directory, default: /usr/share/GeoIP]),
-	[
-		geoip_db="$with_geoip_db"
-	],
-	[
-		geoip_db=$geoip_db_default
-	])
-
 AC_ARG_WITH([geoip-dyn-lib],
 	AS_HELP_STRING([--with-geoip-dyn-lib=NAME],
 		[Use specified GeoIP dynamic library, default: libGeoIP.so.1]),
@@ -1032,9 +1208,6 @@ if test "$GEOIP" = "yes"; then
 		AC_MSG_ERROR([GeoIP library header files not found])
 	])
 
-	AC_MSG_RESULT([*** GeoIP database directory: $geoip_db])
-	AC_DEFINE_UNQUOTED(GEOIP_DB, "$geoip_db", Define GeoIP database directory.)
-
 	if test "$GEOIP_DYN" != "yes"; then
 		if test "$GEOIP_STATIC" = "yes"; then
 			AC_DEFINE(SUPPORT_GEOIP_STATIC, 1, Define if you want GeoIP support statically linked - requires also additional linker options.)
@@ -1121,7 +1294,6 @@ if test "$GEOIP" = "yes"; then
 	fi
 fi
 
-GEOIP_DB=$geoip_db
 AC_SUBST(GEOIP_INCLUDE)
 AC_SUBST(GEOIP_INCLUDE_VERSION)
 AC_SUBST(GEOIP_INCLUDE_L2)
@@ -1138,10 +1310,49 @@ fi
 
 
 dnl *************************************************
+dnl GeoIP v2 support powered by MaxMindDB
+dnl *************************************************
+if test "$GEOIP2" = "yes"; then
+	AC_MSG_RESULT([*** GeoIP (MaxMindDB) auotenabled"])
+fi
+
+
+dnl *************************************************
+dnl GeoIP common support powered by MaxMindDB
+dnl *************************************************
+AC_ARG_WITH([geoip-db],
+	AS_HELP_STRING([--with-geoip-db=DIR],
+		[Use specified GeoIP database directory, default: /usr/share/GeoIP]),
+	[
+		geoip_db="$with_geoip_db"
+	],
+	[
+		geoip_db=$geoip_db_default
+	])
+
+
+if test "$GEOIP" = "yes"; then
+	AC_MSG_RESULT([*** GeoIPv1 database directory: $geoip_db])
+	AC_DEFINE_UNQUOTED(GEOIP_DB, "$geoip_db", Define GeoIP legacy database directory.)
+fi
+
+if test "$GEOIP2" = "yes"; then
+	AC_DEFINE(SUPPORT_GEOIP2, 1, Define if you want GeoIP (MaxMindDB) support.)
+	AC_MSG_RESULT([*** GeoIP (MaxMindDB) support enabled])
+
+	AC_MSG_RESULT([*** GeoIP (MaxMindDB) database directory: $geoip_db])
+	AC_DEFINE_UNQUOTED(GEOIP2_DB, "$geoip_db", Define GeoIP (MaxMindDB) database directory.)
+fi
+
+GEOIP_DB=$geoip_db
+GEOIP2_DB=$geoip_db
+
+
+dnl *************************************************
 dnl Dynamic load used?
 dnl *************************************************
 if test "$DYNAMIC_LOAD" = "yes"; then
-	if test "$GEOIP_DYN" = "yes" -o "$IP2LOCATION_DYN" = "yes"; then
+	if test "$GEOIP_DYN" = "yes" -o "$IP2LOCATION_DYN" = "yes" -o "$MMDB_DYN" = "yes"; then
 		DYNAMIC_LOAD="yes"
 		AC_MSG_RESULT([*** Dynamic loading of libraries is ENABLED])
 		DYNLOAD_LIB="-rdynamic -ldl"
@@ -1288,6 +1499,17 @@ AC_OUTPUT([
 
 AC_MSG_RESULT([***** Summary])
 
+AC_MSG_RESULT([*** MMDB                       =$MMDB])
+AC_MSG_RESULT([*** MMDB_DYN                   =$MMDB_DYN])
+AC_MSG_RESULT([*** MMDB_DYN_LIB               =$mmdb_dyn_lib])
+AC_MSG_RESULT([*** MMDB_INCLUDE               =$MMDB_INCLUDE])
+AC_MSG_RESULT([*** MMDB_INCLUDE_VERSION       =$MMDB_INCLUDE_VERSION])
+AC_MSG_RESULT([*** MMDB_LIB                   =$MMDB_LIB])
+AC_MSG_RESULT([*** MMDB_LIB_NAME              =$MMDB_LIB_NAME])
+AC_MSG_RESULT([*** MMDB_LIB_DIR               =$MMDB_LIB_DIR])
+
+AC_MSG_RESULT([])
+
 AC_MSG_RESULT([*** IP2LOCATION                =$IP2LOCATION])
 AC_MSG_RESULT([*** IP2LOCATION_DB             =$IP2LOCATION_DB])
 AC_MSG_RESULT([*** IP2LOCATION_DYN            =$IP2LOCATION_DYN])
@@ -1314,8 +1536,18 @@ AC_MSG_RESULT([*** GEOIP_LIB_DIR              =$GEOIP_LIB_DIR])
 
 AC_MSG_RESULT([])
 
+AC_MSG_RESULT([*** GEOIP2                     =$GEOIP2])
+AC_MSG_RESULT([*** GEOIP2_DB                  =$GEOIP_DB])
+
+AC_MSG_RESULT([])
+
 AC_MSG_RESULT([*** DBIP                       =$DBIP])
 AC_MSG_RESULT([*** DBIP_DB                    =$DBIP_DB])
+
+AC_MSG_RESULT([])
+
+AC_MSG_RESULT([*** DBIP2                      =$DBIP2])
+AC_MSG_RESULT([*** DBIP2_DB                   =$DBIP_DB])
 
 AC_MSG_RESULT([])
 

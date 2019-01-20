@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
  * Version    : $Id$
- * Copyright  : 2013-2018 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options
@@ -38,9 +38,19 @@ static struct option ipv6calc_longopts_common[] = {
 	{"db-geoip-disable"            , 0, NULL, OPTION_NOOP },
 #endif
 
+#ifndef SUPPORT_GEOIP2
+	{"disable-geoip2"              , 0, NULL, OPTION_NOOP },
+	{"db-geoip2-disable"           , 0, NULL, OPTION_NOOP },
+#endif
+
 #ifndef SUPPORT_DBIP
 	{"disable-dbip"                , 0, NULL, OPTION_NOOP },
 	{"db-dbip-disable"             , 0, NULL, OPTION_NOOP },
+#endif
+
+#ifndef SUPPORT_DBIP2
+	{"disable-dbip2"               , 0, NULL, OPTION_NOOP },
+	{"db-dbip2-disable"            , 0, NULL, OPTION_NOOP },
 #endif
 
 #ifndef SUPPORT_EXTERNAL
@@ -104,6 +114,29 @@ static struct option ipv6calc_longopts_geoip[] = {
 };
 #endif // SUPPORT_GEOIP
 
+#ifdef SUPPORT_GEOIP2
+static char *ipv6calc_shortopts_geoip2 = "";
+
+static struct option ipv6calc_longopts_geoip2[] = {
+	{"disable-geoip2"              , 0, NULL, DB_geoip2_disable       },
+	{"db-geoip2-disable"           , 0, NULL, DB_geoip2_disable       },
+	{"db-geoip2-dir"               , 1, NULL, DB_geoip2_dir           },
+};
+#endif // SUPPORT_GEOIP2
+
+#ifdef SUPPORT_MMDB
+static char *ipv6calc_shortopts_mmdb = "M";
+
+static struct option ipv6calc_longopts_mmdb[] = {
+	/* database options */
+	{"disable-mmdb"               , 0, NULL, DB_mmdb_disable       },
+	{"db-mmdb-disable"            , 0, NULL, DB_mmdb_disable       },
+#ifdef SUPPORT_MMDB_DYN
+	{"db-mmdb-lib"                , 1, NULL, DB_mmdb_lib           },
+#endif // SUPPORT_MMDB_DYN
+};
+#endif // SUPPORT_MMDB
+
 #ifdef SUPPORT_DBIP
 static char *ipv6calc_shortopts_dbip = "";
 
@@ -115,6 +148,18 @@ static struct option ipv6calc_longopts_dbip[] = {
 	{"db-dbip-only-type", 1, NULL, DB_dbip_only_type },
 };
 #endif // SUPPORT_DBIP
+
+#ifdef SUPPORT_DBIP2
+static char *ipv6calc_shortopts_dbip2 = "";
+
+static struct option ipv6calc_longopts_dbip2[] = {
+	{"disable-dbip2"               , 0, NULL, DB_dbip2_disable       },
+	{"db-dbip2-disable"             , 0, NULL, DB_dbip2_disable       },
+	{"db-dbip2-dir"                 , 1, NULL, DB_dbip2_dir           },
+	{"db-dbip2-comm-to-free-switch-min-delta-months", 1, NULL, DB_dbip2_comm_to_free_switch_min_delta_months },
+	{"db-dbip2-only-type", 1, NULL, DB_dbip2_only_type },
+};
+#endif // SUPPORT_DBIP2
 
 #ifdef SUPPORT_EXTERNAL
 static char *ipv6calc_shortopts_external = "";
@@ -135,7 +180,7 @@ static struct option ipv6calc_longopts_builtin[] = {
 };
 #endif // SUPPORT_BUILTIN
 
-#if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP || defined SUPPORT_GEOIP || SUPPORT_IP2LOCATION
+#if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP || defined SUPPORT_GEOIP || SUPPORT_IP2LOCATION || defined SUPPORT_MMDB || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
 static char *ipv6calc_shortopts_db_common = "";
 
 static struct option ipv6calc_longopts_db_common[] = {

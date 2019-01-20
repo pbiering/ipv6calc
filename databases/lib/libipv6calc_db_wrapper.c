@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
  * Version    : $Id$
- * Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc database wrapper (for decoupling databases from main binary)
@@ -23,9 +23,12 @@
 #include "ipv6calcoptions.h"
 
 #include "libipv6calc_db_wrapper.h"
+#include "libipv6calc_db_wrapper_MMDB.h"
 #include "libipv6calc_db_wrapper_GeoIP.h"
+#include "libipv6calc_db_wrapper_GeoIP2.h"
 #include "libipv6calc_db_wrapper_IP2Location.h"
 #include "libipv6calc_db_wrapper_DBIP.h"
+#include "libipv6calc_db_wrapper_DBIP2.h"
 #include "libipv6calc_db_wrapper_External.h"
 #include "libipv6calc_db_wrapper_BuiltIn.h"
 
@@ -45,14 +48,18 @@ static int uint64_log2(uint64_t n) {
 #endif
 
 static int wrapper_GeoIP_disable       = 0;
+static int wrapper_GeoIP2_disable      = 0;
 static int wrapper_IP2Location_disable = 0;
 static int wrapper_DBIP_disable        = 0;
+static int wrapper_DBIP2_disable       = 0;
 static int wrapper_External_disable    = 0;
 static int wrapper_BuiltIn_disable     = 0;
 
 static int wrapper_GeoIP_status = 0;
+static int wrapper_GeoIP2_status = 0;
 static int wrapper_IP2Location_status = 0;
 static int wrapper_DBIP_status = 0;
+static int wrapper_DBIP2_status = 0;
 static int wrapper_External_status = 0;
 static int wrapper_BuiltIn_status = 0;
 
@@ -74,7 +81,7 @@ int wrapper_source_priority_selector_by_option = -1; // -1: uninitialized, 0: in
 int libipv6calc_db_wrapper_init(const char *prefix_string) {
 	int result = 0, f, p, s, j;
 
-#if defined SUPPORT_GEOIP || defined SUPPORT_IP2LOCATION || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN
+#if defined SUPPORT_GEOIP || defined SUPPORT_IP2LOCATION || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
 	int r;
 #endif
 	s = strlen(prefix_string); // make compiler happy (avoid unused "...")
@@ -137,6 +144,22 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Database priorization/defined by option entry %d: %s", j, libipv6calc_db_wrapper_get_data_source_name_by_number(wrapper_source_priority_selector[j]));
 	};
 
+#ifdef SUPPORT_MMDB
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call libipv6calc_db_wrapper_MMDB_wrapper_init");
+	r = libipv6calc_db_wrapper_MMDB_wrapper_init();
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "MMDB_wrapper_init result: %d", r);
+	if (r != 0) {
+#ifndef SUPPORT_MMDB_DYN
+		// only non-dynamic-load results in a problem
+		result = 1;
+
+		// disable support for GEOIP2 & DBIP2
+		wrapper_GeoIP2_disable = 1;
+		wrapper_DBIP2_disable = 1;
+#endif
+	};
+#endif
+
 	if (wrapper_GeoIP_disable != 1) {
 #ifdef SUPPORT_GEOIP
 		// Call GeoIP wrapper
@@ -156,6 +179,28 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 		};
 	} else {
 		NONQUIETPRINT_WA("%sSupport for GeoIP disabled by option", prefix_string);
+#endif // SUPPORT_GEOIP
+	};
+
+	if (wrapper_GeoIP2_disable != 1) {
+#ifdef SUPPORT_GEOIP2
+		// Call GeoIP2 wrapper
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call libipv6calc_db_wrapper_GeoIP2_wrapper_init");
+
+		r = libipv6calc_db_wrapper_GeoIP2_wrapper_init();
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "GeoIP2_wrapper_init result: %d wrapper_features=0x%08x", r, wrapper_features);
+
+		if (r != 0) {
+#ifndef SUPPORT_GEOIP2_DYN
+			// only non-dynamic-load results in a problem
+			result = 1;
+#endif
+		} else {
+			wrapper_GeoIP2_status = 1; // ok
+		};
+	} else {
+		NONQUIETPRINT_WA("%sSupport for GeoIP (MaxMindDB) disabled by option", prefix_string);
 #endif // SUPPORT_GEOIP
 	};
 
@@ -198,6 +243,25 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 	} else {
 		NONQUIETPRINT_WA("%sSupport for db-ip.com disabled by option", prefix_string);
 #endif // SUPPORT_DBIP
+	};
+
+	if (wrapper_DBIP2_disable != 1) {
+#ifdef SUPPORT_DBIP2
+		// Call DBIP2 wrapper
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call libipv6calc_db_wrapper_DBIP2_wrapper_init");
+
+		r = libipv6calc_db_wrapper_DBIP2_wrapper_init();
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "DBIP2_wrapper_init result: %d wrapper_features=0x%08x", r, wrapper_features);
+
+		if (r != 0) {
+			result = 1;
+		} else {
+			wrapper_DBIP2_status = 1; // ok
+		};
+	} else {
+		NONQUIETPRINT_WA("%sSupport for db-ip.com for MaxMindDB disabled by option", prefix_string);
+#endif // SUPPORT_DBIP2
 	};
 
 	if (wrapper_External_disable != 1) {
@@ -344,7 +408,7 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 int libipv6calc_db_wrapper_cleanup(void) {
 	int result = 0;
 
-#if defined SUPPORT_GEOIP || defined SUPPORT_IP2LOCATION || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN
+#if defined SUPPORT_GEOIP || defined SUPPORT_IP2LOCATION || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
 	int r;
 #endif
 
@@ -353,6 +417,14 @@ int libipv6calc_db_wrapper_cleanup(void) {
 #ifdef SUPPORT_GEOIP
 	// Call GeoIP wrapper
 	r = libipv6calc_db_wrapper_GeoIP_wrapper_cleanup();
+	if (r != 0) {
+		result = 1;
+	};
+#endif
+
+#ifdef SUPPORT_GEOIP2
+	// Call GeoIP2 wrapper
+	r = libipv6calc_db_wrapper_GeoIP2_wrapper_cleanup();
 	if (r != 0) {
 		result = 1;
 	};
@@ -369,6 +441,14 @@ int libipv6calc_db_wrapper_cleanup(void) {
 #ifdef SUPPORT_DBIP
 	// Call DBIP wrapper
 	r = libipv6calc_db_wrapper_DBIP_wrapper_cleanup();
+	if (r != 0) {
+		result = 1;
+	};
+#endif
+
+#ifdef SUPPORT_DBIP2
+	// Call DBIP2 wrapper
+	r = libipv6calc_db_wrapper_DBIP2_wrapper_cleanup();
 	if (r != 0) {
 		result = 1;
 	};
@@ -395,6 +475,11 @@ void libipv6calc_db_wrapper_info(char *string, const size_t size) {
 	libipv6calc_db_wrapper_GeoIP_wrapper_info(string, size);
 #endif
 
+#ifdef SUPPORT_GEOIP2
+	// Call GeoIP2 wrapper
+	libipv6calc_db_wrapper_GeoIP2_wrapper_info(string, size);
+#endif
+
 #ifdef SUPPORT_IP2LOCATION
 	// Call IP2Location wrapper
 	libipv6calc_db_wrapper_IP2Location_wrapper_info(string, size);
@@ -402,7 +487,12 @@ void libipv6calc_db_wrapper_info(char *string, const size_t size) {
 
 #ifdef SUPPORT_DBIP
 	// Call DBIP wrapper
-	libipv6calc_db_wrapper_BuiltIn_wrapper_info(string, size);
+	libipv6calc_db_wrapper_DBIP_wrapper_info(string, size);
+#endif
+
+#ifdef SUPPORT_DBIP2
+	// Call DBIP2 wrapper
+	libipv6calc_db_wrapper_DBIP2_wrapper_info(string, size);
 #endif
 
 #ifdef SUPPORT_BUILTIN
@@ -444,7 +534,7 @@ void libipv6calc_db_wrapper_features(char *string, const size_t size) {
 
 /* function get capability string */
 void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
-#if defined SUPPORT_GEOIP || defined SUPPORT_IP2LOCATION || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN
+#if defined SUPPORT_GEOIP || defined SUPPORT_IP2LOCATION || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
 	char tempstring[NI_MAXHOST];
 #endif
 
@@ -467,6 +557,13 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 #endif // SUPPORT_GEOIP
 	};
 
+	if (wrapper_GeoIP2_disable != 1) {
+#ifdef SUPPORT_GEOIP2
+		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP2", string, strlen(string) > 0 ? " " : "");
+		snprintf(string, size, "%s", tempstring);
+#endif // SUPPORT_GEOIP2
+	};
+
 	if (wrapper_IP2Location_disable != 1) {
 #ifdef SUPPORT_IP2LOCATION
 #ifdef SUPPORT_IP2LOCATION_DYN
@@ -487,6 +584,13 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 	if (wrapper_DBIP_disable != 1) {
 #ifdef SUPPORT_DBIP
 		snprintf(tempstring, sizeof(tempstring), "%s%sDBIP", string, strlen(string) > 0 ? " " : "");
+		snprintf(string, size, "%s", tempstring);
+#endif
+	};
+
+	if (wrapper_DBIP2_disable != 1) {
+#ifdef SUPPORT_DBIP2
+		snprintf(tempstring, sizeof(tempstring), "%s%sDBIP2", string, strlen(string) > 0 ? " " : "");
 		snprintf(string, size, "%s", tempstring);
 #endif
 	};
@@ -610,6 +714,16 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 	fprintf(stderr, "\n");
 #endif
 
+#ifdef SUPPORT_GEOIP2
+	if (wrapper_GeoIP2_disable != 1) {
+		// Call GeoIP2 wrapper
+		libipv6calc_db_wrapper_GeoIP2_wrapper_print_db_info(level_verbose, prefix_string);
+	} else {
+		fprintf(stderr, "%sGeoIP (MaxMindDB) support available but disabled by option\n", prefix_string);
+	};
+	fprintf(stderr, "\n");
+#endif
+
 #ifdef SUPPORT_IP2LOCATION
 	if (wrapper_IP2Location_disable != 1) {
 		// Call IP2Location wrapper
@@ -626,6 +740,16 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(level_verbose, prefix_string);
 	} else {
 		fprintf(stderr, "%sdb-ip.com support available but disabled by option\n", prefix_string);
+	};
+	fprintf(stderr, "\n");
+#endif
+
+#ifdef SUPPORT_DBIP2
+	if (wrapper_DBIP2_disable != 1) {
+		// Call DBIP2 wrapper
+		libipv6calc_db_wrapper_DBIP2_wrapper_print_db_info(level_verbose, prefix_string);
+	} else {
+		fprintf(stderr, "%sdb-ip.com (MaxMindDB) support available but disabled by option\n", prefix_string);
 	};
 	fprintf(stderr, "\n");
 #endif
@@ -745,8 +869,18 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			result = 0;
 			break;
 
+		case DB_geoip2_disable:
+			wrapper_GeoIP2_disable = 1;
+			result = 0;
+			break;
+
 		case DB_dbip_disable:
 			wrapper_DBIP_disable = 1;
+			result = 0;
+			break;
+
+		case DB_dbip2_disable:
+			wrapper_DBIP2_disable = 1;
 			result = 0;
 			break;
 
@@ -805,6 +939,15 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			result = 0;
 			break;
 
+		case DB_dbip2_dir:
+#ifdef SUPPORT_DBIP2
+			result = snprintf(dbip2_db_dir, sizeof(dbip2_db_dir), "%s", optarg);
+#else
+			NONQUIETPRINT_WA("Support for db-ip.com (MaxMindDB) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+
 		case DB_dbip_only_type:
 #ifdef SUPPORT_DBIP
 			if ((atoi(optarg) >= 1) && (atoi(optarg) <= DBIP_DB_MAX)) {
@@ -819,6 +962,21 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			result = 0;
 			break;
 
+		case DB_dbip2_only_type:
+#ifdef SUPPORT_DBIP2
+			if ((atoi(optarg) >= 1) && (atoi(optarg) <= DBIP2_DB_MAX)) {
+				dbip2_db_only_type = atoi(optarg);
+			} else {
+				fprintf(stderr, " Argument of option 'db-dbip2-only-type' is out or range (1-%d): %d\n", DBIP2_DB_MAX, atoi(optarg));
+				exit(EXIT_FAILURE);
+			};
+#else
+			NONQUIETPRINT_WA("Support for db-ip.com (MaxMindDB) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+
+
 		case DB_dbip_comm_to_free_switch_min_delta_months:
 #ifdef SUPPORT_DBIP
 			if ((atoi(optarg) >= 0) && (atoi(optarg) <= 99999)) {
@@ -829,6 +987,20 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			};
 #else
 			NONQUIETPRINT_WA("Support for db-ip.com not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+
+		case DB_dbip2_comm_to_free_switch_min_delta_months:
+#ifdef SUPPORT_DBIP2
+			if ((atoi(optarg) >= 0) && (atoi(optarg) <= 99999)) {
+				dbip2_db_comm_to_free_switch_min_delta_months = atoi(optarg);
+			} else {
+				fprintf(stderr, " Argument of option 'db-dbip2-comm-to-free-switch-min-delta-months' is out or range (0-99999): %d\n", atoi(optarg));
+				exit(EXIT_FAILURE);
+			};
+#else
+			NONQUIETPRINT_WA("Support for db-ip.com (MaxMindDB) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
 			result = 0;
 			break;
@@ -908,7 +1080,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			break;
 
 		case DB_common_priorization:
-#if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP || defined SUPPORT_GEOIP || SUPPORT_IP2LOCATION
+#if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP || defined SUPPORT_GEOIP || SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Parse database priorization string: %s", optarg);
 			char tempstring[NI_MAXHOST];
 			char *token, *cptr, **ptrptr;
@@ -971,6 +1143,35 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Return with result: %d", result);
 
 	return(result);
+};
+
+/***********************************************************/
+/*********** geolocation support      **********************/
+/***********************************************************/
+void libipv6calc_db_wrapper_geolocation_record_clear(libipv6calc_db_wrapper_geolocation_record *recordp) {
+
+	// clear structure
+	snprintf(recordp->country       , IPV6CALC_DB_SIZE_COUNTRY       , "%s", "");
+	snprintf(recordp->country_long  , IPV6CALC_DB_SIZE_COUNTRY_LONG  , "%s", "");
+	snprintf(recordp->continent     , IPV6CALC_DB_SIZE_CONTINENT     , "%s", "");
+	snprintf(recordp->continent_long, IPV6CALC_DB_SIZE_CONTINENT_LONG, "%s", "");
+	snprintf(recordp->stateprov     , IPV6CALC_DB_SIZE_STATEPROV     , "%s", "");
+	snprintf(recordp->district      , IPV6CALC_DB_SIZE_DISTRICT      , "%s", "");
+	snprintf(recordp->city          , IPV6CALC_DB_SIZE_CITY          , "%s", "");
+	snprintf(recordp->zipcode       , IPV6CALC_DB_SIZE_ZIPCODE       , "%s", "");
+	snprintf(recordp->weathercode   , IPV6CALC_DB_SIZE_WEATHERCODE   , "%s", "");
+	recordp->latitude             = 0;
+	recordp->longitude            = 0;
+	recordp->accuracy_radius      = 0;
+	recordp->geoname_id           = 0;
+	recordp->continent_geoname_id = 0;
+	recordp->country_geoname_id   = 0;
+	recordp->asn                  = ASNUM_AS_UNKNOWN; // invalid/unset
+	recordp->timezone_offset      = 99; // invalid/unset (>= 24)
+	snprintf(recordp->timezone_name    , IPV6CALC_DB_SIZE_TIMEZONE_NAME, "%s", "");
+	snprintf(recordp->isp_name         , IPV6CALC_DB_SIZE_ISP_NAME     , "%s", "");
+	snprintf(recordp->connection_type  , IPV6CALC_DB_SIZE_CONN_TYPE    , "%s", "");
+	snprintf(recordp->organization_name, IPV6CALC_DB_SIZE_ORG_NAME     , "%s", "");
 };
 
 
@@ -1120,6 +1321,23 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 			};
 			break;
 
+		    case IPV6CALC_DB_SOURCE_GEOIP2:
+			if (wrapper_GeoIP2_status == 1) {
+#ifdef SUPPORT_GEOIP2
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now GEOIP2");
+
+				int ret = libipv6calc_db_wrapper_GeoIP2_wrapper_country_code_by_addr(ipaddrp, string, length);
+				if (ret == 0) {
+					result = 0;
+					data_source = IPV6CALC_DB_SOURCE_GEOIP2;
+					goto END_libipv6calc_db_wrapper; // ok
+				} else {
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called GeoIP (MaxMindDB) did not return a valid country_code");
+				};
+#endif
+			};
+			break;
+
 		    case IPV6CALC_DB_SOURCE_IP2LOCATION:
 			if (wrapper_IP2Location_status == 1) {
 #ifdef SUPPORT_IP2LOCATION
@@ -1152,6 +1370,23 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
 					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called db-ip.com did not return a valid country_code");
+				};
+#endif
+			};
+			break;
+
+		    case IPV6CALC_DB_SOURCE_DBIP2:
+			if (wrapper_DBIP2_status == 1) {
+#ifdef SUPPORT_DBIP2
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now DBIP2");
+
+				int ret = libipv6calc_db_wrapper_DBIP2_wrapper_country_code_by_addr(ipaddrp, string, length);
+				if (ret == 0) {
+					result = 0;
+					data_source = IPV6CALC_DB_SOURCE_DBIP2;
+					goto END_libipv6calc_db_wrapper; // ok
+				} else {
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called db-ip.com (MaxMindDB) did not return a valid country_code");
 				};
 #endif
 			};
@@ -1308,15 +1543,14 @@ int libipv6calc_db_wrapper_country_code_by_cc_index(char *string, const int leng
 };
 
 
+#if defined SUPPORT_GEOIP
 /*
  * get AS information in text form
  */
-char *libipv6calc_db_wrapper_as_text_by_addr(const ipv6calc_ipaddr *ipaddrp) {
+static char *libipv6calc_db_wrapper_as_text_by_addr(const ipv6calc_ipaddr *ipaddrp) {
 	char *result_char_ptr = NULL;
 
-#if defined SUPPORT_GEOIP
 	char tempstring[IPV6CALC_ADDR_STRING_MAX] = "";
-#endif
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%04x%04x%04x%04x proto=%d", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], ipaddrp->proto);
 
@@ -1355,18 +1589,24 @@ END_libipv6calc_db_wrapper:
 
 	return(result_char_ptr);
 };
-
+#endif
 
 
 /*
  * get AS 32-bit number
  */
 uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp) {
-	char *as_text;
-	char as_number_string[11];  // max: 4294967295 = 10 digits + \0
+	unsigned int data_source = IPV6CALC_DB_SOURCE_UNKNOWN;
+
 	uint32_t as_num32 = ASNUM_AS_UNKNOWN; // default
+#ifdef SUPPORT_GEOIP
 	int valid = 1;
 	unsigned int s;
+	char *as_text;
+	char as_number_string[11];  // max: 4294967295 = 10 digits + \0
+#endif
+
+	int f = 0, p;
 
 	int cache_hit = 0;
 
@@ -1377,12 +1617,14 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp)
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x%08x%08x%08x proto=%d", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], ipaddrp->proto);
 
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
+		f = IPV6CALC_DB_FEATURE_NUM_IPV4_TO_AS;
 		if ((ipaddrp->typeinfo1 & IPV4_ADDR_RESERVED) != 0) {
 			// reserved IPv4 address has no AS
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv4 address: %08x is reserved (skip AS lookup)", (unsigned int) ipaddrp->addr[0]);
 			goto END_libipv6calc_db_wrapper;
 		};
 	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
+		f = IPV6CALC_DB_FEATURE_NUM_IPV6_TO_AS;
 		if ((ipaddrp->typeinfo1 & IPV6_ADDR_RESERVED) != 0) {
 			// reserved IPv4 address has no AS
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv6 address prefix (0-63): %08x%08x is reserved (skip AS lookup)", (unsigned int) ipaddrp->addr[0], (unsigned int) ipaddrp->addr[1]);
@@ -1402,43 +1644,97 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp)
 	) {
 		as_num32 = as_num32_lastused;
 		cache_hit = 1;
-	} else {
-		// TODO: switch mechanism depending on backend (GeoIP supports AS only by text representation)
-		as_text = libipv6calc_db_wrapper_as_text_by_addr(ipaddrp);
-
-		if ((as_text != NULL) && (strncmp(as_text, "AS", 2) == 0) && (strlen(as_text) > 2)) {
-			// catch AS....
-			for (s = 0; s < (strlen(as_text) - 2); s++) {
-				if ((as_text[s+2] == ' ') || (as_text[s+2] == '\0')) {
-					break;
-				} else if (isdigit(as_text[s+2])) {
-					continue;
-				} else {
-					// something wrong
-					valid = 0;
-					break;
-				};
-			};
-
-			if (s > 10) {
-				// too many digits
-				valid = 0;
-			};
-
-			if (valid == 1) {
-				snprintf(as_number_string, 11, "%s", as_text + 2);
-				as_num32 = atol(as_number_string);
-			};
-		};
-
-		// store in last used cache
-		ipaddr_cache_lastused_valid = 1;
-		as_num32_lastused = as_num32;
-		ipaddr_cache_lastused = *ipaddrp;
+		goto END_libipv6calc_db_wrapper; // ok
 	};
 
+	// run through priorities
+	for (p = 0; p < IPV6CALC_DB_PRIO_MAX; p++) {
+		switch(wrapper_features_selector[f][p]) {
+		    case 0:
+			// last
+			goto END_libipv6calc_db_wrapper; // ok
+			break;
+
+		    case IPV6CALC_DB_SOURCE_GEOIP:
+			if (wrapper_GeoIP_status == 1) {
+#ifdef SUPPORT_GEOIP
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now GeoIP");
+				as_text = libipv6calc_db_wrapper_as_text_by_addr(ipaddrp);
+
+				if ((as_text != NULL) && (strncmp(as_text, "AS", 2) == 0) && (strlen(as_text) > 2)) {
+					// catch AS....
+					for (s = 0; s < (strlen(as_text) - 2); s++) {
+						if ((as_text[s+2] == ' ') || (as_text[s+2] == '\0')) {
+							break;
+						} else if (isdigit(as_text[s+2])) {
+							continue;
+						} else {
+							// something wrong
+							valid = 0;
+							break;
+						};
+					};
+
+					if (s > 10) {
+						// too many digits
+						valid = 0;
+					};
+
+					if (valid == 1) {
+						snprintf(as_number_string, 11, "%s", as_text + 2);
+						as_num32 = atol(as_number_string);
+					};
+				};
+#endif
+			};
+			break;
+
+		    case IPV6CALC_DB_SOURCE_GEOIP2:
+			if (wrapper_GeoIP2_status == 1) {
+#ifdef SUPPORT_GEOIP2
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now GeoIP2");
+
+				as_num32 = libipv6calc_db_wrapper_GeoIP2_wrapper_asn_by_addr(ipaddrp);
+				if (as_num32 != ASNUM_AS_UNKNOWN) {
+					data_source = IPV6CALC_DB_SOURCE_GEOIP2;
+					goto END_libipv6calc_db_wrapper; // ok
+				} else {
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called GeoIP (MaxMindDB) did not return a valid ASN");
+				};
+#endif
+			};
+			break;
+
+		    case IPV6CALC_DB_SOURCE_DBIP2:
+			if (wrapper_DBIP2_status == 1) {
+#ifdef SUPPORT_DBIP2
+
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now DBIP2");
+
+				as_num32 = libipv6calc_db_wrapper_DBIP2_wrapper_asn_by_addr(ipaddrp);
+				if (as_num32 != ASNUM_AS_UNKNOWN) {
+					data_source = IPV6CALC_DB_SOURCE_DBIP2;
+					goto END_libipv6calc_db_wrapper; // ok
+				} else {
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called db-ip.com (MaxMindDB) did not return a valid ASN");
+				};
+#endif
+			};
+			break;
+
+		    default:
+			goto END_libipv6calc_db_wrapper; // dummy goto in case no db is enabled
+			break;
+		};
+	};
+
+	// store in last used cache
+	ipaddr_cache_lastused_valid = 1;
+	as_num32_lastused = as_num32;
+	ipaddr_cache_lastused = *ipaddrp;
+
 END_libipv6calc_db_wrapper:
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: addr=%08x%08x%08x%08x as_num32=%d (0x%08x)%s", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], as_num32, as_num32, (cache_hit == 1 ? " (cached)" : ""));
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: addr=%08x%08x%08x%08x as_num32=%u (0x%08x)%s (data_source=%d)", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], as_num32, as_num32, (cache_hit == 1 ? " (cached)" : ""), data_source);
 
 	return(as_num32);
 };
@@ -2724,6 +3020,7 @@ uint16_t libipv6calc_db_cc_to_index(const char *cc_text) {
 END_libipv6calc_db_cc_to_index:
 	return(index);
 };
+
 
 
 /***********************************************************/

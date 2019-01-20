@@ -74,7 +74,7 @@
 // 	+ DBIP_ISP
 // 	+ DBIP_ORGNAME
 
-#define IPV6CALC_OUTPUT_VERSION	11
+#define IPV6CALC_OUTPUT_VERSION	12
 
 /* prototypes */
 extern int  showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, const uint32_t formatoptions);
