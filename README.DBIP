@@ -22,5 +22,7 @@ For regular (monthls) updates of the free available databases a download tool is
 
 Commercial databases need a subscription and must be downloaded and converted manually like
 	$ cd /var/local/share/DBIP
-	$ wget http://download.db-ip.com/key/<key> -O dbip-full-$(date +'%Y-%m').csv.gz
+	$ wget http://download.db-ip.com/key/<key>.csv -O dbip-full-$(date +'%Y-%m').csv.gz
 	$ /usr/share/ipv6calc/tools/DBIP-generate-db.pl -A -I dbip-full-$(date +'%Y-%m').csv.gz
+
+$Id$
