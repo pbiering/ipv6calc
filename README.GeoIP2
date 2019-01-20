@@ -1,0 +1,28 @@
+GENERAL
+-------
+MaxMind distributes since some time also binary loation file in MaxMindDB format (aka GeoIPv2)
+
+
+ENABLING SUPPORT
+----------------
+Install following RPMs (usually supported by distribution)
+        maxminddb maxminddb-devel
+
+If you want to use the GeoIPv2 databases with ipv6calc, you will
+have only to enable the support using configure:
+	--enable-geoip2 --enable-maxminddb
+
+  In case, dynamic load of library should be enabled (conditional MaxMindDB support), add
+     --with-maxmindd-dynamic
+
+
+DATA UPDATE
+-----------
+For regular (monthls) updates of the free available databases a download tool is also provided:
+	GeoIP-update.sh
+
+
+Commercial databases need a subscription and must be downloaded and softlinked 
+	$ cd /var/local/share/GeoIP
+
+$Id$
