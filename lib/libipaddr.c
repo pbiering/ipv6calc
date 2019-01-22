@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libipaddr.c
  * Version    : $Id$
- * Copyright  : 2014-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2014-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for generic IPv4/6 address handling
@@ -88,6 +88,14 @@ extern void libipaddr_clearall(ipv6calc_ipaddr *ipaddrp) {
 
         /* Clear valid flag */
         ipaddrp->flag_valid = 0;
+
+        /* Clear prefix */
+        ipaddrp->prefixlength = 0;
+        ipaddrp->flag_prefixuse = 0;
+
+        /* Clear typeinfo */
+        ipaddrp->typeinfo1 = 0;
+        ipaddrp->typeinfo2 = 0;
 
 	return;
 };
