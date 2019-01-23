@@ -1,5 +1,8 @@
 GENERAL
 -------
+
+*** legacy since db-ip.com is also publishing MaxMindDB files ***
+
 db-ip.com only publish gzip compressed CSV files with location data, no binary format
 
 Therefore ipv6calc package contains the tool
@@ -24,5 +27,8 @@ Commercial databases need a subscription and must be downloaded and converted ma
 	$ cd /var/local/share/DBIP
 	$ wget http://download.db-ip.com/key/<key>.csv -O dbip-full-$(date +'%Y-%m').csv.gz
 	$ /usr/share/ipv6calc/tools/DBIP-generate-db.pl -A -I dbip-full-$(date +'%Y-%m').csv.gz
+
+Or use the provided tool
+	$ /usr/share/ipv6calc/tools/DBIP-update.sh -L -U http://download.db-ip.com/key/<key>.csv
 
 $Id$
