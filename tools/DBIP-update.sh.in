@@ -12,17 +12,21 @@ DBIP_DAT_DIR_DEFAULT="@DBIP_DB@"
 [ -z "$DBIP_DAT_DIR" ] && DBIP_DAT_DIR="$DBIP_DAT_DIR_DEFAULT"
 
 DBIP_DAT_URL_BASE="http://download.db-ip.com/free/"
-DBIP_DAT_FILES="dbip-country-lite-%Y-%m.csv.gz dbip-city-lite-%Y-%m.csv.gz"
+DBIP_DAT_FILES="dbip-country-lite-%Y-%m.csv.gz dbip-city-lite-%Y-%m.csv.gz dbip-country-lite-%Y-%m.mmdb.gz dbip-city-lite-%Y-%m.mmdb.gz"
 DBIP_GENERATOR_LIST="./DBIP-generate-db.pl /usr/share/ipv6calc/tools/DBIP-generate-db.pl"
 
 
 help() {
 	cat <<END
-Usage: $(basename "$0") [-s] [-D <dir>] [-U <url>]
+Usage: $(basename "$0") [-s] [-D <dir>] [-U <url>] [-T <type>]
 	-s		skip download
 	-g		skip generation of database file
 	-D <dir>	database directory (optional)
 	-U <url>	use URL to download full database
+	-T <type>	set type of via URL downloaded file
+                          MMDB: country|isp|location|*location-isp*
+			  CSV : isp|location|*full*
+	-L		legacy download mode (by default download only MaxMindDB version)
 
 	database directory: $DBIP_DAT_DIR (default: $DBIP_DAT_DIR_DEFAULT)
 
@@ -35,11 +39,12 @@ Usage: $(basename "$0") [-s] [-D <dir>] [-U <url>]
  DBIP_DAT_URL_BASE=$DBIP_DAT_URL_BASE
  DBIP_DAT_FILES=$DBIP_DAT_FILES
 
- in case -U <url> (take URL from subscription e-mail) is provided, it downloads the full database
+ in case -U <url> (take URL from subscription e-mail) is provided, it downloads the database
+  use -T <type> in case it's not "location-isp"
 END
 }
 
-while getopts "D:U:gsh\?" opt; do
+while getopts "T:LD:U:gsh\?" opt; do
 	case $opt in
 	    s)
 		skip_download=1
@@ -52,7 +57,12 @@ while getopts "D:U:gsh\?" opt; do
 		;;
 	    U)
 		DBIP_URL="$OPTARG"
-		DBIP_DAT_FILES="dbip-full-%Y-%m.csv.gz"
+		;;
+	    T)
+		DBIP_TYPE="$OPTARG"
+		;;
+	    L)
+		legacy=1
 		;;
 	    *)
 		help
@@ -61,7 +71,22 @@ while getopts "D:U:gsh\?" opt; do
 	esac
 done
 
+case $DBIP_URL in
+    *.csv)
+	urldbtype=${DBIP_TYPE:-full}
+	DBIP_DAT_FILES="dbip-$urldbtype-%Y-%m.csv.gz"
+	;;
+    *.mmdb)
+	urldbtype=${DBIP_TYPE:-location-isp}
+	DBIP_DAT_FILES="dbip-$urldbtype-%Y-%m.mmdb.gz"
+	;;
+    *)
+	echo "ERROR : given URL has unsupported filename suffix"
+	exit 1
+	;;
+esac
 
+if [ "$legacy" = "1" ]; then
 for entry in $DBIP_GENERATOR_LIST; do
 	if [ -e "$entry" -a -x "$entry" ]; then
 		generate_db="$entry"
@@ -75,9 +100,11 @@ if [ -z "$generate_db" ]; then
 else
 	echo "INFO  : selected DBIP database generator: $generate_db"
 fi
+fi # legacy
 
 if [ ! -t 0 ]; then
 	options_generate="-q"
+	options_wget="-q"
 fi
 
 if [ ! -d "$DBIP_DAT_DIR" ]; then
@@ -94,6 +121,15 @@ fi
 download_result=1
 if [ "$skip_download" != "1" ]; then
 	for file in $DBIP_DAT_FILES; do
+		case $file in
+		    *.csv.gz)
+			if [ "$legacy" != "1" ]; then
+				echo "NOTICE: legacy mode not enabled, skip download of: $file)"
+			fi
+			continue
+			;;
+		esac
+
 		# convert tokens
 		year=$(date +%Y)
 		month=$(date +%m)
@@ -105,7 +141,7 @@ if [ "$skip_download" != "1" ]; then
 
 		if [ -z "$DBIP_URL" ]; then
 			echo "INFO  : try to download file: $file ($file_dest)"
-			wget -q -O "$file_dest" "$DBIP_DAT_URL_BASE$file"
+			wget $options_wget -O "$file_dest" "$DBIP_DAT_URL_BASE$file"
 			if [ $? -ne 0 ]; then
 				echo "ERROR : download of file not successful: $file ($file_dest)"
 				download_result=0
@@ -113,7 +149,7 @@ if [ "$skip_download" != "1" ]; then
 			fi
 		else
 			echo "INFO  : try to download file: $DBIP_URL ($file_dest)"
-			wget -q -O "$file_dest" "$DBIP_URL"
+			wget $options_wget -O "$file_dest" "$DBIP_URL"
 			if [ $? -ne 0 ]; then
 				echo "ERROR : download of file not successful: $DBIP_URL ($file_dest)"
 				download_result=0
@@ -124,20 +160,64 @@ if [ "$skip_download" != "1" ]; then
 	done
 fi
 
-# create db files from downloaded files
+# create db/decompress mmdb files from downloaded files
+error=0
 if [ "$download_result" = "1" -a "$skip_generation" != "1" ]; then
 	for file in $DBIP_DAT_FILES; do
-		time_begin=$(date '+%s')
-		echo "INFO  : begin $(date '+%Y%m%d-%H%M%S')"
-
 		# convert tokens
 		year=$(date +%Y)
 		month=$(date +%m)
 
-		file=${file//%Y/$year}
-		file=${file//%m/$month}
+		file_input=${file//%Y/$year}
+		file_input=${file_input//%m/$month}
 
-		file_input="$DBIP_DAT_DIR/`basename "$file"`"
+		file_input="$DBIP_DAT_DIR/`basename "$file_input"`"
+
+		case $file in
+		    *.csv.gz)
+			if [ "$legacy" != "1" ]; then
+				echo "NOTICE: legacy mode not enabled, skip generation from: $file)"
+				continue
+			fi
+			;;
+		    *.mmdb.gz)
+			if [ -e "$file_input" ]; then
+				echo "INFO  : decompress: $file_input)"
+				gunzip "$file_input"
+				if [ $? -ne 0 ] ;then
+					echo "ERROR : decompress failed: $file_input"
+					error=1
+					continue
+				fi
+			fi
+
+			file_input=${file_input/.gz}
+			if [ ! -e "$file_input" ]; then
+				echo "ERROR : decompressed file missing: $file_input)"
+				error=1
+				continue
+			fi
+
+			file_softlink="${file/-%Y}"
+			file_softlink="${file_softlink/-%m}"
+			file_softlink="${file_softlink/.gz}"
+			file_softlink="$DBIP_DAT_DIR/`basename "${file_softlink}"`"
+			echo "NOTICE: mmdb file requires only softlink: $file_softlink -> `basename "$file_input"`"
+			if [ -e "$file_softlink" ]; then
+				if [ ! -L "$file_softlink" ]; then
+					echo "ERROR : file exists but is not a softlink: $file_softlink"
+					continue
+				fi
+				echo "NOTICE: remove existing softlink: $file_softlink"
+				rm -f "$file_softlink"
+			fi
+			ln -sf "`basename "$file_input"`" "$file_softlink"
+			continue
+			;;
+		esac
+
+		time_begin=$(date '+%s')
+		echo "INFO  : begin $(date '+%Y%m%d-%H%M%S')"
 
 		nice -n 19 $generate_db $options_generate -I "$file_input" -O "$DBIP_DAT_DIR" -A
 		result=$?
@@ -152,6 +232,7 @@ if [ "$download_result" = "1" -a "$skip_generation" != "1" ]; then
 
 		if [ $result -ne 0 ]; then
 			echo "ERROR : processing of file was not successful, keep downloaded file: $file_input"
+			error=1
 		else
 			echo "INFO  : processing of file was successful, remove downloaded file now: $file_input"
 			rm -f "$file_input"
