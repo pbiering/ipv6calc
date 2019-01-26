@@ -446,7 +446,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const siz
 	addronlystring = strtok_r(tempstring, "/", ptrptr);
 
 	if ( addronlystring == NULL ) {
-		fprintf(stderr, "Strange input: %s\n", addrstring);
+		fprintf(stderr, "Strange input (extracting prefix length): %s\n", addrstring);
 		return (1);
 	};
 
