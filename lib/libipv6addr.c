@@ -1251,7 +1251,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, const siz
 	addronlystring = strtok_r(tempstring2, "%%", ptrptr);
 	
 	if ( addronlystring == NULL ) {
-		fprintf(stderr, "Strange input: %s\n", addronlystring);
+		fprintf(stderr, "Strange input: %s\n", addrstring);
 		return (1);
 	};
 
