@@ -18,8 +18,9 @@ DBIP_GENERATOR_LIST="./DBIP-generate-db.pl /usr/share/ipv6calc/tools/DBIP-genera
 
 help() {
 	cat <<END
-Usage: $(basename "$0") [-s] [-D <dir>] [-U <url>] [-T <type>]
+Usage: $(basename "$0") [-v] [-s] [-D <dir>] [-U <url>] [-T <type>]
 	-s		skip download
+	-v		verbose
 	-g		skip generation of database file
 	-D <dir>	database directory (optional)
 	-U <url>	use URL to download full database
@@ -46,6 +47,9 @@ END
 
 while getopts "T:LD:U:gsh\?" opt; do
 	case $opt in
+	    v)
+		verbose=1
+		;;
 	    s)
 		skip_download=1
 		;;
@@ -71,20 +75,22 @@ while getopts "T:LD:U:gsh\?" opt; do
 	esac
 done
 
-case $DBIP_URL in
-    *.csv)
-	urldbtype=${DBIP_TYPE:-full}
-	DBIP_DAT_FILES="dbip-$urldbtype-%Y-%m.csv.gz"
-	;;
-    *.mmdb)
-	urldbtype=${DBIP_TYPE:-location-isp}
-	DBIP_DAT_FILES="dbip-$urldbtype-%Y-%m.mmdb.gz"
-	;;
-    *)
-	echo "ERROR : given URL has unsupported filename suffix"
-	exit 1
-	;;
-esac
+if [ -n "$DBIP_URL" ]; then
+	case $DBIP_URL in
+	    *.csv)
+		urldbtype=${DBIP_TYPE:-full}
+		DBIP_DAT_FILES="dbip-$urldbtype-%Y-%m.csv.gz"
+		;;
+	    *.mmdb)
+		urldbtype=${DBIP_TYPE:-location-isp}
+		DBIP_DAT_FILES="dbip-$urldbtype-%Y-%m.mmdb.gz"
+		;;
+	    *)
+		echo "ERROR : given URL has unsupported filename suffix"
+		exit 1
+		;;
+	esac
+fi
 
 if [ "$legacy" = "1" ]; then
 for entry in $DBIP_GENERATOR_LIST; do
@@ -102,7 +108,7 @@ else
 fi
 fi # legacy
 
-if [ ! -t 0 ]; then
+if [ ! -t 0 -o "$verbose" = "1" ]; then
 	options_generate="-q"
 	options_wget="-q"
 fi

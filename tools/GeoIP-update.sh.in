@@ -125,6 +125,9 @@ for file in $GEOIP_DAT_FILES; do
 			echo "ERROR : tar extract of file not successful: $file_dest"
 			continue
 		fi
+
+		echo "INFO  : remove downloaded file: $file_dest"
+		rm -f "$file_dest"
 		;;
 	esac
 
