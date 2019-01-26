@@ -689,26 +689,29 @@ END_libipv6calc_db_wrapper:
  */
 MMDB_lookup_result_s libipv6calc_db_wrapper_MMDB_wrapper_lookup_by_addr (const ipv6calc_ipaddr *ipaddrp, MMDB_s *const mmdb, int *const mmdb_error) {
 	MMDB_lookup_result_s lookup_result;
-	struct sockaddr sockaddr;
 
 	// convert ipaddrp into sockaddr
+	union sockaddr_u {
+		struct sockaddr_in in;
+		struct sockaddr_in6 in6;
+		struct sockaddr sockaddr;
+	} su;
+
 	if (ipaddrp->proto == 4) {
-		sockaddr.sa_family = AF_INET;
-		struct sockaddr_in * sockaddr_in = (struct sockaddr_in *) &sockaddr;
-		sockaddr_in->sin_addr.s_addr = htonl(ipaddrp->addr[0]);
+		su.sockaddr.sa_family = AF_INET;
+		su.in.sin_addr.s_addr = htonl(ipaddrp->addr[0]);
 	} else if (ipaddrp->proto == 6) {
-		sockaddr.sa_family = AF_INET6;
-		struct sockaddr_in6 * sockaddr_in6 = (struct sockaddr_in6 *) &sockaddr;
-		sockaddr_in6->sin6_addr.s6_addr32[0] = htonl(ipaddrp->addr[0]);
-		sockaddr_in6->sin6_addr.s6_addr32[1] = htonl(ipaddrp->addr[1]);
-		sockaddr_in6->sin6_addr.s6_addr32[2] = htonl(ipaddrp->addr[2]);
-		sockaddr_in6->sin6_addr.s6_addr32[3] = htonl(ipaddrp->addr[3]);
+		su.sockaddr.sa_family = AF_INET6;
+		su.in6.sin6_addr.s6_addr32[0] = htonl(ipaddrp->addr[0]);
+		su.in6.sin6_addr.s6_addr32[1] = htonl(ipaddrp->addr[1]);
+		su.in6.sin6_addr.s6_addr32[2] = htonl(ipaddrp->addr[2]);
+		su.in6.sin6_addr.s6_addr32[3] = htonl(ipaddrp->addr[3]);
 	} else {
 		*mmdb_error = MMDB_INVALID_DATA_ERROR;
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	lookup_result = libipv6calc_db_wrapper_MMDB_lookup_sockaddr(mmdb, &sockaddr, mmdb_error);
+	lookup_result = libipv6calc_db_wrapper_MMDB_lookup_sockaddr(mmdb, &su.sockaddr, mmdb_error);
 
 END_libipv6calc_db_wrapper:
 	return(lookup_result);
@@ -803,27 +806,33 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 	MMDB_lookup_result_s lookup_result;
 	MMDB_entry_data_s entry_data;
 	int mmdb_error;
-	struct sockaddr sockaddr;
 
 	static char resultstring[NI_MAXHOST];
 
 	libipv6calc_db_wrapper_geolocation_record_clear(recordp);
 
 	// convert ipaddrp into sockaddr
+	union sockaddr_u {
+		struct sockaddr_in in;
+		struct sockaddr_in6 in6;
+		struct sockaddr sockaddr;
+	} su;
+
 	if (ipaddrp->proto == 4) {
-		sockaddr.sa_family = AF_INET;
-		struct sockaddr_in * sockaddr_in = (struct sockaddr_in *) &sockaddr;
-		sockaddr_in->sin_addr.s_addr = htonl(ipaddrp->addr[0]);
+		su.sockaddr.sa_family = AF_INET;
+		su.in.sin_addr.s_addr = htonl(ipaddrp->addr[0]);
 	} else if (ipaddrp->proto == 6) {
-		sockaddr.sa_family = AF_INET6;
-		struct sockaddr_in6 * sockaddr_in6 = (struct sockaddr_in6 *) &sockaddr;
-		sockaddr_in6->sin6_addr.s6_addr32[0] = htonl(ipaddrp->addr[0]);
-		sockaddr_in6->sin6_addr.s6_addr32[1] = htonl(ipaddrp->addr[1]);
-		sockaddr_in6->sin6_addr.s6_addr32[2] = htonl(ipaddrp->addr[2]);
-		sockaddr_in6->sin6_addr.s6_addr32[3] = htonl(ipaddrp->addr[3]);
+		su.sockaddr.sa_family = AF_INET6;
+		su.in6.sin6_addr.s6_addr32[0] = htonl(ipaddrp->addr[0]);
+		su.in6.sin6_addr.s6_addr32[1] = htonl(ipaddrp->addr[1]);
+		su.in6.sin6_addr.s6_addr32[2] = htonl(ipaddrp->addr[2]);
+		su.in6.sin6_addr.s6_addr32[3] = htonl(ipaddrp->addr[3]);
+	} else {
+		mmdb_error = MMDB_INVALID_DATA_ERROR;
+		goto END_libipv6calc_db_wrapper;
 	};
 
-	lookup_result = libipv6calc_db_wrapper_MMDB_lookup_sockaddr(mmdb, &sockaddr, &mmdb_error);
+	lookup_result = libipv6calc_db_wrapper_MMDB_lookup_sockaddr(mmdb, &su.sockaddr, &mmdb_error);
 
 	if (mmdb_error != MMDB_SUCCESS) {
 		ERRORPRINT_WA("Lookup results in error from MaxMindDB library: %s", libipv6calc_db_wrapper_MMDB_strerror(mmdb_error));
