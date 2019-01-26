@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : librfc6052.c
  * Version    : $Id$
- * Copyright  : 2015-2017 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2015-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for conversions defined in RFC 6052
@@ -42,7 +42,7 @@ int librfc6052_ipv4addr_to_ipv6addr(ipv6calc_ipv6addr *ipv6addrp, const ipv6calc
 	ipv6addrp->prefixlength = 96;
 	ipv6addrp->flag_prefixuse = 0;
 	ipv6addrp->flag_valid = 1;
-	ipv6addr_settype(ipv6addrp, 1); /* Set typeinfo */
+	ipv6addr_settype(ipv6addrp); /* Set typeinfo */
 
 	retval = 0;
 	return (retval);

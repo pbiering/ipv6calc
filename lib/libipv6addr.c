@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libipv6addr.c
  * Version    : $Id$
- * Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -663,37 +663,13 @@ END_ipv6addr_iidrandomdetection:
 /*
  * Set type of an IPv6 address
  *
- * in: ipv6addrp = pointer to IPv6 address structure
- *     flag_reset = 1: redetect type
- */
-void ipv6addr_settype(ipv6calc_ipv6addr *ipv6addrp, int flag_reset) {
-	uint32_t typeinfo = 0, typeinfo2 = 0;
-
-	if (flag_reset == 1) {
-		ipv6addrp->flag_typeinfo = 0;
-	};
-
-	if (ipv6addrp->flag_typeinfo == 0) {
-		typeinfo = ipv6addr_gettype(ipv6addrp, &typeinfo2);
-
-		ipv6addrp->typeinfo = typeinfo;
-		ipv6addrp->typeinfo2 = typeinfo2;
-		ipv6addrp->flag_typeinfo = 1;
-	};
-	return;
-};
-
-
-/*
- * Get type of an IPv6 address
- *
  * with credits to kernel and USAGI developer team
  * basic code was taken from "kernel/net/ipv6/addrconf.c"
  *
- * in: ipv6addrp = pointer to IPv6 address structure
- *     typeinfo2 = pointer to typeinfo2 (optional)
+ * in : ipv6addrp = pointer to IPv6 address structure
+ * mod: typeinfo, typeinfo2, prefix2length
  */
-uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp, uint32_t *typeinfo2p) {
+void ipv6addr_settype(ipv6calc_ipv6addr *ipv6addrp) {
 	uint32_t type = 0, r, type2 = 0;
 	uint32_t st, st1, st2, st3;
 	s_iid_statistics variances;
@@ -712,11 +688,6 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp, uint32_t *typeinfo
 	st3 = ipv6addr_getdword(ipv6addrp, 3); /* 32 LSB */
 
 	DEBUGPRINT_NA(DEBUG_libipv6addr, "Called");
-
-	if (typeinfo2p != NULL) {
-		/* clear typeinfo2 if not a NULL pointer */
-		*typeinfo2p = type2;
-	};
 
 	/* unspecified address */
 	if ( (st == 0) && (st1 == 0) && (st2 == 0) && (st3 == 0) ) {
@@ -815,8 +786,9 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp, uint32_t *typeinfo
 		};
 	};
 
-	if ((st & 0xFFFFFFF0u) == 0x20010010u) {
+	if (((st & 0xFFFFFFF0u) == 0x20010010u) || ((st & 0xFFFFFFF0u) == 0x20010020u)) {
 		/* 2001:0010::/28 -> ORCHID (RFC 4843) */
+		/* 2001:0020::/28 -> ORCHIDv2 (RFC 7343) */
 		type |= IPV6_NEW_ADDR_ORCHID;
 		/* ORCHID has no IID, only a 100 bit encoded hash */
 
@@ -1049,7 +1021,9 @@ uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp, uint32_t *typeinfo
 								goto END_ANON_IID;
 							};
 
-							DEBUGPRINT_NA(DEBUG_libipv6addr, "anonymized prefix verified");
+							type2 |= IPV6_ADDR_TYPE2_ANON_MASKED_PREFIX;
+							ipv6addrp->prefix2length = 64 - 4 * p;
+							DEBUGPRINT_WA(DEBUG_libipv6addr, "anonymized masked prefix verified, usable prefix length is %u", ipv6addrp->prefix2length);
 						};
 
 						if (((st2 & ANON_IID_RANDOM_MASK_00_31) == ANON_IID_RANDOM_VALUE_00_31) && ((st3 & ANON_IID_RANDOM_MASK_32_63) == ANON_IID_RANDOM_VALUE_32_63)) {
@@ -1140,12 +1114,9 @@ END_ANON_IID:
 	};
 
 END_ipv6addr_gettype:
-	if (typeinfo2p != NULL) {
-		/* set typeinfo2 if not a NULL pointer */
-		*typeinfo2p = type2;
-	};
-
-	return (type);
+	ipv6addrp->typeinfo  = type;
+	ipv6addrp->typeinfo2 = type2;
+	ipv6addrp->flag_typeinfo = 1;
 };
 
 
@@ -1403,7 +1374,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, const siz
 	DEBUGPRINT_WA(DEBUG_libipv6addr, "In structure %08x %08x %08x %08x", (unsigned int) ipv6addr_getdword(ipv6addrp, 0), (unsigned int) ipv6addr_getdword(ipv6addrp, 1), (unsigned int) ipv6addr_getdword(ipv6addrp, 2), (unsigned int) ipv6addr_getdword(ipv6addrp, 3));
 	DEBUGPRINT_WA(DEBUG_libipv6addr, "In structure %04x %04x %04x %04x %04x %04x %04x %04x", (unsigned int) ipv6addr_getword(ipv6addrp, 0), (unsigned int) ipv6addr_getword(ipv6addrp, 1), (unsigned int) ipv6addr_getword(ipv6addrp, 2), (unsigned int) ipv6addr_getword(ipv6addrp, 3), (unsigned int) ipv6addr_getword(ipv6addrp, 4), (unsigned int) ipv6addr_getword(ipv6addrp, 5), (unsigned int) ipv6addr_getword(ipv6addrp, 6), (unsigned int) ipv6addr_getword(ipv6addrp, 7));
 	
-	ipv6addr_settype(ipv6addrp, 1);
+	ipv6addr_settype(ipv6addrp);
 
 	DEBUGPRINT_WA(DEBUG_libipv6addr, "flag_prefixuse %d", ipv6addrp->flag_prefixuse);
 	
@@ -2082,7 +2053,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 
 	DEBUGPRINT_WA(DEBUG_libipv6addr, "Called: addr=%08x %08x %08x %08x", ipv6addr_getdword(ipv6addrp, 0), ipv6addr_getdword(ipv6addrp, 1), ipv6addr_getdword(ipv6addrp, 2), ipv6addr_getdword(ipv6addrp, 3));
 
-	ipv6addr_settype(ipv6addrp, 0); // set typeinfo if not already done
+	ipv6addr_settype(ipv6addrp);
 
 	if (method == ANON_METHOD_ZEROIZE) {
 		zeroize_prefix = 1;
@@ -2207,7 +2178,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 				CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
 
 				cc_index = libipv6calc_db_wrapper_cc_index_by_addr(&ipaddr, NULL);
-				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr);
+				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, NULL);
 
 				if (cc_index == COUNTRYCODE_INDEX_UNKNOWN) {
 					// on unknown country, map registry value
@@ -3055,7 +3026,7 @@ int ipv6addr_filter(const ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_filter_
 	};
 
 	if (filter->filter_db_asn.active > 0) {
-		uint32_t asn = libipv6addr_as_num32_by_addr(ipv6addrp);
+		uint32_t asn = libipv6addr_as_num32_by_addr(ipv6addrp, NULL);
 
 		if (libipv6calc_db_asn_filter(asn, &filter->filter_db_asn) > 0) {
 			/* no match */
@@ -3187,12 +3158,14 @@ int libipv6addr_get_included_ipv4addr(const ipv6calc_ipv6addr *ipv6addrp, ipv6ca
 uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsigned int *data_source_ptr) {
 	uint32_t cc_index = COUNTRYCODE_INDEX_UNKNOWN;
 	ipv6calc_ipv4addr ipv4addr;
+	ipv6calc_ipv6addr ipv6addr;
 	ipv6calc_ipaddr ipaddr;
 	int retval;
 
 	DEBUGPRINT_NA(DEBUG_libipv6addr, "start");
 
 	if ((ipv6addrp->typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) != 0) {
+		DEBUGPRINT_NA(DEBUG_libipv6addr, "anonymized prefix handling");
 		if ((ipv6addrp->typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX) == 0) {
 			if ((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_LISP) != 0) {
 				retval = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_ASN32, &cc_index);
@@ -3225,8 +3198,8 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsign
 
 		cc_index = libipv4addr_cc_index_by_addr(&ipv4addr, data_source_ptr);
 	} else {
-		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC) == 1) {
-			if ((ipv6addrp->typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID) != 0) {
+		if ((ipv6addrp->typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID) != 0) {
+			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC) == 1) {
 				/* retrieve CountryCodeIndex from IPv4 address inside */
 				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 				if (retval != 0) {
@@ -3235,7 +3208,11 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsign
 				};
 
 				cc_index = libipv4addr_cc_index_by_addr(&ipv4addr, data_source_ptr);
-			} else if ((ipv6addrp->typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX) != 0) {
+			} else {
+				DEBUGPRINT_NA(DEBUG_libipv6addr, "DB feature missing: DB_IPV4_TO_CC");
+			};
+		} else if ((ipv6addrp->typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX) != 0) {
+			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC) == 1) {
 				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 				if (retval != 0) {
 					fprintf(stderr, "Error getting included IPv4 address from IPv6 address\n");
@@ -3243,12 +3220,33 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsign
 				};
 
 				cc_index = libipv4addr_cc_index_by_addr(&ipv4addr, data_source_ptr);
-			} else if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_6BONE) != 0) {
-				cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + IPV6_ADDR_REGISTRY_6BONE;
+			} else {
+				DEBUGPRINT_NA(DEBUG_libipv6addr, "DB feature missing: DB_IPV4_TO_CC");
+			};
+		} else if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_6BONE) != 0) {
+			cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + IPV6_ADDR_REGISTRY_6BONE;
+		} else if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_ORCHID) != 0) {
+			DEBUGPRINT_NA(DEBUG_libipv6addr, "ORCHID has no country");
+			goto END_libipv6addr_cc_index_by_addr;
+		} else if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_CC) == 1) {
+			if ((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_ANON_MASKED_PREFIX) != 0) {
+				if (ipv6addrp->prefix2length < 48) {
+					DEBUGPRINT_WA(DEBUG_libipv6addr, "anonymized prefix prefix length to low for detecting country: %u", ipv6addrp->prefix2length);
+					goto END_libipv6addr_cc_index_by_addr;
+				};
+				ipv6addr = *ipv6addrp;
+				ipv6addr.flag_prefixuse = 1;
+				ipv6addr.prefixlength = ipv6addrp->prefix2length;
+				ipv6addrstruct_maskprefix(&ipv6addr);
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "anonymized prefix found, apply prefix length %u", ipv6addr.prefixlength);
+				CONVERT_IPV6ADDRP_IPADDR(&ipv6addr, ipaddr);
 			} else {
 				CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
-				cc_index = libipv6calc_db_wrapper_cc_index_by_addr(&ipaddr, data_source_ptr);
 			};
+
+			cc_index = libipv6calc_db_wrapper_cc_index_by_addr(&ipaddr, data_source_ptr);
+		} else {
+			DEBUGPRINT_NA(DEBUG_libipv6addr, "DB feature missing: DB_IPV6_TO_CC");
 		};
 	};
 
@@ -3264,9 +3262,10 @@ END_libipv6addr_cc_index_by_addr:
  * in : *ipv6addrp = IPv6 address structure
  * out: 32-bit AS number
  */
-uint32_t libipv6addr_as_num32_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
+uint32_t libipv6addr_as_num32_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsigned int *data_source_ptr) {
 	uint32_t as_num32 = ASNUM_AS_UNKNOWN;
 	ipv6calc_ipv4addr ipv4addr;
+	ipv6calc_ipv6addr ipv6addr;
 	ipv6calc_ipaddr ipaddr;
 	int retval;
 
@@ -3288,16 +3287,31 @@ uint32_t libipv6addr_as_num32_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 					goto END_libipv6addr_as_num32_by_addr;
 				};
 
-				as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr);
+				as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr, data_source_ptr);
 			};
 		};
 	} else if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_6BONE) != 0) {
 		as_num32 = ASNUM_AS_UNKNOWN;
 		goto END_libipv6addr_as_num32_by_addr;
 	} else {
-		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS) == 1) {
-			CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
-			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr);
+		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_AS) == 1) {
+			if ((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_ANON_MASKED_PREFIX) != 0) {
+				if (ipv6addrp->prefix2length < 48) {
+					goto END_libipv6addr_as_num32_by_addr;
+				};
+				ipv6addr = *ipv6addrp;
+				ipv6addr.flag_prefixuse = 1;
+				ipv6addr.prefixlength = ipv6addrp->prefix2length;
+				ipv6addrstruct_maskprefix(&ipv6addr);
+				DEBUGPRINT_WA(DEBUG_libipv6addr, "anonymized prefix found, apply prefix length %u", ipv6addr.prefixlength);
+				CONVERT_IPV6ADDRP_IPADDR(&ipv6addr, ipaddr);
+			} else {
+				CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
+			};
+
+			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, data_source_ptr);
+		} else {
+			DEBUGPRINT_NA(DEBUG_libipv6addr, "DB feature missing: DB_IPV6_TO_AS");
 		};
 	};
 
@@ -3316,6 +3330,7 @@ END_libipv6addr_as_num32_by_addr:
 int libipv6addr_registry_num_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 	int registry = IPV6_ADDR_REGISTRY_UNKNOWN;
 	uint16_t cc_index;
+	ipv6calc_ipv6addr ipv6addr;
 
 	if (((ipv6addrp->typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) != 0) \
 		&& ((ipv6addrp->typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX) == 0)) {
@@ -3324,10 +3339,22 @@ int libipv6addr_registry_num_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 			registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_REGISTRY) == 1) {
-			registry = libipv6calc_db_wrapper_registry_num_by_ipv6addr(ipv6addrp);
+			if ((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_ANON_MASKED_PREFIX) != 0) {
+				if (ipv6addrp->prefix2length < 12) {
+					goto END_libipv6addr_registry_by_addr;
+				};
+				ipv6addr = *ipv6addrp;
+				ipv6addr.flag_prefixuse = 1;
+				ipv6addr.prefixlength = ipv6addrp->prefix2length;
+				ipv6addrstruct_maskprefix(&ipv6addr);
+				registry = libipv6calc_db_wrapper_registry_num_by_ipv6addr(&ipv6addr);
+			} else {
+				registry = libipv6calc_db_wrapper_registry_num_by_ipv6addr(ipv6addrp);
+			};
 		};
 	};
 
+END_libipv6addr_registry_by_addr:
 	DEBUGPRINT_WA(DEBUG_libipv6addr, "registry=%d (0x%x)", registry, registry);
 	return(registry);
 };

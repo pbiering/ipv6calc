@@ -616,8 +616,8 @@ my %text = (
 		'en' => "GeoName ID of Continent",
 	},
 	'_ORGNAME' => {
-		'de' => "Organisation",
-		'en' => "Organization",
+		'de' => "Autonomous System Organisation",
+		'en' => "Autonomous System Organization",
 	},
 	'_AS_ORGNAME' => {
 		'de' => "Autonomous System Organisation",

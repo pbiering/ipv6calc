@@ -40,6 +40,8 @@ static int geoip2_db_country_v4 = 0;
 static int geoip2_db_country_v6 = 0;
 static int geoip2_db_region_city_v4 = 0;
 static int geoip2_db_region_city_v6 = 0;
+static int geoip2_db_asn_v4 = 0;
+static int geoip2_db_asn_v6 = 0;
 
 typedef struct {
 	unsigned int num;
@@ -55,6 +57,8 @@ static s_ipv6calc_geoip2_db geoip2_db_country_v4_best[GeoIP2_MAX];
 static s_ipv6calc_geoip2_db geoip2_db_country_v6_best[GeoIP2_MAX];
 static s_ipv6calc_geoip2_db geoip2_db_region_city_v4_best[GeoIP2_MAX];
 static s_ipv6calc_geoip2_db geoip2_db_region_city_v6_best[GeoIP2_MAX];
+static s_ipv6calc_geoip2_db geoip2_db_asn_v4_best[GeoIP2_MAX];
+static s_ipv6calc_geoip2_db geoip2_db_asn_v6_best[GeoIP2_MAX];
 
 static int type2index[GeoIP2_DB_MAX+1];
 
@@ -185,6 +189,14 @@ int libipv6calc_db_wrapper_GeoIP2_wrapper_init(void) {
 			GeoIP2_DB_SELECT_BETTER(geoip2_db_region_city_v6_best[product])
 		};
 
+		if ((libipv6calc_db_wrapper_GeoIP2_db_file_desc[i].features & IPV6CALC_DB_IPV4_TO_AS) != 0) {
+			GeoIP2_DB_SELECT_BETTER(geoip2_db_asn_v4_best[product])
+		};
+
+		if ((libipv6calc_db_wrapper_GeoIP2_db_file_desc[i].features & IPV6CALC_DB_IPV6_TO_AS) != 0) {
+			GeoIP2_DB_SELECT_BETTER(geoip2_db_asn_v6_best[product])
+		};
+
 		wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP2] |= libipv6calc_db_wrapper_GeoIP2_db_file_desc[i].features;
 	};
 
@@ -201,6 +213,8 @@ int libipv6calc_db_wrapper_GeoIP2_wrapper_init(void) {
 		SELECT_FREE_INSTEAD_OF_COMM(geoip2_db_country_v6_best[GeoIP2_FREE], geoip2_db_country_v6_best[GeoIP2_COMM], geoip2_db_country_v6)
 		SELECT_FREE_INSTEAD_OF_COMM(geoip2_db_region_city_v4_best[GeoIP2_FREE], geoip2_db_region_city_v4_best[GeoIP2_COMM], geoip2_db_region_city_v4)
 		SELECT_FREE_INSTEAD_OF_COMM(geoip2_db_region_city_v6_best[GeoIP2_FREE], geoip2_db_region_city_v6_best[GeoIP2_COMM], geoip2_db_region_city_v6)
+		SELECT_FREE_INSTEAD_OF_COMM(geoip2_db_asn_v4_best[GeoIP2_FREE], geoip2_db_asn_v4_best[GeoIP2_COMM], geoip2_db_asn_v4)
+		SELECT_FREE_INSTEAD_OF_COMM(geoip2_db_asn_v6_best[GeoIP2_FREE], geoip2_db_asn_v6_best[GeoIP2_COMM], geoip2_db_asn_v6)
 	};
 
 #define FILL_EMPTY(product, final) \
@@ -213,13 +227,16 @@ int libipv6calc_db_wrapper_GeoIP2_wrapper_init(void) {
 	FILL_EMPTY(geoip2_db_country_v6_best[GeoIP2_COMM], geoip2_db_country_v6)
 	FILL_EMPTY(geoip2_db_region_city_v4_best[GeoIP2_COMM], geoip2_db_region_city_v4)
 	FILL_EMPTY(geoip2_db_region_city_v6_best[GeoIP2_COMM], geoip2_db_region_city_v6)
+	FILL_EMPTY(geoip2_db_asn_v4_best[GeoIP2_COMM], geoip2_db_asn_v4)
+	FILL_EMPTY(geoip2_db_asn_v6_best[GeoIP2_COMM], geoip2_db_asn_v6)
 
 	// fill empty ones with free
 	FILL_EMPTY(geoip2_db_country_v4_best[GeoIP2_FREE], geoip2_db_country_v4)
 	FILL_EMPTY(geoip2_db_country_v6_best[GeoIP2_FREE], geoip2_db_country_v6)
 	FILL_EMPTY(geoip2_db_region_city_v4_best[GeoIP2_FREE], geoip2_db_region_city_v4)
 	FILL_EMPTY(geoip2_db_region_city_v6_best[GeoIP2_FREE], geoip2_db_region_city_v6)
-
+	FILL_EMPTY(geoip2_db_asn_v4_best[GeoIP2_FREE], geoip2_db_asn_v4)
+	FILL_EMPTY(geoip2_db_asn_v6_best[GeoIP2_FREE], geoip2_db_asn_v6)
 
 	/* close handles which are not necessary further on */
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_GeoIP2_db_file_desc); i++) {
@@ -705,10 +722,8 @@ char *libipv6calc_db_wrapper_GeoIP2_database_info(const unsigned int type) {
 
 	char year[5];
 	strftime(year, sizeof(year), "%Y", gmtime(&epoch));
-	snprintf(resultstring, sizeof(resultstring), "GeoIP2-%d/%s %s Copyright (c) %s MaxMind All Rights Reserved"
-		, type
+	snprintf(resultstring, sizeof(resultstring), "%s Copyright (c) %s MaxMind All Rights Reserved"
 		, mmdb.metadata.database_type
-		, (type <= 2) ? "FREE" : "COMM"
 		, year
 	);
 
@@ -761,7 +776,7 @@ int libipv6calc_db_wrapper_GeoIP2_has_features(uint32_t features) {
 
 /* country code */
 int libipv6calc_db_wrapper_GeoIP2_wrapper_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp, char *country, const size_t country_len) {
-	int result = -1;
+	int result = MMDB_INVALID_DATA_ERROR;
 
 	int GeoIP2_type = 0;
 
@@ -816,14 +831,14 @@ uint32_t libipv6calc_db_wrapper_GeoIP2_wrapper_asn_by_addr(const ipv6calc_ipaddr
 	int GEOIP2_type = 0;
 
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
-		GEOIP2_type = geoip2_db_country_v4;
+		GEOIP2_type = geoip2_db_asn_v4;
 
 		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP2] & IPV6CALC_DB_IPV4_TO_AS) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "No GeoIP2 database supporting IPv4 ASN");
 			goto END_libipv6calc_db_wrapper;
 		};
 	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
-		GEOIP2_type = geoip2_db_country_v6;
+		GEOIP2_type = geoip2_db_asn_v6;
 
 		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP2] & IPV6CALC_DB_IPV6_TO_AS) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "No GeoIP2 database supporting IPv6 ASN");
@@ -864,9 +879,13 @@ int libipv6calc_db_wrapper_GeoIP2_all_by_addr(const ipv6calc_ipaddr *ipaddrp, li
 	int result = -1;
 
 	int GeoIP2_type = 0;
+	int GeoIP2_type_asn = 0;
+
+	libipv6calc_db_wrapper_geolocation_record record_asn;
 
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
 		GeoIP2_type = geoip2_db_region_city_v4;
+		GeoIP2_type_asn = geoip2_db_asn_v4;
 
 		if (GeoIP2_type == 0) {
 			// fallback
@@ -874,6 +893,7 @@ int libipv6calc_db_wrapper_GeoIP2_all_by_addr(const ipv6calc_ipaddr *ipaddrp, li
 		};
 	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
 		GeoIP2_type = geoip2_db_region_city_v6;
+		GeoIP2_type_asn = geoip2_db_asn_v6;
 
 		if (GeoIP2_type == 0) {
 			// fallback
@@ -898,7 +918,27 @@ int libipv6calc_db_wrapper_GeoIP2_all_by_addr(const ipv6calc_ipaddr *ipaddrp, li
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	GeoIP2_DB_USAGE_MAP_TAG(GeoIP2_type);
+	// ASN is stored in a different database
+	if (GeoIP2_type_asn > 0) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "fetch ASN information from dedicated database");
+		result = libipv6calc_db_wrapper_GeoIP2_open_type(GeoIP2_type_asn);
+
+		if (result != MMDB_SUCCESS) {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "Error opening GeoIP2 by type");
+			goto END_libipv6calc_db_wrapper;
+		};
+
+		result = libipv6calc_db_wrapper_MMDB_all_by_addr(ipaddrp, &record_asn, &mmdb_cache[GeoIP2_type_asn]);
+
+		if (result != MMDB_SUCCESS) {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "no match found");
+			goto END_libipv6calc_db_wrapper;
+		};
+
+		// copy information
+		recordp->asn = record_asn.asn;
+                snprintf(recordp->organization_name, IPV6CALC_DB_SIZE_ORG_NAME, "%s", record_asn.organization_name);
+	};
 
 END_libipv6calc_db_wrapper:
 	return(result);

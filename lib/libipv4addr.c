@@ -2,7 +2,7 @@
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
  * Version    : $Id$
- * Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -904,7 +904,7 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 			as_num32_comp17 |= 0x000; // TODO: map LISP information into 11 LSB
 		} else {
 			// get AS number
-			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr);
+			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, NULL);
 			DEBUGPRINT_WA(DEBUG_libipv4addr, "result of AS number  retrievement: 0x%08x (%d)", as_num32, as_num32);
 
 			as_num32_comp17 = libipv6calc_db_wrapper_as_num32_comp17(as_num32);
@@ -1405,7 +1405,7 @@ int ipv4addr_filter(const ipv6calc_ipv4addr *ipv4addrp, const s_ipv6calc_filter_
 	};
 
 	if (filter->filter_db_asn.active > 0) {
-		uint32_t asn = libipv4addr_as_num32_by_addr(ipv4addrp);
+		uint32_t asn = libipv4addr_as_num32_by_addr(ipv4addrp, NULL);
 
 		if (filter->filter_db_asn.active > 0) {
 			if (libipv6calc_db_asn_filter(asn, &filter->filter_db_asn) > 0) {
@@ -1466,7 +1466,7 @@ uint16_t libipv4addr_cc_index_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsign
  * in : *ipv4addrp = IPv4 address structure
  * out: 32-bit AS number
  */
-uint32_t libipv4addr_as_num32_by_addr(const ipv6calc_ipv4addr *ipv4addrp) {
+uint32_t libipv4addr_as_num32_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsigned int *data_source_ptr) {
 	uint32_t as_num32 = ASNUM_AS_UNKNOWN;
 	ipv6calc_ipaddr ipaddr;
 
@@ -1475,7 +1475,7 @@ uint32_t libipv4addr_as_num32_by_addr(const ipv6calc_ipv4addr *ipv4addrp) {
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS) == 1) {
 			CONVERT_IPV4ADDRP_IPADDR(ipv4addrp, ipaddr);
-			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr);
+			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, data_source_ptr);
 		};
 	};
 
@@ -1501,7 +1501,7 @@ int libipv4addr_registry_num_by_addr(const ipv6calc_ipv4addr *ipv4addrp) {
 		// CC  -> Registry
 
 		/* retrieve registry via AS number from anonymized address (simple) */
-		as_num32 = libipv4addr_as_num32_by_addr(ipv4addrp);
+		as_num32 = libipv4addr_as_num32_by_addr(ipv4addrp, NULL);
 		if (as_num32 != ASNUM_AS_UNKNOWN) {
 			registry = libipv6calc_db_wrapper_registry_num_by_as_num32(as_num32);
 		};

@@ -195,5 +195,5 @@ extern int ipv4addr_filter_check(const s_ipv6calc_filter_ipv4addr *filter);
 extern void ipv4addr_filter_clear(s_ipv6calc_filter_ipv4addr *filter);
 
 extern uint16_t libipv4addr_cc_index_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsigned int *data_source_ptr);
-extern uint32_t libipv4addr_as_num32_by_addr(const ipv6calc_ipv4addr *ipv4addrp);
+extern uint32_t libipv4addr_as_num32_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsigned int *data_source_ptr);
 extern int libipv4addr_registry_num_by_addr(const ipv6calc_ipv4addr *ipv4addrp);

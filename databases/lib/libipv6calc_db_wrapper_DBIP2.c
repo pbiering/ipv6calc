@@ -705,10 +705,8 @@ char *libipv6calc_db_wrapper_DBIP2_database_info(const unsigned int type) {
 
 	char year[5];
 	strftime(year, sizeof(year), "%Y", gmtime(&epoch));
-	snprintf(resultstring, sizeof(resultstring), "DBIP2-%d/%s %s Copyright (c) %s db-ip.com All Rights Reserved"
-		, type
+	snprintf(resultstring, sizeof(resultstring), "%s Copyright (c) %s db-ip.com All Rights Reserved"
 		, mmdb.metadata.database_type
-		, (type <= 2) ? "FREE" : "COMM"
 		, year
 	);
 
@@ -761,7 +759,7 @@ int libipv6calc_db_wrapper_DBIP2_has_features(uint32_t features) {
 
 /* country code */
 int libipv6calc_db_wrapper_DBIP2_wrapper_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp, char *country, const size_t country_len) {
-	int result = -1;
+	int result = MMDB_INVALID_DATA_ERROR;
 
 	int DBIP2_type = 0;
 

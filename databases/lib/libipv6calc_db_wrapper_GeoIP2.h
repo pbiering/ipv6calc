@@ -17,9 +17,10 @@
 // database types
 #define GeoIP2_DB_COUNTRY_LITE				1
 #define GeoIP2_DB_CITY_LITE				2
-#define GeoIP2_DB_COUNTRY				3	// commercial
-#define GeoIP2_DB_CITY					4	// commercial
-#define GeoIP2_DB_ISP					5	// commercial
+#define GeoIP2_DB_ASN					3
+#define GeoIP2_DB_COUNTRY				4	// commercial
+#define GeoIP2_DB_CITY					5	// commercial
+#define GeoIP2_DB_ISP					6	// commercial
 #define GeoIP2_DB_MAX					GeoIP2_DB_ISP
 
 #define IPV6CALC_DB_GEOIP2_INTERNAL_FREE		0x00000001
@@ -39,6 +40,14 @@
 		, "GeoLite2-City.mmdb"
 		, "IPv4/v6 City (FREE)"
 		, IPV6CALC_DB_IPV4_TO_CITY | IPV6CALC_DB_IPV4_TO_REGION | IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_GEOIP_IPV4 | IPV6CALC_DB_IPV6_TO_CITY | IPV6CALC_DB_IPV6_TO_REGION | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_GEOIP_IPV6
+		, IPV6CALC_DB_GEOIP2_INTERNAL_FREE
+	},
+
+	// ASN (lite)
+	{ GeoIP2_DB_ASN
+		, "GeoLite2-ASN.mmdb"
+		, "IPv4/v6 ASN (FREE)"
+		, IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_IPV6_TO_AS
 		, IPV6CALC_DB_GEOIP2_INTERNAL_FREE
 	},
 

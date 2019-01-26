@@ -559,7 +559,7 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 
 	if (wrapper_GeoIP2_disable != 1) {
 #ifdef SUPPORT_GEOIP2
-		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP2", string, strlen(string) > 0 ? " " : "");
+		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP2(linked/MaxMindDB)", string, strlen(string) > 0 ? " " : "");
 		snprintf(string, size, "%s", tempstring);
 #endif // SUPPORT_GEOIP2
 	};
@@ -590,7 +590,7 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 
 	if (wrapper_DBIP2_disable != 1) {
 #ifdef SUPPORT_DBIP2
-		snprintf(tempstring, sizeof(tempstring), "%s%sDBIP2", string, strlen(string) > 0 ? " " : "");
+		snprintf(tempstring, sizeof(tempstring), "%s%sDBIP2(linked/MaxMindDB)", string, strlen(string) > 0 ? " " : "");
 		snprintf(string, size, "%s", tempstring);
 #endif
 	};
@@ -1309,7 +1309,7 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 
 				result_char_ptr = (char *) libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(tempstring, ipaddrp->proto);
 
-				if (result_char_ptr != NULL) {
+				if ((result_char_ptr != NULL) && (strlen(result_char_ptr) > 0)) {
 					snprintf(string, length, "%s", result_char_ptr);
 					result = 0;
 					data_source = IPV6CALC_DB_SOURCE_GEOIP;
@@ -1503,7 +1503,7 @@ uint16_t libipv6calc_db_wrapper_cc_index_by_addr(const ipv6calc_ipaddr *ipaddrp,
 				};
 			};
 		} else {
-			ERRORPRINT_WA("returned cc_text has not 2 chars: %s", cc_text);
+			ERRORPRINT_WA("returned cc_text has not 2 chars: %s (addr=%08x%08x%08x%08x)", cc_text, ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3]);
 			goto END_libipv6calc_db_wrapper_cached; // something wrong
 		};
 
@@ -1511,6 +1511,11 @@ uint16_t libipv6calc_db_wrapper_cc_index_by_addr(const ipv6calc_ipaddr *ipaddrp,
 		ipaddr_cache_lastused_valid = 1;
 		cc_index_lastused = index;
 		ipaddr_cache_lastused = *ipaddrp;
+
+		// set only data_source from cache if caller request it
+		if (data_source_ptr != NULL) {
+			*data_source_ptr = data_source_lastused;
+		};
 	};
 
 END_libipv6calc_db_wrapper_cached:
@@ -1595,9 +1600,7 @@ END_libipv6calc_db_wrapper:
 /*
  * get AS 32-bit number
  */
-uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp) {
-	unsigned int data_source = IPV6CALC_DB_SOURCE_UNKNOWN;
-
+uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr) {
 	uint32_t as_num32 = ASNUM_AS_UNKNOWN; // default
 #ifdef SUPPORT_GEOIP
 	int valid = 1;
@@ -1612,6 +1615,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp)
 
 	static ipv6calc_ipaddr ipaddr_cache_lastused;
 	static uint32_t as_num32_lastused;
+	static unsigned int data_source_lastused = IPV6CALC_DB_SOURCE_UNKNOWN;
 	static int ipaddr_cache_lastused_valid = 0;
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x%08x%08x%08x proto=%d", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], ipaddrp->proto);
@@ -1643,6 +1647,12 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp)
 	    && 	(ipaddr_cache_lastused.addr[3] == ipaddrp->addr[3])
 	) {
 		as_num32 = as_num32_lastused;
+
+		// set only data_source from cache if caller request it
+		if (data_source_ptr != NULL) {
+			*data_source_ptr = data_source_lastused;
+		};
+
 		cache_hit = 1;
 		goto END_libipv6calc_db_wrapper; // ok
 	};
@@ -1683,6 +1693,8 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp)
 					if (valid == 1) {
 						snprintf(as_number_string, 11, "%s", as_text + 2);
 						as_num32 = atol(as_number_string);
+						data_source_lastused = IPV6CALC_DB_SOURCE_GEOIP;
+						goto END_libipv6calc_db_wrapper; // ok
 					};
 				};
 #endif
@@ -1696,7 +1708,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp)
 
 				as_num32 = libipv6calc_db_wrapper_GeoIP2_wrapper_asn_by_addr(ipaddrp);
 				if (as_num32 != ASNUM_AS_UNKNOWN) {
-					data_source = IPV6CALC_DB_SOURCE_GEOIP2;
+					data_source_lastused = IPV6CALC_DB_SOURCE_GEOIP2;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
 					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called GeoIP (MaxMindDB) did not return a valid ASN");
@@ -1713,7 +1725,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp)
 
 				as_num32 = libipv6calc_db_wrapper_DBIP2_wrapper_asn_by_addr(ipaddrp);
 				if (as_num32 != ASNUM_AS_UNKNOWN) {
-					data_source = IPV6CALC_DB_SOURCE_DBIP2;
+					data_source_lastused = IPV6CALC_DB_SOURCE_DBIP2;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
 					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called db-ip.com (MaxMindDB) did not return a valid ASN");
@@ -1728,35 +1740,22 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp)
 		};
 	};
 
-	// store in last used cache
-	ipaddr_cache_lastused_valid = 1;
-	as_num32_lastused = as_num32;
-	ipaddr_cache_lastused = *ipaddrp;
-
 END_libipv6calc_db_wrapper:
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: addr=%08x%08x%08x%08x as_num32=%u (0x%08x)%s (data_source=%d)", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], as_num32, as_num32, (cache_hit == 1 ? " (cached)" : ""), data_source);
+	if (as_num32 != ASNUM_AS_UNKNOWN) {
+		// store in last used cache
+		ipaddr_cache_lastused_valid = 1;
+		as_num32_lastused = as_num32;
+		ipaddr_cache_lastused = *ipaddrp;
+
+		// set only data_source from cache if caller request it
+		if (data_source_ptr != NULL) {
+			*data_source_ptr = data_source_lastused;
+		};
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: addr=%08x%08x%08x%08x as_num32=%u (0x%08x)%s (data_source=%d)", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], as_num32, as_num32, (cache_hit == 1 ? " (cached)" : ""), data_source_lastused);
 
 	return(as_num32);
-};
-
-
-/*
- * get AS 16-bit number
- */
-uint16_t libipv6calc_db_wrapper_as_num16_by_addr(const ipv6calc_ipaddr *ipaddrp) {
-	uint16_t as_num16 = 0;
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x%08x%08x%08x proto=%d", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], ipaddrp->proto);
-
-	// get 32-bit ASN
-	uint32_t as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(ipaddrp);
-
-	as_num16 = (uint16_t) (as_num32 < 65536 ? as_num32 : ASNUM_AS_TRANS);
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %d (0x%04x)", as_num16, as_num16);
-
-	// return 16-bit ASN or AS_TRANS in case of > 16-bit
-	return(as_num16);
 };
 
 

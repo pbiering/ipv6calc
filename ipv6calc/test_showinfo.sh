@@ -48,6 +48,7 @@ fe80::fefc:acff:fe10:fe01		# link-local autoconf on ISDN interface
 3ffe:831f:ce49:7601:8000:efff:af4a:86bf	# Teredo
 2001:a60:f011::1			# Productive IPv6
 2001:0010:392e:a450:2cd3:75e1:6098:8104	# Orchid
+2001:0020:392e:a450:2cd3:75e1:6098:8104	# Orchidv2
 fe80::8000:5445:5245:444F		# Link-local teredo
 fe80::ffff:ffff:fffd			# Link-local teredo
 fe80--1.IPV6-LITERAL.NET                                                       # ipv6literal
@@ -293,7 +294,8 @@ if ./ipv6calc -q -v 2>&1 | grep -qw GeoIP; then
 		output_escaped="${output//./\\.}"
 		output_escaped="${output_escaped//[/\\[}"
 		output_escaped="${output_escaped//]/\\]}"
-		if ! ./ipv6calc -q -i -m $address | grep $grepopt "^$output_escaped$"; then
+		output_escaped="${output_escaped/GEOIP/GEOIP2?}"
+		if ! ./ipv6calc -q -i -m $address | egrep $grepopt "^$output_escaped$"; then
 			[ "$verbose" = "1" ] || echo
 			echo "ERROR: unexpected result for $address ($output_escaped)"
 			./ipv6calc -q -i -m $address
@@ -403,7 +405,7 @@ test="run db-ip.com IPv4 tests"
 if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv4; then
 	echo "INFO  : $test"
 	getexamples_DBIPv4 | while read address; do
-		[ "$verbose" = "1" ] && echo "Run IP2Location showinfo on: $address"
+		[ "$verbose" = "1" ] && echo "Run DBIP showinfo on: $address"
 		if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep $grepopt ^DBIP; then
 			true
 		else
@@ -431,7 +433,8 @@ if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv4; then
 		output_escaped="${output//./\\.}"
 		output_escaped="${output_escaped//[/\\[}"
 		output_escaped="${output_escaped//]/\\]}"
-		if ! ./ipv6calc -q -i -m $address | grep $grepopt "^$output_escaped$"; then
+		output_escaped="${output_escaped/DBIP/DBIP2?}"
+		if ! ./ipv6calc -q -i -m $address | egrep $grepopt "^$output_escaped$"; then
 			echo "ERROR: unexpected result ($output_escaped)"
 			./ipv6calc -q -i -m $address
 			exit 1	
@@ -478,7 +481,8 @@ if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv6; then
 		output_escaped="${output//./\\.}"
 		output_escaped="${output_escaped//[/\\[}"
 		output_escaped="${output_escaped//]/\\]}"
-		if ! ./ipv6calc -q -i -m $address | grep $grepopt "^$output_escaped$"; then
+		output_escaped="${output_escaped/DBIP/DBIP2?}"
+		if ! ./ipv6calc -q -i -m $address | egrep $grepopt "^$output_escaped$"; then
 			[ "$verbose" = "1" ] || echo
 			echo "ERROR: unexpected result ($output_escaped)"
 			./ipv6calc -q -i -m $address

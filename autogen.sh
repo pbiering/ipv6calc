@@ -19,7 +19,7 @@ while [ "$1" != "$LAST" ]; do
 		;;
 	    '--all'|'-a')
 		shift
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --enable-ip2location --enable-dbip --enable-external --enable-mod_ipv6calc"
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --enable-ip2location --enable-dbip --enable-mmdb --enable-external --enable-mod_ipv6calc"
 		SKIP_STATIC=1
 		use_geoip=1
 		use_ip2location=1

@@ -1192,7 +1192,7 @@ PIPE_input:
 	};
 
 	if (ipv6addr.flag_valid == 1) {
-		ipv6addr_settype(&ipv6addr, 1); /* Set typeinfo */
+		ipv6addr_settype(&ipv6addr); /* Set typeinfo */
 
 		/* honor 6rd prefix length option */
 		if (ipv6rd_prefixlength > 0) {

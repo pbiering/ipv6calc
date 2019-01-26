@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP.c
  * Version    : $Id$
- * Copyright  : 2013-2018 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc DB-IP.com database wrapper
@@ -774,10 +774,9 @@ char *libipv6calc_db_wrapper_DBIP_database_info(const unsigned int type) {
 
 	char year[5];
 	snprintf(year, sizeof(year), "%s", datastring);
-	snprintf(resultstring, sizeof(resultstring), "DBIP-%d/%s %s Copyright (c) %s db-ip.com All Rights Reserved"
-		, type
-		, datastring
-		, (type <= 4) ? "FREE" : "COMM"
+	snprintf(tempstring, sizeof(tempstring), "%s %s", libipv6calc_db_wrapper_DBIP_db_file_desc[entry].description, datastring);
+	snprintf(resultstring, sizeof(resultstring), "DBIP %s Copyright (c) %s db-ip.com All Rights Reserved"
+		, tempstring
 		, year
 	);
 

@@ -320,9 +320,7 @@ extern int         libipv6calc_db_wrapper_country_code_by_cc_index(char *string,
 extern uint16_t    libipv6calc_db_wrapper_cc_index_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr);
 
 // Autonomous System Text/Number
-//extern char       *libipv6calc_db_wrapper_as_text_by_addr(const ipv6calc_ipaddr *ipaddrp);
-extern uint32_t    libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp);
-extern uint16_t    libipv6calc_db_wrapper_as_num16_by_addr(const ipv6calc_ipaddr *ipaddrp);
+extern uint32_t    libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr);
 
 extern uint32_t    libipv6calc_db_wrapper_as_num32_comp17(const uint32_t as_num32);
 extern uint32_t    libipv6calc_db_wrapper_as_num32_decomp17(const uint32_t as_num32_comp17);

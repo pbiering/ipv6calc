@@ -76,14 +76,26 @@ run_anon_tests() {
 			exit 1
 		fi
 
-		type_anon_compare="${type_anon/anonymized,}"
-		type_orig_compare="${type_orig/anonymized,}"
+		type_anon_compare="${type_anon}"
+		type_orig_compare="${type_orig}"
 
-		type_anon_compare="${type_anon_compare/anonymized-iid,}"
-		type_orig_compare="${type_orig_compare/anonymized-iid,}"
+		type_anon_compare="${type_anon_compare/anonymized-iid}"
+		type_orig_compare="${type_orig_compare/anonymized-iid}"
 
-		type_anon_compare="${type_anon_compare/anonymized-prefix,}"
-		type_orig_compare="${type_orig_compare/anonymized-prefix,}"
+		type_anon_compare="${type_anon_compare/anonymized-prefix}"
+		type_orig_compare="${type_orig_compare/anonymized-prefix}"
+
+		type_anon_compare="${type_anon_compare/anonymized-masked-prefix}"
+		type_orig_compare="${type_orig_compare/anonymized-masked-prefix}"
+
+		type_anon_compare="${type_anon_compare/anonymized}"
+		type_orig_compare="${type_orig_compare/anonymized}"
+
+		type_anon_compare="$(echo "$type_anon_compare" | perl -p -e 's/,+/,/g')"
+		type_orig_compare="$(echo "$type_orig_compare" | perl -p -e 's/,+/,/g')"
+
+		type_anon_compare="$(echo "$type_anon_compare" | perl -p -e 's/(^,|,$)//g')"
+		type_orig_compare="$(echo "$type_orig_compare" | perl -p -e 's/(^,|,$)//g')"
 
 		[ "$verbose" = "1" ] && echo "DEBUG : IPVx_TYPE orig: $type_orig_compare"
 		[ "$verbose" = "1" ] && echo "DEBUG : IPVx_TYPE anon: $type_anon_compare"
@@ -201,8 +213,8 @@ run_anon_options_kp_tests() {
 		#echo "DEBUG : IPVx_TYPE orig not reduced: $type_orig_compare"
 		#echo "DEBUG : IPVx_TYPE anon not reduced: $type_anon_compare"
 
-		type_anon_compare="$(echo "$type_anon_compare" | perl -p -e 's/(anonymized-prefix|anonymized-iid|anonymized)//g')"
-		type_orig_compare="$(echo "$type_orig_compare" | perl -p -e 's/(anonymized-prefix|anonymized-iid|anonymized)//g')"
+		type_anon_compare="$(echo "$type_anon_compare" | perl -p -e 's/(anonymized-prefix|anonymized-iid|anonymized-masked-prefix|anonymized)//g')"
+		type_orig_compare="$(echo "$type_orig_compare" | perl -p -e 's/(anonymized-prefix|anonymized-iid|anonymized-masked-prefix|anonymized)//g')"
 
 		type_anon_compare="$(echo "$type_anon_compare" | perl -p -e 's/,+/,/g')"
 		type_orig_compare="$(echo "$type_orig_compare" | perl -p -e 's/,+/,/g')"

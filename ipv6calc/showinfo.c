@@ -72,6 +72,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV6_REGISTRY=...             : registry token of given IPv6 address\n");
 	fprintf(stderr, " IPV6_PREFIXLENGTH=ddd         : given prefix length\n");
 	fprintf(stderr, " IPV6_AS_NUM=...               : AS number of (anonymized) IPv6 address\n");
+	fprintf(stderr, " IPV6_AS_SOURCE=...            : Source of AS number of IPv6 address\n");
 	fprintf(stderr, " IPV6_COUNTRYCODE=...          : Country Code of (anonymized) IPv6 address\n");
 	fprintf(stderr, " IPV6_COUNTRYCODE_SOURCE=...   : Source of Country Code of IPv6 address\n");
 	fprintf(stderr, " IPV4=ddd.ddd.ddd.ddd          : native IPv4 address\n");
@@ -83,6 +84,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV4_REGISTRY[...]=...        : registry token of included IPv4 address\n");
 	fprintf(stderr, " IPV4_SOURCE[...]=...          : source of IPv4 address\n");
 	fprintf(stderr, " IPV4_AS_NUM[...]=...          : AS number of (anonymized) IPv4 address\n");
+	fprintf(stderr, " IPV4_AS_SOURCE[...]=...       : Source of AS number of (anonymized) IPv4 address\n");
 	fprintf(stderr, " IPV4_COUNTRYCODE[...]=...     : Country Code of (anonymized) IPv4 address\n");
 	fprintf(stderr, " IPV4_COUNTRYCODE_SOURCE[...]=...: Source of Country Code of (anonymized) IPv4 address\n");
 	fprintf(stderr, "  ISATAP|TEREDO-SERVER|TEREDO-CLIENT|6TO4|LINK-LOCAL-IID\n");
@@ -156,8 +158,9 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " <prefix>_WEATHERSTATIONCODE=...  : Weather Station Code of IP address\n");
 	fprintf(stderr, " <prefix>_ISP=...                 : ISP of IP address\n");
 	fprintf(stderr, " <prefix>_AS_NUM=...              : Autonomous System Number of IP address\n");
+	fprintf(stderr, " <prefix>_AS_ORGNAME=...          : Autonomous System Organization Name of IP address\n");
+	fprintf(stderr, " <prefix>_AS_TEXT=...             : Autonomous System Number and Organization Name of IP address\n");
 	fprintf(stderr, " <prefix>_NETSPEED=...            : Net Speed of IP address\n");
-	fprintf(stderr, " <prefix>_ORGNAME=...             : Organization Name of IP address\n");
 	fprintf(stderr, " <prefix>_DATABASE_INFO=...       : Information about the used databases\n");
 #endif
 #ifdef SUPPORT_DBIP
@@ -294,13 +297,6 @@ static void printout2(const char *token, const char *additional, const char *val
 	);
 };
 
-// with prefix
-static void printout3(const char *token, const char *additional, const char *value, const uint32_t formatoptions, const char *prefix) {
-	char tokencomplete[NI_MAXHOST] = "";
-	snprintf(tokencomplete, sizeof(tokencomplete), "%s_%s", prefix, token);
-	printout2(tokencomplete, additional, value, formatoptions);
-};
-
 static void printfooter(const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST] = "";
 	char tempstring2[NI_MAXHOST] = "";
@@ -432,6 +428,16 @@ static void printfooter(const uint32_t formatoptions) {
 	};
 };
 
+
+#if defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
+// with prefix
+static void printout3(const char *token, const char *additional, const char *value, const uint32_t formatoptions, const char *prefix) {
+	char tokencomplete[NI_MAXHOST] = "";
+	snprintf(tokencomplete, sizeof(tokencomplete), "%s_%s", prefix, token);
+	printout2(tokencomplete, additional, value, formatoptions);
+};
+
+
 /* print geolocation based information */
 static void print_geolocation(libipv6calc_db_wrapper_geolocation_record *record, const uint32_t formatoptions, const char *additionalstring, const char *dbprefix, const char *dbinfo) {
 	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
@@ -483,6 +489,22 @@ static void print_geolocation(libipv6calc_db_wrapper_geolocation_record *record,
 	PRINT_RECORD_STRING(record->weathercode         , "WEATHERSTATIONCODE"  , "Weather Station Code")
 	PRINT_RECORD_STRING(record->timezone_name       , "TIMEZONE_NAME"       , "Time Zone Name")
 
+	PRINT_RECORD_NUMBER(record->asn                 , "AS_NUM"              , "Autonomous System Number", "%u", ASNUM_AS_UNKNOWN)
+	PRINT_RECORD_STRING(record->organization_name   , "AS_ORGNAME"          , "Autonomous System Organization Name")
+
+	// create AS_TEXT
+	if (record->asn != ASNUM_AS_UNKNOWN) {
+		if (strlen(record->organization_name) > 0) {
+			snprintf(tempstring, sizeof(tempstring), "AS%u %s", record->asn, record->organization_name);
+		} else {
+			snprintf(tempstring, sizeof(tempstring), "AS%u", record->asn);
+		};
+		PRINT_RECORD_STRING(tempstring, "AS_TEXT"          , "Autonomous System Information")
+	};
+
+	PRINT_RECORD_STRING(record->isp_name            , "ISP"                 , "ISP Name")
+	PRINT_RECORD_STRING(record->connection_type     , "NETSPEED"            , "Network Speed")
+
 	// timezone_name set -> timezone_offset considered as valid, but check
 	if (abs(record->timezone_offset) < 24) {
 		// convert timezone offset into human readable value
@@ -494,15 +516,11 @@ static void print_geolocation(libipv6calc_db_wrapper_geolocation_record *record,
 		};
 	};
 
-	PRINT_RECORD_NUMBER(record->asn                 , "AS_TEXT"             , "Autonomous System Number", "%u", ASNUM_AS_UNKNOWN)
-	PRINT_RECORD_STRING(record->isp_name            , "ISP"                 , "Time Zone Name")
-	PRINT_RECORD_STRING(record->connection_type     , "NETSPEED"            , "Network Speed")
-	PRINT_RECORD_STRING(record->organization_name   , "ORGNAME"             , "Organization Name")
-
 	PRINT_RECORD_NUMBER(record->geoname_id          , "GEONAME_ID"          , "Geoname ID of Location", "%u", 0)
 	PRINT_RECORD_NUMBER(record->country_geoname_id  , "GEONAME_ID_COUNTRY"  , "Geoname ID of Country", "%u", 0)
 	PRINT_RECORD_NUMBER(record->continent_geoname_id, "GEONAME_ID_CONTINENT", "Geoname ID of Continent", "%u", 0)
 };
+#endif
 
 #ifdef SUPPORT_IP2LOCATION
 /* print IP2Location information */
@@ -1205,10 +1223,11 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 	if ((ipv4addrp->typeinfo & (IPV4_ADDR_GLOBAL)) != 0) {
 		/* get AS Information */
-		as_num32 = libipv4addr_as_num32_by_addr(ipv4addrp);
+		data_source = IPV6CALC_DB_SOURCE_UNKNOWN;
+		as_num32 = libipv4addr_as_num32_by_addr(ipv4addrp, &data_source);
 		if ((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
 			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS) == 1) {
-				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr);
+				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, &data_source);
 			};
 		};
 
@@ -1216,6 +1235,15 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 			if ( machinereadable != 0 ) {
 				snprintf(tempstring, sizeof(tempstring), "%u", as_num32);
 				printout2("IPV4_AS_NUM", embeddedipv4string, tempstring, formatoptions);
+
+				if (data_source != IPV6CALC_DB_SOURCE_UNKNOWN) {
+					for (i = 0; i < MAXENTRIES_ARRAY(data_sources); i++ ) {
+						if (data_source == data_sources[i].number) {
+							printout2("IPV4_AS_SOURCE" , embeddedipv4string, data_sources[i].name, formatoptions);
+							break;
+						};
+					};
+				};
 			} else {
 				if (strlen(embeddedipv4string) > 0) {
 					fprintf(stdout, "Autonomous System Number (32-bit) for %s: %d\n", embeddedipv4string, as_num32);
@@ -1228,6 +1256,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		};
 
 		/* get CountryCode Information */
+		data_source = IPV6CALC_DB_SOURCE_UNKNOWN;
 		cc_index = libipv4addr_cc_index_by_addr(ipv4addrp, &data_source);
 
 		if (cc_index < COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN) {
@@ -1285,7 +1314,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	};
 
 
-	if (((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) == 0) && ((ipv4addrp->typeinfo & IPV4_ADDR_GLOBAL) != 0)) {
+	if (((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) == 0)) {
 #ifdef SUPPORT_IP2LOCATION
 		/* IP2Location information */
 		print_ip2location(tempipv4string, formatoptions, embeddedipv4string, 4);
@@ -1621,6 +1650,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	if ((ipv6addrp->typeinfo & (IPV6_NEW_ADDR_AGU)) != 0) {
 		/* CountryCode */
 		DEBUGPRINT_NA(DEBUG_showinfo, "get country code");
+		data_source = IPV6CALC_DB_SOURCE_UNKNOWN;
 		cc_index = libipv6addr_cc_index_by_addr(ipv6addrp, &data_source);
 
 		if (cc_index > COUNTRYCODE_INDEX_MAX) {
@@ -1651,11 +1681,12 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 
 		/* AS */
 		DEBUGPRINT_NA(DEBUG_showinfo, "get AS number/text");
-		as_num32 = libipv6addr_as_num32_by_addr(ipv6addrp);
+		data_source = IPV6CALC_DB_SOURCE_UNKNOWN;
+		as_num32 = libipv6addr_as_num32_by_addr(ipv6addrp, &data_source);
 
 		if ((ipv6addrp->typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) == 0) {
 			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_AS) == 1) {
-				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr);
+				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, &data_source);
 			};
 		};
 
@@ -1670,6 +1701,15 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 						snprintf(tempstring, sizeof(tempstring), "%d", as_num32);
 					};
 					printout("IPV6_AS_NUM" ,tempstring, formatoptions);
+
+					if (data_source != IPV6CALC_DB_SOURCE_UNKNOWN) {
+						for (i = 0; i < MAXENTRIES_ARRAY(data_sources); i++ ) {
+							if (data_source == data_sources[i].number) {
+								printout("IPV6_AS_SOURCE" , data_sources[i].name, formatoptions);
+								break;
+							};
+						};
+					};
 				} else {
 					fprintf(stdout, "ASN for address: %d\n", as_num32);
 				};
@@ -2046,6 +2086,12 @@ END:
 	i = libipv6calc_db_wrapper_registry_num_by_ipv6addr(ipv6addrp);
 	if ((i != IPV6_ADDR_REGISTRY_RESERVED) && (i != IPV6_ADDR_REGISTRY_6BONE)) {
 		if (((ipv6addrp->typeinfo & IPV6_NEW_ADDR_AGU) != 0) && ((ipv6addrp->typeinfo & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID | IPV6_ADDR_ANONYMIZED_PREFIX)) == 0)) {
+
+			if (((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_ANON_MASKED_PREFIX) != 0)\
+				&& (ipv6addrp->prefix2length < 48)\
+				// prefix partially anonymized including NLAs
+			) {
+			} else {
 #ifdef SUPPORT_IP2LOCATION
 			/* IP2Location information */
 			print_ip2location(ipv6addrstring, formatoptions, "", 6);
@@ -2075,6 +2121,7 @@ END:
 			/* External DB information */
 			print_external(&ipaddr, formatoptions, "");
 #endif
+			}; // IPV6_ADDR_TYPE2_ANON_MASKED_PREFIX
 		};
 	};
 

@@ -744,6 +744,7 @@ int libipv6calc_db_wrapper_MMDB_country_code_by_addr(const ipv6calc_ipaddr *ipad
 		};
 	} else {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "CountryCode not found");
+		mmdb_error = MMDB_INVALID_DATA_ERROR;
 	};
 
 END_libipv6calc_db_wrapper:
@@ -768,8 +769,14 @@ uint32_t libipv6calc_db_wrapper_MMDB_asn_by_addr(const ipv6calc_ipaddr *ipaddrp,
 	};
 
 	// fetch ASN
-	const char *lookup_path_asn[] = { "traits", "autonomous_system_number", NULL };
-	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_asn);
+	if(strstr(mmdb->metadata.database_type, "ASN")) {
+		// GeoLite2-ASN
+		const char *lookup_path_asn[] = { "autonomous_system_number", NULL };
+		libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_asn);
+	} else {
+		const char *lookup_path_asn[] = { "traits", "autonomous_system_number", NULL };
+		libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_asn);
+	};
 	if (entry_data.has_data) {
 		if (entry_data.type == MMDB_DATA_TYPE_UINT32) {
 			result = entry_data.uint32;
@@ -779,6 +786,7 @@ uint32_t libipv6calc_db_wrapper_MMDB_asn_by_addr(const ipv6calc_ipaddr *ipaddrp,
 		};
 	} else {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "ASN not found");
+		mmdb_error = MMDB_INVALID_DATA_ERROR;
 	};
 
 END_libipv6calc_db_wrapper:
@@ -1067,8 +1075,14 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 	};
 
 	// fetch ASN
-	const char *lookup_path_asn[] = { "traits", "autonomous_system_number", NULL };
-	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_asn);
+	if(strstr(mmdb->metadata.database_type, "ASN")) {
+		// GeoLite2-ASN
+		const char *lookup_path_asn[] = { "autonomous_system_number", NULL };
+		libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_asn);
+	} else {
+		const char *lookup_path_asn[] = { "traits", "autonomous_system_number", NULL };
+		libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_asn);
+	};
 	if (entry_data.has_data) {
 		if (entry_data.type == MMDB_DATA_TYPE_UINT32) {
 			recordp->asn = entry_data.uint32;
@@ -1081,15 +1095,21 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 	};
 
 	// organization name
-	const char *lookup_path_organization_name[] = { "traits", "organization", NULL };
-	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_organization_name);
+	if(strstr(mmdb->metadata.database_type, "ASN")) {
+		// GeoLite2-ASN
+		const char *lookup_path_organization_name[] = { "autonomous_system_organization", NULL };
+		libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_organization_name);
+	} else {
+		const char *lookup_path_organization_name[] = { "traits", "autonomous_system_organization", NULL };
+		libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_organization_name);
+	};
 	if (entry_data.has_data) {
 		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
 			int max = (entry_data.data_size + 1 > IPV6CALC_DB_SIZE_ORG_NAME) ? IPV6CALC_DB_SIZE_ORG_NAME : entry_data.data_size +1;
 			snprintf(recordp->organization_name, max, "%s", entry_data.utf8_string);
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "Organization: %s", recordp->organization_name);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "AS Organization: %s", recordp->organization_name);
 		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for Organization: %u", entry_data.type);
+			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for AS Organization: %u", entry_data.type);
 		};
 	} else {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "Organization not found");
