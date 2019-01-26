@@ -45,7 +45,7 @@ Usage: $(basename "$0") [-v] [-s] [-D <dir>] [-U <url>] [-T <type>]
 END
 }
 
-while getopts "T:LD:U:gsh\?" opt; do
+while getopts "vT:LD:U:gsh\?" opt; do
 	case $opt in
 	    v)
 		verbose=1
