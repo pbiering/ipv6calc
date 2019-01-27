@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
  * Version    : $Id$
- * Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -21,23 +21,13 @@
 #include "libieee.h"
 #include "databases/lib/libipv6calc_db_wrapper.h"
 #include "databases/lib/libipv6calc_db_wrapper_GeoIP.h"
+#include "databases/lib/libipv6calc_db_wrapper_GeoIP2.h"
 #include "databases/lib/libipv6calc_db_wrapper_IP2Location.h"
 #include "databases/lib/libipv6calc_db_wrapper_DBIP.h"
+#include "databases/lib/libipv6calc_db_wrapper_DBIP2.h"
 #include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 #include "databases/lib/libipv6calc_db_wrapper_External.h"
 
-
-#ifdef SUPPORT_IP2LOCATION
-/* 
- *  * API_VERSION is defined as a bareword in IP2Location.h, 
- *   * we need this trick to stringify it. Blah.
- *    */
-#define makestr(x) #x
-#define xmakestr(x) makestr(x)
-
-extern char* file_ip2location_ipv4;
-extern char* file_ip2location_ipv6;
-#endif
 
 /* to be defined in each application */
 extern void printversion(void);
@@ -344,6 +334,28 @@ void printhelp_common(const uint32_t help_features) {
 #ifdef SUPPORT_GEOIP_DYN
 		fprintf(stderr, "  [--db-geoip-lib       <file>     ] : GeoIP library file (default: %s)\n", geoip_lib_file);
 #endif
+#endif
+	};
+
+	if ((help_features & IPV6CALC_HELP_MMDB) != 0) {
+#ifdef SUPPORT_MMDB_DYN
+		fprintf(stderr, "\n");
+		fprintf(stderr, "  [--db-mmdb-lib       <file>      ] : MaxMindDB library file (default: %s)\n", mmdb_lib_file);
+		fprintf(stderr, "\n");
+#endif
+#ifdef SUPPORT_GEOIP2
+		fprintf(stderr, "  [--disable-geoip2                ] : GeoIP (MaxMindDB) support disabled\n");
+		fprintf(stderr, "  [--db-geoip2-disable             ] : GeoIP (MaxMindDB) support disabled\n");
+		fprintf(stderr, "  [--db-geoip2-dir      <directory>] : GeoIP (MaxMindDB) database directory (default: %s)\n", geoip2_db_dir);
+#endif
+#ifdef SUPPORT_DBIP2
+		fprintf(stderr, "\n");
+		fprintf(stderr, "  [--disable-dbip2                 ] : db-ip.com (MaxMindDB) support disabled\n");
+		fprintf(stderr, "  [--db-dbip2-disable              ] : db-ip.com (MaxMindDB) support disabled\n");
+		fprintf(stderr, "  [--db-dbip2-dir       <directory>] : db-ip.com (MaxMindDB) database directory (default: %s)\n", dbip2_db_dir);
+		fprintf(stderr, "  [--db-dbip2-only-type <TYPE>]      : db-ip.com (MaxMindDB) database only selected type (1-%d)\n", DBIP_DB_MAX);
+		fprintf(stderr, "  [--db-dbip2-comm-to-free-switch-min-delta-months <MONTHS>]:\n");
+		fprintf(stderr, "     switch from COMM to FREE databases if possible and delta more than %d months (0=disabled)\n", dbip2_db_comm_to_free_switch_min_delta_months);
 #endif
 	};
 
@@ -871,91 +883,6 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 
 	fprintf(stderr, "Compiled: %s  %s\n\n", __DATE__, __TIME__);
 
-
-#ifdef SUPPORT_GEOIP
-#ifdef GEOIP_INCLUDE_VERSION
-	fprintf(stderr, "GeoIP support enabled, compiled with include file version: %s\n", GEOIP_INCLUDE_VERSION);
-#endif
-#ifndef SUPPORT_GEOIP_DYN
-#ifdef SUPPORT_GEOIP_V6
-#if defined (SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6) && defined (SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6)
-	fprintf(stderr, "GeoIP support enabled, compiled with IPv4 & IPv6 support\n");
-#else
-	fprintf(stderr, "GeoIP support enabled, compiled with IPv4 & IPv6 support (in compatibility mode)\n");
-#endif
-#else // SUPPORT_GEOIP_V6
-	fprintf(stderr, "GeoIP support enabled, compiled with IPv4 support only\n");
-#endif // SUPPORT_GEOIP_V6
-#ifdef SUPPORT_GEOIP_LIB_VERSION
-	fprintf(stderr, "GeoIP dynamic library version (on this system): %s\n", libipv6calc_db_wrapper_GeoIP_lib_version());
-#else
-	fprintf(stderr, "GeoIP dynamic library version (on this system): compiled without detection\n");
-#endif
-#else // SUPPORT_GEOIP_DYN
-#ifdef SUPPORT_GEOIP_V6
-	fprintf(stderr, "GeoIP support by dynamic library load, compiled with IPv4 & IPv6 support\n");
-#else  // SUPPORT_GEOIP_V6
-	fprintf(stderr, "GeoIP support by dynamic library load, compiled with IPv4 support only\n");
-#endif // SUPPORT_GEOIP_V6
-	fprintf(stderr, "GeoIP configured dynamic library file and detected version: %s %s\n", geoip_lib_file, libipv6calc_db_wrapper_GeoIP_lib_version());
-#endif // SUPPORT_GEOIP_DYN
-
-	//TODO: list of GeoIP files
-#ifdef SUPPORT_GEOIP_V6
-	//TODO: list of GeoIP files
-#endif
-	libipv6calc_db_wrapper_GeoIP_wrapper_info(string, sizeof(string));
-	fprintf(stderr, "%s\n\n", string);
-#else
-	fprintf(stderr, "GeoIP support not compiled-in\n\n");
-#endif
-
-#ifdef SUPPORT_IP2LOCATION
-#ifdef IP2LOCATION_INCLUDE_VERSION
-	fprintf(stderr, "IP2Location support enabled, compiled with include file version: %s\n", IP2LOCATION_INCLUDE_VERSION);
-#endif
-#ifdef SUPPORT_IP2LOCATION_API_VERSION_STRING
-	fprintf(stderr, "IP2Location support enabled, compiled with API version: %s, dynamically linked with version: %s\n", xmakestr(API_VERSION), libipv6calc_db_wrapper_IP2Location_lib_version());
-#else  // SUPPORT_IP2LOCATION_API_VERSION_STRING
-	fprintf(stderr, "IP2Location support enabled, compiled with API version: %s (retrieving linked version not supported - older version)\n", xmakestr(API_VERSION));
-#endif // SUPPORT_IP2LOCATION_API_VERSION_STRING
-#ifndef SUPPORT_IP2LOCATION_DYN
-#else
-	fprintf(stderr, "IP2Location support by dynamic library load\n");
-	fprintf(stderr, "IP2Location configured dynamic library file and detected version: %s %s\n", ip2location_lib_file, libipv6calc_db_wrapper_IP2Location_lib_version());
-#endif
-	// TODO: show base directory
-	/*
-	if (file_ip2location_ipv4 != NULL && strlen(file_ip2location_ipv4) > 0) {
-		fprintf(stderr, "IP2Location IPv4 default file: %s\n", file_ip2location_ipv4);
-	} else {
-		fprintf(stderr, "IP2Location IPv4 default file: not configured\n");
-	};
-	if (file_ip2location_ipv6 != NULL && strlen(file_ip2location_ipv6) > 0) {
-		fprintf(stderr, "IP2Location IPv6 default file: %s\n", file_ip2location_ipv6);
-	} else {
-		fprintf(stderr, "IP2Location IPv6 default file: not configured\n");
-	};
-	*/
-	libipv6calc_db_wrapper_IP2Location_wrapper_info(string, sizeof(string));
-	fprintf(stderr, "%s\n\n", string);
-#else
-	fprintf(stderr, "IP2Location support not compiled-in\n\n");
-#endif
-
-#ifdef SUPPORT_DBIP
-	fprintf(stderr, "DBIP support enabled\n\n");
-#else
-	fprintf(stderr, "DBIP support not compiled-in\n\n");
-#endif
-
-#ifdef SUPPORT_BUILTIN
-	libipv6calc_db_wrapper_BuiltIn_wrapper_info(string, sizeof(string));
-	fprintf(stderr, "%s\n\n", string);
-#else
-	fprintf(stderr, "BuiltIn support not compiled-in\n\n");
-#endif
-
-	libipv6calc_db_wrapper_print_db_info(level_verbose, "");
+	libipv6calc_db_wrapper_print_features_verbose(level_verbose);
 };
 

@@ -63,6 +63,10 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 %define enable_dbip 1
 %endif
 
+%if "%{?_without_mmdb:0}%{?!_without_mmdb:1}" == "1"
+%define enable_mmdb 1
+%endif
+
 %if "%{?_without_external:0}%{?!_without_external:1}" == "1"
 %define enable_external 1
 %endif
@@ -85,6 +89,10 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: db4-devel
 %else
 BuildRequires: libdb-devel
+%endif
+
+%if %{enable_mmdb}
+BuildRequires: libmaxminddb-devel
 %endif
 
 # RPM license macro detector
@@ -119,7 +127,15 @@ Support for following databases
 		default directory for downloaded db files: %{geoip_db}
 		(requires also external library on system)
 
+ - GeoIP v2	%{?enable_mmdb:ENABLED}%{?!enable_mmdb:DISABLED}
+		default directory for downloaded db files: %{geoip_db}
+		(requires also external library on system)
+
  - db-ip.com	%{?enable_dbip:ENABLED}%{?!enable_dbip:DISABLED}
+		(once generated database files are found on system)
+		default directory for generated db files: %{dbip_db}
+
+ - db-ip.com v2	%{?enable_mmdb:ENABLED}%{?!enable_mmdb:DISABLED}
 		(once generated database files are found on system)
 		default directory for generated db files: %{dbip_db}
 
@@ -132,6 +148,7 @@ Available rpmbuild rebuild options:
   --without ip2location
   --without geoip
   --without dbip
+  --without mmdb (which disables GeoIP v2 and db-ip.com v2)
   --without external
   --without shared
   --without mod_ipv6calc
@@ -195,6 +212,7 @@ By default the module is disabled.
 	--with-geoip-db=%{geoip_db} \
 	%{?enable_dbip:--enable-dbip} \
 	--with-dbip-db=%{dbip_db} \
+	%{?enable_mmdb:--enable-mmdb --with-mmdb-dynamic} \
 	%{?enable_external:--enable-external} \
 	--with-external-db=%{external_db} \
 	%{?enable_shared:--enable-shared} \
@@ -325,6 +343,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sat Jan 26 2018 Peter Bieringer <pb@bieringer.de>
+- add option for libmaxminddb supporting GeoIP v2 and db-ip.com v2
+
 * Sun Sep 23 2018 Peter Bieringer <pb@bieringer.de>
 - subpackage ipv6calcweb: add dependency Perl(Proc::ProcessTable)
 

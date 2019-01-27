@@ -122,9 +122,9 @@ static const s_formatoption ipv6calc_db_features[] = {
 #define IPV6CALC_DB_SOURCE_MIN			1
 
 #define IPV6CALC_DB_SOURCE_GEOIP2		1
-#define IPV6CALC_DB_SOURCE_GEOIP		2
-#define IPV6CALC_DB_SOURCE_IP2LOCATION		3
-#define IPV6CALC_DB_SOURCE_DBIP2		4
+#define IPV6CALC_DB_SOURCE_IP2LOCATION		2
+#define IPV6CALC_DB_SOURCE_DBIP2		3
+#define IPV6CALC_DB_SOURCE_GEOIP		4
 #define IPV6CALC_DB_SOURCE_DBIP			5
 #define IPV6CALC_DB_SOURCE_EXTERNAL		6
 #define IPV6CALC_DB_SOURCE_BUILTIN		7
@@ -141,10 +141,10 @@ typedef struct {
 
 static const s_data_sources data_sources[] = {
 	{ IPV6CALC_DB_SOURCE_GEOIP	, "GeoIP"      , "GeoIP"       },
-	{ IPV6CALC_DB_SOURCE_GEOIP2	, "GeoIP (MaxMindDB)"    , "GeoIP2"      },
+	{ IPV6CALC_DB_SOURCE_GEOIP2	, "GeoIP(MaxMindDB)"    , "GeoIP2"      },
 	{ IPV6CALC_DB_SOURCE_IP2LOCATION, "IP2Location", "IP2Location" },
 	{ IPV6CALC_DB_SOURCE_DBIP	, "db-ip.com"  , "DBIP"        },
-	{ IPV6CALC_DB_SOURCE_DBIP2	, "db-ip.com (MaxMindDB)", "DBIP2"       },
+	{ IPV6CALC_DB_SOURCE_DBIP2	, "db-ip.com(MaxMindDB)", "DBIP2"       },
 	{ IPV6CALC_DB_SOURCE_EXTERNAL	, "External"   , "External"    },
 	{ IPV6CALC_DB_SOURCE_BUILTIN	, "BuiltIn"    , "BuiltIn"     },
 };
@@ -180,7 +180,7 @@ typedef struct {
 #define IPV6CALC_DB_SIZE_WEATHERCODE	20+1
 #define IPV6CALC_DB_SIZE_TIMEZONE_NAME	64+1
 #define IPV6CALC_DB_SIZE_ISP_NAME	128+1
-#define IPV6CALC_DB_SIZE_CONN_TYPE	8+1
+#define IPV6CALC_DB_SIZE_CONN_TYPE	20+1
 #define IPV6CALC_DB_SIZE_ORG_NAME	128+1
 
 typedef struct
@@ -307,6 +307,7 @@ extern void libipv6calc_db_wrapper_features(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_capabilities(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_features_help(void);
 extern void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
+extern void libipv6calc_db_wrapper_print_features_verbose(const int level_verbose);
 extern int  libipv6calc_db_wrapper_has_features(uint32_t features);
 extern int  libipv6calc_db_wrapper_options(const int opt, const char *optarg, const struct option longopts[]);
 extern const char *libipv6calc_db_wrapper_get_data_source_name_by_number(const unsigned int number);

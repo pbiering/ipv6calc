@@ -97,7 +97,7 @@ extern int         libipv6calc_db_wrapper_GeoIP2_has_features(const uint32_t fea
 
 #include "libipv6calc_db_wrapper_MMDB.h"
 
-extern char geip2_db_dir[NI_MAXHOST];
+extern char geoip2_db_dir[NI_MAXHOST];
 
 extern int          libipv6calc_db_wrapper_GeoIP2_db_avail(const unsigned int type);
 extern int          libipv6calc_db_wrapper_GeoIP2_open_type(const unsigned int type_flag);
@@ -105,8 +105,8 @@ extern int          libipv6calc_db_wrapper_GeoIP2_open_type(const unsigned int t
 extern const char  *libipv6calc_db_wrapper_GeoIP2_dbdescription(const unsigned int type);
 extern char        *libipv6calc_db_wrapper_GeoIP2_database_info(const unsigned int type);
 
-extern int geip2_db_comm_to_free_switch_min_delta_months;
-extern int geip2_db_only_type;
+extern int geoip2_db_comm_to_free_switch_min_delta_months;
+extern int geoip2_db_only_type;
 
 extern int          libipv6calc_db_wrapper_GeoIP2_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libipv6calc_db_wrapper_geolocation_record *recordp);
 

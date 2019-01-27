@@ -234,7 +234,7 @@ int libipv6calc_db_wrapper_MMDB_open(const char *const filename, uint32_t flags,
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "Called: %s filename=%s", wrapper_mmdb_info, filename);
 
 #ifdef SUPPORT_MMDB_DYN
-	int r = 0;
+	int r = MMDB_FILE_OPEN_ERROR;
 	const char *dl_symbol = "MMDB_open";
 	char *error;
 

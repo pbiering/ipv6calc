@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 #include "ipv6calc.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
@@ -506,7 +507,7 @@ static void print_geolocation(libipv6calc_db_wrapper_geolocation_record *record,
 	PRINT_RECORD_STRING(record->connection_type     , "NETSPEED"            , "Network Speed")
 
 	// timezone_name set -> timezone_offset considered as valid, but check
-	if (abs(record->timezone_offset) < 24) {
+	if (fabsf(record->timezone_offset) < 24) {
 		// convert timezone offset into human readable value
 		snprintf(tempstring, sizeof(tempstring), "%+03d:%02d", (int) record->timezone_offset, (int) ((record->timezone_offset - (int) record->timezone_offset) * 60));
 		if ( machinereadable != 0 ) {

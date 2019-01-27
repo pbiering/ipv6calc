@@ -4199,6 +4199,9 @@ if test "${enable_compiler_warning_to_error+set}" = set; then :
 
 else
 
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: **** analyze compiler options: CC=$CC" >&5
+$as_echo "**** analyze compiler options: CC=$CC" >&6; }
+
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** check for CFLAGS: -Werror=format-security" >&5
 $as_echo "*** check for CFLAGS: -Werror=format-security" >&6; }
 		CFLAGS_SAVE="$CFLAGS"
@@ -4324,10 +4327,10 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 		CFLAGS="$CFLAGS_SAVE"
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** check for CFLAGS: -Werror=format-truncation" >&5
-$as_echo "*** check for CFLAGS: -Werror=format-truncation" >&6; }
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** check for CFLAGS: -Werror=format-truncation=0" >&5
+$as_echo "*** check for CFLAGS: -Werror=format-truncation=0" >&6; }
 		CFLAGS_SAVE="$CFLAGS"
-		CFLAGS="$CFLAGS -Werror=format-truncation"
+		CFLAGS="$CFLAGS -Werror -Werror=format-truncation=0"
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 int a=1;
@@ -4342,15 +4345,15 @@ main ()
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** CFLAGS supported: -Werror=format-truncation" >&5
-$as_echo "*** CFLAGS supported: -Werror=format-truncation" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** CFLAGS supported: -Werror=format-truncation=0" >&5
+$as_echo "*** CFLAGS supported: -Werror=format-truncation=0" >&6; }
 				# disable errors related to format-truncation
 				CFLAGS_EXTRA="$CFLAGS_EXTRA -Werror=format-truncation=0"
 
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: *** missing CFLAGS support: -Werror=format-truncation" >&5
-$as_echo "$as_me: WARNING: *** missing CFLAGS support: -Werror=format-truncation" >&2;}
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: *** missing CFLAGS support: -Werror=format-truncation=0" >&5
+$as_echo "$as_me: WARNING: *** missing CFLAGS support: -Werror=format-truncation=0" >&2;}
 
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
@@ -5363,6 +5366,26 @@ cat >>confdefs.h <<_ACEOF
 _ACEOF
 
 
+		ac_fn_c_check_decl "$LINENO" "IP2Location_api_version_string" "ac_cv_have_decl_IP2Location_api_version_string" "$ac_includes_default"
+if test "x$ac_cv_have_decl_IP2Location_api_version_string" = xyes; then :
+  ac_have_decl=1
+else
+  ac_have_decl=0
+fi
+
+cat >>confdefs.h <<_ACEOF
+#define HAVE_DECL_IP2LOCATION_API_VERSION_STRING $ac_have_decl
+_ACEOF
+if test $ac_have_decl = 1; then :
+  IP2LOCATION_HAS_API_STRING="yes"
+fi
+
+		ac_fn_c_check_decl "$LINENO" "IP2Location_lib_version_string" "ac_cv_have_decl_IP2Location_lib_version_string" "$ac_includes_default"
+if test "x$ac_cv_have_decl_IP2Location_lib_version_string" = xyes; then :
+  IP2LOCATION_HAS_LIB_STRING="yes"
+fi
+
+
 		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -5545,11 +5568,16 @@ eval ac_res=\$$as_ac_Lib
 $as_echo "$ac_res" >&6; }
 if eval test \"x\$"$as_ac_Lib"\" = x"yes"; then :
 
+			if test "$IP2LOCATION_HAS_LIB_STRING" != "yes"; then
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: IP2Location library header file misses IP2Location_lib_version_string while library contains" >&5
+$as_echo "IP2Location library header file misses IP2Location_lib_version_string while library contains" >&6; }
+			else
 
 $as_echo "#define SUPPORT_IP2LOCATION_LIB_VERSION_STRING 1" >>confdefs.h
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2Location library supports LIB version string" >&5
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2Location library supports LIB version string" >&5
 $as_echo "*** IP2Location library supports LIB version string" >&6; }
+			fi
 
 fi
 
