@@ -35,6 +35,8 @@
 #  HTTP_IPV6CALCWEB_INFO_SERVER         : 0 (default), 1 (show information about server)
 #  HTTP_IPV6CALCWEB_DEBUG               : 0 (default)
 #  HTTP_IPV6CALCWEB_BIN_IPV6CALC        : path to ipv6calc binary (optional)
+#
+#  HTTP_IPV6CALCWEB_DB_MMDB_LIB         : MaxMindDB library name (optional in dyn-load support)
 #  HTTP_IPV6CALCWEB_DB_IP2LOCATION_DIR  : IP2Location database directory (optional)
 #  HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB  : IP2Location library name (optional in dyn-load support)
 #  HTTP_IPV6CALCWEB_DB_GEOIP_DIR        : GeoIP database directory (optional)
@@ -744,7 +746,18 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX'}) {
 };
 
 
-## Location of database files
+## Location of database and library files
+
+# MaxMindDB
+my $database_mmdb_lib;
+if (defined $ENV{'HTTP_IPV6CALCWEB_DB_MMDB_LIB'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_DB_MMDB_LIB'} =~ /^([[:alnum:]\.\-\/]+)$/) {
+		$database_mmdb_lib = $1;
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_DB_MMDB_LIB found, but not containing proper chars");
+		&print_error();
+	};
+};
 
 # IP2Location
 my $options_ipv6calc_ip2location = "";
@@ -774,16 +787,19 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB'}) {
 
 # GeoIP/GeoIP2
 my $options_ipv6calc_geoip = "";
+my $options_ipv6calc_geoip2 = "";
 my %db_info_geoip;
 my %db_info_geoip2;
 my $info_geoip_string;
 my $info_geoip2_string;
 my $database_geoip_dir;
+my $database_geoip2_dir;
 my $database_geoip_lib;
 
 if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_DIR'}) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_DIR'} =~ /^([[:alnum:]\.\-\/]+)$/) {
 		$database_geoip_dir = $1;
+		$database_geoip2_dir = $1;
 	} else {
 		logging("ERROR", "HTTP_IPV6CALCWEB_DB_GEOIP_DIR found, but not containing proper chars");
 		&print_error();
@@ -803,15 +819,18 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_LIB'}) {
 
 # db-ip.com
 my $options_ipv6calc_dbip = "";
+my $options_ipv6calc_dbip2 = "";
 my %db_info_dbip;
 my %db_info_dbip2;
 my $database_dbip_dir;
+my $database_dbip2_dir;
 my $info_dbip_string;
 my $info_dbip2_string;
 
 if (defined $ENV{'HTTP_IPV6CALCWEB_DB_DBIP_DIR'}) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DB_DBIP_DIR'} =~ /^([[:alnum:]\.\-\/]+)$/) {
 		$database_dbip_dir = $1;
+		$database_dbip2_dir = $1;
 	} else {
 		logging("ERROR", "HTTP_IPV6CALCWEB_DB_DBIP_DIR found, but not containing proper chars");
 		&print_error();
@@ -845,6 +864,12 @@ my $info_builtin_string;
 
 
 ## external database ipv6calc option handling
+# MaxMindDB
+if (defined $database_mmdb_lib) {
+	$options_ipv6calc_geoip2 .= " --db-mmdb-lib $database_mmdb_lib";
+	$options_ipv6calc_dbip2 .= " --db-mmdb-lib $database_mmdb_lib";
+};
+
 # IP2Location
 if (defined $database_ip2location_dir) {
 	$options_ipv6calc_ip2location .= " --db-ip2location-dir $database_ip2location_dir";
@@ -863,9 +888,19 @@ if (defined $database_geoip_lib) {
 	$options_ipv6calc_geoip .= " --db-geoip-lib $database_geoip_lib";
 };
 
+# GeoIP2
+if (defined $database_geoip2_dir) {
+	$options_ipv6calc_geoip2 .= " --db-geoip2-dir $database_geoip2_dir";
+};
+
 # DBIP
 if (defined $database_dbip_dir) {
 	$options_ipv6calc_dbip .= " --db-dbip-dir $database_dbip_dir";
+};
+
+# DBIP2
+if (defined $database_dbip2_dir) {
+	$options_ipv6calc_dbip2 .= " --db-dbip2-dir $database_dbip2_dir";
 };
 
 # External DB
@@ -2120,7 +2155,7 @@ if ($result != 0) {
 
 # add options depending of available capabilities (fallback: features)
 if (length($ipv6calc_capabilities) > 0) {
- 	if (defined $ipv6calc_capability_hash{"GeoIP"} && ($ipv6calc_capability_hash{"GeoIP"} == 1)) {
+	if (defined $ipv6calc_capability_hash{"GeoIP"} && ($ipv6calc_capability_hash{"GeoIP"} == 1)) {
 		if ($disable_db_GeoIP == 1) {
 			$options_ipv6calc .= " --db-geoip-disable";
 		} else {
@@ -2129,7 +2164,16 @@ if (length($ipv6calc_capabilities) > 0) {
 			push @key_db_tokens, "GEOIP";
 		};
 	};
- 	if (defined $ipv6calc_capability_hash{"IP2Location"} && ($ipv6calc_capability_hash{"IP2Location"} == 1)) {
+	if (defined $ipv6calc_capability_hash{"GeoIP2"} && ($ipv6calc_capability_hash{"GeoIP2"} == 1)) {
+		if ($disable_db_GeoIP2 == 1) {
+			$options_ipv6calc .= " --db-geoip2-disable";
+		} else {
+			$options_ipv6calc .= $options_ipv6calc_geoip2;
+			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
+			push @key_db_tokens, "GEOIP2";
+		};
+	};
+	if (defined $ipv6calc_capability_hash{"IP2Location"} && ($ipv6calc_capability_hash{"IP2Location"} == 1)) {
 		if ($disable_db_IP2Location == 1) {
 			$options_ipv6calc .= " --db-ip2location-disable";
 		} else {
@@ -2138,7 +2182,7 @@ if (length($ipv6calc_capabilities) > 0) {
 			push @key_db_tokens, "IP2LOCATION";
 		};
 	};
- 	if (defined $ipv6calc_capability_hash{"DBIP"} && ($ipv6calc_capability_hash{"DBIP"} == 1)) {
+	if (defined $ipv6calc_capability_hash{"DBIP"} && ($ipv6calc_capability_hash{"DBIP"} == 1)) {
 		if ($disable_db_DBIP == 1) {
 			$options_ipv6calc .= " --db-dbip-disable";
 		} else {
@@ -2147,7 +2191,16 @@ if (length($ipv6calc_capabilities) > 0) {
 			push @key_db_tokens, "DBIP";
 		};
 	};
- 	if (defined $ipv6calc_capability_hash{"External"} && ($ipv6calc_capability_hash{"External"} == 1)) {
+	if (defined $ipv6calc_capability_hash{"DBIP2"} && ($ipv6calc_capability_hash{"DBIP2"} == 1)) {
+		if ($disable_db_DBIP2 == 1) {
+			$options_ipv6calc .= " --db-dbip2-disable";
+		} else {
+			$options_ipv6calc .= $options_ipv6calc_dbip2;
+			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
+			push @key_db_tokens, "DBIP2";
+		};
+	};
+	if (defined $ipv6calc_capability_hash{"External"} && ($ipv6calc_capability_hash{"External"} == 1)) {
 		if ($disable_db_External == 1) {
 			$options_ipv6calc .= " --db-external-disable";
 		} else {

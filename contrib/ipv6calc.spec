@@ -20,7 +20,7 @@
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
-Version:	2.0.0alpha1
+Version:	2.0.0alpha2
 Release:	28%{?gittag}%{?dist}
 Group:		Applications/Text
 URL:		http://www.deepspace6.net/projects/%{name}.html
@@ -343,7 +343,7 @@ rm -rf %{buildroot}
 
 
 %changelog
-* Sat Jan 26 2018 Peter Bieringer <pb@bieringer.de>
+* Sat Jan 26 2019 Peter Bieringer <pb@bieringer.de>
 - add option for libmaxminddb supporting GeoIP v2 and db-ip.com v2
 
 * Sun Sep 23 2018 Peter Bieringer <pb@bieringer.de>

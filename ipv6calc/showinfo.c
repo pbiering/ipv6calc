@@ -528,7 +528,7 @@ static void print_geolocation(libipv6calc_db_wrapper_geolocation_record *record,
 static void print_ip2location(char *addrstring, const uint32_t formatoptions, const char *additionalstring, int version) {
 	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
 
-#define TEST_IP2LOCATION_AVAILABLE(v)	((v != NULL) && (strstr(v, "unavailable") == NULL) && (strstr(v, "demo database") == NULL) && (strstr(v, "This is demo") == NULL) && (strstr(v, "INVALID") == NULL) && (strstr(v, "-") == NULL))
+#define TEST_IP2LOCATION_AVAILABLE(v)	((v != NULL) && (strstr(v, "unavailable") == NULL) && (strstr(v, "demo database") == NULL) && (strstr(v, "demo BIN database") == NULL) && (strstr(v, "This is demo") == NULL) && (strstr(v, "INVALID") == NULL) && (strstr(v, "-") == NULL))
 
 #define HUMAN_READABLE_IP2LOCATION(name, value) \
 				if (strlen(additionalstring) > 0) { \
@@ -1315,7 +1315,9 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	};
 
 
-	if (((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) == 0)) {
+	if (((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) == 0)
+		&& ((ipv4addrp->typeinfo & IPV4_ADDR_GLOBAL) == IPV4_ADDR_GLOBAL)
+	) {
 #ifdef SUPPORT_IP2LOCATION
 		/* IP2Location information */
 		print_ip2location(tempipv4string, formatoptions, embeddedipv4string, 4);
