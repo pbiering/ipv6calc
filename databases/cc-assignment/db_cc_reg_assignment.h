@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : db_cc_reg_assignment.h
  * Version       : $Id$
- * Generated     : Wed Oct  3 07:45:13 2018
+ * Generated     : Mon Jan 28 08:22:12 2019
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
  *  Additional header file for databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  */
 
-static const char *db_cc_registry_status = "AFRINIC/20181002 APNIC/20181002 ARIN/20181002 LACNIC/20181002 RIPENCC/20181002";
+static const char *db_cc_registry_status = "AFRINIC/20190128 APNIC/20190126 ARIN/20190128 LACNIC/20190125 RIPENCC/20190127";
 
 static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "", REGISTRY_ARIN     },
@@ -21,6 +21,8 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "AL", REGISTRY_RIPENCC  },
 	{ "AM", REGISTRY_RIPENCC  },
 	{ "AO", REGISTRY_AFRINIC  },
+	{ "AP", REGISTRY_APNIC    },
+	{ "AQ", REGISTRY_ARIN     },
 	{ "AR", REGISTRY_LACNIC   },
 	{ "AS", REGISTRY_APNIC    },
 	{ "AT", REGISTRY_RIPENCC  },
@@ -904,7 +906,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  647  XO
 	{ REGISTRY_UNKNOWN  }, //  648  YO
 	{ REGISTRY_UNKNOWN  }, //  649  ZO
-	{ REGISTRY_UNKNOWN  }, //  650  AP
+	{ REGISTRY_APNIC    }, //  650  AP
 	{ REGISTRY_UNKNOWN  }, //  651  BP
 	{ REGISTRY_UNKNOWN  }, //  652  CP
 	{ REGISTRY_UNKNOWN  }, //  653  DP
@@ -930,7 +932,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  673  XP
 	{ REGISTRY_UNKNOWN  }, //  674  YP
 	{ REGISTRY_UNKNOWN  }, //  675  ZP
-	{ REGISTRY_UNKNOWN  }, //  676  AQ
+	{ REGISTRY_ARIN     }, //  676  AQ
 	{ REGISTRY_LACNIC   }, //  677  BQ
 	{ REGISTRY_UNKNOWN  }, //  678  CQ
 	{ REGISTRY_UNKNOWN  }, //  679  DQ

@@ -1,5 +1,8 @@
 Major Changes/Enhancements of ipv6calc
 
+1.xx -> 2.xx
+============
+- add support for MaxMindDB based database files like GeoIP version 2 or db-ip.com
 
 0.94 -> 0.95
 ============

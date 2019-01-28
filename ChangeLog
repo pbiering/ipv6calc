@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20190128/PB
+	many files: add MaxMindDB support, internal improvements and fixes
+	databases: update
+
 20190120/PB
 	ipv6calc/ipv6calc.c: Merge pull request #10 from packetloop/segment-fault-when-pipe
 

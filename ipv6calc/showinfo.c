@@ -528,7 +528,7 @@ static void print_geolocation(libipv6calc_db_wrapper_geolocation_record *record,
 static void print_ip2location(char *addrstring, const uint32_t formatoptions, const char *additionalstring, int version) {
 	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
 
-#define TEST_IP2LOCATION_AVAILABLE(v)	((v != NULL) && (strstr(v, "unavailable") == NULL) && (strstr(v, "demo database") == NULL) && (strstr(v, "demo BIN database") == NULL) && (strstr(v, "This is demo") == NULL) && (strstr(v, "INVALID") == NULL) && (strstr(v, "-") == NULL))
+#define TEST_IP2LOCATION_AVAILABLE(v)	((v != NULL) && (strstr(v, "unavailable") == NULL) && (strstr(v, "demo") == NULL) && (strstr(v, "INVALID") == NULL) && (strstr(v, "-") == NULL))
 
 #define HUMAN_READABLE_IP2LOCATION(name, value) \
 				if (strlen(additionalstring) > 0) { \
