@@ -9,6 +9,8 @@
 # Simple Perl web interface and security wrapper
 #  It's too dangerous to call the binary 'ipv6calc' directly...
 #
+# Note: potentially SELinux will block access to databases and block also maximum process check
+#
 # Todo: more functions by query string...
 
 ### Uses environment variables:
@@ -49,7 +51,14 @@
 #  HTTP_IPV6CALCWEB_ANTIDOS_LOAD1       : System load 1 limit to trigger DoS protection (default below)
 #  HTTP_IPV6CALCWEB_ANTIDOS_LOAD5       : System load 5 limit to trigger DoS protection (default below)
 #  HTTP_IPV6CALCWEB_ANTIDOS_LOAD15      : System load 15 limit to trigger DoS protection (default below)
-#  HTTP_IPV6CALCWEB_ANTIDOS_MAXPROC     : Max CGI processes to trigger DoS protection (default below)
+#  HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX     : Max CGI processes to trigger DoS protection (default below)
+#
+#  HTTP_IPV6CALCWEB_DB_GEOIP		: 1 (default), 0 (disable)
+#  HTTP_IPV6CALCWEB_DB_GEOIP2		: 1 (default), 0 (disable)
+#  HTTP_IPV6CALCWEB_DB_DBIP		: 1 (default), 0 (disable)
+#  HTTP_IPV6CALCWEB_DB_DBIP2		: 1 (default), 0 (disable)
+#  HTTP_IPV6CALCWEB_DB_IP2LOCATION	: 1 (default), 0 (disable)
+#  HTTP_IPV6CALCWEB_DB_EXTERNAL		: 1 (default), 0 (disable)
 
 ## special output format "textkeyvalue"
 #  INFO__OUTPUTVERSION="1"			: current output format version
@@ -102,13 +111,14 @@ my $error_flag = 0;
 my $mode_db_entries_in_subcolumns = 0;
 my $db_columns = 0;
 
-# currently only for internal use (TODO: make switchable by environment variables)
-my $disable_db_GeoIP = 0;
-my $disable_db_GeoIP2 = 0;
-my $disable_db_IP2Location = 0;
-my $disable_db_DBIP = 0;
-my $disable_db_DBIP2 = 0;
-my $disable_db_External = 0;
+# database enabled toggles and defaults
+my %db_enabled;
+$db_enabled{'GEOIP'} = 1;
+$db_enabled{'GEOIP2'} = 1;
+$db_enabled{'IP2LOCATION'} = 1;
+$db_enabled{'DBIP'} = 1;
+$db_enabled{'DBIP2'} = 1;
+$db_enabled{'EXTERNAL'} = 1;
 
 ## Debug value
 my $debug = 0;
@@ -307,9 +317,9 @@ my @format_tt = ( "EUI48", "EUI64", "IPV6", "IPV4", "SLA", "IID", "IPV4_6TO4", "
 my %text_geodb = (
 	'IP2LOCATION' => 'IP2Location',
 	'GEOIP'       => 'GeoIP',
-	'GEOIP2'      => 'GeoIP v2',
+	'GEOIP2'      => 'GeoIP(MaxMindDB)',
 	'DBIP'        => 'db-ip.com',
-	'DBIP2'       => 'db-ip.com v2'
+	'DBIP2'       => 'db-ip.com(MaxMindDB)'
 );
 
 my %text = (
@@ -746,6 +756,21 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX'}) {
 };
 
 
+## Database toggles
+for my $db (sort keys %db_enabled) {
+	my $db_env = "HTTP_IPV6CALCWEB_DB_" . $db;
+	if (defined $ENV{$db_env}) {
+		if ($ENV{$db_env} =~ /^(0|no|disabled|off)$/) {
+			$db_enabled{$db} = 0;
+		} elsif ($ENV{$db_env} =~ /^(1|yes|enabled|on)$/) {
+			$db_enabled{$db} = 1;
+		} else {
+			logging("ERROR", "$db_env found, but not containing proper value (0|1)");
+			&print_error();
+		};
+	};
+};
+
 ## Location of database and library files
 
 # MaxMindDB
@@ -955,7 +980,7 @@ my $input;
 my $input_default;
 my $token;
 
-my @key_db_tokens;
+my %key_db_tokens;
 
 # default values
 my $ipv6calc_version = "";
@@ -1180,9 +1205,10 @@ sub print_infohash ($$$;$) {
 		if ($mode_db_entries_in_subcolumns == 1) {
 			# suppress db based keys, store them in hash for later printout
 			$key =~ /^([A-Z0-9]+)_(.*)$/o;
-			if (grep(/^$1/i, @key_db_tokens)) {
+			if (grep(/^$1/i, keys %key_db_tokens)) {
 				my $dbprovider = $1;
 				my $subkey = $2;
+				$key_db_tokens{$dbprovider}++;
 
 				# check for embedded information
 				$subkey =~ /^([^[]+)(\[[^]]*\])?$/;
@@ -1451,7 +1477,7 @@ sub print_infohash ($$$;$) {
 		($r, $g, $b) = (240, 240, 255);
 		&print_tagoutput ( "      <tr>\n" );
 		&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 224);\" align=\"center\" colspan=\"2\"><font size=\"-1\"><i>Information from databases</i>$entry</font></td>\n" );
-		for my $key (sort @key_db_tokens) {
+		for my $key (sort keys %key_db_tokens) {
 			&print_tagoutput ("        <td style=\"background-color: rgb(" . $r . "," . $g . "," . $b . ");\"><font size=\"-1\"><b>");
 			if (defined $urls{$key}) {
 				# add URL
@@ -1492,7 +1518,7 @@ sub print_infohash ($$$;$) {
 
 			# print value
 			($r, $g, $b) = (240, 240, 255);
-			for my $db (sort @key_db_tokens) {
+			for my $db (sort keys %key_db_tokens) {
 				&print_tagoutput ( "        <td style=\"background-color: rgb(" . $r . "," . $g . "," . $b . ");\"><font size=\"-1\">" );
 				my $key_result = $db . "_" . $key;
 				if (defined $$phash{$key_result}) {
@@ -1734,11 +1760,6 @@ if ( defined $ENV{'QUERY_STRING'} ) {
 
 ## check system health
 if (($debug & 0x4000) == 0) {
-	# retrieve amount of processes
-	my $t = Proc::ProcessTable->new;
-	my @proc_list = grep { $_->{cmndline} =~ /perl .*( |\/)$proc_pattern/ } @{$t->table};
-	my $proc_count = scalar(@proc_list);
-
 	# retrieve amount of CPU cores
 	my $cpu_cores = 1;
 	if (-r "/proc/cpuinfo") {
@@ -1778,7 +1799,7 @@ if (($debug & 0x4000) == 0) {
 			};
 
 			if ($overload > 0) {
-				logging("WARN", "System overloaded by load$overload load=$load1/$load5/$load15 load_norm=$load1_norm/$load5_norm/$load15_norm limit=$load1_max/$load5_max/$load15_max cpus=$cpu_cores procs=$proc_count");
+				logging("WARN", "System overloaded by load$overload load=$load1/$load5/$load15 load_norm=$load1_norm/$load5_norm/$load15_norm limit=$load1_max/$load5_max/$load15_max cpus=$cpu_cores");
 				$error = "System overloaded, please retry in $overload minutes - sorry";
 				$error_flag = 1; # no automatic redirect
 				&print_error();
@@ -1786,13 +1807,57 @@ if (($debug & 0x4000) == 0) {
 		};
 	};
 
-	# check amount of processes
-	my $proc_count_norm = $proc_count / $cpu_cores;
-	if ($proc_count_norm > $proc_max) {
-		logging("WARN", "System has too much 'perl $proc_pattern' running in parallel: procs=$proc_count procs_norm=$proc_count_norm limit=$proc_max");
-		$error = "System overloaded, please retry in 1 minute - sorry";
-		$error_flag = 1; # no automatic redirect
-		&print_error();
+	my $proc_check_possible = 1;
+	my $dh;
+	if (! opendir($dh, "/dev/mqueue")) {
+		$proc_check_possible = 0;
+	} else {
+		closedir $dh;
+	};
+	if (! opendir($dh, "/dev/shm")) {
+		$proc_check_possible = 0;
+	} else {
+		closedir $dh;
+	};
+	if (! opendir($dh, "/proc")) {
+		$proc_check_possible = 0;
+	} else {
+		closedir $dh;
+	};
+
+	my $proc_count = 0;
+	my @proc_list;
+	if ($proc_check_possible == 1) {
+		## check whether Proc::ProcessTable would be supported at all
+		# in case of SELinux is enabled this will fail with
+		# Can't opendir(/dev/mqueue): Permission denied
+		#  at /usr/lib64/perl5/vendor_perl/Proc/ProcessTable.pm line ...
+		# Can't opendir(/dev/shm): Permission denied
+		#  at /usr/lib64/perl5/vendor_perl/Proc/ProcessTable.pm line ...
+		# /proc unavailable at /usr/lib64/perl5/vendor_perl/Proc/ProcessTable.pm line ...
+		#  at least found on Fedora 30
+		# retrieve amount of processes
+		my $t = Proc::ProcessTable->new;
+		@proc_list = grep { $_->{cmndline} =~ /perl .*( |\/)$proc_pattern/ } @{$t->table};
+	} else {
+		# use fallback via "ps"
+		if (-x "/usr/bin/ps") {
+			my @proc_table = `ps -eo args`;
+			@proc_list = grep /perl .*( |\/)$proc_pattern/, @proc_table;
+		};
+	};
+
+	$proc_count = scalar(@proc_list);
+
+	if ($proc_count > 0) {
+		# check amount of processes
+		my $proc_count_norm = $proc_count / $cpu_cores;
+		if ($proc_count_norm > $proc_max) {
+			logging("WARN", "System has too much 'perl $proc_pattern' running in parallel: procs=$proc_count procs_norm=$proc_count_norm limit=$proc_max");
+			$error = "System overloaded, please retry in 1 minute - sorry";
+			$error_flag = 1; # no automatic redirect
+			&print_error();
+		};
 	};
 };
 
@@ -2156,78 +2221,78 @@ if ($result != 0) {
 # add options depending of available capabilities (fallback: features)
 if (length($ipv6calc_capabilities) > 0) {
 	if (defined $ipv6calc_capability_hash{"GeoIP"} && ($ipv6calc_capability_hash{"GeoIP"} == 1)) {
-		if ($disable_db_GeoIP == 1) {
+		if ($db_enabled{"GEOIP"} == 1) {
 			$options_ipv6calc .= " --db-geoip-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_geoip;
 			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
-			push @key_db_tokens, "GEOIP";
+			$key_db_tokens{"GEOIP"} = 0;
 		};
 	};
 	if (defined $ipv6calc_capability_hash{"GeoIP2"} && ($ipv6calc_capability_hash{"GeoIP2"} == 1)) {
-		if ($disable_db_GeoIP2 == 1) {
+		if ($db_enabled{"GEOIP2"} == 1) {
 			$options_ipv6calc .= " --db-geoip2-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_geoip2;
 			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
-			push @key_db_tokens, "GEOIP2";
+			$key_db_tokens{"GEOIP2"} = 0;
 		};
 	};
 	if (defined $ipv6calc_capability_hash{"IP2Location"} && ($ipv6calc_capability_hash{"IP2Location"} == 1)) {
-		if ($disable_db_IP2Location == 1) {
+		if ($db_enabled{"IP2LOCATION"} == 1) {
 			$options_ipv6calc .= " --db-ip2location-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_ip2location;
 			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
-			push @key_db_tokens, "IP2LOCATION";
+			$key_db_tokens{"IP2LOCATION"} = 0;
 		};
 	};
 	if (defined $ipv6calc_capability_hash{"DBIP"} && ($ipv6calc_capability_hash{"DBIP"} == 1)) {
-		if ($disable_db_DBIP == 1) {
+		if ($db_enabled{"DBIP"} == 1) {
 			$options_ipv6calc .= " --db-dbip-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_dbip;
 			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
-			push @key_db_tokens, "DBIP";
+			$key_db_tokens{"DBIP"} = 0;
 		};
 	};
 	if (defined $ipv6calc_capability_hash{"DBIP2"} && ($ipv6calc_capability_hash{"DBIP2"} == 1)) {
-		if ($disable_db_DBIP2 == 1) {
+		if ($db_enabled{"DBIP2"} == 1) {
 			$options_ipv6calc .= " --db-dbip2-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_dbip2;
 			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
-			push @key_db_tokens, "DBIP2";
+			$key_db_tokens{"DBIP2"} = 0;
 		};
 	};
 	if (defined $ipv6calc_capability_hash{"External"} && ($ipv6calc_capability_hash{"External"} == 1)) {
-		if ($disable_db_External == 1) {
+		if ($db_enabled{"EXTERNAL"} == 1) {
 			$options_ipv6calc .= " --db-external-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_external;
 			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
-			push @key_db_tokens, "EXTERNAL";
+			$key_db_tokens{"EXTERNAL"} = 0;
 		};
 	};
 } else {
 	# fallback for ipv6calc < 0.97.4
 	if (defined $ipv6calc_feature_hash{"GeoIP"} && ($ipv6calc_feature_hash{"GeoIP"} == "1")) {
-		if ($disable_db_GeoIP == 1) {
+		if ($db_enabled{"GEOIP"} == 1) {
 			$options_ipv6calc .= " --db-geoip-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_geoip;
 			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
-			push @key_db_tokens, "GEOIP";
+			$key_db_tokens{"GEOIP"} = 0;
 		};
 	};
 
 	if (defined $ipv6calc_feature_hash{"IP2Location"} && ($ipv6calc_feature_hash{"IP2Location"} == "1")) {
-		if ($disable_db_IP2Location == 1) {
+		if ($db_enabled{"IP2LOCATION"} == 1) {
 			$options_ipv6calc .= " --db-ip2location-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_ip2location;
 			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
-			push @key_db_tokens, "IP2LOCATION";
+			$key_db_tokens{"IP2LOCATION"} = 0;
 		};
 	};
 };
