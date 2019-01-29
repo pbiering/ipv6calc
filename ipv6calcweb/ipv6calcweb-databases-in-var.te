@@ -1,0 +1,16 @@
+# Activate SELinux extension for ipv6calcweb.cgi
+#
+# checkmodule -M -m -o ipv6calcweb-database-in-var.mod ipv6calcweb-database-in-var.te
+# semodule_package -o ipv6calcweb-database-in-var.pp -m ipv6calcweb-database-in-var.mod
+# semodule -i ipv6calcweb-database-in-var.pp
+
+module ipv6calcweb-database-in-var 1.0;
+
+require {
+	type var_t;
+	type httpd_sys_script_t;
+	class file { getattr read open };
+}
+
+#============= httpd_sys_script_t ==============
+allow httpd_sys_script_t var_t:file { getattr read open };

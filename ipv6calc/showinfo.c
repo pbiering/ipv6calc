@@ -719,7 +719,7 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 			};
 
 			if (record->elevation != 0) {
-				snprintf(tempstring, sizeof(tempstring), "%f", record->elevation);
+				snprintf(tempstring, sizeof(tempstring), "%.0f", record->elevation);
 				if ( machinereadable != 0 ) {
 					printout2("IP2LOCATION_ELEVATION", additionalstring, tempstring, formatoptions);
 				} else {

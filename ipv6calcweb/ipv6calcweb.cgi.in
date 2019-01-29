@@ -37,6 +37,7 @@
 #  HTTP_IPV6CALCWEB_INFO_SERVER         : 0 (default), 1 (show information about server)
 #  HTTP_IPV6CALCWEB_DEBUG               : 0 (default)
 #  HTTP_IPV6CALCWEB_BIN_IPV6CALC        : path to ipv6calc binary (optional)
+#  HTTP_IPV6CALCWEB_DEBUG_IPV6CALC      : debug value for ipv6calc binary (optional)
 #
 #  HTTP_IPV6CALCWEB_DB_MMDB_LIB         : MaxMindDB library name (optional in dyn-load support)
 #  HTTP_IPV6CALCWEB_DB_IP2LOCATION_DIR  : IP2Location database directory (optional)
@@ -69,7 +70,6 @@ use strict;
 use URI::Escape;
 use HTML::Entities;
 use POSIX;
-use Proc::ProcessTable;
 use warnings;
 
 ## Defines
@@ -131,7 +131,7 @@ my $debug = 0;
 # debug | 0x0002: print result of find_file to stderr
 # debug | 0x0004: print result of find_dir to stderr
 # debug | 0x0008: print environment handling to stderr
-# debug | 0x0010: print raw ipv6calc output
+# debug | 0x0010: print raw ipv6calc output to stderr
 # debug | 0x0020: db info parser
 # debug | 0x0040: print form input/token to stderr
 # debug | 0x0080: print environment to stderr
@@ -172,11 +172,16 @@ if ($mode eq "form" || $mode eq "mixed") {
 	use Digest::MD5;
 };
 
-# List of deefault location of files (first existing one would be choosen)
+# List of default location of files (first existing one would be choosen)
 my @list_bin_ipv6calc = (
 	"../ipv6calc/ipv6calc",
 	"/usr/bin/ipv6calc",
 	"/bin/ipv6calc",
+);
+
+my @list_bin_ps = (
+	"/usr/bin/ps",
+	"/bin/ps",
 );
 
 my @list_database_ip2location_dir = (
@@ -715,8 +720,20 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_BIN_IPV6CALC'}) {
 	$bin_ipv6calc = find_file(@list_bin_ipv6calc);
 };
 
+my $bin_ps;
+$bin_ps = find_file(@list_bin_ps);
+
 my $options_ipv6calc = "-m -i -q";
 
+## add optional ipv6calc options
+if (defined $ENV{'HTTP_IPV6CALCWEB_DEBUG_IPV6CALC'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_DEBUG_IPV6CALC'} =~ /^(0x[[:digit:]abcdef]+|-?[[:digit:]]+)$/oi) {
+		$options_ipv6calc .= " -d " . $1;
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_DEBUG_IPV6CALC found, but not containing proper value: " . $ENV{'HTTP_IPV6CALCWEB_DEBUG_IPV6CALC'});
+		&print_error();
+	};
+};
 
 ## simple DoS protection
 if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD1'}) {
@@ -1383,7 +1400,7 @@ sub print_infohash ($$$;$) {
 				};
 			} else {
 				if ($debug & 0x08) {
-					print STDERR "whoisserver is not defined\n";
+					logging("NOTICE", "whoisserver is not defined");
 				};
 				$flag_whoisurl = 0;
 			};
@@ -1807,47 +1824,16 @@ if (($debug & 0x4000) == 0) {
 		};
 	};
 
-	my $proc_check_possible = 1;
-	my $dh;
-	if (! opendir($dh, "/dev/mqueue")) {
-		$proc_check_possible = 0;
-	} else {
-		closedir $dh;
-	};
-	if (! opendir($dh, "/dev/shm")) {
-		$proc_check_possible = 0;
-	} else {
-		closedir $dh;
-	};
-	if (! opendir($dh, "/proc")) {
-		$proc_check_possible = 0;
-	} else {
-		closedir $dh;
-	};
-
 	my $proc_count = 0;
 	my @proc_list;
-	if ($proc_check_possible == 1) {
-		## check whether Proc::ProcessTable would be supported at all
-		# in case of SELinux is enabled this will fail with
-		# Can't opendir(/dev/mqueue): Permission denied
-		#  at /usr/lib64/perl5/vendor_perl/Proc/ProcessTable.pm line ...
-		# Can't opendir(/dev/shm): Permission denied
-		#  at /usr/lib64/perl5/vendor_perl/Proc/ProcessTable.pm line ...
-		# /proc unavailable at /usr/lib64/perl5/vendor_perl/Proc/ProcessTable.pm line ...
-		#  at least found on Fedora 30
-		# retrieve amount of processes
-		my $t = Proc::ProcessTable->new;
-		@proc_list = grep { $_->{cmndline} =~ /perl .*( |\/)$proc_pattern/ } @{$t->table};
-	} else {
-		# use fallback via "ps"
-		if (-x "/usr/bin/ps") {
-			my @proc_table = `ps -eo args`;
-			@proc_list = grep /perl .*( |\/)$proc_pattern/, @proc_table;
-		};
-	};
 
-	$proc_count = scalar(@proc_list);
+	if ((defined $bin_ps) && (-x $bin_ps)) {
+		my @proc_table = `$bin_ps -eo args`;
+		@proc_list = grep /perl .*( |\/)$proc_pattern/, @proc_table;
+
+		$proc_count = scalar(@proc_list);
+		logging("DEBUG", "System has 'perl $proc_pattern' running in parallel: procs=$proc_count") if ($debug & 0x0100);
+	};
 
 	if ($proc_count > 0) {
 		# check amount of processes
@@ -2082,17 +2068,18 @@ sub ipv6calc_exec($$$$) {
 
 	logging("DEBUG", "execute: $bin_ipv6calc $options_ipv6calc $addr") if ($debug & 0x1);
 
-	my @info = `$bin_ipv6calc $options_ipv6calc $addr 2>&1`;
+	my @info = `$bin_ipv6calc $options_ipv6calc $addr`;
 
 	if ( $? != 0 ) {
 		logging("ERROR", "ipv6calc did not proper return ($addr)");
 		return 1;
 	};
 
-	print $debug_tag . "\n" if ($debug & 0x10);
+	logging("DEBUG", $debug_tag) if ($debug & 0x10);
 
 	for my $line (@info) {
-		print $line if ($debug & 0x10);
+		chomp($line);
+		logging("DEBUG", $line) if ($debug & 0x10);
 
 		my ( $key, $content ) = split /=/, $line, 2;
 		if ( (! defined $key) || (! defined $content) ) {
@@ -2208,10 +2195,10 @@ if (scalar(@proxy_addresses) != scalar(@proxy_infos)) {
 $result = ipv6calc_exec("127.0.0.1", "***feature***", \%infoh_localhost4, \@sort_localhost4);
 if ($debug & 0x8000) {
 	foreach my $key (sort keys %ipv6calc_feature_hash) {
-		printf "DEBUG : feature    " . $key . "=" . $ipv6calc_feature_hash{$key} . "\n";
+		logging("DEBUG", "feature    " . $key . "=" . $ipv6calc_feature_hash{$key});
 	};
 	foreach my $key (sort keys %ipv6calc_capability_hash) {
-		printf "DEBUG : capability " . $key . "=" . $ipv6calc_capability_hash{$key} . "\n";
+		logging("DEBUG", "capability " . $key . "=" . $ipv6calc_capability_hash{$key});
 	};
 };
 if ($result != 0) {
@@ -2221,7 +2208,7 @@ if ($result != 0) {
 # add options depending of available capabilities (fallback: features)
 if (length($ipv6calc_capabilities) > 0) {
 	if (defined $ipv6calc_capability_hash{"GeoIP"} && ($ipv6calc_capability_hash{"GeoIP"} == 1)) {
-		if ($db_enabled{"GEOIP"} == 1) {
+		if ($db_enabled{"GEOIP"} == 0) {
 			$options_ipv6calc .= " --db-geoip-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_geoip;
@@ -2230,7 +2217,7 @@ if (length($ipv6calc_capabilities) > 0) {
 		};
 	};
 	if (defined $ipv6calc_capability_hash{"GeoIP2"} && ($ipv6calc_capability_hash{"GeoIP2"} == 1)) {
-		if ($db_enabled{"GEOIP2"} == 1) {
+		if ($db_enabled{"GEOIP2"} == 0) {
 			$options_ipv6calc .= " --db-geoip2-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_geoip2;
@@ -2239,7 +2226,7 @@ if (length($ipv6calc_capabilities) > 0) {
 		};
 	};
 	if (defined $ipv6calc_capability_hash{"IP2Location"} && ($ipv6calc_capability_hash{"IP2Location"} == 1)) {
-		if ($db_enabled{"IP2LOCATION"} == 1) {
+		if ($db_enabled{"IP2LOCATION"} == 0) {
 			$options_ipv6calc .= " --db-ip2location-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_ip2location;
@@ -2248,7 +2235,7 @@ if (length($ipv6calc_capabilities) > 0) {
 		};
 	};
 	if (defined $ipv6calc_capability_hash{"DBIP"} && ($ipv6calc_capability_hash{"DBIP"} == 1)) {
-		if ($db_enabled{"DBIP"} == 1) {
+		if ($db_enabled{"DBIP"} == 0) {
 			$options_ipv6calc .= " --db-dbip-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_dbip;
@@ -2257,7 +2244,7 @@ if (length($ipv6calc_capabilities) > 0) {
 		};
 	};
 	if (defined $ipv6calc_capability_hash{"DBIP2"} && ($ipv6calc_capability_hash{"DBIP2"} == 1)) {
-		if ($db_enabled{"DBIP2"} == 1) {
+		if ($db_enabled{"DBIP2"} == 0) {
 			$options_ipv6calc .= " --db-dbip2-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_dbip2;
@@ -2266,7 +2253,7 @@ if (length($ipv6calc_capabilities) > 0) {
 		};
 	};
 	if (defined $ipv6calc_capability_hash{"External"} && ($ipv6calc_capability_hash{"External"} == 1)) {
-		if ($db_enabled{"EXTERNAL"} == 1) {
+		if ($db_enabled{"EXTERNAL"} == 0) {
 			$options_ipv6calc .= " --db-external-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_external;
@@ -2277,7 +2264,7 @@ if (length($ipv6calc_capabilities) > 0) {
 } else {
 	# fallback for ipv6calc < 0.97.4
 	if (defined $ipv6calc_feature_hash{"GeoIP"} && ($ipv6calc_feature_hash{"GeoIP"} == "1")) {
-		if ($db_enabled{"GEOIP"} == 1) {
+		if ($db_enabled{"GEOIP"} == 0) {
 			$options_ipv6calc .= " --db-geoip-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_geoip;
@@ -2287,7 +2274,7 @@ if (length($ipv6calc_capabilities) > 0) {
 	};
 
 	if (defined $ipv6calc_feature_hash{"IP2Location"} && ($ipv6calc_feature_hash{"IP2Location"} == "1")) {
-		if ($db_enabled{"IP2LOCATION"} == 1) {
+		if ($db_enabled{"IP2LOCATION"} == 0) {
 			$options_ipv6calc .= " --db-ip2location-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_ip2location;
