@@ -457,50 +457,72 @@ int libipv6calc_db_wrapper_cleanup(void) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
 #ifdef SUPPORT_GEOIP
-	// Call GeoIP wrapper
-	r = libipv6calc_db_wrapper_GeoIP_wrapper_cleanup();
-	if (r != 0) {
-		result = 1;
+	if (wrapper_GeoIP_disable == 0) {
+		// Call GeoIP wrapper
+		r = libipv6calc_db_wrapper_GeoIP_wrapper_cleanup();
+		if (r != 0) {
+			result = 1;
+		};
 	};
 #endif
 
 #ifdef SUPPORT_GEOIP2
-	// Call GeoIP2 wrapper
-	r = libipv6calc_db_wrapper_GeoIP2_wrapper_cleanup();
-	if (r != 0) {
-		result = 1;
+	if (wrapper_GeoIP2_disable == 0) {
+		// Call GeoIP2 wrapper
+		r = libipv6calc_db_wrapper_GeoIP2_wrapper_cleanup();
+		if (r != 0) {
+			result = 1;
+		};
 	};
 #endif
 
 #ifdef SUPPORT_IP2LOCATION
-	// Call IP2Location wrapper
-	r = libipv6calc_db_wrapper_IP2Location_wrapper_cleanup();
-	if (r != 0) {
-		result = 1;
+	if (wrapper_IP2Location_disable == 0) {
+		// Call IP2Location wrapper
+		r = libipv6calc_db_wrapper_IP2Location_wrapper_cleanup();
+		if (r != 0) {
+			result = 1;
+		};
 	};
 #endif
 
 #ifdef SUPPORT_DBIP
-	// Call DBIP wrapper
-	r = libipv6calc_db_wrapper_DBIP_wrapper_cleanup();
-	if (r != 0) {
-		result = 1;
+	if (wrapper_DBIP_disable == 0) {
+		// Call DBIP wrapper
+		r = libipv6calc_db_wrapper_DBIP_wrapper_cleanup();
+		if (r != 0) {
+			result = 1;
+		};
 	};
 #endif
 
 #ifdef SUPPORT_DBIP2
-	// Call DBIP2 wrapper
-	r = libipv6calc_db_wrapper_DBIP2_wrapper_cleanup();
-	if (r != 0) {
-		result = 1;
+	if (wrapper_DBIP2_disable == 0) {
+		// Call DBIP2 wrapper
+		r = libipv6calc_db_wrapper_DBIP2_wrapper_cleanup();
+		if (r != 0) {
+			result = 1;
+		};
+	};
+#endif
+
+#ifdef SUPPORT_EXTERNAL
+	if (wrapper_External_disable == 0) {
+		// Call DBIP2 wrapper
+		r = libipv6calc_db_wrapper_External_wrapper_cleanup();
+		if (r != 0) {
+			result = 1;
+		};
 	};
 #endif
 
 #ifdef SUPPORT_BUILTIN
-	// Call BuiltIn wrapper
-	r = libipv6calc_db_wrapper_BuiltIn_wrapper_cleanup();
-	if (r != 0) {
-		result = 1;
+	if (wrapper_BuiltIn_disable == 0) {
+		// Call BuiltIn wrapper
+		r = libipv6calc_db_wrapper_BuiltIn_wrapper_cleanup();
+		if (r != 0) {
+			result = 1;
+		};
 	};
 #endif
 
