@@ -33,8 +33,10 @@
 
 #include "../databases/lib/libipv6calc_db_wrapper.h"
 #include "../databases/lib/libipv6calc_db_wrapper_GeoIP.h"
+#include "../databases/lib/libipv6calc_db_wrapper_GeoIP2.h"
 #include "../databases/lib/libipv6calc_db_wrapper_IP2Location.h"
 #include "../databases/lib/libipv6calc_db_wrapper_DBIP.h"
+#include "../databases/lib/libipv6calc_db_wrapper_DBIP2.h"
 #include "../databases/lib/libipv6calc_db_wrapper_External.h"
 #include "../databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
@@ -882,7 +884,7 @@ static void lineparser(void) {
 	if (opt_printdirection == 0) {
 		/* print used database only in row mode */
 
-#if defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP || defined SUPPORT_DBIP2 || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN
 		char *string;
 #endif
 
@@ -900,8 +902,22 @@ static void lineparser(void) {
 		};
 #endif
 
+#ifdef SUPPORT_GEOIP2
+		string = libipv6calc_db_wrapper_GeoIP2_wrapper_db_info_used();
+		if ((string != NULL) && (strlen(string) > 0)) {
+			printf("*3*DB-Used: %s\n", string);
+		};
+#endif
+
 #ifdef SUPPORT_DBIP
 		string = libipv6calc_db_wrapper_DBIP_wrapper_db_info_used();
+		if ((string != NULL) && (strlen(string) > 0)) {
+			printf("*3*DB-Used: %s\n", string);
+		};
+#endif
+
+#ifdef SUPPORT_DBIP2
+		string = libipv6calc_db_wrapper_DBIP2_wrapper_db_info_used();
 		if ((string != NULL) && (strlen(string) > 0)) {
 			printf("*3*DB-Used: %s\n", string);
 		};
