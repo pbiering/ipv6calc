@@ -1,6 +1,6 @@
 ipv6calc will do some format changes and calculations for you
 
-(P) & (C) 2001-2018 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
                    published under GNU GPLv2
 
 For suggestions and bug report please contact author
@@ -36,8 +36,10 @@ Included internal databases:
 
 Supported external databases:
 * GeoIP
+* GeoIP(MaxMindDB) - internally handled as GEOIP2
 * IP2Location
 * DB-IP.com
+* DB-IP.com(MaxMindDB) - internally handled as DBIP2
 
 
 Where to get:
@@ -60,9 +62,9 @@ Where to get:
     Core 6: developing platform, so use given hint above to create a RPM
     since 7: package is included
    Red Hat Enterprise Linux / CentOS:
-    EL3: build from source package should work but not tested, OS is EOSL
-    EL4: build from source package tested, working, OS is EOSL
-    EL5: package is included, OS is EOSL
+    EL3: build from source package potentially still work but not tested anymore, OS is EOSL
+    EL4: build from source package potentially still work but not tested anymore, OS is EOSL
+    EL5: build from source package potentially still work but not tested anymore, OS is EOSL
     EL6: package is available via EPEL
     EL7: package is available via EPEL
    Mandrake (EOS):
