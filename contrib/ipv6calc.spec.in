@@ -256,14 +256,21 @@ done
 # db directory
 install -d %{buildroot}%{external_db}
 
+# selinux
+install -d %{buildroot}%{_datadir}/%{name}/selinux
+
 
 # ipv6calcweb
 install -d %{buildroot}%{_sysconfdir}/httpd/conf.d
 install -d %{buildroot}%{_localstatedir}/www/cgi-bin
 
-install ipv6calcweb/ipv6calcweb.conf %{buildroot}%{_sysconfdir}/httpd/conf.d
-install -m 755 ipv6calcweb/ipv6calcweb.cgi  %{buildroot}%{_localstatedir}/www/cgi-bin
+install ipv6calcweb/ipv6calcweb.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/
+install -m 755 ipv6calcweb/ipv6calcweb.cgi  %{buildroot}%{_localstatedir}/www/cgi-bin/
+install -m 644 ipv6calcweb/ipv6calcweb-databases-in-var.te  %{buildroot}%{_datadir}/%{name}/selinux/
 
+# mod_ipv6calc
+install -d %{buildroot}%{_datadir}/%{name}/examples/mod_ipv6calc
+install -m 755 mod_ipv6calc/ipv6calc.cgi  %{buildroot}%{_datadir}/%{name}/examples/mod_ipv6calc
 
 %clean
 rm -rf %{buildroot}
@@ -293,6 +300,9 @@ rm -rf %{buildroot}
 
 # tools
 %attr(755,-,-) %{_datadir}/%{name}/tools/*
+
+# selinux
+%attr(644,-,-) %{_datadir}/%{name}/selinux/*
 
 # shared library
 %{?enable_shared:%attr(755,-,-) %{_libdir}/libipv6calc*}
@@ -332,6 +342,8 @@ rm -rf %{buildroot}
 
 %config(noreplace) %{_httpd_confdir}/ipv6calc.conf
 %attr(755,-,-) %{_httpd_moddir}/mod_ipv6calc.so
+
+%attr(755,-,-) %{_datadir}/%{name}/examples/mod_ipv6calc/ipv6calc.cgi
 
 
 %post
