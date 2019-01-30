@@ -102,83 +102,43 @@ void showinfo_availabletypes(void) {
 
 	fprintf(stderr, " AS_NUM=...                    : Autonomous System Number\n");
 	fprintf(stderr, " AS_NUM_REGISTRY=...           : Registry of AS number\n");
-#ifdef SUPPORT_IP2LOCATION
-	fprintf(stderr, " IP2LOCATION_COUNTRY_SHORT=...     : Country code of IP address\n");
-	fprintf(stderr, " IP2LOCATION_COUNTRY_LONG=...      : Country of IP address\n");
-	fprintf(stderr, " IP2LOCATION_REGION=...            : Region of IP address\n");
-	fprintf(stderr, " IP2LOCATION_CITY=...              : City of IP address\n");
-	fprintf(stderr, " IP2LOCATION_ISP=...               : ISP of IP address\n");
-	fprintf(stderr, " IP2LOCATION_LATITUDE=...          : Latitude of IP address\n");
-	fprintf(stderr, " IP2LOCATION_LONGITUDE=...         : Longitude of IP address\n");
-	fprintf(stderr, " IP2LOCATION_DOMAIN=...            : Domain of IP address\n");
-	fprintf(stderr, " IP2LOCATION_ZIPCODE=...           : ZIP code of IP address\n");
-	fprintf(stderr, " IP2LOCATION_AREACODE=...          : Area code of IP address\n");
-	fprintf(stderr, " IP2LOCATION_TIMEZONE=...          : Time zone of IP address\n");
-	fprintf(stderr, " IP2LOCATION_NETSPEED=...          : Net speed of IP address\n");
-	fprintf(stderr, " IP2LOCATION_IDDCODE=...           : Internation Direct Dialing of IP address\n");
-	fprintf(stderr, " IP2LOCATION_WEATHERSTATIONCODE=...: Weather Station Code of IP address\n");
-	fprintf(stderr, " IP2LOCATION_WEATHERSTATIONNAME=...: Weather Station Name of IP address\n");
-	fprintf(stderr, " IP2LOCATION_USAGETYPE=...         : Usage type of IP address\n");
-	fprintf(stderr, " IP2LOCATION_ELEVATION=...         : Elevation of city of IP address\n");
-	fprintf(stderr, " IP2LOCATION_MOBILEBRAND=...       : Mobile Brand of IP address\n");
-	fprintf(stderr, " IP2LOCATION_MNC=...               : Mobile Network Code of IP address\n");
-	fprintf(stderr, " IP2LOCATION_MCC=...               : Mobile Country Code of IP address\n");
-	fprintf(stderr, " IP2LOCATION_DATABASE_INFO=...     : Information about the used databases\n");
-#endif
-#ifdef SUPPORT_GEOIP
-	fprintf(stderr, " GEOIP_COUNTRY_SHORT=...       : Country code of IP address\n");
-	fprintf(stderr, " GEOIP_COUNTRY_LONG=...        : Country of IP address\n");
-	fprintf(stderr, " GEOIP_REGION=...              : Region of IP address\n");
-	fprintf(stderr, " GEOIP_CITY=...                : City of IP address\n");
-	fprintf(stderr, " GEOIP_ZIPCODE=...             : Zip code of IP address\n");
-	fprintf(stderr, " GEOIP_LATITUDE=...            : Latitude of IP address\n");
-	fprintf(stderr, " GEOIP_LONGITUDE=...           : Longitude of IP address\n");
-	fprintf(stderr, " GEOIP_AREACODE=...            : Area code of IP address\n");
-	fprintf(stderr, " GEOIP_DMACODE=...             : DMA/Metro code of IP address\n");
-	fprintf(stderr, " GEOIP_AS_TEXT=...             : Autonomous System information\n");
-	fprintf(stderr, " GEOIP_DATABASE_INFO=...       : Information about the used databases\n");
-#endif
-#if defined SUPPORT_GEOIP2 || defined DBIP2
-	fprintf(stderr, "Prefix: GEOIP2, DBIP2 (output can vary depending on database type (Free/Commercial)\n");
-	fprintf(stderr, " <prefix>_CONTINENT_SHORT=...     : Continent Code of IP address\n");
-	fprintf(stderr, " <prefix>_CONTINENT_LONG=...      : Continent Name of IP address\n");
-	fprintf(stderr, " <prefix>_COUNTRY_LONG=...        : Country of IP address\n");
-	fprintf(stderr, " <prefix>_COUNTRY_SHORT=...       : Country Code of IP address\n");
-	fprintf(stderr, " <prefix>_COUNTRY_LONG=...        : Country of IP address\n");
-	fprintf(stderr, " <prefix>_REGION=...              : Region of IP address\n");
-	fprintf(stderr, " <prefix>_DISTRICT=...            : District of IP address\n");
-	fprintf(stderr, " <prefix>_CITY=...                : City of IP address\n");
-	fprintf(stderr, " <prefix>_ZIPCODE=...             : ZIP code of IP address\n");
-	fprintf(stderr, " <prefix>_GEONAME_ID=...          : GeoName ID of IP address\n");
-	fprintf(stderr, " <prefix>_GEONAME_ID_COUNTRY=...  : GeoName ID of Country of IP address\n");
-	fprintf(stderr, " <prefix>_GEONAME_ID_CONTINENT=...: GeoName ID of Continent of IP address\n");
-	fprintf(stderr, " <prefix>_LATITUDE=...            : Latitude of IP address\n");
-	fprintf(stderr, " <prefix>_LONGITUDE=...           : Longitude of IP address\n");
-	fprintf(stderr, " <prefix>_RADIUS=...              : Radius around Latitude/Longitude of IP address\n");
-	fprintf(stderr, " <prefix>_TIMEZONE_NAME=...       : Time Zone Name of IP address\n");
-	fprintf(stderr, " <prefix>_WEATHERSTATIONCODE=...  : Weather Station Code of IP address\n");
-	fprintf(stderr, " <prefix>_ISP=...                 : ISP of IP address\n");
-	fprintf(stderr, " <prefix>_AS_NUM=...              : Autonomous System Number of IP address\n");
-	fprintf(stderr, " <prefix>_AS_ORGNAME=...          : Autonomous System Organization Name of IP address\n");
-	fprintf(stderr, " <prefix>_AS_TEXT=...             : Autonomous System Number and Organization Name of IP address\n");
-	fprintf(stderr, " <prefix>_NETSPEED=...            : Net Speed of IP address\n");
-	fprintf(stderr, " <prefix>_DATABASE_INFO=...       : Information about the used databases\n");
-#endif
-#ifdef SUPPORT_DBIP
-	fprintf(stderr, " DBIP_COUNTRY_SHORT=.. .       : Country code of IP address\n");
-	fprintf(stderr, " DBIP_CITY=...                 : City of IP address\n");
-	fprintf(stderr, " DBIP_REGION=...               : Region of IP address\n");
-	fprintf(stderr, " DBIP_DISTRICT=...             : District of IP address\n");
-	fprintf(stderr, " DBIP_ZIPCODE=...              : ZIP code of IP address\n");
-	fprintf(stderr, " DBIP_GEONAME_ID=...           : GeoName ID of IP address\n");
-	fprintf(stderr, " DBIP_LATITUDE=...             : Latitude of IP address\n");
-	fprintf(stderr, " DBIP_LONGITUDE=...            : Longitude of IP address\n");
-	fprintf(stderr, " DBIP_TIMEZONE=...             : Time zone of IP address\n");
-	fprintf(stderr, " DBIP_TIMEZONE_NAME=...        : Time zone name of IP address\n");
-	fprintf(stderr, " DBIP_NETSPEED=...             : Net speed of IP address\n");
-	fprintf(stderr, " DBIP_ISP=...                  : ISP of IP address\n");
-	fprintf(stderr, " DBIP_ORGNAME=...              : Organization name of IP address\n");
-	fprintf(stderr, " DBIP_DATABASE_INFO=.. .       : Information about the used databases\n");
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP || defined DBIP2
+	fprintf(stderr, "Prefix: IP2LOCATION, GEOIP, GEOIP2, DBIP, DBIP2\n");
+	fprintf(stderr, " (output can vary depending on database provider and type Free/Commercial)\n");
+	fprintf(stderr, " <prefix>_CONTINENT_SHORT=...  : Continent Code of IP address\n");
+	fprintf(stderr, " <prefix>_CONTINENT_LONG=...   : Continent Name of IP address\n");
+	fprintf(stderr, " <prefix>_COUNTRY_LONG=...     : Country of IP address\n");
+	fprintf(stderr, " <prefix>_COUNTRY_SHORT=...    : Country Code of IP address\n");
+	fprintf(stderr, " <prefix>_COUNTRY_LONG=...     : Country of IP address\n");
+	fprintf(stderr, " <prefix>_REGION=...           : Region of IP address\n");
+	fprintf(stderr, " <prefix>_DISTRICT=...         : District of IP address\n");
+	fprintf(stderr, " <prefix>_CITY=...             : City of IP address\n");
+	fprintf(stderr, " <prefix>_ZIPCODE=...          : ZIP code of IP address\n");
+	fprintf(stderr, " <prefix>_GEONAME_ID=...       : GeoName ID of IP address\n");
+	fprintf(stderr, " <prefix>_GEONAME_ID_COUNTRY=..: GeoName ID of Country of IP address\n");
+	fprintf(stderr, " <prefix>_GEONAME_ID_CONTINENT=: GeoName ID of Continent of IP address\n");
+	fprintf(stderr, " <prefix>_AREACODE=...         : Area code of IP address\n");
+	fprintf(stderr, " <prefix>_DMACODE=...          : DMA/Metro code of IP address\n");
+	fprintf(stderr, " <prefix>_IDDCODE=...          : Internation Direct Dialing of IP address\n");
+	fprintf(stderr, " <prefix>_LATITUDE=...         : Latitude of IP address\n");
+	fprintf(stderr, " <prefix>_LONGITUDE=...        : Longitude of IP address\n");
+	fprintf(stderr, " <prefix>_RADIUS=...           : Radius around Latitude/Longitude of IP address\n");
+	fprintf(stderr, " <prefix>_ELEVATION=...        : Elevation of location of IP address\n");
+	fprintf(stderr, " <prefix>_TIMEZONE_NAME=...    : Time Zone Name of IP address\n");
+	fprintf(stderr, " <prefix>_TIMEZONE=...         : Time zone of IP address\n");
+	fprintf(stderr, " <prefix>_WEATHERSTATIONCODE=. : Weather Station Code of IP address\n");
+	fprintf(stderr, " <prefix>_WEATHERSTATIONNAME=. : Weather Station Name of IP address\n");
+	fprintf(stderr, " <prefix>_ISP=...              : ISP of IP address\n");
+	fprintf(stderr, " <prefix>_DOMAIN=...           : Domain of IP address\n");
+	fprintf(stderr, " <prefix>_AS_NUM=...           : Autonomous System Number of IP address\n");
+	fprintf(stderr, " <prefix>_AS_ORGNAME=...       : Autonomous System Organization Name of IP address\n");
+	fprintf(stderr, " <prefix>_AS_TEXT=...          : Autonomous System Number and Organization Name of IP address\n");
+	fprintf(stderr, " <prefix>_NETSPEED=...         : Net Speed of IP address\n");
+	fprintf(stderr, " <prefix>_USAGETYPE=...        : Usage type of IP address\n");
+	fprintf(stderr, " <prefix>_MOBILEBRAND=...      : Mobile Brand of IP address\n");
+	fprintf(stderr, " <prefix>_MNC=...              : Mobile Network Code of IP address\n");
+	fprintf(stderr, " <prefix>_MCC=...              : Mobile Country Code of IP address\n");
+	fprintf(stderr, " <prefix>_DATABASE_INFO=...    : Information about the used databases\n");
 #endif
 #ifdef SUPPORT_EXTERNAL
 	fprintf(stderr, " EXTERNAL_COUNTRY_SHORT=.. .   : Country code of IP address\n");
