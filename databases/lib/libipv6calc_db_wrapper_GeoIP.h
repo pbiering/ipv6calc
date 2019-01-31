@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP.h
  * Version    : $Id$
- * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_GeoIP.c
@@ -37,6 +37,7 @@ extern int          libipv6calc_db_wrapper_GeoIP_wrapper_cleanup(void);
 extern const char  *libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(const char *addr, const int proto);
 extern const char  *libipv6calc_db_wrapper_GeoIP_wrapper_country_name_by_addr(const char *addr, const int proto);
 extern char        *libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(const char *addr, const int proto);
+extern uint32_t     libipv6calc_db_wrapper_GeoIP_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp);
 extern void         libipv6calc_db_wrapper_GeoIP_wrapper_info(char* string, const size_t size);
 extern void         libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
 extern char        *libipv6calc_db_wrapper_GeoIP_wrapper_db_info_used(void);

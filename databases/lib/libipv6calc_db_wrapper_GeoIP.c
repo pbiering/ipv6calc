@@ -2066,6 +2066,74 @@ END_libipv6calc_db_wrapper:
 };
 
 
+/* ASN */
+uint32_t libipv6calc_db_wrapper_GeoIP_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp) {
+	uint32_t as_num32 = ASNUM_AS_UNKNOWN; // default
+
+	int valid = 1;
+	unsigned int s;
+	char *as_text = NULL;;
+	char as_number_string[11];  // max: 4294967295 = 10 digits + \0
+
+	char tempstring[IPV6CALC_ADDR_STRING_MAX] = "";
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%04x%04x%04x%04x proto=%d", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], ipaddrp->proto);
+
+	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
+		if ((ipaddrp->typeinfo1 & IPV4_ADDR_RESERVED) != 0) {
+			// reserved IPv4 address has no AS
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv4 address: %08x is reserved (skip AS lookup)", (unsigned int) ipaddrp->addr[0]);
+			goto END_libipv6calc_db_wrapper;
+		};
+	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
+		if ((ipaddrp->typeinfo1 & IPV6_ADDR_RESERVED) != 0) {
+			// reserved IPv4 address has no AS
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv6 address prefix (0-63): %08x%08x is reserved (skip AS lookup)", (unsigned int) ipaddrp->addr[0], (unsigned int) ipaddrp->addr[1]);
+			goto END_libipv6calc_db_wrapper;
+		};
+		ERRORPRINT_WA("unsupported proto=%d (FIX CODE)", ipaddrp->proto);
+		exit(EXIT_FAILURE);
+	};
+
+	// conversion sto string needed for GeoIP
+	if (strlen(tempstring) == 0) {
+		libipaddr_ipaddrstruct_to_string(ipaddrp, tempstring, sizeof(tempstring), 0);
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Call now GeoIP with addr=%s proto=%d)", tempstring, ipaddrp->proto);
+
+	as_text = libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(tempstring, ipaddrp->proto);
+
+	if ((as_text != NULL) && (strncmp(as_text, "AS", 2) == 0) && (strlen(as_text) > 2)) {
+		// catch AS....
+		for (s = 0; s < (strlen(as_text) - 2); s++) {
+			if ((as_text[s+2] == ' ') || (as_text[s+2] == '\0')) {
+				break;
+			} else if (isdigit(as_text[s+2])) {
+				continue;
+			} else {
+				// something wrong
+				valid = 0;
+				break;
+			};
+		};
+
+		if (s > 10) {
+			// too many digits
+			valid = 0;
+		};
+
+		if (valid == 1) {
+			snprintf(as_number_string, 11, "%s", as_text + 2);
+			as_num32 = atol(as_number_string);
+		};
+	};
+
+END_libipv6calc_db_wrapper:
+	return(as_num32);
+};
+
+
 /* asnum */
 char *libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(const char *addr, const int proto) {
 	GeoIP *gi;

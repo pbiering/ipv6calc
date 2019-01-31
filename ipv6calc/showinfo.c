@@ -806,7 +806,7 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 
 		if (gir->continent_code != NULL) {
 			if ( machinereadable != 0 ) {
-				printout2("GEOIP_CONTINENTCODE", additionalstring, gir->continent_code, formatoptions);
+				printout2("GEOIP_CONTINENT_SHORT", additionalstring, gir->continent_code, formatoptions);
 			} else {
 				HUMAN_READABLE_GEOIP("Continent Code", gir->continent_code)
 			};
