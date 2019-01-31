@@ -1000,9 +1000,9 @@ static void print_dbip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatopti
 
 		if (TEST_DBIP_AVAILABLE(record.organization_name)) {
 			if ( machinereadable != 0 ) {
-				printout2("DBIP_ORGNAME", additionalstring, record.organization_name, formatoptions);
+				printout2("DBIP_AS_ORGNAME", additionalstring, record.organization_name, formatoptions);
 			} else {
-				HUMAN_READABLE_DBIP("Organization Name", record.organization_name)
+				HUMAN_READABLE_DBIP("Autonomous System Organization Name", record.organization_name)
 			};
 		};
 	};
