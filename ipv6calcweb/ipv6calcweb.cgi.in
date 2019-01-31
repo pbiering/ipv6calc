@@ -37,6 +37,7 @@
 #  HTTP_IPV6CALCWEB_INFO_SERVER         : 0 (default), 1 (show information about server)
 #  HTTP_IPV6CALCWEB_DEBUG               : 0 (default)
 #  HTTP_IPV6CALCWEB_BIN_IPV6CALC        : path to ipv6calc binary (optional)
+#  HTTP_IPV6CALCWEB_LIB_IPV6CALC        : path to ipv6calc library (optional)
 #  HTTP_IPV6CALCWEB_DEBUG_IPV6CALC      : debug value for ipv6calc binary (optional)
 #
 #  HTTP_IPV6CALCWEB_DB_MMDB_LIB         : MaxMindDB library name (optional in dyn-load support)
@@ -718,6 +719,17 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_BIN_IPV6CALC'}) {
 	};
 } else {
 	$bin_ipv6calc = find_file(@list_bin_ipv6calc);
+};
+
+# Location of library
+my $lib_ipv6calc;
+if (defined $ENV{'HTTP_IPV6CALCWEB_LIB_IPV6CALC'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_LIB_IPV6CALC'} =~ /^([[:alnum:]\.\-\/]+)$/o) {
+		$lib_ipv6calc = $1;
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_LIB_IPV6CALC found, but not containing proper chars");
+		&print_error();
+	};
 };
 
 my $bin_ps;
@@ -2036,19 +2048,28 @@ if (! defined $bin_ipv6calc) {
 	logging("ERROR", "'bin_ipv6calc' not defined");
 	&print_error();
 };
-if ( length($bin_ipv6calc) == 0) {
+if (length($bin_ipv6calc) == 0) {
 	logging("ERROR", "'bin_ipv6calc' is empty");
 	&print_error();
 };
-if ( ! -f $bin_ipv6calc ) {
+if (! -f $bin_ipv6calc ) {
 	logging("ERROR", "$bin_ipv6calc (bin_ipv6calc) does not exist as file");
 	&print_error();
 };
-if ( ! -x $bin_ipv6calc ) {
+if (! -x $bin_ipv6calc ) {
 	logging("ERROR", "$bin_ipv6calc (bin_ipv6calc) not executable");
 	&print_error();
 };
 
+## Check for library path exists
+if (defined $lib_ipv6calc) {
+	if (! -d $lib_ipv6calc) {
+		logging("ERROR", "$lib_ipv6calc (lib_ipv6calc) not a directory");
+	};
+	if (! -r $lib_ipv6calc) {
+		logging("ERROR", "$lib_ipv6calc (lib_ipv6calc) not readable");
+	};
+};
 
 ## Get and fill information
 sub ipv6calc_exec($$$$) {
@@ -2060,15 +2081,21 @@ sub ipv6calc_exec($$$$) {
 	my $debug_tag = $_[1];
 	my $p_hash = $_[2];
 	my $p_array = $_[3];
+
+	my $option_preload = "";
 	
 	if (! defined $addr) {
 		logging("ERROR", "no input for ipv6calc (strange)");
 		return 1;
 	};
 
-	logging("DEBUG", "execute: $bin_ipv6calc $options_ipv6calc $addr") if ($debug & 0x1);
+	if (defined $lib_ipv6calc) {
+		$option_preload = "LD_LIBRARY_PATH=$lib_ipv6calc";
+	};
 
-	my @info = `$bin_ipv6calc $options_ipv6calc $addr`;
+	logging("DEBUG", "execute: $option_preload $bin_ipv6calc $options_ipv6calc $addr") if ($debug & 0x1);
+
+	my @info = `$option_preload $bin_ipv6calc $options_ipv6calc $addr`;
 
 	if ( $? != 0 ) {
 		logging("ERROR", "ipv6calc did not proper return ($addr)");
