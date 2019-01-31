@@ -1192,6 +1192,15 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			result = 0;
 			break;
 
+		case DB_geoip2_dir:
+#ifdef SUPPORT_GEOIP2
+			result = snprintf(geoip2_db_dir, sizeof(geoip2_db_dir), "%s", optarg);
+#else
+			NONQUIETPRINT_WA("Support for GeoIP(MaxMindDB) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+
 		case DB_dbip_dir:
 #ifdef SUPPORT_DBIP
 			result = snprintf(dbip_db_dir, sizeof(dbip_db_dir), "%s", optarg);
