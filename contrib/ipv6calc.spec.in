@@ -313,7 +313,9 @@ rm -rf %{buildroot}
 # examples
 %attr(755,-,-) %{_datadir}/%{name}/examples/*/*.pl
 %attr(755,-,-) %{_datadir}/%{name}/examples/*/*.sh
-%{_datadir}/%{name}/examples/*
+%{_datadir}/%{name}/examples/ipv6loganon/
+%{_datadir}/%{name}/examples/ipv6logconv/
+%{_datadir}/%{name}/examples/ipv6logstats/
 
 
 %files ipv6calcweb

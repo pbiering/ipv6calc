@@ -5,7 +5,7 @@ dnl Copyright: 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(ipv6calc, 2.0.0beta1, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
+AC_INIT(ipv6calc, 2.0.0beta3, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
 
 COPYRIGHT_YEAR=2019
 
@@ -280,7 +280,7 @@ dbip_db_default="/usr/share/DBIP"
 external_db_default="/usr/share/ipv6calc/db"
 
 geoip_dyn_lib_default="libGeoIP.so.1"
-mmdb_dyn_lib_default="libmaxminddb.so"
+mmdb_dyn_lib_default="libmaxminddb.so.0"
 ip2location_dyn_lib_default="libIP2Location.so"
 
 

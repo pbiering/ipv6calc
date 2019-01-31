@@ -20,7 +20,7 @@
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
-Version:	2.0.0beta1
+Version:	2.0.0beta3
 Release:	28%{?gittag}%{?dist}
 Group:		Applications/Text
 URL:		http://www.deepspace6.net/projects/%{name}.html
@@ -313,7 +313,9 @@ rm -rf %{buildroot}
 # examples
 %attr(755,-,-) %{_datadir}/%{name}/examples/*/*.pl
 %attr(755,-,-) %{_datadir}/%{name}/examples/*/*.sh
-%{_datadir}/%{name}/examples/*
+%{_datadir}/%{name}/examples/ipv6loganon/
+%{_datadir}/%{name}/examples/ipv6logconv/
+%{_datadir}/%{name}/examples/ipv6logstats/
 
 
 %files ipv6calcweb
