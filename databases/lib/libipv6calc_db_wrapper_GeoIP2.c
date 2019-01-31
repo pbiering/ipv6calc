@@ -308,13 +308,13 @@ int libipv6calc_db_wrapper_GeoIP2_wrapper_cleanup(void) {
 void libipv6calc_db_wrapper_GeoIP2_wrapper_info(char* string, const size_t size) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "Called");
 
-	snprintf(string, size, "GeoIP2 available databases: Country4=%d Country6=%d City4=%d City6=%d ASN4=%d ASN6=%d", \
+	snprintf(string, size, "GeoIP2 available databases: Country4=%d Country6=%d ASN4=%d ASN6=%d City4=%d City6=%d", \
 		(wrapper_features & IPV6CALC_DB_IPV4_TO_CC) ? 1 : 0, \
 		(wrapper_features & IPV6CALC_DB_IPV6_TO_CC) ? 1 : 0, \
-		(wrapper_features & IPV6CALC_DB_IPV4_TO_CITY) ? 1 : 0, \
-		(wrapper_features & IPV6CALC_DB_IPV6_TO_CITY) ? 1 : 0, \
 		(wrapper_features & IPV6CALC_DB_IPV4_TO_AS) ? 1 : 0, \
-		(wrapper_features & IPV6CALC_DB_IPV6_TO_AS) ? 1 : 0 \
+		(wrapper_features & IPV6CALC_DB_IPV6_TO_AS) ? 1 : 0, \
+		(wrapper_features & IPV6CALC_DB_IPV4_TO_CITY) ? 1 : 0, \
+		(wrapper_features & IPV6CALC_DB_IPV6_TO_CITY) ? 1 : 0 \
 	);
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "Finished");
