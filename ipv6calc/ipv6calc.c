@@ -683,8 +683,9 @@ int main(int argc, char *argv[]) {
 				break;
 				
 			default:
+				fprintf(stderr, "Unsupported option: %s\n", argv[optind - 1]);
 				fprintf(stderr, "Usage: (see '%s --command -?|-h|--help' for more help)\n", PROGRAM_NAME);
-				ipv6calc_printhelp(longopts, ipv6calc_longopts_shortopts_map);
+				// ipv6calc_printhelp(longopts, ipv6calc_longopts_shortopts_map);
 				exit(EXIT_FAILURE);
 		};
 	};
