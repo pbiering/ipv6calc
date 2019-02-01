@@ -132,7 +132,6 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " <prefix>_DOMAIN=...           : Domain of IP address\n");
 	fprintf(stderr, " <prefix>_AS_NUM=...           : Autonomous System Number of IP address\n");
 	fprintf(stderr, " <prefix>_AS_ORGNAME=...       : Autonomous System Organization Name of IP address\n");
-	fprintf(stderr, " <prefix>_AS_TEXT=...          : Autonomous System Number and Organization Name of IP address\n");
 	fprintf(stderr, " <prefix>_NETSPEED=...         : Net Speed of IP address\n");
 	fprintf(stderr, " <prefix>_USAGETYPE=...        : Usage type of IP address\n");
 	fprintf(stderr, " <prefix>_MOBILEBRAND=...      : Mobile Brand of IP address\n");
@@ -453,16 +452,6 @@ static void print_geolocation(libipv6calc_db_wrapper_geolocation_record *record,
 	PRINT_RECORD_NUMBER(record->asn                 , "AS_NUM"              , "Autonomous System Number", "%u", ASNUM_AS_UNKNOWN)
 	PRINT_RECORD_STRING(record->organization_name   , "AS_ORGNAME"          , "Autonomous System Organization Name")
 
-	// create AS_TEXT
-	if (record->asn != ASNUM_AS_UNKNOWN) {
-		if (strlen(record->organization_name) > 0) {
-			snprintf(tempstring, sizeof(tempstring), "AS%u %s", record->asn, record->organization_name);
-		} else {
-			snprintf(tempstring, sizeof(tempstring), "AS%u", record->asn);
-		};
-		PRINT_RECORD_STRING(tempstring, "AS_TEXT"          , "Autonomous System Information")
-	};
-
 	PRINT_RECORD_STRING(record->isp_name            , "ISP"                 , "ISP Name")
 	PRINT_RECORD_STRING(record->connection_type     , "NETSPEED"            , "Network Speed")
 
@@ -697,140 +686,24 @@ static void print_ip2location(char *addrstring, const uint32_t formatoptions, co
 #endif
 
 #ifdef SUPPORT_GEOIP
-/* print GeoIP information */
-static void print_geoip(const char *addrstring, const uint32_t formatoptions, const char *additionalstring, int version) {
+/* print GeoIP (legacy) information */
+static void print_geoip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatoptions, const char *additionalstring) {
 	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
 
-#define HUMAN_READABLE_GEOIP(name, value) \
-				if (strlen(additionalstring) > 0) { \
-					fprintf(stdout, "GeoIP reports for %s %s: %s\n", additionalstring, name, value); \
-				} else { \
-					fprintf(stdout, "GeoIP reports %s: %s\n", name, value); \
-				};
-
 	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP] == 0) {
-		DEBUGPRINT_NA(DEBUG_showinfo, "GeoIP support not active");
+		DEBUGPRINT_NA(DEBUG_showinfo, "GeoIP (legacy) support not active");
 		return;
 	};
 
-	const char *returnedCountry = NULL;
-	const char *returnedCountryName = NULL;
-	char *as_text;
-	GeoIPRecord *gir = NULL;
+	int ret;
 
-	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable);
-	char tempstring[NI_MAXHOST] = "";
+	libipv6calc_db_wrapper_geolocation_record record;
 
-	as_text = libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(addrstring, version);
-	if (as_text != NULL) {
-		if ( machinereadable != 0 ) {
-			printout2("GEOIP_AS_TEXT", additionalstring, as_text, formatoptions);
-		};
-	};
+	/* get all information */
+	ret = libipv6calc_db_wrapper_GeoIP_all_by_addr(ipaddrp, &record);
 
-	returnedCountry     = libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(addrstring, version);
-	returnedCountryName = libipv6calc_db_wrapper_GeoIP_wrapper_country_name_by_addr(addrstring, version);
-	if (returnedCountry != NULL) {
-		DEBUGPRINT_WA(DEBUG_showinfo, "GeoIP IPv%d country database result", version);
-
-		if ( machinereadable != 0 ) {
-			printout2("GEOIP_COUNTRY_SHORT", additionalstring, returnedCountry, formatoptions);
-
-			if (returnedCountryName != NULL) {
-				printout2("GEOIP_COUNTRY_LONG", additionalstring, returnedCountryName, formatoptions);
-			} else {
-				DEBUGPRINT_NA(DEBUG_showinfo, "returnedCountryName=NULL");
-			};
-		} else {
-			if (returnedCountryName != NULL) {
-				if (strlen(additionalstring) > 0) {
-					fprintf(stdout, "GeoIP country name and code for %s: %s (%s)\n", additionalstring, returnedCountryName, returnedCountry);
-				} else {
-					fprintf(stdout, "GeoIP country name and code: %s (%s)\n", returnedCountryName, returnedCountry);
-				};
-			} else {
-				if (strlen(additionalstring) > 0) {
-					fprintf(stdout, "GeoIP country code for %s: %s\n", additionalstring, returnedCountry);
-				} else {
-					fprintf(stdout, "GeoIP country code: %s\n", returnedCountry);
-				};
-			};
-		};
-	};
-
-	gir = libipv6calc_db_wrapper_GeoIP_wrapper_record_city_by_addr(addrstring, version);
-	if (gir != NULL) {
-		DEBUGPRINT_WA(DEBUG_showinfo, "GeoIP IPv%d city database result", version);
-
-		if (gir->region != NULL) {
-			if ( machinereadable != 0 ) {
-				printout2("GEOIP_REGION", additionalstring, gir->region, formatoptions);
-			} else {
-				HUMAN_READABLE_GEOIP("Region", gir->region)
-			};
-		};
-
-		if (gir->city != NULL) {
-			if ( machinereadable != 0 ) {
-				printout2("GEOIP_CITY", additionalstring, gir->city, formatoptions);
-			} else {
-				HUMAN_READABLE_GEOIP("City", gir->city)
-			};
-		};
-
-		if (gir->postal_code != NULL) {
-			if ( machinereadable != 0 ) {
-				printout2("GEOIP_ZIPCODE", additionalstring, gir->postal_code, formatoptions);
-			} else {
-				HUMAN_READABLE_GEOIP("ZIP Code", gir->postal_code)
-			};
-		};
-
-		if (gir->latitude != 0) {
-			snprintf(tempstring, sizeof(tempstring), "%f", gir->latitude);
-			if ( machinereadable != 0 ) {
-				printout2("GEOIP_LATITUDE", additionalstring, tempstring, formatoptions);
-			} else {
-				HUMAN_READABLE_GEOIP("Latitude", tempstring)
-			};
-		};
-
-		if (gir->longitude != 0) {
-			snprintf(tempstring, sizeof(tempstring), "%f", gir->longitude);
-			if ( machinereadable != 0 ) {
-				printout2("GEOIP_LONGITUDE", additionalstring, tempstring, formatoptions);
-			} else {
-				HUMAN_READABLE_GEOIP("Longitude", tempstring)
-			};
-		};
-
-		if (gir->continent_code != NULL) {
-			if ( machinereadable != 0 ) {
-				printout2("GEOIP_CONTINENT_SHORT", additionalstring, gir->continent_code, formatoptions);
-			} else {
-				HUMAN_READABLE_GEOIP("Continent Code", gir->continent_code)
-			};
-		};
-
-		if (gir->dma_code != 0) {
-			snprintf(tempstring, sizeof(tempstring), "%d", gir->dma_code);
-			if ( machinereadable != 0 ) {
-				printout2("GEOIP_DMACODE", additionalstring, tempstring, formatoptions);
-			} else {
-				HUMAN_READABLE_GEOIP("DMA Code", tempstring)
-			};
-		};
-
-		if (gir->area_code != 0) {
-			snprintf(tempstring, sizeof(tempstring), "%d", gir->area_code);
-			if ( machinereadable != 0 ) {
-				printout2("GEOIP_AREACODE", additionalstring, tempstring, formatoptions);
-			} else {
-				HUMAN_READABLE_GEOIP("AREA Code", tempstring)
-			};
-		};
-
-		libipv6calc_db_wrapper_GeoIPRecord_delete(gir);
+	if (ret == 0) {
+		print_geolocation(&record, formatoptions, additionalstring, "GEOIP", "GeoIP (legacy)");
 	};
 };
 #endif
@@ -839,15 +712,6 @@ static void print_geoip(const char *addrstring, const uint32_t formatoptions, co
 /* print GeoIP2 (MaxMindDB) information */
 static void print_geoip2(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatoptions, const char *additionalstring) {
 	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
-
-#define TEST_GEOIP2_AVAILABLE(v)	((v != NULL) && (strlen(v) > 0))
-
-#define HUMAN_READABLE_GEOIP2(name, value) \
-				if (strlen(additionalstring) > 0) { \
-					fprintf(stdout, "GeoIP (MaxMindDB) reports for %s %s: %s\n", additionalstring, name, value); \
-				} else { \
-					fprintf(stdout, "GeoIP (MaxMindDB) reports %s: %s\n", name, value); \
-				};
 
 	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP2] == 0) {
 		DEBUGPRINT_NA(DEBUG_showinfo, "GeoIP (MaxMindDB) support not active");
@@ -1013,8 +877,6 @@ static void print_dbip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatopti
 /* print DBIP2 (MaxMindDB) information */
 static void print_dbip2(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatoptions, const char *additionalstring) {
 	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
-
-#define TEST_DBIP2_AVAILABLE(v)	((v != NULL) && (strlen(v) > 0))
 
 #define HUMAN_READABLE_DBIP2(name, value) \
 				if (strlen(additionalstring) > 0) { \
@@ -1285,7 +1147,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 #ifdef SUPPORT_GEOIP
 		/* GeoIP information */
-		print_geoip(tempipv4string, formatoptions, embeddedipv4string, 4);
+		print_geoip(&ipaddr, formatoptions, embeddedipv4string);
 #endif
 
 #ifdef SUPPORT_GEOIP2
@@ -2062,7 +1924,7 @@ END:
 
 #ifdef SUPPORT_GEOIP
 			/* GeoIP information */
-			print_geoip(ipv6addrstring, formatoptions, "", 6);
+			print_geoip(&ipaddr, formatoptions, "");
 #endif
 
 #ifdef SUPPORT_GEOIP2

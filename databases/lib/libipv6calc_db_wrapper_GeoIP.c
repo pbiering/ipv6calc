@@ -2125,6 +2125,7 @@ uint32_t libipv6calc_db_wrapper_GeoIP_wrapper_asn_by_addr(const ipv6calc_ipaddr 
 
 		if (valid == 1) {
 			snprintf(as_number_string, 11, "%s", as_text + 2);
+			as_number_string[s] = '\0'; // terminate
 			as_num32 = atol(as_number_string);
 		};
 	};
@@ -2244,6 +2245,133 @@ GeoIPRecord *libipv6calc_db_wrapper_GeoIP_wrapper_record_city_by_addr(const char
 END_libipv6calc_db_wrapper:
 	return(GeoIP_result_ptr);
 };
+
+
+/* all information */
+int libipv6calc_db_wrapper_GeoIP_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libipv6calc_db_wrapper_geolocation_record *recordp) {
+	int result = 0, retval;
+	char addrstring[NI_MAXHOST] = "";
+
+	libipv6calc_db_wrapper_geolocation_record_clear(recordp);
+
+	// convert to string
+	retval = libipaddr_ipaddrstruct_to_string(ipaddrp, addrstring, sizeof(addrstring), 0);
+
+	if ( retval != 0 ) {
+		fprintf(stderr, "Error converting address object into string\n");
+		result = -1;
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	const char *returnedCountry = NULL;
+	const char *returnedCountryName = NULL;
+	char *as_text;
+	GeoIPRecord *gir = NULL;
+	char as_number_string[11];  // max: 4294967295 = 10 digits + \0
+	unsigned int s;
+
+	// AS number + text
+	as_text = libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(addrstring, ipaddrp->proto);
+
+	int valid = 1;
+	if (as_text != NULL) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Separate AS from OrgName: %s", as_text);
+		if ((strncmp(as_text, "AS", 2) == 0) && (strlen(as_text) > 2)) {
+			// catch AS....
+			for (s = 0; s < (strlen(as_text) - 2); s++) {
+				if ((as_text[s+2] == ' ') || (as_text[s+2] == '\0')) {
+					break;
+				} else if (isdigit(as_text[s+2])) {
+					continue;
+				} else {
+					// something wrong
+					valid = 0;
+					break;
+				};
+			};
+
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "AS separation: s=%d valid=%d", s, valid);
+
+			if (s > 10) {
+				// too many digits
+				valid = 0;
+			};
+
+			if (valid == 1) {
+				snprintf(as_number_string, 11, "%s", as_text + 2);
+				as_number_string[s] = '\0'; // terminate
+				recordp->asn = atol(as_number_string);
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Extracted AS string: %s", as_number_string);
+
+				// store organization
+				if (strlen(as_text) > s + 2 + 1) {
+					snprintf(recordp->organization_name, IPV6CALC_DB_SIZE_ORG_NAME, "%s", as_text + s + 3);
+					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP, "Extracted OrgName: %s", recordp->organization_name);
+				};
+			} else {
+				snprintf(recordp->organization_name, IPV6CALC_DB_SIZE_ORG_NAME, "%s", as_text);
+			};
+		} else {
+			snprintf(recordp->organization_name, IPV6CALC_DB_SIZE_ORG_NAME, "%s", as_text);
+		};
+	};
+
+	// Country
+	returnedCountry     = libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(addrstring, ipaddrp->proto);
+	if (returnedCountry != NULL) {
+		snprintf(recordp->country, IPV6CALC_DB_SIZE_COUNTRY, "%s", returnedCountry);
+	};
+
+	returnedCountryName = libipv6calc_db_wrapper_GeoIP_wrapper_country_name_by_addr(addrstring, ipaddrp->proto);
+	if (returnedCountryName != NULL) {
+		snprintf(recordp->country_long, IPV6CALC_DB_SIZE_COUNTRY_LONG, "%s", returnedCountryName);
+	};
+
+	// City and other details
+	gir = libipv6calc_db_wrapper_GeoIP_wrapper_record_city_by_addr(addrstring, ipaddrp->proto);
+	if (gir != NULL) {
+		if (gir->region != NULL) {
+			snprintf(recordp->stateprov, IPV6CALC_DB_SIZE_STATEPROV, "%s", gir->region);
+		};
+
+		if (gir->city != NULL) {
+			snprintf(recordp->city, IPV6CALC_DB_SIZE_CITY, "%s", gir->city);
+		};
+
+		if (gir->postal_code != NULL) {
+			snprintf(recordp->zipcode, IPV6CALC_DB_SIZE_ZIPCODE, "%s", gir->postal_code);
+		};
+
+		if (gir->latitude != 0) {
+			recordp->latitude = gir->latitude;
+		};
+
+		if (gir->longitude != 0) {
+			recordp->longitude = gir->longitude;
+		};
+
+		if (gir->continent_code != NULL) {
+			snprintf(recordp->continent, IPV6CALC_DB_SIZE_CONTINENT, "%s", gir->continent_code);
+		};
+
+		if (gir->dma_code != 0) {
+			snprintf(recordp->dma_code, IPV6CALC_DB_SIZE_DMA_CODE, "%d", gir->dma_code);
+		};
+
+		if (gir->area_code != 0) {
+			snprintf(recordp->area_code, IPV6CALC_DB_SIZE_DMA_CODE, "%d", gir->area_code);
+		};
+
+		libipv6calc_db_wrapper_GeoIPRecord_delete(gir);
+
+		result = 0;
+	};
+
+
+END_libipv6calc_db_wrapper:
+	return(result);
+};
+
 
 #endif
 

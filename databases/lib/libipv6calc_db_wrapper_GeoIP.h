@@ -77,4 +77,6 @@ extern const char  **libipv6calc_db_wrapper_GeoIPDBDescription;
 extern char       ***libipv6calc_db_wrapper_GeoIPDBFileName_ptr;
 
 extern GeoIPRecord *libipv6calc_db_wrapper_GeoIP_wrapper_record_city_by_addr(const char *addr, const int proto);
+
+extern int          libipv6calc_db_wrapper_GeoIP_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libipv6calc_db_wrapper_geolocation_record *recordp);
 #endif

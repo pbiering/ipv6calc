@@ -1431,6 +1431,8 @@ void libipv6calc_db_wrapper_geolocation_record_clear(libipv6calc_db_wrapper_geol
 	snprintf(recordp->city          , IPV6CALC_DB_SIZE_CITY          , "%s", "");
 	snprintf(recordp->zipcode       , IPV6CALC_DB_SIZE_ZIPCODE       , "%s", "");
 	snprintf(recordp->weathercode   , IPV6CALC_DB_SIZE_WEATHERCODE   , "%s", "");
+	snprintf(recordp->dma_code      , IPV6CALC_DB_SIZE_DMA_CODE      , "%s", "");
+	snprintf(recordp->area_code     , IPV6CALC_DB_SIZE_AREA_CODE     , "%s", "");
 	recordp->latitude             = 0;
 	recordp->longitude            = 0;
 	recordp->accuracy_radius      = 0;

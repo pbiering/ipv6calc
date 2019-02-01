@@ -173,7 +173,6 @@ typedef struct {
 #define IPV6CALC_DB_SIZE_COUNTRY_LONG	80+1
 #define IPV6CALC_DB_SIZE_CONTINENT_LONG	80+1
 #define IPV6CALC_DB_SIZE_STATEPROV	80+1
-#define IPV6CALC_DB_SIZE_STATEPROV	80+1
 #define IPV6CALC_DB_SIZE_DISTRICT	80+1
 #define IPV6CALC_DB_SIZE_CITY		80+1
 #define IPV6CALC_DB_SIZE_ZIPCODE	20+1
@@ -182,6 +181,9 @@ typedef struct {
 #define IPV6CALC_DB_SIZE_ISP_NAME	128+1
 #define IPV6CALC_DB_SIZE_CONN_TYPE	20+1
 #define IPV6CALC_DB_SIZE_ORG_NAME	128+1
+#define IPV6CALC_DB_SIZE_CONN_TYPE	20+1
+#define IPV6CALC_DB_SIZE_DMA_CODE	8+1
+#define IPV6CALC_DB_SIZE_AREA_CODE	8+1
 
 typedef struct
 {
@@ -206,6 +208,8 @@ typedef struct
 	char     isp_name[IPV6CALC_DB_SIZE_ISP_NAME];
 	char     connection_type[IPV6CALC_DB_SIZE_CONN_TYPE];
 	char     organization_name[IPV6CALC_DB_SIZE_ORG_NAME];
+	char     dma_code[IPV6CALC_DB_SIZE_DMA_CODE];
+	char     area_code[IPV6CALC_DB_SIZE_AREA_CODE];
 } libipv6calc_db_wrapper_geolocation_record;
 
 // define internal API versions

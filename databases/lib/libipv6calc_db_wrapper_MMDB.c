@@ -1125,7 +1125,22 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 	};
 
 	// fetch District (Subdivision) - which is a list
-	const char *lookup_path_distinct[] = { "subdivisions", "0", "names", "en", NULL };
+	const char *lookup_path_stateprov[] = { "subdivisions", "0", "names", "en", NULL };
+	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_stateprov);
+	if (entry_data.has_data) {
+		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
+			int max = (entry_data.data_size + 1 > IPV6CALC_DB_SIZE_STATEPROV) ? IPV6CALC_DB_SIZE_STATEPROV : entry_data.data_size +1;
+			snprintf(recordp->stateprov, max, "%s", entry_data.utf8_string);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "State/Province: %s", recordp->stateprov);
+		} else {
+			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for State/Province: %u", entry_data.type);
+		};
+	} else {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "State/Province (subdivion#0) not found");
+	};
+
+	// fetch District (Subdivision) - which is a list
+	const char *lookup_path_distinct[] = { "subdivisions", "1", "names", "en", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_distinct);
 	if (entry_data.has_data) {
 		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
@@ -1133,10 +1148,10 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 			snprintf(recordp->district, max, "%s", entry_data.utf8_string);
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "Distinct: %s", recordp->district);
 		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for District Array: %u", entry_data.type);
+			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for District: %u", entry_data.type);
 		};
 	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "District not found");
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "District not (subdivision#1) found");
 	};
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "resultstring=%s", resultstring);
