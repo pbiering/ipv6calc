@@ -5,7 +5,7 @@ dnl Copyright: 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(ipv6calc, 2.0.0beta4, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
+AC_INIT(ipv6calc, 2.0.0beta5, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
 
 COPYRIGHT_YEAR=2019
 
@@ -451,7 +451,7 @@ MMDB_INCLUDE_VERSION=""
 
 AC_ARG_ENABLE([mmdb],
 	AS_HELP_STRING([--enable-mmdb],
-	               [Enable MaxMindDB support (GeoIP/DB-IP) (default: disabled)]),
+	               [Enable MaxMindDB support (GeoIP/db-ip.com) (default: disabled)]),
 	[
 		if test "$enable_mmdb" != "no"; then
 			MMDB="$enable_mmdb"
@@ -516,7 +516,7 @@ AC_ARG_WITH([mmdb-lib],
 
 AC_ARG_WITH([mmdb-dyn-lib],
 	AS_HELP_STRING([--with-mmdb-dyn-lib=NAME],
-		[Use specified MaxMindDB dynamic library, default: libmaxminddb.so]),
+		[Use specified MaxMindDB dynamic library, default: libmaxminddb.so.0]),
 	[
 		mmdb_dyn_lib="$with_mmdb_dyn_lib"
 	],
@@ -600,9 +600,24 @@ if test "$MMDB" = "yes"; then
 		AC_DEFINE(SUPPORT_MMDB_DYN, 1, Define if you want MaxMindDB support with dynamic loading support - requires also additional linker options.)
 	fi
 
-	# autoenable GeoIPv2 and DBIPv2 support
-	GEOIP2="yes"
-	DBIP2="yes"
+	# GeoIPv2 and DBIPv2 support
+	AC_ARG_ENABLE([geoip2b],
+		AS_HELP_STRING([--disable-geoip2],
+			       [Disable MaxMindDB support for GeoIP (default: enabled)]),
+		[
+			GEOIP2="no"
+		],[
+			GEOIP2="yes"
+		])
+
+	AC_ARG_ENABLE([dbip2],
+		AS_HELP_STRING([--disable-dbip2],
+			       [Disable MaxMindDB support for db-ip.com (default: enabled)]),
+		[
+			DBIP2="no"
+		],[
+			DBIP2="yes"
+		])
 fi
 
 AC_SUBST(MMDB_INCLUDE)
@@ -813,7 +828,7 @@ AC_ARG_WITH([ip2location-lib],
 #	AS_HELP_STRING([--with-ip2location-lib-name=NAME],
 #		[IP2Location library name]),
 #	[
-#		IP2LOCATION_LIB_NAME="$with_geoip_lib_name"
+#		IP2LOCATION_LIB_NAME="$with_ip2location_lib_name"
 #		IP2LOCATION_LIB="-l$IP2LOCATION_LIB_NAME $IP2LOCATION_LIB"
 #		AC_MSG_RESULT([IP2Location library name given: $IP2LOCATION_LIB_NAME])
 #        ],[
@@ -898,20 +913,17 @@ if test "$IP2LOCATION" = "yes"; then
 				};
 		     ]])],[
 				AC_MSG_RESULT([IP2Location has full IPv6 support (API >= 7.0.0)])
-				IP2LOCATION_IPV6_COMPAT="no"
 			],[
-				AC_MSG_WARN([IP2Location has only compat IPv6 support (API < 7.0.0) which is no longer supported])
-				IP2LOCATION_IPV6_COMPAT="yes"
+				AC_MSG_ERROR([IP2Location has only compat IPv6 support (API < 7.0.0) which is no longer supported])
 			]
 		)
 
 		AC_CHECK_DECLS([USAGETYPE],
 			[
-				IP2LOCATION_ALL_COMPAT="no"
+				AC_MSG_RESULT([IP2Location has full support (library >= 6.0.0)])
 			],
 			[
-				AC_MSG_WARN([IP2Location library header file misses USAGETYPE (library < 6.0.0)])
-				IP2LOCATION_ALL_COMPAT="yes"
+				AC_MSG_ERROR([IP2Location library header file misses USAGETYPE (library < 6.0.0) which is no longer supported])
 			]
 		)
 
@@ -983,14 +995,6 @@ if test "$IP2LOCATION" = "yes"; then
 		AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location support.)
 		AC_DEFINE(SUPPORT_IP2LOCATION_DYN, 1, Define if you want IP2Location support with dynamic loading support - requires also additional linker options.)
 	fi
-fi
-
-if test "$IP2LOCATION_IPV6_COMPAT" = "yes"; then
-	AC_DEFINE(SUPPORT_IP2LOCATION_IPV6_COMPAT, 1, Define if your IP2Location supports IPv6 only in old manner.)
-fi
-
-if test "$IP2LOCATION_ALL_COMPAT" = "yes"; then
-	AC_DEFINE(SUPPORT_IP2LOCATION_ALL_COMPAT, 1, Define if your IP2Location supports only reduced set of databases.)
 fi
 
 IP2LOCATION_DB=$ip2location_db

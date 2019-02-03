@@ -289,18 +289,12 @@
 /* Define if you want IP2Location support. */
 #undef SUPPORT_IP2LOCATION
 
-/* Define if your IP2Location supports only reduced set of databases. */
-#undef SUPPORT_IP2LOCATION_ALL_COMPAT
-
 /* Define if you want IP2Location API version string support. */
 #undef SUPPORT_IP2LOCATION_API_VERSION_STRING
 
 /* Define if you want IP2Location support with dynamic loading support -
    requires also additional linker options. */
 #undef SUPPORT_IP2LOCATION_DYN
-
-/* Define if your IP2Location supports IPv6 only in old manner. */
-#undef SUPPORT_IP2LOCATION_IPV6_COMPAT
 
 /* Define if you want IP2Location LIB version string support. */
 #undef SUPPORT_IP2LOCATION_LIB_VERSION_STRING

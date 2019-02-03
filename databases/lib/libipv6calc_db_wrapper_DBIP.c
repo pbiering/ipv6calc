@@ -353,15 +353,15 @@ void libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(const int level_verbose, 
 			// DBIP returned that database is available
 			dbp = libipv6calc_db_wrapper_DBIP_open_type(type | 0x10000, NULL);
 			if (dbp == NULL) {
-				fprintf(stderr, "%sDBIP: %-30s: %-30s (CAN'T OPEN database information)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_dbfilename(type));
+				fprintf(stderr, "%sDBIP: %-30s: [%2d] %-30s (CAN'T OPEN database information)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, type, libipv6calc_db_wrapper_DBIP_dbfilename(type));
 			} else {
-				fprintf(stderr, "%sDBIP: %-30s: %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_db_file_desc[i].filename, libipv6calc_db_wrapper_DBIP_database_info(type));
+				fprintf(stderr, "%sDBIP: %-30s: [%2d] %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, type, libipv6calc_db_wrapper_DBIP_db_file_desc[i].filename, libipv6calc_db_wrapper_DBIP_database_info(type));
 				libipv6calc_db_wrapper_DBIP_close(dbp);
 				count++;
 			};
 		} else {
 			if (level_verbose == LEVEL_VERBOSE2) {
-				fprintf(stderr, "%sDBIP: %-30s: %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, libipv6calc_db_wrapper_DBIP_dbfilename(type), strerror(errno));
+				fprintf(stderr, "%sDBIP: %-30s: [%2d] %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP_db_file_desc[i].description, type, libipv6calc_db_wrapper_DBIP_dbfilename(type), strerror(errno));
 			};
 			continue;
 		};
@@ -960,140 +960,8 @@ END_libipv6calc_db_wrapper:
 };
 
 
-/* city (& region) */
-int libipv6calc_db_wrapper_DBIP_wrapper_city_by_addr(const ipv6calc_ipaddr *ipaddrp, char *city, const size_t city_len, char *region, const size_t region_len) {
-	int result = -1;
-	DB *dbp;
-
-	static char resultstring[NI_MAXHOST];
-
-	int DBIP_type = 0;
-
-	long int recno_max;
-
-	int region_token = 2; // default
-	int city_token = 3; // default
-
-	//DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Called with addr=%s proto=%d", addr, proto);
-
-	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
-		DBIP_type = dbip_db_region_city_v4;
-		if ((DBIP_type == DBIP_DB_IPV4_LOCATION) || (DBIP_type == DBIP_DB_IPV4_FULL)) {
-			city_token++; // location/full have district inbetween;
-		};
-
-		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP] & IPV6CALC_DB_IPV4_TO_CITY) == 0) {
-			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "No DBIP database supporting IPv4 city/region available");
-			goto END_libipv6calc_db_wrapper;
-		};
-	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
-		DBIP_type = dbip_db_region_city_v6;
-		if ((DBIP_type == DBIP_DB_IPV6_LOCATION) || (DBIP_type == DBIP_DB_IPV6_FULL)) {
-			city_token++; // location/full have district inbetween;
-		};
-
-		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP] & IPV6CALC_DB_IPV6_TO_CITY) == 0) {
-			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "No DBIP database supporting IPv6 city/region available");
-			goto END_libipv6calc_db_wrapper;
-		};
-	} else {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Unsupported proto: %d", ipaddrp->proto);
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	dbp = libipv6calc_db_wrapper_DBIP_open_type(DBIP_type, &recno_max);
-
-	if (dbp == NULL) {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "Error opening DBIP by type");
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	result = libipv6calc_db_wrapper_get_entry_generic(
-		(void *) dbp,						// pointer to database
-		IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB,			// type of data_ptr
-		IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_FIRST_LAST,		// key type
-		(ipaddrp->proto == IPV6CALC_PROTO_IPV4) ? IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x2 : IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x4,	// key format
-		(ipaddrp->proto == IPV6CALC_PROTO_IPV4) ? 32 : 64,	// key length
-		IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY,		// search type
-		recno_max,						// number of rows
-		ipaddrp->addr[0],					// lookup key MSB
-		ipaddrp->addr[1],					// lookup key LSB
-		resultstring,						// data ptr
-		NULL							// function pointer
-	);
-
-	if (result < 0) {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "no match found");
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "resultstring=%s", resultstring);
-
-	char *token, *ptrptr;
-
-	int token_count = 0;
-
-	// split result string
-	ptrptr = resultstring;
-	token = strsep(&ptrptr, ";");
-
-	while (token != NULL) {
-		token_count++;
-
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "Database entry found %d: %s", token_count, token);
-
-		if (token_count == region_token) {
-			/* region */
-			if (strlen(token) > 0) {
-				snprintf(region, region_len, "%s", token);
-			} else {
-				snprintf(region, region_len, "%s", "-");
-			};
-		} else if (token_count == city_token) {
-			/* city */
-			if (strlen(token) > 0) {
-				snprintf(city, city_len, "%s", token);
-			} else {
-				snprintf(city, city_len, "%s", "-");
-			};
-			break;
-		};
-
-		/* get next token */
-		token = strsep(&ptrptr, ";");
-	};
-
-	if (token_count != city_token) {
-		ERRORPRINT_WA("data has more entries than expected, corrupt database: %d", token_count);
-		goto END_libipv6calc_db_wrapper_close;
-	};
-
-	if (strlen(region) == 0) {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "did not return a record for 'region'");
-	};
-
-	if (strlen(city) == 0) {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP, "did not return a record for 'city'");
-	};
-
-	result = 0;
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP, "result entry=%d: city=%s region=%s", result, city, region);
-
-	DBIP_DB_USAGE_MAP_TAG(DBIP_type);
-
-	goto END_libipv6calc_db_wrapper; // keep db open
-
-END_libipv6calc_db_wrapper_close:
-	libipv6calc_db_wrapper_DBIP_close(dbp);
-
-END_libipv6calc_db_wrapper:
-	return(result);
-};
-
-
 /* all information */
-int libipv6calc_db_wrapper_DBIP_all_by_addr(const ipv6calc_ipaddr *ipaddrp, DBIP_Record *recordp) {
+int libipv6calc_db_wrapper_DBIP_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libipv6calc_db_wrapper_geolocation_record *recordp) {
 	int result = -1;
 
 	DB *dbp;
@@ -1105,19 +973,7 @@ int libipv6calc_db_wrapper_DBIP_all_by_addr(const ipv6calc_ipaddr *ipaddrp, DBIP
 	long int recno_max;
 
 	// clear structure
-	snprintf(recordp->country  , DBIP_SIZE_COUNTRY  , "%s", "");
-	snprintf(recordp->stateprov, DBIP_SIZE_STATEPROV, "%s", "");
-	snprintf(recordp->district , DBIP_SIZE_DISTRICT , "%s", "");
-	snprintf(recordp->city     , DBIP_SIZE_CITY     , "%s", "");
-	snprintf(recordp->zipcode  , DBIP_SIZE_ZIPCODE  , "%s", "");
-	recordp->latitude = 0;
-	recordp->longitude = 0;
-	recordp->geoname_id = 0;
-	recordp->timezone_offset = 0;
-	snprintf(recordp->timezone_name    , DBIP_SIZE_TIMEZONE_NAME, "%s", "");
-	snprintf(recordp->isp_name         , DBIP_SIZE_ISP_NAME     , "%s", "");
-	snprintf(recordp->connection_type  , DBIP_SIZE_CONN_TYPE    , "%s", "");
-	snprintf(recordp->organization_name, DBIP_SIZE_ORG_NAME     , "%s", "");
+	libipv6calc_db_wrapper_geolocation_record_clear(recordp);
 
 	int t_country = 1, t_stateprov = 0, t_district = 0, t_city = 0, t_zipcode = 0, t_latitude = 0 , t_longitude = 0, t_geoname_id = 0, \
 		t_timezone_offset = 0, t_timezone_name = 0, t_isp_name = 0, t_connection_type = 0, t_organization_name = 0;
@@ -1222,15 +1078,15 @@ int libipv6calc_db_wrapper_DBIP_all_by_addr(const ipv6calc_ipaddr *ipaddrp, DBIP
 
 		if (token_count == t_country) {
 			// country
-			snprintf(recordp->country  , DBIP_SIZE_COUNTRY  , "%s", token);
+			snprintf(recordp->country_code, IPV6CALC_DB_SIZE_COUNTRY_CODE, "%s", token);
 		} else if (token_count == t_stateprov) {
-			snprintf(recordp->stateprov, DBIP_SIZE_STATEPROV, "%s", token);
+			snprintf(recordp->stateprov, IPV6CALC_DB_SIZE_STATEPROV, "%s", token);
 		} else if (token_count == t_district) {
-			snprintf(recordp->district , DBIP_SIZE_DISTRICT , "%s", token);
+			snprintf(recordp->district , IPV6CALC_DB_SIZE_DISTRICT , "%s", token);
 		} else if (token_count == t_city) {
-			snprintf(recordp->city     , DBIP_SIZE_CITY     , "%s", token);
+			snprintf(recordp->city     , IPV6CALC_DB_SIZE_CITY     , "%s", token);
 		} else if (token_count == t_zipcode) {
-			snprintf(recordp->zipcode  , DBIP_SIZE_ZIPCODE  , "%s", token);
+			snprintf(recordp->zipcode  , IPV6CALC_DB_SIZE_ZIPCODE  , "%s", token);
 		} else if (token_count == t_latitude) {
 			recordp->latitude = atof(token);
 		} else if (token_count == t_longitude) {
@@ -1240,13 +1096,13 @@ int libipv6calc_db_wrapper_DBIP_all_by_addr(const ipv6calc_ipaddr *ipaddrp, DBIP
 		} else if (token_count == t_timezone_offset) {
 			recordp->timezone_offset = atof(token);
 		} else if (token_count == t_timezone_name) {
-			snprintf(recordp->timezone_name    , DBIP_SIZE_TIMEZONE_NAME, "%s", token);
+			snprintf(recordp->timezone_name    , IPV6CALC_DB_SIZE_TIMEZONE_NAME, "%s", token);
 		} else if (token_count == t_isp_name) {
-			snprintf(recordp->isp_name         , DBIP_SIZE_ISP_NAME     , "%s", token);
+			snprintf(recordp->isp_name         , IPV6CALC_DB_SIZE_ISP_NAME     , "%s", token);
 		} else if (token_count == t_connection_type) {
-			snprintf(recordp->connection_type  , DBIP_SIZE_CONN_TYPE    , "%s", token);
+			snprintf(recordp->connection_type  , IPV6CALC_DB_SIZE_CONN_TYPE    , "%s", token);
 		} else if (token_count == t_organization_name) {
-			snprintf(recordp->organization_name, DBIP_SIZE_ORG_NAME     , "%s", token);
+			snprintf(recordp->organization_name, IPV6CALC_DB_SIZE_ORG_NAME     , "%s", token);
 		};
 
 		/* get next token */

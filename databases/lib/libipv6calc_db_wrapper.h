@@ -168,36 +168,51 @@ typedef struct {
 
 // abstract structure for geolocation information
 // string limits taken from from https://db-ip.com/db/
-#define IPV6CALC_DB_SIZE_COUNTRY	2+1
-#define IPV6CALC_DB_SIZE_CONTINENT	2+1
+// and IP2Location
+#define IPV6CALC_DB_SIZE_COUNTRY_CODE	2+1
 #define IPV6CALC_DB_SIZE_COUNTRY_LONG	80+1
+#define IPV6CALC_DB_SIZE_CONTINENT_CODE	2+1
 #define IPV6CALC_DB_SIZE_CONTINENT_LONG	80+1
 #define IPV6CALC_DB_SIZE_STATEPROV	80+1
 #define IPV6CALC_DB_SIZE_DISTRICT	80+1
 #define IPV6CALC_DB_SIZE_CITY		80+1
 #define IPV6CALC_DB_SIZE_ZIPCODE	20+1
-#define IPV6CALC_DB_SIZE_WEATHERCODE	20+1
+#define IPV6CALC_DB_SIZE_WEATHERSTATIONCODE	20+1
+#define IPV6CALC_DB_SIZE_WEATHERSTATIONNAME	80+1
 #define IPV6CALC_DB_SIZE_TIMEZONE_NAME	64+1
 #define IPV6CALC_DB_SIZE_ISP_NAME	128+1
 #define IPV6CALC_DB_SIZE_CONN_TYPE	20+1
 #define IPV6CALC_DB_SIZE_ORG_NAME	128+1
-#define IPV6CALC_DB_SIZE_CONN_TYPE	20+1
+#define IPV6CALC_DB_SIZE_DOMAIN		20+1
 #define IPV6CALC_DB_SIZE_DMA_CODE	8+1
+#define IPV6CALC_DB_SIZE_IDD_CODE	8+1
 #define IPV6CALC_DB_SIZE_AREA_CODE	8+1
+#define IPV6CALC_DB_SIZE_MOBILENETWORKCODE	80+1
+#define IPV6CALC_DB_SIZE_MOBILECOUNTRYCODE	8+1
+#define IPV6CALC_DB_SIZE_MOBILE_BRAND	80+1
+#define IPV6CALC_DB_SIZE_USAGE_TYPE	80+1
+
+#define IPV6CALC_DB_GEO_ELEVATION_UNKNOWN -20000
+#define IPV6CALC_DB_GEO_TIMEZONE_UNKNOWN  99
 
 typedef struct
 {
-	char     country[IPV6CALC_DB_SIZE_COUNTRY];
-	char     continent[IPV6CALC_DB_SIZE_CONTINENT];
+	char     country_code[IPV6CALC_DB_SIZE_COUNTRY_CODE];
 	char     country_long[IPV6CALC_DB_SIZE_COUNTRY_LONG];
+	char     continent_code[IPV6CALC_DB_SIZE_CONTINENT_CODE];
 	char     continent_long[IPV6CALC_DB_SIZE_CONTINENT_LONG];
 	char     stateprov[IPV6CALC_DB_SIZE_STATEPROV];
 	char     district[IPV6CALC_DB_SIZE_CITY];
 	char     city[IPV6CALC_DB_SIZE_CITY];
 	char     zipcode[IPV6CALC_DB_SIZE_ZIPCODE];
-	char     weathercode[IPV6CALC_DB_SIZE_WEATHERCODE];
+	char     weatherstationcode[IPV6CALC_DB_SIZE_WEATHERSTATIONCODE];
+	char     weatherstationname[IPV6CALC_DB_SIZE_WEATHERSTATIONNAME];
+	char     dma_code[IPV6CALC_DB_SIZE_DMA_CODE];
+	char     idd_code[IPV6CALC_DB_SIZE_IDD_CODE];
+	char     area_code[IPV6CALC_DB_SIZE_AREA_CODE];
 	double   latitude;
 	double   longitude;
+	float    elevation;
 	uint16_t accuracy_radius;
 	uint32_t geoname_id;
 	uint32_t continent_geoname_id;
@@ -208,8 +223,11 @@ typedef struct
 	char     isp_name[IPV6CALC_DB_SIZE_ISP_NAME];
 	char     connection_type[IPV6CALC_DB_SIZE_CONN_TYPE];
 	char     organization_name[IPV6CALC_DB_SIZE_ORG_NAME];
-	char     dma_code[IPV6CALC_DB_SIZE_DMA_CODE];
-	char     area_code[IPV6CALC_DB_SIZE_AREA_CODE];
+	char     domain[IPV6CALC_DB_SIZE_DOMAIN];
+	char     mobile_network_code[IPV6CALC_DB_SIZE_MOBILENETWORKCODE];
+	char     mobile_country_code[IPV6CALC_DB_SIZE_MOBILECOUNTRYCODE];
+	char     mobile_brand[IPV6CALC_DB_SIZE_MOBILE_BRAND];
+	char     usage_type[IPV6CALC_DB_SIZE_USAGE_TYPE];
 } libipv6calc_db_wrapper_geolocation_record;
 
 // define internal API versions

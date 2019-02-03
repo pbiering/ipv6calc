@@ -689,6 +689,7 @@ END_libipv6calc_db_wrapper:
  */
 MMDB_lookup_result_s libipv6calc_db_wrapper_MMDB_wrapper_lookup_by_addr (const ipv6calc_ipaddr *ipaddrp, MMDB_s *const mmdb, int *const mmdb_error) {
 	MMDB_lookup_result_s lookup_result;
+	lookup_result.found_entry = false;
 
 	// convert ipaddrp into sockaddr
 	union sockaddr_u {
@@ -811,6 +812,55 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 
 	libipv6calc_db_wrapper_geolocation_record_clear(recordp);
 
+#define CHECK_STORE(MAXLEN, STORE, DESC) \
+	if (entry_data.has_data) { \
+		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) { \
+			int max = (entry_data.data_size + 1 > MAXLEN) ? MAXLEN : entry_data.data_size +1; \
+			snprintf(STORE, max , "%s", entry_data.utf8_string); \
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s: %s", DESC, STORE); \
+		} else { \
+			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for %s: %u", DESC, entry_data.type); \
+		}; \
+	} else { \
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s not found", DESC); \
+	};
+
+#define CHECK_STORE_DOUBLE(STORE, DESC) \
+	if (entry_data.has_data) { \
+		if (entry_data.type == MMDB_DATA_TYPE_DOUBLE) { \
+			STORE = entry_data.double_value; \
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s: %lf", DESC, STORE); \
+		} else { \
+			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for %s: %u", DESC, entry_data.type); \
+		}; \
+	} else { \
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s not found", DESC); \
+	};
+
+#define CHECK_STORE_UINT32(STORE, DESC) \
+	if (entry_data.has_data) { \
+		if (entry_data.type == MMDB_DATA_TYPE_UINT32) { \
+			STORE = entry_data.uint32; \
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s: %u", DESC, STORE); \
+		} else { \
+			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for %s: %u", DESC, entry_data.type); \
+		}; \
+	} else { \
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s not found", DESC); \
+	};
+
+#define CHECK_STORE_UINT16(STORE, DESC) \
+	if (entry_data.has_data) { \
+		if (entry_data.type == MMDB_DATA_TYPE_UINT16) { \
+			STORE = entry_data.uint16; \
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s: %u", DESC, STORE); \
+		} else { \
+			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for %s: %u", DESC, entry_data.type); \
+		}; \
+	} else { \
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s not found", DESC); \
+	};
+
 	// convert ipaddrp into sockaddr
 	union sockaddr_u {
 		struct sockaddr_in in;
@@ -853,235 +903,81 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 	// fetch CountryCode
 	const char *lookup_path_country_code[] = { "country", "iso_code", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_country_code);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
-			int max = (entry_data.data_size + 1 > IPV6CALC_DB_SIZE_COUNTRY) ? IPV6CALC_DB_SIZE_COUNTRY : entry_data.data_size +1;
-			snprintf(recordp->country, max , "%s", entry_data.utf8_string);
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "CountryCode: %s", recordp->country);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for CountryCode: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "CountryCode not found");
-	};
+	CHECK_STORE(IPV6CALC_DB_SIZE_COUNTRY_CODE, recordp->country_code, "CountryCode")
 
 	// fetch CountryName
 	const char *lookup_path_country_name[] = { "country", "names", "en", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_country_name);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
-			int max = (entry_data.data_size + 1 > IPV6CALC_DB_SIZE_COUNTRY_LONG) ? IPV6CALC_DB_SIZE_COUNTRY_LONG : entry_data.data_size +1;
-			snprintf(recordp->country_long, max , "%s", entry_data.utf8_string);
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "CountryName: %s", recordp->country_long);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for CountryName: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "CountryName not found");
-	};
-
-	// fetch ContinentName
-	const char *lookup_path_continent_name[] = { "continent", "names", "en", NULL };
-	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_continent_name);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
-			int max = (entry_data.data_size + 1 > IPV6CALC_DB_SIZE_CONTINENT_LONG) ? IPV6CALC_DB_SIZE_CONTINENT_LONG : entry_data.data_size +1;
-			snprintf(recordp->continent_long, max , "%s", entry_data.utf8_string);
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "ContinentName: %s", recordp->continent_long);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for ContinentName: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "ContinentName not found");
-	};
-
-	// fetch Location Latitude/Longitude
-	const char *lookup_path_location_latitude[] = { "location", "latitude", NULL };
-	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_location_latitude);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_DOUBLE) {
-			recordp->latitude = entry_data.double_value;
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "Latitude: %lf", recordp->latitude);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for Latitude: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "Latitude not found");
-	};
-
-	const char *lookup_path_location_longitude[] = { "location", "longitude", NULL };
-	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_location_longitude);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_DOUBLE) {
-			recordp->longitude = entry_data.double_value;
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "Longitude: %lf", recordp->longitude);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for Longitude: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "Longitude not found");
-	};
-
-	// fetch accuracy_radius
-	const char *lookup_path_location_radius[] = { "location", "accuracy_radius", NULL };
-	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_location_radius);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UINT16) {
-			recordp->accuracy_radius = entry_data.uint16;
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "Location/Radius: %u", recordp->accuracy_radius);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for Location/Radius: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "Location/Radius not found");
-	};
-
-	// weather_code
-	const char *lookup_path_location_weather_code[] = { "location", "weather_code", NULL };
-	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_location_weather_code);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
-			int max = (entry_data.data_size + 1 > IPV6CALC_DB_SIZE_WEATHERCODE) ? IPV6CALC_DB_SIZE_WEATHERCODE : entry_data.data_size +1;
-			snprintf(recordp->weathercode, max , "%s", entry_data.utf8_string);
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "Location/WeatherCode: %s", recordp->weathercode);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for Location/WeatherCode: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "Location/WeatherCode not found");
-	};
-
-	// fetch City
-	const char *lookup_path_city_name[] = { "city", "names", "en", NULL };
-	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_city_name);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
-			int max = (entry_data.data_size + 1 > IPV6CALC_DB_SIZE_CITY) ? IPV6CALC_DB_SIZE_CITY : entry_data.data_size +1;
-			snprintf(recordp->city, max , "%s", entry_data.utf8_string);
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "City: %s", recordp->city);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for City: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "City not found");
-	};
+	CHECK_STORE(IPV6CALC_DB_SIZE_COUNTRY_LONG, recordp->country_long, "CountryName")
 
 	// fetch ContinentCode
 	const char *lookup_path_continent_code[] = { "continent", "code", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_continent_code);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
-			int max = (entry_data.data_size + 1 > IPV6CALC_DB_SIZE_CONTINENT) ? IPV6CALC_DB_SIZE_CONTINENT : entry_data.data_size +1;
-			snprintf(recordp->continent, max , "%s", entry_data.utf8_string);
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "ContinentCode: %s", recordp->continent);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for ContinentCode: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "ContinentCode not found");
-	};
+	CHECK_STORE(IPV6CALC_DB_SIZE_CONTINENT_CODE, recordp->continent_code, "ContinentCode")
+
+	// fetch ContinentName
+	const char *lookup_path_continent_name[] = { "continent", "names", "en", NULL };
+	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_continent_name);
+	CHECK_STORE(IPV6CALC_DB_SIZE_CONTINENT_LONG, recordp->continent_long, "ContinentName")
+
+	// fetch Location Latitude/Longitude
+	const char *lookup_path_location_latitude[] = { "location", "latitude", NULL };
+	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_location_latitude);
+	CHECK_STORE_DOUBLE(recordp->latitude, "Latitude")
+
+	const char *lookup_path_location_longitude[] = { "location", "longitude", NULL };
+	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_location_longitude);
+	CHECK_STORE_DOUBLE(recordp->longitude, "Longitude")
+
+	// fetch accuracy_radius
+	const char *lookup_path_location_radius[] = { "location", "accuracy_radius", NULL };
+	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_location_radius);
+	CHECK_STORE_UINT16(recordp->accuracy_radius, "Radius")
+
+	// weather_code
+	const char *lookup_path_location_weather_code[] = { "location", "weather_code", NULL };
+	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_location_weather_code);
+	CHECK_STORE(IPV6CALC_DB_SIZE_WEATHERSTATIONCODE, recordp->weatherstationcode, "WeatherStationCode")
+
+	// fetch City
+	const char *lookup_path_city_name[] = { "city", "names", "en", NULL };
+	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_city_name);
+	CHECK_STORE(IPV6CALC_DB_SIZE_CITY, recordp->city, "City")
 
 	// fetch GeonameId of Continent
 	const char *lookup_path_continent_geonameid[] = { "continent", "geoname_id", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_continent_geonameid);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UINT32) {
-			recordp->continent_geoname_id = entry_data.uint32;
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "Continent/GeonameId: %u", recordp->continent_geoname_id);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for Continent/GeonameId: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "Continent/GeonameId not found");
-	};
+	CHECK_STORE_UINT32(recordp->continent_geoname_id, "Continent/GeonameId")
 
 	// fetch GeonameId of Country
 	const char *lookup_path_country_geonameid[] = { "country", "geoname_id", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_country_geonameid);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UINT32) {
-			recordp->country_geoname_id = entry_data.uint32;
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "Country/GeonameId: %u", recordp->country_geoname_id);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for Country/GeonameId: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "Country/GeonameId not found");
-	};
+	CHECK_STORE_UINT32(recordp->country_geoname_id, "Country/GeonameId")
 
 	// fetch GeonameId of City
 	const char *lookup_path_city_geonameid[] = { "city", "geoname_id", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_city_geonameid);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UINT32) {
-			recordp->geoname_id = entry_data.uint32;
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "City/GeonameId: %u", recordp->geoname_id);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for City/GeonameId: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "City/GeonameId not found");
-	};
+	CHECK_STORE_UINT32(recordp->geoname_id, "City/GeonameId")
 
 	// fetch postal code
 	const char *lookup_path_zipcode[] = { "postal", "code", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_zipcode);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
-			int max = (entry_data.data_size + 1 > IPV6CALC_DB_SIZE_ZIPCODE) ? IPV6CALC_DB_SIZE_ZIPCODE : entry_data.data_size +1;
-			snprintf(recordp->zipcode, max, "%s", entry_data.utf8_string);
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "ZIPcode: %s", recordp->zipcode);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for Postal/Code: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "Postal/Code not found");
-	};
+	CHECK_STORE(IPV6CALC_DB_SIZE_ZIPCODE, recordp->zipcode, "PostalCode")
 
 	// time zone
 	const char *lookup_path_timezone[] = { "location", "time_zone", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_timezone);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
-			int max = (entry_data.data_size + 1 > IPV6CALC_DB_SIZE_TIMEZONE_NAME) ? IPV6CALC_DB_SIZE_TIMEZONE_NAME : entry_data.data_size +1;
-			snprintf(recordp->timezone_name, max, "%s", entry_data.utf8_string);
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "TimeZone: %s", recordp->timezone_name);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for TimeZone: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "TimeZone not found");
-	};
+	CHECK_STORE(IPV6CALC_DB_SIZE_TIMEZONE_NAME, recordp->timezone_name, "TimeZoneName")
 
 	// ISP
 	const char *lookup_path_isp[] = { "traits", "isp", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_isp);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
-			int max = (entry_data.data_size + 1 > IPV6CALC_DB_SIZE_ISP_NAME) ? IPV6CALC_DB_SIZE_ISP_NAME : entry_data.data_size +1;
-			snprintf(recordp->isp_name, max, "%s", entry_data.utf8_string);
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "ISP: %s", recordp->isp_name);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for ISP: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "ISP not found");
-	};
+	CHECK_STORE(IPV6CALC_DB_SIZE_ISP_NAME, recordp->isp_name, "ISP")
 
 	// connection type
 	const char *lookup_path_connection_type[] = { "traits", "connection_type", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_connection_type);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
-			int max = (entry_data.data_size + 1 > IPV6CALC_DB_SIZE_CONN_TYPE) ? IPV6CALC_DB_SIZE_CONN_TYPE : entry_data.data_size +1;
-			snprintf(recordp->connection_type, max, "%s", entry_data.utf8_string);
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "ConnectionType: %s", recordp->connection_type);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for ConnectionType: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "ConnectionType not found");
-	};
+	CHECK_STORE(IPV6CALC_DB_SIZE_CONN_TYPE, recordp->connection_type, "ConnectionType")
 
 	// fetch ASN
 	if(strstr(mmdb->metadata.database_type, "ASN")) {
@@ -1092,16 +988,7 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 		const char *lookup_path_asn[] = { "traits", "autonomous_system_number", NULL };
 		libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_asn);
 	};
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UINT32) {
-			recordp->asn = entry_data.uint32;
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "ASN: %u", recordp->asn);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for ASN: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "ASN not found");
-	};
+	CHECK_STORE_UINT32(recordp->asn, "Autonomous System Number");
 
 	// organization name
 	if(strstr(mmdb->metadata.database_type, "ASN")) {
@@ -1112,57 +999,18 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 		const char *lookup_path_organization_name[] = { "traits", "autonomous_system_organization", NULL };
 		libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_organization_name);
 	};
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
-			int max = (entry_data.data_size + 1 > IPV6CALC_DB_SIZE_ORG_NAME) ? IPV6CALC_DB_SIZE_ORG_NAME : entry_data.data_size +1;
-			snprintf(recordp->organization_name, max, "%s", entry_data.utf8_string);
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "AS Organization: %s", recordp->organization_name);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for AS Organization: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "Organization not found");
-	};
+	CHECK_STORE(IPV6CALC_DB_SIZE_ORG_NAME, recordp->organization_name, "AutonomousSystemOrganization")
 
-	// fetch District (Subdivision) - which is a list
+	// fetch StateProv / District (Subdivision) - which is a list
 	const char *lookup_path_stateprov[] = { "subdivisions", "0", "names", "en", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_stateprov);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
-			int max = (entry_data.data_size + 1 > IPV6CALC_DB_SIZE_STATEPROV) ? IPV6CALC_DB_SIZE_STATEPROV : entry_data.data_size +1;
-			snprintf(recordp->stateprov, max, "%s", entry_data.utf8_string);
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "State/Province: %s", recordp->stateprov);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for State/Province: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "State/Province (subdivion#0) not found");
-	};
+	CHECK_STORE(IPV6CALC_DB_SIZE_STATEPROV, recordp->stateprov, "State/Province(subdivision#0)")
 
-	// fetch District (Subdivision) - which is a list
 	const char *lookup_path_distinct[] = { "subdivisions", "1", "names", "en", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_distinct);
-	if (entry_data.has_data) {
-		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
-			int max = (entry_data.data_size + 1 > IPV6CALC_DB_SIZE_DISTRICT) ? IPV6CALC_DB_SIZE_DISTRICT : entry_data.data_size +1;
-			snprintf(recordp->district, max, "%s", entry_data.utf8_string);
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "Distinct: %s", recordp->district);
-		} else {
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for District: %u", entry_data.type);
-		};
-	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "District not (subdivision#1) found");
-	};
+	CHECK_STORE(IPV6CALC_DB_SIZE_DISTRICT, recordp->district, "District(subdivsion#1)")
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "resultstring=%s", resultstring);
-
-
-	/* todo migrate once found in an mmdb
-			snprintf(recordp->stateprov, MMDB_SIZE_STATEPROV, "%s", token);
-			snprintf(recordp->isp_name         , MMDB_SIZE_ISP_NAME     , "%s", token);
-			snprintf(recordp->connection_type  , MMDB_SIZE_CONN_TYPE    , "%s", token);
-			snprintf(recordp->organization_name, MMDB_SIZE_ORG_NAME     , "%s", token);
-	*/
 
 END_libipv6calc_db_wrapper:
 	return(mmdb_error);

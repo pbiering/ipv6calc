@@ -399,7 +399,7 @@ int main(int argc, char *argv[]) {
 				if ((atoi(optarg) >= 1) && (atoi(optarg) <= 32)) {
 					ipv6rd_prefixlength = atoi(optarg);
 				} else {
-					fprintf(stderr, " Argument of option '6rd_prefixlength' is out or range (1-32): %d\n", atoi(optarg));
+					fprintf(stderr, " Argument of option '6rd_prefixlength' is out of range (1-32): %d\n", atoi(optarg));
 					exit(EXIT_FAILURE);
 				};
 				break;
@@ -517,7 +517,7 @@ int main(int argc, char *argv[]) {
 					force_prefix = atoi(optarg);
 					formatoptions |= FORMATOPTION_forceprefix;
 				} else {
-					fprintf(stderr, " Argument of option 'forceprefix' is out or range (1-128): %d\n", atoi(optarg));
+					fprintf(stderr, " Argument of option 'forceprefix' is out of range (1-128): %d\n", atoi(optarg));
 					exit(EXIT_FAILURE);
 				};
 				break;
@@ -528,7 +528,7 @@ int main(int argc, char *argv[]) {
 					bit_start = atoi(optarg);
 					formatoptions |= FORMATOPTION_printstart;
 				} else {
-					fprintf(stderr, " Argument of option 'printstart' is out or range (1-128): %d\n", atoi(optarg));
+					fprintf(stderr, " Argument of option 'printstart' is out of range (1-128): %d\n", atoi(optarg));
 					exit(EXIT_FAILURE);
 				};
 				break;
@@ -539,7 +539,7 @@ int main(int argc, char *argv[]) {
 					bit_end = atoi(optarg);
 					formatoptions |= FORMATOPTION_printend;
 				} else {
-					fprintf(stderr, " Argument of option 'printend' is out or range (1-128): %d\n", atoi(optarg));
+					fprintf(stderr, " Argument of option 'printend' is out of range (1-128): %d\n", atoi(optarg));
 					exit(EXIT_FAILURE);
 				};
 				break;

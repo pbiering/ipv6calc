@@ -2003,7 +2003,7 @@ END_libipv6calc_db_wrapper:
 
 
 /* country_name */
-const char *libipv6calc_db_wrapper_GeoIP_wrapper_country_name_by_addr(const char *addr, const int proto) {
+static const char *libipv6calc_db_wrapper_GeoIP_wrapper_country_name_by_addr(const char *addr, const int proto) {
 	GeoIP *gi;
 	int GeoIP_type = 0;
 	const char *GeoIP_result_ptr = NULL;
@@ -2091,6 +2091,7 @@ uint32_t libipv6calc_db_wrapper_GeoIP_wrapper_asn_by_addr(const ipv6calc_ipaddr 
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv6 address prefix (0-63): %08x%08x is reserved (skip AS lookup)", (unsigned int) ipaddrp->addr[0], (unsigned int) ipaddrp->addr[1]);
 			goto END_libipv6calc_db_wrapper;
 		};
+	} else {
 		ERRORPRINT_WA("unsupported proto=%d (FIX CODE)", ipaddrp->proto);
 		exit(EXIT_FAILURE);
 	};
@@ -2200,7 +2201,7 @@ END_libipv6calc_db_wrapper:
 
 
 /* record: city */
-GeoIPRecord *libipv6calc_db_wrapper_GeoIP_wrapper_record_city_by_addr(const char *addr, const int proto) {
+static GeoIPRecord *libipv6calc_db_wrapper_GeoIP_wrapper_record_city_by_addr(const char *addr, const int proto) {
 	GeoIP *gi;
 	int GeoIP_type = 0;
 	GeoIPRecord *GeoIP_result_ptr = NULL;
@@ -2316,20 +2317,17 @@ int libipv6calc_db_wrapper_GeoIP_all_by_addr(const ipv6calc_ipaddr *ipaddrp, lib
 		};
 	};
 
-	// Country
-	returnedCountry     = libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(addrstring, ipaddrp->proto);
-	if (returnedCountry != NULL) {
-		snprintf(recordp->country, IPV6CALC_DB_SIZE_COUNTRY, "%s", returnedCountry);
-	};
-
-	returnedCountryName = libipv6calc_db_wrapper_GeoIP_wrapper_country_name_by_addr(addrstring, ipaddrp->proto);
-	if (returnedCountryName != NULL) {
-		snprintf(recordp->country_long, IPV6CALC_DB_SIZE_COUNTRY_LONG, "%s", returnedCountryName);
-	};
-
 	// City and other details
 	gir = libipv6calc_db_wrapper_GeoIP_wrapper_record_city_by_addr(addrstring, ipaddrp->proto);
 	if (gir != NULL) {
+		if (gir->country_code != NULL) {
+			snprintf(recordp->country_code, IPV6CALC_DB_SIZE_COUNTRY_CODE, "%s", gir->country_code);
+		};
+
+		if (gir->country_name != NULL) {
+			snprintf(recordp->country_long, IPV6CALC_DB_SIZE_COUNTRY_LONG, "%s", gir->country_name);
+		};
+
 		if (gir->region != NULL) {
 			snprintf(recordp->stateprov, IPV6CALC_DB_SIZE_STATEPROV, "%s", gir->region);
 		};
@@ -2351,7 +2349,7 @@ int libipv6calc_db_wrapper_GeoIP_all_by_addr(const ipv6calc_ipaddr *ipaddrp, lib
 		};
 
 		if (gir->continent_code != NULL) {
-			snprintf(recordp->continent, IPV6CALC_DB_SIZE_CONTINENT, "%s", gir->continent_code);
+			snprintf(recordp->continent_code, IPV6CALC_DB_SIZE_CONTINENT_CODE, "%s", gir->continent_code);
 		};
 
 		if (gir->dma_code != 0) {
@@ -2359,14 +2357,24 @@ int libipv6calc_db_wrapper_GeoIP_all_by_addr(const ipv6calc_ipaddr *ipaddrp, lib
 		};
 
 		if (gir->area_code != 0) {
-			snprintf(recordp->area_code, IPV6CALC_DB_SIZE_DMA_CODE, "%d", gir->area_code);
+			snprintf(recordp->area_code, IPV6CALC_DB_SIZE_AREA_CODE, "%d", gir->area_code);
 		};
 
 		libipv6calc_db_wrapper_GeoIPRecord_delete(gir);
 
 		result = 0;
-	};
+	} else {
+		// Country
+		returnedCountry     = libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(addrstring, ipaddrp->proto);
+		if (returnedCountry != NULL) {
+			snprintf(recordp->country_code, IPV6CALC_DB_SIZE_COUNTRY_CODE, "%s", returnedCountry);
+		};
 
+		returnedCountryName = libipv6calc_db_wrapper_GeoIP_wrapper_country_name_by_addr(addrstring, ipaddrp->proto);
+		if (returnedCountryName != NULL) {
+			snprintf(recordp->country_long, IPV6CALC_DB_SIZE_COUNTRY_LONG, "%s", returnedCountryName);
+		};
+	};
 
 END_libipv6calc_db_wrapper:
 	return(result);

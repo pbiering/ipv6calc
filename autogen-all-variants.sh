@@ -27,6 +27,10 @@ GEOIP#-g --geoip-ipv6-compat
 GEOIP#-g --geoip-ipv6-compat --geoip-dyn
 GEOIP2 DBIP2#-m
 GEOIP2 DBIP2#-m --mmdb-dyn
+GEOIP2#-m --disable-dbip2
+GEOIP2#-M --disable-dbip2
+DBIP2#-m --disable-geoip2
+DBIP2#-M --disable-geoip2
 IP2LOCATION GEOIP DBIP GEOIP2 DBIP2#-a
 IP2LOCATION GEOIP DBIP GEOIP2 DBIP2#-a --mmdb-dyn --geoip-dyn --ip2location-dyn
 NONE#--disable-db-ieee

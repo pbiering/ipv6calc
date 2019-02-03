@@ -73,8 +73,20 @@
 // 	+ DBIP_NETSPEED
 // 	+ DBIP_ISP
 // 	+ DBIP_ORGNAME
+// (inbetween)
+//      + <geolocation provider>_AS_NUM
+//      + <geolocation provider>_AS_TEXT
+//      + <geolocation provider>_CONTINENT_SHORT
+// 20: 2.0.0 to current
+//      rename ORGNAME to AS_ORGNAME
+//      remove AS_TEXT
+//      + <geolocation provider>_GEONAME_ID_COUNTRY
+//      + <geolocation provider>_GEONAME_ID_CONTINENT
+//      + <geolocation provider>_RADIUS
+//      + <geolocation provider>_ELEVATION
+//      + <geolocation provider>_CONTINENT_LONG
 
-#define IPV6CALC_OUTPUT_VERSION	12
+#define IPV6CALC_OUTPUT_VERSION	20
 
 /* prototypes */
 extern int  showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, const uint32_t formatoptions);

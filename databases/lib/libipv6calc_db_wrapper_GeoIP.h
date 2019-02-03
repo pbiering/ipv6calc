@@ -35,7 +35,6 @@ extern uint32_t lib_features_GeoIP;
 extern int          libipv6calc_db_wrapper_GeoIP_wrapper_init(void);
 extern int          libipv6calc_db_wrapper_GeoIP_wrapper_cleanup(void);
 extern const char  *libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(const char *addr, const int proto);
-extern const char  *libipv6calc_db_wrapper_GeoIP_wrapper_country_name_by_addr(const char *addr, const int proto);
 extern char        *libipv6calc_db_wrapper_GeoIP_wrapper_asnum_by_addr(const char *addr, const int proto);
 extern uint32_t     libipv6calc_db_wrapper_GeoIP_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp);
 extern void         libipv6calc_db_wrapper_GeoIP_wrapper_info(char* string, const size_t size);
@@ -75,8 +74,6 @@ extern const char   *libipv6calc_db_wrapper_GeoIP_country_name_by_ipnum_v6(GeoIP
 extern void          libipv6calc_db_wrapper_GeoIP_setup_custom_directory(char *dir);
 extern const char  **libipv6calc_db_wrapper_GeoIPDBDescription;
 extern char       ***libipv6calc_db_wrapper_GeoIPDBFileName_ptr;
-
-extern GeoIPRecord *libipv6calc_db_wrapper_GeoIP_wrapper_record_city_by_addr(const char *addr, const int proto);
 
 extern int          libipv6calc_db_wrapper_GeoIP_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libipv6calc_db_wrapper_geolocation_record *recordp);
 #endif

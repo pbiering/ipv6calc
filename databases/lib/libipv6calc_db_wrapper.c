@@ -1224,7 +1224,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			if ((atoi(optarg) >= 1) && (atoi(optarg) <= DBIP_DB_MAX)) {
 				dbip_db_only_type = atoi(optarg);
 			} else {
-				fprintf(stderr, " Argument of option 'db-dbip-only-type' is out or range (1-%d): %d\n", DBIP_DB_MAX, atoi(optarg));
+				fprintf(stderr, " Argument of option 'db-dbip-only-type' is out of range (1-%d): %d\n", DBIP_DB_MAX, atoi(optarg));
 				exit(EXIT_FAILURE);
 			};
 #else
@@ -1238,7 +1238,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			if ((atoi(optarg) >= 1) && (atoi(optarg) <= DBIP2_DB_MAX)) {
 				dbip2_db_only_type = atoi(optarg);
 			} else {
-				fprintf(stderr, " Argument of option 'db-dbip2-only-type' is out or range (1-%d): %d\n", DBIP2_DB_MAX, atoi(optarg));
+				fprintf(stderr, " Argument of option 'db-dbip2-only-type' is out of range (1-%d): %d\n", DBIP2_DB_MAX, atoi(optarg));
 				exit(EXIT_FAILURE);
 			};
 #else
@@ -1253,7 +1253,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			if ((atoi(optarg) >= 0) && (atoi(optarg) <= 99999)) {
 				dbip_db_comm_to_free_switch_min_delta_months = atoi(optarg);
 			} else {
-				fprintf(stderr, " Argument of option 'db-dbip-comm-to-free-switch-min-delta-months' is out or range (0-99999): %d\n", atoi(optarg));
+				fprintf(stderr, " Argument of option 'db-dbip-comm-to-free-switch-min-delta-months' is out of range (0-99999): %d\n", atoi(optarg));
 				exit(EXIT_FAILURE);
 			};
 #else
@@ -1267,7 +1267,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			if ((atoi(optarg) >= 0) && (atoi(optarg) <= 99999)) {
 				dbip2_db_comm_to_free_switch_min_delta_months = atoi(optarg);
 			} else {
-				fprintf(stderr, " Argument of option 'db-dbip2-comm-to-free-switch-min-delta-months' is out or range (0-99999): %d\n", atoi(optarg));
+				fprintf(stderr, " Argument of option 'db-dbip2-comm-to-free-switch-min-delta-months' is out of range (0-99999): %d\n", atoi(optarg));
 				exit(EXIT_FAILURE);
 			};
 #else
@@ -1304,7 +1304,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			if ((atoi(optarg) >= 0) && (atoi(optarg) <= 99999)) {
 				ip2location_db_lite_to_sample_autoswitch_max_delta_months = atoi(optarg);
 			} else {
-				fprintf(stderr, " Argument of option 'db-ip2location-lite-to-sample-autoswitch-max-delta-months' is out or range (0-99999): %d\n", atoi(optarg));
+				fprintf(stderr, " Argument of option 'db-ip2location-lite-to-sample-autoswitch-max-delta-months' is out of range (0-99999): %d\n", atoi(optarg));
 				exit(EXIT_FAILURE);
 			};
 #else
@@ -1318,7 +1318,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			if ((atoi(optarg) >= 0) && (atoi(optarg) <= 99999)) {
 				ip2location_db_comm_to_lite_switch_min_delta_months = atoi(optarg);
 			} else {
-				fprintf(stderr, " Argument of option 'db-ip2location-comm-to-lite-switch-min-delta-months' is out or range (0-99999): %d\n", atoi(optarg));
+				fprintf(stderr, " Argument of option 'db-ip2location-comm-to-lite-switch-min-delta-months' is out of range (0-99999): %d\n", atoi(optarg));
 				exit(EXIT_FAILURE);
 			};
 #else
@@ -1332,7 +1332,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			if ((atoi(optarg) >= 1) && (atoi(optarg) <= IP2LOCATION_DB_MAX)) {
 				ip2location_db_only_type = atoi(optarg);
 			} else {
-				fprintf(stderr, " Argument of option 'db-ip2location-only-type' is out or range (1-%d): %d\n", IP2LOCATION_DB_MAX, atoi(optarg));
+				fprintf(stderr, " Argument of option 'db-ip2location-only-type' is out of range (1-%d): %d\n", IP2LOCATION_DB_MAX, atoi(optarg));
 				exit(EXIT_FAILURE);
 			};
 #else
@@ -1422,29 +1422,37 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 void libipv6calc_db_wrapper_geolocation_record_clear(libipv6calc_db_wrapper_geolocation_record *recordp) {
 
 	// clear structure
-	snprintf(recordp->country       , IPV6CALC_DB_SIZE_COUNTRY       , "%s", "");
+	snprintf(recordp->country_code  , IPV6CALC_DB_SIZE_COUNTRY_CODE  , "%s", "");
 	snprintf(recordp->country_long  , IPV6CALC_DB_SIZE_COUNTRY_LONG  , "%s", "");
-	snprintf(recordp->continent     , IPV6CALC_DB_SIZE_CONTINENT     , "%s", "");
+	snprintf(recordp->continent_code, IPV6CALC_DB_SIZE_CONTINENT_CODE, "%s", "");
 	snprintf(recordp->continent_long, IPV6CALC_DB_SIZE_CONTINENT_LONG, "%s", "");
 	snprintf(recordp->stateprov     , IPV6CALC_DB_SIZE_STATEPROV     , "%s", "");
 	snprintf(recordp->district      , IPV6CALC_DB_SIZE_DISTRICT      , "%s", "");
 	snprintf(recordp->city          , IPV6CALC_DB_SIZE_CITY          , "%s", "");
 	snprintf(recordp->zipcode       , IPV6CALC_DB_SIZE_ZIPCODE       , "%s", "");
-	snprintf(recordp->weathercode   , IPV6CALC_DB_SIZE_WEATHERCODE   , "%s", "");
+	snprintf(recordp->weatherstationcode, IPV6CALC_DB_SIZE_WEATHERSTATIONCODE, "%s", "");
+	snprintf(recordp->weatherstationname, IPV6CALC_DB_SIZE_WEATHERSTATIONNAME, "%s", "");
 	snprintf(recordp->dma_code      , IPV6CALC_DB_SIZE_DMA_CODE      , "%s", "");
+	snprintf(recordp->idd_code      , IPV6CALC_DB_SIZE_IDD_CODE      , "%s", "");
 	snprintf(recordp->area_code     , IPV6CALC_DB_SIZE_AREA_CODE     , "%s", "");
 	recordp->latitude             = 0;
 	recordp->longitude            = 0;
 	recordp->accuracy_radius      = 0;
+	recordp->elevation            = IPV6CALC_DB_GEO_ELEVATION_UNKNOWN;
 	recordp->geoname_id           = 0;
 	recordp->continent_geoname_id = 0;
 	recordp->country_geoname_id   = 0;
 	recordp->asn                  = ASNUM_AS_UNKNOWN; // invalid/unset
-	recordp->timezone_offset      = 99; // invalid/unset (>= 24)
+	recordp->timezone_offset      = IPV6CALC_DB_GEO_TIMEZONE_UNKNOWN; // invalid/unset (>= 24)
 	snprintf(recordp->timezone_name    , IPV6CALC_DB_SIZE_TIMEZONE_NAME, "%s", "");
 	snprintf(recordp->isp_name         , IPV6CALC_DB_SIZE_ISP_NAME     , "%s", "");
 	snprintf(recordp->connection_type  , IPV6CALC_DB_SIZE_CONN_TYPE    , "%s", "");
 	snprintf(recordp->organization_name, IPV6CALC_DB_SIZE_ORG_NAME     , "%s", "");
+	snprintf(recordp->domain           , IPV6CALC_DB_SIZE_DOMAIN       , "%s", "");
+	snprintf(recordp->mobile_network_code, IPV6CALC_DB_SIZE_MOBILENETWORKCODE, "%s", "");
+	snprintf(recordp->mobile_country_code, IPV6CALC_DB_SIZE_MOBILECOUNTRYCODE, "%s", "");
+	snprintf(recordp->mobile_brand       , IPV6CALC_DB_SIZE_MOBILE_BRAND     , "%s", "");
+	snprintf(recordp->usage_type         , IPV6CALC_DB_SIZE_USAGE_TYPE       , "%s", "");
 };
 
 
@@ -1520,7 +1528,6 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 
 #if defined SUPPORT_GEOIP || defined SUPPORT_IP2LOCATION
 	char tempstring[IPV6CALC_ADDR_STRING_MAX] = "";
-	char *result_char_ptr = NULL;
 #endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
@@ -1580,7 +1587,7 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 			if (wrapper_GeoIP_status == 1) {
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Call now GeoIP with %s", tempstring);
 
-				result_char_ptr = (char *) libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(tempstring, ipaddrp->proto);
+				char *result_char_ptr = (char *) libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(tempstring, ipaddrp->proto);
 
 				if ((result_char_ptr != NULL) && (strlen(result_char_ptr) > 0)) {
 					snprintf(string, length, "%s", result_char_ptr);
@@ -1616,11 +1623,8 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 			if (wrapper_IP2Location_status == 1) {
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Call now IP2Location with %s", tempstring);
 
-				result_char_ptr = libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(tempstring, ipaddrp->proto);
-				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called IP2Location returned: %s", result_char_ptr);
-
-				if (result_char_ptr != NULL) {
-					snprintf(string, length, "%s", result_char_ptr);
+				int ret = libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(tempstring, ipaddrp->proto, string, length);
+				if (ret == 0) {
 					result = 0;
 					data_source = IPV6CALC_DB_SOURCE_IP2LOCATION;
 					goto END_libipv6calc_db_wrapper; // ok
