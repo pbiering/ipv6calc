@@ -2,6 +2,7 @@ GENERAL
 -------
 MaxMind distributes since some time also binary loation file in MaxMindDB format (aka GeoIPv2)
 
+See also README.MaxMindDB
 
 ENABLING SUPPORT
 ----------------
@@ -10,10 +11,13 @@ Install following RPMs (usually supported by distribution)
 
 If you want to use the GeoIPv2 databases with ipv6calc, you will
 have only to enable the support using configure:
-	--enable-geoip2 --enable-maxminddb
+     --enable-maxminddb
 
   In case, dynamic load of library should be enabled (conditional MaxMindDB support), add
      --with-maxmindd-dynamic
+
+  In case GeoIPv2 support should be explicity *disabled*, use
+    --disable-geoip2
 
 
 DATA UPDATE

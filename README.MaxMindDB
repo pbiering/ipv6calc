@@ -1,0 +1,22 @@
+GENERAL
+-------
+MaxMindDB support added since version 2.0.0
+
+See also README.GeoIP2, README.DBIP2
+
+
+ENABLING SUPPORT
+----------------
+Install following RPMs (usually supported by distribution)
+        maxminddb maxminddb-devel
+
+  In case, dynamic load of library should be enabled (conditional MaxMindDB support), add
+     --with-maxmindd-dynamic
+
+COMPATIBILITY
+-------------
+ipv6calc is tested against following MaxMindDB library versions
+     1.1.1 (EL6)
+     1.2.0 (EL7, FC29)
+
+$Id$

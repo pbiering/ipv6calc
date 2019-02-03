@@ -2,6 +2,8 @@ GENERAL
 -------
 db-ip.com distributes since some time also binary loation file in MaxMindDB format
 
+see also README.MaxMindDB
+
 
 ENABLING SUPPORT
 ----------------
@@ -10,11 +12,13 @@ Install following RPMs (usually supported by distribution)
 
 If you want to use the db-ip.com databases with ipv6calc, you will
 have only to enable the support using configure:
-	--enable-dbip2 --enable-maxminddb
+     --enable-maxminddb
 
   In case, dynamic load of library should be enabled (conditional MaxMindDB support), add
      --with-maxmindd-dynamic
 
+  In case db-ip.com MaxMindDB support should be explicity *disabled*, use
+    --disable-dbip2
 
 DATA UPDATE
 -----------
