@@ -1,6 +1,6 @@
-.TH "ipv6calc" "8" "0.99.0" "Peter Bieringer <pb@bieringer.de>" "system administration"
+.TH "ipv6calc" "8" "2.0.0" "Peter Bieringer <pb@bieringer.de>" "system administration"
 .SH "NAME"
-ipv6calc \- format and calculate IPv6/IPv4/MAC
+ipv6calc \- format, calculate, show information, filter IPv6/IPv4/MAC addresses
 .SH "SYNOPSIS"
 ipv6calc [\fIOPTIONS\fP] [\fB<input data>\fR]
 
@@ -9,7 +9,7 @@ ipv6calc [\fIOPTIONS\fP] [\fB<input data>\fR]
 This program formats and calculates IPv6/IPv4/MAC addresses and can do
 many more tricky things, e.g. includes a pipe filter capability.
 .SH "OPTIONS"
-If no data is presented as command-line arguments, data is read from
+If no data is presented as command\-line arguments, data is read from
 standard input.
 .LP 
 General options:
@@ -22,7 +22,7 @@ version information (2 optional detail levels)
 .TP 
 \fB[\-v|\-\-version \-h]\fR
 explanation of feature tokens
-.TP
+.TP 
 \fB[\-V|\-\-verbose]\fR
 be more verbose
 .TP 
@@ -135,9 +135,15 @@ For more information and available format options use:
 .LP 
 See inline help or documentation for more.
 .SH "REPORTING BUGS"
-Report bugs to <ipv6calc@lists.deepspace6.net> or to the authors.
-.br 
-Homepage: http://www.deepspace6.net/projects/ipv6calc.html
+Report bugs via GitHub:
+.UR https://github.com/pbiering/ipv6calc/issues
+ https://github.com/pbiering/ipv6calc/issues
+.UE
+.PP 
+Homepage:
+.UR http://www.deepspace6.net/projects/ipv6calc.html
+http://www.deepspace6.net/projects/ipv6calc.html
+.UE
 .SH "EXAMPLES"
 To run this program the standard way type:
 .LP 

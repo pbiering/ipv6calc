@@ -1,4 +1,4 @@
-.TH "ipv6loganon" "8" "0.99.0" "Peter Bieringer <pb@bieringer.de>" "system tools"
+.TH "ipv6loganon" "8" "2.0.0" "Peter Bieringer <pb@bieringer.de>" "system tools"
 .SH "NAME"
 ipv6loganon \- HTTP server log file anonymizer
 .SH "SYNOPSIS"
@@ -12,19 +12,19 @@ Depending on the anonymization method, address parts (prefix/interface
 identifier) are
 
 1. simply \fBzeroized\fR by given masks.
-.PP
+.PP 
 2. \fBanonymized\fR by zeroizing only required bits (partially depending
 on specified masks).
-.PP
+.PP 
 3. anonymized by trying to keep for IPv4 and IPv6 addresses
 (\fBkeep\-type\-asn\-cc\fR)
 
 When zeroing only required bits (mode 2) the possibilities are
 
-.TP
+.TP 
 IID:
 .RS
-.TP
+.TP 
 EUI\-48/64:
 serial number would be zero'ed, keeping OID
 ISATAP:
@@ -32,15 +32,15 @@ client IPv4 address would be anonymized by given IPv4 mask
 TEREDO:
 client IPv4 address would be anonymized by given IPv4 mask, client
 port would be zero'ed
-.TP
+.TP 
 6to4(Microsoft):
 client IPv4 address would be anonymized by given IPv4 mask
-.TP
+.TP 
 local:
 whole IID would be zero'ed (except if privacy extension
 was detected, then replaced by a special token)
 .RE
-.TP
+.TP 
 Prefix:
 IPv6 addresses including IPv4 address of client will be anonymized
 by the given IPv4 mask
@@ -49,16 +49,16 @@ by the given IPv4 mask
 When anonymizing with keep (mode 3) the relevant fields are: \fBtype\fR of
 address, Autonomous System Number (\fBASN\fR), and Country Code
 (\fBCC\fR)
-.PP
+.PP 
 This method requires an IPv4/IPv6 to Country Code and ASN resolution,
 provided by GeoIP
-.PP
+.PP 
 Big advantage: ipv6logstats(8) result should be the same as with raw data
-.PP
+.PP 
 Anonymized IPv4 addresses are from experimental range \fB240.0.0.0/8\fR
-.PP
+.PP 
 Anonymized IPv6 addresses are using (currently hijacked) prefix \fBa909::/16\fR
-.PP
+.PP 
 Anonymized IPv6 IID is starting with \fBa9x9\fR (x = anonymized nibbles of SLA)
 .SH "OPTIONS"
 .LP 
@@ -72,7 +72,7 @@ version information (2 optional detail levels)
 .TP 
 \fB[\-v|\-\-version \-h]\fR
 explanation of feature tokens
-.TP
+.TP 
 \fB[\-V|\-\-verbose]\fR
 be more verbose
 .TP 
@@ -106,7 +106,7 @@ flush output after each line
 .TP 
 \fB[\-V|\-\-verbose]\fR
 be verbose
-.PP
+.PP 
 Performance options:
 .TP 
 \fB[\-n|\-\-nocache]\fR
@@ -151,7 +151,7 @@ mask\-autoadjust=yes method=anonymize
 \fBanonymize\-paranoid\fR (\fBap\fR):
 mask\-ipv6= 40 mask\-ipv4=16 mask\-eui64= 0 mask\-mac=24
 mask\-autoadjust=no method=anonymize
-.TP
+.TP 
 \fBzeroize\-standard\fR (\fBzs\fR):
 mask\-ipv6= 56 mask\-ipv4=24 mask\-eui64=40 mask\-mac=24
 mask\-autoadjust=yes method=zeroize
@@ -159,11 +159,11 @@ mask\-autoadjust=yes method=zeroize
 \fBzeroize\-careful\fR (\fBzc\fR):
 mask\-ipv6= 48 mask\-ipv4=20 mask\-eui64=24 mask\-mac=24 mask\-autoadjust=yes
 method=zeroize
-.TP
+.TP 
 \fBzeroize\-paranoid\fR (\fBzp\fR):
 mask\-ipv6= 40 mask\-ipv4=16 mask\-eui64= 0 mask\-mac=24 mask\-autoadjust=no
 method=zeroize
-.TP
+.TP 
 \fBkeep\-type\-asn\-cc\fR (\fBkp\fR):
 mask\-ipv6= 56 mask\-ipv4=24 mask\-eui64=40 mask\-mac=24 mask\-autoadjust=yes
 method=keep\-type\-asn\-cc
@@ -209,7 +209,10 @@ a909:16fa:9092:23ff:a909:4291:4022:1708
 .SH "SEE ALSO"
 ipv6calc(8), ipv6logstat(8)
 .SH "REPORTING BUGS"
-Report bugs to <ipv6calc@lists.deepspace6.net> or to the authors.
+Report bugs via GitHub:
+.UR https://github.com/pbiering/ipv6calc/issues
+ https://github.com/pbiering/ipv6calc/issues
+.UE
 .PP 
 Homepage:
 .UR http://www.deepspace6.net/projects/ipv6calc.html
