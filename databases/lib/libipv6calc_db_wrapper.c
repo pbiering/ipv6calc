@@ -241,9 +241,13 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 	} else if (wrapper_GeoIP2_disable == 1) {
 		NONQUIETPRINT_WA("%sSupport for GeoIP (MaxMindDB) disabled by option", prefix_string);
 	} else if (wrapper_GeoIP2_disable == 2) {
+#ifdef SUPPORT_MMDB_DYN
 		NONQUIETPRINT_WA("%sSupport for GeoIP (MaxMindDB) disabled, no MaxMindDB library found: %s", prefix_string, mmdb_lib_file);
+#endif
 	} else {
+#ifdef SUPPORT_MMDB_DYN
 		NONQUIETPRINT_WA("%sSupport for GeoIP (MaxMindDB) disabled by MaxMindDB library problem: %s", prefix_string, mmdb_lib_file);
+#endif
 	};
 #endif // SUPPORT_GEOIP
 
@@ -308,9 +312,13 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 	} else if (wrapper_DBIP2_disable == 1) {
 		NONQUIETPRINT_WA("%sSupport for db-ip.com (MaxMindDB) disabled by option", prefix_string);
 	} else if (wrapper_DBIP2_disable == 2) {
+#ifdef SUPPORT_MMDB_DYN
 		NONQUIETPRINT_WA("%sSupport for db-ip.com (MaxMindDB) disabled, no MaxMindDB library found: %s", prefix_string, mmdb_lib_file);
+#endif
 	} else {
+#ifdef SUPPORT_MMDB_DYN
 		NONQUIETPRINT_WA("%sSupport for db-ip.com (MaxMindDB) disabled by MaxMindDB library problem: %s", prefix_string, mmdb_lib_file);
+#endif
 	};
 #endif // SUPPORT_DBIP2
 

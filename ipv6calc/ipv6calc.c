@@ -692,6 +692,8 @@ int main(int argc, char *argv[]) {
 	argv += optind;
 	argc -= optind;
 
+	DEBUGPRINT_WA(DEBUG_ipv6calc_general, "End of option local parsing: argc=%d", argc);
+
 	if (ipv6calc_quiet != 0) {
 		formatoptions |= FORMATOPTION_quiet;
 	};
@@ -699,6 +701,7 @@ int main(int argc, char *argv[]) {
 	/* initialise database wrapper */
 	result = libipv6calc_db_wrapper_init("");
 	if (result != 0) {
+		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "db_wrapper_init failed, result=%d", result);
 		exit(EXIT_FAILURE);
 	};
 

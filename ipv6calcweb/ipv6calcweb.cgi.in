@@ -325,9 +325,9 @@ my @format_tt = ( "EUI48", "EUI64", "IPV6", "IPV4", "SLA", "IID", "IPV4_6TO4", "
 
 my %text_geodb = (
 	'IP2LOCATION' => 'IP2Location',
-	'GEOIP'       => 'GeoIP',
+	'GEOIP'       => 'GeoIP(legacy)',
 	'GEOIP2'      => 'GeoIP(MaxMindDB)',
-	'DBIP'        => 'db-ip.com',
+	'DBIP'        => 'db-ip.com(legacy)',
 	'DBIP2'       => 'db-ip.com(MaxMindDB)'
 );
 
@@ -1552,7 +1552,11 @@ sub print_infohash ($$$;$) {
 			} else {
 				&print_tagoutput($key);
 			};
-			&print_tagoutput("</b></font></td>\n");
+			&print_tagoutput("</b>");
+			if (defined $text_geodb{$key}) {
+				&print_tagoutput("</font><br ><font size=\"-2\">" . $text_geodb{$key});
+			};
+			&print_tagoutput("</font></td>\n");
 			$shift = $r; $r = $g; $g = $b; $b = $shift;	
 		};
 		&print_tagoutput ( "      </tr>\n" );

@@ -108,9 +108,9 @@ int libipv6calc_db_wrapper_MMDB_wrapper_init(void) {
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "Loaded library successful: %s", mmdb_lib_file);
 END_libipv6calc_db_wrapper:
 #else // SUPPORT_MMDB_DYN
-
+	// todo: library version check
+	result = 0;
 #endif // SUPPORT_MMDB_DYN
-
 
 	return(result);
 };
