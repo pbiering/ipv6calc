@@ -437,7 +437,8 @@ static void print_geolocation(libipv6calc_db_wrapper_geolocation_record *record,
 
 	if (fabsf(record->timezone_offset) < 24) {
 		// convert timezone offset into human readable value
-		snprintf(tempstring, sizeof(tempstring), "%+03d:%02d", (int) record->timezone_offset, (int) ((record->timezone_offset - (int) record->timezone_offset) * 60));
+		DEBUGPRINT_WA(DEBUG_showinfo, "timezone offset value: %f", record->timezone_offset);
+		snprintf(tempstring, sizeof(tempstring), "%+03d:%02d", (int) record->timezone_offset, ((int) (record->timezone_offset * 60)) % 60);
 		PRINT_RECORD_STRING(tempstring          , "TIMEZONE"            , "Time Zone")
 	};
 

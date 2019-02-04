@@ -1884,7 +1884,14 @@ int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddr
 		};
 
 		if (TEST_IP2LOCATION_AVAILABLE(record->timezone)) {
-			snprintf(recordp->timezone_name, IPV6CALC_DB_SIZE_TIMEZONE_NAME, "%s", record->timezone);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "parse timezone: %s", record->timezone);
+			// IP2Location supplies time zone as char
+			int hour, minute;
+			int result = sscanf(record->timezone, "%d:%d", &hour, &minute);
+			if (result == 2) {
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "result of timezone parsing: hour=%d minute=%d", hour, minute);
+				recordp->timezone_offset = hour + ((float) minute) / 60;
+			};
 		};
 
 		if (record->latitude != 0) {
