@@ -246,6 +246,9 @@ my $url_geoname_by_id = "http://api.geonames.org/get?geonameId=#GEONAME_ID#&user
 # Base URL for Location Service
 my $url_openstreetmap_by_lat_lon = "http://www.openstreetmap.org/?mlat=#LATITUDE#&mlon=#LONGITUDE#&zoom=5";
 
+# Base URL for Weather Station Service
+my $url_weather_com_by_station = "https://weather.com/weather/tenday/l/#WEATHERSTATIONCODE#:1:GM";
+
 # Whois server urls
 my %url_whoisservers = (
 	'RIPENCC' => {
@@ -326,6 +329,33 @@ my %text_geodb = (
 	'GEOIP2'      => 'GeoIP(MaxMindDB)',
 	'DBIP'        => 'db-ip.com',
 	'DBIP2'       => 'db-ip.com(MaxMindDB)'
+);
+
+my %text_extra = (
+	'_GEONAME_ID' => {
+		'de' => "Verweis auf geonames.org",
+		'en' => "link to geonames.org",
+	},
+	'_GEONAME_ID_COUNTRY' => {
+		'de' => "Verweis auf geonames.org",
+		'en' => "link to geonames.org",
+	},
+	'_GEONAME_ID_CONTINENT' => {
+		'de' => "Verweis auf geonames.org",
+		'en' => "link to geonames.org",
+	},
+	'_LATITUDE' => {
+		'de' => "Verweis auf openstreetmap.org",
+		'en' => "link to openstreetmap.org",
+	},
+	'_LONGITUDE' => {
+		'de' => "Verweis auf openstreetmap.org",
+		'en' => "link to openstreetmap.org",
+	},
+	'_WEATHERSTATIONCODE' => {
+		'de' => "Verweis auf weather.com",
+		'en' => "link to weather.com",
+	}
 );
 
 my %text = (
@@ -1305,6 +1335,11 @@ sub print_infohash ($$$;$) {
 				} else {
 					&print_textonly (' ' x ($length_max_description) );
 				};
+
+				# print information about link
+				if (defined $text_extra{$key_lookup_without_db}->{$lang}) {
+					&print_tagoutput(" <font size=\"-2\">(" . $text_extra{$key_lookup_without_db}->{$lang} . ")</font>")
+				};
 			} else {
 				&print_textonly (' ' x ($length_max_description) );
 			};
@@ -1451,6 +1486,9 @@ sub print_infohash ($$$;$) {
 			if ($combined_valid != 2) {
 				$url = undef;
 			};
+		} elsif ($key_lookup =~ /WEATHERSTATIONCODE/o) {
+			$url = $url_weather_com_by_station;
+			$url =~ s/#WEATHERSTATIONCODE#/$$phash{$key}/g;
 		};
 		
 		&print_tagoutput ( "<font size=\"-1\">" ) if ($count_key_embedded > 0);
@@ -1533,9 +1571,13 @@ sub print_infohash ($$$;$) {
 			# print description
 			if ($outputtype ne "simple") {
 				&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 224);\"><font size=\"-1\">" );
-				if (defined $text{$key_lookup}->{$lang}) {
-					print $text{$key_lookup}->{$lang};
-				} elsif ($key_lookup =~ /^(IP2LOCATION|GEOIP|GEOIP2|DBIP|DBIP2)(_.+)$/o) {
+				if (defined $text{"_" . $key_lookup}->{$lang}) {
+					print $text{"_" . $key_lookup}->{$lang};
+
+					if (defined $text_extra{"_" . $key_lookup}->{$lang}) {
+						&print_tagoutput(" <font size=\"-2\">(" . $text_extra{"_" . $key_lookup}->{$lang} . ")</font>")
+					};
+				} elsif ($key_lookup =~ /^(IP2LOCATION|GEOIP|GEOIP2|DBIP|DBIP2)$/o) {
 					# fallback
 					my $key_lookup_without_db = $2;
 					if (defined $text{$key_lookup_without_db}->{$lang}) {
@@ -1591,6 +1633,11 @@ sub print_infohash ($$$;$) {
 							&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
 							$flag = 1; # workaround to close a tag below
 						};
+					} elsif ($key_lookup =~ /WEATHERSTATIONCODE/o) {
+						$url = $url_weather_com_by_station;
+						$url =~ s/#WEATHERSTATIONCODE#/$$phash{$key_result}/g;
+						&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
+						$flag = 1;
 					};
 
 					print $$phash{$key_result};
@@ -2439,10 +2486,9 @@ if ($length_max_key_sub + $length_max_key_geodb > $length_max_key) {
 	$length_max_key = $length_max_key_sub + $length_max_key_geodb;
 };
 
-if ($length_max_desc_sub + $length_max_desc_geodb > $length_max_description) {
-	$length_max_description = $length_max_desc_sub + $length_max_desc_geodb;
+if ($length_max_desc_sub + $length_max_desc_geodb + 1 > $length_max_description) {
+	$length_max_description = $length_max_desc_sub + $length_max_desc_geodb + 1;
 };
-
 
 goto("OUTPUT_BEGIN");
 

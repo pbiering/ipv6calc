@@ -26,6 +26,15 @@ while [ "$1" != "$LAST" ]; do
 		use_dbip=1
 		use_external=1
 		;;
+	    '--ALL'|'-A')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --enable-ip2location --enable-dbip --enable-mmdb --with-geoip-dynamic --with-ip2location-dynamic --with-mmdb-dynamic --enable-external --enable-mod_ipv6calc"
+		SKIP_STATIC=1
+		use_geoip=1
+		use_ip2location=1
+		use_dbip=1
+		use_external=1
+		;;
 	    '--geoip'|'-g')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip"
@@ -120,6 +129,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   -?|-h|--help        : this help"
 		echo "   -n|--no-make        : stop before running 'make'"
 		echo "   -a|--all            : enable GeoIP/IP2Location/db-ip.com/External/mod_ipv6calc support"
+		echo "   -A|--ALL            : enable GeoIP/IP2Location/db-ip.com/External/mod_ipv6calc support with dynamic library support"
 		echo "   -m|--mmdb           : enable MaxMindDB support (GeoIP/db-ip.com)"
 		echo "   --mmdb-dyn|-M       : switch to dynamic library loading of MaxMindDB"
 		echo "   --disable-geoip2    : disable MaxMindDB support for GeoIP"

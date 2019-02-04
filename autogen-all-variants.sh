@@ -32,7 +32,7 @@ GEOIP2#-M --disable-dbip2
 DBIP2#-m --disable-geoip2
 DBIP2#-M --disable-geoip2
 IP2LOCATION GEOIP DBIP GEOIP2 DBIP2#-a
-IP2LOCATION GEOIP DBIP GEOIP2 DBIP2#-a --mmdb-dyn --geoip-dyn --ip2location-dyn
+IP2LOCATION GEOIP DBIP GEOIP2 DBIP2#-A
 NONE#--disable-db-ieee
 NONE#--disable-db-ipv4
 NONE#--disable-db-ipv6

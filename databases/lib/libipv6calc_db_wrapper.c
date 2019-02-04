@@ -183,10 +183,10 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 #endif
 		// disable support for GEOIP2 & DBIP2
 #ifdef SUPPORT_GEOIP2
-		wrapper_GeoIP2_disable = 2;
+		wrapper_GeoIP2_disable = r;
 #endif
 #ifdef SUPPORT_DBIP2
-		wrapper_DBIP2_disable = 2;
+		wrapper_DBIP2_disable = r;
 #endif
 	};
 #else
@@ -231,7 +231,7 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "GeoIP2_wrapper_init result: %d wrapper_features=0x%08x", r, wrapper_features);
 
 		if (r != 0) {
-#ifndef SUPPORT_GEOIP2_DYN
+#ifndef SUPPORT_MMDB_DYN
 			// only non-dynamic-load results in a problem
 			result = 1;
 #endif
@@ -240,8 +240,10 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 		};
 	} else if (wrapper_GeoIP2_disable == 1) {
 		NONQUIETPRINT_WA("%sSupport for GeoIP (MaxMindDB) disabled by option", prefix_string);
+	} else if (wrapper_GeoIP2_disable == 2) {
+		NONQUIETPRINT_WA("%sSupport for GeoIP (MaxMindDB) disabled, no MaxMindDB library found: %s", prefix_string, mmdb_lib_file);
 	} else {
-		NONQUIETPRINT_WA("%sSupport for GeoIP (MaxMindDB) disabled by MaxMindDB library problem", prefix_string);
+		NONQUIETPRINT_WA("%sSupport for GeoIP (MaxMindDB) disabled by MaxMindDB library problem: %s", prefix_string, mmdb_lib_file);
 	};
 #endif // SUPPORT_GEOIP
 
@@ -296,14 +298,19 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "DBIP2_wrapper_init result: %d wrapper_features=0x%08x", r, wrapper_features);
 
 		if (r != 0) {
+#ifndef SUPPORT_MMDB_DYN
+			// only non-dynamic-load results in a problem
 			result = 1;
+#endif
 		} else {
 			wrapper_DBIP2_status = 1; // ok
 		};
 	} else if (wrapper_DBIP2_disable == 1) {
 		NONQUIETPRINT_WA("%sSupport for db-ip.com (MaxMindDB) disabled by option", prefix_string);
+	} else if (wrapper_DBIP2_disable == 2) {
+		NONQUIETPRINT_WA("%sSupport for db-ip.com (MaxMindDB) disabled, no MaxMindDB library found: %s", prefix_string, mmdb_lib_file);
 	} else {
-		NONQUIETPRINT_WA("%sSupport for db-ip.com (MaxMindDB) disabled by MaxMindDB library problem", prefix_string);
+		NONQUIETPRINT_WA("%sSupport for db-ip.com (MaxMindDB) disabled by MaxMindDB library problem: %s", prefix_string, mmdb_lib_file);
 	};
 #endif // SUPPORT_DBIP2
 

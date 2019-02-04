@@ -76,13 +76,14 @@ static void *dl_MMDB_handle = NULL;
  * function initialise the MMDB wrapper
  *
  * in : (nothing)
- * out: 0=ok, 1=error
+ * out: 0=ok, 1=error, 2=not found, 3=unknown
  */
 int libipv6calc_db_wrapper_MMDB_wrapper_init(void) {
+	int result = 3;
+
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "Called");
 
 #ifdef SUPPORT_MMDB_DYN
-
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "Load library: %s", mmdb_lib_file);
 
 	dlerror();    /* Clear any existing error */
@@ -90,19 +91,28 @@ int libipv6calc_db_wrapper_MMDB_wrapper_init(void) {
 	dl_MMDB_handle = dlopen(mmdb_lib_file, RTLD_NOW | RTLD_LOCAL);
 
 	if (dl_MMDB_handle == NULL) {
-		if ((strcmp(mmdb_lib_file, MMDB_DYN_LIB) != 0) || (ipv6calc_verbose > 0)) {
-			NONQUIETPRINT_WA("MMDB dynamic library load failed (disable support): %s", dlerror())
+		const char *error = dlerror();
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "Load of library not successful: %s (%s)", mmdb_lib_file, error);
+		if (strstr(error, "such file") != NULL) {
+			result = 2;
+			goto END_libipv6calc_db_wrapper;
 		};
-		return(1);
+		if ((strcmp(mmdb_lib_file, MMDB_DYN_LIB) != 0) || (ipv6calc_verbose > 0)) {
+			NONQUIETPRINT_WA("MMDB dynamic library load failed by problem with specified library (disable support): %s (%s)", mmdb_lib_file, error)
+		};
+		result = 1;
+	} else {
+		result = 0;
 	};
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "Loaded library successful: %s", mmdb_lib_file);
-
+END_libipv6calc_db_wrapper:
 #else // SUPPORT_MMDB_DYN
 
 #endif // SUPPORT_MMDB_DYN
 
-	return 0;
+
+	return(result);
 };
 
 

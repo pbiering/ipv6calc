@@ -43,7 +43,8 @@
 #          ip2location-c-8.0.4	# 20170617
 #          ip2location-c-8.0.5	# 20190202
 #          ip2location-c-8.0.6	# 20190202
-#          ip2location-c-8.0.7	# 20190202
+#          ip2location-c-8.0.7	# 20190202 BROKEN
+#          ip2location-c-8.0.8	# 20190204
 
 #### Definitions
 
@@ -90,8 +91,8 @@ geoip_cross_version_test_blacklist() {
 
 
 ## List of IP2Location versions (append newest one rightmost!)
-ip2location_versions="7.0.1 8.0.1 8.0.2 8.0.3 8.0.4 8.0.5 8.0.6 8.0.7"
-ip2location_versions_download="7.0.1 8.0.1 8.0.2 8.0.3 8.0.4 8.0.5 8.0.6 8.0.7"
+ip2location_versions="7.0.1 8.0.1 8.0.2 8.0.3 8.0.4 8.0.5 8.0.6 8.0.8"
+ip2location_versions_download="7.0.1 8.0.1 8.0.2 8.0.3 8.0.4 8.0.5 8.0.6 8.0.8"
 ip2location_url_base="https://www.ip2location.com/downloads/"
 ip2location_url_github="https://codeload.github.com/chrislim2888/IP2Location-C-Library/tar.gz/"
 

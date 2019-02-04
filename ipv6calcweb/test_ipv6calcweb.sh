@@ -3,7 +3,7 @@
 # Project    : ipv6calc/ipv6calcweb
 # File       : test_ipv6calcweb.sh
 # Version    : $Id$
-# Copyright  : 2012-2018 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2012-2019 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Test script for ipv6calcweb
@@ -42,6 +42,31 @@ if [ ! -f ipv6calcweb.cgi ]; then
 fi
 if [ ! -x ipv6calcweb.cgi ]; then
 	chmod u+x ipv6calcweb.cgi
+fi
+
+## check for empty stderr
+set -x
+stderr=$(HTTP_IPV6CALCWEB_OUTPUT_FORMAT=html HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB=subcolumns REMOTE_ADDR=50.60.70.80 ./ipv6calcweb.cgi 2>&1 >/dev/null)
+set +x
+if [ -n "$stderr" ]; then
+	echo "ERROR : stderr not empty: $stderr"
+	exit 1
+fi
+
+set -x
+stderr=$(HTTP_IPV6CALCWEB_OUTPUT_FORMAT=html HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB=sequential REMOTE_ADDR=50.60.70.80 ./ipv6calcweb.cgi 2>&1 >/dev/null)
+set +x
+if [ -n "$stderr" ]; then
+	echo "ERROR : stderr not empty: $stderr"
+	exit 1
+fi
+
+set -x
+stderr=$(HTTP_IPV6CALCWEB_OUTPUT_FORMAT=text REMOTE_ADDR=50.60.70.80 ./ipv6calcweb.cgi 2>&1 >/dev/null)
+set +x
+if [ -n "$stderr" ]; then
+	echo "ERROR : stderr not empty: $stderr"
+	exit 1
 fi
 
 ## very basic output format tests
@@ -182,7 +207,6 @@ for e in  1 5 15 p; do
 done || exit 1
 [ "$verbose" = "1" ] || echo
 echo "INFO  : $test successful"
-
 
 #if [ $result -ne 0 ]; then
 #	echo "TEST FAILED (exit code != 0)"
