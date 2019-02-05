@@ -1,4 +1,4 @@
-.TH "ipv6logstats" "8" "0.99.0" "Peter Bieringer <pb@bieringer.de>" "system tools"
+.TH "ipv6logstats" "8" "2.0.0" "Peter Bieringer <pb@bieringer.de>" "system tools"
 .SH "Name"
 ipv6logstats \- Takes http log data from stdin and print a statistics table on output
 .SH "SYNOPSIS"
@@ -21,7 +21,7 @@ version information (2 optional detail levels)
 .TP 
 \fB[\-v|\-\-version \-h]\fR
 explanation of feature tokens
-.TP
+.TP 
 \fB[\-V|\-\-verbose]\fR
 be more verbose
 .TP 
@@ -82,7 +82,7 @@ ALL IPv4 IPv6 UNKNOWN IPv4/APNIC IPv4/ARIN IPv4/RIPE IPv4/LACNIC IPv4/AFRINIC IP
 1 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 #4.0
 .LP 
 Row mode:
-.nf
+.nf 
 echo "2001:a60:1400:1201:221:70ff:fe01:2345" | ./ipv6logstats \-q 
 *Version             4.0
 *DateTime: 2014:07:23 19:59:56+0000 GMT
@@ -106,11 +106,14 @@ IPv6/IID/Global      1
 *3*AS\-proto\-num/ALL/8767   1
 *3*AS\-proto\-num/IPv6/8767  1
 *3*AS\-proto\-num\-list/ALL  1 0 1
-.fi
+.fi 
 .SH "SEE ALSO"
 ipv6calc(8)
 .SH "REPORTING BUGS"
-Report bugs to <ipv6calc@lists.deepspace6.net> or to the authors.
+Report bugs via GitHub:
+.UR https://github.com/pbiering/ipv6calc/issues
+ https://github.com/pbiering/ipv6calc/issues
+.UE
 .PP 
 Homepage:
 .UR http://www.deepspace6.net/projects/ipv6calc.html

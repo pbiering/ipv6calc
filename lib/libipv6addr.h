@@ -310,6 +310,7 @@ typedef struct {
 #define IPV6_ADDR_TYPE2_LISP			(uint32_t) 0x00010000U	/* IPv6 LISP (RFC6830) */
 #define IPV6_ADDR_TYPE2_LISP_PETR		(uint32_t) 0x00020000U	/* IPv6 LISP Proxy Egress Tunnel Routers (PETRY) Anycast */
 #define IPV6_ADDR_TYPE2_LISP_MAP_RESOLVER	(uint32_t) 0x00040000U	/* IPv6 LISP Map Resolver Anycast */
+#define IPV6_ADDR_TYPE2_ANON_MASKED_PREFIX	(uint32_t) 0x00080000U	/* IPv6 partially masked prefix */
 
 // IPv4 address extractor selector
 #define IPV6_ADDR_SELECT_IPV4_DEFAULT		0
@@ -359,6 +360,7 @@ typedef struct {
 	{ IPV6_ADDR_TYPE2_LISP	 		, "lisp" },
 	{ IPV6_ADDR_TYPE2_LISP_PETR		, "lisp-proxyegresstunnelrouter-anycast" },
 	{ IPV6_ADDR_TYPE2_LISP_MAP_RESOLVER	, "lisp-mapresolver-anycast" },
+	{ IPV6_ADDR_TYPE2_ANON_MASKED_PREFIX    , "anonymized-masked-prefix" },
 };
 
 /* Registries */
@@ -403,8 +405,7 @@ extern void ipv6addr_copy(ipv6calc_ipv6addr *ipv6addrp_dst, const ipv6calc_ipv6a
 
 extern int ipv6addr_compare(const ipv6calc_ipv6addr *ipv6addrp1, const ipv6calc_ipv6addr *ipv6addrp2, const uint16_t compare_flags);
 
-extern uint32_t ipv6addr_gettype(const ipv6calc_ipv6addr *ipv6addrp, uint32_t *typeinfo2p);
-extern void ipv6addr_settype(ipv6calc_ipv6addr *ipv6addrp, int flag_reset);
+extern void ipv6addr_settype(ipv6calc_ipv6addr *ipv6addrp);
 
 extern int  addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp);
 extern int  addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp);
@@ -435,5 +436,5 @@ extern void ipv6addr_filter_clear(s_ipv6calc_filter_ipv6addr *filter);
 extern int  libipv6addr_get_included_ipv4addr(const ipv6calc_ipv6addr *ipv6addrp, ipv6calc_ipv4addr *ipv4addrp, const int selector);
 
 extern uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsigned int *data_source_ptr);
-extern uint32_t libipv6addr_as_num32_by_addr(const ipv6calc_ipv6addr *ipv6addrp);
+extern uint32_t libipv6addr_as_num32_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsigned int *data_source_ptr);
 extern int libipv6addr_registry_num_by_addr(const ipv6calc_ipv6addr *ipv6addrp);

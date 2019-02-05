@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.c
  * Version    : $Id$
- * Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc External (superseeding BuiltIn) database wrapper
@@ -200,10 +200,14 @@ void libipv6calc_db_wrapper_External_wrapper_info(char* string, const size_t siz
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Called");
 
 #ifdef SUPPORT_EXTERNAL
-	//snprintf(string, size, "External available databases: Country4=%d Country6=%d ASN4=%d ASN6=%d City4=%d City6=%d", (wrapper_features & IPV6CALC_DB_IPV4_TO_CC) ? 1 : 0, (wrapper_features & IPV6CALC_DB_IPV6_TO_CC) ? 1 : 0, external_asnum_v4, external_asnum_v6, external_city_v4, external_city_v6);
-	snprintf(string, size, "External available databases: TODO");
+	snprintf(string, size, "External available databases: Country4=%d Country6=%d IPV4_REG=%d IPV6_REG=%d", \
+		(wrapper_features & IPV6CALC_DB_IPV4_TO_CC) ? 1 : 0, \
+		(wrapper_features & IPV6CALC_DB_IPV6_TO_CC) ? 1 : 0, \
+		(wrapper_features & IPV6CALC_DB_IPV4_TO_REGISTRY) ? 1 : 0, \
+		(wrapper_features & IPV6CALC_DB_IPV6_TO_REGISTRY) ? 1 : 0 \
+	);
 #else
-	snprintf(string, size, "No External support built-in");
+	snprintf(string, size, "No External database support built-in");
 #endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Finished");

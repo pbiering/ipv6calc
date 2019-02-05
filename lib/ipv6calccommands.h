@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calccommands.h
  * Version    : $Id$
- * Copyright  : 2002-2018 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GPLv2
  *
  * Information:
@@ -84,6 +84,17 @@
 #define DB_external_dir			0x0023050
 
 #define DB_builtin_disable		0x0024000
+
+#define DB_mmdb_disable			0x0025000
+#define DB_mmdb_lib			0x0025060
+
+#define DB_geoip2_disable		0x0026000
+#define DB_geoip2_dir			0x0026050
+
+#define DB_dbip2_disable		0x0027000
+#define DB_dbip2_dir			0x0027050
+#define DB_dbip2_comm_to_free_switch_min_delta_months		0x0027110
+#define DB_dbip2_only_type		0x0027120
 
 #define DB_common_priorization		0x002fff0
 

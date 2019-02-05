@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.h
  * Version    : $Id$
- * Copyright  : 2013-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_IP2Location.c
@@ -29,8 +29,6 @@
 #define IP2LOCATION_IPV6_SUPPORT_NOTEXISTS	3
 
 // database types
-#define IP2LOCATION_DB_MAX	 24
-
 /*** Commercial ***/
 #define IP2LOCATION_IPV4_DB1	 1
 #define IP2LOCATION_IPV4_DB2	 2
@@ -151,6 +149,10 @@
 
 /* FREE (old) */
 #define IP2LOCATION_DB_IPV6_COUNTRY_FREE			120
+
+#define IP2LOCATION_DB_MAX	 IP2LOCATION_DB_IPV6_COUNTRY_FREE
+
+#define IP2LOCATION_DB_YEAR_MIN		2010	// older databases are ignored
 
 // shortcuts
 #define IPV6CALC_DB_SC_IP2LOCATION_IPV4_COUNTRY			(IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV4_TO_COUNTRY | IPV6CALC_DB_IP2LOCATION_IPV4)
@@ -583,8 +585,7 @@ extern void        libipv6calc_db_wrapper_IP2Location_wrapper_info(char* string,
 extern void        libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
 extern char       *libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used(void);
 
-extern char       *libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(char *addr, const int proto);
-extern char       *libipv6calc_db_wrapper_IP2Location_wrapper_country_name_by_addr(char *addr, const int proto);
+extern int         libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(char *addr, const int proto, char *country, const size_t country_len);
 
 extern int         libipv6calc_db_wrapper_IP2Location_has_features(uint32_t features);
 
@@ -606,8 +607,6 @@ void                      libipv6calc_db_wrapper_IP2Location_free_record(IP2Loca
 extern const char  *libipv6calc_db_wrapper_IP2Location_dbdescription(const unsigned int type);
 extern char        *libipv6calc_db_wrapper_IP2Location_database_info(IP2Location *loc, const int level_verbose, const int entry, const int flag_copyright);
 
-extern IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_wrapper_record_city_by_addr(char *addr, const int proto);
-
 extern const char *libipv6calc_db_wrapper_IP2Location_UsageType_description(char *UsageType);
 
 extern int ip2location_db_lite_to_sample_autoswitch_max_delta_months;
@@ -615,5 +614,5 @@ extern int ip2location_db_comm_to_lite_switch_min_delta_months;
 extern int ip2location_db_only_type;
 extern int ip2location_db_allow_softlinks;
 
-
+extern int          libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libipv6calc_db_wrapper_geolocation_record *recordp);
 #endif

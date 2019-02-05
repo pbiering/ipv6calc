@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
  * Version    : $Id$
- * Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper.c
@@ -12,14 +12,14 @@
 #include <db.h>
 #endif // HAVE_BERKELEY_DB_SUPPORT
 
-#ifndef _libipv6calc_db_wrapper_h
-
-#define _libipv6calc_db_wrapper_h 1
-
 #include "ipv6calctypes.h"
 #include "libmac.h"
 #include "libipv4addr.h"
 #include "libipv6addr.h"
+
+#ifndef _libipv6calc_db_wrapper_h
+
+#define _libipv6calc_db_wrapper_h 1
 
 extern uint32_t wrapper_features;
 extern uint32_t wrapper_features_by_source[];
@@ -121,13 +121,15 @@ static const s_formatoption ipv6calc_db_features[] = {
 
 #define IPV6CALC_DB_SOURCE_MIN			1
 
-#define IPV6CALC_DB_SOURCE_GEOIP		1
+#define IPV6CALC_DB_SOURCE_GEOIP2		1
 #define IPV6CALC_DB_SOURCE_IP2LOCATION		2
-#define IPV6CALC_DB_SOURCE_DBIP			3
-#define IPV6CALC_DB_SOURCE_EXTERNAL		4
-#define IPV6CALC_DB_SOURCE_BUILTIN		5
+#define IPV6CALC_DB_SOURCE_DBIP2		3
+#define IPV6CALC_DB_SOURCE_GEOIP		4
+#define IPV6CALC_DB_SOURCE_DBIP			5
+#define IPV6CALC_DB_SOURCE_EXTERNAL		6
+#define IPV6CALC_DB_SOURCE_BUILTIN		7
 
-#define IPV6CALC_DB_SOURCE_MAX			5
+#define IPV6CALC_DB_SOURCE_MAX			7
 
 #define IPV6CALC_DB_PRIO_MAX			IPV6CALC_DB_SOURCE_MAX
 
@@ -139,8 +141,10 @@ typedef struct {
 
 static const s_data_sources data_sources[] = {
 	{ IPV6CALC_DB_SOURCE_GEOIP	, "GeoIP"      , "GeoIP"       },
+	{ IPV6CALC_DB_SOURCE_GEOIP2	, "GeoIP(MaxMindDB)"    , "GeoIP2"      },
 	{ IPV6CALC_DB_SOURCE_IP2LOCATION, "IP2Location", "IP2Location" },
 	{ IPV6CALC_DB_SOURCE_DBIP	, "db-ip.com"  , "DBIP"        },
+	{ IPV6CALC_DB_SOURCE_DBIP2	, "db-ip.com(MaxMindDB)", "DBIP2"       },
 	{ IPV6CALC_DB_SOURCE_EXTERNAL	, "External"   , "External"    },
 	{ IPV6CALC_DB_SOURCE_BUILTIN	, "BuiltIn"    , "BuiltIn"     },
 };
@@ -161,6 +165,70 @@ typedef struct {
 	const uint32_t     internal;
 } db_file_desc2;
 
+
+// abstract structure for geolocation information
+// string limits taken from from https://db-ip.com/db/
+// and IP2Location
+#define IPV6CALC_DB_SIZE_COUNTRY_CODE	2+1
+#define IPV6CALC_DB_SIZE_COUNTRY_LONG	80+1
+#define IPV6CALC_DB_SIZE_CONTINENT_CODE	2+1
+#define IPV6CALC_DB_SIZE_CONTINENT_LONG	80+1
+#define IPV6CALC_DB_SIZE_STATEPROV	80+1
+#define IPV6CALC_DB_SIZE_DISTRICT	80+1
+#define IPV6CALC_DB_SIZE_CITY		80+1
+#define IPV6CALC_DB_SIZE_ZIPCODE	20+1
+#define IPV6CALC_DB_SIZE_WEATHERSTATIONCODE	20+1
+#define IPV6CALC_DB_SIZE_WEATHERSTATIONNAME	80+1
+#define IPV6CALC_DB_SIZE_TIMEZONE_NAME	64+1
+#define IPV6CALC_DB_SIZE_ISP_NAME	128+1
+#define IPV6CALC_DB_SIZE_CONN_TYPE	20+1
+#define IPV6CALC_DB_SIZE_ORG_NAME	128+1
+#define IPV6CALC_DB_SIZE_DOMAIN		20+1
+#define IPV6CALC_DB_SIZE_DMA_CODE	8+1
+#define IPV6CALC_DB_SIZE_IDD_CODE	8+1
+#define IPV6CALC_DB_SIZE_AREA_CODE	8+1
+#define IPV6CALC_DB_SIZE_MOBILENETWORKCODE	80+1
+#define IPV6CALC_DB_SIZE_MOBILECOUNTRYCODE	8+1
+#define IPV6CALC_DB_SIZE_MOBILE_BRAND	80+1
+#define IPV6CALC_DB_SIZE_USAGE_TYPE	80+1
+
+#define IPV6CALC_DB_GEO_ELEVATION_UNKNOWN -20000
+#define IPV6CALC_DB_GEO_TIMEZONE_UNKNOWN  99
+
+typedef struct
+{
+	char     country_code[IPV6CALC_DB_SIZE_COUNTRY_CODE];
+	char     country_long[IPV6CALC_DB_SIZE_COUNTRY_LONG];
+	char     continent_code[IPV6CALC_DB_SIZE_CONTINENT_CODE];
+	char     continent_long[IPV6CALC_DB_SIZE_CONTINENT_LONG];
+	char     stateprov[IPV6CALC_DB_SIZE_STATEPROV];
+	char     district[IPV6CALC_DB_SIZE_CITY];
+	char     city[IPV6CALC_DB_SIZE_CITY];
+	char     zipcode[IPV6CALC_DB_SIZE_ZIPCODE];
+	char     weatherstationcode[IPV6CALC_DB_SIZE_WEATHERSTATIONCODE];
+	char     weatherstationname[IPV6CALC_DB_SIZE_WEATHERSTATIONNAME];
+	char     dma_code[IPV6CALC_DB_SIZE_DMA_CODE];
+	char     idd_code[IPV6CALC_DB_SIZE_IDD_CODE];
+	char     area_code[IPV6CALC_DB_SIZE_AREA_CODE];
+	double   latitude;
+	double   longitude;
+	float    elevation;
+	uint16_t accuracy_radius;
+	uint32_t geoname_id;
+	uint32_t continent_geoname_id;
+	uint32_t country_geoname_id;
+	uint32_t asn;
+	float    timezone_offset;
+	char     timezone_name[IPV6CALC_DB_SIZE_TIMEZONE_NAME];
+	char     isp_name[IPV6CALC_DB_SIZE_ISP_NAME];
+	char     connection_type[IPV6CALC_DB_SIZE_CONN_TYPE];
+	char     organization_name[IPV6CALC_DB_SIZE_ORG_NAME];
+	char     domain[IPV6CALC_DB_SIZE_DOMAIN];
+	char     mobile_network_code[IPV6CALC_DB_SIZE_MOBILENETWORKCODE];
+	char     mobile_country_code[IPV6CALC_DB_SIZE_MOBILECOUNTRYCODE];
+	char     mobile_brand[IPV6CALC_DB_SIZE_MOBILE_BRAND];
+	char     usage_type[IPV6CALC_DB_SIZE_USAGE_TYPE];
+} libipv6calc_db_wrapper_geolocation_record;
 
 // define internal API versions
 #define IPV6CALC_DB_API_GEOIP		1
@@ -261,6 +329,7 @@ extern void libipv6calc_db_wrapper_features(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_capabilities(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_features_help(void);
 extern void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
+extern void libipv6calc_db_wrapper_print_features_verbose(const int level_verbose);
 extern int  libipv6calc_db_wrapper_has_features(uint32_t features);
 extern int  libipv6calc_db_wrapper_options(const int opt, const char *optarg, const struct option longopts[]);
 extern const char *libipv6calc_db_wrapper_get_data_source_name_by_number(const unsigned int number);
@@ -274,9 +343,7 @@ extern int         libipv6calc_db_wrapper_country_code_by_cc_index(char *string,
 extern uint16_t    libipv6calc_db_wrapper_cc_index_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr);
 
 // Autonomous System Text/Number
-extern char       *libipv6calc_db_wrapper_as_text_by_addr(const ipv6calc_ipaddr *ipaddrp);
-extern uint32_t    libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp);
-extern uint16_t    libipv6calc_db_wrapper_as_num16_by_addr(const ipv6calc_ipaddr *ipaddrp);
+extern uint32_t    libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr);
 
 extern uint32_t    libipv6calc_db_wrapper_as_num32_comp17(const uint32_t as_num32);
 extern uint32_t    libipv6calc_db_wrapper_as_num32_decomp17(const uint32_t as_num32_comp17);
@@ -301,6 +368,8 @@ extern int libipv6calc_db_wrapper_registry_string_by_ipv6addr(const ipv6calc_ipv
 extern int libipv6calc_db_wrapper_registry_num_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp);
 extern int libipv6calc_db_wrapper_info_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, char *string, const size_t string_len);
 
+// geolocation record
+extern void libipv6calc_db_wrapper_geolocation_record_clear(libipv6calc_db_wrapper_geolocation_record *recordp);
 
 #ifdef HAVE_BERKELEY_DB_SUPPORT
 extern int libipv6calc_db_wrapper_bdb_get_data_by_key(DB *dbp, char *token, char *value, const size_t value_size);

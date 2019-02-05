@@ -183,6 +183,7 @@ fe80::5e01:2345:6789				iid
 fe80::5e01:2345:6789				iid-local
 fe80::5e01:2345:6789				iid-isatap
 2001:1a:392e:a450:2cd3:75e1:6098:8104		orchid
+2001:2a:392e:a450:2cd3:75e1:6098:8104		orchid
 2001:1a:392e:a450:2cd3:75e1:6098:8104		^iid-local
 2001:1a:392e:a450:2cd3:75e1:6098:8104		^iid
 2001:1a:392e:a450:2cd3:75e1:6098:8104		^iid-random
@@ -506,8 +507,8 @@ testscenarios_showinfo_anonymized_info() {
 # IPv4 address
 2.2.3.4;;match;IPV4_ANON=253.134.12.143
 2.2.3.4;;key-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
-2.2.3.4;--db-geoip-disable --db-ip2location-disable;match;IPV4_ANON=2.2.3.0
-2.2.3.4;--db-geoip-disable --db-ip2location-disable;key-no-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
+2.2.3.4;--db-geoip-disable --db-ip2location-disable --db-geoip2-disable --db-dbip-disable --db-dbip2-disable;match;IPV4_ANON=2.2.3.0
+2.2.3.4;--db-geoip-disable --db-ip2location-disable --db-geoip2-disable --db-dbip-disable --db-dbip2-disable;key-no-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
 END
 }
 

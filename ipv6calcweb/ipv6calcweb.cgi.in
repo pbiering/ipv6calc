@@ -3,11 +3,13 @@
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
 # Version    : $Id$
-# Copyright  : 2002-2018 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
 # Simple Perl web interface and security wrapper
 #  It's too dangerous to call the binary 'ipv6calc' directly...
+#
+# Note: potentially SELinux will block access to databases and block also maximum process check
 #
 # Todo: more functions by query string...
 
@@ -35,6 +37,10 @@
 #  HTTP_IPV6CALCWEB_INFO_SERVER         : 0 (default), 1 (show information about server)
 #  HTTP_IPV6CALCWEB_DEBUG               : 0 (default)
 #  HTTP_IPV6CALCWEB_BIN_IPV6CALC        : path to ipv6calc binary (optional)
+#  HTTP_IPV6CALCWEB_LIB_IPV6CALC        : path to ipv6calc library (optional)
+#  HTTP_IPV6CALCWEB_DEBUG_IPV6CALC      : debug value for ipv6calc binary (optional)
+#
+#  HTTP_IPV6CALCWEB_DB_MMDB_LIB         : MaxMindDB library name (optional in dyn-load support)
 #  HTTP_IPV6CALCWEB_DB_IP2LOCATION_DIR  : IP2Location database directory (optional)
 #  HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB  : IP2Location library name (optional in dyn-load support)
 #  HTTP_IPV6CALCWEB_DB_GEOIP_DIR        : GeoIP database directory (optional)
@@ -47,7 +53,14 @@
 #  HTTP_IPV6CALCWEB_ANTIDOS_LOAD1       : System load 1 limit to trigger DoS protection (default below)
 #  HTTP_IPV6CALCWEB_ANTIDOS_LOAD5       : System load 5 limit to trigger DoS protection (default below)
 #  HTTP_IPV6CALCWEB_ANTIDOS_LOAD15      : System load 15 limit to trigger DoS protection (default below)
-#  HTTP_IPV6CALCWEB_ANTIDOS_MAXPROC     : Max CGI processes to trigger DoS protection (default below)
+#  HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX     : Max CGI processes to trigger DoS protection (default below)
+#
+#  HTTP_IPV6CALCWEB_DB_GEOIP		: 1 (default), 0 (disable)
+#  HTTP_IPV6CALCWEB_DB_GEOIP2		: 1 (default), 0 (disable)
+#  HTTP_IPV6CALCWEB_DB_DBIP		: 1 (default), 0 (disable)
+#  HTTP_IPV6CALCWEB_DB_DBIP2		: 1 (default), 0 (disable)
+#  HTTP_IPV6CALCWEB_DB_IP2LOCATION	: 1 (default), 0 (disable)
+#  HTTP_IPV6CALCWEB_DB_EXTERNAL		: 1 (default), 0 (disable)
 
 ## special output format "textkeyvalue"
 #  INFO__OUTPUTVERSION="1"			: current output format version
@@ -58,7 +71,6 @@ use strict;
 use URI::Escape;
 use HTML::Entities;
 use POSIX;
-use Proc::ProcessTable;
 use warnings;
 
 ## Defines
@@ -100,11 +112,14 @@ my $error_flag = 0;
 my $mode_db_entries_in_subcolumns = 0;
 my $db_columns = 0;
 
-# currently only for internal use (TODO: make switchable by environment variables)
-my $disable_db_GeoIP = 0;
-my $disable_db_IP2Location = 0;
-my $disable_db_DBIP = 0;
-my $disable_db_External = 0;
+# database enabled toggles and defaults
+my %db_enabled;
+$db_enabled{'GEOIP'} = 1;
+$db_enabled{'GEOIP2'} = 1;
+$db_enabled{'IP2LOCATION'} = 1;
+$db_enabled{'DBIP'} = 1;
+$db_enabled{'DBIP2'} = 1;
+$db_enabled{'EXTERNAL'} = 1;
 
 ## Debug value
 my $debug = 0;
@@ -117,7 +132,7 @@ my $debug = 0;
 # debug | 0x0002: print result of find_file to stderr
 # debug | 0x0004: print result of find_dir to stderr
 # debug | 0x0008: print environment handling to stderr
-# debug | 0x0010: print raw ipv6calc output
+# debug | 0x0010: print raw ipv6calc output to stderr
 # debug | 0x0020: db info parser
 # debug | 0x0040: print form input/token to stderr
 # debug | 0x0080: print environment to stderr
@@ -158,11 +173,16 @@ if ($mode eq "form" || $mode eq "mixed") {
 	use Digest::MD5;
 };
 
-# List of deefault location of files (first existing one would be choosen)
+# List of default location of files (first existing one would be choosen)
 my @list_bin_ipv6calc = (
 	"../ipv6calc/ipv6calc",
 	"/usr/bin/ipv6calc",
 	"/bin/ipv6calc",
+);
+
+my @list_bin_ps = (
+	"/usr/bin/ps",
+	"/bin/ps",
 );
 
 my @list_database_ip2location_dir = (
@@ -209,7 +229,9 @@ sub find_dir(@) {
 my %urls = (
 	"IP2LOCATION" => "http://www.ip2location.com",
 	"GEOIP" => "http://www.maxmind.com",
+	"GEOIP2" => "http://www.maxmind.com",
 	"DBIP"  => "http://www.db-ip.com",
+	"DBIP2"  => "http://www.db-ip.com",
 );
 
 # Base URL for RFCs
@@ -223,6 +245,9 @@ my $url_geoname_by_id = "http://api.geonames.org/get?geonameId=#GEONAME_ID#&user
 
 # Base URL for Location Service
 my $url_openstreetmap_by_lat_lon = "http://www.openstreetmap.org/?mlat=#LATITUDE#&mlon=#LONGITUDE#&zoom=5";
+
+# Base URL for Weather Station Service
+my $url_weather_com_by_station = "https://weather.com/weather/tenday/l/#WEATHERSTATIONCODE#:1:GM";
 
 # Whois server urls
 my %url_whoisservers = (
@@ -298,6 +323,41 @@ my @supported_formats = ( "text", "html", "textkeyvalue");
 # Tokens to be formatted using <TT>
 my @format_tt = ( "EUI48", "EUI64", "IPV6", "IPV4", "SLA", "IID", "IPV4_6TO4", "IPV4_ANON", "IPV6_ANON", "HTTP_X_FORWARDED_FOR" );
 
+my %text_geodb = (
+	'IP2LOCATION' => 'IP2Location',
+	'GEOIP'       => 'GeoIP(legacy)',
+	'GEOIP2'      => 'GeoIP(MaxMindDB)',
+	'DBIP'        => 'db-ip.com(legacy)',
+	'DBIP2'       => 'db-ip.com(MaxMindDB)'
+);
+
+my %text_extra = (
+	'_GEONAME_ID' => {
+		'de' => "Verweis auf geonames.org",
+		'en' => "link to geonames.org",
+	},
+	'_GEONAME_ID_COUNTRY' => {
+		'de' => "Verweis auf geonames.org",
+		'en' => "link to geonames.org",
+	},
+	'_GEONAME_ID_CONTINENT' => {
+		'de' => "Verweis auf geonames.org",
+		'en' => "link to geonames.org",
+	},
+	'_LATITUDE' => {
+		'de' => "Verweis auf openstreetmap.org",
+		'en' => "link to openstreetmap.org",
+	},
+	'_LONGITUDE' => {
+		'de' => "Verweis auf openstreetmap.org",
+		'en' => "link to openstreetmap.org",
+	},
+	'_WEATHERSTATIONCODE' => {
+		'de' => "Verweis auf weather.com",
+		'en' => "link to weather.com",
+	}
+);
+
 my %text = (
 	'EUI48' => {
 		'de' => "EUI-48 Identifizierungsnummer (MAC Adresse)",
@@ -343,6 +403,14 @@ my %text = (
 		'de' => "Autonomous System der IPv6 Adresse",
 		'en' => "Autonomous System of IPv6 address",
 	},
+	'IPV6_AS_SOURCE' => {
+		'de' => "Quelle der Autonomous System der IPv6 Adresse",
+		'en' => "Source of Autonomous System of IPv6 address",
+	},
+	'IPV6_AS_NUM_SOURCE' => {
+		'de' => "Quelle der Autonomous System Nummer der IPv6 Adresse",
+		'en' => "Source of Autonomous System Number of IPv6 address",
+	},
 	'IPV4' => {
 		'de' => "IPv4 Adresse",
 		'en' => "IPv4 address",
@@ -378,6 +446,10 @@ my %text = (
 	'IPV4_AS_TEXT' => {
 		'de' => "Autonomous System der IPv4 Adresse",
 		'en' => "Autonomous System of IPv4 address",
+	},
+	'IPV4_AS_SOURCE' => {
+		'de' => "Quelle der Autonomous System der IPv4 Adresse",
+		'en' => "Source of Autonomous System of IPv4 address",
 	},
 	'TEREDO_PORT_CLIENT' => {
 		'de' => "UDP-Port des Teredo Clients (nach NAT)",
@@ -511,210 +583,6 @@ my %text = (
 		'de' => "Proxy Information",
 		'en' => "Proxy Information",
 	},
-	'IP2LOCATION_COUNTRY_SHORT' => {
-		'de' => "IP2Location Laenderkennung",
-		'en' => "IP2Location country code",
-	},
-	'IP2LOCATION_COUNTRY_LONG' => {
-		'de' => "IP2Location Land",
-		'en' => "IP2Location country",
-	},
-	'IP2LOCATION_REGION' => {
-		'de' => "IP2Location Region",
-		'en' => "IP2Location region",
-	},
-	'IP2LOCATION_CITY' => {
-		'de' => "IP2Location Stadt",
-		'en' => "IP2Location city",
-	},
-	'IP2LOCATION_ISP' => {
-		'de' => "IP2Location ISP",
-		'en' => "IP2Location ISP",
-	},
-	'IP2LOCATION_LATITUDE' => {
-		'de' => "IP2Location Breitengrad",
-		'en' => "IP2Location latitude",
-	},
-	'IP2LOCATION_LONGITUDE' => {
-		'de' => "IP2Location Laengengrad",
-		'en' => "IP2Location longitude",
-	},
-	'IP2LOCATION_DOMAIN' => {
-		'de' => "IP2Location Domain",
-		'en' => "IP2Location domain",
-	},
-	'IP2LOCATION_ZIPCODE' => {
-		'de' => "IP2Location Postleitzahl",
-		'en' => "IP2Location ZIP code",
-	},
-	'IP2LOCATION_AREACODE' => {
-		'de' => "IP2Location Area-Code",
-		'en' => "IP2Location Area Code",
-	},
-	'IP2LOCATION_TIMEZONE' => {
-		'de' => "IP2Location Zeitzone",
-		'en' => "IP2Location Time Zone",
-	},
-	'IP2LOCATION_NETSPEED' => {
-		'de' => "IP2Location Netzgeschwindigkeit",
-		'en' => "IP2Location Net Speed",
-	},
-	'IP2LOCATION_WEATHERSTATIONNAME' => {
-		'de' => "IP2Location Name der Wetterstation",
-		'en' => "IP2Location Weather Station Name",
-	},
-	'IP2LOCATION_WEATHERSTATIONCODE' => {
-		'de' => "IP2Location Code der Wetterstation",
-		'en' => "IP2Location Weather Station Code",
-	},
-	'IP2LOCATION_IDDCODE' => {
-		'de' => "IP2Location Landesvorwahl",
-		'en' => "IP2Location Internation Direct Dialing",
-	},
-	'IP2LOCATION_ELEVATION' => {
-		'de' => "IP2Location Hoehe ueber Meeresspiegel [m]",
-		'en' => "IP2Location High above Sealevel [m]",
-	},
-	'IP2LOCATION_USAGETYPE' => {
-		'de' => "IP2Location Art der Benutzung",
-		'en' => "IP2Location Usage Type Classification",
-	},
-	'IP2LOCATION_MOBILEBRAND' => {
-		'de' => "IP2Location Mobile Brand",
-		'en' => "IP2Location Mobile Brand",
-	},
-	'IP2LOCATION_MNC' => {
-		'de' => "IP2Location Mobile Network Code",
-		'en' => "IP2Location Mobile Network Code",
-	},
-	'IP2LOCATION_MCC' => {
-		'de' => "IP2Location Mobile Country Code",
-		'en' => "IP2Location Mobile Country Code",
-	},
-	'IP2LOCATION_DATABASE_INFO' => {
-		'de' => "IP2Location Datenbank-Information",
-		'en' => "IP2Location database information",
-	},
-	'IP2LOCATION_DATABASE_INFO_IPV4' => {
-		'de' => "IP2Location IPv4 Datenbank-Information",
-		'en' => "IP2Location IPv4 database information",
-	},
-	'IP2LOCATION_DATABASE_INFO_IPV6' => {
-		'de' => "IP2Location IPv6 Datenbank-Information",
-		'en' => "IP2Location IPv6 database information",
-	},
-	'GEOIP_COUNTRY_SHORT' => {
-		'de' => "GeoIP Laenderkennung",
-		'en' => "GeoIP country code",
-	},
-	'GEOIP_COUNTRY_LONG' => {
-		'de' => "GeoIP Land",
-		'en' => "GeoIP country",
-	},
-	'GEOIP_REGION' => {
-		'de' => "GeoIP Region",
-		'en' => "GeoIP region",
-	},
-	'GEOIP_CITY' => {
-		'de' => "GeoIP Stadt",
-		'en' => "GeoIP city",
-	},
-	'GEOIP_LATITUDE' => {
-		'de' => "GeoIP Breitengrad",
-		'en' => "GeoIP latitude",
-	},
-	'GEOIP_LONGITUDE' => {
-		'de' => "GeoIP Laengengrad",
-		'en' => "GeoIP longitude",
-	},
-	'GEOIP_ZIPCODE' => {
-		'de' => "GeoIP Postleitzahl",
-		'en' => "GeoIP ZIP code",
-	},
-	'GEOIP_DMACODE' => {
-		'de' => "GeoIP DMA Code",
-		'en' => "GeoIP DMA Code",
-	},
-	'GEOIP_AREACODE' => {
-		'de' => "GeoIP Area-Code",
-		'en' => "GeoIP Area Code",
-	},
-	'GEOIP_CONTINENTCODE' => {
-		'de' => "GeoIP Kontinent-Code",
-		'en' => "GeoIP Continent Code",
-	},
-	'GEOIP_DATABASE_INFO_IPV4' => {
-		'de' => "GeoIP IPv4 Datenbank-Information",
-		'en' => "GeoIP IPv4 database information",
-	},
-	'GEOIP_DATABASE_INFO_IPV6' => {
-		'de' => "GeoIP IPv6 Datenbank-Information",
-		'en' => "GeoIP IPv6 database information",
-	},
-	'GEOIP_DATABASE_INFO' => {
-		'de' => "GeoIP Datenbank-Information",
-		'en' => "GeoIP database information",
-	},
-	'GEOIP_AS_TEXT' => {
-		'de' => "Autonomous System der IP Adresse",
-		'en' => "Autonomous System of IP address",
-	},
-	'DBIP_COUNTRY_SHORT' => {
-		'de' => "db-ip.com Laenderkennung",
-		'en' => "db-ip.com country code",
-	},
-	'DBIP_REGION' => {
-		'de' => "db-ip.com Region",
-		'en' => "db-ip.com region",
-	},
-	'DBIP_CITY' => {
-		'de' => "db-ip.com Stadt",
-		'en' => "db-ip.com city",
-	},
-	'DBIP_DISTRICT' => {
-		'de' => "db-ip.com Bezirk",
-		'en' => "db-ip.com district",
-	},
-	'DBIP_DISTRICT' => {
-		'de' => "db-ip.com Bezirk",
-		'en' => "db-ip.com district",
-	},
-	'DBIP_ZIPCODE' => {
-		'de' => "db-ip.com Postleitzahl",
-		'en' => "db-ip.com ZIP code",
-	},
-	'DBIP_TIMEZONE' => {
-		'de' => "db-ip.com Zeitzone",
-		'en' => "db-ip.com Time Zone",
-	},
-	'DBIP_TIMEZONE_NAME' => {
-		'de' => "db-ip.com Zeitzonen Name",
-		'en' => "db-ip.com Time Zone Name",
-	},
-	'DBIP_NETSPEED' => {
-		'de' => "db-ip.com Netzgeschwindigkeit",
-		'en' => "db-ip.com Net Speed",
-	},
-	'DBIP_LATITUDE' => {
-		'de' => "db-ip.com Breitengrad",
-		'en' => "db-ip.com latitude",
-	},
-	'DBIP_LONGITUDE' => {
-		'de' => "db-ip.com Laengengrad",
-		'en' => "db-ip.com longitude",
-	},
-	'DBIP_ISP' => {
-		'de' => "db-ip.com ISP",
-		'en' => "db-ip.com ISP",
-	},
-	'DBIP_GEONAME_ID' => {
-		'de' => "db-ip.com GeoName ID",
-		'en' => "db-ip.com GeoName ID",
-	},
-	'DBIP_ORGNAME' => {
-		'de' => "db-ip.com Organisation",
-		'en' => "db-ip.com Organization",
-	},
 	'EXTERNAL_COUNTRY_SHORT' => {
 		'de' => "External DB Laenderkennung",
 		'en' => "External DB country code",
@@ -731,111 +599,139 @@ my %text = (
 		'de' => "Einstellungen der Anonymisierung",
 		'en' => "Anoymizer settings",
 	},
-	'COUNTRY_SHORT' => {
+	'_COUNTRY_SHORT' => {
 		'de' => "Laenderkennung",
 		'en' => "Country Code",
 	},
-	'COUNTRY_LONG' => {
+	'_COUNTRY_LONG' => {
 		'de' => "Land",
 		'en' => "Country",
 	},
-	'REGION' => {
+	'_CONTINENT_LONG' => {
+		'de' => "Kontinent",
+		'en' => "Continent",
+	},
+	'_CONTINENT_SHORT' => {
+		'de' => "Kontinentkennung",
+		'en' => "Continent Code",
+	},
+	'_REGION' => {
 		'de' => "Region",
 		'en' => "Region",
 	},
-	'DISTRICT' => {
+	'_RADIUS' => {
+		'de' => "Radius",
+		'en' => "Radius",
+	},
+	'_DISTRICT' => {
 		'de' => "Bezirk",
 		'en' => "District",
 	},
-	'CITY' => {
+	'_CITY' => {
 		'de' => "Stadt",
 		'en' => "City",
 	},
-	'ISP' => {
-		'de' => "ISP",
-		'en' => "ISP",
+	'_ISP' => {
+		'de' => "Internet Service Provider",
+		'en' => "Internet Service Provider",
 	},
-	'LATITUDE' => {
+	'_LATITUDE' => {
 		'de' => "IP2Location Breitengrad",
 		'en' => "Latitude",
 	},
-	'LONGITUDE' => {
+	'_LONGITUDE' => {
 		'de' => "Laengengrad",
 		'en' => "Longitude",
 	},
-	'DOMAIN' => {
+	'_DOMAIN' => {
 		'de' => "Domain",
 		'en' => "Domain",
 	},
-	'ZIPCODE' => {
+	'_ZIPCODE' => {
 		'de' => "Postleitzahl",
 		'en' => "ZIP code",
 	},
-	'GEONAME_ID' => {
-		'de' => "GeoName ID",
-		'en' => "GeoName ID",
+	'_GEONAME_ID' => {
+		'de' => "GeoName ID des Ortes",
+		'en' => "GeoName ID of Location",
 	},
-	'ORGNAME' => {
-		'de' => "Organisation",
-		'en' => "Organization",
+	'_GEONAME_ID_COUNTRY' => {
+		'de' => "GeoName ID des Landes",
+		'en' => "GeoName ID of Country",
 	},
-	'AS_TEXT' => {
-		'de' => "Autonomous System der IP Adresse",
-		'en' => "Autonomous System of IP address",
+	'_GEONAME_ID_CONTINENT' => {
+		'de' => "GeoName ID des Kontinents",
+		'en' => "GeoName ID of Continent",
 	},
-	'CONTINENTCODE' => {
+	'_ORGNAME' => {
+		'de' => "Autonomous System Organisation",
+		'en' => "Autonomous System Organization",
+	},
+	'_AS_ORGNAME' => {
+		'de' => "Autonomous System Organisation",
+		'en' => "Autonomous System Organization",
+	},
+	'_AS_NUM' => {
+		'de' => "Autonomous System Nummer",
+		'en' => "Autonomous System Number",
+	},
+	'_AS_TEXT' => {
+		'de' => "Autonomous System",
+		'en' => "Autonomous System",
+	},
+	'_CONTINENTCODE' => {
 		'de' => "Kontinent-Code",
 		'en' => "Continent Code",
 	},
-	'AREACODE' => {
+	'_AREACODE' => {
 		'de' => "Area-Code",
 		'en' => "Area Code",
 	},
-	'DMACODE' => {
+	'_DMACODE' => {
 		'de' => "DMA-Code",
 		'en' => "DMA Code",
 	},
-	'TIMEZONE' => {
+	'_TIMEZONE' => {
 		'de' => "Zeitzone",
 		'en' => "Time Zone",
 	},
-	'TIMEZONE_NAME' => {
+	'_TIMEZONE_NAME' => {
 		'de' => "Zeitzonen Name",
 		'en' => "Time Zone Name",
 	},
-	'NETSPEED' => {
+	'_NETSPEED' => {
 		'de' => "Netzgeschwindigkeit",
 		'en' => "Net Speed",
 	},
-	'WEATHERSTATIONNAME' => {
+	'_WEATHERSTATIONNAME' => {
 		'de' => "Name der Wetterstation",
 		'en' => "Weather Station Name",
 	},
-	'WEATHERSTATIONCODE' => {
+	'_WEATHERSTATIONCODE' => {
 		'de' => "Code der Wetterstation",
 		'en' => "Weather Station Code",
 	},
-	'IDDCODE' => {
+	'_IDDCODE' => {
 		'de' => "Landesvorwahl",
 		'en' => "Internation Direct Dialing",
 	},
-	'ELEVATION' => {
+	'_ELEVATION' => {
 		'de' => "Hoehe ueber Meeresspiegel [m]",
 		'en' => "High above Sealevel [m]",
 	},
-	'USAGETYPE' => {
+	'_USAGETYPE' => {
 		'de' => "Art der Benutzung",
 		'en' => "Usage Type Classification",
 	},
-	'MOBILEBRAND' => {
+	'_MOBILEBRAND' => {
 		'de' => "Mobile Brand",
 		'en' => "Mobile Brand",
 	},
-	'MNC' => {
+	'_MNC' => {
 		'de' => "Mobile Network Code",
 		'en' => "Mobile Network Code",
 	},
-	'MCC' => {
+	'_MCC' => {
 		'de' => "Mobile Country Code",
 		'en' => "Mobile Country Code",
 	},
@@ -855,8 +751,31 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_BIN_IPV6CALC'}) {
 	$bin_ipv6calc = find_file(@list_bin_ipv6calc);
 };
 
+# Location of library
+my $lib_ipv6calc;
+if (defined $ENV{'HTTP_IPV6CALCWEB_LIB_IPV6CALC'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_LIB_IPV6CALC'} =~ /^([[:alnum:]\.\-\/]+)$/o) {
+		$lib_ipv6calc = $1;
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_LIB_IPV6CALC found, but not containing proper chars");
+		&print_error();
+	};
+};
+
+my $bin_ps;
+$bin_ps = find_file(@list_bin_ps);
+
 my $options_ipv6calc = "-m -i -q";
 
+## add optional ipv6calc options
+if (defined $ENV{'HTTP_IPV6CALCWEB_DEBUG_IPV6CALC'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_DEBUG_IPV6CALC'} =~ /^(0x[[:digit:]abcdef]+|-?[[:digit:]]+)$/oi) {
+		$options_ipv6calc .= " -d " . $1;
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_DEBUG_IPV6CALC found, but not containing proper value: " . $ENV{'HTTP_IPV6CALCWEB_DEBUG_IPV6CALC'});
+		&print_error();
+	};
+};
 
 ## simple DoS protection
 if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_LOAD1'}) {
@@ -896,7 +815,33 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX'}) {
 };
 
 
-## Location of database files
+## Database toggles
+for my $db (sort keys %db_enabled) {
+	my $db_env = "HTTP_IPV6CALCWEB_DB_" . $db;
+	if (defined $ENV{$db_env}) {
+		if ($ENV{$db_env} =~ /^(0|no|disabled|off)$/) {
+			$db_enabled{$db} = 0;
+		} elsif ($ENV{$db_env} =~ /^(1|yes|enabled|on)$/) {
+			$db_enabled{$db} = 1;
+		} else {
+			logging("ERROR", "$db_env found, but not containing proper value (0|1)");
+			&print_error();
+		};
+	};
+};
+
+## Location of database and library files
+
+# MaxMindDB
+my $database_mmdb_lib;
+if (defined $ENV{'HTTP_IPV6CALCWEB_DB_MMDB_LIB'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_DB_MMDB_LIB'} =~ /^([[:alnum:]\.\-\/]+)$/) {
+		$database_mmdb_lib = $1;
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_DB_MMDB_LIB found, but not containing proper chars");
+		&print_error();
+	};
+};
 
 # IP2Location
 my $options_ipv6calc_ip2location = "";
@@ -924,16 +869,21 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB'}) {
 	};
 };
 
-# GeoIP
+# GeoIP/GeoIP2
 my $options_ipv6calc_geoip = "";
+my $options_ipv6calc_geoip2 = "";
 my %db_info_geoip;
+my %db_info_geoip2;
 my $info_geoip_string;
+my $info_geoip2_string;
 my $database_geoip_dir;
+my $database_geoip2_dir;
 my $database_geoip_lib;
 
 if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_DIR'}) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_DIR'} =~ /^([[:alnum:]\.\-\/]+)$/) {
 		$database_geoip_dir = $1;
+		$database_geoip2_dir = $1;
 	} else {
 		logging("ERROR", "HTTP_IPV6CALCWEB_DB_GEOIP_DIR found, but not containing proper chars");
 		&print_error();
@@ -953,13 +903,18 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_LIB'}) {
 
 # db-ip.com
 my $options_ipv6calc_dbip = "";
+my $options_ipv6calc_dbip2 = "";
 my %db_info_dbip;
+my %db_info_dbip2;
 my $database_dbip_dir;
+my $database_dbip2_dir;
 my $info_dbip_string;
+my $info_dbip2_string;
 
 if (defined $ENV{'HTTP_IPV6CALCWEB_DB_DBIP_DIR'}) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DB_DBIP_DIR'} =~ /^([[:alnum:]\.\-\/]+)$/) {
 		$database_dbip_dir = $1;
+		$database_dbip2_dir = $1;
 	} else {
 		logging("ERROR", "HTTP_IPV6CALCWEB_DB_DBIP_DIR found, but not containing proper chars");
 		&print_error();
@@ -993,6 +948,12 @@ my $info_builtin_string;
 
 
 ## external database ipv6calc option handling
+# MaxMindDB
+if (defined $database_mmdb_lib) {
+	$options_ipv6calc_geoip2 .= " --db-mmdb-lib $database_mmdb_lib";
+	$options_ipv6calc_dbip2 .= " --db-mmdb-lib $database_mmdb_lib";
+};
+
 # IP2Location
 if (defined $database_ip2location_dir) {
 	$options_ipv6calc_ip2location .= " --db-ip2location-dir $database_ip2location_dir";
@@ -1011,9 +972,19 @@ if (defined $database_geoip_lib) {
 	$options_ipv6calc_geoip .= " --db-geoip-lib $database_geoip_lib";
 };
 
+# GeoIP2
+if (defined $database_geoip2_dir) {
+	$options_ipv6calc_geoip2 .= " --db-geoip2-dir $database_geoip2_dir";
+};
+
 # DBIP
 if (defined $database_dbip_dir) {
 	$options_ipv6calc_dbip .= " --db-dbip-dir $database_dbip_dir";
+};
+
+# DBIP2
+if (defined $database_dbip2_dir) {
+	$options_ipv6calc_dbip2 .= " --db-dbip2-dir $database_dbip2_dir";
 };
 
 # External DB
@@ -1068,7 +1039,7 @@ my $input;
 my $input_default;
 my $token;
 
-my @key_db_tokens;
+my %key_db_tokens;
 
 # default values
 my $ipv6calc_version = "";
@@ -1186,6 +1157,15 @@ sub print_infohash ($$$;$) {
 			next;
 		};
 
+		if ($key eq "GEOIP2_DATABASE_INFO") {
+			$info_geoip2_string = $$phash{$key};
+			# strip non-ascii chars
+			$info_geoip2_string =~ s/[\200-\377]//g;
+			split_store(\%db_info_geoip2, $info_geoip2_string);
+			# skipped, will be shown in footer
+			next;
+		};
+
 		if ($key eq "GEOIP_DATABASE_INFO_IPV4") {
 			split_store(\%db_info_geoip, $info_geoip_string);
 			# skipped, will be shown in footer
@@ -1203,6 +1183,15 @@ sub print_infohash ($$$;$) {
 			# strip non-ascii chars
 			$info_dbip_string =~ s/[\200-\377]//g;
 			split_store(\%db_info_dbip, $info_dbip_string);
+			# skipped, will be shown in footer
+			next;
+		};
+
+		if ($key eq "DBIP2_DATABASE_INFO") {
+			$info_dbip2_string = $$phash{$key};
+			# strip non-ascii chars
+			$info_dbip2_string =~ s/[\200-\377]//g;
+			split_store(\%db_info_dbip2, $info_dbip2_string);
 			# skipped, will be shown in footer
 			next;
 		};
@@ -1275,9 +1264,10 @@ sub print_infohash ($$$;$) {
 		if ($mode_db_entries_in_subcolumns == 1) {
 			# suppress db based keys, store them in hash for later printout
 			$key =~ /^([A-Z0-9]+)_(.*)$/o;
-			if (grep(/^$1/i, @key_db_tokens)) {
+			if (grep(/^$1/i, keys %key_db_tokens)) {
 				my $dbprovider = $1;
 				my $subkey = $2;
+				$key_db_tokens{$dbprovider}++;
 
 				# check for embedded information
 				$subkey =~ /^([^[]+)(\[[^]]*\])?$/;
@@ -1336,6 +1326,20 @@ sub print_infohash ($$$;$) {
 			if (defined $text{$key_lookup}->{$lang}) {
 				print $text{$key_lookup}->{$lang};
 				&print_textonly (' ' x ($length_max_description - length($text{$key_lookup}->{$lang})) );
+			} elsif ($key_lookup =~ /^(IP2LOCATION|GEOIP|GEOIP2|DBIP|DBIP2)(_.+)$/o) {
+				# fallback
+				my $key_lookup_without_db = $2;
+				if (defined $text{$key_lookup_without_db}->{$lang}) {
+					print $text_geodb{$1} . " " . $text{$key_lookup_without_db}->{$lang};
+					&print_textonly (' ' x ($length_max_description - length($text{$key_lookup_without_db}->{$lang}) - length($text_geodb{$1}) - 1) );
+				} else {
+					&print_textonly (' ' x ($length_max_description) );
+				};
+
+				# print information about link
+				if (defined $text_extra{$key_lookup_without_db}->{$lang}) {
+					&print_tagoutput(" <font size=\"-2\">(" . $text_extra{$key_lookup_without_db}->{$lang} . ")</font>")
+				};
 			} else {
 				&print_textonly (' ' x ($length_max_description) );
 			};
@@ -1443,7 +1447,7 @@ sub print_infohash ($$$;$) {
 				};
 			} else {
 				if ($debug & 0x08) {
-					print STDERR "whoisserver is not defined\n";
+					logging("NOTICE", "whoisserver is not defined");
 				};
 				$flag_whoisurl = 0;
 			};
@@ -1482,6 +1486,9 @@ sub print_infohash ($$$;$) {
 			if ($combined_valid != 2) {
 				$url = undef;
 			};
+		} elsif ($key_lookup =~ /WEATHERSTATIONCODE/o) {
+			$url = $url_weather_com_by_station;
+			$url =~ s/#WEATHERSTATIONCODE#/$$phash{$key}/g;
 		};
 		
 		&print_tagoutput ( "<font size=\"-1\">" ) if ($count_key_embedded > 0);
@@ -1537,7 +1544,7 @@ sub print_infohash ($$$;$) {
 		($r, $g, $b) = (240, 240, 255);
 		&print_tagoutput ( "      <tr>\n" );
 		&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 224);\" align=\"center\" colspan=\"2\"><font size=\"-1\"><i>Information from databases</i>$entry</font></td>\n" );
-		for my $key (sort @key_db_tokens) {
+		for my $key (sort keys %key_db_tokens) {
 			&print_tagoutput ("        <td style=\"background-color: rgb(" . $r . "," . $g . "," . $b . ");\"><font size=\"-1\"><b>");
 			if (defined $urls{$key}) {
 				# add URL
@@ -1545,7 +1552,11 @@ sub print_infohash ($$$;$) {
 			} else {
 				&print_tagoutput($key);
 			};
-			&print_tagoutput("</b></font></td>\n");
+			&print_tagoutput("</b>");
+			if (defined $text_geodb{$key}) {
+				&print_tagoutput("</font><br ><font size=\"-2\">" . $text_geodb{$key});
+			};
+			&print_tagoutput("</font></td>\n");
 			$shift = $r; $r = $g; $g = $b; $b = $shift;	
 		};
 		&print_tagoutput ( "      </tr>\n" );
@@ -1564,16 +1575,25 @@ sub print_infohash ($$$;$) {
 			# print description
 			if ($outputtype ne "simple") {
 				&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 224);\"><font size=\"-1\">" );
-				if (defined $text{$key_lookup}->{$lang}) {
-					print $text{$key_lookup}->{$lang};
-				} else {
+				if (defined $text{"_" . $key_lookup}->{$lang}) {
+					print $text{"_" . $key_lookup}->{$lang};
+
+					if (defined $text_extra{"_" . $key_lookup}->{$lang}) {
+						&print_tagoutput(" <font size=\"-2\">(" . $text_extra{"_" . $key_lookup}->{$lang} . ")</font>")
+					};
+				} elsif ($key_lookup =~ /^(IP2LOCATION|GEOIP|GEOIP2|DBIP|DBIP2)$/o) {
+					# fallback
+					my $key_lookup_without_db = $2;
+					if (defined $text{$key_lookup_without_db}->{$lang}) {
+						print $1 . " " . $text{$key_lookup_without_db}->{$lang};
+					};
 				};
 				&print_tagoutput ( "</font></td>\n" );
 			};
 
 			# print value
 			($r, $g, $b) = (240, 240, 255);
-			for my $db (sort @key_db_tokens) {
+			for my $db (sort keys %key_db_tokens) {
 				&print_tagoutput ( "        <td style=\"background-color: rgb(" . $r . "," . $g . "," . $b . ");\"><font size=\"-1\">" );
 				my $key_result = $db . "_" . $key;
 				if (defined $$phash{$key_result}) {
@@ -1617,6 +1637,11 @@ sub print_infohash ($$$;$) {
 							&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
 							$flag = 1; # workaround to close a tag below
 						};
+					} elsif ($key_lookup =~ /WEATHERSTATIONCODE/o) {
+						$url = $url_weather_com_by_station;
+						$url =~ s/#WEATHERSTATIONCODE#/$$phash{$key_result}/g;
+						&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
+						$flag = 1;
 					};
 
 					print $$phash{$key_result};
@@ -1815,11 +1840,6 @@ if ( defined $ENV{'QUERY_STRING'} ) {
 
 ## check system health
 if (($debug & 0x4000) == 0) {
-	# retrieve amount of processes
-	my $t = Proc::ProcessTable->new;
-	my @proc_list = grep { $_->{cmndline} =~ /perl .*( |\/)$proc_pattern/ } @{$t->table};
-	my $proc_count = scalar(@proc_list);
-
 	# retrieve amount of CPU cores
 	my $cpu_cores = 1;
 	if (-r "/proc/cpuinfo") {
@@ -1859,7 +1879,7 @@ if (($debug & 0x4000) == 0) {
 			};
 
 			if ($overload > 0) {
-				logging("WARN", "System overloaded by load$overload load=$load1/$load5/$load15 load_norm=$load1_norm/$load5_norm/$load15_norm limit=$load1_max/$load5_max/$load15_max cpus=$cpu_cores procs=$proc_count");
+				logging("WARN", "System overloaded by load$overload load=$load1/$load5/$load15 load_norm=$load1_norm/$load5_norm/$load15_norm limit=$load1_max/$load5_max/$load15_max cpus=$cpu_cores");
 				$error = "System overloaded, please retry in $overload minutes - sorry";
 				$error_flag = 1; # no automatic redirect
 				&print_error();
@@ -1867,13 +1887,26 @@ if (($debug & 0x4000) == 0) {
 		};
 	};
 
-	# check amount of processes
-	my $proc_count_norm = $proc_count / $cpu_cores;
-	if ($proc_count_norm > $proc_max) {
-		logging("WARN", "System has too much 'perl $proc_pattern' running in parallel: procs=$proc_count procs_norm=$proc_count_norm limit=$proc_max");
-		$error = "System overloaded, please retry in 1 minute - sorry";
-		$error_flag = 1; # no automatic redirect
-		&print_error();
+	my $proc_count = 0;
+	my @proc_list;
+
+	if ((defined $bin_ps) && (-x $bin_ps)) {
+		my @proc_table = `$bin_ps -eo args`;
+		@proc_list = grep /perl .*( |\/)$proc_pattern/, @proc_table;
+
+		$proc_count = scalar(@proc_list);
+		logging("DEBUG", "System has 'perl $proc_pattern' running in parallel: procs=$proc_count") if ($debug & 0x0100);
+	};
+
+	if ($proc_count > 0) {
+		# check amount of processes
+		my $proc_count_norm = $proc_count / $cpu_cores;
+		if ($proc_count_norm > $proc_max) {
+			logging("WARN", "System has too much 'perl $proc_pattern' running in parallel: procs=$proc_count procs_norm=$proc_count_norm limit=$proc_max");
+			$error = "System overloaded, please retry in 1 minute - sorry";
+			$error_flag = 1; # no automatic redirect
+			&print_error();
+		};
 	};
 };
 
@@ -2066,19 +2099,28 @@ if (! defined $bin_ipv6calc) {
 	logging("ERROR", "'bin_ipv6calc' not defined");
 	&print_error();
 };
-if ( length($bin_ipv6calc) == 0) {
+if (length($bin_ipv6calc) == 0) {
 	logging("ERROR", "'bin_ipv6calc' is empty");
 	&print_error();
 };
-if ( ! -f $bin_ipv6calc ) {
+if (! -f $bin_ipv6calc ) {
 	logging("ERROR", "$bin_ipv6calc (bin_ipv6calc) does not exist as file");
 	&print_error();
 };
-if ( ! -x $bin_ipv6calc ) {
+if (! -x $bin_ipv6calc ) {
 	logging("ERROR", "$bin_ipv6calc (bin_ipv6calc) not executable");
 	&print_error();
 };
 
+## Check for library path exists
+if (defined $lib_ipv6calc) {
+	if (! -d $lib_ipv6calc) {
+		logging("ERROR", "$lib_ipv6calc (lib_ipv6calc) not a directory");
+	};
+	if (! -r $lib_ipv6calc) {
+		logging("ERROR", "$lib_ipv6calc (lib_ipv6calc) not readable");
+	};
+};
 
 ## Get and fill information
 sub ipv6calc_exec($$$$) {
@@ -2090,25 +2132,32 @@ sub ipv6calc_exec($$$$) {
 	my $debug_tag = $_[1];
 	my $p_hash = $_[2];
 	my $p_array = $_[3];
+
+	my $option_preload = "";
 	
 	if (! defined $addr) {
 		logging("ERROR", "no input for ipv6calc (strange)");
 		return 1;
 	};
 
-	logging("DEBUG", "execute: $bin_ipv6calc $options_ipv6calc $addr") if ($debug & 0x1);
+	if (defined $lib_ipv6calc) {
+		$option_preload = "LD_LIBRARY_PATH=$lib_ipv6calc";
+	};
 
-	my @info = `$bin_ipv6calc $options_ipv6calc $addr 2>&1`;
+	logging("DEBUG", "execute: $option_preload $bin_ipv6calc $options_ipv6calc $addr") if ($debug & 0x1);
+
+	my @info = `$option_preload $bin_ipv6calc $options_ipv6calc $addr`;
 
 	if ( $? != 0 ) {
 		logging("ERROR", "ipv6calc did not proper return ($addr)");
 		return 1;
 	};
 
-	print $debug_tag . "\n" if ($debug & 0x10);
+	logging("DEBUG", $debug_tag) if ($debug & 0x10);
 
 	for my $line (@info) {
-		print $line if ($debug & 0x10);
+		chomp($line);
+		logging("DEBUG", $line) if ($debug & 0x10);
 
 		my ( $key, $content ) = split /=/, $line, 2;
 		if ( (! defined $key) || (! defined $content) ) {
@@ -2224,10 +2273,10 @@ if (scalar(@proxy_addresses) != scalar(@proxy_infos)) {
 $result = ipv6calc_exec("127.0.0.1", "***feature***", \%infoh_localhost4, \@sort_localhost4);
 if ($debug & 0x8000) {
 	foreach my $key (sort keys %ipv6calc_feature_hash) {
-		printf "DEBUG : feature    " . $key . "=" . $ipv6calc_feature_hash{$key} . "\n";
+		logging("DEBUG", "feature    " . $key . "=" . $ipv6calc_feature_hash{$key});
 	};
 	foreach my $key (sort keys %ipv6calc_capability_hash) {
-		printf "DEBUG : capability " . $key . "=" . $ipv6calc_capability_hash{$key} . "\n";
+		logging("DEBUG", "capability " . $key . "=" . $ipv6calc_capability_hash{$key});
 	};
 };
 if ($result != 0) {
@@ -2236,61 +2285,79 @@ if ($result != 0) {
 
 # add options depending of available capabilities (fallback: features)
 if (length($ipv6calc_capabilities) > 0) {
- 	if (defined $ipv6calc_capability_hash{"GeoIP"} && ($ipv6calc_capability_hash{"GeoIP"} == 1)) {
-		if ($disable_db_GeoIP == 1) {
+	if (defined $ipv6calc_capability_hash{"GeoIP"} && ($ipv6calc_capability_hash{"GeoIP"} == 1)) {
+		if ($db_enabled{"GEOIP"} == 0) {
 			$options_ipv6calc .= " --db-geoip-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_geoip;
 			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
-			push @key_db_tokens, "GEOIP";
+			$key_db_tokens{"GEOIP"} = 0;
 		};
 	};
- 	if (defined $ipv6calc_capability_hash{"IP2Location"} && ($ipv6calc_capability_hash{"IP2Location"} == 1)) {
-		if ($disable_db_IP2Location == 1) {
+	if (defined $ipv6calc_capability_hash{"GeoIP2"} && ($ipv6calc_capability_hash{"GeoIP2"} == 1)) {
+		if ($db_enabled{"GEOIP2"} == 0) {
+			$options_ipv6calc .= " --db-geoip2-disable";
+		} else {
+			$options_ipv6calc .= $options_ipv6calc_geoip2;
+			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
+			$key_db_tokens{"GEOIP2"} = 0;
+		};
+	};
+	if (defined $ipv6calc_capability_hash{"IP2Location"} && ($ipv6calc_capability_hash{"IP2Location"} == 1)) {
+		if ($db_enabled{"IP2LOCATION"} == 0) {
 			$options_ipv6calc .= " --db-ip2location-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_ip2location;
 			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
-			push @key_db_tokens, "IP2LOCATION";
+			$key_db_tokens{"IP2LOCATION"} = 0;
 		};
 	};
- 	if (defined $ipv6calc_capability_hash{"DBIP"} && ($ipv6calc_capability_hash{"DBIP"} == 1)) {
-		if ($disable_db_DBIP == 1) {
+	if (defined $ipv6calc_capability_hash{"DBIP"} && ($ipv6calc_capability_hash{"DBIP"} == 1)) {
+		if ($db_enabled{"DBIP"} == 0) {
 			$options_ipv6calc .= " --db-dbip-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_dbip;
 			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
-			push @key_db_tokens, "DBIP";
+			$key_db_tokens{"DBIP"} = 0;
 		};
 	};
- 	if (defined $ipv6calc_capability_hash{"External"} && ($ipv6calc_capability_hash{"External"} == 1)) {
-		if ($disable_db_External == 1) {
+	if (defined $ipv6calc_capability_hash{"DBIP2"} && ($ipv6calc_capability_hash{"DBIP2"} == 1)) {
+		if ($db_enabled{"DBIP2"} == 0) {
+			$options_ipv6calc .= " --db-dbip2-disable";
+		} else {
+			$options_ipv6calc .= $options_ipv6calc_dbip2;
+			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
+			$key_db_tokens{"DBIP2"} = 0;
+		};
+	};
+	if (defined $ipv6calc_capability_hash{"External"} && ($ipv6calc_capability_hash{"External"} == 1)) {
+		if ($db_enabled{"EXTERNAL"} == 0) {
 			$options_ipv6calc .= " --db-external-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_external;
 			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
-			push @key_db_tokens, "EXTERNAL";
+			$key_db_tokens{"EXTERNAL"} = 0;
 		};
 	};
 } else {
 	# fallback for ipv6calc < 0.97.4
 	if (defined $ipv6calc_feature_hash{"GeoIP"} && ($ipv6calc_feature_hash{"GeoIP"} == "1")) {
-		if ($disable_db_GeoIP == 1) {
+		if ($db_enabled{"GEOIP"} == 0) {
 			$options_ipv6calc .= " --db-geoip-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_geoip;
 			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
-			push @key_db_tokens, "GEOIP";
+			$key_db_tokens{"GEOIP"} = 0;
 		};
 	};
 
 	if (defined $ipv6calc_feature_hash{"IP2Location"} && ($ipv6calc_feature_hash{"IP2Location"} == "1")) {
-		if ($disable_db_IP2Location == 1) {
+		if ($db_enabled{"IP2LOCATION"} == 0) {
 			$options_ipv6calc .= " --db-ip2location-disable";
 		} else {
 			$options_ipv6calc .= $options_ipv6calc_ip2location;
 			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
-			push @key_db_tokens, "IP2LOCATION";
+			$key_db_tokens{"IP2LOCATION"} = 0;
 		};
 	};
 };
@@ -2376,15 +2443,55 @@ if ($debug & 0x01) {
 };
 
 ## Calculate max lengths
+# geodb
+my $length_max_key_geodb = 0;
+my $length_max_desc_geodb = 0;
+for my $key (keys %text_geodb) {
+	if (length($key) > $length_max_key_geodb) {
+		$length_max_key_geodb = length($key);
+	};
+	if (length($text_geodb{$key}) > $length_max_desc_geodb) {
+		$length_max_desc_geodb = length($text_geodb{$key});
+	};
+};
+
+# subkeys
+my $length_max_key_sub = 0;
+my $length_max_desc_sub = 0;
 for my $key (keys %text) {
-	if (length($key) + 17 > $length_max_key) {
-		$length_max_key = length($key) + 17;
+	next if ($key !~ /^_/o);
+
+	if (length($key) > $length_max_key_sub) {
+		$length_max_key_sub = length($key);
+	};
+
+	if (length($text{$key}->{$lang}) > $length_max_desc_sub) {
+		$length_max_desc_sub = length($text{$key}->{$lang});
+
+	};
+};
+
+# others
+for my $key (keys %text) {
+	next if ($key =~ /^_/o);
+
+	if (length($key) > $length_max_key) {
+		$length_max_key = length($key);
 	};
 
 	if (length($text{$key}->{$lang}) > $length_max_description) {
 		$length_max_description = length($text{$key}->{$lang});
 
 	};
+};
+
+# combine
+if ($length_max_key_sub + $length_max_key_geodb > $length_max_key) {
+	$length_max_key = $length_max_key_sub + $length_max_key_geodb;
+};
+
+if ($length_max_desc_sub + $length_max_desc_geodb + 1 > $length_max_description) {
+	$length_max_description = $length_max_desc_sub + $length_max_desc_geodb + 1;
 };
 
 goto("OUTPUT_BEGIN");
@@ -2599,9 +2706,19 @@ if ($outputformat =~ /^html/o) {
 		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'GEOIP'} . "\">MaxMind</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_geoip)) . "</font>\n";
 	};
 
+	if (scalar(keys %db_info_geoip2) > 0) {
+		print "          <br>\n";
+		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'GEOIP2'} . "\">MaxMind</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_geoip2)) . "</font>\n";
+	};
+
 	if (scalar(keys %db_info_dbip) > 0) {
 		print "          <br>\n";
 		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'DBIP'} . "\">db-ip.com</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_dbip)) . "</font>\n";
+	};
+
+	if (scalar(keys %db_info_dbip2) > 0) {
+		print "          <br>\n";
+		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'DBIP2'} . "\">db-ip.com</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_dbip2)) . "</font>\n";
 	};
 
 	if (scalar(keys %db_info_external) > 0) {
@@ -2640,9 +2757,19 @@ if ($outputformat =~ /^html/o) {
 		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_geoip) . " (http://www.maxmind.com)" . $chr_quote . "\n";
 	};
 
+	if (scalar(keys %db_info_geoip2) > 0) {
+		print "INFO__POWEREDBY_GEOIP2=" if ($outputformat eq "textkeyvalue");
+		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_geoip2) . " (http://www.maxmind.com)" . $chr_quote . "\n";
+	};
+
 	if (scalar(keys %db_info_dbip) > 0) {
 		print "INFO__POWEREDBY_DBIP=" if ($outputformat eq "textkeyvalue");
 		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_dbip) . " (http://www.db-ip.com)" . $chr_quote . "\n";
+	};
+
+	if (scalar(keys %db_info_dbip2) > 0) {
+		print "INFO__POWEREDBY_DBIP2=" if ($outputformat eq "textkeyvalue");
+		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_dbip2) . " (http://www.db-ip.com)" . $chr_quote . "\n";
 	};
 
 	if (scalar(keys %db_info_external) > 0) {

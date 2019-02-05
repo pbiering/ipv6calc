@@ -1,8 +1,8 @@
 $Id$
 
 Apache module tested on
-	- 2.2 (CentOS 5)
-	- 2.4 (CentOS 7, Fedora 22)
+	- 2.2 (CentOS 6)
+	- 2.4 (CentOS 7, Fedora 30)
 
 Installation
  - copy compiled module to Apache module directory

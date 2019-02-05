@@ -831,7 +831,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		// IPv6
 		ipv6addr_clearall(&ipv6addr);
 		ipv6addr.in6_addr = client_addr_p->sa.sin6.sin6_addr;
-		ipv6addr_settype(&ipv6addr, 1);
+		ipv6addr_settype(&ipv6addr);
 		ipv6addr.flag_valid = 1;
 
 		CONVERT_IPV6ADDRP_IPADDR(&ipv6addr, ipaddr);
@@ -966,7 +966,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		// set ASN of IP in environment
 		if (config->action_asn == 1) {
 			if (retrieve_asn != 0) {
-				asn_num = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr);
+				asn_num = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, NULL);
 
 				snprintf(asn, sizeof(asn), "%u", asn_num);
 

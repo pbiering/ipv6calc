@@ -8,15 +8,16 @@ TODO list
 Next
 ----------
 
-* add option to support LMDB instead of Berkeley DB because of license change in version 6
 
 
 Short term
 ----------
 
 
+
 Middle term
 -----------
+* replace Berkeley DB with MMDB
 
 Format:
 * octal:

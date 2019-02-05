@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
 # Version    : $Id$
-# Copyright  : 2011-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2011-2019 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
 #
@@ -25,7 +25,14 @@ GEOIP#-g
 GEOIP#-g --geoip-dyn
 GEOIP#-g --geoip-ipv6-compat
 GEOIP#-g --geoip-ipv6-compat --geoip-dyn
-IP2LOCATION GEOIP DBIP#-a
+GEOIP2 DBIP2#-m
+GEOIP2 DBIP2#-m --mmdb-dyn
+GEOIP2#-m --disable-dbip2
+GEOIP2#-M --disable-dbip2
+DBIP2#-m --disable-geoip2
+DBIP2#-M --disable-geoip2
+IP2LOCATION GEOIP DBIP GEOIP2 DBIP2#-a
+IP2LOCATION GEOIP DBIP GEOIP2 DBIP2#-A
 NONE#--disable-db-ieee
 NONE#--disable-db-ipv4
 NONE#--disable-db-ipv6

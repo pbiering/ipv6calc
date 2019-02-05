@@ -116,7 +116,7 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>7.2</revnumber> <date>2018-09-02</date> <authorinitials>PB<
+<revision> <revnumber>8.0</revnumber> <date>2019-02-02</date> <authorinitials>PB<
 /authorinitials></revision>
 \end_layout
 
@@ -182,7 +182,7 @@ Latest version
 \end_layout
 
 \begin_layout Standard
-Latest version since last update of this page is 1.1.0
+Latest version since last update of this page is 2.0.0
 \end_layout
 
 \begin_layout Subsection
@@ -334,6 +334,10 @@ IPv6 (since 0.90.0, released 2011, req.
 release 0.99.0 is tested against GeoIP >= 1.4.4
 \end_layout
 
+\begin_layout Itemize
+GeoIP2 (native MaxMindDB file support since 2.0.0, release 2019)
+\end_layout
+
 \end_deeper
 \begin_layout Itemize
 \begin_inset CommandInset href
@@ -373,6 +377,10 @@ literal "false"
 release 0.99.0 is tested against IP2Location >= 4.0.2
 \end_layout
 
+\begin_layout Itemize
+release >= 2.0.0 is only working with IP2Location >= 7.0.1
+\end_layout
+
 \end_deeper
 \begin_layout Itemize
 \begin_inset CommandInset href
@@ -383,10 +391,20 @@ literal "false"
 
 \end_inset
 
- (since 0.98.0, released 2015), based on local Berkeley DB files generated
+
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+(since 0.98.0, released 2015), based on local Berkeley DB files generated
  from downloaded CSV files
 \end_layout
 
+\begin_layout Itemize
+native MaxMindDB files (support since 2.0.0, released 2019)
+\end_layout
+
+\end_deeper
 \begin_layout Itemize
 \begin_inset Quotes eld
 \end_inset
@@ -416,6 +434,10 @@ Since version 0.97.4 also fallback code for GeoIP and IP2Location is included
  on the system.
 \end_layout
 
+\begin_layout Standard
+Since version 2.0.0 MaxMindDB is supported (linked or dynamically loaded)
+\end_layout
+
 \begin_layout Section
 License
 \end_layout
@@ -429,7 +451,7 @@ Copyright
 \end_layout
 
 \begin_layout Standard
-(C) 2001 - 2018 by Dr.
+(C) 2001 - 2019 by Dr.
  Peter Bieringer
 \end_layout
 
@@ -591,6 +613,10 @@ In addition, conditional build options are available (see related configure
 \end_layout
 
 \begin_layout Code
+--without mmdb (which disables GeoIP v2 and db-ip.com v2)
+\end_layout
+
+\begin_layout Code
 --without external
 \end_layout
 
@@ -637,7 +663,7 @@ Fedora Linux
 \end_layout
 
 \begin_layout Standard
-Fedora 27 is the current developing platform, so use given hints above to
+Fedora 29 is the current developing platform, so use given hints above to
  create a RPM.
  Since Fedora 7 this package is included by default.
 \end_layout
@@ -685,6 +711,10 @@ literal "false"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Itemize
+*** Untested since version 2.0.0 because OS is out of support ***
 \end_layout
 
 \end_deeper
@@ -887,7 +917,17 @@ ipc6calc
 \end_layout
 
 \begin_layout Code
+--disable-geoip2        Disable MaxMindDB support for GeoIP (default: enabled)
+\end_layout
 
+\begin_layout Code
+--disable-dbip2         Disable MaxMindDB support for db-ip.com (default:
+ enabled) 
+\end_layout
+
+\begin_layout Code
+--enable-mmdb           Enable MaxMindDB support (GeoIP/db-ip.com) (default:
+ disabled) 
 \end_layout
 
 \begin_layout Code
@@ -916,17 +956,35 @@ ipc6calc
 \end_layout
 
 \begin_layout Code
+--with-mmdb-dynamic     Enable use of dynamic loading of MaxMindDB library
+ (default=no)
+\end_layout
+
+\begin_layout Code
+--with-mmdb-headers=DIR MaxMindDB include files location
+\end_layout
+
+\begin_layout Code
+--with-mmdb-lib=DIR     MaxMindDB library location
+\end_layout
+
+\begin_layout Code
+--with-mmdb-dyn-lib=NAME Use specified MaxMindDB dynamic library, default:
+ libmaxminddb.so.0 
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
 --with-ip2location-headers=DIR      IP2Location include files location
 \end_layout
 
 \begin_layout Code
 --with-ip2location-headers-fallback IP2Location include files from internal
- fallback location
-\end_layout
-
-\begin_layout Code
-                                     (only usable with dynamic load option)
- 
+ fallback location (only usable with dynamic load option)              
+            
 \end_layout
 
 \begin_layout Code
@@ -1005,10 +1063,7 @@ ipc6calc
 
 \begin_layout Code
 --with-dbip-db=DIR      Use specified db-ip.com database directory, default:
-\end_layout
-
-\begin_layout Code
-                          /usr/share/DBIP
+ /usr/share/DBIP
 \end_layout
 
 \begin_layout Code
@@ -1017,10 +1072,7 @@ ipc6calc
 
 \begin_layout Code
 --with-external-db=DIR  Use specified external database directory, default:
-\end_layout
-
-\begin_layout Code
-                          /usr/share/ipv6calc/db 
+ /usr/share/ipv6calc/db 
 \end_layout
 
 \begin_layout Code
@@ -1110,6 +1162,22 @@ Supported options:
 \begin_layout Code
    -a|--all            : enable GeoIP/IP2Location/db-ip.com/External/mod_ipv6calc
  support
+\end_layout
+
+\begin_layout Code
+   -m|--mmdb           : enable MaxMindDB support
+\end_layout
+
+\begin_layout Code
+   --mmdb-dyn|-M       : switch to dynamic library loading of MaxMindDB
+\end_layout
+
+\begin_layout Code
+   --disable-geoip2    : disable MaxMindDB support for GeoIP
+\end_layout
+
+\begin_layout Code
+   --disable-dbip2     : disable MaxMindDB support for db-ip.com 
 \end_layout
 
 \begin_layout Code
@@ -1288,11 +1356,11 @@ $ ipv6calc -v
 \end_layout
 
 \begin_layout Code
-ipv6calc: version 0.99.3 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
+ipv6calc: version 2.0.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
  DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC
  DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION
  DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO ANON_ZEROISE
- ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC 
+ ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 \end_layout
 
 \begin_layout Standard
@@ -1313,28 +1381,57 @@ $ ipv6calc -vv
 \end_layout
 
 \begin_layout Code
-ipv6calc: version 0.99.3.rc1 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4
- DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC
- DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_RE
-GION DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO ANON_ZEROISE
+ipv6calc: version 2.0.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
+ DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC
+ DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION
+ DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO ANON_ZEROISE
  ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 \end_layout
 
 \begin_layout Code
-Capabilities: GeoIP(linked) IP2Location(linked) DBIP External DB_AS_REG(BuiltIn)
- DB_CC_REG(BuiltIn) DB_IPV4_REG(BuiltIn) DB_IPV6_REG(BuiltIn) DB_IEEE(BuiltIn)
+
 \end_layout
 
 \begin_layout Code
-Internal main     library version: 0.99.3  API: 0.99.3  (built-in)
+Capabilities: GeoIP(linked) GeoIP2(linked/MaxMindDB) IP2Location(linked)
+ DBIP DBIP2(linked/MaxMindDB) External database DB_AS_REG(BuiltIn) DB_CC_REG(Bui
+ltIn) DB_IPV4_REG(BuiltIn) DB_IPV6_REG(BuiltIn) DB_IEEE(BuiltIn)
 \end_layout
 
 \begin_layout Code
-Internal database library version: 0.99.3  API: 0.99.3  (built-in)
+
 \end_layout
 
 \begin_layout Code
-Compiled: Feb 26 2017  11:04:37
+Internal main     library version: 2.0.0  API: 2.0.0  (built-in)
+\end_layout
+
+\begin_layout Code
+Internal database library version: 2.0.0  API: 2.0.0  (built-in)
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+Compiled: Feb  3 2019  08:24:17
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+MaxMindDB for GeoIP2/DBIP2 support enabled
+\end_layout
+
+\begin_layout Code
+MaxMindDB dynamic library version (on this system): 1.2.0
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -1342,11 +1439,28 @@ GeoIP support enabled, compiled with IPv4 & IPv6 support
 \end_layout
 
 \begin_layout Code
-GeoIP dynamic library version (on this system): 1.6.9
+GeoIP dynamic library version (on this system): 1.6.12
 \end_layout
 
 \begin_layout Code
 GeoIP available databases: Country4=1 Country6=1 ASN4=1 ASN6=1 City4=1 City6=1
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+GeoIP2 (MaxMindDB) support enabled
+\end_layout
+
+\begin_layout Code
+GeoIP2 available databases: Country4=1 Country6=1 ASN4=1 ASN6=1 City4=1
+ City6=1
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -1360,11 +1474,55 @@ IP2Location available databases: Country4=1 Country6=1 ASN4=0 ASN6=0 City4=1
 \end_layout
 
 \begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+DBIP support enabled
+\end_layout
+
+\begin_layout Code
+DBIP available databases: Country4=1 Country6=1 City4=1 City6=1
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+DBIP2 (MaxMindDB) support enabled
+\end_layout
+
+\begin_layout Code
+DBIP2 available databases: Country4=1 Country6=1 ASN4=1 ASN6=1 City4=1 City6=1
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+External available databases: Country4=1 Country6=1 IPV4_REG=1 IPV6_REG=1
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
 BuiltIn databases available: ASN_REG=1 IPV4_REG=1 IPV6_REG=1 IEEE=1 CC_REG=1
 \end_layout
 
 \begin_layout Code
+
+\end_layout
+
+\begin_layout Code
 DB features: 0xff01ffff
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -1378,32 +1536,92 @@ GeoIP: info of available databases in directory: /usr/share/GeoIP (max:
 
 \begin_layout Code
 GeoIP: GeoIP Country Edition            :[ 1] GeoIP.dat            (GEO-106FREE
- 20161004 Build 1 Copy)
+ 20170404 Build 1 Copyright (c) 2017 MaxMind Inc All Rights Reserved)
 \end_layout
 
 \begin_layout Code
 GeoIP: GeoIP City Edition, Rev 1        :[ 2] GeoIPCity.dat        (GEO-533LITE
- 20161004 Build 1 Copyright (c) 2016 MaxMind Inc All Rights Re)
+ 20170404 Build 1 Copyright (c) 2017 MaxMind Inc All Rights Reserved)
 \end_layout
 
 \begin_layout Code
 GeoIP: GeoIP ASNum Edition              :[ 9] GeoIPASNum.dat       (GEO-117
- 20161002 Build 1 Copyright (c) 2016 MaxMind Inc All Rights Re)
+ 20170408 Build 1 Copyright (c) 2017 MaxMind Inc All Rights Reserved)
 \end_layout
 
 \begin_layout Code
 GeoIP: GeoIP Country V6 Edition         :[12] GeoIPv6.dat          (GEO-106FREE
- 20161004 Build 1 C)
+ 20170404 Build 1 Copyright (c) 2017 MaxMind Inc All Rights Reserved)
 \end_layout
 
 \begin_layout Code
 GeoIP: GeoIP ASNum V6 Edition           :[21] GeoIPASNumv6.dat     (GEO-117
- 20160911 Build 1 Copyright (c) 2016 MaxMind Inc All Rights)
+ 20170408 Build 1 Copyright (c) 2017 MaxMind Inc All Rights Reserved)
 \end_layout
 
 \begin_layout Code
 GeoIP: GeoIP City Edition V6, Rev 1     :[30] GeoIPCityv6.dat      (GEO-536LITE
- 20161004 Build 1 Copyright (c) 2016 MaxMind Inc All Rights Reser)
+ 20170406 Build 1 Copyright (c) 2017 MaxMind Inc All Rights Reserved)
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+GeoIP(MaxMindDB): features available/implemented: 0x03003cf0/0x03003cf0
+ (100%)
+\end_layout
+
+\begin_layout Code
+GeoIP2: info of available databases in directory: /usr/share/GeoIP
+\end_layout
+
+\begin_layout Code
+GeoIP2: IPv4/v6 CountryCode (FREE)    : [1] GeoLite2-Country.mmdb       
+   (GeoLite2-Country Copyright (c) 2019 MaxMind All Rights Reserved, created:
+ 20190122-234327 UTC)
+\end_layout
+
+\begin_layout Code
+GeoIP2: IPv4/v6 City (FREE)           : [2] GeoLite2-City.mmdb          
+   (GeoLite2-City Copyright (c) 2019 MaxMind All Rights Reserved, created:
+ 20190122-234640 UTC)
+\end_layout
+
+\begin_layout Code
+GeoIP2: IPv4/v6 ASN (FREE)            : [3] GeoLite2-ASN.mmdb           
+   (GeoLite2-ASN Copyright (c) 2019 MaxMind All Rights Reserved, created:
+ 20190122-114228 UTC)
+\end_layout
+
+\begin_layout Code
+GeoIP2: detected best databases FREE    Country4=2    Country6=2    City4=2
+    City6=2  
+\end_layout
+
+\begin_layout Code
+GeoIP2: detected best databases COMM    Country4=0    Country6=0    City4=0
+    City6=0  
+\end_layout
+
+\begin_layout Code
+GeoIP2: selected best databases normal  Country4=2    Country6=2    City4=2
+    City6=2  
+\end_layout
+
+\begin_layout Code
+GeoIP2: selected best databases method: COMM older than 12 months are deselected
+ in case of FREE is available
+\end_layout
+
+\begin_layout Code
+GeoIP2: selected best databases method: COMM/FREE with more features are
+ only selected in case not older than 1 months of already found COMM/FREE
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -1421,85 +1639,35 @@ IP2Location: Copyright (c) IP2Location All Rights Reserved
 \begin_layout Code
 IP2Location: IPv4 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo      :[ 68] IP-COUNTRY-R
 EGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEAT
-HER-MOBILE-SAMPLE.BIN (IP2L-DB20 IPv4 SAMPLE 20160604)
+HER-MOBILE-SAMPLE.BIN (IP2L-DB20 IPv4 SAMPLE 20190129)
 \end_layout
 
 \begin_layout Code
 IP2Location: IPv4 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo/El/Us:[ 72] IP-COUNTRY-R
 EGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEAT
-HER-MOBILE-ELEVATION-USAGETYPE-SAMPLE.BIN (IP2L-DB24 IPv4 SAMPLE 20160604)
+HER-MOBILE-ELEVATION-USAGETYPE-SAMPLE.BIN (IP2L-DB24 IPv4 SAMPLE 20190129)
 \end_layout
 
 \begin_layout Code
 IP2Location: IPv6 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo      :[ 92] IPV6-COUNTRY
 -REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WE
-ATHER-MOBILE.SAMPLE.BIN (IP2L-DB20 IPv6 SAMPLE 20160604)
+ATHER-MOBILE.SAMPLE.BIN (IP2L-DB20 IPv6 SAMPLE 20171128)
 \end_layout
 
 \begin_layout Code
 IP2Location: IPv6 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo/El/Us:[ 96] IPV6-COUNTRY
 -REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WE
-ATHER-MOBILE-ELEVATION-USAGETYPE.SAMPLE.BIN (IP2L-DB24 IPv6 SAMPLE 20160604)
-\end_layout
-
-\begin_layout Code
-IP2Location: IPv4 Country                                    :[100] IP2LOCATION-
-LITE-DB1.BIN            (IP2L-DB1 IPv4 LITE 20150329)
-\end_layout
-
-\begin_layout Code
-IP2Location: IPv4 Country/Region/City                        :[102] IP2LOCATION-
-LITE-DB3.BIN            (IP2L-DB3 IPv4 LITE 20150329)
-\end_layout
-
-\begin_layout Code
-IP2Location: IPv4 Country/Region/City/LongitudeLattitude     :[104] IP2LOCATION-
-LITE-DB5.BIN            (IP2L-DB5 IPv4 LITE 20150329)
-\end_layout
-
-\begin_layout Code
-IP2Location: IPv4 Co/Re/Ci/LattLong/ZIP                      :[106] IP2LOCATION-
-LITE-DB9.BIN            (IP2L-DB9 IPv4 LITE 20150329)
-\end_layout
-
-\begin_layout Code
-IP2Location: IPv4 Co/Re/Ci/LattLong/ZIP/TZ                   :[108] IP2LOCATION-
-LITE-DB11.BIN           (IP2L-DB11 IPv4 LITE 20150329)
-\end_layout
-
-\begin_layout Code
-IP2Location: IPvx Country                                    :[101] IP2LOCATION-
-LITE-DB1.IPV6.BIN       (IP2L-DB1 IPv6 LITE 20150329)
-\end_layout
-
-\begin_layout Code
-IP2Location: IPvx Country/ISP                                :[103] IP2LOCATION-
-LITE-DB3.IPV6.BIN       (IP2L-DB3 IPv6 LITE 20150329)
-\end_layout
-
-\begin_layout Code
-IP2Location: IPvx Country/Region/City/LongitudeLattitude     :[105] IP2LOCATION-
-LITE-DB5.IPV6.BIN       (IP2L-DB5 IPv6 LITE 20150329)
-\end_layout
-
-\begin_layout Code
-IP2Location: IPvx Co/Re/Ci/LattLong/ZIP                      :[107] IP2LOCATION-
-LITE-DB9.IPV6.BIN       (IP2L-DB9 IPv6 LITE 20150329)
-\end_layout
-
-\begin_layout Code
-IP2Location: IPvx Co/Re/Ci/LattLong/ZIP/TZ                   :[109] IP2LOCATION-
-LITE-DB11.IPV6.BIN      (IP2L-DB11 IPv6 LITE 20150329)
+ATHER-MOBILE-ELEVATION-USAGETYPE.SAMPLE.BIN (IP2L-DB24 IPv6 SAMPLE 20171128)
 \end_layout
 
 \begin_layout Code
 IP2Location: IPvx Country                                    :[ 25] IPV6-COUNTRY.
-BIN                    (IP2L-DB1 IPv6 20060918)
+BIN                    (IP2L-DB1 IPv6 20060918 TOO-OLD)
 \end_layout
 
 \begin_layout Code
 IP2Location: IPvx Co/Re/Ci/LattLong/ZIP/TZ                   :[ 35] IPV6-COUNTRY
--REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE.BIN (IP2L-DB11 IPv6 20160928)
+-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE.BIN (IP2L-DB11 IPv6 20181226)
 \end_layout
 
 \begin_layout Code
@@ -1513,8 +1681,8 @@ IP2Location: detected best databases SAMPLE  Country4=72   Country6=96
 \end_layout
 
 \begin_layout Code
-IP2Location: detected best databases LITE    Country4=109  Country6=109
-  City4=109  City6=109
+IP2Location: detected best databases LITE    Country4=0    Country6=0  
+  City4=0    City6=0  
 \end_layout
 
 \begin_layout Code
@@ -1523,8 +1691,8 @@ IP2Location: detected best databases COMM    Country4=35   Country6=35
 \end_layout
 
 \begin_layout Code
-IP2Location: selected best databases LI->SA* Country4=72   Country6=96 
-  City4=72   City6=96 
+IP2Location: selected best databases LI->SA* Country4=0    Country6=0  
+  City4=0    City6=0  
 \end_layout
 
 \begin_layout Code
@@ -1553,6 +1721,10 @@ IP2Location: selected best databases method: softlinks: skipped-by-default
 \end_layout
 
 \begin_layout Code
+
+\end_layout
+
+\begin_layout Code
 db-ip.com: features available/implemented: 0x30003fc0/0x30003fc0 (100%)
 \end_layout
 
@@ -1561,38 +1733,32 @@ DBIP: info of available databases in directory: /usr/share/DBIP
 \end_layout
 
 \begin_layout Code
-DBIP: IPv4 CountryCode (FREE)       : ipv6calc-dbip-ipv4-country.db  (DBIP-1/2016
-1001, created: 20161009-090609 UTC)
+DBIP: IPv4 ISP (COMM)               : [ 5] ipv6calc-dbip-ipv4-isp.db    
+  (DBIP IPv4 ISP (COMM) 20170201 Copyright (c) 2017 db-ip.com All Rights
+ Reserved, created: 20170227-204550 UTC)
 \end_layout
 
 \begin_layout Code
-DBIP: IPv6 CountryCode (FREE)       : ipv6calc-dbip-ipv6-country.db  (DBIP-2/2016
-1001, created: 20161009-090609 UTC)
+DBIP: IPv6 ISP (COMM)               : [ 6] ipv6calc-dbip-ipv6-isp.db    
+  (DBIP IPv6 ISP (COMM) 20170201 Copyright (c) 2017 db-ip.com All Rights
+ Reserved, created: 20170227-204550 UTC)
 \end_layout
 
 \begin_layout Code
-DBIP: IPv4 City/Region/CountryCode (FREE): ipv6calc-dbip-ipv4-city.db   
-  (DBIP-3/20161001, created: 20161009-090650 UTC)
+DBIP: IPv4 Location/ISP (COMM)      : [ 9] ipv6calc-dbip-ipv4-full.db   
+  (DBIP IPv4 Location/ISP (COMM) 20170201 Copyright (c) 2017 db-ip.com All
+ Rights Reserved, created: 20170221-183104 UTC)
 \end_layout
 
 \begin_layout Code
-DBIP: IPv6 City/Region/CountryCode (FREE): ipv6calc-dbip-ipv6-city.db   
-  (DBIP-4/20161001, created: 20161009-090650 UTC)
+DBIP: IPv6 Location/ISP (COMM)      : [10] ipv6calc-dbip-ipv6-full.db   
+  (DBIP IPv6 Location/ISP (COMM) 20170201 Copyright (c) 2017 db-ip.com All
+ Rights Reserved, created: 20170221-183104 UTC)
 \end_layout
 
 \begin_layout Code
-DBIP: IPv4 Location/ISP (COMM)      : ipv6calc-dbip-ipv4-full.db     (DBIP-9/2017
-0201, created: 20170221-183104 UTC)
-\end_layout
-
-\begin_layout Code
-DBIP: IPv6 Location/ISP (COMM)      : ipv6calc-dbip-ipv6-full.db     (DBIP-10/201
-70201, created: 20170221-183104 UTC)
-\end_layout
-
-\begin_layout Code
-DBIP: detected best databases FREE    Country4=3    Country6=4    City4=3
-    City6=4  
+DBIP: detected best databases FREE    Country4=0    Country6=0    City4=0
+    City6=0  
 \end_layout
 
 \begin_layout Code
@@ -1616,7 +1782,67 @@ DBIP: selected best databases method: COMM/FREE with more features are only
 \end_layout
 
 \begin_layout Code
-External: features available/implemented: 0xc00000cc/0xc00180cc (75%)
+
+\end_layout
+
+\begin_layout Code
+db-ip.com(MaxMindDB): features available/implemented: 0x30003ff0/0x30003ff0
+ (100%)
+\end_layout
+
+\begin_layout Code
+DBIP2: info of available databases in directory: /usr/share/DBIP
+\end_layout
+
+\begin_layout Code
+DBIP2: IPv4/v6 CountryCode (FREE)    : [1] dbip-country-lite.mmdb       
+  (DBIP-Country-Lite Copyright (c) 2019 db-ip.com All Rights Reserved, created:
+ 20190101-001811 UTC)
+\end_layout
+
+\begin_layout Code
+DBIP2: IPv4/v6 City (FREE)           : [2] dbip-city-lite.mmdb          
+  (DBIP-City-Lite Copyright (c) 2019 db-ip.com All Rights Reserved, created:
+ 20190101-002109 UTC)
+\end_layout
+
+\begin_layout Code
+DBIP2: IPv4/v6 Location+ISP (COMM)   : [6] dbip-location-isp.mmdb       
+  (DBIP-Location-ISP (compat=Enterprise) Copyright (c) 2019 db-ip.com All
+ Rights Reserved, created: 20190101-015418 UTC)
+\end_layout
+
+\begin_layout Code
+DBIP2: detected best databases FREE    Country4=2    Country6=2    City4=2
+    City6=2  
+\end_layout
+
+\begin_layout Code
+DBIP2: detected best databases COMM    Country4=6    Country6=6    City4=6
+    City6=6  
+\end_layout
+
+\begin_layout Code
+DBIP2: selected best databases normal  Country4=6    Country6=6    City4=6
+    City6=6  
+\end_layout
+
+\begin_layout Code
+DBIP2: selected best databases method: COMM older than 12 months are deselected
+ in case of FREE is available
+\end_layout
+
+\begin_layout Code
+DBIP2: selected best databases method: COMM/FREE with more features are
+ only selected in case not older than 1 months of already found COMM/FREE
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+External: features available/implemented: 0xc00180cc/0xc00180cc (100%)
 \end_layout
 
 \begin_layout Code
@@ -1625,24 +1851,30 @@ External: info of available databases in directory: /usr/share/ipv6calc/db
 
 \begin_layout Code
 External: IPv4 Registry       : ipv6calc-external-ipv4-registry.db      
- (EXTDB-1/AFRINIC/20160930 APNIC/20160930 ARIN/20160930 IANA/20150810 LACNIC/201
-60929 RIPENCC/20160929, created: 20160930-164535 UTC)
+ (EXTDB-1/AFRINIC/20170607 APNIC/20170609 ARIN/20170609 IANA/20170419 LACNIC/201
+70608 LISP/20170609 RIPENCC/20170608, created: 20170609-161137 UTC)
 \end_layout
 
 \begin_layout Code
 External: IPv6 Registry       : ipv6calc-external-ipv6-registry.db      
- (EXTDB-2/AFRINIC/20160930 IANA/20160128, created: 20161001-051950 UTC)
+ (EXTDB-2/AFRINIC/20170607 APNIC/20170609 ARIN/20170609 IANA/20170104 LACNIC/201
+70608 LISP/20170609 RIPENCC/20170608, created: 20170609-161629 UTC)
 \end_layout
 
 \begin_layout Code
 External: IPv4 CountryCode    : ipv6calc-external-ipv4-countrycode.db   
- (EXTDB-3/AFRINIC/20160930 APNIC/20160930 ARIN/20160930 IANA/20150810 LACNIC/201
-60929 RIPENCC/20160929, created: 20160930-164535 UTC)
+ (EXTDB-3/AFRINIC/20170607 APNIC/20170609 ARIN/20170609 IANA/20170419 LACNIC/201
+70608 LISP/20170609 RIPENCC/20170608, created: 20170609-161137 UTC)
 \end_layout
 
 \begin_layout Code
 External: IPv6 CountryCode    : ipv6calc-external-ipv6-countrycode.db   
- (EXTDB-4/AFRINIC/20160930 IANA/20160128, created: 20161001-051950 UTC)
+ (EXTDB-4/AFRINIC/20170607 APNIC/20170609 ARIN/20170609 IANA/20170104 LACNIC/201
+70608 LISP/20170609 RIPENCC/20170608, created: 20170609-161629 UTC)
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -1654,28 +1886,32 @@ BuiltIn: info of available databases
 \end_layout
 
 \begin_layout Code
-BuiltIn: ASN  : IANA/20160908
+BuiltIn: ASN  : IANA/20181207
 \end_layout
 
 \begin_layout Code
-BuiltIn: CC   : AFRINIC/20161224 APNIC/20161223 ARIN/20161224 LACNIC/20161223
- RIPENCC/20161223
+BuiltIn: CC   : AFRINIC/20190128 APNIC/20190126 ARIN/20190128 LACNIC/20190125
+ RIPENCC/20190127
 \end_layout
 
 \begin_layout Code
-BuiltIn: IPv4 : AFRINIC/20170223 APNIC/20170222 ARIN/20170222 IANA/20150810
- LACNIC/20170222 LISP/20170223 RIPENCC/20170222 (created: 20170224-184411
+BuiltIn: IPv4 : AFRINIC/20190128 APNIC/20190126 ARIN/20190128 IANA/20180918
+ LACNIC/20190125 LISP/20190128 RIPENCC/20190127 (created: 20190128-070617
  UTC)
 \end_layout
 
 \begin_layout Code
-BuiltIn: IPv6 : AFRINIC/20170223 APNIC/20170222 ARIN/20170222 IANA/20170104
- LACNIC/20170222 LISP/20170223 RIPENCC/20170222 (created: 20170225-075038
+BuiltIn: IPv6 : AFRINIC/20190128 APNIC/20190126 ARIN/20190128 IANA/20180424
+ LACNIC/20190125 LISP/20190128 RIPENCC/20190127 (created: 20190128-072209
  UTC)
 \end_layout
 
 \begin_layout Code
-BuiltIn: IEEE : IAB/20161218 OUI/20161117 OUI36/20161218
+BuiltIn: IEEE : IAB/20170625 OUI/20170625 OUI36/20190128
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -1683,7 +1919,8 @@ Database selection or priorization ('->': subsequential calls)
 \end_layout
 
 \begin_layout Code
-Database priorization default: GeoIP->IP2Location->db-ip.com->External->BuiltIn
+Database priorization default: GeoIP(MaxMindDB)->IP2Location->db-ip.com(MaxMindDB
+)->GeoIP->db-ip.com->External->BuiltIn
 \end_layout
 
 \begin_layout Code
@@ -1703,45 +1940,51 @@ DB_IPV6_REG (IPv6 to Registry database): BuiltIn
 \end_layout
 
 \begin_layout Code
-DB_IPV4_AS (IPv4 to AS database): GeoIP
+DB_IPV4_AS (IPv4 to AS database): GeoIP(MaxMindDB)->db-ip.com(MaxMindDB)->GeoIP
 \end_layout
 
 \begin_layout Code
-DB_IPV6_AS (IPv6 to AS database): GeoIP
+DB_IPV6_AS (IPv6 to AS database): GeoIP(MaxMindDB)->db-ip.com(MaxMindDB)->GeoIP
 \end_layout
 
 \begin_layout Code
-DB_IPV4_CC (IPv4 to CountryCode database): GeoIP->IP2Location->db-ip.com->Externa
-l
+DB_IPV4_CC (IPv4 to CountryCode database): GeoIP(MaxMindDB)->IP2Location->db-ip.c
+om(MaxMindDB)->GeoIP->db-ip.com->External
 \end_layout
 
 \begin_layout Code
-DB_IPV6_CC (IPv6 to CountryCode database): GeoIP->IP2Location->db-ip.com->Externa
-l
+DB_IPV6_CC (IPv6 to CountryCode database): GeoIP(MaxMindDB)->IP2Location->db-ip.c
+om(MaxMindDB)->GeoIP->db-ip.com->External
 \end_layout
 
 \begin_layout Code
-DB_IPV4_COUNTRY (IPv4 to Country database): GeoIP->IP2Location->db-ip.com
+DB_IPV4_COUNTRY (IPv4 to Country database): IP2Location->db-ip.com(MaxMindDB)->Ge
+oIP->db-ip.com
 \end_layout
 
 \begin_layout Code
-DB_IPV6_COUNTRY (IPv6 to Country database): GeoIP->IP2Location->db-ip.com
+DB_IPV6_COUNTRY (IPv6 to Country database): IP2Location->db-ip.com(MaxMindDB)->Ge
+oIP->db-ip.com
 \end_layout
 
 \begin_layout Code
-DB_IPV4_CITY (IPv4 to City database): GeoIP->IP2Location->db-ip.com
+DB_IPV4_CITY (IPv4 to City database): GeoIP(MaxMindDB)->IP2Location->db-ip.com(Ma
+xMindDB)->GeoIP->db-ip.com
 \end_layout
 
 \begin_layout Code
-DB_IPV6_CITY (IPv6 to City database): GeoIP->IP2Location->db-ip.com
+DB_IPV6_CITY (IPv6 to City database): GeoIP(MaxMindDB)->IP2Location->db-ip.com(Ma
+xMindDB)->GeoIP->db-ip.com
 \end_layout
 
 \begin_layout Code
-DB_IPV4_REGION (IPv4 to Region database): GeoIP->IP2Location->db-ip.com
+DB_IPV4_REGION (IPv4 to Region database): GeoIP(MaxMindDB)->IP2Location->db-ip.co
+m(MaxMindDB)->GeoIP->db-ip.com
 \end_layout
 
 \begin_layout Code
-DB_IPV6_REGION (IPv6 to Region database): GeoIP->IP2Location->db-ip.com
+DB_IPV6_REGION (IPv6 to Region database): GeoIP(MaxMindDB)->IP2Location->db-ip.co
+m(MaxMindDB)->GeoIP->db-ip.com
 \end_layout
 
 \begin_layout Code
@@ -1749,11 +1992,11 @@ DB_IEEE (IEEE/OUI/OUI36 Vendor database): BuiltIn
 \end_layout
 
 \begin_layout Code
-DB_IPV4_INFO (IPv4 additional information): BuiltIn
+DB_IPV4_INFO (IPv4 additional information): External->BuiltIn
 \end_layout
 
 \begin_layout Code
-DB_IPV6_INFO (IPv6 additional information): BuiltIn
+DB_IPV6_INFO (IPv6 additional information): External->BuiltIn
 \end_layout
 
 \begin_layout Standard
@@ -1773,10 +2016,10 @@ $ ipv6calc -v -h
 \end_layout
 
 \begin_layout Code
-ipv6calc: version 0.99.3 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
+ipv6calc: version 2.0.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
  DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC
  DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION
- DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFOANON_ZEROISE
+ DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO ANON_ZEROISE
  ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 \end_layout
 
@@ -1785,119 +2028,125 @@ ipv6calc: version 0.99.3 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
 \end_layout
 
 \begin_layout Code
-Explanation of available(+)/possible(-) feature tokens
+Explanation of available(x)/possible(o) feature tokens
 \end_layout
 
 \begin_layout Code
-GeoIP                 + GeoIPv4 database (provided by GeoIP)
+GeoIP                 x GeoIPv4 database (provided by GeoIP(MaxMindDB),GeoIP)
 \end_layout
 
 \begin_layout Code
-GeoIPv6               + GeoIPv6 database (provided by GeoIP)
+GeoIPv6               x GeoIPv6 database (provided by GeoIP(MaxMindDB),GeoIP)
 \end_layout
 
 \begin_layout Code
-IP2Location           + IP2Location IPv4 database (provided by IP2Location)
+IP2Location           x IP2Location IPv4 database (provided by IP2Location)
 \end_layout
 
 \begin_layout Code
-IP2Location6          + IP2Location IPv6 database (provided by IP2Location)
+IP2Location6          x IP2Location IPv6 database (provided by IP2Location)
 \end_layout
 
 \begin_layout Code
-DBIPv4                + db-ip.com IPv4 database (provided by db-ip.com)
+DBIPv4                x db-ip.com IPv4 database (provided by db-ip.com(MaxMindDB),
+db-ip.com)
 \end_layout
 
 \begin_layout Code
-DBIPv6                + db-ip.com IPv6 database (provided by db-ip.com)
+DBIPv6                x db-ip.com IPv6 database (provided by db-ip.com(MaxMindDB),
+db-ip.com)
 \end_layout
 
 \begin_layout Code
-DB_AS_REG             + AS-Number to Registry database (provided by BuiltIn)
+DB_AS_REG             x AS-Number to Registry database (provided by BuiltIn)
 \end_layout
 
 \begin_layout Code
-DB_IPV4_REG           + IPv4 to Registry database (provided by External,BuiltIn)
+DB_IPV4_REG           x IPv4 to Registry database (provided by External,BuiltIn)
 \end_layout
 
 \begin_layout Code
-DB_IPV6_REG           + IPv6 to Registry database (provided by External,BuiltIn)
+DB_IPV6_REG           x IPv6 to Registry database (provided by External,BuiltIn)
 \end_layout
 
 \begin_layout Code
-DB_IPV4_AS            + IPv4 to AS database (provided by GeoIP)
+DB_IPV4_AS            x IPv4 to AS database (provided by GeoIP(MaxMindDB),db-ip.c
+om(MaxMindDB),GeoIP)
 \end_layout
 
 \begin_layout Code
-DB_IPV6_AS            + IPv6 to AS database (provided by GeoIP)
+DB_IPV6_AS            x IPv6 to AS database (provided by GeoIP(MaxMindDB),db-ip.c
+om(MaxMindDB),GeoIP)
 \end_layout
 
 \begin_layout Code
-DB_IPV4_CC            + IPv4 to CountryCode database (provided by GeoIP,IP2Locat
-ion,db-ip.com,External)
+DB_IPV4_CC            x IPv4 to CountryCode database (provided by GeoIP(MaxMindD
+B),IP2Location,db-ip.com(MaxMindDB),GeoIP,db-ip.com,External)
 \end_layout
 
 \begin_layout Code
-DB_IPV6_CC            + IPv6 to CountryCode database (provided by GeoIP,IP2Locat
-ion,db-ip.com,External)
+DB_IPV6_CC            x IPv6 to CountryCode database (provided by GeoIP(MaxMindD
+B),IP2Location,db-ip.com(MaxMindDB),GeoIP,db-ip.com,External)
 \end_layout
 
 \begin_layout Code
-DB_IPV4_COUNTRY       + IPv4 to Country database (provided by GeoIP,IP2Location)
+DB_IPV4_COUNTRY       x IPv4 to Country database (provided by IP2Location,db-ip.c
+om(MaxMindDB),GeoIP,db-ip.com)
 \end_layout
 
 \begin_layout Code
-DB_IPV6_COUNTRY       + IPv6 to Country database (provided by GeoIP,IP2Location)
+DB_IPV6_COUNTRY       x IPv6 to Country database (provided by IP2Location,db-ip.c
+om(MaxMindDB),GeoIP,db-ip.com)
 \end_layout
 
 \begin_layout Code
-DB_IPV4_CITY          + IPv4 to City database (provided by GeoIP,IP2Location,db-
-ip.com)
+DB_IPV4_CITY          x IPv4 to City database (provided by GeoIP(MaxMindDB),IP2L
+ocation,db-ip.com(MaxMindDB),GeoIP,db-ip.com)
 \end_layout
 
 \begin_layout Code
-DB_IPV6_CITY          + IPv6 to City database (provided by GeoIP,IP2Location,db-
-ip.com)
+DB_IPV6_CITY          x IPv6 to City database (provided by GeoIP(MaxMindDB),IP2L
+ocation,db-ip.com(MaxMindDB),GeoIP,db-ip.com)
 \end_layout
 
 \begin_layout Code
-DB_IPV4_REGION        + IPv4 to Region database (provided by GeoIP,IP2Location,d
-b-ip.com)
+DB_IPV4_REGION        x IPv4 to Region database (provided by GeoIP(MaxMindDB),IP
+2Location,db-ip.com(MaxMindDB),GeoIP,db-ip.com)
 \end_layout
 
 \begin_layout Code
-DB_IPV6_REGION        + IPv6 to Region database (provided by GeoIP,IP2Location,d
-b-ip.com)
+DB_IPV6_REGION        x IPv6 to Region database (provided by GeoIP(MaxMindDB),IP
+2Location,db-ip.com(MaxMindDB),GeoIP,db-ip.com)
 \end_layout
 
 \begin_layout Code
-DB_CC_REG             + CountryCode to Registry database (provided by BuiltIn)
+DB_CC_REG             x CountryCode to Registry database (provided by BuiltIn)
 \end_layout
 
 \begin_layout Code
-DB_IEEE               + IEEE/OUI/OUI36 Vendor database (provided by BuiltIn)
+DB_IEEE               x IEEE/OUI/OUI36 Vendor database (provided by BuiltIn)
 \end_layout
 
 \begin_layout Code
-DB_IPV4_INFO          + IPv4 additional information (provided by External,BuiltI
+DB_IPV4_INFO          x IPv4 additional information (provided by External,BuiltI
 n)
 \end_layout
 
 \begin_layout Code
-DB_IPV6_INFO          + IPv6 additional information (provided by External,BuiltI
-n) 
+DB_IPV6_INFO          x IPv6 additional information (provided by External,BuiltI
+n)
 \end_layout
 
 \begin_layout Code
-ANON_ZEROISE          + Anonymization method 'zeroize'
+ANON_ZEROISE          x Anonymization method 'zeroize'
 \end_layout
 
 \begin_layout Code
-ANON_ANONYMIZE        + Anonymization method 'anonymize'
+ANON_ANONYMIZE        x Anonymization method 'anonymize'
 \end_layout
 
 \begin_layout Code
-ANON_KEEP-TYPE-ASN-CC + Anonymization method 'keep-type-asn-cc'
+ANON_KEEP-TYPE-ASN-CC x Anonymization method 'keep-type-asn-cc'
 \end_layout
 
 \begin_layout Standard
@@ -2151,7 +2400,7 @@ IPV6_COUNTRYCODE=DE
 \end_layout
 
 \begin_layout Code
-IPV6_COUNTRYCODE_SOURCE=GeoIP
+IPV6_COUNTRYCODE_SOURCE=GeoIP(MaxMindDB)
 \end_layout
 
 \begin_layout Code
@@ -2159,7 +2408,7 @@ IPV6_AS_NUM=6724
 \end_layout
 
 \begin_layout Code
-IPV6_AS_TEXT=AS6724 STRATO AG
+IPV6_AS_SOURCE=GeoIP(MaxMindDB)
 \end_layout
 
 \begin_layout Code
@@ -2195,6 +2444,10 @@ IP2LOCATION_CITY=Berlin
 \end_layout
 
 \begin_layout Code
+IP2LOCATION_ZIPCODE=10178
+\end_layout
+
+\begin_layout Code
 IP2LOCATION_LATITUDE=52.524368
 \end_layout
 
@@ -2203,15 +2456,11 @@ IP2LOCATION_LONGITUDE=13.410530
 \end_layout
 
 \begin_layout Code
-IP2LOCATION_ZIPCODE=10178
+IP2LOCATION_TIMEZONE_NAME=+01:00
 \end_layout
 
 \begin_layout Code
-IP2LOCATION_TIMEZONE=+01:00
-\end_layout
-
-\begin_layout Code
-GEOIP_AS_TEXT=AS6724 STRATO AG
+GEOIP_CONTINENT_SHORT=EU
 \end_layout
 
 \begin_layout Code
@@ -2231,7 +2480,55 @@ GEOIP_LONGITUDE=9.000000
 \end_layout
 
 \begin_layout Code
-GEOIP_CONTINENTCODE=EU
+GEOIP_AS_NUM=6724
+\end_layout
+
+\begin_layout Code
+GEOIP_AS_ORGNAME=Strato AG
+\end_layout
+
+\begin_layout Code
+GEOIP2_CONTINENT_SHORT=EU
+\end_layout
+
+\begin_layout Code
+GEOIP2_CONTINENT_LONG=Europe
+\end_layout
+
+\begin_layout Code
+GEOIP2_COUNTRY_SHORT=DE
+\end_layout
+
+\begin_layout Code
+GEOIP2_COUNTRY_LONG=Germany
+\end_layout
+
+\begin_layout Code
+GEOIP2_LATITUDE=51.000000
+\end_layout
+
+\begin_layout Code
+GEOIP2_LONGITUDE=9.000000
+\end_layout
+
+\begin_layout Code
+GEOIP2_RADIUS=100
+\end_layout
+
+\begin_layout Code
+GEOIP2_AS_NUM=6724
+\end_layout
+
+\begin_layout Code
+GEOIP2_AS_ORGNAME=Strato AG
+\end_layout
+
+\begin_layout Code
+GEOIP2_GEONAME_ID_COUNTRY=2921044
+\end_layout
+
+\begin_layout Code
+GEOIP2_GEONAME_ID_CONTINENT=6255148
 \end_layout
 
 \begin_layout Code
@@ -2239,11 +2536,115 @@ DBIP_COUNTRY_SHORT=DE
 \end_layout
 
 \begin_layout Code
-DBIP_CITY=Berlin
+DBIP_REGION=Berlin
 \end_layout
 
 \begin_layout Code
-DBIP_REGION=Berlin
+DBIP_CITY=Berlin (Charlottenburg)
+\end_layout
+
+\begin_layout Code
+DBIP_ZIPCODE=10587
+\end_layout
+
+\begin_layout Code
+DBIP_LATITUDE=52.523900
+\end_layout
+
+\begin_layout Code
+DBIP_LONGITUDE=13.321400
+\end_layout
+
+\begin_layout Code
+DBIP_TIMEZONE_NAME=Europe/Berlin
+\end_layout
+
+\begin_layout Code
+DBIP_TIMEZONE=+01:00
+\end_layout
+
+\begin_layout Code
+DBIP_AS_ORGNAME=Strato AG
+\end_layout
+
+\begin_layout Code
+DBIP_ISP=Strato Rechenzentrum
+\end_layout
+
+\begin_layout Code
+DBIP_GEONAME_ID=2940187
+\end_layout
+
+\begin_layout Code
+DBIP2_CONTINENT_SHORT=EU
+\end_layout
+
+\begin_layout Code
+DBIP2_CONTINENT_LONG=Europe
+\end_layout
+
+\begin_layout Code
+DBIP2_COUNTRY_SHORT=DE
+\end_layout
+
+\begin_layout Code
+DBIP2_COUNTRY_LONG=Germany
+\end_layout
+
+\begin_layout Code
+DBIP2_REGION=Berlin
+\end_layout
+
+\begin_layout Code
+DBIP2_CITY=Berlin (Charlottenburg-Wilmersdorf)
+\end_layout
+
+\begin_layout Code
+DBIP2_ZIPCODE=10587
+\end_layout
+
+\begin_layout Code
+DBIP2_LATITUDE=52.523900
+\end_layout
+
+\begin_layout Code
+DBIP2_LONGITUDE=13.321400
+\end_layout
+
+\begin_layout Code
+DBIP2_WEATHERSTATIONCODE=GMXX8538
+\end_layout
+
+\begin_layout Code
+DBIP2_TIMEZONE_NAME=Europe/Berlin
+\end_layout
+
+\begin_layout Code
+DBIP2_AS_NUM=6724
+\end_layout
+
+\begin_layout Code
+DBIP2_AS_ORGNAME=Strato AG
+\end_layout
+
+\begin_layout Code
+DBIP2_ISP=Strato Rechenzentrum
+\end_layout
+
+\begin_layout Code
+DBIP2_NETSPEED=Corporate
+\end_layout
+
+\begin_layout Code
+DBIP2_GEONAME_ID=3336294
+\end_layout
+
+\begin_layout Code
+DBIP2_GEONAME_ID_COUNTRY=2921044
+\end_layout
+
+\begin_layout Code
+DBIP2_GEONAME_ID_CONTINENT=6255148
 \end_layout
 
 \begin_layout Code
@@ -2251,32 +2652,41 @@ EXTERNAL_COUNTRY_SHORT=DE
 \end_layout
 
 \begin_layout Code
-IP2LOCATION_DATABASE_INFO=IP2L-DB11 IPv6 LITE 20150329 Copyright (c) 2015
- IP2Location All Rights Reserved / This site or product includes IP2Location
- LITE data available from http://lite.ip2location.com
+IP2LOCATION_DATABASE_INFO=IP2L-DB11 IPv6 20181226 Copyright (c) 2018 IP2Location
+ All Rights Reserved
 \end_layout
 
 \begin_layout Code
-GEOIP_DATABASE_INFO=GEO-106FREE 20150407 Build 1 Copyright (c) 2015 MaxMind
- Inc All Rights Reserved / GEO-117 20150405 Build 1 Copyright (c) 2015 MaxMind
- Inc All Rights Reserved / GEO-536LITE 20150407 Build 1 Copyright (c) 2015
+GEOIP_DATABASE_INFO=GEO-117 20170408 Build 1 Copyright (c) 2017 MaxMind
+ Inc All Rights Reserved / GEO-536LITE 20170406 Build 1 Copyright (c) 2017
  MaxMind Inc All Rights Reserved
 \end_layout
 
 \begin_layout Code
-DBIP_DATABASE_INFO=DBIP-2/20150301, created: 20150304-183312 UTC / DBIP-4/201503
-01, created: 20150304-183330 UTC
+GEOIP2_DATABASE_INFO=GeoLite2-City Copyright (c) 2019 MaxMind All Rights
+ Reserved, created: 20190122-234640 UTC / GeoLite2-ASN Copyright (c) 2019
+ MaxMind All Rights Reserved, created: 20190122-114228 UTC
 \end_layout
 
 \begin_layout Code
-EXTERNAL_DATABASE_INFO=EXTDB-4/AFRINIC/20150215 APNIC/20150213 ARIN/20150215
- IANA/20140520 LACNIC/20150213 RIPENCC/20150214, created: 20150215-170924
- UTC
+DBIP_DATABASE_INFO=DBIP IPv6 Location/ISP (COMM) 20170201 Copyright (c)
+ 2017 db-ip.com All Rights Reserved, created: 20170221-183104 UTC
 \end_layout
 
 \begin_layout Code
-BUILTIN_DATABASE_INFO=IPv6-REG:AFRINIC/20150418 APNIC/20150417 ARIN/20150418
- IANA/20150324 LACNIC/20150417 RIPENCC/20150417
+DBIP2_DATABASE_INFO=DBIP-Location-ISP (compat=Enterprise) Copyright (c)
+ 2019 db-ip.com All Rights Reserved, created: 20190101-015418 UTC
+\end_layout
+
+\begin_layout Code
+EXTERNAL_DATABASE_INFO=EXTDB-4/AFRINIC/20170607 APNIC/20170609 ARIN/20170609
+ IANA/20170104 LACNIC/20170608 LISP/20170609 RIPENCC/20170608, created:
+ 20170609-161629 UTC
+\end_layout
+
+\begin_layout Code
+BUILTIN_DATABASE_INFO=IPv6-REG:AFRINIC/20190128 APNIC/20190126 ARIN/20190128
+ IANA/20180424 LACNIC/20190125 LISP/20190128 RIPENCC/20190127
 \end_layout
 
 \begin_layout Code
@@ -2284,16 +2694,16 @@ IPV6CALC_NAME=ipv6calc
 \end_layout
 
 \begin_layout Code
-IPV6CALC_VERSION=0.99.0
+IPV6CALC_VERSION=2.0.0beta5
 \end_layout
 
 \begin_layout Code
-IPV6CALC_COPYRIGHT="(P) & (C) 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
+IPV6CALC_COPYRIGHT="(P) & (C) 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
 "
 \end_layout
 
 \begin_layout Code
-IPV6CALC_OUTPUT_VERSION=10
+IPV6CALC_OUTPUT_VERSION=20
 \end_layout
 
 \begin_layout Code
@@ -2305,14 +2715,14 @@ IPV6CALC_SETTINGS_ANON="set=keep-type-asn-cc,mask-ipv6=56,mask-ipv4=24,mask-eui6
 IPV6CALC_FEATURES="GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
  DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC
  DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION
- DB_IPV6_REGION DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN
--CC"
+ DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO ANON_ZEROISE
+ ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC"
 \end_layout
 
 \begin_layout Code
-IPV6CALC_CAPABILITIES="GeoIP(linked) IP2Location(linked) DBIP External DB_AS_REG
-(BuiltIn) DB_CC_REG(BuiltIn) DB_IPV4_REG(BuiltIn) DB_IPV6_REG(BuiltIn) DB_IEEE(B
-uiltIn)"
+IPV6CALC_CAPABILITIES="GeoIP(linked) GeoIP2(linked/MaxMindDB) IP2Location(linked
+) DBIP DBIP2(linked/MaxMindDB) External database DB_AS_REG(BuiltIn) DB_CC_REG(Bu
+iltIn) DB_IPV4_REG(BuiltIn) DB_IPV6_REG(BuiltIn) DB_IEEE(BuiltIn)"
 \end_layout
 
 \begin_layout Paragraph*
@@ -2325,7 +2735,7 @@ Output filter by selecting a token (>= 0.99.0)
 
 \begin_layout Standard
 Using option --mrst <TOKEN> (Machine Readable Select Token) can be used
- to display only token
+ to display only a selected token
 \end_layout
 
 \begin_layout Code
@@ -2368,6 +2778,10 @@ IP2LOCATION_CITY=Berlin
 \end_layout
 
 \begin_layout Code
+IP2LOCATION_ZIPCODE=10178
+\end_layout
+
+\begin_layout Code
 IP2LOCATION_LATITUDE=52.524368
 \end_layout
 
@@ -2376,17 +2790,12 @@ IP2LOCATION_LONGITUDE=13.410530
 \end_layout
 
 \begin_layout Code
-IP2LOCATION_ZIPCODE=10178
+IP2LOCATION_TIMEZONE_NAME=+01:00
 \end_layout
 
 \begin_layout Code
-IP2LOCATION_TIMEZONE=+01:00
-\end_layout
-
-\begin_layout Code
-IP2LOCATION_DATABASE_INFO="IP2L-DB11 IPv6 LITE 20150329 Copyright (c) 2015
- IP2Location All Rights Reserved / This site or product includes IP2Location
- LITE data available from http://lite.ip2location.com"
+IP2LOCATION_DATABASE_INFO=IP2L-DB11 IPv6 20181226 Copyright (c) 2018 IP2Location
+ All Rights Reserved
 \end_layout
 
 \begin_layout Subparagraph
@@ -2395,7 +2804,7 @@ Output filter by selecting a value of a token token (>= 0.99.0)
 
 \begin_layout Standard
 Using option --mrtvo <TOKEN> (Machine Readable Token Value Only) can be
- used to display only value of a token
+ used to display only thevalue of a selected token
 \end_layout
 
 \begin_layout Code
@@ -2413,7 +2822,7 @@ Output adjustment by unconditional quoting of values (>= 0.99.0)
 
 \begin_layout Standard
 Using option --mrqva (Machine Readable Quote Values Always) can be used
- to quote values always
+ to quote values always of a selected token
 \end_layout
 
 \begin_layout Code
@@ -2431,7 +2840,7 @@ Output adjustment by unconditional disabling quoted values (>= 0.99.0)
 
 \begin_layout Standard
 Using option --mrqvn (Machine Readable Quote Values Never) can be used to
- never quote values
+ never quote values of a selected token
 \end_layout
 
 \begin_layout Code
@@ -2603,28 +3012,20 @@ $ ipv6calc -h
 \end_layout
 
 \begin_layout Code
-ipv6calc: version 0.99.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
+ipv6calc: version 2.0.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
  DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC
  DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION
- DB_IPV6_REGION DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN
--CC
+ DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO ANON_ZEROISE
+ ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 \end_layout
 
 \begin_layout Code
-(P) & (C) 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
-\end_layout
-
-\begin_layout Code
-
+(P) & (C) 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
 \end_layout
 
 \begin_layout Code
 This program formats and calculates IPv6/IPv4/MAC addresses and can do many
  more tricky things
-\end_layout
-
-\begin_layout Code
-
 \end_layout
 
 \begin_layout Code
@@ -2653,10 +3054,6 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 \end_layout
 
 \begin_layout Code
-
-\end_layout
-
-\begin_layout Code
   [--disable-ip2location           ] : IP2Location support disabled
 \end_layout
 
@@ -2670,17 +3067,17 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 \end_layout
 
 \begin_layout Code
-  [--db-ip2location-lib <file>     ] : IP2Location library file (default:
- libIP2Location.so)
-\end_layout
-
-\begin_layout Code
   [--db-ip2location-only-type <TYPE>]: IP2Location database only selected
- type (1-24)
+ type (1-120)
 \end_layout
 
 \begin_layout Code
   [--db-ip2location-allow-softlinks] : IP2Location database softlinks allowed
+\end_layout
+
+\begin_layout Code
+     by default they are ignored because it is hard to autodetect COMM/LITE/SAMP
+LE
 \end_layout
 
 \begin_layout Code
@@ -2702,10 +3099,6 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 \end_layout
 
 \begin_layout Code
-
-\end_layout
-
-\begin_layout Code
   [--disable-geoip                 ] : GeoIP support disabled
 \end_layout
 
@@ -2719,11 +3112,43 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 \end_layout
 
 \begin_layout Code
-  [--db-geoip-lib       <file>     ] : GeoIP library file (default: libGeoIP.so.1)
+  [--disable-geoip2                ] : GeoIP (MaxMindDB) support disabled
 \end_layout
 
 \begin_layout Code
+  [--db-geoip2-disable             ] : GeoIP (MaxMindDB) support disabled
+\end_layout
 
+\begin_layout Code
+  [--db-geoip2-dir      <directory>] : GeoIP (MaxMindDB) database directory
+ (default: /usr/share/GeoIP)
+\end_layout
+
+\begin_layout Code
+  [--disable-dbip2                 ] : db-ip.com (MaxMindDB) support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-dbip2-disable              ] : db-ip.com (MaxMindDB) support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-dbip2-dir       <directory>] : db-ip.com (MaxMindDB) database directory
+ (default: /usr/share/DBIP)
+\end_layout
+
+\begin_layout Code
+  [--db-dbip2-only-type <TYPE>]      : db-ip.com (MaxMindDB) database only
+ selected type (1-10)
+\end_layout
+
+\begin_layout Code
+  [--db-dbip2-comm-to-free-switch-min-delta-months <MONTHS>]:
+\end_layout
+
+\begin_layout Code
+     switch from COMM to FREE databases if possible and delta more than
+ 12 months (0=disabled)
 \end_layout
 
 \begin_layout Code
@@ -2740,7 +3165,17 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 \end_layout
 
 \begin_layout Code
+  [--db-dbip-only-type <TYPE>]       : db-ip.com database only selected type
+ (1-10)
+\end_layout
 
+\begin_layout Code
+  [--db-dbip-comm-to-free-switch-min-delta-months <MONTHS>]:
+\end_layout
+
+\begin_layout Code
+     switch from COMM to FREE databases if possible and delta more than
+ 12 months (0=disabled)
 \end_layout
 
 \begin_layout Code
@@ -2757,10 +3192,6 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 \end_layout
 
 \begin_layout Code
-
-\end_layout
-
-\begin_layout Code
   [--disable-builtin               ] : BuiltIn support disabled
 \end_layout
 
@@ -2769,7 +3200,13 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 \end_layout
 
 \begin_layout Code
+  [--db-priorization <entry1>[:...]] : Database priorization order list (overwrites
+ default)
+\end_layout
 
+\begin_layout Code
+                                         colon separated: GeoIP GeoIP2 IP2Locati
+on DBIP DBIP2 External BuiltIn
 \end_layout
 
 \begin_layout Code
@@ -2778,10 +3215,6 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 
 \begin_layout Code
   [-f|--flush]               : flush each line in pipe mode
-\end_layout
-
-\begin_layout Code
-
 \end_layout
 
 \begin_layout Code
@@ -2821,11 +3254,7 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 \end_layout
 
 \begin_layout Code
-  
-\end_layout
-
-\begin_layout Code
- Available input  types:  [-m] -I|--in     -?|-h|--help
+  Available input  types:  [-m] -I|--in     -?|-h|--help
 \end_layout
 
 \begin_layout Code
@@ -2837,7 +3266,7 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 \end_layout
 
 \begin_layout Code
- 
+  Special filter action :  -E -?|-h|--help
 \end_layout
 
 \begin_layout Code
@@ -2881,10 +3310,6 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 \end_layout
 
 \begin_layout Code
- 
-\end_layout
-
-\begin_layout Code
  Usage with shortcut options: <shortcut option> [<format option> ...] <input
  data>
 \end_layout
@@ -2895,11 +3320,7 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 \end_layout
 
 \begin_layout Code
-
-\end_layout
-
-\begin_layout Code
- -r|--addr2ip6_int (-O revnibbles.int)
+  -r|--addr2ip6_int (-O revnibbles.int)
 \end_layout
 
 \begin_layout Code
@@ -2993,6 +3414,11 @@ directory of database files can be given via related option
 \begin_layout Itemize
 databases requiring external library the library file can be given in case
  of dynamic load and linking
+\end_layout
+
+\begin_layout Itemize
+for geolocation databases specific file can be selected (see --db-<PROVIDER>-onl
+y-type <TYPE>)
 \end_layout
 
 \begin_layout Paragraph
@@ -3135,13 +3561,15 @@ $ ipv6calc --in -?
 \end_layout
 
 \begin_layout Code
-ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
-S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE
- ANON_KEEP-TYPE-ASN-CC
+ipv6calc: version 2.0.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
+ DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC
+ DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION
+ DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO ANON_ZEROISE
+ ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 \end_layout
 
 \begin_layout Code
-(P) & (C) 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
 \end_layout
 
 \begin_layout Code
@@ -3229,13 +3657,15 @@ $ ipv6calc --out -?
 \end_layout
 
 \begin_layout Code
-ipv6calc: version 0.97.0 IP2Location GeoIP GeoIPv6 DB_AS DB_IPV4 DB_IPV6 DB_IPV4_A
-S DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_CC_REG DB_IEEE ANON_ZEROISE ANON_ANONYMIZE
- ANON_KEEP-TYPE-ASN-CC
+ipv6calc: version 2.0.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
+ DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC
+ DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION
+ DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO ANON_ZEROISE
+ ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 \end_layout
 
 \begin_layout Code
-(P) & (C) 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
 \end_layout
 
 \begin_layout Code
@@ -3347,12 +3777,15 @@ $ ipv6calc --action -?
 \end_layout
 
 \begin_layout Code
-ipv6calc: version 1.1.0 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_CC_REG DB_IEEE
- DB_IPV4_INFO DB_IPV6_INFO ANON_ZEROISE ANON_ANONYMIZE
+ipv6calc: version 2.0.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
+ DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC
+ DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION
+ DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO ANON_ZEROISE
+ ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 \end_layout
 
 \begin_layout Code
-(P) & (C) 2001-2018 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
 \end_layout
 
 \begin_layout Code
@@ -3773,12 +4206,15 @@ test
 \end_layout
 
 \begin_layout Code
-$ ./ipv6calc/ipv6calc -A test -h
+$ ipv6calc -A test -?
 \end_layout
 
 \begin_layout Code
-ipv6calc: version 0.99.2 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_CC_REG DB_IEEE
- ANON_ZEROISE ANON_ANONYMIZE
+ipv6calc: version 2.0.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
+ DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC
+ DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION
+ DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO ANON_ZEROISE
+ ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 \end_layout
 
 \begin_layout Code
@@ -3933,15 +4369,23 @@ $ ipv6logconv -h
 \end_layout
 
 \begin_layout Code
-ipv6logconv: version 0.97.0 CONV_REG CONV_IEEE
+ipv6logconv: version 2.0.0 CONV_REG CONV_IEEE
 \end_layout
 
 \begin_layout Code
-(P) & (C) 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
 \end_layout
 
 \begin_layout Code
- General:
+
+\end_layout
+
+\begin_layout Code
+This program converts IPv4/IPv6 addresses in HTTP server log files
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -3949,11 +4393,36 @@ ipv6logconv: version 0.97.0 CONV_REG CONV_IEEE
 \end_layout
 
 \begin_layout Code
-  [-q|--quiet] : be more quiet
+                                can also be set by IPV6CALC_DEBUG environment
+ value
 \end_layout
 
 \begin_layout Code
-  [-n|--nocache] : disable caching
+  [-v|--version [-v [-v]]]   : version information (2 optional detail levels)
+\end_layout
+
+\begin_layout Code
+  [-v|--version -h]          : explanation of feature tokens
+\end_layout
+
+\begin_layout Code
+  [-V|--verbose]             : be more verbose
+\end_layout
+
+\begin_layout Code
+  [-h|--help|-?]             : this online help
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+ Performance options:
+\end_layout
+
+\begin_layout Code
+  [-n|--nocache]            : disable caching
 \end_layout
 
 \begin_layout Code
@@ -3969,7 +4438,7 @@ ipv6logconv: version 0.97.0 CONV_REG CONV_IEEE
 \end_layout
 
 \begin_layout Code
- Output:
+ Output options:
 \end_layout
 
 \begin_layout Code
@@ -3990,6 +4459,14 @@ ipv6logconv: version 0.97.0 CONV_REG CONV_IEEE
 
 \begin_layout Code
    any            : any type
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -4530,11 +5007,11 @@ $ ipv6loganon -h
 \end_layout
 
 \begin_layout Code
-ipv6loganon: version 0.97.0 ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
+ipv6loganon: version 2.0.0 ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
 \end_layout
 
 \begin_layout Code
-(P) & (C) 2007-2014 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2007-2019 by Peter Bieringer <pb (at) bieringer.de>
 \end_layout
 
 \begin_layout Code
@@ -4560,7 +5037,15 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 \end_layout
 
 \begin_layout Code
-  [-v|--version [-v [-v]]]   : version information (2 optional verbose levels)
+  [-v|--version [-v [-v]]]   : version information (2 optional detail levels)
+\end_layout
+
+\begin_layout Code
+  [-v|--version -h]          : explanation of feature tokens
+\end_layout
+
+\begin_layout Code
+  [-V|--verbose]             : be more verbose
 \end_layout
 
 \begin_layout Code
@@ -4568,7 +5053,15 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 \end_layout
 
 \begin_layout Code
+  [-q|--quiet]               : be more quiet
+\end_layout
 
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+  [--disable-ip2location           ] : IP2Location support disabled
 \end_layout
 
 \begin_layout Code
@@ -4581,12 +5074,43 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 \end_layout
 
 \begin_layout Code
-  [--db-ip2location-lib <file>]      : IP2Location library file (default:
- libIP2Location.so)
+  [--db-ip2location-only-type <TYPE>]: IP2Location database only selected
+ type (1-120)
+\end_layout
+
+\begin_layout Code
+  [--db-ip2location-allow-softlinks] : IP2Location database softlinks allowed
+\end_layout
+
+\begin_layout Code
+     by default they are ignored because it is hard to autodetect COMM/LITE/SAMP
+LE
+\end_layout
+
+\begin_layout Code
+  [--db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>]:
+\end_layout
+
+\begin_layout Code
+     autoswitch from LITE to SAMPLE databases if possible and delta is not
+ more than 12 months (0=disabled)
+\end_layout
+
+\begin_layout Code
+  [--db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>]:
+\end_layout
+
+\begin_layout Code
+     switch from COMM to LITE databases if possible and delta more than
+ 12 months (0=disabled)
 \end_layout
 
 \begin_layout Code
 
+\end_layout
+
+\begin_layout Code
+  [--disable-geoip                 ] : GeoIP support disabled
 \end_layout
 
 \begin_layout Code
@@ -4599,7 +5123,121 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 \end_layout
 
 \begin_layout Code
-  [--db-geoip-lib       <file>]      : GeoIP library file (default: libGeoIP.so.1)
+  [--disable-geoip2                ] : GeoIP (MaxMindDB) support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-geoip2-disable             ] : GeoIP (MaxMindDB) support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-geoip2-dir      <directory>] : GeoIP (MaxMindDB) database directory
+ (default: /usr/share/GeoIP)
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+  [--disable-dbip2                 ] : db-ip.com (MaxMindDB) support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-dbip2-disable              ] : db-ip.com (MaxMindDB) support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-dbip2-dir       <directory>] : db-ip.com (MaxMindDB) database directory
+ (default: /usr/share/DBIP)
+\end_layout
+
+\begin_layout Code
+  [--db-dbip2-only-type <TYPE>]      : db-ip.com (MaxMindDB) database only
+ selected type (1-10)
+\end_layout
+
+\begin_layout Code
+  [--db-dbip2-comm-to-free-switch-min-delta-months <MONTHS>]:
+\end_layout
+
+\begin_layout Code
+     switch from COMM to FREE databases if possible and delta more than
+ 12 months (0=disabled)
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+  [--disable-dbip                  ] : db-ip.com support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-dbip-disable               ] : db-ip.com support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-dbip-dir        <directory>] : db-ip.com database directory (default:
+ /usr/share/DBIP)
+\end_layout
+
+\begin_layout Code
+  [--db-dbip-only-type <TYPE>]       : db-ip.com database only selected type
+ (1-10)
+\end_layout
+
+\begin_layout Code
+  [--db-dbip-comm-to-free-switch-min-delta-months <MONTHS>]:
+\end_layout
+
+\begin_layout Code
+     switch from COMM to FREE databases if possible and delta more than
+ 12 months (0=disabled)
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+  [--disable-external              ] : External support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-external-disable           ] : External support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-external-dir    <directory>] : External database directory (default:
+ /usr/share/ipv6calc/db)
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+  [--disable-builtin               ] : BuiltIn support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-builtin-disable            ] : BuiltIn support disabled
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+  [--db-priorization <entry1>[:...]] : Database priorization order list (overwrites
+ default)
+\end_layout
+
+\begin_layout Code
+                                         colon separated: GeoIP GeoIP2 IP2Locati
+on DBIP DBIP2 External BuiltIn
 \end_layout
 
 \begin_layout Code
@@ -4686,7 +5324,7 @@ This program anonymizes IPv4/IPv6 addresses in e.g.
 \end_layout
 
 \begin_layout Code
-  Available presets (shortcut names) [--anonymize-preset PRESET-NAME]:
+  Available presets (shortcut names) [--anonymize-preset|ap PRESET-NAME]:
 \end_layout
 
 \begin_layout Code
@@ -4962,16 +5600,37 @@ Usage: IP2Location-update.sh [-D <dir>] [-n] [-s]
 GeoIP
 \end_layout
 
+\begin_layout Standard
+Just note that old database format (version 1) is no longer supported for
+ free download, ipv6calc >= 2.0.0 supports also MaxMindDB format.
+\end_layout
+
 \begin_layout Code
 $ /usr/share/ipv6calc/tools/GeoIP-update.sh -h
 \end_layout
 
 \begin_layout Code
-Usage: GeoIP-update.sh [-D <dir>]
+sage: GeoIP-update.sh [-D <dir>] [-v] [-s] [-L] [-G]
+\end_layout
+
+\begin_layout Code
+	-s		skip download
 \end_layout
 
 \begin_layout Code
 	-D <dir>	database directory (optional)
+\end_layout
+
+\begin_layout Code
+	-v		verbose
+\end_layout
+
+\begin_layout Code
+	-L		legacy download mode (by default download only MaxMindDB version)
+\end_layout
+
+\begin_layout Code
+	-G		use 'geoipupdate' to download databases
 \end_layout
 
 \begin_layout Code
@@ -5013,11 +5672,36 @@ Usage: GeoIP-update.sh [-D <dir>]
 \begin_layout Code
  GEOIP_DAT_FILES=GeoLiteCountry/GeoIP.dat.gz GeoIPv6.dat.gz GeoLiteCity.dat.gz
  GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz asnum/GeoIPASNum.dat.gz asnum/GeoIPASNumv6.d
-at.gz
+at.gz GeoLite2-City.tar.gz GeoLite2-Country.tar.gz GeoLite2-ASN.tar.gz
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+ in case of 'geoipupdate' mode is used, adjust /etc/GeoIP.conf:
+\end_layout
+
+\begin_layout Code
+   EditionIDs GeoLite2-Country GeoLite2-City GeoLite2-ASN
+\end_layout
+
+\begin_layout Code
+   (in case a valid license key exists, add key and extend EditionIDs related)
+\end_layout
+
+\begin_layout Code
+   see also https://dev.maxmind.com/geoip/geoipupdate/
 \end_layout
 
 \begin_layout Subsection
 DB-IP.com
+\end_layout
+
+\begin_layout Standard
+Since ipv6calc >= 2.0.0 supports also MaxMindDB format, so download of CSV
+ files and converting them into BerkeleyDB format is no longer required.
 \end_layout
 
 \begin_layout Code
@@ -5025,7 +5709,7 @@ $ /usr/share/ipv6calc/tools/DBIP-update.sh -h
 \end_layout
 
 \begin_layout Code
-Usage: DBIP-update.sh [-s] [-D <dir>]
+Usage: DBIP-update.sh [-v] [-s] [-D <dir>] [-U <url>] [-T <type>]
 \end_layout
 
 \begin_layout Code
@@ -5033,7 +5717,35 @@ Usage: DBIP-update.sh [-s] [-D <dir>]
 \end_layout
 
 \begin_layout Code
+	-v		verbose
+\end_layout
+
+\begin_layout Code
+	-g		skip generation of database file
+\end_layout
+
+\begin_layout Code
 	-D <dir>	database directory (optional)
+\end_layout
+
+\begin_layout Code
+	-U <url>	use URL to download full database
+\end_layout
+
+\begin_layout Code
+	-T <type>	set type of via URL downloaded file
+\end_layout
+
+\begin_layout Code
+                          MMDB: country|isp|location|*location-isp*
+\end_layout
+
+\begin_layout Code
+			  CSV : isp|location|*full*
+\end_layout
+
+\begin_layout Code
+	-L		legacy download mode (by default download only MaxMindDB version)
 \end_layout
 
 \begin_layout Code
@@ -5061,7 +5773,7 @@ Usage: DBIP-update.sh [-s] [-D <dir>]
 \end_layout
 
 \begin_layout Code
- DB-IP.com (free versions) and generate Berkeley DB files for ipv6calc
+ DB-IP.com (default: free versions) and generate Berkeley DB files for ipv6calc
 \end_layout
 
 \begin_layout Code
@@ -5077,7 +5789,21 @@ Usage: DBIP-update.sh [-s] [-D <dir>]
 \end_layout
 
 \begin_layout Code
- DBIP_DAT_FILES=dbip-country-%Y-%m.csv.gz dbip-city-%Y-%m.csv.gz
+ DBIP_DAT_FILES=dbip-country-lite-%Y-%m.csv.gz dbip-city-lite-%Y-%m.csv.gz dbip-coun
+try-lite-%Y-%m.mmdb.gz dbip-city-lite-%Y-%m.mmdb.gz
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+ in case -U <url> (take URL from subscription e-mail) is provided, it downloads
+ the database
+\end_layout
+
+\begin_layout Code
+  use -T <type> in case it's not "location-isp"
 \end_layout
 
 \begin_layout Subsection
@@ -5228,11 +5954,11 @@ $ ./ipv6logstats -h
 \end_layout
 
 \begin_layout Code
-ipv6logstats: version 0.97.0 STAT_REG STAT_CC STAT_AS
+ipv6logstats: version 2.0.0 STAT_REG STAT_CC STAT_AS
 \end_layout
 
 \begin_layout Code
-(P) & (C) 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2003-2019 by Peter Bieringer <pb (at) bieringer.de>
 \end_layout
 
 \begin_layout Code
@@ -5262,7 +5988,15 @@ ipv6logstats: version 0.97.0 STAT_REG STAT_CC STAT_AS
 \end_layout
 
 \begin_layout Code
-  [-v|--version [-v [-v]]]   : version information (2 optional verbose levels)
+  [-v|--version [-v [-v]]]   : version information (2 optional detail levels)
+\end_layout
+
+\begin_layout Code
+  [-v|--version -h]          : explanation of feature tokens
+\end_layout
+
+\begin_layout Code
+  [-V|--verbose]             : be more verbose
 \end_layout
 
 \begin_layout Code
@@ -5270,7 +6004,15 @@ ipv6logstats: version 0.97.0 STAT_REG STAT_CC STAT_AS
 \end_layout
 
 \begin_layout Code
+  [-q|--quiet]               : be more quiet
+\end_layout
 
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+  [--disable-ip2location           ] : IP2Location support disabled
 \end_layout
 
 \begin_layout Code
@@ -5283,12 +6025,43 @@ ipv6logstats: version 0.97.0 STAT_REG STAT_CC STAT_AS
 \end_layout
 
 \begin_layout Code
-  [--db-ip2location-lib <file>]      : IP2Location library file (default:
- libIP2Location.so)
+  [--db-ip2location-only-type <TYPE>]: IP2Location database only selected
+ type (1-120)
+\end_layout
+
+\begin_layout Code
+  [--db-ip2location-allow-softlinks] : IP2Location database softlinks allowed
+\end_layout
+
+\begin_layout Code
+     by default they are ignored because it is hard to autodetect COMM/LITE/SAMP
+LE
+\end_layout
+
+\begin_layout Code
+  [--db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>]:
+\end_layout
+
+\begin_layout Code
+     autoswitch from LITE to SAMPLE databases if possible and delta is not
+ more than 12 months (0=disabled)
+\end_layout
+
+\begin_layout Code
+  [--db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>]:
+\end_layout
+
+\begin_layout Code
+     switch from COMM to LITE databases if possible and delta more than
+ 12 months (0=disabled)
 \end_layout
 
 \begin_layout Code
 
+\end_layout
+
+\begin_layout Code
+  [--disable-geoip                 ] : GeoIP support disabled
 \end_layout
 
 \begin_layout Code
@@ -5301,7 +6074,121 @@ ipv6logstats: version 0.97.0 STAT_REG STAT_CC STAT_AS
 \end_layout
 
 \begin_layout Code
-  [--db-geoip-lib       <file>]      : GeoIP library file (default: libGeoIP.so.1)
+  [--disable-geoip2                ] : GeoIP (MaxMindDB) support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-geoip2-disable             ] : GeoIP (MaxMindDB) support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-geoip2-dir      <directory>] : GeoIP (MaxMindDB) database directory
+ (default: /usr/share/GeoIP)
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+  [--disable-dbip2                 ] : db-ip.com (MaxMindDB) support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-dbip2-disable              ] : db-ip.com (MaxMindDB) support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-dbip2-dir       <directory>] : db-ip.com (MaxMindDB) database directory
+ (default: /usr/share/DBIP)
+\end_layout
+
+\begin_layout Code
+  [--db-dbip2-only-type <TYPE>]      : db-ip.com (MaxMindDB) database only
+ selected type (1-10)
+\end_layout
+
+\begin_layout Code
+  [--db-dbip2-comm-to-free-switch-min-delta-months <MONTHS>]:
+\end_layout
+
+\begin_layout Code
+     switch from COMM to FREE databases if possible and delta more than
+ 12 months (0=disabled)
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+  [--disable-dbip                  ] : db-ip.com support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-dbip-disable               ] : db-ip.com support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-dbip-dir        <directory>] : db-ip.com database directory (default:
+ /usr/share/DBIP)
+\end_layout
+
+\begin_layout Code
+  [--db-dbip-only-type <TYPE>]       : db-ip.com database only selected type
+ (1-10)
+\end_layout
+
+\begin_layout Code
+  [--db-dbip-comm-to-free-switch-min-delta-months <MONTHS>]:
+\end_layout
+
+\begin_layout Code
+     switch from COMM to FREE databases if possible and delta more than
+ 12 months (0=disabled)
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+  [--disable-external              ] : External support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-external-disable           ] : External support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-external-dir    <directory>] : External database directory (default:
+ /usr/share/ipv6calc/db)
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+  [--disable-builtin               ] : BuiltIn support disabled
+\end_layout
+
+\begin_layout Code
+  [--db-builtin-disable            ] : BuiltIn support disabled
+\end_layout
+
+\begin_layout Code
+
+\end_layout
+
+\begin_layout Code
+  [--db-priorization <entry1>[:...]] : Database priorization order list (overwrites
+ default)
+\end_layout
+
+\begin_layout Code
+                                         colon separated: GeoIP GeoIP2 IP2Locati
+on DBIP DBIP2 External BuiltIn
 \end_layout
 
 \begin_layout Code
@@ -5317,6 +6204,10 @@ ipv6logstats: version 0.97.0 STAT_REG STAT_CC STAT_AS
 \end_layout
 
 \begin_layout Code
+  [-N|--column-numbers]      : print column numbers
+\end_layout
+
+\begin_layout Code
   [-n|--noheader]            : don't print header in columns mode (1)
 \end_layout
 
@@ -5326,10 +6217,6 @@ ipv6logstats: version 0.97.0 STAT_REG STAT_CC STAT_AS
 
 \begin_layout Code
   [-p|--prefix <token>]      : print token as prefix (1)
-\end_layout
-
-\begin_layout Code
-  [-q|--quiet]               : be more quiet
 \end_layout
 
 \begin_layout Code
@@ -6200,6 +7087,18 @@ History
 
 \begin_layout Standard
 Major extensions/changes are listed here
+\end_layout
+
+\begin_layout Subsection
+2019
+\end_layout
+
+\begin_layout Itemize
+add support for MaxMindDB (GeoIP, db-ip.com) (>= 2.0.0)
+\end_layout
+
+\begin_layout Itemize
+drop support of IP2Location libraries < 7.0.1 (>= 2.0.0)
 \end_layout
 
 \begin_layout Subsection

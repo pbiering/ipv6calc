@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
  * Version    : $Id$
- * Copyright  : 2001-2018 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
@@ -399,7 +399,7 @@ int main(int argc, char *argv[]) {
 				if ((atoi(optarg) >= 1) && (atoi(optarg) <= 32)) {
 					ipv6rd_prefixlength = atoi(optarg);
 				} else {
-					fprintf(stderr, " Argument of option '6rd_prefixlength' is out or range (1-32): %d\n", atoi(optarg));
+					fprintf(stderr, " Argument of option '6rd_prefixlength' is out of range (1-32): %d\n", atoi(optarg));
 					exit(EXIT_FAILURE);
 				};
 				break;
@@ -517,7 +517,7 @@ int main(int argc, char *argv[]) {
 					force_prefix = atoi(optarg);
 					formatoptions |= FORMATOPTION_forceprefix;
 				} else {
-					fprintf(stderr, " Argument of option 'forceprefix' is out or range (1-128): %d\n", atoi(optarg));
+					fprintf(stderr, " Argument of option 'forceprefix' is out of range (1-128): %d\n", atoi(optarg));
 					exit(EXIT_FAILURE);
 				};
 				break;
@@ -528,7 +528,7 @@ int main(int argc, char *argv[]) {
 					bit_start = atoi(optarg);
 					formatoptions |= FORMATOPTION_printstart;
 				} else {
-					fprintf(stderr, " Argument of option 'printstart' is out or range (1-128): %d\n", atoi(optarg));
+					fprintf(stderr, " Argument of option 'printstart' is out of range (1-128): %d\n", atoi(optarg));
 					exit(EXIT_FAILURE);
 				};
 				break;
@@ -539,7 +539,7 @@ int main(int argc, char *argv[]) {
 					bit_end = atoi(optarg);
 					formatoptions |= FORMATOPTION_printend;
 				} else {
-					fprintf(stderr, " Argument of option 'printend' is out or range (1-128): %d\n", atoi(optarg));
+					fprintf(stderr, " Argument of option 'printend' is out of range (1-128): %d\n", atoi(optarg));
 					exit(EXIT_FAILURE);
 				};
 				break;
@@ -683,13 +683,16 @@ int main(int argc, char *argv[]) {
 				break;
 				
 			default:
+				fprintf(stderr, "Unsupported option: %s\n", argv[optind - 1]);
 				fprintf(stderr, "Usage: (see '%s --command -?|-h|--help' for more help)\n", PROGRAM_NAME);
-				ipv6calc_printhelp(longopts, ipv6calc_longopts_shortopts_map);
+				// ipv6calc_printhelp(longopts, ipv6calc_longopts_shortopts_map);
 				exit(EXIT_FAILURE);
 		};
 	};
 	argv += optind;
 	argc -= optind;
+
+	DEBUGPRINT_WA(DEBUG_ipv6calc_general, "End of option local parsing: argc=%d", argc);
 
 	if (ipv6calc_quiet != 0) {
 		formatoptions |= FORMATOPTION_quiet;
@@ -698,6 +701,7 @@ int main(int argc, char *argv[]) {
 	/* initialise database wrapper */
 	result = libipv6calc_db_wrapper_init("");
 	if (result != 0) {
+		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "db_wrapper_init failed, result=%d", result);
 		exit(EXIT_FAILURE);
 	};
 
@@ -1192,7 +1196,7 @@ PIPE_input:
 	};
 
 	if (ipv6addr.flag_valid == 1) {
-		ipv6addr_settype(&ipv6addr, 1); /* Set typeinfo */
+		ipv6addr_settype(&ipv6addr); /* Set typeinfo */
 
 		/* honor 6rd prefix length option */
 		if (ipv6rd_prefixlength > 0) {

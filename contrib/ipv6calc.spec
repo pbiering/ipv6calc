@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2018 by Peter Bieringer <pb@bieringer.de>
-# $Id: 0df17afba6c435c28b3c3d0323e0739d2f88678e $
+# $Id: 048e4b691ba65ba083a95582d23400dc3634fae1 $
 
 # enable the following for intermediate builds
 #%#define gitcommit d3a4108cb7aeb6f731bb07989f91d8a7f449f0f0
@@ -20,7 +20,7 @@
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
-Version:	1.1.0
+Version:	2.0.0
 Release:	28%{?gittag}%{?dist}
 Group:		Applications/Text
 URL:		http://www.deepspace6.net/projects/%{name}.html
@@ -63,6 +63,10 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 %define enable_dbip 1
 %endif
 
+%if "%{?_without_mmdb:0}%{?!_without_mmdb:1}" == "1"
+%define enable_mmdb 1
+%endif
+
 %if "%{?_without_external:0}%{?!_without_external:1}" == "1"
 %define enable_external 1
 %endif
@@ -85,6 +89,10 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires: db4-devel
 %else
 BuildRequires: libdb-devel
+%endif
+
+%if %{enable_mmdb}
+BuildRequires: libmaxminddb-devel
 %endif
 
 # RPM license macro detector
@@ -119,7 +127,15 @@ Support for following databases
 		default directory for downloaded db files: %{geoip_db}
 		(requires also external library on system)
 
+ - GeoIP v2	%{?enable_mmdb:ENABLED}%{?!enable_mmdb:DISABLED}
+		default directory for downloaded db files: %{geoip_db}
+		(requires also external library on system)
+
  - db-ip.com	%{?enable_dbip:ENABLED}%{?!enable_dbip:DISABLED}
+		(once generated database files are found on system)
+		default directory for generated db files: %{dbip_db}
+
+ - db-ip.com v2	%{?enable_mmdb:ENABLED}%{?!enable_mmdb:DISABLED}
 		(once generated database files are found on system)
 		default directory for generated db files: %{dbip_db}
 
@@ -132,6 +148,7 @@ Available rpmbuild rebuild options:
   --without ip2location
   --without geoip
   --without dbip
+  --without mmdb (which disables GeoIP v2 and db-ip.com v2)
   --without external
   --without shared
   --without mod_ipv6calc
@@ -141,8 +158,8 @@ Available rpmbuild rebuild options:
 Summary:	IP address information web utility
 Group:		Applications/Internet
 Requires:	ipv6calc httpd
-Requires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities) perl(Proc::ProcessTable)
-BuildRequires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities) perl(Proc::ProcessTable)
+Requires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities)
+BuildRequires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities)
 
 %description ipv6calcweb
 ipv6calcweb contains a CGI program and a configuration file for
@@ -195,6 +212,7 @@ By default the module is disabled.
 	--with-geoip-db=%{geoip_db} \
 	%{?enable_dbip:--enable-dbip} \
 	--with-dbip-db=%{dbip_db} \
+	%{?enable_mmdb:--enable-mmdb --with-mmdb-dynamic} \
 	%{?enable_external:--enable-external} \
 	--with-external-db=%{external_db} \
 	%{?enable_shared:--enable-shared} \
@@ -238,14 +256,21 @@ done
 # db directory
 install -d %{buildroot}%{external_db}
 
+# selinux
+install -d %{buildroot}%{_datadir}/%{name}/selinux
+
 
 # ipv6calcweb
 install -d %{buildroot}%{_sysconfdir}/httpd/conf.d
 install -d %{buildroot}%{_localstatedir}/www/cgi-bin
 
-install ipv6calcweb/ipv6calcweb.conf %{buildroot}%{_sysconfdir}/httpd/conf.d
-install -m 755 ipv6calcweb/ipv6calcweb.cgi  %{buildroot}%{_localstatedir}/www/cgi-bin
+install ipv6calcweb/ipv6calcweb.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/
+install -m 755 ipv6calcweb/ipv6calcweb.cgi  %{buildroot}%{_localstatedir}/www/cgi-bin/
+install -m 644 ipv6calcweb/ipv6calcweb-databases-in-var.te  %{buildroot}%{_datadir}/%{name}/selinux/
 
+# mod_ipv6calc
+install -d %{buildroot}%{_datadir}/%{name}/examples/mod_ipv6calc
+install -m 755 mod_ipv6calc/ipv6calc.cgi  %{buildroot}%{_datadir}/%{name}/examples/mod_ipv6calc
 
 %clean
 rm -rf %{buildroot}
@@ -276,6 +301,9 @@ rm -rf %{buildroot}
 # tools
 %attr(755,-,-) %{_datadir}/%{name}/tools/*
 
+# selinux
+%attr(644,-,-) %{_datadir}/%{name}/selinux/*
+
 # shared library
 %{?enable_shared:%attr(755,-,-) %{_libdir}/libipv6calc*}
 
@@ -285,7 +313,9 @@ rm -rf %{buildroot}
 # examples
 %attr(755,-,-) %{_datadir}/%{name}/examples/*/*.pl
 %attr(755,-,-) %{_datadir}/%{name}/examples/*/*.sh
-%{_datadir}/%{name}/examples/*
+%{_datadir}/%{name}/examples/ipv6loganon/
+%{_datadir}/%{name}/examples/ipv6logconv/
+%{_datadir}/%{name}/examples/ipv6logstats/
 
 
 %files ipv6calcweb
@@ -315,6 +345,8 @@ rm -rf %{buildroot}
 %config(noreplace) %{_httpd_confdir}/ipv6calc.conf
 %attr(755,-,-) %{_httpd_moddir}/mod_ipv6calc.so
 
+%attr(755,-,-) %{_datadir}/%{name}/examples/mod_ipv6calc/ipv6calc.cgi
+
 
 %post
 /usr/sbin/ldconfig
@@ -325,6 +357,12 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Tue Jan 29 2019 Peter Bieringer <pb@bieringer.de>
+- subpackage ipv6calcweb: remove dependency Perl(Proc::ProcessTable) because no longer used
+
+* Sat Jan 26 2019 Peter Bieringer <pb@bieringer.de>
+- add option for libmaxminddb supporting GeoIP v2 and db-ip.com v2
+
 * Sun Sep 23 2018 Peter Bieringer <pb@bieringer.de>
 - subpackage ipv6calcweb: add dependency Perl(Proc::ProcessTable)
 

@@ -2,7 +2,7 @@
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
  * Version    : $Id$
- * Copyright  : 2003-2017 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2003-2019 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile statistics
@@ -33,8 +33,10 @@
 
 #include "../databases/lib/libipv6calc_db_wrapper.h"
 #include "../databases/lib/libipv6calc_db_wrapper_GeoIP.h"
+#include "../databases/lib/libipv6calc_db_wrapper_GeoIP2.h"
 #include "../databases/lib/libipv6calc_db_wrapper_IP2Location.h"
 #include "../databases/lib/libipv6calc_db_wrapper_DBIP.h"
+#include "../databases/lib/libipv6calc_db_wrapper_DBIP2.h"
 #include "../databases/lib/libipv6calc_db_wrapper_External.h"
 #include "../databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
@@ -552,7 +554,7 @@ static void lineparser(void) {
 
 					if (opt_simple != 1) {
 						cc_index = libipv4addr_cc_index_by_addr(&ipv4addr, NULL);
-						as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr);
+						as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr, NULL);
 						if (feature_cc == 1) {
 							stat_inc_country_code(cc_index, 4);
 						};
@@ -612,7 +614,7 @@ static void lineparser(void) {
 				} else {
 					if (opt_simple != 1) {
 						cc_index = libipv6addr_cc_index_by_addr(&ipv6addr, NULL);
-						as_num32 = libipv6addr_as_num32_by_addr(&ipv6addr);
+						as_num32 = libipv6addr_as_num32_by_addr(&ipv6addr, NULL);
 
 						if (feature_cc == 1) {
 							/* country code */
@@ -683,7 +685,7 @@ static void lineparser(void) {
 
 				if (opt_simple != 1) {
 					cc_index = libipv4addr_cc_index_by_addr(&ipv4addr, NULL);
-					as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr);
+					as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr, NULL);
 
 					stat_inc_country_code(cc_index, 4);
 					stat_inc_asnum(as_num32, 4);
@@ -882,7 +884,7 @@ static void lineparser(void) {
 	if (opt_printdirection == 0) {
 		/* print used database only in row mode */
 
-#if defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP || defined SUPPORT_DBIP2 || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN
 		char *string;
 #endif
 
@@ -900,8 +902,22 @@ static void lineparser(void) {
 		};
 #endif
 
+#ifdef SUPPORT_GEOIP2
+		string = libipv6calc_db_wrapper_GeoIP2_wrapper_db_info_used();
+		if ((string != NULL) && (strlen(string) > 0)) {
+			printf("*3*DB-Used: %s\n", string);
+		};
+#endif
+
 #ifdef SUPPORT_DBIP
 		string = libipv6calc_db_wrapper_DBIP_wrapper_db_info_used();
+		if ((string != NULL) && (strlen(string) > 0)) {
+			printf("*3*DB-Used: %s\n", string);
+		};
+#endif
+
+#ifdef SUPPORT_DBIP2
+		string = libipv6calc_db_wrapper_DBIP2_wrapper_db_info_used();
 		if ((string != NULL) && (strlen(string) > 0)) {
 			printf("*3*DB-Used: %s\n", string);
 		};

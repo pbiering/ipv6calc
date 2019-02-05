@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : autogen.sh
 # Version    : $Id$
-# Copyright  : 2003-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2003-2019 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
 
@@ -19,7 +19,16 @@ while [ "$1" != "$LAST" ]; do
 		;;
 	    '--all'|'-a')
 		shift
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --enable-ip2location --enable-dbip --enable-external --enable-mod_ipv6calc"
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --enable-ip2location --enable-dbip --enable-mmdb --enable-external --enable-mod_ipv6calc"
+		SKIP_STATIC=1
+		use_geoip=1
+		use_ip2location=1
+		use_dbip=1
+		use_external=1
+		;;
+	    '--ALL'|'-A')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --enable-ip2location --enable-dbip --enable-mmdb --with-geoip-dynamic --with-ip2location-dynamic --with-mmdb-dynamic --enable-external --enable-mod_ipv6calc"
 		SKIP_STATIC=1
 		use_geoip=1
 		use_ip2location=1
@@ -38,6 +47,19 @@ while [ "$1" != "$LAST" ]; do
 		SKIP_STATIC=1
 		use_geoip=1
 		use_geoip_dyn=1
+		;;
+	    '--mmdb'|'-m')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-mmdb"
+		SKIP_STATIC=1
+		use_mmdb=1
+		;;
+	    '--mmdb-dyn'|'-M')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-mmdb --with-mmdb-dynamic"
+		SKIP_STATIC=1
+		use_mmdb=1
+		use_mmdb_dyn=1
 		;;
 	    '--ip2location'|'-i')
 		shift
@@ -98,11 +120,20 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		USE_CLANG=1
 		;;
+	    '--relax')
+		shift
+		RELAX=1
+		;;
 	    '-?'|'-h'|'--help')
 		echo "Supported options:"
 		echo "   -?|-h|--help        : this help"
 		echo "   -n|--no-make        : stop before running 'make'"
 		echo "   -a|--all            : enable GeoIP/IP2Location/db-ip.com/External/mod_ipv6calc support"
+		echo "   -A|--ALL            : enable GeoIP/IP2Location/db-ip.com/External/mod_ipv6calc support with dynamic library support"
+		echo "   -m|--mmdb           : enable MaxMindDB support (GeoIP/db-ip.com)"
+		echo "   --mmdb-dyn|-M       : switch to dynamic library loading of MaxMindDB"
+		echo "   --disable-geoip2    : disable MaxMindDB support for GeoIP"
+		echo "   --disable-dbip2     : disable MaxMindDB support for db-ip.com"
 		echo "   -g|--geoip          : enable GeoIP support"
 		echo "   --geoip-dyn|-G      : switch to dynamic library loading of GeoIP"
 		echo "   -i|--ip2location    : enable IP2Location support"
@@ -117,6 +148,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --no-static-build   : skip static build"
 		echo "   --no-test           : skip 'make test'"
 		echo "   --clang             : use 'clang' instead of default (usually 'gcc')"
+		echo "   --relax             : don't stop on compiler warnings"
 		exit 1
 		;;
 	    *)
@@ -137,6 +169,12 @@ fi
 if [ "$use_ip2location" = "1" ]; then
 	if ! echo "$OPTIONS_CONFIGURE" | grep -q 'with-ip2location-headers='; then
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $(fallback_options_from_name IP2Location)"
+	fi
+fi
+
+if [ "$RELAX" = "1" ]; then
+	if ! echo "$OPTIONS_CONFIGURE" | grep -q 'disable-compiler-warning-to-error'; then
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --disable-compiler-warning-to-error"
 	fi
 fi
 
