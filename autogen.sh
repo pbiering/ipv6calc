@@ -120,6 +120,10 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		USE_CLANG=1
 		;;
+	    '--m32')
+		shift
+		CFLAGS="$CFLAGS -m32"
+		;;
 	    '--relax')
 		shift
 		RELAX=1
@@ -148,6 +152,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --no-static-build   : skip static build"
 		echo "   --no-test           : skip 'make test'"
 		echo "   --clang             : use 'clang' instead of default (usually 'gcc')"
+		echo "   --m32               : compile for 32-bit"
 		echo "   --relax             : don't stop on compiler warnings"
 		exit 1
 		;;
@@ -199,7 +204,7 @@ echo "*** run: autoconf"
 autoconf || exit 1
 
 echo "*** run: configure, options: $OPTIONS_CONFIGURE $*"
-LDFLAGS="$LDFLAGS -Wl,--as-needed" ./configure --bindir=/usr/bin --mandir=/usr/share/man $OPTIONS_CONFIGURE $* || exit 1
+CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS -Wl,--as-needed" ./configure --bindir=/usr/bin --mandir=/usr/share/man $OPTIONS_CONFIGURE $* || exit 1
 
 if [ "$flag_no_make" = "1" ]; then
 	echo
