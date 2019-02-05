@@ -156,7 +156,7 @@ int libipv6calc_db_wrapper_GeoIP2_wrapper_init(void) {
 		struct tm *db_gmtime = gmtime(&db_time);
 
 		dbym = (db_gmtime->tm_year + 1900) * 12 + (db_gmtime->tm_mon + 1);
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "GEOIP2 type=%d dbym=%d Year/Month=%d unixtime=%lld", dbtype, dbym, GeoIP2_UNPACK_YM(dbym), mmdb_cache[dbtype].metadata.build_epoch);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "GEOIP2 type=%d dbym=%d Year/Month=%d unixtime=%llu", dbtype, dbym, GeoIP2_UNPACK_YM(dbym), (long long unsigned int) mmdb_cache[dbtype].metadata.build_epoch);
 
 #define GeoIP2_DB_SELECT_BETTER(best) \
 			if ( \
@@ -722,7 +722,7 @@ char *libipv6calc_db_wrapper_GeoIP2_database_info(const unsigned int type) {
             mmdb.metadata.ip_version,
             mmdb.metadata.binary_format_major_version,
             mmdb.metadata.binary_format_minor_version,
-            mmdb.metadata.build_epoch,
+            (long long unsigned int) mmdb.metadata.build_epoch,
             mmdb.metadata.database_type);
 
 	const time_t epoch = (const time_t)mmdb.metadata.build_epoch;
