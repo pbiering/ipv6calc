@@ -152,7 +152,7 @@ int libipv6calc_db_wrapper_DBIP2_wrapper_init(void) {
 		struct tm *db_gmtime = gmtime(&db_time);
 
 		dbym = (db_gmtime->tm_year + 1900) * 12 + (db_gmtime->tm_mon + 1);
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "DBIP2 type=%d dbym=%d Year/Month=%d unixtime=%ld", dbtype, dbym, DBIP2_UNPACK_YM(dbym), mmdb_cache[dbtype].metadata.build_epoch);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "DBIP2 type=%d dbym=%d Year/Month=%d unixtime=%lld", dbtype, dbym, DBIP2_UNPACK_YM(dbym), mmdb_cache[dbtype].metadata.build_epoch);
 
 #define DBIP2_DB_SELECT_BETTER(best) \
 			if ( \
@@ -699,7 +699,7 @@ char *libipv6calc_db_wrapper_DBIP2_database_info(const unsigned int type) {
 
 	mmdb = mmdb_cache[type];
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "meta: NodeCount=%i RecordSize=%i IpVersion=%i BinaryFormat=%i.%i BuildTime=%lu Type=%s", \
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "meta: NodeCount=%i RecordSize=%i IpVersion=%i BinaryFormat=%i.%i BuildTime=%llu Type=%s", \
             mmdb.metadata.node_count,
             mmdb.metadata.record_size,
             mmdb.metadata.ip_version,
