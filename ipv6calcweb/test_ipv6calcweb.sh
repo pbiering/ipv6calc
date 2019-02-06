@@ -45,6 +45,8 @@ if [ ! -x ipv6calcweb.cgi ]; then
 fi
 
 ## check for empty stderr
+export HTTP_IPV6CALCWEB_DEBUG="0x5000" # no sleeps and no Anti-DoS
+
 set -x
 stderr=$(HTTP_IPV6CALCWEB_OUTPUT_FORMAT=html HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB=subcolumns REMOTE_ADDR=50.60.70.80 ./ipv6calcweb.cgi 2>&1 >/dev/null)
 set +x
