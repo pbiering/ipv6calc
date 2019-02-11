@@ -864,6 +864,56 @@ END_libipv6calc_db_wrapper:
 };
 
 
+/* GeonameID */
+uint32_t libipv6calc_db_wrapper_DBIP2_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp, int *source_ptr) {
+	uint32_t result = IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN;
+
+	int DBIP2_type = 0;
+
+	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
+		DBIP2_type = dbip2_db_region_city_v4;
+
+		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP2] & IPV6CALC_DB_IPV4_TO_GEONAMEID) == 0) {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP2, "No DBIP2 database supporting IPv4 GeonameID");
+			goto END_libipv6calc_db_wrapper;
+		};
+	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
+		DBIP2_type = dbip2_db_region_city_v6;
+
+		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP2] & IPV6CALC_DB_IPV6_TO_GEONAMEID) == 0) {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP2, "No DBIP2 database supporting IPv6 GeonameID");
+			goto END_libipv6calc_db_wrapper;
+		};
+	} else {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "Unsupported proto: %d", ipaddrp->proto);
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	result = libipv6calc_db_wrapper_DBIP2_open_type(DBIP2_type);
+
+	if (result != MMDB_SUCCESS) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP2, "Error opening DBIP2 by type");
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	result = libipv6calc_db_wrapper_MMDB_GeonameID_by_addr(ipaddrp, &mmdb_cache[DBIP2_type], source_ptr);
+ 
+	if (result == IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP2, "no match found");
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "result GeonameID=%u", result);
+
+	DBIP2_DB_USAGE_MAP_TAG(DBIP2_type);
+
+	goto END_libipv6calc_db_wrapper;
+
+END_libipv6calc_db_wrapper:
+	return(result);
+};
+
+
 /* all information */
 int libipv6calc_db_wrapper_DBIP2_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libipv6calc_db_wrapper_geolocation_record *recordp) {
 	int result = -1;

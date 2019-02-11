@@ -32,8 +32,8 @@ extern char mmdb_lib_file[NI_MAXHOST];
 
 extern int          libipv6calc_db_wrapper_MMDB_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp, char *country, const size_t country_len, MMDB_s *const mmdb);
 extern int          libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libipv6calc_db_wrapper_geolocation_record *recordp, MMDB_s *const mmdb);
-//MMDB_lookup_result_s libipv6calc_db_wrapper_MMDB_wrapper_lookup_addr (const ipv6calc_ipaddr *ipaddrp, int *const mmdb_error, MMDB_s *const mmdb);
 extern uint32_t     libipv6calc_db_wrapper_MMDB_asn_by_addr(const ipv6calc_ipaddr *ipaddrp, MMDB_s *const mmdb);
+extern uint32_t     libipv6calc_db_wrapper_MMDB_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp, MMDB_s *const mmdb, int *source_ptr);
 
 extern int	    libipv6calc_db_wrapper_MMDB_open(const char *const filename, uint32_t flags, MMDB_s *const mmdb);
 extern void         libipv6calc_db_wrapper_MMDB_close(MMDB_s *const mmdb);

@@ -101,6 +101,8 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " <prefix>_GEONAME_ID=...       : GeoName ID of IP address\n");
 	fprintf(stderr, " <prefix>_GEONAME_ID_COUNTRY=..: GeoName ID of Country of IP address\n");
 	fprintf(stderr, " <prefix>_GEONAME_ID_CONTINENT=: GeoName ID of Continent of IP address\n");
+	fprintf(stderr, " <prefix>_GEONAME_ID_REGION=   : GeoName ID of Region of IP address\n");
+	fprintf(stderr, " <prefix>_GEONAME_ID_DISTRICT= : GeoName ID of District of IP address\n");
 	fprintf(stderr, " <prefix>_AREACODE=...         : Area code of IP address\n");
 	fprintf(stderr, " <prefix>_DMACODE=...          : DMA/Metro code of IP address\n");
 	fprintf(stderr, " <prefix>_IDDCODE=...          : Internation Direct Dialing of IP address\n");
@@ -453,9 +455,11 @@ static void print_geolocation(libipv6calc_db_wrapper_geolocation_record *record,
 	PRINT_RECORD_STRING(record->mobile_country_code , "MCC"                 , "Mobile Country Code")
 	PRINT_RECORD_STRING(record->mobile_brand        , "MOBILEBRAND"         , "Mobile Brand")
 
-	PRINT_RECORD_NUMBER(record->geoname_id          , "GEONAME_ID"          , "Geoname ID of Location", "%u", 0)
-	PRINT_RECORD_NUMBER(record->country_geoname_id  , "GEONAME_ID_COUNTRY"  , "Geoname ID of Country", "%u", 0)
-	PRINT_RECORD_NUMBER(record->continent_geoname_id, "GEONAME_ID_CONTINENT", "Geoname ID of Continent", "%u", 0)
+	PRINT_RECORD_NUMBER(record->geoname_id          , "GEONAME_ID"          , "Geoname ID of Location" , "%u", IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN)
+	PRINT_RECORD_NUMBER(record->district_geoname_id , "GEONAME_ID_DISTRICT" , "Geoname ID of Country"  , "%u", IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN)
+	PRINT_RECORD_NUMBER(record->stateprov_geoname_id, "GEONAME_ID_STATEPROV", "Geoname ID of Country"  , "%u", IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN)
+	PRINT_RECORD_NUMBER(record->country_geoname_id  , "GEONAME_ID_COUNTRY"  , "Geoname ID of Country"  , "%u", IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN)
+	PRINT_RECORD_NUMBER(record->continent_geoname_id, "GEONAME_ID_CONTINENT", "Geoname ID of Continent", "%u", IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN)
 };
 #endif
 

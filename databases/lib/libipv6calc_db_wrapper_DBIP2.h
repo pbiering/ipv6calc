@@ -31,7 +31,7 @@
 	{ DBIP2_DB_COUNTRY_LITE
 		, "dbip-country-lite.mmdb"
 		, "IPv4/v6 CountryCode (FREE)"
-		, IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_DBIP_IPV4 | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6
+		, IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_GEONAMEID | IPV6CALC_DB_IP_TO_COUNTRY
 		, IPV6CALC_DB_DBIP2_INTERNAL_FREE
 	},
 
@@ -39,7 +39,7 @@
 	{ DBIP2_DB_CITY_LITE
 		, "dbip-city-lite.mmdb"
 		, "IPv4/v6 City (FREE)"
-		, IPV6CALC_DB_IPV4_TO_CITY | IPV6CALC_DB_IPV4_TO_REGION | IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_DBIP_IPV4 | IPV6CALC_DB_IPV6_TO_CITY | IPV6CALC_DB_IPV6_TO_REGION | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6
+		, IPV6CALC_DB_IP_TO_CITY | IPV6CALC_DB_IP_TO_REGION | IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_GEONAMEID | IPV6CALC_DB_IP_TO_COUNTRY
 		, IPV6CALC_DB_DBIP2_INTERNAL_FREE
 	},
 
@@ -47,7 +47,7 @@
 	{ DBIP2_DB_COUNTRY
 		, "dbip-country.mmdb"
 		, "IPv4/v6 CountryCode (COMM)"
-		, IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_DBIP_IPV4 | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6
+		, IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_GEONAMEID | IPV6CALC_DB_IP_TO_COUNTRY
 		, IPV6CALC_DB_DBIP2_INTERNAL_COMM
 	},
 
@@ -55,14 +55,14 @@
 	{ DBIP2_DB_LOCATION
 		, "dbip-location.mmdb"
 		, "IPv4/v6 Location (COMM)"
-		, IPV6CALC_DB_IPV4_TO_CITY | IPV6CALC_DB_IPV4_TO_REGION | IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_DBIP_IPV4 | IPV6CALC_DB_IPV4_TO_COUNTRY | IPV6CALC_DB_IPV6_TO_CITY | IPV6CALC_DB_IPV6_TO_REGION | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6 | IPV6CALC_DB_IPV6_TO_COUNTRY
+		, IPV6CALC_DB_IP_TO_CITY | IPV6CALC_DB_IP_TO_REGION | IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_COUNTRY | IPV6CALC_DB_IP_TO_GEONAMEID
 		, IPV6CALC_DB_DBIP2_INTERNAL_COMM
 	},
 
 	// ISP
 	{ DBIP2_DB_ISP
 		, "dbip-isp.mmdb"
-		, "IPv4/v6 ISP (COMM)", IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_DBIP_IPV4 | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6
+		, "IPv4/v6 ISP (COMM)", IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_AS
 		, IPV6CALC_DB_DBIP2_INTERNAL_COMM
 	},
 
@@ -70,7 +70,7 @@
 	{ DBIP2_DB_LOCATION_ISP
 		, "dbip-location-isp.mmdb"
 		, "IPv4/v6 Location+ISP (COMM)"
-		, IPV6CALC_DB_IPV4_TO_CITY | IPV6CALC_DB_IPV4_TO_REGION | IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_DBIP_IPV4 | IPV6CALC_DB_IPV4_TO_COUNTRY | IPV6CALC_DB_IPV6_TO_CITY | IPV6CALC_DB_IPV6_TO_REGION | IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_DBIP_IPV6 | IPV6CALC_DB_IPV6_TO_COUNTRY | IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_IPV6_TO_AS
+		, IPV6CALC_DB_IP_TO_CITY | IPV6CALC_DB_IP_TO_REGION | IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_COUNTRY | IPV6CALC_DB_IP_TO_AS | IPV6CALC_DB_IP_TO_GEONAMEID 
 		, IPV6CALC_DB_DBIP2_INTERNAL_COMM
 	},
 };
@@ -86,28 +86,23 @@ extern int         libipv6calc_db_wrapper_DBIP2_wrapper_cleanup(void);
 extern void        libipv6calc_db_wrapper_DBIP2_wrapper_info(char* string, const size_t size);
 extern void        libipv6calc_db_wrapper_DBIP2_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
 extern char       *libipv6calc_db_wrapper_DBIP2_wrapper_db_info_used(void);
+extern int         libipv6calc_db_wrapper_DBIP2_has_features(const uint32_t features);
+
+#ifdef SUPPORT_DBIP2
+#include "libipv6calc_db_wrapper_MMDB.h"
 
 extern int         libipv6calc_db_wrapper_DBIP2_wrapper_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp, char *country, const size_t country_len);
 extern uint32_t    libipv6calc_db_wrapper_DBIP2_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp);
-
-extern int         libipv6calc_db_wrapper_DBIP2_has_features(const uint32_t features);
-
-
-#ifdef SUPPORT_DBIP2
-
-#include "libipv6calc_db_wrapper_MMDB.h"
+extern uint32_t    libipv6calc_db_wrapper_DBIP2_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp, int *source_ptr);
+extern int         libipv6calc_db_wrapper_DBIP2_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libipv6calc_db_wrapper_geolocation_record *recordp);
 
 extern char dbip2_db_dir[NI_MAXHOST];
+extern int  dbip2_db_comm_to_free_switch_min_delta_months;
+extern int  dbip2_db_only_type;
 
-extern int          libipv6calc_db_wrapper_DBIP2_db_avail(const unsigned int type);
-extern int          libipv6calc_db_wrapper_DBIP2_open_type(const unsigned int type);
+extern int         libipv6calc_db_wrapper_DBIP2_db_avail(const unsigned int type);
+extern int         libipv6calc_db_wrapper_DBIP2_open_type(const unsigned int type);
 
-extern const char  *libipv6calc_db_wrapper_DBIP2_dbdescription(const unsigned int type);
-extern char        *libipv6calc_db_wrapper_DBIP2_database_info(const unsigned int type);
-
-extern int dbip2_db_comm_to_free_switch_min_delta_months;
-extern int dbip2_db_only_type;
-
-extern int          libipv6calc_db_wrapper_DBIP2_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libipv6calc_db_wrapper_geolocation_record *recordp);
-
+extern const char *libipv6calc_db_wrapper_DBIP2_dbdescription(const unsigned int type);
+extern char       *libipv6calc_db_wrapper_DBIP2_database_info(const unsigned int type);
 #endif

@@ -85,8 +85,11 @@
 //      + <geolocation provider>_RADIUS
 //      + <geolocation provider>_ELEVATION
 //      + <geolocation provider>_CONTINENT_LONG
+// 20: 2.1.0 to current
+//      + <geolocation provider>_GEONAME_ID_REGION
+//      + <geolocation provider>_GEONAME_ID_STATEPROV
 
-#define IPV6CALC_OUTPUT_VERSION	20
+#define IPV6CALC_OUTPUT_VERSION	21
 
 /* prototypes */
 extern int  showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, const uint32_t formatoptions);

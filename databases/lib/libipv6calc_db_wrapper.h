@@ -28,7 +28,7 @@ extern uint32_t wrapper_features_by_source_implemented[];
 #define IPV6CALC_PROTO_IPV4				4
 #define IPV6CALC_PROTO_IPV6				6
 
-// define generic feature numbers
+// define generic feature numbers (max: 24)
 #define IPV6CALC_DB_FEATURE_NUM_MIN			0
 #define IPV6CALC_DB_FEATURE_NUM_AS_TO_REGISTRY		0
 #define IPV6CALC_DB_FEATURE_NUM_CC_TO_REGISTRY		1
@@ -47,7 +47,9 @@ extern uint32_t wrapper_features_by_source_implemented[];
 #define IPV6CALC_DB_FEATURE_NUM_IEEE_TO_INFO		14
 #define IPV6CALC_DB_FEATURE_NUM_IPV4_TO_INFO		15
 #define IPV6CALC_DB_FEATURE_NUM_IPV6_TO_INFO		16
-#define IPV6CALC_DB_FEATURE_NUM_MAX			IPV6CALC_DB_FEATURE_NUM_IPV6_TO_INFO
+#define IPV6CALC_DB_FEATURE_NUM_IPV4_TO_GEONAMEID	17
+#define IPV6CALC_DB_FEATURE_NUM_IPV6_TO_GEONAMEID	18
+#define IPV6CALC_DB_FEATURE_NUM_MAX			IPV6CALC_DB_FEATURE_NUM_IPV6_TO_GEONAMEID
 
 // define generic features
 #define IPV6CALC_DB_AS_TO_REGISTRY		(1 << IPV6CALC_DB_FEATURE_NUM_AS_TO_REGISTRY)
@@ -75,16 +77,28 @@ extern uint32_t wrapper_features_by_source_implemented[];
 #define IPV6CALC_DB_IPV4_TO_INFO		(1 << IPV6CALC_DB_FEATURE_NUM_IPV4_TO_INFO)
 #define IPV6CALC_DB_IPV6_TO_INFO		(1 << IPV6CALC_DB_FEATURE_NUM_IPV6_TO_INFO)
 
+#define IPV6CALC_DB_IPV4_TO_GEONAMEID		(1 << IPV6CALC_DB_FEATURE_NUM_IPV4_TO_GEONAMEID)
+#define IPV6CALC_DB_IPV6_TO_GEONAMEID		(1 << IPV6CALC_DB_FEATURE_NUM_IPV6_TO_GEONAMEID)
+
+// define combination of generic features
+#define IPV6CALC_DB_IP_TO_AS			(IPV6CALC_DB_IPV4_TO_AS        | IPV6CALC_DB_IPV6_TO_AS       )
+#define IPV6CALC_DB_IP_TO_COUNTRY		(IPV6CALC_DB_IPV4_TO_COUNTRY   | IPV6CALC_DB_IPV6_TO_COUNTRY  )
+#define IPV6CALC_DB_IP_TO_CC			(IPV6CALC_DB_IPV4_TO_CC        | IPV6CALC_DB_IPV6_TO_CC       )
+#define IPV6CALC_DB_IP_TO_CITY			(IPV6CALC_DB_IPV4_TO_CITY      | IPV6CALC_DB_IPV6_TO_CITY     )
+#define IPV6CALC_DB_IP_TO_REGION		(IPV6CALC_DB_IPV4_TO_REGION    | IPV6CALC_DB_IPV6_TO_REGION   )
+#define IPV6CALC_DB_IP_TO_GEONAMEID		(IPV6CALC_DB_IPV4_TO_GEONAMEID | IPV6CALC_DB_IPV6_TO_GEONAMEID)
 
 // define database specific generic features
 #define IPV6CALC_DB_GEOIP_IPV4			0x01000000
 #define IPV6CALC_DB_GEOIP_IPV6			0x02000000
+#define IPV6CALC_DB_GEOIP			(IPV6CALC_DB_GEOIP_IPV4 | IPV6CALC_DB_GEOIP_IPV6)
 
 #define IPV6CALC_DB_IP2LOCATION_IPV4		0x04000000
 #define IPV6CALC_DB_IP2LOCATION_IPV6		0x08000000
 
 #define IPV6CALC_DB_DBIP_IPV4			0x10000000
 #define IPV6CALC_DB_DBIP_IPV6			0x20000000
+#define IPV6CALC_DB_DBIP			(IPV6CALC_DB_DBIP_IPV4 | IPV6CALC_DB_DBIP_IPV6)
 
 #define IPV6CALC_DB_EXTERNAL_IPV4		0x40000000
 #define IPV6CALC_DB_EXTERNAL_IPV6		0x80000000
@@ -114,6 +128,8 @@ static const s_formatoption ipv6calc_db_features[] = {
 	{ IPV6CALC_DB_IEEE_TO_INFO	, "DB_IEEE"		, "IEEE/OUI/OUI36 Vendor database" },
 	{ IPV6CALC_DB_IPV4_TO_INFO	, "DB_IPV4_INFO"	, "IPv4 additional information" },
 	{ IPV6CALC_DB_IPV6_TO_INFO	, "DB_IPV6_INFO"	, "IPv6 additional information" },
+	{ IPV6CALC_DB_IPV4_TO_GEONAMEID	, "DB_IPV4_GEONAMEID"	, "IPv4 GeonameID" },
+	{ IPV6CALC_DB_IPV6_TO_GEONAMEID	, "DB_IPV6_GEONAMEID"	, "IPv6 GeonameID" },
 };
 
 // data sources
@@ -194,6 +210,14 @@ typedef struct {
 
 #define IPV6CALC_DB_GEO_ELEVATION_UNKNOWN -20000
 #define IPV6CALC_DB_GEO_TIMEZONE_UNKNOWN  99
+#define IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN  0
+
+#define IPV6CALC_DB_GEO_GEONAMEID_SOURCE_UNKNOWN    0
+#define IPV6CALC_DB_GEO_GEONAMEID_SOURCE_CONTINENT  1
+#define IPV6CALC_DB_GEO_GEONAMEID_SOURCE_COUNTRY    2
+#define IPV6CALC_DB_GEO_GEONAMEID_SOURCE_STATEPROV  3
+#define IPV6CALC_DB_GEO_GEONAMEID_SOURCE_DISTRICT   4
+#define IPV6CALC_DB_GEO_GEONAMEID_SOURCE_CITY       5
 
 typedef struct
 {
@@ -217,6 +241,8 @@ typedef struct
 	uint32_t geoname_id;
 	uint32_t continent_geoname_id;
 	uint32_t country_geoname_id;
+	uint32_t stateprov_geoname_id;
+	uint32_t district_geoname_id;
 	uint32_t asn;
 	float    timezone_offset;
 	char     timezone_name[IPV6CALC_DB_SIZE_TIMEZONE_NAME];
@@ -229,6 +255,7 @@ typedef struct
 	char     mobile_brand[IPV6CALC_DB_SIZE_MOBILE_BRAND];
 	char     usage_type[IPV6CALC_DB_SIZE_USAGE_TYPE];
 } libipv6calc_db_wrapper_geolocation_record;
+
 
 // define internal API versions
 #define IPV6CALC_DB_API_GEOIP		1
@@ -347,6 +374,9 @@ extern uint32_t    libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr
 
 extern uint32_t    libipv6calc_db_wrapper_as_num32_comp17(const uint32_t as_num32);
 extern uint32_t    libipv6calc_db_wrapper_as_num32_decomp17(const uint32_t as_num32_comp17);
+
+// GeonameID
+extern uint32_t    libipv6calc_db_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr, int *source_ptr);
 
 // Registries
 extern int         libipv6calc_db_wrapper_registry_num_by_as_num32(const uint32_t as_num32);

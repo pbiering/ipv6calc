@@ -72,6 +72,55 @@ static const char* wrapper_mmdb_info = "built-in";
 
 static void *dl_MMDB_handle = NULL;
 
+#define CHECK_STORE(MAXLEN, STORE, DESC) \
+	if (entry_data.has_data) { \
+		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) { \
+			int max = (entry_data.data_size + 1 > MAXLEN) ? MAXLEN : entry_data.data_size +1; \
+			snprintf(STORE, max , "%s", entry_data.utf8_string); \
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s: %s", DESC, STORE); \
+		} else { \
+			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for %s: %u", DESC, entry_data.type); \
+		}; \
+	} else { \
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s not found", DESC); \
+	};
+
+#define CHECK_STORE_DOUBLE(STORE, DESC) \
+	if (entry_data.has_data) { \
+		if (entry_data.type == MMDB_DATA_TYPE_DOUBLE) { \
+			STORE = entry_data.double_value; \
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s: %lf", DESC, STORE); \
+		} else { \
+			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for %s: %u", DESC, entry_data.type); \
+		}; \
+	} else { \
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s not found", DESC); \
+	};
+
+#define CHECK_STORE_UINT32(STORE, DESC) \
+	if (entry_data.has_data) { \
+		if (entry_data.type == MMDB_DATA_TYPE_UINT32) { \
+			STORE = entry_data.uint32; \
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s: %u", DESC, STORE); \
+		} else { \
+			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for %s: %u", DESC, entry_data.type); \
+		}; \
+	} else { \
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s not found", DESC); \
+	};
+
+#define CHECK_STORE_UINT16(STORE, DESC) \
+	if (entry_data.has_data) { \
+		if (entry_data.type == MMDB_DATA_TYPE_UINT16) { \
+			STORE = entry_data.uint16; \
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s: %u", DESC, STORE); \
+		} else { \
+			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for %s: %u", DESC, entry_data.type); \
+		}; \
+	} else { \
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s not found", DESC); \
+	};
+
 /*
  * function initialise the MMDB wrapper
  *
@@ -808,6 +857,70 @@ END_libipv6calc_db_wrapper:
 };
 
 
+/* GeonameID By Addr
+ * in : ipaddrp, mmdb
+ * mod: source
+ * out: GeonameID
+ */
+uint32_t libipv6calc_db_wrapper_MMDB_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp, MMDB_s *const mmdb, int *source_ptr) {
+	MMDB_lookup_result_s lookup_result;
+	MMDB_entry_data_s entry_data;
+	int mmdb_error = MMDB_INVALID_DATA_ERROR;
+	uint32_t result = IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN;
+	int source = IPV6CALC_DB_GEO_GEONAMEID_SOURCE_UNKNOWN;
+
+	lookup_result = libipv6calc_db_wrapper_MMDB_wrapper_lookup_by_addr(ipaddrp, mmdb, &mmdb_error);
+
+	if (mmdb_error != MMDB_SUCCESS) {
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	// fetch GeonameID (nearest to global)
+	// city
+	const char *lookup_path_city_geonameid[] = { "city", "geoname_id", NULL };
+	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_city_geonameid);
+	CHECK_STORE_UINT32(result, "City/GeonameId")
+	source = IPV6CALC_DB_GEO_GEONAMEID_SOURCE_CITY;
+	if (result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) { goto END_libipv6calc_db_wrapper; };
+
+	// district
+	const char *lookup_path_district_geonameid[] = { "subdivisions", "1", "geoname_id", NULL };
+	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_district_geonameid);
+	CHECK_STORE_UINT32(result, "District(subdivision#1)/GeonameId")
+	source = IPV6CALC_DB_GEO_GEONAMEID_SOURCE_DISTRICT;
+	if (result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) { goto END_libipv6calc_db_wrapper; };
+
+	// stateprov
+	const char *lookup_path_stateprov_geonameid[] = { "subdivisions", "0", "geoname_id", NULL };
+	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_stateprov_geonameid);
+	CHECK_STORE_UINT32(result, "State/Prov(subdivsion#0)/GeonameId")
+	source = IPV6CALC_DB_GEO_GEONAMEID_SOURCE_STATEPROV;
+	if (result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) { goto END_libipv6calc_db_wrapper; };
+
+	// country
+	const char *lookup_path_country_geonameid[] = { "country", "geoname_id", NULL };
+	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_country_geonameid);
+	CHECK_STORE_UINT32(result, "Country/GeonameId")
+	source = IPV6CALC_DB_GEO_GEONAMEID_SOURCE_COUNTRY;
+	if (result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) { goto END_libipv6calc_db_wrapper; };
+
+	// continent
+	const char *lookup_path_continent_geonameid[] = { "continent", "geoname_id", NULL };
+	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_continent_geonameid);
+	CHECK_STORE_UINT32(result, "Continent/GeonameId")
+	source = IPV6CALC_DB_GEO_GEONAMEID_SOURCE_CONTINENT;
+	if (result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) { goto END_libipv6calc_db_wrapper; };
+
+	source = IPV6CALC_DB_GEO_GEONAMEID_SOURCE_UNKNOWN;
+
+END_libipv6calc_db_wrapper:
+	if (source_ptr != NULL) {
+		*source_ptr = source;
+	};
+	return(result);
+};
+
+
 /* all information by addr
  * in : ipaddrp, recordp
  * mod: recordp
@@ -821,55 +934,6 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 	static char resultstring[NI_MAXHOST];
 
 	libipv6calc_db_wrapper_geolocation_record_clear(recordp);
-
-#define CHECK_STORE(MAXLEN, STORE, DESC) \
-	if (entry_data.has_data) { \
-		if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) { \
-			int max = (entry_data.data_size + 1 > MAXLEN) ? MAXLEN : entry_data.data_size +1; \
-			snprintf(STORE, max , "%s", entry_data.utf8_string); \
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s: %s", DESC, STORE); \
-		} else { \
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for %s: %u", DESC, entry_data.type); \
-		}; \
-	} else { \
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s not found", DESC); \
-	};
-
-#define CHECK_STORE_DOUBLE(STORE, DESC) \
-	if (entry_data.has_data) { \
-		if (entry_data.type == MMDB_DATA_TYPE_DOUBLE) { \
-			STORE = entry_data.double_value; \
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s: %lf", DESC, STORE); \
-		} else { \
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for %s: %u", DESC, entry_data.type); \
-		}; \
-	} else { \
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s not found", DESC); \
-	};
-
-#define CHECK_STORE_UINT32(STORE, DESC) \
-	if (entry_data.has_data) { \
-		if (entry_data.type == MMDB_DATA_TYPE_UINT32) { \
-			STORE = entry_data.uint32; \
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s: %u", DESC, STORE); \
-		} else { \
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for %s: %u", DESC, entry_data.type); \
-		}; \
-	} else { \
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s not found", DESC); \
-	};
-
-#define CHECK_STORE_UINT16(STORE, DESC) \
-	if (entry_data.has_data) { \
-		if (entry_data.type == MMDB_DATA_TYPE_UINT16) { \
-			STORE = entry_data.uint16; \
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s: %u", DESC, STORE); \
-		} else { \
-			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for %s: %u", DESC, entry_data.type); \
-		}; \
-	} else { \
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "%s not found", DESC); \
-	};
 
 	// convert ipaddrp into sockaddr
 	union sockaddr_u {
@@ -1016,9 +1080,17 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_stateprov);
 	CHECK_STORE(IPV6CALC_DB_SIZE_STATEPROV, recordp->stateprov, "State/Province(subdivision#0)")
 
+	const char *lookup_path_stateprov_geonameid[] = { "subdivisions", "0", "geoname_id", NULL };
+	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_stateprov_geonameid);
+	CHECK_STORE_UINT32(recordp->stateprov_geoname_id, "State/Prov(subdivsion#0)/GeonameId")
+
 	const char *lookup_path_distinct[] = { "subdivisions", "1", "names", "en", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_distinct);
 	CHECK_STORE(IPV6CALC_DB_SIZE_DISTRICT, recordp->district, "District(subdivsion#1)")
+
+	const char *lookup_path_district_geonameid[] = { "subdivisions", "1", "geoname_id", NULL };
+	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_district_geonameid);
+	CHECK_STORE_UINT32(recordp->district_geoname_id, "District(subdivision#1)/GeonameId")
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "resultstring=%s", resultstring);
 
