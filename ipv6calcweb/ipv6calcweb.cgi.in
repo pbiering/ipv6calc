@@ -663,6 +663,14 @@ my %text = (
 		'de' => "GeoName ID des Kontinents",
 		'en' => "GeoName ID of Continent",
 	},
+	'_GEONAME_ID_REGION' => {
+		'de' => "GeoName ID der Region",
+		'en' => "GeoName ID of Region",
+	},
+	'_GEONAME_ID_DISTRICT' => {
+		'de' => "GeoName ID des Bezirks",
+		'en' => "GeoName ID of District",
+	},
 	'_ORGNAME' => {
 		'de' => "Autonomous System Organisation",
 		'en' => "Autonomous System Organization",
