@@ -852,8 +852,8 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 	} else if ((ipv4addrp->typeinfo & IPV4_ADDR_BROADCAST) != 0) {
 		DEBUGPRINT_NA(DEBUG_libipv4addr, "skip anonymize (broadcast address)");
 
-	} else if ((method != ANON_METHOD_KEEPTYPEASNCC) || ((ipv4addrp->typeinfo & (IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL)) != (IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL))) {
-		// not ANON_METHOD_KEEPTYPEASNCC or not a global address
+	} else if (((method != ANON_METHOD_KEEPTYPEASNCC) && (method != ANON_METHOD_KEEPTYPEGEONAMEID)) || ((ipv4addrp->typeinfo & (IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL)) != (IPV4_ADDR_UNICAST | IPV4_ADDR_GLOBAL))) {
+		// not ANON_METHOD_KEEPTYPEASNCC/ANON_METHOD_KEEPTYPEGEONAMEID or not a global address
 		if (((ipv4addrp->typeinfo & IPV4_ADDR_ANYCAST) != 0) && ((ipv4addrp->typeinfo & IPV4_ADDR_LISP) != 0)) {
 			if (mask < 24) {
 				mask = 24; // keeping address type
@@ -887,14 +887,14 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 				ipv4addr_setdword(ipv4addrp, ipv4addr_getdword(ipv4addrp) & (0xffffffffu << ((unsigned int) 32 - mask)));
 			};
 		};
-	} else {
+	} else if (method == ANON_METHOD_KEEPTYPEASNCC) {
 		/* check for required database support */
 		if (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV4_REQ_DB) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv4addr, "anonymization method not supported, db_wrapper reports too less features");
 			return(1);
 		};
 
-		DEBUGPRINT_NA(DEBUG_libipv4addr, "anonymize by keep information");
+		DEBUGPRINT_NA(DEBUG_libipv4addr, "anonymize by keep Type/ASN/CountryCode information");
 
 		CONVERT_IPV4ADDRP_IPADDR(ipv4addrp, ipaddr);
 
@@ -943,7 +943,57 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 
 		ipv4addr_anon |= ((c & 0x1) ^ 0x1) << 27;
 
-		DEBUGPRINT_WA(DEBUG_libipv4addr, "result anonymized IPv4 address: 0x%08x, bitcounts=%d", ipv4addr_anon, c);
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "result anonymized (Type/ASN/CC) IPv4 address: 0x%08x, bitcounts=%d", ipv4addr_anon, c);
+
+		ipv4addr_setdword(ipv4addrp, ipv4addr_anon);
+	} else {
+		int GeonameID_source = IPV6CALC_DB_GEO_GEONAMEID_SOURCE_UNKNOWN;
+		uint32_t GeonameID = IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN;
+
+		/* check for required database support */
+		if (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEGEONAMEID_IPV4_REQ_DB) == 0) {
+			DEBUGPRINT_NA(DEBUG_libipv4addr, "anonymization method not supported, db_wrapper reports too less features");
+			return(1);
+		};
+
+		DEBUGPRINT_NA(DEBUG_libipv4addr, "anonymize by keep GeonameID information");
+
+		CONVERT_IPV4ADDRP_IPADDR(ipv4addrp, ipaddr);
+
+		if (((ipv4addrp->typeinfo & IPV4_ADDR_UNICAST) != 0) && ((ipv4addrp->typeinfo & IPV4_ADDR_LISP) != 0)) {
+			as_num32_comp17 = 0x11800;
+			as_num32_comp17 |= (libipv6calc_db_wrapper_registry_num_by_ipv4addr(ipv4addrp) & 0x7) << 12;
+			as_num32_comp17 |= 0x000; // TODO: map LISP information into 11 LSB
+		} else {
+			// get GeonameID
+			GeonameID_source |= IPV6CALC_DB_GEO_GEONAMEID_SOURCE_FLAG_24BIT;
+			GeonameID = libipv6calc_db_wrapper_GeonameID_by_addr(&ipaddr, NULL, &GeonameID_source);
+			DEBUGPRINT_WA(DEBUG_libipv4addr, "result of GeonameID retrievement: %d (0x%08x) (source: %d)", GeonameID, GeonameID, GeonameID_source);
+
+			if (GeonameID > 0xffffff) {
+				ERRORPRINT_WA("result of GeonameID retrievement: %d (source: %d) above 24-bit limit (fix code)", GeonameID, GeonameID_source);
+			};
+		};
+
+		// 0-3   ( 4 bits) : prefix 0xf0
+		// 4     ( 1 bit ) : parity bit (even parity)
+		// 5-7   ( 3 bits) : GeoNameID source
+		// 8-31  (24 bits) : GeonameID (limited to 24 bit)
+		ipv4addr_anon = 0xf0000000 | ((GeonameID_source << 24) & 0x07000000 ) | (GeonameID & 0x00ffffff);
+
+		// create parity bits
+		c = 0;
+		p = 0x00000001;
+		for (i = 0; i < 27; i++) {
+			if ((ipv4addr_anon & p) != 0) {
+				c++;
+			};
+			p <<= 1;
+		};
+
+		ipv4addr_anon |= ((c & 0x1) ^ 0x0) << 27;
+
+		DEBUGPRINT_WA(DEBUG_libipv4addr, "result anonymized (Type/GeonameID) IPv4 address: 0x%08x, bitcounts=%d", ipv4addr_anon, c);
 
 		ipv4addr_setdword(ipv4addrp, ipv4addr_anon);
 	};

@@ -869,6 +869,13 @@ uint32_t libipv6calc_db_wrapper_MMDB_GeonameID_by_addr(const ipv6calc_ipaddr *ip
 	uint32_t result = IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN;
 	int source = IPV6CALC_DB_GEO_GEONAMEID_SOURCE_UNKNOWN;
 
+	int limit_24bit = 0;
+
+	if ((source_ptr != NULL) \
+		&& ((*source_ptr & IPV6CALC_DB_GEO_GEONAMEID_SOURCE_FLAG_MASK) == IPV6CALC_DB_GEO_GEONAMEID_SOURCE_FLAG_24BIT)) {
+			limit_24bit = 1;
+	};
+
 	lookup_result = libipv6calc_db_wrapper_MMDB_wrapper_lookup_by_addr(ipaddrp, mmdb, &mmdb_error);
 
 	if (mmdb_error != MMDB_SUCCESS) {
@@ -881,35 +888,35 @@ uint32_t libipv6calc_db_wrapper_MMDB_GeonameID_by_addr(const ipv6calc_ipaddr *ip
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_city_geonameid);
 	CHECK_STORE_UINT32(result, "City/GeonameId")
 	source = IPV6CALC_DB_GEO_GEONAMEID_SOURCE_CITY;
-	if (result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) { goto END_libipv6calc_db_wrapper; };
+	if ((result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) && ((limit_24bit == 0) || (source < 0x1000000))) { goto END_libipv6calc_db_wrapper; };
 
 	// district
 	const char *lookup_path_district_geonameid[] = { "subdivisions", "1", "geoname_id", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_district_geonameid);
 	CHECK_STORE_UINT32(result, "District(subdivision#1)/GeonameId")
 	source = IPV6CALC_DB_GEO_GEONAMEID_SOURCE_DISTRICT;
-	if (result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) { goto END_libipv6calc_db_wrapper; };
+	if ((result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) && ((limit_24bit == 0) || (source < 0x1000000))) { goto END_libipv6calc_db_wrapper; };
 
 	// stateprov
 	const char *lookup_path_stateprov_geonameid[] = { "subdivisions", "0", "geoname_id", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_stateprov_geonameid);
 	CHECK_STORE_UINT32(result, "State/Prov(subdivsion#0)/GeonameId")
 	source = IPV6CALC_DB_GEO_GEONAMEID_SOURCE_STATEPROV;
-	if (result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) { goto END_libipv6calc_db_wrapper; };
+	if ((result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) && ((limit_24bit == 0) || (source < 0x1000000))) { goto END_libipv6calc_db_wrapper; };
 
 	// country
 	const char *lookup_path_country_geonameid[] = { "country", "geoname_id", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_country_geonameid);
 	CHECK_STORE_UINT32(result, "Country/GeonameId")
 	source = IPV6CALC_DB_GEO_GEONAMEID_SOURCE_COUNTRY;
-	if (result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) { goto END_libipv6calc_db_wrapper; };
+	if ((result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) && ((limit_24bit == 0) || (source < 0x1000000))) { goto END_libipv6calc_db_wrapper; };
 
 	// continent
 	const char *lookup_path_continent_geonameid[] = { "continent", "geoname_id", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_continent_geonameid);
 	CHECK_STORE_UINT32(result, "Continent/GeonameId")
 	source = IPV6CALC_DB_GEO_GEONAMEID_SOURCE_CONTINENT;
-	if (result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) { goto END_libipv6calc_db_wrapper; };
+	if ((result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) && ((limit_24bit == 0) || (source < 0x1000000))) { goto END_libipv6calc_db_wrapper; };
 
 	source = IPV6CALC_DB_GEO_GEONAMEID_SOURCE_UNKNOWN;
 

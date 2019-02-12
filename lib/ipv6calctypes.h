@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
  * Version    : $Id$
- * Copyright  : 2002-2018 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GPLv2
  *
  * Information:
@@ -294,6 +294,7 @@ typedef struct {
 #define ANON_METHOD_ANONYMIZE		1
 #define ANON_METHOD_ZEROIZE		2
 #define ANON_METHOD_KEEPTYPEASNCC	3
+#define ANON_METHOD_KEEPTYPEGEONAMEID	4
 
 typedef struct {
 	const uint32_t number;

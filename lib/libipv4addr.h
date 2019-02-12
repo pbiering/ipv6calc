@@ -2,7 +2,7 @@
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
  * Version    : $Id$
- * Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -152,7 +152,10 @@ typedef struct {
  *                                1|r r r|1|1|0 0 0 0 0 0 0 0 0 0 0|
  */
 
+// Prefix anonymization on method=kp
 #define ANON_METHOD_KEEPTYPEASNCC_IPV4_REQ_DB   (IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV4_TO_AS)
+// Prefix anonymization on method=kg
+#define ANON_METHOD_KEEPTYPEGEONAMEID_IPV4_REQ_DB   (IPV6CALC_DB_IPV4_TO_GEONAMEID)
 
 #endif
 

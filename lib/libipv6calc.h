@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libipv6calc.h
  * Version    : $Id$
- * Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc.c
@@ -40,13 +40,15 @@ typedef struct {
 	{ "zeroize-standard"    , "zs"  , 24, 56, 40, 24, 1       , ANON_METHOD_ZEROIZE       },
 	{ "zeroize-careful"     , "zc"  , 20, 48, 24, 24, 1       , ANON_METHOD_ZEROIZE       },
 	{ "zeroize-paranoid"    , "zp"  , 16, 40,  0, 24, 0       , ANON_METHOD_ZEROIZE       },
-	{ "keep-type-asn-cc"    , "kp"  , 24, 56, 40, 24, 1       , ANON_METHOD_KEEPTYPEASNCC }
+	{ "keep-type-asn-cc"    , "kp"  , 24, 56, 40, 24, 1       , ANON_METHOD_KEEPTYPEASNCC },
+	{ "keep-type-geonameid" , "kg"  , 24, 56, 40, 24, 1       , ANON_METHOD_KEEPTYPEGEONAMEID }
 };
 
 /*@unused@*/ static const s_ipv6calc_anon_methods ipv6calc_anon_methods[] = {
 	{ "anonymize"        , 1, "reliable anonymization, keep as much type information as possible" },
 	{ "zeroize"          , 2, "simple zeroizing according to given masks, probably loose type information" },
-	{ "keep-type-asn-cc" , 3, "special reliable anonymization, keep type & Autonomous System Number and CountryCode" }
+	{ "keep-type-asn-cc" , 3, "special reliable anonymization, keep type & Autonomous System Number and CountryCode" },
+	{ "keep-type-geonameid", 4, "special reliable anonymization, keep type & GeonameID" }
 };
 
 /* Registries (main registries must below 8 for anonymization mapping) */

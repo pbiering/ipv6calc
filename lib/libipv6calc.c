@@ -656,16 +656,29 @@ int libipv6calc_anon_supported(const s_ipv6calc_anon_set *ipv6calc_anon_set) {
 			return(2);
 		} else {
 			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC) != 1) {
-				fprintf(stderr, "ipv6calc anonymization method not supported, missing included/available database: IPv4->CountryCode (GeoIP)\n");
+				fprintf(stderr, "ipv6calc anonymization method not supported, missing included/available database: IPv4->CountryCode\n");
 			};
 			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_CC) != 1) {
-				fprintf(stderr, "ipv6calc anonymization method not supported, missing included/available database: IPv6->CountryCode (GeoIP)\n");
+				fprintf(stderr, "ipv6calc anonymization method not supported, missing included/available database: IPv6->CountryCode\n");
 			};
 			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS) != 1) {
-				fprintf(stderr, "ipv6calc anonymization method not supported, missing included/available database: IPv4->AutonomousSystemNumber (GeoIP)\n");
+				fprintf(stderr, "ipv6calc anonymization method not supported, missing included/available database: IPv4->AutonomousSystemNumber\n");
 			};
 			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_AS) != 1) {
-				fprintf(stderr, "ipv6calc anonymization method not supported, missing included/available database: IPv6->AutonomousSystemNumber (GeoIP)\n");
+				fprintf(stderr, "ipv6calc anonymization method not supported, missing included/available database: IPv6->AutonomousSystemNumber\n");
+			};
+			return(0);
+		};
+	} else if (ipv6calc_anon_set->method == ANON_METHOD_KEEPTYPEGEONAMEID) {
+		// check for support
+		if (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEGEONAMEID_IPV4_REQ_DB | ANON_METHOD_KEEPTYPEGEONAMEID_IPV6_REQ_DB) == 1) {
+			return(2);
+		} else {
+			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_GEONAMEID) != 1) {
+				fprintf(stderr, "ipv6calc anonymization method not supported, missing included/available database: IPv4->GeonameID\n");
+			};
+			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_GEONAMEID) != 1) {
+				fprintf(stderr, "ipv6calc anonymization method not supported, missing included/available database: IPv6->GeonameID\n");
 			};
 			return(0);
 		};
