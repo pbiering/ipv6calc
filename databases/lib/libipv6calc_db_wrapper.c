@@ -2042,9 +2042,9 @@ uint32_t libipv6calc_db_wrapper_as_num32_decomp17(const uint32_t as_num32_comp17
 /*
  * get GeonameID
  */
-uint32_t libipv6calc_db_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr, int *source_ptr) {
+uint32_t libipv6calc_db_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr, unsigned int *GeonameID_type_ptr) {
 	uint32_t GeonameID = IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN; // default
-	int GeonameID_source;
+	int GeonameID_type;
 
 	int f = 0, p;
 
@@ -2052,7 +2052,7 @@ uint32_t libipv6calc_db_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp
 
 	static ipv6calc_ipaddr ipaddr_cache_lastused;
 	static uint32_t GeonameID_lastused;
-	static int GeonameID_source_lastused;
+	static int GeonameID_type_lastused;
 	static unsigned int data_source_lastused = IPV6CALC_DB_SOURCE_UNKNOWN;
 	static int ipaddr_cache_lastused_valid = 0;
 
@@ -2092,8 +2092,8 @@ uint32_t libipv6calc_db_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp
 		};
 
 		// set only source from cache if caller request it
-		if (source_ptr != NULL) {
-			*source_ptr = GeonameID_source_lastused;
+		if (GeonameID_type_ptr != NULL) {
+			*GeonameID_type_ptr = GeonameID_type_lastused;
 		};
 
 		cache_hit = 1;
@@ -2113,7 +2113,7 @@ uint32_t libipv6calc_db_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp
 			if (wrapper_GeoIP2_status == 1) {
 				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now GeoIP2");
 
-				GeonameID = libipv6calc_db_wrapper_GeoIP2_wrapper_GeonameID_by_addr(ipaddrp, &GeonameID_source);
+				GeonameID = libipv6calc_db_wrapper_GeoIP2_wrapper_GeonameID_by_addr(ipaddrp, &GeonameID_type);
 				if (GeonameID != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) {
 					data_source_lastused = IPV6CALC_DB_SOURCE_GEOIP2;
 					goto END_libipv6calc_db_wrapper; // ok
@@ -2130,7 +2130,7 @@ uint32_t libipv6calc_db_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp
 
 				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now DBIP2");
 
-				GeonameID = libipv6calc_db_wrapper_DBIP2_wrapper_GeonameID_by_addr(ipaddrp, &GeonameID_source);
+				GeonameID = libipv6calc_db_wrapper_DBIP2_wrapper_GeonameID_by_addr(ipaddrp, &GeonameID_type);
 				if (GeonameID != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) {
 					data_source_lastused = IPV6CALC_DB_SOURCE_DBIP2;
 					goto END_libipv6calc_db_wrapper; // ok
@@ -2152,7 +2152,7 @@ END_libipv6calc_db_wrapper:
 		// store in last used cache
 		ipaddr_cache_lastused_valid = 1;
 		GeonameID_lastused = GeonameID;
-		GeonameID_source_lastused = GeonameID_source;
+		GeonameID_type_lastused = GeonameID_type;
 		ipaddr_cache_lastused = *ipaddrp;
 
 		// set only data_source from cache if caller request it
@@ -2160,12 +2160,12 @@ END_libipv6calc_db_wrapper:
 			*data_source_ptr = data_source_lastused;
 		};
 
-		if (source_ptr != NULL) {
-			*source_ptr = GeonameID_source_lastused;
+		if (GeonameID_type_ptr != NULL) {
+			*GeonameID_type_ptr = GeonameID_type_lastused;
 		};
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: addr=%08x%08x%08x%08x GeonameID=%u GeonameID_source=%d %s (data_source=%d)", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], GeonameID, GeonameID_source, (cache_hit == 1 ? " (cached)" : ""), data_source_lastused);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: addr=%08x%08x%08x%08x GeonameID=%u GeonameID_type=%d %s (data_source=%d)", ipaddrp->addr[0], ipaddrp->addr[1], ipaddrp->addr[2], ipaddrp->addr[3], GeonameID, GeonameID_type, (cache_hit == 1 ? " (cached)" : ""), data_source_lastused);
 
 	return(GeonameID);
 };

@@ -213,15 +213,15 @@ typedef struct {
 #define IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN  0
 
 // range: 0..7 (for anonymization)
-#define IPV6CALC_DB_GEO_GEONAMEID_SOURCE_UNKNOWN    0
-#define IPV6CALC_DB_GEO_GEONAMEID_SOURCE_CONTINENT  1
-#define IPV6CALC_DB_GEO_GEONAMEID_SOURCE_COUNTRY    2
-#define IPV6CALC_DB_GEO_GEONAMEID_SOURCE_STATEPROV  3
-#define IPV6CALC_DB_GEO_GEONAMEID_SOURCE_DISTRICT   4
-#define IPV6CALC_DB_GEO_GEONAMEID_SOURCE_CITY       5
+#define IPV6CALC_DB_GEO_GEONAMEID_TYPE_UNKNOWN    0
+#define IPV6CALC_DB_GEO_GEONAMEID_TYPE_CONTINENT  1
+#define IPV6CALC_DB_GEO_GEONAMEID_TYPE_COUNTRY    2
+#define IPV6CALC_DB_GEO_GEONAMEID_TYPE_STATEPROV  3
+#define IPV6CALC_DB_GEO_GEONAMEID_TYPE_DISTRICT   4
+#define IPV6CALC_DB_GEO_GEONAMEID_TYPE_CITY       5
 
-#define IPV6CALC_DB_GEO_GEONAMEID_SOURCE_FLAG_24BIT	0x10000
-#define IPV6CALC_DB_GEO_GEONAMEID_SOURCE_FLAG_MASK	0xf0000
+#define IPV6CALC_DB_GEO_GEONAMEID_TYPE_FLAG_24BIT	0x10000
+#define IPV6CALC_DB_GEO_GEONAMEID_TYPE_FLAG_MASK	0xf0000
 
 typedef struct
 {
@@ -260,6 +260,13 @@ typedef struct
 	char     usage_type[IPV6CALC_DB_SIZE_USAGE_TYPE];
 } libipv6calc_db_wrapper_geolocation_record;
 
+static const s_data_sources geonameid_types[] = {
+	{ IPV6CALC_DB_GEO_GEONAMEID_TYPE_CONTINENT	, "Continent" , "Continent"  },
+	{ IPV6CALC_DB_GEO_GEONAMEID_TYPE_COUNTRY	, "Country"   , "Country"    },
+	{ IPV6CALC_DB_GEO_GEONAMEID_TYPE_STATEPROV	, "Region"    , "Region"     },
+	{ IPV6CALC_DB_GEO_GEONAMEID_TYPE_DISTRICT	, "District"  , "District"   },
+	{ IPV6CALC_DB_GEO_GEONAMEID_TYPE_CITY		, "City"      , "City"       },
+};
 
 // define internal API versions
 #define IPV6CALC_DB_API_GEOIP		1
@@ -380,7 +387,7 @@ extern uint32_t    libipv6calc_db_wrapper_as_num32_comp17(const uint32_t as_num3
 extern uint32_t    libipv6calc_db_wrapper_as_num32_decomp17(const uint32_t as_num32_comp17);
 
 // GeonameID
-extern uint32_t    libipv6calc_db_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr, int *source_ptr);
+extern uint32_t    libipv6calc_db_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr, unsigned int *GeonameID_type_ptr);
 
 // Registries
 extern int         libipv6calc_db_wrapper_registry_num_by_as_num32(const uint32_t as_num32);

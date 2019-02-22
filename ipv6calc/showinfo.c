@@ -58,6 +58,9 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV6_PREFIXLENGTH=ddd         : given prefix length\n");
 	fprintf(stderr, " IPV6_AS_NUM=...               : AS number of (anonymized) IPv6 address\n");
 	fprintf(stderr, " IPV6_AS_SOURCE=...            : Source of AS number of IPv6 address\n");
+	fprintf(stderr, " IPV6_GEONAME_ID=...           : GeonameID of (anonymized) IPv6 address\n");
+	fprintf(stderr, " IPV6_GEONAME_ID_SOURCE=...    : Source of GeonameID number of IPv6 address\n");
+	fprintf(stderr, " IPV6_GEONAME_ID_TYPE=...      : Type of GeonameID number of IPv4 address\n");
 	fprintf(stderr, " IPV6_COUNTRYCODE=...          : Country Code of (anonymized) IPv6 address\n");
 	fprintf(stderr, " IPV6_COUNTRYCODE_SOURCE=...   : Source of Country Code of IPv6 address\n");
 	fprintf(stderr, " IPV4=ddd.ddd.ddd.ddd          : native IPv4 address\n");
@@ -70,6 +73,9 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV4_SOURCE[...]=...          : source of IPv4 address\n");
 	fprintf(stderr, " IPV4_AS_NUM[...]=...          : AS number of (anonymized) IPv4 address\n");
 	fprintf(stderr, " IPV4_AS_SOURCE[...]=...       : Source of AS number of (anonymized) IPv4 address\n");
+	fprintf(stderr, " IPV4_GEONAME_ID=...           : GeonameID of (anonymized) IPv4 address\n");
+	fprintf(stderr, " IPV4_GEONAME_ID_SOURCE=...    : Source of GeonameID number of IPv4 address\n");
+	fprintf(stderr, " IPV4_GEONAME_ID_TYPE=...      : Type of GeonameID number of IPv4 address\n");
 	fprintf(stderr, " IPV4_COUNTRYCODE[...]=...     : Country Code of (anonymized) IPv4 address\n");
 	fprintf(stderr, " IPV4_COUNTRYCODE_SOURCE[...]=...: Source of Country Code of (anonymized) IPv4 address\n");
 	fprintf(stderr, "  ISATAP|TEREDO-SERVER|TEREDO-CLIENT|6TO4|LINK-LOCAL-IID\n");
@@ -777,6 +783,38 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 			};
 		} else {
 			DEBUGPRINT_NA(DEBUG_showinfo, "Skip CountryCode print: cc_index>=COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN");
+		};
+
+		// get GeonameID
+		unsigned int GeonameID_type;
+		uint32_t GeonameID = libipv4addr_GeonameID_by_addr(ipv4addrp, &data_source, &GeonameID_type);
+		if (GeonameID != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) {
+			if ( machinereadable != 0 ) {
+				snprintf(tempstring, sizeof(tempstring), "%u", GeonameID);
+				printout2("IPV4_GEONAME_ID", embeddedipv4string, tempstring, formatoptions);
+				if (data_source != IPV6CALC_DB_SOURCE_UNKNOWN) {
+					for (i = 0; i < MAXENTRIES_ARRAY(data_sources); i++ ) {
+						if (data_source == data_sources[i].number) {
+							printout2("IPV4_GEONAME_ID_SOURCE" , embeddedipv4string, data_sources[i].name, formatoptions);
+							break;
+						};
+					};
+				};
+				if (GeonameID_type != IPV6CALC_DB_GEO_GEONAMEID_TYPE_UNKNOWN) {
+					for (i = 0; i < MAXENTRIES_ARRAY(geonameid_types); i++ ) {
+						if (GeonameID_type == geonameid_types[i].number) {
+							printout2("IPV4_GEONAME_ID_TYPE" , embeddedipv4string, geonameid_types[i].name, formatoptions);
+							break;
+						};
+					};
+				};
+			} else {
+				if (strlen(embeddedipv4string) > 0) {
+					fprintf(stdout, "GeonameID %s: %u\n", embeddedipv4string, GeonameID);
+				} else {
+					fprintf(stdout, "GeonameID: %u\n", GeonameID);
+				};
+			};
 		};
 	};
 

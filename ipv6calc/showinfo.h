@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : showinfo.h
  * Version    : $Id$
- * Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for showinfo.c
@@ -88,6 +88,12 @@
 // 20: 2.1.0 to current
 //      + <geolocation provider>_GEONAME_ID_REGION
 //      + <geolocation provider>_GEONAME_ID_STATEPROV
+//      + IPV4_GEONAME_ID
+//      + IPV4_GEONAME_ID_SOURCE
+//      + IPV4_GEONAME_ID_TYPE
+//      + IPV6_GEONAME_ID
+//      + IPV6_GEONAME_ID_SOURCE
+//      + IPV6_GEONAME_ID_TYPE
 
 #define IPV6CALC_OUTPUT_VERSION	21
 

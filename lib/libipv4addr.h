@@ -62,6 +62,7 @@ typedef struct {
 #define IPV4_ADDR_BROADCAST			(uint32_t) 0x00000008U
 #define IPV4_ADDR_LOOPBACK			(uint32_t) 0x00000010U
 #define IPV4_ADDR_UNSPECIFIED			(uint32_t) 0x00000020U
+#define IPV4_ADDR_ANONYMIZED_GEONAMEID		(uint32_t) 0x00000080U
 #define IPV4_ADDR_ANONYMIZED			(uint32_t) 0x00000100U
 #define IPV4_ADDR_GLOBAL			(uint32_t) 0x00000200U
 #define IPV4_ADDR_UNKNOWN			(uint32_t) 0x00000400U
@@ -91,6 +92,7 @@ typedef struct {
 	{ IPV4_ADDR_ZEROCONF		, "zeroconf" },
 	{ IPV4_ADDR_SITELOCAL		, "site-local" },
 	{ IPV4_ADDR_ANONYMIZED		, "anonymized" },
+	{ IPV4_ADDR_ANONYMIZED_GEONAMEID, "anonymized-geonameid" },
 	{ IPV4_ADDR_GLOBAL		, "global" },
 	{ IPV4_ADDR_6TO4RELAY		, "6to4relay" },
 	{ IPV4_ADDR_LISP	 	, "lisp" },
@@ -199,4 +201,5 @@ extern void ipv4addr_filter_clear(s_ipv6calc_filter_ipv4addr *filter);
 
 extern uint16_t libipv4addr_cc_index_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsigned int *data_source_ptr);
 extern uint32_t libipv4addr_as_num32_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsigned int *data_source_ptr);
+extern uint32_t libipv4addr_GeonameID_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsigned int *data_source_ptr, unsigned int *GeonameID_type_ptr);
 extern int libipv4addr_registry_num_by_addr(const ipv6calc_ipv4addr *ipv4addrp);
