@@ -2,7 +2,7 @@
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
  * Version    : $Id$
- * Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2015-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc Apache module
@@ -26,7 +26,7 @@
  *
  *  ipv6calc behavior can be controlled by config, e.g
  *   ipv6calcOption debug                   0x8
- *   ipv6calcOption anonymize-preset        keep-type-asn-cc
+ *   ipv6calcOption anonymize-preset        keep-type-asn-cc|keep-type-geonameid
  *   ipv6calcOption disable-external        yes
  *   ipv6calcOption disable-ip2location     yes
  *   ipv6calcOption mask-ipv4               16
@@ -58,6 +58,7 @@
 int feature_zeroize = 1; // always supported
 int feature_anon    = 1; // always supported
 int feature_kp      = 0; // will be checked later
+int feature_kg      = 0; // will be checked later
 
 
 /***************************
@@ -305,6 +306,12 @@ static int ipv6calc_support_init(server_rec *s) {
 		feature_kp = 1;
 	};
 
+	/* check for KeepTypeAsnCC support */
+	if ((libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEGEONAMEID_IPV4_REQ_DB) == 1) \
+	    && (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEGEONAMEID_IPV6_REQ_DB) == 1)) {
+		feature_kg = 1;
+	};
+
 	return(0);
 };
 
@@ -431,6 +438,7 @@ static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t 
 		, (feature_zeroize == 1) ? " ANON_ZEROISE" : ""
 		, (feature_anon    == 1) ? " ANON_ANONYMIZE" : ""
 		, (feature_kp      == 1) ? " ANON_KEEP-TYPE-ASN-CC" : ""
+		, (feature_kg      == 1) ? " ANON_KEEP-TYPE-GEONAMEID" : ""
 	);
 
 	if (config->ipv6calc_anon_set.method != ANON_METHOD_KEEPTYPEASNCC) {
@@ -450,9 +458,10 @@ static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t 
 			, (config->anon_set_default == 1) ? "default" : "configured"
 			, libipv6calc_anon_method_name(&config->ipv6calc_anon_set)
 			, ((feature_kp == 0) && (config->ipv6calc_anon_set.method == ANON_METHOD_KEEPTYPEASNCC)) ? " NOT-SUPPORTED" : ""
+			, ((feature_kg == 0) && (config->ipv6calc_anon_set.method == ANON_METHOD_KEEPTYPEGEONAMEID)) ? " NOT-SUPPORTED" : ""
 		);
 
-		if (feature_kp == 0) {
+		if ((feature_kp == 0) && (feature_kg == 0)) {
 			if (config->no_fallback) {
 				ap_log_error(APLOG_MARK, APLOG_ERR, 0, s
 					, "%s anonymization method: %s NOT-SUPPORTED, NO-FALLBACK activated - STOP NOW"
@@ -515,10 +524,21 @@ static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
 		feature_kp = 1;
 	};
 
-	if (config->ipv6calc_anon_set.method != ANON_METHOD_KEEPTYPEASNCC) {
-		// nothing to do
-	} else {
+	/* check for KeepTypeAsnCC support */
+	if ((libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEGEONAMEID_IPV4_REQ_DB) == 1) \
+	    && (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEGEONAMEID_IPV6_REQ_DB) == 1)) {
+		feature_kg = 1;
+	};
+
+	if (config->ipv6calc_anon_set.method == ANON_METHOD_KEEPTYPEASNCC) {
 		if (feature_kp == 0) {
+			// fallback
+			libipv6calc_anon_set_by_name(&config->ipv6calc_anon_set, "as"); // anonymize standard
+		};
+	};
+
+	if (config->ipv6calc_anon_set.method == ANON_METHOD_KEEPTYPEGEONAMEID) {
+		if (feature_kg == 0) {
 			// fallback
 			libipv6calc_anon_set_by_name(&config->ipv6calc_anon_set, "as"); // anonymize standard
 		};

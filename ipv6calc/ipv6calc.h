@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calc.h
  * Version    : $Id$
- * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Main header file
@@ -27,6 +27,7 @@
 extern int feature_zeroize;
 extern int feature_anon;
 extern int feature_kp;
+extern int feature_kg;
 
 extern char showinfo_machine_readable_filter[];
 extern int showinfo_machine_readable_filter_used;

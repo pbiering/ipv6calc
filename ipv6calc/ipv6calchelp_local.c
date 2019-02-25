@@ -2,7 +2,7 @@
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calchelp_local.c
  * Version    : $Id$
- * Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -42,6 +42,10 @@ void printversion(void) {
 
 	if (feature_kp == 1) {
 		fprintf(stderr, " ANON_KEEP-TYPE-ASN-CC");
+	};
+
+	if (feature_kg == 1) {
+		fprintf(stderr, " ANON_KEEP-TYPE-GEONAMEID");
 	};
 
 	fprintf(stderr, "\n");

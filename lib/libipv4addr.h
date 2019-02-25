@@ -111,7 +111,7 @@ typedef struct {
 #define IPV4_ADDR_REGISTRY_RESERVED	REGISTRY_RESERVED
 #define IPV4_ADDR_REGISTRY_UNKNOWN	REGISTRY_UNKNOWN
 
-/* IPv4 address anonymization
+/* IPv4 address anonymization type "keep-type-asn-cc"
  *  Global IPv4 addresses are anonymized by storing country code and AS number
  *   and using prefix of experimental range (240-255.x.y.z)
  *
@@ -152,6 +152,45 @@ typedef struct {
  *
  * Mapping of LISP
  *                                1|r r r|1|1|0 0 0 0 0 0 0 0 0 0 0|
+ */
+
+/* IPv4 address anonymization type "keep-type-geonameid"
+ *  Global IPv4 addresses are anonymized by storing GeonameID
+ *   and using prefix of experimental range (240-255.x.y.z)
+ *
+ *  3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 
+ *  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
+ *  1 1 1 1
+ * |p p p p|
+ *  Prefix                
+ *    0xF
+ *
+ * Parity Bit (even parity)
+ *         |P|
+ *
+ * Mapping of GeonameID source
+ *           |s s s|
+ *            3-bit GeonameID source information
+ *            0 0 0 (0x0) = unknown
+ *            0 0 1 (0x1) = continent  (prio: lowest)
+ *            0 1 0 (0x2) = country
+ *            0 1 1 (0x3) = state/prov
+ *            1 0 0 (0x4) = district   
+ *            1 0 1 (0x5) = city       (prio: highest)
+ *            1 1 0 (0x6) = (reserved)
+ *            1 1 1 (0x7) = LISP
+ *
+ * Mapping of GeonameID (limited to IDs < 2^24, in worst case ID from source with lower prio is used)
+ *                 |g g g g g g g g g g g g g g g g g g g g g g g g|
+ *
+ * Mapping of LISP registry
+ *                                  0 0 0 = "unknown ASN registry"
+ *                                  0 1 0 = APNIC
+ *                                  0 1 1 = RIPE
+ *                                  1 0 0 = LACNIC
+ *                                  1 0 1 = AFRINIC
+ *                                  1 1 0 = ARIN
+ *                 |0 0 0 0 0 0 0 1 r r r 1 1 0 0 0 0 0 0 0 0 0 0 0|
  */
 
 // Prefix anonymization on method=kp

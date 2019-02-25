@@ -79,6 +79,7 @@ s_ipv6calc_anon_set ipv6calc_anon_set;
 int feature_zeroize = 1; // always supported
 int feature_anon    = 1; // always supported
 int feature_kp      = 0; // will be checked later
+int feature_kg      = 1; // will be checked later
 
 /* showinfo machine readable filter */
 char showinfo_machine_readable_filter[32] = "";
@@ -709,6 +710,12 @@ int main(int argc, char *argv[]) {
 	if ((libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV4_REQ_DB) == 1) \
 	    && (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV6_REQ_DB) == 1)) {
 		feature_kp = 1;
+	};
+
+	/* check for KeepTypeGeonameID support */
+	if ((libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEGEONAMEID_IPV4_REQ_DB) == 1) \
+	    && (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEGEONAMEID_IPV6_REQ_DB) == 1)) {
+		feature_kg = 1;
 	};
 
 	DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Debug value:%08lx command:%08lx inputtype:%08lx outputtype:%08lx action:%08lx formatoptions:%08lx", (unsigned long) ipv6calc_debug, (unsigned long) command, (unsigned long) inputtype, (unsigned long) outputtype, (unsigned long) action, (unsigned long) formatoptions); // ipv6calc_debug usage ok

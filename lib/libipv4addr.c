@@ -313,7 +313,7 @@ uint32_t ipv4addr_gettype(const ipv6calc_ipv4addr *ipv4addrp) {
 		DEBUGPRINT_WA(DEBUG_libipv4addr, "Check for anonymized address, parity count c=%d", c);
 
 		if (((c & 0x1) ^ 0x1) == ((ipv4 >> 27) & 0x1)) {
-			// check country code (limited value)
+			// odd parity: check country code (limited value)
 			p = (ipv4 >> 17) & 0x3ff;
 
 			if ((p <= COUNTRYCODE_INDEX_LETTER_MAX) || (p == COUNTRYCODE_INDEX_UNKNOWN) || ((p >= COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN) && (p <= COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MAX))) {
@@ -321,28 +321,37 @@ uint32_t ipv4addr_gettype(const ipv6calc_ipv4addr *ipv4addrp) {
 
 				type = IPV4_ADDR_ANONYMIZED | IPV4_ADDR_UNICAST| IPV4_ADDR_GLOBAL;
 
-				if ((ipv4 & 0x11800) == 0x11800) {
+				if ((ipv4 & 0x11fff) == 0x11800) {
 					DEBUGPRINT_NA(DEBUG_libipv4addr, "Address is a LISP unicast one");
 					type |= IPV4_ADDR_LISP;
 				};
 				goto END_ipv4addr_gettype;
 			};
 		} else  if (((c & 0x1) ^ 0x0) == ((ipv4 >> 27) & 0x1)) {
-			// check GeonameID source
+			//even parity: check GeonameID source
 			p = (ipv4 >> 24) & 0x7;
 
-			if (p <= IPV6CALC_DB_GEO_GEONAMEID_TYPE_CITY) {
+			if (p == 0x7) {
+				DEBUGPRINT_NA(DEBUG_libipv4addr, "Address is potentially an anonymized one (KeepType/GeonameID: LISP)");
+
+				if ((ipv4 & 0x11fff) == 0x11800) {
+					// 11 bit LISP information still not encoded
+					DEBUGPRINT_NA(DEBUG_libipv4addr, "Address is a LISP unicast one");
+
+					type = IPV4_ADDR_ANONYMIZED | IPV4_ADDR_UNICAST| IPV4_ADDR_GLOBAL | IPV4_ADDR_ANONYMIZED_GEONAMEID | IPV4_ADDR_LISP;
+
+					goto END_ipv4addr_gettype;
+				};
+			};
+
+			if (((p > IPV6CALC_DB_GEO_GEONAMEID_TYPE_UNKNOWN) \
+			     && p <= IPV6CALC_DB_GEO_GEONAMEID_TYPE_CITY)) {
 				DEBUGPRINT_NA(DEBUG_libipv4addr, "Address is an anonymized one(KeepGeonameID)");
 
 				type = IPV4_ADDR_ANONYMIZED | IPV4_ADDR_UNICAST| IPV4_ADDR_GLOBAL | IPV4_ADDR_ANONYMIZED_GEONAMEID;
 
-				if ((ipv4 & 0x11800) == 0x11800) {
-					DEBUGPRINT_NA(DEBUG_libipv4addr, "Address is a LISP unicast one");
-					type |= IPV4_ADDR_LISP;
-				};
 				goto END_ipv4addr_gettype;
 			};
-
 		} else {
 				DEBUGPRINT_NA(DEBUG_libipv4addr, "Address is not an detected anonymized one");
 		};
@@ -915,7 +924,7 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 
 		if (((ipv4addrp->typeinfo & IPV4_ADDR_UNICAST) != 0) && ((ipv4addrp->typeinfo & IPV4_ADDR_LISP) != 0)) {
 			as_num32_comp17 = 0x11800;
-			as_num32_comp17 |= (libipv6calc_db_wrapper_registry_num_by_ipv4addr(ipv4addrp) & 0x7) << 12;
+			as_num32_comp17 |= (libipv6calc_db_wrapper_registry_num_by_ipv4addr(ipv4addrp) & 0x7) << 13;
 			as_num32_comp17 |= 0x000; // TODO: map LISP information into 11 LSB
 		} else {
 			// get AS number
@@ -976,9 +985,10 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 		CONVERT_IPV4ADDRP_IPADDR(ipv4addrp, ipaddr);
 
 		if (((ipv4addrp->typeinfo & IPV4_ADDR_UNICAST) != 0) && ((ipv4addrp->typeinfo & IPV4_ADDR_LISP) != 0)) {
-			as_num32_comp17 = 0x11800;
-			as_num32_comp17 |= (libipv6calc_db_wrapper_registry_num_by_ipv4addr(ipv4addrp) & 0x7) << 12;
-			as_num32_comp17 |= 0x000; // TODO: map LISP information into 11 LSB
+			GeonameID_type = 0x7;
+			GeonameID = 0x11800;
+			GeonameID |= (libipv6calc_db_wrapper_registry_num_by_ipv4addr(ipv4addrp) & 0x7) << 13;
+			GeonameID |= 0x000; // TODO: map LISP information into 11 LSB
 		} else {
 			// get GeonameID
 			GeonameID_type |= IPV6CALC_DB_GEO_GEONAMEID_TYPE_FLAG_24BIT;
@@ -992,8 +1002,8 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 
 		// 0-3   ( 4 bits) : prefix 0xf0
 		// 4     ( 1 bit ) : parity bit (even parity)
-		// 5-7   ( 3 bits) : GeoNameID source
-		// 8-31  (24 bits) : GeonameID (limited to 24 bit)
+		// 5-7   ( 3 bits) : GeoNameID source - or 0x7 in case of LISP
+		// 8-31  (24 bits) : GeonameID (limited to 24 bit) - or Registry in case of LISP
 		ipv4addr_anon = 0xf0000000 | ((GeonameID_type << 24) & 0x07000000 ) | (GeonameID & 0x00ffffff);
 
 		// create parity bits
@@ -1567,8 +1577,13 @@ int libipv4addr_registry_num_by_addr(const ipv6calc_ipv4addr *ipv4addrp) {
 	uint16_t cc_index;
 
 	if ((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
-		if( (ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED_GEONAMEID) != 0) {
-			// GeonameID can't save Registry
+		if( (ipv4addrp->typeinfo & IPV4_ADDR_LISP) != 0) {
+			DEBUGPRINT_NA(DEBUG_libipv4addr, "IPv4 is anonymized LISP, extract registry from anonymized data");
+			// extract registry
+			uint32_t ipv4addr = ipv4addr_getdword(ipv4addrp);
+			registry = (ipv4addr >> 13) & 0x7;
+		} else if( (ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED_GEONAMEID) != 0) {
+			// GeonameID can't save Registry (exception: LISP)
 		} else {
 			DEBUGPRINT_NA(DEBUG_libipv4addr, "IPv4 is anonymized, extract registry from anonymized data");
 			// ASN -> Registry
@@ -1614,7 +1629,8 @@ uint32_t libipv4addr_GeonameID_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsig
 	uint32_t ipv4 = ipv4addr_getdword(ipv4addrp);
 
 	if ((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
-		if( (ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED_GEONAMEID) != 0) {
+		if (((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED_GEONAMEID) != 0) \
+		    && ((ipv4addrp->typeinfo & IPV4_ADDR_LISP) == 0)) {
 			// GeonameID included
 			GeonameID = ipv4 & 0x00ffffff; // 24 bit LSB
 			GeonameID_type = (ipv4 & 0x07000000) >> 24;

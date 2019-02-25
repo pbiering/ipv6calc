@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6loganon.h
  * Version    : $Id$
- * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2007-2019 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
  * Information:
@@ -29,3 +29,4 @@ extern int mask_iid;
 extern int feature_zeroize;
 extern int feature_anon;
 extern int feature_kp;
+extern int feature_kg;
