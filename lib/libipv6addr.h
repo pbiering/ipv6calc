@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libipv6addr.h
  * Version    : $Id$
- * Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -45,17 +45,35 @@
  * SLA/NLA prefix part anonymization is done by replacing with pattern a909a909
  *   p = number of nibbles anonymized in prefix
  *   		0 : no nibble of prefix is anonymized
- *   		f : Prefix anonymization with method=kp
+ *   		f : Prefix anonymization with method=kp|kg
  *
- * Prefix anonymization in case of method=kp: p=0x0f, but skipped for
+ * Prefix anonymization, but skipped for
  *  - LISP anycast
+ * in case of method=kp: p=0x0f
  * a909:ccca:aaaa:aaaC  (C = 4-bit checksum)
  *                      ccc      -> 10-bit Country Code mapping [A-Z]*[A-Z0-9] (936)
  *                                   0x3FD = LISP
  *                                   0x3FE = unknown country
  *                                   0x3FF - 16 + REGISTRY_6BONE && ASN=0 = 6bone
  *                                   0x000-0x3A7: c1= c / 36, c2 = c % 36
+ *                               -> 2 leftmost bit are |0 0|
  *                      aaaaaaaa -> 32-bit ASN
+ *
+ * in case of method=kg: p=0x0f
+ * a909:sssg:gggg:gggC  (C = 4-bit checksum)
+ *                      sss      -> 10-bit source mapping
+ *                                   0x3FD = LISP
+ *                                   GeonameID source information
+ *                                   0x000 = unknown
+ *			             0x001 = continent  (prio: lowest)
+ *                                   0x002 = country
+ *                                   0x003 = state/prov
+ *                                   0x004 = district   
+ *                                   0x005 = city       (prio: highest)
+ *                                   0x006 = (reserved)
+ *                                   0x0r. = registry
+ *                               -> 2 leftmost bit are |0 1|
+ *                      gggggggg -> 32-bit GeonameID
  */
 #define ANON_TOKEN_VALUE_00_31		(uint32_t) 0xa9090000u
 #define ANON_TOKEN_MASK_00_31		(uint32_t) 0xff0f0000u
@@ -138,6 +156,11 @@
 #define ANON_PREFIX_CCINDEX_MASK	0x3ff
 #define ANON_PREFIX_CCINDEX_XOR		0x0
 
+#define ANON_PREFIX_GEONAMEID_TYPE_DWORD	0
+#define ANON_PREFIX_GEONAMEID_TYPE_SHIFT	4
+#define ANON_PREFIX_GEONAMEID_TYPE_MASK		0x3ff
+#define ANON_PREFIX_GEONAMEID_TYPE_XOR		0x0
+
 #define ANON_PREFIX_ASN32_MSB_DWORD	0
 #define ANON_PREFIX_ASN32_MSB_SHIFT	0
 #define ANON_PREFIX_ASN32_MSB_AMOUNT	4
@@ -149,6 +172,18 @@
 #define ANON_PREFIX_ASN32_LSB_AMOUNT	28
 #define ANON_PREFIX_ASN32_LSB_MASK	((1 << ANON_PREFIX_ASN32_LSB_AMOUNT) - 1)
 #define ANON_PREFIX_ASN32_LSB_XOR	0x09090000
+
+#define ANON_PREFIX_GEONAMEID_MSB_DWORD	0
+#define ANON_PREFIX_GEONAMEID_MSB_SHIFT	0
+#define ANON_PREFIX_GEONAMEID_MSB_AMOUNT	4
+#define ANON_PREFIX_GEONAMEID_MSB_MASK	((1 << ANON_PREFIX_GEONAMEID_MSB_AMOUNT) - 1)
+#define ANON_PREFIX_GEONAMEID_MSB_XOR	0x0000000a
+
+#define ANON_PREFIX_GEONAMEID_LSB_DWORD	1
+#define ANON_PREFIX_GEONAMEID_LSB_SHIFT	4
+#define ANON_PREFIX_GEONAMEID_LSB_AMOUNT	28
+#define ANON_PREFIX_GEONAMEID_LSB_MASK	((1 << ANON_PREFIX_GEONAMEID_LSB_AMOUNT) - 1)
+#define ANON_PREFIX_GEONAMEID_LSB_XOR	0x09090000
 
 #define ANON_PREFIX_FLAGS_DWORD		0
 #define ANON_PREFIX_FLAGS_SHIFT		14
@@ -162,8 +197,11 @@
 #define ANON_PREFIX_TOKEN_VALUE		0xa909		// fix
 
 // Payload selector
-#define ANON_PREFIX_PAYLOAD_CCINDEX	1
-#define ANON_PREFIX_PAYLOAD_ASN32	2
+#define ANON_PREFIX_PAYLOAD_FLAGS		0
+#define ANON_PREFIX_PAYLOAD_CCINDEX		1
+#define ANON_PREFIX_PAYLOAD_ASN32		2
+#define ANON_PREFIX_PAYLOAD_GEONAMEID		3
+#define ANON_PREFIX_PAYLOAD_GEONAMEID_TYPE	4
 
 
 /* IPv6 address storage structure */
@@ -313,6 +351,7 @@ typedef struct {
 #define IPV6_ADDR_TYPE2_LISP_PETR		(uint32_t) 0x00020000U	/* IPv6 LISP Proxy Egress Tunnel Routers (PETRY) Anycast */
 #define IPV6_ADDR_TYPE2_LISP_MAP_RESOLVER	(uint32_t) 0x00040000U	/* IPv6 LISP Map Resolver Anycast */
 #define IPV6_ADDR_TYPE2_ANON_MASKED_PREFIX	(uint32_t) 0x00080000U	/* IPv6 partially masked prefix */
+#define IPV6_ADDR_TYPE2_ANONYMIZED_GEONAMEID	(uint32_t) 0x00100000U  /* IPv6 prefix anonymized contains GeonameID */
 
 // IPv4 address extractor selector
 #define IPV6_ADDR_SELECT_IPV4_DEFAULT		0
@@ -363,6 +402,7 @@ typedef struct {
 	{ IPV6_ADDR_TYPE2_LISP_PETR		, "lisp-proxyegresstunnelrouter-anycast" },
 	{ IPV6_ADDR_TYPE2_LISP_MAP_RESOLVER	, "lisp-mapresolver-anycast" },
 	{ IPV6_ADDR_TYPE2_ANON_MASKED_PREFIX    , "anonymized-masked-prefix" },
+	{ IPV6_ADDR_TYPE2_ANONYMIZED_GEONAMEID  , "anonymized-geonameid" },
 };
 
 /* Registries */
@@ -439,4 +479,5 @@ extern int  libipv6addr_get_included_ipv4addr(const ipv6calc_ipv6addr *ipv6addrp
 
 extern uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsigned int *data_source_ptr);
 extern uint32_t libipv6addr_as_num32_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsigned int *data_source_ptr);
+extern uint32_t libipv6addr_GeonameID_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsigned int *data_source_ptr, unsigned int *GeonameID_type_ptr);
 extern int libipv6addr_registry_num_by_addr(const ipv6calc_ipv6addr *ipv6addrp);

@@ -1183,7 +1183,8 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		fprintf(stdout, "\n");
 	};
 
-	if ((ipv6addrp->typeinfo & (IPV6_NEW_ADDR_AGU)) != 0) {
+	if (((ipv6addrp->typeinfo & (IPV6_NEW_ADDR_AGU)) != 0) \
+	    && ((ipv6addrp->typeinfo2 & (IPV6_ADDR_TYPE2_ANONYMIZED_GEONAMEID)) == 0)) {
 		/* CountryCode */
 		DEBUGPRINT_NA(DEBUG_showinfo, "get country code");
 		data_source = IPV6CALC_DB_SOURCE_UNKNOWN;
@@ -1251,6 +1252,39 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 				};
 			} else {
 				DEBUGPRINT_NA(DEBUG_showinfo, "Skip AS print: as_num32=ASNUM_AS_UNKNOWN");
+			};
+		};
+	};
+
+
+	/* GeonameID */
+	if (((ipv6addrp->typeinfo & (IPV6_NEW_ADDR_AGU)) != 0) 
+	    && ! (((ipv6addrp->typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) != 0) && (((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_ANONYMIZED_GEONAMEID)) == 0))) {
+		// get GeonameID
+		unsigned int GeonameID_type;
+		uint32_t GeonameID = libipv6addr_GeonameID_by_addr(ipv6addrp, &data_source, &GeonameID_type);
+		if (GeonameID != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) {
+			if ( machinereadable != 0 ) {
+				snprintf(tempstring, sizeof(tempstring), "%u", GeonameID);
+				printout2("IPV6_GEONAME_ID", "", tempstring, formatoptions);
+				if (data_source != IPV6CALC_DB_SOURCE_UNKNOWN) {
+					for (i = 0; i < MAXENTRIES_ARRAY(data_sources); i++ ) {
+						if (data_source == data_sources[i].number) {
+							printout2("IPV6_GEONAME_ID_SOURCE" , "", data_sources[i].name, formatoptions);
+							break;
+						};
+					};
+				};
+				if (GeonameID_type != IPV6CALC_DB_GEO_GEONAMEID_TYPE_UNKNOWN) {
+					for (i = 0; i < MAXENTRIES_ARRAY(geonameid_types); i++ ) {
+						if (GeonameID_type == geonameid_types[i].number) {
+							printout2("IPV6_GEONAME_ID_TYPE" , "", geonameid_types[i].name, formatoptions);
+							break;
+						};
+					};
+				};
+			} else {
+				fprintf(stdout, "GeonameID: %u\n", GeonameID);
 			};
 		};
 	};
