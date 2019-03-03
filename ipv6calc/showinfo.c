@@ -690,16 +690,11 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 		j = 0;
 
-		snprintf(tempstring, sizeof(tempstring), "%s", "");
+		snprintf(tempstring, sizeof(tempstring), "%s", "ipv4");
 		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv4addrtypestrings); i++ ) {
 			if ((ipv4addrp->typeinfo & ipv6calc_ipv4addrtypestrings[i].number) != 0) {
-				if (j != 0) {
-					snprintf(helpstring, sizeof(helpstring), "%s,", tempstring);
-					snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
-				};
-				snprintf(helpstring, sizeof(helpstring), "%s%s", tempstring, ipv6calc_ipv4addrtypestrings[i].token);
+				snprintf(helpstring, sizeof(helpstring), "%s,%s", tempstring, ipv6calc_ipv4addrtypestrings[i].token);
 				snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
-				j = 1;
 			};
 		};
 		printout2("IPV4_TYPE", embeddedipv4string, tempstring, formatoptions);
@@ -1139,27 +1134,17 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		};
 
 		j = 0;
-		snprintf(tempstring, sizeof(tempstring), "%s", "");
+		snprintf(tempstring, sizeof(tempstring), "%s", "ipv6");
 		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
 			if ((ipv6addrp->typeinfo & ipv6calc_ipv6addrtypestrings[i].number) != 0) {
-				if (j != 0) {
-					snprintf(helpstring, sizeof(helpstring), "%s,", tempstring);
-					snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
-				};
-				snprintf(helpstring, sizeof(helpstring), "%s%s", tempstring, ipv6calc_ipv6addrtypestrings[i].token);
+				snprintf(helpstring, sizeof(helpstring), "%s,%s", tempstring, ipv6calc_ipv6addrtypestrings[i].token);
 				snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
-				j = 1;
 			};
 		};
 		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addr_type2_strings); i++ ) {
 			if ((ipv6addrp->typeinfo2 & ipv6calc_ipv6addr_type2_strings[i].number) != 0) {
-				if (j != 0) {
-					snprintf(helpstring, sizeof(helpstring), "%s,", tempstring);
-					snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
-				};
-				snprintf(helpstring, sizeof(helpstring), "%s%s", tempstring, ipv6calc_ipv6addr_type2_strings[i].token);
+				snprintf(helpstring, sizeof(helpstring), "%s,%s", tempstring, ipv6calc_ipv6addr_type2_strings[i].token);
 				snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
-				j = 1;
 			};
 		};
 		printout("IPV6_TYPE", tempstring, formatoptions);

@@ -62,7 +62,6 @@
  * in case of method=kg: p=0x0f
  * a909:sssg:gggg:gggC  (C = 4-bit checksum)
  *                      sss      -> 10-bit source mapping
- *                                   0x3FD = LISP
  *                                   GeonameID source information
  *                                   0x000 = unknown
  *			             0x001 = continent  (prio: lowest)
@@ -71,9 +70,11 @@
  *                                   0x004 = district   
  *                                   0x005 = city       (prio: highest)
  *                                   0x006 = (reserved)
+ *                                   0x007 = LISP
  *                                   0x0r. = registry
  *                               -> 2 leftmost bit are |0 1|
  *                      gggggggg -> 32-bit GeonameID
+ *                                   0x11800 = LISP
  */
 #define ANON_TOKEN_VALUE_00_31		(uint32_t) 0xa9090000u
 #define ANON_TOKEN_MASK_00_31		(uint32_t) 0xff0f0000u

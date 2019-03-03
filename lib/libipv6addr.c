@@ -333,7 +333,7 @@ uint32_t ipv6addr_checksum_anonymized_qword(const ipv6calc_ipv6addr *ipv6addrp, 
 		b = (a % 17) + ((dword[index] & (0xf << s)) >> s);
 		c = b % 16;
 
-		DEBUGPRINT_WA(DEBUG_libipv6addr, "checksum calculation of qword: %08x %08x  i=%02d a=%02d b=%02d c=%02d", (unsigned int) dword[0], (unsigned int) dword[1], i, a, b, c);
+		// DEBUGPRINT_WA(DEBUG_libipv6addr, "checksum calculation of qword: %08x %08x  i=%02d a=%02d b=%02d c=%02d", (unsigned int) dword[0], (unsigned int) dword[1], i, a, b, c);
 	};
 
 	if (flag == ANON_CHECKSUM_FLAG_VERIFY) {
@@ -740,6 +740,7 @@ void ipv6addr_settype(ipv6calc_ipv6addr *ipv6addrp) {
 			};
 
 			if (flags == 0x0) {
+				DEBUGPRINT_NA(DEBUG_libipv6addr, "found anonymized IPv6 address with method: kp");
 				// anon method=kp
 				type |= IPV6_NEW_ADDR_AGU | IPV6_ADDR_UNICAST | IPV6_ADDR_ANONYMIZED_PREFIX;
 
@@ -748,13 +749,14 @@ void ipv6addr_settype(ipv6calc_ipv6addr *ipv6addrp) {
 
 				if ((r1 == 0) && (r2 == 0) && (cc_index == COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + REGISTRY_6BONE)) {
 					type |= IPV6_NEW_ADDR_6BONE;
-				} else if ((r1 == 0) && (r2 == 0) && (cc_index == 0x3fd)) {
+				} else if ((r1 == 0) && (r2 == 0) && (cc_index == COUNTRYCODE_INDEX_LISP)) {
 					type |= IPV6_NEW_ADDR_PRODUCTIVE;
 					type2 |= IPV6_ADDR_TYPE2_LISP;
 				} else {
 					type |= IPV6_NEW_ADDR_PRODUCTIVE;
 				};
 			} else if (flags == 0x1) {
+				DEBUGPRINT_NA(DEBUG_libipv6addr, "found anonymized IPv6 address with method: kg");
 				// anon method=kg
 				type |= IPV6_NEW_ADDR_AGU | IPV6_ADDR_UNICAST | IPV6_ADDR_ANONYMIZED_PREFIX;
 				type2 |= IPV6_ADDR_TYPE2_ANONYMIZED_GEONAMEID;
@@ -762,9 +764,11 @@ void ipv6addr_settype(ipv6calc_ipv6addr *ipv6addrp) {
 				r1 = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_GEONAMEID, &geonameid);
 				r2 = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_GEONAMEID_TYPE, &geonameid_type);
 
-				if ((r1 == 0) && (r2 == 0) && (geonameid_type == COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + REGISTRY_6BONE)) {
+				if ((r1 == 0) && (r2 == 0) && (((geonameid_type & 0xf) == 0) && ((geonameid_type & 0xf0) >> 4) == REGISTRY_6BONE)) {
 					type |= IPV6_NEW_ADDR_6BONE;
-				} else if ((r1 == 0) && (r2 == 0) && (geonameid_type == 0x3fd)) {
+					DEBUGPRINT_NA(DEBUG_libipv6addr, "found anonymized 6bone IPv6 address with method: kg");
+				} else if ((r1 == 0) && (r2 == 0) && (geonameid == 0x11800) && ((geonameid_type & 0xf)== 7)) {
+					DEBUGPRINT_NA(DEBUG_libipv6addr, "found anonymized LISP IPv6 address with method: kg");
 					type |= IPV6_NEW_ADDR_PRODUCTIVE;
 					type2 |= IPV6_ADDR_TYPE2_LISP;
 				} else {
@@ -928,6 +932,9 @@ void ipv6addr_settype(ipv6calc_ipv6addr *ipv6addrp) {
 					type |= IPV6_ADDR_ANONYMIZED_IID;
 				};
 			};
+			if ((ipv4addr.typeinfo & IPV4_ADDR_ANONYMIZED_GEONAMEID) != 0) {
+				type2 |= IPV6_ADDR_TYPE2_ANONYMIZED_GEONAMEID;
+			};
 		};
 	} else if ((type & (IPV6_NEW_ADDR_TEREDO)) != 0) {
 		// check client IP
@@ -938,6 +945,9 @@ void ipv6addr_settype(ipv6calc_ipv6addr *ipv6addrp) {
 		if (r == 0) {
 			if ((ipv4addr.typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
 				type |= IPV6_ADDR_ANONYMIZED_IID;
+			};
+			if ((ipv4addr.typeinfo & IPV4_ADDR_ANONYMIZED_GEONAMEID) != 0) {
+				type2 |= IPV6_ADDR_TYPE2_ANONYMIZED_GEONAMEID;
 			};
 		};
 
@@ -2064,7 +2074,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 	uint32_t iid[2];
 	char tempstring[NI_MAXHOST];
 	char helpstring[NI_MAXHOST];
-	int i, j, r;
+	int i, r;
 	int calculate_checksum = 0;
 	int calculate_checksum_prefix = 0;
 	int zeroize_prefix = 0;
@@ -2101,31 +2111,13 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 		DEBUGPRINT_WA(DEBUG_libipv6addr, "Anonymize IPv6 address flags: %s", tempstring);
 	};
 
-	if ( (ipv6calc_debug & DEBUG_libipv6addr) != 0 ) {	// ipv6calc_debug usage ok
-		DEBUGPRINT_WA(DEBUG_libipv6addr, "IPv6 address flags: 0x%08x", ipv6addrp->typeinfo);
-
-		j = 0;
-		snprintf(tempstring, sizeof(tempstring), "TYPE=");
-		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
-			if ((ipv6addrp->typeinfo & ipv6calc_ipv6addrtypestrings[i].number) != 0 ) {
-				if (j != 0) {
-					snprintf(helpstring, sizeof(helpstring), "%s,", tempstring);
-					snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
-				};
-				snprintf(helpstring, sizeof(helpstring), "%s%s", tempstring, ipv6calc_ipv6addrtypestrings[i].token);
-				snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
-				j = 1;
-			};
-		};
-		fprintf(stderr, "%s\n", tempstring);
-	};
-
 	if ((ipv6addrp->typeinfo & (IPV6_ADDR_ANONYMIZED_IID | IPV6_ADDR_ANONYMIZED_PREFIX)) != 0) {
 		DEBUGPRINT_NA(DEBUG_libipv6addr, "Already anonymized IPv6 address - skip");
 		return(0);
 	};
 
 	if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_6TO4) != 0) {
+		DEBUGPRINT_NA(DEBUG_libipv6addr, "Embedded IPv4 address, anonymize and store back");
 		/* extract IPv4 address */
 		for (i = 0; i <= 3; i++) {
 			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 2 + i));
@@ -2213,9 +2205,10 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 					as_num32 = 0;
 				} else if ((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_LISP) != 0) {
 					DEBUGPRINT_NA(DEBUG_libipv6addr, "IPv6 is LISP unicast, special prefix anonymization");
-					cc_index = 0x3fd;
+					cc_index = COUNTRYCODE_INDEX_LISP;
+
 					CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
-					as_num32 = libipv6calc_db_wrapper_cc_index_by_addr(&ipaddr, NULL) << 20;
+					as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, NULL);
 				} else {
 					CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
 
@@ -2230,6 +2223,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 
 				DEBUGPRINT_WA(DEBUG_libipv6addr, "cc_index=%d (0x%03x) as_num32=%d (0x%08x)", cc_index, cc_index, as_num32, as_num32);
 			} else if (method == ANON_METHOD_KEEPTYPEGEONAMEID) {
+				
 				if (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEGEONAMEID_IPV6_REQ_DB) == 0) {
 					DEBUGPRINT_NA(DEBUG_libipv6addr, "anonymization method not supported, db_wrapper reports too less features");
 					return(1);
@@ -2237,10 +2231,15 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 
 				CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
 
-				if (((ipv6addrp->typeinfo & IPV6_ADDR_UNICAST) != 0) && ((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_LISP) != 0)) {
+				if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_6BONE) != 0) {
+					DEBUGPRINT_NA(DEBUG_libipv6addr, "IPv6 is 6bone unicast, special prefix anonymization");
+					GeonameID_type = 0x0;
+					GeonameID_type |= REGISTRY_6BONE << 4;
+				} else if (((ipv6addrp->typeinfo & IPV6_ADDR_UNICAST) != 0) && ((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_LISP) != 0)) {
+					DEBUGPRINT_NA(DEBUG_libipv6addr, "IPv6 is LISP unicast, special prefix anonymization");
 					GeonameID_type = 0x7;
 					GeonameID = 0x11800;
-					GeonameID |= (libipv6calc_db_wrapper_registry_num_by_ipv6addr(ipv6addrp) & 0x7) << 13;
+					GeonameID_type |= (libipv6calc_db_wrapper_registry_num_by_ipv6addr(ipv6addrp) & 0x7) << 4;
 					GeonameID |= 0x000; // TODO: map LISP information into 11 LSB
 				} else {
 					// get GeonameID
@@ -3250,8 +3249,8 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsign
 		DEBUGPRINT_NA(DEBUG_libipv6addr, "anonymized prefix handling");
 		if ((ipv6addrp->typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX) == 0) {
 			if ((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_LISP) != 0) {
-				retval = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_ASN32, &cc_index);
-				cc_index >>= 20;
+				// no country code included
+				cc_index = COUNTRYCODE_INDEX_LISP;
 			} else {
 				/* retrieve CountryCodeIndex from anonymization value */
 				retval = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_CCINDEX, &cc_index);
@@ -3309,6 +3308,9 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsign
 			cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + IPV6_ADDR_REGISTRY_6BONE;
 		} else if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_ORCHID) != 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6addr, "ORCHID has no country");
+			goto END_libipv6addr_cc_index_by_addr;
+		} else if ((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_LISP) != 0) {
+			DEBUGPRINT_NA(DEBUG_libipv6addr, "LISP has no country");
 			goto END_libipv6addr_cc_index_by_addr;
 		} else if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_CC) == 1) {
 			if ((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_ANON_MASKED_PREFIX) != 0) {
@@ -3412,6 +3414,7 @@ END_libipv6addr_as_num32_by_addr:
 int libipv6addr_registry_num_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 	int registry = IPV6_ADDR_REGISTRY_UNKNOWN;
 	uint16_t cc_index;
+	uint32_t as_num32;
 	uint32_t geonameid_type;
 	ipv6calc_ipv6addr ipv6addr;
 
@@ -3420,7 +3423,13 @@ int libipv6addr_registry_num_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
 		if ((ipv6addrp->typeinfo2 & (IPV6_ADDR_TYPE2_ANONYMIZED_GEONAMEID)) == 0) {
 			/* retrieve registry via cc_index from anonymized address (simple) */
 			cc_index = libipv6addr_cc_index_by_addr(ipv6addrp, NULL);
-			registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
+
+			if (cc_index == COUNTRYCODE_INDEX_LISP) {
+				as_num32 = libipv6addr_as_num32_by_addr(ipv6addrp, NULL);
+				registry = libipv6calc_db_wrapper_registry_num_by_as_num32(as_num32);
+			} else {
+				registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);
+			};
 		} else {
 			if (ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_GEONAMEID_TYPE, &geonameid_type) == 0) {
 				DEBUGPRINT_WA(DEBUG_libipv6addr, "geonameid_type/registry=%d (0x%03x)", geonameid_type, geonameid_type);
@@ -3464,9 +3473,19 @@ uint32_t libipv6addr_GeonameID_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsig
 	uint32_t GeonameID_type = IPV6CALC_DB_GEO_GEONAMEID_TYPE_UNKNOWN;
 	unsigned int data_source = IPV6CALC_DB_SOURCE_UNKNOWN;
 	ipv6calc_ipaddr ipaddr;
+	ipv6calc_ipv4addr ipv4addr;
+	int retval;
 
 	if ((ipv6addrp->typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) != 0) {
-		if (((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_ANONYMIZED_GEONAMEID) != 0) \
+		if (((ipv6addrp->typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID) != 0)
+		    || ((ipv6addrp->typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX) != 0)) {
+			retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
+			if (retval != 0) {
+				fprintf(stderr, "Error getting included IPv4 address from IPv6 address\n");
+				goto END_libipv6addr_GeonameID_by_addr;
+			};
+			GeonameID = libipv4addr_GeonameID_by_addr(&ipv4addr, NULL, &GeonameID_type);
+		} else if (((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_ANONYMIZED_GEONAMEID) != 0) \
 		    && ((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_LISP) == 0)) {
 			// GeonameID included
 			int r1 = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_GEONAMEID, &GeonameID);
@@ -3477,8 +3496,47 @@ uint32_t libipv6addr_GeonameID_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsig
 				// dummy
 			};
 		};
+	} else if (((ipv6addrp->typeinfo & IPV6_ADDR_ANONYMIZED_IID) != 0) && ((ipv6addrp->typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID) != 0)) {
+		retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
+		if (retval != 0) {
+			fprintf(stderr, "Error getting included IPv4 address from anonymized IPv6 address\n");
+			goto END_libipv6addr_GeonameID_by_addr;
+		};
+		GeonameID = libipv4addr_GeonameID_by_addr(&ipv4addr, NULL, &GeonameID_type);
 	} else {
-		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_GEONAMEID) == 1) {
+		if ((ipv6addrp->typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_IID) != 0) {
+			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_GEONAMEID) == 1) {
+				/* retrieve GeonameID from IPv4 address inside */
+				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
+				if (retval != 0) {
+					fprintf(stderr, "Error getting included IPv4 address from IPv6 address\n");
+					goto END_libipv6addr_GeonameID_by_addr;
+				};
+				GeonameID = libipv4addr_GeonameID_by_addr(&ipv4addr, NULL, &GeonameID_type);
+			} else {
+				DEBUGPRINT_NA(DEBUG_libipv6addr, "DB feature missing: DB_IPV4_TO_GEONAMEID");
+			};
+		} else if ((ipv6addrp->typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX) != 0) {
+			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_GEONAMEID) == 1) {
+				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
+				if (retval != 0) {
+					fprintf(stderr, "Error getting included IPv4 address from IPv6 address\n");
+					goto END_libipv6addr_GeonameID_by_addr;
+				};
+				GeonameID = libipv4addr_GeonameID_by_addr(&ipv4addr, NULL, &GeonameID_type);
+			} else {
+				DEBUGPRINT_NA(DEBUG_libipv6addr, "DB feature missing: DB_IPV4_TO_GEONAMEID");
+			};
+		} else if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_6BONE) != 0) {
+			DEBUGPRINT_NA(DEBUG_libipv6addr, "6bone has no GeonameID");
+			goto END_libipv6addr_GeonameID_by_addr;
+		} else if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_ORCHID) != 0) {
+			DEBUGPRINT_NA(DEBUG_libipv6addr, "ORCHID has no GeonameID");
+			goto END_libipv6addr_GeonameID_by_addr;
+		} else if ((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_LISP) != 0) {
+			DEBUGPRINT_NA(DEBUG_libipv6addr, "LISP has no country");
+			goto END_libipv6addr_GeonameID_by_addr;
+		} else if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_GEONAMEID) == 1) {
 			// get GeonameID
 			CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
 			GeonameID = libipv6calc_db_wrapper_GeonameID_by_addr(&ipaddr, &data_source, &GeonameID_type);
@@ -3498,5 +3556,6 @@ uint32_t libipv6addr_GeonameID_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsig
 		*GeonameID_type_ptr = GeonameID_type;
 	};
 
+END_libipv6addr_GeonameID_by_addr:
 	return(GeonameID);
 };

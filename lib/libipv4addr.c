@@ -346,7 +346,7 @@ uint32_t ipv4addr_gettype(const ipv6calc_ipv4addr *ipv4addrp) {
 
 			if (((p > IPV6CALC_DB_GEO_GEONAMEID_TYPE_UNKNOWN) \
 			     && p <= IPV6CALC_DB_GEO_GEONAMEID_TYPE_CITY)) {
-				DEBUGPRINT_NA(DEBUG_libipv4addr, "Address is an anonymized one(KeepGeonameID)");
+				DEBUGPRINT_NA(DEBUG_libipv4addr, "Address is an anonymized one (KeepGeonameID)");
 
 				type = IPV4_ADDR_ANONYMIZED | IPV4_ADDR_UNICAST| IPV4_ADDR_GLOBAL | IPV4_ADDR_ANONYMIZED_GEONAMEID;
 

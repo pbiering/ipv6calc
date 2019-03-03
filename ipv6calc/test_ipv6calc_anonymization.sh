@@ -335,11 +335,55 @@ run_anon_options_kp_tests() {
 			fi
 		fi
 		[ "$verbose" = "1" ] || echo -n "."
+
+		# ASN (optional)
+		if echo "${type_orig//,/ }" | grep -w ipv4 | grep -w lisp >/dev/null; then
+			# skip ASN on IPv4+LISP
+			continue
+		fi
+		asn_orig="`./ipv6calc -m -i -q "$input"  | grep -a "^IPV._AS_NUM=" | sed 's/IPV._AS_NUM=//'`"
+		asn_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._AS_NUM=" | sed 's/IPV._AS_NUM=//'`"
+
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx     orig: $input"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx     anon: $output"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx_AS_NUM orig: $asn_orig"
+		[ "$verbose" = "1" ] && echo "DEBUG : IPVx_AS_NUM anon: $asn_anon"
+
+		if [ -z "$asn_orig" -a -z "$asn_anon" ]; then
+			# everything is ok, both have no AS_NUM
+			true
+		elif [ -z "$asn_orig" -a -n "$asn_anon" ]; then
+			[ "$verbose" = "1" ] || echo
+			echo "ERROR : IPVx_AS_NUM not equal for: $input (anonymized: $output)"
+			echo "ERROR : IPVx_AS_NUM orig: $asn_orig"
+			echo "ERROR : IPVx_AS_NUM anon: $asn_anon"
+			echo "ERROR : something went wrong, anon has AS_NUM code while orig hasn't"
+			exit 1
+		elif [ -n "$asn_orig" -a -z "$asn_anon" ]; then
+			[ "$verbose" = "1" ] || echo
+			echo "ERROR : IPVx_AS_NUM not equal for: $input (anonymized: $output)"
+			echo "ERROR : IPVx_AS_NUM orig: $asn_orig"
+			echo "ERROR : IPVx_AS_NUM anon: $asn_anon"
+			echo "ERROR : something went wrong, orig has AS_NUM while anon hasn't"
+			exit 1
+		else
+			# Check result
+			if [ "$asn_orig" != "$asn_anon" ]; then
+				[ "$verbose" = "1" ] || echo
+				echo "ERROR : IPVx_AS_NUM not equal for: $input (anonymized: $output)"
+				echo "ERROR : IPVx_AS_NUM orig: $asn_orig"
+				echo "ERROR : IPVx_AS_NUM anon: $asn_anon"
+				exit 1
+			else
+				[ "$verbose" = "1" ] && echo "Result ok!" || true
+			fi
+		fi
+		[ "$verbose" = "1" ] || echo -n "."
 	done || return 1
 	[ "$verbose" = "1" ] || echo
 	echo "INFO  : $test successful"
 
-	test="run 'ipv6calc' anonymization option kp TYPE/GEONAMEID tests"
+	test="run 'ipv6calc' anonymization option kg TYPE/GEONAMEID tests"
 	echo "INFO  : $test"
 	testscenarios_kp | ./ipv6calc -q -E ipv4,ipv6 | while read input result; do
 		if [ -z "$input" ]; then
@@ -472,14 +516,14 @@ run_anon_options_kp_tests() {
 				echo "ERROR : IPVx_GEONAME_ID not equal for: $input (anonymized: $output)"
 				echo "ERROR : IPVx_GEONAME_ID orig: $gi_orig"
 				echo "ERROR : IPVx_GEONAME_ID anon: $gi_anon"
-				echo "ERROR : something went wrong, anon has country code while orig hasn't"
+				echo "ERROR : something went wrong, anon has GeonameID while orig hasn't"
 				exit 1
 			elif [ -n "$gi_orig" -a -z "$gi_anon" ]; then
 				[ "$verbose" = "1" ] || echo
 				echo "ERROR : IPVx_GEONAME_ID not equal for: $input (anonymized: $output)"
 				echo "ERROR : IPVx_GEONAME_ID orig: $gi_orig"
 				echo "ERROR : IPVx_GEONAME_ID anon: $gi_anon"
-				echo "ERROR : something went wrong, orig has country code while anon hasn't"
+				echo "ERROR : something went wrong, orig has GeonameID while anon hasn't"
 				exit 1
 			else
 				# Check result
@@ -488,6 +532,45 @@ run_anon_options_kp_tests() {
 					echo "ERROR : IPVx_GEONAME_ID not equal for: $input (anonymized: $output)"
 					echo "ERROR : IPVx_GEONAME_ID orig: $gi_orig"
 					echo "ERROR : IPVx_GEONAME_ID anon: $gi_anon"
+					exit 1
+				else
+					[ "$verbose" = "1" ] && echo "Result ok!" || true
+				fi
+			fi
+
+			# GeonameID Type
+			gi_type_orig="`./ipv6calc -m -i -q "$input"  | grep -a "^IPV._GEONAME_ID_TYPE=" | sed 's/IPV._GEONAME_ID_TYPE=//'`"
+			gi_type_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._GEONAME_ID_TYPE=" | sed 's/IPV._GEONAME_ID_TYPE=//'`"
+
+			[ "$verbose" = "1" ] && echo "DEBUG : IPVx             orig: $input"
+			[ "$verbose" = "1" ] && echo "DEBUG : IPVx             anon: $output"
+			[ "$verbose" = "1" ] && echo "DEBUG : IPVx_GEONAME_ID_TYPE   orig: $gi_type_orig"
+			[ "$verbose" = "1" ] && echo "DEBUG : IPVx_GEONAME_ID_TYPE   anon: $gi_type_anon"
+
+			if [ -z "$gi_type_orig" -a -z "$gi_type_anon" ]; then
+				# everything is ok, both have no CC
+				true
+			elif [ -z "$gi_type_orig" -a -n "$gi_type_anon" ]; then
+				[ "$verbose" = "1" ] || echo
+				echo "ERROR : IPVx_GEONAME_ID_TYPE not equal for: $input (anonymized: $output)"
+				echo "ERROR : IPVx_GEONAME_ID_TYPE orig: $gi_type_orig"
+				echo "ERROR : IPVx_GEONAME_ID_TYPE anon: $gi_type_anon"
+				echo "ERROR : something went wrong, anon has GeonameID while orig hasn't"
+				exit 1
+			elif [ -n "$gi_type_orig" -a -z "$gi_type_anon" ]; then
+				[ "$verbose" = "1" ] || echo
+				echo "ERROR : IPVx_GEONAME_ID_TYPE not equal for: $input (anonymized: $output)"
+				echo "ERROR : IPVx_GEONAME_ID_TYPE orig: $gi_type_orig"
+				echo "ERROR : IPVx_GEONAME_ID_TYPE anon: $gi_type_anon"
+				echo "ERROR : something went wrong, orig has GeonameID while anon hasn't"
+				exit 1
+			else
+				# Check result
+				if [ "$gi_type_orig" != "$gi_type_anon" ]; then
+					[ "$verbose" = "1" ] || echo
+					echo "ERROR : IPVx_GEONAME_ID_TYPE not equal for: $input (anonymized: $output)"
+					echo "ERROR : IPVx_GEONAME_ID_TYPE orig: $gi_type_orig"
+					echo "ERROR : IPVx_GEONAME_ID_TYPE anon: $gi_type_anon"
 					exit 1
 				else
 					[ "$verbose" = "1" ] && echo "Result ok!" || true
