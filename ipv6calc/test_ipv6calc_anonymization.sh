@@ -382,6 +382,14 @@ run_anon_options_kp_tests() {
 	done || return 1
 	[ "$verbose" = "1" ] || echo
 	echo "INFO  : $test successful"
+}
+
+run_anon_options_kg_tests() {
+	if ! ./ipv6calc -v 2>&1| grep -wq "ANON_KEEP-TYPE-GEONAMEID"; then
+		echo "NOTICE: 'ipv6calc' has not required support for Anonymization Type-GeonameID included, skip option kg tests"
+		[ "$stoponerror" = "1" ] && return 1
+		return 0
+	fi
 
 	test="run 'ipv6calc' anonymization option kg TYPE/GEONAMEID tests"
 	echo "INFO  : $test"
@@ -586,5 +594,6 @@ run_anon_options_kp_tests() {
 
 run_anon_options_tests || exit 1
 run_anon_options_kp_tests || exit 1
+run_anon_options_kg_tests || exit 1
 run_anon_tests || exit 1
 echo "INFO  : all anonymization tests successful!"

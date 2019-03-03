@@ -79,7 +79,7 @@ s_ipv6calc_anon_set ipv6calc_anon_set;
 int feature_zeroize = 1; // always supported
 int feature_anon    = 1; // always supported
 int feature_kp      = 0; // will be checked later
-int feature_kg      = 1; // will be checked later
+int feature_kg      = 0; // will be checked later
 
 /* showinfo machine readable filter */
 char showinfo_machine_readable_filter[32] = "";

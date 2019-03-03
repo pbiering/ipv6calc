@@ -2044,7 +2044,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_decomp17(const uint32_t as_num32_comp17
  */
 uint32_t libipv6calc_db_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr, unsigned int *GeonameID_type_ptr) {
 	uint32_t GeonameID = IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN; // default
-	int GeonameID_type;
+	int GeonameID_type = IPV6CALC_DB_GEO_GEONAMEID_TYPE_UNKNOWN;
 
 	int f = 0, p;
 

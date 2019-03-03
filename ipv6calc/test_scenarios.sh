@@ -432,9 +432,9 @@ a909:16fa:9092:23ff:a909:4941::7	IPV6_REGISTRY=RIPENCC
 1.2.3.4					IPV4=1.2.3.4|--mrst IPV4
 1.2.3.4					IPV4="1.2.3.4"|--mrst IPV4 --mrqva
 2a01:238:423d:8800:85b3:9e6b:3019:8909	IPV4=""|--mrstpa IPV4 --mrqva
-2a01:238:423d:8800:85b3:9e6b:3019:8909	"unicast,global-unicast,productive,iid-random,iid,iid-local"|--mrqva --mrtvo IPV6_TYPE
-2a01:238:423d:8800:85b3:9e6b:3019:8909	unicast,global-unicast,productive,iid-random,iid,iid-local|--mrqvn --mrtvo IPV6_TYPE
-2a01:238:423d:8800:85b3:9e6b:3019:8909	IPV6_TYPE=unicast,global-unicast,productive,iid-random,iid,iid-local|--mrst IPV6_TYPE
+2a01:238:423d:8800:85b3:9e6b:3019:8909	"ipv6,unicast,global-unicast,productive,iid-random,iid,iid-local"|--mrqva --mrtvo IPV6_TYPE
+2a01:238:423d:8800:85b3:9e6b:3019:8909	ipv6,unicast,global-unicast,productive,iid-random,iid,iid-local|--mrqvn --mrtvo IPV6_TYPE
+2a01:238:423d:8800:85b3:9e6b:3019:8909	IPV6_TYPE=ipv6,unicast,global-unicast,productive,iid-random,iid,iid-local|--mrst IPV6_TYPE
 # 6rd
 2001:b4c:0:2010::/60			IPV4[192.0.2.1]=192.0.2.1|--6rd_prefixlength 28
 2001:b4e:0:1008::/61			IPV4[192.0.2.1]=192.0.2.1|--6rd_prefixlength 29
