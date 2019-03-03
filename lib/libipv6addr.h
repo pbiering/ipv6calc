@@ -67,7 +67,7 @@
  *			             0x001 = continent  (prio: lowest)
  *                                   0x002 = country
  *                                   0x003 = state/prov
- *                                   0x004 = district   
+ *                                   0x004 = district
  *                                   0x005 = city       (prio: highest)
  *                                   0x006 = (reserved)
  *                                   0x007 = LISP

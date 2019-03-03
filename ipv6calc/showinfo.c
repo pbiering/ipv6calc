@@ -1243,7 +1243,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 
 
 	/* GeonameID */
-	if (((ipv6addrp->typeinfo & (IPV6_NEW_ADDR_AGU)) != 0) 
+	if (((ipv6addrp->typeinfo & (IPV6_NEW_ADDR_AGU)) != 0)
 	    && ! (((ipv6addrp->typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) != 0) && (((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_ANONYMIZED_GEONAMEID)) == 0))) {
 		// get GeonameID
 		unsigned int GeonameID_type;

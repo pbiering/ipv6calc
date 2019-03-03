@@ -2223,7 +2223,6 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 
 				DEBUGPRINT_WA(DEBUG_libipv6addr, "cc_index=%d (0x%03x) as_num32=%d (0x%08x)", cc_index, cc_index, as_num32, as_num32);
 			} else if (method == ANON_METHOD_KEEPTYPEGEONAMEID) {
-				
 				if (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEGEONAMEID_IPV6_REQ_DB) == 0) {
 					DEBUGPRINT_NA(DEBUG_libipv6addr, "anonymization method not supported, db_wrapper reports too less features");
 					return(1);

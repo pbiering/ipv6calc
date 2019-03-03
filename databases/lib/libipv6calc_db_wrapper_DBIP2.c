@@ -897,7 +897,7 @@ uint32_t libipv6calc_db_wrapper_DBIP2_wrapper_GeonameID_by_addr(const ipv6calc_i
 	};
 
 	result = libipv6calc_db_wrapper_MMDB_GeonameID_by_addr(ipaddrp, &mmdb_cache[DBIP2_type], source_ptr);
- 
+
 	if (result == IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP2, "no match found");
 		goto END_libipv6calc_db_wrapper;

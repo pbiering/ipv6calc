@@ -158,11 +158,11 @@ typedef struct {
  *  Global IPv4 addresses are anonymized by storing GeonameID
  *   and using prefix of experimental range (240-255.x.y.z)
  *
- *  3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1 
+ *  3 3 2 2 2 2 2 2 2 2 2 2 1 1 1 1 1 1 1 1 1 1
  *  1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0 9 8 7 6 5 4 3 2 1 0
  *  1 1 1 1
  * |p p p p|
- *  Prefix                
+ *  Prefix
  *    0xF
  *
  * Parity Bit (even parity)
@@ -175,7 +175,7 @@ typedef struct {
  *            0 0 1 (0x1) = continent  (prio: lowest)
  *            0 1 0 (0x2) = country
  *            0 1 1 (0x3) = state/prov
- *            1 0 0 (0x4) = district   
+ *            1 0 0 (0x4) = district
  *            1 0 1 (0x5) = city       (prio: highest)
  *            1 1 0 (0x6) = (reserved)
  *            1 1 1 (0x7) = LISP
