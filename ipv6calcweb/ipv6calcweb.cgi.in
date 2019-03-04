@@ -61,6 +61,8 @@
 #  HTTP_IPV6CALCWEB_DB_DBIP2		: 1 (default), 0 (disable)
 #  HTTP_IPV6CALCWEB_DB_IP2LOCATION	: 1 (default), 0 (disable)
 #  HTTP_IPV6CALCWEB_DB_EXTERNAL		: 1 (default), 0 (disable)
+#
+#  HTTP_IPV6CALCWEB_USERNAME_GEONAMESORG: user name for geonames.org API (default: "demo")
 
 ## special output format "textkeyvalue"
 #  INFO__OUTPUTVERSION="1"			: current output format version
@@ -241,7 +243,9 @@ my $url_rfc = "https://tools.ietf.org/html/";
 my $url_lisp = "http://www.lisp4.net/lisp-site/";
 
 # Base URL for GeoName service
-my $url_geoname_by_id = "http://api.geonames.org/get?geonameId=#GEONAME_ID#&username=demo";
+my $username_geonamesorg = "demo";
+my $url_geoname_by_id = "http://api.geonames.org/get?geonameId=#GEONAME_ID#&username=#USERNAME#";
+my $api_used_geonamesorg = 0;
 
 # Base URL for Location Service
 my $url_openstreetmap_by_lat_lon = "http://www.openstreetmap.org/?mlat=#LATITUDE#&mlon=#LONGITUDE#&zoom=5";
@@ -535,6 +539,10 @@ my %text = (
 		'de' => "Unterstuetzt durch",
 		'en' => "Powered by",
 	},
+	'credits' => {
+		'de' => "Danksagung an",
+		'en' => "Credits to",
+	},
 	'entries' => {
 		'de' => "Eintraege",
 		'en' => "entries",
@@ -822,6 +830,16 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX'}) {
 	};
 };
 
+
+## external APIs
+if (defined $ENV{'HTTP_IPV6CALCWEB_USERNAME_GEONAMESORG'}) {
+	if ($ENV{'HTTP_IPV6CALCWEB_USERNAME_GEONAMESORG'} =~ /^([[:alnum:]\.\-]+)$/o) {
+		$username_geonamesorg = $1; # overwrite default from above
+	} else {
+		logging("ERROR", "HTTP_IPV6CALCWEB_USERNAME_GEONAMESORG found, but not containing proper chars");
+		&print_error();
+	};
+};
 
 ## Database toggles
 for my $db (sort keys %db_enabled) {
@@ -1464,6 +1482,8 @@ sub print_infohash ($$$;$) {
 		if ($key =~ /GEONAME_ID/o) {
 			$url = $url_geoname_by_id;
 			$url =~ s/#GEONAME_ID#/$$phash{$key}/g;
+			$url =~ s/#USERNAME#/$username_geonamesorg/g;
+			$api_used_geonamesorg = 1;
 		} elsif ($key =~ /(LATITUDE|LONGITUDE)/o) {
 			my $combined_key;
 			my $combined_valid = 0;
@@ -1610,6 +1630,8 @@ sub print_infohash ($$$;$) {
 					if ($key_lookup =~ /GEONAME_ID/o) {
 						$url = $url_geoname_by_id;
 						$url =~ s/#GEONAME_ID#/$$phash{$key_result}/g;
+						$url =~ s/#USERNAME#/$username_geonamesorg/g;
+						$api_used_geonamesorg = 1;
 						&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
 						$flag = 1;
 					} elsif ($key =~ /(LATITUDE|LONGITUDE)/o) {
@@ -2738,6 +2760,11 @@ if ($outputformat =~ /^html/o) {
 		print "          <br>\n";
 		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " BuiltIn " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_builtin)) . "</font>\n";
 	};
+
+	if ($api_used_geonamesorg > 0) {
+		print "          <br>\n";
+		print "          <font size=\"-2\">" . $text{'credits'}->{$lang} . " <a target=\"_blank\" href=\"http://www.geonames.org\">GeoNames</a></font>\n";
+	};
 } else {
 	# text output
 	print "INFO__GENERATED=" if ($outputformat eq "textkeyvalue");
@@ -2788,6 +2815,11 @@ if ($outputformat =~ /^html/o) {
 	if (scalar(keys %db_info_builtin) > 0) {
 		print "INFO__POWEREDBY_BUILTIN=" if ($outputformat eq "textkeyvalue");
 		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_builtin) . $chr_quote . "\n";
+	};
+
+	if ($api_used_geonamesorg > 0) {
+		print "INFO__CREDITS_GEONAMESORG=" if ($outputformat eq "textkeyvalue");
+		print $chr_quote . $text{'credits'}->{$lang} . " GeoNames (http://www.geonames.org)" . $chr_quote . "\n";
 	};
 };
 
