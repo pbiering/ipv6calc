@@ -12,6 +12,7 @@
  *   - client IP address country code retrievement by setting environment IPV6CALC_CLIENT_COUNTRYCODE
  *   - client IP address ASN retrievement by setting environment IPV6CALC_CLIENT_ASN
  *   - client IP address registry retrievement by setting environment IPV6CALC_CLIENT_REGISTRY
+ *   - client IP address GeonameID retrievement by setting environment IPV6CALC_CLIENT_GEONAMEID
  *   - anonymization method by setting IPV6CALC_ANON_METHOD
  *
  *  mode_ipv6calc behavior can be controlled by config, e.g.
@@ -107,6 +108,7 @@ static const char *set_ipv6calc_action_anonymize(cmd_parms *cmd, void *dummy, in
 static const char *set_ipv6calc_action_countrycode(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_action_asn(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_action_registry(cmd_parms *cmd, void *dummy, int arg);
+static const char *set_ipv6calc_action_geonameid(cmd_parms *cmd, void *dummy, int arg);
 
 static const char *set_ipv6calc_option(cmd_parms *cmd, void *dummy, const char *name, const char *value, int arg);
 
@@ -127,6 +129,7 @@ static char     ipv6calc_cache_lri_value_anon[2][IPV6CALC_CACHE_LRI_SIZE][APRMAX
 static char     ipv6calc_cache_lri_value_cc[2][IPV6CALC_CACHE_LRI_SIZE][APRMAXHOSTLEN];
 static char     ipv6calc_cache_lri_value_asn[2][IPV6CALC_CACHE_LRI_SIZE][APRMAXHOSTLEN];
 static char     ipv6calc_cache_lri_value_registry[2][IPV6CALC_CACHE_LRI_SIZE][APRMAXHOSTLEN];
+static char     ipv6calc_cache_lri_value_geonameid[2][IPV6CALC_CACHE_LRI_SIZE][APRMAXHOSTLEN];
 
 static struct in_addr  ipv6calc_cache_lri_ipv4_token[IPV6CALC_CACHE_LRI_SIZE];
 #if APR_HAVE_IPV6
@@ -164,6 +167,7 @@ typedef struct {
 	int action_countrycode;
 	int action_asn;
 	int action_registry;
+	int action_geonameid;
 
 	int anon_set_default;
 	s_ipv6calc_anon_set ipv6calc_anon_set;
@@ -196,8 +200,9 @@ static const command_rec ipv6calc_cmds[] = {
 	AP_INIT_TAKE1("ipv6calcDebuglevel",  (const char *(*)()) set_ipv6calc_debuglevel, NULL, OR_FILEINFO, "Debug level of module (binary or'ed): <value>"),
 	AP_INIT_FLAG("ipv6calcActionAnonymize", set_ipv6calc_action_anonymize, NULL, OR_FILEINFO, "Store anonymized IP address in IPV6CALC_CLIENT_IP_ANON"),
 	AP_INIT_FLAG("ipv6calcActionCountrycode", set_ipv6calc_action_countrycode, NULL, OR_FILEINFO, "Store Country Code of IP address in IPV6CALC_CLIENT_COUNTRYCODE"),
-	AP_INIT_FLAG("ipv6calcActionAsn", set_ipv6calc_action_asn, NULL, OR_FILEINFO, "Store ASN of IP address in IPV6CALC_CLIENT_COUNTRYCODE"),
-	AP_INIT_FLAG("ipv6calcActionRegistry", set_ipv6calc_action_registry, NULL, OR_FILEINFO, "Store Registry of IP address in IPV6CALC_CLIENT_COUNTRYCODE"),
+	AP_INIT_FLAG("ipv6calcActionAsn", set_ipv6calc_action_asn, NULL, OR_FILEINFO, "Store ASN of IP address in IPV6CALC_CLIENT_ASN"),
+	AP_INIT_FLAG("ipv6calcActionRegistry", set_ipv6calc_action_registry, NULL, OR_FILEINFO, "Store Registry of IP address in IPV6CALC_CLIENT_REGISTRY"),
+	AP_INIT_FLAG("ipv6calcActionGeonameid", set_ipv6calc_action_geonameid, NULL, OR_FILEINFO, "Store GeonameID of IP address in IPV6CALC_CLIENT_GEONAMEID"),
 	AP_INIT_TAKE2("ipv6calcOption",  (const char *(*)()) set_ipv6calc_option, NULL, OR_FILEINFO, "Define ipv6calc option: <key> <value>"),
 	{NULL} 
 };
@@ -380,12 +385,13 @@ static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t 
 	);
 
 	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-		, "%s module actions: anonymize=%s countrycode=%s asn=%s registry=%s"
+		, "%s module actions: anonymize=%s countrycode=%s asn=%s registry=%s geonameid=%s"
 		, ((config->action_anonymize + config->action_countrycode) == 0) ? "default" : "configured"
 		, (config->action_anonymize > 0) ? "ON" : "OFF"
 		, (config->action_countrycode > 0) ? "ON" : "OFF"
 		, (config->action_asn > 0) ? "ON" : "OFF"
 		, (config->action_registry > 0) ? "ON" : "OFF"
+		, (config->action_geonameid > 0) ? "ON" : "OFF"
 	);
 
 	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
@@ -434,7 +440,7 @@ static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t 
 	};
 
 	ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-		, "supported anonymization methods:%s%s%s"
+		, "supported anonymization methods:%s%s%s%s"
 		, (feature_zeroize == 1) ? " ANON_ZEROISE" : ""
 		, (feature_anon    == 1) ? " ANON_ANONYMIZE" : ""
 		, (feature_kp      == 1) ? " ANON_KEEP-TYPE-ASN-CC" : ""
@@ -454,7 +460,7 @@ static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t 
 		);
 	} else {
 		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
-			, "%s anonymization method: %s%s"
+			, "%s anonymization method: %s%s%s"
 			, (config->anon_set_default == 1) ? "default" : "configured"
 			, libipv6calc_anon_method_name(&config->ipv6calc_anon_set)
 			, ((feature_kp == 0) && (config->ipv6calc_anon_set.method == ANON_METHOD_KEEPTYPEASNCC)) ? " NOT-SUPPORTED" : ""
@@ -574,6 +580,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 	char cc[APRMAXHOSTLEN];
 	char asn[APRMAXHOSTLEN];
 	char registry[APRMAXHOSTLEN];
+	char geonameid[APRMAXHOSTLEN];
 	unsigned int data_source;
 
 	int result;
@@ -797,6 +804,18 @@ static int ipv6calc_post_read_request(request_rec *r) {
 					); 
 				};
 
+				if (config->action_geonameid == 1) {
+					ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
+						, "client IP GeonameID (from cache): %s"
+						, ipv6calc_cache_lri_value_geonameid[pi][hit]
+					);
+
+					apr_table_set(r->subprocess_env
+						, "IPV6CALC_CLIENT_GEONAMEID"
+						, ipv6calc_cache_lri_value_geonameid[pi][hit]
+					); 
+				};
+
 				if (config->action_anonymize == 1) {
 					ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
 						, "client IP address anonymized (from cache): %s"
@@ -899,14 +918,17 @@ static int ipv6calc_post_read_request(request_rec *r) {
 	int result_registry = -1;
 	const char *data_source_string = "-";
 	uint32_t asn_num = 0;
+	uint32_t result_geonameid = 0;
 
 	if (	(config->action_countrycode == 1)
 	     ||	(config->action_asn == 1)
 	     ||	(config->action_registry == 1)
+	     ||	(config->action_geonameid == 1)
 	) {
 		int retrieve_cc = 0;
 		int retrieve_asn = 0;
 		int retrieve_registry = 0;
+		int retrieve_geonameid = 0;
 
 		if ((pi == mod_ipv6calc_pi_IPV6) && (ipv6addr.typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4)) {
 			// extract IPv4 address and retrieve country code of that particular address
@@ -924,15 +946,15 @@ static int ipv6calc_post_read_request(request_rec *r) {
 				};
 
 				retrieve_registry = 1;
+				retrieve_geonameid = 1;
 			};
 		} else if (	((pi == mod_ipv6calc_pi_IPV4) && (ipv4addr.typeinfo & IPV4_ADDR_GLOBAL))
 			    ||	((pi == mod_ipv6calc_pi_IPV6) && (ipv6addr.typeinfo & IPV6_ADDR_GLOBAL))
 		) {
-			// retrieve country code only for global addresses
+			// retrieve only global addresses
 			retrieve_cc = 1;
-
-			// retrieve ASN only for global addresses
 			retrieve_asn = 1;
+			retrieve_geonameid = 1;
 
 			retrieve_registry = 1;
 		} else {
@@ -941,10 +963,11 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 		if (config->debuglevel & IPV6CALC_DEBUG_RETRIEVE_DATA) {
 			ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
-				, "potential data retrieve_cc=%d retrieve_asn=%d retrieve_registry=%d"
+				, "potential data retrieve_cc=%d retrieve_asn=%d retrieve_registry=%d retrieve_geonameid=%d"
 				, retrieve_cc
 				, retrieve_asn
 				, retrieve_registry
+				, retrieve_geonameid
 			);
 		};
 
@@ -972,7 +995,9 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 			if (config->cache == 1) {
 				// store value
-				snprintf(ipv6calc_cache_lri_value_cc[pi][ipv6calc_cache_lri_last[pi] - 1], sizeof(ipv6calc_cache_lri_value_cc[pi][ipv6calc_cache_lri_last[pi] - 1]), "%s", cc);
+				snprintf(ipv6calc_cache_lri_value_cc[pi][ipv6calc_cache_lri_last[pi] - 1]
+				    , sizeof(ipv6calc_cache_lri_value_cc[pi][ipv6calc_cache_lri_last[pi] - 1])
+				    , "%s", cc);
 				if (config->debuglevel & IPV6CALC_DEBUG_CACHE_STORE) {
 					ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
 						, "store CountryCode of IPv%s address in cache on position: %d"
@@ -1002,7 +1027,9 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 			if (config->cache == 1) {
 				// store value
-				snprintf(ipv6calc_cache_lri_value_asn[pi][ipv6calc_cache_lri_last[pi] - 1], sizeof(ipv6calc_cache_lri_value_asn[pi][ipv6calc_cache_lri_last[pi] - 1]), "%s", asn);
+				snprintf(ipv6calc_cache_lri_value_asn[pi][ipv6calc_cache_lri_last[pi] - 1]
+				    , sizeof(ipv6calc_cache_lri_value_asn[pi][ipv6calc_cache_lri_last[pi] - 1])
+				    , "%s", asn);
 				if (config->debuglevel & IPV6CALC_DEBUG_CACHE_STORE) {
 					ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
 						, "store ASN of IPv%s address in cache on position: %d"
@@ -1036,10 +1063,48 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 			if (config->cache == 1) {
 				// store value
-				snprintf(ipv6calc_cache_lri_value_registry[pi][ipv6calc_cache_lri_last[pi] - 1], sizeof(ipv6calc_cache_lri_value_asn[pi][ipv6calc_cache_lri_last[pi] - 1]), "%s", registry);
+				snprintf(ipv6calc_cache_lri_value_registry[pi][ipv6calc_cache_lri_last[pi] - 1]
+				    , sizeof(ipv6calc_cache_lri_value_registry[pi][ipv6calc_cache_lri_last[pi] - 1])
+				    , "%s", registry);
 				if (config->debuglevel & IPV6CALC_DEBUG_CACHE_STORE) {
 					ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
 						, "store Registry of IPv%s address in cache on position: %d"
+						, (pi == 0) ? "4" : "6"
+						, ipv6calc_cache_lri_last[pi] - 1
+					);
+				};
+			};
+		};
+
+		// set GeonameID of IP in environment
+		if (config->action_geonameid == 1) {
+			if (retrieve_geonameid != 0) {
+				result_geonameid = libipv6calc_db_wrapper_GeonameID_by_addr(&ipaddr, NULL, NULL);
+
+				if (result_registry == IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) {
+					snprintf(geonameid, sizeof(geonameid), "%u", result_geonameid);
+				} else {
+					snprintf(geonameid, sizeof(geonameid), "%s", "-");
+				};
+
+				ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
+					, "client IP address GeonameID: %s"
+					, geonameid
+				);
+			} else {
+				snprintf(geonameid, sizeof(geonameid), "%s", "-");
+			};
+
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_GEONAMEID", geonameid); 
+
+			if (config->cache == 1) {
+				// store value
+				snprintf(ipv6calc_cache_lri_value_geonameid[pi][ipv6calc_cache_lri_last[pi] - 1]
+				    , sizeof(ipv6calc_cache_lri_value_geonameid[pi][ipv6calc_cache_lri_last[pi] - 1])
+				    , "%s", geonameid);
+				if (config->debuglevel & IPV6CALC_DEBUG_CACHE_STORE) {
+					ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
+						, "store GeonameID of IPv%s address in cache on position: %d"
 						, (pi == 0) ? "4" : "6"
 						, ipv6calc_cache_lri_last[pi] - 1
 					);
@@ -1059,6 +1124,10 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 	if (config->action_registry == 0)  {
 		apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_REGISTRY", "disabled"); 
+	};
+
+	if (config->action_geonameid == 0)  {
+		apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_GEONAMEID", "disabled"); 
 	};
 
 
@@ -1286,13 +1355,13 @@ static const char *set_ipv6calc_debuglevel(cmd_parms *cmd, void *dummy, const ch
  */
 static const char *set_ipv6calc_action_countrycode(cmd_parms *cmd, void *dummy, int arg) {
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
-	
+
 	if (!config) {
 		return NULL;
 	};
-	
+
 	config->action_countrycode = arg;
-	
+
 	return NULL;
 };
 
@@ -1302,13 +1371,13 @@ static const char *set_ipv6calc_action_countrycode(cmd_parms *cmd, void *dummy, 
  */
 static const char *set_ipv6calc_action_asn(cmd_parms *cmd, void *dummy, int arg) {
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
-	
+
 	if (!config) {
 		return NULL;
 	};
-	
+
 	config->action_asn = arg;
-	
+
 	return NULL;
 };
 
@@ -1318,13 +1387,29 @@ static const char *set_ipv6calc_action_asn(cmd_parms *cmd, void *dummy, int arg)
  */
 static const char *set_ipv6calc_action_registry(cmd_parms *cmd, void *dummy, int arg) {
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
-	
+
 	if (!config) {
 		return NULL;
 	};
-	
+
 	config->action_registry = arg;
-	
+
+	return NULL;
+};
+
+
+/*
+ * set_ipv6calc_geonameid
+ */
+static const char *set_ipv6calc_action_geonameid(cmd_parms *cmd, void *dummy, int arg) {
+	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
+
+	if (!config) {
+		return NULL;
+	};
+
+	config->action_geonameid = arg;
+
 	return NULL;
 };
 
@@ -1393,6 +1478,9 @@ static void *ipv6calc_create_svr_conf(apr_pool_t* pool, server_rec* svr) {
 
 	svr_cfg->action_anonymize = 0;
 	svr_cfg->action_countrycode = 0;
+	svr_cfg->action_asn = 0;
+	svr_cfg->action_registry = 0;
+	svr_cfg->action_geonameid = 0;
 
 	libipv6calc_anon_set_by_name(&svr_cfg->ipv6calc_anon_set, "as"); // anonymize standard
 	svr_cfg->anon_set_default = 1;

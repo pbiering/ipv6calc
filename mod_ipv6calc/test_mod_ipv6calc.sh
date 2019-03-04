@@ -113,6 +113,7 @@ create_apache_root_and_start() {
 	[ "$action_asn" = "0" ]    && perl -pi -e 's/(ipv6calcActionAsn\s+).*$/$1 off/g'         $dir_base/conf.d/ipv6calc.conf
 	[ "$action_cc" = "0" ]     && perl -pi -e 's/(ipv6calcActionCountrycode\s+).*$/$1 off/g' $dir_base/conf.d/ipv6calc.conf
 	[ "$action_reg" = "0" ]    && perl -pi -e 's/(ipv6calcActionRegistry\s+).*$/$1 off/g'    $dir_base/conf.d/ipv6calc.conf
+	[ "$action_gid" = "0" ]    && perl -pi -e 's/(ipv6calcActionGeonameid\s+).*$/$1 off/g'   $dir_base/conf.d/ipv6calc.conf
 	[ "$action_anon" = "0" ]   && perl -pi -e 's/(ipv6calcActionAnonymize\s+).*$/$1 off/g'   $dir_base/conf.d/ipv6calc.conf
 
 
@@ -308,6 +309,7 @@ $(basename "$0") [<options>] [-S|-K|-W]
 	-A	disable action ASN
 	-C	disable action CountryCode
 	-R	disable action Registry
+	-I	disable action GeonameID
 	-N	disable action Anonymization
 
 	-b <base directory
@@ -318,7 +320,7 @@ END
 }
 
 #### Options
-while getopts "DGrACRNca:fSKWb:mlgideh\?" opt; do
+while getopts "IDGrACRNca:fSKWb:mlgideh\?" opt; do
 	case $opt in
 	    b)
 		if [ -d "$OPTARG" ]; then
@@ -377,6 +379,9 @@ while getopts "DGrACRNca:fSKWb:mlgideh\?" opt; do
 		;;
 	    R)
 		action_reg="0"
+		;;
+	    I)
+		action_gid="0"
 		;;
 	    N)
 		action_anon="0"

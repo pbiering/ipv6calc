@@ -62,9 +62,10 @@ void printversion_help(void) {
 
 	libipv6calc_db_wrapper_features_help();
 
-	fprintf(stderr, "%-22s%c %s\n", "ANON_ZEROISE", (feature_zeroize == 1)? 'x' : 'o', "Anonymization method 'zeroize'");
-	fprintf(stderr, "%-22s%c %s\n", "ANON_ANONYMIZE", (feature_anon == 1) ? 'x' : 'o', "Anonymization method 'anonymize'");
-	fprintf(stderr, "%-22s%c %s\n", "ANON_KEEP-TYPE-ASN-CC", (feature_kp == 1) ? 'x' : 'o', "Anonymization method 'keep-type-asn-cc'");
+	fprintf(stderr, "%-25s%c %s\n", "ANON_ZEROISE", (feature_zeroize == 1)? 'x' : 'o', "Anonymization method 'zeroize'");
+	fprintf(stderr, "%-25s%c %s\n", "ANON_ANONYMIZE", (feature_anon == 1) ? 'x' : 'o', "Anonymization method 'anonymize'");
+	fprintf(stderr, "%-25s%c %s\n", "ANON_KEEP-TYPE-ASN-CC", (feature_kp == 1) ? 'x' : 'o', "Anonymization method 'keep-type-asn-cc'");
+	fprintf(stderr, "%-25s%c %s\n", "ANON_KEEP-TYPE-GEONAMEID", (feature_kg == 1) ? 'x' : 'o', "Anonymization method 'keep-type-geonameid'");
 
 	fprintf(stderr, "\n");
 };

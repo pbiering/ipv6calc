@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6loganonhelp.c
  * Version    : $Id$
- * Copyright  : 2007-2013 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2007-2019 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
  * Information:
@@ -34,6 +34,10 @@ void printversion(void) {
 		fprintf(stderr, " ANON_KEEP-TYPE-ASN-CC");
 	};
 
+	if (feature_kg == 1) {
+		fprintf(stderr, " ANON_KEEP-TYPE-GEONAMEID");
+	};
+
 	fprintf(stderr, "\n");
 };
 
@@ -42,9 +46,10 @@ void printversion_help(void) {
 
 	fprintf(stderr, "Explanation of available(x)/possible(o) feature tokens\n");
 
-	fprintf(stderr, "%-22s%c %s\n", "ANON_ZEROISE", (feature_zeroize == 1)? 'x' : 'o', "Anonymization method 'zeroize'");
-	fprintf(stderr, "%-22s%c %s\n", "ANON_ANONYMIZE", (feature_anon == 1) ? 'x' : 'o', "Anonymization method 'anonymize'");
-	fprintf(stderr, "%-22s%c %s\n", "ANON_KEEP-TYPE-ASN-CC", (feature_kp == 1) ? 'x' : 'o', "Anonymization method 'keep-type-asn-cc'");
+	fprintf(stderr, "%-25s%c %s\n", "ANON_ZEROISE", (feature_zeroize == 1)? 'x' : 'o', "Anonymization method 'zeroize'");
+	fprintf(stderr, "%-25s%c %s\n", "ANON_ANONYMIZE", (feature_anon == 1) ? 'x' : 'o', "Anonymization method 'anonymize'");
+	fprintf(stderr, "%-25s%c %s\n", "ANON_KEEP-TYPE-ASN-CC", (feature_kp == 1) ? 'x' : 'o', "Anonymization method 'keep-type-asn-cc'");
+	fprintf(stderr, "%-25s%c %s\n", "ANON_KEEP-TYPE-GEONAMEID", (feature_kg == 1) ? 'x' : 'o', "Anonymization method 'keep-type-geonameid'");
 
 	fprintf(stderr, "\n");
 };

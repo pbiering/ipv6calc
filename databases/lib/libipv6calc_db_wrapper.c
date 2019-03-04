@@ -926,7 +926,7 @@ void libipv6calc_db_wrapper_features_help(void) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
 	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_db_features); i++) {
-		fprintf(stderr, "%-22s%c %s", ipv6calc_db_features[i].token, (wrapper_features & ipv6calc_db_features[i].number) ? 'x' : 'o', ipv6calc_db_features[i].explanation);
+		fprintf(stderr, "%-25s%c %s", ipv6calc_db_features[i].token, (wrapper_features & ipv6calc_db_features[i].number) ? 'x' : 'o', ipv6calc_db_features[i].explanation);
 
 		first = 1;
 		for (s = IPV6CALC_DB_SOURCE_MIN; s <= IPV6CALC_DB_SOURCE_MAX; s++) {
