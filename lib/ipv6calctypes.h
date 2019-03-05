@@ -183,6 +183,7 @@ typedef struct {
 #define FORMATOPTION_NUM_mr_select_token_pa	23	// 00800000
 #define FORMATOPTION_NUM_mr_match_token		24	// 01000000
 #define FORMATOPTION_NUM_mr_quote_default	25	// 02000000 flag for controlling old quote behavior < 0.99.0
+#define FORMATOPTION_NUM_mr_match_token_suffix	26	// 04000000
 
 #define FORMATOPTION_NUM_printembedded		31	// special
 
@@ -211,6 +212,7 @@ typedef struct {
 #define FORMATOPTION_mr_select_token_pa		(uint32_t) (1 << FORMATOPTION_NUM_mr_select_token_pa)
 #define FORMATOPTION_mr_match_token		(uint32_t) (1 << FORMATOPTION_NUM_mr_match_token)
 #define FORMATOPTION_mr_quote_default		(uint32_t) (1 << FORMATOPTION_NUM_mr_quote_default) // flag for controlling old quote behavior < 0.99.0
+#define FORMATOPTION_mr_match_token_suffix	(uint32_t) (1 << FORMATOPTION_NUM_mr_match_token_suffix)
 
 #define FORMATOPTION_printembedded		(uint32_t) (1 << FORMATOPTION_NUM_printembedded)
 

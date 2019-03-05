@@ -589,6 +589,14 @@ int main(int argc, char *argv[]) {
 				formatoptions |= (FORMATOPTION_mr_match_token | FORMATOPTION_machinereadable);
 				break;
 
+			case FORMATOPTION_NUM_mr_match_token_suffix + FORMATOPTION_NUM_HEAD:
+				if (strlen(showinfo_machine_readable_filter) >= sizeof(showinfo_machine_readable_filter)) {
+					fprintf(stderr, " Argument of option 'mrmts' is too long: %s\n", optarg);
+					exit(EXIT_FAILURE);
+				};
+				snprintf(showinfo_machine_readable_filter, sizeof(showinfo_machine_readable_filter), "%s", optarg);
+				formatoptions |= (FORMATOPTION_mr_match_token_suffix | FORMATOPTION_machinereadable);
+				break;
 
 			case 'm':	
 			case FORMATOPTION_NUM_machinereadable + FORMATOPTION_NUM_HEAD:

@@ -126,6 +126,7 @@ void ipv6calc_printhelp(const struct option longopts[], const s_ipv6calc_longopt
 	fprintf(stderr, "  --showinfo|-i --mrst <TOKEN>          : Machine Readable Select Token\n");
 	fprintf(stderr, "  --showinfo|-i --mrstpa <TOKEN>        : Machine Readable Select Token Print Always\n");
 	fprintf(stderr, "  --showinfo|-i --mrmt <TOKENPREFIX>    : Machine Readable Match Token Prefix\n");
+	fprintf(stderr, "  --showinfo|-i --mrmts <TOKENSUFFIX>   : Machine Readable Match Token Suffix\n");
 	fprintf(stderr, "  --showinfo|-i --mrtvo <TOKEN>         : Machine Readable Token Value Only\n");
 	fprintf(stderr, "  --showinfo|-i --show-tokens           : show available tokens (aka types) on '-m'\n");
 

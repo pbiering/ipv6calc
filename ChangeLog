@@ -16,6 +16,7 @@ Info:
 20190128/PB
 	many files: add MaxMindDB support, internal improvements and fixes
 	databases: update
+	ipv6calc/showinfo: add tokensuffix filter option
 	tag version 2.0.0
 
 20190120/PB

@@ -63,21 +63,25 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV6_GEONAME_ID_TYPE=...      : Type of GeonameID number of IPv4 address\n");
 	fprintf(stderr, " IPV6_COUNTRYCODE=...          : Country Code of (anonymized) IPv6 address\n");
 	fprintf(stderr, " IPV6_COUNTRYCODE_SOURCE=...   : Source of Country Code of IPv6 address\n");
+	fprintf(stderr, " IPV4_TYPE=...                 : type of IPv4 address (commata separated)\n");
+	fprintf(stderr, " ");
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv4addrtypestrings); i++ ) {
+		fprintf(stderr, " %s", ipv6calc_ipv4addrtypestrings[i].token);
+	};
+	fprintf(stderr, "\n");
 	fprintf(stderr, " IPV4=ddd.ddd.ddd.ddd          : native IPv4 address\n");
 	fprintf(stderr, " IPV4_ANON=ddd.ddd.ddd.ddd     : native anonymized IPv4 address\n");
 	fprintf(stderr, " IPV4_REGISTRY=...             : registry token of native IPv4 address\n");
 	fprintf(stderr, " IPV4_PREFIXLENGTH=ddd         : given prefix length of native IPv4 address\n");
-	fprintf(stderr, " IPV4[...]=ddd.ddd.ddd.ddd     : included IPv4 address in IID or SLA (e.g. ISATAP, TEREDO, NAT64, 6to4)\n");
-	fprintf(stderr, " IPV4_ANON[...]=ddd.ddd.ddd.ddd: included anonymized IPv4 address in IID or SLA (e.g. ISATAP, TEREDO, NAT64, 6to4)\n");
-	fprintf(stderr, " IPV4_REGISTRY[...]=...        : registry token of included IPv4 address\n");
-	fprintf(stderr, " IPV4_SOURCE[...]=...          : source of IPv4 address\n");
-	fprintf(stderr, " IPV4_AS_NUM[...]=...          : AS number of (anonymized) IPv4 address\n");
-	fprintf(stderr, " IPV4_AS_SOURCE[...]=...       : Source of AS number of (anonymized) IPv4 address\n");
+	fprintf(stderr, " IPV4_AS_NUM=...               : AS number of (anonymized) IPv4 address\n");
+	fprintf(stderr, " IPV4_AS_SOURCE=...            : Source of AS number of (anonymized) IPv4 address\n");
+	fprintf(stderr, " IPV4_COUNTRYCODE=...          : Country Code of (anonymized) IPv4 address\n");
+	fprintf(stderr, " IPV4_COUNTRYCODE_SOURCE=...   : Source of Country Code of (anonymized) IPv4 address\n");
 	fprintf(stderr, " IPV4_GEONAME_ID=...           : GeonameID of (anonymized) IPv4 address\n");
 	fprintf(stderr, " IPV4_GEONAME_ID_SOURCE=...    : Source of GeonameID number of IPv4 address\n");
 	fprintf(stderr, " IPV4_GEONAME_ID_TYPE=...      : Type of GeonameID number of IPv4 address\n");
-	fprintf(stderr, " IPV4_COUNTRYCODE[...]=...     : Country Code of (anonymized) IPv4 address\n");
-	fprintf(stderr, " IPV4_COUNTRYCODE_SOURCE[...]=...: Source of Country Code of (anonymized) IPv4 address\n");
+	fprintf(stderr, " IPV4*[...]=                   : included IPv4 address in IID or SLA (e.g. ISATAP, TEREDO, NAT64, 6to4)\n");
+	fprintf(stderr, " IPV4_SOURCE[...]=...          : source of IPv4 address\n");
 	fprintf(stderr, "  ISATAP|TEREDO-SERVER|TEREDO-CLIENT|6TO4|LINK-LOCAL-IID\n");
 	fprintf(stderr, " SLA=xxxx                      : an included SLA\n");
 	fprintf(stderr, " IID=xxxx:xxxx:xxxx:xxxx       : an included interface identifier\n");
@@ -89,7 +93,6 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " EUI64_SCOPE=local-*|global    : scope of EUI-64 identifier\n");
 	fprintf(stderr, " OUI=\"...\"                     : OUI string, if available\n");
 	fprintf(stderr, " TEREDO_PORT_CLIENT=...        : port of Teredo client (NAT outside)\n");
-
 	fprintf(stderr, " AS_NUM=...                    : Autonomous System Number\n");
 	fprintf(stderr, " AS_NUM_REGISTRY=...           : Registry of AS number\n");
 #if defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP || defined DBIP2
@@ -173,6 +176,14 @@ static void printout(const char *token, const char *value, const uint32_t format
 		if (strncmp(showinfo_machine_readable_filter, token, strlen(showinfo_machine_readable_filter)) != 0) return;
 	};
 
+	if (formatoptions & FORMATOPTION_mr_match_token_suffix) {
+		// skip not matching token (end)
+		if (strlen(token) < strlen(showinfo_machine_readable_filter)) return; // token longer then filter
+		char *c = strstr(token, showinfo_machine_readable_filter); // search for filter in token
+		if (c == NULL) return; // filter not found
+		if (strlen(c) != strlen(showinfo_machine_readable_filter)) return; // found but not the suffix
+	};
+
 	/* automatic quoting disabled
 	if (strstr(value, " ") != NULL) {
 		quote = 1;
@@ -219,6 +230,14 @@ static void printout2(const char *token, const char *additional, const char *val
 
 		// skip not matching token (begin)
 		if (strncmp(showinfo_machine_readable_filter, token, strlen(showinfo_machine_readable_filter)) != 0) return;
+	};
+
+	if (formatoptions & FORMATOPTION_mr_match_token_suffix) {
+		// skip not matching token (end)
+		if (strlen(token) < strlen(showinfo_machine_readable_filter)) return; // token longer then filter
+		char *c = strstr(token, showinfo_machine_readable_filter); // search for filter in token
+		if (c == NULL) return; // filter not found
+		if (strlen(c) != strlen(showinfo_machine_readable_filter)) return; // found but not the suffix
 	};
 
 	/* automatic quoting disabled

@@ -3398,11 +3398,11 @@ $ ipv6calc -h
 
 \begin_layout Code
 
-ipv6calc: version 2.0.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
+ipv6calc: version 2.1.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
  DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC
  DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION
  DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO ANON_ZEROISE
- ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC
+ ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID
 \end_layout
 
 \begin_layout Code
@@ -3412,8 +3412,16 @@ ipv6calc: version 2.0.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
 
 \begin_layout Code
 
+\end_layout
+
+\begin_layout Code
+
 This program formats and calculates IPv6/IPv4/MAC addresses and can do many
  more tricky things
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -3445,6 +3453,10 @@ This program formats and calculates IPv6/IPv4/MAC addresses and can do many
 \begin_layout Code
 
   [-h|--help|-?]             : this online help
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -3504,6 +3516,10 @@ LE
 
 \begin_layout Code
 
+\end_layout
+
+\begin_layout Code
+
   [--disable-geoip                 ] : GeoIP support disabled
 \end_layout
 
@@ -3520,6 +3536,10 @@ LE
 
 \begin_layout Code
 
+\end_layout
+
+\begin_layout Code
+
   [--disable-geoip2                ] : GeoIP (MaxMindDB) support disabled
 \end_layout
 
@@ -3532,6 +3552,10 @@ LE
 
   [--db-geoip2-dir      <directory>] : GeoIP (MaxMindDB) database directory
  (default: /usr/share/GeoIP)
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -3569,6 +3593,10 @@ LE
 
 \begin_layout Code
 
+\end_layout
+
+\begin_layout Code
+
   [--disable-dbip                  ] : db-ip.com support disabled
 \end_layout
 
@@ -3602,6 +3630,10 @@ LE
 
 \begin_layout Code
 
+\end_layout
+
+\begin_layout Code
+
   [--disable-external              ] : External support disabled
 \end_layout
 
@@ -3618,12 +3650,20 @@ LE
 
 \begin_layout Code
 
+\end_layout
+
+\begin_layout Code
+
   [--disable-builtin               ] : BuiltIn support disabled
 \end_layout
 
 \begin_layout Code
 
   [--db-builtin-disable            ] : BuiltIn support disabled
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -3640,12 +3680,20 @@ on DBIP DBIP2 External BuiltIn
 
 \begin_layout Code
 
+\end_layout
+
+\begin_layout Code
+
   [-q|--quiet]               : be more quiet (auto-enabled in pipe mode)
 \end_layout
 
 \begin_layout Code
 
   [-f|--flush]               : flush each line in pipe mode
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -3695,6 +3743,10 @@ on DBIP DBIP2 External BuiltIn
 
 \begin_layout Code
 
+\end_layout
+
+\begin_layout Code
+
   Available input  types:  [-m] -I|--in     -?|-h|--help
 \end_layout
 
@@ -3710,7 +3762,15 @@ on DBIP DBIP2 External BuiltIn
 
 \begin_layout Code
 
+\end_layout
+
+\begin_layout Code
+
   Special filter action :  -E -?|-h|--help
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -3753,6 +3813,11 @@ on DBIP DBIP2 External BuiltIn
 
 \begin_layout Code
 
+  --showinfo|-i --mrmts <TOKENSUFFIX>   : Machine Readable Match Token Suffix
+\end_layout
+
+\begin_layout Code
+
   --showinfo|-i --mrtvo <TOKEN>         : Machine Readable Token Value Only
 \end_layout
 
@@ -3760,6 +3825,10 @@ on DBIP DBIP2 External BuiltIn
 
   --showinfo|-i --show-tokens           : show available tokens (aka types)
  on '-m'
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code
@@ -3772,6 +3841,10 @@ on DBIP DBIP2 External BuiltIn
 
   for more information and available format options use: <shortcut option>
  -?|-h|--help
+\end_layout
+
+\begin_layout Code
+
 \end_layout
 
 \begin_layout Code

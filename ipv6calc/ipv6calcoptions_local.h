@@ -2,7 +2,7 @@
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calc/ipv6calcoptions.h
  * Version    : $Id$
- * Copyright  : 2002-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options for ipv6calc
@@ -105,6 +105,7 @@ static struct option ipv6calc_longopts[] = {
 	{ "mrst"                 , 1, NULL, FORMATOPTION_NUM_mr_select_token + FORMATOPTION_NUM_HEAD },
 	{ "mrstpa"               , 1, NULL, FORMATOPTION_NUM_mr_select_token_pa + FORMATOPTION_NUM_HEAD },
 	{ "mrmt"                 , 1, NULL, FORMATOPTION_NUM_mr_match_token  + FORMATOPTION_NUM_HEAD },
+	{ "mrmts"                , 1, NULL, FORMATOPTION_NUM_mr_match_token_suffix  + FORMATOPTION_NUM_HEAD },
 	
 	{ "printmirrored"        , 0, NULL, FORMATOPTION_NUM_printmirrored + FORMATOPTION_NUM_HEAD },
 
