@@ -10,6 +10,8 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
 	some files: add IP address anonymization support "keep-type-geonameid"
+	ipv6calcweb: disable GeoIP/DBIP legacy databases by default
+	databases: update
 
 20190128/PB
 	many files: add MaxMindDB support, internal improvements and fixes

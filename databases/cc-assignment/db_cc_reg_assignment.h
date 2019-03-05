@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : db_cc_reg_assignment.h
  * Version       : $Id$
- * Generated     : Mon Jan 28 08:22:12 2019
+ * Generated     : Tue Mar  5 06:28:55 2019
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
  *  Additional header file for databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  */
 
-static const char *db_cc_registry_status = "AFRINIC/20190128 APNIC/20190126 ARIN/20190128 LACNIC/20190125 RIPENCC/20190127";
+static const char *db_cc_registry_status = "AFRINIC/20190304 APNIC/20190304 ARIN/20190304 LACNIC/20190301 RIPENCC/20190304";
 
 static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "", REGISTRY_ARIN     },

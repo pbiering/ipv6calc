@@ -55,12 +55,12 @@
 #  HTTP_IPV6CALCWEB_ANTIDOS_LOAD15      : System load 15 limit to trigger DoS protection (default below)
 #  HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX     : Max CGI processes to trigger DoS protection (default below)
 #
-#  HTTP_IPV6CALCWEB_DB_GEOIP		: 1 (default), 0 (disable)
-#  HTTP_IPV6CALCWEB_DB_GEOIP2		: 1 (default), 0 (disable)
-#  HTTP_IPV6CALCWEB_DB_DBIP		: 1 (default), 0 (disable)
-#  HTTP_IPV6CALCWEB_DB_DBIP2		: 1 (default), 0 (disable)
-#  HTTP_IPV6CALCWEB_DB_IP2LOCATION	: 1 (default), 0 (disable)
-#  HTTP_IPV6CALCWEB_DB_EXTERNAL		: 1 (default), 0 (disable)
+#  HTTP_IPV6CALCWEB_DB_GEOIP		: 1 (enable)         , 0 (disable, default)
+#  HTTP_IPV6CALCWEB_DB_GEOIP2		: 1 (enable, default), 0 (disable)
+#  HTTP_IPV6CALCWEB_DB_DBIP		: 1 (enable)         , 0 (disable, default)
+#  HTTP_IPV6CALCWEB_DB_DBIP2		: 1 (enable, default), 0 (disable)
+#  HTTP_IPV6CALCWEB_DB_IP2LOCATION	: 1 (enable, default), 0 (disable)
+#  HTTP_IPV6CALCWEB_DB_EXTERNAL		: 1 (enable)         , 1 (disable, default)
 #
 #  HTTP_IPV6CALCWEB_USERNAME_GEONAMESORG: user name for geonames.org API (default: "demo")
 
@@ -116,12 +116,12 @@ my $db_columns = 0;
 
 # database enabled toggles and defaults
 my %db_enabled;
-$db_enabled{'GEOIP'} = 1;
+$db_enabled{'GEOIP'} = 0;
 $db_enabled{'GEOIP2'} = 1;
 $db_enabled{'IP2LOCATION'} = 1;
-$db_enabled{'DBIP'} = 1;
+$db_enabled{'DBIP'} = 0;
 $db_enabled{'DBIP2'} = 1;
-$db_enabled{'EXTERNAL'} = 1;
+$db_enabled{'EXTERNAL'} = 0;
 
 ## Debug value
 my $debug = 0;

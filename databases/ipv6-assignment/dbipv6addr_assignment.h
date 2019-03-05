@@ -2,7 +2,7 @@
  * Project       : ipv6calc
  * File          : dbipv6_assignment.h
  * Version       : $Id$
- * Generated     : 20190128-082209+0100 CET
+ * Generated     : 20190305-062853+0100 CET
  * Data copyright: IANA ARIN RIPENCC APNIC LACNIC AFRINIC
  *
  * Information:
@@ -11,8 +11,8 @@
 
 #include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
-static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20190128 APNIC/20190126 ARIN/20190128 IANA/20180424 LACNIC/20190125 LISP/20190128 RIPENCC/20190127";
-static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = 1548660129;
+static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20190304 APNIC/20190304 ARIN/20190304 IANA/20180424 LACNIC/20190301 LISP/20190305 RIPENCC/20190304";
+static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = 1551763733;
 
 static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 	//ipv6_00_31, ipv6_32_63, mask_00_31, mask_32_63, mask_length, registry  
@@ -467,16 +467,16 @@ static const s_ipv6addr_info dbipv6addr_info[] = {
 	{ 0x261000d0, 0x21e20000, 0xffffffff, 0xffff0000,  48, "LISP#mbar-xtr" },
 	{ 0x261000d0, 0x21e30000, 0xffffffff, 0xffff0000,  48, "LISP#ssanders-xtr" },
 	{ 0x261000d0, 0x21e40000, 0xffffffff, 0xffff0000,  48, "LISP#mreimers-xtr" },
-	{ 0x261000d0, 0x21e50000, 0xffffffff, 0xffff0000,  48, "LISP#mbuchler-xtr" },
+	{ 0x261000d0, 0x21e50000, 0xffffffff, 0xffff0000,  48, "LISP#gmaricau-xtr" },
 	{ 0x261000d0, 0x21e60000, 0xffffffff, 0xffff0000,  48, "LISP#ivugmbh-xtr" },
 	{ 0x261000d0, 0x21e70000, 0xffffffff, 0xffff0000,  48, "LISP#dzeitler-xtr" },
 	{ 0x261000d0, 0x21e80000, 0xffffffff, 0xffff0000,  48, "LISP#garndt-xtr" },
-	{ 0x261000d0, 0x21e90000, 0xffffffff, 0xffff0000,  48, "LISP#hbertsch-xtr" },
+	{ 0x261000d0, 0x21e90000, 0xffffffff, 0xffff0000,  48, "LISP#jpreuss-xtr" },
 	{ 0x261000d0, 0x21ea0000, 0xffffffff, 0xffff0000,  48, "LISP#smondwurf-xtr" },
 	{ 0x261000d0, 0x21eb0000, 0xffffffff, 0xffff0000,  48, "LISP#tbonitz-xtr" },
 	{ 0x261000d0, 0x21ec0000, 0xffffffff, 0xffff0000,  48, "LISP#cisco-natal1-xtr" },
 	{ 0x261000d0, 0x21ed0000, 0xffffffff, 0xffff0000,  48, "LISP#cglasmeyer-xtr" },
-	{ 0x261000d0, 0x21ee0000, 0xffffffff, 0xffff0000,  48, "LISP#rsiegel-xtr" },
+	{ 0x261000d0, 0x21ee0000, 0xffffffff, 0xffff0000,  48, "LISP#rengel-xtr" },
 	{ 0x261000d0, 0x21ef0000, 0xffffffff, 0xffff0000,  48, "LISP#hgojny-xtr" },
 	{ 0x261000d0, 0x21f10000, 0xffffffff, 0xffff0000,  48, "LISP#rkohn-xtr" },
 	{ 0x261000d0, 0x21f20000, 0xffffffff, 0xffff0000,  48, "LISP#jpkoegeler-xtr" },
@@ -496,7 +496,6 @@ static const s_ipv6addr_info dbipv6addr_info[] = {
 	{ 0x261000d0, 0x22010000, 0xffffffff, 0xffff0000,  48, "LISP#sukiyakiproj-xtr" },
 	{ 0x261000d0, 0x22020000, 0xffffffff, 0xffff0000,  48, "LISP#jdechert-xtr" },
 	{ 0x261000d0, 0x22030000, 0xffffffff, 0xffff0000,  48, "LISP#crothlander-xtr" },
-	{ 0x261000d0, 0x22040000, 0xffffffff, 0xffff0000,  48, "LISP#isonmezglu-xtr" },
 	{ 0x261000d0, 0x22050000, 0xffffffff, 0xffff0000,  48, "LISP#wvanlid-xtr" },
 	{ 0x261000d0, 0x22060000, 0xffffffff, 0xffff0000,  48, "LISP#upc-oor-xtr" },
 	{ 0x261000d0, 0x22070000, 0xffffffff, 0xffff0000,  48, "LISP#hosius-xtr" },
@@ -521,12 +520,10 @@ static const s_ipv6addr_info dbipv6addr_info[] = {
 	{ 0x261000d0, 0x222a0000, 0xffffffff, 0xffff0000,  48, "LISP#hketele-xtr" },
 	{ 0x261000d0, 0x222b0000, 0xffffffff, 0xffff0000,  48, "LISP#rdchragner-xtr" },
 	{ 0x261000d0, 0x222c0000, 0xffffffff, 0xffff0000,  48, "LISP#mamin-xtr" },
-	{ 0x261000d0, 0x222d0000, 0xffffffff, 0xffff0000,  48, "LISP#ebent-xtr" },
 	{ 0x261000d0, 0x222e0000, 0xffffffff, 0xffff0000,  48, "LISP#twittenberg-xtr" },
 	{ 0x261000d0, 0x222f0000, 0xffffffff, 0xffff0000,  48, "LISP#bwieder-xtr" },
 	{ 0x261000d0, 0x22300000, 0xffffffff, 0xffff0000,  48, "LISP#sbethge-xtr" },
 	{ 0x261000d0, 0x22310000, 0xffffffff, 0xffff0000,  48, "LISP#jdornauf-xtr" },
-	{ 0x261000d0, 0x22320000, 0xffffffff, 0xffff0000,  48, "LISP#logima-xtr" },
 	{ 0x261000d0, 0x22330000, 0xffffffff, 0xffff0000,  48, "LISP#mmiller-xtr" },
 	{ 0x261000d0, 0x22340000, 0xffffffff, 0xffff0000,  48, "LISP#cfertig-xtr" },
 	{ 0x261000d0, 0x22350000, 0xffffffff, 0xffff0000,  48, "LISP#jkatolla-xtr" },
@@ -539,6 +536,7 @@ static const s_ipv6addr_info dbipv6addr_info[] = {
 	{ 0x261000d0, 0x223c0000, 0xffffffff, 0xffff0000,  48, "LISP#asellmann-xtr" },
 	{ 0x261000d0, 0x223d0000, 0xffffffff, 0xffff0000,  48, "LISP#mluckert-xtr" },
 	{ 0x261000d0, 0x223e0000, 0xffffffff, 0xffff0000,  48, "LISP#tzimmermann-xtr" },
+	{ 0x261000d0, 0x223f0000, 0xffffffff, 0xffff0000,  48, "LISP#dpeshev-xtr" },
 	{ 0x261000d0, 0x31000000, 0xffffffff, 0xffff0000,  48, "LISP#iij-xtr" },
 	{ 0x261000d0, 0x32000000, 0xffffffff, 0xffff0000,  48, "LISP#hughes-xtr" },
 	{ 0x261000d0, 0x32010000, 0xffffffff, 0xffff0000,  48, "LISP#apan-xtr" },
