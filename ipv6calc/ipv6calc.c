@@ -1906,7 +1906,7 @@ PIPE_input:
 				};
 				cc_index = libipv6addr_cc_index_by_addr(&ipv6addr, NULL);
 			} else {
-				fprintf(stderr, "Unsupported input type for 'addr2cc'!\n");
+				fprintf(stderr, "Unsupported input type for 'addr2cc' (need to be IPv4/IPv6 address)!\n");
 				exit(EXIT_FAILURE);
 			};
 
