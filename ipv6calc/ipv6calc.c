@@ -105,6 +105,7 @@ int main(int argc, char *argv[]) {
 	char *input1 = NULL, *input2 = NULL;
 	int inputc;
 	int inputtype_given = 0, outputtype_given = 0, action_given = 0;
+	uint16_t cc_index;
 
 	int ipv6rd_prefixlength = -1;
 
@@ -376,6 +377,11 @@ int main(int argc, char *argv[]) {
 				inputtype = FORMAT_iid_token;
 				outputtype = FORMAT_iid_token;
 				action = ACTION_iid_token_to_privacy;
+				break;
+
+			case CMD_addr_to_countrycode:
+				action = ACTION_addr_to_countrycode;
+				formatoptions |= FORMATOPTION_quiet;
 				break;
 
 			case 'i':
@@ -1880,6 +1886,37 @@ PIPE_input:
 			};
 
 			goto RESULT_print;
+			break;
+
+		case ACTION_addr_to_countrycode:
+			cc_index = COUNTRYCODE_INDEX_UNKNOWN;
+
+			if (inputtype == FORMAT_ipv4addr || inputtype == FORMAT_ipv4hex || inputtype == FORMAT_ipv4revhex) {
+				/* test IPv4 address */
+				if (ipv4addr.flag_valid != 1) {
+					fprintf(stderr, "No valid IPv4 address given!\n");
+					exit(EXIT_FAILURE);
+				};
+				cc_index = libipv4addr_cc_index_by_addr(&ipv4addr, NULL);
+			} else if (inputtype == FORMAT_ipv6addr || inputtype == FORMAT_bitstring || inputtype == FORMAT_revnibbles_int || inputtype == FORMAT_revnibbles_arpa || inputtype == FORMAT_base85 || inputtype == FORMAT_ipv6literal) {
+				/* test IPv6 address */
+				if (ipv6addr.flag_valid != 1) {
+					fprintf(stderr, "No valid IPv6 address given!\n");
+					exit(EXIT_FAILURE);
+				};
+				cc_index = libipv6addr_cc_index_by_addr(&ipv6addr, NULL);
+			} else {
+				fprintf(stderr, "Unsupported input type for 'addr2cc'!\n");
+				exit(EXIT_FAILURE);
+			};
+
+			if (cc_index != COUNTRYCODE_INDEX_UNKNOWN) {
+				snprintf(resultstring, sizeof(resultstring), "%c%c", COUNTRYCODE_INDEX_TO_CHAR1(cc_index), COUNTRYCODE_INDEX_TO_CHAR2(cc_index));
+			} else {
+				snprintf(resultstring, sizeof(resultstring), "%s", "-");
+			};
+			goto RESULT_print;
+
 			break;
 
 		case ACTION_undefined:

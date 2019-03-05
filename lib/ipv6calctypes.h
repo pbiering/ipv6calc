@@ -276,6 +276,7 @@ typedef struct {
 #define ACTION_NUM_ipv6_to_eui64	10
 #define ACTION_NUM_filter		15
 #define ACTION_NUM_test			16
+#define ACTION_NUM_addr_to_countrycode	17
 #define ACTION_NUM_undefined		31
 
 #define ACTION_auto			(uint32_t) 0x0
@@ -291,6 +292,7 @@ typedef struct {
 #define ACTION_ipv6_to_eui64		(uint32_t) (1 << ACTION_NUM_ipv6_to_eui64)
 #define ACTION_filter			(uint32_t) (1 << ACTION_NUM_filter)
 #define ACTION_test			(uint32_t) (1 << ACTION_NUM_test)
+#define ACTION_addr_to_countrycode	(uint32_t) (1 << ACTION_NUM_addr_to_countrycode)
 #define ACTION_undefined		(uint32_t) (1 << ACTION_NUM_undefined)
 
 #define ANON_METHOD_ANONYMIZE		1
@@ -319,6 +321,7 @@ typedef struct {
 	{ ACTION_6rd_extract_ipv4     , "6rd_extract_ipv4", "Extract from 6rd address the include IPv4 address", "" },
 	{ ACTION_filter	              , "filter"          , "Filter addresses related to filter options", "" },
 	{ ACTION_test                 , "test"            , "Test address against given prefix or address", "" },
+	{ ACTION_addr_to_countrycode  , "addr2cc"         , "Converts IPv4/IPv6 address into Country Code", "" },
 };
 
 /* Possible action option map (required) */

@@ -73,6 +73,8 @@ static struct option ipv6calc_longopts[] = {
 	{ "eui64_to_privacy"        , 0, NULL, CMD_eui64_to_privacy },
 	
 	{ "ipv4_to_6to4addr"        , 0, NULL, CMD_ipv4_to_6to4addr },
+
+	{ "addr2cc"                 , 0, NULL, CMD_addr_to_countrycode },
 	
 	{ "showinfo"                , 0, NULL, CMD_showinfo },
 	{ "show_types"              , 0, NULL, CMD_showinfotypes },

@@ -12,6 +12,7 @@ Info:
 	some files: add IP address anonymization support "keep-type-geonameid"
 	ipv6calcweb: disable GeoIP/DBIP legacy databases by default
 	databases: update
+	ipv6calc: add action "address to countrycode" and for machine readable "match token suffix"
 
 20190128/PB
 	many files: add MaxMindDB support, internal improvements and fixes

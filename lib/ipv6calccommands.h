@@ -47,7 +47,8 @@
 #define CMD_mac_to_eui64		0x00010b0
 #define CMD_eui64_to_privacy		0x00010c0
 #define CMD_ifinet6_to_compressed	0x00010d0
-#define CMD_shortcut_end		0x00010d0
+#define CMD_addr_to_countrycode		0x00010e0
+#define CMD_shortcut_end		0x00010e0
 
 #define CMD_showinfo			0x0010010
 #define CMD_showinfotypes		0x0010020
