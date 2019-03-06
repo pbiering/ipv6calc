@@ -380,8 +380,8 @@ int main(int argc, char *argv[]) {
 				break;
 
 			case CMD_addr_to_countrycode:
+				inputtype = FORMAT_auto;
 				action = ACTION_addr_to_countrycode;
-				formatoptions |= FORMATOPTION_quiet;
 				break;
 
 			case 'i':
@@ -927,7 +927,7 @@ PIPE_input:
 	};
 	
 	/* reset input type in case of action=filter and pipe mode */
-	if ((input_is_pipe == 1) && (action_given == 1) && ( (action == ACTION_filter) || (action == ACTION_test) ) ) {
+	if ((input_is_pipe == 1) && (action_given == 1) && ( (action == ACTION_filter) || (action == ACTION_test) || (action == ACTION_addr_to_countrycode)) ) {
 		DEBUGPRINT_NA(DEBUG_ipv6calc_general, "reset input type for later autodetection");
 		inputtype = FORMAT_auto;
 
@@ -991,6 +991,8 @@ PIPE_input:
 		} else if ( (inputtype == FORMAT_ipv6addr && (input_is_pipe == 0 || inputtype_given == 1)) && (outputtype == FORMAT_eui64 && outputtype_given == 1) ) {
 			action = ACTION_ipv6_to_eui64;
 		};
+	} else if (action == ACTION_addr_to_countrycode) {
+		outputtype = FORMAT_auto_noresult;
 	};
 
 	if (input_is_pipe == 0 && action_given == 0) {

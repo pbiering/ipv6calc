@@ -341,9 +341,9 @@ void printhelp_common(const uint32_t help_features) {
 #ifdef SUPPORT_MMDB_DYN
 		fprintf(stderr, "\n");
 		fprintf(stderr, "  [--db-mmdb-lib       <file>      ] : MaxMindDB library file (default: %s)\n", mmdb_lib_file);
-		fprintf(stderr, "\n");
 #endif
 #ifdef SUPPORT_GEOIP2
+		fprintf(stderr, "\n");
 		fprintf(stderr, "  [--disable-geoip2                ] : GeoIP (MaxMindDB) support disabled\n");
 		fprintf(stderr, "  [--db-geoip2-disable             ] : GeoIP (MaxMindDB) support disabled\n");
 		fprintf(stderr, "  [--db-geoip2-dir      <directory>] : GeoIP (MaxMindDB) database directory (default: %s)\n", geoip2_db_dir);

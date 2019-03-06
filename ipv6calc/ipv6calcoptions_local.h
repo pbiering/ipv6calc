@@ -159,5 +159,6 @@ static s_ipv6calc_longopts_shortopts_map ipv6calc_longopts_shortopts_map[] = {
 	{ '\0',	CMD_ifinet6_to_compressed				, "-I ifinet6 -O ipv6addr --printcompressed"},
 	{ '\0',	CMD_ipv4_to_6to4addr					, "-I ipv4 -O ipv6addr -A conv6to4"},
 	{ '\0',	CMD_eui64_to_privacy					, "-I iid_token -O iid_token -A genprivacyiid"},
+	{ '\0',	CMD_addr_to_countrycode					, "-A addr2cc"},
 	{ '\0',	0, NULL } // end marker
 };
