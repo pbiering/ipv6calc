@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
  * Version       : $Id$
- * Generated     : Tue Mar  5 06:11:59 2019
+ * Generated     : Fri Mar  8 06:46:01 2019
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20190305";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20190308";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -1140,7 +1140,6 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0xAF6000, 0xAF6FFF, "S.C.E. srl", "S-C-E-SRL" },
 	{ 0x70B3D5, 0xF37000, 0xF37FFF, "Mitsubishi Electric Micro-Computer Application Software Co.,Ltd.", "MITSUBISHI-ELECTRIC-MICRO--APPLICATION-SOFTWARE" },
 	{ 0x70B3D5, 0x8C3000, 0x8C3FFF, "Wyebot, Inc.", "WYEBOT" },
-	{ 0x70B3D5, 0x42D000, 0x42DFFF, "RCH Italia SpA", "RCH-ITALIA-SPA" },
 	{ 0x70B3D5, 0x332000, 0x332FFF, "InnoSenT", "INNOSENT" },
 	{ 0x70B3D5, 0xDEE000, 0xDEEFFF, "CRDE", "CRDE" },
 	{ 0x70B3D5, 0xA47000, 0xA47FFF, "KANOA INC", "KANOA" },
@@ -1254,6 +1253,10 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x334000, 0x334FFF, "Dokuen Co. Ltd.", "DOKUEN" },
 	{ 0x70B3D5, 0x444000, 0x444FFF, "AMS Controls, Inc.", "AMS-CONTROLS" },
 	{ 0x70B3D5, 0x982000, 0x982FFF, "3S - Sensors, Signal Processing, Systems GmbH", "3S---SENSORS-SIGNAL-PROCESSING" },
+	{ 0x70B3D5, 0x50A000, 0x50AFFF, "AMEDTEC Medizintechnik Aue GmbH", "AMEDTEC-MEDIZINTECHNIK-AUE" },
+	{ 0x70B3D5, 0x42D000, 0x42DFFF, "RCH ITALIA SPA", "RCH-ITALIA-SPA" },
+	{ 0x70B3D5, 0xC00000, 0xC00FFF, "BESO sp. z o.o.", "BESO-SP-Z-O-O" },
+	{ 0x70B3D5, 0x99B000, 0x99BFFF, "RCH ITALIA SPA", "RCH-ITALIA-SPA" },
 	{ 0x70B3D5, 0x494000, 0x494FFF, "Schildknecht AG", "SCHILDKNECHT" },
 	{ 0x70B3D5, 0xBF2000, 0xBF2FFF, "TWIN DEVELOPMENT", "TWIN-DEVELOPMENT" },
 	{ 0x70B3D5, 0x901000, 0x901FFF, "ATS-CONVERS", "ATS-CONVERS" },
@@ -1716,7 +1719,6 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x9D5000, 0x9D5FFF, "Southern Tier Technologies", "SOUTHERN-TIER-TECHNOLOGIES" },
 	{ 0x70B3D5, 0xFAE000, 0xFAEFFF, "Silixa Ltd", "SILIXA" },
 	{ 0x70B3D5, 0x19B000, 0x19BFFF, "Global Technical Systems", "GLOBAL-TECHNICAL" },
-	{ 0x70B3D5, 0x7FE000, 0x7FEFFF, "RCH Italia SpA", "RCH-ITALIA-SPA" },
 	{ 0x70B3D5, 0x2CD000, 0x2CDFFF, "Korea Airports Corporation", "KOREA-AIRPORTS" },
 	{ 0x70B3D5, 0x566000, 0x566FFF, "Data Informs LLC", "DATA-INFORMS-LLC" },
 	{ 0x70B3D5, 0xB07000, 0xB07FFF, "Arrowvale Electronics", "ARROWVALE-ELECTRONICS" },
@@ -1876,6 +1878,9 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x019000, 0x019FFF, "Transit Solutions, LLC.", "TRANSIT-SOLUTIONS-LLC" },
 	{ 0x70B3D5, 0x151000, 0x151FFF, "Virsae Group Ltd", "VIRSAE-GROUP" },
 	{ 0x70B3D5, 0x4CC000, 0x4CCFFF, "FRESENIUS MEDICAL CARE", "FRESENIUS-MEDICAL-CARE" },
+	{ 0x70B3D5, 0x111000, 0x111FFF, "Leonardo Sistemi Integrati S.r.l.", "LEONARDO-SISTEMI-INTEGRATI-S-R-L" },
+	{ 0x70B3D5, 0x7FE000, 0x7FEFFF, "RCH ITALIA SPA", "RCH-ITALIA-SPA" },
+	{ 0x70B3D5, 0xB52000, 0xB52FFF, "AEye, Inc.", "AEYE" },
 	{ 0x70B3D5, 0x66B000, 0x66BFFF, "Innitive B.V.", "INNITIVE" },
 	{ 0x70B3D5, 0x8F6000, 0x8F6FFF, "Dofuntech Co.,LTD.", "DOFUNTECH" },
 	{ 0x70B3D5, 0xA06000, 0xA06FFF, "Kopis Mobile LLC", "KOPIS-MOBILE-LLC" },
@@ -2384,7 +2389,6 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x67D000, 0x67DFFF, "Acrodea, Inc.", "ACRODEA" },
 	{ 0x70B3D5, 0xA54000, 0xA54FFF, "provedo", "PROVEDO" },
 	{ 0x70B3D5, 0x770000, 0x770FFF, "STREGA", "STREGA" },
-	{ 0x70B3D5, 0x857000, 0x857FFF, "RCH Italia SpA", "RCH-ITALIA-SPA" },
 	{ 0x70B3D5, 0x876000, 0x876FFF, "IONETECH", "IONETECH" },
 	{ 0x70B3D5, 0x8EB000, 0x8EBFFF, "Procon Electronics Pty Ltd", "PROCON-ELECTRONICS-PTY" },
 	{ 0x70B3D5, 0xC1A000, 0xC1AFFF, "Xylon", "XYLON" },
@@ -2509,6 +2513,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0xE14000, 0xE14FFF, "Automata Spa", "AUTOMATA-SPA" },
 	{ 0x70B3D5, 0xBB5000, 0xBB5FFF, "Grossenbacher Systeme AG", "GROSSENBACHER-SYSTEME" },
 	{ 0x70B3D5, 0x8C4000, 0x8C4FFF, "APE GmbH", "APE" },
+	{ 0x70B3D5, 0x857000, 0x857FFF, "RCH ITALIA SPA", "RCH-ITALIA-SPA" },
 	{ 0x70B3D5, 0x8AB000, 0x8ABFFF, "EMAC, Inc.", "EMAC" },
 	{ 0x70B3D5, 0x729000, 0x729FFF, "EMAC, Inc.", "EMAC" },
 	{ 0x70B3D5, 0xE93000, 0xE93FFF, "ECON Technology Co.Ltd", "ECON" },
