@@ -64,7 +64,7 @@ void printhelp_doublecommands(void) {
 void printhelp_missinginputdata(void) {
 	printversion();
 	printcopyright();
-	fprintf(stderr, "   Missing or to few input data given!\n");
+	fprintf(stderr, "   Missing or too few input data given!\n");
 };
 
 /* list of input types */
@@ -833,6 +833,26 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "  ipv6calc [-A test] --test_ge 2001:db9:: --test_le 2001:db9:ffff:ffff:ffff:ffff:ffff:ffff 2001:db8::1\n");
 			fprintf(stderr, "  ipv6calc [-A test] --test_ge 2001:db9:: --test_lt 2001:dba:: 2001:db8::1\n");
 			fprintf(stderr, "  ipv6calc [-A test] --test_ge 2001:db8:: --test_lt 2001:db9:: 2001:db8::1\n");
+			fprintf(stderr, "\n");
+			break;
+
+		case ACTION_addr_to_countrycode:
+			fprintf(stderr, " Convert given IPv4/IPv6 address to country code\n");
+			fprintf(stderr, "  --addr2cc|-A addr2cc <ADDRESS>\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, " Examples:\n");
+			fprintf(stderr, "  ipv6calc -A addr2cc 50.60.70.80\n");
+			fprintf(stderr, "  US\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, " Example for address which has no country code:\n");
+			fprintf(stderr, " (reason is only displayed in non-quiet mode)\n");
+			fprintf(stderr, "  ipv6calc -A addr2cc 2001:db8::1\n");
+			fprintf(stderr, "  -- (unknown)\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, " Example in case no related database is available:\n");
+			fprintf(stderr, " (reason is only displayed in non-quiet mode)\n");
+			fprintf(stderr, "  ipv6calc -A addr2cc 50.60.70.80\n");
+			fprintf(stderr, "  -- (no-usable-database)\n");
 			fprintf(stderr, "\n");
 			break;
 	};

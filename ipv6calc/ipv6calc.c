@@ -309,12 +309,14 @@ int main(int argc, char *argv[]) {
 				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_ipv6addr;
 				outputtype = FORMAT_bitstring;
+				outputtype_given = 1;
 				break;
 				
 			case CMD_addr_to_compressed:
 				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_ipv6addr;
 				outputtype = FORMAT_ipv6addr;
+				outputtype_given = 1;
 				formatoptions |= FORMATOPTION_printcompressed;
 				break;
 				
@@ -322,6 +324,7 @@ int main(int argc, char *argv[]) {
 				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_ipv6addr;
 				outputtype = FORMAT_ipv6addr;
+				outputtype_given = 1;
 				formatoptions |= FORMATOPTION_printuncompressed;
 				break;
 				
@@ -329,12 +332,14 @@ int main(int argc, char *argv[]) {
 				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_ipv6addr;
 				outputtype = FORMAT_base85;
+				outputtype_given = 1;
 				break;
 				
 			case CMD_base85_to_addr:
 				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_base85;
 				outputtype = FORMAT_ipv6addr;
+				outputtype_given = 1;
 				formatoptions |= FORMATOPTION_printuncompressed;
 				break;
 
@@ -342,6 +347,7 @@ int main(int argc, char *argv[]) {
 				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_mac;
 				outputtype = FORMAT_eui64;
+				outputtype_given = 1;
 				action = ACTION_mac_to_eui64;
 				break;
 				
@@ -349,6 +355,7 @@ int main(int argc, char *argv[]) {
 				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_ipv6addr;
 				outputtype = FORMAT_ipv6addr;
+				outputtype_given = 1;
 				formatoptions |= FORMATOPTION_printfulluncompressed;
 				break;
 				
@@ -356,12 +363,14 @@ int main(int argc, char *argv[]) {
 				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype  = FORMAT_ipv6addr;
 				outputtype = FORMAT_ifinet6;
+				outputtype_given = 1;
 				break;
 
 			case CMD_ifinet6_to_compressed:
 				if (inputtype != FORMAT_undefined || outputtype != FORMAT_undefined) { printhelp_doublecommands(); exit(EXIT_FAILURE); };
 				inputtype = FORMAT_ifinet6;
 				outputtype = FORMAT_ipv6addr;
+				outputtype_given = 1;
 				formatoptions |= FORMATOPTION_printcompressed;
 				break;
 				
@@ -381,6 +390,7 @@ int main(int argc, char *argv[]) {
 
 			case CMD_addr_to_countrycode:
 				inputtype = FORMAT_auto;
+				outputtype = FORMAT_auto_noresult;
 				action = ACTION_addr_to_countrycode;
 				break;
 
@@ -756,25 +766,31 @@ int main(int argc, char *argv[]) {
 
 	if (command & CMD_printhelp) {
 		if ( (outputtype == FORMAT_undefined) && (inputtype == FORMAT_undefined) && (action == ACTION_undefined)) {
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "printhelp/longopts");
 			ipv6calc_printhelp(longopts, ipv6calc_longopts_shortopts_map);
 			exit(EXIT_FAILURE);
 		} else if (outputtype == FORMAT_auto) {
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "printhelp_outputtypes");
 			if (inputtype == FORMAT_undefined) {
 				inputtype = FORMAT_auto;
 			};
 			printhelp_outputtypes(inputtype, formatoptions);
 			exit(EXIT_FAILURE);
-		} else if (inputtype == FORMAT_auto) {
+		} else if ((inputtype == FORMAT_auto) && (outputtype != FORMAT_auto_noresult)) {
 			if (outputtype == FORMAT_undefined) {
+				DEBUGPRINT_NA(DEBUG_ipv6calc_general, "printhelp_inputtypes");
 				printhelp_inputtypes(formatoptions);
 			} else {
+				DEBUGPRINT_NA(DEBUG_ipv6calc_general, "printhelp_output_dispatcher");
 				printhelp_output_dispatcher(outputtype);
 			};
 			exit(EXIT_FAILURE);
 		} else if (action == ACTION_auto) {
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "printhelp_actiontypes");
 			printhelp_actiontypes(formatoptions, ipv6calc_longopts);
 			exit(EXIT_FAILURE);
 		} else if (action != ACTION_undefined) {
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "printhelp_action_dispatcher");
 			printhelp_action_dispatcher(action, 0);
 			exit(EXIT_FAILURE);
 		};
@@ -1891,31 +1907,45 @@ PIPE_input:
 			break;
 
 		case ACTION_addr_to_countrycode:
-			cc_index = COUNTRYCODE_INDEX_UNKNOWN;
+			cc_index = COUNTRYCODE_INDEX_MAX;
 
 			if (inputtype == FORMAT_ipv4addr || inputtype == FORMAT_ipv4hex || inputtype == FORMAT_ipv4revhex) {
-				/* test IPv4 address */
+				/* retrieve country code of IPv4 address */
 				if (ipv4addr.flag_valid != 1) {
 					fprintf(stderr, "No valid IPv4 address given!\n");
 					exit(EXIT_FAILURE);
 				};
-				cc_index = libipv4addr_cc_index_by_addr(&ipv4addr, NULL);
+				if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_CC) == 1) {
+					cc_index = libipv4addr_cc_index_by_addr(&ipv4addr, NULL);
+				};
+
 			} else if (inputtype == FORMAT_ipv6addr || inputtype == FORMAT_bitstring || inputtype == FORMAT_revnibbles_int || inputtype == FORMAT_revnibbles_arpa || inputtype == FORMAT_base85 || inputtype == FORMAT_ipv6literal) {
-				/* test IPv6 address */
+				/* retrieve country code of IPv6 address */
 				if (ipv6addr.flag_valid != 1) {
 					fprintf(stderr, "No valid IPv6 address given!\n");
 					exit(EXIT_FAILURE);
 				};
-				cc_index = libipv6addr_cc_index_by_addr(&ipv6addr, NULL);
+				if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_CC) == 1) {
+					cc_index = libipv6addr_cc_index_by_addr(&ipv6addr, NULL);
+				};
+
 			} else {
 				fprintf(stderr, "Unsupported input type for 'addr2cc' (need to be IPv4/IPv6 address)!\n");
 				exit(EXIT_FAILURE);
 			};
 
-			if (cc_index != COUNTRYCODE_INDEX_UNKNOWN) {
-				snprintf(resultstring, sizeof(resultstring), "%c%c", COUNTRYCODE_INDEX_TO_CHAR1(cc_index), COUNTRYCODE_INDEX_TO_CHAR2(cc_index));
+			if (cc_index == COUNTRYCODE_INDEX_UNKNOWN) {
+				snprintf(resultstring, sizeof(resultstring), "%s%s"
+				    , "--"
+				    , ((formatoptions & FORMATOPTION_quiet) == 0) ? " (unknown)": ""
+				);
+			} else if (cc_index == COUNTRYCODE_INDEX_MAX) {
+				snprintf(resultstring, sizeof(resultstring), "%s%s"
+				    , "--"
+				    , ((formatoptions & FORMATOPTION_quiet) == 0) ? " (no-usable-database)" : ""
+				);
 			} else {
-				snprintf(resultstring, sizeof(resultstring), "%s", "-");
+				snprintf(resultstring, sizeof(resultstring), "%c%c", COUNTRYCODE_INDEX_TO_CHAR1(cc_index), COUNTRYCODE_INDEX_TO_CHAR2(cc_index));
 			};
 			goto RESULT_print;
 

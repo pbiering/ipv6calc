@@ -336,6 +336,7 @@ typedef struct {
 	{ ACTION_iid_token_to_privacy	, 0 , 0},
 	{ ACTION_prefix_mac_to_ipv6	, 0 , 0},
 	{ ACTION_anonymize		, 0 , 0},
+	{ ACTION_addr_to_countrycode	, 0 , 0},
 	{ ACTION_6rd_local_prefix	, CMD_6rd_prefix, 0},
 	{ ACTION_6rd_local_prefix	, CMD_6rd_relay_prefix, 1 },
 	{ ACTION_6rd_extract_ipv4	, CMD_6rd_prefixlength, 0},

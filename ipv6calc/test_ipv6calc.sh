@@ -231,10 +231,10 @@ NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 NOPIPETEST--in ipv6 2001:db8::a8bb:ccff:fedd:eeff --out eui64                             =aa:bb:cc:ff:fe:dd:ee:ff
 NOPIPETEST--in ipv6 2001:db8::a8bb:ccff:fedd:eeff --out mac                               =aa:bb:cc:dd:ee:ff
 # Countrycode
-NOPIPETEST-A addr2cc 3ffe:831f:ce49:7601:8000:efff:af4a:86bf				=IT;DB_IPV6_CC
-NOPIPETEST-A addr2cc 50.60.70.80								=US;DB_IPV4_CC
-NOPIPETEST--addr2cc 3ffe:831f:ce49:7601:8000:efff:af4a:86bf				=IT;DB_IPV6_CC
-NOPIPETEST--addr2cc 50.60.70.80								=US;DB_IPV4_CC
+NOPIPETEST-A addr2cc 3ffe:831f:ce49:7601:8000:efff:af4a:86bf			=IT;DB_IPV6_CC
+NOPIPETEST-A addr2cc 50.60.70.80						=US;DB_IPV4_CC
+NOPIPETEST--addr2cc 3ffe:831f:ce49:7601:8000:efff:af4a:86bf			=IT;DB_IPV6_CC
+NOPIPETEST--addr2cc 50.60.70.80							=US;DB_IPV4_CC
 END
 }
 
@@ -384,7 +384,6 @@ testscenarios | sed 's/NOPIPETEST//' | while read line; do
 			true
 		else
 			echo "NOTICE: condition not satisfied ($condition): ./ipv6calc $command"
-			exit 1
 			continue
 		fi
 	fi
