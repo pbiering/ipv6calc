@@ -348,6 +348,14 @@ my %text_extra = (
 		'de' => "Verweis auf geonames.org",
 		'en' => "link to geonames.org",
 	},
+	'_GEONAME_ID_REGION' => {
+		'de' => "Verweis auf geonames.org",
+		'en' => "link to geonames.org",
+	},
+	'_GEONAME_ID_DISTRICT' => {
+		'de' => "Verweis auf geonames.org",
+		'en' => "link to geonames.org",
+	},
 	'_LATITUDE' => {
 		'de' => "Verweis auf openstreetmap.org",
 		'en' => "link to openstreetmap.org",
