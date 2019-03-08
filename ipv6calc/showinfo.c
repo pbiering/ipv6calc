@@ -482,7 +482,7 @@ static void print_geolocation(libipv6calc_db_wrapper_geolocation_record *record,
 
 	PRINT_RECORD_NUMBER(record->geoname_id          , "GEONAME_ID"          , "Geoname ID of Location" , "%u", IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN)
 	PRINT_RECORD_NUMBER(record->district_geoname_id , "GEONAME_ID_DISTRICT" , "Geoname ID of Country"  , "%u", IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN)
-	PRINT_RECORD_NUMBER(record->stateprov_geoname_id, "GEONAME_ID_STATEPROV", "Geoname ID of Country"  , "%u", IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN)
+	PRINT_RECORD_NUMBER(record->stateprov_geoname_id, "GEONAME_ID_REGION"   , "Geoname ID of Region"   , "%u", IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN)
 	PRINT_RECORD_NUMBER(record->country_geoname_id  , "GEONAME_ID_COUNTRY"  , "Geoname ID of Country"  , "%u", IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN)
 	PRINT_RECORD_NUMBER(record->continent_geoname_id, "GEONAME_ID_CONTINENT", "Geoname ID of Continent", "%u", IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN)
 };
