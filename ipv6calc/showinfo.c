@@ -388,6 +388,11 @@ static void printfooter(const uint32_t formatoptions) {
 			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
 		};
 
+		if (feature_kg == 1) {
+			snprintf(tempstring2, sizeof(tempstring2), "%s%sANON_KEEP-TYPE-GEONAMEID", tempstring, strlen(tempstring) > 0 ? " " : "");
+			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
+		};
+
 		printout("IPV6CALC_FEATURES", tempstring, formatoptions | FORMATOPTION_mr_quote_default);
 
 		/* capabilities */
