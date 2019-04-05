@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20190405/PB
+	databases: update
+	tag version 2.1.0
+
 20190308/PB
 	some files: add IP address anonymization support "keep-type-geonameid"
 	ipv6calcweb: disable GeoIP/DBIP legacy databases by default

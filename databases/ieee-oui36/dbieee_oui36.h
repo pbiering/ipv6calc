@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
  * Version       : $Id$
- * Generated     : Fri Mar  8 06:46:01 2019
+ * Generated     : Fri Apr  5 05:45:44 2019
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20190308";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20190405";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -379,7 +379,6 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x85A000, 0x85AFFF, "BRUSHIES", "BRUSHIES" },
 	{ 0x70B3D5, 0xFAF000, 0xFAFFFF, "Radig Hard & Software", "RADIG-HARD-SOFTWARE" },
 	{ 0x70B3D5, 0x0BC000, 0x0BCFFF, "Practical Software Studio LLC", "PRACTICAL-SOFTWARE-STUDIO-LLC" },
-	{ 0x70B3D5, 0x7A2000, 0x7A2FFF, "Alpha ESS Co., Ltd.", "ALPHA-ESS" },
 	{ 0x70B3D5, 0x724000, 0x724FFF, "Quan International Co., Ltd.", "QUAN" },
 	{ 0x70B3D5, 0x53B000, 0x53BFFF, "Mr.Loop", "MR-LOOP" },
 	{ 0x70B3D5, 0xEBE000, 0xEBEFFF, "Sierra Pacific Innovations Corp", "SIERRA-PACIFIC-INNOVATIONS" },
@@ -608,6 +607,16 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0xE9D000, 0xE9DFFF, "INTECH", "INTECH" },
 	{ 0x70B3D5, 0x7CB000, 0x7CBFFF, "KeyW Corporation", "KEYW" },
 	{ 0x70B3D5, 0xA45000, 0xA45FFF, "Viper Innovations Ltd", "VIPER-INNOVATIONS" },
+	{ 0x70B3D5, 0xDFE000, 0xDFEFFF, "microtec Sicherheitstechnik GmbH", "MICROTEC-SICHERHEITSTECHNIK" },
+	{ 0x70B3D5, 0x7A2000, 0x7A2FFF, "Alpha ESS Co., Ltd.", "ALPHA-ESS" },
+	{ 0x70B3D5, 0x0CA000, 0x0CAFFF, "VITEC", "VITEC" },
+	{ 0x70B3D5, 0x068000, 0x068FFF, "Onethinx BV", "ONETHINX" },
+	{ 0x70B3D5, 0x2C7000, 0x2C7FFF, "Worldsensing", "WORLDSENSING" },
+	{ 0x70B3D5, 0xDC3000, 0xDC3FFF, "Fath Mechatronics", "FATH-MECHATRONICS" },
+	{ 0x70B3D5, 0x102000, 0x102FFF, "Oxford Monitoring Solutions Ltd", "OXFORD-MONITORING-SOLUTIONS" },
+	{ 0x70B3D5, 0x2C0000, 0x2C0FFF, "Sensative AB", "SENSATIVE-AB" },
+	{ 0x70B3D5, 0x24C000, 0x24CFFF, "Astronomical Research Cameras, Inc.", "ASTRONOMICAL-RESEARCH-CAMERAS" },
+	{ 0x70B3D5, 0xD49000, 0xD49FFF, "Sicon srl", "SICON-SRL" },
 	{ 0x70B3D5, 0xD60000, 0xD60FFF, "Flintab AB", "FLINTAB-AB" },
 	{ 0x70B3D5, 0x1B4000, 0x1B4FFF, "5nines", "5NINES" },
 	{ 0x70B3D5, 0x522000, 0x522FFF, "Syncopated Engineering Inc", "SYNCOPATED-ENGINEERING" },
@@ -1013,7 +1022,6 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x338000, 0x338FFF, "Opti-Sciences, Inc.", "OPTI-SCIENCES" },
 	{ 0x70B3D5, 0x2F5000, 0x2F5FFF, "eze System, Inc.", "EZE-SYSTEM" },
 	{ 0x001BC5, 0x015000, 0x015FFF, "Corporate Systems Engineering", "CORPORATE-ENGINEERING" },
-	{ 0x70B3D5, 0x580000, 0x580FFF, "Private", "PRIVATE" },
 	{ 0x70B3D5, 0xBB0000, 0xBB0FFF, "WICELL TECHNOLOGY", "WICELL" },
 	{ 0x70B3D5, 0xCA1000, 0xCA1FFF, "Waldo System", "WALDO-SYSTEM" },
 	{ 0x70B3D5, 0x302000, 0x302FFF, "DogWatch Inc", "DOGWATCH" },
@@ -1211,7 +1219,6 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x0C9000, 0x0C9FFF, "LINEAGE POWER PVT LTD.,", "LINEAGE-POWER-PVT" },
 	{ 0x70B3D5, 0xFEA000, 0xFEAFFF, "Heng Dian Technology Co., Ltd", "HENG-DIAN" },
 	{ 0x70B3D5, 0x5FB000, 0x5FBFFF, "TELEPLATFORMS", "TELEPLATFORMS" },
-	{ 0x70B3D5, 0x401000, 0x401FFF, "Private", "PRIVATE" },
 	{ 0x70B3D5, 0x9E3000, 0x9E3FFF, "LG Electronics", "LG-ELECTRONICS" },
 	{ 0x70B3D5, 0x960000, 0x960FFF, "HORIZON TELECOM", "HORIZON-TELECOM" },
 	{ 0x70B3D5, 0x06F000, 0x06FFFF, "Beijing Daswell Science and Technology Co.LTD", "BEIJING-DASWELL-SCIENCE-AND" },
@@ -1256,7 +1263,14 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x50A000, 0x50AFFF, "AMEDTEC Medizintechnik Aue GmbH", "AMEDTEC-MEDIZINTECHNIK-AUE" },
 	{ 0x70B3D5, 0x42D000, 0x42DFFF, "RCH ITALIA SPA", "RCH-ITALIA-SPA" },
 	{ 0x70B3D5, 0xC00000, 0xC00FFF, "BESO sp. z o.o.", "BESO-SP-Z-O-O" },
+	{ 0x70B3D5, 0xEFF000, 0xEFFFFF, "Carlo Gavazzi Industri", "CARLO-GAVAZZI-INDUSTRI" },
 	{ 0x70B3D5, 0x99B000, 0x99BFFF, "RCH ITALIA SPA", "RCH-ITALIA-SPA" },
+	{ 0x70B3D5, 0x5E1000, 0x5E1FFF, "Arevita", "AREVITA" },
+	{ 0x70B3D5, 0xCD7000, 0xCD7FFF, "AutomationX GmbH", "AUTOMATIONX" },
+	{ 0x70B3D5, 0x580000, 0x580FFF, "Private", "PRIVATE" },
+	{ 0x70B3D5, 0x401000, 0x401FFF, "Private", "PRIVATE" },
+	{ 0x70B3D5, 0xB2F000, 0xB2FFFF, "Hermann Automation GmbH", "HERMANN-AUTOMATION" },
+	{ 0x70B3D5, 0xB58000, 0xB58FFF, "INTERNET PROTOCOLO LOGICA SL", "INTERNET-PROTOCOLO-LOGICA-SL" },
 	{ 0x70B3D5, 0x494000, 0x494FFF, "Schildknecht AG", "SCHILDKNECHT" },
 	{ 0x70B3D5, 0xBF2000, 0xBF2FFF, "TWIN DEVELOPMENT", "TWIN-DEVELOPMENT" },
 	{ 0x70B3D5, 0x901000, 0x901FFF, "ATS-CONVERS", "ATS-CONVERS" },
@@ -1758,7 +1772,6 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0xC66000, 0xC66FFF, "Blue Access Inc", "BLUE-ACCESS" },
 	{ 0x70B3D5, 0x87D000, 0x87DFFF, "INVIXIUM ACCESS INC.", "INVIXIUM-ACCESS" },
 	{ 0x70B3D5, 0x5FA000, 0x5FAFFF, "TEX COMPUTER SRL", "TEX-SRL" },
-	{ 0x70B3D5, 0xA9F000, 0xA9FFFF, "Private", "PRIVATE" },
 	{ 0x70B3D5, 0x985000, 0x985FFF, "Burk Technology", "BURK" },
 	{ 0x70B3D5, 0xFC8000, 0xFC8FFF, "Moduware PTY LTD", "MODUWARE-PTY" },
 	{ 0x70B3D5, 0x07B000, 0x07BFFF, "wallbe GmbH", "WALLBE" },
@@ -1881,6 +1894,16 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0x111000, 0x111FFF, "Leonardo Sistemi Integrati S.r.l.", "LEONARDO-SISTEMI-INTEGRATI-S-R-L" },
 	{ 0x70B3D5, 0x7FE000, 0x7FEFFF, "RCH ITALIA SPA", "RCH-ITALIA-SPA" },
 	{ 0x70B3D5, 0xB52000, 0xB52FFF, "AEye, Inc.", "AEYE" },
+	{ 0x70B3D5, 0xE25000, 0xE25FFF, "GJD Manufacturing", "GJD-MANUFACTURING" },
+	{ 0x70B3D5, 0xE8A000, 0xE8AFFF, "Melecs EWS GmbH", "MELECS-EWS" },
+	{ 0x70B3D5, 0xE1E000, 0xE1EFFF, "Umano Medical Inc.", "UMANO-MEDICAL" },
+	{ 0x70B3D5, 0x8DF000, 0x8DFFFF, "DORLET SAU", "DORLET-SAU" },
+	{ 0x70B3D5, 0xA9F000, 0xA9FFFF, "Private", "PRIVATE" },
+	{ 0x70B3D5, 0xD56000, 0xD56FFF, "KRONOTECH SRL", "KRONOTECH-SRL" },
+	{ 0x70B3D5, 0x57E000, 0x57EFFF, "Ascon Tecnologic S.r.l.", "ASCON-TECNOLOGIC-S-R-L" },
+	{ 0x70B3D5, 0x2D7000, 0x2D7FFF, "Private", "PRIVATE" },
+	{ 0x70B3D5, 0x3CB000, 0x3CBFFF, "GeoSpectrum Technologies Inc", "GEOSPECTRUM-TECHNOLOGIES" },
+	{ 0x70B3D5, 0xDF4000, 0xDF4FFF, "Heim- & Bürokommunikation Ilmert e.K.", "HEIM--BUEROKOMMUNIKATION-ILMERT-E-K" },
 	{ 0x70B3D5, 0x66B000, 0x66BFFF, "Innitive B.V.", "INNITIVE" },
 	{ 0x70B3D5, 0x8F6000, 0x8F6FFF, "Dofuntech Co.,LTD.", "DOFUNTECH" },
 	{ 0x70B3D5, 0xA06000, 0xA06FFF, "Kopis Mobile LLC", "KOPIS-MOBILE-LLC" },
@@ -2514,6 +2537,20 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0xBB5000, 0xBB5FFF, "Grossenbacher Systeme AG", "GROSSENBACHER-SYSTEME" },
 	{ 0x70B3D5, 0x8C4000, 0x8C4FFF, "APE GmbH", "APE" },
 	{ 0x70B3D5, 0x857000, 0x857FFF, "RCH ITALIA SPA", "RCH-ITALIA-SPA" },
+	{ 0x70B3D5, 0x210000, 0x210FFF, "Eastone Century Technology Co.,Ltd.", "EASTONE-CENTURY" },
+	{ 0x70B3D5, 0xAC0000, 0xAC0FFF, "RITEC", "RITEC" },
+	{ 0x70B3D5, 0x5BA000, 0x5BAFFF, "INFRASAFE/ ADVANTOR SYSTEMS", "INFRASAFE/-ADVANTOR" },
+	{ 0x70B3D5, 0xBC9000, 0xBC9FFF, "Yite technology", "YITE" },
+	{ 0x70B3D5, 0x6FE000, 0x6FEFFF, "NTO IRE-POLUS", "NTO-IRE-POLUS" },
+	{ 0x70B3D5, 0xCF8000, 0xCF8FFF, "Idneo Technologies S.A.U.", "IDNEO-TECHNOLOGIES-U" },
+	{ 0x70B3D5, 0xBE7000, 0xBE7FFF, "Syscom Instruments SA", "SYSCOM-INSTRUMENTS" },
+	{ 0x70B3D5, 0x3BD000, 0x3BDFFF, "DAO QIN TECHNOLOGY CO.LTD.", "DAO-QIN" },
+	{ 0x70B3D5, 0xCC6000, 0xCC6FFF, "MB connect line GmbH Fernwartungssysteme", "MB-CONNECT-LINE-FERNWARTUNGSSYSTEME" },
+	{ 0x70B3D5, 0x456000, 0x456FFF, "Technological Application and Production One Member Liability Company (Tecapro company)", "TECHNOLOGICAL-APPLICATION-AND-PRODUCTION-ONE-MEMBER-LIABILITY-COMPANY-TECAPRO-COMPANY" },
+	{ 0x70B3D5, 0xDFB000, 0xDFBFFF, "Yamamoto Works Ltd.", "YAMAMOTO-WORKS" },
+	{ 0x70B3D5, 0x258000, 0x258FFF, "BAYKON Endüstriyel Kontrol Sistemleri San. ve Tic. A.Ş.", "BAYKON-ENDUESTRIYEL-KONTROL-SISTEMLERI-SAN-VE-TIC-A-Ş" },
+	{ 0x70B3D5, 0x47A000, 0x47AFFF, "GlooVir Inc.", "GLOOVIR" },
+	{ 0x70B3D5, 0x463000, 0x463FFF, "WARECUBE,INC", "WARECUBE" },
 	{ 0x70B3D5, 0x8AB000, 0x8ABFFF, "EMAC, Inc.", "EMAC" },
 	{ 0x70B3D5, 0x729000, 0x729FFF, "EMAC, Inc.", "EMAC" },
 	{ 0x70B3D5, 0xE93000, 0xE93FFF, "ECON Technology Co.Ltd", "ECON" },
@@ -3125,5 +3162,16 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0xEAD000, 0xEADFFF, "Cobo, Inc.", "COBO" },
 	{ 0x70B3D5, 0xB20000, 0xB20FFF, "ICT BUSINESS GROUP of Humanrights Center for disabled people", "ICT-BUSINESS-GROUP-OF-HUMANRIGHTS-CENTER-FOR-DISABLED-PEOPLE" },
 	{ 0x70B3D5, 0xB06000, 0xB06FFF, "MULTIVOICE LLC", "MULTIVOICE-LLC" },
+	{ 0x70B3D5, 0x83A000, 0x83AFFF, "EMDEP CENTRO TECNOLOGICO MEXICO", "EMDEP-CENTRO-TECNOLOGICO-MEXICO" },
+	{ 0x70B3D5, 0xFD5000, 0xFD5FFF, "OCEANCCTV LTD", "OCEANCCTV" },
+	{ 0x70B3D5, 0xB73000, 0xB73FFF, "Cetto Industries", "CETTO-INDUSTRIES" },
+	{ 0x70B3D5, 0x9BF000, 0x9BFFFF, "Xiris Automation Inc.", "XIRIS-AUTOMATION" },
+	{ 0x70B3D5, 0xABD000, 0xABDFFF, "wtec GmbH", "WTEC" },
+	{ 0x70B3D5, 0x884000, 0x884FFF, "LG Electronics", "LG-ELECTRONICS" },
+	{ 0x70B3D5, 0xC04000, 0xC04FFF, "Prolan Zrt.", "PROLAN-ZRT" },
+	{ 0x70B3D5, 0x1F7000, 0x1F7FFF, "Morgan Schaffer Inc.", "MORGAN-SCHAFFER" },
+	{ 0x70B3D5, 0x65E000, 0x65EFFF, "Season Electronics Ltd", "SEASON-ELECTRONICS" },
+	{ 0x70B3D5, 0xE54000, 0xE54FFF, "Beijing PanGu Company", "BEIJING-PANGU-COMPANY" },
+	{ 0x70B3D5, 0xC51000, 0xC51FFF, "Innotas Elektronik GmbH", "INNOTAS-ELEKTRONIK" },
 
 };
