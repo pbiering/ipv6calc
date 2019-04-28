@@ -1165,6 +1165,7 @@ END_libipv6calc_db_wrapper:
  */
 char *libipv6calc_db_wrapper_IP2Location_database_info(IP2Location *loc, const int level_verbose, const int entry, const int flag_copyright) {
 	static char resultstring[NI_MAXHOST];
+	char tempstring[NI_MAXHOST] = "";
 
 	uint32_t ipsupport = 0; // unknown
 	uint32_t entries_ipv4 = 0;
@@ -1180,6 +1181,13 @@ char *libipv6calc_db_wrapper_IP2Location_database_info(IP2Location *loc, const i
 		snprintf(resultstring, sizeof(resultstring), "%s", "can't retrieve database information");
 	} else {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "databasetype=%u ipversion=%u", loc->databasetype, loc->ipversion);
+
+		if (flag_copyright != 0) {
+			snprintf(tempstring, sizeof(tempstring), " Copyright (c) %04d IP2Location All Rights Reserved",
+				loc->databaseyear + 2000
+			);
+		};
+
 		if (level_verbose == LEVEL_VERBOSE2) {
 			// catch API 4.0.0 -> 7.0.0 extension
 #ifdef SUPPORT_IP2LOCATION_DYN
@@ -1228,59 +1236,31 @@ char *libipv6calc_db_wrapper_IP2Location_database_info(IP2Location *loc, const i
 			};
 #endif // SUPPORT_IP2LOCATION_DYN
 
-			if (flag_copyright != 0) {
-				snprintf(resultstring, sizeof(resultstring), "IP2L-DB%d %s%s%04d%02d%02d Copyright (c) %04d IP2Location All Rights Reserved IPv4=%u IPv6=%u %s%s", 
-					loc->databasetype,
-					(features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0 ? "IPv6 " : "IPv4 ",
-					((internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LITE) != 0 ? "LITE " : ((internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE) != 0 ? "SAMPLE " : (internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_FREE) != 0 ? "FREE " : "" )),
-					loc->databaseyear + 2000,
-					loc->databasemonth,
-					loc->databaseday,
-					loc->databaseyear + 2000,
-					entries_ipv4,
-					entries_ipv6,
-					(libipv6calc_db_wrapper_IP2Location_db_compatible(type) != 0) ? " INCOMPATIBLE" : "",
-					(loc->databaseyear + 2000 < IP2LOCATION_DB_YEAR_MIN) ? " TOO-OLD" : ""
-				);
-			} else {
-				snprintf(resultstring, sizeof(resultstring), "IP2L-DB%d %s%s%04d%02d%02d IPv4=%u IPv6=%u %s%s", 
-					loc->databasetype,
-					(features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0 ? "IPv6 " : "IPv4 ",
-					((internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LITE) != 0 ? "LITE " : ((internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE) != 0 ? "SAMPLE " : (internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_FREE) != 0 ? "FREE " : "" )),
-					loc->databaseyear + 2000,
-					loc->databasemonth,
-					loc->databaseday,
-					entries_ipv4,
-					entries_ipv6,
-					(libipv6calc_db_wrapper_IP2Location_db_compatible(type) != 0) ? " INCOMPATIBLE" : "",
-					(loc->databaseyear + 2000 < IP2LOCATION_DB_YEAR_MIN) ? " TOO-OLD" : ""
-				);
-			};
+			snprintf(resultstring, sizeof(resultstring), "IP2L-DB%d %s%s%04d%02d%02d%s IPv4=%u IPv6=%u%s%s",
+				loc->databasetype,
+				(features & (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) != 0 ? "IPv4 IPv6 " : ((features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0 ? "IPv6 " : "IPv4 "),
+				(internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LITE) != 0 ? "LITE " : ((internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE) != 0 ? "SAMPLE " : (internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_FREE) != 0 ? "FREE " : "" ),
+				loc->databaseyear + 2000,
+				loc->databasemonth,
+				loc->databaseday,
+				tempstring,
+				entries_ipv4,
+				entries_ipv6,
+				(libipv6calc_db_wrapper_IP2Location_db_compatible(type) != 0) ? " INCOMPATIBLE" : "",
+				(loc->databaseyear + 2000 < IP2LOCATION_DB_YEAR_MIN) ? " TOO-OLD" : ""
+			);
 		} else {
-			if (flag_copyright != 0) {
-				snprintf(resultstring, sizeof(resultstring), "IP2L-DB%d %s%s%04d%02d%02d Copyright (c) %04d IP2Location All Rights Reserved%s%s",
-					loc->databasetype,
-					(features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0 ? "IPv6 " : "IPv4 ",
-					((internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LITE) != 0 ? "LITE " : ((internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE) != 0 ? "SAMPLE " : (internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_FREE) != 0 ? "FREE " : "" )),
-					loc->databaseyear + 2000,
-					loc->databasemonth,
-					loc->databaseday,
-					loc->databaseyear + 2000,
-					(libipv6calc_db_wrapper_IP2Location_db_compatible(type) != 0) ? " INCOMPATIBLE" : "",
-					(loc->databaseyear + 2000 < IP2LOCATION_DB_YEAR_MIN) ? " TOO-OLD" : ""
-				);
-			} else {
-				snprintf(resultstring, sizeof(resultstring), "IP2L-DB%d %s%s%04d%02d%02d%s%s",
-					loc->databasetype,
-					(features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0 ? "IPv6 " : "IPv4 ",
-					((internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LITE) != 0 ? "LITE " : ((internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE) != 0 ? "SAMPLE " : (internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_FREE) != 0 ? "FREE " : "" )),
-					loc->databaseyear + 2000,
-					loc->databasemonth,
-					loc->databaseday,
-					(libipv6calc_db_wrapper_IP2Location_db_compatible(type) != 0) ? " INCOMPATIBLE" : "",
-					(loc->databaseyear + 2000 < IP2LOCATION_DB_YEAR_MIN) ? " TOO-OLD" : ""
-				);
-			};
+			snprintf(resultstring, sizeof(resultstring), "IP2L-DB%d %s%s%04d%02d%02d%s%s%s",
+				loc->databasetype,
+				(features & (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) != 0 ? "IPv4 IPv6 " : ((features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0 ? "IPv6 " : "IPv4 "),
+				(internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LITE) != 0 ? "LITE " : ((internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE) != 0 ? "SAMPLE " : (internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_FREE) != 0 ? "FREE " : "" ),
+				loc->databaseyear + 2000,
+				loc->databasemonth,
+				loc->databaseday,
+				tempstring,
+				(libipv6calc_db_wrapper_IP2Location_db_compatible(type) != 0) ? " INCOMPATIBLE" : "",
+				(loc->databaseyear + 2000 < IP2LOCATION_DB_YEAR_MIN) ? " TOO-OLD" : ""
+			);
 		};
 	};
 
