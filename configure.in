@@ -1405,10 +1405,14 @@ AC_ARG_ENABLE([mod_ipv6calc],
 	AS_HELP_STRING([--enable-mod_ipv6calc],
 		[Enable build of mod_ipv6calc for Apache (default: disabled)]),
 	[
-		ENABLE_MOD_IPV6CALC="1"
 	],[
-		ENABLE_MOD_IPV6CALC="0"
 	])
+
+if test "$enable_mod_ipv6calc" = "yes"; then
+    ENABLE_MOD_IPV6CALC="1"
+else
+    ENABLE_MOD_IPV6CALC="0"
+fi
 
 AC_SUBST(ENABLE_MOD_IPV6CALC)
 

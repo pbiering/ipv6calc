@@ -6621,14 +6621,15 @@ fi
 # Check whether --enable-mod_ipv6calc was given.
 if test "${enable_mod_ipv6calc+set}" = set; then :
   enableval=$enable_mod_ipv6calc;
-		ENABLE_MOD_IPV6CALC="1"
-
-else
-
-		ENABLE_MOD_IPV6CALC="0"
 
 fi
 
+
+if test "$enable_mod_ipv6calc" = "yes"; then
+    ENABLE_MOD_IPV6CALC="1"
+else
+    ENABLE_MOD_IPV6CALC="0"
+fi
 
 
 
