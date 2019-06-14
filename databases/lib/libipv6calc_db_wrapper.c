@@ -3642,7 +3642,7 @@ int libipv6calc_db_asn_filter_parse(s_ipv6calc_filter_db_asn *filter, const char
 		asn = (uint32_t) strtol(token + offset, NULL, 10);
 
 		if (errno == ERANGE) {
-			ERRORPRINT_WA("filter token 'asn=' requires a valid decimal number between 0 and %ul: %s:", (2^32) - 1, token + offset);
+			ERRORPRINT_WA("filter token 'asn=' requires a valid decimal number between 0 and %ul: %s:", (1UL << 32) - 1, token + offset);
 			goto END_ipv6calc_db_asn_filter_parse;
 		};
 	};
