@@ -806,8 +806,21 @@ int libipv6calc_db_wrapper_MMDB_country_code_by_addr(const ipv6calc_ipaddr *ipad
 			ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for CountryCode: %u", entry_data.type);
 		};
 	} else {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "CountryCode not found");
-		mmdb_error = MMDB_INVALID_DATA_ERROR;
+		// fetch CountryCode from fallback (registered_country)
+		const char *lookup_path_registered_country_code[] = { "registered_country", "iso_code", NULL };
+		libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_registered_country_code);
+		if (entry_data.has_data) {
+			if (entry_data.type == MMDB_DATA_TYPE_UTF8_STRING) {
+				int max = (entry_data.data_size + 1 > country_len) ? country_len : entry_data.data_size +1;
+				snprintf(country, max , "%s", entry_data.utf8_string);
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "CountryCode(Registered): %s", country);
+			} else {
+				ERRORPRINT_WA("Lookup result from MaxMindDB has unexpected type for CountryCode(Registered): %u", entry_data.type);
+			};
+		} else {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "CountryCode not found");
+			mmdb_error = MMDB_INVALID_DATA_ERROR;
+		};
 	};
 
 END_libipv6calc_db_wrapper:
@@ -911,6 +924,13 @@ uint32_t libipv6calc_db_wrapper_MMDB_GeonameID_by_addr(const ipv6calc_ipaddr *ip
 	source = IPV6CALC_DB_GEO_GEONAMEID_TYPE_COUNTRY;
 	if ((result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) && ((limit_24bit == 0) || (source < 0x1000000))) { goto END_libipv6calc_db_wrapper; };
 
+	// registered country (fallback)
+	const char *lookup_path_registered_country_geonameid[] = { "registered_country", "geoname_id", NULL };
+	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_registered_country_geonameid);
+	CHECK_STORE_UINT32(result, "RegisteredCountry/GeonameId")
+	source = IPV6CALC_DB_GEO_GEONAMEID_TYPE_COUNTRY;
+	if ((result != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) && ((limit_24bit == 0) || (source < 0x1000000))) { goto END_libipv6calc_db_wrapper; };
+
 	// continent
 	const char *lookup_path_continent_geonameid[] = { "continent", "geoname_id", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_continent_geonameid);
@@ -984,11 +1004,21 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 	// fetch CountryCode
 	const char *lookup_path_country_code[] = { "country", "iso_code", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_country_code);
+	if (!entry_data.has_data) {
+		// fetch CountryCode (fallback)
+		const char *lookup_path_registered_country_code[] = { "registered_country", "iso_code", NULL };
+		libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_registered_country_code);
+	};
 	CHECK_STORE(IPV6CALC_DB_SIZE_COUNTRY_CODE, recordp->country_code, "CountryCode")
 
 	// fetch CountryName
 	const char *lookup_path_country_name[] = { "country", "names", "en", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_country_name);
+	if (!entry_data.has_data) {
+		// fetch CountryName (fallback)
+		const char *lookup_path_registered_country_name[] = { "registered_country", "names", "en", NULL };
+		libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_registered_country_name);
+	}
 	CHECK_STORE(IPV6CALC_DB_SIZE_COUNTRY_LONG, recordp->country_long, "CountryName")
 
 	// fetch ContinentCode
@@ -1033,6 +1063,11 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 	// fetch GeonameId of Country
 	const char *lookup_path_country_geonameid[] = { "country", "geoname_id", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_country_geonameid);
+	if (!entry_data.has_data) {
+		// fetch GeonameId of Country (fallback)
+		const char *lookup_path_registered_country_geonameid[] = { "registered_country", "geoname_id", NULL };
+		libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_registered_country_geonameid);
+	};
 	CHECK_STORE_UINT32(recordp->country_geoname_id, "Country/GeonameId")
 
 	// fetch GeonameId of City
