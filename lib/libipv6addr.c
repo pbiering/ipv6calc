@@ -2087,7 +2087,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 	ipv6calc_ipaddr    ipaddr;
 	uint32_t map_value;
 
-	uint16_t cc_index, flags;
+	uint16_t cc_index, flags = 0;
 	uint32_t as_num32, ipv6_prefix[2];
 
 	int mask_eui64  = ipv6calc_anon_set->mask_eui64;

@@ -13,6 +13,7 @@ Info:
 	databases/lib/libipv6calc_db_wrapper_MMDB.c: add support for registered_country (fallback)
 	contrib/ipv6calc.spec[.in]: add build requirement: automake make
 	databases/lib/libipv6calc_db_wrapper.c: fix format token
+	lib/libipv6addr.c: make clang happy by initialization of "flags"
 
 20190607/PB:
 	configure[.in]: fix broken logic in case of --disable-mod_ipv6calc is given
