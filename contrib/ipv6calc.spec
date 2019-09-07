@@ -30,6 +30,7 @@ Source:		https://github.com/pbiering/%{name}/archive/%{gitcommit}/%{name}-%{gitc
 %else
 Source:		ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/%{name}-%{version}.tar.gz
 %endif
+BuildRequires:	automake make
 BuildRequires:	gcc
 BuildRequires:	openssl-devel
 BuildRequires:	perl-generators
@@ -357,6 +358,9 @@ rm -rf %{buildroot}
 
 
 %changelog
+* Sat Sep 07 2019 Peter Bieringer <pb@bieringer.de>
+- add build requirement: automake make
+
 * Tue Jan 29 2019 Peter Bieringer <pb@bieringer.de>
 - subpackage ipv6calcweb: remove dependency Perl(Proc::ProcessTable) because no longer used
 
