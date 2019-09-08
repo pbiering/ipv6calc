@@ -157,8 +157,10 @@ while [ "$1" != "$LAST" ]; do
 		exit 1
 		;;
 	    *)
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $1"
-		shift
+		if [ -n "$1" ]; then
+			OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $1"
+			shift
+		fi
 		;;
 	esac
 done

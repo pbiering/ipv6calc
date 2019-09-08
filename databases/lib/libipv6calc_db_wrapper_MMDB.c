@@ -632,7 +632,7 @@ MMDB_lookup_result_s libipv6calc_db_wrapper_MMDB_lookup_sockaddr (MMDB_s *const 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "Called: %s", wrapper_mmdb_info);
 
 #ifdef SUPPORT_MMDB_DYN
-	MMDB_lookup_result_s result_MMDB_lookup_sockaddr;
+	MMDB_lookup_result_s result_MMDB_lookup_sockaddr = {false, { NULL, 0}, 0};
 	const char *dl_symbol = "MMDB_lookup_sockaddr";
 	char *error;
 
