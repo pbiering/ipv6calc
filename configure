@@ -1417,6 +1417,7 @@ Optional Features:
   --enable-mod_ipv6calc   Enable build of mod_ipv6calc for Apache (default:
                           disabled)
 
+
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
@@ -6621,7 +6622,6 @@ fi
 # Check whether --enable-mod_ipv6calc was given.
 if test "${enable_mod_ipv6calc+set}" = set; then :
   enableval=$enable_mod_ipv6calc;
-
 fi
 
 

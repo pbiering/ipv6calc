@@ -12,6 +12,8 @@ Info:
 20190908/PB:
 	autogen.sh: small bugfix
 	databases/lib/libipv6calc_db_wrapper_MMDB.c: make clang happy by initialization of "result_MMDB_lookup_sockaddr"
+	configure[.in]: adjust fix --disable-mod_ipv6calc to support also EL6
+	databases/lib/libipv6calc_db_wrapper.c: fix for 32 bit systems
 
 20190907/PB:
 	databases/lib/libipv6calc_db_wrapper_MMDB.c: add support for registered_country (fallback)
