@@ -67,7 +67,8 @@ Where to get:
     EL5: build from source package potentially still work but not tested anymore, OS is EOSL
     EL6: package is available via EPEL
     EL7: package is available via EPEL
-   Mandrake (EOS):
+    EL8: package is available via EPEL
+   Mandrake (EOSL):
     similar to Red Hat, rebuild should work, too
    Debian:
     maintained package at http://packages.debian.org/ipv6calc
