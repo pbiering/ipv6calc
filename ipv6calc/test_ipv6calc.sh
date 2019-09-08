@@ -232,9 +232,9 @@ NOPIPETEST--in ipv6 2001:db8::a8bb:ccff:fedd:eeff --out eui64                   
 NOPIPETEST--in ipv6 2001:db8::a8bb:ccff:fedd:eeff --out mac                               =aa:bb:cc:dd:ee:ff
 # Countrycode
 NOPIPETEST-A addr2cc 3ffe:831f:ce49:7601:8000:efff:af4a:86bf			=IT;DB_IPV6_CC
-NOPIPETEST-A addr2cc 50.60.70.80						=SA;DB_IPV4_CC
+NOPIPETEST-A addr2cc 8.8.8.8							=US;DB_IPV4_CC
 NOPIPETEST--addr2cc 3ffe:831f:ce49:7601:8000:efff:af4a:86bf			=IT;DB_IPV6_CC
-NOPIPETEST--addr2cc 50.60.70.80							=SA;DB_IPV4_CC
+NOPIPETEST--addr2cc 8.8.8.8							=US;DB_IPV4_CC
 END
 }
 
