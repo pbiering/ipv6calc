@@ -9,6 +9,10 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20190923/PB:
+	tools/DBIP-update.sh[.in]: drop CSV database support
+	tools/DBIP-generate-db.pl: removed, no longer needed
+
 20190908/PB:
 	autogen.sh: small bugfix
 	databases/lib/libipv6calc_db_wrapper_MMDB.c: make clang happy by initialization of "result_MMDB_lookup_sockaddr"

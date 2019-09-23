@@ -20,8 +20,8 @@
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
-Version:	2.1.1
-Release:	36%{?gittag}%{?dist}
+Version:	2.2.0
+Release:	37%{?gittag}%{?dist}
 Group:		Applications/Text
 URL:		http://www.deepspace6.net/projects/%{name}.html
 License:	GPLv2
