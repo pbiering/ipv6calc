@@ -9,6 +9,11 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20191005/PB:
+	databases/lib/libipv6calc_db_wrapper_{GeoIP2,DBIP2}.c: remove not necessary dependencies to db.h
+	update documentation
+	internal databases: update
+
 20190923/PB:
 	tools/DBIP-update.sh[.in]: drop CSV database support
 	tools/DBIP-generate-db.pl: removed, no longer needed

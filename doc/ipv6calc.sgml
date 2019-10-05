@@ -12,14 +12,14 @@
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>9</revnumber> <date>2019-09-07</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>9.1</revnumber> <date>2019-09-24</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freecode.com/projects/ipv6calc/">freecode.com (former freshmeat, now also EOL) / ipv6calc</ulink> page (but this is not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 2.1.1</para></sect2><sect2>
+<para>Latest version since last update of this page is 2.2.0</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
 <listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;mod_ipv6calc&rdquo;: Apache module</para></listitem></itemizedlist></sect2><sect2>
@@ -33,7 +33,7 @@
 <listitem><para>IPv4 (since 0.61.0, released 2006)</para></listitem><listitem><para>IPv6 (since 0.90.0, released 2011, req. GeoIP &gt;= 1.4.5)</para></listitem><listitem><para>release 0.99.0 is tested against GeoIP &gt;= 1.4.4</para></listitem><listitem><para>GeoIP2 (native MaxMindDB file support since 2.0.0, release 2019)</para></listitem></itemizedlist></listitem><listitem><para><ulink url="http://www.ip2.location.com/">IP2Location</ulink>
 </para><itemizedlist>
 <listitem><para>IPv4 (since 0.60.0, released 2006)</para></listitem><listitem><para>IPv6 (since 0.70.0, released 2007, <ulink url="http://lite.ip2location.com/">IP2Location LITE IPv6 Databases</ulink> since 0.99.0, released 2015)</para></listitem><listitem><para>release 0.99.0 is tested against IP2Location &gt;= 4.0.2</para></listitem><listitem><para>release &gt;= 2.0.0 is only working with IP2Location &gt;= 7.0.1</para></listitem></itemizedlist></listitem><listitem><para><ulink url="http://www.db-ip.com/">DB-IP.com</ulink></para><itemizedlist>
-<listitem><para>(since 0.98.0, released 2015), based on local Berkeley DB files generated from downloaded CSV files</para></listitem><listitem><para>native MaxMindDB files (support since 2.0.0, released 2019)</para></listitem></itemizedlist></listitem><listitem><para>&ldquo;External&rdquo; (since 0.98.0, released 2015), based on local Berkeley DB files, generated from downloaded TXT/XML files (registries assignment databases). Supporting IPv4/IPv6 to Registries and IPv4/IPv6 to CountryCode. If newer, overruling the related included databases.</para></listitem></itemizedlist><para>Since version 0.95.0 the tool can be compiled to use dynamically loading of library, means the binaries can be also used on systems where IP2Location or GeoIP libraries are not existing. On such system, the support is simply disabled then and some capabilities/features which requires the databases are disabled.</para>
+<listitem><para>(since 0.98.0, released 2015) based on local Berkeley DB files generated from downloaded CSV files (will be dropped from 3.0.0 onwards)</para></listitem><listitem><para>native MaxMindDB files (support since 2.0.0, released 2019)</para></listitem></itemizedlist></listitem><listitem><para>&ldquo;External&rdquo; (since 0.98.0, released 2015), based on local Berkeley DB files, generated from downloaded TXT/XML files (registries assignment databases). Supporting IPv4/IPv6 to Registries and IPv4/IPv6 to CountryCode. If newer, overruling the related included databases.</para></listitem></itemizedlist><para>Since version 0.95.0 the tool can be compiled to use dynamically loading of library, means the binaries can be also used on systems where IP2Location or GeoIP libraries are not existing. On such system, the support is simply disabled then and some capabilities/features which requires the databases are disabled.</para>
 <para>Since version 0.97.4 also fallback code for GeoIP and IP2Location is included in the source package, means that support of dynamically loading of library can be included during compilation without having related development sources on the system.</para>
 <para>Since version 2.0.0 MaxMindDB is supported (linked or dynamically loaded)</para></sect2></sect1><sect1>
 <title>License</title>
@@ -75,7 +75,7 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 <sect3>
 <title>Fedora Linux</title>
 <para>Fedora 29 is the current developing platform, so use given hints above to create a RPM. Since Fedora 7 this package is included by default.</para>
-<para>See also <ulink url="https://admin.fedoraproject.org/pkgdb/package/ipv6calc/">FedoraProject / Package / ipv6calc</ulink></para></sect3><sect3>
+<para>See also <ulink url="https://apps.fedoraproject.org/packages/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para></sect3><sect3>
 <title>Red Hat Enterprise Linux and clones</title>
 <para>It's tested by the developer that creation of the RPM is working fine starting with RHEL 4.</para><itemizedlist>
 <listitem><para>RHEL/CentOS 5 has the package included by default (but an rather old version)

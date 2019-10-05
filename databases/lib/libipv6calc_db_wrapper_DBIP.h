@@ -6,6 +6,8 @@
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_DBIP.c
+ *
+ *  !!! Support of BerkeleyDB files will be dropped in 3.0.0 !!!
  */
 
 #include "ipv6calctypes.h"

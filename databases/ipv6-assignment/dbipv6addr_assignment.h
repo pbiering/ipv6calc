@@ -2,7 +2,7 @@
  * Project       : ipv6calc
  * File          : dbipv6_assignment.h
  * Version       : $Id$
- * Generated     : 20190405-060250+0200 CEST
+ * Generated     : 20191005-150212+0200 CEST
  * Data copyright: IANA ARIN RIPENCC APNIC LACNIC AFRINIC
  *
  * Information:
@@ -11,13 +11,12 @@
 
 #include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
-static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20190403 APNIC/20190404 ARIN/20190404 IANA/20190312 LACNIC/20190404 LISP/20190405 RIPENCC/20190404";
-static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = 1554436970;
+static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20191005 APNIC/20191004 ARIN/20191004 IANA/20190913 LACNIC/20191004 LISP/20191005 RIPENCC/20191004";
+static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = 1570280532;
 
 static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 	//ipv6_00_31, ipv6_32_63, mask_00_31, mask_32_63, mask_length, registry  
 	{ 0x20010000, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_IANA       },
-	{ 0x20010005, 0x00000000, 0xffffffff, 0x00000000,  32, REGISTRY_RIPENCC    },
 	{ 0x20010200, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_APNIC      },
 	{ 0x20010400, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_ARIN       },
 	{ 0x20010600, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_RIPENCC    },
@@ -40,20 +39,15 @@ static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 	{ 0x200107fa, 0x000f0000, 0xffffffff, 0xffff0000,  48, REGISTRY_APNIC      },
 	{ 0x200107fa, 0x00100000, 0xffffffff, 0xffff0000,  48, REGISTRY_APNIC      },
 	{ 0x200107fa, 0x00110000, 0xffffffff, 0xffff0000,  48, REGISTRY_APNIC      },
-	{ 0x20010800, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_RIPENCC    },
-	{ 0x20010a00, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_RIPENCC    },
+	{ 0x20010800, 0x00000000, 0xfffffc00, 0x00000000,  22, REGISTRY_RIPENCC    },
 	{ 0x20010c00, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_APNIC      },
 	{ 0x20010e00, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_APNIC      },
 	{ 0x20011200, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_LACNIC     },
-	{ 0x20011400, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_RIPENCC    },
-	{ 0x20011600, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_RIPENCC    },
+	{ 0x20011400, 0x00000000, 0xfffffc00, 0x00000000,  22, REGISTRY_RIPENCC    },
 	{ 0x20011800, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_ARIN       },
 	{ 0x20011a00, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_RIPENCC    },
 	{ 0x20011c00, 0x00000000, 0xfffffc00, 0x00000000,  22, REGISTRY_RIPENCC    },
-	{ 0x20012000, 0x00000000, 0xfffff000, 0x00000000,  20, REGISTRY_RIPENCC    },
-	{ 0x20013000, 0x00000000, 0xfffff800, 0x00000000,  21, REGISTRY_RIPENCC    },
-	{ 0x20013800, 0x00000000, 0xfffffc00, 0x00000000,  22, REGISTRY_RIPENCC    },
-	{ 0x20013c00, 0x00000000, 0xfffffc00, 0x00000000,  22, REGISTRY_RIPENCC    },
+	{ 0x20012000, 0x00000000, 0xffffe000, 0x00000000,  19, REGISTRY_RIPENCC    },
 	{ 0x20014000, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_RIPENCC    },
 	{ 0x20014200, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_AFRINIC    },
 	{ 0x20014400, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_APNIC      },
@@ -73,6 +67,7 @@ static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 	{ 0x26200000, 0x00000000, 0xfffffe00, 0x00000000,  23, REGISTRY_ARIN       },
 	{ 0x28000000, 0x00000000, 0xfff00000, 0x00000000,  12, REGISTRY_LACNIC     },
 	{ 0x2a000000, 0x00000000, 0xfff00000, 0x00000000,  12, REGISTRY_RIPENCC    },
+	{ 0x2a100000, 0x00000000, 0xfff00000, 0x00000000,  12, REGISTRY_RIPENCC    },
 	{ 0x2c000000, 0x00000000, 0xfff00000, 0x00000000,  12, REGISTRY_AFRINIC    },
 	{ 0x2d000000, 0x00000000, 0xff000000, 0x00000000,   8, REGISTRY_IANA       },
 	{ 0x2e000000, 0x00000000, 0xfe000000, 0x00000000,   7, REGISTRY_IANA       },
@@ -490,7 +485,7 @@ static const s_ipv6addr_info dbipv6addr_info[] = {
 	{ 0x261000d0, 0x21fd0000, 0xffffffff, 0xffff0000,  48, "LISP#theinz-xtr" },
 	{ 0x261000d0, 0x21fe0000, 0xffffffff, 0xffff0000,  48, "LISP#fzahn-xtr" },
 	{ 0x261000d0, 0x22000000, 0xffffffff, 0xffff0000,  48, "LISP#ahugi-xtr" },
-	{ 0x261000d0, 0x22010000, 0xffffffff, 0xffff0000,  48, "LISP#sukiyakiproj-xtr" },
+	{ 0x261000d0, 0x22010000, 0xffffffff, 0xffff0000,  48, "LISP#niekvanderven-xtr" },
 	{ 0x261000d0, 0x22020000, 0xffffffff, 0xffff0000,  48, "LISP#jdechert-xtr" },
 	{ 0x261000d0, 0x22030000, 0xffffffff, 0xffff0000,  48, "LISP#crothlander-xtr" },
 	{ 0x261000d0, 0x22050000, 0xffffffff, 0xffff0000,  48, "LISP#wvanlid-xtr" },
@@ -579,6 +574,7 @@ static const s_ipv6addr_info dbipv6addr_info[] = {
 	{ 0x261000d0, 0x322e0000, 0xffffffff, 0xffff0000,  48, "LISP#sukiyaki2-proj-xtr" },
 	{ 0x261000d0, 0x322f0000, 0xffffffff, 0xffff0000,  48, "LISP#gtja-xtr" },
 	{ 0x261000d0, 0x32300000, 0xffffffff, 0xffff0000,  48, "LISP#hcmus-xtr" },
+	{ 0x261000d0, 0x32310000, 0xffffffff, 0xffff0000,  48, "LISP#amacuz-xtr" },
 	{ 0x261000d0, 0x323f0000, 0xffffffff, 0xffff0000,  48, "LISP#gs9591-xtr" },
 	{ 0x261000d0, 0x50000000, 0xffffffff, 0xffff0000,  48, "LISP#ufba-xtr" },
 	{ 0x261000d0, 0xface0000, 0xffffffff, 0xffff0000,  48, "LISP#facebook-xtr-2" },

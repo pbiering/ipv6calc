@@ -26,8 +26,6 @@
 
 #ifdef SUPPORT_GEOIP2
 
-#include <db.h>
-
 #include "libipv6calc_db_wrapper_GeoIP2.h"
 
 char geoip2_db_dir[NI_MAXHOST] = GEOIP2_DB;
@@ -740,19 +738,6 @@ char *libipv6calc_db_wrapper_GeoIP2_database_info(const unsigned int type) {
 
 END_libipv6calc_db_wrapper:
 	return(resultstring);
-};
-
-
-/*
- * wrapper: GeoIP2_get_country_short
- */
-char *libipv6calc_db_wrapper_GeoIP2_get_country_short(DB *dbp, char *ip) {
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "Called: %s ip=%s", wrapper_geoip2_info, ip);
-
-	// not implemented so far
-	if (dbp == NULL) { }; // make compiler happy (avoid unused "...")
-	//return(GeoIP2_get_country_short(loc, ip));
-	return(NULL);
 };
 
 

@@ -6,6 +6,8 @@
  *
  * Information:
  *  ipv6calc DB-IP.com database wrapper
+ *
+ *  !!! Support of BerkeleyDB files will be dropped in 3.0.0 !!!
  */
 
 #include <stdio.h>
