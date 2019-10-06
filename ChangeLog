@@ -9,6 +9,14 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20191006/PB:
+	autogen-all-variants.sh: add permutations for --clang and --m32
+	{getopt,md5}/Makefile.in: remove unnecessary -s option (make clang happy), fix --m32 support
+	lib/Makefile.in: fix --m32 support
+	databases/lib/Makefile.in: fix --m32 support
+	autogen.sh/configure.in: improve --m32 support
+	databases/lib/libipv6calc_db_wrapper_MMDB.h: add workaround for libmaxminddb header file pinning to m32 or m64
+
 20191005/PB:
 	databases/lib/libipv6calc_db_wrapper_{GeoIP2,DBIP2}.c: remove not necessary dependencies to db.h
 	update documentation
