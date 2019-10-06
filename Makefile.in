@@ -148,7 +148,7 @@ db-lib-make:	db-ieee-oui-make db-ieee-iab-make db-ipv4-assignment-make db-ipv6-a
 		cd databases/lib && ${MAKE}
 
 update:
-		for dir in databases/ieee-oui databases/ieee-oui36 databases/ieee-iab databases/registries; do \
+		for dir in databases/ieee-oui databases/ieee-oui28 databases/ieee-oui36 databases/ieee-iab databases/registries; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
 			${MAKE} $@ || exit 1; \
