@@ -151,7 +151,7 @@ update:
 		for dir in databases/ieee-oui databases/ieee-oui36 databases/ieee-iab databases/registries; do \
 			ocwd=`pwd`; \
 			cd $$dir || exit 1; \
-			${MAKE} $@ ; \
+			${MAKE} $@ || exit 1; \
 			cd $$ocwd ; \
 		done || exit 1
 
