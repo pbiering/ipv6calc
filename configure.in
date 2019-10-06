@@ -84,7 +84,7 @@ AC_ARG_ENABLE(
 		if test "$enable_m32" = "yes"; then
 			AC_MSG_RESULT([*** switch to 32-bit compilation])
 			CFLAGS_EXTRA="${CFLAGS_EXTRA:+$CFLAGS_EXTRA }-m32 -DMMDB_UINT128_IS_BYTE_ARRAY=1"
-			LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-m32"
+			LDFLAGS="${LDFLAGS:+$LDFLAGS }-m32"
 		fi
 	])
 
@@ -1414,7 +1414,8 @@ if test "$require_libdb" = "yes"; then
 		AC_MSG_ERROR([Berkeley DB library header files not found (perhaps missing db4-devel/libdb-devel package)])
 	])
 
-	LDFLAGS_EXTRA="-ldb $LDFLAGS_EXTRA"
+	LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-ldb"
+	LDFLAGS="${LDFLAGS:+$LDFLAGS }-ldb"
 	LDFLAGS_EXTRA_MOD_IPV6CALC="-ldb $LDFLAGS_EXTRA_MOD_IPV6CALC"
 	AC_DEFINE(HAVE_BERKELEY_DB_SUPPORT, 1, Define if Berkeley DB support is required.)
 fi

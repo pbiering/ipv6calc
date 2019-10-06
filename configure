@@ -4213,7 +4213,7 @@ if test "${enable_m32+set}" = set; then :
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** switch to 32-bit compilation" >&5
 $as_echo "*** switch to 32-bit compilation" >&6; }
 			CFLAGS_EXTRA="${CFLAGS_EXTRA:+$CFLAGS_EXTRA }-m32 -DMMDB_UINT128_IS_BYTE_ARRAY=1"
-			LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-m32"
+			LDFLAGS="${LDFLAGS:+$LDFLAGS }-m32"
 		fi
 
 fi
@@ -6631,7 +6631,8 @@ fi
 
 
 
-	LDFLAGS_EXTRA="-ldb $LDFLAGS_EXTRA"
+	LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-ldb"
+	LDFLAGS="${LDFLAGS:+$LDFLAGS }-ldb"
 	LDFLAGS_EXTRA_MOD_IPV6CALC="-ldb $LDFLAGS_EXTRA_MOD_IPV6CALC"
 
 $as_echo "#define HAVE_BERKELEY_DB_SUPPORT 1" >>confdefs.h
