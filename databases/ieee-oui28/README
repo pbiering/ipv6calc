@@ -1,0 +1,6 @@
+$Id$
+
+OUI28 (aka MA-M) database:
+URL: http://standards-oui.ieee.org/oui28/mam.txt
+
+File will be retrieved on-the-fly during "make update"
