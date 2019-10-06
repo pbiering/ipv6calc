@@ -14,6 +14,21 @@ status_file="autogen-all-variants.status"
 
 ## Generate configure variants
 autogen_variants() {
+	autogen_variants_list
+	autogen_variants_list | while read line; do
+		echo "${line:+$line }--clang"
+	done
+
+	# skip IP2Location and MaxMindDB based
+	autogen_variants_list | egrep -vw "(IP2LOCATION)" | while read line; do
+		echo "${line:+$line }--m32"
+	done
+	autogen_variants_list | egrep -vw "(IP2LOCATION)" | while read line; do
+		echo "${line:+$line }--clang --m32"
+	done
+}
+
+autogen_variants_list() {
 	if [ "$skip_main_test" != "1" ]; then
 		cat <<END | grep -v ^#
 NONE#
@@ -210,11 +225,12 @@ for liboption in "normal" "shared"; do
 	fi
 
 	autogen_variants | while IFS="#" read token buildoptions testlist; do
+		buildoptions=$(echo $buildoptions)
 		if [ -n "$options_add" ]; then
 			if [ "$no_static_build" = "1" ]; then
 				options="--no-static-build $options_add $buildoptions"
 			else
-				options="$options_add $buildoptions"
+				options="${options_add:+$options_add }$buildoptions"
 			fi
 		else
 			if [ "$no_static_build" = "1" ]; then
@@ -226,20 +242,20 @@ for liboption in "normal" "shared"; do
 
 		case $liboption in
 		    shared)
-			options="$options -S"
+			options="${options:+$options }-S"
 			;;
 		esac
 
 		# extend options in fallback case
 		if [ -n "$ip2location_options_extra" ]; then
 			if echo "$token" | egrep -wq "IP2LOCATION"; then
-				options="$options $ip2location_options_extra"
+				options="${options:+$options }$ip2location_options_extra"
 			fi
 		fi
 
 		if [ -n "$geoip_options_extra" ]; then
 			if echo "$token" | egrep -wq "GEOIP"; then
-				options="$options $geoip_options_extra"
+				options="${options:+$options }$geoip_options_extra"
 			fi
 		fi
 
