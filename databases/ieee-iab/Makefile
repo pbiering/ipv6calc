@@ -1,13 +1,13 @@
 # Project    : ipv6calc/databases/ieee-iab
 # File       : Makefile
 # Version    : $Id$
-# Copyright  : 2004-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2004-2019 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ieee-iab
 
-FILE    = "iab.txt"
-BASEURL = "http://standards.ieee.org/regauth/oui/"
+FILE    = iab.txt
+BASEURL = http://standards-oui.ieee.org/iab/
 FILE_H  = dbieee_iab.h
 TYPE    = iab
 
