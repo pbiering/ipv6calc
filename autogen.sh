@@ -122,7 +122,7 @@ while [ "$1" != "$LAST" ]; do
 		;;
 	    '--m32')
 		shift
-		CFLAGS="$CFLAGS -m32"
+		OPTIONS_CONFIGURE="${OPTIONS_CONFIGURE:+$OPTIONS_CONFIGURE }--enable-m32"
 		;;
 	    '--relax')
 		shift
