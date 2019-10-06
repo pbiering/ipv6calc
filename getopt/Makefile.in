@@ -3,13 +3,15 @@
 
 CC = @CC@
 
+DEFAULT_CFLAGS ?= -O2 -Wall -g @CFLAGS_EXTRA@
+
 all: getopt1.o getopt.o
 
 getopt1.o: getopt1.c
-	${CC} $(CFLAGS) -fPIC -o getopt1.o -c -s getopt1.c
+	${CC} $(DEFAULT_CFLAGS) $(CFLAGS) -fPIC -o getopt1.o -c getopt1.c
 
 getopt.o: getopt.c
-	${CC} $(CFLAGS) -fPIC -o getopt.o -c -s getopt.c
+	${CC} $(DEFAULT_CFLAGS) $(CFLAGS) -fPIC -o getopt.o -c getopt.c
 
 clean:
 	rm -f *.o *.so.1 *.a
