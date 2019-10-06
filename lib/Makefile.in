@@ -14,6 +14,8 @@ libdir	= @libdir@
 DEFAULT_CFLAGS ?= -O2 -Wall
 CFLAGS += -D__EXTENSIONS__ -fPIC
 
+LDFLAGS ?= @LDFLAGS@
+
 INCLUDES= -I. -I../ -I../databases/lib/ @GETOPT_INCLUDE@ @MD5_INCLUDE@ @MMDB_INCLUDE_L1@ @GEOIP_INCLUDE_L1@ @IP2LOCATION_INCLUDE_L1@
 
 ifeq ($(shell uname), Darwin)
@@ -91,8 +93,8 @@ ifeq ($(SHARED_LIBRARY), yes)
 		cd ../ && ${MAKE} db-ieee-oui-make
 		cd ../ && ${MAKE} db-ipv4-assignment-make
 		cd ../ && ${MAKE} db-ipv6-assignment-make
-		echo "Creates shared library (.so)"
-		$(CC) -o libipv6calc.so.@PACKAGE_VERSION@ $(OBJS) $(CFLAGS) $(LDFLAGS) -shared -Wl,$(SO_NAME_FLAGS),libipv6calc.so.@PACKAGE_VERSION@
+		echo "Creates shared library (libipv6calc.so)"
+		$(CC) -o libipv6calc.so.@PACKAGE_VERSION@ $(OBJS) $(LDFLAGS) -shared -Wl,$(SO_NAME_FLAGS),libipv6calc.so.@PACKAGE_VERSION@
 else
 		echo "Nothing to do (shared libary mode is not enabled)"
 endif
