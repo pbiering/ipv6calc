@@ -11,8 +11,10 @@ libdir	= @libdir@
 
 # Compiler and Linker Options
 #  -D__EXTENSIONS__ is for Solaris & strtok_r
-DEFAULT_CFLAGS ?= -O2 -Wall
+DEFAULT_CFLAGS ?= -O2 -Wall @CFLAGS_EXTRA@
 CFLAGS += -D__EXTENSIONS__ -fPIC
+
+LDFLAGS ?= @LDFLAGS@
 
 INCLUDES= -I../../lib -I../.. @MMDB_INCLUDE_L2@ @GEOIP_INCLUDE_L2@ @IP2LOCATION_INCLUDE_L2@
 
@@ -71,8 +73,8 @@ libipv6calc_db_wrapper.a:	$(OBJS)
 
 libipv6calc_db_wrapper.so.@PACKAGE_VERSION@:	$(OBJS)
 ifeq ($(SHARED_LIBRARY), yes)
-		echo "Create shared library (.so)"
-		$(CC) -o libipv6calc_db_wrapper.so.@PACKAGE_VERSION@ $(OBJS) $(CFLAGS) $(LDFLAGS) -shared -Wl,$(SO_NAME_FLAGS),libipv6calc_db_wrapper.so.@PACKAGE_VERSION@
+		echo "Create shared library (libipv6calc_db_wrapper.so)"
+		$(CC) -o libipv6calc_db_wrapper.so.@PACKAGE_VERSION@ $(OBJS) $(LDFLAGS) -shared -Wl,$(SO_NAME_FLAGS),libipv6calc_db_wrapper.so.@PACKAGE_VERSION@
 else
 		echo "Nothing to do (shared libary mode is not enabled)"
 endif
