@@ -15,6 +15,20 @@
 #define _libipv6calc_db_wrapper_MMDB_h 1
 
 #ifdef SUPPORT_MMDB
+#include "maxminddb_config.h"
+
+/* workaround for inflexible header file (at least found on Fedora Linux for i686/x86_64)  */
+#ifdef MMDB_UINT128_IS_BYTE_ARRAY
+
+#if MMDB_UINT128_IS_BYTE_ARRAY == 0
+#ifdef __i386__
+// enforce to be 1
+#define MMDB_UINT128_IS_BYTE_ARRAY 1
+#endif
+#endif
+
+#endif // ifdef MMDB_UINT128_IS_BYTE_ARRAY
+
 #include "maxminddb.h"
 #endif
 
