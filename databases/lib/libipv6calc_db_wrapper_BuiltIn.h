@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.h
  * Version    : $Id$
- * Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_BuiltIn.c
@@ -26,7 +26,8 @@
 #define BUILTIN_DB_OUI36					5
 #define BUILTIN_DB_CC_REG					6
 #define BUILTIN_DB_AS_REG					7
-#define BUILTIN_DB_MAX						(7 + 1)
+#define BUILTIN_DB_OUI28					8
+#define BUILTIN_DB_MAX						(8 + 1)
 
 
 // features

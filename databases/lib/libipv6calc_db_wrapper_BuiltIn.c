@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  * Version    : $Id$
- * Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc BuiltIn database wrapper
@@ -47,6 +47,7 @@ static int builtin_ieee       = 0;
 #ifdef SUPPORT_DB_IEEE
 #include "../ieee-iab/dbieee_iab.h"
 #include "../ieee-oui/dbieee_oui.h"
+#include "../ieee-oui28/dbieee_oui28.h"
 #include "../ieee-oui36/dbieee_oui36.h"
 #endif
 
@@ -204,7 +205,7 @@ void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level_verbos
 
 #ifdef SUPPORT_DB_IEEE
 	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_BUILTIN] & IPV6CALC_DB_IEEE_TO_INFO) {
-		fprintf(stderr, "%sBuiltIn: %-5s: %s %s %s\n", prefix, "IEEE", libieee_iab_status, libieee_oui_status, libieee_oui36_status);
+		fprintf(stderr, "%sBuiltIn: %-5s: %s %s %s %s\n", prefix, "IEEE", libieee_iab_status, libieee_oui_status, libieee_oui28_status, libieee_oui36_status);
 	};
 #endif
 
@@ -258,6 +259,10 @@ char *libipv6calc_db_wrapper_BuiltIn_wrapper_db_info_used(void) {
 				break;
 			    case BUILTIN_DB_OUI:
 				snprintf(tempstring2, sizeof(tempstring2), "IEEE:%s", libieee_oui_status);
+				info = tempstring2;
+				break;
+			    case BUILTIN_DB_OUI28:
+				snprintf(tempstring2, sizeof(tempstring2), "IEEE:%s", libieee_oui28_status);
 				info = tempstring2;
 				break;
 			    case BUILTIN_DB_OUI36:
@@ -496,6 +501,18 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(char *resultstr
 		};
 	};
 
+	/* run through OUI28 list */
+	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui28); i++) {
+		if (libieee_oui28[i].id == idval) {
+			/* major id match */
+			if (libieee_oui28[i].subid_begin <= subidval && libieee_oui28[i].subid_end >= subidval) {
+				snprintf(resultstring, resultstring_length, "%s", libieee_oui28[i].string_owner);
+				BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_OUI28);
+				return (0);
+			};
+		};
+	};
+
 	/* run through OUI list */
 	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui); i++) {
 		if (libieee_oui[i].id == idval) {
@@ -567,6 +584,18 @@ int libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(char *res
 			if (libieee_oui36[i].subid_begin <= subidval && libieee_oui36[i].subid_end >= subidval) {
 				snprintf(resultstring, resultstring_length, "%s", libieee_oui36[i].shortstring_owner);
 				BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_OUI36);
+				return (0);
+			};
+		};
+	};
+
+	/* run through OUI28 list */
+	for (i = 0; i < MAXENTRIES_ARRAY(libieee_oui28); i++) {
+		if (libieee_oui28[i].id == idval) {
+			/* major id match */
+			if (libieee_oui28[i].subid_begin <= subidval && libieee_oui28[i].subid_end >= subidval) {
+				snprintf(resultstring, resultstring_length, "%s", libieee_oui28[i].shortstring_owner);
+				BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_OUI28);
 				return (0);
 			};
 		};
