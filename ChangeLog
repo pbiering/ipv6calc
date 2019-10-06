@@ -15,7 +15,9 @@ Info:
 	lib/Makefile.in: fix --m32 support
 	databases/lib/Makefile.in: fix --m32 support
 	autogen.sh/configure.in: improve --m32 support
+	configure.in: fix LDFLAGS issue (ldb)
 	databases/lib/libipv6calc_db_wrapper_MMDB.h: add workaround for libmaxminddb header file pinning to m32 or m64
+	{ipv6calc,ipv6logconv,ipv6loganon,ipv6logstats}/Makefile.in: fix LDFLAGS usage
 
 20191005/PB:
 	databases/lib/libipv6calc_db_wrapper_{GeoIP2,DBIP2}.c: remove not necessary dependencies to db.h
