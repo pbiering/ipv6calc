@@ -9,6 +9,12 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20191007/PB:
+	databases/ieee*: update, switch to CSV mode
+	databases/tools/create_ieee_headerfile.pl: remove TXT parser, add CSV parser
+	databases/ieee-oui/create_ieee_oui_headerfile.pl: removed, EOL
+	lib/libeui64.c,lib/libieee.c,lib/libieee.h,lib/libmac.c: add support for oui28
+
 20191006/PB:
 	autogen-all-variants.sh: add permutations for --clang and --m32
 	{getopt,md5}/Makefile.in: remove unnecessary -s option (make clang happy), fix --m32 support
@@ -18,7 +24,11 @@ Info:
 	configure.in: fix LDFLAGS issue (ldb)
 	databases/lib/libipv6calc_db_wrapper_MMDB.h: add workaround for libmaxminddb header file pinning to m32 or m64
 	{ipv6calc,ipv6logconv,ipv6loganon,ipv6logstats}/Makefile.in: fix LDFLAGS usage
-	Makefile.in: catch error during single update
+	Makefile.in: catch error during single update, add support for oui28
+	databases/tools/create_ieee_headerfile.pl: add support for oui28
+	databases/ieee-{iab,oui,oui36}/{Makefile,README}: fix URLs
+	databases/ieee-oui28: new
+	databases/lib/libipv6calc_db_wrapper_BuiltIn.{c,h}: add support for oui28
 
 20191005/PB:
 	databases/lib/libipv6calc_db_wrapper_{GeoIP2,DBIP2}.c: remove not necessary dependencies to db.h
