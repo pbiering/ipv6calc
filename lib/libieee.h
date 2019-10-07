@@ -64,7 +64,7 @@ typedef struct {
 	// IAB
 	{ 0x0050C2,	IEEE_IAB, 0x1 },
 	{ 0x40D855,	IEEE_IAB, 0x2 },
-	// OUI28
+	// OUI28 (2019-10-07)
 	{ 0x0055DA,	IEEE_OUI28, 0x0 },
 	{ 0x006967,	IEEE_OUI28, 0x0 },
 	{ 0x04714B,	IEEE_OUI28, 0x0 },

@@ -21,7 +21,7 @@ my $OUTFILE;
 my $TYPE;
 
 my %opts;
-getopts ("cdi:o:t:", \%opts);
+getopts ("cdi:o:t:l:", \%opts);
 
 if (! defined $opts{'i'}) {
 	print "ERROR : missing input file (option -i)\n";
@@ -299,11 +299,29 @@ print OUT qq|
 };
 |;
 
-if ($TYPE eq "oui36" || $TYPE eq "iab") {
-	print "List of major OUIs\n";
-	for my $key (sort keys %major_list) {
-		print $key . "\n";
+if ($TYPE eq "oui36" || $TYPE eq "iab" || $TYPE eq "oui28") {
+	my @lines;
+	if (defined $opts{'l'}) {
+		# read file
+		open my $handle, '<', $opts{'l'} || die("Can't open file: " . $opts{'l'});
+		chomp(@lines = <$handle>);
+		close $handle;
+		print "Lines of " . $opts{'l'} . ": " . $#lines . "\n";
 	};
+
+	print "List of major OUIs\n" if ($TYPE eq "oui36" || $TYPE eq "iab");
+	for my $key (sort keys %major_list) {
+		print $key . "\n" if ($TYPE eq "oui36" || $TYPE eq "iab");
+		if (defined $opts{'l'}) {
+			if (grep /0x$key/, @lines) {
+				# ok
+			} else {
+				print "Missing OUI 0x$key in " . $opts{'l'} . "\n";
+				exit 1;
+			};
+		};
+	};
+	print "Check successfully major OUI entries in " . $opts{'l'} . ": " . scalar(%major_list) . "\n";
 };
 
 if (scalar(keys %major_list) == 0) {

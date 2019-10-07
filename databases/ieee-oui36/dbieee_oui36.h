@@ -2,7 +2,7 @@
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
  * Version       : $Id$
- * Generated     : Mon Oct  7 06:25:24 2019
+ * Generated     : Mon Oct  7 22:14:15 2019
  * Data copyright: IEEE
  *
  * Information:

@@ -18,7 +18,7 @@ install:
 		echo "Nothing to do"
 
 create:
-		../tools/create_ieee_headerfile.pl -c -t $(TYPE) -i $(FILE) -o $(FILE_H)
+		../tools/create_ieee_headerfile.pl -c -t $(TYPE) -i $(FILE) -o $(FILE_H) -l ../../lib/libieee.h
 
 update:
 		echo "Download new version of file"
