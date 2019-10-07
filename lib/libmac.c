@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libmac.c
  * Version    : $Id$
- * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library MAC address handling
@@ -236,6 +236,11 @@ void libmacaddr_anonymize(ipv6calc_macaddr *macaddrp, const s_ipv6calc_anon_set 
 			if (libieee_check_oui36_iab(EUI48_00_23(macaddrp->addr)) == 1) {
 				// OUI-36/IAB
 				mask += 12; // increase by 12 bits
+				DEBUGPRINT_WA(DEBUG_libmac, "EUI-48 contains OUI-36/IAB, change mask: %d", mask);
+			} else if (libieee_check_oui28(EUI48_00_23(macaddrp->addr)) == 1) {
+				// OUI-28
+				mask += 8; // increase by 8 bits
+				DEBUGPRINT_WA(DEBUG_libmac, "EUI-48 contains OUI-28, change mask: %d", mask);
 			};
 
 			DEBUGPRINT_WA(DEBUG_libmac, "EUI-48 is a global one, source of mask: automagic: %d", mask);

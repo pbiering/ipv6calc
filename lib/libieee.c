@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libieee.c
  * Version    : $Id$
- * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for IEEE information
@@ -36,9 +36,38 @@ int libieee_check_oui36_iab(const uint32_t bits_00_23) {
 		DEBUGPRINT_WA(DEBUG_libieee, "check against: %06x", ieee_mapping[i].bits_00_23);
 
 		if (ieee_mapping[i].bits_00_23 == bits_00_23) {
-			DEBUGPRINT_WA(DEBUG_libieee, "found entry in map: %06x", bits_00_23);
-			r = 1;
-			break;
+			if ((ieee_mapping[i].type == IEEE_IAB) || (ieee_mapping[i].type == IEEE_OUI36)) {
+				DEBUGPRINT_WA(DEBUG_libieee, "found entry in map: %06x", bits_00_23);
+				r = 1;
+				break;
+			};
+		};
+	};
+
+	return(r);
+};
+
+
+/*
+ * check for OUI-28
+ * in:  bits_00_23
+ * out: 0=not OUI-28, 1=is OUI-28
+ */
+int libieee_check_oui28(const uint32_t bits_00_23) {
+	int r = 0, i;
+
+	DEBUGPRINT_WA(DEBUG_libieee, "called with bits_00_23=%06x", bits_00_23);
+
+	/* run through map */
+	for (i = 0; i < MAXENTRIES_ARRAY(ieee_mapping); i++) {
+		DEBUGPRINT_WA(DEBUG_libieee, "check against: %06x", ieee_mapping[i].bits_00_23);
+
+		if (ieee_mapping[i].bits_00_23 == bits_00_23) {
+			if (ieee_mapping[i].type == IEEE_OUI28) {
+				DEBUGPRINT_WA(DEBUG_libieee, "found entry in map: %06x", bits_00_23);
+				r = 1;
+				break;
+			};
 		};
 	};
 
@@ -62,12 +91,14 @@ uint32_t libieee_map_oui36_iab(const uint32_t bits_00_23, const uint32_t bits_24
 		DEBUGPRINT_WA(DEBUG_libieee, "check against: %06x", ieee_mapping[i].bits_00_23);
 
 		if (ieee_mapping[i].bits_00_23 == bits_00_23) {
-			// hit, set flag (0x1mmmvvv), mapping number (mmm) and 12 bit vendor code
-			map_value = 0x1000000 | (bits_00_23 & 0xff0000) | (ieee_mapping[i].mapping << 12) | bits_24_36;
+			if ((ieee_mapping[i].type == IEEE_IAB) || (ieee_mapping[i].type == IEEE_OUI36)) {
+				// hit, set flag (0x1mmmvvv), mapping number (mmm) and 12 bit vendor code
+				map_value = 0x1000000 | (bits_00_23 & 0xff0000) | (ieee_mapping[i].mapping << 12) | bits_24_36;
 
-			DEBUGPRINT_WA(DEBUG_libieee, "found entry in map: %06x -> %08x", bits_00_23, map_value);
+				DEBUGPRINT_WA(DEBUG_libieee, "found entry in map: %06x -> %08x", bits_00_23, map_value);
 
-			break;
+				break;
+			};
 		};
 	};
 
