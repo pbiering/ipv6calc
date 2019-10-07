@@ -6,8 +6,10 @@
 # Information:
 #  Makefile for ieee-oui
 
-FILE = oui.txt
+FILE = oui.csv
 BASEURL = http://standards-oui.ieee.org/oui/
+FILE_H  = dbieee_oui.h
+TYPE    = oui
 
 all:
 		test -f dbieee_oui.h || ${MAKE} update
@@ -16,7 +18,7 @@ install:
 		echo "Nothing to do"
 
 create:
-		./create_ieee_oui_headerfile.pl $(FILE)
+		../tools/create_ieee_headerfile.pl -c -t $(TYPE) -i $(FILE) -o $(FILE_H)
 
 update:
 		echo "Download new version of file"

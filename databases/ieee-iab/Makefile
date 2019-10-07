@@ -6,7 +6,7 @@
 # Information:
 #  Makefile for ieee-iab
 
-FILE    = iab.txt
+FILE    = iab.csv
 BASEURL = http://standards-oui.ieee.org/iab/
 FILE_H  = dbieee_iab.h
 TYPE    = iab
@@ -18,7 +18,7 @@ install:
 		echo "Nothing to do"
 
 create:
-		../tools/create_ieee_headerfile.pl -t $(TYPE) -i $(FILE) -o $(FILE_H)
+		../tools/create_ieee_headerfile.pl -c -t $(TYPE) -i $(FILE) -o $(FILE_H)
 
 update:
 		echo "Download new version of file"

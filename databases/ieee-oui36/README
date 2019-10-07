@@ -1,6 +1,6 @@
 $Id$
 
 OUI36 (aka MA-S) database:
-URL: http://standards-oui.ieee.org/oui/oui36.txt
+URL: http://standards-oui.ieee.org/oui/oui36.csv
 
 File will be retrieved on-the-fly during "make update"

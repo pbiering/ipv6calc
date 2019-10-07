@@ -1,6 +1,6 @@
 $Id$
 
 IAB database:
-URL: http://standards.ieee.org/regauth/oui/iab.txt
+URL: http://standards.ieee.org/regauth/oui/csv.txt
 
 File will be retrieved on-the-fly during "make update"

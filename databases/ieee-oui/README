@@ -1,6 +1,6 @@
 $Id$
 
 OUI (aka MA-L) database:
-URL: http://standards-oui.ieee.org/oui/oui.txt
+URL: http://standards-oui.ieee.org/oui/csv.txt
 
 File will be retrieved on-the-fly during "make"
