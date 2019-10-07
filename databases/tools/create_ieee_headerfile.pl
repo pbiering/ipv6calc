@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : create_ieee_headerfile.pl
 # Version    : $Id$
-# Copyright  : 2002-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE files
 #
@@ -21,7 +21,7 @@ my $OUTFILE;
 my $TYPE;
 
 my %opts;
-getopts ("di:o:t:", \%opts);
+getopts ("cdi:o:t:", \%opts);
 
 if (! defined $opts{'i'}) {
 	print "ERROR : missing input file (option -i)\n";
@@ -49,12 +49,15 @@ if ($TYPE eq "oui") {
 
 } elsif ($TYPE eq "oui36") {
 
+} elsif ($TYPE eq "oui28") {
+
 } elsif ($TYPE eq "iab") {
 
 } else {
 	print "ERROR : unsupported type: " . $TYPE . "\n";
 	exit 1;
 };
+
 my $flag_qemu = 0;
 
 print "Create file " . $OUTFILE . " from " . $INFILE . " of type " . $TYPE . "\n";
@@ -89,53 +92,12 @@ print OUT qq|
 static const s_ieee_$TYPE libieee_${TYPE}[] = {
 |;
 
+# normalize
+sub normalize($) {
+	my $oui = shift;
+		$oui = uc($oui);
 
-# Data
-my %major_list;
-my $oui_major;
-my $oui_owner;
-my $oui_owner_short;
-my $oui_minor_begin;
-my $oui_minor_end;
-
-my $state = 0;
-
-my $i = 0;
-while (<IN>) {
-	my $line = $_;
-	chomp $line;
-
-	print "DEBUG : parse line: " . $line . "\n" if (defined $debug);
-
-	# kill "
-	$line =~ s/"//g;
-
-	if ($line =~ /\(hex\)/ ) {
-		print "DEBUG : found major entry line: " . $line . "\n" if (defined $debug);
-
-		if ($state != 0) {
-			die "Major problem during parsing (out of state)";
-		};
-
-		$i++;
-		print STDERR $i . "\r";
-
-		# kill spaces
-		$line =~ s/[ \t]+/ /g;
-                # kill leading spaces
-		$line =~ s/^ *//g;
-		# kill trailing spaces
-		$line =~ s/ *$//g;
-		# kill \r
-		$line =~ s/\r//g;
-
-		#print $line . "\n";
-		my ($t1, $t2, $t3) = split / /, $line, 3;
-
-		my ($a, $b, $c) = split /-/, $t1;
-
-		# shorten OUI string
-		my $oui = uc($t3);
+		$oui =~ s/"//ig;
 
 		# replace '(' ')' '&'
 		$oui =~ s/[\(\)\&\',]/ /ig;
@@ -181,22 +143,6 @@ while (<IN>) {
 		# convert spaces to '-'
 		$oui =~ s/\s+/-/ig;
 
-		# remove '"'
-		$oui =~ s/"//ig;
-		$t3 =~ s/"//ig;
-
-                # kill leading spaces
-		$t3 =~ s/^ *//g;
-		# kill trailing spaces
-		$t3 =~ s/ *$//g;
-	
-		# Some final cleanup
-		$oui =~ s/-INT-L//ig;
-		$oui =~ s/-B-V//ig;
-
-		# remove trailling '-'
-		$oui =~ s/-+$//ig;
-
 		# translate umlauts
 		$oui =~ s/Ä/AE/g;
 		$oui =~ s/Ö/OE/g;
@@ -205,52 +151,147 @@ while (<IN>) {
 		$oui =~ s/ö/OE/g;
 		$oui =~ s/ü/UE/g;
 		$oui =~ s/ß/SS/g;
+
+		# remove non-ascii chars
+		$oui =~ s/[^[:ascii:]]//g;
 	
-		#print $oui . "\n";
+		# Some final cleanup
+		$oui =~ s/-INT-L$//ig;
+		$oui =~ s/-S-L$//ig;
+		$oui =~ s/-A-S$//ig;
+		$oui =~ s/-LLC$//ig;
+		$oui =~ s/-S-P-A$//ig;
+		$oui =~ s/-S-R-L$//ig;
+		$oui =~ s/-AND$//ig;
+		$oui =~ s/-E-V$//ig;
+		$oui =~ s/-BHD$//ig;
+		$oui =~ s/-SDN$//ig;
+		$oui =~ s/-MBH$//ig;
 
-		$oui_major = "0x" . $a . $b . $c;
-		$oui_owner = $t3;
-		$oui_owner_short = $oui;
+		# remove trailing '+'
+		$oui =~ s/\++$//ig;
 
-		if (! defined $major_list{$oui_major}) {
-			$major_list{$oui_major} = 1;
+		# remove trailing '-'
+		$oui =~ s/-+$//ig;
+
+		# reduce more than one '-'
+		$oui =~ s/-+/-/ig;
+	return($oui);
+};
+
+# Data
+my %major_list;
+my $oui_major;
+my $oui_owner;
+my $oui_owner_short;
+my $oui_minor_begin;
+my $oui_minor_end;
+
+my $state = 0;
+
+my %map;
+
+my $i = 0;
+while (<IN>) {
+	my $line = $_;
+	chomp $line;
+
+	print "DEBUG : parse line: " . $line . "\n" if (defined $debug);
+
+
+	if (defined $opts{'c'}) {
+		# CSV parser
+		if ($line !~ /^MA-(L|M|S),([0-9A-F]+),(.*)$/o && $line !~ /^(IAB),([0-9A-F]+),(.*)$/o) {
+			print "DEBUG : skip line: " . $line . "\n" if (defined $debug);
+			next;
 		};
 
-		$state = 1;
-		print "DEBUG : found entry: " . $oui_major . "\n" if (defined $debug);
-	};
+		my $type = $1;
+		my $prefix = $2;
+		my $company_raw = $3;
 
-	if ($line =~ /\(base 16\)/) {
-		print "DEBUG : found minor entry line: " . $line . "\n" if (defined $debug);
-
-		if ($state != 1) {
-			die "Major problem during parsing (out of state)";
+		# extract company
+		my $company;
+		if ($company_raw =~ /^"([^"]+)",(.*)$/o) {
+			$company = $1;
+		} else {
+			$company_raw =~ /^([^,]+),(.*)/o;
+			$company = $1;
 		};
 
-		$i++;
-		print STDERR $i . "\r";
+		$company =~ s/"//ig;
 
-		# kill spaces
-		$line =~ s/[ \t]+/ /g;
                 # kill leading spaces
-		$line =~ s/^ *//g;
+		$company =~ s/^ *//g;
 		# kill trailing spaces
-		$line =~ s/ *$//g;
+		$company =~ s/ *$//g;
 
-		$line =~ /^([0-9A-Fa-f]+)-([0-9A-Fa-f]+) /;
+		print "DEBUG : extract from: " . $company_raw . " -> " . $company . "\n" if (defined $debug);
 
-		if (! defined $1 || ! defined $2) {
-			die "Major problem during parsing (no begin or end)";
+		$map{$prefix}->{'short'} = normalize($company);
+		$map{$prefix}->{'long'} = $company;
+
+		$major_list{substr($prefix, 0, 6)} = 1;
+
+		# Append information for special OUIs
+		if ($prefix eq "080027") {
+			# 08:00:27
+			$map{$prefix}->{'long'} .= " (possible VirtualBox VM)";
+			$map{$prefix}->{'short'} .= "-VIRTUAL";
+		} elsif ($prefix eq "0003FF") {
+			# 00:03:FF
+			$map{$prefix}->{'long'} .= " (possible Hyper-V, Virtual Server, Virtual PC VM)";
+			$map{$prefix}->{'short'} .= "-VIRTUAL";
+		} elsif ($prefix eq "001C42") {
+			# 00:1C:42
+			$map{$prefix}->{'long'} .= " (possible Paralles Desktop, Workstation, Server, Virtuozzo VM)";
+			$map{$prefix}->{'short'} .= "-VIRTUAL";
+		} elsif ($prefix eq "000F4B") {
+			# 00:0F:4B
+			$map{$prefix}->{'long'} .= " (possible Virtual Iron VM)";
+			$map{$prefix}->{'short'} .= "-VIRTUAL";
+		} elsif ($prefix eq "00163E") {
+			# 00:16:3E
+			$map{$prefix}->{'long'} .= " (possible Xen VM)";
+			$map{$prefix}->{'short'} .= "-VIRTUAL";
+		} elsif ($prefix eq "525400") {
+			# 52:54:00
+			$map{$prefix}->{'long'} .= " (possible QEMU VM)";
+			$map{$prefix}->{'short'} .= "-VIRTUAL";
+			$flag_qemu = 1;
+		} elsif ( ($prefix eq "005056") ||
+			  ($prefix eq "000C29") ||
+			  ($prefix eq "000569") ) {
+			# 00:50:56
+			# 00:0C:29
+			# 00:05:69
+			$map{$prefix}->{'long'} .= " (possible VMware VM)";
+			$map{$prefix}->{'short'} .= "-VIRTUAL";
 		};
-		$oui_minor_begin = "0x" . $1;
-		$oui_minor_end = "0x" . $2;
+	} else {
+		die("TXT parser no longer supported");
+	}; # TXT parser
+};
 
-		$state = 2;
+if (scalar(keys %map) > 0) {
+	if ($TYPE eq "oui" && ($flag_qemu == 0)) {
+		# add missing entry
+		$map{"525400"}->{'long'} = "possible QEMU VM";
+		$map{"525400"}->{'short'} = "QEMU-VIRTUAL";
 	};
 
-	if ($state == 2) {
-		print OUT "\t{ " . $oui_major . ", " . $oui_minor_begin . ", " . $oui_minor_end . ", \"" . $oui_owner . "\", \"" . $oui_owner_short . "\" },\n";
-		$state = 0;
+	for my $prefix (sort { $a cmp $b } keys %map) {
+		my $oui_major = "0x" . substr($prefix, 0, 6);
+		my $oui_minor_begin = "0x" . substr($prefix, 6) . "0" x (6 - length(substr($prefix, 6)));
+		my $oui_minor_end   = "0x" . substr($prefix, 6) . "F" x (6 - length(substr($prefix, 6)));
+		my $oui_owner = $map{$prefix}->{'long'};
+		my $oui_owner_short = $map{$prefix}->{'short'};
+
+		if ($TYPE eq "oui") {
+			print OUT "\t{ " . $oui_major . ", \"" . $oui_owner . "\", \"" . $oui_owner_short . "\" },\n";
+		} else {
+			print OUT "\t{ " . $oui_major . ", " . $oui_minor_begin . ", " . $oui_minor_end . ", \"" . $oui_owner . "\", \"" . $oui_owner_short . "\" },\n";
+		};
 	};
 };
 
@@ -258,8 +299,15 @@ print OUT qq|
 };
 |;
 
-print "List of major OUIs\n";
-for my $key (sort keys %major_list) {
-	print $key . "\n";
+if ($TYPE eq "oui36" || $TYPE eq "iab") {
+	print "List of major OUIs\n";
+	for my $key (sort keys %major_list) {
+		print $key . "\n";
+	};
 };
-print "Finished\n";
+
+if (scalar(keys %major_list) == 0) {
+	print "Finished with problems (list empty)\n";
+	exit 1;
+};
+print "Finished successfully, entries: " . scalar(keys %map) . "\n";
