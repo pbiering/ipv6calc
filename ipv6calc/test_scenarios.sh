@@ -345,16 +345,23 @@ testscenarios_anonymization_options() {
 --anonymize-preset zc		00:02:b3:ff:fe:ff:ff:ff=00:02:b3:ff:fe:00:00:00
 # EUI-64: global (OUI-36)
 --anonymize-preset zc		00:1b:c5:03:df:ff:ff:ff=00:1b:c5:03:d0:00:00:00
+--anonymize-preset zc		70:b3:d5:f7:19:87:65:43=70:b3:d5:f7:10:00:00:00
 # EUI-64: global (OUI-36) expanded EUI-48
 --anonymize-preset zc		00:1b:c5:ff:fe:03:df:ff=00:1b:c5:ff:fe:03:d0:00
 --anonymize-preset zc --mask-eui64 16 --mask-autoadjust no	00:1b:c5:ff:fe:03:df:ff=00:1b:00:00:00:00:00:00
+# EUI-64: global (OUI-28)
+--anonymize-preset zc		a0:3e:6b:23:67:01:43:21=a0:3e:6b:20:00:00:00:00
+--anonymize-preset zc		b4:a2:eb:b9:87:65:43:21=b4:a2:eb:b0:00:00:00:00
 # EUI-48: global (OUI-24)
 --anonymize-preset zc		00:02:b3:ff:ff:ff=00:02:b3:00:00:00
+--anonymize-preset zc		00:50:56:01:23:45=00:50:56:00:00:00
 # EUI-48: global (OUI-36)
 --anonymize-preset zc		00:1b:c5:03:df:ff=00:1b:c5:03:d0:00
+--anonymize-preset zc		70:b3:d5:f7:19:87=70:b3:d5:f7:10:00
 --anonymize-preset zc --mask-mac 16 --mask-autoadjust no	00:1b:c5:03:df:ff=00:1b:00:00:00:00
 # EUI-48: global (OUI-28)
---anonymize-preset zc		a0:3e:6b:23:67:01=a0:3e:6b:23:00:00
+--anonymize-preset zc		a0:3e:6b:23:67:01=a0:3e:6b:20:00:00
+--anonymize-preset zc		b4:a2:eb:b9:87:65=b4:a2:eb:b0:00:00
 # LISP Anycast
 --mask-ipv6 16				2001:67c:198:f123:0123:4567:89ab:cdef=2001:67c:198:a909:a949:4291:c02d:5d13
 --mask-ipv6 24				2001:67c:198:f123:0123:4567:89ab:cdef=2001:67c:198:a909:a949:4291:c02d:5d13
