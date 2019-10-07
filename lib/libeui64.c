@@ -241,7 +241,7 @@ void libeui64_anonymize(ipv6calc_eui64addr *eui64addrp, const s_ipv6calc_anon_se
 					DEBUGPRINT_WA(DEBUG_libeui64, "EUI-64 contains OUI-36/IAB, change mask: %d", mask);
 				} else if (libieee_check_oui28(EUI64_00_23(eui64addrp->addr)) == 1) {
 					// OUI-28
-					mask += 8; // increase by 8 bits
+					mask += 4; // increase by 4 bits
 					DEBUGPRINT_WA(DEBUG_libeui64, "EUI-64 contains OUI-28, change mask: %d", mask);
 				};
 

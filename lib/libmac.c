@@ -239,7 +239,7 @@ void libmacaddr_anonymize(ipv6calc_macaddr *macaddrp, const s_ipv6calc_anon_set 
 				DEBUGPRINT_WA(DEBUG_libmac, "EUI-48 contains OUI-36/IAB, change mask: %d", mask);
 			} else if (libieee_check_oui28(EUI48_00_23(macaddrp->addr)) == 1) {
 				// OUI-28
-				mask += 8; // increase by 8 bits
+				mask += 4; // increase by 4 bits
 				DEBUGPRINT_WA(DEBUG_libmac, "EUI-48 contains OUI-28, change mask: %d", mask);
 			};
 
