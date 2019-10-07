@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : test_scenarios.sh
 # Version    : $Id$
-# Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPLv2
 #
 # Test patterns for ipv6calc (functions only)
@@ -353,6 +353,8 @@ testscenarios_anonymization_options() {
 # EUI-48: global (OUI-36)
 --anonymize-preset zc		00:1b:c5:03:df:ff=00:1b:c5:03:d0:00
 --anonymize-preset zc --mask-mac 16 --mask-autoadjust no	00:1b:c5:03:df:ff=00:1b:00:00:00:00
+# EUI-48: global (OUI-28)
+--anonymize-preset zc		a0:3e:6b:23:67:01=a0:3e:6b:23:00:00
 # LISP Anycast
 --mask-ipv6 16				2001:67c:198:f123:0123:4567:89ab:cdef=2001:67c:198:a909:a949:4291:c02d:5d13
 --mask-ipv6 24				2001:67c:198:f123:0123:4567:89ab:cdef=2001:67c:198:a909:a949:4291:c02d:5d13
@@ -392,6 +394,8 @@ testscenarios_showinfo() {
 00:1b:c5:06:a3:45	EUI48_SCOPE=global
 00:50:c2:86:23:45	OUI="Elsys AG"
 00:50:c2:86:23:45	EUI48_SCOPE=global
+52:54:00:01:23:45	OUI="possible QEMU VM"
+00:50:56:01:23:45	OUI="VMware, Inc. (possible VMware VM)"
 00:02:b3:01:23:45:67:89	OUI="Intel Corporation"
 00:02:b3:01:23:45:67:89	EUI64_SCOPE=global
 00:1b:c5:06:a3:45:67:89	OUI="IST GmbH"
