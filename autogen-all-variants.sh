@@ -118,12 +118,17 @@ $0
 	-D	enable dynamic library loading in run through versions	
 	-M	skip main tests
 	-n	dry-run, show only what would be build
+	-c	cross version test
+	-b	batch test (do not stop on error)
 END
 }
 
 
-while getopts ":cDNMigrIGfWn?h" opt; do
+while getopts ":cbDNMigrIGfWn?h" opt; do
 	case $opt in
+	    'b')
+		batch=1
+		;;
 	    'f')
 		force=1
 		;;
@@ -207,7 +212,7 @@ fi
 if [ "$dry_run" != "1" ]; then
 	if [ ! -f "$status_file" ]; then
 		echo "INFO  : status file missing, create: $status_file"
-		date "+%s:START:" >$status_file
+		date "+%s:START:${batch:+BATCHMODE}" >$status_file
 	fi
 fi
 
@@ -297,7 +302,14 @@ for liboption in "normal" "shared"; do
 			nice -n 20 $IONICE ./autogen.sh $options_test $options
 			if [ $? -ne 0 ]; then
 				echo "ERROR : autogen.sh reports an error with options: $options_test $options"
-				exit 1
+				if [ "$batch" = "1" ]; then
+					date "+%s:BROKEN:variants:$options" >>$status_file
+				else
+					exit 1
+				fi
+			else
+				# add entry in log
+				date "+%s:FINISHED:variants:$options:OK" >>$status_file
 			fi
 		fi
 
@@ -371,22 +383,30 @@ for liboption in "normal" "shared"; do
 					else
 						echo "NOTICE: executed command: LD_PRELOAD="$lib" make test-ldlibpath"
 					fi
-					exit 1
-				fi
 
-				date "+%s:FINISHED:variants:$options:TESTLIST-ENTRY=$entry" >>$status_file
+					if [ "$batch" = "1" ]; then
+						date "+%s:BROKEN:variants:$options:TESTLIST-ENTRY=$entry" >>$status_file
+					else
+						exit 1
+					fi
+				else
+					date "+%s:FINISHED:variants:$options:TESTLIST-ENTRY=$entry" >>$status_file
+				fi
 			done
 		fi
-
-		# add entry in log
-		date "+%s:FINISHED:variants:$options:OK" >>$status_file
 
 	done || exit 1
 done
 
 
 if [ "$dry_run" != "1" ]; then
-	echo "INFO  : congratulations, all variants built successful!"
+	if grep -q ":BROKEN:" $status_file; then
+		echo "ERROR : there are BROKEN builds:"
+		grep ":BROKEN:" $status_file
+		exit 1
+	else
+		echo "INFO  : congratulations, all variants built successful!"
+	fi
 	date "+%s:END:" >>$status_file
 	cat $status_file
 
