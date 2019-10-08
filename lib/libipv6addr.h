@@ -27,9 +27,9 @@
  * a9p9 4941 0000 000C  -> RFC 4941 anonymized privacy extension Interface ID
  *
  * a9p9 4291 4xxx xxxC  -> RFC 4291 anonymized EUI-48 Interface ID, xxx xxx = converted OUI
- * a9p9 4291 5xxx xxxC  -> RFC 4291 anonymized EUI-48 Interface ID, xxx xxx = converted mapped IAB/OUI-36
+ * a9p9 4291 5xxx xxxC  -> RFC 4291 anonymized EUI-48 Interface ID, xxx xxx = converted mapped IAB/OUI-36/OUI-28
  * a9p9 4291 6xxx xxxC  -> RFC 4291 anonymized EUI-64 Interface ID, xxx xxx = converted OUI
- * a9p9 4291 7xxx xxxC  -> RFC 4291 anonymized EUI-64 Interface ID, xxx xxx = converted mapped IAB/OUI-36
+ * a9p9 4291 7xxx xxxC  -> RFC 4291 anonymized EUI-64 Interface ID, xxx xxx = converted mapped IAB/OUI-36/OUI-28
  * a9p9 4291 8xxx xxxC  -> RFC 4291 embedded anonymized IPv4 address, xxx xxx = first 24 bit of included (anonymized) IPv4 address
  * a9p9 4291 c02d 5d1C  -> RFC 4291 Chapter 2.5.1 anonymized static Interface ID
  *
