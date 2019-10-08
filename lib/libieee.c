@@ -76,13 +76,13 @@ int libieee_check_oui28(const uint32_t bits_00_23) {
 
 
 /*
- * map OUI-36/IAB
+ * map OUI-36/IAB and OUI-28
  * in:  bits_00_23, bits_24_36
- * out: mapping value
+ * out: mapping value (0x1nnnnnn)
  */
-uint32_t libieee_map_oui36_iab(const uint32_t bits_00_23, const uint32_t bits_24_36) {
+uint32_t libieee_map_oui28_oui36_iab(const uint32_t bits_00_23, const uint32_t bits_24_36) {
 	int i;
-	uint32_t map_value = bits_00_23;
+	uint32_t map_value = bits_00_23; // default is OUI-24
 
 	DEBUGPRINT_WA(DEBUG_libieee, "called with bits_00_23=%06x bits_24_36=%03x", bits_00_23, bits_24_36);
 
@@ -92,11 +92,14 @@ uint32_t libieee_map_oui36_iab(const uint32_t bits_00_23, const uint32_t bits_24
 
 		if (ieee_mapping[i].bits_00_23 == bits_00_23) {
 			if ((ieee_mapping[i].type == IEEE_IAB) || (ieee_mapping[i].type == IEEE_OUI36)) {
-				// hit, set flag (0x1mmmvvv), mapping number (mmm) and 12 bit vendor code
-				map_value = 0x1000000 | (bits_00_23 & 0xff0000) | (ieee_mapping[i].mapping << 12) | bits_24_36;
-
-				DEBUGPRINT_WA(DEBUG_libieee, "found entry in map: %06x -> %08x", bits_00_23, map_value);
-
+				// hit, set flag (0x1mmmvvv), mapping number (mmm) and 12 bit vendor code (vvv)
+				map_value = 0x1000000 | (ieee_mapping[i].mapping << 12) | bits_24_36;
+				DEBUGPRINT_WA(DEBUG_libieee, "found entry in map (OUI-36/IAB): %06x -> %08x", bits_00_23, map_value);
+				break;
+			} else if (ieee_mapping[i].type == IEEE_OUI28) {
+				// hit, set flag (0x1mmmv00), mapping number (mmm) and 4 bit vendor code (v)
+				map_value = 0x1000000 | (ieee_mapping[i].mapping << 12) | (bits_24_36 & 0xf00);
+				DEBUGPRINT_WA(DEBUG_libieee, "found entry in map (OUI-28): %06x -> %08x", bits_00_23, map_value);
 				break;
 			};
 		};
@@ -106,13 +109,13 @@ uint32_t libieee_map_oui36_iab(const uint32_t bits_00_23, const uint32_t bits_24
 };
 
 /*
- * unmap OUI-36/IAB
+ * unmap OUI-36/IAB and OUI-28
  * in : mapping value
- * out:  bits_00_23, bits_24_36
+ * out: bits_00_23, bits_24_36
  */
-int libieee_unmap_oui36_iab(const uint32_t map_value, uint32_t *bits_00_23_p, uint32_t *bits_24_36_p) {
+int libieee_unmap_oui28_oui36_iab(const uint32_t map_value, uint32_t *bits_00_23_p, uint32_t *bits_24_36_p) {
 	int i;
-	uint32_t map_index = (map_value & 0x00f000) >> 12;
+	uint32_t map_index = (map_value & 0xfff000) >> 12;
 
 	*bits_00_23_p = 0;
 	*bits_24_36_p = 0;
@@ -138,26 +141,26 @@ int libieee_unmap_oui36_iab(const uint32_t map_value, uint32_t *bits_00_23_p, ui
 };
 
 /*
- * map IAB/OUI-36
+ * map IAB/OUI-36/OUI-28
  * in:  macaddrp
- * out: OUI (0x0......) or mapped IAB/OUI-36 (0x1mmm...)
+ * out: OUI (0x0......) or mapped IAB/OUI-36/OUI-28 (0x1mmm...)
  *	mmm = map index
  */
 uint32_t libieee_map_oui_macaddr(const ipv6calc_macaddr *macaddrp) {
 	uint32_t oui, ven;
 
 	oui = (macaddrp->addr[0] << 16) | (macaddrp->addr[1] << 8) | macaddrp->addr[2];
-	ven = (macaddrp->addr[3] << 4)  | (macaddrp->addr[4] >> 4);
+	ven = (macaddrp->addr[3] << 4)  | (macaddrp->addr[4] >> 4); // 12 bits
 
-	DEBUGPRINT_WA(DEBUG_libieee, "called with OUI: %06x", oui);
+	DEBUGPRINT_WA(DEBUG_libieee, "called with OUI/VEN: %06x %03x", oui, ven);
 
-	return (libieee_map_oui36_iab(oui, ven));
+	return (libieee_map_oui28_oui36_iab(oui, ven));
 };
 
 /*
- * map IAB/OUI-36
+ * map IAB/OUI-36/OUI-28
  * in:  eui64addrp
- * out: OUI (0x0......) or mapped IAB/OUI-36 (0x1mmm...)
+ * out: OUI (0x0......) or mapped IAB/OUI-36/OUI-28 (0x1mmm...)
  *	mmm = map index
  */
 uint32_t libieee_map_oui_eui64addr(const ipv6calc_eui64addr *eui64addrp) {
@@ -166,14 +169,14 @@ uint32_t libieee_map_oui_eui64addr(const ipv6calc_eui64addr *eui64addrp) {
 	oui = (eui64addrp->addr[0] << 16) | (eui64addrp->addr[1] << 8) | eui64addrp->addr[2];
 	ven = (eui64addrp->addr[3] << 4)  | (eui64addrp->addr[4] >> 4);
 
-	DEBUGPRINT_WA(DEBUG_libieee, "called with OUI: %06x", oui);
+	DEBUGPRINT_WA(DEBUG_libieee, "called with OUI/VEN: %06x %03x", oui, ven);
 
-	return (libieee_map_oui36_iab(oui, ven));
+	return (libieee_map_oui28_oui36_iab(oui, ven));
 };
 
 /*
- * unmap IAB/OUI-36
- * in : OUI (0x0......) or mapped IAB/OUI-36 (0x1mmm...)
+ * unmap IAB/OUI-36/OUI-28
+ * in : OUI (0x0......) or mapped IAB/OUI-36/OUI-28 (0x1mmm...)
  *	mmm = map index
  * mod: macaddrp (last bits zeroized)
  * out: result
@@ -185,7 +188,7 @@ int libieee_unmap_oui_macaddr(ipv6calc_macaddr *macaddrp, uint32_t map_value) {
 
 	DEBUGPRINT_NA(DEBUG_libieee, "called");
 
-	libieee_unmap_oui36_iab(map_value, &bits_00_23, &bits_24_36);
+	libieee_unmap_oui28_oui36_iab(map_value, &bits_00_23, &bits_24_36);
 
 	macaddrp->addr[0] = (bits_00_23 & 0xff0000) >> 16;
 	macaddrp->addr[1] = (bits_00_23 & 0x00ff00) >>  8;
@@ -199,8 +202,8 @@ int libieee_unmap_oui_macaddr(ipv6calc_macaddr *macaddrp, uint32_t map_value) {
 
 
 /*
- * unmap IAB/OUI-36
- * in : OUI (0x0......) or mapped IAB/OUI-36 (0x1mmm...)
+ * unmap IAB/OUI-36/OUI-28
+ * in : OUI (0x0......) or mapped IAB/OUI-36/OUI-28 (0x1mmm...)
  *	mmm = map index
  * mod: eui64addrp (last bits zeroized)
  * out: result
@@ -212,7 +215,7 @@ int libieee_unmap_oui_eui64addr(ipv6calc_eui64addr *eui64addrp, uint32_t map_val
 
 	DEBUGPRINT_NA(DEBUG_libieee, "called");
 
-	libieee_unmap_oui36_iab(map_value, &bits_00_23, &bits_24_36);
+	libieee_unmap_oui28_oui36_iab(map_value, &bits_00_23, &bits_24_36);
 
 	eui64addrp->addr[0] = (bits_00_23 & 0xff0000) >> 16;
 	eui64addrp->addr[1] = (bits_00_23 & 0x00ff00) >>  8;
