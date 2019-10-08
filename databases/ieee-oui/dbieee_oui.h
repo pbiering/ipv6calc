@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_oui.h
  * Version       : $Id$
- * Generated     : Mon Oct  7 06:48:46 2019
+ * Generated     : Tue Oct  8 06:33:52 2019
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui_status __attribute__ ((__unused__)) = "OUI/20191007";
+/*@unused@*/ static const char* libieee_oui_status __attribute__ ((__unused__)) = "OUI/20191008";
 
 
 static const s_ieee_oui libieee_oui[] = {
@@ -3323,7 +3323,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x000D07, "Calrec Audio Ltd", "CALREC-AUDIO" },
 	{ 0x000D08, "AboveCable, Inc.", "ABOVECABLE" },
 	{ 0x000D09, "Yuehua(Zhuhai) Electronic CO. LTD", "YUEHUA-ZHUHAI" },
-	{ 0x000D0A, "Projectiondesign as", "PROJECTIONDESIGN-AS" },
+	{ 0x000D0A, "Barco Projection Systems NV", "BARCO-PROJECTION-NV" },
 	{ 0x000D0B, "BUFFALO.INC", "BUFFALO" },
 	{ 0x000D0C, "MDI Security Systems", "MDI-SECURITY" },
 	{ 0x000D0D, "ITSupported, LLC", "ITSUPPORTED" },
@@ -23898,6 +23898,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xC80258, "ITW GSE ApS", "ITW-GSE-APS" },
 	{ 0xC8028F, "Nova Electronics (Shanghai) Co., Ltd.", "NOVA-ELECTRONICS-SHANGHAI" },
 	{ 0xC802A6, "Beijing Newmine Technology", "BEIJING-NEWMINE" },
+	{ 0xC803F5, "Ruckus Wireless", "RUCKUS-WIRELESS" },
 	{ 0xC80718, "TDSi", "TDSI" },
 	{ 0xC80873, "Ruckus Wireless", "RUCKUS-WIRELESS" },
 	{ 0xC808E9, "LG Electronics", "LG-ELECTRONICS" },
