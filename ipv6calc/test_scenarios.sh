@@ -388,6 +388,14 @@ testscenarios_anonymization_options_kp() {
 --anonymize-preset kp			3ffe:831f:ce49:7601:8000:efff:af4a:86bf=3ffe:831f:ce49:7601:8000:ffff:a0b:f33a
 --anonymize-preset kp			64:ff9b::0202:0304=64:ff9b::fd86:c8f
 --anonymize-preset kp			2001:0db8:0000:0000:81c0:0f3f:c807:1455=2001:db8::a909:4941:0:7
+# EUI-48 OUI-24/28/36
+--anonymize-preset kp			fd00:bbbb:bbbb:1:265e:beff:fe12:3456=fd00:bbbb:bbbb:9:a929:4291:4265:ebee
+--anonymize-preset kp			fd00:bbbb:bbbb:1:0250:c2ff:fe12:3456=fd00:bbbb:bbbb:9:a929:4291:5021:1234
+--anonymize-preset kp			fd00:bbbb:bbbb:1:0255:daff:fe12:3456=fd00:bbbb:bbbb:9:a929:4291:5030:1001
+# EUI-64 OUI-24/28/36
+--anonymize-preset kp			fd00:bbbb:bbbb:1:265e:be12:3456:789a=fd00:bbbb:bbbb:9:a929:4291:6265:ebeb
+--anonymize-preset kp			fd00:bbbb:bbbb:1:0250:c212:3456:789a=fd00:bbbb:bbbb:9:a929:4291:7021:123c
+--anonymize-preset kp			fd00:bbbb:bbbb:1:0255:da12:3456:789a=fd00:bbbb:bbbb:9:a929:4291:7030:1001
 # do not anonymize LISP anycast prefix
 --anonymize-preset kp			2001:67c:198::1=2001:67c:198::a909:4291:c02d:5d1d
 END
