@@ -1511,7 +1511,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 				if ((payload & 0x1000000) != 0) {
 					libieee_unmap_oui_macaddr(&macaddr, payload);
 				} else {
-					macaddr.addr[0] = ((payload >> 16) & 0xff) ^ 0x02;
+					macaddr.addr[0] = ((payload >> 16) & 0xff);
 					macaddr.addr[1] = (payload >> 8) & 0xff;
 					macaddr.addr[2] = (payload & 0xff);
 					macaddr.addr[3] = 0;
@@ -1536,7 +1536,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 					if ((payload & 0x1000000) != 0) {
 						libieee_unmap_oui_eui64addr(&eui64addr, payload);
 					} else  {
-						eui64addr.addr[0] = ((payload >> 16) & 0xff) ^ 0x02;
+						eui64addr.addr[0] = ((payload >> 16) & 0xff);
 						eui64addr.addr[1] = (payload >> 8) & 0xff;
 						eui64addr.addr[2] = (payload & 0xff);
 						eui64addr.addr[3] = 0;
