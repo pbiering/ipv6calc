@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20191011/PB:
+	external-fallback/IP2Location: update to 8.0.9
+
 20191008/PB:
 	ipv6calc/showinfo.c: fix bug regarding decoding anonymized EUI-48/64
 	ipv6calc/test_scenarios.sh: add additional test cases for OUI-24/28/36

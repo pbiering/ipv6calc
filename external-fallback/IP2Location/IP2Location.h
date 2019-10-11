@@ -1,19 +1,9 @@
 /*
- * IP2Location C library is distributed under LGPL version 3
+ * IP2Location C library is distributed under MIT license
  * Copyright (c) 2013-2015 IP2Location.com. support at ip2location dot com
  *
  * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not see <http://www.gnu.org/licenses/>.
+ * modify it under the terms of the MIT license
  */
 #ifndef HAVE_IP2LOCATION_H
 #define HAVE_IP2LOCATION_H
@@ -66,12 +56,12 @@ extern "C" {
 #include "IP2Loc_DBInterface.h"
 
 /* API version changes only if functions are added (release) or changed (minor/major) */
-#define API_VERSION   8.0.4
+#define API_VERSION   8.0.8
 
 
 #define API_VERSION_MAJOR   8
 #define API_VERSION_MINOR   0
-#define API_VERSION_RELEASE 4
+#define API_VERSION_RELEASE 8
 #define API_VERSION_NUMERIC (((API_VERSION_MAJOR * 100) + API_VERSION_MINOR) * 100 + API_VERSION_RELEASE)
 
 #define MAX_IPV4_RANGE  4294967295U
