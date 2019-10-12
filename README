@@ -58,10 +58,10 @@ Where to get:
 
  Ready to use packages for several operating systems:
   Linux:
-   Fedora:
+   Fedora (https://apps.fedoraproject.org/packages/ipv6calc/builds/)
     Core 6: developing platform, so use given hint above to create a RPM
     since 7: package is included
-   Red Hat Enterprise Linux / CentOS:
+   Red Hat Enterprise Linux / CentOS (https://apps.fedoraproject.org/packages/ipv6calc/builds/):
     EL3: build from source package potentially still work but not tested anymore, OS is EOSL
     EL4: build from source package potentially still work but not tested anymore, OS is EOSL
     EL5: build from source package potentially still work but not tested anymore, OS is EOSL
