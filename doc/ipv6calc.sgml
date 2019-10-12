@@ -1509,7 +1509,7 @@ IPV6_REGISTRY=RIPENCC
 <para>Major extensions/changes are listed here</para><sect2>
 <title>2019</title>
 <itemizedlist>
-<listitem><para>add action &ldquo;addr2cc&rdquo; (can be used as replacement for geoiplookup)</para></listitem><listitem><para>enable &ldquo;geonameid&rdquo; also in mod_ipv6calc</para></listitem><listitem><para>add anonymization method &ldquo;keep-type-geonameid&rdquo; (&gt;= 2.1.0)</para></listitem><listitem><para>add support for MaxMindDB (GeoIP, db-ip.com) (&gt;= 2.0.0)</para></listitem><listitem><para>drop support of IP2Location libraries &lt; 7.0.1 (&gt;= 2.0.0)</para></listitem></itemizedlist></sect2><sect2>
+<listitem><para>add OUI-28 support (&gt;= 2.2.0)</para></listitem><listitem><para>add action &ldquo;addr2cc&rdquo; (can be used as replacement for geoiplookup) (&gt;= 2.1.0)</para></listitem><listitem><para>enable &ldquo;geonameid&rdquo; also in mod_ipv6calc (&gt;= 2.1.0)</para></listitem><listitem><para>add anonymization method &ldquo;keep-type-geonameid&rdquo; (&gt;= 2.1.0)</para></listitem><listitem><para>add support for MaxMindDB (GeoIP, db-ip.com) (&gt;= 2.0.0)</para></listitem><listitem><para>drop support of IP2Location libraries &lt; 7.0.1 (&gt;= 2.0.0)</para></listitem></itemizedlist></sect2><sect2>
 <title>2017</title>
 <itemizedlist>
 <listitem><para>add support for LISP detection</para></listitem><listitem><para>add support for non-free versions <ulink url="http://www.db-ip.com/">DB-IP.com</ulink> databases</para></listitem><listitem><para>finally release 1.0.0 after 16 year of development</para></listitem></itemizedlist></sect2><sect2>
