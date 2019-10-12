@@ -116,7 +116,7 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>9.1</revnumber> <date>2019-09-24</date> <authorinitials>PB<
+<revision> <revnumber>9.2</revnumber> <date>2019-10-12</date> <authorinitials>PB<
 /authorinitials></revision>
 \end_layout
 
@@ -273,7 +273,8 @@ BuiltIn
 \end_layout
 
 \begin_layout Itemize
-IEEE IAB, OUI, OUI-36 databases (for decoding vendor part of MAC/EUI-48/EUI-64)
+IEEE IAB, OUI, OUI-28, OUI-36 databases (for decoding vendor part of MAC/EUI-48/
+EUI-64)
 \end_layout
 
 \begin_layout Itemize
@@ -732,7 +733,7 @@ literal "false"
 \end_layout
 
 \begin_layout Standard
-CentOS 6/7 are also platforms for regression tests.
+CentOS 6/7/8 are also platforms for regression tests.
 \end_layout
 
 \begin_layout Subsubsection
