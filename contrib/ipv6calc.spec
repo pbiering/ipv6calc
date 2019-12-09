@@ -20,7 +20,7 @@
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
-Version:	2.2.0
+Version:	2.2.1
 Release:	37%{?gittag}%{?dist}
 Group:		Applications/Text
 URL:		http://www.deepspace6.net/projects/%{name}.html
@@ -175,8 +175,8 @@ Default restricts access to localhost
 Summary:	Apache module for ipv6calc
 Group:		Applications/Internet
 BuildRequires:	httpd-devel psmisc curl
-Requires:	httpd >= 2.4.0
-Requires:	httpd <= 2.4.99999
+Requires:	httpd >= .0
+Requires:	httpd <= .99999
 Requires:	ipv6calc = %{version}-%{release}
 %if %{enable_shared}
 Requires:	ipv6calc-libs = %{version}-%{release}

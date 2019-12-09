@@ -687,6 +687,30 @@ my %text = (
 		'de' => "GeoName ID des Bezirks",
 		'en' => "GeoName ID of District",
 	},
+	'IPV6_GEONAME_ID' => {
+		'de' => "GeoName ID des Ortes der IPv6 Adresse",
+		'en' => "GeoName ID of Location of IPv6 Address",
+	},
+	'IPV4_GEONAME_ID' => {
+		'de' => "GeoName ID des Ortes der IPv4 Adresse",
+		'en' => "GeoName ID of Location of IPv4 Address",
+	},
+	'IPV6_GEONAME_ID_TYPE' => {
+		'de' => "Typ der GeoName ID der IPv6 Adresse",
+		'en' => "Type of GeoName ID of IPv6 Address",
+	},
+	'IPV4_GEONAME_ID_TYPE' => {
+		'de' => "Typ der GeoName ID der IPv4 Adresse",
+		'en' => "Type of GeoName ID of IPv4 Address",
+	},
+	'IPV6_GEONAME_ID_SOURCE' => {
+		'de' => "Quelle der GeoName ID der IPv6 Adresse",
+		'en' => "Source of GeoName ID of IPv6 Address",
+	},
+	'IPV4_GEONAME_ID_SOURCE' => {
+		'de' => "Quelle der GeoName ID der IPv4 Adresse",
+		'en' => "Source of GeoName ID of IPv4 Address",
+	},
 	'_ORGNAME' => {
 		'de' => "Autonomous System Organisation",
 		'en' => "Autonomous System Organization",
@@ -1487,7 +1511,7 @@ sub print_infohash ($$$;$) {
 			};
 		};
 
-		if ($key =~ /GEONAME_ID/o) {
+		if ($key =~ /GEONAME_ID/o && $key_lookup !~ /_(SOURCE|TYPE)$/o) {
 			$url = $url_geoname_by_id;
 			$url =~ s/#GEONAME_ID#/$$phash{$key}/g;
 			$url =~ s/#USERNAME#/$username_geonamesorg/g;
@@ -1635,7 +1659,7 @@ sub print_infohash ($$$;$) {
 				if (defined $$phash{$key_result}) {
 					my $flag = 0;
 					my $url;
-					if ($key_lookup =~ /GEONAME_ID/o) {
+					if ($key_lookup =~ /GEONAME_ID/o && $key_lookup !~ /_(SOURCE|TYPE)$/o) {
 						$url = $url_geoname_by_id;
 						$url =~ s/#GEONAME_ID#/$$phash{$key_result}/g;
 						$url =~ s/#USERNAME#/$username_geonamesorg/g;
