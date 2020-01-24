@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6logconv.h
  * Version    : $Id$
- * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2020 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
  * Information:
@@ -20,8 +20,7 @@
 #define DEBUG_ipv6logconv_general      0x00000001l
 #define DEBUG_ipv6logconv_processing   0x00000002l
 
-/* prototyping */
-int cache_lru_limit;
+extern int cache_lru_limit;
 
 extern int feature_reg;
 extern int feature_ieee;

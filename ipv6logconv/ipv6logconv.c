@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6logconv.c
  * Version    : $Id$
- * Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2020 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile conversions
@@ -58,7 +58,7 @@ static void lineparser(const long int outputtype);
 /* LRU cache */
 
 #define CACHE_LRU_SIZE 200
-
+int cache_lru_limit;
 static int      cache_lru_max = 0;
 static int      cache_lru_last = 0;
 static char     cache_lru_key_token[CACHE_LRU_SIZE][NI_MAXHOST];
