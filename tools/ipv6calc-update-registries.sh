@@ -3,7 +3,7 @@
 # Project    : ipv6calc/databases/registries
 # File       : update-registries.sh
 # Version    : $Id$
-# Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2020 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces ../ipv4-assignment/update-ipv4-assignment.sh
 #               replaces ../ipv6-assignment/update-ipv6-assignment.sh
 #
@@ -22,7 +22,7 @@ apnic	http://ftp.apnic.net/stats/apnic/		delegated-apnic-latest			txt
 lacnic	http://ftp.lacnic.net/pub/stats/lacnic/		delegated-lacnic-latest			txt
 afrinic	http://ftp.afrinic.net/pub/stats/afrinic/	delegated-afrinic-latest		txt
 iana    https://www.iana.org/assignments/as-numbers/	as-numbers.txt				txt
-lisp	http://www.lisp4.net/lisp-site/			site-db					txt
+lisp	https://lisp4.net.cba.upc.edu/lisp-site/	site-db					txt
 END
 }
 

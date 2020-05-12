@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN" "https://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd">
 
-<!-- XML file was created by LyX 2.3.3
+<!-- XML file was created by LyX 2.3.4.2
   See http://www.lyx.org/ for more information -->
 <article lang="en_US">
 <articleinfo>
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>9.2</revnumber> <date>2019-10-12</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>9.2a</revnumber> <date>2020-04-27</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
@@ -26,7 +26,7 @@
 <para>If enabled during compiling the tool, following external (but local stored) databases can be used</para><itemizedlist>
 <listitem><para><ulink url="http://www.maxmind.com/">GeoIP</ulink>
 </para><itemizedlist>
-<listitem><para>IPv4 (since 0.61.0, released 2006)</para></listitem><listitem><para>IPv6 (since 0.90.0, released 2011, req. GeoIP &gt;= 1.4.5)</para></listitem><listitem><para>release 0.99.0 is tested against GeoIP &gt;= 1.4.4</para></listitem><listitem><para>GeoIP2 (native MaxMindDB file support since 2.0.0, release 2019)</para></listitem></itemizedlist></listitem><listitem><para><ulink url="http://www.ip2.location.com/">IP2Location</ulink>
+<listitem><para>IPv4 (since 0.61.0, released 2006)</para></listitem><listitem><para>IPv6 (since 0.90.0, released 2011, req. GeoIP &gt;= 1.4.5)</para></listitem><listitem><para>release 0.99.0 is tested against GeoIP &gt;= 1.4.4</para></listitem><listitem><para>GeoIP2 (native MaxMindDB file support since 2.0.0, release 2019)</para></listitem></itemizedlist></listitem><listitem><para><ulink url="http://www.ip2location.com/">IP2Location</ulink>
 </para><itemizedlist>
 <listitem><para>IPv4 (since 0.60.0, released 2006)</para></listitem><listitem><para>IPv6 (since 0.70.0, released 2007, <ulink url="http://lite.ip2location.com/">IP2Location LITE IPv6 Databases</ulink> since 0.99.0, released 2015)</para></listitem><listitem><para>release 0.99.0 is tested against IP2Location &gt;= 4.0.2</para></listitem><listitem><para>release &gt;= 2.0.0 is only working with IP2Location &gt;= 7.0.1</para></listitem></itemizedlist></listitem><listitem><para><ulink url="http://www.db-ip.com/">DB-IP.com</ulink></para><itemizedlist>
 <listitem><para>(since 0.98.0, released 2015) based on local Berkeley DB files generated from downloaded CSV files (will be dropped from 3.0.0 onwards)</para></listitem><listitem><para>native MaxMindDB files (support since 2.0.0, released 2019)</para></listitem></itemizedlist></listitem><listitem><para>&ldquo;External&rdquo; (since 0.98.0, released 2015), based on local Berkeley DB files, generated from downloaded TXT/XML files (registries assignment databases). Supporting IPv4/IPv6 to Registries and IPv4/IPv6 to CountryCode. If newer, overruling the related included databases.</para></listitem></itemizedlist><para>Since version 0.95.0 the tool can be compiled to use dynamically loading of library, means the binaries can be also used on systems where IP2Location or GeoIP libraries are not existing. On such system, the support is simply disabled then and some capabilities/features which requires the databases are disabled.</para>
