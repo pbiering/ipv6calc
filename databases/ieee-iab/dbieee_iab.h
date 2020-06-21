@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Mon Oct  7 22:13:52 2019
+ * Generated     : Sun Jun 21 07:59:33 2020
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20191007";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20200621";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -324,7 +324,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x136000, 0x136FFF, "Tensilica, Inc.", "TENSILICA" },
 	{ 0x0050C2, 0x137000, 0x137FFF, "Uniwell Systems (UK) Ltd.", "UNIWELL-UK" },
 	{ 0x0050C2, 0x138000, 0x138FFF, "Delphin Technology AG", "DELPHIN" },
-	{ 0x0050C2, 0x139000, 0x139FFF, "SR Research Ltd.", "SR-RESEARCH" },
+	{ 0x0050C2, 0x139000, 0x139FFF, "SR RESEARCH LTD", "SR-RESEARCH" },
 	{ 0x0050C2, 0x13A000, 0x13AFFF, "Tex Computer SRL", "TEX-SRL" },
 	{ 0x0050C2, 0x13B000, 0x13BFFF, "Vaisala Oyj", "VAISALA-OYJ" },
 	{ 0x0050C2, 0x13C000, 0x13CFFF, "NBG Industrial Automation B.V.", "NBG-INDUSTRIAL-AUTOMATION-B-V" },
@@ -1022,7 +1022,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x3F0000, 0x3F0FFF, "megatec electronic GmbH", "MEGATEC" },
 	{ 0x0050C2, 0x3F1000, 0x3F1FFF, "Salland Electronics Holding BV", "SALLAND-ELECTRONICS-HOLDING" },
 	{ 0x0050C2, 0x3F2000, 0x3F2FFF, "STL GmbH", "STL" },
-	{ 0x0050C2, 0x3F3000, 0x3F3FFF, "ABB AG - Power Grids - Grid Automation", "ABB-POWER-GRIDS-GRID-AUTOMATION" },
+	{ 0x0050C2, 0x3F3000, 0x3F3FFF, "ABB Power Grids Germany AG – Grid Automation", "ABB-POWER-GRIDS-GERMANY-GRID-AUTOMATION" },
 	{ 0x0050C2, 0x3F4000, 0x3F4FFF, "MC TECHNOLOGY GmbH", "MC" },
 	{ 0x0050C2, 0x3F5000, 0x3F5FFF, "Phaedrus Limited", "PHAEDRUS" },
 	{ 0x0050C2, 0x3F6000, 0x3F6FFF, "dAFTdATA Limited", "DAFTDATA" },
@@ -3918,7 +3918,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xF45000, 0xF45FFF, "HUSTY M.Styczen J.Hupert Sp.J.", "HUSTY-M-STYCZEN-J-HUPERT-SP-J" },
 	{ 0x0050C2, 0xF46000, 0xF46FFF, "Reason Tecnologia S.A.", "REASON-TECNOLOGIA" },
 	{ 0x0050C2, 0xF47000, 0xF47FFF, "cadac,inc.", "CADAC" },
-	{ 0x0050C2, 0xF48000, 0xF48FFF, "Midas Technology DBA Phoenix Audio Technologies", "MIDAS-DBA-PHOENIX-AUDIO-TECHNOLOGIES" },
+	{ 0x0050C2, 0xF48000, 0xF48FFF, "Phoenix Audio Technologies", "PHOENIX-AUDIO-TECHNOLOGIES" },
 	{ 0x0050C2, 0xF49000, 0xF49FFF, "Green Instruments A/S", "GREEN-INSTRUMENTS-A/S" },
 	{ 0x0050C2, 0xF4A000, 0xF4AFFF, "Z-App Systems, Inc.", "Z-APP" },
 	{ 0x0050C2, 0xF4B000, 0xF4BFFF, "Supranet", "SUPRANET" },
@@ -4573,7 +4573,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x1D5000, 0x1D5FFF, "FST21 Ltd.", "FST21" },
 	{ 0x40D855, 0x1D6000, 0x1D6FFF, "EMS Computers Pty Ltd", "EMS-COMPUTERS-PTY" },
 	{ 0x40D855, 0x1D7000, 0x1D7FFF, "Wheatstone Corporation", "WHEATSTONE" },
-	{ 0x40D855, 0x1D8000, 0x1D8FFF, "Owl Computing Technologies, Inc.", "OWL-COMPUTING-TECHNOLOGIES" },
+	{ 0x40D855, 0x1D8000, 0x1D8FFF, "Owl Cyber Defense Solutions, LLC", "OWL-CYBER-DEFENSE-SOLUTIONS" },
 	{ 0x40D855, 0x1D9000, 0x1D9FFF, "Commercial Wireless Systems International LLC.", "COMMERCIAL-WIRELESS" },
 	{ 0x40D855, 0x1DA000, 0x1DAFFF, "Energy Technology and Control Ltd.", "ENERGY-AND-CONTROL" },
 	{ 0x40D855, 0x1DB000, 0x1DBFFF, "NIPPON TECHNO LAB.,INC,", "NIPPON-TECHNO-LAB" },

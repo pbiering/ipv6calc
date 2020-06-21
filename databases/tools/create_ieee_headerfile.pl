@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : create_ieee_headerfile.pl
 # Version    : $Id$
-# Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2020 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE files
 #
@@ -309,6 +309,7 @@ if ($TYPE eq "oui36" || $TYPE eq "iab" || $TYPE eq "oui28") {
 		print "Lines of " . $opts{'l'} . ": " . $#lines . "\n";
 	};
 
+	my $problem = 0;
 	print "List of major OUIs\n" if ($TYPE eq "oui36" || $TYPE eq "iab");
 	for my $key (sort keys %major_list) {
 		print $key . "\n" if ($TYPE eq "oui36" || $TYPE eq "iab");
@@ -316,10 +317,14 @@ if ($TYPE eq "oui36" || $TYPE eq "iab" || $TYPE eq "oui28") {
 			if (grep /0x$key/, @lines) {
 				# ok
 			} else {
-				print "Missing OUI 0x$key in " . $opts{'l'} . "\n";
-				exit 1;
+				print "Missing OUI 0x$key in " . $opts{'l'} . " (-> append there in array 'ieee_mapping' and retry)\n";
+				$problem = 1;
 			};
 		};
+	};
+	if ($problem == 1) {
+		print "Check NOT successfully of major OUI entries in " . $opts{'l'} . ": " . scalar(%major_list) . "\n";
+		exit 1;
 	};
 	print "Check successfully major OUI entries in " . $opts{'l'} . ": " . scalar(%major_list) . "\n";
 };

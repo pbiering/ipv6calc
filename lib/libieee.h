@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libieee.h
  * Version    : $Id$
- * Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2020 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libieee.c
@@ -256,6 +256,31 @@ typedef struct {
 	{ 0xF8B568,	IEEE_OUI28, 0x00c9 },
 	{ 0xFCA47A,	IEEE_OUI28, 0x00ca },
 	{ 0xFCD2B6,	IEEE_OUI28, 0x00cb },
+
+	{ 0x14AE85,	IEEE_OUI28, 0x00cc },
+	{ 0x200A0D,	IEEE_OUI28, 0x00cd },
+	{ 0x28B77C,	IEEE_OUI28, 0x00ce },
+	{ 0x304950,	IEEE_OUI28, 0x00cd },
+	{ 0x38F7CD,	IEEE_OUI28, 0x00ce },
+	{ 0x3CFAD3,	IEEE_OUI28, 0x00cf },
+	{ 0x402C76,	IEEE_OUI28, 0x00d0 },
+	{ 0x4C93A6,	IEEE_OUI28, 0x00d1 },
+	{ 0x50DE19,	IEEE_OUI28, 0x00d2 },
+	{ 0x5C857E,	IEEE_OUI28, 0x00d3 },
+	{ 0x646266,	IEEE_OUI28, 0x00d4 },
+	{ 0x706979,	IEEE_OUI28, 0x00d5 },
+	{ 0x90E2FC,	IEEE_OUI28, 0x00d6 },
+	{ 0x9405BB,	IEEE_OUI28, 0x00d7 },
+	{ 0x94CC04,	IEEE_OUI28, 0x00d8 },
+	{ 0x94FBA7,	IEEE_OUI28, 0x00d9 },
+	{ 0xB0B353,	IEEE_OUI28, 0x00da },
+	{ 0xC09BF4,	IEEE_OUI28, 0x00db },
+	{ 0xCCC261,	IEEE_OUI28, 0x00dc },
+	{ 0xD01411,	IEEE_OUI28, 0x00de },
+	{ 0xE8B470,	IEEE_OUI28, 0x00df },
+	{ 0xF0D7AF,	IEEE_OUI28, 0x00e0 },
+	{ 0xF469D5,	IEEE_OUI28, 0x00e1 },
+	{ 0xF490CB,	IEEE_OUI28, 0x00e2 },
 };
 
 #endif
