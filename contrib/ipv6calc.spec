@@ -350,14 +350,25 @@ rm -rf %{buildroot}
 
 
 %post
-/usr/sbin/ldconfig
+if [ -x /usr/sbin/ldconfig ]; then
+	/usr/sbin/ldconfig
+elif [ -x /sbin/ldconfig ]; then
+	/sbin/ldconfig
+fi
 
 
 %postun
-/usr/sbin/ldconfig
+if [ -x /usr/sbin/ldconfig ]; then
+	/usr/sbin/ldconfig
+elif [ -x /sbin/ldconfig ]; then
+	/sbin/ldconfig
+fi
 
 
 %changelog
+* Sun Jun 21 2020 Peter Bieringer <pb@bieringer.de>
+- cover 2 potential ldconfig locations
+
 * Sat Sep 07 2019 Peter Bieringer <pb@bieringer.de>
 - add build requirement: automake make
 

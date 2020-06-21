@@ -12,6 +12,7 @@ Info:
 20200621/PB:
 	databases: update
 	databases/tools/create_ieee_headerfile.pl: minor improvement
+	contrib/ipv6calc.spec[.in]: cover 2 potential ldconfig locations
 
 20200512/PB:
 	tools/ipv6calc-update-registries.sh: adjust LISP URL (website moved)
