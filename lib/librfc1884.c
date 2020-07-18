@@ -275,7 +275,7 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 		retval = 0;
 	};
 
-	if ( ( retval == 0 ) && ( ipv6addrp->flag_prefixuse == 1 ) && ((formatoptions & FORMATOPTION_literal) == 0) ) {
+	if ( ( retval == 0 ) && ( ipv6addrp->flag_prefixuse == 1 ) && ((formatoptions & (FORMATOPTION_literal|FORMATOPTION_no_prefixlength)) == 0) ) {
 		snprintf(resultstring, resultstring_length, "%s/%u", tempstring, (unsigned int) ipv6addrp->prefixlength);
 	} else {
 		if ((formatoptions & FORMATOPTION_literal) != 0) {

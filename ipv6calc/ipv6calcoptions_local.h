@@ -2,7 +2,7 @@
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calc/ipv6calcoptions.h
  * Version    : $Id$
- * Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2020 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options for ipv6calc
@@ -97,6 +97,9 @@ static struct option ipv6calc_longopts[] = {
 	{ "printcompressed"      , 0, NULL, FORMATOPTION_NUM_printcompressed       + FORMATOPTION_NUM_HEAD },
 	{ "printuncompressed"    , 0, NULL, FORMATOPTION_NUM_printuncompressed     + FORMATOPTION_NUM_HEAD },
 	{ "printfulluncompressed", 0, NULL, FORMATOPTION_NUM_printfulluncompressed + FORMATOPTION_NUM_HEAD },
+
+	{ "no-prefixlength"      , 0, NULL, FORMATOPTION_NUM_no_prefixlength + FORMATOPTION_NUM_HEAD },
+	{ "force-prefix"         , 1, NULL, FORMATOPTION_NUM_forceprefix + FORMATOPTION_NUM_HEAD },
 	
 	{ "machine_readable"     , 0, NULL, FORMATOPTION_NUM_machinereadable + FORMATOPTION_NUM_HEAD },
 	// { "quiet"                , 0, NULL, FORMATOPTION_NUM_quiet + FORMATOPTION_NUM_HEAD }, strange duplicate

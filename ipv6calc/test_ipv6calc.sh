@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
 # Version    : $Id$
-# Copyright  : 2001-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2001-2020 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 
@@ -153,6 +153,8 @@ NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 --action convnat64 64:ff9b::c000:201					=192.0.2.1
 ## Prefix + MAC -> IPv6
 --in prefix+mac fec0:0:0:1:: 01:23:45:67:89:01				=fec0::1:323:45ff:fe67:8901
+NOPIPETEST--in prefix+mac 1:2:3:4::/56 11:22:33:44:55:aa --action prefixmac2ipv6 --out ipv6addr  --force-prefix 64	=1:2:3:4:1322:33ff:fe44:55aa/64
+NOPIPETEST--in prefix+mac 1:2:3:4::/56 11:22:33:44:55:aa --action prefixmac2ipv6 --out ipv6addr --no-prefixlength	=1:2:3:4:1322:33ff:fe44:55aa
 ## IPv4 -> reverse
 --in ipv4addr --out revipv4 1.2.3.4					=4.3.2.1.in-addr.arpa.
 ## Information

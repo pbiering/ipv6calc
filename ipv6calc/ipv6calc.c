@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
  * Version    : $Id$
- * Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2020 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
@@ -526,6 +526,10 @@ int main(int argc, char *argv[]) {
 			case 'u':	
 			case FORMATOPTION_NUM_printuppercase + FORMATOPTION_NUM_HEAD:
 				formatoptions |= FORMATOPTION_printuppercase;
+				break;
+
+			case FORMATOPTION_NUM_no_prefixlength + FORMATOPTION_NUM_HEAD:
+				formatoptions |= FORMATOPTION_no_prefixlength;
 				break;
 				
 			case FORMATOPTION_NUM_forceprefix + FORMATOPTION_NUM_HEAD:
