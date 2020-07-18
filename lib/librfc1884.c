@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : librfc1884.c
  * Version    : $Id$
- * Copyright  : 2001-2016 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2020 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for conversions defined in RFC 1884
