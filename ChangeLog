@@ -11,9 +11,12 @@ Info:
 --------------------------------------------------------------------
 20200720/PB:
 	databases: update
+	lib/libipv4addr.h lib/libipv4addr.c: fix not working --no-prefixlength, add support maskprefix/suffix
+	lib/ipv6calctypes.h: add support maskprefix/suffix, forceprefix length
+	ipv6calc/ipv6calc.c: add support maskprefix/suffix
 
 20200718/PB:
-	ipv6calc/ipv6calc.c,ipv6calc/ipv6calcoptions_local.h,lib/librfc1884.c: fix not working --force-prefix <len> / --no-prefixlength
+	ipv6calc/ipv6calc.c,ipv6calc/ipv6calcoptions_local.h,lib/librfc1884.c: fix not working --forceprefix <len> / --no-prefixlength
 
 20200621/PB:
 	databases: update

@@ -2,7 +2,7 @@
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
  * Version    : $Id$
- * Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Copyright  : 2002-2020 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -689,7 +689,7 @@ int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, cha
 	if ((formatoptions & FORMATOPTION_machinereadable) != 0) {
 		snprintf(resultstring, resultstring_length, "IPV4=%s", tempstring);
 	} else {
-		if (ipv4addrp->flag_prefixuse == 1) {
+		if ((ipv4addrp->flag_prefixuse == 1) && ((formatoptions & FORMATOPTION_no_prefixlength) == 0)) {
 			snprintf(resultstring, resultstring_length, "%s/%d", tempstring, ipv4addrp->prefixlength);
 		} else {
 			snprintf(resultstring, resultstring_length, "%s", tempstring);
@@ -799,6 +799,83 @@ int libipv4addr_to_octal(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring,
 	snprintf(resultstring, resultstring_length, "%s", tempstring);
 	retval = 0;	
 	return (retval);
+};
+
+
+/*
+ * mask prefix bits (set suffix bits to 0)
+ *
+ * in:  structure via reference
+ * out: modified structure
+ */
+void ipv4addrstruct_maskprefix(ipv6calc_ipv4addr *ipv4addrp) {
+	unsigned int nbit, nword;
+	uint16_t mask, newword;
+	int i;
+
+	DEBUGPRINT_NA(DEBUG_libipv4addr, "called");
+
+	if (ipv4addrp->flag_prefixuse != 1) {
+		/* hmm, no prefix specified. skip */
+		return;
+	};
+
+	for (i = 31; i >= 0; i--) {
+		nbit = (unsigned int) i;
+		if (nbit >= (unsigned int) ipv4addrp->prefixlength) {
+			/* set bit to zero */
+
+			/* calculate word (16 bit) - matches with addr4p[]*/
+			nword = (nbit & 0x70) >> 4;
+
+			/* calculate mask */
+			mask = ((uint16_t) 0x8000u) >> (( ((uint16_t) nbit) & ((uint16_t) 0x0fu)));
+			newword = ipv4addr_getword(ipv4addrp, nword) & (~ mask );
+
+			DEBUGPRINT_WA(DEBUG_libipv4addr, "bit: %u = nword: %u, mask: %04x, word: %04x newword: %04x", nbit, nword, (unsigned int) mask, (unsigned int) ipv4addr_getword(ipv4addrp, nword), (unsigned int) newword);
+
+			ipv4addr_setword(ipv4addrp, nword, (unsigned int) newword);
+		};
+	};
+};
+
+
+/*
+ * mask suffix bits (set prefix bits to 0)
+ *
+ * in:  structure via reference
+ * out: modified structure
+ */
+void ipv4addrstruct_masksuffix(ipv6calc_ipv4addr *ipv4addrp) {
+	unsigned int nbit, nword;
+	uint16_t mask, newword;
+	int i;
+
+	DEBUGPRINT_NA(DEBUG_libipv4addr, "called");
+ 
+	if (ipv4addrp->flag_prefixuse != 1) {
+		/* hmm, no prefix specified. skip */
+		return;
+	};
+
+	for (i = 31; i >= 0; i--) {
+		nbit = (unsigned int) i;
+
+		if (nbit < (unsigned int) ipv4addrp->prefixlength) {
+			/* set bit to zero */
+
+			/* calculate word (16 bit) - matches with addr4p[]*/
+			nword = (nbit & 0x70) >> 4;
+
+			/* calculate mask */
+			mask = ((uint32_t) 0x8000u) >> (((uint32_t) nbit) & ((uint32_t) 0x0fu ));
+			newword = ipv4addr_getword(ipv4addrp, nword) & (~ mask );
+
+			DEBUGPRINT_WA(DEBUG_libipv4addr, "%u = nword: %u, mask: %04x, word: %04x newword: %04x", nbit, nword, (unsigned int) mask, (unsigned int) ipv4addr_getword(ipv4addrp, nword), (unsigned int) newword);
+
+			ipv4addr_setword(ipv4addrp, nword, (unsigned int) newword);
+		};
+	};
 };
 
 

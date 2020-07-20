@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : ipv6calc/Makefile[.in]
 # Version    : $Id$
-# Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2020 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calc
@@ -40,7 +40,7 @@ all:		ipv6calc
 .c.o:
 		$(CC) -c $< $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES)
 
-$(OBJS):	ipv6calc.h ipv6calchelp_local.h showinfo.h ipv6calcoptions_local.h ../config.h
+$(OBJS):	ipv6calc.h ipv6calchelp_local.h showinfo.h ipv6calcoptions_local.h ../config.h ../lib/ipv6calctypes.h
 
 libipv6calc:
 		cd ../ && ${MAKE} lib-make

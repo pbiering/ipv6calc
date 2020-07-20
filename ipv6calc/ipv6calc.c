@@ -1236,6 +1236,19 @@ PIPE_input:
 			ipv4addr.flag_prefixuse = 1;
 			ipv4addr.prefixlength = force_prefix;
 		};
+
+		if ((formatoptions & (FORMATOPTION_maskprefix | FORMATOPTION_masksuffix)) != 0) {
+			if (ipv4addr.flag_prefixuse == 1) {
+				if ((formatoptions & FORMATOPTION_maskprefix) != 0) {
+					ipv4addrstruct_maskprefix(&ipv4addr);
+				} else if ((formatoptions & FORMATOPTION_masksuffix) != 0) {
+					ipv4addrstruct_masksuffix(&ipv4addr);
+				};
+			} else {
+				fprintf(stderr, " Error: mask option used without specifying a prefix length\n");
+				exit(EXIT_FAILURE);
+			};
+		};
 	};
 
 	if (ipv6addr.flag_valid == 1) {
