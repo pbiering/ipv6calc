@@ -281,6 +281,10 @@ typedef struct {
 	{ 0xF0D7AF,	IEEE_OUI28, 0x00e0 },
 	{ 0xF469D5,	IEEE_OUI28, 0x00e1 },
 	{ 0xF490CB,	IEEE_OUI28, 0x00e2 },
+
+	{ 0x18FDCB,	IEEE_OUI28, 0x00e3 },
+	{ 0x98FC84,	IEEE_OUI28, 0x00e4 },
+	{ 0xC0619A,	IEEE_OUI28, 0x00e5 },
 };
 
 #endif

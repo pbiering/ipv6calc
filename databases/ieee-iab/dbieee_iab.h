@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Sun Jun 21 07:59:33 2020
+ * Generated     : Sat Jul 18 07:59:17 2020
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20200621";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20200718";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -652,7 +652,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x27E000, 0x27EFFF, "AnaLogic Computers Ltd.", "ANALOGIC-COMPUTERS" },
 	{ 0x0050C2, 0x27F000, 0x27FFFF, "Air Broadband Communications, Inc.", "AIR-BROADBAND-COMMUNICATION" },
 	{ 0x0050C2, 0x280000, 0x280FFF, "AGECODAGIS SARL", "AGECODAGIS-SARL" },
-	{ 0x0050C2, 0x281000, 0x281FFF, "CabTronix GmbH", "CABTRONIX" },
+	{ 0x0050C2, 0x281000, 0x281FFF, "Cabtronix AG", "CABTRONIX" },
 	{ 0x0050C2, 0x282000, 0x282FFF, "Telvent", "TELVENT" },
 	{ 0x0050C2, 0x283000, 0x283FFF, "ANSITEX CORP.", "ANSITEX" },
 	{ 0x0050C2, 0x284000, 0x284FFF, "Micronet Ltd.", "MICRONET" },
@@ -4456,7 +4456,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x160000, 0x160FFF, "Thermo Fisher Sceintific", "THERMO-FISHER-SCEINTIFIC" },
 	{ 0x40D855, 0x161000, 0x161FFF, "Solidscape Inc", "SOLIDSCAPE" },
 	{ 0x40D855, 0x162000, 0x162FFF, "LUNA-NEXUS", "LUNA-NEXUS" },
-	{ 0x40D855, 0x163000, 0x163FFF, "KMtronic LTD", "KMTRONIC" },
+	{ 0x40D855, 0x163000, 0x163FFF, "KMtronic ltd", "KMTRONIC" },
 	{ 0x40D855, 0x164000, 0x164FFF, "NFT Automatisierungssysteme GmbH", "NFT-AUTOMATISIERUNGSSYSTEME" },
 	{ 0x40D855, 0x165000, 0x165FFF, "TECHBOARD SRL", "TECHBOARD-SRL" },
 	{ 0x40D855, 0x166000, 0x166FFF, "Anhui Jiante Network Technology Co., Ltd.", "ANHUI-JIANTE-NETWORK" },

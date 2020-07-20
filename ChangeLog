@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20200720/PB:
+	databases: update
+
 20200718/PB:
 	ipv6calc/ipv6calc.c,ipv6calc/ipv6calcoptions_local.h,lib/librfc1884.c: fix not working --force-prefix <len> / --no-prefixlength
 
