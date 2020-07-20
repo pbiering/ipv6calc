@@ -91,6 +91,11 @@ cat <<END | grep -v '^#'
 --addr_to_uncompressed --maskprefix 3ffe:ffff:100:f101::1/64		=3ffe:ffff:100:f101:0:0:0:0/64
 --addr_to_uncompressed --masksuffix 3ffe:ffff:100:f101:c000::1/64	=0:0:0:0:c000:0:0:1/64
 --addr_to_uncompressed --uppercase ::ffff:13.1.68.3			=0:0:0:0:0:FFFF:13.1.68.3
+--out ipv4addr --no-prefixlength 1.2.3.4/24				=1.2.3.4
+--out ipv4addr --maskprefix 1.2.3.4/24					=1.2.3.0/24
+--out ipv4addr --masksuffix 1.2.3.4/24					=0.0.0.4/24
+--out ipv4addr --maskprefix 1.2.3.4/22					=1.2.0.0/22
+--out ipv4addr --masksuffix 1.2.3.4/22 					=0.0.3.4/22
 # selecting suffix/prefix
 --addr_to_uncompressed --printsuffix ::ffff:1.2.3.4/64			=0:ffff:1.2.3.4
 --in ipv6 --out ipv6 --printsuffix --printuncompressed ::ffff:1.2.3.4/64			=0:ffff:1.2.3.4
