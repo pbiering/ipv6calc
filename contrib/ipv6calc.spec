@@ -21,7 +21,7 @@
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
 Version:	2.2.1
-Release:	37%{?gittag}%{?dist}
+Release:	38%{?gittag}%{?dist}
 Group:		Applications/Text
 URL:		http://www.deepspace6.net/projects/%{name}.html
 License:	GPLv2
@@ -38,6 +38,7 @@ BuildRequires:	perl(Digest::MD5), perl(Digest::SHA1), perl(URI::Escape)
 BuildRequires:	perl(strict), perl(warnings)
 Requires:	perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 %if %{enable_shared}
+Requires:	unzip
 Provides:	ipv6calc-libs = %{version}-%{release}
 %else
 Conflicts:	ipv6calc-libs
