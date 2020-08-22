@@ -12,6 +12,7 @@ Info:
 20200822/PB:
 	spec: add requirement "unzip" (for IP2Location-update.sh)
 	tools/IP2Location-update.sh: check for existing "unzip"
+	tools/ipv6calc-db-update.sh.in: fix broken options -D|h|?
 
 20200720/PB:
 	databases: update

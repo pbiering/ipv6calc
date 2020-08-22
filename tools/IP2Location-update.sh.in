@@ -10,7 +10,7 @@
 # Project    : ipv6calc/IP2Location
 # File       : IP2Location-update.sh
 # Version    : $Id$
-# Copyright  : 2012-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2012-2020 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
 # 20150416: remove softlink support, no longer needed

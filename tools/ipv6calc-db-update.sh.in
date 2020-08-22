@@ -5,7 +5,7 @@
 # Project    : ipv6calc/databases
 # File       : ipv6calc-db-update.sh
 # Version    : $Id$
-# Copyright  : 2015-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2015-2020 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
 IPV6CALC_DAT_DIR_DEFAULT="@EXTERNAL_DB@"
@@ -34,7 +34,7 @@ Usage: $(basename "$0") [-s] [-u] [-D <dir>]
 END
 }
 
-while getopts "Dush\?" opt; do
+while getopts "D:ush\?" opt; do
 	case $opt in
 	    s)
 		skip_download=1
@@ -43,7 +43,11 @@ while getopts "Dush\?" opt; do
 		update=1
 		;;
 	    D)
-		IPV6CALC_DAT_DIR=$OPTARG
+		IPV6CALC_DAT_DIR="$OPTARG"
+		;;
+	    h|\?)
+		help
+		exit 0
 		;;
 	    *)
 		help
