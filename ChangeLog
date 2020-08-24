@@ -14,6 +14,7 @@ Info:
 	tools/GeoIP-update.sh[.in]: honor also IPV6CALC_DB_GEOIP2_DIR, remove legacy no-longer-working download mode, improve verbose mode
 	tools/IP2Location-update.sh[.in]: honor also IPV6CALC_DB_IP2LOCATION_DIR, add verbose option, mask password in verbose mode
 	tools/ipv6calc-db-update.sh[.in]: honor also IPV6CALC_DB_EXTERNAL_DIR
+	lib/ipv6calchelp.c: add hint about predefined long options from environment, fix missing catch for db-prio regarding DBIP2 and GEOIP2
 
 20200822/PB:
 	spec: add requirement "unzip" (for IP2Location-update.sh)

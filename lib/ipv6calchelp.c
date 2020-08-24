@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
  * Version    : $Id$
- * Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2020 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -387,7 +387,7 @@ void printhelp_common(const uint32_t help_features) {
 		fprintf(stderr, "  [--db-builtin-disable            ] : BuiltIn support disabled\n");
 #endif
 
-#if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP || defined SUPPORT_GEOIP || SUPPORT_IP2LOCATION
+#if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP || defined SUPPORT_DBIP2 || defined SUPPORT_GEOIP || defined SUPPORT_GEOIP2 || SUPPORT_IP2LOCATION
 		fprintf(stderr, "\n");
 		fprintf(stderr, "  [--db-priorization <entry1>[:...]] : Database priorization order list (overwrites default)\n");
 		fprintf(stderr, "                                         colon separated:");
@@ -398,6 +398,13 @@ void printhelp_common(const uint32_t help_features) {
 		fprintf(stderr, "\n");
 #endif
 	};
+
+	fprintf(stderr, "\n");
+	fprintf(stderr, " Hint: all long options can be predefined from environment by using\n");
+	fprintf(stderr, "  prefix: IPV6CALC_ and  conversion: '-' -> '_' and lowercase -> uppercase\n");
+	fprintf(stderr, "  example for options with values   : --db-dbip2-dir=<DIR>  ->  environment: IPV6CALC_DB_DBIP2_DIR=<DIR>\n");
+	fprintf(stderr, "  example for options without values: --db-dbip2-disable    ->  environment: IPV6CALC_DB_DBIP2_DISABLE=1\n");
+	fprintf(stderr, "                                                                              on|off|0|1 is supported\n");
 
 	fprintf(stderr, "\n");
 	return;
