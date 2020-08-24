@@ -9,6 +9,7 @@
 # License    : GNU GPL version 2
 
 IPV6CALC_DAT_DIR_DEFAULT="@EXTERNAL_DB@"
+[ -z "$IPV6CALC_DAT_DIR" -a -n "$IPV6CALC_DB_EXTERNAL_DIR" ] && IPV6CALC_DAT_DIR="$IPV6CALC_DB_EXTERNAL_DIR"
 [ -z "$IPV6CALC_DAT_DIR" ] && IPV6CALC_DAT_DIR="$IPV6CALC_DAT_DIR_DEFAULT"
 
 IPV6CALC_UPDATE_LIST="./ipv6calc-update-registries.sh /usr/share/ipv6calc/tools/ipv6calc-update-registries.sh"
@@ -26,7 +27,9 @@ Usage: $(basename "$0") [-s] [-u] [-D <dir>]
 
 	database directory: $IPV6CALC_DAT_DIR (default: $IPV6CALC_DAT_DIR_DEFAULT)
 
-	it honors externally defined environment value: IPV6CALC_DAT_DIR
+	it honors externally defined environment values:
+		prio 1: IPV6CALC_DAT_DIR
+		prio 2: IPV6CALC_DB_EXTERNAL_DIR
 
 	this script (and its helper scripts) will download data from
 	registries and generate Berkeley DB files for ipv6calc

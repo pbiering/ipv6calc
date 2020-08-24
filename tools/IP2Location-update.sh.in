@@ -18,6 +18,7 @@
 IP2LOCATION_CONFIG=${IP2LOCATION_CONFIG:-"$HOME/.ip2location"}
 
 IP2LOCATION_DAT_DIR_DEFAULT="@IP2LOCATION_DB@"
+[ -z "$IP2LOCATION_DAT_DIR" -a -n "$IPV6CALC_DB_IP2LOCATION_DIR" ] && IP2LOCATION_DAT_DIR="$IPV6CALC_DB_IP2LOCATION_DIR"
 [ -z "$IP2LOCATION_DAT_DIR" ] && IP2LOCATION_DAT_DIR="$IP2LOCATION_DAT_DIR_DEFAULT"
 
 IP2LOCATION_DAT_URL_BASE="http://www.ip2location.com/download?login=@LOGIN@&password=@PASSWORD@"
@@ -45,10 +46,13 @@ Usage: $(basename "$0") [-D <dir>] [-n] [-s]
 	-D <dir>	database destination directory (optional)
 	-n		no action (dry-run)
 	-s		skip already successfully downloaded files
+	-v		verbose
 
 	database directory: $IP2LOCATION_DAT_DIR (default: $IP2LOCATION_DAT_DIR_DEFAULT)
 
-	it honors externally defined environment value: IP2LOCATION_DAT_DIR
+	it honors externally defined environment value:
+		prio 1: IP2LOCATION_DAT_DIR
+		prio 2: IPV6CALC_DB_IP2LOCATION_DIR
 
  this script will download data from ip2location.com
   into given/set database directory
@@ -101,7 +105,7 @@ if [ $authenticated -eq 0 ]; then
 fi
 
 # option parsing
-while getopts "fsnD:h\?" opt; do
+while getopts "vfsnD:h\?" opt; do
 	case $opt in
 	    D)
 		IP2LOCATION_DAT_DIR=$OPTARG
@@ -111,6 +115,9 @@ while getopts "fsnD:h\?" opt; do
 		;;
 	    s)
 		SKIP_OK=1
+		;;
+	    v)
+		verbose=1
 		;;
 	    *)
 		help
@@ -145,7 +152,7 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 		continue
 	fi
 
-	echo "INFO  : download list $list: ${!list}"
+	[ "$verbose" = "1" ] && echo "INFO  : download list $list: ${!list}"
 
 	url_base="$IP2LOCATION_DAT_URL_BASE"
 
@@ -223,7 +230,7 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 		file_dest="$IP2LOCATION_DAT_DIR/$file"
 
 		if [ "$NO_ACTION" = "1" ]; then
-			echo "NOTICE: download skipped by option: $uri ($file_dest)"
+			echo "NOTICE: download skipped by option: ${url/password=*&/password=********&} ($file_dest)"
 			continue
 		fi
 
@@ -250,7 +257,7 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 			fi
 		fi
 
-		echo "INFO  : try to download URL: $url ($file_dest)"
+		[ "$verbose" = "1" ] && echo "INFO  : try to download URL: ${url/password=*&/password=********&} ($file_dest)"
 		wget -q -O "$file_dest" "$url"
 		result=$?
 			
@@ -258,7 +265,7 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 			echo "ERROR : download of file not successful: $file_dest ($!)"
 			continue
 		fi
-		echo "INFO  : download of file successful: $file_dest"
+		[ "$verbose" = "1" ] && echo "INFO  : download of file successful: $file_dest"
 
 		if [ ! -s "$file_dest" ]; then
 			echo "ERROR : downloaded file has ZERO size: $file_dest"
@@ -279,8 +286,10 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 			echo "ERROR : unzip of file not successful: $file_dest"
 			continue
 		fi
-		echo "INFO  : unzip of file successful: $file_dest (remove downloaded file now)"
+		[ "$verbose" = "1" ] && echo "INFO  : unzip of file successful: $file_dest (remove downloaded file now)"
 		rm -f "$file_dest"
+
+		echo "NOTICE: download/unzip successful: $token"
 	done
 done
 

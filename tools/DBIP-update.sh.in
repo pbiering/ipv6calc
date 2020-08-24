@@ -5,10 +5,11 @@
 # Project    : ipv6calc/DBIP
 # File       : DBIP-update.sh
 # Version    : $Id$
-# Copyright  : 2014-2019 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2014-2020 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
 DBIP_DAT_DIR_DEFAULT="@DBIP_DB@"
+[ -z "$DBIP_DAT_DIR" -a -n "$IPV6CALC_DB_DBIP2_DIR" ] && DBIP_DAT_DIR="$IPV6CALC_DB_DBIP2_DIR"
 [ -z "$DBIP_DAT_DIR" ] && DBIP_DAT_DIR="$DBIP_DAT_DIR_DEFAULT"
 
 DBIP_DAT_URL_BASE="http://download.db-ip.com/free/"
@@ -28,7 +29,9 @@ Usage: $(basename "$0") [-v] [-s] [-D <dir>] [-U <url>] [-T <type>]
 
 	database directory: $DBIP_DAT_DIR (default: $DBIP_DAT_DIR_DEFAULT)
 
- it honors externally defined environment value: DBIP_DAT_DIR
+ it honors externally defined environment value:
+	prio 1: DBIP_DAT_DIR
+	prio 2: IPV6CALC_DB_DBIP2_DIR
 
  this script will download data from
  DB-IP.com (default: free versions) the MaxMindDB (mmdb) files DB files for ipv6calc

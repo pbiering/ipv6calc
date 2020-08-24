@@ -5,14 +5,12 @@
 # Project    : ipv6calc/GeoIP
 # File       : GeoIP-update.sh
 # Version    : $Id$
-# Copyright  : 2012-2019 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2012-2020 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
 GEOIP_DAT_DIR_DEFAULT="@GEOIP_DB@"
+[ -z "$GEOIP_DAT_DIR" -a -n "$IPV6CALC_DB_GEOIP2_DIR" ] && GEOIP_DAT_DIR="$IPV6CALC_DB_GEOIP2_DIR"
 [ -z "$GEOIP_DAT_DIR" ] && GEOIP_DAT_DIR="$GEOIP_DAT_DIR_DEFAULT"
-
-GEOIP_DAT_URL_BASE="http://geolite.maxmind.com/download/geoip/database/"
-GEOIP_DAT_FILES="GeoLiteCountry/GeoIP.dat.gz GeoIPv6.dat.gz GeoLiteCity.dat.gz GeoLiteCityv6-beta/GeoLiteCityv6.dat.gz asnum/GeoIPASNum.dat.gz asnum/GeoIPASNumv6.dat.gz GeoLite2-City.tar.gz GeoLite2-Country.tar.gz GeoLite2-ASN.tar.gz"
 
 help() {
 	cat <<END
@@ -20,20 +18,14 @@ Usage: $(basename "$0") [-D <dir>] [-v] [-s] [-L] [-G]
 	-s		skip download
 	-D <dir>	database directory (optional)
 	-v		verbose
-	-L		legacy download mode (by default download only MaxMindDB version)
-	-G		use 'geoipupdate' to download databases
 
 	database directory: $GEOIP_DAT_DIR (default: $GEOIP_DAT_DIR_DEFAULT)
 
-	it honors externally defined environment value: GEOIP_DAT_DIR
+	it honors externally defined environment value:
+		prio 1: GEOIP_DAT_DIR
+		prio 2: IPV6CALC_DB_GEOIP2_DIR
 
- this script will download data from geolite.maxmind.com (GeoIP)
- into given/set database directory
-
- GEOIP_DAT_URL_BASE=$GEOIP_DAT_URL_BASE
- GEOIP_DAT_FILES=$GEOIP_DAT_FILES
-
- in case of 'geoipupdate' mode is used, adjust /etc/GeoIP.conf:
+ adjust /etc/GeoIP.conf in advance:
    EditionIDs GeoLite2-Country GeoLite2-City GeoLite2-ASN
    (in case a valid license key exists, add key and extend EditionIDs related)
    see also https://dev.maxmind.com/geoip/geoipupdate/
@@ -52,10 +44,11 @@ while getopts "sGLD:vh\?" opt; do
 		verbose=1
 		;;
 	    L)
-		legacy=1
+		echo "ERROR : legacy mode is no longer supported"
+		exit 1
 		;;
 	    G)
-		geoipupdate=1
+		echo "NOTICE: 'geoipupdate' is default since legacy is no longer supported"
 		;;
 	    *)
 		help
@@ -64,6 +57,7 @@ while getopts "sGLD:vh\?" opt; do
 	esac
 done
 
+geoipupdate=1 # now default, legacy is no longer working
 
 if [ ! -d "$GEOIP_DAT_DIR" ]; then
 	echo "ERROR : missing directory: $GEOIP_DAT_DIR"
@@ -81,81 +75,17 @@ fi
 
 
 if [ "$geoipupdate" != "1" ]; then
-
-# Download and unpack files
-for file in $GEOIP_DAT_FILES; do
-	case $file in
-	    *.dat.gz)
-		if [ "$legacy" != "1" ]; then
-			echo "NOTICE: legacy mode not enabled, skip download of: $file"
-		fi
-		continue
-		;;
-	esac
-
-	file_basename="`basename "$file"`"
-	file_basename_decomp="`basename "$file" .gz`"
-	file_dest="$GEOIP_DAT_DIR/$file_basename"
-
-	if [ "$skip_download" != "1" ]; then
-		echo "INFO  : try to download file: $file ($file_dest)"
-		wget $options_wget -O "$file_dest" "$GEOIP_DAT_URL_BASE$file"
-		if [ $? -ne 0 ]; then
-			echo "ERROR : download of file not successful: $file ($file_dest)"
-			continue
-		fi
-		echo "INFO  : download of file successful: $file ($file_dest)"
-	fi
-
-	case $file in
-	    *.dat.gz)
-		gunzip -f "$file_dest"
-		if [ $? -ne 0 ]; then
-			echo "ERROR : unzip of file not successful: $file_dest"
-			continue
-		fi
-		echo "INFO  : unzip of file successful: $file_dest"
-		;;
-	    *.tar.gz)
-		file_extract=${file/.tar.gz/.mmdb}
-		file_extract_full=$(tar tzf "$file_dest" | grep "$file_extract$")
-		echo "INFO  : extract from $file_dest: $file_extract_full"
-		tar xzf "$file_dest" --strip-components 1 -C "$GEOIP_DAT_DIR" "$file_extract_full"
-		if [ $? -ne 0 ]; then
-			echo "ERROR : tar extract of file not successful: $file_dest"
-			continue
-		fi
-
-		echo "INFO  : remove downloaded file: $file_dest"
-		rm -f "$file_dest"
-		;;
-	esac
-
-	# check for softlinks
-	case "$file_basename_decomp" in
-	    GeoLiteCity.dat)
-		softlinkdst="GeoIPCity.dat" 
-		;;
-	    GeoLiteCityv6.dat)
-		softlinkdst="GeoIPCityv6.dat" 
-		;;
-	    *)
-		softlinkdst="" 
-        esac
-
-	if [ -n "$softlinkdst" -a ! -e "$GEOIP_DAT_DIR/$softlinkdst" ]; then
-		echo "NOTICE: softlink missing, create: $softlinkdst"
-		ln -s "$file_basename_decomp" "$GEOIP_DAT_DIR/$softlinkdst"
-	fi
-done
-
-else	# end of wget based download
+	echo "ERROR : legacy mode is no longer supported (and this part of code should not be reached anymore...)"
+	exit 1
+else
 	geoipupdate_bin=$(which geoipupdate)
 
 	if [ -z "$geoipupdate_bin" ]; then
 		echo "ERROR : missing binary 'geoipupdate' not found, can't continue"
 		exit 1
 	fi
+
+	[ "$verbose" ] && echo "INFO  : call now: geoipupdate -v -d $GEOIP_DAT_DIR"
 
 	geoipupdate ${verbose:+-v} -d $GEOIP_DAT_DIR
 	if [ $? -ne 0 ]; then

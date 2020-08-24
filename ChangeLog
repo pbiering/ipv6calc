@@ -9,10 +9,16 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20200824/PB:
+	tools/DBIP-update.sh[.in]: honor also IPV6CALC_DB_DBIP2_DIR
+	tools/GeoIP-update.sh[.in]: honor also IPV6CALC_DB_GEOIP2_DIR, remove legacy no-longer-working download mode, improve verbose mode
+	tools/IP2Location-update.sh[.in]: honor also IPV6CALC_DB_IP2LOCATION_DIR, add verbose option, mask password in verbose mode
+	tools/ipv6calc-db-update.sh[.in]: honor also IPV6CALC_DB_EXTERNAL_DIR
+
 20200822/PB:
 	spec: add requirement "unzip" (for IP2Location-update.sh)
 	tools/IP2Location-update.sh: check for existing "unzip"
-	tools/ipv6calc-db-update.sh.in: fix broken options -D|h|?
+	tools/ipv6calc-db-update.sh[.in]: fix broken options -D|h|?
 
 20200720/PB:
 	databases: update
