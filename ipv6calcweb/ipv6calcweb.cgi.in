@@ -3,7 +3,7 @@
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
 # Version    : $Id$
-# Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2020 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
 # Simple Perl web interface and security wrapper
@@ -43,7 +43,7 @@
 #  HTTP_IPV6CALCWEB_DB_MMDB_LIB         : MaxMindDB library name (optional in dyn-load support)
 #  HTTP_IPV6CALCWEB_DB_IP2LOCATION_DIR  : IP2Location database directory (optional)
 #  HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB  : IP2Location library name (optional in dyn-load support)
-#  HTTP_IPV6CALCWEB_DB_GEOIP_DIR        : GeoIP database directory (optional)
+#  HTTP_IPV6CALCWEB_DB_GEOIP_DIR        : GeoIP/GeoIP2 database directory (optional)
 #  HTTP_IPV6CALCWEB_DB_GEOIP_LIB        : GeoIP library name (optional in dyn-load support)
 #  HTTP_IPV6CALCWEB_DB_DBIP_DIR         : db-ip.com database directory (optional)
 #  HTTP_IPV6CALCWEB_DB_EXTERNAL_DIR     : external database directory (optional)
@@ -53,7 +53,7 @@
 #  HTTP_IPV6CALCWEB_ANTIDOS_LOAD1       : System load 1 limit to trigger DoS protection (default below)
 #  HTTP_IPV6CALCWEB_ANTIDOS_LOAD5       : System load 5 limit to trigger DoS protection (default below)
 #  HTTP_IPV6CALCWEB_ANTIDOS_LOAD15      : System load 15 limit to trigger DoS protection (default below)
-#  HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX     : Max CGI processes to trigger DoS protection (default below)
+#  HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX     : Max CGI processes to trigger DoS protection (default 0), keep 0 in case of SELinux is active to avoid many entries in audit log
 #
 #  HTTP_IPV6CALCWEB_DB_GEOIP		: 1 (enable)         , 0 (disable, default)
 #  HTTP_IPV6CALCWEB_DB_GEOIP2		: 1 (enable, default), 0 (disable)
@@ -92,7 +92,7 @@ sub logging($$);
 my $load1_max = 2;
 my $load5_max = 1.5;
 my $load15_max = 1;
-my $proc_max = 4;
+my $proc_max = 0;
 my $proc_pattern = "ipv6calcweb";
 
 ## defines for Anti-DoS (form or mixed mode only)
@@ -1952,22 +1952,24 @@ if (($debug & 0x4000) == 0) {
 	my $proc_count = 0;
 	my @proc_list;
 
-	if ((defined $bin_ps) && (-x $bin_ps)) {
-		my @proc_table = `$bin_ps -eo args`;
-		@proc_list = grep /perl .*( |\/)$proc_pattern/, @proc_table;
+	if ($proc_max > 0) {
+		if ((defined $bin_ps) && (-x $bin_ps)) {
+			my @proc_table = `$bin_ps -eo args`;
+			@proc_list = grep /perl .*( |\/)$proc_pattern/, @proc_table;
 
-		$proc_count = scalar(@proc_list);
-		logging("DEBUG", "System has 'perl $proc_pattern' running in parallel: procs=$proc_count") if ($debug & 0x0100);
-	};
+			$proc_count = scalar(@proc_list);
+			logging("DEBUG", "System has 'perl $proc_pattern' running in parallel: procs=$proc_count") if ($debug & 0x0100);
+		};
 
-	if ($proc_count > 0) {
-		# check amount of processes
-		my $proc_count_norm = $proc_count / $cpu_cores;
-		if ($proc_count_norm > $proc_max) {
-			logging("WARN", "System has too much 'perl $proc_pattern' running in parallel: procs=$proc_count procs_norm=$proc_count_norm limit=$proc_max");
-			$error = "System overloaded, please retry in 1 minute - sorry";
-			$error_flag = 1; # no automatic redirect
-			&print_error();
+		if ($proc_count > 0) {
+			# check amount of processes
+			my $proc_count_norm = $proc_count / $cpu_cores;
+			if ($proc_count_norm > $proc_max) {
+				logging("WARN", "System has too much 'perl $proc_pattern' running in parallel: procs=$proc_count procs_norm=$proc_count_norm limit=$proc_max");
+				$error = "System overloaded, please retry in 1 minute - sorry";
+				$error_flag = 1; # no automatic redirect
+				&print_error();
+			};
 		};
 	};
 };
