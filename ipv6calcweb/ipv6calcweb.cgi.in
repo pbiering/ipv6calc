@@ -1952,7 +1952,7 @@ if (($debug & 0x4000) == 0) {
 	my $proc_count = 0;
 	my @proc_list;
 
-	if ($proc_max > 0) {
+	if ($proc_max != 0) {
 		if ((defined $bin_ps) && (-x $bin_ps)) {
 			my @proc_table = `$bin_ps -eo args`;
 			@proc_list = grep /perl .*( |\/)$proc_pattern/, @proc_table;
