@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libipv6addr.c
  * Version    : $Id$
- * Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Copyright  : 2001-2020 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -2202,7 +2202,9 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 				if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_6BONE) != 0) {
 					DEBUGPRINT_NA(DEBUG_libipv6addr, "IPv6 is 6bone unicast, special prefix anonymization");
 					cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + IPV6_ADDR_REGISTRY_6BONE;
-					as_num32 = 0;
+
+					CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
+					as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, NULL);
 				} else if ((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_LISP) != 0) {
 					DEBUGPRINT_NA(DEBUG_libipv6addr, "IPv6 is LISP unicast, special prefix anonymization");
 					cc_index = COUNTRYCODE_INDEX_LISP;
@@ -3350,20 +3352,37 @@ uint32_t libipv6addr_as_num32_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsign
 	ipv6calc_ipv4addr ipv4addr;
 	ipv6calc_ipv6addr ipv6addr;
 	ipv6calc_ipaddr ipaddr;
+	uint32_t payload;
 	int retval;
 
 	DEBUGPRINT_NA(DEBUG_libipv6addr, "start");
 
 	if ((ipv6addrp->typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) != 0) {
+		DEBUGPRINT_NA(DEBUG_libipv6addr, "IPv6 address has anonymized prefix");
 		if ((ipv6addrp->typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX) == 0) {
-			/* retrieve ASN from anonymization value */
-			retval = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_ASN32, &as_num32);
-			if (retval != 0) {
-				fprintf(stderr, "Error getting ASN32 from anonymized IPv6 address\n");
-				goto END_libipv6addr_as_num32_by_addr;
+			if ((ipv6addrp->typeinfo & IPV6_ADDR_IID_32_63_HAS_IPV4) != 0) {
+				DEBUGPRINT_NA(DEBUG_libipv6addr, "retrieve ASN from anonymized IPv4 in IID");
+				payload = ipv6addr_get_payload_anonymized_iid(ipv6addrp, ipv6addrp->typeinfo);
+				/* IPv4 */
+				ipv4addr_setoctet(&ipv4addr, 0, (payload >> 16) & 0xff);
+				ipv4addr_setoctet(&ipv4addr, 1, (payload >>  8) & 0xff);
+				ipv4addr_setoctet(&ipv4addr, 2, (payload      ) & 0xff);
+				ipv4addr_setoctet(&ipv4addr, 3, 0);
+
+				as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr, data_source_ptr);
+			} else {
+				/* retrieve ASN from anonymization value */
+				DEBUGPRINT_NA(DEBUG_libipv6addr, "retrieve ASN from anonymized prefix");
+				retval = ipv6addr_get_payload_anonymized_prefix(ipv6addrp, ANON_PREFIX_PAYLOAD_ASN32, &as_num32);
+				if (retval != 0) {
+					fprintf(stderr, "Error getting ASN32 from anonymized IPv6 address\n");
+					goto END_libipv6addr_as_num32_by_addr;
+				};
 			};
 		} else {
 			if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_6TO4) != 0) {
+				/* retrieve ASN from included IPv4 address */
+				DEBUGPRINT_NA(DEBUG_libipv6addr, "retrieve ASN from included IPv4 address (6to4)");
 				retval = libipv6addr_get_included_ipv4addr(ipv6addrp, &ipv4addr, IPV6_ADDR_SELECT_IPV4_DEFAULT);
 				if (retval != 0) {
 					fprintf(stderr, "Error getting included IPv4 address from anonymized IPv6 address\n");
