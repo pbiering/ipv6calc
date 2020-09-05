@@ -2760,6 +2760,7 @@ int libipv6calc_db_wrapper_bdb_get_data_by_key(DB *dbp, char *token, char *value
 
 /*
  * generic fetch of a Berkeley DB row
+ * in: data_ptr has to point to proper variable (not a pointer)
  */
 int libipv6calc_db_wrapper_bdb_fetch_row(
 	DB 			*db_ptr,		// pointer to DB
