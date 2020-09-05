@@ -9,6 +9,14 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20200905/PB:
+	databases/lib/libipv6calc_db_wrapper_External.c: remove unused function, do not close database in case an error is found, log extended information instead, fix variable handling for strtok
+	ipv6calc/test_scenarios.sh: some fixes related to database updates
+
+20200904/PB:
+	lib/libipv6addr.c: extract ASN from anonymized included IPv4 address in IID
+	ipv6calcweb/ipv6calcweb.cgi[.in]: HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX: activate test only if proc_max != 0 (solve "make test" issue)
+
 20200825/PB:
 	ipv6calcweb/ipv6calcweb.cgi[.in]: HTTP_IPV6CALCWEB_ANTIDOS_PROCMAX default 0 and activate test only if proc_max > 0 to avoid SELinux issues (until a better solution is found)
 
