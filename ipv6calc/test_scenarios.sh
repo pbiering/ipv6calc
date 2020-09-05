@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : test_scenarios.sh
 # Version    : $Id$
-# Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2001-2020 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPLv2
 #
 # Test patterns for ipv6calc (functions only)
@@ -66,10 +66,10 @@ testscenarios_ipv4_reserved() {
 	cat <<END | grep -v '^#'
 0.0.0.0			RFC1122#3.2.1.3
 0.255.255.255		RFC1122#3.2.1.3
-9.255.255.255		noRFC
+9.255.255.255		noRFC		skip-anon-test
 10.0.0.0		RFC1918#3
 10.255.255.255		RFC1918#3
-11.0.0.0		noRFC
+11.0.0.0		noRFC		skip-anon-test
 100.63.255.255		noRFC
 100.64.0.0		RFC6598
 100.127.255.255		RFC6598
@@ -77,7 +77,7 @@ testscenarios_ipv4_reserved() {
 126.255.255.255		noRFC
 127.0.0.0		RFC1122#3.2.1.3
 127.255.255.255		RFC1122#3.2.1.3
-128.0.0.0		noRFC
+128.0.0.0		noRFC		skip-anon-test
 169.253.255.255		noRFC
 169.254.0.0		RFC3927#1
 169.254.255.255		RFC3927#1
@@ -94,7 +94,7 @@ testscenarios_ipv4_reserved() {
 192.0.2.0		RFC5737#1
 192.0.2.255		RFC5737#1
 192.0.3.0		noRFC
-192.88.98.255		noRFC
+192.88.98.255		noRFC		skip-anon-test
 192.88.99.0		RFC3068#2.3
 192.88.99.255		RFC3068#2.3
 192.88.100.0		noRFC		skip-anon-test
@@ -106,7 +106,7 @@ testscenarios_ipv4_reserved() {
 198.18.0.0		RFC2544#C.2.2
 198.19.255.255		RFC2544#C.2.2
 198.20.0.0		noRFC
-198.51.99.255		noRFC
+198.51.99.255		noRFC		skip-anon-test
 198.51.100.0		RFC5737#3
 198.51.100.255		RFC5737#3
 198.51.101.0		noRFC		skip-anon-test
@@ -511,10 +511,10 @@ END
 
 testscenarios_showinfo_DBIPv6() {
 	cat <<END | grep -v '^#'
-# match first entry in database (db-ip.com assigns unusued range to US)
-2000:000:0000:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=US
-# match first entry in database (db-ip.com assigns unusued range to US)
-3fff:000:0000:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=US
+# match first entry in database
+2000:000:0000:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=CN
+# match first entry in database
+3fff:000:0000:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=CN
 # non-anonymized IPv6 prefix
 2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=DE
 2001:a60:113a:0123:0123:4567:89ab:cdef	DBIP_COUNTRY_SHORT=DE
