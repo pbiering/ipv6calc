@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.c
  * Version    : $Id$
- * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2020 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc External (superseeding BuiltIn) database wrapper
@@ -549,7 +549,7 @@ END_libipv6calc_db_wrapper:
  * wrapper: External_database_info
  */
 char *libipv6calc_db_wrapper_External_database_info(const unsigned int type) {
-	static char resultstring[NI_MAXHOST] = "";
+	static char resultstring[NI_MAXHOST] = ""; // has to be static because pointer is returned
 	char datastring[NI_MAXHOST];
 	char tempstring[NI_MAXHOST];
 	int ret, i, entry = -1;
@@ -678,142 +678,6 @@ time_t libipv6calc_db_wrapper_External_db_unixtime_by_feature(uint32_t feature) 
 };
 
 
-/* registry by address */
-int libipv6calc_db_wrapper_External_wrapper_registry_by_addr(const char *addr, const int proto) {
-	int result = REGISTRY_UNKNOWN;
-
-	int i;
-	DB *dbp;
-
-	static char resultstring[NI_MAXHOST];
-
-	char *data_ptr = "";
-
-	int External_type = 0;
-
-	ipv6calc_ipv4addr ipv4addr;
-	ipv6calc_ipv6addr ipv6addr;
-
-	uint32_t ipv4 = 0, ipv6_00_31 = 0, ipv6_32_63 = 0;
-
-	long int recno_max;
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Called with addr=%s proto=%d", addr, proto);
-
-	if (proto == 4) {
-		External_type = EXTERNAL_DB_IPV4_REGISTRY;
-
-		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_EXTERNAL] & IPV6CALC_DB_IPV4_TO_REGISTRY) == 0) {
-			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "No external database supporting IPv4 registry available");
-			goto END_libipv6calc_db_wrapper;
-		};
-		// convert char to structure
-		result = addr_to_ipv4addrstruct(addr, resultstring, sizeof(resultstring), &ipv4addr);
-	} else if (proto == 6) {
-		External_type = EXTERNAL_DB_IPV6_REGISTRY;
-
-		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_EXTERNAL] & IPV6CALC_DB_IPV6_TO_REGISTRY) == 0) {
-			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "No external database supporting IPv6 registry available");
-			goto END_libipv6calc_db_wrapper;
-		};
-
-		// convert char to structure
-		result = addr_to_ipv6addrstruct(addr, resultstring, sizeof(resultstring), &ipv6addr);
-	} else {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Unsupported proto: %d", proto);
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	if (result != 0) {
-		ERRORPRINT_WA("error converting address string for proto %d: %s", proto, addr);
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	dbp = libipv6calc_db_wrapper_External_open_type(External_type, &recno_max);
-
-	if (dbp == NULL) {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Error opening External by type");
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "database opened type=%d recno_max=%ld", External_type, recno_max);
-
-	if (proto == 4) {
-		ipv4 = ipv4addr_getdword(&ipv4addr);
-	} else if (proto == 6) {
-		ipv6_00_31 = ipv6addr_getdword(&ipv6addr, 0);
-		ipv6_32_63 = ipv6addr_getdword(&ipv6addr, 1);
-	};
-
-	result = libipv6calc_db_wrapper_get_entry_generic(
-		(void *) dbp,						// pointer to database
-		IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB,			// type of data_ptr
-		IPV6CALC_DB_LOOKUP_DATA_KEY_TYPE_FIRST_LAST,		// key type
-		(proto == 4) ? IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x2 : IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_DEC_32x4,   // key format
-		(proto == 4) ? 32 : 64,					// key length
-		IPV6CALC_DB_LOOKUP_DATA_SEARCH_TYPE_BINARY,		// search type
-		recno_max,						// number of rows
-		(proto == 4) ? ipv4 : ipv6_00_31,			// lookup key MSB
-		(proto == 4) ? 0    : ipv6_32_63,			// lookup key LSB
-		resultstring,						// data ptr
-		NULL							// function pointer
-	);
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "resultstring=%s", resultstring);
-
-	char datastring[NI_MAXHOST];
-
-	char *token, *cptr, **ptrptr;
-	ptrptr = &cptr;
-
-	int token_count = 0;
-
-	snprintf(datastring, sizeof(datastring), "%s", data_ptr);
-
-	// split result string
-	token = strtok_r(resultstring, ";", ptrptr);
-	while (token != NULL) {
-		token_count++;
-
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Database entry found %d: %s", token_count, token);
-
-		if (token_count == 1) {
-			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_registries); i++) {
-				if (strcmp(token, ipv6calc_registries[i].tokensimple) == 0) {
-					result = ipv6calc_registries[i].number;
-					break;
-				};
-			};
-		};
-
-		/* get next token */
-		token = strtok_r(NULL, ";", ptrptr);
-	};
-
-	if (token_count != 1) {
-		ERRORPRINT_WA("data has more entries than expected, corrupt database: %d", token_count);
-		goto END_libipv6calc_db_wrapper_close;
-	};
-
-	if (result == REGISTRY_UNKNOWN) {
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "did not return a record for 'registry'");
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "result registry=%d", result);
-
-	EXTERNAL_DB_USAGE_MAP_TAG(External_type);
-
-	goto END_libipv6calc_db_wrapper; // keep db open
-
-END_libipv6calc_db_wrapper_close:
-	libipv6calc_db_wrapper_External_close(dbp);
-
-END_libipv6calc_db_wrapper:
-	return(result);
-};
-
-
 /*
  * get registry number of an IPv4/IPv6 address
  *
@@ -823,8 +687,7 @@ END_libipv6calc_db_wrapper:
 int libipv6calc_db_wrapper_External_registry_num_by_addr(const ipv6calc_ipaddr *ipaddrp) {
 	DB *dbp, *dbp_iana;
 	long int recno_max;
-	static char resultstring[NI_MAXHOST];
-	char *data_ptr = "";
+	char resultstring[NI_MAXHOST];
 	int i, result;
 	int retval = REGISTRY_UNKNOWN;
 
@@ -925,20 +788,18 @@ int libipv6calc_db_wrapper_External_registry_num_by_addr(const ipv6calc_ipaddr *
 	goto END_libipv6calc_db_wrapper;
 
 END_libipv6calc_db_wrapper_match:
-
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "resultstring=%s", resultstring);
 
 	char datastring[NI_MAXHOST];
+	snprintf(datastring, sizeof(datastring), "%s", resultstring); // copy string for strtok
 
 	char *token, *cptr, **ptrptr;
 	ptrptr = &cptr;
 
 	int token_count = 0;
 
-	snprintf(datastring, sizeof(datastring), "%s", data_ptr);
-
 	// split result string
-	token = strtok_r(resultstring, ";", ptrptr);
+	token = strtok_r(datastring, ";", ptrptr);
 	while (token != NULL) {
 		token_count++;
 
@@ -958,8 +819,8 @@ END_libipv6calc_db_wrapper_match:
 	};
 
 	if (token_count != 1) {
-		ERRORPRINT_WA("data has more entries than expected, corrupt database: %d", token_count);
-		goto END_libipv6calc_db_wrapper_close;
+		ERRORPRINT_WA("data has more entries than expected, corrupt database: %d (resultstring='%s' prefix=%08x%08x)", token_count, resultstring, (unsigned int) ipaddrp->addr[0], (unsigned int) ipaddrp->addr[1]);
+		goto END_libipv6calc_db_wrapper;
 	};
 
 	if (retval == REGISTRY_UNKNOWN) {
@@ -970,11 +831,6 @@ END_libipv6calc_db_wrapper_match:
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "result registry=%d", retval);
 
 	EXTERNAL_DB_USAGE_MAP_TAG(External_type);
-
-	goto END_libipv6calc_db_wrapper; // keep db open
-
-END_libipv6calc_db_wrapper_close:
-	libipv6calc_db_wrapper_External_close(dbp);
 
 END_libipv6calc_db_wrapper:
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "retval=%d", retval);
@@ -993,7 +849,6 @@ int libipv6calc_db_wrapper_External_country_code_by_addr(const ipv6calc_ipaddr *
 	DB *dbp;
 	long int recno_max;
 	static char resultstring[NI_MAXHOST];
-	char *data_ptr = "";
 	int result;
 	int retval = -1;
 
@@ -1057,16 +912,15 @@ int libipv6calc_db_wrapper_External_country_code_by_addr(const ipv6calc_ipaddr *
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "resultstring=%s", resultstring);
 
 	char datastring[NI_MAXHOST];
+	snprintf(datastring, sizeof(datastring), "%s", resultstring); // copy string for strtok
 
 	char *token, *cptr, **ptrptr;
 	ptrptr = &cptr;
 
 	int token_count = 0;
 
-	snprintf(datastring, sizeof(datastring), "%s", data_ptr);
-
 	// split result string
-	token = strtok_r(resultstring, ";", ptrptr);
+	token = strtok_r(datastring, ";", ptrptr);
 	while (token != NULL) {
 		token_count++;
 
@@ -1082,8 +936,8 @@ int libipv6calc_db_wrapper_External_country_code_by_addr(const ipv6calc_ipaddr *
 	};
 
 	if (token_count != 1) {
-		ERRORPRINT_WA("data has more entries than expected, corrupt database: %d", token_count);
-		goto END_libipv6calc_db_wrapper_close;
+		ERRORPRINT_WA("data has more entries than expected, corrupt database: %d (resultstring='%s' prefix=%08x%08x)", token_count, resultstring, (unsigned int) ipaddrp->addr[0], (unsigned int) ipaddrp->addr[1]);
+		goto END_libipv6calc_db_wrapper;
 	};
 
 	if (strlen(country) != 2) {
@@ -1096,11 +950,6 @@ int libipv6calc_db_wrapper_External_country_code_by_addr(const ipv6calc_ipaddr *
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "result CountryCode=%s", country);
 
 	EXTERNAL_DB_USAGE_MAP_TAG(External_type);
-
-	goto END_libipv6calc_db_wrapper; // keep db open
-
-END_libipv6calc_db_wrapper_close:
-	libipv6calc_db_wrapper_External_close(dbp);
 
 END_libipv6calc_db_wrapper:
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "retval=%d", retval);
@@ -1119,8 +968,7 @@ END_libipv6calc_db_wrapper:
 int libipv6calc_db_wrapper_External_info_by_ipaddr(const ipv6calc_ipaddr *ipaddrp, char *string, const size_t string_len) {
 	DB *dbp;
 	long int recno_max;
-	static char resultstring[NI_MAXHOST];
-	char *data_ptr = "";
+	char resultstring[NI_MAXHOST];
 	int result;
 	int retval = -1;
 
@@ -1184,16 +1032,15 @@ int libipv6calc_db_wrapper_External_info_by_ipaddr(const ipv6calc_ipaddr *ipaddr
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "resultstring=%s", resultstring);
 
 	char datastring[NI_MAXHOST];
+	snprintf(datastring, sizeof(datastring), "%s", resultstring); // copy string for strtok
 
 	char *token, *cptr, **ptrptr;
 	ptrptr = &cptr;
 
 	int token_count = 0;
 
-	snprintf(datastring, sizeof(datastring), "%s", data_ptr);
-
 	// split result string
-	token = strtok_r(resultstring, ";", ptrptr);
+	token = strtok_r(datastring, ";", ptrptr);
 	while (token != NULL) {
 		token_count++;
 
@@ -1209,8 +1056,8 @@ int libipv6calc_db_wrapper_External_info_by_ipaddr(const ipv6calc_ipaddr *ipaddr
 	};
 
 	if (token_count != 1) {
-		ERRORPRINT_WA("data has more entries than expected, corrupt database: %d", token_count);
-		goto END_libipv6calc_db_wrapper_close;
+		ERRORPRINT_WA("data has more entries than expected, corrupt database: %d (resultstring='%s' prefix=%08x%08x)", token_count, resultstring, (unsigned int) ipaddrp->addr[0], (unsigned int) ipaddrp->addr[1]);
+		goto END_libipv6calc_db_wrapper;
 	};
 
 	if (strlen(string) == 0) {
@@ -1223,11 +1070,6 @@ int libipv6calc_db_wrapper_External_info_by_ipaddr(const ipv6calc_ipaddr *ipaddr
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "result Info=%s", string);
 
 	EXTERNAL_DB_USAGE_MAP_TAG(External_type);
-
-	goto END_libipv6calc_db_wrapper; // keep db open
-
-END_libipv6calc_db_wrapper_close:
-	libipv6calc_db_wrapper_External_close(dbp);
 
 END_libipv6calc_db_wrapper:
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "retval=%d", retval);
