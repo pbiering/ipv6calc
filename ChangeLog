@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20200908/PB:
+	ipv6calcweb/ipv6calcweb.conf: unset all possible headers related to supported environment variables to avoid unexpected preset via extra headers in request
+
 20200905/PB:
 	databases/lib/libipv6calc_db_wrapper_External.c: remove unused function, do not close database in case an error is found, log extended information instead, fix variable handling for strtok
 	ipv6calc/test_scenarios.sh: some fixes related to database updates
