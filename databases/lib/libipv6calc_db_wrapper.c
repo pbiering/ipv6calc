@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
  * Version    : $Id$
- * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2020 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc database wrapper (for decoupling databases from main binary)
@@ -699,7 +699,7 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 
 #ifdef SUPPORT_EXTERNAL
 	if (wrapper_External_disable == 0) {
-		snprintf(tempstring, sizeof(tempstring), "%s%sExternal database", string, strlen(string) > 0 ? " " : "");
+		snprintf(tempstring, sizeof(tempstring), "%s%sExternalDatabase", string, strlen(string) > 0 ? " " : "");
 		snprintf(string, size, "%s", tempstring);
 	};
 #endif
