@@ -174,7 +174,6 @@ int libipv6calc_db_wrapper_External_wrapper_cleanup(void) {
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Called");
 
-#ifdef SUPPORT_EXTERNAL
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_External_db_file_desc); i++) {
 		if (db_ptr_cache[i] != NULL) {
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Close External: type=%d desc='%s'", libipv6calc_db_wrapper_External_db_file_desc[i].number, libipv6calc_db_wrapper_External_db_file_desc[i].description);
@@ -183,7 +182,6 @@ int libipv6calc_db_wrapper_External_wrapper_cleanup(void) {
 			};
 		};
 	};
-#endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Finished");
 	return 0;
@@ -199,16 +197,12 @@ int libipv6calc_db_wrapper_External_wrapper_cleanup(void) {
 void libipv6calc_db_wrapper_External_wrapper_info(char* string, const size_t size) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Called");
 
-#ifdef SUPPORT_EXTERNAL
 	snprintf(string, size, "External available databases: Country4=%d Country6=%d IPV4_REG=%d IPV6_REG=%d", \
 		(wrapper_features & IPV6CALC_DB_IPV4_TO_CC) ? 1 : 0, \
 		(wrapper_features & IPV6CALC_DB_IPV6_TO_CC) ? 1 : 0, \
 		(wrapper_features & IPV6CALC_DB_IPV4_TO_REGISTRY) ? 1 : 0, \
 		(wrapper_features & IPV6CALC_DB_IPV6_TO_REGISTRY) ? 1 : 0 \
 	);
-#else
-	snprintf(string, size, "No External database support built-in");
-#endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Finished");
 	return;
@@ -232,29 +226,25 @@ void libipv6calc_db_wrapper_External_wrapper_print_db_info(const int level_verbo
 
 	IPV6CALC_DB_FEATURE_INFO(prefix, IPV6CALC_DB_SOURCE_EXTERNAL)
 
-#ifdef SUPPORT_EXTERNAL
-	printf("%sExternal: info of available databases in directory: %s\n", prefix, external_db_dir);
+	fprintf(stderr, "%sExternal: info of available databases in directory: %s\n", prefix, external_db_dir);
 
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_External_db_file_desc); i++) {
 		type = libipv6calc_db_wrapper_External_db_file_desc[i].number;
 
 		if (libipv6calc_db_wrapper_External_db_avail(type)) {
-			printf("%sExternal: %-20s: %-40s (%s)\n", prefix, libipv6calc_db_wrapper_External_db_file_desc[i].description, libipv6calc_db_wrapper_External_db_file_desc[i].filename, libipv6calc_db_wrapper_External_database_info(type));
+			fprintf(stderr, "%sExternal: %-20s: %-40s (%s)\n", prefix, libipv6calc_db_wrapper_External_db_file_desc[i].description, libipv6calc_db_wrapper_External_db_file_desc[i].filename, libipv6calc_db_wrapper_External_database_info(type));
 			count++;
 		} else {
 			if (level_verbose == LEVEL_VERBOSE2) {
-				printf("%sExternal: %-20s: %-40s (%s)\n", prefix, libipv6calc_db_wrapper_External_db_file_desc[i].description, libipv6calc_db_wrapper_External_dbfilename(type), strerror(errno));
+				fprintf(stderr, "%sExternal: %-20s: %-40s (%s)\n", prefix, libipv6calc_db_wrapper_External_db_file_desc[i].description, libipv6calc_db_wrapper_External_dbfilename(type), strerror(errno));
 			};
 			continue;
 		};
 	};
 
 	if (count == 0) {
-		printf("%sExternal: NO available databases found in directory: %s\n", prefix, external_db_dir);
+		fprintf(stderr, "%sExternal: NO available databases found in directory: %s\n", prefix, external_db_dir);
 	};
-#else // SUPPORT_EXTERNAL
-	snprintf(string, size, "%sNo External support built-in", prefix);
-#endif // SUPPORT_EXTERNAL
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Finished");
 	return;
@@ -306,9 +296,6 @@ char *libipv6calc_db_wrapper_External_wrapper_db_info_used(void) {
 	return(external_db_usage_string);
 };
 
-
-
-#ifdef SUPPORT_EXTERNAL
 
 /*******************************
  * Wrapper extension functions for External
@@ -1077,5 +1064,4 @@ END_libipv6calc_db_wrapper:
 };
 
 
-#endif //SUPPORT_EXTERNAL
 #endif //SUPPORT_EXTERNAL

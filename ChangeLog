@@ -12,6 +12,7 @@ Info:
 20200908/PB:
 	ipv6calcweb/ipv6calcweb.conf: unset all possible headers related to supported environment variables to avoid unexpected preset via extra headers in request
 	mod_ipv6calc/ipv6calc.conf: disable legacy databases GeoIP(v1) and DBIP(Berkeley) by default
+	databases/lib/libipv6calc_db_wrapper_External.c: stdout->stderr bugfixes, remove redundant #ifdef
 
 20200905/PB:
 	databases/lib/libipv6calc_db_wrapper_External.c: remove unused function, do not close database in case an error is found, log extended information instead, fix variable handling for strtok
