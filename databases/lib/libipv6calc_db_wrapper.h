@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
  * Version    : $Id$
- * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2020 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper.c
@@ -125,7 +125,7 @@ static const s_formatoption ipv6calc_db_features[] = {
 	{ IPV6CALC_DB_IPV4_TO_REGION	, "DB_IPV4_REGION"	, "IPv4 to Region database" },
 	{ IPV6CALC_DB_IPV6_TO_REGION	, "DB_IPV6_REGION"	, "IPv6 to Region database" },
 	{ IPV6CALC_DB_CC_TO_REGISTRY	, "DB_CC_REG"		, "CountryCode to Registry database" },
-	{ IPV6CALC_DB_IEEE_TO_INFO	, "DB_IEEE"		, "IEEE/OUI/OUI36 Vendor database" },
+	{ IPV6CALC_DB_IEEE_TO_INFO	, "DB_IEEE"		, "IEEE/OUI/OUI28/OUI36 Vendor database" },
 	{ IPV6CALC_DB_IPV4_TO_INFO	, "DB_IPV4_INFO"	, "IPv4 additional information" },
 	{ IPV6CALC_DB_IPV6_TO_INFO	, "DB_IPV6_INFO"	, "IPv6 additional information" },
 	{ IPV6CALC_DB_IPV4_TO_GEONAMEID	, "DB_IPV4_GEONAMEID"	, "IPv4 GeonameID" },
