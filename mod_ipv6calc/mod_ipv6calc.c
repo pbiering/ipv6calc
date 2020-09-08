@@ -2,7 +2,7 @@
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
  * Version    : $Id$
- * Copyright  : 2015-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2015-2020 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc Apache module
@@ -81,6 +81,8 @@ int feature_kg      = 0; // will be checked later
 #define IPV6CALC_DEBUG_RETRIEVE_DATA		0x0080
 
 #define IPV6CALC_DEBUG_SHOW_DB_INFO		0x0100
+
+#define IPV6CALC_DEBUG_SHOW_CLIENT_IP		0x1000
 
 
 /***************************
@@ -563,6 +565,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 	int p_mapped; // proto mapped (IPv6 in IPv4)
 
 	int mod_ipv6calc_APLOG_DEBUG = APLOG_DEBUG;
+	int mod_ipv6calc_APLOG_SHOW_CLIENT_IP = mod_ipv6calc_APLOG_DEBUG;
 
 	// Apache/APR related includes
 	apr_sockaddr_t *client_addr_p; // structure defined in apr_network_io.h
@@ -596,6 +599,11 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 	if (config->debuglevel & IPV6CALC_DEBUG_MAP_DEBUG_TO_NOTICE) {
 		mod_ipv6calc_APLOG_DEBUG = APLOG_NOTICE;
+		mod_ipv6calc_APLOG_SHOW_CLIENT_IP = APLOG_NOTICE;
+	};
+
+	if (config->debuglevel & IPV6CALC_DEBUG_SHOW_CLIENT_IP) {
+		mod_ipv6calc_APLOG_SHOW_CLIENT_IP = APLOG_NOTICE;
 	};
 
 	// get client address (aka REMOTE_IP)
@@ -605,7 +613,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 	client_addr_p = r->connection->remote_addr;
 #endif
 
-	ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r
+	ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_SHOW_CLIENT_IP, 0, r
 		, "client IP address: %s  family: %d"
 #if (((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER >= 4)) || (AP_SERVER_MAJORVERSION_NUMBER > 2))
 		, r->connection->client_ip
