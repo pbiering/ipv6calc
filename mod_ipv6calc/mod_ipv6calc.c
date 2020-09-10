@@ -16,6 +16,7 @@
  *   - anonymization method by setting IPV6CALC_ANON_METHOD
  *
  *  mode_ipv6calc behavior can be controlled by config, e.g.
+ *   ipv6calcDefaultActive		on
  *   ipv6calcActionAnonymize		on
  *   ipv6calcActionCountrycode		on
  *   ipv6calcActionAsn			on
@@ -40,6 +41,7 @@
 
 // Apache/APR related includes
 #include <httpd.h>
+#include <http_request.h>
 #include <http_config.h>
 #include <http_log.h>
 #include <http_protocol.h>
@@ -71,6 +73,13 @@ int feature_kg      = 0; // will be checked later
 
 
 /***************************
+ * Module enviroment controls
+ ***************************/
+#define ENV_ipv6calcActive	"ipv6calcActive"
+#define ENV_ipv6calcPassive	"ipv6calcPassive"
+
+
+/***************************
  * Module debugging
  ***************************/
 #define IPV6CALC_DEBUG_MAP_DEBUG_TO_NOTICE	0x0001
@@ -83,6 +92,7 @@ int feature_kg      = 0; // will be checked later
 #define IPV6CALC_DEBUG_SHOW_DB_INFO		0x0100
 
 #define IPV6CALC_DEBUG_SHOW_CLIENT_IP		0x1000
+#define IPV6CALC_DEBUG_SHOW_ENVIRONMENT		0x2000
 
 
 /***************************
@@ -100,6 +110,7 @@ int    longopts_maxentries = 0;
  * Prototyping
  ***************************/
 static const char *set_ipv6calc_enable(cmd_parms *cmd, void *dummy, int arg);
+static const char *set_ipv6calc_default_active(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_no_fallback(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_cache(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_cache_limit(cmd_parms *cmd, void *dummy, const char *value, int arg);
@@ -157,6 +168,8 @@ module AP_MODULE_DECLARE_DATA ipv6calc_module;
 typedef struct {
 	int enabled;
 
+	int default_active;
+
 	int no_fallback;
 
 	int cache;
@@ -195,6 +208,7 @@ int ipv6calc_option_list_entries = 0;
  */
 static const command_rec ipv6calc_cmds[] = {
 	AP_INIT_FLAG("ipv6calcEnable", set_ipv6calc_enable, NULL, OR_FILEINFO, "Turn on mod_ipv6calc"),
+	AP_INIT_FLAG("ipv6calcDefaultActive", set_ipv6calc_default_active, NULL, OR_FILEINFO, "mod_ipv6calc active by default (on/off can be controlled by environment)"),
 	AP_INIT_FLAG("ipv6calcNoFallback", set_ipv6calc_no_fallback, NULL, OR_FILEINFO, "Do not fallback in case of issues with mod_ipv6calc"),
 	AP_INIT_FLAG("ipv6calcCache", set_ipv6calc_cache, NULL, OR_FILEINFO, "Turn off mod_ipv6calc cache"),
 	AP_INIT_TAKE1("ipv6calcCacheLimit",  (const char *(*)()) set_ipv6calc_cache_limit, NULL, OR_FILEINFO, "mod_ipv6calc cache limit: <value>"),
@@ -347,12 +361,23 @@ static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t 
 
 	int mod_ipv6calc_APLOG_DEBUG = (config->debuglevel & IPV6CALC_DEBUG_MAP_DEBUG_TO_NOTICE) ? APLOG_NOTICE : APLOG_DEBUG;
 
-	// check enabled	
+	// check enabled
 	if (config->enabled == 0) {
 		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
 			, "module is NOT enabled (check for 'ipv6calcEnable on')"
 		);
 		return 0;
+	};
+
+	// check active
+	if (config->default_active == 0) {
+		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+			, "module is NOT active by default"
+		);
+	} else {
+		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+			, "module is active by default"
+		);
 	};
 
 #ifdef SHARED_LIBRARY
@@ -598,6 +623,49 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 	if (config->debuglevel & IPV6CALC_DEBUG_MAP_DEBUG_TO_NOTICE) {
 		mod_ipv6calc_APLOG_DEBUG = APLOG_NOTICE;
+	};
+
+	if (config->debuglevel & IPV6CALC_DEBUG_SHOW_ENVIRONMENT) {
+		const apr_array_header_t    *fields;
+		int                         i;
+		apr_table_entry_t           *e = 0;
+		fields = apr_table_elts(r->subprocess_env);
+		e = (apr_table_entry_t *) fields->elts;
+		for(i = 0; i < fields->nelts; i++) {
+			ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r, "environment %s: %s", e[i].key, e[i].val);
+		}
+	};
+
+	if (config->default_active == 0) {
+		ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r, "configuration 'ipv6calcDefaultActive off', check for environment '%s'", ENV_ipv6calcActive);
+		if (! apr_table_get(r->subprocess_env, ENV_ipv6calcActive)) {
+			ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r, "configuration 'ipv6calcDefaultActive off', NOT found in environment '%s' (return '-PbD-')", ENV_ipv6calcActive);
+			// pdb <-> Passive by Default
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_COUNTRYCODE", "-PbD-");
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_ASN", "-PbD-");
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_REGISTRY", "-PbD-");
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_GEONAMEID", "-PbD-");
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP_ANON", "-PbD-");
+			apr_table_set(r->subprocess_env, "IPV6CALC_ANON_METHOD", "-PbD-");
+			return OK;
+		} else {
+			ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r, "configuration 'ipv6calcDefaultActive off', found in environment '%s'", ENV_ipv6calcActive);
+		};
+	} else {
+		ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r, "configuration 'ipv6calcDefaultActive on', check for environment '%s'", ENV_ipv6calcPassive);
+		if (apr_table_get(r->subprocess_env, ENV_ipv6calcPassive)) {
+			ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r, "configuration 'ipv6calcDefaultActive on', found in environment '%s' (return '-PbE')", ENV_ipv6calcPassive);
+			// pdb <-> Passive by Environment
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_COUNTRYCODE", "-PbE-");
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_ASN", "-PbE-");
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_REGISTRY", "-PbE-");
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_GEONAMEID", "-PbE-");
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP_ANON", "-PbE-");
+			apr_table_set(r->subprocess_env, "IPV6CALC_ANON_METHOD", "-PbE-");
+			return OK;
+		} else {
+			ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r, "configuration 'ipv6calcDefaultActive on', NOT found in environment '%s'", ENV_ipv6calcPassive);
+		};
 	};
 
 	// get client address (aka REMOTE_IP)
@@ -1216,6 +1284,22 @@ static const char *set_ipv6calc_enable(cmd_parms *cmd, void *dummy, int arg) {
 
 
 /*
+ * set_ipv6calc_default_active
+ */
+static const char *set_ipv6calc_default_active(cmd_parms *cmd, void *dummy, int arg) {
+	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
+
+	if (!config) {
+		return NULL;
+	};
+
+	config->default_active = arg;
+
+	return NULL;
+};
+
+
+/*
  * set_ipv6calc_no_fallback
  */
 static const char *set_ipv6calc_no_fallback(cmd_parms *cmd, void *dummy, int arg) {
@@ -1469,6 +1553,8 @@ static void *ipv6calc_create_svr_conf(apr_pool_t* pool, server_rec* svr) {
 	
 	svr_cfg->enabled = 0;
 
+	svr_cfg->default_active = 1;
+
 	svr_cfg->no_fallback = 0;
 
 	// cache settings
@@ -1497,7 +1583,7 @@ static void *ipv6calc_create_svr_conf(apr_pool_t* pool, server_rec* svr) {
 static void ipv6calc_register_hooks(apr_pool_t *p) {
 	ap_hook_post_config(ipv6calc_post_config, NULL, NULL, APR_HOOK_MIDDLE);
 	ap_hook_child_init(ipv6calc_child_init, NULL, NULL, APR_HOOK_MIDDLE);
-	ap_hook_post_read_request(ipv6calc_post_read_request, NULL, NULL, APR_HOOK_MIDDLE);
+	ap_hook_fixups(ipv6calc_post_read_request, NULL, NULL, APR_HOOK_MIDDLE);
 };
 
 
