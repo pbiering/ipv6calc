@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
 # Version    : $Id$
-# Copyright  : 2015-2019 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2015-2020 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 
@@ -115,6 +115,10 @@ create_apache_root_and_start() {
 	[ "$action_reg" = "0" ]    && perl -pi -e 's/(ipv6calcActionRegistry\s+).*$/$1 off/g'    $dir_base/conf.d/ipv6calc.conf
 	[ "$action_gid" = "0" ]    && perl -pi -e 's/(ipv6calcActionGeonameid\s+).*$/$1 off/g'   $dir_base/conf.d/ipv6calc.conf
 	[ "$action_anon" = "0" ]   && perl -pi -e 's/(ipv6calcActionAnonymize\s+).*$/$1 off/g'   $dir_base/conf.d/ipv6calc.conf
+
+	[ "$config_passive" = "1" ]   && perl -pi -e 's/(ipv6calcDefaultActive\s+).*$/$1 off/g'   $dir_base/conf.d/ipv6calc.conf
+	[ "$config_passive" != "1" -a "$config_environment" = "1" ]   && echo "SetEnv ipv6calcPassive" >>$dir_base/conf.d/ipv6calc.conf
+	[ "$config_passive" = "1" -a "$config_environment" = "1" ]   && echo "SetEnv ipv6calcActive" >>$dir_base/conf.d/ipv6calc.conf
 
 
 	echo "INFO  : start httpd with ServerRoot $dir_base"
@@ -233,18 +237,34 @@ exec_request() {
 		curl -g -s "http://$1:8080/" >/dev/null
 		if [ $? -ne 0 ]; then
 			echo "ERROR : curl request to $1:8080 failed"
-			exit 1
+			return 1
 		fi
 
 		echo "INFO  : access log entry"
 		tail -1 $dir_base/logs/access_log
 
-		if [ -f "$dir_base/logs/access_anon_log" ]; then
+		if [ -f "$dir_base/logs/access_anon_log" -a -s "$dir_base/logs/access_anon_log" ]; then
 			echo "INFO  : anonymized access log entry"
-			tail -1 $dir_base/logs/access_anon_log
+			log_anon=$(tail -1 $dir_base/logs/access_anon_log)
+			echo "$log_anon"
+			if [ "$config_passive" = "1" -a "$config_environment" != "1" ]; then
+				if echo "$log_anon" | grep -q "PbD"; then
+					echo "INFO  : anonymized access log entry is containing 'PdD' (OK)"
+				else
+					echo "ERROR : anonymized access log entry is not containing 'PdD'"
+					return 1
+				fi
+			elif [ "$config_passive" != "1" -a "$config_environment" = "1" ]; then
+				if echo "$log_anon" | grep -q "PbE"; then
+					echo "INFO  : anonymized access log entry is containing 'PbE' (OK)"
+				else
+					echo "ERROR : anonymized access log entry is not containing 'PbE'"
+					return 1
+				fi
+			fi
 		else
-			echo "ERROR : anonymized access log missing"
-			exit 1
+			echo "ERROR : anonymized access log missing or empty"
+			return 1
 		fi
 
 		echo "INFO  : error log entry"
@@ -312,6 +332,9 @@ $(basename "$0") [<options>] [-S|-K|-W]
 	-I	disable action GeonameID
 	-N	disable action Anonymization
 
+	-P	disable 'ipv6calcDefaultActive'
+	-E	keep 'ipv6calcDefaultActive', but set environment
+
 	-b <base directory
 
 	-a <address>	disable autoretrievement of local IP, use given one instead
@@ -320,7 +343,7 @@ END
 }
 
 #### Options
-while getopts "IDGrACRNca:fSKWb:mlgideh\?" opt; do
+while getopts "EPIDGrACRNca:fSKWb:mlgideh\?" opt; do
 	case $opt in
 	    b)
 		if [ -d "$OPTARG" ]; then
@@ -385,6 +408,12 @@ while getopts "IDGrACRNca:fSKWb:mlgideh\?" opt; do
 		;;
 	    N)
 		action_anon="0"
+		;;
+	    P)
+		config_passive="1"
+		;;
+	    E)
+		config_environment="1"
 		;;
 	    r)
 		repeat=1
