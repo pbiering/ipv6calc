@@ -9,6 +9,12 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20200910/PB:
+	mod_ipv6calc/test_mod_ipv6calc.sh: add additional test cases for new config/environment options
+	mod_ipv6calc/ipv6calc.conf: add info about new config/environment/debug options
+	mod_ipv6calc/Makefile[.in]: add additional test cases for new config/environment options
+	mod_ipv6calc/mod_ipv6calc.c: add new debug option IPV6CALC_DEBUG_SHOW_ENVIRONMENT, add support for new config/environment options
+	
 20200908/PB:
 	ipv6calcweb/ipv6calcweb.conf: unset all possible headers related to supported environment variables to avoid unexpected preset via extra headers in request
 	mod_ipv6calc/ipv6calc.conf: disable legacy databases GeoIP(v1) and DBIP(Berkeley) by default
