@@ -60,6 +60,9 @@ clean:
 test:		mod_ipv6calc
 		LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):@LD_LIBRARY_PATH_BASIC@ ./test_mod_ipv6calc.sh -K
 		LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):@LD_LIBRARY_PATH_BASIC@ ./test_mod_ipv6calc.sh -W
+		LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):@LD_LIBRARY_PATH_BASIC@ ./test_mod_ipv6calc.sh -W -P
+		LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):@LD_LIBRARY_PATH_BASIC@ ./test_mod_ipv6calc.sh -W -E
+		LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):@LD_LIBRARY_PATH_BASIC@ ./test_mod_ipv6calc.sh -W -P -E
 
 test-minimal:	mod_ipv6calc
 
