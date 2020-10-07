@@ -1,22 +1,22 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
 dnl Version  : $Id$
-dnl Copyright: 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
+dnl Copyright: 2001-2020 by Peter Bieringer <pb (at) bieringer.de>
 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(ipv6calc, 2.2.1, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
+AC_INIT(ipv6calc, 3.0.0, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
 
 COPYRIGHT_YEAR=2020
 
 dnl Program/library version (align with version above)
-PACKAGE_VERSION_MAJOR=2
-PACKAGE_VERSION_MINOR=2
+PACKAGE_VERSION_MAJOR=3
+PACKAGE_VERSION_MINOR=0
 PACKAGE_VERSION_BUGFIX=0
 
 dnl API version
-API_VERSION_MAJOR=2
-API_VERSION_MINOR=2
+API_VERSION_MAJOR=3
+API_VERSION_MINOR=0
 API_VERSION_BUGFIX=0
 
 
@@ -301,7 +301,6 @@ ip2location_db_default="/usr/share/IP2Location"
 dbip_db_default="/usr/share/DBIP"
 external_db_default="/usr/share/ipv6calc/db"
 
-geoip_dyn_lib_default="libGeoIP.so.1"
 mmdb_dyn_lib_default="libmaxminddb.so.0"
 ip2location_dyn_lib_default="libIP2Location.so"
 
@@ -661,12 +660,10 @@ dnl DB-IP.com support
 dnl *************************************************
 AC_ARG_ENABLE([dbip], 
 	AS_HELP_STRING([--enable-dbip],
-	               [Enable db-ip.com support (default: disabled)]),
+	               [Compatibility Dummy (no longer supported)]),
 	[
-		DBIP="$enable_dbip"
 	],
 	[
-		DBIP="no"
 	])
 
 dnl defaults for database directories
@@ -680,14 +677,6 @@ AC_ARG_WITH([dbip-db],
 		dbip_db=$dbip_db_default
 	])
 
-if test "$DBIP" = "yes"; then
-	require_libdb="yes"
-
-	AC_DEFINE(SUPPORT_DBIP, 1, Define if you want db-ip.com support included.)
-	AC_MSG_RESULT([*** db-ip.com database directory: $dbip_db])
-	AC_DEFINE_UNQUOTED(DBIP_DB, "$dbip_db", Define db-ip.com database directory.)
-fi
-
 if test "$DBIP2" = "yes"; then
 	AC_MSG_RESULT([*** db-ip.com (MaxMindDB) support auotenabled"])
 	AC_DEFINE(SUPPORT_DBIP2, 1, Define if you want db-ip.com (MaxMindDB) support included.)
@@ -695,7 +684,6 @@ if test "$DBIP2" = "yes"; then
 	AC_DEFINE_UNQUOTED(DBIP2_DB, "$dbip_db", Define db-ip.com (MaxMindDB) database directory.)
 fi
 
-DBIP_DB=$dbip_db
 DBIP2_DB=$dbip_db
 AC_SUBST(DBIP_DB)
 AC_SUBST(DBIP2_DB)
@@ -1042,306 +1030,57 @@ GEOIP_INCLUDE_VERSION=""
 
 AC_ARG_ENABLE([geoip], 
 	AS_HELP_STRING([--enable-geoip],
-	               [Enable GeoIP support (default: disabled)]),
+	               [Compatibility Dummy (no longer supported)]),
 	[
-		if test "$enable_geoip" != "no"; then
-			GEOIP="$enable_geoip"
-		fi
 	],[
-		GEOIP="no"
 	])
 
 AC_ARG_WITH([geoip-dynamic],
 	AS_HELP_STRING([--with-geoip-dynamic],
-                   [Enable use of dynamic loading of GeoIP library (default=no)]),
+                   [Compatibility Dummy (no longer supported)]),
 	[
-		if test "$with_geoip_dynamic" != "no"; then
-			GEOIP_DYN="yes"
-		fi
 	],[
-		true
 	])
 
 AC_ARG_WITH([geoip-headers],
 	AS_HELP_STRING([--with-geoip-headers=DIR],
-		[GeoIP include files location]),
+		[Compatibility Dummy (no longer supported)]),
 	[
-		GEOIP_INCLUDE_DIR="$with_geoip_headers"
 	])
 
 AC_ARG_WITH([geoip-headers-fallback],
 	AS_HELP_STRING([--with-geoip-headers-fallback],
-		[GeoIP include files from internal fallback location (only usable with dynamic load option)]),
+		[Compatibility Dummy (no longer supported)]),
 	[
-		if test "$GEOIP_DYN" != "yes"; then
-			AC_MSG_ERROR([GeoIP fallback headers are only usable with dynamic load option set: --with-geoip-dynamic])
-		fi
-	
-		if test -n "$GEOIP_INCLUDE_DIR"; then
-			AC_MSG_ERROR([GeoIP include files location already set by --with-geoip-headers, skip fallback])
-		else
-			AC_MSG_RESULT([*** GeoIP fallback headers activated])
-			GEOIP_INCLUDE_DIR="external-fallback/GeoIP"
-			GEOIP_INCLUDE_VERSION=$(cat external-fallback/GeoIP/VERSION-GeoIP)
-		fi
 	])
-
-if test -n "$GEOIP_INCLUDE_DIR"; then
-	GEOIP_INCLUDE="-I$GEOIP_INCLUDE_DIR"
-	if echo "$GEOIP_INCLUDE_DIR" | grep -q "^/"; then
-		# absolute path
-		GEOIP_INCLUDE_L1="-I$GEOIP_INCLUDE_DIR"
-		GEOIP_INCLUDE_L2="-I$GEOIP_INCLUDE_DIR"
-	else
-		GEOIP_INCLUDE_L1="-I../$GEOIP_INCLUDE_DIR"
-		GEOIP_INCLUDE_L2="-I../../$GEOIP_INCLUDE_DIR"
-	fi
-fi
 
 AC_ARG_WITH([geoip-lib],
 	AS_HELP_STRING([--with-geoip-lib=DIR],
-		[GeoIP library location]),
+		[Compatibility Dummy (no longer supported)]),
 	[
-		if test -d "$with_geoip_lib"; then 
-			GEOIP_LIB_DIR="$with_geoip_lib"
-			GEOIP_LIB="-L$GEOIP_LIB_DIR $GEOIP_LIB"
-			AC_MSG_RESULT([GeoIP library directory given: $GEOIP_LIB_DIR])
-		else
-			AC_MSG_ERROR([GeoIP library directory not found: $with_geoip_lib])
-		fi
-
-		if echo "$GEOIP_LIB_DIR" | grep -q "^/"; then
-			# absolute path
-			GEOIP_LIB_L1="-L$GEOIP_LIB_DIR"
-			GEOIP_LIB_L2="-L$GEOIP_LIB_DIR"
-			LD_LIBRARY_PATH=$GEOIP_LIB_DIR:$LD_LIBRARY_PATH
-		else
-			GEOIP_LIB_L1="-L../$GEOIP_LIB_DIR"
-			GEOIP_LIB_L2="-L../../$GEOIP_LIB_DIR"
-			LD_LIBRARY_PATH=../$GEOIP_LIB_DIR:$LD_LIBRARY_PATH
-		fi
 	])
-
-# must be tested
-#AC_ARG_WITH([geoip-lib-name],
-#	AS_HELP_STRING([--with-geoip-lib-name=NAME],
-#		[GeoIP library name]),
-#	[
-#		GEOIP_LIB_NAME="$with_geoip_lib_name"
-#		GEOIP_LIB="-l$GEOIP_LIB_NAME $GEOIP_LIB"
-#		AC_MSG_RESULT([GeoIP library name given: $GEOIP_LIB_NAME])
-#        ],[
-#	])
 
 AC_ARG_WITH([geoip-static],
 	AS_HELP_STRING([--with-geoip-static],
-                   [Explicitly link GeoIP statically (default=no)]),
+                   [Compatibility Dummy (no longer supported)]),
 	[
-		if test "$with_geoip_static" != "no"; then 
-			GEOIP_STATIC="$with_geoip_static"
-			GEOIP_LIB="-Wl,-Bstatic $GEOIP_LIB -Wl,-Bdynamic"
-		fi
 	],[
-		GEOIP_STATIC="no"
 	])
 
 AC_ARG_WITH([geoip-dyn-lib],
 	AS_HELP_STRING([--with-geoip-dyn-lib=NAME],
-		[Use specified GeoIP dynamic library, default: libGeoIP.so.1]),
+		[Compatibility Dummy (no longer supported)]),
 	[
-		geoip_dyn_lib="$with_geoip_dyn_lib"
 	],
 	[
-		geoip_dyn_lib=$geoip_dyn_lib_default
 	])
 
 AC_ARG_WITH([geoip-ipv6-compat],
 	AS_HELP_STRING([--with-geoip-ipv6-compat],
-		[Use IPv6 interface of GeoIP in compatibility mode (supporting 1.4.5)]),
+		[Compatibility Dummy (no longer supported)]),
 	[
-		if test "$with_geoip_ipv6_compat" != "no"; then 
-			GEOIP_COMPAT="yes",
-		fi
 	],[
-		GEOIP_COMPAT="no"
 	])
-
-# Automagic enable GeoIP if dynamic load is available (TODO: enable later by default??)
-#if test "$DYNAMIC_LOAD" = "yes"; then
-#	if test "$GEOIP_DYN" = "no"; then
-#		true
-#	else
-#	    AC_CHECK_HEADER(GeoIP.h,
-#		    [
-#			    AC_MSG_RESULT(["*** GeoIP library header files found and dynamic library support enabled, enable GeoIP"])
-#			    GEOIP="yes"
-#			    GEOIP_DYN="yes"
-#		    ],
-#		    [
-#		    ])
-#	fi
-#fi
-
-if test "$GEOIP" = "yes"; then
-	if test "$GEOIP_DYN" != "yes"; then
-		GEOIP_LIB="-l$GEOIP_LIB_NAME $GEOIP_LIB"
-		GEOIP_LIB_L1="-l$GEOIP_LIB_NAME $GEOIP_LIB_L1"
-		GEOIP_LIB_L2="-l$GEOIP_LIB_NAME $GEOIP_LIB_L2"
-	else
-		AC_MSG_RESULT([*** GeoIP dynamic load support enabled, disable GeoIP linker options])
-	fi
-
-	CPPFLAGS="$CPPLAGS $GEOIP_INCLUDE"
-
-	AC_MSG_RESULT([*** GeoIP support requested])
-
-	AC_MSG_RESULT([***** CPPFLAGS=$CPPFLAGS])
-	AC_MSG_RESULT([***** CFLAGS  =$CFLAGS])
-	AC_MSG_RESULT([***** LDFLAGS =$LDFLAGS])
-
-	AC_CHECK_HEADER(GeoIP.h, [
-		if test -n "$GEOIP_INCLUDE_DIR"; then
-			if test -e "$GEOIP_INCLUDE_DIR/GeoIP.h"; then
-				CPPFLAGS="$CPPFLAGS -include $GEOIP_INCLUDE_DIR/GeoIP.h"
-			else
-				AC_MSG_ERROR([GeoIP library header file not found: $GEOIP_INCLUDE_DIR/GeoIP.h])
-			fi
-		else
-			CPPFLAGS="$CPPFLAGS -include GeoIP.h"
-		fi
-
-		AC_CHECK_DECL([GeoIP_open],,
-			AC_MSG_ERROR([GeoIP library header file misses GeoIP_open]))
-
-		AC_CHECK_DECLS([GeoIP_country_code_by_ipnum_v6,
-			GeoIP_lib_version,
-			GeoIP_country_code_by_addr_v6,
-			GeoIP_country_name_by_addr_v6,
-			GeoIP_cleanup])
-
-		AC_CHECK_DECLS([GEOIP_LARGE_COUNTRY_EDITION,
-			GEOIP_LARGE_COUNTRY_EDITION_V6,
-			GEOIP_CITY_EDITION_REV0_V6,
-			GEOIP_CITY_EDITION_REV1_V6,
-			GEOIP_ASNUM_EDITION,
-			GEOIP_ASNUM_EDITION_V6,
-			GEOIP_COUNTRY_EDITION_V6])
-
-		AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
-			     [[geoipv6_t a;]])
-			],
-			[
-				AC_MSG_RESULT([typedef geoipv6_t defined])
-				AC_DEFINE(SUPPORT_GEOIP_IPV6_STRUCT, 1, Define if GeoIP support IPv6 structure.)
-			],
-			[
-				AC_MSG_WARN([typedef geoipv6_t missing, enable workaround])
-			])
-
-	],
-	[
-		AC_MSG_ERROR([GeoIP library header files not found])
-	])
-
-	if test "$GEOIP_DYN" != "yes"; then
-		if test "$GEOIP_STATIC" = "yes"; then
-			AC_DEFINE(SUPPORT_GEOIP_STATIC, 1, Define if you want GeoIP support statically linked - requires also additional linker options.)
-		fi
-
-		CPPFLAGS="$CFLAGS"
-
-		if test -n "$GEOIP_LIB_DIR"; then
-			if test -e "$GEOIP_LIB_DIR/lib$GEOIP_LIB_NAME.so"; then
-				LDFLAGS="$LDFLAGS -L$GEOIP_LIB_DIR"
-				CFLAGS="$CFLAGS -L$GEOIP_LIB_DIR"
-				LIBS="-L$GEOIP_LIB_DIR"
-			else
-				AC_MSG_ERROR([GeoIP library file not found: $GEOIP_INCLUDE_DIR/lib$GEOIP_LIB_NAME.so])
-			fi
-		fi
-
-		AC_MSG_RESULT([***** CPPFLAGS=$CPPFLAGS])
-		AC_MSG_RESULT([***** CFLAGS  =$CFLAGS])
-		AC_MSG_RESULT([***** LDFLAGS =$LDFLAGS])
-
-		AC_CHECK_LIB($GEOIP_LIB_NAME, GeoIP_open,
-		[
-			AC_DEFINE(SUPPORT_GEOIP, 1, Define if you want GeoIP support.)
-			AC_MSG_RESULT([*** GeoIP support enabled])
-		],
-		[
-			AC_MSG_ERROR([GeoIP library header files given but the library was not found, LDFLAGS=$LDFLAGS])
-		])
-
-		AC_CHECK_LIB($GEOIP_LIB_NAME, GeoIP_country_code_by_ipnum_v6,
-		[
-			AC_DEFINE(SUPPORT_GEOIP_V6, 1, Define if you want GeoIP IPv6 support.)
-			AC_MSG_RESULT([*** GeoIP IPv6 support enabled])
-		],
-		[
-			AC_MSG_WARN([GeoIP library file were found but not supporting IPv6 (upgrade to GeoIP 1.4.5 or newer for enabling IPv6 support)])
-		])
-
-		if test "$GEOIP_COMPAT" = "no"; then
-			AC_CHECK_LIB($GEOIP_LIB_NAME, GeoIP_lib_version,
-			[
-				AC_DEFINE(SUPPORT_GEOIP_LIB_VERSION, 1, Define if your GeoIP version supports GeoIP_lib_version.)
-			],
-			[
-		    		AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_lib_version (upgrade to newer version for support).])
-			])
-
-			AC_CHECK_LIB($GEOIP_LIB_NAME, GeoIP_country_code_by_addr_v6,
-			[
-				AC_DEFINE(SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6, 1, Define if your GeoIP version supports GeoIP_country_code_by_addr_v6.)
-			],
-			[
-			    AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_country_code_by_addr_v6 (will use workaround).])
-			])
-
-			AC_CHECK_LIB($GEOIP_LIB_NAME, GeoIP_country_name_by_addr_v6,
-			[
-				AC_DEFINE(SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6, 1, Define if your GeoIP version supports GeoIP_country_name_by_addr_v6.)
-			],
-			[
-				AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_country_name_by_addr_v6 (will use workaround).])
-			])
-
-			AC_CHECK_LIB($GEOIP_LIB_NAME, GeoIP_cleanup,
-			[
-				AC_DEFINE(SUPPORT_GEOIP_CLEANUP, 1, Define if your GeoIP version supports GeoIP_cleanup.)
-			],
-			[
-				AC_MSG_WARN([GeoIP library header files were found but not supporting GeoIP_cleanup (will use workaround).])
-			])
-		else
-			AC_MSG_WARN([GeoIP IPv6 support compatibility mode enabled (supporting 1.4.5).])
-		fi
-	else
-		# wrapper detects by itself the real support
-		AC_MSG_RESULT([*** GeoIP dyn lib: $geoip_dyn_lib])
-		AC_DEFINE_UNQUOTED(GEOIP_DYN_LIB, "$geoip_dyn_lib", Define GeoIP dynamic library.)
-
-		AC_MSG_RESULT([*** GeoIP support will be implemented by using dynamic load of library])
-		AC_DEFINE(SUPPORT_GEOIP, 1, Define if you want GeoIP support.)
-		AC_DEFINE(SUPPORT_GEOIP_V6, 1, Define if you want GeoIP IPv6 support.)
-		AC_DEFINE(SUPPORT_GEOIP_DYN, 1, Define if you want GeoIP support with dynamic loading support - requires also additional linker options.)
-	fi
-fi
-
-AC_SUBST(GEOIP_INCLUDE)
-AC_SUBST(GEOIP_INCLUDE_VERSION)
-AC_SUBST(GEOIP_INCLUDE_L2)
-AC_SUBST(GEOIP_INCLUDE_L1)
-AC_SUBST(GEOIP_LIB)
-AC_SUBST(GEOIP_LIB_L1)
-AC_SUBST(GEOIP_LIB_L2)
-AC_SUBST(GEOIP_DB)
-AC_SUBST(GEOIP_DYN_LIB)
-
-if test -n "$GEOIP_INCLUDE_VERSION"; then
-	AC_DEFINE_UNQUOTED(GEOIP_INCLUDE_VERSION, "$GEOIP_INCLUDE_VERSION", GeoIP include file version.)
-fi
 
 
 dnl *************************************************
@@ -1366,11 +1105,6 @@ AC_ARG_WITH([geoip-db],
 	])
 
 
-if test "$GEOIP" = "yes"; then
-	AC_MSG_RESULT([*** GeoIPv1 database directory: $geoip_db])
-	AC_DEFINE_UNQUOTED(GEOIP_DB, "$geoip_db", Define GeoIP legacy database directory.)
-fi
-
 if test "$GEOIP2" = "yes"; then
 	AC_DEFINE(SUPPORT_GEOIP2, 1, Define if you want GeoIP (MaxMindDB) support.)
 	AC_MSG_RESULT([*** GeoIP (MaxMindDB) support enabled])
@@ -1379,7 +1113,6 @@ if test "$GEOIP2" = "yes"; then
 	AC_DEFINE_UNQUOTED(GEOIP2_DB, "$geoip_db", Define GeoIP (MaxMindDB) database directory.)
 fi
 
-GEOIP_DB=$geoip_db
 GEOIP2_DB=$geoip_db
 
 
@@ -1562,30 +1295,13 @@ AC_MSG_RESULT([*** IP2LOCATION_ALL_COMPAT     =$IP2LOCATION_ALL_COMPAT])
 
 AC_MSG_RESULT([])
 
-AC_MSG_RESULT([*** GEOIP                      =$GEOIP])
-AC_MSG_RESULT([*** GEOIP_DB                   =$GEOIP_DB])
-AC_MSG_RESULT([*** GEOIP_DYN                  =$GEOIP_DYN])
-AC_MSG_RESULT([*** GEOIP_DYN_LIB              =$geoip_dyn_lib])
-AC_MSG_RESULT([*** GEOIP_INCLUDE              =$GEOIP_INCLUDE])
-AC_MSG_RESULT([*** GEOIP_INCLUDE_VERSION      =$GEOIP_INCLUDE_VERSION])
-AC_MSG_RESULT([*** GEOIP_LIB                  =$GEOIP_LIB])
-AC_MSG_RESULT([*** GEOIP_LIB_NAME             =$GEOIP_LIB_NAME])
-AC_MSG_RESULT([*** GEOIP_LIB_DIR              =$GEOIP_LIB_DIR])
-
-AC_MSG_RESULT([])
-
 AC_MSG_RESULT([*** GEOIP2                     =$GEOIP2])
 AC_MSG_RESULT([*** GEOIP2_DB                  =$GEOIP_DB])
 
 AC_MSG_RESULT([])
 
-AC_MSG_RESULT([*** DBIP                       =$DBIP])
-AC_MSG_RESULT([*** DBIP_DB                    =$DBIP_DB])
-
-AC_MSG_RESULT([])
-
 AC_MSG_RESULT([*** DBIP2                      =$DBIP2])
-AC_MSG_RESULT([*** DBIP2_DB                   =$DBIP_DB])
+AC_MSG_RESULT([*** DBIP2_DB                   =$DBIP2_DB])
 
 AC_MSG_RESULT([])
 
