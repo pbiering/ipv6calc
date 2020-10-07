@@ -717,7 +717,7 @@ if test "$EXTERNAL" = "yes"; then
 	require_libdb="yes"
 
 	AC_DEFINE(SUPPORT_EXTERNAL, 1, Define if you want external support included.)
-	AC_MSG_RESULT([*** external db dir: $dbip_db])
+	AC_MSG_RESULT([*** external db dir: $external_db])
 	AC_DEFINE_UNQUOTED(EXTERNAL_DB, "$external_db", Define external database directory.)
 fi
 
