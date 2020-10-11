@@ -2,12 +2,13 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
  * Version    : $Id$
- * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2020 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc IP2Location database wrapper
  *    - decoupling databases from main binary
  *    - optional support of dynamic library loading (based on config.h)
+ *    - only supporting API >= 8.2.0 now
  */
 
 #include <stdio.h>
@@ -137,7 +138,7 @@ int ip2location_db_only_type = 0;
 // allow soft links (usually skipped)
 int ip2location_db_allow_softlinks = 0;
 
-#define IP2L_PACK_YM(loc) (loc->databaseyear * 12 + (loc->databasemonth -1))
+#define IP2L_PACK_YM(loc) (loc->database_year * 12 + (loc->database_month -1))
 #define IP2L_UNPACK_YM(dbym) ((dbym > 0) ? ((dbym % 12) + 1 + ((dbym / 12) + 2000) * 100) : 0)
 
 static void *dl_IP2Location_handle = NULL;
@@ -249,11 +250,11 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 
 		loc = libipv6calc_db_wrapper_IP2Location_open_type(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number);
 		dbym = IP2L_PACK_YM(loc);
-		dbtype = loc->databasetype;
+		dbtype = loc->database_type;
 
-		if (2000 + loc->databaseyear < IP2LOCATION_DB_YEAR_MIN) {
+		if (2000 + loc->database_year < IP2LOCATION_DB_YEAR_MIN) {
 			// really too old
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "IP2Location database too old: %s y=%d", libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description, 2000 + loc->databaseyear);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "IP2Location database too old: %s y=%d", libipv6calc_db_wrapper_IP2Location_db_file_desc[i].description, 2000 + loc->database_year);
 			continue;
 		};
 
@@ -1180,11 +1181,11 @@ char *libipv6calc_db_wrapper_IP2Location_database_info(IP2Location *loc, const i
 	if (loc == NULL) {
 		snprintf(resultstring, sizeof(resultstring), "%s", "can't retrieve database information");
 	} else {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "databasetype=%u ipversion=%u", loc->databasetype, loc->ipversion);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "databasetype=%u ipversion=%u", loc->database_type, loc->ip_version);
 
 		if (flag_copyright != 0) {
 			snprintf(tempstring, sizeof(tempstring), " Copyright (c) %04d IP2Location All Rights Reserved",
-				loc->databaseyear + 2000
+				loc->database_year + 2000
 			);
 		};
 
@@ -1216,20 +1217,20 @@ char *libipv6calc_db_wrapper_IP2Location_database_info(IP2Location *loc, const i
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "compiled with API >= 7.0.0, loaded library is >= 7.0.0: ipsupport=%u entries_ipv4=%u entries_ipv6=%u", ipsupport, entries_ipv4, entries_ipv6);
 #else // SUPPORT_IP2LOCATION_DYN
 			// API >= 7.0.0
-			if (loc->ipv4databasecount > 2) {
+			if (loc->ipv4_database_count > 2) {
 				// IPv4
-				entries_ipv4 = loc->ipv4databasecount;
+				entries_ipv4 = loc->ipv4_database_count;
 				ipsupport |= 0x1;
 			};
 
-			if (loc->ipv6databasecount > 0) {
+			if (loc->ipv6_database_count > 0) {
 				// catch of changed API which reuses ipversion as ipv6databasecount
 				ipsupport |= 0x2;
-				if (loc->ipv6databasecount > 1) {
-					entries_ipv6 = loc->ipv6databasecount;
-				} else if (loc->ipv6databasecount == 1) {
+				if (loc->ipv6_database_count > 1) {
+					entries_ipv6 = loc->ipv6_database_count;
+				} else if (loc->ipv6_database_count == 1) {
 					// old behavior
-					entries_ipv6 = loc->databasecount;
+					entries_ipv6 = loc->database_count;
 					ipsupport &= ~0x1;
 					entries_ipv4 = 0;
 				};
@@ -1237,29 +1238,29 @@ char *libipv6calc_db_wrapper_IP2Location_database_info(IP2Location *loc, const i
 #endif // SUPPORT_IP2LOCATION_DYN
 
 			snprintf(resultstring, sizeof(resultstring), "IP2L-DB%d %s%s%04d%02d%02d%s IPv4=%u IPv6=%u%s%s",
-				loc->databasetype,
+				loc->database_type,
 				(features & (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) != 0 ? "IPv4 IPv6 " : ((features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0 ? "IPv6 " : "IPv4 "),
 				(internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LITE) != 0 ? "LITE " : ((internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE) != 0 ? "SAMPLE " : (internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_FREE) != 0 ? "FREE " : "" ),
-				loc->databaseyear + 2000,
-				loc->databasemonth,
-				loc->databaseday,
+				loc->database_year + 2000,
+				loc->database_month,
+				loc->database_day,
 				tempstring,
 				entries_ipv4,
 				entries_ipv6,
 				(libipv6calc_db_wrapper_IP2Location_db_compatible(type) != 0) ? " INCOMPATIBLE" : "",
-				(loc->databaseyear + 2000 < IP2LOCATION_DB_YEAR_MIN) ? " TOO-OLD" : ""
+				(loc->database_year + 2000 < IP2LOCATION_DB_YEAR_MIN) ? " TOO-OLD" : ""
 			);
 		} else {
 			snprintf(resultstring, sizeof(resultstring), "IP2L-DB%d %s%s%04d%02d%02d%s%s%s",
-				loc->databasetype,
+				loc->database_type,
 				(features & (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) != 0 ? "IPv4 IPv6 " : ((features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0 ? "IPv6 " : "IPv4 "),
 				(internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LITE) != 0 ? "LITE " : ((internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE) != 0 ? "SAMPLE " : (internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_FREE) != 0 ? "FREE " : "" ),
-				loc->databaseyear + 2000,
-				loc->databasemonth,
-				loc->databaseday,
+				loc->database_year + 2000,
+				loc->database_month,
+				loc->database_day,
 				tempstring,
 				(libipv6calc_db_wrapper_IP2Location_db_compatible(type) != 0) ? " INCOMPATIBLE" : "",
-				(loc->databaseyear + 2000 < IP2LOCATION_DB_YEAR_MIN) ? " TOO-OLD" : ""
+				(loc->database_year + 2000 < IP2LOCATION_DB_YEAR_MIN) ? " TOO-OLD" : ""
 			);
 		};
 	};
