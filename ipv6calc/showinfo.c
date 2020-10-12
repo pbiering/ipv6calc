@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : showinfo.c
  * Version    : $Id$
- * Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2020 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Function to show information about a given IPv6 address
@@ -28,10 +28,8 @@
 
 #include "../databases/lib/libipv6calc_db_wrapper.h"
 #include "../databases/lib/libipv6calc_db_wrapper_MMDB.h"
-#include "../databases/lib/libipv6calc_db_wrapper_GeoIP.h"
 #include "../databases/lib/libipv6calc_db_wrapper_GeoIP2.h"
 #include "../databases/lib/libipv6calc_db_wrapper_IP2Location.h"
-#include "../databases/lib/libipv6calc_db_wrapper_DBIP.h"
 #include "../databases/lib/libipv6calc_db_wrapper_DBIP2.h"
 #include "../databases/lib/libipv6calc_db_wrapper_External.h"
 #include "../databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
@@ -95,8 +93,8 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " TEREDO_PORT_CLIENT=...        : port of Teredo client (NAT outside)\n");
 	fprintf(stderr, " AS_NUM=...                    : Autonomous System Number\n");
 	fprintf(stderr, " AS_NUM_REGISTRY=...           : Registry of AS number\n");
-#if defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP || defined DBIP2
-	fprintf(stderr, "Prefix: IP2LOCATION, GEOIP, GEOIP2, DBIP, DBIP2\n");
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP2 || defined DBIP2
+	fprintf(stderr, "Prefix: IP2LOCATION, GEOIP2, DBIP2\n");
 	fprintf(stderr, " (output can vary depending on database provider and type Free/Commercial)\n");
 	fprintf(stderr, " <prefix>_CONTINENT_SHORT=...  : Continent Code of IP address\n");
 	fprintf(stderr, " <prefix>_CONTINENT_LONG=...   : Continent Name of IP address\n");
@@ -276,7 +274,7 @@ static void printfooter(const uint32_t formatoptions) {
 		printout(showinfo_machine_readable_filter, "", formatoptions);
 	};
 
-#if defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2 || defined SUPPORT_GEOIP2
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
 	char *string;
 #endif
 
@@ -291,17 +289,6 @@ static void printfooter(const uint32_t formatoptions) {
 	};
 #endif
 
-#ifdef SUPPORT_GEOIP
-	string = libipv6calc_db_wrapper_GeoIP_wrapper_db_info_used();
-	if ((string != NULL) && (strlen(string) > 0)) {
-		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
-			printout("GEOIP_DATABASE_INFO", string, formatoptions);
-		} else {
-			fprintf(stdout, "GeoIP database: %s\n", string);
-		};
-	};
-#endif
-
 #ifdef SUPPORT_GEOIP2
 	string = libipv6calc_db_wrapper_GeoIP2_wrapper_db_info_used();
 	if ((string != NULL) && (strlen(string) > 0)) {
@@ -309,17 +296,6 @@ static void printfooter(const uint32_t formatoptions) {
 			printout("GEOIP2_DATABASE_INFO", string, formatoptions);
 		} else {
 			fprintf(stdout, "GeoIP database:(MaxMindDB) %s\n", string);
-		};
-	};
-#endif
-
-#ifdef SUPPORT_DBIP
-	string = libipv6calc_db_wrapper_DBIP_wrapper_db_info_used();
-	if ((string != NULL) && (strlen(string) > 0)) {
-		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
-			printout("DBIP_DATABASE_INFO", string, formatoptions);
-		} else {
-			fprintf(stdout, "DB-IP.com database: %s\n", string);
 		};
 	};
 #endif
@@ -405,7 +381,7 @@ static void printfooter(const uint32_t formatoptions) {
 };
 
 
-#if defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2 || defined SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP || defined SUPPORT_DBIP
+#if defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2 || defined SUPPORT_IP2LOCATION
 // with prefix
 static void printout3(const char *token, const char *additional, const char *value, const uint32_t formatoptions, const char *prefix) {
 	char tokencomplete[NI_MAXHOST] = "";
@@ -515,28 +491,6 @@ static void print_ip2location(const ipv6calc_ipaddr *ipaddrp, const uint32_t for
 };
 #endif
 
-#ifdef SUPPORT_GEOIP
-/* print GeoIP (legacy) information */
-static void print_geoip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatoptions, const char *additionalstring) {
-	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
-
-	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP] == 0) {
-		DEBUGPRINT_NA(DEBUG_showinfo, "GeoIP (legacy) support not active");
-		return;
-	};
-
-	int ret;
-	libipv6calc_db_wrapper_geolocation_record record;
-
-	/* get all information */
-	ret = libipv6calc_db_wrapper_GeoIP_all_by_addr(ipaddrp, &record);
-
-	if (ret == 0) {
-		print_geolocation(&record, formatoptions, additionalstring, "GEOIP", "GeoIP (legacy)");
-	};
-};
-#endif
-
 #ifdef SUPPORT_GEOIP2
 /* print GeoIP2 (MaxMindDB) information */
 static void print_geoip2(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatoptions, const char *additionalstring) {
@@ -556,29 +510,6 @@ static void print_geoip2(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatop
 
 	if (ret == 0) {
 		print_geolocation(&record, formatoptions, additionalstring, "GEOIP2", "GeoIP (MaxMindDB)");
-	};
-};
-#endif
-
-#ifdef SUPPORT_DBIP
-/* print DBIP information */
-static void print_dbip(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatoptions, const char *additionalstring) {
-	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
-
-	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP] == 0) {
-		DEBUGPRINT_NA(DEBUG_showinfo, "DBIP support not active");
-		return;
-	};
-
-	int ret;
-
-	libipv6calc_db_wrapper_geolocation_record record;
-
-	/* get all information */
-	ret = libipv6calc_db_wrapper_DBIP_all_by_addr(ipaddrp, &record);
-
-	if (ret == 0) {
-		print_geolocation(&record, formatoptions, additionalstring, "DBIP", "DBIP (legacy)");
 	};
 };
 #endif
@@ -875,19 +806,9 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		print_ip2location(&ipaddr, formatoptions, embeddedipv4string);
 #endif
 
-#ifdef SUPPORT_GEOIP
-		/* GeoIP information */
-		print_geoip(&ipaddr, formatoptions, embeddedipv4string);
-#endif
-
 #ifdef SUPPORT_GEOIP2
 		/* GeoIP (MaxMindDB) information */
 		print_geoip2(&ipaddr, formatoptions, embeddedipv4string);
-#endif
-
-#ifdef SUPPORT_DBIP
-		/* db-ip.com information */
-		print_dbip(&ipaddr, formatoptions, embeddedipv4string);
 #endif
 
 #ifdef SUPPORT_DBIP2
@@ -1676,19 +1597,9 @@ END:
 			print_ip2location(&ipaddr, formatoptions, "");
 #endif
 
-#ifdef SUPPORT_GEOIP
-			/* GeoIP information */
-			print_geoip(&ipaddr, formatoptions, "");
-#endif
-
 #ifdef SUPPORT_GEOIP2
 			/* GeoIP (MaxMindDB) information */
 			print_geoip2(&ipaddr, formatoptions, "");
-#endif
-
-#ifdef SUPPORT_DBIP
-			/* db-ip.com information */
-			print_dbip(&ipaddr, formatoptions, "");
 #endif
 
 #ifdef SUPPORT_DBIP2
