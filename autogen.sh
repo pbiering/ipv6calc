@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : autogen.sh
 # Version    : $Id$
-# Copyright  : 2003-2019 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2003-2020 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
 
@@ -19,34 +19,17 @@ while [ "$1" != "$LAST" ]; do
 		;;
 	    '--all'|'-a')
 		shift
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --enable-ip2location --enable-dbip --enable-mmdb --enable-external --enable-mod_ipv6calc"
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --enable-mmdb --enable-external --enable-mod_ipv6calc"
 		SKIP_STATIC=1
-		use_geoip=1
 		use_ip2location=1
-		use_dbip=1
 		use_external=1
 		;;
 	    '--ALL'|'-A')
 		shift
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --enable-ip2location --enable-dbip --enable-mmdb --with-geoip-dynamic --with-ip2location-dynamic --with-mmdb-dynamic --enable-external --enable-mod_ipv6calc"
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --enable-mmdb --with-ip2location-dynamic --with-mmdb-dynamic --enable-external --enable-mod_ipv6calc"
 		SKIP_STATIC=1
-		use_geoip=1
 		use_ip2location=1
-		use_dbip=1
 		use_external=1
-		;;
-	    '--geoip'|'-g')
-		shift
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip"
-		SKIP_STATIC=1
-		use_geoip=1
-		;;
-	    '--geoip-dyn'|'-G')
-		shift
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-geoip --with-geoip-dynamic"
-		SKIP_STATIC=1
-		use_geoip=1
-		use_geoip_dyn=1
 		;;
 	    '--mmdb'|'-m')
 		shift
@@ -74,12 +57,6 @@ while [ "$1" != "$LAST" ]; do
 		use_ip2location=1
 		use_ip2location_dyn=1
 		;;
-	    '--dbip'|'-d')
-		shift
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-dbip"
-		SKIP_STATIC=1
-		use_dbip=1
-		;;
 	    '--external'|'-e')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-external"
@@ -97,11 +74,6 @@ while [ "$1" != "$LAST" ]; do
 	    '--disable-db-ipv6')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --disable-db-ipv6"
-		;;
-	    '--geoip-ipv6-compat')
-		shift
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --with-geoip-ipv6-compat"
-		SKIP_STATIC=1
 		;;
 	    '-S')
 		shift
@@ -138,16 +110,12 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --mmdb-dyn|-M       : switch to dynamic library loading of MaxMindDB"
 		echo "   --disable-geoip2    : disable MaxMindDB support for GeoIP"
 		echo "   --disable-dbip2     : disable MaxMindDB support for db-ip.com"
-		echo "   -g|--geoip          : enable GeoIP support"
-		echo "   --geoip-dyn|-G      : switch to dynamic library loading of GeoIP"
 		echo "   -i|--ip2location    : enable IP2Location support"
 		echo "   --ip2location-dyn|-I: switch to dynamic library loading of IP2Location"
-		echo "   -d|--dbip           : enable db-ip.com support"
 		echo "   -e|--external       : enable external database support"
 		echo "   --disable-db-ieee   : disable built-in IEEE database"
 		echo "   --disable-db-ipv4   : disable built-in IPv4 database"
 		echo "   --disable-db-ipv6   : disable built-in IPv6 database"
-		echo "   --geoip-ipv6-compat : enable GeoIP IPv6 compatibility mode"
 		echo "   -S                  : enable shared library mode"
 		echo "   --no-static-build   : skip static build"
 		echo "   --no-test           : skip 'make test'"
@@ -167,15 +135,9 @@ done
 
 source ./autogen-support.sh "source"
 
-if [ "$use_geoip" = "1" ]; then
-	if ! echo "$OPTIONS_CONFIGURE" | grep -q 'with-geoip-headers='; then
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $(fallback_options_from_name GeoIP)"
-	fi
-fi
-
 if [ "$use_ip2location" = "1" ]; then
 	if ! echo "$OPTIONS_CONFIGURE" | grep -q 'with-ip2location-headers='; then
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE $(fallback_options_from_name IP2Location)"
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE"
 	fi
 fi
 
