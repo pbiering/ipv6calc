@@ -3,96 +3,18 @@
 # Project    : ipv6calc
 # File       : autogen-support.sh
 # Version    : $Id$
-# Copyright  : 2014-2019 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2014-2020 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support functions to autogen.sh/autogen-all-variants.sh
 #
-# $BASE_DEVEL_GEOIP/  (default if unset: "..")
-#          GeoIP-1.4.4
-#          GeoIP-1.4.5
-#          GeoIP-1.4.6
-#          GeoIP-1.4.7
-#          GeoIP-1.4.8
-#          GeoIP-1.5.0  # 20190202 (EL7 via base as of 20190202)
-#          GeoIP-1.5.1
-#          GeoIP-1.5.2
-#          GeoIP-1.6.0
-#          GeoIP-1.6.1
-#          GeoIP-1.6.2
-#          GeoIP-1.6.3
-#          GeoIP-1.6.4
-#          GeoIP-1.6.5  # (EL6 via EPEL as of 20190202)
-#          GeoIP-1.6.6	# 20161218
-#          GeoIP-1.6.7	# 20161218
-#          GeoIP-1.6.8	# 20161218
-#          GeoIP-1.6.9	# 20161218
-#          GeoIP-1.6.10	# 20170617
-#          GeoIP-1.6.11	# 20170617
-#          GeoIP-1.6.12	# 20190202
-#
 # $BASE_DEVEL_IP2LCATION/   (default if unset: "..")
-#          C-IP2Location-4.0.2  # dropped with version 0.99
-#          ip2location-c-6.0.1  # dropped with version 2.0
-#          IP2Location-c-6.0.2  # dropped with version 2.0
-#          ip2location-c-6.0.3	# 20141003 # dropped with version 2.0
-#          ip2location-c-7.0.0	# 20141003 DOWNLOAD BROKEN
-#          ip2location-c-7.0.1	# 20150416
-#          ip2location-c-8.0.1	# 20161218
-#          ip2location-c-8.0.2	# 20161218
-#          ip2location-c-8.0.3	# 20161218
-#          ip2location-c-8.0.4	# 20170617
-#          ip2location-c-8.0.5	# 20190202
-#          ip2location-c-8.0.6	# 20190202
-#          ip2location-c-8.0.7	# 20190202 BROKEN
-#          ip2location-c-8.0.8	# 20190204
+#          ip2location-c-8.2.0	# 20201011
 
 #### Definitions
 
-## List of GeoIP versions (append newest one rightmost!)
-geoip_versions="1.4.4 1.4.5 1.4.6 1.4.7 1.4.8 1.5.0 1.5.1 1.5.2 1.6.0 1.6.1 1.6.2 1.6.3 1.6.4 1.6.5 1.6.6 1.6.7 1.6.8 1.6.9 1.6.10 1.6.11"
-geoip_url_maxmind="http://geolite.maxmind.com/download/geoip/api/c/"
-geoip_url_github="https://codeload.github.com/maxmind/geoip-api-c/tar.gz/"
-
-# reduce version on known issues
-if which autoconf >/dev/null 2>&1; then
-	autoconf_version=$(autoconf -V |grep autoconf | awk '{ print $NF }' | awk -F. '{ print $1 * 1000 + $2 }')
-	if [ -n "$autoconf_version" -a $autoconf_version -lt 2065 ]; then
-		# autoconf >= 2.65 is required for GeoIP >= 1.5.2
-		geoip_versions_orig="$geoip_versions"
-		geoip_versions=""
-		for version in $geoip_versions_orig; do
-			[ -n "$geoip_versions" ] && geoip_versions="$geoip_versions "
-			prefix=""
-			version_num=$(echo $version | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
-			if [ $version_num -ge 10502 ]; then
-				prefix="!"
-			fi
-			geoip_versions="$geoip_versions$prefix$version"
-		done	
-	fi
-else
-	echo "ERROR : missing executable in path: : autoconf" >&2
-	exit 1
-fi
-
-geoip_versions_download="$geoip_versions"
-
-geoip_cross_version_test_blacklist() {
-	local version_have=$(echo $1 | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
-	local version_test=$(echo $2 | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
-
-	if [ $version_have -ge 10407 -a $version_test -lt 10407 ]; then
-		# missing GeoIP_cleanup
-		return 1
-	fi
-
-	return 0
-}
-
-
 ## List of IP2Location versions (append newest one rightmost!)
-ip2location_versions="7.0.1 8.0.1 8.0.2 8.0.3 8.0.4 8.0.5 8.0.6 8.0.8"
-ip2location_versions_download="7.0.1 8.0.1 8.0.2 8.0.3 8.0.4 8.0.5 8.0.6 8.0.8"
+ip2location_versions="8.2.0"
+ip2location_versions_download="8.2.0"
 ip2location_url_base="https://www.ip2location.com/downloads/"
 ip2location_url_github="https://codeload.github.com/chrislim2888/IP2Location-C-Library/tar.gz/"
 
@@ -222,7 +144,7 @@ nameversion_from_name_version() {
 	echo "$nameversion"
 }
 
-## retrieve GeoIP/IP2Location options from version
+## retrieve IP2Location options from version
 options_from_name_version() {
 	local name="$1"
 	local version="$2"
@@ -231,12 +153,6 @@ options_from_name_version() {
 	local nameversion=$(nameversion_from_name_version $name $version)
 
 	case $name in
-	    GeoIP|G)
-		local dir="$BASE_DEVEL_GEOIP/$nameversion"
-		libdir="$dir/libGeoIP/.libs"
-		lib="$libdir/libGeoIP.so"
-		result="--with-geoip-headers=$dir/libGeoIP --with-geoip-lib=$libdir"
-		;;
 	    IP2Location|I)
 		local dir="$BASE_DEVEL_IP2LOCATION/$nameversion"
 		libdir="$dir/libIP2Location/.libs"
@@ -262,66 +178,7 @@ options_from_name_version() {
 	esac
 }
 
-## fallback for GeoIP/IP2Location
-fallback_options_from_name() {
-	local name="$1"
-
-	local file_header=""
-	local versions=""
-
-	case $name in
-	    GeoIP|G)
-		file_header="/usr/include/GeoIP.h"
-		versions="$geoip_versions"
-		dir_base="$BASE_DEVEL_GEOIP"
-		;;
-	    IP2Location|I)
-		file_header="/usr/include/IP2Location.h"
-		versions="$ip2location_versions"
-		dir_base="$BASE_DEVEL_IP2LOCATION"
-		;;
-	    *)
-		echo "ERROR : unsupported: $name" >&2
-		return 1
-		;;
-	esac
-
-	if [ -e "$file_header" ]; then
-		echo "NOTICE: file is existing, no fallback required for $name: $file_header" >&2
-		return 0
-	fi
-
-	echo "NOTICE: file is missing $file_header, check for local availability for $name: $file_header" >&2
-
-	for version in $(echo "$versions" | awk '{ for (i=NF;i>0;i--) print $i }'); do
-		if [ ${version:0:1} = "!" ]; then
-			echo "NOTICE: skip blacklisted version: $version" >&2
-			continue
-		fi
-
-		echo "DEBUG : check for version for $name: $version" >&2
-
-		dir="$dir_base/$(nameversion_from_name_version $name $version)"
-
-		if [ -d "$dir" ]; then
-			echo "INFO  : found at least directory for name $name: $dir" >&2
-			result="$(options_from_name_version $name $version)"
-			break
-		else
-			echo "NOTICE: did not find directory for name $name: $dir (try next)" >&2
-		fi
-	done
-
-	if [ -z "$result" ]; then
-		echo "ERROR : can't find any local source for $name in: $dir_base" >&2
-		return 1
-	fi
-
-	echo "$result"
-}
-
-
-## build GeoIP/IP2Location libraries
+## build IP2Location libraries
 build_library() {
 	local name="$1"
 	local version_selected="$2"
@@ -332,10 +189,6 @@ build_library() {
 	local base_devel=""
 
 	case $name in
-	    GeoIP|G)
-		versions="$geoip_versions"
-		base_devel="$BASE_DEVEL_GEOIP"
-		;;
 	    IP2Location|I)
 		versions="$ip2location_versions"
 		base_devel="$BASE_DEVEL_IP2LOCATION"
@@ -385,23 +238,6 @@ build_library() {
 		fi
 
 		case $name in
-		    GeoIP)
-			skip_autoreconf=0
-			if [ -n "$autoconf_version" -a $autoconf_version -eq 2059 ]; then
-				if [ $version_numeric -eq 10407 -o $version_numeric -eq 10501 ]; then
-					# on CentOS 5 with autoreconf 2.59 somehow broken for 1.4.7 and 1.5.1
-					skip_autoreconf=1
-				fi
-			fi
-
-			if [ $skip_autoreconf -eq 1 ]; then
-				./configure && make clean && make
-				result=$?
-			else
-				autoreconf -fi && ./configure && make clean && make
-				result=$?
-			fi
-			;;
 		    IP2Location)
 			case $version in
 			    6.0.3)
@@ -430,7 +266,7 @@ build_library() {
 }
 
 
-## clean GeoIP/IP2Location libraries
+## clean IP2Location libraries
 clean_versions() {
 	local name="$1"
 	local version_selected="$2"
@@ -441,10 +277,6 @@ clean_versions() {
 	local base_devel=""
 
 	case $name in
-	    GeoIP|G)
-		versions="$geoip_versions"
-		base_devel="$BASE_DEVEL_GEOIP"
-		;;
 	    IP2Location|I)
 		versions="$ip2location_versions"
 		base_devel="$BASE_DEVEL_IP2LOCATION"
@@ -497,7 +329,7 @@ clean_versions() {
 
 	return $result_all
 }
-## extract GeoIP/IP2Location source packages
+## extract IP2Location source packages
 extract_versions() {
 	local name="$1"
 	local version_selected="$2"
@@ -505,10 +337,6 @@ extract_versions() {
 	echo "INFO  : extract: name=$name version=$version_selected" >&2
 
 	case $name in
-	    GeoIP|G)
-		versions="$geoip_versions"
-		base_devel="$BASE_DEVEL_GEOIP"
-		;;
 	    IP2Location|I)
 		versions="$ip2location_versions"
 		base_devel="$BASE_DEVEL_IP2LOCATION"
@@ -583,7 +411,7 @@ extract_versions() {
 
 	return $result_all
 }
-## retrieve GeoIP/IP2Location source packages
+## retrieve IP2Location source packages
 download_versions() {
 	local name="$1"
 	local version_selected="$2"
@@ -591,10 +419,6 @@ download_versions() {
 	echo "INFO  : download: name=$name version=$version_selected" >&2
 
 	case $name in
-	    GeoIP|G)
-		versions="$geoip_versions_download"
-		base_devel="$BASE_DEVEL_GEOIP"
-		;;
 	    IP2Location|I)
 		versions="$ip2location_versions_download"
 		base_devel="$BASE_DEVEL_IP2LOCATION"
@@ -675,15 +499,14 @@ $0 [-A] [-n] [GeoIP|IP2Location [<version>]]
 
 	source: source mode (using functions only in main script)
 
-	-D  : download GeoIP/IP2Location source packages
-	-C  : clean GeoIP/IP2Location source packages
-	-X  : extract GeoIP/IP2Location source packages
-	-B  : build GeoIP/IP2Location libraries
+	-D  : download IP2Location source packages
+	-C  : clean IP2Location source packages
+	-X  : extract IP2Location source packages
+	-B  : build IP2Location libraries
 	-A  : whole chain: download/extract/build
 	-n  : dry-run
 	(optionally, type and version can be specified)
 
-	GeoIP: $geoip_versions
 	IP2Location: $ip2location_versions
 	Prefix '!' means not supported on this platform
 
@@ -691,7 +514,6 @@ $0 [-A] [-n] [GeoIP|IP2Location [<version>]]
 
 	used values from environment (or defaults):
 	  BASE_SOURCES=$BASE_SOURCES
-	  BASE_DEVEL_GEOIP=$BASE_DEVEL_GEOIP
 	  BASE_DEVEL_IP2LOCATION=$BASE_DEVEL_IP2LOCATION
 END
 }
@@ -773,7 +595,6 @@ if [ "$1" != "source" ]; then
 		fi
 		if [ "$do_build" = "1" ]; then
 			if [ -z "$*" ]; then
-				build_library GeoIP || exit 1
 				build_library IP2Location || exit 1
 			else
 				build_library $* || exit 1
