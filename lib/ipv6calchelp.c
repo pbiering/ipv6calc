@@ -20,10 +20,8 @@
 
 #include "libieee.h"
 #include "databases/lib/libipv6calc_db_wrapper.h"
-#include "databases/lib/libipv6calc_db_wrapper_GeoIP.h"
 #include "databases/lib/libipv6calc_db_wrapper_GeoIP2.h"
 #include "databases/lib/libipv6calc_db_wrapper_IP2Location.h"
-#include "databases/lib/libipv6calc_db_wrapper_DBIP.h"
 #include "databases/lib/libipv6calc_db_wrapper_DBIP2.h"
 #include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 #include "databases/lib/libipv6calc_db_wrapper_External.h"
@@ -342,32 +340,15 @@ void printhelp_common(const uint32_t help_features) {
 		fprintf(stderr, "\n");
 		fprintf(stderr, "  [--db-mmdb-lib       <file>      ] : MaxMindDB library file (default: %s)\n", mmdb_lib_file);
 #endif
-#ifdef SUPPORT_GEOIP2
-		fprintf(stderr, "\n");
-		fprintf(stderr, "  [--disable-geoip2                ] : GeoIP (MaxMindDB) support disabled\n");
-		fprintf(stderr, "  [--db-geoip2-disable             ] : GeoIP (MaxMindDB) support disabled\n");
-		fprintf(stderr, "  [--db-geoip2-dir      <directory>] : GeoIP (MaxMindDB) database directory (default: %s)\n", geoip2_db_dir);
-#endif
+
 #ifdef SUPPORT_DBIP2
 		fprintf(stderr, "\n");
-		fprintf(stderr, "  [--disable-dbip2                 ] : db-ip.com (MaxMindDB) support disabled\n");
-		fprintf(stderr, "  [--db-dbip2-disable              ] : db-ip.com (MaxMindDB) support disabled\n");
-		fprintf(stderr, "  [--db-dbip2-dir       <directory>] : db-ip.com (MaxMindDB) database directory (default: %s)\n", dbip2_db_dir);
-		fprintf(stderr, "  [--db-dbip2-only-type <TYPE>]      : db-ip.com (MaxMindDB) database only selected type (1-%d)\n", DBIP_DB_MAX);
+		fprintf(stderr, "  [--disable-dbip2                 ] : db-ip.com(MaxMindDB) support disabled\n");
+		fprintf(stderr, "  [--db-dbip2-disable              ] : db-ip.com(MaxMindDB) support disabled\n");
+		fprintf(stderr, "  [--db-dbip2-dir       <directory>] : db-ip.com(MaxMindDB) database directory (default: %s)\n", dbip2_db_dir);
+		fprintf(stderr, "  [--db-dbip2-only-type <TYPE>]      : db-ip.com(MaxMindDB) database only selected type (1-%d)\n", DBIP2_DB_MAX);
 		fprintf(stderr, "  [--db-dbip2-comm-to-free-switch-min-delta-months <MONTHS>]:\n");
 		fprintf(stderr, "     switch from COMM to FREE databases if possible and delta more than %d months (0=disabled)\n", dbip2_db_comm_to_free_switch_min_delta_months);
-#endif
-	};
-
-	if ((help_features & IPV6CALC_HELP_DBIP) != 0) {
-#ifdef SUPPORT_DBIP
-		fprintf(stderr, "\n");
-		fprintf(stderr, "  [--disable-dbip                  ] : db-ip.com support disabled\n");
-		fprintf(stderr, "  [--db-dbip-disable               ] : db-ip.com support disabled\n");
-		fprintf(stderr, "  [--db-dbip-dir        <directory>] : db-ip.com database directory (default: %s)\n", dbip_db_dir);
-		fprintf(stderr, "  [--db-dbip-only-type <TYPE>]       : db-ip.com database only selected type (1-%d)\n", DBIP_DB_MAX);
-		fprintf(stderr, "  [--db-dbip-comm-to-free-switch-min-delta-months <MONTHS>]:\n");
-		fprintf(stderr, "     switch from COMM to FREE databases if possible and delta more than %d months (0=disabled)\n", dbip_db_comm_to_free_switch_min_delta_months);
 #endif
 	};
 
@@ -387,7 +368,7 @@ void printhelp_common(const uint32_t help_features) {
 		fprintf(stderr, "  [--db-builtin-disable            ] : BuiltIn support disabled\n");
 #endif
 
-#if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP || defined SUPPORT_DBIP2 || defined SUPPORT_GEOIP || defined SUPPORT_GEOIP2 || SUPPORT_IP2LOCATION
+#if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP2 || defined SUPPORT_GEOIP2 || SUPPORT_IP2LOCATION
 		fprintf(stderr, "\n");
 		fprintf(stderr, "  [--db-priorization <entry1>[:...]] : Database priorization order list (overwrites default)\n");
 		fprintf(stderr, "                                         colon separated:");
