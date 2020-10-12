@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
  * Version    : $Id$
- * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2020 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options
@@ -33,20 +33,29 @@ static struct option ipv6calc_longopts_common[] = {
 	{"db-ip2location-disable"      , 0, NULL, OPTION_NOOP },
 #endif
 
-#ifndef SUPPORT_GEOIP
-	{"disable-geoip"               , 0, NULL, OPTION_NOOP },
-	{"db-geoip-disable"            , 0, NULL, OPTION_NOOP },
-#endif
+	// catch EOL GeoIP(legacy) options, TODO remove in 4.0.0
+	{"disable-geoip"               , 0, NULL, OPTION_GEOIP_EOL },
+	{"db-geoip-disable"            , 0, NULL, OPTION_GEOIP_EOL },
+	{"db-geoip"                    , 1, NULL, OPTION_GEOIP_EOL },
+	{"db-geoip-ipv4"               , 1, NULL, OPTION_GEOIP_EOL },
+	{"db-geoip-ipv6"               , 1, NULL, OPTION_GEOIP_EOL },
+	{"db-geoip-default"            , 0, NULL, OPTION_GEOIP_EOL },
+	{"db-geoip-ipv4-default"       , 0, NULL, OPTION_GEOIP_EOL },
+	{"db-geoip-ipv6-default"       , 0, NULL, OPTION_GEOIP_EOL },
+	{"db-geoip-dir"                , 1, NULL, OPTION_GEOIP_EOL },
+	{"db-geoip-lib"                , 1, NULL, OPTION_GEOIP_EOL },
 
 #ifndef SUPPORT_GEOIP2
 	{"disable-geoip2"              , 0, NULL, OPTION_NOOP },
 	{"db-geoip2-disable"           , 0, NULL, OPTION_NOOP },
 #endif
 
-#ifndef SUPPORT_DBIP
-	{"disable-dbip"                , 0, NULL, OPTION_NOOP },
-	{"db-dbip-disable"             , 0, NULL, OPTION_NOOP },
-#endif
+	// catch EOL dbip.com(BerkeleyDB) options, TODO remove in 4.0.0
+	{"disable-dbip"                , 0, NULL, OPTION_DBIP_EOL },
+	{"db-dbip-disable"             , 0, NULL, OPTION_DBIP_EOL },
+	{"db-dbip-dir"                 , 1, NULL, OPTION_DBIP_EOL },
+	{"db-dbip-comm-to-free-switch-min-delta-months", 1, NULL, OPTION_DBIP_EOL },
+	{"db-dbip-only-type"           , 1, NULL, OPTION_DBIP_EOL },
 
 #ifndef SUPPORT_DBIP2
 	{"disable-dbip2"               , 0, NULL, OPTION_NOOP },
@@ -68,12 +77,12 @@ static struct option ipv6calc_longopts_common[] = {
 static char *ipv6calc_shortopts_ip2location = "L";
 
 static struct option ipv6calc_longopts_ip2location[] = {
-	/* database options (old) */
-	{"db-ip2location-ipv4"         , 1, NULL, DB_ip2location_ipv4   },
-	{"db-ip2location-ipv6"         , 1, NULL, DB_ip2location_ipv6   },
-	{"db-ip2location-default"      , 0, NULL, (int) 'L'             },
-	{"db-ip2location-ipv4-default" , 0, NULL, DB_geoip_ipv4_default },
-	{"db-ip2location-ipv6-default" , 0, NULL, DB_geoip_ipv6_default },
+	/* database options (EOS) */
+	{"db-ip2location-ipv4"         , 1, NULL, OPTION_IP2LOCATION_EOS},
+	{"db-ip2location-ipv6"         , 1, NULL, OPTION_IP2LOCATION_EOS},
+	{"db-ip2location-default"      , 0, NULL, OPTION_IP2LOCATION_EOS},
+	{"db-ip2location-ipv4-default" , 0, NULL, OPTION_IP2LOCATION_EOS},
+	{"db-ip2location-ipv6-default" , 0, NULL, OPTION_IP2LOCATION_EOS},
 
 	/* database options (new) */
 	{"disable-ip2location"         , 0, NULL, DB_ip2location_disable },
@@ -91,28 +100,6 @@ static struct option ipv6calc_longopts_ip2location[] = {
 #endif // SUPPORT_IP2LOCATION_DYN
 };
 #endif // SUPPORT_IP2LOCATION
-
-#ifdef SUPPORT_GEOIP
-static char *ipv6calc_shortopts_geoip = "G";
-
-static struct option ipv6calc_longopts_geoip[] = {
-	/* database options (old) */
-	{"db-geoip"                    , 1, NULL, DB_geoip_ipv4         }, // backward compatibility
-	{"db-geoip-ipv4"               , 1, NULL, DB_geoip_ipv4         },
-	{"db-geoip-ipv6"               , 1, NULL, DB_geoip_ipv6         },
-	{"db-geoip-default"            , 0, NULL, (int) 'G'             },
-	{"db-geoip-ipv4-default"       , 0, NULL, DB_geoip_ipv4_default },
-	{"db-geoip-ipv6-default"       , 0, NULL, DB_geoip_ipv6_default },
-
-	/* database options (new) */
-	{"disable-geoip"               , 0, NULL, DB_geoip_disable       },
-	{"db-geoip-disable"            , 0, NULL, DB_geoip_disable       },
-	{"db-geoip-dir"                , 1, NULL, DB_geoip_dir           },
-#ifdef SUPPORT_GEOIP_DYN
-	{"db-geoip-lib"                , 1, NULL, DB_geoip_lib           },
-#endif // SUPPORT_GEOIP_DYN
-};
-#endif // SUPPORT_GEOIP
 
 #ifdef SUPPORT_GEOIP2
 static char *ipv6calc_shortopts_geoip2 = "";
@@ -136,18 +123,6 @@ static struct option ipv6calc_longopts_mmdb[] = {
 #endif // SUPPORT_MMDB_DYN
 };
 #endif // SUPPORT_MMDB
-
-#ifdef SUPPORT_DBIP
-static char *ipv6calc_shortopts_dbip = "";
-
-static struct option ipv6calc_longopts_dbip[] = {
-	{"disable-dbip"                , 0, NULL, DB_dbip_disable       },
-	{"db-dbip-disable"             , 0, NULL, DB_dbip_disable       },
-	{"db-dbip-dir"                 , 1, NULL, DB_dbip_dir           },
-	{"db-dbip-comm-to-free-switch-min-delta-months", 1, NULL, DB_dbip_comm_to_free_switch_min_delta_months },
-	{"db-dbip-only-type", 1, NULL, DB_dbip_only_type },
-};
-#endif // SUPPORT_DBIP
 
 #ifdef SUPPORT_DBIP2
 static char *ipv6calc_shortopts_dbip2 = "";
