@@ -7360,10 +7360,6 @@ $as_echo "*** IP2LOCATION_LIB            =$IP2LOCATION_LIB" >&6; }
 $as_echo "*** IP2LOCATION_LIB_NAME       =$IP2LOCATION_LIB_NAME" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_LIB_DIR        =$IP2LOCATION_LIB_DIR" >&5
 $as_echo "*** IP2LOCATION_LIB_DIR        =$IP2LOCATION_LIB_DIR" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_IPV6_COMPAT    =$IP2LOCATION_IPV6_COMPAT" >&5
-$as_echo "*** IP2LOCATION_IPV6_COMPAT    =$IP2LOCATION_IPV6_COMPAT" >&6; }
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_ALL_COMPAT     =$IP2LOCATION_ALL_COMPAT" >&5
-$as_echo "*** IP2LOCATION_ALL_COMPAT     =$IP2LOCATION_ALL_COMPAT" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
 $as_echo "" >&6; }

@@ -197,7 +197,7 @@ By default the module is disabled.
 
 %configure \
 	%{?enable_ip2location:--enable-ip2location} \
-	%{?enable_ip2location:--with-ip2location-dynamic --with-ip2location-headers-fallback} \
+	%{?enable_ip2location:--with-ip2location-dynamic} \
 	--with-ip2location-db=%{ip2location_db} \
 	--with-geoip-db=%{geoip_db} \
 	%{?enable_mmdb:--enable-mmdb --with-mmdb-dynamic} \
@@ -353,6 +353,9 @@ fi
 
 
 %changelog
+* Mon Oct 12 2020 Peter Bieringer <pb@bieringer.de>
+- remove support for GeoIP(legacy) and force minimum IP2Location version, add some recommendations and remove legacy support
+
 * Sun Jun 21 2020 Peter Bieringer <pb@bieringer.de>
 - cover 2 potential ldconfig locations
 
