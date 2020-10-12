@@ -261,30 +261,6 @@ int main(int argc, char *argv[]) {
 				DEBUGPRINT_NA(DEBUG_ipv6calc_general, "help option detected");
 				break;
 				
-			case 'L':
-				fprintf(stderr, "Option is obsolete: -L\n");
-				break;
-
-			case DB_ip2location_ipv4_default:
-				fprintf(stderr, "Option is obsolete: --db-ip2location-ipv4-default\n");
-				break;
-
-			case DB_ip2location_ipv6_default:
-				fprintf(stderr, "Option is obsolete: --db-ip2location-ipv6-default\n");
-				break;
-
-			case 'G':
-				fprintf(stderr, "Option is obsolete: -G\n");
-				break;
-
-			case DB_geoip_ipv4_default:
-				fprintf(stderr, "Option is obsolete: --db-geoip-ipv4-default\n");
-				break;
-
-			case DB_geoip_ipv6_default:
-				fprintf(stderr, "Option is obsolete: --db-geoip-ipv6-default\n");
-				break;
-
 			case CMD_printexamples:
 				command = CMD_printexamples;
 				break;
