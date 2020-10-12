@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Sat Jul 18 07:59:17 2020
+ * Generated     : Mon Oct 12 08:42:31 2020
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20200718";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20201012";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -100,7 +100,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x056000, 0x056FFF, "Base 2", "BASE-2" },
 	{ 0x0050C2, 0x057000, 0x057FFF, "Lite F GmBH", "LITE-F" },
 	{ 0x0050C2, 0x058000, 0x058FFF, "Vision Research, Inc.", "VISION-RESEARCH" },
-	{ 0x0050C2, 0x059000, 0x059FFF, "Austco Communication Systems Pty, Ltd", "AUSTCO-COMMUNICATION-PTY" },
+	{ 0x0050C2, 0x059000, 0x059FFF, "Austco Marketing & Service (USA) ltd.", "AUSTCO-MARKETING-SERVICE-USA" },
 	{ 0x0050C2, 0x05A000, 0x05AFFF, "Sonifex Ltd", "SONIFEX" },
 	{ 0x0050C2, 0x05B000, 0x05BFFF, "Radiometer Medical A/S", "RADIOMETER-MEDICAL-A/S" },
 	{ 0x0050C2, 0x05C000, 0x05CFFF, "Nortel Networks PLC (UK)", "NORTEL-NETWORKS-PLC-UK" },
@@ -252,7 +252,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x0EE000, 0x0EEFFF, "Industrial Indexing Systems, Inc.", "INDUSTRIAL-INDEXING" },
 	{ 0x0050C2, 0x0EF000, 0x0EFFFF, "Movaz Networks, Inc.", "MOVAZ-NETWORKS" },
 	{ 0x0050C2, 0x0F0000, 0x0F0FFF, "VHB Technologies, Inc.", "VHB-TECHNOLOGIES" },
-	{ 0x0050C2, 0x0F1000, 0x0F1FFF, "Polyvision Corporation", "POLYVISION" },
+	{ 0x0050C2, 0x0F1000, 0x0F1FFF, "Steelcase Inc.", "STEELCASE" },
 	{ 0x0050C2, 0x0F2000, 0x0F2FFF, "KMS Systems, Inc.", "KMS" },
 	{ 0x0050C2, 0x0F3000, 0x0F3FFF, "Young Computer Co., Ltd.", "YOUNG" },
 	{ 0x0050C2, 0x0F4000, 0x0F4FFF, "Sysnet Co., Ltd.", "SYSNET" },
@@ -1022,7 +1022,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x3F0000, 0x3F0FFF, "megatec electronic GmbH", "MEGATEC" },
 	{ 0x0050C2, 0x3F1000, 0x3F1FFF, "Salland Electronics Holding BV", "SALLAND-ELECTRONICS-HOLDING" },
 	{ 0x0050C2, 0x3F2000, 0x3F2FFF, "STL GmbH", "STL" },
-	{ 0x0050C2, 0x3F3000, 0x3F3FFF, "ABB Power Grids Germany AG – Grid Automation", "ABB-POWER-GRIDS-GERMANY-GRID-AUTOMATION" },
+	{ 0x0050C2, 0x3F3000, 0x3F3FFF, "Hitachi ABB Power Grids – Grid Automation", "HITACHI-ABB-POWER-GRIDS-GRID-AUTOMATION" },
 	{ 0x0050C2, 0x3F4000, 0x3F4FFF, "MC TECHNOLOGY GmbH", "MC" },
 	{ 0x0050C2, 0x3F5000, 0x3F5FFF, "Phaedrus Limited", "PHAEDRUS" },
 	{ 0x0050C2, 0x3F6000, 0x3F6FFF, "dAFTdATA Limited", "DAFTDATA" },
@@ -1938,7 +1938,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x784000, 0x784FFF, "Lewis Controls Inc.", "LEWIS-CONTROLS" },
 	{ 0x0050C2, 0x785000, 0x785FFF, "Icon Time Systems", "ICON-TIME" },
 	{ 0x0050C2, 0x786000, 0x786FFF, "Keith & Koep GmbH", "KEITH-KOEP" },
-	{ 0x0050C2, 0x787000, 0x787FFF, "Austco Communication Systems Pty Ltd", "AUSTCO-COMMUNICATION-PTY" },
+	{ 0x0050C2, 0x787000, 0x787FFF, "Austco Marketing & Service (USA) ltd.", "AUSTCO-MARKETING-SERVICE-USA" },
 	{ 0x0050C2, 0x788000, 0x788FFF, "HOSA TECHNOLOGY, INC.", "HOSA" },
 	{ 0x0050C2, 0x789000, 0x789FFF, "Rosslare Enterprises Limited", "ROSSLARE-ENTERPRISES" },
 	{ 0x0050C2, 0x78A000, 0x78AFFF, "LEVEL TELECOM", "LEVEL-TELECOM" },
@@ -2563,7 +2563,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x9F5000, 0x9F5FFF, "Commex Technologies", "COMMEX-TECHNOLOGIES" },
 	{ 0x0050C2, 0x9F6000, 0x9F6FFF, "Ion Sense Inc.", "ION-SENSE" },
 	{ 0x0050C2, 0x9F7000, 0x9F7FFF, "Dave Jones Design", "DAVE-JONES-DESIGN" },
-	{ 0x0050C2, 0x9F8000, 0x9F8FFF, "Austco Communication Systems Pty Ltd", "AUSTCO-COMMUNICATION-PTY" },
+	{ 0x0050C2, 0x9F8000, 0x9F8FFF, "Austco Marketing & Service (USA) ltd.", "AUSTCO-MARKETING-SERVICE-USA" },
 	{ 0x0050C2, 0x9F9000, 0x9F9FFF, "ABB Transmission and Distribution Automation Equipment (Xiamen) Co., Ltd.", "ABB-TRANSMISSION-AND-DISTRIBUTION-AUTOMATION-EQUIPMENT-XIAMEN" },
 	{ 0x0050C2, 0x9FA000, 0x9FAFFF, "Teranex A Division of Silicon Optix", "TERANEX-A-DIVISION-OF-SILICON-OPTIX" },
 	{ 0x0050C2, 0x9FB000, 0x9FBFFF, "Villbau Kft.", "VILLBAU-KFT" },
@@ -2613,7 +2613,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xA27000, 0xA27FFF, "meconet e. K.", "MECONET-E-K" },
 	{ 0x0050C2, 0xA28000, 0xA28FFF, "KENDA ELECTRONIC SYSTEMS LIMITED", "KENDA" },
 	{ 0x0050C2, 0xA29000, 0xA29FFF, "Luminex Corporation", "LUMINEX" },
-	{ 0x0050C2, 0xA2A000, 0xA2AFFF, "Custom Control Concepts", "CUSTOM-CONTROL-CONCEPTS" },
+	{ 0x0050C2, 0xA2A000, 0xA2AFFF, "Astronics Custom Control Concepts", "ASTRONICS-CUSTOM-CONTROL-CONCEPTS" },
 	{ 0x0050C2, 0xA2B000, 0xA2BFFF, "APRILIA RACING S.R.L.", "APRILIA-RACING" },
 	{ 0x0050C2, 0xA2C000, 0xA2CFFF, "KWS-Electronic GmbH", "KWS" },
 	{ 0x0050C2, 0xA2D000, 0xA2DFFF, "Inventure Inc.", "INVENTURE" },
@@ -3120,7 +3120,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xC23000, 0xC23FFF, "Vidicon LLC", "VIDICON" },
 	{ 0x0050C2, 0xC24000, 0xC24FFF, "Qualnetics Corporation", "QUALNETICS" },
 	{ 0x0050C2, 0xC25000, 0xC25FFF, "Private", "PRIVATE" },
-	{ 0x0050C2, 0xC26000, 0xC26FFF, "Austco Communication Systems Pty Ltd", "AUSTCO-COMMUNICATION-PTY" },
+	{ 0x0050C2, 0xC26000, 0xC26FFF, "Austco Marketing & Service (USA) ltd.", "AUSTCO-MARKETING-SERVICE-USA" },
 	{ 0x0050C2, 0xC27000, 0xC27FFF, "Qtechnology A/S", "QTECHNOLOGY-A/S" },
 	{ 0x0050C2, 0xC28000, 0xC28FFF, "ELREHA GmbH", "ELREHA" },
 	{ 0x0050C2, 0xC29000, 0xC29FFF, "Newtel Engineering S.r.l.", "NEWTEL-ENGINEERING" },
@@ -4207,7 +4207,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x067000, 0x067FFF, "Tronic Control ltd.", "TRONIC-CONTROL" },
 	{ 0x40D855, 0x068000, 0x068FFF, "Oki Seatec Co., Ltd.", "OKI-SEATEC" },
 	{ 0x40D855, 0x069000, 0x069FFF, "Smartcom-Bulgaria AD", "SMARTCOM-BULGARIA-AD" },
-	{ 0x40D855, 0x06A000, 0x06AFFF, "elgris", "ELGRIS" },
+	{ 0x40D855, 0x06A000, 0x06AFFF, "elgris UG", "ELGRIS-UG" },
 	{ 0x40D855, 0x06B000, 0x06BFFF, "BRS Sistemas Eletrônicos", "BRS-SISTEMAS-ELETRNICOS" },
 	{ 0x40D855, 0x06C000, 0x06CFFF, "Rohde&Schwarz Topex SA", "ROHDE-SCHWARZ-TOPEX" },
 	{ 0x40D855, 0x06D000, 0x06DFFF, "BroadSoft, INC", "BROADSOFT" },
