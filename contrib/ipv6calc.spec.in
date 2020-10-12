@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Copyright  : 2001-2018 by Peter Bieringer <pb@bieringer.de>
+# Copyright  : 2001-2020 by Peter Bieringer <pb@bieringer.de>
 # $Id$
 
 # enable the following for intermediate builds
@@ -21,7 +21,7 @@
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
 Version:	@PACKAGE_VERSION@
-Release:	38%{?gittag}%{?dist}
+Release:	39%{?gittag}%{?dist}
 Group:		Applications/Text
 URL:		http://www.deepspace6.net/projects/%{name}.html
 License:	GPLv2
@@ -57,14 +57,6 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 %define enable_ip2location 1
 %endif
 
-%if "%{?_without_geoip:0}%{?!_without_geoip:1}" == "1"
-%define enable_geoip 1
-%endif
-
-%if "%{?_without_dbip:0}%{?!_without_dbip:1}" == "1"
-%define enable_dbip 1
-%endif
-
 %if "%{?_without_mmdb:0}%{?!_without_mmdb:1}" == "1"
 %define enable_mmdb 1
 %endif
@@ -89,12 +81,20 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 %define require_db4 %(echo "%{dist}" | egrep -q '^\.el(5|6)$' && echo 1 || echo 0)
 %if %{require_db4}
 BuildRequires: db4-devel
+Requires:      db4
 %else
 BuildRequires: libdb-devel
+Requires:      libdb
 %endif
 
 %if %{enable_mmdb}
 BuildRequires: libmaxminddb-devel
+Recommends:    libmaxminddb
+%endif
+
+%if %{enable_ip2location}
+BuildRequires: IP2Location-devel >= 8.2.0
+Recommends:    IP2Location       >= 8.2.0
 %endif
 
 # RPM license macro detector
@@ -125,17 +125,9 @@ Support for following databases
 		default directory for downloaded db files: %{ip2location_db}
 		(requires also external library on system)
 
- - GeoIP	%{?enable_geoip:ENABLED}%{?!enable_geoip:DISABLED}
-		default directory for downloaded db files: %{geoip_db}
-		(requires also external library on system)
-
  - GeoIP v2	%{?enable_mmdb:ENABLED}%{?!enable_mmdb:DISABLED}
 		default directory for downloaded db files: %{geoip_db}
 		(requires also external library on system)
-
- - db-ip.com	%{?enable_dbip:ENABLED}%{?!enable_dbip:DISABLED}
-		(once generated database files are found on system)
-		default directory for generated db files: %{dbip_db}
 
  - db-ip.com v2	%{?enable_mmdb:ENABLED}%{?!enable_mmdb:DISABLED}
 		(once generated database files are found on system)
@@ -148,8 +140,6 @@ Built %{?enable_shared:WITH}%{?!enable_shared:WITHOUT} shared-library
 
 Available rpmbuild rebuild options:
   --without ip2location
-  --without geoip
-  --without dbip
   --without mmdb (which disables GeoIP v2 and db-ip.com v2)
   --without external
   --without shared
@@ -207,13 +197,9 @@ By default the module is disabled.
 
 %configure \
 	%{?enable_ip2location:--enable-ip2location} \
-	%{?enable_ip2location:--with-ip2location-dynamic --with-ip2location-headers-fallback} \
+	%{?enable_ip2location:--with-ip2location-dynamic} \
 	--with-ip2location-db=%{ip2location_db} \
-	%{?enable_geoip:--enable-geoip} \
-	%{?enable_geoip:--with-geoip-dynamic --with-geoip-headers-fallback} \
 	--with-geoip-db=%{geoip_db} \
-	%{?enable_dbip:--enable-dbip} \
-	--with-dbip-db=%{dbip_db} \
 	%{?enable_mmdb:--enable-mmdb --with-mmdb-dynamic} \
 	%{?enable_external:--enable-external} \
 	--with-external-db=%{external_db} \
@@ -367,6 +353,9 @@ fi
 
 
 %changelog
+* Mon Oct 12 2020 Peter Bieringer <pb@bieringer.de>
+- remove support for GeoIP(legacy) and force minimum IP2Location version, add some recommendations and remove legacy support
+
 * Sun Jun 21 2020 Peter Bieringer <pb@bieringer.de>
 - cover 2 potential ldconfig locations
 
