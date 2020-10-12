@@ -3,11 +3,11 @@
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
 # Version    : $Id$
-# Copyright  : 2011-2019 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2011-2020 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
 #
-# can run also through various version of GeoIP (-g) and IP2Location (-i) libraries
+# history: can run also through various version of GeoIP (-g) and IP2Location (-i) libraries
 #  see autogen-support.sh for details
 
 status_file="autogen-all-variants.status"
@@ -33,13 +33,8 @@ autogen_variants_list() {
 		cat <<END | grep -v ^#
 NONE#
 NONE#--enable-bundled-md5 --enable-bundled-getopt
-DBIP#-d
 IP2LOCATION#-i
 IP2LOCATION#-i --ip2location-dyn
-GEOIP#-g
-GEOIP#-g --geoip-dyn
-GEOIP#-g --geoip-ipv6-compat
-GEOIP#-g --geoip-ipv6-compat --geoip-dyn
 GEOIP2 DBIP2#-m
 GEOIP2 DBIP2#-m --mmdb-dyn
 GEOIP2#-m --disable-dbip2
