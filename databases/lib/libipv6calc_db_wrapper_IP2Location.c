@@ -222,6 +222,36 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called dlsym successful: %s (library >= 6.0.0)", "IP2Location_get_usagetype");
 	};
 
+	/* check for IP2Location_api_version_num (mandatory since ipv6calc >= 3.0.0) */
+	const char *dl_symbol2 = "IP2Location_api_version_num";
+
+	if (dl_status_IP2Location_api_version_num == IPV6CALC_DL_STATUS_UNKNOWN) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Call dlsym: %s", dl_symbol2);
+
+		dlerror();    /* Clear any existing error */
+
+		*(void **) (&dl_IP2Location_api_version_num.obj) = dlsym(dl_IP2Location_handle, dl_symbol2);
+
+		if ((error = dlerror()) != NULL)  {
+			dl_status_IP2Location_api_version_num = IPV6CALC_DL_STATUS_ERROR;
+		} else {
+			dl_status_IP2Location_api_version_num = IPV6CALC_DL_STATUS_OK;
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called dlsym successful: %s", dl_symbol2);
+		};
+	} else if (dl_status_IP2Location_api_version_num == IPV6CALC_DL_STATUS_ERROR) {
+		/* already known issue */
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already failed: %s", dl_symbol2);
+	} else {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol2);
+	};
+
+
+	/* check version */
+	if (dl_IP2Location_api_version_num.func() < 80200) {
+		ERRORPRINT_WA("IP2Location library is no longer supported with API version: %s", "< 8.2.0");
+		return(1);
+	};
+
 #else // SUPPORT_IP2LOCATION_DYN
 #endif // SUPPORT_IP2LOCATION_DYN
 
@@ -920,20 +950,7 @@ char *libipv6calc_db_wrapper_IP2Location_lib_version(void) {
 		snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API>=7.0.0 Major=%d", libipv6calc_db_wrapper_IP2Location_library_version_major());
 	};
 #else
-#ifdef SUPPORT_IP2LOCATION_API_VERSION_STRING
-#ifdef SUPPORT_IP2LOCATION_LIB_VERSION_STRING // (>= 8.0.4)
-	if (IP2Location_api_version_num() < 80004) {
-		// IP2Location_lib_version_string unsupported in non-dynamic link mode (because older libs can be used by accident)
-		snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d", IP2Location_api_version_string(), libipv6calc_db_wrapper_IP2Location_library_version_major());
-	} else {
-		snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "%s API=%s Major=%d", IP2Location_lib_version_string(), IP2Location_api_version_string(), libipv6calc_db_wrapper_IP2Location_library_version_major());
-	};
-#else  // SUPPORT_IP2LOCATION_LIB_VERSION_STRING
 	snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d", IP2Location_api_version_string(), libipv6calc_db_wrapper_IP2Location_library_version_major());
-#endif // SUPPORT_IP2LOCATION_LIB_VERSION_STRING
-#else  // SUPPORT_IP2LOCATION_API_VERSION_STRING
-	snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d", IP2LOCATION_API_VERSION, libipv6calc_db_wrapper_IP2Location_library_version_major());
-#endif // SUPPORT_IP2LOCATION_API_VERSION_STRING
 #endif
 
 #ifdef SUPPORT_IP2LOCATION_DYN
@@ -1193,22 +1210,22 @@ char *libipv6calc_db_wrapper_IP2Location_database_info(IP2Location *loc, const i
 			// catch API 4.0.0 -> 7.0.0 extension
 #ifdef SUPPORT_IP2LOCATION_DYN
 			// API >= 7.0.0
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "databasetype=%u databasecount/ipv4databasecount=%u ipversion/ipv6databasecount=%u", loc->databasetype, loc->ipv4databasecount, loc->ipv6databasecount);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "databasetype=%u databasecount/ipv4databasecount=%u ipversion/ipv6databasecount=%u", loc->database_type, loc->ipv4_database_count, loc->ipv6_database_count);
 			// compiled with API >= 7.0.0, loaded library is >= 7.0.0
-			if (loc->ipv4databasecount > 2) {
+			if (loc->ipv4_database_count > 2) {
 				// IPv4
-				entries_ipv4 = loc->ipv4databasecount;
+				entries_ipv4 = loc->ipv4_database_count;
 				ipsupport |= 0x1;
 			};
 
-			if (loc->ipv6databasecount > 0) {
+			if (loc->ipv6_database_count > 0) {
 				// IPv6
 				ipsupport |= 0x2;
-				if (loc->ipv6databasecount > 1) {
-					entries_ipv6 = loc->ipv6databasecount;
-				} else if (loc->ipversion == 1) {
+				if (loc->ipv6_database_count > 1) {
+					entries_ipv6 = loc->ipv6_database_count;
+				} else if (loc->ip_version == 1) {
 					// catch of old DB file, ipv4databasecount is reused as databasecount 
-					entries_ipv6 = loc->ipv4databasecount;
+					entries_ipv6 = loc->ipv4_database_count;
 					// clear IPv4 support
 					ipsupport &= ~0x1;
 					entries_ipv4 = 0;
