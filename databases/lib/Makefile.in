@@ -1,7 +1,7 @@
 # Project    : ipv6calc
 # File       : databases/lib/Makefile
 # Version    : $Id$
-# Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2013-2020 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calc database libraries
@@ -16,7 +16,7 @@ CFLAGS += -D__EXTENSIONS__ -fPIC
 
 LDFLAGS += @LDFLAGS@
 
-INCLUDES= -I../../lib -I../.. @MMDB_INCLUDE_L2@ @GEOIP_INCLUDE_L2@ @IP2LOCATION_INCLUDE_L2@
+INCLUDES= -I../../lib -I../.. @MMDB_INCLUDE_L2@ @IP2LOCATION_INCLUDE_L2@
 
 SHARED_LIBRARY=@SHARED_LIBRARY@
 
@@ -32,10 +32,8 @@ RANLIB	= @RANLIB@
 
 OBJS	=	libipv6calc_db_wrapper.o \
 		libipv6calc_db_wrapper_MMDB.o \
-		libipv6calc_db_wrapper_GeoIP.o \
 		libipv6calc_db_wrapper_GeoIP2.o \
 		libipv6calc_db_wrapper_IP2Location.o \
-		libipv6calc_db_wrapper_DBIP.o \
 		libipv6calc_db_wrapper_DBIP2.o \
 		libipv6calc_db_wrapper_External.o \
 		libipv6calc_db_wrapper_BuiltIn.o
@@ -49,10 +47,8 @@ all:
 
 $(OBJS):	libipv6calc_db_wrapper.h \
 		libipv6calc_db_wrapper_MMDB.h \
-		libipv6calc_db_wrapper_GeoIP.h \
 		libipv6calc_db_wrapper_GeoIP2.h \
 		libipv6calc_db_wrapper_IP2Location.h \
-		libipv6calc_db_wrapper_DBIP.h \
 		libipv6calc_db_wrapper_DBIP2.h \
 		libipv6calc_db_wrapper_External.h \
 		libipv6calc_db_wrapper_BuiltIn.h \
