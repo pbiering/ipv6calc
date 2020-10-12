@@ -302,7 +302,7 @@ dbip_db_default="/usr/share/DBIP"
 external_db_default="/usr/share/ipv6calc/db"
 
 mmdb_dyn_lib_default="libmaxminddb.so.0"
-ip2location_dyn_lib_default="libIP2Location.so"
+ip2location_dyn_lib_default="libIP2Location.so.3"
 
 
 dnl *************************************************
@@ -461,6 +461,66 @@ dnl enable built-in database support in general
 dnl *************************************************
 if test "$BUILTIN" = "yes"; then
 	AC_DEFINE(SUPPORT_BUILTIN, 1, Define if you want general BuiltIn database included.)
+fi
+
+
+dnl *************************************************
+dnl External ipv6calc db support
+dnl *************************************************
+AC_ARG_ENABLE([external],
+	AS_HELP_STRING([--enable-external],
+	               [Enable external db support (default: disabled)]),
+	[
+		EXTERNAL="$enable_external"
+	],
+	[
+		EXTERNAL="no"
+	])
+
+dnl defaults for database directories
+AC_ARG_WITH([external-db],
+	AS_HELP_STRING([--with-external-db=DIR],
+               [Use specified external database directory, default: /usr/share/ipv6calc/db]),
+	[
+		external_db="$with_external_db"
+	],
+	[
+		external_db=$external_db_default
+	])
+
+if test "$EXTERNAL" = "yes"; then
+	require_libdb="yes"
+
+	AC_DEFINE(SUPPORT_EXTERNAL, 1, Define if you want external support included.)
+	AC_MSG_RESULT([*** external db dir: $external_db])
+	AC_DEFINE_UNQUOTED(EXTERNAL_DB, "$external_db", Define external database directory.)
+fi
+
+EXTERNAL_DB=$external_db
+AC_SUBST(EXTERNAL_DB)
+
+
+dnl *************************************************
+dnl libdb required
+dnl *************************************************
+if test "$require_libdb" = "yes"; then
+	AC_CHECK_HEADER(db.h, [
+		AC_CHECK_LIB(db, db_create,
+		[
+			AC_MSG_RESULT([*** Berkeley DB library found and usable])
+		],
+		[
+			AC_MSG_ERROR([Berkeley DB library file misses db_create])
+		])
+	],
+	[
+		AC_MSG_ERROR([Berkeley DB library header files not found (perhaps missing one of the following packages: db4-devel libdb-devel)])
+	])
+
+	LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-ldb"
+	LDFLAGS="${LDFLAGS:+$LDFLAGS }-ldb"
+	LDFLAGS_EXTRA_MOD_IPV6CALC="-ldb $LDFLAGS_EXTRA_MOD_IPV6CALC"
+	AC_DEFINE(HAVE_BERKELEY_DB_SUPPORT, 1, Define if Berkeley DB support is required.)
 fi
 
 
@@ -639,6 +699,9 @@ if test "$MMDB" = "yes"; then
 		],[
 			DBIP2="yes"
 		])
+else
+	GEOIP2=no
+	DBIP2=no
 fi
 
 AC_SUBST(MMDB_INCLUDE)
@@ -685,44 +748,7 @@ if test "$DBIP2" = "yes"; then
 fi
 
 DBIP2_DB=$dbip_db
-AC_SUBST(DBIP_DB)
 AC_SUBST(DBIP2_DB)
-
-
-dnl *************************************************
-dnl External ipv6calc db support
-dnl *************************************************
-AC_ARG_ENABLE([external], 
-	AS_HELP_STRING([--enable-external],
-	               [Enable external db support (default: disabled)]),
-	[
-		EXTERNAL="$enable_external"
-	],
-	[
-		EXTERNAL="no"
-	])
-
-dnl defaults for database directories
-AC_ARG_WITH([external-db],
-	AS_HELP_STRING([--with-external-db=DIR],
-               [Use specified external database directory, default: /usr/share/ipv6calc/db]),
-	[
-		external_db="$with_external_db"
-	],
-	[
-		external_db=$external_db_default
-	])
-
-if test "$EXTERNAL" = "yes"; then
-	require_libdb="yes"
-
-	AC_DEFINE(SUPPORT_EXTERNAL, 1, Define if you want external support included.)
-	AC_MSG_RESULT([*** external db dir: $external_db])
-	AC_DEFINE_UNQUOTED(EXTERNAL_DB, "$external_db", Define external database directory.)
-fi
-
-EXTERNAL_DB=$external_db
-AC_SUBST(EXTERNAL_DB)
 
 
 dnl *************************************************
@@ -760,19 +786,8 @@ AC_ARG_WITH([ip2location-headers],
 
 AC_ARG_WITH([ip2location-headers-fallback],
 	AS_HELP_STRING([--with-ip2location-headers-fallback],
-		[IP2Location include files from internal fallback location (only usable with dynamic load option)]),
+		[Compatibility Dummy (no longer supported)]),
 	[
-		if test "$IP2LOCATION_DYN" != "yes"; then
-			AC_MSG_ERROR([IP2Location fallback headers are only usable with dynamic load option set: --with-ip2location-dynamic])
-		fi
-	
-		if test -n "$IP2LOCATION_INCLUDE_DIR"; then
-			AC_MSG_ERROR([IP2Location include files location already set by --with-ip2location-headers, skip fallback])
-		else
-			AC_MSG_RESULT([*** IP2Location fallback headers activated])
-			IP2LOCATION_INCLUDE_DIR="external-fallback/IP2Location"
-			IP2LOCATION_INCLUDE_VERSION=$(cat external-fallback/IP2Location/VERSION-IP2Location)
-		fi
 	])
 
 if test -n "$IP2LOCATION_INCLUDE_DIR"; then
@@ -919,12 +934,12 @@ if test "$IP2LOCATION" = "yes"; then
 				#include <IP2Location.h>
 				IP2Location loc;
 				void test() {
-					loc.ipv6databaseaddr = 1;
+					loc.ipv6_database_address = 1;
 				};
 		     ]])],[
-				AC_MSG_RESULT([IP2Location has full IPv6 support (API >= 7.0.0)])
+				AC_MSG_RESULT([IP2Location has full (and updated) IPv6 support (API >= 8.2.0)])
 			],[
-				AC_MSG_ERROR([IP2Location has only compat IPv6 support (API < 7.0.0) which is no longer supported])
+				AC_MSG_ERROR([IP2Location has only compat IPv6 support (API < 7.0.0) or old (API < 8.2.0) which is no longer supported])
 			]
 		)
 
@@ -964,16 +979,16 @@ if test "$IP2LOCATION" = "yes"; then
 
 		AC_CHECK_LIB($IP2LOCATION_LIB_NAME, IP2Location_api_version_string,
 		[
-			AC_DEFINE(SUPPORT_IP2LOCATION_API_VERSION_STRING, 1, Define if you want IP2Location API version string support.)
 			AC_MSG_RESULT([*** IP2Location library supports API version string])
+		],[
+			AC_MSG_ERROR([IP2Location library file misses IP2Location_api_version_string - no longer supported])
 		])
 
 		AC_CHECK_LIB($IP2LOCATION_LIB_NAME, IP2Location_lib_version_string,
 		[
 			if test "$IP2LOCATION_HAS_LIB_STRING" != "yes"; then
-				AC_MSG_RESULT([IP2Location library header file misses IP2Location_lib_version_string while library contains])
+				AC_MSG_ERROR([IP2Location library header file misses IP2Location_lib_version_string while library contains])
 			else
-				AC_DEFINE(SUPPORT_IP2LOCATION_LIB_VERSION_STRING, 1, Define if you want IP2Location LIB version string support.)
 				AC_MSG_RESULT([*** IP2Location library supports LIB version string])
 			fi
 		])
@@ -993,8 +1008,9 @@ if test "$IP2LOCATION" = "yes"; then
 	else
 		AC_CHECK_DECLS([IP2Location_api_version_string],
 		[
-			AC_DEFINE(SUPPORT_IP2LOCATION_API_VERSION_STRING, 1, Define if you want IP2Location API version string support.)
 			AC_MSG_RESULT([*** IP2Location header supports API version string])
+		],[
+			AC_MSG_ERROR([IP2Location library header file misses IP2Location_api_version_string - no longer supported])
 		])
 
 		# wrapper detects by itself the real support
@@ -1128,30 +1144,6 @@ if test "$DYNAMIC_LOAD" = "yes"; then
 fi
 
 AC_SUBST(DYNLOAD_LIB)
-
-
-dnl *************************************************
-dnl libdb required
-dnl *************************************************
-if test "$require_libdb" = "yes"; then
-	AC_CHECK_HEADER(db.h, [
-		AC_CHECK_LIB(db, db_create,
-		[
-			AC_MSG_RESULT([*** Berkeley DB library found and usable])
-		],
-		[
-			AC_MSG_ERROR([Berkeley DB library file misses db_create])
-		])
-	],
-	[
-		AC_MSG_ERROR([Berkeley DB library header files not found (perhaps missing db4-devel/libdb-devel package)])
-	])
-
-	LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-ldb"
-	LDFLAGS="${LDFLAGS:+$LDFLAGS }-ldb"
-	LDFLAGS_EXTRA_MOD_IPV6CALC="-ldb $LDFLAGS_EXTRA_MOD_IPV6CALC"
-	AC_DEFINE(HAVE_BERKELEY_DB_SUPPORT, 1, Define if Berkeley DB support is required.)
-fi
 
 
 dnl *************************************************
@@ -1290,13 +1282,11 @@ AC_MSG_RESULT([*** IP2LOCATION_INCLUDE_VERSION=$IP2LOCATION_INCLUDE_VERSION])
 AC_MSG_RESULT([*** IP2LOCATION_LIB            =$IP2LOCATION_LIB])
 AC_MSG_RESULT([*** IP2LOCATION_LIB_NAME       =$IP2LOCATION_LIB_NAME])
 AC_MSG_RESULT([*** IP2LOCATION_LIB_DIR        =$IP2LOCATION_LIB_DIR])
-AC_MSG_RESULT([*** IP2LOCATION_IPV6_COMPAT    =$IP2LOCATION_IPV6_COMPAT])
-AC_MSG_RESULT([*** IP2LOCATION_ALL_COMPAT     =$IP2LOCATION_ALL_COMPAT])
 
 AC_MSG_RESULT([])
 
 AC_MSG_RESULT([*** GEOIP2                     =$GEOIP2])
-AC_MSG_RESULT([*** GEOIP2_DB                  =$GEOIP_DB])
+AC_MSG_RESULT([*** GEOIP2_DB                  =$GEOIP2_DB])
 
 AC_MSG_RESULT([])
 
