@@ -103,10 +103,8 @@ create_apache_root_and_start() {
 	fi
 
 	## disable databases by option
-	[ "$disable_geoip" = "1" ]       && perl -pi -e 's/#(ipv6calcOption\s+db-geoip-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
 	[ "$disable_geoip2" = "1" ]      && perl -pi -e 's/#(ipv6calcOption\s+db-geoip2-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
 	[ "$disable_ip2location" = "1" ] && perl -pi -e 's/#(ipv6calcOption\s+db-ip2location-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
-	[ "$disable_dbip" = "1" ]        && perl -pi -e 's/#(ipv6calcOption\s+db-dbip-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
 	[ "$disable_dbip2" = "1" ]       && perl -pi -e 's/#(ipv6calcOption\s+db-dbip2-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
 	[ "$disable_external" = "1" ]    && perl -pi -e 's/#(ipv6calcOption\s+db-external-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
 
@@ -365,7 +363,7 @@ while getopts "EPIDGrACRNca:fSKWb:mlgideh\?" opt; do
 		debug_config=1
 		;;
 	    g)
-		disable_geoip=1
+		echo "NOTICE: support removed for GeoIP(legacy): $opt"
 		;;
 	    G)
 		disable_geoip2=1
@@ -374,7 +372,7 @@ while getopts "EPIDGrACRNca:fSKWb:mlgideh\?" opt; do
 		disable_ip2location=1
 		;;
 	    d)
-		disable_dbip=1
+		echo "NOTICE: support removed for db-ip.com(BerkeleyDB): $opt"
 		;;
 	    D)
 		disable_dbip2=1
