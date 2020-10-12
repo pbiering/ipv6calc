@@ -24,10 +24,8 @@
 
 #include "libipv6calc_db_wrapper.h"
 #include "libipv6calc_db_wrapper_MMDB.h"
-#include "libipv6calc_db_wrapper_GeoIP.h"
 #include "libipv6calc_db_wrapper_GeoIP2.h"
 #include "libipv6calc_db_wrapper_IP2Location.h"
-#include "libipv6calc_db_wrapper_DBIP.h"
 #include "libipv6calc_db_wrapper_DBIP2.h"
 #include "libipv6calc_db_wrapper_External.h"
 #include "libipv6calc_db_wrapper_BuiltIn.h"
@@ -56,11 +54,6 @@ static int uint64_log2(uint64_t n) {
 #define xmakestr(x) makestr(x)
 #endif
 
-#ifdef SUPPORT_GEOIP
-static int wrapper_GeoIP_disable       = 0;
-static int wrapper_GeoIP_status = 0;
-#endif
-
 #ifdef SUPPORT_GEOIP2
 static int wrapper_GeoIP2_disable      = 0;
 static int wrapper_GeoIP2_status = 0;
@@ -69,11 +62,6 @@ static int wrapper_GeoIP2_status = 0;
 #ifdef SUPPORT_IP2LOCATION
 static int wrapper_IP2Location_disable = 0;
 static int wrapper_IP2Location_status = 0;
-#endif
-
-#ifdef SUPPORT_DBIP
-static int wrapper_DBIP_disable        = 0;
-static int wrapper_DBIP_status = 0;
 #endif
 
 #ifdef SUPPORT_DBIP2
@@ -109,7 +97,7 @@ int wrapper_source_priority_selector_by_option = -1; // -1: uninitialized, 0: in
 int libipv6calc_db_wrapper_init(const char *prefix_string) {
 	int result = 0, f, p, s, j;
 
-#if defined SUPPORT_GEOIP || defined SUPPORT_IP2LOCATION || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
 	int r;
 #endif
 	s = strlen(prefix_string); // make compiler happy (avoid unused "...")
@@ -199,28 +187,6 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 #endif
 #endif
 
-#ifdef SUPPORT_GEOIP
-	if (wrapper_GeoIP_disable == 0) {
-		// Call GeoIP wrapper
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call libipv6calc_db_wrapper_GeoIP_wrapper_init");
-
-		r = libipv6calc_db_wrapper_GeoIP_wrapper_init();
-
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "GeoIP_wrapper_init result: %d wrapper_features=0x%08x", r, wrapper_features);
-
-		if (r != 0) {
-#ifndef SUPPORT_GEOIP_DYN
-			// only non-dynamic-load results in a problem
-			result = 1;
-#endif
-		} else {
-			wrapper_GeoIP_status = 1; // ok
-		};
-	} else {
-		NONQUIETPRINT_WA("%sSupport for GeoIP disabled by option", prefix_string);
-	};
-#endif // SUPPORT_GEOIP
-
 #ifdef SUPPORT_GEOIP2
 	if (wrapper_GeoIP2_disable == 0) {
 		// Call GeoIP2 wrapper
@@ -249,7 +215,7 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 		NONQUIETPRINT_WA("%sSupport for GeoIP (MaxMindDB) disabled by MaxMindDB library problem: %s", prefix_string, mmdb_lib_file);
 #endif
 	};
-#endif // SUPPORT_GEOIP
+#endif // SUPPORT_GEOIP2
 
 #ifdef SUPPORT_IP2LOCATION
 	if (wrapper_IP2Location_disable == 0) {
@@ -272,25 +238,6 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 		NONQUIETPRINT_WA("%sSupport for IP2Location disabled by option", prefix_string);
 	};
 #endif // SUPPORT_IP2LOCATION
-
-#ifdef SUPPORT_DBIP
-	if (wrapper_DBIP_disable == 0) {
-		// Call DBIP wrapper
-		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call libipv6calc_db_wrapper_DBIP_wrapper_init");
-
-		r = libipv6calc_db_wrapper_DBIP_wrapper_init();
-
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "DBIP_wrapper_init result: %d wrapper_features=0x%08x", r, wrapper_features);
-
-		if (r != 0) {
-			result = 1;
-		} else {
-			wrapper_DBIP_status = 1; // ok
-		};
-	} else {
-		NONQUIETPRINT_WA("%sSupport for db-ip.com disabled by option", prefix_string);
-	};
-#endif // SUPPORT_DBIP
 
 #ifdef SUPPORT_DBIP2
 	if (wrapper_DBIP2_disable == 0) {
@@ -465,21 +412,11 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 int libipv6calc_db_wrapper_cleanup(void) {
 	int result = 0;
 
-#if defined SUPPORT_GEOIP || defined SUPPORT_IP2LOCATION || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
 	int r;
 #endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
-
-#ifdef SUPPORT_GEOIP
-	if (wrapper_GeoIP_disable == 0) {
-		// Call GeoIP wrapper
-		r = libipv6calc_db_wrapper_GeoIP_wrapper_cleanup();
-		if (r != 0) {
-			result = 1;
-		};
-	};
-#endif
 
 #ifdef SUPPORT_GEOIP2
 	if (wrapper_GeoIP2_disable == 0) {
@@ -495,16 +432,6 @@ int libipv6calc_db_wrapper_cleanup(void) {
 	if (wrapper_IP2Location_disable == 0) {
 		// Call IP2Location wrapper
 		r = libipv6calc_db_wrapper_IP2Location_wrapper_cleanup();
-		if (r != 0) {
-			result = 1;
-		};
-	};
-#endif
-
-#ifdef SUPPORT_DBIP
-	if (wrapper_DBIP_disable == 0) {
-		// Call DBIP wrapper
-		r = libipv6calc_db_wrapper_DBIP_wrapper_cleanup();
 		if (r != 0) {
 			result = 1;
 		};
@@ -549,13 +476,6 @@ int libipv6calc_db_wrapper_cleanup(void) {
 void libipv6calc_db_wrapper_info(char *string, const size_t size) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
-#ifdef SUPPORT_GEOIP
-	if (wrapper_GeoIP_disable == 0) {
-		// Call GeoIP wrapper
-		libipv6calc_db_wrapper_GeoIP_wrapper_info(string, size);
-	};
-#endif
-
 #ifdef SUPPORT_GEOIP2
 	if (wrapper_GeoIP2_disable == 0) {
 		// Call GeoIP2 wrapper
@@ -567,13 +487,6 @@ void libipv6calc_db_wrapper_info(char *string, const size_t size) {
 	if (wrapper_IP2Location_disable == 0) {
 		// Call IP2Location wrapper
 		libipv6calc_db_wrapper_IP2Location_wrapper_info(string, size);
-	};
-#endif
-
-#ifdef SUPPORT_DBIP
-	if (wrapper_DBIP_disable == 0) {
-		// Call DBIP wrapper
-		libipv6calc_db_wrapper_DBIP_wrapper_info(string, size);
 	};
 #endif
 
@@ -632,26 +545,11 @@ void libipv6calc_db_wrapper_features(char *string, const size_t size) {
 
 /* function get capability string */
 void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
-#if defined SUPPORT_GEOIP || defined SUPPORT_IP2LOCATION || defined SUPPORT_DBIP || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
 	char tempstring[NI_MAXHOST];
 #endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
-
-#ifdef SUPPORT_GEOIP
-	if (wrapper_GeoIP_disable == 0) {
-#ifdef SUPPORT_GEOIP_DYN
-		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(dyn-load)", string, strlen(string) > 0 ? " " : "");
-#else // SUPPORT_GEOIP_DYN
-#ifdef SUPPORT_GEOIP_STATIC
-		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(static)", string, strlen(string) > 0 ? " " : "");
-#else // SUPPORT_GEOIP_STATIC
-		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(linked)", string, strlen(string) > 0 ? " " : "");
-#endif // SUPPORT_GEOIP_STATIC
-#endif // SUPPORT_GEOIP_DYN
-		snprintf(string, size, "%s", tempstring);
-	};
-#endif // SUPPORT_GEOIP
 
 #ifdef SUPPORT_GEOIP2
 	if (wrapper_GeoIP2_disable == 0) {
@@ -678,13 +576,6 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 		snprintf(string, size, "%s", tempstring);
 	};
 #endif // SUPPORT_IP2LOCATION
-
-#ifdef SUPPORT_DBIP
-	if (wrapper_DBIP_disable == 0) {
-		snprintf(tempstring, sizeof(tempstring), "%s%sDBIP", string, strlen(string) > 0 ? " " : "");
-		snprintf(string, size, "%s", tempstring);
-	};
-#endif
 
 #ifdef SUPPORT_DBIP2
 	if (wrapper_DBIP2_disable == 0) {
@@ -750,48 +641,6 @@ void libipv6calc_db_wrapper_print_features_verbose(const int level_verbose) {
 #endif // SUPPORT_MMDB_DYN
 #endif
 
-#ifdef SUPPORT_GEOIP
-	if (wrapper_GeoIP_disable == 0) {
-#ifdef GEOIP_INCLUDE_VERSION
-		fprintf(stderr, "GeoIP support enabled, compiled with include file version: %s\n", GEOIP_INCLUDE_VERSION);
-#endif
-#ifndef SUPPORT_GEOIP_DYN
-#ifdef SUPPORT_GEOIP_V6
-#if defined (SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6) && defined (SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6)
-		fprintf(stderr, "GeoIP support enabled, compiled with IPv4 & IPv6 support\n");
-#else
-		fprintf(stderr, "GeoIP support enabled, compiled with IPv4 & IPv6 support (in compatibility mode)\n");
-#endif
-#else // SUPPORT_GEOIP_V6
-		fprintf(stderr, "GeoIP support enabled, compiled with IPv4 support only\n");
-#endif // SUPPORT_GEOIP_V6
-#ifdef SUPPORT_GEOIP_LIB_VERSION
-		fprintf(stderr, "GeoIP dynamic library version (on this system): %s\n", libipv6calc_db_wrapper_GeoIP_lib_version());
-#else
-		fprintf(stderr, "GeoIP dynamic library version (on this system): compiled without detection\n");
-#endif
-#else // SUPPORT_GEOIP_DYN
-#ifdef SUPPORT_GEOIP_V6
-		fprintf(stderr, "GeoIP support by dynamic library load, compiled with IPv4 & IPv6 support\n");
-#else  // SUPPORT_GEOIP_V6
-		fprintf(stderr, "GeoIP support by dynamic library load, compiled with IPv4 support only\n");
-#endif // SUPPORT_GEOIP_V6
-		fprintf(stderr, "GeoIP configured dynamic library file and detected version: %s %s\n", geoip_lib_file, libipv6calc_db_wrapper_GeoIP_lib_version());
-#endif // SUPPORT_GEOIP_DYN
-
-	//TODO: list of GeoIP files
-#ifdef SUPPORT_GEOIP_V6
-	//TODO: list of GeoIP files
-#endif
-		libipv6calc_db_wrapper_GeoIP_wrapper_info(string, sizeof(string));
-		fprintf(stderr, "%s\n\n", string);
-	} else {
-		fprintf(stderr, "GeoIP disabled by option\n\n");
-	};
-#else
-	fprintf(stderr, "GeoIP support not compiled-in\n\n");
-#endif
-
 #ifdef SUPPORT_GEOIP2
 	if (wrapper_GeoIP2_disable == 0) {
 		fprintf(stderr, "GeoIP2 (MaxMindDB) support enabled\n");
@@ -811,11 +660,7 @@ void libipv6calc_db_wrapper_print_features_verbose(const int level_verbose) {
 #ifdef IP2LOCATION_INCLUDE_VERSION
 		fprintf(stderr, "IP2Location support enabled, compiled with include file version: %s\n", IP2LOCATION_INCLUDE_VERSION);
 #endif
-#ifdef SUPPORT_IP2LOCATION_API_VERSION_STRING
 		fprintf(stderr, "IP2Location support enabled, compiled with API version: %s, dynamically linked with version: %s\n", xmakestr(API_VERSION), libipv6calc_db_wrapper_IP2Location_lib_version());
-#else  // SUPPORT_IP2LOCATION_API_VERSION_STRING
-		fprintf(stderr, "IP2Location support enabled, compiled with API version: %s (retrieving linked version not supported - older version)\n", xmakestr(API_VERSION));
-#endif // SUPPORT_IP2LOCATION_API_VERSION_STRING
 #ifndef SUPPORT_IP2LOCATION_DYN
 #else
 		fprintf(stderr, "IP2Location support by dynamic library load\n");
@@ -828,18 +673,6 @@ void libipv6calc_db_wrapper_print_features_verbose(const int level_verbose) {
 	};
 #else
 	fprintf(stderr, "IP2Location support not compiled-in\n\n");
-#endif
-
-#ifdef SUPPORT_DBIP
-	if (wrapper_DBIP_disable == 0) {
-		fprintf(stderr, "DBIP support enabled\n");
-		libipv6calc_db_wrapper_DBIP_wrapper_info(string, sizeof(string));
-		fprintf(stderr, "%s\n\n", string);
-	} else {
-		fprintf(stderr, "DBIP support disabled by option\n\n");
-	};
-#else
-	fprintf(stderr, "DBIP support not compiled-in\n\n");
 #endif
 
 #ifdef SUPPORT_DBIP2
@@ -954,16 +787,6 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 
 	fprintf(stderr, "%sDB features: 0x%08x\n\n", prefix_string, wrapper_features);
 
-#ifdef SUPPORT_GEOIP
-	if (wrapper_GeoIP_disable == 0) {
-		// Call GeoIP wrapper
-		libipv6calc_db_wrapper_GeoIP_wrapper_print_db_info(level_verbose, prefix_string);
-	} else {
-		fprintf(stderr, "%sGeoIP support available but disabled by option\n", prefix_string);
-	};
-	fprintf(stderr, "\n");
-#endif
-
 #ifdef SUPPORT_GEOIP2
 	if (wrapper_GeoIP2_disable == 0) {
 		// Call GeoIP2 wrapper
@@ -982,16 +805,6 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(level_verbose, prefix_string);
 	} else {
 		fprintf(stderr, "%sIP2Location support available but disabled by option\n", prefix_string);
-	};
-	fprintf(stderr, "\n");
-#endif
-
-#ifdef SUPPORT_DBIP
-	if (wrapper_DBIP_disable == 0) {
-		// Call DBIP wrapper
-		libipv6calc_db_wrapper_DBIP_wrapper_print_db_info(level_verbose, prefix_string);
-	} else {
-		fprintf(stderr, "%sdb-ip.com support available but disabled by option\n", prefix_string);
 	};
 	fprintf(stderr, "\n");
 #endif
@@ -1113,6 +926,34 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with option: %08x", opt);
 
 	switch(opt) {
+		// TODO remove in 4.0.0
+		case OPTION_GEOIP_EOL:
+			NONQUIETPRINT_WA("Support for GeoIP(legacy) removed, ignoring option: --%s", ipv6calcoption_name(opt, longopts));
+			result = 0;
+			break;
+
+		case 'G':
+			NONQUIETPRINT_NA("Support for GeoIP(legacy) removed, ignoring option: -G");
+			result = 0;
+			break;
+
+		// TODO remove in 4.0.0
+		case OPTION_DBIP_EOL:
+			NONQUIETPRINT_WA("Support for db-ip.com(Berkeley-DB) removed, ignoring option: --%s", ipv6calcoption_name(opt, longopts));
+			result = 0;
+			break;
+
+		// TODO remove in 4.0.0
+		case OPTION_IP2LOCATION_EOS:
+			NONQUIETPRINT_WA("Obsolete, ignoring IP2Location option: --%s", ipv6calcoption_name(opt, longopts));
+			result = 0;
+			break;
+
+		case 'L':
+			NONQUIETPRINT_NA("Obsolete, ignoring IP2Location option: -L");
+			result = 0;
+			break;
+
 		case DB_ip2location_disable:
 #ifdef SUPPORT_IP2LOCATION
 			wrapper_IP2Location_disable = 1;
@@ -1120,23 +961,9 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			result = 0;
 			break;
 
-		case DB_geoip_disable:
-#ifdef SUPPORT_GEOIP
-			wrapper_GeoIP_disable = 1;
-#endif
-			result = 0;
-			break;
-
 		case DB_geoip2_disable:
 #ifdef SUPPORT_GEOIP2
 			wrapper_GeoIP2_disable = 1;
-#endif
-			result = 0;
-			break;
-
-		case DB_dbip_disable:
-#ifdef SUPPORT_DBIP
-			wrapper_DBIP_disable = 1;
 #endif
 			result = 0;
 			break;
@@ -1180,29 +1007,11 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			result = 0;
 			break;
 
-		case DB_geoip_lib:
-#ifdef SUPPORT_GEOIP_DYN
-			result = snprintf(geoip_lib_file, sizeof(geoip_lib_file), "%s", optarg);
-#else
-			NONQUIETPRINT_WA("Support for GeoIP dyn-load not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
-#endif
-			result = 0;
-			break;
-
 		case DB_ip2location_dir:
 #ifdef SUPPORT_IP2LOCATION
 			result = snprintf(ip2location_db_dir, sizeof(ip2location_db_dir), "%s", optarg);
 #else
 			NONQUIETPRINT_WA("Support for IP2Location not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
-#endif
-			result = 0;
-			break;
-
-		case DB_geoip_dir:
-#ifdef SUPPORT_GEOIP
-			result = snprintf(geoip_db_dir, sizeof(geoip_db_dir), "%s", optarg);
-#else
-			NONQUIETPRINT_WA("Support for GeoIP not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
 			result = 0;
 			break;
@@ -1216,34 +1025,11 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			result = 0;
 			break;
 
-		case DB_dbip_dir:
-#ifdef SUPPORT_DBIP
-			result = snprintf(dbip_db_dir, sizeof(dbip_db_dir), "%s", optarg);
-#else
-			NONQUIETPRINT_WA("Support for db-ip.com not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
-#endif
-			result = 0;
-			break;
-
 		case DB_dbip2_dir:
 #ifdef SUPPORT_DBIP2
 			result = snprintf(dbip2_db_dir, sizeof(dbip2_db_dir), "%s", optarg);
 #else
-			NONQUIETPRINT_WA("Support for db-ip.com (MaxMindDB) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
-#endif
-			result = 0;
-			break;
-
-		case DB_dbip_only_type:
-#ifdef SUPPORT_DBIP
-			if ((atoi(optarg) >= 1) && (atoi(optarg) <= DBIP_DB_MAX)) {
-				dbip_db_only_type = atoi(optarg);
-			} else {
-				fprintf(stderr, " Argument of option 'db-dbip-only-type' is out of range (1-%d): %d\n", DBIP_DB_MAX, atoi(optarg));
-				exit(EXIT_FAILURE);
-			};
-#else
-			NONQUIETPRINT_WA("Support for db-ip.com not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+			NONQUIETPRINT_WA("Support for db-ip.com(MaxMindDB) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
 			result = 0;
 			break;
@@ -1262,20 +1048,6 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			result = 0;
 			break;
 
-
-		case DB_dbip_comm_to_free_switch_min_delta_months:
-#ifdef SUPPORT_DBIP
-			if ((atoi(optarg) >= 0) && (atoi(optarg) <= 99999)) {
-				dbip_db_comm_to_free_switch_min_delta_months = atoi(optarg);
-			} else {
-				fprintf(stderr, " Argument of option 'db-dbip-comm-to-free-switch-min-delta-months' is out of range (0-99999): %d\n", atoi(optarg));
-				exit(EXIT_FAILURE);
-			};
-#else
-			NONQUIETPRINT_WA("Support for db-ip.com not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
-#endif
-			result = 0;
-			break;
 
 		case DB_dbip2_comm_to_free_switch_min_delta_months:
 #ifdef SUPPORT_DBIP2
@@ -1299,20 +1071,6 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 #endif
 			result = 0;
 			break;
-
-		/* obsolete options */
-		case DB_ip2location_ipv4:
-		case DB_ip2location_ipv6:
-			NONQUIETPRINT_WA("Obsolete option skipped: --%s <file>, use instead: --%s <dir>", ipv6calcoption_name(opt, longopts), ipv6calcoption_name(DB_ip2location_dir, longopts));
-			result = 0;
-			break;
-
-		case DB_geoip_ipv4:
-		case DB_geoip_ipv6:
-			NONQUIETPRINT_WA("Obsolete option skipped: --%s <file>, use instead: --%s <dir>", ipv6calcoption_name(opt, longopts), ipv6calcoption_name(DB_geoip_dir, longopts));
-			result = 0;
-			break;
-
 
 		case DB_ip2location_lite_to_sample_autoswitch_max_delta_months:
 #ifdef SUPPORT_IP2LOCATION
