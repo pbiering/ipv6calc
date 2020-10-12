@@ -32,10 +32,8 @@
 #include "libifinet6.h"
 
 #include "../databases/lib/libipv6calc_db_wrapper.h"
-#include "../databases/lib/libipv6calc_db_wrapper_GeoIP.h"
 #include "../databases/lib/libipv6calc_db_wrapper_GeoIP2.h"
 #include "../databases/lib/libipv6calc_db_wrapper_IP2Location.h"
-#include "../databases/lib/libipv6calc_db_wrapper_DBIP.h"
 #include "../databases/lib/libipv6calc_db_wrapper_DBIP2.h"
 #include "../databases/lib/libipv6calc_db_wrapper_External.h"
 #include "../databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
