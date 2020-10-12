@@ -9,9 +9,6 @@
 /* Define db-ip.com (MaxMindDB) database directory. */
 #undef DBIP2_DB
 
-/* Define db-ip.com database directory. */
-#undef DBIP_DB
-
 /* Define if bundled GETOPT should be used */
 #undef ENABLE_BUNDLED_GETOPT
 
@@ -24,69 +21,12 @@
 /* Define GeoIP (MaxMindDB) database directory. */
 #undef GEOIP2_DB
 
-/* Define GeoIP legacy database directory. */
-#undef GEOIP_DB
-
-/* Define GeoIP dynamic library. */
-#undef GEOIP_DYN_LIB
-
-/* GeoIP include file version. */
-#undef GEOIP_INCLUDE_VERSION
-
 /* Define if Berkeley DB support is required. */
 #undef HAVE_BERKELEY_DB_SUPPORT
 
 /* Define to 1 if you have the declaration of `API_VERSION', and to 0 if you
    don't. */
 #undef HAVE_DECL_API_VERSION
-
-/* Define to 1 if you have the declaration of `GEOIP_ASNUM_EDITION', and to 0
-   if you don't. */
-#undef HAVE_DECL_GEOIP_ASNUM_EDITION
-
-/* Define to 1 if you have the declaration of `GEOIP_ASNUM_EDITION_V6', and to
-   0 if you don't. */
-#undef HAVE_DECL_GEOIP_ASNUM_EDITION_V6
-
-/* Define to 1 if you have the declaration of `GEOIP_CITY_EDITION_REV0_V6',
-   and to 0 if you don't. */
-#undef HAVE_DECL_GEOIP_CITY_EDITION_REV0_V6
-
-/* Define to 1 if you have the declaration of `GEOIP_CITY_EDITION_REV1_V6',
-   and to 0 if you don't. */
-#undef HAVE_DECL_GEOIP_CITY_EDITION_REV1_V6
-
-/* Define to 1 if you have the declaration of `GeoIP_cleanup', and to 0 if you
-   don't. */
-#undef HAVE_DECL_GEOIP_CLEANUP
-
-/* Define to 1 if you have the declaration of `GeoIP_country_code_by_addr_v6',
-   and to 0 if you don't. */
-#undef HAVE_DECL_GEOIP_COUNTRY_CODE_BY_ADDR_V6
-
-/* Define to 1 if you have the declaration of
-   `GeoIP_country_code_by_ipnum_v6', and to 0 if you don't. */
-#undef HAVE_DECL_GEOIP_COUNTRY_CODE_BY_IPNUM_V6
-
-/* Define to 1 if you have the declaration of `GEOIP_COUNTRY_EDITION_V6', and
-   to 0 if you don't. */
-#undef HAVE_DECL_GEOIP_COUNTRY_EDITION_V6
-
-/* Define to 1 if you have the declaration of `GeoIP_country_name_by_addr_v6',
-   and to 0 if you don't. */
-#undef HAVE_DECL_GEOIP_COUNTRY_NAME_BY_ADDR_V6
-
-/* Define to 1 if you have the declaration of `GEOIP_LARGE_COUNTRY_EDITION',
-   and to 0 if you don't. */
-#undef HAVE_DECL_GEOIP_LARGE_COUNTRY_EDITION
-
-/* Define to 1 if you have the declaration of
-   `GEOIP_LARGE_COUNTRY_EDITION_V6', and to 0 if you don't. */
-#undef HAVE_DECL_GEOIP_LARGE_COUNTRY_EDITION_V6
-
-/* Define to 1 if you have the declaration of `GeoIP_lib_version', and to 0 if
-   you don't. */
-#undef HAVE_DECL_GEOIP_LIB_VERSION
 
 /* Define to 1 if you have the declaration of
    `IP2Location_api_version_string', and to 0 if you don't. */
@@ -230,9 +170,6 @@
 /* Define if you want general BuiltIn database included. */
 #undef SUPPORT_BUILTIN
 
-/* Define if you want db-ip.com support included. */
-#undef SUPPORT_DBIP
-
 /* Define if you want db-ip.com (MaxMindDB) support included. */
 #undef SUPPORT_DBIP2
 
@@ -254,50 +191,15 @@
 /* Define if you want external support included. */
 #undef SUPPORT_EXTERNAL
 
-/* Define if you want GeoIP support. */
-#undef SUPPORT_GEOIP
-
 /* Define if you want GeoIP (MaxMindDB) support. */
 #undef SUPPORT_GEOIP2
-
-/* Define if your GeoIP version supports GeoIP_cleanup. */
-#undef SUPPORT_GEOIP_CLEANUP
-
-/* Define if your GeoIP version supports GeoIP_country_code_by_addr_v6. */
-#undef SUPPORT_GEOIP_COUNTRY_CODE_BY_ADDR_V6
-
-/* Define if your GeoIP version supports GeoIP_country_name_by_addr_v6. */
-#undef SUPPORT_GEOIP_COUNTRY_NAME_BY_ADDR_V6
-
-/* Define if you want GeoIP support with dynamic loading support - requires
-   also additional linker options. */
-#undef SUPPORT_GEOIP_DYN
-
-/* Define if GeoIP support IPv6 structure. */
-#undef SUPPORT_GEOIP_IPV6_STRUCT
-
-/* Define if your GeoIP version supports GeoIP_lib_version. */
-#undef SUPPORT_GEOIP_LIB_VERSION
-
-/* Define if you want GeoIP support statically linked - requires also
-   additional linker options. */
-#undef SUPPORT_GEOIP_STATIC
-
-/* Define if you want GeoIP IPv6 support. */
-#undef SUPPORT_GEOIP_V6
 
 /* Define if you want IP2Location support. */
 #undef SUPPORT_IP2LOCATION
 
-/* Define if you want IP2Location API version string support. */
-#undef SUPPORT_IP2LOCATION_API_VERSION_STRING
-
 /* Define if you want IP2Location support with dynamic loading support -
    requires also additional linker options. */
 #undef SUPPORT_IP2LOCATION_DYN
-
-/* Define if you want IP2Location LIB version string support. */
-#undef SUPPORT_IP2LOCATION_LIB_VERSION_STRING
 
 /* Define if you want IP2Location support statically linked - requires also
    additional linker options. */
