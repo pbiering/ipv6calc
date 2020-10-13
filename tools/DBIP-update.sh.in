@@ -8,7 +8,7 @@
 # Copyright  : 2014-2020 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
-DBIP_DAT_DIR_DEFAULT="@DBIP_DB@"
+DBIP_DAT_DIR_DEFAULT="@DBIP2_DB@"
 [ -z "$DBIP_DAT_DIR" -a -n "$IPV6CALC_DB_DBIP2_DIR" ] && DBIP_DAT_DIR="$IPV6CALC_DB_DBIP2_DIR"
 [ -z "$DBIP_DAT_DIR" ] && DBIP_DAT_DIR="$DBIP_DAT_DIR_DEFAULT"
 
