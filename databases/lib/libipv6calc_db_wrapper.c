@@ -926,8 +926,14 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with option: %08x", opt);
 
 	switch(opt) {
-		// TODO remove in 4.0.0
-		case OPTION_GEOIP_EOL:
+		// GeoIP(legacy) EOS since 3.0.0, TODO remove in 4.0.0
+		case DB_EOS_geoip_disable:
+		case DB_EOS_geoip_ipv4:
+		case DB_EOS_geoip_ipv6:
+		case DB_EOS_geoip_ipv4_default:
+		case DB_EOS_geoip_ipv6_default:
+		case DB_EOS_geoip_dir:
+		case DB_EOS_geoip_lib:
 			NONQUIETPRINT_WA("Support for GeoIP(legacy) removed, ignoring option: --%s", ipv6calcoption_name(opt, longopts));
 			result = 0;
 			break;
@@ -937,14 +943,20 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			result = 0;
 			break;
 
-		// TODO remove in 4.0.0
-		case OPTION_DBIP_EOL:
+		// db-ip.com(BerkeleyDB) EOS since 3.0.0, TODO remove in 4.0.0
+		case DB_EOS_dbip_disable:
+		case DB_EOS_dbip_dir:
+		case DB_EOS_dbip_comm_to_free_switch_min_delta_months:
+		case DB_EOS_dbip_only_type:
 			NONQUIETPRINT_WA("Support for db-ip.com(Berkeley-DB) removed, ignoring option: --%s", ipv6calcoption_name(opt, longopts));
 			result = 0;
 			break;
 
-		// TODO remove in 4.0.0
-		case OPTION_IP2LOCATION_EOS:
+		// IP2Location legacy options, EOS since longer, TODO remove in 4.0.0
+		case DB_EOS_ip2location_ipv4:
+		case DB_EOS_ip2location_ipv6:
+		case DB_EOS_ip2location_ipv4_default:
+		case DB_EOS_ip2location_ipv6_default:
 			NONQUIETPRINT_WA("Obsolete, ignoring IP2Location option: --%s", ipv6calcoption_name(opt, longopts));
 			result = 0;
 			break;
@@ -1043,7 +1055,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 				exit(EXIT_FAILURE);
 			};
 #else
-			NONQUIETPRINT_WA("Support for db-ip.com (MaxMindDB) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+			NONQUIETPRINT_WA("Support for db-ip.com(MaxMindDB) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
 			result = 0;
 			break;
@@ -1058,7 +1070,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 				exit(EXIT_FAILURE);
 			};
 #else
-			NONQUIETPRINT_WA("Support for db-ip.com (MaxMindDB) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+			NONQUIETPRINT_WA("Support for db-ip.com(MaxMindDB) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
 			result = 0;
 			break;
@@ -1067,7 +1079,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 #ifdef SUPPORT_EXTERNAL
 			result = snprintf(external_db_dir, sizeof(external_db_dir), "%s", optarg);
 #else
-			NONQUIETPRINT_WA("Support for external not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+			NONQUIETPRINT_WA("Support for external(BerkeleyDB) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
 			result = 0;
 			break;

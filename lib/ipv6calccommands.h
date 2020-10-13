@@ -53,22 +53,20 @@
 #define CMD_showinfo			0x0010010
 #define CMD_showinfotypes		0x0010020
 
-/* database options (old), EOSL since 3.0.0 */
-//#define DB_ip2location_ipv4		0x0020010
-//#define DB_ip2location_ipv6		0x0020020
-//#define DB_ip2location_ipv4_default	0x0020030
-//#define DB_ip2location_ipv6_default	0x0020040
-#define OPTION_IP2LOCATION_EOS		0x0020fff
+/* database options (old), EOS since 3.0.0 */
+#define DB_EOS_ip2location_ipv4		0x0020010
+#define DB_EOS_ip2location_ipv6		0x0020020
+#define DB_EOS_ip2location_ipv4_default	0x0020030
+#define DB_EOS_ip2location_ipv6_default	0x0020040
 
-// EOL since 3.0.0
-//#define DB_geoip_disable		0x0021000
-//#define DB_geoip_ipv4			0x0021010
-//#define DB_geoip_ipv6			0x0021020
-//#define DB_geoip_ipv4_default		0x0021030
-//#define DB_geoip_ipv6_default		0x0021040
-//#define DB_geoip_dir			0x0021050
-//#define DB_geoip_lib			0x0021060
-#define OPTION_GEOIP_EOL		0x0021fff
+// EOS since 3.0.0
+#define DB_EOS_geoip_disable		0x0021000
+#define DB_EOS_geoip_ipv4			0x0021010
+#define DB_EOS_geoip_ipv6			0x0021020
+#define DB_EOS_geoip_ipv4_default		0x0021030
+#define DB_EOS_geoip_ipv6_default		0x0021040
+#define DB_EOS_geoip_dir			0x0021050
+#define DB_EOS_geoip_lib			0x0021060
 
 /* database options (new) */
 #define DB_ip2location_disable		0x0020000
@@ -79,12 +77,11 @@
 #define DB_ip2location_only_type	0x0020120
 #define DB_ip2location_allow_softlinks	0x0020130
 
-// EOL since 3.0.0
-//#define DB_dbip_disable		0x0022000
-//#define DB_dbip_dir			0x0022050
-//#define DB_dbip_comm_to_free_switch_min_delta_months		0x0022110
-//#define DB_dbip_only_type		0x0022120
-#define OPTION_DBIP_EOL			0x0022fff
+// EOS since 3.0.0
+#define DB_EOS_dbip_disable			0x0022000
+#define DB_EOS_dbip_dir			0x0022050
+#define DB_EOS_dbip_comm_to_free_switch_min_delta_months		0x0022110
+#define DB_EOS_dbip_only_type		0x0022120
 
 #define DB_external_disable		0x0023000
 #define DB_external_dir			0x0023050
