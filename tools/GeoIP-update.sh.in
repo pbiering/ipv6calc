@@ -8,7 +8,7 @@
 # Copyright  : 2012-2020 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
-GEOIP_DAT_DIR_DEFAULT="@GEOIP_DB@"
+GEOIP_DAT_DIR_DEFAULT="@GEOIP2_DB@"
 [ -z "$GEOIP_DAT_DIR" -a -n "$IPV6CALC_DB_GEOIP2_DIR" ] && GEOIP_DAT_DIR="$IPV6CALC_DB_GEOIP2_DIR"
 [ -z "$GEOIP_DAT_DIR" ] && GEOIP_DAT_DIR="$GEOIP_DAT_DIR_DEFAULT"
 
