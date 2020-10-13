@@ -22,7 +22,6 @@ Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
 Version:	3.0.0
 Release:	39%{?gittag}%{?dist}
-Group:		Applications/Text
 URL:		http://www.deepspace6.net/projects/%{name}.html
 License:	GPLv2
 %if 0%{?gitcommit:1}
@@ -36,15 +35,14 @@ BuildRequires:	openssl-devel
 BuildRequires:	perl-generators
 BuildRequires:	perl(Digest::MD5), perl(Digest::SHA1), perl(URI::Escape)
 BuildRequires:	perl(strict), perl(warnings)
+BuildRequires:	procps-ng
 Requires:	perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
-%if %{enable_shared}
 Requires:	unzip
+%if %{enable_shared}
 Provides:	ipv6calc-libs = %{version}-%{release}
 %else
 Conflicts:	ipv6calc-libs
 %endif
-
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 
 # mod_ipv6calc related
@@ -148,7 +146,6 @@ Available rpmbuild rebuild options:
 
 %package ipv6calcweb
 Summary:	IP address information web utility
-Group:		Applications/Internet
 Requires:	ipv6calc httpd
 Requires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities)
 BuildRequires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities)
@@ -164,7 +161,6 @@ Default restricts access to localhost
 %if %{enable_mod_ipv6calc}
 %package mod_ipv6calc
 Summary:	Apache module for ipv6calc
-Group:		Applications/Internet
 BuildRequires:	httpd-devel psmisc curl
 Requires:	httpd >= 2.4.0
 Requires:	httpd <= 2.4.99999
@@ -200,6 +196,7 @@ By default the module is disabled.
 	%{?enable_ip2location:--with-ip2location-dynamic} \
 	--with-ip2location-db=%{ip2location_db} \
 	--with-geoip-db=%{geoip_db} \
+	--with-dbip-db=%{dbip_db} \
 	%{?enable_mmdb:--enable-mmdb --with-mmdb-dynamic} \
 	%{?enable_external:--enable-external} \
 	--with-external-db=%{external_db} \
@@ -353,6 +350,9 @@ fi
 
 
 %changelog
+* Tue Oct 13 2020 Peter Bieringer <pb@bieringer.de>
+- remove obsolete BuildRoot and Group, fix requirement of unzip
+
 * Mon Oct 12 2020 Peter Bieringer <pb@bieringer.de>
 - remove support for GeoIP(legacy) and force minimum IP2Location version, add some recommendations and remove legacy support
 
