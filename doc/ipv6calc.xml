@@ -70,12 +70,12 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 <sect3>
 <title>Fedora Linux</title>
 <para>Fedora 29 is the current developing platform, so use given hints above to create a RPM. Since Fedora 7 this package is included by default.</para>
-<para>See also <ulink url="https://apps.fedoraproject.org/packages/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para></sect3><sect3>
+<para>See also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para></sect3><sect3>
 <title>Red Hat Enterprise Linux and clones</title>
 <para>It's tested by the developer that creation of the RPM is working fine starting with RHEL 4.</para><itemizedlist>
 <listitem><para>RHEL/CentOS 5 has the package included by default (but an rather old version)
 </para><itemizedlist>
-<listitem><para>RPMs of newer releases are available as test builds on koji, see related URL in announcements <ulink url="https://lists.deepspace6.net/pipermail/ipv6calc-announce/">ipv6calc-announce / list archive</ulink></para></listitem><listitem><para>*** Untested since version 2.0.0 because OS is out of support ***</para></listitem></itemizedlist></listitem><listitem><para>RHEL/CentOS 6/7/8: available since September 2014 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink>, see also <ulink url="https://apps.fedoraproject.org/packages/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para></listitem></itemizedlist><para>CentOS 6/7/8 are also platforms for regression tests.</para></sect3><sect3>
+<listitem><para>RPMs of newer releases are available as test builds on koji, see related URL in announcements <ulink url="https://lists.deepspace6.net/pipermail/ipv6calc-announce/">ipv6calc-announce / list archive</ulink></para></listitem><listitem><para>*** Untested since version 2.0.0 because OS is out of support ***</para></listitem></itemizedlist></listitem><listitem><para>RHEL/CentOS 6/7/8: available since September 2014 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink>, see also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para></listitem></itemizedlist><para>CentOS 6/7/8 are also platforms for regression tests.</para></sect3><sect3>
 <title>Gentoo/Funtoo</title>
 <para>Package is maintained, nevertheless, Funtoo is used as platform for regression tests.</para></sect3><sect3>
 <title>Ubuntu</title>

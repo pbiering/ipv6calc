@@ -1,6 +1,6 @@
 ipv6calc will do some format changes and calculations for you
 
-(P) & (C) 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2020 by Peter Bieringer <pb (at) bieringer.de>
                    published under GNU GPLv2
 
 For suggestions and bug report please contact author
@@ -35,10 +35,8 @@ Included internal databases:
 * ASN assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for IPv4/IPv6 anonymization)
 
 Supported external databases:
-* GeoIP
 * GeoIP(MaxMindDB) - internally handled as GEOIP2
 * IP2Location
-* DB-IP.com
 * DB-IP.com(MaxMindDB) - internally handled as DBIP2
 
 
@@ -58,10 +56,10 @@ Where to get:
 
  Ready to use packages for several operating systems:
   Linux:
-   Fedora (https://apps.fedoraproject.org/packages/ipv6calc/builds/)
+   Fedora (https://src.fedoraproject.org/rpms/ipv6calc)
     Core 6: developing platform, so use given hint above to create a RPM
     since 7: package is included
-   Red Hat Enterprise Linux / CentOS (https://apps.fedoraproject.org/packages/ipv6calc/builds/):
+   Red Hat Enterprise Linux / CentOS (https://src.fedoraproject.org/rpms/ipv6calc):
     EL3: build from source package potentially still work but not tested anymore, OS is EOSL
     EL4: build from source package potentially still work but not tested anymore, OS is EOSL
     EL5: build from source package potentially still work but not tested anymore, OS is EOSL
