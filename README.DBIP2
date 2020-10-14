@@ -32,4 +32,10 @@ Commercial databases need a subscription and must be downloaded, decompressed an
         $ gunzip dbip-location-isp-$(date +'%Y-%m').mmdb.gz
 	$ ln -sf dbip-location-isp-$(date +'%Y-%m').mmdb.gz dbip-location-isp.mmdb
 
+the tool can help you here:
+	$ DBIP-update.sh -U  https://download.db-ip.com/key/<key>.mmdb
+
+example (<key> is NOT working):
+	$ DBIP-update.sh -U  https://download.db-ip.com/key/0123456789abcdef0123456789abcdef01234567.mmdb
+
 $Id$
