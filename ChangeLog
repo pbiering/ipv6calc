@@ -9,6 +9,33 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20201019/PB:
+	Drop support of GeoIP(legacy) and db-ip.com(BerkeleyDB):
+	README README.DBIP README.GeoIP autogen.sh config.h.in configure
+	databases/lib/Makefile.in
+	databases/lib/libipv6calc_db_wrapper.c
+	doc/ipv6calc.[lyx|sgml|xml|html]
+	ipv6calc/Makefile.in ipv6calc/ipv6calc.c ipv6calc/showinfo.c
+	ipv6loganon/Makefile.in
+	ipv6logconv/Makefile.in
+	ipv6logstats/Makefile.in ipv6logstats/ipv6logstats.c
+	lib/Makefile.in lib/ipv6calccommands.h lib/ipv6calchelp.c lib/ipv6calcoptions.c lib/ipv6calcoptions_common.h
+	ipv6calcweb/ipv6calcweb.cgi.in
+	mod_ipv6calc/Makefile.in mod_ipv6calc/ipv6calc.conf mod_ipv6calc/test_mod_ipv6calc.sh
+
+	autogen-all-variants.sh: drop also support of EOL IP2Location library version
+	contrib/ipv6calc.spec[.in]: sync also with FedoraProject version
+	databases/lib/libipv6calc_db_wrapper_DBIP.[c|h]: deleted
+	databases/lib/libipv6calc_db_wrapper_GeoIP.[c|h]: deleted
+	external-fallback/GeoIP/*: deleted
+	external-fallback/IP2Location/*: deleted
+	tools/DBIP-update.sh.in: fix database directory
+	tools/GeoIP-update.sh.in: fix database directory
+
+	databases/lib/libipv6calc_db_wrapper_IP2Location.c: remove support of EOL IP2Location library version, adjust for 8.2.0
+	README.DBIP2: add additional hints
+	internal databases: update
+
 20200910/PB:
 	mod_ipv6calc/test_mod_ipv6calc.sh: add additional test cases for new config/environment options
 	mod_ipv6calc/ipv6calc.conf: add info about new config/environment/debug options
