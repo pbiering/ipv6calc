@@ -295,6 +295,10 @@ typedef struct {
 	{ 0xCC4F5C,	IEEE_OUI28, 0x00eb },
 	{ 0xDC4A9E,	IEEE_OUI28, 0x00ec },
 	{ 0xFCCD2F,	IEEE_OUI28, 0x00ed },
+
+	// OUI28 (2020-11-07)
+	{ 0xA0024A,	IEEE_OUI28, 0x00ee },
+	{ 0xA453EE,	IEEE_OUI28, 0x00ef },
 };
 
 #endif

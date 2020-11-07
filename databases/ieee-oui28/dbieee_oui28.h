@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_oui28.h
  * Version       : $Id$
- * Generated     : Mon Oct 12 08:42:28 2020
+ * Generated     : Sat Nov  7 07:30:41 2020
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui28_status __attribute__ ((__unused__)) = "OUI28/20201012";
+/*@unused@*/ static const char* libieee_oui28_status __attribute__ ((__unused__)) = "OUI28/20201107";
 
 
 static const s_ieee_oui28 libieee_oui28[] = {
@@ -1134,7 +1134,7 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x4C93A6, 0x100000, 0x1FFFFF, "Atrie Technology Fzc", "ATRIE-FZC" },
 	{ 0x4C93A6, 0x200000, 0x2FFFFF, "Diehl Controls Nanjing Co., Ltd.", "DIEHL-CONTROLS-NANJING" },
 	{ 0x4C93A6, 0x300000, 0x3FFFFF, "Commsignia, Ltd.", "COMMSIGNIA" },
-	{ 0x4C93A6, 0x400000, 0x4FFFFF, "4D Sistem Ticaret A.S.", "4D-SISTEM-TICARET" },
+	{ 0x4C93A6, 0x400000, 0x4FFFFF, "4TheWall - 4D Sistem A.S", "4THEWALL-4D-SISTEM" },
 	{ 0x4C93A6, 0x500000, 0x5FFFFF, "Private", "PRIVATE" },
 	{ 0x4C93A6, 0x600000, 0x6FFFFF, "Shandong Senter Electronic Co., Ltd", "SHANDONG-SENTER" },
 	{ 0x4C93A6, 0x700000, 0x7FFFFF, "5Voxel Co., Ltd.", "5VOXEL" },
@@ -1979,8 +1979,21 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x8C593C, 0xC00000, 0xCFFFFF, "Dantherm Cooling Inc.", "DANTHERM-COOLING" },
 	{ 0x8C593C, 0xD00000, 0xDFFFFF, "IDRO-ELETTRICA S.P.A.", "IDRO-ELETTRICA" },
 	{ 0x8C593C, 0xE00000, 0xEFFFFF, "Shenzhen Tian-Power Technology Co.,Ltd.", "SHENZHEN-TIAN-POWER" },
+	{ 0x8CAE49, 0x000000, 0x0FFFFF, "Ouman Oy", "OUMAN-OY" },
+	{ 0x8CAE49, 0x100000, 0x1FFFFF, "H3 Platform", "H3-PLATFORM" },
+	{ 0x8CAE49, 0x200000, 0x2FFFFF, "SEVERIN Elektrogeräte GmbH", "SEVERIN-ELEKTROGERAETE" },
+	{ 0x8CAE49, 0x300000, 0x3FFFFF, "BERTIN TECHNOLOGIES", "BERTIN-TECHNOLOGIES" },
+	{ 0x8CAE49, 0x400000, 0x4FFFFF, "Jiangsu Sixingda Information Technology Co., Ltd.", "JIANGSU-SIXINGDA-INFORMATION" },
+	{ 0x8CAE49, 0x500000, 0x5FFFFF, "Gati Information Technolog(Kunshan)Co.,Ltd.", "GATI-INFORMATION-TECHNOLOG-KUNSHAN" },
 	{ 0x8CAE49, 0x600000, 0x6FFFFF, "Chengdu BillDTE Technology Co., Ltd", "CHENGDU-BILLDTE" },
+	{ 0x8CAE49, 0x700000, 0x7FFFFF, "Precitec Optronik GmbH", "PRECITEC-OPTRONIK" },
+	{ 0x8CAE49, 0x800000, 0x8FFFFF, "LLC Taipit - Measuring Equipment", "LLC-TAIPIT-MEASURING-EQUIPMENT" },
+	{ 0x8CAE49, 0x900000, 0x9FFFFF, "TTR Corporation", "TTR" },
 	{ 0x8CAE49, 0xA00000, 0xAFFFFF, "Gigawave", "GIGAWAVE" },
+	{ 0x8CAE49, 0xB00000, 0xBFFFFF, "Suzhou Guowang Electronics Technology Co., Ltd.", "SUZHOU-GUOWANG-ELECTRONICS" },
+	{ 0x8CAE49, 0xC00000, 0xCFFFFF, "Parametric GmbH", "PARAMETRIC" },
+	{ 0x8CAE49, 0xD00000, 0xDFFFFF, "Larch Networks", "LARCH-NETWORKS" },
+	{ 0x8CAE49, 0xE00000, 0xEFFFFF, "Shenzhen C & D Electronics Co., Ltd.", "SHENZHEN-C-D-ELECTRONICS" },
 	{ 0x8CC8F4, 0x000000, 0x0FFFFF, "Guardtec,Inc", "GUARDTEC" },
 	{ 0x8CC8F4, 0x100000, 0x1FFFFF, "Lanhomex Technology(Shen Zhen)Co.,Ltd.", "LANHOMEX-SHEN-ZHEN" },
 	{ 0x8CC8F4, 0x200000, 0x2FFFFF, "Dark Horse Connect LLC", "DARK-HORSE-CONNECT" },
@@ -2223,6 +2236,17 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x9CF6DD, 0xC00000, 0xCFFFFF, "Lighting New Energy Technology Co., Ltd.", "LIGHTING-NEW-ENERGY" },
 	{ 0x9CF6DD, 0xD00000, 0xDFFFFF, "Foshan Synwit Technology Co.,Ltd.", "FOSHAN-SYNWIT" },
 	{ 0x9CF6DD, 0xE00000, 0xEFFFFF, "Shanxi ZhuoZhi fei High Electronic Technology Co. Ltd.", "SHANXI-ZHUOZHI-FEI-HIGH" },
+	{ 0xA0024A, 0x000000, 0x0FFFFF, "Zhejiang Hechuan Technology Co.,Ltd", "ZHEJIANG-HECHUAN" },
+	{ 0xA0024A, 0x200000, 0x2FFFFF, "Danriver Technologies Corp.", "DANRIVER-TECHNOLOGIES" },
+	{ 0xA0024A, 0x300000, 0x3FFFFF, "SomaDetect Inc", "SOMADETECT" },
+	{ 0xA0024A, 0x400000, 0x4FFFFF, "Argos Solutions AS", "ARGOS-SOLUTIONS-AS" },
+	{ 0xA0024A, 0x500000, 0x5FFFFF, "Donguan Amsamotion Automation Technology Co., Ltd", "DONGUAN-AMSAMOTION-AUTOMATION" },
+	{ 0xA0024A, 0x600000, 0x6FFFFF, "Xiaojie Technology (Shenzhen) Co., Ltd", "XIAOJIE-SHENZHEN" },
+	{ 0xA0024A, 0x800000, 0x8FFFFF, "Beijing Lyratone Technology Co., Ltd", "BEIJING-LYRATONE" },
+	{ 0xA0024A, 0x900000, 0x9FFFFF, "Kontakt Micro-Location Sp z o.o.", "KONTAKT-MICRO-LOCATION-SP-Z-O-O" },
+	{ 0xA0024A, 0xA00000, 0xAFFFFF, "Guangdong Jinpeng Technology Co. LTD", "GUANGDONG-JINPENG" },
+	{ 0xA0024A, 0xB00000, 0xBFFFFF, "Xi'an Yingsheng Electric Technology Co.,Ltd.", "XI-AN-YINGSHENG-ELECTRIC" },
+	{ 0xA0024A, 0xD00000, 0xDFFFFF, "bitbee Inc", "BITBEE" },
 	{ 0xA019B2, 0x000000, 0x0FFFFF, "Vast Production Services", "VAST-PRODUCTION-SERVICES" },
 	{ 0xA019B2, 0x100000, 0x1FFFFF, "El Sewedy Electrometer Egypt S.A.E.", "EL-SEWEDY-ELECTROMETER-EGYPT-E" },
 	{ 0xA019B2, 0x200000, 0x2FFFFF, "Beijing Deephi Intelligent Technology Co., Ltd", "BEIJING-DEEPHI-INTELLIGENT" },
@@ -2362,6 +2386,18 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0xA44F29, 0xD00000, 0xDFFFFF, "HALLIBURTON", "HALLIBURTON" },
 	{ 0xA44F29, 0xE00000, 0xEFFFFF, "Neotech Systems Pvt. Ltd.", "NEOTECH-PVT" },
 	{ 0xA44F29, 0xF00000, 0xFFFFFF, "Private", "PRIVATE" },
+	{ 0xA453EE, 0x000000, 0x0FFFFF, "MAHLE ELECTRONICS, SLU", "MAHLE-ELECTRONICS-SLU" },
+	{ 0xA453EE, 0x100000, 0x1FFFFF, "Stellamore", "STELLAMORE" },
+	{ 0xA453EE, 0x200000, 0x2FFFFF, "Ubisafe Smart Devices", "UBISAFE-SMART-DEVICES" },
+	{ 0xA453EE, 0x300000, 0x3FFFFF, "Larva.io OÜ", "LARVA-IO-OUE" },
+	{ 0xA453EE, 0x400000, 0x4FFFFF, "Williamson Corporation", "WILLIAMSON" },
+	{ 0xA453EE, 0x500000, 0x5FFFFF, "Foshan Yisihang Electrical Technology Co., Ltd.", "FOSHAN-YISIHANG-ELECTRICAL" },
+	{ 0xA453EE, 0x600000, 0x6FFFFF, "Aura Home, Inc.", "AURA-HOME" },
+	{ 0xA453EE, 0x800000, 0x8FFFFF, "T-Touching Co., Ltd.", "T-TOUCHING" },
+	{ 0xA453EE, 0x900000, 0x9FFFFF, "Dongguan HuaFuu industrial co., LTD", "DONGGUAN-HUAFUU-INDUSTRIAL" },
+	{ 0xA453EE, 0xB00000, 0xBFFFFF, "Viper Design, LLC", "VIPER-DESIGN" },
+	{ 0xA453EE, 0xC00000, 0xCFFFFF, "SOS LAB Co., Ltd.", "SOS-LAB" },
+	{ 0xA453EE, 0xD00000, 0xDFFFFF, "SSK CORPORATION", "SSK" },
 	{ 0xA4580F, 0x000000, 0x0FFFFF, "INNOPRO", "INNOPRO" },
 	{ 0xA4580F, 0x100000, 0x1FFFFF, "Stone Lock Global, Inc.", "STONE-LOCK-GLOBAL" },
 	{ 0xA4580F, 0x200000, 0x2FFFFF, "BLOKS. GmbH", "BLOKS" },

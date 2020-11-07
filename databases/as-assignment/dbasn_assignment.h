@@ -2,7 +2,7 @@
  * Project       : ipv6calc
  * File          : dbasn_assignment.h
  * Version       : $Id$
- * Generated     : Mon Oct 12 09:02:10 2020
+ * Generated     : Sat Nov  7 07:50:41 2020
  * Data copyright: IANA
  *
  * Information:
@@ -11,7 +11,7 @@
 
 #include "libipv6calc.h"
 
-/*@unused@*/ static const char* dbasn_registry_status __attribute__ ((__unused__)) = "IANA/20200518";
+/*@unused@*/ static const char* dbasn_registry_status __attribute__ ((__unused__)) = "IANA/20201102";
 
 static const s_asn_assignment dbasn_assignment[] = {
 	{          1,       1876, REGISTRY_ARIN       },
@@ -108,6 +108,8 @@ static const s_asn_assignment dbasn_assignment[] = {
 	{     138554,     139577, REGISTRY_APNIC      },
 	{     139578,     140601, REGISTRY_APNIC      },
 	{     140602,     141625, REGISTRY_APNIC      },
+	{     141626,     142649, REGISTRY_APNIC      },
+	{     142650,     143673, REGISTRY_APNIC      },
 	{     196608,     197631, REGISTRY_RIPENCC    },
 	{     197632,     198655, REGISTRY_RIPENCC    },
 	{     198656,     199679, REGISTRY_RIPENCC    },
@@ -144,6 +146,8 @@ static const s_asn_assignment dbasn_assignment[] = {
 	{     396189,     397212, REGISTRY_ARIN       },
 	{     397213,     398236, REGISTRY_ARIN       },
 	{     398237,     399260, REGISTRY_ARIN       },
+	{     399261,     400284, REGISTRY_ARIN       },
+	{     400285,     401308, REGISTRY_ARIN       },
 
 };
 
