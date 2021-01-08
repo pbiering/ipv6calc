@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calctypes.h
  * Version    : $Id$
- * Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2021 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GPLv2
  *
  * Information:
@@ -411,6 +411,7 @@ typedef struct {
 } s_ipv6calc_filter_typeinfo;
 
 
+#define IPV6CALC_TEST_NONE	0
 #define IPV6CALC_TEST_PREFIX	1
 #define IPV6CALC_TEST_GT	2
 #define IPV6CALC_TEST_GE	3

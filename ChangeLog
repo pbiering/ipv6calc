@@ -9,6 +9,9 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20210108/PB:
+	fix 'maybe-uninitialized' issue found by gcc -Os
+
 20201108/PB:
 	tag version 3.0.0
 

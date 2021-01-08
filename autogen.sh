@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : autogen.sh
 # Version    : $Id$
-# Copyright  : 2003-2020 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2003-2021 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
 
@@ -92,6 +92,10 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		USE_CLANG=1
 		;;
+	    '--gcc-Os')
+		shift
+		CFLAGS="$CFLAGS -Os"
+		;;
 	    '--m32')
 		shift
 		OPTIONS_CONFIGURE="${OPTIONS_CONFIGURE:+$OPTIONS_CONFIGURE }--enable-m32"
@@ -120,6 +124,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --no-static-build   : skip static build"
 		echo "   --no-test           : skip 'make test'"
 		echo "   --clang             : use 'clang' instead of default (usually 'gcc')"
+		echo "   --gcc-Os            : use 'gcc' option '-Os'"
 		echo "   --m32               : compile for 32-bit"
 		echo "   --relax             : don't stop on compiler warnings"
 		exit 1
