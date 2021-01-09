@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libipv6addr.c
  * Version    : $Id$
- * Copyright  : 2001-2020 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Copyright  : 2001-2021 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -2687,8 +2687,8 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 	const char *prefixaddreq_gt2 = "addr=gt=";
 	ipv6calc_ipv6addr ipv6addr;
 	char resultstring[NI_MAXHOST];
-	int db = 0, addr = 0;
-	int addr_test_method;
+	int db = 0;
+	int addr_test_method = IPV6CALC_TEST_NONE;
 
 	if (token == NULL) {
 		return (result);
@@ -2727,63 +2727,54 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 	if (strncmp(token + offset, prefixaddreq_le, strlen(prefixaddreq_le)) == 0) {
 		/* prefixaddr with = found */
 		DEBUGPRINT_WA(DEBUG_libipv6addr, "found 'addr<=' prefix in token: %s", token);
-		addr = 1;
 		offset += strlen(prefixaddreq_le);
 		addr_test_method = IPV6CALC_TEST_LE;
 
 	} else if (strncmp(token + offset, prefixaddreq_lt, strlen(prefixaddreq_lt)) == 0) {
 		/* prefixaddr with = found */
 		DEBUGPRINT_WA(DEBUG_libipv6addr, "found 'addr<' prefix in token: %s", token);
-		addr = 1;
 		offset += strlen(prefixaddreq_lt);
 		addr_test_method = IPV6CALC_TEST_LT;
 
 	} else if (strncmp(token + offset, prefixaddreq_ge, strlen(prefixaddreq_ge)) == 0) {
 		/* prefixaddr with = found */
 		DEBUGPRINT_WA(DEBUG_libipv6addr, "found 'addr>=' prefix in token: %s", token);
-		addr = 1;
 		offset += strlen(prefixaddreq_ge);
 		addr_test_method = IPV6CALC_TEST_GE;
 
 	} else if (strncmp(token + offset, prefixaddreq_gt, strlen(prefixaddreq_gt)) == 0) {
 		/* prefixaddr with = found */
 		DEBUGPRINT_WA(DEBUG_libipv6addr, "found 'addr>' prefix in token: %s", token);
-		addr = 1;
 		offset += strlen(prefixaddreq_gt);
 		addr_test_method = IPV6CALC_TEST_GT;
 
 	} else if (strncmp(token + offset, prefixaddreq_le2, strlen(prefixaddreq_le2)) == 0) {
 		/* prefixaddr with = found */
 		DEBUGPRINT_WA(DEBUG_libipv6addr, "found 'addr=le=' prefix in token: %s", token);
-		addr = 1;
 		offset += strlen(prefixaddreq_le2);
 		addr_test_method = IPV6CALC_TEST_LE;
 
 	} else if (strncmp(token + offset, prefixaddreq_lt2, strlen(prefixaddreq_lt2)) == 0) {
 		/* prefixaddr with = found */
 		DEBUGPRINT_WA(DEBUG_libipv6addr, "found 'addr=lt=' prefix in token: %s", token);
-		addr = 1;
 		offset += strlen(prefixaddreq_lt2);
 		addr_test_method = IPV6CALC_TEST_LT;
 
 	} else if (strncmp(token + offset, prefixaddreq_ge2, strlen(prefixaddreq_ge2)) == 0) {
 		/* prefixaddr with = found */
 		DEBUGPRINT_WA(DEBUG_libipv6addr, "found 'addr=ge=' prefix in token: %s", token);
-		addr = 1;
 		offset += strlen(prefixaddreq_ge2);
 		addr_test_method = IPV6CALC_TEST_GE;
 
 	} else if (strncmp(token + offset, prefixaddreq_gt2, strlen(prefixaddreq_gt2)) == 0) {
 		/* prefixaddr with = found */
 		DEBUGPRINT_WA(DEBUG_libipv6addr, "found 'addr=gt=' prefix in token: %s", token);
-		addr = 1;
 		offset += strlen(prefixaddreq_gt2);
 		addr_test_method = IPV6CALC_TEST_GT;
 
 	} else if (strncmp(token + offset, prefixaddreq, strlen(prefixaddreq)) == 0) {
 		/* prefixaddr with = found */
 		DEBUGPRINT_WA(DEBUG_libipv6addr, "found 'addr=' prefix in token: %s", token);
-		addr = 1;
 		offset += strlen(prefixaddreq);
 		addr_test_method = IPV6CALC_TEST_PREFIX;
 
@@ -2800,7 +2791,7 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 	};
 
 
-	if ((db == 0) && (addr == 0)) {
+	if ((db == 0) && (addr_test_method == IPV6CALC_TEST_NONE)) {
 		// typeinfo token
 		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
 			DEBUGPRINT_WA(DEBUG_libipv6addr, "check token against: %s", ipv6calc_ipv6addrtypestrings[i].token);
@@ -2864,7 +2855,7 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 	};
 
 
-	if (addr == 1) {
+	if (addr_test_method != IPV6CALC_TEST_NONE) {
 		DEBUGPRINT_WA(DEBUG_libipv6addr, "try to parse IPv6 address: %s", token + offset);
 		r = addr_to_ipv6addrstruct(token + offset, resultstring, sizeof(resultstring), &ipv6addr);
 
