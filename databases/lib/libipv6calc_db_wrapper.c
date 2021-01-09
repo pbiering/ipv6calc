@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
  * Version    : $Id$
- * Copyright  : 2013-2020 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc database wrapper (for decoupling databases from main binary)
@@ -511,7 +511,7 @@ void libipv6calc_db_wrapper_info(char *string, const size_t size) {
 	};
 #endif
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s", string);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s (size: %ld)", string, size);
 
 	return;
 };
@@ -619,14 +619,16 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 	};
 #endif // SUPPORT_BUILTIN
 
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Return");
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s (size: %ld)", string, size);
 
 	return;
 };
 
 /* function print wrapper features */
 void libipv6calc_db_wrapper_print_features_verbose(const int level_verbose) {
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
 	char string[NI_MAXHOST] = "";
+#endif
 
 #ifdef SUPPORT_MMDB
 #ifdef MMDB_INCLUDE_VERSION
@@ -783,7 +785,7 @@ void libipv6calc_db_wrapper_features_help(void) {
 void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *prefix_string) {
 	int f, p, f_index;
 
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with verbose level: %d", level_verbose);
 
 	fprintf(stderr, "%sDB features: 0x%08x\n\n", prefix_string, wrapper_features);
 
@@ -1251,8 +1253,13 @@ void libipv6calc_db_wrapper_geolocation_record_clear(libipv6calc_db_wrapper_geol
  * get registry number by AS number
  */
 int libipv6calc_db_wrapper_registry_num_by_as_num32(const uint32_t as_num32) {
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with as_num32: %d", as_num32);
+#ifdef SUPPORT_BUILTIN
 	// currently only supported by BuiltIn
 	return(libipv6calc_db_wrapper_BuiltIn_registry_num_by_as_num32(as_num32));
+#else
+	return(ASNUM_AS_UNKNOWN);
+#endif
 };
 
 
@@ -1260,8 +1267,13 @@ int libipv6calc_db_wrapper_registry_num_by_as_num32(const uint32_t as_num32) {
  * get registry number by CC index
  */
 int libipv6calc_db_wrapper_registry_num_by_cc_index(const uint16_t cc_index) {
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with cc_index: %d", cc_index);
+#ifdef SUPPORT_BUILTIN
 	// currently only supported by BuiltIn
 	return(libipv6calc_db_wrapper_BuiltIn_registry_num_by_cc_index(cc_index));
+#else
+	return(COUNTRYCODE_INDEX_UNKNOWN);
+#endif
 };
 
 /*
@@ -1949,6 +1961,9 @@ END_libipv6calc_db_wrapper:
  */
 int libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(char *resultstring, const size_t resultstring_length, const ipv6calc_macaddr *macaddrp) {
 	int retval = 1;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with rp=%p, rl=%ld, mp=%p", resultstring, resultstring_length, macaddrp); // avoid -Werror=unused-parameter
+
 #ifdef SUPPORT_BUILTIN
 	retval = libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(resultstring, resultstring_length, macaddrp);
 #endif
@@ -1964,6 +1979,9 @@ int libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(char *resultstring, con
  */
 int libipv6calc_db_wrapper_ieee_vendor_string_short_by_macaddr(char *resultstring, const size_t resultstring_length, const ipv6calc_macaddr *macaddrp) {
 	int retval = 1;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with rp=%p, rl=%ld, mp=%p", resultstring, resultstring_length, macaddrp); // avoid -Werror=unused-parameter
+
 #ifdef SUPPORT_BUILTIN
 	retval = libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(resultstring, resultstring_length, macaddrp);
 #endif
@@ -2427,6 +2445,8 @@ int libipv6calc_db_wrapper_info_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, 
 	};
 
 END_libipv6calc_db_wrapper:
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s (size: %ld)", string, string_len);
+
 	return (retval);
 };
 
@@ -2484,6 +2504,8 @@ int libipv6calc_db_wrapper_info_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, 
 	};
 
 END_libipv6calc_db_wrapper:
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s (size: %ld)", string, string_len);
+
 	return (retval);
 };
 
