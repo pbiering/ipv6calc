@@ -1,13 +1,13 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
 dnl Version  : $Id$
-dnl Copyright: 2001-2020 by Peter Bieringer <pb (at) bieringer.de>
+dnl Copyright: 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
 
 dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT(ipv6calc, 3.0.0, ipv6calc@deepspace6.net, ipv6calc, http://www.deepspace6.net/projects/ipv6calc.html)
 
-COPYRIGHT_YEAR=2020
+COPYRIGHT_YEAR=2021
 
 dnl Program/library version (align with version above)
 PACKAGE_VERSION_MAJOR=3
@@ -362,6 +362,10 @@ if test "$DYNAMIC_LOAD_SUPPORT" = "yes"; then
 	fi
 fi
 
+dnl *************************************************
+dnl internal databases default
+dnl *************************************************
+BUILTIN="no"
 
 dnl *************************************************
 dnl disable built-in database IEEE
