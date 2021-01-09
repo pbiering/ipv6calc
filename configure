@@ -732,7 +732,7 @@ with_mmdb_dynamic
 with_mmdb_headers
 with_mmdb_lib
 with_mmdb_dyn_lib
-enable_geoip2b
+enable_geoip2
 enable_dbip2
 enable_dbip
 with_dbip_db
@@ -5108,9 +5108,9 @@ $as_echo "#define SUPPORT_MMDB_DYN 1" >>confdefs.h
 	fi
 
 	# GeoIPv2 and DBIPv2 support
-	# Check whether --enable-geoip2b was given.
-if test "${enable_geoip2b+set}" = set; then :
-  enableval=$enable_geoip2b;
+	# Check whether --enable-geoip2 was given.
+if test "${enable_geoip2+set}" = set; then :
+  enableval=$enable_geoip2;
 			GEOIP2="no"
 
 else
