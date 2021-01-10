@@ -514,9 +514,7 @@ END
 testscenarios_showinfo_DBIPv6() {
 	cat <<END | grep -v '^#'
 # match first entry in database
-2000:000:0000:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=CN
-# match first entry in database
-3fff:000:0000:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=CN
+2001:4860:4860::8888			IPV6_COUNTRYCODE=US
 # non-anonymized IPv6 prefix
 2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=DE
 2001:a60:113a:0123:0123:4567:89ab:cdef	DBIP_COUNTRY_SHORT=DE
