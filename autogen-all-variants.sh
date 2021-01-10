@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
 # Version    : $Id$
-# Copyright  : 2011-2020 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2011-2021 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
 #
@@ -17,6 +17,10 @@ autogen_variants() {
 	autogen_variants_list
 	autogen_variants_list | while read line; do
 		echo "${line:+$line }--clang"
+	done
+
+	autogen_variants_list | while read line; do
+		echo "${line:+$line }--gcc-Os"
 	done
 
 	# skip IP2Location and MaxMindDB based
@@ -53,6 +57,7 @@ NONE#--disable-db-ipv6 --disable-db-ipv4 --disable-db-ieee --disable-cc-registry
 NONE#--disable-db-ipv6 --disable-db-ipv4 --disable-db-ieee --disable-as-registry --disable-cc-registry
 NONE#--disable-db-ipv6 --disable-db-ieee
 NONE#--disable-db-ipv4 --disable-db-ieee
+NONE#--disable-db-builtin
 END
 	fi
 
