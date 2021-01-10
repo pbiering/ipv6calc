@@ -163,6 +163,8 @@ void showinfo_availabletypes(void) {
 static void printout(const char *token, const char *value, const uint32_t formatoptions) {
 	int quote = 0;
 
+	DEBUGPRINT_WA(DEBUG_showinfo, "called with token='%s' value='%s'", token, value);
+
 	if (formatoptions & FORMATOPTION_mr_select_token) {
 		if (strchr(showinfo_machine_readable_filter, '.')) {
 			// wildcard found, execute sophisticated check
@@ -223,6 +225,8 @@ static void printout(const char *token, const char *value, const uint32_t format
 
 static void printout2(const char *token, const char *additional, const char *value, const uint32_t formatoptions) {
 	int quote = 0;
+
+	DEBUGPRINT_WA(DEBUG_showinfo, "called with token='%s' additional='%s' value='%s'", token, additional, value);
 
 	if (formatoptions & FORMATOPTION_mr_select_token) {
 		// skip in case additional is not empty
