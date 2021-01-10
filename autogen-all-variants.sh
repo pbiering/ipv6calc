@@ -45,8 +45,9 @@ GEOIP2#-m --disable-dbip2
 GEOIP2#-M --disable-dbip2
 DBIP2#-m --disable-geoip2
 DBIP2#-M --disable-geoip2
-IP2LOCATION GEOIP DBIP GEOIP2 DBIP2#-a
-IP2LOCATION GEOIP DBIP GEOIP2 DBIP2#-A
+IP2LOCATION GEOIP2 DBIP2#-a
+IP2LOCATION GEOIP2 DBIP2#-A
+IP2LOCATION GEOIP2 DBIP2#-a --memcmp-missing-workaround
 NONE#--disable-db-ieee
 NONE#--disable-db-ipv4
 NONE#--disable-db-ipv6
