@@ -13,6 +13,7 @@ Info:
 	ipv6calc/showinfo.c: add support for wildcard in select token
 	ipv6loganon/ipv6loganon.c ipv6calc/ipv6calc.c: autodetect support for ANON_ANONYMIZE
 	ipv6calc/ipv6calc.c: do not enforce output type for revnibbles and ipv6literal in case of showinfo
+	ipv6calc/test_scenarios.sh: add test cases for wildcard support in select token
 
 20210109/PB:
 	databases/lib/libipv6calc_db_wrapper_BuiltIn.c databases/lib/libipv6calc_db_wrapper.c: fixes for case of all internal databases are disabled
