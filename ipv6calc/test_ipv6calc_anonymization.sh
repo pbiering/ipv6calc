@@ -78,8 +78,8 @@ run_anon_tests() {
 
 		if [ -z "$type_orig" -a -z "$type_anon" ]; then
 			# fallback EUI*
-			type_orig="`./ipv6calc -q -i "$input" -m | grep -a "^EUI.._TYPE=" | sed 's/EUI.._TYPE=//'`"
-			type_anon="`./ipv6calc -q -i "$output" -m | grep -a "^EUI.._TYPE=" | sed 's/EUI.._TYPE=//'`"
+			type_orig="`./ipv6calc -q -i "$input"  -m --mrtvo EUI.._TYPE`"
+			type_anon="`./ipv6calc -q -i "$output" -m --mrtvo EUI.._TYPE`"
 		fi
 
 		if [ -z "$type_orig" ]; then
@@ -210,8 +210,8 @@ run_anon_options_kp_tests() {
 			exit 1
 		fi
 
-		type_orig="`./ipv6calc -m -i -q "$input"  | grep -a "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
-		type_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
+		type_orig="`./ipv6calc -m -i -q "$input"  --mrtvo IPV._TYPE`"
+		type_anon="`./ipv6calc -m -i -q "$output" --mrtvo IPV._TYPE`"
 
 		if [ -z "$type_orig" ]; then
 			echo "ERROR : something went wrong retrieving IPVx_TYPE for $input"
@@ -265,11 +265,11 @@ run_anon_options_kp_tests() {
 		fi
 
 		# Registry
-		reg_orig="`./ipv6calc -m -i -q "$input"  | grep -a "^IPV._REGISTRY=" | sed 's/IPV._REGISTRY=//'`"
+		reg_orig="`./ipv6calc -m -i -q "$input"  --mrtvo IPV._REGISTRY`"
 		if echo "$reg_orig" | grep -q LISP; then
 			reg_orig=${reg_orig/(*} # cut lisp details
 		fi
-		reg_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._REGISTRY=" | sed 's/IPV._REGISTRY=//'`"
+		reg_anon="`./ipv6calc -m -i -q "$output" --mrtvo IPV._REGISTRY`"
 
 		if [ -z "$reg_orig" ]; then
 			[ "$verbose" = "1" ] || echo
@@ -312,8 +312,8 @@ run_anon_options_kp_tests() {
 		fi
 
 		# Country Code (optional)
-		cc_orig="`./ipv6calc -m -i -q "$input"  | grep -a "^IPV._COUNTRYCODE=" | sed 's/IPV._COUNTRYCODE=//'`"
-		cc_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._COUNTRYCODE=" | sed 's/IPV._COUNTRYCODE=//'`"
+		cc_orig="`./ipv6calc -m -i -q "$input"  --mrtvo IPV._COUNTRYCODE`"
+		cc_anon="`./ipv6calc -m -i -q "$output" --mrtvo IPV._COUNTRYCODE`"
 
 		[ "$verbose" = "1" ] && echo "DEBUG : IPVx             orig: $input"
 		[ "$verbose" = "1" ] && echo "DEBUG : IPVx             anon: $output"
@@ -356,8 +356,8 @@ run_anon_options_kp_tests() {
 			# skip ASN on IPv4+LISP
 			continue
 		fi
-		asn_orig="`./ipv6calc -m -i -q "$input"  | grep -a "^IPV._AS_NUM=" | sed 's/IPV._AS_NUM=//'`"
-		asn_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._AS_NUM=" | sed 's/IPV._AS_NUM=//'`"
+		asn_orig="`./ipv6calc -m -i -q "$input"  --mrtvo IPV._AS_NUM`"
+		asn_anon="`./ipv6calc -m -i -q "$output" --mrtvo IPV._AS_NUM`"
 
 		[ "$verbose" = "1" ] && echo "DEBUG : IPVx     orig: $input"
 		[ "$verbose" = "1" ] && echo "DEBUG : IPVx     anon: $output"
@@ -421,8 +421,8 @@ run_anon_options_kg_tests() {
 			exit 1
 		fi
 
-		type_orig="`./ipv6calc -m -i -q "$input"  | grep -a "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
-		type_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
+		type_orig="`./ipv6calc -m -i -q "$input"  --mrtvo IPV._TYPE`"
+		type_anon="`./ipv6calc -m -i -q "$output" --mrtvo IPV._TYPE`"
 
 		if [ -z "$type_orig" ]; then
 			echo "ERROR : something went wrong retrieving IPVx_TYPE for $input"
@@ -476,11 +476,11 @@ run_anon_options_kg_tests() {
 		fi
 
 		# Registry (only in case of LISP)
-		reg_orig="`./ipv6calc -m -i -q "$input"  | grep -a "^IPV._REGISTRY=" | sed 's/IPV._REGISTRY=//'`"
+		reg_orig="`./ipv6calc -m -i -q "$input" --mrtvo IPV._REGISTRY`"
 		if echo "$reg_orig" | grep -q LISP; then
 			reg_orig=${reg_orig/(*} # cut lisp details
 
-			reg_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._REGISTRY=" | sed 's/IPV._REGISTRY=//'`"
+			reg_anon="`./ipv6calc -m -i -q "$output" --mrtvo IPV._REGISTRY`"
 
 			if [ -z "$reg_orig" ]; then
 				[ "$verbose" = "1" ] || echo
@@ -523,8 +523,8 @@ run_anon_options_kg_tests() {
 			fi
 		else
 			# GeonameID
-			gi_orig="`./ipv6calc -m -i -q "$input"  | grep -a "^IPV._GEONAME_ID=" | sed 's/IPV._GEONAME_ID=//'`"
-			gi_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._GEONAME_ID=" | sed 's/IPV._GEONAME_ID=//'`"
+			gi_orig="`./ipv6calc -m -i -q "$input"  --mrtvo IPV._GEONAME_ID`"
+			gi_anon="`./ipv6calc -m -i -q "$output" --mrtvo IPV._GEONAME_ID`"
 
 			[ "$verbose" = "1" ] && echo "DEBUG : IPVx             orig: $input"
 			[ "$verbose" = "1" ] && echo "DEBUG : IPVx             anon: $output"
@@ -562,8 +562,8 @@ run_anon_options_kg_tests() {
 			fi
 
 			# GeonameID Type
-			gi_type_orig="`./ipv6calc -m -i -q "$input"  | grep -a "^IPV._GEONAME_ID_TYPE=" | sed 's/IPV._GEONAME_ID_TYPE=//'`"
-			gi_type_anon="`./ipv6calc -m -i -q "$output" | grep -a "^IPV._GEONAME_ID_TYPE=" | sed 's/IPV._GEONAME_ID_TYPE=//'`"
+			gi_type_orig="`./ipv6calc -m -i -q "$input"  --mrtvo IPV._GEONAME_ID_TYPE`"
+			gi_type_anon="`./ipv6calc -m -i -q "$output" --mrtvo IPV._GEONAME_ID_TYPE`"
 
 			[ "$verbose" = "1" ] && echo "DEBUG : IPVx             orig: $input"
 			[ "$verbose" = "1" ] && echo "DEBUG : IPVx             anon: $output"
