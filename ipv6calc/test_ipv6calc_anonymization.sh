@@ -64,8 +64,17 @@ run_anon_tests() {
 
 		[ "$verbose" = "1" ] && echo "INFO  : anonymized: $output"
 
-		type_orig="`./ipv6calc -q -i "$input" -m | grep -a "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
-		type_anon="`./ipv6calc -q -i "$output" -m | grep -a "^IPV._TYPE=" | sed 's/IPV._TYPE=//'`"
+		type_orig="`./ipv6calc -q -i "$input" -m --mrtvo IPV*_TYPE`"
+		if [ $? -ne 0 ]; then
+			echo "ERROR  : ipv6calc result not 0: ./ipv6calc -q -i "$input" -m"
+			exit 1
+		fi
+
+		type_anon="`./ipv6calc -q -i "$output" -m --mrtvo IPV*_TYPE`"
+		if [ $? -ne 0 ]; then
+			echo "ERROR  : ipv6calc result not 0: ./ipv6calc -q -i "$output" -m"
+			exit 1
+		fi
 
 		if [ -z "$type_orig" -a -z "$type_anon" ]; then
 			# fallback EUI*
