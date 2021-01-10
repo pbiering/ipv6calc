@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : test_ipv6calc_anonymization.sh
 # Version    : $Id$
-# Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test ipv6calc anonymization
 
@@ -40,6 +40,12 @@ test_list() {
 }
 
 run_anon_tests() {
+	if ! ./ipv6calc -v 2>&1| grep -wq "ANON_ANONYMIZE"; then
+		echo "NOTICE: 'ipv6calc' has not required support for ANON_ANONYMIZE, skip standard tests"
+		[ "$stoponerror" = "1" ] && return 1
+		return 0
+	fi
+
 	test="run 'ipv6calc' anonymization tests"
 	echo "INFO  : $test"
 	test_list | while read input filter; do
