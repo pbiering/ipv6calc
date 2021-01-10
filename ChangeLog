@@ -15,7 +15,8 @@ Info:
 	ipv6calc/ipv6calc.c: do not enforce output type for revnibbles and ipv6literal in case of showinfo
 	ipv6calc/test_scenarios.sh: add test cases for wildcard support in select token
 	ipv6calc/test_ipv6calc_anonymization.sh: take use of wildcard support in select token
-	config.h.in databases/lib/libipv6calc_db_wrapper.c configure: add workaround for missing "memcmp"
+	config.h.in databases/lib/libipv6calc_db_wrapper.c configure: don't check/use 'memcmp'
+	lib/libipv6addr.c: fix missing settype for extracted IPv4 address
 
 20210109/PB:
 	databases/lib/libipv6calc_db_wrapper_BuiltIn.c databases/lib/libipv6calc_db_wrapper.c: fixes for case of all internal databases are disabled
