@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6loganon.c
  * Version    : $Id$
- * Copyright  : 2007-2017 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2007-2021 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile anonymization
@@ -55,7 +55,7 @@ int mask_mac;
 
 /* features */
 int feature_zeroize = 1; // always supported
-int feature_anon    = 1; // always supported
+int feature_anon    = 0; // will be checked later
 int feature_kp      = 0; // will be checked later
 int feature_kg      = 0; // will be checked later
 
@@ -235,6 +235,12 @@ int main(int argc,char *argv[]) {
 	if ((libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEGEONAMEID_IPV4_REQ_DB) == 1) \
 	    && (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEGEONAMEID_IPV6_REQ_DB) == 1)) {
 		feature_kg = 1;
+	};
+
+	/* check for standard anonymization support */
+	if ((libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_REGISTRY) == 1) \
+	    && (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_REGISTRY) == 1)) {
+		feature_anon = 1;
 	};
 
 	/* do work depending on selection */
