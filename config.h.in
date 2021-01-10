@@ -15,9 +15,6 @@
 /* Define if bundled MD5 should be used */
 #undef ENABLE_BUNDLED_MD5
 
-/* Define if memcmp is missing to enable workaround */
-#undef ENABLE_MEMCMP_MISSING_WORKAROUND
-
 /* Define external database directory. */
 #undef EXTERNAL_DB
 
