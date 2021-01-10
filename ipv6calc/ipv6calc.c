@@ -77,7 +77,11 @@ s_ipv6calc_anon_set ipv6calc_anon_set;
 
 /* features */
 int feature_zeroize = 1; // always supported
+#ifdef SUPPORT_BUILTIN
 int feature_anon    = 1; // always supported
+#else
+int feature_anon    = 0;
+#endif
 int feature_kp      = 0; // will be checked later
 int feature_kg      = 0; // will be checked later
 
