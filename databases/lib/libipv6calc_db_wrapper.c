@@ -2205,7 +2205,11 @@ int libipv6calc_db_wrapper_registry_num_by_ipv4addr(const ipv6calc_ipv4addr *ipv
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x", ipv4addr_getdword(ipv4addrp));
 
 	if ((cache_lu_ipv4addr_valid == 1)
+#if defined ENABLE_MEMCMP_MISSING_WORKAROUND
+	    &&  (&cache_lu_ipv4addr.in_addr.s_addr == &ipv4addrp->in_addr.s_addr)
+#else
 	    && 	(memcmp(&cache_lu_ipv4addr.in_addr, &ipv4addrp->in_addr, sizeof(struct in_addr)) == 0)
+#endif
 	) {
 		retval= cache_lu_ipv4addr_registry_num;
 		cache_hit = 1;
@@ -2327,7 +2331,14 @@ int libipv6calc_db_wrapper_registry_num_by_ipv6addr(const ipv6calc_ipv6addr *ipv
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x%08x%08x%08x", ipv6addr_getdword(ipv6addrp, 0), ipv6addr_getdword(ipv6addrp, 1), ipv6addr_getdword(ipv6addrp, 2), ipv6addr_getdword(ipv6addrp, 3));
 
 	if ((cache_lu_ipv6addr_valid == 1)
+#if defined ENABLE_MEMCMP_MISSING_WORKAROUND
+	    &&  (&cache_lu_ipv6addr.in6_addr.s6_addr32[0] == &ipv6addrp->in6_addr.s6_addr32[0])
+	    &&  (&cache_lu_ipv6addr.in6_addr.s6_addr32[1] == &ipv6addrp->in6_addr.s6_addr32[1])
+	    &&  (&cache_lu_ipv6addr.in6_addr.s6_addr32[2] == &ipv6addrp->in6_addr.s6_addr32[2])
+	    &&  (&cache_lu_ipv6addr.in6_addr.s6_addr32[3] == &ipv6addrp->in6_addr.s6_addr32[3])
+#else
 	    && 	(memcmp(&cache_lu_ipv6addr.in6_addr, &ipv6addrp->in6_addr, sizeof(struct in6_addr)) == 0)
+#endif
 	) {
 		retval= cache_lu_ipv6addr_registry_num;
 		cache_hit = 1;

@@ -4176,6 +4176,13 @@ test $ac_cv_func_memcmp_working = no && case " $LIBOBJS " in
 esac
 
 
+if test "$ac_cv_func_memcmp_working" = "no"; then
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** memcmp missing (enable workaround)" >&5
+$as_echo "*** memcmp missing (enable workaround)" >&6; }
+
+$as_echo "#define ENABLE_MEMCMP_MISSING_WORKAROUND 1" >>confdefs.h
+
+fi
 for ac_func in strspn strstr
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`

@@ -65,6 +65,10 @@ AC_C_BIGENDIAN
 
 dnl Checks for library functions.
 AC_FUNC_MEMCMP
+if test "$ac_cv_func_memcmp_working" = "no"; then
+	AC_MSG_RESULT([*** memcmp missing (enable workaround)])
+	AC_DEFINE(ENABLE_MEMCMP_MISSING_WORKAROUND, 1, Define if memcmp is missing to enable workaround)
+fi
 AC_CHECK_FUNCS(strspn strstr)
 
 dnl Copy inital provided CFLAGS into CFLAGS_EXTRA
