@@ -349,11 +349,11 @@ run_anon_options_kp_tests() {
 				[ "$verbose" = "1" ] && echo "Result ok!" || true
 			fi
 		fi
-		[ "$verbose" = "1" ] || echo -n "."
+		[ "$verbose" = "1" ] || echo -n "+"
 
 		# ASN (optional)
-		if echo "${type_orig//,/ }" | grep -w ipv4 | grep -w lisp >/dev/null; then
-			# skip ASN on IPv4+LISP
+		if echo "${type_orig//,/ }" | egrep -qw "(lisp|ipv4|iid-includes-ipv4)"; then
+			# skip ASN on IPv4+LISP or IID includes IPv4
 			continue
 		fi
 		asn_orig="`./ipv6calc -m -i -q "$input"  --mrtvo IPV._AS_NUM`"
@@ -560,6 +560,8 @@ run_anon_options_kg_tests() {
 					[ "$verbose" = "1" ] && echo "Result ok!" || true
 				fi
 			fi
+
+			[ "$verbose" = "1" ] || echo -n "+"
 
 			# GeonameID Type
 			gi_type_orig="`./ipv6calc -m -i -q "$input"  --mrtvo IPV._GEONAME_ID_TYPE`"
