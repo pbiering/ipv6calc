@@ -2047,6 +2047,8 @@ uint32_t ipv6addr_get_payload_anonymized_iid(const ipv6calc_ipv6addr *ipv6addrp,
 	iid[0] = ipv6addr_getdword(ipv6addrp, 2);
 	iid[1] = ipv6addr_getdword(ipv6addrp, 3);
 
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "typeinfo=%08x iid[0]=%08x iid[1]=%08x", typeinfo, iid[0], iid[1]);
+
 	if ((typeinfo & IPV6_NEW_ADDR_IID_EUI48) != 0) {
 		payload = (iid[1] >> ANON_IID_EUI48_PAYLOAD_SHIFT) & ((2 << ANON_IID_EUI48_PAYLOAD_LENGTH) - 1);
 	} else if ((typeinfo & IPV6_NEW_ADDR_IID_EUI64) != 0) {
@@ -2056,6 +2058,8 @@ uint32_t ipv6addr_get_payload_anonymized_iid(const ipv6calc_ipv6addr *ipv6addrp,
 	} else if ((typeinfo & IPV6_ADDR_IID_32_63_HAS_IPV4) != 0) {
 		payload = (iid[1] >> ANON_IID_IPV4_PAYLOAD_SHIFT) & ((2 << ANON_IID_IPV4_PAYLOAD_LENGTH) - 1);
 	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6addr, "payload=%08x", payload);
 
 	return(payload);
 };
@@ -3359,6 +3363,8 @@ uint32_t libipv6addr_as_num32_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsign
 				ipv4addr_setoctet(&ipv4addr, 1, (payload >>  8) & 0xff);
 				ipv4addr_setoctet(&ipv4addr, 2, (payload      ) & 0xff);
 				ipv4addr_setoctet(&ipv4addr, 3, 0);
+
+				ipv4addr_settype(&ipv4addr, 1); // set type
 
 				as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr, data_source_ptr);
 			} else {
