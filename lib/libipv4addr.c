@@ -1619,6 +1619,8 @@ uint32_t libipv4addr_as_num32_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsign
 	uint32_t as_num32 = ASNUM_AS_UNKNOWN;
 	ipv6calc_ipaddr ipaddr;
 
+	DEBUGPRINT_WA(DEBUG_libipv4addr, "typeinfo=%08x", ipv4addrp->typeinfo);
+
 	if ((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
 		as_num32 = ipv4addr_anonymized_get_as_num32(ipv4addrp);
 	} else {
