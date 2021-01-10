@@ -972,7 +972,7 @@ PIPE_input:
 
 	/* auto set of output type*/
 	if (inputtype == FORMAT_revnibbles_int || inputtype == FORMAT_revnibbles_arpa || inputtype == FORMAT_ipv6literal) {
-		if ( outputtype == FORMAT_undefined ) {
+		if ((outputtype == FORMAT_undefined) && (command != CMD_showinfo)) {
 			outputtype = FORMAT_ipv6addr;
 		};
 	};
@@ -1014,7 +1014,7 @@ PIPE_input:
 	};
 
 	/* check formatoptions for validity */
-	DEBUGPRINT_WA(DEBUG_ipv6calc_general, "check format option of output type: 0x%08lx", (unsigned long) outputtype);
+	DEBUGPRINT_WA(DEBUG_ipv6calc_general, "check format option of output type: 0x%08lx (0x%08x)", (unsigned long) outputtype, formatoptions);
 		
 	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_outputformatoptionmap); i++) {
 		if (outputtype != ipv6calc_outputformatoptionmap[i][0]) {
@@ -1030,7 +1030,7 @@ PIPE_input:
 			/* workaround */
 			continue;
 		};
-		fprintf(stderr, " Unsupported format option(s):\n");
+		fprintf(stderr, "Unsupported format option(s):\n");
 
 		/* run through format options */
 		for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_formatoptionstrings); j++) {
