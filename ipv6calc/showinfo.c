@@ -152,9 +152,9 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, "          --mrqva (always) --mrqvn (never)\n");
 	fprintf(stderr, "       specific token can be selected using --mrst <TOKEN>\n");
 	fprintf(stderr, "         even in case of no/empty output: --mrstpa <TOKEN>\n");
+	fprintf(stderr, "         value of a specific token can be displayed using --mrtvo <TOKEN>\n");
+	fprintf(stderr, "         wildcard '.' is suppported in select token\n");
 	fprintf(stderr, "       matching tokens can be selected using --mrmt <TOKEN>\n");
-	fprintf(stderr, "       value of a specific token can be displayed using --mrtvo <TOKEN>\n");
-	fprintf(stderr, "       wildcard '*' is suppported in select token\n");
 };
 
 /*
@@ -164,11 +164,11 @@ static void printout(const char *token, const char *value, const uint32_t format
 	int quote = 0;
 
 	if (formatoptions & FORMATOPTION_mr_select_token) {
-		if (strchr(showinfo_machine_readable_filter, '*')) {
+		if (strchr(showinfo_machine_readable_filter, '.')) {
 			// wildcard found, execute sophisticated check
 			if (strlen(showinfo_machine_readable_filter) != strlen(token)) return; // length not matching
 			for (unsigned int i = 0; i < strlen(token); i++) {
-				if (showinfo_machine_readable_filter[i] == '*') {
+				if (showinfo_machine_readable_filter[i] == '.') {
 					continue; // skip
 				};
 				if (showinfo_machine_readable_filter[i] != token[i]) return; // not matching
@@ -228,11 +228,11 @@ static void printout2(const char *token, const char *additional, const char *val
 		// skip in case additional is not empty
 		if ((additional != NULL) && (strlen(additional) > 0)) return;
 
-		if (strchr(showinfo_machine_readable_filter, '*')) {
+		if (strchr(showinfo_machine_readable_filter, '.')) {
 			// wildcard found, execute sophisticated check
 			if (strlen(showinfo_machine_readable_filter) != strlen(token)) return; // length not matching
 			for (unsigned int i = 0; i < strlen(token); i++) {
-				if (showinfo_machine_readable_filter[i] == '*') {
+				if (showinfo_machine_readable_filter[i] == '.') {
 					continue; // skip
 				};
 				if (showinfo_machine_readable_filter[i] != token[i]) return; // not matching
