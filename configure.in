@@ -461,6 +461,24 @@ fi
 
 
 dnl *************************************************
+dnl Built-in database support (catch-all)
+dnl *************************************************
+AC_ARG_ENABLE([builtin],
+	AS_HELP_STRING([--disable-builtin],
+	               [Disable all built-in databases (default: enabled)]),
+	[
+		DB_CC_REG="$enable_builtin"
+		DB_AS_REG="$enable_builtin"
+		DB_IEEE="$enable_builtin"
+		DB_IPV4="$enable_builtin"
+		DB_IPV6="$enable_builtin"
+	],
+	[
+	])
+
+
+
+dnl *************************************************
 dnl enable built-in database support in general
 dnl *************************************************
 if test "$BUILTIN" = "yes"; then

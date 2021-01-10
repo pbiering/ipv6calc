@@ -725,6 +725,7 @@ enable_db_ipv4
 enable_db_ipv6
 enable_db_as_registry
 enable_db_cc_registry
+enable_builtin
 enable_external
 with_external_db
 enable_mmdb
@@ -1396,6 +1397,7 @@ Optional Features:
   --disable-db-cc-registry
                           Disable built-in CountryCode-to-Registry database
                           (default: enabled)
+  --disable-builtin       Disable all built-in databases (default: enabled)
   --enable-external       Enable external db support (default: disabled)
   --enable-mmdb           Enable MaxMindDB support (GeoIP/db-ip.com) (default:
                           disabled)
@@ -4729,6 +4731,20 @@ if test "$DB_CC_REG" = "yes"; then
 $as_echo "#define SUPPORT_DB_CC_REG 1" >>confdefs.h
 
 fi
+
+
+# Check whether --enable-builtin was given.
+if test "${enable_builtin+set}" = set; then :
+  enableval=$enable_builtin;
+		DB_CC_REG="$enable_builtin"
+		DB_AS_REG="$enable_builtin"
+		DB_IEEE="$enable_builtin"
+		DB_IPV4="$enable_builtin"
+		DB_IPV6="$enable_builtin"
+
+fi
+
+
 
 
 if test "$BUILTIN" = "yes"; then
