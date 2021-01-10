@@ -11,8 +11,11 @@ Info:
 --------------------------------------------------------------------
 20210109/PB:
 	databases/lib/libipv6calc_db_wrapper_BuiltIn.c databases/lib/libipv6calc_db_wrapper.c: fixes for case of all internal databases are disabled
-	configure configure.in: fix typo and builtin default
+	configure configure.in: fix typo and builtin default, add disable-builtin option (catch-all)
 	autogen.sh: add test case for disabling all internal databases
+	ipv6calc/test_ipv6calc_anonymization.sh: skip standard anonymization tests if not supported
+	ipv6calc/ipv6calc.c: disable standard anonymization feature if builtin database is not enabled
+	autogen-all-variants.sh: add additional variants
 
 20210108/PB:
 	autogen.sh: add test case for gcc -Os
