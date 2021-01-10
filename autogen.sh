@@ -75,7 +75,7 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --disable-db-ipv6"
 		;;
-	    '--disable-internal')
+	    '--disable-builtin')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --disable-db-ipv6 --disable-db-ipv4 --disable-db-ieee --disable-db-ipv4  --disable-db-ipv6  --disable-db-as-registry --disable-db-cc-registry"
 		;;
@@ -124,7 +124,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --disable-db-ieee   : disable built-in IEEE database"
 		echo "   --disable-db-ipv4   : disable built-in IPv4 database"
 		echo "   --disable-db-ipv6   : disable built-in IPv6 database"
-		echo "   --disable-internal  : disable all internal databases"
+		echo "   --disable-builtin   : disable all internal databases"
 		echo "   -S                  : enable shared library mode"
 		echo "   --no-static-build   : skip static build"
 		echo "   --no-test           : skip 'make test'"
