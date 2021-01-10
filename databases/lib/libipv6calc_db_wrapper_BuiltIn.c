@@ -160,9 +160,7 @@ void libipv6calc_db_wrapper_BuiltIn_wrapper_info(char* string, const size_t size
 void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level_verbose, const char *prefix_string) {
 	const char *prefix = "\0";
 
-	if (level_verbose == 0) { }; // make compiler happy (avoid unused "...")
-
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called");
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Called with verbose: %d", level_verbose);
 
 	if (prefix_string != NULL) {
 		prefix = prefix_string;

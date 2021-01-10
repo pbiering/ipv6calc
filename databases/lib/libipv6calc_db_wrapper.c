@@ -476,6 +476,8 @@ int libipv6calc_db_wrapper_cleanup(void) {
 void libipv6calc_db_wrapper_info(char *string, const size_t size) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
 
+	snprintf(string, size, "%s", ""); // default empty
+
 #ifdef SUPPORT_GEOIP2
 	if (wrapper_GeoIP2_disable == 0) {
 		// Call GeoIP2 wrapper
@@ -511,7 +513,7 @@ void libipv6calc_db_wrapper_info(char *string, const size_t size) {
 	};
 #endif
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s (size: %ld)", string, size);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s", string);
 
 	return;
 };
@@ -550,6 +552,8 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 #endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
+
+	snprintf(string, size, "%s", ""); // default empty
 
 #ifdef SUPPORT_GEOIP2
 	if (wrapper_GeoIP2_disable == 0) {
@@ -619,7 +623,7 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 	};
 #endif // SUPPORT_BUILTIN
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s (size: %ld)", string, size);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s", string);
 
 	return;
 };
@@ -1966,6 +1970,9 @@ int libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(char *resultstring, con
 
 #ifdef SUPPORT_BUILTIN
 	retval = libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(resultstring, resultstring_length, macaddrp);
+#else
+	snprintf(resultstring, resultstring_length, "(BUILTIN databases not compiled in)");
+	retval = 0;
 #endif
 	return (retval);
 };
@@ -1984,6 +1991,9 @@ int libipv6calc_db_wrapper_ieee_vendor_string_short_by_macaddr(char *resultstrin
 
 #ifdef SUPPORT_BUILTIN
 	retval = libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(resultstring, resultstring_length, macaddrp);
+#else
+	snprintf(resultstring, resultstring_length, "(BUILTIN databases not compiled in)");
+	retval = 0;
 #endif
 	return (retval);
 };
