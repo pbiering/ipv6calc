@@ -1966,7 +1966,7 @@ END_libipv6calc_db_wrapper:
 int libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(char *resultstring, const size_t resultstring_length, const ipv6calc_macaddr *macaddrp) {
 	int retval = 1;
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with rp=%p, rl=%ld, mp=%p", resultstring, resultstring_length, macaddrp); // avoid -Werror=unused-parameter
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with mp=%p", macaddrp); // avoid -Werror=unused-parameter
 
 #ifdef SUPPORT_BUILTIN
 	retval = libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_by_macaddr(resultstring, resultstring_length, macaddrp);
@@ -1987,7 +1987,7 @@ int libipv6calc_db_wrapper_ieee_vendor_string_by_macaddr(char *resultstring, con
 int libipv6calc_db_wrapper_ieee_vendor_string_short_by_macaddr(char *resultstring, const size_t resultstring_length, const ipv6calc_macaddr *macaddrp) {
 	int retval = 1;
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with rp=%p, rl=%ld, mp=%p", resultstring, resultstring_length, macaddrp); // avoid -Werror=unused-parameter
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called with mp=%p", macaddrp); // avoid -Werror=unused-parameter
 
 #ifdef SUPPORT_BUILTIN
 	retval = libipv6calc_db_wrapper_BuiltIn_ieee_vendor_string_short_by_macaddr(resultstring, resultstring_length, macaddrp);
@@ -2452,13 +2452,15 @@ int libipv6calc_db_wrapper_info_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, 
 			break;
 
 		    default:
+			snprintf(string, string_len, "unknown (databases not compiled in)");
+			retval = 0;
 			goto END_libipv6calc_db_wrapper; // dummy goto in case no db is enabled
 			break;
 		};
 	};
 
 END_libipv6calc_db_wrapper:
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s (size: %ld)", string, string_len);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s", string);
 
 	return (retval);
 };
@@ -2511,13 +2513,15 @@ int libipv6calc_db_wrapper_info_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, 
 			break;
 
 		    default:
+			snprintf(string, string_len, "unknown (databases not compiled in)");
+			retval = 0;
 			goto END_libipv6calc_db_wrapper; // dummy goto in case no db is enabled
 			break;
 		};
 	};
 
 END_libipv6calc_db_wrapper:
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s (size: %ld)", string, string_len);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Result: %s", string);
 
 	return (retval);
 };
