@@ -2122,6 +2122,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 
 	if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_6TO4) != 0) {
 		DEBUGPRINT_NA(DEBUG_libipv6addr, "Embedded IPv4 address, anonymize and store back");
+		ipv4addr_clearall(&ipv4addr);
 		/* extract IPv4 address */
 		for (i = 0; i <= 3; i++) {
 			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 2 + i));
@@ -2140,6 +2141,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 
 	if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_TEREDO) != 0) {
 		/* extract Teredo client IPv4 address */
+		ipv4addr_clearall(&ipv4addr);
 		for (i = 0; i <= 3; i++) {
 			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 12 + i) ^ 0xff);
 		};
@@ -2159,6 +2161,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 
 	if ((ipv6addrp->typeinfo & (IPV6_ADDR_MAPPED | IPV6_ADDR_COMPATv4 | IPV6_NEW_ADDR_NAT64)) != 0) {
 		/* extract IPv4 address */
+		ipv4addr_clearall(&ipv4addr);
 		for (i = 0; i <= 3; i++) {
 			ipv4addr_setoctet(&ipv4addr, (unsigned int) i, (unsigned int) ipv6addr_getoctet(ipv6addrp, (unsigned int) 12 + i));
 		};
@@ -3359,12 +3362,14 @@ uint32_t libipv6addr_as_num32_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsign
 				DEBUGPRINT_NA(DEBUG_libipv6addr, "retrieve ASN from anonymized IPv4 in IID");
 				payload = ipv6addr_get_payload_anonymized_iid(ipv6addrp, ipv6addrp->typeinfo);
 				/* IPv4 */
+				ipv4addr_clearall(&ipv4addr);
 				ipv4addr_setoctet(&ipv4addr, 0, (payload >> 16) & 0xff);
 				ipv4addr_setoctet(&ipv4addr, 1, (payload >>  8) & 0xff);
 				ipv4addr_setoctet(&ipv4addr, 2, (payload      ) & 0xff);
 				ipv4addr_setoctet(&ipv4addr, 3, 0);
 
 				ipv4addr_settype(&ipv4addr, 1); // set type
+				ipv4addr.flag_valid = 1;
 
 				as_num32 = libipv4addr_as_num32_by_addr(&ipv4addr, data_source_ptr);
 			} else {
