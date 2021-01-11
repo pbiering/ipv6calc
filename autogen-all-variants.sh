@@ -24,10 +24,10 @@ autogen_variants() {
 	done
 
 	# skip IP2Location and MaxMindDB based
-	autogen_variants_list | egrep -vw "(IP2LOCATION)" | while read line; do
+	autogen_variants_list | egrep -vw "(IP2LOCATION|GEOIP2|DBIP2)" | while read line; do
 		echo "${line:+$line }--m32"
 	done
-	autogen_variants_list | egrep -vw "(IP2LOCATION)" | while read line; do
+	autogen_variants_list | egrep -vw "(IP2LOCATION|GEOIP2|DBIP2)" | while read line; do
 		echo "${line:+$line }--clang --m32"
 	done
 }
