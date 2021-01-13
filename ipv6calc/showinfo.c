@@ -162,6 +162,7 @@ void showinfo_availabletypes(void) {
  */
 static void printout(const char *token, const char *value, const uint32_t formatoptions) {
 	int quote = 0;
+	unsigned int i;
 
 	DEBUGPRINT_WA(DEBUG_showinfo, "called with token='%s' value='%s'", token, value);
 
@@ -169,7 +170,7 @@ static void printout(const char *token, const char *value, const uint32_t format
 		if (strchr(showinfo_machine_readable_filter, '.')) {
 			// wildcard found, execute sophisticated check
 			if (strlen(showinfo_machine_readable_filter) != strlen(token)) return; // length not matching
-			for (unsigned int i = 0; i < strlen(token); i++) {
+			for (i = 0; i < strlen(token); i++) {
 				if (showinfo_machine_readable_filter[i] == '.') {
 					continue; // skip
 				};
@@ -225,6 +226,7 @@ static void printout(const char *token, const char *value, const uint32_t format
 
 static void printout2(const char *token, const char *additional, const char *value, const uint32_t formatoptions) {
 	int quote = 0;
+	unsigned int i;
 
 	DEBUGPRINT_WA(DEBUG_showinfo, "called with token='%s' additional='%s' value='%s'", token, additional, value);
 
@@ -235,7 +237,7 @@ static void printout2(const char *token, const char *additional, const char *val
 		if (strchr(showinfo_machine_readable_filter, '.')) {
 			// wildcard found, execute sophisticated check
 			if (strlen(showinfo_machine_readable_filter) != strlen(token)) return; // length not matching
-			for (unsigned int i = 0; i < strlen(token); i++) {
+			for (i = 0; i < strlen(token); i++) {
 				if (showinfo_machine_readable_filter[i] == '.') {
 					continue; // skip
 				};
