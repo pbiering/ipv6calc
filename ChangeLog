@@ -9,6 +9,11 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20210113/PB:
+	internal databases: update
+	lib/libieee.h: add 6 new OUI28 prefixes
+	configure[.in]: remove obsolete and incomplete function checks
+
 20210110/PB:
 	ipv6calc/showinfo.c: add support for wildcard in select token
 	ipv6loganon/ipv6loganon.c ipv6calc/ipv6calc.c: autodetect support for ANON_ANONYMIZE

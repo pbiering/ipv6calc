@@ -1,7 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
 # Copyright  : 2001-2020 by Peter Bieringer <pb@bieringer.de>
-# $Id: 048e4b691ba65ba083a95582d23400dc3634fae1 $
 
 # enable the following for intermediate builds
 #%#define gitcommit d3a4108cb7aeb6f731bb07989f91d8a7f449f0f0
@@ -20,7 +19,7 @@
 
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
-Version:	3.0.0
+Version:	3.0.1
 Release:	39%{?gittag}%{?dist}
 URL:		http://www.deepspace6.net/projects/%{name}.html
 License:	GPLv2
@@ -388,7 +387,7 @@ fi
 - take use of license macro
 
 * Sun Mar 01 2015 Peter Bieringer <pb@bieringer.de>
-- remove not necessary x-bits for some files by proper definition in %files section
+- remove not necessary x-bits for some files by proper definition in %%files section
 
 * Wed Feb 18 2015 Peter Bieringer <pb@bieringer.de>
 - delete subpackage db, major spec file alignment with Fedora-SCM version
@@ -420,7 +419,7 @@ fi
 
 * Wed Sep 12 2012 Peter Bieringer <pb@bieringer.de>
 - change requirements for ip2location to Mandrake Linux compatible names
-- change location of "ipv6calc" from bin to %{_bindir}
+- change location of "ipv6calc" from bin to %%{_bindir}
 - install tools/GeoIP-update.sh tools/IP2Location-update.sh to doc dir
 
 * Sun Jan 01 2012 Peter Bieringer <pb@bieringer.de>
