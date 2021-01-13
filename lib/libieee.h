@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libieee.h
  * Version    : $Id$
- * Copyright  : 2002-2020 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libieee.c
@@ -299,6 +299,14 @@ typedef struct {
 	// OUI28 (2020-11-07)
 	{ 0xA0024A,	IEEE_OUI28, 0x00ee },
 	{ 0xA453EE,	IEEE_OUI28, 0x00ef },
+
+	// OUI28 (2021-01-13)
+	{ 0x041119,	IEEE_OUI28, 0x00f0 },
+	{ 0x245DFC,	IEEE_OUI28, 0x00f1 },
+	{ 0x446FD8,	IEEE_OUI28, 0x00f2 },
+	{ 0x78D4F1,	IEEE_OUI28, 0x00f3 },
+	{ 0x982782,	IEEE_OUI28, 0x00f4 },
+	{ 0xE86CC7,	IEEE_OUI28, 0x00f5 },
 };
 
 #endif
