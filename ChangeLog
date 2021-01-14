@@ -10,9 +10,13 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
 20210113/PB:
+	ipv6calc/showinfo.c: fix for compilers < C99
+
+20210113/PB:
 	internal databases: update
 	lib/libieee.h: add 6 new OUI28 prefixes
 	configure[.in]: remove obsolete and incomplete function checks
+	tag version 3.0.1
 
 20210110/PB:
 	ipv6calc/showinfo.c: add support for wildcard in select token
