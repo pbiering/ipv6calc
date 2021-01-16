@@ -144,12 +144,12 @@ while [ "$1" != "$LAST" ]; do
 done
 
 # check for proper make
-if make -v | grep -w "GNU"; then
+if make -v 2>&1 | grep -wq "GNU"; then
 	echo "INFO  : make is GNU make -> OK"
 	MAKE="make"
 else
 	echo "WARN  : make is NOT GNU make -> check for dedicated 'gmake'"
-	if gmake -v | grep -w "GNU"; then
+	if gmake -v 2>&1 | grep -wq "GNU"; then
 		echo "NOTICE: gmake found and is GNU make -> OK"
 		MAKE="gmake"
 	else
