@@ -1,7 +1,7 @@
 # Project    : ipv6calc/ipv6calcweb
 # File       : Makefile
 # Version    : $Id$
-# Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2021 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calcweb
@@ -27,7 +27,6 @@ clean:
 
 test:
 		${MAKE} ipv6calcweb
-		pushd ../ipv6calc; ${MAKE}; popd
 		# Pseudo random selected
 		LD_LIBRARY_PATH=@LD_LIBRARY_PATH@ ./test_ipv6calcweb.sh 2001:200:1:ea::1 || exit 1
 		# www.hp.com
@@ -44,7 +43,6 @@ test-minimal:
 
 test-ldlibpath:
 		${MAKE} ipv6calcweb
-		pushd ../ipv6calc; ${MAKE}; popd
 		# Pseudo random selected
 		LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):@LD_LIBRARY_PATH_BASIC@ ./test_ipv6calcweb.sh 2001:200:1:ea::1 || exit 1
 		# www.hp.com
