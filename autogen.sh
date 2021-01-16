@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # Project    : ipv6calc
 # File       : autogen.sh
@@ -143,6 +143,22 @@ while [ "$1" != "$LAST" ]; do
 	esac
 done
 
+# check for proper make
+if make -v | grep -w "GNU"; then
+	echo "INFO  : make is GNU make -> OK"
+	MAKE="make"
+else
+	echo "WARN  : make is NOT GNU make -> check for dedicated 'gmake'"
+	if gmake -v | grep -w "GNU"; then
+		echo "NOTICE: gmake found and is GNU make -> OK"
+		MAKE="gmake"
+	else
+		echo "ERROR : no GNU make found in path"
+		exit 1
+	fi
+fi
+
+
 source ./autogen-support.sh "source"
 
 if [ "$use_ip2location" = "1" ]; then
@@ -159,7 +175,7 @@ fi
 
 if [ -f Makefile ]; then
 	echo "*** cleanup"
-	make autoclean
+	$MAKE autoclean
 fi
 
 if [ "$USE_CLANG" = "1" ]; then
@@ -187,7 +203,7 @@ if [ "$flag_no_make" = "1" ]; then
 fi
 
 echo "*** run: make clean"
-make clean || exit 1
+$MAKE clean || exit 1
 
 if [ "$use_ip2location_dyn" = "1" ]; then
 	if ldd ./ipv6calc/ipv6calc | grep -i IPLocation; then
@@ -203,7 +219,7 @@ if [ "$use_geoip_dyn" = "1" ]; then
 	fi
 fi
 
-make
+$MAKE
 if [ $? -ne 0 ]; then
 	echo "ERROR : 'make' was not successful with configure options: $OPTIONS_CONFIGURE"
 	exit 1
@@ -213,7 +229,7 @@ if [ "$SKIP_TEST" = "1" ]; then
 	echo "*** skip: make test"
 else
 	echo "*** run: make test"
-	make test
+	$MAKE test
 	if [ $? -ne 0 ]; then
 		echo "ERROR : 'make test' was not successful with configure options: $OPTIONS_CONFIGURE"
 		exit 1
@@ -228,7 +244,7 @@ fi
 
 if [ "$SKIP_STATIC" != "1" ]; then
 	echo "*** run: make static"
-	make static
+	$MAKE static
 	if [ $? -ne 0 ]; then
 		echo "ERROR : 'make static' reports an error (perhaps glibc-static/openssl-static/zlib-static is missing)"
 		exit 1
@@ -236,7 +252,7 @@ if [ "$SKIP_STATIC" != "1" ]; then
 fi
 
 echo "*** run: make -n install (dummy install test)"
-make -n install
+$MAKE -n install
 if [ $? -ne 0 ]; then
         echo "ERROR : 'make -n install' reports an error"
         exit 1
