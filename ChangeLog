@@ -21,6 +21,7 @@ Info:
 	autogen.sh-support.sh: autodetect GNU make if available (FreeBSD regression test result)
 	autogen.sh: add additional 'hint' regarding includes/libs in case of "clang" is used (FreeBSD regression test result)
 	autogen-all-variants.sh: skip bundled getopt/md5 + 32-bit tests (FreeBSD regression test result)
+	tag version 3.0.2
 
 20210115/PB:
 	configure[.in]: add missing predefine ENABLE_BUNDLED_GETOPT=0 ENABLE_BUNDLED_MD5=0
