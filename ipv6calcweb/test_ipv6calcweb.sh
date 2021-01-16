@@ -167,6 +167,7 @@ echo "INFO  : $test successful"
 
 
 ## test Anti-DoS implementation
+if [ -r /proc/loadavg ]; then
 test="run 'ipv6calcweb.cgi' Anti-DoS tests"
 echo "INFO  : $test"
 for e in  1 5 15 p; do
@@ -211,6 +212,9 @@ for e in  1 5 15 p; do
 done || exit 1
 [ "$verbose" = "1" ] || echo
 echo "INFO  : $test successful"
+else
+echo "NOTICE: AntiDDoS test skipped, /proc/loadavg missing"
+fi
 
 #if [ $result -ne 0 ]; then
 #	echo "TEST FAILED (exit code != 0)"
