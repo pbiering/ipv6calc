@@ -10,7 +10,8 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
 20210116/PB:
-	all */test_*.sh: enforce use of "bash" (FreeBSD regression test result
+	all */test_*.sh: enforce use of "bash" (FreeBSD regression test result)
+	ipv6loganon/test_ipv6loganon.sh: fix for "sed" which is not supporting \W (FreeBSD regression test result)
 
 20210115/PB:
 	configure[.in]: add missing predefine ENABLE_BUNDLED_GETOPT=0 ENABLE_BUNDLED_MD5=0

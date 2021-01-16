@@ -145,7 +145,7 @@ if [ "$1" != "bulk" ]; then
 	testscenarios_standard | grep -v "^#" | while read line; do
 
 		# extract result
-		input="`echo $line | awk -F= '{ print $1 }' | sed 's/\W*$//g'`"
+		input="`echo $line | awk -F= '{ print $1 }' | sed 's/ *$//g'`"
 		result="`echo $line | awk -F= '{ print $2 }'`"
 		if [ -z "$result" -o -z "$input" ]; then
 			echo "Something is wrong in line '$line'"
@@ -189,7 +189,7 @@ if [ "$1" != "bulk" ]; then
 		testscenarios_special | grep -v "^#" | while read line; do
 
 			# extract result
-			input="`echo $line | awk -F= '{ print $1 }' | sed 's/\W*$//g'`"
+			input="`echo $line | awk -F= '{ print $1 }' | sed 's/ *$//g'`"
 			options="`echo $line | awk -F= '{ print $2 }'`"
 			result="`echo $line | awk -F= '{ print $3 }'`"
 			if [ -z "$result" -o -z "$input" -o -z "$options" ]; then
