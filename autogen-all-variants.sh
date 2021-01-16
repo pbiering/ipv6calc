@@ -36,7 +36,7 @@ autogen_variants_list() {
 	if [ "$skip_main_test" != "1" ]; then
 		cat <<END | grep -v ^#
 NONE#
-NONE#--enable-bundled-md5 --enable-bundled-getopt
+BUNDLED#--enable-bundled-md5 --enable-bundled-getopt
 IP2LOCATION#-i
 IP2LOCATION#-i --ip2location-dyn
 GEOIP2 DBIP2#-m
@@ -230,6 +230,16 @@ for liboption in "normal" "shared"; do
 	fi
 
 	autogen_variants | while IFS="#" read token buildoptions testlist; do
+		case "$OSTYPE" in
+		    freebsd*)
+			case $token in
+			    BUNDLED)
+				echo "NOTICE: disable on OSTYPE=$OSTYPE: $buildoptions"
+				continue
+				;;
+			esac
+		esac
+
 		buildoptions=$(echo $buildoptions)
 		if [ -n "$options_add" ]; then
 			if [ "$no_static_build" = "1" ]; then
