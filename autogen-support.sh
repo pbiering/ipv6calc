@@ -12,6 +12,22 @@
 
 #### Definitions
 
+# check for proper make
+if make -v 2>&1 | grep -wq "GNU"; then
+	echo "INFO  : make is GNU make -> OK"
+	MAKE="make"
+else
+	echo "WARN  : make is NOT GNU make -> check for dedicated 'gmake'"
+	if gmake -v 2>&1 | grep -wq "GNU"; then
+		echo "NOTICE: gmake found and is GNU make -> OK"
+		MAKE="gmake"
+	else
+		echo "ERROR : no GNU make found in path"
+		exit 1
+	fi
+fi
+
+
 ## List of IP2Location versions (append newest one rightmost!)
 ip2location_versions="8.2.0"
 ip2location_versions_download="8.2.0"

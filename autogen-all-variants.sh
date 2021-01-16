@@ -23,6 +23,13 @@ autogen_variants() {
 		echo "${line:+$line }--gcc-Os"
 	done
 
+	case "$OSTYPE" in
+	    freebsd*)
+		    # skip 32-bit builds on freebsd
+		    return
+		    ;;
+	esac
+
 	# skip IP2Location and MaxMindDB based
 	autogen_variants_list | egrep -vw "(IP2LOCATION|GEOIP2|DBIP2)" | while read line; do
 		echo "${line:+$line }--m32"
@@ -378,11 +385,11 @@ for liboption in "normal" "shared"; do
 					fi
 
 					echo "INFO  : call: LD_LIBRARY_PATH=$libdir make test-ldlibpath"
-					LD_LIBRARY_PATH="$libdir" make test-ldlibpath
+					LD_LIBRARY_PATH="$libdir" $MAKE test-ldlibpath
 					result=$?
 				else
 					echo "INFO  : call: LD_PRELOAD=$lib make test-ldlibpath"
-					LD_LIBRARY_PATH="$libdir" make test-ldlibpath
+					LD_LIBRARY_PATH="$libdir" $MAKE test-ldlibpath
 					result=$?
 				fi
 
@@ -420,7 +427,7 @@ if [ "$dry_run" != "1" ]; then
 	date "+%s:END:" >>$status_file
 	cat $status_file
 
-	make autoclean >/dev/null 
+	$MAKE autoclean >/dev/null
 	if [ $? -ne 0 ]; then
 		echo "ERROR : 'make autoclean' failed"
 		exit 1
