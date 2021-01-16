@@ -9,8 +9,11 @@ Info:
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 --------------------------------------------------------------------
+20210116/PB:
+	all */test_*.sh: enforce use of "bash" (FreeBSD regression test result
+
 20210115/PB:
-	configure.in: add missing predefine ENABLE_BUNDLED_GETOPT=0 ENABLE_BUNDLED_MD5=0
+	configure[.in]: add missing predefine ENABLE_BUNDLED_GETOPT=0 ENABLE_BUNDLED_MD5=0
 
 20210113/PB:
 	ipv6calc/showinfo.c: fix for compilers < C99
