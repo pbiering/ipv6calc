@@ -18,9 +18,9 @@ Info:
 	ipv6calcweb/create_ipv6calcweb-cgi.sh: remove -T on FreeBSD (FreeBSD regression test result)
 	ipv6calcweb/test_ipv6calcweb.sh: skip AntiDDoS test on FreeBSD (FreeBSD regression test result)
 	ipv6calcweb/Makefile.in: remove explicit make of ipv6calc (FreeBSD regression test result)
-	autogen.sh: autodetect GNU make if available (FreeBSD regression test result)
+	autogen.sh-support.sh: autodetect GNU make if available (FreeBSD regression test result)
 	autogen.sh: add additional 'hint' regarding includes/libs in case of "clang" is used (FreeBSD regression test result)
-	autogen-all-variants.sh: skip bundled getopt/md5 tests (FreeBSD regression test result)
+	autogen-all-variants.sh: skip bundled getopt/md5 + 32-bit tests (FreeBSD regression test result)
 
 20210115/PB:
 	configure[.in]: add missing predefine ENABLE_BUNDLED_GETOPT=0 ENABLE_BUNDLED_MD5=0
