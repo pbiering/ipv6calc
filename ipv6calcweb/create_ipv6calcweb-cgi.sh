@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # Project    : ipv6calc/ipv6calcweb
 # File       : create_ipv6calcweb.sh
 # Version    : $Id$
-# Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  create ipv6calcweb.cgi from ipv6calcweb.cgi.in
@@ -34,6 +34,13 @@ cp ipv6calcweb.cgi.in ipv6calcweb.cgi || exit 1
 # replace placeholders
 perl -pi -e "s/\@PACKAGE_VERSION\@/$v/" ipv6calcweb.cgi || exit 1
 perl -pi -e "s/\@COPYRIGHT_YEAR\@/$c/" ipv6calcweb.cgi || exit 1
+
+case "$OSTYPE" in
+    freebsd*)
+	# FreeBSD has somehow issue with -T, so remove it
+	perl -pi -e "s/perl -w -T/perl -w/" ipv6calcweb.cgi || exit 1
+	;;
+esac
 
 if [ ! -x ipv6calcweb.cgi ]; then
 	chmod u+x ipv6calcweb.cgi

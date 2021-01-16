@@ -15,6 +15,7 @@ Info:
 	databases/lib/libipv6calc_db_wrapper.c: use different way to access union members in in6_addr (FreeBSD regression test result)
 	ipv6calcweb/test_ipv6calcweb_form.sh ipv6calcweb/test_ipv6calcweb.sh:
 	use different way of calling cgi with optional -T where not causing issues (FreeBSD regression test result)
+	ipv6calcweb/create_ipv6calcweb-cgi.sh: remove -T on FreeBSD (FreeBSD regression test result)
 
 20210115/PB:
 	configure[.in]: add missing predefine ENABLE_BUNDLED_GETOPT=0 ENABLE_BUNDLED_MD5=0
