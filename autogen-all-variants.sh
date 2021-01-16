@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
