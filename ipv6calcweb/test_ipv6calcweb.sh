@@ -40,15 +40,17 @@ fi
 if [ ! -f ipv6calcweb.cgi ]; then
 	make || exit 1
 fi
-if [ ! -x ipv6calcweb.cgi ]; then
-	chmod u+x ipv6calcweb.cgi
+
+if [ "$OSTYPE" = "linux-gnu" ]; then
+	# Linux has no issues -T (but FreeBSD)
+	perlopt=" -T"
 fi
 
 ## check for empty stderr
 export HTTP_IPV6CALCWEB_DEBUG="0x5000" # no sleeps and no Anti-DoS
 
 set -x
-stderr=$(HTTP_IPV6CALCWEB_OUTPUT_FORMAT=html HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB=subcolumns REMOTE_ADDR=50.60.70.80 ./ipv6calcweb.cgi 2>&1 >/dev/null)
+stderr=$(HTTP_IPV6CALCWEB_OUTPUT_FORMAT=html HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB=subcolumns REMOTE_ADDR=50.60.70.80 perl -w $perlopt ipv6calcweb.cgi 2>&1 >/dev/null)
 set +x
 if [ -n "$stderr" ]; then
 	echo "ERROR : stderr not empty: $stderr"
@@ -56,7 +58,7 @@ if [ -n "$stderr" ]; then
 fi
 
 set -x
-stderr=$(HTTP_IPV6CALCWEB_OUTPUT_FORMAT=html HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB=sequential REMOTE_ADDR=50.60.70.80 ./ipv6calcweb.cgi 2>&1 >/dev/null)
+stderr=$(HTTP_IPV6CALCWEB_OUTPUT_FORMAT=html HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB=sequential REMOTE_ADDR=50.60.70.80 perl -w $perlopt ipv6calcweb.cgi 2>&1 >/dev/null)
 set +x
 if [ -n "$stderr" ]; then
 	echo "ERROR : stderr not empty: $stderr"
@@ -64,7 +66,7 @@ if [ -n "$stderr" ]; then
 fi
 
 set -x
-stderr=$(HTTP_IPV6CALCWEB_OUTPUT_FORMAT=text REMOTE_ADDR=50.60.70.80 ./ipv6calcweb.cgi 2>&1 >/dev/null)
+stderr=$(HTTP_IPV6CALCWEB_OUTPUT_FORMAT=text REMOTE_ADDR=50.60.70.80 perl -w $perlopt ipv6calcweb.cgi 2>&1 >/dev/null)
 set +x
 if [ -n "$stderr" ]; then
 	echo "ERROR : stderr not empty: $stderr"
@@ -83,24 +85,24 @@ for format in textkeyvalue text html htmlfull; do
 	export HTTP_IPV6CALCWEB_DEBUG="0x5000" # no sleeps and no Anti-DoS
 
 	[ "$verbose" = "1" ] && echo "INFO  : test format: $format"
-	[ "$verbose" = "1" ] && echo "DEBUG : execute: HTTP_IPV6CALCWEB_DEBUG=$HTTP_IPV6CALCWEB_DEBUG HTTP_IPV6CALCWEB_OUTPUT_FORMAT=\"$format\" ./ipv6calcweb.cgi"
+	[ "$verbose" = "1" ] && echo "DEBUG : execute: HTTP_IPV6CALCWEB_DEBUG=$HTTP_IPV6CALCWEB_DEBUG HTTP_IPV6CALCWEB_OUTPUT_FORMAT=\"$format\" perl -w $perlopt ipv6calcweb.cgi"
 
 	if [ "$opt_debug" = "1" ]; then
-		HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi
+		HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" perl -w $perlopt ipv6calcweb.cgi
 		rc=$?
 	else
 		if [ "$verbose" = "1" ]; then
-			HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi >/dev/null
+			HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" perl -w $perlopt ipv6calcweb.cgi >/dev/null
 			rc=$?
 		else
-			HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi >/dev/null 2>/dev/null
+			HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" perl -w $perlopt ipv6calcweb.cgi >/dev/null 2>/dev/null
 			rc=$?
 		fi
 	fi
 	if [ $rc -ne 0 ];then
 		echo "ERROR : output format reports an error: $format"
 		if [ "$opt_debug" != "1" ]; then
-			HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" ./ipv6calcweb.cgi
+			HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" perl -w $perlopt ipv6calcweb.cgi
 		fi
 		exit 1
 	fi
@@ -141,10 +143,10 @@ for format in textkeyvalue text html htmlfull; do
 	export HTTP_IPV6CALCWEB_OUTPUT_FORMAT
 
 	if [ "$verbose" = "1" ]; then
-		OUTPUT="`./ipv6calcweb.cgi`"
+		OUTPUT="`perl -w $perlopt ipv6calcweb.cgi`"
 		result=$?
 	else
-		OUTPUT="`./ipv6calcweb.cgi 2>&1`"
+		OUTPUT="`perl -w $perlopt ipv6calcweb.cgi 2>&1`"
 		result=$?
 	fi
 	if [ "$opt_debug" = "1" ]; then
@@ -192,7 +194,7 @@ for e in  1 5 15 p; do
 
 	echo "INFO  : Anti-DoS test: $e"
 
-	output=$(./ipv6calcweb.cgi)
+	output=$(perl -w $perlopt ipv6calcweb.cgi)
 	rc=$?
 	if [ $rc -ne 1 ];then
 		echo "ERROR : Anti-DoS test reports unexpected error: rc=$rc"

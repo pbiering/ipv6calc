@@ -26,9 +26,14 @@ done
 # Test Scenarios for autodetection "good case"
 source ../ipv6calc/test_scenarios.sh
 
-if [ ! -x ipv6calcweb.cgi ]; then
+if [ ! -f ipv6calcweb.cgi ]; then
 	echo "ERROR : run make"
 	exit 1
+fi
+
+if [ "$OSTYPE" = "linux-gnu" ]; then
+	# Linux has no issues -T (but FreeBSD)
+	perlopt=" -T"
 fi
 
 REMOTE_ADDR="127.0.0.1"
@@ -44,7 +49,7 @@ HTTP_IPV6CALCWEB_DEBUG="0x5000" # no sleeps and no Anti-DoS
 export REMOTE_ADDR REMOTE_HOST HTTP_USER_AGENT SERVER_ADDR SERVER_NAME QUERY_STRING HTTP_IPV6CALCWEB_MODE HTTP_IPV6CALCWEB_DEBUG
 
 # extract tokenhash & tokentime
-OUTPUT="`./ipv6calcweb.cgi`"
+OUTPUT="`perl -w $perlopt ipv6calcweb.cgi`"
 result=$?
 if [ $result -ne 0 ]; then
 	echo "TEST FAILED"
@@ -73,7 +78,7 @@ fi
 [ "$verbose" = "1" ] && echo "DEBUG: extracted tokenhash: $tokenhash"
 [ "$verbose" = "1" ] && echo "DEBUG: extracted tokentime: $tokentime"
 
-test="run 'ipv6calcweb.cgi ' good tests"
+test="run 'ipv6calcweb.cgi' good tests"
 echo "INFO  : $test"
 testscenarios_auto_good | grep -v "^#" | egrep -vw "(bitstring|base85)" | grep -v "%" | while read input type; do
 	input_escaped="$(perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' "$input")"
@@ -85,10 +90,10 @@ testscenarios_auto_good | grep -v "^#" | egrep -vw "(bitstring|base85)" | grep -
 	export REMOTE_ADDR REMOTE_HOST HTTP_USER_AGENT SERVER_ADDR SERVER_NAME QUERY_STRING HTTP_IPV6CALCWEB_MODE
 
 	if [ "$verbose" = "1" ]; then 
-		OUTPUT="`./ipv6calcweb.cgi`"
+		OUTPUT="`perl -w $perlopt ipv6calcweb.cgi`"
 		result=$?
 	else
-		OUTPUT=$(./ipv6calcweb.cgi 2>/dev/null)
+		OUTPUT=$(perl -w $perlopt ipv6calcweb.cgi 2>/dev/null)
 		result=$?
 	fi
 
