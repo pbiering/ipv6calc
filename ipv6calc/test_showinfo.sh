@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
 # Version    : $Id$
-# Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2021 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
 

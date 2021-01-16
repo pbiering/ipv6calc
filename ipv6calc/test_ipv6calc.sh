@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
 # Version    : $Id$
-# Copyright  : 2001-2020 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 

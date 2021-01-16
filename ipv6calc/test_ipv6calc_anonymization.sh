@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc_anonymization.sh

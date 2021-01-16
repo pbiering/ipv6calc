@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
 # Version    : $Id$
-# Copyright  : 2001-2020 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPLv2
 #
 # Test patterns for ipv6calc (functions only)

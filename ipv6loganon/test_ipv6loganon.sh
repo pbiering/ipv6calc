@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh

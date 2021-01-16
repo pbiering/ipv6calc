@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
 # Version    : $Id$
-# Copyright  : 2003-2015 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2003-2021 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"
 
