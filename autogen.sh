@@ -185,6 +185,13 @@ if [ "$USE_CLANG" = "1" ]; then
 		echo "ERROR : --clang selected but binary is missing: /usr/bin/clang"
 		exit 1
 	fi
+
+	case "$OSTYPE" in
+	    freebsd*)
+		# clang requires hint to /usr/local
+		LDFLAGS=-L/usr/local/lib CFLAGS=-I/usr/local/include
+		;;
+	esac
 fi
 
 echo "*** run: autoheader"
