@@ -4304,6 +4304,7 @@ fi
 
 
 
+ENABLE_BUNDLED_GETOPT=0
 # Check whether --enable-bundled-getopt was given.
 if test "${enable_bundled_getopt+set}" = set; then :
   enableval=$enable_bundled_getopt;
@@ -4359,6 +4360,7 @@ fi
 
 
 
+ENABLE_BUNDLED_MD5=0
 # Check whether --enable-bundled-md5 was given.
 if test "${enable_bundled_md5+set}" = set; then :
   enableval=$enable_bundled_md5;
