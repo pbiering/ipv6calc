@@ -763,10 +763,10 @@ MMDB_lookup_result_s libipv6calc_db_wrapper_MMDB_wrapper_lookup_by_addr (const i
 	} else if (ipaddrp->proto == 6) {
 		su.sockaddr.sa_family = AF_INET6;
 #ifdef __KAME__ // FreeBSD misses s6_addr8/16/32 in non-kernel include, also union has different name in glibc (__in6_u vs.  __u6_addr) :-(
-		su.in6_addr.__u6_addr.__u6_addr32[0] = htonl(ipaddrp->addr[0]);
-		su.in6_addr.__u6_addr.__u6_addr32[1] = htonl(ipaddrp->addr[1]);
-		su.in6_addr.__u6_addr.__u6_addr32[2] = htonl(ipaddrp->addr[2]);
-		su.in6_addr.__u6_addr.__u6_addr32[3] = htonl(ipaddrp->addr[3]);
+		su.in6.sin6_addr.__u6_addr.__u6_addr32[0] = htonl(ipaddrp->addr[0]);
+		su.in6.sin6_addr.__u6_addr.__u6_addr32[1] = htonl(ipaddrp->addr[1]);
+		su.in6.sin6_addr.__u6_addr.__u6_addr32[2] = htonl(ipaddrp->addr[2]);
+		su.in6.sin6_addr.__u6_addr.__u6_addr32[3] = htonl(ipaddrp->addr[3]);
 #else
 		su.in6.sin6_addr.s6_addr32[0] = htonl(ipaddrp->addr[0]);
 		su.in6.sin6_addr.s6_addr32[1] = htonl(ipaddrp->addr[1]);
@@ -981,10 +981,17 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 		su.in.sin_addr.s_addr = htonl(ipaddrp->addr[0]);
 	} else if (ipaddrp->proto == 6) {
 		su.sockaddr.sa_family = AF_INET6;
+#ifdef __KAME__ // FreeBSD misses s6_addr8/16/32 in non-kernel include, also union has different name in glibc (__in6_u vs.  __u6_addr) :-(
+		su.in6.sin6_addr.__u6_addr.__u6_addr32[0] = htonl(ipaddrp->addr[0]);
+		su.in6.sin6_addr.__u6_addr.__u6_addr32[1] = htonl(ipaddrp->addr[1]);
+		su.in6.sin6_addr.__u6_addr.__u6_addr32[2] = htonl(ipaddrp->addr[2]);
+		su.in6.sin6_addr.__u6_addr.__u6_addr32[3] = htonl(ipaddrp->addr[3]);
+#else
 		su.in6.sin6_addr.s6_addr32[0] = htonl(ipaddrp->addr[0]);
 		su.in6.sin6_addr.s6_addr32[1] = htonl(ipaddrp->addr[1]);
 		su.in6.sin6_addr.s6_addr32[2] = htonl(ipaddrp->addr[2]);
 		su.in6.sin6_addr.s6_addr32[3] = htonl(ipaddrp->addr[3]);
+#endif
 	} else {
 		mmdb_error = MMDB_INVALID_DATA_ERROR;
 		goto END_libipv6calc_db_wrapper;
