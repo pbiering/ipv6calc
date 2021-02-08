@@ -1555,7 +1555,7 @@ uint16_t libipv6calc_db_wrapper_cc_index_by_addr(const ipv6calc_ipaddr *ipaddrp,
 		};
 
 		if (strlen(cc_text) == 2) {
-			if (isalpha(cc_text[0]) && isalnum(cc_text[1])) {
+			if (isalpha((int) cc_text[0]) && isalnum((int) cc_text[1])) {
 				c1 = toupper(cc_text[0]);
 				if (! (c1 >= 'A' && c1 <= 'Z')) {
 					goto END_libipv6calc_db_wrapper_cached; // something wrong
@@ -3152,7 +3152,7 @@ uint16_t libipv6calc_db_cc_to_index(const char *cc_text) {
 		goto END_libipv6calc_db_cc_to_index; // something wrong
 	};
 
-	if ((! isalpha(cc_text[0])) || (! isalnum(cc_text[1]))) {
+	if ((! isalpha((int) cc_text[0])) || (! isalnum((int) cc_text[1]))) {
 		ERRORPRINT_WA("input is not valid country code: %s", cc_text);
 		goto END_libipv6calc_db_cc_to_index; // something wrong
 	};
