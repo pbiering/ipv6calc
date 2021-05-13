@@ -14,8 +14,7 @@ GEOIP_DAT_DIR_DEFAULT="@GEOIP2_DB@"
 
 help() {
 	cat <<END
-Usage: $(basename "$0") [-D <dir>] [-v] [-s] [-L] [-G]
-	-s		skip download
+Usage: $(basename "$0") [-D <dir>] [-v] [-L] [-G]
 	-D <dir>	database directory (optional)
 	-v		verbose
 
@@ -32,12 +31,10 @@ Usage: $(basename "$0") [-D <dir>] [-v] [-s] [-L] [-G]
 END
 }
 
-skip_download=false
 verbose=
 while getopts "sGLD:vh\?" opt; do
 	case $opt in
-	    s)
-		skip_download=true
+	    s)	# for backward compatibility
 		;;
 	    D)
 		GEOIP_DAT_DIR=$OPTARG
