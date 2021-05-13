@@ -45,13 +45,15 @@ Usage: $(basename "$0") [-v] [-s] [-D <dir>] [-U <url>] [-T <type>]
 END
 }
 
+skip_download=false
+verbose=false
 while getopts "vT:D:U:sh\?" opt; do
 	case $opt in
 	    v)
-		verbose=1
+		verbose=true
 		;;
 	    s)
-		skip_download=1
+		skip_download=true
 		;;
 	    D)
 		DBIP_DAT_DIR="$OPTARG"
@@ -86,7 +88,7 @@ if [ -n "$DBIP_URL" ]; then
 	esac
 fi
 
-if [ ! -t 0 -o "$verbose" = "1" ]; then
+if [ ! -t 0 ] || $verbose; then
 	options_generate="-q"
 	options_wget="-q"
 fi
@@ -102,8 +104,8 @@ if [ ! -w "$DBIP_DAT_DIR" ]; then
 fi
 
 # Download files
-download_result=1
-if [ "$skip_download" != "1" ]; then
+download_result=true
+if ! $skip_download; then
 	for file in $DBIP_DAT_FILES; do
 		# convert tokens
 		year=$(date +%Y)
@@ -119,7 +121,7 @@ if [ "$skip_download" != "1" ]; then
 			wget $options_wget -O "$file_dest" "$DBIP_DAT_URL_BASE$file"
 			if [ $? -ne 0 ]; then
 				echo "ERROR : download of file not successful: $file ($file_dest)"
-				download_result=0
+				download_result=false
 				continue
 			fi
 		else
@@ -127,7 +129,7 @@ if [ "$skip_download" != "1" ]; then
 			wget $options_wget -O "$file_dest" "$DBIP_URL"
 			if [ $? -ne 0 ]; then
 				echo "ERROR : download of file not successful: $DBIP_URL ($file_dest)"
-				download_result=0
+				download_result=false
 				continue
 			fi
 		fi
@@ -137,7 +139,7 @@ fi
 
 # create db/decompress mmdb files from downloaded files
 error=0
-if [ "$download_result" = "1" ]; then
+if $download_result; then
 	for file in $DBIP_DAT_FILES; do
 		# convert tokens
 		year=$(date +%Y)

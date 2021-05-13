@@ -192,13 +192,15 @@ if [ -z "$1" ]; then
 	exit 0
 fi
 
+test_asn=false
+test_ipv4=false
 while getopts ":a4" opt; do
         case $opt in
             a)
-		test_asn=1
+		test_asn=true
                 ;;
             4)
-		test_ipv4=1
+		test_ipv4=true
                 ;;
             \?|h)
                 echo "Invalid option: -$OPTARG" >&2
@@ -210,11 +212,11 @@ done
 
 shift $[ $OPTIND - 1 ]
 
-if [ "$test_asn"  = "1" ]; then
+if $test_asn; then
 	test_asn_registry  || exit 1
 fi
 
-if [ "$test_ipv4" = "1" ]; then
+if $test_ipv4; then
 	test_ipv4_registry || exit 1
 fi
 

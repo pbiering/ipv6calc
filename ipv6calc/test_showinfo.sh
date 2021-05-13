@@ -7,12 +7,12 @@
 #
 # Test patterns for ipv6calc showinfo
 
-verbose=0
+verbose=false
 grepopt="-q"
 while getopts "Vh\?" opt; do
 	case $opt in
 	    V)
-		verbose=1
+		verbose=true
 		grepopt=""
 		;;
 	    *)
@@ -93,8 +93,8 @@ END
 test="test showinfo"
 echo "INFO  : $test"
 getexamples | while read address separator comment; do
-	[ "$verbose" = "1" ] && echo "$comment: $address"
-	if [ "$verbose" = "1" ]; then
+	$verbose && echo "$comment: $address"
+	if $verbose; then
 		./ipv6calc -q -i -m $address
 		retval=$?
 	else
@@ -102,26 +102,26 @@ getexamples | while read address separator comment; do
 		retval=$?
 	fi
 	if [ $retval -ne 0 ]; then
-		[ "$verbose" = "1" ] || echo
+		$verbose || echo
 		echo "ERROR : $comment: $address"
 		./ipv6calc -q -i -m $address
 		exit 1
 	fi
-	[ "$verbose" = "1" ] && echo || true
-	[ "$verbose" = "1" ] || echo -n "."
+	$verbose && echo || true
+	$verbose || echo -n "."
 done || exit 1
-[ "$verbose" = "1" ] || echo
+$verbose || echo
 echo "INFO  : $test successful"
 
 # Test reserved IPv4 addresses
 test="test IPv4 reserved"
 echo "INFO  : $test"
 testscenarios_ipv4_reserved | while read address rfc rest; do
-	[ "$verbose" = "1" ] && echo "INFO  : test $rfc: $address"
+	$verbose && echo "INFO  : test $rfc: $address"
 	case $rfc in
 	    RFC*)
 		if ! ./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY | grep $grepopt "$rfc"; then
-			[ "$verbose" = "1" ] || echo
+			$verbose || echo
 			echo "ERROR: unexpected result for $address (should: $rfc)"
 			./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY
 			exit 1	
@@ -129,28 +129,28 @@ testscenarios_ipv4_reserved | while read address rfc rest; do
 		;;
 	    noRFC)
 		if ./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY | grep $grepopt "RFC"; then
-			[ "$verbose" = "1" ] || echo
+			$verbose || echo
 			echo "ERROR: unexpected result for $address (should not contain RFC token)"
 			./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY
 			exit 1	
 		fi
 		;;
 	esac
-	[ "$verbose" = "1" ] && echo || true
-	[ "$verbose" = "1" ] || echo -n "."
+	$verbose && echo || true
+	$verbose || echo -n "."
 done || exit 1
-[ "$verbose" = "1" ] || echo
+$verbose || echo
 echo "INFO  : $test successful"
 
 # Test reserved IPv6 addresses
 test="test IPv6 reserved"
 echo "INFO  : $test"
 testscenarios_ipv6_reserved | while read address rfc rest; do
-	[ "$verbose" = "1" ] && echo "INFO  : test $rfc: $address"
+	$verbose && echo "INFO  : test $rfc: $address"
 	case $rfc in
 	    RFC*)
 		if ! ./ipv6calc -q -i -m $address | grep ^IPV6_REGISTRY | grep $grepopt "$rfc"; then
-			[ "$verbose" = "1" ] || echo
+			$verbose || echo
 			echo "ERROR: unexpected result (should: $rfc)"
 			./ipv6calc -q -i -m $address | grep ^IPV6_REGISTRY
 			exit 1	
@@ -158,33 +158,33 @@ testscenarios_ipv6_reserved | while read address rfc rest; do
 		;;
 	    noRFC)
 		if ./ipv6calc -q -i -m $address | grep ^IPV6_REGISTRY | grep $grepopt "RFC"; then
-			[ "$verbose" = "1" ] || echo
+			$verbose || echo
 			echo "ERROR: unexpected result (should not contain RFC token)"
 			./ipv6calc -q -i -m $address | grep ^IPV6_REGISTRY
 			exit 1	
 		fi
 		;;
 	esac
-	[ "$verbose" = "1" ] && echo || true
-	[ "$verbose" = "1" ] || echo -n "."
+	$verbose && echo || true
+	$verbose || echo -n "."
 done || exit 1
-[ "$verbose" = "1" ] || echo
+$verbose || echo
 echo "INFO  : $test successful"
 
 # Test showinfo output
-ipv6calc_has_db_ieee=0
+ipv6calc_has_db_ieee=false
 if ./ipv6calc -v 2>&1 | grep -qw DB_IEEE; then
-	ipv6calc_has_db_ieee=1
+	ipv6calc_has_db_ieee=true
 fi
 
-ipv6calc_has_db_ipv4=0
+ipv6calc_has_db_ipv4=false
 if ./ipv6calc -v 2>&1 | grep -qw DB_IPV4_REG; then
-	ipv6calc_has_db_ipv4=1
+	ipv6calc_has_db_ipv4=true
 fi
 
-ipv6calc_has_db_ipv6=0
+ipv6calc_has_db_ipv6=false
 if ./ipv6calc -v 2>&1 | grep -qw DB_IPV6_REG; then
-	ipv6calc_has_db_ipv6=1
+	ipv6calc_has_db_ipv6=true
 fi
 
 test="test showinfo"
@@ -196,24 +196,24 @@ testscenarios_showinfo | while read address output_options; do
 	[ "$options" = "$output" ] && options=""
 
 	if echo "$output" | grep -q "^OUI="; then
-		if [ $ipv6calc_has_db_ieee -ne 1 ]; then
-			[ "$verbose" = "1" ] || echo
+		if ! $ipv6calc_has_db_ieee; then
+			$verbose || echo
 			echo "NOTICE: test $address for $output SKIPPED (no DB_IEEE compiled in)"
 			continue
 		fi
 	fi
 
 	if echo "$output" | grep -q "^IPV4_REGISTRY="; then
-		if [ $ipv6calc_has_db_ipv4 -ne 1 ]; then
-			[ "$verbose" = "1" ] || echo
+		if ! $ipv6calc_has_db_ipv4; then
+			$verbose || echo
 			echo "NOTICE: test: $address for $output SKIPPED (no DB_IPV4_REG compiled in)"
 			continue
 		fi
 	fi
 
 	if echo "$output" | grep -q "^IPV6_REGISTRY="; then
-		if [ $ipv6calc_has_db_ipv6 -ne 1 ]; then
-			[ "$verbose" = "1" ] || echo
+		if ! $ipv6calc_has_db_ipv6; then
+			$verbose || echo
 			echo "NOTICE: test: $address for $output SKIPPED (no DB_IPV6_REG compiled in)"
 			continue
 		fi
@@ -222,17 +222,17 @@ testscenarios_showinfo | while read address output_options; do
 	output_escaped="${output//./\\.}"
 	output_escaped="${output_escaped//[/\\[}"
 	output_escaped="${output_escaped//]/\\]}"
-	[ "$verbose" = "1" ] && echo "INFO: test: $address for $output ($options) (escaped: $output_escaped)"
+	$verbose && echo "INFO: test: $address for $output ($options) (escaped: $output_escaped)"
 	if ! ./ipv6calc $options -q -i -m $address | grep $grepopt "^$output_escaped$"; then
-		[ "$verbose" = "1" ] || echo
+		$verbose || echo
 		echo "ERROR: unexpected result for $address ($output_escaped)"
 		./ipv6calc $options -q -i -m $address
 		exit 1	
 	fi
-	[ "$verbose" = "1" ] && echo || true
-	[ "$verbose" = "1" ] || echo -n "."
+	$verbose && echo || true
+	$verbose || echo -n "."
 done || exit 1
-[ "$verbose" = "1" ] || echo
+$verbose || echo
 echo "INFO  : $test successful"
 
 if [ "$1" = "minimal" ]; then
@@ -245,39 +245,39 @@ test="run GeoIP tests"
 if ./ipv6calc -q -v 2>&1 | grep -qw GeoIP; then
 	echo "INFO  : $test"
 	getexamples_GeoIP | while read address; do
-		[ "$verbose" = "1" ] && echo "INFO  : run GeoIP showinfo on: $address"
+		$verbose && echo "INFO  : run GeoIP showinfo on: $address"
 		if ./ipv6calc -q -i -m $address | grep $grepopt ^GEOIP; then
 			true
 		else
 			if echo "$address" | grep -q ":"; then
 				if ./ipv6calc -q -v 2>&1 | grep -v -q "GeoIPv6"; then
-					[ "$verbose" = "1" ] || echo
+					$verbose || echo
 					echo "Expected result (missing GEOIP) because of missing IPv6 support in GeoIP)"
 					true
 				else
-					[ "$verbose" = "1" ] || echo
+					$verbose || echo
 					echo "Unexpected result (missing GEOIP): ./ipv6calc -q -i -m $address"
 					./ipv6calc -q -i -m $address
 					exit 1
 				fi
 			else
-				[ "$verbose" = "1" ] || echo
+				$verbose || echo
 				echo "Unexpected result (missing GEOIP): ./ipv6calc -q -i -m $address"
 				./ipv6calc -q -i -m $address
 				exit 1
 			fi
 		fi
-		[ "$verbose" = "1" ] || echo -n "."
+		$verbose || echo -n "."
 	done || exit 1
-	[ "$verbose" = "1" ] || echo
+	$verbose || echo
 	echo "INFO  : $test successful"
 
 	test="run GeoIP showinfo tests"
 	echo "INFO  : $test"
 	testscenarios_showinfo_geoip | while read address output requirement; do
 		if echo "$output" | grep -q "^OUI="; then
-			if [ $ipv6calc_has_db_ieee -ne 1 ]; then
-				[ "$verbose" = "1" ] && echo "Test: $address for $output SKIPPED (no DB_IEEE compiled in)"
+			if ! $ipv6calc_has_db_ieee; then
+				$verbose && echo "Test: $address for $output SKIPPED (no DB_IEEE compiled in)"
 				continue
 			fi
 		fi
@@ -286,24 +286,24 @@ if ./ipv6calc -q -v 2>&1 | grep -qw GeoIP; then
 			if ./ipv6calc -v 2>&1 | grep -q -w "$requirement"; then
 				true
 			else
-				[ "$verbose" = "1" ] && echo "Test: $address for $output SKIPPED (no $requirement compiled in)"
+				$verbose && echo "Test: $address for $output SKIPPED (no $requirement compiled in)"
 				continue
 			fi
 		fi
-		[ "$verbose" = "1" ] && echo "Test: $address for $output"
+		$verbose && echo "Test: $address for $output"
 		output_escaped="${output//./\\.}"
 		output_escaped="${output_escaped//[/\\[}"
 		output_escaped="${output_escaped//]/\\]}"
 		output_escaped="${output_escaped/GEOIP/GEOIP2?}"
 		if ! ./ipv6calc -q -i -m $address | egrep $grepopt "^$output_escaped$"; then
-			[ "$verbose" = "1" ] || echo
+			$verbose || echo
 			echo "ERROR: unexpected result for $address ($output_escaped)"
 			./ipv6calc -q -i -m $address
 			exit 1	
 		fi
-		[ "$verbose" = "1" ] || echo -n "."
+		$verbose || echo -n "."
 	done || exit 1
-	[ "$verbose" = "1" ] || echo
+	$verbose || echo
 	echo "INFO  : $test successful"
 else
 	echo "NOTICE: $test SKIPPED"
@@ -314,31 +314,31 @@ test="run IP2Location tests"
 if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 	echo "INFO  : $test"
 	getexamples_IP2Location | while read address; do
-		[ "$verbose" = "1" ] && echo "Run IP2Location IPv4 showinfo on: $address"
+		$verbose && echo "Run IP2Location IPv4 showinfo on: $address"
 		if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep $grepopt ^IP2LOCATION; then
 			true
 		else
-			[ "$verbose" = "1" ] || echo
+			$verbose || echo
 			echo "Unexpected result (missing IP2LOCATION): ./ipv6calc -q -i -m $address"
 			./ipv6calc -q -i -m $address
 			exit 1
 		fi
-		[ "$verbose" = "1" ] && echo
-		[ "$verbose" = "1" ] || echo -n "."
+		$verbose && echo
+		$verbose || echo -n "."
 	done || exit 1
-	[ "$verbose" = "1" ] || echo
+	$verbose || echo
 	echo "INFO  : $test successful"
 
 	test="run IP2Location showinfo tests"
 	echo "INFO  : $test"
 	testscenarios_showinfo_ip2location | while read address output; do
 		if echo "$output" | grep -q "^OUI="; then
-			if [ $ipv6calc_has_db_ieee -ne 1 ]; then
-				[ "$verbose" = "1" ] && echo "Test: $address for $output SKIPPED (no DB_IEEE compiled in)"
+			if ! $ipv6calc_has_db_ieee; then
+				$verbose && echo "Test: $address for $output SKIPPED (no DB_IEEE compiled in)"
 				continue
 			fi
 		fi
-		[ "$verbose" = "1" ] && echo "Test: $address for $output"
+		$verbose && echo "Test: $address for $output"
 		output_escaped="${output//./\\.}"
 		output_escaped="${output_escaped//[/\\[}"
 		output_escaped="${output_escaped//]/\\]}"
@@ -347,17 +347,17 @@ if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 			./ipv6calc -q -i -m $address
 			exit 1	
 		fi
-		[ "$verbose" = "1" ] && echo
-		[ "$verbose" = "1" ] || echo -n "."
+		$verbose && echo
+		$verbose || echo -n "."
 	done || exit 1
-	[ "$verbose" = "1" ] || echo
+	$verbose || echo
 	echo "INFO  : $test successful"
 
 	if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location6; then
 		test="run IP2Location IPv6 tests"
 		echo "INFO  : $test"
 		getexamples_IP2Location6 | while read address; do
-			[ "$verbose" = "1" ] && echo "Run IP2Location IPv6 showinfo on: $address"
+			$verbose && echo "Run IP2Location IPv6 showinfo on: $address"
 			if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep $grepopt ^IP2LOCATION; then
 				true
 			else
@@ -365,35 +365,35 @@ if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 				./ipv6calc -q -i -m $address
 				exit 1
 			fi
-			[ "$verbose" = "1" ] && echo
-			[ "$verbose" = "1" ] || echo -n "."
+			$verbose && echo
+			$verbose || echo -n "."
 		done || exit 1
-		[ "$verbose" = "1" ] || echo
+		$verbose || echo
 		echo "INFO  : $test successful"
 
 		test="run IP2Location IPv6 showinfo tests"
 		echo "INFO  : $test"
 		testscenarios_showinfo_ip2location6 | while read address output; do
 			if echo "$output" | grep -q "^OUI="; then
-				if [ $ipv6calc_has_db_ieee -ne 1 ]; then
+				if ! $ipv6calc_has_db_ieee; then
 					echo "Test: $address for $output SKIPPED (no DB_IEEE compiled in)"
 					continue
 				fi
 			fi
-			[ "$verbose" = "1" ] && echo "Test: $address for $output"
+			$verbose && echo "Test: $address for $output"
 			output_escaped="${output//./\\.}"
 			output_escaped="${output_escaped//[/\\[}"
 			output_escaped="${output_escaped//]/\\]}"
 			if ! ./ipv6calc -q -i -m $address | grep $grepopt "^$output_escaped$"; then
-				[ "$verbose" = "1" ] || echo
+				$verbose || echo
 				echo "ERROR: unexpected result for $address ($output_escaped)"
 				./ipv6calc -q -i -m $address
 				exit 1	
 			fi
-			[ "$verbose" = "1" ] && echo
-			[ "$verbose" = "1" ] || echo -n "."
+			$verbose && echo
+			$verbose || echo -n "."
 		done || exit 1
-		[ "$verbose" = "1" ] || echo
+		$verbose || echo
 		echo "INFO  : $test successful"
 	fi
 else
@@ -405,31 +405,31 @@ test="run db-ip.com IPv4 tests"
 if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv4; then
 	echo "INFO  : $test"
 	getexamples_DBIPv4 | while read address; do
-		[ "$verbose" = "1" ] && echo "Run DBIP showinfo on: $address"
+		$verbose && echo "Run DBIP showinfo on: $address"
 		if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep $grepopt ^DBIP; then
 			true
 		else
-			[ "$verbose" = "1" ] || echo
+			$verbose || echo
 			echo "Unexpected result (missing DBIP): ./ipv6calc -q -i -m $address"
 			./ipv6calc -q -i -m $address
 			exit 1
 		fi
-		[ "$verbose" = "1" ] && echo
-		[ "$verbose" = "1" ] || echo -n "."
+		$verbose && echo
+		$verbose || echo -n "."
 	done || exit 1
-	[ "$verbose" = "1" ] || echo
+	$verbose || echo
 	echo "INFO  : $test successful"
 
 	test="run db-ip.com IPv4 showinfo tests"
 	echo "INFO  : $test"
 	testscenarios_showinfo_DBIPv4 | while read address output; do
 		if echo "$output" | grep -q "^OUI="; then
-			if [ $ipv6calc_has_db_ieee -ne 1 ]; then
-				[ "$verbose" = "1" ] && echo "Test: $address for $output SKIPPED (no DB_IEEE compiled in)"
+			if ! $ipv6calc_has_db_ieee; then
+				$verbose && echo "Test: $address for $output SKIPPED (no DB_IEEE compiled in)"
 				continue
 			fi
 		fi
-		[ "$verbose" = "1" ] && echo "Test: $address for $output"
+		$verbose && echo "Test: $address for $output"
 		output_escaped="${output//./\\.}"
 		output_escaped="${output_escaped//[/\\[}"
 		output_escaped="${output_escaped//]/\\]}"
@@ -439,10 +439,10 @@ if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv4; then
 			./ipv6calc -q -i -m $address
 			exit 1	
 		fi
-		[ "$verbose" = "1" ] && echo
-		[ "$verbose" = "1" ] || echo -n "."
+		$verbose && echo
+		$verbose || echo -n "."
 	done || exit 1
-	[ "$verbose" = "1" ] || echo
+	$verbose || echo
 	echo "INFO  : $test successful"
 else
 	echo "NOTICE: $test SKIPPED"
@@ -453,45 +453,45 @@ test="run db-ip.com IPv6 tests"
 if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv6; then
 	echo "INFO  : $test"
 	getexamples_DBIPv6 | while read address; do
-		[ "$verbose" = "1" ] && echo "Run IP2Location showinfo on: $address"
+		$verbose && echo "Run IP2Location showinfo on: $address"
 		if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep $grepopt ^DBIP; then
 			true
 		else
-			[ "$verbose" = "1" ] || echo
+			$verbose || echo
 			echo "Unexpected result (missing DBIP): ./ipv6calc -q -i -m $address"
 			./ipv6calc -q -i -m $address
 			exit 1
 		fi
-		[ "$verbose" = "1" ] && echo
-		[ "$verbose" = "1" ] || echo -n "."
+		$verbose && echo
+		$verbose || echo -n "."
 	done || exit 1
-	[ "$verbose" = "1" ] || echo
+	$verbose || echo
 	echo "INFO  : $test successful"
 
 	test="run db-ip.com IPv6 showinfo tests"
 	echo "INFO  : $test"
 	testscenarios_showinfo_DBIPv6 | while read address output; do
 		if echo "$output" | grep -q "^OUI="; then
-			if [ $ipv6calc_has_db_ieee -ne 1 ]; then
+			if ! $ipv6calc_has_db_ieee; then
 				echo "Test: $address for $output SKIPPED (no DB_IEEE compiled in)"
 				continue
 			fi
 		fi
-		[ "$verbose" = "1" ] && echo "Test: $address for $output"
+		$verbose && echo "Test: $address for $output"
 		output_escaped="${output//./\\.}"
 		output_escaped="${output_escaped//[/\\[}"
 		output_escaped="${output_escaped//]/\\]}"
 		output_escaped="${output_escaped/DBIP/DBIP2?}"
 		if ! ./ipv6calc -q -i -m $address | egrep $grepopt "^$output_escaped$"; then
-			[ "$verbose" = "1" ] || echo
+			$verbose || echo
 			echo "ERROR: unexpected result ($output_escaped)"
 			./ipv6calc -q -i -m $address
 			exit 1	
 		fi
-		[ "$verbose" = "1" ] && echo
-		[ "$verbose" = "1" ] || echo -n "."
+		$verbose && echo
+		$verbose || echo -n "."
 	done || exit 1
-	[ "$verbose" = "1" ] || echo
+	$verbose || echo
 	echo "INFO  : $test successful"
 else
 	echo "NOTICE: $test SKIPPED"
@@ -502,7 +502,7 @@ test="run special anon tests"
 if ./ipv6calc -v 2>&1 | grep -qw "ANON_KEEP-TYPE-ASN-CC"; then
 	echo "INFO  : $test"
 	testscenarios_showinfo_anonymized_info | while IFS=";" read input options token result; do
-		[ "$verbose" = "1" ] && echo -n "INFO  : test: $options $input for $result: "
+		$verbose && echo -n "INFO  : test: $options $input for $result: "
 		output="`./ipv6calc -q $options -m -i $input`"
 
 		case $token in
@@ -515,7 +515,7 @@ if ./ipv6calc -v 2>&1 | grep -qw "ANON_KEEP-TYPE-ASN-CC"; then
 		case $token in
 		    match)
 			if echo "$output" | grep -q "^$result$"; then
-				[ "$verbose" = "1" ] && echo "OK"
+				$verbose && echo "OK"
 			else
 				echo " ERROR"
 				echo "$output"
@@ -524,22 +524,22 @@ if ./ipv6calc -v 2>&1 | grep -qw "ANON_KEEP-TYPE-ASN-CC"; then
 			;;
 		    key-word)
 			if echo "$output" | grep "^$key=" | grep $grepopt -w "$word"; then
-				[ "$verbose" = "1" ] && echo " OK"
+				$verbose && echo " OK"
 			else
 				exit 1
 			fi
 			;;
 		    key-no-word)
 			if ! echo "$output" | grep "^$key=" | grep $grepopt -w "$word"; then
-				[ "$verbose" = "1" ] && echo " OK"
+				$verbose && echo " OK"
 			else
 				exit 1
 			fi
 			;;
 		esac
-		[ "$verbose" = "1" ] || echo -n "."
+		$verbose || echo -n "."
 	done || exit 1
-	[ "$verbose" = "1" ] || echo
+	$verbose || echo
 	echo "INFO  : $test successful"
 else
 	echo "NOTICE: $test SKIPPED"

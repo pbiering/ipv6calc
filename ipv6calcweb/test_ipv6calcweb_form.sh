@@ -9,11 +9,11 @@
 #  Test script for form mode of ipv6calcweb
 #
 
-verbose=0
+verbose=false
 while getopts "Vh\?" opt; do
 	case $opt in
 	    V)
-		verbose=1
+		verbose=true
 		;;
 	    *)
 		echo "$0 [-V]"
@@ -75,8 +75,8 @@ if [ ${#tokentime} -ne 10 ]; then
 	exit 1
 fi
 
-[ "$verbose" = "1" ] && echo "DEBUG: extracted tokenhash: $tokenhash"
-[ "$verbose" = "1" ] && echo "DEBUG: extracted tokentime: $tokentime"
+$verbose && echo "DEBUG: extracted tokenhash: $tokenhash"
+$verbose && echo "DEBUG: extracted tokentime: $tokentime"
 
 test="run 'ipv6calcweb.cgi' good tests"
 echo "INFO  : $test"
@@ -84,12 +84,12 @@ testscenarios_auto_good | grep -v "^#" | egrep -vw "(bitstring|base85)" | grep -
 	input_escaped="$(perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' "$input")"
 	QUERY_STRING="input=$input_escaped&tokenhash=$tokenhash&tokentime=$tokentime"
 
-	[ "$verbose" = "1" ] && echo "Test: $input ($input_escaped) ($type)"
-	[ "$verbose" = "1" ] && echo "QUERY_STRING=$QUERY_STRING"
+	$verbose && echo "Test: $input ($input_escaped) ($type)"
+	$verbose && echo "QUERY_STRING=$QUERY_STRING"
 
 	export REMOTE_ADDR REMOTE_HOST HTTP_USER_AGENT SERVER_ADDR SERVER_NAME QUERY_STRING HTTP_IPV6CALCWEB_MODE
 
-	if [ "$verbose" = "1" ]; then 
+	if $verbose; then 
 		OUTPUT="`perl -w $perlopt ipv6calcweb.cgi`"
 		result=$?
 	else
@@ -97,7 +97,7 @@ testscenarios_auto_good | grep -v "^#" | egrep -vw "(bitstring|base85)" | grep -
 		result=$?
 	fi
 
-	[ "$verbose" = "1" ] && echo "Result: $result"
+	$verbose && echo "Result: $result"
 
 	if [ $result -ne 0 ]; then
 		echo "TEST FAILED"
@@ -109,7 +109,7 @@ testscenarios_auto_good | grep -v "^#" | egrep -vw "(bitstring|base85)" | grep -
 			exit 1
 		fi
 	fi
-	[ "$verbose" = "1" ] || echo -n "."
+	$verbose || echo -n "."
 done || exit $?
-[ "$verbose" = "1" ] || echo
+$verbose || echo
 echo "INFO  : $test successful"

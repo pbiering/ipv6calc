@@ -8,11 +8,11 @@
 #
 # Test patterns for ipv6calc filter & test_prefix
 
-verbose=0
+verbose=false
 while getopts "Vh\?" opt; do
 	case $opt in
 	    V)
-		verbose=1
+		verbose=true
 		;;
 	    *)
 		echo "$0 [-V]"
@@ -50,7 +50,7 @@ testscenarios_filter | while read input filter_feature; do
 		fi
 	fi
 		
-	[ "$verbose" = "1" ] && echo "INFO  : test './ipv6calc -A filter -E $filter' for: $input"
+	$verbose && echo "INFO  : test './ipv6calc -A filter -E $filter' for: $input"
 	output="`echo "$input" | ./ipv6calc -A filter -E $filter`"
 	retval=$?
 	if [ $retval -ne 0 ]; then
@@ -63,15 +63,15 @@ testscenarios_filter | while read input filter_feature; do
 			echo "ERROR : result '$output' doesn't match '$input'!"
 			exit 1
 		else
-			[ "$verbose" = "1" ] && echo "INFO  : result ok!" || true
+			$verbose && echo "INFO  : result ok!" || true
 		fi
 	else
 		echo "Result empty: echo $input | ./ipv6calc -A filter -E $filter"
 		exit 1
 	fi
-	[ "$verbose" = "1" ] || echo -n "."
+	$verbose || echo -n "."
 done || exit 1
-[ "$verbose" = "1" ] || echo
+$verbose || echo
 echo "INFO  : $test successful"
 
 # subsequent filter
