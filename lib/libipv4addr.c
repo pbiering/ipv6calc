@@ -464,7 +464,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const siz
 		} else if (*p == '.' && !in_prefix_len && digit) {
 			digit = 0;
 			i++;
-		} else if (*p == '/' && !in_prefix_len) {
+		} else if (*p == '/' && !in_prefix_len && p != addrstring) {
 			digit = 0;
 			in_prefix_len = 1;
 			i = 4;

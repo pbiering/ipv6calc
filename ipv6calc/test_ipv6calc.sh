@@ -266,6 +266,8 @@ cat <<END | grep -v '^#'
 2.2.3.4/-1									ipv4addr
 2.2.3.4/33									ipv4addr
 1.2.3.4/									ipv4addr
+/10										ipv4addr
+./10										ipv4addr
 01:23:r5:67:89:01								mac
 2002:102:304::r1								ipv6addr
 2002:102:304::1/-1								ipv6addr
