@@ -136,10 +136,6 @@ options="$options -$option -A"
 if $flag_update; then
 	echo "INFO  : call now create program with options: $options"
 	nice -n 19 $command $options
-	rc=$?
 else
 	echo "NOTICE: nothing to do for proto IPv$proto"
-	rc=0
 fi
-
-exit $rc

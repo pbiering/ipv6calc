@@ -12,9 +12,6 @@ OPTIONS_CONFIGURE=""
 flag_no_make=false
 use_ip2location=false
 use_ip2location_dyn=false
-use_external=false
-use_mmdb=false
-use_mmdb_dyn=false
 RELAX=false
 SKIP_STATIC=false
 SKIP_TEST=false
@@ -33,27 +30,22 @@ while [ "$1" != "$LAST" ]; do
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --enable-mmdb --enable-external --enable-mod_ipv6calc"
 		SKIP_STATIC=true
 		use_ip2location=true
-		use_external=true
 		;;
 	    '--ALL'|'-A')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --enable-mmdb --with-ip2location-dynamic --with-mmdb-dynamic --enable-external --enable-mod_ipv6calc"
 		SKIP_STATIC=true
 		use_ip2location=true
-		use_external=true
 		;;
 	    '--mmdb'|'-m')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-mmdb"
 		SKIP_STATIC=true
-		use_mmdb=true
 		;;
 	    '--mmdb-dyn'|'-M')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-mmdb --with-mmdb-dynamic"
 		SKIP_STATIC=true
-		use_mmdb=true
-		use_mmdb_dyn=true
 		;;
 	    '--ip2location'|'-i')
 		shift
@@ -72,7 +64,6 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-external"
 		SKIP_STATIC=true
-		use_external=true
 		;;
 	    '--disable-db-ieee')
 		shift
