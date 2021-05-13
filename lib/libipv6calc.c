@@ -215,12 +215,18 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		} else DEBUGPRINT_WA(DEBUG_libipv6calc, " check FORMAT_base85 not successful, result: %s", resultstring);
 	};
 	
-	if (((length >= 7 && length <= 15 && numdots == 3 && numcolons == 0 && numdigits == numxdigits && numdigits >= 4 && numdigits <= 12 && numslashes == 0 )
-	    || ((length >= 9 && length <= 18 && numdots == 3 && numcolons == 0 && numdigits == numxdigits && numdigits >= 5 && numdigits <= 14 && numslashes == 1)))
-	    && (numdots + numdigits + numslashes) == length) {
-		/* IPv4: d{1-3}.d{1-3}.d{1-3}.d{1-3} or d{1-3}.d{1-3}.d{1-3}.d{1-3}/d{1-2} */
-		type = FORMAT_ipv4addr;
-		goto END_libipv6calc_autodetectinput;
+	if (numcolons == 0 && numdigits == numxdigits && numslashes <= 1 && (numdots + numdigits + numslashes) == length) {
+		unsigned int a3 = numslashes ? 3 : 0;
+		unsigned int a2 = numslashes ? 2 : 0;
+		unsigned int a1 = numslashes ? 1 : 0;
+		if (   (numdots == 3 && length >= 6+a2 && length <= 15+a3 && numdigits >= 3+a1 && numdigits <= 12+a2)
+		    || (numdots == 2 && length >= 4+a2 && length <= 11+a3 && numdigits >= 2+a1 && numdigits <=  9+a2)
+		    || (numdots == 1 && length >= 2+a2 && length <=  7+a3 && numdigits >= 1+a1 && numdigits <=  6+a2)
+		    || (numdots == 0 && length >= 1+a2 && length <=  4+a3 && numdigits >= 1+a1 && numdigits <=  3+a2)) {
+			/* IPv4: d{1-3}(.d{1-3})?(.d{1-3})?(.d{0-3})?(/d{1-2})? */
+			type = FORMAT_ipv4addr;
+			goto END_libipv6calc_autodetectinput;
+		}
 	};
 
 	if ( strncmp(string, "\\[", 2) == 0 ) {

@@ -436,116 +436,70 @@ END_ipv4addr_gettype:
  * ret: ==0: ok, !=0: error
  */
 int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv4addr *ipv4addrp) {
-	int retval = 1, result, i;
-	unsigned int cpoints = 0, cdigits = 0;
-	char *addronlystring, *cp;
-	int expecteditems = 0;
-	int compat[4];
-	char tempstring[NI_MAXHOST], *cptr, **ptrptr;
+	int in_prefix_len = 0, digit = 0;
+	unsigned int compat[5], i;
 	uint32_t typeinfo;
-
-	ptrptr = &cptr;
+	const char *p;
 
 	resultstring[0] = '\0'; /* clear result string */
 
 	DEBUGPRINT_WA(DEBUG_libipv4addr, "Got input '%s'",  addrstring);
 
-	if ((strlen(addrstring) < 7) || (strlen(addrstring) > 18)) {
-		/* min: 0.0.0.0 */
-		/* max: 123.123.123.123/32 */
-		snprintf(resultstring, resultstring_length, "Error in given dot notated IPv4 address, has not 7 to 18 chars!");
+	if (*addrstring == '\0') {
+		snprintf(resultstring, resultstring_length, "Error in given dot notated IPv4 address: empty string!");
 		return (1);
-	};
+	}
 
-	if (strlen(addrstring) >= sizeof(tempstring)) {
-		ERRORPRINT_WA("Input too long: %s", addrstring);
+	memset(compat, 0, sizeof(compat));
+	for (p = addrstring, i = 0; *p && i < (in_prefix_len ? 5 : 4); p++)
+	{
+		if (*p >= '0' && *p <= '9') {
+			digit = 1;
+			compat[i] = compat[i] * 10 + (*p - '0');
+			if (compat[i] > (in_prefix_len ? 32 : 255)) {
+				snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (%d on position %d)!",
+			                 addrstring, compat[i], (int)(p - addrstring + 1));
+				return (1);
+			}
+		} else if (*p == '.' && !in_prefix_len && digit) {
+			digit = 0;
+			i++;
+		} else if (*p == '/' && !in_prefix_len) {
+			digit = 0;
+			in_prefix_len = 1;
+			i = 4;
+		} else {
+			snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (illegal char at %d)!",
+			         addrstring, (int)(p - addrstring + 1));
+			return (1);
+		}
+	}
+	if (p[-1] == '/') {
+		snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (illegal char at %d)!",
+		         addrstring, (int)(p - addrstring));
 		return (1);
-	};
+	}
+	if (i >= (in_prefix_len ? 5 : 4)) {
+		snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (more than 3 dots)!", addrstring);
+		return (1);
+	}
 
-	snprintf(tempstring, sizeof(tempstring), "%s", addrstring);
-	
 	ipv4addr_clearall(ipv4addrp);
-
-	/* save prefix length first, if available */
-	addronlystring = strtok_r(tempstring, "/", ptrptr);
-
-	if ( addronlystring == NULL ) {
-		fprintf(stderr, "Strange input (extracting prefix length): %s\n", addrstring);
-		return (1);
-	};
-
-	cp = strtok_r(NULL, "/", ptrptr);
-	if ( cp != NULL ) {
-		i = atoi(cp);
-		if (i < 0 || i > 32 ) {
-			snprintf(resultstring, resultstring_length, "Illegal prefix length: '%s'", cp);
-			retval = 1;
-			return (retval);
-		};
+	if (in_prefix_len) {
 		ipv4addrp->flag_prefixuse = 1;
-		ipv4addrp->prefixlength = (uint8_t) i;
-		
+		ipv4addrp->prefixlength = (uint8_t) compat[4];
+
 		DEBUGPRINT_WA(DEBUG_libipv4addr, "prefix length %u", (unsigned int) ipv4addrp->prefixlength);
 		DEBUGPRINT_WA(DEBUG_libipv4addr, "flag_prefixuse %d", ipv4addrp->flag_prefixuse);
-	};
-
-	/* count "." and digits */
-	for (i = 0; i < (int) strlen(addronlystring); i++) {
-		if (addronlystring[i] == '.') {
-			cpoints++;
-		};
-		if (isdigit(addronlystring[i])) {
-			cdigits++;
-		};
-	};
-
-	/* check amount of ".", must be 3 */
-	if ( cpoints != 3 ) {
-		snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (only %d dots)!", addronlystring, cpoints);
-		retval = 1;
-		return (retval);
-	};
-
-	/* amount of "." and digits must be length */
-	if (cdigits + cpoints != strlen(addronlystring)) {
-		snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (illegal chars)!", addronlystring);
-		retval = 1;
-		return (retval);
-	};
-
-	/* clear variables */
-	for ( i = 0; i <= 3; i++ ) {
-		compat[i] = 0;
-	};
-
-	expecteditems = 4;
-	result = sscanf(addronlystring, "%d.%d.%d.%d", &compat[0], &compat[1], &compat[2], &compat[3]);
-	
-	for ( i = 0; i <= 3; i++ ) {
-		if ( ( compat[i] < 0 ) || ( compat[i] > 255 ) )	{
-			snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (%d on position %d)!", addronlystring, compat[i], i+1);
-			retval = 1;
-			return (retval);
-		};
-	};
-	
-	DEBUGPRINT_WA(DEBUG_libipv4addr, "reading into array, got items: %d", result);
-
-	if ( result != expecteditems ) {
-		snprintf(resultstring, resultstring_length, "Error in given IPv4 address, splitting of %s returns %d items instead of %d!", addronlystring, result, expecteditems);
-		retval = 1;
-		return (retval);
-	};
-
-	/* copy into structure */
+	}
 	for ( i = 0; i <= 3; i++ ) {
 		DEBUGPRINT_WA(DEBUG_libipv4addr, "Octett %d = %d", i, compat[i]);
-		ipv4addr_setoctet(ipv4addrp, (unsigned int) i, (unsigned int) compat[i]);
+		ipv4addr_setoctet(ipv4addrp, i, compat[i]);
 	};
 
 	DEBUGPRINT_WA(DEBUG_libipv4addr, "In structure %03u %03u %03u %03u", (unsigned int) ipv4addr_getoctet(ipv4addrp, 0), (unsigned int) ipv4addr_getoctet(ipv4addrp, 1), (unsigned int) ipv4addr_getoctet(ipv4addrp, 2), (unsigned int) ipv4addr_getoctet(ipv4addrp, 3));
 	DEBUGPRINT_WA(DEBUG_libipv4addr, "In structure %8x", (unsigned int) ipv4addr_getdword(ipv4addrp));
-	
+
 	typeinfo = ipv4addr_gettype(ipv4addrp); 
 
 	DEBUGPRINT_WA(DEBUG_libipv4addr, "Got typeinfo: 0x%08x", typeinfo);
@@ -553,8 +507,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const siz
 	ipv4addrp->typeinfo = typeinfo;
 	ipv4addrp->flag_valid = 1;
 
-	retval = 0;
-	return (retval);
+	return (0);
 };
 
 
@@ -683,12 +636,54 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, const 
 int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
 	char tempstring[NI_MAXHOST];
 
-	/* address */
-	snprintf(tempstring, sizeof(tempstring), "%u.%u.%u.%u", (unsigned int) ipv4addr_getoctet(ipv4addrp, 0), (unsigned int) ipv4addr_getoctet(ipv4addrp, 1), (unsigned int) ipv4addr_getoctet(ipv4addrp, 2), (unsigned int) ipv4addr_getoctet(ipv4addrp, 3));
-
 	if ((formatoptions & FORMATOPTION_machinereadable) != 0) {
-		snprintf(resultstring, resultstring_length, "IPV4=%s", tempstring);
+		snprintf(resultstring, resultstring_length, "IPV4=%u.%u.%u.%u",
+		         (unsigned int) ipv4addr_getoctet(ipv4addrp, 0),
+		         (unsigned int) ipv4addr_getoctet(ipv4addrp, 1),
+		         (unsigned int) ipv4addr_getoctet(ipv4addrp, 2),
+		         (unsigned int) ipv4addr_getoctet(ipv4addrp, 3));
 	} else {
+		int oct_to_print = 4;
+
+		if ((formatoptions & FORMATOPTION_printcompressed) != 0) {
+			for (; oct_to_print > 1; oct_to_print--)
+				if (ipv4addr_getoctet(ipv4addrp, oct_to_print-1) != 0)
+					break;
+		}
+
+		switch (oct_to_print) {
+		case 4:
+			snprintf(tempstring, sizeof(tempstring), "%u.%u.%u.%u",
+			         (unsigned int) ipv4addr_getoctet(ipv4addrp, 0),
+			         (unsigned int) ipv4addr_getoctet(ipv4addrp, 1),
+			         (unsigned int) ipv4addr_getoctet(ipv4addrp, 2),
+			         (unsigned int) ipv4addr_getoctet(ipv4addrp, 3));
+			break;
+
+		case 3:
+			snprintf(tempstring, sizeof(tempstring), "%u.%u.%u",
+			         (unsigned int) ipv4addr_getoctet(ipv4addrp, 0),
+			         (unsigned int) ipv4addr_getoctet(ipv4addrp, 1),
+			         (unsigned int) ipv4addr_getoctet(ipv4addrp, 2));
+			break;
+
+		case 2:
+			snprintf(tempstring, sizeof(tempstring), "%u.%u",
+			         (unsigned int) ipv4addr_getoctet(ipv4addrp, 0),
+			         (unsigned int) ipv4addr_getoctet(ipv4addrp, 1));
+			break;
+
+		case 1:
+			snprintf(tempstring, sizeof(tempstring), "%u",
+			         (unsigned int) ipv4addr_getoctet(ipv4addrp, 0));
+			break;
+
+		default:
+			/* should not happen here */
+			fprintf(stderr, "%s/%s: 'oct_to_print' has an unexpected illegal value!\n", __FILE__, __func__);
+			exit(EXIT_FAILURE);
+		}
+
 		if ((ipv4addrp->flag_prefixuse == 1) && ((formatoptions & FORMATOPTION_no_prefixlength) == 0)) {
 			snprintf(resultstring, resultstring_length, "%s/%d", tempstring, ipv4addrp->prefixlength);
 		} else {
@@ -696,12 +691,6 @@ int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, cha
 		};
 	};
 
-	/* netmask/prefixlength */
-	if (ipv4addrp->flag_prefixuse == 1) {
-		/* to be filled */
-		/* IPV4NETMASK= */
-	};
-	
 	return(0);
 };
 
