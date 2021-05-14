@@ -441,7 +441,8 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const siz
 	uint32_t typeinfo;
 	const char *p;
 
-	resultstring[0] = '\0'; /* clear result string */
+	if (resultstring_length > 0)
+		resultstring[0] = '\0'; /* clear result string */
 
 	DEBUGPRINT_WA(DEBUG_libipv4addr, "Got input '%s'",  addrstring);
 
