@@ -485,6 +485,16 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const siz
 		return (1);
 	}
 
+	/* do not allow '1.2', but allow '1.2/12' */
+	if (!in_prefix_len && i < 3) {
+		snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (missing %d dots)!", addrstring, 3-i);
+		return (1);
+	}
+	if (!in_prefix_len && p[-1] == '.') {
+		snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (missing last octet)!", addrstring);
+		return (1);
+	}
+
 	ipv4addr_clearall(ipv4addrp);
 	if (in_prefix_len) {
 		ipv4addrp->flag_prefixuse = 1;

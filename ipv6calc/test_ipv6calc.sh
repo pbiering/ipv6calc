@@ -91,6 +91,7 @@ cat <<END | grep -v '^#'
 --addr_to_uncompressed --maskprefix 3ffe:ffff:100:f101::1/64		=3ffe:ffff:100:f101:0:0:0:0/64
 --addr_to_uncompressed --masksuffix 3ffe:ffff:100:f101:c000::1/64	=0:0:0:0:c000:0:0:1/64
 --addr_to_uncompressed --uppercase ::ffff:13.1.68.3			=0:0:0:0:0:FFFF:13.1.68.3
+--out ipv4addr --no-prefixlength 1.2.3.4				=1.2.3.4
 --out ipv4addr --no-prefixlength 1.2.3.4/24				=1.2.3.4
 --out ipv4addr --no-prefixlength 1.2.3/24				=1.2.3.0
 --out ipv4addr --no-prefixlength 1.2/24					=1.2.0.0
@@ -266,6 +267,15 @@ cat <<END | grep -v '^#'
 2.2.3.4/-1									ipv4addr
 2.2.3.4/33									ipv4addr
 1.2.3.4/									ipv4addr
+1										ipv4addr
+1.										ipv4addr
+1.2										ipv4addr
+1.2.										ipv4addr
+1.2.3										ipv4addr
+1.2.3.										ipv4addr
+1.2.3.4.									ipv4addr
+1.2.3.4.5									ipv4addr
+1.2.3.4.5/10									ipv4addr
 /10										ipv4addr
 ./10										ipv4addr
 01:23:r5:67:89:01								mac
