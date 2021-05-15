@@ -456,6 +456,11 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const siz
 	{
 		if (*p >= '0' && *p <= '9') {
 			digit = 1;
+			if (in_prefix_len && p[0] == '0' && p[1] && compat[i] == 0) {
+				snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (CIDR prefix length cannot start with zero)!",
+			                 addrstring);
+				return (1);
+			}
 			compat[i] = compat[i] * 10 + (*p - '0');
 			if (compat[i] > (in_prefix_len ? 32 : 255)) {
 				snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (%d on position %d)!",

@@ -96,6 +96,9 @@ cat <<END | grep -v '^#'
 --out ipv4addr --no-prefixlength 1.2.3/24				=1.2.3.0
 --out ipv4addr --no-prefixlength 1.2/24					=1.2.0.0
 --out ipv4addr --no-prefixlength 1/24					=1.0.0.0
+--out ipv4addr 1.2.3.4/0						=1.2.3.4/0
+--out ipv4addr 0/0							=0.0.0.0/0
+--out ipv4addr --printcompressed 0/0					=0/0
 --out ipv4addr --printcompressed 1.2.3.4/24				=1.2.3.4/24
 --out ipv4addr --printcompressed 1.2.3.0/24				=1.2.3/24
 --out ipv4addr --printcompressed 1.2.3/24				=1.2.3/24
@@ -267,6 +270,8 @@ cat <<END | grep -v '^#'
 2.2.3.4/-1									ipv4addr
 2.2.3.4/33									ipv4addr
 1.2.3.4/									ipv4addr
+1.2.3.4/00									ipv4addr
+0/00										ipv4addr
 1										ipv4addr
 1.										ipv4addr
 1.2										ipv4addr
