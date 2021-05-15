@@ -8,7 +8,12 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
+	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20210515/VZ:
+	Shell scripts refinement
+	add support for compressed IPv4 addresses, like 10/8
+
 20210116/PB:
 	all */test_*.sh: enforce use of "bash" (FreeBSD regression test result)
 	ipv6loganon/test_ipv6loganon.sh: fix for "sed" which is not supporting \W (FreeBSD regression test result)
