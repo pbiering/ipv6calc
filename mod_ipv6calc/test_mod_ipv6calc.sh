@@ -7,8 +7,6 @@
 #
 # Test patterns for ipv6calc conversions
 
-verbose=0
-
 for BIN_PS in /bin/ps /usr/bin/ps; do
 	if [ -x "$BIN_PS" ]; then
 		break

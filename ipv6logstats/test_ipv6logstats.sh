@@ -7,11 +7,11 @@
 #
 # Test program for "ipv6logstats"
 
-verbose=0
+verbose=false
 while getopts "Vh\?" opt; do
 	case $opt in
 	    V)
-		verbose=1
+		verbose=true
 		;;
 	    *)
 		echo "$0 [-V]"
@@ -115,7 +115,7 @@ fi
 echo 
 
 echo "Run 'ipv6logstats' version test in debug mode..."
-if [ "$verbose" = "1" ]; then
+if $verbose; then
 	./ipv6logstats -vvv -d -1
 	retval=$?
 else
@@ -142,7 +142,7 @@ echo "Run 'ipv6logstats' function tests..."
 #testscenarios
 test="run 'ipv6logstats' test #1"
 echo "INFO  : $test"
-if [ "$verbose" = "1" ]; then
+if $verbose; then
 	testscenarios | ./ipv6logstats -q
 	retval=$?
 else
@@ -159,7 +159,7 @@ echo "INFO  : $test successful"
 #testscenarios (columns)
 test="run 'ipv6logstats' columns"
 echo "INFO  : $test"
-if [ "$verbose" = "1" ]; then
+if $verbose; then
 	testscenarios | ./ipv6logstats -q -c
 	retval=$?
 else
@@ -176,7 +176,7 @@ echo "INFO  : $test successful"
 test="run 'ipv6logstats' test #3"
 echo "INFO  : $test"
 if ./ipv6logstats -v 2>&1 | grep -qw "STAT_CC"; then
-	if [ "$verbose" = "1" ]; then
+	if $verbose; then
 		testscenarios | ./ipv6logstats -q | grep -q '\*3\*CC-proto-code-list/ALL'
 		retval=$?
 	else
@@ -193,34 +193,36 @@ else
 fi
 
 # testscenarios matching
+feature_cc=false
 if ./ipv6logstats -v 2>&1 | grep -qw "STAT_CC"; then
-	feature_cc=1
+	feature_cc=true
 fi
 
+feature_as=false
 if ./ipv6logstats -v 2>&1 | grep -qw "STAT_AS"; then
-	feature_as=1
+	feature_as=true
 fi
 
 test="run 'ipv6logstats' match test"
 echo "INFO  : $test"
 testscenarios_match | while read ip match; do
-	[ "$verbose" = "1" ] && echo -n "INFO  : test $ip for match $match: "
+	$verbose && echo -n "INFO  : test $ip for match $match: "
 
 	if echo "$match" | grep -q "^AS"; then
-		if [ "$feature_as" != "1" ]; then
+		if ! $feature_as; then
 			echo "SKIPPED (missing support)"
 			continue
 		fi
 	fi
 
 	if echo "$match" | grep -q "^CC"; then
-		if [ "$feature_cc" != "1" ]; then
+		if $feature_cc; then
 			echo "SKIPPED (missing support)"
 			continue
 		fi
 	fi
 
-	if [ "$verbose" = "1" ]; then
+	if $verbose; then
 		echo "$ip" | ./ipv6logstats -q | grep -q "$match\W*1"
 		result=$?
 	else
@@ -236,7 +238,7 @@ done || exit 1
 echo "INFO  : $test successful"
 
 echo "INFO  : test scenario with huge amount of addresses..."
-if [ "$verbose" = "1" ]; then
+if $verbose; then
 	testscenario_hugelist ipv4 | ./ipv6logstats -q >/dev/null
 	result=$?
 else

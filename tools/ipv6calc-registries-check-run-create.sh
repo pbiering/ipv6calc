@@ -5,7 +5,7 @@
 # Version    : $Id$
 # Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de>
 
-flag_update=0
+flag_update=false
 
 help() {
 	cat <<END
@@ -20,7 +20,7 @@ END
 while getopts "d:uS:D:HB46C:h\?" opt; do
 	case $opt in
 	    u)
-		flag_update="1"
+		flag_update=true
 		;;
 	    H)
 		option="$opt"
@@ -115,17 +115,17 @@ if [ -f "$file" ]; then
 	echo "INFO  : found newer than $file files: IANA=$IANA ARIN=$ARIN APNIC=$APNIC RIPENCC=$RIPENCC LACNIC=$LACNIC AFRINIC=$AFRINIC LISP=$LISP"
 
 	if [ $IANA -gt 0 -o $ARIN -gt 0 -o $APNIC -gt 0 -o $RIPENCC -gt 0 -o $LACNIC -gt 0 -o $AFRINIC -gt 0 -o $LISP -gt 0 ]; then
-		flag_update=1
+		flag_update=true
 	elif [ -n "$file2" -a -f "$file2" ]; then
 		# 2nd file given
 		if [ "$file" -nt "$file2" ]; then
 			echo "INFO  : found newer than $file: $file2"
-			flag_update=1
+			flag_update=true
 		fi
 	fi
 
 else
-	flag_update=1
+	flag_update=true
 fi
 
 [ -n "$src_dir" ] && options="$options -S $src_dir"
@@ -133,13 +133,9 @@ fi
 [ -n "$debug"   ] && options="$options -d $debug"
 options="$options -$option -A"
 
-if [ $flag_update -eq 1 ]; then
+if $flag_update; then
 	echo "INFO  : call now create program with options: $options"
 	nice -n 19 $command $options
-	rc=$?
 else
 	echo "NOTICE: nothing to do for proto IPv$proto"
-	rc=0
 fi
-
-exit $rc

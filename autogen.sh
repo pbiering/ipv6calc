@@ -9,59 +9,61 @@
 
 OPTIONS_CONFIGURE=""
 
+flag_no_make=false
+use_ip2location=false
+use_ip2location_dyn=false
+RELAX=false
+SKIP_STATIC=false
+SKIP_TEST=false
+USE_CLANG=false
+
 LAST=""
 while [ "$1" != "$LAST" ]; do
 	LAST="$1"
 	case $1 in
 	    '--no-make'|'-n')
 		shift
-		flag_no_make=1
+		flag_no_make=true
 		;;
 	    '--all'|'-a')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --enable-mmdb --enable-external --enable-mod_ipv6calc"
-		SKIP_STATIC=1
-		use_ip2location=1
-		use_external=1
+		SKIP_STATIC=true
+		use_ip2location=true
 		;;
 	    '--ALL'|'-A')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --enable-mmdb --with-ip2location-dynamic --with-mmdb-dynamic --enable-external --enable-mod_ipv6calc"
-		SKIP_STATIC=1
-		use_ip2location=1
-		use_external=1
+		SKIP_STATIC=true
+		use_ip2location=true
 		;;
 	    '--mmdb'|'-m')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-mmdb"
-		SKIP_STATIC=1
-		use_mmdb=1
+		SKIP_STATIC=true
 		;;
 	    '--mmdb-dyn'|'-M')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-mmdb --with-mmdb-dynamic"
-		SKIP_STATIC=1
-		use_mmdb=1
-		use_mmdb_dyn=1
+		SKIP_STATIC=true
 		;;
 	    '--ip2location'|'-i')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location"
-		SKIP_STATIC=1
-		use_ip2location=1
+		SKIP_STATIC=true
+		use_ip2location=true
 		;;
 	    '--ip2location-dyn'|'-I')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --with-ip2location-dynamic"
-		SKIP_STATIC=1
-		use_ip2location=1
-		use_ip2location_dyn=1
+		SKIP_STATIC=true
+		use_ip2location=true
+		use_ip2location_dyn=true
 		;;
 	    '--external'|'-e')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-external"
-		SKIP_STATIC=1
-		use_external=1
+		SKIP_STATIC=true
 		;;
 	    '--disable-db-ieee')
 		shift
@@ -82,19 +84,19 @@ while [ "$1" != "$LAST" ]; do
 	    '-S')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-shared"
-		SKIP_STATIC=1
+		SKIP_STATIC=true
 		;;
 	    '--no-static-build')
 		shift
-		SKIP_STATIC=1
+		SKIP_STATIC=true
 		;;
 	    '--no-test')
 		shift
-		SKIP_TEST=1
+		SKIP_TEST=true
 		;;
 	    '--clang')
 		shift
-		USE_CLANG=1
+		USE_CLANG=true
 		;;
 	    '--gcc-Os')
 		shift
@@ -106,7 +108,7 @@ while [ "$1" != "$LAST" ]; do
 		;;
 	    '--relax')
 		shift
-		RELAX=1
+		RELAX=true
 		;;
 	    '-?'|'-h'|'--help')
 		echo "Supported options:"
@@ -145,13 +147,13 @@ done
 
 source ./autogen-support.sh "source"
 
-if [ "$use_ip2location" = "1" ]; then
+if $use_ip2location; then
 	if ! echo "$OPTIONS_CONFIGURE" | grep -q 'with-ip2location-headers='; then
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE"
 	fi
 fi
 
-if [ "$RELAX" = "1" ]; then
+if $RELAX; then
 	if ! echo "$OPTIONS_CONFIGURE" | grep -q 'disable-compiler-warning-to-error'; then
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --disable-compiler-warning-to-error"
 	fi
@@ -162,7 +164,7 @@ if [ -f Makefile ]; then
 	$MAKE autoclean
 fi
 
-if [ "$USE_CLANG" = "1" ]; then
+if $USE_CLANG; then
 	if [ -x "/usr/bin/clang" ]; then
 		export CC=/usr/bin/clang
 	else
@@ -187,7 +189,7 @@ autoconf || exit 1
 echo "*** run: configure, options: $OPTIONS_CONFIGURE $*"
 CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS -Wl,--as-needed" ./configure --bindir=/usr/bin --mandir=/usr/share/man $OPTIONS_CONFIGURE $* || exit 1
 
-if [ "$flag_no_make" = "1" ]; then
+if $flag_no_make; then
 	echo
 	echo "Stop before running 'make'"
 	exit
@@ -196,7 +198,7 @@ fi
 echo "*** run: make clean"
 $MAKE clean || exit 1
 
-if [ "$use_ip2location_dyn" = "1" ]; then
+if $use_ip2location_dyn; then
 	if ldd ./ipv6calc/ipv6calc | grep -i IPLocation; then
 		echo "ERROR : dynamic library mode enabled, but ldd of binary still reports reference to IP2Location"
 		exit 1
@@ -216,7 +218,7 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-if [ "$SKIP_TEST" = "1" ]; then
+if $SKIP_TEST; then
 	echo "*** skip: make test"
 else
 	echo "*** run: make test"
@@ -227,13 +229,13 @@ else
 	fi
 fi
 
-if [ "$SKIP_STATIC" != "1" -a ! -e /etc/redhat-release ]; then
+if ! $SKIP_STATIC && ! [ -e /etc/redhat-release ]; then
 	# skip static on non Fedora/RedHat/CentOS systems
-	SKIP_STATIC="1"
+	SKIP_STATIC=true
 	echo "NOTICE: 'make static' skipped on non Fedora/RedHat/CentOS systems"
 fi
 
-if [ "$SKIP_STATIC" != "1" ]; then
+if ! $SKIP_STATIC; then
 	echo "*** run: make static"
 	$MAKE static
 	if [ $? -ne 0 ]; then

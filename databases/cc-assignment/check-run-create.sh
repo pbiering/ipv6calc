@@ -7,7 +7,7 @@
 
 #set -x
 
-flag_update=0
+flag_update=false
 file_header="db_cc_reg_assignment.h"
 
 if [ -f $file_header ]; then
@@ -20,13 +20,13 @@ if [ -f $file_header ]; then
 	echo "Found newer than $file_header file: ARIN=$ARIN APNIC=$APNIC RIPENCC=$RIPENCC LACNIC=$LACNIC AFRINIC=$AFRINIC"
 
 	if [ $ARIN -gt 0 -o $APNIC -gt 0 -o $RIPENCC -gt 0 -o $LACNIC -gt 0 -o $AFRINIC -gt 0 ]; then
-		flag_update=1
+		flag_update=true
 	fi
 else
-	flag_update=1
+	flag_update=true
 fi
 
-if [ $flag_update -eq 1 ]; then
+if $flag_update; then
 	./create-cc-to-registry-list.pl
 else
 	echo " Nothing to do!"

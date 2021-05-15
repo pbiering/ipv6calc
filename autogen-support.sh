@@ -246,7 +246,7 @@ build_library() {
 			echo "INFO  : changed to directory: $base_devel/$nameversion"
 		fi
 
-		if [ "$dry_run" = "1" ]; then
+		if $dry_run; then
 			echo "INFO  : would build library (dry-run): $name-$version ($nameversion)"
 			continue
 		else
@@ -323,7 +323,7 @@ clean_versions() {
 			continue
 		fi
 
-		if [ "$dry_run" = "1" ]; then
+		if $dry_run; then
 			echo "INFO  : would remove: $base_devel/$nameversion" >&2
 			continue
 		else
@@ -386,7 +386,7 @@ extract_versions() {
 			continue
 		fi
 
-		if [ "$dry_run" = "1" ]; then
+		if $dry_run; then
 			echo "INFO  : would extract source package (dry-run): $name-$version ($nameversion) from $file" >&2
 			continue
 		else
@@ -480,7 +480,7 @@ download_versions() {
 			return 1
 		fi
 
-		if [ "$dry_run" = "1" ]; then
+		if $dry_run; then
 			echo "INFO  : would download source package (dry-run): $name-$version from $url $outfile_option_info" >&2
 			continue
 		else
@@ -538,34 +538,40 @@ if [ "$1" != "source" ]; then
 	# use script not only as source (function-mode)
 
 	#### Main
+	dry_run=false
+	do_download=false
+	do_clean=false
+	do_extract=false
+	do_build=false
+
 	while getopts ":ADCXnB?h" opt; do
 		case $opt in
 		    'n')
-			dry_run=1
+			dry_run=true
 			echo "NOTICE: dry-run selected" >&2
 			;;
 		    'A')
 			action="prepare"
-			do_download="1"
-			do_clean="1"
-			do_extract="1"
-			do_build="1"
+			do_download=true
+			do_clean=true
+			do_extract=true
+			do_build=true
 			;;
 		    'C')
 			action="prepare"
-			do_clean="1"
+			do_clean=true
 			;;
 		    'D')
 			action="prepare"
-			do_download="1"
+			do_download=true
 			;;
 		    'X')
 			action="prepare"
-			do_extract="1"
+			do_extract=true
 			;;
 		    'B')
 			action="prepare"
-			do_build="1"
+			do_build=true
 			;;
 		    \?|h)
 			help
@@ -582,7 +588,7 @@ if [ "$1" != "source" ]; then
 
 	case $action in
 	    'prepare')
-		if [ "$do_download" = "1" ]; then
+		if $do_download; then
 			if [ -z "$*" ]; then
 				download_versions GeoIP || exit 1
 				download_versions IP2Location || exit 1
@@ -591,7 +597,7 @@ if [ "$1" != "source" ]; then
 			fi
 			echo "INFO  : following libaries were successfully downloaded: $download_library_status" >&2
 		fi
-		if [ "$do_clean" = "1" ]; then
+		if $do_clean; then
 			if [ -z "$*" ]; then
 				clean_versions GeoIP || exit 1
 				clean_versions IP2Location || exit 1
@@ -600,7 +606,7 @@ if [ "$1" != "source" ]; then
 			fi
 			echo "INFO  : following libaries were successfully cleaned: $clean_library_status" >&2
 		fi
-		if [ "$do_extract" = "1" ]; then
+		if $do_extract; then
 			if [ -z "$*" ]; then
 				extract_versions GeoIP || exit 1
 				extract_versions IP2Location || exit 1
@@ -609,7 +615,7 @@ if [ "$1" != "source" ]; then
 			fi
 			echo "INFO  : following libaries were successfully extracted: $extract_library_status" >&2
 		fi
-		if [ "$do_build" = "1" ]; then
+		if $do_build; then
 			if [ -z "$*" ]; then
 				build_library IP2Location || exit 1
 			else

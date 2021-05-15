@@ -37,13 +37,15 @@ Usage: $(basename "$0") [-s] [-u] [-D <dir>]
 END
 }
 
+skip_download=true
+update=false
 while getopts "D:ush\?" opt; do
 	case $opt in
 	    s)
-		skip_download=1
+		skip_download=true
 		;;
 	    u)
-		update=1
+		update=true
 		;;
 	    D)
 		IPV6CALC_DAT_DIR="$OPTARG"
@@ -151,7 +153,7 @@ elif [ ! -w "$IPV6CALC_DAT_DIR" ]; then
 fi
 
 ## update files from registries
-if [ "$skip_download" != "1" ]; then
+if ! $skip_download; then
 	echo "INFO  : updating files from registries now and store to: $IPV6CALC_DAT_DIR"
 	$update_registries -D $IPV6CALC_DAT_DIR
 	if [ $? -ne 0 ]; then
@@ -165,7 +167,7 @@ fi
 
 
 ## check files from registries
-[ "$update" = "1" ] && options="$options -u"
+$update && options="$options -u"
 
 for proto in 4 6; do
 	echo "INFO  : call now check registries files for proto: IPv${proto} srcdir=$IPV6CALC_DAT_DIR dstdir=$IPV6CALC_DAT_DIR"

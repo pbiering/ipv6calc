@@ -41,7 +41,13 @@ END
 
 ## default
 dir_dst=""
-dry_run=0
+dry_run=false
+
+if [ -t 0 ]; then
+	quiet=false
+else
+	quiet=true
+fi
 
 ## parse options
 while getopts "\?hdqR:D:" opt; do 
@@ -58,10 +64,10 @@ while getopts "\?hdqR:D:" opt; do
 		registry="$OPTARG"
 		;;
 	    d)
-		dry_run=1
+		dry_run=true
 		;;
 	    q)
-		quiet=1
+		quiet=true
 		;;
 	    \?|h)
 		help
@@ -74,13 +80,7 @@ while getopts "\?hdqR:D:" opt; do
 	esac
 done
 
-if [ ! -t 0 ]; then
-	quiet=1
-fi
-
-if [ "$quiet" = "1" ]; then
-	wget_options="--no-verbose"
-fi
+$quiet && wget_options="--no-verbose"
 
 if [ -z "$dir_dst" ]; then
 	echo "INFO  : download new version of files to defined sub-directories"
@@ -106,10 +106,10 @@ get_urls | while read subdir url filename format flag; do
 	fi
 
 	if [ "$flag" = "out" ]; then
-		[ $dry_run -ne 1 ] && wget $wget_options $url$filename -O $filename
+		$dry_run || wget $wget_options $url$filename -O $filename
 		retval=$?
 	else
-		[ $dry_run -ne 1 ] && wget $wget_options $url$filename --timestamping --retr-symlinks
+		$dry_run || wget $wget_options $url$filename --timestamping --retr-symlinks
 		retval=$?
 	fi
 	popd >/dev/null
