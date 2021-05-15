@@ -47,7 +47,7 @@ if [ ! -x ipv6calcweb.cgi ]; then
 fi
 
 if [ -f ipv6calcweb.cgi ]; then
-	touch ipv6calcweb.cgi -r ipv6calcweb.cgi.in
+	touch -r ipv6calcweb.cgi.in ipv6calcweb.cgi
 fi
 
 echo "INFO  : successfully created: ipv6calcweb.cgi"

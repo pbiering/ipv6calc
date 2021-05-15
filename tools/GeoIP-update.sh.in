@@ -14,8 +14,7 @@ GEOIP_DAT_DIR_DEFAULT="@GEOIP2_DB@"
 
 help() {
 	cat <<END
-Usage: $(basename "$0") [-D <dir>] [-v] [-s] [-L] [-G]
-	-s		skip download
+Usage: $(basename "$0") [-D <dir>] [-v] [-L] [-G]
 	-D <dir>	database directory (optional)
 	-v		verbose
 
@@ -32,16 +31,16 @@ Usage: $(basename "$0") [-D <dir>] [-v] [-s] [-L] [-G]
 END
 }
 
+verbose=
 while getopts "sGLD:vh\?" opt; do
 	case $opt in
-	    s)
-		skip_download=1
+	    s)	# for backward compatibility
 		;;
 	    D)
 		GEOIP_DAT_DIR=$OPTARG
 		;;
 	    v)
-		verbose=1
+		verbose=-v
 		;;
 	    L)
 		echo "ERROR : legacy mode is no longer supported"
@@ -57,7 +56,7 @@ while getopts "sGLD:vh\?" opt; do
 	esac
 done
 
-geoipupdate=1 # now default, legacy is no longer working
+geoipupdate=true # now default, legacy is no longer working
 
 if [ ! -d "$GEOIP_DAT_DIR" ]; then
 	echo "ERROR : missing directory: $GEOIP_DAT_DIR"
@@ -74,7 +73,7 @@ if [ ! -t 0 ]; then
 fi
 
 
-if [ "$geoipupdate" != "1" ]; then
+if ! $geoipupdate; then
 	echo "ERROR : legacy mode is no longer supported (and this part of code should not be reached anymore...)"
 	exit 1
 else
@@ -85,9 +84,9 @@ else
 		exit 1
 	fi
 
-	[ "$verbose" ] && echo "INFO  : call now: geoipupdate -v -d $GEOIP_DAT_DIR"
+	[ -n "$verbose" ] && echo "INFO  : call now: geoipupdate -v -d $GEOIP_DAT_DIR"
 
-	geoipupdate ${verbose:+-v} -d $GEOIP_DAT_DIR
+	geoipupdate $verbose -d $GEOIP_DAT_DIR
 	if [ $? -ne 0 ]; then
 		echo "ERROR : 'geoipupdate' stopped with error"
 		exit 1

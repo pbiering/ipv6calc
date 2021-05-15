@@ -140,6 +140,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 	unsigned int numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, numdashes = 0, numspaces = 0, numslashes = 0, numalnums = 0, numchar_s = 0, numpercents = 0, numcolonsdouble = 0, xdigitlen_max = 0, xdigitlen_min = 0, xdl;
 	char resultstring[NI_MAXHOST];
 	size_t length;
+	ipv6calc_ipv4addr ipv4addr;
 
 	length = strlen(string);
 
@@ -147,6 +148,12 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 		/* input is empty */
 		goto END_libipv6calc_autodetectinput;
 	};
+
+	ipv4addr_clearall(&ipv4addr);
+	if (addr_to_ipv4addrstruct(string, NULL, 0, &ipv4addr) == 0) {
+		type = FORMAT_ipv4addr;
+		goto END_libipv6calc_autodetectinput;
+	}
 
 	xdl = 0;
 	for (i = 0; i < (int) length; i++) {
@@ -213,14 +220,6 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 			type = FORMAT_base85;
 			goto END_libipv6calc_autodetectinput;
 		} else DEBUGPRINT_WA(DEBUG_libipv6calc, " check FORMAT_base85 not successful, result: %s", resultstring);
-	};
-	
-	if (((length >= 7 && length <= 15 && numdots == 3 && numcolons == 0 && numdigits == numxdigits && numdigits >= 4 && numdigits <= 12 && numslashes == 0 )
-	    || ((length >= 9 && length <= 18 && numdots == 3 && numcolons == 0 && numdigits == numxdigits && numdigits >= 5 && numdigits <= 14 && numslashes == 1)))
-	    && (numdots + numdigits + numslashes) == length) {
-		/* IPv4: d{1-3}.d{1-3}.d{1-3}.d{1-3} or d{1-3}.d{1-3}.d{1-3}.d{1-3}/d{1-2} */
-		type = FORMAT_ipv4addr;
-		goto END_libipv6calc_autodetectinput;
 	};
 
 	if ( strncmp(string, "\\[", 2) == 0 ) {

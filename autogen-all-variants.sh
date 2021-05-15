@@ -131,25 +131,37 @@ END
 }
 
 
+batch=false
+cross_versions_test=false
+dry_run=false
+dynamic_load=false
+force=false
+geoip_versions_test=false
+no_static_build=false
+no_static_build=false
+rerun=false
+skip_main_test=false
+skip_shared=false
+
 while getopts ":cbDNMigrIGfWn?h" opt; do
 	case $opt in
 	    'b')
-		batch=1
+		batch=true
 		;;
 	    'f')
-		force=1
+		force=true
 		;;
 	    'r')
-		rerun=1
+		rerun=true
 		;;
 	    'N')
-		no_static_build=1
+		no_static_build=true
 		;;
 	    'n')
-		dry_run=1
+		dry_run=true
 		;;
 	    'M')
-		skip_main_test=1
+		skip_main_test=true
 		;;
 	    'I')
 		skip_token="IP2LOCATION"
@@ -158,20 +170,20 @@ while getopts ":cbDNMigrIGfWn?h" opt; do
 		skip_token="GEOIP"
 		;;
 	    'g')
-		geoip_versions_test="1"
-		skip_shared="1"
-		no_static_build=1
+		geoip_versions_test=true
+		skip_shared=true
+		no_static_build=true
 		;;
 	    'i')
-		ip2location_versions_test="1"
-		skip_shared="1"
-		no_static_build=1
+		ip2location_versions_test=true
+		skip_shared=true
+		no_static_build=true
 		;;
 	    'c')
-		cross_versions_test="1"
+		cross_versions_test=true
 		;;
 	    'D')
-		dynamic_load="1"
+		dynamic_load=true
 		;;
 	    \?|h)
 		help
@@ -192,10 +204,10 @@ if [ -n "$options_add" ]; then
 	echo "INFO  : additional options: $options_add"
 fi
 
-if [ -f "$status_file" -a "$dry_run" != "1" ]; then
+if [ -f "$status_file" ] && ! $dry_run; then
 	echo "INFO  : status file found: $status_file"
 
-	if [ "$force" = "1" ]; then
+	if $force; then
 		echo "NOTICE: remove status file (force)"
 		rm $status_file
 	else
@@ -208,7 +220,7 @@ if [ -f "$status_file" -a "$dry_run" != "1" ]; then
 				exit 0
 			fi
 		else
-			if [ "$rerun" = "1" ]; then
+			if $rerun; then
 				echo "NOTICE: option -r for forcing a re-run is useless, last run was not finished (use -f)"
 				exit 0
 			fi
@@ -216,7 +228,7 @@ if [ -f "$status_file" -a "$dry_run" != "1" ]; then
 	fi
 fi
 
-if [ "$dry_run" != "1" ]; then
+if ! $dry_run; then
 	if [ ! -f "$status_file" ]; then
 		echo "INFO  : status file missing, create: $status_file"
 		date "+%s:START:${batch:+BATCHMODE}" >$status_file
@@ -232,7 +244,7 @@ fi
 
 # variants
 for liboption in "normal" "shared"; do
-	if [ "$skip_shared" = "1" -a "$liboption" = "shared" ]; then
+	if $skip_shared  && [ "$liboption" = "shared" ]; then
 		continue
 	fi
 
@@ -249,13 +261,13 @@ for liboption in "normal" "shared"; do
 
 		buildoptions=$(echo $buildoptions)
 		if [ -n "$options_add" ]; then
-			if [ "$no_static_build" = "1" ]; then
+			if $no_static_build; then
 				options="--no-static-build $options_add $buildoptions"
 			else
 				options="${options_add:+$options_add }$buildoptions"
 			fi
 		else
-			if [ "$no_static_build" = "1" ]; then
+			if $no_static_build; then
 				options="--no-static-build $buildoptions"
 			else
 				options="$buildoptions"
@@ -295,7 +307,7 @@ for liboption in "normal" "shared"; do
 
 		if echo "$token" | egrep -wq "$skip_token"; then
 			echo "NOTICE: skip variant because of token: $token"
-			if [ "$dry_run" = "1" ]; then
+			if $dry_run; then
 				date "+%s:FINISHED:variants:$options:SKIPPED" >>$status_file
 			fi
 			continue
@@ -307,7 +319,7 @@ for liboption in "normal" "shared"; do
 			options_test="--no-test"
 		fi
 
-		if [ "$dry_run" = "1" ]; then
+		if $dry_run; then
 			echo "INFO  : would call(dry-run): ./autogen.sh $options_test $options"
 			if [ -z "$testlist" ]; then
 				continue
@@ -319,7 +331,7 @@ for liboption in "normal" "shared"; do
 			nice -n 20 $IONICE ./autogen.sh $options_test $options
 			if [ $? -ne 0 ]; then
 				echo "ERROR : autogen.sh reports an error with options: $options_test $options"
-				if [ "$batch" = "1" ]; then
+				if $batch; then
 					date "+%s:BROKEN:variants:$options" >>$status_file
 				else
 					exit 1
@@ -337,7 +349,7 @@ for liboption in "normal" "shared"; do
 					continue
 				fi
 
-				if [ "$dry_run" = "1" ]; then
+				if $dry_run; then
 					echo "INFO  : would call(dry-run): ./autogen.sh $options (testlist entry: $entry)"
 					continue
 				fi
@@ -367,7 +379,7 @@ for liboption in "normal" "shared"; do
 					exit 1
 				fi
 
-				if [ "$dynamic_load" = "1" ]; then
+				if $dynamic_load; then
 					case $name in
 					    I*)
 						feature_string="IP2Location"
@@ -395,13 +407,13 @@ for liboption in "normal" "shared"; do
 
 				if [ $result -ne 0 ]; then
 					echo "ERROR : autogen.sh reports an error with options: $options during testlist entry: $entry"
-					if [ "$dynamic_load" = "1" ]; then
+					if $dynamic_load; then
 						echo "NOTICE: executed command: LD_LIBRARY_PATH=$libdir make test-ldlibpath"
 					else
 						echo "NOTICE: executed command: LD_PRELOAD="$lib" make test-ldlibpath"
 					fi
 
-					if [ "$batch" = "1" ]; then
+					if $batch; then
 						date "+%s:BROKEN:variants:$options:TESTLIST-ENTRY=$entry" >>$status_file
 					else
 						exit 1
@@ -416,7 +428,7 @@ for liboption in "normal" "shared"; do
 done
 
 
-if [ "$dry_run" != "1" ]; then
+if ! $dry_run; then
 	if grep -q ":BROKEN:" $status_file; then
 		echo "ERROR : there are BROKEN builds:"
 		grep ":BROKEN:" $status_file

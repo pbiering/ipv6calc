@@ -7,11 +7,11 @@
 #
 # Test program for "ipv6loganon"
 
-verbose=0
+verbose=false
 while getopts "Vh\?" opt; do
 	case $opt in
 	    V)
-		verbose=1
+		verbose=true
 		;;
 	    *)
 		echo "$0 [-V]"
@@ -151,35 +151,35 @@ if [ "$1" != "bulk" ]; then
 			echo "Something is wrong in line '$line'"
 			exit 1
 		fi
-		[ "$verbose" = "1" ] && echo "IN     : $input"
-		[ "$verbose" = "1" ] && echo "CHECK  : $result"
+		$verbose && echo "IN     : $input"
+		$verbose && echo "CHECK  : $result"
 		# get result
 		output="`echo "$input" | ./ipv6loganon -q`"
 		retval=$?
-		[ "$verbose" = "1" ] && echo "OUT    : $output"
+		$verbose && echo "OUT    : $output"
 		if [ $retval -ne 0 ]; then
 			echo "Error executing 'ipv6loganon'!"
-			[ "$verbose" = "1" ] || echo "IN     : $input"
-			[ "$verbose" = "1" ] || echo "CHECK  : $result"
-			[ "$verbose" = "1" ] || echo "OUT    : $output"
+			$verbose || echo "IN     : $input"
+			$verbose || echo "CHECK  : $result"
+			$verbose || echo "OUT    : $output"
 			exit 1
 		fi
 		# Check result
 		if [ "$result" != "*" ]; then
 			if [ "$output" != "$result" ]; then
-				[ "$verbose" = "1" ] || echo "IN     : $input"
-				[ "$verbose" = "1" ] || echo "CHECK  : $result"
-				[ "$verbose" = "1" ] || echo "OUT    : $output"
+				$verbose || echo "IN     : $input"
+				$verbose || echo "CHECK  : $result"
+				$verbose || echo "OUT    : $output"
 				echo "RESULT : fail"
 				exit 1
 			fi
 		fi
-		[ "$verbose" = "1" ] && echo "RESULT : ok"
-		[ "$verbose" = "1" ] && echo
-		[ "$verbose" = "1" ] || echo -n "."
+		$verbose && echo "RESULT : ok"
+		$verbose && echo
+		$verbose || echo -n "."
 	done
 	retval=$?
-	[ "$verbose" = "1" ] || echo
+	$verbose || echo
 	echo "INFO  : $test successful"
 
 	if [ $retval -eq 0 ]; then
@@ -196,36 +196,36 @@ if [ "$1" != "bulk" ]; then
 				echo "Something is wrong in line '$line'"
 				exit 1
 			fi
-			[ "$verbose" = "1" ] && echo "IN     : $input"
-			[ "$verbose" = "1" ] && echo "OPTIONS: $options"
-			[ "$verbose" = "1" ] && echo "CHECK  : $result"
+			$verbose && echo "IN     : $input"
+			$verbose && echo "OPTIONS: $options"
+			$verbose && echo "CHECK  : $result"
 			# get result
 			output="`echo "$input" | ./ipv6loganon -q $options`"
 			retval=$?
-			[ "$verbose" = "1" ] && echo "OUT    : $output"
+			$verbose && echo "OUT    : $output"
 			if [ $retval -ne 0 ]; then
 				echo "Error executing 'ipv6loganon'!"
-				[ "$verbose" = "1" ] || echo "IN     : $input"
-				[ "$verbose" = "1" ] || echo "CHECK  : $result"
-				[ "$verbose" = "1" ] || echo "OUT    : $output"
+				$verbose || echo "IN     : $input"
+				$verbose || echo "CHECK  : $result"
+				$verbose || echo "OUT    : $output"
 				exit 1
 			fi
 			# Check result
 			if [ "$result" != "*" ]; then
 				if [ "$output" != "$result" ]; then
-					[ "$verbose" = "1" ] || echo "IN     : $input"
-					[ "$verbose" = "1" ] || echo "CHECK  : $result"
-					[ "$verbose" = "1" ] || echo "OUT    : $output"
+					$verbose || echo "IN     : $input"
+					$verbose || echo "CHECK  : $result"
+					$verbose || echo "OUT    : $output"
 					echo "RESULT : fail"
 					exit 1
 				fi
 			fi
-			[ "$verbose" = "1" ] && echo "RESULT : ok"
-			[ "$verbose" = "1" ] && echo
-			[ "$verbose" = "1" ] || echo -n "."
+			$verbose && echo "RESULT : ok"
+			$verbose && echo
+			$verbose || echo -n "."
 		done
 		retval=$?
-		[ "$verbose" = "1" ] || echo
+		$verbose || echo
 		echo "INFO  : $test successful"
 	fi
 	echo 
@@ -359,8 +359,8 @@ run_loganon_options_tests() {
 		options="`echo $line | awk '{ for ( i = 1; i < NF; i++) printf "%s ", $i }'`"
 		input_result="`echo $line | awk '{ print $NF }'`"
 
-		[ "$verbose" = "1" ] && echo "DEBUG : options=$options"
-		[ "$verbose" = "1" ] && echo "DEBUG : input_result=$input_result"
+		$verbose && echo "DEBUG : options=$options"
+		$verbose && echo "DEBUG : input_result=$input_result"
 
 		input=${input_result/=*/}
 		result=${input_result/*=/}
@@ -374,17 +374,17 @@ run_loganon_options_tests() {
 		fi
 
 		if [ "$result" != "$result_real" ]; then
-			[ "$verbose" = "1" ] || echo
+			$verbose || echo
 			echo "ERROR : result doesn't match on command: $command"
 			echo "ERROR : result is      : $result_real"
 			echo "ERROR : result expected: $result"
 			exit 1
 		else
-			[ "$verbose" = "1" ] && echo "INFO  : $command -> test ok"
+			$verbose && echo "INFO  : $command -> test ok"
 		fi
-		[ "$verbose" = "1" ] || echo -n "."
+		$verbose || echo -n "."
 	done || return 1
-	[ "$verbose" = "1" ] || echo
+	$verbose || echo
 	echo "INFO  : $test successful"
 }
 
@@ -417,7 +417,7 @@ run_loganon_options_kp_tests() {
 		fi
 
 		if [ "$result" != "$result_real" ]; then
-			[ "$verbose" = "1" ] || echo
+			$verbose || echo
 			echo "ERROR : result doesn't match on command: $command"
 			echo "ERROR : result is      : $result_real"
 			echo "ERROR : result expected: $result"

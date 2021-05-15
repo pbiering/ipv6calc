@@ -9,16 +9,18 @@
 #  Test script for ipv6calcweb
 #
 
+verbose=false
+opt_debug=false
 while getopts "Vf:d" opt; do
 	case $opt in
 	    f)
 		opt_format="$OPTARG"
 		;;
 	    d)
-		opt_debug=1
+		opt_debug=true
 		;;
 	    V)
-		verbose=1
+		verbose=true
 		;;
 	    *)
 		echo "$0 [-V] [-d] [-f <format>]"
@@ -84,14 +86,14 @@ for format in textkeyvalue text html htmlfull; do
 
 	export HTTP_IPV6CALCWEB_DEBUG="0x5000" # no sleeps and no Anti-DoS
 
-	[ "$verbose" = "1" ] && echo "INFO  : test format: $format"
-	[ "$verbose" = "1" ] && echo "DEBUG : execute: HTTP_IPV6CALCWEB_DEBUG=$HTTP_IPV6CALCWEB_DEBUG HTTP_IPV6CALCWEB_OUTPUT_FORMAT=\"$format\" perl -w $perlopt ipv6calcweb.cgi"
+	$verbose && echo "INFO  : test format: $format"
+	$verbose && echo "DEBUG : execute: HTTP_IPV6CALCWEB_DEBUG=$HTTP_IPV6CALCWEB_DEBUG HTTP_IPV6CALCWEB_OUTPUT_FORMAT=\"$format\" perl -w $perlopt ipv6calcweb.cgi"
 
-	if [ "$opt_debug" = "1" ]; then
+	if $opt_debug; then
 		HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" perl -w $perlopt ipv6calcweb.cgi
 		rc=$?
 	else
-		if [ "$verbose" = "1" ]; then
+		if $verbose; then
 			HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" perl -w $perlopt ipv6calcweb.cgi >/dev/null
 			rc=$?
 		else
@@ -101,14 +103,14 @@ for format in textkeyvalue text html htmlfull; do
 	fi
 	if [ $rc -ne 0 ];then
 		echo "ERROR : output format reports an error: $format"
-		if [ "$opt_debug" != "1" ]; then
+		if ! $opt_debug; then
 			HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format" perl -w $perlopt ipv6calcweb.cgi
 		fi
 		exit 1
 	fi
-	[ "$verbose" = "1" ] || echo -n "."
+	$verbose || echo -n "."
 done || exit 1
-[ "$verbose" = "1" ] || echo
+$verbose || echo
 echo "INFO  : $test successful"
 
 
@@ -142,27 +144,27 @@ for format in textkeyvalue text html htmlfull; do
 	HTTP_IPV6CALCWEB_OUTPUT_FORMAT="$format"
 	export HTTP_IPV6CALCWEB_OUTPUT_FORMAT
 
-	if [ "$verbose" = "1" ]; then
+	if $verbose; then
 		OUTPUT="`perl -w $perlopt ipv6calcweb.cgi`"
 		result=$?
 	else
 		OUTPUT="`perl -w $perlopt ipv6calcweb.cgi 2>&1`"
 		result=$?
 	fi
-	if [ "$opt_debug" = "1" ]; then
+	if $opt_debug then
 		echo "$OUTPUT"
 	fi
 
 	if [ $result -ne 0 ];then
 		echo "ERROR : output format reports an error: $format"
-		if [ "$opt_debug" != "1" ]; then
+		if ! $opt_debug; then
 			echo "$OUTPUT"
 		fi
 		exit 1
 	fi
-	[ "$verbose" = "1" ] || echo -n "."
+	$verbose || echo -n "."
 done || exit 1
-[ "$verbose" = "1" ] || echo
+$verbose || echo
 echo "INFO  : $test successful"
 
 
@@ -210,7 +212,7 @@ for e in  1 5 15 p; do
 		exit 1
 	fi
 done || exit 1
-[ "$verbose" = "1" ] || echo
+$verbose || echo
 echo "INFO  : $test successful"
 else
 echo "NOTICE: AntiDDoS test skipped, /proc/loadavg missing"
@@ -232,6 +234,6 @@ fi
 #		exit 1
 #	fi
 #	if echo "$OUTPUT" | egrep -q "(reserved)"; then
-#		[ "$verbose" = "1" ] || echo "$OUTPUT"
+#		$verbose || echo "$OUTPUT"
 #	fi
 #fi

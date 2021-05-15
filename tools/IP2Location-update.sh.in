@@ -76,27 +76,27 @@ END
 }
 
 # source credentials (must provide login= and password=)
-authenticated=1
+authenticated=true
 if [ -f "$IP2LOCATION_CONFIG" ]; then
 	source "$IP2LOCATION_CONFIG"
 
 	for token in login password; do
 		if [ -z "${!token}" ]; then
 			echo "NOTICE: missing credential token in: $IP2LOCATION_CONFIG [$token=<VALUE>] (skip authenticated downloads)"
-			authenticated=0
+			authenticated=false
 		fi
 	done
 
-	if [ $authenticated -ne 0 ]; then
+	if $authenticated; then
 		# replace placeholders
 		IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@LOGIN@/$login}
 		IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@PASSWORD@/$password}
 	fi
 else
-	authenticated=0
+	authenticated=false
 fi
 
-if [ $authenticated -eq 0 ]; then
+if ! $authenticated; then
 	echo "NOTICE: IP2Location credential file not found, clear IP2LOCATION_DAT_FILES"
 	IP2LOCATION_DAT_FILES=""
 
@@ -152,7 +152,7 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 		continue
 	fi
 
-	[ "$verbose" = "1" ] && echo "INFO  : download list $list: ${!list}"
+	$verbose && echo "INFO  : download list $list: ${!list}"
 
 	url_base="$IP2LOCATION_DAT_URL_BASE"
 
@@ -257,7 +257,7 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 			fi
 		fi
 
-		[ "$verbose" = "1" ] && echo "INFO  : try to download URL: ${url/password=*&/password=********&} ($file_dest)"
+		$verbose && echo "INFO  : try to download URL: ${url/password=*&/password=********&} ($file_dest)"
 		wget -q -O "$file_dest" "$url"
 		result=$?
 			
@@ -265,7 +265,7 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 			echo "ERROR : download of file not successful: $file_dest ($!)"
 			continue
 		fi
-		[ "$verbose" = "1" ] && echo "INFO  : download of file successful: $file_dest"
+		$verbose && echo "INFO  : download of file successful: $file_dest"
 
 		if [ ! -s "$file_dest" ]; then
 			echo "ERROR : downloaded file has ZERO size: $file_dest"
@@ -286,7 +286,7 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 			echo "ERROR : unzip of file not successful: $file_dest"
 			continue
 		fi
-		[ "$verbose" = "1" ] && echo "INFO  : unzip of file successful: $file_dest (remove downloaded file now)"
+		$verbose && echo "INFO  : unzip of file successful: $file_dest (remove downloaded file now)"
 		rm -f "$file_dest"
 
 		echo "NOTICE: download/unzip successful: $token"
