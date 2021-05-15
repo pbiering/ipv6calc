@@ -91,8 +91,25 @@ cat <<END | grep -v '^#'
 --addr_to_uncompressed --maskprefix 3ffe:ffff:100:f101::1/64		=3ffe:ffff:100:f101:0:0:0:0/64
 --addr_to_uncompressed --masksuffix 3ffe:ffff:100:f101:c000::1/64	=0:0:0:0:c000:0:0:1/64
 --addr_to_uncompressed --uppercase ::ffff:13.1.68.3			=0:0:0:0:0:FFFF:13.1.68.3
+--out ipv4addr --no-prefixlength 1.2.3.4				=1.2.3.4
 --out ipv4addr --no-prefixlength 1.2.3.4/24				=1.2.3.4
+--out ipv4addr --no-prefixlength 1.2.3/24				=1.2.3.0
+--out ipv4addr --no-prefixlength 1.2/24					=1.2.0.0
+--out ipv4addr --no-prefixlength 1/24					=1.0.0.0
+--out ipv4addr 1.2.3.4/0						=1.2.3.4/0
+--out ipv4addr 0/0							=0.0.0.0/0
+--out ipv4addr --printcompressed 0/0					=0/0
+--out ipv4addr --printcompressed 1.2.3.4/24				=1.2.3.4/24
+--out ipv4addr --printcompressed 1.2.3.0/24				=1.2.3/24
+--out ipv4addr --printcompressed 1.2.3/24				=1.2.3/24
+--out ipv4addr --printcompressed 1.2.0.0/24				=1.2/24
+--out ipv4addr --printcompressed 1.2/24					=1.2/24
+--out ipv4addr --printcompressed 1.0.0.0/24				=1/24
+--out ipv4addr --printcompressed 1/24					=1/24
 --out ipv4addr --maskprefix 1.2.3.4/24					=1.2.3.0/24
+--out ipv4addr --maskprefix 1.2.3./24					=1.2.3.0/24
+--out ipv4addr --maskprefix 1.2./24					=1.2.0.0/24
+--out ipv4addr --maskprefix 1./24					=1.0.0.0/24
 --out ipv4addr --masksuffix 1.2.3.4/24					=0.0.0.4/24
 --out ipv4addr --maskprefix 1.2.3.4/22					=1.2.0.0/22
 --out ipv4addr --masksuffix 1.2.3.4/22 					=0.0.3.4/22
@@ -252,6 +269,20 @@ cat <<END | grep -v '^#'
 1.2.3.r4									ipv4addr
 2.2.3.4/-1									ipv4addr
 2.2.3.4/33									ipv4addr
+1.2.3.4/									ipv4addr
+1.2.3.4/00									ipv4addr
+0/00										ipv4addr
+1										ipv4addr
+1.										ipv4addr
+1.2										ipv4addr
+1.2.										ipv4addr
+1.2.3										ipv4addr
+1.2.3.										ipv4addr
+1.2.3.4.									ipv4addr
+1.2.3.4.5									ipv4addr
+1.2.3.4.5/10									ipv4addr
+/10										ipv4addr
+./10										ipv4addr
 01:23:r5:67:89:01								mac
 2002:102:304::r1								ipv6addr
 2002:102:304::1/-1								ipv6addr

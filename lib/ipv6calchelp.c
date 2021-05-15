@@ -523,7 +523,13 @@ static void printhelp_output_ifinet6void(void) {
 };
 
 static void printhelp_output_ipv4addr(void) {
-	fprintf(stderr, " Print an IPv4 address\n");
+	fprintf(stderr, " Print an IPv4 address, depending on format options:\n");
+	fprintf(stderr, "  Uncompressed, e.g.\n");
+	fprintf(stderr, "   1.2.0.0 -> 1.2.0.0\n");
+	fprintf(stderr, "   1.2.0.  -> 1.2.0.0\n");
+	fprintf(stderr, "   1.2     -> 1.2.0.0\n");
+	fprintf(stderr, "  Compressed, e.g.\n");
+	fprintf(stderr, "   1.2.0.0 -> 1.2\n");
 };
 
 static void printhelp_output_revipv4(void) {

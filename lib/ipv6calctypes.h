@@ -253,7 +253,7 @@ typedef struct {
 	{ FORMAT_eui64          , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_base85         , 0 },
 	{ FORMAT_ifinet6        , 0 },
-	{ FORMAT_ipv4addr       , FORMATOPTION_machinereadable | FORMATOPTION_no_prefixlength | FORMATOPTION_forceprefix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix },
+	{ FORMAT_ipv4addr       , FORMATOPTION_machinereadable | FORMATOPTION_no_prefixlength | FORMATOPTION_forceprefix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed },
 	{ FORMAT_iid_token      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_octal          , FORMATOPTION_printfulluncompressed },
 	{ FORMAT_ipv6literal    , FORMATOPTION_machinereadable | FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed },
