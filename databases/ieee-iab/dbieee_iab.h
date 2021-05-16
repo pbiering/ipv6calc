@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Wed Jan 13 06:46:07 2021
+ * Generated     : Sun May 16 09:49:56 2021
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20210113";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20210516";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -442,7 +442,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x1AC000, 0x1ACFFF, "Beckmann+Egle GmbH", "BECKMANN+EGLE" },
 	{ 0x0050C2, 0x1AD000, 0x1ADFFF, "Remia s.r.o.", "REMIA-S-R-O" },
 	{ 0x0050C2, 0x1AE000, 0x1AEFFF, "Home Director, Inc", "HOME-DIRECTOR" },
-	{ 0x0050C2, 0x1AF000, 0x1AFFFF, "PESA Switching Systems, Inc.", "PESA-SWITCHING" },
+	{ 0x0050C2, 0x1AF000, 0x1AFFFF, "PESA", "PESA" },
 	{ 0x0050C2, 0x1B0000, 0x1B0FFF, "BLANKOM Antennentechnik GmbH", "BLANKOM-ANTENNENTECHNIK" },
 	{ 0x0050C2, 0x1B1000, 0x1B1FFF, "Axes Technologies", "AXES-TECHNOLOGIES" },
 	{ 0x0050C2, 0x1B2000, 0x1B2FFF, "SIGOS Systemintegration GmbH", "SIGOS-SYSTEMINTEGRATION" },
@@ -991,7 +991,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x3D1000, 0x3D1FFF, "Braintronics BV", "BRAINTRONICS" },
 	{ 0x0050C2, 0x3D2000, 0x3D2FFF, "Adilec Enginyeria SL", "ADILEC-ENGINYERIA-SL" },
 	{ 0x0050C2, 0x3D3000, 0x3D3FFF, "American LED-gible Inc.", "AMERICAN-LED-GIBLE" },
-	{ 0x0050C2, 0x3D4000, 0x3D4FFF, "Wisnu and Supak Co.Ltd.", "WISNU-AND-SUPAK" },
+	{ 0x0050C2, 0x3D4000, 0x3D4FFF, "Wisnu and Supak Co.,Ltd.", "WISNU-AND-SUPAK" },
 	{ 0x0050C2, 0x3D5000, 0x3D5FFF, "Fluke Biomedical, Radiation Management Services", "FLUKE-BIOMEDICAL-RADIATION-MANAGEMENT-SERVICES" },
 	{ 0x0050C2, 0x3D6000, 0x3D6FFF, "Comlab Inc.", "COMLAB" },
 	{ 0x0050C2, 0x3D7000, 0x3D7FFF, "TTC TELEKOMUNIKACE Ltd", "TTC-TELEKOMUNIKACE" },
@@ -3687,7 +3687,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xE5D000, 0xE5DFFF, "T8 Ltd", "T8" },
 	{ 0x0050C2, 0xE5E000, 0xE5EFFF, "OREP", "OREP" },
 	{ 0x0050C2, 0xE5F000, 0xE5FFFF, "Pantec Engineering AG", "PANTEC-ENGINEERING" },
-	{ 0x0050C2, 0xE60000, 0xE60FFF, "TAIYO SEIKI CO.,LTD.", "TAIYO-SEIKI" },
+	{ 0x0050C2, 0xE60000, 0xE60FFF, "HORIZON.INC", "HORIZON" },
 	{ 0x0050C2, 0xE61000, 0xE61FFF, "Detech Electronics ApS", "DETECH-ELECTRONICS-APS" },
 	{ 0x0050C2, 0xE62000, 0xE62FFF, "SAE IT-systems GmbH & Co. KG", "SAE-IT" },
 	{ 0x0050C2, 0xE63000, 0xE63FFF, "Prima sistemi", "PRIMA-SISTEMI" },

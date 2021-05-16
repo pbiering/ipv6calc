@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : db_cc_reg_assignment.h
  * Version       : $Id$
- * Generated     : Wed Jan 13 07:06:30 2021
+ * Generated     : Sun May 16 10:10:19 2021
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
  *  Additional header file for databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  */
 
-static const char *db_cc_registry_status = "AFRINIC/20210113 APNIC/20210112 ARIN/20210112 LACNIC/20210112 RIPENCC/20210112";
+static const char *db_cc_registry_status = "AFRINIC/20210516 APNIC/20210514 ARIN/20210515 LACNIC/20210514 RIPENCC/20210515";
 
 static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "", REGISTRY_ARIN     },
@@ -21,7 +21,6 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "AL", REGISTRY_RIPENCC  },
 	{ "AM", REGISTRY_RIPENCC  },
 	{ "AO", REGISTRY_AFRINIC  },
-	{ "AP", REGISTRY_APNIC    },
 	{ "AR", REGISTRY_LACNIC   },
 	{ "AS", REGISTRY_APNIC    },
 	{ "AT", REGISTRY_RIPENCC  },
@@ -39,7 +38,7 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "BI", REGISTRY_AFRINIC  },
 	{ "BJ", REGISTRY_AFRINIC  },
 	{ "BL", REGISTRY_ARIN     },
-	{ "BM", REGISTRY_RIPENCC  },
+	{ "BM", REGISTRY_ARIN     },
 	{ "BN", REGISTRY_APNIC    },
 	{ "BO", REGISTRY_LACNIC   },
 	{ "BQ", REGISTRY_LACNIC   },
@@ -828,7 +827,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  570  YL
 	{ REGISTRY_UNKNOWN  }, //  571  ZL
 	{ REGISTRY_RIPENCC  }, //  572  AM
-	{ REGISTRY_RIPENCC  }, //  573  BM
+	{ REGISTRY_ARIN     }, //  573  BM
 	{ REGISTRY_AFRINIC  }, //  574  CM
 	{ REGISTRY_ARIN     }, //  575  DM
 	{ REGISTRY_UNKNOWN  }, //  576  EM
@@ -905,7 +904,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  647  XO
 	{ REGISTRY_UNKNOWN  }, //  648  YO
 	{ REGISTRY_UNKNOWN  }, //  649  ZO
-	{ REGISTRY_APNIC    }, //  650  AP
+	{ REGISTRY_UNKNOWN  }, //  650  AP
 	{ REGISTRY_UNKNOWN  }, //  651  BP
 	{ REGISTRY_UNKNOWN  }, //  652  CP
 	{ REGISTRY_UNKNOWN  }, //  653  DP
