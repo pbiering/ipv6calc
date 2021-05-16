@@ -223,14 +223,14 @@ testscenarios_match | while read ip match; do
 	fi
 
 	if $verbose; then
-		echo "$ip" | ./ipv6logstats -q | grep -q "$match\W*1"
+		echo "$ip" | ./ipv6logstats -q | grep -xq "$match[^_[:alnum:]]*1"
 		result=$?
 	else
-		echo "$ip" | ./ipv6logstats -q 2>/dev/null | grep -q "$match\W*1"
+		echo "$ip" | ./ipv6logstats -q 2>/dev/null | grep -xq "$match[^_[:alnum:]]*1"
 		result=$?
 	fi
 	if [ $result -ne 0 ]; then
-		echo "ERROR: unexpected result calling echo $ip | ./ipv6logstats -q | grep -q $match\W*1':"
+		echo "ERROR: unexpected result calling echo $ip | ./ipv6logstats -q | grep -xq '$match[^_[:alnum:]]*1':"
 		echo "$ip" | ./ipv6logstats -q | grep -v "DB-Info"
 		exit 1
 	fi
