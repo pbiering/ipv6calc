@@ -36,8 +36,8 @@ perl -pi -e "s/\@PACKAGE_VERSION\@/$v/" ipv6calcweb.cgi || exit 1
 perl -pi -e "s/\@COPYRIGHT_YEAR\@/$c/" ipv6calcweb.cgi || exit 1
 
 case "$OSTYPE" in
-    freebsd*)
-	# FreeBSD has somehow issue with -T, so remove it
+    freebsd*|openbsd*)
+	# *BSD has somehow issue with -T, so remove it
 	perl -pi -e "s/perl -w -T/perl -w/" ipv6calcweb.cgi || exit 1
 	;;
 esac
