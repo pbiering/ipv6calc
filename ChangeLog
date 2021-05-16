@@ -10,6 +10,9 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20210516/VZ:
+	Fix tests on OpenBSD (https://github.com/pbiering/ipv6calc/pull/21)
+
 20210516/PB:
 	Improve autodetection of nibble strings, add additional test cases, triggered by "pull/19"
 	Bugfixes related to "pull/20"
