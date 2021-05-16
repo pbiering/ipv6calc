@@ -151,7 +151,7 @@ for format in textkeyvalue text html htmlfull; do
 		OUTPUT="`perl -w $perlopt ipv6calcweb.cgi 2>&1`"
 		result=$?
 	fi
-	if $opt_debug then
+	if $opt_debug; then
 		echo "$OUTPUT"
 	fi
 
