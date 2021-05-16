@@ -251,6 +251,11 @@ NOPIPETEST--in prefix+mac 1:2:3:4::/56 11:22:33:44:55:aa --action prefixmac2ipv6
 -O hex --forceprefix 24 --printsuffix 1.2.3.4					=04
 -O hex --forceprefix 24 --printprefix 1.2.3.4					=010203
 -O hex -u 192.168.1.1								=C0A80101
+# nibble strings
+-O ipv6addr 1.ip6.arpa								=1000::/4
+-O ipv6addr 1.2.ip6.arpa							=2100::/8
+-O ipv6addr 1.2.3.ip6.arpa							=3210::/12
+-O ipv6addr 1.2.3.4.ip6.arpa							=4321::/16
 # Extraction
 NOPIPETEST--in ipv6 2001:db8::a8bb:ccff:fedd:eeff --out eui64                             =aa:bb:cc:ff:fe:dd:ee:ff
 NOPIPETEST--in ipv6 2001:db8::a8bb:ccff:fedd:eeff --out mac                               =aa:bb:cc:dd:ee:ff

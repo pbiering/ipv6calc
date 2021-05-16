@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : librfc1886.c
  * Version    : $Id$
- * Copyright  : 2002-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  RFC 1886 conform reverse nibble format string
@@ -251,6 +251,7 @@ NEXT_token_nibblestring_to_ipv6addrstruct:
 
 /*
  * checks for proper format of a nibble string
+ *  suffix has to be ip6.int or ip6.arpa
  *
  * in : string
  * ret: ==0: ok, !=0: error
@@ -315,6 +316,11 @@ int librfc1886_formatcheck(const char *string, char *infostring, const size_t in
 				snprintf(infostring, infostring_length, "Next level domain 'ip6' is in wrong place or missing");
 				return (1);
 			};
+		};
+
+		if ((flag_tld != 1) && (flag_nld != 1)) {
+			snprintf(infostring, infostring_length, "Nibble string misses suffix ip6.int or ip6.arpa");
+			return (1);
 		};
 
 		/* now proceed nibbles */
