@@ -216,7 +216,7 @@ testscenarios_match | while read ip match; do
 	fi
 
 	if echo "$match" | grep -q "^CC"; then
-		if $feature_cc; then
+		if ! $feature_cc; then
 			echo "SKIPPED (missing support)"
 			continue
 		fi
@@ -230,7 +230,7 @@ testscenarios_match | while read ip match; do
 		result=$?
 	fi
 	if [ $result -ne 0 ]; then
-		echo "ERROR, unexpected result:"
+		echo "ERROR: unexpected result calling echo $ip | ./ipv6logstats -q | grep -q $match\W*1':"
 		echo "$ip" | ./ipv6logstats -q | grep -v "DB-Info"
 		exit 1
 	fi
