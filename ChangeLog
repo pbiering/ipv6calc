@@ -12,6 +12,7 @@ Info:
 --------------------------------------------------------------------
 20210518/PB:
 	Improve revnibble handling (TLD+NLD given given -> prefix, missing -> suffix), add related online help
+	tag version 3.1.0
 
 20210516/VZ:
 	Fix tests on OpenBSD (https://github.com/pbiering/ipv6calc/pull/21)
