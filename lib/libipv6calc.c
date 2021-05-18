@@ -373,13 +373,13 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 	
 	if (numcolons == 0 && numdots > 0 && numslashes == 0 && numspaces == 0 && (numalnums + numdots) == length) {
 		/* check for reverse nibble string */
-		DEBUGPRINT_NA(DEBUG_libipv6calc, " check FORMAT_revnibbels_int");
+		DEBUGPRINT_NA(DEBUG_libipv6calc, " check FORMAT_revnibbels_arpa");
 		result = librfc1886_formatcheck(string, resultstring, sizeof(resultstring));
 	        if ( result == 0 ) {
 			/* ok: reverse nibble string */
-			type = FORMAT_revnibbles_int;
+			type = FORMAT_revnibbles_arpa;
 			goto END_libipv6calc_autodetectinput;
-		} else DEBUGPRINT_WA(DEBUG_libipv6calc, " check FORMAT_revnibbels_int not successful, result: %s", resultstring);
+		} else DEBUGPRINT_WA(DEBUG_libipv6calc, " check FORMAT_revnibbels_arpa not successful, result: %s", resultstring);
 	};
 	
 	if ((numcolons == 3) && (numcolonsdouble == 0) && numdots == 0 && numslashes == 0 && numpercents == 0 && ((numcolons + numxdigits) == length)) {
