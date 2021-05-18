@@ -5,21 +5,21 @@
 <!ENTITY % output.print.bmp "IGNORE">
  ]>
 
-<!-- SGML file was created by LyX 2.3.5.2
+<!-- SGML file was created by LyX 2.3.6.1
   See http://www.lyx.org/ for more information -->
 <article lang="en">
 <articleinfo>
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>10.0</revnumber> <date>2020-10-13</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>10.1</revnumber> <date>2021-05-18</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freecode.com/projects/ipv6calc/">freecode.com (former freshmeat, now also EOL) / ipv6calc</ulink> page (but this is not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 3.0.0</para></sect2><sect2>
+<para>Latest version since last update of this page is 3.1.0</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
 <listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;mod_ipv6calc&rdquo;: Apache module</para></listitem></itemizedlist></sect2><sect2>
@@ -40,7 +40,7 @@
 <title>License</title>
 <para>The program is published under the GNU GPL version 2.</para></sect1><sect1>
 <title>Copyright</title>
-<para>(C) 2001 - 2020 by Dr. Peter Bieringer</para></sect1><sect1>
+<para>(C) 2001 - 2021 by Dr. Peter Bieringer</para></sect1><sect1>
 <title>Author</title>
 <para>The author of ipv6calc is</para><itemizedlist>
 <listitem><para><ulink url="mailto:pb@bieringer.de">Dr. Peter Bieringer</ulink> with some minor contribution by others</para></listitem></itemizedlist></sect1><sect1>
@@ -79,7 +79,8 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 <para>It's tested by the developer that creation of the RPM is working fine starting with RHEL 4.</para><itemizedlist>
 <listitem><para>RHEL/CentOS 5 has the package included by default (but an rather old version)
 </para><itemizedlist>
-<listitem><para>RPMs of newer releases are available as test builds on koji, see related URL in announcements <ulink url="https://lists.deepspace6.net/pipermail/ipv6calc-announce/">ipv6calc-announce / list archive</ulink></para></listitem><listitem><para>*** Untested since version 2.0.0 because OS is out of support ***</para></listitem></itemizedlist></listitem><listitem><para>RHEL/CentOS 6/7/8: available since September 2014 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink>, see also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para></listitem></itemizedlist><para>CentOS 6/7/8 are also platforms for regression tests.</para></sect3><sect3>
+<listitem><para>RPMs of newer releases are available as test builds on koji, see related URL in announcements <ulink url="https://lists.deepspace6.net/pipermail/ipv6calc-announce/">ipv6calc-announce / list archive</ulink></para></listitem><listitem><para>*** Untested since version 2.0.0 because OS is out of support ***</para></listitem></itemizedlist></listitem><listitem><para>RHEL/CentOS 6: available since September 2014 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink>, see also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para><itemizedlist>
+<listitem><para>*** Untested since version 3.0.1 because OS is out of support ***</para></listitem></itemizedlist></listitem><listitem><para>RHEL/CentOS 7: available since Decenber 2016 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink>, see also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para></listitem><listitem><para>RHEL/CentOS 8: available since September 2019 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink>, see also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para></listitem></itemizedlist><para>CentOS 7/8 are also platforms for regression tests.</para></sect3><sect3>
 <title>Gentoo/Funtoo</title>
 <para>Package is maintained, nevertheless, Funtoo is used as platform for regression tests.</para></sect3><sect3>
 <title>Ubuntu</title>
@@ -1406,9 +1407,12 @@ IPV6_REGISTRY=RIPENCC
 ]]></screen></sect2></sect1><sect1>
 <title>History</title>
 <para>Major extensions/changes are listed here</para><sect2>
+<title>2021</title>
+<itemizedlist>
+<listitem><para>add support for compressed IPv4 addresses like 10/8 (&gt;= 3.1.0)</para></listitem></itemizedlist></sect2><sect2>
 <title>2020</title>
 <itemizedlist>
-<listitem><para>drop GeoIP(legacy) support (&gt;= 3.0.0)</para></listitem><listitem><para>drop db-ip-com(BerkeleyDB) support (&gt;= 3.0.0)</para></listitem></itemizedlist></sect2><sect2>
+<listitem><para>drop GeoIP(legacy) support (&gt;= 3.0.0)</para></listitem><listitem><para>drop db-ip.com(BerkeleyDB) support (&gt;= 3.0.0)</para></listitem></itemizedlist></sect2><sect2>
 <title>2019</title>
 <itemizedlist>
 <listitem><para>add OUI-28 support (&gt;= 2.2.0)</para></listitem><listitem><para>add action &ldquo;addr2cc&rdquo; (can be used as replacement for geoiplookup) (&gt;= 2.1.0)</para></listitem><listitem><para>enable &ldquo;geonameid&rdquo; also in mod_ipv6calc (&gt;= 2.1.0)</para></listitem><listitem><para>add anonymization method &ldquo;keep-type-geonameid&rdquo; (&gt;= 2.1.0)</para></listitem><listitem><para>add support for MaxMindDB (GeoIP, db-ip.com) (&gt;= 2.0.0)</para></listitem><listitem><para>drop support of IP2Location libraries &lt; 7.0.1 (&gt;= 2.0.0)</para></listitem></itemizedlist></sect2><sect2>
