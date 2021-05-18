@@ -135,8 +135,9 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 	int retval = 1;
 	char tempstring[NI_MAXHOST], *token, *cptr, **ptrptr;
 	int flag_tld = 0, flag_nld = 0, tokencounter = 0;
+	int n, offset;
 	unsigned int noctet, nibblecounter = 0;
-	int xdigit;
+	uint32_t xdigit;
 
 	if ((strlen(inputstring) < 4) || (strlen(inputstring) > 73)) {
 		/* min: .int */
@@ -214,7 +215,7 @@ int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_
 			return (1);
 		};
 
-		if ( xdigit < 0 || xdigit > 0xf ) {
+		if (xdigit > 0xf) {
 			snprintf(resultstring, resultstring_length, "Nibble '%s' on dot position %d (from right side) is out of range", token, tokencounter + 1);
 			return (1);
 		};
@@ -242,8 +243,45 @@ NEXT_token_nibblestring_to_ipv6addrstruct:
 	};
 
 	ipv6addrp->flag_valid = 1;
-	ipv6addrp->flag_prefixuse = 1;
-	ipv6addrp->prefixlength = (uint8_t) nibblecounter << 2;
+	if ((flag_tld == 1) && (flag_nld == 1)) {
+		// started with TLD and NLD, so from top
+		ipv6addrp->flag_prefixuse = 1;
+		ipv6addrp->prefixlength = (uint8_t) nibblecounter << 2;
+	} else {
+		ipv6addrp->flag_prefixuse = 1;
+		ipv6addrp->prefixlength = 128 - ((uint8_t) nibblecounter << 2);
+		// shift now to the right
+		if (nibblecounter < 32) {
+			// shift byte with offset to the right
+			offset = 16 - (nibblecounter >> 1);
+
+			if ( (nibblecounter & 0x01) != 0 ) {
+				offset--;
+			};
+
+			for (n = 15; n >= 15 - (int) (nibblecounter >> 1); n--) {
+				(*ipv6addrp).in6_addr.s6_addr[n] = (*ipv6addrp).in6_addr.s6_addr[n - offset];
+			};
+
+			// clear prefix
+			for (n = 0; n < offset; n++) {
+				(*ipv6addrp).in6_addr.s6_addr[n] = 0;
+			};
+			if ( (nibblecounter & 0x01) != 0 ) {
+				// shift additional one nibble right
+				for (n = 15; n >= 15 - (int) (nibblecounter >> 1); n--) {
+					// save rightmost nibble
+					xdigit = (*ipv6addrp).in6_addr.s6_addr[n] & 0xf;
+					// shift by one nibble right
+					(*ipv6addrp).in6_addr.s6_addr[n] = (*ipv6addrp).in6_addr.s6_addr[n] >> 4;
+					if (n < 15)  {
+						// implant saved rightmost nibble on leftmost
+						(*ipv6addrp).in6_addr.s6_addr[n + 1] |= xdigit << 4;
+					};
+				};
+			};
+		};
+	};
 	
 	retval = 0;
 	return (retval);
@@ -318,8 +356,8 @@ int librfc1886_formatcheck(const char *string, char *infostring, const size_t in
 			};
 		};
 
-		if ((flag_tld != 1) && (flag_nld != 1)) {
-			snprintf(infostring, infostring_length, "Nibble string misses suffix ip6.int or ip6.arpa");
+		if ((flag_tld != 1) && (flag_nld != 1) && (strlen(string) < 7)) {
+			snprintf(infostring, infostring_length, "Nibble string misses suffix ip6.int or ip6.arpa or is less than 7 chars long");
 			return (1);
 		};
 

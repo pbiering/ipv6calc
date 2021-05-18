@@ -264,6 +264,17 @@ NOPIPETEST-A addr2cc 3ffe:831f:ce49:7601:8000:efff:af4a:86bf			=IT;DB_IPV6_CC
 NOPIPETEST-A addr2cc 8.8.8.8							=US;DB_IPV4_CC
 NOPIPETEST--addr2cc 3ffe:831f:ce49:7601:8000:efff:af4a:86bf			=IT;DB_IPV6_CC
 NOPIPETEST--addr2cc 8.8.8.8							=US;DB_IPV4_CC
+# revnibble >= 3.1.0
+NOPIPETEST9.b.3.2.9.7.f.1.9.a.e.5.3.8.5.f					=::f583:5ea9:1f79:23b9/64
+NOPIPETEST9.b.3.2.9.7.f.1.9.a.e.5.3.8.5.f --printsuffix				=f583:5ea9:1f79:23b9
+NOPIPETEST0.1.2.3.4.5.6.7.8.9.a.b.c.d.e.f					=::fedc:ba98:7654:3210/64
+NOPIPETEST0.1.2.3.4.5.6.7.8.9.a.b.c.d.e.f.0.1					=::10:fedc:ba98:7654:3210/56
+NOPIPETEST0.1.2.3.4.5.6.7.8.9.a.b.c.d.e.f.a.b					=::ba:fedc:ba98:7654:3210/56
+NOPIPETEST0.1.2.3.4.5.6.7.8.9.a.b.c.d.e.f.a					=::a:fedc:ba98:7654:3210/60
+NOPIPETEST0.1.2.3.4.5.6.7.8.9.a.b.c.d.e.f.a.b.c					=::cba:fedc:ba98:7654:3210/52
+NOPIPETEST0.1.2.3.4.5.6.7.8.9.a.b.c.d.e.f.a.b.c.d				=::dcba:fedc:ba98:7654:3210/48
+NOPIPETEST0.1.2.3.4.5.6.7.8.9.a.b.c.d.e.f.a.b.c.d --printsuffix			=dcba:fedc:ba98:7654:3210
+NOPIPETEST0.1.2.3.4.5.6.7.8.9.a.b.c.d.e.f.a.b.c --printsuffix			=cba:fedc:ba98:7654:3210
 END
 }
 

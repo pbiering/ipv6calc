@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
  * Version    : $Id$
- * Copyright  : 2001-2020 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
@@ -768,7 +768,7 @@ int main(int argc, char *argv[]) {
 				printhelp_inputtypes(formatoptions);
 			} else {
 				DEBUGPRINT_NA(DEBUG_ipv6calc_general, "printhelp_output_dispatcher");
-				printhelp_output_dispatcher(outputtype);
+				printhelp_output_dispatcher(outputtype, inputtype);
 			};
 			exit(EXIT_FAILURE);
 		} else if (action == ACTION_auto) {
@@ -782,7 +782,7 @@ int main(int argc, char *argv[]) {
 		};
 
 	} else if (command == CMD_printexamples) {
-		printhelp_output_dispatcher(outputtype);
+		printhelp_output_dispatcher(outputtype, inputtype);
 		exit(EXIT_FAILURE);
 	} else if (command == CMD_showinfotypes) {
 		showinfo_availabletypes();

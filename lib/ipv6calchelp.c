@@ -516,6 +516,16 @@ static void printhelp_output_revnibble_arpa(void) {
 	fprintf(stderr, "  3ffe:ffff:100:f101::1/64\n    -> 1.0.1.f.0.0.1.0.0.0.4.0.e.f.f.3.ip6.arpa.\n");
 };
 
+static void printhelp_input_revnibbles(void) {
+	fprintf(stderr, " Print reverse nibble format (used in DNS) as IPv6 address, e.g.\n");
+	fprintf(stderr, "  1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.8.b.d.0.1.0.0.2.ip6.arpa.\n    -> 2001:db8::1/128\n");
+	fprintf(stderr, "  8.b.d.0.1.0.0.2.ip6.arpa.\n    -> 2001:db8::/32\n");
+	fprintf(stderr, "  8.b.d.0.1.0.0.2.ip6.arpa. --printprefix\n    -> 2001:db8\n");
+	fprintf(stderr, "  1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0\n    -> ::1/64\n");
+	fprintf(stderr, "  1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0 --printsuffix\n    -> 0:0:0:1\n");
+};
+
+
 static void printhelp_output_ifinet6void(void) {
 	fprintf(stderr, " Print a given IPv6 address to same format shown in Linux /proc/net/if_inet6:\n");
 	fprintf(stderr, "  3ffe:ffff:100:f101::1    -> 3ffeffff0100f1010000000000000001 00\n");
@@ -567,7 +577,7 @@ static void printhelp_output_octal(void) {
 	fprintf(stderr, "  --printfulluncompressed 3ffe:ffff::1 ->\n    \\077\\376\\377\\377\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\001\n");
 };
 
-void printhelp_output_dispatcher(const uint32_t outputtype) {
+void printhelp_output_dispatcher(const uint32_t outputtype, const uint32_t inputtype) {
 	int i, j;
 
 	printversion();
@@ -640,7 +650,16 @@ void printhelp_output_dispatcher(const uint32_t outputtype) {
 			break;
 			
 		default:
-			fprintf(stderr, " Examples currently missing...!\n");
+			switch (inputtype) {
+				case FORMAT_revnibbles_int:
+				case FORMAT_revnibbles_arpa:
+					printhelp_input_revnibbles();
+					break;
+
+				default:
+					fprintf(stderr, " Examples currently missing... (output type)!\n");
+					break;
+			};
 			break;
 	};
 	

@@ -45,7 +45,7 @@ extern void printhelp_outputtypes(const uint32_t inputtype, const uint32_t forma
 extern void printhelp_actiontypes(const uint32_t formatoptions, const struct option longopts[]);
 extern void printhelp_common(const uint32_t help_features);
 extern void printhelp_shortcut_options(const struct option longopts[], const s_ipv6calc_longopts_shortopts_map longopts_shortopts_map[]);
-extern void printhelp_output_dispatcher(const uint32_t outputtype);
+extern void printhelp_output_dispatcher(const uint32_t outputtype, const uint32_t inputtype);
 extern void printhelp_action_dispatcher(const uint32_t action, const int embedded);
 
 extern void ipv6calc_print_features_verbose(const int level_vebose);

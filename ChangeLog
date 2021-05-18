@@ -10,6 +10,9 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20210518/PB:
+	Improve revnibble handling (TLD+NLD given given -> prefix, missing -> suffix), add related online help
+
 20210516/VZ:
 	Fix tests on OpenBSD (https://github.com/pbiering/ipv6calc/pull/21)
 
