@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : autogen-support.sh
 # Version    : $Id$
-# Copyright  : 2014-2020 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2014-2021 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support functions to autogen.sh/autogen-all-variants.sh
 #

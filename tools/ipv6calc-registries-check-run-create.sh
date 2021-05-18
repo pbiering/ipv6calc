@@ -3,7 +3,7 @@
 # Project    : ipv6calc/databases/ipv4-assignment
 # File       : ipv6calc-registries-check-run-create.sh
 # Version    : $Id$
-# Copyright  : 2002-2017 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2021 by Peter Bieringer <pb (at) bieringer.de>
 
 flag_update=false
 

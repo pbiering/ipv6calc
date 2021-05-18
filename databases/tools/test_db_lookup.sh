@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : test_db_lookup.sh
 # Version    : $Id$
-# Copyright  : 2014-2014 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2014-2021 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test raw database entries against ipv6calc output (to check, whether BuiltIn databases are correctly aggregated)
 #

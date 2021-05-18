@@ -5,7 +5,7 @@
 # Project    : ipv6calc/databases
 # File       : ipv6calc-db-update.sh
 # Version    : $Id$
-# Copyright  : 2015-2020 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2015-2021 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
 IPV6CALC_DAT_DIR_DEFAULT="@EXTERNAL_DB@"

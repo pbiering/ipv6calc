@@ -3,7 +3,7 @@
 # Project    : ipv6calc/databases/cc-assignment
 # File       : check-run-create.sh
 # Version    : $Id$
-# Copyright  : 2013-2013 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
 
 #set -x
 

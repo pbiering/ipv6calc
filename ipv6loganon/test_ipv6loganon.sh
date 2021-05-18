@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : test_ipv6loganon.sh
 # Version    : $Id$
-# Copyright  : 2007-2017 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2007-2021 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6loganon"
 
