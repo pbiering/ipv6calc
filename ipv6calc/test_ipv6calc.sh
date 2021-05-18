@@ -294,8 +294,6 @@ cat <<END | grep -v '^#'
 1.2.										ipv4addr
 1.2.3										ipv4addr
 1.2.3.										ipv4addr
-1.2.3.4.									ipv4addr
-1.2.3.4.5									ipv4addr
 1.2.3.4.5/10									ipv4addr
 /10										ipv4addr
 ./10										ipv4addr
