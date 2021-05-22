@@ -10,6 +10,10 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20210522/PB:
+	Bugfixes related to "pull/20" (https://github.com/pbiering/ipv6calc/issues/25)
+	tag version 3.1.1
+
 20210518/PB:
 	Improve revnibble handling (TLD+NLD given given -> prefix, missing -> suffix), add related online help
 	tag version 3.1.0
