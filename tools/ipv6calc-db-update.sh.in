@@ -37,7 +37,7 @@ Usage: $(basename "$0") [-s] [-u] [-D <dir>]
 END
 }
 
-skip_download=true
+skip_download=false
 update=false
 while getopts "D:ush\?" opt; do
 	case $opt in
