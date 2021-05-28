@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.h
  * Version    : $Id$
- * Copyright  : 2013-2017 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_External.c
@@ -66,7 +66,7 @@ extern time_t      libipv6calc_db_wrapper_External_db_unixtime_by_feature(uint32
 
 #include <db.h>
 
-extern char external_db_dir[NI_MAXHOST];
+extern char external_db_dir[PATH_MAX];
 
 extern int          libipv6calc_db_wrapper_External_db_avail(const unsigned int type);
 extern DB          *libipv6calc_db_wrapper_External_open_type(const unsigned int type, long int *db_recno_max_ptr);

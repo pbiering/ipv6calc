@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.c
  * Version    : $Id$
- * Copyright  : 2013-2020 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc External (superseeding BuiltIn) database wrapper
@@ -30,7 +30,7 @@
 
 #include "libipv6calc_db_wrapper_External.h"
 
-char external_db_dir[NI_MAXHOST] = EXTERNAL_DB;
+char external_db_dir[PATH_MAX] = EXTERNAL_DB;
 
 static const char* wrapper_external_info = "External";
 

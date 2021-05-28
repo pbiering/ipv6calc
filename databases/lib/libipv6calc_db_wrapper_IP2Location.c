@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
  * Version    : $Id$
- * Copyright  : 2013-2020 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc IP2Location database wrapper
@@ -30,7 +30,7 @@
 
 #include "libipv6calc_db_wrapper_IP2Location.h"
 
-char ip2location_db_dir[NI_MAXHOST] = IP2LOCATION_DB;
+char ip2location_db_dir[PATH_MAX] = IP2LOCATION_DB;
 
 /* 
  * API_VERSION is defined as a bareword in IP2Location.h, 
@@ -42,7 +42,7 @@ char ip2location_db_dir[NI_MAXHOST] = IP2LOCATION_DB;
 #define IP2LOCATION_API_VERSION	xmakestr(API_VERSION)
 
 #ifdef SUPPORT_IP2LOCATION_DYN
-char ip2location_lib_file[NI_MAXHOST] = IP2LOCATION_DYN_LIB;
+char ip2location_lib_file[PATH_MAX] = IP2LOCATION_DYN_LIB;
 
 static const char* wrapper_ip2location_info = "dyn-load";
 static int wrapper_ip2location_ipv6_support = IP2LOCATION_IPV6_SUPPORT_UNKNOWN;

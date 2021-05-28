@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.h
  * Version    : $Id$
- * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_IP2Location.c
@@ -593,8 +593,8 @@ extern int         libipv6calc_db_wrapper_IP2Location_library_version_major(void
 
 
 #ifdef SUPPORT_IP2LOCATION
-extern char ip2location_lib_file[NI_MAXHOST];
-extern char ip2location_db_dir[NI_MAXHOST];
+extern char ip2location_lib_file[PATH_MAX];
+extern char ip2location_db_dir[PATH_MAX];
 
 extern int                libipv6calc_db_wrapper_IP2Location_db_avail(const unsigned int type);
 extern char              *libipv6calc_db_wrapper_IP2Location_lib_version(void);

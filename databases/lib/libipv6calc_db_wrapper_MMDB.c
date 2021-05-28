@@ -26,7 +26,7 @@
 #include "libipv6calc_db_wrapper_MMDB.h"
 
 #ifdef SUPPORT_MMDB_DYN
-char mmdb_lib_file[NI_MAXHOST] = MMDB_DYN_LIB;
+char mmdb_lib_file[PATH_MAX] = MMDB_DYN_LIB;
 static const char* wrapper_mmdb_info = "dyn-load";
 
 /* define status and dynamic load functions */

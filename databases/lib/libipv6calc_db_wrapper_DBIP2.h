@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP2.h
  * Version    : $Id$
- * Copyright  : 2019-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2019-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_DBIP2.c
@@ -96,7 +96,7 @@ extern uint32_t    libipv6calc_db_wrapper_DBIP2_wrapper_asn_by_addr(const ipv6ca
 extern uint32_t    libipv6calc_db_wrapper_DBIP2_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp, int *source_ptr);
 extern int         libipv6calc_db_wrapper_DBIP2_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libipv6calc_db_wrapper_geolocation_record *recordp);
 
-extern char dbip2_db_dir[NI_MAXHOST];
+extern char dbip2_db_dir[PATH_MAX];
 extern int  dbip2_db_comm_to_free_switch_min_delta_months;
 extern int  dbip2_db_only_type;
 

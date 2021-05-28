@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP2.c
  * Version    : $Id$
- * Copyright  : 2019-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2019-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc DB-IP.com database wrapper for MaxMindDB databases
@@ -28,7 +28,7 @@
 
 #include "libipv6calc_db_wrapper_GeoIP2.h"
 
-char geoip2_db_dir[NI_MAXHOST] = GEOIP2_DB;
+char geoip2_db_dir[PATH_MAX] = GEOIP2_DB;
 
 static const char* wrapper_geoip2_info = "GeoIP2";
 
