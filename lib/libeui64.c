@@ -64,7 +64,7 @@ int create_eui64_from_mac(ipv6calc_ipv6addr *ipv6addrp, ipv6calc_macaddr *macadd
  * ret: ==0: ok, !=0: error
  */
 int libeui64_eui64addrstruct_to_string(const ipv6calc_eui64addr *eui64addr_p, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 
 	/* address */
 	snprintf(tempstring, sizeof(tempstring), "%02x:%02x:%02x:%02x:%02x:%02x:%02x:%02x", \

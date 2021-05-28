@@ -40,7 +40,7 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
 	int retval = 1;
 	unsigned int nibble;
 	int bit_start, bit_end, nbit;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 	unsigned int nnibble, noctet;
 	
 	DEBUGPRINT_WA(DEBUG_librfc1886, "flag_prefixuse %d", (*ipv6addrp).flag_prefixuse);
@@ -133,7 +133,7 @@ int librfc1886_addr_to_nibblestring(ipv6calc_ipv6addr *ipv6addrp, char *resultst
  */
 int librfc1886_nibblestring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length) {
 	int retval = 1;
-	char tempstring[NI_MAXHOST], *token, *cptr, **ptrptr;
+	char tempstring[IPV6CALC_STRING_MAX], *token, *cptr, **ptrptr;
 	int flag_tld = 0, flag_nld = 0, tokencounter = 0;
 	int n, offset;
 	unsigned int noctet, nibblecounter = 0;
@@ -296,7 +296,7 @@ NEXT_token_nibblestring_to_ipv6addrstruct:
  */
 int librfc1886_formatcheck(const char *string, char *infostring, const size_t infostring_length) {
 	int nibblecounter = 0, flag_tld = 0, flag_nld = 0, tokencounter = 0;
-	char tempstring[NI_MAXHOST], *token, *cptr, **ptrptr;
+	char tempstring[IPV6CALC_STRING_MAX], *token, *cptr, **ptrptr;
 
 	ptrptr = &cptr;
 

@@ -142,7 +142,7 @@ int ipv6addrstruct_to_base85(const ipv6calc_ipv6addr *ipv6addrp, char *resultstr
 
 int base85_to_ipv6addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1, i;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 	uint16_t result[8];
 
 	retval = librfc1924_formatcheck(addrstring, resultstring, resultstring_length);

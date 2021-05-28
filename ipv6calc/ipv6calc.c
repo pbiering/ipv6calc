@@ -95,9 +95,9 @@ int main(int argc, char *argv[]) {
 	IPV6CALC_DB_LIB_VERSION_CHECK_EXIT(IPV6CALC_PACKAGE_VERSION_NUMERIC, IPV6CALC_PACKAGE_VERSION_STRING)
 #endif // SHARED_LIBRARY
 
-	char resultstring[NI_MAXHOST] = "";
-	char resultstring2[NI_MAXHOST] = "";
-	char resultstring3[NI_MAXHOST] = "";
+	char resultstring[IPV6CALC_STRING_MAX] = "";
+	char resultstring2[IPV6CALC_STRING_MAX] = "";
+	char resultstring3[IPV6CALC_STRING_MAX] = "";
 	int retval = 1, i, j, lop, result;
 	extern int optopt;
 	uint32_t command = 0;
@@ -170,7 +170,7 @@ int main(int argc, char *argv[]) {
 
 	/* options */
 	struct option longopts[IPV6CALC_MAXLONGOPTIONS];
-	char   shortopts[NI_MAXHOST] = "";
+	char   shortopts[IPV6CALC_STRING_MAX] = "";
 	int    longopts_maxentries = 0;
 
 	/* initialize debug value from environment for bootstrap debugging */
@@ -840,7 +840,7 @@ int main(int argc, char *argv[]) {
 		};
 		for (i = 0; i < argc; i++) {
 			if ( argv[i] != NULL ) {
-				if ( strlen(argv[i]) >= NI_MAXHOST ) {
+				if ( strlen(argv[i]) >= IPV6CALC_STRING_MAX ) {
 					/* that's not good for size limited buffers...*/
 					fprintf(stderr, "Argument %d is too long\n", i + 1);
 					exit(EXIT_FAILURE);
@@ -868,7 +868,7 @@ PIPE_input:
 		
 		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Line: %d", linecounter);
 
-		if (strlen(linebuffer) >= NI_MAXHOST) {
+		if (strlen(linebuffer) >= IPV6CALC_STRING_MAX) {
 			fprintf(stderr, "Line too long: %d\n", linecounter);
 			exit(EXIT_FAILURE);
 		};

@@ -540,7 +540,7 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, const 
 	char *addronlystring, *cp;
 	int expecteditems = 0;
 	int compat[4];
-	char tempstring[NI_MAXHOST], *cptr, **ptrptr;
+	char tempstring[IPV6CALC_STRING_MAX], *cptr, **ptrptr;
 	uint32_t typeinfo;
 
 	ptrptr = &cptr;
@@ -650,7 +650,7 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, const 
  * ret: ==0: ok, !=0: error
  */
 int libipv4addr_ipv4addrstruct_to_string(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 
 	if ((formatoptions & FORMATOPTION_machinereadable) != 0) {
 		snprintf(resultstring, resultstring_length, "IPV4=%u.%u.%u.%u",
@@ -722,7 +722,7 @@ int libipv4addr_to_reversestring(const ipv6calc_ipv4addr *ipv4addrp, char *resul
 	int retval = 1;
 	uint8_t octet;
 	int bit_start, bit_end, nbit;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 	unsigned int noctet;
 	
 	if ( ((formatoptions & (FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_printstart | FORMATOPTION_printend)) == 0 ) && ((*ipv4addrp).flag_prefixuse != 0) ) {
@@ -783,7 +783,7 @@ int libipv4addr_to_reversestring(const ipv6calc_ipv4addr *ipv4addrp, char *resul
  */
 int libipv4addr_to_octal(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
 	int retval = 1;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 
 	if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
 		snprintf(tempstring, sizeof(tempstring), "\\0%03o\\0%03o\\0%03o\\0%03o",
@@ -898,7 +898,7 @@ int libipv4addr_to_hex(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring, c
 	int retval = 1;
 	int i;
 	unsigned int s;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 
 	snprintf(tempstring, sizeof(tempstring), "%02x%02x%02x%02x",
 		(unsigned int) ipv4addr_getoctet(ipv4addrp, 0),  \
@@ -1195,7 +1195,7 @@ int ipv4addr_filter_parse(s_ipv6calc_filter_ipv4addr *filter, const char *token)
 	const char *prefixaddreq_ge2 = "addr=ge=";
 	const char *prefixaddreq_gt2 = "addr=gt=";
 	ipv6calc_ipv4addr ipv4addr;
-	char resultstring[NI_MAXHOST];
+	char resultstring[IPV6CALC_STRING_MAX];
 	int db = 0;
 	int addr_test_method = IPV6CALC_TEST_NONE;
 
@@ -1396,7 +1396,7 @@ END_ipv4addr_filter_parse:
  */
 int ipv4addr_filter_check(const s_ipv6calc_filter_ipv4addr *filter) {
 	int result = 0, r, i;
-	char resultstring[NI_MAXHOST];
+	char resultstring[IPV6CALC_STRING_MAX];
 
 	DEBUGPRINT_WA(DEBUG_libipv4addr, "ipv4 filter general active         : %d", filter->active);
 

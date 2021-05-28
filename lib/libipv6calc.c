@@ -89,7 +89,7 @@ void string_to_reverse(char *string) {
  * in : pointer to a string
  */
 void string_to_reverse_dotted(char *string, const size_t string_length) {
-	char resultstring[NI_MAXHOST], tempstring[NI_MAXHOST];
+	char resultstring[IPV6CALC_STRING_MAX], tempstring[IPV6CALC_STRING_MAX];
 	char *token, *cptr, **ptrptr;
 	int flag_first = 1;
 	
@@ -138,7 +138,7 @@ uint32_t libipv6calc_autodetectinput(const char *string) {
 	uint32_t type = FORMAT_auto_noresult;
 	int i, j = 0, result;
 	unsigned int numdots = 0, numcolons = 0, numdigits = 0, numxdigits = 0, numdashes = 0, numspaces = 0, numslashes = 0, numalnums = 0, numchar_s = 0, numpercents = 0, numcolonsdouble = 0, xdigitlen_max = 0, xdigitlen_min = 0, xdl;
-	char resultstring[NI_MAXHOST];
+	char resultstring[IPV6CALC_STRING_MAX];
 	size_t length;
 	ipv6calc_ipv4addr ipv4addr;
 
@@ -496,7 +496,7 @@ void libipv6calc_filter_clear_db_registry(s_ipv6calc_filter_db_registry *filter_
  * ret: success
  */
 int libipv6calc_filter_parse(const char *expression, s_ipv6calc_filter_master *filter_master) {
-	char tempstring[NI_MAXHOST] = "";
+	char tempstring[IPV6CALC_STRING_MAX] = "";
 	char *charptr, *cptr, **ptrptr;
 	ptrptr = &cptr;
 	int r, token_used, result = 0;

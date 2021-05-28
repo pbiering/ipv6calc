@@ -48,9 +48,9 @@ static int opt_column_numbers = 0;
 static int opt_noheader = 0;
 static int opt_onlyheader = 0;
 static int opt_printdirection = 0; /* rows */
-static char opt_token[NI_MAXHOST] = "";
+static char opt_token[IPV6CALC_STRING_MAX] = "";
 
-char    file_out[NI_MAXHOST] = "";
+char    file_out[IPV6CALC_STRING_MAX] = "";
 int     file_out_flag = 0;
 FILE    *FILE_OUT;
 
@@ -140,7 +140,7 @@ int main(int argc,char *argv[]) {
 
 	/* options */
 	struct option longopts[IPV6CALC_MAXLONGOPTIONS];
-	char   shortopts[NI_MAXHOST] = "";
+	char   shortopts[IPV6CALC_STRING_MAX] = "";
 	int    longopts_maxentries = 0;
 	extern int optopt;
 

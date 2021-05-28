@@ -39,7 +39,7 @@
  */
 int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv6calc_ipv6addr *newidentifier, ipv6calc_ipv6addr *newtoken) {
 	int retval = 1, i;
-	char tempstring[NI_MAXHOST],  tempstring2[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX],  tempstring2[IPV6CALC_STRING_MAX];
 	unsigned char digest[MD5_DIGEST_LENGTH];
 
 #ifdef ENABLE_BUNDLED_MD5

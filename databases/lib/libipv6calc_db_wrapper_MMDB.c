@@ -965,7 +965,7 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 	MMDB_entry_data_s entry_data;
 	int mmdb_error;
 
-	static char resultstring[NI_MAXHOST];
+	static char resultstring[IPV6CALC_STRING_MAX];
 
 	libipv6calc_db_wrapper_geolocation_record_clear(recordp);
 
