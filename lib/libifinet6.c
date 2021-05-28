@@ -27,7 +27,7 @@
  */
 int libifinet6_ifinet6_to_ipv6addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 	char addr6p[8][5]; 
 
 	DEBUGPRINT_WA(DEBUG_libifinet6, "Got input '%s'", addrstring);
@@ -67,7 +67,7 @@ int libifinet6_ifinet6_to_ipv6addrstruct(const char *addrstring, char *resultstr
  */
 int libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(const char *addrstring, const char *prefixlengthstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1, result, tempint;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 	uint8_t prefixlength = 0;
 
 	DEBUGPRINT_WA(DEBUG_libifinet6, "Got input addressstring: '%s', prefixlengthstring: '%s'", addrstring, prefixlengthstring);
@@ -122,7 +122,7 @@ int libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(const char *addrstring
  */
 int libifinet6_ipv6addrstruct_to_ifinet6(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length) {
 	int retval = 1;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 
 	/* print out array */	
 	snprintf(tempstring, sizeof(tempstring), "%08x%08x%08x%08x %02x", (unsigned int) ipv6addr_getdword(ipv6addrp, 0), (unsigned int) ipv6addr_getdword(ipv6addrp, 1), (unsigned int) ipv6addr_getdword(ipv6addrp, 2), (unsigned int) ipv6addr_getdword(ipv6addrp, 3), (unsigned int) ipv6addrp->typeinfo & IPV6_ADDR_SCOPE_MASK);

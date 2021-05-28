@@ -31,7 +31,7 @@ int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resul
 	int retval = 1;
 	unsigned int nibble;
 	unsigned int noctet, nbit, nnibble, prefixlength, bit_start, bit_end;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 
 	if ( (*ipv6addrp).flag_startend_use != 0 ) {
 		/* check start and end */
@@ -115,7 +115,7 @@ int librfc2874_addr_to_bitstring(const ipv6calc_ipv6addr *ipv6addrp, char *resul
  */
 int librfc2874_bitstring_to_ipv6addrstruct(const char *inputstring, ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length) {
 	int retval = 1;
-	char tempstring[NI_MAXHOST], tempstring2[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX], tempstring2[IPV6CALC_STRING_MAX];
 	unsigned int nibblecounter = 0;
 	unsigned int noctet, startprefixlength, endprefixlength, index = 0, length, prefixlength;
 	int xdigit;

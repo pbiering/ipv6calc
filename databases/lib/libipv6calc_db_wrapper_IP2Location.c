@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
  * Version    : $Id$
- * Copyright  : 2013-2020 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc IP2Location database wrapper
@@ -30,7 +30,7 @@
 
 #include "libipv6calc_db_wrapper_IP2Location.h"
 
-char ip2location_db_dir[NI_MAXHOST] = IP2LOCATION_DB;
+char ip2location_db_dir[PATH_MAX] = IP2LOCATION_DB;
 
 /* 
  * API_VERSION is defined as a bareword in IP2Location.h, 
@@ -42,7 +42,7 @@ char ip2location_db_dir[NI_MAXHOST] = IP2LOCATION_DB;
 #define IP2LOCATION_API_VERSION	xmakestr(API_VERSION)
 
 #ifdef SUPPORT_IP2LOCATION_DYN
-char ip2location_lib_file[NI_MAXHOST] = IP2LOCATION_DYN_LIB;
+char ip2location_lib_file[PATH_MAX] = IP2LOCATION_DYN_LIB;
 
 static const char* wrapper_ip2location_info = "dyn-load";
 static int wrapper_ip2location_ipv6_support = IP2LOCATION_IPV6_SUPPORT_UNKNOWN;
@@ -158,7 +158,7 @@ static uint32_t ip2location_db_usage_map[IP2LOCATION_DB_MAX_BLOCKS_32];
 							exit(1); \
 						};
 
-char ip2location_db_usage_string[NI_MAXHOST] = "";
+char ip2location_db_usage_string[IPV6CALC_STRING_MAX] = "";
 
 // local cache
 static IP2Location *db_ptr_cache[MAXENTRIES_ARRAY(libipv6calc_db_wrapper_IP2Location_db_file_desc)];
@@ -784,7 +784,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 char *libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used(void) {
 	unsigned int db;
 	IP2Location *loc;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 	char *info;
 
 	unsigned int db_lite_used = 0;
@@ -964,7 +964,7 @@ END_libipv6calc_db_wrapper:
  * wrapper extension: IP2Location_dbfilename
  */
 static char *libipv6calc_db_wrapper_IP2Location_dbfilename(const unsigned int type) {
-	static char tempstring[NI_MAXHOST];
+	static char tempstring[IPV6CALC_STRING_MAX];
 	int  entry = -1, i;
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called: %s type=%d", wrapper_ip2location_info, type);
@@ -1182,8 +1182,8 @@ END_libipv6calc_db_wrapper:
  * wrapper: IP2Location_database_info
  */
 char *libipv6calc_db_wrapper_IP2Location_database_info(IP2Location *loc, const int level_verbose, const int entry, const int flag_copyright) {
-	static char resultstring[NI_MAXHOST];
-	char tempstring[NI_MAXHOST] = "";
+	static char resultstring[IPV6CALC_STRING_MAX];
+	char tempstring[IPV6CALC_STRING_MAX] = "";
 
 	uint32_t ipsupport = 0; // unknown
 	uint32_t entries_ipv4 = 0;
@@ -1836,7 +1836,7 @@ extern const char *libipv6calc_db_wrapper_IP2Location_UsageType_description(char
 /* all information */
 int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libipv6calc_db_wrapper_geolocation_record *recordp) {
 	int result = 0, retval;
-	char addrstring[NI_MAXHOST] = "";
+	char addrstring[IPV6CALC_STRING_MAX] = "";
 	IP2LocationRecord *record = NULL;
 
 	libipv6calc_db_wrapper_geolocation_record_clear(recordp);
@@ -1942,8 +1942,8 @@ int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddr
 
 				// add description
 				char *token, *cptr = NULL, **ptrptr;
-				char tempstring[NI_MAXHOST] = "";
-				char tempstring2[NI_MAXHOST] = "";
+				char tempstring[IPV6CALC_STRING_MAX] = "";
+				char tempstring2[IPV6CALC_STRING_MAX] = "";
 				ptrptr = &cptr;
 				token = strtok_r(record->usagetype, "/", ptrptr);
 				while (token != NULL) {

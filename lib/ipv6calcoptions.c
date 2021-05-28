@@ -74,7 +74,7 @@ void ipv6calc_debug_from_env(void) {
 void ipv6calc_options_add(char *shortopts_p, const int shortopts_maxlen, struct option longopts[], int *maxentries_p, const char *shortopts_custom, const struct option longopts_custom[], const int longopts_custom_entries) {
 	int i, l;
 	unsigned int j, k;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 
 	DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Called: longopts_custom_entries=%d shortopts=%s", longopts_custom_entries, shortopts_p);
 
@@ -423,7 +423,7 @@ const char *ipv6calcoption_name(const int opt, const struct option longopts[]) {
 void ipv6calc_common_options_from_env(const struct option longopts[], s_ipv6calc_anon_set *ipv6calc_anon_set_p) {
 	int i, result;
 	unsigned int s;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 	char *environment_value;
 
 	i = 0;

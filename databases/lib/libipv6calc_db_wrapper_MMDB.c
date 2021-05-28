@@ -26,7 +26,7 @@
 #include "libipv6calc_db_wrapper_MMDB.h"
 
 #ifdef SUPPORT_MMDB_DYN
-char mmdb_lib_file[NI_MAXHOST] = MMDB_DYN_LIB;
+char mmdb_lib_file[PATH_MAX] = MMDB_DYN_LIB;
 static const char* wrapper_mmdb_info = "dyn-load";
 
 /* define status and dynamic load functions */
@@ -965,7 +965,7 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 	MMDB_entry_data_s entry_data;
 	int mmdb_error;
 
-	static char resultstring[NI_MAXHOST];
+	static char resultstring[IPV6CALC_STRING_MAX];
 
 	libipv6calc_db_wrapper_geolocation_record_clear(recordp);
 

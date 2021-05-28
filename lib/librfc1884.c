@@ -31,7 +31,7 @@
 int compaddr_to_uncompaddr(const char *addrstring, char *resultstring, const size_t resultstring_length) {
 	int retval = 1, cnt;
 	char *cp, *op, *strp;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 
 	DEBUGPRINT_WA(DEBUG_librfc1884, "got input: %s", addrstring);
 
@@ -119,7 +119,7 @@ int ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, char *results
 };
 	
 int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
-	char tempstring[NI_MAXHOST], temp2string[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX], temp2string[IPV6CALC_STRING_MAX];
 	int retval = 1;
 	int zstart = -1, zend = -1, tstart = -1, tend = -1, i, w_max = 7;
 	unsigned int s;

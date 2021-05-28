@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP2.c
  * Version    : $Id$
- * Copyright  : 2019-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2019-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc DB-IP.com database wrapper for MaxMindDB databases
@@ -28,7 +28,7 @@
 
 #include "libipv6calc_db_wrapper_DBIP2.h"
 
-char dbip2_db_dir[NI_MAXHOST] = DBIP2_DB;
+char dbip2_db_dir[PATH_MAX] = DBIP2_DB;
 
 static const char* wrapper_dbip2_info = "DBIP2";
 
@@ -81,7 +81,7 @@ static uint32_t dbip2_db_usage_map[DBIP2_DB_MAX_BLOCKS_32];
 							exit(1); \
 						};
 
-char dbip2_db_usage_string[NI_MAXHOST] = "";
+char dbip2_db_usage_string[IPV6CALC_STRING_MAX] = "";
 
 // local cache
 static MMDB_s mmdb_cache[DBIP2_DB_MAX+1];
@@ -442,7 +442,7 @@ void libipv6calc_db_wrapper_DBIP2_wrapper_print_db_info(const int level_verbose,
  */
 char *libipv6calc_db_wrapper_DBIP2_wrapper_db_info_used(void) {
 	int type, i;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 	char *info;
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP2, "Called");
@@ -491,7 +491,7 @@ char *libipv6calc_db_wrapper_DBIP2_wrapper_db_info_used(void) {
  * wrapper extension: DBIP2_dbfilename
  */
 static char *libipv6calc_db_wrapper_DBIP2_dbfilename(const unsigned int type) {
-	static char tempstring[NI_MAXHOST];
+	static char tempstring[IPV6CALC_STRING_MAX];
 	int  entry = -1, i;
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "Called: %s type=%d", wrapper_dbip2_info, type);
@@ -648,9 +648,9 @@ END_libipv6calc_db_wrapper:
  * wrapper: DBIP2_database_info
  */
 char *libipv6calc_db_wrapper_DBIP2_database_info(const unsigned int type) {
-	static char resultstring[NI_MAXHOST];
-	char datastring[NI_MAXHOST];
-	char tempstring[NI_MAXHOST];
+	static char resultstring[IPV6CALC_STRING_MAX];
+	char datastring[IPV6CALC_STRING_MAX];
+	char tempstring[IPV6CALC_STRING_MAX];
 
 	MMDB_s mmdb;
 	int ret, i, entry = -1;

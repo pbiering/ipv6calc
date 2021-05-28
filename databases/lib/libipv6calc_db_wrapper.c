@@ -522,7 +522,7 @@ void libipv6calc_db_wrapper_info(char *string, const size_t size) {
 /* function get feature string */
 void libipv6calc_db_wrapper_features(char *string, const size_t size) {
 	int i;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 	char *separator;
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
@@ -548,7 +548,7 @@ void libipv6calc_db_wrapper_features(char *string, const size_t size) {
 /* function get capability string */
 void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 #if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 #endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
@@ -631,7 +631,7 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 /* function print wrapper features */
 void libipv6calc_db_wrapper_print_features_verbose(const int level_verbose) {
 #if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
-	char string[NI_MAXHOST] = "";
+	char string[IPV6CALC_STRING_MAX] = "";
 #endif
 
 #ifdef SUPPORT_MMDB
@@ -1144,7 +1144,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 		case DB_common_priorization:
 #if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP || defined SUPPORT_GEOIP || SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Parse database priorization string: %s", optarg);
-			char tempstring[NI_MAXHOST];
+			char tempstring[IPV6CALC_STRING_MAX];
 			char *token, *cptr, **ptrptr;
 			ptrptr = &cptr;
 			int i, j;
@@ -2625,7 +2625,7 @@ int libipv6calc_db_wrapper_bdb_fetch_row(
 		exit(EXIT_FAILURE);
 	};
 
-	char datastring[NI_MAXHOST];
+	char datastring[IPV6CALC_STRING_MAX];
 
 	DBT key, data;
 
@@ -3297,8 +3297,8 @@ int libipv6calc_db_cc_filter_check(const s_ipv6calc_filter_db_cc *filter, const 
 	char cc[IPV6CALC_COUNTRYCODE_STRING_MAX];
 
 	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper)
-	char tempstring[NI_MAXHOST];
-	char tempstring2[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
+	char tempstring2[IPV6CALC_STRING_MAX];
 	int i;
 
 	if (filter->cc_must_have_max > 0) {
@@ -3499,8 +3499,8 @@ int libipv6calc_db_asn_filter_check(const s_ipv6calc_filter_db_asn *filter, cons
 	int result = 0, r;
 
 	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper)
-	char tempstring[NI_MAXHOST];
-	char tempstring2[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
+	char tempstring2[IPV6CALC_STRING_MAX];
 	int i;
 	if (filter->asn_must_have_max > 0) {
 		tempstring2[0] = '\0';
@@ -3693,8 +3693,8 @@ int libipv6calc_db_registry_filter_check(const s_ipv6calc_filter_db_registry *fi
 	int result = 0, r;
 
 	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper)
-	char tempstring[NI_MAXHOST];
-	char tempstring2[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
+	char tempstring2[IPV6CALC_STRING_MAX];
 	int i;
 	if (filter->registry_must_have_max > 0) {
 		tempstring2[0] = '\0';

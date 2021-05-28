@@ -102,7 +102,7 @@ long int ipv6calc_debug = 0; // ipv6calc_debug usage (possible set via option)
 
 /* options (only used via the option parser) */
 struct option longopts[IPV6CALC_MAXLONGOPTIONS];
-char   shortopts[NI_MAXHOST] = "";
+char   shortopts[IPV6CALC_STRING_MAX] = "";
 int    longopts_maxentries = 0;
 
 
@@ -191,8 +191,8 @@ typedef struct {
 
 /* module options forwarded to ipv6calc during init */
 typedef struct {
-	char name[NI_MAXHOST];
-	char value[NI_MAXHOST];
+	char name[IPV6CALC_STRING_MAX];
+	char value[IPV6CALC_STRING_MAX];
 } ipv6calc_option;
 
 #define mod_ipv6calc_options_max IPV6CALC_MAXLONGOPTIONS
@@ -354,7 +354,7 @@ static apr_status_t ipv6calc_cleanup(void *cfgdata) {
  * ipv6calc_post_config
  */
 static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t *ptemp, server_rec *s) {
-	char string[NI_MAXHOST] = "";
+	char string[IPV6CALC_STRING_MAX] = "";
 	int result;
 
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(s->module_config, &ipv6calc_module);
@@ -1616,7 +1616,7 @@ void printcopyright(void) {
  * ipv6calc version (to satisfy dynamic library load)
  */
 void printversion(void) {
-	char resultstring[NI_MAXHOST] = "";
+	char resultstring[IPV6CALC_STRING_MAX] = "";
 
 	libipv6calc_db_wrapper_features(resultstring, sizeof(resultstring));
 

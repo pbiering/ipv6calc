@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_MMDB.h
  * Version    : $Id$
- * Copyright  : 2019-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2019-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_MMDB.c
@@ -41,7 +41,7 @@ extern void         libipv6calc_db_wrapper_MMDB_wrapper_info(char* string, const
 #ifdef SUPPORT_MMDB
 
 #ifdef SUPPORT_MMDB_DYN
-extern char mmdb_lib_file[NI_MAXHOST];
+extern char mmdb_lib_file[PATH_MAX];
 #endif
 
 extern int          libipv6calc_db_wrapper_MMDB_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp, char *country, const size_t country_len, MMDB_s *const mmdb);

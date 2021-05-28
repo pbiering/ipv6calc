@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.c
  * Version    : $Id$
- * Copyright  : 2013-2020 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc External (superseeding BuiltIn) database wrapper
@@ -30,7 +30,7 @@
 
 #include "libipv6calc_db_wrapper_External.h"
 
-char external_db_dir[NI_MAXHOST] = EXTERNAL_DB;
+char external_db_dir[PATH_MAX] = EXTERNAL_DB;
 
 static const char* wrapper_external_info = "External";
 
@@ -47,7 +47,7 @@ static uint32_t external_db_usage_map[EXTERNAL_DB_MAX_BLOCKS_32];
 							exit(1); \
 						};
 
-char external_db_usage_string[NI_MAXHOST] = "";
+char external_db_usage_string[IPV6CALC_STRING_MAX] = "";
 
 // local cache
 #define IPV6CALC_DBD_SUBDB_MAX 3
@@ -256,7 +256,7 @@ void libipv6calc_db_wrapper_External_wrapper_print_db_info(const int level_verbo
  */
 char *libipv6calc_db_wrapper_External_wrapper_db_info_used(void) {
 	int type, i;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 	char *info;
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Called");
@@ -305,7 +305,7 @@ char *libipv6calc_db_wrapper_External_wrapper_db_info_used(void) {
  * wrapper extension: External_dbfilename
  */
 static char *libipv6calc_db_wrapper_External_dbfilename(unsigned int type) {
-	static char tempstring[NI_MAXHOST];
+	static char tempstring[IPV6CALC_STRING_MAX];
 	int  entry = -1, i;
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Called: %s type=%d", wrapper_external_info, type);
@@ -536,9 +536,9 @@ END_libipv6calc_db_wrapper:
  * wrapper: External_database_info
  */
 char *libipv6calc_db_wrapper_External_database_info(const unsigned int type) {
-	static char resultstring[NI_MAXHOST] = ""; // has to be static because pointer is returned
-	char datastring[NI_MAXHOST];
-	char tempstring[NI_MAXHOST];
+	static char resultstring[IPV6CALC_STRING_MAX] = ""; // has to be static because pointer is returned
+	char datastring[IPV6CALC_STRING_MAX];
+	char tempstring[IPV6CALC_STRING_MAX];
 	int ret, i, entry = -1;
 	DB *dbp;
 
@@ -674,7 +674,7 @@ time_t libipv6calc_db_wrapper_External_db_unixtime_by_feature(uint32_t feature) 
 int libipv6calc_db_wrapper_External_registry_num_by_addr(const ipv6calc_ipaddr *ipaddrp) {
 	DB *dbp, *dbp_iana;
 	long int recno_max;
-	char resultstring[NI_MAXHOST];
+	char resultstring[IPV6CALC_STRING_MAX];
 	int i, result;
 	int retval = REGISTRY_UNKNOWN;
 
@@ -777,7 +777,7 @@ int libipv6calc_db_wrapper_External_registry_num_by_addr(const ipv6calc_ipaddr *
 END_libipv6calc_db_wrapper_match:
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "resultstring=%s", resultstring);
 
-	char datastring[NI_MAXHOST];
+	char datastring[IPV6CALC_STRING_MAX];
 	snprintf(datastring, sizeof(datastring), "%s", resultstring); // copy string for strtok
 
 	char *token, *cptr, **ptrptr;
@@ -835,7 +835,7 @@ END_libipv6calc_db_wrapper:
 int libipv6calc_db_wrapper_External_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp, char *country, const size_t country_len) {
 	DB *dbp;
 	long int recno_max;
-	static char resultstring[NI_MAXHOST];
+	static char resultstring[IPV6CALC_STRING_MAX];
 	int result;
 	int retval = -1;
 
@@ -898,7 +898,7 @@ int libipv6calc_db_wrapper_External_country_code_by_addr(const ipv6calc_ipaddr *
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "resultstring=%s", resultstring);
 
-	char datastring[NI_MAXHOST];
+	char datastring[IPV6CALC_STRING_MAX];
 	snprintf(datastring, sizeof(datastring), "%s", resultstring); // copy string for strtok
 
 	char *token, *cptr, **ptrptr;
@@ -955,7 +955,7 @@ END_libipv6calc_db_wrapper:
 int libipv6calc_db_wrapper_External_info_by_ipaddr(const ipv6calc_ipaddr *ipaddrp, char *string, const size_t string_len) {
 	DB *dbp;
 	long int recno_max;
-	char resultstring[NI_MAXHOST];
+	char resultstring[IPV6CALC_STRING_MAX];
 	int result;
 	int retval = -1;
 
@@ -1018,7 +1018,7 @@ int libipv6calc_db_wrapper_External_info_by_ipaddr(const ipv6calc_ipaddr *ipaddr
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "resultstring=%s", resultstring);
 
-	char datastring[NI_MAXHOST];
+	char datastring[IPV6CALC_STRING_MAX];
 	snprintf(datastring, sizeof(datastring), "%s", resultstring); // copy string for strtok
 
 	char *token, *cptr, **ptrptr;

@@ -885,7 +885,7 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 
 /* display features in verbose mode */
 void ipv6calc_print_features_verbose(const int level_verbose) {
-	char string[NI_MAXHOST] = "";
+	char string[IPV6CALC_STRING_MAX] = "";
 
 	libipv6calc_db_wrapper_capabilities(string, sizeof(string));
 	fprintf(stderr, "Capabilities: %s\n\n", string);

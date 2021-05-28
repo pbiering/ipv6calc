@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP2.c
  * Version    : $Id$
- * Copyright  : 2019-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2019-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc DB-IP.com database wrapper for MaxMindDB databases
@@ -28,7 +28,7 @@
 
 #include "libipv6calc_db_wrapper_GeoIP2.h"
 
-char geoip2_db_dir[NI_MAXHOST] = GEOIP2_DB;
+char geoip2_db_dir[PATH_MAX] = GEOIP2_DB;
 
 static const char* wrapper_geoip2_info = "GeoIP2";
 
@@ -85,7 +85,7 @@ static uint32_t geoip2_db_usage_map[GeoIP2_DB_MAX_BLOCKS_32];
 							exit(1); \
 						};
 
-char geoip2_db_usage_string[NI_MAXHOST] = "";
+char geoip2_db_usage_string[IPV6CALC_STRING_MAX] = "";
 
 // local cache
 static MMDB_s mmdb_cache[GeoIP2_DB_MAX+1];
@@ -459,7 +459,7 @@ void libipv6calc_db_wrapper_GeoIP2_wrapper_print_db_info(const int level_verbose
  */
 char *libipv6calc_db_wrapper_GeoIP2_wrapper_db_info_used(void) {
 	int type, i;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 	char *info;
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "Called");
@@ -508,7 +508,7 @@ char *libipv6calc_db_wrapper_GeoIP2_wrapper_db_info_used(void) {
  * wrapper extension: GeoIP2_dbfilename
  */
 static char *libipv6calc_db_wrapper_GeoIP2_dbfilename(const unsigned int type) {
-	static char tempstring[NI_MAXHOST];
+	static char tempstring[IPV6CALC_STRING_MAX];
 	int  entry = -1, i;
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "Called: %s type=%d", wrapper_geoip2_info, type);
@@ -665,9 +665,9 @@ END_libipv6calc_db_wrapper:
  * wrapper: GeoIP2_database_info
  */
 char *libipv6calc_db_wrapper_GeoIP2_database_info(const unsigned int type) {
-	static char resultstring[NI_MAXHOST];
-	char datastring[NI_MAXHOST];
-	char tempstring[NI_MAXHOST];
+	static char resultstring[IPV6CALC_STRING_MAX];
+	char datastring[IPV6CALC_STRING_MAX];
+	char tempstring[IPV6CALC_STRING_MAX];
 
 	MMDB_s mmdb;
 	int ret, i, entry = -1;

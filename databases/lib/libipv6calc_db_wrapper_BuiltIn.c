@@ -65,7 +65,7 @@ static uint32_t builtin_db_usage_map[BUILTIN_DB_MAX_BLOCKS_32];
 							exit(1); \
 						};
 
-char builtin_db_usage_string[NI_MAXHOST] = "";
+char builtin_db_usage_string[IPV6CALC_STRING_MAX] = "";
 
 
 /*
@@ -170,7 +170,7 @@ void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level_verbos
 
 #ifdef SUPPORT_BUILTIN
 #if defined SUPPORT_DB_IPV4_REG || defined SUPPORT_DB_IPV6_REG
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 #endif
 
 	fprintf(stderr, "%sBuiltIn: info of available databases\n", prefix);
@@ -221,9 +221,9 @@ void libipv6calc_db_wrapper_BuiltIn_wrapper_print_db_info(const int level_verbos
  */
 char *libipv6calc_db_wrapper_BuiltIn_wrapper_db_info_used(void) {
 	int type, i;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 #if defined SUPPORT_DB_IPV4_REG || defined SUPPORT_DB_IPV6_REG || defined SUPPORT_DB_IEEE || defined SUPPORT_DB_AS_REG || defined SUPPORT_DB_CC_REG
-	char tempstring2[NI_MAXHOST];
+	char tempstring2[IPV6CALC_STRING_MAX];
 #endif
 	char *info;
 

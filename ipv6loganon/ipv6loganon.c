@@ -72,14 +72,14 @@ static void lineparser();
 static int      cache_lru_max = 0;
 static int      cache_lru_last = 0;
 int      cache_lru_limit = 20; /* optimum */
-static char     cache_lru_key_token[CACHE_LRU_SIZE][NI_MAXHOST];
-static char     cache_lru_value[CACHE_LRU_SIZE][NI_MAXHOST];
+static char     cache_lru_key_token[CACHE_LRU_SIZE][IPV6CALC_STRING_MAX];
+static char     cache_lru_value[CACHE_LRU_SIZE][IPV6CALC_STRING_MAX];
 static long int cache_lru_statistics[CACHE_LRU_SIZE];
 
-char	file_out[NI_MAXHOST] = "";
+char	file_out[IPV6CALC_STRING_MAX] = "";
 int	file_out_flag = 0;
 int	file_out_flush = 0;
-char	file_out_mode[NI_MAXHOST] = "";
+char	file_out_mode[IPV6CALC_STRING_MAX] = "";
 FILE	*FILE_OUT;
 
 
@@ -103,7 +103,7 @@ int main(int argc,char *argv[]) {
 
 	/* options */
 	struct option longopts[IPV6CALC_MAXLONGOPTIONS];
-	char   shortopts[NI_MAXHOST] = "";
+	char   shortopts[IPV6CALC_STRING_MAX] = "";
 	int    longopts_maxentries = 0;
 	extern int optopt;
 
@@ -568,8 +568,8 @@ static int anonymizetoken(char *resultstring, const size_t resultstring_length, 
 		};
 
 		/* store key and value */
-		snprintf(cache_lru_key_token[cache_lru_last - 1], NI_MAXHOST, "%s", token);
-		snprintf(cache_lru_value[cache_lru_last - 1], NI_MAXHOST, "%s", resultstring);
+		snprintf(cache_lru_key_token[cache_lru_last - 1], IPV6CALC_STRING_MAX, "%s", token);
+		snprintf(cache_lru_value[cache_lru_last - 1], IPV6CALC_STRING_MAX, "%s", resultstring);
 		DEBUGPRINT_WA(DEBUG_ipv6loganon_cache, "LRU cache: fill line=%d key_token=%s value=%s", cache_lru_last - 1, cache_lru_key_token[cache_lru_last - 1], cache_lru_value[cache_lru_last - 1]);
 	};
 

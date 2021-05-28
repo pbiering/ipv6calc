@@ -10,6 +10,9 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20210528/PB:
+	replace NI_MAXHOST with IPV6CALC_STRING_MAX or PATH_MAX where applicable (https://github.com/pbiering/ipv6calc/issues/24)
+
 20210522/PB:
 	Bugfixes related to "pull/20" (https://github.com/pbiering/ipv6calc/issues/25)
 	tag version 3.1.1

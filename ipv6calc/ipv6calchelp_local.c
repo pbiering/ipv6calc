@@ -24,7 +24,7 @@
 
 /* display info */
 void printversion(void) {
-	char resultstring[NI_MAXHOST] = "";
+	char resultstring[IPV6CALC_STRING_MAX] = "";
 
 	libipv6calc_db_wrapper_features(resultstring, sizeof(resultstring));
 
@@ -52,7 +52,7 @@ void printversion(void) {
 };
 
 void printversion_help(void) {
-	char resultstring[NI_MAXHOST] = "";
+	char resultstring[IPV6CALC_STRING_MAX] = "";
 
 	libipv6calc_db_wrapper_features(resultstring, sizeof(resultstring));
 

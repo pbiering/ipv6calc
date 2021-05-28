@@ -1169,7 +1169,7 @@ END_ipv6addr_gettype:
 int addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1;
 	unsigned int s;
-	char tempstring[NI_MAXHOST], tempstring2[NI_MAXHOST], *cptr;
+	char tempstring[IPV6CALC_STRING_MAX], tempstring2[IPV6CALC_STRING_MAX], *cptr;
 	const char *literalstring = ".ipv6-literal.net";
 
 	resultstring[0] = '\0'; /* clear result string */
@@ -1229,7 +1229,7 @@ int addrliteral_to_ipv6addrstruct(const char *addrstring, char *resultstring, co
  */
 int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1, result, i, cpoints = 0, ccolons = 0, cxdigits = 0;
-	char *addronlystring, *cp, tempstring[NI_MAXHOST], tempstring2[NI_MAXHOST], *cptr, **ptrptr;
+	char *addronlystring, *cp, tempstring[IPV6CALC_STRING_MAX], tempstring2[IPV6CALC_STRING_MAX], *cptr, **ptrptr;
 	int expecteditems = 0;
 	int temp[8];
 	unsigned int compat[4];
@@ -1432,7 +1432,7 @@ int addr_to_ipv6addrstruct(const char *addrstring, char *resultstring, const siz
 static int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
 	int retval = 1;
 	unsigned int s;
-	char tempstring[NI_MAXHOST], temp2string[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX], temp2string[IPV6CALC_STRING_MAX];
 	
 	/* print array */
 	if ( ((ipv6addrp->typeinfo & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED | IPV6_ADDR_IID_32_63_HAS_IPV4)) != 0) && ((ipv6addrp->typeinfo & IPV6_ADDR_ANONYMIZED_IID) == 0)) {
@@ -1535,7 +1535,7 @@ static int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char
 static int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
 	int retval = 1;
 	unsigned int max, i;
-	char tempstring1[NI_MAXHOST], tempstring2[NI_MAXHOST];
+	char tempstring1[IPV6CALC_STRING_MAX], tempstring2[IPV6CALC_STRING_MAX];
 	
 	DEBUGPRINT_NA(DEBUG_libipv6addr, "called");
 
@@ -1590,7 +1590,7 @@ static int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp
 static int ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
 	int retval = 1;
 	unsigned int max, i;
-	char tempstring1[NI_MAXHOST], tempstring2[NI_MAXHOST];
+	char tempstring1[IPV6CALC_STRING_MAX], tempstring2[IPV6CALC_STRING_MAX];
 
 	DEBUGPRINT_NA(DEBUG_libipv6addr, "called");
 
@@ -1760,7 +1760,7 @@ void ipv6addrstruct_masksuffix(ipv6calc_ipv6addr *ipv6addrp) {
 int tokenlsb64_to_ipv6addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1, result;
 	int temp[4];
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 
 	resultstring[0] = '\0'; /* clear result string */
 
@@ -1804,7 +1804,7 @@ int tokenlsb64_to_ipv6addrstruct(const char *addrstring, char *resultstring, con
  */
 int identifier_to_ipv6addrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_ipv6addr *ipv6addrp) {
 	int retval = 1, i, ccolons = 0;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 
 	resultstring[0] = '\0'; /* clear result string */
 
@@ -1882,7 +1882,7 @@ int libipv6addr_ipv6addrstruct_to_tokenlsb64(const ipv6calc_ipv6addr *ipv6addrp,
  */
 int libipv6addr_to_octal(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
 	int retval = 1;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 
 	if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
 		snprintf(tempstring, sizeof(tempstring), "\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o\\0%03o",
@@ -1942,7 +1942,7 @@ int libipv6addr_to_hex(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, c
 	int retval = 1;
 	int i;
 	unsigned int s;
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 
 	snprintf(tempstring, sizeof(tempstring), "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
 			(unsigned int) ipv6addrp->in6_addr.s6_addr[0],  \
@@ -2076,8 +2076,8 @@ uint32_t ipv6addr_get_payload_anonymized_iid(const ipv6calc_ipv6addr *ipv6addrp,
 int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_set *ipv6calc_anon_set) {
 	/* anonymize IPv4 address according to settings */
 	uint32_t iid[2];
-	char tempstring[NI_MAXHOST];
-	char helpstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
+	char helpstring[IPV6CALC_STRING_MAX];
 	int i, r;
 	int calculate_checksum = 0;
 	int calculate_checksum_prefix = 0;
@@ -2693,7 +2693,7 @@ int ipv6addr_filter_parse(s_ipv6calc_filter_ipv6addr *filter, const char *token)
 	const char *prefixaddreq_ge2 = "addr=ge=";
 	const char *prefixaddreq_gt2 = "addr=gt=";
 	ipv6calc_ipv6addr ipv6addr;
-	char resultstring[NI_MAXHOST];
+	char resultstring[IPV6CALC_STRING_MAX];
 	int db = 0;
 	int addr_test_method = IPV6CALC_TEST_NONE;
 
@@ -2914,7 +2914,7 @@ END_ipv6addr_filter_parse:
  */
 int ipv6addr_filter_check(const s_ipv6calc_filter_ipv6addr *filter) {
 	int result = 0, r, i;
-	char resultstring[NI_MAXHOST];
+	char resultstring[IPV6CALC_STRING_MAX];
 
 	DEBUGPRINT_WA(DEBUG_libipv6addr, "ipv6 filter general active          : %d", filter->active);
 

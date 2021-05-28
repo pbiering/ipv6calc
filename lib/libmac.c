@@ -161,7 +161,7 @@ void mac_clearall(ipv6calc_macaddr *macaddrp) {
  * ret: ==0: ok, !=0: error
  */
 int macaddrstruct_to_string(const ipv6calc_macaddr *macaddrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 
 	/* address */
 	snprintf(tempstring, sizeof(tempstring), "%02x:%02x:%02x:%02x:%02x:%02x", (unsigned int) macaddrp->addr[0], (unsigned int) macaddrp->addr[1], (unsigned int) macaddrp->addr[2], (unsigned int) macaddrp->addr[3], (unsigned int) macaddrp->addr[4], (unsigned int) macaddrp->addr[5]);

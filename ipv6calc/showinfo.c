@@ -296,8 +296,8 @@ static void printout2(const char *token, const char *additional, const char *val
 };
 
 static void printfooter(const uint32_t formatoptions) {
-	char tempstring[NI_MAXHOST] = "";
-	char tempstring2[NI_MAXHOST] = "";
+	char tempstring[IPV6CALC_STRING_MAX] = "";
+	char tempstring2[IPV6CALC_STRING_MAX] = "";
 
 	if ((formatoptions & FORMATOPTION_mr_select_token_pa) && (showinfo_machine_readable_filter_used == 0)) {
 		printout(showinfo_machine_readable_filter, "", formatoptions);
@@ -413,7 +413,7 @@ static void printfooter(const uint32_t formatoptions) {
 #if defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2 || defined SUPPORT_IP2LOCATION
 // with prefix
 static void printout3(const char *token, const char *additional, const char *value, const uint32_t formatoptions, const char *prefix) {
-	char tokencomplete[NI_MAXHOST] = "";
+	char tokencomplete[IPV6CALC_STRING_MAX] = "";
 	snprintf(tokencomplete, sizeof(tokencomplete), "%s_%s", prefix, token);
 	printout2(tokencomplete, additional, value, formatoptions);
 };
@@ -452,7 +452,7 @@ static void print_geolocation(libipv6calc_db_wrapper_geolocation_record *record,
 	};
 
 
-	char tempstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX];
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable);
 
 	PRINT_RECORD_STRING(record->continent_code      , "CONTINENT_SHORT"     , "Continent Code")
@@ -601,9 +601,9 @@ static void print_external(const ipv6calc_ipaddr *ipaddrp, const uint32_t format
 
 /* print IPv4 address */
 static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formatoptions, const char *string) {
-	char tempstring[NI_MAXHOST] = "", tempstring2[NI_MAXHOST] = "", tempstring3[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
-	char tempipv4string[NI_MAXHOST] = "";
-	char embeddedipv4string[NI_MAXHOST] = "";
+	char tempstring[IPV6CALC_STRING_MAX] = "", tempstring2[IPV6CALC_STRING_MAX] = "", tempstring3[IPV6CALC_STRING_MAX] = "", helpstring[IPV6CALC_STRING_MAX] = "";
+	char tempipv4string[IPV6CALC_STRING_MAX] = "";
+	char embeddedipv4string[IPV6CALC_STRING_MAX] = "";
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable), as_num32 = ASNUM_AS_UNKNOWN;
 	int retval, i, j, retval_anon = 1, r;
 	ipv6calc_ipv4addr ipv4addr_anon, *ipv4addr_anon_ptr;
@@ -859,7 +859,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
  * print ASN information
  */
 static void print_asn(const uint32_t asn, const uint32_t formatoptions) {
-	char helpstring[NI_MAXHOST];
+	char helpstring[IPV6CALC_STRING_MAX];
 	uint32_t machinereadable = ( formatoptions & FORMATOPTION_machinereadable);
 	int registry;
 
@@ -886,7 +886,7 @@ static void print_asn(const uint32_t asn, const uint32_t formatoptions) {
  * print EUI-48/MAC information
  */
 static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formatoptions) {
-	char helpstring[NI_MAXHOST];
+	char helpstring[IPV6CALC_STRING_MAX];
 	uint32_t machinereadable = ( formatoptions & FORMATOPTION_machinereadable);
 	int i, result;
 	ipv6calc_ipv4addr ipv4addr;
@@ -974,7 +974,7 @@ static void print_eui48(const ipv6calc_macaddr *macaddrp, const uint32_t formato
  * print EUI-64 information
  */
 static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t formatoptions) {
-	char tempstring[NI_MAXHOST], helpstring[NI_MAXHOST];
+	char tempstring[IPV6CALC_STRING_MAX], helpstring[IPV6CALC_STRING_MAX];
 	uint32_t machinereadable = ( formatoptions & FORMATOPTION_machinereadable);
 	int result, i;
 	ipv6calc_macaddr macaddr;
@@ -1028,8 +1028,8 @@ static void print_eui64(const ipv6calc_eui64addr *eui64addrp, const uint32_t for
  */
 int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t formatoptions) {
 	int retval = 1, i, j, flag_prefixuse, registry, r, retval_anon = 1;
-	char tempstring[NI_MAXHOST] = "", tempstring2[NI_MAXHOST] = "", tempstring3[NI_MAXHOST] = "", helpstring[NI_MAXHOST] = "";
-	char ipv6addrstring[NI_MAXHOST] = "";
+	char tempstring[IPV6CALC_STRING_MAX] = "", tempstring2[IPV6CALC_STRING_MAX] = "", tempstring3[IPV6CALC_STRING_MAX] = "", helpstring[IPV6CALC_STRING_MAX] = "";
+	char ipv6addrstring[IPV6CALC_STRING_MAX] = "";
 	ipv6calc_ipv6addr ipv6addr, ipv6addr_anon, *ipv6addrp, *ipv6addr_anon_ptr;
 	ipv6calc_ipv4addr ipv4addr, ipv4addr2;
 	ipv6calc_macaddr macaddr;
