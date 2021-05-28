@@ -40,7 +40,7 @@ autogen_variants() {
 }
 
 autogen_variants_list() {
-	if [ "$skip_main_test" != "1" ]; then
+	if ! $skip_main_test; then
 		cat <<END | grep -v ^#
 NONE#
 BUNDLED#--enable-bundled-md5 --enable-bundled-getopt
@@ -68,7 +68,7 @@ NONE#--disable-db-builtin
 END
 	fi
 
-	if [ "$ip2location_versions_test" = "1" ]; then
+	if $ip2location_versions_test; then
 		for version in $ip2location_versions; do
 			[ ${version:0:1} = "!" ] && continue
 			local testlist=""
@@ -89,7 +89,7 @@ END
 		done
 	fi
 
-	if [ "$geoip_versions_test" = "1" ]; then
+	if $geoip_versions_test; then
 		for version in $geoip_versions; do
 			[ ${version:0:1} = "!" ] && continue
 			local testlist=""
