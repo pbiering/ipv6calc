@@ -212,7 +212,7 @@ if [ -f "$status_file" ] && ! $dry_run; then
 		rm $status_file
 	else
 		if grep -q ":END:" $status_file; then
-			if [ "$rerun" = "1" ]; then
+			if $rerun; then
 				echo "NOTICE: all runs successful, option -r given, status file removed (re-run)"
 				rm $status_file
 			else
