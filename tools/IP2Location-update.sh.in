@@ -2,10 +2,13 @@
 #
 # Simple shell script to update IP2Location database files
 #
-# For updating non-sample files, credentials are required:
+# For updating non-sample files, credentials are or token is required:
 #  provided by file $HOME/.ip2location
-#   login=EMAIL
-#   password=PASSWORD
+#   credential-based authentication:
+#    login=EMAIL
+#    password=PASSWORD
+#   token-based authentication:
+#    token=TOKEN
 #
 # Project    : ipv6calc/IP2Location
 # File       : IP2Location-update.sh
@@ -14,6 +17,7 @@
 # License    : GNU GPL version 2
 
 # 20150416: remove softlink support, no longer needed
+# 20210528: add support for 'token'
 
 IP2LOCATION_CONFIG=${IP2LOCATION_CONFIG:-"$HOME/.ip2location"}
 
@@ -21,9 +25,9 @@ IP2LOCATION_DAT_DIR_DEFAULT="@IP2LOCATION_DB@"
 [ -z "$IP2LOCATION_DAT_DIR" -a -n "$IPV6CALC_DB_IP2LOCATION_DIR" ] && IP2LOCATION_DAT_DIR="$IPV6CALC_DB_IP2LOCATION_DIR"
 [ -z "$IP2LOCATION_DAT_DIR" ] && IP2LOCATION_DAT_DIR="$IP2LOCATION_DAT_DIR_DEFAULT"
 
-IP2LOCATION_DAT_URL_BASE="http://www.ip2location.com/download?login=@LOGIN@&password=@PASSWORD@"
-IP2LOCATION_DAT_URL_BASE_SAMPLE="http://www.ip2location.com/downloads"
-IP2LOCATION_DAT_URL_BASE_LITE_FREE="http://download.ip2location.com/lite"
+IP2LOCATION_DAT_URL_BASE="https://www.ip2location.com/download?login=@LOGIN@&password=@PASSWORD@&token=@TOKEN@"
+IP2LOCATION_DAT_URL_BASE_SAMPLE="https://www.ip2location.com/downloads"
+IP2LOCATION_DAT_URL_BASE_LITE_FREE="https://download.ip2location.com/lite"
 
 # Format: Proto:DB-Number
 
@@ -42,10 +46,11 @@ IP2LOCATION_DAT_FILES_SAMPLE=${IP2LOCATION_DAT_FILES_SAMPLE:-"IPv4:20 IPv6:20 IP
 
 help() {
 	cat <<END
-Usage: $(basename "$0") [-D <dir>] [-n] [-s]
+Usage: $(basename "$0") [-D <dir>] [-n] [-s] [-t] [-v]
 	-D <dir>	database destination directory (optional)
 	-n		no action (dry-run)
 	-s		skip already successfully downloaded files
+	-t		enforce use of 'token' instead of using 'login' & 'password'
 	-v		verbose
 
 	database directory: $IP2LOCATION_DAT_DIR (default: $IP2LOCATION_DAT_DIR_DEFAULT)
@@ -63,49 +68,47 @@ Usage: $(basename "$0") [-D <dir>] [-n] [-s]
  Lite (free) databases:
   IP2LOCATION_DAT_FILES_LITE_FREE=$IP2LOCATION_DAT_FILES_LITE_FREE
 
- With authentication (requires login/password in $IP2LOCATION_CONFIG) and a valid subscription
+ With authentication (requires login/password or token in $IP2LOCATION_CONFIG) and a valid subscription
   IP2LOCATION_DAT_FILES_LITE=$IP2LOCATION_DAT_FILES_LITE
   IP2LOCATION_DAT_FILES=$IP2LOCATION_DAT_FILES
 
- Credentials must be defined in \$HOME/.ip2location by
-  login=IP2LOCATION-LOGIN
-  password=IP2LOCATION-PASSWORD
+ Credentials or token must be defined in \$HOME/.ip2location by
+  login=IP2LOCATION-LOGIN       ${login:+found: ${login:0:2}...}
+  password=IP2LOCATION-PASSWORD ${password:+found: ${password:0:2}...}
+  token=IP2LOCATION-TOKEN       ${token:+found: ${token:0:2}...}
 
  In addition settings from above can be overwritten by setting related variables
 END
 }
 
-# source credentials (must provide login= and password=)
-authenticated=true
+# source credentials (must provide login= and password= or token=)
+authenticated=false
+has_token=false
+has_credentials=false
+verbose=false
+
 if [ -f "$IP2LOCATION_CONFIG" ]; then
-	source "$IP2LOCATION_CONFIG"
+	source "$IP2LOCATION_CONFIG" || exit 1
 
-	for token in login password; do
-		if [ -z "${!token}" ]; then
-			echo "NOTICE: missing credential token in: $IP2LOCATION_CONFIG [$token=<VALUE>] (skip authenticated downloads)"
-			authenticated=false
-		fi
-	done
-
-	if $authenticated; then
-		# replace placeholders
-		IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@LOGIN@/$login}
-		IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@PASSWORD@/$password}
+	if [ -n "${token}" ]; then
+		has_token=true
+		authenticated=true
+		echo "INFO  : found token in: $IP2LOCATION_CONFIG (for authenticated downloads)"
 	fi
-else
-	authenticated=false
-fi
 
-if ! $authenticated; then
-	echo "NOTICE: IP2Location credential file not found, clear IP2LOCATION_DAT_FILES"
-	IP2LOCATION_DAT_FILES=""
+	if [ -n "${login}" -a -n "${password}" ]; then
+		has_credentials=true
+		authenticated=true
+		echo "INFO  : found credentials in: $IP2LOCATION_CONFIG (for authenticated downloads)"
+	fi
 
-	echo "NOTICE: IP2Location credential file not found, clear IP2LOCATION_DAT_FILES_LITE"
-	IP2LOCATION_DAT_FILES_LITE=""
+	if ! $authenticated; then
+		echo "NOTICE: missing credentials/token in: $IP2LOCATION_CONFIG (skip authenticated downloads)"
+	fi
 fi
 
 # option parsing
-while getopts "vfsnD:h\?" opt; do
+while getopts "vfsntD:h\?" opt; do
 	case $opt in
 	    D)
 		IP2LOCATION_DAT_DIR=$OPTARG
@@ -116,8 +119,11 @@ while getopts "vfsnD:h\?" opt; do
 	    s)
 		SKIP_OK=1
 		;;
+	    t)
+		has_credentials=false
+		;;
 	    v)
-		verbose=1
+		verbose=true
 		;;
 	    *)
 		help
@@ -144,6 +150,29 @@ if ! which unzip >/dev/null 2>&1; then
 	exit 1
 fi
 
+if ! $authenticated; then
+	echo "NOTICE: IP2Location credentials/token not found, clear IP2LOCATION_DAT_FILES"
+	IP2LOCATION_DAT_FILES=""
+
+	echo "NOTICE: IP2Location credentials/token not found, clear IP2LOCATION_DAT_FILES_LITE"
+	IP2LOCATION_DAT_FILES_LITE=""
+fi
+
+if $has_credentials; then
+	# replace placeholders
+	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@LOGIN@/$login}
+	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@PASSWORD@/$password}
+	# clear token parameter
+	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@TOKEN@/}
+fi
+
+if $has_token; then
+	# replace placeholders
+	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@TOKEN@/$token}
+	# clear credential parameters
+	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@LOGIN@/}
+	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@PASSWORD@/}
+fi
 
 # Download and unpack non-sample files
 for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FILES_LITE_FREE IP2LOCATION_DAT_FILES_SAMPLE; do
@@ -178,26 +207,31 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 
 	file_dest="$IP2LOCATION_DAT_DIR/$file"
 
-	for token in ${!list}; do
-		proto=${token/:*}
-		number=${token/*:}
+	if [ "${!list}" = "skip" ]; then
+		echo "NOTICE: skip list (by keyword 'skip'): $list"
+		continue
+	fi
+
+	for item in ${!list}; do
+		proto=${item/:*}
+		number=${item/*:}
 
 		case $list in
 		    *_SAMPLE)
 			case $proto in
 			    IPv4)
-				prototoken=""
+				protoitem=""
 				;;
 			    IPv6)
-				prototoken="6"
+				protoitem="6"
 				;;
 			    *)
-				echo "ERROR : unsupported proto in token: $token"
+				echo "ERROR : unsupported 'proto' in item: $item"
 				exit 1
 				;;
 			esac
 
-			file="sample${prototoken}.bin.db${number}.zip"
+			file="sample${protoitem}.bin.db${number}.zip"
 			;;
 		    *)
 			case $proto in
@@ -210,7 +244,7 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 				file="${file_prefix}-DB${number}.IPV6.BIN.ZIP"
 				;;
 			    *)
-				echo "ERROR : unsupported proto in token: $token"
+				echo "ERROR : unsupported 'proto' in item: $item"
 				exit 1
 				;;
 			esac
@@ -230,8 +264,14 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 		file_dest="$IP2LOCATION_DAT_DIR/$file"
 
 		if [ "$NO_ACTION" = "1" ]; then
-			echo "NOTICE: download skipped by option: ${url/password=*&/password=********&} ($file_dest)"
-			continue
+			if $has_credentials; then
+				echo "NOTICE: download skipped by option: ${url/password=*&/password=**PASS**&} ($file_dest)"
+				continue
+			fi
+			if $has_token; then
+				echo "NOTICE: download skipped by option: ${url/token=*&/token=**TOK**&} ($file_dest)"
+				continue
+			fi
 		fi
 
 		if [ "$SKIP_OK" = "1" ]; then
@@ -257,7 +297,13 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 			fi
 		fi
 
-		$verbose && echo "INFO  : try to download URL: ${url/password=*&/password=********&} ($file_dest)"
+		if $has_credentials; then
+			$verbose && echo "INFO  : try to download URL: ${url/password=*&/password=**PASS**&} ($file_dest)"
+		fi
+		if $has_token; then
+			$verbose && echo "INFO  : try to download URL: ${url/token=*&/token=**TOK**&} ($file_dest)"
+		fi
+
 		wget -q -O "$file_dest" "$url"
 		result=$?
 			
@@ -289,7 +335,7 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 		$verbose && echo "INFO  : unzip of file successful: $file_dest (remove downloaded file now)"
 		rm -f "$file_dest"
 
-		echo "NOTICE: download/unzip successful: $token"
+		echo "NOTICE: download/unzip successful: $item"
 	done
 done
 
