@@ -288,7 +288,7 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 			continue;
 		};
 
-		if ((ip2location_db_only_type > 0) && (ip2location_db_only_type != dbtype)) {
+		if ((ip2location_db_only_type > 0) && (ip2location_db_only_type != (int) libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number)) {
 			// not selected
 			continue;
 		};
