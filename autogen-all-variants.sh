@@ -98,7 +98,6 @@ $0
 	-r	force re-run, after finished one, remove status file
 	-N	add --no-static-build to autogen.sh
 	-I	skip IP2Location builds using system wide available library
-	-g	run through internal defined GeoIP versions
 	-i	run through internal defined IP2Location versions
 	-D	enable dynamic library loading in run through versions	
 	-M	skip main tests
@@ -115,10 +114,10 @@ dry_run=false
 dynamic_load=false
 force=false
 no_static_build=false
-no_static_build=false
 rerun=false
 skip_main_test=false
 skip_shared=false
+ip2location_versions_test=false
 
 while getopts ":cbDNMirIfWn?h" opt; do
 	case $opt in
