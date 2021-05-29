@@ -31,10 +31,10 @@ autogen_variants() {
 	esac
 
 	# skip IP2Location and MaxMindDB based
-	autogen_variants_list | egrep -vw "(IP2LOCATION|GEOIP2|DBIP2)" | while read options list; do
+	autogen_variants_list | egrep -vw "(IP2LOCATION|GEOIP2|DBIP2)" | while IFS="#" read options list; do
 		echo "${options:+$options }--m32#$list"
 	done
-	autogen_variants_list | egrep -vw "(IP2LOCATION|GEOIP2|DBIP2)" | while read options list; do
+	autogen_variants_list | egrep -vw "(IP2LOCATION|GEOIP2|DBIP2)" | while IFS="#" read options list; do
 		echo "${options:+$options }--clang --m32#$list"
 	done
 }
