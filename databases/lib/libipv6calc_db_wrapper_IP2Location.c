@@ -147,7 +147,7 @@ char ***libipv6calc_db_wrapper_IP2LocationDBFileName_ptr = NULL;
 const char **libipv6calc_db_wrapper_IP2LocationDBDescription = NULL;
 
 /* database usage map */
-#define IP2LOCATION_DB_MAX_BLOCKS_32	4	// 0-127
+#define IP2LOCATION_DB_MAX_BLOCKS_32	32	// 0-1023
 static uint32_t ip2location_db_usage_map[IP2LOCATION_DB_MAX_BLOCKS_32];
 
 #define IP2LOCATION_DB_USAGE_MAP_TAG(db)	if (db < (32 * IP2LOCATION_DB_MAX_BLOCKS_32)) { \
