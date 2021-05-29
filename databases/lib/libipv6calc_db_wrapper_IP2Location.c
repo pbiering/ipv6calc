@@ -1799,7 +1799,7 @@ int libipv6calc_db_wrapper_IP2Location_library_version_major(void) {
  * out: major+minor IP2Location library version in numeric form major*100 + minor
  */
 int libipv6calc_db_wrapper_IP2Location_library_version_majorminor(void) {
-	int result = 820; // (minimum) default
+	int result = 802; // (minimum) default 8.2.x
 #ifdef SUPPORT_IP2LOCATION_DYN
 	if (dl_status_IP2Location_api_version_num == IPV6CALC_DL_STATUS_OK) {
 		result = (*dl_IP2Location_api_version_num.func)() / (100);
@@ -1838,6 +1838,12 @@ static int libipv6calc_db_wrapper_IP2Location_db_compatible(const unsigned int t
 
 	if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_FREE) != 0) {
 		// blacklist old IPV6-COUNTRY-FREE.BIN in case of API >= 7.0.0
+		result = 1;
+	};
+
+	if (	((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_4) != 0)
+	    && 	(libipv6calc_db_wrapper_IP2Location_library_version_majorminor() < 804)
+	) {
 		result = 1;
 	};
 
