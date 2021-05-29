@@ -608,6 +608,7 @@ extern int         libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_ad
 extern int         libipv6calc_db_wrapper_IP2Location_has_features(uint32_t features);
 
 extern int         libipv6calc_db_wrapper_IP2Location_library_version_major(void);
+extern int         libipv6calc_db_wrapper_IP2Location_library_version_majorminor(void);
 
 
 #ifdef SUPPORT_IP2LOCATION

@@ -1785,6 +1785,29 @@ int libipv6calc_db_wrapper_IP2Location_library_version_major(void) {
 
 
 /*
+ * numeric major+minor IP2Location library version
+ *
+ * in : (nothing)
+ * out: major+minor IP2Location library version in numeric form major*100 + minor
+ */
+int libipv6calc_db_wrapper_IP2Location_library_version_majorminor(void) {
+	int result = 820; // (minimum) default
+#ifdef SUPPORT_IP2LOCATION_DYN
+	if (dl_status_IP2Location_api_version_num == IPV6CALC_DL_STATUS_OK) {
+		result = (*dl_IP2Location_api_version_num.func)() / (100);
+	};
+#else // SUPPORT_IP2LOCATION_DYN
+#if defined API_VERSION_MAJOR && defined API_VERSION_MINOR
+	result = API_VERSION_MAJOR * 100 + API_VERSION_MINOR;
+#else // API_VERSION_MAJOR && API_VERSION_MINOR
+#endif // API_VERSION_MAJOR && API_VERSION_MINOR
+#endif // SUPPORT_IP2LOCATION_DYN
+
+	return(result);
+};
+
+
+/*
  * database to API and library compatibility
  *
  * in : database type
