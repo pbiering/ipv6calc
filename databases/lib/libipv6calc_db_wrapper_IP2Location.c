@@ -941,16 +941,24 @@ char *libipv6calc_db_wrapper_IP2Location_lib_version(void) {
 		// take use of new (>= 7.0.1) function
 		if (dl_status_IP2Location_lib_version_string == IPV6CALC_DL_STATUS_OK) {
 			// take also use of new (>= 8.0.4) function
-			snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "%s API=%s Major=%d", (*dl_IP2Location_lib_version_string.func)(), (*dl_IP2Location_api_version_string.func)(), libipv6calc_db_wrapper_IP2Location_library_version_major());
+			snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "%s API=%s Major=%d MajorMinor=%d", (*dl_IP2Location_lib_version_string.func)(), (*dl_IP2Location_api_version_string.func)(), libipv6calc_db_wrapper_IP2Location_library_version_major()
+				, libipv6calc_db_wrapper_IP2Location_library_version_majorminor()
+			);
 		} else {
-			snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d", (*dl_IP2Location_api_version_string.func)(), libipv6calc_db_wrapper_IP2Location_library_version_major());
+			snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d MajorMinor=%d", (*dl_IP2Location_api_version_string.func)(), libipv6calc_db_wrapper_IP2Location_library_version_major()
+				, libipv6calc_db_wrapper_IP2Location_library_version_majorminor()
+			);
 		};
 	} else {
 		// fallback
-		snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API>=7.0.0 Major=%d", libipv6calc_db_wrapper_IP2Location_library_version_major());
+		snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API>=7.0.0 Major=%d MajorMinor=%d", libipv6calc_db_wrapper_IP2Location_library_version_major()
+			, libipv6calc_db_wrapper_IP2Location_library_version_majorminor()
+		);
 	};
 #else
-	snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d", IP2Location_api_version_string(), libipv6calc_db_wrapper_IP2Location_library_version_major());
+	snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d MajorMinor=%d", IP2Location_api_version_string(), libipv6calc_db_wrapper_IP2Location_library_version_major()
+		, libipv6calc_db_wrapper_IP2Location_library_version_majorminor()
+	);
 #endif
 
 #ifdef SUPPORT_IP2LOCATION_DYN
