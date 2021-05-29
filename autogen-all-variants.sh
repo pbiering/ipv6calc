@@ -15,12 +15,12 @@ status_file="autogen-all-variants.status"
 ## Generate configure variants
 autogen_variants() {
 	autogen_variants_list
-	autogen_variants_list | while read line; do
-		echo "${line:+$line }--clang"
+	autogen_variants_list | while IFS="#" read options list; do
+		echo "${options:+$options }--clang#$list"
 	done
 
-	autogen_variants_list | while read line; do
-		echo "${line:+$line }--gcc-Os"
+	autogen_variants_list | while IFS="#" read options list; do
+		echo "${options:+$options }--gcc-Os#$list"
 	done
 
 	case "$OSTYPE" in
@@ -31,11 +31,11 @@ autogen_variants() {
 	esac
 
 	# skip IP2Location and MaxMindDB based
-	autogen_variants_list | egrep -vw "(IP2LOCATION|GEOIP2|DBIP2)" | while read line; do
-		echo "${line:+$line }--m32"
+	autogen_variants_list | egrep -vw "(IP2LOCATION|GEOIP2|DBIP2)" | while read options list; do
+		echo "${options:+$options }--m32#$list"
 	done
-	autogen_variants_list | egrep -vw "(IP2LOCATION|GEOIP2|DBIP2)" | while read line; do
-		echo "${line:+$line }--clang --m32"
+	autogen_variants_list | egrep -vw "(IP2LOCATION|GEOIP2|DBIP2)" | while read options list; do
+		echo "${options:+$options }--clang --m32#$list"
 	done
 }
 
@@ -85,28 +85,7 @@ END
 					fi
 				fi
 			done
-			echo "NONE#--enable-ip2location $option $(options_from_name_version IP2Location $version)#$testlist"
-		done
-	fi
-
-	if $geoip_versions_test; then
-		for version in $geoip_versions; do
-			[ ${version:0:1} = "!" ] && continue
-			local testlist=""
-			local option=""
-			for version_test in $geoip_versions; do
-				if [ "$dynamic_load" = "1" ]; then
-					option="--geoip-dyn"
-					# unconditionally test all versions
-					testlist="$testlist G:$version_test"
-				else
-					[ ${version_test:0:1} = "!" ] && continue
-					if geoip_cross_version_test_blacklist $version $version_test; then
-						testlist="$testlist G:$version_test"
-					fi
-				fi
-			done
-			echo "NONE#--enable-geoip $option $(options_from_name_version GeoIP $version)#$testlist"
+			echo "IP2LOCATION#--enable-ip2location $option $(options_from_name_version IP2Location $version)#$testlist"
 		done
 	fi
 }
@@ -119,7 +98,6 @@ $0
 	-r	force re-run, after finished one, remove status file
 	-N	add --no-static-build to autogen.sh
 	-I	skip IP2Location builds using system wide available library
-	-G	skip GeoIP builds using system wide available library
 	-g	run through internal defined GeoIP versions
 	-i	run through internal defined IP2Location versions
 	-D	enable dynamic library loading in run through versions	
@@ -136,14 +114,13 @@ cross_versions_test=false
 dry_run=false
 dynamic_load=false
 force=false
-geoip_versions_test=false
 no_static_build=false
 no_static_build=false
 rerun=false
 skip_main_test=false
 skip_shared=false
 
-while getopts ":cbDNMigrIGfWn?h" opt; do
+while getopts ":cbDNMirIfWn?h" opt; do
 	case $opt in
 	    'b')
 		batch=true
@@ -165,14 +142,6 @@ while getopts ":cbDNMigrIGfWn?h" opt; do
 		;;
 	    'I')
 		skip_token="IP2LOCATION"
-		;;
-	    'G')
-		skip_token="GEOIP"
-		;;
-	    'g')
-		geoip_versions_test=true
-		skip_shared=true
-		no_static_build=true
 		;;
 	    'i')
 		ip2location_versions_test=true
@@ -284,12 +253,6 @@ for liboption in "normal" "shared"; do
 		if [ -n "$ip2location_options_extra" ]; then
 			if echo "$token" | egrep -wq "IP2LOCATION"; then
 				options="${options:+$options }$ip2location_options_extra"
-			fi
-		fi
-
-		if [ -n "$geoip_options_extra" ]; then
-			if echo "$token" | egrep -wq "GEOIP"; then
-				options="${options:+$options }$geoip_options_extra"
 			fi
 		fi
 
