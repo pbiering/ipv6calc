@@ -13,12 +13,14 @@ Info:
 20210529/PB:
 	databases/lib/libipv6calc_db_wrapper_IP2Location.c|h: add support for blacklisting IP2Location DB25 files < 8.4.0
 	databases/lib/libipv6calc_db_wrapper_IP2Location.c: fix broken dedicated db selection option
+	Bugfixes related to "pull/20" (https://github.com/pbiering/ipv6calc/issues/25)
 
 20210528/PB:
 	replace NI_MAXHOST with IPV6CALC_STRING_MAX or PATH_MAX where applicable (https://github.com/pbiering/ipv6calc/issues/24)
 	tools/IP2Location-update.sh[.in]: add support for 'token' authentication
 	databases/lib/libipv6calc_db_wrapper_IP2Location.h: add initial support for IP2Location DB25 files
 	autogen-support.sh: add IP2Location 8.3.0 8.3.1 8.4.0
+	Bugfixes related to "pull/20" (https://github.com/pbiering/ipv6calc/issues/25)
 
 20210522/PB:
 	Bugfixes related to "pull/20" (https://github.com/pbiering/ipv6calc/issues/25)
