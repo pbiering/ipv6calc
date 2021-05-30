@@ -147,7 +147,7 @@ char ***libipv6calc_db_wrapper_IP2LocationDBFileName_ptr = NULL;
 const char **libipv6calc_db_wrapper_IP2LocationDBDescription = NULL;
 
 /* database usage map */
-#define IP2LOCATION_DB_MAX_BLOCKS_32	4	// 0-127
+#define IP2LOCATION_DB_MAX_BLOCKS_32	32	// 0-1023
 static uint32_t ip2location_db_usage_map[IP2LOCATION_DB_MAX_BLOCKS_32];
 
 #define IP2LOCATION_DB_USAGE_MAP_TAG(db)	if (db < (32 * IP2LOCATION_DB_MAX_BLOCKS_32)) { \
@@ -288,7 +288,7 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 			continue;
 		};
 
-		if ((ip2location_db_only_type > 0) && (ip2location_db_only_type != dbtype)) {
+		if ((ip2location_db_only_type > 0) && (ip2location_db_only_type != (int) libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number)) {
 			// not selected
 			continue;
 		};
@@ -941,16 +941,24 @@ char *libipv6calc_db_wrapper_IP2Location_lib_version(void) {
 		// take use of new (>= 7.0.1) function
 		if (dl_status_IP2Location_lib_version_string == IPV6CALC_DL_STATUS_OK) {
 			// take also use of new (>= 8.0.4) function
-			snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "%s API=%s Major=%d", (*dl_IP2Location_lib_version_string.func)(), (*dl_IP2Location_api_version_string.func)(), libipv6calc_db_wrapper_IP2Location_library_version_major());
+			snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "%s API=%s Major=%d MajorMinor=%d", (*dl_IP2Location_lib_version_string.func)(), (*dl_IP2Location_api_version_string.func)(), libipv6calc_db_wrapper_IP2Location_library_version_major()
+				, libipv6calc_db_wrapper_IP2Location_library_version_majorminor()
+			);
 		} else {
-			snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d", (*dl_IP2Location_api_version_string.func)(), libipv6calc_db_wrapper_IP2Location_library_version_major());
+			snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d MajorMinor=%d", (*dl_IP2Location_api_version_string.func)(), libipv6calc_db_wrapper_IP2Location_library_version_major()
+				, libipv6calc_db_wrapper_IP2Location_library_version_majorminor()
+			);
 		};
 	} else {
 		// fallback
-		snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API>=7.0.0 Major=%d", libipv6calc_db_wrapper_IP2Location_library_version_major());
+		snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API>=7.0.0 Major=%d MajorMinor=%d", libipv6calc_db_wrapper_IP2Location_library_version_major()
+			, libipv6calc_db_wrapper_IP2Location_library_version_majorminor()
+		);
 	};
 #else
-	snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d", IP2Location_api_version_string(), libipv6calc_db_wrapper_IP2Location_library_version_major());
+	snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d MajorMinor=%d", IP2Location_api_version_string(), libipv6calc_db_wrapper_IP2Location_library_version_major()
+		, libipv6calc_db_wrapper_IP2Location_library_version_majorminor()
+	);
 #endif
 
 #ifdef SUPPORT_IP2LOCATION_DYN
@@ -1785,6 +1793,29 @@ int libipv6calc_db_wrapper_IP2Location_library_version_major(void) {
 
 
 /*
+ * numeric major+minor IP2Location library version
+ *
+ * in : (nothing)
+ * out: major+minor IP2Location library version in numeric form major*100 + minor
+ */
+int libipv6calc_db_wrapper_IP2Location_library_version_majorminor(void) {
+	int result = 802; // (minimum) default 8.2.x
+#ifdef SUPPORT_IP2LOCATION_DYN
+	if (dl_status_IP2Location_api_version_num == IPV6CALC_DL_STATUS_OK) {
+		result = (*dl_IP2Location_api_version_num.func)() / (100);
+	};
+#else // SUPPORT_IP2LOCATION_DYN
+#if defined API_VERSION_MAJOR && defined API_VERSION_MINOR
+	result = API_VERSION_MAJOR * 100 + API_VERSION_MINOR;
+#else // API_VERSION_MAJOR && API_VERSION_MINOR
+#endif // API_VERSION_MAJOR && API_VERSION_MINOR
+#endif // SUPPORT_IP2LOCATION_DYN
+
+	return(result);
+};
+
+
+/*
  * database to API and library compatibility
  *
  * in : database type
@@ -1807,6 +1838,12 @@ static int libipv6calc_db_wrapper_IP2Location_db_compatible(const unsigned int t
 
 	if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_FREE) != 0) {
 		// blacklist old IPV6-COUNTRY-FREE.BIN in case of API >= 7.0.0
+		result = 1;
+	};
+
+	if (	((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_4) != 0)
+	    && 	(libipv6calc_db_wrapper_IP2Location_library_version_majorminor() < 804)
+	) {
 		result = 1;
 	};
 
