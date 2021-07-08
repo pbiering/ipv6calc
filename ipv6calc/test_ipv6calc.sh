@@ -55,6 +55,13 @@ cat <<END | grep -v '^#'
 ## to uncompressed
 --addr_to_compressed 3ffe:ffff:0100:f101:0000:0000:0000:0001		=3ffe:ffff:100:f101::1
 --in ipv6 --out ipv6 --printcompressed 3ffe:ffff:0100:f101:0000:0000:0000:0001 =3ffe:ffff:100:f101::1
+# :0: is not allowed to be compressed according to RFC5952 (https://github.com/pbiering/ipv6calc/issues/28)
+--in ipv6 --out ipv6 --printcompressed 2001:db8:0:1:1:1:1:1             =2001:db8:0:1:1:1:1:1 
+--in ipv6 --out ipv6 --printcompressed 2001:db8:0:0:1:1:1:1             =2001:db8::1:1:1:1 
+--in ipv6 --out ipv6 --printcompressed 0:db8:0:1:1:1:1:1                =0:db8:0:1:1:1:1:1 
+--in ipv6 --out ipv6 --printcompressed 0:0:db8:1:1:1:1:1                =::db8:1:1:1:1:1 
+--in ipv6 --out ipv6 --printcompressed 2001:db8:0:1:1:1:1:0             =2001:db8:0:1:1:1:1:0 
+--in ipv6 --out ipv6 --printcompressed 2001:db8:0:1:1:1:0:0             =2001:db8:0:1:1:1:: 
 -I ipv6 -O ipv6 -C 3ffe:ffff:0100:f101:0000:0000:0000:0001 		=3ffe:ffff:100:f101::1
 --addr_to_compressed 3ffe:ffff:0100:f101:0000:0000:0000:0001/64		=3ffe:ffff:100:f101::1/64
 --addr_to_compressed 0:0:2:2:3:4:0:0					=::2:2:3:4:0:0
@@ -72,7 +79,7 @@ cat <<END | grep -v '^#'
 --addr_to_compressed 0:0:0:0:0:0:13.1.68.3				=::13.1.68.3
 --addr_to_compressed 0:0:0:0:0:ffff:129.144.52.38			=::ffff:129.144.52.38
 --addr_to_compressed --uppercase 0:0:0:0:0:ffff:129.144.52.38		=::FFFF:129.144.52.38
---addr_to_compressed fd00:1234:5678:0:210:a4ff:fe01:2345		=fd00:1234:5678::210:a4ff:fe01:2345
+--addr_to_compressed fd00:1234:5678:0:210:a4ff:fe01:2345		=fd00:1234:5678:0:210:a4ff:fe01:2345
 --in ipv6 --out ipv6 --printcompressed --uppercase 0:0:0:0:0:ffff:129.144.52.38		=::FFFF:129.144.52.38
 ## uncompressed
 --addr_to_uncompressed 3ffe:ffff:100:f101::1				=3ffe:ffff:100:f101:0:0:0:1
@@ -187,12 +194,12 @@ NOPIPETEST--in prefix+mac 1:2:3:4::/56 11:22:33:44:55:aa --action prefixmac2ipv6
 --action anonymize fe80:0000:0000:0000:0000:5e01:2345:6789		=fe80::a909:5214:e012:3451
 --action anonymize fe80:0000:0000:0000:0200:5e01:2345:6789		=fe80::a909:5214:f012:345f
 --action anonymize fe80:0000:0000:0000:0000:5eff:fe01:2345		=fe80::a909:5214:c010:1
---action anonymize 2001:0db8:0000:0000:81c0:0f3f:c807:1455		=2001:db8::9:a929:4941:0:c
+--action anonymize 2001:0db8:0000:0000:81c0:0f3f:c807:1455		=2001:db8:0:9:a929:4941:0:c
 --action anonymize 3ffe:831f:ce49:7601:8000:efff:af4a:86BF		=3ffe:831f:ce49:7601:8000:ffff:af4a:86ff
 --action anonymize --mask-ipv4 16 3ffe:831f:ce49:7601:8000:efff:af4a:86BF	=3ffe:831f:ce49:7601:8000:ffff:af4a:ffff
 --action anonymize 192.0.2.1						=192.0.2.0
 --action anonymize --mask-ipv4 16 192.0.2.1				=192.0.0.0
---action anonymize 2001:1a:392e:a450:2cd3:75e1:6098:8104		=2001:19:a909:a909:a999:4843::e
+--action anonymize 2001:1a:392e:a450:2cd3:75e1:6098:8104		=2001:19:a909:a909:a999:4843:0:e
 --action anonymize 01:23:45:67:89:ab					=01:23:45:00:00:00
 --action anonymize --mask-mac 48 01:23:45:67:89:ab			=01:23:45:67:89:ab
 --action anonymize --mask-mac 47 01:23:45:67:89:ab			=01:23:45:67:89:aa
@@ -203,7 +210,7 @@ NOPIPETEST--in prefix+mac 1:2:3:4::/56 11:22:33:44:55:aa --action prefixmac2ipv6
 --action anonymize --mask-mac 7  ff:23:45:67:89:a8			=fe:00:00:00:00:00
 --action anonymize --mask-mac 1  ff:23:45:67:89:a8			=82:00:00:00:00:00
 -A anonymize --anonymize-preset zeroize-paranoid   2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2200::
--A anonymize --anonymize-preset zeroize-careful    2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2280::224:21ff:fe00:0
+-A anonymize --anonymize-preset zeroize-careful    2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2280:0:224:21ff:fe00:0
 -A anonymize --anonymize-preset zeroize-standard   2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2280:6900:224:21ff:fe00:0
 -A anonymize --anonymize-preset anonymize-paranoid 2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2209:a909:a969:4291:4022:4213
 -A anonymize --anonymize-preset anonymize-careful  2001:db8:2280:6901:224:21ff:fe01:2345  =2001:db8:2280:a909:a949:4291:4022:4219
@@ -211,7 +218,7 @@ NOPIPETEST--in prefix+mac 1:2:3:4::/56 11:22:33:44:55:aa --action prefixmac2ipv6
 # RFC 5952 4.2.1
 --in ipv6addr --out ipv6addr 2001:db8:0:0:0:0:2:1			=2001:db8::2:1
 # RFC 5952 4.2.2
---in ipv6addr --out ipv6addr 2001:db8:0:1:1:1:1:1			=2001:db8::1:1:1:1:1
+--in ipv6addr --out ipv6addr 2001:db8:0:1:1:1:1:1			=2001:db8:0:1:1:1:1:1
 # RFC 5952 4.2.3
 --in ipv6addr --out ipv6addr 2001:0:0:1:0:0:0:1			 	=2001:0:0:1::1
 --in ipv6addr --out ipv6addr 2001:db8:0:0:1:0:0:1 			=2001:db8::1:0:0:1

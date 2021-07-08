@@ -381,7 +381,7 @@ END
 testscenarios_anonymization_options_kp() {
 	cat <<END | grep -v '^#'
 --anonymize-preset kp			46.244.223.233=242.222.34.63
---anonymize-preset kp			2001:0a60:11e1:9501:e876:aee4:0721:e8ac=a909:16fa:9092:23ff:a909:4941::7
+--anonymize-preset kp			2001:0a60:11e1:9501:e876:aee4:0721:e8ac=a909:16fa:9092:23ff:a909:4941:0:7
 --anonymize-preset kp			::2.2.3.4=::253.134.12.143
 --anonymize-preset kp			::ffff:2.2.3.4=::ffff:253.134.12.143
 --anonymize-preset kp			::1=::1
@@ -397,7 +397,7 @@ testscenarios_anonymization_options_kp() {
 --anonymize-preset kp			fd00:bbbb:bbbb:1:0250:c212:3456:789a=fd00:bbbb:bbbb:9:a929:4291:7021:123c
 --anonymize-preset kp			fd00:bbbb:bbbb:1:0255:da12:3456:789a=fd00:bbbb:bbbb:9:a929:4291:7030:1001
 # do not anonymize LISP anycast prefix
---anonymize-preset kp			2001:67c:198::1=2001:67c:198::a909:4291:c02d:5d1d
+--anonymize-preset kp			2001:67c:198::1=2001:67c:198:0:a909:4291:c02d:5d1d
 END
 }
 

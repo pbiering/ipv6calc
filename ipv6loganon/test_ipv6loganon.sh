@@ -49,8 +49,8 @@ testscenarios_standard() {
 # Address
 cat <<END | grep -v "^#"
 192.0.2.1 - - IPv4 address			=192.0.2.0 - - IPv4 address
-2001:0db8:0000:0000:81c0:0f3f:c807:1455 - - IPv6 address/privacy IID	=2001:db8::9:a929:4941:0:c - - IPv6 address/privacy IID
-3ffe:ffff::1 - - IPv6 address/6bone/static IID	=3ffe:ffff::9:a929:4291:c02d:5d15 - - IPv6 address/6bone/static IID
+2001:0db8:0000:0000:81c0:0f3f:c807:1455 - - IPv6 address/privacy IID	=2001:db8:0:9:a929:4941:0:c - - IPv6 address/privacy IID
+3ffe:ffff::1 - - IPv6 address/6bone/static IID	=3ffe:ffff:0:9:a929:4291:c02d:5d15 - - IPv6 address/6bone/static IID
 3FFE:1a05:510:200:0:5EFE:8CAD:8108 - - ISATAP	=3ffe:1a05:510:209:a929:5214:48ca:d81d - - ISATAP
 ff02::1:ff00:1234 - - Solicited Node		=ff02::1:ff00:0 - - Solicited Node
 3ffe::1:ff00:1234 - - Solicited Node		=3ffe::9:0:1:ff00:0 - - Solicited Node
@@ -61,15 +61,15 @@ ff02::1:ff00:1234 - - Solicited Node		=ff02::1:ff00:0 - - Solicited Node
 2002:50b5:7940::50b5:7940 - - 6to4 Microsoft	=2002:50b5:7900:9:a929:4291:850b:5794 - - 6to4 Microsoft
 fe80::210:a4ff:fe01:2345 - - link local EUI-48	=fe80::a909:4291:4021:a4c - - link local EUI-48
 fe80::210:a489:ab01:2345 - - link local EUI-64	=fe80::a909:4291:6021:a43 - - link local EUI-64
-3ffe:ffff::210:a4ff:fe01:2345 - - 6bone EUI-48	=3ffe:ffff::9:a929:4291:4021:a48 - - 6bone EUI-48
-3ffe:ffff::210:a489:ab01:2345 - - 6bone EUI-64	=3ffe:ffff::9:a929:4291:6021:a44 - - 6bone EUI-64
-3ffe:ffff::000:a4ff:fe01:2345 - - 6bone EUI-48 local	=3ffe:ffff::9:a929:4291:4000:a43 - - 6bone EUI-48 local
-3ffe:ffff::000:a489:ab01:2345 - - 6bone local	=3ffe:ffff::9:a929:4291:c02d:5d15 - - 6bone local
+3ffe:ffff::210:a4ff:fe01:2345 - - 6bone EUI-48	=3ffe:ffff:0:9:a929:4291:4021:a48 - - 6bone EUI-48
+3ffe:ffff::210:a489:ab01:2345 - - 6bone EUI-64	=3ffe:ffff:0:9:a929:4291:6021:a44 - - 6bone EUI-64
+3ffe:ffff::000:a4ff:fe01:2345 - - 6bone EUI-48 local	=3ffe:ffff:0:9:a929:4291:4000:a43 - - 6bone EUI-48 local
+3ffe:ffff::000:a489:ab01:2345 - - 6bone local	=3ffe:ffff:0:9:a929:4291:c02d:5d15 - - 6bone local
 fd00:1234:5678:9abc::1 - - ULUA local		=fd00:1234:5678:9a09:a929:4291:c02d:5d15 - - ULUA local
 fd00:1234:5678:9abc:210:a4ff:fe01:2345 - - ULUA EUI-48=fd00:1234:5678:9a09:a929:4291:4021:a48 - - ULUA EUI-48
 fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64=fd00:1234:5678:9a09:a929:4291:6021:a44 - - ULUA EUI-64
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF - - Teredo 6bone=3ffe:831f:ce49:7601:8000:ffff:af4a:86ff - - Teredo 6bone
-2001:001a:392e:a450:2cd3:75e1:6098:8104 - - ORCHID=2001:19:a909:a909:a999:4843::e - - ORCHID
+2001:001a:392e:a450:2cd3:75e1:6098:8104 - - ORCHID=2001:19:a909:a909:a999:4843:0:e - - ORCHID
 END
 }
 
@@ -121,7 +121,7 @@ fe80::210:a4ff:fe01:2345 - - link local EUI-48/careful	=--anonymize-careful=fe80
 fe80::210:a489:ab01:2345 - - link local EUI-64/paranoid	=--anonymize-paranoid=fe80::a909:4291:6021:a43 - - link local EUI-64/paranoid
 fec0::1234:210:a4ff:fe01:2345 - - site local EUI-48/standard	=--anonymize-standard=fec0::1209:a929:4291:4021:a48 - - site local EUI-48/standard
 fec0::1234:210:a4ff:fe01:2345 - - site local EUI-48/careful	=--anonymize-careful=fec0::a909:a949:4291:4021:a46 - - site local EUI-48/careful
-fed0::1234:210:a489:ab01:2345 - - site local EUI-64/paranoid	=--anonymize-paranoid=fed0::9:a909:a969:4291:6021:a4c - - site local EUI-64/paranoid
+fed0::1234:210:a489:ab01:2345 - - site local EUI-64/paranoid	=--anonymize-paranoid=fed0:0:9:a909:a969:4291:6021:a4c - - site local EUI-64/paranoid
 fd00:1234:5678:9abc::1 - - ULUA local		=--anonymize-standard=fd00:1234:5678:9a09:a929:4291:c02d:5d15 - - ULUA local
 fd00:1234:5678:9abc:210:a4ff:fe01:2345 - - ULUA EUI-48/careful=--anonymize-careful=fd00:1234:5678:a909:a949:4291:4021:a46 - - ULUA EUI-48/careful
 fd00:1234:5678:9abc:210:a489:ab01:2345 - - ULUA EUI-64/paranoid=--anonymize-paranoid=fd00:1234:5609:a909:a969:4291:6021:a4c - - ULUA EUI-64/paranoid
