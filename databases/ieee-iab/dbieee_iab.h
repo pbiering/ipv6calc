@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Sun May 16 09:49:56 2021
+ * Generated     : Mon Jul 12 07:38:24 2021
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20210516";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20210712";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -2334,7 +2334,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x910000, 0x910FFF, "Autotank AB", "AUTOTANK-AB" },
 	{ 0x0050C2, 0x911000, 0x911FFF, "Vapor Rail", "VAPOR-RAIL" },
 	{ 0x0050C2, 0x912000, 0x912FFF, "ASSET InterTech, Inc.", "ASSET-INTERTECH" },
-	{ 0x0050C2, 0x913000, 0x913FFF, "Leonardo MW Ltd (Land & Naval Defence Electronic)", "LEONARDO-MW-LAND-NAVAL-DEFENCE" },
+	{ 0x0050C2, 0x913000, 0x913FFF, "Leonardo UK Ltd", "LEONARDO-UK" },
 	{ 0x0050C2, 0x914000, 0x914FFF, "IO-Connect", "IO-CONNECT" },
 	{ 0x0050C2, 0x915000, 0x915FFF, "Verint Systems Ltd.", "VERINT" },
 	{ 0x0050C2, 0x916000, 0x916FFF, "CHK GridSense P/L", "CHK-GRIDSENSE-P/L" },
@@ -3552,7 +3552,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xDD5000, 0xDD5FFF, "Friend Spring Industrial Co., Ltd.", "FRIEND-SPRING-INDUSTRIAL" },
 	{ 0x0050C2, 0xDD6000, 0xDD6FFF, "Wartsila Voyage Limited", "WARTSILA-VOYAGE" },
 	{ 0x0050C2, 0xDD7000, 0xDD7FFF, "Tornado Modular Systems", "TORNADO-MODULAR" },
-	{ 0x0050C2, 0xDD8000, 0xDD8FFF, "Leonardo MW Ltd (Land & Naval Defence Electronic)", "LEONARDO-MW-LAND-NAVAL-DEFENCE" },
+	{ 0x0050C2, 0xDD8000, 0xDD8FFF, "Leonardo UK Ltd", "LEONARDO-UK" },
 	{ 0x0050C2, 0xDD9000, 0xDD9FFF, "Metraware", "METRAWARE" },
 	{ 0x0050C2, 0xDDA000, 0xDDAFFF, "rbz robot design s.l.", "RBZ-ROBOT-DESIGN" },
 	{ 0x0050C2, 0xDDB000, 0xDDBFFF, "LUCEO", "LUCEO" },
@@ -3851,7 +3851,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xF02000, 0xF02FFF, "BMR", "BMR" },
 	{ 0x0050C2, 0xF03000, 0xF03FFF, "Wren Sound Systems", "WREN-SOUND" },
 	{ 0x0050C2, 0xF04000, 0xF04FFF, "KINKI ROENTGEN INDUSTRIAL CO.,LTD", "KINKI-ROENTGEN-INDUSTRIAL" },
-	{ 0x0050C2, 0xF05000, 0xF05FFF, "ESI Ventures", "ESI-VENTURES" },
+	{ 0x0050C2, 0xF05000, 0xF05FFF, "ESI Ventures, LLC", "ESI-VENTURES" },
 	{ 0x0050C2, 0xF06000, 0xF06FFF, "Micro-Key BV", "MICRO-KEY" },
 	{ 0x0050C2, 0xF07000, 0xF07FFF, "Icon Research Ltd", "ICON-RESEARCH" },
 	{ 0x0050C2, 0xF08000, 0xF08FFF, "Aplex Technology Inc.", "APLEX" },
