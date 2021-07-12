@@ -10,6 +10,12 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20210712/PB:
+	internal databases: update
+
+20210708/PB:
+	lib/librfc1884.c ipv6calc/test_ipv6calc.sh ipv6calc/test_scenarios.sh ipv6loganon/test_ipv6loganon.sh: output format fix for compressed IPv6 addresses (https://github.com/pbiering/ipv6calc/issues/28)
+
 20210529/PB:
 	databases/lib/libipv6calc_db_wrapper_IP2Location.c|h: add support for blacklisting IP2Location DB25 files < 8.4.0
 	databases/lib/libipv6calc_db_wrapper_IP2Location.c: fix broken dedicated db selection option
