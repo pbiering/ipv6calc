@@ -1,6 +1,6 @@
 ipv6calc will do some format changes and calculations for you
 
-(P) & (C) 2001-2020 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
                    published under GNU GPLv2
 
 For suggestions and bug report please contact author
@@ -46,6 +46,12 @@ Where to get:
 
  Latest version of sources:
   ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/
+  http://www.bieringer.de/ftp/pub/linux/IPv6/ipv6calc/
+  https://www.bieringer.de/ftp/pub/linux/IPv6/ipv6calc/
+
+  ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/
+  http://www.deepspace6.net/ftp/pub/ds6/sources/ipv6calc/
+  https://www.deepspace6.net/ftp/pub/ds6/sources/ipv6calc/
 
  GitHub access:
   https://github.com/pbiering/ipv6calc
@@ -57,13 +63,13 @@ Where to get:
  Ready to use packages for several operating systems:
   Linux:
    Fedora (https://src.fedoraproject.org/rpms/ipv6calc)
-    Core 6: developing platform, so use given hint above to create a RPM
+    Core 6: initial developing platform, so use given hint above to create a RPM
     since 7: package is included
-   Red Hat Enterprise Linux / CentOS (https://src.fedoraproject.org/rpms/ipv6calc):
+   Enterprise Linux (https://src.fedoraproject.org/rpms/ipv6calc / https://koji.fedoraproject.org/koji/packageinfo?packageID=366):
     EL3: build from source package potentially still work but not tested anymore, OS is EOSL
     EL4: build from source package potentially still work but not tested anymore, OS is EOSL
     EL5: build from source package potentially still work but not tested anymore, OS is EOSL
-    EL6: package is available via EPEL
+    EL6: build from source package potentially still work but not tested anymore, OS is EOSL
     EL7: package is available via EPEL
     EL8: package is available via EPEL
    Mandrake (EOSL):
