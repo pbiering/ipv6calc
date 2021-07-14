@@ -10,6 +10,9 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20210714/PB:
+	tag version 3.2.0
+
 20210712/PB:
 	internal databases: update
 
