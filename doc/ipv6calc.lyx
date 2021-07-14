@@ -116,7 +116,7 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>10.1</revnumber> <date>2021-05-18</date> <authorinitials>PB
+<revision> <revnumber>10.2</revnumber> <date>2021-07-14</date> <authorinitials>PB
 </authorinitials></revision>
 \end_layout
 
@@ -182,7 +182,7 @@ Latest version
 \end_layout
 
 \begin_layout Standard
-Latest version since last update of this page is 3.1.0
+Latest version since last update of this page is 3.2.0
 \end_layout
 
 \begin_layout Subsection
@@ -543,7 +543,7 @@ as tar.gz (signed)
 \end_layout
 
 \begin_layout Itemize
-Via FTP at 
+from 
 \begin_inset CommandInset href
 LatexCommand href
 name "DeepSpace6"
@@ -552,7 +552,7 @@ literal "false"
 
 \end_inset
 
-: 
+ via FTP 
 \begin_inset CommandInset href
 LatexCommand href
 name "DeepSpace6 / anonymous FTP"
@@ -561,15 +561,33 @@ literal "false"
 
 \end_inset
 
+ or HTTP 
+\begin_inset CommandInset href
+LatexCommand href
+name "http://www.deepspace6.net/ftp/"
+target "http://www.deepspace6.net/ftp/"
+literal "false"
+
+\end_inset
+
 
 \end_layout
 
 \begin_layout Itemize
-Via FTP at 
+via 
 \begin_inset CommandInset href
 LatexCommand href
 name "ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/"
 target "ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/"
+literal "false"
+
+\end_inset
+
+ or HTTP at 
+\begin_inset CommandInset href
+LatexCommand href
+name "http://www.bieringer.de/ftp/"
+target "http://www.bieringer.de/ftp/"
 literal "false"
 
 \end_inset
@@ -703,7 +721,7 @@ It's tested by the developer that creation of the RPM is working fine starting
 \end_layout
 
 \begin_layout Itemize
-RHEL/CentOS 5 has the package included by default (but an rather old version)
+Major version 5 has the package included by default (but an rather old version)
 \begin_inset Separator latexpar
 \end_inset
 
@@ -731,7 +749,7 @@ literal "false"
 
 \end_deeper
 \begin_layout Itemize
-RHEL/CentOS 6: available since September 2014 on 
+Major version 6: available since September 2014 on 
 \begin_inset CommandInset href
 LatexCommand href
 name "FedoraProject / EPEL"
@@ -759,7 +777,7 @@ literal "false"
 
 \end_deeper
 \begin_layout Itemize
-RHEL/CentOS 7: available since Decenber 2016 on 
+Major version 7: available since Decenber 2016 on 
 \begin_inset CommandInset href
 LatexCommand href
 name "FedoraProject / EPEL"
@@ -781,7 +799,7 @@ literal "false"
 \end_layout
 
 \begin_layout Itemize
-RHEL/CentOS 8: available since September 2019 on 
+Major version 8: available since September 2019 on 
 \begin_inset CommandInset href
 LatexCommand href
 name "FedoraProject / EPEL"
@@ -803,7 +821,7 @@ literal "false"
 \end_layout
 
 \begin_layout Standard
-CentOS 7/8 are also platforms for regression tests.
+CentOS 7 and Rocky 8 are also platforms for regression tests.
 \end_layout
 
 \begin_layout Subsubsection

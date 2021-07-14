@@ -8,14 +8,14 @@
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>10.1</revnumber> <date>2021-05-18</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>10.2</revnumber> <date>2021-07-14</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freecode.com/projects/ipv6calc/">freecode.com (former freshmeat, now also EOL) / ipv6calc</ulink> page (but this is not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 3.1.0</para></sect2><sect2>
+<para>Latest version since last update of this page is 3.2.0</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
 <listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;mod_ipv6calc&rdquo;: Apache module</para></listitem></itemizedlist></sect2><sect2>
@@ -52,7 +52,7 @@
 <listitem><para>via HTTPS at <ulink url="https://github.com/pbiering/ipv6calc/releases">GitHub / ipv6calc / releases</ulink> </para></listitem></itemizedlist></sect3><sect3>
 <title>as tar.gz (signed)</title>
 <itemizedlist>
-<listitem><para>Via FTP at <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink>: <ulink url="ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/">DeepSpace6 / anonymous FTP</ulink></para></listitem><listitem><para>Via FTP at <ulink url="ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/">ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/</ulink></para></listitem></itemizedlist><para>Since version 0.95.0 packages are signed with new GPG key, also available here: <ulink url="ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/CODE-GPG-KEY-bieringer.de-2013">CODE-GPG-KEY-bieringer.de-2013 @ftp.bieringer.de</ulink> or <ulink url="ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/CODE-GPG-KEY-bieringer.de-2013">CODE-GPG-KEY-bieringer.de-2013 @ftp.deepspace6.net</ulink></para><screen>
+<listitem><para>from <ulink url="http://www.deepspace6.net/">DeepSpace6</ulink> via FTP <ulink url="ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/">DeepSpace6 / anonymous FTP</ulink> or HTTP <ulink url="http://www.deepspace6.net/ftp/">http://www.deepspace6.net/ftp/</ulink></para></listitem><listitem><para>via <ulink url="ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/">ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/</ulink> or HTTP at <ulink url="http://www.bieringer.de/ftp/">http://www.bieringer.de/ftp/</ulink></para></listitem></itemizedlist><para>Since version 0.95.0 packages are signed with new GPG key, also available here: <ulink url="ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/CODE-GPG-KEY-bieringer.de-2013">CODE-GPG-KEY-bieringer.de-2013 @ftp.bieringer.de</ulink> or <ulink url="ftp://ftp.deepspace6.net/pub/ds6/sources/ipv6calc/CODE-GPG-KEY-bieringer.de-2013">CODE-GPG-KEY-bieringer.de-2013 @ftp.deepspace6.net</ulink></para><screen>
 <![CDATA[Key fingerprint: AAB3 8CB7 97C7 50C7 78C6 08C6 DDEB 141D F738 0F61
 uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 ]]></screen><para>A SPEC file is included, so you can build a RPM from tar.gz using</para><screen>
@@ -73,10 +73,10 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 <para>See also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para></sect3><sect3>
 <title>Red Hat Enterprise Linux and clones</title>
 <para>It's tested by the developer that creation of the RPM is working fine starting with RHEL 4.</para><itemizedlist>
-<listitem><para>RHEL/CentOS 5 has the package included by default (but an rather old version)
+<listitem><para>Major version 5 has the package included by default (but an rather old version)
 </para><itemizedlist>
-<listitem><para>RPMs of newer releases are available as test builds on koji, see related URL in announcements <ulink url="https://lists.deepspace6.net/pipermail/ipv6calc-announce/">ipv6calc-announce / list archive</ulink></para></listitem><listitem><para>*** Untested since version 2.0.0 because OS is out of support ***</para></listitem></itemizedlist></listitem><listitem><para>RHEL/CentOS 6: available since September 2014 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink>, see also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para><itemizedlist>
-<listitem><para>*** Untested since version 3.0.1 because OS is out of support ***</para></listitem></itemizedlist></listitem><listitem><para>RHEL/CentOS 7: available since Decenber 2016 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink>, see also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para></listitem><listitem><para>RHEL/CentOS 8: available since September 2019 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink>, see also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para></listitem></itemizedlist><para>CentOS 7/8 are also platforms for regression tests.</para></sect3><sect3>
+<listitem><para>RPMs of newer releases are available as test builds on koji, see related URL in announcements <ulink url="https://lists.deepspace6.net/pipermail/ipv6calc-announce/">ipv6calc-announce / list archive</ulink></para></listitem><listitem><para>*** Untested since version 2.0.0 because OS is out of support ***</para></listitem></itemizedlist></listitem><listitem><para>Major version 6: available since September 2014 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink>, see also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para><itemizedlist>
+<listitem><para>*** Untested since version 3.0.1 because OS is out of support ***</para></listitem></itemizedlist></listitem><listitem><para>Major version 7: available since Decenber 2016 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink>, see also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para></listitem><listitem><para>Major version 8: available since September 2019 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink>, see also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para></listitem></itemizedlist><para>CentOS 7 and Rocky 8 are also platforms for regression tests.</para></sect3><sect3>
 <title>Gentoo/Funtoo</title>
 <para>Package is maintained, nevertheless, Funtoo is used as platform for regression tests.</para></sect3><sect3>
 <title>Ubuntu</title>
