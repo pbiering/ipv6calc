@@ -10,6 +10,9 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20210801/PB:
+	tools/DBIP-update.sh.in: add support for deleting older files (-C <days>)
+
 20210714/PB:
 	tag version 3.2.0
 

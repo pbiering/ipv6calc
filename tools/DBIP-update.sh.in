@@ -18,10 +18,12 @@ DBIP_DAT_FILES="dbip-country-lite-%Y-%m.mmdb.gz dbip-city-lite-%Y-%m.mmdb.gz"
 
 help() {
 	cat <<END
-Usage: $(basename "$0") [-v] [-s] [-D <dir>] [-U <url>] [-T <type>]
+Usage: $(basename "$0") [-v] [-s] [-c] [-D <dir>] [-C <days>] [-U <url>] [-T <type>]
 	-s		skip download
+	-c		skip decompress
 	-v		verbose
 	-D <dir>	database directory (optional)
+	-C <days>	cleanup files older than given days (optional)
 	-U <url>	use URL to download full database
 	-T <type>	set type of via URL downloaded file
                           MMDB: country|isp|location|*location-isp*
@@ -46,14 +48,21 @@ END
 }
 
 skip_download=false
+skip_decompress=false
 verbose=false
-while getopts "vT:D:U:sh\?" opt; do
+while getopts "vT:D:C:U:sch\?" opt; do
 	case $opt in
 	    v)
 		verbose=true
 		;;
 	    s)
 		skip_download=true
+		;;
+	    c)
+		skip_decompress=true
+		;;
+	    C)
+		DBIP_DAT_CLEANUP_DAYS="$OPTARG"
 		;;
 	    D)
 		DBIP_DAT_DIR="$OPTARG"
@@ -138,6 +147,7 @@ if ! $skip_download; then
 fi
 
 # create db/decompress mmdb files from downloaded files
+$skip_decompress && download_result=false
 error=0
 if $download_result; then
 	for file in $DBIP_DAT_FILES; do
@@ -190,4 +200,48 @@ if $download_result; then
 		esac
 	done
 fi
+
+if [ -n "$DBIP_DAT_CLEANUP_DAYS" ]; then
+	# lookup softlinks
+	declare -A DBIP_DAT_SOFTLINKS
+	declare -A DBIP_DAT_SOFTLINKS_DEST
+	DBIP_DAT_SOFTLINKS=$(find $DBIP_DAT_DIR -type l -name 'dbip-*.mmdb' -o -name 'dbip-*.csv')
+	for key in ${DBIP_DAT_SOFTLINKS[@]}; do
+		$verbose && echo "DEBUG : check softlink   : $key"
+		dest=$(readlink "$key")
+		if [ -n "$dest" ]; then
+			$verbose && echo "DEBUG : softlink resolved: $key -> $dest"
+			DBIP_DAT_SOFTLINKS_DEST[$dest]=$key
+		else
+			$verbose && echo "DEBUG : softlink broken  : $key"
+		fi
+	done
+
+	# lookup files and check whether they are target of a softlink
+	declare -A DBIP_DAT_FILES
+	DBIP_DAT_FILES=$(find $DBIP_DAT_DIR -type f -mtime +$DBIP_DAT_CLEANUP_DAYS -name 'dbip-*-????-??.mmdb' -o -name 'dbip-*-????-??.csv')
+	for file in ${DBIP_DAT_FILES[@]}; do
+		basefile=$(basename "$file")
+		$verbose && echo "DEBUG : check file         : $file ($basefile)"
+		if [ -n "${DBIP_DAT_SOFTLINKS_DEST[$file]}" ];then
+			$verbose && echo "DEBUG : target of softlink1: $file <- ${DBIP_DAT_SOFTLINKS_DEST[$file]}"
+			DBIP_DAT_FILES[$file]=2
+		elif [ -n "${DBIP_DAT_SOFTLINKS_DEST[$basefile]}" ];then
+			$verbose && echo "DEBUG : target of softlink2: $file <- ${DBIP_DAT_SOFTLINKS_DEST[$basefile]}"
+			DBIP_DAT_FILES[$file]=3
+		else
+			$verbose && echo "DEBUG : no softlink target : $file"
+			DBIP_DAT_FILES[$file]=1
+		fi
+	done
+
+	# delete unused files
+	for file in ${DBIP_DAT_FILES[@]}; do
+		if [ "${DBIP_DAT_FILES[$file]}" = "1" ]; then
+			echo "INFO  : delete unused file : $file"
+			rm -f "$file"
+		fi
+	done
+fi
+
 exit $error
