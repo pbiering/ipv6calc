@@ -822,7 +822,12 @@ int libipv4addr_to_octal(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring,
 		);
 	};
 
-	snprintf(resultstring, resultstring_length, "%s", tempstring);
+	if ((ipv4addrp->flag_prefixuse == 1) && ((formatoptions & FORMATOPTION_no_prefixlength) == 0) && ((formatoptions & FORMATOPTION_print_octal_separated) != 0)) {
+		snprintf(resultstring, resultstring_length, "%s/%d", tempstring, ipv4addrp->prefixlength);
+	} else {
+		snprintf(resultstring, resultstring_length, "%s", tempstring);
+	};
+
 	retval = 0;	
 	return (retval);
 };

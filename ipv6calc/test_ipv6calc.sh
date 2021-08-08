@@ -130,6 +130,7 @@ cat <<END | grep -v '^#'
 --in ipv6 --out ipv6 --printprefix --printuncompressed 3ffe:ffff:100:f101::1/65		=3ffe:ffff:100:f101:0
 ## octal
 --in ipv4 --out octal --print-octal-separated 192.0.2.1			=0300.0000.0002.0001
+--in ipv4 --out octal --print-octal-separated 192.0.2.1/24		=0300.0000.0002.0001/24
 --in ipv4 --out ipv4 0300.0000.0002.0001				=192.0.2.1
 --in ipv4 --out ipv4 0300.0000.0002.0001/24				=192.0.2.1/24
 ## full uncompressed
