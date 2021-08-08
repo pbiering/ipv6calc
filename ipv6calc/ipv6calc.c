@@ -612,6 +612,10 @@ int main(int argc, char *argv[]) {
 	       			formatoptions |= FORMATOPTION_printfulluncompressed;
 				break;
 
+			case FORMATOPTION_NUM_print_octal_separated + FORMATOPTION_NUM_HEAD:
+				formatoptions |= FORMATOPTION_print_octal_separated;
+				break;
+
 			/* new options */
 			case 'I':	
 			case CMD_inputtype:

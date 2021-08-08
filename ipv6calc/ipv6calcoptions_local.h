@@ -2,7 +2,7 @@
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calc/ipv6calcoptions.h
  * Version    : $Id$
- * Copyright  : 2002-2020 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options for ipv6calc
@@ -115,6 +115,8 @@ static struct option ipv6calc_longopts[] = {
 	{ "printmirrored"        , 0, NULL, FORMATOPTION_NUM_printmirrored + FORMATOPTION_NUM_HEAD },
 
 	{ "print-iid-var"        , 0, NULL, FORMATOPTION_NUM_print_iid_var + FORMATOPTION_NUM_HEAD },
+
+	{ "print-octal-separated", 0, NULL, FORMATOPTION_NUM_print_octal_separated + FORMATOPTION_NUM_HEAD },
 
 	/* new options */
 	{ "in"        , 1, NULL, CMD_inputtype  },

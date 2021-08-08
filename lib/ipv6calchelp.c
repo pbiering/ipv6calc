@@ -571,10 +571,11 @@ static void printhelp_output_ouitype(void) {
 };
 
 static void printhelp_output_octal(void) {
-	fprintf(stderr, " Print octal representation of a given IPv6 address:\n");
+	fprintf(stderr, " Print octal representation of a given IP address:\n");
 	fprintf(stderr, "  (useful for djbdns/tinydns)\n");
-	fprintf(stderr, "  3ffe:ffff::1 ->\n    \\77\\376\\377\\377\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\1\n");
-	fprintf(stderr, "  --printfulluncompressed 3ffe:ffff::1 ->\n    \\077\\376\\377\\377\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\001\n");
+	fprintf(stderr, "  3ffe:ffff::1 -> \\77\\376\\377\\377\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\1\n");
+	fprintf(stderr, "  --printfulluncompressed 3ffe:ffff::1 -> \\077\\376\\377\\377\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\001\n");
+	fprintf(stderr, "  --print-octal-separated 192.0.2.1    -> 0300.0000.0002.0001\n");
 };
 
 void printhelp_output_dispatcher(const uint32_t outputtype, const uint32_t inputtype) {

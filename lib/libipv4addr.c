@@ -777,7 +777,7 @@ int libipv4addr_to_reversestring(const ipv6calc_ipv4addr *ipv4addrp, char *resul
  * function prints an IPv4 address in native octal format
  *
  * in:  ipv4addr = IPv4 address structure
- * formatoptions
+ * in:  formatoptions
  * out: *resultstring = IPv4 address (modified)
  * ret: ==0: ok, !=0: error
  */
@@ -785,7 +785,14 @@ int libipv4addr_to_octal(const ipv6calc_ipv4addr *ipv4addrp, char *resultstring,
 	int retval = 1;
 	char tempstring[IPV6CALC_STRING_MAX];
 
-	if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
+	if ( (formatoptions & FORMATOPTION_print_octal_separated) != 0 ) {
+		snprintf(tempstring, sizeof(tempstring), "0%03o.0%03o.0%03o.0%03o",
+			(unsigned int) ipv4addr_getoctet(ipv4addrp, 0),  \
+			(unsigned int) ipv4addr_getoctet(ipv4addrp, 1),  \
+			(unsigned int) ipv4addr_getoctet(ipv4addrp, 2),  \
+			(unsigned int) ipv4addr_getoctet(ipv4addrp, 3)   \
+		);
+	} else if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
 		snprintf(tempstring, sizeof(tempstring), "\\0%03o\\0%03o\\0%03o\\0%03o",
 			(unsigned int) ipv4addr_getoctet(ipv4addrp, 0),  \
 			(unsigned int) ipv4addr_getoctet(ipv4addrp, 1),  \

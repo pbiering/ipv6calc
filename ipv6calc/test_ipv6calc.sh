@@ -91,6 +91,7 @@ cat <<END | grep -v '^#'
 --in ipv6 --out ipv6 --printuncompressed 2001:db8:0:cd30:1:2::4		=2001:db8:0:cd30:1:2:0:4
 --in ipv6 --out ipv6 --printuncompressed ::db8:0:cd30:1:2:3:4		=0:db8:0:cd30:1:2:3:4
 --in ipv6 --out ipv6 --printuncompressed ::1:cd30:1:2:3:4		=0:0:1:cd30:1:2:3:4
+--in ipv4 --out octal --print-octal-separated 				=0300.0000.0002.0001
 --addr_to_uncompressed 3ffe:ffff:100:f101::1/64				=3ffe:ffff:100:f101:0:0:0:1/64
 --addr_to_uncompressed ::13.1.68.3					=0:0:0:0:0:0:13.1.68.3
 --addr_to_uncompressed ::013.01.068.0003				=0:0:0:0:0:0:13.1.68.3
