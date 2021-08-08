@@ -91,7 +91,6 @@ cat <<END | grep -v '^#'
 --in ipv6 --out ipv6 --printuncompressed 2001:db8:0:cd30:1:2::4		=2001:db8:0:cd30:1:2:0:4
 --in ipv6 --out ipv6 --printuncompressed ::db8:0:cd30:1:2:3:4		=0:db8:0:cd30:1:2:3:4
 --in ipv6 --out ipv6 --printuncompressed ::1:cd30:1:2:3:4		=0:0:1:cd30:1:2:3:4
---in ipv4 --out octal --print-octal-separated 				=0300.0000.0002.0001
 --addr_to_uncompressed 3ffe:ffff:100:f101::1/64				=3ffe:ffff:100:f101:0:0:0:1/64
 --addr_to_uncompressed ::13.1.68.3					=0:0:0:0:0:0:13.1.68.3
 --addr_to_uncompressed ::013.01.068.0003				=0:0:0:0:0:0:13.1.68.3
@@ -129,6 +128,10 @@ cat <<END | grep -v '^#'
 --addr_to_uncompressed --printprefix 3ffe:ffff:100:f101::1/64		=3ffe:ffff:100:f101
 --addr_to_uncompressed --printprefix 3ffe:ffff:100:f101::1/65		=3ffe:ffff:100:f101:0
 --in ipv6 --out ipv6 --printprefix --printuncompressed 3ffe:ffff:100:f101::1/65		=3ffe:ffff:100:f101:0
+## octal
+--in ipv4 --out octal --print-octal-separated 192.0.2.1			=0300.0000.0002.0001
+--in ipv4 --out ipv4 0300.0000.0002.0001				=192.0.2.1
+--in ipv4 --out ipv4 0300.0000.0002.0001/24				=192.0.2.1/24
 ## full uncompressed
 --addr_to_fulluncompressed 3ffe:ffff:100:f101::1			=3ffe:ffff:0100:f101:0000:0000:0000:0001
 --in ipv6 --out ipv6 --printfulluncompressed 3ffe:ffff:100:f101::1 =3ffe:ffff:0100:f101:0000:0000:0000:0001
@@ -295,6 +298,7 @@ cat <<END | grep -v '^#'
 2.2.3.4/33									ipv4addr
 1.2.3.4/									ipv4addr
 1.2.3.4/00									ipv4addr
+0300.0000.0002.0001/33								ipv4addr
 0/00										ipv4addr
 1										ipv4addr
 1.										ipv4addr

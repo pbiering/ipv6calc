@@ -452,57 +452,71 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const siz
 	}
 
 	memset(compat, 0, sizeof(compat));
-	for (p = addrstring, i = 0; *p && i < (in_prefix_len ? 5 : 4); p++)
-	{
-		if (*p >= '0' && *p <= '9') {
-			digit = 1;
-			if (in_prefix_len && p[0] == '0' && p[1] && compat[i] == 0) {
-				snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (CIDR prefix length cannot start with zero)!",
-			                 addrstring);
+
+	if (sscanf(addrstring, "0%3o.0%3o.0%3o.0%3o/%2d", &compat[0], &compat[1], &compat[2], &compat[3], &compat[4]) == 5) {
+		// IPv4 address in octal format separated by . with prefix length
+		in_prefix_len = 1;
+	} else if (sscanf(addrstring, "0%3o.0%3o.0%3o.0%3o", &compat[0], &compat[1], &compat[2], &compat[3]) == 4) {
+		// IPv4 address in octal format separated by .
+	} else {
+		// standard but potentially shortened notation
+		for (p = addrstring, i = 0; *p && i < (in_prefix_len ? 5 : 4); p++)
+		{
+			if (*p >= '0' && *p <= '9') {
+				digit = 1;
+				if (in_prefix_len && p[0] == '0' && p[1] && compat[i] == 0) {
+					snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (CIDR prefix length cannot start with zero)!",
+						 addrstring);
+					return (1);
+				}
+				compat[i] = compat[i] * 10 + (*p - '0');
+				if (compat[i] > (in_prefix_len ? 32 : 255)) {
+					snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (%d on position %d)!",
+						 addrstring, compat[i], (int)(p - addrstring + 1));
+					return (1);
+				}
+			} else if (*p == '.' && !in_prefix_len && digit) {
+				digit = 0;
+				i++;
+			} else if (*p == '/' && !in_prefix_len && p != addrstring) {
+				digit = 0;
+				in_prefix_len = 1;
+				i = 4;
+			} else {
+				snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (illegal char at %d)!",
+					 addrstring, (int)(p - addrstring + 1));
 				return (1);
 			}
-			compat[i] = compat[i] * 10 + (*p - '0');
-			if (compat[i] > (in_prefix_len ? 32 : 255)) {
-				snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (%d on position %d)!",
-			                 addrstring, compat[i], (int)(p - addrstring + 1));
-				return (1);
-			}
-		} else if (*p == '.' && !in_prefix_len && digit) {
-			digit = 0;
-			i++;
-		} else if (*p == '/' && !in_prefix_len && p != addrstring) {
-			digit = 0;
-			in_prefix_len = 1;
-			i = 4;
-		} else {
+		}
+		if (p[-1] == '/') {
 			snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (illegal char at %d)!",
-			         addrstring, (int)(p - addrstring + 1));
+				 addrstring, (int)(p - addrstring));
 			return (1);
 		}
-	}
-	if (p[-1] == '/') {
-		snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (illegal char at %d)!",
-		         addrstring, (int)(p - addrstring));
-		return (1);
-	}
-	if (i >= (in_prefix_len ? 5 : 4)) {
-		snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (more than 3 dots)!", addrstring);
-		return (1);
-	}
+		if (i >= (in_prefix_len ? 5 : 4)) {
+			snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (more than 3 dots)!", addrstring);
+			return (1);
+		}
 
-	/* do not allow '1.2', but allow '1.2/12' */
-	if (!in_prefix_len && i < 3) {
-		snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (missing %d dots)!", addrstring, 3-i);
-		return (1);
-	}
-	if (!in_prefix_len && p[-1] == '.') {
-		snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (missing last octet)!", addrstring);
-		return (1);
-	}
+		/* do not allow '1.2', but allow '1.2/12' */
+		if (!in_prefix_len && i < 3) {
+			snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (missing %d dots)!", addrstring, 3-i);
+			return (1);
+		}
+		if (!in_prefix_len && p[-1] == '.') {
+			snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (missing last octet)!", addrstring);
+			return (1);
+		}
+	};
 
 	ipv4addr_clearall(ipv4addrp);
 	if (in_prefix_len) {
 		ipv4addrp->flag_prefixuse = 1;
+
+		if (compat[4] > 32) {
+			snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (prefix length is out-of-range 0..32)!", addrstring);
+			return (1);
+		};
 		ipv4addrp->prefixlength = (uint8_t) compat[4];
 
 		DEBUGPRINT_WA(DEBUG_libipv4addr, "prefix length %u", (unsigned int) ipv4addrp->prefixlength);
