@@ -128,11 +128,16 @@ cat <<END | grep -v '^#'
 --addr_to_uncompressed --printprefix 3ffe:ffff:100:f101::1/64		=3ffe:ffff:100:f101
 --addr_to_uncompressed --printprefix 3ffe:ffff:100:f101::1/65		=3ffe:ffff:100:f101:0
 --in ipv6 --out ipv6 --printprefix --printuncompressed 3ffe:ffff:100:f101::1/65		=3ffe:ffff:100:f101:0
-## octal
+## octal IPv4 (with separator)
 --in ipv4 --out ipv4 --print-octal 192.0.2.1				=0300.0000.0002.0001
 --in ipv4 --out ipv4 --print-octal 192.0.2.1/24				=0300.0000.0002.0001/24
 --in ipv4 --out ipv4 0300.0000.0002.0001				=192.0.2.1
 --in ipv4 --out ipv4 0300.0000.0002.0001/24				=192.0.2.1/24
+## octal IP
+--in ipv4 --out octal 192.0.2.1						=\\\\0300\\\\00\\\\02\\\\01
+--in ipv4 --out octal --printfulluncompressed 192.0.2.1			=\\\\0300\\\\0000\\\\0002\\\\0001
+--in ipv6 --out octal 3ffe:ffff::1					=\\\\077\\\\0376\\\\0377\\\\0377\\\\00\\\\00\\\\00\\\\00\\\\00\\\\00\\\\00\\\\00\\\\00\\\\00\\\\00\\\\01
+--in ipv6 --out octal --printfulluncompressed 3ffe:ffff::1		=\\\\0077\\\\0376\\\\0377\\\\0377\\\\0000\\\\0000\\\\0000\\\\0000\\\\0000\\\\0000\\\\0000\\\\0000\\\\0000\\\\0000\\\\0000\\\\0001
 ## full uncompressed
 --addr_to_fulluncompressed 3ffe:ffff:100:f101::1			=3ffe:ffff:0100:f101:0000:0000:0000:0001
 --in ipv6 --out ipv6 --printfulluncompressed 3ffe:ffff:100:f101::1 =3ffe:ffff:0100:f101:0000:0000:0000:0001
