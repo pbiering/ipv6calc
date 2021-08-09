@@ -540,6 +540,8 @@ static void printhelp_output_ipv4addr(void) {
 	fprintf(stderr, "   1.2     -> 1.2.0.0\n");
 	fprintf(stderr, "  Compressed, e.g.\n");
 	fprintf(stderr, "   1.2.0.0 -> 1.2\n");
+	fprintf(stderr, "  Octal, e.g.\n");
+	fprintf(stderr, "   192.0.2.1 -> 0300.0000.0002.0001\n");
 };
 
 static void printhelp_output_revipv4(void) {
@@ -575,7 +577,6 @@ static void printhelp_output_octal(void) {
 	fprintf(stderr, "  (useful for djbdns/tinydns)\n");
 	fprintf(stderr, "  3ffe:ffff::1 -> \\77\\376\\377\\377\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\1\n");
 	fprintf(stderr, "  --printfulluncompressed 3ffe:ffff::1 -> \\077\\376\\377\\377\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\001\n");
-	fprintf(stderr, "  --print-octal-separated 192.0.2.1    -> 0300.0000.0002.0001\n");
 };
 
 void printhelp_output_dispatcher(const uint32_t outputtype, const uint32_t inputtype) {

@@ -612,8 +612,8 @@ int main(int argc, char *argv[]) {
 	       			formatoptions |= FORMATOPTION_printfulluncompressed;
 				break;
 
-			case FORMATOPTION_NUM_print_octal_separated + FORMATOPTION_NUM_HEAD:
-				formatoptions |= FORMATOPTION_print_octal_separated;
+			case FORMATOPTION_NUM_print_octal + FORMATOPTION_NUM_HEAD:
+				formatoptions |= FORMATOPTION_print_octal;
 				break;
 
 			/* new options */

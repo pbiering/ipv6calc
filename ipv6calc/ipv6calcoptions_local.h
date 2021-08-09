@@ -116,7 +116,7 @@ static struct option ipv6calc_longopts[] = {
 
 	{ "print-iid-var"        , 0, NULL, FORMATOPTION_NUM_print_iid_var + FORMATOPTION_NUM_HEAD },
 
-	{ "print-octal-separated", 0, NULL, FORMATOPTION_NUM_print_octal_separated + FORMATOPTION_NUM_HEAD },
+	{ "print-octal"		 , 0, NULL, FORMATOPTION_NUM_print_octal + FORMATOPTION_NUM_HEAD },
 
 	/* new options */
 	{ "in"        , 1, NULL, CMD_inputtype  },

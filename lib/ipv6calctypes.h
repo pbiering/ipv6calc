@@ -185,7 +185,7 @@ typedef struct {
 #define FORMATOPTION_NUM_mr_quote_default	25	// 02000000 flag for controlling old quote behavior < 0.99.0
 #define FORMATOPTION_NUM_mr_match_token_suffix	26	// 04000000
 
-#define FORMATOPTION_NUM_print_octal_separated	30	// octal with separator
+#define FORMATOPTION_NUM_print_octal		30	// octal with separator
 #define FORMATOPTION_NUM_printembedded		31	// special
 
 #define FORMATOPTION_printlowercase		(uint32_t) (1 << FORMATOPTION_NUM_printlowercase)
@@ -215,7 +215,7 @@ typedef struct {
 #define FORMATOPTION_mr_quote_default		(uint32_t) (1 << FORMATOPTION_NUM_mr_quote_default) // flag for controlling old quote behavior < 0.99.0
 #define FORMATOPTION_mr_match_token_suffix	(uint32_t) (1 << FORMATOPTION_NUM_mr_match_token_suffix)
 
-#define FORMATOPTION_print_octal_separated	(uint32_t) (1 << FORMATOPTION_NUM_print_octal_separated)
+#define FORMATOPTION_print_octal		(uint32_t) (1 << FORMATOPTION_NUM_print_octal)
 #define FORMATOPTION_printembedded		(uint32_t) (1 << FORMATOPTION_NUM_printembedded)
 
 typedef struct {
@@ -242,7 +242,7 @@ typedef struct {
 	{ FORMATOPTION_forceprefix	, "--forceprefix <num>", "Force prefix to <num>" },
 	{ FORMATOPTION_print_iid_var	, "--print-iid-var"	, "IPv6 address IID variance"},
 	{ FORMATOPTION_no_prefixlength	, "--no-prefixlength"	, "Don't print prefix length if given on input"},
-	{ FORMATOPTION_print_octal_separated	, "--print-octal-separated", "Print IP address in octal with separator"},
+	{ FORMATOPTION_print_octal	, "--print-octal"       , "Print IPv4 address in dot-separated octal notation"},
 };
 
 /* Possible format option map */
@@ -256,9 +256,9 @@ typedef struct {
 	{ FORMAT_eui64          , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
 	{ FORMAT_base85         , 0 },
 	{ FORMAT_ifinet6        , 0 },
-	{ FORMAT_ipv4addr       , FORMATOPTION_machinereadable | FORMATOPTION_no_prefixlength | FORMATOPTION_forceprefix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed },
+	{ FORMAT_ipv4addr       , FORMATOPTION_machinereadable | FORMATOPTION_no_prefixlength | FORMATOPTION_forceprefix | FORMATOPTION_maskprefix | FORMATOPTION_masksuffix | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed | FORMATOPTION_print_octal },
 	{ FORMAT_iid_token      , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase },
-	{ FORMAT_octal          , FORMATOPTION_printfulluncompressed | FORMATOPTION_print_octal_separated },
+	{ FORMAT_octal          , FORMATOPTION_printfulluncompressed },
 	{ FORMAT_ipv6literal    , FORMATOPTION_machinereadable | FORMATOPTION_printlowercase | FORMATOPTION_printuppercase | FORMATOPTION_printcompressed | FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed },
 	{ FORMAT_hex            , FORMATOPTION_printuppercase | FORMATOPTION_printprefix | FORMATOPTION_printsuffix | FORMATOPTION_forceprefix },
 	{ FORMAT_prefix_mac     , FORMATOPTION_printlowercase | FORMATOPTION_printuppercase }
