@@ -473,6 +473,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const siz
 			goto END_addr_to_ipv4addrstruct;
 		};
 	};
+	regfree(&regex);
 
 	// standard but potentially shortened notation
 	for (p = addrstring, i = 0; *p && i < (in_prefix_len ? 5 : 4); p++)
