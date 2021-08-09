@@ -575,8 +575,8 @@ static void printhelp_output_ouitype(void) {
 static void printhelp_output_octal(void) {
 	fprintf(stderr, " Print octal representation of a given IP address:\n");
 	fprintf(stderr, "  (useful for djbdns/tinydns)\n");
-	fprintf(stderr, "  3ffe:ffff::1 -> \\77\\376\\377\\377\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\0\\1\n");
-	fprintf(stderr, "  --printfulluncompressed 3ffe:ffff::1 -> \\077\\376\\377\\377\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\000\\001\n");
+	fprintf(stderr, "  3ffe:ffff::1 -> \\077\\0376\\0377\\0377\\00\\00\\00\\00\\00\\00\\00\\00\\00\\00\\00\\01\n");
+	fprintf(stderr, "  --printfulluncompressed 3ffe:ffff::1 -> \\0077\\0376\\0377\\0377\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0000\\0001\n");
 	fprintf(stderr, "  192.0.2.1 -> \\0300\\00\\02\\01\n");
 	fprintf(stderr, "  --printfulluncompressed 192.0.2.1 -> \\0300\\0000\\0002\\0001\n");
 };
