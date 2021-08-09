@@ -10,6 +10,10 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20210809/PB:
+	ipv6calc/ipv6calc.c ipv6calc/ipv6calcoptions_local.h ipv6calc/test_ipv6calc.sh lib/ipv6calchelp.c lib/ipv6calctypes.h lib/libipv4addr.c:
+		add support for output of IPv4 in dot separated octal and also autodetect/parse such input
+
 20210801/PB:
 	tools/DBIP-update.sh.in: add support for deleting older files (-C <days>)
 
