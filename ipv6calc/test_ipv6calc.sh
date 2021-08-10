@@ -306,6 +306,8 @@ cat <<END | grep -v '^#'
 1.2.3.4/00									ipv4addr
 0300.0000.0002.0001/33								ipv4addr
 0300.0000.0002.0001.1								ipv4addr
+0500.0000.0002.0001.1								ipv4addr
+320.2.3.4									ipv4addr
 0/00										ipv4addr
 1										ipv4addr
 1.										ipv4addr

@@ -526,6 +526,7 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const siz
 
 END_addr_to_ipv4addrstruct:
 	ipv4addr_clearall(ipv4addrp);
+
 	if (in_prefix_len) {
 		ipv4addrp->flag_prefixuse = 1;
 
@@ -538,8 +539,15 @@ END_addr_to_ipv4addrstruct:
 		DEBUGPRINT_WA(DEBUG_libipv4addr, "prefix length %u", (unsigned int) ipv4addrp->prefixlength);
 		DEBUGPRINT_WA(DEBUG_libipv4addr, "flag_prefixuse %d", ipv4addrp->flag_prefixuse);
 	}
+
 	for ( i = 0; i <= 3; i++ ) {
 		DEBUGPRINT_WA(DEBUG_libipv4addr, "Octett %d = %d", i, compat[i]);
+
+		if (compat[i] > 255) {
+			snprintf(resultstring, resultstring_length, "Error in given IPv4 address, '%s' is not valid (decimal value %d on position %d)!", addrstring, compat[i], i+1);
+			return (1);
+		};
+
 		ipv4addr_setoctet(ipv4addrp, i, compat[i]);
 	};
 
@@ -637,7 +645,7 @@ int addrhex_to_ipv4addrstruct(const char *addrstring, char *resultstring, const 
 	
 	for ( i = 0; i <= 3; i++ ) {
 		if ( ( compat[i] < 0 ) || ( compat[i] > 255 ) )	{
-			snprintf(resultstring, resultstring_length, "Error in given hex notated IPv4 address, '%s' is not valid (%d on position %d)!", addronlystring, compat[i], i+1);
+			snprintf(resultstring, resultstring_length, "Error in given hex notated IPv4 address, '%s' is not valid (decimal value %d on position %d)!", addronlystring, compat[i], i+1);
 			retval = 1;
 			return (retval);
 		};
