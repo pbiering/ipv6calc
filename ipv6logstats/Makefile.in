@@ -1,7 +1,7 @@
 # Project    : ipv6calc/ipv6logstats
 # File       : Makefile
 # Version    : $Id$
-# Copyright  : 2003-2020 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2003-2021 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6logstats
@@ -27,6 +27,7 @@ GETOBJS = @LIBOBJS@
 CC	= @CC@
 
 LDFLAGS_EXTRA = @LDFLAGS_EXTRA@
+LDFLAGS_EXTRA_STATIC = @LDFLAGS_EXTRA_STATIC@
 
 OBJS	= ipv6logstats.o ipv6logstatshelp.o
 
@@ -51,7 +52,7 @@ ipv6logstats:	$(OBJS) libipv6calc.a libipv6calc_db_wrapper.a
 		$(CC) -o ipv6logstats $(OBJS) $(GETOBJS) $(LIBS) -lm $(LDFLAGS) $(LDFLAGS_EXTRA)
 
 static:		ipv6logstats
-		$(CC) -o ipv6logstats-static $(OBJS) $(GETOBJS) $(LIBS) -lm $(LDFLAGS) $(LDFLAGS_EXTRA) -static
+		$(CC) -o ipv6logstats-static $(OBJS) $(GETOBJS) $(LIBS) -lm $(LDFLAGS) $(LDFLAGS_EXTRA_STATIC) -static
 
 distclean:
 		${MAKE} clean

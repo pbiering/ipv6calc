@@ -1,7 +1,7 @@
 # Project    : ipv6calc/ipv6logconv
 # File       : ipv6logconv/Makefile[.in]
 # Version    : $Id$
-# Copyright  : 2002-2020 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2021 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6logconv
@@ -27,6 +27,7 @@ GETOBJS = @LIBOBJS@
 CC	= @CC@
 
 LDFLAGS_EXTRA = @LDFLAGS_EXTRA@
+LDFLAGS_EXTRA_STATIC = @LDFLAGS_EXTRA_STATIC@
 
 OBJS	= ipv6logconv.o ipv6logconvhelp.o
 
@@ -51,7 +52,7 @@ ipv6logconv:	$(OBJS) libipv6calc libipv6calc_db_wrapper
 		$(CC) -o ipv6logconv $(OBJS) $(GETOBJS) $(LIBS) -lm $(LDFLAGS) $(LDFLAGS_EXTRA)
 
 static:		ipv6logconv
-		$(CC) -o ipv6logconv-static $(OBJS) $(GETOBJS) $(LIBS) -lm $(LDFLAGS) $(LDFLAGS_EXTRA) -static
+		$(CC) -o ipv6logconv-static $(OBJS) $(GETOBJS) $(LIBS) -lm $(LDFLAGS) $(LDFLAGS_EXTRA_STATIC) -static
 
 distclean:
 		${MAKE} clean
