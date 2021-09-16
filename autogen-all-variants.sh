@@ -44,6 +44,8 @@ autogen_variants_list() {
 		cat <<END | grep -v ^#
 NONE#
 BUNDLED#--enable-bundled-md5 --enable-bundled-getopt
+OPENSSL#--enable-openssl-md5
+OPENSSL#--enable-openssl-evp-md5
 IP2LOCATION#-i
 IP2LOCATION#-i --ip2location-dyn
 GEOIP2 DBIP2#-m
