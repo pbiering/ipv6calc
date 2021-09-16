@@ -15,6 +15,12 @@
 /* Define if bundled MD5 should be used */
 #undef ENABLE_BUNDLED_MD5
 
+/* Define if OpenSSL EVP MD5 should be used */
+#undef ENABLE_OPENSSL_EVP_MD5
+
+/* Define if OpenSSL legacy MD5 should be used */
+#undef ENABLE_OPENSSL_MD5
+
 /* Define external database directory. */
 #undef EXTERNAL_DB
 
@@ -51,6 +57,24 @@
 /* Define to 1 if you have the declaration of `USAGETYPE', and to 0 if you
    don't. */
 #undef HAVE_DECL_USAGETYPE
+
+/* Define to 1 if you have the `EVP_DigestFinal_ex' function. */
+#undef HAVE_EVP_DIGESTFINAL_EX
+
+/* Define to 1 if you have the `EVP_DigestInit_ex' function. */
+#undef HAVE_EVP_DIGESTINIT_EX
+
+/* Define to 1 if you have the `EVP_DigestUpdate' function. */
+#undef HAVE_EVP_DIGESTUPDATE
+
+/* Define to 1 if you have the `EVP_md5' function. */
+#undef HAVE_EVP_MD5
+
+/* Define to 1 if you have the `EVP_MD_CTX_free' function. */
+#undef HAVE_EVP_MD_CTX_FREE
+
+/* Define to 1 if you have the `EVP_MD_CTX_new' function. */
+#undef HAVE_EVP_MD_CTX_NEW
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H

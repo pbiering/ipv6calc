@@ -654,6 +654,8 @@ MMDB_INCLUDE
 EXTERNAL_DB
 IPV6CALC_LIB
 SHARED_LIBRARY
+ENABLE_OPENSSL_MD5
+ENABLE_OPENSSL_EVP_MD5
 ENABLE_BUNDLED_MD5
 MD5_INCLUDE
 ENABLE_BUNDLED_GETOPT
@@ -719,6 +721,8 @@ enable_m32
 enable_compiler_warning_to_error
 enable_bundled_getopt
 enable_bundled_md5
+enable_openssl_evp_md5
+enable_openssl_md5
 enable_shared
 enable_dynamic_load
 enable_db_ieee
@@ -1394,6 +1398,11 @@ Optional Features:
   --enable-bundled-getopt Enable bundled getopt library (default:
                           autoselected)
   --enable-bundled-md5    Enable bundled MD5 library (default: autoselected)
+  --enable-openssl-evp-md5
+                          Enforce use of OpenSSL EVP MD5 implementation
+                          (default: autoselected)
+  --enable-openssl-md5    Enforce use of OpenSSL legacy MD5 implementation
+                          (default: autoselected)
   --enable-shared         Enable shared library build (default: disabled)
 
   --disable-dynamic-load  Disable dynamic load of libraries (default: enabled)
@@ -4126,9 +4135,7 @@ $as_echo "#define AC_APPLE_UNIVERSAL_BUILD 1" >>confdefs.h
  esac
 
 
-CFLAGS_EXTRA=$CFLAGS
 
-LDFLAGS_EXTRA=$LDFLAGS
 
 
 # Check whether --enable-m32 was given.
@@ -4405,26 +4412,105 @@ fi
 
 
 ENABLE_BUNDLED_MD5=0
-# Check whether --enable-bundled-md5 was given.
-if test "${enable_bundled_md5+set}" = set; then :
-  enableval=$enable_bundled_md5;
-		if test "$enable_bundled_md5" = "yes"; then
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** use of bundled MD5 library forced" >&5
-$as_echo "*** use of bundled MD5 library forced" >&6; }
-			ENABLE_BUNDLED_MD5=1
-		else
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** use of system MD5 library forced" >&5
-$as_echo "*** use of system MD5 library forced" >&6; }
-		fi
+HAVE_OPENSSL_EVP_MD5=0
+HAVE_OPENSSL_MD5=0
+ENABLE_OPENSSL_EVP_MD5=0
+ENABLE_OPENSSL_MD5=0
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** check for OpenSSL EVP MD5" >&5
+$as_echo "*** check for OpenSSL EVP MD5" >&6; }
+ac_fn_c_check_header_mongrel "$LINENO" "openssl/evp.h" "ac_cv_header_openssl_evp_h" "$ac_includes_default"
+if test "x$ac_cv_header_openssl_evp_h" = xyes; then :
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: openssl/evp.h header file found" >&5
+$as_echo "openssl/evp.h header file found" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for EVP_DigestInit_ex in -lcrypto" >&5
+$as_echo_n "checking for EVP_DigestInit_ex in -lcrypto... " >&6; }
+if ${ac_cv_lib_crypto_EVP_DigestInit_ex+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lcrypto  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char EVP_DigestInit_ex ();
+int
+main ()
+{
+return EVP_DigestInit_ex ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_crypto_EVP_DigestInit_ex=yes
+else
+  ac_cv_lib_crypto_EVP_DigestInit_ex=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_crypto_EVP_DigestInit_ex" >&5
+$as_echo "$ac_cv_lib_crypto_EVP_DigestInit_ex" >&6; }
+if test "x$ac_cv_lib_crypto_EVP_DigestInit_ex" = xyes; then :
+
+		LDFLAGS_ORIG="$LDFLAGS"
+		LDFLAGS="-lcrypto $LDFLAGS"
+		HAVE_OPENSSL_EVP_MD5=1
+		for ac_func in EVP_MD_CTX_new EVP_md5 EVP_DigestInit_ex EVP_DigestUpdate EVP_DigestFinal_ex EVP_MD_CTX_free
+do :
+  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
 
 else
 
-		ac_fn_c_check_header_mongrel "$LINENO" "openssl/md5.h" "ac_cv_header_openssl_md5_h" "$ac_includes_default"
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: OpenSSL crypto library DOES NOT support MD5 via EVP" >&5
+$as_echo "$as_me: WARNING: OpenSSL crypto library DOES NOT support MD5 via EVP" >&2;}
+			HAVE_OPENSSL_EVP_MD5=0
+
+fi
+done
+
+		LDFLAGS="$LDFLAGS_ORIG"
+
+else
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: OpenSSL crypto library DOES NOT support MD5 via EVP" >&5
+$as_echo "$as_me: WARNING: OpenSSL crypto library DOES NOT support MD5 via EVP" >&2;}
+
+fi
+
+
+else
+
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: openssl/evp.h header file not found" >&5
+$as_echo "$as_me: WARNING: openssl/evp.h header file not found" >&2;}
+
+fi
+
+
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** check for OpenSSL legacy MD5" >&5
+$as_echo "*** check for OpenSSL legacy MD5" >&6; }
+ac_fn_c_check_header_mongrel "$LINENO" "openssl/md5.h" "ac_cv_header_openssl_md5_h" "$ac_includes_default"
 if test "x$ac_cv_header_openssl_md5_h" = xyes; then :
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** openssl/md5.h header file found" >&5
-$as_echo "*** openssl/md5.h header file found" >&6; }
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for MD5_Init in -lcrypto" >&5
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: openssl/md5.h header file found" >&5
+$as_echo "openssl/md5.h header file found" >&6; }
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for MD5_Init in -lcrypto" >&5
 $as_echo_n "checking for MD5_Init in -lcrypto... " >&6; }
 if ${ac_cv_lib_crypto_MD5_Init+:} false; then :
   $as_echo_n "(cached) " >&6
@@ -4462,8 +4548,10 @@ fi
 $as_echo "$ac_cv_lib_crypto_MD5_Init" >&6; }
 if test "x$ac_cv_lib_crypto_MD5_Init" = xyes; then :
 
-				LDFLAGS="-lcrypto $LDFLAGS"
-				for ac_func in MD5_Init MD5_Update MD5_Final
+		LDFLAGS_ORIG="$LDFLAGS"
+		LDFLAGS="-lcrypto $LDFLAGS"
+		HAVE_OPENSSL_MD5=1
+		for ac_func in MD5_Init MD5_Update MD5_Final
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
@@ -4472,41 +4560,93 @@ if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
 #define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
 _ACEOF
 
-						md5_found="yes"
 
 else
 
-						ENABLE_BUNDLED_MD5=1
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: OpenSSL crypto library supports MD5 via legacy implementation" >&5
+$as_echo "OpenSSL crypto library supports MD5 via legacy implementation" >&6; }
+			HAVE_OPENSSL_EVP_MD5=0
 
 fi
 done
 
-				if test "$md5_found" = "yes"; then
-					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** use of system MD5 library autoselected" >&5
-$as_echo "*** use of system MD5 library autoselected" >&6; }
-				else
-					{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** use of bundled MD5 library autoselected" >&5
-$as_echo "*** use of bundled MD5 library autoselected" >&6; }
-				fi
+		LDFLAGS="$LDFLAGS_ORIG"
 
 else
 
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: crypto library header files were found but not supporting required MD5 functions (will use bundled MD5 function)." >&5
-$as_echo "$as_me: WARNING: crypto library header files were found but not supporting required MD5 functions (will use bundled MD5 function)." >&2;}
-				ENABLE_BUNDLED_MD5=1
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: OpenSSL crypto library DOES NOT support MD5 via legacy implementation" >&5
+$as_echo "$as_me: WARNING: OpenSSL crypto library DOES NOT support MD5 via legacy implementation" >&2;}
 
 fi
 
 
 else
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: openssl/md5.h header file not found (will use bundled MD5 function)." >&5
-$as_echo "$as_me: WARNING: openssl/md5.h header file not found (will use bundled MD5 function)." >&2;}
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: openssl/md5.h header file not found" >&5
+$as_echo "$as_me: WARNING: openssl/md5.h header file not found" >&2;}
+
+fi
+
+
+
+# Check whether --enable-bundled-md5 was given.
+if test "${enable_bundled_md5+set}" = set; then :
+  enableval=$enable_bundled_md5;
+		if test "$enable_bundled_md5" = "yes"; then
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** use of bundled MD5 library forced" >&5
+$as_echo "*** use of bundled MD5 library forced" >&6; }
 			ENABLE_BUNDLED_MD5=1
+		else
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** use of OpenSSL MD5 library forced" >&5
+$as_echo "*** use of OpenSSL MD5 library forced" >&6; }
+		fi
+
+else
+
+		if test "$HAVE_OPENSSL_EVP_MD5" = "0"; then
+			if test "$HAVE_OPENSSL_EVP_MD5" = "0"; then
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** use of bundled MD5 library autoselected because no OpenSSL suppport found" >&5
+$as_echo "*** use of bundled MD5 library autoselected because no OpenSSL suppport found" >&6; }
+				ENABLE_BUNDLED_MD5=1
+			fi
+		fi
+
 
 fi
 
 
+if test "$HAVE_OPENSSL_EVP_MD5" = "1"; then
+	# precedence
+	ENABLE_OPENSSL_EVP_MD5=1
+else
+	if test "$HAVE_OPENSSL_MD5" = "1"; then
+		# fallback
+		ENABLE_OPENSSL_MD5=1
+	fi
+fi
+
+# Check whether --enable-openssl-evp-md5 was given.
+if test "${enable_openssl_evp_md5+set}" = set; then :
+  enableval=$enable_openssl_evp_md5;
+		if test "$enable_openssl_evp_md5" = "yes"; then
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** use of OpenSSL EVP MD5 implementation forced" >&5
+$as_echo "*** use of OpenSSL EVP MD5 implementation forced" >&6; }
+			ENABLE_OPENSSL_EVP_MD5=1
+			ENABLE_OPENSSL_MD5=0
+		fi
+
+fi
+
+
+# Check whether --enable-openssl-md5 was given.
+if test "${enable_openssl_md5+set}" = set; then :
+  enableval=$enable_openssl_md5;
+		if test "$enable_openssl_md5" = "yes"; then
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** use of OpenSSL legacy MD5 implementation forced" >&5
+$as_echo "*** use of OpenSSL legacy MD5 implementation forced" >&6; }
+			ENABLE_OPENSSL_EVP_MD5=0
+			ENABLE_OPENSSL_MD5=1
+		fi
 
 fi
 
@@ -4518,15 +4658,37 @@ if test "$ENABLE_BUNDLED_MD5" = "1"; then
  ;;
 esac
 
-	GETOPT_INCLUDE=-I../md5
+	MD5_INCLUDE=-I../md5
 
 $as_echo "#define ENABLE_BUNDLED_MD5 1" >>confdefs.h
 
 else
-	LDFLAGS_EXTRA="-lcrypto $LDFLAGS_EXTRA"
-	LDFLAGS_EXTRA_MOD_IPV6CALC="-lcrypto $LDFLAGS_EXTRA_MOD_IPV6CALC"
-	LDFLAGS_EXTRA_STATIC="-lcrypto -lz -ldl $LDFLAGS_EXTRA_STATIC"
+	if test "$ENABLE_OPENSSL_EVP_MD5" = "1"; then
+		LDFLAGS_EXTRA="-lcrypto $LDFLAGS_EXTRA"
+		LDFLAGS_EXTRA_MOD_IPV6CALC="-lcrypto $LDFLAGS_EXTRA_MOD_IPV6CALC"
+		LDFLAGS_EXTRA_STATIC="-lcrypto -lz -ldl -lpthread -lc $LDFLAGS_EXTRA_STATIC"
+
+
+$as_echo "#define ENABLE_OPENSSL_EVP_MD5 1" >>confdefs.h
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** use of OpenSSL EVP MD5 implementation" >&5
+$as_echo "*** use of OpenSSL EVP MD5 implementation" >&6; }
+	fi
+
+	if test "$ENABLE_OPENSSL_MD5" = "1"; then
+		LDFLAGS_EXTRA="-lcrypto $LDFLAGS_EXTRA"
+		LDFLAGS_EXTRA_MOD_IPV6CALC="-lcrypto $LDFLAGS_EXTRA_MOD_IPV6CALC"
+		LDFLAGS_EXTRA_STATIC="-lcrypto -lz -ldl $LDFLAGS_EXTRA_STATIC"
+
+
+$as_echo "#define ENABLE_OPENSSL_MD5 1" >>confdefs.h
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** use of OpenSSL legacy MD5 implementation" >&5
+$as_echo "*** use of OpenSSL legacy MD5 implementation" >&6; }
+	fi
 fi
+
+
 
 
 
@@ -7399,13 +7561,12 @@ $as_echo "*** CC                         =$CC" >&6; }
 $as_echo "*** CFLAGS_EXTRA               =$CFLAGS_EXTRA" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS_EXTRA              =$LDFLAGS_EXTRA" >&5
 $as_echo "*** LDFLAGS_EXTRA              =$LDFLAGS_EXTRA" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS_EXTRA_STATIC       =$LDFLAGS_EXTRA_STATIC" >&5
+$as_echo "*** LDFLAGS_EXTRA_STATIC       =$LDFLAGS_EXTRA_STATIC" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH            =$LD_LIBRARY_PATH" >&5
 $as_echo "*** LD_LIBRARY_PATH            =$LD_LIBRARY_PATH" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH_BASIC      =$LD_LIBRARY_PATH_BASIC" >&5
 $as_echo "*** LD_LIBRARY_PATH_BASIC      =$LD_LIBRARY_PATH_BASIC" >&6; }
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
-$as_echo "" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** CPPLAGS                    =$CPPLAGS" >&5
 $as_echo "*** CPPLAGS                    =$CPPLAGS" >&6; }
@@ -7413,6 +7574,20 @@ $as_echo "*** CPPLAGS                    =$CPPLAGS" >&6; }
 $as_echo "*** CFLAGS                     =$CFLAGS" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS                    =$LDFLAGS" >&5
 $as_echo "*** LDFLAGS                    =$LDFLAGS" >&6; }
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
+$as_echo "" >&6; }
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HAVE_OPENSSL_EVP_MD5       =$HAVE_OPENSSL_EVP_MD5" >&5
+$as_echo "*** HAVE_OPENSSL_EVP_MD5       =$HAVE_OPENSSL_EVP_MD5" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HAVE_OPENSSL_MD5           =$HAVE_OPENSSL_MD5" >&5
+$as_echo "*** HAVE_OPENSSL_MD5           =$HAVE_OPENSSL_MD5" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** ENABLE_BUNDLED_MD5         =$ENABLE_BUNDLED_MD5" >&5
+$as_echo "*** ENABLE_BUNDLED_MD5         =$ENABLE_BUNDLED_MD5" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** ENABLE_OPENSSL_EVP_MD5     =$ENABLE_OPENSSL_EVP_MD5" >&5
+$as_echo "*** ENABLE_OPENSSL_EVP_MD5     =$ENABLE_OPENSSL_EVP_MD5" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** ENABLE_OPENSSL_MD5         =$ENABLE_OPENSSL_MD5" >&5
+$as_echo "*** ENABLE_OPENSSL_MD5         =$ENABLE_OPENSSL_MD5" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
 $as_echo "" >&6; }
