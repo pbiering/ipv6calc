@@ -926,10 +926,10 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 #endif
 
 #if defined ENABLE_OPENSSL_EVP_MD5
-	fprintf(stderr, "Linked MD5 implemenation: OpenSSL EVP MD5\n");
+	fprintf(stderr, "Linked MD5 implemenation: OpenSSL EVP MD5\n\n");
 #endif
 #if defined ENABLE_OPENSSL_MD5
-	fprintf(stderr, "Linked MD5 implemenation: OpenSSL legacy MD5\n");
+	fprintf(stderr, "Linked MD5 implemenation: OpenSSL legacy MD5\n\");
 #endif
 
 
