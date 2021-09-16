@@ -63,8 +63,8 @@ AC_TYPE_OFF_T
 AC_TYPE_SIZE_T
 AC_C_BIGENDIAN
 
-dnl Copy inital provided CFLAGS into CFLAGS_EXTRA
-dnl CFLAGS_EXTRA=$CFLAGS // not required ?!
+dnl Default extra CFLAGS
+CFLAGS_EXTRA=-fPIC
 
 dnl Copy inital provided LDFLAGS into LDFLAGS_EXTRA
 dnl LDFLAGS_EXTRA=$LDFLAGS // not required ?!

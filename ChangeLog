@@ -16,6 +16,7 @@ Info:
 	lib/ipv6calchelp.c: display linked MD5 implementation
 	*/Makefile[.in]: fixes related to static builds
 	autogen-all-variants.sh: add additional variants for OpenSSL legacy and EVP MD5
+	configure[.in]: define CFLAG_EXTRAS=-fPIC to fix linker issues since use of regex was introduced
 
 20210809/PB:
 	ipv6calc/ipv6calc.c ipv6calc/ipv6calcoptions_local.h ipv6calc/test_ipv6calc.sh lib/ipv6calchelp.c lib/ipv6calctypes.h lib/libipv4addr.c:
