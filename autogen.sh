@@ -235,6 +235,12 @@ if ! $SKIP_STATIC && ! [ -e /etc/redhat-release ]; then
 	echo "NOTICE: 'make static' skipped on non Fedora/RedHat/CentOS systems"
 fi
 
+if grep -qF "#define ENABLE_OPENSSL_EVP_MD5 1" config.h; then
+	# skip static when OpenSSL EVP MD5 is selected (unresolved issue)
+	SKIP_STATIC=true
+	echo "NOTICE: 'make static' skipped because OpenSSL EVP MD5 implementation is selected"
+fi
+
 if ! $SKIP_STATIC; then
 	echo "*** run: make static"
 	$MAKE static
