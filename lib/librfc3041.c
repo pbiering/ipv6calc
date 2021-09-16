@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : librfc3041.c
  * Version    : $Id$
- * Copyright  : 2001-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for host identifier privacy extension defined in RFC 3041 / RFC 4941
@@ -22,7 +22,11 @@
 #ifdef ENABLE_BUNDLED_MD5
 #include "../md5/md5.h"
 #else
+#ifdef ENABLE_OPENSSL_EVP_MD5
+#include <openssl/evp.h>
+#else
 #include <openssl/md5.h>
+#endif
 #endif
 
 #include "libipv6calc.h"
@@ -38,41 +42,48 @@
  * ret: ==0: ok, !=0: error
  */
 int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv6calc_ipv6addr *newidentifier, ipv6calc_ipv6addr *newtoken) {
-	int retval = 1, i;
+	int retval = 1;
+	unsigned int i;
 	char tempstring[IPV6CALC_STRING_MAX],  tempstring2[IPV6CALC_STRING_MAX];
-	unsigned char digest[MD5_DIGEST_LENGTH];
-
-#ifdef ENABLE_BUNDLED_MD5
-	struct md5_ctx md5hash;
-#else
-	MD5_CTX md5hash;
-#endif
 
 	DEBUGPRINT_WA(DEBUG_librfc3041, "Got identifier '%08x-%08x' and token '%08x-%08x'", (unsigned int) ipv6addr_getdword(identifier, 2), (unsigned int) ipv6addr_getdword(identifier, 3), (unsigned int) ipv6addr_getdword(token, 2), (unsigned int) ipv6addr_getdword(token, 3));
 
-#ifdef ENABLE_BUNDLED_MD5
-	md5_init_ctx(&md5hash);
-#else
-	MD5_Init(&md5hash);
-#endif
+#ifdef ENABLE_OPENSSL_EVP_MD5
+	unsigned int digest_len; // will be set by EVP_DigestFinal_ex
+	unsigned char digest[EVP_MAX_MD_SIZE];
+	EVP_MD_CTX *md5hash = EVP_MD_CTX_new();
 
-#ifdef ENABLE_BUNDLED_MD5
-	md5_process_bytes(&identifier->in6_addr.s6_addr[8], 8, &md5hash);
-	md5_process_bytes(&token->in6_addr.s6_addr[8], 8, &md5hash);
+	EVP_DigestInit_ex(md5hash, EVP_md5(), NULL);
+	EVP_DigestUpdate(md5hash, &identifier->in6_addr.s6_addr[8], 8);
+	EVP_DigestUpdate(md5hash, &token->in6_addr.s6_addr[8], 8);
+	EVP_DigestFinal_ex(md5hash, digest, &digest_len);
+	EVP_MD_CTX_free(md5hash);
 #else
+#ifdef ENABLE_OPENSSL_MD5
+	unsigned int digest_len = MD5_DIGEST_LENGTH;
+	unsigned char digest[MD5_DIGEST_LENGTH];
+	MD5_CTX md5hash;
+
+	MD5_Init(&md5hash);
 	MD5_Update(&md5hash, &identifier->in6_addr.s6_addr[8], 8);
 	MD5_Update(&md5hash, &token->in6_addr.s6_addr[8], 8);
-#endif
-
-#ifdef ENABLE_BUNDLED_MD5
-	md5_finish_ctx(&md5hash, digest);
-#else
 	MD5_Final(digest, &md5hash);
+#else
+	// fallback to bundled MD5
+	unsigned int digest_len = MD5_DIGEST_LENGTH;
+	unsigned char digest[MD5_DIGEST_LENGTH];
+	struct md5_ctx md5hash;
+
+	md5_init_ctx(&md5hash);
+	md5_process_bytes(&identifier->in6_addr.s6_addr[8], 8, &md5hash);
+	md5_process_bytes(&token->in6_addr.s6_addr[8], 8, &md5hash);
+	md5_finish_ctx(&md5hash, digest);
+#endif
 #endif
 
 	tempstring[0] = '\0';
 
-	for (i = 0; i < MD5_DIGEST_LENGTH; i++) {
+	for (i = 0; i < digest_len; i++) {
 		snprintf(tempstring2, sizeof(tempstring2), "%s%02x", tempstring, (int) digest[i]);
 		snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
 	};
