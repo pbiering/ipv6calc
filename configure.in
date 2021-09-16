@@ -268,17 +268,19 @@ AC_CHECK_HEADER(openssl/evp.h, [
 		HAVE_OPENSSL_EVP_MD5=1
 		AC_CHECK_FUNCS(EVP_MD_CTX_new EVP_md5 EVP_DigestInit_ex EVP_DigestUpdate EVP_DigestFinal_ex EVP_MD_CTX_free,
 		[
-		],
-		[
+		],[
 			AC_MSG_WARN([OpenSSL crypto library DOES NOT support MD5 via EVP])
 			HAVE_OPENSSL_EVP_MD5=0
 		])
 		LDFLAGS="$LDFLAGS_ORIG"
-	],
-	[
+
+		if test "$HAVE_OPENSSL_EVP_MD5" = "1"; then
+			AC_MSG_RESULT([*** OpenSSL crypto library supports MD5 via EVP implementation])
+		fi
+	],[
 		AC_MSG_WARN([OpenSSL crypto library DOES NOT support MD5 via EVP])
 	])
-], [
+],[
 	AC_MSG_WARN([openssl/evp.h header file not found])
 ])
 
@@ -292,17 +294,19 @@ AC_CHECK_HEADER(openssl/md5.h, [
 		HAVE_OPENSSL_MD5=1
 		AC_CHECK_FUNCS(MD5_Init MD5_Update MD5_Final,
 		[
-		],
-		[
+		],[
 			AC_MSG_RESULT([OpenSSL crypto library supports MD5 via legacy implementation])
-			HAVE_OPENSSL_EVP_MD5=0
+			HAVE_OPENSSL_MD5=0
 		])
 		LDFLAGS="$LDFLAGS_ORIG"
-	],
-	[
+
+		if test "$HAVE_OPENSSL_MD5" = "1"; then
+			AC_MSG_RESULT([*** OpenSSL crypto library supports MD5 via legacy implementation])
+		fi
+	],[
 		AC_MSG_WARN([OpenSSL crypto library DOES NOT support MD5 via legacy implementation])
 	])
-	], [
+],[
 	AC_MSG_WARN([openssl/md5.h header file not found])
 ])
 
@@ -319,7 +323,7 @@ AC_ARG_ENABLE(
 		fi
 	],[
 		if test "$HAVE_OPENSSL_EVP_MD5" = "0"; then
-			if test "$HAVE_OPENSSL_EVP_MD5" = "0"; then
+			if test "$HAVE_OPENSSL_MD5" = "0"; then
 				AC_MSG_RESULT([*** use of bundled MD5 library autoselected because no OpenSSL suppport found])
 				ENABLE_BUNDLED_MD5=1
 			fi

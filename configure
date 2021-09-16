@@ -4486,6 +4486,11 @@ done
 
 		LDFLAGS="$LDFLAGS_ORIG"
 
+		if test "$HAVE_OPENSSL_EVP_MD5" = "1"; then
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** OpenSSL crypto library supports MD5 via EVP implementation" >&5
+$as_echo "*** OpenSSL crypto library supports MD5 via EVP implementation" >&6; }
+		fi
+
 else
 
 		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: OpenSSL crypto library DOES NOT support MD5 via EVP" >&5
@@ -4565,12 +4570,17 @@ else
 
 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: OpenSSL crypto library supports MD5 via legacy implementation" >&5
 $as_echo "OpenSSL crypto library supports MD5 via legacy implementation" >&6; }
-			HAVE_OPENSSL_EVP_MD5=0
+			HAVE_OPENSSL_MD5=0
 
 fi
 done
 
 		LDFLAGS="$LDFLAGS_ORIG"
+
+		if test "$HAVE_OPENSSL_MD5" = "1"; then
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** OpenSSL crypto library supports MD5 via legacy implementation" >&5
+$as_echo "*** OpenSSL crypto library supports MD5 via legacy implementation" >&6; }
+		fi
 
 else
 
@@ -4604,7 +4614,7 @@ $as_echo "*** use of OpenSSL MD5 library forced" >&6; }
 else
 
 		if test "$HAVE_OPENSSL_EVP_MD5" = "0"; then
-			if test "$HAVE_OPENSSL_EVP_MD5" = "0"; then
+			if test "$HAVE_OPENSSL_MD5" = "0"; then
 				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** use of bundled MD5 library autoselected because no OpenSSL suppport found" >&5
 $as_echo "*** use of bundled MD5 library autoselected because no OpenSSL suppport found" >&6; }
 				ENABLE_BUNDLED_MD5=1
@@ -4635,6 +4645,7 @@ $as_echo "*** use of OpenSSL EVP MD5 implementation forced" >&6; }
 			ENABLE_OPENSSL_MD5=0
 		fi
 
+
 fi
 
 
@@ -4647,6 +4658,7 @@ $as_echo "*** use of OpenSSL legacy MD5 implementation forced" >&6; }
 			ENABLE_OPENSSL_EVP_MD5=0
 			ENABLE_OPENSSL_MD5=1
 		fi
+
 
 fi
 
@@ -4876,6 +4888,7 @@ if test "${enable_builtin+set}" = set; then :
 		DB_IPV4="$enable_builtin"
 		DB_IPV6="$enable_builtin"
 
+
 fi
 
 
@@ -5025,10 +5038,6 @@ if test "${with_mmdb_dynamic+set}" = set; then :
 		if test "$with_mmdb_dynamic" != "no"; then
 			MMDB_DYN="yes"
 		fi
-
-else
-
-		true
 
 fi
 
@@ -5366,10 +5375,6 @@ if test "${with_ip2location_dynamic+set}" = set; then :
 		if test "$enable_ip2location_dynamic" != "no"; then
 			IP2LOCATION_DYN="yes"
 		fi
-
-else
-
-		true
 
 fi
 
