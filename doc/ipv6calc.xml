@@ -8,14 +8,14 @@
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>10.2</revnumber> <date>2021-07-14</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>10.3.pre.1</revnumber> <date>2021-09-18</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freecode.com/projects/ipv6calc/">freecode.com (former freshmeat, now also EOL) / ipv6calc</ulink> page (but this is not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 3.2.0</para></sect2><sect2>
+<para>Latest version since last update of this page is 3.2.1</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
 <listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;mod_ipv6calc&rdquo;: Apache module</para></listitem></itemizedlist></sect2><sect2>
@@ -658,8 +658,9 @@ ipv6calc: version 2.1.1 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6 DB_
   octal           : IP address in escaped octal format
   hex             : IP address in hexadecimal format
   ipv6literal     : IPv6 address in literal
- For examples and available format options use:
-    -O|--out <type> --examples
+
+]]></screen><para>For examples and available format options use:</para><screen>
+<![CDATA[$ ipv6calc -O|--out <type> --examples
 ]]></screen></sect3><sect3>
 <title>Action-type options: </title>
 <screen>
@@ -788,6 +789,31 @@ no output type specified, try autodetection...found type: ipv6addr
 <![CDATA[$ echo -e "1.2.3.4\n1.2.4.4" | ipv6calc --test_prefix 1.2.3.0/24
 1.2.3.4   inside 1.2.3.0/24
 1.2.4.4   NOT inside 1.2.3.0/24
+]]></screen></sect3><sect3>
+<title>Special action &ldquo;conv6to4&rdquo;:</title>
+<para>Special action &ldquo;conv6to4&rdquo; (since at least 0.99.1) can be used in command line or pipe mode to convert 6to4-IPv6 in IPv4 addresses and vice versa.</para><screen>
+<![CDATA[$ ipv6calc: version 3.2.1 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO ANON_ZEROISE ANON_ANONYMIZE
+  Convert IPv4 to 6to4 prefix / extract IPv4 from 6to4 prefix
+   ipv6calc -A conv6to4 192.0.2.1          -> 2002:c000:201::
+   ipv6calc -A conv6to4 192.0.2.1/24       -> 2002:c000:200::/40
+   ipv6calc -A conv6to4 192.0.2.0/24       -> 2002:c000:200::/40
+   ipv6calc -A conv6to4 2002:c000:201::    -> 192.0.2.1
+   ipv6calc -A conv6to4 2002:c000:201::/40 -> 192.0.2.0/24
+  See '-O ipv4 -h' or '-O ipv6 -h' for optional output modifications
+  Can also be used in PIPE mode to convert a list of IP addresses/networks
+
+]]></screen><para>Example for command line mode:</para><screen>
+<![CDATA[$ ipv6calc -q -A conv6to4 192.0.2.1
+2002:c000:201::
+
+]]></screen><para>Example for pipe mode:</para><screen>
+<![CDATA[echo -e "1.2.3.4\n1.2.4.4" | ipv6calc -A conv6to4
+2002:102:304::
+2002:102:404::
+
+$ echo -e "1.2.3.0/24\n1.2.4.0/24" | ipv6calc -A conv6to4
+2002:102:300::/40
+2002:102:400::/40
 ]]></screen></sect3></sect2></sect1><sect1>
 <title>Webserver log conversion helper program "ipv6logconv"</title>
 <para>This program parses address tokens of a given webserver logfile and converts them to special strings, useful for statistics (e.g. created by using "analog").</para><sect2>
