@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : librfc3056.c
  * Version    : $Id$
- * Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for conversions defined in RFC 3056
@@ -39,8 +39,13 @@ int librfc3056_ipv4addr_to_ipv6to4addr(ipv6calc_ipv6addr *ipv6addrp, const ipv6c
 		ipv6addr_setoctet(ipv6addrp, i + 2, (unsigned int) ipv4addr_getoctet(ipv4addrp, i));
 	};
 
-	ipv6addrp->prefixlength = 48;
-	ipv6addrp->flag_prefixuse = 0;
+	ipv6addrp->flag_prefixuse = ipv4addrp->flag_prefixuse;
+	if ((ipv4addrp->flag_prefixuse == 1) && (ipv4addrp->prefixlength < 32)) {
+		ipv6addrp->prefixlength = 48 - 32 + ipv4addrp->prefixlength;
+		ipv6addrstruct_maskprefix(ipv6addrp);
+	} else {
+		ipv6addrp->prefixlength = 48;
+	};
 	ipv6addrp->flag_valid = 1;
 	ipv6addr_settype(ipv6addrp); /* Set typeinfo */
 
@@ -74,8 +79,13 @@ int librfc3056_ipv6addr_to_ipv4addr(ipv6calc_ipv4addr *ipv4addrp, const ipv6calc
 		ipv4addr_setoctet(ipv4addrp, i, (unsigned int) ipv6addr_getoctet(ipv6addrp, i + 2));
 	};
 
-	ipv4addrp->prefixlength = 32;
-	ipv4addrp->flag_prefixuse = 0;
+	ipv4addrp->flag_prefixuse = ipv6addrp->flag_prefixuse;
+	if ((ipv6addrp->flag_prefixuse == 1) && (ipv6addrp->prefixlength < 48)) {
+		ipv4addrp->prefixlength = 32 - 48 + ipv6addrp->prefixlength;
+		ipv4addrstruct_maskprefix(ipv4addrp);
+	} else {
+		ipv4addrp->prefixlength = 32;
+	};
 	ipv4addrp->flag_valid = 1;
 	ipv4addr_settype(ipv4addrp, 1); /* Set typeinfo */
 

@@ -711,10 +711,14 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			
 		case ACTION_ipv4_to_6to4addr:
 			fprintf(stderr, "  Convert IPv4 to 6to4 prefix / extract IPv4 from 6to4 prefix\n");
-			fprintf(stderr, "   ipv6calc -A conv6to4 192.0.2.1\n");
-			fprintf(stderr, "    2002:c000:201::\n");
-			fprintf(stderr, "   ipv6calc -A conv6to4 2002:c000:201::\n");
-			fprintf(stderr, "    192.0.2.1\n");
+			fprintf(stderr, "   ipv6calc -A conv6to4 192.0.2.1          -> 2002:c000:201::\n");
+			fprintf(stderr, "   ipv6calc -A conv6to4 192.0.2.1/24       -> 2002:c000:200::/40\n");
+			fprintf(stderr, "   ipv6calc -A conv6to4 192.0.2.0/24       -> 2002:c000:200::/40\n");
+			fprintf(stderr, "   ipv6calc -A conv6to4 2002:c000:201::    -> 192.0.2.1\n");
+			fprintf(stderr, "   ipv6calc -A conv6to4 2002:c000:201::/40 -> 192.0.2.0/24\n");
+			fprintf(stderr, "\n");
+			fprintf(stderr, "  See '-O ipv4 -h' or '-O ipv6 -h' for optional output modifications\n");
+			fprintf(stderr, "  Can also be used in PIPE mode to convert a list of IP addresses/networks\n");
 			break;
 
 		case ACTION_ipv4_to_nat64:

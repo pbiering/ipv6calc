@@ -183,9 +183,13 @@ NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 --ipv4_to_6to4addr 11.12.13.14						=2002:b0c:d0e::
 --in ipv4 --out ipv6 --action conv6to4 11.12.13.14			=2002:b0c:d0e::
 --action conv6to4 192.0.2.1						=2002:c000:201::
+--no-prefixlength --action conv6to4 192.0.2.1/24 			=2002:c000:200::
+--action conv6to4 192.0.2.1/24						=2002:c000:200::/40
 ## IPv6 -> IPv4 (6to4)
 --in ipv6 --out ipv4 --action conv6to4 2002:102:304::1			=1.2.3.4
---action conv6to4 2002:c000:201::					=192.0.2.1
+--action conv6to4 2002:c000:201:: 					=192.0.2.1
+--no-prefixlength --action conv6to4 2002:c000:201::/40			=192.0.2.0
+--action conv6to4 2002:c000:201::/40					=192.0.2.0/24
 ## IPv4 -> IPv6 (NAT64)
 --action convnat64 192.0.2.1						=64:ff9b::c000:201
 ## IPv6 -> IPv4 (NAT64)
