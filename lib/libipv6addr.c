@@ -1571,7 +1571,13 @@ static int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp
 		i++;
 		snprintf(tempstring1, sizeof(tempstring1), "%s", tempstring2);
 	};
-	snprintf(resultstring, resultstring_length, "%s", tempstring1);
+
+	if ((ipv6addrp->flag_prefixuse == 1) && ((formatoptions & (FORMATOPTION_no_prefixlength | FORMATOPTION_printprefix)) == 0))  {
+		/* append prefix length */
+		snprintf(resultstring, resultstring_length, "%s/%u", tempstring1, (unsigned int) ipv6addrp->prefixlength);
+	} else {
+		snprintf(resultstring, resultstring_length, "%s", tempstring1);
+	};
 
 	DEBUGPRINT_WA(DEBUG_libipv6addr, "result string: %s", resultstring);
 
