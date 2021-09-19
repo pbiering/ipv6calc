@@ -3835,33 +3835,6 @@ int libipv6calc_db_registry_filter(const uint32_t registry, const s_ipv6calc_fil
 void libipv6calc_db_dump(const int source, const int selector, const s_ipv6calc_filter_master *filter_master, const uint32_t formatoptions) {
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "called with source=%d selector=%d", source, selector);
 
-	// check support
-	switch (source) {
-	    case IPV6CALC_DB_SOURCE_EXTERNAL:
-#ifdef SUPPORT_EXTERNAL
-		switch (selector) {
-		    case IPV6CALC_PROTO_IPV4:
-		    case IPV6CALC_PROTO_IPV6:
-			break;
-
-		    default:
-			ERRORPRINT_WA("selector not supported: %d", selector);
-			return;
-			break;
-		};
-#else
-		ERRORPRINT_WA("source not compiled in: %d", source);
-		return;
-#endif
-		break;
-
-	    default:
-		ERRORPRINT_WA("source not supported: %d (FIX CODE)", source);
-		return;
-		break;
-	};
-
-	// dump
 	switch (source) {
 	    case IPV6CALC_DB_SOURCE_EXTERNAL:
 #ifdef SUPPORT_EXTERNAL
@@ -3883,6 +3856,8 @@ void libipv6calc_db_dump(const int source, const int selector, const s_ipv6calc_
 		break;
 
 	    default:
+		ERRORPRINT_WA("source not supported: %d (FIX CODE)", source);
+		return;
 		break;
 	};
 
