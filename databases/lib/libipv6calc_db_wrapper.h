@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
  * Version    : $Id$
- * Copyright  : 2013-2020 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper.c
@@ -416,6 +416,18 @@ extern void libipv6calc_db_wrapper_geolocation_record_clear(libipv6calc_db_wrapp
 #ifdef HAVE_BERKELEY_DB_SUPPORT
 extern int libipv6calc_db_wrapper_bdb_get_data_by_key(DB *dbp, char *token, char *value, const size_t value_size);
 #endif // HAVE_BERKELEY_DB_SUPPORT
+
+// generic DB fetch
+extern int libipv6calc_db_wrapper_bdb_fetch_row(
+	DB 			*db_ptr,		// pointer to DB
+	const uint8_t		db_format,		// DB format
+	const long int		row,			// row number
+	uint32_t		*data_1_00_31_ptr,	// data 1 (MSB in case of 64 bits)
+	uint32_t		*data_1_32_63_ptr,	// data 1 (LSB in case of 64 bits)
+	uint32_t		*data_2_00_31_ptr,	// data 2 (MSB in case of 64 bits)
+	uint32_t		*data_2_32_63_ptr,	// data 2 (LSB in case of 64 bits)
+	void			*data_ptr		// pointer to data
+	);
 
 // generic DB lookup
 extern long int libipv6calc_db_wrapper_get_entry_generic(
