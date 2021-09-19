@@ -6180,7 +6180,16 @@ fi
 
 
 
-ac_config_files="$ac_config_files Makefile md5/Makefile tools/Makefile getopt/Makefile ipv6calc/Makefile lib/Makefile man/Makefile databases/lib/Makefile ipv6logconv/Makefile ipv6loganon/Makefile ipv6logstats/Makefile ipv6calcweb/Makefile contrib/ipv6calc.spec tools/ipv6calc-db-update.sh tools/DBIP-update.sh tools/IP2Location-update.sh tools/GeoIP-update.sh mod_ipv6calc/Makefile VERSION"
+ac_config_files="$ac_config_files tools/ipv6calc-db-update.sh"
+
+ac_config_files="$ac_config_files tools/DBIP-update.sh"
+
+ac_config_files="$ac_config_files tools/IP2Location-update.sh"
+
+ac_config_files="$ac_config_files tools/GeoIP-update.sh"
+
+
+ac_config_files="$ac_config_files Makefile md5/Makefile tools/Makefile getopt/Makefile ipv6calc/Makefile lib/Makefile man/Makefile databases/lib/Makefile ipv6logconv/Makefile ipv6loganon/Makefile ipv6logstats/Makefile ipv6calcweb/Makefile contrib/ipv6calc.spec mod_ipv6calc/Makefile VERSION"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -6875,6 +6884,10 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "config.h") CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
+    "tools/ipv6calc-db-update.sh") CONFIG_FILES="$CONFIG_FILES tools/ipv6calc-db-update.sh" ;;
+    "tools/DBIP-update.sh") CONFIG_FILES="$CONFIG_FILES tools/DBIP-update.sh" ;;
+    "tools/IP2Location-update.sh") CONFIG_FILES="$CONFIG_FILES tools/IP2Location-update.sh" ;;
+    "tools/GeoIP-update.sh") CONFIG_FILES="$CONFIG_FILES tools/GeoIP-update.sh" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "md5/Makefile") CONFIG_FILES="$CONFIG_FILES md5/Makefile" ;;
     "tools/Makefile") CONFIG_FILES="$CONFIG_FILES tools/Makefile" ;;
@@ -6888,10 +6901,6 @@ do
     "ipv6logstats/Makefile") CONFIG_FILES="$CONFIG_FILES ipv6logstats/Makefile" ;;
     "ipv6calcweb/Makefile") CONFIG_FILES="$CONFIG_FILES ipv6calcweb/Makefile" ;;
     "contrib/ipv6calc.spec") CONFIG_FILES="$CONFIG_FILES contrib/ipv6calc.spec" ;;
-    "tools/ipv6calc-db-update.sh") CONFIG_FILES="$CONFIG_FILES tools/ipv6calc-db-update.sh" ;;
-    "tools/DBIP-update.sh") CONFIG_FILES="$CONFIG_FILES tools/DBIP-update.sh" ;;
-    "tools/IP2Location-update.sh") CONFIG_FILES="$CONFIG_FILES tools/IP2Location-update.sh" ;;
-    "tools/GeoIP-update.sh") CONFIG_FILES="$CONFIG_FILES tools/GeoIP-update.sh" ;;
     "mod_ipv6calc/Makefile") CONFIG_FILES="$CONFIG_FILES mod_ipv6calc/Makefile" ;;
     "VERSION") CONFIG_FILES="$CONFIG_FILES VERSION" ;;
 
@@ -7439,6 +7448,14 @@ $as_echo "$as_me: $ac_file is unchanged" >&6;}
 
   esac
 
+
+  case $ac_file$ac_mode in
+    "tools/ipv6calc-db-update.sh":F)  chmod a+x tools/ipv6calc-db-update.sh  ;;
+    "tools/DBIP-update.sh":F)  chmod a+x tools/DBIP-update.sh         ;;
+    "tools/IP2Location-update.sh":F)  chmod a+x tools/IP2Location-update.sh  ;;
+    "tools/GeoIP-update.sh":F)  chmod a+x tools/GeoIP-update.sh        ;;
+
+  esac
 done # for ac_tag
 
 

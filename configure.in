@@ -1351,6 +1351,11 @@ AC_SUBST(LDFLAGS_EXTRA_STATIC)
 AC_SUBST(LD_LIBRARY_PATH)
 AC_SUBST(LD_LIBRARY_PATH_BASIC)
 
+AC_CONFIG_FILES([ tools/ipv6calc-db-update.sh ], [ chmod a+x tools/ipv6calc-db-update.sh ])
+AC_CONFIG_FILES([ tools/DBIP-update.sh        ], [ chmod a+x tools/DBIP-update.sh        ])
+AC_CONFIG_FILES([ tools/IP2Location-update.sh ], [ chmod a+x tools/IP2Location-update.sh ])
+AC_CONFIG_FILES([ tools/GeoIP-update.sh       ], [ chmod a+x tools/GeoIP-update.sh       ])
+
 AC_OUTPUT([
 		Makefile
 		md5/Makefile
@@ -1365,13 +1370,9 @@ AC_OUTPUT([
 		ipv6logstats/Makefile
 		ipv6calcweb/Makefile
 		contrib/ipv6calc.spec
-		tools/ipv6calc-db-update.sh
-		tools/DBIP-update.sh
-		tools/IP2Location-update.sh
-		tools/GeoIP-update.sh
 		mod_ipv6calc/Makefile
 		VERSION
-	])
+])
 
 AC_MSG_RESULT([***** Summary])
 
