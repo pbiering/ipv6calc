@@ -3742,7 +3742,6 @@ END_ipv6calc_db_registry_filter_check:
 };
 
 
-
 /*
  * filter Registry
  *
@@ -3783,6 +3782,70 @@ int libipv6calc_db_registry_filter(const uint32_t registry, const s_ipv6calc_fil
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.reg filter final result: %d", result);
 	return (result);
+};
+
+
+/*
+ * dump database
+ *
+ * in : selector
+ */
+void libipv6calc_db_dump(const int source, const int selector, const s_ipv6calc_filter_master *filter_master) {
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "called with source=%d selector=%d", source, selector);
+
+	// check support
+	switch (source) {
+	    case IPV6CALC_DB_SOURCE_EXTERNAL:
+#ifdef SUPPORT_EXTERNAL
+		switch (selector) {
+		    case IPV6CALC_PROTO_IPV4:
+		    case IPV6CALC_PROTO_IPV6:
+			libipv6calc_db_wrapper_External_dump(selector, filter_master);
+			break;
+
+		    default:
+			ERRORPRINT_WA("selector not supported: %d", selector);
+			return;
+			break;
+		};
+#else
+		ERRORPRINT_WA("source not compiled in: %d", source);
+		return;
+#endif
+		break;
+
+	    default:
+		ERRORPRINT_WA("source not supported: %d (FIX CODE)", source);
+		return;
+		break;
+	};
+
+	// dump
+	switch (source) {
+	    case IPV6CALC_DB_SOURCE_EXTERNAL:
+#ifdef SUPPORT_EXTERNAL
+		switch (selector) {
+		    case IPV6CALC_PROTO_IPV4:
+		    case IPV6CALC_PROTO_IPV6:
+			libipv6calc_db_wrapper_External_dump(selector); // TODO filter
+			break;
+
+		    default:
+			ERRORPRINT_WA("selector not supported: %d", selector);
+			return;
+			break;
+		};
+#else
+		ERRORPRINT_WA("source not compiled in: %d", source);
+		return;
+#endif
+		break;
+
+	    default:
+		break;
+	};
+
+	return;
 };
 
 

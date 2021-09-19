@@ -1064,4 +1064,78 @@ END_libipv6calc_db_wrapper:
 };
 
 
+/*
+ * database dump
+ *
+ * in:  selector
+ * out: 0=OK
+ */
+int libipv6calc_db_wrapper_External_dump(const int selector) {
+	DB *dbp;
+	long int recno_max, recno;
+	char resultstring[IPV6CALC_STRING_MAX];
+	int result;
+	int retval = -1;
+
+	uint32_t value_first_00_31, value_last_00_31;
+        uint32_t value_first_32_63, value_last_32_63;
+
+	int External_type, key_format;
+
+	switch (selector) {
+	    case IPV6CALC_PROTO_IPV4:
+		External_type = EXTERNAL_DB_IPV4_COUNTRYCODE;
+		key_format = IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x2;
+		break;
+
+	    case IPV6CALC_PROTO_IPV6:
+		External_type = EXTERNAL_DB_IPV6_COUNTRYCODE;
+		key_format = IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x4;
+		break;
+
+	    default:
+		ERRORPRINT_WA("unsupported selector: %d (FIX CODE)", selector);
+		exit(EXIT_FAILURE);
+		break;
+	};
+
+
+	// data-info
+	dbp = libipv6calc_db_wrapper_External_open_type(External_type, &recno_max);
+
+	if (dbp == NULL) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Error opening External by type");
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "database opened type=%x recno_max=%ld dbp=%p", External_type | 0x40000, recno_max, dbp);
+
+	for (recno = 1; recno <= recno_max; recno++) {
+		result = libipv6calc_db_wrapper_bdb_fetch_row(
+			dbp,								// pointer to database
+			key_format,							// key format
+			recno,								// row number
+			&value_first_00_31,     // data 1 (MSB in case of 64 bits)
+			&value_first_32_63,     // data 1 (LSB in case of 64 bits)
+			&value_last_00_31,      // data 2 (MSB in case of 64 bits)
+			&value_last_32_63,      // data 2 (LSB in case of 64 bits)
+			resultstring		// data ptr
+		);
+
+		if (result < 0) {
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "no entry found for recno=%ld", recno);
+			goto END_libipv6calc_db_wrapper;
+		};
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "resultstring=%s", resultstring);
+	};
+
+	EXTERNAL_DB_USAGE_MAP_TAG(External_type);
+	retval = 0;
+
+END_libipv6calc_db_wrapper:
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "retval=%d", retval);
+	return(retval);
+};
+
 #endif //SUPPORT_EXTERNAL
