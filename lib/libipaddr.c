@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libipaddr.c
  * Version    : $Id$
- * Copyright  : 2014-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2014-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for generic IPv4/6 address handling
@@ -38,6 +38,11 @@ int libipaddr_ipaddrstruct_to_string(const ipv6calc_ipaddr *ipaddrp, char *resul
 	    case IPV6CALC_PROTO_IPV4:
 		ipv4addr_clearall(&ipv4addr);
 		ipv4addr_setdword(&ipv4addr, ipaddrp->addr[0]);
+
+		ipv4addr.prefixlength   = ipaddrp->prefixlength;
+		ipv4addr.flag_valid     = ipaddrp->flag_valid;
+		ipv4addr.flag_prefixuse = ipaddrp->flag_prefixuse;
+
 		libipv4addr_ipv4addrstruct_to_string(&ipv4addr, resultstring, resultstring_length, formatoptions);
 		break;
 
@@ -47,6 +52,10 @@ int libipaddr_ipaddrstruct_to_string(const ipv6calc_ipaddr *ipaddrp, char *resul
 		ipv6addr_setdword(&ipv6addr, 1, ipaddrp->addr[1]);
 		ipv6addr_setdword(&ipv6addr, 2, ipaddrp->addr[2]);
 		ipv6addr_setdword(&ipv6addr, 3, ipaddrp->addr[3]);
+
+		ipv6addr.prefixlength   = ipaddrp->prefixlength;
+		ipv6addr.flag_valid     = ipaddrp->flag_valid;
+		ipv6addr.flag_prefixuse = ipaddrp->flag_prefixuse;
 
 		if ((formatoptions & (FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed)) != 0) {
 			libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, resultstring_length, formatoptions);
