@@ -1070,27 +1070,69 @@ END_libipv6calc_db_wrapper:
  * in:  selector
  * out: 0=OK
  */
-int libipv6calc_db_wrapper_External_dump(const int selector) {
+int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_filter_master *filter_master, const uint32_t formatoptions) {
 	DB *dbp;
-	long int recno_max, recno;
+	long int recno_max, recno, count = 0;
 	char resultstring[IPV6CALC_STRING_MAX];
+	char tempstring[IPV6CALC_STRING_MAX];
+	char filterstring[IPV6CALC_STRING_MAX];
 	int result;
 	int retval = -1;
+	char protocol;
+	int i;
 
 	uint32_t value_first_00_31, value_last_00_31;
         uint32_t value_first_32_63, value_last_32_63;
 
+	const s_ipv6calc_filter_db_cc *filter;
+
 	int External_type, key_format;
+
+	char cc2[IPV6CALC_COUNTRYCODE_STRING_MAX];
+
+	int prefixlength;
+	uint32_t mask;
+	uint32_t delta;
+
+	ipv6calc_ipaddr ipaddr;
 
 	switch (selector) {
 	    case IPV6CALC_PROTO_IPV4:
 		External_type = EXTERNAL_DB_IPV4_COUNTRYCODE;
+		protocol = '4';
 		key_format = IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x2;
+
+		if (filter_master->filter_ipv4addr.active == 0) {
+			ERRORPRINT_NA("no IPv4 filter provided (ipv4.db.cc=<CountryCode>)");
+			exit(EXIT_FAILURE);
+		};
+
+		if (filter_master->filter_ipv4addr.filter_db_cc.active ==  0) {
+			ERRORPRINT_NA("no IPv4 Database CountryCode filter provided (ipv4.db.cc=<CountryCode>)");
+			exit(EXIT_FAILURE);
+		};
+
+		filter = &filter_master->filter_ipv4addr.filter_db_cc;
+
 		break;
 
 	    case IPV6CALC_PROTO_IPV6:
 		External_type = EXTERNAL_DB_IPV6_COUNTRYCODE;
+		protocol = '6';
 		key_format = IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x4;
+
+		if (filter_master->filter_ipv6addr.active == 0) {
+			ERRORPRINT_NA("no IPv6 filter provided (ipv6.db.cc=<CountryCode>)");
+			exit(EXIT_FAILURE);
+		};
+
+		if (filter_master->filter_ipv6addr.filter_db_cc.active ==  0) {
+			ERRORPRINT_NA("no IPv6 Database CountryCode filter provided (ipv6.db.cc=<CountryCode>)");
+			exit(EXIT_FAILURE);
+		};
+
+		filter = &filter_master->filter_ipv6addr.filter_db_cc;
+
 		break;
 
 	    default:
@@ -1099,6 +1141,24 @@ int libipv6calc_db_wrapper_External_dump(const int selector) {
 		break;
 	};
 
+	// create filter info string
+	snprintf(resultstring, sizeof(resultstring), "%s", ""); // clear string
+
+	if (filter->cc_must_have_max > 0) {
+		for (i = 0; i < filter->cc_must_have_max; i++) {
+			libipv6calc_db_wrapper_country_code_by_cc_index(cc2, sizeof(cc2), filter->cc_must_have[i]);
+			snprintf(tempstring, sizeof(tempstring), "%s %s", filterstring, cc2); 
+			snprintf(filterstring, sizeof(filterstring), "%s", tempstring);
+		};
+	};
+
+	if (filter->cc_may_not_have_max > 0) {
+		for (i = 0; i < filter->cc_may_not_have_max; i++) {
+			libipv6calc_db_wrapper_country_code_by_cc_index(cc2, sizeof(cc2), filter->cc_may_not_have[i]);
+			snprintf(tempstring, sizeof(tempstring), "%s ^%s", filterstring, cc2); 
+			snprintf(filterstring, sizeof(filterstring), "%s", tempstring);
+		};
+	};
 
 	// data-info
 	dbp = libipv6calc_db_wrapper_External_open_type(External_type, &recno_max);
@@ -1110,11 +1170,13 @@ int libipv6calc_db_wrapper_External_dump(const int selector) {
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "database opened type=%x recno_max=%ld dbp=%p", External_type | 0x40000, recno_max, dbp);
 
+	NONQUIETPRINT_WA("# External database dump start with filter IPv%c && CountryCode(s):%s (suppress this line with option '-q')", protocol, filterstring); // string has a trailing space
+
 	for (recno = 1; recno <= recno_max; recno++) {
 		result = libipv6calc_db_wrapper_bdb_fetch_row(
-			dbp,								// pointer to database
-			key_format,							// key format
-			recno,								// row number
+			dbp,			// pointer to database
+			key_format,		// key format
+			recno,			// row number
 			&value_first_00_31,     // data 1 (MSB in case of 64 bits)
 			&value_first_32_63,     // data 1 (LSB in case of 64 bits)
 			&value_last_00_31,      // data 2 (MSB in case of 64 bits)
@@ -1128,12 +1190,94 @@ int libipv6calc_db_wrapper_External_dump(const int selector) {
 		};
 
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "resultstring=%s", resultstring);
+
+		int16_t cc_index = libipv6calc_db_wrapper_cc_index_by_country_code(resultstring);
+
+		switch (selector) {
+		    case IPV6CALC_PROTO_IPV4:
+			if (libipv6calc_db_cc_filter(cc_index, &filter_master->filter_ipv4addr.filter_db_cc) > 0) {
+				continue;
+			};
+
+			count++;
+			libipaddr_clearall(&ipaddr);
+			ipaddr.proto = IPV6CALC_PROTO_IPV4;
+			ipaddr.addr[0] = value_first_00_31;
+
+			// convert start/end into prefix length
+			delta = value_last_00_31 - value_first_00_31;
+			prefixlength = 32;
+			mask = 0x0000001;
+			while (prefixlength > 0) {
+				if (delta < mask) {
+					break;
+				};
+
+				mask <<= 1;
+				prefixlength--;
+			};
+
+			ipaddr.prefixlength = prefixlength;
+			ipaddr.flag_valid = 1;
+			ipaddr.flag_prefixuse = 1;
+
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "# IPv4 start=%08x end=%08x prefixlength=%d CC: %s", value_first_00_31, value_last_00_31, prefixlength, resultstring);
+			break;
+
+		    case IPV6CALC_PROTO_IPV6:
+			if (libipv6calc_db_cc_filter(cc_index, &filter_master->filter_ipv6addr.filter_db_cc) > 0) {
+				continue;
+			};
+
+			count++;
+			libipaddr_clearall(&ipaddr);
+			ipaddr.proto = IPV6CALC_PROTO_IPV6;
+			ipaddr.addr[0] = value_first_00_31;
+			ipaddr.addr[1] = value_first_32_63;
+
+			// convert mask into prefix length
+			prefixlength = 0;
+			mask = 0x8000000;
+			while (mask > 0) {
+				if ((value_last_00_31 & mask) == 0) {
+					break;
+				};
+
+				prefixlength++;
+				mask >>= 1;
+			};
+
+			if (prefixlength == 32) {
+				// continue with 2nd block
+				int mask = 0x8000000;
+				while (mask > 0) {
+					if ((value_last_32_63 & mask) == 0) {
+						break;
+					};
+
+					prefixlength++;
+					mask >>= 1;
+				};
+			};
+
+			ipaddr.prefixlength = prefixlength;
+			ipaddr.flag_valid = 1;
+			ipaddr.flag_prefixuse = 1;
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "# IPv6 prefix=%08x%08x mask=%08x%08x prefixlength=%d CC: %s", value_first_00_31, value_first_32_63, value_last_00_31, value_last_32_63, prefixlength, resultstring);
+			break;
+		};
+
+		libipaddr_ipaddrstruct_to_string(&ipaddr, tempstring, sizeof(tempstring), formatoptions);
+		fprintf(stdout, "%s\n", tempstring);
 	};
+
 
 	EXTERNAL_DB_USAGE_MAP_TAG(External_type);
 	retval = 0;
 
 END_libipv6calc_db_wrapper:
+	NONQUIETPRINT_WA("# External database dump finished displaying %lu entries with filter IPv%c && CountryCode(s):%s (suppress this line with option '-q')", count, protocol, filterstring); // resultstring has a trailing space
+
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "retval=%d", retval);
 	return(retval);
 };

@@ -13,7 +13,6 @@
 #include "ipv6calccommands.h"
 #include <getopt.h>
 
-
 /* defines */
 #ifndef _ipv6calctypes_h_
 

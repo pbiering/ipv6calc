@@ -830,9 +830,9 @@ int main(int argc, char *argv[]) {
 
 		// TODO SOURCE SELECTION
 		if ((filter_master.filter_ipv4addr.active == 0) && (filter_master.filter_ipv6addr.active != 0)) {
-			libipv6calc_db_dump(IPV6CALC_DB_SOURCE_EXTERNAL, IPV6CALC_PROTO_IPV6, &filter_master);
+			libipv6calc_db_dump(IPV6CALC_DB_SOURCE_EXTERNAL, IPV6CALC_PROTO_IPV6, &filter_master, formatoptions);
 		} else if ((filter_master.filter_ipv4addr.active != 0) && (filter_master.filter_ipv6addr.active == 0)) {
-			libipv6calc_db_dump(IPV6CALC_DB_SOURCE_EXTERNAL, IPV6CALC_PROTO_IPV4, &filter_master);
+			libipv6calc_db_dump(IPV6CALC_DB_SOURCE_EXTERNAL, IPV6CALC_PROTO_IPV4, &filter_master, formatoptions);
 		} else {
 			fprintf(stderr, "ipv6calc action 'dbdump' is not supporting combined IPv4 and IPv6 filter\n");
 			exit(EXIT_FAILURE);

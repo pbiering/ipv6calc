@@ -17,20 +17,13 @@
 #include "databases/lib/libipv6calc_db_wrapper.h"
 #include "ipv6calcoptions.h"
 #include "libipv6calcdebug.h"
+#include "ipv6calc_typedefs.h"
 
 /* typedefs */
 
 #ifndef _libipv6calc_h
 
 #define _libipv6calc_h 1
-
-/* master filter structure */
-typedef struct {
-	s_ipv6calc_filter_ipv4addr filter_ipv4addr;
-	s_ipv6calc_filter_ipv6addr filter_ipv6addr;
-	s_ipv6calc_filter_macaddr  filter_macaddr;
-} s_ipv6calc_filter_master;
-
 
 /*@unused@*/ static const s_ipv6calc_anon_set ipv6calc_anon_set_list[] = {
 	// name                   short  ip4 ip6 iid mac  keep-oui method

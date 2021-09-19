@@ -16,6 +16,7 @@
 #include "libmac.h"
 #include "libipv4addr.h"
 #include "libipv6addr.h"
+#include "ipv6calc_typedefs.h"
 
 #ifndef _libipv6calc_db_wrapper_h
 
@@ -416,9 +417,8 @@ extern void libipv6calc_db_wrapper_geolocation_record_clear(libipv6calc_db_wrapp
 
 #ifdef HAVE_BERKELEY_DB_SUPPORT
 extern int libipv6calc_db_wrapper_bdb_get_data_by_key(DB *dbp, char *token, char *value, const size_t value_size);
-#endif // HAVE_BERKELEY_DB_SUPPORT
 
-// generic DB fetch
+// fetch row
 extern int libipv6calc_db_wrapper_bdb_fetch_row(
 	DB 			*db_ptr,		// pointer to DB
 	const uint8_t		db_format,		// DB format
@@ -429,6 +429,7 @@ extern int libipv6calc_db_wrapper_bdb_fetch_row(
 	uint32_t		*data_2_32_63_ptr,	// data 2 (LSB in case of 64 bits)
 	void			*data_ptr		// pointer to data
 	);
+#endif // HAVE_BERKELEY_DB_SUPPORT
 
 // generic DB lookup
 extern long int libipv6calc_db_wrapper_get_entry_generic(
@@ -458,7 +459,7 @@ extern int libipv6calc_db_registry_filter_parse(s_ipv6calc_filter_db_registry *f
 extern int libipv6calc_db_registry_filter_check(const s_ipv6calc_filter_db_registry *filter, const int proto);
 extern int libipv6calc_db_registry_filter(const uint32_t registry, const s_ipv6calc_filter_db_registry *filter);
 
-extern void libipv6calc_db_dump(const int source, const int selector, const s_ipv6calc_filter_master *filter_master);
+extern void libipv6calc_db_dump(const int source, const int selector, const s_ipv6calc_filter_master *filter_master, const uint32_t formatoptions);
 
 extern       uint32_t libipv6calc_db_lib_version_numeric(void);
 extern const char    *libipv6calc_db_lib_version_string(void);

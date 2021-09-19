@@ -21,6 +21,7 @@
 #include "libipv6calc.h"
 
 #include "ipv6calcoptions.h"
+#include "ipv6calc_typedefs.h"
 
 #include "libipv6calc_db_wrapper.h"
 #include "libipv6calc_db_wrapper_MMDB.h"
@@ -3831,7 +3832,7 @@ int libipv6calc_db_registry_filter(const uint32_t registry, const s_ipv6calc_fil
  *
  * in : selector
  */
-void libipv6calc_db_dump(const int source, const int selector, const s_ipv6calc_filter_master *filter_master) {
+void libipv6calc_db_dump(const int source, const int selector, const s_ipv6calc_filter_master *filter_master, const uint32_t formatoptions) {
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "called with source=%d selector=%d", source, selector);
 
 	// check support
@@ -3841,7 +3842,6 @@ void libipv6calc_db_dump(const int source, const int selector, const s_ipv6calc_
 		switch (selector) {
 		    case IPV6CALC_PROTO_IPV4:
 		    case IPV6CALC_PROTO_IPV6:
-			libipv6calc_db_wrapper_External_dump(selector, filter_master);
 			break;
 
 		    default:
@@ -3868,7 +3868,7 @@ void libipv6calc_db_dump(const int source, const int selector, const s_ipv6calc_
 		switch (selector) {
 		    case IPV6CALC_PROTO_IPV4:
 		    case IPV6CALC_PROTO_IPV6:
-			libipv6calc_db_wrapper_External_dump(selector); // TODO filter
+			libipv6calc_db_wrapper_External_dump(selector, filter_master, formatoptions);
 			break;
 
 		    default:

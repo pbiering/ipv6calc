@@ -83,6 +83,6 @@ extern int libipv6calc_db_wrapper_External_country_code_by_addr(const ipv6calc_i
 extern int libipv6calc_db_wrapper_External_info_by_ipaddr(const ipv6calc_ipaddr *ipaddrp, char *string, const size_t string_len);
 
 // Database dump
-extern int libipv6calc_db_wrapper_External_dump(const int selector);
+extern int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_filter_master *filter_master, const uint32_t formatoptions);
 
 #endif
