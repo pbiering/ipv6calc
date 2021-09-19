@@ -1068,6 +1068,8 @@ END_libipv6calc_db_wrapper:
  * database dump
  *
  * in:  selector
+ * in:  filter ('External' database only supports CountryCode)
+ * in:  formatoptions
  * out: 0=OK
  */
 int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_filter_master *filter_master, const uint32_t formatoptions) {
