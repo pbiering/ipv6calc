@@ -1106,12 +1106,12 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 
 		if (filter_master->filter_ipv4addr.active == 0) {
 			ERRORPRINT_NA("no IPv4 filter provided (ipv4.db.cc=<CountryCode>)");
-			exit(EXIT_FAILURE);
+			return (1);
 		};
 
-		if (filter_master->filter_ipv4addr.filter_db_cc.active ==  0) {
+		if (filter_master->filter_ipv4addr.filter_db_cc.active == 0) {
 			ERRORPRINT_NA("no IPv4 Database CountryCode filter provided (ipv4.db.cc=<CountryCode>)");
-			exit(EXIT_FAILURE);
+			return (1);
 		};
 
 		filter = &filter_master->filter_ipv4addr.filter_db_cc;
@@ -1125,12 +1125,12 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 
 		if (filter_master->filter_ipv6addr.active == 0) {
 			ERRORPRINT_NA("no IPv6 filter provided (ipv6.db.cc=<CountryCode>)");
-			exit(EXIT_FAILURE);
+			return (1);
 		};
 
-		if (filter_master->filter_ipv6addr.filter_db_cc.active ==  0) {
+		if (filter_master->filter_ipv6addr.filter_db_cc.active == 0) {
 			ERRORPRINT_NA("no IPv6 Database CountryCode filter provided (ipv6.db.cc=<CountryCode>)");
-			exit(EXIT_FAILURE);
+			return (1);
 		};
 
 		filter = &filter_master->filter_ipv6addr.filter_db_cc;
@@ -1139,7 +1139,7 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 
 	    default:
 		ERRORPRINT_WA("unsupported selector: %d (FIX CODE)", selector);
-		exit(EXIT_FAILURE);
+		return (1);
 		break;
 	};
 
@@ -1172,7 +1172,7 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "database opened type=%x recno_max=%ld dbp=%p", External_type | 0x40000, recno_max, dbp);
 
-	NONQUIETPRINT_WA("# External database dump start with filter IPv%c && CountryCode(s):%s (suppress this line with option '-q')", protocol, filterstring); // string has a trailing space
+	NONQUIETPRINT_WA("# 'External' database dump (with %lu entries) start with filter IPv%c && CountryCode(s):%s (suppress this line with option '-q')", recno_max, protocol, filterstring); // string has a trailing space
 
 	for (recno = 1; recno <= recno_max; recno++) {
 		result = libipv6calc_db_wrapper_bdb_fetch_row(
@@ -1278,7 +1278,7 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 	retval = 0;
 
 END_libipv6calc_db_wrapper:
-	NONQUIETPRINT_WA("# External database dump finished displaying %lu entries with filter IPv%c && CountryCode(s):%s (suppress this line with option '-q')", count, protocol, filterstring); // resultstring has a trailing space
+	NONQUIETPRINT_WA("# 'External' database dump finished displaying %lu entries with filter IPv%c && CountryCode(s):%s (suppress this line with option '-q')", count, protocol, filterstring); // resultstring has a trailing space
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "retval=%d", retval);
 	return(retval);
