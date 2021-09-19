@@ -832,7 +832,7 @@ int main(int argc, char *argv[]) {
 		};
 
 		// TODO SOURCE SELECTION in case more databases support dump format
-		source = IPV6CALC_DB_SOURCE_EXTERNAL;
+		db_source = IPV6CALC_DB_SOURCE_EXTERNAL;
 
 		if ((filter_master.filter_ipv4addr.active == 0) && (filter_master.filter_ipv6addr.active != 0)) {
 			libipv6calc_db_dump(db_source, IPV6CALC_PROTO_IPV6, &filter_master, formatoptions);
