@@ -10,6 +10,11 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20210919/PB:
+	internal databases: update
+	lib/libipaddr.c: copy also flags/prefixlengths
+	lib/ipv6calctypes.h ipv6calc/ipv6calc.c databases/lib/libipv6calc_db_wrapper_External.[h,c] databases/lib/libipv6calc_db_wrapper.[h,c] ipv6calc/test_ipv6calc.sh lib/ipv6calchelp.c: add new action -A dbdump
+
 20210918/PB:
 	lib/libipv6addr.c: ipv6addrstruct_to_uncompaddrprefix: print prefix length if given and not suppressed by option
 	lib/librfc3056.c,lib/ipv6calchelp.c,ipv6calc/test_ipv6calc.sh: action conv6to4 keeps (and mask) prefix length if not suppressed by option
