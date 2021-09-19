@@ -2,21 +2,21 @@
  * Project       : ipv6calc
  * File          : db_cc_reg_assignment.h
  * Version       : $Id$
- * Generated     : Mon Jul 12 07:59:02 2021
+ * Generated     : Sun Sep 19 22:49:10 2021
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
  *  Additional header file for databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  */
 
-static const char *db_cc_registry_status = "AFRINIC/20210712 APNIC/20210709 ARIN/20210711 LACNIC/20210708 RIPENCC/20210711";
+static const char *db_cc_registry_status = "AFRINIC/20210919 APNIC/20210917 ARIN/20210919 LACNIC/20210918 RIPENCC/20210918";
 
 static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "", REGISTRY_ARIN     },
 	{ "AD", REGISTRY_RIPENCC  },
 	{ "AE", REGISTRY_RIPENCC  },
 	{ "AF", REGISTRY_APNIC    },
-	{ "AG", REGISTRY_RIPENCC  },
+	{ "AG", REGISTRY_ARIN     },
 	{ "AI", REGISTRY_ARIN     },
 	{ "AL", REGISTRY_RIPENCC  },
 	{ "AM", REGISTRY_RIPENCC  },
@@ -670,7 +670,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  413  XF
 	{ REGISTRY_UNKNOWN  }, //  414  YF
 	{ REGISTRY_UNKNOWN  }, //  415  ZF
-	{ REGISTRY_RIPENCC  }, //  416  AG
+	{ REGISTRY_ARIN     }, //  416  AG
 	{ REGISTRY_RIPENCC  }, //  417  BG
 	{ REGISTRY_AFRINIC  }, //  418  CG
 	{ REGISTRY_UNKNOWN  }, //  419  DG

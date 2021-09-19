@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Mon Jul 12 07:38:24 2021
+ * Generated     : Sun Sep 19 22:27:55 2021
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20210712";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20210919";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -1636,7 +1636,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x656000, 0x656FFF, "LDA Audio Video Profesional", "LDA-AUDIO-VIDEO-PROFESIONAL" },
 	{ 0x0050C2, 0x657000, 0x657FFF, "MONYTEL S.A.", "MONYTEL" },
 	{ 0x0050C2, 0x658000, 0x658FFF, "OpenPKG GmbH", "OPENPKG" },
-	{ 0x0050C2, 0x659000, 0x659FFF, "Dorsett Technologies, Inc.", "DORSETT-TECHNOLOGIES" },
+	{ 0x0050C2, 0x659000, 0x659FFF, "Dorsett Technologies Inc", "DORSETT-TECHNOLOGIES" },
 	{ 0x0050C2, 0x65A000, 0x65AFFF, "Hisstema AB", "HISSTEMA-AB" },
 	{ 0x0050C2, 0x65B000, 0x65BFFF, "Silverbrook Research", "SILVERBROOK-RESEARCH" },
 	{ 0x0050C2, 0x65C000, 0x65CFFF, "VTZ d.o.o.", "VTZ-D-O-O" },
@@ -2242,7 +2242,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x8B4000, 0x8B4FFF, "Sandar Telecast AS", "SANDAR-TELECAST-AS" },
 	{ 0x0050C2, 0x8B5000, 0x8B5FFF, "Keith & Koep GmbH", "KEITH-KOEP" },
 	{ 0x0050C2, 0x8B6000, 0x8B6FFF, "Shadrinskiy Telefonny Zavod", "SHADRINSKIY-TELEFONNY-ZAVOD" },
-	{ 0x0050C2, 0x8B7000, 0x8B7FFF, "Calnex Solutions Limited", "CALNEX-SOLUTIONS" },
+	{ 0x0050C2, 0x8B7000, 0x8B7FFF, "Calnex Solutions plc", "CALNEX-SOLUTIONS-PLC" },
 	{ 0x0050C2, 0x8B8000, 0x8B8FFF, "DSS Networks, Inc.", "DSS-NETWORKS" },
 	{ 0x0050C2, 0x8B9000, 0x8B9FFF, "ACD Elektronik GmbH", "ACD-ELEKTRONIK" },
 	{ 0x0050C2, 0x8BA000, 0x8BAFFF, "Fr. Sauter AG", "FR-SAUTER" },
@@ -2718,7 +2718,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xA90000, 0xA90FFF, "S.two Corporation", "S-TWO" },
 	{ 0x0050C2, 0xA91000, 0xA91FFF, "Ceron Tech Co.,LTD", "CERON-TECH" },
 	{ 0x0050C2, 0xA92000, 0xA92FFF, "Sicon srl", "SICON-SRL" },
-	{ 0x0050C2, 0xA93000, 0xA93FFF, "SPX Dehydration & Filtration", "SPX-DEHYDRATION-FILTRATION" },
+	{ 0x0050C2, 0xA93000, 0xA93FFF, "SPX Flow Technology", "SPX-FLOW" },
 	{ 0x0050C2, 0xA94000, 0xA94FFF, "Par-Tech, Inc.", "PAR-TECH" },
 	{ 0x0050C2, 0xA95000, 0xA95FFF, "INNOVACIONES Microelectrónicas SL (AnaFocus)", "INNOVACIONES-MICROELECTRNICAS-SL-ANAFOCUS" },
 	{ 0x0050C2, 0xA96000, 0xA96FFF, "FEP SRL", "FEP-SRL" },
