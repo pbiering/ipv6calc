@@ -379,6 +379,7 @@ extern const char *libipv6calc_db_wrapper_get_data_source_name_by_number(const u
 // CountryCode Text/Number
 extern int         libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr);
 extern int         libipv6calc_db_wrapper_country_code_by_cc_index(char *string, const int length, const uint16_t cc_index);
+extern uint16_t    libipv6calc_db_wrapper_cc_index_by_country_code(const char *cc_text);
 extern uint16_t    libipv6calc_db_wrapper_cc_index_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr);
 
 // Autonomous System Text/Number

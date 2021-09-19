@@ -1629,6 +1629,47 @@ int libipv6calc_db_wrapper_country_code_by_cc_index(char *string, const int leng
 
 
 /*
+ * get country code index by string
+ */
+uint16_t libipv6calc_db_wrapper_cc_index_by_country_code(const char *cc_text) {
+	uint16_t cc_index = COUNTRYCODE_INDEX_UNKNOWN;
+	uint8_t c1, c2;
+
+	if (strlen(cc_text) == 2) {
+		if (isalpha((int) cc_text[0]) && isalnum((int) cc_text[1])) {
+			c1 = toupper(cc_text[0]);
+			if (! (c1 >= 'A' && c1 <= 'Z')) {
+				goto END_libipv6calc_db_wrapper; // something wrong
+			};
+			c1 -= 'A';
+
+			c2 = toupper(cc_text[1]);
+			if (c2 >= '0' && c2 <= '9') {
+				c2 -= '0';
+			} else if (c2 >= 'A' && c2 <= 'Z') {
+				c2 -= 'A';
+				c2 += 10;
+			} else {
+				goto END_libipv6calc_db_wrapper; // something wrong
+			};
+
+			cc_index = c1 + c2 * COUNTRYCODE_LETTER1_MAX;
+
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "cc_text=%s cc_index=%d (0x%03x) -> test: %c%c", cc_text, cc_index, cc_index, COUNTRYCODE_INDEX_TO_CHAR1(cc_index), COUNTRYCODE_INDEX_TO_CHAR2(cc_index));
+
+			if (cc_index >= COUNTRYCODE_INDEX_MAX) {
+				cc_index = COUNTRYCODE_INDEX_UNKNOWN; // failsafe
+				goto END_libipv6calc_db_wrapper; // something wrong
+			};
+		};
+	};
+
+END_libipv6calc_db_wrapper:
+	return (cc_index);
+};
+
+
+/*
  * get AS 32-bit number
  */
 uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr) {
