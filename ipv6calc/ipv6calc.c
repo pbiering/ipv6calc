@@ -822,6 +822,24 @@ int main(int argc, char *argv[]) {
 		};
 	};
 
+	if (action == ACTION_db_dump) {
+		if ((filter_master.filter_ipv4addr.active == 0) && (filter_master.filter_ipv6addr.active == 0)) {
+			fprintf(stderr, "ipv6calc action 'dbdump' require a valid IPv4 or IPv6 filter\n");
+			exit(EXIT_FAILURE);
+		};
+
+		// TODO SOURCE SELECTION
+		if ((filter_master.filter_ipv4addr.active == 0) && (filter_master.filter_ipv6addr.active != 0)) {
+			libipv6calc_db_dump(IPV6CALC_DB_SOURCE_EXTERNAL, IPV6CALC_PROTO_IPV6, &filter_master);
+		} else if ((filter_master.filter_ipv4addr.active != 0) && (filter_master.filter_ipv6addr.active == 0)) {
+			libipv6calc_db_dump(IPV6CALC_DB_SOURCE_EXTERNAL, IPV6CALC_PROTO_IPV4, &filter_master);
+		} else {
+			fprintf(stderr, "ipv6calc action 'dbdump' is not supporting combined IPv4 and IPv6 filter\n");
+			exit(EXIT_FAILURE);
+		};
+		goto RESULT_none;
+	};
+
 	if (argc > 0) {
 		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "Got input: %s", argv[0]);
 	} else {
@@ -2182,6 +2200,7 @@ RESULT_print:
 		goto PIPE_input;
 	};
 
+RESULT_none:
 	libipv6calc_db_wrapper_cleanup();
 
 	exit(retval);
