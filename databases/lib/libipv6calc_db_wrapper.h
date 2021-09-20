@@ -22,7 +22,7 @@
 #include "libipv6addr.h"
 #include "libipaddr.h"
 #include "ipv6calctypes.h"
-#include "ipv6calc_typedefs.h"
+#include "libipv6calc_filter.h"
 
 
 extern uint32_t wrapper_features;

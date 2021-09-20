@@ -16,14 +16,14 @@
 #include "config.h"
 
 #include "ipv6calctypes.h"
-#include "ipv6calc_typedefs.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
+#include "libipv6calc_filter.h"
 #include "librfc1924.h"
 #include "librfc2874.h"
 #include "librfc1886.h"
 
-#include "../databases/lib/libipv6calc_db_wrapper.h"
+#include "libipv6calc_db_wrapper.h"
 
 
 /* text representations */

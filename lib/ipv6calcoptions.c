@@ -18,7 +18,7 @@
 #include "ipv6calcoptions.h"
 #include "ipv6calcoptions_common.h"
 
-#include "databases/lib/libipv6calc_db_wrapper.h"
+#include "libipv6calc_db_wrapper.h"
 
 extern long int ipv6calc_debug; // ipv6calc_debug usage ok
 int ipv6calc_quiet = 0;

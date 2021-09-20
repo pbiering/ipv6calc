@@ -27,7 +27,8 @@
 #include "libieee.h"
 #include "libeui64.h"
 
-#include "../databases/lib/libipv6calc_db_wrapper.h"
+#include "libipv6calc_db_wrapper.h"
+
 
 /* text representations */
 const s_type ipv6calc_ipv6addrtypestrings[] = {

@@ -19,12 +19,13 @@
 #include "config.h"
 
 #include "libieee.h"
-#include "databases/lib/libipv6calc_db_wrapper.h"
-#include "databases/lib/libipv6calc_db_wrapper_GeoIP2.h"
-#include "databases/lib/libipv6calc_db_wrapper_IP2Location.h"
-#include "databases/lib/libipv6calc_db_wrapper_DBIP2.h"
-#include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
-#include "databases/lib/libipv6calc_db_wrapper_External.h"
+
+#include "libipv6calc_db_wrapper.h"
+#include "libipv6calc_db_wrapper_GeoIP2.h"
+#include "libipv6calc_db_wrapper_IP2Location.h"
+#include "libipv6calc_db_wrapper_DBIP2.h"
+#include "libipv6calc_db_wrapper_BuiltIn.h"
+#include "libipv6calc_db_wrapper_External.h"
 
 
 /* to be defined in each application */

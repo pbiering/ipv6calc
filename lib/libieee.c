@@ -18,7 +18,7 @@
 #include "libmac.h"
 #include "libeui64.h"
 
-#include "../databases/lib/libipv6calc_db_wrapper.h"
+#include "libipv6calc_db_wrapper.h"
 
 
 // internal map for IAB / OUI-28 / OUI-36 lists

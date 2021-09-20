@@ -21,7 +21,7 @@
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
 
-#include "../databases/lib/libipv6calc_db_wrapper.h"
+#include "libipv6calc_db_wrapper.h"
 
 
 /* text representation */
