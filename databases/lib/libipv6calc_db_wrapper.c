@@ -3687,7 +3687,7 @@ int libipv6calc_db_registry_filter_parse(s_ipv6calc_filter_db_registry *filter, 
 	if (strcmp(token + offset, "unknown") == 0) {
 		registry = REGISTRY_UNKNOWN;
 	} else {
-		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_registries); i++) {
+		for (i = 0; i < ipv6calc_registries_entries; i++) {
 			if (strcasecmp(token + offset, ipv6calc_registries[i].token) == 0) {
 				registry = ipv6calc_registries[i].number;
 				break;

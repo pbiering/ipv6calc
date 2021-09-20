@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libipv6calc.h
  * Version    : $Id$
- * Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc.c
@@ -25,25 +25,6 @@
 
 #define _libipv6calc_h 1
 
-/*@unused@*/ static const s_ipv6calc_anon_set ipv6calc_anon_set_list[] = {
-	// name                   short  ip4 ip6 iid mac  keep-oui method
-	{ "anonymize-standard"  , "as"  , 24, 56, 40, 24, 1       , ANON_METHOD_ANONYMIZE     },
-	{ "anonymize-careful"   , "ac"  , 20, 48, 24, 24, 1       , ANON_METHOD_ANONYMIZE     },
-	{ "anonymize-paranoid"  , "ap"  , 16, 40,  0, 24, 0       , ANON_METHOD_ANONYMIZE     },
-	{ "zeroize-standard"    , "zs"  , 24, 56, 40, 24, 1       , ANON_METHOD_ZEROIZE       },
-	{ "zeroize-careful"     , "zc"  , 20, 48, 24, 24, 1       , ANON_METHOD_ZEROIZE       },
-	{ "zeroize-paranoid"    , "zp"  , 16, 40,  0, 24, 0       , ANON_METHOD_ZEROIZE       },
-	{ "keep-type-asn-cc"    , "kp"  , 24, 56, 40, 24, 1       , ANON_METHOD_KEEPTYPEASNCC },
-	{ "keep-type-geonameid" , "kg"  , 24, 56, 40, 24, 1       , ANON_METHOD_KEEPTYPEGEONAMEID }
-};
-
-/*@unused@*/ static const s_ipv6calc_anon_methods ipv6calc_anon_methods[] = {
-	{ "anonymize"        , 1, "reliable anonymization, keep as much type information as possible" },
-	{ "zeroize"          , 2, "simple zeroizing according to given masks, probably loose type information" },
-	{ "keep-type-asn-cc" , 3, "special reliable anonymization, keep type & Autonomous System Number and CountryCode" },
-	{ "keep-type-geonameid", 4, "special reliable anonymization, keep type & GeonameID" }
-};
-
 /* Registries (main registries must below 8 for anonymization mapping) */
 #define REGISTRY_APNIC        0x02
 #define REGISTRY_RIPENCC      0x03
@@ -56,20 +37,6 @@
 #define REGISTRY_6TO4         0x0c
 #define REGISTRY_RESERVED     0x0e
 #define REGISTRY_UNKNOWN      0x0f
-
-// new array (try to remove old arrays)
-/*@unused@*/ static const s_type2 ipv6calc_registries[] = {
-        { REGISTRY_6BONE      , "6BONE"     , "REGISTRY_6BONE"   },
-        { REGISTRY_IANA       , "IANA"      , "REGISTRY_IANA"    },
-        { REGISTRY_APNIC      , "APNIC"     , "REGISTRY_APNIC"   },
-        { REGISTRY_ARIN       , "ARIN"      , "REGISTRY_ARIN"    },
-        { REGISTRY_RIPENCC    , "RIPENCC"   , "REGISTRY_RIPENCC" },
-        { REGISTRY_LACNIC     , "LACNIC"    , "REGISTRY_LACNIC"  },
-        { REGISTRY_AFRINIC    , "AFRINIC"   , "REGISTRY_AFRINIC" },
-        { REGISTRY_6TO4       , "6TO4"      , "REGISTRY_6TO4"    },
-        { REGISTRY_RESERVED   , "reserved"  , "REGISTRY_RESERVED"},
-        { REGISTRY_UNKNOWN    , "unknown"   , "REGISTRY_UNKNOWN" }
-};
 
 /* some generic defines */
 #define IPV6CALC_PROTO_IPV4		4
@@ -106,6 +73,17 @@
 	};
 
 #endif // _libipv6calc_h
+
+
+/* references */
+extern const s_ipv6calc_anon_set ipv6calc_anon_set_list[];
+extern const int                 ipv6calc_anon_set_list_entries;
+
+extern const s_ipv6calc_anon_methods ipv6calc_anon_methods[];
+extern const int                     ipv6calc_anon_methods_entries;
+
+extern const s_type2 ipv6calc_registries[];
+extern const int     ipv6calc_registries_entries;
 
 
 /* prototypes */

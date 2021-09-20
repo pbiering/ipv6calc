@@ -2,7 +2,7 @@
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
  * Version    : $Id$
- * Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for some tools
@@ -23,6 +23,49 @@
 #include "librfc1886.h"
 
 #include "../databases/lib/libipv6calc_db_wrapper.h"
+
+
+/* text representations */
+const s_ipv6calc_anon_set ipv6calc_anon_set_list[] = {
+	// name                   short  ip4 ip6 iid mac  keep-oui method
+	{ "anonymize-standard"  , "as"  , 24, 56, 40, 24, 1       , ANON_METHOD_ANONYMIZE     },
+	{ "anonymize-careful"   , "ac"  , 20, 48, 24, 24, 1       , ANON_METHOD_ANONYMIZE     },
+	{ "anonymize-paranoid"  , "ap"  , 16, 40,  0, 24, 0       , ANON_METHOD_ANONYMIZE     },
+	{ "zeroize-standard"    , "zs"  , 24, 56, 40, 24, 1       , ANON_METHOD_ZEROIZE       },
+	{ "zeroize-careful"     , "zc"  , 20, 48, 24, 24, 1       , ANON_METHOD_ZEROIZE       },
+	{ "zeroize-paranoid"    , "zp"  , 16, 40,  0, 24, 0       , ANON_METHOD_ZEROIZE       },
+	{ "keep-type-asn-cc"    , "kp"  , 24, 56, 40, 24, 1       , ANON_METHOD_KEEPTYPEASNCC },
+	{ "keep-type-geonameid" , "kg"  , 24, 56, 40, 24, 1       , ANON_METHOD_KEEPTYPEGEONAMEID }
+};
+
+const int ipv6calc_anon_set_list_entries = MAXENTRIES_ARRAY(ipv6calc_anon_set_list);
+
+
+const s_ipv6calc_anon_methods ipv6calc_anon_methods[] = {
+	{ "anonymize"        , 1, "reliable anonymization, keep as much type information as possible" },
+	{ "zeroize"          , 2, "simple zeroizing according to given masks, probably loose type information" },
+	{ "keep-type-asn-cc" , 3, "special reliable anonymization, keep type & Autonomous System Number and CountryCode" },
+	{ "keep-type-geonameid", 4, "special reliable anonymization, keep type & GeonameID" }
+};
+
+const int ipv6calc_anon_methods_entries = MAXENTRIES_ARRAY(ipv6calc_anon_methods);
+
+
+const s_type2 ipv6calc_registries[] = {
+        { REGISTRY_6BONE      , "6BONE"     , "REGISTRY_6BONE"   },
+        { REGISTRY_IANA       , "IANA"      , "REGISTRY_IANA"    },
+        { REGISTRY_APNIC      , "APNIC"     , "REGISTRY_APNIC"   },
+        { REGISTRY_ARIN       , "ARIN"      , "REGISTRY_ARIN"    },
+        { REGISTRY_RIPENCC    , "RIPENCC"   , "REGISTRY_RIPENCC" },
+        { REGISTRY_LACNIC     , "LACNIC"    , "REGISTRY_LACNIC"  },
+        { REGISTRY_AFRINIC    , "AFRINIC"   , "REGISTRY_AFRINIC" },
+        { REGISTRY_6TO4       , "6TO4"      , "REGISTRY_6TO4"    },
+        { REGISTRY_RESERVED   , "reserved"  , "REGISTRY_RESERVED"},
+        { REGISTRY_UNKNOWN    , "unknown"   , "REGISTRY_UNKNOWN" }
+};
+
+const int ipv6calc_registries_entries = MAXENTRIES_ARRAY(ipv6calc_registries);
+
 
 /*
  * function converts chars in a string to upcase

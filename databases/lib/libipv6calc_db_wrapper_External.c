@@ -793,7 +793,7 @@ END_libipv6calc_db_wrapper_match:
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Database entry found %d: %s", token_count, token);
 
 		if (token_count == 1) {
-			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_registries); i++) {
+			for (i = 0; i < ipv6calc_registries_entries; i++) {
 				if (strcmp(token, ipv6calc_registries[i].tokensimple) == 0) {
 					retval = ipv6calc_registries[i].number;
 					break;

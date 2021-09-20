@@ -377,7 +377,7 @@ int ipv6calcoptions_common_anon(const int opt, const char *optarg, const struct 
 			break;
 
 		case CMD_ANON_METHOD_OPTION:
-			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_anon_methods); i++) {
+			for (i = 0; i < ipv6calc_anon_methods_entries; i++) {
 				if (strcmp(ipv6calc_anon_methods[i].name, optarg) == 0) {
 					ipv6calc_anon_set_p->method = ipv6calc_anon_methods[i].method;
 					snprintf(ipv6calc_anon_set_p->name, sizeof(ipv6calc_anon_set_p->name), "%s", "custom");
@@ -385,7 +385,7 @@ int ipv6calcoptions_common_anon(const int opt, const char *optarg, const struct 
 				};
 			};
 
-			if (i == MAXENTRIES_ARRAY(ipv6calc_anon_methods)) {
+			if (i == ipv6calc_anon_methods_entries) {
 				fprintf(stderr, "anonymization method not supported: %s\n", optarg);
 				exit(EXIT_FAILURE);
 			};

@@ -745,17 +745,17 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "   --anonymize-paranoid\n");
 			fprintf(stderr, "\n");
 			fprintf(stderr, "  Supported methods [--anonymize-method METHOD]:\n");
-			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_anon_methods); i++) {
+			for (i = 0; i < ipv6calc_anon_methods_entries; i++) {
 				fprintf(stderr, "   %-10s: %s\n", ipv6calc_anon_methods[i].name, ipv6calc_anon_methods[i].description);
 			};
 			fprintf(stderr, "\n");
 
 			fprintf(stderr, "  Available presets (shortcut names) [--anonymize-preset|ap PRESET-NAME]:\n");
 
-			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_anon_set_list); i++) {
+			for (i = 0; i < ipv6calc_anon_set_list_entries; i++) {
 				snprintf(method_name, sizeof(method_name), "%s", "unknown"); // default
 
-				for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_anon_methods); j++) {
+				for (j = 0; j < ipv6calc_anon_methods_entries; j++) {
 					if (ipv6calc_anon_methods[j].method == ipv6calc_anon_set_list[i].method) {
 						snprintf(method_name, sizeof(method_name), "%s", ipv6calc_anon_methods[j].name);
 						break;
@@ -816,7 +816,7 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "   [^][ipv4.|ipv6.]db.asn=<ASN>|unknown (Autonomous System Number)\n");
 			fprintf(stderr, "   [^][ipv4.|ipv6.]db.reg=<REGISTRY>\n");
 			fprintf(stderr, "    Registry tokens:");
-			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_registries); i++ ) {
+			for (i = 0; i < ipv6calc_registries_entries; i++ ) {
 				fprintf(stderr, " %s", ipv6calc_registries[i].token);
 			};
 			fprintf(stderr, "\n");
