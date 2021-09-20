@@ -176,10 +176,10 @@ typedef struct {
 
 #endif
 
+
 /* references */
 extern const s_type ipv6calc_ipv4addrtypestrings[];
-
-extern const int ipv6calc_ipv4addrtypestrings_entries;
+extern const int    ipv6calc_ipv4addrtypestrings_entries;
 
 
 /* prototypes */

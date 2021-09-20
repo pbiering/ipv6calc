@@ -356,10 +356,10 @@ typedef struct {
 
 /* references */
 extern const s_type ipv6calc_ipv6addrtypestrings[];
-extern const s_type ipv6calc_ipv6addr_type2_strings[];
+extern const int    ipv6calc_ipv6addrtypestrings_entries;
 
-extern const int ipv6calc_ipv6addrtypestrings_entries;
-extern const int ipv6calc_ipv6addr_type2_strings_entries;
+extern const s_type ipv6calc_ipv6addr_type2_strings[];
+extern const int    ipv6calc_ipv6addr_type2_strings_entries;
 
 
 /* prototypes */
