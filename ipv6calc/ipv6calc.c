@@ -982,7 +982,7 @@ PIPE_input:
 		DEBUGPRINT_WA(DEBUG_ipv6calc_general, "call input type autodetection resulted in 0x%08x", inputtype);
 
 		if ( inputtype != FORMAT_undefined ) {
-			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_formatstrings); i++) {
+			for (i = 0; i < ipv6calc_formatstrings_entries; i++) {
 				if (inputtype == ipv6calc_formatstrings[i].number) {
 					if ((formatoptions & FORMATOPTION_quiet) == 0) {
 						fprintf(stderr, "found type: %s\n", ipv6calc_formatstrings[i].token);
@@ -1029,7 +1029,7 @@ PIPE_input:
 			if ((formatoptions & FORMATOPTION_quiet) == 0) {
 				fprintf(stderr, "No action type specified, try autodetection...");
 			};
-			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_actionstrings); i++) {
+			for (i = 0; i < ipv6calc_actionstrings_entries; i++) {
 				if (action == ipv6calc_actionstrings[i].number) {
 					if ((formatoptions & FORMATOPTION_quiet) == 0) {
 						fprintf(stderr, "found type: %s\n", ipv6calc_actionstrings[i].token);
@@ -1043,7 +1043,7 @@ PIPE_input:
 	/* check formatoptions for validity */
 	DEBUGPRINT_WA(DEBUG_ipv6calc_general, "check format option of output type: 0x%08lx (0x%08x)", (unsigned long) outputtype, formatoptions);
 		
-	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_outputformatoptionmap); i++) {
+	for (i = 0; i < ipv6calc_outputformatoptionmap_entries; i++) {
 		if (outputtype != ipv6calc_outputformatoptionmap[i][0]) {
 			continue;
 		};
@@ -1060,7 +1060,7 @@ PIPE_input:
 		fprintf(stderr, "Unsupported format option(s):\n");
 
 		/* run through format options */
-		for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_formatoptionstrings); j++) {
+		for (j = 0; j < ipv6calc_formatoptionstrings_entries; j++) {
 			if ( (ipv6calc_formatoptionstrings[j].number & FORMATOPTION_quiet) != 0 ) {
 				/* skip format option "quiet" on check */
 				continue;
@@ -1409,7 +1409,7 @@ PIPE_input:
 		};
 
 		if ( outputtype != FORMAT_undefined ) {
-			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_formatstrings); i++) {
+			for (i = 0; i < ipv6calc_formatstrings_entries; i++) {
 				if (outputtype == ipv6calc_formatstrings[i].number) {
 					if ((formatoptions & FORMATOPTION_quiet) == 0) {
 						fprintf(stderr, "found type: %s\n", ipv6calc_formatstrings[i].token);

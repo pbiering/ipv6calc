@@ -77,7 +77,7 @@ void printhelp_inputtypes(const uint32_t formatoptions) {
 	};
 
 	/* look for longest type definition */
-	for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_formatstrings); j++) {
+	for (j = 0; j < ipv6calc_formatstrings_entries; j++) {
 		if (strlen(ipv6calc_formatstrings[j].token) > maxlen) {
 			maxlen = strlen(ipv6calc_formatstrings[j].token);
 		};
@@ -99,11 +99,11 @@ void printhelp_inputtypes(const uint32_t formatoptions) {
 	if ((formatoptions & FORMATOPTION_machinereadable) == 0) fprintf(stderr, "\n Available input types:\n");
 
 	/* run through matrix */
-	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_formatmatrix); i++) {
+	for (i = 0; i < ipv6calc_formatmatrix_entries; i++) {
 		DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Row %d: %08x - %08x", i, (unsigned int) ipv6calc_formatmatrix[i][0], (unsigned int) ipv6calc_formatmatrix[i][1]);
 		if (ipv6calc_formatmatrix[i][1] != 0) {
 			/* available for input, look for name now */
-			for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_formatstrings); j++) {
+			for (j = 0; j < ipv6calc_formatstrings_entries; j++) {
 				DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Format-Row %d: %08x - %s - %s", j, (unsigned int) ipv6calc_formatstrings[j].number, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
 				if (ipv6calc_formatstrings[j].number == ipv6calc_formatmatrix[i][0]) {
 					if ((formatoptions & FORMATOPTION_machinereadable) == 0) {	
@@ -132,7 +132,7 @@ void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoption
 	};
 
 	/* look for longest type definition */
-	for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_formatstrings); j++) {
+	for (j = 0; j < ipv6calc_formatstrings_entries; j++) {
 		if (strlen(ipv6calc_formatstrings[j].token) > maxlen) {
 			maxlen = strlen(ipv6calc_formatstrings[j].token);
 		};
@@ -160,10 +160,10 @@ void printhelp_outputtypes(const uint32_t inputtype, const uint32_t formatoption
 	};
 
 	/* run through matrix */
-	for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_formatstrings); j++) {
+	for (j = 0; j < ipv6calc_formatstrings_entries; j++) {
 		DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Format-Row %d: %08x - %s - %s", j, (unsigned int) ipv6calc_formatstrings[j].number, ipv6calc_formatstrings[j].token, ipv6calc_formatstrings[j].explanation);
 
-		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_formatmatrix); i++) {
+		for (i = 0; i < ipv6calc_formatmatrix_entries; i++) {
 			if ( (inputtype & ~ (FORMAT_auto | FORMAT_any) ) != 0 ) {
 				if (ipv6calc_formatmatrix[i][0] != inputtype) {
 					/* skip */
@@ -205,7 +205,7 @@ void printhelp_actiontypes(const uint32_t formatoptions, const struct option lon
 	};
 
 	/* look for longest type definition */
-	for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_actionstrings); j++) {
+	for (j = 0; j < ipv6calc_actionstrings_entries; j++) {
 		if (strlen(ipv6calc_actionstrings[j].token) > maxlen) {
 			maxlen = strlen(ipv6calc_actionstrings[j].token);
 		};
@@ -229,7 +229,7 @@ void printhelp_actiontypes(const uint32_t formatoptions, const struct option lon
 
 	if ((formatoptions & FORMATOPTION_machinereadable) == 0) fprintf(stderr, "\n Available action types:\n");
 
-	for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_actionstrings); j++) {
+	for (j = 0; j < ipv6calc_actionstrings_entries; j++) {
 		DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Action-Row %d: %08x - %s - %s", j, (unsigned int) ipv6calc_actionstrings[j].number, ipv6calc_actionstrings[j].token, ipv6calc_actionstrings[j].explanation);
 
 		if ((formatoptions & FORMATOPTION_machinereadable) == 0) {
@@ -243,7 +243,7 @@ void printhelp_actiontypes(const uint32_t formatoptions, const struct option lon
 				};
 
 				/* search for defined options */
-				for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_actionoptionmap); i++) {
+				for (i = 0; i < ipv6calc_actionoptionmap_entries; i++) {
 					DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Option %d", i)
 
 					if (ipv6calc_actionstrings[j].number == ipv6calc_actionoptionmap[i][0]) {
@@ -668,7 +668,7 @@ void printhelp_output_dispatcher(const uint32_t outputtype, const uint32_t input
 	};
 	
 	/* looking for outtype */
-	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_outputformatoptionmap); i++) {
+	for (i = 0; i < ipv6calc_outputformatoptionmap_entries; i++) {
 		if (outputtype == ipv6calc_outputformatoptionmap[i][0]) {
 			if (ipv6calc_outputformatoptionmap[i][1] == 0) {
 				fprintf(stderr, " No format options supported\n");
@@ -681,7 +681,7 @@ void printhelp_output_dispatcher(const uint32_t outputtype, const uint32_t input
 			fprintf(stderr, " Available format options:\n");
 
 			/* run through format options */
-			for (j = 0; j < MAXENTRIES_ARRAY(ipv6calc_formatoptionstrings); j++) {
+			for (j = 0; j < ipv6calc_formatoptionstrings_entries; j++) {
 				if ((ipv6calc_outputformatoptionmap[i][1] & ipv6calc_formatoptionstrings[j].number) != 0) {
 					fprintf(stderr, "  %s: %s\n", ipv6calc_formatoptionstrings[j].token, ipv6calc_formatoptionstrings[j].explanation);
 				};
