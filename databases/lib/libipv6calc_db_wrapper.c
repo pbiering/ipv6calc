@@ -3857,6 +3857,8 @@ void libipv6calc_db_dump(const int source, const int selector, const s_ipv6calc_
 			break;
 		};
 #else
+		if (formatoptions == 0) { }; // avoid -Werror=unused-parameter
+		if (filter_master == NULL) { }; // avoid -Werror=unused-parameter
 		ERRORPRINT_WA("source not compiled in: %d", source);
 		return;
 #endif
