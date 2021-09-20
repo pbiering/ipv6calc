@@ -27,60 +27,14 @@
 #define IPV6CALC_DB_DBIP2_INTERNAL_FREE		0x00000001
 #define IPV6CALC_DB_DBIP2_INTERNAL_COMM		0x00000002
 
-/*@unused@*/ static const db_file_desc2 libipv6calc_db_wrapper_DBIP2_db_file_desc[] = {
-	// country (lite)
-	{ DBIP2_DB_COUNTRY_LITE
-		, "dbip-country-lite.mmdb"
-		, "IPv4/v6 CountryCode (FREE)"
-		, IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_GEONAMEID | IPV6CALC_DB_IP_TO_COUNTRY
-		, IPV6CALC_DB_DBIP2_INTERNAL_FREE
-	},
-
-	// city (lite)
-	{ DBIP2_DB_CITY_LITE
-		, "dbip-city-lite.mmdb"
-		, "IPv4/v6 City (FREE)"
-		, IPV6CALC_DB_IP_TO_CITY | IPV6CALC_DB_IP_TO_REGION | IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_GEONAMEID | IPV6CALC_DB_IP_TO_COUNTRY
-		, IPV6CALC_DB_DBIP2_INTERNAL_FREE
-	},
-
-	// country
-	{ DBIP2_DB_COUNTRY
-		, "dbip-country.mmdb"
-		, "IPv4/v6 CountryCode (COMM)"
-		, IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_GEONAMEID | IPV6CALC_DB_IP_TO_COUNTRY
-		, IPV6CALC_DB_DBIP2_INTERNAL_COMM
-	},
-
-	// location
-	{ DBIP2_DB_LOCATION
-		, "dbip-location.mmdb"
-		, "IPv4/v6 Location (COMM)"
-		, IPV6CALC_DB_IP_TO_CITY | IPV6CALC_DB_IP_TO_REGION | IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_COUNTRY | IPV6CALC_DB_IP_TO_GEONAMEID
-		, IPV6CALC_DB_DBIP2_INTERNAL_COMM
-	},
-
-	// ISP
-	{ DBIP2_DB_ISP
-		, "dbip-isp.mmdb"
-		, "IPv4/v6 ISP (COMM)", IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_AS
-		, IPV6CALC_DB_DBIP2_INTERNAL_COMM
-	},
-
-	// full
-	{ DBIP2_DB_LOCATION_ISP
-		, "dbip-location-isp.mmdb"
-		, "IPv4/v6 Location+ISP (COMM)"
-		, IPV6CALC_DB_IP_TO_CITY | IPV6CALC_DB_IP_TO_REGION | IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_COUNTRY | IPV6CALC_DB_IP_TO_AS | IPV6CALC_DB_IP_TO_GEONAMEID
-		, IPV6CALC_DB_DBIP2_INTERNAL_COMM
-	},
-};
-
 
 // features
 extern uint32_t wrapper_features_DBIP2;
 
 #endif
+
+
+/* prototypes */
 
 extern int         libipv6calc_db_wrapper_DBIP2_wrapper_init(void);
 extern int         libipv6calc_db_wrapper_DBIP2_wrapper_cleanup(void);

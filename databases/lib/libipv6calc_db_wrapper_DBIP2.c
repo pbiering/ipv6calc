@@ -32,6 +32,56 @@ char dbip2_db_dir[PATH_MAX] = DBIP2_DB;
 
 static const char* wrapper_dbip2_info = "DBIP2";
 
+/* database files */
+static const db_file_desc2 libipv6calc_db_wrapper_DBIP2_db_file_desc[] = {
+	// country (lite)
+	{ DBIP2_DB_COUNTRY_LITE
+		, "dbip-country-lite.mmdb"
+		, "IPv4/v6 CountryCode (FREE)"
+		, IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_GEONAMEID | IPV6CALC_DB_IP_TO_COUNTRY
+		, IPV6CALC_DB_DBIP2_INTERNAL_FREE
+	},
+
+	// city (lite)
+	{ DBIP2_DB_CITY_LITE
+		, "dbip-city-lite.mmdb"
+		, "IPv4/v6 City (FREE)"
+		, IPV6CALC_DB_IP_TO_CITY | IPV6CALC_DB_IP_TO_REGION | IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_GEONAMEID | IPV6CALC_DB_IP_TO_COUNTRY
+		, IPV6CALC_DB_DBIP2_INTERNAL_FREE
+	},
+
+	// country
+	{ DBIP2_DB_COUNTRY
+		, "dbip-country.mmdb"
+		, "IPv4/v6 CountryCode (COMM)"
+		, IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_GEONAMEID | IPV6CALC_DB_IP_TO_COUNTRY
+		, IPV6CALC_DB_DBIP2_INTERNAL_COMM
+	},
+
+	// location
+	{ DBIP2_DB_LOCATION
+		, "dbip-location.mmdb"
+		, "IPv4/v6 Location (COMM)"
+		, IPV6CALC_DB_IP_TO_CITY | IPV6CALC_DB_IP_TO_REGION | IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_COUNTRY | IPV6CALC_DB_IP_TO_GEONAMEID
+		, IPV6CALC_DB_DBIP2_INTERNAL_COMM
+	},
+
+	// ISP
+	{ DBIP2_DB_ISP
+		, "dbip-isp.mmdb"
+		, "IPv4/v6 ISP (COMM)", IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_AS
+		, IPV6CALC_DB_DBIP2_INTERNAL_COMM
+	},
+
+	// full
+	{ DBIP2_DB_LOCATION_ISP
+		, "dbip-location-isp.mmdb"
+		, "IPv4/v6 Location+ISP (COMM)"
+		, IPV6CALC_DB_IP_TO_CITY | IPV6CALC_DB_IP_TO_REGION | IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_COUNTRY | IPV6CALC_DB_IP_TO_AS | IPV6CALC_DB_IP_TO_GEONAMEID
+		, IPV6CALC_DB_DBIP2_INTERNAL_COMM
+	},
+};
+
 
 // DB used for resolution after automatic election, which is currently done by checking for DB files and the sequence in the header file
 static int dbip2_db_country_v4 = 0;
