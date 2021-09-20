@@ -9,6 +9,7 @@
  */
 
 #include "ipv6calctypes.h"
+#include "libipaddr.h"
 
 #ifndef _libipv6calc_db_wrapper_DBIP2_h
 

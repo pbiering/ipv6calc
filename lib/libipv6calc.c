@@ -16,6 +16,7 @@
 #include "config.h"
 
 #include "ipv6calctypes.h"
+#include "ipv6calc_typedefs.h"
 #include "libipv6calc.h"
 #include "libipv6calcdebug.h"
 #include "librfc1924.h"

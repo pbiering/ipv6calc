@@ -11,13 +11,14 @@
 #include <getopt.h> 
 #include <stdio.h>
 
-#include "ipv6calctypes.h"
-#include "ipv6calccommands.h"
-
-
 #ifndef _ipv6calcoptions_h_
 
 #define _ipv6calcoptions_h_
+
+
+#include "ipv6calctypes.h"
+#include "ipv6calccommands.h"
+
 
 #define IPV6CALC_MAXLONGOPTIONS	128
 

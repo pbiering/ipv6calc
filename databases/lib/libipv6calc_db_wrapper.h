@@ -12,15 +12,18 @@
 #include <db.h>
 #endif // HAVE_BERKELEY_DB_SUPPORT
 
-#include "ipv6calctypes.h"
-#include "libmac.h"
-#include "libipv4addr.h"
-#include "libipv6addr.h"
-#include "ipv6calc_typedefs.h"
-
 #ifndef _libipv6calc_db_wrapper_h
 
 #define _libipv6calc_db_wrapper_h 1
+
+
+#include "libmac.h"
+#include "libipv4addr.h"
+#include "libipv6addr.h"
+#include "libipaddr.h"
+#include "ipv6calctypes.h"
+#include "ipv6calc_typedefs.h"
+
 
 extern uint32_t wrapper_features;
 extern uint32_t wrapper_features_by_source[];

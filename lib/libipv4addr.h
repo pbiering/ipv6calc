@@ -9,13 +9,16 @@
  *  Header file for libipv4addr.c
  */ 
 
-#include "ipv6calctypes.h"
-#include <netinet/in.h>
-
-/* typedefs */
 #ifndef _libipv4addr_h
 
 #define _libipv4addr_h 1
+
+
+#include <netinet/in.h>
+#include "ipv6calctypes.h"
+
+
+/* typedefs */
 
 /* IPv4 address structure */
 typedef struct {

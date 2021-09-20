@@ -13,6 +13,7 @@
 #include <string.h>
 
 #include "config.h"
+#include "libipaddr.h"
 #include "libipv6addr.h"
 #include "libipv4addr.h"
 #include "ipv6calctypes.h"

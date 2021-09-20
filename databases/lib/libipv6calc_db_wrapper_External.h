@@ -10,6 +10,7 @@
 
 #include <time.h>
 #include "ipv6calctypes.h"
+#include "libipaddr.h"
 
 #ifndef _libipv6calc_db_wrapper_External_h
 

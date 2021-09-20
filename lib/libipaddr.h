@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libipaddr.h
  * Version    : $Id$
- * Copyright  : 2014-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2014-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipaddr.c
@@ -11,6 +11,12 @@
 #ifndef _libipaddr_h
 
 #define _libipaddr_h 1
+
+
+#include "ipv6calc_inttypes.h"
+#include "libipv4addr.h"
+#include "libipv6addr.h"
+
 
 /**************
  * Defines

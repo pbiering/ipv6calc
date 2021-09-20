@@ -9,12 +9,13 @@
  */ 
 
 
-#include "ipv6calc_inttypes.h"
-
-
 #ifndef _libmac_h
 
 #define _libmac_h 1
+
+
+#include "libipv6calc.h"
+
 
 /* typedefs */
 
@@ -33,7 +34,9 @@ typedef struct {
 #define EUI48_00_23(x)  ((x[0] << 16) | (x[1] << 8) | x[2])
 #define EUI48_24_47(x)  ((x[3] << 16) | (x[4] << 8) | x[5])
 
+
 #endif
+
 
 /* prototypes */
 extern int mac_to_macaddrstruct(const char *addrstring, char *resultstring, const size_t resultstring_length, ipv6calc_macaddr *macaddrp);

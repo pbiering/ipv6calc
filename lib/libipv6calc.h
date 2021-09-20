@@ -8,22 +8,15 @@
  *  Header file for libipv6calc.c
  */ 
 
-#include "ipv6calc_inttypes.h"
-#include "ipv6calctypes.h"
-#include "libmac.h"
-#include "libipv4addr.h"
-#include "libipv6addr.h"
-#include "libipaddr.h"
-#include "databases/lib/libipv6calc_db_wrapper.h"
-#include "ipv6calcoptions.h"
-#include "libipv6calcdebug.h"
-#include "ipv6calc_typedefs.h"
-
-/* typedefs */
-
 #ifndef _libipv6calc_h
 
 #define _libipv6calc_h 1
+
+
+#include "ipv6calctypes.h"
+
+
+/* typedefs */
 
 /* Registries (main registries must below 8 for anonymization mapping) */
 #define REGISTRY_APNIC        0x02
@@ -97,13 +90,6 @@ extern void string_to_reverse(char *string);
 extern void string_to_reverse_dotted(char *string, const size_t string_length);
 
 extern uint32_t libipv6calc_autodetectinput(const char *string);
-
-extern int  libipv6calc_filter_parse(const char *expression, s_ipv6calc_filter_master *filter_master);
-extern int  libipv6calc_filter_check(s_ipv6calc_filter_master *filter_master);
-extern void libipv6calc_filter_clear(s_ipv6calc_filter_master *filter_master);
-extern void libipv6calc_filter_clear_db_cc(s_ipv6calc_filter_db_cc *filter_db_cc);
-extern void libipv6calc_filter_clear_db_asn(s_ipv6calc_filter_db_asn *filter_db_asn);
-extern void libipv6calc_filter_clear_db_registry(s_ipv6calc_filter_db_registry *filter_db_registry);
 
 extern int   libipv6calc_anon_set_by_name(s_ipv6calc_anon_set *ipv6calc_anon_set, const char* name);
 extern void  libipv6calc_anon_infostring(char* string, const int stringlength, const s_ipv6calc_anon_set *ipv6calc_anon_set);

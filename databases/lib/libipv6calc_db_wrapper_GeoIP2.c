@@ -20,6 +20,7 @@
 
 #include "libipv6calcdebug.h"
 #include "libipv6calc.h"
+#include "libipaddr.h"
 
 #include "libipv6calc_db_wrapper.h"
 

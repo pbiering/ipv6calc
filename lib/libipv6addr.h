@@ -9,15 +9,20 @@
  *  Header file for libipv6addr.c
  */ 
 
-#include "ipv6calctypes.h"
-#include <netinet/in.h>
-#include <ctype.h>
-
-/* typedefs & defines */
-
 #ifndef _libipv6addr_h
 
 #define _libipv6addr_h 1
+
+
+#include <netinet/in.h>
+#include <ctype.h>
+#include "ipv6calctypes.h"
+#include "libipv4addr.h"
+//#include "ipv6calc_typedefs.h"
+
+
+/* typedefs & defines */
+
 
 /* IPv6 anonymization */
 /* 
@@ -341,8 +346,6 @@ typedef struct {
 /* text representations -> libipv6addr.c */
 
 /* Registries */
-#include "libipv6calc.h"
-
 #define IPV6_ADDR_REGISTRY_6BONE	REGISTRY_6BONE
 #define IPV6_ADDR_REGISTRY_IANA		REGISTRY_IANA
 #define IPV6_ADDR_REGISTRY_APNIC	REGISTRY_APNIC

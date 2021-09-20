@@ -56,6 +56,9 @@
 #undef PACKAGE_VERSION
 #include "config.h"
 #include "libipv6calc.h"
+#include "ipv6calcoptions.h"
+#include "libipaddr.h"
+#include "databases/lib/libipv6calc_db_wrapper.h"
 
 /* features */
 int feature_zeroize = 1; // always supported

@@ -279,6 +279,7 @@ typedef struct {
 	uint32_t registry_may_not_have[IPV6CALC_FILTER_DB_REGISTRY_MAX];
 } s_ipv6calc_filter_db_registry;
 
+
 /* typeinfo filter structure */
 typedef struct {
 	int active;

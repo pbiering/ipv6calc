@@ -18,10 +18,8 @@
 #include "config.h"
 
 #include "libipv6calcdebug.h"
-#include "libipv6calc.h"
 
 #include "ipv6calcoptions.h"
-#include "ipv6calc_typedefs.h"
 
 #include "libipv6calc_db_wrapper.h"
 #include "libipv6calc_db_wrapper_MMDB.h"
@@ -30,6 +28,15 @@
 #include "libipv6calc_db_wrapper_DBIP2.h"
 #include "libipv6calc_db_wrapper_External.h"
 #include "libipv6calc_db_wrapper_BuiltIn.h"
+
+#include "libmac.h"
+#include "libipv4addr.h"
+#include "libipv6addr.h"
+#include "libipaddr.h"
+
+#include "ipv6calctypes.h"
+
+#include "libipv6calc.h"
 
 #ifdef DOMAIN
 // fallback for IP2Location.h < 8.0.0 where "DOMAIN" is defined
