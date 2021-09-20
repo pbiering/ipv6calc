@@ -63,7 +63,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV6_COUNTRYCODE_SOURCE=...   : Source of Country Code of IPv6 address\n");
 	fprintf(stderr, " IPV4_TYPE=...                 : type of IPv4 address (commata separated)\n");
 	fprintf(stderr, " ");
-	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv4addrtypestrings); i++ ) {
+	for (i = 0; i < ipv6calc_ipv4addrtypestrings_entries; i++ ) {
 		fprintf(stderr, " %s", ipv6calc_ipv4addrtypestrings[i].token);
 	};
 	fprintf(stderr, "\n");
@@ -675,7 +675,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		j = 0;
 
 		snprintf(tempstring, sizeof(tempstring), "%s", "ipv4");
-		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv4addrtypestrings); i++ ) {
+		for (i = 0; i < ipv6calc_ipv4addrtypestrings_entries; i++ ) {
 			if ((ipv4addrp->typeinfo & ipv6calc_ipv4addrtypestrings[i].number) != 0) {
 				snprintf(helpstring, sizeof(helpstring), "%s,%s", tempstring, ipv6calc_ipv4addrtypestrings[i].token);
 				snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
@@ -692,7 +692,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 		fprintf(stdout, "IPv4 address type: ");
 		j = 0;
-		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv4addrtypestrings); i++ ) {
+		for (i = 0; i < ipv6calc_ipv4addrtypestrings_entries; i++ ) {
 			if ((ipv4addrp->typeinfo & ipv6calc_ipv4addrtypestrings[i].number) != 0) {
 				if ( j != 0 ) { fprintf(stdout, ", "); };
 				fprintf(stdout, "%s", ipv6calc_ipv4addrtypestrings[i].token);

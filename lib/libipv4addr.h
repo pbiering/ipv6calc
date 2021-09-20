@@ -2,7 +2,7 @@
  * Project    : ipv6calc/lib
  * File       : libipv4addr.h
  * Version    : $Id$
- * Copyright  : 2002-2020 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Copyright  : 2002-2021 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -76,30 +76,6 @@ typedef struct {
 #define IPV4_ADDR_LISP				(uint32_t) 0x00010000U	/* IPv6 LISP (RFC6830) */
 #define IPV4_ADDR_LISP_PETR			(uint32_t) 0x00020000U	/* IPv6 LISP Proxy Egress Tunnel Routers (PETRY) Anycast */
 #define IPV4_ADDR_LISP_MAP_RESOLVER		(uint32_t) 0x00040000U	/* IPv6 LISP Map Resolver Anycast */
-
-
-/* text representation */
-/*@unused@*/ static const s_type ipv6calc_ipv4addrtypestrings[] = {
-	{ IPV4_ADDR_ANY			, "any" },
-	{ IPV4_ADDR_UNICAST		, "unicast" },
-	{ IPV4_ADDR_MULTICAST		, "multicast" },
-	{ IPV4_ADDR_ANYCAST		, "anycast" },
-	{ IPV4_ADDR_BROADCAST		, "broadcast" },
-	{ IPV4_ADDR_LOOPBACK		, "loopback" },
-	{ IPV4_ADDR_UNSPECIFIED		, "unspecified" },
-	{ IPV4_ADDR_UNKNOWN		, "unknown" },
-	{ IPV4_ADDR_RESERVED		, "reserved" },
-	{ IPV4_ADDR_ZEROCONF		, "zeroconf" },
-	{ IPV4_ADDR_SITELOCAL		, "site-local" },
-	{ IPV4_ADDR_ANONYMIZED		, "anonymized" },
-	{ IPV4_ADDR_ANONYMIZED_GEONAMEID, "anonymized-geonameid" },
-	{ IPV4_ADDR_GLOBAL		, "global" },
-	{ IPV4_ADDR_6TO4RELAY		, "6to4relay" },
-	{ IPV4_ADDR_LISP	 	, "lisp" },
-	{ IPV4_ADDR_LISP_PETR		, "lisp-proxyegresstunnelrouter-anycast" },
-	{ IPV4_ADDR_LISP_MAP_RESOLVER	, "lisp-mapresolver-anycast" },
-};
-
 
 /* Registries */
 #define IPV4_ADDR_REGISTRY_IANA		REGISTRY_IANA
@@ -199,6 +175,11 @@ typedef struct {
 #define ANON_METHOD_KEEPTYPEGEONAMEID_IPV4_REQ_DB   (IPV6CALC_DB_IPV4_TO_GEONAMEID)
 
 #endif
+
+/* references */
+extern const s_type ipv6calc_ipv4addrtypestrings[];
+
+extern const int ipv6calc_ipv4addrtypestrings_entries;
 
 
 /* prototypes */
