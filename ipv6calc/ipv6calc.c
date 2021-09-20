@@ -99,7 +99,6 @@ int main(int argc, char *argv[]) {
 	char resultstring2[IPV6CALC_STRING_MAX] = "";
 	char resultstring3[IPV6CALC_STRING_MAX] = "";
 	int retval = 1, i, j, lop, result;
-	extern int optopt;
 	uint32_t command = 0;
 	int bit_start = 0, bit_end = 0, force_prefix = 0;
 	char *input1 = NULL, *input2 = NULL;
