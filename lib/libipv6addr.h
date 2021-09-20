@@ -223,14 +223,16 @@ typedef struct {
 	uint8_t  test_mode;		/* address test mode */
 } ipv6calc_ipv6addr;
 
+
 /* IPv6 Address filter structure */
 typedef struct {
         int active;
         int addr_must_have_max;
         int addr_may_not_have_max;
-        ipv6calc_ipv6addr ipv6addr_must_have[IPV6CALC_FILTER_IPV4ADDR];
+        ipv6calc_ipv6addr ipv6addr_must_have[IPV6CALC_FILTER_IPV6ADDR];
         ipv6calc_ipv6addr ipv6addr_may_not_have[IPV6CALC_FILTER_IPV6ADDR];
 } s_ipv6calc_filter_addr_ipv6;
+
 
 /* IPv6 filter structure */
 typedef struct {
