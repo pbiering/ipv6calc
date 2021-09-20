@@ -32,6 +32,7 @@ char dbip2_db_dir[PATH_MAX] = DBIP2_DB;
 
 static const char* wrapper_dbip2_info = "DBIP2";
 
+
 /* database files */
 static const db_file_desc2 libipv6calc_db_wrapper_DBIP2_db_file_desc[] = {
 	// country (lite)
