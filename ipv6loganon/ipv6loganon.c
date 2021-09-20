@@ -476,7 +476,7 @@ static int anonymizetoken(char *resultstring, const size_t resultstring_length, 
 
 	DEBUGSECTION_BEGIN(DEBUG_ipv6loganon_general)
 		if (inputtype != FORMAT_undefined) {
-			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_formatstrings); i++) {
+			for (i = 0; i < ipv6calc_formatstrings_entries; i++) {
 				if (inputtype == ipv6calc_formatstrings[i].number) {
 					DEBUGPRINT_WA(DEBUG_ipv6loganon_general, "Found type: %s", ipv6calc_formatstrings[i].token);
 				};

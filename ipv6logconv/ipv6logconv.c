@@ -466,7 +466,7 @@ static int converttoken(char *resultstring, const size_t resultstring_length, co
 
 	DEBUGSECTION_BEGIN(DEBUG_ipv6logconv_processing)
 		if (inputtype != FORMAT_undefined) {
-			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_formatstrings); i++) {
+			for (i = 0; i < ipv6calc_formatstrings_entries; i++) {
 				if (inputtype == ipv6calc_formatstrings[i].number) {
 					DEBUGPRINT_WA(DEBUG_ipv6logconv_processing, "Found type: %s", ipv6calc_formatstrings[i].token);
 				};
