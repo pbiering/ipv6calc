@@ -27,61 +27,14 @@
 #define IPV6CALC_DB_GEOIP2_INTERNAL_FREE		0x00000001
 #define IPV6CALC_DB_GEOIP2_INTERNAL_COMM		0x00000002
 
-/*@unused@*/ static const db_file_desc2 libipv6calc_db_wrapper_GeoIP2_db_file_desc[] = {
-	// country (lite)
-	{ GeoIP2_DB_COUNTRY_LITE
-		, "GeoLite2-Country.mmdb"
-		, "IPv4/v6 CountryCode (FREE)"
-		, IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_IP_TO_GEONAMEID | IPV6CALC_DB_IP_TO_COUNTRY | IPV6CALC_DB_GEOIP
-		, IPV6CALC_DB_GEOIP2_INTERNAL_FREE
-	},
-
-	// city (lite)
-	{ GeoIP2_DB_CITY_LITE
-		, "GeoLite2-City.mmdb"
-		, "IPv4/v6 City (FREE)"
-		, IPV6CALC_DB_IP_TO_CITY | IPV6CALC_DB_IP_TO_REGION | IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_GEOIP | IPV6CALC_DB_IP_TO_GEONAMEID
-		, IPV6CALC_DB_GEOIP2_INTERNAL_FREE
-	},
-
-	// ASN (lite)
-	{ GeoIP2_DB_ASN
-		, "GeoLite2-ASN.mmdb"
-		, "IPv4/v6 ASN (FREE)"
-		, IPV6CALC_DB_IP_TO_AS | IPV6CALC_DB_GEOIP
-		, IPV6CALC_DB_GEOIP2_INTERNAL_FREE
-	},
-
-	// country
-	{ GeoIP2_DB_COUNTRY
-		, "Geo2-Country.mmdb"
-		, "IPv4/v6 CountryCode (COMM)"
-		, IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_IP_TO_GEONAMEID | IPV6CALC_DB_IP_TO_COUNTRY | IPV6CALC_DB_GEOIP
-		, IPV6CALC_DB_GEOIP2_INTERNAL_COMM
-	},
-
-	// city
-	{ GeoIP2_DB_CITY
-		, "Geo2-City.mmdb"
-		, "IPv4/v6 City (COMM)"
-		, IPV6CALC_DB_IP_TO_CITY | IPV6CALC_DB_IP_TO_REGION | IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_GEOIP | IPV6CALC_DB_IP_TO_GEONAMEID
-		, IPV6CALC_DB_GEOIP2_INTERNAL_COMM
-	},
-
-	// ISP
-	{ GeoIP2_DB_ISP
-		, "Geo2-ISP.mmdb"
-		, "IPv4/v6 ISP (COMM)"
-		, IPV6CALC_DB_IP_TO_AS | IPV6CALC_DB_GEOIP
-		, IPV6CALC_DB_GEOIP2_INTERNAL_COMM
-	},
-};
-
 
 // features
 extern uint32_t wrapper_features_GeoIP2;
 
 #endif
+
+
+/* prototypes */
 
 extern int         libipv6calc_db_wrapper_GeoIP2_wrapper_init(void);
 extern int         libipv6calc_db_wrapper_GeoIP2_wrapper_cleanup(void);
