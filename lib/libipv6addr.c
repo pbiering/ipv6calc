@@ -65,7 +65,9 @@ const s_type ipv6calc_ipv6addrtypestrings[] = {
 	{ IPV6_NEW_ADDR_IID_ISATAP	, "iid-isatap" },
 	{ IPV6_ADDR_IID_32_63_HAS_IPV4	, "iid-includes-ipv4" }
 };
+
 const int ipv6calc_ipv6addrtypestrings_entries = MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings);
+
 
 const s_type ipv6calc_ipv6addr_type2_strings[] = {
 	{ IPV6_ADDR_TYPE2_6RD		, "6rd" },
@@ -75,12 +77,13 @@ const s_type ipv6calc_ipv6addr_type2_strings[] = {
 	{ IPV6_ADDR_TYPE2_ANON_MASKED_PREFIX    , "anonymized-masked-prefix" },
 	{ IPV6_ADDR_TYPE2_ANONYMIZED_GEONAMEID  , "anonymized-geonameid" },
 };
+
 const int ipv6calc_ipv6addr_type2_strings_entries = MAXENTRIES_ARRAY(ipv6calc_ipv6addr_type2_strings);
 
 
 /* IID random limits */
 // this filter values detects 999.744 from 1.000.000 generated random (using privacy extension) IIDs (256 are not detected)
-const s_iid_statistics s_iid_statistics_ok_min = {
+static const s_iid_statistics s_iid_statistics_ok_min = {
 	0.249,		// fits to 100% of 1 million tested
 	6.275,		// fits to 100% of 1 million tested
 	{  4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	// fit to 100% of 1 million tested
@@ -90,7 +93,7 @@ const s_iid_statistics s_iid_statistics_ok_min = {
 	6	// fit to 1 million
 };
 
-const s_iid_statistics s_iid_statistics_ok_max = {
+static const s_iid_statistics s_iid_statistics_ok_max = {
 	2.5,		// fits to 1 million - 90 tested (100%: 4.016)
 	26.042,		// fits to 100% of 1 million tested
 	{ 16, 6, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	// fit to 1 million - 3 tested
