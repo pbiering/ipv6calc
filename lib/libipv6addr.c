@@ -29,6 +29,77 @@
 
 #include "../databases/lib/libipv6calc_db_wrapper.h"
 
+/* text representations */
+const s_type ipv6calc_ipv6addrtypestrings[] = {
+	{ IPV6_ADDR_ANY			, "unknown" },
+	{ IPV6_ADDR_UNICAST		, "unicast" },
+	{ IPV6_ADDR_MULTICAST		, "multicast" },
+	{ IPV6_ADDR_ANYCAST		, "anycast" },
+	{ IPV6_ADDR_LOOPBACK		, "loopback" },
+	{ IPV6_ADDR_LINKLOCAL		, "link-local" },
+	{ IPV6_ADDR_SITELOCAL		, "site-local" },
+	{ IPV6_ADDR_COMPATv4		, "compat-v4" },
+	{ IPV6_ADDR_MAPPED		, "mapped" },
+	{ IPV6_ADDR_RESERVED		, "reserved" },
+	{ IPV6_ADDR_ULUA		, "unique-local-unicast" },
+	{ IPV6_ADDR_ANONYMIZED_IID	, "anonymized-iid" },
+	{ IPV6_ADDR_ANONYMIZED_PREFIX	, "anonymized-prefix" },
+	{ IPV6_NEW_ADDR_6TO4		, "6to4" },
+	{ IPV6_NEW_ADDR_6BONE		, "6bone" },
+	{ IPV6_NEW_ADDR_AGU		, "global-unicast" },
+	{ IPV6_NEW_ADDR_UNSPECIFIED	, "unspecified" },
+	{ IPV6_NEW_ADDR_SOLICITED_NODE	, "solicited-node" },
+	{ IPV6_NEW_ADDR_PRODUCTIVE	, "productive" },
+	{ IPV6_NEW_ADDR_6TO4_MICROSOFT	, "6to4-microsoft" },
+	{ IPV6_NEW_ADDR_TEREDO		, "teredo" },
+	{ IPV6_NEW_ADDR_ORCHID		, "orchid" },
+	{ IPV6_NEW_ADDR_LINKLOCAL_TEREDO, "link-local-teredo" },
+	{ IPV6_NEW_ADDR_NAT64		, "nat64" },
+	{ IPV6_NEW_ADDR_IID_RANDOM	, "iid-random" },
+	{ IPV6_NEW_ADDR_IID		, "iid" },
+	{ IPV6_NEW_ADDR_IID_LOCAL	, "iid-local" },
+	{ IPV6_NEW_ADDR_IID_GLOBAL	, "iid-global" },
+	{ IPV6_NEW_ADDR_IID_TEREDO	, "iid-teredo" },
+	{ IPV6_NEW_ADDR_IID_EUI48	, "iid-eui48" },
+	{ IPV6_NEW_ADDR_IID_EUI64	, "iid-eui64" },
+	{ IPV6_NEW_ADDR_IID_ISATAP	, "iid-isatap" },
+	{ IPV6_ADDR_IID_32_63_HAS_IPV4	, "iid-includes-ipv4" }
+};
+const int ipv6calc_ipv6addrtypestrings_entries = MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings);
+
+const s_type ipv6calc_ipv6addr_type2_strings[] = {
+	{ IPV6_ADDR_TYPE2_6RD		, "6rd" },
+	{ IPV6_ADDR_TYPE2_LISP	 		, "lisp" },
+	{ IPV6_ADDR_TYPE2_LISP_PETR		, "lisp-proxyegresstunnelrouter-anycast" },
+	{ IPV6_ADDR_TYPE2_LISP_MAP_RESOLVER	, "lisp-mapresolver-anycast" },
+	{ IPV6_ADDR_TYPE2_ANON_MASKED_PREFIX    , "anonymized-masked-prefix" },
+	{ IPV6_ADDR_TYPE2_ANONYMIZED_GEONAMEID  , "anonymized-geonameid" },
+};
+const int ipv6calc_ipv6addr_type2_strings_entries = MAXENTRIES_ARRAY(ipv6calc_ipv6addr_type2_strings);
+
+
+/* IID random limits */
+// this filter values detects 999.744 from 1.000.000 generated random (using privacy extension) IIDs (256 are not detected)
+const s_iid_statistics s_iid_statistics_ok_min = {
+	0.249,		// fits to 100% of 1 million tested
+	6.275,		// fits to 100% of 1 million tested
+	{  4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	// fit to 100% of 1 million tested
+	{  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	// fit to 100% of 1 million tested
+	{  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	// default
+	{  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // default
+	6	// fit to 1 million
+};
+
+const s_iid_statistics s_iid_statistics_ok_max = {
+	2.5,		// fits to 1 million - 90 tested (100%: 4.016)
+	26.042,		// fits to 100% of 1 million tested
+	{ 16, 6, 3, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},	// fit to 1 million - 3 tested
+	{  2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2},	// TODO
+	{  7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7},	// fit to 1 million - 38 tested
+	{  3, 4, 3, 3, 4, 5, 4, 5, 5, 5, 6, 6, 6, 7, 7, 6, 6, 7, 6, 6, 6, 5, 5, 5, 4, 4, 4, 4, 4, 3, 2},	// fit to 1 million
+	15	// fit to 1 million
+};
+
 
 /*
  * function returns an octet of an IPv6 address

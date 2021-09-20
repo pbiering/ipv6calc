@@ -506,7 +506,7 @@ static int converttoken(char *resultstring, const size_t resultstring_length, co
 
 				/* scope of IPv6 address */
 				/* init retval */
-				for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++) {
+				for (i = 0; i < ipv6calc_ipv6addrtypestrings_entries; i++) {
 					if ( ipv6calc_ipv6addrtypestrings[i].number == IPV6_ADDR_ANY ) {
 						retval = i;
 						break;
@@ -515,7 +515,7 @@ static int converttoken(char *resultstring, const size_t resultstring_length, co
 				typeinfo_test = ipv6addr.typeinfo & (IPV6_NEW_ADDR_AGU | IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_ADDR_MAPPED | IPV6_ADDR_COMPATv4 | IPV6_ADDR_ULUA);
 				if ( typeinfo_test != 0 ) {
 					/* get string */
-					for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++) {
+					for (i = 0; i < ipv6calc_ipv6addrtypestrings_entries; i++) {
 						if ( (typeinfo_test & ipv6calc_ipv6addrtypestrings[i].number) != 0 ) {
 							retval = i;
 							break;
@@ -527,7 +527,7 @@ static int converttoken(char *resultstring, const size_t resultstring_length, co
 
 				/* type of global IPv6 address */
 				/* init retval */
-				for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++) {
+				for (i = 0; i < ipv6calc_ipv6addrtypestrings_entries; i++) {
 					if ( ipv6calc_ipv6addrtypestrings[i].number == IPV6_ADDR_ANY ) {
 						retval = i;
 						break;
@@ -540,7 +540,7 @@ static int converttoken(char *resultstring, const size_t resultstring_length, co
 						snprintf(resultstring, resultstring_length, "%s", tempstring);
 					} else {
 						/* get string */
-						for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++) {
+						for (i = 0; i < ipv6calc_ipv6addrtypestrings_entries; i++) {
 							if ( (typeinfo_test & ipv6calc_ipv6addrtypestrings[i].number) != 0 ) {
 								retval = i;
 								break;

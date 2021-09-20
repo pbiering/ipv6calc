@@ -799,7 +799,7 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			fprintf(stderr, "\n");
 			fprintf(stderr, "  IPv6 address filter tokens:\n");
 			fprintf(stderr, "   ipv6 ");
-			for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
+			for (i = 0; i < ipv6calc_ipv6addrtypestrings_entries; i++ ) {
 				fprintf(stderr, " %s", ipv6calc_ipv6addrtypestrings[i].token);
 			};
 			fprintf(stderr, "\n");

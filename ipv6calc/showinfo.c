@@ -46,7 +46,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, "\nAvailable tokens for machine-readable output (printed in one line):\n");
 	fprintf(stderr, " IPV6_TYPE=...                 : type of IPv6 address (commata separated)\n");
 	fprintf(stderr, " ");
-	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
+	for (i = 0; i < ipv6calc_ipv6addrtypestrings_entries; i++ ) {
 		fprintf(stderr, " %s", ipv6calc_ipv6addrtypestrings[i].token);
 	};
 	fprintf(stderr, "\n");
@@ -1052,11 +1052,11 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 
 	DEBUGPRINT_WA(DEBUG_showinfo, "typeinfo 0x%08x-0x%08x (from given address)", (unsigned int) ipv6addrp->typeinfo, (unsigned int) ipv6addrp->typeinfo2);
 
-	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
+	for (i = 0; i < ipv6calc_ipv6addrtypestrings_entries; i++ ) {
 		DEBUGPRINT_WA(DEBUG_showinfo, "test1: %08x : %s", (unsigned int) ipv6calc_ipv6addrtypestrings[i].number, ipv6calc_ipv6addrtypestrings[i].token);
 	};	
 
-	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addr_type2_strings); i++ ) {
+	for (i = 0; i < ipv6calc_ipv6addr_type2_strings_entries; i++ ) {
 		DEBUGPRINT_WA(DEBUG_showinfo, "test2: %08x : %s", (unsigned int) ipv6calc_ipv6addr_type2_strings[i].number, ipv6calc_ipv6addr_type2_strings[i].token);
 	};
 
@@ -1109,13 +1109,13 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 
 		j = 0;
 		snprintf(tempstring, sizeof(tempstring), "%s", "ipv6");
-		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
+		for (i = 0; i < ipv6calc_ipv6addrtypestrings_entries; i++ ) {
 			if ((ipv6addrp->typeinfo & ipv6calc_ipv6addrtypestrings[i].number) != 0) {
 				snprintf(helpstring, sizeof(helpstring), "%s,%s", tempstring, ipv6calc_ipv6addrtypestrings[i].token);
 				snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
 			};
 		};
-		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addr_type2_strings); i++ ) {
+		for (i = 0; i < ipv6calc_ipv6addr_type2_strings_entries; i++ ) {
 			if ((ipv6addrp->typeinfo2 & ipv6calc_ipv6addr_type2_strings[i].number) != 0) {
 				snprintf(helpstring, sizeof(helpstring), "%s,%s", tempstring, ipv6calc_ipv6addr_type2_strings[i].token);
 				snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
@@ -1125,14 +1125,14 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	} else {
 		fprintf(stdout, "Address type: ");
 		j = 0;
-		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addrtypestrings); i++ ) {
+		for (i = 0; i < ipv6calc_ipv6addrtypestrings_entries; i++ ) {
 			if ((ipv6addrp->typeinfo & ipv6calc_ipv6addrtypestrings[i].number) != 0) {
 				if ( j != 0 ) { fprintf(stdout, ", "); };
 				fprintf(stdout, "%s", ipv6calc_ipv6addrtypestrings[i].token);
 				j = 1;
 			};
 		};
-		for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_ipv6addr_type2_strings); i++ ) {
+		for (i = 0; i < ipv6calc_ipv6addr_type2_strings_entries; i++ ) {
 			if ((ipv6addrp->typeinfo2 & ipv6calc_ipv6addr_type2_strings[i].number) != 0) {
 				if ( j != 0 ) { fprintf(stdout, ", "); };
 				fprintf(stdout, "%s", ipv6calc_ipv6addr_type2_strings[i].token);
