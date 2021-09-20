@@ -30,7 +30,7 @@ LDFLAGS_EXTRA_STATIC = @LDFLAGS_EXTRA_STATIC@
 OBJS	= ipv6calc.o showinfo.o ipv6calchelp_local.o
 
 # splint
-SPLINT_OPT_OUTSIDE = -warnposix -nullassign -uniondef -compdef -usedef -formatconst -exportlocal
+SPLINT_OPT_OUTSIDE = +posixlib -nullassign -uniondef -compdef -usedef -formatconst -exportlocal -preproc
 #SPLINT_OPT_OUTSIDE = -uniondef +matchanyintegral --nullassign +ignoresigns -compdef -usedef -modobserver -formatconst -warnposix -exportlocal
 SPLINT_TODO_LATER = -unrecog  -retvalint
 
