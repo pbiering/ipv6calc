@@ -1207,23 +1207,40 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 			ipaddr.addr[0] = value_first_00_31;
 
 			// convert start/end into prefix length
-			delta = value_last_00_31 - value_first_00_31;
-			prefixlength = 32;
-			mask = 0x0000001;
-			while (prefixlength > 0) {
-				if (delta < mask) {
-					break;
+			delta = value_last_00_31 - value_first_00_31 + 1;
+
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "found delta (main): %u", delta);
+
+			/* backfill with smaller segments if necessary */
+			while (delta > 0) {
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "found delta: %u", delta);
+				prefixlength = 32;
+				mask = 0x0000001;
+				while (prefixlength > 0) {
+					if (delta < mask) {
+						break;
+					};
+
+					mask <<= 1;
+					prefixlength--;
 				};
 
-				mask <<= 1;
-				prefixlength--;
+				mask >>= 1;
+				prefixlength++;
+
+				ipaddr.prefixlength = prefixlength;
+				ipaddr.flag_valid = 1;
+				ipaddr.flag_prefixuse = 1;
+
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "# IPv4 start=%08x end=%08x prefixlength=%d CC: %s", value_first_00_31, value_last_00_31, prefixlength, resultstring);
+
+				libipaddr_ipaddrstruct_to_string(&ipaddr, tempstring, sizeof(tempstring), formatoptions);
+				fprintf(stdout, "%s\n", tempstring);
+
+				delta -= mask;
+				ipaddr.addr[0] += mask;
 			};
 
-			ipaddr.prefixlength = prefixlength;
-			ipaddr.flag_valid = 1;
-			ipaddr.flag_prefixuse = 1;
-
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "# IPv4 start=%08x end=%08x prefixlength=%d CC: %s", value_first_00_31, value_last_00_31, prefixlength, resultstring);
 			break;
 
 		    case IPV6CALC_PROTO_IPV6:
@@ -1266,11 +1283,11 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 			ipaddr.flag_valid = 1;
 			ipaddr.flag_prefixuse = 1;
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "# IPv6 prefix=%08x%08x mask=%08x%08x prefixlength=%d CC: %s", value_first_00_31, value_first_32_63, value_last_00_31, value_last_32_63, prefixlength, resultstring);
+
+			libipaddr_ipaddrstruct_to_string(&ipaddr, tempstring, sizeof(tempstring), formatoptions);
+			fprintf(stdout, "%s\n", tempstring);
 			break;
 		};
-
-		libipaddr_ipaddrstruct_to_string(&ipaddr, tempstring, sizeof(tempstring), formatoptions);
-		fprintf(stdout, "%s\n", tempstring);
 	};
 
 
