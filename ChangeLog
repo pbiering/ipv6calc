@@ -10,6 +10,9 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20210921/PB:
+	*.c/*.h: complete reorg of static includes in *.h to avoid private copies where possible
+
 20210919/PB:
 	internal databases: update
 	lib/libipaddr.c: copy also flags/prefixlengths
