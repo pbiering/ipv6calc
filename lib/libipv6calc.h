@@ -16,8 +16,6 @@
 #include "ipv6calctypes.h"
 
 
-/* typedefs */
-
 /* Registries (main registries must below 8 for anonymization mapping) */
 #define REGISTRY_APNIC        0x02
 #define REGISTRY_RIPENCC      0x03
