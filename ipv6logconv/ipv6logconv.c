@@ -242,7 +242,7 @@ int main(int argc,char *argv[]) {
 	/* call lineparser */
 	lineparser(outputtype);
 
-	libipv6calc_db_wrapper_cleanup();
+	libipv6calc_cleanup();
 
 	exit(EXIT_SUCCESS);
 };

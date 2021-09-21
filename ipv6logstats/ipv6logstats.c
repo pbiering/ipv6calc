@@ -2,7 +2,7 @@
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
  * Version    : $Id$
- * Copyright  : 2003-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2003-2021 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile statistics
@@ -306,7 +306,7 @@ int main(int argc,char *argv[]) {
 	/* call lineparser */
 	lineparser();
 
-	libipv6calc_db_wrapper_cleanup();
+	libipv6calc_cleanup();
 
 	exit(EXIT_SUCCESS);
 };

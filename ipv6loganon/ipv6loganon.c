@@ -294,7 +294,7 @@ int main(int argc,char *argv[]) {
 		fflush(stdout);
 	};
 
-	libipv6calc_db_wrapper_cleanup();
+	libipv6calc_cleanup();
 
 	exit(EXIT_SUCCESS);
 };

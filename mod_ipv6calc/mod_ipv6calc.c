@@ -2,7 +2,7 @@
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
  * Version    : $Id$
- * Copyright  : 2015-2020 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2015-2021 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc Apache module
@@ -350,7 +350,7 @@ static int ipv6calc_support_init(server_rec *s) {
  */
 static apr_status_t ipv6calc_cleanup(void *cfgdata) {
 	// cleanup ipv6calc database wrapper
-	libipv6calc_db_wrapper_cleanup();
+	libipv6calc_cleanup();
 	return APR_SUCCESS;
 };
 

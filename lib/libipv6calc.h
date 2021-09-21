@@ -100,6 +100,8 @@ extern const char *libipv6calc_registry_string_by_num(const int registry);
 
 extern int libipv6calc_bitcount_uint32_t(const uint32_t value);
 
+extern void libipv6calc_cleanup();
+
 extern       uint32_t libipv6calc_lib_version_numeric(void);
 extern const char    *libipv6calc_lib_version_string(void);
 extern       uint32_t libipv6calc_api_version_numeric(void);

@@ -772,11 +772,21 @@ int libipv6calc_bitcount_uint32_t(const uint32_t value) {
 };
 
 /*
+ * cleanup
+ */
+void libipv6calc_cleanup() {
+	libipv6calc_db_wrapper_cleanup();
+};
+
+
+/*
  * return library version numeric
  */
 uint32_t libipv6calc_lib_version_numeric(void) {
 	return(IPV6CALC_PACKAGE_VERSION_NUMERIC);
 }; 
+
+
 
 /*
  * return library version as string
@@ -786,12 +796,14 @@ const char *libipv6calc_lib_version_string(void) {
 
 };
 
+
 /*
  * return API version numeric
  */
 uint32_t libipv6calc_api_version_numeric(void) {
 	return(IPV6CALC_API_VERSION_NUMERIC);
 };
+
 
 /*
  * return API version as string

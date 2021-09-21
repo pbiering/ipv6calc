@@ -2205,7 +2205,7 @@ RESULT_print:
 	};
 
 RESULT_none:
-	libipv6calc_db_wrapper_cleanup();
+	libipv6calc_cleanup();
 
 	exit(retval);
 };
