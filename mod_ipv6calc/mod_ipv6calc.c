@@ -59,6 +59,7 @@
 #include "ipv6calcoptions.h"
 #include "libipaddr.h"
 #include "libipv6calc_db_wrapper.h"
+#include "libipv6calcdebug.h"
 
 /* features */
 int feature_zeroize = 1; // always supported
