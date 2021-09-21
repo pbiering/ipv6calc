@@ -59,6 +59,7 @@ all:
 
 $(OBJS):	libipv6calcdebug.h  \
 		libipv6calc.h       \
+		libipv6calc_filter.h \
 		libipv6addr.h       \
 		libipv4addr.h       \
 		libipaddr.h         \
@@ -71,6 +72,7 @@ $(OBJS):	libipv6calcdebug.h  \
 		librfc2874.h        \
 		librfc3041.h        \
 		librfc3056.h        \
+		librfc5569.h        \
 		librfc6052.h        \
 		libifinet6.h        \
 		ipv6calchelp.h      \
