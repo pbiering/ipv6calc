@@ -231,3 +231,5 @@ extern uint16_t libipv4addr_cc_index_by_addr(const ipv6calc_ipv4addr *ipv4addrp,
 extern uint32_t libipv4addr_as_num32_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsigned int *data_source_ptr);
 extern uint32_t libipv4addr_GeonameID_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsigned int *data_source_ptr, unsigned int *GeonameID_type_ptr);
 extern int libipv4addr_registry_num_by_addr(const ipv6calc_ipv4addr *ipv4addrp);
+
+extern void libipv4addr_cleanup();

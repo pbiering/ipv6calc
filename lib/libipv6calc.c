@@ -771,10 +771,13 @@ int libipv6calc_bitcount_uint32_t(const uint32_t value) {
 	return(count);
 };
 
+
 /*
  * cleanup
  */
 void libipv6calc_cleanup() {
+	DEBUGPRINT_NA(DEBUG_libipv6calc, "called");
+	libipv4addr_cleanup();
 	libipv6calc_db_wrapper_cleanup();
 };
 

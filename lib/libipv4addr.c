@@ -23,6 +23,13 @@
 
 #include "libipv6calc_db_wrapper.h"
 
+/* regex cache */
+#define LIBIPV4ADDR_REGEX_CACHE_MAX	8
+#define LIBIPV4ADDR_REGEX_IPV4_OCTAL	0
+
+static regex_t libipv4addr_regex_cache_entry[LIBIPV4ADDR_REGEX_CACHE_MAX];
+static int     libipv4addr_regex_cache_valid[LIBIPV4ADDR_REGEX_CACHE_MAX];
+
 
 /* text representation */
 const s_type ipv6calc_ipv4addrtypestrings[] = {
@@ -466,7 +473,6 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const siz
 	unsigned int compat[5], i;
 	uint32_t typeinfo;
 	const char *p;
-	regex_t regex;
 	int revalue;
 
 	if (resultstring_length > 0)
@@ -482,13 +488,18 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const siz
 	memset(compat, 0, sizeof(compat));
 
 	// catch octal notation
-	revalue = regcomp(&regex, "^0[0-7]{3}\\.0[0-7]{3}\\.0[0-7]{3}\\.0[0-7]{3}(/[0-9]{1,2})?$", REG_EXTENDED);
-	if (revalue != 0) {
-		fprintf(stderr, "FATAL - regular expression compilation issue");
-		exit(1);
+	if (libipv4addr_regex_cache_valid[LIBIPV4ADDR_REGEX_IPV4_OCTAL] == 0) {
+		// compile and store in cache
+		revalue = regcomp(&libipv4addr_regex_cache_entry[LIBIPV4ADDR_REGEX_IPV4_OCTAL], "^0[0-7]{3}\\.0[0-7]{3}\\.0[0-7]{3}\\.0[0-7]{3}(/[0-9]{1,2})?$", REG_EXTENDED);
+		if (revalue != 0) {
+			fprintf(stderr, "FATAL - regular expression compilation issue");
+			exit(1);
+		};
+
+		libipv4addr_regex_cache_valid[LIBIPV4ADDR_REGEX_IPV4_OCTAL] = 1;
 	};
 
-	if (regexec(&regex, addrstring, 0 , NULL, 0) == 0) {
+	if (regexec(&libipv4addr_regex_cache_entry[LIBIPV4ADDR_REGEX_IPV4_OCTAL], addrstring, 0 , NULL, 0) == 0) {
 		if (sscanf(addrstring, "0%3o.0%3o.0%3o.0%3o/%2d", &compat[0], &compat[1], &compat[2], &compat[3], &compat[4]) == 5) {
 			// IPv4 address in octal format separated by . with prefix length
 			in_prefix_len = 1;
@@ -498,7 +509,6 @@ int addr_to_ipv4addrstruct(const char *addrstring, char *resultstring, const siz
 			goto END_addr_to_ipv4addrstruct;
 		};
 	};
-	regfree(&regex);
 
 	// standard but potentially shortened notation
 	for (p = addrstring, i = 0; *p && i < (in_prefix_len ? 5 : 4); p++)
@@ -1808,4 +1818,17 @@ uint32_t libipv4addr_GeonameID_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsig
 	};
 
 	return(GeonameID);
+};
+
+
+/* cleanup */
+void libipv4addr_cleanup() {
+	DEBUGPRINT_NA(DEBUG_libipv4addr, "called");
+
+	for (int i = 0; i < LIBIPV4ADDR_REGEX_CACHE_MAX; i++) {
+		if (libipv4addr_regex_cache_valid[i]) {
+			DEBUGPRINT_WA(DEBUG_libipv4addr, "free regex cache entry: %d", i);
+			regfree(&libipv4addr_regex_cache_entry[i]);
+		};
+	};
 };
