@@ -1105,12 +1105,32 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 		key_format = IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x2;
 
 		if (filter_master->filter_ipv4addr.active == 0) {
-			ERRORPRINT_NA("no IPv4 filter provided (ipv4.db.cc=<CountryCode>)");
+			ERRORPRINT_NA("no IPv4 filter provided (-E ...)");
 			return (1);
 		};
 
 		if (filter_master->filter_ipv4addr.filter_db_cc.active == 0) {
-			ERRORPRINT_NA("no IPv4 Database CountryCode filter provided (ipv4.db.cc=<CountryCode>)");
+			ERRORPRINT_NA("no IPv4 Database CountryCode filter provided (-E ipv4.db.cc=<CountryCode>)");
+			return (1);
+		};
+
+		if (filter_master->filter_ipv4addr.filter_db_asn.active != 0) {
+			ERRORPRINT_NA("IPv4 ASN filter currently not supported for database dump");
+			return (1);
+		};
+
+		if (filter_master->filter_ipv4addr.filter_db_registry.active != 0) {
+			ERRORPRINT_NA("IPv4 Registry filter currently not supported for database dump");
+			return (1);
+		};
+
+		if (filter_master->filter_ipv4addr.filter_typeinfo.active != 0) {
+			ERRORPRINT_NA("IPv4 TypeInfo filter currently not supported for database dump");
+			return (1);
+		};
+
+		if (filter_master->filter_ipv4addr.filter_addr.active != 0) {
+			ERRORPRINT_NA("IPv4 Address filter currently not supported for database dump");
 			return (1);
 		};
 
@@ -1124,12 +1144,37 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 		key_format = IPV6CALC_DB_LOOKUP_DATA_DBD_FORMAT_SEMICOLON_SEP_HEX_32x4;
 
 		if (filter_master->filter_ipv6addr.active == 0) {
-			ERRORPRINT_NA("no IPv6 filter provided (ipv6.db.cc=<CountryCode>)");
+			ERRORPRINT_NA("no IPv6 filter provided (-E ...)");
 			return (1);
 		};
 
 		if (filter_master->filter_ipv6addr.filter_db_cc.active == 0) {
-			ERRORPRINT_NA("no IPv6 Database CountryCode filter provided (ipv6.db.cc=<CountryCode>)");
+			ERRORPRINT_NA("no IPv6 Database CountryCode filter provided (-E ipv6.db.cc=<CountryCode>)");
+			return (1);
+		};
+
+		if (filter_master->filter_ipv6addr.filter_db_asn.active != 0) {
+			ERRORPRINT_NA("IPv6 ASN filter currently not supported for database dump");
+			return (1);
+		};
+
+		if (filter_master->filter_ipv6addr.filter_db_registry.active != 0) {
+			ERRORPRINT_NA("IPv6 Registry filter currently not supported for database dump");
+			return (1);
+		};
+
+		if (filter_master->filter_ipv6addr.filter_typeinfo.active != 0) {
+			ERRORPRINT_NA("IPv6 TypeInfo filter currently not supported for database dump");
+			return (1);
+		};
+
+		if (filter_master->filter_ipv6addr.filter_typeinfo2.active != 0) {
+			ERRORPRINT_NA("IPv6 TypeInfo filter currently not supported for database dump");
+			return (1);
+		};
+
+		if (filter_master->filter_ipv6addr.filter_addr.active != 0) {
+			ERRORPRINT_NA("IPv6 Address filter currently not supported for database dump");
 			return (1);
 		};
 
@@ -1197,6 +1242,7 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 
 		switch (selector) {
 		    case IPV6CALC_PROTO_IPV4:
+			// countrycode shortcut filter
 			if (libipv6calc_db_cc_filter(cc_index, &filter_master->filter_ipv4addr.filter_db_cc) > 0) {
 				continue;
 			};
@@ -1259,6 +1305,7 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 			break;
 
 		    case IPV6CALC_PROTO_IPV6:
+			// countrycode shortcut filter
 			if (libipv6calc_db_cc_filter(cc_index, &filter_master->filter_ipv6addr.filter_db_cc) > 0) {
 				continue;
 			};

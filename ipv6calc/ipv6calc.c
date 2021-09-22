@@ -826,7 +826,7 @@ int main(int argc, char *argv[]) {
 
 	if (action == ACTION_db_dump) {
 		if ((filter_master.filter_ipv4addr.active == 0) && (filter_master.filter_ipv6addr.active == 0)) {
-			fprintf(stderr, "ipv6calc action 'dbdump' require a valid IPv4 or IPv6 filter\n");
+			fprintf(stderr, "ipv6calc action 'dbdump' require a valid IPv4 or IPv6 filter (see option -E ...)\n");
 			exit(EXIT_FAILURE);
 		};
 
