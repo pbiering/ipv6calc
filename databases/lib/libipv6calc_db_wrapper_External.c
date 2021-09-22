@@ -1207,38 +1207,53 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 			ipaddr.addr[0] = value_first_00_31;
 
 			// convert start/end into prefix length
-			delta = value_last_00_31 - value_first_00_31 + 1;
+			delta = value_last_00_31 - value_first_00_31;
 
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "found delta (main): %u", delta);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "# IPv4 start=0x%08x end=0x%08x CC: %s", value_first_00_31, value_last_00_31, resultstring);
 
-			/* backfill with smaller segments if necessary */
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "entry (main   ): ipv4=0x%08x delta=0x%08x", ipaddr.addr[0], delta);
+
+			// backfill with smaller segments if necessary
+			int split = 0;
 			while (delta > 0) {
-				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "found delta: %u", delta);
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "entry (analzye): ipv4=0x%08x delta=0x%08x split=%d", ipaddr.addr[0], delta, split);
+				// calculate base mask from delta
 				prefixlength = 32;
-				mask = 0x0000001;
-				while (prefixlength > 0) {
-					if (delta < mask) {
-						break;
-					};
-
+				mask = 0xffffffff;
+				while (delta >= ~mask) {
 					mask <<= 1;
 					prefixlength--;
 				};
-
-				mask >>= 1;
+				mask = ~((~mask) >> 1);
 				prefixlength++;
+
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "entry (check  ): ipv4=0x%08x delta=0x%08x split=%d mask=0x%08x prefixlength=%d", ipaddr.addr[0], delta, split, mask, prefixlength);
+
+				// check whether mask is aligned
+				while ((ipaddr.addr[0] & mask) != ipaddr.addr[0]) {
+					// increase mask/prefixlength
+					mask = ~((~mask) >> 1);
+					prefixlength++;
+                                };
 
 				ipaddr.prefixlength = prefixlength;
 				ipaddr.flag_valid = 1;
 				ipaddr.flag_prefixuse = 1;
 
-				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "# IPv4 start=%08x end=%08x prefixlength=%d CC: %s", value_first_00_31, value_last_00_31, prefixlength, resultstring);
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "entry (aligned): ipv4=0x%08x delta=0x%08x split=%d mask=0x%08x prefixlength=%d", ipaddr.addr[0], delta, split, mask, prefixlength);
 
 				libipaddr_ipaddrstruct_to_string(&ipaddr, tempstring, sizeof(tempstring), formatoptions);
 				fprintf(stdout, "%s\n", tempstring);
 
-				delta -= mask;
-				ipaddr.addr[0] += mask;
+				delta -= ~mask;
+				if (delta == 0) {
+					// all covered, finished
+					break;
+				};
+
+				delta--;
+				ipaddr.addr[0] += ~mask + 1;
+				split++;
 			};
 
 			break;
