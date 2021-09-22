@@ -2289,7 +2289,7 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 				// switch to prefix anonymization
 				if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_6BONE) != 0) {
 					DEBUGPRINT_NA(DEBUG_libipv6addr, "IPv6 is 6bone unicast, special prefix anonymization");
-					cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + IPV6_ADDR_REGISTRY_6BONE;
+					cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + REGISTRY_6BONE;
 
 					CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
 					as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, NULL);
@@ -3385,7 +3385,7 @@ uint16_t libipv6addr_cc_index_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsign
 				DEBUGPRINT_NA(DEBUG_libipv6addr, "DB feature missing: DB_IPV4_TO_CC");
 			};
 		} else if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_6BONE) != 0) {
-			cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + IPV6_ADDR_REGISTRY_6BONE;
+			cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + REGISTRY_6BONE;
 		} else if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_ORCHID) != 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6addr, "ORCHID has no country");
 			goto END_libipv6addr_cc_index_by_addr;
@@ -3513,7 +3513,7 @@ END_libipv6addr_as_num32_by_addr:
  * out: registry number
  */
 int libipv6addr_registry_num_by_addr(const ipv6calc_ipv6addr *ipv6addrp) {
-	int registry = IPV6_ADDR_REGISTRY_UNKNOWN;
+	int registry = REGISTRY_UNKNOWN;
 	uint16_t cc_index;
 	uint32_t as_num32;
 	uint32_t geonameid_type;

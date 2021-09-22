@@ -82,15 +82,8 @@ typedef struct {
 #define IPV4_ADDR_LISP_PETR			(uint32_t) 0x00020000U	/* IPv6 LISP Proxy Egress Tunnel Routers (PETRY) Anycast */
 #define IPV4_ADDR_LISP_MAP_RESOLVER		(uint32_t) 0x00040000U	/* IPv6 LISP Map Resolver Anycast */
 
-/* Registries */
-#define IPV4_ADDR_REGISTRY_IANA		REGISTRY_IANA
-#define IPV4_ADDR_REGISTRY_APNIC	REGISTRY_APNIC
-#define IPV4_ADDR_REGISTRY_ARIN		REGISTRY_ARIN
-#define IPV4_ADDR_REGISTRY_RIPENCC	REGISTRY_RIPENCC
-#define IPV4_ADDR_REGISTRY_LACNIC	REGISTRY_LACNIC
-#define IPV4_ADDR_REGISTRY_AFRINIC	REGISTRY_AFRINIC
-#define IPV4_ADDR_REGISTRY_RESERVED	REGISTRY_RESERVED
-#define IPV4_ADDR_REGISTRY_UNKNOWN	REGISTRY_UNKNOWN
+/* text representations -> libipv4addr.c */
+
 
 /* IPv4 address anonymization type "keep-type-asn-cc"
  *  Global IPv4 addresses are anonymized by storing country code and AS number

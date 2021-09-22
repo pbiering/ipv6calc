@@ -712,7 +712,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Given IPv4 address: %08x", (unsigned int) ipv4);
 
-	int result = IPV4_ADDR_REGISTRY_UNKNOWN;
+	int result = REGISTRY_UNKNOWN;
 
 #ifdef SUPPORT_DB_IPV4_REG
 	int match = -1;
@@ -737,7 +737,7 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv4addr(const ipv6calc_ipv4a
 		BUILTIN_DB_USAGE_MAP_TAG(BUILTIN_DB_IPV4_REGISTRY);
 	};
 
-	if (result == IPV4_ADDR_REGISTRY_UNKNOWN) {
+	if (result == REGISTRY_UNKNOWN) {
 		// IANA fallback
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Nothing found in dbipv4addr_assignment, fallback now to dbipv4addr_assignment_iana");
 
@@ -888,10 +888,10 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6a
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "Given ipv6 prefix: %08x%08x", (unsigned int) ipv6_00_31, (unsigned int) ipv6_32_63);
 
 	if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_6BONE) != 0) {
-		return(IPV6_ADDR_REGISTRY_6BONE);
+		return(REGISTRY_6BONE);
 	};
 
-	int result = IPV6_ADDR_REGISTRY_UNKNOWN;
+	int result = REGISTRY_UNKNOWN;
 
 #ifdef SUPPORT_DB_IPV6_REG
 	int match = -1;

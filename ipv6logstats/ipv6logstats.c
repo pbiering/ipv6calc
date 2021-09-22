@@ -576,25 +576,25 @@ static void lineparser(void) {
 
 					if (stat_registry_base > 0) {
 						switch (registry) {
-							case IPV4_ADDR_REGISTRY_IANA:
+							case REGISTRY_IANA:
 								stat_inc(stat_registry_base + REGISTRY_IANA);
 								break;
-							case IPV4_ADDR_REGISTRY_APNIC:
+							case REGISTRY_APNIC:
 								stat_inc(stat_registry_base + REGISTRY_APNIC);
 								break;
-							case IPV4_ADDR_REGISTRY_ARIN:
+							case REGISTRY_ARIN:
 								stat_inc(stat_registry_base + REGISTRY_ARIN);
 								break;
-							case IPV4_ADDR_REGISTRY_RIPENCC:
+							case REGISTRY_RIPENCC:
 								stat_inc(stat_registry_base + REGISTRY_RIPENCC);
 								break;
-							case IPV4_ADDR_REGISTRY_LACNIC:
+							case REGISTRY_LACNIC:
 								stat_inc(stat_registry_base + REGISTRY_LACNIC);
 								break;
-							case IPV4_ADDR_REGISTRY_AFRINIC:
+							case REGISTRY_AFRINIC:
 								stat_inc(stat_registry_base + REGISTRY_AFRINIC);
 								break;
-							case IPV4_ADDR_REGISTRY_RESERVED:
+							case REGISTRY_RESERVED:
 								stat_inc(stat_registry_base + REGISTRY_RESERVED);
 								break;
 							default:
@@ -628,28 +628,28 @@ static void lineparser(void) {
 					registry = libipv6addr_registry_num_by_addr(&ipv6addr);
 
 					switch (registry) {
-						case IPV6_ADDR_REGISTRY_6BONE:
+						case REGISTRY_6BONE:
 							stat_inc(STATS_IPV6_6BONE);
 							break;
-						case IPV6_ADDR_REGISTRY_IANA:
+						case REGISTRY_IANA:
 							stat_inc(STATS_IPV6_IANA);
 							break;
-						case IPV6_ADDR_REGISTRY_APNIC:
+						case REGISTRY_APNIC:
 							stat_inc(STATS_IPV6_APNIC);
 							break;
-						case IPV6_ADDR_REGISTRY_ARIN:
+						case REGISTRY_ARIN:
 							stat_inc(STATS_IPV6_ARIN);
 							break;
-						case IPV6_ADDR_REGISTRY_RIPENCC:
+						case REGISTRY_RIPENCC:
 							stat_inc(STATS_IPV6_RIPENCC);
 							break;
-						case IPV6_ADDR_REGISTRY_LACNIC:
+						case REGISTRY_LACNIC:
 							stat_inc(STATS_IPV6_LACNIC);
 							break;
-						case IPV6_ADDR_REGISTRY_AFRINIC:
+						case REGISTRY_AFRINIC:
 							stat_inc(STATS_IPV6_AFRINIC);
 							break;
-						case IPV6_ADDR_REGISTRY_RESERVED:
+						case REGISTRY_RESERVED:
 							stat_inc(STATS_IPV6_RESERVED);
 							break;
 						default:
@@ -692,25 +692,25 @@ static void lineparser(void) {
 				registry = libipv4addr_registry_num_by_addr(&ipv4addr);
 
 				switch (registry) {
-					case IPV4_ADDR_REGISTRY_IANA:
+					case REGISTRY_IANA:
 						stat_inc(STATS_IPV4_IANA);
 						break;
-					case IPV4_ADDR_REGISTRY_APNIC:
+					case REGISTRY_APNIC:
 						stat_inc(STATS_IPV4_APNIC);
 						break;
-					case IPV4_ADDR_REGISTRY_ARIN:
+					case REGISTRY_ARIN:
 						stat_inc(STATS_IPV4_ARIN);
 						break;
-					case IPV4_ADDR_REGISTRY_RIPENCC:
+					case REGISTRY_RIPENCC:
 						stat_inc(STATS_IPV4_RIPENCC);
 						break;
-					case IPV4_ADDR_REGISTRY_LACNIC:
+					case REGISTRY_LACNIC:
 						stat_inc(STATS_IPV4_LACNIC);
 						break;
-					case IPV4_ADDR_REGISTRY_AFRINIC:
+					case REGISTRY_AFRINIC:
 						stat_inc(STATS_IPV4_AFRINIC);
 						break;
-					case IPV4_ADDR_REGISTRY_RESERVED:
+					case REGISTRY_RESERVED:
 						stat_inc(STATS_IPV4_RESERVED);
 						break;
 					default:

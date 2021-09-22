@@ -1732,7 +1732,7 @@ uint32_t libipv4addr_as_num32_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsign
  * out: registry number
  */
 int libipv4addr_registry_num_by_addr(const ipv6calc_ipv4addr *ipv4addrp) {
-	int registry = IPV4_ADDR_REGISTRY_UNKNOWN;
+	int registry = REGISTRY_UNKNOWN;
 	uint32_t as_num32;
 	uint16_t cc_index;
 
@@ -1754,7 +1754,7 @@ int libipv4addr_registry_num_by_addr(const ipv6calc_ipv4addr *ipv4addrp) {
 			if (as_num32 != ASNUM_AS_UNKNOWN) {
 				registry = libipv6calc_db_wrapper_registry_num_by_as_num32(as_num32);
 			};
-			if ((as_num32 == ASNUM_AS_UNKNOWN) || (registry == IPV4_ADDR_REGISTRY_ARIN)) {
+			if ((as_num32 == ASNUM_AS_UNKNOWN) || (registry == REGISTRY_ARIN)) {
 				/* retrieve registry via cc_index from anonymized address (simple, fallback) */
 				cc_index = libipv4addr_cc_index_by_addr(ipv4addrp, NULL);
 				registry = libipv6calc_db_wrapper_registry_num_by_cc_index(cc_index);

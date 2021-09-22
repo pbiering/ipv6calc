@@ -1613,7 +1613,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 END:
 
 	i = libipv6calc_db_wrapper_registry_num_by_ipv6addr(ipv6addrp);
-	if ((i != IPV6_ADDR_REGISTRY_RESERVED) && (i != IPV6_ADDR_REGISTRY_6BONE)) {
+	if ((i != REGISTRY_RESERVED) && (i != REGISTRY_6BONE)) {
 		if (((ipv6addrp->typeinfo & IPV6_NEW_ADDR_AGU) != 0) && ((ipv6addrp->typeinfo & (IPV6_NEW_ADDR_TEREDO | IPV6_NEW_ADDR_ORCHID | IPV6_ADDR_ANONYMIZED_PREFIX)) == 0)) {
 
 			if (((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_ANON_MASKED_PREFIX) != 0)\
