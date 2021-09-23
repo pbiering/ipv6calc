@@ -1068,7 +1068,7 @@ END_libipv6calc_db_wrapper:
  * database dump
  *
  * in:  selector
- * in:  filter ('External' database only supports CountryCode)
+ * in:  filter ('External' database only supports CountryCode so far)
  * in:  formatoptions
  * out: 0=OK
  */
@@ -1086,7 +1086,7 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 	uint32_t value_first_00_31, value_last_00_31;
         uint32_t value_first_32_63, value_last_32_63;
 
-	const s_ipv6calc_filter_db_cc *filter;
+	const s_ipv6calc_filter_db_cc *filter_db_cc;
 
 	int External_type, key_format;
 
@@ -1134,7 +1134,7 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 			return (1);
 		};
 
-		filter = &filter_master->filter_ipv4addr.filter_db_cc;
+		filter_db_cc = &filter_master->filter_ipv4addr.filter_db_cc;
 
 		break;
 
@@ -1178,7 +1178,7 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 			return (1);
 		};
 
-		filter = &filter_master->filter_ipv6addr.filter_db_cc;
+		filter_db_cc = &filter_master->filter_ipv6addr.filter_db_cc;
 
 		break;
 
@@ -1188,20 +1188,26 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 		break;
 	};
 
+	// check for unsupported mixed filter
+	if ((filter_db_cc->cc_must_have_max > 0) && (filter_db_cc->cc_may_not_have_max > 0)) {
+		ERRORPRINT_NA("mixed Database filter with 'must-have' and 'may-not-have' is senseless for database dump");
+		return (1);
+	};
+
 	// create filter info string
 	snprintf(resultstring, sizeof(resultstring), "%s", ""); // clear string
 
-	if (filter->cc_must_have_max > 0) {
-		for (i = 0; i < filter->cc_must_have_max; i++) {
-			libipv6calc_db_wrapper_country_code_by_cc_index(cc2, sizeof(cc2), filter->cc_must_have[i]);
+	if (filter_db_cc->cc_must_have_max > 0) {
+		for (i = 0; i < filter_db_cc->cc_must_have_max; i++) {
+			libipv6calc_db_wrapper_country_code_by_cc_index(cc2, sizeof(cc2), filter_db_cc->cc_must_have[i]);
 			snprintf(tempstring, sizeof(tempstring), "%s %s", filterstring, cc2); 
 			snprintf(filterstring, sizeof(filterstring), "%s", tempstring);
 		};
 	};
 
-	if (filter->cc_may_not_have_max > 0) {
-		for (i = 0; i < filter->cc_may_not_have_max; i++) {
-			libipv6calc_db_wrapper_country_code_by_cc_index(cc2, sizeof(cc2), filter->cc_may_not_have[i]);
+	if (filter_db_cc->cc_may_not_have_max > 0) {
+		for (i = 0; i < filter_db_cc->cc_may_not_have_max; i++) {
+			libipv6calc_db_wrapper_country_code_by_cc_index(cc2, sizeof(cc2), filter_db_cc->cc_may_not_have[i]);
 			snprintf(tempstring, sizeof(tempstring), "%s ^%s", filterstring, cc2); 
 			snprintf(filterstring, sizeof(filterstring), "%s", tempstring);
 		};
@@ -1243,7 +1249,7 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 		switch (selector) {
 		    case IPV6CALC_PROTO_IPV4:
 			// countrycode shortcut filter
-			if (libipv6calc_db_cc_filter(cc_index, &filter_master->filter_ipv4addr.filter_db_cc) > 0) {
+			if (libipv6calc_db_cc_filter(cc_index, filter_db_cc) > 0) {
 				continue;
 			};
 
@@ -1306,7 +1312,7 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 
 		    case IPV6CALC_PROTO_IPV6:
 			// countrycode shortcut filter
-			if (libipv6calc_db_cc_filter(cc_index, &filter_master->filter_ipv6addr.filter_db_cc) > 0) {
+			if (libipv6calc_db_cc_filter(cc_index, filter_db_cc) > 0) {
 				continue;
 			};
 
