@@ -665,8 +665,7 @@ ipv6calc: version 2.1.1 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6 DB_
 <title>Action-type options: </title>
 <screen>
 <![CDATA[$ ipv6calc --action -?
-ipv6calc: version 2.1.1 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO DB_IPV4_GEONAMEID DB_IPV6_GEONAMEID ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID
-(P) & (C) 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
+ipv6calc: version 3.3.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO DB_IPV4_GEONAMEID DB_IPV6_GEONAMEID DB_IPV4_DUMP_CC DB_IPV6_DUMP_CC ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID (P) & (C) 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
  Available action types:
   auto             : Automatic selection of action (default)
   geneui64         : Converts a MAC address to an EUI-64 address
@@ -693,6 +692,7 @@ ipv6calc: version 2.1.1 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6 DB_
                        --test_lt ... (optional)
                        --test_le ... (optional)
   addr2cc          : Converts IPv4/IPv6 address into Country Code
+  dbdump           : Dump Database 
 ]]></screen></sect3><sect3>
 <title>Special action &ldquo;filter&rdquo;:</title>
 <para>Special action &ldquo;filter&rdquo; can be used especially in pipe mode to filter IP addresses related to their type and since 0.99.0 also related to database results (CountryCode, ASN or Registry).</para><screen>
@@ -814,7 +814,43 @@ no output type specified, try autodetection...found type: ipv6addr
 $ echo -e "1.2.3.0/24\n1.2.4.0/24" | ipv6calc -A conv6to4
 2002:102:300::/40
 2002:102:400::/40
-]]></screen></sect3></sect2></sect1><sect1>
+]]></screen></sect3><sect3>
+<title>Special action &ldquo;dbdump&rdquo;:</title>
+<para>Since version 3.3.0, action &ldquo;dbdump&rdquo; is provided</para><itemizedlist>
+<listitem><para>Version &gt;= 3.3.0: database &ldquo;External&rdquo;, type: IPv4/IPv6 addresses, suppported filter: CountryCode</para></listitem></itemizedlist><para>Precondition: created/updated &ldquo;External&rdquo; database</para><screen>
+<![CDATA[$ /usr/share/ipv6calc/tools/ipv6calc-db-update.sh
+...
+]]></screen><para>Precondition: active &ldquo;database dump&rdquo; support</para><screen>
+<![CDATA[$ ipv6calc -vv 2>&1 | egrep '(DB_IPV4_DUMP_CC|DB_IPV6_DUMP_CC)'
+ipv6calc: version 3.3.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO DB_IPV4_GEONAMEID DB_IPV6_GEONAMEID DB_IPV4_DUMP_CC DB_IPV6_DUMP_CC ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID 
+DB_IPV4_DUMP_CC (IPv4 Database Dump by CountryCode): External
+DB_IPV6_DUMP_CC (IPv6 Database Dump by CountryCode): External 
+]]></screen><para>Precondition: recognized &ldquo;External&rdquo; database</para><screen>
+<![CDATA[$ ipv6calc -vv 2>&1 | egrep '(External: IPv. CountryCode)'
+External: IPv4 CountryCode    : ipv6calc-external-ipv4-countrycode.db    (EXTDB-3/AFRINIC/20210919 APNIC/20210917 ARIN/20210919 IANA/20210205 LACNIC/20210918 LISP/20200318 RIPENCC/20210918, created: 20210919-152957 UTC)
+External: IPv6 CountryCode    : ipv6calc-external-ipv6-countrycode.db    (EXTDB-4/AFRINIC/20210919 APNIC/20210917 ARIN/20210919 IANA/20191106 LACNIC/20210918 LISP/20200318 RIPENCC/20210918, created: 20210919-155049 UTC) 
+]]></screen><para>Usage Examples: dump all IPv4 networks which have not &ldquo;unknown&rdquo; CountryCode</para><screen>
+<![CDATA[$ ipv6calc -A dbdump -E ^ipv4.db.cc=unknown
+# 'External' database dump (with 121894 entries) start with filter IPv4 && CountryCode(s): ^unknown (suppress this line with option '-q')
+1.0.0.0/24
+1.0.1.0/24
+...
+# 'External' database dump finished displaying 121894 entries with filter IPv4 && CountryCode(s): ^unknown (suppress this line with option '-q') 
+]]></screen><para>Usage Examples: dump all IPv6 networks of a given CountryCode </para><screen>
+<![CDATA[$ ipv6calc -A dbdump -E ipv6.db.cc=VN
+# 'External' database dump (with 56097 entries) start with filter IPv6 && CountryCode(s): VN (suppress this line with option '-q')
+2001:7fa:6::/28
+2001:dc8::/28 
+...
+# 'External' database dump finished displaying 344 entries with filter IPv6 && CountryCode(s): VN (suppress this line with option '-q') 
+]]></screen><para>Usage Examples: dump all IPv4 networks of two given CountryCodes</para><screen>
+<![CDATA[$ ipv6calc -A dbdump -E ipv4.db.cc=VN,ipv4.db.cc=CN
+# 'External' database dump (with 121894 entries) start with filter IPv4 && CountryCode(s): VN CN (suppress this line with option '-q')
+1.0.1.0/24
+1.0.2.0/23 
+...
+# 'External' database dump finished displaying 4631 entries with filter IPv4 && CountryCode(s): VN CN (suppress this line with option '-q') 
+]]></screen><para>Output can be used to e.g. fill &ldquo;ipset&rdquo; for local Linux firewalling type &ldquo;hash:net&rdquo;.</para></sect3></sect2></sect1><sect1>
 <title>Webserver log conversion helper program "ipv6logconv"</title>
 <para>This program parses address tokens of a given webserver logfile and converts them to special strings, useful for statistics (e.g. created by using "analog").</para><sect2>
 <title>Supported options</title>
@@ -1431,7 +1467,7 @@ IPV6_REGISTRY=RIPENCC
 <para>Major extensions/changes are listed here</para><sect2>
 <title>2021</title>
 <itemizedlist>
-<listitem><para>add support for compressed IPv4 addresses like 10/8 (&gt;= 3.1.0)</para></listitem></itemizedlist></sect2><sect2>
+<listitem><para>add support for compressed IPv4 addresses like 10/8 (&gt;= 3.1.0)</para></listitem><listitem><para>add support for octal representation of IPv4 addresses (&gt;= 3.3.0)</para></listitem><listitem><para>add Database Dump action (&gt;= 3.3.0)</para></listitem></itemizedlist></sect2><sect2>
 <title>2020</title>
 <itemizedlist>
 <listitem><para>drop GeoIP(legacy) support (&gt;= 3.0.0)</para></listitem><listitem><para>drop db-ip.com(BerkeleyDB) support (&gt;= 3.0.0)</para></listitem></itemizedlist></sect2><sect2>

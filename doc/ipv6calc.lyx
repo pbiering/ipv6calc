@@ -4042,17 +4042,13 @@ $ ipv6calc --action -?
 
 \begin_layout Code
 
-ipv6calc: version 2.1.1 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
+ipv6calc: version 3.3.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
  DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC
  DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION
  DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO DB_IPV4_GEONAMEID
- DB_IPV6_GEONAMEID ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-T
-YPE-GEONAMEID
-\end_layout
-
-\begin_layout Code
-
-(P) & (C) 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
+ DB_IPV6_GEONAMEID DB_IPV4_DUMP_CC DB_IPV6_DUMP_CC ANON_ZEROISE ANON_ANONYMIZE
+ ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID (P) & (C) 2001-2021 by Peter
+ Bieringer <pb (at) bieringer.de>
 \end_layout
 
 \begin_layout Code
@@ -4195,6 +4191,11 @@ n
 \begin_layout Code
 
   addr2cc          : Converts IPv4/IPv6 address into Country Code
+\end_layout
+
+\begin_layout Code
+
+  dbdump           : Dump Database 
 \end_layout
 
 \begin_layout Subsubsection
@@ -4853,6 +4854,272 @@ n1.2.4.0/24" | ipv6calc -A conv6to4
 \begin_layout Code
 
 2002:102:400::/40
+\end_layout
+
+\begin_layout Subsubsection
+Special action 
+\begin_inset Quotes eld
+\end_inset
+
+dbdump
+\begin_inset Quotes erd
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+Since version 3.3.0, action 
+\begin_inset Quotes eld
+\end_inset
+
+dbdump
+\begin_inset Quotes erd
+\end_inset
+
+ is provided
+\end_layout
+
+\begin_layout Itemize
+Version >= 3.3.0: database 
+\begin_inset Quotes eld
+\end_inset
+
+External
+\begin_inset Quotes erd
+\end_inset
+
+, type: IPv4/IPv6 addresses, suppported filter: CountryCode
+\end_layout
+
+\begin_layout Standard
+Precondition: created/updated 
+\begin_inset Quotes eld
+\end_inset
+
+External
+\begin_inset Quotes erd
+\end_inset
+
+ database
+\end_layout
+
+\begin_layout Code
+
+$ /usr/share/ipv6calc/tools/ipv6calc-db-update.sh
+\end_layout
+
+\begin_layout Code
+
+...
+\end_layout
+
+\begin_layout Standard
+Precondition: active 
+\begin_inset Quotes eld
+\end_inset
+
+database dump
+\begin_inset Quotes erd
+\end_inset
+
+ support
+\end_layout
+
+\begin_layout Code
+
+$ ipv6calc -vv 2>&1 | egrep '(DB_IPV4_DUMP_CC|DB_IPV6_DUMP_CC)'
+\end_layout
+
+\begin_layout Code
+
+ipv6calc: version 3.3.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6
+ DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC
+ DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION
+ DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO DB_IPV4_GEONAMEID
+ DB_IPV6_GEONAMEID DB_IPV4_DUMP_CC DB_IPV6_DUMP_CC ANON_ZEROISE ANON_ANONYMIZE
+ ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID 
+\end_layout
+
+\begin_layout Code
+
+DB_IPV4_DUMP_CC (IPv4 Database Dump by CountryCode): External
+\end_layout
+
+\begin_layout Code
+
+DB_IPV6_DUMP_CC (IPv6 Database Dump by CountryCode): External 
+\end_layout
+
+\begin_layout Standard
+Precondition: recognized 
+\begin_inset Quotes eld
+\end_inset
+
+External
+\begin_inset Quotes erd
+\end_inset
+
+ database
+\end_layout
+
+\begin_layout Code
+
+$ ipv6calc -vv 2>&1 | egrep '(External: IPv.
+ CountryCode)'
+\end_layout
+
+\begin_layout Code
+
+External: IPv4 CountryCode    : ipv6calc-external-ipv4-countrycode.db   
+ (EXTDB-3/AFRINIC/20210919 APNIC/20210917 ARIN/20210919 IANA/20210205 LACNIC/202
+10918 LISP/20200318 RIPENCC/20210918, created: 20210919-152957 UTC)
+\end_layout
+
+\begin_layout Code
+
+External: IPv6 CountryCode    : ipv6calc-external-ipv6-countrycode.db   
+ (EXTDB-4/AFRINIC/20210919 APNIC/20210917 ARIN/20210919 IANA/20191106 LACNIC/202
+10918 LISP/20200318 RIPENCC/20210918, created: 20210919-155049 UTC) 
+\end_layout
+
+\begin_layout Standard
+Usage Examples: dump all IPv4 networks which have not 
+\begin_inset Quotes eld
+\end_inset
+
+unknown
+\begin_inset Quotes erd
+\end_inset
+
+ CountryCode
+\end_layout
+
+\begin_layout Code
+
+$ ipv6calc -A dbdump -E ^ipv4.db.cc=unknown
+\end_layout
+
+\begin_layout Code
+
+# 'External' database dump (with 121894 entries) start with filter IPv4
+ && CountryCode(s): ^unknown (suppress this line with option '-q')
+\end_layout
+
+\begin_layout Code
+
+1.0.0.0/24
+\end_layout
+
+\begin_layout Code
+
+1.0.1.0/24
+\end_layout
+
+\begin_layout Code
+
+...
+\end_layout
+
+\begin_layout Code
+
+# 'External' database dump finished displaying 121894 entries with filter
+ IPv4 && CountryCode(s): ^unknown (suppress this line with option '-q')
+ 
+\end_layout
+
+\begin_layout Standard
+Usage Examples: dump all IPv6 networks of a given CountryCode 
+\end_layout
+
+\begin_layout Code
+
+$ ipv6calc -A dbdump -E ipv6.db.cc=VN
+\end_layout
+
+\begin_layout Code
+
+# 'External' database dump (with 56097 entries) start with filter IPv6 &&
+ CountryCode(s): VN (suppress this line with option '-q')
+\end_layout
+
+\begin_layout Code
+
+2001:7fa:6::/28
+\end_layout
+
+\begin_layout Code
+
+2001:dc8::/28 
+\end_layout
+
+\begin_layout Code
+
+...
+\end_layout
+
+\begin_layout Code
+
+# 'External' database dump finished displaying 344 entries with filter IPv6
+ && CountryCode(s): VN (suppress this line with option '-q') 
+\end_layout
+
+\begin_layout Standard
+Usage Examples: dump all IPv4 networks of two given CountryCodes
+\end_layout
+
+\begin_layout Code
+
+$ ipv6calc -A dbdump -E ipv4.db.cc=VN,ipv4.db.cc=CN
+\end_layout
+
+\begin_layout Code
+
+# 'External' database dump (with 121894 entries) start with filter IPv4
+ && CountryCode(s): VN CN (suppress this line with option '-q')
+\end_layout
+
+\begin_layout Code
+
+1.0.1.0/24
+\end_layout
+
+\begin_layout Code
+
+1.0.2.0/23 
+\end_layout
+
+\begin_layout Code
+
+...
+\end_layout
+
+\begin_layout Code
+
+# 'External' database dump finished displaying 4631 entries with filter
+ IPv4 && CountryCode(s): VN CN (suppress this line with option '-q') 
+\end_layout
+
+\begin_layout Standard
+
+Output can be used to e.g.
+ fill 
+\begin_inset Quotes eld
+\end_inset
+
+ipset
+\begin_inset Quotes erd
+\end_inset
+
+ for local Linux firewalling type 
+\begin_inset Quotes eld
+\end_inset
+
+hash:net
+\begin_inset Quotes erd
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
@@ -8161,6 +8428,14 @@ Major extensions/changes are listed here
 
 \begin_layout Itemize
 add support for compressed IPv4 addresses like 10/8 (>= 3.1.0)
+\end_layout
+
+\begin_layout Itemize
+add support for octal representation of IPv4 addresses (>= 3.3.0)
+\end_layout
+
+\begin_layout Itemize
+add Database Dump action (>= 3.3.0)
 \end_layout
 
 \begin_layout Subsection
