@@ -63,9 +63,12 @@ typedef struct {
 #define FORMAT_NUM_hex			22
 #define FORMAT_NUM_ipv6literal		23
 #define FORMAT_NUM_ipv6rd		24
+#define FORMAT_NUM_ipv6to4		25
+
 #define FORMAT_NUM_asn			29
 #define FORMAT_NUM_auto_noresult	30
 #define FORMAT_NUM_undefined		31
+
 
 #define FORMAT_auto		(uint32_t) 0x00000u
 #define FORMAT_revnibbles_int	(uint32_t) (1 << FORMAT_NUM_revnibbles_int)
@@ -92,9 +95,13 @@ typedef struct {
 #define FORMAT_octal		(uint32_t) (1 << FORMAT_NUM_octal)
 #define FORMAT_hex		(uint32_t) (1 << FORMAT_NUM_hex)
 #define FORMAT_ipv6literal	(uint32_t) (1 << FORMAT_NUM_ipv6literal)
+#define FORMAT_ipv6rd		(uint32_t) (1 << FORMAT_NUM_ipv6rd)
+#define FORMAT_ipv6to4		(uint32_t) (1 << FORMAT_NUM_ipv6to4)
+
 #define FORMAT_asn		(uint32_t) (1 << FORMAT_NUM_asn)
 #define FORMAT_auto_noresult	(uint32_t) (1 << FORMAT_NUM_auto_noresult)
 #define FORMAT_undefined	(uint32_t) (1 << FORMAT_NUM_undefined)
+
 
 /* Primary label of format number, keeping also an explanation */
 typedef struct {

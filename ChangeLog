@@ -10,6 +10,10 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20210924/PB:
+	ipv6calc/ipv6calc.c: improve error message in case input and output type is given but no action autodetected
+	ipv6calc/ipv6calc.c: new output format ip6to4 for IPv4 addresses (also supported on action "dbdump")
+
 20210921/PB:
 	*.c/*.h: complete reorg of static includes in *.h to avoid private copies where possible
 

@@ -850,6 +850,13 @@ External: IPv6 CountryCode    : ipv6calc-external-ipv6-countrycode.db    (EXTDB-
 1.0.2.0/23 
 ...
 # 'External' database dump finished displaying 4631 entries with filter IPv4 && CountryCode(s): VN CN (suppress this line with option '-q') 
+]]></screen><para>Usage Examples: dump all IPv4 networks of a given CountryCode incl. automatic conversion into 6to4 addresses</para><screen>
+<![CDATA[$ ipv6calc -A dbdump -E ipv4.db.cc=VN -I ipv4 -O ipv6to4
+# 'External' database dump (with 121894 entries) start with filter IPv4 && CountryCode(s): VN (output format: 6to4) (suppress this line with option '-q')
+2002:134::/30
+2002:e00:1000::/36 
+...
+# 'External' database dump finished displaying 569 entries with filter IPv4 && CountryCode(s): VN (output format: 6to4) (suppress this line with option '-q') 
 ]]></screen><para>Output can be used to e.g. fill &ldquo;ipset&rdquo; for local Linux firewalling type &ldquo;hash:net&rdquo;.</para></sect3></sect2></sect1><sect1>
 <title>Webserver log conversion helper program "ipv6logconv"</title>
 <para>This program parses address tokens of a given webserver logfile and converts them to special strings, useful for statistics (e.g. created by using "analog").</para><sect2>

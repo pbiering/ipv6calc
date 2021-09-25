@@ -39,6 +39,9 @@ const s_format ipv6calc_formatstrings[] = {
 	{ FORMAT_octal		, "octal"	   , "IP address in escaped octal format", "" },
 	{ FORMAT_hex		, "hex"	 	   , "IP address in hexadecimal format", "" },
 	{ FORMAT_ipv6literal	, "ipv6literal"	   , "IPv6 address in literal", "" },
+	{ FORMAT_ipv6rd		, "ipv6rd"	   , "IPv6 Rapid Deployment address", "" },
+	{ FORMAT_ipv6to4	, "ipv6to4"	   , "IPv6 address based on 6to4 converted IPv4 address", "" },
+
 	{ FORMAT_prefix_mac     , "prefix+mac"     , "IPv6 prefix and a MAC address", "" },
 	{ FORMAT_asn            , "asn"            , "Autonomous System Number", "" },
 };
@@ -99,9 +102,9 @@ const uint32_t ipv6calc_formatmatrix[][2] = {
 	{ FORMAT_bitstring      , 0x5ff },
 	{ FORMAT_ipv6addr       , FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ipv6addr | FORMAT_base85 | FORMAT_ifinet6 | FORMAT_octal | FORMAT_ipv6literal | FORMAT_hex },
 	{ FORMAT_ipv6literal    , FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ipv6addr | FORMAT_base85 | FORMAT_ifinet6 | FORMAT_octal | FORMAT_ipv6literal },
-	{ FORMAT_ipv4addr       , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex | FORMAT_hex },
-	{ FORMAT_ipv4hex        , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex | FORMAT_hex },
-	{ FORMAT_ipv4revhex     , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex },
+	{ FORMAT_ipv4addr       , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex | FORMAT_hex | FORMAT_ipv6to4 },
+	{ FORMAT_ipv4hex        , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex | FORMAT_hex | FORMAT_ipv6to4 },
+	{ FORMAT_ipv4revhex     , FORMAT_ipv4addr | FORMAT_ipv6addr | FORMAT_revipv4 | FORMAT_ipv4hex | FORMAT_ipv6to4 },
 	{ FORMAT_mac            , FORMAT_eui64 },
 	{ FORMAT_eui64          , FORMAT_eui64 },
 	{ FORMAT_base85         , FORMAT_base85 | FORMAT_ipv6addr | FORMAT_revnibbles_int | FORMAT_revnibbles_arpa | FORMAT_bitstring | FORMAT_ifinet6 },

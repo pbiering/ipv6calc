@@ -121,6 +121,7 @@ int main(int argc, char *argv[]) {
 	ipv6calc_ipv4addr ipv4addr, ipv4addr2;
 	ipv6calc_macaddr  macaddr;
 	ipv6calc_eui64addr  eui64addr;
+	ipv6calc_ipaddr ipaddr;
 
 	/* arrays of structures and chars for "test" action */
 	#define ipv6calc_arrays (IPV6CALC_TEST_LIST_MAX + 1)
@@ -834,9 +835,9 @@ int main(int argc, char *argv[]) {
 		db_source = IPV6CALC_DB_SOURCE_EXTERNAL;
 
 		if ((filter_master.filter_ipv4addr.active == 0) && (filter_master.filter_ipv6addr.active != 0)) {
-			libipv6calc_db_dump(db_source, IPV6CALC_PROTO_IPV6, &filter_master, formatoptions);
+			libipv6calc_db_dump(db_source, IPV6CALC_PROTO_IPV6, &filter_master, outputtype, formatoptions);
 		} else if ((filter_master.filter_ipv4addr.active != 0) && (filter_master.filter_ipv6addr.active == 0)) {
-			libipv6calc_db_dump(db_source, IPV6CALC_PROTO_IPV4, &filter_master, formatoptions);
+			libipv6calc_db_dump(db_source, IPV6CALC_PROTO_IPV4, &filter_master, outputtype, formatoptions);
 		} else {
 			fprintf(stderr, "ipv6calc action 'dbdump' is not supporting combined IPv4 and IPv6 filter\n");
 			exit(EXIT_FAILURE);
@@ -2049,6 +2050,7 @@ PIPE_input:
 		case FORMAT_ipv4addr:
 		case FORMAT_ipv4hex:
 		case FORMAT_revipv4:
+		case FORMAT_ipv6to4:
 			if (ipv4addr.flag_valid != 1) {
 				fprintf(stderr, "No valid IPv4 address given%s!\n",
 					(inputtype_given > 0) ? " (no action autoselected from specified input type)": ""
@@ -2167,6 +2169,13 @@ PIPE_input:
 		case FORMAT_ipv4addr:
 			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_ipv4addr");
 			retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, resultstring, sizeof(resultstring), formatoptions);
+			break;
+
+		case FORMAT_ipv6to4:
+			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_ipv6to4");
+			retval = librfc3056_ipv4addr_to_ipv6to4addr(&ipv6addr, &ipv4addr);
+			CONVERT_IPV6ADDRP_IPADDR(&ipv6addr, ipaddr);
+			retval = libipaddr_ipaddrstruct_to_string(&ipaddr, resultstring, sizeof(resultstring), formatoptions);
 			break;
 
 		case FORMAT_eui64:

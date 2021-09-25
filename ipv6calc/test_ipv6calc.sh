@@ -190,6 +190,9 @@ NOPIPETEST--out eui64 00:0:F:6:4:5					=200:fff:fe06:405
 --action conv6to4 2002:c000:201:: 					=192.0.2.1
 --no-prefixlength --action conv6to4 2002:c000:201::/40			=192.0.2.0
 --action conv6to4 2002:c000:201::/40					=192.0.2.0/24
+## IPv4 -> IPv6 (6to4) with output format option
+-I ipv4 -O ipv6to4 1.2.3.4/24						=2002:102:300::/40
+-I ipv4 -O ipv6to4 1.2.3.4						=2002:102:304::
 ## IPv4 -> IPv6 (NAT64)
 --action convnat64 192.0.2.1						=64:ff9b::c000:201
 ## IPv6 -> IPv4 (NAT64)
@@ -491,6 +494,19 @@ test="run 'ipv6calc' database dump for IPv4 by CountryCode"
 if ./ipv6calc -v 2>&1 | grep -wq DB_IPV4_DUMP_CC; then
 	echo "INFO  : $test"
 	lines=$(./ipv6calc -q -A dbdump -E ipv4.db.cc=VN | wc -l)
+	if [ $lines -eq 0 ]; then
+		echo "ERROR : $test failed"
+		exit 1
+	fi
+	echo "INFO  : $test successful"
+else
+	echo "NOTICE: $test not executed (feature missing: DB_IPV4_DUMP)"
+fi
+
+test="run 'ipv6calc' database dump for IPv4 by CountryCode incl. 6to4 conversion"
+if ./ipv6calc -v 2>&1 | grep -wq DB_IPV4_DUMP_CC; then
+	echo "INFO  : $test"
+	lines=$(./ipv6calc -q -A dbdump -E ipv4.db.cc=VN -O ipv6to4 --printfulluncompressed | wc -l)
 	if [ $lines -eq 0 ]; then
 		echo "ERROR : $test failed"
 		exit 1

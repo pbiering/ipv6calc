@@ -20,6 +20,7 @@
 
 #include "libipv6calcdebug.h"
 #include "libipv6calc.h"
+#include "librfc3056.h"
 
 #include "libipv6calc_db_wrapper.h"
 
@@ -1072,12 +1073,13 @@ END_libipv6calc_db_wrapper:
  * in:  formatoptions
  * out: 0=OK
  */
-int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_filter_master *filter_master, const uint32_t formatoptions) {
+int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_filter_master *filter_master, const uint32_t outputtype, const uint32_t formatoptions) {
 	DB *dbp;
 	long int recno_max, recno, count = 0;
 	char resultstring[IPV6CALC_STRING_MAX];
 	char tempstring[IPV6CALC_STRING_MAX];
-	char filterstring[IPV6CALC_STRING_MAX];
+	char filterstring[IPV6CALC_STRING_MAX] = "";
+	char conversionstring[IPV6CALC_STRING_MAX] = "";
 	int result;
 	int retval = -1;
 	char protocol;
@@ -1096,7 +1098,9 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 	uint32_t mask;
 	uint32_t delta;
 
-	ipv6calc_ipaddr ipaddr;
+	ipv6calc_ipaddr ipaddr, ipaddr2;
+	ipv6calc_ipv6addr ipv6addr;
+	ipv6calc_ipv4addr ipv4addr;
 
 	switch (selector) {
 	    case IPV6CALC_PROTO_IPV4:
@@ -1135,6 +1139,27 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 		};
 
 		filter_db_cc = &filter_master->filter_ipv4addr.filter_db_cc;
+
+		// check for supported outputtype
+		switch (outputtype) {
+			case FORMAT_ipv4addr:
+			case FORMAT_ipv6to4:
+			case FORMAT_undefined:
+				// supported
+				break;
+
+			default:
+				ERRORPRINT_WA("Outputtype for IPv4 Address is not supported: 0x%08x", outputtype);
+				return (1);
+				break;
+		};
+
+		// check for supported outputtype
+		switch (outputtype) {
+			case FORMAT_ipv6to4:
+				snprintf(conversionstring, sizeof(conversionstring), "%s", " (output format: 6to4)");
+				break;
+		};
 
 		break;
 
@@ -1180,6 +1205,19 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 
 		filter_db_cc = &filter_master->filter_ipv6addr.filter_db_cc;
 
+		// check for supported outputtype
+		switch (outputtype) {
+			case FORMAT_ipv6addr:
+			case FORMAT_undefined:
+				// supported
+				break;
+
+			default:
+				ERRORPRINT_WA("Outputtype for IPv6 Address is not supported: 0x%08x", outputtype);
+				return (1);
+				break;
+		};
+
 		break;
 
 	    default:
@@ -1223,7 +1261,7 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "database opened type=%x recno_max=%ld dbp=%p", External_type | 0x40000, recno_max, dbp);
 
-	NONQUIETPRINT_WA("# 'External' database dump (with %lu entries) start with filter IPv%c && CountryCode(s):%s (suppress this line with option '-q')", recno_max, protocol, filterstring); // string has a trailing space
+	NONQUIETPRINT_WA("# 'External' database dump (with %lu entries) start with filter IPv%c && CountryCode(s):%s%s (suppress this line with option '-q')", recno_max, protocol, filterstring, conversionstring); // filterstring has a trailing space
 
 	for (recno = 1; recno <= recno_max; recno++) {
 		result = libipv6calc_db_wrapper_bdb_fetch_row(
@@ -1294,7 +1332,19 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "entry (aligned): ipv4=0x%08x delta=0x%08x split=%d mask=0x%08x prefixlength=%d", ipaddr.addr[0], delta, split, mask, prefixlength);
 
-				libipaddr_ipaddrstruct_to_string(&ipaddr, tempstring, sizeof(tempstring), formatoptions);
+				switch (outputtype) {
+					case FORMAT_ipv6to4:
+						CONVERT_IPADDR_IPV4ADDR(ipaddr, ipv4addr);
+						retval = librfc3056_ipv4addr_to_ipv6to4addr(&ipv6addr, &ipv4addr);
+						CONVERT_IPV6ADDR_IPADDR(ipv6addr, ipaddr2);
+						libipaddr_ipaddrstruct_to_string(&ipaddr2, tempstring, sizeof(tempstring), formatoptions);
+						break;
+
+					default:
+						libipaddr_ipaddrstruct_to_string(&ipaddr, tempstring, sizeof(tempstring), formatoptions);
+						break;
+				};
+
 				fprintf(stdout, "%s\n", tempstring);
 
 				delta -= ~mask;
@@ -1363,7 +1413,7 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 	retval = 0;
 
 END_libipv6calc_db_wrapper:
-	NONQUIETPRINT_WA("# 'External' database dump finished displaying %lu entries with filter IPv%c && CountryCode(s):%s (suppress this line with option '-q')", count, protocol, filterstring); // resultstring has a trailing space
+	NONQUIETPRINT_WA("# 'External' database dump finished displaying %lu entries with filter IPv%c && CountryCode(s):%s%s (suppress this line with option '-q')", count, protocol, filterstring, conversionstring); // filterstring has a trailing space
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "retval=%d", retval);
 	return(retval);

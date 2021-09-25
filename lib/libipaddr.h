@@ -41,6 +41,7 @@ typedef struct {
 
 /* ipv4addr ptr -> ipaddr */
 #define CONVERT_IPV4ADDRP_IPADDR(ipv4addrp, ipaddr) \
+	libipaddr_clearall(&ipaddr); \
 	ipaddr.typeinfo1	= (*ipv4addrp).typeinfo; \
 	ipaddr.typeinfo2	= (*ipv4addrp).typeinfo2; \
 	ipaddr.prefixlength	= (*ipv4addrp).prefixlength; \
@@ -54,6 +55,7 @@ typedef struct {
 
 /* ipv4addr ptr -> ipaddr ptr */
 #define CONVERT_IPV4ADDRP_IPADDRP(ipv4addrp, ipaddrp) \
+	libipaddr_clearall(ipaddrp); \
 	ipaddrp->typeinfo1	= ipv4addrp->typeinfo; \
 	ipaddrp->typeinfo2	= ipv4addrp->typeinfo2; \
 	ipaddrp->prefixlength	= ipv4addrp->prefixlength; \
@@ -65,8 +67,10 @@ typedef struct {
 	ipaddrp->flag_valid	= 1; \
 	ipaddrp->proto		= IPV6CALC_PROTO_IPV4;
 
+
 /* ipv6addr ptr -> ipaddr */
 #define CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr) \
+	libipaddr_clearall(&ipaddr); \
 	ipaddr.typeinfo1	= (*ipv6addrp).typeinfo; \
 	ipaddr.typeinfo2	= (*ipv6addrp).typeinfo2; \
 	ipaddr.prefixlength	= (*ipv6addrp).prefixlength; \
@@ -80,6 +84,7 @@ typedef struct {
 
 /* ipv6addr ptr -> ipaddr ptr */
 #define CONVERT_IPV6ADDRP_IPADDRP(ipv6addrp, ipaddrp) \
+	libipaddr_clearall(ipaddrp); \
 	ipaddrp->typeinfo1	= ipv6addrp->typeinfo; \
 	ipaddrp->typeinfo2	= ipv6addrp->typeinfo2; \
 	ipaddrp->prefixlength	= ipv6addrp->prefixlength; \
@@ -91,6 +96,20 @@ typedef struct {
 	ipaddrp->flag_valid	= 1; \
 	ipaddrp->proto		= IPV6CALC_PROTO_IPV6;
 
+/* ipv6addr -> ipaddr */
+#define CONVERT_IPV6ADDR_IPADDR(ipv6addr, ipaddr) \
+	libipaddr_clearall(&ipaddr); \
+	ipaddr.typeinfo1	= ipv6addr.typeinfo; \
+	ipaddr.typeinfo2	= ipv6addr.typeinfo2; \
+	ipaddr.prefixlength	= ipv6addr.prefixlength; \
+	ipaddr.flag_prefixuse	= ipv6addr.flag_prefixuse; \
+	ipaddr.addr[0]		= ipv6addr_getdword(&ipv6addr, 0); \
+	ipaddr.addr[1]		= ipv6addr_getdword(&ipv6addr, 1); \
+	ipaddr.addr[2]		= ipv6addr_getdword(&ipv6addr, 2); \
+	ipaddr.addr[3]		= ipv6addr_getdword(&ipv6addr, 3); \
+	ipaddr.flag_valid	= 1; \
+	ipaddr.proto		= IPV6CALC_PROTO_IPV6;
+
 
 /* ipaddr ptr -> ipv4addr */
 #define CONVERT_IPADDRP_IPV4ADDR(ipaddrp, ipv4addr) \
@@ -100,6 +119,16 @@ typedef struct {
 	ipv4addr.typeinfo2  = ipaddrp->typeinfo2; \
 	ipv4addr.prefixlength = ipaddrp->prefixlength; \
 	ipv4addr.flag_prefixuse = ipaddrp->flag_prefixuse; \
+	ipv4addr.flag_valid = 1;
+
+/* ipaddr -> ipv4addr */
+#define CONVERT_IPADDR_IPV4ADDR(ipaddr, ipv4addr) \
+	ipv4addr_clearall(&ipv4addr); \
+	ipv4addr_setdword(&ipv4addr, ipaddr.addr[0]); \
+	ipv4addr.typeinfo   = ipaddr.typeinfo1; \
+	ipv4addr.typeinfo2  = ipaddr.typeinfo2; \
+	ipv4addr.prefixlength = ipaddr.prefixlength; \
+	ipv4addr.flag_prefixuse = ipaddr.flag_prefixuse; \
 	ipv4addr.flag_valid = 1;
 
 /* ipaddr ptr -> ipv6addr */

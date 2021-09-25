@@ -5101,7 +5101,45 @@ $ ipv6calc -A dbdump -E ipv4.db.cc=VN,ipv4.db.cc=CN
 \end_layout
 
 \begin_layout Standard
+Usage Examples: dump all IPv4 networks of a given CountryCode incl.
+ automatic conversion into 6to4 addresses
+\end_layout
 
+\begin_layout Code
+
+$ ipv6calc -A dbdump -E ipv4.db.cc=VN -I ipv4 -O ipv6to4
+\end_layout
+
+\begin_layout Code
+
+# 'External' database dump (with 121894 entries) start with filter IPv4
+ && CountryCode(s): VN (output format: 6to4) (suppress this line with option
+ '-q')
+\end_layout
+
+\begin_layout Code
+
+2002:134::/30
+\end_layout
+
+\begin_layout Code
+
+2002:e00:1000::/36 
+\end_layout
+
+\begin_layout Code
+
+...
+\end_layout
+
+\begin_layout Code
+
+# 'External' database dump finished displaying 569 entries with filter IPv4
+ && CountryCode(s): VN (output format: 6to4) (suppress this line with option
+ '-q') 
+\end_layout
+
+\begin_layout Standard
 Output can be used to e.g.
  fill 
 \begin_inset Quotes eld
