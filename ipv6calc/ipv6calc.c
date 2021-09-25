@@ -2028,6 +2028,47 @@ PIPE_input:
 		goto RESULT_print;
 	};
 
+	/* catch error cases in advance */
+	switch (outputtype) {
+		case FORMAT_base85:
+		case FORMAT_bitstring:
+		case FORMAT_ifinet6:
+		case FORMAT_ipv6addr:
+		case FORMAT_ipv6literal:
+		case FORMAT_revnibbles_int:
+		case FORMAT_revnibbles_arpa:
+		case FORMAT_iid_token:
+			if (ipv6addr.flag_valid != 1) {
+				fprintf(stderr, "No valid IPv6 address given%s!\n",
+					(inputtype_given > 0) ? " (no action autoselected from specified input type)": ""
+				);
+				exit(EXIT_FAILURE);
+			};
+			break;
+
+		case FORMAT_ipv4addr:
+		case FORMAT_ipv4hex:
+		case FORMAT_revipv4:
+			if (ipv4addr.flag_valid != 1) {
+				fprintf(stderr, "No valid IPv4 address given%s!\n",
+					(inputtype_given > 0) ? " (no action autoselected from specified input type)": ""
+				);
+				exit(EXIT_FAILURE);
+			};
+			break;
+
+		case FORMAT_mac:
+			if (macaddr.flag_valid != 1) {
+				fprintf(stderr, "No valid MAC address given%s!\n",
+					(inputtype_given > 0) ? " (no action autoselected from specified input type)": ""
+				);
+				exit(EXIT_FAILURE);
+			};
+			break;
+
+	};
+
+	/* process output */
 	switch (outputtype) {
 		case -1:
 			/* old implementation */
@@ -2035,13 +2076,11 @@ PIPE_input:
 
 		case FORMAT_base85:
 			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_base85");
-			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
 			retval = ipv6addrstruct_to_base85(&ipv6addr, resultstring, sizeof(resultstring));
 			break;
 				
 		case FORMAT_bitstring:
 			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_bitstring");
-			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
 			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Call 'librfc2874_addr_to_bitstring'");
 			retval = librfc2874_addr_to_bitstring(&ipv6addr, resultstring, sizeof(resultstring), formatoptions);
 			break;
@@ -2066,46 +2105,34 @@ PIPE_input:
 
 		case FORMAT_ipv4hex:
 			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_ipv4hex");
-			if (ipv4addr.flag_valid == 1) {
-				retval = libipv4addr_to_hex(&ipv4addr, resultstring, sizeof(resultstring), formatoptions);
-			};
+			retval = libipv4addr_to_hex(&ipv4addr, resultstring, sizeof(resultstring), formatoptions);
 			break;
 				
 		case FORMAT_revnibbles_int:
 		case FORMAT_revnibbles_arpa:
 			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_revnibbles_int/arpa");
-			if (ipv6addr.flag_valid == 1) {
-				switch (outputtype) {
-					case FORMAT_revnibbles_int:
-						retval = librfc1886_addr_to_nibblestring(&ipv6addr, resultstring, sizeof(resultstring), formatoptions, "ip6.int.");
-						break;
-					case FORMAT_revnibbles_arpa:
-						retval = librfc1886_addr_to_nibblestring(&ipv6addr, resultstring, sizeof(resultstring), formatoptions, "ip6.arpa.");
-						break;
-				};
-			} else {
-			       fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE);
+			switch (outputtype) {
+				case FORMAT_revnibbles_int:
+					retval = librfc1886_addr_to_nibblestring(&ipv6addr, resultstring, sizeof(resultstring), formatoptions, "ip6.int.");
+					break;
+				case FORMAT_revnibbles_arpa:
+					retval = librfc1886_addr_to_nibblestring(&ipv6addr, resultstring, sizeof(resultstring), formatoptions, "ip6.arpa.");
+					break;
 			};
 			break;
 				
 		case FORMAT_revipv4:
 			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_revipv4");
-			if (ipv4addr.flag_valid == 1) {
-				retval = libipv4addr_to_reversestring(&ipv4addr, resultstring, sizeof(resultstring), formatoptions);
-			} else {
-			       fprintf(stderr, "No valid IPv4 address given!\n"); exit(EXIT_FAILURE);
-		       	};
+			retval = libipv4addr_to_reversestring(&ipv4addr, resultstring, sizeof(resultstring), formatoptions);
 			break;
 			
 		case FORMAT_ifinet6:
 			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_ifinet6");
-			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
 			retval = libifinet6_ipv6addrstruct_to_ifinet6(&ipv6addr, resultstring, sizeof(resultstring));
 			break;
 
 		case FORMAT_ipv6addr:
 			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_ipv6addr");
-			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
 			if ((formatoptions & (FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed | FORMATOPTION_printprefix | FORMATOPTION_printsuffix)) != 0) {
 				retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, sizeof(resultstring), formatoptions);
 			} else {
@@ -2129,7 +2156,6 @@ PIPE_input:
 
 		case FORMAT_ipv6literal:
 			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_ipv6literal");
-			if (ipv6addr.flag_valid != 1) { fprintf(stderr, "No valid IPv6 address given!\n"); exit(EXIT_FAILURE); };
 			if ((formatoptions & (FORMATOPTION_printuncompressed | FORMATOPTION_printfulluncompressed)) != 0) {
 				retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring, sizeof(resultstring), formatoptions | FORMATOPTION_literal);
 			} else {
@@ -2140,7 +2166,6 @@ PIPE_input:
 			
 		case FORMAT_ipv4addr:
 			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_ipv4addr");
-			if (ipv4addr.flag_valid != 1) { fprintf(stderr, "No valid IPv4 address given!\n"); exit(EXIT_FAILURE); };
 			retval = libipv4addr_ipv4addrstruct_to_string(&ipv4addr, resultstring, sizeof(resultstring), formatoptions);
 			break;
 
@@ -2161,13 +2186,12 @@ PIPE_input:
 			
 		case FORMAT_mac:
 			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_mac");
-			if (macaddr.flag_valid != 1) { fprintf(stderr, "No valid MAC address given!\n"); exit(EXIT_FAILURE); };
 			retval = macaddrstruct_to_string(&macaddr, resultstring, sizeof(resultstring), formatoptions);
 			break;
 			
 		case FORMAT_iid_token:
 			DEBUGPRINT_NA(DEBUG_ipv6calc_general, "Start of output handling for FORMAT_iid_token");
-			if (ipv6addr.flag_valid != 1 || ipv6addr2.flag_valid != 1) { fprintf(stderr, "No valid IPv6 addresses given!\n"); exit(EXIT_FAILURE); };
+			if (ipv6addr2.flag_valid != 1) { fprintf(stderr, "No valid second IPv6 address given!\n"); exit(EXIT_FAILURE); };
 			/* get interface identifier */
 			retval = libipv6addr_ipv6addrstruct_to_uncompaddr(&ipv6addr, resultstring2, sizeof(resultstring2), formatoptions | FORMATOPTION_printsuffix);
 			if (retval != 0) { break; };
