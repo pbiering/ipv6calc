@@ -1288,7 +1288,7 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 	// family inet6: IPv6 and IPv4 converted by 6to4
 	if (print_ipset == 1) {
 		// create but don't care if already existing
-		fprintf(stdout, "create %s hash:net family %s -exist\n", name_ipset,
+		fprintf(stdout, "create %s hash:net family %s counters -exist\n", name_ipset,
 			(selector == IPV6CALC_PROTO_IPV6) ? "inet6" : (
 				(outputtype == FORMAT_ipv6to4) ? "inet6" : "inet")
 		);
