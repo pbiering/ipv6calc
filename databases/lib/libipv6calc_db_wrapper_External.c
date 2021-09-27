@@ -1073,7 +1073,7 @@ END_libipv6calc_db_wrapper:
  * in:  formatoptions
  * out: 0=OK
  */
-int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_filter_master *filter_master, const uint32_t outputtype, const uint32_t formatoptions) {
+int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_filter_master *filter_master, const uint32_t outputtype, const uint32_t formatoptions, const char *name_ipset) {
 	DB *dbp;
 	long int recno_max, recno, count = 0;
 	char resultstring[IPV6CALC_STRING_MAX];
@@ -1102,6 +1102,25 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 	ipv6calc_ipv6addr ipv6addr;
 	ipv6calc_ipv4addr ipv4addr;
 
+	int print_ipset = 0;
+
+	// general failsafe check
+	if ((formatoptions & FORMATOPTION_print_ipset) > 0) {
+		if (name_ipset == NULL) {
+			ERRORPRINT_NA("Format 'print-ipset <name>' selected but no name provided");
+			return (1);
+		};
+
+		if (strlen(name_ipset) == 0) {
+			ERRORPRINT_NA("Format 'print-ipset <name>' selected but name has zero length");
+			return (1);
+		};
+
+		// enable
+		print_ipset = 1;
+	};
+
+	// failsafe check per proto
 	switch (selector) {
 	    case IPV6CALC_PROTO_IPV4:
 		External_type = EXTERNAL_DB_IPV4_COUNTRYCODE;
@@ -1263,6 +1282,21 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 
 	NONQUIETPRINT_WA("# 'External' database dump (with %lu entries) start with filter IPv%c && CountryCode(s):%s%s (suppress this line with option '-q')", recno_max, protocol, filterstring, conversionstring); // filterstring has a trailing space
 
+
+	// print header for 'ipset'
+	// family inet : IPv4
+	// family inet6: IPv6 and IPv4 converted by 6to4
+	if (print_ipset == 1) {
+		// create but don't care if already existing
+		fprintf(stdout, "create %s hash:net family %s -exist\n", name_ipset,
+			(selector == IPV6CALC_PROTO_IPV6) ? "inet6" : (
+				(outputtype == FORMAT_ipv6to4) ? "inet6" : "inet")
+		);
+
+		// flush ipset
+		fprintf(stdout, "flush %s\n", name_ipset);
+	};
+
 	for (recno = 1; recno <= recno_max; recno++) {
 		result = libipv6calc_db_wrapper_bdb_fetch_row(
 			dbp,			// pointer to database
@@ -1345,7 +1379,11 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 						break;
 				};
 
-				fprintf(stdout, "%s\n", tempstring);
+				if (print_ipset == 1) {
+					fprintf(stdout, "add %s %s\n", name_ipset, tempstring);
+				} else {
+					fprintf(stdout, "%s\n", tempstring);
+				};
 
 				delta -= ~mask;
 				if (delta == 0) {
@@ -1400,10 +1438,15 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 			ipaddr.prefixlength = prefixlength;
 			ipaddr.flag_valid = 1;
 			ipaddr.flag_prefixuse = 1;
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "# IPv6 prefix=%08x%08x mask=%08x%08x prefixlength=%d CC: %s", value_first_00_31, value_first_32_63, value_last_00_31, value_last_32_63, prefixlength, resultstring);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "# IPv6 prefix=%08x:%08x mask=%08x:%08x prefixlength=%d CC: %s", value_first_00_31, value_first_32_63, value_last_00_31, value_last_32_63, prefixlength, resultstring);
 
 			libipaddr_ipaddrstruct_to_string(&ipaddr, tempstring, sizeof(tempstring), formatoptions);
-			fprintf(stdout, "%s\n", tempstring);
+
+			if (print_ipset == 1) {
+				fprintf(stdout, "add %s %s\n", name_ipset, tempstring);
+			} else {
+				fprintf(stdout, "%s\n", tempstring);
+			};
 			break;
 		};
 	};

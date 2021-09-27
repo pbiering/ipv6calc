@@ -118,6 +118,8 @@ static struct option ipv6calc_longopts[] = {
 
 	{ "print-octal"		 , 0, NULL, FORMATOPTION_NUM_print_octal + FORMATOPTION_NUM_HEAD },
 
+	{ "print-ipset"		 , 1, NULL, FORMATOPTION_NUM_print_ipset + FORMATOPTION_NUM_HEAD },
+
 	/* new options */
 	{ "in"        , 1, NULL, CMD_inputtype  },
 	{ "out"       , 1, NULL, CMD_outputtype },

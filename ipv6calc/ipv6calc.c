@@ -98,6 +98,7 @@ int main(int argc, char *argv[]) {
 	char resultstring[IPV6CALC_STRING_MAX] = "";
 	char resultstring2[IPV6CALC_STRING_MAX] = "";
 	char resultstring3[IPV6CALC_STRING_MAX] = "";
+	char name_ipset[IPV6CALC_STRING_MAX] = "";
 	int retval = 1, i, j, lop, result;
 	uint32_t command = 0;
 	int bit_start = 0, bit_end = 0, force_prefix = 0;
@@ -619,6 +620,16 @@ int main(int argc, char *argv[]) {
 				formatoptions |= FORMATOPTION_print_octal;
 				break;
 
+			case FORMATOPTION_NUM_print_ipset + FORMATOPTION_NUM_HEAD:
+				if (strlen(optarg) >= sizeof(name_ipset)) {
+					fprintf(stderr, " Argument of option 'print-ipset' is too long: %s\n", optarg);
+					exit(EXIT_FAILURE);
+				};
+				snprintf(name_ipset, sizeof(name_ipset), "%s", optarg);
+				formatoptions |= FORMATOPTION_print_ipset;
+				break;
+
+
 			/* new options */
 			case 'I':	
 			case CMD_inputtype:
@@ -835,9 +846,9 @@ int main(int argc, char *argv[]) {
 		db_source = IPV6CALC_DB_SOURCE_EXTERNAL;
 
 		if ((filter_master.filter_ipv4addr.active == 0) && (filter_master.filter_ipv6addr.active != 0)) {
-			libipv6calc_db_dump(db_source, IPV6CALC_PROTO_IPV6, &filter_master, outputtype, formatoptions);
+			libipv6calc_db_dump(db_source, IPV6CALC_PROTO_IPV6, &filter_master, outputtype, formatoptions, name_ipset);
 		} else if ((filter_master.filter_ipv4addr.active != 0) && (filter_master.filter_ipv6addr.active == 0)) {
-			libipv6calc_db_dump(db_source, IPV6CALC_PROTO_IPV4, &filter_master, outputtype, formatoptions);
+			libipv6calc_db_dump(db_source, IPV6CALC_PROTO_IPV4, &filter_master, outputtype, formatoptions, name_ipset);
 		} else {
 			fprintf(stderr, "ipv6calc action 'dbdump' is not supporting combined IPv4 and IPv6 filter\n");
 			exit(EXIT_FAILURE);

@@ -469,7 +469,7 @@ extern int libipv6calc_db_registry_filter_parse(s_ipv6calc_filter_db_registry *f
 extern int libipv6calc_db_registry_filter_check(const s_ipv6calc_filter_db_registry *filter, const int proto);
 extern int libipv6calc_db_registry_filter(const uint32_t registry, const s_ipv6calc_filter_db_registry *filter);
 
-extern void libipv6calc_db_dump(const int source, const int selector, const s_ipv6calc_filter_master *filter_master, const uint32_t outputtype, const uint32_t formatoptions);
+extern void libipv6calc_db_dump(const int source, const int selector, const s_ipv6calc_filter_master *filter_master, const uint32_t outputtype, const uint32_t formatoptions, const char *name_ipset);
 
 extern       uint32_t libipv6calc_db_lib_version_numeric(void);
 extern const char    *libipv6calc_db_lib_version_string(void);

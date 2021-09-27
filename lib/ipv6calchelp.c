@@ -886,11 +886,13 @@ void printhelp_action_dispatcher(const uint32_t action, const int embedded) {
 			break;
 
 		case ACTION_db_dump:
-			fprintf(stderr, "  Dump (internal) databases depending on selector\n");
-			fprintf(stderr, "   ipv6calc -A dbdump -E <FILTER>\n");
+			fprintf(stderr, "  Dump (supported) databases depending on selector\n");
+			fprintf(stderr, "   ipv6calc -A dbdump -E <FILTER> [--print-ipset <SETNAME>]\n");
 			fprintf(stderr, "\n");
 			fprintf(stderr, "  See '-O ipv4 -h' or '-O ipv6 -h' for optional output modifications\n");
 			fprintf(stderr, "  See '-E -h' for available filter\n");
+			fprintf(stderr, "  Use '-q --print-ipset <SETNAME>' to generate 'ipset restore' compatible format\n");
+			fprintf(stderr, "  Supported and autoselected database: External (only so far)\n");
 			break;
 	};
 };

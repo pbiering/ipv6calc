@@ -833,35 +833,48 @@ DB_IPV6_DUMP_CC (IPv6 Database Dump by CountryCode): External
 <![CDATA[$ ipv6calc -vv 2>&1 | egrep '(External: IPv. CountryCode)'
 External: IPv4 CountryCode    : ipv6calc-external-ipv4-countrycode.db    (EXTDB-3/AFRINIC/20210919 APNIC/20210917 ARIN/20210919 IANA/20210205 LACNIC/20210918 LISP/20200318 RIPENCC/20210918, created: 20210919-152957 UTC)
 External: IPv6 CountryCode    : ipv6calc-external-ipv6-countrycode.db    (EXTDB-4/AFRINIC/20210919 APNIC/20210917 ARIN/20210919 IANA/20191106 LACNIC/20210918 LISP/20200318 RIPENCC/20210918, created: 20210919-155049 UTC) 
-]]></screen><para>Usage Examples: dump all IPv4 networks which have not &ldquo;unknown&rdquo; CountryCode</para><screen>
+]]></screen><para>Usage Example: dump all IPv4 networks which have not &ldquo;unknown&rdquo; CountryCode</para><screen>
 <![CDATA[$ ipv6calc -A dbdump -E ^ipv4.db.cc=unknown
 # 'External' database dump (with 121894 entries) start with filter IPv4 && CountryCode(s): ^unknown (suppress this line with option '-q')
 1.0.0.0/24
 1.0.1.0/24
 ...
 # 'External' database dump finished displaying 121894 entries with filter IPv4 && CountryCode(s): ^unknown (suppress this line with option '-q') 
-]]></screen><para>Usage Examples: dump all IPv6 networks of a given CountryCode </para><screen>
+]]></screen><para>Usage Example: dump all IPv6 networks of a given CountryCode </para><screen>
 <![CDATA[$ ipv6calc -A dbdump -E ipv6.db.cc=VN
 # 'External' database dump (with 56097 entries) start with filter IPv6 && CountryCode(s): VN (suppress this line with option '-q')
 2001:7fa:6::/28
 2001:dc8::/28 
 ...
 # 'External' database dump finished displaying 344 entries with filter IPv6 && CountryCode(s): VN (suppress this line with option '-q') 
-]]></screen><para>Usage Examples: dump all IPv4 networks of two given CountryCodes</para><screen>
+]]></screen><para>Usage Example: dump all IPv4 networks of two given CountryCodes</para><screen>
 <![CDATA[$ ipv6calc -A dbdump -E ipv4.db.cc=VN,ipv4.db.cc=CN
 # 'External' database dump (with 121894 entries) start with filter IPv4 && CountryCode(s): VN CN (suppress this line with option '-q')
 1.0.1.0/24
 1.0.2.0/23 
 ...
 # 'External' database dump finished displaying 4631 entries with filter IPv4 && CountryCode(s): VN CN (suppress this line with option '-q') 
-]]></screen><para>Usage Examples: dump all IPv4 networks of a given CountryCode incl. automatic conversion into 6to4 addresses</para><screen>
+]]></screen><para>Usage Example: dump all IPv4 networks of a given CountryCode incl. automatic conversion into 6to4 addresses</para><screen>
 <![CDATA[$ ipv6calc -A dbdump -E ipv4.db.cc=VN -I ipv4 -O ipv6to4
 # 'External' database dump (with 121894 entries) start with filter IPv4 && CountryCode(s): VN (output format: 6to4) (suppress this line with option '-q')
 2002:134::/30
 2002:e00:1000::/36 
 ...
 # 'External' database dump finished displaying 569 entries with filter IPv4 && CountryCode(s): VN (output format: 6to4) (suppress this line with option '-q') 
-]]></screen><para>Output can be used to e.g. fill &ldquo;ipset&rdquo; for local Linux firewalling type &ldquo;hash:net&rdquo;.</para></sect3></sect2></sect1><sect1>
+]]></screen><para>Usage Example: dump all IPv6to4 networks of a given CountryCode in &ldquo;ipset restore&rdquo; compatible format and create/update &ldquo;ipset&rdquo; (related &ldquo;sudo&rdquo; command whitelist have to be created in advance)</para><screen>
+<![CDATA[$ ipv6calc -A dbdump -E ipv4.db.cc=VN -I ipv4 -O ipv6to4 -q ---print-ipset Net_VN_IPv6to4 >/path/to/ipset-Net_VN_IPv6to4.txt
+
+$ sudo ipset restore -f /path/to/ipset-Net_VN_IPv6to4.txt
+
+$ sudo ipset list Net_VN_IPv6to4 -t
+Name: Net_VN_IPv6to4
+Type: hash:net
+Revision: 7
+Header: family inet6 hashsize 1024 maxelem 65536 bucketsize 12 initval 0x30b0bdaf
+Size in memory: 41344
+References: 0
+Number of entries: 723 
+]]></screen></sect3></sect2></sect1><sect1>
 <title>Webserver log conversion helper program "ipv6logconv"</title>
 <para>This program parses address tokens of a given webserver logfile and converts them to special strings, useful for statistics (e.g. created by using "analog").</para><sect2>
 <title>Supported options</title>
