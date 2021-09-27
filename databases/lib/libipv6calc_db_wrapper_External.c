@@ -1374,7 +1374,7 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 
 			// convert mask into prefix length
 			prefixlength = 0;
-			mask = 0x8000000;
+			mask = 0x80000000;
 			while (mask > 0) {
 				if ((value_last_00_31 & mask) == 0) {
 					break;
@@ -1386,7 +1386,7 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 
 			if (prefixlength == 32) {
 				// continue with 2nd block
-				int mask = 0x8000000;
+				int mask = 0x80000000;
 				while (mask > 0) {
 					if ((value_last_32_63 & mask) == 0) {
 						break;
