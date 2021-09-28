@@ -832,26 +832,29 @@ int main(int argc, char *argv[]) {
 		};
 		if (result == 0) {
 			fprintf(stderr, "ipv6calc action 'test' misses prefix or begin/end for testing\n");
-			exit(EXIT_FAILURE);
+			retval = 1;
+			goto RESULT_none;
 		};
 	};
 
 	if (action == ACTION_db_dump) {
 		if ((filter_master.filter_ipv4addr.active == 0) && (filter_master.filter_ipv6addr.active == 0)) {
 			fprintf(stderr, "ipv6calc action 'dbdump' require a valid IPv4 or IPv6 filter (see option -E ...)\n");
-			exit(EXIT_FAILURE);
+			retval = 1;
+			goto RESULT_none;
 		};
 
 		// TODO SOURCE SELECTION in case more databases support dump format
 		db_source = IPV6CALC_DB_SOURCE_EXTERNAL;
 
 		if ((filter_master.filter_ipv4addr.active == 0) && (filter_master.filter_ipv6addr.active != 0)) {
-			libipv6calc_db_dump(db_source, IPV6CALC_PROTO_IPV6, &filter_master, outputtype, formatoptions, name_ipset);
+			retval = libipv6calc_db_dump(db_source, IPV6CALC_PROTO_IPV6, &filter_master, outputtype, formatoptions, name_ipset);
 		} else if ((filter_master.filter_ipv4addr.active != 0) && (filter_master.filter_ipv6addr.active == 0)) {
-			libipv6calc_db_dump(db_source, IPV6CALC_PROTO_IPV4, &filter_master, outputtype, formatoptions, name_ipset);
+			retval = libipv6calc_db_dump(db_source, IPV6CALC_PROTO_IPV4, &filter_master, outputtype, formatoptions, name_ipset);
 		} else {
 			fprintf(stderr, "ipv6calc action 'dbdump' is not supporting combined IPv4 and IPv6 filter\n");
-			exit(EXIT_FAILURE);
+			retval = 1;
+			goto RESULT_none;
 		};
 		goto RESULT_none;
 	};

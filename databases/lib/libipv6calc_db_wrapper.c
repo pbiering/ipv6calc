@@ -3839,7 +3839,9 @@ int libipv6calc_db_registry_filter(const uint32_t registry, const s_ipv6calc_fil
  *
  * in : selector
  */
-void libipv6calc_db_dump(const int source, const int selector, const s_ipv6calc_filter_master *filter_master, const uint32_t outputtype, const uint32_t formatoptions, const char *name_ipset) {
+int libipv6calc_db_dump(const int source, const int selector, const s_ipv6calc_filter_master *filter_master, const uint32_t outputtype, const uint32_t formatoptions, const char *name_ipset) {
+	int retval;
+
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "called with source=%d selector=%d", source, selector);
 
 	switch (source) {
@@ -3848,29 +3850,29 @@ void libipv6calc_db_dump(const int source, const int selector, const s_ipv6calc_
 		switch (selector) {
 		    case IPV6CALC_PROTO_IPV4:
 		    case IPV6CALC_PROTO_IPV6:
-			libipv6calc_db_wrapper_External_dump(selector, filter_master, outputtype, formatoptions, name_ipset);
+			retval = libipv6calc_db_wrapper_External_dump(selector, filter_master, outputtype, formatoptions, name_ipset);
 			break;
 
 		    default:
 			ERRORPRINT_WA("selector not supported: %d", selector);
-			return;
+			return(1);
 			break;
 		};
 #else
 		if (formatoptions == 0) { }; // avoid -Werror=unused-parameter
 		if (filter_master == NULL) { }; // avoid -Werror=unused-parameter
 		ERRORPRINT_WA("source not compiled in: %d", source);
-		return;
+		return(1);
 #endif
 		break;
 
 	    default:
 		ERRORPRINT_WA("source not supported: %d (FIX CODE)", source);
-		return;
+		return(1);
 		break;
 	};
 
-	return;
+	return(retval);
 };
 
 
