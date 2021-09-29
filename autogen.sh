@@ -106,6 +106,10 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		OPTIONS_CONFIGURE="${OPTIONS_CONFIGURE:+$OPTIONS_CONFIGURE }--enable-m32"
 		;;
+	    '--openssl-md5')
+		shift
+		OPTIONS_CONFIGURE="${OPTIONS_CONFIGURE:+$OPTIONS_CONFIGURE }--enable-openssl-md5"
+		;;
 	    '--relax')
 		shift
 		RELAX=true
@@ -133,6 +137,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --clang             : use 'clang' instead of default (usually 'gcc')"
 		echo "   --gcc-Os            : use 'gcc' option '-Os'"
 		echo "   --m32               : compile for 32-bit"
+		echo "   --enable-openssl-md5: use legacy OpenSSL MD5 implementation"
 		echo "   --relax             : don't stop on compiler warnings"
 		exit 1
 		;;
@@ -245,7 +250,7 @@ if ! $SKIP_STATIC; then
 	echo "*** run: make static"
 	$MAKE static
 	if [ $? -ne 0 ]; then
-		echo "ERROR : 'make static' reports an error (perhaps glibc-static/openssl-static/zlib-static is missing)"
+		echo "ERROR : 'make static' reports an error (perhaps glibc-static/openssl-static/zlib-static/libdb-devel-static is missing)"
 		exit 1
 	fi
 fi
