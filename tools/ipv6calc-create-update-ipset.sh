@@ -9,18 +9,22 @@
 #  Shell script to manage country code based "ipset" lists
 #
 # requires sudo support for 'iplist'
+#
+#
+# 20210929/bie: initial version
 
 
 prefix="Net"
 
 help() {
 	cat <<END
-Usage: $(basename "$0") -C <CountryCode> [-P <SETNAME-Prefix>] [-L <list>] [-h|?] [-d] [-q] [-t]
+Usage: $(basename "$0") -C <CountryCode> [-P <SETNAME-Prefix>] [-L <list>] [-h|?] [-d] [-q] [-t] [-n]
 	-q			more quiet (default if called by cron)
 	-C <CountryCode>	Country Code for database filter
 	-P <SETNAME-Prefix>	Prefix for 'ipset' SETNAME (optional, default: $prefix)
 	-L <list>>		Selected list (IPv4|IPv6|IPv6to4) (optional, default: ALL)
-	-d			dry-run/debug
+	-d			debug
+	-n			no dry-run
 	-t			trace
 	-h|?			this online help
 
@@ -32,7 +36,7 @@ END
 }
 
 ## default
-dryrun=false
+dryrun=true
 debug=false
 trace=false
 
@@ -43,7 +47,7 @@ else
 fi
 
 ## parse options
-while getopts "\?hdqtC:P:L:" opt; do
+while getopts "\?hdnqtC:P:L:" opt; do
 	case $opt in
 	    P)
 		prefix="$OPTARG"
@@ -55,8 +59,10 @@ while getopts "\?hdqtC:P:L:" opt; do
 		listselected="$OPTARG"
 		;;
 	    d)
-		dryrun=true
 		debug=true
+		;;
+	    n)
+		dryrun=false
 		;;
 	    q)
 		quiet=true
@@ -75,9 +81,11 @@ while getopts "\?hdqtC:P:L:" opt; do
 	esac
 done
 
-$debug  && echo "DEBUG : debug  mode enabled"
-$dryrun && echo "DEBUG : dryrun mode enabled"
-$trace  && echo "DEBUG : trace  mode enabled"
+if ! $quiet; then
+	$debug  && echo "DEBUG : debug  mode enabled"
+	$dryrun && echo "NOTICE: dryrun mode enabled"
+	$trace  && echo "DEBUG : trace  mode enabled"
+fi
 
 ## failsafe checks
 
@@ -150,6 +158,10 @@ ipset_list_members() {
 
 
 ## main work
+declare -A summary
+require_no_dryrun=false
+result=0
+
 for list in ${!ipv6calc_support[@]}; do
 	if [ -n "$listselected" -a "$list" != "$listselected" ]; then
 		$quiet || echo "INFO  : skip not selected list for country code: $list ($countrycode)"
@@ -177,6 +189,8 @@ for list in ${!ipv6calc_support[@]}; do
 		;;
 	esac
 
+	unset list_entries
+	unset list_entries_array
 	declare -A list_entries
 	declare -a list_entries_array
 	list_entries_array=( $($ipv6calc -q $ipv6calc_options) )
@@ -204,6 +218,8 @@ for list in ${!ipv6calc_support[@]}; do
 	# retrieve 'iplist'
 	setname="${prefix}_${countrycode}_${list}"
 
+	unset ipset_entries
+	unset ipset_entries_array
 	declare -A ipset_entries
 	declare -a ipset_entries_array
 	ipset_new=false
@@ -212,10 +228,10 @@ for list in ${!ipv6calc_support[@]}; do
 	ipset_info=$(sudo ipset list -t $setname 2>/dev/null)
 	rc=$?
 	if [ $rc -ne 0 ]; then
-		echo "NOTICE: ipset is not existing (will be created later): $setname (rc=$?)"
+		$quiet || echo "NOTICE: ipset is not existing (will be created later): $setname (rc=$?)"
 		ipset_new=true
 	else
-		echo "NOTICE: ipset is already existing (will be updated): $setname"
+		$quiet || echo "NOTICE: ipset is already existing (will be updated): $setname"
 
 		# retrieve list
 		ipset_entries_array=( $(ipset_list_members $setname) )
@@ -226,7 +242,7 @@ for list in ${!ipv6calc_support[@]}; do
 			exit 1
 		fi
 
-		$debug || echo "DEBUG : execution result in entries (array): ipset_list_members $setname (${#ipset_entries_array[@]})"
+		$debug && echo "DEBUG : execution result in entries (array): ipset_list_members $setname (${#ipset_entries_array[@]})"
 
 		if [ ${#ipset_entries_array[@]} -eq 0 ]; then
 			echo "NOTICE: execution returns 0 entries: ipset_list_members $setname (skip)"
@@ -306,18 +322,56 @@ for list in ${!ipv6calc_support[@]}; do
 	)
 
 	if [ -z "$commandlist" ]; then
-		echo "NOTICE: nothing todo for $list and $setname"
+		$quiet || echo "NOTICE: nothing todo for $list and $setname"
+		summary[$list]="nothing-todo"
 		continue
 	fi
 
+
 	if $dryrun; then
-		echo "NOTICE: dry-run selected <BEGIN>"
-		echo "$commandlist"
-		echo "NOTICE: dry-run selected <END>"
+		if $debug; then
+			echo "NOTICE: dry-run selected <BEGIN>"
+			echo "$commandlist"
+			echo "NOTICE: dry-run selected <END> (use -n for no-dryrun execution)"
+		fi
+		summary[$list]="dryrun"
+		require_no_dryrun=true
 	else
-		echo "$commandlist" | while read command; do
-			sudo ipset $command
-		done
-		true
+		# create temporary file
+		commandfile=$(mktemp /tmp/ipset-$list-$setname.XXXXX)
+		if [ -z "$commandfile" ]; then
+			echo "ERROR : can't create temporary command file"
+			exit 1
+		fi
+		echo "$commandlist" >$commandfile
+		sudo ipset - <$commandfile >/dev/null
+		rc=$?
+		if [ $rc -ne 0 ]; then
+			echo "ERROR : can't execute commands from commandfile via sudo: $commandfile ($setname)"
+			summary[$list]="create/update-ERROR"
+			result=1
+			continue
+		fi
+
+		summary[$list]="create/update-successful"
+
+		if $debug; then
+			echo " NOTICE : keep command file: $commandfile"
+		else
+			[ -e "$commandfile" ] && rm -f "$commandfile"
+		fi
 	fi
 done
+
+if ! $quiet; then
+	echo -n "NOTICE: summary:"
+	for entry in ${!summary[@]}; do
+		echo -n " $entry=${summary[$entry]}"
+	done
+	if $require_no_dryrun; then
+		echo -n " (pending actions require no-dryrun [-n])"
+	fi
+	echo
+fi
+
+exit $result
