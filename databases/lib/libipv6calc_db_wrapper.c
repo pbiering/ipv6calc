@@ -3860,7 +3860,9 @@ int libipv6calc_db_dump(const int source, const int selector, const s_ipv6calc_f
 		};
 #else
 		if (formatoptions == 0) { }; // avoid -Werror=unused-parameter
+		if (outputtype == 0) { }; // avoid -Werror=unused-parameter
 		if (filter_master == NULL) { }; // avoid -Werror=unused-parameter
+		if (name_ipset == NULL) { }; // avoid -Werror=unused-parameter
 		ERRORPRINT_WA("source not compiled in: %d", source);
 		return(1);
 #endif
