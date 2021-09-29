@@ -119,18 +119,17 @@ fi
 
 
 ## get features
-declare -A ipv6calc_features
-ipv6calc_features=( $($ipv6calc -v 2>&1) )
+ipv6calc_features=$($ipv6calc -v 2>&1)
 
 declare -A ipv6calc_support
 
-if [[ ${!ipv6calc_features[@]} =~ DB_IPV4_DUMP_CC ]]; then
+if [[ $ipv6calc_features =~ DB_IPV4_DUMP_CC ]]; then
 	$quiet || echo "INFO  : $ipv6calc supports DB_IPV4_DUMP_CC"
 	ipv6calc_support[IPv4]=1
 	ipv6calc_support[IPv6to4]=1
 fi
 
-if [[ ${!ipv6calc_features[@]} =~ DB_IPV6_DUMP_CC ]]; then
+if [[ $ipv6calc_features =~ DB_IPV6_DUMP_CC ]]; then
 	$quiet || echo "INFO  : $ipv6calc supports DB_IPV6_DUMP_CC"
 	ipv6calc_support[IPv6]=1
 fi
