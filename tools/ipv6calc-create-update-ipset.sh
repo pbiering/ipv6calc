@@ -8,7 +8,10 @@
 # Information:
 #  Shell script to manage country code based "ipset" lists
 #
-# requires sudo support for 'iplist'
+# requires sudo support for 'iplist' like
+#
+# /etc/sudoers.d/99-ipv6calc
+# poweruser     ALL=NOPASSWD:/usr/sbin/ipset
 #
 #
 # 20210929/bie: initial version
