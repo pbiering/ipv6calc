@@ -15,11 +15,13 @@ prefix="Net"
 
 help() {
 	cat <<END
-Usage: $(basename "$0") -C <CountryCode> [-P <SETNAME-Prefix>] [-h|?] [-d] [-q]
+Usage: $(basename "$0") -C <CountryCode> [-P <SETNAME-Prefix>] [-L <list>] [-h|?] [-d] [-q] [-t]
 	-q			more quiet (default if called by cron)
 	-C <CountryCode>	Country Code for database filter
 	-P <SETNAME-Prefix>	Prefix for 'ipset' SETNAME (optional, default: $prefix)
+	-L <list>>		Selected list (IPv4|IPv6|IPv6to4) (optional, default: ALL)
 	-d			dry-run/debug
+	-t			trace
 	-h|?			this online help
 
 honors environment
@@ -32,6 +34,7 @@ END
 ## default
 dryrun=false
 debug=false
+trace=false
 
 if [ -t 0 ]; then
 	quiet=false
@@ -40,7 +43,7 @@ else
 fi
 
 ## parse options
-while getopts "\?hdqC:P:" opt; do 
+while getopts "\?hdqtC:P:L:" opt; do
 	case $opt in
 	    P)
 		prefix="$OPTARG"
@@ -48,12 +51,18 @@ while getopts "\?hdqC:P:" opt; do
 	    C)
 		countrycode="$OPTARG"
 		;;
+	    L)
+		listselected="$OPTARG"
+		;;
 	    d)
 		dryrun=true
 		debug=true
 		;;
 	    q)
 		quiet=true
+		;;
+	    t)
+		trace=true
 		;;
 	    \?|h)
 		help
@@ -68,6 +77,7 @@ done
 
 $debug  && echo "DEBUG : debug  mode enabled"
 $dryrun && echo "DEBUG : dryrun mode enabled"
+$trace  && echo "DEBUG : trace  mode enabled"
 
 ## failsafe checks
 
@@ -130,9 +140,9 @@ ipset_list_members() {
 
 	# note: ipset will always print header, this is currently not deselectable
 	sudo ipset list $setname -o xml | while read line; do
-		$debug && echo "DEBUG : ipset_list_members: $line (TEST)" >&2
-		if [[ $line =~ \<member\>\<elem\>([0-9a-f:./]+)\<\/elem\>\<\/member\> ]]; then
-			$debug && echo "DEBUG : ipset_list_members: $line (MATCH)" >&2
+		$trace && echo "DEBUG : ipset_list_members: $line (TEST)" >&2
+		if [[ $line =~ \<member\>\<elem\>([0-9a-f:./]+)\<\/elem\> ]]; then
+			$trace && echo "DEBUG : ipset_list_members: $line (MATCH)" >&2
 			echo "${BASH_REMATCH[1]}"
 		fi
 	done
@@ -141,17 +151,25 @@ ipset_list_members() {
 
 ## main work
 for list in ${!ipv6calc_support[@]}; do
+	if [ -n "$listselected" -a "$list" != "$listselected" ]; then
+		$quiet || echo "INFO  : skip not selected list for country code: $list ($countrycode)"
+		continue
+	fi
+
 	$quiet || echo "INFO  : process list for country code: $list ($countrycode)"
 
 	case $list in
 	    IPv4)
 		ipv6calc_options="-A dbdump -E ipv4.db.cc=$countrycode"
+		family="inet"
 		;;
 	    IPv6to4)
 		ipv6calc_options="-A dbdump -E ipv4.db.cc=$countrycode -O ipv6to4"
+		family="inet6"
 		;;
 	    IPv6)
 		ipv6calc_options="-A dbdump -E ipv6.db.cc=$countrycode"
+		family="inet6"
 		;;
 	    *)
 		echo "ERROR : unsupported list: $list (FIX-CODE)"
@@ -160,7 +178,8 @@ for list in ${!ipv6calc_support[@]}; do
 	esac
 
 	declare -A list_entries
-	list_entries=( $($ipv6calc -q $ipv6calc_options) )
+	declare -a list_entries_array
+	list_entries_array=( $($ipv6calc -q $ipv6calc_options) )
 	rc=$?
 
 	if [ $rc -ne 0 ]; then
@@ -168,42 +187,59 @@ for list in ${!ipv6calc_support[@]}; do
 		exit 1
 	fi
 
-	if [ ${#list_entries[@]} -eq 0 ]; then
+	$debug && echo "DEBUG : execution result in entries (array): $ipv6calc -q $ipv6calc_options (${#list_entries_array[@]})"
+
+	if [ ${#list_entries_array[@]} -eq 0 ]; then
 		echo "NOTICE: execution returns 0 entries: $ipv6calc -q $ipv6calc_options (skip)"
 		continue
 	fi
 
-	# set entries to default value
-	for entry in ${!list_entries[@]}; do
+	# convert entries with default value to hash
+	for entry in ${list_entries_array[@]}; do
 		list_entries[$entry]=0
 	done
 
 	$quiet || echo "INFO  : execution result in entries: $ipv6calc -q $ipv6calc_options (${#list_entries[@]})"
 
-
 	# retrieve 'iplist'
 	setname="${prefix}_${countrycode}_${list}"
 
 	declare -A ipset_entries
-	ipset_entries=( $(ipset_list_members $setname) )
+	declare -a ipset_entries_array
+	ipset_new=false
+
+	# check whether list exits at all
+	ipset_info=$(sudo ipset list -t $setname 2>/dev/null)
 	rc=$?
-
 	if [ $rc -ne 0 ]; then
-		echo "ERROR : execution not successful: ipset_list_members $setname (rc=$?)"
-		exit 1
-	fi
+		echo "NOTICE: ipset is not existing (will be created later): $setname (rc=$?)"
+		ipset_new=true
+	else
+		echo "NOTICE: ipset is already existing (will be updated): $setname"
 
-	if [ ${#ipset_entries[@]} -eq 0 ]; then
-		echo "NOTICE: execution returns 0 entries: ipset_list_members $setname (skip)"
-		continue
-	fi
-	
-	# set entries to default value
-	for entry in ${!ipset_entries[@]}; do
-		ipset_entries[$entry]=0
-	done
+		# retrieve list
+		ipset_entries_array=( $(ipset_list_members $setname) )
+		rc=$?
 
-	$quiet || echo "INFO  : execution result in entries: ipset_list_members $setname (${#ipset_entries[@]})"
+		if [ $rc -ne 0 ]; then
+			echo "ERROR : execution not successful: ipset_list_members $setname (rc=$?)"
+			exit 1
+		fi
+
+		$debug || echo "DEBUG : execution result in entries (array): ipset_list_members $setname (${#ipset_entries_array[@]})"
+
+		if [ ${#ipset_entries_array[@]} -eq 0 ]; then
+			echo "NOTICE: execution returns 0 entries: ipset_list_members $setname (skip)"
+			continue
+		fi
+
+		# convert entries to hash with default value
+		for entry in ${ipset_entries_array[@]}; do
+			ipset_entries[$entry]=0
+		done
+
+		$quiet || echo "INFO  : execution result in entries: ipset_list_members $setname (${#ipset_entries[@]})"
+	fi
 
 	## Match code
 	declare -A statistics
@@ -229,6 +265,7 @@ for list in ${!ipv6calc_support[@]}; do
 	done
 
 	for entry in ${!list_entries[@]}; do
+		$trace && echo "list_entry: $entry"
 		if [ "${list_entries[$entry]}" -eq 0 ]; then
 			# list entry not found in ipset list, mark with 3 -> add
 			list_entries[$entry]=3
@@ -245,4 +282,42 @@ for list in ${!ipv6calc_support[@]}; do
 		echo
 	fi
 
+	# create command list
+	commandlist=$(
+		# create set
+		if $ipset_new; then
+			echo "create $setname hash:net family $family counters"
+		fi
+
+		# add missing ones
+		for entry in ${!list_entries[@]}; do
+			$trace && echo "list_entry: $entry"
+			if [ "${list_entries[$entry]}" -eq 3 ]; then
+				echo "add $setname $entry"
+			fi
+		done
+
+		# delete no longer in list existing ones
+		for entry in ${!ipset_entries[@]}; do
+			if [ "${ipset_entries[$entry]}" -eq 2 ]; then
+				echo "del $setname $entry"
+			fi
+		done
+	)
+
+	if [ -z "$commandlist" ]; then
+		echo "NOTICE: nothing todo for $list and $setname"
+		continue
+	fi
+
+	if $dryrun; then
+		echo "NOTICE: dry-run selected <BEGIN>"
+		echo "$commandlist"
+		echo "NOTICE: dry-run selected <END>"
+	else
+		echo "$commandlist" | while read command; do
+			sudo ipset $command
+		done
+		true
+	fi
 done
