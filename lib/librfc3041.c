@@ -49,6 +49,8 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 	DEBUGPRINT_WA(DEBUG_librfc3041, "Got identifier '%08x-%08x' and token '%08x-%08x'", (unsigned int) ipv6addr_getdword(identifier, 2), (unsigned int) ipv6addr_getdword(identifier, 3), (unsigned int) ipv6addr_getdword(token, 2), (unsigned int) ipv6addr_getdword(token, 3));
 
 #ifdef ENABLE_OPENSSL_EVP_MD5
+
+#ifdef HAVE_EVP_MD_CTX_NEW
 	unsigned int digest_len; // will be set by EVP_DigestFinal_ex
 	unsigned char digest[EVP_MAX_MD_SIZE];
 	EVP_MD_CTX *md5hash = EVP_MD_CTX_new();
@@ -58,7 +60,28 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 	EVP_DigestUpdate(md5hash, &token->in6_addr.s6_addr[8], 8);
 	EVP_DigestFinal_ex(md5hash, digest, &digest_len);
 	EVP_MD_CTX_free(md5hash);
-#else
+#else // HAVE_EVP_MD_CTX_NEW
+
+#ifdef HAVE_EVP_MD_CTX_INIT
+	unsigned int digest_len; // will be set by EVP_DigestFinal_ex
+	unsigned char digest[EVP_MAX_MD_SIZE];
+	EVP_MD_CTX md5hash;
+	EVP_MD_CTX_init(&md5hash);
+
+	EVP_DigestInit_ex(&md5hash, EVP_md5(), NULL);
+	EVP_DigestUpdate(&md5hash, &identifier->in6_addr.s6_addr[8], 8);
+	EVP_DigestUpdate(&md5hash, &token->in6_addr.s6_addr[8], 8);
+	EVP_DigestFinal_ex(&md5hash, digest, &digest_len);
+#else // HAVE_EVP_MD_CTX_INIT
+
+#error No supported OpenSSL EVP MD5 method defined
+
+#endif // HAVE_EVP_MD_CTX_INIT
+
+#endif // HAVE_EVP_MD_CTX_NEW
+
+#else // ENABLE_OPENSSL_EVP_MD5
+
 #ifdef ENABLE_OPENSSL_MD5
 	unsigned int digest_len = MD5_DIGEST_LENGTH;
 	unsigned char digest[MD5_DIGEST_LENGTH];
@@ -68,7 +91,7 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 	MD5_Update(&md5hash, &identifier->in6_addr.s6_addr[8], 8);
 	MD5_Update(&md5hash, &token->in6_addr.s6_addr[8], 8);
 	MD5_Final(digest, &md5hash);
-#else
+#else // ENABLE_OPENSSL_MD5
 	// fallback to bundled MD5
 	unsigned int digest_len = MD5_DIGEST_LENGTH;
 	unsigned char digest[MD5_DIGEST_LENGTH];
@@ -78,8 +101,9 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 	md5_process_bytes(&identifier->in6_addr.s6_addr[8], 8, &md5hash);
 	md5_process_bytes(&token->in6_addr.s6_addr[8], 8, &md5hash);
 	md5_finish_ctx(&md5hash, digest);
-#endif
-#endif
+#endif // ENABLE_OPENSSL_MD5
+
+#endif // ENABLE_OPENSSL_EVP_MD5
 
 	tempstring[0] = '\0';
 
