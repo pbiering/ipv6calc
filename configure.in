@@ -268,7 +268,7 @@ AC_CHECK_HEADER(openssl/evp.h, [
 		HAVE_OPENSSL_EVP_MD5=1
 		HAVE_OPENSSL_EVP_MD5_LEGACY=1
 
-		dnl OpenSSL 1.1.x
+		dnl OpenSSL 3.x
 		AC_CHECK_FUNCS(EVP_MD_CTX_new EVP_md5 EVP_DigestInit_ex EVP_DigestUpdate EVP_DigestFinal_ex EVP_MD_CTX_free,
 		[
 		],[
@@ -276,7 +276,7 @@ AC_CHECK_HEADER(openssl/evp.h, [
 			HAVE_OPENSSL_EVP_MD5=0
 		])
 
-		dnl OpenSSL 1.0.x
+		dnl OpenSSL 1.x
 		AC_CHECK_FUNCS(EVP_MD_CTX_init EVP_md5 EVP_DigestInit_ex EVP_DigestUpdate EVP_DigestFinal_ex,
 		[
 		],[
