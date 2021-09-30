@@ -1824,8 +1824,9 @@ uint32_t libipv4addr_GeonameID_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsig
 /* cleanup */
 void libipv4addr_cleanup() {
 	DEBUGPRINT_NA(DEBUG_libipv4addr, "called");
+	int i;
 
-	for (int i = 0; i < LIBIPV4ADDR_REGEX_CACHE_MAX; i++) {
+	for (i = 0; i < LIBIPV4ADDR_REGEX_CACHE_MAX; i++) {
 		if (libipv4addr_regex_cache_valid[i]) {
 			DEBUGPRINT_WA(DEBUG_libipv4addr, "free regex cache entry: %d", i);
 			regfree(&libipv4addr_regex_cache_entry[i]);
