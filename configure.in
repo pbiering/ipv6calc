@@ -634,18 +634,22 @@ if test "$require_libdb" = "yes"; then
 		[
 			AC_MSG_RESULT([Berkeley DB library found and usable: db_create])
 		],[
-			AC_MSG_ERROR([Berkeley DB library file misses: db_version])
+			AC_MSG_ERROR([Berkeley DB library file misses: db_create])
 		])
 	],[
 		AC_MSG_ERROR([Berkeley DB library header files not found (perhaps missing one of the following packages: db4-devel libdb-devel)])
 	])
 
-	dnl try to retrieve installed version: '#?'/'#\?' -> ugly workaround to avoid that autoconf parser removes '[' and ']'
-	DB_VERSION=`ldconfig -p | grep -E '#?\s*libdb-[0-9]+.[0-9]+' | sed -e 's/^#\?\s*libdb-\([0-9]*\)\.\([0-9]*\).*/\1.\2/'`
-	if test -n "$DB_VERSION"; then
-		AC_MSG_RESULT([Berkeley DB library version found: libdb-$DB_VERSION])
-		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-ldb-$DB_VERSION"
-	fi
+	AC_CHECK_FILE(/sbin/ldconfig, [
+		dnl try to retrieve installed version: '#?'/'#\?' -> ugly workaround to avoid that autoconf parser removes '[' and ']'
+		DB_VERSION=`/sbin/ldconfig -p | grep -E '#?\s*libdb-[0-9]+.[0-9]+' | sed -e 's/^#\?\s*libdb-\([0-9]*\)\.\([0-9]*\).*/\1.\2/' | sort -n | tail -1`
+		if test -n "$DB_VERSION"; then
+			AC_MSG_RESULT([Berkeley DB library version found: libdb-$DB_VERSION])
+			LDFLAGS_EXTRA_STATIC="-ldb-$DB_VERSION${LDFLAGS_EXTRA_STATIC:+ $LDFLAGS_EXTRA_STATIC}"
+		fi
+	],[
+		AC_MSG_WARN([Missing /sbin/ldconfig, cannot detect Berkeley DB library version])
+	])
 
 	LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-ldb"
 	LDFLAGS_EXTRA_MOD_IPV6CALC="-ldb $LDFLAGS_EXTRA_MOD_IPV6CALC"

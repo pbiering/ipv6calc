@@ -4993,7 +4993,7 @@ $as_echo "Berkeley DB library found and usable: db_create" >&6; }
 
 else
 
-			as_fn_error $? "Berkeley DB library file misses: db_version" "$LINENO" 5
+			as_fn_error $? "Berkeley DB library file misses: db_create" "$LINENO" 5
 
 fi
 
@@ -5006,12 +5006,37 @@ fi
 
 
 
-		DB_VERSION=`ldconfig -p | grep -E '#?\s*libdb-[0-9]+.[0-9]+' | sed -e 's/^#\?\s*libdb-\([0-9]*\)\.\([0-9]*\).*/\1.\2/'`
-	if test -n "$DB_VERSION"; then
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Berkeley DB library version found: libdb-$DB_VERSION" >&5
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for /sbin/ldconfig" >&5
+$as_echo_n "checking for /sbin/ldconfig... " >&6; }
+if ${ac_cv_file__sbin_ldconfig+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  test "$cross_compiling" = yes &&
+  as_fn_error $? "cannot check for file existence when cross compiling" "$LINENO" 5
+if test -r "/sbin/ldconfig"; then
+  ac_cv_file__sbin_ldconfig=yes
+else
+  ac_cv_file__sbin_ldconfig=no
+fi
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_file__sbin_ldconfig" >&5
+$as_echo "$ac_cv_file__sbin_ldconfig" >&6; }
+if test "x$ac_cv_file__sbin_ldconfig" = xyes; then :
+
+				DB_VERSION=`/sbin/ldconfig -p | grep -E '#?\s*libdb-[0-9]+.[0-9]+' | sed -e 's/^#\?\s*libdb-\([0-9]*\)\.\([0-9]*\).*/\1.\2/' | sort -n | tail -1`
+		if test -n "$DB_VERSION"; then
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Berkeley DB library version found: libdb-$DB_VERSION" >&5
 $as_echo "Berkeley DB library version found: libdb-$DB_VERSION" >&6; }
-		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-ldb-$DB_VERSION"
-	fi
+			LDFLAGS_EXTRA_STATIC="-ldb-$DB_VERSION${LDFLAGS_EXTRA_STATIC:+ $LDFLAGS_EXTRA_STATIC}"
+		fi
+
+else
+
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: Missing /sbin/ldconfig, cannot detect Berkeley DB library version" >&5
+$as_echo "$as_me: WARNING: Missing /sbin/ldconfig, cannot detect Berkeley DB library version" >&2;}
+
+fi
+
 
 	LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-ldb"
 	LDFLAGS_EXTRA_MOD_IPV6CALC="-ldb $LDFLAGS_EXTRA_MOD_IPV6CALC"
