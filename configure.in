@@ -373,18 +373,18 @@ if test "$ENABLE_BUNDLED_MD5" = "1"; then
 	AC_DEFINE(ENABLE_BUNDLED_MD5, 1, Define if bundled MD5 should be used)
 else
 	if test "$ENABLE_OPENSSL_EVP_MD5" = "1"; then
-		LDFLAGS_EXTRA="-lcrypto $LDFLAGS_EXTRA"
+		LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-lcrypto"
 		LDFLAGS_EXTRA_MOD_IPV6CALC="-lcrypto $LDFLAGS_EXTRA_MOD_IPV6CALC"
-		LDFLAGS_EXTRA_STATIC="-lcrypto -lz -ldl -lpthread -lc $LDFLAGS_EXTRA_STATIC"
+		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-lcrypto -lz -ldl -lpthread -lc"
 
 		AC_DEFINE(ENABLE_OPENSSL_EVP_MD5, 1, Define if OpenSSL EVP MD5 should be used)
 		AC_MSG_RESULT([*** use of OpenSSL EVP MD5 implementation])
 	fi
 
 	if test "$ENABLE_OPENSSL_MD5" = "1"; then
-		LDFLAGS_EXTRA="-lcrypto $LDFLAGS_EXTRA"
+		LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-lcrypto"
 		LDFLAGS_EXTRA_MOD_IPV6CALC="-lcrypto $LDFLAGS_EXTRA_MOD_IPV6CALC"
-		LDFLAGS_EXTRA_STATIC="-lcrypto -lz -ldl $LDFLAGS_EXTRA_STATIC"
+		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-lcrypto -lz -ldl -lpthread -lc"
 
 		AC_DEFINE(ENABLE_OPENSSL_MD5, 1, Define if OpenSSL legacy MD5 should be used)
 		AC_MSG_RESULT([*** use of OpenSSL legacy MD5 implementation])
