@@ -277,7 +277,7 @@ AC_CHECK_HEADER(openssl/evp.h, [
 		])
 
 		dnl OpenSSL 1.0.x
-		AC_CHECK_FUNCS(EVP_MD_CTX_init EVP_md5 EVP_DigestInit_ex EVP_DigestUpdate EVP_DigestFinal_ex EVP_MD_CTX_destroy,
+		AC_CHECK_FUNCS(EVP_MD_CTX_init EVP_md5 EVP_DigestInit_ex EVP_DigestUpdate EVP_DigestFinal_ex,
 		[
 		],[
 			AC_MSG_WARN([OpenSSL crypto library DOES NOT support MD5 via EVP LEGACY])
