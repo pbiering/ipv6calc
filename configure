@@ -4677,9 +4677,9 @@ $as_echo "#define ENABLE_BUNDLED_MD5 1" >>confdefs.h
 
 else
 	if test "$ENABLE_OPENSSL_EVP_MD5" = "1"; then
-		LDFLAGS_EXTRA="-lcrypto $LDFLAGS_EXTRA"
+		LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-lcrypto"
 		LDFLAGS_EXTRA_MOD_IPV6CALC="-lcrypto $LDFLAGS_EXTRA_MOD_IPV6CALC"
-		LDFLAGS_EXTRA_STATIC="-lcrypto -lz -ldl -lpthread -lc $LDFLAGS_EXTRA_STATIC"
+		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-lcrypto -lz -ldl -lpthread -lc"
 
 
 $as_echo "#define ENABLE_OPENSSL_EVP_MD5 1" >>confdefs.h
@@ -4689,9 +4689,9 @@ $as_echo "*** use of OpenSSL EVP MD5 implementation" >&6; }
 	fi
 
 	if test "$ENABLE_OPENSSL_MD5" = "1"; then
-		LDFLAGS_EXTRA="-lcrypto $LDFLAGS_EXTRA"
+		LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-lcrypto"
 		LDFLAGS_EXTRA_MOD_IPV6CALC="-lcrypto $LDFLAGS_EXTRA_MOD_IPV6CALC"
-		LDFLAGS_EXTRA_STATIC="-lcrypto -lz -ldl $LDFLAGS_EXTRA_STATIC"
+		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-lcrypto -lz -ldl -lpthread -lc"
 
 
 $as_echo "#define ENABLE_OPENSSL_MD5 1" >>confdefs.h
