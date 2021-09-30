@@ -632,20 +632,26 @@ if test "$require_libdb" = "yes"; then
 	AC_CHECK_HEADER(db.h, [
 		AC_CHECK_LIB(db, db_create,
 		[
-			AC_MSG_RESULT([*** Berkeley DB library found and usable])
-		],
-		[
-			AC_MSG_ERROR([Berkeley DB library file misses db_create])
+			AC_MSG_RESULT([Berkeley DB library found and usable: db_create])
+		],[
+			AC_MSG_ERROR([Berkeley DB library file misses: db_version])
 		])
-	],
-	[
+	],[
 		AC_MSG_ERROR([Berkeley DB library header files not found (perhaps missing one of the following packages: db4-devel libdb-devel)])
 	])
 
+	dnl try to retrieve installed version: '#?'/'#\?' -> ugly workaround to avoid that autoconf parser removes '[' and ']'
+	DB_VERSION=`ldconfig -p | grep -E '#?\s*libdb-[0-9]+.[0-9]+' | sed -e 's/^#\?\s*libdb-\([0-9]*\)\.\([0-9]*\).*/\1.\2/'`
+	if test -n "$DB_VERSION"; then
+		AC_MSG_RESULT([Berkeley DB library version found: libdb-$DB_VERSION])
+		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-ldb-$DB_VERSION"
+	fi
+
 	LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-ldb"
-	LDFLAGS="${LDFLAGS:+$LDFLAGS }-ldb"
 	LDFLAGS_EXTRA_MOD_IPV6CALC="-ldb $LDFLAGS_EXTRA_MOD_IPV6CALC"
+	HAVE_BERKELEY_DB_SUPPORT=1
 	AC_DEFINE(HAVE_BERKELEY_DB_SUPPORT, 1, Define if Berkeley DB support is required.)
+	AC_MSG_RESULT([*** Berkeley DB library found and usable (required)])
 fi
 
 
@@ -1441,6 +1447,10 @@ AC_MSG_RESULT([*** HAVE_OPENSSL_MD5           =$HAVE_OPENSSL_MD5])
 AC_MSG_RESULT([*** ENABLE_BUNDLED_MD5         =$ENABLE_BUNDLED_MD5])
 AC_MSG_RESULT([*** ENABLE_OPENSSL_EVP_MD5     =$ENABLE_OPENSSL_EVP_MD5])
 AC_MSG_RESULT([*** ENABLE_OPENSSL_MD5         =$ENABLE_OPENSSL_MD5])
+
+AC_MSG_RESULT([])
+AC_MSG_RESULT([*** HAVE_BERKELEY_DB_SUPPORT   =$HAVE_BERKELEY_DB_SUPPORT])
+AC_MSG_RESULT([*** DB_VERSION                 =$DB_VERSION])
 
 AC_MSG_RESULT([])
 

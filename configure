@@ -4988,12 +4988,12 @@ fi
 $as_echo "$ac_cv_lib_db_db_create" >&6; }
 if test "x$ac_cv_lib_db_db_create" = xyes; then :
 
-			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** Berkeley DB library found and usable" >&5
-$as_echo "*** Berkeley DB library found and usable" >&6; }
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Berkeley DB library found and usable: db_create" >&5
+$as_echo "Berkeley DB library found and usable: db_create" >&6; }
 
 else
 
-			as_fn_error $? "Berkeley DB library file misses db_create" "$LINENO" 5
+			as_fn_error $? "Berkeley DB library file misses: db_version" "$LINENO" 5
 
 fi
 
@@ -5006,12 +5006,21 @@ fi
 
 
 
+		DB_VERSION=`ldconfig -p | grep -E '#?\s*libdb-[0-9]+.[0-9]+' | sed -e 's/^#\?\s*libdb-\([0-9]*\)\.\([0-9]*\).*/\1.\2/'`
+	if test -n "$DB_VERSION"; then
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Berkeley DB library version found: libdb-$DB_VERSION" >&5
+$as_echo "Berkeley DB library version found: libdb-$DB_VERSION" >&6; }
+		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-ldb-$DB_VERSION"
+	fi
+
 	LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-ldb"
-	LDFLAGS="${LDFLAGS:+$LDFLAGS }-ldb"
 	LDFLAGS_EXTRA_MOD_IPV6CALC="-ldb $LDFLAGS_EXTRA_MOD_IPV6CALC"
+	HAVE_BERKELEY_DB_SUPPORT=1
 
 $as_echo "#define HAVE_BERKELEY_DB_SUPPORT 1" >>confdefs.h
 
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** Berkeley DB library found and usable (required)" >&5
+$as_echo "*** Berkeley DB library found and usable (required)" >&6; }
 fi
 
 
@@ -7611,6 +7620,13 @@ $as_echo "*** ENABLE_BUNDLED_MD5         =$ENABLE_BUNDLED_MD5" >&6; }
 $as_echo "*** ENABLE_OPENSSL_EVP_MD5     =$ENABLE_OPENSSL_EVP_MD5" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** ENABLE_OPENSSL_MD5         =$ENABLE_OPENSSL_MD5" >&5
 $as_echo "*** ENABLE_OPENSSL_MD5         =$ENABLE_OPENSSL_MD5" >&6; }
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
+$as_echo "" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HAVE_BERKELEY_DB_SUPPORT   =$HAVE_BERKELEY_DB_SUPPORT" >&5
+$as_echo "*** HAVE_BERKELEY_DB_SUPPORT   =$HAVE_BERKELEY_DB_SUPPORT" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** DB_VERSION                 =$DB_VERSION" >&5
+$as_echo "*** DB_VERSION                 =$DB_VERSION" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: " >&5
 $as_echo "" >&6; }
