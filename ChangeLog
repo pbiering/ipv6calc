@@ -13,6 +13,7 @@ Info:
 20210930/PB:
 	configure[.in]: add support for OpenSSL EVP MD5 legacy (OpenSSL 1.0.x)
 	lib/librfc3041.c: add support for OpenSSL EVP MD5 legacy (OpenSSL 1.0.x)
+	configure[.in]: try to resolve BerkeleyDB library version required for static builds
 
 20210927/PB:
 	ipv6calc/ipv6calc.c(+dependent files): add option '--print-ipset <SETNAME>' to be honored by action "dbdump"
