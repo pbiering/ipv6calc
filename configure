@@ -4466,7 +4466,9 @@ if test "x$ac_cv_lib_crypto_EVP_DigestInit_ex" = xyes; then :
 		LDFLAGS_ORIG="$LDFLAGS"
 		LDFLAGS="-lcrypto $LDFLAGS"
 		HAVE_OPENSSL_EVP_MD5=1
-		for ac_func in EVP_MD_CTX_new EVP_md5 EVP_DigestInit_ex EVP_DigestUpdate EVP_DigestFinal_ex EVP_MD_CTX_free
+		HAVE_OPENSSL_EVP_MD5_LEGACY=1
+
+				for ac_func in EVP_MD_CTX_new EVP_md5 EVP_DigestInit_ex EVP_DigestUpdate EVP_DigestFinal_ex EVP_MD_CTX_free
 do :
   as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
@@ -4484,6 +4486,27 @@ $as_echo "$as_me: WARNING: OpenSSL crypto library DOES NOT support MD5 via EVP" 
 
 fi
 done
+
+
+				for ac_func in EVP_MD_CTX_init EVP_md5 EVP_DigestInit_ex EVP_DigestUpdate EVP_DigestFinal_ex
+do :
+  as_ac_var=`$as_echo "ac_cv_func_$ac_func" | $as_tr_sh`
+ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
+if eval test \"x\$"$as_ac_var"\" = x"yes"; then :
+  cat >>confdefs.h <<_ACEOF
+#define `$as_echo "HAVE_$ac_func" | $as_tr_cpp` 1
+_ACEOF
+
+
+else
+
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: WARNING: OpenSSL crypto library DOES NOT support MD5 via EVP LEGACY" >&5
+$as_echo "$as_me: WARNING: OpenSSL crypto library DOES NOT support MD5 via EVP LEGACY" >&2;}
+			HAVE_OPENSSL_EVP_MD5_LEGACY=0
+
+fi
+done
+
 
 		LDFLAGS="$LDFLAGS_ORIG"
 
@@ -4627,6 +4650,9 @@ fi
 
 
 if test "$HAVE_OPENSSL_EVP_MD5" = "1"; then
+	# precedence
+	ENABLE_OPENSSL_EVP_MD5=1
+elif test "$HAVE_OPENSSL_EVP_MD5_LEGACY" = "1"; then
 	# precedence
 	ENABLE_OPENSSL_EVP_MD5=1
 else
@@ -7637,6 +7663,8 @@ $as_echo "" >&6; }
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HAVE_OPENSSL_EVP_MD5       =$HAVE_OPENSSL_EVP_MD5" >&5
 $as_echo "*** HAVE_OPENSSL_EVP_MD5       =$HAVE_OPENSSL_EVP_MD5" >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HAVE_OPENSSL_EVP_MD5_LEGACY=$HAVE_OPENSSL_EVP_MD5_LEGACY" >&5
+$as_echo "*** HAVE_OPENSSL_EVP_MD5_LEGACY=$HAVE_OPENSSL_EVP_MD5_LEGACY" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** HAVE_OPENSSL_MD5           =$HAVE_OPENSSL_MD5" >&5
 $as_echo "*** HAVE_OPENSSL_MD5           =$HAVE_OPENSSL_MD5" >&6; }
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: *** ENABLE_BUNDLED_MD5         =$ENABLE_BUNDLED_MD5" >&5

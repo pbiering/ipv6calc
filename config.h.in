@@ -73,6 +73,9 @@
 /* Define to 1 if you have the `EVP_MD_CTX_free' function. */
 #undef HAVE_EVP_MD_CTX_FREE
 
+/* Define to 1 if you have the `EVP_MD_CTX_init' function. */
+#undef HAVE_EVP_MD_CTX_INIT
+
 /* Define to 1 if you have the `EVP_MD_CTX_new' function. */
 #undef HAVE_EVP_MD_CTX_NEW
 
