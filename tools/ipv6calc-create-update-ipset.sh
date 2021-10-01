@@ -12,9 +12,11 @@
 #
 # /etc/sudoers.d/99-ipv6calc
 # poweruser     ALL=NOPASSWD:/usr/sbin/ipset
+# poweruser     ALL=NOPASSWD:/usr/bin/firewall-cmd
 #
 #
 # 20210929/bie: initial version
+# 20211001/bie: add support for firewalld
 
 
 prefix="Net"
@@ -24,8 +26,10 @@ help() {
 Usage: $(basename "$0") -C <CountryCode> [-P <SETNAME-Prefix>] [-L <list>] [-h|?] [-d] [-q] [-t] [-n]
 	-q			more quiet (default if called by cron)
 	-C <CountryCode>	Country Code for database filter
-	-P <SETNAME-Prefix>	Prefix for 'ipset' SETNAME (optional, default: $prefix)
-	-L <list>>		Selected list (IPv4|IPv6|IPv6to4) (optional, default: ALL)
+	-P <SETNAME-Prefix>	prefix for 'ipset' SETNAME (optional, default: $prefix)
+	-L <list>>		selected list (IPv4|IPv6|IPv6to4) (optional, default: ALL)
+	-F			control 'ipset' via 'firewalld'
+	-p			control 'firewalld' permanent configuration
 	-d			debug
 	-n			no dry-run
 	-t			trace
@@ -38,10 +42,14 @@ honors environment
 END
 }
 
+## defines
+declare -A summary
+
 ## default
 dryrun=true
 debug=false
 trace=false
+firewalld=false
 
 if [ -t 0 ]; then
 	quiet=false
@@ -50,7 +58,7 @@ else
 fi
 
 ## parse options
-while getopts "\?hdnqtC:P:L:" opt; do
+while getopts "\?hdnqtFpC:P:L:" opt; do
 	case $opt in
 	    P)
 		prefix="$OPTARG"
@@ -60,6 +68,12 @@ while getopts "\?hdnqtC:P:L:" opt; do
 		;;
 	    L)
 		listselected="$OPTARG"
+		;;
+	    F)
+		firewalld=true
+		;;
+	    p)
+		firewalld_permanent="--permanent"
 		;;
 	    d)
 		debug=true
@@ -143,24 +157,217 @@ if [ ${#ipv6calc_support[@]} -eq 0 ]; then
 fi
 
 ## functions
-ipset_list_members() {
+
+# check ipset
+ipset_check() {
 	local setname="$1"
 
-	$debug && echo "DEBUG : called: ipset_list_members $setname" >&2
+	if $firewalld; then
+		$debug && echo "DEBUG : called: ipset info $setname (firewalld)" >&2
+		sudo firewall-cmd $firewalld_permanent --info-ipset=$setname >/dev/null 2>&1
+		rc=$?
+	else
+		$debug && echo "DEBUG : called: ipset info $setname" >&2
+		sudo ipset list -t $setname >/dev/null 2>&1
+		rc=$?
+	fi
 
-	# note: ipset will always print header, this is currently not deselectable
-	sudo ipset list $setname -o xml | while read line; do
-		$trace && echo "DEBUG : ipset_list_members: $line (TEST)" >&2
-		if [[ $line =~ \<member\>\<elem\>([0-9a-f:./]+)\<\/elem\> ]]; then
-			$trace && echo "DEBUG : ipset_list_members: $line (MATCH)" >&2
-			echo "${BASH_REMATCH[1]}"
+	$debug && echo "DEBUG : ipset info $setname (rc=$rc)" >&2
+	return $rc
+}
+
+# list entries of an ipset
+ipset_list_entries() {
+	local setname="$1"
+
+	if $firewalld; then
+		$debug && echo "DEBUG : called: ipset_list_entries $setname (firewalld)" >&2
+		sudo firewall-cmd $firewalld_permanent --ipset=$setname --get-entries
+	else
+		$debug && echo "DEBUG : called: ipset_list_entries $setname" >&2
+
+		# note: ipset will always print header, this is currently not deselectable
+		sudo ipset list $setname -o xml 2>/dev/null | while read line; do
+			$trace && echo "DEBUG : ipset_list_entries: $line (TEST)" >&2
+			if [[ $line =~ \<member\>\<elem\>([0-9a-f:./]+)\<\/elem\> ]]; then
+				$trace && echo "DEBUG : ipset_list_entries: $line (MATCH)" >&2
+				echo "${BASH_REMATCH[1]}"
+			fi
+		done
+	fi
+}
+
+# update entries of an ipset (native)
+# return codes:  0: ok  1: error  2: fatal error
+ipset_update_entries() {
+	# create command list
+	commandlist=$(
+		# create set
+		if $ipset_new; then
+			echo "create $setname hash:net family $family counters"
+		fi
+
+		# add missing ones
+		for entry in ${!list_entries[@]}; do
+			if [ "${list_entries[$entry]}" -eq 3 ]; then
+				$trace && echo "list_entry (add): $entry" >&2
+				echo "add $setname $entry"
+			fi
+		done
+
+		# delete no longer in list existing ones
+		for entry in ${!ipset_entries[@]}; do
+			if [ "${ipset_entries[$entry]}" -eq 2 ]; then
+				$trace && echo "list_entry (del): $entry" >&2
+				echo "del $setname $entry"
+			fi
+		done
+	)
+
+	if [ -z "$commandlist" ]; then
+		$quiet || echo "NOTICE: nothing todo for $list and $setname"
+		summary[$list]="nothing-todo"
+		return 0
+	fi
+
+
+	if $dryrun; then
+		if $trace; then
+			echo "NOTICE: dry-run selected <BEGIN>"
+			echo "$commandlist"
+			echo "NOTICE: dry-run selected <END> (use -n for no-dryrun execution)"
+		fi
+		summary[$list]="dryrun"
+		require_no_dryrun=true
+	else
+		# create temporary file
+		commandfile=$(mktemp /tmp/ipset-$list-$setname.XXXXX)
+		if [ -z "$commandfile" ]; then
+			echo "ERROR : can't create temporary command file"
+			return 2
+		fi
+		echo "$commandlist" >$commandfile
+		sudo ipset - <$commandfile >/dev/null
+		rc=$?
+		if [ $rc -ne 0 ]; then
+			echo "ERROR : can't execute commands from commandfile via sudo: $commandfile ($setname)"
+			summary[$list]="create/update-ERROR"
+			return 1
+		fi
+
+		summary[$list]="create/update-successful"
+
+		if $debug; then
+			echo " NOTICE : keep command file: $commandfile"
+		else
+			[ -e "$commandfile" ] && rm -f "$commandfile"
+		fi
+	fi
+}
+
+# update entries of an ipset (firewalld)
+ipset_update_entries_firewalld() {
+	local add_entries_file=$(mktemp /tmp/ipset-firewalld-add-$list-$setname.XXXXX)
+	if [ -z "$add_entries_file" ]; then
+		echo "ERROR : can't create temporary file containing entries to add"
+		return 2
+	fi
+
+	# add missing ones
+	for entry in ${!list_entries[@]}; do
+		if [ "${list_entries[$entry]}" -eq 3 ]; then
+			$trace && echo "list_entry (add): $entry" >&2
+			echo "$entry" >>$add_entries_file
 		fi
 	done
+
+	local del_entries_file=$(mktemp /tmp/ipset-firewalld-remove-$list-$setname.XXXXX)
+	if [ -z "$del_entries_file" ]; then
+		echo "ERROR : can't create temporary file containing entries to remove"
+		return 2
+	fi
+
+	# delete no longer in list existing ones
+	for entry in ${!ipset_entries[@]}; do
+		if [ "${ipset_entries[$entry]}" -eq 2 ]; then
+			$trace && echo "list_entry (del): $entry" >&2
+			echo "$entry" >$del_entries_file
+		fi
+	done
+
+	if [ ! -s $add_entries_file -a ! -s $del_entries_file ]; then
+		$quiet || echo "NOTICE: nothing todo for $list and $setname"
+		summary[$list]="nothing-todo"
+		return 0
+	fi
+
+	# create command list
+	commandlist=$(
+		if $ipset_new; then
+			# new ipset is always permanent	
+			echo "firewall-cmd --permanent --new-ipset=$setname --type=hash:net --option=family=$family"
+			echo "firewall-cmd --reload"
+		fi
+
+		if [ -s $add_entries_file ]; then
+			echo "firewall-cmd $firewalld_permanent --ipset=$setname --add-entries-from-file=$add_entries_file"
+		fi
+
+		if [ -s $del_entries_file ]; then
+			echo "firewall-cmd $firewalld_permanent --ipset=$setname --remove-entries-from-file=$del_entries_file"
+		fi
+
+		if [ -n "$firewalld_permanent" ]; then
+			echo "firewall-cmd --reload"
+		fi
+	)
+
+
+	if $dryrun; then
+		if $debug; then
+			echo "NOTICE: dry-run selected <BEGIN>"
+			echo "$commandlist"
+			echo "NOTICE: dry-run selected <END> (use -n for no-dryrun execution)"
+		fi
+		summary[$list]="dryrun"
+		require_no_dryrun=true
+	else
+		echo "$commandlist" | while read line; do
+			if $debug; then
+				echo "DEBUG : execute via sudo: $line"
+				sudo $line
+				rc=$?
+			else
+				sudo $line >/dev/null
+				rc=$?
+			fi
+
+			if $debug; then
+				echo "DEBUG : executed via sudo: $line (rc=$rc)"
+			fi
+
+			[ $rc -ne 0 ] && exit 3
+		done
+
+		if [ $rc -eq 3 ]; then
+			echo "ERROR : can't execute commands from commandlist via sudo: ($setname)"
+			summary[$list]="create/update-ERROR"
+			return 1
+		fi
+
+		summary[$list]="create/update-successful"
+
+		if $debug; then
+			echo "NOTICE: keep add/remove entries files: $add_entries_file $del_entries_file"
+		else
+			[ -e "$add_entries_file" ] && rm -f "$add_entries_file"
+			[ -e "$del_entries_file" ] && rm -f "$del_entries_file"
+		fi
+	fi
 }
 
 
 ## main work
-declare -A summary
 require_no_dryrun=false
 result=0
 
@@ -227,8 +434,9 @@ for list in ${!ipv6calc_support[@]}; do
 	ipset_new=false
 
 	# check whether list exits at all
-	ipset_info=$(sudo ipset list -t $setname 2>/dev/null)
+	ipset_check $setname
 	rc=$?
+
 	if [ $rc -ne 0 ]; then
 		$quiet || echo "NOTICE: ipset is not existing (will be created later): $setname (rc=$?)"
 		ipset_new=true
@@ -236,27 +444,22 @@ for list in ${!ipv6calc_support[@]}; do
 		$quiet || echo "NOTICE: ipset is already existing (will be updated): $setname"
 
 		# retrieve list
-		ipset_entries_array=( $(ipset_list_members $setname) )
+		ipset_entries_array=( $(ipset_list_entries $setname) )
 		rc=$?
 
 		if [ $rc -ne 0 ]; then
-			echo "ERROR : execution not successful: ipset_list_members $setname (rc=$?)"
+			echo "ERROR : execution not successful: ipset_list_entries $setname (rc=$?)"
 			exit 1
 		fi
 
-		$debug && echo "DEBUG : execution result in entries (array): ipset_list_members $setname (${#ipset_entries_array[@]})"
-
-		if [ ${#ipset_entries_array[@]} -eq 0 ]; then
-			echo "NOTICE: execution returns 0 entries: ipset_list_members $setname (skip)"
-			continue
-		fi
+		$debug && echo "DEBUG : execution result in entries (array): ipset_list_entries $setname (${#ipset_entries_array[@]})"
 
 		# convert entries to hash with default value
 		for entry in ${ipset_entries_array[@]}; do
 			ipset_entries[$entry]=0
 		done
 
-		$quiet || echo "INFO  : execution result in entries: ipset_list_members $setname (${#ipset_entries[@]})"
+		$quiet || echo "INFO  : execution result in entries: ipset_list_entries $setname (${#ipset_entries[@]})"
 	fi
 
 	## Match code
@@ -300,68 +503,17 @@ for list in ${!ipv6calc_support[@]}; do
 		echo
 	fi
 
-	# create command list
-	commandlist=$(
-		# create set
-		if $ipset_new; then
-			echo "create $setname hash:net family $family counters"
-		fi
-
-		# add missing ones
-		for entry in ${!list_entries[@]}; do
-			$trace && echo "list_entry: $entry"
-			if [ "${list_entries[$entry]}" -eq 3 ]; then
-				echo "add $setname $entry"
-			fi
-		done
-
-		# delete no longer in list existing ones
-		for entry in ${!ipset_entries[@]}; do
-			if [ "${ipset_entries[$entry]}" -eq 2 ]; then
-				echo "del $setname $entry"
-			fi
-		done
-	)
-
-	if [ -z "$commandlist" ]; then
-		$quiet || echo "NOTICE: nothing todo for $list and $setname"
-		summary[$list]="nothing-todo"
-		continue
+	# create/update
+	if $firewalld; then
+		ipset_update_entries_firewalld
+		rc=$?
+	else
+		ipset_update_entries
+		rc=$?
 	fi
 
-
-	if $dryrun; then
-		if $debug; then
-			echo "NOTICE: dry-run selected <BEGIN>"
-			echo "$commandlist"
-			echo "NOTICE: dry-run selected <END> (use -n for no-dryrun execution)"
-		fi
-		summary[$list]="dryrun"
-		require_no_dryrun=true
-	else
-		# create temporary file
-		commandfile=$(mktemp /tmp/ipset-$list-$setname.XXXXX)
-		if [ -z "$commandfile" ]; then
-			echo "ERROR : can't create temporary command file"
-			exit 1
-		fi
-		echo "$commandlist" >$commandfile
-		sudo ipset - <$commandfile >/dev/null
-		rc=$?
-		if [ $rc -ne 0 ]; then
-			echo "ERROR : can't execute commands from commandfile via sudo: $commandfile ($setname)"
-			summary[$list]="create/update-ERROR"
-			result=1
-			continue
-		fi
-
-		summary[$list]="create/update-successful"
-
-		if $debug; then
-			echo " NOTICE : keep command file: $commandfile"
-		else
-			[ -e "$commandfile" ] && rm -f "$commandfile"
-		fi
+	if [ $rc -eq 2 ]; then
+		exit 1
 	fi
 done
 
