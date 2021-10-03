@@ -8,14 +8,14 @@
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>10.3.pre.1</revnumber> <date>2021-09-18</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>11.0.0</revnumber> <date>2021-10-03</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freecode.com/projects/ipv6calc/">freecode.com (former freshmeat, now also EOL) / ipv6calc</ulink> page (but this is not maintained by the author)</para><sect2>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 3.2.1</para></sect2><sect2>
+<para>Latest version since last update of this page is 4.0.0</para></sect2><sect2>
 <title>Included programs</title>
 <itemizedlist>
 <listitem><para>&ldquo;ipv6calc&rdquo;: the main utility</para></listitem><listitem><para>&ldquo;ipv6calcweb&rdquo;: CGI wrapper for ipv6calc's address information output</para></listitem><listitem><para>&ldquo;ipv6logconv&rdquo;: log converter (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6loganon&rdquo;: log anonymizer (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;ipv6logstats&rdquo;: log statistic generator (IPv4/IPv6)</para></listitem><listitem><para>&ldquo;mod_ipv6calc&rdquo;: Apache module</para></listitem></itemizedlist></sect2><sect2>
@@ -870,7 +870,9 @@ Header: family inet6 hashsize 1024 maxelem 65536 bucketsize 12 initval 0x30b0bda
 Size in memory: 41344
 References: 0
 Number of entries: 723 
-]]></screen></sect3></sect2></sect1><sect1>
+]]></screen><para>Hint: try also helper script for 'ipset' management</para><screen>
+<![CDATA[]]>$ tools/ipv6calc-create-update-ipset.sh
+<![CDATA[]]></screen></sect3></sect2></sect1><sect1>
 <title>Webserver log conversion helper program "ipv6logconv"</title>
 <para>This program parses address tokens of a given webserver logfile and converts them to special strings, useful for statistics (e.g. created by using "analog").</para><sect2>
 <title>Supported options</title>

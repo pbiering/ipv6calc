@@ -116,8 +116,8 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>10.3.pre.1</revnumber> <date>2021-09-18</date> <authorinitial
-s>PB</authorinitials></revision>
+<revision> <revnumber>11.0.0</revnumber> <date>2021-10-03</date> <authorinitials>P
+B</authorinitials></revision>
 \end_layout
 
 \end_inset
@@ -182,7 +182,7 @@ Latest version
 \end_layout
 
 \begin_layout Standard
-Latest version since last update of this page is 3.2.1
+Latest version since last update of this page is 4.0.0
 \end_layout
 
 \begin_layout Subsection
@@ -5225,6 +5225,17 @@ References: 0
 \begin_layout Code
 
 Number of entries: 723 
+\end_layout
+
+\begin_layout Standard
+Hint: try also helper script for 'ipset' management
+\end_layout
+
+\begin_layout Code
+
+$ 
+\lang english
+tools/ipv6calc-create-update-ipset.sh
 \end_layout
 
 \begin_layout Section
