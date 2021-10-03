@@ -14,25 +14,47 @@
 # poweruser     ALL=NOPASSWD:/usr/sbin/ipset
 # poweruser     ALL=NOPASSWD:/usr/bin/firewall-cmd
 #
+# Usage in combination with firewalld
+#  Note: ipset counters are not supported by ipset generation through firewalld
+#  See also: https://firewalld.org/documentation/man-pages/firewalld.ipset.html
+#   firewall-cmd --permanent --zone=block --add-source=ipset:Net_VN_IPv4
+#   firewall-cmd --permanent --zone=block --add-source=ipset:Net_VN_IPv6
+#   firewall-cmd --permanent --zone=block --add-source=ipset:Net_VN_IPv6to4
+#   firewall-cmd --permanent --zone=public --add-rich-rule="rule family='ipv4' source ipset='Net_VN_IPv4'    port port='8080' protocol='tcp' drop"
+#   firewall-cmd --permanent --zone=public --add-rich-rule="rule family='ipv6' source ipset='Net_VN_IPv6'    port port='8080' protocol='tcp' drop"
+#   firewall-cmd --permanent --zone=public --add-rich-rule="rule family='ipv6' source ipset='Net_VN_IPv6to4' port port='8080' protocol='tcp' drop"
+#
+# Usage example in combination with iptables/ip6tables (to become reboot-safe take use of 'ipset-service')
+#   iptables  -I INPUT -m set --match-set Net_VN_IPv4    src -j DROP
+#   ip6tables -I INPUT -m set --match-set Net_VN_IPv6    src -j DROP
+#   ip6tables -I INPUT -m set --match-set Net_VN_IPv6to4 src -j DROP
+#   iptables  -I INPUT -m set --match-set Net_VN_IPv4    src -p tcp --dport 8080 -j DROP
+#   ip6tables -I INPUT -m set --match-set Net_VN_IPv6    src -p tcp --dport 8080 -j DROP
+#   ip6tables -I INPUT -m set --match-set Net_VN_IPv6to4 src -p tcp --dport 8080 -j DROP
 #
 # 20210929/bie: initial version
 # 20211001/bie: add support for firewalld
+# 20211003/bie: further improvements
 
 
 prefix="Net"
 
 help() {
 	cat <<END
-Usage: $(basename "$0") -C <CountryCode> [-P <SETNAME-Prefix>] [-L <list>] [-h|?] [-d] [-q] [-t] [-n]
-	-q			more quiet (default if called by cron)
+Usage: $(basename "$0") -C <CountryCode> [-P <SETNAME-Prefix>] [-L <list>] [-F [-p]] [-n] [-d] [-q] [-t]
+                        -h|?
 	-C <CountryCode>	Country Code for database filter
+	-F			control 'ipset' via 'firewalld'
+	-p			control 'firewalld' permanent configuration (reboot-safe)
+	-n			no dry-run
+
 	-P <SETNAME-Prefix>	prefix for 'ipset' SETNAME (optional, default: $prefix)
 	-L <list>>		selected list (IPv4|IPv6|IPv6to4) (optional, default: ALL)
-	-F			control 'ipset' via 'firewalld'
-	-p			control 'firewalld' permanent configuration
+
+	-q			more quiet (default if called by cron)
 	-d			debug
-	-n			no dry-run
 	-t			trace
+
 	-h|?			this online help
 
 honors environment
@@ -44,12 +66,15 @@ END
 
 ## defines
 declare -A summary
+summary_important=false
+summary_hint="ipset"
 
 ## default
 dryrun=true
 debug=false
 trace=false
 firewalld=false
+firewalld_permanent=""
 
 if [ -t 0 ]; then
 	quiet=false
@@ -71,9 +96,16 @@ while getopts "\?hdnqtFpC:P:L:" opt; do
 		;;
 	    F)
 		firewalld=true
+		summary_hint="firewalld"
 		;;
 	    p)
-		firewalld_permanent="--permanent"
+		if ! $firewalld; then
+			echo "NOTICE: -p selected but -F not given"
+			exit 1
+		else
+			firewalld_permanent=1
+			summary_hint="firewalld/permanent"
+		fi
 		;;
 	    d)
 		debug=true
@@ -164,7 +196,7 @@ ipset_check() {
 
 	if $firewalld; then
 		$debug && echo "DEBUG : called: ipset info $setname (firewalld)" >&2
-		sudo firewall-cmd $firewalld_permanent --info-ipset=$setname >/dev/null 2>&1
+		sudo firewall-cmd ${firewalld_permanent:+--permanent }--info-ipset=$setname >/dev/null 2>&1
 		rc=$?
 	else
 		$debug && echo "DEBUG : called: ipset info $setname" >&2
@@ -182,7 +214,7 @@ ipset_list_entries() {
 
 	if $firewalld; then
 		$debug && echo "DEBUG : called: ipset_list_entries $setname (firewalld)" >&2
-		sudo firewall-cmd $firewalld_permanent --ipset=$setname --get-entries
+		sudo firewall-cmd ${firewalld_permanent:+--permanent }--ipset=$setname --get-entries
 	else
 		$debug && echo "DEBUG : called: ipset_list_entries $setname" >&2
 
@@ -198,7 +230,7 @@ ipset_list_entries() {
 }
 
 # update entries of an ipset (native)
-# return codes:  0: ok  1: error  2: fatal error
+# rc: 0=ok 1=nothingtodo 4=dryrun 3=error 2=fatal
 ipset_update_entries() {
 	# create command list
 	commandlist=$(
@@ -226,8 +258,7 @@ ipset_update_entries() {
 
 	if [ -z "$commandlist" ]; then
 		$quiet || echo "NOTICE: nothing todo for $list and $setname"
-		summary[$list]="nothing-todo"
-		return 0
+		return 1
 	fi
 
 
@@ -237,8 +268,7 @@ ipset_update_entries() {
 			echo "$commandlist"
 			echo "NOTICE: dry-run selected <END> (use -n for no-dryrun execution)"
 		fi
-		summary[$list]="dryrun"
-		require_no_dryrun=true
+		return 4
 	else
 		# create temporary file
 		commandfile=$(mktemp /tmp/ipset-$list-$setname.XXXXX)
@@ -251,11 +281,8 @@ ipset_update_entries() {
 		rc=$?
 		if [ $rc -ne 0 ]; then
 			echo "ERROR : can't execute commands from commandfile via sudo: $commandfile ($setname)"
-			summary[$list]="create/update-ERROR"
-			return 1
+			return 3
 		fi
-
-		summary[$list]="create/update-successful"
 
 		if $debug; then
 			echo " NOTICE : keep command file: $commandfile"
@@ -263,9 +290,11 @@ ipset_update_entries() {
 			[ -e "$commandfile" ] && rm -f "$commandfile"
 		fi
 	fi
+	return 0
 }
 
 # update entries of an ipset (firewalld)
+# rc: 0=ok 1=nothingtodo 4=dryrun 3=error 2=fatal
 ipset_update_entries_firewalld() {
 	local add_entries_file=$(mktemp /tmp/ipset-firewalld-add-$list-$setname.XXXXX)
 	if [ -z "$add_entries_file" ]; then
@@ -297,8 +326,7 @@ ipset_update_entries_firewalld() {
 
 	if [ ! -s $add_entries_file -a ! -s $del_entries_file ]; then
 		$quiet || echo "NOTICE: nothing todo for $list and $setname"
-		summary[$list]="nothing-todo"
-		return 0
+		return 1
 	fi
 
 	# create command list
@@ -310,11 +338,11 @@ ipset_update_entries_firewalld() {
 		fi
 
 		if [ -s $add_entries_file ]; then
-			echo "firewall-cmd $firewalld_permanent --ipset=$setname --add-entries-from-file=$add_entries_file"
+			echo "firewall-cmd ${firewalld_permanent:+--permanent }--ipset=$setname --add-entries-from-file=$add_entries_file"
 		fi
 
 		if [ -s $del_entries_file ]; then
-			echo "firewall-cmd $firewalld_permanent --ipset=$setname --remove-entries-from-file=$del_entries_file"
+			echo "firewall-cmd ${firewalld_permanent:+--permanent }--ipset=$setname --remove-entries-from-file=$del_entries_file"
 		fi
 
 		if [ -n "$firewalld_permanent" ]; then
@@ -329,8 +357,7 @@ ipset_update_entries_firewalld() {
 			echo "$commandlist"
 			echo "NOTICE: dry-run selected <END> (use -n for no-dryrun execution)"
 		fi
-		summary[$list]="dryrun"
-		require_no_dryrun=true
+		return 4
 	else
 		echo "$commandlist" | while read line; do
 			if $debug; then
@@ -351,11 +378,8 @@ ipset_update_entries_firewalld() {
 
 		if [ $rc -eq 3 ]; then
 			echo "ERROR : can't execute commands from commandlist via sudo: ($setname)"
-			summary[$list]="create/update-ERROR"
-			return 1
+			return 3
 		fi
-
-		summary[$list]="create/update-successful"
 
 		if $debug; then
 			echo "NOTICE: keep add/remove entries files: $add_entries_file $del_entries_file"
@@ -364,6 +388,7 @@ ipset_update_entries_firewalld() {
 			[ -e "$del_entries_file" ] && rm -f "$del_entries_file"
 		fi
 	fi
+	return 0
 }
 
 
@@ -374,6 +399,7 @@ result=0
 for list in ${!ipv6calc_support[@]}; do
 	if [ -n "$listselected" -a "$list" != "$listselected" ]; then
 		$quiet || echo "INFO  : skip not selected list for country code: $list ($countrycode)"
+		summary[$list]="SKIPPED"
 		continue
 	fi
 
@@ -513,17 +539,36 @@ for list in ${!ipv6calc_support[@]}; do
 	fi
 
 	if [ $rc -eq 2 ]; then
-		exit 1
+		summary[$list]="FATAL"
+		summary_important=true
+		[ $result -eq 0 ] && result=1
+		break
+	elif [ $rc -eq 1 ]; then
+		summary[$list]="NOOP"
+	elif [ $rc -eq 0 ]; then
+		summary[$list]="SUCESS(add=${statistics[Add]}/del=${statistics[Delete]})"
+		summary_important=true
+	elif [ $rc -eq 3 ]; then
+		summary[$list]="ERROR"
+		summary_important=true
+		[ $result -eq 0 ] && result=1
+	elif [ $rc -eq 4 ]; then
+		summary[$list]="DRYRUN"
+		require_no_dryrun=true
+		summary_important=true
 	fi
 done
 
-if ! $quiet; then
-	echo -n "NOTICE: summary:"
+if ! $quiet || $summary_important; then
+	echo -n "NOTICE: summary for $countrycode ($summary_hint):"
 	for entry in ${!summary[@]}; do
 		echo -n " $entry=${summary[$entry]}"
 	done
 	if $require_no_dryrun; then
 		echo -n " (pending actions require no-dryrun [-n])"
+	fi
+	if [ ! -n "$firewalld_permanent" ]; then
+		echo -n " (firewalld permanent change requires -p)"
 	fi
 	echo
 fi
