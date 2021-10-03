@@ -60,7 +60,7 @@ Usage: $(basename "$0") -C <CountryCode> [-P <SETNAME-Prefix>] [-L <list>] [-F [
 honors environment
 	IPV6CALC_BIN		'ipv6calc' binary
 
-'iplist' setname will be named: ${prefix}_CC_(IPv4|IPv6|IPv6to4)
+'ipset' SETNAME will be named: ${prefix}_CC_(IPv4|IPv6|IPv6to4)
 END
 }
 
