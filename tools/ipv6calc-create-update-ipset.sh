@@ -43,7 +43,7 @@ help() {
 	cat <<END
 Usage: $(basename "$0") -C <CountryCode> [-P <SETNAME-Prefix>] [-L <list>] [-F [-p]] [-n] [-d] [-q] [-t]
                         -h|?
-	-C <CountryCode>	Country Code for database filter
+	-C <CountryCode>	Country Code (CC) for database filter
 	-F			control 'ipset' via 'firewalld'
 	-p			control 'firewalld' permanent configuration (reboot-safe)
 	-n			no dry-run
@@ -60,7 +60,7 @@ Usage: $(basename "$0") -C <CountryCode> [-P <SETNAME-Prefix>] [-L <list>] [-F [
 honors environment
 	IPV6CALC_BIN		'ipv6calc' binary
 
-'iplist' setname will be named: Prefix_CountryCode_(IPv4|IPv6|IPv6to4)
+'iplist' setname will be named: ${prefix}_CC_(IPv4|IPv6|IPv6to4)
 END
 }
 
