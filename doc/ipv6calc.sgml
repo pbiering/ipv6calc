@@ -875,8 +875,8 @@ Size in memory: 41344
 References: 0
 Number of entries: 723 
 ]]></screen><para>Hint: try also helper script for 'ipset' management</para><screen>
-<![CDATA[]]>$ tools/ipv6calc-create-update-ipset.sh
-<![CDATA[]]></screen></sect3></sect2></sect1><sect1>
+<![CDATA[$ tools/ipv6calc-create-update-ipset.sh
+]]></screen></sect3></sect2></sect1><sect1>
 <title>Webserver log conversion helper program "ipv6logconv"</title>
 <para>This program parses address tokens of a given webserver logfile and converts them to special strings, useful for statistics (e.g. created by using "analog").</para><sect2>
 <title>Supported options</title>
@@ -1258,7 +1258,7 @@ Usage: ipv6calc-db-update.sh [-s] [-u] [-D <dir>]
 <para>Because calling C programs directly as CGI isn't really recommended (too much security troubles all the time), I wrote a small wrapper utility which calls "ipv6calc" to get information about client and server address for displaying on a web page. </para><sect2>
 <title>Examples</title>
 <para>A demonstration about which kind of output is possible to produce is shown at</para><itemizedlist>
-<listitem><para><ulink url="http://ip.bieringer.de/">http://ip.bieringer.de/</ulink> (IPv4/IPv6)</para></listitem><listitem><para><ulink url="http://www.ipv6.bieringer.de/">http://www.ipv6.bieringer.de/</ulink> (IPv6 only)</para></listitem><listitem><para><ulink url="http://mirrors.bieringer.de/">http://mirrors.bieringer.de/</ulink> (IPv4/IPv6)</para></listitem><listitem><para><ulink url="http://www.sixxs.net/tools/ipv6calc/">http://www.sixxs.net/tools/ipv6calc/</ulink> (IPv4/IPv6)</para></listitem></itemizedlist></sect2></sect1><sect1>
+<listitem><para><ulink url="http://ip.bieringer.net/">http://ip.bieringer.net/</ulink> (IPv4/IPv6)</para></listitem><listitem><para><ulink url="http://www.ipv6.bieringer.de/">http://www.ipv6.bieringer.de/</ulink> (IPv6 only)</para></listitem><listitem><para><ulink url="http://mirrors.bieringer.de/">http://mirrors.bieringer.de/</ulink> (IPv4/IPv6)</para></listitem></itemizedlist></sect2></sect1><sect1>
 <title>Webserver log statistics helper program "ipv6logstats"</title>
 <para>This program parses a given webserver logfile and count addresses, useful for time period statistics.</para>
 <para>Since version 0.95.0 it has extended output, adding a date/time line and statistics by Country Code and ASN (if required databases are available).</para><sect2>
