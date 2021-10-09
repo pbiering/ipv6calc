@@ -47,7 +47,7 @@ while getopts "sGLD:vh\?" opt; do
 		exit 1
 		;;
 	    G)
-		echo "NOTICE: 'geoipupdate' is default since legacy is no longer supported"
+		echo "NOTICE: 'geoipupdate' is default since legacy is no longer supported (dedicated option '-G' can be removed now)"
 		;;
 	    *)
 		help
