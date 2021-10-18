@@ -1544,7 +1544,7 @@ sub print_infohash ($$$;$) {
 
 	# loop through all embedded
 	for my $embedded (keys %key_values_db_tokens) {
-		my $entry = " for <b>$embedded</b>";
+		my $entry = " for $embedded";
 		$entry =~ s/[\[\]]//g;
 
 		if ($embedded eq "default") {
@@ -2563,8 +2563,8 @@ if ($mode eq "form" || $mode eq "mixed") {
 	&print_textonly ("\n");
 	&print_tagoutput ( "      <tr>\n" );
 	&print_tagoutput ( "        <th style=\"background-color:#44DD44;\" align=\"center\" colspan=\"" . ($db_columns + 3) . "\">" );
-	&print_tagoutput ( "        Enter your IPv4/IPv6/MAC/EUI-64 " . $text{'Address'}->{$lang} . "\n" );
-	&print_tagoutput ( "        </th>\n" );
+	&print_tagoutput ( "Enter your IPv4/IPv6/MAC/EUI-64 " . $text{'Address'}->{$lang});
+	&print_tagoutput ( "</th>\n" ); # same line
 	&print_tagoutput ( "      <tr>\n" );
 	&print_tagoutput ( "        <td align=\"center\" colspan=\"" . ($db_columns + 3) . "\">\n" );
 	&print_tagoutput ( "          <p>\n" );
@@ -2592,7 +2592,7 @@ if ($mode eq "form" || $mode eq "mixed") {
 		&print_tagoutput ( "        <th style=\"background-color:#DDDDFF;\" align=\"center\" colspan=\"" . ($db_columns + 3) . "\">" );
 		print $text{'INPUT'}->{$lang} . " " . $input;
 		&print_textonly ("\n");
-		&print_tagoutput ( "        </th>\n" );
+		&print_tagoutput ( "</th>\n" ); # same line
 		&print_tagoutput ( "      </tr>\n" );
 		&print_infohash (\%infoh_input, \@sort_input, 'form');
 	};
@@ -2607,7 +2607,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 	&print_tagoutput ( "        <th style=\"background-color:#FFDDDD;\" colspan=\"" . ($db_columns + 3) . "\">" );
 	print $text{'REMOTE'}->{$lang} if ($outputformat ne "textkeyvalue");
 	&print_textonly ("\n");
-	&print_tagoutput ( "        </th>\n" );
+	&print_tagoutput ( "</th>\n" ); # same line
 	&print_tagoutput ( "      </tr>\n" );
 	&print_infohash (\%infoh_remote, \@sort_remote, 'client');
 
@@ -2640,7 +2640,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 			&print_tagoutput ( "        <th style=\"background-color:#EEDDDD;\" colspan=\"" . ($db_columns + 3) . "\">" );
 			print $text{'PROXY'}->{$lang} . " #" . $proxy_count if ($outputformat ne "textkeyvalue");
 			&print_textonly ("\n");
-			&print_tagoutput ( "        </th>\n" );
+			&print_tagoutput ( "</th>\n" ); # same line
 			&print_tagoutput ( "      </tr>\n" );
 			&print_infohash (\%infoh_proxy, \@sort_proxy, 'proxy', $proxy_count);
 		};
@@ -2653,7 +2653,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 		&print_tagoutput ( "        <th style=\"background-color:#DDFFDD;\" colspan=\"" . ($db_columns + 3) . "\">" );
 		print $text{'SERVER'}->{$lang} if ($outputformat ne "textkeyvalue");
 		&print_textonly ("\n");
-		&print_tagoutput ( "</th>\n" );
+		&print_tagoutput ( "</th>\n" ); # same line
 		&print_tagoutput ( "      </tr>\n" );
 		&print_infohash (\%infoh_server, \@sort_server, 'server');
 	};
