@@ -1255,9 +1255,9 @@ sub print_infohash ($$$;$) {
 					} else {
 						&print_tagoutput ( "      <tr style=\"background-color: rgb(216, 216, 216);\">\n" );
 					};
-					my $entry = "Embedded IPv4 address <b>" . $key_embedded . "</b>";
+					my $entry = "Embedded IPv4 address " . $key_embedded;
 					$entry =~ s/[\[\]]//g;
-					&print_tagoutput ( "        <td align=\"left\" colspan=\"" . ($db_columns + 3) . "\"><font size=\"-1\">" . $entry . "</font></td>\n" );
+					&print_tagoutput ( "        <th align=\"left\" colspan=\"" . ($db_columns + 3) . "\"><font size=\"-1\">" . $entry . "</font></th>\n" );
 					&print_tagoutput ( "      </tr>\n");
 				};
 			};
@@ -1553,7 +1553,7 @@ sub print_infohash ($$$;$) {
 
 		($r, $g, $b) = (240, 240, 255);
 		&print_tagoutput ( "      <tr>\n" );
-		&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 224);\" align=\"center\" colspan=\"2\"><font size=\"-1\"><i>Information from databases</i>$entry</font></td>\n" );
+		&print_tagoutput ( "        <th style=\"background-color: rgb(255, 255, 224);\" align=\"center\" colspan=\"2\">Information from databases$entry</th>\n" );
 		for my $key (sort keys %key_db_tokens) {
 			&print_tagoutput ("        <td style=\"background-color: rgb(" . $r . ", " . $g . ", " . $b . ");\"><font size=\"-1\"><b>");
 			if (defined $urls{$key}) {
