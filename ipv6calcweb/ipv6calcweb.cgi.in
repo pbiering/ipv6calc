@@ -1429,7 +1429,6 @@ sub print_infohash ($$$;$) {
 				if (defined $section) {
 					$url .= "#section-" . $section;
 				};
-				&print_tagoutput ( "<a target=\"_blank\" href=\"" . $url . "\">" );
 			};
 
 			if ( defined $url_whoisservers{$whois_registry}->{$whois_type} ) {
