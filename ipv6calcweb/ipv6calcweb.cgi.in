@@ -1555,7 +1555,7 @@ sub print_infohash ($$$;$) {
 		&print_tagoutput ( "      <tr>\n" );
 		&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 224);\" align=\"center\" colspan=\"2\"><font size=\"-1\"><i>Information from databases</i>$entry</font></td>\n" );
 		for my $key (sort keys %key_db_tokens) {
-			&print_tagoutput ("        <td style=\"background-color: rgb(" . $r . "," . $g . "," . $b . ");\"><font size=\"-1\"><b>");
+			&print_tagoutput ("        <td style=\"background-color: rgb(" . $r . ", " . $g . ", " . $b . ");\"><font size=\"-1\"><b>");
 			if (defined $urls{$key}) {
 				# add URL
 				&print_tagoutput("<a target=\"_blank\" href=\"" . $urls{$key} . "\">" . $key . "</a>");
@@ -1604,7 +1604,7 @@ sub print_infohash ($$$;$) {
 			# print value
 			($r, $g, $b) = (240, 240, 255);
 			for my $db (sort keys %key_db_tokens) {
-				&print_tagoutput ( "        <td style=\"background-color: rgb(" . $r . "," . $g . "," . $b . ");\"><font size=\"-1\">" );
+				&print_tagoutput ( "        <td style=\"background-color: rgb(" . $r . ", " . $g . ", " . $b . ");\"><font size=\"-1\">" );
 				my $key_result = $db . "_" . $key;
 				if (defined $$phash{$key_result}) {
 					my $flag = 0;
@@ -2504,6 +2504,7 @@ OUTPUT_BEGIN:
 &print_textonly  ("Content-type: text/plain\n\n");
 
 if ($outputformat eq "htmlfull") {
+	&print_tagoutput ( "<!DOCTYPE html>\n" );
 	&print_tagoutput ( "<html>\n" );
 	&print_tagoutput ( "  <head>\n" );
 	&print_tagoutput ( "    <meta name=\"Author\" content=\"Peter Bieringer\">\n" );
@@ -2561,13 +2562,18 @@ if ($mode eq "form" || $mode eq "mixed") {
 	# Input
 	&print_textonly ("\n");
 	&print_tagoutput ( "      <tr>\n" );
-	&print_tagoutput ( "        <th colspan=\"" . ($db_columns + 3) . "\">\n" );
+	&print_tagoutput ( "        <th style=\"background-color:#44DD44;\" align=\"center\" colspan=\"" . ($db_columns + 3) . "\">" );
+	&print_tagoutput ( "        Enter your IPv4/IPv6/MAC/EUI-64 " . $text{'Address'}->{$lang} . "\n" );
+	&print_tagoutput ( "        </th>\n" );
+	&print_tagoutput ( "      <tr>\n" );
+	&print_tagoutput ( "        <td align=\"center\" colspan=\"" . ($db_columns + 3) . "\">\n" );
+	&print_tagoutput ( "          <p>\n" );
 	&print_tagoutput ( "          <form action=\"" . $script_name . "\" method=\"get\">\n" );
 	if (!defined $input) {
 		$input = "::1";
 		$input_default = 1;
 	};
-	&print_tagoutput ( "            <p>IPv4/IPv6/MAC/EUI-64 " . $text{'Address'}->{$lang} . ": <input name=\"input\" type=\"text\" size=\"64\" maxlength=\" $maxenvlength\" value=\"$input\">\n" );
+	&print_tagoutput ( "            <input name=\"input\" type=\"text\" size=\"64\" maxlength=\" $maxenvlength\" value=\"$input\">\n" );
 	&print_tagoutput ( "            <input type=\"text\" size=\"128\" maxlength=\"128\" name=\"tokenhash\" value=\"" . $tokenhash . "\" hidden>\n" );
 	&print_tagoutput ( "            <input type=\"text\" size=\"128\" maxlength=\"128\" name=\"tokentime\" value=\"" . $tokentime . "\" hidden>\n" );
 	&print_tagoutput ( "            <input name=\"lang\" type=\"text\" size=\"128\" maxlength=\"128\" value=\"$lang\" hidden>\n" );
@@ -2578,7 +2584,7 @@ if ($mode eq "form" || $mode eq "mixed") {
 	&print_tagoutput ( "            <input type=\"submit\" value=\"" . $text{'clear'}->{$lang} . "\">\n" );
 	&print_tagoutput ( "          </form>\n" );
 	&print_textonly ("\n");
-	&print_tagoutput ( "        </th>\n" );
+	&print_tagoutput ( "        </td>\n" );
 	&print_tagoutput ( "      </tr>\n" );
 
 	if (defined $input && !defined $input_default) {
@@ -2586,7 +2592,7 @@ if ($mode eq "form" || $mode eq "mixed") {
 		&print_tagoutput ( "        <th style=\"background-color:#DDDDFF;\" align=\"center\" colspan=\"" . ($db_columns + 3) . "\">" );
 		print $text{'INPUT'}->{$lang} . " " . $input;
 		&print_textonly ("\n");
-		&print_tagoutput ( "</th>\n" );
+		&print_tagoutput ( "        </th>\n" );
 		&print_tagoutput ( "      </tr>\n" );
 		&print_infohash (\%infoh_input, \@sort_input, 'form');
 	};
@@ -2601,7 +2607,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 	&print_tagoutput ( "        <th style=\"background-color:#FFDDDD;\" colspan=\"" . ($db_columns + 3) . "\">" );
 	print $text{'REMOTE'}->{$lang} if ($outputformat ne "textkeyvalue");
 	&print_textonly ("\n");
-	&print_tagoutput ( "</th>\n" );
+	&print_tagoutput ( "        </th>\n" );
 	&print_tagoutput ( "      </tr>\n" );
 	&print_infohash (\%infoh_remote, \@sort_remote, 'client');
 
@@ -2663,14 +2669,14 @@ sub create_uri($) {
 # Footer
 &print_textonly ("\n");
 &print_tagoutput ( "      <tr>\n" );
-&print_tagoutput ( "        <td style=\"background-color:#DDDDDD;\" colspan=\"" . ($db_columns + 3) . "\">\n" );
+&print_tagoutput ( "        <td style=\"font-size:60%; background-color:#DDDDDD;\" colspan=\"" . ($db_columns + 3) . "\">\n" );
 
 my $datetime = POSIX::strftime("%Y-%m-%d %H:%M:%S", gmtime) . " UTC";
 
 if ($outputformat =~ /^html/o) {
-	print "          <font size=\"-2\">" . $text{'generated'}->{$lang} . " " . encode_entities($program_name) . " " . encode_entities($program_version) . ", " . encode_entities($program_copyright) . " " . $text{'at'}->{$lang} . " " . $datetime . "</font>\n";
+	print "          " . $text{'generated'}->{$lang} . " " . encode_entities($program_name) . " " . encode_entities($program_version) . ", " . encode_entities($program_copyright) . " " . $text{'at'}->{$lang} . " " . $datetime . "\n";
 	print "          <br>\n";
-	print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.deepspace6.net/projects/ipv6calc.html\">" . encode_entities($ipv6calc_name) . "</a> " . encode_entities($ipv6calc_version) . ", " . encode_entities($ipv6calc_copyright);
+	print "          " . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.deepspace6.net/projects/ipv6calc.html\">" . encode_entities($ipv6calc_name) . "</a> " . encode_entities($ipv6calc_version) . ", " . encode_entities($ipv6calc_copyright);
 	if (length($ipv6calc_features) > 0) {
 		print " (features: " . $ipv6calc_features . ")";
 	};
@@ -2680,36 +2686,35 @@ if ($outputformat =~ /^html/o) {
 	if (length($ipv6calc_settings) > 0) {
 		print " (settings: " . $ipv6calc_settings . ")";
 	};
-	print "</font>\n";
 
 	if (scalar(keys %db_info_ip2location) > 0) {
 		print "          <br>\n";
-		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'IP2LOCATION'} . "\">IP2Location</a> " . $text{'database'}->{$lang} . " " . create_uri(encode_entities(join(" / ", sort keys %db_info_ip2location))). "</font>\n";
+		print "          " . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'IP2LOCATION'} . "\">IP2Location</a> " . $text{'database'}->{$lang} . " " . create_uri(encode_entities(join(" / ", sort keys %db_info_ip2location))). "\n";
 	};
 
 	if (scalar(keys %db_info_geoip2) > 0) {
 		print "          <br>\n";
-		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'GEOIP2'} . "\">MaxMind</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_geoip2)) . "</font>\n";
+		print "          " . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'GEOIP2'} . "\">MaxMind</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_geoip2)) . "\n";
 	};
 
 	if (scalar(keys %db_info_dbip2) > 0) {
 		print "          <br>\n";
-		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'DBIP2'} . "\">db-ip.com</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_dbip2)) . "</font>\n";
+		print "          " . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'DBIP2'} . "\">db-ip.com</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_dbip2)) . "\n";
 	};
 
 	if (scalar(keys %db_info_external) > 0) {
 		print "          <br>\n";
-		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " External " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_external)) . "</font>\n";
+		print "          " . $text{'powered'}->{$lang} . " External " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_external)) . "\n";
 	};
 
 	if (scalar(keys %db_info_builtin) > 0) {
 		print "          <br>\n";
-		print "          <font size=\"-2\">" . $text{'powered'}->{$lang} . " BuiltIn " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_builtin)) . "</font>\n";
+		print "          " . $text{'powered'}->{$lang} . " BuiltIn " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_builtin)) . "\n";
 	};
 
 	if ($api_used_geonamesorg > 0) {
 		print "          <br>\n";
-		print "          <font size=\"-2\">" . $text{'credits'}->{$lang} . " <a target=\"_blank\" href=\"http://www.geonames.org\">GeoNames</a></font>\n";
+		print "          " . $text{'credits'}->{$lang} . " <a target=\"_blank\" href=\"http://www.geonames.org\">GeoNames</a>\n";
 	};
 } else {
 	# text output
