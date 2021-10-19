@@ -10,6 +10,12 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20211019/PB:
+	ipv6calcweb/ipv6calcweb.cgi.in: several cosmetic updates and fixes
+	databases/ieee*/Makefile: alignments related to libieee.[ch] changes
+	internal databases: update
+	tag version 4.0.0
+
 20211003/PB:
 	tools/ipv6calc-create-update-ipset.sh: (add)
 
