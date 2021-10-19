@@ -2770,12 +2770,12 @@ if ($outputformat =~ /^html/o) {
 
 	if (scalar(keys %db_info_geoip2) > 0) {
 		print "INFO__POWEREDBY_GEOIP2=" if ($outputformat eq "textkeyvalue");
-		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_geoip2) . " (" . $urls{'GEOIP'} . ")" . $chr_quote . "\n";
+		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_geoip2) . " (" . $urls{'GEOIP2'} . ")" . $chr_quote . "\n";
 	};
 
 	if (scalar(keys %db_info_dbip2) > 0) {
 		print "INFO__POWEREDBY_DBIP2=" if ($outputformat eq "textkeyvalue");
-		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_dbip2) . " (" . $urls{'DBIP'} . ")" . $chr_quote . "\n";
+		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_dbip2) . " (" . $urls{'DBIP2'} . ")" . $chr_quote . "\n";
 	};
 
 	if (scalar(keys %db_info_external) > 0) {
