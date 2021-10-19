@@ -2617,7 +2617,7 @@ if ($mode eq "form" || $mode eq "mixed") {
 
 	if (defined $input && !defined $input_default) {
 		&print_tagoutput ( "      <tr>\n" );
-		&print_tagoutput ( "        <th style=\"background-color:#DDDDFF;\" align=\"center\" colspan=\"" . ($db_columns + 3) . "\">" );
+		&print_tagoutput ( "        <th style=\"background-color:#44DD44;\" align=\"center\" colspan=\"" . ($db_columns + 3) . "\">" );
 		print $text{'INPUT'}->{$lang} . " " . $input;
 		&print_textonly ("\n");
 		&print_tagoutput ( "</th>\n" ); # same line
