@@ -262,16 +262,16 @@ my %url_whoisservers = (
 		'ipv6'	=> "https://whois.arin.net/rest/ip/",
 	},
 	'APNIC'	=> {
-		'ipv4'	=> "https://www.apnic.net/apnic-bin/whois.pl?searchtext=",
-		'ipv6'	=> "https://www.apnic.net/apnic-bin/whois.pl?searchtext=",
+		'ipv4'	=> "https://wq.apnic.net/static/search.html?query=",
+		'ipv6'	=> "https://wq.apnic.net/static/search.html?query=",
 	},
 	'LACNIC'	=> {
 		'ipv4'	=> "https://lacnic.net/cgi-bin/lacnic/whois?query=",
 		'ipv6'	=> "https://lacnic.net/cgi-bin/lacnic/whois?query=",
 	},
-	'AFRINIC'	=> {
-		'ipv4'	=> "https://www.afrinic.net/cgi-bin/whois?searchtext=",
-		'ipv6'	=> "https://www.afrinic.net/cgi-bin/whois?searchtext=",
+	'AFRINIC'	=> { # currently only supporting POST, e.g. curl --data "key=<IP>" "https://www.afrinic.net/whois-web/public/?"
+		'ipv4'	=> "https://www.afrinic.net/whois-web/public/?key=",
+		'ipv6'	=> "https://www.afrinic.net/whois-web/public/?key=",
 	},
 	'IANA'	=> {
 		'ipv4'	=> "",
