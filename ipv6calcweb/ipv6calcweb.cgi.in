@@ -108,10 +108,13 @@ my $returncode = 0;
 my $error;
 my $error_flag = 0;
 
+## defines for layout
 my $mode_db_entries_in_subcolumns = 0;
 my $db_columns = 0;
+my $font_size_1 = "85%";
+my $font_size_2 = "70%";
 
-# database enabled toggles and defaults
+## database enabled toggles and defaults
 my %db_enabled;
 $db_enabled{'GEOIP2'} = 1;
 $db_enabled{'IP2LOCATION'} = 1;
@@ -327,6 +330,10 @@ my %text_geodb = (
 );
 
 my %text_extra = (
+	'_REGISTRY' => {
+		'de' => "Verweis auf REGISTRY",
+		'en' => "link to REGISTRY",
+	},
 	'_GEONAME_ID' => {
 		'de' => "Verweis auf geonames.org",
 		'en' => "link to geonames.org",
@@ -1164,8 +1171,8 @@ sub print_infohash ($$$;$) {
 		&print_tagoutput ( "        <td colspan=\"" . ($db_columns + 3) . "\">" );
 		print $text{'nodata'}->{$lang};
 		&print_textonly ("\n");
-		&print_tagoutput ( "</td>\n" );
-		&print_tagoutput ( "</tr>\n" );
+		&print_tagoutput ( "        </td>\n" );
+		&print_tagoutput ( "      </tr>\n" );
 		return;
 	};
 
@@ -1251,13 +1258,13 @@ sub print_infohash ($$$;$) {
 			if (($outputformat eq "html") || ($outputformat eq "htmlfull")) {
 				if ($embedded_changed == 1) {
 					if ($count_key_embedded & 1) {
-						&print_tagoutput ( "      <tr style=\"background-color: rgb(240, 240, 240);\">\n" );
+						&print_tagoutput ( "      <tr style=\"background-color:rgb(240,240,240);\">\n" );
 					} else {
-						&print_tagoutput ( "      <tr style=\"background-color: rgb(216, 216, 216);\">\n" );
+						&print_tagoutput ( "      <tr style=\"background-color:rgb(216,216,216);\">\n" );
 					};
 					my $entry = "Embedded IPv4 address " . $key_embedded;
 					$entry =~ s/[\[\]]//g;
-					&print_tagoutput ( "        <th align=\"left\" colspan=\"" . ($db_columns + 3) . "\"><font size=\"-1\">" . $entry . "</font></th>\n" );
+					&print_tagoutput ( "        <th align=\"left\" colspan=\"" . ($db_columns + 3) . "\" style=\"font-size:$font_size_1;\">" . $entry . "</th>\n" );
 					&print_tagoutput ( "      </tr>\n");
 				};
 			};
@@ -1291,9 +1298,9 @@ sub print_infohash ($$$;$) {
 		# print key
 		if ($count_key_embedded > 0) {
 			if ($count_key_embedded & 1) {
-				&print_tagoutput ( "      <tr style=\"background-color: rgb(240, 240, 240);\">\n" );
+				&print_tagoutput ( "      <tr style=\"background-color:rgb(240,240,240);\">\n" );
 			} else {
-				&print_tagoutput ( "      <tr style=\"background-color: rgb(216, 216, 216);\">\n" );
+				&print_tagoutput ( "      <tr style=\"background-color:rgb(216,216,216);\">\n" );
 			};
 		} else {
 			&print_tagoutput ( "      <tr>\n" );
@@ -1347,7 +1354,7 @@ sub print_infohash ($$$;$) {
 
 				# print information about link
 				if (defined $text_extra{$key_lookup_without_db}->{$lang}) {
-					&print_tagoutput(" <font size=\"-2\">(" . $text_extra{$key_lookup_without_db}->{$lang} . ")</font>")
+					&print_tagoutput("<p style=\"font-size=$font_size_2\">(" . $text_extra{$key_lookup_without_db}->{$lang} . ")</p>")
 				};
 			} else {
 				&print_textonly (' ' x ($length_max_description) );
@@ -1553,27 +1560,26 @@ sub print_infohash ($$$;$) {
 
 		($r, $g, $b) = (240, 240, 255);
 		&print_tagoutput ( "      <tr>\n" );
-		&print_tagoutput ( "        <th style=\"background-color: rgb(255, 255, 224);\" align=\"center\" colspan=\"2\">Information from databases$entry</th>\n" );
+		&print_tagoutput ( "        <th style=\"background-color:rgb(255,255,224);\" align=\"left\" colspan=\"2\">Information from databases$entry</th>\n" );
 		for my $key (sort keys %key_db_tokens) {
-			&print_tagoutput ("        <td style=\"background-color: rgb(" . $r . ", " . $g . ", " . $b . ");\"><font size=\"-1\"><b>");
+			&print_tagoutput ("        <th style=\"background-color:rgb(" . $r . "," . $g . "," . $b . "); font-size:$font_size_1;\" align=\"left\">");
 			if (defined $urls{$key}) {
 				# add URL
 				&print_tagoutput("<a target=\"_blank\" href=\"" . $urls{$key} . "\">" . $key . "</a>");
 			} else {
 				&print_tagoutput($key);
 			};
-			&print_tagoutput("</b>");
 			if (defined $text_geodb{$key}) {
-				&print_tagoutput("</font><br ><font size=\"-2\">" . $text_geodb{$key});
+				&print_tagoutput("<br><p style=\"font-size:$font_size_2;\">" . $text_geodb{$key} . "</p>");
 			};
-			&print_tagoutput("</font></td>\n");
+			&print_tagoutput("</th>\n");
 			$shift = $r; $r = $g; $g = $b; $b = $shift;	
 		};
 		&print_tagoutput ( "      </tr>\n" );
 
 		for my $key_lookup (sort keys %{$key_values_db_tokens{$embedded}}) {
 			&print_tagoutput ( "      <tr>\n" );
-			&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 224);\"><font size=\"-1\"><b>$key_lookup</b></font></td>\n" );
+			&print_tagoutput ( "        <td style=\"background-color:rgb(255,255,224); font-size:$font_size_1;\"><b>$key_lookup</b></td>\n" );
 
 			my $key;
 			if ($embedded eq "default") {
@@ -1584,12 +1590,12 @@ sub print_infohash ($$$;$) {
 
 			# print description
 			if ($outputtype ne "simple") {
-				&print_tagoutput ( "        <td style=\"background-color: rgb(255, 255, 224);\"><font size=\"-1\">" );
+				&print_tagoutput ( "        <td style=\"background-color:rgb(255,255,224); font-size:$font_size_1;\">" );
 				if (defined $text{"_" . $key_lookup}->{$lang}) {
 					print $text{"_" . $key_lookup}->{$lang};
 
 					if (defined $text_extra{"_" . $key_lookup}->{$lang}) {
-						&print_tagoutput(" <font size=\"-2\">(" . $text_extra{"_" . $key_lookup}->{$lang} . ")</font>")
+						&print_tagoutput("<p style=\"font-size:$font_size_2;\">(" . $text_extra{"_" . $key_lookup}->{$lang} . ")</p>")
 					};
 				} elsif ($key_lookup =~ /^(IP2LOCATION|GEOIP2|DBIP2)$/o) {
 					# fallback
@@ -1598,13 +1604,13 @@ sub print_infohash ($$$;$) {
 						print $1 . " " . $text{$key_lookup_without_db}->{$lang};
 					};
 				};
-				&print_tagoutput ( "</font></td>\n" );
+				&print_tagoutput ( "</td>\n" );
 			};
 
 			# print value
 			($r, $g, $b) = (240, 240, 255);
 			for my $db (sort keys %key_db_tokens) {
-				&print_tagoutput ( "        <td style=\"background-color: rgb(" . $r . ", " . $g . ", " . $b . ");\"><font size=\"-1\">" );
+				&print_tagoutput ( "        <td style=\"background-color:rgb(" . $r . "," . $g . "," . $b . "); font-size:$font_size_1;\">" );
 				my $key_result = $db . "_" . $key;
 				if (defined $$phash{$key_result}) {
 					my $flag = 0;
@@ -1664,7 +1670,7 @@ sub print_infohash ($$$;$) {
 				} else {
 					print "-";
 				};
-				&print_tagoutput ( "</font></td>\n" );
+				&print_tagoutput ( "</td>\n" );
 				$shift = $r; $r = $g; $g = $b; $b = $shift;	
 			};
 			&print_tagoutput ( "      </tr>\n" );
