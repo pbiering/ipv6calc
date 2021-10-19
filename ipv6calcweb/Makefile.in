@@ -11,6 +11,8 @@ all:		ipv6calcweb
 
 ipv6calcweb:	ipv6calcweb.cgi.in
 		./create_ipv6calcweb-cgi.sh
+		# Test script
+		./ipv6calcweb.cgi >/dev/null
 
 update:
 
