@@ -1305,7 +1305,7 @@ sub print_infohash ($$$;$) {
 		} else {
 			&print_tagoutput ( "      <tr>\n" );
 		};
-		&print_tagoutput ( "        <td><b>" );
+		&print_tagoutput ( "        <th align=\"left\"><b>" );
 		&print_tagoutput ( "<font size=\"-1\">" ) if ($count_key_embedded > 0);
 		print uc($colormode) . "__" if ($outputformat eq "textkeyvalue");
 		# reduce duplicate information
@@ -1333,7 +1333,27 @@ sub print_infohash ($$$;$) {
 		&print_textonly ("[" . $counter . "]") if (($outputformat eq "textkeyvalue") && (defined $counter));
 		&print_textonly ("=") if ($outputformat eq "textkeyvalue");
 		&print_tagoutput ( "</font>" ) if ($count_key_embedded > 0);
-		&print_tagoutput ( "</b></td>\n" );
+		&print_tagoutput ( "</b></th>\n" );
+
+		# registry detection
+		if ($key_lookup eq "IPV4" || $key_lookup eq "IPV4_REGISTRY") {
+			if ( defined $$phash{'IPV4_REGISTRY' . $key_embedded} ) {
+				$whois_registry = $$phash{'IPV4_REGISTRY' . $key_embedded};
+				$whois_type = "ipv4";
+				$flag_whoisurl = 1;
+			} else {
+				# Temporary workaround
+				$whois_registry = 'unknown';
+				$whois_type = "ipv4";
+				$flag_whoisurl = 1;
+			};
+		} elsif ($key_lookup eq "IPV6" || $key_lookup eq "IPV6_REGISTRY") {
+			if ( defined $$phash{'IPV6_REGISTRY' . $key_embedded} ) {
+				$whois_registry = $$phash{'IPV6_REGISTRY' . $key_embedded};
+				$whois_type = "ipv6";
+				$flag_whoisurl = 1;
+			};
+		};
 
 		# print description
 		if ($outputtype ne "simple") {
@@ -1342,6 +1362,25 @@ sub print_infohash ($$$;$) {
 			if (defined $text{$key_lookup}->{$lang}) {
 				print $text{$key_lookup}->{$lang};
 				&print_textonly (' ' x ($length_max_description - length($text{$key_lookup}->{$lang})) );
+
+				my $key_lookup_extra;
+
+				if ($key_lookup =~ /^(IPV4|IPV6)(_REGISTRY)?$/o) {
+					$key_lookup_extra = "_REGISTRY" if ($flag_whoisurl == 1);
+				} elsif ($key_lookup =~ /^([^_]+)(_.+)$/o) {
+					$key_lookup_extra = $2;
+				};
+
+				if (defined $key_lookup_extra) {
+					if (defined $text_extra{$key_lookup_extra}->{$lang}) {
+						my $text = $text_extra{$key_lookup_extra}->{$lang};
+
+						$text =~ s/REGISTRY/$whois_registry/g if ($flag_whoisurl == 1);
+						$text =~ s/reserved\(([^)]+)\)/IETF/g if ($flag_whoisurl == 1);
+
+						&print_tagoutput("<br><font size=\"-2\">(" . $text . ")</font>");
+					};
+				};
 			} elsif ($key_lookup =~ /^(IP2LOCATION|GEOIP2|DBIP2)(_.+)$/o) {
 				# fallback
 				my $key_lookup_without_db = $2;
@@ -1354,7 +1393,7 @@ sub print_infohash ($$$;$) {
 
 				# print information about link
 				if (defined $text_extra{$key_lookup_without_db}->{$lang}) {
-					&print_tagoutput("<p style=\"font-size=$font_size_2\">(" . $text_extra{$key_lookup_without_db}->{$lang} . ")</p>")
+					&print_tagoutput("<font size=\"-2\">(" . $text_extra{$key_lookup_without_db}->{$lang} . ")</font>")
 				};
 			} else {
 				&print_textonly (' ' x ($length_max_description) );
@@ -1400,25 +1439,6 @@ sub print_infohash ($$$;$) {
 
 		if ($flag_tt) {
 			&print_tagoutput ( "<tt>" );
-		};
-
-		if ($key_lookup eq "IPV4" || $key_lookup eq "IPV4_REGISTRY") {
-			if ( defined $$phash{'IPV4_REGISTRY' . $key_embedded} ) {
-				$whois_registry = $$phash{'IPV4_REGISTRY' . $key_embedded};
-				$whois_type = "ipv4";
-				$flag_whoisurl = 1;
-			} else {
-				# Temporary workaround
-				$whois_registry = 'unknown';
-				$whois_type = "ipv4";
-				$flag_whoisurl = 1;
-			};
-		} elsif ($key_lookup eq "IPV6" || $key_lookup eq "IPV6_REGISTRY") {
-			if ( defined $$phash{'IPV6_REGISTRY' . $key_embedded} ) {
-				$whois_registry = $$phash{'IPV6_REGISTRY' . $key_embedded};
-				$whois_type = "ipv6";
-				$flag_whoisurl = 1;
-			};
 		};
 
 		my ($info, $rfc, $section, $url, $url2);
@@ -1570,7 +1590,7 @@ sub print_infohash ($$$;$) {
 				&print_tagoutput($key);
 			};
 			if (defined $text_geodb{$key}) {
-				&print_tagoutput("<br><p style=\"font-size:$font_size_2;\">" . $text_geodb{$key} . "</p>");
+				&print_tagoutput("<br><font size=\"-2\">" . $text_geodb{$key} . "</font>");
 			};
 			&print_tagoutput("</th>\n");
 			$shift = $r; $r = $g; $g = $b; $b = $shift;	
@@ -1579,7 +1599,7 @@ sub print_infohash ($$$;$) {
 
 		for my $key_lookup (sort keys %{$key_values_db_tokens{$embedded}}) {
 			&print_tagoutput ( "      <tr>\n" );
-			&print_tagoutput ( "        <td style=\"background-color:rgb(255,255,224); font-size:$font_size_1;\"><b>$key_lookup</b></td>\n" );
+			&print_tagoutput ( "        <th align=\"left\" style=\"background-color:rgb(255,255,224); font-size:$font_size_1;\"><b>$key_lookup</b></th>\n" );
 
 			my $key;
 			if ($embedded eq "default") {
@@ -1595,7 +1615,7 @@ sub print_infohash ($$$;$) {
 					print $text{"_" . $key_lookup}->{$lang};
 
 					if (defined $text_extra{"_" . $key_lookup}->{$lang}) {
-						&print_tagoutput("<p style=\"font-size:$font_size_2;\">(" . $text_extra{"_" . $key_lookup}->{$lang} . ")</p>")
+						&print_tagoutput("<br><font size=\"-2\">(" . $text_extra{"_" . $key_lookup}->{$lang} . ")</font>")
 					};
 				} elsif ($key_lookup =~ /^(IP2LOCATION|GEOIP2|DBIP2)$/o) {
 					# fallback
