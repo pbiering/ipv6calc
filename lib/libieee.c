@@ -307,6 +307,11 @@ static const s_ieee_mapping ieee_mapping[] = {
 	{ 0x9880BB,	IEEE_OUI28, 0x010d },
 	{ 0xF4700C,	IEEE_OUI28, 0x010e },
 	{ 0xF4A454,	IEEE_OUI28, 0x010f },
+
+	// OUI28 (2021-10-19)
+	{ 0x08F80D,	IEEE_OUI28, 0x0110 },
+	{ 0x1845B3,	IEEE_OUI28, 0x0111 },
+	{ 0x94C9B7,	IEEE_OUI28, 0x0112 },
 };
 
 

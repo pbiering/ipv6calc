@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Sun Sep 19 22:27:55 2021
+ * Generated     : Tue Oct 19 20:16:16 2021
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20210919";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20211019";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -1281,7 +1281,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x4F3000, 0x4F3FFF, "Autronica Fire And Securirty", "AUTRONICA-FIRE-AND-SECURIRTY" },
 	{ 0x0050C2, 0x4F4000, 0x4F4FFF, "O2RUN", "O2RUN" },
 	{ 0x0050C2, 0x4F5000, 0x4F5FFF, "Monroe Electronics, Inc.", "MONROE-ELECTRONICS" },
-	{ 0x0050C2, 0x4F6000, 0x4F6FFF, "REAL D", "REAL-D" },
+	{ 0x0050C2, 0x4F6000, 0x4F6FFF, "RealD, Inc.", "REALD" },
 	{ 0x0050C2, 0x4F7000, 0x4F7FFF, "WaveIP", "WAVEIP" },
 	{ 0x0050C2, 0x4F8000, 0x4F8FFF, "Prodco International Inc.", "PRODCO" },
 	{ 0x0050C2, 0x4F9000, 0x4F9FFF, "RTDS Technologies Inc.", "RTDS-TECHNOLOGIES" },
@@ -2915,7 +2915,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xB55000, 0xB55FFF, "SANYO ELECTRONIC INDUSTRIES CO.,LTD", "SANYO-INDUSTRIES" },
 	{ 0x0050C2, 0xB56000, 0xB56FFF, "SINOVIA SA", "SINOVIA" },
 	{ 0x0050C2, 0xB57000, 0xB57FFF, "Phytec Messtechnik GmbH", "PHYTEC-MESSTECHNIK" },
-	{ 0x0050C2, 0xB58000, 0xB58FFF, "Real D", "REAL-D" },
+	{ 0x0050C2, 0xB58000, 0xB58FFF, "RealD, Inc.", "REALD" },
 	{ 0x0050C2, 0xB59000, 0xB59FFF, "SLICAN sp. z o.o.", "SLICAN-SP-Z-O-O" },
 	{ 0x0050C2, 0xB5A000, 0xB5AFFF, "GREEN Center s.r.o.", "GREEN-CENTER-S-R-O" },
 	{ 0x0050C2, 0xB5B000, 0xB5BFFF, "Timberline Mfg Company", "TIMBERLINE-MFG-COMPANY" },
@@ -3225,7 +3225,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xC8D000, 0xC8DFFF, "Emergency Message Controls LLC", "EMERGENCY-MESSAGE-CONTROLS" },
 	{ 0x0050C2, 0xC8E000, 0xC8EFFF, "SDD ITG", "SDD-ITG" },
 	{ 0x0050C2, 0xC8F000, 0xC8FFFF, "Keith & Koep GmbH", "KEITH-KOEP" },
-	{ 0x0050C2, 0xC90000, 0xC90FFF, "RealD", "REALD" },
+	{ 0x0050C2, 0xC90000, 0xC90FFF, "RealD, Inc.", "REALD" },
 	{ 0x0050C2, 0xC91000, 0xC91FFF, "Media Technologies Ltd.", "MEDIA-TECHNOLOGIES" },
 	{ 0x0050C2, 0xC92000, 0xC92FFF, "EMAC, Inc.", "EMAC" },
 	{ 0x0050C2, 0xC93000, 0xC93FFF, "SENSAIR Pty Ltd", "SENSAIR-PTY" },
