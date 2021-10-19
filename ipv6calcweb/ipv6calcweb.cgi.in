@@ -227,24 +227,26 @@ sub find_dir(@) {
 
 # URLs
 my %urls = (
-	"IP2LOCATION" => "http://www.ip2location.com",
-	"GEOIP2" => "http://www.maxmind.com",
-	"DBIP2"  => "http://www.db-ip.com",
+	"IP2LOCATION" => "https://www.ip2location.com",
+	"GEOIP2" => "https://www.maxmind.com",
+	"DBIP2"  => "https://www.db-ip.com",
+	"GEONAMES"  => "https://www.geonames.org",
+	"IPV6CALC"  => "https://www.deepspace6.net/projects/ipv6calc.html",
 );
 
 # Base URL for RFCs
 my $url_rfc = "https://tools.ietf.org/html/";
 
 # Base URL for LISP
-my $url_lisp = "http://www.lisp4.net/lisp-site/";
+my $url_lisp = "https://lisp4.net.cba.upc.edu/lisp-site/";
 
 # Base URL for GeoName service
 my $username_geonamesorg = "demo";
-my $url_geoname_by_id = "http://api.geonames.org/get?geonameId=#GEONAME_ID#&username=#USERNAME#";
+my $url_geoname_by_id = "http://api.geonames.org/get?geonameId=#GEONAME_ID#&username=#USERNAME#"; # https currently not supported (TLS cert CN mispatch)
 my $api_used_geonamesorg = 0;
 
 # Base URL for Location Service
-my $url_openstreetmap_by_lat_lon = "http://www.openstreetmap.org/?mlat=#LATITUDE#&mlon=#LONGITUDE#&zoom=5";
+my $url_openstreetmap_by_lat_lon = "https://www.openstreetmap.org/?mlat=#LATITUDE#&mlon=#LONGITUDE#&zoom=5";
 
 # Base URL for Weather Station Service
 my $url_weather_com_by_station = "https://weather.com/weather/tenday/l/#WEATHERSTATIONCODE#:1:GM";
@@ -252,24 +254,24 @@ my $url_weather_com_by_station = "https://weather.com/weather/tenday/l/#WEATHERS
 # Whois server urls
 my %url_whoisservers = (
 	'RIPENCC' => {
-		'ipv4'	=> "http://www.ripe.net/perl/whois?searchtext=",
-		'ipv6'	=> "http://www.ripe.net/perl/whois?searchtext=",
+		'ipv4'	=> "https://www.ripe.net/perl/whois?searchtext=",
+		'ipv6'	=> "https://www.ripe.net/perl/whois?searchtext=",
 	},
 	'ARIN'	=> {
-		'ipv4'	=> "http://whois.arin.net/rest/ip/",
-		'ipv6'	=> "http://whois.arin.net/rest/ip/",
+		'ipv4'	=> "https://whois.arin.net/rest/ip/",
+		'ipv6'	=> "https://whois.arin.net/rest/ip/",
 	},
 	'APNIC'	=> {
-		'ipv4'	=> "http://www.apnic.net/apnic-bin/whois.pl?searchtext=",
-		'ipv6'	=> "http://www.apnic.net/apnic-bin/whois.pl?searchtext=",
+		'ipv4'	=> "https://www.apnic.net/apnic-bin/whois.pl?searchtext=",
+		'ipv6'	=> "https://www.apnic.net/apnic-bin/whois.pl?searchtext=",
 	},
 	'LACNIC'	=> {
-		'ipv4'	=> "http://lacnic.net/cgi-bin/lacnic/whois?query=",
-		'ipv6'	=> "http://lacnic.net/cgi-bin/lacnic/whois?query=",
+		'ipv4'	=> "https://lacnic.net/cgi-bin/lacnic/whois?query=",
+		'ipv6'	=> "https://lacnic.net/cgi-bin/lacnic/whois?query=",
 	},
 	'AFRINIC'	=> {
-		'ipv4'	=> "http://www.afrinic.net/cgi-bin/whois?searchtext=",
-		'ipv6'	=> "http://www.afrinic.net/cgi-bin/whois?searchtext=",
+		'ipv4'	=> "https://www.afrinic.net/cgi-bin/whois?searchtext=",
+		'ipv6'	=> "https://www.afrinic.net/cgi-bin/whois?searchtext=",
 	},
 	'IANA'	=> {
 		'ipv4'	=> "",
@@ -2688,7 +2690,7 @@ if ($mode eq "info" || $mode eq "mixed") {
 ## create uri
 sub create_uri($) {
 	my $string = $_[0];
-	$string =~ s#(http://[^ ]+)#<a target="_blank" href="$1">$1</a>#g;
+	$string =~ s#(https?://[^ ]+)#<a target="_blank" href="$1">$1</a>#g;
 	return($string);
 };
 
@@ -2702,7 +2704,7 @@ my $datetime = POSIX::strftime("%Y-%m-%d %H:%M:%S", gmtime) . " UTC";
 if ($outputformat =~ /^html/o) {
 	print "          " . $text{'generated'}->{$lang} . " " . encode_entities($program_name) . " " . encode_entities($program_version) . ", " . encode_entities($program_copyright) . " " . $text{'at'}->{$lang} . " " . $datetime . "\n";
 	print "          <br>\n";
-	print "          " . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"http://www.deepspace6.net/projects/ipv6calc.html\">" . encode_entities($ipv6calc_name) . "</a> " . encode_entities($ipv6calc_version) . ", " . encode_entities($ipv6calc_copyright);
+	print "          " . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'IPV6CALC'} . "\">" . encode_entities($ipv6calc_name) . "</a> " . encode_entities($ipv6calc_version) . ", " . encode_entities($ipv6calc_copyright);
 	if (length($ipv6calc_features) > 0) {
 		print " (features: " . $ipv6calc_features . ")";
 	};
@@ -2742,14 +2744,14 @@ if ($outputformat =~ /^html/o) {
 
 	if ($api_used_geonamesorg > 0) {
 		print "          <br>\n";
-		print "          " . $text{'credits'}->{$lang} . " <a target=\"_blank\" href=\"http://www.geonames.org\">GeoNames</a>\n";
+		print "          " . $text{'credits'}->{$lang} . " <a target=\"_blank\" href=\"" .  $urls{'GEONAMES'} . "\">GeoNames</a>\n";
 	};
 } else {
 	# text output
 	print "INFO__GENERATED=" if ($outputformat eq "textkeyvalue");
 	print $chr_quote . $text{'generated'}->{$lang} . " " . $program_name . " " . $program_version . ", " . $program_copyright . " " . $text{'at'}->{$lang} . " " . $datetime . $chr_quote . "\n";
 	print "INFO__POWEREDBY=" if ($outputformat eq "textkeyvalue");
-	print $chr_quote . $text{'powered'}->{$lang} . " " . $ipv6calc_name . " " . $ipv6calc_version . ", " . $ipv6calc_copyright . " (http://www.deepspace6.net/projects/ipv6calc.html)";
+	print $chr_quote . $text{'powered'}->{$lang} . " " . $ipv6calc_name . " " . $ipv6calc_version . ", " . $ipv6calc_copyright . " (" . $urls{'IPV6CALC'} . ")";
 	if (length($ipv6calc_features) > 0) {
 		print " (features: " . $ipv6calc_features . ")";
 	};
@@ -2763,17 +2765,17 @@ if ($outputformat =~ /^html/o) {
 
 	if (scalar(keys %db_info_ip2location) > 0) {
 		print "INFO__POWEREDBY_IP2LOCATION=" if ($outputformat eq "textkeyvalue");
-		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_ip2location) . " (http://www.ip2location.com)" . $chr_quote . "\n";
+		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_ip2location) . " (" . $urls{'IP2LOCATION'} . ")" . $chr_quote . "\n";
 	};
 
 	if (scalar(keys %db_info_geoip2) > 0) {
 		print "INFO__POWEREDBY_GEOIP2=" if ($outputformat eq "textkeyvalue");
-		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_geoip2) . " (http://www.maxmind.com)" . $chr_quote . "\n";
+		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_geoip2) . " (" . $urls{'GEOIP'} . ")" . $chr_quote . "\n";
 	};
 
 	if (scalar(keys %db_info_dbip2) > 0) {
 		print "INFO__POWEREDBY_DBIP2=" if ($outputformat eq "textkeyvalue");
-		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_dbip2) . " (http://www.db-ip.com)" . $chr_quote . "\n";
+		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_dbip2) . " (" . $urls{'DBIP'} . ")" . $chr_quote . "\n";
 	};
 
 	if (scalar(keys %db_info_external) > 0) {
@@ -2788,7 +2790,7 @@ if ($outputformat =~ /^html/o) {
 
 	if ($api_used_geonamesorg > 0) {
 		print "INFO__CREDITS_GEONAMESORG=" if ($outputformat eq "textkeyvalue");
-		print $chr_quote . $text{'credits'}->{$lang} . " GeoNames (http://www.geonames.org)" . $chr_quote . "\n";
+		print $chr_quote . $text{'credits'}->{$lang} . " GeoNames (" . $urls{'GEONAMES'} . ")" . $chr_quote . "\n";
 	};
 };
 
