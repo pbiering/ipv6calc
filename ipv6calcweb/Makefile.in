@@ -11,8 +11,8 @@ all:		ipv6calcweb
 
 ipv6calcweb:	ipv6calcweb.cgi.in
 		./create_ipv6calcweb-cgi.sh
-		# Test script
-		LD_LIBRARY_PATH=@LD_LIBRARY_PATH@ ./ipv6calcweb.cgi >/dev/null
+		# Test script (no sleeps and no Anti-DoS)
+		LD_LIBRARY_PATH=@LD_LIBRARY_PATH@ HTTP_IPV6CALCWEB_DEBUG="0x5000" ./ipv6calcweb.cgi >/dev/null
 
 update:
 
