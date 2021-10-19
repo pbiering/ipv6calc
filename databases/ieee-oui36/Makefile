@@ -1,7 +1,7 @@
 # Project    : ipv6calc/databases/ieee-oui36
 # File       : Makefile
 # Version    : $Id$
-# Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ieee-oui36
@@ -18,7 +18,7 @@ install:
 		echo "Nothing to do"
 
 create:
-		../tools/create_ieee_headerfile.pl -c -t $(TYPE) -i $(FILE) -o $(FILE_H) -l ../../lib/libieee.h
+		../tools/create_ieee_headerfile.pl -c -t $(TYPE) -i $(FILE) -o $(FILE_H) -l ../../lib/libieee.c
 
 update:
 		echo "Download new version of file"
