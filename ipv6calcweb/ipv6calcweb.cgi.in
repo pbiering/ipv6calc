@@ -2713,6 +2713,8 @@ if ($outputformat =~ /^html/o) {
 		print " (settings: " . $ipv6calc_settings . ")";
 	};
 
+	print "\n";
+
 	if (scalar(keys %db_info_ip2location) > 0) {
 		print "          <br>\n";
 		print "          " . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'IP2LOCATION'} . "\">IP2Location</a> " . $text{'database'}->{$lang} . " " . create_uri(encode_entities(join(" / ", sort keys %db_info_ip2location))). "\n";
