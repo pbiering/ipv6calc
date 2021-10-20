@@ -242,7 +242,7 @@ my $url_lisp = "https://lisp4.net.cba.upc.edu/lisp-site/";
 
 # Base URL for GeoName service
 my $username_geonamesorg = "demo";
-my $url_geoname_by_id = "http://api.geonames.org/get?geonameId=#GEONAME_ID#&username=#USERNAME#"; # https currently not supported (TLS cert CN mispatch)
+my $url_geoname_by_id = "https://secure.geonames.org/get?geonameId=#GEONAME_ID#&username=#USERNAME#";
 my $api_used_geonamesorg = 0;
 
 # Base URL for Location Service

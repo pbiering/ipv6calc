@@ -10,6 +10,9 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20211020/PB:
+	ipv6calcweb/ipv6calcweb.cgi.in: change geonames URL to https
+
 20211019/PB:
 	ipv6calcweb/ipv6calcweb.cgi.in: several cosmetic updates and fixes
 	databases/ieee*/Makefile: alignments related to libieee.[ch] changes
