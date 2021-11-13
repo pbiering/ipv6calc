@@ -4351,7 +4351,7 @@ database dump
 \end_layout
 
 \begin_layout Code
-$ ipv6calc -vv 2>&1 | egrep '(DB_IPV4_DUMP_CC|DB_IPV6_DUMP_CC)'
+$ ipv6calc -vv 2>&1 | grep -E '(DB_IPV4_DUMP_CC|DB_IPV6_DUMP_CC)'
 \end_layout
 
 \begin_layout Code
@@ -4384,7 +4384,7 @@ External
 \end_layout
 
 \begin_layout Code
-$ ipv6calc -vv 2>&1 | egrep '(External: IPv.
+$ ipv6calc -vv 2>&1 | grep -E '(External: IPv.
  CountryCode)'
 \end_layout
 

@@ -825,12 +825,12 @@ $ echo -e "1.2.3.0/24\n1.2.4.0/24" | ipv6calc -A conv6to4
 <![CDATA[$ /usr/share/ipv6calc/tools/ipv6calc-db-update.sh
 ...
 ]]></screen><para>Precondition: active &ldquo;database dump&rdquo; support</para><screen>
-<![CDATA[$ ipv6calc -vv 2>&1 | egrep '(DB_IPV4_DUMP_CC|DB_IPV6_DUMP_CC)'
+<![CDATA[$ ipv6calc -vv 2>&1 | grep -E '(DB_IPV4_DUMP_CC|DB_IPV6_DUMP_CC)'
 ipv6calc: version 3.3.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO DB_IPV4_GEONAMEID DB_IPV6_GEONAMEID DB_IPV4_DUMP_CC DB_IPV6_DUMP_CC ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID 
 DB_IPV4_DUMP_CC (IPv4 Database Dump by CountryCode): External
 DB_IPV6_DUMP_CC (IPv6 Database Dump by CountryCode): External 
 ]]></screen><para>Precondition: recognized &ldquo;External&rdquo; database</para><screen>
-<![CDATA[$ ipv6calc -vv 2>&1 | egrep '(External: IPv. CountryCode)'
+<![CDATA[$ ipv6calc -vv 2>&1 | grep -E '(External: IPv. CountryCode)'
 External: IPv4 CountryCode    : ipv6calc-external-ipv4-countrycode.db    (EXTDB-3/AFRINIC/20210919 APNIC/20210917 ARIN/20210919 IANA/20210205 LACNIC/20210918 LISP/20200318 RIPENCC/20210918, created: 20210919-152957 UTC)
 External: IPv6 CountryCode    : ipv6calc-external-ipv6-countrycode.db    (EXTDB-4/AFRINIC/20210919 APNIC/20210917 ARIN/20210919 IANA/20191106 LACNIC/20210918 LISP/20200318 RIPENCC/20210918, created: 20210919-155049 UTC) 
 ]]></screen><para>Usage Example: dump all IPv4 networks which have not &ldquo;unknown&rdquo; CountryCode</para><screen>

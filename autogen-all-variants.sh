@@ -31,10 +31,10 @@ autogen_variants() {
 	esac
 
 	# skip IP2Location and MaxMindDB based
-	autogen_variants_list | egrep -vw "(IP2LOCATION|GEOIP2|DBIP2)" | while IFS="#" read options list; do
+	autogen_variants_list | grep -Evw "(IP2LOCATION|GEOIP2|DBIP2)" | while IFS="#" read options list; do
 		echo "${options:+$options }--m32#$list"
 	done
-	autogen_variants_list | egrep -vw "(IP2LOCATION|GEOIP2|DBIP2)" | while IFS="#" read options list; do
+	autogen_variants_list | grep -Evw "(IP2LOCATION|GEOIP2|DBIP2)" | while IFS="#" read options list; do
 		echo "${options:+$options }--clang --m32#$list"
 	done
 }
@@ -252,7 +252,7 @@ for liboption in "normal" "shared"; do
 
 		# extend options in fallback case
 		if [ -n "$ip2location_options_extra" ]; then
-			if echo "$token" | egrep -wq "IP2LOCATION"; then
+			if echo "$token" | grep -Fwq "IP2LOCATION"; then
 				options="${options:+$options }$ip2location_options_extra"
 			fi
 		fi
@@ -260,7 +260,7 @@ for liboption in "normal" "shared"; do
 		# check for already executed option combination
 		if [ -f "$status_file" ]; then
 			if [ -z "$testlist" ]; then
-				if egrep -q ":FINISHED:variants:$options:" $status_file; then
+				if grep -Eq ":FINISHED:variants:$options:" $status_file; then
 					echo "NOTICE: skip variant run (already finished) with: $options"
 					continue
 				fi
@@ -269,7 +269,7 @@ for liboption in "normal" "shared"; do
 			fi
 		fi
 
-		if echo "$token" | egrep -wq "$skip_token"; then
+		if echo "$token" | grep -Ewq "$skip_token"; then
 			echo "NOTICE: skip variant because of token: $token"
 			if $dry_run; then
 				date "+%s:FINISHED:variants:$options:SKIPPED" >>$status_file
@@ -308,7 +308,7 @@ for liboption in "normal" "shared"; do
 
 		if [ -n "$testlist" ]; then
 			for entry in $testlist; do
-				if egrep -q ":FINISHED:variants:$options:TESTLIST-ENTRY=$entry" $status_file; then
+				if grep -Eq ":FINISHED:variants:$options:TESTLIST-ENTRY=$entry" $status_file; then
 					echo "NOTICE: skip variant test (already finished) with: $options and $entry"
 					continue
 				fi

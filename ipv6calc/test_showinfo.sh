@@ -295,7 +295,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw GeoIP; then
 		output_escaped="${output_escaped//[/\\[}"
 		output_escaped="${output_escaped//]/\\]}"
 		output_escaped="${output_escaped/GEOIP/GEOIP2?}"
-		if ! ./ipv6calc -q -i -m $address | egrep $grepopt "^$output_escaped$"; then
+		if ! ./ipv6calc -q -i -m $address | grep -E $grepopt "^$output_escaped$"; then
 			$verbose || echo
 			echo "ERROR: unexpected result for $address ($output_escaped)"
 			./ipv6calc -q -i -m $address
@@ -315,7 +315,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 	echo "INFO  : $test"
 	getexamples_IP2Location | while read address; do
 		$verbose && echo "Run IP2Location IPv4 showinfo on: $address"
-		if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep $grepopt ^IP2LOCATION; then
+		if ./ipv6calc -q -i -m $address | grep -Ev '=This (record|parameter) ' | grep $grepopt ^IP2LOCATION; then
 			true
 		else
 			$verbose || echo
@@ -358,7 +358,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 		echo "INFO  : $test"
 		getexamples_IP2Location6 | while read address; do
 			$verbose && echo "Run IP2Location IPv6 showinfo on: $address"
-			if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep $grepopt ^IP2LOCATION; then
+			if ./ipv6calc -q -i -m $address | grep -Ev '=This (record|parameter) ' | grep $grepopt ^IP2LOCATION; then
 				true
 			else
 				echo "Unexpected result (missing IP2LOCATION): ./ipv6calc -q -i -m $address"
@@ -406,7 +406,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv4; then
 	echo "INFO  : $test"
 	getexamples_DBIPv4 | while read address; do
 		$verbose && echo "Run DBIP showinfo on: $address"
-		if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep $grepopt ^DBIP; then
+		if ./ipv6calc -q -i -m $address | grep -Ev '=This (record|parameter) ' | grep $grepopt ^DBIP; then
 			true
 		else
 			$verbose || echo
@@ -434,7 +434,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv4; then
 		output_escaped="${output_escaped//[/\\[}"
 		output_escaped="${output_escaped//]/\\]}"
 		output_escaped="${output_escaped/DBIP/DBIP2?}"
-		if ! ./ipv6calc -q -i -m $address | egrep $grepopt "^$output_escaped$"; then
+		if ! ./ipv6calc -q -i -m $address | grep -E $grepopt "^$output_escaped$"; then
 			echo "ERROR: unexpected result ($output_escaped)"
 			./ipv6calc -q -i -m $address
 			exit 1	
@@ -454,7 +454,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv6; then
 	echo "INFO  : $test"
 	getexamples_DBIPv6 | while read address; do
 		$verbose && echo "Run IP2Location showinfo on: $address"
-		if ./ipv6calc -q -i -m $address | egrep -v '=This (record|parameter) ' | grep $grepopt ^DBIP; then
+		if ./ipv6calc -q -i -m $address | grep -Ev '=This (record|parameter) ' | grep $grepopt ^DBIP; then
 			true
 		else
 			$verbose || echo
@@ -482,7 +482,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv6; then
 		output_escaped="${output_escaped//[/\\[}"
 		output_escaped="${output_escaped//]/\\]}"
 		output_escaped="${output_escaped/DBIP/DBIP2?}"
-		if ! ./ipv6calc -q -i -m $address | egrep $grepopt "^$output_escaped$"; then
+		if ! ./ipv6calc -q -i -m $address | grep -E $grepopt "^$output_escaped$"; then
 			$verbose || echo
 			echo "ERROR: unexpected result ($output_escaped)"
 			./ipv6calc -q -i -m $address

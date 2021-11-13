@@ -353,7 +353,7 @@ run_anon_options_kp_tests() {
 		$verbose || echo -n "+"
 
 		# ASN (optional)
-		if echo "${type_orig//,/ }" | egrep -qw "(lisp|ipv4|iid-includes-ipv4)"; then
+		if echo "${type_orig//,/ }" | grep -Eqw "(lisp|ipv4|iid-includes-ipv4)"; then
 			# skip ASN on IPv4+LISP or IID includes IPv4
 			continue
 		fi

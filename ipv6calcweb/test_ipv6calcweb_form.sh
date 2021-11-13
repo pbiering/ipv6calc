@@ -56,7 +56,7 @@ if [ $result -ne 0 ]; then
 	exit 1
 else
 	# check output
-	if echo "$OUTPUT" | egrep -q "(ERROR|problem)"; then
+	if echo "$OUTPUT" | grep -Eq "(ERROR|problem)"; then
 		echo "TEST FAILED"
 		exit 1
 	fi
@@ -80,7 +80,7 @@ $verbose && echo "DEBUG: extracted tokentime: $tokentime"
 
 test="run 'ipv6calcweb.cgi' good tests"
 echo "INFO  : $test"
-testscenarios_auto_good | grep -v "^#" | egrep -vw "(bitstring|base85)" | grep -v "%" | while read input type; do
+testscenarios_auto_good | grep -v "^#" | grep -Evw "(bitstring|base85)" | grep -v "%" | while read input type; do
 	input_escaped="$(perl -MURI::Escape -e 'print uri_escape($ARGV[0]);' "$input")"
 	QUERY_STRING="input=$input_escaped&tokenhash=$tokenhash&tokentime=$tokentime"
 
@@ -104,7 +104,7 @@ testscenarios_auto_good | grep -v "^#" | egrep -vw "(bitstring|base85)" | grep -
 		exit 1
 	else
 		# check output
-		if echo "$OUTPUT" | egrep -q "(ERROR|problem)"; then
+		if echo "$OUTPUT" | grep -Eq "(ERROR|problem)"; then
 			echo "TEST FAILED"
 			exit 1
 		fi

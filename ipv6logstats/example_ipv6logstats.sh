@@ -53,5 +53,5 @@ find $dir -name '*-log.*' -type f | while read file; do
 	fi
 done | sort -u | while read yearmonth; do
 	# don't count mon and check_http (from Nagios)
-	cat_file `find $dir -name "*-log.$yearmonth*" -type f` | egrep -v "(mon.d/http.monitor|check_http)" | $bin -c -q -n -p "$yearmonth" || exit 1
+	cat_file `find $dir -name "*-log.$yearmonth*" -type f` | grep -Ev "(mon.d/http.monitor|check_http)" | $bin -c -q -n -p "$yearmonth" || exit 1
 done
