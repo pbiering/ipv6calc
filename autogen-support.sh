@@ -595,7 +595,7 @@ if [ "$1" != "source" ]; then
 			else
 				download_versions $* || exit 1
 			fi
-			echo "INFO  : following libaries were successfully downloaded: $download_library_status" >&2
+			echo "INFO  : following libraries were successfully downloaded: $download_library_status" >&2
 		fi
 		if $do_clean; then
 			if [ -z "$*" ]; then
@@ -604,7 +604,7 @@ if [ "$1" != "source" ]; then
 			else
 				clean_versions $* || exit 1
 			fi
-			echo "INFO  : following libaries were successfully cleaned: $clean_library_status" >&2
+			echo "INFO  : following libraries were successfully cleaned: $clean_library_status" >&2
 		fi
 		if $do_extract; then
 			if [ -z "$*" ]; then
@@ -613,7 +613,7 @@ if [ "$1" != "source" ]; then
 			else
 				extract_versions $* || exit 1
 			fi
-			echo "INFO  : following libaries were successfully extracted: $extract_library_status" >&2
+			echo "INFO  : following libraries were successfully extracted: $extract_library_status" >&2
 		fi
 		if $do_build; then
 			if [ -z "$*" ]; then
@@ -621,7 +621,7 @@ if [ "$1" != "source" ]; then
 			else
 				build_library $* || exit 1
 			fi
-			echo "INFO  : following libaries were successfully built: $build_library_status" >&2
+			echo "INFO  : following libraries were successfully built: $build_library_status" >&2
 		fi
 		;;
 	    *)

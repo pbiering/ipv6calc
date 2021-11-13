@@ -7,7 +7,7 @@
 # License    : GNU GPL v2
 #
 # Information:
-#  Perl program which creates IPv4 address assignement header
+#  Perl program which creates IPv4 address assignment header
 # Requires:
 #  XML::Simple
 

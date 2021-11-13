@@ -608,7 +608,7 @@ static int converttoken(char *resultstring, const size_t resultstring_length, co
 
 			ipv6addr_settype(&ipv6addr);
 
-			/* check whether address has a OUI ID */
+			/* check whether address has an OUI ID */
 			if ( (( ipv6addr.typeinfo & (IPV6_ADDR_LINKLOCAL | IPV6_ADDR_SITELOCAL | IPV6_NEW_ADDR_AGU | IPV6_NEW_ADDR_6BONE | IPV6_NEW_ADDR_6TO4 | IPV6_ADDR_ULUA)) == 0) && ((ipv6addr.typeinfo & (IPV6_NEW_ADDR_TEREDO)) == 0) )  {
 				if (flag_skipunknown != 0) {
 					return (1);

@@ -8,7 +8,7 @@
 # File       : run_analog.sh
 # Version    : $Id$
 # Copyright  : none
-# Procuded   : 2002 by Peter Bieringer <pb (at) bieringer.de>
+# Produced   : 2002 by Peter Bieringer <pb (at) bieringer.de>
 
 umask 007
 

@@ -20,7 +20,7 @@
  *
  *	Janos Farkas			:	delete timer on ifdown
  *	<chexum@bankinf.banki.hu>
- *	Andi Kleen			:	kill doube kfree on module
+ *	Andi Kleen			:	kill double kfree on module
  *						unload.
  */
 

@@ -42,7 +42,7 @@ int compaddr_to_uncompaddr(const char *addrstring, char *resultstring, const siz
 			
 		DEBUGPRINT_NA(DEBUG_librfc1884, "found '::' in IPv6 address");
 
-		/* check for additional "::" occurance - not allowed! */
+		/* check for additional "::" occurrence - not allowed! */
 		if (strstr(strp+1, "::")) {
 			snprintf(resultstring, resultstring_length, "%s", "More than 1 block of 2 colons in address is not allowed!");
 			retval = 1;

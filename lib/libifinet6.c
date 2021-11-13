@@ -5,7 +5,7 @@
  * Copyright  : 2001-2017 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
- *  Function to converts a address string like shown in 
+ *  Function to convert an address string like shown in
  *   Linux /proc/net/if_inet6 to IPv6 address structure
  *
  * some hints taken from ifconfig.c (net-tools)
@@ -19,7 +19,7 @@
 #include "libifinet6.h"
 
 /*
- * function formats an given Linux /proc/net/if_inet6 format to normal one
+ * function formats a given Linux /proc/net/if_inet6 format to normal one
  *
  * in : *addrstring = IPv6 address
  * out: *resultstring = result
@@ -59,7 +59,7 @@ int libifinet6_ifinet6_to_ipv6addrstruct(const char *addrstring, char *resultstr
 };
 
 /*
- * function formats an given /proc/net/if_inet6 format to normal one with prefixlength
+ * function formats a given /proc/net/if_inet6 format to normal one with prefixlength
  *
  * in : *addrstring = IPv6 address
  * out: *resultstring = result
@@ -114,7 +114,7 @@ int libifinet6_ifinet6_withprefixlength_to_ipv6addrstruct(const char *addrstring
 
 
 /*
- * function formats an given IPv6 address to Linux /proc/net/if_inet6 format
+ * function formats a given IPv6 address to Linux /proc/net/if_inet6 format
  *
  * in : *addrstring = IPv6 address
  * out: *resultstring = result

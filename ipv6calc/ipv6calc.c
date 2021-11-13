@@ -6,7 +6,7 @@
  * 
  * Information:
  *  Central program (main)
- *  This program print out different formats of an given IP(v4/v6)/MAC address
+ *  This program print out different formats of a given IP(v4/v6)/MAC address
  */
 
 #include <stdio.h>

@@ -546,7 +546,7 @@ for list in ${!ipv6calc_support[@]}; do
 	elif [ $rc -eq 1 ]; then
 		summary[$list]="NOOP"
 	elif [ $rc -eq 0 ]; then
-		summary[$list]="SUCESS(add=${statistics[Add]}/del=${statistics[Delete]})"
+		summary[$list]="SUCCESS(add=${statistics[Add]}/del=${statistics[Delete]})"
 		summary_important=true
 	elif [ $rc -eq 3 ]; then
 		summary[$list]="ERROR"

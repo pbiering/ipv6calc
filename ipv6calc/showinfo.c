@@ -112,7 +112,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " <prefix>_GEONAME_ID_DISTRICT= : GeoName ID of District of IP address\n");
 	fprintf(stderr, " <prefix>_AREACODE=...         : Area code of IP address\n");
 	fprintf(stderr, " <prefix>_DMACODE=...          : DMA/Metro code of IP address\n");
-	fprintf(stderr, " <prefix>_IDDCODE=...          : Internation Direct Dialing of IP address\n");
+	fprintf(stderr, " <prefix>_IDDCODE=...          : International Direct Dialing of IP address\n");
 	fprintf(stderr, " <prefix>_LATITUDE=...         : Latitude of IP address\n");
 	fprintf(stderr, " <prefix>_LONGITUDE=...        : Longitude of IP address\n");
 	fprintf(stderr, " <prefix>_RADIUS=...           : Radius around Latitude/Longitude of IP address\n");
@@ -153,7 +153,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, "       specific token can be selected using --mrst <TOKEN>\n");
 	fprintf(stderr, "         even in case of no/empty output: --mrstpa <TOKEN>\n");
 	fprintf(stderr, "         value of a specific token can be displayed using --mrtvo <TOKEN>\n");
-	fprintf(stderr, "         wildcard '.' is suppported in select token\n");
+	fprintf(stderr, "         wildcard '.' is supported in select token\n");
 	fprintf(stderr, "       matching tokens can be selected using --mrmt <TOKEN>\n");
 };
 

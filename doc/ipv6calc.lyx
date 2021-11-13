@@ -156,7 +156,7 @@ ipv6calc is a small utility written in programming language C to manipulate
 ip6_int
 \shape default
  into.
- Now only one utiltity is needed to do a lot.
+ Now only one utility is needed to do a lot.
 \end_layout
 
 \begin_layout Standard
@@ -713,7 +713,7 @@ It's tested by the developer that creation of the RPM is working fine starting
 \end_layout
 
 \begin_layout Itemize
-Major version 5 has the package included by default (but an rather old version)
+Major version 5 has the package included by default (but a rather old version)
 \begin_inset Separator latexpar
 \end_inset
 
@@ -1261,7 +1261,7 @@ Supported options:
 \end_layout
 
 \begin_layout Section
-Mailling Lists
+Mailing Lists
 \end_layout
 
 \begin_layout Subsection
@@ -5866,7 +5866,7 @@ On-the-fly online anonymization for Apache Webserver
 \end_layout
 
 \begin_layout Quotation
-Note: since 0.91.1 also an module for Apache Webserver is available (see below)
+Note: since 0.91.1 also a module for Apache Webserver is available (see below)
  supporting anonymized logging
 \end_layout
 

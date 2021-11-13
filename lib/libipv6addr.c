@@ -1621,7 +1621,7 @@ static int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp
 		return (retval);
 	};
 	if ( ipv6addrp->prefixlength == 0 ) {
-		snprintf(resultstring, resultstring_length, "Error, cannot print prefix of a address with prefix length 0!");
+		snprintf(resultstring, resultstring_length, "Error, cannot print prefix of an address with prefix length 0!");
 		retval = 1;
 		return (retval);
 	};
@@ -1682,7 +1682,7 @@ static int ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp
 		return (retval);
 	};
 	if ( ipv6addrp->prefixlength == 128 ) {
-		snprintf(resultstring, resultstring_length, "Error, cannot print suffix of a address with prefix length 128!");
+		snprintf(resultstring, resultstring_length, "Error, cannot print suffix of an address with prefix length 128!");
 		retval = 1;
 		return (retval);
 	};
@@ -1831,7 +1831,7 @@ void ipv6addrstruct_masksuffix(ipv6calc_ipv6addr *ipv6addrp) {
 
 
 /*
- * function stores an 16 char token into a structure
+ * function stores a 16 char token into a structure
  *
  * in : *addrstring = 16 char token
  * out: *resultstring = error message

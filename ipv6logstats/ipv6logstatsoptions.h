@@ -5,7 +5,7 @@
  * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
- *  Header file containing optios for ipvlogstats.c
+ *  Header file containing options for ipvlogstats.c
  */ 
 
 #include <getopt.h> 
