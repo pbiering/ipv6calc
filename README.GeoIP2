@@ -16,7 +16,7 @@ have only to enable the support using configure:
   In case, dynamic load of library should be enabled (conditional MaxMindDB support), add
      --with-maxmindd-dynamic
 
-  In case GeoIPv2 support should be explicity *disabled*, use
+  In case GeoIPv2 support should be explicitly *disabled*, use
     --disable-geoip2
 
 

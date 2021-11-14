@@ -17,7 +17,7 @@ have only to enable the support using configure:
   In case, dynamic load of library should be enabled (conditional MaxMindDB support), add
      --with-maxmindd-dynamic
 
-  In case db-ip.com MaxMindDB support should be explicity *disabled*, use
+  In case db-ip.com MaxMindDB support should be explicitly *disabled*, use
     --disable-dbip2
 
 DATA UPDATE

@@ -8,7 +8,7 @@
 # License    : GNU GPL v2
 #
 # Information:
-#  Perl program which creates IPv6 address assignement header
+#  Perl program which creates IPv6 address assignment header
 #  Uses code from ipv4-assignment
 
 use strict;
@@ -164,7 +164,7 @@ for (my $i = 0; $i <= 64; $i++) {
 };
 
 
-# Fill global assignement (IPv6 should be more hierarchical than IPv4)
+# Fill global assignment (IPv6 should be more hierarchical than IPv4)
 sub proceed_global {
 	# Proceed first global IANA file
 	print "INFO  : proceed file (XML): " . $global_file . "\n";
@@ -236,7 +236,7 @@ sub proceed_lisp {
 	# 7: proxy - yes or no (or blank)
 	# 8: ttl - in what ever format the map-server reports it
 	# 9: nrloc - how many rlocs in field 10
-	# 10: rlocs - seperated by ';' and with (up|down)
+	# 10: rlocs - separated by ';' and with (up|down)
 	# 11: timestamp - when data was collected, in UTC 
 	#
 	# Example:

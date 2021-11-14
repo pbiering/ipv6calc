@@ -2,7 +2,7 @@ ipv6calc 4 Conversion powered by ipv6calc
 ipv4-addr 1 IPv4 address
 ipv6-addr 1 IPv6 address
 reverse-lookup-successful 1 Reverse lookup successful
-addrtype 4 Adress type
+addrtype 4 Address type
 ipv4-addr.addrtype 3 IPv4 address
 ipv6-addr.addrtype 3 IPv6 address
 reverse-lookup-successful.addrtype 1 Reverse lookup successful

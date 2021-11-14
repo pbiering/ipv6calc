@@ -30,7 +30,7 @@ Credits to
    - contribution of patches for man page
 
 * Authors of ircd
-   for RFC 1884 decompress algorithmus
+   for RFC 1884 decompress algorithms
 
 * Authors of net-tools
    (recycling of some code)
@@ -73,7 +73,7 @@ Credits to
    some fixes
 
 * Simon Arlott <simon at arlott dot org>
-   patch to extend IPv6 TLA assignement
+   patch to extend IPv6 TLA assignment
 
 * Brad Allen/sonic.net
    for bug reporting

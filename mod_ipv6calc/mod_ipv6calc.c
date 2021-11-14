@@ -77,7 +77,7 @@ int feature_kg      = 0; // will be checked later
 
 
 /***************************
- * Module enviroment controls
+ * Module environment controls
  ***************************/
 #define ENV_ipv6calcActive	"ipv6calcActive"
 #define ENV_ipv6calcPassive	"ipv6calcPassive"

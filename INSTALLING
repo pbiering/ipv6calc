@@ -8,7 +8,7 @@ ipv6calc.
 
 USING RPM
 ---------
-This tar-ball provides a spec file for building an source and binary RPM using
+This tar-ball provides a spec file for building a source and binary RPM using
 	rpmbuild -ta ipv6calc-$version.tar.gz
 
 	Available build options:

@@ -72,7 +72,7 @@ ifeq ($(SHARED_LIBRARY), yes)
 		echo "Create shared library (libipv6calc_db_wrapper.so)"
 		$(CC) -o libipv6calc_db_wrapper.so.@PACKAGE_VERSION@ $(OBJS) $(LDFLAGS) -shared -Wl,$(SO_NAME_FLAGS),libipv6calc_db_wrapper.so.@PACKAGE_VERSION@
 else
-		echo "Nothing to do (shared libary mode is not enabled)"
+		echo "Nothing to do (shared library mode is not enabled)"
 endif
 
 
@@ -92,7 +92,7 @@ ifeq ($(SHARED_LIBRARY), yes)
 		install -m 755 libipv6calc_db_wrapper.so.@PACKAGE_VERSION@ $(DESTDIR)$(libdir)
 		/sbin/ldconfig -n $(DESTDIR)$(libdir)
 else
-		echo "Nothing to do (shared libary mode is not enabled)"
+		echo "Nothing to do (shared library mode is not enabled)"
 endif
 
 test:

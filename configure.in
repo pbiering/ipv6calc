@@ -66,7 +66,7 @@ AC_C_BIGENDIAN
 dnl Default extra CFLAGS
 CFLAGS_EXTRA=-fPIC
 
-dnl Copy inital provided LDFLAGS into LDFLAGS_EXTRA
+dnl Copy initial provided LDFLAGS into LDFLAGS_EXTRA
 dnl LDFLAGS_EXTRA=$LDFLAGS // not required ?!
 
 
@@ -336,7 +336,7 @@ AC_ARG_ENABLE(
 	],[
 		if test "$HAVE_OPENSSL_EVP_MD5" = "0"; then
 			if test "$HAVE_OPENSSL_MD5" = "0"; then
-				AC_MSG_RESULT([*** use of bundled MD5 library autoselected because no OpenSSL suppport found])
+				AC_MSG_RESULT([*** use of bundled MD5 library autoselected because no OpenSSL support found])
 				ENABLE_BUNDLED_MD5=1
 			fi
 		fi

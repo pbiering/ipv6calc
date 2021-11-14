@@ -11,7 +11,7 @@
 <revision> <revnumber>11.0.0</revnumber> <date>2021-10-03</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
-<para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utiltity is needed to do a lot.</para>
+<para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utility is needed to do a lot.</para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <ulink url="http://freecode.com/projects/ipv6calc/">freecode.com (former freshmeat, now also EOL) / ipv6calc</ulink> page (but this is not maintained by the author)</para><sect2>
 <title>Latest version</title>
@@ -73,7 +73,7 @@ uid: Peter Bieringer (Code Signing Key 2013) <code@bieringer.de>
 <para>See also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para></sect3><sect3>
 <title>Red Hat Enterprise Linux and clones</title>
 <para>It's tested by the developer that creation of the RPM is working fine starting with RHEL 4.</para><itemizedlist>
-<listitem><para>Major version 5 has the package included by default (but an rather old version)
+<listitem><para>Major version 5 has the package included by default (but a rather old version)
 </para><itemizedlist>
 <listitem><para>RPMs of newer releases are available as test builds on koji, see related URL in announcements <ulink url="https://lists.deepspace6.net/pipermail/ipv6calc-announce/">ipv6calc-announce / list archive</ulink></para></listitem><listitem><para>*** Untested since version 2.0.0 because OS is out of support ***</para></listitem></itemizedlist></listitem><listitem><para>Major version 6: available since September 2014 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink>, see also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para><itemizedlist>
 <listitem><para>*** Untested since version 3.0.1 because OS is out of support ***</para></listitem></itemizedlist></listitem><listitem><para>Major version 7: available since Decenber 2016 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink>, see also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para></listitem><listitem><para>Major version 8: available since September 2019 on <ulink url="https://fedoraproject.org/wiki/EPEL">FedoraProject / EPEL</ulink>, see also <ulink url="https://src.fedoraproject.org/rpms/ipv6calc">FedoraProject / Packages / ipv6calc</ulink></para></listitem></itemizedlist><para>CentOS 7 and Rocky 8 are also platforms for regression tests.</para></sect3><sect3>
@@ -168,7 +168,7 @@ Supported options:
    --m32               : compile for 32-bit
    --relax             : don't stop on compiler warnings
 ]]></screen></sect2></sect1><sect1>
-<title>Mailling Lists</title>
+<title>Mailing Lists</title>
 <sect2>
 <title>ipv6calc-announce</title>
 <variablelist>
@@ -1152,7 +1152,7 @@ This program anonymizes IPv4/IPv6 addresses in e.g. HTTP server log files
 ]]></screen></sect3><sect3>
 <title>On-the-fly online anonymization for Apache Webserver</title>
 <blockquote>
-<para>Note: since 0.91.1 also an module for Apache Webserver is available (see below) supporting anonymized logging</para>
+<para>Note: since 0.91.1 also a module for Apache Webserver is available (see below) supporting anonymized logging</para>
 </blockquote><para>(Supported since 0.90.0)</para>
 <para>Adjust or add (note: more than one CustomLog directive is supported by Apache) httpd.conf like following:</para><screen>
 <![CDATA[CustomLog "|/usr/local/bin/ipv6loganon -a -f /var/log/httpd/access_log" combined

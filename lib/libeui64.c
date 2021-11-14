@@ -230,7 +230,7 @@ void libeui64_anonymize(ipv6calc_eui64addr *eui64addrp, const s_ipv6calc_anon_se
 				if ((eui64addrp->addr[3] == 0xff) && (eui64addrp->addr[4] == 0xfe)) {
 					// expanded EUI-48
 					mask = 40; // 24 + 16 bits
-					DEBUGPRINT_WA(DEBUG_libeui64, "EUI-64 is a expanded EUI-48, change mask: %d", mask);
+					DEBUGPRINT_WA(DEBUG_libeui64, "EUI-64 is an expanded EUI-48, change mask: %d", mask);
 				} else {
 					mask = 24;
 				};

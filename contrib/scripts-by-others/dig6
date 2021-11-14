@@ -12,10 +12,10 @@ echo -e "Usage: dig6 [<type>] <ipv6addr> [options]\n allowed types: arpa, int"; 
 }
 
 if [ ! -x "$IPV6CALC" ]; then
-	echo "Can't exceute $IPV6CALC"; exit 1
+	echo "Can't execute $IPV6CALC"; exit 1
 fi;
 if [ ! -x "$DIG" ]; then
-	echo "Can't exceute $DIG"; exit 1
+	echo "Can't execute $DIG"; exit 1
 fi;
 if [ ! $# -gt 0 ]; then
 	usage

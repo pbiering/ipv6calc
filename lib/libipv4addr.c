@@ -386,7 +386,7 @@ uint32_t ipv4addr_gettype(const ipv6calc_ipv4addr *ipv4addrp) {
 				goto END_ipv4addr_gettype;
 			};
 		} else {
-				DEBUGPRINT_NA(DEBUG_libipv4addr, "Address is not an detected anonymized one");
+				DEBUGPRINT_NA(DEBUG_libipv4addr, "Address is not a detected anonymized one");
 		};
 	};
 

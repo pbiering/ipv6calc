@@ -66,7 +66,7 @@ Output format version 3.0 extended with:
 
 => "grep" your favorite lines, "*" can be matched with '^\*3\*'
 
-NOTE: country code "--" (unkown) is mapped to "00", there are also other special ones defined in GeoIP like A1, A2 and O1 (see GeoIP source code)
+NOTE: country code "--" (unknown) is mapped to "00", there are also other special ones defined in GeoIP like A1, A2 and O1 (see GeoIP source code)
 
 NOTE: ASN "0" is "unknown"
 
