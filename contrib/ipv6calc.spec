@@ -75,7 +75,7 @@ Conflicts:	ipv6calc-libs
 
 
 # Berkeley DB selector
-%define require_db4 %(echo "%{dist}" | egrep -q '^\.el(5|6)$' && echo 1 || echo 0)
+%define require_db4 %(echo "%{dist}" | grep -Eq '^\.el(5|6)$' && echo 1 || echo 0)
 %if %{require_db4}
 BuildRequires: db4-devel
 Requires:      db4

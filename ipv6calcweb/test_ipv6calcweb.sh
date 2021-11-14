@@ -226,14 +226,14 @@ fi
 #	exit 1
 #else
 #	# check output
-#	if echo "$OUTPUT" | egrep -q "(ERROR|problem)"; then
+#	if echo "$OUTPUT" | grep -Eq "(ERROR|problem)"; then
 #		echo "TEST FAILED (ERROR|problem) occurs"
 #		HTTP_IPV6CALCWEB_DEBUG="0xffff"
 #		export HTTP_IPV6CALCWEB_DEBUG
 #		./ipv6calcweb.cgi
 #		exit 1
 #	fi
-#	if echo "$OUTPUT" | egrep -q "(reserved)"; then
+#	if echo "$OUTPUT" | grep -Eq "(reserved)"; then
 #		$verbose || echo "$OUTPUT"
 #	fi
 #fi
