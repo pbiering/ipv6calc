@@ -1,7 +1,7 @@
 # Project    : ipv6calc/ipv6calcweb
 # File       : Makefile
 # Version    : $Id$
-# Copyright  : 2002-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2022 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calcweb
@@ -11,8 +11,6 @@ all:		ipv6calcweb
 
 ipv6calcweb:	ipv6calcweb.cgi.in
 		./create_ipv6calcweb-cgi.sh
-		# Test script (no sleeps and no Anti-DoS)
-		LD_LIBRARY_PATH=@LD_LIBRARY_PATH@ HTTP_IPV6CALCWEB_DEBUG="0x5000" ./ipv6calcweb.cgi >/dev/null
 
 update:
 
@@ -29,6 +27,8 @@ clean:
 
 test:
 		${MAKE} ipv6calcweb
+		# Test script (no sleeps and no Anti-DoS)
+		LD_LIBRARY_PATH=@LD_LIBRARY_PATH@ HTTP_IPV6CALCWEB_DEBUG="0x5000" ./ipv6calcweb.cgi >/dev/null
 		# Pseudo random selected
 		LD_LIBRARY_PATH=@LD_LIBRARY_PATH@ ./test_ipv6calcweb.sh 2001:200:1:ea::1 || exit 1
 		# www.hp.com
