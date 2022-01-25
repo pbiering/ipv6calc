@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.c
  * Version    : $Id$
- * Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2022 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc External (superseeding BuiltIn) database wrapper
@@ -172,13 +172,19 @@ static int libipv6calc_db_wrapper_External_close(DB *dbp) {
  */
 int libipv6calc_db_wrapper_External_wrapper_cleanup(void) {
 	int i, j;
+	int hit;
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Called");
 
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_External_db_file_desc); i++) {
-		if (db_ptr_cache[i] != NULL) {
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Close External: type=%d desc='%s'", libipv6calc_db_wrapper_External_db_file_desc[i].number, libipv6calc_db_wrapper_External_db_file_desc[i].description);
-			for (j = 0; j < IPV6CALC_DBD_SUBDB_MAX; j++) {
+		hit = 0;
+		for (j = 0; j < IPV6CALC_DBD_SUBDB_MAX; j++) {
+			if (db_ptr_cache[i][j] != NULL) {
+				if (hit == 0) {
+					// display debug message only once per i (type)
+					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Close External: type=%d desc='%s'", libipv6calc_db_wrapper_External_db_file_desc[i].number, libipv6calc_db_wrapper_External_db_file_desc[i].description);
+					hit = 1;
+				};
 				libipv6calc_db_wrapper_External_close(db_ptr_cache[i][j]);
 			};
 		};
