@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : libieee.c
  * Version    : $Id$
- * Copyright  : 2002-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2022 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for IEEE information
@@ -312,6 +312,18 @@ static const s_ieee_mapping ieee_mapping[] = {
 	{ 0x08F80D,	IEEE_OUI28, 0x0110 },
 	{ 0x1845B3,	IEEE_OUI28, 0x0111 },
 	{ 0x94C9B7,	IEEE_OUI28, 0x0112 },
+
+	// OUI28 (2022-01-25)
+	{ 0x04EEE8,	IEEE_OUI28, 0x0113 },
+	{ 0x0826AE,	IEEE_OUI28, 0x0114 },
+	{ 0x0C8629,	IEEE_OUI28, 0x0115 },
+	{ 0x1054D2,	IEEE_OUI28, 0x0116 },
+	{ 0x18D793,	IEEE_OUI28, 0x0117 },
+	{ 0x3043D7,	IEEE_OUI28, 0x0118 },
+	{ 0x50A030,	IEEE_OUI28, 0x0119 },
+	{ 0x6C9308,	IEEE_OUI28, 0x011a },
+	{ 0x988FE0,	IEEE_OUI28, 0x011b },
+	{ 0xDC3643,	IEEE_OUI28, 0x011c },
 };
 
 

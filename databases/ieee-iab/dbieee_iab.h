@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Tue Oct 19 20:16:16 2021
+ * Generated     : Tue Jan 25 21:51:23 2022
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20211019";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20220125";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -1022,7 +1022,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x3F0000, 0x3F0FFF, "megatec electronic GmbH", "MEGATEC" },
 	{ 0x0050C2, 0x3F1000, 0x3F1FFF, "Salland Electronics Holding BV", "SALLAND-ELECTRONICS-HOLDING" },
 	{ 0x0050C2, 0x3F2000, 0x3F2FFF, "STL GmbH", "STL" },
-	{ 0x0050C2, 0x3F3000, 0x3F3FFF, "Hitachi ABB Power Grids – Grid Automation", "HITACHI-ABB-POWER-GRIDS-GRID-AUTOMATION" },
+	{ 0x0050C2, 0x3F3000, 0x3F3FFF, "Hitachi Energy", "HITACHI-ENERGY" },
 	{ 0x0050C2, 0x3F4000, 0x3F4FFF, "MC TECHNOLOGY GmbH", "MC" },
 	{ 0x0050C2, 0x3F5000, 0x3F5FFF, "Phaedrus Limited", "PHAEDRUS" },
 	{ 0x0050C2, 0x3F6000, 0x3F6FFF, "dAFTdATA Limited", "DAFTDATA" },
@@ -1442,7 +1442,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x594000, 0x594FFF, "Pixel Velocity, Inc", "PIXEL-VELOCITY" },
 	{ 0x0050C2, 0x595000, 0x595FFF, "Callpod, Inc.", "CALLPOD" },
 	{ 0x0050C2, 0x596000, 0x596FFF, "SPANSION", "SPANSION" },
-	{ 0x0050C2, 0x597000, 0x597FFF, "Nautel Limited", "NAUTEL" },
+	{ 0x0050C2, 0x597000, 0x597FFF, "Nautel LTD", "NAUTEL" },
 	{ 0x0050C2, 0x598000, 0x598FFF, "Bundesamt für Strahlenschutz", "BUNDESAMT-FUER-STRAHLENSCHUTZ" },
 	{ 0x0050C2, 0x599000, 0x599FFF, "Fen Technology Limited", "FEN" },
 	{ 0x0050C2, 0x59A000, 0x59AFFF, "MultiTrode Pty Ltd", "MULTITRODE-PTY" },
@@ -2503,7 +2503,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x9B9000, 0x9B9FFF, "ISA - Intelligent Sensing Anywhere, S.A.", "ISA-INTELLIGENT-SENSING-ANYWHERE" },
 	{ 0x0050C2, 0x9BA000, 0x9BAFFF, "Connor-Winfield", "CONNOR-WINFIELD" },
 	{ 0x0050C2, 0x9BB000, 0x9BBFFF, "OMICRON electronics GmbH", "OMICRON-ELECTRONICS" },
-	{ 0x0050C2, 0x9BC000, 0x9BCFFF, "Vester Elektronik GmbH", "VESTER-ELEKTRONIK" },
+	{ 0x0050C2, 0x9BC000, 0x9BCFFF, "Kistler Straubenhardt GmbH", "KISTLER-STRAUBENHARDT" },
 	{ 0x0050C2, 0x9BD000, 0x9BDFFF, "Sensitron Semiconductor", "SENSITRON-SEMICONDUCTOR" },
 	{ 0x0050C2, 0x9BE000, 0x9BEFFF, "Xad Communications Ltd", "XAD-COMMUNICATION" },
 	{ 0x0050C2, 0x9BF000, 0x9BFFFF, "2N TELEKOMUNIKACE a.s.", "2N-TELEKOMUNIKACE" },
@@ -3430,7 +3430,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xD5B000, 0xD5BFFF, "Infinition Inc.", "INFINITION" },
 	{ 0x0050C2, 0xD5C000, 0xD5CFFF, "Ibetor S.L.", "IBETOR" },
 	{ 0x0050C2, 0xD5D000, 0xD5DFFF, "GLOBALCOM ENGINEERING SRL", "GLOBALCOM-ENGINEERING-SRL" },
-	{ 0x0050C2, 0xD5E000, 0xD5EFFF, "infinitec co., ltd.", "INFINITEC" },
+	{ 0x0050C2, 0xD5E000, 0xD5EFFF, "PRIVATECH Inc.", "PRIVATECH" },
 	{ 0x0050C2, 0xD5F000, 0xD5FFFF, "Embedded Solution Bank Co., Ltd.", "EMBEDDED-SOLUTION-BANK" },
 	{ 0x0050C2, 0xD60000, 0xD60FFF, "Nihon Kessho Koogaku Co., Ltd.", "NIHON-KESSHO-KOOGAKU" },
 	{ 0x0050C2, 0xD61000, 0xD61FFF, "system2 GmbH", "SYSTEM2" },
@@ -3534,7 +3534,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xDC3000, 0xDC3FFF, "ZED Ziegler Electronic Devices GmbH", "ZED-ZIEGLER-DEVICES" },
 	{ 0x0050C2, 0xDC4000, 0xDC4FFF, "Keith & Koep GmbH", "KEITH-KOEP" },
 	{ 0x0050C2, 0xDC5000, 0xDC5FFF, "Saia-Burgess Controls AG", "SAIA-BURGESS-CONTROLS" },
-	{ 0x0050C2, 0xDC6000, 0xDC6FFF, "Fluid Components International", "FLUID-COMPONENTS" },
+	{ 0x0050C2, 0xDC6000, 0xDC6FFF, "Fluid Components Intl", "FLUID-COMPONENTS-INTL" },
 	{ 0x0050C2, 0xDC7000, 0xDC7FFF, "AGT Holdings Limited", "AGT-HOLDINGS" },
 	{ 0x0050C2, 0xDC8000, 0xDC8FFF, "T2M2 GmbH", "T2M2" },
 	{ 0x0050C2, 0xDC9000, 0xDC9FFF, "KinotonGmbH", "KINOTONGMBH" },
@@ -4126,7 +4126,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x016000, 0x016FFF, "Par-Tech, Inc.", "PAR-TECH" },
 	{ 0x40D855, 0x017000, 0x017FFF, "Franke Aquarotter GmbH", "FRANKE-AQUAROTTER" },
 	{ 0x40D855, 0x018000, 0x018FFF, "STANEO SAS", "STANEO-SAS" },
-	{ 0x40D855, 0x019000, 0x019FFF, "Nautel Limited", "NAUTEL" },
+	{ 0x40D855, 0x019000, 0x019FFF, "Nautel LTD", "NAUTEL" },
 	{ 0x40D855, 0x01A000, 0x01AFFF, "MEGGITT DEFENSE SYSTEMS INC.", "MEGGITT-DEFENSE" },
 	{ 0x40D855, 0x01B000, 0x01BFFF, "Audio Enhancement", "AUDIO-ENHANCEMENT" },
 	{ 0x40D855, 0x01C000, 0x01CFFF, "BERG Cloud Limited", "BERG-CLOUD" },
