@@ -2374,7 +2374,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-COPYRIGHT_YEAR=2021
+COPYRIGHT_YEAR=2022
 
 PACKAGE_VERSION_MAJOR=4
 PACKAGE_VERSION_MINOR=0
@@ -4639,8 +4639,8 @@ else
 
 		if test "$HAVE_OPENSSL_EVP_MD5" = "0"; then
 			if test "$HAVE_OPENSSL_MD5" = "0"; then
-				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** use of bundled MD5 library autoselected because no OpenSSL suppport found" >&5
-$as_echo "*** use of bundled MD5 library autoselected because no OpenSSL suppport found" >&6; }
+				{ $as_echo "$as_me:${as_lineno-$LINENO}: result: *** use of bundled MD5 library autoselected because no OpenSSL support found" >&5
+$as_echo "*** use of bundled MD5 library autoselected because no OpenSSL support found" >&6; }
 				ENABLE_BUNDLED_MD5=1
 			fi
 		fi
