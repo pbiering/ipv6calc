@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
  * Version    : $Id$
- * Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2022 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc IP2Location database wrapper
@@ -1581,7 +1581,6 @@ char *libipv6calc_db_wrapper_IP2Location_database_info(IP2Location *loc, const i
 	static char resultstring[IPV6CALC_STRING_MAX];
 	char tempstring[IPV6CALC_STRING_MAX] = "";
 
-	uint32_t ipsupport = 0; // unknown
 	uint32_t entries_ipv4 = 0;
 	uint32_t entries_ipv6 = 0;
 
@@ -1611,40 +1610,33 @@ char *libipv6calc_db_wrapper_IP2Location_database_info(IP2Location *loc, const i
 			if (loc->ipv4_database_count > 2) {
 				// IPv4
 				entries_ipv4 = loc->ipv4_database_count;
-				ipsupport |= 0x1;
 			};
 
 			if (loc->ipv6_database_count > 0) {
 				// IPv6
-				ipsupport |= 0x2;
 				if (loc->ipv6_database_count > 1) {
 					entries_ipv6 = loc->ipv6_database_count;
 				} else if (loc->ip_version == 1) {
 					// catch of old DB file, ipv4databasecount is reused as databasecount 
 					entries_ipv6 = loc->ipv4_database_count;
-					// clear IPv4 support
-					ipsupport &= ~0x1;
 					entries_ipv4 = 0;
 				};
 			};
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "compiled with API >= 7.0.0, loaded library is >= 7.0.0: ipsupport=%u entries_ipv4=%u entries_ipv6=%u", ipsupport, entries_ipv4, entries_ipv6);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "compiled with API >= 7.0.0, loaded library is >= 7.0.0: entries_ipv4=%u entries_ipv6=%u", entries_ipv4, entries_ipv6);
 #else // SUPPORT_IP2LOCATION_DYN
 			// API >= 7.0.0
 			if (loc->ipv4_database_count > 2) {
 				// IPv4
 				entries_ipv4 = loc->ipv4_database_count;
-				ipsupport |= 0x1;
 			};
 
 			if (loc->ipv6_database_count > 0) {
 				// catch of changed API which reuses ipversion as ipv6databasecount
-				ipsupport |= 0x2;
 				if (loc->ipv6_database_count > 1) {
 					entries_ipv6 = loc->ipv6_database_count;
 				} else if (loc->ipv6_database_count == 1) {
 					// old behavior
 					entries_ipv6 = loc->database_count;
-					ipsupport &= ~0x1;
 					entries_ipv4 = 0;
 				};
 			};
