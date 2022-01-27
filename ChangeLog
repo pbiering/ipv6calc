@@ -17,6 +17,9 @@ Info:
 	databases/lib/libipv6calc_db_wrapper_External.c: bugfix related to db_ptr_cache
 	internal databases: update
 
+20211114/PB:
+	various spelling and grammar fixes (credits to Ville Skyttä)
+
 20211020/PB:
 	ipv6calcweb/ipv6calcweb.cgi.in: change geonames URL to https
 
