@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
 # Version    : $Id$
-# Copyright  : 2015-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2015-2022 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 
@@ -44,7 +44,7 @@ create_apache_root_and_start() {
 	done
 
 	echo "INFO  : define listen port 8080 in $dir_base/conf/httpd.conf"
-	perl -pi -e 's/^Listen/Listen 8080/g' $dir_base/conf/httpd.conf
+	perl -pi -e 's/^Listen.*/Listen 8080/g' $dir_base/conf/httpd.conf
 	if [ $? -ne 0 ]; then
 		echo "ERROR : can't define listen port: $dir_base/conf/httpd.conf"
 		return 1
@@ -66,7 +66,8 @@ create_apache_root_and_start() {
 
 	perl -pi -e 's/^ServerRoot.*$//g' $dir_base/conf/httpd.conf
 
-	for file in 00-base.conf 00-mpm.conf; do
+	for file in 00-base.conf 00-mpm.conf 00-systemd.conf; do
+		[ -e /etc/httpd/conf.modules.d/$file ] || continue
 		cp /etc/httpd/conf.modules.d/$file $dir_base/conf.modules.d/
 	done
 
