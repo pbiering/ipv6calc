@@ -35,3 +35,14 @@ ipv6logconv/ipv6logconv
 ipv6logstats/ipv6logstats
 databases/*/*.db
 */.libs/*
+databases/ieee-iab/iab.csv
+databases/ieee-oui/oui.csv
+databases/ieee-oui28/mam.csv
+databases/ieee-oui36/oui36.csv
+databases/registries/afrinic/
+databases/registries/apnic/
+databases/registries/arin/
+databases/registries/iana/
+databases/registries/lacnic/
+databases/registries/lisp/
+databases/registries/ripencc/
