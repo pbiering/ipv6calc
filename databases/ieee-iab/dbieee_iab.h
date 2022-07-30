@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Tue Jan 25 21:51:23 2022
+ * Generated     : Sat Jul 30 08:07:47 2022
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20220125";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20220730";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -442,7 +442,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x1AC000, 0x1ACFFF, "Beckmann+Egle GmbH", "BECKMANN+EGLE" },
 	{ 0x0050C2, 0x1AD000, 0x1ADFFF, "Remia s.r.o.", "REMIA-S-R-O" },
 	{ 0x0050C2, 0x1AE000, 0x1AEFFF, "Home Director, Inc", "HOME-DIRECTOR" },
-	{ 0x0050C2, 0x1AF000, 0x1AFFFF, "PESA", "PESA" },
+	{ 0x0050C2, 0x1AF000, 0x1AFFFF, "PESA Inc.", "PESA" },
 	{ 0x0050C2, 0x1B0000, 0x1B0FFF, "BLANKOM Antennentechnik GmbH", "BLANKOM-ANTENNENTECHNIK" },
 	{ 0x0050C2, 0x1B1000, 0x1B1FFF, "Axes Technologies", "AXES-TECHNOLOGIES" },
 	{ 0x0050C2, 0x1B2000, 0x1B2FFF, "SIGOS Systemintegration GmbH", "SIGOS-SYSTEMINTEGRATION" },
@@ -3918,7 +3918,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xF45000, 0xF45FFF, "HUSTY M.Styczen J.Hupert Sp.J.", "HUSTY-M-STYCZEN-J-HUPERT-SP-J" },
 	{ 0x0050C2, 0xF46000, 0xF46FFF, "Reason Tecnologia S.A.", "REASON-TECNOLOGIA" },
 	{ 0x0050C2, 0xF47000, 0xF47FFF, "cadac,inc.", "CADAC" },
-	{ 0x0050C2, 0xF48000, 0xF48FFF, "Phoenix Audio Technologies", "PHOENIX-AUDIO-TECHNOLOGIES" },
+	{ 0x0050C2, 0xF48000, 0xF48FFF, "SHURE INCORPORATED", "SHURE-INCORPORATED" },
 	{ 0x0050C2, 0xF49000, 0xF49FFF, "Green Instruments A/S", "GREEN-INSTRUMENTS-A/S" },
 	{ 0x0050C2, 0xF4A000, 0xF4AFFF, "Z-App Systems, Inc.", "Z-APP" },
 	{ 0x0050C2, 0xF4B000, 0xF4BFFF, "Supranet", "SUPRANET" },
