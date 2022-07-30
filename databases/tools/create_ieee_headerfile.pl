@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : create_ieee_headerfile.pl
 # Version    : $Id$
-# Copyright  : 2002-2020 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2022 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE files
 #
@@ -299,6 +299,14 @@ print OUT qq|
 };
 |;
 
+my @missing;
+
+my %defines = (
+	"oui36" => "IEEE_OUI36",
+	"oui28" => "IEEE_OUI28",
+	"iab"   => "IEEE_IAB",
+);
+
 if ($TYPE eq "oui36" || $TYPE eq "iab" || $TYPE eq "oui28") {
 	my @lines;
 	if (defined $opts{'l'}) {
@@ -317,13 +325,37 @@ if ($TYPE eq "oui36" || $TYPE eq "iab" || $TYPE eq "oui28") {
 			if (grep /0x$key/, @lines) {
 				# ok
 			} else {
-				print "Missing OUI 0x$key in " . $opts{'l'} . " (-> append there in array 'ieee_mapping' and retry)\n";
+				print "Missing OUI ($TYPE) 0x$key in " . $opts{'l'} . " (-> append there in array 'ieee_mapping' and retry)\n";
 				$problem = 1;
+				push @missing, "0x" . $key;
 			};
 		};
 	};
 	if ($problem == 1) {
-		print "Check NOT successfully of major OUI entries in " . $opts{'l'} . ": " . scalar(%major_list) . "\n";
+		print "Check NOT successfully of major OUI ($TYPE) entries in " . $opts{'l'} . ": " . scalar(%major_list) . "\n";
+		if (scalar (@missing) > 0) {
+			# retrieve latest
+			my $last;
+			my $lc = 0;
+			my $lc_last = 0;
+			foreach my $line (@lines) {
+				$lc++;
+				if ($line =~ /\s+$defines{$TYPE},\s+(0x[0-9a-f]{4})/) {
+					$last = hex($1);
+					$lc_last = $lc
+				};
+			};
+
+			#print "last=$last\n";
+			print "Add following to " . $opts{'l'} . "after line " . $lc_last . "\n";
+
+			print "\t// " . uc($TYPE) . " (" . strftime("%Y-%m-%d", localtime) . ")\n";
+
+			foreach my $entry (@missing) {
+				$last++;
+				printf "\t{ " . $entry . ",\t" . $defines{$TYPE} . ", 0x%04x },\n", $last;
+			};
+		};
 		exit 1;
 	};
 	print "Check successfully major OUI entries in " . $opts{'l'} . ": " . scalar(%major_list) . "\n";
