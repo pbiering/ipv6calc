@@ -97,7 +97,9 @@ a909:16fa:9092:23ff:a909:4941::7 "DE" - [30/May/2015:18:15:01 +0200] "GET / HTTP
 
 ### Log file with anonymized IP address and enriched with geolocation information looks then like:
 
-`LogFormat "%{IPV6CALC_CLIENT_IP_ANON}e %{IPV6CALC_ANON_METHOD}e %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" %{local}p \"%{Host}i\" \"%{X-Forwarded-For}i\" \"%{IPV6CALC_CLIENT_COUNTRYCODE}e/%{IPV6CALC_CLIENT_ASN}e/%{IPV6CALC_CLIENT_REGISTRY}e/%{IPV6CALC_CLIENT_GEONAMEID}e\""`
+```
+LogFormat "%{IPV6CALC_CLIENT_IP_ANON}e %{IPV6CALC_ANON_METHOD}e %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-Agent}i\" %{local}p \"%{Host}i\" \"%{X-Forwarded-For}i\" \"%{IPV6CALC_CLIENT_COUNTRYCODE}e/%{IPV6CALC_CLIENT_ASN}e/%{IPV6CALC_CLIENT_REGISTRY}e/%{IPV6CALC_CLIENT_GEONAMEID}e\""`
+```
 
 ```
 245.216.31.139 - - [31/Jul/2022:23:52:17 +0200] "GET / HTTP/1.1" 200 4514 "http://ip.bieringer.net/" "Mozilla/5.0 (compatible; DuckDuckGo-Favicons-Bot/1.0; +http://duckduckgo.com)" 80 "ip.bieringer.net" "-" "US/8075/ARIN/4788822"
