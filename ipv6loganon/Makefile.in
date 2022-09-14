@@ -49,10 +49,10 @@ libipv6calc_db_wrapper:
 		cd ../ && ${MAKE} lib-make
 
 ipv6loganon:	$(OBJS) libipv6calc libipv6calc_db_wrapper
-		$(CC) -o ipv6loganon $(OBJS) $(GETOBJS) $(LIBS) -lm $(LDFLAGS) $(LDFLAGS_EXTRA)
+		$(CC) -o ipv6loganon $(LDFLAGS) $(LDFLAGS_EXTRA) $(OBJS) $(GETOBJS) $(LIBS) -lm
 
 static:		ipv6loganon
-		$(CC) -o ipv6loganon-static $(OBJS) $(GETOBJS) $(LIBS) -lm $(LDFLAGS) $(LDFLAGS_EXTRA_STATIC) -static
+		$(CC) -o ipv6loganon-static $(LDFLAGS) $(LDFLAGS_EXTRA_STATIC) $(OBJS) $(GETOBJS) $(LIBS) -lm -static
 
 distclean:
 		${MAKE} clean
