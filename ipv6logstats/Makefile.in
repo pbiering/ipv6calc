@@ -49,10 +49,10 @@ libipv6calc_db_wrapper.a:
 $(OBJS):	ipv6logstatsoptions.h ipv6logstatshelp.h ipv6logstats.h
 
 ipv6logstats:	$(OBJS) libipv6calc.a libipv6calc_db_wrapper.a
-		$(CC) -o ipv6logstats $(OBJS) $(GETOBJS) $(LIBS) -lm $(LDFLAGS) $(LDFLAGS_EXTRA)
+		$(CC) -o ipv6logstats $(OBJS) $(GETOBJS) $(LDFLAGS) $(LDFLAGS_EXTRA) $(LIBS) -lm
 
 static:		ipv6logstats
-		$(CC) -o ipv6logstats-static $(OBJS) $(GETOBJS) $(LIBS) -lm $(LDFLAGS) $(LDFLAGS_EXTRA_STATIC) -static
+		$(CC) -o ipv6logstats-static $(OBJS) $(GETOBJS) $(LDFLAGS) $(LDFLAGS_EXTRA_STATIC) $(LIBS) -lm -static
 
 distclean:
 		${MAKE} clean
