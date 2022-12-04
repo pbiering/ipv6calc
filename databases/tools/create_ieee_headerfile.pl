@@ -347,7 +347,7 @@ if ($TYPE eq "oui36" || $TYPE eq "iab" || $TYPE eq "oui28") {
 			};
 
 			#print "last=$last\n";
-			print "Add following to " . $opts{'l'} . "after line " . $lc_last . "\n";
+			print "Add following to " . $opts{'l'} . " after line " . $lc_last . "\n";
 
 			print "\t// " . uc($TYPE) . " (" . strftime("%Y-%m-%d", localtime) . ")\n";
 
