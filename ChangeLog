@@ -12,6 +12,7 @@ Info:
 --------------------------------------------------------------------
 20221204/PB:
 	internal databases: update
+	tag version 4.0.2
 
 20220730/PB:
 	databases/tools/create_ieee_headerfile.pl: extend hints in case of entries have to be extended in lib/libieee.h
