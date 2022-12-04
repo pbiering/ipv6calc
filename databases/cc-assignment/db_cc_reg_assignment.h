@@ -2,21 +2,21 @@
  * Project       : ipv6calc
  * File          : db_cc_reg_assignment.h
  * Version       : $Id$
- * Generated     : Sat Jul 30 08:24:25 2022
+ * Generated     : Sun Dec  4 07:12:00 2022
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
  *  Additional header file for databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  */
 
-static const char *db_cc_registry_status = "AFRINIC/20220729 APNIC/20220729 ARIN/20220729 LACNIC/20220729 RIPENCC/20220729";
+static const char *db_cc_registry_status = "AFRINIC/20221204 APNIC/20221202 ARIN/20221203 LACNIC/20221202 RIPENCC/20221203";
 
 static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "", REGISTRY_ARIN     },
 	{ "AD", REGISTRY_RIPENCC  },
 	{ "AE", REGISTRY_RIPENCC  },
 	{ "AF", REGISTRY_APNIC    },
-	{ "AG", REGISTRY_RIPENCC  },
+	{ "AG", REGISTRY_ARIN     },
 	{ "AI", REGISTRY_ARIN     },
 	{ "AL", REGISTRY_RIPENCC  },
 	{ "AM", REGISTRY_RIPENCC  },
@@ -222,7 +222,7 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "TG", REGISTRY_AFRINIC  },
 	{ "TH", REGISTRY_APNIC    },
 	{ "TJ", REGISTRY_RIPENCC  },
-	{ "TK", REGISTRY_APNIC    },
+	{ "TK", REGISTRY_RIPENCC  },
 	{ "TL", REGISTRY_APNIC    },
 	{ "TM", REGISTRY_RIPENCC  },
 	{ "TN", REGISTRY_AFRINIC  },
@@ -247,7 +247,7 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "WF", REGISTRY_APNIC    },
 	{ "WS", REGISTRY_APNIC    },
 	{ "YE", REGISTRY_RIPENCC  },
-	{ "YT", REGISTRY_RIPENCC  },
+	{ "YT", REGISTRY_AFRINIC  },
 	{ "ZA", REGISTRY_AFRINIC  },
 	{ "ZM", REGISTRY_AFRINIC  },
 	{ "ZW", REGISTRY_AFRINIC  },
@@ -670,7 +670,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  413  XF
 	{ REGISTRY_UNKNOWN  }, //  414  YF
 	{ REGISTRY_UNKNOWN  }, //  415  ZF
-	{ REGISTRY_RIPENCC  }, //  416  AG
+	{ REGISTRY_ARIN     }, //  416  AG
 	{ REGISTRY_RIPENCC  }, //  417  BG
 	{ REGISTRY_AFRINIC  }, //  418  CG
 	{ REGISTRY_UNKNOWN  }, //  419  DG
@@ -793,7 +793,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  536  QK
 	{ REGISTRY_UNKNOWN  }, //  537  RK
 	{ REGISTRY_RIPENCC  }, //  538  SK
-	{ REGISTRY_APNIC    }, //  539  TK
+	{ REGISTRY_RIPENCC  }, //  539  TK
 	{ REGISTRY_UNKNOWN  }, //  540  UK
 	{ REGISTRY_UNKNOWN  }, //  541  VK
 	{ REGISTRY_UNKNOWN  }, //  542  WK
@@ -1032,7 +1032,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  775  VT
 	{ REGISTRY_UNKNOWN  }, //  776  WT
 	{ REGISTRY_UNKNOWN  }, //  777  XT
-	{ REGISTRY_RIPENCC  }, //  778  YT
+	{ REGISTRY_AFRINIC  }, //  778  YT
 	{ REGISTRY_UNKNOWN  }, //  779  ZT
 	{ REGISTRY_APNIC    }, //  780  AU
 	{ REGISTRY_UNKNOWN  }, //  781  BU

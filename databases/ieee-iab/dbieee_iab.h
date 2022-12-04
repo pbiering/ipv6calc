@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Sat Jul 30 08:07:47 2022
+ * Generated     : Sun Dec  4 06:56:03 2022
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20220730";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20221204";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -1022,7 +1022,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x3F0000, 0x3F0FFF, "megatec electronic GmbH", "MEGATEC" },
 	{ 0x0050C2, 0x3F1000, 0x3F1FFF, "Salland Electronics Holding BV", "SALLAND-ELECTRONICS-HOLDING" },
 	{ 0x0050C2, 0x3F2000, 0x3F2FFF, "STL GmbH", "STL" },
-	{ 0x0050C2, 0x3F3000, 0x3F3FFF, "Hitachi Energy", "HITACHI-ENERGY" },
+	{ 0x0050C2, 0x3F3000, 0x3F3FFF, "Hitachi Energy Germany AG", "HITACHI-ENERGY-GERMANY" },
 	{ 0x0050C2, 0x3F4000, 0x3F4FFF, "MC TECHNOLOGY GmbH", "MC" },
 	{ 0x0050C2, 0x3F5000, 0x3F5FFF, "Phaedrus Limited", "PHAEDRUS" },
 	{ 0x0050C2, 0x3F6000, 0x3F6FFF, "dAFTdATA Limited", "DAFTDATA" },
@@ -1140,7 +1140,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x466000, 0x466FFF, "LONAP Limited", "LONAP" },
 	{ 0x0050C2, 0x467000, 0x467FFF, "United Western Technologies", "UNITED-WESTERN-TECHNOLOGIES" },
 	{ 0x0050C2, 0x468000, 0x468FFF, "Network I/O", "NETWORK-I/O" },
-	{ 0x0050C2, 0x469000, 0x469FFF, "BiPOM Electronics, Inc.", "BIPOM-ELECTRONICS" },
+	{ 0x0050C2, 0x469000, 0x469FFF, "Bipom Electronics, Inc.", "BIPOM-ELECTRONICS" },
 	{ 0x0050C2, 0x46A000, 0x46AFFF, "ISE GmbH", "ISE" },
 	{ 0x0050C2, 0x46B000, 0x46BFFF, "EASYTECH GmbH", "EASYTECH" },
 	{ 0x0050C2, 0x46C000, 0x46CFFF, "CAMCO GmbH", "CAMCO" },
@@ -2519,7 +2519,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x9C9000, 0x9C9FFF, "LUMINEX Lighting Control Equipment", "LUMINEX-LIGHTING-CONTROL-EQUIPMENT" },
 	{ 0x0050C2, 0x9CA000, 0x9CAFFF, "ESAB-ATAS GmbH", "ESAB-ATAS" },
 	{ 0x0050C2, 0x9CB000, 0x9CBFFF, "NIS-time GmbH", "NIS-TIME" },
-	{ 0x0050C2, 0x9CC000, 0x9CCFFF, "Hirotech, Inc", "HIROTECH" },
+	{ 0x0050C2, 0x9CC000, 0x9CCFFF, "Hirotech inc.", "HIROTECH" },
 	{ 0x0050C2, 0x9CD000, 0x9CDFFF, "Uwe Schneider GmbH", "UWE-SCHNEIDER" },
 	{ 0x0050C2, 0x9CE000, 0x9CEFFF, "Ronan Engineering", "RONAN-ENGINEERING" },
 	{ 0x0050C2, 0x9CF000, 0x9CFFFF, "Intuitive Surgical, Inc", "INTUITIVE-SURGICAL" },
@@ -3367,7 +3367,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xD1C000, 0xD1CFFF, "Recon Dynamics, LLC", "RECON-DYNAMICS" },
 	{ 0x0050C2, 0xD1D000, 0xD1DFFF, "Moco Media Pty Ltd", "MOCO-MEDIA-PTY" },
 	{ 0x0050C2, 0xD1E000, 0xD1EFFF, "Tobila Systems, Inc.", "TOBILA" },
-	{ 0x0050C2, 0xD1F000, 0xD1FFFF, "Olympus NDT Canada Inc.", "OLYMPUS-NDT-CANADA" },
+	{ 0x0050C2, 0xD1F000, 0xD1FFFF, "Olympus NDT Canada", "OLYMPUS-NDT-CANADA" },
 	{ 0x0050C2, 0xD20000, 0xD20FFF, "7+ Kft", "7+-KFT" },
 	{ 0x0050C2, 0xD21000, 0xD21FFF, "Innovative Circuit Technology", "INNOVATIVE-CIRCUIT" },
 	{ 0x0050C2, 0xD22000, 0xD22FFF, "eMDee Technology, Inc.", "EMDEE" },
