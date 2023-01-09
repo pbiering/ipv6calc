@@ -63,14 +63,14 @@ Usage: $(basename "$0") [-D <dir>] [-n] [-s] [-t] [-v]
   into given/set database directory
 
  Sample databases:
-  IP2LOCATION_DAT_FILES_SAMPLE=$IP2LOCATION_DAT_FILES_SAMPLE
+  IP2LOCATION_DAT_FILES_SAMPLE=\"$IP2LOCATION_DAT_FILES_SAMPLE\"
 
  Lite (free) databases:
-  IP2LOCATION_DAT_FILES_LITE_FREE=$IP2LOCATION_DAT_FILES_LITE_FREE
+  IP2LOCATION_DAT_FILES_LITE_FREE=\"$IP2LOCATION_DAT_FILES_LITE_FREE\"
 
  With authentication (requires login/password or token in $IP2LOCATION_CONFIG) and a valid subscription
-  IP2LOCATION_DAT_FILES_LITE=$IP2LOCATION_DAT_FILES_LITE
-  IP2LOCATION_DAT_FILES=$IP2LOCATION_DAT_FILES
+  IP2LOCATION_DAT_FILES_LITE=\"$IP2LOCATION_DAT_FILES_LITE\"
+  IP2LOCATION_DAT_FILES=\"$IP2LOCATION_DAT_FILES\"
 
  Credentials or token must be defined in \$HOME/.ip2location by
   login=IP2LOCATION-LOGIN       ${login:+found: ${login:0:2}...}
