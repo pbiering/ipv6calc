@@ -10,6 +10,9 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20230112/PB:
+	ipv6calc/ipv6calc.c: bugfix related to ACTION_addr_to_countrycode and pipe mode
+
 20221204/PB:
 	internal databases: update
 	tag version 4.0.2

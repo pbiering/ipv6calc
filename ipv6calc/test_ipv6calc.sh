@@ -3,7 +3,7 @@
 # Project    : ipv6calc
 # File       : test_ipv6calc.sh
 # Version    : $Id$
-# Copyright  : 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2001-2023 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 
@@ -342,6 +342,7 @@ testscenarios_pipe() {
 	cat <<END
 3ffe::1:ff00:1234,--in ipv6addr --out ipv6addr --printuncompressed,3ffe:0:0:0:0:1:ff00:1234
 3ffe::1:ff00:1234,--in ipv6addr --out ipv6addr --printuncompressed --printprefix --forceprefix 96,3ffe:0:0:0:0:1
+192.0.2.1\\\n2001:db8::1,--addr2cc,--
 END
 
 }
@@ -733,9 +734,9 @@ echo "INFO  : $test successful"
 test="run 'ipv6calc' pipe tests (1)"
 echo "INFO  : $test"
 testscenarios_pipe | while IFS="," read input arguments result; do
-	info="INFO  : test 'echo $input | ./ipv6calc $arguments | grep \"^$result\$\"'"
+	info="INFO  : test 'echo -e \"$input\" | ./ipv6calc $arguments | grep \"^$result\$\"'"
 	$verbose && echo "$info"
-	output=$(echo -e $input | ./ipv6calc $arguments | grep "^$result\$")
+	output=$(echo -e "$input" | ./ipv6calc $arguments | grep "^$result\$")
 	retval=$?
 	$verbose && echo "$output"
 	if [ $retval -ne 0 ]; then

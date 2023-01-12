@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : ipv6calc/ipv6calc.c
  * Version    : $Id$
- * Copyright  : 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2023 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Central program (main)
@@ -372,6 +372,7 @@ int main(int argc, char *argv[]) {
 				inputtype = FORMAT_auto;
 				outputtype = FORMAT_auto_noresult;
 				action = ACTION_addr_to_countrycode;
+				action_given = 1;
 				break;
 
 			case 'i':
