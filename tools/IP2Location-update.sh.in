@@ -13,7 +13,7 @@
 # Project    : ipv6calc/IP2Location
 # File       : IP2Location-update.sh
 # Version    : $Id$
-# Copyright  : 2012-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2012-2023 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
 # 20150416: remove softlink support, no longer needed
@@ -52,6 +52,7 @@ Usage: $(basename "$0") [-D <dir>] [-n] [-s] [-t] [-v]
 	-s		skip already successfully downloaded files
 	-t		enforce use of 'token' instead of using 'login' & 'password'
 	-v		verbose
+	-S <selector>	download only sample file given by selector IPv4:<num> or IPv6:<num>
 
 	database directory: $IP2LOCATION_DAT_DIR (default: $IP2LOCATION_DAT_DIR_DEFAULT)
 
@@ -108,7 +109,7 @@ if [ -f "$IP2LOCATION_CONFIG" ]; then
 fi
 
 # option parsing
-while getopts "vfsntD:h\?" opt; do
+while getopts "vfsntS:D:h\?" opt; do
 	case $opt in
 	    D)
 		IP2LOCATION_DAT_DIR=$OPTARG
@@ -118,6 +119,15 @@ while getopts "vfsntD:h\?" opt; do
 		;;
 	    s)
 		SKIP_OK=1
+		;;
+	    S)
+		# clear defaults
+		IP2LOCATION_DAT_FILES_LITE=""
+		IP2LOCATION_DAT_FILES=""
+		IP2LOCATION_DAT_FILES_LITE_FREE=""
+
+		#  use option
+		IP2LOCATION_DAT_FILES_SAMPLE="$OPTARG"
 		;;
 	    t)
 		has_credentials=false
