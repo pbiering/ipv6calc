@@ -90,8 +90,8 @@ Recommends:    libmaxminddb
 %endif
 
 %if %{enable_ip2location}
-BuildRequires: IP2Location-devel >= 8.2.0
-Recommends:    IP2Location       >= 8.2.0
+BuildRequires: IP2Location-devel >= 8.6.0
+Recommends:    IP2Location       >= 8.6.0
 %endif
 
 # RPM license macro detector
@@ -349,6 +349,9 @@ fi
 
 
 %changelog
+* Wed Jun 07 2023 Peter Bieringer <pb@bieringer.de>
+- increase minimum IP2Location version to 8.6.0 (support of DB-26)
+
 * Tue Oct 13 2020 Peter Bieringer <pb@bieringer.de>
 - remove obsolete BuildRoot and Group, fix requirement of unzip
 
