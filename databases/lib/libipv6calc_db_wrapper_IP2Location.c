@@ -117,7 +117,7 @@ static const db_file_desc2 libipv6calc_db_wrapper_IP2Location_db_file_desc[] = {
 		IPV6CALC_DB_SC_IP2LOCATION_IPV4_CITY, IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE | IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_4 },
 	{ IP2LOCATION_IPV4_SAMPLE_DB26,
 		"IP-COUNTRY-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEATHER-MOBILE-ELEVATION-USAGETYPE-ADDRESSTYPE-CATEGORY-DISTRICT-ASN-SAMPLE.BIN", IP2LOCATION_DB26,
-		IPV6CALC_DB_SC_IP2LOCATION_IPV4_CITY, IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE | IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_6 },
+		IPV6CALC_DB_SC_IP2LOCATION_IPV4_ASN , IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE | IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_6 },
 
 	// SAMPLES IPv6
 	{ IP2LOCATION_IPV6_SAMPLE_DB1,
@@ -197,7 +197,7 @@ static const db_file_desc2 libipv6calc_db_wrapper_IP2Location_db_file_desc[] = {
 		IPV6CALC_DB_SC_IP2LOCATION_IPV6_CITY, IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE | IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_4 },
 	{ IP2LOCATION_IPV6_SAMPLE_DB26,
 		"IPV6-COUNTRY-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEATHER-MOBILE-ELEVATION-USAGETYPE-ADDRESSTYPE-CATEGORY-DISTRICT-ASN.SAMPLE.BIN", IP2LOCATION_DB26,
-		IPV6CALC_DB_SC_IP2LOCATION_IPV6_CITY, IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE | IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_6 },
+		IPV6CALC_DB_SC_IP2LOCATION_IPV6_ASN , IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE | IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_6 },
 
 
 	/**************/
@@ -311,7 +311,7 @@ static const db_file_desc2 libipv6calc_db_wrapper_IP2Location_db_file_desc[] = {
 		IPV6CALC_DB_SC_IP2LOCATION_IPV4_CITY, IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_4 },
 	{ IP2LOCATION_IPV4_DB26,
 		"IP-COUNTRY-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEATHER-MOBILE-ELEVATION-USAGETYPE-ADDRESSTYPE-CATEGORY-DISTRICT-ASN.BIN", IP2LOCATION_DB26,
-		IPV6CALC_DB_SC_IP2LOCATION_IPV4_CITY, IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_6 },
+		IPV6CALC_DB_SC_IP2LOCATION_IPV4_ASN , IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_6 },
 
 	// Commercial IPv6 (having also IPv4 included)
 	{ IP2LOCATION_IPV6_DB1,
@@ -391,7 +391,7 @@ static const db_file_desc2 libipv6calc_db_wrapper_IP2Location_db_file_desc[] = {
 		IPV6CALC_DB_SC_IP2LOCATION_IPV6_CITY | IPV6CALC_DB_SC_IP2LOCATION_IPV4_CITY, IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_4 },
 	{ IP2LOCATION_IPV6_DB26,
 		"IPV6-COUNTRY-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEATHER-MOBILE-ELEVATION-USAGETYPE-ADDRESSTYPE-CATEGORY-DISTRICT-ASN.BIN", IP2LOCATION_DB26,
-		IPV6CALC_DB_SC_IP2LOCATION_IPV6_CITY | IPV6CALC_DB_SC_IP2LOCATION_IPV4_CITY, IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_6 },
+		IPV6CALC_DB_SC_IP2LOCATION_IPV6_ASN  | IPV6CALC_DB_SC_IP2LOCATION_IPV4_ASN , IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_6 },
 
 
 	/*****************/
@@ -464,6 +464,10 @@ static int dl_status_IP2Location_get_country_long = IPV6CALC_DL_STATUS_UNKNOWN;
 typedef IP2LocationRecord *(*dl_IP2Location_get_country_long_t)(IP2Location *loc, char *ip);
 static union { dl_IP2Location_get_country_long_t func; void * obj; } dl_IP2Location_get_country_long;
 
+static int dl_status_IP2Location_get_asn = IPV6CALC_DL_STATUS_UNKNOWN;
+typedef IP2LocationRecord *(*dl_IP2Location_get_asn_t)(IP2Location *loc, char *ip);
+static union { dl_IP2Location_get_asn_t func; void * obj; } dl_IP2Location_get_asn;
+
 static int dl_status_IP2Location_get_all = IPV6CALC_DL_STATUS_UNKNOWN;
 typedef IP2LocationRecord *(*dl_IP2Location_get_all_t)(IP2Location *loc, char *ip);
 static union { dl_IP2Location_get_all_t func; void * obj; } dl_IP2Location_get_all;
@@ -500,6 +504,8 @@ static int ip2location_db_country_v4 = 0;
 static int ip2location_db_country_v6 = 0;
 static int ip2location_db_region_city_v4 = 0;
 static int ip2location_db_region_city_v6 = 0;
+static int ip2location_db_asn_v4 = 0;
+static int ip2location_db_asn_v6 = 0;
 
 typedef struct {
 	unsigned int num;
@@ -516,11 +522,15 @@ static s_ipv6calc_ip2location_db ip2location_db_country_v4_best[IP2L_MAX];
 static s_ipv6calc_ip2location_db ip2location_db_country_v6_best[IP2L_MAX];
 static s_ipv6calc_ip2location_db ip2location_db_region_city_v4_best[IP2L_MAX];
 static s_ipv6calc_ip2location_db ip2location_db_region_city_v6_best[IP2L_MAX];
+static s_ipv6calc_ip2location_db ip2location_db_asn_v4_best[IP2L_MAX];
+static s_ipv6calc_ip2location_db ip2location_db_asn_v6_best[IP2L_MAX];
 
 static int ip2location_db_country_sample_v4_lite_autoswitch = 0;
 static int ip2location_db_country_sample_v6_lite_autoswitch = 0;
 static int ip2location_db_region_city_sample_v4_lite_autoswitch = 0;
 static int ip2location_db_region_city_sample_v6_lite_autoswitch = 0;
+static int ip2location_db_asn_sample_v4_lite_autoswitch = 0;
+static int ip2location_db_asn_sample_v6_lite_autoswitch = 0;
 
 // select automagically SAMPLE databases in case available and matching and not older than given months
 int ip2location_db_lite_to_sample_autoswitch_max_delta_months = 12;
@@ -731,6 +741,14 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 			IP2L_DB_SELECT_BETTER(ip2location_db_region_city_v6_best[product])
 		};
 
+		if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & (IPV6CALC_DB_IPV4_TO_AS)) != 0) {
+			IP2L_DB_SELECT_BETTER(ip2location_db_asn_v4_best[product])
+		};
+
+		if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & (IPV6CALC_DB_IPV6_TO_AS)) != 0) {
+			IP2L_DB_SELECT_BETTER(ip2location_db_asn_v6_best[product])
+		};
+
 		wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] |= libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features;
 	};
 
@@ -750,6 +768,8 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 		SELECT_LITE_SAMPLE_AUTOSWITCH(ip2location_db_country_v6_best[IP2L_SAMPLE], ip2location_db_country_v6_best[IP2L_LITE], ip2location_db_country_sample_v6_lite_autoswitch)
 		SELECT_LITE_SAMPLE_AUTOSWITCH(ip2location_db_region_city_v4_best[IP2L_SAMPLE], ip2location_db_region_city_v4_best[IP2L_LITE], ip2location_db_region_city_sample_v4_lite_autoswitch)
 		SELECT_LITE_SAMPLE_AUTOSWITCH(ip2location_db_region_city_v6_best[IP2L_SAMPLE], ip2location_db_region_city_v6_best[IP2L_LITE], ip2location_db_region_city_sample_v6_lite_autoswitch)
+		SELECT_LITE_SAMPLE_AUTOSWITCH(ip2location_db_asn_v4_best[IP2L_SAMPLE], ip2location_db_asn_v4_best[IP2L_LITE], ip2location_db_asn_sample_v4_lite_autoswitch)
+		SELECT_LITE_SAMPLE_AUTOSWITCH(ip2location_db_asn_v6_best[IP2L_SAMPLE], ip2location_db_asn_v6_best[IP2L_LITE], ip2location_db_asn_sample_v6_lite_autoswitch)
 	};
 
 	// select lite instead of comm, if comm is outdated and lite available
@@ -764,6 +784,8 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 		SELECT_LITE_INSTEAD_OF_COMM(ip2location_db_country_v6_best[IP2L_LITE], ip2location_db_country_v6_best[IP2L_COMM], ip2location_db_country_v6)
 		SELECT_LITE_INSTEAD_OF_COMM(ip2location_db_region_city_v4_best[IP2L_LITE], ip2location_db_region_city_v4_best[IP2L_COMM], ip2location_db_region_city_v4)
 		SELECT_LITE_INSTEAD_OF_COMM(ip2location_db_region_city_v6_best[IP2L_LITE], ip2location_db_region_city_v6_best[IP2L_COMM], ip2location_db_region_city_v6)
+		SELECT_LITE_INSTEAD_OF_COMM(ip2location_db_asn_v4_best[IP2L_LITE], ip2location_db_asn_v4_best[IP2L_COMM], ip2location_db_asn_v4)
+		SELECT_LITE_INSTEAD_OF_COMM(ip2location_db_asn_v6_best[IP2L_LITE], ip2location_db_asn_v6_best[IP2L_COMM], ip2location_db_asn_v6)
 	};
 
 #define FILL_EMPTY(product, final) \
@@ -776,18 +798,24 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 	FILL_EMPTY(ip2location_db_country_v6_best[IP2L_COMM], ip2location_db_country_v6)
 	FILL_EMPTY(ip2location_db_region_city_v4_best[IP2L_COMM], ip2location_db_region_city_v4)
 	FILL_EMPTY(ip2location_db_region_city_v6_best[IP2L_COMM], ip2location_db_region_city_v6)
+	FILL_EMPTY(ip2location_db_asn_v4_best[IP2L_COMM], ip2location_db_asn_v4)
+	FILL_EMPTY(ip2location_db_asn_v6_best[IP2L_COMM], ip2location_db_asn_v6)
 
 	// fill empty ones with lite
 	FILL_EMPTY(ip2location_db_country_v4_best[IP2L_LITE], ip2location_db_country_v4)
 	FILL_EMPTY(ip2location_db_country_v6_best[IP2L_LITE], ip2location_db_country_v6)
 	FILL_EMPTY(ip2location_db_region_city_v4_best[IP2L_LITE], ip2location_db_region_city_v4)
 	FILL_EMPTY(ip2location_db_region_city_v6_best[IP2L_LITE], ip2location_db_region_city_v6)
+	FILL_EMPTY(ip2location_db_asn_v4_best[IP2L_LITE], ip2location_db_asn_v4)
+	FILL_EMPTY(ip2location_db_asn_v6_best[IP2L_LITE], ip2location_db_asn_v6)
 
 	// fill empty ones with sample
 	FILL_EMPTY(ip2location_db_country_v4_best[IP2L_SAMPLE], ip2location_db_country_v4)
 	FILL_EMPTY(ip2location_db_country_v6_best[IP2L_SAMPLE], ip2location_db_country_v6)
 	FILL_EMPTY(ip2location_db_region_city_v4_best[IP2L_SAMPLE], ip2location_db_region_city_v4)
 	FILL_EMPTY(ip2location_db_region_city_v6_best[IP2L_SAMPLE], ip2location_db_region_city_v6)
+	FILL_EMPTY(ip2location_db_asn_v4_best[IP2L_SAMPLE], ip2location_db_asn_v4)
+	FILL_EMPTY(ip2location_db_asn_v6_best[IP2L_SAMPLE], ip2location_db_asn_v6)
 
 
 #ifdef SUPPORT_IP2LOCATION_DYN
@@ -1033,7 +1061,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 		fprintf(stderr, "%sIP2Location: NO available databases found in directory: %s\n", prefix, ip2location_db_dir);
 	} else {
 		if (level_verbose >= LEVEL_VERBOSE2) {
-			fprintf(stderr, "%sIP2Location: detected best databases SAMPLE  Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d\n"
+			fprintf(stderr, "%sIP2Location: detected best databases SAMPLE  Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d  ASN4=%-3d DB%-2d %6d  ASN6=%-3d DB%-2d %6d\n"
 				, prefix
 				, ip2location_db_country_v4_best[IP2L_SAMPLE].num
 				, ip2location_db_country_v4_best[IP2L_SAMPLE].dbtype
@@ -1047,9 +1075,15 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 				, ip2location_db_region_city_v6_best[IP2L_SAMPLE].num
 				, ip2location_db_region_city_v6_best[IP2L_SAMPLE].dbtype
 				, IP2L_UNPACK_YM(ip2location_db_region_city_v6_best[IP2L_SAMPLE].dbym)
+				, ip2location_db_asn_v4_best[IP2L_SAMPLE].num
+				, ip2location_db_asn_v4_best[IP2L_SAMPLE].dbtype
+				, IP2L_UNPACK_YM(ip2location_db_asn_v4_best[IP2L_SAMPLE].dbym)
+				, ip2location_db_asn_v6_best[IP2L_SAMPLE].num
+				, ip2location_db_asn_v6_best[IP2L_SAMPLE].dbtype
+				, IP2L_UNPACK_YM(ip2location_db_asn_v6_best[IP2L_SAMPLE].dbym)
 			);
 
-			fprintf(stderr, "%sIP2Location: detected best databases LITE    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d\n"
+			fprintf(stderr, "%sIP2Location: detected best databases LITE    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d  ASN4=%-3d DB%-2d %6d  ASN6=%-3d DB%-2d %6d\n"
 				, prefix
 				, ip2location_db_country_v4_best[IP2L_LITE].num
 				, ip2location_db_country_v4_best[IP2L_LITE].dbtype
@@ -1063,9 +1097,15 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 				, ip2location_db_region_city_v6_best[IP2L_LITE].num
 				, ip2location_db_region_city_v6_best[IP2L_LITE].dbtype
 				, IP2L_UNPACK_YM(ip2location_db_region_city_v6_best[IP2L_LITE].dbym)
+				, ip2location_db_asn_v4_best[IP2L_LITE].num
+				, ip2location_db_asn_v4_best[IP2L_LITE].dbtype
+				, IP2L_UNPACK_YM(ip2location_db_asn_v4_best[IP2L_LITE].dbym)
+				, ip2location_db_asn_v6_best[IP2L_LITE].num
+				, ip2location_db_asn_v6_best[IP2L_LITE].dbtype
+				, IP2L_UNPACK_YM(ip2location_db_asn_v6_best[IP2L_LITE].dbym)
 			);
 
-			fprintf(stderr, "%sIP2Location: detected best databases COMM    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d\n"
+			fprintf(stderr, "%sIP2Location: detected best databases COMM    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d  ASN4=%-3d DB%-2d %6d  ASN6=%-3d DB%-2d %6d"
 				, prefix
 				, ip2location_db_country_v4_best[IP2L_COMM].num
 				, ip2location_db_country_v4_best[IP2L_COMM].dbtype
@@ -1079,37 +1119,49 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 				, ip2location_db_region_city_v6_best[IP2L_COMM].num
 				, ip2location_db_region_city_v6_best[IP2L_COMM].dbtype
 				, IP2L_UNPACK_YM(ip2location_db_region_city_v6_best[IP2L_COMM].dbym)
+				, ip2location_db_asn_v4_best[IP2L_COMM].num
+				, ip2location_db_asn_v4_best[IP2L_COMM].dbtype
+				, IP2L_UNPACK_YM(ip2location_db_asn_v4_best[IP2L_COMM].dbym)
+				, ip2location_db_asn_v6_best[IP2L_COMM].num
+				, ip2location_db_asn_v6_best[IP2L_COMM].dbtype
+				, IP2L_UNPACK_YM(ip2location_db_asn_v6_best[IP2L_COMM].dbym)
 			);
 		} else if (level_verbose >= LEVEL_VERBOSE) {
-			fprintf(stderr, "%sIP2Location: detected best databases SAMPLE  Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
+			fprintf(stderr, "%sIP2Location: detected best databases SAMPLE  Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d  ASN4=%-3d  ASN6=%-3d\n"
 				, prefix
 				, ip2location_db_country_v4_best[IP2L_SAMPLE].num
 				, ip2location_db_country_v6_best[IP2L_SAMPLE].num
 				, ip2location_db_region_city_v4_best[IP2L_SAMPLE].num
 				, ip2location_db_region_city_v6_best[IP2L_SAMPLE].num
+				, ip2location_db_asn_v4_best[IP2L_SAMPLE].num
+				, ip2location_db_asn_v6_best[IP2L_SAMPLE].num
 			);
 
-			fprintf(stderr, "%sIP2Location: detected best databases LITE    Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
+			fprintf(stderr, "%sIP2Location: detected best databases LITE    Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d  ASN4=%-3d  ASN6=%-3d\n"
 				, prefix
 				, ip2location_db_country_v4_best[IP2L_LITE].num
 				, ip2location_db_country_v6_best[IP2L_LITE].num
 				, ip2location_db_region_city_v4_best[IP2L_LITE].num
 				, ip2location_db_region_city_v6_best[IP2L_LITE].num
+				, ip2location_db_asn_v4_best[IP2L_LITE].num
+				, ip2location_db_asn_v6_best[IP2L_LITE].num
 			);
 
-			fprintf(stderr, "%sIP2Location: detected best databases COMM    Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
+			fprintf(stderr, "%sIP2Location: detected best databases COMM    Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d  ASN4=%-3d  ASN6=%-3d\n"
 				, prefix
 				, ip2location_db_country_v4_best[IP2L_COMM].num
 				, ip2location_db_country_v6_best[IP2L_COMM].num
 				, ip2location_db_region_city_v4_best[IP2L_COMM].num
 				, ip2location_db_region_city_v6_best[IP2L_COMM].num
+				, ip2location_db_asn_v4_best[IP2L_COMM].num
+				, ip2location_db_asn_v6_best[IP2L_COMM].num
 			);
 
 		};
 
 		if (level_verbose >= LEVEL_VERBOSE) {
 			if (ip2location_db_lite_to_sample_autoswitch_max_delta_months > 0) {
-				fprintf(stderr, "%sIP2Location: selected best databases LI->SA* Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d\n"
+				fprintf(stderr, "%sIP2Location: selected best databases LI->SA* Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d%s  ASN4=%-3d%s  ASN6=%-3d\n"
 					, prefix
 					, ip2location_db_country_sample_v4_lite_autoswitch
 					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
@@ -1118,10 +1170,14 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 					, ip2location_db_region_city_sample_v4_lite_autoswitch
 					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
 					, ip2location_db_region_city_sample_v6_lite_autoswitch
+					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+					, ip2location_db_asn_sample_v4_lite_autoswitch
+					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+					, ip2location_db_asn_sample_v6_lite_autoswitch
 				);
 			};
 
-			fprintf(stderr, "%sIP2Location: selected best databases normal  Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d\n"
+			fprintf(stderr, "%sIP2Location: selected best databases normal  Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d%s  ASN4=%-3d%s  ASN6=%-3d\n"
 				, prefix
 				, ip2location_db_country_v4
 				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
@@ -1130,6 +1186,10 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 				, ip2location_db_region_city_v4
 				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
 				, ip2location_db_region_city_v6
+				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, ip2location_db_asn_v4
+				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, ip2location_db_asn_v6
 			);
 
 			if (ip2location_db_lite_to_sample_autoswitch_max_delta_months > 0) {
@@ -1858,6 +1918,62 @@ END_libipv6calc_db_wrapper:
 
 
 /*
+ * wrapper: IP2Location_get_as_number
+ */
+IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_as_number(IP2Location *loc, char *ip) {
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called: %s ip=%s", wrapper_ip2location_info, ip);
+
+#ifdef SUPPORT_IP2LOCATION_DYN
+	IP2LocationRecord *result_IP2Location_get_asn = NULL;
+	const char *dl_symbol = "IP2Location_get_asn";
+	char *error;
+
+	if (dl_IP2Location_handle == NULL) {
+		fprintf(stderr, "dl_IP2Location handle not defined\n");
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	if (dl_status_IP2Location_get_country_long == IPV6CALC_DL_STATUS_UNKNOWN) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Call dlsym: %s", dl_symbol);
+
+		dlerror();    /* Clear any existing error */
+
+		*(void **) (&dl_IP2Location_get_asn.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
+
+		if ((error = dlerror()) != NULL)  {
+			dl_status_IP2Location_get_country_short = IPV6CALC_DL_STATUS_ERROR;
+			fprintf(stderr, "%s\n", error);
+			goto END_libipv6calc_db_wrapper;
+		};
+
+		dl_status_IP2Location_get_asn = IPV6CALC_DL_STATUS_OK;
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called dlsym successful: %s", dl_symbol);
+	} else if (dl_status_IP2Location_get_asn == IPV6CALC_DL_STATUS_ERROR) {
+		/* already known issue */
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already failed: %s", dl_symbol);
+		goto END_libipv6calc_db_wrapper;
+	} else {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
+	};
+
+	dlerror();    /* Clear any existing error */
+
+	result_IP2Location_get_asn = (*dl_IP2Location_get_asn.func)(loc, ip);
+
+	if ((error = dlerror()) != NULL)  {
+		fprintf(stderr, "%s\n", error);
+		goto END_libipv6calc_db_wrapper;
+	};
+
+END_libipv6calc_db_wrapper:
+	return(result_IP2Location_get_asn);
+#else
+	return(IP2Location_get_asn(loc, ip));
+#endif
+};
+
+
+/*
  * wrapper: IP2Location_get_all
  */
 IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_all(IP2Location *loc, char *ip) {
@@ -1944,6 +2060,7 @@ int libipv6calc_db_wrapper_IP2Location_has_features(uint32_t features) {
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Return with result: %d", result);
 	return(result);
 };
+
 
 /* country_code */
 int libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(char *addr, const int proto, char *country, const size_t country_length) {
@@ -2040,6 +2157,102 @@ END_libipv6calc_db_wrapper:
 	};
 	return(result);
 };
+
+
+/* ASN */
+uint32_t libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp) {
+	int retval;
+	IP2Location *loc;
+	IP2LocationRecord *record = NULL;
+	uint32_t result = ASNUM_AS_UNKNOWN;
+	char addrstring[IPV6CALC_STRING_MAX] = "";
+
+	char *IP2Location_result_ptr = NULL;
+	unsigned int IP2Location_type = 0;
+
+	long asn;
+        char *end;
+
+	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
+		IP2Location_type = ip2location_db_asn_v4;
+
+		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] & IPV6CALC_DB_IPV4_TO_AS) == 0) {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "No IP2Location database supporting IPv4 ASN");
+			goto END_libipv6calc_db_wrapper;
+		};
+	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
+		IP2Location_type = ip2location_db_asn_v6;
+
+		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] & IPV6CALC_DB_IPV6_TO_AS) == 0) {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "No IP2Location database supporting IPv6 ASN");
+			goto END_libipv6calc_db_wrapper;
+		};
+	} else {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Unsupported proto: %d", ipaddrp->proto);
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	if (IP2Location_type == 0) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "No IP2Location database selected for proto: %d", ipaddrp->proto);
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	// convert to string
+	retval = libipaddr_ipaddrstruct_to_string(ipaddrp, addrstring, sizeof(addrstring), 0);
+
+	if ( retval != 0 ) {
+		fprintf(stderr, "Error converting address object into string\n");
+		result = -1;
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	loc = libipv6calc_db_wrapper_IP2Location_open_type(IP2Location_type);
+
+	if (loc == NULL) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Error opening IP2Location by type");
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	record = libipv6calc_db_wrapper_IP2Location_get_as_number(loc, addrstring);
+
+	if (record == NULL) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "did not return a record");
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	IP2Location_result_ptr = record->asn;
+
+	if (IP2Location_result_ptr == NULL) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "did not contain a as_number");
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	if (strlen(IP2Location_result_ptr) == 0) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "did not contain a as_number");
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	errno = 0;
+	asn = strtol(IP2Location_result_ptr, &end, 10);
+
+	if ((errno == ERANGE) || (asn < 0) || (asn > UINT32_MAX)) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "can't convert AS number string to uint32_t as out-of-range: %s", IP2Location_result_ptr);
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	result = (uint32_t) asn;
+
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "ASN: %s -> %u", IP2Location_result_ptr, result);
+
+	IP2LOCATION_DB_USAGE_MAP_TAG(IP2Location_type);
+
+END_libipv6calc_db_wrapper:
+	if (record != NULL) {
+		libipv6calc_db_wrapper_IP2Location_free_record(record);
+	};
+	return(result);
+};
+
 
 /* country_name
  * return: record, must be free'ed after usage
@@ -2273,6 +2486,9 @@ int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddr
 	char addrstring[IPV6CALC_STRING_MAX] = "";
 	IP2LocationRecord *record = NULL;
 
+	long asn;
+        char *end;
+
 	libipv6calc_db_wrapper_geolocation_record_clear(recordp);
 
 	// convert to string
@@ -2401,6 +2617,19 @@ int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddr
 
 			if (record->elevation != 0) {
 				recordp->elevation = record->elevation;
+			};
+		};
+
+		if (libipv6calc_db_wrapper_IP2Location_library_version_majorminor() >= 806) {
+			if (TEST_IP2LOCATION_AVAILABLE(record->asn)) {
+				errno = 0;
+				asn = strtol(record->asn, &end, 10);
+
+				if ((errno == ERANGE) || (asn < 0) || (asn > UINT32_MAX)) {
+					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "can't convert AS number string to uint32_t as out-of-range: %s", record->asn);
+				} else {
+					recordp->asn = asn;
+				};
 			};
 		};
 

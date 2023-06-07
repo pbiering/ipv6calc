@@ -159,9 +159,11 @@
 // shortcuts
 #define IPV6CALC_DB_SC_IP2LOCATION_IPV4_COUNTRY			(IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV4_TO_COUNTRY | IPV6CALC_DB_IP2LOCATION_IPV4)
 #define IPV6CALC_DB_SC_IP2LOCATION_IPV4_CITY			(IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV4_TO_COUNTRY | IPV6CALC_DB_IP2LOCATION_IPV4 | IPV6CALC_DB_IPV4_TO_REGION | IPV6CALC_DB_IPV4_TO_CITY)
+#define IPV6CALC_DB_SC_IP2LOCATION_IPV4_ASN			(IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV4_TO_COUNTRY | IPV6CALC_DB_IP2LOCATION_IPV4 | IPV6CALC_DB_IPV4_TO_REGION | IPV6CALC_DB_IPV4_TO_CITY | IPV6CALC_DB_IPV4_TO_AS)
 
 #define IPV6CALC_DB_SC_IP2LOCATION_IPV6_COUNTRY			(IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_IPV6_TO_COUNTRY | IPV6CALC_DB_IP2LOCATION_IPV6)
 #define IPV6CALC_DB_SC_IP2LOCATION_IPV6_CITY			(IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_IPV6_TO_COUNTRY | IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IPV6_TO_REGION | IPV6CALC_DB_IPV6_TO_CITY)
+#define IPV6CALC_DB_SC_IP2LOCATION_IPV6_ASN			(IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_IPV6_TO_COUNTRY | IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IPV6_TO_REGION | IPV6CALC_DB_IPV6_TO_CITY | IPV6CALC_DB_IPV6_TO_AS)
 
 #define IP2LOCATION_DB1  "Country"
 #define IP2LOCATION_DB2  "Country/ISP"
@@ -209,7 +211,7 @@ extern uint32_t wrapper_features_IP2Location;
 
 extern int         libipv6calc_db_wrapper_IP2Location_wrapper_init(void);
 extern int         libipv6calc_db_wrapper_IP2Location_wrapper_cleanup(void);
-extern const char *libipv6calc_db_wrapper_IP2Location_wrapper_asnum_by_addr (const char *addr, const int proto);
+extern uint32_t    libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp);
 extern void        libipv6calc_db_wrapper_IP2Location_wrapper_info(char* string, const size_t size);
 extern void        libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
 extern char       *libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used(void);
