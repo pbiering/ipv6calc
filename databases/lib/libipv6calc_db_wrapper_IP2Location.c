@@ -2501,7 +2501,7 @@ int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddr
 	};
 
 
-#define TEST_IP2LOCATION_AVAILABLE(v)	((v != NULL) && (strstr(v, "unavailable") == NULL) && (strstr(v, "demo") == NULL) && (strstr(v, "INVALID") == NULL) && (strstr(v, "-") == NULL))
+#define TEST_IP2LOCATION_AVAILABLE(v)	((v != NULL) && (strstr(v, "unavailable") == NULL) && (strstr(v, " sample BIN ") == NULL) && (strstr(v, "INVALID") == NULL) && (strstr(v, "-") == NULL))
 
 	record = libipv6calc_db_wrapper_IP2Location_wrapper_record_city_by_addr((char*) addrstring, ipaddrp->proto);
 
