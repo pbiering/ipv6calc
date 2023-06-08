@@ -2621,6 +2621,10 @@ int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddr
 		};
 
 		if (libipv6calc_db_wrapper_IP2Location_library_version_majorminor() >= 806) {
+			if (TEST_IP2LOCATION_AVAILABLE(record->district)) {
+				snprintf(recordp->district, IPV6CALC_DB_SIZE_DISTRICT, "%s", record->district);
+			};
+
 			if (TEST_IP2LOCATION_AVAILABLE(record->asn)) {
 				errno = 0;
 				asn = strtol(record->asn, &end, 10);
