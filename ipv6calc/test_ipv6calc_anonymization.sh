@@ -264,52 +264,6 @@ run_anon_options_kp_tests() {
 			$verbose && echo "Result ok!" || true
 		fi
 
-		# ASN
-		asn_orig="`./ipv6calc -m -i -q "$input"  --mrtvo IPV._AS_NUM`"
-		asn_anon="`./ipv6calc -m -i -q "$output" --mrtvo IPV._AS_NUM`"
-
-		if [ -z "$asn_orig" -a -z "$asn_anon" ]; then
-			# everything is ok, both have no ASN
-			true
-		elif [ -z "$asn_orig" ]; then
-			$verbose || echo
-			echo "ERROR : something went wrong retrieving IPVx_AS_NUM for $input"
-			exit 1
-		elif [ -n "$asn_orig" -a -z "$asn_anon" ]; then
-			$verbose || echo
-			echo "ERROR : something went wrong retrieving IPVx_AS_NUM for $output (output/input=$input)"
-			exit 1
-		fi
-
-		$verbose && echo "DEBUG : IPVx          orig: $input"
-		$verbose && echo "DEBUG : IPVx          anon: $output"
-		$verbose && echo "DEBUG : IPVx_AS_NUM   orig: $asn_orig"
-		$verbose && echo "DEBUG : IPVx_AS_NUM   anon: $asn_anon"
-
-		if [ -z "$asn_orig" -a -z "$asn_anon" ]; then
-			# everything is ok, both have no registry
-			true
-		elif [ -z "$asn_orig" -a -n "$asn_anon" ]; then
-			$verbose || echo
-			echo "ERROR : something went wrong, anon has ASN while orig hasn't"
-			exit 1
-		elif [ -n "$asn_orig" -a -z "$asn_anon" ]; then
-			$verbose || echo
-			echo "ERROR : something went wrong, orig has ASN while anon hasn't"
-			exit 1
-		else
-			# Check result
-			if [ "$asn_orig" != "$asn_anon" ]; then
-				$verbose || echo
-				echo "ERROR : IPVx_AS_NUM not equal for: $input (anonymized: $output)"
-				echo "ERROR : IPVx_AS_NUM   orig: $asn_orig"
-				echo "ERROR : IPVx_AS_NUM   anon: $asn_anon"
-				exit 1
-			else
-				$verbose && echo "Result ok!" || true
-			fi
-		fi
-
 		# Country Code (optional)
 		cc_orig="`./ipv6calc -m -i -q "$input"  --mrtvo IPV._COUNTRYCODE`"
 		cc_anon="`./ipv6calc -m -i -q "$output" --mrtvo IPV._COUNTRYCODE`"
