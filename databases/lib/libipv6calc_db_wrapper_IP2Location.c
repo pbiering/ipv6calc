@@ -955,7 +955,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_info(char* string, const size_t 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called");
 
 #ifdef SUPPORT_IP2LOCATION
-	snprintf(string, size, "IP2Location available databases: Country4=%d Country6=%d ASN4=%d ASN6=%d City4=%d City6=%d"
+	snprintf(string, size, "IP2Location database support: Country4=%d Country6=%d ASN4=%d ASN6=%d City4=%d City6=%d"
 		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] & IPV6CALC_DB_IPV4_TO_CC)   ? 1 : 0
 		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] & IPV6CALC_DB_IPV6_TO_CC)   ? 1 : 0
 		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] & IPV6CALC_DB_IPV4_TO_AS)   ? 1 : 0
