@@ -2,8 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Version    : $Id$
-# Copyright  : 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2001-2023 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPLv2
 #
 # Test patterns for ipv6calc (functions only)
@@ -381,7 +380,7 @@ END
 testscenarios_anonymization_options_kp() {
 	cat <<END | grep -v '^#'
 --anonymize-preset kp			46.244.223.233=242.222.34.63
---anonymize-preset kp			2001:0a60:11e1:9501:e876:aee4:0721:e8ac=a909:16fa:9092:23ff:a909:4941:0:7
+--anonymize-preset kp			2a04:8000:11e1:9501:e876:aee4:0721:e8ac=a909:118a:90a0:d40f:a909:4941:0:7
 --anonymize-preset kp			::2.2.3.4=::253.134.12.143
 --anonymize-preset kp			::ffff:2.2.3.4=::ffff:253.134.12.143
 --anonymize-preset kp			::1=::1

@@ -2,8 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc_anonymization.sh
-# Version    : $Id$
-# Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2013-2023 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test ipv6calc anonymization
 
@@ -196,7 +195,7 @@ run_anon_options_kp_tests() {
 	$verbose || echo
 	echo "INFO  : $test successful"
 
-	test="run 'ipv6calc' anonymization option kp TYPE/REGISTRY/CC tests"
+	test="run 'ipv6calc' anonymization option kp TYPE/ASN/CC tests"
 	echo "INFO  : $test"
 	testscenarios_kp | ./ipv6calc -q -E ipv4,ipv6 | while read input result; do
 		if [ -z "$input" ]; then
@@ -265,47 +264,46 @@ run_anon_options_kp_tests() {
 			$verbose && echo "Result ok!" || true
 		fi
 
-		# Registry
-		reg_orig="`./ipv6calc -m -i -q "$input"  --mrtvo IPV._REGISTRY`"
-		if echo "$reg_orig" | grep -q LISP; then
-			reg_orig=${reg_orig/(*} # cut lisp details
-		fi
-		reg_anon="`./ipv6calc -m -i -q "$output" --mrtvo IPV._REGISTRY`"
+		# ASN
+		asn_orig="`./ipv6calc -m -i -q "$input"  --mrtvo IPV._AS_NUM`"
+		asn_anon="`./ipv6calc -m -i -q "$output" --mrtvo IPV._AS_NUM`"
 
-		if [ -z "$reg_orig" ]; then
+		if [ -z "$asn_orig" -a -z "$asn_anon" ]; then
+			# everything is ok, both have no ASN
+			true
+		elif [ -z "$asn_orig" ]; then
 			$verbose || echo
-			echo "ERROR : something went wrong retrieving IPVx_REGISTRY for $input"
+			echo "ERROR : something went wrong retrieving IPVx_AS_NUM for $input"
 			exit 1
-		fi
-		if [ -z "$reg_anon" ]; then
+		elif [ -n "$asn_orig" -a -z "$asn_anon" ]; then
 			$verbose || echo
-			echo "ERROR : something went wrong retrieving IPVx_REGISTRY for $output"
+			echo "ERROR : something went wrong retrieving IPVx_AS_NUM for $output"
 			exit 1
 		fi
 
 		$verbose && echo "DEBUG : IPVx          orig: $input"
 		$verbose && echo "DEBUG : IPVx          anon: $output"
-		$verbose && echo "DEBUG : IPVx_REGISTRY orig: $reg_orig"
-		$verbose && echo "DEBUG : IPVx_REGISTRY anon: $reg_anon"
+		$verbose && echo "DEBUG : IPVx_AS_NUM   orig: $asn_orig"
+		$verbose && echo "DEBUG : IPVx_AS_NUM   anon: $asn_anon"
 
-		if [ -z "$reg_orig" -a -z "$reg_anon" ]; then
+		if [ -z "$asn_orig" -a -z "$asn_anon" ]; then
 			# everything is ok, both have no registry
 			true
-		elif [ -z "$reg_orig" -a -n "$reg_anon" ]; then
+		elif [ -z "$asn_orig" -a -n "$asn_anon" ]; then
 			$verbose || echo
-			echo "ERROR : something went wrong, anon has registry while orig hasn't"
+			echo "ERROR : something went wrong, anon has ASN while orig hasn't"
 			exit 1
-		elif [ -n "$reg_orig" -a -z "$reg_anon" ]; then
+		elif [ -n "$asn_orig" -a -z "$asn_anon" ]; then
 			$verbose || echo
-			echo "ERROR : something went wrong, orig has registry while anon hasn't"
+			echo "ERROR : something went wrong, orig has ASN while anon hasn't"
 			exit 1
 		else
 			# Check result
-			if [ "$reg_orig" != "$reg_anon" ]; then
+			if [ "$asn_orig" != "$asn_anon" ]; then
 				$verbose || echo
-				echo "ERROR : IPVx_REGISTRY not equal for: $input (anonymized: $output)"
-				echo "ERROR : IPVx_REGISTRY orig: $reg_orig"
-				echo "ERROR : IPVx_REGISTRY anon: $reg_anon"
+				echo "ERROR : IPVx_AS_NUM not equal for: $input (anonymized: $output)"
+				echo "ERROR : IPVx_AS_NUM   orig: $asn_orig"
+				echo "ERROR : IPVx_AS_NUM   anon: $asn_anon"
 				exit 1
 			else
 				$verbose && echo "Result ok!" || true
