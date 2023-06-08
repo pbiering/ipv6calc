@@ -4579,6 +4579,39 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
 		CFLAGS="$CFLAGS_SAVE"
 
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** check for CFLAGS: -Wno-deprecated-declarations" >&5
+printf "%s\n" "*** check for CFLAGS: -Wno-deprecated-declarations" >&6; }
+		CFLAGS_SAVE="$CFLAGS"
+		CFLAGS="$CFLAGS -Werror -Wno-deprecated-declarations"
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+int a=1;
+int
+main (void)
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"
+then :
+
+				{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** CFLAGS supported: -Wno-deprecated-declarations" >&5
+printf "%s\n" "*** CFLAGS supported: -Wno-deprecated-declarations" >&6; }
+				# disable errors related to deprecated-declarations
+				CFLAGS_EXTRA="${CFLAGS_EXTRA:+$CFLAGS_EXTRA }-Wno-deprecated-declarations"
+
+else $as_nop
+
+				{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: *** missing CFLAGS support: -Wno-deprecated-declarations" >&5
+printf "%s\n" "$as_me: WARNING: *** missing CFLAGS support: -Wno-deprecated-declarations" >&2;}
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
+		CFLAGS="$CFLAGS_SAVE"
+
 fi
 
 
