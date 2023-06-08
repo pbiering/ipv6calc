@@ -277,7 +277,7 @@ run_anon_options_kp_tests() {
 			exit 1
 		elif [ -n "$asn_orig" -a -z "$asn_anon" ]; then
 			$verbose || echo
-			echo "ERROR : something went wrong retrieving IPVx_AS_NUM for $output"
+			echo "ERROR : something went wrong retrieving IPVx_AS_NUM for $output (output/input=$input)"
 			exit 1
 		fi
 
