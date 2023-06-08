@@ -192,7 +192,7 @@ echo "*** run: autoconf"
 autoconf || exit 1
 
 echo "*** run: configure, options: $OPTIONS_CONFIGURE $*"
-CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS -Wl,--as-needed" ./configure --bindir=/usr/bin --mandir=/usr/share/man $OPTIONS_CONFIGURE $* || exit 1
+CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" ./configure --bindir=/usr/bin --mandir=/usr/share/man $OPTIONS_CONFIGURE $* || exit 1
 
 if $flag_no_make; then
 	echo
