@@ -2631,6 +2631,10 @@ int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddr
 					recordp->asn = asn;
 				};
 			};
+
+			if (TEST_IP2LOCATION_AVAILABLE(record->as)) {
+				snprintf(recordp->organization_name, IPV6CALC_DB_SIZE_ORG_NAME, "%s", record->as);
+			};
 		};
 
 		libipv6calc_db_wrapper_IP2Location_free_record(record);
