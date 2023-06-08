@@ -241,7 +241,7 @@ typedef struct
 	char     continent_code[IPV6CALC_DB_SIZE_CONTINENT_CODE];
 	char     continent_long[IPV6CALC_DB_SIZE_CONTINENT_LONG];
 	char     stateprov[IPV6CALC_DB_SIZE_STATEPROV];
-	char     district[IPV6CALC_DB_SIZE_CITY];
+	char     district[IPV6CALC_DB_SIZE_DISTRICT];
 	char     city[IPV6CALC_DB_SIZE_CITY];
 	char     zipcode[IPV6CALC_DB_SIZE_ZIPCODE];
 	char     weatherstationcode[IPV6CALC_DB_SIZE_WEATHERSTATIONCODE];
