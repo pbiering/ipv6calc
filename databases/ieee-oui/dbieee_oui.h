@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_oui.h
  * Version       : $Id$
- * Generated     : Thu Jun  8 18:13:51 2023
+ * Generated     : Fri Jun  9 07:51:18 2023
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui_status __attribute__ ((__unused__)) = "OUI/20230608";
+/*@unused@*/ static const char* libieee_oui_status __attribute__ ((__unused__)) = "OUI/20230609";
 
 
 static const s_ieee_oui libieee_oui[] = {
@@ -20031,6 +20031,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x54F15F, "Sichuan AI-Link Technology Co., Ltd.", "SICHUAN-AI-LINK" },
 	{ 0x54F201, "Samsung Electronics Co.,Ltd", "SAMSUNG-ELECTRONICS" },
 	{ 0x54F294, "Huawei Device Co., Ltd.", "HUAWEI-DEVICE" },
+	{ 0x54F29F, "HUNAN FN-LINK TECHNOLOGY LIMITED", "HUNAN-FN-LINK" },
 	{ 0x54F5B6, "ORIENTAL PACIFIC INTERNATIONAL LIMITED", "ORIENTAL-PACIFIC" },
 	{ 0x54F607, "Huawei Device Co., Ltd.", "HUAWEI-DEVICE" },
 	{ 0x54F666, "Berthold Technologies GmbH and Co.KG", "BERTHOLD-TECHNOLOGIES" },
@@ -20456,7 +20457,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x5C647A, "HUAWEI TECHNOLOGIES CO.,LTD", "HUAWEI-TECHNOLOGIES" },
 	{ 0x5C648E, "Zyxel Communications Corporation", "ZYXEL-COMMUNICATION" },
 	{ 0x5C64F1, "Cisco Systems, Inc", "CISCO" },
-	{ 0x5C64F3, "sywinkey HongKong Co,. Limited?", "SYWINKEY-HONGKONG-?" },
+	{ 0x5C64F3, "sywinkey HongKong Co,. Limited?", "SYWINKEY-HONGKONG" },
 	{ 0x5C666C, "GUANGDONG OPPO MOBILE TELECOMMUNICATIONS CORP.,LTD", "GUANGDONG-OPPO-MOBILE-TELECOMMUNICATIONS" },
 	{ 0x5C6776, "IDS Imaging Development Systems GmbH", "IDS-IMAGING-DEVELOPMENT" },
 	{ 0x5C68D0, "Aurora Innovation Inc.", "AURORA-INNOVATION" },
@@ -21200,7 +21201,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x64995D, "LGE", "LGE" },
 	{ 0x649968, "Elentec", "ELENTEC" },
 	{ 0x6499A0, "AG Elektronik AB", "ELEKTRONIK-AB" },
-	{ 0x649A08, "Shenzhen SuperElectron Technology Co.,LTD", "SHENZHEN-SUPERELECTRON" },
+	{ 0x649A08, "Shenzhen SuperElectron Technology Co.,Ltd.", "SHENZHEN-SUPERELECTRON" },
 	{ 0x649A12, "P2 Mobile Technologies Limited", "P2-MOBILE-TECHNOLOGIES" },
 	{ 0x649A63, "Ring LLC", "RING" },
 	{ 0x649ABE, "Apple, Inc.", "APPLE" },
@@ -24747,6 +24748,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0x900D66, "Digimore Electronics Co., Ltd", "DIGIMORE-ELECTRONICS" },
 	{ 0x900DCB, "ARRIS Group, Inc.", "ARRIS-GROUP" },
 	{ 0x900E83, "Monico Monitoring, Inc.", "MONICO-MONITORING" },
+	{ 0x900E9E, "Shenzhen SuperElectron Technology Co.,Ltd.", "SHENZHEN-SUPERELECTRON" },
 	{ 0x900EB3, "Shenzhen Amediatech Technology Co., Ltd.", "SHENZHEN-AMEDIATECH" },
 	{ 0x900F0C, "CLOUD NETWORK TECHNOLOGY SINGAPORE PTE. LTD.", "CLOUD-NETWORK-SINGAPORE-PTE" },
 	{ 0x901195, "Amazon Technologies Inc.", "AMAZON-TECHNOLOGIES" },
@@ -26943,6 +26945,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xA8B271, "HUAWEI TECHNOLOGIES CO.,LTD", "HUAWEI-TECHNOLOGIES" },
 	{ 0xA8B2DA, "FUJITSU LIMITED", "FUJITSU" },
 	{ 0xA8B456, "Cisco Systems, Inc", "CISCO" },
+	{ 0xA8B483, "Shenzhen SuperElectron Technology Co.,Ltd.", "SHENZHEN-SUPERELECTRON" },
 	{ 0xA8B57C, "Roku, Inc", "ROKU" },
 	{ 0xA8B86E, "LG Electronics (Mobile Communications)", "LG-ELECTRONICS-MOBILE-COMMUNICATION" },
 	{ 0xA8B9B3, "ESSYS", "ESSYS" },
@@ -28755,7 +28758,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xC04442, "Apple, Inc.", "APPLE" },
 	{ 0xC044E3, "Shenzhen Sinkna Electronics Co., LTD", "SHENZHEN-SINKNA-ELECTRONICS" },
 	{ 0xC04754, "vivo Mobile Communication Co., Ltd.", "VIVO-MOBILE-COMMUNICATION" },
-	{ 0xC04884, "Sigma Bilisim Sist. Tekn. Elk. Enj. ve San. D??. Tic. Ltd. ?ti.", "SIGMA-BILISIM-SIST-TEKN-ELK-ENJ-VE-SAN-D??-TIC-?TI" },
+	{ 0xC04884, "Sigma Bilisim Sist. Tekn. Elk. Enj. ve San. D??. Tic. Ltd. ?ti.", "SIGMA-BILISIM-SIST-TEKN-ELK-ENJ-VE-SAN-D-TIC-TI" },
 	{ 0xC048E6, "Samsung Electronics Co.,Ltd", "SAMSUNG-ELECTRONICS" },
 	{ 0xC048FB, "Shenzhen JingHanDa Electronics Co.Ltd", "SHENZHEN-JINGHANDA-ELECTRONICS" },
 	{ 0xC0493D, "MAITRISE TECHNOLOGIQUE", "MAITRISE-TECHNOLOGIQUE" },
@@ -29379,6 +29382,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xC82B6B, "shenzhen worldelite electronics co., LTD", "SHENZHEN-WORLDELITE-ELECTRONICS" },
 	{ 0xC82B96, "Espressif Inc.", "ESPRESSIF" },
 	{ 0xC82C2B, "IEEE Registration Authority", "IEEE-REGISTRATION-AUTHORITY" },
+	{ 0xC82E18, "Espressif Inc.", "ESPRESSIF" },
 	{ 0xC82E47, "Suzhou SmartChip Semiconductor Co., LTD", "SUZHOU-SMARTCHIP-SEMICONDUCTOR" },
 	{ 0xC82E94, "Halfa Enterprise Co., Ltd.", "HALFA" },
 	{ 0xC83168, "eZEX corporation", "EZEX" },
@@ -32062,6 +32066,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xE86819, "HUAWEI TECHNOLOGIES CO.,LTD", "HUAWEI-TECHNOLOGIES" },
 	{ 0xE868E7, "Espressif Inc.", "ESPRESSIF" },
 	{ 0xE86A64, "LCFC(HeFei) Electronics Technology co., ltd", "LCFC-HEFEI-ELECTRONICS" },
+	{ 0xE86BEA, "Espressif Inc.", "ESPRESSIF" },
 	{ 0xE86CC7, "IEEE Registration Authority", "IEEE-REGISTRATION-AUTHORITY" },
 	{ 0xE86CDA, "Supercomputers and Neurocomputers Research Center", "SUPERCOMPUTERS-AND-NEUROCOMPUTERS-RESEARCH-CENTER" },
 	{ 0xE86D52, "ARRIS Group, Inc.", "ARRIS-GROUP" },
@@ -33577,6 +33582,7 @@ static const s_ieee_oui libieee_oui[] = {
 	{ 0xF8F005, "Newport Media Inc.", "NEWPORT-MEDIA" },
 	{ 0xF8F014, "RackWare Inc.", "RACKWARE" },
 	{ 0xF8F082, "NAGTECH LLC", "NAGTECH" },
+	{ 0xF8F09D, "Hangzhou Prevail Communication Technology Co., Ltd", "HANGZHOU-PREVAIL-COMMUNICATION" },
 	{ 0xF8F0C5, "Suzhou Kuhan Information Technologies Co.,Ltd.", "SUZHOU-KUHAN-INFORMATION-TECHNOLOGIES" },
 	{ 0xF8F1B6, "Motorola Mobility LLC, a Lenovo Company", "MOTOROLA-MOBILITY-LLC-A-LENOVO-COMPANY" },
 	{ 0xF8F1E6, "Samsung Electronics Co.,Ltd", "SAMSUNG-ELECTRONICS" },

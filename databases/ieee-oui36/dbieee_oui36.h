@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
  * Version       : $Id$
- * Generated     : Thu Jun  8 18:13:55 2023
+ * Generated     : Fri Jun  9 07:52:31 2023
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20230608";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20230609";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -3994,7 +3994,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x70B3D5, 0xEC5000, 0xEC5FFF, "TATTILE SRL", "TATTILE-SRL" },
 	{ 0x70B3D5, 0xEC6000, 0xEC6FFF, "ESII", "ESII" },
 	{ 0x70B3D5, 0xEC7000, 0xEC7FFF, "Neoptix Inc.", "NEOPTIX" },
-	{ 0x70B3D5, 0xEC8000, 0xEC8FFF, "PANASONIC LIFE SOLUTIONS ELEKTR?K SANAY? VE T?CARE", "PANASONIC-LIFE-SOLUTIONS-ELEKTR?K-SANAY?-VE-T?CARE" },
+	{ 0x70B3D5, 0xEC8000, 0xEC8FFF, "PANASONIC LIFE SOLUTIONS ELEKTR?K SANAY? VE T?CARE", "PANASONIC-LIFE-SOLUTIONS-ELEKTRK-SANAY-VE-TCARE" },
 	{ 0x70B3D5, 0xEC9000, 0xEC9FFF, "Qlinx Technologies", "QLINX-TECHNOLOGIES" },
 	{ 0x70B3D5, 0xECA000, 0xECAFFF, "Transtronic AB", "TRANSTRONIC-AB" },
 	{ 0x70B3D5, 0xECB000, 0xECBFFF, "Re spa - Controlli Industriali - IT01782300154", "RE-SPA-CONTROLLI-INDUSTRIALI-IT01782300154" },
@@ -5035,7 +5035,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0x99E000, 0x99EFFF, "EIDOS s.r.l.", "EIDOS" },
 	{ 0x8C1F64, 0x9A1000, 0x9A1FFF, "Pacific Software Development Co., Ltd.", "PACIFIC-SOFTWARE-DEVELOPMENT" },
 	{ 0x8C1F64, 0x9A4000, 0x9A4FFF, "LabLogic Systems", "LABLOGIC" },
-	{ 0x8C1F64, 0x9A5000, 0x9A5FFF, "Xi‘an Shengxin Science& Technology Development Co.?Ltd.", "XIAN-SHENGXIN-SCIENCE-DEVELOPMENT-?" },
+	{ 0x8C1F64, 0x9A5000, 0x9A5FFF, "Xi‘an Shengxin Science& Technology Development Co.?Ltd.", "XIAN-SHENGXIN-SCIENCE-DEVELOPMENT" },
 	{ 0x8C1F64, 0x9A6000, 0x9A6FFF, "INSTITUTO DE GESTÃO, REDES TECNOLÓGICAS E NERGIAS", "INSTITUTO-DE-GESTO-REDES-TECNOLGICAS-E-NERGIAS" },
 	{ 0x8C1F64, 0x9AB000, 0x9ABFFF, "DAVE SRL", "DAVE-SRL" },
 	{ 0x8C1F64, 0x9B2000, 0x9B2FFF, "Emerson Rosemount Analytical", "EMERSON-ROSEMOUNT-ANALYTICAL" },
@@ -5054,6 +5054,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0x9D8000, 0x9D8FFF, "Integer.pl S.A.", "INTEGER-PL" },
 	{ 0x8C1F64, 0x9E0000, 0x9E0FFF, "Druck Ltd.", "DRUCK" },
 	{ 0x8C1F64, 0x9E2000, 0x9E2FFF, "Technology for Energy Corp", "FOR-ENERGY" },
+	{ 0x8C1F64, 0x9E5000, 0x9E5FFF, "Schunk Sonosystems GmbH", "SCHUNK-SONOSYSTEMS" },
 	{ 0x8C1F64, 0x9E6000, 0x9E6FFF, "MB connect line GmbH Fernwartungssysteme", "MB-CONNECT-LINE-FERNWARTUNGSSYSTEME" },
 	{ 0x8C1F64, 0x9E8000, 0x9E8FFF, "GHM Messtechnik GmbH", "GHM-MESSTECHNIK" },
 	{ 0x8C1F64, 0x9EC000, 0x9ECFFF, "Specialized Communications Corp.", "SPECIALIZED-COMMUNICATION" },
@@ -5109,6 +5110,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0xA94000, 0xA94FFF, "Future wave ultra tech Company", "FUTURE-WAVE-ULTRA-TECH-COMPANY" },
 	{ 0x8C1F64, 0xA97000, 0xA97FFF, "Integer.pl S.A.", "INTEGER-PL" },
 	{ 0x8C1F64, 0xA9A000, 0xA9AFFF, "Signasystems Elektronik San. ve Tic. Ltd. Sti.", "SIGNASYSTEMS-ELEKTRONIK-SAN-VE-TIC-STI" },
+	{ 0x8C1F64, 0xA9B000, 0xA9BFFF, "Ovide Maudet SL", "OVIDE-MAUDET-SL" },
 	{ 0x8C1F64, 0xA9C000, 0xA9CFFF, "Upstart Power", "UPSTART-POWER" },
 	{ 0x8C1F64, 0xA9E000, 0xA9EFFF, "Optimum Instruments Inc.", "OPTIMUM-INSTRUMENTS" },
 	{ 0x8C1F64, 0xAA3000, 0xAA3FFF, "Peter Huber Kaeltemaschinenbau AG", "PETER-HUBER-KAELTEMASCHINENBAU" },
@@ -5374,7 +5376,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0xE74000, 0xE74FFF, "Magosys Systems LTD", "MAGOSYS" },
 	{ 0x8C1F64, 0xE75000, 0xE75FFF, "Stercom Power Soltions GmbH", "STERCOM-POWER-SOLTIONS" },
 	{ 0x8C1F64, 0xE77000, 0xE77FFF, "GY-FX SAS", "GY-FX-SAS" },
-	{ 0x8C1F64, 0xE79000, 0xE79FFF, "SHENZHEN GUANGWEN INDUSTRIAL CO.,LTD(????)", "SHENZHEN-GUANGWEN-INDUSTRIAL-????" },
+	{ 0x8C1F64, 0xE79000, 0xE79FFF, "SHENZHEN GUANGWEN INDUSTRIAL CO.,LTD", "SHENZHEN-GUANGWEN-INDUSTRIAL" },
 	{ 0x8C1F64, 0xE7B000, 0xE7BFFF, "Dongguan Pengchen Earth Instrument CO. LT", "DONGGUAN-PENGCHEN-EARTH-INSTRUMENT-LT" },
 	{ 0x8C1F64, 0xE7C000, 0xE7CFFF, "Ashinne Technology Co., Ltd", "ASHINNE" },
 	{ 0x8C1F64, 0xE86000, 0xE86FFF, "ComVetia AG", "COMVETIA" },
