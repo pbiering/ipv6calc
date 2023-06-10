@@ -464,9 +464,11 @@ static int dl_status_IP2Location_get_country_long = IPV6CALC_DL_STATUS_UNKNOWN;
 typedef IP2LocationRecord *(*dl_IP2Location_get_country_long_t)(IP2Location *loc, char *ip);
 static union { dl_IP2Location_get_country_long_t func; void * obj; } dl_IP2Location_get_country_long;
 
+#if API_VERSION_NUMERIC >= 806000
 static int dl_status_IP2Location_get_asn = IPV6CALC_DL_STATUS_UNKNOWN;
 typedef IP2LocationRecord *(*dl_IP2Location_get_asn_t)(IP2Location *loc, char *ip);
 static union { dl_IP2Location_get_asn_t func; void * obj; } dl_IP2Location_get_asn;
+#endif // API_VERSION_NUMERIC >= 806000
 
 static int dl_status_IP2Location_get_all = IPV6CALC_DL_STATUS_UNKNOWN;
 typedef IP2LocationRecord *(*dl_IP2Location_get_all_t)(IP2Location *loc, char *ip);
@@ -2446,8 +2448,10 @@ static int libipv6calc_db_wrapper_IP2Location_db_compatible(const unsigned int t
 	};
 
 	if (	(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_4) != 0) {
+#ifdef SUPPORT_IP2LOCATION_DYN
 #if API_VERSION_NUMERIC < 804000
 		result = 1;
+#endif
 #else
 		if (libipv6calc_db_wrapper_IP2Location_library_version_majorminor() < 804) {
 			result = 1;
@@ -2456,8 +2460,10 @@ static int libipv6calc_db_wrapper_IP2Location_db_compatible(const unsigned int t
 	};
 
 	if (	(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_6) != 0) {
+#ifdef SUPPORT_IP2LOCATION_DYN
 #if API_VERSION_NUMERIC < 806000
 		result = 1;
+#endif
 #else
 		if (libipv6calc_db_wrapper_IP2Location_library_version_majorminor() < 806) {
 			result = 1;
