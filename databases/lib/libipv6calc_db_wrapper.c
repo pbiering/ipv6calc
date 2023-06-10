@@ -1771,7 +1771,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp,
 #endif
 			break;
 
-#if API_VERSION_NUMERIC >= 806000
+#if API_VERSION_NUMERIC >= 80600
 		    case IPV6CALC_DB_SOURCE_IP2LOCATION:
 #ifdef SUPPORT_IP2LOCATION
 			if (wrapper_IP2Location_status == 1) {
@@ -1788,7 +1788,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp,
 			};
 #endif
 			break;
-#endif // API_VERSION_NUMERIC >= 806000
+#endif // API_VERSION_NUMERIC >= 80600
 
 
 		    case IPV6CALC_DB_SOURCE_DBIP2:

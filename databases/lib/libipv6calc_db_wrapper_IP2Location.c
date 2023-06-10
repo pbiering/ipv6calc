@@ -464,11 +464,11 @@ static int dl_status_IP2Location_get_country_long = IPV6CALC_DL_STATUS_UNKNOWN;
 typedef IP2LocationRecord *(*dl_IP2Location_get_country_long_t)(IP2Location *loc, char *ip);
 static union { dl_IP2Location_get_country_long_t func; void * obj; } dl_IP2Location_get_country_long;
 
-#if API_VERSION_NUMERIC >= 806000
+#if API_VERSION_NUMERIC >= 80600
 static int dl_status_IP2Location_get_asn = IPV6CALC_DL_STATUS_UNKNOWN;
 typedef IP2LocationRecord *(*dl_IP2Location_get_asn_t)(IP2Location *loc, char *ip);
 static union { dl_IP2Location_get_asn_t func; void * obj; } dl_IP2Location_get_asn;
-#endif // API_VERSION_NUMERIC >= 806000
+#endif // API_VERSION_NUMERIC >= 80600
 
 static int dl_status_IP2Location_get_all = IPV6CALC_DL_STATUS_UNKNOWN;
 typedef IP2LocationRecord *(*dl_IP2Location_get_all_t)(IP2Location *loc, char *ip);
@@ -1918,7 +1918,7 @@ END_libipv6calc_db_wrapper:
 #endif
 };
 
-#if API_VERSION_NUMERIC >= 806000
+#if API_VERSION_NUMERIC >= 80600
 /*
  * wrapper: IP2Location_get_as_number
  */
@@ -1973,7 +1973,7 @@ END_libipv6calc_db_wrapper:
 	return(IP2Location_get_asn(loc, ip));
 #endif
 };
-#endif // API_VERSION_NUMERIC >= 806000
+#endif // API_VERSION_NUMERIC >= 80600
 
 
 /*
@@ -2162,7 +2162,7 @@ END_libipv6calc_db_wrapper:
 };
 
 
-#if API_VERSION_NUMERIC >= 806000
+#if API_VERSION_NUMERIC >= 80600
 /* ASN */
 uint32_t libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp) {
 	int retval;
@@ -2256,7 +2256,7 @@ END_libipv6calc_db_wrapper:
 	};
 	return(result);
 };
-#endif // API_VERSION_NUMERIC >= 806000
+#endif // API_VERSION_NUMERIC >= 80600
 
 
 /* country_name
@@ -2449,7 +2449,7 @@ static int libipv6calc_db_wrapper_IP2Location_db_compatible(const unsigned int t
 
 	if (	(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_4) != 0) {
 #ifdef SUPPORT_IP2LOCATION_DYN
-#if API_VERSION_NUMERIC < 804000
+#if API_VERSION_NUMERIC < 80400
 		result = 1;
 #endif
 #else
@@ -2461,7 +2461,7 @@ static int libipv6calc_db_wrapper_IP2Location_db_compatible(const unsigned int t
 
 	if (	(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_6) != 0) {
 #ifdef SUPPORT_IP2LOCATION_DYN
-#if API_VERSION_NUMERIC < 806000
+#if API_VERSION_NUMERIC < 80600
 		result = 1;
 #endif
 #else
@@ -2500,10 +2500,10 @@ int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddr
 	char addrstring[IPV6CALC_STRING_MAX] = "";
 	IP2LocationRecord *record = NULL;
 
-#if API_VERSION_NUMERIC >= 806000
+#if API_VERSION_NUMERIC >= 80600
 	long asn;
         char *end;
-#endif // API_VERSION_NUMERIC >= 806000
+#endif // API_VERSION_NUMERIC >= 80600
 
 	libipv6calc_db_wrapper_geolocation_record_clear(recordp);
 
@@ -2636,7 +2636,7 @@ int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddr
 			};
 		};
 
-#if API_VERSION_NUMERIC >= 806000
+#if API_VERSION_NUMERIC >= 80600
 		if (libipv6calc_db_wrapper_IP2Location_library_version_majorminor() >= 806) {
 			if (TEST_IP2LOCATION_AVAILABLE(record->district)) {
 				snprintf(recordp->district, IPV6CALC_DB_SIZE_DISTRICT, "%s", record->district);
@@ -2657,7 +2657,7 @@ int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddr
 				snprintf(recordp->organization_name, IPV6CALC_DB_SIZE_ORG_NAME, "%s", record->as);
 			};
 		};
-#endif // API_VERSION_NUMERIC >= 806000
+#endif // API_VERSION_NUMERIC >= 80600
 
 		libipv6calc_db_wrapper_IP2Location_free_record(record);
 		result = 0;
