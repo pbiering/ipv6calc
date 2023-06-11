@@ -10,6 +10,19 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20230609/PB:
+	databases/lib/libipv6calc_db_wrapper_IP2Location.c: adjustments depending on IP2Location version
+	databases/lib/libipv6calc_db_wrapper.c: adjustments depending on IP2Location version
+
+20230608/PB:
+	databases/lib/libipv6calc_db_wrapper_IP2Location.[h|c]: add support for DB-26
+	databases/lib/libipv6calc_db_wrapper.c: extension for ASN from IP2Location (DB-26)
+	databases/lib/libipv6calc_db_wrapper.h: minor bugfix
+	configure[.in]: add support for -Wno-deprecated-declarations (openssl/md5 workaround)
+	autogen-all-variants.sh: disable static build for --enable-openssl-md5
+	autogen.sh: remove -Wl,--as-needed from LDFLAGS as causing issues with -S
+	internal databases: update
+
 20230606/PB:
 	tools/IP2Location-update.sh.in: add option -S to download a specific sample file
 
