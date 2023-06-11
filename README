@@ -1,6 +1,6 @@
 ipv6calc will do some format changes and calculations for you
 
-(P) & (C) 2001-2022 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2023 by Peter Bieringer <pb (at) bieringer.de>
                    published under GNU GPLv2
 
 For suggestions and bug report please contact author
@@ -72,6 +72,7 @@ Where to get:
     EL6: build from source package potentially still work but not tested anymore, OS is EOSL
     EL7: package is available via EPEL
     EL8: package is available via EPEL
+    EL9: package is available via EPEL
    Mandrake (EOSL):
     similar to Red Hat, rebuild should work, too
    Debian:
@@ -101,6 +102,3 @@ Mailing lists:
   Traffic: medium
   Postings: only subscribers are allowed to post
   Subscription: http://lists.deepspace6.net/listinfo/ipv6calc
-
-
-$Id$
