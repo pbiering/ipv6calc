@@ -2448,10 +2448,8 @@ static int libipv6calc_db_wrapper_IP2Location_db_compatible(const unsigned int t
 	};
 
 	if (	(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_4) != 0) {
-#ifdef SUPPORT_IP2LOCATION_DYN
 #if API_VERSION_NUMERIC < 80400
 		result = 1;
-#endif
 #else
 		if (libipv6calc_db_wrapper_IP2Location_library_version_majorminor() < 804) {
 			result = 1;
@@ -2460,10 +2458,8 @@ static int libipv6calc_db_wrapper_IP2Location_db_compatible(const unsigned int t
 	};
 
 	if (	(libipv6calc_db_wrapper_IP2Location_db_file_desc[i].internal & IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_6) != 0) {
-#ifdef SUPPORT_IP2LOCATION_DYN
 #if API_VERSION_NUMERIC < 80600
 		result = 1;
-#endif
 #else
 		if (libipv6calc_db_wrapper_IP2Location_library_version_majorminor() < 806) {
 			result = 1;
