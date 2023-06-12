@@ -2174,7 +2174,7 @@ uint32_t libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(const ipv6calc_i
 	char *IP2Location_result_ptr = NULL;
 	unsigned int IP2Location_type = 0;
 
-	long asn;
+	long long asn;
         char *end;
 
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
@@ -2237,7 +2237,7 @@ uint32_t libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(const ipv6calc_i
 	};
 
 	errno = 0;
-	asn = strtol(IP2Location_result_ptr, &end, 10);
+	asn = strtoll(IP2Location_result_ptr, &end, 10);
 
 	if ((errno == ERANGE) || (asn < 0) || (asn > UINT32_MAX)) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "can't convert AS number string to uint32_t as out-of-range: %s", IP2Location_result_ptr);
