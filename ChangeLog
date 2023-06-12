@@ -10,6 +10,9 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20230612/PB:
+	tag version 4.1.0
+
 20230609/PB:
 	databases/lib/libipv6calc_db_wrapper_IP2Location.c: adjustments depending on IP2Location version
 	databases/lib/libipv6calc_db_wrapper.c: adjustments depending on IP2Location version
