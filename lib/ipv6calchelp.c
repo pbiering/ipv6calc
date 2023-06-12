@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Version    : $Id$
- * Copyright  : 2002-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2023 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -941,10 +940,10 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 #endif
 
 #if defined ENABLE_OPENSSL_EVP_MD5
-	fprintf(stderr, "Linked MD5 implemenation: OpenSSL EVP MD5\n\n");
+	fprintf(stderr, "Linked MD5 implementation: OpenSSL EVP MD5\n\n");
 #endif
 #if defined ENABLE_OPENSSL_MD5
-	fprintf(stderr, "Linked MD5 implemenation: OpenSSL legacy MD5\n\n");
+	fprintf(stderr, "Linked MD5 implementation: OpenSSL legacy MD5\n\n");
 #endif
 
 

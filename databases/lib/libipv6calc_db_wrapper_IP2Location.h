@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.h
- * Version    : $Id$
- * Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2023 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_IP2Location.c
@@ -50,6 +49,7 @@
 #define IP2LOCATION_IPV4_DB23	 23
 #define IP2LOCATION_IPV4_DB24	 24
 #define IP2LOCATION_IPV4_DB25	 25
+#define IP2LOCATION_IPV4_DB26	 26
 
 #define IP2LOCATION_IPV6_DB1	 101
 #define IP2LOCATION_IPV6_DB2	 102
@@ -76,6 +76,7 @@
 #define IP2LOCATION_IPV6_DB23	 123
 #define IP2LOCATION_IPV6_DB24	 124
 #define IP2LOCATION_IPV6_DB25	 125
+#define IP2LOCATION_IPV6_DB26	 126
 
 /* SAMPLE */
 #define IP2LOCATION_IPV4_SAMPLE_DB1	 201
@@ -103,6 +104,7 @@
 #define IP2LOCATION_IPV4_SAMPLE_DB23	 223
 #define IP2LOCATION_IPV4_SAMPLE_DB24	 224
 #define IP2LOCATION_IPV4_SAMPLE_DB25	 225
+#define IP2LOCATION_IPV4_SAMPLE_DB26	 226
 
 #define IP2LOCATION_IPV6_SAMPLE_DB1	 301
 #define IP2LOCATION_IPV6_SAMPLE_DB2	 302
@@ -129,6 +131,7 @@
 #define IP2LOCATION_IPV6_SAMPLE_DB23	 323
 #define IP2LOCATION_IPV6_SAMPLE_DB24	 324
 #define IP2LOCATION_IPV6_SAMPLE_DB25	 325
+#define IP2LOCATION_IPV6_SAMPLE_DB26	 326
 
 /* LITE */
 #define IP2LOCATION_DB_IP_COUNTRY_LITE				401
@@ -156,9 +159,11 @@
 // shortcuts
 #define IPV6CALC_DB_SC_IP2LOCATION_IPV4_COUNTRY			(IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV4_TO_COUNTRY | IPV6CALC_DB_IP2LOCATION_IPV4)
 #define IPV6CALC_DB_SC_IP2LOCATION_IPV4_CITY			(IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV4_TO_COUNTRY | IPV6CALC_DB_IP2LOCATION_IPV4 | IPV6CALC_DB_IPV4_TO_REGION | IPV6CALC_DB_IPV4_TO_CITY)
+#define IPV6CALC_DB_SC_IP2LOCATION_IPV4_ASN			(IPV6CALC_DB_IPV4_TO_CC | IPV6CALC_DB_IPV4_TO_COUNTRY | IPV6CALC_DB_IP2LOCATION_IPV4 | IPV6CALC_DB_IPV4_TO_REGION | IPV6CALC_DB_IPV4_TO_CITY | IPV6CALC_DB_IPV4_TO_AS)
 
 #define IPV6CALC_DB_SC_IP2LOCATION_IPV6_COUNTRY			(IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_IPV6_TO_COUNTRY | IPV6CALC_DB_IP2LOCATION_IPV6)
 #define IPV6CALC_DB_SC_IP2LOCATION_IPV6_CITY			(IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_IPV6_TO_COUNTRY | IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IPV6_TO_REGION | IPV6CALC_DB_IPV6_TO_CITY)
+#define IPV6CALC_DB_SC_IP2LOCATION_IPV6_ASN			(IPV6CALC_DB_IPV6_TO_CC | IPV6CALC_DB_IPV6_TO_COUNTRY | IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IPV6_TO_REGION | IPV6CALC_DB_IPV6_TO_CITY | IPV6CALC_DB_IPV6_TO_AS)
 
 #define IP2LOCATION_DB1  "Country"
 #define IP2LOCATION_DB2  "Country/ISP"
@@ -185,6 +190,7 @@
 #define IP2LOCATION_DB23 "Co/Re/Ci/LaLo/ISP/Dom/Mobile/Usagetype"
 #define IP2LOCATION_DB24 "Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo/El/Us"
 #define IP2LOCATION_DB25 "Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo/El/Us/Ad/Ca"
+#define IP2LOCATION_DB26 "Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo/El/Us/Ad/Ca/Di/AS"
 
 
 #define IPV6CALC_DB_IP2LOCATION_INTERNAL_SAMPLE		0x00000001
@@ -192,6 +198,7 @@
 #define IPV6CALC_DB_IP2LOCATION_INTERNAL_FREE		0x00000004
 #define IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_6	0x00000008
 #define IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_4 0x00000010
+#define IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_6 0x00000020
 
 
 // features
@@ -204,7 +211,7 @@ extern uint32_t wrapper_features_IP2Location;
 
 extern int         libipv6calc_db_wrapper_IP2Location_wrapper_init(void);
 extern int         libipv6calc_db_wrapper_IP2Location_wrapper_cleanup(void);
-extern const char *libipv6calc_db_wrapper_IP2Location_wrapper_asnum_by_addr (const char *addr, const int proto);
+extern uint32_t    libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp);
 extern void        libipv6calc_db_wrapper_IP2Location_wrapper_info(char* string, const size_t size);
 extern void        libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
 extern char       *libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used(void);

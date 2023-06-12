@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Sun Dec  4 06:56:03 2022
+ * Generated     : Thu Jun  8 18:13:58 2023
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20221204";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20230608";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -773,7 +773,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x2F7000, 0x2F7FFF, "GILLAM-FEI S.A.", "GILLAM-FEI" },
 	{ 0x0050C2, 0x2F8000, 0x2F8FFF, "SavvyCorp.com Ltd", "SAVVYCORP-COM" },
 	{ 0x0050C2, 0x2F9000, 0x2F9FFF, "Digilent Inc.", "DIGILENT" },
-	{ 0x0050C2, 0x2FA000, 0x2FAFFF, "Tornado Modular Systems, Ltd", "TORNADO-MODULAR" },
+	{ 0x0050C2, 0x2FA000, 0x2FAFFF, "Tornado Modular Systems", "TORNADO-MODULAR" },
 	{ 0x0050C2, 0x2FB000, 0x2FBFFF, "Arthur Industries Inc., dba On Hold Media Group", "ARTHUR-INDUSTRIES-DBA-ON-HOLD-MEDIA-GROUP" },
 	{ 0x0050C2, 0x2FC000, 0x2FCFFF, "Blackline Systems Corporation", "BLACKLINE" },
 	{ 0x0050C2, 0x2FD000, 0x2FDFFF, "American Microsystems, Ltd.", "AMERICAN-MICROSYSTEMS" },
@@ -999,7 +999,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x3D9000, 0x3D9FFF, "Bavaria Digital Technik GmbH", "BAVARIA-DIGITAL-TECHNIK" },
 	{ 0x0050C2, 0x3DA000, 0x3DAFFF, "M5 Data Limited", "M5-DATA" },
 	{ 0x0050C2, 0x3DB000, 0x3DBFFF, "Osmetech Inc.", "OSMETECH" },
-	{ 0x0050C2, 0x3DC000, 0x3DCFFF, "3D perception", "3D-PERCEPTION" },
+	{ 0x0050C2, 0x3DC000, 0x3DCFFF, "3D perception AS", "3D-PERCEPTION-AS" },
 	{ 0x0050C2, 0x3DD000, 0x3DDFFF, "ELMIC GmbH", "ELMIC" },
 	{ 0x0050C2, 0x3DE000, 0x3DEFFF, "ABB Power Technologies S.p.A.  Unità  Operativa SACE (PTMV)", "ABB-POWER-TECHNOLOGIES-S-P-A-UNIT-OPERATIVA-SACE-PTMV" },
 	{ 0x0050C2, 0x3DF000, 0x3DFFFF, "BiODE Inc.", "BIODE" },
@@ -1684,7 +1684,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x686000, 0x686FFF, "ANNAX Anzeigesysteme GmbH", "ANNAX-ANZEIGESYSTEME" },
 	{ 0x0050C2, 0x687000, 0x687FFF, "Access Specialties, Inc", "ACCESS-SPECIALTIES" },
 	{ 0x0050C2, 0x688000, 0x688FFF, "Elk Products", "ELK-PRODUCTS" },
-	{ 0x0050C2, 0x689000, 0x689FFF, "RF Code, Inc.", "RF-CODE" },
+	{ 0x0050C2, 0x689000, 0x689FFF, "RF Code", "RF-CODE" },
 	{ 0x0050C2, 0x68A000, 0x68AFFF, "Zhuhai Jiahe Electronics Co.,LTD", "ZHUHAI-JIAHE-ELECTRONICS" },
 	{ 0x0050C2, 0x68B000, 0x68BFFF, "SIMTEK INC.", "SIMTEK" },
 	{ 0x0050C2, 0x68C000, 0x68CFFF, "Isochron Inc", "ISOCHRON" },
@@ -2374,7 +2374,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x938000, 0x938FFF, "Postec Data Systems Ltd", "POSTEC-DATA" },
 	{ 0x0050C2, 0x939000, 0x939FFF, "Mosaic Dynamic Solutions", "MOSAIC-DYNAMIC-SOLUTIONS" },
 	{ 0x0050C2, 0x93A000, 0x93AFFF, "ALPHATRONICS nv", "ALPHATRONICS-NV" },
-	{ 0x0050C2, 0x93B000, 0x93BFFF, "Reliatronics Inc.", "RELIATRONICS" },
+	{ 0x0050C2, 0x93B000, 0x93BFFF, "Cleaveland/Price, Inc.", "CLEAVELAND/PRICE" },
 	{ 0x0050C2, 0x93C000, 0x93CFFF, "FractureCode Corporation", "FRACTURECODE" },
 	{ 0x0050C2, 0x93D000, 0x93DFFF, "Lighting Science Group", "LIGHTING-SCIENCE-GROUP" },
 	{ 0x0050C2, 0x93E000, 0x93EFFF, "RCS Communication Test Systems Ltd.", "RCS-COMMUNICATION-TEST" },
@@ -2831,7 +2831,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xB01000, 0xB01FFF, "HSR Harald L. Reuter", "HSR-HARALD-L-REUTER" },
 	{ 0x0050C2, 0xB02000, 0xB02FFF, "MASTER CO LTD", "MASTER" },
 	{ 0x0050C2, 0xB03000, 0xB03FFF, "Spider Tecnologia Ind. e Com. Ltda.", "SPIDER-TECNOLOGIA-IND-E-COM-LTDA" },
-	{ 0x0050C2, 0xB04000, 0xB04FFF, "Ubiquiti Networks Inc.", "UBIQUITI-NETWORKS" },
+	{ 0x0050C2, 0xB04000, 0xB04FFF, "Ubiquiti Inc", "UBIQUITI" },
 	{ 0x0050C2, 0xB05000, 0xB05FFF, "POLA s.r.l.", "POLA" },
 	{ 0x0050C2, 0xB06000, 0xB06FFF, "CompuDesigns, Inc.", "COMPUDESIGNS" },
 	{ 0x0050C2, 0xB07000, 0xB07FFF, "FARECO", "FARECO" },
@@ -2918,7 +2918,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xB58000, 0xB58FFF, "RealD, Inc.", "REALD" },
 	{ 0x0050C2, 0xB59000, 0xB59FFF, "SLICAN sp. z o.o.", "SLICAN-SP-Z-O-O" },
 	{ 0x0050C2, 0xB5A000, 0xB5AFFF, "GREEN Center s.r.o.", "GREEN-CENTER-S-R-O" },
-	{ 0x0050C2, 0xB5B000, 0xB5BFFF, "Timberline Mfg Company", "TIMBERLINE-MFG-COMPANY" },
+	{ 0x0050C2, 0xB5B000, 0xB5BFFF, "Timberline Manufacturing", "TIMBERLINE-MANUFACTURING" },
 	{ 0x0050C2, 0xB5C000, 0xB5CFFF, "ADI Video Technologies", "ADI-VIDEO-TECHNOLOGIES" },
 	{ 0x0050C2, 0xB5D000, 0xB5DFFF, "Plitron Manufacturing Inc.", "PLITRON-MANUFACTURING" },
 	{ 0x0050C2, 0xB5E000, 0xB5EFFF, "Palgiken Co.,Ltd.", "PALGIKEN" },
@@ -3055,7 +3055,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xBE2000, 0xBE2FFF, "Convergent Bioscience Ltd.", "CONVERGENT-BIOSCIENCE" },
 	{ 0x0050C2, 0xBE3000, 0xBE3FFF, "Jiskoot Ltd", "JISKOOT" },
 	{ 0x0050C2, 0xBE4000, 0xBE4FFF, "Grupo Epelsa S.L.", "GRUPO-EPELSA" },
-	{ 0x0050C2, 0xBE5000, 0xBE5FFF, "RF Code, Inc", "RF-CODE" },
+	{ 0x0050C2, 0xBE5000, 0xBE5FFF, "RF Code", "RF-CODE" },
 	{ 0x0050C2, 0xBE6000, 0xBE6FFF, "Docobo Ltd", "DOCOBO" },
 	{ 0x0050C2, 0xBE7000, 0xBE7FFF, "Genetec Inc.", "GENETEC" },
 	{ 0x0050C2, 0xBE8000, 0xBE8FFF, "VEHICLE TESTING EQUIPMENT, S.L.", "VEHICLE-TESTING-EQUIPMENT" },
@@ -3513,7 +3513,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xDAE000, 0xDAEFFF, "Spang Power Electronics", "SPANG-POWER-ELECTRONICS" },
 	{ 0x0050C2, 0xDAF000, 0xDAFFFF, "eumig industrie-tv GmbH", "EUMIG-INDUSTRIE-TV" },
 	{ 0x0050C2, 0xDB0000, 0xDB0FFF, "IMAGO Technologies GmbH", "IMAGO-TECHNOLOGIES" },
-	{ 0x0050C2, 0xDB1000, 0xDB1FFF, "RF Code, Inc", "RF-CODE" },
+	{ 0x0050C2, 0xDB1000, 0xDB1FFF, "RF Code", "RF-CODE" },
 	{ 0x0050C2, 0xDB2000, 0xDB2FFF, "SoftwareCannery", "SOFTWARECANNERY" },
 	{ 0x0050C2, 0xDB3000, 0xDB3FFF, "LAUDA DR. R. WOBSER GMBH & CO. KG", "LAUDA-DR-R-WOBSER" },
 	{ 0x0050C2, 0xDB4000, 0xDB4FFF, "ZAO NPC Kompjuternie Technologii", "ZAO-NPC-KOMPJUTERNIE-TECHNOLOGII" },
@@ -3959,7 +3959,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xF6E000, 0xF6EFFF, "Smith Meter, Inc.", "SMITH-METER" },
 	{ 0x0050C2, 0xF6F000, 0xF6FFFF, "Aplex Technology Inc.", "APLEX" },
 	{ 0x0050C2, 0xF70000, 0xF70FFF, "Noralta Technologies Inc", "NORALTA-TECHNOLOGIES" },
-	{ 0x0050C2, 0xF71000, 0xF71FFF, "RF Code, Inc", "RF-CODE" },
+	{ 0x0050C2, 0xF71000, 0xF71FFF, "RF Code", "RF-CODE" },
 	{ 0x0050C2, 0xF72000, 0xF72FFF, "MaxDeTec AG", "MAXDETEC" },
 	{ 0x0050C2, 0xF73000, 0xF73FFF, "DELTACAST.TV", "DELTACAST-TV" },
 	{ 0x0050C2, 0xF74000, 0xF74FFF, "Thor Technologies Pty Ltd", "THOR-TECHNOLOGIES-PTY" },

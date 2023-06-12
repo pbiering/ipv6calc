@@ -1771,6 +1771,26 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp,
 #endif
 			break;
 
+#if API_VERSION_NUMERIC >= 80600
+		    case IPV6CALC_DB_SOURCE_IP2LOCATION:
+#ifdef SUPPORT_IP2LOCATION
+			if (wrapper_IP2Location_status == 1) {
+
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now IP2Location");
+
+				as_num32 = libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(ipaddrp);
+				if (as_num32 != ASNUM_AS_UNKNOWN) {
+					data_source_lastused = IPV6CALC_DB_SOURCE_IP2LOCATION;
+					goto END_libipv6calc_db_wrapper; // ok
+				} else {
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called IP2Lcation did not return a valid ASN");
+				};
+			};
+#endif
+			break;
+#endif // API_VERSION_NUMERIC >= 80600
+
+
 		    case IPV6CALC_DB_SOURCE_DBIP2:
 #ifdef SUPPORT_DBIP2
 			if (wrapper_DBIP2_status == 1) {

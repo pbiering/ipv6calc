@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Copyright  : 2001-2020 by Peter Bieringer <pb@bieringer.de>
+# Copyright  : 2001-2023 by Peter Bieringer <pb@bieringer.de>
 
 # enable the following for intermediate builds
 #%#define gitcommit d3a4108cb7aeb6f731bb07989f91d8a7f449f0f0
@@ -90,8 +90,8 @@ Recommends:    libmaxminddb
 %endif
 
 %if %{enable_ip2location}
-BuildRequires: IP2Location-devel >= 8.2.0
-Recommends:    IP2Location       >= 8.2.0
+BuildRequires: IP2Location-devel >= 8.6.0
+Recommends:    IP2Location       >= 8.6.0
 %endif
 
 # RPM license macro detector
@@ -349,6 +349,9 @@ fi
 
 
 %changelog
+* Wed Jun 07 2023 Peter Bieringer <pb@bieringer.de>
+- increase minimum IP2Location version to 8.6.0 (support of DB-26)
+
 * Tue Oct 13 2020 Peter Bieringer <pb@bieringer.de>
 - remove obsolete BuildRoot and Group, fix requirement of unzip
 

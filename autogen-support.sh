@@ -2,8 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Version    : $Id$
-# Copyright  : 2014-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2014-2023 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support functions to autogen.sh/autogen-all-variants.sh
 #
@@ -29,8 +28,8 @@ fi
 
 
 ## List of IP2Location versions (append newest one rightmost!)
-ip2location_versions="8.2.0 8.3.0 8.3.1 8.4.0"
-ip2location_versions_download="8.2.0 8.3.0 8.3.1 8.4.0"
+ip2location_versions="8.2.0 8.3.0 8.3.1 8.4.0 8.5.1 8.6.1"
+ip2location_versions_download="8.2.0 8.3.0 8.3.1 8.4.0 8.5.1 8.6.1"
 ip2location_url_base="https://www.ip2location.com/downloads/"
 ip2location_url_github="https://codeload.github.com/chrislim2888/IP2Location-C-Library/tar.gz/"
 

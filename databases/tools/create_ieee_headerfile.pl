@@ -2,8 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : create_ieee_headerfile.pl
-# Version    : $Id$
-# Copyright  : 2002-2022 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2023 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Creates a header file out of IEEE files
 #
@@ -154,6 +153,9 @@ sub normalize($) {
 
 		# remove non-ascii chars
 		$oui =~ s/[^[:ascii:]]//g;
+
+		# remove ? (to avoid trigraphs issues)
+		$oui =~ s/\?//g;
 	
 		# Some final cleanup
 		$oui =~ s/-INT-L$//ig;

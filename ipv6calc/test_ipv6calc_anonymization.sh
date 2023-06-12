@@ -2,8 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc_anonymization.sh
-# Version    : $Id$
-# Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2013-2023 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test ipv6calc anonymization
 
@@ -196,7 +195,7 @@ run_anon_options_kp_tests() {
 	$verbose || echo
 	echo "INFO  : $test successful"
 
-	test="run 'ipv6calc' anonymization option kp TYPE/REGISTRY/CC tests"
+	test="run 'ipv6calc' anonymization option kp TYPE/ASN/CC tests"
 	echo "INFO  : $test"
 	testscenarios_kp | ./ipv6calc -q -E ipv4,ipv6 | while read input result; do
 		if [ -z "$input" ]; then
@@ -263,53 +262,6 @@ run_anon_options_kp_tests() {
 			exit 1
 		else
 			$verbose && echo "Result ok!" || true
-		fi
-
-		# Registry
-		reg_orig="`./ipv6calc -m -i -q "$input"  --mrtvo IPV._REGISTRY`"
-		if echo "$reg_orig" | grep -q LISP; then
-			reg_orig=${reg_orig/(*} # cut lisp details
-		fi
-		reg_anon="`./ipv6calc -m -i -q "$output" --mrtvo IPV._REGISTRY`"
-
-		if [ -z "$reg_orig" ]; then
-			$verbose || echo
-			echo "ERROR : something went wrong retrieving IPVx_REGISTRY for $input"
-			exit 1
-		fi
-		if [ -z "$reg_anon" ]; then
-			$verbose || echo
-			echo "ERROR : something went wrong retrieving IPVx_REGISTRY for $output"
-			exit 1
-		fi
-
-		$verbose && echo "DEBUG : IPVx          orig: $input"
-		$verbose && echo "DEBUG : IPVx          anon: $output"
-		$verbose && echo "DEBUG : IPVx_REGISTRY orig: $reg_orig"
-		$verbose && echo "DEBUG : IPVx_REGISTRY anon: $reg_anon"
-
-		if [ -z "$reg_orig" -a -z "$reg_anon" ]; then
-			# everything is ok, both have no registry
-			true
-		elif [ -z "$reg_orig" -a -n "$reg_anon" ]; then
-			$verbose || echo
-			echo "ERROR : something went wrong, anon has registry while orig hasn't"
-			exit 1
-		elif [ -n "$reg_orig" -a -z "$reg_anon" ]; then
-			$verbose || echo
-			echo "ERROR : something went wrong, orig has registry while anon hasn't"
-			exit 1
-		else
-			# Check result
-			if [ "$reg_orig" != "$reg_anon" ]; then
-				$verbose || echo
-				echo "ERROR : IPVx_REGISTRY not equal for: $input (anonymized: $output)"
-				echo "ERROR : IPVx_REGISTRY orig: $reg_orig"
-				echo "ERROR : IPVx_REGISTRY anon: $reg_anon"
-				exit 1
-			else
-				$verbose && echo "Result ok!" || true
-			fi
 		fi
 
 		# Country Code (optional)
