@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Copyright  : 2001-2020 by Peter Bieringer <pb@bieringer.de>
+# Copyright  : 2001-2023 by Peter Bieringer <pb@bieringer.de>
 
 # enable the following for intermediate builds
 #%#define gitcommit d3a4108cb7aeb6f731bb07989f91d8a7f449f0f0
