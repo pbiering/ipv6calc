@@ -42,12 +42,19 @@ autogen_variants_list() {
 	if ! $skip_main_test; then
 		cat <<END | grep -v ^#
 NONE#
+NONE#--m32
+NONE#-e
+NONE#-e --m32
+NONE#-S
+NONE#-S --m32
 BUNDLED#--enable-bundled-md5 --enable-bundled-getopt
 OPENSSL#--enable-openssl-md5 --no-static-build
 OPENSSL#--enable-openssl-evp-md5
 IP2LOCATION#-i
+IP2LOCATION#-i --m32
 IP2LOCATION#-i --ip2location-dyn
 GEOIP2 DBIP2#-m
+GEOIP2 DBIP2#-m --m32
 GEOIP2 DBIP2#-m --mmdb-dyn
 GEOIP2#-m --disable-dbip2
 GEOIP2#-M --disable-dbip2
@@ -55,6 +62,12 @@ DBIP2#-m --disable-geoip2
 DBIP2#-M --disable-geoip2
 IP2LOCATION GEOIP2 DBIP2#-a
 IP2LOCATION GEOIP2 DBIP2#-A
+IP2LOCATION GEOIP2 DBIP2#-a --m32
+IP2LOCATION GEOIP2 DBIP2#-A --m32
+IP2LOCATION GEOIP2 DBIP2#-a -S
+IP2LOCATION GEOIP2 DBIP2#-A -S
+IP2LOCATION GEOIP2 DBIP2#-a --m32 -S
+IP2LOCATION GEOIP2 DBIP2#-A --m32 -S
 NONE#--disable-db-ieee
 NONE#--disable-db-ipv4
 NONE#--disable-db-ipv6
