@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Version    : $Id$
- * Copyright  : 2015-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2015-2023 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc Apache module
@@ -349,6 +348,8 @@ static int ipv6calc_support_init(server_rec *s) {
  * ipv6calc_cleanup
  */
 static apr_status_t ipv6calc_cleanup(void *cfgdata) {
+	UNUSED(cfgdata);
+
 	// cleanup ipv6calc database wrapper
 	libipv6calc_cleanup();
 	return APR_SUCCESS;
@@ -358,6 +359,10 @@ static apr_status_t ipv6calc_cleanup(void *cfgdata) {
  * ipv6calc_post_config
  */
 static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t *ptemp, server_rec *s) {
+	UNUSED(pconf);
+	UNUSED(plog);
+	UNUSED(ptemp);
+
 	char string[IPV6CALC_STRING_MAX] = "";
 	int result;
 
@@ -1275,6 +1280,8 @@ static int ipv6calc_post_read_request(request_rec *r) {
  * set_ipv6calc_enable
  */
 static const char *set_ipv6calc_enable(cmd_parms *cmd, void *dummy, int arg) {
+	UNUSED(dummy);
+
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 	
 	if (!config) {
@@ -1291,6 +1298,8 @@ static const char *set_ipv6calc_enable(cmd_parms *cmd, void *dummy, int arg) {
  * set_ipv6calc_default_active
  */
 static const char *set_ipv6calc_default_active(cmd_parms *cmd, void *dummy, int arg) {
+	UNUSED(dummy);
+
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 
 	if (!config) {
@@ -1307,6 +1316,8 @@ static const char *set_ipv6calc_default_active(cmd_parms *cmd, void *dummy, int 
  * set_ipv6calc_no_fallback
  */
 static const char *set_ipv6calc_no_fallback(cmd_parms *cmd, void *dummy, int arg) {
+	UNUSED(dummy);
+
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 	
 	if (!config) {
@@ -1323,6 +1334,8 @@ static const char *set_ipv6calc_no_fallback(cmd_parms *cmd, void *dummy, int arg
  * set_ipv6calc_cache
  */
 static const char *set_ipv6calc_cache(cmd_parms *cmd, void *dummy, int arg) {
+	UNUSED(dummy);
+
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 	
 	if (!config) {
@@ -1339,6 +1352,9 @@ static const char *set_ipv6calc_cache(cmd_parms *cmd, void *dummy, int arg) {
  * set_ipv6calc_cache_limit
  */
 static const char *set_ipv6calc_cache_limit(cmd_parms *cmd, void *dummy, const char *value, int arg) {
+	UNUSED(dummy);
+	UNUSED(arg);
+
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 
 	if (!config) {
@@ -1380,6 +1396,9 @@ static const char *set_ipv6calc_cache_limit(cmd_parms *cmd, void *dummy, const c
  * set_ipv6calc_cache_statistics_interval
  */
 static const char *set_ipv6calc_cache_statistics_interval(cmd_parms *cmd, void *dummy, const char *value, int arg) {
+	UNUSED(dummy);
+	UNUSED(arg);
+
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 
 	if (!config) {
@@ -1410,6 +1429,9 @@ static const char *set_ipv6calc_cache_statistics_interval(cmd_parms *cmd, void *
  * set_ipv6calc_debuglevel
  */
 static const char *set_ipv6calc_debuglevel(cmd_parms *cmd, void *dummy, const char *value, int arg) {
+	UNUSED(dummy);
+	UNUSED(arg);
+
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 
 	if (!config) {
@@ -1444,6 +1466,8 @@ static const char *set_ipv6calc_debuglevel(cmd_parms *cmd, void *dummy, const ch
  * set_ipv6calc_countrycode
  */
 static const char *set_ipv6calc_action_countrycode(cmd_parms *cmd, void *dummy, int arg) {
+	UNUSED(dummy);
+
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 
 	if (!config) {
@@ -1460,6 +1484,8 @@ static const char *set_ipv6calc_action_countrycode(cmd_parms *cmd, void *dummy, 
  * set_ipv6calc_asn
  */
 static const char *set_ipv6calc_action_asn(cmd_parms *cmd, void *dummy, int arg) {
+	UNUSED(dummy);
+
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 
 	if (!config) {
@@ -1476,6 +1502,8 @@ static const char *set_ipv6calc_action_asn(cmd_parms *cmd, void *dummy, int arg)
  * set_ipv6calc_registry
  */
 static const char *set_ipv6calc_action_registry(cmd_parms *cmd, void *dummy, int arg) {
+	UNUSED(dummy);
+
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 
 	if (!config) {
@@ -1492,6 +1520,8 @@ static const char *set_ipv6calc_action_registry(cmd_parms *cmd, void *dummy, int
  * set_ipv6calc_geonameid
  */
 static const char *set_ipv6calc_action_geonameid(cmd_parms *cmd, void *dummy, int arg) {
+	UNUSED(dummy);
+
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 
 	if (!config) {
@@ -1508,6 +1538,8 @@ static const char *set_ipv6calc_action_geonameid(cmd_parms *cmd, void *dummy, in
  * set_ipv6calc_anonymize
  */
 static const char *set_ipv6calc_action_anonymize(cmd_parms *cmd, void *dummy, int arg) {
+	UNUSED(dummy);
+
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 	
 	if (!config) {
@@ -1522,9 +1554,11 @@ static const char *set_ipv6calc_action_anonymize(cmd_parms *cmd, void *dummy, in
 
 /*
  * set_ipv6calc_option
- *  set generic ipv6calc option
  */
 static const char *set_ipv6calc_option(cmd_parms *cmd, void *dummy, const char *name, const char *value, int arg) {
+	UNUSED(dummy);
+	UNUSED(arg);
+
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 
 	if (!config) {
@@ -1553,6 +1587,8 @@ static const char *set_ipv6calc_option(cmd_parms *cmd, void *dummy, const char *
  * ipv6calc_create_svr_conf
  */
 static void *ipv6calc_create_svr_conf(apr_pool_t* pool, server_rec* svr) {
+	UNUSED(svr);
+
 	ipv6calc_server_config* svr_cfg = apr_pcalloc(pool, sizeof(ipv6calc_server_config));
 	
 	svr_cfg->enabled = 0;
@@ -1585,6 +1621,8 @@ static void *ipv6calc_create_svr_conf(apr_pool_t* pool, server_rec* svr) {
  * ipv6calc_register_hooks
  */
 static void ipv6calc_register_hooks(apr_pool_t *p) {
+	UNUSED(p);
+
 	ap_hook_post_config(ipv6calc_post_config, NULL, NULL, APR_HOOK_MIDDLE);
 	ap_hook_child_init(ipv6calc_child_init, NULL, NULL, APR_HOOK_MIDDLE);
 	ap_hook_fixups(ipv6calc_post_read_request, NULL, NULL, APR_HOOK_MIDDLE);
@@ -1605,7 +1643,10 @@ module AP_MODULE_DECLARE_DATA ipv6calc_module = {
 	ipv6calc_create_svr_conf,    /* create per-server config structures */
 	NULL,                        /* merge  per-server config structures */
 	ipv6calc_cmds,               /* table of config file commands       */
-	ipv6calc_register_hooks      /* register hooks                      */
+	ipv6calc_register_hooks,     /* register hooks                      */
+#if (((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER >= 4)) || (AP_SERVER_MAJORVERSION_NUMBER > 37))
+	0,                           /* flags                               */ // not found in 2.4.6, found in 2.4.37
+#endif
 };
 
 
