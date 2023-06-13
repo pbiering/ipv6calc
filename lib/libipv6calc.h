@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Version    : $Id$
- * Copyright  : 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2023 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc.c
@@ -62,6 +61,9 @@
 		ERRORPRINT_WA("Library version is not matching: has:%s required:%s", libipv6calc_lib_version_string(), version_string); \
 		exit(1); \
 	};
+
+/* explicit exclude from "unused" warning */
+#define UNUSED(x) (void)(x)
 
 #endif // _libipv6calc_h
 

@@ -10,6 +10,9 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20230613/PB:
+	lib/libipv6calc.h: add macro UNUSED
+
 20230612/PB:
 	tag version 4.1.0
 
