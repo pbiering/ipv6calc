@@ -12,6 +12,8 @@ Info:
 --------------------------------------------------------------------
 20230613/PB:
 	lib/libipv6calc.h: add macro UNUSED
+	*/Makefile[.in]: reorg LDFLAGS/CFLAGS usage
+	autogen-all-variants.sh: add 32-bit variants
 
 20230612/PB:
 	tag version 4.1.0
