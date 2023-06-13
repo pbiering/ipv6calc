@@ -1,7 +1,6 @@
 # Project    : ipv6calc
 # File       : ipv6calc/Makefile[.in]
-# Version    : $Id$
-# Copyright  : 2002-2022 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2023 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calc
@@ -12,9 +11,13 @@ exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 
 # Compiler and Linker Options
-DEFAULT_CFLAGS ?= -O2 -Wall -g @CFLAGS_EXTRA@
+DEFAULT_CFLAGS ?= -O2 -Wall -g
+CFLAGS += $(DEFAULT_CFLAGS)
+CFLAGS += @CFLAGS@
+CFLAGS += @CFLAGS_EXTRA@
 
 LDFLAGS += @LDFLAGS@
+LDFLAGS += @LDFLAGS_EXTRA@
 
 INCLUDES= @MD5_INCLUDE@ @GETOPT_INCLUDE@ @MMDB_INCLUDE_L1@ @IP2LOCATION_INCLUDE_L1@ -I../ -I../lib/ -I../databases/lib/
 
@@ -24,7 +27,6 @@ GETOBJS = @LIBOBJS@
 
 CC	= @CC@
 
-LDFLAGS_EXTRA = @LDFLAGS_EXTRA@
 LDFLAGS_EXTRA_STATIC = @LDFLAGS_EXTRA_STATIC@
 
 OBJS	= ipv6calc.o showinfo.o ipv6calchelp_local.o
@@ -38,7 +40,7 @@ SPLINT_TODO_LATER = -unrecog  -retvalint
 all:		ipv6calc
 
 .c.o:
-		$(CC) -c $< $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES)
+		$(CC) -c $< $(CFLAGS) $(INCLUDES)
 
 $(OBJS):	ipv6calc.h ipv6calchelp_local.h showinfo.h ipv6calcoptions_local.h ../config.h ../lib/ipv6calctypes.h
 
@@ -49,7 +51,7 @@ libipv6calc_db_wrapper:
 		cd ../ && ${MAKE} lib-make
 
 ipv6calc:	$(OBJS) libipv6calc libipv6calc_db_wrapper
-		$(CC) -o ipv6calc $(OBJS) $(GETOBJS) $(LDFLAGS) $(LIBS) $(LDFLAGS_EXTRA) -lm
+		$(CC) -o ipv6calc $(OBJS) $(GETOBJS) $(LDFLAGS) $(LIBS) -lm
 
 static:		ipv6calc
 		$(CC) -o ipv6calc-static $(OBJS) $(GETOBJS) $(LDFLAGS) $(LIBS) $(LDFLAGS_EXTRA_STATIC) -lm -static

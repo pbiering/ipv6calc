@@ -1,7 +1,6 @@
 # Project    : ipv6calc/ipv6logconv
 # File       : ipv6logconv/Makefile[.in]
-# Version    : $Id$
-# Copyright  : 2002-2022 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2023 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6logconv
@@ -12,11 +11,13 @@ exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 
 # Compiler and Linker Options
-#  -D__EXTENSIONS__ is for Solaris & strtok_r
-DEFAULT_CFLAGS ?= -O2 -Wall -g @CFLAGS_EXTRA@
-CFLAGS += -D__EXTENSIONS__
+DEFAULT_CFLAGS ?= -O2 -Wall -g
+CFLAGS += $(DEFAULT_CFLAGS)
+CFLAGS += @CFLAGS@
+CFLAGS += @CFLAGS_EXTRA@
 
 LDFLAGS += @LDFLAGS@
+LDFLAGS += @LDFLAGS_EXTRA@
 
 INCLUDES= @MD5_INCLUDE@ @GETOPT_INCLUDE@ @IP2LOCATION_INCLUDE_L1@ @MMDB_INCLUDE_L1@ -I../ -I../lib/ -I../databases/lib/
 
@@ -26,7 +27,6 @@ GETOBJS = @LIBOBJS@
 
 CC	= @CC@
 
-LDFLAGS_EXTRA = @LDFLAGS_EXTRA@
 LDFLAGS_EXTRA_STATIC = @LDFLAGS_EXTRA_STATIC@
 
 OBJS	= ipv6logconv.o ipv6logconvhelp.o
@@ -38,7 +38,7 @@ SPLINT_TODO_LATER = -unrecog -retvalint
 all:		ipv6logconv
 
 .c.o:
-		$(CC) -c $< $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES)
+		$(CC) -c $< $(CFLAGS) $(INCLUDES)
 
 $(OBJS):	ipv6logconvoptions.h ipv6logconvhelp.h ipv6logconv.h
 
@@ -49,7 +49,7 @@ libipv6calc_db_wrapper:
 		cd ../ && ${MAKE} lib-make
 
 ipv6logconv:	$(OBJS) libipv6calc libipv6calc_db_wrapper
-		$(CC) -o ipv6logconv $(OBJS) $(GETOBJS) $(LDFLAGS) $(LIBS) $(LDFLAGS_EXTRA) -lm
+		$(CC) -o ipv6logconv $(OBJS) $(GETOBJS) $(LDFLAGS) $(LIBS) -lm
 
 static:		ipv6logconv
 		$(CC) -o ipv6logconv-static $(OBJS) $(GETOBJS) $(LDFLAGS) $(LIBS) $(LDFLAGS_EXTRA_STATIC) -lm -static

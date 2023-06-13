@@ -1,7 +1,6 @@
 # Project    : ipv6calc
 # File       : databases/lib/Makefile
-# Version    : $Id$
-# Copyright  : 2013-2020 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2013-2023 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ipv6calc database libraries
@@ -10,11 +9,13 @@
 libdir	= @libdir@
 
 # Compiler and Linker Options
-#  -D__EXTENSIONS__ is for Solaris & strtok_r
-DEFAULT_CFLAGS ?= -O2 -Wall @CFLAGS_EXTRA@
-CFLAGS += -D__EXTENSIONS__ -fPIC
+DEFAULT_CFLAGS ?= -O2 -Wall -g
+CFLAGS += $(DEFAULT_CFLAGS)
+CFLAGS += @CFLAGS@
+CFLAGS += @CFLAGS_EXTRA@
 
 LDFLAGS += @LDFLAGS@
+LDFLAGS += @LDFLAGS_EXTRA@
 
 INCLUDES= -I../../lib -I../.. @MMDB_INCLUDE_L2@ @IP2LOCATION_INCLUDE_L2@
 
@@ -43,7 +44,7 @@ all:
 		${MAKE} libipv6calc_db_wrapper.so.@PACKAGE_VERSION@
 
 .c.o:
-		$(CC) -c $< $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES)
+		$(CC) -c $< $(CFLAGS) $(INCLUDES)
 
 $(OBJS):	libipv6calc_db_wrapper.h \
 		libipv6calc_db_wrapper_MMDB.h \
@@ -70,7 +71,7 @@ libipv6calc_db_wrapper.a:	$(OBJS)
 libipv6calc_db_wrapper.so.@PACKAGE_VERSION@:	$(OBJS)
 ifeq ($(SHARED_LIBRARY), yes)
 		echo "Create shared library (libipv6calc_db_wrapper.so)"
-		$(CC) -o libipv6calc_db_wrapper.so.@PACKAGE_VERSION@ $(OBJS) $(LDFLAGS) -shared -Wl,$(SO_NAME_FLAGS),libipv6calc_db_wrapper.so.@PACKAGE_VERSION@
+		$(CC) -o libipv6calc_db_wrapper.so.@PACKAGE_VERSION@ $(OBJS) $(CFLAGS) $(LDFLAGS) -shared -Wl,$(SO_NAME_FLAGS),libipv6calc_db_wrapper.so.@PACKAGE_VERSION@
 else
 		echo "Nothing to do (shared library mode is not enabled)"
 endif

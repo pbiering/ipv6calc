@@ -12,7 +12,10 @@ SYSCONFDIR = @HTTPD_SYSCONFDIR@
 APXS	= @APXS@
 
 # Compiler and Linker Options
-DEFAULT_CFLAGS ?= -O2 -Wall -g @CFLAGS_EXTRA@
+DEFAULT_CFLAGS ?= -O2 -Wall -g
+CFLAGS += $(DEFAULT_CFLAGS)
+CFLAGS += @CFLAGS@
+CFLAGS += @CFLAGS_EXTRA@
 
 INCLUDES= @MD5_INCLUDE@ @GETOPT_INCLUDE@ @MMDB_INCLUDE_L1@ @IP2LOCATION_INCLUDE_L1@ -I../ -I../lib/ -I../databases/lib/
 
@@ -20,7 +23,9 @@ LIBS = @IPV6CALC_LIB@ @IP2LOCATION_LIB_L1@ @MMDB_LIB_L1@ -lm
 
 GETOBJS = @LIBOBJS@
 
-LDFLAGS_EXTRA = @LDFLAGS_EXTRA_MOD_IPV6CALC@
+LDFLAGS += @LDFLAGS@
+LDFLAGS += @LDFLAGS_EXTRA@
+LDFLAGS += @LDFLAGS_EXTRA_MOD_IPV6CALC@
 
 # splint
 SPLINT_OPT_OUTSIDE = -warnposix -nullassign -uniondef -compdef -usedef -formatconst -exportlocal
@@ -44,7 +49,7 @@ shared =  mod_ipv6calc.la
 
 mod_ipv6calc:	mod_ipv6calc.c ../lib/libipv6calc.h ../config.h libipv6calc libipv6calc_db_wrapper
 		if test -z "$(APXS)"; then echo "no APXS found, can't build module"; exit 1; fi
-		$(APXS) $(LIBS) $(INCLUDES) -c mod_ipv6calc.c $(LDFLAGS_EXTRA)
+		$(APXS) $(LIBS) $(INCLUDES) -c -Wl,"$(LDFLAGS)" -Wc,"$(CFLAGS)" mod_ipv6calc.c
 
 static:		
 
