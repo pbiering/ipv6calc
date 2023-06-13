@@ -4355,7 +4355,7 @@ printf "%s\n" "#define AC_APPLE_UNIVERSAL_BUILD 1" >>confdefs.h
  esac
 
 
-CFLAGS_EXTRA=-fPIC
+CFLAGS_EXTRA=-fPIC -D__EXTENSIONS__
 
 
 
@@ -4366,7 +4366,7 @@ then :
 		if test "$enable_m32" = "yes"; then
 			{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** switch to 32-bit compilation" >&5
 printf "%s\n" "*** switch to 32-bit compilation" >&6; }
-			CFLAGS_EXTRA="${CFLAGS_EXTRA:+$CFLAGS_EXTRA }-m32 -DMMDB_UINT128_IS_BYTE_ARRAY=1"
+			CFLAGS="${CFLAGS:+$CFLAGS }-m32 -DMMDB_UINT128_IS_BYTE_ARRAY=1"
 			LDFLAGS="${LDFLAGS:+$LDFLAGS }-m32"
 		fi
 
@@ -5461,7 +5461,7 @@ if test "$MMDB" = "yes"; then
 printf "%s\n" "*** MaxMindDB dynamic load support enabled, disable MaxMindDB linker options" >&6; }
 	fi
 
-	CPPFLAGS="$CPPLAGS $MMDB_INCLUDE"
+	CPPFLAGS="$CPPFLAGS $MMDB_INCLUDE"
 
 	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** MaxMindDB support requested" >&5
 printf "%s\n" "*** MaxMindDB support requested" >&6; }
@@ -8013,8 +8013,8 @@ printf "%s\n" "*** LD_LIBRARY_PATH            =$LD_LIBRARY_PATH" >&6; }
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** LD_LIBRARY_PATH_BASIC      =$LD_LIBRARY_PATH_BASIC" >&5
 printf "%s\n" "*** LD_LIBRARY_PATH_BASIC      =$LD_LIBRARY_PATH_BASIC" >&6; }
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** CPPLAGS                    =$CPPLAGS" >&5
-printf "%s\n" "*** CPPLAGS                    =$CPPLAGS" >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** CPPFLAGS                   =$CPPFLAGS" >&5
+printf "%s\n" "*** CPPFLAGS                   =$CPPFLAGS" >&6; }
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** CFLAGS                     =$CFLAGS" >&5
 printf "%s\n" "*** CFLAGS                     =$CFLAGS" >&6; }
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** LDFLAGS                    =$LDFLAGS" >&5
