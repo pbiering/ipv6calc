@@ -2,10 +2,18 @@
 #
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
-# Version    : $Id$
-# Copyright  : 2015-2022 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2015-2023 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
+
+if file .libs/mod_ipv6calc.so | grep -q -w 32-bit; then
+	# module compiled for 32-bit
+	if file /usr/sbin/httpd | grep -q -w 64-bit; then
+		# httpd is 64-bit
+		echo "NOTICE: can't execute test as module was compiled for 32-bit but server is 64-bit"
+		exit 0
+	fi
+fi
 
 for BIN_PS in /bin/ps /usr/bin/ps; do
 	if [ -x "$BIN_PS" ]; then
