@@ -64,10 +64,8 @@ AC_C_BIGENDIAN
 
 dnl Default extra CFLAGS
 dnl  -D__EXTENSIONS__ is for Solaris & strtok_r
-CFLAGS_EXTRA=-fPIC -D__EXTENSIONS__
-
-dnl Copy initial provided LDFLAGS into LDFLAGS_EXTRA
-dnl LDFLAGS_EXTRA=$LDFLAGS // not required ?!
+dnl  -fPIC is for shared library support
+CFLAGS_EXTRA="-fPIC -D__EXTENSIONS__"
 
 
 dnl *************************************************
@@ -1416,6 +1414,10 @@ AC_OUTPUT([
 ])
 
 AC_MSG_RESULT([***** Summary])
+
+AC_MSG_RESULT([*** SHARED_LIBRARY             =$SHARED_LIBRARY])
+
+AC_MSG_RESULT([])
 
 AC_MSG_RESULT([*** MMDB                       =$MMDB])
 AC_MSG_RESULT([*** MMDB_DYN                   =$MMDB_DYN])
