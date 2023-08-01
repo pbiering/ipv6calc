@@ -3,7 +3,7 @@
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
 # Version    : $Id$
-# Copyright  : 2002-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2023 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
 # Simple Perl web interface and security wrapper
@@ -1330,7 +1330,7 @@ sub print_infohash ($$$;$) {
 			print $key_print;
 		};
 
-		&print_textonly (' ' x ($length_max_key - length($key)) ) if ($outputformat ne "textkeyvalue");
+		&print_textonly (' ' x ($length_max_key - length($key)) ) if (($outputformat ne "textkeyvalue") && (length($key) < $length_max_key));
 		&print_textonly (" | ") if ($outputformat ne "textkeyvalue");
 		&print_textonly ("[" . $counter . "]") if (($outputformat eq "textkeyvalue") && (defined $counter));
 		&print_textonly ("=") if ($outputformat eq "textkeyvalue");
