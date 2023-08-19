@@ -10,6 +10,9 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20230819/PB:
+	configure[.in]: fix missing substitute for GEOIP2_DB
+
 20230801/PB:
 	ipv6calcweb/ipv6calcweb.cgi[.in]: fix potential "Negative repeat count"
 

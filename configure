@@ -661,6 +661,7 @@ HTTPD_LIBEXECDIR
 APXS
 ENABLE_MOD_IPV6CALC
 DYNLOAD_LIB
+GEOIP2_DB
 IP2LOCATION_DYN_LIB
 IP2LOCATION_DB
 IP2LOCATION_LIB_L2
@@ -6446,6 +6447,7 @@ printf "%s\n" "#define GEOIP2_DB \"$geoip_db\"" >>confdefs.h
 fi
 
 GEOIP2_DB=$geoip_db
+
 
 
 if test "$DYNAMIC_LOAD" = "yes"; then

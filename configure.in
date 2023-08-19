@@ -1282,6 +1282,7 @@ if test "$GEOIP2" = "yes"; then
 fi
 
 GEOIP2_DB=$geoip_db
+AC_SUBST(GEOIP2_DB)
 
 
 dnl *************************************************
