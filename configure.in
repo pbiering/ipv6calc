@@ -44,7 +44,7 @@ AC_DEFINE_UNQUOTED(IPV6CALC_API_VERSION_STRING,  "$API_VERSION_STRING", "API ver
 AC_DEFINE_UNQUOTED(IPV6CALC_API_VERSION_NUMERIC, $API_VERSION_NUMERIC , "API version numeric")
 
 dnl Define version header
-AC_CONFIG_HEADER(config.h)
+AC_CONFIG_HEADERS([config.h])
 
 dnl Checks for programs.
 AC_PROG_AWK
@@ -52,9 +52,6 @@ AC_PROG_CC
 dnl AC_PROG_INSTALL
 AC_PROG_RANLIB
 AC_PROG_MAKE_SET
-
-dnl Checks for header files.
-AC_HEADER_STDC
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 AC_C_CONST
@@ -1331,8 +1328,7 @@ fi
 
 AC_SUBST(ENABLE_MOD_IPV6CALC)
 
-AC_ARG_WITH(apxs, AC_HELP_STRING([--with-apxs=NAME],
-            [name of the apxs executable (apxs)]),
+AC_ARG_WITH(apxs, AS_HELP_STRING([--with-apxs=NAME],[name of the apxs executable (apxs)]),
             [APXS="$with_apxs"])
 
 if test "$ENABLE_MOD_IPV6CALC" = "1"; then
@@ -1412,7 +1408,7 @@ AC_CONFIG_FILES([ tools/DBIP-update.sh        ], [ chmod a+x tools/DBIP-update.s
 AC_CONFIG_FILES([ tools/IP2Location-update.sh ], [ chmod a+x tools/IP2Location-update.sh ])
 AC_CONFIG_FILES([ tools/GeoIP-update.sh       ], [ chmod a+x tools/GeoIP-update.sh       ])
 
-AC_OUTPUT([
+AC_CONFIG_FILES([
 		Makefile
 		md5/Makefile
 		tools/Makefile
@@ -1429,6 +1425,7 @@ AC_OUTPUT([
 		mod_ipv6calc/Makefile
 		VERSION
 ])
+AC_OUTPUT
 
 AC_MSG_RESULT([***** Summary])
 

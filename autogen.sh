@@ -2,8 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Version    : $Id$
-# Copyright  : 2003-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2003-2023 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
 
@@ -184,9 +183,6 @@ if $USE_CLANG; then
 		;;
 	esac
 fi
-
-echo "*** run: autoheader"
-autoheader || exit 1
 
 echo "*** run: autoconf"
 autoconf || exit 1
