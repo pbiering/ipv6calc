@@ -471,7 +471,7 @@ static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t 
 		, string
 	);
 
-	if (config->debuglevel && IPV6CALC_DEBUG_SHOW_DB_INFO) {
+	if (config->debuglevel & IPV6CALC_DEBUG_SHOW_DB_INFO) {
 		libipv6calc_db_wrapper_print_db_info(0, "");
 	};
 
