@@ -4208,6 +4208,9 @@ printf "%s\n" "#define AC_APPLE_UNIVERSAL_BUILD 1" >>confdefs.h
 
 CFLAGS_EXTRA="-fPIC -D__EXTENSIONS__"
 
+if test "$CFLAGS" = ""; then
+CFLAGS="-O2 -Wall -g"
+fi
 
 # Check whether --enable-m32 was given.
 if test ${enable_m32+y}

@@ -1,14 +1,10 @@
 # Project    : ipv6calc
 # File       : Makefile[.in]
-# Version    : $Id$
-# Copyright  : 2001-2019 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2001-2023 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Main Makefile for ipv6calc project
 #
-
-# Compiler and Linker Options
-export DEFAULT_CFLAGS = -D_GNU_SOURCE -O2 -Wall -g @CFLAGS_EXTRA@
 
 ifeq (@ENABLE_BUNDLED_GETOPT@, 1)
   GETOPT_MAKE = getopt-make
@@ -29,10 +25,6 @@ endif
 CC	= @CC@
 
 all:		$(MD5_MAKE) $(GETOPT_MAKE) ipv6calc ipv6logconv ipv6logstats ipv6loganon $(MOD_IPV6CALC_MAKE)
-
-.c.o:
-		$(CC) -c $< $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES)
-
 
 ipv6logconv:	$(GETOPT_MAKE) lib-make ipv6logconv-make
 

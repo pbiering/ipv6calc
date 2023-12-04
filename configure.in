@@ -64,6 +64,10 @@ dnl  -D__EXTENSIONS__ is for Solaris & strtok_r
 dnl  -fPIC is for shared library support
 CFLAGS_EXTRA="-fPIC -D__EXTENSIONS__"
 
+dnl Default CFLAGS
+if test "$CFLAGS" = ""; then
+CFLAGS="-O2 -Wall -g"
+fi
 
 dnl *************************************************
 dnl 32-bit mode

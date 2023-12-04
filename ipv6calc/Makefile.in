@@ -11,8 +11,6 @@ exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 
 # Compiler and Linker Options
-DEFAULT_CFLAGS ?= -O2 -Wall -g
-CFLAGS += $(DEFAULT_CFLAGS)
 CFLAGS += @CFLAGS@
 CFLAGS += @CFLAGS_EXTRA@
 
@@ -40,7 +38,7 @@ SPLINT_TODO_LATER = -unrecog  -retvalint
 all:		ipv6calc
 
 .c.o:
-		$(CC) -c $< $(CFLAGS) $(INCLUDES)
+		$(CC) -c $< $(CPPFLAGS) $(CFLAGS) $(INCLUDES)
 
 $(OBJS):	ipv6calc.h ipv6calchelp_local.h showinfo.h ipv6calcoptions_local.h ../config.h ../lib/ipv6calctypes.h
 

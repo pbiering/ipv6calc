@@ -1,17 +1,17 @@
 # Adapted for use with project 'ipv6calc' by Peter Bieringer <pb (at) bieringer.de>
-# $Id$
 
 CC = @CC@
 
-DEFAULT_CFLAGS ?= -O2 -Wall -g @CFLAGS_EXTRA@
+CFLAGS += @CFLAGS@
+CFLAGS += @CFLAGS_EXTRA@
 
 all: getopt1.o getopt.o
 
 getopt1.o: getopt1.c
-	${CC} $(DEFAULT_CFLAGS) $(CFLAGS) -fPIC -o getopt1.o -c getopt1.c
+	${CC} $(CPPFLAGS) $(CFLAGS) -o getopt1.o -c getopt1.c
 
 getopt.o: getopt.c
-	${CC} $(DEFAULT_CFLAGS) $(CFLAGS) -fPIC -o getopt.o -c getopt.c
+	${CC} $(CPPFLAGS) $(CFLAGS) -o getopt.o -c getopt.c
 
 clean:
 	rm -f *.o *.so.1 *.a

@@ -1,14 +1,14 @@
 # Adapted for use with project 'ipv6calc' by Peter Bieringer <pb (at) bieringer.de>
-# $Id$
 
 CC = @CC@
 
-DEFAULT_CFLAGS ?= -O2 -Wall -g @CFLAGS_EXTRA@
+CFLAGS += @CFLAGS@
+CFLAGS += @CFLAGS_EXTRA@
 
 all: md5.o
 
 md5.o: md5.c
-	${CC} $(DEFAULT_CFLAGS) $(CFLAGS) $(INCLUDES) -I.. -fPIC -o md5.o -c md5.c
+	${CC} $(CPPFLAGS) $(CFLAGS) $(INCLUDES) -I.. -fPIC -o md5.o -c md5.c
 
 clean:
 	rm -f *.o *.so.1 *.a

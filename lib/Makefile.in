@@ -9,8 +9,6 @@
 libdir	= @libdir@
 
 # Compiler and Linker Options
-DEFAULT_CFLAGS ?= -O2 -Wall -g
-CFLAGS += $(DEFAULT_CFLAGS)
 CFLAGS += @CFLAGS@
 CFLAGS += @CFLAGS_EXTRA@
 
@@ -56,7 +54,7 @@ all:
 		${MAKE} libipv6calc.so.@PACKAGE_VERSION@
 
 .c.o:
-		$(CC) -c $< $(CFLAGS) $(INCLUDES)
+		$(CC) -c $< $(CPPFLAGS) $(CFLAGS) $(INCLUDES)
 
 $(OBJS):	libipv6calcdebug.h  \
 		libipv6calc.h       \

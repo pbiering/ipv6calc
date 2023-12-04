@@ -11,9 +11,6 @@ exec_prefix     = @exec_prefix@
 bindir		= @bindir@
 
 # Compiler and Linker Options
-#  -D__EXTENSIONS__ is for Solaris & strtok_r
-DEFAULT_CFLAGS ?= -O2 -Wall -g @CFLAGS_EXTRA@
-CFLAGS += $(DEFAULT_CFLAGS)
 CFLAGS += @CFLAGS@
 CFLAGS += @CFLAGS_EXTRA@
 
@@ -39,7 +36,7 @@ SPLINT_TODO_LATER = -unrecog
 all:		ipv6logstats
 
 .c.o:
-		$(CC) -c $< $(CFLAGS) $(INCLUDES)
+		$(CC) -c $< $(CPPFLAGS) $(CFLAGS) $(INCLUDES)
 
 libipv6calc.a:
 		cd ../ && ${MAKE} lib-make
