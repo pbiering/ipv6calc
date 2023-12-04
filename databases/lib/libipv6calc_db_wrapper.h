@@ -442,6 +442,8 @@ extern int libipv6calc_db_wrapper_bdb_fetch_row(
 #endif // HAVE_BERKELEY_DB_SUPPORT
 
 // generic DB lookup
+extern int (*get_array_row)(const int i, const uint32_t *value_first_00_31, const uint32_t *value_first_32_63, const uint32_t *value_last_00_31, const uint32_t *value_last_32_63);
+
 extern long int libipv6calc_db_wrapper_get_entry_generic(
 	void 		*db_ptr,		// pointer to database in case of IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB, otherwise NULL
 	const uint8_t	data_ptr_type,		// type of data_ptr
