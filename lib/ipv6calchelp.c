@@ -946,8 +946,5 @@ void ipv6calc_print_features_verbose(const int level_verbose) {
 	fprintf(stderr, "Linked MD5 implementation: OpenSSL legacy MD5\n\n");
 #endif
 
-
-	fprintf(stderr, "Compiled: %s  %s\n\n", __DATE__, __TIME__);
-
 	libipv6calc_db_wrapper_print_features_verbose(level_verbose);
 };
