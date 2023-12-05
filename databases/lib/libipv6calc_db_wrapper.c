@@ -2778,7 +2778,7 @@ long int libipv6calc_db_wrapper_get_entry_generic(
 	const uint32_t	lookup_key_00_31,	// lookup key MSB
 	const uint32_t	lookup_key_32_63,	// lookup key LSB
 	void            *data_ptr,		// pointer to DB data in case of IPV6CALC_DB_LOOKUP_DATA_PTR_TYPE_BDB, otherwise NULL
-	int  (*get_array_row)()			// function to get array row
+	int  (*get_array_row)(const uint32_t row, uint32_t *key_first_00_31_ptr, uint32_t *key_first_32_63_ptr, uint32_t *key_last_00_31_ptr, uint32_t *key_last_32_63_ptr)	// function to get array row
 	) {
 
 	int retval = -1;
