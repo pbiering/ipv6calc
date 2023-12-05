@@ -4486,7 +4486,6 @@ then :
 
 				{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** CFLAGS supported: -Wdate-time" >&5
 printf "%s\n" "*** CFLAGS supported: -Wdate-time" >&6; }
-				# disable errors related to deprecated-declarations
 				CFLAGS_EXTRA="${CFLAGS_EXTRA:+$CFLAGS_EXTRA }-Wdate-time"
 
 else $as_nop
