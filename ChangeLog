@@ -16,6 +16,8 @@ Info:
 	databases/lib/libipv6calc_db_wrapper_*.c, ipv6calc/ipv6calc.c,
 	lib/libipv6calc.c: use macros for string concatenation (https://github.com/pbiering/ipv6calc/issues/43)
 	ipv6calc/test_ipv6calc.sh: add missing testcases for --printmirrored
+	mod_ipv6calc/Makefile.in: take use of selected CC
+	mod_ipv6calc/mod_ipv6calc.c: add pragma to suppress -Wmissing-field-initializers issue caused by clang in command_rec
 
 20231204/PB:
 	configure[.in]: add support for -Wdate-time

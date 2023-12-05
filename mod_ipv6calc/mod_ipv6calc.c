@@ -209,6 +209,7 @@ int ipv6calc_option_list_entries = 0;
 /*
  * Config options (ipv6calc_cmds)
  */
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers" // command_rec -> {NULL}
 static const command_rec ipv6calc_cmds[] = {
 	AP_INIT_FLAG("ipv6calcEnable", set_ipv6calc_enable, NULL, OR_FILEINFO, "Turn on mod_ipv6calc"),
 	AP_INIT_FLAG("ipv6calcDefaultActive", set_ipv6calc_default_active, NULL, OR_FILEINFO, "mod_ipv6calc active by default (on/off can be controlled by environment)"),

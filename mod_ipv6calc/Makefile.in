@@ -8,11 +8,15 @@
 LIBEXECDIR = @HTTPD_LIBEXECDIR@
 SYSCONFDIR = @HTTPD_SYSCONFDIR@
 
+CC      = @CC@
 APXS	= @APXS@
 
 # Compiler and Linker Options
 CFLAGS += @CFLAGS@
 CFLAGS += @CFLAGS_EXTRA@
+
+# workaround for clang: error: optimization flag '-ffat-lto-objects' is not supported [-Werror,-Wignored-optimization-argument]
+CFLAGS += -Wno-ignored-optimization-argument
 
 INCLUDES= @MD5_INCLUDE@ @GETOPT_INCLUDE@ @MMDB_INCLUDE_L1@ @IP2LOCATION_INCLUDE_L1@ -I../ -I../lib/ -I../databases/lib/
 
@@ -46,7 +50,7 @@ shared =  mod_ipv6calc.la
 
 mod_ipv6calc:	mod_ipv6calc.c ../lib/libipv6calc.h ../config.h libipv6calc libipv6calc_db_wrapper
 		if test -z "$(APXS)"; then echo "no APXS found, can't build module"; exit 1; fi
-		$(APXS) $(LIBS) $(INCLUDES) -c -Wl,"$(LDFLAGS)" -Wc,"$(CFLAGS)" mod_ipv6calc.c
+		$(APXS) -S CC=${CC} $(LIBS) $(INCLUDES) -c -Wl,"$(LDFLAGS)" -Wc,"$(CFLAGS)" mod_ipv6calc.c
 
 static:		
 
