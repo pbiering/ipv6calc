@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP2.c
- * Version    : $Id$
- * Copyright  : 2019-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2019-2023 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc DB-IP.com database wrapper for MaxMindDB databases
@@ -514,16 +513,17 @@ char *libipv6calc_db_wrapper_DBIP2_wrapper_db_info_used(void) {
 
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "type=%d info=%s", type, info);
 
+			STRCLR(tempstring);
 			if (strlen(dbip2_db_usage_string) > 0) {
 				if (strstr(dbip2_db_usage_string, info) != NULL) {
 					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "type=%d info=%s (skip, already displayed)", type, info);
 					continue;
 				}; // string already included
 
-				snprintf(tempstring, sizeof(tempstring), "%s / %s", dbip2_db_usage_string, info);
-			} else {
-				snprintf(tempstring, sizeof(tempstring), "%s", info);
+				STRCAT(tempstring, dbip2_db_usage_string);
+				STRCAT(tempstring, " / ");
 			};
+			STRCAT(tempstring, info);
 
 			snprintf(dbip2_db_usage_string, sizeof(dbip2_db_usage_string), "%s", tempstring);
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "type=%d dbip2_db_usage_string=%s", type, dbip2_db_usage_string);
@@ -558,7 +558,10 @@ static char *libipv6calc_db_wrapper_DBIP2_dbfilename(const unsigned int type) {
 		return(NULL);
 	};
 
-	snprintf(tempstring, sizeof(tempstring), "%s/%s", dbip2_db_dir, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].filename);
+	STRCLR(tempstring);
+	STRCAT(tempstring, dbip2_db_dir);
+	STRCAT(tempstring, "/");
+	STRCAT(tempstring, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].filename);
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "Finished: %s type=%d has filename=%s", wrapper_dbip2_info, type, tempstring);
 
@@ -701,7 +704,6 @@ END_libipv6calc_db_wrapper:
 char *libipv6calc_db_wrapper_DBIP2_database_info(const unsigned int type) {
 	static char resultstring[IPV6CALC_STRING_MAX];
 	char datastring[IPV6CALC_STRING_MAX];
-	char tempstring[IPV6CALC_STRING_MAX];
 
 	MMDB_s mmdb;
 	int ret, i, entry = -1;
@@ -767,8 +769,8 @@ char *libipv6calc_db_wrapper_DBIP2_database_info(const unsigned int type) {
 	);
 
 	strftime(datastring, sizeof(datastring), "%Y%m%d-%H%M%S UTC", gmtime(&epoch));
-	snprintf(tempstring, sizeof(tempstring), "%s, created: %s", resultstring, datastring);
-	snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
+	STRCAT(resultstring, ", created: ");
+	STRCAT(resultstring, datastring);
 
 END_libipv6calc_db_wrapper:
 	return(resultstring);

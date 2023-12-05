@@ -1928,18 +1928,23 @@ PIPE_input:
 
 			DEBUGPRINT_WA(DEBUG_ipv6calc_general, "'test_*' result: %x", retval);
 
+			STRCLR(resultstring);
 			if (input_is_pipe == 1) {
+				STRCAT(resultstring, linebuffer);
 				if (retval == 2) {
-					snprintf(resultstring, sizeof(resultstring), "%s uncomparable", linebuffer);
+					STRCAT(resultstring, " uncomparable");
 				} else {
-					snprintf(resultstring, sizeof(resultstring), "%s %s", linebuffer, resultstring3);
+					STRCAT(resultstring, " ");
+					STRCAT(resultstring, resultstring3);
 				};
 			} else {
 				if ((formatoptions & FORMATOPTION_quiet) == 0) {
+					STRCAT(resultstring, input1);
 					if (retval == 2) {
-						snprintf(resultstring, sizeof(resultstring), "%s uncomparable", input1);
+						STRCAT(resultstring, " uncomparable");
 					} else {
-						snprintf(resultstring, sizeof(resultstring), "%s %s", input1, resultstring3);
+						STRCAT(resultstring, " ");
+						STRCAT(resultstring, resultstring3);
 					};
 				};
 			};

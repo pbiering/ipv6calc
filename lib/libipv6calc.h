@@ -65,6 +65,29 @@
 /* explicit exclude from "unused" warning */
 #define UNUSED(x) (void)(x)
 
+/* string functions */
+#define STRCLR(dst) \
+	if (strlen(dst) > 0) { \
+		dst[0] = '\0'; \
+	};
+
+// STRCAT
+//  case 1: src can be added to dst completly
+//  case 2: src is too long to be added to dst, add only what is available but leave space for ...
+//  case 3: dst is already exhausted, override end with ...
+#define STRCAT(dst, src) \
+        if (sizeof(dst) > strlen(src) + strlen(dst)) { \
+                strncat(dst, src, sizeof(dst) - strlen(dst) - 1); \
+        } else { \
+                if (sizeof(dst) > strlen(dst) + strlen("...")) { \
+                        strncat(dst, src, sizeof(dst) - strlen(dst) - strlen("...") - 1); \
+                        strcat(dst, "..."); \
+                } else if (strlen(dst) > strlen("...")) { \
+			dst[strlen(dst) - strlen("...")] = '\0'; \
+                        strcat(dst, "..."); \
+                }; \
+        };
+
 #endif // _libipv6calc_h
 
 

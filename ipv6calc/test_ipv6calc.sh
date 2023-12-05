@@ -41,6 +41,7 @@ cat <<END | grep -v '^#'
 ## ip6.int.
 --addr_to_ip6int 3ffe:ffff:100:f101::1					=1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
 --in ipv6 --out revnibbles.int 3ffe:ffff:100:f101::1			=1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
+NOPIPETEST--in ipv6 --out revnibbles.int 3ffe:ffff:100:f101::1 --printmirrored	=.int.ip6.3.f.f.e.f.f.f.f.0.1.0.0.f.1.0.1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1
 --addr_to_ip6int 3ffe:ffff:100:f101::1/64				=1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.
 --in revnibbles.int --out ipv6 1.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.1.0.1.f.0.0.1.0.f.f.f.f.e.f.f.3.ip6.int.	=3ffe:ffff:100:f101::1/128
 ## ip6.arpa.
@@ -203,6 +204,7 @@ NOPIPETEST--in prefix+mac 1:2:3:4::/56 11:22:33:44:55:aa --action prefixmac2ipv6
 NOPIPETEST--in prefix+mac 1:2:3:4::/56 11:22:33:44:55:aa --action prefixmac2ipv6 --out ipv6addr --no-prefixlength	=1:2:3:4:1322:33ff:fe44:55aa
 ## IPv4 -> reverse
 --in ipv4addr --out revipv4 1.2.3.4					=4.3.2.1.in-addr.arpa.
+NOPIPETEST--in ipv4addr --out revipv4 1.2.3.4 --printmirrored			=.arpa.in-addr.1.2.3.4
 ## Information
 -i fe80::1								=*
 -i -m ff02::1								=*

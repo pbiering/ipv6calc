@@ -1280,13 +1280,14 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used(void) {
 				db_lite_used = 1;
 			};
 
+			STRCLR(tempstring);
 			if (strlen(ip2location_db_usage_string) > 0) {
 				if (strstr(ip2location_db_usage_string, info) != NULL) { continue; }; // string already included
 
-				snprintf(tempstring, sizeof(tempstring), "%s / %s", ip2location_db_usage_string, info);
-			} else {
-				snprintf(tempstring, sizeof(tempstring), "%s", info);
+				STRCAT(tempstring, ip2location_db_usage_string);
+				STRCAT(tempstring, " / ");
 			};
+			STRCAT(tempstring, info);
 
 			snprintf(ip2location_db_usage_string, sizeof(ip2location_db_usage_string), "%s", tempstring);
 		};
@@ -1449,7 +1450,10 @@ static char *libipv6calc_db_wrapper_IP2Location_dbfilename(const unsigned int ty
 		return(NULL);
 	};
 
-	snprintf(tempstring, sizeof(tempstring), "%s/%s", ip2location_db_dir, libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename);
+	STRCLR(tempstring);
+	STRCAT(tempstring, ip2location_db_dir);
+	STRCAT(tempstring, "/");
+	STRCAT(tempstring, libipv6calc_db_wrapper_IP2Location_db_file_desc[i].filename);
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished: %s type=%d has filename=%s", wrapper_ip2location_info, type, tempstring);
 

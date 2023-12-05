@@ -10,6 +10,13 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20231205/PB:
+	configure[.in]: enable -Werror=format-truncation=1
+	lib/libipv6calc.h: add macros for string concatenation
+	databases/lib/libipv6calc_db_wrapper_*.c, ipv6calc/ipv6calc.c,
+	lib/libipv6calc.c: use macros for string concatenation (https://github.com/pbiering/ipv6calc/issues/43)
+	ipv6calc/test_ipv6calc.sh: add missing testcases for --printmirrored
+
 20231204/PB:
 	configure[.in]: add support for -Wdate-time
 	lib/ipv6calchelp.c: remove displaying compile time (https://github.com/pbiering/ipv6calc/issues/41)

@@ -290,16 +290,17 @@ char *libipv6calc_db_wrapper_BuiltIn_wrapper_db_info_used(void) {
 
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "type=%d info=%s", type, info);
 
+			STRCLR(tempstring);
 			if (strlen(builtin_db_usage_string) > 0) {
 				if (strstr(builtin_db_usage_string, info) != NULL) {
 					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_BuiltIn, "type=%d info=%s (skip, already displayed)", type, info);
 					continue;
 				}; // string already included
 
-				snprintf(tempstring, sizeof(tempstring), "%s / %s", builtin_db_usage_string, info);
-			} else {
-				snprintf(tempstring, sizeof(tempstring), "%s", info);
+				STRCAT(tempstring, builtin_db_usage_string);
+				STRCAT(tempstring, " / ");
 			};
+			STRCAT(tempstring, info);
 
 			snprintf(builtin_db_usage_string, sizeof(builtin_db_usage_string), "%s", tempstring);
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "type=%d builtin_db_usage_string=%s", type, builtin_db_usage_string);

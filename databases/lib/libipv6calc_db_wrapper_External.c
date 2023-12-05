@@ -284,16 +284,17 @@ char *libipv6calc_db_wrapper_External_wrapper_db_info_used(void) {
 
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "type=%d info=%s", type, info);
 
+			STRCLR(tempstring);
 			if (strlen(external_db_usage_string) > 0) {
 				if (strstr(external_db_usage_string, info) != NULL) {
 					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "type=%d info=%s (skip, already displayed)", type, info);
 					continue;
 				}; // string already included
 
-				snprintf(tempstring, sizeof(tempstring), "%s / %s", external_db_usage_string, info);
-			} else {
-				snprintf(tempstring, sizeof(tempstring), "%s", info);
+				STRCAT(tempstring, external_db_usage_string);
+				STRCAT(tempstring, " / ");
 			};
+			STRCAT(tempstring, info);
 
 			snprintf(external_db_usage_string, sizeof(external_db_usage_string), "%s", tempstring);
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "type=%d external_db_usage_string=%s", type, external_db_usage_string);
@@ -328,7 +329,10 @@ static char *libipv6calc_db_wrapper_External_dbfilename(unsigned int type) {
 		return(NULL);
 	};
 
-	snprintf(tempstring, sizeof(tempstring), "%s/%s", external_db_dir, libipv6calc_db_wrapper_External_db_file_desc[i].filename);
+	STRCLR(tempstring);
+	STRCAT(tempstring, external_db_dir);
+	STRCAT(tempstring, "/");
+	STRCAT(tempstring, libipv6calc_db_wrapper_External_db_file_desc[i].filename);
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Finished: %s type=%d has filename=%s", wrapper_external_info, type, tempstring);
 
@@ -591,7 +595,8 @@ char *libipv6calc_db_wrapper_External_database_info(const unsigned int type) {
 		goto END_libipv6calc_db_wrapper_close;
 	};
 
-	snprintf(resultstring, sizeof(resultstring), "EXTDB-%d/%s", type, datastring);
+	snprintf(resultstring, sizeof(resultstring), "EXTDB-%d/", type);
+	STRCAT(resultstring, datastring);
 
 	// get dbcreated_unixtime
 	ret = libipv6calc_db_wrapper_bdb_get_data_by_key(dbp, "dbcreated_unixtime", datastring, sizeof(datastring));

@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calc.c
- * Version    : $Id$
- * Copyright  : 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2023 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for some tools
@@ -131,43 +130,61 @@ void string_to_reverse(char *string) {
 /*
  * dotted-reverse string
  * in : pointer to a string
+ * in : string length
  */
 void string_to_reverse_dotted(char *string, const size_t string_length) {
-	char resultstring[IPV6CALC_STRING_MAX], tempstring[IPV6CALC_STRING_MAX];
+	char resultstring[IPV6CALC_STRING_MAX] = "", tempstring[IPV6CALC_STRING_MAX] = "", splitstring[IPV6CALC_STRING_MAX];
 	char *token, *cptr, **ptrptr;
 	int flag_first = 1;
 	
 	ptrptr = &cptr;
 
+	DEBUGPRINT_NA(DEBUG_libipv6calc, "called");
+	if (strlen(string) < sizeof(splitstring)) {
+		snprintf(splitstring, sizeof(splitstring), "%s", string);
+	} else {
+		snprintf(string, string_length, "%s", "ERROR/INPUT-STRING-TOO-LONG/CANNOT-CREATE-REVERSE");
+		return;
+	};
+
 	/* clear result string */
-	snprintf(resultstring, sizeof(resultstring), "%s", "");
+	STRCLR(resultstring);
 
 	/* check for starting dot */
 	if ( string[0] == '.' ) {
-		snprintf(tempstring, sizeof(tempstring), "%s.", resultstring);
-		snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
+		DEBUGPRINT_NA(DEBUG_libipv6calc, "1st char is dot");
+		STRCAT(resultstring, ".");
 	};
 
-	token = strtok_r(string, ".", ptrptr);
+	token = strtok_r(splitstring, ".", ptrptr);
 
 	while (token != NULL) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc, "split token: %s", token);
+		STRCLR(tempstring);
 		if (flag_first == 1) {
-			snprintf(tempstring, sizeof(tempstring), "%s%s", token, resultstring);
 			flag_first = 0;
+			STRCAT(tempstring, token);
 		} else {
-			snprintf(tempstring, sizeof(tempstring), "%s.%s", token, resultstring);
+			STRCAT(tempstring, token);
+			STRCAT(tempstring, ".");
+			STRCAT(tempstring, resultstring);
 		};
-		snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
+		STRCLR(resultstring);
+		STRCAT(resultstring, tempstring);
 
 		token = strtok_r(NULL, ".", ptrptr);
 	};
 	
 	if ( string[strlen(string) - 1] == '.' ) {
-		snprintf(tempstring, sizeof(tempstring), ".%s", resultstring);
-		snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
+		DEBUGPRINT_NA(DEBUG_libipv6calc, "last char is dot");
+		STRCLR(tempstring);
+		STRCAT(tempstring, ".");
+		STRCAT(tempstring, resultstring);
+		STRCLR(resultstring);
+		STRCAT(resultstring, tempstring);
 	};
 
-	snprintf(string, string_length, ".%s", resultstring);
+	snprintf(string, string_length, "%s", resultstring);
 	
 	return;
 };
