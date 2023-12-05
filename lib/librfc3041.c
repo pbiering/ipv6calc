@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : librfc3041.c
- * Version    : $Id$
- * Copyright  : 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2023 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Function library for host identifier privacy extension defined in RFC 3041 / RFC 4941
@@ -25,7 +24,13 @@
 #ifdef ENABLE_OPENSSL_EVP_MD5
 #include <openssl/evp.h>
 #else
+#ifdef ENABLE_OPENSSL_MD5
 #include <openssl/md5.h>
+#else
+#ifdef ENABLE_LIBMD_MD5
+#include <md5.h>
+#endif
+#endif
 #endif
 #endif
 
@@ -92,6 +97,16 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 	MD5_Update(&md5hash, &token->in6_addr.s6_addr[8], 8);
 	MD5_Final(digest, &md5hash);
 #else // ENABLE_OPENSSL_MD5
+#ifdef ENABLE_LIBMD_MD5
+	unsigned int digest_len = MD5_DIGEST_LENGTH;
+	unsigned char digest[MD5_DIGEST_LENGTH];
+	MD5_CTX md5hash;
+
+	MD5Init(&md5hash);
+	MD5Update(&md5hash, &identifier->in6_addr.s6_addr[8], 8);
+	MD5Update(&md5hash, &token->in6_addr.s6_addr[8], 8);
+	MD5Final(digest, &md5hash);
+#else // ENABLE_LIBMD_MD5
 	// fallback to bundled MD5
 	unsigned int digest_len = MD5_DIGEST_LENGTH;
 	unsigned char digest[MD5_DIGEST_LENGTH];
@@ -101,6 +116,7 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 	md5_process_bytes(&identifier->in6_addr.s6_addr[8], 8, &md5hash);
 	md5_process_bytes(&token->in6_addr.s6_addr[8], 8, &md5hash);
 	md5_finish_ctx(&md5hash, digest);
+#endif // ENABLE_LIBMD_MD5
 #endif // ENABLE_OPENSSL_MD5
 
 #endif // ENABLE_OPENSSL_EVP_MD5

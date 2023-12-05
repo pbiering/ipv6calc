@@ -109,6 +109,10 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		OPTIONS_CONFIGURE="${OPTIONS_CONFIGURE:+$OPTIONS_CONFIGURE }--enable-openssl-md5"
 		;;
+	    '--libmd-md5')
+		shift
+		OPTIONS_CONFIGURE="${OPTIONS_CONFIGURE:+$OPTIONS_CONFIGURE }--enable-libmd-md5"
+		;;
 	    '--relax')
 		shift
 		RELAX=true
@@ -137,6 +141,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --gcc-Os            : use 'gcc' option '-Os'"
 		echo "   --m32               : compile for 32-bit"
 		echo "   --enable-openssl-md5: use legacy OpenSSL MD5 implementation"
+		echo "   --enable-libmd-md5  : use libmd MD5 implementation"
 		echo "   --relax             : don't stop on compiler warnings"
 		exit 1
 		;;

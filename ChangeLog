@@ -18,6 +18,9 @@ Info:
 	ipv6calc/test_ipv6calc.sh: add missing testcases for --printmirrored
 	mod_ipv6calc/Makefile.in: take use of selected CC
 	mod_ipv6calc/mod_ipv6calc.c: add pragma to suppress -Wmissing-field-initializers issue caused by clang in command_rec
+	configure[.in],config.h.in: add option --enable-libmd-md5
+	autogen-all-variants.sh,autogen.sh: add option --enable-libmd-md5
+	lib/librfc3041.c: add support for libmd MD5 implementation
 
 20231204/PB:
 	configure[.in]: add support for -Wdate-time

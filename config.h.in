@@ -15,6 +15,9 @@
 /* Define if bundled MD5 should be used */
 #undef ENABLE_BUNDLED_MD5
 
+/* Define if libmd MD5 should be used */
+#undef ENABLE_LIBMD_MD5
+
 /* Define if OpenSSL EVP MD5 should be used */
 #undef ENABLE_OPENSSL_EVP_MD5
 
@@ -81,6 +84,12 @@
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
+
+/* Define to 1 if you have the `MD5Init' function. */
+#undef HAVE_MD5INIT
+
+/* Define to 1 if you have the `MD5Update' function. */
+#undef HAVE_MD5UPDATE
 
 /* Define to 1 if you have the `MD5_Final' function. */
 #undef HAVE_MD5_FINAL

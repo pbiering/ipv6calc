@@ -48,6 +48,7 @@ NONE#--external --m32
 BUNDLED#--enable-bundled-md5 --enable-bundled-getopt
 OPENSSL#--enable-openssl-md5 --no-static-build
 OPENSSL#--enable-openssl-evp-md5
+LIBMD#--enable-libmd-md5 --no-static-build
 IP2LOCATION#-i
 IP2LOCATION#-i --m32
 IP2LOCATION#-I

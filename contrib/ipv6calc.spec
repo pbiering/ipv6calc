@@ -161,8 +161,8 @@ Default restricts access to localhost
 %package mod_ipv6calc
 Summary:	Apache module for ipv6calc
 BuildRequires:	httpd-devel psmisc curl
-Requires:	httpd >= 2.4.0
-Requires:	httpd <= 2.4.99999
+Requires:	httpd >= .0
+Requires:	httpd <= .99999
 Requires:	ipv6calc = %{version}-%{release}
 %if %{enable_shared}
 Requires:	ipv6calc-libs = %{version}-%{release}
