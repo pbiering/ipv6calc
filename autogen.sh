@@ -189,8 +189,8 @@ if $USE_CLANG; then
 	esac
 fi
 
-echo "*** run: autoconf"
-autoconf || exit 1
+echo "*** run: autoreconf"
+autoreconf || exit 1
 
 echo "*** run: configure, options: $OPTIONS_CONFIGURE $*"
 CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS" ./configure --bindir=/usr/bin --mandir=/usr/share/man $OPTIONS_CONFIGURE $* || exit 1

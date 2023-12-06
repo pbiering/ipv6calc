@@ -10,6 +10,10 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20231206/PB:
+	rename configure.in to configure.ac
+	autogen.sh: replace call of autoconf by autoreconf (https://github.com/pbiering/ipv6calc/issues/44)
+
 20231205/PB:
 	configure[.in]: enable -Werror=format-truncation=1
 	lib/libipv6calc.h: add macros for string concatenation
