@@ -190,6 +190,8 @@ By default the module is disabled.
 %setup -q
 %endif
 
+autoreconf
+
 %configure \
 	%{?enable_ip2location:--enable-ip2location} \
 	%{?enable_ip2location:--with-ip2location-dynamic} \
@@ -349,6 +351,9 @@ fi
 
 
 %changelog
+* Wed Dec 06 2023 Peter Bieringer <pb@bieringer.de>
+- call autoreconf before configure
+
 * Wed Jun 07 2023 Peter Bieringer <pb@bieringer.de>
 - increase minimum IP2Location version to 8.6.0 (support of DB-26)
 

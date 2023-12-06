@@ -13,6 +13,7 @@ Info:
 20231206/PB:
 	rename configure.in to configure.ac
 	autogen.sh: replace call of autoconf by autoreconf (https://github.com/pbiering/ipv6calc/issues/44)
+	contrib/ipv6calc.spec[.in]: call autoreconf before configure
 
 20231205/PB:
 	configure[.in]: enable -Werror=format-truncation=1
