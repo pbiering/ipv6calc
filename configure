@@ -4622,7 +4622,7 @@ then :
 		LDFLAGS="-lmd $LDFLAGS"
 		HAVE_LIBMD_MD5=1
 
-  for ac_func in MD5Init MD5Update
+  for ac_func in MD5Init MD5Update MD5Final
 do :
   as_ac_var=`printf "%s\n" "ac_cv_func_$ac_func" | $as_tr_sh`
 ac_fn_c_check_func "$LINENO" "$ac_func" "$as_ac_var"
@@ -4631,7 +4631,14 @@ then :
   cat >>confdefs.h <<_ACEOF
 #define `printf "%s\n" "HAVE_$ac_func" | $as_tr_cpp` 1
 _ACEOF
- MD5_Final
+
+
+else $as_nop
+
+			{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: libmd crypto library supports MD5" >&5
+printf "%s\n" "libmd crypto library supports MD5" >&6; }
+			HAVE_OPENSSL_MD5=0
+
 fi
 
 done

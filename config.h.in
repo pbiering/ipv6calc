@@ -85,6 +85,9 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
+/* Define to 1 if you have the `MD5Final' function. */
+#undef HAVE_MD5FINAL
+
 /* Define to 1 if you have the `MD5Init' function. */
 #undef HAVE_MD5INIT
 

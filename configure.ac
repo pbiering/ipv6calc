@@ -298,7 +298,7 @@ AC_CHECK_HEADER(md5.h, [
 		LDFLAGS_ORIG="$LDFLAGS"
 		LDFLAGS="-lmd $LDFLAGS"
 		HAVE_LIBMD_MD5=1
-		AC_CHECK_FUNCS(MD5Init MD5Update, MD5_Final,
+		AC_CHECK_FUNCS(MD5Init MD5Update MD5Final,
 		[
 		],[
 			AC_MSG_RESULT([libmd crypto library supports MD5])
