@@ -1,60 +1,10 @@
-# Project    : ipv6calc/ipv6calc
+# Project    : ipv6calc/tools
 # File       : Makefile[.in]
 # Copyright  : 2006-2023 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for various tools
 #
-
-prefix		= @prefix@
-exec_prefix	= @exec_prefix@
-datadir         = @datadir@
-datarootdir     = @datarootdir@
-
-
-# Compiler and Linker Options
-CFLAGS += @CFLAGS@
-CFLAGS += @CFLAGS_EXTRA@
-
-INCLUDES= -I../getopt/ -I../ -I../lib/
-
-GETOBJS = ../getopt/getopt.o ../getopt/getopt1.o
-
-CC	= @CC@
-
-OBJS	= registry-assignment-to-list.o
-
-# splint
-SPLINT_OPT_OUTSIDE = -warnposix -nullassign -uniondef -compdef -usedef -formatconst -exportlocal
-#SPLINT_OPT_OUTSIDE = -uniondef +matchanyintegral --nullassign +ignoresigns -compdef -usedef -modobserver -formatconst -warnposix -exportlocal
-SPLINT_TODO_LATER = -unrecog  -retvalint
-
-
-all:	
-
-.c.o:
-		$(CC) -c $< $(CFLAGS) $(INCLUDES)
-
-$(OBJS):	../config.h
-
-libipv6calc.a:	
-		cd ../ && ${MAKE} lib-make
-
-distclean:
-		${MAKE} clean
-		for f in *.sh; do if [ -f $$f.in ]; then rm -f $$f; fi; done
-		
-
-autoclean:
-		${MAKE} distclean
-
-clean:
-		rm -f *.o
-
-test:
-
-splint:		
-		splint *.c ../lib/*.c -I.. -I../lib $(SPLINT_OPT_OUTSIDE) $(SPLINT_TODO_LATER)
 
 install:	
 		if [ ! -d $(DESTDIR)$(datadir)/ipv6calc/tools ]; then install -d -m 755 $(DESTDIR)$(datadir)/ipv6calc/tools; fi
