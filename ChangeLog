@@ -12,6 +12,7 @@ Info:
 --------------------------------------------------------------------
 20231207/PB:
 	doc/generate.sh: reworked
+	internal databases: update
 
 20231206/PB:
 	rename configure.in to configure.ac

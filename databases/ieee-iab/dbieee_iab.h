@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Thu Jun  8 18:13:58 2023
+ * Generated     : Thu Dec  7 06:37:15 2023
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20230608";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20231207";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -1382,7 +1382,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x558000, 0x558FFF, "Bedo Elektronik GmbH", "BEDO-ELEKTRONIK" },
 	{ 0x0050C2, 0x559000, 0x559FFF, "Fail Safe Solutions LLC", "FAIL-SAFE-SOLUTIONS" },
 	{ 0x0050C2, 0x55A000, 0x55AFFF, "Valde Systems, Inc.", "VALDE" },
-	{ 0x0050C2, 0x55B000, 0x55BFFF, "MATRIX TELECOM PVT. LTD.", "MATRIX-TELECOM-PVT" },
+	{ 0x0050C2, 0x55B000, 0x55BFFF, "MATRIX COMSEC PRIVATE LIMITED", "MATRIX-COMSEC-PRIVATE" },
 	{ 0x0050C2, 0x55C000, 0x55CFFF, "ads-tec GmbH", "ADS-TEC" },
 	{ 0x0050C2, 0x55D000, 0x55DFFF, "ACD Elektronik GmbH", "ACD-ELEKTRONIK" },
 	{ 0x0050C2, 0x55E000, 0x55EFFF, "HANZAS ELEKTRONIKA, SIA", "HANZAS-ELEKTRONIKA-SIA" },
@@ -2214,7 +2214,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x898000, 0x898FFF, "Veeco Process Equipment, Inc.", "VEECO-PROCESS-EQUIPMENT" },
 	{ 0x0050C2, 0x899000, 0x899FFF, "Inico Technologies Ltd.", "INICO-TECHNOLOGIES" },
 	{ 0x0050C2, 0x89A000, 0x89AFFF, "Neptune Technology Group Inc.", "NEPTUNE-GROUP" },
-	{ 0x0050C2, 0x89B000, 0x89BFFF, "Sensata Technologies, Inc.", "SENSATA-TECHNOLOGIES" },
+	{ 0x0050C2, 0x89B000, 0x89BFFF, "Sensata Technologies", "SENSATA-TECHNOLOGIES" },
 	{ 0x0050C2, 0x89C000, 0x89CFFF, "Mediana", "MEDIANA" },
 	{ 0x0050C2, 0x89D000, 0x89DFFF, "Systemtechnik GmbH", "SYSTEMTECHNIK" },
 	{ 0x0050C2, 0x89E000, 0x89EFFF, "Broadcast Electronics", "BROADCAST-ELECTRONICS" },
@@ -2660,7 +2660,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xA56000, 0xA56FFF, "ReaMetrix, Inc.", "REAMETRIX" },
 	{ 0x0050C2, 0xA57000, 0xA57FFF, "Juice Technologies, LLC", "JUICE-TECHNOLOGIES" },
 	{ 0x0050C2, 0xA58000, 0xA58FFF, "EPL", "EPL" },
-	{ 0x0050C2, 0xA59000, 0xA59FFF, "GSP Sprachtechnologie GmbH", "GSP-SPRACHTECHNOLOGIE" },
+	{ 0x0050C2, 0xA59000, 0xA59FFF, "Televic Rail GmbH", "TELEVIC-RAIL" },
 	{ 0x0050C2, 0xA5A000, 0xA5AFFF, "ITAS A/S", "ITAS-A/S" },
 	{ 0x0050C2, 0xA5B000, 0xA5BFFF, "Phytec Messtechnik GmbH", "PHYTEC-MESSTECHNIK" },
 	{ 0x0050C2, 0xA5C000, 0xA5CFFF, "JSC Component-ASU", "JSC-COMPONENT-ASU" },
@@ -3567,7 +3567,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xDE4000, 0xDE4FFF, "EGS Technologies Ltd", "EGS-TECHNOLOGIES" },
 	{ 0x0050C2, 0xDE5000, 0xDE5FFF, "Neets", "NEETS" },
 	{ 0x0050C2, 0xDE6000, 0xDE6FFF, "Fr. Sauter AG", "FR-SAUTER" },
-	{ 0x0050C2, 0xDE7000, 0xDE7FFF, "Elan Systems", "ELAN" },
+	{ 0x0050C2, 0xDE7000, 0xDE7FFF, "Bucher Automation Budapest", "BUCHER-AUTOMATION-BUDAPEST" },
 	{ 0x0050C2, 0xDE8000, 0xDE8FFF, "Visual Productions", "VISUAL-PRODUCTIONS" },
 	{ 0x0050C2, 0xDE9000, 0xDE9FFF, "Dacom West GmbH", "DACOM-WEST" },
 	{ 0x0050C2, 0xDEA000, 0xDEAFFF, "Cerner Corporation", "CERNER" },
@@ -3885,7 +3885,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xF24000, 0xF24FFF, "CT Company", "CT-COMPANY" },
 	{ 0x0050C2, 0xF25000, 0xF25FFF, "Samway Electronic SRL", "SAMWAY-SRL" },
 	{ 0x0050C2, 0xF26000, 0xF26FFF, "WaveIP", "WAVEIP" },
-	{ 0x0050C2, 0xF27000, 0xF27FFF, "ELAN SYSTEMS", "ELAN" },
+	{ 0x0050C2, 0xF27000, 0xF27FFF, "Bucher Automation Budapest", "BUCHER-AUTOMATION-BUDAPEST" },
 	{ 0x0050C2, 0xF28000, 0xF28FFF, "Vertex Antennentechnik GmbH", "VERTEX-ANTENNENTECHNIK" },
 	{ 0x0050C2, 0xF29000, 0xF29FFF, "RADYNE CORPORATION", "RADYNE" },
 	{ 0x0050C2, 0xF2A000, 0xF2AFFF, "ACD Elektronik GmbH", "ACD-ELEKTRONIK" },
@@ -3977,7 +3977,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xF80000, 0xF80FFF, "SYS TEC electronic GmbH", "SYS-TEC" },
 	{ 0x0050C2, 0xF81000, 0xF81FFF, "PLDA", "PLDA" },
 	{ 0x0050C2, 0xF82000, 0xF82FFF, "Sincair Systems International", "SINCAIR" },
-	{ 0x0050C2, 0xF83000, 0xF83FFF, "GSP Sprachtechnologie GmbH", "GSP-SPRACHTECHNOLOGIE" },
+	{ 0x0050C2, 0xF83000, 0xF83FFF, "Televic Rail GmbH", "TELEVIC-RAIL" },
 	{ 0x0050C2, 0xF84000, 0xF84FFF, "Dynon Instruments", "DYNON-INSTRUMENTS" },
 	{ 0x0050C2, 0xF85000, 0xF85FFF, "Enetics, Inc.", "ENETICS" },
 	{ 0x0050C2, 0xF86000, 0xF86FFF, "Audio Power Labs", "AUDIO-POWER-LABS" },
@@ -4063,7 +4063,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xFD7000, 0xFD7FFF, "DEUTA-WERKE GmbH", "DEUTA-WERKE" },
 	{ 0x0050C2, 0xFD8000, 0xFD8FFF, "Ease Inc.", "EASE" },
 	{ 0x0050C2, 0xFD9000, 0xFD9FFF, "Figment Design Laboratories", "FIGMENT-DESIGN-LABORATORIES" },
-	{ 0x0050C2, 0xFDA000, 0xFDAFFF, "ELAN SYSTEMS", "ELAN" },
+	{ 0x0050C2, 0xFDA000, 0xFDAFFF, "Bucher Automation Budapest", "BUCHER-AUTOMATION-BUDAPEST" },
 	{ 0x0050C2, 0xFDB000, 0xFDBFFF, "The Security Center Inc", "THE-SECURITY-CENTER" },
 	{ 0x0050C2, 0xFDC000, 0xFDCFFF, "QUERCUS TECHNOLOGIES, S.L.", "QUERCUS-TECHNOLOGIES" },
 	{ 0x0050C2, 0xFDD000, 0xFDDFFF, "Toptech Systems, Inc.", "TOPTECH" },
@@ -4074,7 +4074,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xFE2000, 0xFE2FFF, "Pulsotronic Anlagentechnik GmbH", "PULSOTRONIC-ANLAGENTECHNIK" },
 	{ 0x0050C2, 0xFE3000, 0xFE3FFF, "Private", "PRIVATE" },
 	{ 0x0050C2, 0xFE4000, 0xFE4FFF, "RTT Mobile Interpretation", "RTT-MOBILE-INTERPRETATION" },
-	{ 0x0050C2, 0xFE5000, 0xFE5FFF, "Scandinova Systems AB", "SCANDINOVA-AB" },
+	{ 0x0050C2, 0xFE5000, 0xFE5FFF, "ScandiNova Systems", "SCANDINOVA" },
 	{ 0x0050C2, 0xFE6000, 0xFE6FFF, "Exibea AB", "EXIBEA-AB" },
 	{ 0x0050C2, 0xFE7000, 0xFE7FFF, "Erhardt+Leimer GmbH", "ERHARDT+LEIMER" },
 	{ 0x0050C2, 0xFE8000, 0xFE8FFF, "Mango DSP, Inc.", "MANGO-DSP" },
@@ -4311,7 +4311,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x0CF000, 0x0CFFFF, "Clark-MXR, Inc.", "CLARK-MXR" },
 	{ 0x40D855, 0x0D0000, 0x0D0FFF, "Icraft Oy", "ICRAFT-OY" },
 	{ 0x40D855, 0x0D1000, 0x0D1FFF, "Cantada Inc", "CANTADA" },
-	{ 0x40D855, 0x0D2000, 0x0D2FFF, "ELAN SYSTEMS", "ELAN" },
+	{ 0x40D855, 0x0D2000, 0x0D2FFF, "Bucher Automation Budapest", "BUCHER-AUTOMATION-BUDAPEST" },
 	{ 0x40D855, 0x0D3000, 0x0D3FFF, "LECO Corporation", "LECO" },
 	{ 0x40D855, 0x0D4000, 0x0D4FFF, "Mitsubishi Heavy Industries, Ltd.", "MITSUBISHI-HEAVY-INDUSTRIES" },
 	{ 0x40D855, 0x0D5000, 0x0D5FFF, "Shimizu Electric Co., Ltd.", "SHIMIZU-ELECTRIC" },
@@ -4405,7 +4405,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x12D000, 0x12DFFF, "Biotage Sweden AB", "BIOTAGE-SWEDEN-AB" },
 	{ 0x40D855, 0x12E000, 0x12EFFF, "Canfield Scientific, Inc.", "CANFIELD-SCIENTIFIC" },
 	{ 0x40D855, 0x12F000, 0x12FFFF, "Private", "PRIVATE" },
-	{ 0x40D855, 0x130000, 0x130FFF, "GSP Sprachtechnologie GmbH", "GSP-SPRACHTECHNOLOGIE" },
+	{ 0x40D855, 0x130000, 0x130FFF, "Televic Rail GmbH", "TELEVIC-RAIL" },
 	{ 0x40D855, 0x131000, 0x131FFF, "EMAC, Inc.", "EMAC" },
 	{ 0x40D855, 0x132000, 0x132FFF, "AeroVision Avionics, Inc", "AEROVISION-AVIONICS" },
 	{ 0x40D855, 0x133000, 0x133FFF, "TATTILE SRL", "TATTILE-SRL" },
@@ -4529,7 +4529,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x1A9000, 0x1A9FFF, "Lubino s.r.o.", "LUBINO-S-R-O" },
 	{ 0x40D855, 0x1AA000, 0x1AAFFF, "Broachlink Technology Co.,Limited", "BROACHLINK" },
 	{ 0x40D855, 0x1AB000, 0x1ABFFF, "Rosslare Enterprises Limited", "ROSSLARE-ENTERPRISES" },
-	{ 0x40D855, 0x1AC000, 0x1ACFFF, "ELAN SYSTEMS", "ELAN" },
+	{ 0x40D855, 0x1AC000, 0x1ACFFF, "Bucher Automation Budapest", "BUCHER-AUTOMATION-BUDAPEST" },
 	{ 0x40D855, 0x1AD000, 0x1ADFFF, "WICHER DIGITAL TECHNIK", "WICHER-DIGITAL-TECHNIK" },
 	{ 0x40D855, 0x1AE000, 0x1AEFFF, "Autonomous Solutions, Inc", "AUTONOMOUS-SOLUTIONS" },
 	{ 0x40D855, 0x1AF000, 0x1AFFFF, "Vigitron Inc.", "VIGITRON" },
