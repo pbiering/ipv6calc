@@ -1,0 +1,10 @@
+# Project    : ipv6calc/doc
+# File       : Makefile
+# Copyright  : 2023-2023 by Peter Bieringer <pb (at) bieringer.de>
+#
+# Information:
+#  Makefile for doc
+#
+
+doc:	ipv6calc.lyx
+	./generate.sh

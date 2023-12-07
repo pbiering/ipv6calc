@@ -6,28 +6,30 @@
 # File       : generate.sh
 # Copyright  : 2003-2023 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
-# Requires: openjade opens
-# Optional: lyx docbook-utils
+# Requires: openjade opensp lyx docbook-utils
 #
 # 20231206/PB: change from "jade" to "openjade" (anyhow a softlink since at least EL6)
 # 20231206/PB: add option to generate directly all from LyX file
+# 20231207/PB: drop support of SGML file, LyX file is now mandatory
 
 #export SP_ENCODING=UTF-8
 export SP_CHARSET_FIXED=yes
 
 help() {
 	cat <<END
-$(basename "$0") [-L <file>] [<file>]
+$(basename "$0") [-L <file>]
 	-L <file>	Lyx file
-	<file>		SGML file
 END
 }
 
 # parse options
-while getopts "h?L:" opt; do
+while getopts "h?L:S:" opt; do
     case $opt in
 	L)
 		file_lyx="$OPTARG"
+		;;
+	S)
+		file_sgml="$OPTARG"
 		;;
 	h|\?)
 		help
@@ -40,18 +42,15 @@ while getopts "h?L:" opt; do
     esac
 done
 
-shift $[ $OPTIND - 1 ]
-
-if [ -z "$1" ]; then
-	file_sgml="ipv6calc.sgml"
-else
-	file_sgml="$1"
+if [ -z "$file_lxy" ]; then
+	file_lyx="ipv6calc.lyx"
 fi
 
-echo "INF: Used SGML file: $file_sgml"
+echo "INF: Used LyX file: $file_lyx"
 
-file_base="`basename $file_sgml .sgml`"
+file_base="`basename $file_lyx .lyx`"
 
+file_sgml="${file_base}.sgml"
 file_html="${file_base}.html"
 file_xml="${file_base}.xml"
 
@@ -73,17 +72,16 @@ if [ ! -f "$file_dsl" ]; then
 	exit 1
 fi
 
-if [ ! -f $file_sgml ]; then
-	echo "ERR: Missing SGML file, perhaps export DocBook of LyX won't work"
-	exit 1
-fi
-
+## Validate SGML
 validate_sgml() {
-	echo "INF: Validate SGML code '$file_sgml'"
-	set -x
+	if [ ! -f $file_sgml ]; then
+		echo "ERR: Missing SGML file, perhaps export DocBook of LyX won't work"
+		return 1
+	fi
+
+	echo "INF: Validation of SGML '$file_sgml'"
 	onsgmls -s $file_sgml
 	local result=$?
-	set +x
 	if [ $result -gt 0 ]; then
 		echo "ERR: Validation results in errors!"
 		return 1
@@ -92,13 +90,11 @@ validate_sgml() {
 	fi
 }
 
-
+## Create HTML single page from SGML
 create_html_singlepage() {
 	echo "INF: Create HTML singlepage '$file_html'"
-	set -x
 	openjade -t sgml -i html -V nochunks -d "${file_dsl}#html" $file_sgml >$file_html
 	local retval=$?
-	set +x
 	if [ $retval -eq 0 ]; then
 		if head -1 $file_html | grep -q DOCTYPE; then
 			echo "INF: Create HTML singlepage - done"
@@ -110,8 +106,8 @@ create_html_singlepage() {
 	return $retval
 }
 
-
-export_sgml() {
+## export SGML+XML from LyX
+export_sgml_xml() {
 	if [ ! -f "$file_lyx" ]; then
 		echo "ERR: given Lyx file is not existing: $file_lyx"
 		return 1
@@ -132,16 +128,16 @@ export_sgml() {
 
 	echo "INF: Export LyX->SGML"
 	$lyxBin --export docbook $file_lyx || return 1
+	echo "INF: Export LyX->SGML successful"
 
 	echo "INF: Export LyX->XML"
 	$lyxBin --export docbook-xml $file_lyx || return 1
+	echo "INF: Export LyX->XML successful"
 }
 
 
 ### Main
-if [ -n "$file_lyx" ]; then
-	export_sgml || exit 1
-fi
+export_sgml_xml || exit 1
 
 validate_sgml || exit 1
 

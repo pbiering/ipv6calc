@@ -1469,6 +1469,7 @@ AC_CONFIG_FILES([
 		Makefile
 		md5/Makefile
 		tools/Makefile
+		doc/Makefile
 		getopt/Makefile
 		ipv6calc/Makefile
 		lib/Makefile
