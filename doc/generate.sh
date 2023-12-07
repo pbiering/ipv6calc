@@ -42,7 +42,7 @@ while getopts "h?L:S:" opt; do
     esac
 done
 
-if [ -z "$file_lxy" ]; then
+if [ -z "$file_lyx" ]; then
 	file_lyx="ipv6calc.lyx"
 fi
 
