@@ -156,6 +156,9 @@ sub normalize($) {
 
 		# remove ? (to avoid trigraphs issues)
 		$oui =~ s/\?//g;
+
+		# remove \ (to avoid misinterpretion by compiler)
+		$oui =~ s/\\//g;
 	
 		# Some final cleanup
 		$oui =~ s/-INT-L$//ig;
@@ -222,6 +225,8 @@ while (<IN>) {
 		};
 
 		$company =~ s/"//ig;
+
+		$company =~ s/\\/\\\\/ig; # escape \
 
                 # kill leading spaces
 		$company =~ s/^ *//g;
