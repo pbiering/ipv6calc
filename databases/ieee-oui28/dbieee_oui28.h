@@ -2016,7 +2016,7 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x5CF838, 0xA00000, 0xAFFFFF, "Semsotec GmbH", "SEMSOTEC" },
 	{ 0x5CF838, 0xB00000, 0xBFFFFF, "trilogik GmbH", "TRILOGIK" },
 	{ 0x5CF838, 0xC00000, 0xCFFFFF, "Sichuan Zhongguang Lightning Protection Technologies Co., Ltd.", "SICHUAN-ZHONGGUANG-LIGHTNING-PROTECTION-TECHNOLOGIES" },
-	{ 0x5CF838, 0xD00000, 0xDFFFFF, "Watts A\S", "WATTS-A\S" },
+	{ 0x5CF838, 0xD00000, 0xDFFFFF, "Watts A\\S", "WATTS-AS" },
 	{ 0x5CF838, 0xE00000, 0xEFFFFF, "Guangzhou Duge Technology Co.,LTD", "GUANGZHOU-DUGE" },
 	{ 0x601592, 0x000000, 0x0FFFFF, "S Labs sp. z o.o.", "S-LABS-SP-Z-O-O" },
 	{ 0x601592, 0x100000, 0x1FFFFF, "RTDS Technologies Inc.", "RTDS-TECHNOLOGIES" },
