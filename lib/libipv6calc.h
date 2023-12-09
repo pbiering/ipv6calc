@@ -66,12 +66,13 @@
 #define UNUSED(x) (void)(x)
 
 /* string functions */
+// STRCLR: clears a string
 #define STRCLR(dst) \
 	if (strlen(dst) > 0) { \
 		dst[0] = '\0'; \
 	};
 
-// STRCAT
+// STRCAT: concenate a string
 //  case 1: src can be added to dst completly
 //  case 2: src is too long to be added to dst, add only what is available but leave space for ...
 //  case 3: dst is already exhausted, override end with ...
