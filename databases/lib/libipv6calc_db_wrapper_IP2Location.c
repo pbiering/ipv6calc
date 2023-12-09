@@ -1245,7 +1245,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 char *libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used(void) {
 	unsigned int db;
 	IP2Location *loc;
-	char tempstring[IPV6CALC_STRING_MAX];
+	char tempstring[IPV6CALC_STRING_MAX] = "";
 	char *info;
 
 	unsigned int db_lite_used = 0;
@@ -1294,7 +1294,8 @@ char *libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used(void) {
 	};
 
 	if (db_lite_used == 1) {
-		snprintf(tempstring, sizeof(tempstring), "%s / This site or product includes IP2Location LITE data available from http://lite.ip2location.com", ip2location_db_usage_string);
+		STRCAT(tempstring, ip2location_db_usage_string);
+		STRCAT(tempstring, " / This site or product includes IP2Location LITE data available from http://lite.ip2location.com");
 		snprintf(ip2location_db_usage_string, sizeof(ip2location_db_usage_string), "%s", tempstring);
 	};
 
@@ -1655,7 +1656,7 @@ END_libipv6calc_db_wrapper:
  * wrapper: IP2Location_database_info
  */
 char *libipv6calc_db_wrapper_IP2Location_database_info(IP2Location *loc, const int level_verbose, const int entry, const int flag_copyright) {
-	static char resultstring[IPV6CALC_STRING_MAX];
+	static char resultstring[IPV6CALC_STRING_MAX2];
 	char tempstring[IPV6CALC_STRING_MAX] = "";
 
 	uint32_t entries_ipv4 = 0;
@@ -2608,16 +2609,16 @@ int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddr
 
 				// add description
 				char *token, *cptr = NULL, **ptrptr;
-				char tempstring[IPV6CALC_STRING_MAX] = "";
-				char tempstring2[IPV6CALC_STRING_MAX] = "";
+				char tempstring[IPV6CALC_DB_SIZE_USAGE_TYPE] = "";
+				char tempstring2[IPV6CALC_DB_SIZE_USAGE_TYPE] = "";
 				ptrptr = &cptr;
 				token = strtok_r(record->usagetype, "/", ptrptr);
 				while (token != NULL) {
 					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "split usage_type: %s", token);
 					const char *desc = libipv6calc_db_wrapper_IP2Location_UsageType_description(token);
 					if (desc != NULL) {
-						snprintf(tempstring2, sizeof(tempstring2), "%s%s%s", tempstring, strlen(tempstring) > 0 ? "," : "", desc);
-						snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
+						STRCAT(tempstring, strlen(tempstring) > 0 ? "," : "");
+						STRCAT(tempstring, desc);
 					};
 					// get next token
 					token = strtok_r(NULL, " ", ptrptr);
@@ -2625,7 +2626,10 @@ int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddr
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "usage_type description: %s", tempstring);
 
 				if (strlen(tempstring) > 0) {
-					snprintf(tempstring2, sizeof(tempstring2), "%s (%s)", recordp->usage_type, tempstring);
+					STRCAT(tempstring2, recordp->usage_type);
+					STRCAT(tempstring2, " (");
+					STRCAT(tempstring2, tempstring);
+					STRCAT(tempstring2, ")");
 					snprintf(recordp->usage_type, IPV6CALC_DB_SIZE_USAGE_TYPE, "%s", tempstring2);
 				};
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "usage_type complete: %s", recordp->usage_type);

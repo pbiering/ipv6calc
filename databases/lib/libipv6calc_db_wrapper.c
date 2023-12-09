@@ -3366,30 +3366,29 @@ int libipv6calc_db_cc_filter_check(const s_ipv6calc_filter_db_cc *filter, const 
 	char cc[IPV6CALC_COUNTRYCODE_STRING_MAX];
 
 	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper)
-	char tempstring[IPV6CALC_STRING_MAX];
-	char tempstring2[IPV6CALC_STRING_MAX];
+	char tempstring[IPV6CALC_STRING_MAX] = "";
 	int i;
 
 	if (filter->cc_must_have_max > 0) {
-		tempstring2[0] = '\0';
+		STRCLR(tempstring);
 		for (i = 0; i < filter->cc_must_have_max; i++) {
 			libipv6calc_db_wrapper_country_code_by_cc_index(cc, sizeof(cc), filter->cc_must_have[i]);
-			snprintf(tempstring, sizeof(tempstring), "%s%s%s", tempstring2, (i > 0) ? " " : "", cc);
-			snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+			STRCAT(tempstring, (i > 0) ? " " : "");
+			STRCAT(tempstring, cc);
 		};
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.cc filter 'must_have'   : %s", tempstring2);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.cc filter 'must_have'   : %s", tempstring);
 	} else {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.cc filter 'must_have'   : --"); 
 	};
 
 	if (filter->cc_may_not_have_max > 0) {
-		tempstring2[0] = '\0';
+		STRCLR(tempstring);
 		for (i = 0; i < filter->cc_may_not_have_max; i++) {
 			libipv6calc_db_wrapper_country_code_by_cc_index(cc, sizeof(cc), filter->cc_may_not_have[i]);
-			snprintf(tempstring, sizeof(tempstring), "%s%s%s", tempstring2, (i > 0) ? " " : "", cc);
-			snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+			STRCAT(tempstring, (i > 0) ? " " : "");
+			STRCAT(tempstring, cc);
 		};
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.cc filter 'may_not_have': %s", tempstring2);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.cc filter 'may_not_have': %s", tempstring);
 	} else {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.cc filter 'may_not_have': --"); 
 	};
@@ -3568,27 +3567,30 @@ int libipv6calc_db_asn_filter_check(const s_ipv6calc_filter_db_asn *filter, cons
 	int result = 0, r;
 
 	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper)
-	char tempstring[IPV6CALC_STRING_MAX];
+	char tempstring[IPV6CALC_STRING_MAX] = "";
 	char tempstring2[IPV6CALC_STRING_MAX];
 	int i;
+
 	if (filter->asn_must_have_max > 0) {
-		tempstring2[0] = '\0';
+		STRCLR(tempstring);
 		for (i = 0; i < filter->asn_must_have_max; i++) {
-			snprintf(tempstring, sizeof(tempstring), "%s%s%u", tempstring2, (i > 0) ? " " : "", filter->asn_must_have[i]);
-			snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+			STRCAT(tempstring, (i > 0) ? " " : "");
+			snprintf(tempstring2, sizeof(tempstring2), "%u", filter->asn_must_have[i]);
+			STRCAT(tempstring, tempstring2);
 		};
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.asn filter 'must_have'   : %s", tempstring2);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.asn filter 'must_have'   : %s", tempstring);
 	} else {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.asn filter 'must_have'   : --"); 
 	};
 
 	if (filter->asn_may_not_have_max > 0) {
-		tempstring2[0] = '\0';
+		STRCLR(tempstring);
 		for (i = 0; i < filter->asn_may_not_have_max; i++) {
-			snprintf(tempstring, sizeof(tempstring), "%s%s%u", tempstring2, (i > 0) ? " " : "", filter->asn_may_not_have[i]);
-			snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+			STRCAT(tempstring, (i > 0) ? " " : "");
+			snprintf(tempstring2, sizeof(tempstring2), "%u", filter->asn_may_not_have[i]);
+			STRCAT(tempstring, tempstring2);
 		};
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.asn filter 'may_not_have': %s", tempstring2);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.asn filter 'may_not_have': %s", tempstring);
 	} else {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.asn filter 'may_not_have': --"); 
 	};
@@ -3762,27 +3764,27 @@ int libipv6calc_db_registry_filter_check(const s_ipv6calc_filter_db_registry *fi
 	int result = 0, r;
 
 	DEBUGSECTION_BEGIN(DEBUG_libipv6calc_db_wrapper)
-	char tempstring[IPV6CALC_STRING_MAX];
-	char tempstring2[IPV6CALC_STRING_MAX];
+	char tempstring[IPV6CALC_STRING_MAX] = "";
 	int i;
+
 	if (filter->registry_must_have_max > 0) {
-		tempstring2[0] = '\0';
+		STRCLR(tempstring);
 		for (i = 0; i < filter->registry_must_have_max; i++) {
-			snprintf(tempstring, sizeof(tempstring), "%s%s%s", tempstring2, (i > 0) ? " " : "", libipv6calc_registry_string_by_num(filter->registry_must_have[i]));
-			snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+			STRCAT(tempstring, (i > 0) ? " " : "");
+			STRCAT(tempstring, libipv6calc_registry_string_by_num(filter->registry_must_have[i]));
 		};
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.registry filter 'must_have'   : %s", tempstring2);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.registry filter 'must_have'   : %s", tempstring);
 	} else {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.registry filter 'must_have'   : --"); 
 	};
 
 	if (filter->registry_may_not_have_max > 0) {
-		tempstring2[0] = '\0';
+		STRCLR(tempstring);
 		for (i = 0; i < filter->registry_may_not_have_max; i++) {
-			snprintf(tempstring, sizeof(tempstring), "%s%s%s", tempstring2, (i > 0) ? " " : "", libipv6calc_registry_string_by_num(filter->registry_may_not_have[i]));
-			snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+			STRCAT(tempstring, (i > 0) ? " " : "");
+			STRCAT(tempstring, libipv6calc_registry_string_by_num(filter->registry_may_not_have[i]));
 		};
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.registry filter 'may_not_have': %s", tempstring2);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.registry filter 'may_not_have': %s", tempstring);
 	} else {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "db.registry filter 'may_not_have': --"); 
 	};

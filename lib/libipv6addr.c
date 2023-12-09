@@ -1610,7 +1610,7 @@ static int ipv6addrstruct_to_uncompaddr(const ipv6calc_ipv6addr *ipv6addrp, char
 static int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
 	int retval = 1;
 	unsigned int max, i;
-	char tempstring1[IPV6CALC_STRING_MAX], tempstring2[IPV6CALC_STRING_MAX];
+	char tempstring1[IPV6CALC_STRING_MAX] = "", tempstring2[IPV6CALC_STRING_MAX] = "";
 	
 	DEBUGPRINT_NA(DEBUG_libipv6addr, "called");
 
@@ -1628,23 +1628,23 @@ static int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp
 
 	max = ( (unsigned int) ipv6addrp->prefixlength - 1 ) / 16u;
 	i = 0;
-	tempstring1[0] = '\0';
+	STRCLR(tempstring1);
 	while (i <= max ) {
 		if ( i < max ) {
 			if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
-				snprintf(tempstring2, sizeof(tempstring2), "%s%04x:", tempstring1, (unsigned int) ipv6addr_getword(ipv6addrp, i));
+				snprintf(tempstring2, sizeof(tempstring2), "%04x:", (unsigned int) ipv6addr_getword(ipv6addrp, i));
 			} else {
-				snprintf(tempstring2, sizeof(tempstring2), "%s%x:", tempstring1, (unsigned int) ipv6addr_getword(ipv6addrp, i));
+				snprintf(tempstring2, sizeof(tempstring2), "%x:", (unsigned int) ipv6addr_getword(ipv6addrp, i));
 			};
 		} else {
 			if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
-				snprintf(tempstring2, sizeof(tempstring2), "%s%04x", tempstring1, (unsigned int) ipv6addr_getword(ipv6addrp, i));
+				snprintf(tempstring2, sizeof(tempstring2), "%04x", (unsigned int) ipv6addr_getword(ipv6addrp, i));
 			} else {
-				snprintf(tempstring2, sizeof(tempstring2), "%s%x", tempstring1, (unsigned int) ipv6addr_getword(ipv6addrp, i));
+				snprintf(tempstring2, sizeof(tempstring2), "%x", (unsigned int) ipv6addr_getword(ipv6addrp, i));
 			};
 		};
 		i++;
-		snprintf(tempstring1, sizeof(tempstring1), "%s", tempstring2);
+		STRCAT(tempstring1, tempstring2);
 	};
 
 	if ((ipv6addrp->flag_prefixuse == 1) && ((formatoptions & (FORMATOPTION_no_prefixlength | FORMATOPTION_printprefix)) == 0))  {
@@ -1671,7 +1671,7 @@ static int ipv6addrstruct_to_uncompaddrprefix(const ipv6calc_ipv6addr *ipv6addrp
 static int ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
 	int retval = 1;
 	unsigned int max, i;
-	char tempstring1[IPV6CALC_STRING_MAX], tempstring2[IPV6CALC_STRING_MAX];
+	char tempstring1[IPV6CALC_STRING_MAX] = "", tempstring2[IPV6CALC_STRING_MAX] = "";
 
 	DEBUGPRINT_NA(DEBUG_libipv6addr, "called");
 
@@ -1689,10 +1689,10 @@ static int ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp
 
 	max = 7;
 	i = (unsigned int) ipv6addrp->prefixlength / 16u;
-	tempstring1[0] = '\0';
+	STRCLR(tempstring1);
 	while (i <= max ) {
 		if ( ( ( ipv6addrp->typeinfo & (IPV6_ADDR_COMPATv4 | IPV6_ADDR_MAPPED)) != 0 ) && ( i == 6 ) ) {
-			snprintf(tempstring2, sizeof(tempstring2), "%s%u.%u.%u.%u", tempstring1, \
+			snprintf(tempstring2, sizeof(tempstring2), "%u.%u.%u.%u", \
 				(unsigned int) ipv6addrp->in6_addr.s6_addr[12], \
 				(unsigned int) ipv6addrp->in6_addr.s6_addr[13], \
 				(unsigned int) ipv6addrp->in6_addr.s6_addr[14], \
@@ -1701,19 +1701,19 @@ static int ipv6addrstruct_to_uncompaddrsuffix(const ipv6calc_ipv6addr *ipv6addrp
 			i = max;
 		} else if ( i < max ) {
 			if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
-				snprintf(tempstring2, sizeof(tempstring2), "%s%04x:", tempstring1, (unsigned int) ipv6addr_getword(ipv6addrp, i));
+				snprintf(tempstring2, sizeof(tempstring2), "%04x:", (unsigned int) ipv6addr_getword(ipv6addrp, i));
 			} else {
-				snprintf(tempstring2, sizeof(tempstring2), "%s%x:", tempstring1, (unsigned int) ipv6addr_getword(ipv6addrp, i));
+				snprintf(tempstring2, sizeof(tempstring2), "%x:", (unsigned int) ipv6addr_getword(ipv6addrp, i));
 			};
 		} else {
 			if ( (formatoptions & FORMATOPTION_printfulluncompressed) != 0 ) {
-				snprintf(tempstring2, sizeof(tempstring2), "%s%04x", tempstring1, (unsigned int) ipv6addr_getword(ipv6addrp, i));
+				snprintf(tempstring2, sizeof(tempstring2), "%04x", (unsigned int) ipv6addr_getword(ipv6addrp, i));
 			} else {
-				snprintf(tempstring2, sizeof(tempstring2), "%s%x", tempstring1, (unsigned int) ipv6addr_getword(ipv6addrp, i));
+				snprintf(tempstring2, sizeof(tempstring2), "%x", (unsigned int) ipv6addr_getword(ipv6addrp, i));
 			};
 		};
 		i++;
-		snprintf(tempstring1, sizeof(tempstring1), "%s", tempstring2);
+		STRCAT(tempstring1, tempstring2);
 	};
 	snprintf(resultstring, resultstring_length, "%s", tempstring1);
 

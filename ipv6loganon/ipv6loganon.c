@@ -568,7 +568,8 @@ static int anonymizetoken(char *resultstring, const size_t resultstring_length, 
 
 		/* store key and value */
 		snprintf(cache_lru_key_token[cache_lru_last - 1], IPV6CALC_STRING_MAX, "%s", token);
-		snprintf(cache_lru_value[cache_lru_last - 1], IPV6CALC_STRING_MAX, "%s", resultstring);
+		STRCLR(cache_lru_value[cache_lru_last - 1]);
+		STRCAT(cache_lru_value[cache_lru_last - 1], resultstring);
 		DEBUGPRINT_WA(DEBUG_ipv6loganon_cache, "LRU cache: fill line=%d key_token=%s value=%s", cache_lru_last - 1, cache_lru_key_token[cache_lru_last - 1], cache_lru_value[cache_lru_last - 1]);
 	};
 

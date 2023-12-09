@@ -379,23 +379,23 @@ static void printfooter(const uint32_t formatoptions) {
 		libipv6calc_db_wrapper_features(tempstring, sizeof(tempstring));
 
 		if (feature_zeroize == 1) {
-			snprintf(tempstring2, sizeof(tempstring2), "%s%sANON_ZEROISE", tempstring, strlen(tempstring) > 0 ? " " : "");
-			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
+			STRCAT(tempstring, strlen(tempstring) > 0 ? " " : "");
+			STRCAT(tempstring, "ANON_ZEROISE");
 		};
 
 		if (feature_anon == 1) {
-			snprintf(tempstring2, sizeof(tempstring2), "%s%sANON_ANONYMIZE", tempstring, strlen(tempstring) > 0 ? " " : "");
-			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
+			STRCAT(tempstring, strlen(tempstring) > 0 ? " " : "");
+			STRCAT(tempstring, "ANON_ANONYMIZE");
 		};
 
 		if (feature_kp == 1) {
-			snprintf(tempstring2, sizeof(tempstring2), "%s%sANON_KEEP-TYPE-ASN-CC", tempstring, strlen(tempstring) > 0 ? " " : "");
-			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
+			STRCAT(tempstring, strlen(tempstring) > 0 ? " " : "");
+			STRCAT(tempstring, "ANON_KEEP-TYPE-ASN-CC");
 		};
 
 		if (feature_kg == 1) {
-			snprintf(tempstring2, sizeof(tempstring2), "%s%sANON_KEEP-TYPE-GEONAMEID", tempstring, strlen(tempstring) > 0 ? " " : "");
-			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
+			STRCAT(tempstring, strlen(tempstring) > 0 ? " " : "");
+			STRCAT(tempstring, "ANON_KEEP-TYPE-GEONAMEID");
 		};
 
 		printout("IPV6CALC_FEATURES", tempstring, formatoptions | FORMATOPTION_mr_quote_default);
@@ -601,7 +601,7 @@ static void print_external(const ipv6calc_ipaddr *ipaddrp, const uint32_t format
 
 /* print IPv4 address */
 static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t formatoptions, const char *string) {
-	char tempstring[IPV6CALC_STRING_MAX] = "", tempstring2[IPV6CALC_STRING_MAX] = "", tempstring3[IPV6CALC_STRING_MAX] = "", helpstring[IPV6CALC_STRING_MAX] = "";
+	char tempstring[IPV6CALC_STRING_MAX] = "", tempstring2[IPV6CALC_STRING_MAX] = "", tempstring3[IPV6CALC_STRING_MAX] = "";
 	char tempipv4string[IPV6CALC_STRING_MAX] = "";
 	char embeddedipv4string[IPV6CALC_STRING_MAX] = "";
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable), as_num32 = ASNUM_AS_UNKNOWN;
@@ -629,7 +629,10 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	CONVERT_IPV4ADDRP_IPADDR(ipv4addrp, ipaddr);
 
 	if ((formatoptions & FORMATOPTION_printembedded) != 0) {
-		snprintf(embeddedipv4string, sizeof(embeddedipv4string), "[%s]", tempipv4string);
+		STRCLR(embeddedipv4string);
+		STRCAT(embeddedipv4string, "[");
+		STRCAT(embeddedipv4string, tempipv4string);
+		STRCAT(embeddedipv4string, "]");
 	};
 
 	ipv4addr_copy(ipv4addr_anon_ptr, ipv4addrp); /* copy structure */
@@ -677,8 +680,8 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		snprintf(tempstring, sizeof(tempstring), "%s", "ipv4");
 		for (i = 0; i < ipv6calc_ipv4addrtypestrings_entries; i++ ) {
 			if ((ipv4addrp->typeinfo & ipv6calc_ipv4addrtypestrings[i].number) != 0) {
-				snprintf(helpstring, sizeof(helpstring), "%s,%s", tempstring, ipv6calc_ipv4addrtypestrings[i].token);
-				snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
+				STRCAT(tempstring, ",");
+				STRCAT(tempstring, ipv6calc_ipv4addrtypestrings[i].token);
 			};
 		};
 		printout2("IPV4_TYPE", embeddedipv4string, tempstring, formatoptions);
@@ -811,8 +814,9 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		r = libipv6calc_db_wrapper_info_by_ipv4addr(ipv4addrp, tempstring3, sizeof(tempstring3));
 		if (r == 0) {
 			// info found, append to registry
-			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
-			snprintf(tempstring2, sizeof(tempstring2), "%s(%s)", tempstring, tempstring3);
+			STRCAT(tempstring2, "(");
+			STRCAT(tempstring2, tempstring3);
+			STRCAT(tempstring2, ")");
 		};
 	};
 
@@ -1111,14 +1115,14 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		snprintf(tempstring, sizeof(tempstring), "%s", "ipv6");
 		for (i = 0; i < ipv6calc_ipv6addrtypestrings_entries; i++ ) {
 			if ((ipv6addrp->typeinfo & ipv6calc_ipv6addrtypestrings[i].number) != 0) {
-				snprintf(helpstring, sizeof(helpstring), "%s,%s", tempstring, ipv6calc_ipv6addrtypestrings[i].token);
-				snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
+				STRCAT(tempstring, ",");
+				STRCAT(tempstring, ipv6calc_ipv6addrtypestrings[i].token);
 			};
 		};
 		for (i = 0; i < ipv6calc_ipv6addr_type2_strings_entries; i++ ) {
 			if ((ipv6addrp->typeinfo2 & ipv6calc_ipv6addr_type2_strings[i].number) != 0) {
-				snprintf(helpstring, sizeof(helpstring), "%s,%s", tempstring, ipv6calc_ipv6addr_type2_strings[i].token);
-				snprintf(tempstring, sizeof(tempstring), "%s", helpstring);
+				STRCAT(tempstring, ",");
+				STRCAT(tempstring, ipv6calc_ipv6addr_type2_strings[i].token);
 			};
 		};
 		printout("IPV6_TYPE", tempstring, formatoptions);
@@ -1263,8 +1267,9 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		r = libipv6calc_db_wrapper_info_by_ipv6addr(ipv6addrp, tempstring3, sizeof(tempstring3));
 		if (r == 0) {
 			// info found, append to registry
-			snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
-			snprintf(tempstring2, sizeof(tempstring2), "%s(%s)", tempstring, tempstring3);
+			STRCAT(tempstring2, "(");
+			STRCAT(tempstring2, tempstring3);
+			STRCAT(tempstring2, ")");
 		};
 	};
 

@@ -1728,7 +1728,8 @@ PIPE_input:
 				/* skip everything */
 				DEBUGPRINT_WA(DEBUG_ipv6calc_general, "filter result SKIP (%d): '%s'", result, linebuffer);
 			} else {
-				snprintf(resultstring, sizeof(resultstring), "%s", linebuffer);
+				STRCLR(resultstring);
+				STRCAT(resultstring, linebuffer);
 			};
 			goto RESULT_print;
 
@@ -1884,8 +1885,8 @@ PIPE_input:
 			if (i == 0) {
 				retval = 2;
 			} else {
-				snprintf(resultstring2, sizeof(resultstring2), "%s", "");
-				snprintf(resultstring3, sizeof(resultstring3), "%s", "");
+				STRCLR(resultstring2);
+				STRCLR(resultstring3);
 
 				// combine results
 				for (a = IPV6CALC_TEST_LIST_MIN; a <= IPV6CALC_TEST_LIST_MAX; a++) {
@@ -1897,31 +1898,46 @@ PIPE_input:
 					if (result_a[a] >= 0) {
 						switch (a) {
 							case IPV6CALC_TEST_PREFIX:
-								snprintf(resultstring2, sizeof(resultstring2), "%s  %s %s", resultstring3,
-									(result_a[a] == 0) ? "inside" : "NOT inside", input_a[a]);
+							case IPV6CALC_TEST_GT:
+							case IPV6CALC_TEST_GE:
+							case IPV6CALC_TEST_LT:
+							case IPV6CALC_TEST_LE:
+								STRCAT(resultstring3, (result_a[a] == 0) ? "  " : "  NOT ");
+								break;
+						};
+
+						switch (a) {
+							case IPV6CALC_TEST_PREFIX:
+								STRCAT(resultstring3, "inside");
 								break;
 
 							case IPV6CALC_TEST_GT:
-								snprintf(resultstring2, sizeof(resultstring2), "%s  %s %s", resultstring3,
-									(result_a[a] == 0) ? "greater than" : "NOT greater than", input_a[a]);
+								STRCAT(resultstring3, "greater than");
 								break;
 
 							case IPV6CALC_TEST_GE:
-								snprintf(resultstring2, sizeof(resultstring2), "%s  %s %s", resultstring3,
-									(result_a[a] == 0) ? "greater/equal than" : "NOT greater/equal than", input_a[a]);
+								STRCAT(resultstring3, "greater/equal than");
 								break;
 
 							case IPV6CALC_TEST_LT:
-								snprintf(resultstring2, sizeof(resultstring2), "%s  %s %s", resultstring3,
-									(result_a[a] == 0) ? "less than" : "NOT less than", input_a[a]);
+								STRCAT(resultstring3, "less than");
 								break;
 
 							case IPV6CALC_TEST_LE:
-								snprintf(resultstring2, sizeof(resultstring2), "%s  %s %s", resultstring3,
-									(result_a[a] == 0) ? "less/equal than" : "NOT less/equal than", input_a[a]);
+								STRCAT(resultstring3, "less/equal than");
 								break;
 						};
-						snprintf(resultstring3, sizeof(resultstring3), "%s", resultstring2);
+
+						switch (a) {
+							case IPV6CALC_TEST_PREFIX:
+							case IPV6CALC_TEST_GT:
+							case IPV6CALC_TEST_GE:
+							case IPV6CALC_TEST_LT:
+							case IPV6CALC_TEST_LE:
+								STRCAT(resultstring3, " ");
+								STRCAT(resultstring3, input_a[a]);
+								break;
+						};
 					};
 				};
 			};
@@ -2163,7 +2179,10 @@ PIPE_input:
 
 			if ((formatoptions & FORMATOPTION_print_iid_var) == FORMATOPTION_print_iid_var) {
 				iid_random_result = ipv6addr_iidrandomdetection(&ipv6addr, &iid_statistics);
-				snprintf(resultstring2, sizeof(resultstring2), "%-40s R=%d h=%7.3f r=%7.3f db= %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d dbh= %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d da= %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d dd= %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d dda= %d", resultstring, \
+				snprintf(resultstring2, sizeof(resultstring2), "%-40s", resultstring);
+				STRCLR(resultstring);
+				STRCAT(resultstring, resultstring2);
+				snprintf(resultstring2, sizeof(resultstring2), " R=%d h=%7.3f r=%7.3f db= %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d dbh= %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d da= %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d dd= %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d dda= %d", \
 					iid_random_result, iid_statistics.hexdigit, iid_statistics.lls_residual, \
 					iid_statistics.digit_blocks[0], iid_statistics.digit_blocks[1], iid_statistics.digit_blocks[2], iid_statistics.digit_blocks[3], iid_statistics.digit_blocks[4], iid_statistics.digit_blocks[5], iid_statistics.digit_blocks[6], iid_statistics.digit_blocks[7], iid_statistics.digit_blocks[8], iid_statistics.digit_blocks[9], iid_statistics.digit_blocks[10], iid_statistics.digit_blocks[11], iid_statistics.digit_blocks[12], iid_statistics.digit_blocks[13], iid_statistics.digit_blocks[14], iid_statistics.digit_blocks[15], \
 					iid_statistics.digit_blocks_hexdigit[0], iid_statistics.digit_blocks_hexdigit[1], iid_statistics.digit_blocks_hexdigit[2], iid_statistics.digit_blocks_hexdigit[3], iid_statistics.digit_blocks_hexdigit[4], iid_statistics.digit_blocks_hexdigit[5], iid_statistics.digit_blocks_hexdigit[6], iid_statistics.digit_blocks_hexdigit[7], iid_statistics.digit_blocks_hexdigit[8], iid_statistics.digit_blocks_hexdigit[9], iid_statistics.digit_blocks_hexdigit[10], iid_statistics.digit_blocks_hexdigit[11], iid_statistics.digit_blocks_hexdigit[12], iid_statistics.digit_blocks_hexdigit[13], iid_statistics.digit_blocks_hexdigit[14], iid_statistics.digit_blocks_hexdigit[15], \
@@ -2172,7 +2191,7 @@ PIPE_input:
 					iid_statistics.digit_delta[16], iid_statistics.digit_delta[17], iid_statistics.digit_delta[18], iid_statistics.digit_delta[19], iid_statistics.digit_delta[20], iid_statistics.digit_delta[21], iid_statistics.digit_delta[22], iid_statistics.digit_delta[23], iid_statistics.digit_delta[24], iid_statistics.digit_delta[25], iid_statistics.digit_delta[26], iid_statistics.digit_delta[27], iid_statistics.digit_delta[28], iid_statistics.digit_delta[29], iid_statistics.digit_delta[30], \
 					iid_statistics.digit_delta_amount
 				);
-				snprintf(resultstring, sizeof(resultstring), "%s", resultstring2);
+				STRCAT(resultstring, resultstring2);
 			};
 			break;
 
@@ -2229,7 +2248,10 @@ PIPE_input:
 			retval = libipv6addr_ipv6addrstruct_to_tokenlsb64(&ipv6addr2, resultstring3, sizeof(resultstring3), formatoptions);
 			
 			/* cat together */
-			snprintf(resultstring, sizeof(resultstring), "%s %s", resultstring2, resultstring3);
+			STRCLR(resultstring);
+			STRCAT(resultstring, resultstring2);
+			STRCAT(resultstring, " ");
+			STRCAT(resultstring, resultstring3);
 			break;
 
 		default:

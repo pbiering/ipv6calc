@@ -549,7 +549,6 @@ END_libipv6calc_db_wrapper:
 char *libipv6calc_db_wrapper_External_database_info(const unsigned int type) {
 	static char resultstring[IPV6CALC_STRING_MAX] = ""; // has to be static because pointer is returned
 	char datastring[IPV6CALC_STRING_MAX];
-	char tempstring[IPV6CALC_STRING_MAX];
 	int ret, i, entry = -1;
 	DB *dbp;
 
@@ -615,8 +614,8 @@ char *libipv6calc_db_wrapper_External_database_info(const unsigned int type) {
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "wrapper_db_unixtime_External=%ld", (long int) wrapper_db_unixtime_External[entry]);
 
 	strftime(datastring, sizeof(datastring), "%Y%m%d-%H%M%S UTC", gmtime(&wrapper_db_unixtime_External[entry]));
-	snprintf(tempstring, sizeof(tempstring), "%s, created: %s", resultstring, datastring);
-	snprintf(resultstring, sizeof(resultstring), "%s", tempstring);
+	STRCAT(resultstring, ", created: ");
+	STRCAT(resultstring, datastring);
 
 END_libipv6calc_db_wrapper_close:
 	libipv6calc_db_wrapper_External_close(dbp);
@@ -1268,16 +1267,16 @@ int libipv6calc_db_wrapper_External_dump(const int selector, const s_ipv6calc_fi
 	if (filter_db_cc->cc_must_have_max > 0) {
 		for (i = 0; i < filter_db_cc->cc_must_have_max; i++) {
 			libipv6calc_db_wrapper_country_code_by_cc_index(cc2, sizeof(cc2), filter_db_cc->cc_must_have[i]);
-			snprintf(tempstring, sizeof(tempstring), "%s %s", filterstring, cc2); 
-			snprintf(filterstring, sizeof(filterstring), "%s", tempstring);
+			STRCAT(filterstring, " ");
+			STRCAT(filterstring, cc2);
 		};
 	};
 
 	if (filter_db_cc->cc_may_not_have_max > 0) {
 		for (i = 0; i < filter_db_cc->cc_may_not_have_max; i++) {
 			libipv6calc_db_wrapper_country_code_by_cc_index(cc2, sizeof(cc2), filter_db_cc->cc_may_not_have[i]);
-			snprintf(tempstring, sizeof(tempstring), "%s ^%s", filterstring, cc2); 
-			snprintf(filterstring, sizeof(filterstring), "%s", tempstring);
+			STRCAT(filterstring, " ");
+			STRCAT(filterstring, cc2);
 		};
 	};
 

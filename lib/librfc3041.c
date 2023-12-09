@@ -49,7 +49,7 @@
 int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv6calc_ipv6addr *newidentifier, ipv6calc_ipv6addr *newtoken) {
 	int retval = 1;
 	unsigned int i;
-	char tempstring[IPV6CALC_STRING_MAX],  tempstring2[IPV6CALC_STRING_MAX];
+	char tempstring[IPV6CALC_STRING_MAX] = "", tempstring2[IPV6CALC_STRING_MAX];
 
 	DEBUGPRINT_WA(DEBUG_librfc3041, "Got identifier '%08x-%08x' and token '%08x-%08x'", (unsigned int) ipv6addr_getdword(identifier, 2), (unsigned int) ipv6addr_getdword(identifier, 3), (unsigned int) ipv6addr_getdword(token, 2), (unsigned int) ipv6addr_getdword(token, 3));
 
@@ -121,11 +121,11 @@ int librfc3041_calc(ipv6calc_ipv6addr *identifier, ipv6calc_ipv6addr *token, ipv
 
 #endif // ENABLE_OPENSSL_EVP_MD5
 
-	tempstring[0] = '\0';
+	STRCLR(tempstring);
 
 	for (i = 0; i < digest_len; i++) {
-		snprintf(tempstring2, sizeof(tempstring2), "%s%02x", tempstring, (int) digest[i]);
-		snprintf(tempstring, sizeof(tempstring), "%s", tempstring2);
+		snprintf(tempstring2, sizeof(tempstring2), "%02x", (int) digest[i]);
+		STRCAT(tempstring, tempstring2);
 	};
 	
 	DEBUGPRINT_WA(DEBUG_librfc3041, "MD5 hash '%s'", tempstring);

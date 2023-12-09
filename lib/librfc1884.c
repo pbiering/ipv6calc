@@ -119,7 +119,7 @@ int ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, char *results
 };
 	
 int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, char *resultstring, const size_t resultstring_length, const uint32_t formatoptions) {
-	char tempstring[IPV6CALC_STRING_MAX], temp2string[IPV6CALC_STRING_MAX];
+	char tempstring[IPV6CALC_STRING_MAX] = "", tempstring2[IPV6CALC_STRING_MAX] = "";
 	int retval = 1;
 	int zstart = -1, zend = -1, tstart = -1, tend = -1, i, w_max = 7;
 	unsigned int s;
@@ -238,36 +238,33 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 		};
 
 		/* create string */
-		tempstring[0] = '\0';
+		STRCLR(tempstring);
 
 		for ( i = 0; i <= w_max; i++ ) {
 			if ( i == zstart ) {
-		
 				DEBUGPRINT_WA(DEBUG_librfc1884, "start of '0' at '%d'", i);
-				
-				snprintf(temp2string, sizeof(temp2string), "%s:", tempstring);
+				STRCAT(tempstring, ":");
 			} else if ( i == 0 ) {
-				DEBUGPRINT_WA(DEBUG_librfc1884, "normal start value at '%d' (%x)", i, (unsigned int) ipv6addr_getword(ipv6addrp, (unsigned int) i));
-				
-				snprintf(temp2string, sizeof(temp2string), "%x", (unsigned int) ipv6addr_getword(ipv6addrp, (unsigned int) i));
+				snprintf(tempstring2, sizeof(tempstring2), "%x", (unsigned int) ipv6addr_getword(ipv6addrp, (unsigned int) i));
+				STRCAT(tempstring, tempstring2);
 			} else if ( ( i > zend ) || ( i < zstart ) ) {
-				snprintf(temp2string, sizeof(temp2string), "%s:%x", tempstring, (unsigned int) ipv6addr_getword(ipv6addrp, (unsigned int) i));
+				snprintf(tempstring2, sizeof(tempstring2), "%x", (unsigned int) ipv6addr_getword(ipv6addrp, (unsigned int) i));
+				STRCAT(tempstring, ":");
+				STRCAT(tempstring, tempstring2);
 			} else if ( ( i == 7 ) && ( zend == i )) {
-				snprintf(temp2string, sizeof(temp2string), "%s:", tempstring);
+				STRCAT(tempstring, ":");
 			};
-			snprintf(tempstring, sizeof(tempstring), "%s", temp2string);
 		};
 		
 		if ( ((ipv6addrp->typeinfo & IPV6_ADDR_IID_32_63_HAS_IPV4) != 0) && ((ipv6addrp->typeinfo & IPV6_ADDR_ANONYMIZED_IID) == 0)) {
 			/* append IPv4 address */
-			snprintf(temp2string, sizeof(temp2string), "%s:%u.%u.%u.%u", \
-				tempstring, \
+			snprintf(tempstring2, sizeof(tempstring2), ":%u.%u.%u.%u", \
 				(unsigned int) ipv6addrp->in6_addr.s6_addr[12], \
 				(unsigned int) ipv6addrp->in6_addr.s6_addr[13], \
 				(unsigned int) ipv6addrp->in6_addr.s6_addr[14], \
 				(unsigned int) ipv6addrp->in6_addr.s6_addr[15]  \
 			);
-			snprintf(tempstring, sizeof(tempstring), "%s", temp2string);
+			STRCAT(tempstring, tempstring2);
 		};
 
 		DEBUGPRINT_WA(DEBUG_librfc1884, "new method: '%s'", tempstring);
@@ -306,8 +303,8 @@ int librfc1884_ipv6addrstruct_to_compaddr(const ipv6calc_ipv6addr *ipv6addrp, ch
 	};
 
 	if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
-		snprintf(temp2string, sizeof(temp2string), "IPV6=%s", resultstring);
-		snprintf(resultstring, resultstring_length, "%s", temp2string);
+		snprintf(tempstring2, sizeof(tempstring2), "IPV6=%s", resultstring);
+		snprintf(resultstring, resultstring_length, "%s", tempstring2);
 	};
 
 	DEBUGPRINT_WA(DEBUG_librfc1884, "Result: '%s'", resultstring);
