@@ -3644,7 +3644,7 @@ int libipv6calc_db_asn_filter(const uint32_t asn, const s_ipv6calc_filter_db_asn
 
 	if (filter->asn_may_not_have_max > 0) {
 		for (i = 0; i < filter->asn_may_not_have_max; i++) {
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.asn filter: check %u against must-have: %u", asn, filter->asn_may_not_have[i]);
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.asn filter: check %u against may-not-have: %u", asn, filter->asn_may_not_have[i]);
 			if (asn == filter->asn_may_not_have[i]) {
 				// match MAY-NOT-HAVE
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.asn filter: %u hits may-not-have: %u", asn, filter->asn_may_not_have[i]);
@@ -3838,7 +3838,7 @@ int libipv6calc_db_registry_filter(const uint32_t registry, const s_ipv6calc_fil
 
 	if (filter->registry_may_not_have_max > 0) {
 		for (i = 0; i < filter->registry_may_not_have_max; i++) {
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.reg filter: check %s against must-have: %s", libipv6calc_registry_string_by_num(registry), libipv6calc_registry_string_by_num(filter->registry_may_not_have[i]));
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.reg filter: check %s against may-not-have: %s", libipv6calc_registry_string_by_num(registry), libipv6calc_registry_string_by_num(filter->registry_may_not_have[i]));
 			if (registry == filter->registry_may_not_have[i]) {
 				// match MAY-NOT-HAVE
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "db.reg filter: %s hits may-not-have: %s", libipv6calc_registry_string_by_num(registry), libipv6calc_registry_string_by_num(filter->registry_may_not_have[i]));
