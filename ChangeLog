@@ -12,6 +12,7 @@ Info:
 --------------------------------------------------------------------
 20231209/PB:
 	autogen.sh/configure[.ac]: move CFLAG -Os into autodetection
+	replace further snprintf by STRCLR/STRCAT macros to avoid compiler warnings
 
 20231207/PB:
 	doc/generate.sh: reworked

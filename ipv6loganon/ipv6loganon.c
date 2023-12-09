@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganon.c
- * Version    : $Id$
- * Copyright  : 2007-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2007-2023 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile anonymization

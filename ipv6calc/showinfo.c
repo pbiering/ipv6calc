@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Version    : $Id$
- * Copyright  : 2001-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2023 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Function to show information about a given IPv6 address

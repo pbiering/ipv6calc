@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Version    : $Id$
- * Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2023 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc database wrapper (for decoupling databases from main binary)
