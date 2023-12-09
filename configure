@@ -4501,6 +4501,38 @@ fi
 rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
 		CFLAGS="$CFLAGS_SAVE"
 
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** check for CFLAGS: -Os" >&5
+printf "%s\n" "*** check for CFLAGS: -Os" >&6; }
+		CFLAGS_SAVE="$CFLAGS"
+		CFLAGS="$CFLAGS -Werror -Os"
+		cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+int a=1;
+int
+main (void)
+{
+
+  ;
+  return 0;
+}
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"
+then :
+
+				{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** CFLAGS supported: -Os" >&5
+printf "%s\n" "*** CFLAGS supported: -Os" >&6; }
+				CFLAGS_EXTRA="${CFLAGS_EXTRA:+$CFLAGS_EXTRA }-Os"
+
+else $as_nop
+
+				{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: *** missing CFLAGS support: -Os" >&5
+printf "%s\n" "$as_me: WARNING: *** missing CFLAGS support: -Os" >&2;}
+
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
+		CFLAGS="$CFLAGS_SAVE"
+
 fi
 
 

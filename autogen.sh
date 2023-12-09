@@ -97,10 +97,6 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		USE_CLANG=true
 		;;
-	    '--gcc-Os')
-		shift
-		CFLAGS="$CFLAGS -Os"
-		;;
 	    '--m32')
 		shift
 		OPTIONS_CONFIGURE="${OPTIONS_CONFIGURE:+$OPTIONS_CONFIGURE }--enable-m32"
@@ -138,7 +134,6 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --no-static-build   : skip static build"
 		echo "   --no-test           : skip 'make test'"
 		echo "   --clang             : use 'clang' instead of default (usually 'gcc')"
-		echo "   --gcc-Os            : use 'gcc' option '-Os'"
 		echo "   --m32               : compile for 32-bit"
 		echo "   --enable-openssl-md5: use legacy OpenSSL MD5 implementation"
 		echo "   --enable-libmd-md5  : use libmd MD5 implementation"

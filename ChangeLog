@@ -10,6 +10,9 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20231209/PB:
+	autogen.sh/configure[.ac]: move CFLAG -Os into autodetection
+
 20231207/PB:
 	doc/generate.sh: reworked
 	doc/ldp.dsl: update by latest one from Debian

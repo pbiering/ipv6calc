@@ -218,6 +218,21 @@ AC_ARG_ENABLE([compiler-warning-to-error],
 				AC_MSG_WARN([*** missing CFLAGS support: -Wdate-time])
 			])
 		CFLAGS="$CFLAGS_SAVE"
+
+		AC_MSG_RESULT([*** check for CFLAGS: -Os])
+		CFLAGS_SAVE="$CFLAGS"
+		CFLAGS="$CFLAGS -Werror -Os"
+		AC_COMPILE_IFELSE([AC_LANG_PROGRAM(
+			     [[int a=1;]])
+			],
+			[
+				AC_MSG_RESULT([*** CFLAGS supported: -Os])
+				CFLAGS_EXTRA="${CFLAGS_EXTRA:+$CFLAGS_EXTRA }-Os"
+			],
+			[
+				AC_MSG_WARN([*** missing CFLAGS support: -Os])
+			])
+		CFLAGS="$CFLAGS_SAVE"
 	])
 
 dnl *************************************************
