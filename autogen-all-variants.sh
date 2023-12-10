@@ -29,20 +29,19 @@ autogen_variants() {
 		# skip 32-bit builds on FreeBSD
 		return
 		;;
-	    linux-gnu)
-		if [ -e /etc/redhat-release ]; then
-			if grep -E -q "(CentOS|Red Hat|Alma|Rocky)" /etc/redhat-release; then
-				if [[ $token =~ IP2LOCATION ]]; then
-					# skip 32-bit builds on Enterprise Linux as IP2Location devel is not built for i686 on EPEL
-					return
-				fi
-			fi
-		fi
-		;;
 	esac
 
 	# 32-bit builds
 	autogen_variants_list  | while IFS="#" read token options; do
+		if [ -e /etc/redhat-release ]; then
+			if grep -E -q "(CentOS|Red Hat|Alma|Rocky)" /etc/redhat-release; then
+				if [[ $token =~ IP2LOCATION ]]; then
+					# skip 32-bit builds on Enterprise Linux as IP2Location devel is not built for i686 on EPEL
+					continue
+				fi
+			fi
+		fi
+
 		echo "$token#${options:+$options } --m32"
 	done
 
@@ -52,6 +51,16 @@ autogen_variants() {
 			# https://github.com/pbiering/ipv6calc/issues/45
 			options_extra=" --disable-mod_ipv6calc"
 		fi
+
+		if [ -e /etc/redhat-release ]; then
+			if grep -E -q "(CentOS|Red Hat|Alma|Rocky)" /etc/redhat-release; then
+				if [[ $token =~ IP2LOCATION ]]; then
+					# skip 32-bit builds on Enterprise Linux as IP2Location devel is not built for i686 on EPEL
+					continue
+				fi
+			fi
+		fi
+
 		echo "$token#${options:+$options } --clang --m32$options_extra"
 	done
 }
