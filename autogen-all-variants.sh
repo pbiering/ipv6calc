@@ -14,27 +14,45 @@ status_file="autogen-all-variants.status"
 ## Generate configure variants
 autogen_variants() {
 	autogen_variants_list
-	autogen_variants_list | while IFS="#" read options list; do
-		echo "${options:+$options }--clang#$list"
-	done
 
-	autogen_variants_list | while IFS="#" read options list; do
-		echo "${options:+$options }--gcc-Os#$list"
+	autogen_variants_list | while IFS="#" read token options; do
+		options_extra=""
+		if [[ $token =~ APACHE ]]; then
+			# https://github.com/pbiering/ipv6calc/issues/45
+			options_extra=" --disable-mod_ipv6calc"
+		fi
+		echo "$token#${options:+$options } --clang$options_extra"
 	done
 
 	case "$OSTYPE" in
 	    freebsd*)
-		    # skip 32-bit builds on freebsd
-		    return
-		    ;;
+		# skip 32-bit builds on FreeBSD
+		return
+		;;
+	    linux-gnu)
+		if [ -e /etc/redhat-release ]; then
+			if grep -E -q "(CentOS|Red Hat|Alma|Rocky)" /etc/redhat-release; then
+				if [[ $token =~ IP2LOCATION ]]; then
+					# skip 32-bit builds on Enterprise Linux as IP2Location devel is not built for i686 on EPEL
+					return
+				fi
+			fi
+		fi
+		;;
 	esac
 
-	# skip IP2Location and MaxMindDB based
-	autogen_variants_list | grep -Evw "(IP2LOCATION|GEOIP2|DBIP2)" | while IFS="#" read options list; do
-		echo "${options:+$options }--m32#$list"
+	# 32-bit builds
+	autogen_variants_list  | while IFS="#" read token options; do
+		echo "$token#${options:+$options } --m32"
 	done
-	autogen_variants_list | grep -Evw "(IP2LOCATION|GEOIP2|DBIP2)" | while IFS="#" read options list; do
-		echo "${options:+$options }--clang --m32#$list"
+
+	# 32-bit builds with clang
+	autogen_variants_list  | while IFS="#" read token options; do
+		if [[ $token =~ APACHE ]]; then
+			# https://github.com/pbiering/ipv6calc/issues/45
+			options_extra=" --disable-mod_ipv6calc"
+		fi
+		echo "$token#${options:+$options } --clang --m32$options_extra"
 	done
 }
 
@@ -42,29 +60,21 @@ autogen_variants_list() {
 	if ! $skip_main_test; then
 		cat <<END | grep -v ^#
 NONE#
-NONE#--m32
 NONE#--external
-NONE#--external --m32
 BUNDLED#--enable-bundled-md5 --enable-bundled-getopt
 OPENSSL#--enable-openssl-md5 --no-static-build
 OPENSSL#--enable-openssl-evp-md5
 LIBMD#--enable-libmd-md5 --no-static-build
 IP2LOCATION#-i
-IP2LOCATION#-i --m32
 IP2LOCATION#-I
-IP2LOCATION#-I --m32
 GEOIP2 DBIP2#-m
-GEOIP2 DBIP2#-m --m32
 GEOIP2 DBIP2#-M
-GEOIP2 DBIP2#-M --m32
 GEOIP2#-m --disable-dbip2
 GEOIP2#-M --disable-dbip2
 DBIP2#-m --disable-geoip2
 DBIP2#-M --disable-geoip2
-IP2LOCATION GEOIP2 DBIP2#-a
-IP2LOCATION GEOIP2 DBIP2#-A
-IP2LOCATION GEOIP2 DBIP2#-a --m32
-IP2LOCATION GEOIP2 DBIP2#-A --m32
+APACHE IP2LOCATION GEOIP2 DBIP2#-a
+APACHE IP2LOCATION GEOIP2 DBIP2#-A
 NONE#--disable-db-ieee
 NONE#--disable-db-ipv4
 NONE#--disable-db-ipv6
@@ -278,12 +288,14 @@ for liboption in "normal" "shared"; do
 			fi
 		fi
 
-		if echo "$token" | grep -Ewq "$skip_token"; then
-			echo "NOTICE: skip variant because of token: $token"
-			if $dry_run; then
-				date "+%s:FINISHED:variants:$options:SKIPPED" >>$status_file
+		if [ -n "$skip_token" ]; then
+			if echo "$token" | grep -Ewq "$skip_token"; then
+				echo "NOTICE: skip variant because of token: $token"
+				if $dry_run; then
+					date "+%s:FINISHED:variants:$options:SKIPPED" >>$status_file
+				fi
+				continue
 			fi
-			continue
 		fi
 
 		options_test=""

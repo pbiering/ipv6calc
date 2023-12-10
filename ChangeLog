@@ -10,6 +10,9 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20231210/PB:
+	autogen-all-variants.sh: bugfixes and exclude mod_ipv6calc in case of clang (https://github.com/pbiering/ipv6calc/issues/45)
+
 20231209/PB:
 	autogen.sh/configure[.ac]: move CFLAG -Os into autodetection
 	replace further snprintf by STRCLR/STRCAT macros to avoid compiler warnings
