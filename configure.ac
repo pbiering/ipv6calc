@@ -4,13 +4,13 @@ dnl Copyright: 2001-2023 by Peter Bieringer <pb (at) bieringer.de>
 
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([ipv6calc],[4.1.0],[ipv6calc@deepspace6.net],[ipv6calc],[https://www.deepspace6.net/projects/ipv6calc.html])
+AC_INIT([ipv6calc],[4.2.0],[ipv6calc@deepspace6.net],[ipv6calc],[https://www.deepspace6.net/projects/ipv6calc.html])
 
 COPYRIGHT_YEAR=2023
 
 dnl Program/library version (align with version above)
 PACKAGE_VERSION_MAJOR=4
-PACKAGE_VERSION_MINOR=1
+PACKAGE_VERSION_MINOR=2
 PACKAGE_VERSION_BUGFIX=0
 
 dnl API version
