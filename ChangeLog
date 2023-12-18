@@ -10,6 +10,9 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20231218/PB:
+	internal databases: update
+
 20231210/PB:
 	autogen-all-variants.sh: bugfixes and exclude mod_ipv6calc in case of clang (https://github.com/pbiering/ipv6calc/issues/45) and IP2Location 32-bit on EL
 

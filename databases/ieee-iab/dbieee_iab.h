@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Thu Dec  7 06:37:15 2023
+ * Generated     : Mon Dec 18 08:05:34 2023
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20231207";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20231218";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -3868,7 +3868,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xF13000, 0xF13FFF, "Packet Plus, Inc.", "PACKET-PLUS" },
 	{ 0x0050C2, 0xF14000, 0xF14FFF, "VISION SYSTEMS AERONAUTIC", "VISION-AERONAUTIC" },
 	{ 0x0050C2, 0xF15000, 0xF15FFF, "Sascal Displays Ltd", "SASCAL-DISPLAYS" },
-	{ 0x0050C2, 0xF16000, 0xF16FFF, "Peter Huber Kältemaschinenbau GmbH", "PETER-HUBER-KAELTEMASCHINENBAU" },
+	{ 0x0050C2, 0xF16000, 0xF16FFF, "Peter Huber Kaeltemaschinenbau SE", "PETER-HUBER-KAELTEMASCHINENBAU-SE" },
 	{ 0x0050C2, 0xF17000, 0xF17FFF, "ABB Transmission and Distribution Automation Equipment (Xiamen) Co., Ltd.", "ABB-TRANSMISSION-AND-DISTRIBUTION-AUTOMATION-EQUIPMENT-XIAMEN" },
 	{ 0x0050C2, 0xF18000, 0xF18FFF, "Vitec Multimedia", "VITEC-MULTIMEDIA" },
 	{ 0x0050C2, 0xF19000, 0xF19FFF, "Netlink Bilisim Sistemleri San. ve Tic. Ltd. Sti.", "NETLINK-BILISIM-SISTEMLERI-SAN-VE-TIC-STI" },
@@ -4563,7 +4563,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x1CB000, 0x1CBFFF, "MG S.r.l.", "MG" },
 	{ 0x40D855, 0x1CC000, 0x1CCFFF, "NKT Photonics A/S", "NKT-PHOTONICS-A/S" },
 	{ 0x40D855, 0x1CD000, 0x1CDFFF, "YXLON International A/S", "YXLON-A/S" },
-	{ 0x40D855, 0x1CE000, 0x1CEFFF, "Peter Huber", "PETER-HUBER" },
+	{ 0x40D855, 0x1CE000, 0x1CEFFF, "Peter Huber Kaeltemaschinenbau SE", "PETER-HUBER-KAELTEMASCHINENBAU-SE" },
 	{ 0x40D855, 0x1CF000, 0x1CFFFF, "Omnik New Energy Co., Ltd", "OMNIK-NEW-ENERGY" },
 	{ 0x40D855, 0x1D0000, 0x1D0FFF, "Webeasy BV", "WEBEASY" },
 	{ 0x40D855, 0x1D1000, 0x1D1FFF, "Founder Broadband Network Service Co.,Ltd.", "FOUNDER-BROADBAND-NETWORK-SERVICE" },

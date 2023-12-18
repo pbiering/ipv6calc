@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_oui28.h
  * Version       : $Id$
- * Generated     : Thu Dec  7 06:37:12 2023
+ * Generated     : Mon Dec 18 08:05:28 2023
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui28_status __attribute__ ((__unused__)) = "OUI28/20231207";
+/*@unused@*/ static const char* libieee_oui28_status __attribute__ ((__unused__)) = "OUI28/20231218";
 
 
 static const s_ieee_oui28 libieee_oui28[] = {
@@ -2991,9 +2991,19 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x8C5DB2, 0xE00000, 0xEFFFFF, "Surbhi Satcom Pvt Ltd", "SURBHI-SATCOM-PVT" },
 	{ 0x8CA682, 0x000000, 0x0FFFFF, "AI SECURITY Co.Ltd.", "AI-SECURITY" },
 	{ 0x8CA682, 0x100000, 0x1FFFFF, "FightCamp", "FIGHTCAMP" },
+	{ 0x8CA682, 0x200000, 0x2FFFFF, "Lion Energy", "LION-ENERGY" },
 	{ 0x8CA682, 0x300000, 0x3FFFFF, "Royal Way General Trading LLC", "ROYAL-WAY-GENERAL-TRADING" },
+	{ 0x8CA682, 0x400000, 0x4FFFFF, "China Information Technology Designing&Consulting Institute Co., Ltd.", "CHINA-INFORMATION-DESIGNING-CONSULTING-INSTITUTE" },
 	{ 0x8CA682, 0x500000, 0x5FFFFF, "Qstar Technology Co,Ltd", "QSTAR" },
+	{ 0x8CA682, 0x600000, 0x6FFFFF, "ShangHai Huijue Network Communication Equipment CO., Ltd.", "SHANGHAI-HUIJUE-NETWORK-COMMUNICATION-EQUIPMENT" },
+	{ 0x8CA682, 0x700000, 0x7FFFFF, "Wuhan Canpoint Education&Technology Co.,Ltd", "WUHAN-CANPOINT-EDUCATION" },
+	{ 0x8CA682, 0x800000, 0x8FFFFF, "Schok LLC", "SCHOK" },
+	{ 0x8CA682, 0x900000, 0x9FFFFF, "Barkodes Bilgisayar Sistemleri Bilgi Iletisim ve Y", "BARKODES-BILGISAYAR-SISTEMLERI-BILGI-ILETISIM-VE-Y" },
+	{ 0x8CA682, 0xA00000, 0xAFFFFF, "Schok LLC", "SCHOK" },
+	{ 0x8CA682, 0xB00000, 0xBFFFFF, "POCKETALK CORP.", "POCKETALK" },
+	{ 0x8CA682, 0xC00000, 0xCFFFFF, "Netskope", "NETSKOPE" },
 	{ 0x8CA682, 0xD00000, 0xDFFFFF, "EFit partners", "EFIT-PARTNERS" },
+	{ 0x8CA682, 0xE00000, 0xEFFFFF, "Texys International", "TEXYS" },
 	{ 0x8CAE49, 0x000000, 0x0FFFFF, "Ouman Oy", "OUMAN-OY" },
 	{ 0x8CAE49, 0x100000, 0x1FFFFF, "H3 Platform", "H3-PLATFORM" },
 	{ 0x8CAE49, 0x200000, 0x2FFFFF, "SEVERIN Elektrogeräte GmbH", "SEVERIN-ELEKTROGERAETE" },
@@ -4404,6 +4414,10 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0xD09FD9, 0xC00000, 0xCFFFFF, "Fujian Newland Auto-ID Tech. Co,.Ltd.", "FUJIAN-NEWLAND-AUTO-ID-TECH" },
 	{ 0xD09FD9, 0xD00000, 0xDFFFFF, "Shenzhen eloT Technology Co.,Ltd", "SHENZHEN-ELOT" },
 	{ 0xD09FD9, 0xE00000, 0xEFFFFF, "Minibems Ltd", "MINIBEMS" },
+	{ 0xD0A011, 0x600000, 0x6FFFFF, "OCEM Energy Technology", "OCEM-ENERGY" },
+	{ 0xD0A011, 0x900000, 0x9FFFFF, "O-NET Industrial Technologies (Shenzhen) Limited", "O-NET-INDUSTRIAL-TECHNOLOGIES-SHENZHEN" },
+	{ 0xD0A011, 0xA00000, 0xAFFFFF, "Wuhan Tabebuia Technology Co.Ltd", "WUHAN-TABEBUIA" },
+	{ 0xD0A011, 0xC00000, 0xCFFFFF, "TASKA Prosthetics", "TASKA-PROSTHETICS" },
 	{ 0xD0C857, 0x000000, 0x0FFFFF, "YUAN High-Tech Development Co., Ltd.", "YUAN-HIGH-TECH-DEVELOPMENT" },
 	{ 0xD0C857, 0x100000, 0x1FFFFF, "DALI A/S", "DALI-A/S" },
 	{ 0xD0C857, 0x200000, 0x2FFFFF, "FORGAMERS INC.", "FORGAMERS" },
