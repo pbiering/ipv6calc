@@ -131,6 +131,7 @@ $0
 	-i	run through internal defined IP2Location versions
 	-D	enable dynamic library loading in run through versions	
 	-M	skip main tests
+	-T	skip "make test"
 	-n	dry-run, show only what would be build
 	-c	cross version test
 	-b	batch test (do not stop on error)
@@ -146,10 +147,11 @@ force=false
 no_static_build=false
 rerun=false
 skip_main_test=false
+skip_make_test=false
 skip_shared=false
 ip2location_versions_test=false
 
-while getopts ":cbDNMirIfWn?h" opt; do
+while getopts ":cbDNMTirIfWn?h" opt; do
 	case $opt in
 	    'b')
 		batch=true
@@ -168,6 +170,9 @@ while getopts ":cbDNMirIfWn?h" opt; do
 		;;
 	    'M')
 		skip_main_test=true
+		;;
+	    'T')
+		skip_make_test=true
 		;;
 	    'I')
 		skip_token="IP2LOCATION"
@@ -309,7 +314,7 @@ for liboption in "normal" "shared"; do
 
 		options_test=""
 
-		if [ -n "$testlist" ]; then
+		if $skip_make_test; then
 			options_test="--no-test"
 		fi
 
