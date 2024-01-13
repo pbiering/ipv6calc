@@ -52,15 +52,6 @@ static int uint64_log2(uint64_t n) {
 #define uint64_log2	log2
 #endif
 
-#ifdef SUPPORT_IP2LOCATION
-/*
- * API_VERSION is defined as a bareword in IP2Location.h,
- * we need this trick to stringify it. Blah.
- */
-#define makestr(x) #x
-#define xmakestr(x) makestr(x)
-#endif
-
 #ifdef SUPPORT_GEOIP2
 static int wrapper_GeoIP2_disable      = 0;
 static int wrapper_GeoIP2_status = 0;
@@ -673,7 +664,7 @@ void libipv6calc_db_wrapper_print_features_verbose(const int level_verbose) {
 #ifdef IP2LOCATION_INCLUDE_VERSION
 		fprintf(stderr, "IP2Location support enabled, compiled with include file version: %s\n", IP2LOCATION_INCLUDE_VERSION);
 #endif
-		fprintf(stderr, "IP2Location support enabled, compiled with API version: %s, dynamically linked with version: %s\n", xmakestr(API_VERSION), libipv6calc_db_wrapper_IP2Location_lib_version());
+		fprintf(stderr, "IP2Location support enabled, compiled with API version: %s, dynamically linked with version: %s\n", IP2LOCATION_API_VERSION, libipv6calc_db_wrapper_IP2Location_lib_version());
 #ifndef SUPPORT_IP2LOCATION_DYN
 #else
 		fprintf(stderr, "IP2Location support by dynamic library load\n");

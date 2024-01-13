@@ -1185,16 +1185,6 @@ if test "$IP2LOCATION" = "yes"; then
 				AC_MSG_ERROR([IP2Location has only compat IPv6 support (API < 7.0.0) or old (API < 8.2.0) which is no longer supported])
 			]
 		)
-
-		AC_CHECK_DECLS([USAGETYPE],
-			[
-				AC_MSG_RESULT([IP2Location has full support (library >= 6.0.0)])
-			],
-			[
-				AC_MSG_ERROR([IP2Location library header file misses USAGETYPE (library < 6.0.0) which is no longer supported])
-			]
-		)
-
 	],
 	[
 		AC_MSG_ERROR([IP2Location library header files not found])
@@ -1212,8 +1202,6 @@ if test "$IP2LOCATION" = "yes"; then
 
 		if test -n "$IP2LOCATION_LIB_DIR"; then
 			if test -e "$IP2LOCATION_LIB_DIR/lib$IP2LOCATION_LIB_NAME.so"; then
-				LDFLAGS="$LDFLAGS -L$IP2LOCATION_LIB_DIR"
-				CFLAGS="$CFLAGS -L$IP2LOCATION_LIB_DIR"
 				LIBS="-L$IP2LOCATION_LIB_DIR"
 			else
 				AC_MSG_ERROR([IP2Location library file not found: $IP2LOCATION_INCLUDE_DIR/lib$IP2LOCATION_LIB_NAME.so])

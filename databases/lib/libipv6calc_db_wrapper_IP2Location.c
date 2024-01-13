@@ -431,15 +431,6 @@ static const s_type2 libipv6calc_db_wrapper_IP2Location_UsageType[] = {
 };
 
 
-/* 
- * API_VERSION is defined as a bareword in IP2Location.h, 
- *  we need this trick to stringify it. Blah.
- */
-#define makestr(x) #x
-#define xmakestr(x) makestr(x)
-
-#define IP2LOCATION_API_VERSION	xmakestr(API_VERSION)
-
 #ifdef SUPPORT_IP2LOCATION_DYN
 char ip2location_lib_file[PATH_MAX] = IP2LOCATION_DYN_LIB;
 
