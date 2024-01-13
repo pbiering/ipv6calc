@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.c
- * Copyright  : 2013-2023 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2024 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc IP2Location database wrapper
@@ -1390,27 +1390,34 @@ char *libipv6calc_db_wrapper_IP2Location_lib_version(void) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol3);
 	};
 
-
 	if (dl_status_IP2Location_api_version_string == IPV6CALC_DL_STATUS_OK) {
 		// take use of new (>= 7.0.1) function
 		if (dl_status_IP2Location_lib_version_string == IPV6CALC_DL_STATUS_OK) {
 			// take also use of new (>= 8.0.4) function
-			snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "%s API=%s Major=%d MajorMinor=%d", (*dl_IP2Location_lib_version_string.func)(), (*dl_IP2Location_api_version_string.func)(), libipv6calc_db_wrapper_IP2Location_library_version_major()
+			snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "%s API=%s Major=%d MajorMinor=%d"
+				, (*dl_IP2Location_lib_version_string.func)()
+				, (*dl_IP2Location_api_version_string.func)()
+				, libipv6calc_db_wrapper_IP2Location_library_version_major()
 				, libipv6calc_db_wrapper_IP2Location_library_version_majorminor()
 			);
 		} else {
-			snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d MajorMinor=%d", (*dl_IP2Location_api_version_string.func)(), libipv6calc_db_wrapper_IP2Location_library_version_major()
+			snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d MajorMinor=%d"
+				, (*dl_IP2Location_api_version_string.func)()
+				, libipv6calc_db_wrapper_IP2Location_library_version_major()
 				, libipv6calc_db_wrapper_IP2Location_library_version_majorminor()
 			);
 		};
 	} else {
 		// fallback
-		snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API>=7.0.0 Major=%d MajorMinor=%d", libipv6calc_db_wrapper_IP2Location_library_version_major()
+		snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API>=8.0.0 Major=%d MajorMinor=%d"
+			, libipv6calc_db_wrapper_IP2Location_library_version_major()
 			, libipv6calc_db_wrapper_IP2Location_library_version_majorminor()
 		);
 	};
 #else
-	snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d MajorMinor=%d", IP2Location_api_version_string(), libipv6calc_db_wrapper_IP2Location_library_version_major()
+	snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "API=%s Major=%d MajorMinor=%d"
+		, IP2Location_api_version_string()
+		, libipv6calc_db_wrapper_IP2Location_library_version_major()
 		, libipv6calc_db_wrapper_IP2Location_library_version_majorminor()
 	);
 #endif
