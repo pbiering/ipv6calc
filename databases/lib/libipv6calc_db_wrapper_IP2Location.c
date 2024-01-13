@@ -2385,19 +2385,16 @@ END_libipv6calc_db_wrapper:
  * major IP2Location library version
  *
  * in : (nothing)
- * out: major IP2Location library version, currently 4, 6, 7, 8
+ * out: major IP2Location library version
  */
 int libipv6calc_db_wrapper_IP2Location_library_version_major(void) {
-	int result = 7; // default
+	int result = 8; // default
 #ifdef SUPPORT_IP2LOCATION_DYN
 	if (dl_status_IP2Location_api_version_num == IPV6CALC_DL_STATUS_OK) {
 		result = (*dl_IP2Location_api_version_num.func)() / (100 * 100);
 	};
 #else // SUPPORT_IP2LOCATION_DYN
-#ifdef API_VERSION_MAJOR
-	result = API_VERSION_MAJOR;
-#else // API_VERSION_MAJOR
-#endif // API_VERSION_MAJOR
+	result = IP2Location_api_version_num() / (100 * 100);
 #endif // SUPPORT_IP2LOCATION_DYN
 
 	return(result);
