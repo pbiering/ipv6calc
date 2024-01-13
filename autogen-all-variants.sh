@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Copyright  : 2011-2023 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2011-2024 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
 #
@@ -15,13 +15,13 @@ status_file="autogen-all-variants.status"
 autogen_variants() {
 	autogen_variants_list
 
-	autogen_variants_list | while IFS="#" read token options; do
+	autogen_variants_list | while IFS="#" read token options testlist; do
 		options_extra=""
 		if [[ $token =~ APACHE ]]; then
 			# https://github.com/pbiering/ipv6calc/issues/45
 			options_extra=" --disable-mod_ipv6calc"
 		fi
-		echo "$token#${options:+$options } --clang$options_extra"
+		echo "$token#${options:+$options } --clang$options_extra#$testlist"
 	done
 
 	case "$OSTYPE" in
@@ -32,7 +32,7 @@ autogen_variants() {
 	esac
 
 	# 32-bit builds
-	autogen_variants_list  | while IFS="#" read token options; do
+	autogen_variants_list  | while IFS="#" read token options testlist; do
 		if [ -e /etc/redhat-release ]; then
 			if grep -E -q "(CentOS|Red Hat|Alma|Rocky)" /etc/redhat-release; then
 				if [[ $token =~ IP2LOCATION ]]; then
@@ -42,11 +42,11 @@ autogen_variants() {
 			fi
 		fi
 
-		echo "$token#${options:+$options } --m32"
+		echo "$token#${options:+$options } --m32#$teslist"
 	done
 
 	# 32-bit builds with clang
-	autogen_variants_list  | while IFS="#" read token options; do
+	autogen_variants_list  | while IFS="#" read token options testlist; do
 		if [[ $token =~ APACHE ]]; then
 			# https://github.com/pbiering/ipv6calc/issues/45
 			options_extra=" --disable-mod_ipv6calc"
@@ -61,7 +61,7 @@ autogen_variants() {
 			fi
 		fi
 
-		echo "$token#${options:+$options } --clang --m32$options_extra"
+		echo "$token#${options:+$options } --clang --m32$options_extra#$testlist"
 	done
 }
 
