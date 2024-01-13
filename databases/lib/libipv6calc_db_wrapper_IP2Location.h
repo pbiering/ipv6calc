@@ -247,4 +247,15 @@ extern int ip2location_db_only_type;
 extern int ip2location_db_allow_softlinks;
 
 extern int          libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libipv6calc_db_wrapper_geolocation_record *recordp);
+
+#ifndef IP2LOCATION_API_VERSION
+/*
+ * API_VERSION in old versions was defined as a bareword in IP2Location.h,
+ *  we need this trick to stringify it. Blah.
+ */
+#define makestr(x) #x
+#define xmakestr(x) makestr(x)
+#define IP2LOCATION_API_VERSION xmakestr(API_VERSION)
+#endif /* IP2LOCATION_API_VERSION */
+
 #endif
