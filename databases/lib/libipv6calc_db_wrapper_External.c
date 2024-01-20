@@ -846,7 +846,7 @@ END_libipv6calc_db_wrapper:
 int libipv6calc_db_wrapper_External_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp, char *country, const size_t country_len) {
 	DB *dbp;
 	long int recno_max;
-	static char resultstring[IPV6CALC_STRING_MAX];
+	char resultstring[IPV6CALC_STRING_MAX];
 	int result;
 	int retval = -1;
 
