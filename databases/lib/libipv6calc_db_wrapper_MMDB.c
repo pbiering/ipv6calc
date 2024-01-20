@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_MMDB.c
- * Version    : $Id$
- * Copyright  : 2019-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2019-2024 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc MaxMindDB database wrapper
@@ -965,8 +964,6 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 	MMDB_entry_data_s entry_data;
 	int mmdb_error;
 
-	static char resultstring[IPV6CALC_STRING_MAX];
-
 	libipv6calc_db_wrapper_geolocation_record_clear(recordp);
 
 	// convert ipaddrp into sockaddr
@@ -1147,8 +1144,6 @@ int libipv6calc_db_wrapper_MMDB_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libi
 	const char *lookup_path_district_geonameid[] = { "subdivisions", "1", "geoname_id", NULL };
 	libipv6calc_db_wrapper_MMDB_aget_value(&lookup_result.entry, &entry_data, lookup_path_district_geonameid);
 	CHECK_STORE_UINT32(recordp->district_geoname_id, "District(subdivision#1)/GeonameId")
-
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_MMDB, "resultstring=%s", resultstring);
 
 END_libipv6calc_db_wrapper:
 	return(mmdb_error);
