@@ -1,12 +1,12 @@
 # Project    : ipv6calc/tools
 # File       : Makefile[.in]
-# Copyright  : 2006-2023 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2006-2024 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for various tools
 #
 
-install:	
+install:
 		if [ ! -d $(DESTDIR)$(datadir)/ipv6calc/tools ]; then install -d -m 755 $(DESTDIR)$(datadir)/ipv6calc/tools; fi
 		for f in *.sh *.pl; do install -m 755 $$f $(DESTDIR)$(datadir)/ipv6calc/tools; done
 
