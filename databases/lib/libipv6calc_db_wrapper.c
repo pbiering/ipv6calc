@@ -2485,7 +2485,12 @@ int libipv6calc_db_wrapper_info_by_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, 
 	ipv6calc_ipaddr ipaddr;
 #endif
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x", ipv4addr_getdword(ipv4addrp));
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x typeinfo=%08x", ipv4addr_getdword(ipv4addrp), ipv4addrp->typeinfo);
+
+	if ((ipv4addrp->typeinfo & IPV4_ADDR_GLOBAL) == 0) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "IPv4 address is not global, skip further database calls");
+		return(1);
+	};
 
 	f = IPV6CALC_DB_FEATURE_NUM_IPV4_TO_INFO;
 
@@ -2546,7 +2551,12 @@ int libipv6calc_db_wrapper_info_by_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, 
 	ipv6calc_ipaddr ipaddr;
 #endif
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x%08x%08x%08x", ipv6addr_getdword(ipv6addrp, 0), ipv6addr_getdword(ipv6addrp, 1), ipv6addr_getdword(ipv6addrp, 2), ipv6addr_getdword(ipv6addrp, 3));
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Called: addr=%08x%08x%08x%08x typeinfo=%08x", ipv6addr_getdword(ipv6addrp, 0), ipv6addr_getdword(ipv6addrp, 1), ipv6addr_getdword(ipv6addrp, 2), ipv6addr_getdword(ipv6addrp, 3), ipv6addrp->typeinfo);
+
+	if ((ipv6addrp->typeinfo & IPV6_ADDR_GLOBAL) == 0) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "IPv6 address not global, skip further database calls");
+		return(1);
+	};
 
 	f = IPV6CALC_DB_FEATURE_NUM_IPV6_TO_INFO;
 
