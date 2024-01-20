@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Copyright  : 2001-2023 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2024 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Function to show information about a given IPv6 address
@@ -802,14 +802,15 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 
 	DEBUGPRINT_NA(DEBUG_showinfo, "get registry");
 
+	STRCLR(tempstring2);
 	if ((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) != 0) {
 		registry = libipv4addr_registry_num_by_addr(ipv4addrp);
-		snprintf(tempstring2, sizeof(tempstring2), "%s", libipv6calc_registry_string_by_num(registry));
+		STRCAT(tempstring2, libipv6calc_registry_string_by_num(registry));
 	} else {
 		libipv6calc_db_wrapper_registry_string_by_ipv4addr(ipv4addrp, tempstring, sizeof(tempstring));
-		snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+		STRCAT(tempstring2, tempstring);
 
-		DEBUGPRINT_NA(DEBUG_showinfo, "try to get additional information");
+		DEBUGPRINT_NA(DEBUG_showinfo, "try to get additional information from databases");
 		r = libipv6calc_db_wrapper_info_by_ipv4addr(ipv4addrp, tempstring3, sizeof(tempstring3));
 		if (r == 0) {
 			// info found, append to registry
@@ -1254,13 +1255,14 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 
 	/* IPv6 Registry */
 	DEBUGPRINT_NA(DEBUG_showinfo, "get registry");
+	STRCLR(tempstring2);
 	if (((ipv6addrp->typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) != 0) \
 		&& ((ipv6addrp->typeinfo & IPV6_ADDR_HAS_PUBLIC_IPV4_IN_PREFIX) == 0)) {
 		registry = libipv6addr_registry_num_by_addr(ipv6addrp);
-		snprintf(tempstring2, sizeof(tempstring2), "%s", libipv6calc_registry_string_by_num(registry));
+		STRCAT(tempstring2, libipv6calc_registry_string_by_num(registry));
 	} else {
 		libipv6calc_db_wrapper_registry_string_by_ipv6addr(ipv6addrp, tempstring, sizeof(tempstring));
-		snprintf(tempstring2, sizeof(tempstring2), "%s", tempstring);
+		STRCAT(tempstring2, tempstring);
 
 		DEBUGPRINT_NA(DEBUG_showinfo, "try to get additional information");
 		r = libipv6calc_db_wrapper_info_by_ipv6addr(ipv6addrp, tempstring3, sizeof(tempstring3));
