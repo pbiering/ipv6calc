@@ -2058,10 +2058,6 @@ int libipv6calc_db_wrapper_ieee_vendor_string_short_by_macaddr(char *resultstrin
 };
 
 
-/********************************************
- * IPv4/IPv6 -> Registry lookup
- ********************************************/
-
 /*
  * Get reserved IPv4 address information as string
  * ret: NULL: not reserved, !=NULL: pointer to string
@@ -2208,6 +2204,10 @@ static const char *libipv6calc_db_wrapper_reserved_string_by_ipv6addr(const ipv6
 	return(info);
 };
 
+
+/********************************************
+ * IPv4/IPv6 -> Registry lookup
+ ********************************************/
 
 /*
  * get registry string of an IPv4 address
