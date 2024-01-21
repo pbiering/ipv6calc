@@ -1,10 +1,10 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP2.c
- * Copyright  : 2019-2023 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2019-2024 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
- *  ipv6calc DB-IP.com database wrapper for MaxMindDB databases
+ *  ipv6calc GeoIP2 database wrapper for MaxMindDB databases
  */
 
 #include <stdio.h>
