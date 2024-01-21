@@ -410,7 +410,7 @@ my %text = (
 		'de' => "Autonomous System Nummer der IPv6 Adresse",
 		'en' => "Autonomous System Number of IPv6 address",
 	},
-	'IPV6_AS_TEXT' => {
+	'IPV6_AS_ORGNAME' => {
 		'de' => "Autonomous System der IPv6 Adresse",
 		'en' => "Autonomous System of IPv6 address",
 	},
@@ -454,7 +454,7 @@ my %text = (
 		'de' => "Autonomous System Nummer der IPv4 Adresse",
 		'en' => "Autonomous System Number of IPv4 address",
 	},
-	'IPV4_AS_TEXT' => {
+	'IPV4_AS_ORGNAME' => {
 		'de' => "Autonomous System der IPv4 Adresse",
 		'en' => "Autonomous System of IPv4 address",
 	},
@@ -722,7 +722,7 @@ my %text = (
 		'de' => "Autonomous System Nummer",
 		'en' => "Autonomous System Number",
 	},
-	'_AS_TEXT' => {
+	'_AS_ORGNAME' => {
 		'de' => "Autonomous System",
 		'en' => "Autonomous System",
 	},
