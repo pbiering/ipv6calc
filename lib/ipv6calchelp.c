@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Copyright  : 2002-2023 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2024 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -320,18 +320,6 @@ void printhelp_common(const uint32_t help_features) {
 		fprintf(stderr, "     autoswitch from LITE to SAMPLE databases if possible and delta is not more than %d months (0=disabled)\n", ip2location_db_lite_to_sample_autoswitch_max_delta_months);
 		fprintf(stderr, "  [--db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>]:\n");
 		fprintf(stderr, "     switch from COMM to LITE databases if possible and delta more than %d months (0=disabled)\n", ip2location_db_comm_to_lite_switch_min_delta_months);
-#endif
-	};
-
-	if ((help_features & IPV6CALC_HELP_GEOIP) != 0) {
-#ifdef SUPPORT_GEOIP
-		fprintf(stderr, "\n");
-		fprintf(stderr, "  [--disable-geoip                 ] : GeoIP support disabled\n");
-		fprintf(stderr, "  [--db-geoip-disable              ] : GeoIP support disabled\n");
-		fprintf(stderr, "  [--db-geoip-dir       <directory>] : GeoIP database directory (default: %s)\n", geoip_db_dir);
-#ifdef SUPPORT_GEOIP_DYN
-		fprintf(stderr, "  [--db-geoip-lib       <file>     ] : GeoIP library file (default: %s)\n", geoip_lib_file);
-#endif
 #endif
 	};
 

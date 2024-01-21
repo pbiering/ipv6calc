@@ -1069,8 +1069,8 @@ RIPENCC.6to4.global-unicast.ipv6-addr.addrtype.ipv6calc
 <title>Supported options</title>
 <screen>
 <![CDATA[$ ipv6loganon -h
-ipv6loganon: version 2.1.1 ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID
-(P) & (C) 2007-2019 by Peter Bieringer <pb (at) bieringer.de>
+ipv6loganon: version 4.2.0 ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID
+(P) & (C) 2007-2023 by Peter Bieringer <pb (at) bieringer.de>
 This program anonymizes IPv4/IPv6 addresses in e.g. HTTP server log files
   [-d|--debug <debug value>] : debug value (bitwise like)
                                 can also be set by IPV6CALC_DEBUG environment value
@@ -1082,33 +1082,21 @@ This program anonymizes IPv4/IPv6 addresses in e.g. HTTP server log files
   [--disable-ip2location           ] : IP2Location support disabled
   [--db-ip2location-disable        ] : IP2Location support disabled
   [--db-ip2location-dir <directory>] : IP2Location database directory (default: /usr/share/IP2Location)
-  [--db-ip2location-lib <file>     ] : IP2Location library file (default: libIP2Location.so)
-  [--db-ip2location-only-type <TYPE>]: IP2Location database only selected type (1-120)
+  [--db-ip2location-only-type <TYPE>]: IP2Location database only selected type (1-666)
   [--db-ip2location-allow-softlinks] : IP2Location database softlinks allowed
      by default they are ignored because it is hard to autodetect COMM/LITE/SAMPLE
   [--db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>]:
      autoswitch from LITE to SAMPLE databases if possible and delta is not more than 12 months (0=disabled)
   [--db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>]:
      switch from COMM to LITE databases if possible and delta more than 12 months (0=disabled)
-  [--disable-geoip                 ] : GeoIP support disabled
-  [--db-geoip-disable              ] : GeoIP support disabled
-  [--db-geoip-dir       <directory>] : GeoIP database directory (default: /usr/share/GeoIP)
-  [--db-geoip-lib       <file>     ] : GeoIP library file (default: libGeoIP.so.1)
-  [--db-mmdb-lib       <file>      ] : MaxMindDB library file (default: libmaxminddb.so.0)
-  [--disable-geoip2                ] : GeoIP (MaxMindDB) support disabled
-  [--db-geoip2-disable             ] : GeoIP (MaxMindDB) support disabled
-  [--db-geoip2-dir      <directory>] : GeoIP (MaxMindDB) database directory (default: /usr/share/GeoIP)
-  [--disable-dbip2                 ] : db-ip.com (MaxMindDB) support disabled
-  [--db-dbip2-disable              ] : db-ip.com (MaxMindDB) support disabled
-  [--db-dbip2-dir       <directory>] : db-ip.com (MaxMindDB) database directory (default: /usr/share/DBIP)
-  [--db-dbip2-only-type <TYPE>]      : db-ip.com (MaxMindDB) database only selected type (1-10)
+  [--disable-geoip2                ] : GeoIP(MaxMindDB) support disabled
+  [--db-geoip2-disable             ] : GeoIP(MaxMindDB) support disabled
+  [--db-geoip2-dir      <directory>] : GeoIP(MaxMindDB) database directory (default: /usr/share/GeoIP)
+  [--disable-dbip2                 ] : db-ip.com(MaxMindDB) support disabled
+  [--db-dbip2-disable              ] : db-ip.com(MaxMindDB) support disabled
+  [--db-dbip2-dir       <directory>] : db-ip.com(MaxMindDB) database directory (default: /usr/share/DBIP)
+  [--db-dbip2-only-type <TYPE>]      : db-ip.com(MaxMindDB) database only selected type (1-6)
   [--db-dbip2-comm-to-free-switch-min-delta-months <MONTHS>]:
-     switch from COMM to FREE databases if possible and delta more than 12 months (0=disabled)
-  [--disable-dbip                  ] : db-ip.com support disabled
-  [--db-dbip-disable               ] : db-ip.com support disabled
-  [--db-dbip-dir        <directory>] : db-ip.com database directory (default: /usr/share/DBIP)
-  [--db-dbip-only-type <TYPE>]       : db-ip.com database only selected type (1-10)
-  [--db-dbip-comm-to-free-switch-min-delta-months <MONTHS>]:
      switch from COMM to FREE databases if possible and delta more than 12 months (0=disabled)
   [--disable-external              ] : External support disabled
   [--db-external-disable           ] : External support disabled
@@ -1116,7 +1104,12 @@ This program anonymizes IPv4/IPv6 addresses in e.g. HTTP server log files
   [--disable-builtin               ] : BuiltIn support disabled
   [--db-builtin-disable            ] : BuiltIn support disabled
   [--db-priorization <entry1>[:...]] : Database priorization order list (overwrites default)
-                                         colon separated: GeoIP GeoIP2 IP2Location DBIP DBIP2 External BuiltIn
+                                         colon separated: GeoIP2 IP2Location DBIP2 External BuiltIn
+ Hint: all long options can be predefined from environment by using
+  prefix: IPV6CALC_ and  conversion: '-' -> '_' and lowercase -> uppercase
+  example for options with values   : --db-dbip2-dir=<DIR>  ->  environment: IPV6CALC_DB_DBIP2_DIR=<DIR>
+  example for options without values: --db-dbip2-disable    ->  environment: IPV6CALC_DB_DBIP2_DISABLE=1
+                                                                              on|off|0|1 is supported
   [-w|--write]               : write output to file instead of stdout
   [-a|--append]              : append output to file instead of stdout
   [-f|--flush]               : flush output after each line
@@ -1149,7 +1142,8 @@ This program anonymizes IPv4/IPv6 addresses in e.g. HTTP server log files
   --mask-eui64 <bits>     : mask EUI-64 address or IPv6 interface identifier [0-64]
   --mask-mac   <bits>     : mask MAC address [0-48]
   --mask-autoadjust yes|no: autoadjust mask to keep type/vendor information regardless of less given mask
- Takes data from stdin, outputs the processed data to stdout (default)
+
+Takes data from stdin, outputs the processed data to stdout (default)
 ]]></screen></sect2><sect2>
 <title>Usage</title>
 <sect3>
@@ -1268,8 +1262,8 @@ Usage: ipv6calc-db-update.sh [-s] [-u] [-D <dir>]
 <title>Supported options</title>
 <screen>
 <![CDATA[$ ipv6logstats -h
-ipv6logstats: version 2.1.1 STAT_REG STAT_CC STAT_AS
-(P) & (C) 2003-2019 by Peter Bieringer <pb (at) bieringer.de>
+ipv6logstats: version 4.2.0 STAT_REG STAT_CC STAT_AS
+(P) & (C) 2003-2023 by Peter Bieringer <pb (at) bieringer.de>
  Takes web server log data (or any other data which has IPv4/v6 address in first column)
    from stdin and print statistics table/list (depending on option) to stdout
   [-d|--debug <debug value>] : debug value (bitwise like)
@@ -1282,33 +1276,21 @@ ipv6logstats: version 2.1.1 STAT_REG STAT_CC STAT_AS
   [--disable-ip2location           ] : IP2Location support disabled
   [--db-ip2location-disable        ] : IP2Location support disabled
   [--db-ip2location-dir <directory>] : IP2Location database directory (default: /usr/share/IP2Location)
-  [--db-ip2location-lib <file>     ] : IP2Location library file (default: libIP2Location.so)
-  [--db-ip2location-only-type <TYPE>]: IP2Location database only selected type (1-120)
+  [--db-ip2location-only-type <TYPE>]: IP2Location database only selected type (1-666)
   [--db-ip2location-allow-softlinks] : IP2Location database softlinks allowed
      by default they are ignored because it is hard to autodetect COMM/LITE/SAMPLE
   [--db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>]:
      autoswitch from LITE to SAMPLE databases if possible and delta is not more than 12 months (0=disabled)
   [--db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>]:
      switch from COMM to LITE databases if possible and delta more than 12 months (0=disabled)
-  [--disable-geoip                 ] : GeoIP support disabled
-  [--db-geoip-disable              ] : GeoIP support disabled
-  [--db-geoip-dir       <directory>] : GeoIP database directory (default: /usr/share/GeoIP)
-  [--db-geoip-lib       <file>     ] : GeoIP library file (default: libGeoIP.so.1)
-  [--db-mmdb-lib       <file>      ] : MaxMindDB library file (default: libmaxminddb.so.0)
-  [--disable-geoip2                ] : GeoIP (MaxMindDB) support disabled
-  [--db-geoip2-disable             ] : GeoIP (MaxMindDB) support disabled
-  [--db-geoip2-dir      <directory>] : GeoIP (MaxMindDB) database directory (default: /usr/share/GeoIP)
-  [--disable-dbip2                 ] : db-ip.com (MaxMindDB) support disabled
-  [--db-dbip2-disable              ] : db-ip.com (MaxMindDB) support disabled
-  [--db-dbip2-dir       <directory>] : db-ip.com (MaxMindDB) database directory (default: /usr/share/DBIP)
-  [--db-dbip2-only-type <TYPE>]      : db-ip.com (MaxMindDB) database only selected type (1-10)
+  [--disable-geoip2                ] : GeoIP(MaxMindDB) support disabled
+  [--db-geoip2-disable             ] : GeoIP(MaxMindDB) support disabled
+  [--db-geoip2-dir      <directory>] : GeoIP(MaxMindDB) database directory (default: /usr/share/GeoIP)
+  [--disable-dbip2                 ] : db-ip.com(MaxMindDB) support disabled
+  [--db-dbip2-disable              ] : db-ip.com(MaxMindDB) support disabled
+  [--db-dbip2-dir       <directory>] : db-ip.com(MaxMindDB) database directory (default: /usr/share/DBIP)
+  [--db-dbip2-only-type <TYPE>]      : db-ip.com(MaxMindDB) database only selected type (1-6)
   [--db-dbip2-comm-to-free-switch-min-delta-months <MONTHS>]:
-     switch from COMM to FREE databases if possible and delta more than 12 months (0=disabled)
-  [--disable-dbip                  ] : db-ip.com support disabled
-  [--db-dbip-disable               ] : db-ip.com support disabled
-  [--db-dbip-dir        <directory>] : db-ip.com database directory (default: /usr/share/DBIP)
-  [--db-dbip-only-type <TYPE>]       : db-ip.com database only selected type (1-10)
-  [--db-dbip-comm-to-free-switch-min-delta-months <MONTHS>]:
      switch from COMM to FREE databases if possible and delta more than 12 months (0=disabled)
   [--disable-external              ] : External support disabled
   [--db-external-disable           ] : External support disabled
@@ -1316,7 +1298,12 @@ ipv6logstats: version 2.1.1 STAT_REG STAT_CC STAT_AS
   [--disable-builtin               ] : BuiltIn support disabled
   [--db-builtin-disable            ] : BuiltIn support disabled
   [--db-priorization <entry1>[:...]] : Database priorization order list (overwrites default)
-                                         colon separated: GeoIP GeoIP2 IP2Location DBIP DBIP2 External BuiltIn
+                                         colon separated: GeoIP2 IP2Location DBIP2 External BuiltIn
+ Hint: all long options can be predefined from environment by using
+  prefix: IPV6CALC_ and  conversion: '-' -> '_' and lowercase -> uppercase
+  example for options with values   : --db-dbip2-dir=<DIR>  ->  environment: IPV6CALC_DB_DBIP2_DIR=<DIR>
+  example for options without values: --db-dbip2-disable    ->  environment: IPV6CALC_DB_DBIP2_DISABLE=1
+                                                                              on|off|0|1 is supported
   [-u|--unknown]             : print unknown IP addresses to stderr
   [-c|--columns]             : print statistics in columns (1)
   [-N|--column-numbers]      : print column numbers
@@ -1329,62 +1316,105 @@ ipv6logstats: version 2.1.1 STAT_REG STAT_CC STAT_AS
 <title>Usage</title>
 <para>There are a README and some helper scripts available in the package how to use this program and how to generate a graph using Gnuplot.</para><sect3>
 <title>Line-by-line output</title>
-<para>The example shows output version 3.0, which </para><screen>
-<![CDATA[$ zcat ip.bieringer.de-log.201*.gz | ipv6logstats
+<para>The example shows output version 4.0, which </para><screen>
+<![CDATA[$ cat ip.bieringer.de-log.202401 | ipv6logstats
 ]]></screen><para>Header section, since output version 3.0 (&gt;= 0.95.0) additional lines starting with '*3*' and '*DateTime' and '*UnixTime' included</para><screen>
-<![CDATA[*Version             3.0
-*DateTime: 2013:11:03 08:57:01+0000 GMT
-*UnixTime: 1383469021
-*3*DB-Info: DB features: 0x0000133f
-*3*DB-Info: GeoIP: features: 0x00000330
-*3*DB-Info: GeoIP: info of available databases in directory: /usr/share/GeoIP (max: 31)
-*3*DB-Info: GeoIP: GeoIP Country Edition            :[ 1] /usr/share/GeoIP/GeoIP.dat               (GEO-106FREE 20130903 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
-*3*DB-Info: GeoIP: GeoIP ASNum Edition              :[ 9] /usr/share/GeoIP/GeoIPASNum.dat          (GEO-117 20130902 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
-*3*DB-Info: GeoIP: GeoIP Country V6 Edition         :[12] /usr/share/GeoIP/GeoIPv6.dat             (GEO-106FREE 20131001 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
-*3*DB-Info: GeoIP: GeoIP Large Country Edition      :[17] /usr/share/GeoIP/GeoIP.dat               (GEO-106FREE 20130903 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
-*3*DB-Info: GeoIP: GeoIP Large Country V6 Edition   :[18] /usr/share/GeoIP/GeoIPv6.dat             (GEO-106FREE 20131001 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
-*3*DB-Info: GeoIP: GeoIP ASNum V6 Edition           :[21] /usr/share/GeoIP/GeoIPASNumv6.dat        (GEO-117 20130306 Build 1 Copyright (c) 2013 MaxMind Inc All Rights Reserved)
-*3*DB-Info: IP2Location: features: 0x00000300
-*3*DB-Info: IP2Location: info of available databases in directory: /usr/share/IP2Location
-*3*DB-Info: IP2Location: IPv4 Country               : /usr/share/IP2Location/IP-COUNTRY.BIN    (IP2L-DB20 20130411 Copyright (c) 2013 IP2Location All Rights Reserved)
-*3*DB-Info: IP2Location: IPv6 Country               : /usr/share/IP2Location/IPV6-COUNTRY.BIN  (IP2L-DB1 20131025 Copyright (c) 2013 IP2Location All Rights Reserved)
-*3*DB-Info: BuiltIn: features: 0x0000100f
+<![CDATA[*Version             4.0
+*DateTime: 2024:01:21 08:07:59+0000 GMT
+*UnixTime: 1705824479
+*3*DB-Info: DB features: 0xff1fffff
+*3*DB-Info: GeoIP(MaxMindDB): features available/implemented: 0x03063ff0/0x03063ff0
+*3*DB-Info: GeoIP2: info of available databases in directory: /var/local/share/GeoIP
+*3*DB-Info: GeoIP2: IPv4/v6 CountryCode (FREE)    : [1] GeoLite2-Country.mmdb          (GeoLite2-Country Copyright (c) 2024 MaxMind All Rights Reserved, created: 20240112-201408 UTC)
+*3*DB-Info: GeoIP2: IPv4/v6 City (FREE)           : [2] GeoLite2-City.mmdb             (GeoLite2-City Copyright (c) 2024 MaxMind All Rights Reserved, created: 20240112-195220 UTC)
+*3*DB-Info: GeoIP2: IPv4/v6 ASN (FREE)            : [3] GeoLite2-ASN.mmdb              (GeoLite2-ASN Copyright (c) 2024 MaxMind All Rights Reserved, created: 20240112-193300 UTC)
+*3*DB-Info: IP2Location: features available/implemented: 0x0c003fc0/0x0c003ff0
+*3*DB-Info: IP2Location: info of available databases in directory: /var/local/share/IP2Location
+*3*DB-Info: IP2Location: Copyright (c) IP2Location All Rights Reserved
+*3*DB-Info: IP2Location: IPv4 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo      :[220] IP-COUNTRY-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEATHER-MOBILE-SAMPLE.BIN (IP2L-DB20 IPv4 IPv6 SAMPLE 20240101)
+*3*DB-Info: IP2Location: IPv4 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo/El/Us:[224] IP-COUNTRY-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEATHER-MOBILE-ELEVATION-USAGETYPE-SAMPLE.BIN (IP2L-DB24 IPv4 IPv6 SAMPLE 20240101)
+*3*DB-Info: IP2Location: IPv6 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo      :[320] IPV6-COUNTRY-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEATHER-MOBILE.SAMPLE.BIN (IP2L-DB20 IPv4 IPv6 SAMPLE 20240101)
+*3*DB-Info: IP2Location: IPv6 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo/El/Us:[324] IPV6-COUNTRY-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEATHER-MOBILE-ELEVATION-USAGETYPE.SAMPLE.BIN (IP2L-DB24 IPv4 IPv6 SAMPLE 20240101)
+*3*DB-Info: IP2Location: IPv4 Country                                    :[401] IP2LOCATION-LITE-DB1.BIN            (IP2L-DB1 IPv4 IPv6 LITE 20231215)
+*3*DB-Info: IP2Location: IPv4 Co/Re/Ci/LattLong/ZIP/TZ                   :[411] IP2LOCATION-LITE-DB11.BIN           (IP2L-DB11 IPv4 IPv6 LITE 20231215)
+*3*DB-Info: IP2Location: IPvx Country                                    :[501] IP2LOCATION-LITE-DB1.IPV6.BIN       (IP2L-DB1 IPv4 IPv6 LITE 20231215)
+*3*DB-Info: IP2Location: IPvx Co/Re/Ci/LattLong/ZIP/TZ                   :[511] IP2LOCATION-LITE-DB11.IPV6.BIN      (IP2L-DB11 IPv4 IPv6 LITE 20231215)
+*3*DB-Info: IP2Location: IPvx Co/Re/Ci/LattLong/ZIP/TZ                   :[111] IPV6-COUNTRY-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE.BIN (IP2L-DB11 IPv4 IPv6 20231215)
+*3*DB-Info: db-ip.com(MaxMindDB): features available/implemented: 0x30063ff0/0x30063ff0
+*3*DB-Info: DBIP2: info of available databases in directory: /var/local/share/DBIP
+*3*DB-Info: DBIP2: IPv4/v6 CountryCode (FREE)    : [1] dbip-country-lite.mmdb         (DBIP-Country-Lite Copyright (c) 2024 db-ip.com All Rights Reserved, created: 20240101-231423 UTC)
+*3*DB-Info: DBIP2: IPv4/v6 City (FREE)           : [2] dbip-city-lite.mmdb            (DBIP-City-Lite Copyright (c) 2024 db-ip.com All Rights Reserved, created: 20240101-231818 UTC)
+*3*DB-Info: DBIP2: IPv4/v6 Location+ISP (COMM)   : [6] dbip-location-isp.mmdb         (DBIP-Location-ISP (compat=Enterprise) Copyright (c) 2024 db-ip.com All Rights Reserved, created: 20240102-010801 UTC)
+*3*DB-Info: External: features available/implemented: 0xc01980cc/0xc01980cc
+*3*DB-Info: External: info of available databases in directory: /var/local/share/ipv6calc
+*3*DB-Info: External: IPv4 Registry       : ipv6calc-external-ipv4-registry.db       (EXTDB-1/AFRINIC/20240107 APNIC/20240106 ARIN/20240107 IANA/20231218 LACNIC/20240105 LISP/20200318 RIPENCC/20240106, created: 20240107-161126 UTC)
+*3*DB-Info: External: IPv6 Registry       : ipv6calc-external-ipv6-registry.db       (EXTDB-2/AFRINIC/20240107 APNIC/20240106 ARIN/20240107 IANA/20191106 LACNIC/20240105 LISP/20200318 RIPENCC/20240106, created: 20240107-162146 UTC)
+*3*DB-Info: External: IPv4 CountryCode    : ipv6calc-external-ipv4-countrycode.db    (EXTDB-3/AFRINIC/20240107 APNIC/20240106 ARIN/20240107 IANA/20231218 LACNIC/20240105 LISP/20200318 RIPENCC/20240106, created: 20240107-161126 UTC)
+*3*DB-Info: External: IPv6 CountryCode    : ipv6calc-external-ipv6-countrycode.db    (EXTDB-4/AFRINIC/20240107 APNIC/20240106 ARIN/20240107 IANA/20191106 LACNIC/20240105 LISP/20200318 RIPENCC/20240106, created: 20240107-162146 UTC)
+*3*DB-Info: BuiltIn: features available/implemented: 0x0001c00f/0x0001c00f
 *3*DB-Info: BuiltIn: info of available databases
-*3*DB-Info: BuiltIn: ASN  : IANA/20130730
-*3*DB-Info: BuiltIn: CC   : AFRINIC/20130806 APNIC/20130805 ARIN/20130805 LACNIC/20130805 RIPENCC/20130805
-*3*DB-Info: BuiltIn: IPv4 : AFRINIC/20131014 APNIC/20131014 ARIN/20131014 IANA/20130520 LACNIC/20131014 RIPENCC/20131014
-*3*DB-Info: BuiltIn: IPv6 : AFRINIC/20131015 APNIC/20131014 ARIN/20131014 IANA/20130215 LACNIC/20131014 RIPENCC/20131014
-*3*DB-Info: BuiltIn: IEEE : IAB/20131015 OUI/20131015 OUI36/20131015
+*3*DB-Info: BuiltIn: ASN  : IANA/20230810
+*3*DB-Info: BuiltIn: CC   : AFRINIC/20240119 APNIC/20240119 ARIN/20240119 LACNIC/20240119 RIPENCC/20240119
+*3*DB-Info: BuiltIn: IPv4 : AFRINIC/20240119 APNIC/20240119 ARIN/20240119 IANA/20231218 LACNIC/20240119 LISP/20200318 RIPENCC/20240119 (created: 20240120-044633 UTC)
+*3*DB-Info: BuiltIn: IPv6 : AFRINIC/20240119 APNIC/20240119 ARIN/20240119 IANA/20191106 LACNIC/20240119 LISP/20200318 RIPENCC/20240119 (created: 20240120-050328 UTC)
+*3*DB-Info: BuiltIn: IEEE : IAB/20240120 OUI/20240120 OUI28/20240120 OUI36/20240120
+*3*DB-Info: Database selection or priorization ('->': subsequential calls)
+*3*DB-Info: Database priorization default: GeoIP(MaxMindDB)->IP2Location->db-ip.com(MaxMindDB)->GeoIP->db-ip.com->External->BuiltIn
+*3*DB-Info: DB_AS_REG (AS-Number to Registry database): BuiltIn
+*3*DB-Info: DB_CC_REG (CountryCode to Registry database): BuiltIn
+*3*DB-Info: DB_IPV4_REG (IPv4 to Registry database): BuiltIn
+*3*DB-Info: DB_IPV6_REG (IPv6 to Registry database): BuiltIn
+*3*DB-Info: DB_IPV4_AS (IPv4 to AS database): GeoIP(MaxMindDB)->db-ip.com(MaxMindDB)
+*3*DB-Info: DB_IPV6_AS (IPv6 to AS database): GeoIP(MaxMindDB)->db-ip.com(MaxMindDB)
+*3*DB-Info: DB_IPV4_CC (IPv4 to CountryCode database): GeoIP(MaxMindDB)->IP2Location->db-ip.com(MaxMindDB)->External
+*3*DB-Info: DB_IPV6_CC (IPv6 to CountryCode database): GeoIP(MaxMindDB)->IP2Location->db-ip.com(MaxMindDB)->External
+*3*DB-Info: DB_IPV4_COUNTRY (IPv4 to Country database): GeoIP(MaxMindDB)->IP2Location->db-ip.com(MaxMindDB)
+*3*DB-Info: DB_IPV6_COUNTRY (IPv6 to Country database): GeoIP(MaxMindDB)->IP2Location->db-ip.com(MaxMindDB)
+*3*DB-Info: DB_IPV4_CITY (IPv4 to City database): GeoIP(MaxMindDB)->IP2Location->db-ip.com(MaxMindDB)
+*3*DB-Info: DB_IPV6_CITY (IPv6 to City database): GeoIP(MaxMindDB)->IP2Location->db-ip.com(MaxMindDB)
+*3*DB-Info: DB_IPV4_REGION (IPv4 to Region database): GeoIP(MaxMindDB)->IP2Location->db-ip.com(MaxMindDB)
+*3*DB-Info: DB_IPV6_REGION (IPv6 to Region database): GeoIP(MaxMindDB)->IP2Location->db-ip.com(MaxMindDB)
+*3*DB-Info: DB_IEEE (IEEE/OUI/OUI28/OUI36 Vendor database): BuiltIn
+*3*DB-Info: DB_IPV4_INFO (IPv4 additional information): External->BuiltIn
+*3*DB-Info: DB_IPV6_INFO (IPv6 additional information): External->BuiltIn
+*3*DB-Info: DB_IPV4_GEONAMEID (IPv4 GeonameID): GeoIP(MaxMindDB)->db-ip.com(MaxMindDB)
+*3*DB-Info: DB_IPV6_GEONAMEID (IPv6 GeonameID): GeoIP(MaxMindDB)->db-ip.com(MaxMindDB)
+*3*DB-Info: DB_IPV4_DUMP_CC (IPv4 Database Dump by CountryCode): External
+*3*DB-Info: DB_IPV6_DUMP_CC (IPv6 Database Dump by CountryCode): External
 ]]></screen><para>Simple statistics section</para><screen>
-<![CDATA[ALL                  108525
-IPv4                 46233
-IPv6                 62292
+<![CDATA[ALL                  68612
+IPv4                 57311
+IPv6                 11301
 UNKNOWN              0
-IPv4/APNIC           2397
-IPv4/ARIN            3525
-IPv4/RIPE            40198
-IPv4/LACNIC          97
-IPv4/UNKNOWN         16
+IPv4/APNIC           4154
+IPv4/ARIN            27873
+IPv4/RIPE            24889
+IPv4/LACNIC          305
+IPv4/AFRINIC         90
+IPv4/UNKNOWN         0
 IPv6/6bone           0
 IPv6/IANA            0
-IPv6/APNIC           129
-IPv6/ARIN            839
-IPv6/RIPE            61074
-IPv6/LACNIC          0
+IPv6/APNIC           506
+IPv6/ARIN            1475
+IPv6/RIPE            9103
+IPv6/LACNIC          216
+IPv6/AFRINIC         0
 IPv6/RESERVED        0
 IPv6/UNKNOWN         0
 IPv6/6to4/IANA       0
 IPv6/6to4/APNIC      0
-IPv6/6to4/ARIN       16
-IPv6/6to4/RIPE       51
+IPv6/6to4/ARIN       0
+IPv6/6to4/RIPE       1
 IPv6/6to4/LACNIC     0
+IPv6/6to4/AFRINIC    0
 IPv6/6to4/RESERVED   0
 IPv6/6to4/UNKNOWN    0
 IPv6/Teredo/IANA     0
-IPv6/Teredo/APNIC    63
+IPv6/Teredo/APNIC    0
 IPv6/Teredo/ARIN     0
-IPv6/Teredo/RIPE     90
-IPv6/Teredo/LACNIC   30
+IPv6/Teredo/RIPE     0
+IPv6/Teredo/LACNIC   0
+IPv6/Teredo/AFRINIC  0
 IPv6/Teredo/RESERVED 0
 IPv6/Teredo/UNKNOWN  0
 IPv6/NAT64/IANA      0
@@ -1392,20 +1422,21 @@ IPv6/NAT64/APNIC     0
 IPv6/NAT64/ARIN      0
 IPv6/NAT64/RIPE      0
 IPv6/NAT64/LACNIC    0
+IPv6/NAT64/AFRINIC   0
 IPv6/NAT64/RESERVED  0
 IPv6/NAT64/UNKNOWN   0
-IPv6/IID/Global      1436
-IPv6/IID/Random      58198
-IPv6/IID/Manual      2055
-IPv6/IID/ISATAP      353
+IPv6/IID/Global      2581
+IPv6/IID/Random      6880
+IPv6/IID/Manual      1839
+IPv6/IID/ISATAP      0
 IPv6/IID/Unknown     0
 ]]></screen><para>External database supported output since output version 3.0 (&gt;= 0.95.0)</para><itemizedlist>
 <listitem><para>Country Code / Proto</para></listitem></itemizedlist><screen>
 <![CDATA[...
-*3*CC-code-proto/DE/ALL   96450
-*3*CC-code-proto/DE/IPv4  36486
-*3*CC-code-proto/DE/IPv6  59964 
-*3*CC-code-proto-list/DE  96450 36486 59964
+*3*CC-code-proto/DE/ALL   9126
+*3*CC-code-proto/DE/IPv4  5381
+*3*CC-code-proto/DE/IPv6  3745
+*3*CC-code-proto-list/DE  9126 5381 3745
 ...
 ]]></screen><itemizedlist>
 <listitem><para>Proto / Country Code (&ldquo;ALL&rdquo; line contains: ALL IPv4 IPv6)</para></listitem></itemizedlist><screen>

@@ -60,11 +60,6 @@
 #endif
 
 
-#ifdef SUPPORT_GEOIP
-#include "GeoIP.h"
-#endif
-
-
 long int ipv6calc_debug = 0; // ipv6calc_debug usage ok
 
 /* pipe support */

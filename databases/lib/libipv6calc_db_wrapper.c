@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Copyright  : 2013-2023 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2024 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc database wrapper (for decoupling databases from main binary)
@@ -1140,7 +1140,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			break;
 
 		case DB_common_priorization:
-#if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP || defined SUPPORT_GEOIP || SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
+#if defined SUPPORT_EXTERNAL || SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Parse database priorization string: %s", optarg);
 			char tempstring[IPV6CALC_STRING_MAX];
 			char *token, *cptr, **ptrptr;
@@ -1327,7 +1327,7 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 	unsigned int data_source = IPV6CALC_DB_SOURCE_UNKNOWN;
 	int f = 0, p, result = -1;
 
-#if defined SUPPORT_GEOIP || defined SUPPORT_IP2LOCATION
+#if defined SUPPORT_IP2LOCATION
 	char tempstring[IPV6CALC_ADDR_STRING_MAX] = "";
 #endif
 
@@ -1366,9 +1366,8 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 
 	// run through priorities
 	for (p = 0; p < IPV6CALC_DB_PRIO_MAX; p++) {
-#if defined SUPPORT_GEOIP || defined SUPPORT_IP2LOCATION
+#if defined SUPPORT_IP2LOCATION
 		switch(wrapper_features_selector[f][p]) {
-		    case IPV6CALC_DB_SOURCE_GEOIP:
 		    case IPV6CALC_DB_SOURCE_IP2LOCATION:
 			// need IP address as string
 			if (strlen(tempstring) == 0) {
@@ -1381,25 +1380,6 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 		    case 0:
 			// last
 			goto END_libipv6calc_db_wrapper; // ok
-			break;
-
-		    case IPV6CALC_DB_SOURCE_GEOIP:
-#ifdef SUPPORT_GEOIP
-			if (wrapper_GeoIP_status == 1) {
-				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Call now GeoIP with %s", tempstring);
-
-				char *result_char_ptr = (char *) libipv6calc_db_wrapper_GeoIP_wrapper_country_code_by_addr(tempstring, ipaddrp->proto);
-
-				if ((result_char_ptr != NULL) && (strlen(result_char_ptr) > 0)) {
-					snprintf(string, length, "%s", result_char_ptr);
-					result = 0;
-					data_source = IPV6CALC_DB_SOURCE_GEOIP;
-					goto END_libipv6calc_db_wrapper; // ok
-				} else {
-					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called GeoIP did not return a valid country_code");
-				};
-			};
-#endif
 			break;
 
 		    case IPV6CALC_DB_SOURCE_GEOIP2:
@@ -1431,23 +1411,6 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
 					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called IP2Location did not return a valid country_code");
-				};
-			};
-#endif
-			break;
-
-		    case IPV6CALC_DB_SOURCE_DBIP:
-#ifdef SUPPORT_DBIP
-			if (wrapper_DBIP_status == 1) {
-				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now DBIP");
-
-				int ret = libipv6calc_db_wrapper_DBIP_wrapper_country_code_by_addr(ipaddrp, string, length);
-				if (ret == 0) {
-					result = 0;
-					data_source = IPV6CALC_DB_SOURCE_DBIP;
-					goto END_libipv6calc_db_wrapper; // ok
-				} else {
-					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called db-ip.com did not return a valid country_code");
 				};
 			};
 #endif
@@ -1727,22 +1690,6 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp,
 		    case 0:
 			// last
 			goto END_libipv6calc_db_wrapper; // ok
-			break;
-
-		    case IPV6CALC_DB_SOURCE_GEOIP:
-#ifdef SUPPORT_GEOIP
-			if (wrapper_GeoIP_status == 1) {
-				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now GeoIP");
-
-				as_num32 = libipv6calc_db_wrapper_GeoIP_wrapper_asn_by_addr(ipaddrp);
-				if (as_num32 != ASNUM_AS_UNKNOWN) {
-					data_source_lastused = IPV6CALC_DB_SOURCE_GEOIP;
-					goto END_libipv6calc_db_wrapper; // ok
-				} else {
-					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called GeoIP did not return a valid ASN");
-				};
-			};
-#endif
 			break;
 
 		    case IPV6CALC_DB_SOURCE_GEOIP2:

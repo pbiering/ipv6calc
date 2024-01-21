@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calcoptions.h
- * Version    : $Id$
- * Copyright  : 2013-2020 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2024 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file containing options
@@ -33,29 +32,10 @@ static struct option ipv6calc_longopts_common[] = {
 	{"db-ip2location-disable"      , 0, NULL, OPTION_NOOP },
 #endif
 
-	/* GeoIP(legacy) database options (EOS since 3.0.0, TODO remove 4.0.0) */
-	{"db-geoip"                    , 1, NULL, DB_EOS_geoip_ipv4         },
-	{"db-geoip-ipv4"               , 1, NULL, DB_EOS_geoip_ipv4         },
-	{"db-geoip-ipv6"               , 1, NULL, DB_EOS_geoip_ipv6         },
-	{"db-geoip-default"            , 0, NULL, (int) 'G'             },
-	{"db-geoip-ipv4-default"       , 0, NULL, DB_EOS_geoip_ipv4_default },
-	{"db-geoip-ipv6-default"       , 0, NULL, DB_EOS_geoip_ipv6_default },
-	{"disable-geoip"               , 0, NULL, DB_EOS_geoip_disable       },
-	{"db-geoip-disable"            , 0, NULL, DB_EOS_geoip_disable       },
-	{"db-geoip-dir"                , 1, NULL, DB_EOS_geoip_dir           },
-	{"db-geoip-lib"                , 1, NULL, DB_EOS_geoip_lib           },
-
 #ifndef SUPPORT_GEOIP2
 	{"disable-geoip2"              , 0, NULL, OPTION_NOOP },
 	{"db-geoip2-disable"           , 0, NULL, OPTION_NOOP },
 #endif
-
-	/* db-ip.com(BerkeleyDB) database options (EOS since 3.0.0, TODO remove 4.0.0) */
-	{"disable-dbip"                , 0, NULL, DB_EOS_dbip_disable       },
-	{"db-dbip-disable"             , 0, NULL, DB_EOS_dbip_disable       },
-	{"db-dbip-dir"                 , 1, NULL, DB_EOS_dbip_dir           },
-	{"db-dbip-comm-to-free-switch-min-delta-months", 1, NULL, DB_EOS_dbip_comm_to_free_switch_min_delta_months },
-	{"db-dbip-only-type", 1, NULL, DB_EOS_dbip_only_type },
 
 #ifndef SUPPORT_DBIP2
 	{"disable-dbip2"               , 0, NULL, OPTION_NOOP },
@@ -77,13 +57,6 @@ static struct option ipv6calc_longopts_common[] = {
 static char *ipv6calc_shortopts_ip2location = "L";
 
 static struct option ipv6calc_longopts_ip2location[] = {
-	/* database options (EOS since 3.0.0, TODO remove in 4.0.0) */
-	{"db-ip2location-ipv4"         , 1, NULL, DB_EOS_ip2location_ipv4   },
-	{"db-ip2location-ipv6"         , 1, NULL, DB_EOS_ip2location_ipv6   },
-	{"db-ip2location-default"      , 0, NULL, (int) 'L'             },
-	{"db-ip2location-ipv4-default" , 0, NULL, DB_EOS_geoip_ipv4_default },
-	{"db-ip2location-ipv6-default" , 0, NULL, DB_EOS_geoip_ipv6_default },
-
 	/* database options (new) */
 	{"disable-ip2location"         , 0, NULL, DB_ip2location_disable },
 	{"db-ip2location-disable"      , 0, NULL, DB_ip2location_disable },
@@ -155,7 +128,7 @@ static struct option ipv6calc_longopts_builtin[] = {
 };
 #endif // SUPPORT_BUILTIN
 
-#if defined SUPPORT_EXTERNAL || defined SUPPORT_DBIP || defined SUPPORT_GEOIP || SUPPORT_IP2LOCATION || defined SUPPORT_MMDB || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
+#if defined SUPPORT_EXTERNAL || SUPPORT_IP2LOCATION || defined SUPPORT_MMDB || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
 static char *ipv6calc_shortopts_db_common = "";
 
 static struct option ipv6calc_longopts_db_common[] = {

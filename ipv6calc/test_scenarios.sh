@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Copyright  : 2001-2023 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2001-2024 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPLv2
 #
 # Test patterns for ipv6calc (functions only)
@@ -525,8 +525,8 @@ testscenarios_showinfo_anonymized_info() {
 # IPv4 address
 2.2.3.4;;match;IPV4_ANON=253.134.12.143
 2.2.3.4;;key-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
-2.2.3.4;--db-geoip-disable --db-ip2location-disable --db-geoip2-disable --db-dbip-disable --db-dbip2-disable;match;IPV4_ANON=2.2.3.0
-2.2.3.4;--db-geoip-disable --db-ip2location-disable --db-geoip2-disable --db-dbip-disable --db-dbip2-disable;key-no-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
+2.2.3.4;--db-ip2location-disable --db-geoip2-disable --db-dbip2-disable;match;IPV4_ANON=2.2.3.0
+2.2.3.4;--db-ip2location-disable --db-geoip2-disable --db-dbip2-disable;key-no-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
 END
 }
 
