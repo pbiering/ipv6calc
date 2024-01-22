@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_IP2Location.h
- * Copyright  : 2013-2023 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2024 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_IP2Location.c
@@ -211,7 +211,7 @@ extern uint32_t wrapper_features_IP2Location;
 
 extern int         libipv6calc_db_wrapper_IP2Location_wrapper_init(void);
 extern int         libipv6calc_db_wrapper_IP2Location_wrapper_cleanup(void);
-extern uint32_t    libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp);
+extern uint32_t    libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp, char *as_orgname, const size_t as_orgname_length);
 extern void        libipv6calc_db_wrapper_IP2Location_wrapper_info(char* string, const size_t size);
 extern void        libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
 extern char       *libipv6calc_db_wrapper_IP2Location_wrapper_db_info_used(void);

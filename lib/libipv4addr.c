@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv4addr.c
- * Version    : $Id$
- * Copyright  : 2002-2021 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Copyright  : 2002-2024 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -1095,7 +1094,7 @@ int libipv4addr_anonymize(ipv6calc_ipv4addr *ipv4addrp, unsigned int mask, const
 			as_num32_comp17 |= 0x000; // TODO: map LISP information into 11 LSB
 		} else {
 			// get AS number
-			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, NULL);
+			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, NULL, NULL, 0);
 			DEBUGPRINT_WA(DEBUG_libipv4addr, "result of AS number  retrievement: 0x%08x (%d)", as_num32, as_num32);
 
 			as_num32_comp17 = libipv6calc_db_wrapper_as_num32_comp17(as_num32);
@@ -1716,7 +1715,7 @@ uint32_t libipv4addr_as_num32_by_addr(const ipv6calc_ipv4addr *ipv4addrp, unsign
 	} else {
 		if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS) == 1) {
 			CONVERT_IPV4ADDRP_IPADDR(ipv4addrp, ipaddr);
-			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, data_source_ptr);
+			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, data_source_ptr, NULL, 0);
 		};
 	};
 

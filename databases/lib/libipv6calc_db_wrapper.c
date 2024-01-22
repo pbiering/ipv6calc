@@ -1631,9 +1631,14 @@ END_libipv6calc_db_wrapper:
 
 
 /*
- * get AS 32-bit number
+ * get AS 32-bit number and orgname (optional)
+ * in : ipaddrp (mandatory)
+ * in : data_source_ptr (optional, can be NULL)
+ * out: as_orgname (optional if not NULL and as_orgname_length != 0)
+ * in : as_orgname_length (optional required != 0)
+ * out: AS 32-bit number
  */
-uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr) {
+uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp, unsigned int *data_source_ptr, char *as_orgname, const size_t as_orgname_length) {
 	uint32_t as_num32 = ASNUM_AS_UNKNOWN; // default
 
 	int f = 0, p;
@@ -1667,6 +1672,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp,
 	};
 
 	if ((ipaddr_cache_lastused_valid == 1)
+	    &&  ((as_orgname == NULL) || (as_orgname_length == 0)) // do not retrieve result from cache in case of orgname is requested
 	    &&	(ipaddr_cache_lastused.proto == ipaddrp->proto)
 	    && 	(ipaddr_cache_lastused.addr[0] == ipaddrp->addr[0])
 	    && 	(ipaddr_cache_lastused.addr[1] == ipaddrp->addr[1])
@@ -1697,7 +1703,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp,
 			if (wrapper_GeoIP2_status == 1) {
 				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now GeoIP2");
 
-				as_num32 = libipv6calc_db_wrapper_GeoIP2_wrapper_asn_by_addr(ipaddrp);
+				as_num32 = libipv6calc_db_wrapper_GeoIP2_wrapper_asn_by_addr(ipaddrp, as_orgname, as_orgname_length);
 				if (as_num32 != ASNUM_AS_UNKNOWN) {
 					data_source_lastused = IPV6CALC_DB_SOURCE_GEOIP2;
 					goto END_libipv6calc_db_wrapper; // ok
@@ -1715,7 +1721,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp,
 
 				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now IP2Location");
 
-				as_num32 = libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(ipaddrp);
+				as_num32 = libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(ipaddrp, as_orgname, as_orgname_length);
 				if (as_num32 != ASNUM_AS_UNKNOWN) {
 					data_source_lastused = IPV6CALC_DB_SOURCE_IP2LOCATION;
 					goto END_libipv6calc_db_wrapper; // ok
@@ -1734,7 +1740,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp,
 
 				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now DBIP2");
 
-				as_num32 = libipv6calc_db_wrapper_DBIP2_wrapper_asn_by_addr(ipaddrp);
+				as_num32 = libipv6calc_db_wrapper_DBIP2_wrapper_asn_by_addr(ipaddrp, as_orgname, as_orgname_length);
 				if (as_num32 != ASNUM_AS_UNKNOWN) {
 					data_source_lastused = IPV6CALC_DB_SOURCE_DBIP2;
 					goto END_libipv6calc_db_wrapper; // ok

@@ -54,6 +54,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV6_REGISTRY=...             : registry token of given IPv6 address\n");
 	fprintf(stderr, " IPV6_PREFIXLENGTH=ddd         : given prefix length\n");
 	fprintf(stderr, " IPV6_AS_NUM=...               : AS number of (anonymized) IPv6 address\n");
+	fprintf(stderr, " IPV6_AS_ORGNAME=...           : AS organisation name of (anonymized) IPv6 address\n");
 	fprintf(stderr, " IPV6_AS_SOURCE=...            : Source of AS number of IPv6 address\n");
 	fprintf(stderr, " IPV6_GEONAME_ID=...           : GeonameID of (anonymized) IPv6 address\n");
 	fprintf(stderr, " IPV6_GEONAME_ID_SOURCE=...    : Source of GeonameID number of IPv6 address\n");
@@ -71,6 +72,7 @@ void showinfo_availabletypes(void) {
 	fprintf(stderr, " IPV4_REGISTRY=...             : registry token of native IPv4 address\n");
 	fprintf(stderr, " IPV4_PREFIXLENGTH=ddd         : given prefix length of native IPv4 address\n");
 	fprintf(stderr, " IPV4_AS_NUM=...               : AS number of (anonymized) IPv4 address\n");
+	fprintf(stderr, " IPV4_AS_ORGNAME=...           : AS organisation name of (anonymized) IPv4 address\n");
 	fprintf(stderr, " IPV4_AS_SOURCE=...            : Source of AS number of (anonymized) IPv4 address\n");
 	fprintf(stderr, " IPV4_COUNTRYCODE=...          : Country Code of (anonymized) IPv4 address\n");
 	fprintf(stderr, " IPV4_COUNTRYCODE_SOURCE=...   : Source of Country Code of (anonymized) IPv4 address\n");
@@ -603,6 +605,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 	char tempstring[IPV6CALC_STRING_MAX] = "", tempstring2[IPV6CALC_STRING_MAX] = "", tempstring3[IPV6CALC_STRING_MAX] = "";
 	char tempipv4string[IPV6CALC_STRING_MAX] = "";
 	char embeddedipv4string[IPV6CALC_STRING_MAX] = "";
+	char as_orgname[IPV6CALC_DB_SIZE_ORG_NAME] = "";
 	uint32_t machinereadable = (formatoptions & FORMATOPTION_machinereadable), as_num32 = ASNUM_AS_UNKNOWN;
 	int retval, i, j, retval_anon = 1, r;
 	ipv6calc_ipv4addr ipv4addr_anon, *ipv4addr_anon_ptr;
@@ -710,7 +713,7 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 		as_num32 = libipv4addr_as_num32_by_addr(ipv4addrp, &data_source);
 		if ((ipv4addrp->typeinfo & IPV4_ADDR_ANONYMIZED) == 0) {
 			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV4_TO_AS) == 1) {
-				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, &data_source);
+				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, &data_source, as_orgname, sizeof(as_orgname));
 			};
 		};
 
@@ -718,6 +721,9 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 			if ( machinereadable != 0 ) {
 				snprintf(tempstring, sizeof(tempstring), "%u", as_num32);
 				printout2("IPV4_AS_NUM", embeddedipv4string, tempstring, formatoptions);
+				if (strlen(as_orgname) > 0) {
+					printout2("IPV4_AS_ORGNAME", embeddedipv4string, as_orgname, formatoptions);
+				};
 
 				if (data_source != IPV6CALC_DB_SOURCE_UNKNOWN) {
 					for (i = 0; i < MAXENTRIES_ARRAY(data_sources); i++ ) {
@@ -730,8 +736,14 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 			} else {
 				if (strlen(embeddedipv4string) > 0) {
 					fprintf(stdout, "Autonomous System Number (32-bit) for %s: %d\n", embeddedipv4string, as_num32);
+					if (strlen(as_orgname) > 0) {
+						fprintf(stdout, "Autonomous System Organisation Name for %s: %s\n", embeddedipv4string, as_orgname);
+					};
 				} else {
 					fprintf(stdout, "Autonomous System Number (32-bit): %d\n", as_num32);
+					if (strlen(as_orgname) > 0) {
+						fprintf(stdout, "Autonomous System Organisation Name: %s\n", as_orgname);
+					};
 				};
 			};
 		} else {
@@ -1034,6 +1046,7 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 	int retval = 1, i, j, flag_prefixuse, registry, r, retval_anon = 1;
 	char tempstring[IPV6CALC_STRING_MAX] = "", tempstring2[IPV6CALC_STRING_MAX] = "", tempstring3[IPV6CALC_STRING_MAX] = "", helpstring[IPV6CALC_STRING_MAX] = "";
 	char ipv6addrstring[IPV6CALC_STRING_MAX] = "";
+	char as_orgname[IPV6CALC_DB_SIZE_ORG_NAME] = "";
 	ipv6calc_ipv6addr ipv6addr, ipv6addr_anon, *ipv6addrp, *ipv6addr_anon_ptr;
 	ipv6calc_ipv4addr ipv4addr, ipv4addr2;
 	ipv6calc_macaddr macaddr;
@@ -1180,13 +1193,13 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 		};
 
 		/* AS */
-		DEBUGPRINT_NA(DEBUG_showinfo, "get AS number/text");
+		DEBUGPRINT_NA(DEBUG_showinfo, "get AS number");
 		data_source = IPV6CALC_DB_SOURCE_UNKNOWN;
 		as_num32 = libipv6addr_as_num32_by_addr(ipv6addrp, &data_source);
 
 		if ((ipv6addrp->typeinfo & IPV6_ADDR_ANONYMIZED_PREFIX) == 0) {
 			if (libipv6calc_db_wrapper_has_features(IPV6CALC_DB_IPV6_TO_AS) == 1) {
-				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, &data_source);
+				as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, &data_source, as_orgname, sizeof(as_orgname));
 			};
 		};
 
@@ -1200,7 +1213,10 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 					} else {
 						snprintf(tempstring, sizeof(tempstring), "%d", as_num32);
 					};
-					printout("IPV6_AS_NUM" ,tempstring, formatoptions);
+					printout("IPV6_AS_NUM", tempstring, formatoptions);
+					if (strlen(as_orgname) > 0) {
+						printout("IPV6_AS_ORGNAME", as_orgname, formatoptions);
+					};
 
 					if (data_source != IPV6CALC_DB_SOURCE_UNKNOWN) {
 						for (i = 0; i < MAXENTRIES_ARRAY(data_sources); i++ ) {
@@ -1211,7 +1227,10 @@ int showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp1, const uint32_t format
 						};
 					};
 				} else {
-					fprintf(stdout, "ASN for address: %d\n", as_num32);
+					fprintf(stdout, "Autonomous System Number (32-bit): %d\n", as_num32);
+					if (strlen(as_orgname) > 0) {
+						fprintf(stdout, "Autonomous System Organisation Name: %s\n", as_orgname);
+					};
 				};
 			} else {
 				DEBUGPRINT_NA(DEBUG_showinfo, "Skip AS print: as_num32=ASNUM_AS_UNKNOWN");

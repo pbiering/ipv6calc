@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6addr.c
- * Copyright  : 2001-2023 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
+ * Copyright  : 2001-2024 by Peter Bieringer <pb (at) bieringer.de> except the parts taken from kernel source
  * License    : GNU GPL v2
  *
  * Information:
@@ -2291,18 +2291,18 @@ int libipv6addr_anonymize(ipv6calc_ipv6addr *ipv6addrp, const s_ipv6calc_anon_se
 					cc_index = COUNTRYCODE_INDEX_UNKNOWN_REGISTRY_MAP_MIN + REGISTRY_6BONE;
 
 					CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
-					as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, NULL);
+					as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, NULL, NULL, 0);
 				} else if ((ipv6addrp->typeinfo2 & IPV6_ADDR_TYPE2_LISP) != 0) {
 					DEBUGPRINT_NA(DEBUG_libipv6addr, "IPv6 is LISP unicast, special prefix anonymization");
 					cc_index = COUNTRYCODE_INDEX_LISP;
 
 					CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
-					as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, NULL);
+					as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, NULL, NULL, 0);
 				} else {
 					CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
 
 					cc_index = libipv6calc_db_wrapper_cc_index_by_addr(&ipaddr, NULL);
-					as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, NULL);
+					as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, NULL, NULL, 0);
 
 					if (cc_index == COUNTRYCODE_INDEX_UNKNOWN) {
 						// on unknown country, map registry value
@@ -3493,7 +3493,7 @@ uint32_t libipv6addr_as_num32_by_addr(const ipv6calc_ipv6addr *ipv6addrp, unsign
 				CONVERT_IPV6ADDRP_IPADDR(ipv6addrp, ipaddr);
 			};
 
-			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, data_source_ptr);
+			as_num32 = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, data_source_ptr, NULL, 0);
 		} else {
 			DEBUGPRINT_NA(DEBUG_libipv6addr, "DB feature missing: DB_IPV6_TO_AS");
 		};

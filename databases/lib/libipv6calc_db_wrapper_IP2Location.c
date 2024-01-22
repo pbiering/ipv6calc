@@ -29,6 +29,8 @@
 
 #include "libipv6calc_db_wrapper_IP2Location.h"
 
+#define TEST_IP2LOCATION_AVAILABLE(v)	((v != NULL) && (strstr(v, "unavailable") == NULL) && (strstr(v, " sample BIN ") == NULL) && (strstr(v, "INVALID") == NULL) && (strstr(v, "-") == NULL))
+
 char ip2location_db_dir[PATH_MAX] = IP2LOCATION_DB;
 
 
@@ -2166,15 +2168,22 @@ END_libipv6calc_db_wrapper:
 
 
 #if API_VERSION_NUMERIC >= 80600
-/* ASN */
-uint32_t libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp) {
+/*
+ * get AS 32-bit number and orgname (optional)
+ * in : ipaddrp (mandatory)
+ * in : data_source_ptr (optional, can be NULL)
+ * out: as_orgname (optional if not NULL and as_orgname_length != 0)
+ * in : as_orgname_length (optional required != 0)
+ * out: AS 32-bit number
+ */
+uint32_t libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp, char *as_orgname, const size_t as_orgname_length) {
 	int retval;
 	IP2Location *loc;
 	IP2LocationRecord *record = NULL;
-	uint32_t result = ASNUM_AS_UNKNOWN;
+	uint32_t as_num = ASNUM_AS_UNKNOWN;
 	char addrstring[IPV6CALC_STRING_MAX] = "";
 
-	char *IP2Location_result_ptr = NULL;
+	char *IP2Location_as_num_ptr = NULL;
 	unsigned int IP2Location_type = 0;
 
 	long long asn;
@@ -2209,7 +2218,7 @@ uint32_t libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(const ipv6calc_i
 
 	if ( retval != 0 ) {
 		fprintf(stderr, "Error converting address object into string\n");
-		result = -1;
+		as_num = -1;
 		goto END_libipv6calc_db_wrapper;
 	};
 
@@ -2220,6 +2229,7 @@ uint32_t libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(const ipv6calc_i
 		goto END_libipv6calc_db_wrapper;
 	};
 
+	// AS Number
 	record = libipv6calc_db_wrapper_IP2Location_get_as_number(loc, addrstring);
 
 	if (record == NULL) {
@@ -2227,29 +2237,41 @@ uint32_t libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(const ipv6calc_i
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	IP2Location_result_ptr = record->asn;
+	IP2Location_as_num_ptr = record->asn;
 
-	if (IP2Location_result_ptr == NULL) {
+	if (IP2Location_as_num_ptr == NULL) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "did not contain a as_number");
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	if (strlen(IP2Location_result_ptr) == 0) {
+	if (strlen(IP2Location_as_num_ptr) == 0) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "did not contain a as_number");
 		goto END_libipv6calc_db_wrapper;
 	};
 
 	errno = 0;
-	asn = strtoll(IP2Location_result_ptr, &end, 10);
+	asn = strtoll(IP2Location_as_num_ptr, &end, 10);
 
 	if ((errno == ERANGE) || (asn < 0) || (asn > UINT32_MAX)) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "can't convert AS number string to uint32_t as out-of-range: %s", IP2Location_result_ptr);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "can't convert AS number string to uint32_t as out-of-range: %s", IP2Location_as_num_ptr);
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	result = (uint32_t) asn;
+	as_num = (uint32_t) asn;
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "ASN: %s -> %u", IP2Location_result_ptr, result);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "as_num AS_NUM=%u (converted from '%s')", as_num, IP2Location_as_num_ptr);
+
+	// AS Text (optional)
+	if ((as_orgname != NULL) && (as_orgname_length > 0)) {
+		if (TEST_IP2LOCATION_AVAILABLE(record->as)) {
+			// copy information
+			snprintf(as_orgname, as_orgname_length, "%s", record->as);
+
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "as_num AS_ORGNAME=%s", as_orgname);
+		};
+	} else {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "lookup AS_ORGNAME skipped");
+	};
 
 	IP2LOCATION_DB_USAGE_MAP_TAG(IP2Location_type);
 
@@ -2257,7 +2279,7 @@ END_libipv6calc_db_wrapper:
 	if (record != NULL) {
 		libipv6calc_db_wrapper_IP2Location_free_record(record);
 	};
-	return(result);
+	return(as_num);
 };
 #endif // API_VERSION_NUMERIC >= 80600
 
@@ -2511,9 +2533,6 @@ int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddr
 		result = -1;
 		goto END_libipv6calc_db_wrapper;
 	};
-
-
-#define TEST_IP2LOCATION_AVAILABLE(v)	((v != NULL) && (strstr(v, "unavailable") == NULL) && (strstr(v, " sample BIN ") == NULL) && (strstr(v, "INVALID") == NULL) && (strstr(v, "-") == NULL))
 
 	record = libipv6calc_db_wrapper_IP2Location_wrapper_record_city_by_addr((char*) addrstring, ipaddrp->proto);
 

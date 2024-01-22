@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP2.c
- * Copyright  : 2019-2023 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2019-2024 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc DB-IP.com database wrapper for MaxMindDB databases
@@ -852,11 +852,20 @@ END_libipv6calc_db_wrapper:
 };
 
 
-/* ASN */
-uint32_t libipv6calc_db_wrapper_DBIP2_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp) {
-	uint32_t result = ASNUM_AS_UNKNOWN;
+/*
+ * get AS 32-bit number and orgname (optional)
+ * in : ipaddrp (mandatory)
+ * in : data_source_ptr (optional, can be NULL)
+ * out: as_orgname (optional if not NULL and as_orgname_length != 0)
+ * in : as_orgname_length (optional required != 0)
+ * out: AS 32-bit number
+ */
+uint32_t libipv6calc_db_wrapper_DBIP2_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp, char *as_orgname, const size_t as_orgname_length) {
+	uint32_t as_num = ASNUM_AS_UNKNOWN;
+	int result;
 
 	int DBIP2_type = 0;
+	libipv6calc_db_wrapper_geolocation_record record_asn;
 
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
 		DBIP2_type = dbip2_db_country_v4;
@@ -884,21 +893,39 @@ uint32_t libipv6calc_db_wrapper_DBIP2_wrapper_asn_by_addr(const ipv6calc_ipaddr 
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	result = libipv6calc_db_wrapper_MMDB_asn_by_addr(ipaddrp, &mmdb_cache[DBIP2_type]);
+	// AS Number
+	as_num = libipv6calc_db_wrapper_MMDB_asn_by_addr(ipaddrp, &mmdb_cache[DBIP2_type]);
  
-	if (result == ASNUM_AS_UNKNOWN) {
+	if (as_num == ASNUM_AS_UNKNOWN) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP2, "no match found");
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "result ASN=%u", result);
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "result ASN=%u", as_num);
+
+	// AS Text (optional)
+	if ((as_orgname != NULL) && (as_orgname_length > 0)) {
+		result = libipv6calc_db_wrapper_MMDB_all_by_addr(ipaddrp, &record_asn, &mmdb_cache[DBIP2_type]);
+
+		if (result != MMDB_SUCCESS) {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP2, "no match found");
+			goto END_libipv6calc_db_wrapper;
+		};
+
+		// copy information
+		snprintf(as_orgname, as_orgname_length, "%s", record_asn.organization_name);
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "result AS_ORGNAME=%s", as_orgname);
+	} else {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP2, "lookup AS_ORGNAME skipped");
+	};
 
 	DBIP2_DB_USAGE_MAP_TAG(DBIP2_type);
 
 	goto END_libipv6calc_db_wrapper; // keep db open
 
 END_libipv6calc_db_wrapper:
-	return(result);
+	return(as_num);
 };
 
 

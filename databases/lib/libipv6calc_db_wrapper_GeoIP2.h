@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP2.h
- * Version    : $Id$
- * Copyright  : 2019-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2019-2024 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper_GeoIP2.c
@@ -47,7 +46,7 @@ extern int         libipv6calc_db_wrapper_GeoIP2_has_features(const uint32_t fea
 #include "libipv6calc_db_wrapper_MMDB.h"
 
 extern int         libipv6calc_db_wrapper_GeoIP2_wrapper_country_code_by_addr(const ipv6calc_ipaddr *ipaddrp, char *country, const size_t country_len);
-extern uint32_t    libipv6calc_db_wrapper_GeoIP2_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp);
+extern uint32_t    libipv6calc_db_wrapper_GeoIP2_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp, char *as_orgname, const size_t as_orgname_length);
 extern uint32_t    libipv6calc_db_wrapper_GeoIP2_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp, int *source_ptr);
 extern int         libipv6calc_db_wrapper_GeoIP2_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libipv6calc_db_wrapper_geolocation_record *recordp);
 

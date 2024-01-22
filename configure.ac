@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.in
-dnl Copyright: 2001-2023 by Peter Bieringer <pb (at) bieringer.de>
+dnl Copyright: 2001-2024 by Peter Bieringer <pb (at) bieringer.de>
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -15,7 +15,7 @@ PACKAGE_VERSION_BUGFIX=0
 
 dnl API version
 API_VERSION_MAJOR=4
-API_VERSION_MINOR=1
+API_VERSION_MINOR=2
 API_VERSION_BUGFIX=0
 
 

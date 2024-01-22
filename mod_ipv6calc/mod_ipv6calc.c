@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/mod_ipv6calc
  * File       : mod_ipv6calc.c
- * Copyright  : 2015-2023 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2015-2024 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc Apache module
@@ -1091,7 +1091,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		// set ASN of IP in environment
 		if (config->action_asn == 1) {
 			if (retrieve_asn != 0) {
-				asn_num = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, NULL);
+				asn_num = libipv6calc_db_wrapper_as_num32_by_addr(&ipaddr, NULL, NULL, 0);
 
 				snprintf(asn, sizeof(asn), "%u", asn_num);
 
