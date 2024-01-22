@@ -6112,29 +6112,6 @@ else $as_nop
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
 
-		ac_fn_check_decl "$LINENO" "USAGETYPE" "ac_cv_have_decl_USAGETYPE" "$ac_includes_default" "$ac_c_undeclared_builtin_options" "CFLAGS"
-if test "x$ac_cv_have_decl_USAGETYPE" = xyes
-then :
-  ac_have_decl=1
-else $as_nop
-  ac_have_decl=0
-fi
-printf "%s\n" "#define HAVE_DECL_USAGETYPE $ac_have_decl" >>confdefs.h
-if test $ac_have_decl = 1
-then :
-
-				{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: IP2Location has full support (library >= 6.0.0)" >&5
-printf "%s\n" "IP2Location has full support (library >= 6.0.0)" >&6; }
-
-else $as_nop
-
-				as_fn_error $? "IP2Location library header file misses USAGETYPE (library < 6.0.0) which is no longer supported" "$LINENO" 5
-
-
-fi
-
-
-
 else $as_nop
 
 		as_fn_error $? "IP2Location library header files not found" "$LINENO" 5
