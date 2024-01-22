@@ -8,6 +8,9 @@
 
 datadir         = @datadir@
 
+all:
+		echo "Nothing-to-make"
+
 install:
 		if [ ! -d $(DESTDIR)$(datadir)/ipv6calc/tools ]; then install -d -m 755 $(DESTDIR)$(datadir)/ipv6calc/tools; fi
 		for f in *.sh *.pl; do install -m 755 $$f $(DESTDIR)$(datadir)/ipv6calc/tools; done
