@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Copyright  : 2003-2023 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2003-2024 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
 
@@ -15,6 +15,7 @@ RELAX=false
 SKIP_STATIC=false
 SKIP_TEST=false
 USE_CLANG=false
+SKIP_MODIPV6CALC=false
 
 LAST=""
 while [ "$1" != "$LAST" ]; do
@@ -26,13 +27,21 @@ while [ "$1" != "$LAST" ]; do
 		;;
 	    '--all'|'-a')
 		shift
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --enable-mmdb --enable-external --enable-mod_ipv6calc"
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --enable-mmdb --enable-external"
+		if ! $SKIP_MODIPV6CALC; then
+			echo "NOTICE: 'mod_ipv6calc' will be skipped"
+			OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-mod_ipv6calc"
+		fi
 		SKIP_STATIC=true
 		use_ip2location=true
 		;;
 	    '--ALL'|'-A')
 		shift
-		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --enable-mmdb --with-ip2location-dynamic --with-mmdb-dynamic --enable-external --enable-mod_ipv6calc"
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --enable-mmdb --with-ip2location-dynamic --with-mmdb-dynamic --enable-external"
+		if ! $SKIP_MODIPV6CALC; then
+			echo "NOTICE: 'mod_ipv6calc' will be skipped"
+			OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-mod_ipv6calc"
+		fi
 		SKIP_STATIC=true
 		use_ip2location=true
 		;;
@@ -96,6 +105,7 @@ while [ "$1" != "$LAST" ]; do
 	    '--clang')
 		shift
 		USE_CLANG=true
+		SKIP_MODIPV6CALC=true
 		;;
 	    '--m32')
 		shift
@@ -134,6 +144,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --no-static-build   : skip static build"
 		echo "   --no-test           : skip 'make test'"
 		echo "   --clang             : use 'clang' instead of default (usually 'gcc')"
+		echo "                           if used before '-a|-A' mod_ipv6calc support will be excluded (incompatible linker issue)"
 		echo "   --m32               : compile for 32-bit"
 		echo "   --enable-openssl-md5: use legacy OpenSSL MD5 implementation"
 		echo "   --enable-libmd-md5  : use libmd MD5 implementation"
