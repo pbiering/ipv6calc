@@ -57,10 +57,6 @@
    you don't. */
 #undef HAVE_DECL_MMDB_LIB_VERSION
 
-/* Define to 1 if you have the declaration of `USAGETYPE', and to 0 if you
-   don't. */
-#undef HAVE_DECL_USAGETYPE
-
 /* Define to 1 if you have the `EVP_DigestFinal_ex' function. */
 #undef HAVE_EVP_DIGESTFINAL_EX
 

@@ -898,8 +898,6 @@ if test "$MMDB" = "yes"; then
 
 		if test -n "$MMDB_LIB_DIR"; then
 			if test -e "$MMDB_LIB_DIR/lib$MMDB_LIB_NAME.so"; then
-				LDFLAGS="$LDFLAGS -L$MMDB_LIB_DIR"
-				CFLAGS="$CFLAGS -L$MMDB_LIB_DIR"
 				LIBS="-L$MMDB_LIB_DIR"
 			else
 				AC_MSG_ERROR([MaxMindDB library file not found: $MMDB_INCLUDE_DIR/lib$MMDB_LIB_NAME.so])
@@ -1551,6 +1549,7 @@ AC_MSG_RESULT([*** LD_LIBRARY_PATH_BASIC      =$LD_LIBRARY_PATH_BASIC])
 AC_MSG_RESULT([*** CPPFLAGS                   =$CPPFLAGS])
 AC_MSG_RESULT([*** CFLAGS                     =$CFLAGS])
 AC_MSG_RESULT([*** LDFLAGS                    =$LDFLAGS])
+AC_MSG_RESULT([*** LIBS                       =$LIBS])
 
 AC_MSG_RESULT([])
 
