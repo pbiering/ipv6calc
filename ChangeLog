@@ -1,5 +1,4 @@
 /*
- *  $Id$
  */
 
 Info:
@@ -10,13 +9,28 @@ Info:
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
 	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
 --------------------------------------------------------------------
+20240124/PB:
+	tools/ipv6calc-db-update-support.sh: new
+	tools/DBIP-update.sh[.in]: add optional support for service restart
+	tools/GeoIP-update.sh[.in]: add optional support for service restart, add option -n
+	tools/IP2Location-update.sh[.in]: add optional support for service restart
+	tools/ipv6calc-db-update.sh[.in]: add optional support for service restart
+	tag version 4.2.0
+
 20240120/PB:
 	databases/lib/libipv6calc_db_wrapper.c: skip database lookups if address is not global	
 	internal databases: update
+	autogen-support.sh: add upcoming IP2Location 8.7.0
+	ipv6calc/showinfo.c: use macros for string concatenation
+	mod_ipv6calc/ipv6calc.cgi: add since 2019 supported IPV6CALC_CLIENT_GEONAMEID
+	remove EOL GeoIPv1 and DBIPv1 leftovers
+	ipv6calcweb/ipv6calcweb.cgi.in: fix leftover change from AS_TEXT to AS_ORGNAME
+	ipv6calc/showinfo.c + several library files: add support for global AS_ORGNAME superseeding AS_TEXT dropped in 2.2.0
+	autogen.sh: exclude 'mod_ipv6calc' in case '--clang' is selected in proper sequence
+	lib/Makefile.in: add databases/lib/*.h as dependencies
 
 20231218/PB:
 	internal databases: update
-	tag version 4.2.0
 
 20231210/PB:
 	autogen-all-variants.sh: bugfixes and exclude mod_ipv6calc in case of clang (https://github.com/pbiering/ipv6calc/issues/45) and IP2Location 32-bit on EL
