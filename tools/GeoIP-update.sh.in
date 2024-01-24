@@ -4,19 +4,33 @@
 #
 # Project    : ipv6calc/GeoIP
 # File       : GeoIP-update.sh
-# Version    : $Id$
-# Copyright  : 2012-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2012-2024 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
+
+# 20240124: add option -n, add optional -R|t support
 
 GEOIP_DAT_DIR_DEFAULT="@GEOIP2_DB@"
 [ -z "$GEOIP_DAT_DIR" -a -n "$IPV6CALC_DB_GEOIP2_DIR" ] && GEOIP_DAT_DIR="$IPV6CALC_DB_GEOIP2_DIR"
 [ -z "$GEOIP_DAT_DIR" ] && GEOIP_DAT_DIR="$GEOIP_DAT_DIR_DEFAULT"
 
+# optional ipv6calc-db-update-support.sh
+supportfile="$(dirname "$0")/ipv6calc-db-update-support.sh"
+if [ -r "$supportfile" ]; then
+	echo "INFO  : found and sourced: $supportfile"
+	source $supportfile
+fi
+
 help() {
 	cat <<END
-Usage: $(basename "$0") [-D <dir>] [-v] [-L] [-G]
+Usage: $(basename "$0") [-D <dir>] [-v] ${have_ipv6calc_db_update_support:+[-R [-r]]}
 	-D <dir>	database directory (optional)
 	-v		verbose
+	-n		no action (dry-run)
+END
+
+	[ -n "$have_ipv6calc_db_update_support" ] && ipv6calc_db_update_support_help
+
+	cat <<END
 
 	database directory: $GEOIP_DAT_DIR (default: $GEOIP_DAT_DIR_DEFAULT)
 
@@ -32,7 +46,7 @@ END
 }
 
 verbose=
-while getopts "sGLD:vh\?" opt; do
+while getopts "sGLD:nRrvh\?" opt; do
 	case $opt in
 	    s)	# for backward compatibility
 		;;
@@ -42,12 +56,25 @@ while getopts "sGLD:vh\?" opt; do
 	    v)
 		verbose=-v
 		;;
+	    n)
+		NO_ACTION=1
+		;;
 	    L)
 		echo "ERROR : legacy mode is no longer supported"
 		exit 1
 		;;
 	    G)
 		echo "NOTICE: 'geoipupdate' is default since legacy is no longer supported (dedicated option '-G' can be removed now)"
+		;;
+	    R)
+		if [ -z "$have_ipv6calc_db_update_support" ]; then
+			echo "WARN  : -R is not supported as extension was not loaded: ipv6calc-db-update-support.sh"
+		else
+			reloadrestart=1
+		fi
+		;;
+	    r)
+		testrun=1
 		;;
 	    *)
 		help
@@ -80,12 +107,21 @@ else
 		exit 1
 	fi
 
-	[ -n "$verbose" ] && echo "INFO  : call now: geoipupdate -v -d $GEOIP_DAT_DIR"
+	if [ "$NO_ACTION" = "1" ]; then
+		echo "NOTICE: (TEST) would execute: geoipupdate -v -d $GEOIP_DAT_DIR"
+	else
+		echo "INFO  : call now: geoipupdate -v -d $GEOIP_DAT_DIR"
 
-	geoipupdate $verbose -d $GEOIP_DAT_DIR
-	if [ $? -ne 0 ]; then
-		echo "ERROR : 'geoipupdate' stopped with error"
-		exit 1
+		geoipupdate $verbose -d $GEOIP_DAT_DIR
+		if [ $? -ne 0 ]; then
+			echo "ERROR : execution error: geoipupdate -v -d $GEOIP_DAT_DIR"
+			exit 1
+		fi
+		echo "INFO  : execution successful: geoipupdate -v -d $GEOIP_DAT_DIR"
 	fi
-	echo "INFO  : 'geoipupdate' was successful"
 fi # end of using geoipupdate
+
+# calling external function
+if [ -n "$have_ipv6calc_db_update_support" ]; then
+	[ "$reloadrestart" = "1" ] && ipv6calc_db_update_support_reloadrestart "$GEOIP_DAT_DIR" "$testrun"
+fi

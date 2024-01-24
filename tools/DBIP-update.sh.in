@@ -4,9 +4,10 @@
 #
 # Project    : ipv6calc/DBIP
 # File       : DBIP-update.sh
-# Version    : $Id$
-# Copyright  : 2014-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2014-2024 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
+
+# 20240124: add optional -R|t support
 
 DBIP_DAT_DIR_DEFAULT="@DBIP2_DB@"
 [ -z "$DBIP_DAT_DIR" -a -n "$IPV6CALC_DB_DBIP2_DIR" ] && DBIP_DAT_DIR="$IPV6CALC_DB_DBIP2_DIR"
@@ -15,10 +16,16 @@ DBIP_DAT_DIR_DEFAULT="@DBIP2_DB@"
 DBIP_DAT_URL_BASE="http://download.db-ip.com/free/"
 DBIP_DAT_FILES="dbip-country-lite-%Y-%m.mmdb.gz dbip-city-lite-%Y-%m.mmdb.gz"
 
+# optional ipv6calc-db-update-support.sh
+supportfile="$(dirname "$0")/ipv6calc-db-update-support.sh"
+if [ -r "$supportfile" ]; then
+	echo "INFO  : found and sourced: $supportfile"
+	source $supportfile
+fi
 
 help() {
 	cat <<END
-Usage: $(basename "$0") [-v] [-s] [-c] [-D <dir>] [-C <days>] [-U <url>] [-T <type>]
+Usage: $(basename "$0") [-v] [-s] [-c] [-D <dir>] [-C <days>] [-U <url>] [-T <type>] ${have_ipv6calc_db_update_support:+[-R [-r]]}
 	-s		skip download
 	-c		skip decompress
 	-v		verbose
@@ -28,6 +35,11 @@ Usage: $(basename "$0") [-v] [-s] [-c] [-D <dir>] [-C <days>] [-U <url>] [-T <ty
 	-T <type>	set type of via URL downloaded file
                           MMDB: country|isp|location|*location-isp*
 			  CSV : isp|location|*full*
+END
+
+	[ -n "$have_ipv6calc_db_update_support" ] && ipv6calc_db_update_support_help
+
+	cat <<END
 
 	database directory: $DBIP_DAT_DIR (default: $DBIP_DAT_DIR_DEFAULT)
 
@@ -50,7 +62,7 @@ END
 skip_download=false
 skip_decompress=false
 verbose=false
-while getopts "vT:D:C:U:sch\?" opt; do
+while getopts "vT:D:C:U:scRrh\?" opt; do
 	case $opt in
 	    v)
 		verbose=true
@@ -72,6 +84,16 @@ while getopts "vT:D:C:U:sch\?" opt; do
 		;;
 	    T)
 		DBIP_TYPE="$OPTARG"
+		;;
+	    R)
+		if [ -z "$have_ipv6calc_db_update_support" ]; then
+			echo "WARN  : -R is not supported as extension was not loaded: ipv6calc-db-update-support.sh"
+		else
+			reloadrestart=1
+		fi
+		;;
+	    r)
+		testrun=1
 		;;
 	    *)
 		help
@@ -242,6 +264,11 @@ if [ -n "$DBIP_DAT_CLEANUP_DAYS" ]; then
 			rm -f "$file"
 		fi
 	done
+fi
+
+# calling external function
+if [ -n "$have_ipv6calc_db_update_support" ]; then
+	[ "$reloadrestart" = "1" ] && ipv6calc_db_update_support_reloadrestart "$DBIP_DAT_DIR" "$testrun"
 fi
 
 exit $error

@@ -4,10 +4,11 @@
 #
 # Project    : ipv6calc/databases
 # File       : ipv6calc-db-update.sh
-# Version    : $Id$
-# Copyright  : 2015-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2015-2024 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
+# 20240124: add optional -R|t support
+#
 IPV6CALC_DAT_DIR_DEFAULT="@EXTERNAL_DB@"
 [ -z "$IPV6CALC_DAT_DIR" -a -n "$IPV6CALC_DB_EXTERNAL_DIR" ] && IPV6CALC_DAT_DIR="$IPV6CALC_DB_EXTERNAL_DIR"
 [ -z "$IPV6CALC_DAT_DIR" ] && IPV6CALC_DAT_DIR="$IPV6CALC_DAT_DIR_DEFAULT"
@@ -17,13 +18,24 @@ IPV6CALC_CHECK_LIST="./ipv6calc-registries-check-run-create.sh /usr/share/ipv6ca
 IPV6CALC_CREATE_IPV4_LIST="./ipv6calc-create-registry-list-ipv4.pl /usr/share/ipv6calc/tools/ipv6calc-create-registry-list-ipv4.pl"
 IPV6CALC_CREATE_IPV6_LIST="./ipv6calc-create-registry-list-ipv6.pl /usr/share/ipv6calc/tools/ipv6calc-create-registry-list-ipv6.pl"
 
+# optional ipv6calc-db-update-support.sh
+supportfile="$(dirname "$0")/ipv6calc-db-update-support.sh"
+if [ -r "$supportfile" ]; then
+	echo "INFO  : found and sourced: $supportfile"
+	source $supportfile
+fi
 
 help() {
 	cat <<END
-Usage: $(basename "$0") [-s] [-u] [-D <dir>]
+Usage: $(basename "$0") [-s] [-u] [-D <dir>] ${have_ipv6calc_db_update_support:+[-R [-r]]}
 	-s		skip download
 	-u		unconditional update
 	-D <dir>        database directory (optional)
+END
+
+	[ -n "$have_ipv6calc_db_update_support" ] && ipv6calc_db_update_support_help
+
+	cat <<END
 
 	database directory: $IPV6CALC_DAT_DIR (default: $IPV6CALC_DAT_DIR_DEFAULT)
 
@@ -39,7 +51,7 @@ END
 
 skip_download=false
 update=false
-while getopts "D:ush\?" opt; do
+while getopts "D:usRrh\?" opt; do
 	case $opt in
 	    s)
 		skip_download=true
@@ -49,6 +61,16 @@ while getopts "D:ush\?" opt; do
 		;;
 	    D)
 		IPV6CALC_DAT_DIR="$OPTARG"
+		;;
+	    R)
+		if [ -z "$have_ipv6calc_db_update_support" ]; then
+			echo "WARN  : -R is not supported as extension was not loaded: ipv6calc-db-update-support.sh"
+		else
+			reloadrestart=1
+		fi
+		;;
+	    r)
+		testrun=1
 		;;
 	    h|\?)
 		help
@@ -180,5 +202,10 @@ for proto in 4 6; do
 		exit 1
 	fi
 done
+
+# calling external function
+if [ -n "$have_ipv6calc_db_update_support" ]; then
+	[ "$reloadrestart" = "1" ] && ipv6calc_db_update_support_reloadrestart "$IPV6CALC_DAT_DIR" "$testrun"
+fi
 
 exit 0
