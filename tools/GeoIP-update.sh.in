@@ -68,10 +68,6 @@ if [ ! -w "$GEOIP_DAT_DIR" ]; then
 	exit 1
 fi
 
-if [ ! -t 0 ]; then
-	options_wget="-q"
-fi
-
 
 if ! $geoipupdate; then
 	echo "ERROR : legacy mode is no longer supported (and this part of code should not be reached anymore...)"
