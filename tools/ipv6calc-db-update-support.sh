@@ -103,7 +103,7 @@ ipv6calc_db_update_support_reloadrestart() {
 			echo "NOTICE: execute: $sudo /usr/bin/systemctl restart $service"
 			$sudo /usr/bin/systemctl restart $service
 			if [ $? -eq 0 ]; then
-				echo "INFO: execute: $sudo /usr/bin/systemctl restart $service (SUCCESSFUL)"
+				echo "INFO  : execute: $sudo /usr/bin/systemctl restart $service (SUCCESSFUL)"
 			else
 				echo "WARN  : execute: $sudo /usr/bin/systemctl restart $service (PROBLEM)"
 			fi
