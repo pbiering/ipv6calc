@@ -1,5 +1,5 @@
 dnl Project  : ipv6calc
-dnl File     : configure.in
+dnl File     : configure.ac
 dnl Copyright: 2001-2024 by Peter Bieringer <pb (at) bieringer.de>
 
 dnl Process this file with autoconf to produce a configure script.
@@ -1450,7 +1450,6 @@ else
 	AC_MSG_WARN([Build of mod_ipv6calc NOT enabled])
 fi
 
-
 dnl *************************************************
 dnl Files to create from <file>.in
 dnl *************************************************
@@ -1484,6 +1483,7 @@ AC_CONFIG_FILES([
 		mod_ipv6calc/Makefile
 		VERSION
 ])
+
 AC_OUTPUT
 
 AC_MSG_RESULT([***** Summary])
