@@ -84,6 +84,20 @@ See summary after Apache startup in log (e.g. /var/log/httpd/error_log) for defa
 [Tue Aug 02 05:51:42.293176 2022] [ipv6calc:notice] [pid ...:tid ...] supported anonymization methods: ANON_ZEROISE ANON_ANONYMIZE ANON
 ```
 
+### run test with provided CGI
+
+Check ACL configuration in `ipv6calc.conf` in advance
+
+```
+curl https://<FQDN>/cgi-bin/ipv6calc.cgi
+REMOTE_ADDR=2001:a61:a8a:0123:4567:89ab:cdef:c87f
+IPV6CALC_CLIENT_IP_ANON=a909:16fa:9092:23ff:a909:4291:c02d:5d1d
+IPV6CALC_CLIENT_COUNTRYCODE=DE
+IPV6CALC_CLIENT_ASN=8767
+IPV6CALC_CLIENT_REGISTRY=RIPENCC
+IPV6CALC_ANON_METHOD=keep-type-asn-cc
+```
+
 ### Access log
 
 ### Anonymized log file according to example LogFormat looks then like:
