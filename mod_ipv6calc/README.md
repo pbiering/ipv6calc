@@ -37,18 +37,27 @@ Depending on module options and available "offline" databases following environm
 ## Installation
  - copy compiled module to Apache module directory
 	Fedora/Enterprise Linux
-		# cp .libs/mod_ipv6calc.so /etc/httpd/modules/
+```
+cp .libs/mod_ipv6calc.so /etc/httpd/modules/
+```
 
  - copy default configuration to Apache configuration directory
 	Fedora/Enterprise Linux
-		# cp ipv6calc.conf /etc/httpd/conf.d/
+```
+cp ipv6calc.conf /etc/httpd/conf.d/
+```
 
- - review config /etc/httpd/conf.d/ipv6calc.conf
 
+ - copy CGI script to dedicated folder (OPTIONAL)
+	Fedora/Enterprise Linux
+```
+mkdir /var/www/ipv6calc
+cp ipv6calc.cgi /var/www/ipv6calc
+```
 
 ## Configuration
 
- - see examples in `ipv6calc.conf`
+ - see defaults/examples in `ipv6calc.conf`
 
 
 ## Activation
@@ -95,6 +104,7 @@ IPV6CALC_CLIENT_IP_ANON=a909:16fa:9092:23ff:a909:4291:c02d:5d1d
 IPV6CALC_CLIENT_COUNTRYCODE=DE
 IPV6CALC_CLIENT_ASN=8767
 IPV6CALC_CLIENT_REGISTRY=RIPENCC
+IPV6CALC_CLIENT_GEONAMEID=2867714
 IPV6CALC_ANON_METHOD=keep-type-asn-cc
 ```
 
