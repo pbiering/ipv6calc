@@ -1,9 +1,16 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Copyright  : 2001-2023 by Peter Bieringer <pb@bieringer.de>
+# Copyright  : 2001-2024 by Peter Bieringer <pb@bieringer.de>
 
-# enable the following for intermediate builds
-#%#define gitcommit d3a4108cb7aeb6f731bb07989f91d8a7f449f0f0
+### supports following defines during RPM build:
+#
+### specific git commit on upstream (EXAMPLE)
+## build SRPMS+RPM
+# rpmbuild --undefine=_disable_source_fetch -ba -D "gitcommit b32d47bf915d38e08b53904501764452773d62ca" ipv6calc.spec
+#
+## rebuild SRPMS on a different system using
+# rpmbuild --rebuild -D "gitcommit b32d47bf915d38e08b53904501764452773d62ca" ipv6calc-<VERSION>-<RELEASE>.YYYYMMDDgitSHORTHASH.DIST.src.rpm
+
 
 %if 0%{?gitcommit:1}
 %global shortcommit %(c=%{gitcommit}; echo ${c:0:7})
@@ -20,13 +27,17 @@
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
 Version:	4.2.0
-Release:	48%{?gittag}%{?dist}
+Release:	80%{?gittag}%{?dist}
 URL:		http://www.deepspace6.net/projects/%{name}.html
 License:	GPLv2
 %if 0%{?gitcommit:1}
 Source:		https://github.com/pbiering/%{name}/archive/%{gitcommit}/%{name}-%{gitcommit}.tar.gz
 %else
+%if 0%{?_with_github:1}
+Source:		https://github.com/pbiering/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
+%else
 Source:		ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/%{name}-%{version}.tar.gz
+%endif
 %endif
 BuildRequires:	automake make
 BuildRequires:	gcc
@@ -192,6 +203,8 @@ By default the module is disabled.
 
 autoreconf
 
+
+%build
 %configure \
 	%{?enable_ip2location:--enable-ip2location} \
 	%{?enable_ip2location:--with-ip2location-dynamic} \
@@ -204,8 +217,6 @@ autoreconf
 	%{?enable_shared:--enable-shared} \
 	%{?enable_mod_ipv6calc:--enable-mod_ipv6calc}
 
-
-%build
 make clean
 make %{?_smp_mflags} COPTS="$RPM_OPT_FLAGS"
 
@@ -215,7 +226,7 @@ rm -rf %{buildroot}
 make install DESTDIR=%{buildroot}
 
 ## Install examples and helper files
-install -d -p %{buildroot}%{_docdir}/%{name}-%{version}/
+install -d -p %{buildroot}%{_docdir}/%{name}-%{version}
 
 ## examples
 install -d %{buildroot}%{_datadir}/%{name}/examples/
@@ -248,15 +259,19 @@ install -d %{buildroot}%{_datadir}/%{name}/selinux
 
 # ipv6calcweb
 install -d %{buildroot}%{_sysconfdir}/httpd/conf.d
-install -d %{buildroot}%{_localstatedir}/www/cgi-bin
+install -d %{buildroot}%{_localstatedir}/www/ipv6calcweb/cgi-bin
 
 install ipv6calcweb/ipv6calcweb.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/
-install -m 755 ipv6calcweb/ipv6calcweb.cgi  %{buildroot}%{_localstatedir}/www/cgi-bin/
-install -m 644 ipv6calcweb/ipv6calcweb-databases-in-var.te  %{buildroot}%{_datadir}/%{name}/selinux/
+install -m 755 ipv6calcweb/ipv6calcweb.cgi %{buildroot}%{_localstatedir}/www/ipv6calcweb/cgi-bin/
+install -m 644 ipv6calcweb/ipv6calcweb-databases-in-var.te %{buildroot}%{_datadir}/%{name}/selinux/
 
+%if %{enable_mod_ipv6calc}
 # mod_ipv6calc
-install -d %{buildroot}%{_datadir}/%{name}/examples/mod_ipv6calc
-install -m 755 mod_ipv6calc/ipv6calc.cgi  %{buildroot}%{_datadir}/%{name}/examples/mod_ipv6calc
+install -d %{buildroot}%{_sysconfdir}/httpd/conf.d
+install -d %{buildroot}%{_localstatedir}/www/ipv6calc/cgi-bin
+install mod_ipv6calc/ipv6calc.conf %{buildroot}%{_sysconfdir}/httpd/conf.d/
+install -m 755 mod_ipv6calc/ipv6calc.cgi %{buildroot}%{_localstatedir}/www/ipv6calc/cgi-bin/
+%endif
 
 %clean
 rm -rf %{buildroot}
@@ -314,16 +329,16 @@ rm -rf %{buildroot}
 
 %defattr(644,root,root,755)
 
-%attr(755,-,-) %{_localstatedir}/www/cgi-bin/ipv6calcweb.cgi
+%attr(755,-,-) %{_localstatedir}/www/ipv6calcweb/cgi-bin/ipv6calcweb.cgi
 %config(noreplace) %{_sysconfdir}/httpd/conf.d/ipv6calcweb.conf
 
 
 %files mod_ipv6calc
 %if %{rpm_license_extra}
-%doc mod_ipv6calc/README.mod_ipv6calc
+%doc mod_ipv6calc/README.md
 %license COPYING LICENSE
 %else
-%doc mod_ipv6calc/README.mod_ipv6calc COPYING LICENSE
+%doc mod_ipv6calc/README.md COPYING LICENSE
 %endif
 
 %defattr(644,root,root,755)
@@ -331,7 +346,7 @@ rm -rf %{buildroot}
 %config(noreplace) %{_httpd_confdir}/ipv6calc.conf
 %attr(755,-,-) %{_httpd_moddir}/mod_ipv6calc.so
 
-%attr(755,-,-) %{_datadir}/%{name}/examples/mod_ipv6calc/ipv6calc.cgi
+%attr(755,-,-) %{_localstatedir}/www/ipv6calc/cgi-bin/ipv6calc.cgi
 
 
 %post
@@ -351,6 +366,10 @@ fi
 
 
 %changelog
+* Fri Jan 26 2023 Peter Bieringer <pb@bieringer.de>
+- cosmetics, minor updates and alignment with EPEL9 variant
+- change locations of CGI scripts
+
 * Wed Dec 06 2023 Peter Bieringer <pb@bieringer.de>
 - call autoreconf before configure
 
