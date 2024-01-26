@@ -15,6 +15,7 @@ Info:
 	contrib/ipv6calc.spec[.in]: cosmetics, minor updates and alignment with EPEL9 variant, change locations of CGI scripts
 	ipv6calcweb/ipv6calcweb.conf: use dedicated directory now for CGI script
 	mod_ipv6calc/ipv6calc.conf: use dedicated directory now for CGI script
+	internal databases: update
 
 20240124/PB:
 	tools/ipv6calc-db-update-support.sh: new

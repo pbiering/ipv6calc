@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_oui28.h
  * Version       : $Id$
- * Generated     : Sat Jan 20 05:46:04 2024
+ * Generated     : Fri Jan 26 08:15:29 2024
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui28_status __attribute__ ((__unused__)) = "OUI28/20240120";
+/*@unused@*/ static const char* libieee_oui28_status __attribute__ ((__unused__)) = "OUI28/20240126";
 
 
 static const s_ieee_oui28 libieee_oui28[] = {
@@ -177,7 +177,7 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x08F80D, 0xA00000, 0xAFFFFF, "MICKEY INDUSTRY,LTD.", "MICKEY-INDUSTRY" },
 	{ 0x08F80D, 0xB00000, 0xBFFFFF, "Vont Innovations", "VONT-INNOVATIONS" },
 	{ 0x08F80D, 0xC00000, 0xCFFFFF, "ZMBIZI APP LLC", "ZMBIZI-APP" },
-	{ 0x08F80D, 0xD00000, 0xDFFFFF, "ZHEJIANG EV-TECH.,LTD", "ZHEJIANG-EV-TECH" },
+	{ 0x08F80D, 0xD00000, 0xDFFFFF, "Zhe Jiang EV-Tech Co.,Ltd", "ZHE-JIANG-EV-TECH" },
 	{ 0x08F80D, 0xE00000, 0xEFFFFF, "Suzhou Sidi Information Technology Co., Ltd.", "SUZHOU-SIDI-INFORMATION" },
 	{ 0x0C5CB5, 0x000000, 0x0FFFFF, "Yamasei", "YAMASEI" },
 	{ 0x0C5CB5, 0x100000, 0x1FFFFF, "avxav Electronic Trading LLC", "AVXAV-TRADING" },
@@ -2704,9 +2704,14 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x807B85, 0xD00000, 0xDFFFFF, "Kaynes Technology India Pvt Ltd", "KAYNES-INDIA-PVT" },
 	{ 0x807B85, 0xE00000, 0xEFFFFF, "Mersen", "MERSEN" },
 	{ 0x807B85, 0xF00000, 0xFFFFFF, "Private", "PRIVATE" },
+	{ 0x80A579, 0x000000, 0x0FFFFF, "Benano Inc.", "BENANO" },
+	{ 0x80A579, 0x100000, 0x1FFFFF, "Zhe Jiang EV-Tech Co.,Ltd", "ZHE-JIANG-EV-TECH" },
 	{ 0x80A579, 0x300000, 0x3FFFFF, "Tool-Temp AG", "TOOL-TEMP" },
+	{ 0x80A579, 0x400000, 0x4FFFFF, "Hardened Networks", "HARDENED-NETWORKS" },
+	{ 0x80A579, 0x500000, 0x5FFFFF, "Potron Technology Co.,Ltd.,", "POTRON" },
 	{ 0x80A579, 0x700000, 0x7FFFFF, "Siemens Energy Global GmbH & Co. KG", "SIEMENS-ENERGY-GLOBAL" },
 	{ 0x80A579, 0xA00000, 0xAFFFFF, "ViewSonic Corp", "VIEWSONIC" },
+	{ 0x80A579, 0xB00000, 0xBFFFFF, "Ground Control Technologies UK Ltd.", "GROUND-CONTROL-TECHNOLOGIES-UK" },
 	{ 0x80A579, 0xC00000, 0xCFFFFF, "BluArmor", "BLUARMOR" },
 	{ 0x80E4DA, 0x000000, 0x0FFFFF, "Wheatstone Corporation", "WHEATSTONE" },
 	{ 0x80E4DA, 0x100000, 0x1FFFFF, "Guangzhou Pinzhong Electronic Technology CO., LTD", "GUANGZHOU-PINZHONG" },
