@@ -7,15 +7,21 @@ Info:
 	ESR = Eric S. Raymond <esr (at) thyrsus dot com>
 	PV = Peter Volkov <pva (at) gentoo dot org>
 	AGP = Anthony G. Basile <basile at opensource dot dyc dot edu>
-	VZ = Vadim Zhukow https://github.com/grayedhttps://github.com/grayed
+	VZ = Vadim Zhukow https://github.com/grayed
+	BL = Boris Lytochkin https://github.com/lytboris/
+
 --------------------------------------------------------------------
+20240126/PB:
+	contrib/ipv6calc.spec[.in]: cosmetics, minor updates and alignment with EPEL9 variant, change locations of CGI scripts
+	ipv6calcweb/ipv6calcweb.conf: use dedicated directory now for CGI script
+	mod_ipv6calc/ipv6calc.conf: use dedicated directory now for CGI script
+
 20240124/PB:
 	tools/ipv6calc-db-update-support.sh: new
 	tools/DBIP-update.sh[.in]: add optional support for service restart
 	tools/GeoIP-update.sh[.in]: add optional support for service restart, add option -n
 	tools/IP2Location-update.sh[.in]: add optional support for service restart
 	tools/ipv6calc-db-update.sh[.in]: add optional support for service restart
-	tag version 4.2.0
 
 20240120/PB:
 	databases/lib/libipv6calc_db_wrapper.c: skip database lookups if address is not global	
@@ -28,6 +34,9 @@ Info:
 	ipv6calc/showinfo.c + several library files: add support for global AS_ORGNAME superseeding AS_TEXT dropped in 2.2.0
 	autogen.sh: exclude 'mod_ipv6calc' in case '--clang' is selected in proper sequence
 	lib/Makefile.in: add databases/lib/*.h as dependencies
+
+20240112/BL
+	configure.ac,databases/lib/libipv6calc_db_wrapper.c,databases/lib/libipv6calc_db_wrapper_IP2Location.c,databases/lib/libipv6calc_db_wrapper_IP2Location.h: EOL cleanup and support for upcoming IP2Location 8.7.0
 
 20231218/PB:
 	internal databases: update
