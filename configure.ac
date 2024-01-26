@@ -6,7 +6,7 @@ dnl Process this file with autoconf to produce a configure script.
 
 AC_INIT([ipv6calc],[4.2.0],[ipv6calc@deepspace6.net],[ipv6calc],[https://www.deepspace6.net/projects/ipv6calc.html])
 
-COPYRIGHT_YEAR=2023
+COPYRIGHT_YEAR=2024
 
 dnl Program/library version (align with version above)
 PACKAGE_VERSION_MAJOR=4
