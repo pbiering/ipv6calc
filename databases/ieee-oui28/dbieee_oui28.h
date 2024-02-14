@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_oui28.h
  * Version       : $Id$
- * Generated     : Fri Jan 26 08:15:29 2024
+ * Generated     : Wed Feb 14 21:30:04 2024
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui28_status __attribute__ ((__unused__)) = "OUI28/20240126";
+/*@unused@*/ static const char* libieee_oui28_status __attribute__ ((__unused__)) = "OUI28/20240214";
 
 
 static const s_ieee_oui28 libieee_oui28[] = {
@@ -103,7 +103,7 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x04C3E6, 0xB00000, 0xBFFFFF, "Flintec UK Ltd.", "FLINTEC-UK" },
 	{ 0x04C3E6, 0xC00000, 0xCFFFFF, "SHANTOU YINGSHENG IMPORT & EXPORT TRADING CO.,LTD.", "SHANTOU-YINGSHENG-IMPORT-EXPORT-TRADING" },
 	{ 0x04C3E6, 0xD00000, 0xDFFFFF, "Amiosec Ltd", "AMIOSEC" },
-	{ 0x04C3E6, 0xE00000, 0xEFFFFF, "Teleepoch Ltd", "TELEEPOCH" },
+	{ 0x04C3E6, 0xE00000, 0xEFFFFF, "Great Talent Technology Limited", "GREAT-TALENT" },
 	{ 0x04D16E, 0x000000, 0x0FFFFF, "INTRIPLE, a.s.", "INTRIPLE" },
 	{ 0x04D16E, 0x100000, 0x1FFFFF, "Launch Tech Co., Ltd.", "LAUNCH-TECH" },
 	{ 0x04D16E, 0x200000, 0x2FFFFF, "s.d.i. s.p.a.", "S-D-I" },
@@ -149,6 +149,11 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x0826AE, 0xC00000, 0xCFFFFF, "Brannstrom Sweden AB", "BRANNSTROM-SWEDEN-AB" },
 	{ 0x0826AE, 0xD00000, 0xDFFFFF, "Veth Propulsion bv", "VETH-PROPULSION" },
 	{ 0x0826AE, 0xE00000, 0xEFFFFF, "Mass Electronics Pty Ltd", "MASS-ELECTRONICS-PTY" },
+	{ 0x086332, 0x000000, 0x0FFFFF, "Eaton", "EATON" },
+	{ 0x086332, 0x200000, 0x2FFFFF, "innovative specialized security solutions", "INNOVATIVE-SPECIALIZED-SECURITY-SOLUTIONS" },
+	{ 0x086332, 0x300000, 0x3FFFFF, "Umano Medical Inc.", "UMANO-MEDICAL" },
+	{ 0x086332, 0x600000, 0x6FFFFF, "OVT India pvt Ltd", "OVT-INDIA-PVT" },
+	{ 0x086332, 0xA00000, 0xAFFFFF, "Dynacom Communication", "DYNACOM-COMMUNICATION" },
 	{ 0x08ED02, 0x000000, 0x0FFFFF, "D2SLink Systems", "D2SLINK" },
 	{ 0x08ED02, 0x100000, 0x1FFFFF, "Imperx, Inc", "IMPERX" },
 	{ 0x08ED02, 0x200000, 0x2FFFFF, "TES Touch Embedded Solutions Inc.", "TES-TOUCH-EMBEDDED-SOLUTIONS" },
@@ -351,7 +356,7 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x141FBA, 0x300000, 0x3FFFFF, "Private", "PRIVATE" },
 	{ 0x141FBA, 0x400000, 0x4FFFFF, "BYZERO", "BYZERO" },
 	{ 0x141FBA, 0x500000, 0x5FFFFF, "Inttelix Brasil Tecnologia e Sistemas Ltda", "INTTELIX-BRASIL-TECNOLOGIA-E-SISTEMAS-LTDA" },
-	{ 0x141FBA, 0x600000, 0x6FFFFF, "Thales Communications & Security SAS", "THALES-COMMUNICATION-SECURITY-SAS" },
+	{ 0x141FBA, 0x600000, 0x6FFFFF, "Revenue Collection Systems France SAS", "REVENUE-COLLECTION-FRANCE-SAS" },
 	{ 0x141FBA, 0x700000, 0x7FFFFF, "Wisnetworks Technologies Co., Ltd.", "WISNETWORKS-TECHNOLOGIES" },
 	{ 0x141FBA, 0x800000, 0x8FFFFF, "Shenzhen CATIC Information Technology Industry Co.,Ltd", "SHENZHEN-CATIC-INFORMATION-INDUSTRY" },
 	{ 0x141FBA, 0x900000, 0x9FFFFF, "Black Moth Technologies", "BLACK-MOTH-TECHNOLOGIES" },
@@ -1469,7 +1474,7 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x40F385, 0x500000, 0x5FFFFF, "KATO ENGINEERING INC.", "KATO-ENGINEERING" },
 	{ 0x40F385, 0x600000, 0x6FFFFF, "Lennox International Incorporated", "LENNOX-INCORPORATED" },
 	{ 0x40F385, 0x700000, 0x7FFFFF, "PALAZZETTI LELIO SPA", "PALAZZETTI-LELIO-SPA" },
-	{ 0x40F385, 0x800000, 0x8FFFFF, "Teleepoch Ltd", "TELEEPOCH" },
+	{ 0x40F385, 0x800000, 0x8FFFFF, "Great Talent Technology Limited", "GREAT-TALENT" },
 	{ 0x40F385, 0x900000, 0x9FFFFF, "Fast Precision Technologies Co. Ltd.", "FAST-PRECISION-TECHNOLOGIES" },
 	{ 0x40F385, 0xA00000, 0xAFFFFF, "Creanord", "CREANORD" },
 	{ 0x40F385, 0xB00000, 0xBFFFFF, "URMET Home & Building Solutions Pty Ltd", "URMET-HOME-BUILDING-SOLUTIONS-PTY" },
@@ -2706,13 +2711,19 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x807B85, 0xF00000, 0xFFFFFF, "Private", "PRIVATE" },
 	{ 0x80A579, 0x000000, 0x0FFFFF, "Benano Inc.", "BENANO" },
 	{ 0x80A579, 0x100000, 0x1FFFFF, "Zhe Jiang EV-Tech Co.,Ltd", "ZHE-JIANG-EV-TECH" },
+	{ 0x80A579, 0x200000, 0x2FFFFF, "Jiangsu wonder-working electric co., LTD", "JIANGSU-WONDER-WORKING-ELECTRIC" },
 	{ 0x80A579, 0x300000, 0x3FFFFF, "Tool-Temp AG", "TOOL-TEMP" },
 	{ 0x80A579, 0x400000, 0x4FFFFF, "Hardened Networks", "HARDENED-NETWORKS" },
 	{ 0x80A579, 0x500000, 0x5FFFFF, "Potron Technology Co.,Ltd.,", "POTRON" },
+	{ 0x80A579, 0x600000, 0x6FFFFF, "Xiamen Pinnacle Electrical Co., Ltd", "XIAMEN-PINNACLE-ELECTRICAL" },
 	{ 0x80A579, 0x700000, 0x7FFFFF, "Siemens Energy Global GmbH & Co. KG", "SIEMENS-ENERGY-GLOBAL" },
+	{ 0x80A579, 0x800000, 0x8FFFFF, "DI3 INFOTECH LLP", "DI3-INFOTECH-LLP" },
+	{ 0x80A579, 0x900000, 0x9FFFFF, "Yovil Ltd.", "YOVIL" },
 	{ 0x80A579, 0xA00000, 0xAFFFFF, "ViewSonic Corp", "VIEWSONIC" },
 	{ 0x80A579, 0xB00000, 0xBFFFFF, "Ground Control Technologies UK Ltd.", "GROUND-CONTROL-TECHNOLOGIES-UK" },
 	{ 0x80A579, 0xC00000, 0xCFFFFF, "BluArmor", "BLUARMOR" },
+	{ 0x80A579, 0xD00000, 0xDFFFFF, "Guangdong Province Ivsuan technology co., ltd", "GUANGDONG-PROVINCE-IVSUAN" },
+	{ 0x80A579, 0xE00000, 0xEFFFFF, "Unplugged Technologies Ltd.", "UNPLUGGED-TECHNOLOGIES" },
 	{ 0x80E4DA, 0x000000, 0x0FFFFF, "Wheatstone Corporation", "WHEATSTONE" },
 	{ 0x80E4DA, 0x100000, 0x1FFFFF, "Guangzhou Pinzhong Electronic Technology CO., LTD", "GUANGZHOU-PINZHONG" },
 	{ 0x80E4DA, 0x200000, 0x2FFFFF, "Thurlby Thandar Instruments LTD", "THURLBY-THANDAR-INSTRUMENTS" },
@@ -3073,10 +3084,24 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x8CC8F4, 0xC00000, 0xCFFFFF, "Shenzhen KSTAR Science and Technology Co., Ltd", "SHENZHEN-KSTAR-SCIENCE" },
 	{ 0x8CC8F4, 0xD00000, 0xDFFFFF, "Beijing Xinxunxintong Eletronics Co.,Ltd", "BEIJING-XINXUNXINTONG-ELETRONICS" },
 	{ 0x8CC8F4, 0xE00000, 0xEFFFFF, "Evaporcool Solutions", "EVAPORCOOL-SOLUTIONS" },
+	{ 0x901564, 0x000000, 0x0FFFFF, "Fengzhushou Co., Ltd.", "FENGZHUSHOU" },
+	{ 0x901564, 0x200000, 0x2FFFFF, "PIN GENIE, INC.DBA LOCKLY", "PIN-GENIE-DBA-LOCKLY" },
+	{ 0x901564, 0x300000, 0x3FFFFF, "Clinton Electronics Corporation", "CLINTON-ELECTRONICS" },
+	{ 0x901564, 0x400000, 0x4FFFFF, "Kontakt Micro-Location Sp z o.o.", "KONTAKT-MICRO-LOCATION-SP-Z-O-O" },
+	{ 0x901564, 0x500000, 0x5FFFFF, "Relectrify Pty Ltd", "RELECTRIFY-PTY" },
+	{ 0x901564, 0x600000, 0x6FFFFF, "final Inc.", "FINAL" },
+	{ 0x901564, 0x700000, 0x7FFFFF, "Hangzhou System Technology Co.,Ltd", "HANGZHOU-SYSTEM" },
+	{ 0x901564, 0x800000, 0x8FFFFF, "Heliogen", "HELIOGEN" },
+	{ 0x901564, 0x900000, 0x9FFFFF, "Annapurna labs", "ANNAPURNA-LABS" },
+	{ 0x901564, 0xA00000, 0xAFFFFF, "Bunka Shutter Co., Ltd.", "BUNKA-SHUTTER" },
+	{ 0x901564, 0xB00000, 0xBFFFFF, "Shanghai AMP&MOONS'Automation Co.,Ltd.", "SHANGHAI-AMP-MOONS-AUTOMATION" },
+	{ 0x901564, 0xC00000, 0xCFFFFF, "LINAK A/S", "LINAK-A/S" },
+	{ 0x901564, 0xD00000, 0xDFFFFF, "Jiangsu Kangjie Data Co., Ltd.", "JIANGSU-KANGJIE-DATA" },
+	{ 0x901564, 0xE00000, 0xEFFFFF, "Guiyag Electrlcal Control Equipment Co.,Ltd", "GUIYAG-ELECTRLCAL-CONTROL-EQUIPMENT" },
 	{ 0x904E91, 0x000000, 0x0FFFFF, "Spirtech", "SPIRTECH" },
 	{ 0x904E91, 0x100000, 0x1FFFFF, "Apollo Video Technology", "APOLLO-VIDEO" },
 	{ 0x904E91, 0x200000, 0x2FFFFF, "North Pole Engineering, Inc.", "NORTH-POLE-ENGINEERING" },
-	{ 0x904E91, 0x300000, 0x3FFFFF, "Teleepoch Ltd", "TELEEPOCH" },
+	{ 0x904E91, 0x300000, 0x3FFFFF, "Great Talent Technology Limited", "GREAT-TALENT" },
 	{ 0x904E91, 0x400000, 0x4FFFFF, "Wrtnode technology Inc.", "WRTNODE" },
 	{ 0x904E91, 0x500000, 0x5FFFFF, "mcf88 SRL", "MCF88-SRL" },
 	{ 0x904E91, 0x600000, 0x6FFFFF, "Nuwa Robotics (HK) Limited Taiwan Branch", "NUWA-ROBOTICS-HK-TAIWAN-BRANCH" },

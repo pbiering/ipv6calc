@@ -11,6 +11,9 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20240214/PB:
+	internal databases: update
+
 20240126/PB:
 	contrib/ipv6calc.spec[.in]: cosmetics, minor updates and alignment with EPEL9 variant, change locations of CGI scripts
 	ipv6calcweb/ipv6calcweb.conf: use dedicated directory now for CGI script
