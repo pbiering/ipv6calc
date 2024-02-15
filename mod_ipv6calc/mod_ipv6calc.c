@@ -1633,7 +1633,10 @@ static void ipv6calc_register_hooks(apr_pool_t *p) {
 /*
  * mod_ipv6calc API hooks
  */
-#if (((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER >= 4)) || (AP_SERVER_MAJORVERSION_NUMBER > 2))
+#if ( \
+	((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER >= 4)) \
+     || (AP_SERVER_MAJORVERSION_NUMBER > 2) \\
+)
 AP_DECLARE_MODULE(ipv6calc) = {
 #else
 module AP_MODULE_DECLARE_DATA ipv6calc_module = {
@@ -1645,7 +1648,11 @@ module AP_MODULE_DECLARE_DATA ipv6calc_module = {
 	NULL,                        /* merge  per-server config structures */
 	ipv6calc_cmds,               /* table of config file commands       */
 	ipv6calc_register_hooks,     /* register hooks                      */
-#if (((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER >= 4)) || (AP_SERVER_MAJORVERSION_NUMBER > 37))
+#if ( \
+	((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER == 4) && (AP_SERVER_PATCHLEVEL_NUMBER >= 37)) \
+    ||	((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER > 4)) \
+    ||  (AP_SERVER_MAJORVERSION_NUMBER > 2) \
+)
 	0,                           /* flags                               */ // not found in 2.4.6, found in 2.4.37
 #endif
 };
