@@ -1635,7 +1635,7 @@ static void ipv6calc_register_hooks(apr_pool_t *p) {
  */
 #if ( \
 	((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER >= 4)) \
-     || (AP_SERVER_MAJORVERSION_NUMBER > 2) \\
+     || (AP_SERVER_MAJORVERSION_NUMBER > 2) \
 )
 AP_DECLARE_MODULE(ipv6calc) = {
 #else
