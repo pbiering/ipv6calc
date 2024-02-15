@@ -29,8 +29,9 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --enable-mmdb --enable-external"
 		if ! $SKIP_MODIPV6CALC; then
-			echo "NOTICE: 'mod_ipv6calc' will be skipped"
 			OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-mod_ipv6calc"
+		else
+			echo "NOTICE: 'mod_ipv6calc' will be skipped"
 		fi
 		SKIP_STATIC=true
 		use_ip2location=true
