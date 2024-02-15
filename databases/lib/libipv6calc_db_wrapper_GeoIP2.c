@@ -924,7 +924,7 @@ uint32_t libipv6calc_db_wrapper_GeoIP2_wrapper_asn_by_addr(const ipv6calc_ipaddr
 
 	// AS Text (optional)
 	if ((as_orgname != NULL) && (as_orgname_length > 0)) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "lookup AS_ORGNAME as_orgname=%p as_orgname_length=%lu", as_orgname, as_orgname_length);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "lookup AS_ORGNAME as_orgname=%p as_orgname_length=%lu", as_orgname, (long unsigned int) as_orgname_length);
 		result = libipv6calc_db_wrapper_MMDB_all_by_addr(ipaddrp, &record_asn, &mmdb_cache[GEOIP2_type]);
 
 		if (result != MMDB_SUCCESS) {
@@ -937,7 +937,7 @@ uint32_t libipv6calc_db_wrapper_GeoIP2_wrapper_asn_by_addr(const ipv6calc_ipaddr
 
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "result AS_ORGNAME=%s", as_orgname);
 	} else {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "lookup AS_ORGNAME skipped as_orgname=%p as_orgname_length=%lu", as_orgname, as_orgname_length);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "lookup AS_ORGNAME skipped as_orgname=%p as_orgname_length=%lu", as_orgname, (long unsigned int) as_orgname_length);
 	};
 
 	GeoIP2_DB_USAGE_MAP_TAG(GEOIP2_type);
