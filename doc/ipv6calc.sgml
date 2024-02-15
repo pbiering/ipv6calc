@@ -12,7 +12,7 @@
 <title>The ipv6calc Homepage</title>
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 <revhistory> 
-<revision> <revnumber>11.1.0</revnumber> <date>2023-12-08</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>11.1.1</revnumber> <date>2024-02-15</date> <authorinitials>PB</authorinitials></revision>
 </revhistory> </articleinfo><sect1>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in /proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program ip6_int into. Now only one utility is needed to do a lot.</para>
@@ -36,11 +36,11 @@
 <listitem><para>(since 0.98.0, released 2015 until 3.0.0 released 2020) based on local Berkeley DB files generated from downloaded CSV files</para></listitem><listitem><para>native MaxMindDB files (support since 2.0.0, released 2019)</para></listitem></itemizedlist></listitem><listitem><para>&ldquo;External&rdquo; (since 0.98.0, released 2015), based on local Berkeley DB files, generated from downloaded TXT/XML files (registries assignment databases). Supporting IPv4/IPv6 to Registries and IPv4/IPv6 to CountryCode. If newer, overruling the related included databases.</para></listitem></itemizedlist><para>Since version 0.95.0 the tool can be compiled to use dynamically loading of library, means the binaries can be also used on systems where IP2Location or GeoIP libraries are not existing. On such system, the support is simply disabled then and some capabilities/features which requires the databases are disabled.</para>
 <para>Since version 0.97.4 also fallback code for GeoIP and IP2Location is included in the source package, means that support of dynamically loading of library can be included during compilation without having related development sources on the system.</para>
 <para>Since version 2.0.0 MaxMindDB is supported (linked or dynamically loaded)</para>
-<para>Since version 3.0.0 GeoIP(legacy) and db-ip.com(BerkeleyDB) is remoed</para></sect2></sect1><sect1>
+<para>Since version 3.0.0 GeoIP(legacy) and db-ip.com(BerkeleyDB) is removed</para></sect2></sect1><sect1>
 <title>License</title>
 <para>The program is published under the GNU GPL version 2.</para></sect1><sect1>
 <title>Copyright</title>
-<para>(C) 2001 - 2023 by Dr. Peter Bieringer</para></sect1><sect1>
+<para>(C) 2001 - 2024 by Dr. Peter Bieringer</para></sect1><sect1>
 <title>Author</title>
 <para>The author of ipv6calc is</para><itemizedlist>
 <listitem><para><ulink url="mailto:pb@bieringer.de">Dr. Peter Bieringer</ulink> with some minor contribution by others</para></listitem></itemizedlist></sect1><sect1>
