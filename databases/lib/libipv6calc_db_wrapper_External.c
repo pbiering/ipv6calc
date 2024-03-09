@@ -2,7 +2,7 @@
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_External.c
  * Version    : $Id$
- * Copyright  : 2013-2022 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2024 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc External (superseeding BuiltIn) database wrapper
@@ -157,7 +157,7 @@ static int libipv6calc_db_wrapper_External_close(DB *dbp) {
 			};
 		};
 
-		dbp->close(dbp, 0);
+		dbp->close(dbp, DB_NOSYNC); // DB_NOSYNC: databases are only opened in read-only mode
 	};
 
 	return(0);

@@ -11,6 +11,9 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20240309/PB:
+	databases/lib/libipv6calc_db_wrapper_External.c: close with DB_NOSYNC
+
 20240214/PB:
 	tag version 4.2.0
 
