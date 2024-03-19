@@ -757,15 +757,15 @@ static int ipv6calc_post_read_request(request_rec *r) {
 				if (pi == mod_ipv6calc_pi_IPV4) {
 					ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
 						, "IPv4 address to lookup in cache: %08x"
-						, (p_mapped == 0) ? client_addr_p->sa.sin.sin_addr.s_addr : client_addr_p->sa.sin6.sin6_addr.s6_addr32[3]
+						, (p_mapped == 0) ? ntohl(client_addr_p->sa.sin.sin_addr.s_addr) : ntohl(client_addr_p->sa.sin6.sin6_addr.s6_addr32[3])
 					);
 				} else if (pi == mod_ipv6calc_pi_IPV6) {
 					ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
 						, "IPv6 address to lookup in cache: %08x %08x %08x %08x"
-						, client_addr_p->sa.sin6.sin6_addr.s6_addr32[0]
-						, client_addr_p->sa.sin6.sin6_addr.s6_addr32[1]
-						, client_addr_p->sa.sin6.sin6_addr.s6_addr32[2]
-						, client_addr_p->sa.sin6.sin6_addr.s6_addr32[3]
+						, ntohl(client_addr_p->sa.sin6.sin6_addr.s6_addr32[0])
+						, ntohl(client_addr_p->sa.sin6.sin6_addr.s6_addr32[1])
+						, ntohl(client_addr_p->sa.sin6.sin6_addr.s6_addr32[2])
+						, ntohl(client_addr_p->sa.sin6.sin6_addr.s6_addr32[3])
 					);
 				};
 			};
@@ -776,16 +776,16 @@ static int ipv6calc_post_read_request(request_rec *r) {
 						ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
 							, "IPv4 address in cache       %3d: %08x"
 							, i
-							, ipv6calc_cache_lri_ipv4_token[i].s_addr
+							, ntohl(ipv6calc_cache_lri_ipv4_token[i].s_addr)
 						);
 					} else if (pi == mod_ipv6calc_pi_IPV6) {
 						ap_log_rerror(APLOG_MARK, APLOG_NOTICE, 0, r
 							, "IPv6 address in cache       %3d: %08x %08x %08x %08x"
 							, i
-							, ipv6calc_cache_lri_ipv6_token[i].s6_addr32[0]
-							, ipv6calc_cache_lri_ipv6_token[i].s6_addr32[1]
-							, ipv6calc_cache_lri_ipv6_token[i].s6_addr32[2]
-							, ipv6calc_cache_lri_ipv6_token[i].s6_addr32[3]
+							, ntohl(ipv6calc_cache_lri_ipv6_token[i].s6_addr32[0])
+							, ntohl(ipv6calc_cache_lri_ipv6_token[i].s6_addr32[1])
+							, ntohl(ipv6calc_cache_lri_ipv6_token[i].s6_addr32[2])
+							, ntohl(ipv6calc_cache_lri_ipv6_token[i].s6_addr32[3])
 						);
 					};
 				};
