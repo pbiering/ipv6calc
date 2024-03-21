@@ -548,34 +548,6 @@ static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
 		, "ipv6calc_child_init"
 	);
 
-	ipv6calc_support_init(s);
-
-	/* check for KeepTypeAsnCC support */
-	if ((libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV4_REQ_DB) == 1) \
-	    && (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEASNCC_IPV6_REQ_DB) == 1)) {
-		feature_kp = 1;
-	};
-
-	/* check for KeepTypeAsnCC support */
-	if ((libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEGEONAMEID_IPV4_REQ_DB) == 1) \
-	    && (libipv6calc_db_wrapper_has_features(ANON_METHOD_KEEPTYPEGEONAMEID_IPV6_REQ_DB) == 1)) {
-		feature_kg = 1;
-	};
-
-	if (config->ipv6calc_anon_set.method == ANON_METHOD_KEEPTYPEASNCC) {
-		if (feature_kp == 0) {
-			// fallback
-			libipv6calc_anon_set_by_name(&config->ipv6calc_anon_set, "as"); // anonymize standard
-		};
-	};
-
-	if (config->ipv6calc_anon_set.method == ANON_METHOD_KEEPTYPEGEONAMEID) {
-		if (feature_kg == 0) {
-			// fallback
-			libipv6calc_anon_set_by_name(&config->ipv6calc_anon_set, "as"); // anonymize standard
-		};
-	};
-
 	return;
 };
 
