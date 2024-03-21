@@ -11,6 +11,10 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20240321/PB:
+	mod_ipv6calc/mod_ipv6calc.c: add support for fetching client IP from environment
+	mod_ipv6calc/mod_ipv6calc.c: remove not required database init per child
+
 20240309/PB:
 	databases/lib/libipv6calc_db_wrapper_External.c: close with DB_NOSYNC
 
