@@ -345,16 +345,6 @@ static int ipv6calc_support_init(server_rec *s) {
  * Hooks functions
  ***************************/
 
-/*
- * ipv6calc_cleanup
- */
-static apr_status_t ipv6calc_cleanup(void *cfgdata) {
-	UNUSED(cfgdata);
-
-	// cleanup ipv6calc database wrapper
-	libipv6calc_cleanup();
-	return APR_SUCCESS;
-};
 
 /*
  * ipv6calc_post_config
@@ -540,8 +530,7 @@ static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t 
  * ipv6calc_child_init
  */
 static void ipv6calc_child_init(apr_pool_t *p, server_rec *s) {
-
-	apr_pool_cleanup_register(p, NULL, ipv6calc_cleanup, ipv6calc_cleanup);
+	UNUSED(p);
 
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(s->module_config, &ipv6calc_module);
 
