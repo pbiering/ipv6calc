@@ -139,27 +139,32 @@ int libipv6calc_db_wrapper_External_wrapper_init(void) {
 
 /*
  * wrapper: External_close
+ * in: dbp
+ * out: 0=ok, 1=error
  */
 static int libipv6calc_db_wrapper_External_close(DB *dbp) {
-	int i, j;
+	int entry, subdb;
+	int ret = 0;
 
-	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Called");
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Called with dbp=%p", dbp);
 
 	if (dbp != NULL) {
 		/* cleanup cache entry */
-		for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_External_db_file_desc); i++) {
-			for (j = 0; j < IPV6CALC_DBD_SUBDB_MAX; j++) {
-				if (db_ptr_cache[i][j] == dbp) {
-					db_ptr_cache[i][j] = NULL;
-					db_recno_max_cache[i][j] = -1;
+		for (entry = 0; entry < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_External_db_file_desc); entry++) {
+			for (subdb = 0; subdb < IPV6CALC_DBD_SUBDB_MAX; subdb++) {
+				if (db_ptr_cache[entry][subdb] == dbp) {
+					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Cleanup db_ptr_cache entry=%d subdb=%d dbp=%p", entry, subdb, dbp);
+					db_ptr_cache[entry][subdb] = NULL;
+					db_recno_max_cache[entry][subdb] = -1;
 				};
 			};
 		};
 
-		dbp->close(dbp, DB_NOSYNC); // DB_NOSYNC: databases are only opened in read-only mode
+		/* close database */
+		ret = dbp->close(dbp, DB_NOSYNC); // DB_NOSYNC: databases are only opened in read-only mode
 	};
 
-	return(0);
+	return(ret);
 };
 
 
@@ -170,21 +175,21 @@ static int libipv6calc_db_wrapper_External_close(DB *dbp) {
  * out: 0=ok, 1=error
  */
 int libipv6calc_db_wrapper_External_wrapper_cleanup(void) {
-	int i, j;
+	int entry, subdb;
 	int hit;
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Called");
 
-	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_External_db_file_desc); i++) {
+	for (entry = 0; entry < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_External_db_file_desc); entry++) {
 		hit = 0;
-		for (j = 0; j < IPV6CALC_DBD_SUBDB_MAX; j++) {
-			if (db_ptr_cache[i][j] != NULL) {
+		for (subdb = 0; subdb < IPV6CALC_DBD_SUBDB_MAX; subdb++) {
+			if (db_ptr_cache[entry][subdb] != NULL) {
 				if (hit == 0) {
 					// display debug message only once per i (type)
-					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Close External: type=%d desc='%s'", libipv6calc_db_wrapper_External_db_file_desc[i].number, libipv6calc_db_wrapper_External_db_file_desc[i].description);
+					DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Close External: type=%d entry=%d subdb=%d dbp=%p desc='%s'", libipv6calc_db_wrapper_External_db_file_desc[entry].number, entry, subdb, db_ptr_cache[entry][subdb], libipv6calc_db_wrapper_External_db_file_desc[entry].description);
 					hit = 1;
 				};
-				libipv6calc_db_wrapper_External_close(db_ptr_cache[i][j]);
+				libipv6calc_db_wrapper_External_close(db_ptr_cache[entry][subdb]);
 			};
 		};
 	};
@@ -453,7 +458,7 @@ DB *libipv6calc_db_wrapper_External_open_type(const unsigned int type_flag, long
 			*db_recno_max_ptr = db_recno_max_cache[entry][subdb];
 		};
 
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Database already opened (cached) dbp=%p type=%d subdb=%d recno_max: %u", dbp, type, subdb, db_recno_max_cache[entry][subdb]);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_External, "Database already opened (cached) dbp=%p type=%d entry=%d subdb=%d recno_max: %u", dbp, type, entry, subdb, db_recno_max_cache[entry][subdb]);
 
 		goto END_libipv6calc_db_wrapper;
 	};
