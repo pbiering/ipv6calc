@@ -115,6 +115,7 @@ int    longopts_maxentries = 0;
 static const char *set_ipv6calc_enable(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_default_active(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_no_fallback(cmd_parms *cmd, void *dummy, int arg);
+static const char *set_ipv6calc_source_env_name(cmd_parms *cmd, void *dummy, const char *value, int arg);
 static const char *set_ipv6calc_cache(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_cache_limit(cmd_parms *cmd, void *dummy, const char *value, int arg);
 static const char *set_ipv6calc_cache_statistics_interval(cmd_parms *cmd, void *dummy, const char *value, int arg);
@@ -175,6 +176,8 @@ typedef struct {
 
 	int no_fallback;
 
+	char source_env_name[MAX_STRING_LEN];
+
 	int cache;
 	int cache_limit;
 	unsigned long int cache_statistics_interval;
@@ -214,6 +217,7 @@ static const command_rec ipv6calc_cmds[] = {
 	AP_INIT_FLAG("ipv6calcEnable", set_ipv6calc_enable, NULL, OR_FILEINFO, "Turn on mod_ipv6calc"),
 	AP_INIT_FLAG("ipv6calcDefaultActive", set_ipv6calc_default_active, NULL, OR_FILEINFO, "mod_ipv6calc active by default (on/off can be controlled by environment)"),
 	AP_INIT_FLAG("ipv6calcNoFallback", set_ipv6calc_no_fallback, NULL, OR_FILEINFO, "Do not fallback in case of issues with mod_ipv6calc"),
+	AP_INIT_TAKE1("ipv6calcSourceEnvName",  (const char *(*)()) set_ipv6calc_source_env_name, NULL, OR_FILEINFO, "mod_ipv6calc source of IP address environment name: <NAME_ENV>"),
 	AP_INIT_FLAG("ipv6calcCache", set_ipv6calc_cache, NULL, OR_FILEINFO, "Turn off mod_ipv6calc cache"),
 	AP_INIT_TAKE1("ipv6calcCacheLimit",  (const char *(*)()) set_ipv6calc_cache_limit, NULL, OR_FILEINFO, "mod_ipv6calc cache limit: <value>"),
 	AP_INIT_TAKE1("ipv6calcCacheStatisticsInterval",  (const char *(*)()) set_ipv6calc_cache_statistics_interval, NULL, OR_FILEINFO, "mod_ipv6calc cache statistics interval: <value> (0=disabled)"),
@@ -377,6 +381,18 @@ static int ipv6calc_post_config(apr_pool_t *pconf, apr_pool_t *plog, apr_pool_t 
 	} else {
 		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
 			, "module is active by default"
+		);
+	};
+
+	// check source of client address
+	if (strlen(config->source_env_name) > 0) {
+		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+			, "client address is taken from enviroment: %s"
+			, config->source_env_name
+		);
+	} else {
+		ap_log_error(APLOG_MARK, APLOG_NOTICE, 0, s
+			, "client address is taken from socket"
 		);
 	};
 
@@ -564,6 +580,9 @@ static int ipv6calc_post_read_request(request_rec *r) {
 
 	// Apache/APR related includes
 	apr_sockaddr_t *client_addr_p; // structure defined in apr_network_io.h
+	apr_sockaddr_t *client_addr_p_source_env; // structure defined in apr_network_io.h
+	apr_status_t status;
+
 	ipv6calc_server_config* config;
 
 	// ipv6calc related
@@ -579,6 +598,8 @@ static int ipv6calc_post_read_request(request_rec *r) {
 	char asn[APRMAXHOSTLEN];
 	char registry[APRMAXHOSTLEN];
 	char geonameid[APRMAXHOSTLEN];
+	const char *source_env_content;
+	const char *client_ip;
 	unsigned int data_source;
 
 	int result;
@@ -612,6 +633,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		if (! apr_table_get(r->subprocess_env, ENV_ipv6calcActive)) {
 			ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r, "configuration 'ipv6calcDefaultActive off', NOT found in environment '%s' (return '-PbD-')", ENV_ipv6calcActive);
 			// pdb <-> Passive by Default
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP", "-PbD-");
 			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_COUNTRYCODE", "-PbD-");
 			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_ASN", "-PbD-");
 			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_REGISTRY", "-PbD-");
@@ -627,6 +649,7 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		if (apr_table_get(r->subprocess_env, ENV_ipv6calcPassive)) {
 			ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r, "configuration 'ipv6calcDefaultActive on', found in environment '%s' (return '-PbE')", ENV_ipv6calcPassive);
 			// pdb <-> Passive by Environment
+			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP", "-PbE-");
 			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_COUNTRYCODE", "-PbE-");
 			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_ASN", "-PbE-");
 			apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_REGISTRY", "-PbE-");
@@ -639,22 +662,39 @@ static int ipv6calc_post_read_request(request_rec *r) {
 		};
 	};
 
-	// get client address (aka REMOTE_IP)
+	// get client address (aka REMOTE_ADDR)
 #if (((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER >= 4)) || (AP_SERVER_MAJORVERSION_NUMBER > 2))
 	client_addr_p = r->connection->client_addr;
+	client_ip = r->connection->client_ip;
 #else
 	client_addr_p = r->connection->remote_addr;
+	client_ip = r->connection->remote_ip;
 #endif
+
+	if (strlen(config->source_env_name) > 0) {
+		source_env_content = apr_table_get(r->subprocess_env, config->source_env_name);
+		if (source_env_content != NULL) {
+			ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r, "found in environment for client address source: %s=%s", config->source_env_name, source_env_content);
+			status = apr_sockaddr_info_get(&client_addr_p_source_env, source_env_content, APR_UNSPEC, 0, 0, r->pool);
+			if (status == APR_SUCCESS) {
+				ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r, "client address found in environment parsed OK: %s=%s", config->source_env_name, source_env_content);
+				client_addr_p = client_addr_p_source_env;
+				client_ip = source_env_content;
+			} else {
+				ap_log_rerror(APLOG_MARK, APLOG_WARNING, 0, r, "cannot parse client address found in environment: %s=%s", config->source_env_name, source_env_content);
+			};
+		} else {
+			ap_log_rerror(APLOG_MARK, mod_ipv6calc_APLOG_DEBUG, 0, r, "NOT found in environment for client address source: %s", config->source_env_name);
+		};
+	};
 
 	ap_log_rerror(APLOG_MARK, (config->debuglevel & IPV6CALC_DEBUG_SHOW_CLIENT_IP) ? APLOG_NOTICE : mod_ipv6calc_APLOG_DEBUG, 0, r
 		, "client IP address: %s  family: %d"
-#if (((AP_SERVER_MAJORVERSION_NUMBER == 2) && (AP_SERVER_MINORVERSION_NUMBER >= 4)) || (AP_SERVER_MAJORVERSION_NUMBER > 2))
-		, r->connection->client_ip
-#else
-		, r->connection->remote_ip
-#endif
+		, client_ip
 		, client_addr_p->family
 	);
+
+	apr_table_set(r->subprocess_env, "IPV6CALC_CLIENT_IP", client_ip);
 
 	// convert address into ipv6calc structure
 	libipaddr_clearall(&ipaddr);
@@ -1291,6 +1331,31 @@ static const char *set_ipv6calc_no_fallback(cmd_parms *cmd, void *dummy, int arg
 	return NULL;
 };
 
+/*
+ * set_ipv6calc_source_env_name
+ */
+static const char *set_ipv6calc_source_env_name(cmd_parms *cmd, void *dummy, const char *value, int arg) {
+	UNUSED(dummy);
+	UNUSED(arg);
+
+	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
+
+	if (!config) {
+		return NULL;
+	};
+
+	if (strlen(value) >= sizeof(config->source_env_name)) {
+		ap_log_error(APLOG_MARK, APLOG_WARNING, 0, cmd->server
+			, "config option ipv6calcSourceEnvName: string too long (skip): %lu >= %lu"
+			, strlen(value)
+			, sizeof(config->source_env_name)
+		);
+	} else {
+		strncpy(config->source_env_name, value, sizeof(config->source_env_name) - 1);
+	};
+
+	return NULL;
+};
 
 /*
  * set_ipv6calc_cache
@@ -1558,6 +1623,9 @@ static void *ipv6calc_create_svr_conf(apr_pool_t* pool, server_rec* svr) {
 	svr_cfg->default_active = 1;
 
 	svr_cfg->no_fallback = 0;
+
+	// source toggle
+	svr_cfg->source_env_name[0] = '\0';
 
 	// cache settings
 	svr_cfg->cache = 1; // default: on
