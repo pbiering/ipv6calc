@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
-# Copyright  : 2015-2023 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2015-2024 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 
@@ -21,6 +21,8 @@ for BIN_PS in /bin/ps /usr/bin/ps; do
 	fi
 done
 
+port=8080
+
 
 create_apache_root_and_start() {
 	echo "INFO  : create temporary base directory"
@@ -31,7 +33,7 @@ create_apache_root_and_start() {
 	fi
 	echo "INFO  : temporary base directory created: $dir_base"
 
-	for dir in $dir_base/conf $dir_base/var $dir_base/modules $dir_base/logs $dir_base/conf.d $dir_base/conf.modules.d; do
+	for dir in $dir_base/conf $dir_base/var $dir_base/modules $dir_base/logs $dir_base/conf.d $dir_base/conf.modules.d $dir_base/var/www $dir_base/var/www/cgi-bin $dir_base/var/www/html $dir_base/var/www/ipv6calc $dir_base/var/www/ipv6calc/cgi-bin $dir_base/run; do
 		echo "INFO  : create directory: $dir"
 		mkdir $dir
 		if [ $? -ne 0 ]; then
@@ -40,6 +42,26 @@ create_apache_root_and_start() {
 		fi
 		echo "INFO  : directory created: $dir"
 	done
+
+	# store dummy index.html
+	echo "INFO  : create index.html: $dir_base/var/www/html/index.html"
+	cat <<END >$dir_base/var/www/html/index.html
+<html>
+<head>ipv6calc test</head>
+<body>ipc6calc test</body>
+</html>
+END
+	if [ $? -ne 0 ]; then
+		echo "ERROR : can't create index.html: $dir_base/var/www/html/index.html"
+		return 1
+	fi
+
+	# copy cgi
+	cp ipv6calc.cgi $dir_base/var/www/ipv6calc/cgi-bin
+	if [ $? -ne 0 ]; then
+		echo "ERROR : can't copy ipv6calc.cgi to $dir_base/var/www/ipv6calc/cgi-bin"
+		return 1
+	fi
 
 	for file in /etc/httpd/conf/httpd.conf /etc/httpd/conf/magic; do
 		echo "INFO  : copy file: $file -> $dir_base/conf"
@@ -51,8 +73,8 @@ create_apache_root_and_start() {
 		echo "INFO  : file copied: $file -> $dir_base/conf"
 	done
 
-	echo "INFO  : define listen port 8080 in $dir_base/conf/httpd.conf"
-	perl -pi -e 's/^Listen.*/Listen 8080/g' $dir_base/conf/httpd.conf
+	echo "INFO  : define listen port $port in $dir_base/conf/httpd.conf"
+	perl -pi -e "s/^Listen.*/Listen $port/g" $dir_base/conf/httpd.conf
 	if [ $? -ne 0 ]; then
 		echo "ERROR : can't define listen port: $dir_base/conf/httpd.conf"
 		return 1
@@ -65,6 +87,13 @@ create_apache_root_and_start() {
 		return 1
 	fi
 
+	echo "INFO  : extend /var in $dir_base/conf/httpd.conf"
+	perl -pi -e "s|/var|$dir_base/var|g" $dir_base/conf/httpd.conf
+	if [ $? -ne 0 ]; then
+		echo "ERROR : can't extend /var in: $dir_base/conf/httpd.conf"
+		return 1
+	fi
+
 	echo "INFO  : specify pid file in $dir_base/conf/httpd.conf"
 	echo "PidFile $dir_base/var/httpd.pid" >>$dir_base/conf/httpd.conf
 	if [ $? -ne 0 ]; then
@@ -74,7 +103,7 @@ create_apache_root_and_start() {
 
 	perl -pi -e 's/^ServerRoot.*$//g' $dir_base/conf/httpd.conf
 
-	for file in 00-base.conf 00-mpm.conf 00-systemd.conf; do
+	for file in 00-base.conf 00-mpm.conf 00-systemd.conf 01-cgi.conf; do
 		[ -e /etc/httpd/conf.modules.d/$file ] || continue
 		cp /etc/httpd/conf.modules.d/$file $dir_base/conf.modules.d/
 	done
@@ -109,6 +138,13 @@ create_apache_root_and_start() {
 		perl -pi -e 's/#(ipv6calcOption\s+debug).*/$1 -1/g' $dir_base/conf.d/ipv6calc.conf
 	fi
 
+	echo "INFO  : extend /var in $dir_base/conf.d/ipv6calc.conf"
+	perl -pi -e "s|/var|$dir_base/var|g" $dir_base/conf.d/ipv6calc.conf
+	if [ $? -ne 0 ]; then
+		echo "ERROR : can't extend /var in: $dir_base/conf.d/ipv6calc.conf"
+		return 1
+	fi
+
 	## disable databases by option
 	[ "$disable_geoip2" = "1" ]      && perl -pi -e 's/#(ipv6calcOption\s+db-geoip2-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
 	[ "$disable_ip2location" = "1" ] && perl -pi -e 's/#(ipv6calcOption\s+db-ip2location-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
@@ -124,6 +160,9 @@ create_apache_root_and_start() {
 	[ "$config_passive" = "1" ]   && perl -pi -e 's/(ipv6calcDefaultActive\s+).*$/$1 off/g'   $dir_base/conf.d/ipv6calc.conf
 	[ "$config_passive" != "1" -a "$config_environment" = "1" ]   && echo "SetEnv ipv6calcPassive" >>$dir_base/conf.d/ipv6calc.conf
 	[ "$config_passive" = "1" -a "$config_environment" = "1" ]   && echo "SetEnv ipv6calcActive" >>$dir_base/conf.d/ipv6calc.conf
+
+	[ -n "$source_env_name" ]  && perl -pi -e "s/#(ipv6calcSourceEnvName\s+).*$/\$1 $source_env_name/g"   $dir_base/conf.d/ipv6calc.conf
+	[ -n "$source_env_name" ]  && echo "SetEnvIf $source_env_name ^([0-9a-f:.]+)$ $source_env_name=\$1" >>$dir_base/conf.d/ipv6calc.conf
 
 
 	echo "INFO  : start httpd with ServerRoot $dir_base"
@@ -181,10 +220,12 @@ create_apache_root_and_start() {
 	fi
 
 	echo "NOTICE: base directory is     : $dir_base"
+	echo "NOTICE: httpd conf is         : $dir_base/conf/httpd.conf"
 	echo "NOTICE: ipv6calc module config: $dir_base/conf.d/ipv6calc.conf"
 	echo "NOTICE: error log             : $dir_base/logs/error_log"
 	echo "NOTICE: access log            : $dir_base/logs/access_log"
 	echo "NOTICE: anonymized access log : $dir_base/logs/access_anon_log"
+	echo "NOTICE: port                  : $port"
 }
 
 stop_apache() {
@@ -239,9 +280,9 @@ exec_request() {
 	while [ $count -lt $max ]; do
 		echo "NOTICE: test: $1"
 		# curl-7.29.0-19.el7.x86_64 is broken, -g required
-		curl -g -s "http://$1:8080/" >/dev/null
+		curl -g -s "http://$1:$port/" >/dev/null
 		if [ $? -ne 0 ]; then
-			echo "ERROR : curl request to $1:8080 failed"
+			echo "ERROR : curl request to $1:$port failed"
 			return 1
 		fi
 
@@ -340,7 +381,10 @@ $(basename "$0") [<options>] [-S|-K|-W]
 	-P	disable 'ipv6calcDefaultActive'
 	-E	keep 'ipv6calcDefaultActive', but set environment
 
-	-b <base directory
+	-s <name>	take client address from environment <name>
+
+	-p <port>		(optional, default: $port)
+	-b <base directory>	(optional)
 
 	-a <address>	disable autoretrievement of local IP, use given one instead
 	-r		repeat (1x)
@@ -348,7 +392,7 @@ END
 }
 
 #### Options
-while getopts "EPIDGrACRNca:fSKWb:mlgideh\?" opt; do
+while getopts "EPIDGrACRNca:fSKWb:mlgides:p:h\?" opt; do
 	case $opt in
 	    b)
 		if [ -d "$OPTARG" ]; then
@@ -417,11 +461,17 @@ while getopts "EPIDGrACRNca:fSKWb:mlgideh\?" opt; do
 	    P)
 		config_passive="1"
 		;;
+	    p)
+		port=$OPTARG
+		;;
 	    E)
 		config_environment="1"
 		;;
 	    r)
 		repeat=1
+		;;
+	    s)
+		source_env_name=$OPTARG
 		;;
 	    h|\?)
 		help
