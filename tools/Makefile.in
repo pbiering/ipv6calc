@@ -6,6 +6,7 @@
 #  Makefile for various tools
 #
 
+prefix          = @prefix@
 datadir         = @datadir@
 
 all:
