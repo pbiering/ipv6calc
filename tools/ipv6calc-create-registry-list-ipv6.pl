@@ -2,9 +2,8 @@
 #
 # Project    : ipv6calc/databases/ipv6-assignment
 # File       : create-registry-list.pl
-# Version    : $Id$
 # Copyright  : 2005 by Simon Arlott (initial implementation of global file only)
-#              2005-2017 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
+#              2005-2024 by Peter Bieringer <pb (at) bieringer.de> (further extensions)
 # License    : GNU GPL v2
 #
 # Information:
@@ -132,7 +131,7 @@ print "INFO  : destination file for DB (CountryCode): " . $file_dst_db_cc  . "\n
 
 
 ## Read data
-my (@arin, @apnic, @ripencc, @iana, @lacnic, @afrinic, @reserved, @s6to4, @s6bone);
+my (@arin, @apnic, @ripencc, @iana, @lacnic, @afrinic, @reserved, @s6to4, @s6bone, @sSRv6);
 
 my @cc_array;
 my @info_array;
@@ -213,6 +212,8 @@ sub proceed_global {
 			push @afrinic, $ipv6;
 		} elsif ($reg eq "RESERVED" ) {
 			push @reserved, $ipv6;
+		} elsif ($reg =~ /^Segment Routing/oi ) {
+			push @sSRv6, $ipv6;
 		} elsif ($reg eq "6TO4" ) {
 			push @s6to4, $ipv6;
 		} elsif ($reg eq "6BONE" ) {
@@ -521,6 +522,7 @@ sub fill_data {
 &fill_data(\@iana   , "IANA"   , \%data);
 &fill_data(\@s6to4  , "6TO4"   , \%data);
 &fill_data(\@s6bone , "6BONE"  , \%data);
+&fill_data(\@sSRv6  , "SRV6"   , \%data);
 
 &fill_data(\@cc_array, "CC"  , \%data_cc);
 &fill_data(\@info_array, "INFO"  , \%data_info);

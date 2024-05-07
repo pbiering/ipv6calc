@@ -11,6 +11,9 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20240507/PB:
+	tools/ipv6calc-create-registry-list-ipv6.pl: add support for SRv6
+
 20240413/PB:
 	tools/Makefile[.in]: add previously removed "prefix"
 
