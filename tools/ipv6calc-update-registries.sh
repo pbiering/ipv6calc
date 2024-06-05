@@ -2,8 +2,7 @@
 #
 # Project    : ipv6calc/databases/registries
 # File       : ipv6calc-update-registries.sh
-# Version    : $Id$
-# Copyright  : 2002-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2024 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces ../ipv4-assignment/update-ipv4-assignment.sh
 #               replaces ../ipv6-assignment/update-ipv6-assignment.sh
 #
@@ -109,7 +108,7 @@ get_urls | while read subdir url filename format flag; do
 		$dry_run || wget $wget_options $url$filename -O $filename
 		retval=$?
 	else
-		$dry_run || wget $wget_options $url$filename --timestamping --retr-symlinks
+		$dry_run || wget $wget_options $url$filename -N
 		retval=$?
 	fi
 	popd >/dev/null

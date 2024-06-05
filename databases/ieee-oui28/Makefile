@@ -1,7 +1,6 @@
 # Project    : ipv6calc/databases/ieee-oui36
 # File       : Makefile
-# Version    : $Id$
-# Copyright  : 2019-2019 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2019-2024 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Makefile for ieee-oui28
@@ -22,7 +21,7 @@ create:
 
 update:
 		echo "Download new version of file"
-		wget $(BASEURL)$(FILE) --timestamp
+		wget $(BASEURL)$(FILE) -N
 		${MAKE} create
 
 updateclean:
