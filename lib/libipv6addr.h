@@ -337,6 +337,7 @@ typedef struct {
 #define IPV6_ADDR_TYPE2_LISP_MAP_RESOLVER	(uint32_t) 0x00040000U	/* IPv6 LISP Map Resolver Anycast */
 #define IPV6_ADDR_TYPE2_ANON_MASKED_PREFIX	(uint32_t) 0x00080000U	/* IPv6 partially masked prefix */
 #define IPV6_ADDR_TYPE2_ANONYMIZED_GEONAMEID	(uint32_t) 0x00100000U  /* IPv6 prefix anonymized contains GeonameID */
+#define IPV6_ADDR_TYPE2_SRV6			(uint32_t) 0x00200000U  /* IPv6 Segment Routing (SRV6) SIDs (RFC-ietf-6man-sids-06)  */
 
 // IPv4 address extractor selector
 #define IPV6_ADDR_SELECT_IPV4_DEFAULT		0

@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Copyright  : 2001-2023 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2024 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc.c
@@ -24,6 +24,7 @@
 
 #define REGISTRY_6BONE        0x08
 #define REGISTRY_IANA         0x09
+#define REGISTRY_SRV6         0x0a
 #define REGISTRY_6TO4         0x0c
 #define REGISTRY_RESERVED     0x0e
 #define REGISTRY_UNKNOWN      0x0f

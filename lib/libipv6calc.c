@@ -60,6 +60,7 @@ const s_type2 ipv6calc_registries[] = {
         { REGISTRY_LACNIC     , "LACNIC"    , "REGISTRY_LACNIC"  },
         { REGISTRY_AFRINIC    , "AFRINIC"   , "REGISTRY_AFRINIC" },
         { REGISTRY_6TO4       , "6TO4"      , "REGISTRY_6TO4"    },
+        { REGISTRY_SRV6       , "SRV6"      , "REGISTRY_SRV6"    },
         { REGISTRY_RESERVED   , "reserved"  , "REGISTRY_RESERVED"},
         { REGISTRY_UNKNOWN    , "unknown"   , "REGISTRY_UNKNOWN" }
 };

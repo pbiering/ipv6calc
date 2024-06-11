@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Wed Feb 14 21:30:09 2024
+ * Generated     : Wed Jun  5 07:22:00 2024
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20240214";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20240605";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -793,7 +793,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x30B000, 0x30BFFF, "VX Technologies Inc.", "VX-TECHNOLOGIES" },
 	{ 0x0050C2, 0x30C000, 0x30CFFF, "TEAMLOG", "TEAMLOG" },
 	{ 0x0050C2, 0x30D000, 0x30DFFF, "SETARAM", "SETARAM" },
-	{ 0x0050C2, 0x30E000, 0x30EFFF, "Obvius", "OBVIUS" },
+	{ 0x0050C2, 0x30E000, 0x30EFFF, "Leviton Manufacturing Co., Inc", "LEVITON-MANUFACTURING" },
 	{ 0x0050C2, 0x30F000, 0x30FFFF, "Digicontrole Lda", "DIGICONTROLE-LDA" },
 	{ 0x0050C2, 0x310000, 0x310FFF, "CYBERTRON CO., LTD.", "CYBERTRON" },
 	{ 0x0050C2, 0x311000, 0x311FFF, "Comodo", "COMODO" },
@@ -807,7 +807,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x319000, 0x319FFF, "Invatron Systems Corp.", "INVATRON" },
 	{ 0x0050C2, 0x31A000, 0x31AFFF, "Zodiak Data Systems", "ZODIAK-DATA" },
 	{ 0x0050C2, 0x31B000, 0x31BFFF, "Datacon", "DATACON" },
-	{ 0x0050C2, 0x31C000, 0x31CFFF, "Casa Systems Inc.", "CASA" },
+	{ 0x0050C2, 0x31C000, 0x31CFFF, "AxyomCore Inc.", "AXYOMCORE" },
 	{ 0x0050C2, 0x31D000, 0x31DFFF, "Imarda New Zealand Limited", "IMARDA-NEW-ZEALAND" },
 	{ 0x0050C2, 0x31E000, 0x31EFFF, "C3-ilex, LLC", "C3-ILEX" },
 	{ 0x0050C2, 0x31F000, 0x31FFFF, "Geotech Instruments, LLC", "GEOTECH-INSTRUMENTS" },
@@ -2193,7 +2193,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x883000, 0x883FFF, "Neocontrol Soluções em Automação", "NEOCONTROL-SOLUES-EM-AUTOMAO" },
 	{ 0x0050C2, 0x884000, 0x884FFF, "IP Thinking A/S", "IP-THINKING-A/S" },
 	{ 0x0050C2, 0x885000, 0x885FFF, "OOO NTK IMOS", "OOO-NTK-IMOS" },
-	{ 0x0050C2, 0x886000, 0x886FFF, "Wartsila Voyage Limited", "WARTSILA-VOYAGE" },
+	{ 0x0050C2, 0x886000, 0x886FFF, "Wartsila Voyage Oy", "WARTSILA-VOYAGE-OY" },
 	{ 0x0050C2, 0x887000, 0x887FFF, "Inventis Technology Pty Limited", "INVENTIS-PTY" },
 	{ 0x0050C2, 0x888000, 0x888FFF, "IAdea Corporation", "IADEA" },
 	{ 0x0050C2, 0x889000, 0x889FFF, "ACS Motion Control Ltd.", "ACS-MOTION-CONTROL" },
@@ -2271,7 +2271,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x8D1000, 0x8D1FFF, "Bachmann Monitoring GmbH", "BACHMANN-MONITORING" },
 	{ 0x0050C2, 0x8D2000, 0x8D2FFF, "TTi Ltd", "TTI" },
 	{ 0x0050C2, 0x8D3000, 0x8D3FFF, "IFAM GmbH", "IFAM" },
-	{ 0x0050C2, 0x8D4000, 0x8D4FFF, "Internet Protocolo Lógica SL", "INTERNET-PROTOCOLO-LGICA-SL" },
+	{ 0x0050C2, 0x8D4000, 0x8D4FFF, "INTERNET PROTOCOLO LOGICA SL", "INTERNET-PROTOCOLO-LOGICA-SL" },
 	{ 0x0050C2, 0x8D5000, 0x8D5FFF, "Peek Traffic Corp", "PEEK-TRAFFIC" },
 	{ 0x0050C2, 0x8D6000, 0x8D6FFF, "UltraVision Security Systems, Inc.", "ULTRAVISION-SECURITY" },
 	{ 0x0050C2, 0x8D7000, 0x8D7FFF, "Polygon Informatics Ltd.", "POLYGON-INFORMATICS" },
@@ -2925,7 +2925,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xB5F000, 0xB5FFFF, "North Bridge Technologies", "NORTH-BRIDGE-TECHNOLOGIES" },
 	{ 0x0050C2, 0xB60000, 0xB60FFF, "OOO NPF ATIS", "OOO-NPF-ATIS" },
 	{ 0x0050C2, 0xB61000, 0xB61FFF, "Nayos LTD", "NAYOS" },
-	{ 0x0050C2, 0xB62000, 0xB62FFF, "Measurement Technology NW", "MEASUREMENT-NW" },
+	{ 0x0050C2, 0xB62000, 0xB62FFF, "Rugged Controls", "RUGGED-CONTROLS" },
 	{ 0x0050C2, 0xB63000, 0xB63FFF, "RO.VE.R. Laboratories S.p.A", "RO-VE-R-LABORATORIES" },
 	{ 0x0050C2, 0xB64000, 0xB64FFF, "FEW Bauer GmbH", "FEW-BAUER" },
 	{ 0x0050C2, 0xB65000, 0xB65FFF, "Peek Traffic Corporation", "PEEK-TRAFFIC" },
@@ -3511,7 +3511,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xDAC000, 0xDACFFF, "RFL Electronics, Inc.", "RFL-ELECTRONICS" },
 	{ 0x0050C2, 0xDAD000, 0xDADFFF, "Keith & Koep GmbH", "KEITH-KOEP" },
 	{ 0x0050C2, 0xDAE000, 0xDAEFFF, "Spang Power Electronics", "SPANG-POWER-ELECTRONICS" },
-	{ 0x0050C2, 0xDAF000, 0xDAFFFF, "eumig industrie-tv GmbH", "EUMIG-INDUSTRIE-TV" },
+	{ 0x0050C2, 0xDAF000, 0xDAFFFF, "eumig industrie-TV GmbH.", "EUMIG-INDUSTRIE-TV" },
 	{ 0x0050C2, 0xDB0000, 0xDB0FFF, "IMAGO Technologies GmbH", "IMAGO-TECHNOLOGIES" },
 	{ 0x0050C2, 0xDB1000, 0xDB1FFF, "RF Code", "RF-CODE" },
 	{ 0x0050C2, 0xDB2000, 0xDB2FFF, "SoftwareCannery", "SOFTWARECANNERY" },
@@ -3550,7 +3550,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xDD3000, 0xDD3FFF, "Rohde&Schwarz Topex SA", "ROHDE-SCHWARZ-TOPEX" },
 	{ 0x0050C2, 0xDD4000, 0xDD4FFF, "SYSTECH", "SYSTECH" },
 	{ 0x0050C2, 0xDD5000, 0xDD5FFF, "Friend Spring Industrial Co., Ltd.", "FRIEND-SPRING-INDUSTRIAL" },
-	{ 0x0050C2, 0xDD6000, 0xDD6FFF, "Wartsila Voyage Limited", "WARTSILA-VOYAGE" },
+	{ 0x0050C2, 0xDD6000, 0xDD6FFF, "Wartsila Voyage Oy", "WARTSILA-VOYAGE-OY" },
 	{ 0x0050C2, 0xDD7000, 0xDD7FFF, "Tornado Modular Systems", "TORNADO-MODULAR" },
 	{ 0x0050C2, 0xDD8000, 0xDD8FFF, "Leonardo UK Ltd", "LEONARDO-UK" },
 	{ 0x0050C2, 0xDD9000, 0xDD9FFF, "Metraware", "METRAWARE" },
@@ -4353,7 +4353,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x0F9000, 0x0F9FFF, "Invisua Lighting BV", "INVISUA-LIGHTING" },
 	{ 0x40D855, 0x0FA000, 0x0FAFFF, "Marmitek BV", "MARMITEK" },
 	{ 0x40D855, 0x0FB000, 0x0FBFFF, "InfoMac Sp. z o. o. Sp. k.", "INFOMAC-SP-Z-O-O-SP-K" },
-	{ 0x40D855, 0x0FC000, 0x0FCFFF, "eumig industrie-tv GmbH", "EUMIG-INDUSTRIE-TV" },
+	{ 0x40D855, 0x0FC000, 0x0FCFFF, "eumig industrie-TV GmbH.", "EUMIG-INDUSTRIE-TV" },
 	{ 0x40D855, 0x0FD000, 0x0FDFFF, "MONOGRAM technologies ltd", "MONOGRAM-TECHNOLOGIES" },
 	{ 0x40D855, 0x0FE000, 0x0FEFFF, "Cytech Technology Pte Ltd", "CYTECH-PTE" },
 	{ 0x40D855, 0x0FF000, 0x0FFFFF, "YUYAMA MFG Co.,Ltd", "YUYAMA-MFG" },

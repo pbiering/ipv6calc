@@ -2,7 +2,7 @@
  * Project       : ipv6calc
  * File          : dbipv6_assignment.h
  * Version       : $Id$
- * Generated     : 20240214-214843+0100 CET
+ * Generated     : 20240605-074106+0200 CEST
  * Data copyright: IANA ARIN RIPENCC APNIC LACNIC AFRINIC
  *
  * Information:
@@ -11,8 +11,8 @@
 
 #include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
-static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20240214 APNIC/20240214 ARIN/20240214 IANA/20191106 LACNIC/20240213 LISP/20200318 RIPENCC/20240213";
-static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = 1707943723;
+static const char* dbipv6addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20240604 APNIC/20240604 ARIN/20240604 IANA/20240523 LACNIC/20240604 LISP/20200318 RIPENCC/20240604";
+static const time_t dbipv6addr_registry_unixtime __attribute__ ((__unused__)) = 1717566066;
 
 static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 	//ipv6_00_31, ipv6_32_63, mask_00_31, mask_32_63, mask_length, registry  
@@ -74,7 +74,15 @@ static const s_ipv6addr_assignment dbipv6addr_assignment[] = {
 	{ 0x2e000000, 0x00000000, 0xfe000000, 0x00000000,   7, REGISTRY_IANA       },
 	{ 0x30000000, 0x00000000, 0xf0000000, 0x00000000,   4, REGISTRY_IANA       },
 	{ 0x3ffe0000, 0x00000000, 0xffff0000, 0x00000000,  16, REGISTRY_IANA       },
-	{ 0x5f000000, 0x00000000, 0xff000000, 0x00000000,   8, REGISTRY_IANA       },
+	{ 0x5f000000, 0x00000000, 0xffff0000, 0x00000000,  16, REGISTRY_SRV6       },
+	{ 0x5f010000, 0x00000000, 0xffff0000, 0x00000000,  16, REGISTRY_IANA       },
+	{ 0x5f020000, 0x00000000, 0xfffe0000, 0x00000000,  15, REGISTRY_IANA       },
+	{ 0x5f040000, 0x00000000, 0xfffc0000, 0x00000000,  14, REGISTRY_IANA       },
+	{ 0x5f080000, 0x00000000, 0xfff80000, 0x00000000,  13, REGISTRY_IANA       },
+	{ 0x5f100000, 0x00000000, 0xfff00000, 0x00000000,  12, REGISTRY_IANA       },
+	{ 0x5f200000, 0x00000000, 0xffe00000, 0x00000000,  11, REGISTRY_IANA       },
+	{ 0x5f400000, 0x00000000, 0xffc00000, 0x00000000,  10, REGISTRY_IANA       },
+	{ 0x5f800000, 0x00000000, 0xff800000, 0x00000000,   9, REGISTRY_IANA       },
 };
 
 static const s_ipv6addr_info dbipv6addr_info[] = {
