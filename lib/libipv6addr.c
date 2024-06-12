@@ -71,6 +71,7 @@ const int ipv6calc_ipv6addrtypestrings_entries = MAXENTRIES_ARRAY(ipv6calc_ipv6a
 
 const s_type ipv6calc_ipv6addr_type2_strings[] = {
 	{ IPV6_ADDR_TYPE2_6RD		, "6rd" },
+	{ IPV6_ADDR_TYPE2_SRV6		, "srv6" },
 	{ IPV6_ADDR_TYPE2_LISP	 		, "lisp" },
 	{ IPV6_ADDR_TYPE2_LISP_PETR		, "lisp-proxyegresstunnelrouter-anycast" },
 	{ IPV6_ADDR_TYPE2_LISP_MAP_RESOLVER	, "lisp-mapresolver-anycast" },
@@ -863,8 +864,13 @@ void ipv6addr_settype(ipv6calc_ipv6addr *ipv6addrp) {
 	
 	/* address space information  */
 	if ((st & 0xFFFF0000u) == 0x3FFE0000u) {
-		/* 3ffe::/16 -> experimental 6bone */
+		/* 3ffe::/16 -> experimental 6bone (legacy) */
 		type |= IPV6_NEW_ADDR_6BONE;
+	};
+
+	if ((st & 0xFFFF0000u) == 0x5F000000u) {
+		/* 5f00::/16 -> IPv6 Segment Routing (SRV6) */
+		type2 |= IPV6_ADDR_TYPE2_SRV6;
 	};
 
 	if ((st & 0xFFFF0000u) == 0x20020000u) {
