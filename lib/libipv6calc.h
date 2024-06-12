@@ -79,10 +79,10 @@
 //  case 3: dst is already exhausted, override end with ...
 #define STRCAT(dst, src) \
         if (sizeof(dst) > strlen(src) + strlen(dst)) { \
-                strncat(dst, src, sizeof(dst) - strlen(dst) - 1); \
+                strncat(dst, src, ((sizeof(dst) - strlen(dst) - 1) > 0) ? (sizeof(dst) - strlen(dst) - 1) : 0); \
         } else { \
                 if (sizeof(dst) > strlen(dst) + strlen("...")) { \
-                        strncat(dst, src, sizeof(dst) - strlen(dst) - strlen("...") - 1); \
+                        strncat(dst, src, ((sizeof(dst) - strlen(dst) - strlen("...") - 1) > 0) ? (sizeof(dst) - strlen(dst) - strlen("...") - 1) : 0); \
                         strcat(dst, "..."); \
                 } else if (strlen(dst) > strlen("...")) { \
 			dst[strlen(dst) - strlen("...")] = '\0'; \
