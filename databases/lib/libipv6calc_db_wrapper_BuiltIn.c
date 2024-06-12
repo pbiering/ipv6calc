@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_BuiltIn.c
- * Version    : $Id$
- * Copyright  : 2013-2021 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2024 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc BuiltIn database wrapper
@@ -890,6 +889,10 @@ int libipv6calc_db_wrapper_BuiltIn_registry_num_by_ipv6addr(const ipv6calc_ipv6a
 
 	if ((ipv6addrp->typeinfo & IPV6_NEW_ADDR_6BONE) != 0) {
 		return(REGISTRY_6BONE);
+	};
+
+	if ((ipv6addrp->typeinfo & IPV6_ADDR_TYPE2_SRV6) != 0) {
+		return(REGISTRY_SRV6);
 	};
 
 	int result = REGISTRY_UNKNOWN;
