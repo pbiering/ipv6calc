@@ -248,6 +248,8 @@ a909:16fa:9092:23ff:a909:4941::7		anonymized-prefix
 192.88.99.1					anycast,^unicast,6to4relay
 2001:0db8:0000:0000:81c0:0f3f:c807:1455 	iid-random,iid-local
 2001:0db8:0000:0000::1			 	iid-local,^iid-random
+3ffe::1						6bone
+5f00::1						srv6
 END
 }
 
