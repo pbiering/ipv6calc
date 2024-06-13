@@ -1346,7 +1346,11 @@ static const char *set_ipv6calc_source_env_name(cmd_parms *cmd, void *dummy, con
 
 	if (strlen(value) >= sizeof(config->source_env_name)) {
 		ap_log_error(APLOG_MARK, APLOG_WARNING, 0, cmd->server
+#ifdef __i386__
+			, "config option ipv6calcSourceEnvName: string too long (skip): %u >= %u"
+#else
 			, "config option ipv6calcSourceEnvName: string too long (skip): %lu >= %lu"
+#endif
 			, strlen(value)
 			, sizeof(config->source_env_name)
 		);
