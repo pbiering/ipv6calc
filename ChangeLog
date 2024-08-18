@@ -11,6 +11,9 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20240818/PB:
+	tools/ipv6calc-create-registry-list-ipv6.pl: add support for registry "Documentation"
+
 20240605/PB:
 	databases/ieee-*/Makefile, tools/ipv6calc-update-registries.sh: adjustments related to newer wget version
 	internal databases: update

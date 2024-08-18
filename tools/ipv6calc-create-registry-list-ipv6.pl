@@ -210,7 +210,7 @@ sub proceed_global {
 			push @lacnic, $ipv6;
 		} elsif ($reg eq "AFRINIC" ) {
 			push @afrinic, $ipv6;
-		} elsif ($reg eq "RESERVED" ) {
+		} elsif ($reg eq "RESERVED" || $reg eq "DOCUMENTATION" ) {
 			push @reserved, $ipv6;
 		} elsif ($reg =~ /^Segment Routing/oi ) {
 			push @sSRv6, $ipv6;
