@@ -21,6 +21,12 @@ for BIN_PS in /bin/ps /usr/bin/ps; do
 	fi
 done
 
+for BIN_IP in /sbin/ip /usr/sbin/ip; do
+	if [ -x "$BIN_IP" ]; then
+		break
+	fi
+done
+
 port=8080
 
 
@@ -337,12 +343,12 @@ run_test_requests() {
 			exec_request "$address"
 		fi
 	else
-		for ipv4 in $(/sbin/ip -o addr show |grep -w inet | grep -w global | grep -vw deprecated | awk '{ print $4 }' | awk -F/ '{ print $1 }'); do
+		for ipv4 in $($BIN_IP -o addr show |grep -w inet | grep -w global | grep -vw deprecated | awk '{ print $4 }' | awk -F/ '{ print $1 }'); do
 			exec_request "$ipv4" || return 1
 		done
 
 		# retrieve local IPv6 address
-		for ipv6 in $(/sbin/ip -o addr show |grep -w inet6 | grep -w global | grep -vw deprecated | awk '{ print $4 }' | awk -F/ '{ print $1 }'); do
+		for ipv6 in $($BIN_IP -o addr show |grep -w inet6 | grep -w global | grep -vw deprecated | awk '{ print $4 }' | awk -F/ '{ print $1 }'); do
 			exec_request "[$ipv6]" || return 1
 		done
 	fi
