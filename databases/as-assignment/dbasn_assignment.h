@@ -2,7 +2,7 @@
  * Project       : ipv6calc
  * File          : dbasn_assignment.h
  * Version       : $Id$
- * Generated     : Wed Jun  5 07:41:06 2024
+ * Generated     : Fri Aug 23 06:31:33 2024
  * Data copyright: IANA
  *
  * Information:

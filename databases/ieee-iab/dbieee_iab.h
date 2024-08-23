@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Wed Jun  5 07:22:00 2024
+ * Generated     : Fri Aug 23 06:08:54 2024
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20240605";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20240823";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -2001,7 +2001,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x7C3000, 0x7C3FFF, "AST INCORPORATED", "AST-INCORPORATED" },
 	{ 0x0050C2, 0x7C4000, 0x7C4FFF, "MoBaCon", "MOBACON" },
 	{ 0x0050C2, 0x7C5000, 0x7C5FFF, "Venture Research Inc.", "VENTURE-RESEARCH" },
-	{ 0x0050C2, 0x7C6000, 0x7C6FFF, "Lyngdorf Audio Aps", "LYNGDORF-AUDIO-APS" },
+	{ 0x0050C2, 0x7C6000, 0x7C6FFF, "SL Audio A/S", "SL-AUDIO-A/S" },
 	{ 0x0050C2, 0x7C7000, 0x7C7FFF, "Pyrosequencing AB", "PYROSEQUENCING-AB" },
 	{ 0x0050C2, 0x7C8000, 0x7C8FFF, "Fr. Sauter AG", "FR-SAUTER" },
 	{ 0x0050C2, 0x7C9000, 0x7C9FFF, "Bluebell Opticom Limited", "BLUEBELL-OPTICOM" },
@@ -2081,7 +2081,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x813000, 0x813FFF, "Intelleflex Corporation", "INTELLEFLEX" },
 	{ 0x0050C2, 0x814000, 0x814FFF, "Telvent", "TELVENT" },
 	{ 0x0050C2, 0x815000, 0x815FFF, "microC Design SRL", "MICROC-DESIGN-SRL" },
-	{ 0x0050C2, 0x816000, 0x816FFF, "Intelight Inc.", "INTELIGHT" },
+	{ 0x0050C2, 0x816000, 0x816FFF, "Q-Free America, Inc.", "Q-FREE-AMERICA" },
 	{ 0x0050C2, 0x817000, 0x817FFF, "Odin TeleSystems Inc", "ODIN-TELESYSTEMS" },
 	{ 0x0050C2, 0x818000, 0x818FFF, "Wireless Value BV", "WIRELESS-VALUE" },
 	{ 0x0050C2, 0x819000, 0x819FFF, "Cabinplant A/S", "CABINPLANT-A/S" },
@@ -4397,7 +4397,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x125000, 0x125FFF, "Scandyna A/S", "SCANDYNA-A/S" },
 	{ 0x40D855, 0x126000, 0x126FFF, "TTI LTD", "TTI" },
 	{ 0x40D855, 0x127000, 0x127FFF, "LIGHTSTAR", "LIGHTSTAR" },
-	{ 0x40D855, 0x128000, 0x128FFF, "Akse srl", "AKSE-SRL" },
+	{ 0x40D855, 0x128000, 0x128FFF, "AKSE srl", "AKSE-SRL" },
 	{ 0x40D855, 0x129000, 0x129FFF, "DSP DESIGN", "DSP-DESIGN" },
 	{ 0x40D855, 0x12A000, 0x12AFFF, "Jadpod Communication Company Limited", "JADPOD-COMMUNICATION-COMPANY" },
 	{ 0x40D855, 0x12B000, 0x12BFFF, "Mango DSP, Inc.", "MANGO-DSP" },
