@@ -122,7 +122,7 @@ int geoip2_db_better_max_delta_months = 1;
 int geoip2_db_only_type = 0;
 
 
-#define GeoIP2_UNPACK_YM(dbym) ((dbym > 0) ? ((dbym % 12) + ((dbym / 12)) * 100) : 0)
+#define GeoIP2_UNPACK_YM(dbym) ((dbym > 0) ? ((dbym % 12 +  1) + ((dbym / 12)) * 100) : 0)
 
 
 /* database usage map */
@@ -205,7 +205,7 @@ int libipv6calc_db_wrapper_GeoIP2_wrapper_init(void) {
 		time_t db_time = mmdb_cache[dbtype].metadata.build_epoch;
 		struct tm *db_gmtime = gmtime(&db_time);
 
-		dbym = (db_gmtime->tm_year + 1900) * 12 + (db_gmtime->tm_mon + 1);
+		dbym = (db_gmtime->tm_year + 1900) * 12 + db_gmtime->tm_mon;
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "GEOIP2 type=%d dbym=%d Year/Month=%d unixtime=%llu", dbtype, dbym, GeoIP2_UNPACK_YM(dbym), (long long unsigned int) mmdb_cache[dbtype].metadata.build_epoch);
 
 #define GeoIP2_DB_SELECT_BETTER(best) \
