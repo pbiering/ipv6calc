@@ -27,7 +27,7 @@
 Summary:	IPv6 address format change and calculation utility
 Name:		ipv6calc
 Version:	4.2.1
-Release:	80%{?gittag}%{?dist}
+Release:	81%{?gittag}%{?dist}
 URL:		http://www.deepspace6.net/projects/%{name}.html
 License:	GPLv2
 %if 0%{?gitcommit:1}
@@ -98,6 +98,23 @@ Requires:      libdb
 %if %{enable_mmdb}
 BuildRequires: libmaxminddb-devel
 Recommends:    libmaxminddb
+
+%if 0%{?fedora} >= 39
+BuildRequires: geolite2-country
+BuildRequires: geolite2-city
+BuildRequires: geolite2-asn
+Recommends:    geolite2-country
+Recommends:    geolite2-city
+Recommends:    geolite2-asn
+%endif
+
+%if 0%{?rhel} >= 8
+BuildRequires: geolite2-country
+BuildRequires: geolite2-city
+Recommends:    geolite2-country
+Recommends:    geolite2-city
+%endif
+
 %endif
 
 %if %{enable_ip2location}
@@ -366,6 +383,9 @@ fi
 
 
 %changelog
+* Sat Aug 23 2023 Peter Bieringer <pb@bieringer.de>
+- add BuildRequires+Recommends for geolite in case MMDB is enabled
+
 * Fri Jan 26 2023 Peter Bieringer <pb@bieringer.de>
 - cosmetics, minor updates and alignment with EPEL9 variant
 - change locations of CGI scripts
