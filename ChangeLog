@@ -13,6 +13,7 @@ Info:
 --------------------------------------------------------------------
 20240824/PB:
 	databases/lib/libipv6calc_db_wrapper_GeoIP2.c: fix YYYYMM display
+	databases/lib/libipv6calc_db_wrapper_GeoIP2.c: improve database selection for GeonameID
 
 20240823/PB:
 	mod_ipv6calc/test_mod_ipv6calc.sh: catch additional location of 'ip'

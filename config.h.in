@@ -33,70 +33,70 @@
 /* Define if Berkeley DB support is required. */
 #undef HAVE_BERKELEY_DB_SUPPORT
 
-/* Define to 1 if you have the declaration of `API_VERSION', and to 0 if you
+/* Define to 1 if you have the declaration of 'API_VERSION', and to 0 if you
    don't. */
 #undef HAVE_DECL_API_VERSION
 
 /* Define to 1 if you have the declaration of
-   `IP2Location_api_version_string', and to 0 if you don't. */
+   'IP2Location_api_version_string', and to 0 if you don't. */
 #undef HAVE_DECL_IP2LOCATION_API_VERSION_STRING
 
-/* Define to 1 if you have the declaration of `IP2Location_close', and to 0 if
+/* Define to 1 if you have the declaration of 'IP2Location_close', and to 0 if
    you don't. */
 #undef HAVE_DECL_IP2LOCATION_CLOSE
 
-/* Define to 1 if you have the declaration of `IP2Location_get_country_long',
+/* Define to 1 if you have the declaration of 'IP2Location_get_country_long',
    and to 0 if you don't. */
 #undef HAVE_DECL_IP2LOCATION_GET_COUNTRY_LONG
 
-/* Define to 1 if you have the declaration of `IP2Location_get_country_short',
+/* Define to 1 if you have the declaration of 'IP2Location_get_country_short',
    and to 0 if you don't. */
 #undef HAVE_DECL_IP2LOCATION_GET_COUNTRY_SHORT
 
-/* Define to 1 if you have the declaration of `MMDB_lib_version', and to 0 if
+/* Define to 1 if you have the declaration of 'MMDB_lib_version', and to 0 if
    you don't. */
 #undef HAVE_DECL_MMDB_LIB_VERSION
 
-/* Define to 1 if you have the `EVP_DigestFinal_ex' function. */
+/* Define to 1 if you have the 'EVP_DigestFinal_ex' function. */
 #undef HAVE_EVP_DIGESTFINAL_EX
 
-/* Define to 1 if you have the `EVP_DigestInit_ex' function. */
+/* Define to 1 if you have the 'EVP_DigestInit_ex' function. */
 #undef HAVE_EVP_DIGESTINIT_EX
 
-/* Define to 1 if you have the `EVP_DigestUpdate' function. */
+/* Define to 1 if you have the 'EVP_DigestUpdate' function. */
 #undef HAVE_EVP_DIGESTUPDATE
 
-/* Define to 1 if you have the `EVP_md5' function. */
+/* Define to 1 if you have the 'EVP_md5' function. */
 #undef HAVE_EVP_MD5
 
-/* Define to 1 if you have the `EVP_MD_CTX_free' function. */
+/* Define to 1 if you have the 'EVP_MD_CTX_free' function. */
 #undef HAVE_EVP_MD_CTX_FREE
 
-/* Define to 1 if you have the `EVP_MD_CTX_init' function. */
+/* Define to 1 if you have the 'EVP_MD_CTX_init' function. */
 #undef HAVE_EVP_MD_CTX_INIT
 
-/* Define to 1 if you have the `EVP_MD_CTX_new' function. */
+/* Define to 1 if you have the 'EVP_MD_CTX_new' function. */
 #undef HAVE_EVP_MD_CTX_NEW
 
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define to 1 if you have the `MD5Final' function. */
+/* Define to 1 if you have the 'MD5Final' function. */
 #undef HAVE_MD5FINAL
 
-/* Define to 1 if you have the `MD5Init' function. */
+/* Define to 1 if you have the 'MD5Init' function. */
 #undef HAVE_MD5INIT
 
-/* Define to 1 if you have the `MD5Update' function. */
+/* Define to 1 if you have the 'MD5Update' function. */
 #undef HAVE_MD5UPDATE
 
-/* Define to 1 if you have the `MD5_Final' function. */
+/* Define to 1 if you have the 'MD5_Final' function. */
 #undef HAVE_MD5_FINAL
 
-/* Define to 1 if you have the `MD5_Init' function. */
+/* Define to 1 if you have the 'MD5_Init' function. */
 #undef HAVE_MD5_INIT
 
-/* Define to 1 if you have the `MD5_Update' function. */
+/* Define to 1 if you have the 'MD5_Update' function. */
 #undef HAVE_MD5_UPDATE
 
 /* Define to 1 if you have the <stdint.h> header file. */
@@ -193,7 +193,7 @@
    libipv6calc */
 #undef SHARED_LIBRARY
 
-/* Define to 1 if all of the C90 standard headers exist (not just the ones
+/* Define to 1 if all of the C89 standard headers exist (not just the ones
    required in a freestanding environment). This macro is provided for
    backward compatibility; new code need not use it. */
 #undef STDC_HEADERS
@@ -255,11 +255,11 @@
 # endif
 #endif
 
-/* Define to empty if `const' does not conform to ANSI C. */
+/* Define to empty if 'const' does not conform to ANSI C. */
 #undef const
 
-/* Define to `long int' if <sys/types.h> does not define. */
+/* Define to 'long int' if <sys/types.h> does not define. */
 #undef off_t
 
-/* Define to `unsigned int' if <sys/types.h> does not define. */
+/* Define as 'unsigned int' if <stddef.h> doesn't define. */
 #undef size_t

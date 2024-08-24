@@ -92,6 +92,8 @@ static int geoip2_db_region_city_v4 = 0;
 static int geoip2_db_region_city_v6 = 0;
 static int geoip2_db_asn_v4 = 0;
 static int geoip2_db_asn_v6 = 0;
+static int geoip2_db_geonameid_v4 = 0;
+static int geoip2_db_geonameid_v6 = 0;
 
 typedef struct {
 	unsigned int num;
@@ -109,6 +111,8 @@ static s_ipv6calc_geoip2_db geoip2_db_region_city_v4_best[GeoIP2_MAX];
 static s_ipv6calc_geoip2_db geoip2_db_region_city_v6_best[GeoIP2_MAX];
 static s_ipv6calc_geoip2_db geoip2_db_asn_v4_best[GeoIP2_MAX];
 static s_ipv6calc_geoip2_db geoip2_db_asn_v6_best[GeoIP2_MAX];
+static s_ipv6calc_geoip2_db geoip2_db_geonameid_v4_best[GeoIP2_MAX];
+static s_ipv6calc_geoip2_db geoip2_db_geonameid_v6_best[GeoIP2_MAX];
 
 static int type2index[GeoIP2_DB_MAX+1];
 
@@ -247,6 +251,14 @@ int libipv6calc_db_wrapper_GeoIP2_wrapper_init(void) {
 			GeoIP2_DB_SELECT_BETTER(geoip2_db_asn_v6_best[product])
 		};
 
+		if ((libipv6calc_db_wrapper_GeoIP2_db_file_desc[i].features & IPV6CALC_DB_IPV4_TO_GEONAMEID) != 0) {
+			GeoIP2_DB_SELECT_BETTER(geoip2_db_geonameid_v4_best[product])
+		};
+
+		if ((libipv6calc_db_wrapper_GeoIP2_db_file_desc[i].features & IPV6CALC_DB_IPV6_TO_GEONAMEID) != 0) {
+			GeoIP2_DB_SELECT_BETTER(geoip2_db_geonameid_v6_best[product])
+		};
+
 		wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP2] |= libipv6calc_db_wrapper_GeoIP2_db_file_desc[i].features;
 	};
 
@@ -265,6 +277,8 @@ int libipv6calc_db_wrapper_GeoIP2_wrapper_init(void) {
 		SELECT_FREE_INSTEAD_OF_COMM(geoip2_db_region_city_v6_best[GeoIP2_FREE], geoip2_db_region_city_v6_best[GeoIP2_COMM], geoip2_db_region_city_v6)
 		SELECT_FREE_INSTEAD_OF_COMM(geoip2_db_asn_v4_best[GeoIP2_FREE], geoip2_db_asn_v4_best[GeoIP2_COMM], geoip2_db_asn_v4)
 		SELECT_FREE_INSTEAD_OF_COMM(geoip2_db_asn_v6_best[GeoIP2_FREE], geoip2_db_asn_v6_best[GeoIP2_COMM], geoip2_db_asn_v6)
+		SELECT_FREE_INSTEAD_OF_COMM(geoip2_db_geonameid_v4_best[GeoIP2_FREE], geoip2_db_geonameid_v4_best[GeoIP2_COMM], geoip2_db_geonameid_v4)
+		SELECT_FREE_INSTEAD_OF_COMM(geoip2_db_geonameid_v6_best[GeoIP2_FREE], geoip2_db_geonameid_v6_best[GeoIP2_COMM], geoip2_db_geonameid_v6)
 	};
 
 #define FILL_EMPTY(product, final) \
@@ -279,6 +293,8 @@ int libipv6calc_db_wrapper_GeoIP2_wrapper_init(void) {
 	FILL_EMPTY(geoip2_db_region_city_v6_best[GeoIP2_COMM], geoip2_db_region_city_v6)
 	FILL_EMPTY(geoip2_db_asn_v4_best[GeoIP2_COMM], geoip2_db_asn_v4)
 	FILL_EMPTY(geoip2_db_asn_v6_best[GeoIP2_COMM], geoip2_db_asn_v6)
+	FILL_EMPTY(geoip2_db_geonameid_v4_best[GeoIP2_COMM], geoip2_db_geonameid_v4)
+	FILL_EMPTY(geoip2_db_geonameid_v6_best[GeoIP2_COMM], geoip2_db_geonameid_v6)
 
 	// fill empty ones with free
 	FILL_EMPTY(geoip2_db_country_v4_best[GeoIP2_FREE], geoip2_db_country_v4)
@@ -287,6 +303,8 @@ int libipv6calc_db_wrapper_GeoIP2_wrapper_init(void) {
 	FILL_EMPTY(geoip2_db_region_city_v6_best[GeoIP2_FREE], geoip2_db_region_city_v6)
 	FILL_EMPTY(geoip2_db_asn_v4_best[GeoIP2_FREE], geoip2_db_asn_v4)
 	FILL_EMPTY(geoip2_db_asn_v6_best[GeoIP2_FREE], geoip2_db_asn_v6)
+	FILL_EMPTY(geoip2_db_geonameid_v4_best[GeoIP2_FREE], geoip2_db_geonameid_v4)
+	FILL_EMPTY(geoip2_db_geonameid_v6_best[GeoIP2_FREE], geoip2_db_geonameid_v6)
 
 	/* close handles which are not necessary further on */
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_GeoIP2_db_file_desc); i++) {
@@ -358,13 +376,15 @@ int libipv6calc_db_wrapper_GeoIP2_wrapper_cleanup(void) {
 void libipv6calc_db_wrapper_GeoIP2_wrapper_info(char* string, const size_t size) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "Called");
 
-	snprintf(string, size, "GeoIP2 database support: Country4=%d Country6=%d ASN4=%d ASN6=%d City4=%d City6=%d", \
+	snprintf(string, size, "GeoIP2 database support: Country4=%d Country6=%d ASN4=%d ASN6=%d City4=%d City6=%d GeonameID4=%d GeonameID6=%d", \
 		(wrapper_features & IPV6CALC_DB_IPV4_TO_CC) ? 1 : 0, \
 		(wrapper_features & IPV6CALC_DB_IPV6_TO_CC) ? 1 : 0, \
 		(wrapper_features & IPV6CALC_DB_IPV4_TO_AS) ? 1 : 0, \
 		(wrapper_features & IPV6CALC_DB_IPV6_TO_AS) ? 1 : 0, \
 		(wrapper_features & IPV6CALC_DB_IPV4_TO_CITY) ? 1 : 0, \
-		(wrapper_features & IPV6CALC_DB_IPV6_TO_CITY) ? 1 : 0 \
+		(wrapper_features & IPV6CALC_DB_IPV6_TO_CITY) ? 1 : 0, \
+		(wrapper_features & IPV6CALC_DB_IPV4_TO_GEONAMEID) ? 1 : 0, \
+		(wrapper_features & IPV6CALC_DB_IPV6_TO_GEONAMEID) ? 1 : 0 \
 	);
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "Finished");
@@ -416,7 +436,7 @@ void libipv6calc_db_wrapper_GeoIP2_wrapper_print_db_info(const int level_verbose
 		fprintf(stderr, "%sGeoIP2: NO available databases found in directory: %s\n", prefix, geoip2_db_dir);
 	} else {
 		if (level_verbose >= LEVEL_VERBOSE2) {
-			fprintf(stderr, "%sGeoIP2: detected best databases FREE    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d\n"
+			fprintf(stderr, "%sGeoIP2: detected best databases FREE    Country4=%-2d DB%-2d %6d  Country6=%-2d DB%-2d %6d  City4=%-2d DB%-2d %6d  City6=%-2d DB%-2d %6d  GeonameID4=%-2d DB%-2d %6d  GeonameID6=%-2d DB%-2d %6d\n"
 				, prefix
 				, geoip2_db_country_v4_best[GeoIP2_FREE].num
 				, geoip2_db_country_v4_best[GeoIP2_FREE].dbtype
@@ -430,9 +450,15 @@ void libipv6calc_db_wrapper_GeoIP2_wrapper_print_db_info(const int level_verbose
 				, geoip2_db_region_city_v6_best[GeoIP2_FREE].num
 				, geoip2_db_region_city_v6_best[GeoIP2_FREE].dbtype
 				, GeoIP2_UNPACK_YM(geoip2_db_region_city_v6_best[GeoIP2_FREE].dbym)
+				, geoip2_db_geonameid_v4_best[GeoIP2_FREE].num
+				, geoip2_db_geonameid_v4_best[GeoIP2_FREE].dbtype
+				, GeoIP2_UNPACK_YM(geoip2_db_geonameid_v4_best[GeoIP2_FREE].dbym)
+				, geoip2_db_geonameid_v6_best[GeoIP2_FREE].num
+				, geoip2_db_geonameid_v6_best[GeoIP2_FREE].dbtype
+				, GeoIP2_UNPACK_YM(geoip2_db_geonameid_v6_best[GeoIP2_FREE].dbym)
 			);
 
-			fprintf(stderr, "%sGeoIP2: detected best databases COMM    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d\n"
+			fprintf(stderr, "%sGeoIP2: detected best databases COMM    Country4=%-2d DB%-2d %6d  Country6=%-2d DB%-2d %6d  City4=%-2d DB%-2d %6d  City6=%-2d DB%-2d %6d  GeonameID4=%-2d DB%-2d %6d  GeonameID6=%-2d DB%-2d %6d\n"
 				, prefix
 				, geoip2_db_country_v4_best[GeoIP2_COMM].num
 				, geoip2_db_country_v4_best[GeoIP2_COMM].dbtype
@@ -446,28 +472,38 @@ void libipv6calc_db_wrapper_GeoIP2_wrapper_print_db_info(const int level_verbose
 				, geoip2_db_region_city_v6_best[GeoIP2_COMM].num
 				, geoip2_db_region_city_v6_best[GeoIP2_COMM].dbtype
 				, GeoIP2_UNPACK_YM(geoip2_db_region_city_v6_best[GeoIP2_COMM].dbym)
+				, geoip2_db_geonameid_v4_best[GeoIP2_COMM].num
+				, geoip2_db_geonameid_v4_best[GeoIP2_COMM].dbtype
+				, GeoIP2_UNPACK_YM(geoip2_db_geonameid_v4_best[GeoIP2_COMM].dbym)
+				, geoip2_db_geonameid_v6_best[GeoIP2_COMM].num
+				, geoip2_db_geonameid_v6_best[GeoIP2_COMM].dbtype
+				, GeoIP2_UNPACK_YM(geoip2_db_geonameid_v6_best[GeoIP2_COMM].dbym)
 			);
 		} else if (level_verbose >= LEVEL_VERBOSE) {
-			fprintf(stderr, "%sGeoIP2: detected best databases FREE    Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
+			fprintf(stderr, "%sGeoIP2: detected best databases FREE    Country4=%-2d  Country6=%-2d  City4=%-2d  City6=%-2d  GeonameID4=%-2d  GeonameID6=%-2d\n"
 				, prefix
 				, geoip2_db_country_v4_best[GeoIP2_FREE].num
 				, geoip2_db_country_v6_best[GeoIP2_FREE].num
 				, geoip2_db_region_city_v4_best[GeoIP2_FREE].num
 				, geoip2_db_region_city_v6_best[GeoIP2_FREE].num
+				, geoip2_db_geonameid_v4_best[GeoIP2_FREE].num
+				, geoip2_db_geonameid_v6_best[GeoIP2_FREE].num
 			);
 
-			fprintf(stderr, "%sGeoIP2: detected best databases COMM    Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
+			fprintf(stderr, "%sGeoIP2: detected best databases COMM    Country4=%-2d  Country6=%-2d  City4=%-2d  City6=%-2d  GeonameID4=%-2d  GeonameID6=%-2d\n"
 				, prefix
 				, geoip2_db_country_v4_best[GeoIP2_COMM].num
 				, geoip2_db_country_v6_best[GeoIP2_COMM].num
 				, geoip2_db_region_city_v4_best[GeoIP2_COMM].num
 				, geoip2_db_region_city_v6_best[GeoIP2_COMM].num
+				, geoip2_db_geonameid_v4_best[GeoIP2_COMM].num
+				, geoip2_db_geonameid_v6_best[GeoIP2_COMM].num
 			);
 
 		};
 
 		if (level_verbose >= LEVEL_VERBOSE) {
-			fprintf(stderr, "%sGeoIP2: selected best databases normal  Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d\n"
+			fprintf(stderr, "%sGeoIP2: selected best databases normal  Country4=%-2d%s  Country6=%-2d%s  City4=%-2d%s  City6=%-2d%s  GeonameID4=%-2d%s  GeonameID6=%-2d\n"
 				, prefix
 				, geoip2_db_country_v4
 				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
@@ -476,6 +512,10 @@ void libipv6calc_db_wrapper_GeoIP2_wrapper_print_db_info(const int level_verbose
 				, geoip2_db_region_city_v4
 				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
 				, geoip2_db_region_city_v6
+				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, geoip2_db_geonameid_v4
+				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, geoip2_db_geonameid_v6
 			);
 
 			if (geoip2_db_comm_to_free_switch_min_delta_months > 0) {
@@ -956,14 +996,14 @@ uint32_t libipv6calc_db_wrapper_GeoIP2_wrapper_GeonameID_by_addr(const ipv6calc_
 	int GEOIP2_type = 0;
 
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
-		GEOIP2_type = geoip2_db_region_city_v4;
+		GEOIP2_type = geoip2_db_geonameid_v4;
 
 		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP2] & IPV6CALC_DB_IPV4_TO_GEONAMEID) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "No GeoIP2 database supporting IPv4 GeonameID");
 			goto END_libipv6calc_db_wrapper;
 		};
 	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
-		GEOIP2_type = geoip2_db_region_city_v6;
+		GEOIP2_type = geoip2_db_geonameid_v6;
 
 		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP2] & IPV6CALC_DB_IPV6_TO_GEONAMEID) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "No GeoIP2 database supporting IPv6 GeonameID");
