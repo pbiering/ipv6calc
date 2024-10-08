@@ -21,7 +21,7 @@ apnic	http://ftp.apnic.net/stats/apnic/		delegated-apnic-latest			txt
 lacnic	http://ftp.lacnic.net/pub/stats/lacnic/		delegated-lacnic-latest			txt
 afrinic	http://ftp.afrinic.net/pub/stats/afrinic/	delegated-afrinic-latest		txt
 iana    https://www.iana.org/assignments/as-numbers/	as-numbers.txt				txt
-lisp	https://lisp4.net.cba.upc.edu/lisp-site/	site-db					txt
+#EOL#202410#lisp	https://lisp4.net.cba.upc.edu/lisp-site/	site-db					txt
 END
 }
 

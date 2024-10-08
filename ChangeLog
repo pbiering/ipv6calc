@@ -13,6 +13,7 @@ Info:
 --------------------------------------------------------------------
 20241008/PB:
 	databases/lisp/site-db[.txt]: historic LISP site database 2020-03-18
+	tools/ipv6calc-update-registries.sh: disable download of LISP site database (broken URL)
 
 20240824/PB:
 	databases/lib/libipv6calc_db_wrapper_GeoIP2.c: fix YYYYMM display
