@@ -1,7 +1,6 @@
 # Project    : ipv6calc/databases/registries
 # File       : Makefile
-# Version    : $Id$
-# Copyright  : 2002-2022 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2024 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces parts of ../ipv4-assignment/Makefile
 #               replaces parts of ../ipv6-assignment/Makefile
 #
@@ -42,11 +41,6 @@ distclean:
 			echo "Delete datafiles: iana"; \
 			rm -f iana/ipv6-unicast-address-assignments.xml iana/ipv4-address-space.xml iana/as-numbers.txt; \
 			rmdir iana; \
-		fi
-		if [ -d lisp ]; then \
-			echo "Delete datafiles: lisp"; \
-			rm -f lisp/site-db; \
-			rmdir lisp; \
 		fi
 		for d in ripencc apnic arin lacnic afrinic; do \
 			if [ -d $${d} ]; then \
