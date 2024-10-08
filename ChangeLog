@@ -11,6 +11,9 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20241008/PB:
+	databases/lisp/site-db[.txt]: historic LISP site database 2020-03-18
+
 20240824/PB:
 	databases/lib/libipv6calc_db_wrapper_GeoIP2.c: fix YYYYMM display
 	databases/lib/libipv6calc_db_wrapper_GeoIP2.c: improve database selection for GeonameID
