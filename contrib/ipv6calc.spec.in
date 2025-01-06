@@ -48,6 +48,7 @@ BuildRequires:	perl(strict), perl(warnings)
 BuildRequires:	procps-ng
 Requires:	perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 Requires:	unzip
+Requires:	perl-BerkeleyDB perl-Net-IP
 %if %{enable_shared}
 Provides:	ipv6calc-libs = %{version}-%{release}
 %else
@@ -366,6 +367,9 @@ fi
 
 
 %changelog
+* Mon Jan 06 2025 Peter Bieringer <pb@bieringer.de>
+- add additional Perl requirements
+
 * Fri Jan 26 2023 Peter Bieringer <pb@bieringer.de>
 - cosmetics, minor updates and alignment with EPEL9 variant
 - change locations of CGI scripts
