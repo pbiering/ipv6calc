@@ -11,6 +11,9 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20250106/PB:
+	internal databases: update
+
 20241008/PB:
 	databases/registries/lisp/site-db[.txt]: historic LISP site database 2020-03-18
 	tools/ipv6calc-update-registries.sh: disable download of LISP site database (broken URL)

@@ -2,21 +2,21 @@
  * Project       : ipv6calc
  * File          : db_cc_reg_assignment.h
  * Version       : $Id$
- * Generated     : Fri Aug 23 06:31:35 2024
+ * Generated     : Mon Jan  6 08:03:02 2025
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC
  *
  * Information:
  *  Additional header file for databases/lib/libipv6calc_db_wrapper_BuiltIn.c
  */
 
-static const char *db_cc_registry_status = "AFRINIC/20240822 APNIC/20240822 ARIN/20240822 LACNIC/20240822 RIPENCC/20240822";
+static const char *db_cc_registry_status = "AFRINIC/20250106 APNIC/20250105 ARIN/20250105 LACNIC/20250103 RIPENCC/20250105";
 
 static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "", REGISTRY_ARIN     },
 	{ "AD", REGISTRY_RIPENCC  },
 	{ "AE", REGISTRY_RIPENCC  },
 	{ "AF", REGISTRY_APNIC    },
-	{ "AG", REGISTRY_ARIN     },
+	{ "AG", REGISTRY_RIPENCC  },
 	{ "AI", REGISTRY_ARIN     },
 	{ "AL", REGISTRY_RIPENCC  },
 	{ "AM", REGISTRY_RIPENCC  },
@@ -149,7 +149,7 @@ static const s_cc_reg_assignment cc_reg_assignment[] = {
 	{ "ME", REGISTRY_RIPENCC  },
 	{ "MF", REGISTRY_ARIN     },
 	{ "MG", REGISTRY_AFRINIC  },
-	{ "MH", REGISTRY_APNIC    },
+	{ "MH", REGISTRY_RIPENCC  },
 	{ "MK", REGISTRY_RIPENCC  },
 	{ "ML", REGISTRY_AFRINIC  },
 	{ "MM", REGISTRY_APNIC    },
@@ -670,7 +670,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  413  XF
 	{ REGISTRY_UNKNOWN  }, //  414  YF
 	{ REGISTRY_UNKNOWN  }, //  415  ZF
-	{ REGISTRY_ARIN     }, //  416  AG
+	{ REGISTRY_RIPENCC  }, //  416  AG
 	{ REGISTRY_RIPENCC  }, //  417  BG
 	{ REGISTRY_AFRINIC  }, //  418  CG
 	{ REGISTRY_UNKNOWN  }, //  419  DG
@@ -708,7 +708,7 @@ static const s_cc_index_reg_assignment cc_index_reg_assignment[] = {
 	{ REGISTRY_UNKNOWN  }, //  451  JH
 	{ REGISTRY_APNIC    }, //  452  KH
 	{ REGISTRY_UNKNOWN  }, //  453  LH
-	{ REGISTRY_APNIC    }, //  454  MH
+	{ REGISTRY_RIPENCC  }, //  454  MH
 	{ REGISTRY_UNKNOWN  }, //  455  NH
 	{ REGISTRY_UNKNOWN  }, //  456  OH
 	{ REGISTRY_APNIC    }, //  457  PH

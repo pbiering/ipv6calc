@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Fri Aug 23 06:08:54 2024
+ * Generated     : Mon Jan  6 07:58:57 2025
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20240823";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20250106";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -260,7 +260,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x0F6000, 0x0F6FFF, "Carl Baasel Lasertechnik GmbH", "CARL-BAASEL-LASERTECHNIK" },
 	{ 0x0050C2, 0x0F7000, 0x0F7FFF, "Foss NIRSystems, Inc.", "FOSS-NIRSYSTEMS" },
 	{ 0x0050C2, 0x0F8000, 0x0F8FFF, "Tecnint HTE SRL", "TECNINT-HTE-SRL" },
-	{ 0x0050C2, 0x0F9000, 0x0F9FFF, "Raven Industries", "RAVEN-INDUSTRIES" },
+	{ 0x0050C2, 0x0F9000, 0x0F9FFF, "Raven Industries Inc.", "RAVEN-INDUSTRIES" },
 	{ 0x0050C2, 0x0FA000, 0x0FAFFF, "GE Transportation Systems", "GE-TRANSPORTATION" },
 	{ 0x0050C2, 0x0FB000, 0x0FBFFF, "PIUSYS Co., Ltd.", "PIUSYS" },
 	{ 0x0050C2, 0x0FC000, 0x0FCFFF, "Kimmon Manufacturing Co., Ltd.", "KIMMON-MANUFACTURING" },
@@ -3322,7 +3322,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xCEE000, 0xCEEFFF, "EMBED-IT OG", "EMBED-IT-OG" },
 	{ 0x0050C2, 0xCEF000, 0xCEFFFF, "Lupatecnologia e Sistemas Ltda", "LUPATECNOLOGIA-E-SISTEMAS-LTDA" },
 	{ 0x0050C2, 0xCF0000, 0xCF0FFF, "Inviso B.V.", "INVISO-B-V" },
-	{ 0x0050C2, 0xCF1000, 0xCF1FFF, "TelGaAs, Inc.", "TELGAAS" },
+	{ 0x0050C2, 0xCF1000, 0xCF1FFF, "Bascom Hunter", "BASCOM-HUNTER" },
 	{ 0x0050C2, 0xCF2000, 0xCF2FFF, "Weiss Robotics GmbH & Co. KG", "WEISS-ROBOTICS" },
 	{ 0x0050C2, 0xCF3000, 0xCF3FFF, "Daiken Automacao Ltda", "DAIKEN-AUTOMACAO-LTDA" },
 	{ 0x0050C2, 0xCF4000, 0xCF4FFF, "Baudisch Electronic GmbH", "BAUDISCH" },
