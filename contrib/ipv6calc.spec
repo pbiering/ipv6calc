@@ -48,6 +48,7 @@ BuildRequires:	perl(strict), perl(warnings)
 BuildRequires:	procps-ng
 Requires:	perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
 Requires:	unzip
+Requires:	perl-BerkeleyDB perl-Net-IP
 %if %{enable_shared}
 Provides:	ipv6calc-libs = %{version}-%{release}
 %else
@@ -98,6 +99,7 @@ Requires:      libdb
 %if %{enable_mmdb}
 BuildRequires: libmaxminddb-devel
 Recommends:    libmaxminddb
+%endif
 
 %if 0%{?fedora} >= 39
 BuildRequires: geolite2-country
@@ -113,8 +115,6 @@ BuildRequires: geolite2-country
 BuildRequires: geolite2-city
 Recommends:    geolite2-country
 Recommends:    geolite2-city
-%endif
-
 %endif
 
 %if %{enable_ip2location}
@@ -383,6 +383,9 @@ fi
 
 
 %changelog
+* Mon Jan 06 2025 Peter Bieringer <pb@bieringer.de>
+- add additional Perl requirements
+
 * Sat Aug 23 2023 Peter Bieringer <pb@bieringer.de>
 - add BuildRequires+Recommends for geolite in case MMDB is enabled
 
