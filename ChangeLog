@@ -11,6 +11,9 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20250109/PB:
+	tools/IP2Location-update.sh[.in]: add summary
+
 20250106/PB:
 	internal databases: update
 

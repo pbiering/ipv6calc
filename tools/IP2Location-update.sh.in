@@ -12,7 +12,7 @@
 #
 # Project    : ipv6calc/IP2Location
 # File       : IP2Location-update.sh
-# Copyright  : 2012-2024 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2012-2025 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
 # 20150416: remove softlink support, no longer needed
@@ -207,6 +207,7 @@ if $has_token; then
 fi
 
 # Download and unpack non-sample files
+error=0
 for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FILES_LITE_FREE IP2LOCATION_DAT_FILES_SAMPLE; do
 	if [ -z "${!list}" ]; then
 		echo "NOTICE: empty list, skip: $list"
@@ -317,6 +318,7 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 						unzip -o -d "$IP2LOCATION_DAT_DIR" "$file_dest" '*.BIN'
 						if [ $? -ne 0 ]; then
 							echo "ERROR : unzip of file not successful: $file_dest"
+							error=$[ $error + 1 ]
 							continue
 						else
 							echo "INFO  : unzip of file successful: $file_dest"
@@ -353,8 +355,10 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 		if ! file "$file_dest" | grep -q "Zip archive data"; then
 			if file "$file_dest" | grep -q "ASCII text"; then
 				echo "ERROR : downloaded file is not a ZIP archive: $file_dest ($(head -1 "$file_dest"))"
+				error=$[ $error + 1 ]
 			else
 				echo "ERROR : downloaded file is not a ZIP archive: $file_dest"
+				error=$[ $error + 1 ]
 			fi
 			continue
 		fi
@@ -362,6 +366,7 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 		unzip -o -d "$IP2LOCATION_DAT_DIR" "$file_dest" '*.BIN'
 		if [ $? -ne 0 ]; then
 			echo "ERROR : unzip of file not successful: $file_dest"
+			error=$[ $error + 1 ]
 			continue
 		fi
 		$verbose && echo "INFO  : unzip of file successful: $file_dest (remove downloaded file now)"
@@ -379,4 +384,10 @@ fi
 # calling external function
 if [ -n "$have_ipv6calc_db_update_support" ]; then
 	[ "$reloadrestart" = "1" ] && ipv6calc_db_update_support_reloadrestart "$IP2LOCATION_DAT_DIR" "$testrun"
+fi
+
+if [ $error -gt 0 ]; then
+	echo "WARN  : $errors ERRORS occurred during execution"
+else
+	echo "INFO  : NO errors occurred during execution"
 fi
