@@ -101,6 +101,22 @@ BuildRequires: libmaxminddb-devel
 Recommends:    libmaxminddb
 %endif
 
+%if 0%{?fedora} >= 39
+BuildRequires: geolite2-country
+BuildRequires: geolite2-city
+BuildRequires: geolite2-asn
+Recommends:    geolite2-country
+Recommends:    geolite2-city
+Recommends:    geolite2-asn
+%endif
+
+%if 0%{?rhel} >= 8
+BuildRequires: geolite2-country
+BuildRequires: geolite2-city
+Recommends:    geolite2-country
+Recommends:    geolite2-city
+%endif
+
 %if %{enable_ip2location}
 BuildRequires: IP2Location-devel >= 8.6.0
 Recommends:    IP2Location       >= 8.6.0
@@ -369,6 +385,9 @@ fi
 %changelog
 * Mon Jan 06 2025 Peter Bieringer <pb@bieringer.de>
 - add additional Perl requirements
+
+* Sat Aug 23 2023 Peter Bieringer <pb@bieringer.de>
+- add BuildRequires+Recommends for geolite in case MMDB is enabled
 
 * Fri Jan 26 2023 Peter Bieringer <pb@bieringer.de>
 - cosmetics, minor updates and alignment with EPEL9 variant
