@@ -13,6 +13,7 @@ Info:
 --------------------------------------------------------------------
 20250109/PB:
 	tools/IP2Location-update.sh[.in]: add summary
+	configure[.ac]: cosmetics
 
 20250106/PB:
 	internal databases: update

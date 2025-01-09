@@ -5484,7 +5484,7 @@ fi
 
 else case e in #(
   e)
-		as_fn_error $? "Berkeley DB library header files not found (perhaps missing one of the following packages: db4-devel libdb-devel)" "$LINENO" 5
+		as_fn_error $? "Berkeley DB library header files not found - missing db4-devel or libdb-devel?" "$LINENO" 5
 	 ;;
 esac
 fi
@@ -5775,7 +5775,7 @@ printf "%s\n" "#define HAVE_DECL_MMDB_LIB_VERSION $ac_have_decl" >>confdefs.h
 
 else case e in #(
   e)
-		as_fn_error $? "MaxMindDB library header files not found" "$LINENO" 5
+		as_fn_error $? "MaxMindDB library header files not found - missing libmaxminddb-devel?" "$LINENO" 5
 	 ;;
 esac
 fi
@@ -6275,7 +6275,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
 
 else case e in #(
   e)
-		as_fn_error $? "IP2Location library header files not found" "$LINENO" 5
+		as_fn_error $? "IP2Location library header files not found - missing IP2Location-devel?" "$LINENO" 5
 	 ;;
 esac
 fi

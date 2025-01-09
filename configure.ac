@@ -1,6 +1,6 @@
 dnl Project  : ipv6calc
 dnl File     : configure.ac
-dnl Copyright: 2001-2024 by Peter Bieringer <pb (at) bieringer.de>
+dnl Copyright: 2001-2025 by Peter Bieringer <pb (at) bieringer.de>
 
 dnl Process this file with autoconf to produce a configure script.
 
@@ -751,7 +751,7 @@ if test "$require_libdb" = "yes"; then
 			AC_MSG_ERROR([Berkeley DB library file misses: db_create])
 		])
 	],[
-		AC_MSG_ERROR([Berkeley DB library header files not found (perhaps missing one of the following packages: db4-devel libdb-devel)])
+		AC_MSG_ERROR([Berkeley DB library header files not found - missing db4-devel or libdb-devel?])
 	])
 
 	AC_CHECK_FILE(/sbin/ldconfig, [
@@ -887,7 +887,7 @@ if test "$MMDB" = "yes"; then
 
 	],
 	[
-		AC_MSG_ERROR([MaxMindDB library header files not found])
+		AC_MSG_ERROR([MaxMindDB library header files not found - missing libmaxminddb-devel?])
 	])
 
 	AC_MSG_RESULT([*** MaxMindDB database directory: $mmdb_db])
@@ -1185,7 +1185,7 @@ if test "$IP2LOCATION" = "yes"; then
 		)
 	],
 	[
-		AC_MSG_ERROR([IP2Location library header files not found])
+		AC_MSG_ERROR([IP2Location library header files not found - missing IP2Location-devel?])
 	])
 
 	AC_MSG_RESULT([*** IP2location db dir: $ip2location_db])
