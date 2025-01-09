@@ -5,6 +5,7 @@ ipv6calc's internal databases
 * IPv4 assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for selecting proper registry in ipv6calcweb.cgi and IPv4 anonymization)
 * IPv6 assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for selecting proper registry in ipv6calcweb.cgi and IPv6 anonymization)
 * ASN assignment databases from IANA, ARIN, RIPENCC, APNIC, LACNIC, AFRINIC (for IPv4/IPv6 anonymization)
+* LISP assignment database originally from  https://lisp4.net.cba.upc.edu/lisp-site/
 
 can be overruled by using updated ones converted into Berkeley DB format.
 
