@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_oui28.h
  * Version       : $Id$
- * Generated     : Mon Jan  6 07:58:55 2025
+ * Generated     : Tue Jan 14 20:54:56 2025
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui28_status __attribute__ ((__unused__)) = "OUI28/20250106";
+/*@unused@*/ static const char* libieee_oui28_status __attribute__ ((__unused__)) = "OUI28/20250114";
 
 
 static const s_ieee_oui28 libieee_oui28[] = {
@@ -466,6 +466,9 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x1845B3, 0xC00000, 0xCFFFFF, "Bdf Digital", "BDF-DIGITAL" },
 	{ 0x1845B3, 0xD00000, 0xDFFFFF, "Taicang T&W Electronics", "TAICANG-T-W-ELECTRONICS" },
 	{ 0x1845B3, 0xE00000, 0xEFFFFF, "Sleep Number", "SLEEP-NUMBER" },
+	{ 0x186696, 0x400000, 0x4FFFFF, "Akteena Inc", "AKTEENA" },
+	{ 0x186696, 0x700000, 0x7FFFFF, "Shandong Hummingbird Internet of Things Technology Co., Ltd", "SHANDONG-HUMMINGBIRD-INTERNET-OF-THINGS" },
+	{ 0x186696, 0xA00000, 0xAFFFFF, "BIPAI ELECTRONIC TECHNOLOGY(DONGGUAN)CO.,LTD", "BIPAI-DONGGUAN" },
 	{ 0x1874E2, 0x000000, 0x0FFFFF, "Ensor AG", "ENSOR" },
 	{ 0x1874E2, 0x100000, 0x1FFFFF, "Sartorius Lab Instruments GmbH & Co. KG", "SARTORIUS-LAB-INSTRUMENTS" },
 	{ 0x1874E2, 0x200000, 0x2FFFFF, "Shenzhen WITSTECH Co.,Ltd.", "SHENZHEN-WITSTECH" },
@@ -1044,7 +1047,7 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x2C691D, 0x100000, 0x1FFFFF, "KATEK SE", "KATEK-SE" },
 	{ 0x2C691D, 0x200000, 0x2FFFFF, "Abode Systems Inc", "ABODE" },
 	{ 0x2C691D, 0x300000, 0x3FFFFF, "Sunsa, Inc", "SUNSA" },
-	{ 0x2C691D, 0x400000, 0x4FFFFF, "SPEEDTECH CORP. JIO", "SPEEDTECH-JIO" },
+	{ 0x2C691D, 0x400000, 0x4FFFFF, "SPEEDTECH CORP.", "SPEEDTECH" },
 	{ 0x2C691D, 0x500000, 0x5FFFFF, "LG Electronics Inc.", "LG-ELECTRONICS" },
 	{ 0x2C691D, 0x600000, 0x6FFFFF, "Carnegie Robotics", "CARNEGIE-ROBOTICS" },
 	{ 0x2C691D, 0x700000, 0x7FFFFF, "Shenzhen Gigalight Technology Co., Ltd", "SHENZHEN-GIGALIGHT" },
@@ -1073,7 +1076,7 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x2C6A6F, 0xF00000, 0xFFFFFF, "Private", "PRIVATE" },
 	{ 0x2CC44F, 0x000000, 0x0FFFFF, "Shenzhen Syeconmax Technology Co. Ltd", "SHENZHEN-SYECONMAX" },
 	{ 0x2CC44F, 0x100000, 0x1FFFFF, "Joyoful", "JOYOFUL" },
-	{ 0x2CC44F, 0x200000, 0x2FFFFF, "Falcon V Systems S. A.", "FALCON-V-S-A" },
+	{ 0x2CC44F, 0x200000, 0x2FFFFF, "Vecima Networks Inc.", "VECIMA-NETWORKS" },
 	{ 0x2CC44F, 0x300000, 0x3FFFFF, "somon", "SOMON" },
 	{ 0x2CC44F, 0x400000, 0x4FFFFF, "Beijing Siling Robot Technology Co.,Ltd", "BEIJING-SILING-ROBOT" },
 	{ 0x2CC44F, 0x500000, 0x5FFFFF, "MOHAN ELECTRONICS AND SYSTEMS (OPTIVISION)", "MOHAN-ELECTRONICS-AND-OPTIVISION" },
@@ -4245,8 +4248,21 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0xBC9740, 0xC00000, 0xCFFFFF, "LISTEC GmbH", "LISTEC" },
 	{ 0xBC9740, 0xD00000, 0xDFFFFF, "Rollock Oy", "ROLLOCK-OY" },
 	{ 0xBC9740, 0xE00000, 0xEFFFFF, "B4ComTechnologies LLC", "B4COMTECHNOLOGIES" },
+	{ 0xBCDFE1, 0x000000, 0x0FFFFF, "Shenzhen Galaxy Century Information Technology Co.,Ltd", "SHENZHEN-GALAXY-CENTURY-INFORMATION" },
+	{ 0xBCDFE1, 0x100000, 0x1FFFFF, "Shenzhen Valley Ventures Co.,Ltd.", "SHENZHEN-VALLEY-VENTURES" },
+	{ 0xBCDFE1, 0x200000, 0x2FFFFF, "Shanghai Zhuoyu Communication Technology Co., Ltd", "SHANGHAI-ZHUOYU-COMMUNICATION" },
+	{ 0xBCDFE1, 0x300000, 0x3FFFFF, "System Industrie Electronic GmbH", "SYSTEM-INDUSTRIE" },
+	{ 0xBCDFE1, 0x400000, 0x4FFFFF, "Ochno AB", "OCHNO-AB" },
+	{ 0xBCDFE1, 0x500000, 0x5FFFFF, "Enli Inc.", "ENLI" },
+	{ 0xBCDFE1, 0x600000, 0x6FFFFF, "D3 Technical Partners, LLC", "D3-TECHNICAL-PARTNERS" },
+	{ 0xBCDFE1, 0x700000, 0x7FFFFF, "Databridge Dynamic", "DATABRIDGE-DYNAMIC" },
+	{ 0xBCDFE1, 0x800000, 0x8FFFFF, "Cortex Systems", "CORTEX" },
 	{ 0xBCDFE1, 0x900000, 0x9FFFFF, "Annapurna labs", "ANNAPURNA-LABS" },
 	{ 0xBCDFE1, 0xA00000, 0xAFFFFF, "Building Automation Products Inc.", "BUILDING-AUTOMATION-PRODUCTS" },
+	{ 0xBCDFE1, 0xB00000, 0xBFFFFF, "HI-TARGET SURVEYING INSTRUMENT CO.,LTD", "HI-TARGET-SURVEYING-INSTRUMENT" },
+	{ 0xBCDFE1, 0xC00000, 0xCFFFFF, "XY Sense, Inc.", "XY-SENSE" },
+	{ 0xBCDFE1, 0xD00000, 0xDFFFFF, "UGPA LLC", "UGPA" },
+	{ 0xBCDFE1, 0xE00000, 0xEFFFFF, "Clairvoyant Technology Inc.", "CLAIRVOYANT" },
 	{ 0xC022F1, 0x000000, 0x0FFFFF, "RCT Power GmbH", "RCT-POWER" },
 	{ 0xC022F1, 0x100000, 0x1FFFFF, "COMMUP WUHAN NETWORK TECHNOLOGY CO.,LTD", "COMMUP-WUHAN-NETWORK" },
 	{ 0xC022F1, 0x200000, 0x2FFFFF, "TSURUGA Electric Corporation", "TSURUGA-ELECTRIC" },
@@ -4300,7 +4316,7 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0xC08359, 0x500000, 0x5FFFFF, "Viper Design, LLC", "VIPER-DESIGN" },
 	{ 0xC08359, 0x600000, 0x6FFFFF, "Beijing Cloud Fly Technology Development Co.Ltd", "BEIJING-CLOUD-FLY-DEVELOPMENT" },
 	{ 0xC08359, 0x700000, 0x7FFFFF, "Fuzhou Fdlinker Technology Co.,LTD", "FUZHOU-FDLINKER" },
-	{ 0xC08359, 0x800000, 0x8FFFFF, "ista International GmbH", "ISTA" },
+	{ 0xC08359, 0x800000, 0x8FFFFF, "Ista SE", "ISTA-SE" },
 	{ 0xC08359, 0x900000, 0x9FFFFF, "Shenzhen Pay Device Technology Co., Ltd.", "SHENZHEN-PAY-DEVICE" },
 	{ 0xC08359, 0xA00000, 0xAFFFFF, "SHANGHAI CHARMHOPE INFORMATION TECHNOLOGY CO.,LTD.", "SHANGHAI-CHARMHOPE-INFORMATION" },
 	{ 0xC08359, 0xB00000, 0xBFFFFF, "Suzhou Siheng Science and Technology Ltd.", "SUZHOU-SIHENG-SCIENCE" },
