@@ -2,12 +2,14 @@
 #
 # Project    : ipv6calc/databases/registries
 # File       : ipv6calc-update-registries.sh
-# Copyright  : 2002-2024 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2025 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces ../ipv4-assignment/update-ipv4-assignment.sh
 #               replaces ../ipv6-assignment/update-ipv6-assignment.sh
 #
 # Information:
 #  Shell script to update registry data
+#
+#  LISP database is no longer online since 2024-10
 
 #set -x
 
@@ -21,7 +23,8 @@ apnic	http://ftp.apnic.net/stats/apnic/		delegated-apnic-latest			txt
 lacnic	http://ftp.lacnic.net/pub/stats/lacnic/		delegated-lacnic-latest			txt
 afrinic	http://ftp.afrinic.net/pub/stats/afrinic/	delegated-afrinic-latest		txt
 iana    https://www.iana.org/assignments/as-numbers/	as-numbers.txt				txt
-#EOL#202410#lisp	https://lisp4.net.cba.upc.edu/lisp-site/	site-db					txt
+#lisp	https://lisp4.net.cba.upc.edu/lisp-site/	site-db					txt
+lisp	file:///usr/share/ipv6calc/db/lisp/		site-db					txt	curl
 END
 }
 
@@ -106,6 +109,9 @@ get_urls | while read subdir url filename format flag; do
 
 	if [ "$flag" = "out" ]; then
 		$dry_run || wget $wget_options $url$filename -O $filename
+		retval=$?
+	elif [ "$flag" = "curl" ]; then
+		$dry_run || curl $url$filename -o $filename
 		retval=$?
 	else
 		$dry_run || wget $wget_options $url$filename -N
