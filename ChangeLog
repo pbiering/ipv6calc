@@ -14,6 +14,8 @@ Info:
 20250114/PB:
 	tools/ipv6calc-update-registries.sh: reneable download of LISP database from local filesystem
 	contrib/ipv6calc.spec[.in]: include databases/registries/lisp/site-db as no longer reachable for download
+	internal databases: update
+	tag version 4.2.2
 
 20250109/PB:
 	tools/IP2Location-update.sh[.in]: add summary
