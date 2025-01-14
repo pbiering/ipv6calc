@@ -1,6 +1,6 @@
 # Project    : ipv6calc/databases/registries
 # File       : Makefile
-# Copyright  : 2002-2024 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2025 by Peter Bieringer <pb (at) bieringer.de>
 #               replaces parts of ../ipv4-assignment/Makefile
 #               replaces parts of ../ipv6-assignment/Makefile
 #
@@ -15,7 +15,7 @@ install:
 
 download:
 		echo "Download new version of files"
-		../../tools/ipv6calc-update-registries.sh
+		../../tools/ipv6calc-update-registries.sh -l
 
 update-only:
 		echo "Create database files for IPv4"

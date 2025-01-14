@@ -30,11 +30,13 @@ END
 
 help() {
 	cat <<END
-Usage: $(basename "$0") [-D <DST-DIR>] [-h|?] [-d] [-q]
+Usage: $(basename "$0") [-D <DST-DIR>] [-h|?] [-d] [-q] [-L <FILE>] [-l]
 	-D <DST-DIR>	destination directory (default: internal sub-directories)
 
 	-d		dry-run/debug
 	-q		more quiet (default if called by cron)
+	-L <file>	LISP site-db file
+	-l		skip LISP site-db download
 	-R <registry>	download only given registry:
 			 $(get_urls | awk '{ printf $1 " " }')
 	-h|?		this online help
@@ -52,7 +54,7 @@ else
 fi
 
 ## parse options
-while getopts "\?hdqR:D:" opt; do 
+while getopts "\?hdqR:D:L:l" opt; do
 	case $opt in
 	    D)
 		if [ -d "$OPTARG" ]; then
@@ -64,6 +66,12 @@ while getopts "\?hdqR:D:" opt; do
 		;;
 	    R)
 		registry="$OPTARG"
+		;;
+	    L)
+		lisp_site_db="$OPTARG"
+		;;
+	    l)
+		lisp_site_db_skip="1"
 		;;
 	    d)
 		dry_run=true
@@ -105,6 +113,23 @@ get_urls | while read subdir url filename format flag; do
 	else
 		echo "DEBUG : change to download directory: $dir_dst"
 		pushd "$dir_dst" >/dev/null || exit 1
+	fi
+
+	if [ "$subdir" = "lisp" ]; then
+		if [ "$lisp_site_db_skip" = "1" ]; then
+			echo "NOTICE: skip download of LISP site-db"
+			continue
+		fi
+
+		if [ -n "$lisp_site_db" ]; then
+			if [ "${lisp_site_db:0:1}" = "/" ]; then
+				# absolute path
+				url="file://$lisp_site_db"
+			else
+				# relative path
+				url="file://$PWD/$lisp_site_db"
+			fi
+		fi
 	fi
 
 	if [ "$flag" = "out" ]; then
