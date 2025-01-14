@@ -1,6 +1,6 @@
 # Project    : ipv6calc
 # File       : contrib/ipv6calc.spec
-# Copyright  : 2001-2024 by Peter Bieringer <pb@bieringer.de>
+# Copyright  : 2001-2025 by Peter Bieringer <pb@bieringer.de>
 
 ### supports following defines during RPM build:
 #
@@ -269,6 +269,8 @@ done
 
 # db directory
 install -d %{buildroot}%{external_db}
+install -d %{buildroot}%{external_db}/lisp
+install -m 644 databases/registries/lisp/site-db %{buildroot}%{external_db}/lisp/
 
 # selinux
 install -d %{buildroot}%{_datadir}/%{name}/selinux
@@ -383,6 +385,9 @@ fi
 
 
 %changelog
+* Tue Jan 14 2025 Peter Bieringer <pb@bieringer.de>
+- include databases/registries/lisp/site-db as no longer reachable for download
+
 * Mon Jan 06 2025 Peter Bieringer <pb@bieringer.de>
 - add additional Perl requirements
 
