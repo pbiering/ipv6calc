@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_scenarios.sh
-# Copyright  : 2001-2024 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2001-2025 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPLv2
 #
 # Test patterns for ipv6calc (functions only)
@@ -444,7 +444,7 @@ a909:16fa:9092:23ff:a909:4941::7	IPV6_REGISTRY=RIPENCC
 246.24.59.65				IPV4_COUNTRYCODE=AU
 ::246.24.59.65				IPV4_COUNTRYCODE[246.24.59.65]=AU
 ::ffff:246.24.59.65			IPV4_COUNTRYCODE[246.24.59.65]=AU
-2001:07fa:0:1::1			IPV6_REGISTRY=APNIC
+2001:07fa:0:1::1			IPV6_REGISTRY=RIPENCC
 2001:07fa:0:0::1			IPV6_REGISTRY=RIPENCC
 # output variations
 1.2.3.4					1.2.3.4|--mrtvo IPV4
