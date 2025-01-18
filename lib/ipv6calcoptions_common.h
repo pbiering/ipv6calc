@@ -32,6 +32,11 @@ static struct option ipv6calc_longopts_common[] = {
 	{"db-ip2location-disable"      , 0, NULL, OPTION_NOOP },
 #endif
 
+#ifndef SUPPORT_IP2LOCATION2
+	{"disable-ip2location2"         , 0, NULL, OPTION_NOOP },
+	{"db-ip2location2-disable"      , 0, NULL, OPTION_NOOP },
+#endif
+
 #ifndef SUPPORT_GEOIP2
 	{"disable-geoip2"              , 0, NULL, OPTION_NOOP },
 	{"db-geoip2-disable"           , 0, NULL, OPTION_NOOP },

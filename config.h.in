@@ -123,6 +123,9 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
+/* Define IP2Location(MaxMindDB) database directory. */
+#undef IP2LOCATION2_DB
+
 /* Define IP2Location database directory. */
 #undef IP2LOCATION_DB
 

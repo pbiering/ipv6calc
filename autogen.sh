@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen.sh
-# Copyright  : 2003-2024 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2003-2025 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: autogeneration of projects with optional features
 
@@ -134,6 +134,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   --mmdb-dyn|-M       : switch to dynamic library loading of MaxMindDB"
 		echo "   --disable-geoip2    : disable MaxMindDB support for GeoIP"
 		echo "   --disable-dbip2     : disable MaxMindDB support for db-ip.com"
+		echo "   --disable-ip2location2: disable MaxMindDB support for IP2Location"
 		echo "   -i|--ip2location    : enable IP2Location support"
 		echo "   --ip2location-dyn|-I: switch to dynamic library loading of IP2Location"
 		echo "   -e|--external       : enable external database support"

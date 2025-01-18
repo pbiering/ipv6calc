@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/lib
  * File       : libipv6calcdebug.h
- * Copyright  : 2002-2024 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2025 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Debug information
@@ -41,6 +41,7 @@
 #define DEBUG_libipv6calc_db_wrapper			0x00100000l
 #define DEBUG_libipv6calc_db_wrapper_GeoIP2		0x00200000l
 #define DEBUG_libipv6calc_db_wrapper_IP2Location	0x00400000l
+#define DEBUG_libipv6calc_db_wrapper_IP2Location2	0x00800000l
 
 #define DEBUG_libipv6addr_iidrandomdetection		0x01000000l
 #define DEBUG_libipv6addr_anonymization_unknown_break	0x02000000l

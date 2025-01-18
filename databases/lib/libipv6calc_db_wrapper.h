@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.h
- * Copyright  : 2013-2024 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2025 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc_db_wrapper.c
@@ -152,8 +152,9 @@ static const s_formatoption ipv6calc_db_features[] = {
 #define IPV6CALC_DB_SOURCE_DBIP2		3
 #define IPV6CALC_DB_SOURCE_EXTERNAL		4
 #define IPV6CALC_DB_SOURCE_BUILTIN		5
+#define IPV6CALC_DB_SOURCE_IP2LOCATION2		6
 
-#define IPV6CALC_DB_SOURCE_MAX			5
+#define IPV6CALC_DB_SOURCE_MAX			6
 
 #define IPV6CALC_DB_PRIO_MAX			IPV6CALC_DB_SOURCE_MAX
 
@@ -165,10 +166,11 @@ typedef struct {
 
 static const s_data_sources data_sources[] = {
 	{ IPV6CALC_DB_SOURCE_GEOIP2	, "GeoIP(MaxMindDB)"    , "GeoIP2"      },
-	{ IPV6CALC_DB_SOURCE_IP2LOCATION, "IP2Location", "IP2Location" },
+	{ IPV6CALC_DB_SOURCE_IP2LOCATION, "IP2Location(BIN)", "IP2Location" },
 	{ IPV6CALC_DB_SOURCE_DBIP2	, "db-ip.com(MaxMindDB)", "DBIP2"       },
-	{ IPV6CALC_DB_SOURCE_EXTERNAL	, "External"   , "External"    },
+	{ IPV6CALC_DB_SOURCE_EXTERNAL	, "External(BDB)"   , "External"    },
 	{ IPV6CALC_DB_SOURCE_BUILTIN	, "BuiltIn"    , "BuiltIn"     },
+	{ IPV6CALC_DB_SOURCE_IP2LOCATION2, "IP2Location(MaxMindDB)", "IP2Location2" },
 };
 
 // database names and descriptions

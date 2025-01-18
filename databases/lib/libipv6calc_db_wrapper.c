@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper.c
- * Copyright  : 2013-2024 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2025 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc database wrapper (for decoupling databases from main binary)
@@ -24,6 +24,7 @@
 #include "libipv6calc_db_wrapper_MMDB.h"
 #include "libipv6calc_db_wrapper_GeoIP2.h"
 #include "libipv6calc_db_wrapper_IP2Location.h"
+#include "libipv6calc_db_wrapper_IP2Location2.h"
 #include "libipv6calc_db_wrapper_DBIP2.h"
 #include "libipv6calc_db_wrapper_External.h"
 #include "libipv6calc_db_wrapper_BuiltIn.h"
@@ -62,6 +63,11 @@ static int wrapper_IP2Location_disable = 0;
 static int wrapper_IP2Location_status = 0;
 #endif
 
+#ifdef SUPPORT_IP2LOCATION2
+static int wrapper_IP2Location2_disable = 0;
+static int wrapper_IP2Location2_status = 0;
+#endif
+
 #ifdef SUPPORT_DBIP2
 static int wrapper_DBIP2_disable       = 0;
 static int wrapper_DBIP2_status = 0;
@@ -95,7 +101,7 @@ int wrapper_source_priority_selector_by_option = -1; // -1: uninitialized, 0: in
 int libipv6calc_db_wrapper_init(const char *prefix_string) {
 	int result = 0, f, p, s, j;
 
-#if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2 || SUPPORT_IP2LOCATION2
 	int r;
 #endif
 	s = strlen(prefix_string); // make compiler happy (avoid unused "...")
@@ -167,22 +173,28 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 		// only non-dynamic-load results in a problem
 		result = 1;
 #endif
-		// disable support for GEOIP2 & DBIP2
+		// disable support for GEOIP2 & DBIP2 & IP2LOCATION2
 #ifdef SUPPORT_GEOIP2
 		wrapper_GeoIP2_disable = r;
 #endif
 #ifdef SUPPORT_DBIP2
 		wrapper_DBIP2_disable = r;
 #endif
+#ifdef SUPPORT_IP2LOCATION2
+		wrapper_IP2Location2_disable = r;
+#endif
 	};
 #else
-	// disable support for GEOIP2 & DBIP2
+	// disable support for GEOIP2 & DBIP2 & IP2LOCATION2
 #ifdef SUPPORT_GEOIP2
 	wrapper_GeoIP2_disable = 3;
 #endif
 #ifdef SUPPORT_DBIP2
 	wrapper_DBIP2_disable = 3;
 #endif
+#endif
+#ifdef SUPPORT_IP2LOCATION2
+	wrapper_IP2Location2_disable = 3;
 #endif
 
 #ifdef SUPPORT_GEOIP2
@@ -233,9 +245,39 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 			wrapper_IP2Location_status = 1; // ok
 		};
 	} else {
-		NONQUIETPRINT_WA("%sSupport for IP2Location disabled by option", prefix_string);
+		NONQUIETPRINT_WA("%sSupport for IP2Location(BIN) disabled by option", prefix_string);
 	};
 #endif // SUPPORT_IP2LOCATION
+
+#ifdef SUPPORT_IP2LOCATION2
+	if (wrapper_IP2Location2_disable == 0) {
+		// Call IP2LOCATION2 wrapper
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call libipv6calc_db_wrapper_IP2Location2_wrapper_init");
+
+		r = libipv6calc_db_wrapper_IP2Location2_wrapper_init();
+
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "IP2Location2_wrapper_init result: %d wrapper_features=0x%08x", r, wrapper_features);
+
+		if (r != 0) {
+#ifndef SUPPORT_MMDB_DYN
+			// only non-dynamic-load results in a problem
+			result = 1;
+#endif
+		} else {
+			wrapper_IP2Location2_status = 1; // ok
+		};
+	} else if (wrapper_IP2Location2_disable == 1) {
+		NONQUIETPRINT_WA("%sSupport for IP2Location(MaxMindDB) disabled by option", prefix_string);
+	} else if (wrapper_IP2Location2_disable == 2) {
+#ifdef SUPPORT_MMDB_DYN
+		NONQUIETPRINT_WA("%sSupport for IP2Location(MaxMindDB) disabled, no MaxMindDB library found: %s", prefix_string, mmdb_lib_file);
+#endif
+	} else {
+#ifdef SUPPORT_MMDB_DYN
+		NONQUIETPRINT_WA("%sSupport for IP2Location(MaxMindDB) disabled by MaxMindDB library problem: %s", prefix_string, mmdb_lib_file);
+#endif
+	};
+#endif // SUPPORT_IP2LOCATION2
 
 #ifdef SUPPORT_DBIP2
 	if (wrapper_DBIP2_disable == 0) {
@@ -410,7 +452,7 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 int libipv6calc_db_wrapper_cleanup(void) {
 	int result = 0;
 
-#if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2 || SUPPORT_IP2LOCATION2
 	int r;
 #endif
 
@@ -430,6 +472,16 @@ int libipv6calc_db_wrapper_cleanup(void) {
 	if (wrapper_IP2Location_disable == 0) {
 		// Call IP2Location wrapper
 		r = libipv6calc_db_wrapper_IP2Location_wrapper_cleanup();
+		if (r != 0) {
+			result = 1;
+		};
+	};
+#endif
+
+#ifdef SUPPORT_IP2LOCATION2
+	if (wrapper_IP2Location2_disable == 0) {
+		// Call IP2LOCATION2 wrapper
+		r = libipv6calc_db_wrapper_IP2Location2_wrapper_cleanup();
 		if (r != 0) {
 			result = 1;
 		};
@@ -490,6 +542,13 @@ void libipv6calc_db_wrapper_info(char *string, const size_t size) {
 	};
 #endif
 
+#ifdef SUPPORT_IP2LOCATION2
+	if (wrapper_IP2Location2_disable == 0) {
+		// Call IP2Location wrapper
+		libipv6calc_db_wrapper_IP2Location2_wrapper_info(string, size);
+	};
+#endif
+
 #ifdef SUPPORT_DBIP2
 	if (wrapper_DBIP2_disable == 0) {
 		// Call DBIP2 wrapper
@@ -545,7 +604,7 @@ void libipv6calc_db_wrapper_features(char *string, const size_t size) {
 
 /* function get capability string */
 void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
-#if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2 || SUPPORT_IP2LOCATION2
 	char tempstring[IPV6CALC_STRING_MAX];
 #endif
 
@@ -590,6 +649,17 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 	};
 #endif
 
+#ifdef SUPPORT_IP2LOCATION2
+	if (wrapper_IP2Location2_disable == 0) {
+#ifdef SUPPORT_MMDB_DYN
+		snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(dyn-load/MaxMindDB)", string, strlen(string) > 0 ? " " : "");
+#else
+		snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(linked/MaxMindDB)", string, strlen(string) > 0 ? " " : "");
+#endif
+		snprintf(string, size, "%s", tempstring);
+	};
+#endif
+
 #ifdef SUPPORT_EXTERNAL
 	if (wrapper_External_disable == 0) {
 		snprintf(tempstring, sizeof(tempstring), "%s%sExternalDatabase", string, strlen(string) > 0 ? " " : "");
@@ -628,15 +698,15 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 
 /* function print wrapper features */
 void libipv6calc_db_wrapper_print_features_verbose(const int level_verbose) {
-#if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2 || SUPPORT_IP2LOCATION2
 	char string[IPV6CALC_STRING_MAX] = "";
 #endif
 
 #ifdef SUPPORT_MMDB
 #ifdef MMDB_INCLUDE_VERSION
-	fprintf(stderr, "MaxMindDB for GeoIP2/DBIP2 support enabled, compiled with include file version: %s\n", MMDB_INCLUDE_VERSION);
+	fprintf(stderr, "MaxMindDB for GeoIP2/DBIP2/IP2Location2 support enabled, compiled with include file version: %s\n", MMDB_INCLUDE_VERSION);
 #else
-	fprintf(stderr, "MaxMindDB for GeoIP2/DBIP2 support enabled\n");
+	fprintf(stderr, "MaxMindDB for GeoIP2/DBIP2/IP2Location2 support enabled\n");
 #endif // MMDB_INCLUDE_VERSION
 #ifndef SUPPORT_MMDB_DYN
 	fprintf(stderr, "MaxMindDB dynamic library version (on this system): %s\n\n", libipv6calc_db_wrapper_MMDB_lib_version());
@@ -681,16 +751,30 @@ void libipv6calc_db_wrapper_print_features_verbose(const int level_verbose) {
 
 #ifdef SUPPORT_DBIP2
 	if (wrapper_DBIP2_disable == 0) {
-		fprintf(stderr, "DBIP2 (MaxMindDB) support enabled\n");
+		fprintf(stderr, "DBIP(MaxMindDB) support enabled\n");
 		libipv6calc_db_wrapper_DBIP2_wrapper_info(string, sizeof(string));
 		fprintf(stderr, "%s\n\n", string);
 	} else if (wrapper_DBIP2_disable == 1) {
-		fprintf(stderr, "DBIP2 support disabled by option\n\n");
+		fprintf(stderr, "DBIP(MaxMindDB) support disabled by option\n\n");
 	} else {
-		fprintf(stderr, "DBIP2 (MaxMindDB) disabled by MaxMindDB library problem\n\n");
+		fprintf(stderr, "DBIP(MaxMindDB) disabled by MaxMindDB library problem\n\n");
 	};
 #else
 	fprintf(stderr, "DBIP2 support not compiled-in\n\n");
+#endif
+
+#ifdef SUPPORT_IP2LOCATION2
+	if (wrapper_IP2Location2_disable == 0) {
+		fprintf(stderr, "IP2Location(MaxMindDB) support enabled\n");
+		libipv6calc_db_wrapper_IP2Location2_wrapper_info(string, sizeof(string));
+		fprintf(stderr, "%s\n\n", string);
+	} else if (wrapper_IP2Location2_disable == 1) {
+		fprintf(stderr, "IP2Location(MaxMindDB) support disabled by option\n\n");
+	} else {
+		fprintf(stderr, "IP2Location(MaxMindDB) disabled by MaxMindDB library problem\n\n");
+	};
+#else
+	fprintf(stderr, "IP2Location(MaxMindDB) support not compiled-in\n\n");
 #endif
 
 #ifdef SUPPORT_EXTERNAL
@@ -818,12 +902,25 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		// Call DBIP2 wrapper
 		libipv6calc_db_wrapper_DBIP2_wrapper_print_db_info(level_verbose, prefix_string);
 	} else if (wrapper_DBIP2_disable == 1) {
-		fprintf(stderr, "%sdb-ip.com (MaxMindDB) support available but disabled by option\n", prefix_string);
+		fprintf(stderr, "%sdb-ip.com(MaxMindDB) support available but disabled by option\n", prefix_string);
 	} else {
-		fprintf(stderr, "%sdb-ip.com (MaxMindDB) support available but disabled by MaxMindDB library problem\n", prefix_string);
+		fprintf(stderr, "%sdb-ip.com(MaxMindDB) support available but disabled by MaxMindDB library problem\n", prefix_string);
 	};
 	fprintf(stderr, "\n");
 #endif
+
+#ifdef SUPPORT_IP2LOCATION2
+	if (wrapper_IP2Location2_disable == 0) {
+		// Call IP2LOCATION2 wrapper
+		libipv6calc_db_wrapper_IP2Location2_wrapper_print_db_info(level_verbose, prefix_string);
+	} else if (wrapper_IP2Location2_disable == 1) {
+		fprintf(stderr, "%sIP2Location(MaxMindDB) support available but disabled by option\n", prefix_string);
+	} else {
+		fprintf(stderr, "%sIP2Location(MaxMindDB) support available but disabled by MaxMindDB library problem\n", prefix_string);
+	};
+	fprintf(stderr, "\n");
+#endif
+
 
 #ifdef SUPPORT_EXTERNAL
 	if (wrapper_External_disable == 0) {
@@ -1134,13 +1231,36 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 #ifdef SUPPORT_IP2LOCATION
 			ip2location_db_allow_softlinks = 1;
 #else
-			NONQUIETPRINT_WA("Support for IP2Location not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+			NONQUIETPRINT_WA("Support for IP2Location(BIN) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+
+		case DB_ip2location2_only_type:
+#ifdef SUPPORT_IP2LOCATION2
+			if ((atoi(optarg) >= 1) && (atoi(optarg) <= IP2LOCATION_DB_MAX)) {
+				ip2location2_db_only_type = atoi(optarg);
+			} else {
+				fprintf(stderr, " Argument of option 'db-ip2location2-only-type' is out of range (1-%d): %d\n", IP2LOCATION_DB_MAX, atoi(optarg));
+				exit(EXIT_FAILURE);
+			};
+#else
+			NONQUIETPRINT_WA("Support for IP2Location(MMDB) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+
+		case DB_ip2location2_allow_softlinks:
+#ifdef SUPPORT_IP2LOCATION2
+			ip2location2_db_allow_softlinks = 1;
+#else
+			NONQUIETPRINT_WA("Support for IP2Location(MMDB) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
 			result = 0;
 			break;
 
 		case DB_common_priorization:
-#if defined SUPPORT_EXTERNAL || SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
+#if defined SUPPORT_EXTERNAL || SUPPORT_IP2LOCATION || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2 || SUPPORT_IP2LOCATION2
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Parse database priorization string: %s", optarg);
 			char tempstring[IPV6CALC_STRING_MAX];
 			char *token, *cptr, **ptrptr;
@@ -1410,7 +1530,24 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 					data_source = IPV6CALC_DB_SOURCE_IP2LOCATION;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
-					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called IP2Location did not return a valid country_code");
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called IP2Location(BIN) did not return a valid country_code");
+				};
+			};
+#endif
+			break;
+
+		    case IPV6CALC_DB_SOURCE_IP2LOCATION2:
+#ifdef SUPPORT_IP2LOCATION2
+			if (wrapper_IP2Location_status == 1) {
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Call now IP2Location(MaxMindDB) with %s", tempstring);
+
+				int ret = libipv6calc_db_wrapper_IP2Location2_wrapper_country_code_by_addr(tempstring, ipaddrp->proto, string, length);
+				if (ret == 0) {
+					result = 0;
+					data_source = IPV6CALC_DB_SOURCE_IP2LOCATION2;
+					goto END_libipv6calc_db_wrapper; // ok
+				} else {
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called IP2Location(MaxMindDB) did not return a valid country_code");
 				};
 			};
 #endif
@@ -1726,12 +1863,29 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp,
 					data_source_lastused = IPV6CALC_DB_SOURCE_IP2LOCATION;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
-					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called IP2Lcation did not return a valid ASN");
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called IP2Lcation(BIN) did not return a valid ASN");
 				};
 			};
 #endif
 			break;
 #endif // API_VERSION_NUMERIC >= 80600
+
+		    case IPV6CALC_DB_SOURCE_IP2LOCATION2:
+#ifdef SUPPORT_P2LOCATION2
+			if (wrapper_IP2Location2_status == 1) {
+
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now IP2Location2");
+
+				as_num32 = libipv6calc_db_wrapper_IP2Location2_wrapper_asn_by_addr(ipaddrp, as_orgname, as_orgname_length);
+				if (as_num32 != ASNUM_AS_UNKNOWN) {
+					data_source_lastused = IPV6CALC_DB_SOURCE_IP2LOCATION2;
+					goto END_libipv6calc_db_wrapper; // ok
+				} else {
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called IP2Location(MaxMindDB) did not return a valid ASN");
+				};
+			};
+#endif
+			break;
 
 
 		    case IPV6CALC_DB_SOURCE_DBIP2:

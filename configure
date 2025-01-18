@@ -654,6 +654,7 @@ APXS
 ENABLE_MOD_IPV6CALC
 DYNLOAD_LIB
 GEOIP2_DB
+IP2LOCATION2_DB
 IP2LOCATION_DYN_LIB
 IP2LOCATION_DB
 IP2LOCATION_LIB_L2
@@ -759,6 +760,7 @@ with_mmdb_lib
 with_mmdb_dyn_lib
 enable_geoip2
 enable_dbip2
+enable_ip2location2
 enable_dbip
 with_dbip_db
 enable_ip2location
@@ -1438,11 +1440,13 @@ Optional Features:
                           (default: enabled)
   --disable-builtin       Disable all built-in databases (default: enabled)
   --enable-external       Enable external db support (default: disabled)
-  --enable-mmdb           Enable MaxMindDB support (GeoIP/db-ip.com) (default:
-                          disabled)
+  --enable-mmdb           Enable MaxMindDB support
+                          (GeoIP/db-ip.com/IP2Location) (default: disabled)
   --disable-geoip2        Disable MaxMindDB support for GeoIP (default:
                           enabled)
   --disable-dbip2         Disable MaxMindDB support for db-ip.com (default:
+                          enabled)
+  --disable-ip2location2  Disable MaxMindDB support for IP2Location (default:
                           enabled)
   --enable-dbip           Compatibility Dummy (no longer supported)
   --enable-ip2location    Enable IP2Location support (default: disabled)
@@ -5884,7 +5888,7 @@ printf "%s\n" "#define SUPPORT_MMDB_DYN 1" >>confdefs.h
 
 	fi
 
-	# GeoIPv2 and DBIPv2 support
+	# GeoIPv2, DBIP(MMDB), IP2Location(MMDB) support
 	# Check whether --enable-geoip2 was given.
 if test ${enable_geoip2+y}
 then :
@@ -5912,9 +5916,24 @@ else case e in #(
 esac
 fi
 
+
+	# Check whether --enable-ip2location2 was given.
+if test ${enable_ip2location2+y}
+then :
+  enableval=$enable_ip2location2;
+			IP2LOCATION2="no"
+
+else case e in #(
+  e)
+			IP2LOCATION2="yes"
+		 ;;
+esac
+fi
+
 else
 	GEOIP2=no
 	DBIP2=no
+	IP2LOCATION2=no
 fi
 
 
@@ -6545,6 +6564,27 @@ if test -n "$IP2LOCATION_INCLUDE_VERSION"; then
 
 printf "%s\n" "#define IP2LOCATION_INCLUDE_VERSION \"$IP2LOCATION_INCLUDE_VERSION\"" >>confdefs.h
 
+fi
+
+if test "$IP2LOCATION2" = "yes"; then
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** IP2Location(MaxMindDB) support autoenabled\"" >&5
+printf "%s\n" "*** IP2Location(MaxMindDB) support autoenabled\"" >&6; }
+
+printf "%s\n" "#define SUPPORT_IP2LOCATION2 1" >>confdefs.h
+
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** IP2Location(MaxMindDB) database directory: $ip2location_db" >&5
+printf "%s\n" "*** IP2Location(MaxMindDB) database directory: $ip2location_db" >&6; }
+
+printf "%s\n" "#define IP2LOCATION2_DB \"$dbip_db\"" >>confdefs.h
+
+fi
+IP2LOCATION2_DB=$ip2location_db
+
+
+
+if test "$IP2LOCATION2" = "yes"; then
+	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** IP2Location(MaxMindDB) autoenabled\"" >&5
+printf "%s\n" "*** IP2Location(MaxMindDB) autoenabled\"" >&6; }
 fi
 
 
@@ -8181,6 +8221,14 @@ printf "%s\n" "*** IP2LOCATION_LIB            =$IP2LOCATION_LIB" >&6; }
 printf "%s\n" "*** IP2LOCATION_LIB_NAME       =$IP2LOCATION_LIB_NAME" >&6; }
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION_LIB_DIR        =$IP2LOCATION_LIB_DIR" >&5
 printf "%s\n" "*** IP2LOCATION_LIB_DIR        =$IP2LOCATION_LIB_DIR" >&6; }
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: " >&5
+printf "%s\n" "" >&6; }
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** IP2OCATION2                =$IP2LOCATION2" >&5
+printf "%s\n" "*** IP2OCATION2                =$IP2LOCATION2" >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** IP2LOCATION2_DB            =$IP2LOCATION2_DB" >&5
+printf "%s\n" "*** IP2LOCATION2_DB            =$IP2LOCATION2_DB" >&6; }
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: " >&5
 printf "%s\n" "" >&6; }
