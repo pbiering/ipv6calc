@@ -1541,7 +1541,7 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 			if (wrapper_IP2Location_status == 1) {
 				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Call now IP2Location(MaxMindDB) with %s", tempstring);
 
-				int ret = libipv6calc_db_wrapper_IP2Location2_wrapper_country_code_by_addr(tempstring, ipaddrp->proto, string, length);
+				int ret = libipv6calc_db_wrapper_IP2Location2_wrapper_country_code_by_addr(ipaddrp, string, length);
 				if (ret == 0) {
 					result = 0;
 					data_source = IPV6CALC_DB_SOURCE_IP2LOCATION2;
