@@ -500,7 +500,7 @@ int libipv6calc_db_wrapper_cleanup(void) {
 
 #ifdef SUPPORT_EXTERNAL
 	if (wrapper_External_disable == 0) {
-		// Call DBIP2 wrapper
+		// Call External wrapper
 		r = libipv6calc_db_wrapper_External_wrapper_cleanup();
 		if (r != 0) {
 			result = 1;
