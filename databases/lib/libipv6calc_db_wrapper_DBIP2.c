@@ -985,6 +985,8 @@ int libipv6calc_db_wrapper_DBIP2_all_by_addr(const ipv6calc_ipaddr *ipaddrp, lib
 
 	int DBIP2_type = 0;
 
+	libipv6calc_db_wrapper_geolocation_record_clear(recordp);
+
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
 		DBIP2_type = dbip2_db_region_city_v4;
 
