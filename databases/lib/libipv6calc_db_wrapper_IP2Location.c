@@ -2071,7 +2071,7 @@ int libipv6calc_db_wrapper_IP2Location_has_features(uint32_t features) {
 
 
 /* country_code */
-int libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(char *addr, const int proto, char *country, const size_t country_length) {
+int libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(char *addr, const int proto, char *country, const size_t country_len) {
 	IP2Location *loc;
 	IP2LocationRecord *record = NULL;
 	int result = -1;
@@ -2154,7 +2154,7 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(char *addr, 
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "country_short code: %s", IP2Location_result_ptr);
 
-	snprintf(country, country_length, "%s", IP2Location_result_ptr);
+	snprintf(country, country_len, "%s", IP2Location_result_ptr);
 	result = 0;
 
 	IP2LOCATION_DB_USAGE_MAP_TAG(IP2Location_type);
