@@ -774,14 +774,14 @@ fi
 
 
 dnl *************************************************
-dnl MaxMindDB support (GeoIP2, DB-IP)
+dnl MaxMindDB support (GeoIP2, DB-IP, IP2Location)
 dnl *************************************************
 MMDB_LIB_NAME="maxminddb"
 MMDB_INCLUDE_VERSION=""
 
 AC_ARG_ENABLE([mmdb],
 	AS_HELP_STRING([--enable-mmdb],
-	               [Enable MaxMindDB support (GeoIP/db-ip.com) (default: disabled)]),
+	               [Enable MaxMindDB support (GeoIP/db-ip.com/IP2Location) (default: disabled)]),
 	[
 		if test "$enable_mmdb" != "no"; then
 			MMDB="$enable_mmdb"
@@ -926,7 +926,7 @@ if test "$MMDB" = "yes"; then
 		AC_DEFINE(SUPPORT_MMDB_DYN, 1, Define if you want MaxMindDB support with dynamic loading support - requires also additional linker options.)
 	fi
 
-	# GeoIPv2 and DBIPv2 support
+	# GeoIPv2, DBIP(MMDB), IP2Location(MMDB) support
 	AC_ARG_ENABLE([geoip2],
 		AS_HELP_STRING([--disable-geoip2],
 			       [Disable MaxMindDB support for GeoIP (default: enabled)]),
@@ -944,9 +944,19 @@ if test "$MMDB" = "yes"; then
 		],[
 			DBIP2="yes"
 		])
+
+	AC_ARG_ENABLE([ip2location2],
+		AS_HELP_STRING([--disable-ip2location2],
+			       [Disable MaxMindDB support for IP2Location (default: enabled)]),
+		[
+			IP2LOCATION2="no"
+		],[
+			IP2LOCATION2="yes"
+		])
 else
 	GEOIP2=no
 	DBIP2=no
+	IP2LOCATION2=no
 fi
 
 AC_SUBST(MMDB_INCLUDE)
@@ -1266,6 +1276,23 @@ if test -n "$IP2LOCATION_INCLUDE_VERSION"; then
 	AC_DEFINE_UNQUOTED(IP2LOCATION_INCLUDE_VERSION, "$IP2LOCATION_INCLUDE_VERSION", IP2Location include file version.)
 fi
 
+if test "$IP2LOCATION2" = "yes"; then
+	AC_MSG_RESULT([*** IP2Location(MaxMindDB) support autoenabled"])
+	AC_DEFINE(SUPPORT_IP2LOCATION2, 1, Define if you want IP2Location(MaxMindDB) support included.)
+	AC_MSG_RESULT([*** IP2Location(MaxMindDB) database directory: $ip2location_db])
+	AC_DEFINE_UNQUOTED(IP2LOCATION2_DB, "$dbip_db", Define IP2Location(MaxMindDB) database directory.)
+fi
+IP2LOCATION2_DB=$ip2location_db
+AC_SUBST(IP2LOCATION2_DB)
+
+
+dnl *************************************************
+dnl IP2Location v2 support powered by MaxMindDB
+dnl *************************************************
+if test "$IP2LOCATION2" = "yes"; then
+	AC_MSG_RESULT([*** IP2Location(MaxMindDB) autoenabled"])
+fi
+
 
 dnl *************************************************
 dnl GeoIP v1 support
@@ -1512,6 +1539,11 @@ AC_MSG_RESULT([*** IP2LOCATION_INCLUDE_VERSION=$IP2LOCATION_INCLUDE_VERSION])
 AC_MSG_RESULT([*** IP2LOCATION_LIB            =$IP2LOCATION_LIB])
 AC_MSG_RESULT([*** IP2LOCATION_LIB_NAME       =$IP2LOCATION_LIB_NAME])
 AC_MSG_RESULT([*** IP2LOCATION_LIB_DIR        =$IP2LOCATION_LIB_DIR])
+
+AC_MSG_RESULT([])
+
+AC_MSG_RESULT([*** IP2OCATION2                =$IP2LOCATION2])
+AC_MSG_RESULT([*** IP2LOCATION2_DB            =$IP2LOCATION2_DB])
 
 AC_MSG_RESULT([])
 
