@@ -215,14 +215,14 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 			wrapper_GeoIP2_status = 1; // ok
 		};
 	} else if (wrapper_GeoIP2_disable == 1) {
-		NONQUIETPRINT_WA("%sSupport for GeoIP (MaxMindDB) disabled by option", prefix_string);
+		NONQUIETPRINT_WA("%sSupport for GeoIP(MaxMindDB) disabled by option", prefix_string);
 	} else if (wrapper_GeoIP2_disable == 2) {
 #ifdef SUPPORT_MMDB_DYN
-		NONQUIETPRINT_WA("%sSupport for GeoIP (MaxMindDB) disabled, no MaxMindDB library found: %s", prefix_string, mmdb_lib_file);
+		NONQUIETPRINT_WA("%sSupport for GeoIP(MaxMindDB) disabled, no MaxMindDB library found: %s", prefix_string, mmdb_lib_file);
 #endif
 	} else {
 #ifdef SUPPORT_MMDB_DYN
-		NONQUIETPRINT_WA("%sSupport for GeoIP (MaxMindDB) disabled by MaxMindDB library problem: %s", prefix_string, mmdb_lib_file);
+		NONQUIETPRINT_WA("%sSupport for GeoIP(MaxMindDB) disabled by MaxMindDB library problem: %s", prefix_string, mmdb_lib_file);
 #endif
 	};
 #endif // SUPPORT_GEOIP2
@@ -297,14 +297,14 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 			wrapper_DBIP2_status = 1; // ok
 		};
 	} else if (wrapper_DBIP2_disable == 1) {
-		NONQUIETPRINT_WA("%sSupport for db-ip.com (MaxMindDB) disabled by option", prefix_string);
+		NONQUIETPRINT_WA("%sSupport for db-ip.com(MaxMindDB) disabled by option", prefix_string);
 	} else if (wrapper_DBIP2_disable == 2) {
 #ifdef SUPPORT_MMDB_DYN
-		NONQUIETPRINT_WA("%sSupport for db-ip.com (MaxMindDB) disabled, no MaxMindDB library found: %s", prefix_string, mmdb_lib_file);
+		NONQUIETPRINT_WA("%sSupport for db-ip.com(MaxMindDB) disabled, no MaxMindDB library found: %s", prefix_string, mmdb_lib_file);
 #endif
 	} else {
 #ifdef SUPPORT_MMDB_DYN
-		NONQUIETPRINT_WA("%sSupport for db-ip.com (MaxMindDB) disabled by MaxMindDB library problem: %s", prefix_string, mmdb_lib_file);
+		NONQUIETPRINT_WA("%sSupport for db-ip.com(MaxMindDB) disabled by MaxMindDB library problem: %s", prefix_string, mmdb_lib_file);
 #endif
 	};
 #endif // SUPPORT_DBIP2
@@ -615,9 +615,9 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 #ifdef SUPPORT_GEOIP2
 	if (wrapper_GeoIP2_disable == 0) {
 #ifdef SUPPORT_MMDB_DYN
-		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP2(dyn-load/MaxMindDB)", string, strlen(string) > 0 ? " " : "");
+		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(dyn-load/MaxMindDB)", string, strlen(string) > 0 ? " " : "");
 #else
-		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP2(linked/MaxMindDB)", string, strlen(string) > 0 ? " " : "");
+		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(linked/MaxMindDB)", string, strlen(string) > 0 ? " " : "");
 #endif // SUPPORT_MMDB_DYN
 		snprintf(string, size, "%s", tempstring);
 	};
@@ -626,12 +626,12 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 #ifdef SUPPORT_IP2LOCATION
 	if (wrapper_IP2Location_disable == 0) {
 #ifdef SUPPORT_IP2LOCATION_DYN
-		snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(dyn-load)", string, strlen(string) > 0 ? " " : "");
+		snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(dyn-load/BIN)", string, strlen(string) > 0 ? " " : "");
 #else // SUPPORT_IP2LOCATION_DYN
 #ifdef SUPPORT_IP2LOCATION_STATIC
-		snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(static)", string, strlen(string) > 0 ? " " : "");
+		snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(static/BIN)", string, strlen(string) > 0 ? " " : "");
 #else // SUPPORT_IP2LOCATION_STATIC
-		snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(linked)", string, strlen(string) > 0 ? " " : "");
+		snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(linked/BIN)", string, strlen(string) > 0 ? " " : "");
 #endif // SUPPORT_IP2LOCATION_STATIC
 #endif //SUPPORT_IP2LOCATION_DYN
 		snprintf(string, size, "%s", tempstring);
@@ -717,16 +717,16 @@ void libipv6calc_db_wrapper_print_features_verbose(const int level_verbose) {
 
 #ifdef SUPPORT_GEOIP2
 	if (wrapper_GeoIP2_disable == 0) {
-		fprintf(stderr, "GeoIP2 (MaxMindDB) support enabled\n");
+		fprintf(stderr, "GeoIP2(MaxMindDB) support enabled\n");
 		libipv6calc_db_wrapper_GeoIP2_wrapper_info(string, sizeof(string));
 		fprintf(stderr, "%s\n\n", string);
 	} else if (wrapper_GeoIP2_disable == 1) {
-		fprintf(stderr, "GeoIP2 (MaxMindDB) disabled by option\n\n");
+		fprintf(stderr, "GeoIP2(MaxMindDB) disabled by option\n\n");
 	} else {
-		fprintf(stderr, "GeoIP2 (MaxMindDB) disabled by MaxMindDB library problem\n\n");
+		fprintf(stderr, "GeoIP2(MaxMindDB) disabled by MaxMindDB library problem\n\n");
 	};
 #else
-	fprintf(stderr, "GeoIP2 (MaxMindDB) support not compiled-in\n\n");
+	fprintf(stderr, "GeoIP2(MaxMindDB) support not compiled-in\n\n");
 #endif
 
 #ifdef SUPPORT_IP2LOCATION
@@ -880,9 +880,9 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		// Call GeoIP2 wrapper
 		libipv6calc_db_wrapper_GeoIP2_wrapper_print_db_info(level_verbose, prefix_string);
 	} else if (wrapper_GeoIP2_disable == 1) {
-		fprintf(stderr, "%sGeoIP (MaxMindDB) support available but disabled by option\n", prefix_string);
+		fprintf(stderr, "%sGeoIP(MaxMindDB) support available but disabled by option\n", prefix_string);
 	} else {
-		fprintf(stderr, "%sGeoIP (MaxMindDB) support available but disabled by MaxMindDB library problem\n", prefix_string);
+		fprintf(stderr, "%sGeoIP(MaxMindDB) support available but disabled by MaxMindDB library problem\n", prefix_string);
 	};
 	fprintf(stderr, "\n");
 #endif
@@ -892,7 +892,7 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		// Call IP2Location wrapper
 		libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(level_verbose, prefix_string);
 	} else {
-		fprintf(stderr, "%sIP2Location support available but disabled by option\n", prefix_string);
+		fprintf(stderr, "%sIP2Location(BIN) support available but disabled by option\n", prefix_string);
 	};
 	fprintf(stderr, "\n");
 #endif
@@ -1222,7 +1222,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 				exit(EXIT_FAILURE);
 			};
 #else
-			NONQUIETPRINT_WA("Support for IP2Location not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+			NONQUIETPRINT_WA("Support for IP2Location(BIN) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
 			result = 0;
 			break;
@@ -1505,7 +1505,7 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 		    case IPV6CALC_DB_SOURCE_GEOIP2:
 #ifdef SUPPORT_GEOIP2
 			if (wrapper_GeoIP2_status == 1) {
-				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now GEOIP2");
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now GeoIP(MaxMindDB)");
 
 				int ret = libipv6calc_db_wrapper_GeoIP2_wrapper_country_code_by_addr(ipaddrp, string, length);
 				if (ret == 0) {
@@ -1513,7 +1513,7 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 					data_source = IPV6CALC_DB_SOURCE_GEOIP2;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
-					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called GeoIP (MaxMindDB) did not return a valid country_code");
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called GeoIP(MaxMindDB) did not return a valid country_code");
 				};
 			};
 #endif
@@ -1522,7 +1522,7 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 		    case IPV6CALC_DB_SOURCE_IP2LOCATION:
 #ifdef SUPPORT_IP2LOCATION
 			if (wrapper_IP2Location_status == 1) {
-				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Call now IP2Location with %s", tempstring);
+				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Call now IP2Location(BIN) with %s", tempstring);
 
 				int ret = libipv6calc_db_wrapper_IP2Location_wrapper_country_code_by_addr(tempstring, ipaddrp->proto, string, length);
 				if (ret == 0) {
@@ -1556,7 +1556,7 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 		    case IPV6CALC_DB_SOURCE_DBIP2:
 #ifdef SUPPORT_DBIP2
 			if (wrapper_DBIP2_status == 1) {
-				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now DBIP2");
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now db-ip.com(MaxMindDB)");
 
 				int ret = libipv6calc_db_wrapper_DBIP2_wrapper_country_code_by_addr(ipaddrp, string, length);
 				if (ret == 0) {
@@ -1564,7 +1564,7 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 					data_source = IPV6CALC_DB_SOURCE_DBIP2;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
-					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called db-ip.com (MaxMindDB) did not return a valid country_code");
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called db-ip.com(MaxMindDB) did not return a valid country_code");
 				};
 			};
 #endif
@@ -1845,7 +1845,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp,
 					data_source_lastused = IPV6CALC_DB_SOURCE_GEOIP2;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
-					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called GeoIP (MaxMindDB) did not return a valid ASN");
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called GeoIP(MaxMindDB) did not return a valid ASN");
 				};
 			};
 #endif
@@ -1899,7 +1899,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp,
 					data_source_lastused = IPV6CALC_DB_SOURCE_DBIP2;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
-					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called db-ip.com (MaxMindDB) did not return a valid ASN");
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called db-ip.com(MaxMindDB) did not return a valid ASN");
 				};
 			};
 #endif
@@ -2070,7 +2070,7 @@ uint32_t libipv6calc_db_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp
 					data_source_lastused = IPV6CALC_DB_SOURCE_GEOIP2;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
-					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called GeoIP (MaxMindDB) did not return a valid GeonameID");
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called GeoIP(MaxMindDB) did not return a valid GeonameID");
 				};
 			};
 #endif
@@ -2087,7 +2087,7 @@ uint32_t libipv6calc_db_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp
 					data_source_lastused = IPV6CALC_DB_SOURCE_DBIP2;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
-					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called db-ip.com (MaxMindDB) did not return a valid GeonameID");
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called db-ip.com(MaxMindDB) did not return a valid GeonameID");
 				};
 			};
 #endif
