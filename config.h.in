@@ -6,7 +6,7 @@
 /* Copyright year */
 #undef COPYRIGHT_YEAR
 
-/* Define db-ip.com (MaxMindDB) database directory. */
+/* Define db-ip.com(MaxMindDB) database directory. */
 #undef DBIP2_DB
 
 /* Define if bundled GETOPT should be used */
@@ -27,7 +27,7 @@
 /* Define external database directory. */
 #undef EXTERNAL_DB
 
-/* Define GeoIP (MaxMindDB) database directory. */
+/* Define GeoIP(MaxMindDB) database directory. */
 #undef GEOIP2_DB
 
 /* Define if Berkeley DB support is required. */
@@ -204,7 +204,7 @@
 /* Define if you want general BuiltIn database included. */
 #undef SUPPORT_BUILTIN
 
-/* Define if you want db-ip.com (MaxMindDB) support included. */
+/* Define if you want db-ip.com(MaxMindDB) support included. */
 #undef SUPPORT_DBIP2
 
 /* Define if you want AS-to-Registry database included. */
@@ -225,18 +225,21 @@
 /* Define if you want external support included. */
 #undef SUPPORT_EXTERNAL
 
-/* Define if you want GeoIP (MaxMindDB) support. */
+/* Define if you want GeoIP(MaxMindDB) support. */
 #undef SUPPORT_GEOIP2
 
-/* Define if you want IP2Location support. */
+/* Define if you want IP2Location(BIN) support. */
 #undef SUPPORT_IP2LOCATION
 
-/* Define if you want IP2Location support with dynamic loading support -
+/* Define if you want IP2Location(MaxMindDB) support included. */
+#undef SUPPORT_IP2LOCATION2
+
+/* Define if you want IP2Location(BIN) support with dynamic loading support -
    requires also additional linker options. */
 #undef SUPPORT_IP2LOCATION_DYN
 
-/* Define if you want IP2Location support statically linked - requires also
-   additional linker options. */
+/* Define if you want IP2Location(BIN) support statically linked - requires
+   also additional linker options. */
 #undef SUPPORT_IP2LOCATION_STATIC
 
 /* Define if you want MaxMindDB support. */

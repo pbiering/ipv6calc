@@ -994,10 +994,10 @@ AC_ARG_WITH([dbip-db],
 	])
 
 if test "$DBIP2" = "yes"; then
-	AC_MSG_RESULT([*** db-ip.com (MaxMindDB) support auotenabled"])
-	AC_DEFINE(SUPPORT_DBIP2, 1, Define if you want db-ip.com (MaxMindDB) support included.)
-	AC_MSG_RESULT([*** db-ip.com (MaxMindDB) database directory: $dbip_db])
-	AC_DEFINE_UNQUOTED(DBIP2_DB, "$dbip_db", Define db-ip.com (MaxMindDB) database directory.)
+	AC_MSG_RESULT([*** db-ip.com(MaxMindDB) support autoenabled"])
+	AC_DEFINE(SUPPORT_DBIP2, 1, Define if you want db-ip.com(MaxMindDB) support included.)
+	AC_MSG_RESULT([*** db-ip.com(MaxMindDB) database directory: $dbip_db])
+	AC_DEFINE_UNQUOTED(DBIP2_DB, "$dbip_db", Define db-ip.com(MaxMindDB) database directory.)
 fi
 
 DBIP2_DB=$dbip_db
@@ -1203,7 +1203,7 @@ if test "$IP2LOCATION" = "yes"; then
 
 	if test "$IP2LOCATION_DYN" != "yes"; then
 		if test "$IP2LOCATION_STATIC" = "yes"; then
-			AC_DEFINE(SUPPORT_IP2LOCATION_STATIC, 1, Define if you want IP2Location support statically linked - requires also additional linker options.)
+			AC_DEFINE(SUPPORT_IP2LOCATION_STATIC, 1, Define if you want IP2Location(BIN) support statically linked - requires also additional linker options.)
 		fi
 
 		CPPFLAGS="$CFLAGS"
@@ -1238,7 +1238,7 @@ if test "$IP2LOCATION" = "yes"; then
 
 		AC_CHECK_LIB($IP2LOCATION_LIB_NAME, IP2Location_open,
 		[
-			AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location support.)
+			AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location(BIN) support.)
 			AC_MSG_RESULT([*** IP2Location support enabled])
 		],
 		[
@@ -1257,8 +1257,8 @@ if test "$IP2LOCATION" = "yes"; then
 		AC_DEFINE_UNQUOTED(IP2LOCATION_DYN_LIB, "$ip2location_dyn_lib", Define IP2Location dynamic library.)
 
 		AC_MSG_RESULT([*** IP2Location support will be implemented by using dynamic load of library])
-		AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location support.)
-		AC_DEFINE(SUPPORT_IP2LOCATION_DYN, 1, Define if you want IP2Location support with dynamic loading support - requires also additional linker options.)
+		AC_DEFINE(SUPPORT_IP2LOCATION, 1, Define if you want IP2Location(BIN) support.)
+		AC_DEFINE(SUPPORT_IP2LOCATION_DYN, 1, Define if you want IP2Location(BIN) support with dynamic loading support - requires also additional linker options.)
 	fi
 fi
 
@@ -1353,7 +1353,7 @@ dnl *************************************************
 dnl GeoIP v2 support powered by MaxMindDB
 dnl *************************************************
 if test "$GEOIP2" = "yes"; then
-	AC_MSG_RESULT([*** GeoIP (MaxMindDB) auotenabled"])
+	AC_MSG_RESULT([*** GeoIP(MaxMindDB) autoenabled"])
 fi
 
 
@@ -1372,11 +1372,11 @@ AC_ARG_WITH([geoip-db],
 
 
 if test "$GEOIP2" = "yes"; then
-	AC_DEFINE(SUPPORT_GEOIP2, 1, Define if you want GeoIP (MaxMindDB) support.)
-	AC_MSG_RESULT([*** GeoIP (MaxMindDB) support enabled])
+	AC_DEFINE(SUPPORT_GEOIP2, 1, Define if you want GeoIP(MaxMindDB) support.)
+	AC_MSG_RESULT([*** GeoIP(MaxMindDB) support enabled])
 
-	AC_MSG_RESULT([*** GeoIP (MaxMindDB) database directory: $geoip_db])
-	AC_DEFINE_UNQUOTED(GEOIP2_DB, "$geoip_db", Define GeoIP (MaxMindDB) database directory.)
+	AC_MSG_RESULT([*** GeoIP(MaxMindDB) database directory: $geoip_db])
+	AC_DEFINE_UNQUOTED(GEOIP2_DB, "$geoip_db", Define GeoIP(MaxMindDB) database directory.)
 fi
 
 GEOIP2_DB=$geoip_db
