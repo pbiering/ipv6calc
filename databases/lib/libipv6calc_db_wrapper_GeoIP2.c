@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_GeoIP2.c
- * Copyright  : 2019-2024 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2019-2025 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc GeoIP2 database wrapper for MaxMindDB databases
@@ -210,7 +210,7 @@ int libipv6calc_db_wrapper_GeoIP2_wrapper_init(void) {
 		struct tm *db_gmtime = gmtime(&db_time);
 
 		dbym = (db_gmtime->tm_year + 1900) * 12 + db_gmtime->tm_mon;
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "GEOIP2 type=%d dbym=%d Year/Month=%d unixtime=%llu", dbtype, dbym, GeoIP2_UNPACK_YM(dbym), (long long unsigned int) mmdb_cache[dbtype].metadata.build_epoch);
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "GeoIP2 type=%d dbym=%d Year/Month=%d unixtime=%llu", dbtype, dbym, GeoIP2_UNPACK_YM(dbym), (long long unsigned int) mmdb_cache[dbtype].metadata.build_epoch);
 
 #define GeoIP2_DB_SELECT_BETTER(best) \
 			if ( \
