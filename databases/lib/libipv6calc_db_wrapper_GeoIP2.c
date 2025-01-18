@@ -1048,6 +1048,8 @@ int libipv6calc_db_wrapper_GeoIP2_all_by_addr(const ipv6calc_ipaddr *ipaddrp, li
 
 	libipv6calc_db_wrapper_geolocation_record record_asn;
 
+	libipv6calc_db_wrapper_geolocation_record_clear(recordp);
+
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
 		GeoIP2_type = geoip2_db_region_city_v4;
 		GeoIP2_type_asn = geoip2_db_asn_v4;
