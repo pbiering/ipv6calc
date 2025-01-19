@@ -6575,7 +6575,7 @@ printf "%s\n" "#define SUPPORT_IP2LOCATION2 1" >>confdefs.h
 	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** IP2Location(MaxMindDB) database directory: $ip2location_db" >&5
 printf "%s\n" "*** IP2Location(MaxMindDB) database directory: $ip2location_db" >&6; }
 
-printf "%s\n" "#define IP2LOCATION2_DB \"$dbip_db\"" >>confdefs.h
+printf "%s\n" "#define IP2LOCATION2_DB \"$ip2location_db\"" >>confdefs.h
 
 fi
 IP2LOCATION2_DB=$ip2location_db
