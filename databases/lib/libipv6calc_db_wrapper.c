@@ -192,10 +192,10 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 #ifdef SUPPORT_DBIP2
 	wrapper_DBIP2_disable = 3;
 #endif
-#endif
 #ifdef SUPPORT_IP2LOCATION2
 	wrapper_IP2Location2_disable = 3;
 #endif
+#endif	// SUPPORT_MMDB
 
 #ifdef SUPPORT_GEOIP2
 	if (wrapper_GeoIP2_disable == 0) {
@@ -1538,8 +1538,8 @@ int libipv6calc_db_wrapper_country_code_by_addr(char *string, const int length, 
 
 		    case IPV6CALC_DB_SOURCE_IP2LOCATION2:
 #ifdef SUPPORT_IP2LOCATION2
-			if (wrapper_IP2Location_status == 1) {
-				DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Call now IP2Location(MaxMindDB) with %s", tempstring);
+			if (wrapper_IP2Location2_status == 1) {
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now IP2Location(MaxMindDB)");
 
 				int ret = libipv6calc_db_wrapper_IP2Location2_wrapper_country_code_by_addr(ipaddrp, string, length);
 				if (ret == 0) {
@@ -2018,7 +2018,7 @@ uint32_t libipv6calc_db_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp
 			goto END_libipv6calc_db_wrapper;
 		};
 	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
-		f = IPV6CALC_DB_FEATURE_NUM_IPV6_TO_AS;
+		f = IPV6CALC_DB_FEATURE_NUM_IPV6_TO_GEONAMEID;
 		if ((ipaddrp->typeinfo1 & IPV6_ADDR_RESERVED) != 0) {
 			// reserved IPv4 address has no GeonameID
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "Given IPv6 address prefix (0-63): %08x%08x is reserved (skip GeonameID lookup)", (unsigned int) ipaddrp->addr[0], (unsigned int) ipaddrp->addr[1]);
@@ -2054,23 +2054,26 @@ uint32_t libipv6calc_db_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp
 
 	// run through priorities
 	for (p = 0; p < IPV6CALC_DB_PRIO_MAX; p++) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper, "prio=%d feature=%d selector=%d", p, f, wrapper_features_selector[f][p]);
+
 		switch(wrapper_features_selector[f][p]) {
 		    case 0:
 			// last
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "No source found for GeonameID (last)");
 			goto END_libipv6calc_db_wrapper; // ok
 			break;
 
 		    case IPV6CALC_DB_SOURCE_GEOIP2:
 #ifdef SUPPORT_GEOIP2
 			if (wrapper_GeoIP2_status == 1) {
-				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now GeoIP2");
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now GeoIP2(MMDB)");
 
 				GeonameID = libipv6calc_db_wrapper_GeoIP2_wrapper_GeonameID_by_addr(ipaddrp, &GeonameID_type);
 				if (GeonameID != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) {
 					data_source_lastused = IPV6CALC_DB_SOURCE_GEOIP2;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
-					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called GeoIP(MaxMindDB) did not return a valid GeonameID");
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called GeoIP(MMDB) did not return a valid GeonameID");
 				};
 			};
 #endif
@@ -2080,20 +2083,38 @@ uint32_t libipv6calc_db_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp
 #ifdef SUPPORT_DBIP2
 			if (wrapper_DBIP2_status == 1) {
 
-				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now DBIP2");
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now db-ip.com(MMDB)");
 
 				GeonameID = libipv6calc_db_wrapper_DBIP2_wrapper_GeonameID_by_addr(ipaddrp, &GeonameID_type);
 				if (GeonameID != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) {
 					data_source_lastused = IPV6CALC_DB_SOURCE_DBIP2;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
-					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called db-ip.com(MaxMindDB) did not return a valid GeonameID");
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called db-ip.com(MMDB) did not return a valid GeonameID");
+				};
+			};
+#endif
+			break;
+
+		    case IPV6CALC_DB_SOURCE_IP2LOCATION2:
+#ifdef SUPPORT_IP2LOCATION2
+			if (wrapper_IP2Location2_status == 1) {
+
+				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now IP2Location(MMDB)");
+
+				GeonameID = libipv6calc_db_wrapper_IP2Location2_wrapper_GeonameID_by_addr(ipaddrp, &GeonameID_type);
+				if (GeonameID != IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) {
+					data_source_lastused = IPV6CALC_DB_SOURCE_IP2LOCATION2;
+					goto END_libipv6calc_db_wrapper; // ok
+				} else {
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called IP2Location(MMDB) did not return a valid GeonameID");
 				};
 			};
 #endif
 			break;
 
 		    default:
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "No source found for GeonameID");
 			goto END_libipv6calc_db_wrapper; // dummy goto in case no db is enabled
 			break;
 		};
