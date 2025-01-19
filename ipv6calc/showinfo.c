@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.c
- * Copyright  : 2001-2024 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2025 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Function to show information about a given IPv6 address
@@ -29,6 +29,7 @@
 #include "../databases/lib/libipv6calc_db_wrapper_MMDB.h"
 #include "../databases/lib/libipv6calc_db_wrapper_GeoIP2.h"
 #include "../databases/lib/libipv6calc_db_wrapper_IP2Location.h"
+#include "../databases/lib/libipv6calc_db_wrapper_IP2Location2.h"
 #include "../databases/lib/libipv6calc_db_wrapper_DBIP2.h"
 #include "../databases/lib/libipv6calc_db_wrapper_External.h"
 #include "../databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
@@ -411,7 +412,7 @@ static void printfooter(const uint32_t formatoptions) {
 };
 
 
-#if defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2 || defined SUPPORT_IP2LOCATION
+#if defined SUPPORT_GEOIP2 || SUPPORT_DBIP2 || SUPPORT_IP2LOCATION || SUPPORT_IP2LOCATION2
 // with prefix
 static void printout3(const char *token, const char *additional, const char *value, const uint32_t formatoptions, const char *prefix) {
 	char tokencomplete[IPV6CALC_STRING_MAX] = "";
@@ -508,7 +509,7 @@ static void print_ip2location(const ipv6calc_ipaddr *ipaddrp, const uint32_t for
 	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
 
 	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] == 0) {
-		DEBUGPRINT_NA(DEBUG_showinfo, "IP2Location support not active");
+		DEBUGPRINT_NA(DEBUG_showinfo, "IP2Location(BIN) support not active");
 		return;
 	};
 
@@ -516,7 +517,29 @@ static void print_ip2location(const ipv6calc_ipaddr *ipaddrp, const uint32_t for
 	ret = libipv6calc_db_wrapper_IP2Location_all_by_addr(ipaddrp, &record);
 
 	if (ret == 0) {
-		print_geolocation(&record, formatoptions, additionalstring, "IP2LOCATION", "IP2Location");
+		print_geolocation(&record, formatoptions, additionalstring, "IP2LOCATION", "IP2Location(BIN)");
+	};
+};
+#endif
+
+#ifdef SUPPORT_IP2LOCATION2
+/* print IP2Location2 information */
+static void print_ip2location2(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatoptions, const char *additionalstring) {
+	libipv6calc_db_wrapper_geolocation_record record;
+	int ret;
+
+	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
+
+	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION2] == 0) {
+		DEBUGPRINT_NA(DEBUG_showinfo, "IP2Location(MMDB) support not active");
+		return;
+	};
+
+	/* get all information */
+	ret = libipv6calc_db_wrapper_IP2Location2_all_by_addr(ipaddrp, &record);
+
+	if (ret == 0) {
+		print_geolocation(&record, formatoptions, additionalstring, "IP2LOCATION2", "IP2Location(MMDB)");
 	};
 };
 #endif
@@ -849,6 +872,11 @@ static void print_ipv4addr(const ipv6calc_ipv4addr *ipv4addrp, const uint32_t fo
 #ifdef SUPPORT_IP2LOCATION
 		/* IP2Location information */
 		print_ip2location(&ipaddr, formatoptions, embeddedipv4string);
+#endif
+
+#ifdef SUPPORT_IP2LOCATION2
+		/* IP2Location information */
+		print_ip2location2(&ipaddr, formatoptions, embeddedipv4string);
 #endif
 
 #ifdef SUPPORT_GEOIP2
@@ -1649,6 +1677,11 @@ END:
 #ifdef SUPPORT_IP2LOCATION
 			/* IP2Location information */
 			print_ip2location(&ipaddr, formatoptions, "");
+#endif
+
+#ifdef SUPPORT_IP2LOCATION2
+			/* IP2Location information */
+			print_ip2location2(&ipaddr, formatoptions, "");
 #endif
 
 #ifdef SUPPORT_GEOIP2
