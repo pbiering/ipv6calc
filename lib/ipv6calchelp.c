@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calchelp.c
- * Copyright  : 2002-2024 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2025 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
@@ -23,6 +23,7 @@
 #include "libipv6calc_db_wrapper_GeoIP2.h"
 #include "libipv6calc_db_wrapper_IP2Location.h"
 #include "libipv6calc_db_wrapper_DBIP2.h"
+#include "libipv6calc_db_wrapper_MMDB.h"
 #include "libipv6calc_db_wrapper_BuiltIn.h"
 #include "libipv6calc_db_wrapper_External.h"
 
