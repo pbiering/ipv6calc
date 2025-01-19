@@ -11,6 +11,9 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20250119/PB:
+	tools/IP2Location-update.sh[.in]: fix improper masking of token and password
+
 20250114/PB:
 	tools/ipv6calc-update-registries.sh: reneable download of LISP database from local filesystem
 	contrib/ipv6calc.spec[.in]: include databases/registries/lisp/site-db as no longer reachable for download

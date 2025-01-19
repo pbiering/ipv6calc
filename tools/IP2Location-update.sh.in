@@ -25,7 +25,7 @@ IP2LOCATION_DAT_DIR_DEFAULT="@IP2LOCATION_DB@"
 [ -z "$IP2LOCATION_DAT_DIR" -a -n "$IPV6CALC_DB_IP2LOCATION_DIR" ] && IP2LOCATION_DAT_DIR="$IPV6CALC_DB_IP2LOCATION_DIR"
 [ -z "$IP2LOCATION_DAT_DIR" ] && IP2LOCATION_DAT_DIR="$IP2LOCATION_DAT_DIR_DEFAULT"
 
-IP2LOCATION_DAT_URL_BASE="https://www.ip2location.com/download?login=@LOGIN@&password=@PASSWORD@&token=@TOKEN@"
+IP2LOCATION_DAT_URL_BASE="https://www.ip2location.com/download?password=@PASSWORD@&token=@TOKEN@&login=@LOGIN@"
 IP2LOCATION_DAT_URL_BASE_SAMPLE="https://www.ip2location.com/downloads"
 IP2LOCATION_DAT_URL_BASE_LITE_FREE="https://download.ip2location.com/lite"
 
@@ -41,7 +41,7 @@ IP2LOCATION_DAT_FILES_LITE=${IP2LOCATION_DAT_FILES_LITE:-"IPv4:11 IPv6:11"}
 IP2LOCATION_DAT_FILES="${IP2LOCATION_DAT_FILES}"
 
 # list of recommended SAMPLE
-IP2LOCATION_DAT_FILES_SAMPLE=${IP2LOCATION_DAT_FILES_SAMPLE:-"IPv4:20 IPv6:20 IPv4:24 IPv6:24"}
+IP2LOCATION_DAT_FILES_SAMPLE=${IP2LOCATION_DAT_FILES_SAMPLE:-"IPv4:26 IPv6:26"}
 
 # optional ipv6calc-db-update-support.sh
 supportfile="$(dirname "$0")/ipv6calc-db-update-support.sh"
@@ -190,20 +190,18 @@ if ! $authenticated; then
 	IP2LOCATION_DAT_FILES_LITE=""
 fi
 
-if $has_credentials; then
-	# replace placeholders
-	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@LOGIN@/$login}
-	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@PASSWORD@/$password}
-	# clear token parameter
-	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@TOKEN@/}
-fi
-
 if $has_token; then
 	# replace placeholders
 	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@TOKEN@/$token}
 	# clear credential parameters
 	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@LOGIN@/}
 	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@PASSWORD@/}
+elif $has_credentials; then
+	# replace placeholders
+	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@LOGIN@/$login}
+	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@PASSWORD@/$password}
+	# clear token parameter
+	IP2LOCATION_DAT_URL_BASE=${IP2LOCATION_DAT_URL_BASE//@TOKEN@/}
 fi
 
 # Download and unpack non-sample files
@@ -296,13 +294,23 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 
 		file_dest="$IP2LOCATION_DAT_DIR/$file"
 
+		url_masked="$url"
+		re="(.*password=)([^&]+)(&.*)"
+		if [[ $url_masked =~ $re ]]; then
+			url_masked=${BASH_REMATCH[1]}**PASS**${BASH_REMATCH[3]}
+		fi
+		re="(.*token=)([^&]+)(&.*)"
+		if [[ $url_masked =~ $re ]]; then
+			url_masked=${BASH_REMATCH[1]}**TOK**${BASH_REMATCH[3]}
+		fi
+
 		if [ "$NO_ACTION" = "1" ]; then
 			if $has_credentials; then
-				echo "NOTICE: download skipped by option: ${url/password=*&/password=**PASS**&} ($file_dest)"
+				echo "NOTICE: download skipped by option: ${url_masked} ($file_dest)"
 				continue
 			fi
 			if $has_token; then
-				echo "NOTICE: download skipped by option: ${url/token=*&/token=**TOK**&} ($file_dest)"
+				echo "NOTICE: download skipped by option: ${url_masked} ($file_dest)"
 				continue
 			fi
 		fi
@@ -331,11 +339,10 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 			fi
 		fi
 
-		if $has_credentials; then
-			$verbose && echo "INFO  : try to download URL: ${url/password=*&/password=**PASS**&} ($file_dest)"
-		fi
 		if $has_token; then
-			$verbose && echo "INFO  : try to download URL: ${url/token=*&/token=**TOK**&} ($file_dest)"
+			$verbose && echo "INFO  : try to download URL: ${url_masked} ($file_dest)"
+		elif $has_credentials; then
+			$verbose && echo "INFO  : try to download URL: ${url_masked} ($file_dest)"
 		fi
 
 		wget -q -O "$file_dest" "$url"
