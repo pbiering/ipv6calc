@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6calccommands.h
- * Version    : $Id$
- * Copyright  : 2002-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2002-2025 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GPLv2
  *
  * Information:
@@ -78,8 +77,6 @@
 #define DB_ip2location_allow_softlinks					0x0020130
 
 #define DB_ip2location2_disable						0x0021000
-#define DB_ip2location2_dir						0x0021050
-#define DB_ip2location2_lib						0x0021060
 #define DB_ip2location2_lite_to_sample_autoswitch_max_delta_months	0x0021100
 #define DB_ip2location2_comm_to_lite_switch_min_delta_months		0x0021110
 #define DB_ip2location2_only_type					0x0021120
