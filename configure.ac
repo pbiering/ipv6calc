@@ -1280,7 +1280,7 @@ if test "$IP2LOCATION2" = "yes"; then
 	AC_MSG_RESULT([*** IP2Location(MaxMindDB) support autoenabled"])
 	AC_DEFINE(SUPPORT_IP2LOCATION2, 1, Define if you want IP2Location(MaxMindDB) support included.)
 	AC_MSG_RESULT([*** IP2Location(MaxMindDB) database directory: $ip2location_db])
-	AC_DEFINE_UNQUOTED(IP2LOCATION2_DB, "$dbip_db", Define IP2Location(MaxMindDB) database directory.)
+	AC_DEFINE_UNQUOTED(IP2LOCATION2_DB, "$ip2location_db", Define IP2Location(MaxMindDB) database directory.)
 fi
 IP2LOCATION2_DB=$ip2location_db
 AC_SUBST(IP2LOCATION2_DB)
