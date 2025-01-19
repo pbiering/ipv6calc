@@ -26,10 +26,6 @@
 #define IPV6CALC_DB_GEOIP2_INTERNAL_FREE		0x00000001
 #define IPV6CALC_DB_GEOIP2_INTERNAL_COMM		0x00000002
 
-
-// features
-extern uint32_t wrapper_features_GeoIP2;
-
 #endif
 
 
