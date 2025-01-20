@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-all-variants.sh
-# Copyright  : 2011-2024 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2011-2025 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: run autogen.sh with all supported variants
 #
@@ -76,14 +76,28 @@ OPENSSL#--enable-openssl-evp-md5
 LIBMD#--enable-libmd-md5 --no-static-build
 IP2LOCATION#-i
 IP2LOCATION#-I
-GEOIP2 DBIP2#-m
-GEOIP2 DBIP2#-M
+GEOIP2 DBIP2 IP2LOCATION2#-m
+GEOIP2 DBIP2 IP2LOCATION2#-M
 GEOIP2#-m --disable-dbip2
 GEOIP2#-M --disable-dbip2
+GEOIP2#-m --disable-dbip2 --disable-ip2location2
+GEOIP2#-M --disable-dbip2 --disable-ip2location2
+GEOIP2#-m --disable-ip2location2
+GEOIP2#-M --disable-ip2location2
 DBIP2#-m --disable-geoip2
 DBIP2#-M --disable-geoip2
-APACHE IP2LOCATION GEOIP2 DBIP2#-a
-APACHE IP2LOCATION GEOIP2 DBIP2#-A
+DBIP2#-m --disable-geoip2 --disable-ip2location2
+DBIP2#-M --disable-geoip2 --disable-ip2location2
+DBIP2#-m --disable-ip2location2
+DBIP2#-M --disable-ip2location2
+IP2LOCATION2#-m --disable-dbip2
+IP2LOCATION2#-M --disable-dbip2
+IP2LOCATION2#-m --disable-dbip2 --disable-geoip2
+IP2LOCATION2#-M --disable-dbip2 --disable-geoip2
+IP2LOCATION2#-m --disable-geoip2
+IP2LOCATION2#-M --disable-geoip2
+APACHE IP2LOCATION GEOIP2 DBIP2 IP2LOCATION2#-a
+APACHE IP2LOCATION GEOIP2 DBIP2 IP2LOCATION2#-A
 NONE#--disable-db-ieee
 NONE#--disable-db-ipv4
 NONE#--disable-db-ipv6
