@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : databases/lib/libipv6calc_db_wrapper_DBIP2.c
- * Copyright  : 2019-2024 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2019-2025 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  ipv6calc DB-IP.com database wrapper for MaxMindDB databases
@@ -339,13 +339,13 @@ int libipv6calc_db_wrapper_DBIP2_wrapper_cleanup(void) {
 void libipv6calc_db_wrapper_DBIP2_wrapper_info(char* string, const size_t size) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP2, "Called");
 
-	snprintf(string, size, "DBIP2 database support: Country4=%d Country6=%d ASN4=%d ASN6=%d City4=%d City6=%d", \
-		(wrapper_features & IPV6CALC_DB_IPV4_TO_CC) ? 1 : 0, \
-		(wrapper_features & IPV6CALC_DB_IPV6_TO_CC) ? 1 : 0, \
-		(wrapper_features & IPV6CALC_DB_IPV4_TO_AS) ? 1 : 0, \
-		(wrapper_features & IPV6CALC_DB_IPV6_TO_AS) ? 1 : 0, \
-		(wrapper_features & IPV6CALC_DB_IPV4_TO_CITY) ? 1 : 0, \
-		(wrapper_features & IPV6CALC_DB_IPV6_TO_CITY) ? 1 : 0 \
+	snprintf(string, size, "db-ip.com(MMDB) database support: Country4=%d Country6=%d ASN4=%d ASN6=%d City4=%d City6=%d", \
+		(wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP2] & IPV6CALC_DB_IPV4_TO_CC) ? 1 : 0, \
+		(wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP2] & IPV6CALC_DB_IPV6_TO_CC) ? 1 : 0, \
+		(wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP2] & IPV6CALC_DB_IPV4_TO_AS) ? 1 : 0, \
+		(wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP2] & IPV6CALC_DB_IPV6_TO_AS) ? 1 : 0, \
+		(wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP2] & IPV6CALC_DB_IPV4_TO_CITY) ? 1 : 0, \
+		(wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP2] & IPV6CALC_DB_IPV6_TO_CITY) ? 1 : 0 \
 	);
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP2, "Finished");
