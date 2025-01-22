@@ -771,6 +771,7 @@ with_ip2location_lib
 with_ip2location_static
 with_ip2location_db
 with_ip2location_dyn_lib
+with_ip2location2_db
 enable_geoip
 with_geoip_dynamic
 with_geoip_headers
@@ -1486,6 +1487,9 @@ Optional Packages:
   --with-ip2location-dyn-lib=NAME
                           Use specified IP2Location dynamic library, default:
                           libIP2Location.so
+  --with-ip2location2-db=DIR
+                          Use specified IP2Location(MMDB) database directory,
+                          default: /usr/share/IP2Location
   --with-geoip-dynamic    Compatibility Dummy (no longer supported)
   --with-geoip-headers=DIR
                           Compatibility Dummy (no longer supported)
@@ -6566,6 +6570,21 @@ printf "%s\n" "#define IP2LOCATION_INCLUDE_VERSION \"$IP2LOCATION_INCLUDE_VERSIO
 
 fi
 
+
+# Check whether --with-ip2location2-db was given.
+if test ${with_ip2location2_db+y}
+then :
+  withval=$with_ip2location2_db;
+		ip2location2_db="$with_ip2location2_db"
+
+else case e in #(
+  e)
+		ip2location2_db=$ip2location_db_default
+	 ;;
+esac
+fi
+
+
 if test "$IP2LOCATION2" = "yes"; then
 	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** IP2Location(MaxMindDB) support autoenabled\"" >&5
 printf "%s\n" "*** IP2Location(MaxMindDB) support autoenabled\"" >&6; }
@@ -6578,7 +6597,7 @@ printf "%s\n" "*** IP2Location(MaxMindDB) database directory: $ip2location_db" >
 printf "%s\n" "#define IP2LOCATION2_DB \"$ip2location_db\"" >>confdefs.h
 
 fi
-IP2LOCATION2_DB=$ip2location_db
+IP2LOCATION2_DB=$ip2location2_db
 
 
 
