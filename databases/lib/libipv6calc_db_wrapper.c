@@ -1880,7 +1880,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp,
 #endif // API_VERSION_NUMERIC >= 80600
 
 		    case IPV6CALC_DB_SOURCE_IP2LOCATION2:
-#ifdef SUPPORT_P2LOCATION2
+#ifdef SUPPORT_IP2LOCATION2
 			if (wrapper_IP2Location2_status == 1) {
 
 				DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Call now IP2Location2");
