@@ -111,14 +111,18 @@ extern uint32_t wrapper_features_by_source_implemented[];
 #define IPV6CALC_DB_EXTERNAL_IPV4		0x40000000
 #define IPV6CALC_DB_EXTERNAL_IPV6		0x80000000
 
+#define IPV6CALC_DB_IP2LOCATION2_IPV4		0x100000000
+#define IPV6CALC_DB_IP2LOCATION2_IPV6		0x200000000
 
 static const s_formatoption ipv6calc_db_features[] = {
 	{ IPV6CALC_DB_GEOIP_IPV4	, "GeoIP"		, "GeoIPv4 database"},
 	{ IPV6CALC_DB_GEOIP_IPV6	, "GeoIPv6"		, "GeoIPv6 database"},
-	{ IPV6CALC_DB_IP2LOCATION_IPV4	, "IP2Location"		, "IP2Location IPv4 database"},
-	{ IPV6CALC_DB_IP2LOCATION_IPV6	, "IP2Location6"	, "IP2Location IPv6 database"},
-	{ IPV6CALC_DB_DBIP_IPV4		, "DBIPv4"		, "db-ip.com IPv4 database"},
-	{ IPV6CALC_DB_DBIP_IPV6		, "DBIPv6"		, "db-ip.com IPv6 database"},
+	{ IPV6CALC_DB_IP2LOCATION_IPV4	, "IP2Location"		, "IP2Location(BIN) IPv4 database"},
+	{ IPV6CALC_DB_IP2LOCATION_IPV6	, "IP2Location6"	, "IP2Location(BIN) IPv6 database"},
+	{ IPV6CALC_DB_IP2LOCATION2_IPV4	, "IP2Location2v4"	, "IP2Location(MMDB) IPv4 database"},
+	{ IPV6CALC_DB_IP2LOCATION2_IPV6	, "IP2Location2v6"	, "IP2Location(MMDB) IPv6 database"},
+	{ IPV6CALC_DB_DBIP_IPV4		, "DBIPv4"		, "db-ip.com(MMDB) IPv4 database"},
+	{ IPV6CALC_DB_DBIP_IPV6		, "DBIPv6"		, "db-ip.com(MMDB) IPv6 database"},
 	{ IPV6CALC_DB_AS_TO_REGISTRY	, "DB_AS_REG"		, "AS-Number to Registry database"},
 	{ IPV6CALC_DB_IPV4_TO_REGISTRY	, "DB_IPV4_REG"		, "IPv4 to Registry database"},
 	{ IPV6CALC_DB_IPV6_TO_REGISTRY	, "DB_IPV6_REG"		, "IPv6 to Registry database"},
