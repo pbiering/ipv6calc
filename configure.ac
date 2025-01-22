@@ -1276,13 +1276,24 @@ if test -n "$IP2LOCATION_INCLUDE_VERSION"; then
 	AC_DEFINE_UNQUOTED(IP2LOCATION_INCLUDE_VERSION, "$IP2LOCATION_INCLUDE_VERSION", IP2Location include file version.)
 fi
 
+dnl defaults for database directories
+AC_ARG_WITH([ip2location2-db],
+	AS_HELP_STRING([--with-ip2location2-db=DIR],
+               [Use specified IP2Location(MMDB) database directory, default: /usr/share/IP2Location]),
+	[
+		ip2location2_db="$with_ip2location2_db"
+	],
+	[
+		ip2location2_db=$ip2location_db_default
+	])
+
 if test "$IP2LOCATION2" = "yes"; then
 	AC_MSG_RESULT([*** IP2Location(MaxMindDB) support autoenabled"])
 	AC_DEFINE(SUPPORT_IP2LOCATION2, 1, Define if you want IP2Location(MaxMindDB) support included.)
 	AC_MSG_RESULT([*** IP2Location(MaxMindDB) database directory: $ip2location_db])
 	AC_DEFINE_UNQUOTED(IP2LOCATION2_DB, "$ip2location_db", Define IP2Location(MaxMindDB) database directory.)
 fi
-IP2LOCATION2_DB=$ip2location_db
+IP2LOCATION2_DB=$ip2location2_db
 AC_SUBST(IP2LOCATION2_DB)
 
 
