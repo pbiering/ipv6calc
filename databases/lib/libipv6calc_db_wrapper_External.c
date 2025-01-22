@@ -208,7 +208,7 @@ int libipv6calc_db_wrapper_External_wrapper_cleanup(void) {
 void libipv6calc_db_wrapper_External_wrapper_info(char* string, const size_t size) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Called");
 
-	snprintf(string, size, "External available databases: Country4=%d Country6=%d IPV4_REG=%d IPV6_REG=%d", \
+	snprintf(string, size, "External(BDB) available databases: Country4=%d Country6=%d IPV4_REG=%d IPV6_REG=%d", \
 		(wrapper_features & IPV6CALC_DB_IPV4_TO_CC) ? 1 : 0, \
 		(wrapper_features & IPV6CALC_DB_IPV6_TO_CC) ? 1 : 0, \
 		(wrapper_features & IPV6CALC_DB_IPV4_TO_REGISTRY) ? 1 : 0, \
@@ -237,17 +237,17 @@ void libipv6calc_db_wrapper_External_wrapper_print_db_info(const int level_verbo
 
 	IPV6CALC_DB_FEATURE_INFO(prefix, IPV6CALC_DB_SOURCE_EXTERNAL)
 
-	fprintf(stderr, "%sExternal: info of available databases in directory: %s\n", prefix, external_db_dir);
+	fprintf(stderr, "%sExternal(BDB): info of available databases in directory: %s\n", prefix, external_db_dir);
 
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_External_db_file_desc); i++) {
 		type = libipv6calc_db_wrapper_External_db_file_desc[i].number;
 
 		if (libipv6calc_db_wrapper_External_db_avail(type)) {
-			fprintf(stderr, "%sExternal: %-20s: %-40s (%s)\n", prefix, libipv6calc_db_wrapper_External_db_file_desc[i].description, libipv6calc_db_wrapper_External_db_file_desc[i].filename, libipv6calc_db_wrapper_External_database_info(type));
+			fprintf(stderr, "%sExternal(BDB): %-20s: %-40s (%s)\n", prefix, libipv6calc_db_wrapper_External_db_file_desc[i].description, libipv6calc_db_wrapper_External_db_file_desc[i].filename, libipv6calc_db_wrapper_External_database_info(type));
 			count++;
 		} else {
 			if (level_verbose == LEVEL_VERBOSE2) {
-				fprintf(stderr, "%sExternal: %-20s: %-40s (%s)\n", prefix, libipv6calc_db_wrapper_External_db_file_desc[i].description, libipv6calc_db_wrapper_External_dbfilename(type), strerror(errno));
+				fprintf(stderr, "%sExternal(BDB): %-20s: %-40s (%s)\n", prefix, libipv6calc_db_wrapper_External_db_file_desc[i].description, libipv6calc_db_wrapper_External_dbfilename(type), strerror(errno));
 			};
 			continue;
 		};

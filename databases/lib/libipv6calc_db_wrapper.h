@@ -165,12 +165,12 @@ typedef struct {
 } s_data_sources;
 
 static const s_data_sources data_sources[] = {
-	{ IPV6CALC_DB_SOURCE_GEOIP2	, "GeoIP(MaxMindDB)"    , "GeoIP2"      },
+	{ IPV6CALC_DB_SOURCE_GEOIP2	, "GeoIP(MMDB)"    , "GeoIP2"      },
 	{ IPV6CALC_DB_SOURCE_IP2LOCATION, "IP2Location(BIN)", "IP2Location" },
-	{ IPV6CALC_DB_SOURCE_DBIP2	, "db-ip.com(MaxMindDB)", "DBIP2"       },
+	{ IPV6CALC_DB_SOURCE_DBIP2	, "db-ip.com(MMDB)", "DBIP2"       },
 	{ IPV6CALC_DB_SOURCE_EXTERNAL	, "External(BDB)"   , "External"    },
 	{ IPV6CALC_DB_SOURCE_BUILTIN	, "BuiltIn"    , "BuiltIn"     },
-	{ IPV6CALC_DB_SOURCE_IP2LOCATION2, "IP2Location(MaxMindDB)", "IP2Location2" },
+	{ IPV6CALC_DB_SOURCE_IP2LOCATION2, "IP2Location(MMDB)", "IP2Location2" },
 };
 
 // database names and descriptions

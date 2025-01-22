@@ -615,9 +615,9 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 #ifdef SUPPORT_GEOIP2
 	if (wrapper_GeoIP2_disable == 0) {
 #ifdef SUPPORT_MMDB_DYN
-		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(dyn-load/MaxMindDB)", string, strlen(string) > 0 ? " " : "");
+		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(dyn-load/MMDB)", string, strlen(string) > 0 ? " " : "");
 #else
-		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(linked/MaxMindDB)", string, strlen(string) > 0 ? " " : "");
+		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(linked/MMDB)", string, strlen(string) > 0 ? " " : "");
 #endif // SUPPORT_MMDB_DYN
 		snprintf(string, size, "%s", tempstring);
 	};
@@ -641,9 +641,9 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 #ifdef SUPPORT_DBIP2
 	if (wrapper_DBIP2_disable == 0) {
 #ifdef SUPPORT_MMDB_DYN
-		snprintf(tempstring, sizeof(tempstring), "%s%sDBIP2(dyn-load/MaxMindDB)", string, strlen(string) > 0 ? " " : "");
+		snprintf(tempstring, sizeof(tempstring), "%s%sDBIP2(dyn-load/MMDB)", string, strlen(string) > 0 ? " " : "");
 #else
-		snprintf(tempstring, sizeof(tempstring), "%s%sDBIP2(linked/MaxMindDB)", string, strlen(string) > 0 ? " " : "");
+		snprintf(tempstring, sizeof(tempstring), "%s%sDBIP2(linked/MMDB)", string, strlen(string) > 0 ? " " : "");
 #endif
 		snprintf(string, size, "%s", tempstring);
 	};
@@ -652,9 +652,9 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 #ifdef SUPPORT_IP2LOCATION2
 	if (wrapper_IP2Location2_disable == 0) {
 #ifdef SUPPORT_MMDB_DYN
-		snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(dyn-load/MaxMindDB)", string, strlen(string) > 0 ? " " : "");
+		snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location2(dyn-load/MMDB)", string, strlen(string) > 0 ? " " : "");
 #else
-		snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location(linked/MaxMindDB)", string, strlen(string) > 0 ? " " : "");
+		snprintf(tempstring, sizeof(tempstring), "%s%sIP2Location2(linked/MMDB)", string, strlen(string) > 0 ? " " : "");
 #endif
 		snprintf(string, size, "%s", tempstring);
 	};
@@ -1115,7 +1115,7 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 #ifdef SUPPORT_IP2LOCATION_DYN
 			result = snprintf(ip2location_lib_file, sizeof(ip2location_lib_file), "%s", optarg);
 #else
-			NONQUIETPRINT_WA("Support for IP2Location dyn-load not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+			NONQUIETPRINT_WA("Support for IP2Location(BIN) dyn-load not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
 			result = 0;
 			break;
@@ -1124,7 +1124,16 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 #ifdef SUPPORT_IP2LOCATION
 			result = snprintf(ip2location_db_dir, sizeof(ip2location_db_dir), "%s", optarg);
 #else
-			NONQUIETPRINT_WA("Support for IP2Location not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+			NONQUIETPRINT_WA("Support for IP2Location(BIN) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
+#endif
+			result = 0;
+			break;
+
+		case DB_ip2location2_dir:
+#ifdef SUPPORT_IP2LOCATION2
+			result = snprintf(ip2location2_db_dir, sizeof(ip2location2_db_dir), "%s", optarg);
+#else
+			NONQUIETPRINT_WA("Support for IP2Location(MMDB) not compiled-in, skipping option: --%s", ipv6calcoption_name(opt, longopts));
 #endif
 			result = 0;
 			break;

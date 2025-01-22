@@ -950,7 +950,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_info(char* string, const size_t 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called");
 
 #ifdef SUPPORT_IP2LOCATION
-	snprintf(string, size, "IP2Location database support: Country4=%d Country6=%d ASN4=%d ASN6=%d City4=%d City6=%d"
+	snprintf(string, size, "IP2Location(BIN) database support: Country4=%d Country6=%d ASN4=%d ASN6=%d City4=%d City6=%d"
 		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] & IPV6CALC_DB_IPV4_TO_CC)   ? 1 : 0
 		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] & IPV6CALC_DB_IPV6_TO_CC)   ? 1 : 0
 		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] & IPV6CALC_DB_IPV4_TO_AS)   ? 1 : 0
@@ -959,7 +959,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_info(char* string, const size_t 
 		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] & IPV6CALC_DB_IPV6_TO_CITY) ? 1 : 0
 	);
 #else
-	snprintf(string, size, "No IP2Location support built-in");
+	snprintf(string, size, "No IP2Location(BIN) support built-in");
 #endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished");
@@ -986,8 +986,8 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 	IPV6CALC_DB_FEATURE_INFO(prefix, IPV6CALC_DB_SOURCE_IP2LOCATION)
 
 #ifdef SUPPORT_IP2LOCATION
-	fprintf(stderr, "%sIP2Location: info of available databases in directory: %s\n", prefix, ip2location_db_dir);
-	fprintf(stderr, "%sIP2Location: Copyright (c) IP2Location All Rights Reserved\n", prefix);
+	fprintf(stderr, "%sIP2Location(BIN): info of available databases in directory: %s\n", prefix, ip2location_db_dir);
+	fprintf(stderr, "%sIP2Location(BIN): Copyright (c) IP2Location All Rights Reserved\n", prefix);
 
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_IP2Location_db_file_desc); i++) {
 		type = libipv6calc_db_wrapper_IP2Location_db_file_desc[i].number;
