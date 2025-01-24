@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc/ip6calcweb
 # File       : ipv6calcweb.cgi
-# Copyright  : 2002-2024 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2025 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GPL, but copyright always has to be displayed in output
 #
 # Simple Perl web interface and security wrapper
@@ -40,10 +40,10 @@
 #  HTTP_IPV6CALCWEB_DEBUG_IPV6CALC      : debug value for ipv6calc binary (optional)
 #
 #  HTTP_IPV6CALCWEB_DB_MMDB_LIB         : MaxMindDB library name (optional in dyn-load support)
-#  HTTP_IPV6CALCWEB_DB_IP2LOCATION_DIR  : IP2Location database directory (optional)
-#  HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB  : IP2Location library name (optional in dyn-load support)
-#  HTTP_IPV6CALCWEB_DB_GEOIP_DIR        : GeoIP/GeoIP2 database directory (optional)
-#  HTTP_IPV6CALCWEB_DB_DBIP_DIR         : db-ip.com database directory (optional)
+#  HTTP_IPV6CALCWEB_DB_IP2LOCATION_DIR  : IP2Location(BIN/MMDB) database directory (optional)
+#  HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB  : IP2Location(BIN) library name (optional in dyn-load support)
+#  HTTP_IPV6CALCWEB_DB_GEOIP_DIR        : GeoIP2(MMDB) database directory (optional)
+#  HTTP_IPV6CALCWEB_DB_DBIP_DIR         : db-ip.com(MMDB) database directory (optional)
 #  HTTP_IPV6CALCWEB_DB_EXTERNAL_DIR     : external database directory (optional)
 #  HTTP_IPV6CALCWEB_OUTPUT_FORMAT       : html (default if SERVER_PROTOCOL=INCLUDED), htmlfull (default), text, textkeyvalue
 #  HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB: sequential (default), subcolumns
@@ -56,6 +56,7 @@
 #  HTTP_IPV6CALCWEB_DB_GEOIP2		: 1 (enable, default), 0 (disable)
 #  HTTP_IPV6CALCWEB_DB_DBIP2		: 1 (enable, default), 0 (disable)
 #  HTTP_IPV6CALCWEB_DB_IP2LOCATION	: 1 (enable, default), 0 (disable)
+#  HTTP_IPV6CALCWEB_DB_IP2LOCATION2	: 1 (enable, default), 0 (disable)
 #  HTTP_IPV6CALCWEB_DB_EXTERNAL		: 1 (enable)         , 1 (disable, default)
 #
 #  HTTP_IPV6CALCWEB_USERNAME_GEONAMESORG: user name for geonames.org API (default: "demo")
@@ -117,6 +118,7 @@ my $font_size_2 = "70%";
 my %db_enabled;
 $db_enabled{'GEOIP2'} = 1;
 $db_enabled{'IP2LOCATION'} = 1;
+$db_enabled{'IP2LOCATION2'} = 1;
 $db_enabled{'DBIP2'} = 1;
 $db_enabled{'EXTERNAL'} = 0;
 
@@ -141,7 +143,7 @@ my $debug = 0;
 # debug | 0x4000: skip system health checks (load)
 # debug | 0x8000: print feature token hash
 
-if ( defined $ENV{'HTTP_IPV6CALCWEB_DEBUG'} ) {
+if (defined $ENV{'HTTP_IPV6CALCWEB_DEBUG'}) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DEBUG'} =~ /^[0-9]+$/) {
 		$debug = $ENV{'HTTP_IPV6CALCWEB_DEBUG'};
 	} elsif ($ENV{'HTTP_IPV6CALCWEB_DEBUG'} =~ /^0x[0-9a-f]+$/oi) {
@@ -227,6 +229,7 @@ sub find_dir(@) {
 # URLs
 my %urls = (
 	"IP2LOCATION" => "https://www.ip2location.com",
+	"IP2LOCATION2" => "https://www.ip2location.com",
 	"GEOIP2" => "https://www.maxmind.com",
 	"DBIP2"  => "https://www.db-ip.com",
 	"GEONAMES"  => "https://www.geonames.org",
@@ -325,9 +328,10 @@ my @supported_formats = ( "text", "html", "textkeyvalue");
 my @format_tt = ( "EUI48", "EUI64", "IPV6", "IPV4", "SLA", "IID", "IPV4_6TO4", "IPV4_ANON", "IPV6_ANON", "HTTP_X_FORWARDED_FOR" );
 
 my %text_geodb = (
-	'IP2LOCATION' => 'IP2Location',
-	'GEOIP2'      => 'GeoIP(MaxMindDB)',
-	'DBIP2'       => 'db-ip.com(MaxMindDB)'
+	'IP2LOCATION' => 'IP2Location(BIN)',
+	'IP2LOCATION2' => 'IP2Location(MMDB)',
+	'GEOIP2'      => 'GeoIP(MMDB)',
+	'DBIP2'       => 'db-ip.com(MMDB)'
 );
 
 my %text_extra = (
@@ -903,18 +907,22 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_DB_MMDB_LIB'}) {
 # IP2Location
 my $options_ipv6calc_ip2location = "";
 my %db_info_ip2location;
+my %db_info_ip2location2;
 my $database_ip2location_dir;
+my $database_ip2location2_dir;
 my $database_ip2location_lib;
 
 if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_DIR'}) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_DIR'} =~ /^([[:alnum:]\.\-\/]+)$/) {
 		$database_ip2location_dir = $1;
+		$database_ip2location2_dir = $1;
 	} else {
 		logging("ERROR", "HTTP_IPV6CALCWEB_DB_IP2LOCATION_DIR found, but not containing proper chars");
 		&print_error();
 	};
 } else {
 	$database_ip2location_dir = find_dir(@list_database_ip2location_dir);
+	$database_ip2location2_dir = find_dir(@list_database_ip2location_dir);
 };
 
 if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB'}) {
@@ -1000,6 +1008,7 @@ my $info_builtin_string;
 if (defined $database_mmdb_lib) {
 	$options_ipv6calc_geoip2 .= " --db-mmdb-lib $database_mmdb_lib";
 	$options_ipv6calc_dbip2 .= " --db-mmdb-lib $database_mmdb_lib";
+	$options_ipv6calc_ip2location2 .= " --db-mmdb-lib $database_mmdb_lib";
 };
 
 # IP2Location
@@ -1011,6 +1020,10 @@ if (defined $database_ip2location_lib) {
 	$options_ipv6calc_ip2location .= " --db-ip2location-lib $database_ip2location_lib";
 };
 
+# IP2Location2
+if (defined $database_ip2location2_dir) {
+	$options_ipv6calc_ip2location2 .= " --db-ip2location2-dir $database_ip2location2_dir";
+};
 # GeoIP2
 if (defined $database_geoip2_dir) {
 	$options_ipv6calc_geoip2 .= " --db-geoip2-dir $database_geoip2_dir";
@@ -1368,7 +1381,7 @@ sub print_infohash ($$$;$) {
 						&print_tagoutput("<br><font size=\"-2\">(" . $text . ")</font>");
 					};
 				};
-			} elsif ($key_lookup =~ /^(IP2LOCATION|GEOIP2|DBIP2)(_.+)$/o) {
+			} elsif ($key_lookup =~ /^(IP2LOCATION|IP2LOCATION2|GEOIP2|DBIP2)(_.+)$/o) {
 				# fallback
 				my $key_lookup_without_db = $2;
 				if (defined $text{$key_lookup_without_db}->{$lang}) {
@@ -1604,7 +1617,7 @@ sub print_infohash ($$$;$) {
 					if (defined $text_extra{"_" . $key_lookup}->{$lang}) {
 						&print_tagoutput("<br><font size=\"-2\">(" . $text_extra{"_" . $key_lookup}->{$lang} . ")</font>")
 					};
-				} elsif ($key_lookup =~ /^(IP2LOCATION|GEOIP2|DBIP2)$/o) {
+				} elsif ($key_lookup =~ /^(IP2LOCATION|IP2LOCATION2|GEOIP2|DBIP2)$/o) {
 					# fallback
 					my $key_lookup_without_db = $2;
 					if (defined $text{$key_lookup_without_db}->{$lang}) {
@@ -2330,6 +2343,15 @@ if (length($ipv6calc_capabilities) > 0) {
 			$key_db_tokens{"IP2LOCATION"} = 0;
 		};
 	};
+	if (defined $ipv6calc_capability_hash{"IP2Location2"} && ($ipv6calc_capability_hash{"IP2Location2"} == 1)) {
+		if ($db_enabled{"IP2LOCATION2"} == 0) {
+			$options_ipv6calc .= " --db-ip2location2-disable";
+		} else {
+			$options_ipv6calc .= $options_ipv6calc_ip2location2;
+			$db_columns++ if ($mode_db_entries_in_subcolumns == 1);
+			$key_db_tokens{"IP2LOCATION2"} = 0;
+		};
+	};
 	if (defined $ipv6calc_capability_hash{"DBIP2"} && ($ipv6calc_capability_hash{"DBIP2"} == 1)) {
 		if ($db_enabled{"DBIP2"} == 0) {
 			$options_ipv6calc .= " --db-dbip2-disable";
@@ -2704,7 +2726,12 @@ if ($outputformat =~ /^html/o) {
 
 	if (scalar(keys %db_info_ip2location) > 0) {
 		print "          <br>\n";
-		print "          " . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'IP2LOCATION'} . "\">IP2Location</a> " . $text{'database'}->{$lang} . " " . create_uri(encode_entities(join(" / ", sort keys %db_info_ip2location))). "\n";
+		print "          " . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'IP2LOCATION'} . "\">IP2Location(BIN)</a> " . $text{'database'}->{$lang} . " " . create_uri(encode_entities(join(" / ", sort keys %db_info_ip2location))). "\n";
+	};
+
+	if (scalar(keys %db_info_ip2location2) > 0) {
+		print "          <br>\n";
+		print "          " . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'IP2LOCATION2'} . "\">IP2Location(MMDB)</a> " . $text{'database'}->{$lang} . " " . create_uri(encode_entities(join(" / ", sort keys %db_info_ip2location))). "\n";
 	};
 
 	if (scalar(keys %db_info_geoip2) > 0) {
@@ -2752,6 +2779,12 @@ if ($outputformat =~ /^html/o) {
 		print "INFO__POWEREDBY_IP2LOCATION=" if ($outputformat eq "textkeyvalue");
 		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_ip2location) . " (" . $urls{'IP2LOCATION'} . ")" . $chr_quote . "\n";
 	};
+
+	if (scalar(keys %db_info_ip2location2) > 0) {
+		print "INFO__POWEREDBY_IP2LOCATION2=" if ($outputformat eq "textkeyvalue");
+		print $chr_quote . $text{'powered'}->{$lang} . " " . $text{'database'}->{$lang} . " " . join(" / ", sort keys %db_info_ip2location2) . " (" . $urls{'IP2LOCATION2'} . ")" . $chr_quote . "\n";
+	};
+
 
 	if (scalar(keys %db_info_geoip2) > 0) {
 		print "INFO__POWEREDBY_GEOIP2=" if ($outputformat eq "textkeyvalue");
