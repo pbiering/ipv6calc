@@ -79,6 +79,22 @@ static struct option ipv6calc_longopts_ip2location[] = {
 };
 #endif // SUPPORT_IP2LOCATION
 
+#ifdef SUPPORT_IP2LOCATION2
+static char *ipv6calc_shortopts_ip2location2 = "";
+
+static struct option ipv6calc_longopts_ip2location2[] = {
+	{"disable-ip2location2"         , 0, NULL, DB_ip2location2_disable },
+	{"db-ip2location2-disable"      , 0, NULL, DB_ip2location2_disable },
+	{"db-ip2location2-dir"          , 1, NULL, DB_ip2location2_dir     },
+
+	/* database selection control */
+	{"db-ip2location2-lite-to-sample-autoswitch-max-delta-months", 1, NULL, DB_ip2location2_lite_to_sample_autoswitch_max_delta_months },
+	{"db-ip2location2-comm-to-lite-switch-min-delta-months", 1, NULL, DB_ip2location2_comm_to_lite_switch_min_delta_months },
+	{"db-ip2location2-only-type", 1, NULL, DB_ip2location2_only_type },
+	{"db-ip2location2-allow-softlinks", 0, NULL, DB_ip2location2_allow_softlinks },
+};
+#endif // SUPPORT_IP2LOCATION2
+
 #ifdef SUPPORT_GEOIP2
 static char *ipv6calc_shortopts_geoip2 = "";
 
@@ -133,7 +149,7 @@ static struct option ipv6calc_longopts_builtin[] = {
 };
 #endif // SUPPORT_BUILTIN
 
-#if defined SUPPORT_EXTERNAL || SUPPORT_IP2LOCATION || defined SUPPORT_MMDB || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
+#if defined SUPPORT_EXTERNAL || SUPPORT_IP2LOCATION || defined SUPPORT_MMDB || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2 || SUPPORT_IP2LOCATION2
 static char *ipv6calc_shortopts_db_common = "";
 
 static struct option ipv6calc_longopts_db_common[] = {
