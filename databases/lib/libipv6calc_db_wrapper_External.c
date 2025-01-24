@@ -254,7 +254,7 @@ void libipv6calc_db_wrapper_External_wrapper_print_db_info(const int level_verbo
 	};
 
 	if (count == 0) {
-		fprintf(stderr, "%sExternal: NO available databases found in directory: %s\n", prefix, external_db_dir);
+		fprintf(stderr, "%sExternal(BDB): NO available databases found in directory: %s\n", prefix, external_db_dir);
 	};
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_External, "Finished");
