@@ -935,9 +935,7 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB'}) {
 };
 
 # GeoIP/GeoIP2
-my $options_ipv6calc_geoip = "";
 my $options_ipv6calc_geoip2 = "";
-my %db_info_geoip;
 my %db_info_geoip2;
 my $info_geoip_string;
 my $info_geoip2_string;
@@ -958,25 +956,21 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_DIR'}) {
 };
 
 # db-ip.com
-my $options_ipv6calc_dbip = "";
 my $options_ipv6calc_dbip2 = "";
-my %db_info_dbip;
+my $options_ipv6calc_ip2location2 = "";
 my %db_info_dbip2;
-my $database_dbip_dir;
 my $database_dbip2_dir;
-my $info_dbip_string;
 my $info_dbip2_string;
 
 if (defined $ENV{'HTTP_IPV6CALCWEB_DB_DBIP_DIR'}) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DB_DBIP_DIR'} =~ /^([[:alnum:]\.\-\/]+)$/) {
-		$database_dbip_dir = $1;
 		$database_dbip2_dir = $1;
 	} else {
 		logging("ERROR", "HTTP_IPV6CALCWEB_DB_DBIP_DIR found, but not containing proper chars");
 		&print_error();
 	};
 } else {
-	$database_dbip_dir = find_dir(@list_database_dbip_dir);
+	$database_dbip2_dir = find_dir(@list_database_dbip_dir);
 };
 
 # External DB
@@ -2741,7 +2735,7 @@ if ($outputformat =~ /^html/o) {
 
 	if (scalar(keys %db_info_dbip2) > 0) {
 		print "          <br>\n";
-		print "          " . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'DBIP2'} . "\">db-ip.com</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_dbip2)) . "\n";
+		print "          " . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'DBIP2'} . "\">db-ip.com(MMDB)</a> " . $text{'database'}->{$lang} . " " . encode_entities(join(" / ", sort keys %db_info_dbip2)) . "\n";
 	};
 
 	if (scalar(keys %db_info_external) > 0) {
