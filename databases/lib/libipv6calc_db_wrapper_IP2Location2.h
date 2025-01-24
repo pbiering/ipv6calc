@@ -183,10 +183,6 @@
 #define IPV6CALC_DB_IP2LOCATION2_INTERNAL_LITE		0x00000002
 #define IPV6CALC_DB_IP2LOCATION2_INTERNAL_FREE		0x00000004
 
-
-// features
-extern uint32_t wrapper_features_IP2Location2;
-
 #endif
 
 
@@ -195,6 +191,7 @@ extern uint32_t wrapper_features_IP2Location2;
 extern int         libipv6calc_db_wrapper_IP2Location2_wrapper_init(void);
 extern int         libipv6calc_db_wrapper_IP2Location2_wrapper_cleanup(void);
 extern uint32_t    libipv6calc_db_wrapper_IP2Location2_wrapper_asn_by_addr(const ipv6calc_ipaddr *ipaddrp, char *as_orgname, const size_t as_orgname_length);
+extern uint32_t    libipv6calc_db_wrapper_IP2Location2_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp, int *source_ptr);
 extern void        libipv6calc_db_wrapper_IP2Location2_wrapper_info(char* string, const size_t size);
 extern void        libipv6calc_db_wrapper_IP2Location2_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
 extern char       *libipv6calc_db_wrapper_IP2Location2_wrapper_db_info_used(void);
@@ -207,7 +204,7 @@ extern int         libipv6calc_db_wrapper_IP2Location2_has_features(uint32_t fea
 #ifdef SUPPORT_IP2LOCATION2
 #include "libipv6calc_db_wrapper_MMDB.h"
 
-extern char ip2location_db_dir[PATH_MAX];
+extern char ip2location2_db_dir[PATH_MAX];
 
 extern int         libipv6calc_db_wrapper_IP2Location2_db_avail(const unsigned int type);
 extern int         libipv6calc_db_wrapper_IP2Location2_open_type(const unsigned int type);
