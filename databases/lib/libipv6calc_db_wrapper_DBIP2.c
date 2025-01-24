@@ -370,7 +370,7 @@ void libipv6calc_db_wrapper_DBIP2_wrapper_print_db_info(const int level_verbose,
 
 	IPV6CALC_DB_FEATURE_INFO(prefix, IPV6CALC_DB_SOURCE_DBIP2)
 
-	fprintf(stderr, "%sDBIP2: info of available databases in directory: %s\n", prefix, dbip2_db_dir);
+	fprintf(stderr, "%sdb-ip.com(MMDB): info of available databases in directory: %s\n", prefix, dbip2_db_dir);
 
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_DBIP2_db_file_desc); i++) {
 		type = libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number;
@@ -379,25 +379,25 @@ void libipv6calc_db_wrapper_DBIP2_wrapper_print_db_info(const int level_verbose,
 			// DBIP2 returned that database is available
 			ret = libipv6calc_db_wrapper_DBIP2_open_type(type);
 			if (ret != MMDB_SUCCESS) {
-				fprintf(stderr, "%sDBIP2: %-30s: [%1d] %-30s (CAN'T OPEN database information)\n", prefix, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_DBIP2_dbfilename(type));
+				fprintf(stderr, "%sdb-ip.com(MMDB): %-30s: [%1d] %-30s (CAN'T OPEN database information)\n", prefix, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_DBIP2_dbfilename(type));
 			} else {
-				fprintf(stderr, "%sDBIP2: %-30s: [%1d] %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].filename, libipv6calc_db_wrapper_DBIP2_database_info(type));
+				fprintf(stderr, "%sdb-ip.com(MMDB): %-30s: [%1d] %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].filename, libipv6calc_db_wrapper_DBIP2_database_info(type));
 				libipv6calc_db_wrapper_DBIP2_close(type);
 				count++;
 			};
 		} else {
 			if (level_verbose == LEVEL_VERBOSE2) {
-				fprintf(stderr, "%sDBIP2: %-30s: [%1d] %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_DBIP2_dbfilename(type), strerror(errno));
+				fprintf(stderr, "%sdb-ip.com(MMDB): %-30s: [%1d] %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_DBIP2_dbfilename(type), strerror(errno));
 			};
 			continue;
 		};
 	};
 
 	if (count == 0) {
-		fprintf(stderr, "%sDBIP2: NO available databases found in directory: %s\n", prefix, dbip2_db_dir);
+		fprintf(stderr, "%sdb-ip.com(MMDB): NO available databases found in directory: %s\n", prefix, dbip2_db_dir);
 	} else {
 		if (level_verbose >= LEVEL_VERBOSE2) {
-			fprintf(stderr, "%sDBIP2: detected best databases FREE    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d\n"
+			fprintf(stderr, "%sdb-ip.com(MMDB): detected best databases FREE    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d\n"
 				, prefix
 				, dbip2_db_country_v4_best[DBIP2_FREE].num
 				, dbip2_db_country_v4_best[DBIP2_FREE].dbtype
@@ -413,7 +413,7 @@ void libipv6calc_db_wrapper_DBIP2_wrapper_print_db_info(const int level_verbose,
 				, DBIP2_UNPACK_YM(dbip2_db_region_city_v6_best[DBIP2_FREE].dbym)
 			);
 
-			fprintf(stderr, "%sDBIP2: detected best databases COMM    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d\n"
+			fprintf(stderr, "%sdb-ip.com(MMDB): detected best databases COMM    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d\n"
 				, prefix
 				, dbip2_db_country_v4_best[DBIP2_COMM].num
 				, dbip2_db_country_v4_best[DBIP2_COMM].dbtype
@@ -429,7 +429,7 @@ void libipv6calc_db_wrapper_DBIP2_wrapper_print_db_info(const int level_verbose,
 				, DBIP2_UNPACK_YM(dbip2_db_region_city_v6_best[DBIP2_COMM].dbym)
 			);
 		} else if (level_verbose >= LEVEL_VERBOSE) {
-			fprintf(stderr, "%sDBIP2: detected best databases FREE    Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
+			fprintf(stderr, "%sdb-ip.com(MMDB): detected best databases FREE    Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
 				, prefix
 				, dbip2_db_country_v4_best[DBIP2_FREE].num
 				, dbip2_db_country_v6_best[DBIP2_FREE].num
@@ -437,7 +437,7 @@ void libipv6calc_db_wrapper_DBIP2_wrapper_print_db_info(const int level_verbose,
 				, dbip2_db_region_city_v6_best[DBIP2_FREE].num
 			);
 
-			fprintf(stderr, "%sDBIP2: detected best databases COMM    Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
+			fprintf(stderr, "%sdb-ip.com(MMDB): detected best databases COMM    Country4=%-3d  Country6=%-3d  City4=%-3d  City6=%-3d\n"
 				, prefix
 				, dbip2_db_country_v4_best[DBIP2_COMM].num
 				, dbip2_db_country_v6_best[DBIP2_COMM].num
@@ -448,7 +448,7 @@ void libipv6calc_db_wrapper_DBIP2_wrapper_print_db_info(const int level_verbose,
 		};
 
 		if (level_verbose >= LEVEL_VERBOSE) {
-			fprintf(stderr, "%sDBIP2: selected best databases normal  Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d\n"
+			fprintf(stderr, "%sdb-ip.com(MMDB): selected best databases normal  Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d\n"
 				, prefix
 				, dbip2_db_country_v4
 				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
@@ -460,21 +460,21 @@ void libipv6calc_db_wrapper_DBIP2_wrapper_print_db_info(const int level_verbose,
 			);
 
 			if (dbip2_db_comm_to_free_switch_min_delta_months > 0) {
-				fprintf(stderr, "%sDBIP2: selected best databases method: COMM older than %d months are deselected in case of FREE is available\n"
+				fprintf(stderr, "%sdb-ip.com(MMDB): selected best databases method: COMM older than %d months are deselected in case of FREE is available\n"
 					, prefix
 					, dbip2_db_comm_to_free_switch_min_delta_months
 				);
 			};
 
 			if (dbip2_db_better_max_delta_months > 0) {
-				fprintf(stderr, "%sDBIP2: selected best databases method: COMM/FREE with more features are only selected in case not older than %d months of already found COMM/FREE\n"
+				fprintf(stderr, "%sdb-ip.com(MMDB): selected best databases method: COMM/FREE with more features are only selected in case not older than %d months of already found COMM/FREE\n"
 					, prefix
 					, dbip2_db_better_max_delta_months
 				);
 			};
 
 			if (dbip2_db_only_type > 0) {
-				fprintf(stderr, "%sDBIP2: selected best databases method: by applying given DB type filter: %d\n"
+				fprintf(stderr, "%sdb-ip.com(MMDB): selected best databases method: by applying given DB type filter: %d\n"
 					, prefix
 					, dbip2_db_only_type
 				);

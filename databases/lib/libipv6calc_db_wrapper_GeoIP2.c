@@ -409,7 +409,7 @@ void libipv6calc_db_wrapper_GeoIP2_wrapper_print_db_info(const int level_verbose
 
 	IPV6CALC_DB_FEATURE_INFO(prefix, IPV6CALC_DB_SOURCE_GEOIP2)
 
-	fprintf(stderr, "%sGeoIP2: info of available databases in directory: %s\n", prefix, geoip2_db_dir);
+	fprintf(stderr, "%sGeoIP(MMDB): info of available databases in directory: %s\n", prefix, geoip2_db_dir);
 
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_GeoIP2_db_file_desc); i++) {
 		type = libipv6calc_db_wrapper_GeoIP2_db_file_desc[i].number;
@@ -418,25 +418,25 @@ void libipv6calc_db_wrapper_GeoIP2_wrapper_print_db_info(const int level_verbose
 			// GeoIP2 returned that database is available
 			ret = libipv6calc_db_wrapper_GeoIP2_open_type(type);
 			if (ret != MMDB_SUCCESS) {
-				fprintf(stderr, "%sGeoIP2: %-30s: [%1d] %-30s (CAN'T OPEN database information)\n", prefix, libipv6calc_db_wrapper_GeoIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_GeoIP2_dbfilename(type));
+				fprintf(stderr, "%sGeoIP(MMDB): %-30s: [%1d] %-30s (CAN'T OPEN database information)\n", prefix, libipv6calc_db_wrapper_GeoIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_GeoIP2_dbfilename(type));
 			} else {
-				fprintf(stderr, "%sGeoIP2: %-30s: [%1d] %-30s (%s)\n", prefix, libipv6calc_db_wrapper_GeoIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_GeoIP2_db_file_desc[i].filename, libipv6calc_db_wrapper_GeoIP2_database_info(type));
+				fprintf(stderr, "%sGeoIP(MMDB): %-30s: [%1d] %-30s (%s)\n", prefix, libipv6calc_db_wrapper_GeoIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_GeoIP2_db_file_desc[i].filename, libipv6calc_db_wrapper_GeoIP2_database_info(type));
 				libipv6calc_db_wrapper_GeoIP2_close(type);
 				count++;
 			};
 		} else {
 			if (level_verbose == LEVEL_VERBOSE2) {
-				fprintf(stderr, "%sGeoIP2: %-30s: [%1d] %-30s (%s)\n", prefix, libipv6calc_db_wrapper_GeoIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_GeoIP2_dbfilename(type), strerror(errno));
+				fprintf(stderr, "%sGeoIP(MMDB): %-30s: [%1d] %-30s (%s)\n", prefix, libipv6calc_db_wrapper_GeoIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_GeoIP2_dbfilename(type), strerror(errno));
 			};
 			continue;
 		};
 	};
 
 	if (count == 0) {
-		fprintf(stderr, "%sGeoIP2: NO available databases found in directory: %s\n", prefix, geoip2_db_dir);
+		fprintf(stderr, "%sGeoIP(MMDB): NO available databases found in directory: %s\n", prefix, geoip2_db_dir);
 	} else {
 		if (level_verbose >= LEVEL_VERBOSE2) {
-			fprintf(stderr, "%sGeoIP2: detected best databases FREE    Country4=%-2d DB%-2d %6d  Country6=%-2d DB%-2d %6d  City4=%-2d DB%-2d %6d  City6=%-2d DB%-2d %6d  GeonameID4=%-2d DB%-2d %6d  GeonameID6=%-2d DB%-2d %6d\n"
+			fprintf(stderr, "%sGeoIP(MMDB): detected best databases FREE    Country4=%-2d DB%-2d %6d  Country6=%-2d DB%-2d %6d  City4=%-2d DB%-2d %6d  City6=%-2d DB%-2d %6d  GeonameID4=%-2d DB%-2d %6d  GeonameID6=%-2d DB%-2d %6d\n"
 				, prefix
 				, geoip2_db_country_v4_best[GeoIP2_FREE].num
 				, geoip2_db_country_v4_best[GeoIP2_FREE].dbtype
@@ -458,7 +458,7 @@ void libipv6calc_db_wrapper_GeoIP2_wrapper_print_db_info(const int level_verbose
 				, GeoIP2_UNPACK_YM(geoip2_db_geonameid_v6_best[GeoIP2_FREE].dbym)
 			);
 
-			fprintf(stderr, "%sGeoIP2: detected best databases COMM    Country4=%-2d DB%-2d %6d  Country6=%-2d DB%-2d %6d  City4=%-2d DB%-2d %6d  City6=%-2d DB%-2d %6d  GeonameID4=%-2d DB%-2d %6d  GeonameID6=%-2d DB%-2d %6d\n"
+			fprintf(stderr, "%sGeoIP(MMDB): detected best databases COMM    Country4=%-2d DB%-2d %6d  Country6=%-2d DB%-2d %6d  City4=%-2d DB%-2d %6d  City6=%-2d DB%-2d %6d  GeonameID4=%-2d DB%-2d %6d  GeonameID6=%-2d DB%-2d %6d\n"
 				, prefix
 				, geoip2_db_country_v4_best[GeoIP2_COMM].num
 				, geoip2_db_country_v4_best[GeoIP2_COMM].dbtype
@@ -480,7 +480,7 @@ void libipv6calc_db_wrapper_GeoIP2_wrapper_print_db_info(const int level_verbose
 				, GeoIP2_UNPACK_YM(geoip2_db_geonameid_v6_best[GeoIP2_COMM].dbym)
 			);
 		} else if (level_verbose >= LEVEL_VERBOSE) {
-			fprintf(stderr, "%sGeoIP2: detected best databases FREE    Country4=%-2d  Country6=%-2d  City4=%-2d  City6=%-2d  GeonameID4=%-2d  GeonameID6=%-2d\n"
+			fprintf(stderr, "%sGeoIP(MMDB): detected best databases FREE    Country4=%-2d  Country6=%-2d  City4=%-2d  City6=%-2d  GeonameID4=%-2d  GeonameID6=%-2d\n"
 				, prefix
 				, geoip2_db_country_v4_best[GeoIP2_FREE].num
 				, geoip2_db_country_v6_best[GeoIP2_FREE].num
@@ -490,7 +490,7 @@ void libipv6calc_db_wrapper_GeoIP2_wrapper_print_db_info(const int level_verbose
 				, geoip2_db_geonameid_v6_best[GeoIP2_FREE].num
 			);
 
-			fprintf(stderr, "%sGeoIP2: detected best databases COMM    Country4=%-2d  Country6=%-2d  City4=%-2d  City6=%-2d  GeonameID4=%-2d  GeonameID6=%-2d\n"
+			fprintf(stderr, "%sGeoIP(MMDB): detected best databases COMM    Country4=%-2d  Country6=%-2d  City4=%-2d  City6=%-2d  GeonameID4=%-2d  GeonameID6=%-2d\n"
 				, prefix
 				, geoip2_db_country_v4_best[GeoIP2_COMM].num
 				, geoip2_db_country_v6_best[GeoIP2_COMM].num
@@ -503,7 +503,7 @@ void libipv6calc_db_wrapper_GeoIP2_wrapper_print_db_info(const int level_verbose
 		};
 
 		if (level_verbose >= LEVEL_VERBOSE) {
-			fprintf(stderr, "%sGeoIP2: selected best databases normal  Country4=%-2d%s  Country6=%-2d%s  City4=%-2d%s  City6=%-2d%s  GeonameID4=%-2d%s  GeonameID6=%-2d\n"
+			fprintf(stderr, "%sGeoIP(MMDB): selected best databases normal  Country4=%-2d%s  Country6=%-2d%s  City4=%-2d%s  City6=%-2d%s  GeonameID4=%-2d%s  GeonameID6=%-2d\n"
 				, prefix
 				, geoip2_db_country_v4
 				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
@@ -519,21 +519,21 @@ void libipv6calc_db_wrapper_GeoIP2_wrapper_print_db_info(const int level_verbose
 			);
 
 			if (geoip2_db_comm_to_free_switch_min_delta_months > 0) {
-				fprintf(stderr, "%sGeoIP2: selected best databases method: COMM older than %d months are deselected in case of FREE is available\n"
+				fprintf(stderr, "%sGeoIP(MMDB): selected best databases method: COMM older than %d months are deselected in case of FREE is available\n"
 					, prefix
 					, geoip2_db_comm_to_free_switch_min_delta_months
 				);
 			};
 
 			if (geoip2_db_better_max_delta_months > 0) {
-				fprintf(stderr, "%sGeoIP2: selected best databases method: COMM/FREE with more features are only selected in case not older than %d months of already found COMM/FREE\n"
+				fprintf(stderr, "%sGeoIP(MMDB): selected best databases method: COMM/FREE with more features are only selected in case not older than %d months of already found COMM/FREE\n"
 					, prefix
 					, geoip2_db_better_max_delta_months
 				);
 			};
 
 			if (geoip2_db_only_type > 0) {
-				fprintf(stderr, "%sGeoIP2: selected best databases method: by applying given DB type filter: %d\n"
+				fprintf(stderr, "%sGeoIP2(MMDB): selected best databases method: by applying given DB type filter: %d\n"
 					, prefix
 					, geoip2_db_only_type
 				);

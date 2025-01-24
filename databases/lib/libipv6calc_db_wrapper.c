@@ -880,9 +880,9 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		// Call GeoIP2 wrapper
 		libipv6calc_db_wrapper_GeoIP2_wrapper_print_db_info(level_verbose, prefix_string);
 	} else if (wrapper_GeoIP2_disable == 1) {
-		fprintf(stderr, "%sGeoIP(MaxMindDB) support available but disabled by option\n", prefix_string);
+		fprintf(stderr, "%sGeoIP(MMDB) support available but disabled by option\n", prefix_string);
 	} else {
-		fprintf(stderr, "%sGeoIP(MaxMindDB) support available but disabled by MaxMindDB library problem\n", prefix_string);
+		fprintf(stderr, "%sGeoIP(MMDB) support available but disabled by MaxMindDB library problem\n", prefix_string);
 	};
 	fprintf(stderr, "\n");
 #endif
@@ -902,9 +902,9 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		// Call DBIP2 wrapper
 		libipv6calc_db_wrapper_DBIP2_wrapper_print_db_info(level_verbose, prefix_string);
 	} else if (wrapper_DBIP2_disable == 1) {
-		fprintf(stderr, "%sdb-ip.com(MaxMindDB) support available but disabled by option\n", prefix_string);
+		fprintf(stderr, "%sdb-ip.com(MMDB) support available but disabled by option\n", prefix_string);
 	} else {
-		fprintf(stderr, "%sdb-ip.com(MaxMindDB) support available but disabled by MaxMindDB library problem\n", prefix_string);
+		fprintf(stderr, "%sdb-ip.com(MMDB) support available but disabled by MaxMindDB library problem\n", prefix_string);
 	};
 	fprintf(stderr, "\n");
 #endif
@@ -914,9 +914,9 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		// Call IP2LOCATION2 wrapper
 		libipv6calc_db_wrapper_IP2Location2_wrapper_print_db_info(level_verbose, prefix_string);
 	} else if (wrapper_IP2Location2_disable == 1) {
-		fprintf(stderr, "%sIP2Location(MaxMindDB) support available but disabled by option\n", prefix_string);
+		fprintf(stderr, "%sIP2Location(MMDB) support available but disabled by option\n", prefix_string);
 	} else {
-		fprintf(stderr, "%sIP2Location(MaxMindDB) support available but disabled by MaxMindDB library problem\n", prefix_string);
+		fprintf(stderr, "%sIP2Location(MMDB) support available but disabled by MaxMindDB library problem\n", prefix_string);
 	};
 	fprintf(stderr, "\n");
 #endif
@@ -927,7 +927,7 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 		// Call External wrapper
 		libipv6calc_db_wrapper_External_wrapper_print_db_info(level_verbose, prefix_string);
 	} else {
-		fprintf(stderr, "%sExternal support available but disabled by option\n", prefix_string);
+		fprintf(stderr, "%sExternal(BDB) support available but disabled by option\n", prefix_string);
 	};
 	fprintf(stderr, "\n");
 #endif
