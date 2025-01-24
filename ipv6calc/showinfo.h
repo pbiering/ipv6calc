@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : showinfo.h
- * Copyright  : 2001-2024 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2025 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for showinfo.c
@@ -97,8 +97,10 @@
 // (no change)
 // 22: 4.2.0 to current
 //      + AS_ORGNAME
+// 23: 4.3.0 to current
+//      + IP2LOCATION2_* (equal to IP2LOCATION_*)
 
-#define IPV6CALC_OUTPUT_VERSION	22
+#define IPV6CALC_OUTPUT_VERSION	23
 
 /* prototypes */
 extern int  showinfo_ipv6addr(const ipv6calc_ipv6addr *ipv6addrp, const uint32_t formatoptions);
