@@ -22,6 +22,7 @@
 #include "libipv6calc_db_wrapper.h"
 #include "libipv6calc_db_wrapper_GeoIP2.h"
 #include "libipv6calc_db_wrapper_IP2Location.h"
+#include "libipv6calc_db_wrapper_IP2Location2.h"
 #include "libipv6calc_db_wrapper_DBIP2.h"
 #include "libipv6calc_db_wrapper_MMDB.h"
 #include "libipv6calc_db_wrapper_BuiltIn.h"
@@ -308,19 +309,33 @@ void printhelp_common(const uint32_t help_features) {
 	if ((help_features & IPV6CALC_HELP_IP2LOCATION) != 0) {
 #ifdef SUPPORT_IP2LOCATION
 		fprintf(stderr, "\n");
-		fprintf(stderr, "  [--disable-ip2location           ] : IP2Location support disabled\n");
-		fprintf(stderr, "  [--db-ip2location-disable        ] : IP2Location support disabled\n");
-		fprintf(stderr, "  [--db-ip2location-dir <directory>] : IP2Location database directory (default: %s)\n", ip2location_db_dir);
+		fprintf(stderr, "  [--disable-ip2location           ] : IP2Location(BIN) support disabled\n");
+		fprintf(stderr, "  [--db-ip2location-disable        ] : IP2Location(BIN) support disabled\n");
+		fprintf(stderr, "  [--db-ip2location-dir <directory>] : IP2Location(BIN) database directory (default: %s)\n", ip2location_db_dir);
 #ifdef SUPPORT_IP2LOCATION_DYN
-		fprintf(stderr, "  [--db-ip2location-lib <file>     ] : IP2Location library file (default: %s)\n", ip2location_lib_file);
+		fprintf(stderr, "  [--db-ip2location-lib <file>     ] : IP2Location(BIN) library file (default: %s)\n", ip2location_lib_file);
 #endif
-		fprintf(stderr, "  [--db-ip2location-only-type <TYPE>]: IP2Location database only selected type (1-%d)\n", IP2LOCATION_DB_MAX);
-		fprintf(stderr, "  [--db-ip2location-allow-softlinks] : IP2Location database softlinks allowed\n");
+		fprintf(stderr, "  [--db-ip2location-only-type <TYPE>]: IP2Location(BIN) database only selected type (1-%d)\n", IP2LOCATION_DB_MAX);
+		fprintf(stderr, "  [--db-ip2location-allow-softlinks] : IP2Location(BIN) database softlinks allowed\n");
 		fprintf(stderr, "     by default they are ignored because it is hard to autodetect COMM/LITE/SAMPLE\n");
 		fprintf(stderr, "  [--db-ip2location-lite-to-sample-autoswitch-max-delta-months <MONTHS>]:\n");
 		fprintf(stderr, "     autoswitch from LITE to SAMPLE databases if possible and delta is not more than %d months (0=disabled)\n", ip2location_db_lite_to_sample_autoswitch_max_delta_months);
 		fprintf(stderr, "  [--db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>]:\n");
 		fprintf(stderr, "     switch from COMM to LITE databases if possible and delta more than %d months (0=disabled)\n", ip2location_db_comm_to_lite_switch_min_delta_months);
+#endif
+
+#ifdef SUPPORT_IP2LOCATION2
+		fprintf(stderr, "\n");
+		fprintf(stderr, "  [--disable-ip2location2           ] : IP2Location(MMDB) support disabled\n");
+		fprintf(stderr, "  [--db-ip2location2-disable        ] : IP2Location(MMDB) support disabled\n");
+		fprintf(stderr, "  [--db-ip2location2-dir <directory>] : IP2Location(MMDB) database directory (default: %s)\n", ip2location2_db_dir);
+		fprintf(stderr, "  [--db-ip2location2-only-type <TYPE>]: IP2Location(MMDB) database only selected type (1-%d)\n", IP2LOCATION_DB_MAX);
+		fprintf(stderr, "  [--db-ip2location2-allow-softlinks] : IP2Location(MMDB) database softlinks allowed\n");
+		fprintf(stderr, "     by default they are ignored because it is hard to autodetect COMM/LITE/SAMPLE\n");
+		fprintf(stderr, "  [--db-ip2location2-lite-to-sample-autoswitch-max-delta-months <MONTHS>]:\n");
+		fprintf(stderr, "     autoswitch from LITE to SAMPLE databases if possible and delta is not more than %d months (0=disabled)\n", ip2location2_db_lite_to_sample_autoswitch_max_delta_months);
+		fprintf(stderr, "  [--db-ip2location-comm-to-lite-switch-min-delta-months <MONTHS>]:\n");
+		fprintf(stderr, "     switch from COMM to LITE databases if possible and delta more than %d months (0=disabled)\n", ip2location2_db_comm_to_lite_switch_min_delta_months);
 #endif
 	};
 

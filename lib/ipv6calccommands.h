@@ -59,7 +59,7 @@
 #define DB_EOS_ip2location_ipv6_default	0x0020040
 
 // EOS since 3.0.0
-#define DB_EOS_geoip_disable		0x0021000
+#define DB_EOS_geoip_disable			0x0021000
 #define DB_EOS_geoip_ipv4			0x0021010
 #define DB_EOS_geoip_ipv6			0x0021020
 #define DB_EOS_geoip_ipv4_default		0x0021030
@@ -76,11 +76,12 @@
 #define DB_ip2location_only_type					0x0020120
 #define DB_ip2location_allow_softlinks					0x0020130
 
-#define DB_ip2location2_disable						0x0021000
-#define DB_ip2location2_lite_to_sample_autoswitch_max_delta_months	0x0021100
-#define DB_ip2location2_comm_to_lite_switch_min_delta_months		0x0021110
-#define DB_ip2location2_only_type					0x0021120
-#define DB_ip2location2_allow_softlinks					0x0021130
+#define DB_ip2location2_disable						0x0028000
+#define DB_ip2location2_dir						0x0028050
+#define DB_ip2location2_lite_to_sample_autoswitch_max_delta_months	0x0028100
+#define DB_ip2location2_comm_to_lite_switch_min_delta_months		0x0028110
+#define DB_ip2location2_only_type					0x0028120
+#define DB_ip2location2_allow_softlinks					0x0028130
 
 // EOS since 3.0.0
 #define DB_EOS_dbip_disable						0x0022000

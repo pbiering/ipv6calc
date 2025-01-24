@@ -150,9 +150,14 @@ void ipv6calc_options_add_common_basic(char *shortopts_p, const int shortopts_ma
 	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_mmdb, ipv6calc_longopts_mmdb, MAXENTRIES_ARRAY(ipv6calc_longopts_mmdb));
 #endif
 
-#if defined SUPPORT_IP2LOCATION || SUPPORT_IP2LOCATION2
+#if defined SUPPORT_IP2LOCATION
 	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "SUPPORT_IP2LOCATION");
 	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_ip2location, ipv6calc_longopts_ip2location, MAXENTRIES_ARRAY(ipv6calc_longopts_ip2location));
+#endif
+
+#if defined SUPPORT_IP2LOCATION2
+	DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "SUPPORT_IP2LOCATION2");
+	ipv6calc_options_add(shortopts_p, shortopts_maxlen, longopts, maxentries_p, ipv6calc_shortopts_ip2location2, ipv6calc_longopts_ip2location2, MAXENTRIES_ARRAY(ipv6calc_longopts_ip2location2));
 #endif
 
 #ifdef SUPPORT_GEOIP2
