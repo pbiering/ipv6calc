@@ -200,10 +200,6 @@
 #define IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_4 0x00000010
 #define IPV6CALC_DB_IP2LOCATION_INTERNAL_LIB_VERSION_8_6 0x00000020
 
-
-// features
-extern uint32_t wrapper_features_IP2Location;
-
 #endif
 
 
