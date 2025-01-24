@@ -96,6 +96,7 @@ extern uint32_t wrapper_features_by_source_implemented[];
 #define IPV6CALC_DB_IP_TO_REGION		(IPV6CALC_DB_IPV4_TO_REGION    | IPV6CALC_DB_IPV6_TO_REGION   )
 #define IPV6CALC_DB_IP_TO_GEONAMEID		(IPV6CALC_DB_IPV4_TO_GEONAMEID | IPV6CALC_DB_IPV6_TO_GEONAMEID)
 
+//                                              0xXXUBBBBB 20 bit are blocked by above
 // define database specific generic features
 #define IPV6CALC_DB_GEOIP_IPV4			0x01000000
 #define IPV6CALC_DB_GEOIP_IPV6			0x02000000
@@ -111,12 +112,12 @@ extern uint32_t wrapper_features_by_source_implemented[];
 #define IPV6CALC_DB_EXTERNAL_IPV4		0x40000000
 #define IPV6CALC_DB_EXTERNAL_IPV6		0x80000000
 
-#define IPV6CALC_DB_IP2LOCATION2_IPV4		0x100000000
-#define IPV6CALC_DB_IP2LOCATION2_IPV6		0x200000000
+#define IPV6CALC_DB_IP2LOCATION2_IPV4		0x00400000
+#define IPV6CALC_DB_IP2LOCATION2_IPV6		0x00800000
 
 static const s_formatoption ipv6calc_db_features[] = {
-	{ IPV6CALC_DB_GEOIP_IPV4	, "GeoIP"		, "GeoIPv4 database"},
-	{ IPV6CALC_DB_GEOIP_IPV6	, "GeoIPv6"		, "GeoIPv6 database"},
+	{ IPV6CALC_DB_GEOIP_IPV4	, "GeoIP"		, "GeoIP(MMDB) IPv4 database"},
+	{ IPV6CALC_DB_GEOIP_IPV6	, "GeoIPv6"		, "GeoIP(MMDB) IPv6 database"},
 	{ IPV6CALC_DB_IP2LOCATION_IPV4	, "IP2Location"		, "IP2Location(BIN) IPv4 database"},
 	{ IPV6CALC_DB_IP2LOCATION_IPV6	, "IP2Location6"	, "IP2Location(BIN) IPv6 database"},
 	{ IPV6CALC_DB_IP2LOCATION2_IPV4	, "IP2Location2v4"	, "IP2Location(MMDB) IPv4 database"},
