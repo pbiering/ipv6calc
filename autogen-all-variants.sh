@@ -33,22 +33,41 @@ autogen_variants() {
 
 	if [ -e /etc/os-release ]; then
 		source /etc/os-release
-		if [ -n "$VERSION_ID" -a "$ID_LIKE" = "rhel centos fedora" ]; then
-			if [ ${VERSION_ID/.*} -ge 9 ]; then
-				# skip 32-bit builds on Enterprise Linux 9+
-				return
+	fi
+
+	skip32=""
+	el=""
+	if [ -n "$VERSION_ID" ]; then
+		if [ -n "$ID_LIKE" ]; then
+			if [[ $ID_LIKE =~ (rhel|centos) ]]; then
+				el=1
+				if [ ${VERSION_ID/.*} -ge 9 ]; then
+					# skip 32-bit builds on Enterprise Linux 9+
+					skip32=1
+				fi
+			fi
+		fi
+		if [ -n "$ID" ]; then
+			if [[ $ID =~ (rhel|centos|almalinux) ]]; then
+				el=1
+				if [ ${VERSION_ID/.*} -ge 9 ]; then
+					# skip 32-bit builds on Enterprise Linux 9+
+					skip32=1
+				fi
 			fi
 		fi
 	fi
 
+	if [ "$skip32" = 1 ]; then
+		return
+	fi
+
 	# 32-bit builds
 	autogen_variants_list  | while IFS="#" read token options testlist; do
-		if [ -e /etc/redhat-release ]; then
-			if grep -E -q "(CentOS|Red Hat|Alma|Rocky)" /etc/redhat-release; then
-				if [[ $token =~ IP2LOCATION ]]; then
-					# skip 32-bit builds on Enterprise Linux as IP2Location devel is not built for i686 on EPEL
-					continue
-				fi
+		if [ "$el" = 1 ]; then
+			if [[ $token =~ IP2LOCATION ]]; then
+				# skip 32-bit builds on Enterprise Linux as IP2Location devel is not built for i686 on EPEL
+				continue
 			fi
 		fi
 
@@ -62,12 +81,10 @@ autogen_variants() {
 			options_extra=" --disable-mod_ipv6calc"
 		fi
 
-		if [ -e /etc/redhat-release ]; then
-			if grep -E -q "(CentOS|Red Hat|Alma|Rocky)" /etc/redhat-release; then
-				if [[ $token =~ IP2LOCATION ]]; then
-					# skip 32-bit builds on Enterprise Linux as IP2Location devel is not built for i686 on EPEL
-					continue
-				fi
+		if [ "$el" = 1 ]; then
+			if [[ $token =~ IP2LOCATION ]]; then
+				# skip 32-bit builds on Enterprise Linux as IP2Location devel is not built for i686 on EPEL
+				continue
 			fi
 		fi
 
