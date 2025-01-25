@@ -77,6 +77,26 @@
 //  case 1: src can be added to dst completly
 //  case 2: src is too long to be added to dst, add only what is available but leave space for ...
 //  case 3: dst is already exhausted, override end with ...
+//  gcc 8.5 generates a false alarm because not proper analyzing the calculations
+#if __GNUC__ == 8 && __GNUC_MINOR__ == 5
+
+#define STRCAT(dst, src) \
+	_Pragma("GCC diagnostic push") \
+	_Pragma("GCC diagnostic warning \"-Wstringop-overflow=0\"") \
+        if (sizeof(dst) > strlen(src) + strlen(dst)) { \
+                strncat(dst, src, ((sizeof(dst) - strlen(dst) - 1) > 0) ? (sizeof(dst) - strlen(dst) - 1) : 0); \
+        } else { \
+                if (sizeof(dst) > strlen(dst) + strlen("...")) { \
+                        strncat(dst, src, ((sizeof(dst) - strlen(dst) - strlen("...") - 1) > 0) ? (sizeof(dst) - strlen(dst) - strlen("...") - 1) : 0); \
+                        strcat(dst, "..."); \
+                } else if (strlen(dst) > strlen("...")) { \
+			dst[strlen(dst) - strlen("...")] = '\0'; \
+                        strcat(dst, "..."); \
+                }; \
+        }; \
+	_Pragma("GCC diagnostic pop")
+#else
+
 #define STRCAT(dst, src) \
         if (sizeof(dst) > strlen(src) + strlen(dst)) { \
                 strncat(dst, src, ((sizeof(dst) - strlen(dst) - 1) > 0) ? (sizeof(dst) - strlen(dst) - 1) : 0); \
@@ -89,6 +109,8 @@
                         strcat(dst, "..."); \
                 }; \
         };
+
+#endif
 
 #endif // _libipv6calc_h
 
