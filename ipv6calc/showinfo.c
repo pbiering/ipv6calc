@@ -305,7 +305,7 @@ static void printfooter(const uint32_t formatoptions) {
 		printout(showinfo_machine_readable_filter, "", formatoptions);
 	};
 
-#if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2
+#if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2 || SUPPORT_IP2LOCATION2
 	char *string;
 #endif
 
@@ -315,7 +315,18 @@ static void printfooter(const uint32_t formatoptions) {
 		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
 			printout("IP2LOCATION_DATABASE_INFO", string, formatoptions);
 		} else {
-			fprintf(stdout, "IP2Location database: %s\n", string);
+			fprintf(stdout, "IP2Location(BIN) database: %s\n", string);
+		};
+	};
+#endif
+
+#ifdef SUPPORT_IP2LOCATION2
+	string = libipv6calc_db_wrapper_IP2Location2_wrapper_db_info_used();
+	if ((string != NULL) && (strlen(string) > 0)) {
+		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
+			printout("IP2LOCATION2_DATABASE_INFO", string, formatoptions);
+		} else {
+			fprintf(stdout, "IP2Location(MMDB) database: %s\n", string);
 		};
 	};
 #endif
@@ -326,7 +337,7 @@ static void printfooter(const uint32_t formatoptions) {
 		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
 			printout("GEOIP2_DATABASE_INFO", string, formatoptions);
 		} else {
-			fprintf(stdout, "GeoIP database:(MaxMindDB) %s\n", string);
+			fprintf(stdout, "GeoIP(MMDB) database: %s\n", string);
 		};
 	};
 #endif
@@ -337,7 +348,7 @@ static void printfooter(const uint32_t formatoptions) {
 		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
 			printout("DBIP2_DATABASE_INFO", string, formatoptions);
 		} else {
-			fprintf(stdout, "DB-IP.com (MaxMindDB) database: %s\n", string);
+			fprintf(stdout, "DB-IP.com(MMDB) database: %s\n", string);
 		};
 	};
 #endif
@@ -348,7 +359,7 @@ static void printfooter(const uint32_t formatoptions) {
 		if ( (formatoptions & FORMATOPTION_machinereadable) != 0 ) {
 			printout("EXTERNAL_DATABASE_INFO", string, formatoptions);
 		} else {
-			fprintf(stdout, "External database: %s\n", string);
+			fprintf(stdout, "External(MMDB) database: %s\n", string);
 		};
 	};
 #endif
@@ -550,7 +561,7 @@ static void print_geoip2(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatop
 	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
 
 	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP2] == 0) {
-		DEBUGPRINT_NA(DEBUG_showinfo, "GeoIP (MaxMindDB) support not active");
+		DEBUGPRINT_NA(DEBUG_showinfo, "GeoIP(MMDB) support not active");
 		return;
 	};
 
@@ -562,7 +573,7 @@ static void print_geoip2(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatop
 	ret = libipv6calc_db_wrapper_GeoIP2_all_by_addr(ipaddrp, &record);
 
 	if (ret == 0) {
-		print_geolocation(&record, formatoptions, additionalstring, "GEOIP2", "GeoIP (MaxMindDB)");
+		print_geolocation(&record, formatoptions, additionalstring, "GEOIP2", "GeoIP(MMDB)");
 	};
 };
 #endif
@@ -573,7 +584,7 @@ static void print_dbip2(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatopt
 	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
 
 	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP2] == 0) {
-		DEBUGPRINT_NA(DEBUG_showinfo, "DBIP2 support not active");
+		DEBUGPRINT_NA(DEBUG_showinfo, "DBIP(MMDB) support not active");
 		return;
 	};
 
@@ -585,7 +596,7 @@ static void print_dbip2(const ipv6calc_ipaddr *ipaddrp, const uint32_t formatopt
 	ret = libipv6calc_db_wrapper_DBIP2_all_by_addr(ipaddrp, &record);
 
 	if (ret == 0) {
-		print_geolocation(&record, formatoptions, additionalstring, "DBIP2", "DB-IP.com (MaxMindDB)");
+		print_geolocation(&record, formatoptions, additionalstring, "DBIP2", "DB-IP.com(MMDB)");
 	};
 };
 #endif
@@ -596,7 +607,7 @@ static void print_external(const ipv6calc_ipaddr *ipaddrp, const uint32_t format
 	DEBUGPRINT_NA(DEBUG_showinfo, "Called");
 
 	if (wrapper_features_by_source[IPV6CALC_DB_SOURCE_EXTERNAL] == 0) {
-		DEBUGPRINT_NA(DEBUG_showinfo, "External DB support not active");
+		DEBUGPRINT_NA(DEBUG_showinfo, "External(BDB) support not active");
 		return;
 	};
 
@@ -614,9 +625,9 @@ static void print_external(const ipv6calc_ipaddr *ipaddrp, const uint32_t format
 			printout2("EXTERNAL_COUNTRY_SHORT", additionalstring, returnedCountry, formatoptions);
 		} else {
 			if (strlen(additionalstring) > 0) {
-				fprintf(stdout, "External DB country code for %s: %s\n", additionalstring, returnedCountry);
+				fprintf(stdout, "External(BDB) country code for %s: %s\n", additionalstring, returnedCountry);
 			} else {
-				fprintf(stdout, "External DB country code: %s\n", returnedCountry);
+				fprintf(stdout, "External(BDB) country code: %s\n", returnedCountry);
 			};
 		};
 	};
