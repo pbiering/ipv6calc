@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
-# Copyright  : 2015-2024 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2015-2025 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 
@@ -152,10 +152,11 @@ END
 	fi
 
 	## disable databases by option
-	[ "$disable_geoip2" = "1" ]      && perl -pi -e 's/#(ipv6calcOption\s+db-geoip2-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
-	[ "$disable_ip2location" = "1" ] && perl -pi -e 's/#(ipv6calcOption\s+db-ip2location-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
-	[ "$disable_dbip2" = "1" ]       && perl -pi -e 's/#(ipv6calcOption\s+db-dbip2-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
-	[ "$disable_external" = "1" ]    && perl -pi -e 's/#(ipv6calcOption\s+db-external-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
+	[ "$disable_geoip2" = "1" ]       && perl -pi -e 's/#(ipv6calcOption\s+db-geoip2-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
+	[ "$disable_ip2location" = "1" ]  && perl -pi -e 's/#(ipv6calcOption\s+db-ip2location-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
+	[ "$disable_ip2location2" = "1" ] && perl -pi -e 's/#(ipv6calcOption\s+db-ip2location2-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
+	[ "$disable_dbip2" = "1" ]        && perl -pi -e 's/#(ipv6calcOption\s+db-dbip2-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
+	[ "$disable_external" = "1" ]     && perl -pi -e 's/#(ipv6calcOption\s+db-external-disable\s+yes)$/$1/g' $dir_base/conf.d/ipv6calc.conf
 
 	[ "$action_asn" = "0" ]    && perl -pi -e 's/(ipv6calcActionAsn\s+).*$/$1 off/g'         $dir_base/conf.d/ipv6calc.conf
 	[ "$action_cc" = "0" ]     && perl -pi -e 's/(ipv6calcActionCountrycode\s+).*$/$1 off/g' $dir_base/conf.d/ipv6calc.conf
@@ -371,11 +372,10 @@ $(basename "$0") [<options>] [-S|-K|-W]
 	-f	list open files after start
 	-c	show effective module config options
 
-	-g	disable GeoIP
-	-G	disable GeoIP(MaxMindDB)
-	-i	disable IP2Location
-	-d	disable db-ip.com
-	-D	disable db-ip.com(MaxMindDB)
+	-G	disable GeoIP(MMDB)
+	-i	disable IP2Location(BIN)
+	-M	disable IP2Location(MMDB)
+	-D	disable db-ip.com(MMDB)
 	-e	disable external databases
 
 	-A	disable action ASN
@@ -398,7 +398,7 @@ END
 }
 
 #### Options
-while getopts "EPIDGrACRNca:fSKWb:mlgides:p:h\?" opt; do
+while getopts "MEPIDGrACRNca:fSKWb:mlgides:p:h\?" opt; do
 	case $opt in
 	    b)
 		if [ -d "$OPTARG" ]; then
@@ -427,6 +427,9 @@ while getopts "EPIDGrACRNca:fSKWb:mlgides:p:h\?" opt; do
 		;;
 	    i)
 		disable_ip2location=1
+		;;
+	    M)
+		disable_ip2location2=1
 		;;
 	    d)
 		echo "NOTICE: support removed for db-ip.com(BerkeleyDB): $opt"
