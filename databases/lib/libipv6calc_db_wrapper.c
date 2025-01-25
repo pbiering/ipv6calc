@@ -1074,6 +1074,13 @@ int libipv6calc_db_wrapper_options(const int opt, const char *optarg, const stru
 			result = 0;
 			break;
 
+		case DB_ip2location2_disable:
+#ifdef SUPPORT_IP2LOCATION2
+			wrapper_IP2Location2_disable = 1;
+#endif
+			result = 0;
+			break;
+
 		case DB_geoip2_disable:
 #ifdef SUPPORT_GEOIP2
 			wrapper_GeoIP2_disable = 1;
