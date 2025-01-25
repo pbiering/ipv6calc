@@ -8,7 +8,7 @@
 
 if file .libs/mod_ipv6calc.so | grep -q -w 32-bit; then
 	# module compiled for 32-bit
-	if file /usr/sbin/httpd | grep -q -w 64-bit; then
+	if file -L /usr/sbin/httpd | grep -q -w 64-bit; then
 		# httpd is 64-bit
 		echo "NOTICE: can't execute test as module was compiled for 32-bit but server is 64-bit"
 		exit 0
