@@ -115,11 +115,11 @@ int    longopts_maxentries = 0;
 static const char *set_ipv6calc_enable(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_default_active(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_no_fallback(cmd_parms *cmd, void *dummy, int arg);
-static const char *set_ipv6calc_source_env_name(cmd_parms *cmd, void *dummy, const char *value, int arg);
+static const char *set_ipv6calc_source_env_name(cmd_parms *cmd, void *dummy, const char *value);
 static const char *set_ipv6calc_cache(cmd_parms *cmd, void *dummy, int arg);
-static const char *set_ipv6calc_cache_limit(cmd_parms *cmd, void *dummy, const char *value, int arg);
-static const char *set_ipv6calc_cache_statistics_interval(cmd_parms *cmd, void *dummy, const char *value, int arg);
-static const char *set_ipv6calc_debuglevel(cmd_parms *cmd, void *dummy, const char *value, int arg);
+static const char *set_ipv6calc_cache_limit(cmd_parms *cmd, void *dummy, const char *value);
+static const char *set_ipv6calc_cache_statistics_interval(cmd_parms *cmd, void *dummy, const char *value);
+static const char *set_ipv6calc_debuglevel(cmd_parms *cmd, void *dummy, const char *value);
 
 static const char *set_ipv6calc_action_anonymize(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_action_countrycode(cmd_parms *cmd, void *dummy, int arg);
@@ -127,7 +127,7 @@ static const char *set_ipv6calc_action_asn(cmd_parms *cmd, void *dummy, int arg)
 static const char *set_ipv6calc_action_registry(cmd_parms *cmd, void *dummy, int arg);
 static const char *set_ipv6calc_action_geonameid(cmd_parms *cmd, void *dummy, int arg);
 
-static const char *set_ipv6calc_option(cmd_parms *cmd, void *dummy, const char *name, const char *value, int arg);
+static const char *set_ipv6calc_option(cmd_parms *cmd, void *dummy, const char *name, const char *value);
 
 
 /***************************
@@ -217,17 +217,17 @@ static const command_rec ipv6calc_cmds[] = {
 	AP_INIT_FLAG("ipv6calcEnable", set_ipv6calc_enable, NULL, OR_FILEINFO, "Turn on mod_ipv6calc"),
 	AP_INIT_FLAG("ipv6calcDefaultActive", set_ipv6calc_default_active, NULL, OR_FILEINFO, "mod_ipv6calc active by default (on/off can be controlled by environment)"),
 	AP_INIT_FLAG("ipv6calcNoFallback", set_ipv6calc_no_fallback, NULL, OR_FILEINFO, "Do not fallback in case of issues with mod_ipv6calc"),
-	AP_INIT_TAKE1("ipv6calcSourceEnvName",  (const char *(*)()) set_ipv6calc_source_env_name, NULL, OR_FILEINFO, "mod_ipv6calc source of IP address environment name: <NAME_ENV>"),
+	AP_INIT_TAKE1("ipv6calcSourceEnvName", set_ipv6calc_source_env_name, NULL, OR_FILEINFO, "mod_ipv6calc source of IP address environment name: <NAME_ENV>"),
 	AP_INIT_FLAG("ipv6calcCache", set_ipv6calc_cache, NULL, OR_FILEINFO, "Turn off mod_ipv6calc cache"),
-	AP_INIT_TAKE1("ipv6calcCacheLimit",  (const char *(*)()) set_ipv6calc_cache_limit, NULL, OR_FILEINFO, "mod_ipv6calc cache limit: <value>"),
-	AP_INIT_TAKE1("ipv6calcCacheStatisticsInterval",  (const char *(*)()) set_ipv6calc_cache_statistics_interval, NULL, OR_FILEINFO, "mod_ipv6calc cache statistics interval: <value> (0=disabled)"),
-	AP_INIT_TAKE1("ipv6calcDebuglevel",  (const char *(*)()) set_ipv6calc_debuglevel, NULL, OR_FILEINFO, "Debug level of module (binary or'ed): <value>"),
+	AP_INIT_TAKE1("ipv6calcCacheLimit", set_ipv6calc_cache_limit, NULL, OR_FILEINFO, "mod_ipv6calc cache limit: <value>"),
+	AP_INIT_TAKE1("ipv6calcCacheStatisticsInterval", set_ipv6calc_cache_statistics_interval, NULL, OR_FILEINFO, "mod_ipv6calc cache statistics interval: <value> (0=disabled)"),
+	AP_INIT_TAKE1("ipv6calcDebuglevel", set_ipv6calc_debuglevel, NULL, OR_FILEINFO, "Debug level of module (binary or'ed): <value>"),
 	AP_INIT_FLAG("ipv6calcActionAnonymize", set_ipv6calc_action_anonymize, NULL, OR_FILEINFO, "Store anonymized IP address in IPV6CALC_CLIENT_IP_ANON"),
 	AP_INIT_FLAG("ipv6calcActionCountrycode", set_ipv6calc_action_countrycode, NULL, OR_FILEINFO, "Store Country Code of IP address in IPV6CALC_CLIENT_COUNTRYCODE"),
 	AP_INIT_FLAG("ipv6calcActionAsn", set_ipv6calc_action_asn, NULL, OR_FILEINFO, "Store ASN of IP address in IPV6CALC_CLIENT_ASN"),
 	AP_INIT_FLAG("ipv6calcActionRegistry", set_ipv6calc_action_registry, NULL, OR_FILEINFO, "Store Registry of IP address in IPV6CALC_CLIENT_REGISTRY"),
 	AP_INIT_FLAG("ipv6calcActionGeonameid", set_ipv6calc_action_geonameid, NULL, OR_FILEINFO, "Store GeonameID of IP address in IPV6CALC_CLIENT_GEONAMEID"),
-	AP_INIT_TAKE2("ipv6calcOption",  (const char *(*)()) set_ipv6calc_option, NULL, OR_FILEINFO, "Define ipv6calc option: <key> <value>"),
+	AP_INIT_TAKE2("ipv6calcOption", set_ipv6calc_option, NULL, OR_FILEINFO, "Define ipv6calc option: <key> <value>"),
 	{NULL} 
 };
 
@@ -1334,9 +1334,8 @@ static const char *set_ipv6calc_no_fallback(cmd_parms *cmd, void *dummy, int arg
 /*
  * set_ipv6calc_source_env_name
  */
-static const char *set_ipv6calc_source_env_name(cmd_parms *cmd, void *dummy, const char *value, int arg) {
+static const char *set_ipv6calc_source_env_name(cmd_parms *cmd, void *dummy, const char *value) {
 	UNUSED(dummy);
-	UNUSED(arg);
 
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 
@@ -1382,9 +1381,8 @@ static const char *set_ipv6calc_cache(cmd_parms *cmd, void *dummy, int arg) {
 /*
  * set_ipv6calc_cache_limit
  */
-static const char *set_ipv6calc_cache_limit(cmd_parms *cmd, void *dummy, const char *value, int arg) {
+static const char *set_ipv6calc_cache_limit(cmd_parms *cmd, void *dummy, const char *value) {
 	UNUSED(dummy);
-	UNUSED(arg);
 
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 
@@ -1426,9 +1424,8 @@ static const char *set_ipv6calc_cache_limit(cmd_parms *cmd, void *dummy, const c
 /*
  * set_ipv6calc_cache_statistics_interval
  */
-static const char *set_ipv6calc_cache_statistics_interval(cmd_parms *cmd, void *dummy, const char *value, int arg) {
+static const char *set_ipv6calc_cache_statistics_interval(cmd_parms *cmd, void *dummy, const char *value) {
 	UNUSED(dummy);
-	UNUSED(arg);
 
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 
@@ -1459,9 +1456,8 @@ static const char *set_ipv6calc_cache_statistics_interval(cmd_parms *cmd, void *
 /*
  * set_ipv6calc_debuglevel
  */
-static const char *set_ipv6calc_debuglevel(cmd_parms *cmd, void *dummy, const char *value, int arg) {
+static const char *set_ipv6calc_debuglevel(cmd_parms *cmd, void *dummy, const char *value) {
 	UNUSED(dummy);
-	UNUSED(arg);
 
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 
@@ -1586,9 +1582,8 @@ static const char *set_ipv6calc_action_anonymize(cmd_parms *cmd, void *dummy, in
 /*
  * set_ipv6calc_option
  */
-static const char *set_ipv6calc_option(cmd_parms *cmd, void *dummy, const char *name, const char *value, int arg) {
+static const char *set_ipv6calc_option(cmd_parms *cmd, void *dummy, const char *name, const char *value) {
 	UNUSED(dummy);
-	UNUSED(arg);
 
 	ipv6calc_server_config *config = (ipv6calc_server_config*) ap_get_module_config(cmd->server->module_config, &ipv6calc_module);
 
