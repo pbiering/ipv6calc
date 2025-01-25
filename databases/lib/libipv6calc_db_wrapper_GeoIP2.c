@@ -1105,7 +1105,11 @@ int libipv6calc_db_wrapper_GeoIP2_all_by_addr(const ipv6calc_ipaddr *ipaddrp, li
 		// copy information
 		recordp->asn = record_asn.asn;
                 snprintf(recordp->organization_name, IPV6CALC_DB_SIZE_ORG_NAME, "%s", record_asn.organization_name);
+
+		GeoIP2_DB_USAGE_MAP_TAG(GEOIP2_type_asn);
 	};
+
+	GeoIP2_DB_USAGE_MAP_TAG(GEOIP2_type);
 
 END_libipv6calc_db_wrapper:
 	return(result);
