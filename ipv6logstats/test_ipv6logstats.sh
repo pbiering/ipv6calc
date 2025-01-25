@@ -94,7 +94,7 @@ testscenarios_match() {
 # NAT64
 64:ff9b::0808:0808				CC-proto-code/IPv4/US
 64:ff9b::0808:0808				AS-num-proto/15169/IPv4
-64:ff9b::0808:0808				IPv6/NAT64/RIPE
+64:ff9b::0808:0808				IPv6/NAT64/ARIN
 # NAT64 (anonmyized)
 64:ff9b::f618:3b41				CC-proto-code/IPv4/AU
 64:ff9b::f618:3b41				AS-num-proto/15169/IPv4
