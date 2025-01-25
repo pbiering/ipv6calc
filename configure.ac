@@ -436,9 +436,13 @@ AC_ARG_ENABLE(
 	[
 		if test "$enable_libmd_md5" = "yes"; then
 			AC_MSG_RESULT([*** use of libmd MD5 implementation forced])
-			ENABLE_LIBMD_MD5=1
-			ENABLE_OPENSSL_MD5=0
-			ENABLE_OPENSSL_EVP_MD5=0
+			if test "$HAVE_LIBMD_MD5" = "1"; then
+				ENABLE_LIBMD_MD5=1
+				ENABLE_OPENSSL_MD5=0
+				ENABLE_OPENSSL_EVP_MD5=0
+			else
+				AC_MSG_ERROR([use of libmd MD5 forced but not found (missing libmd-devel?)])
+			fi
 		fi
 	]
 )
