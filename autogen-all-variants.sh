@@ -31,6 +31,16 @@ autogen_variants() {
 		;;
 	esac
 
+	if [ -e /etc/os-release ]; then
+		source /etc/os-release
+		if [ -n "$VERSION_ID" -a "$ID_LIKE" = "rhel centos fedora" ]; then
+			if [ ${VERSION_ID/.*} -ge 9 ]; then
+				# skip 32-bit builds on Enterprise Linux 9+
+				return
+			fi
+		fi
+	fi
+
 	# 32-bit builds
 	autogen_variants_list  | while IFS="#" read token options testlist; do
 		if [ -e /etc/redhat-release ]; then
