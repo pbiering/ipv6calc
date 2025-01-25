@@ -11,6 +11,10 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20250125/PB:
+	add support for IP2Location(MMDB)
+	various bugfixes
+
 20250119/PB:
 	tools/IP2Location-update.sh[.in]: fix improper masking of token and password
 
