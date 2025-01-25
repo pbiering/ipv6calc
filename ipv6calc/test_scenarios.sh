@@ -11,9 +11,9 @@
 testscenarios_auto_good() {
 	cat <<END | grep -v '^#'
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF						ipv6addr
-2.2.3.4										ipv4addr
-2.2.3.4/0									ipv4addr
-2.2.3.4/32									ipv4addr
+8.8.8.8										ipv4addr
+8.8.8.8/0									ipv4addr
+8.8.8.8/32									ipv4addr
 01:23:45:67:89:01								mac
 01-23-45-67-89-01								mac
 012345678901									mac
@@ -217,28 +217,28 @@ a909:16fa:9092:23ff:a909:4941::7		anonymized-prefix
 2002:f618:3b41:0009:a929:4291:8f61:83b0		anonymized-prefix
 3ffe:831f:ce49:7601:8000:ffff:0a0b:f33a		anonymized-iid
 3ffe:831f:ce49:7601:8000:ffff:0a0b:f33a		^anonymized-prefix
-2.2.3.4						ipv4
-2.2.3.4						ipv4.db.reg=RIPENCC#DB_IPV4_REG
-2.2.3.4						ipv4.db.cc=FR#DB_IPV4_CC
-2.2.3.4						ipv4.db.asn=3215#DB_IPV4_AS
-2.2.3.4						ipv4.addr=le=2.2.3.4
-2.2.3.4						ipv4.addr=lt=2.2.3.5
-2.2.3.4						ipv4.addr=ge=2.2.3.4
-2.2.3.4						ipv4.addr=gt=2.2.3.3
+8.8.8.8						ipv4
+8.8.8.8						ipv4.db.reg=ARIN#DB_IPV4_REG
+8.8.8.8						ipv4.db.cc=US#DB_IPV4_CC
+8.8.8.8						ipv4.db.asn=15169#DB_IPV4_AS
+8.8.8.8						ipv4.addr=le=8.8.8.8
+8.8.8.8						ipv4.addr=lt=8.8.8.9
+8.8.8.8						ipv4.addr=ge=8.8.8.8
+8.8.8.8						ipv4.addr=gt=8.8.8.7
 2001:db8::2					ipv6.addr=le=2001:db8::2
 2001:db8::2					ipv6.addr=lt=2001:db8::3
 2001:db8::2					ipv6.addr=ge=2001:db8::2
 2001:db8::2					ipv6.addr=gt=2001:db8::1
 2001:db8::2					ipv6.addr=gt=2001:db8::1,ipv6.addr=lt=2001:db8::3
-2.2.3.4						ipv4.addr=gt=2.2.3.3,ipv4.addr=lt=2.2.3.5
-2.2.3.4						ipv4.addr=2.2.3.0/24
-2.2.3.4						^ipv4.addr=2.2.2.0/24
+8.8.8.8						ipv4.addr=gt=8.8.8.7,ipv4.addr=lt=8.8.8.9
+8.8.8.8						ipv4.addr=8.8.8.0/24
+8.8.8.8						^ipv4.addr=8.8.4.0/24
 2001:db8::2					ipv6.addr=2001:db8::/32
 2001:db8::2					^ipv6.addr=2001:db9::/32
 2001:db8::2					^ipv6.addr=ge=2001:db8::3
 2001:db8::2					^ipv6.addr=lt=2001:db8::1
-2.2.3.4						^ipv4.addr=gt=2.2.3.5
-2.2.3.4						^ipv4.addr=lt=2.2.3.3
+8.8.8.8						^ipv4.addr=gt=8.8.8.9
+8.8.8.8						^ipv4.addr=lt=8.8.8.7
 2610:00d0::1					lisp
 2001:67c:198::1					lisp-proxyegresstunnelrouter-anycast,anycast,^unicast
 2001:67c:28::1					lisp-mapresolver-anycast,anycast,^unicast
@@ -383,11 +383,11 @@ testscenarios_anonymization_options_kp() {
 	cat <<END | grep -v '^#'
 --anonymize-preset kp			46.244.223.233=242.222.34.63
 --anonymize-preset kp			2a04:8000:11e1:9501:e876:aee4:0721:e8ac=a909:118a:90a0:d40f:a909:4941:0:7
---anonymize-preset kp			::2.2.3.4=::253.134.12.143
---anonymize-preset kp			::ffff:2.2.3.4=::ffff:253.134.12.143
+--anonymize-preset kp			::8.8.8.8=::245.216.59.65
+--anonymize-preset kp			::ffff:8.8.8.8=::ffff:245.216.59.65
 --anonymize-preset kp			::1=::1
 --anonymize-preset kp			3ffe:831f:ce49:7601:8000:efff:af4a:86bf=3ffe:831f:ce49:7601:8000:ffff:a0b:f33a
---anonymize-preset kp			64:ff9b::0202:0304=64:ff9b::fd86:c8f
+--anonymize-preset kp			64:ff9b::0808:0808=64:ff9b::f5d8:3b41
 --anonymize-preset kp			2001:0db8:0000:0000:81c0:0f3f:c807:1455=2001:db8::a909:4941:0:7
 # EUI-48 OUI-24/28/36
 --anonymize-preset kp			fd00:bbbb:bbbb:1:265e:beff:fe12:3456=fd00:bbbb:bbbb:9:a929:4291:4265:ebee
@@ -475,9 +475,9 @@ testscenarios_showinfo_geoip() {
 46.244.223.233				GEOIP_COUNTRY_SHORT=DE
 46.244.223.233				IPV4_AS_NUM=8767		DB_IPV4_AS
 46.244.223.233				IPV4_REGISTRY=RIPENCC
-2.2.3.4					IPV4_COUNTRYCODE=FR
-::2.2.3.4				IPV4_COUNTRYCODE[2.2.3.4]=FR
-::ffff:2.2.3.4				IPV4_COUNTRYCODE[2.2.3.4]=FR
+8.8.8.8					IPV4_COUNTRYCODE=US
+::8.8.8.8				IPV4_COUNTRYCODE[8.8.8.8]=US
+::ffff:8.8.8.8				IPV4_COUNTRYCODE[8.8.8.8]=US
 # non-anonymized IPv6 prefix
 2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_COUNTRYCODE=DE		DB_IPV6_CC
 2001:a60:113a:0123:0123:4567:89ab:cdef	IPV6_AS_NUM=8767		DB_IPV6_AS
@@ -525,10 +525,10 @@ END
 testscenarios_showinfo_anonymized_info() {
 	cat <<END | grep -v '^#'
 # IPv4 address
-2.2.3.4;;match;IPV4_ANON=253.134.12.143
-2.2.3.4;;key-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
-2.2.3.4;--db-ip2location-disable --db-geoip2-disable --db-dbip2-disable;match;IPV4_ANON=2.2.3.0
-2.2.3.4;--db-ip2location-disable --db-geoip2-disable --db-dbip2-disable;key-no-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
+8.8.8.8;;match;IPV4_ANON=245.216.59.65
+8.8.8.8;;key-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
+8.8.8.8;--db-ip2location-disable --db-geoip2-disable --db-dbip2-disable --db-ip2location2-disable;match;IPV4_ANON=8.8.8.0
+8.8.8.8;--db-ip2location-disable --db-geoip2-disable --db-dbip2-disable --db-ip2location2-disable;key-no-word;IPV6CALC_FEATURES=ANON_KEEP-TYPE-ASN-CC
 END
 }
 

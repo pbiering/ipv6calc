@@ -2,8 +2,7 @@
 #
 # Project    : ipv6calc/logstats
 # File       : test_ipv6logstats.sh
-# Version    : $Id$
-# Copyright  : 2003-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2003-2025 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test program for "ipv6logstats"
 
@@ -63,19 +62,19 @@ END
 testscenarios_match() {
 	cat <<END | grep -v "^#"
 # Non-Anonymized IPv4
-2.2.3.4						AS-num-proto/3215/IPv4
-2.2.3.4						CC-proto-code/IPv4/FR
-::2.2.3.4					AS-num-proto/3215/IPv4
-::2.2.3.4					CC-proto-code/IPv4/FR
-::ffff:2.2.3.4					AS-num-proto/3215/IPv4
-::ffff:2.2.3.4					CC-proto-code/IPv4/FR
+8.8.8.8						AS-num-proto/15169/IPv4
+8.8.8.8						CC-proto-code/IPv4/US
+::8.8.8.8					AS-num-proto/15169/IPv4
+::8.8.8.8					CC-proto-code/IPv4/US
+::ffff:8.8.8.8					AS-num-proto/15169/IPv4
+::ffff:8.8.8.8					CC-proto-code/IPv4/US
 # Anonymized IPv4
-253.134.12.143					AS-num-proto/3215/IPv4
-253.134.12.143					CC-proto-code/IPv4/FR
-::253.134.12.143				AS-num-proto/3215/IPv4
-::253.134.12.143				CC-proto-code/IPv4/FR
-::ffff:253.134.12.143				AS-num-proto/3215/IPv4
-::ffff:253.134.12.143				CC-proto-code/IPv4/FR
+245.216.59.65					AS-num-proto/15169/IPv4
+245.216.59.65					CC-proto-code/IPv4/US
+::245.216.59.65					AS-num-proto/15169/IPv4
+::245.216.59.65					CC-proto-code/IPv4/US
+::ffff:245.216.59.65				AS-num-proto/15169/IPv4
+::ffff:245.216.59.65				CC-proto-code/IPv4/US
 # Teredo
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF		CC-code-proto/IT/IPv4
 3ffe:831f:ce49:7601:8000:efff:af4a:86BF		AS-num-proto/3269/IPv4
