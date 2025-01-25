@@ -86,15 +86,15 @@ testscenarios_match() {
 # 6to4
 2002:c0a8:f900:9:a929:4291:4021:132d		IPv6/6to4/RESERVED
 2002:c0a8:f900:9:a929:4291:4021:132d		CC-code-proto/unknown/IPv4
-2002:0202:0304:0:ed08:d22b:6c15:3401		CC-proto-code/IPv4/FR
-2002:0202:0304:0:ed08:d22b:6c15:3401		AS-num-proto/3215/IPv4
+2002:0808:0808:0:ed08:d22b:6c15:3401		CC-proto-code/IPv4/US
+2002:0808:0808:0:ed08:d22b:6c15:3401		AS-num-proto/15169/IPv4
 # 6to4 (anonymized)
 2002:f618:3b41:9:a929:4941::c			CC-proto-code/IPv4/AU
 2002:f618:3b41:9:a929:4941::c			AS-num-proto/15169/IPv4
 # NAT64
-64:ff9b::0202:0304				CC-proto-code/IPv4/FR
-64:ff9b::0202:0304				AS-num-proto/3215/IPv4
-64:ff9b::0202:0304				IPv6/NAT64/RIPE
+64:ff9b::0808:0808				CC-proto-code/IPv4/US
+64:ff9b::0808:0808				AS-num-proto/15169/IPv4
+64:ff9b::0808:0808				IPv6/NAT64/RIPE
 # NAT64 (anonmyized)
 64:ff9b::f618:3b41				CC-proto-code/IPv4/AU
 64:ff9b::f618:3b41				AS-num-proto/15169/IPv4
