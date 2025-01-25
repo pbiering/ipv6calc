@@ -904,8 +904,6 @@ int libipv6calc_db_wrapper_GeoIP2_wrapper_country_code_by_addr(const ipv6calc_ip
 
 	GeoIP2_DB_USAGE_MAP_TAG(GeoIP2_type);
 
-	goto END_libipv6calc_db_wrapper; // keep db open
-
 END_libipv6calc_db_wrapper:
 	return(result);
 };
@@ -923,18 +921,18 @@ uint32_t libipv6calc_db_wrapper_GeoIP2_wrapper_asn_by_addr(const ipv6calc_ipaddr
 	uint32_t as_num = ASNUM_AS_UNKNOWN;
 	int result;
 
-	int GEOIP2_type = 0;
+	int GeoIP2_type = 0;
 	libipv6calc_db_wrapper_geolocation_record record_asn;
 
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
-		GEOIP2_type = geoip2_db_asn_v4;
+		GeoIP2_type = geoip2_db_asn_v4;
 
 		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP2] & IPV6CALC_DB_IPV4_TO_AS) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "No GeoIP2 database supporting IPv4 ASN");
 			goto END_libipv6calc_db_wrapper;
 		};
 	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
-		GEOIP2_type = geoip2_db_asn_v6;
+		GeoIP2_type = geoip2_db_asn_v6;
 
 		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP2] & IPV6CALC_DB_IPV6_TO_AS) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "No GeoIP2 database supporting IPv6 ASN");
@@ -945,7 +943,7 @@ uint32_t libipv6calc_db_wrapper_GeoIP2_wrapper_asn_by_addr(const ipv6calc_ipaddr
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	result = libipv6calc_db_wrapper_GeoIP2_open_type(GEOIP2_type);
+	result = libipv6calc_db_wrapper_GeoIP2_open_type(GeoIP2_type);
 
 	if (result != MMDB_SUCCESS) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "Error opening GeoIP2 by type");
@@ -953,7 +951,7 @@ uint32_t libipv6calc_db_wrapper_GeoIP2_wrapper_asn_by_addr(const ipv6calc_ipaddr
 	};
 
 	// AS Number only
-	as_num = libipv6calc_db_wrapper_MMDB_asn_by_addr(ipaddrp, &mmdb_cache[GEOIP2_type]);
+	as_num = libipv6calc_db_wrapper_MMDB_asn_by_addr(ipaddrp, &mmdb_cache[GeoIP2_type]);
  
 	if (as_num == ASNUM_AS_UNKNOWN) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "no match found");
@@ -965,7 +963,7 @@ uint32_t libipv6calc_db_wrapper_GeoIP2_wrapper_asn_by_addr(const ipv6calc_ipaddr
 	// AS Text (optional)
 	if ((as_orgname != NULL) && (as_orgname_length > 0)) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "lookup AS_ORGNAME as_orgname=%p as_orgname_length=%lu", as_orgname, (long unsigned int) as_orgname_length);
-		result = libipv6calc_db_wrapper_MMDB_all_by_addr(ipaddrp, &record_asn, &mmdb_cache[GEOIP2_type]);
+		result = libipv6calc_db_wrapper_MMDB_all_by_addr(ipaddrp, &record_asn, &mmdb_cache[GeoIP2_type]);
 
 		if (result != MMDB_SUCCESS) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "no match found");
@@ -980,9 +978,7 @@ uint32_t libipv6calc_db_wrapper_GeoIP2_wrapper_asn_by_addr(const ipv6calc_ipaddr
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "lookup AS_ORGNAME skipped as_orgname=%p as_orgname_length=%lu", as_orgname, (long unsigned int) as_orgname_length);
 	};
 
-	GeoIP2_DB_USAGE_MAP_TAG(GEOIP2_type);
-
-	goto END_libipv6calc_db_wrapper;
+	GeoIP2_DB_USAGE_MAP_TAG(GeoIP2_type);
 
 END_libipv6calc_db_wrapper:
 	return(as_num);
@@ -993,17 +989,17 @@ END_libipv6calc_db_wrapper:
 uint32_t libipv6calc_db_wrapper_GeoIP2_wrapper_GeonameID_by_addr(const ipv6calc_ipaddr *ipaddrp, int *source_ptr) {
 	uint32_t result = IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN;
 
-	int GEOIP2_type = 0;
+	int GeoIP2_type = 0;
 
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
-		GEOIP2_type = geoip2_db_geonameid_v4;
+		GeoIP2_type = geoip2_db_geonameid_v4;
 
 		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP2] & IPV6CALC_DB_IPV4_TO_GEONAMEID) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "No GeoIP2 database supporting IPv4 GeonameID");
 			goto END_libipv6calc_db_wrapper;
 		};
 	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
-		GEOIP2_type = geoip2_db_geonameid_v6;
+		GeoIP2_type = geoip2_db_geonameid_v6;
 
 		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_GEOIP2] & IPV6CALC_DB_IPV6_TO_GEONAMEID) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "No GeoIP2 database supporting IPv6 GeonameID");
@@ -1014,14 +1010,14 @@ uint32_t libipv6calc_db_wrapper_GeoIP2_wrapper_GeonameID_by_addr(const ipv6calc_
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	result = libipv6calc_db_wrapper_GeoIP2_open_type(GEOIP2_type);
+	result = libipv6calc_db_wrapper_GeoIP2_open_type(GeoIP2_type);
 
 	if (result != MMDB_SUCCESS) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "Error opening GeoIP2 by type");
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	result = libipv6calc_db_wrapper_MMDB_GeonameID_by_addr(ipaddrp, &mmdb_cache[GEOIP2_type], source_ptr);
+	result = libipv6calc_db_wrapper_MMDB_GeonameID_by_addr(ipaddrp, &mmdb_cache[GeoIP2_type], source_ptr);
 
 	if (result == IPV6CALC_DB_GEO_GEONAMEID_UNKNOWN) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "no match found");
@@ -1030,9 +1026,7 @@ uint32_t libipv6calc_db_wrapper_GeoIP2_wrapper_GeonameID_by_addr(const ipv6calc_
 
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_GeoIP2, "result GeonameID=%u", result);
 
-	GeoIP2_DB_USAGE_MAP_TAG(GEOIP2_type);
-
-	goto END_libipv6calc_db_wrapper;
+	GeoIP2_DB_USAGE_MAP_TAG(GeoIP2_type);
 
 END_libipv6calc_db_wrapper:
 	return(result);
@@ -1106,10 +1100,10 @@ int libipv6calc_db_wrapper_GeoIP2_all_by_addr(const ipv6calc_ipaddr *ipaddrp, li
 		recordp->asn = record_asn.asn;
                 snprintf(recordp->organization_name, IPV6CALC_DB_SIZE_ORG_NAME, "%s", record_asn.organization_name);
 
-		GeoIP2_DB_USAGE_MAP_TAG(GEOIP2_type_asn);
+		GeoIP2_DB_USAGE_MAP_TAG(GeoIP2_type_asn);
 	};
 
-	GeoIP2_DB_USAGE_MAP_TAG(GEOIP2_type);
+	GeoIP2_DB_USAGE_MAP_TAG(GeoIP2_type);
 
 END_libipv6calc_db_wrapper:
 	return(result);
