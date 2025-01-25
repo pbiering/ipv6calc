@@ -1459,8 +1459,6 @@ int libipv6calc_db_wrapper_IP2Location2_wrapper_country_code_by_addr(const ipv6c
 
 	IP2LOCATION2_DB_USAGE_MAP_TAG(IP2Location2_type);
 
-	goto END_libipv6calc_db_wrapper; // keep db open
-
 END_libipv6calc_db_wrapper:
 	return(result);
 };
@@ -1534,8 +1532,6 @@ uint32_t libipv6calc_db_wrapper_IP2Location2_wrapper_asn_by_addr(const ipv6calc_
 
 	IP2LOCATION2_DB_USAGE_MAP_TAG(IP2Location2_type);
 
-	goto END_libipv6calc_db_wrapper; // keep db open
-
 END_libipv6calc_db_wrapper:
 	return(as_num);
 };
@@ -1583,8 +1579,6 @@ uint32_t libipv6calc_db_wrapper_IP2Location2_wrapper_GeonameID_by_addr(const ipv
 	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location2, "result GeonameID=%u", result);
 
 	IP2LOCATION2_DB_USAGE_MAP_TAG(IP2Location2_type);
-
-	goto END_libipv6calc_db_wrapper;
 
 END_libipv6calc_db_wrapper:
 	return(result);
@@ -1645,6 +1639,8 @@ int libipv6calc_db_wrapper_IP2Location2_all_by_addr(const ipv6calc_ipaddr *ipadd
 	};
 
 	result = libipv6calc_db_wrapper_MMDB_all_by_addr(ipaddrp, recordp, &mmdb_cache[IP2Location2_type]);
+
+	IP2LOCATION2_DB_USAGE_MAP_TAG(IP2Location2_type);
 
 END_libipv6calc_db_wrapper:
 	return(result);
