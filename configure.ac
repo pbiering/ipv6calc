@@ -755,7 +755,11 @@ if test "$require_libdb" = "yes"; then
 			AC_MSG_ERROR([Berkeley DB library file misses: db_create])
 		])
 	],[
-		AC_MSG_ERROR([Berkeley DB library header files not found - check for db4-devel or libdb-devel])
+		if test "$LDFLAGS" = "-m32"; then
+			AC_MSG_ERROR([Berkeley DB library header files not found for 32-bit - check for db4-devel.i686 or libdb-devel.i686])
+		else
+			AC_MSG_ERROR([Berkeley DB library header files not found - check for db4-devel or libdb-devel])
+		fi
 	])
 
 	AC_CHECK_FILE(/sbin/ldconfig, [
@@ -891,7 +895,11 @@ if test "$MMDB" = "yes"; then
 
 	],
 	[
-		AC_MSG_ERROR([MaxMindDB library header files not found - check for libmaxminddb-devel?])
+		if test "$LDFLAGS" = "-m32"; then
+			AC_MSG_WARN([MaxMindDB library header files not found for 32-bit - check for libmaxminddb-devel.i686])
+		else
+			AC_MSG_ERROR([MaxMindDB library header files not found - check for libmaxminddb-devel])
+		fi
 	])
 
 	AC_MSG_RESULT([*** MaxMindDB database directory: $mmdb_db])
@@ -1230,7 +1238,7 @@ if test "$IP2LOCATION" = "yes"; then
 			AC_MSG_RESULT([*** IP2Location library supports API version string])
 		],[
 			if test "$LDFLAGS" = "-m32"; then
-				AC_MSG_ERROR([IP2Location library file misses IP2Location_api_version_string - check for IP2Location-devel.i686])
+				AC_MSG_ERROR([IP2Location library file misses IP2Location_api_version_string for 32-bit - check for IP2Location-devel.i686])
 			else
 				AC_MSG_ERROR([IP2Location library file misses IP2Location_api_version_string - no longer supported])
 			fi
