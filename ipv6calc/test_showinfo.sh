@@ -240,7 +240,7 @@ if [ "$1" = "minimal" ]; then
 fi
 
 
-test="run GeoIP tests"
+test="run GeoIP(MMDB) tests"
 if ./ipv6calc -q -v 2>&1 | grep -qw GeoIP; then
 	echo "INFO  : $test"
 	getexamples_GeoIP | while read address; do
@@ -309,7 +309,7 @@ else
 fi
 
 
-test="run IP2Location tests"
+test="run IP2Location(BIN) tests"
 if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 	echo "INFO  : $test"
 	getexamples_IP2Location | while read address; do
@@ -328,7 +328,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 	$verbose || echo
 	echo "INFO  : $test successful"
 
-	test="run IP2Location showinfo tests"
+	test="run IP2Location(BIN) showinfo tests"
 	echo "INFO  : $test"
 	testscenarios_showinfo_ip2location | while read address output; do
 		if echo "$output" | grep -q "^OUI="; then
@@ -353,7 +353,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 	echo "INFO  : $test successful"
 
 	if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location6; then
-		test="run IP2Location IPv6 tests"
+		test="run IP2Location(BIN) IPv6 tests"
 		echo "INFO  : $test"
 		getexamples_IP2Location6 | while read address; do
 			$verbose && echo "Run IP2Location IPv6 showinfo on: $address"
@@ -370,7 +370,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 		$verbose || echo
 		echo "INFO  : $test successful"
 
-		test="run IP2Location IPv6 showinfo tests"
+		test="run IP2Location(BIN) IPv6 showinfo tests"
 		echo "INFO  : $test"
 		testscenarios_showinfo_ip2location6 | while read address output; do
 			if echo "$output" | grep -q "^OUI="; then
