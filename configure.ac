@@ -896,7 +896,7 @@ if test "$MMDB" = "yes"; then
 	],
 	[
 		if test "$LDFLAGS" = "-m32"; then
-			AC_MSG_WARN([MaxMindDB library header files not found for 32-bit - check for libmaxminddb-devel.i686])
+			AC_MSG_ERROR([MaxMindDB library header files not found for 32-bit - check for libmaxminddb-devel.i686])
 		else
 			AC_MSG_ERROR([MaxMindDB library header files not found - check for libmaxminddb-devel])
 		fi
