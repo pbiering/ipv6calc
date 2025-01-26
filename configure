@@ -5081,7 +5081,7 @@ printf "%s\n" "*** use of libmd MD5 implementation forced" >&6; }
 				ENABLE_OPENSSL_MD5=0
 				ENABLE_OPENSSL_EVP_MD5=0
 			else
-				as_fn_error $? "use of libmd MD5 forced but not found (missing libmd-devel?)" "$LINENO" 5
+				as_fn_error $? "use of libmd MD5 forced but not found - check for libmd-devel" "$LINENO" 5
 			fi
 		fi
 
@@ -5496,7 +5496,7 @@ fi
 
 else case e in #(
   e)
-		as_fn_error $? "Berkeley DB library header files not found - missing db4-devel or libdb-devel?" "$LINENO" 5
+		as_fn_error $? "Berkeley DB library header files not found - check for db4-devel or libdb-devel" "$LINENO" 5
 	 ;;
 esac
 fi
@@ -5787,7 +5787,7 @@ printf "%s\n" "#define HAVE_DECL_MMDB_LIB_VERSION $ac_have_decl" >>confdefs.h
 
 else case e in #(
   e)
-		as_fn_error $? "MaxMindDB library header files not found - missing libmaxminddb-devel?" "$LINENO" 5
+		as_fn_error $? "MaxMindDB library header files not found - check for libmaxminddb-devel?" "$LINENO" 5
 	 ;;
 esac
 fi
@@ -6302,7 +6302,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam conftest.$ac_ext
 
 else case e in #(
   e)
-		as_fn_error $? "IP2Location library header files not found - missing IP2Location-devel?" "$LINENO" 5
+		as_fn_error $? "IP2Location library header files not found - check for IP2Location-devel" "$LINENO" 5
 	 ;;
 esac
 fi
@@ -6821,7 +6821,7 @@ done
 	fi
 
 	if test -z "$APXS"; then
-		as_fn_error $? "No APXS binary found: cannot create Apache module - missing httpd-devel?" "$LINENO" 5
+		as_fn_error $? "No APXS binary found: cannot create Apache module - check for httpd-devel" "$LINENO" 5
 	else
 		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: APXS binary found: $APXS" >&5
 printf "%s\n" "APXS binary found: $APXS" >&6; }

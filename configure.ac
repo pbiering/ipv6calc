@@ -441,7 +441,7 @@ AC_ARG_ENABLE(
 				ENABLE_OPENSSL_MD5=0
 				ENABLE_OPENSSL_EVP_MD5=0
 			else
-				AC_MSG_ERROR([use of libmd MD5 forced but not found (missing libmd-devel?)])
+				AC_MSG_ERROR([use of libmd MD5 forced but not found - check for libmd-devel])
 			fi
 		fi
 	]
@@ -755,7 +755,7 @@ if test "$require_libdb" = "yes"; then
 			AC_MSG_ERROR([Berkeley DB library file misses: db_create])
 		])
 	],[
-		AC_MSG_ERROR([Berkeley DB library header files not found - missing db4-devel or libdb-devel?])
+		AC_MSG_ERROR([Berkeley DB library header files not found - check for db4-devel or libdb-devel])
 	])
 
 	AC_CHECK_FILE(/sbin/ldconfig, [
@@ -891,7 +891,7 @@ if test "$MMDB" = "yes"; then
 
 	],
 	[
-		AC_MSG_ERROR([MaxMindDB library header files not found - missing libmaxminddb-devel?])
+		AC_MSG_ERROR([MaxMindDB library header files not found - check for libmaxminddb-devel?])
 	])
 
 	AC_MSG_RESULT([*** MaxMindDB database directory: $mmdb_db])
@@ -1199,7 +1199,7 @@ if test "$IP2LOCATION" = "yes"; then
 		)
 	],
 	[
-		AC_MSG_ERROR([IP2Location library header files not found - missing IP2Location-devel?])
+		AC_MSG_ERROR([IP2Location library header files not found - check for IP2Location-devel])
 	])
 
 	AC_MSG_RESULT([*** IP2location db dir: $ip2location_db])
@@ -1439,7 +1439,7 @@ if test "$ENABLE_MOD_IPV6CALC" = "1"; then
 	fi
 
 	if test -z "$APXS"; then
-		AC_MSG_ERROR([No APXS binary found: cannot create Apache module - missing httpd-devel?])
+		AC_MSG_ERROR([No APXS binary found: cannot create Apache module - check for httpd-devel])
 	else
 		AC_MSG_RESULT([APXS binary found: $APXS])
 
