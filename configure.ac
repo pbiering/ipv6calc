@@ -1215,16 +1215,25 @@ if test "$IP2LOCATION" = "yes"; then
 		if test -n "$IP2LOCATION_LIB_DIR"; then
 			if test -e "$IP2LOCATION_LIB_DIR/lib$IP2LOCATION_LIB_NAME.so"; then
 				LIBS="-L$IP2LOCATION_LIB_DIR"
+				AC_MSG_RESULT([IP2Location library file found: $IP2LOCATION_INCLUDE_DIR/lib$IP2LOCATION_LIB_NAME.so])
 			else
 				AC_MSG_ERROR([IP2Location library file not found: $IP2LOCATION_INCLUDE_DIR/lib$IP2LOCATION_LIB_NAME.so])
 			fi
 		fi
 
+		AC_MSG_RESULT([***** CPPFLAGS=$CPPFLAGS])
+		AC_MSG_RESULT([***** CFLAGS  =$CFLAGS])
+		AC_MSG_RESULT([***** LDFLAGS =$LDFLAGS])
+
 		AC_CHECK_LIB($IP2LOCATION_LIB_NAME, IP2Location_api_version_string,
 		[
 			AC_MSG_RESULT([*** IP2Location library supports API version string])
 		],[
-			AC_MSG_ERROR([IP2Location library file misses IP2Location_api_version_string - no longer supported])
+			if test "$LDFLAGS" = "-m32"; then
+				AC_MSG_ERROR([IP2Location library file misses IP2Location_api_version_string - check for IP2Location-devel.i686])
+			else
+				AC_MSG_ERROR([IP2Location library file misses IP2Location_api_version_string - no longer supported])
+			fi
 		])
 
 		AC_CHECK_LIB($IP2LOCATION_LIB_NAME, IP2Location_lib_version_string,
@@ -1235,10 +1244,6 @@ if test "$IP2LOCATION" = "yes"; then
 				AC_MSG_RESULT([*** IP2Location library supports LIB version string])
 			fi
 		])
-
-		AC_MSG_RESULT([***** CPPFLAGS=$CPPFLAGS])
-		AC_MSG_RESULT([***** CFLAGS  =$CFLAGS])
-		AC_MSG_RESULT([***** LDFLAGS =$LDFLAGS])
 
 		AC_CHECK_LIB($IP2LOCATION_LIB_NAME, IP2Location_open,
 		[
