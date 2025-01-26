@@ -934,25 +934,22 @@ if (defined $ENV{'HTTP_IPV6CALCWEB_DB_IP2LOCATION_LIB'}) {
 	};
 };
 
-# GeoIP/GeoIP2
+# GeoIP2
 my $options_ipv6calc_geoip2 = "";
 my %db_info_geoip2;
-my $info_geoip_string;
 my $info_geoip2_string;
-my $database_geoip_dir;
 my $database_geoip2_dir;
 my $database_geoip_lib;
 
 if (defined $ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_DIR'}) {
 	if ($ENV{'HTTP_IPV6CALCWEB_DB_GEOIP_DIR'} =~ /^([[:alnum:]\.\-\/]+)$/) {
-		$database_geoip_dir = $1;
 		$database_geoip2_dir = $1;
 	} else {
 		logging("ERROR", "HTTP_IPV6CALCWEB_DB_GEOIP_DIR found, but not containing proper chars");
 		&print_error();
 	};
 } else {
-	$database_geoip_dir = find_dir(@list_database_geoip_dir);
+	$database_geoip2_dir = find_dir(@list_database_geoip_dir);
 };
 
 # db-ip.com
