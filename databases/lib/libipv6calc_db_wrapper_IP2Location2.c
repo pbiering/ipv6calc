@@ -1091,7 +1091,7 @@ char *libipv6calc_db_wrapper_IP2Location2_wrapper_db_info_used(void) {
 	if (db_lite_used == 1) {
 		STRCLR(tempstring);
 		STRCAT(tempstring, ip2location2_db_usage_string);
-		STRCAT(tempstring, " / This site or product includes IP2Location LITE data available from http://lite.ip2location.com");
+		STRCAT(tempstring, " / This site or product includes IP2Location LITE data available from https://lite.ip2location.com");
 		snprintf(ip2location2_db_usage_string, sizeof(ip2location2_db_usage_string), "%s", tempstring);
 	};
 
