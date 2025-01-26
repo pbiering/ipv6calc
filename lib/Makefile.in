@@ -49,18 +49,11 @@ OBJS	=	libipv6calc.o  \
 		ipv6calcoptions.o \
 		ipv6calctypes.o
 
-DBHEADERS =	../databases/lib/libipv6calc_db_wrapper.h \
-		../databases/lib/libipv6calc_db_wrapper_GeoIP2.h \
-		../databases/lib/libipv6calc_db_wrapper_IP2Location.h \
-		../databases/lib/libipv6calc_db_wrapper_DBIP2.h \
-		../databases/lib/libipv6calc_db_wrapper_BuiltIn.h \
-		../databases/lib/libipv6calc_db_wrapper_External.h
-
 all:		
 		${MAKE} libipv6calc.a
 		${MAKE} libipv6calc.so.@PACKAGE_VERSION@
 
-.c.o:		$(DBHEADERS)
+.c.o:
 		$(CC) -c $< $(CPPFLAGS) $(CFLAGS) $(INCLUDES)
 
 $(OBJS):	libipv6calcdebug.h  \
@@ -87,6 +80,13 @@ $(OBJS):	libipv6calcdebug.h  \
 		ipv6calcoptions_common.h \
 		ipv6calccommands.h  \
 		ipv6calc_inttypes.h \
+		../databases/lib/libipv6calc_db_wrapper.h \
+		../databases/lib/libipv6calc_db_wrapper_GeoIP2.h \
+		../databases/lib/libipv6calc_db_wrapper_IP2Location.h \
+		../databases/lib/libipv6calc_db_wrapper_IP2Location2.h \
+		../databases/lib/libipv6calc_db_wrapper_DBIP2.h \
+		../databases/lib/libipv6calc_db_wrapper_BuiltIn.h \
+		../databases/lib/libipv6calc_db_wrapper_External.h
 
 libipv6calc.a:	$(OBJS)
 		cd ../ && ${MAKE} db-ieee-oui-make
