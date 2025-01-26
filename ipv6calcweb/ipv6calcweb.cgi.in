@@ -1186,6 +1186,24 @@ sub print_infohash ($$$;$) {
 			next;
 		};
 
+		if ($key eq "IP2LOCATION2_DATABASE_INFO") {
+			split_store(\%db_info_ip2location2, $$phash{$key});
+			# skipped, will be shown in footer
+			next;
+		};
+
+		if ($key eq "IP2LOCATION2_DATABASE_INFO_IPV4") {
+			split_store(\%db_info_ip2location2, $$phash{$key});
+			# skipped, will be shown in footer
+			next;
+		};
+
+		if ($key eq "IP2LOCATION2_DATABASE_INFO_IPV6") {
+			split_store(\%db_info_ip2location2, $$phash{$key});
+			# skipped, will be shown in footer
+			next;
+		};
+
 		if ($key eq "GEOIP2_DATABASE_INFO") {
 			$info_geoip2_string = $$phash{$key};
 			# strip non-ascii chars
@@ -2722,7 +2740,7 @@ if ($outputformat =~ /^html/o) {
 
 	if (scalar(keys %db_info_ip2location2) > 0) {
 		print "          <br>\n";
-		print "          " . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'IP2LOCATION2'} . "\">IP2Location(MMDB)</a> " . $text{'database'}->{$lang} . " " . create_uri(encode_entities(join(" / ", sort keys %db_info_ip2location))). "\n";
+		print "          " . $text{'powered'}->{$lang} . " <a target=\"_blank\" href=\"" . $urls{'IP2LOCATION2'} . "\">IP2Location(MMDB)</a> " . $text{'database'}->{$lang} . " " . create_uri(encode_entities(join(" / ", sort keys %db_info_ip2location2))). "\n";
 	};
 
 	if (scalar(keys %db_info_geoip2) > 0) {
