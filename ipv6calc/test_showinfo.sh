@@ -399,6 +399,97 @@ else
 	echo "NOTICE: $test SKIPPED"
 fi
 
+test="run IP2Location(MMDB) tests"
+if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location2; then
+	echo "INFO  : $test"
+	getexamples_IP2Location | while read address; do
+		$verbose && echo "Run IP2Location(MMDB) IPv4 showinfo on: $address"
+		if ./ipv6calc -q -i -m $address | grep -Ev '=This (record|parameter) ' | grep $grepopt ^IP2LOCATION2_; then
+			true
+		else
+			$verbose || echo
+			echo "Unexpected result (missing IP2LOCATION2): ./ipv6calc -q -i -m $address"
+			./ipv6calc -q -i -m $address
+			exit 1
+		fi
+		$verbose && echo
+		$verbose || echo -n "."
+	done || exit 1
+	$verbose || echo
+	echo "INFO  : $test successful"
+
+	test="run IP2Location(MMDB) showinfo tests"
+	echo "INFO  : $test"
+	testscenarios_showinfo_ip2location | while read address output; do
+		output=${output/IP2LOCATION_/IP2LOCATION2_} # map expected result
+		if echo "$output" | grep -q "^OUI="; then
+			if ! $ipv6calc_has_db_ieee; then
+				$verbose && echo "Test: $address for $output SKIPPED (no DB_IEEE compiled in)"
+				continue
+			fi
+		fi
+		$verbose && echo "Test: $address for $output"
+		output_escaped="${output//./\\.}"
+		output_escaped="${output_escaped//[/\\[}"
+		output_escaped="${output_escaped//]/\\]}"
+		if ! ./ipv6calc -q -i -m $address | grep $grepopt "^$output_escaped$"; then
+			echo "ERROR: unexpected result for address $address ($output_escaped)"
+			./ipv6calc -q -i -m $address
+			exit 1
+		fi
+		$verbose && echo
+		$verbose || echo -n "."
+	done || exit 1
+	$verbose || echo
+	echo "INFO  : $test successful"
+
+	if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location2v6; then
+		test="run IP2Location(MMDB) IPv6 tests"
+		echo "INFO  : $test"
+		getexamples_IP2Location6 | while read address; do
+			$verbose && echo "Run IP2Location(MMDB) IPv6 showinfo on: $address"
+			if ./ipv6calc -q -i -m $address | grep -Ev '=This (record|parameter) ' | grep $grepopt ^IP2LOCATION2_; then
+				true
+			else
+				echo "Unexpected result (missing IP2LOCATION2): ./ipv6calc -q -i -m $address"
+				./ipv6calc -q -i -m $address
+				exit 1
+			fi
+			$verbose && echo
+			$verbose || echo -n "."
+		done || exit 1
+		$verbose || echo
+		echo "INFO  : $test successful"
+
+		test="run IP2Location(MMDB) IPv6 showinfo tests"
+		echo "INFO  : $test"
+		testscenarios_showinfo_ip2location6 | while read address output; do
+			output=${output/IP2LOCATION_/IP2LOCATION2_} # map expected result
+			if echo "$output" | grep -q "^OUI="; then
+				if ! $ipv6calc_has_db_ieee; then
+					echo "Test: $address for $output SKIPPED (no DB_IEEE compiled in)"
+					continue
+				fi
+			fi
+			$verbose && echo "Test: $address for $output"
+			output_escaped="${output//./\\.}"
+			output_escaped="${output_escaped//[/\\[}"
+			output_escaped="${output_escaped//]/\\]}"
+			if ! ./ipv6calc -q -i -m $address | grep $grepopt "^$output_escaped$"; then
+				$verbose || echo
+				echo "ERROR: unexpected result for $address ($output_escaped)"
+				./ipv6calc -q -i -m $address
+				exit 1
+			fi
+			$verbose && echo
+			$verbose || echo -n "."
+		done || exit 1
+		$verbose || echo
+		echo "INFO  : $test successful"
+	fi
+else
+	echo "NOTICE: $test SKIPPED"
+fi
 
 test="run db-ip.com IPv4 tests"
 if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv4; then
