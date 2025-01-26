@@ -6326,10 +6326,19 @@ printf "%s\n" "#define SUPPORT_IP2LOCATION_STATIC 1" >>confdefs.h
 		if test -n "$IP2LOCATION_LIB_DIR"; then
 			if test -e "$IP2LOCATION_LIB_DIR/lib$IP2LOCATION_LIB_NAME.so"; then
 				LIBS="-L$IP2LOCATION_LIB_DIR"
+				{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: IP2Location library file found: $IP2LOCATION_INCLUDE_DIR/lib$IP2LOCATION_LIB_NAME.so" >&5
+printf "%s\n" "IP2Location library file found: $IP2LOCATION_INCLUDE_DIR/lib$IP2LOCATION_LIB_NAME.so" >&6; }
 			else
 				as_fn_error $? "IP2Location library file not found: $IP2LOCATION_INCLUDE_DIR/lib$IP2LOCATION_LIB_NAME.so" "$LINENO" 5
 			fi
 		fi
+
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ***** CPPFLAGS=$CPPFLAGS" >&5
+printf "%s\n" "***** CPPFLAGS=$CPPFLAGS" >&6; }
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ***** CFLAGS  =$CFLAGS" >&5
+printf "%s\n" "***** CFLAGS  =$CFLAGS" >&6; }
+		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ***** LDFLAGS =$LDFLAGS" >&5
+printf "%s\n" "***** LDFLAGS =$LDFLAGS" >&6; }
 
 		as_ac_Lib=`printf "%s\n" "ac_cv_lib_$IP2LOCATION_LIB_NAME""_IP2Location_api_version_string" | sed "$as_sed_sh"`
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for IP2Location_api_version_string in -l$IP2LOCATION_LIB_NAME" >&5
@@ -6384,7 +6393,11 @@ printf "%s\n" "*** IP2Location library supports API version string" >&6; }
 
 else case e in #(
   e)
-			as_fn_error $? "IP2Location library file misses IP2Location_api_version_string - no longer supported" "$LINENO" 5
+			if test "$LDFLAGS" = "-m32"; then
+				as_fn_error $? "IP2Location library file misses IP2Location_api_version_string - check for IP2Location-devel.i686" "$LINENO" 5
+			else
+				as_fn_error $? "IP2Location library file misses IP2Location_api_version_string - no longer supported" "$LINENO" 5
+			fi
 		 ;;
 esac
 fi
@@ -6447,13 +6460,6 @@ printf "%s\n" "*** IP2Location library supports LIB version string" >&6; }
 
 fi
 
-
-		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ***** CPPFLAGS=$CPPFLAGS" >&5
-printf "%s\n" "***** CPPFLAGS=$CPPFLAGS" >&6; }
-		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ***** CFLAGS  =$CFLAGS" >&5
-printf "%s\n" "***** CFLAGS  =$CFLAGS" >&6; }
-		{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ***** LDFLAGS =$LDFLAGS" >&5
-printf "%s\n" "***** LDFLAGS =$LDFLAGS" >&6; }
 
 		as_ac_Lib=`printf "%s\n" "ac_cv_lib_$IP2LOCATION_LIB_NAME""_IP2Location_open" | sed "$as_sed_sh"`
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for IP2Location_open in -l$IP2LOCATION_LIB_NAME" >&5
