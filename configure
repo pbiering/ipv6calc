@@ -5496,7 +5496,11 @@ fi
 
 else case e in #(
   e)
-		as_fn_error $? "Berkeley DB library header files not found - check for db4-devel or libdb-devel" "$LINENO" 5
+		if test "$LDFLAGS" = "-m32"; then
+			as_fn_error $? "Berkeley DB library header files not found for 32-bit - check for db4-devel.i686 or libdb-devel.i686" "$LINENO" 5
+		else
+			as_fn_error $? "Berkeley DB library header files not found - check for db4-devel or libdb-devel" "$LINENO" 5
+		fi
 	 ;;
 esac
 fi
@@ -5787,7 +5791,12 @@ printf "%s\n" "#define HAVE_DECL_MMDB_LIB_VERSION $ac_have_decl" >>confdefs.h
 
 else case e in #(
   e)
-		as_fn_error $? "MaxMindDB library header files not found - check for libmaxminddb-devel?" "$LINENO" 5
+		if test "$LDFLAGS" = "-m32"; then
+			{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: MaxMindDB library header files not found for 32-bit - check for libmaxminddb-devel.i686" >&5
+printf "%s\n" "$as_me: WARNING: MaxMindDB library header files not found for 32-bit - check for libmaxminddb-devel.i686" >&2;}
+		else
+			as_fn_error $? "MaxMindDB library header files not found - check for libmaxminddb-devel" "$LINENO" 5
+		fi
 	 ;;
 esac
 fi
@@ -6394,7 +6403,7 @@ printf "%s\n" "*** IP2Location library supports API version string" >&6; }
 else case e in #(
   e)
 			if test "$LDFLAGS" = "-m32"; then
-				as_fn_error $? "IP2Location library file misses IP2Location_api_version_string - check for IP2Location-devel.i686" "$LINENO" 5
+				as_fn_error $? "IP2Location library file misses IP2Location_api_version_string for 32-bit - check for IP2Location-devel.i686" "$LINENO" 5
 			else
 				as_fn_error $? "IP2Location library file misses IP2Location_api_version_string - no longer supported" "$LINENO" 5
 			fi
