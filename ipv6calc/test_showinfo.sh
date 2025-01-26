@@ -2,8 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_showinfo.sh
-# Version    : $Id$
-# Copyright  : 2002-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2002-2025 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc showinfo
 
@@ -124,7 +123,7 @@ testscenarios_ipv4_reserved | while read address rfc rest; do
 			$verbose || echo
 			echo "ERROR: unexpected result for $address (should: $rfc)"
 			./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY
-			exit 1	
+			exit 1
 		fi
 		;;
 	    noRFC)
@@ -132,7 +131,7 @@ testscenarios_ipv4_reserved | while read address rfc rest; do
 			$verbose || echo
 			echo "ERROR: unexpected result for $address (should not contain RFC token)"
 			./ipv6calc -q -i -m $address | grep ^IPV4_REGISTRY
-			exit 1	
+			exit 1
 		fi
 		;;
 	esac
@@ -153,7 +152,7 @@ testscenarios_ipv6_reserved | while read address rfc rest; do
 			$verbose || echo
 			echo "ERROR: unexpected result (should: $rfc)"
 			./ipv6calc -q -i -m $address | grep ^IPV6_REGISTRY
-			exit 1	
+			exit 1
 		fi
 		;;
 	    noRFC)
@@ -161,7 +160,7 @@ testscenarios_ipv6_reserved | while read address rfc rest; do
 			$verbose || echo
 			echo "ERROR: unexpected result (should not contain RFC token)"
 			./ipv6calc -q -i -m $address | grep ^IPV6_REGISTRY
-			exit 1	
+			exit 1
 		fi
 		;;
 	esac
@@ -227,7 +226,7 @@ testscenarios_showinfo | while read address output_options; do
 		$verbose || echo
 		echo "ERROR: unexpected result for $address ($output_escaped)"
 		./ipv6calc $options -q -i -m $address
-		exit 1	
+		exit 1
 	fi
 	$verbose && echo || true
 	$verbose || echo -n "."
@@ -345,7 +344,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 		if ! ./ipv6calc -q -i -m $address | grep $grepopt "^$output_escaped$"; then
 			echo "ERROR: unexpected result for address $address ($output_escaped)"
 			./ipv6calc -q -i -m $address
-			exit 1	
+			exit 1
 		fi
 		$verbose && echo
 		$verbose || echo -n "."
@@ -388,7 +387,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
 				$verbose || echo
 				echo "ERROR: unexpected result for $address ($output_escaped)"
 				./ipv6calc -q -i -m $address
-				exit 1	
+				exit 1
 			fi
 			$verbose && echo
 			$verbose || echo -n "."
@@ -437,7 +436,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv4; then
 		if ! ./ipv6calc -q -i -m $address | grep -E $grepopt "^$output_escaped$"; then
 			echo "ERROR: unexpected result ($output_escaped)"
 			./ipv6calc -q -i -m $address
-			exit 1	
+			exit 1
 		fi
 		$verbose && echo
 		$verbose || echo -n "."
@@ -486,7 +485,7 @@ if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv6; then
 			$verbose || echo
 			echo "ERROR: unexpected result ($output_escaped)"
 			./ipv6calc -q -i -m $address
-			exit 1	
+			exit 1
 		fi
 		$verbose && echo
 		$verbose || echo -n "."
