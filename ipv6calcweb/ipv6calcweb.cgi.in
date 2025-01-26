@@ -1002,7 +1002,7 @@ if (defined $database_mmdb_lib) {
 	$options_ipv6calc_ip2location2 .= " --db-mmdb-lib $database_mmdb_lib";
 };
 
-# IP2Location
+# IP2Location(BIN)
 if (defined $database_ip2location_dir) {
 	$options_ipv6calc_ip2location .= " --db-ip2location-dir $database_ip2location_dir";
 };
@@ -1011,16 +1011,16 @@ if (defined $database_ip2location_lib) {
 	$options_ipv6calc_ip2location .= " --db-ip2location-lib $database_ip2location_lib";
 };
 
-# IP2Location2
+# IP2Location2(MMDB)
 if (defined $database_ip2location2_dir) {
 	$options_ipv6calc_ip2location2 .= " --db-ip2location2-dir $database_ip2location2_dir";
 };
-# GeoIP2
+# GeoIP2(MMDB)
 if (defined $database_geoip2_dir) {
 	$options_ipv6calc_geoip2 .= " --db-geoip2-dir $database_geoip2_dir";
 };
 
-# DBIP2
+# DBIP2(MMDB)
 if (defined $database_dbip2_dir) {
 	$options_ipv6calc_dbip2 .= " --db-dbip2-dir $database_dbip2_dir";
 };
