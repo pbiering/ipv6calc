@@ -615,9 +615,9 @@ void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 #ifdef SUPPORT_GEOIP2
 	if (wrapper_GeoIP2_disable == 0) {
 #ifdef SUPPORT_MMDB_DYN
-		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(dyn-load/MMDB)", string, strlen(string) > 0 ? " " : "");
+		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP2(dyn-load/MMDB)", string, strlen(string) > 0 ? " " : "");
 #else
-		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP(linked/MMDB)", string, strlen(string) > 0 ? " " : "");
+		snprintf(tempstring, sizeof(tempstring), "%s%sGeoIP2(linked/MMDB)", string, strlen(string) > 0 ? " " : "");
 #endif // SUPPORT_MMDB_DYN
 		snprintf(string, size, "%s", tempstring);
 	};
