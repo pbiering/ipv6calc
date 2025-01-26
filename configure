@@ -5792,8 +5792,7 @@ printf "%s\n" "#define HAVE_DECL_MMDB_LIB_VERSION $ac_have_decl" >>confdefs.h
 else case e in #(
   e)
 		if test "$LDFLAGS" = "-m32"; then
-			{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: WARNING: MaxMindDB library header files not found for 32-bit - check for libmaxminddb-devel.i686" >&5
-printf "%s\n" "$as_me: WARNING: MaxMindDB library header files not found for 32-bit - check for libmaxminddb-devel.i686" >&2;}
+			as_fn_error $? "MaxMindDB library header files not found for 32-bit - check for libmaxminddb-devel.i686" "$LINENO" 5
 		else
 			as_fn_error $? "MaxMindDB library header files not found - check for libmaxminddb-devel" "$LINENO" 5
 		fi
