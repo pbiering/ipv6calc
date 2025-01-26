@@ -788,7 +788,7 @@ void libipv6calc_db_wrapper_IP2Location2_wrapper_print_db_info(const int level_v
 		r = libipv6calc_db_wrapper_IP2Location2_db_avail(type);
 		if (r == 2) {
 			fprintf(stderr, "%sIP2Location(MMDB): %s %-43s:[%3d] %-35s (SOFTLINK IS UNSUPPORTED)\n", prefix,
-				((libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].features & (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) == (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) ? "IPvx" : (((libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0) ? "IPv6" : "IPv4"),
+				((libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].features & (IPV6CALC_DB_IP2LOCATION2_IPV6 | IPV6CALC_DB_IP2LOCATION2_IPV4)) == (IPV6CALC_DB_IP2LOCATION2_IPV6 | IPV6CALC_DB_IP2LOCATION2_IPV4)) ? "IPvx" : (((libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].features & IPV6CALC_DB_IP2LOCATION2_IPV6) != 0) ? "IPv6" : "IPv4"),
 				libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].description,
 				libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].number,
 				libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].filename);
@@ -797,14 +797,14 @@ void libipv6calc_db_wrapper_IP2Location2_wrapper_print_db_info(const int level_v
 			ret = libipv6calc_db_wrapper_IP2Location2_open_type(type);
 			if (ret != MMDB_SUCCESS) {
 				fprintf(stderr, "%sIP2Location(MMDB): %s %-43s:[%3d] %-35s (CAN'T OPEN)\n", prefix,
-					((libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].features & (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) == (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) ? "IPvx" : (((libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0) ? "IPv6" : "IPv4"),
+					((libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].features & (IPV6CALC_DB_IP2LOCATION2_IPV6 | IPV6CALC_DB_IP2LOCATION2_IPV4)) == (IPV6CALC_DB_IP2LOCATION2_IPV6 | IPV6CALC_DB_IP2LOCATION2_IPV4)) ? "IPvx" : (((libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].features & IPV6CALC_DB_IP2LOCATION2_IPV6) != 0) ? "IPv6" : "IPv4"),
 					libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].description,
 					libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].number,
 					libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].filename
 				);
 			} else { 
 				fprintf(stderr, "%sIP2Location(MMDB): %s %-43s:[%3d] %-35s (%s%s)\n", prefix,
-					((libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].features & (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) == (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) ? "IPvx" : (((libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0) ? "IPv6" : "IPv4"),
+					((libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].features & (IPV6CALC_DB_IP2LOCATION2_IPV6 | IPV6CALC_DB_IP2LOCATION2_IPV4)) == (IPV6CALC_DB_IP2LOCATION2_IPV6 | IPV6CALC_DB_IP2LOCATION2_IPV4)) ? "IPvx" : (((libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].features & IPV6CALC_DB_IP2LOCATION2_IPV6) != 0) ? "IPv6" : "IPv4"),
 					libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].description,
 					libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].number,
 					libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].filename,
@@ -817,7 +817,7 @@ void libipv6calc_db_wrapper_IP2Location2_wrapper_print_db_info(const int level_v
 		} else {
 			if (level_verbose == LEVEL_VERBOSE2) {
 				fprintf(stderr, "%sIP2Location(MMDB): %s %-43s:[%3d] %-35s (%s)\n", prefix,
-					((libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].features & (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) == (IPV6CALC_DB_IP2LOCATION_IPV6 | IPV6CALC_DB_IP2LOCATION_IPV4)) ? "IPvx" : (((libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].features & IPV6CALC_DB_IP2LOCATION_IPV6) != 0) ? "IPv6" : "IPv4"),
+					((libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].features & (IPV6CALC_DB_IP2LOCATION2_IPV6 | IPV6CALC_DB_IP2LOCATION2_IPV4)) == (IPV6CALC_DB_IP2LOCATION2_IPV6 | IPV6CALC_DB_IP2LOCATION2_IPV4)) ? "IPvx" : (((libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].features & IPV6CALC_DB_IP2LOCATION2_IPV6) != 0) ? "IPv6" : "IPv4"),
 					libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].description,
 					libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].number,
 					libipv6calc_db_wrapper_IP2Location2_db_file_desc[i].filename,

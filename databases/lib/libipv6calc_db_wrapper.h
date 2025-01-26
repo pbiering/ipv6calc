@@ -120,7 +120,7 @@ static const s_formatoption ipv6calc_db_features[] = {
 	{ IPV6CALC_DB_GEOIP_IPV6	, "GeoIPv6"		, "GeoIP(MMDB) IPv6 database"},
 	{ IPV6CALC_DB_IP2LOCATION_IPV4	, "IP2Location"		, "IP2Location(BIN) IPv4 database"},
 	{ IPV6CALC_DB_IP2LOCATION_IPV6	, "IP2Location6"	, "IP2Location(BIN) IPv6 database"},
-	{ IPV6CALC_DB_IP2LOCATION2_IPV4	, "IP2Location2v4"	, "IP2Location(MMDB) IPv4 database"},
+	{ IPV6CALC_DB_IP2LOCATION2_IPV4	, "IP2Location2"	, "IP2Location(MMDB) IPv4 database"},
 	{ IPV6CALC_DB_IP2LOCATION2_IPV6	, "IP2Location2v6"	, "IP2Location(MMDB) IPv6 database"},
 	{ IPV6CALC_DB_DBIP_IPV4		, "DBIPv4"		, "db-ip.com(MMDB) IPv4 database"},
 	{ IPV6CALC_DB_DBIP_IPV6		, "DBIPv6"		, "db-ip.com(MMDB) IPv6 database"},
