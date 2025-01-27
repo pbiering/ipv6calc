@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
  * Version       : $Id$
- * Generated     : Tue Jan 14 20:54:58 2025
+ * Generated     : Mon Jan 27 05:52:36 2025
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20250114";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20250127";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -4402,6 +4402,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0x0B7000, 0x0B7FFF, "TIAMA", "TIAMA" },
 	{ 0x8C1F64, 0x0B8000, 0x0B8FFF, "Signatrol Ltd", "SIGNATROL" },
 	{ 0x8C1F64, 0x0BB000, 0x0BBFFF, "InfraChen Technology Co., Ltd.", "INFRACHEN" },
+	{ 0x8C1F64, 0x0BD000, 0x0BDFFF, "Solace Systems Inc.", "SOLACE" },
 	{ 0x8C1F64, 0x0BE000, 0x0BEFFF, "BNB", "BNB" },
 	{ 0x8C1F64, 0x0BF000, 0x0BFFFF, "Aurora Communication Technologies Corp.", "AURORA-COMMUNICATION-TECHNOLOGIES" },
 	{ 0x8C1F64, 0x0C0000, 0x0C0FFF, "Active Research Limited", "ACTIVE-RESEARCH" },
@@ -4611,6 +4612,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0x280000, 0x280FFF, "HEITEC AG", "HEITEC" },
 	{ 0x8C1F64, 0x281000, 0x281FFF, "NVP TECO LTD", "NVP-TECO" },
 	{ 0x8C1F64, 0x286000, 0x286FFF, "i2s", "I2S" },
+	{ 0x8C1F64, 0x288000, 0x288FFF, "Vision Systems Safety Tech", "VISION-SAFETY-TECH" },
 	{ 0x8C1F64, 0x289000, 0x289FFF, "Craft4 Digital GmbH", "CRAFT4-DIGITAL" },
 	{ 0x8C1F64, 0x28A000, 0x28AFFF, "Arcopie", "ARCOPIE" },
 	{ 0x8C1F64, 0x28C000, 0x28CFFF, "Sakura Seiki Co.,Ltd.", "SAKURA-SEIKI" },
@@ -4635,6 +4637,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0x2A9000, 0x2A9FFF, "Elbit Systems of America, LLC", "ELBIT-OF-AMERICA" },
 	{ 0x8C1F64, 0x2AC000, 0x2ACFFF, "DCO SYSTEMS LTD", "DCO" },
 	{ 0x8C1F64, 0x2B1000, 0x2B1FFF, "U -MEI-DAH INT'L ENTERPRISE CO.,LTD.", "U-MEI-DAH" },
+	{ 0x8C1F64, 0x2B4000, 0x2B4FFF, "Sonel S.A.", "SONEL" },
 	{ 0x8C1F64, 0x2B6000, 0x2B6FFF, "Stercom Power Solutions GmbH", "STERCOM-POWER-SOLUTIONS" },
 	{ 0x8C1F64, 0x2B8000, 0x2B8FFF, "Veinland GmbH", "VEINLAND" },
 	{ 0x8C1F64, 0x2BB000, 0x2BBFFF, "Chakra Technology Ltd", "CHAKRA" },
@@ -5027,6 +5030,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0x5B0000, 0x5B0FFF, "Sonel S.A.", "SONEL" },
 	{ 0x8C1F64, 0x5B3000, 0x5B3FFF, "eumig industrie-TV GmbH.", "EUMIG-INDUSTRIE-TV" },
 	{ 0x8C1F64, 0x5B4000, 0x5B4FFF, "Axion Lighting", "AXION-LIGHTING" },
+	{ 0x8C1F64, 0x5B5000, 0x5B5FFF, "HUBRIS TECHNOLOGIES PRIVATE LIMITED", "HUBRIS-TECHNOLOGIES-PRIVATE" },
 	{ 0x8C1F64, 0x5B7000, 0x5B7FFF, "Vortex Sp. z o.o.", "VORTEX-SP-Z-O-O" },
 	{ 0x8C1F64, 0x5B9000, 0x5B9FFF, "ViewSonic Corp", "VIEWSONIC" },
 	{ 0x8C1F64, 0x5BA000, 0x5BAFFF, "Connectcom System Co., Ltd", "CONNECTCOM-SYSTEM" },
@@ -5147,6 +5151,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0x698000, 0x698FFF, "Arcus-EDS GmbH", "ARCUS-EDS" },
 	{ 0x8C1F64, 0x699000, 0x699FFF, "FIDICA GmbH & Co. KG", "FIDICA" },
 	{ 0x8C1F64, 0x69E000, 0x69EFFF, "AT-Automation Technology GmbH", "AT-AUTOMATION" },
+	{ 0x8C1F64, 0x69F000, 0x69FFFF, "Insightec", "INSIGHTEC" },
 	{ 0x8C1F64, 0x6A0000, 0x6A0FFF, "Avionica", "AVIONICA" },
 	{ 0x8C1F64, 0x6A3000, 0x6A3FFF, "Becton Dickinson", "BECTON-DICKINSON" },
 	{ 0x8C1F64, 0x6A4000, 0x6A4FFF, "Automata Spa", "AUTOMATA-SPA" },
@@ -5251,6 +5256,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0x769000, 0x769FFF, "Vonamic GmbH", "VONAMIC" },
 	{ 0x8C1F64, 0x76A000, 0x76AFFF, "DORLET SAU", "DORLET-SAU" },
 	{ 0x8C1F64, 0x76C000, 0x76CFFF, "Guan Show Technologe Co., Ltd.", "GUAN-SHOW-TECHNOLOGE" },
+	{ 0x8C1F64, 0x76F000, 0x76FFFF, "INVENTIA Sp. z o.o.", "INVENTIA-SP-Z-O-O" },
 	{ 0x8C1F64, 0x774000, 0x774FFF, "navXperience GmbH", "NAVXPERIENCE" },
 	{ 0x8C1F64, 0x775000, 0x775FFF, "Becton Dickinson", "BECTON-DICKINSON" },
 	{ 0x8C1F64, 0x776000, 0x776FFF, "Visiosoft Pty Ltd", "VISIOSOFT-PTY" },
@@ -5320,6 +5326,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0x7EF000, 0x7EFFFF, "SAXOGY POWER ELECTRONICS GmbH", "SAXOGY-POWER-ELECTRONICS" },
 	{ 0x8C1F64, 0x7F1000, 0x7F1FFF, "AEM Singapore Pte Ltd", "AEM-SINGAPORE-PTE" },
 	{ 0x8C1F64, 0x7F2000, 0x7F2FFF, "AT-Automation Technology GmbH", "AT-AUTOMATION" },
+	{ 0x8C1F64, 0x7F3000, 0x7F3FFF, "Videosys Broadcast Ltd", "VIDEOSYS-BROADCAST" },
 	{ 0x8C1F64, 0x7F4000, 0x7F4FFF, "G.M. International srl", "G-M-SRL" },
 	{ 0x8C1F64, 0x7F8000, 0x7F8FFF, "FleetSafe India Private Limited", "FLEETSAFE-INDIA-PRIVATE" },
 	{ 0x8C1F64, 0x7FC000, 0x7FCFFF, "Mitsubishi Electric Klimat Transportation Systems S.p.A.", "MITSUBISHI-ELECTRIC-KLIMAT-TRANSPORTATION" },
@@ -5538,6 +5545,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0x9B2000, 0x9B2FFF, "Emerson Rosemount Analytical", "EMERSON-ROSEMOUNT-ANALYTICAL" },
 	{ 0x8C1F64, 0x9B3000, 0x9B3FFF, "Böckelt GmbH", "BOECKELT" },
 	{ 0x8C1F64, 0x9B6000, 0x9B6FFF, "GS Elektromedizinsiche Geräte G. Stemple GmbH", "GS-ELEKTROMEDIZINSICHE-GERAETE-G-STEMPLE" },
+	{ 0x8C1F64, 0x9B7000, 0x9B7FFF, "Stercom Power Soltions GmbH", "STERCOM-POWER-SOLTIONS" },
 	{ 0x8C1F64, 0x9B8000, 0x9B8FFF, "Makel Elektrik Malzemeleri A.Ş.", "MAKEL-ELEKTRIK-MALZEMELERI-A" },
 	{ 0x8C1F64, 0x9B9000, 0x9B9FFF, "QUERCUS TECHNOLOGIES, S.L.", "QUERCUS-TECHNOLOGIES" },
 	{ 0x8C1F64, 0x9BA000, 0x9BAFFF, "WINTUS SYSTEM", "WINTUS-SYSTEM" },
@@ -5684,6 +5692,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0xAD8000, 0xAD8FFF, "Novanta IMS", "NOVANTA-IMS" },
 	{ 0x8C1F64, 0xADB000, 0xADBFFF, "Hebei Weiji Electric Co.,Ltd", "HEBEI-WEIJI-ELECTRIC" },
 	{ 0x8C1F64, 0xAE1000, 0xAE1FFF, "YUYAMA MFG Co.,Ltd", "YUYAMA-MFG" },
+	{ 0x8C1F64, 0xAE2000, 0xAE2FFF, "Jiangsu Yi Rong Mstar Technology Ltd.", "JIANGSU-YI-RONG-MSTAR" },
 	{ 0x8C1F64, 0xAE3000, 0xAE3FFF, "Private", "PRIVATE" },
 	{ 0x8C1F64, 0xAE5000, 0xAE5FFF, "Ltec Co.,Ltd", "LTEC" },
 	{ 0x8C1F64, 0xAE8000, 0xAE8FFF, "ADETEC SAS", "ADETEC-SAS" },
@@ -5734,6 +5743,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0xB3B000, 0xB3BFFF, "Sicon srl", "SICON-SRL" },
 	{ 0x8C1F64, 0xB3C000, 0xB3CFFF, "Safepro AI Video Research Labs Pvt Ltd", "SAFEPRO-AI-VIDEO-RESEARCH-LABS-PVT" },
 	{ 0x8C1F64, 0xB3D000, 0xB3DFFF, "RealD, Inc.", "REALD" },
+	{ 0x8C1F64, 0xB3F000, 0xB3FFFF, "Fell Technology AS", "FELL-AS" },
 	{ 0x8C1F64, 0xB46000, 0xB46FFF, "PHYGITALL SOLUÇÕES EM INTERNET DAS COISAS", "PHYGITALL-SOLUES-EM-INTERNET-DAS-COISAS" },
 	{ 0x8C1F64, 0xB47000, 0xB47FFF, "LINEAGE POWER PVT LTD.,", "LINEAGE-POWER-PVT" },
 	{ 0x8C1F64, 0xB4C000, 0xB4CFFF, "Picocom Technology Ltd", "PICOCOM" },
@@ -5753,6 +5763,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0xB6C000, 0xB6CFFF, "Laser Mechanisms, Inc.", "LASER-MECHANISMS" },
 	{ 0x8C1F64, 0xB6D000, 0xB6DFFF, "Andy-L Ltd", "ANDY-L" },
 	{ 0x8C1F64, 0xB6E000, 0xB6EFFF, "Loop Technologies", "LOOP-TECHNOLOGIES" },
+	{ 0x8C1F64, 0xB71000, 0xB71FFF, "Sichuan Youke Communication Technology Co., Ltd", "SICHUAN-YOUKE-COMMUNICATION" },
 	{ 0x8C1F64, 0xB73000, 0xB73FFF, "Comm-ence, Inc.", "COMM-ENCE" },
 	{ 0x8C1F64, 0xB77000, 0xB77FFF, "Carestream Dental LLC", "CARESTREAM-DENTAL" },
 	{ 0x8C1F64, 0xB79000, 0xB79FFF, "AddSecure Smart Grids", "ADDSECURE-SMART-GRIDS" },
@@ -5802,7 +5813,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0xBC3000, 0xBC3FFF, "FoxIoT OÜ", "FOXIOT-OUE" },
 	{ 0x8C1F64, 0xBC4000, 0xBC4FFF, "EasyNet Industry (Shenzhen) Co., Ltd", "EASYNET-INDUSTRY-SHENZHEN" },
 	{ 0x8C1F64, 0xBC6000, 0xBC6FFF, "Chengdu ZiChen Time&Frequency Technology Co.,Ltd", "CHENGDU-ZICHEN-TIME-FREQUENCY" },
-	{ 0x8C1F64, 0xBC7000, 0xBC7FFF, "UGARD NETWORKS TECHNOLOGY Co.,LTD", "UGARD-NETWORKS" },
+	{ 0x8C1F64, 0xBC7000, 0xBC7FFF, "UGUARD NETWORKS TECHNOLOGY Co.,LTD", "UGUARD-NETWORKS" },
 	{ 0x8C1F64, 0xBC9000, 0xBC9FFF, "GL TECH CO.,LTD", "GL-TECH" },
 	{ 0x8C1F64, 0xBCA000, 0xBCAFFF, "OPTOKON, a.s.", "OPTOKON" },
 	{ 0x8C1F64, 0xBCB000, 0xBCBFFF, "A&T Corporation", "A-T" },
@@ -5960,6 +5971,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0xCF9000, 0xCF9FFF, "VeoTech", "VEOTECH" },
 	{ 0x8C1F64, 0xCFA000, 0xCFAFFF, "YUYAMA MFG Co.,Ltd", "YUYAMA-MFG" },
 	{ 0x8C1F64, 0xCFB000, 0xCFBFFF, "YUYAMA MFG Co.,Ltd", "YUYAMA-MFG" },
+	{ 0x8C1F64, 0xCFC000, 0xCFCFFF, "Abbott Diagnostics Technologies AS", "ABBOTT-DIAGNOSTICS-TECHNOLOGIES-AS" },
 	{ 0x8C1F64, 0xCFD000, 0xCFDFFF, "Smart-VOD Pty Ltd", "SMART-VOD-PTY" },
 	{ 0x8C1F64, 0xD02000, 0xD02FFF, "Flextronics International Kft", "FLEXTRONICS-KFT" },
 	{ 0x8C1F64, 0xD07000, 0xD07FFF, "Talleres de Escoriaza SAU", "TALLERES-DE-ESCORIAZA-SAU" },
@@ -5972,6 +5984,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0xD13000, 0xD13FFF, "EYatsko Individual", "EYATSKO-INDIVIDUAL" },
 	{ 0x8C1F64, 0xD15000, 0xD15FFF, "MB connect line GmbH", "MB-CONNECT-LINE" },
 	{ 0x8C1F64, 0xD17000, 0xD17FFF, "I.S.A. - Altanova group srl", "I-ALTANOVA-GROUP-SRL" },
+	{ 0x8C1F64, 0xD1A000, 0xD1AFFF, "Monnit Corporation", "MONNIT" },
 	{ 0x8C1F64, 0xD1B000, 0xD1BFFF, "Audiodo International AB", "AUDIODO-AB" },
 	{ 0x8C1F64, 0xD1C000, 0xD1CFFF, "Vesper Technologies", "VESPER-TECHNOLOGIES" },
 	{ 0x8C1F64, 0xD1F000, 0xD1FFFF, "Free Talk Engineering Co., Ltd", "FREE-TALK-ENGINEERING" },
@@ -6159,6 +6172,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0xE99000, 0xE99FFF, "Pantherun Technologies Pvt Ltd", "PANTHERUN-TECHNOLOGIES-PVT" },
 	{ 0x8C1F64, 0xE9A000, 0xE9AFFF, "SiFive Inc", "SIFIVE" },
 	{ 0x8C1F64, 0xE9F000, 0xE9FFFF, "Lumiplan Duhamel", "LUMIPLAN-DUHAMEL" },
+	{ 0x8C1F64, 0xEA6000, 0xEA6FFF, "Dial Plan Limited", "DIAL-PLAN" },
 	{ 0x8C1F64, 0xEA8000, 0xEA8FFF, "Zumbach Electronic AG", "ZUMBACH" },
 	{ 0x8C1F64, 0xEAA000, 0xEAAFFF, "KB Modul", "KB-MODUL" },
 	{ 0x8C1F64, 0xEAC000, 0xEACFFF, "Miracle Healthcare, Inc.", "MIRACLE-HEALTHCARE" },

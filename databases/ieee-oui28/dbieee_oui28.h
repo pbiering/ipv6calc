@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_oui28.h
  * Version       : $Id$
- * Generated     : Tue Jan 14 20:54:56 2025
+ * Generated     : Mon Jan 27 05:52:34 2025
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui28_status __attribute__ ((__unused__)) = "OUI28/20250114";
+/*@unused@*/ static const char* libieee_oui28_status __attribute__ ((__unused__)) = "OUI28/20250127";
 
 
 static const s_ieee_oui28 libieee_oui28[] = {
@@ -466,9 +466,21 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x1845B3, 0xC00000, 0xCFFFFF, "Bdf Digital", "BDF-DIGITAL" },
 	{ 0x1845B3, 0xD00000, 0xDFFFFF, "Taicang T&W Electronics", "TAICANG-T-W-ELECTRONICS" },
 	{ 0x1845B3, 0xE00000, 0xEFFFFF, "Sleep Number", "SLEEP-NUMBER" },
+	{ 0x186696, 0x000000, 0x0FFFFF, "Annapurna labs", "ANNAPURNA-LABS" },
+	{ 0x186696, 0x100000, 0x1FFFFF, "Turtle AV", "TURTLE-AV" },
+	{ 0x186696, 0x200000, 0x2FFFFF, "Nanjin KW technology Co.,Ltd.", "NANJIN-KW" },
+	{ 0x186696, 0x300000, 0x3FFFFF, "Cheersu(Shenzhen) Technology Co., Ltd", "CHEERSU-SHENZHEN" },
 	{ 0x186696, 0x400000, 0x4FFFFF, "Akteena Inc", "AKTEENA" },
+	{ 0x186696, 0x500000, 0x5FFFFF, "Wuhan Precise Electronics Co.,Ltd.", "WUHAN-PRECISE-ELECTRONICS" },
+	{ 0x186696, 0x600000, 0x6FFFFF, "Shenzhen Safecuit Photonic Technology Co., Ltd", "SHENZHEN-SAFECUIT-PHOTONIC" },
 	{ 0x186696, 0x700000, 0x7FFFFF, "Shandong Hummingbird Internet of Things Technology Co., Ltd", "SHANDONG-HUMMINGBIRD-INTERNET-OF-THINGS" },
+	{ 0x186696, 0x800000, 0x8FFFFF, "Xunmu Information Technology(Shanghai) Co.,Ltd.", "XUNMU-INFORMATION-SHANGHAI" },
+	{ 0x186696, 0x900000, 0x9FFFFF, "Coocaa Network Technology Co.,Ltd.", "COOCAA-NETWORK" },
 	{ 0x186696, 0xA00000, 0xAFFFFF, "BIPAI ELECTRONIC TECHNOLOGY(DONGGUAN)CO.,LTD", "BIPAI-DONGGUAN" },
+	{ 0x186696, 0xB00000, 0xBFFFFF, "HUNAN SONGBEN INFORMATION CO., LTD", "HUNAN-SONGBEN-INFORMATION" },
+	{ 0x186696, 0xC00000, 0xCFFFFF, "Kee Tat Innovative Technology Holdings Limited", "KEE-TAT-INNOVATIVE-HOLDINGS" },
+	{ 0x186696, 0xD00000, 0xDFFFFF, "VIVA CO.,LTD.", "VIVA" },
+	{ 0x186696, 0xE00000, 0xEFFFFF, "Indusenz AS", "INDUSENZ-AS" },
 	{ 0x1874E2, 0x000000, 0x0FFFFF, "Ensor AG", "ENSOR" },
 	{ 0x1874E2, 0x100000, 0x1FFFFF, "Sartorius Lab Instruments GmbH & Co. KG", "SARTORIUS-LAB-INSTRUMENTS" },
 	{ 0x1874E2, 0x200000, 0x2FFFFF, "Shenzhen WITSTECH Co.,Ltd.", "SHENZHEN-WITSTECH" },
