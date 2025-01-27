@@ -2252,6 +2252,12 @@ uint32_t libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(const ipv6calc_i
 	errno = 0;
 	asn = strtoll(IP2Location_as_num_ptr, &end, 10);
 
+	if (! TEST_IP2LOCATION_AVAILABLE(IP2Location_as_num_ptr)) {
+		// has no proper content
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "no data available (sample database)");
+		goto END_libipv6calc_db_wrapper;
+	};
+
 	if ((errno == ERANGE) || (asn < 0) || (asn > UINT32_MAX)) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "can't convert AS number string to uint32_t as out-of-range: %s", IP2Location_as_num_ptr);
 		goto END_libipv6calc_db_wrapper;
@@ -2336,6 +2342,14 @@ static IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_wrapper_country_nam
 		goto END_libipv6calc_db_wrapper;
 	};
 
+	if (! TEST_IP2LOCATION_AVAILABLE(record->country_short)) {
+		// has no proper content
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "no data available (sample database)");
+		libipv6calc_db_wrapper_IP2Location_free_record(record);
+		record = NULL;
+		goto END_libipv6calc_db_wrapper;
+	};
+
 	IP2LOCATION_DB_USAGE_MAP_TAG(IP2Location_type);
 
 END_libipv6calc_db_wrapper:
@@ -2391,6 +2405,14 @@ static IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_wrapper_record_city
 
 	if (record == NULL) {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "did not return a record");
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	if (! TEST_IP2LOCATION_AVAILABLE(record->country_short)) {
+		// has no proper content
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "no data available (sample database)");
+		libipv6calc_db_wrapper_IP2Location_free_record(record);
+		record = NULL;
 		goto END_libipv6calc_db_wrapper;
 	};
 
