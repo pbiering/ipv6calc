@@ -4,13 +4,14 @@
 #
 # Project    : ipv6calc/doc
 # File       : generate.sh
-# Copyright  : 2003-2023 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2003-2025 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 # Requires: openjade opensp lyx docbook-utils
 #
 # 20231206/PB: change from "jade" to "openjade" (anyhow a softlink since at least EL6)
 # 20231206/PB: add option to generate directly all from LyX file
 # 20231207/PB: drop support of SGML file, LyX file is now mandatory
+# 20250128/PB: switch to docbook5, SGML dropped
 
 #export SP_ENCODING=UTF-8
 export SP_CHARSET_FIXED=yes
@@ -126,12 +127,12 @@ export_sgml_xml() {
 
 	echo "INF: Used Lyx file: $file_lyx"
 
-	echo "INF: Export LyX->SGML"
-	$lyxBin --export docbook $file_lyx || return 1
-	echo "INF: Export LyX->SGML successful"
+	#echo "INF: Export LyX->SGML"
+	#$lyxBin --export docbook $file_lyx || return 1
+	#echo "INF: Export LyX->SGML successful"
 
 	echo "INF: Export LyX->XML"
-	$lyxBin --export docbook-xml $file_lyx || return 1
+	$lyxBin --export docbook5 $file_lyx || return 1
 	echo "INF: Export LyX->XML successful"
 }
 
