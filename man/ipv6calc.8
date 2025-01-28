@@ -1,4 +1,4 @@
-.TH "ipv6calc" "8" "2.0.0" "Peter Bieringer <pb@bieringer.de>" "system administration"
+.TH "ipv6calc" "8" "3.4.0" "Peter Bieringer <pb@bieringer.de>" "system administration"
 .SH "NAME"
 ipv6calc \- format, calculate, show information, filter IPv6/IPv4/MAC addresses
 .SH "SYNOPSIS"
@@ -32,16 +32,28 @@ this online help
 External database options (depending on compiled\-in suppport):
 .TP 
 \fB[\-\-db\-ip2location\-disable]\fR
-IP2Location support disabled
+IP2Location(BIN) support disabled
 .TP 
 \fB[\-\-db\-ip2location\-dir\fR \fIDIRECTORY\fR\fB]\fR
-IP2Location database directory (default: /usr/share/IP2Location)
+IP2Location(BIN) database directory (default: /usr/share/IP2Location)
 .TP 
-\fB[\-\-db\-geoip\-disable]\fR
-GeoIP support disabled
+\fB[\-\-db\-ip2location2\-disable]\fR
+IP2Location(MMDB) support disabled
 .TP 
-\fB[\-\-db\-geoip\-dir\fR \fIDIRECTORY\fR\fB]\fR
-GeoIP database directory (default: /usr/share/GeoIP)
+\fB[\-\-db\-ip2location2\-dir\fR \fIDIRECTORY\fR\fB]\fR
+IP2Location(MMDB) database directory (default: /usr/share/IP2Location)
+.TP 
+\fB[\-\-db\-geoip2\-disable]\fR
+GeoIP(MMDB) support disabled
+.TP 
+\fB[\-\-db\-geoip2\-dir\fR \fIDIRECTORY\fR\fB]\fR
+GeoIP(MMDB) database directory (default: /usr/share/GeoIP)
+.TP 
+\fB[\-\-db\-dbip2\-disable]\fR
+db\-ip.com(MMDB) support disabled
+.TP 
+\fB[\-\-db\-dbip2\-dir\fR \fIDIRECTORY\fR\fB]\fR
+db\-ip.com(MMDB) database directory (default: /usr/share/DBIP)
 .LP 
 Special options:
 .TP 

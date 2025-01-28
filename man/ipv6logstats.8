@@ -1,4 +1,4 @@
-.TH "ipv6logstats" "8" "2.0.0" "Peter Bieringer <pb@bieringer.de>" "system tools"
+.TH "ipv6logstats" "8" "3.4.0" "Peter Bieringer <pb@bieringer.de>" "system tools"
 .SH "Name"
 ipv6logstats \- Takes http log data from stdin and print a statistics table on output
 .SH "SYNOPSIS"
@@ -39,11 +39,23 @@ IP2Location support disabled
 \fB[\-\-db\-ip2location\-dir\fR \fIDIRECTORY\fR\fB]\fR
 IP2Location database directory (default: /usr/share/IP2Location)
 .TP 
-\fB[\-\-db\-geoip\-disable]\fR
-GeoIP support disabled
+\fB[\-\-db\-ip2location2\-disable]\fR
+IP2Location(MMDB) support disabled
 .TP 
-\fB[\-\-db\-geoip\-dir\fR \fIDIRECTORY\fR\fB]\fR
-GeoIP database directory (default: /usr/share/GeoIP)
+\fB[\-\-db\-ip2location2\-dir\fR \fIDIRECTORY\fR\fB]\fR
+IP2Location(MMDB) database directory (default: /usr/share/IP2Location)
+.TP 
+\fB[\-\-db\-geoip2\-disable]\fR
+GeoIP(MMDB) support disabled
+.TP 
+\fB[\-\-db\-geoip2\-dir\fR \fIDIRECTORY\fR\fB]\fR
+GeoIP(MMDB) database directory (default: /usr/share/GeoIP)
+.TP 
+\fB[\-\-db\-dbip2\-disable]\fR
+db\-ip.com(MMDB) support disabled
+.TP 
+\fB[\-\-db\-dbip2\-dir\fR \fIDIRECTORY\fR\fB]\fR
+db\-ip.com(MMDB) database directory (default: /usr/share/DBIP)
 .LP 
 Special options:
 .TP 
