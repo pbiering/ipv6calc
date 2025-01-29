@@ -99,7 +99,6 @@ Requires:      libdb
 %if %{enable_mmdb}
 BuildRequires: libmaxminddb-devel
 Recommends:    libmaxminddb
-%endif
 
 %if 0%{?fedora} >= 39
 BuildRequires: geolite2-country
@@ -115,6 +114,8 @@ BuildRequires: geolite2-country
 BuildRequires: geolite2-city
 Recommends:    geolite2-country
 Recommends:    geolite2-city
+%endif
+
 %endif
 
 %if %{enable_ip2location}
@@ -250,7 +251,7 @@ make install DESTDIR=%{buildroot}
 install -d -p %{buildroot}%{_docdir}/%{name}-%{version}
 
 ## examples
-install -d %{buildroot}%{_datadir}/%{name}/examples/
+install -d %{buildroot}%{_datadir}/%{name}/examples
 
 # ipv6logconv
 install -d %{buildroot}%{_datadir}/%{name}/examples/ipv6logconv
