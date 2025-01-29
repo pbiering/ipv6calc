@@ -11,6 +11,14 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20250129/PB:
+	tag version 4.3.0
+
+20250128/PB:
+	doc: updated
+	man: updated
+	tools/IP2Location-update.sh[.in]: add support for MMDB databases
+
 20250127/PB:
 	internal databases: update
 
