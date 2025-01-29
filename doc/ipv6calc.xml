@@ -3,7 +3,8 @@
   See https://www.lyx.org/ for more information -->
 <article xml:lang="en-US" xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.2">
 <title>The ipv6calc Homepage</title>
-<section>
+<address role='right-address'>pb at bieringer dot de</address>
+<info><author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author><revhistory><revision> <revnumber>12.0.0</revnumber> <date>2025-01-28</date> <authorinitials>PB</authorinitials></revision></revhistory></info><section>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in <emphasis>/proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program <emphasis>ip6_int into. Now only one utility is needed to do a lot.</emphasis></emphasis></para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
