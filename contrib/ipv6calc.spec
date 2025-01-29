@@ -309,10 +309,10 @@ rm -rf %{buildroot}
 
 %files
 %if %{rpm_license_extra}
-%doc ChangeLog README README.* CREDITS TODO USAGE doc/ipv6calc.lyx doc/ipv6calc.sgml doc/ipv6calc.html doc/ipv6calc.xml
+%doc ChangeLog README README.* CREDITS TODO USAGE doc/ipv6calc.lyx doc/ipv6calc.html doc/ipv6calc.xml
 %license COPYING LICENSE
 %else
-%doc ChangeLog README README.* CREDITS TODO USAGE doc/ipv6calc.lyx doc/ipv6calc.sgml doc/ipv6calc.html doc/ipv6calc.xml COPYING LICENSE
+%doc ChangeLog README README.* CREDITS TODO USAGE doc/ipv6calc.lyx doc/ipv6calc.html doc/ipv6calc.xml COPYING LICENSE
 %endif
 
 %defattr(644,root,root,755)
@@ -390,6 +390,9 @@ fi
 
 
 %changelog
+* Wed Jan 29 2025 Peter Bieringer <pb@bieringer.de>
+- remove ipv6calc.sgml from doc
+
 * Tue Jan 14 2025 Peter Bieringer <pb@bieringer.de>
 - include databases/registries/lisp/site-db as no longer reachable for download
 
