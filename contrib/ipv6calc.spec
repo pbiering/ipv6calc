@@ -146,26 +146,30 @@ Also this package contains additional programs
  - mod_ipv6calc: Apache module for anonymization/information logging on-the-fly
 
 Support for following databases
- - IP2Location	%{?enable_ip2location:ENABLED}%{?!enable_ip2location:DISABLED}
-		default directory for downloaded db files: %{ip2location_db}
-		(requires also external library on system)
+ - IP2Location(BIN)  %{?enable_ip2location:ENABLED}%{?!enable_ip2location:DISABLED}
+		     default directory for downloaded db files: %{ip2location_db}
+		     (requires also external library on system)
 
- - GeoIP v2	%{?enable_mmdb:ENABLED}%{?!enable_mmdb:DISABLED}
-		default directory for downloaded db files: %{geoip_db}
-		(requires also external library on system)
+ - IP2Location(MMDB) %{?enable_mmdb:ENABLED}%{?!enable_mmdb:DISABLED}
+		     default directory for downloaded db files: %{ip2location_db}
+		     (requires also external library on system)
 
- - db-ip.com v2	%{?enable_mmdb:ENABLED}%{?!enable_mmdb:DISABLED}
-		(once generated database files are found on system)
-		default directory for generated db files: %{dbip_db}
+ - GeoIP(MMDB)	     %{?enable_mmdb:ENABLED}%{?!enable_mmdb:DISABLED}
+		     default directory for downloaded db files: %{geoip_db}
+		     (requires also external library on system)
 
- - External	%{?enable_external:ENABLED}%{?!enable_external:DISABLED}
-		default directory for generated db files: %{external_db}
+ - db-ip.com(MMDB)   %{?enable_mmdb:ENABLED}%{?!enable_mmdb:DISABLED}
+		     (once generated database files are found on system)
+		     default directory for generated db files: %{dbip_db}
+
+ - External	     %{?enable_external:ENABLED}%{?!enable_external:DISABLED}
+		     default directory for generated db files: %{external_db}
 
 Built %{?enable_shared:WITH}%{?!enable_shared:WITHOUT} shared-library
 
 Available rpmbuild rebuild options:
-  --without ip2location
-  --without mmdb (which disables GeoIP v2 and db-ip.com v2)
+  --without ip2location : disables IP2Location(BIN)
+  --without mmdb : disables GeoIP, db-ip.com, IP2Location(MMDB)
   --without external
   --without shared
   --without mod_ipv6calc
