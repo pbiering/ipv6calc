@@ -1,6 +1,7 @@
 ipv6calc will do some format changes and calculations for you
+beside this it is able to display information and filter
 
-(P) & (C) 2001-2024 by Peter Bieringer <pb (at) bieringer.de>
+(P) & (C) 2001-2025 by Peter Bieringer <pb (at) bieringer.de>
                    published under GNU GPLv2
 
 For suggestions and bug report please contact author
@@ -36,15 +37,18 @@ Included internal databases:
 
 Supported external databases:
 * GeoIP(MaxMindDB) - internally handled as GEOIP2
-* IP2Location
-* DB-IP.com(MaxMindDB) - internally handled as DBIP2
+* IP2Location(BIN) - internally handled as IP2LOCATION
+* IP2Location(MaxMindDB) - internally handled as IP2LOCATION2
+* db-ip.com(MaxMindDB) - internally handled as DBIP2
 
 
 Where to get:
  Homepage:
   https://www.deepspace6.net/projects/ipv6calc.html
 
- Latest version of sources:
+ Latest releases of sources:
+  https://github.com/pbiering/ipv6calc/releases
+
   ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/
   http://www.bieringer.de/ftp/pub/linux/IPv6/ipv6calc/
   https://www.bieringer.de/ftp/pub/linux/IPv6/ipv6calc/
@@ -73,6 +77,7 @@ Where to get:
     EL7: package is available via EPEL
     EL8: package is available via EPEL
     EL9: package is available via EPEL
+    EL910: package is available via EPEL
    Mandrake (EOSL):
     similar to Red Hat, rebuild should work, too
    Debian:
