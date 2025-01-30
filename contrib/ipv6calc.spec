@@ -24,7 +24,7 @@
 %define enable_shared 1
 %endif
 
-Summary:	IPv6 address format change and calculation utility
+Summary:	IPv6/IPv4 address information, format change, filter and calculation utility
 Name:		ipv6calc
 Version:	4.3.0
 Release:	81%{?gittag}%{?dist}
@@ -33,11 +33,7 @@ License:	GPLv2
 %if 0%{?gitcommit:1}
 Source:		https://github.com/pbiering/%{name}/archive/%{gitcommit}/%{name}-%{gitcommit}.tar.gz
 %else
-%if 0%{?_with_github:1}
 Source:		https://github.com/pbiering/%{name}/archive/%{version}/%{name}-%{version}.tar.gz
-%else
-Source:		ftp://ftp.bieringer.de/pub/linux/IPv6/ipv6calc/%{name}-%{version}.tar.gz
-%endif
 %endif
 BuildRequires:	automake make
 BuildRequires:	gcc
@@ -392,6 +388,7 @@ fi
 %changelog
 * Wed Jan 29 2025 Peter Bieringer <pb@bieringer.de>
 - remove ipv6calc.sgml from doc
+- use now only releases from GitHub
 
 * Tue Jan 14 2025 Peter Bieringer <pb@bieringer.de>
 - include databases/registries/lisp/site-db as no longer reachable for download
