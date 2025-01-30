@@ -77,8 +77,8 @@
 //  case 1: src can be added to dst completly
 //  case 2: src is too long to be added to dst, add only what is available but leave space for ...
 //  case 3: dst is already exhausted, override end with ...
-//  gcc 8.5 generates a false alarm because not proper analyzing the calculations
-#if __GNUC__ == 8 && __GNUC_MINOR__ == 5
+//  gcc 8.5 + 10.2 generates a false alarm because not proper analyzing the calculations
+#if __GNUC__ >= 8 && __GNUC__ <= 10
 
 #define STRCAT(dst, src) \
 	_Pragma("GCC diagnostic push") \
