@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : libipv6calc.h
- * Copyright  : 2001-2024 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2001-2025 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Header file for libipv6calc.c
