@@ -170,7 +170,7 @@ if ( defined $ENV{'HTTP_IPV6CALCWEB_MODE'} ) {
 };
 
 if ($mode eq "form" || $mode eq "mixed") {
-	use Digest::SHA1;
+	use Digest::SHA;
 	use Digest::MD5;
 };
 
@@ -1786,7 +1786,7 @@ sub token_generate($$$) {
 
 	logging("DEBUG", "token: $token") if ($debug & 0x0100);
 
-	my $token_sha1 = Digest::SHA1::sha1_hex($token);
+	my $token_sha1 = Digest::SHA::sha1_hex($token);
 	my $token_md5  = Digest::MD5::md5_hex($token);
 
 	chomp $token_sha1;
