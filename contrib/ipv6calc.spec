@@ -39,7 +39,7 @@ BuildRequires:	automake make
 BuildRequires:	gcc
 BuildRequires:	openssl-devel
 BuildRequires:	perl-generators
-BuildRequires:	perl(Digest::MD5), perl(Digest::SHA1), perl(URI::Escape)
+BuildRequires:	perl(Digest::MD5), perl(Digest::SHA), perl(URI::Escape)
 BuildRequires:	perl(strict), perl(warnings)
 BuildRequires:	procps-ng
 Requires:	perl(:MODULE_COMPAT_%(eval "`%{__perl} -V:version`"; echo $version))
@@ -175,8 +175,8 @@ Available rpmbuild rebuild options:
 %package ipv6calcweb
 Summary:	IP address information web utility
 Requires:	ipv6calc httpd
-Requires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities)
-BuildRequires:	perl(URI) perl(Digest::SHA1) perl(Digest::MD5) perl(HTML::Entities)
+Requires:	perl(URI) perl(Digest::SHA) perl(Digest::MD5) perl(HTML::Entities)
+BuildRequires:	perl(URI) perl(Digest::SHA) perl(Digest::MD5) perl(HTML::Entities)
 
 %description ipv6calcweb
 ipv6calcweb contains a CGI program and a configuration file for

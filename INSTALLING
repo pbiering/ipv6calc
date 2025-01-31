@@ -56,7 +56,7 @@ For Solaris 8 you need following packages installed:
 
 For Gentoo you need following packages installed:
 	dev-perl/URI
-	dev-perl/Digest-SHA1
+	dev-perl/Digest-SHA
 
 
 CONFIGURE

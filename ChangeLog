@@ -11,6 +11,9 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20250131/PB:
+	ipv6calcweb/ipv6calcweb.cgi.in: use now Digest::SHA
+
 20250129/PB:
 	tag version 4.3.0
 
