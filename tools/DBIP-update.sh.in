@@ -4,7 +4,7 @@
 #
 # Project    : ipv6calc/DBIP
 # File       : DBIP-update.sh
-# Copyright  : 2014-2024 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2014-2025 by Peter Bieringer <pb (at) bieringer.de>
 # License    : GNU GPL version 2
 
 # 20240124: add optional -R|t support
@@ -14,7 +14,7 @@ DBIP_DAT_DIR_DEFAULT="@DBIP2_DB@"
 [ -z "$DBIP_DAT_DIR" ] && DBIP_DAT_DIR="$DBIP_DAT_DIR_DEFAULT"
 
 DBIP_DAT_URL_BASE="http://download.db-ip.com/free/"
-DBIP_DAT_FILES="dbip-country-lite-%Y-%m.mmdb.gz dbip-city-lite-%Y-%m.mmdb.gz"
+DBIP_DAT_FILES="dbip-country-lite-%Y-%m.mmdb.gz dbip-city-lite-%Y-%m.mmdb.gz dbip-asn-lite-%Y-%m.mmdb.gz"
 
 # optional ipv6calc-db-update-support.sh
 supportfile="$(dirname "$0")/ipv6calc-db-update-support.sh"
