@@ -1056,7 +1056,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 		fprintf(stderr, "%sIP2Location(BIN): NO available databases found in directory: %s\n", prefix, ip2location_db_dir);
 	} else {
 		if (level_verbose >= LEVEL_VERBOSE2) {
-			fprintf(stderr, "%sIP2Location(BIN): detected best databases SAMPLE  Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d  ASN4=%-3d DB%-2d %6d  ASN6=%-3d DB%-2d %6d\n"
+			fprintf(stderr, "%sIP2Location(BIN): detected best databases SAMPLE  Country4=%-3d DB%-3d %6d  Country6=%-3d DB%-3d %6d  City4=%-3d DB%-3d %6d  City6=%-3d DB%-3d %6d  ASN4=%-3d DB%-3d %6d  ASN6=%-3d DB%-3d %6d\n"
 				, prefix
 				, ip2location_db_country_v4_best[IP2L_SAMPLE].num
 				, ip2location_db_country_v4_best[IP2L_SAMPLE].dbtype
@@ -1078,7 +1078,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 				, IP2L_UNPACK_YM(ip2location_db_asn_v6_best[IP2L_SAMPLE].dbym)
 			);
 
-			fprintf(stderr, "%sIP2Location(BIN): detected best databases LITE    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d  ASN4=%-3d DB%-2d %6d  ASN6=%-3d DB%-2d %6d\n"
+			fprintf(stderr, "%sIP2Location(BIN): detected best databases LITE    Country4=%-3d DB%-3d %6d  Country6=%-3d DB%-3d %6d  City4=%-3d DB%-3d %6d  City6=%-3d DB%-3d %6d  ASN4=%-3d DB%-3d %6d  ASN6=%-3d DB%-3d %6d\n"
 				, prefix
 				, ip2location_db_country_v4_best[IP2L_LITE].num
 				, ip2location_db_country_v4_best[IP2L_LITE].dbtype
@@ -1100,7 +1100,7 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 				, IP2L_UNPACK_YM(ip2location_db_asn_v6_best[IP2L_LITE].dbym)
 			);
 
-			fprintf(stderr, "%sIP2Location(BIN): detected best databases COMM    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d  ASN4=%-3d DB%-2d %6d  ASN6=%-3d DB%-2d %6d"
+			fprintf(stderr, "%sIP2Location(BIN): detected best databases COMM    Country4=%-3d DB%-3d %6d  Country6=%-3d DB%-3d %6d  City4=%-3d DB%-3d %6d  City6=%-3d DB%-3d %6d  ASN4=%-3d DB%-3d %6d  ASN6=%-3d DB%-3d %6d\n"
 				, prefix
 				, ip2location_db_country_v4_best[IP2L_COMM].num
 				, ip2location_db_country_v4_best[IP2L_COMM].dbtype
@@ -1159,15 +1159,15 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 				fprintf(stderr, "%sIP2Location(BIN): selected best databases LI->SA* Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d%s  ASN4=%-3d%s  ASN6=%-3d\n"
 					, prefix
 					, ip2location_db_country_sample_v4_lite_autoswitch
-					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+					, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 					, ip2location_db_country_sample_v6_lite_autoswitch
-					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+					, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 					, ip2location_db_region_city_sample_v4_lite_autoswitch
-					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+					, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 					, ip2location_db_region_city_sample_v6_lite_autoswitch
-					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+					, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 					, ip2location_db_asn_sample_v4_lite_autoswitch
-					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+					, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 					, ip2location_db_asn_sample_v6_lite_autoswitch
 				);
 			};
@@ -1175,15 +1175,15 @@ void libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(const int level_ve
 			fprintf(stderr, "%sIP2Location(BIN): selected best databases normal  Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d%s  ASN4=%-3d%s  ASN6=%-3d\n"
 				, prefix
 				, ip2location_db_country_v4
-				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 				, ip2location_db_country_v6
-				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 				, ip2location_db_region_city_v4
-				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 				, ip2location_db_region_city_v6
-				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 				, ip2location_db_asn_v4
-				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 				, ip2location_db_asn_v6
 			);
 

@@ -832,7 +832,7 @@ void libipv6calc_db_wrapper_IP2Location2_wrapper_print_db_info(const int level_v
 		fprintf(stderr, "%sIP2Location(MMDB): NO available databases found in directory: %s\n", prefix, ip2location2_db_dir);
 	} else {
 		if (level_verbose >= LEVEL_VERBOSE2) {
-			fprintf(stderr, "%sIP2Location(MMDB): detected best databases SAMPLE  Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d  ASN4=%-3d DB%-2d %6d  ASN6=%-3d DB%-2d %6d GeonameID4=%-3d DB%-2d %6d  GeonameID6=%-3d DB%-2d %6d\n"
+			fprintf(stderr, "%sIP2Location(MMDB): detected best databases SAMPLE  Country4=%-3d DB%-3d %6d  Country6=%-3d DB%-3d %6d  City4=%-3d DB%-3d %6d  City6=%-3d DB%-3d %6d  ASN4=%-3d DB%-3d %6d  ASN6=%-3d DB%-3d %6d  GeonameID4=%-3d DB%-3d %6d  GeonameID6=%-3d DB%-3d %6d\n"
 				, prefix
 				, ip2location2_db_country_v4_best[IP2L_SAMPLE].num
 				, ip2location2_db_country_v4_best[IP2L_SAMPLE].dbtype
@@ -860,7 +860,7 @@ void libipv6calc_db_wrapper_IP2Location2_wrapper_print_db_info(const int level_v
 				, IP2LOCATION2_UNPACK_YM(ip2location2_db_geonameid_v6_best[IP2L_SAMPLE].dbym)
 			);
 
-			fprintf(stderr, "%sIP2Location(MMDB): detected best databases LITE    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d  ASN4=%-3d DB%-2d %6d  ASN6=%-3d DB%-2d %6d  GeonameID4=%-3d DB%-2d %6d  GeonameID6=%-3d DB%-2d %6d\n"
+			fprintf(stderr, "%sIP2Location(MMDB): detected best databases LITE    Country4=%-3d DB%-3d %6d  Country6=%-3d DB%-3d %6d  City4=%-3d DB%-3d %6d  City6=%-3d DB%-3d %6d  ASN4=%-3d DB%-3d %6d  ASN6=%-3d DB%-3d %6d  GeonameID4=%-3d DB%-3d %6d  GeonameID6=%-3d DB%-3d %6d\n"
 				, prefix
 				, ip2location2_db_country_v4_best[IP2L_LITE].num
 				, ip2location2_db_country_v4_best[IP2L_LITE].dbtype
@@ -888,7 +888,7 @@ void libipv6calc_db_wrapper_IP2Location2_wrapper_print_db_info(const int level_v
 				, IP2LOCATION2_UNPACK_YM(ip2location2_db_geonameid_v6_best[IP2L_LITE].dbym)
 			);
 
-			fprintf(stderr, "%sIP2Location(MMDB): detected best databases COMM    Country4=%-3d DB%-2d %6d  Country6=%-3d DB%-2d %6d  City4=%-3d DB%-2d %6d  City6=%-3d DB%-2d %6d  ASN4=%-3d DB%-2d %6d  ASN6=%-3d DB%-2d %6d  GeonameID4=%-3d DB%-2d %6d  GeonameID6=%-3d DB%-2d %6d"
+			fprintf(stderr, "%sIP2Location(MMDB): detected best databases COMM    Country4=%-3d DB%-3d %6d  Country6=%-3d DB%-3d %6d  City4=%-3d DB%-3d %6d  City6=%-3d DB%-3d %6d  ASN4=%-3d DB%-3d %6d  ASN6=%-3d DB%-3d %6d  GeonameID4=%-3d DB%-3d %6d  GeonameID6=%-3d DB%-3d %6d\n"
 				, prefix
 				, ip2location2_db_country_v4_best[IP2L_COMM].num
 				, ip2location2_db_country_v4_best[IP2L_COMM].dbtype
@@ -959,19 +959,19 @@ void libipv6calc_db_wrapper_IP2Location2_wrapper_print_db_info(const int level_v
 				fprintf(stderr, "%sIP2Location(MMDB): selected best databases LI->SA* Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d%s  ASN4=%-3d%s  ASN6=%-3d%s  GeonameID4=%-3d%s  GeonameID6=%-3d\n"
 					, prefix
 					, ip2location2_db_country_sample_v4_lite_autoswitch
-					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+					, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 					, ip2location2_db_country_sample_v6_lite_autoswitch
-					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+					, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 					, ip2location2_db_region_city_sample_v4_lite_autoswitch
-					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+					, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 					, ip2location2_db_region_city_sample_v6_lite_autoswitch
-					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+					, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 					, ip2location2_db_asn_sample_v4_lite_autoswitch
-					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+					, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 					, ip2location2_db_asn_sample_v6_lite_autoswitch
-					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+					, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 					, ip2location2_db_geonameid_sample_v4_lite_autoswitch
-					, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+					, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 					, ip2location2_db_geonameid_sample_v6_lite_autoswitch
 				);
 			};
@@ -979,19 +979,19 @@ void libipv6calc_db_wrapper_IP2Location2_wrapper_print_db_info(const int level_v
 			fprintf(stderr, "%sIP2Location(MMDB): selected best databases normal  Country4=%-3d%s  Country6=%-3d%s  City4=%-3d%s  City6=%-3d%s  ASN4=%-3d%s  ASN6=%-3d%s  GeonameID4=%-3d%s  GeonameID6=%-3d\n"
 				, prefix
 				, ip2location2_db_country_v4
-				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 				, ip2location2_db_country_v6
-				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 				, ip2location2_db_region_city_v4
-				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 				, ip2location2_db_region_city_v6
-				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 				, ip2location2_db_asn_v4
-				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 				, ip2location2_db_asn_v6
-				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 				, ip2location2_db_geonameid_v4
-				, (level_verbose >= LEVEL_VERBOSE2) ? "            " : ""
+				, (level_verbose >= LEVEL_VERBOSE2) ? "             " : ""
 				, ip2location2_db_geonameid_v6
 			);
 
