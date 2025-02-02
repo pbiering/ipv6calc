@@ -1861,7 +1861,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp,
 					data_source_lastused = IPV6CALC_DB_SOURCE_GEOIP2;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
-					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called GeoIP(MaxMindDB) did not return a valid ASN");
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called GeoIP(MMDB) did not return a valid ASN");
 				};
 			};
 #endif
@@ -1897,7 +1897,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp,
 					data_source_lastused = IPV6CALC_DB_SOURCE_IP2LOCATION2;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
-					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called IP2Location(MaxMindDB) did not return a valid ASN");
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called IP2Location(MMDB) did not return a valid ASN");
 				};
 			};
 #endif
@@ -1915,7 +1915,7 @@ uint32_t libipv6calc_db_wrapper_as_num32_by_addr(const ipv6calc_ipaddr *ipaddrp,
 					data_source_lastused = IPV6CALC_DB_SOURCE_DBIP2;
 					goto END_libipv6calc_db_wrapper; // ok
 				} else {
-					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called db-ip.com(MaxMindDB) did not return a valid ASN");
+					DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called db-ip.com(MMDB) did not return a valid ASN");
 				};
 			};
 #endif
