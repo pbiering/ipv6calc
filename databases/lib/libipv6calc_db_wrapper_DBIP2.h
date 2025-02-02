@@ -17,10 +17,11 @@
 // database types
 #define DBIP2_DB_COUNTRY_LITE				1
 #define DBIP2_DB_CITY_LITE				2
-#define DBIP2_DB_COUNTRY				3	// commercial
-#define DBIP2_DB_LOCATION				4	// commercial
-#define DBIP2_DB_ISP					5	// commercial
-#define DBIP2_DB_LOCATION_ISP				6	// commercial
+#define DBIP2_DB_ASN_LITE				3
+#define DBIP2_DB_COUNTRY				4	// commercial
+#define DBIP2_DB_LOCATION				5	// commercial
+#define DBIP2_DB_ISP					6	// commercial
+#define DBIP2_DB_LOCATION_ISP				7	// commercial
 #define DBIP2_DB_MAX					DBIP2_DB_LOCATION_ISP
 
 #define IPV6CALC_DB_DBIP2_INTERNAL_FREE		0x00000001
