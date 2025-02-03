@@ -1022,14 +1022,14 @@ uint32_t libipv6calc_db_wrapper_DBIP2_wrapper_GeonameID_by_addr(const ipv6calc_i
 	int DBIP2_type = 0;
 
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
-		DBIP2_type = dbip2_db_region_city_v4;
+		DBIP2_type = dbip2_db_geonameid_v4;
 
 		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP2] & IPV6CALC_DB_IPV4_TO_GEONAMEID) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP2, "No DBIP2 database supporting IPv4 GeonameID");
 			goto END_libipv6calc_db_wrapper;
 		};
 	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
-		DBIP2_type = dbip2_db_region_city_v6;
+		DBIP2_type = dbip2_db_geonameid_v6;
 
 		if ((wrapper_features_by_source[IPV6CALC_DB_SOURCE_DBIP2] & IPV6CALC_DB_IPV6_TO_GEONAMEID) == 0) {
 			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_DBIP2, "No DBIP2 database supporting IPv6 GeonameID");
