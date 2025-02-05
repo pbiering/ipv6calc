@@ -736,13 +736,13 @@ void libipv6calc_db_wrapper_IP2Location2_close(const int type) {
 void libipv6calc_db_wrapper_IP2Location2_wrapper_info(char* string, const size_t size) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location2, "Called");
 
-	snprintf(string, size, "IP2Location(MMDB) database support: Country4=%d Country6=%d ASN4=%d ASN6=%d City4=%d City6=%d GeonameID4=%d GeonameID6=%d"
+	snprintf(string, size, "IP2Location(MMDB) database support: Country4=%d Country6=%d City4=%d City6=%d ASN4=%d ASN6=%d GeonameID4=%d GeonameID6=%d"
 		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION2] & IPV6CALC_DB_IPV4_TO_CC)   ? 1 : 0
 		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION2] & IPV6CALC_DB_IPV6_TO_CC)   ? 1 : 0
-		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION2] & IPV6CALC_DB_IPV4_TO_AS)   ? 1 : 0
-		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION2] & IPV6CALC_DB_IPV6_TO_AS)   ? 1 : 0
 		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION2] & IPV6CALC_DB_IPV4_TO_CITY) ? 1 : 0
 		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION2] & IPV6CALC_DB_IPV6_TO_CITY) ? 1 : 0
+		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION2] & IPV6CALC_DB_IPV4_TO_AS)   ? 1 : 0
+		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION2] & IPV6CALC_DB_IPV6_TO_AS)   ? 1 : 0
 		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION2] & IPV6CALC_DB_IPV4_TO_GEONAMEID) ? 1 : 0
 		, (wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION2] & IPV6CALC_DB_IPV6_TO_GEONAMEID) ? 1 : 0
 	);
