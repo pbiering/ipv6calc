@@ -11,7 +11,10 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
-20250292/PB:
+20250204/PB:
+	databases/lib/*: align db-info output
+
+20250202/PB:
 	tools/DBIP-update.sh[.in]: add dbip-asn-lite
 	databases/lib/libipv6calc_db_wrapper_DBIP2.(c|h): add support for dbip-asn-lite, enhance verbose info output
 
