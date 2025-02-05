@@ -37,25 +37,25 @@ static const db_file_desc2 libipv6calc_db_wrapper_DBIP2_db_file_desc[] = {
 	// country (lite)
 	{ DBIP2_DB_COUNTRY_LITE
 		, "dbip-country-lite.mmdb"
-		, "IPv4/v6 CountryCode (FREE)"
+		, "IPv4/v6 CountryCode (LITE)"
 		, IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_GEONAMEID | IPV6CALC_DB_IP_TO_COUNTRY
-		, IPV6CALC_DB_DBIP2_INTERNAL_FREE
+		, IPV6CALC_DB_DBIP2_INTERNAL_LITE
 	},
 
 	// city (lite)
 	{ DBIP2_DB_CITY_LITE
 		, "dbip-city-lite.mmdb"
-		, "IPv4/v6 City (FREE)"
+		, "IPv4/v6 City (LITE)"
 		, IPV6CALC_DB_IP_TO_CITY | IPV6CALC_DB_IP_TO_REGION | IPV6CALC_DB_IP_TO_CC | IPV6CALC_DB_DBIP | IPV6CALC_DB_IP_TO_GEONAMEID | IPV6CALC_DB_IP_TO_COUNTRY
-		, IPV6CALC_DB_DBIP2_INTERNAL_FREE
+		, IPV6CALC_DB_DBIP2_INTERNAL_LITE
 	},
 
 	// asn (lite)
 	{ DBIP2_DB_ASN_LITE
 		, "dbip-asn-lite.mmdb"
-		, "IPv4/v6 ASN (FREE)"
+		, "IPv4/v6 ASN (LITE)"
 		, IPV6CALC_DB_IP_TO_AS | IPV6CALC_DB_DBIP
-		, IPV6CALC_DB_DBIP2_INTERNAL_FREE
+		, IPV6CALC_DB_DBIP2_INTERNAL_LITE
 	},
 
 	// country
@@ -101,39 +101,29 @@ static int dbip2_db_asn_v6 = 0;
 static int dbip2_db_geonameid_v4 = 0;
 static int dbip2_db_geonameid_v6 = 0;
 
-typedef struct {
-	unsigned int num;
-	int dbtype;
-	int dbym;
-} s_ipv6calc_dbip2_db;
-
-#define DBIP2_FREE	0
+#define DBIP2_LITE	0
 #define DBIP2_COMM	1
 #define	DBIP2_MAX	2
 
-static s_ipv6calc_dbip2_db dbip2_db_country_v4_best[DBIP2_MAX];
-static s_ipv6calc_dbip2_db dbip2_db_country_v6_best[DBIP2_MAX];
-static s_ipv6calc_dbip2_db dbip2_db_region_city_v4_best[DBIP2_MAX];
-static s_ipv6calc_dbip2_db dbip2_db_region_city_v6_best[DBIP2_MAX];
-static s_ipv6calc_dbip2_db dbip2_db_asn_v4_best[DBIP2_MAX];
-static s_ipv6calc_dbip2_db dbip2_db_asn_v6_best[DBIP2_MAX];
-static s_ipv6calc_dbip2_db dbip2_db_geonameid_v4_best[DBIP2_MAX];
-static s_ipv6calc_dbip2_db dbip2_db_geonameid_v6_best[DBIP2_MAX];
+static s_libipv6calc_db_wrapper_db_info dbip2_db_country_v4_best[DBIP2_MAX];
+static s_libipv6calc_db_wrapper_db_info dbip2_db_country_v6_best[DBIP2_MAX];
+static s_libipv6calc_db_wrapper_db_info dbip2_db_region_city_v4_best[DBIP2_MAX];
+static s_libipv6calc_db_wrapper_db_info dbip2_db_region_city_v6_best[DBIP2_MAX];
+static s_libipv6calc_db_wrapper_db_info dbip2_db_asn_v4_best[DBIP2_MAX];
+static s_libipv6calc_db_wrapper_db_info dbip2_db_asn_v6_best[DBIP2_MAX];
+static s_libipv6calc_db_wrapper_db_info dbip2_db_geonameid_v4_best[DBIP2_MAX];
+static s_libipv6calc_db_wrapper_db_info dbip2_db_geonameid_v6_best[DBIP2_MAX];
 
 static int type2index[DBIP2_DB_MAX+1];
 
-// select FREE database if COMM is older than given months
+// select LITE database if COMM is older than given months
 int dbip2_db_comm_to_free_switch_min_delta_months = 12;
 
-// select better database of same product (COMM/FREE) only if not older than given months
+// select better database of same product (COMM/LITE) only if not older than given months
 int dbip2_db_better_max_delta_months = 1;
 
 // select only a specific DBIP2 db type
 int dbip2_db_only_type = 0;
-
-
-#define DBIP2_UNPACK_YM(dbym) ((dbym > 0) ? ((dbym % 12) + ((dbym / 12)) * 100) : 0)
-
 
 /* database usage map */
 #define DBIP2_DB_MAX_BLOCKS_32	2	// 0-63
@@ -206,8 +196,8 @@ int libipv6calc_db_wrapper_DBIP2_wrapper_init(void) {
 			continue;
 		};
 
-		if ((libipv6calc_db_wrapper_DBIP2_db_file_desc[i].internal & IPV6CALC_DB_DBIP2_INTERNAL_FREE) != 0) {
-			product = DBIP2_FREE;
+		if ((libipv6calc_db_wrapper_DBIP2_db_file_desc[i].internal & IPV6CALC_DB_DBIP2_INTERNAL_LITE) != 0) {
+			product = DBIP2_LITE;
 		} else {
 			product = DBIP2_COMM;
 		};
@@ -215,8 +205,8 @@ int libipv6calc_db_wrapper_DBIP2_wrapper_init(void) {
 		time_t db_time = mmdb_cache[dbtype].metadata.build_epoch;
 		struct tm *db_gmtime = gmtime(&db_time);
 
-		dbym = (db_gmtime->tm_year + 1900) * 12 + (db_gmtime->tm_mon + 1);
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "DBIP2 type=%d dbym=%d Year/Month=%d unixtime=%lld", dbtype, dbym, DBIP2_UNPACK_YM(dbym), (long long unsigned int) mmdb_cache[dbtype].metadata.build_epoch);
+		dbym = (db_gmtime->tm_year + 1900) * 12 + db_gmtime->tm_mon;
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "DBIP2 type=%d dbym=%d Year/Month=%d unixtime=%lld", dbtype, dbym, UNPACK_YM(dbym), (long long unsigned int) mmdb_cache[dbtype].metadata.build_epoch);
 
 #define DBIP2_DB_SELECT_BETTER(best) \
 			if ( \
@@ -271,20 +261,20 @@ int libipv6calc_db_wrapper_DBIP2_wrapper_init(void) {
 	// select free instead of comm, if comm is outdated and free available
 	if (dbip2_db_comm_to_free_switch_min_delta_months > 0) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_DBIP2, "DBIP2 database priority check (comm->free) after months: %d", dbip2_db_comm_to_free_switch_min_delta_months);
-#define SELECT_FREE_INSTEAD_OF_COMM(free, comm, final) \
+#define SELECT_LITE_INSTEAD_OF_COMM(free, comm, final) \
 	if ((free.num > 0) && (comm.num > 0)) { \
 		if (free.dbym - comm.dbym > dbip2_db_comm_to_free_switch_min_delta_months) { \
 			final = free.num; \
 		}; \
 	};
-		SELECT_FREE_INSTEAD_OF_COMM(dbip2_db_country_v4_best[DBIP2_FREE], dbip2_db_country_v4_best[DBIP2_COMM], dbip2_db_country_v4)
-		SELECT_FREE_INSTEAD_OF_COMM(dbip2_db_country_v6_best[DBIP2_FREE], dbip2_db_country_v6_best[DBIP2_COMM], dbip2_db_country_v6)
-		SELECT_FREE_INSTEAD_OF_COMM(dbip2_db_region_city_v4_best[DBIP2_FREE], dbip2_db_region_city_v4_best[DBIP2_COMM], dbip2_db_region_city_v4)
-		SELECT_FREE_INSTEAD_OF_COMM(dbip2_db_region_city_v6_best[DBIP2_FREE], dbip2_db_region_city_v6_best[DBIP2_COMM], dbip2_db_region_city_v6)
-		SELECT_FREE_INSTEAD_OF_COMM(dbip2_db_asn_v4_best[DBIP2_FREE], dbip2_db_asn_v4_best[DBIP2_COMM], dbip2_db_asn_v4)
-		SELECT_FREE_INSTEAD_OF_COMM(dbip2_db_asn_v6_best[DBIP2_FREE], dbip2_db_asn_v6_best[DBIP2_COMM], dbip2_db_asn_v6)
-		SELECT_FREE_INSTEAD_OF_COMM(dbip2_db_geonameid_v4_best[DBIP2_FREE], dbip2_db_geonameid_v4_best[DBIP2_COMM], dbip2_db_geonameid_v4)
-		SELECT_FREE_INSTEAD_OF_COMM(dbip2_db_geonameid_v6_best[DBIP2_FREE], dbip2_db_geonameid_v6_best[DBIP2_COMM], dbip2_db_geonameid_v6)
+		SELECT_LITE_INSTEAD_OF_COMM(dbip2_db_country_v4_best[DBIP2_LITE], dbip2_db_country_v4_best[DBIP2_COMM], dbip2_db_country_v4)
+		SELECT_LITE_INSTEAD_OF_COMM(dbip2_db_country_v6_best[DBIP2_LITE], dbip2_db_country_v6_best[DBIP2_COMM], dbip2_db_country_v6)
+		SELECT_LITE_INSTEAD_OF_COMM(dbip2_db_region_city_v4_best[DBIP2_LITE], dbip2_db_region_city_v4_best[DBIP2_COMM], dbip2_db_region_city_v4)
+		SELECT_LITE_INSTEAD_OF_COMM(dbip2_db_region_city_v6_best[DBIP2_LITE], dbip2_db_region_city_v6_best[DBIP2_COMM], dbip2_db_region_city_v6)
+		SELECT_LITE_INSTEAD_OF_COMM(dbip2_db_asn_v4_best[DBIP2_LITE], dbip2_db_asn_v4_best[DBIP2_COMM], dbip2_db_asn_v4)
+		SELECT_LITE_INSTEAD_OF_COMM(dbip2_db_asn_v6_best[DBIP2_LITE], dbip2_db_asn_v6_best[DBIP2_COMM], dbip2_db_asn_v6)
+		SELECT_LITE_INSTEAD_OF_COMM(dbip2_db_geonameid_v4_best[DBIP2_LITE], dbip2_db_geonameid_v4_best[DBIP2_COMM], dbip2_db_geonameid_v4)
+		SELECT_LITE_INSTEAD_OF_COMM(dbip2_db_geonameid_v6_best[DBIP2_LITE], dbip2_db_geonameid_v6_best[DBIP2_COMM], dbip2_db_geonameid_v6)
 	};
 
 #define FILL_EMPTY(product, final) \
@@ -303,23 +293,23 @@ int libipv6calc_db_wrapper_DBIP2_wrapper_init(void) {
 	FILL_EMPTY(dbip2_db_geonameid_v6_best[DBIP2_COMM], dbip2_db_geonameid_v6)
 
 	// fill empty ones with free
-	FILL_EMPTY(dbip2_db_country_v4_best[DBIP2_FREE], dbip2_db_country_v4)
-	FILL_EMPTY(dbip2_db_country_v6_best[DBIP2_FREE], dbip2_db_country_v6)
-	FILL_EMPTY(dbip2_db_region_city_v4_best[DBIP2_FREE], dbip2_db_region_city_v4)
-	FILL_EMPTY(dbip2_db_region_city_v6_best[DBIP2_FREE], dbip2_db_region_city_v6)
-	FILL_EMPTY(dbip2_db_asn_v4_best[DBIP2_FREE], dbip2_db_asn_v4)
-	FILL_EMPTY(dbip2_db_asn_v6_best[DBIP2_FREE], dbip2_db_asn_v6)
-	FILL_EMPTY(dbip2_db_geonameid_v4_best[DBIP2_FREE], dbip2_db_geonameid_v4)
-	FILL_EMPTY(dbip2_db_geonameid_v6_best[DBIP2_FREE], dbip2_db_geonameid_v6)
+	FILL_EMPTY(dbip2_db_country_v4_best[DBIP2_LITE], dbip2_db_country_v4)
+	FILL_EMPTY(dbip2_db_country_v6_best[DBIP2_LITE], dbip2_db_country_v6)
+	FILL_EMPTY(dbip2_db_region_city_v4_best[DBIP2_LITE], dbip2_db_region_city_v4)
+	FILL_EMPTY(dbip2_db_region_city_v6_best[DBIP2_LITE], dbip2_db_region_city_v6)
+	FILL_EMPTY(dbip2_db_asn_v4_best[DBIP2_LITE], dbip2_db_asn_v4)
+	FILL_EMPTY(dbip2_db_asn_v6_best[DBIP2_LITE], dbip2_db_asn_v6)
+	FILL_EMPTY(dbip2_db_geonameid_v4_best[DBIP2_LITE], dbip2_db_geonameid_v4)
+	FILL_EMPTY(dbip2_db_geonameid_v6_best[DBIP2_LITE], dbip2_db_geonameid_v6)
 
 
 	/* close handles which are not necessary further on */
 	for (i = 0; i < MAXENTRIES_ARRAY(libipv6calc_db_wrapper_DBIP2_db_file_desc); i++) {
 		if (mmdb_cache[libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number].file_size > 0) {
 			if (
-				(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_country_v4_best[DBIP2_FREE].num)
+				(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_country_v4_best[DBIP2_LITE].num)
 			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_country_v4_best[DBIP2_COMM].num)
-			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_country_v6_best[DBIP2_FREE].num)
+			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_country_v6_best[DBIP2_LITE].num)
 			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_country_v6_best[DBIP2_COMM].num)
 			) {
 				// database is in use
@@ -406,6 +396,7 @@ void libipv6calc_db_wrapper_DBIP2_wrapper_info(char* string, const size_t size) 
  */
 void libipv6calc_db_wrapper_DBIP2_wrapper_print_db_info(const int level_verbose, const char *prefix_string) {
 	int ret, i, type, count = 0;
+	s_libipv6calc_db_wrapper_db_info_all db_info_all;
 
 	const char *prefix = "\0";
 	if (prefix_string != NULL) {
@@ -442,118 +433,78 @@ void libipv6calc_db_wrapper_DBIP2_wrapper_print_db_info(const int level_verbose,
 	if (count == 0) {
 		fprintf(stderr, "%sdb-ip.com(MMDB): NO available databases found in directory: %s\n", prefix, dbip2_db_dir);
 	} else {
-		if (level_verbose >= LEVEL_VERBOSE2) {
-			fprintf(stderr, "%sdb-ip.com(MMDB): detected best databases FREE    Country4=%-1d DB%-1d %6d  Country6=%-1d DB%-1d %6d  City4=%-1d DB%-1d %6d  City6=%-1d DB%-1d %6d  ASN4=%-1d DB%-1d %6d  ASN6=%-1d DB%-1d %6d  GeonameID4=%-1d DB%-1d %6d  GeonameID6=%-1d DB%-1d %6d\n"
-				, prefix
-				, dbip2_db_country_v4_best[DBIP2_FREE].num
-				, dbip2_db_country_v4_best[DBIP2_FREE].dbtype
-				, DBIP2_UNPACK_YM(dbip2_db_country_v4_best[DBIP2_FREE].dbym)
-				, dbip2_db_country_v6_best[DBIP2_FREE].num
-				, dbip2_db_country_v6_best[DBIP2_FREE].dbtype
-				, DBIP2_UNPACK_YM(dbip2_db_country_v6_best[DBIP2_FREE].dbym)
-				, dbip2_db_region_city_v4_best[DBIP2_FREE].num
-				, dbip2_db_region_city_v4_best[DBIP2_FREE].dbtype
-				, DBIP2_UNPACK_YM(dbip2_db_region_city_v4_best[DBIP2_FREE].dbym)
-				, dbip2_db_region_city_v6_best[DBIP2_FREE].num
-				, dbip2_db_region_city_v6_best[DBIP2_FREE].dbtype
-				, DBIP2_UNPACK_YM(dbip2_db_region_city_v6_best[DBIP2_FREE].dbym)
-				, dbip2_db_asn_v4_best[DBIP2_FREE].num
-				, dbip2_db_asn_v4_best[DBIP2_FREE].dbtype
-				, DBIP2_UNPACK_YM(dbip2_db_asn_v4_best[DBIP2_FREE].dbym)
-				, dbip2_db_asn_v6_best[DBIP2_FREE].num
-				, dbip2_db_asn_v6_best[DBIP2_FREE].dbtype
-				, DBIP2_UNPACK_YM(dbip2_db_asn_v6_best[DBIP2_FREE].dbym)
-				, dbip2_db_geonameid_v4_best[DBIP2_FREE].num
-				, dbip2_db_geonameid_v4_best[DBIP2_FREE].dbtype
-				, DBIP2_UNPACK_YM(dbip2_db_geonameid_v4_best[DBIP2_FREE].dbym)
-				, dbip2_db_geonameid_v6_best[DBIP2_FREE].num
-				, dbip2_db_geonameid_v6_best[DBIP2_FREE].dbtype
-				, DBIP2_UNPACK_YM(dbip2_db_geonameid_v6_best[DBIP2_FREE].dbym)
-			);
-
-			fprintf(stderr, "%sdb-ip.com(MMDB): detected best databases COMM    Country4=%-1d DB%-1d %6d  Country6=%-1d DB%-1d %6d  City4=%-1d DB%-1d %6d  City6=%-1d DB%-1d %6d  ASN4=%-1d DB%-1d %6d  ASN6=%-1d DB%-1d %6d  GeonameID4=%-1d DB%-1d %6d  GeonameID6=%-1d DB%-1d %6d\n"
-				, prefix
-				, dbip2_db_country_v4_best[DBIP2_COMM].num
-				, dbip2_db_country_v4_best[DBIP2_COMM].dbtype
-				, DBIP2_UNPACK_YM(dbip2_db_country_v4_best[DBIP2_COMM].dbym)
-				, dbip2_db_country_v6_best[DBIP2_COMM].num
-				, dbip2_db_country_v6_best[DBIP2_COMM].dbtype
-				, DBIP2_UNPACK_YM(dbip2_db_country_v6_best[DBIP2_COMM].dbym)
-				, dbip2_db_region_city_v4_best[DBIP2_COMM].num
-				, dbip2_db_region_city_v4_best[DBIP2_COMM].dbtype
-				, DBIP2_UNPACK_YM(dbip2_db_region_city_v4_best[DBIP2_COMM].dbym)
-				, dbip2_db_region_city_v6_best[DBIP2_COMM].num
-				, dbip2_db_region_city_v6_best[DBIP2_COMM].dbtype
-				, DBIP2_UNPACK_YM(dbip2_db_region_city_v6_best[DBIP2_COMM].dbym)
-				, dbip2_db_asn_v4_best[DBIP2_COMM].num
-				, dbip2_db_asn_v4_best[DBIP2_COMM].dbtype
-				, DBIP2_UNPACK_YM(dbip2_db_asn_v4_best[DBIP2_COMM].dbym)
-				, dbip2_db_asn_v6_best[DBIP2_COMM].num
-				, dbip2_db_asn_v6_best[DBIP2_COMM].dbtype
-				, DBIP2_UNPACK_YM(dbip2_db_asn_v6_best[DBIP2_COMM].dbym)
-				, dbip2_db_geonameid_v4_best[DBIP2_COMM].num
-				, dbip2_db_geonameid_v4_best[DBIP2_COMM].dbtype
-				, DBIP2_UNPACK_YM(dbip2_db_geonameid_v4_best[DBIP2_COMM].dbym)
-				, dbip2_db_geonameid_v6_best[DBIP2_COMM].num
-				, dbip2_db_geonameid_v6_best[DBIP2_COMM].dbtype
-				, DBIP2_UNPACK_YM(dbip2_db_geonameid_v6_best[DBIP2_COMM].dbym)
-			);
-		} else if (level_verbose >= LEVEL_VERBOSE) {
-			fprintf(stderr, "%sdb-ip.com(MMDB): detected best databases FREE    Country4=%-1d  Country6=%-1d  City4=%-1d  City6=%-1d  ASN4=%-1d  ASN6=%-1d  GeonameID4=%-1d  GeonameID6=%-1d\n"
-				, prefix
-				, dbip2_db_country_v4_best[DBIP2_FREE].num
-				, dbip2_db_country_v6_best[DBIP2_FREE].num
-				, dbip2_db_region_city_v4_best[DBIP2_FREE].num
-				, dbip2_db_region_city_v6_best[DBIP2_FREE].num
-				, dbip2_db_asn_v4_best[DBIP2_FREE].num
-				, dbip2_db_asn_v6_best[DBIP2_FREE].num
-				, dbip2_db_geonameid_v4_best[DBIP2_FREE].num
-				, dbip2_db_geonameid_v6_best[DBIP2_FREE].num
-			);
-
-			fprintf(stderr, "%sdb-ip.com(MMDB): detected best databases COMM    Country4=%-1d  Country6=%-1d  City4=%-1d  City6=%-1d  ASN4=%-1d  ASN6=%-1d  GeonameID4=%-1d  GeonameID6=%-1d\n"
-				, prefix
-				, dbip2_db_country_v4_best[DBIP2_COMM].num
-				, dbip2_db_country_v6_best[DBIP2_COMM].num
-				, dbip2_db_region_city_v4_best[DBIP2_COMM].num
-				, dbip2_db_region_city_v6_best[DBIP2_COMM].num
-				, dbip2_db_asn_v4_best[DBIP2_COMM].num
-				, dbip2_db_asn_v6_best[DBIP2_COMM].num
-				, dbip2_db_geonameid_v4_best[DBIP2_COMM].num
-				, dbip2_db_geonameid_v6_best[DBIP2_COMM].num
-			);
-
-		};
-
 		if (level_verbose >= LEVEL_VERBOSE) {
-			fprintf(stderr, "%sdb-ip.com(MMDB): selected best databases normal  Country4=%-1d%s  Country6=%-1d%s  City4=%-1d%s  City6=%-1d%s  ASN4=%-1d%s  ASN6=%-1d%s  GeonameID4=%-1d%s  GeonameID6=%-1d\n"
-				, prefix
-				, dbip2_db_country_v4
-				, (level_verbose >= LEVEL_VERBOSE2) ? "           " : ""
-				, dbip2_db_country_v6
-				, (level_verbose >= LEVEL_VERBOSE2) ? "           " : ""
-				, dbip2_db_region_city_v4
-				, (level_verbose >= LEVEL_VERBOSE2) ? "           " : ""
-				, dbip2_db_region_city_v6
-				, (level_verbose >= LEVEL_VERBOSE2) ? "           " : ""
-				, dbip2_db_asn_v4
-				, (level_verbose >= LEVEL_VERBOSE2) ? "           " : ""
-				, dbip2_db_asn_v6
-				, (level_verbose >= LEVEL_VERBOSE2) ? "           " : ""
-				, dbip2_db_geonameid_v4
-				, (level_verbose >= LEVEL_VERBOSE2) ? "           " : ""
-				, dbip2_db_geonameid_v6
-			);
+			db_info_all.country4.num    = dbip2_db_country_v4_best[DBIP2_LITE].num;
+			db_info_all.country4.dbtype = dbip2_db_country_v4_best[DBIP2_LITE].dbtype;
+			db_info_all.country4.dbym   = dbip2_db_country_v4_best[DBIP2_LITE].dbym;
+			db_info_all.country6.num    = dbip2_db_country_v6_best[DBIP2_LITE].num;
+			db_info_all.country6.dbtype = dbip2_db_country_v6_best[DBIP2_LITE].dbtype;
+			db_info_all.country6.dbym   = dbip2_db_country_v6_best[DBIP2_LITE].dbym;
+			db_info_all.city4.num    = dbip2_db_region_city_v4_best[DBIP2_LITE].num;
+			db_info_all.city4.dbtype = dbip2_db_region_city_v4_best[DBIP2_LITE].dbtype;
+			db_info_all.city4.dbym   = dbip2_db_region_city_v4_best[DBIP2_LITE].dbym;
+			db_info_all.city6.num    = dbip2_db_region_city_v6_best[DBIP2_LITE].num;
+			db_info_all.city6.dbtype = dbip2_db_region_city_v6_best[DBIP2_LITE].dbtype;
+			db_info_all.city6.dbym   = dbip2_db_region_city_v6_best[DBIP2_LITE].dbym;
+			db_info_all.asn4.num    = dbip2_db_asn_v4_best[DBIP2_LITE].num;
+			db_info_all.asn4.dbtype = dbip2_db_asn_v4_best[DBIP2_LITE].dbtype;
+			db_info_all.asn4.dbym   = dbip2_db_asn_v4_best[DBIP2_LITE].dbym;
+			db_info_all.asn6.num    = dbip2_db_asn_v6_best[DBIP2_LITE].num;
+			db_info_all.asn6.dbtype = dbip2_db_asn_v6_best[DBIP2_LITE].dbtype;
+			db_info_all.asn6.dbym   = dbip2_db_asn_v6_best[DBIP2_LITE].dbym;
+			db_info_all.geonameid4.num    = dbip2_db_geonameid_v4_best[DBIP2_LITE].num;
+			db_info_all.geonameid4.dbtype = dbip2_db_geonameid_v4_best[DBIP2_LITE].dbtype;
+			db_info_all.geonameid4.dbym   = dbip2_db_geonameid_v4_best[DBIP2_LITE].dbym;
+			db_info_all.geonameid6.num    = dbip2_db_geonameid_v6_best[DBIP2_LITE].num;
+			db_info_all.geonameid6.dbtype = dbip2_db_geonameid_v6_best[DBIP2_LITE].dbtype;
+			db_info_all.geonameid6.dbym   = dbip2_db_geonameid_v6_best[DBIP2_LITE].dbym;
+			libipv6calc_db_wrapper_print_db_info_line(level_verbose, prefix_string, "db-ip.com(MMDB)", "detected best databases LITE", 1, db_info_all, 0);
+
+			db_info_all.country4.num    = dbip2_db_country_v4_best[DBIP2_COMM].num;
+			db_info_all.country4.dbtype = dbip2_db_country_v4_best[DBIP2_COMM].dbtype;
+			db_info_all.country4.dbym   = dbip2_db_country_v4_best[DBIP2_COMM].dbym;
+			db_info_all.country6.num    = dbip2_db_country_v6_best[DBIP2_COMM].num;
+			db_info_all.country6.dbtype = dbip2_db_country_v6_best[DBIP2_COMM].dbtype;
+			db_info_all.country6.dbym   = dbip2_db_country_v6_best[DBIP2_COMM].dbym;
+			db_info_all.city4.num    = dbip2_db_region_city_v4_best[DBIP2_COMM].num;
+			db_info_all.city4.dbtype = dbip2_db_region_city_v4_best[DBIP2_COMM].dbtype;
+			db_info_all.city4.dbym   = dbip2_db_region_city_v4_best[DBIP2_COMM].dbym;
+			db_info_all.city6.num    = dbip2_db_region_city_v6_best[DBIP2_COMM].num;
+			db_info_all.city6.dbtype = dbip2_db_region_city_v6_best[DBIP2_COMM].dbtype;
+			db_info_all.city6.dbym   = dbip2_db_region_city_v6_best[DBIP2_COMM].dbym;
+			db_info_all.asn4.num    = dbip2_db_asn_v4_best[DBIP2_COMM].num;
+			db_info_all.asn4.dbtype = dbip2_db_asn_v4_best[DBIP2_COMM].dbtype;
+			db_info_all.asn4.dbym   = dbip2_db_asn_v4_best[DBIP2_COMM].dbym;
+			db_info_all.asn6.num    = dbip2_db_asn_v6_best[DBIP2_COMM].num;
+			db_info_all.asn6.dbtype = dbip2_db_asn_v6_best[DBIP2_COMM].dbtype;
+			db_info_all.asn6.dbym   = dbip2_db_asn_v6_best[DBIP2_COMM].dbym;
+			db_info_all.geonameid4.num    = dbip2_db_geonameid_v4_best[DBIP2_COMM].num;
+			db_info_all.geonameid4.dbtype = dbip2_db_geonameid_v4_best[DBIP2_COMM].dbtype;
+			db_info_all.geonameid4.dbym   = dbip2_db_geonameid_v4_best[DBIP2_COMM].dbym;
+			db_info_all.geonameid6.num    = dbip2_db_geonameid_v6_best[DBIP2_COMM].num;
+			db_info_all.geonameid6.dbtype = dbip2_db_geonameid_v6_best[DBIP2_COMM].dbtype;
+			db_info_all.geonameid6.dbym   = dbip2_db_geonameid_v6_best[DBIP2_COMM].dbym;
+			libipv6calc_db_wrapper_print_db_info_line(level_verbose, prefix_string, "db-ip.com(MMDB)", "detected best databases COMM", 1, db_info_all, 0);
+
+			db_info_all.country4.num    = dbip2_db_country_v4;
+			db_info_all.country6.num    = dbip2_db_country_v6;
+			db_info_all.city4.num    = dbip2_db_region_city_v4;
+			db_info_all.city6.num    = dbip2_db_region_city_v6;
+			db_info_all.asn4.num    = dbip2_db_asn_v4;
+			db_info_all.asn6.num    = dbip2_db_asn_v6;
+			db_info_all.geonameid4.num    = dbip2_db_geonameid_v4;
+			db_info_all.geonameid6.num    = dbip2_db_geonameid_v6;
+			libipv6calc_db_wrapper_print_db_info_line(level_verbose, prefix_string, "db-ip.com(MMDB)", "selected best databases normal", 1, db_info_all, 1);
 
 			if (dbip2_db_comm_to_free_switch_min_delta_months > 0) {
-				fprintf(stderr, "%sdb-ip.com(MMDB): selected best databases method: COMM older than %d months are deselected in case of FREE is available\n"
+				fprintf(stderr, "%sdb-ip.com(MMDB): selected best databases method: COMM older than %d months are deselected in case of LITE is available\n"
 					, prefix
 					, dbip2_db_comm_to_free_switch_min_delta_months
 				);
 			};
 
 			if (dbip2_db_better_max_delta_months > 0) {
-				fprintf(stderr, "%sdb-ip.com(MMDB): selected best databases method: COMM/FREE with more features are only selected in case not older than %d months of already found COMM/FREE\n"
+				fprintf(stderr, "%sdb-ip.com(MMDB): selected best databases method: COMM/LITE with more features are only selected in case not older than %d months of already found COMM/LITE\n"
 					, prefix
 					, dbip2_db_better_max_delta_months
 				);
