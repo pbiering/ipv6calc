@@ -416,7 +416,7 @@ void libipv6calc_db_wrapper_DBIP2_wrapper_print_db_info(const int level_verbose,
 			// DBIP2 returned that database is available
 			ret = libipv6calc_db_wrapper_DBIP2_open_type(type);
 			if (ret != MMDB_SUCCESS) {
-				fprintf(stderr, "%sdb-ip.com(MMDB): %-30s: [%1d] %-30s (CAN'T OPEN database information)\n", prefix, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_DBIP2_dbfilename(type));
+				fprintf(stderr, "%sdb-ip.com(MMDB): %-30s: [%1d] %-30s (CAN'T OPEN database information)\n", prefix, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].filename);
 			} else {
 				fprintf(stderr, "%sdb-ip.com(MMDB): %-30s: [%1d] %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].filename, libipv6calc_db_wrapper_DBIP2_database_info(type));
 				libipv6calc_db_wrapper_DBIP2_close(type);
@@ -424,7 +424,7 @@ void libipv6calc_db_wrapper_DBIP2_wrapper_print_db_info(const int level_verbose,
 			};
 		} else {
 			if (level_verbose == LEVEL_VERBOSE2) {
-				fprintf(stderr, "%sdb-ip.com(MMDB): %-30s: [%1d] %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_DBIP2_dbfilename(type), strerror(errno));
+				fprintf(stderr, "%sdb-ip.com(MMDB): %-30s: [%1d] %-30s (%s)\n", prefix, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].description, type, libipv6calc_db_wrapper_DBIP2_db_file_desc[i].filename, strerror(errno));
 			};
 			continue;
 		};
