@@ -867,6 +867,80 @@ void libipv6calc_db_wrapper_features_help(void) {
 };
 
 
+/* function print db info line */
+
+// internal support function
+static void db_info(const char *formatstring_ok, const char *formatstring_na, const int first, const char *token, s_libipv6calc_db_wrapper_db_info db_info, const int suppress) {
+	if (first == 0) {
+		fprintf(stderr, " ");
+	};
+	if (db_info.num > 0) {
+		if (suppress == 0) {
+			fprintf(stderr, formatstring_ok, token, db_info.num, db_info.dbtype % 100, UNPACK_YM(db_info.dbym));
+		} else {
+			fprintf(stderr, formatstring_ok, token, db_info.num);
+		};
+	} else {
+		fprintf(stderr, formatstring_na, token);
+	};
+};
+
+// main function
+void libipv6calc_db_wrapper_print_db_info_line(const int level_verbose, const char *prefix_string, const char *db_string, const char *db_info_string, const int db_length, const s_libipv6calc_db_wrapper_db_info_all db_info_all, const int suppress) {
+	const char *formatstring_ok;
+	const char *formatstring_na;
+
+	fprintf(stderr, "%s%s: %-31s:", prefix_string, db_string, db_info_string);
+
+	if (level_verbose >= LEVEL_VERBOSE2) {
+		if (suppress == 0) {
+			if (db_length == 1) {
+				formatstring_ok = " %s=%-1d DB%-1d %6d";
+				formatstring_na = " %s=-           ";
+			} else if (db_length == 2) {
+				formatstring_ok = " %s=%-2d DB%-2d %6d";
+				formatstring_na = " %s=-             ";
+			} else {
+				formatstring_ok = " %s=%-3d DB%-2d %6d";
+				formatstring_na = " %s=-              ";
+			};
+		} else {
+			if (db_length == 1) {
+				formatstring_ok = " %s=%-1d           ";
+				formatstring_na = " %s=-            ";
+			} else if (db_length == 2) {
+				formatstring_ok = " %s=%-2d          ";
+				formatstring_na = " %s=-             ";
+			} else {
+				formatstring_ok = " %s=%-3d            ";
+				formatstring_na = " %s=-              ";
+			};
+		};
+	} else {
+		if (db_length == 1) {
+			formatstring_ok = " %s=%-1d";
+			formatstring_na = " %s=-";
+		} else if (db_length == 2) {
+			formatstring_ok = " %s=%-2d";
+			formatstring_na = " %s=- ";
+		} else {
+			formatstring_ok = " %s=%-3d";
+			formatstring_na = " %s=-  ";
+		};
+	};
+
+	db_info(formatstring_ok, formatstring_na, 1, "Country4"  , db_info_all.country4  , suppress);
+	db_info(formatstring_ok, formatstring_na, 0, "Country6"  , db_info_all.country6  , suppress);
+	db_info(formatstring_ok, formatstring_na, 0, "City4"     , db_info_all.city4     , suppress);
+	db_info(formatstring_ok, formatstring_na, 0, "City6"     , db_info_all.city6     , suppress);
+	db_info(formatstring_ok, formatstring_na, 0, "ASN4"      , db_info_all.asn4      , suppress);
+	db_info(formatstring_ok, formatstring_na, 0, "ASN6"      , db_info_all.asn6      , suppress);
+	db_info(formatstring_ok, formatstring_na, 0, "GeonameID4", db_info_all.geonameid4, suppress);
+	db_info(formatstring_ok, formatstring_na, 0, "GeonameID6", db_info_all.geonameid6, suppress);
+	fprintf(stderr, "\n");
+};
+
+
 /* function print db info */
 void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *prefix_string) {
 	int f, p, f_index;

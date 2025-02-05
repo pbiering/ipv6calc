@@ -292,7 +292,28 @@ static const s_data_sources geonameid_types[] = {
 #define IPV6CALC_DL_STATUS_UNKNOWN	0
 #define IPV6CALC_DL_STATUS_ERROR	-1
 
-// db-info macro
+
+// db_info
+#define UNPACK_YM(dbym) ((dbym > 0) ? (((dbym % 12) + 1) + ((dbym / 12)) * 100) : 0)
+
+typedef struct {
+	unsigned int num;
+	int dbtype;
+	int dbym;
+} s_libipv6calc_db_wrapper_db_info;
+
+
+typedef struct {
+	s_libipv6calc_db_wrapper_db_info	country4;
+	s_libipv6calc_db_wrapper_db_info	country6;
+	s_libipv6calc_db_wrapper_db_info	city4;
+	s_libipv6calc_db_wrapper_db_info	city6;
+	s_libipv6calc_db_wrapper_db_info	asn4;
+	s_libipv6calc_db_wrapper_db_info	asn6;
+	s_libipv6calc_db_wrapper_db_info	geonameid4;
+	s_libipv6calc_db_wrapper_db_info	geonameid6;
+} s_libipv6calc_db_wrapper_db_info_all;
+
 #define IPV6CALC_DB_FEATURE_INFO(prefix, data_source) \
         fprintf(stderr, "%s%s: features available/implemented: 0x%08x/0x%08x", \
 		prefix, \
@@ -381,6 +402,7 @@ extern void libipv6calc_db_wrapper_features(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_capabilities(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_features_help(void);
 extern void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *prefix_string);
+extern void libipv6calc_db_wrapper_print_db_info_line(const int level_verbose, const char *prefix_string, const char *db_string, const char *db_info_string, const int db_length, const s_libipv6calc_db_wrapper_db_info_all db_info_all, const int suppress);
 extern void libipv6calc_db_wrapper_print_features_verbose(const int level_verbose);
 extern int  libipv6calc_db_wrapper_has_features(uint32_t features);
 extern int  libipv6calc_db_wrapper_options(const int opt, const char *optarg, const struct option longopts[]);
