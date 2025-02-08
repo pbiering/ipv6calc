@@ -136,7 +136,7 @@ get_urls | while read subdir url filename format flag; do
 		$dry_run || wget $wget_options $url$filename -O $filename
 		retval=$?
 	elif [ "$flag" = "curl" ]; then
-		$dry_run || curl $url$filename -o $filename
+		$dry_run || curl -s $url$filename -o $filename
 		retval=$?
 	else
 		$dry_run || wget $wget_options $url$filename -N
