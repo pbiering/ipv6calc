@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Mon Jan 27 05:52:38 2025
+ * Generated     : Sat May 10 15:56:44 2025
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20250127";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20250510";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -2005,7 +2005,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x7C7000, 0x7C7FFF, "Pyrosequencing AB", "PYROSEQUENCING-AB" },
 	{ 0x0050C2, 0x7C8000, 0x7C8FFF, "Fr. Sauter AG", "FR-SAUTER" },
 	{ 0x0050C2, 0x7C9000, 0x7C9FFF, "Bluebell Opticom Limited", "BLUEBELL-OPTICOM" },
-	{ 0x0050C2, 0x7CA000, 0x7CAFFF, "CEDAR Audio Limited", "CEDAR-AUDIO" },
+	{ 0x0050C2, 0x7CA000, 0x7CAFFF, "CEDAR Audio Ltd", "CEDAR-AUDIO" },
 	{ 0x0050C2, 0x7CB000, 0x7CBFFF, "ViewPlus Technologies, Inc.", "VIEWPLUS-TECHNOLOGIES" },
 	{ 0x0050C2, 0x7CC000, 0x7CCFFF, "SWECO JAPS AB", "SWECO-JAPS-AB" },
 	{ 0x0050C2, 0x7CD000, 0x7CDFFF, "Precision MicroControl Corporation", "PRECISION-MICROCONTROL" },
@@ -3519,10 +3519,10 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xDB4000, 0xDB4FFF, "ZAO NPC Kompjuternie Technologii", "ZAO-NPC-KOMPJUTERNIE-TECHNOLOGII" },
 	{ 0x0050C2, 0xDB5000, 0xDB5FFF, "DSP DESIGN LTD", "DSP-DESIGN" },
 	{ 0x0050C2, 0xDB6000, 0xDB6FFF, "PROSOFT-SYSTEMS LTD", "PROSOFT" },
-	{ 0x0050C2, 0xDB7000, 0xDB7FFF, "SOREL GmbH Mikroelektronik", "SOREL-MIKROELEKTRONIK" },
+	{ 0x0050C2, 0xDB7000, 0xDB7FFF, "SOREL GmbH", "SOREL" },
 	{ 0x0050C2, 0xDB8000, 0xDB8FFF, "Comsat VertriebsgmbH", "COMSAT-VERTRIEBSGMBH" },
 	{ 0x0050C2, 0xDB9000, 0xDB9FFF, "Peek Traffic Corporation", "PEEK-TRAFFIC" },
-	{ 0x0050C2, 0xDBA000, 0xDBAFFF, "M.P. Electronics", "M-P-ELECTRONICS" },
+	{ 0x0050C2, 0xDBA000, 0xDBAFFF, "Motor Protection Electronics", "MOTOR-PROTECTION-ELECTRONICS" },
 	{ 0x0050C2, 0xDBB000, 0xDBBFFF, "Esensors, Inc.", "ESENSORS" },
 	{ 0x0050C2, 0xDBC000, 0xDBCFFF, "Nantes Systems Private Limited", "NANTES-PRIVATE" },
 	{ 0x0050C2, 0xDBD000, 0xDBDFFF, "Margento R&D", "MARGENTO-R-D" },
@@ -4202,7 +4202,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x062000, 0x062FFF, "Tech Source Inc", "TECH-SOURCE" },
 	{ 0x40D855, 0x063000, 0x063FFF, "Protonic Holland", "PROTONIC-HOLLAND" },
 	{ 0x40D855, 0x064000, 0x064FFF, "HIPODROMO DE AGUA CALIENTE, S.A. DE C.V.", "HIPODROMO-DE-AGUA-CALIENTE-DE-C-V" },
-	{ 0x40D855, 0x065000, 0x065FFF, "Parallel Wireless", "PARALLEL-WIRELESS" },
+	{ 0x40D855, 0x065000, 0x065FFF, "Parallel Wireless, Inc", "PARALLEL-WIRELESS" },
 	{ 0x40D855, 0x066000, 0x066FFF, "TeraTron GmbH", "TERATRON" },
 	{ 0x40D855, 0x067000, 0x067FFF, "Tronic Control ltd.", "TRONIC-CONTROL" },
 	{ 0x40D855, 0x068000, 0x068FFF, "Oki Seatec Co., Ltd.", "OKI-SEATEC" },
@@ -4560,7 +4560,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x40D855, 0x1C8000, 0x1C8FFF, "Sensata Technologies", "SENSATA-TECHNOLOGIES" },
 	{ 0x40D855, 0x1C9000, 0x1C9FFF, "Andy-L Ltd.", "ANDY-L" },
 	{ 0x40D855, 0x1CA000, 0x1CAFFF, "Rigel Engineering", "RIGEL-ENGINEERING" },
-	{ 0x40D855, 0x1CB000, 0x1CBFFF, "MG S.r.l.", "MG" },
+	{ 0x40D855, 0x1CB000, 0x1CBFFF, "MG s.r.l.", "MG" },
 	{ 0x40D855, 0x1CC000, 0x1CCFFF, "NKT Photonics A/S", "NKT-PHOTONICS-A/S" },
 	{ 0x40D855, 0x1CD000, 0x1CDFFF, "YXLON International A/S", "YXLON-A/S" },
 	{ 0x40D855, 0x1CE000, 0x1CEFFF, "Peter Huber Kaeltemaschinenbau SE", "PETER-HUBER-KAELTEMASCHINENBAU-SE" },

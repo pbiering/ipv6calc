@@ -11,6 +11,9 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20250510/PB:
+	internal databases: update
+
 20250204/PB:
 	databases/lib/*: align db-info output
 
