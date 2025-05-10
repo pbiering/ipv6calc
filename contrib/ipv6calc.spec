@@ -26,7 +26,7 @@
 
 Summary:	IPv6/IPv4 address information, format change, filter and calculation utility
 Name:		ipv6calc
-Version:	4.3.0
+Version:	4.3.1
 Release:	81%{?gittag}%{?dist}
 URL:		http://www.deepspace6.net/projects/%{name}.html
 License:	GPLv2
