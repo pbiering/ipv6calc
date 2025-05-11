@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This DocBook file was created by LyX 2.4.2.1
+<!-- This DocBook file was created by LyX 2.4.3
   See https://www.lyx.org/ for more information -->
 <article xml:lang="en-US" xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.2">
 <title>The ipv6calc Homepage</title>
 <address role='right-address'>pb at bieringer dot de</address>
-<info><author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author><revhistory><revision> <revnumber>12.0.0</revnumber> <date>2025-01-28</date> <authorinitials>PB</authorinitials></revision></revhistory></info><section>
+<info><author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author><revhistory><revision> <revnumber>12.0.1</revnumber> <date>2025-05-11</date> <authorinitials>PB</authorinitials></revision></revhistory></info><section>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in <emphasis>/proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program <emphasis>ip6_int into. Now only one utility is needed to do a lot.</emphasis></emphasis></para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <link xlink:href="http://freecode.com/projects/ipv6calc/">freecode.com (former freshmeat, now also EOL) / ipv6calc</link> page (but this is not maintained by the author)</para>
 <section>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 4.3.0</para>
+<para>Latest version since last update of this page is 4.3.1</para>
 </section>
 <section>
 <title>Included programs</title>
@@ -108,6 +108,9 @@
 </listitem>
 <listitem>
 <para>native MaxMindDB files (support since 2.0.0, released 2019)</para>
+</listitem>
+<listitem>
+<para>MaxMindDB file &#8220;IP to ASN-Lite&#8221; (support since 4.3.1, released 2025)</para>
 </listitem>
 </itemizedlist>
 </listitem>
@@ -425,72 +428,74 @@
 <programlisting language='lyx'>ipv6calc: version 4.3.0 GeoIP GeoIPv6 IP2Location IP2Location6 IP2Location2 IP2Location2v6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO DB_IPV4_GEONAMEID DB_IPV6_GEONAMEID DB_IPV4_DUMP_CC DB_IPV6_DUMP_CC ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID</programlisting>
 <para>Option &#8220;-v -v&#8221; (since 0.91.0) shows built-in features and capabilities in detail, depending on configuration before compiling (EXAMPLE):</para>
 <programlisting language='lyx'>$ ipv6calc -vv</programlisting>
-<programlisting language='lyx'>ipv6calc: version 4.3.0 GeoIP GeoIPv6 IP2Location IP2Location6 IP2Location2 IP2Location2v6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO DB_IPV4_GEONAMEID DB_IPV6_GEONAMEID DB_IPV4_DUMP_CC DB_IPV6_DUMP_CC ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID</programlisting>
+<programlisting language='lyx'>ipv6calc: version 4.3.1 GeoIP GeoIPv6 IP2Location IP2Location6 IP2Location2 IP2Location2v6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO DB_IPV4_GEONAMEID DB_IPV6_GEONAMEID DB_IPV4_DUMP_CC DB_IPV6_DUMP_CC ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID</programlisting>
 <programlisting language='lyx'>Capabilities: GeoIP2(linked/MMDB) IP2Location(linked/BIN) DBIP2(linked/MMDB) IP2Location2(linked/MMDB) ExternalDatabase DB_AS_REG(BuiltIn) DB_CC_REG(BuiltIn) DB_IPV4_REG(BuiltIn) DB_IPV6_REG(BuiltIn) DB_IEEE(BuiltIn)</programlisting>
-<programlisting language='lyx'>Internal main     library version: 4.3.0  API: 4.3.0  (built-in)</programlisting>
-<programlisting language='lyx'>Internal database library version: 4.3.0  API: 4.3.0  (built-in)</programlisting>
+<programlisting language='lyx'>Internal main     library version: 4.3.1  API: 4.3.0  (built-in)</programlisting>
+<programlisting language='lyx'>Internal database library version: 4.3.1  API: 4.3.0  (built-in)</programlisting>
 <programlisting language='lyx'>Linked MD5 implementation: OpenSSL EVP MD5</programlisting>
 <programlisting language='lyx'>MaxMindDB for GeoIP2/DBIP2/IP2Location2 support enabled</programlisting>
-<programlisting language='lyx'>MaxMindDB dynamic library version (on this system): 1.12.1</programlisting>
+<programlisting language='lyx'>MaxMindDB dynamic library version (on this system): 1.12.2</programlisting>
 <programlisting language='lyx'>GeoIP2(MaxMindDB) support enabled</programlisting>
-<programlisting language='lyx'>GeoIP(MMDB) database support: Country4=1 Country6=1 ASN4=1 ASN6=1 City4=1 City6=1 GeonameID4=1 GeonameID6=1</programlisting>
+<programlisting language='lyx'>GeoIP(MMDB) database support: Country4=1 Country6=1 City4=1 City6=1 ASN4=1 ASN6=1 GeonameID4=1 GeonameID6=1</programlisting>
 <programlisting language='lyx'>IP2Location support enabled, compiled with API version: 8.6.1, dynamically linked with version: API=8.6.1 Major=8 MajorMinor=806</programlisting>
-<programlisting language='lyx'>IP2Location(BIN) database support: Country4=1 Country6=1 ASN4=1 ASN6=1 City4=1 City6=1</programlisting>
+<programlisting language='lyx'>IP2Location(BIN) database support: Country4=1 Country6=1 City4=1 City6=1 ASN4=1 ASN6=1 GeonameID4=0 GeonameID6=0</programlisting>
 <programlisting language='lyx'>DBIP(MaxMindDB) support enabled</programlisting>
-<programlisting language='lyx'>db-ip.com(MMDB) database support: Country4=1 Country6=1 ASN4=0 ASN6=0 City4=1 City6=1</programlisting>
+<programlisting language='lyx'>db-ip.com(MMDB) database support: Country4=1 Country6=1 City4=1 City6=1 ASN4=1 ASN6=1 GeonameID4=1 GeonameID6=1</programlisting>
 <programlisting language='lyx'>IP2Location(MaxMindDB) support enabled</programlisting>
-<programlisting language='lyx'>IP2Location(MMDB) database support: Country4=1 Country6=1 ASN4=0 ASN6=0 City4=0 City6=0 GeonameID4=1 GeonameID6=1</programlisting>
+<programlisting language='lyx'>IP2Location(MMDB) database support: Country4=1 Country6=1 City4=0 City6=0 ASN4=0 ASN6=0 GeonameID4=1 GeonameID6=1</programlisting>
 <programlisting language='lyx'>External(BDB) available databases: Country4=1 Country6=1 IPV4_REG=1 IPV6_REG=1</programlisting>
 <programlisting language='lyx'>BuiltIn databases available: ASN_REG=1 IPV4_REG=1 IPV6_REG=1 IEEE=1 CC_REG=1</programlisting>
 <programlisting language='lyx'>DB features: 0xffdfffff</programlisting>
 <programlisting language='lyx'>GeoIP(MMDB): features available/implemented: 0x03063ff0/0x03063ff0 (100%)</programlisting>
 <programlisting language='lyx'>GeoIP(MMDB): info of available databases in directory: /var/local/share/GeoIP</programlisting>
-<programlisting language='lyx'>GeoIP(MMDB): IPv4/v6 CountryCode (FREE)    : [1] GeoLite2-Country.mmdb          (GeoLite2-Country Copyright (c) 2025 MaxMind All Rights Reserved, created: 20250121-103200 UTC)</programlisting>
-<programlisting language='lyx'>GeoIP(MMDB): IPv4/v6 City (FREE)           : [2] GeoLite2-City.mmdb             (GeoLite2-City Copyright (c) 2025 MaxMind All Rights Reserved, created: 20250121-102358 UTC)</programlisting>
-<programlisting language='lyx'>GeoIP(MMDB): IPv4/v6 ASN (FREE)            : [3] GeoLite2-ASN.mmdb              (GeoLite2-ASN Copyright (c) 2025 MaxMind All Rights Reserved, created: 20250121-081512 UTC)</programlisting>
-<programlisting language='lyx'>GeoIP(MMDB): detected best databases FREE    Country4=2   Country6=2   City4=2   City6=2   GeonameID4=2   GeonameID6=2 </programlisting>
-<programlisting language='lyx'>GeoIP(MMDB): detected best databases COMM    Country4=0   Country6=0   City4=0   City6=0   GeonameID4=0   GeonameID6=0 </programlisting>
-<programlisting language='lyx'>GeoIP(MMDB): selected best databases normal  Country4=2   Country6=2   City4=2   City6=2   GeonameID4=2   GeonameID6=2 </programlisting>
-<programlisting language='lyx'>GeoIP(MMDB): selected best databases method: COMM older than 12 months are deselected in case of FREE is available</programlisting>
-<programlisting language='lyx'>GeoIP(MMDB): selected best databases method: COMM/FREE with more features are only selected in case not older than 1 months of already found COMM/FREE</programlisting>
+<programlisting language='lyx'>GeoIP(MMDB): IPv4/v6 CountryCode (LITE)    : [1] GeoLite2-Country.mmdb          (GeoLite2-Country Copyright (c) 2025 MaxMind All Rights Reserved, created: 20250121-103200 UTC)</programlisting>
+<programlisting language='lyx'>GeoIP(MMDB): IPv4/v6 City (LITE)           : [2] GeoLite2-City.mmdb             (GeoLite2-City Copyright (c) 2025 MaxMind All Rights Reserved, created: 20250121-102358 UTC)</programlisting>
+<programlisting language='lyx'>GeoIP(MMDB): IPv4/v6 ASN (LITE)            : [3] GeoLite2-ASN.mmdb              (GeoLite2-ASN Copyright (c) 2025 MaxMind All Rights Reserved, created: 20250121-081512 UTC)</programlisting>
+<programlisting language='lyx'>GeoIP(MMDB): detected best databases LITE   : Country4=2  Country6=2  City4=2  City6=2  ASN4=3  ASN6=3  GeonameID4=2  GeonameID6=2</programlisting>
+<programlisting language='lyx'>GeoIP(MMDB): detected best databases COMM   : Country4=-  Country6=-  City4=-  City6=-  ASN4=-  ASN6=-  GeonameID4=-  GeonameID6=-</programlisting>
+<programlisting language='lyx'>GeoIP(MMDB): selected best databases normal : Country4=2  Country6=2  City4=2  City6=2  ASN4=3  ASN6=3  GeonameID4=2  GeonameID6=2</programlisting>
+<programlisting language='lyx'>GeoIP(MMDB): selected best databases method : COMM older than 12 months are deselected in case of LITE is available</programlisting>
+<programlisting language='lyx'>GeoIP(MMDB): selected best databases method : COMM/LITE with more features are only selected in case not older than 1 months of already found COMM/LITE</programlisting>
 <programlisting language='lyx'>IP2Location(BIN): features available/implemented: 0x0c003ff0/0x0c003ff0 (100%)</programlisting>
 <programlisting language='lyx'>IP2Location(BIN): info of available databases in directory: /var/local/share/IP2Location</programlisting>
 <programlisting language='lyx'>IP2Location(BIN): Copyright (c) IP2Location All Rights Reserved</programlisting>
-<programlisting language='lyx'>IP2Location(BIN): IPv4 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo/El/Us/Ad/Ca/Di/AS:[226] IP-COUNTRY-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEATHER-MOBILE-ELEVATION-USAGETYPE-ADDRESSTYPE-CATEGORY-DISTRICT-ASN-SAMPLE.BIN (IP2L-DB26 IPv4 IPv6 SAMPLE 20202501)</programlisting>
-<programlisting language='lyx'>IP2Location(BIN): IPv6 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo/El/Us/Ad/Ca/Di/AS:[326] IPV6-COUNTRY-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEATHER-MOBILE-ELEVATION-USAGETYPE-ADDRESSTYPE-CATEGORY-DISTRICT-ASN.SAMPLE.BIN (IP2L-DB26 IPv4 IPv6 SAMPLE 20202501)</programlisting>
+<programlisting language='lyx'>IP2Location(BIN): IPv4 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo/El/Us/Ad/Ca/Di/AS:[226] IP-COUNTRY-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEATHER-MOBILE-ELEVATION-USAGETYPE-ADDRESSTYPE-CATEGORY-DISTRICT-ASN-SAMPLE.BIN (IP2L-DB26 IPv4 IPv6 SAMPLE 20202502)</programlisting>
+<programlisting language='lyx'>IP2Location(BIN): IPv6 Co/Re/Ci/LaLo/ZI/TZ/IS/Do/Ne/Ar/We/Mo/El/Us/Ad/Ca/Di/AS:[326] IPV6-COUNTRY-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE-ISP-DOMAIN-NETSPEED-AREACODE-WEATHER-MOBILE-ELEVATION-USAGETYPE-ADDRESSTYPE-CATEGORY-DISTRICT-ASN.SAMPLE.BIN (IP2L-DB26 IPv4 IPv6 SAMPLE 20202502)</programlisting>
 <programlisting language='lyx'>IP2Location(BIN): IPv4 Country                                    :[401] IP2LOCATION-LITE-DB1.BIN            (IP2L-DB1 IPv4 IPv6 LITE 20250101)</programlisting>
 <programlisting language='lyx'>IP2Location(BIN): IPvx Country                                    :[501] IP2LOCATION-LITE-DB1.IPV6.BIN       (IP2L-DB1 IPv4 IPv6 LITE 20250101)</programlisting>
-<programlisting language='lyx'>IP2Location(BIN): detected best databases SAMPLE  Country4=226  Country6=326  City4=226  City6=326  ASN4=226  ASN6=326</programlisting>
-<programlisting language='lyx'>IP2Location(BIN): detected best databases LITE    Country4=501  Country6=501  City4=0    City6=0    ASN4=0    ASN6=0  </programlisting>
-<programlisting language='lyx'>IP2Location(BIN): detected best databases COMM    Country4=0    Country6=0    City4=0    City6=0    ASN4=0    ASN6=0  </programlisting>
-<programlisting language='lyx'>IP2Location(BIN): selected best databases LI-&gt;SA* Country4=0    Country6=0    City4=0    City6=0    ASN4=0    ASN6=0  </programlisting>
-<programlisting language='lyx'>IP2Location(BIN): selected best databases normal  Country4=501  Country6=501  City4=226  City6=326  ASN4=226  ASN6=326</programlisting>
-<programlisting language='lyx'>IP2Location(BIN): selected best databases method: * = autoswitch from LITE to SAMPLE enabled in case not older than 12 months and having more features</programlisting>
-<programlisting language='lyx'>IP2Location(BIN): selected best databases method: COMM older than 12 months are deselected in case of LITE is available</programlisting>
-<programlisting language='lyx'>IP2Location(BIN): selected best databases method: COMM/LITE/SAMPLE with more features are only selected in case not older than 1 months of already found COMM/LITE/SAMPLE</programlisting>
-<programlisting language='lyx'>IP2Location(BIN): selected best databases method: softlinks: skipped-by-default</programlisting>
-<programlisting language='lyx'>db-ip.com(MMDB): features available/implemented: 0x30063fc0/0x30063ff0 (85%)</programlisting>
+<programlisting language='lyx'>IP2Location(BIN): IPvx Co/Re/Ci/LattLong/ZIP/TZ                   :[111] IPV6-COUNTRY-REGION-CITY-LATITUDE-LONGITUDE-ZIPCODE-TIMEZONE.BIN (IP2L-DB11 IPv4 IPv6 20250115)</programlisting>
+<programlisting language='lyx'>IP2Location(BIN): detected best databases SAMPLE : Country4=226  Country6=326  City4=226  City6=326  ASN4=226  ASN6=326  GeonameID4=-    GeonameID6=-  </programlisting>
+<programlisting language='lyx'>IP2Location(BIN): detected best databases LITE   : Country4=501  Country6=501  City4=-    City6=-    ASN4=-    ASN6=-    GeonameID4=-    GeonameID6=-  </programlisting>
+<programlisting language='lyx'>IP2Location(BIN): detected best databases COMM   : Country4=111  Country6=111  City4=111  City6=111  ASN4=-    ASN6=-    GeonameID4=-    GeonameID6=-  </programlisting>
+<programlisting language='lyx'>IP2Location(BIN): selected best databases LI-&gt;SA*: Country4=-    Country6=-    City4=-    City6=-    ASN4=-    ASN6=-    GeonameID4=-    GeonameID6=-  </programlisting>
+<programlisting language='lyx'>IP2Location(BIN): selected best databases normal : Country4=111  Country6=111  City4=111  City6=111  ASN4=226  ASN6=326  GeonameID4=-    GeonameID6=-  </programlisting>
+<programlisting language='lyx'>IP2Location(BIN): selected best databases method : * = autoswitch from LITE to SAMPLE enabled in case not older than 12 months and having more features</programlisting>
+<programlisting language='lyx'>IP2Location(BIN): selected best databases method : COMM older than 12 months are deselected in case of LITE is available</programlisting>
+<programlisting language='lyx'>IP2Location(BIN): selected best databases method : COMM/LITE/SAMPLE with more features are only selected in case not older than 1 months of already found COMM/LITE/SAMPLE</programlisting>
+<programlisting language='lyx'>IP2Location(BIN): selected best databases method : softlinks skipped-by-default</programlisting>
+<programlisting language='lyx'>db-ip.com(MMDB): features available/implemented: 0x30063ff0/0x30063ff0 (100%)</programlisting>
 <programlisting language='lyx'>db-ip.com(MMDB): info of available databases in directory: /var/local/share/DBIP</programlisting>
-<programlisting language='lyx'>db-ip.com(MMDB): IPv4/v6 CountryCode (FREE)    : [1] dbip-country-lite.mmdb         (DBIP-Country-Lite Copyright (c) 2025 db-ip.com All Rights Reserved, created: 20250101-022230 UTC)</programlisting>
-<programlisting language='lyx'>db-ip.com(MMDB): IPv4/v6 City (FREE)           : [2] dbip-city-lite.mmdb            (DBIP-City-Lite Copyright (c) 2025 db-ip.com All Rights Reserved, created: 20250101-022649 UTC)</programlisting>
-<programlisting language='lyx'>db-ip.com(MMDB): detected best databases FREE    Country4=2    Country6=2    City4=2    City6=2  </programlisting>
-<programlisting language='lyx'>db-ip.com(MMDB): detected best databases COMM    Country4=0    Country6=0    City4=0    City6=0  </programlisting>
-<programlisting language='lyx'>db-ip.com(MMDB): selected best databases normal  Country4=2    Country6=2    City4=2    City6=2  </programlisting>
-<programlisting language='lyx'>db-ip.com(MMDB): selected best databases method: COMM older than 12 months are deselected in case of FREE is available</programlisting>
-<programlisting language='lyx'>db-ip.com(MMDB): selected best databases method: COMM/FREE with more features are only selected in case not older than 1 months of already found COMM/FREE</programlisting>
+<programlisting language='lyx'>db-ip.com(MMDB): IPv4/v6 CountryCode (LITE)    : [1] dbip-country-lite.mmdb         (DBIP-Country-Lite Copyright (c) 2025 db-ip.com All Rights Reserved, created: 20250201-021656 UTC)</programlisting>
+<programlisting language='lyx'>db-ip.com(MMDB): IPv4/v6 City (LITE)           : [2] dbip-city-lite.mmdb            (DBIP-City-Lite Copyright (c) 2025 db-ip.com All Rights Reserved, created: 20250201-022127 UTC)</programlisting>
+<programlisting language='lyx'>db-ip.com(MMDB): IPv4/v6 ASN (LITE)            : [3] dbip-asn-lite.mmdb             (DBIP-ASN-Lite (compat=GeoLite2-ASN) Copyright (c) 2025 db-ip.com All Rights Reserved, created: 20250201-022141 UTC)</programlisting>
+<programlisting language='lyx'>db-ip.com(MMDB): detected best databases LITE   : Country4=2  Country6=2  City4=2  City6=2  ASN4=3  ASN6=3  GeonameID4=2  GeonameID6=2</programlisting>
+<programlisting language='lyx'>db-ip.com(MMDB): detected best databases COMM   : Country4=-  Country6=-  City4=-  City6=-  ASN4=-  ASN6=-  GeonameID4=-  GeonameID6=-</programlisting>
+<programlisting language='lyx'>db-ip.com(MMDB): selected best databases normal : Country4=2  Country6=2  City4=2  City6=2  ASN4=3  ASN6=3  GeonameID4=2  GeonameID6=2</programlisting>
+<programlisting language='lyx'>db-ip.com(MMDB): selected best databases method: COMM older than 12 months are deselected in case of LITE is available</programlisting>
+<programlisting language='lyx'>db-ip.com(MMDB): selected best databases method: COMM/LITE with more features are only selected in case not older than 1 months of already found COMM/LITE</programlisting>
 <programlisting language='lyx'>IP2Location(MMDB): features available/implemented: 0x00c603c0/0x00c63ff0 (57%)</programlisting>
 <programlisting language='lyx'>IP2Location(MMDB): info of available databases in directory: /var/local/share/IP2Location</programlisting>
 <programlisting language='lyx'>IP2Location(MMDB): Copyright (c) IP2Location All Rights Reserved</programlisting>
 <programlisting language='lyx'>IP2Location(MMDB): IPvx Country                                    :[401] IP2LOCATION-LITE-DB1.MMDB           (GeoLite2Country database, created: 20241228-235320 UTC)</programlisting>
-<programlisting language='lyx'>IP2Location(MMDB): detected best databases SAMPLE  Country4=0    Country6=0    City4=0    City6=0    ASN4=0    ASN6=0    GeonameID4=0    GeonameID6=0  </programlisting>
-<programlisting language='lyx'>IP2Location(MMDB): detected best databases LITE    Country4=401  Country6=401  City4=0    City6=0    ASN4=0    ASN6=0    GeonameID4=401  GeonameID6=401</programlisting>
-<programlisting language='lyx'>IP2Location(MMDB): detected best databases COMM    Country4=0    Country6=0    City4=0    City6=0    ASN4=0    ASN6=0    GeonameID4=0    GeonameID6=0  </programlisting>
-<programlisting language='lyx'>IP2Location(MMDB): selected best databases LI-&gt;SA* Country4=0    Country6=0    City4=0    City6=0    ASN4=0    ASN6=0    GeonameID4=0    GeonameID6=0  </programlisting>
-<programlisting language='lyx'>IP2Location(MMDB): selected best databases normal  Country4=401  Country6=401  City4=0    City6=0    ASN4=0    ASN6=0    GeonameID4=401  GeonameID6=401</programlisting>
-<programlisting language='lyx'>IP2Location(MMDB): selected best databases method: * = autoswitch from LITE to SAMPLE enabled in case not older than 12 months and having more features</programlisting>
-<programlisting language='lyx'>IP2Location(MMDB): selected best databases method: COMM older than 12 months are deselected in case of LITE is available</programlisting>
-<programlisting language='lyx'>IP2Location(MMDB): selected best databases method: COMM/LITE/SAMPLE with more features are only selected in case not older than 1 months of already found COMM/LITE/SAMPLE</programlisting>
-<programlisting language='lyx'>IP2Location(MMDB): selected best databases method: softlinks: skipped-by-default</programlisting>
+<programlisting language='lyx'>IP2Location(MMDB): detected best databases SAMPLE : Country4=-    Country6=-    City4=-    City6=-    ASN4=-    ASN6=-    GeonameID4=-    GeonameID6=-  </programlisting>
+<programlisting language='lyx'>IP2Location(MMDB): detected best databases LITE   : Country4=401  Country6=401  City4=-    City6=-    ASN4=-    ASN6=-    GeonameID4=401  GeonameID6=401</programlisting>
+<programlisting language='lyx'>IP2Location(MMDB): detected best databases COMM   : Country4=-    Country6=-    City4=-    City6=-    ASN4=-    ASN6=-    GeonameID4=-    GeonameID6=-  </programlisting>
+<programlisting language='lyx'>IP2Location(MMDB): selected best databases LI-&gt;SA*: Country4=-    Country6=-    City4=-    City6=-    ASN4=-    ASN6=-    GeonameID4=-    GeonameID6=-  </programlisting>
+<programlisting language='lyx'>IP2Location(MMDB): selected best databases normal : Country4=401  Country6=401  City4=-    City6=-    ASN4=-    ASN6=-    GeonameID4=401  GeonameID6=401</programlisting>
+<programlisting language='lyx'>IP2Location(MMDB): selected best databases method : * = autoswitch from LITE to SAMPLE enabled in case not older than 12 months and having more features</programlisting>
+<programlisting language='lyx'>IP2Location(MMDB): selected best databases method : COMM older than 12 months are deselected in case of LITE is available</programlisting>
+<programlisting language='lyx'>IP2Location(MMDB): selected best databases method : COMM/LITE/SAMPLE with more features are only selected in case not older than 1 months of already found COMM/LITE/SAMPLE</programlisting>
+<programlisting language='lyx'>IP2Location(MMDB): selected best databases method : softlinks skipped-by-default</programlisting>
 <programlisting language='lyx'>External(BDB): features available/implemented: 0xc01980cc/0xc01980cc (100%)</programlisting>
 <programlisting language='lyx'>External(BDB): info of available databases in directory: /var/local/share/ipv6calc</programlisting>
 <programlisting language='lyx'>External(BDB): IPv4 Registry       : ipv6calc-external-ipv4-registry.db       (EXTDB-1/AFRINIC/20250128 APNIC/20250127 ARIN/20250127 IANA/20231218 LACNIC/20250127 LISP/20200318 RIPENCC/20250127, created: 20250128-070630 UTC)</programlisting>
@@ -500,18 +505,18 @@
 <programlisting language='lyx'>BuiltIn: features available/implemented: 0x0001c00f/0x0001c00f (100%)</programlisting>
 <programlisting language='lyx'>BuiltIn: info of available databases</programlisting>
 <programlisting language='lyx'>BuiltIn: ASN  : IANA/20250117</programlisting>
-<programlisting language='lyx'>BuiltIn: CC   : AFRINIC/20250126 APNIC/20250126 ARIN/20250126 LACNIC/20250124 RIPENCC/20250126</programlisting>
-<programlisting language='lyx'>BuiltIn: IPv4 : AFRINIC/20250126 APNIC/20250126 ARIN/20250126 IANA/20231218 LACNIC/20250124 LISP/20200318 RIPENCC/20250126 (created: 20250127-045255 UTC)</programlisting>
-<programlisting language='lyx'>BuiltIn: IPv6 : AFRINIC/20250126 APNIC/20250126 ARIN/20250126 IANA/20241104 LACNIC/20250124 LISP/20200318 RIPENCC/20250126 (created: 20250127-045711 UTC)</programlisting>
-<programlisting language='lyx'>BuiltIn: IEEE : IAB/20250127 OUI/20250127 OUI28/20250127 OUI36/20250127</programlisting>
+<programlisting language='lyx'>BuiltIn: CC   : AFRINIC/20250510 APNIC/20250509 ARIN/20250510 LACNIC/20250509 RIPENCC/20250509</programlisting>
+<programlisting language='lyx'>BuiltIn: IPv4 : AFRINIC/20250510 APNIC/20250509 ARIN/20250510 IANA/20231218 LACNIC/20250509 LISP/20200318 RIPENCC/20250509 (created: 20250510-135700 UTC)</programlisting>
+<programlisting language='lyx'>BuiltIn: IPv6 : AFRINIC/20250510 APNIC/20250509 ARIN/20250510 IANA/20241104 LACNIC/20250509 LISP/20200318 RIPENCC/20250509 (created: 20250510-140120 UTC)</programlisting>
+<programlisting language='lyx'>BuiltIn: IEEE : IAB/20250510 OUI/20250510 OUI28/20250510 OUI36/20250510</programlisting>
 <programlisting language='lyx'>Database selection or priorization ('-&gt;': subsequential calls)</programlisting>
 <programlisting language='lyx'>Database priorization default: GeoIP(MMDB)-&gt;IP2Location(BIN)-&gt;IP2Location(MMDB)-&gt;db-ip.com(MMDB)-&gt;External(BDB)-&gt;BuiltIn</programlisting>
 <programlisting language='lyx'>DB_AS_REG (AS-Number to Registry database): BuiltIn</programlisting>
 <programlisting language='lyx'>DB_CC_REG (CountryCode to Registry database): BuiltIn</programlisting>
-<programlisting language='lyx'>DB_IPV4_REG (IPv4 to Registry database): External(BDB)</programlisting>
-<programlisting language='lyx'>DB_IPV6_REG (IPv6 to Registry database): External(BDB)</programlisting>
-<programlisting language='lyx'>DB_IPV4_AS (IPv4 to AS database): GeoIP(MMDB)-&gt;IP2Location(BIN)</programlisting>
-<programlisting language='lyx'>DB_IPV6_AS (IPv6 to AS database): GeoIP(MMDB)-&gt;IP2Location(BIN)</programlisting>
+<programlisting language='lyx'>DB_IPV4_REG (IPv4 to Registry database): BuiltIn</programlisting>
+<programlisting language='lyx'>DB_IPV6_REG (IPv6 to Registry database): BuiltIn</programlisting>
+<programlisting language='lyx'>DB_IPV4_AS (IPv4 to AS database): GeoIP(MMDB)-&gt;IP2Location(BIN)-&gt;db-ip.com(MMDB)</programlisting>
+<programlisting language='lyx'>DB_IPV6_AS (IPv6 to AS database): GeoIP(MMDB)-&gt;IP2Location(BIN)-&gt;db-ip.com(MMDB)</programlisting>
 <programlisting language='lyx'>DB_IPV4_CC (IPv4 to CountryCode database): GeoIP(MMDB)-&gt;IP2Location(BIN)-&gt;IP2Location(MMDB)-&gt;db-ip.com(MMDB)-&gt;External(BDB)</programlisting>
 <programlisting language='lyx'>DB_IPV6_CC (IPv6 to CountryCode database): GeoIP(MMDB)-&gt;IP2Location(BIN)-&gt;IP2Location(MMDB)-&gt;db-ip.com(MMDB)-&gt;External(BDB)</programlisting>
 <programlisting language='lyx'>DB_IPV4_COUNTRY (IPv4 to Country database): GeoIP(MMDB)-&gt;IP2Location(BIN)-&gt;IP2Location(MMDB)-&gt;db-ip.com(MMDB)</programlisting>
@@ -529,7 +534,7 @@
 <programlisting language='lyx'>DB_IPV6_DUMP_CC (IPv6 Database Dump by CountryCode): External(BDB)</programlisting>
 <para>Option &#8220;-v -h&#8221; (since 0.97.4) shows explanation of feature tokens</para>
 <programlisting language='lyx'>$ ipv6calc -v -h</programlisting>
-<programlisting language='lyx'>ipv6calc: version 4.3.0 GeoIP GeoIPv6 IP2Location IP2Location6 IP2Location2 IP2Location2v6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO DB_IPV4_GEONAMEID DB_IPV6_GEONAMEID DB_IPV4_DUMP_CC DB_IPV6_DUMP_CC ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID</programlisting>
+<programlisting language='lyx'>ipv6calc: version 4.3.1 GeoIP GeoIPv6 IP2Location IP2Location6 IP2Location2 IP2Location2v6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO DB_IPV4_GEONAMEID DB_IPV6_GEONAMEID DB_IPV4_DUMP_CC DB_IPV6_DUMP_CC ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID</programlisting>
 <programlisting language='lyx'>Explanation of available(x)/possible(o) feature tokens</programlisting>
 <programlisting language='lyx'>GeoIP                    x GeoIP(MMDB) IPv4 database (provided by GeoIP(MMDB))</programlisting>
 <programlisting language='lyx'>GeoIPv6                  x GeoIP(MMDB) IPv6 database (provided by GeoIP(MMDB))</programlisting>
@@ -643,6 +648,13 @@
 <programlisting language='lyx'>IID=85b3:9e6b:3019:8909</programlisting>
 <programlisting language='lyx'>EUI64_SCOPE=local-random</programlisting>
 <programlisting language='lyx'>IP2LOCATION_COUNTRY_SHORT=DE</programlisting>
+<programlisting language='lyx'>IP2LOCATION_COUNTRY_LONG=Germany</programlisting>
+<programlisting language='lyx'>IP2LOCATION_REGION=Berlin</programlisting>
+<programlisting language='lyx'>IP2LOCATION_CITY=Berlin</programlisting>
+<programlisting language='lyx'>IP2LOCATION_ZIPCODE=10178</programlisting>
+<programlisting language='lyx'>IP2LOCATION_LATITUDE=52.524525</programlisting>
+<programlisting language='lyx'>IP2LOCATION_LONGITUDE=13.410037</programlisting>
+<programlisting language='lyx'>IP2LOCATION_TIMEZONE=+01:00</programlisting>
 <programlisting language='lyx'>IP2LOCATION2_CONTINENT_SHORT=EU</programlisting>
 <programlisting language='lyx'>IP2LOCATION2_CONTINENT_LONG=Europe</programlisting>
 <programlisting language='lyx'>IP2LOCATION2_COUNTRY_SHORT=DE</programlisting>
@@ -669,16 +681,19 @@
 <programlisting language='lyx'>DBIP2_CITY=Berlin (Charlottenburg-Wilmersdorf)</programlisting>
 <programlisting language='lyx'>DBIP2_LATITUDE=52.523400</programlisting>
 <programlisting language='lyx'>DBIP2_LONGITUDE=13.322400</programlisting>
+<programlisting language='lyx'>DBIP2_AS_NUM=6724</programlisting>
+<programlisting language='lyx'>DBIP2_AS_ORGNAME=Strato AG</programlisting>
 <programlisting language='lyx'>DBIP2_GEONAME_ID_COUNTRY=2921044</programlisting>
 <programlisting language='lyx'>DBIP2_GEONAME_ID_CONTINENT=6255148</programlisting>
 <programlisting language='lyx'>EXTERNAL_COUNTRY_SHORT=DE</programlisting>
-<programlisting language='lyx'>IP2LOCATION_DATABASE_INFO=IP2L-DB1 IPv4 IPv6 LITE 20250101 Copyright (c) 2025 IP2Location All Rights ReservedIP2L-DB1 IPv4 IPv6 LITE 20250101 Copyright (c) 2025 IP2Location All Rights Reserved / This site or product includes IP2Location LITE data available from https://lite.ip2location.com</programlisting>
+<programlisting language='lyx'>IP2LOCATION_DATABASE_INFO=IP2L-DB11 IPv4 IPv6 20250115 Copyright (c) 2025 IP2Location All Rights Reserved</programlisting>
 <programlisting language='lyx'>IP2LOCATION2_DATABASE_INFO=GeoLite2Country database Copyright (c) 2024 IP2Location All Rights Reserved, created: 20241228-235320 UTC / This site or product includes IP2Location LITE data available from https://lite.ip2location.com</programlisting>
 <programlisting language='lyx'>GEOIP2_DATABASE_INFO=GeoLite2-City Copyright (c) 2025 MaxMind All Rights Reserved, created: 20250121-102358 UTC / GeoLite2-ASN Copyright (c) 2025 MaxMind All Rights Reserved, created: 20250121-081512 UTC</programlisting>
-<programlisting language='lyx'>DBIP2_DATABASE_INFO=DBIP-City-Lite Copyright (c) 2025 db-ip.com All Rights Reserved, created: 20250101-022649 UTC</programlisting>
-<programlisting language='lyx'>EXTERNAL_DATABASE_INFO=EXTDB-2/AFRINIC/20250128 APNIC/20250127 ARIN/20250127 IANA/20241104 LACNIC/20250127 LISP/20200318 RIPENCC/20250127, created: 20250128-071031 UTC / EXTDB-4/AFRINIC/20250128 APNIC/20250127 ARIN/20250127 IANA/20241104 LACNIC/20250127 LISP/20200318 RIPENCC/20250127, created: 20250128-071031 UTC</programlisting>
+<programlisting language='lyx'>DBIP2_DATABASE_INFO=DBIP-City-Lite Copyright (c) 2025 db-ip.com All Rights Reserved, created: 20250201-022127 UTC / DBIP-ASN-Lite (compat=GeoLite2-ASN) Copyright (c) 2025 db-ip.com All Rights Reserved, created: 20250201-022141 UTC</programlisting>
+<programlisting language='lyx'>EXTERNAL_DATABASE_INFO=EXTDB-4/AFRINIC/20250128 APNIC/20250127 ARIN/20250127 IANA/20241104 LACNIC/20250127 LISP/20200318 RIPENCC/20250127, created: 20250128-071031 UTC</programlisting>
+<programlisting language='lyx'>BUILTIN_DATABASE_INFO=IPv6-REG:AFRINIC/20250510 APNIC/20250509 ARIN/20250510 IANA/20241104 LACNIC/20250509 LISP/20200318 RIPENCC/20250509</programlisting>
 <programlisting language='lyx'>IPV6CALC_NAME=ipv6calc</programlisting>
-<programlisting language='lyx'>IPV6CALC_VERSION=4.3.0</programlisting>
+<programlisting language='lyx'>IPV6CALC_VERSION=4.3.1</programlisting>
 <programlisting language='lyx'>IPV6CALC_COPYRIGHT="(P) &amp; (C) 2001-2025 by Peter Bieringer &lt;pb (at) bieringer.de&gt;"</programlisting>
 <programlisting language='lyx'>IPV6CALC_OUTPUT_VERSION=23</programlisting>
 <programlisting language='lyx'>IPV6CALC_SETTINGS_ANON="set=keep-type-asn-cc,mask-ipv6=56,mask-ipv4=24,mask-eui64=40,mask-mac=24,method=keep-type-asn-cc"</programlisting>
@@ -1658,8 +1673,9 @@
 </section>
 <section>
 <title>DB-IP.com</title>
-<para>Since ipv6calc &gt;= 2.0.0 supports also MaxMindDB format, so download of CSV files and converting them into BerkeleyDB format is no longer required.</para>
+<para>Since ipv6calc &gt;= 2.0.0 supports also MaxMindDB format, so download of CSV files and converting them into BerkeleyDB format is no longer required. Since ipv6calc &gt;= 4.3.1 support for &#8220;IP to ASN lite&#8221; is available.</para>
 <programlisting language='lyx'>$ /usr/share/ipv6calc/tools/DBIP-update.sh -h</programlisting>
+<programlisting language='lyx'>INFO  : found and sourced: ./tools/ipv6calc-db-update-support.sh</programlisting>
 <programlisting language='lyx'>Usage: DBIP-update.sh [-v] [-s] [-c] [-D &lt;dir&gt;] [-C &lt;days&gt;] [-U &lt;url&gt;] [-T &lt;type&gt;] [-R [-r]]</programlisting>
 <programlisting language='lyx'>	-s		skip download</programlisting>
 <programlisting language='lyx'>	-c		skip decompress</programlisting>
@@ -1684,7 +1700,7 @@
 <programlisting language='lyx'> DB-IP.com (default: free versions) the MaxMindDB (mmdb) files DB files for ipv6calc</programlisting>
 <programlisting language='lyx'> "DBIP" database support</programlisting>
 <programlisting language='lyx'> DBIP_DAT_URL_BASE=http://download.db-ip.com/free/</programlisting>
-<programlisting language='lyx'> DBIP_DAT_FILES=dbip-country-lite-%Y-%m.mmdb.gz dbip-city-lite-%Y-%m.mmdb.gz</programlisting>
+<programlisting language='lyx'> DBIP_DAT_FILES=dbip-country-lite-%Y-%m.mmdb.gz dbip-city-lite-%Y-%m.mmdb.gz dbip-asn-lite-%Y-%m.mmdb.gz</programlisting>
 <programlisting language='lyx'> in case -U &lt;url&gt; (take URL from subscription e-mail) is provided, it downloads the database</programlisting>
 <programlisting language='lyx'>  use -T &lt;type&gt; in case it's not "location-isp"</programlisting>
 </section>
@@ -2072,7 +2088,7 @@
 <title>2025</title>
 <itemizedlist>
 <listitem>
-<para>add support for MaxMindDB (IP2Location) (&gt;= 4.3.0)</para>
+<para>add support for MaxMindDB (IP2Location) (&gt;= 4.3.0)cd do</para>
 </listitem>
 </itemizedlist>
 </section>
