@@ -145,19 +145,20 @@ Also this package contains additional programs
 Support for following databases
  - IP2Location(BIN)  %{?enable_ip2location:ENABLED}%{?!enable_ip2location:DISABLED}
 		     default directory for downloaded db files: %{ip2location_db}
-		     (requires also external library on system)
+		     (requires also IP2Location library on system)
 
  - IP2Location(MMDB) %{?enable_mmdb:ENABLED}%{?!enable_mmdb:DISABLED}
 		     default directory for downloaded db files: %{ip2location_db}
-		     (requires also external library on system)
+		     (requires also MMDB library on system)
 
  - GeoIP(MMDB)	     %{?enable_mmdb:ENABLED}%{?!enable_mmdb:DISABLED}
 		     default directory for downloaded db files: %{geoip_db}
-		     (requires also external library on system)
+		     (requires also MMDB library on system)
 
  - db-ip.com(MMDB)   %{?enable_mmdb:ENABLED}%{?!enable_mmdb:DISABLED}
 		     (once generated database files are found on system)
 		     default directory for generated db files: %{dbip_db}
+		     (requires also MMDB library on system)
 
  - External	     %{?enable_external:ENABLED}%{?!enable_external:DISABLED}
 		     default directory for generated db files: %{external_db}
