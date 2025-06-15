@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_ipv6calc_anonymization.sh
-# Copyright  : 2013-2023 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2013-2025 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test ipv6calc anonymization
 
@@ -194,6 +194,12 @@ run_anon_options_kp_tests() {
 	done || return 1
 	$verbose || echo
 	echo "INFO  : $test successful"
+
+	if ! ./ipv6calc -v 2>&1| grep -wq "GeoIP"; then
+		echo "NOTICE: 'ipv6calc' has not required database support for Anonymization, skip option kp tests"
+		! $stoponerror
+		return
+	fi
 
 	test="run 'ipv6calc' anonymization option kp TYPE/ASN/CC tests"
 	echo "INFO  : $test"
