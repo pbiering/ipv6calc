@@ -311,6 +311,18 @@ int libipv6calc_db_wrapper_DBIP2_wrapper_init(void) {
 			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_country_v4_best[DBIP2_COMM].num)
 			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_country_v6_best[DBIP2_LITE].num)
 			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_country_v6_best[DBIP2_COMM].num)
+			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_region_city_v4_best[DBIP2_LITE].num)
+			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_region_city_v4_best[DBIP2_COMM].num)
+			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_region_city_v6_best[DBIP2_LITE].num)
+			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_region_city_v6_best[DBIP2_COMM].num)
+			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_asn_v4_best[DBIP2_LITE].num)
+			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_asn_v4_best[DBIP2_COMM].num)
+			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_asn_v6_best[DBIP2_LITE].num)
+			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_asn_v6_best[DBIP2_COMM].num)
+			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_geonameid_v4_best[DBIP2_LITE].num)
+			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_geonameid_v4_best[DBIP2_COMM].num)
+			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_geonameid_v6_best[DBIP2_LITE].num)
+			    ||	(libipv6calc_db_wrapper_DBIP2_db_file_desc[i].number == dbip2_db_geonameid_v6_best[DBIP2_COMM].num)
 			) {
 				// database is in use
 				continue;
