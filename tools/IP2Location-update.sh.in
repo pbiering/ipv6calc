@@ -371,12 +371,14 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 			
 		if [ $result -ne 0 ]; then
 			echo "ERROR : download of file not successful: $file_dest ($!)"
+			error=$[ $error + 1 ]
 			continue
 		fi
 		$verbose && echo "INFO  : download of file successful: $file_dest"
 
 		if [ ! -s "$file_dest" ]; then
 			echo "ERROR : downloaded file has ZERO size: $file_dest"
+			error=$[ $error + 1 ]
 			continue
 		fi
 
