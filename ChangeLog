@@ -13,7 +13,11 @@ Info:
 --------------------------------------------------------------------
 20250615/PB:
 	databases/lib/libipv6calc_db_wrapper_IP2Location.[c,h]: add support for ASN BIN files
-	databases/lib/libipv6calc_db_wrapper_IP2Location2.[c,h]: add support for ASN MMDB files
+	databases/lib/libipv6calc_db_wrapper_IP2Location2.[c,h]: add support for ASN MMDB files, combine IPv4+IPv6 support as MMDB files contain both
+	databases/lib/libipv6calc_db_wrapper_IP2Location2.c: fix closing too much in-use databases
+	databases/lib/libipv6calc_db_wrapper_DBIP2.c: fix closing too much in-use databases
+	databases/lib/libipv6calc_db_wrapper_GeoIP2.c: fix closing too much in-use databases
+	tools/IP2Location-update.sh.in: fix sample download URL, extend support for ASN files, fix error detection on unzip
 
 20250510/PB:
 	internal databases: update
