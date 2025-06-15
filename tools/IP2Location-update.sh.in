@@ -19,6 +19,7 @@
 # 20210528: add support for 'token'
 # 20240124: add optional -R|t support
 # 20250128: add support for MMDB databases
+# 20250615: fix sample download URL, extend support for ASN files, fix error detection on unzip
 
 IP2LOCATION_CONFIG=${IP2LOCATION_CONFIG:-"$HOME/.ip2location"}
 
@@ -27,18 +28,18 @@ IP2LOCATION_DAT_DIR_DEFAULT="@IP2LOCATION_DB@"
 [ -z "$IP2LOCATION_DAT_DIR" ] && IP2LOCATION_DAT_DIR="$IP2LOCATION_DAT_DIR_DEFAULT"
 
 IP2LOCATION_DAT_URL_BASE="https://www.ip2location.com/download?password=@PASSWORD@&token=@TOKEN@&login=@LOGIN@"
-IP2LOCATION_DAT_URL_BASE_SAMPLE="https://www.ip2location.com/downloads"
+IP2LOCATION_DAT_URL_BASE_SAMPLE="https://cdn.ip2location.com/samples"
 IP2LOCATION_DAT_URL_BASE_LITE_FREE="https://download.ip2location.com/lite"
 
 # Format: Proto:DB-Number
 
 # free downloads
 IP2LOCATION_DAT_FILES_LITE_FREE=${IP2LOCATION_DAT_FILES_LITE_FREE:-"IPv4:1 IPv6:1"}
-IP2LOCATION_MMDB_FILES_LITE_FREE=${IP2LOCATION_MMDB_FILES_LITE_FREE:-"IPv4:1"}
+IP2LOCATION_MMDB_FILES_LITE_FREE=${IP2LOCATION_MMDB_FILES_LITE_FREE:-"IP:1"}
 
 # (free) subscription is required for LITE DB-Number > 1
-IP2LOCATION_DAT_FILES_LITE=${IP2LOCATION_DAT_FILES_LITE:-"IPv4:11 IPv6:11"}
-IP2LOCATION_MMDB_FILES_LITE=${IP2LOCATION_MMDB_FILES_LITE:-""}
+IP2LOCATION_DAT_FILES_LITE=${IP2LOCATION_DAT_FILES_LITE:-"IPv4:11 IPv6:11 IPV4:ASN IPv6:ASN"}
+IP2LOCATION_MMDB_FILES_LITE=${IP2LOCATION_MMDB_FILES_LITE:-"IP:ASN"}
 
 # list of normal (purchased subscription required)
 IP2LOCATION_DAT_FILES="${IP2LOCATION_DAT_FILES}"
@@ -143,10 +144,14 @@ while getopts "vfsntRrS:D:h\?" opt; do
 		;;
 	    S)
 		# clear defaults
-		IP2LOCATION_DAT_FILES_LITE=""
 		IP2LOCATION_DAT_FILES=""
+		IP2LOCATION_MMDB_FILES=""
 		IP2LOCATION_DAT_FILES_LITE_FREE=""
 		IP2LOCATION_MMDB_FILES_LITE_FREE=""
+		IP2LOCATION_DAT_FILES_LITE=""
+		IP2LOCATION_MMDB_FILES_LITE=""
+		IP2LOCATION_DAT_FILES_SAMPLE=""
+		IP2LOCATION_MMDB_FILES_SAMPLE=""
 
 		#  use option
 		IP2LOCATION_DAT_FILES_SAMPLE="$OPTARG"
@@ -230,7 +235,7 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 
 	case $list in
 	    *_LITE|*_LITE_FREE)
-		code_suffix="LITEBIN"
+		code_suffix="BIN"
 		suffix="BIN"
 		file_prefix="IP2LOCATION-LITE"
 
@@ -242,6 +247,7 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 		;;
 	    *_SAMPLE)
 		url_base="$IP2LOCATION_DAT_URL_BASE_SAMPLE"
+		suffix="BIN"
 		;;
 	    *)
 		code_suffix="BIN"
@@ -254,6 +260,12 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 	    *_MMDB_*)
 		code_suffix="MMDB"
 		suffix="MMDB"
+		;;
+	esac
+
+	case $list in
+	    *_LITE|*_LITE_FREE)
+		code_suffix="LITE${code_suffix}"
 		;;
 	esac
 
@@ -287,13 +299,23 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 			;;
 		    *)
 			case $proto in
-			    IPv4)
-				code="DB${number}${code_suffix}"
-				file="${file_prefix}-DB${number}.$suffix.ZIP"
+			    IPv4|IP)
+				if [ ${number} = "ASN" ]; then
+					code="DB${number}${code_suffix}"
+					file="${file_prefix}-${number}.$suffix.ZIP"
+				else
+					code="DB${number}${code_suffix}"
+					file="${file_prefix}-DB${number}.$suffix.ZIP"
+				fi
 				;;
 			    IPv6)
-				code="DB${number}${code_suffix}IPV6"
-				file="${file_prefix}-DB${number}.IPV6.$suffix.ZIP"
+				if [ ${number} = "ASN" ]; then
+					code="DB${number}${code_suffix}IPV6"
+					file="${file_prefix}-${number}.IPV6.$suffix.ZIP"
+				else
+					code="DB${number}${code_suffix}IPV6"
+					file="${file_prefix}-DB${number}.IPV6.$suffix.ZIP"
+				fi
 				;;
 			    *)
 				echo "ERROR : unsupported 'proto' in item: $item"
