@@ -1283,8 +1283,14 @@ uint32_t libipv6calc_db_wrapper_IP2Location2_wrapper_asn_by_addr(const ipv6calc_
 		goto END_libipv6calc_db_wrapper;
 	};
 
+	result = libipv6calc_db_wrapper_IP2Location2_open_type(IP2Location2_type);
+
+	if (result != MMDB_SUCCESS) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location2, "Error opening IP2Location(MMDB) by type");
+		goto END_libipv6calc_db_wrapper;
+	};
+
 	// AS Number
-	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location2, "use IP2Location2_type=%u", IP2Location2_type);
 	as_num = libipv6calc_db_wrapper_MMDB_asn_by_addr(ipaddrp, &mmdb_cache[IP2Location2_type]);
  
 	if (as_num == ASNUM_AS_UNKNOWN) {
