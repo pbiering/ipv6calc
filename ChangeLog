@@ -13,6 +13,7 @@ Info:
 --------------------------------------------------------------------
 20250615/PB:
 	databases/lib/libipv6calc_db_wrapper_IP2Location.[c,h]: add support for ASN BIN files
+	databases/lib/libipv6calc_db_wrapper_IP2Location2.[c,h]: add support for ASN MMDB files
 
 20250510/PB:
 	internal databases: update
