@@ -11,6 +11,9 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20250615/PB:
+	databases/lib/libipv6calc_db_wrapper_IP2Location.[c,h]: add support for ASN BIN files
+
 20250510/PB:
 	internal databases: update
 	tag version 4.3.1
