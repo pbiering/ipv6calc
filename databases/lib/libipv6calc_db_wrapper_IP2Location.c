@@ -2495,6 +2495,7 @@ extern const char *libipv6calc_db_wrapper_IP2Location_UsageType_description(char
 int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libipv6calc_db_wrapper_geolocation_record *recordp) {
 	int result = 0, retval;
 	char addrstring[IPV6CALC_STRING_MAX] = "";
+	char as_orgname[IPV6CALC_DB_SIZE_ORG_NAME] = "";
 	IP2LocationRecord *record = NULL;
 
 #if API_VERSION_NUMERIC >= 80600
@@ -2677,6 +2678,16 @@ int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddr
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "IP2Location returned no record for address: %s", addrstring);
 		};
 	};
+
+#if API_VERSION_NUMERIC >= 80600
+	if (recordp->asn == ASNUM_AS_UNKNOWN) {
+		// try dedicated database
+		recordp->asn = libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(ipaddrp, as_orgname, sizeof(as_orgname));
+		if (recordp->asn != ASNUM_AS_UNKNOWN) {
+			snprintf(recordp->organization_name, IPV6CALC_DB_SIZE_ORG_NAME, "%s", as_orgname);
+		};
+	};
+#endif // API_VERSION_NUMERIC >= 80600
 
 END_libipv6calc_db_wrapper:
 	return(result);
