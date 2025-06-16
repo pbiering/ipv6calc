@@ -98,6 +98,9 @@
 <listitem>
 <para>native MaxMindDB files (support since 4.3.0, released 2025)</para>
 </listitem>
+<listitem>
+<para>ASN database files (support since 4.3.2, released 2025)</para>
+</listitem>
 </itemizedlist>
 </listitem>
 <listitem>
@@ -2088,7 +2091,7 @@
 <title>2025</title>
 <itemizedlist>
 <listitem>
-<para>add support for MaxMindDB (IP2Location) (&gt;= 4.3.0)cd do</para>
+<para>add support for MaxMindDB (IP2Location) (&gt;= 4.3.0)</para>
 </listitem>
 </itemizedlist>
 </section>

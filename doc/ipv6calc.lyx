@@ -445,6 +445,11 @@ native MaxMindDB files (support since 4.3.0,
  released 2025)
 \end_layout
 
+\begin_layout Itemize
+ASN database files (support since 4.3.2,
+ released 2025)
+\end_layout
+
 \end_deeper
 \begin_layout Itemize
 \begin_inset CommandInset href
@@ -8547,7 +8552,7 @@ Major extensions/changes are listed here
 \end_layout
 
 \begin_layout Itemize
-add support for MaxMindDB (IP2Location) (>= 4.3.0)cd do
+add support for MaxMindDB (IP2Location) (>= 4.3.0)
 \end_layout
 
 \begin_layout Subsection
