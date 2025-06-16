@@ -1396,11 +1396,15 @@ int libipv6calc_db_wrapper_IP2Location2_all_by_addr(const ipv6calc_ipaddr *ipadd
 	int result = 0;
 
 	int IP2Location2_type = 0;
+	int IP2Location2_type_asn = 0;
+
+	libipv6calc_db_wrapper_geolocation_record record_asn;
 
 	libipv6calc_db_wrapper_geolocation_record_clear(recordp);
 
 	if (ipaddrp->proto == IPV6CALC_PROTO_IPV4) {
 		IP2Location2_type = ip2location2_db_region_city_v4;
+		IP2Location2_type_asn = ip2location2_db_asn_v4;
 
 		if (IP2Location2_type == 0) {
 			// fallback
@@ -1408,6 +1412,7 @@ int libipv6calc_db_wrapper_IP2Location2_all_by_addr(const ipv6calc_ipaddr *ipadd
 		};
 	} else if (ipaddrp->proto == IPV6CALC_PROTO_IPV6) {
 		IP2Location2_type = ip2location2_db_region_city_v6;
+		IP2Location2_type_asn = ip2location2_db_asn_v6;
 
 		if (IP2Location2_type == 0) {
 			// fallback
@@ -1426,6 +1431,30 @@ int libipv6calc_db_wrapper_IP2Location2_all_by_addr(const ipv6calc_ipaddr *ipadd
 	};
 
 	result = libipv6calc_db_wrapper_MMDB_all_by_addr(ipaddrp, recordp, &mmdb_cache[IP2Location2_type]);
+
+	// ASN is stored potentially in a different database
+	if (IP2Location2_type_asn > 0) {
+		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location2, "fetch ASN information from dedicated database");
+		result = libipv6calc_db_wrapper_IP2Location2_open_type(IP2Location2_type_asn);
+
+		if (result != MMDB_SUCCESS) {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location2, "Error opening IP2Location2 by type");
+			goto END_libipv6calc_db_wrapper;
+		};
+
+		result = libipv6calc_db_wrapper_MMDB_all_by_addr(ipaddrp, &record_asn, &mmdb_cache[IP2Location2_type_asn]);
+
+		if (result != MMDB_SUCCESS) {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location2, "no match found");
+			goto END_libipv6calc_db_wrapper;
+		};
+
+		// copy information
+		recordp->asn = record_asn.asn;
+                snprintf(recordp->organization_name, IPV6CALC_DB_SIZE_ORG_NAME, "%s", record_asn.organization_name);
+
+		IP2LOCATION2_DB_USAGE_MAP_TAG(IP2Location2_type_asn);
+	};
 
 	IP2LOCATION2_DB_USAGE_MAP_TAG(IP2Location2_type);
 
