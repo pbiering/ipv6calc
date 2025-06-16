@@ -11,6 +11,10 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20250616/PB:
+	internal databases: update
+	tag version 4.3.2
+
 20250615/PB:
 	databases/lib/libipv6calc_db_wrapper_IP2Location.[c,h]: add support for ASN BIN files
 	databases/lib/libipv6calc_db_wrapper_IP2Location2.[c,h]: add support for ASN MMDB files, combine IPv4+IPv6 support as MMDB files contain both
