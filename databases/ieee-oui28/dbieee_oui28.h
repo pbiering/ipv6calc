@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_oui28.h
  * Version       : $Id$
- * Generated     : Sat May 10 15:56:41 2025
+ * Generated     : Mon Jun 16 06:08:48 2025
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui28_status __attribute__ ((__unused__)) = "OUI28/20250510";
+/*@unused@*/ static const char* libieee_oui28_status __attribute__ ((__unused__)) = "OUI28/20250616";
 
 
 static const s_ieee_oui28 libieee_oui28[] = {
@@ -74,6 +74,21 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x041119, 0xC00000, 0xCFFFFF, "Haerbin Donglin Technology Co., Ltd.", "HAERBIN-DONGLIN" },
 	{ 0x041119, 0xD00000, 0xDFFFFF, "Nuance Hearing Ltd.", "NUANCE-HEARING" },
 	{ 0x041119, 0xE00000, 0xEFFFFF, "JULIDA LIMITED", "JULIDA" },
+	{ 0x04585D, 0x000000, 0x0FFFFF, "Wetatronics Limited", "WETATRONICS" },
+	{ 0x04585D, 0x100000, 0x1FFFFF, "Research Laboratory of Design Automation, Ltd.", "RESEARCH-LABORATORY-OF-DESIGN-AUTOMATION" },
+	{ 0x04585D, 0x200000, 0x2FFFFF, "Foxconn Brasil Industria e Comercio Ltda", "FOXCONN-BRASIL-INDUSTRIA-E-COMERCIO-LTDA" },
+	{ 0x04585D, 0x300000, 0x3FFFFF, "REXXON GmbH", "REXXON" },
+	{ 0x04585D, 0x400000, 0x4FFFFF, "Integrated Technical Vision Ltd", "INTEGRATED-TECHNICAL-VISION" },
+	{ 0x04585D, 0x500000, 0x5FFFFF, "Sercomm Japan Corporation", "SERCOMM-JAPAN" },
+	{ 0x04585D, 0x600000, 0x6FFFFF, "VERTE Elektronik San. Ve Tic. A.Ş.", "VERTE-ELEKTRONIK-SAN-VE-TIC-A" },
+	{ 0x04585D, 0x700000, 0x7FFFFF, "HKC Security Ltd.", "HKC-SECURITY" },
+	{ 0x04585D, 0x800000, 0x8FFFFF, "JRK VISION", "JRK-VISION" },
+	{ 0x04585D, 0x900000, 0x9FFFFF, "Dron Edge India Private Limited", "DRON-EDGE-INDIA-PRIVATE" },
+	{ 0x04585D, 0xA00000, 0xAFFFFF, "TELEPLATFORMS", "TELEPLATFORMS" },
+	{ 0x04585D, 0xB00000, 0xBFFFFF, "Chengdu Juxun Electronic Technology Co.,Ltd", "CHENGDU-JUXUN" },
+	{ 0x04585D, 0xC00000, 0xCFFFFF, "Rexon Technology", "REXON" },
+	{ 0x04585D, 0xD00000, 0xDFFFFF, "HDS Otomasyon Güvenlik ve Yazılım Teknolojiler Sanayi Ticaret Limited Şirketi", "HDS-OTOMASYON-GUEVENLIK-VE-YAZLM-TEKNOLOJILER-SANAYI-TICARET-IRKETI" },
+	{ 0x04585D, 0xE00000, 0xEFFFFF, "Shenzhen C & D Electronics Co., Ltd.", "SHENZHEN-C-D-ELECTRONICS" },
 	{ 0x04714B, 0x000000, 0x0FFFFF, "Neurio Technology Inc.", "NEURIO" },
 	{ 0x04714B, 0x100000, 0x1FFFFF, "uAvionix Corporation", "UAVIONIX" },
 	{ 0x04714B, 0x200000, 0x2FFFFF, "Shenzhen WayOS Technology Crop., Ltd.", "SHENZHEN-WAYOS-CROP" },
@@ -1130,6 +1145,7 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x2C7AF4, 0xB00000, 0xBFFFFF, "Arira Platforms, LLC", "ARIRA-PLATFORMS" },
 	{ 0x2C7AF4, 0xC00000, 0xCFFFFF, "Reonel Oy", "REONEL-OY" },
 	{ 0x2C7AF4, 0xD00000, 0xDFFFFF, "Flextronics Automotive USA, Inc", "FLEXTRONICS-AUTOMOTIVE-USA" },
+	{ 0x2C7AF4, 0xE00000, 0xEFFFFF, "NYBSYS Inc", "NYBSYS" },
 	{ 0x2CC44F, 0x000000, 0x0FFFFF, "Shenzhen Syeconmax Technology Co. Ltd", "SHENZHEN-SYECONMAX" },
 	{ 0x2CC44F, 0x100000, 0x1FFFFF, "Joyoful", "JOYOFUL" },
 	{ 0x2CC44F, 0x200000, 0x2FFFFF, "Vecima Networks Inc.", "VECIMA-NETWORKS" },
@@ -4180,6 +4196,14 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0xB0C5CA, 0xD00000, 0xDFFFFF, "Private", "PRIVATE" },
 	{ 0xB0C5CA, 0xE00000, 0xEFFFFF, "Audio Elektronik İthalat İhracat San ve Tic A.Ş.", "AUDIO-ELEKTRONIK-THALAT-HRACAT-SAN-VE-TIC-A" },
 	{ 0xB0C5CA, 0xF00000, 0xFFFFFF, "Private", "PRIVATE" },
+	{ 0xB0CCCE, 0x000000, 0x0FFFFF, "Steelco SpA", "STEELCO-SPA" },
+	{ 0xB0CCCE, 0x100000, 0x1FFFFF, "Agrisys A/S", "AGRISYS-A/S" },
+	{ 0xB0CCCE, 0x200000, 0x2FFFFF, "4MOD Technology", "4MOD" },
+	{ 0xB0CCCE, 0x300000, 0x3FFFFF, "Gateview Technologies", "GATEVIEW-TECHNOLOGIES" },
+	{ 0xB0CCCE, 0x600000, 0x6FFFFF, "MULTI-FIELD LOW TEMPERATURE TECHNOLOGY(BEIJING) CO., LTD.", "MULTI-FIELD-LOW-TEMPERATURE-BEIJING" },
+	{ 0xB0CCCE, 0x700000, 0x7FFFFF, "EBI Patient Care, Inc.", "EBI-PATIENT-CARE" },
+	{ 0xB0CCCE, 0xB00000, 0xBFFFFF, "Watermark Systems (India) Private Limited", "WATERMARK-INDIA-PRIVATE" },
+	{ 0xB0CCCE, 0xC00000, 0xCFFFFF, "Faaftech", "FAAFTECH" },
 	{ 0xB0FD0B, 0x000000, 0x0FFFFF, "TAE HYUNG Industrial Electronics Co., Ltd.", "TAE-HYUNG-INDUSTRIAL-ELECTRONICS" },
 	{ 0xB0FD0B, 0x100000, 0x1FFFFF, "IDspire Corporation Ltd.", "IDSPIRE" },
 	{ 0xB0FD0B, 0x200000, 0x2FFFFF, "Vista Manufacturing", "VISTA-MANUFACTURING" },
@@ -5102,6 +5126,21 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0xD47C44, 0xC00000, 0xCFFFFF, "STRIVE ORTHOPEDICS INC", "STRIVE-ORTHOPEDICS" },
 	{ 0xD47C44, 0xD00000, 0xDFFFFF, "Huaqin Telecom Technology Co.,Ltd.", "HUAQIN-TELECOM" },
 	{ 0xD47C44, 0xE00000, 0xEFFFFF, "SHENZHEN ANYSEC TECHNOLOGY CO. LTD", "SHENZHEN-ANYSEC" },
+	{ 0xD4A0FB, 0x000000, 0x0FFFFF, "M2MD Technologies, Inc.", "M2MD-TECHNOLOGIES" },
+	{ 0xD4A0FB, 0x100000, 0x1FFFFF, "Henan Lingyunda Information Technology Co., Ltd", "HENAN-LINGYUNDA-INFORMATION" },
+	{ 0xD4A0FB, 0x200000, 0x2FFFFF, "Beijing Lingji Innovations technology Co,LTD.", "BEIJING-LINGJI-INNOVATIONS" },
+	{ 0xD4A0FB, 0x300000, 0x3FFFFF, "NEXXUS NETWORKS INDIA PRIVATE LIMITED", "NEXXUS-NETWORKS-INDIA-PRIVATE" },
+	{ 0xD4A0FB, 0x400000, 0x4FFFFF, "Shenzhen Dijiean Technology Co., Ltd", "SHENZHEN-DIJIEAN" },
+	{ 0xD4A0FB, 0x500000, 0x5FFFFF, "Corelase Oy", "CORELASE-OY" },
+	{ 0xD4A0FB, 0x600000, 0x6FFFFF, "Huizhou Jiemeisi Technology Co.,Ltd.", "HUIZHOU-JIEMEISI" },
+	{ 0xD4A0FB, 0x700000, 0x7FFFFF, "Skyfri Corp", "SKYFRI" },
+	{ 0xD4A0FB, 0x800000, 0x8FFFFF, "Parpro System Corporation", "PARPRO-SYSTEM" },
+	{ 0xD4A0FB, 0x900000, 0x9FFFFF, "Hangteng (HK) Technology Co., Limited", "HANGTENG-HK" },
+	{ 0xD4A0FB, 0xA00000, 0xAFFFFF, "IMPULSE CCTV NETWORKS INDIA PVT. LTD.", "IMPULSE-CCTV-NETWORKS-INDIA-PVT" },
+	{ 0xD4A0FB, 0xB00000, 0xBFFFFF, "Spatial Hover  Inc", "SPATIAL-HOVER" },
+	{ 0xD4A0FB, 0xC00000, 0xCFFFFF, "Snap-on Tools", "SNAP-ON-TOOLS" },
+	{ 0xD4A0FB, 0xD00000, 0xDFFFFF, "FASTWEL ELECTRONICS INDIA PRIVATE LIMITED", "FASTWEL-ELECTRONICS-INDIA-PRIVATE" },
+	{ 0xD4A0FB, 0xE00000, 0xEFFFFF, "GTEK GLOBAL CO.,LTD", "GTEK-GLOBAL" },
 	{ 0xD4BABA, 0x000000, 0x0FFFFF, "SHENZHEN ACTION TECHNOLOGIES CO., LTD.", "SHENZHEN-ACTION-TECHNOLOGIES" },
 	{ 0xD4BABA, 0x100000, 0x1FFFFF, "Annapurna labs", "ANNAPURNA-LABS" },
 	{ 0xD4BABA, 0x200000, 0x2FFFFF, "GuangZhou Ostec Electronic Technology Co.,Limited", "GUANGZHOU-OSTEC" },
@@ -5796,6 +5835,21 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0xFC6179, 0xC00000, 0xCFFFFF, "Shenzhen Xmitech Electronic Co.,Ltd", "SHENZHEN-XMITECH" },
 	{ 0xFC6179, 0xD00000, 0xDFFFFF, "Int'Act Pty Ltd", "INT-ACT-PTY" },
 	{ 0xFC6179, 0xE00000, 0xEFFFFF, "ACCO Brands USA LLC", "ACCO-BRANDS-USA" },
+	{ 0xFCA2DF, 0x000000, 0x0FFFFF, "Solink Corporation", "SOLINK" },
+	{ 0xFCA2DF, 0x100000, 0x1FFFFF, "SpacemiT", "SPACEMIT" },
+	{ 0xFCA2DF, 0x200000, 0x2FFFFF, "PDI COMMUNICATION SYSTEMS INC.", "PDI-COMMUNICATION" },
+	{ 0xFCA2DF, 0x300000, 0x3FFFFF, "PAVONE SISTEMI SRL", "PAVONE-SISTEMI-SRL" },
+	{ 0xFCA2DF, 0x400000, 0x4FFFFF, "Hangzhou Laizhi Technology Co.,Ltd", "HANGZHOU-LAIZHI" },
+	{ 0xFCA2DF, 0x500000, 0x5FFFFF, "Annapurna labs", "ANNAPURNA-LABS" },
+	{ 0xFCA2DF, 0x600000, 0x6FFFFF, "shenzhen zovoton electronic co.,ltd", "SHENZHEN-ZOVOTON" },
+	{ 0xFCA2DF, 0x700000, 0x7FFFFF, "Flexmedia ind e com", "FLEXMEDIA-IND-E-COM" },
+	{ 0xFCA2DF, 0x800000, 0x8FFFFF, "boger electronics gmbh", "BOGER-ELECTRONICS" },
+	{ 0xFCA2DF, 0x900000, 0x9FFFFF, "Beijing KSL Electromechanical Technology Development Co.,Ltd", "BEIJING-KSL-ELECTROMECHANICAL-DEVELOPMENT" },
+	{ 0xFCA2DF, 0xA00000, 0xAFFFFF, "BPL MEDICAL TECHNOLOGIES PRIVATE LIMITED", "BPL-MEDICAL-TECHNOLOGIES-PRIVATE" },
+	{ 0xFCA2DF, 0xB00000, 0xBFFFFF, "Lumentum", "LUMENTUM" },
+	{ 0xFCA2DF, 0xC00000, 0xCFFFFF, "TiGHT AV", "TIGHT-AV" },
+	{ 0xFCA2DF, 0xD00000, 0xDFFFFF, "MBio Diagnostics, Inc.", "MBIO-DIAGNOSTICS" },
+	{ 0xFCA2DF, 0xE00000, 0xEFFFFF, "Orion Power Systems, Inc.", "ORION-POWER" },
 	{ 0xFCA47A, 0x000000, 0x0FFFFF, "Broadcom Inc.", "BROADCOM" },
 	{ 0xFCA47A, 0x100000, 0x1FFFFF, "Shenzhen VMAX New Energy Co., Ltd.", "SHENZHEN-VMAX-NEW-ENERGY" },
 	{ 0xFCA47A, 0x200000, 0x2FFFFF, "Ant Financial（Hang Zhou）Network Technology Co.,Ltd.", "ANT-FINANCIALHANG-ZHOUNETWORK" },
