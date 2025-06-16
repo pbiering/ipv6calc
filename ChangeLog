@@ -12,6 +12,10 @@ Info:
 
 --------------------------------------------------------------------
 20250616/PB:
+	databases/lib/libipv6calc_db_wrapper_IP2Location.c: add fallback to dedicated ASN database for all_by_addr
+	databases/lib/libipv6calc_db_wrapper_IP2Location2.c: add fallback to dedicated ASN database for all_by_addr
+
+20250616/PB:
 	internal databases: update
 	tag version 4.3.2
 
