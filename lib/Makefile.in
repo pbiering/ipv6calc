@@ -26,7 +26,7 @@ endif
 SHARED_LIBRARY=@SHARED_LIBRARY@
 
 CC	= @CC@
-AR	= ar
+AR	?= ar
 RANLIB	= @RANLIB@
 
 OBJS	=	libipv6calc.o  \
