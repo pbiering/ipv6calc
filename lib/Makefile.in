@@ -17,6 +17,8 @@ LDFLAGS += @LDFLAGS@
 
 INCLUDES= -I. -I../ -I../databases/lib/ @GETOPT_INCLUDE@ @MD5_INCLUDE@ @MMDB_INCLUDE_L1@ @IP2LOCATION_INCLUDE_L1@
 
+LIBS = @MD5_LIB@ -lm
+
 ifeq ($(shell uname), Darwin)
 	SO_NAME_FLAGS=-install_name
 else
@@ -102,7 +104,7 @@ ifeq ($(SHARED_LIBRARY), yes)
 		cd ../ && ${MAKE} db-ipv4-assignment-make
 		cd ../ && ${MAKE} db-ipv6-assignment-make
 		echo "Creates shared library (libipv6calc.so)"
-		$(CC) -o libipv6calc.so.@PACKAGE_VERSION@ $(OBJS) $(CFLAGS) $(LDFLAGS) -shared -Wl,$(SO_NAME_FLAGS),libipv6calc.so.@PACKAGE_VERSION@
+		$(CC) -o libipv6calc.so.@PACKAGE_VERSION@ $(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS) -shared -Wl,$(SO_NAME_FLAGS),libipv6calc.so.@PACKAGE_VERSION@
 else
 		echo "Nothing to do (shared library mode is not enabled)"
 endif

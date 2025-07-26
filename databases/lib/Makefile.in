@@ -17,6 +17,8 @@ LDFLAGS += @LDFLAGS@
 
 INCLUDES= -I../../lib -I../.. @MMDB_INCLUDE_L2@ @IP2LOCATION_INCLUDE_L2@
 
+LIBS = @MMDB_LIB_L1@ @IP2LOCATION_LIB_L1@ @EXTDB_LIB@ @DYNLOAD_LIB@ -lm
+
 SHARED_LIBRARY=@SHARED_LIBRARY@
 
 ifeq ($(shell uname), Darwin)
@@ -71,7 +73,7 @@ libipv6calc_db_wrapper.a:	$(OBJS)
 libipv6calc_db_wrapper.so.@PACKAGE_VERSION@:	$(OBJS)
 ifeq ($(SHARED_LIBRARY), yes)
 		echo "Create shared library (libipv6calc_db_wrapper.so)"
-		$(CC) -o libipv6calc_db_wrapper.so.@PACKAGE_VERSION@ $(OBJS) $(CFLAGS) $(LDFLAGS) -shared -Wl,$(SO_NAME_FLAGS),libipv6calc_db_wrapper.so.@PACKAGE_VERSION@
+		$(CC) -o libipv6calc_db_wrapper.so.@PACKAGE_VERSION@ $(OBJS) $(CFLAGS) $(LDFLAGS) $(LIBS) -shared -Wl,$(SO_NAME_FLAGS),libipv6calc_db_wrapper.so.@PACKAGE_VERSION@
 else
 		echo "Nothing to do (shared library mode is not enabled)"
 endif
