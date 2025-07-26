@@ -19,7 +19,7 @@ LDFLAGS += @LDFLAGS_EXTRA@
 
 INCLUDES= $(COPTS) @MD5_INCLUDE@ @GETOPT_INCLUDE@ @IP2LOCATION_INCLUDE_L1@ @MMDB_INCLUDE_L1@ -I../ -I../lib/
 
-LIBS = @IPV6CALC_LIB@ @IP2LOCATION_LIB_L1@ @MMDB_LIB_L1@ @DYNLOAD_LIB@
+LIBS = @IPV6CALC_LIB@ @IP2LOCATION_LIB_L1@ @MMDB_LIB_L1@ @EXTDB_LIB@ @DYNLOAD_LIB@ -lm
 
 GETOBJS = @LIBOBJS@
 
@@ -47,10 +47,10 @@ libipv6calc_db_wrapper:
 		cd ../ && ${MAKE} lib-make
 
 ipv6loganon:	$(OBJS) libipv6calc libipv6calc_db_wrapper
-		$(CC) -o ipv6loganon $(OBJS) $(GETOBJS) $(LDFLAGS) $(LIBS) -lm
+		$(CC) -o ipv6loganon $(OBJS) $(GETOBJS) $(LDFLAGS) $(LIBS)
 
 static:		ipv6loganon
-		$(CC) -o ipv6loganon-static $(OBJS) $(GETOBJS) $(LDFLAGS) $(LIBS) $(LDFLAGS_EXTRA_STATIC) -lm -static
+		$(CC) -o ipv6loganon-static $(OBJS) $(GETOBJS) $(LDFLAGS) $(LIBS) $(LDFLAGS_EXTRA_STATIC) -static
 
 distclean:
 		${MAKE} clean

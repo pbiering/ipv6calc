@@ -481,27 +481,24 @@ if test "$ENABLE_BUNDLED_MD5" = "1"; then
 	AC_DEFINE(ENABLE_BUNDLED_MD5, 1, Define if bundled MD5 should be used)
 else
 	if test "$ENABLE_LIBMD_MD5" = "1"; then
-		LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-lmd"
-		LDFLAGS_EXTRA_MOD_IPV6CALC="-lmd $LDFLAGS_EXTRA_MOD_IPV6CALC"
-		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-lmd -lz -ldl -lpthread -lc"
+		MD5_LIB="-lmd"
+		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-lz -ldl -lpthread -lc"
 
 		AC_DEFINE(ENABLE_LIBMD_MD5, 1, Define if libmd MD5 should be used)
 		AC_MSG_RESULT([*** use of libmd MD5 implementation])
 	fi
 
 	if test "$ENABLE_OPENSSL_EVP_MD5" = "1"; then
-		LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-lcrypto"
-		LDFLAGS_EXTRA_MOD_IPV6CALC="-lcrypto $LDFLAGS_EXTRA_MOD_IPV6CALC"
-		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-lcrypto -lz -ldl -lpthread -lc"
+		MD5_LIB="-lcrypto"
+		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-lz -ldl -lpthread -lc"
 
 		AC_DEFINE(ENABLE_OPENSSL_EVP_MD5, 1, Define if OpenSSL EVP MD5 should be used)
 		AC_MSG_RESULT([*** use of OpenSSL EVP MD5 implementation])
 	fi
 
 	if test "$ENABLE_OPENSSL_MD5" = "1"; then
-		LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-lcrypto"
-		LDFLAGS_EXTRA_MOD_IPV6CALC="-lcrypto $LDFLAGS_EXTRA_MOD_IPV6CALC"
-		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-lcrypto -lz -ldl -lpthread -lc"
+		MD5_LIB="-lcrypto"
+		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-lz -ldl -lpthread -lc"
 
 		AC_DEFINE(ENABLE_OPENSSL_MD5, 1, Define if OpenSSL legacy MD5 should be used)
 		AC_MSG_RESULT([*** use of OpenSSL legacy MD5 implementation])
@@ -509,6 +506,7 @@ else
 fi
 
 AC_SUBST(MD5_INCLUDE)
+AC_SUBST(MD5_LIB)
 AC_SUBST(ENABLE_BUNDLED_MD5)
 AC_SUBST(ENABLE_LIBMD_MD5)
 AC_SUBST(ENABLE_OPENSSL_EVP_MD5)
@@ -767,19 +765,19 @@ if test "$require_libdb" = "yes"; then
 		DB_VERSION=`/sbin/ldconfig -p | grep -E '#?\s*libdb-[0-9]+.[0-9]+' | sed -e 's/^#\?\s*libdb-\([0-9]*\)\.\([0-9]*\).*/\1.\2/' | sort -n | tail -1`
 		if test -n "$DB_VERSION"; then
 			AC_MSG_RESULT([Berkeley DB library version found: libdb-$DB_VERSION])
-			LDFLAGS_EXTRA_STATIC="-ldb-$DB_VERSION${LDFLAGS_EXTRA_STATIC:+ $LDFLAGS_EXTRA_STATIC}"
+			EXTDB_LIB="-ldb-$DB_VERSION"
 		fi
 	],[
 		AC_MSG_WARN([Missing /sbin/ldconfig, cannot detect Berkeley DB library version])
 	])
 
-	LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-ldb"
-	LDFLAGS_EXTRA_MOD_IPV6CALC="-ldb $LDFLAGS_EXTRA_MOD_IPV6CALC"
+	EXTDB_LIB="-ldb"
 	HAVE_BERKELEY_DB_SUPPORT=1
 	AC_DEFINE(HAVE_BERKELEY_DB_SUPPORT, 1, Define if Berkeley DB support is required.)
 	AC_MSG_RESULT([*** Berkeley DB library found and usable (required)])
 fi
 
+AC_SUBST(EXTDB_LIB)
 
 dnl *************************************************
 dnl MaxMindDB support (GeoIP2, DB-IP, IP2Location)
