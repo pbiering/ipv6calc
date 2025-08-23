@@ -672,6 +672,7 @@ MMDB_INCLUDE_L1
 MMDB_INCLUDE_L2
 MMDB_INCLUDE_VERSION
 MMDB_INCLUDE
+EXTDB_LIB
 EXTERNAL_DB
 IPV6CALC_LIB
 SHARED_LIBRARY
@@ -679,6 +680,7 @@ ENABLE_OPENSSL_MD5
 ENABLE_OPENSSL_EVP_MD5
 ENABLE_LIBMD_MD5
 ENABLE_BUNDLED_MD5
+MD5_LIB
 MD5_INCLUDE
 ENABLE_BUNDLED_GETOPT
 GETOPT_INCLUDE
@@ -5134,9 +5136,8 @@ printf "%s\n" "#define ENABLE_BUNDLED_MD5 1" >>confdefs.h
 
 else
 	if test "$ENABLE_LIBMD_MD5" = "1"; then
-		LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-lmd"
-		LDFLAGS_EXTRA_MOD_IPV6CALC="-lmd $LDFLAGS_EXTRA_MOD_IPV6CALC"
-		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-lmd -lz -ldl -lpthread -lc"
+		MD5_LIB="-lmd"
+		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-lz -ldl -lpthread -lc"
 
 
 printf "%s\n" "#define ENABLE_LIBMD_MD5 1" >>confdefs.h
@@ -5146,9 +5147,8 @@ printf "%s\n" "*** use of libmd MD5 implementation" >&6; }
 	fi
 
 	if test "$ENABLE_OPENSSL_EVP_MD5" = "1"; then
-		LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-lcrypto"
-		LDFLAGS_EXTRA_MOD_IPV6CALC="-lcrypto $LDFLAGS_EXTRA_MOD_IPV6CALC"
-		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-lcrypto -lz -ldl -lpthread -lc"
+		MD5_LIB="-lcrypto"
+		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-lz -ldl -lpthread -lc"
 
 
 printf "%s\n" "#define ENABLE_OPENSSL_EVP_MD5 1" >>confdefs.h
@@ -5158,9 +5158,8 @@ printf "%s\n" "*** use of OpenSSL EVP MD5 implementation" >&6; }
 	fi
 
 	if test "$ENABLE_OPENSSL_MD5" = "1"; then
-		LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-lcrypto"
-		LDFLAGS_EXTRA_MOD_IPV6CALC="-lcrypto $LDFLAGS_EXTRA_MOD_IPV6CALC"
-		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-lcrypto -lz -ldl -lpthread -lc"
+		MD5_LIB="-lcrypto"
+		LDFLAGS_EXTRA_STATIC="${LDFLAGS_EXTRA_STATIC:+$LDFLAGS_EXTRA_STATIC }-lz -ldl -lpthread -lc"
 
 
 printf "%s\n" "#define ENABLE_OPENSSL_MD5 1" >>confdefs.h
@@ -5169,6 +5168,7 @@ printf "%s\n" "#define ENABLE_OPENSSL_MD5 1" >>confdefs.h
 printf "%s\n" "*** use of OpenSSL legacy MD5 implementation" >&6; }
 	fi
 fi
+
 
 
 
@@ -5530,7 +5530,7 @@ then :
 		if test -n "$DB_VERSION"; then
 			{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: Berkeley DB library version found: libdb-$DB_VERSION" >&5
 printf "%s\n" "Berkeley DB library version found: libdb-$DB_VERSION" >&6; }
-			LDFLAGS_EXTRA_STATIC="-ldb-$DB_VERSION${LDFLAGS_EXTRA_STATIC:+ $LDFLAGS_EXTRA_STATIC}"
+			EXTDB_LIB="-ldb-$DB_VERSION"
 		fi
 
 else case e in #(
@@ -5542,8 +5542,7 @@ esac
 fi
 
 
-	LDFLAGS_EXTRA="${LDFLAGS_EXTRA:+$LDFLAGS_EXTRA }-ldb"
-	LDFLAGS_EXTRA_MOD_IPV6CALC="-ldb $LDFLAGS_EXTRA_MOD_IPV6CALC"
+	EXTDB_LIB="-ldb"
 	HAVE_BERKELEY_DB_SUPPORT=1
 
 printf "%s\n" "#define HAVE_BERKELEY_DB_SUPPORT 1" >>confdefs.h
@@ -5551,6 +5550,7 @@ printf "%s\n" "#define HAVE_BERKELEY_DB_SUPPORT 1" >>confdefs.h
 	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** Berkeley DB library found and usable (required)" >&5
 printf "%s\n" "*** Berkeley DB library found and usable (required)" >&6; }
 fi
+
 
 
 MMDB_LIB_NAME="maxminddb"
@@ -8217,6 +8217,10 @@ printf "%s\n" "***** Summary" >&6; }
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** SHARED_LIBRARY             =$SHARED_LIBRARY" >&5
 printf "%s\n" "*** SHARED_LIBRARY             =$SHARED_LIBRARY" >&6; }
 
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: " >&5
+printf "%s\n" "" >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** EXTDB_LIB                  =$EXTDB_LIB" >&5
+printf "%s\n" "*** EXTDB_LIB                  =$EXTDB_LIB" >&6; }
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: " >&5
 printf "%s\n" "" >&6; }
 
