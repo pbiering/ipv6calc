@@ -1544,6 +1544,8 @@ AC_MSG_RESULT([***** Summary])
 AC_MSG_RESULT([*** SHARED_LIBRARY             =$SHARED_LIBRARY])
 
 AC_MSG_RESULT([])
+AC_MSG_RESULT([*** EXTDB_LIB                  =$EXTDB_LIB])
+AC_MSG_RESULT([])
 
 AC_MSG_RESULT([*** MMDB                       =$MMDB])
 AC_MSG_RESULT([*** MMDB_DYN                   =$MMDB_DYN])
