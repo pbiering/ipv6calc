@@ -69,6 +69,11 @@ autogen_variants() {
 				# skip 32-bit builds on Enterprise Linux as IP2Location devel is not built for i686 on EPEL
 				continue
 			fi
+
+			if [[ $token =~ LIBMD ]]; then
+				# skip 32-bit builds on Enterprise Linux as libmd-devel is not built for i686
+				continue
+			fi
 		fi
 
 		echo "$token#${options:+$options } --m32#$teslist"
@@ -86,6 +91,11 @@ autogen_variants() {
 				# skip 32-bit builds on Enterprise Linux as IP2Location devel is not built for i686 on EPEL
 				continue
 			fi
+		fi
+
+		if [[ $token =~ LIBMD ]]; then
+			# skip 32-bit builds on Enterprise Linux as libmd-devel is not built for i686
+			continue
 		fi
 
 		echo "$token#${options:+$options } --clang --m32$options_extra#$testlist"
