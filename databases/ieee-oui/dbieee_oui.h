@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_oui.h
  * Version       : $Id$
- * Generated     : Sat Aug 23 07:11:41 2025
+ * Generated     : Sun Aug 24 10:49:59 2025
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui_status __attribute__ ((__unused__)) = "OUI/20250823";
+/*@unused@*/ static const char* libieee_oui_status __attribute__ ((__unused__)) = "OUI/20250824";
 
 
 static const s_ieee_oui libieee_oui[] = {

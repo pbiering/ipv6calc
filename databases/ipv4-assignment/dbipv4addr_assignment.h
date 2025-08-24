@@ -2,7 +2,7 @@
  * Project       : ipv6calc
  * File          : dbipv4_assignment.h
  * Version       : $Id$
- * Generated     : 20250823-071202+0200 CEST
+ * Generated     : 20250824-105020+0200 CEST
  * Data copyright: RIPE NCC, APNIC, ARIN, LACNIC, AFRINIC, LISP
  *
  * Information:
@@ -11,8 +11,8 @@
 
 #include "databases/lib/libipv6calc_db_wrapper_BuiltIn.h"
 
-static const char* dbipv4addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20250822 APNIC/20250822 ARIN/20250822 IANA/20250626 LACNIC/20250822 LISP/20200318 RIPENCC/20250822";
-static const time_t dbipv4addr_registry_unixtime __attribute__ ((__unused__)) = 1755925922;
+static const char* dbipv4addr_registry_status __attribute__ ((__unused__)) = "AFRINIC/20250824 APNIC/20250822 ARIN/20250823 IANA/20250626 LACNIC/20250822 LISP/20200318 RIPENCC/20250823";
+static const time_t dbipv4addr_registry_unixtime __attribute__ ((__unused__)) = 1756025420;
 
 static const s_ipv4addr_assignment dbipv4addr_assignment[] = {
 	//first     , last      , registry  
