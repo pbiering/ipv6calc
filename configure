@@ -8219,8 +8219,12 @@ printf "%s\n" "*** SHARED_LIBRARY             =$SHARED_LIBRARY" >&6; }
 
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: " >&5
 printf "%s\n" "" >&6; }
+
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** EXTDB_LIB                  =$EXTDB_LIB" >&5
 printf "%s\n" "*** EXTDB_LIB                  =$EXTDB_LIB" >&6; }
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: *** MD5_LIB                    =$MD5_LIB" >&5
+printf "%s\n" "*** MD5_LIB                    =$MD5_LIB" >&6; }
+
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: " >&5
 printf "%s\n" "" >&6; }
 
