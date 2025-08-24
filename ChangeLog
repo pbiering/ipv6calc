@@ -11,8 +11,10 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
-20250823/PB:
+20250824/PB:
 	internal databases: update
+	minor internal compiler flags reorg
+	tag version 4.3.3
 
 20250616/PB:
 	databases/lib/libipv6calc_db_wrapper_IP2Location.c: add fallback to dedicated ASN database for all_by_addr
