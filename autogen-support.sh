@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : autogen-support.sh
-# Copyright  : 2014-2024 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2014-2025 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information: provide support functions to autogen.sh/autogen-all-variants.sh
 #
@@ -64,16 +64,15 @@ ip2location_cross_version_test_blacklist() {
 
 ### Automatic Definitions
 
-### base directory for GeoIP/IP2Location
+### base directory for IP2Location
 BASE_SOURCES=${BASE_SOURCES:-~/Downloads}
 
-BASE_DEVEL_GEOIP=${BASE_DEVEL_GEOIP:-~/tmp}
 BASE_DEVEL_IP2LOCATION=${BASE_DEVEL_IP2LOCATION:-~/tmp}
 
 
 ### Functions Definitions
 
-## generate GeoIP/IP2Location source package name from version
+## generate IP2Location source package name from version
 # in download mode provide full URL
 nameversion_from_name_version() {
 	local name="$1"
@@ -85,29 +84,6 @@ nameversion_from_name_version() {
 	local version_numeric=$(echo "$version" | awk -F. '{ print $3 + $2 * 100 + $1 * 10000}')
 
 	case $name in
-	    GeoIP|G)
-		if [ "$mode" = "download" ]; then
-			if [ $version_numeric -ge 10502 ]; then
-				# since 1.5.2 on github
-				nameversion="${geoip_url_github}v$version"
-			else
-				nameversion="${geoip_url_maxmind}GeoIP-$version.tar.gz"
-			fi
-		elif [ "$mode" = "outfile" ]; then
-			if [ $version_numeric -ge 10502 ]; then
-				# since 1.5.2 on github
-				nameversion="geoip-api-c-$version.tar.gz"
-			else
-				nameversion="GeoIP-$version.tar.gz"
-			fi
-		else
-			if [ $version_numeric -ge 10502 ]; then
-				nameversion="geoip-api-c-$version"
-			else
-				nameversion="GeoIP-$version"
-			fi
-		fi
-		;;
 	    IP2Location|I)
 		case $version in
 		    4.*)
@@ -509,8 +485,8 @@ help() {
 	cat <<END
 $0 [-h|-?]
 $0 source
-$0 [-D] [-X] [-B] [-n] [GeoIP|IP2Location [<version>]]
-$0 [-A] [-n] [GeoIP|IP2Location [<version>]]
+$0 [-D] [-X] [-B] [-n] IP2Location [<version>]]
+$0 [-A] [-n] IP2Location [<version>]]
 
 	source: source mode (using functions only in main script)
 
@@ -589,7 +565,6 @@ if [ "$1" != "source" ]; then
 	    'prepare')
 		if $do_download; then
 			if [ -z "$*" ]; then
-				download_versions GeoIP || exit 1
 				download_versions IP2Location || exit 1
 			else
 				download_versions $* || exit 1
@@ -598,7 +573,6 @@ if [ "$1" != "source" ]; then
 		fi
 		if $do_clean; then
 			if [ -z "$*" ]; then
-				clean_versions GeoIP || exit 1
 				clean_versions IP2Location || exit 1
 			else
 				clean_versions $* || exit 1
@@ -607,7 +581,6 @@ if [ "$1" != "source" ]; then
 		fi
 		if $do_extract; then
 			if [ -z "$*" ]; then
-				extract_versions GeoIP || exit 1
 				extract_versions IP2Location || exit 1
 			else
 				extract_versions $* || exit 1
