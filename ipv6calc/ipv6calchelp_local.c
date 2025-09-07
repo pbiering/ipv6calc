@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6calc
  * File       : ipv6calchelp_local.c
- * Version    : $Id$
- * Copyright  : 2013-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2013-2025 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
