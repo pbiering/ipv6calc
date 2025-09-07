@@ -1,7 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstats.c
- * Copyright  : 2003-2024 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2003-2025 by Peter Bieringer <pb (at) bieringer.de>
  * 
  * Information:
  *  Dedicated program for logfile statistics

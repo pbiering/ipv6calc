@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc/ipv6logstats
  * File       : ipv6logstatshelp.c
- * Version    : $Id$
- * Copyright  : 2003-2014 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2003-2015 by Peter Bieringer <pb (at) bieringer.de>
  *
  * Information:
  *  Help library
