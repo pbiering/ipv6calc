@@ -1,8 +1,7 @@
 /*
  * Project    : ipv6calc
  * File       : ipv6loganonhelp.c
- * Version    : $Id$
- * Copyright  : 2007-2019 by Peter Bieringer <pb (at) bieringer.de>
+ * Copyright  : 2007-2025 by Peter Bieringer <pb (at) bieringer.de>
  * License    : GNU GPL v2
  *
  * Information:
