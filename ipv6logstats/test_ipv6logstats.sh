@@ -128,7 +128,7 @@ fi
 echo 
 
 ## check basic support
-if ./ipv6logstats -v 2>&1| grep -qw "STAT_REG"; then
+if ./ipv6logstats --has-feature "STAT_REG"; then
 	true
 else
 	echo "NOTICE: SKIP ipv6logstats tests because of missing feature STAT_REG"
@@ -174,7 +174,7 @@ echo "INFO  : $test successful"
 #testscenarios version 3
 test="run 'ipv6logstats' test #3"
 echo "INFO  : $test"
-if ./ipv6logstats -v 2>&1 | grep -qw "STAT_CC"; then
+if ./ipv6logstats --has-feature "STAT_CC"; then
 	if $verbose; then
 		testscenarios | ./ipv6logstats -q | grep -q '\*3\*CC-proto-code-list/ALL'
 		retval=$?
@@ -193,12 +193,12 @@ fi
 
 # testscenarios matching
 feature_cc=false
-if ./ipv6logstats -v 2>&1 | grep -qw "STAT_CC"; then
+if ./ipv6logstats --has-feature "STAT_CC"; then
 	feature_cc=true
 fi
 
 feature_as=false
-if ./ipv6logstats -v 2>&1 | grep -qw "STAT_AS"; then
+if ./ipv6logstats --has-feature "STAT_AS"; then
 	feature_as=true
 fi
 
