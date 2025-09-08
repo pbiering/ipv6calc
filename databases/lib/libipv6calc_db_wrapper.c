@@ -783,7 +783,7 @@ void libipv6calc_db_wrapper_print_features_verbose(const int level_verbose) {
 		fprintf(stderr, "DBIP(MaxMindDB) disabled by MaxMindDB library problem\n\n");
 	};
 #else
-	fprintf(stderr, "DBIP2 support not compiled-in\n\n");
+	fprintf(stderr, "DBIP2(MaxMindDB) support not compiled-in\n\n");
 #endif
 
 #ifdef SUPPORT_IP2LOCATION2
@@ -885,8 +885,6 @@ void libipv6calc_db_wrapper_features_help(void) {
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Return");
 
 	return;
-
-
 };
 
 
