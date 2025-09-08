@@ -11,6 +11,10 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20250908/PB:
+	add option --has-feature <NAME>
+	check IP2Location > 8.6.1 related compatibility/fallback
+
 20250824/PB:
 	internal databases: update
 	minor internal compiler flags reorg
