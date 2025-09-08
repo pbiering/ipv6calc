@@ -582,6 +582,7 @@ static int       libipv6calc_db_wrapper_IP2Location_db_compatible(const unsigned
 int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 	int i, dbym, product, dbtype, result;
 	IP2Location *loc;
+	int v, v_info = 0, suppress_asn = 0;
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called");
 
@@ -657,8 +658,15 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 		return(1);
 	};
 
-#else // SUPPORT_IP2LOCATION_DYN
 #endif // SUPPORT_IP2LOCATION_DYN
+	v = libipv6calc_db_wrapper_IP2Location_library_version_majorminor();
+	if ((v >= 807) && ((API_VERSION_NUMERIC / 100) < 807)) {
+		NONQUIETPRINT_WA("IP2Location(BIN) library %u.%u is not supported with API version: %u.%u", v / 100, v % 100, API_VERSION_NUMERIC / 10000, (API_VERSION_NUMERIC % 10000) / 100);
+		return(1);
+	} else if (v > API_VERSION_NUMERIC) {
+		NONQUIETPRINT_WA("IP2Location(BIN) library %u.%u is not tested with API version: %u.%u", v / 100, v % 100, API_VERSION_NUMERIC / 10000, (API_VERSION_NUMERIC % 10000) / 100);
+		return(1);
+	};
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Check for standard IP2Location(BIN) databases");
 
@@ -737,6 +745,7 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 			IP2L_DB_SELECT_BETTER(ip2location_db_region_city_v6_best[product])
 		};
 
+#if API_VERSION_NUMERIC >= 80600
 		if ((libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & (IPV6CALC_DB_IPV4_TO_AS)) != 0) {
 			IP2L_DB_SELECT_BETTER(ip2location_db_asn_v4_best[product])
 		};
@@ -745,7 +754,28 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 			IP2L_DB_SELECT_BETTER(ip2location_db_asn_v6_best[product])
 		};
 
-		wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] |= libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features;
+		if (v >= 806) {
+#if API_VERSION_NUMERIC >= 80700
+			if (libipv6calc_db_wrapper_IP2Location_library_version_majorminor() < 807) {
+				// mask *_TO_AS as not supported by detected library
+				suppress_asn = 1;
+			};
+#endif
+		};
+
+#else // API_VERSION_NUMERIC
+		// mask *_TO_AS as not supported by API
+		suppress_asn = 1;
+#endif // API_VERSION_NUMERIC
+		if (suppress_asn != 0) {
+			wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] |= (libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features & ~(IPV6CALC_DB_IPV4_TO_AS | IPV6CALC_DB_IPV6_TO_AS));
+			if (v_info == 0) {
+				NONQUIETPRINT_WA("IP2Location(BIN) library %u.%u is not supporting ASN with API version: %u.%u", v / 100, v % 100, API_VERSION_NUMERIC / 10000, (API_VERSION_NUMERIC % 10000) / 100);
+				v_info = 1;
+			};
+		} else {
+			wrapper_features_by_source[IPV6CALC_DB_SOURCE_IP2LOCATION] |= libipv6calc_db_wrapper_IP2Location_db_file_desc[i].features;
+		};
 	};
 
 	// select databases for lite->sample autoswitch
@@ -1932,7 +1962,12 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_as_number(IP2Location 
 END_libipv6calc_db_wrapper:
 	return(result_IP2Location_get_asn);
 #else
-	return(IP2Location_get_asn(loc, ip));
+	if (libipv6calc_db_wrapper_IP2Location_library_version_majorminor() >= 806) {
+		return(IP2Location_get_asn(loc, ip));
+	} else {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called: %s but library version is not supporting", wrapper_ip2location_info);
+		return(NULL);
+	};
 #endif
 };
 #endif // API_VERSION_NUMERIC >= 80600
@@ -2495,12 +2530,12 @@ extern const char *libipv6calc_db_wrapper_IP2Location_UsageType_description(char
 int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddrp, libipv6calc_db_wrapper_geolocation_record *recordp) {
 	int result = 0, retval;
 	char addrstring[IPV6CALC_STRING_MAX] = "";
-	char as_orgname[IPV6CALC_DB_SIZE_ORG_NAME] = "";
 	IP2LocationRecord *record = NULL;
 
 #if API_VERSION_NUMERIC >= 80600
 	long long asn;
         char *end;
+	char as_orgname[IPV6CALC_DB_SIZE_ORG_NAME] = "";
 #endif // API_VERSION_NUMERIC >= 80600
 
 	libipv6calc_db_wrapper_geolocation_record_clear(recordp);

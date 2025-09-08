@@ -239,7 +239,8 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 		if (r != 0) {
 #ifndef SUPPORT_IP2LOCATION_DYN
 			// only non-dynamic-load results in a problem
-			result = 1;
+			wrapper_IP2Location_status = 0; // not-ok
+			wrapper_IP2Location_disable = 3;
 #endif
 		} else {
 			wrapper_IP2Location_status = 1; // ok
@@ -752,21 +753,23 @@ void libipv6calc_db_wrapper_print_features_verbose(const int level_verbose) {
 #ifdef SUPPORT_IP2LOCATION
 	if (wrapper_IP2Location_disable == 0) {
 #ifdef IP2LOCATION_INCLUDE_VERSION
-		fprintf(stderr, "IP2Location support enabled, compiled with include file version: %s\n", IP2LOCATION_INCLUDE_VERSION);
+		fprintf(stderr, "IP2Location(BIN) support enabled, compiled with include file version: %s\n", IP2LOCATION_INCLUDE_VERSION);
 #endif
-		fprintf(stderr, "IP2Location support enabled, compiled with API version: %s, dynamically linked with version: %s\n", IP2LOCATION_API_VERSION, libipv6calc_db_wrapper_IP2Location_lib_version());
+		fprintf(stderr, "IP2Location(BIN) support enabled, compiled with API version: %s, dynamically linked with version: %s\n", IP2LOCATION_API_VERSION, libipv6calc_db_wrapper_IP2Location_lib_version());
 #ifndef SUPPORT_IP2LOCATION_DYN
 #else
-		fprintf(stderr, "IP2Location support by dynamic library load\n");
-		fprintf(stderr, "IP2Location configured dynamic library file and detected version: %s %s\n", ip2location_lib_file, libipv6calc_db_wrapper_IP2Location_lib_version());
+		fprintf(stderr, "IP2Location(BIN) support by dynamic library load\n");
+		fprintf(stderr, "IP2Location(BIN) configured dynamic library file and detected version: %s %s\n", ip2location_lib_file, libipv6calc_db_wrapper_IP2Location_lib_version());
 #endif
 		libipv6calc_db_wrapper_IP2Location_wrapper_info(string, sizeof(string));
 		fprintf(stderr, "%s\n\n", string);
+	} else if (wrapper_IP2Location_disable == 3) {
+		fprintf(stderr, "IP2Location(BIN) disabled by incompatible library\n\n");
 	} else {
-		fprintf(stderr, "IP2Location disabled by option\n\n");
+		fprintf(stderr, "IP2Location(BIN) disabled by option\n\n");
 	};
 #else
-	fprintf(stderr, "IP2Location support not compiled-in\n\n");
+	fprintf(stderr, "IP2Location(BIN) support not compiled-in\n\n");
 #endif
 
 #ifdef SUPPORT_DBIP2
@@ -985,6 +988,8 @@ void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *p
 	if (wrapper_IP2Location_disable == 0) {
 		// Call IP2Location wrapper
 		libipv6calc_db_wrapper_IP2Location_wrapper_print_db_info(level_verbose, prefix_string);
+	} else if (wrapper_IP2Location_disable == 3) {
+		fprintf(stderr, "%sIP2Location(BIN) support blocked by incompatible library\n", prefix_string);
 	} else {
 		fprintf(stderr, "%sIP2Location(BIN) support available but disabled by option\n", prefix_string);
 	};
