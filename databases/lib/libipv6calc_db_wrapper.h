@@ -399,6 +399,7 @@ extern int  libipv6calc_db_wrapper_init(const char *prefix_string);
 extern int  libipv6calc_db_wrapper_cleanup(void);
 extern void libipv6calc_db_wrapper_info(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_features(char *string, const size_t size);
+extern int libipv6calc_db_wrapper_features_support_by_name(const char* feature_name);
 extern void libipv6calc_db_wrapper_capabilities(char *string, const size_t size);
 extern void libipv6calc_db_wrapper_features_help(void);
 extern void libipv6calc_db_wrapper_print_db_info(const int level_verbose, const char *prefix_string);

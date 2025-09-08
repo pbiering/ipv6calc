@@ -602,6 +602,26 @@ void libipv6calc_db_wrapper_features(char *string, const size_t size) {
 };
 
 
+/* check for feature string */
+int libipv6calc_db_wrapper_features_support_by_name(const char* feature_name) {
+	int i;
+
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Called");
+
+	for (i = 0; i < MAXENTRIES_ARRAY(ipv6calc_db_features); i++) {
+		if (wrapper_features & ipv6calc_db_features[i].number) {
+			if (strcmp(feature_name, ipv6calc_db_features[i].token) == 0) {
+				return 0;
+			};
+		};
+	};
+
+	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper, "Return");
+
+	return 1;
+};
+
+
 /* function get capability string */
 void libipv6calc_db_wrapper_capabilities(char *string, const size_t size) {
 #if defined SUPPORT_IP2LOCATION || defined SUPPORT_EXTERNAL || defined SUPPORT_BUILTIN || defined SUPPORT_GEOIP2 || defined SUPPORT_DBIP2 || SUPPORT_IP2LOCATION2
