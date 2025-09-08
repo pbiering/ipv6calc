@@ -215,6 +215,11 @@ int main(int argc,char *argv[]) {
 		exit(EXIT_SUCCESS);
 	};
 
+	if (ipv6calcoptions_has_feature_query != 0) {
+		result = ipv6logconv_has_feature();
+		exit(result);
+	};
+
 	/* print help handling */
 	if (command & CMD_printhelp) {
 		ipv6logconv_printhelp();

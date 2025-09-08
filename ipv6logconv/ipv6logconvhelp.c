@@ -86,3 +86,22 @@ void ipv6logconv_printhelp(void) {
 	return;
 };
 
+
+// check for feature
+int ipv6logconv_has_feature(void) {
+	if (strcmp(ipv6calcoptions_has_feature_name, "CONV_REG") == 0) {
+		if (feature_reg == 1) {
+			return 0;
+		} else {
+			return 1;
+		};
+	} else if (strcmp(ipv6calcoptions_has_feature_name, "CONV_IEEE") == 0) {
+		if (feature_ieee == 1) {
+			return 0;
+		} else {
+			return 1;
+		};
+	};
+
+	return 1;
+};
