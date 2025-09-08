@@ -172,17 +172,17 @@ echo "INFO  : $test successful"
 
 # Test showinfo output
 ipv6calc_has_db_ieee=false
-if ./ipv6calc -v 2>&1 | grep -qw DB_IEEE; then
+if ./ipv6calc --has-feature DB_IEEE; then
 	ipv6calc_has_db_ieee=true
 fi
 
 ipv6calc_has_db_ipv4=false
-if ./ipv6calc -v 2>&1 | grep -qw DB_IPV4_REG; then
+if ./ipv6calc --has-feature DB_IPV4_REG; then
 	ipv6calc_has_db_ipv4=true
 fi
 
 ipv6calc_has_db_ipv6=false
-if ./ipv6calc -v 2>&1 | grep -qw DB_IPV6_REG; then
+if ./ipv6calc --has-feature DB_IPV6_REG; then
 	ipv6calc_has_db_ipv6=true
 fi
 
@@ -241,7 +241,7 @@ fi
 
 
 test="run GeoIP(MMDB) tests"
-if ./ipv6calc -q -v 2>&1 | grep -qw GeoIP; then
+if ./ipv6calc --has-feature GeoIP; then
 	echo "INFO  : $test"
 	getexamples_GeoIP | while read address; do
 		$verbose && echo "INFO  : run GeoIP showinfo on: $address"
@@ -310,7 +310,7 @@ fi
 
 
 test="run IP2Location(BIN) tests"
-if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location; then
+if ./ipv6calc --has-feature IP2Location; then
 	echo "INFO  : $test"
 	getexamples_IP2Location | while read address; do
 		$verbose && echo "Run IP2Location IPv4 showinfo on: $address"
@@ -400,7 +400,7 @@ else
 fi
 
 test="run IP2Location(MMDB) tests"
-if ./ipv6calc -q -v 2>&1 | grep -qw IP2Location2; then
+if ./ipv6calc --has-feature IP2Location2; then
 	echo "INFO  : $test"
 	getexamples_IP2Location | while read address; do
 		$verbose && echo "Run IP2Location(MMDB) IPv4 showinfo on: $address"
@@ -492,7 +492,7 @@ else
 fi
 
 test="run db-ip.com IPv4 tests"
-if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv4; then
+if ./ipv6calc --has-feature DBIPv4; then
 	echo "INFO  : $test"
 	getexamples_DBIPv4 | while read address; do
 		$verbose && echo "Run DBIP showinfo on: $address"
@@ -540,7 +540,7 @@ fi
 
 
 test="run db-ip.com IPv6 tests"
-if ./ipv6calc -q -v 2>&1 | grep -qw DBIPv6; then
+if ./ipv6calc --has-feature DBIPv6; then
 	echo "INFO  : $test"
 	getexamples_DBIPv6 | while read address; do
 		$verbose && echo "Run IP2Location showinfo on: $address"

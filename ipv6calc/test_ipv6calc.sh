@@ -494,7 +494,7 @@ echo "INFO  : $test successful"
 
 ## database dump test
 test="run 'ipv6calc' database dump for IPv4 by CountryCode"
-if ./ipv6calc -v 2>&1 | grep -wq DB_IPV4_DUMP_CC; then
+if ./ipv6calc --has-feature DB_IPV4_DUMP_CC; then
 	echo "INFO  : $test"
 	lines=$(./ipv6calc -q -A dbdump -E ipv4.db.cc=VN | wc -l)
 	if [ $lines -eq 0 ]; then
@@ -507,7 +507,7 @@ else
 fi
 
 test="run 'ipv6calc' database dump for IPv4 by CountryCode incl. 6to4 conversion"
-if ./ipv6calc -v 2>&1 | grep -wq DB_IPV4_DUMP_CC; then
+if ./ipv6calc --has-feature DB_IPV4_DUMP_CC; then
 	echo "INFO  : $test"
 	lines=$(./ipv6calc -q -A dbdump -E ipv4.db.cc=VN -O ipv6to4 --printfulluncompressed | wc -l)
 	if [ $lines -eq 0 ]; then
@@ -520,7 +520,7 @@ else
 fi
 
 test="run 'ipv6calc' database dump for IPv6 by CountryCode"
-if ./ipv6calc -v 2>&1 | grep -wq DB_IPV6_DUMP_CC; then
+if ./ipv6calc --has-feature DB_IPV6_DUMP_CC; then
 	echo "INFO  : $test"
 	lines=$(./ipv6calc -q -A dbdump -E ipv6.db.cc=VN | wc -l)
 	if [ $lines -eq 0 ]; then
