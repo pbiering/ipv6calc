@@ -135,3 +135,47 @@ void ipv6calc_printhelp(const struct option longopts[], const s_ipv6calc_longopt
 	return;
 };
 
+
+// check for feature
+int ipv6calc_has_feature(void) {
+	int result;
+
+	NONQUIETPRINT_WA("Feature support check        : %s", ipv6calcoptions_has_feature_name);
+
+	if (strcmp(ipv6calcoptions_has_feature_name, "ANON_ZEROISE") == 0) {
+		if (feature_zeroize == 1) {
+			return 0;
+		} else {
+			return 1;
+		};
+	} else if (strcmp(ipv6calcoptions_has_feature_name, "ANON_ANONYMIZE") == 0) {
+		if (feature_anon == 1) {
+			return 0;
+		} else {
+			return 1;
+		};
+	} else if (strcmp(ipv6calcoptions_has_feature_name, "ANON_KEEP-TYPE-ASN-CC") == 0) {
+		if (feature_kp == 1) {
+			return 0;
+		} else {
+			return 1;
+		};
+	} else if (strcmp(ipv6calcoptions_has_feature_name, "ANON_KEEP-TYPE-GEONAMEID") == 0) {
+		if (feature_kg == 1) {
+			return 0;
+		} else {
+			return 1;
+		};
+	};
+
+	result = libipv6calc_db_wrapper_features_support_by_name(ipv6calcoptions_has_feature_name);
+
+	if (result == 0) {
+		NONQUIETPRINT_WA("Feature support available    : %s", ipv6calcoptions_has_feature_name);
+		return 0;
+	};
+
+	NONQUIETPRINT_WA("Feature support NOT available: %s", ipv6calcoptions_has_feature_name);
+	return 1;
+};
+

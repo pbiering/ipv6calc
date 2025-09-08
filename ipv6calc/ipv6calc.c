@@ -758,6 +758,11 @@ int main(int argc, char *argv[]) {
 		exit(EXIT_SUCCESS);
 	};
 
+	if (ipv6calcoptions_has_feature_query != 0) {
+		result = ipv6calc_has_feature();
+		exit(result);
+	};
+
 	/* print help handling */
 	if ((outputtype_given == 1) && (command & CMD_printhelp)) {
 		command = CMD_printexamples;

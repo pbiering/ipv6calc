@@ -12,3 +12,4 @@ extern void printversion_help(void);
 extern void printversion_verbose(int level_verbose);
 extern void ipv6calc_printinfo(void);
 extern void ipv6calc_printhelp(const struct option longopts[], const s_ipv6calc_longopts_shortopts_map longopts_shortopts_map[]);
+extern int ipv6calc_has_feature(void);
