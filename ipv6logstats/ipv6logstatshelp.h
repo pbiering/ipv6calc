@@ -12,3 +12,4 @@ extern void printversion_help(void);
 extern void printversion_verbose(int level_verbose);
 extern void ipv6logstats_printinfo(void);
 extern void ipv6logstats_printhelp(void);
+extern int ipv6logstats_has_feature(void);

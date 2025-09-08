@@ -91,3 +91,28 @@ void ipv6logstats_printhelp(void) {
 	return;
 };
 
+
+// check for feature
+int ipv6logstats_has_feature(void) {
+	if (strcmp(ipv6calcoptions_has_feature_name, "STAT_REG") == 0) {
+		if (feature_reg == 1) {
+			return 0;
+		} else {
+			return 1;
+		};
+	} else if (strcmp(ipv6calcoptions_has_feature_name, "STAT_CC") == 0) {
+		if (feature_cc == 1) {
+			return 0;
+		} else {
+			return 1;
+		};
+	} else if (strcmp(ipv6calcoptions_has_feature_name, "STAT_AS") == 0) {
+		if (feature_as == 1) {
+			return 0;
+		} else {
+			return 1;
+		};
+	};
+
+	return 1;
+};
