@@ -12,3 +12,4 @@ extern void printversion(void);
 extern void printversion_help(void);
 extern void ipv6loganon_printinfo(void);
 extern void ipv6loganon_printhelp(void);
+extern int ipv6loganon_has_feature(void);

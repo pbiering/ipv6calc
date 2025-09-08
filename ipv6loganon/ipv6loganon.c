@@ -258,6 +258,11 @@ int main(int argc,char *argv[]) {
 		exit(EXIT_SUCCESS);
 	};
 
+	if (ipv6calcoptions_has_feature_query != 0) {
+		result = ipv6loganon_has_feature();
+		exit(result);
+	};
+
 	if ((command & CMD_printhelp) != 0) {
 		ipv6loganon_printhelp();
 		exit(EXIT_FAILURE);

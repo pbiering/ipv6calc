@@ -91,3 +91,35 @@ void ipv6loganon_printhelp(void) {
 
 	return;
 };
+
+
+// check for feature
+int ipv6loganon_has_feature(void) {
+	if (strcmp(ipv6calcoptions_has_feature_name, "ANON_ZEROISE") == 0) {
+		if (feature_zeroize == 1) {
+			return 0;
+		} else {
+			return 1;
+		};
+	} else if (strcmp(ipv6calcoptions_has_feature_name, "ANON_ANONYMIZE") == 0) {
+		if (feature_anon == 1) {
+			return 0;
+		} else {
+			return 1;
+		};
+	} else if (strcmp(ipv6calcoptions_has_feature_name, "ANON_KEEP-TYPE-ASN-CC") == 0) {
+		if (feature_kp == 1) {
+			return 0;
+		} else {
+			return 1;
+		};
+	} else if (strcmp(ipv6calcoptions_has_feature_name, "ANON_KEEP-TYPE-GEONAMEID") == 0) {
+		if (feature_kg == 1) {
+			return 0;
+		} else {
+			return 1;
+		};
+	};
+
+	return 1;
+};
