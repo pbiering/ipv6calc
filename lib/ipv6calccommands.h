@@ -19,11 +19,11 @@
 /* command values */
 #define CMD_printhelp			0x0000001
 #define CMD_printversion		0x0000002
-#define CMD_printversion_verbose	0x0000020
-#define CMD_printversion_verbose2	0x0000040
-
 #define CMD_printexamples		0x0000004
 #define CMD_printoldoptions		0x0000008	// EOL 2014-04-02
+#define CMD_has_feature			0x0000010	// NEW 2025-09-07
+#define CMD_printversion_verbose	0x0000020
+#define CMD_printversion_verbose2	0x0000040
 
 /* new style options */
 #define CMD_inputtype			0x0200000

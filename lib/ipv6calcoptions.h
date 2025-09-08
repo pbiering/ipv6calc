@@ -32,6 +32,9 @@ typedef struct {
 
 extern int ipv6calc_quiet;
 
+extern int ipv6calcoptions_has_feature_query;
+extern char ipv6calcoptions_has_feature_name[];
+
 extern void ipv6calc_debug_from_env(void);
 extern void ipv6calc_common_options_from_env(const struct option longopts[], s_ipv6calc_anon_set *ipv6calc_anon_set_p);
 extern int ipv6calc_set_option(const struct option longopts[], const char *name, const char *value, s_ipv6calc_anon_set *ipv6calc_anon_set_p);

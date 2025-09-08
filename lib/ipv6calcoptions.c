@@ -22,7 +22,8 @@
 extern long int ipv6calc_debug; // ipv6calc_debug usage ok
 int ipv6calc_quiet = 0;
 int ipv6calc_verbose = 0;
-
+char ipv6calcoptions_has_feature_name[IPV6CALC_MAXLONGOPTIONS] = "";
+int ipv6calcoptions_has_feature_query = 0;
 
 /* parse value */
 static long int parse_dec_hex_val(const char *string) {
@@ -233,6 +234,13 @@ int ipv6calcoptions_common_basic(const int opt, const char *optarg, const struct
 			DEBUGPRINT_NA(DEBUG_ipv6calcoptions, "Found verbose option");
 			ipv6calc_verbose++;
 			ipv6calc_quiet = 0;
+			result = 0;
+			break;
+
+		case CMD_has_feature:
+			STRCAT(ipv6calcoptions_has_feature_name, optarg);
+			ipv6calcoptions_has_feature_query = 1;
+			DEBUGPRINT_WA(DEBUG_ipv6calcoptions, "Found 'has feature' option: %s", ipv6calcoptions_has_feature_name);
 			result = 0;
 			break;
 

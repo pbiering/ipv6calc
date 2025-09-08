@@ -25,6 +25,7 @@ static struct option ipv6calc_longopts_common[] = {
 	{"debug"  , 1, NULL, (int) 'd' },
 	{"quiet"  , 0, NULL, (int) 'q' },
 	{"verbose", 0, NULL, (int) 'V' },
+	{"has-feature", 1, NULL, CMD_has_feature },
 
 	/* dummy catch if support is not compiled in */
 #ifndef SUPPORT_IP2LOCATION

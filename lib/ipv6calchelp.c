@@ -301,6 +301,7 @@ void printhelp_common(const uint32_t help_features) {
 	fprintf(stderr, "  [-v|--version -h]          : explanation of feature tokens\n");
 	fprintf(stderr, "  [-V|--verbose]             : be more verbose\n");
 	fprintf(stderr, "  [-h|--help|-?]             : this online help\n");
+	fprintf(stderr, "  [--has-feature <name> [-q]]: return 0 if given feature name is supported, otherwise 1\n");
 
 	if ((help_features & IPV6CALC_HELP_QUIET) != 0) {
 		fprintf(stderr, "  [-q|--quiet]               : be more quiet\n");
