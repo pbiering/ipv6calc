@@ -761,6 +761,9 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 				suppress_asn = 1;
 			};
 #endif
+		} else {
+			// mask *_TO_AS as not supported by detected library
+			suppress_asn = 1;
 		};
 
 #else // API_VERSION_NUMERIC
