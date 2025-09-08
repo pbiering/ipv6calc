@@ -6,7 +6,7 @@
 #
 # Information: run autogen.sh with all supported variants
 #
-# history: can run also through various version of GeoIP (-g) and IP2Location (-i) libraries
+# history: can run also through various version of IP2Location (-i) libraries
 #  see autogen-support.sh for details
 
 status_file="autogen-all-variants.status"
@@ -434,16 +434,18 @@ for liboption in "normal" "shared"; do
 					    I*)
 						feature_string="IP2Location"
 						;;
-					    G*)
-						feature_string="GeoIP"
-						;;
 					esac
 
 					# check for feature dynamic load
 					echo "INFO  : call: LD_LIBRARY_PATH=$libdir ./ipv6calc/ipv6calc -v"
-					if ! LD_LIBRARY_PATH="$libdir" ./ipv6calc/ipv6calc -v 2>&1 | grep version | grep -qw $feature_string; then
-						echo "ERROR : call has not included required feature string '$feature_string': LD_LIBRARY_PATH=$libdir ./ipv6calc/ipv6calc -v"
-						exit 1
+					if ! LD_LIBRARY_PATH="$libdir" ./ipv6calc/ipv6calc --has-feature $feature_string; then
+						if LD_LIBRARY_PATH="$libdir" ./ipv6calc/ipv6calc -vv 2>&1 | grep "$feature_string" | grep -qw "incompatible"; then
+							echo "WARN  : call has not included required feature string '$feature_string' but reporting incompatible: LD_LIBRARY_PATH=$libdir ./ipv6calc/ipv6calc -v"
+							result=100
+						else
+							echo "ERROR : call has not included required feature string '$feature_string': LD_LIBRARY_PATH=$libdir ./ipv6calc/ipv6calc -v"
+							exit 1
+						fi
 					fi
 
 					echo "INFO  : call: LD_LIBRARY_PATH=$libdir make test-ldlibpath"
@@ -455,7 +457,9 @@ for liboption in "normal" "shared"; do
 					result=$?
 				fi
 
-				if [ $result -ne 0 ]; then
+				if [ $result -eq 100 ]; then
+					date "+%s:INCOMPATIBLE:variants:$options:TESTLIST-ENTRY=$entry" >>$status_file
+				elif [ $result -ne 0 ]; then
 					echo "ERROR : autogen.sh reports an error with options: $options during testlist entry: $entry"
 					if $dynamic_load; then
 						echo "NOTICE: executed command: LD_LIBRARY_PATH=$libdir make test-ldlibpath"
