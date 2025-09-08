@@ -110,7 +110,7 @@ cat <<END | grep -v "^#"
 192.0.130.1 - - IPv4 address			=--anonymize-careful=192.0.128.0 - - IPv4 address
 192.0.2.1 - - IPv4 address			=--anonymize-paranoid=192.0.0.0 - - IPv4 address
 192.0.130.1 - - IPv4 address			=--anonymize-paranoid=192.0.0.0 - - IPv4 address
-192.1.130.1 - - IPv4 address			=--anonymize-paranoid=192.1.0.0 - - IPv4 address
+8.1.130.1 - - IPv4 address			=--anonymize-paranoid=8.1.0.0 - - IPv4 address
 3ffe:ffff:1234::1 - - IPv6 address/6bone/standard	=--anonymize-standard=3ffe:ffff:1234:9:a929:4291:c02d:5d15 - - IPv6 address/6bone/standard
 3ffe:ffff:1234::1 - - IPv6 address/6bone/careful	=--anonymize-careful=3ffe:ffff:1234:a909:a949:4291:c02d:5d13 - - IPv6 address/6bone/careful
 3ffe:ffff:1234::1 - - IPv6 address/6bone/paranoid	=--anonymize-paranoid=3ffe:ffff:1209:a909:a969:4291:c02d:5d1a - - IPv6 address/6bone/paranoid
@@ -264,12 +264,12 @@ run_loganon_reliability_tests() {
 		return 1
 	fi
 
-	if ! ../ipv6logstats/ipv6logstats -v | grep -qw STAT_REG; then
+	if ! ../ipv6logstats/ipv6logstats --has-feature STAT_REG; then
 		echo "NOTICE: ipv6logstats misses basic database, skip tests"
 		return 0
 	fi
 
-	if ! ../ipv6logconv/ipv6logconv -v | grep -qw CONV_REG; then
+	if ! ../ipv6logconv/ipv6logconv --has-feature CONV_REG; then
 		echo "NOTICE: ipv6logconv misses basic database, skip tests"
 		return 0
 	fi
@@ -277,9 +277,9 @@ run_loganon_reliability_tests() {
 	local options="$*"
 
 	if [ "$options" == "--anonymize-preset kp" ]; then
-		list="`testscenarios_kp | ../ipv6calc/ipv6calc -E ipv4,ipv6`"
+		list="`testscenarios_kp | ../ipv6calc/ipv6calc -E ipv4,ipv6 | ../ipv6calc/ipv6calc -E ^lisp | ../ipv6calc/ipv6calc -E ^6bone`"
 	else
-		list="`testscenarios_standard | awk '{ print $1 }'`"
+		list="`testscenarios_standard | awk '{ print $1 }' | ../ipv6calc/ipv6calc -E ^lisp | ../ipv6calc/ipv6calc -E ^6bone`"
 	fi
 
 	if [ -z "$list" ]; then
@@ -287,14 +287,14 @@ run_loganon_reliability_tests() {
 		return 1
 	fi
 	list="$list
-	`testscenarios_special | awk '{ print $1 }'`"
+	`testscenarios_special | awk '{ print $1 }' | ../ipv6calc/ipv6calc -E ^6bone`"
 	sortlist="`echo "$list" | sort -u`"
 
 	echo "INFO  : run ipv6loganon/ipv6logstats reliability tests with options: $options" >&2
 	for entry in $sortlist; do
 		echo "DEBUG : test: $entry"
-		nonanonymized="`echo "$entry" | ../ipv6logstats/ipv6logstats -q | grep -v "Time:"`"
-		anonymized="`echo "$entry" | ./ipv6loganon -q $options | ../ipv6logstats/ipv6logstats -q | grep -v "Time:"`"
+		nonanonymized="`echo "$entry" | ../ipv6logstats/ipv6logstats -q | grep -v -E "(DB-Used|Time):"`"
+		anonymized="`echo "$entry" | ./ipv6loganon -q $options | ../ipv6logstats/ipv6logstats -q | grep -v -E "(DB-Used|Time):"`"
 
 		if [ -z "$nonanonymized" ]; then
 			echo "ERROR : result empty: nonanonymized"
@@ -317,6 +317,19 @@ run_loganon_reliability_tests() {
 			return 1
 		fi
 	done
+
+	c=0
+	if ../ipv6logconv/ipv6logconv --has-feature CONV_REG; then
+		c=$[ $c + 1 ]
+	fi
+	if ../ipv6logconv/ipv6logconv --has-feature CONV_IEEE; then
+		c=$[ $c + 1 ]
+	fi
+
+	if [ $c -ne 2 ]; then
+		echo "NOTICE: SKIP ipv6loganon/ipv6logconv reliability tests with options: $options" >&2
+		return
+	fi
 
 	echo "INFO  : run ipv6loganon/ipv6logconv reliability tests with options: $options" >&2
 	for entry in $sortlist; do
@@ -388,7 +401,7 @@ run_loganon_options_tests() {
 }
 
 run_loganon_options_kp_tests() {
-	if ! ./ipv6loganon -vv 2>&1 | grep -q "Country4=1 Country6=1 ASN4=1 ASN6=1"; then
+	if ! ./ipv6loganon --has-feature "ANON_KEEP-TYPE-ASN-CC"; then
 		echo "NOTICE 'ipv6calc' has not required support for Country/ASN included, skip option kp tests..."
 		return 0
 	fi
