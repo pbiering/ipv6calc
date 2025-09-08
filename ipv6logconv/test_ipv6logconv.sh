@@ -95,9 +95,16 @@ END_CACHE
 ## main ##
 echo "Run 'ipv6logconv' function tests..." >&2
 
-if ./ipv6logconv -v | grep -w "CONV_REG" | grep -w "CONV_IEEE"; then
-	true
-else
+c=0
+if ./ipv6logconv --has-feature "CONV_REG"; then
+       c=$[ $c + 1 ]
+fi
+
+if ./ipv6logconv --has-feature "CONV_IEEE"; then
+       c=$[ $c + 1 ]
+fi
+
+if [  $c -ne 2 ]; then
 	echo "NOTICE : ipv6logconv tests skipped, at least one required database feature is missing"
 	exit 0
 fi
