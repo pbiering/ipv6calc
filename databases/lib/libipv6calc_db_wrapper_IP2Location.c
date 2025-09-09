@@ -2693,6 +2693,23 @@ int libipv6calc_db_wrapper_IP2Location_all_by_addr(const ipv6calc_ipaddr *ipaddr
 				snprintf(recordp->organization_name, IPV6CALC_DB_SIZE_ORG_NAME, "%s", record->as);
 			};
 		};
+
+#if API_VERSION_NUMERIC >= 80700
+		if (libipv6calc_db_wrapper_IP2Location_library_version_majorminor() >= 807) {
+			if (TEST_IP2LOCATION_AVAILABLE(record->as_domain)) {
+				snprintf(recordp->organization_domain, IPV6CALC_DB_SIZE_ORG_DOMAIN, "%s", record->as_domain);
+			};
+
+			if (TEST_IP2LOCATION_AVAILABLE(record->as_usage_type)) {
+				snprintf(recordp->organization_usage_type, IPV6CALC_DB_SIZE_ORG_USAGE_TYPE, "%s", record->as_usage_type);
+			};
+
+			if (TEST_IP2LOCATION_AVAILABLE(record->as_cidr)) {
+				snprintf(recordp->organization_cidr, IPV6CALC_DB_SIZE_ORG_CIDR, "%s", record->as_cidr);
+			};
+		};
+#endif // API_VERSION_NUMERIC >= 80700
+
 #endif // API_VERSION_NUMERIC >= 80600
 
 		libipv6calc_db_wrapper_IP2Location_free_record(record);

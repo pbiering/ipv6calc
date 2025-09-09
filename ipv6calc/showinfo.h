@@ -99,6 +99,10 @@
 //      + AS_ORGNAME
 // 23: 4.3.0 to current
 //      + IP2LOCATION2_* (equal to IP2LOCATION_*)
+// 24: 4.4.0 to current
+//      + AS_ORGDOMAIN
+//      + AS_ORGUSAGETYPE
+//      + AS_ORGCIDR
 
 #define IPV6CALC_OUTPUT_VERSION	23
 

@@ -494,6 +494,9 @@ static void print_geolocation(libipv6calc_db_wrapper_geolocation_record *record,
 
 	PRINT_RECORD_NUMBER(record->asn                 , "AS_NUM"              , "Autonomous System Number", "%u", ASNUM_AS_UNKNOWN)
 	PRINT_RECORD_STRING(record->organization_name   , "AS_ORGNAME"          , "Autonomous System Organization Name")
+	PRINT_RECORD_STRING(record->organization_domain , "AS_ORGDOMAIN"        , "Autonomous System Organization Domain Name")
+	PRINT_RECORD_STRING(record->organization_usage_type, "AS_ORGUSAGETYPE"  , "Autonomous System Organization Usage Type")
+	PRINT_RECORD_STRING(record->organization_cidr   , "AS_ORGCIDR"          , "Autonomous System Organization CIDR")
 
 	PRINT_RECORD_STRING(record->isp_name            , "ISP"                 , "ISP Name")
 	PRINT_RECORD_STRING(record->connection_type     , "NETSPEED"            , "Network Speed")

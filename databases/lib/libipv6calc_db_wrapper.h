@@ -212,6 +212,9 @@ typedef struct {
 #define IPV6CALC_DB_SIZE_ISP_NAME	128+1
 #define IPV6CALC_DB_SIZE_CONN_TYPE	20+1
 #define IPV6CALC_DB_SIZE_ORG_NAME	128+1
+#define IPV6CALC_DB_SIZE_ORG_DOMAIN	128+1
+#define IPV6CALC_DB_SIZE_ORG_USAGE_TYPE	128+1
+#define IPV6CALC_DB_SIZE_ORG_CIDR	128+1
 #define IPV6CALC_DB_SIZE_DOMAIN		20+1
 #define IPV6CALC_DB_SIZE_DMA_CODE	8+1
 #define IPV6CALC_DB_SIZE_IDD_CODE	8+1
@@ -271,6 +274,9 @@ typedef struct
 	char     mobile_country_code[IPV6CALC_DB_SIZE_MOBILECOUNTRYCODE];
 	char     mobile_brand[IPV6CALC_DB_SIZE_MOBILE_BRAND];
 	char     usage_type[IPV6CALC_DB_SIZE_USAGE_TYPE];
+	char     organization_domain[IPV6CALC_DB_SIZE_ORG_DOMAIN];
+	char     organization_usage_type[IPV6CALC_DB_SIZE_ORG_USAGE_TYPE];
+	char     organization_cidr[IPV6CALC_DB_SIZE_ORG_CIDR];
 } libipv6calc_db_wrapper_geolocation_record;
 
 static const s_data_sources geonameid_types[] = {

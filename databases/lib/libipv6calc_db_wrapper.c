@@ -1477,6 +1477,9 @@ void libipv6calc_db_wrapper_geolocation_record_clear(libipv6calc_db_wrapper_geol
 	snprintf(recordp->mobile_country_code, IPV6CALC_DB_SIZE_MOBILECOUNTRYCODE, "%s", "");
 	snprintf(recordp->mobile_brand       , IPV6CALC_DB_SIZE_MOBILE_BRAND     , "%s", "");
 	snprintf(recordp->usage_type         , IPV6CALC_DB_SIZE_USAGE_TYPE       , "%s", "");
+	snprintf(recordp->organization_domain    , IPV6CALC_DB_SIZE_ORG_DOMAIN    , "%s", "");
+	snprintf(recordp->organization_usage_type, IPV6CALC_DB_SIZE_ORG_USAGE_TYPE, "%s", "");
+	snprintf(recordp->organization_cidr      , IPV6CALC_DB_SIZE_ORG_CIDR      , "%s", "");
 };
 
 
