@@ -11,6 +11,9 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20250909/PB:
+	add support for additional data in DB26 usable with IP2Location >= 8.7.0
+
 20250908/PB:
 	add option --has-feature <NAME>
 	check IP2Location > 8.6.1 related compatibility/fallback
