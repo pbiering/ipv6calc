@@ -2,8 +2,7 @@
 #
 # Project    : ipv6calc/ipv6calcweb
 # File       : test_ipv6calcweb.sh
-# Version    : $Id$
-# Copyright  : 2012-2021 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2012-2025 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Information:
 #  Test script for ipv6calcweb
@@ -34,9 +33,10 @@ done
 
 shift $[ $OPTIND - 1 ]
 
-if [ -z "$1" ]; then
-	echo "Need IPv4/v6 address as argument #1"
-	exit 1
+if [ -n "$1" ]; then
+	ip="$1"
+else
+	ip="50.60.70.80"
 fi
 
 if [ ! -f ipv6calcweb.cgi ]; then
@@ -52,7 +52,7 @@ fi
 export HTTP_IPV6CALCWEB_DEBUG="0x5000" # no sleeps and no Anti-DoS
 
 set -x
-stderr=$(HTTP_IPV6CALCWEB_OUTPUT_FORMAT=html HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB=subcolumns REMOTE_ADDR=50.60.70.80 perl -w $perlopt ipv6calcweb.cgi 2>&1 >/dev/null)
+stderr=$(HTTP_IPV6CALCWEB_OUTPUT_FORMAT=html HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB=subcolumns REMOTE_ADDR=$ip perl -w $perlopt ipv6calcweb.cgi 2>&1 >/dev/null)
 set +x
 if [ -n "$stderr" ]; then
 	echo "ERROR : stderr not empty: $stderr"
@@ -60,7 +60,7 @@ if [ -n "$stderr" ]; then
 fi
 
 set -x
-stderr=$(HTTP_IPV6CALCWEB_OUTPUT_FORMAT=html HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB=sequential REMOTE_ADDR=50.60.70.80 perl -w $perlopt ipv6calcweb.cgi 2>&1 >/dev/null)
+stderr=$(HTTP_IPV6CALCWEB_OUTPUT_FORMAT=html HTTP_IPV6CALCWEB_OUTPUT_FORMAT_HTML_DB=sequential REMOTE_ADDR=$ip perl -w $perlopt ipv6calcweb.cgi 2>&1 >/dev/null)
 set +x
 if [ -n "$stderr" ]; then
 	echo "ERROR : stderr not empty: $stderr"
@@ -68,7 +68,7 @@ if [ -n "$stderr" ]; then
 fi
 
 set -x
-stderr=$(HTTP_IPV6CALCWEB_OUTPUT_FORMAT=text REMOTE_ADDR=50.60.70.80 perl -w $perlopt ipv6calcweb.cgi 2>&1 >/dev/null)
+stderr=$(HTTP_IPV6CALCWEB_OUTPUT_FORMAT=text REMOTE_ADDR=$ip perl -w $perlopt ipv6calcweb.cgi 2>&1 >/dev/null)
 set +x
 if [ -n "$stderr" ]; then
 	echo "ERROR : stderr not empty: $stderr"
@@ -116,7 +116,7 @@ echo "INFO  : $test successful"
 
 
 ## more sophisticated checks
-REMOTE_ADDR="$1"
+REMOTE_ADDR="$ip"
 REMOTE_HOST="client.domain.example"
 HTTP_USER_AGENT="test_ipv6calcweb"
 

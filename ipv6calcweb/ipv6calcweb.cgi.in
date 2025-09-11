@@ -726,9 +726,17 @@ my %text = (
 		'de' => "Autonomous System Nummer",
 		'en' => "Autonomous System Number",
 	},
-	'_AS_ORGNAME' => {
-		'de' => "Autonomous System",
-		'en' => "Autonomous System",
+	'_AS_ORGDOMAIN' => {
+		'de' => "Autonomous System Organistation Domain Name",
+		'en' => "Autonomous System Organistation Domain Name",
+	},
+	'_AS_ORGUSAGETYPE' => {
+		'de' => "Autonomous System Organistation Art der Nutzung",
+		'en' => "Autonomous System Organistation Usage Type",
+	},
+	'_AS_ORGCIDR' => {
+		'de' => "Autonomous System Organistation CIDR",
+		'en' => "Autonomous System Organistation CIDR",
 	},
 	'_CONTINENTCODE' => {
 		'de' => "Kontinent-Code",

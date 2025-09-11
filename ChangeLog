@@ -11,6 +11,10 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20250911/PB:
+	ipv6calcweb/ipv6calcweb.cgi.in: add support for new fields in DB26 with 8.7.0
+	ipv6calcweb/test_ipv6calcweb.sh: minor fixes
+
 20250909/PB:
 	add support for additional data in DB26 usable with IP2Location >= 8.7.0
 	internal databases: update
