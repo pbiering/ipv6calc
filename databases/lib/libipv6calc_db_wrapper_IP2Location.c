@@ -1821,7 +1821,7 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_country_short(IP2Locat
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	if (dl_status_IP2Location_get_country_long == IPV6CALC_DL_STATUS_UNKNOWN) {
+	if (dl_status_IP2Location_get_country_short == IPV6CALC_DL_STATUS_UNKNOWN) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Call dlsym: %s", dl_symbol);
 
 		dlerror();    /* Clear any existing error */
@@ -1934,7 +1934,7 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_as_number(IP2Location 
 		goto END_libipv6calc_db_wrapper;
 	};
 
-	if (dl_status_IP2Location_get_country_long == IPV6CALC_DL_STATUS_UNKNOWN) {
+	if (dl_status_IP2Location_get_asn == IPV6CALC_DL_STATUS_UNKNOWN) {
 		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Call dlsym: %s", dl_symbol);
 
 		dlerror();    /* Clear any existing error */
@@ -1942,7 +1942,7 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_as_number(IP2Location 
 		*(void **) (&dl_IP2Location_get_asn.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
 
 		if ((error = dlerror()) != NULL)  {
-			dl_status_IP2Location_get_country_short = IPV6CALC_DL_STATUS_ERROR;
+			dl_status_IP2Location_get_asn = IPV6CALC_DL_STATUS_ERROR;
 			fprintf(stderr, "%s\n", error);
 			goto END_libipv6calc_db_wrapper;
 		};
