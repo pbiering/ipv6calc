@@ -2000,7 +2000,7 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_as_name(IP2Location *l
 
 		dlerror();    /* Clear any existing error */
 
-		*(void **) (&dl_IP2Location_get_asn.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
+		*(void **) (&dl_IP2Location_get_as.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
 
 		if ((error = dlerror()) != NULL)  {
 			dl_status_IP2Location_get_as = IPV6CALC_DL_STATUS_ERROR;
