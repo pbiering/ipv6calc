@@ -469,6 +469,10 @@ static union { dl_IP2Location_get_country_long_t func; void * obj; } dl_IP2Locat
 static int dl_status_IP2Location_get_asn = IPV6CALC_DL_STATUS_UNKNOWN;
 typedef IP2LocationRecord *(*dl_IP2Location_get_asn_t)(IP2Location *loc, char *ip);
 static union { dl_IP2Location_get_asn_t func; void * obj; } dl_IP2Location_get_asn;
+
+static int dl_status_IP2Location_get_as = IPV6CALC_DL_STATUS_UNKNOWN;
+typedef IP2LocationRecord *(*dl_IP2Location_get_as_t)(IP2Location *loc, char *ip);
+static union { dl_IP2Location_get_as_t func; void * obj; } dl_IP2Location_get_as;
 #endif // API_VERSION_NUMERIC >= 80600
 
 static int dl_status_IP2Location_get_all = IPV6CALC_DL_STATUS_UNKNOWN;
@@ -1973,6 +1977,68 @@ END_libipv6calc_db_wrapper:
 	};
 #endif
 };
+
+
+/*
+ * wrapper: IP2Location_get_as_name
+ */
+IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_as_name(IP2Location *loc, char *ip) {
+	DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called: %s ip=%s", wrapper_ip2location_info, ip);
+
+#ifdef SUPPORT_IP2LOCATION_DYN
+	IP2LocationRecord *result_IP2Location_get_as = NULL;
+	const char *dl_symbol = "IP2Location_get_as";
+	char *error;
+
+	if (dl_IP2Location_handle == NULL) {
+		fprintf(stderr, "dl_IP2Location handle not defined\n");
+		goto END_libipv6calc_db_wrapper;
+	};
+
+	if (dl_status_IP2Location_get_as == IPV6CALC_DL_STATUS_UNKNOWN) {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Call dlsym: %s", dl_symbol);
+
+		dlerror();    /* Clear any existing error */
+
+		*(void **) (&dl_IP2Location_get_asn.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
+
+		if ((error = dlerror()) != NULL)  {
+			dl_status_IP2Location_get_as = IPV6CALC_DL_STATUS_ERROR;
+			fprintf(stderr, "%s\n", error);
+			goto END_libipv6calc_db_wrapper;
+		};
+
+		dl_status_IP2Location_get_as = IPV6CALC_DL_STATUS_OK;
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called dlsym successful: %s", dl_symbol);
+	} else if (dl_status_IP2Location_get_as == IPV6CALC_DL_STATUS_ERROR) {
+		/* already known issue */
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already failed: %s", dl_symbol);
+		goto END_libipv6calc_db_wrapper;
+	} else {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
+	};
+
+	dlerror();    /* Clear any existing error */
+
+	result_IP2Location_get_as = (*dl_IP2Location_get_as.func)(loc, ip);
+
+	if ((error = dlerror()) != NULL)  {
+		fprintf(stderr, "%s\n", error);
+		goto END_libipv6calc_db_wrapper;
+	};
+
+END_libipv6calc_db_wrapper:
+	return(result_IP2Location_get_as);
+#else
+	if (libipv6calc_db_wrapper_IP2Location_library_version_majorminor() >= 806) {
+		return(IP2Location_get_as(loc, ip));
+	} else {
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called: %s but library version is not supporting", wrapper_ip2location_info);
+		return(NULL);
+	};
+#endif
+};
+
 #endif // API_VERSION_NUMERIC >= 80600
 
 
@@ -2264,11 +2330,21 @@ uint32_t libipv6calc_db_wrapper_IP2Location_wrapper_asn_by_addr(const ipv6calc_i
 
 	// AS Text (optional)
 	if ((as_orgname != NULL) && (as_orgname_length > 0)) {
+		// AS Name
+		record = libipv6calc_db_wrapper_IP2Location_get_as_name(loc, addrstring);
+
+		if (record == NULL) {
+			DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "did not return a record");
+			goto END_libipv6calc_db_wrapper;
+		};
+
 		if (TEST_IP2LOCATION_AVAILABLE(record->as)) {
 			// copy information
 			snprintf(as_orgname, as_orgname_length, "%s", record->as);
 
 			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "as_num AS_ORGNAME=%s", as_orgname);
+		} else {
+			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "as_num AS_ORGNAME=%s (n/a)", record->as);
 		};
 	} else {
 		DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "lookup AS_ORGNAME skipped");
