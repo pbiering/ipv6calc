@@ -31,6 +31,31 @@
 
 #define TEST_IP2LOCATION_AVAILABLE(v)	((v != NULL) && (strstr(v, "unavailable") == NULL) && (strstr(v, " sample BIN ") == NULL) && (strstr(v, "INVALID") == NULL) && (strstr(v, "-") == NULL))
 
+#define IP2LOCATION_DYN_LOAD(M_dl_symbol, M_dl_status, M_dl_obj) \
+	const char *dl_symbol = M_dl_symbol; \
+	char *error; \
+	if (dl_IP2Location_handle == NULL) { \
+		fprintf(stderr, "dl_IP2Location handle not defined\n"); \
+		goto END_libipv6calc_db_wrapper; \
+	}; \
+	if (M_dl_status == IPV6CALC_DL_STATUS_UNKNOWN) { \
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Call dlsym: %s", dl_symbol); \
+		dlerror(); \
+		*(void **) (&M_dl_obj) = dlsym(dl_IP2Location_handle, dl_symbol); \
+		if ((error = dlerror()) != NULL)  { \
+			M_dl_status = IPV6CALC_DL_STATUS_ERROR; \
+			fprintf(stderr, "%s\n", error); \
+			goto END_libipv6calc_db_wrapper; \
+		}; \
+		M_dl_status = IPV6CALC_DL_STATUS_OK; \
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called dlsym successful: %s", dl_symbol); \
+	} else if (M_dl_status == IPV6CALC_DL_STATUS_ERROR) { \
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already failed: %s", dl_symbol); \
+		goto END_libipv6calc_db_wrapper; \
+	} else { \
+		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol); \
+	};
+
 char ip2location_db_dir[PATH_MAX] = IP2LOCATION_DB;
 
 
@@ -922,36 +947,7 @@ int libipv6calc_db_wrapper_IP2Location_close(IP2Location *loc) {
 	};
 
 #ifdef SUPPORT_IP2LOCATION_DYN
-	const char *dl_symbol = "IP2Location_close";
-	char *error;
-
-	if (dl_IP2Location_handle == NULL) {
-		fprintf(stderr, "dl_IP2Location handle not defined\n");
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	if (dl_status_IP2Location_close == IPV6CALC_DL_STATUS_UNKNOWN) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Call dlsym: %s", dl_symbol);
-
-		dlerror();    /* Clear any existing error */
-
-		*(void **) (&dl_IP2Location_close.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
-
-		if ((error = dlerror()) != NULL)  {
-			dl_status_IP2Location_close = IPV6CALC_DL_STATUS_ERROR;
-			fprintf(stderr, "%s\n", error);
-			goto END_libipv6calc_db_wrapper;
-		};
-
-		dl_status_IP2Location_close = IPV6CALC_DL_STATUS_OK;
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called dlsym successful: %s", dl_symbol);
-	} else if (dl_status_IP2Location_close == IPV6CALC_DL_STATUS_ERROR) {
-		/* already known issue */
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already failed: %s", dl_symbol);
-		goto END_libipv6calc_db_wrapper;
-	} else {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
-	};
+	IP2LOCATION_DYN_LOAD("IP2Location_close", dl_status_IP2Location_close, dl_IP2Location_close.obj)
 
 	dlerror();    /* Clear any existing error */
 
@@ -1307,34 +1303,7 @@ char *libipv6calc_db_wrapper_IP2Location_lib_version(void) {
 	static char result_IP2Location_lib_version[256];
 
 #ifdef SUPPORT_IP2LOCATION_DYN
-	const char *dl_symbol = "IP2Location_api_version_string";
-	char *error;
-
-	if (dl_IP2Location_handle == NULL) {
-		snprintf(result_IP2Location_lib_version, sizeof(result_IP2Location_lib_version), "LIBRARY-NOT-LOADED");
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	if (dl_status_IP2Location_api_version_string == IPV6CALC_DL_STATUS_UNKNOWN) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Call dlsym: %s", dl_symbol);
-
-		dlerror();    /* Clear any existing error */
-
-		*(void **) (&dl_IP2Location_api_version_string.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
-
-		if ((error = dlerror()) != NULL)  {
-			dl_status_IP2Location_api_version_string = IPV6CALC_DL_STATUS_ERROR;
-		} else {
-			dl_status_IP2Location_api_version_string = IPV6CALC_DL_STATUS_OK;
-			DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called dlsym successful: %s", dl_symbol);
-		};
-	} else if (dl_status_IP2Location_api_version_string == IPV6CALC_DL_STATUS_ERROR) {
-		/* already known issue */
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already failed: %s", dl_symbol);
-	} else {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
-	};
-
+	IP2LOCATION_DYN_LOAD("IP2Location_api_version_string", dl_status_IP2Location_api_version_string, dl_IP2Location_api_version_string.obj)
 
 	const char *dl_symbol2 = "IP2Location_api_version_num";
 
@@ -1598,36 +1567,8 @@ IP2Location *libipv6calc_db_wrapper_IP2Location_open(char *db) {
 
 #ifdef SUPPORT_IP2LOCATION_DYN
 	IP2Location *loc = NULL;
-	const char *dl_symbol = "IP2Location_open";
-	char *error;
 
-	if (dl_IP2Location_handle == NULL) {
-		fprintf(stderr, "dl_IP2Location handle not defined\n");
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	if (dl_status_IP2Location_open == IPV6CALC_DL_STATUS_UNKNOWN) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Call dlsym: %s", dl_symbol);
-
-		dlerror();    /* Clear any existing error */
-
-		*(void **) (&dl_IP2Location_open.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
-
-		if ((error = dlerror()) != NULL)  {
-			dl_status_IP2Location_open = IPV6CALC_DL_STATUS_ERROR;
-			fprintf(stderr, "%s\n", error);
-			goto END_libipv6calc_db_wrapper;
-		};
-
-		dl_status_IP2Location_open = IPV6CALC_DL_STATUS_OK;
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called dlsym successful: %s", dl_symbol);
-	} else if (dl_status_IP2Location_open == IPV6CALC_DL_STATUS_ERROR) {
-		/* already known issue */
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already failed: %s", dl_symbol);
-		goto END_libipv6calc_db_wrapper;
-	} else {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
-	};
+	IP2LOCATION_DYN_LOAD("IP2Location_open", dl_status_IP2Location_open, dl_IP2Location_open.obj)
 
 	dlerror();    /* Clear any existing error */
 
@@ -1757,36 +1698,7 @@ void libipv6calc_db_wrapper_IP2Location_free_record(IP2LocationRecord *record) {
 	};
 
 #ifdef SUPPORT_IP2LOCATION_DYN
-	const char *dl_symbol = "IP2Location_free_record";
-	char *error;
-
-	if (dl_IP2Location_handle == NULL) {
-		fprintf(stderr, "dl_IP2Location handle not defined\n");
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	if (dl_status_IP2Location_free_record == IPV6CALC_DL_STATUS_UNKNOWN) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Call dlsym: %s", dl_symbol);
-
-		dlerror();    /* Clear any existing error */
-
-		*(void **) (&dl_IP2Location_free_record) = dlsym(dl_IP2Location_handle, dl_symbol);
-
-		if ((error = dlerror()) != NULL)  {
-			dl_status_IP2Location_free_record = IPV6CALC_DL_STATUS_ERROR;
-			fprintf(stderr, "%s\n", error);
-			goto END_libipv6calc_db_wrapper;
-		};
-
-		dl_status_IP2Location_free_record = IPV6CALC_DL_STATUS_OK;
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called dlsym successful: %s", dl_symbol);
-	} else if (dl_status_IP2Location_free_record == IPV6CALC_DL_STATUS_ERROR) {
-		/* already known issue */
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already failed: %s", dl_symbol);
-		goto END_libipv6calc_db_wrapper;
-	} else {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
-	};
+	IP2LOCATION_DYN_LOAD("IP2Location_free_record", dl_status_IP2Location_free_record, dl_IP2Location_free_record.obj)
 
 	dlerror();    /* Clear any existing error */
 
@@ -1813,36 +1725,8 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_country_short(IP2Locat
 
 #ifdef SUPPORT_IP2LOCATION_DYN
 	IP2LocationRecord *result_IP2Location_get_country_short = NULL;
-	const char *dl_symbol = "IP2Location_get_country_short";
-	char *error;
 
-	if (dl_IP2Location_handle == NULL) {
-		fprintf(stderr, "dl_IP2Location handle not defined\n");
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	if (dl_status_IP2Location_get_country_short == IPV6CALC_DL_STATUS_UNKNOWN) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Call dlsym: %s", dl_symbol);
-
-		dlerror();    /* Clear any existing error */
-
-		*(void **) (&dl_IP2Location_get_country_short.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
-
-		if ((error = dlerror()) != NULL)  {
-			dl_status_IP2Location_get_country_short = IPV6CALC_DL_STATUS_ERROR;
-			fprintf(stderr, "%s\n", error);
-			goto END_libipv6calc_db_wrapper;
-		};
-
-		dl_status_IP2Location_get_country_short = IPV6CALC_DL_STATUS_OK;
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called dlsym successful: %s", dl_symbol);
-	} else if (dl_status_IP2Location_get_country_long == IPV6CALC_DL_STATUS_ERROR) {
-		/* already known issue */
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already failed: %s", dl_symbol);
-		goto END_libipv6calc_db_wrapper;
-	} else {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
-	};
+	IP2LOCATION_DYN_LOAD("IP2Location_get_country_short", dl_status_IP2Location_get_country_short, dl_IP2Location_get_country_short.obj)
 
 	dlerror();    /* Clear any existing error */
 
@@ -1869,37 +1753,8 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_country_long(IP2Locati
 
 #ifdef SUPPORT_IP2LOCATION_DYN
 	IP2LocationRecord *result_IP2Location_get_country_long = NULL;
-	const char *dl_symbol = "IP2Location_get_country_long";
-	char *error;
 
-	if (dl_IP2Location_handle == NULL) {
-		fprintf(stderr, "dl_IP2Location handle not defined\n");
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	if (dl_status_IP2Location_get_country_long == IPV6CALC_DL_STATUS_UNKNOWN) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Call dlsym: %s", dl_symbol);
-
-		dlerror();    /* Clear any existing error */
-
-		*(void **) (&dl_IP2Location_get_country_long.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
-
-		if ((error = dlerror()) != NULL)  {
-			dl_status_IP2Location_get_country_long = IPV6CALC_DL_STATUS_ERROR;
-			fprintf(stderr, "%s\n", error);
-			goto END_libipv6calc_db_wrapper;
-		};
-
-		dl_status_IP2Location_get_country_long = IPV6CALC_DL_STATUS_OK;
-
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called dlsym successful: %s", dl_symbol);
-	} else if (dl_status_IP2Location_get_country_long == IPV6CALC_DL_STATUS_ERROR) {
-		/* already known issue */
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already failed: %s", dl_symbol);
-		goto END_libipv6calc_db_wrapper;
-	} else {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
-	};
+	IP2LOCATION_DYN_LOAD("IP2Location_get_country_long", dl_status_IP2Location_get_country_long, dl_IP2Location_get_country_long.obj)
 
 	dlerror();    /* Clear any existing error */
 
@@ -1926,36 +1781,8 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_as_number(IP2Location 
 
 #ifdef SUPPORT_IP2LOCATION_DYN
 	IP2LocationRecord *result_IP2Location_get_asn = NULL;
-	const char *dl_symbol = "IP2Location_get_asn";
-	char *error;
 
-	if (dl_IP2Location_handle == NULL) {
-		fprintf(stderr, "dl_IP2Location handle not defined\n");
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	if (dl_status_IP2Location_get_asn == IPV6CALC_DL_STATUS_UNKNOWN) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Call dlsym: %s", dl_symbol);
-
-		dlerror();    /* Clear any existing error */
-
-		*(void **) (&dl_IP2Location_get_asn.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
-
-		if ((error = dlerror()) != NULL)  {
-			dl_status_IP2Location_get_asn = IPV6CALC_DL_STATUS_ERROR;
-			fprintf(stderr, "%s\n", error);
-			goto END_libipv6calc_db_wrapper;
-		};
-
-		dl_status_IP2Location_get_asn = IPV6CALC_DL_STATUS_OK;
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called dlsym successful: %s", dl_symbol);
-	} else if (dl_status_IP2Location_get_asn == IPV6CALC_DL_STATUS_ERROR) {
-		/* already known issue */
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already failed: %s", dl_symbol);
-		goto END_libipv6calc_db_wrapper;
-	} else {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
-	};
+	IP2LOCATION_DYN_LOAD("IP2Location_get_asn", dl_status_IP2Location_get_asn, dl_IP2Location_get_asn.obj)
 
 	dlerror();    /* Clear any existing error */
 
@@ -1965,6 +1792,7 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_as_number(IP2Location 
 		fprintf(stderr, "%s\n", error);
 		goto END_libipv6calc_db_wrapper;
 	};
+
 
 END_libipv6calc_db_wrapper:
 	return(result_IP2Location_get_asn);
@@ -1987,36 +1815,8 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_as_name(IP2Location *l
 
 #ifdef SUPPORT_IP2LOCATION_DYN
 	IP2LocationRecord *result_IP2Location_get_as = NULL;
-	const char *dl_symbol = "IP2Location_get_as";
-	char *error;
 
-	if (dl_IP2Location_handle == NULL) {
-		fprintf(stderr, "dl_IP2Location handle not defined\n");
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	if (dl_status_IP2Location_get_as == IPV6CALC_DL_STATUS_UNKNOWN) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Call dlsym: %s", dl_symbol);
-
-		dlerror();    /* Clear any existing error */
-
-		*(void **) (&dl_IP2Location_get_as.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
-
-		if ((error = dlerror()) != NULL)  {
-			dl_status_IP2Location_get_as = IPV6CALC_DL_STATUS_ERROR;
-			fprintf(stderr, "%s\n", error);
-			goto END_libipv6calc_db_wrapper;
-		};
-
-		dl_status_IP2Location_get_as = IPV6CALC_DL_STATUS_OK;
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called dlsym successful: %s", dl_symbol);
-	} else if (dl_status_IP2Location_get_as == IPV6CALC_DL_STATUS_ERROR) {
-		/* already known issue */
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already failed: %s", dl_symbol);
-		goto END_libipv6calc_db_wrapper;
-	} else {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
-	};
+	IP2LOCATION_DYN_LOAD("IP2Location_get_as", dl_status_IP2Location_get_as, dl_IP2Location_get_as.obj)
 
 	dlerror();    /* Clear any existing error */
 
@@ -2056,37 +1856,7 @@ IP2LocationRecord *libipv6calc_db_wrapper_IP2Location_get_all(IP2Location *loc, 
 	};
 
 #ifdef SUPPORT_IP2LOCATION_DYN
-	const char *dl_symbol = "IP2Location_get_all";
-	char *error;
-
-	if (dl_IP2Location_handle == NULL) {
-		fprintf(stderr, "dl_IP2Location handle not defined\n");
-		goto END_libipv6calc_db_wrapper;
-	};
-
-	if (dl_status_IP2Location_get_all == IPV6CALC_DL_STATUS_UNKNOWN) {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Call dlsym: %s", dl_symbol);
-
-		dlerror();    /* Clear any existing error */
-
-		*(void **) (&dl_IP2Location_get_all.obj) = dlsym(dl_IP2Location_handle, dl_symbol);
-
-		if ((error = dlerror()) != NULL)  {
-			dl_status_IP2Location_get_all = IPV6CALC_DL_STATUS_ERROR;
-			fprintf(stderr, "%s\n", error);
-			goto END_libipv6calc_db_wrapper;
-		};
-
-		dl_status_IP2Location_get_all = IPV6CALC_DL_STATUS_OK;
-
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Called dlsym successful: %s", dl_symbol);
-	} else if (dl_status_IP2Location_get_all == IPV6CALC_DL_STATUS_ERROR) {
-		/* already known issue */
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already failed: %s", dl_symbol);
-		goto END_libipv6calc_db_wrapper;
-	} else {
-		DEBUGPRINT_WA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Previous call of dlsym already successful: %s", dl_symbol);
-	};
+	IP2LOCATION_DYN_LOAD("IP2Location_get_all", dl_status_IP2Location_get_all, dl_IP2Location_get_all.obj)
 
 	dlerror();    /* Clear any existing error */
 
