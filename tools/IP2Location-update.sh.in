@@ -20,6 +20,7 @@
 # 20240124: add optional -R|t support
 # 20250128: add support for MMDB databases
 # 20250615: fix sample download URL, extend support for ASN files, fix error detection on unzip
+# 20250913: unconditionally display download URL in verbose mode
 
 IP2LOCATION_CONFIG=${IP2LOCATION_CONFIG:-"$HOME/.ip2location"}
 
@@ -382,11 +383,7 @@ for list in IP2LOCATION_DAT_FILES_LITE IP2LOCATION_DAT_FILES IP2LOCATION_DAT_FIL
 			fi
 		fi
 
-		if $has_token; then
-			$verbose && echo "INFO  : try to download URL: ${url_masked} ($file_dest)"
-		elif $has_credentials; then
-			$verbose && echo "INFO  : try to download URL: ${url_masked} ($file_dest)"
-		fi
+		$verbose && echo "INFO  : try to download URL: ${url_masked} ($file_dest)"
 
 		wget -q -O "$file_dest" "$url"
 		result=$?
