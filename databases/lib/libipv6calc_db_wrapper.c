@@ -240,6 +240,7 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 #ifndef SUPPORT_IP2LOCATION_DYN
 			// only non-dynamic-load results in a problem
 			wrapper_IP2Location_status = 0; // not-ok
+#else
 			wrapper_IP2Location_disable = 3;
 #endif
 		} else {
