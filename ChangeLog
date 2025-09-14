@@ -11,6 +11,10 @@ Info:
 	BL = Boris Lytochkin https://github.com/lytboris/
 
 --------------------------------------------------------------------
+20250914/PB:
+	internal databases: update
+	tag version 4.4.0
+
 20250911/PB:
 	ipv6calcweb/ipv6calcweb.cgi.in: add support for new fields in DB26 with 8.7.0
 	ipv6calcweb/test_ipv6calcweb.sh: minor fixes

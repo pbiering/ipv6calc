@@ -130,7 +130,7 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>12.0.2</revnumber> <date>2025-06-16</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>12.1.0</revnumber> <date>2025-09-14</date> <authorinitials>PB</authorinitials></revision>
 \end_layout
 
 \end_inset
@@ -195,7 +195,7 @@ Latest version
 \end_layout
 
 \begin_layout Standard
-Latest version since last update of this page is 4.3.1
+Latest version since last update of this page is 4.4.0
 \end_layout
 
 \begin_layout Subsection
@@ -438,6 +438,10 @@ release >= 2.0.0 && < 3.0.0 is only working with IP2Location >= 7.0.1
 
 \begin_layout Itemize
 release >= 3.0.0 is only working with IP2Location >= 8.2.0
+\end_layout
+
+\begin_layout Itemize
+release >= 4.4.0 is supporting IP2Location >= 8.7.0
 \end_layout
 
 \begin_layout Itemize
