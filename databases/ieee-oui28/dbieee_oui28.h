@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_oui28.h
  * Version       : $Id$
- * Generated     : Tue Sep  9 08:29:21 2025
+ * Generated     : Sun Sep 14 17:05:03 2025
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui28_status __attribute__ ((__unused__)) = "OUI28/20250909";
+/*@unused@*/ static const char* libieee_oui28_status __attribute__ ((__unused__)) = "OUI28/20250914";
 
 
 static const s_ieee_oui28 libieee_oui28[] = {
@@ -933,6 +933,16 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x248625, 0xC00000, 0xCFFFFF, "L-LIGHT Co., Ltd.", "L-LIGHT" },
 	{ 0x248625, 0xD00000, 0xDFFFFF, "Chengdu HOLDTECS Co.,Ltd", "CHENGDU-HOLDTECS" },
 	{ 0x248625, 0xE00000, 0xEFFFFF, "Hangzhou UPAI Technology Co., Ltd", "HANGZHOU-UPAI" },
+	{ 0x24A10D, 0x000000, 0x0FFFFF, "Lobaro GmbH", "LOBARO" },
+	{ 0x24A10D, 0x100000, 0x1FFFFF, "Shenzhen Star Instrument Co., Ltd.", "SHENZHEN-STAR-INSTRUMENT" },
+	{ 0x24A10D, 0x200000, 0x2FFFFF, "Sony Honda Mobility Inc.", "SONY-HONDA-MOBILITY" },
+	{ 0x24A10D, 0x500000, 0x5FFFFF, "Avantel Limited", "AVANTEL" },
+	{ 0x24A10D, 0x600000, 0x6FFFFF, "Goertek Inc.", "GOERTEK" },
+	{ 0x24A10D, 0x900000, 0x9FFFFF, "Tecnojest SrL", "TECNOJEST-SRL" },
+	{ 0x24A10D, 0xA00000, 0xAFFFFF, "Detroit Defense Inc.", "DETROIT-DEFENSE" },
+	{ 0x24A10D, 0xB00000, 0xBFFFFF, "Private", "PRIVATE" },
+	{ 0x24A10D, 0xC00000, 0xCFFFFF, "REVUPTECH PRIVATE LIMITED", "REVUPTECH-PRIVATE" },
+	{ 0x24A10D, 0xD00000, 0xDFFFFF, "Amina Distribution AS", "AMINA-DISTRIBUTION-AS" },
 	{ 0x24A3F0, 0x000000, 0x0FFFFF, "Shanghai AYAN Industry System Co.L,td", "SHANGHAI-AYAN-INDUSTRY-SYSTEM-L-TD" },
 	{ 0x24A3F0, 0x100000, 0x1FFFFF, "Hunan Newman Internet of vehicles Co,Ltd", "HUNAN-NEWMAN-INTERNET-OF-VEHICLES" },
 	{ 0x24A3F0, 0x200000, 0x2FFFFF, "Magna Hong Co., Ltd.", "MAGNA-HONG" },
@@ -2425,7 +2435,7 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x6095CE, 0xE00000, 0xEFFFFF, "VNS Inc.", "VNS" },
 	{ 0x60A434, 0x000000, 0x0FFFFF, "UNIQON", "UNIQON" },
 	{ 0x60A434, 0x100000, 0x1FFFFF, "EEG Enterprises Inc", "EEG-ENTERPRISES" },
-	{ 0x60A434, 0x200000, 0x2FFFFF, "Hangzhou Zhongxinhui lntelligent Technology Co.,Ltd.", "HANGZHOU-ZHONGXINHUI-LNTELLIGENT" },
+	{ 0x60A434, 0x200000, 0x2FFFFF, "Hangzhou Zhongxinghui Intelligent Technology Co., Ltd.", "HANGZHOU-ZHONGXINGHUI-INTELLIGENT" },
 	{ 0x60A434, 0x300000, 0x3FFFFF, "Shenzhen lncar Technology Co.,Ltd", "SHENZHEN-LNCAR" },
 	{ 0x60A434, 0x400000, 0x4FFFFF, "Human-life Information Platforms Institute", "HUMAN-LIFE-INFORMATION-PLATFORMS-INSTITUTE" },
 	{ 0x60A434, 0x500000, 0x5FFFFF, "Hangzhou Lanly Technology Co., Ltd.", "HANGZHOU-LANLY" },
@@ -3862,6 +3872,7 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x9C69B4, 0xE00000, 0xEFFFFF, "NINGBO SHEN LINK COMMUNICATION TECHNOLOGY CO., LTD", "NINGBO-SHEN-LINK-COMMUNICATION" },
 	{ 0x9CE450, 0x000000, 0x0FFFFF, "Shenzhen Chengzhao Technology Co., Ltd.", "SHENZHEN-CHENGZHAO" },
 	{ 0x9CE450, 0x100000, 0x1FFFFF, "AIO SYSTEMS", "AIO" },
+	{ 0x9CE450, 0x200000, 0x2FFFFF, "Shenzhen Lixun Technology Co., Ltd.", "SHENZHEN-LIXUN" },
 	{ 0x9CE450, 0x300000, 0x3FFFFF, "Marelli AL&S ALIT-TZ", "MARELLI-AL-S-ALIT-TZ" },
 	{ 0x9CE450, 0x400000, 0x4FFFFF, "Strato Automation Inc.", "STRATO-AUTOMATION" },
 	{ 0x9CE450, 0x500000, 0x5FFFFF, "Neways Advanced Applications", "NEWAYS-ADVANCED-APPLICATIONS" },
@@ -3873,6 +3884,7 @@ static const s_ieee_oui28 libieee_oui28[] = {
 	{ 0x9CE450, 0xB00000, 0xBFFFFF, "Shenzhen Coslight Technology Co.,Ltd.", "SHENZHEN-COSLIGHT" },
 	{ 0x9CE450, 0xC00000, 0xCFFFFF, "XTX Markets Technologies Limited", "XTX-MARKETS-TECHNOLOGIES" },
 	{ 0x9CE450, 0xD00000, 0xDFFFFF, "BCD SRL", "BCD-SRL" },
+	{ 0x9CE450, 0xE00000, 0xEFFFFF, "Shenzhen Kuki Electric Co., Ltd.", "SHENZHEN-KUKI-ELECTRIC" },
 	{ 0x9CE549, 0x000000, 0x0FFFFF, "SPEEDTECH CORP.", "SPEEDTECH" },
 	{ 0x9CE549, 0x100000, 0x1FFFFF, "Lightmatter, Inc.", "LIGHTMATTER" },
 	{ 0x9CE549, 0x200000, 0x2FFFFF, "Volumatic Limited", "VOLUMATIC" },

@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_oui36.h
  * Version       : $Id$
- * Generated     : Tue Sep  9 08:29:23 2025
+ * Generated     : Sun Sep 14 17:05:05 2025
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20250909";
+/*@unused@*/ static const char* libieee_oui36_status __attribute__ ((__unused__)) = "OUI36/20250914";
 
 
 static const s_ieee_oui36 libieee_oui36[] = {
@@ -4432,6 +4432,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0x0CC000, 0x0CCFFF, "Smart I Electronics Systems Pvt. Ltd.", "SMART-I-ELECTRONICS-PVT" },
 	{ 0x8C1F64, 0x0CD000, 0x0CDFFF, "DEUTA Werke GmbH", "DEUTA-WERKE" },
 	{ 0x8C1F64, 0x0CE000, 0x0CEFFF, "Digitella Inc.", "DIGITELLA" },
+	{ 0x8C1F64, 0x0D0000, 0x0D0FFF, "Lumiplan-Duhamel", "LUMIPLAN-DUHAMEL" },
 	{ 0x8C1F64, 0x0D2000, 0x0D2FFF, "biosilver .co.,ltd", "BIOSILVER" },
 	{ 0x8C1F64, 0x0D3000, 0x0D3FFF, "erfi Ernst Fischer GmbH+Co.KG", "ERFI-ERNST-FISCHER" },
 	{ 0x8C1F64, 0x0D4000, 0x0D4FFF, "Dalcnet srl", "DALCNET-SRL" },
@@ -4529,6 +4530,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0x176000, 0x176FFF, "Leidos Inc", "LEIDOS" },
 	{ 0x8C1F64, 0x177000, 0x177FFF, "Emcom Systems", "EMCOM" },
 	{ 0x8C1F64, 0x179000, 0x179FFF, "Agrowtek Inc.", "AGROWTEK" },
+	{ 0x8C1F64, 0x17A000, 0x17AFFF, "Sichuan ZhikongLingxin Technology Co., Ltd.", "SICHUAN-ZHIKONGLINGXIN" },
 	{ 0x8C1F64, 0x17B000, 0x17BFFF, "Bavaria Digital Technik GmbH", "BAVARIA-DIGITAL-TECHNIK" },
 	{ 0x8C1F64, 0x17C000, 0x17CFFF, "Zelp Ltd", "ZELP" },
 	{ 0x8C1F64, 0x17E000, 0x17EFFF, "MI Inc.", "MI" },
@@ -4937,6 +4939,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0x439000, 0x439FFF, "BORNICO", "BORNICO" },
 	{ 0x8C1F64, 0x43A000, 0x43AFFF, "Spacelite Inc", "SPACELITE" },
 	{ 0x8C1F64, 0x43D000, 0x43DFFF, "Solid State Supplies Ltd", "SOLID-STATE-SUPPLIES" },
+	{ 0x8C1F64, 0x43F000, 0x43FFFF, "beespace Technologies Limited", "BEESPACE-TECHNOLOGIES" },
 	{ 0x8C1F64, 0x440000, 0x440FFF, "MB connect line GmbH Fernwartungssysteme", "MB-CONNECT-LINE-FERNWARTUNGSSYSTEME" },
 	{ 0x8C1F64, 0x441000, 0x441FFF, "Novanta IMS", "NOVANTA-IMS" },
 	{ 0x8C1F64, 0x442000, 0x442FFF, "Potter Electric Signal Co. LLC", "POTTER-ELECTRIC-SIGNAL" },
@@ -5313,7 +5316,6 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0x6BB000, 0x6BBFFF, "Season Electronics Ltd", "SEASON-ELECTRONICS" },
 	{ 0x8C1F64, 0x6BD000, 0x6BDFFF, "IoT Water Analytics S.L.", "IOT-WATER-ANALYTICS" },
 	{ 0x8C1F64, 0x6BF000, 0x6BFFFF, "Automata GmbH & Co. KG", "AUTOMATA" },
-	{ 0x8C1F64, 0x6C1000, 0x6C1FFF, "Guangzhou Vannove Technology Co., Ltd", "GUANGZHOU-VANNOVE" },
 	{ 0x8C1F64, 0x6C6000, 0x6C6FFF, "FIT", "FIT" },
 	{ 0x8C1F64, 0x6C8000, 0x6C8FFF, "Taiko Audio B.V.", "TAIKO-AUDIO-B-V" },
 	{ 0x8C1F64, 0x6CA000, 0x6CAFFF, "Melissa Climate Jsc", "MELISSA-CLIMATE-JSC" },
@@ -5338,7 +5340,6 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0x6E3000, 0x6E3FFF, "ViewSonic International Corporation", "VIEWSONIC" },
 	{ 0x8C1F64, 0x6E4000, 0x6E4FFF, "RAB Microfluidics R&D Company Ltd", "RAB-MICROFLUIDICS-R-D-COMPANY" },
 	{ 0x8C1F64, 0x6E7000, 0x6E7FFF, "WiTricity Corporation", "WITRICITY" },
-	{ 0x8C1F64, 0x6E8000, 0x6E8FFF, "Combined Public Communications, LLC", "COMBINED-PUBLIC-COMMUNICATION" },
 	{ 0x8C1F64, 0x6E9000, 0x6E9FFF, "SHENZHEN sunforest Co.LTD", "SHENZHEN-SUNFOREST" },
 	{ 0x8C1F64, 0x6EA000, 0x6EAFFF, "KMtronic ltd", "KMTRONIC" },
 	{ 0x8C1F64, 0x6EB000, 0x6EBFFF, "ENLESS WIRELESS", "ENLESS-WIRELESS" },
@@ -5438,6 +5439,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0x782000, 0x782FFF, "ATM LLC", "ATM" },
 	{ 0x8C1F64, 0x787000, 0x787FFF, "Tabology", "TABOLOGY" },
 	{ 0x8C1F64, 0x789000, 0x789FFF, "DEUTA Werke GmbH", "DEUTA-WERKE" },
+	{ 0x8C1F64, 0x78B000, 0x78BFFF, "SENSO2ME NV", "SENSO2ME-NV" },
 	{ 0x8C1F64, 0x78F000, 0x78FFFF, "Connection Systems", "CONNECTION" },
 	{ 0x8C1F64, 0x791000, 0x791FFF, "Otis Technology and Development(Shanghai) Co., Ltd.", "OTIS-AND-DEVELOPMENT-SHANGHAI" },
 	{ 0x8C1F64, 0x793000, 0x793FFF, "Aditec GmbH", "ADITEC" },
@@ -5976,6 +5978,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0xB2C000, 0xB2CFFF, "SANMINA ISRAEL MEDICAL SYSTEMS LTD", "SANMINA-ISRAEL-MEDICAL" },
 	{ 0x8C1F64, 0xB2D000, 0xB2DFFF, "wonder meditec", "WONDER-MEDITEC" },
 	{ 0x8C1F64, 0xB2F000, 0xB2FFFF, "Mtechnology - Gamma Commerciale Srl", "MTECHNOLOGY-GAMMA-COMMERCIALE-SRL" },
+	{ 0x8C1F64, 0xB30000, 0xB30FFF, "Fujian ONETHING Technology Co.,Ltd.", "FUJIAN-ONETHING" },
 	{ 0x8C1F64, 0xB32000, 0xB32FFF, "Plug Power", "PLUG-POWER" },
 	{ 0x8C1F64, 0xB35000, 0xB35FFF, "RADA Electronics Industries Ltd.", "RADA-ELECTRONICS-INDUSTRIES" },
 	{ 0x8C1F64, 0xB36000, 0xB36FFF, "Pneumax Spa", "PNEUMAX-SPA" },
@@ -6221,6 +6224,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0xCC2000, 0xCC2FFF, "TOYOGIKEN CO.,LTD.", "TOYOGIKEN" },
 	{ 0x8C1F64, 0xCC5000, 0xCC5FFF, "Potter Electric Signal Co. LLC", "POTTER-ELECTRIC-SIGNAL" },
 	{ 0x8C1F64, 0xCC6000, 0xCC6FFF, "Genius Vision Digital Private Limited", "GENIUS-VISION-DIGITAL-PRIVATE" },
+	{ 0x8C1F64, 0xCC9000, 0xCC9FFF, "Benchmark Electronics BV", "BENCHMARK-ELECTRONICS" },
 	{ 0x8C1F64, 0xCCB000, 0xCCBFFF, "suzhou yuecrown Electronic Technology Co.,LTD", "SUZHOU-YUECROWN" },
 	{ 0x8C1F64, 0xCCE000, 0xCCEFFF, "Tesollo", "TESOLLO" },
 	{ 0x8C1F64, 0xCCF000, 0xCCFFFF, "Tiptop Platform P. Ltd", "TIPTOP-PLATFORM-P" },
@@ -6242,6 +6246,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0xCE5000, 0xCE5FFF, "Private", "PRIVATE" },
 	{ 0x8C1F64, 0xCEB000, 0xCEBFFF, "EUREKA FOR SMART PROPERTIES CO. W.L.L", "EUREKA-FOR-SMART-PROPERTIES-W-L-L" },
 	{ 0x8C1F64, 0xCEC000, 0xCECFFF, "Zhuhai Huaya machinery Technology Co., LTD", "ZHUHAI-HUAYA-MACHINERY" },
+	{ 0x8C1F64, 0xCED000, 0xCEDFFF, "NHA TRANG HITECH COMPANY,  LTD", "NHA-TRANG-HITECH-COMPANY" },
 	{ 0x8C1F64, 0xCEE000, 0xCEEFFF, "DISPLAX S.A.", "DISPLAX" },
 	{ 0x8C1F64, 0xCEF000, 0xCEFFFF, "Goertek Robotics Co.,Ltd.", "GOERTEK-ROBOTICS" },
 	{ 0x8C1F64, 0xCF1000, 0xCF1FFF, "ROBOfiber, Inc.", "ROBOFIBER" },
@@ -6401,6 +6406,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0xDFB000, 0xDFBFFF, "Bobeesc Co.", "BOBEESC" },
 	{ 0x8C1F64, 0xDFC000, 0xDFCFFF, "Meiko Electronics Co.,Ltd.", "MEIKO-ELECTRONICS" },
 	{ 0x8C1F64, 0xDFE000, 0xDFEFFF, "Nuvation Energy", "NUVATION-ENERGY" },
+	{ 0x8C1F64, 0xDFF000, 0xDFFFFF, "VINGLOOP TECHNOLOGY LTD", "VINGLOOP" },
 	{ 0x8C1F64, 0xE00000, 0xE00FFF, "DVB-TECH S.R.L.", "DVB-TECH" },
 	{ 0x8C1F64, 0xE02000, 0xE02FFF, "ITS Teknik A/S", "ITS-TEKNIK-A/S" },
 	{ 0x8C1F64, 0xE04000, 0xE04FFF, "新川センサテクノロジ株式会社", "" },
@@ -6423,6 +6429,7 @@ static const s_ieee_oui36 libieee_oui36[] = {
 	{ 0x8C1F64, 0xE23000, 0xE23FFF, "Chemito Infotech PVT LTD", "CHEMITO-INFOTECH-PVT" },
 	{ 0x8C1F64, 0xE24000, 0xE24FFF, "COMETA SAS", "COMETA-SAS" },
 	{ 0x8C1F64, 0xE26000, 0xE26FFF, "HyperSilicon Co.,Ltd", "HYPERSILICON" },
+	{ 0x8C1F64, 0xE2A000, 0xE2AFFF, "WHITEBOX TECHNOLOGY HONG KONG LTD", "WHITEBOX-HONG-KONG" },
 	{ 0x8C1F64, 0xE2B000, 0xE2BFFF, "Glotech Exim Private Limited", "GLOTECH-EXIM-PRIVATE" },
 	{ 0x8C1F64, 0xE2D000, 0xE2DFFF, "RADA Electronics Industries Ltd.", "RADA-ELECTRONICS-INDUSTRIES" },
 	{ 0x8C1F64, 0xE2E000, 0xE2EFFF, "RADA Electronics Industries Ltd.", "RADA-ELECTRONICS-INDUSTRIES" },
