@@ -601,7 +601,7 @@ static int       libipv6calc_db_wrapper_IP2Location_db_compatible(const unsigned
  * function initialise the IP2Location wrapper
  *
  * in : (nothing)
- * out: 0=ok, 1=error
+ * out: 0=ok, 1=error, 2=untested
  */
 int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 	int i, dbym, product, dbtype, result;
@@ -669,11 +669,11 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_init(void) {
 #endif // SUPPORT_IP2LOCATION_DYN
 	v = libipv6calc_db_wrapper_IP2Location_library_version_majorminor();
 	if ((v >= 807) && ((API_VERSION_NUMERIC / 100) < 807)) {
-		NONQUIETPRINT_WA("IP2Location(BIN) library %u.%u is not supported with API version: %u.%u", v / 100, v % 100, API_VERSION_NUMERIC / 10000, (API_VERSION_NUMERIC % 10000) / 100);
+		// explicit known incompatible
 		return(1);
 	} else if (v > API_VERSION_NUMERIC) {
-		NONQUIETPRINT_WA("IP2Location(BIN) library %u.%u is not tested with API version: %u.%u", v / 100, v % 100, API_VERSION_NUMERIC / 10000, (API_VERSION_NUMERIC % 10000) / 100);
-		return(1);
+		// untested
+		return(2);
 	};
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Check for standard IP2Location(BIN) databases");

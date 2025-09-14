@@ -241,7 +241,13 @@ int libipv6calc_db_wrapper_init(const char *prefix_string) {
 			// only non-dynamic-load results in a problem
 			wrapper_IP2Location_status = 0; // not-ok
 #else
-			wrapper_IP2Location_disable = 3;
+			if (r == 2) {
+				// untested
+				wrapper_IP2Location_disable = 4;
+			} else {
+				// known incompatible
+				wrapper_IP2Location_disable = 3;
+			};
 #endif
 		} else {
 			wrapper_IP2Location_status = 1; // ok
@@ -765,7 +771,9 @@ void libipv6calc_db_wrapper_print_features_verbose(const int level_verbose) {
 		libipv6calc_db_wrapper_IP2Location_wrapper_info(string, sizeof(string));
 		fprintf(stderr, "%s\n\n", string);
 	} else if (wrapper_IP2Location_disable == 3) {
-		fprintf(stderr, "IP2Location(BIN) disabled by incompatible library\n\n");
+		fprintf(stderr, "IP2Location(BIN) support disabled, compiled with API version: %s, dynamically linked with version: %s (INCOMPATIBLE)\n\n", IP2LOCATION_API_VERSION, libipv6calc_db_wrapper_IP2Location_lib_version());
+	} else if (wrapper_IP2Location_disable == 4) {
+		fprintf(stderr, "IP2Location(BIN) support disabled, compiled with API version: %s, dynamically linked with version: %s (UNTESTED)\n\n", IP2LOCATION_API_VERSION, libipv6calc_db_wrapper_IP2Location_lib_version());
 	} else {
 		fprintf(stderr, "IP2Location(BIN) disabled by option\n\n");
 	};
