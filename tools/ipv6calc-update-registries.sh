@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Project    : ipv6calc/databases/registries
 # File       : ipv6calc-update-registries.sh
