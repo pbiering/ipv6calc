@@ -130,7 +130,7 @@ status open
 
 \begin_layout Plain Layout
 
-<revision> <revnumber>12.1.0</revnumber> <date>2025-09-14</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>12.1.1</revnumber> <date>2025-09-28</date> <authorinitials>PB</authorinitials></revision>
 \end_layout
 
 \end_inset
@@ -988,6 +988,24 @@ Package is maintained,
 LatexCommand href
 name "http://packages.debian.org/ipv6calc"
 target "http://packages.debian.org/ipv6calc"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Void Linux
+\end_layout
+
+\begin_layout Standard
+See here for more:
+ 
+\begin_inset CommandInset href
+LatexCommand href
+name "https://voidlinux.org/packages/?q=ipv6calc"
+target "https://voidlinux.org/packages/?q=ipv6calc"
 literal "false"
 
 \end_inset

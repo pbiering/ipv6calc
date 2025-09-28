@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /><title>The ipv6calc Homepage</title><link rel="stylesheet" type="text/css" href="dbprojects.css" /><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" /></head><body><div xml:lang="en-US" class="article" lang="en-US"><div class="titlepage"><div><div><h2 class="title"><a id="id1337"></a>The ipv6calc Homepage</h2></div><div><div class="author"><h3 class="author"><span class="firstname">Peter</span> <span class="surname">Bieringer</span></h3><div class="affiliation"><div class="address"><p>pb at bieringer dot de</p></div></div></div></div><div><div class="revhistory"><table style="border-style:solid; width:100%;" summary="Revision History"><tr><th align="left" valign="top" colspan="3"><strong>Revision History</strong></th></tr><tr><td align="left">Revision 12.1.0</td><td align="left">2025-09-14</td><td align="left">PB</td></tr></table></div></div></div></div><div class="toc"><p><strong>Table of Contents</strong></p><dl class="toc"><dt><span class="section"><a href="#id1343">General</a></span></dt><dd><dl><dt><span class="section"><a href="#id1339">Latest version</a></span></dt><dt><span class="section"><a href="#id1340">Included programs</a></span></dt><dt><span class="section"><a href="#id1341">Included databases</a></span></dt><dt><span class="section"><a href="#id1342">Possible external databases</a></span></dt></dl></dd><dt><span class="section"><a href="#id1344">License</a></span></dt><dt><span class="section"><a href="#id1345">Copyright</a></span></dt><dt><span class="section"><a href="#id1346">Author</a></span></dt><dt><span class="section"><a href="#id1362">Where to get sources or binaries</a></span></dt><dd><dl><dt><span class="section"><a href="#id1347">Latest version of sources</a></span></dt><dt><span class="section"><a href="#id1351">Releases</a></span></dt><dt><span class="section"><a href="#id1361">Ready to use packages for several operating systems:</a></span></dt></dl></dd><dt><span class="section"><a href="#id1366">Configuring &amp; Compiling</a></span></dt><dd><dl><dt><span class="section"><a href="#id1363">Configuring</a></span></dt><dt><span class="section"><a href="#id1364">Compiling</a></span></dt><dt><span class="section"><a href="#id1365">Configuring &amp; Compiling with Presets</a></span></dt></dl></dd><dt><span class="section"><a href="#id1369">Mailing Lists</a></span></dt><dd><dl><dt><span class="section"><a href="#id1367">ipv6calc-announce</a></span></dt><dt><span class="section"><a href="#id1368">ipv6calc</a></span></dt></dl></dd><dt><span class="section"><a href="#id1370">Bug Reports</a></span></dt><dt><span class="section"><a href="#id1400">Features of ipv6calc</a></span></dt><dd><dl><dt><span class="section"><a href="#id1371">Description</a></span></dt><dt><span class="section"><a href="#id1372">List of built-in features</a></span></dt><dt><span class="section"><a href="#id1387">Examples</a></span></dt><dt><span class="section"><a href="#id1388">Option style</a></span></dt><dt><span class="section"><a href="#id1399">Online help</a></span></dt></dl></dd><dt><span class="section"><a href="#id1404">Webserver log conversion helper program "ipv6logconv"</a></span></dt><dd><dl><dt><span class="section"><a href="#id1401">Supported options</a></span></dt><dt><span class="section"><a href="#id1402">Examples</a></span></dt><dt><span class="section"><a href="#id1403">Usage</a></span></dt></dl></dd><dt><span class="section"><a href="#id1415">Webserver log anonymization helper program "ipv6loganon"</a></span></dt><dd><dl><dt><span class="section"><a href="#id1409">Anonymization details</a></span></dt><dt><span class="section"><a href="#id1410">Supported log file formats</a></span></dt><dt><span class="section"><a href="#id1411">Supported options</a></span></dt><dt><span class="section"><a href="#id1414">Usage</a></span></dt></dl></dd><dt><span class="section"><a href="#id1420">External database update helper scripts</a></span></dt><dd><dl><dt><span class="section"><a href="#id1416">IP2Location</a></span></dt><dt><span class="section"><a href="#id1417">GeoIP</a></span></dt><dt><span class="section"><a href="#id1418">DB-IP.com</a></span></dt><dt><span class="section"><a href="#id1419">External</a></span></dt></dl></dd><dt><span class="section"><a href="#id1422">Perl CGI wrapper program "ipv6calcweb.cgi"</a></span></dt><dd><dl><dt><span class="section"><a href="#id1421">Examples</a></span></dt></dl></dd><dt><span class="section"><a href="#id1428">Webserver log statistics helper program "ipv6logstats"</a></span></dt><dd><dl><dt><span class="section"><a href="#id1423">Supported options</a></span></dt><dt><span class="section"><a href="#id1426">Usage</a></span></dt><dt><span class="section"><a href="#id1427">Examples</a></span></dt></dl></dd><dt><span class="section"><a href="#id1433">Apache web server module &#8220;mod_ipv6calc&#8221;</a></span></dt><dd><dl><dt><span class="section"><a href="#id1429">Installation</a></span></dt><dt><span class="section"><a href="#id1430">Configuration</a></span></dt><dt><span class="section"><a href="#id1431">Result</a></span></dt><dt><span class="section"><a href="#id1432">Post-analysis in case of anonymization method &#8220;keep-type-asn-cc&#8221;</a></span></dt></dl></dd><dt><span class="section"><a href="#id1447">History</a></span></dt><dd><dl><dt><span class="section"><a href="#id1434">2025</a></span></dt><dt><span class="section"><a href="#id1435">2023</a></span></dt><dt><span class="section"><a href="#id1436">2021</a></span></dt><dt><span class="section"><a href="#id1437">2020</a></span></dt><dt><span class="section"><a href="#id1438">2019</a></span></dt><dt><span class="section"><a href="#id1439">2017</a></span></dt><dt><span class="section"><a href="#id1440">2016</a></span></dt><dt><span class="section"><a href="#id1441">2015</a></span></dt><dt><span class="section"><a href="#id1442">2014</a></span></dt><dt><span class="section"><a href="#id1443">2013</a></span></dt><dt><span class="section"><a href="#id1444">2011</a></span></dt><dt><span class="section"><a href="#id1445">2002-2010</a></span></dt><dt><span class="section"><a href="#id1446">2001</a></span></dt></dl></dd></dl></div>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" /><title>The ipv6calc Homepage</title><link rel="stylesheet" type="text/css" href="dbprojects.css" /><meta name="generator" content="DocBook XSL Stylesheets Vsnapshot" /></head><body><div xml:lang="en-US" class="article" lang="en-US"><div class="titlepage"><div><div><h2 class="title"><a id="id1337"></a>The ipv6calc Homepage</h2></div><div><div class="author"><h3 class="author"><span class="firstname">Peter</span> <span class="surname">Bieringer</span></h3><div class="affiliation"><div class="address"><p>pb at bieringer dot de</p></div></div></div></div><div><div class="revhistory"><table style="border-style:solid; width:100%;" summary="Revision History"><tr><th align="left" valign="top" colspan="3"><strong>Revision History</strong></th></tr><tr><td align="left">Revision 12.1.1</td><td align="left">2025-09-28</td><td align="left">PB</td></tr></table></div></div></div></div><div class="toc"><p><strong>Table of Contents</strong></p><dl class="toc"><dt><span class="section"><a href="#id1343">General</a></span></dt><dd><dl><dt><span class="section"><a href="#id1339">Latest version</a></span></dt><dt><span class="section"><a href="#id1340">Included programs</a></span></dt><dt><span class="section"><a href="#id1341">Included databases</a></span></dt><dt><span class="section"><a href="#id1342">Possible external databases</a></span></dt></dl></dd><dt><span class="section"><a href="#id1344">License</a></span></dt><dt><span class="section"><a href="#id1345">Copyright</a></span></dt><dt><span class="section"><a href="#id1346">Author</a></span></dt><dt><span class="section"><a href="#id1363">Where to get sources or binaries</a></span></dt><dd><dl><dt><span class="section"><a href="#id1347">Latest version of sources</a></span></dt><dt><span class="section"><a href="#id1351">Releases</a></span></dt><dt><span class="section"><a href="#id1362">Ready to use packages for several operating systems:</a></span></dt></dl></dd><dt><span class="section"><a href="#id1367">Configuring &amp; Compiling</a></span></dt><dd><dl><dt><span class="section"><a href="#id1364">Configuring</a></span></dt><dt><span class="section"><a href="#id1365">Compiling</a></span></dt><dt><span class="section"><a href="#id1366">Configuring &amp; Compiling with Presets</a></span></dt></dl></dd><dt><span class="section"><a href="#id1370">Mailing Lists</a></span></dt><dd><dl><dt><span class="section"><a href="#id1368">ipv6calc-announce</a></span></dt><dt><span class="section"><a href="#id1369">ipv6calc</a></span></dt></dl></dd><dt><span class="section"><a href="#id1371">Bug Reports</a></span></dt><dt><span class="section"><a href="#id1401">Features of ipv6calc</a></span></dt><dd><dl><dt><span class="section"><a href="#id1372">Description</a></span></dt><dt><span class="section"><a href="#id1373">List of built-in features</a></span></dt><dt><span class="section"><a href="#id1388">Examples</a></span></dt><dt><span class="section"><a href="#id1389">Option style</a></span></dt><dt><span class="section"><a href="#id1400">Online help</a></span></dt></dl></dd><dt><span class="section"><a href="#id1405">Webserver log conversion helper program "ipv6logconv"</a></span></dt><dd><dl><dt><span class="section"><a href="#id1402">Supported options</a></span></dt><dt><span class="section"><a href="#id1403">Examples</a></span></dt><dt><span class="section"><a href="#id1404">Usage</a></span></dt></dl></dd><dt><span class="section"><a href="#id1416">Webserver log anonymization helper program "ipv6loganon"</a></span></dt><dd><dl><dt><span class="section"><a href="#id1410">Anonymization details</a></span></dt><dt><span class="section"><a href="#id1411">Supported log file formats</a></span></dt><dt><span class="section"><a href="#id1412">Supported options</a></span></dt><dt><span class="section"><a href="#id1415">Usage</a></span></dt></dl></dd><dt><span class="section"><a href="#id1421">External database update helper scripts</a></span></dt><dd><dl><dt><span class="section"><a href="#id1417">IP2Location</a></span></dt><dt><span class="section"><a href="#id1418">GeoIP</a></span></dt><dt><span class="section"><a href="#id1419">DB-IP.com</a></span></dt><dt><span class="section"><a href="#id1420">External</a></span></dt></dl></dd><dt><span class="section"><a href="#id1423">Perl CGI wrapper program "ipv6calcweb.cgi"</a></span></dt><dd><dl><dt><span class="section"><a href="#id1422">Examples</a></span></dt></dl></dd><dt><span class="section"><a href="#id1429">Webserver log statistics helper program "ipv6logstats"</a></span></dt><dd><dl><dt><span class="section"><a href="#id1424">Supported options</a></span></dt><dt><span class="section"><a href="#id1427">Usage</a></span></dt><dt><span class="section"><a href="#id1428">Examples</a></span></dt></dl></dd><dt><span class="section"><a href="#id1434">Apache web server module &#8220;mod_ipv6calc&#8221;</a></span></dt><dd><dl><dt><span class="section"><a href="#id1430">Installation</a></span></dt><dt><span class="section"><a href="#id1431">Configuration</a></span></dt><dt><span class="section"><a href="#id1432">Result</a></span></dt><dt><span class="section"><a href="#id1433">Post-analysis in case of anonymization method &#8220;keep-type-asn-cc&#8221;</a></span></dt></dl></dd><dt><span class="section"><a href="#id1448">History</a></span></dt><dd><dl><dt><span class="section"><a href="#id1435">2025</a></span></dt><dt><span class="section"><a href="#id1436">2023</a></span></dt><dt><span class="section"><a href="#id1437">2021</a></span></dt><dt><span class="section"><a href="#id1438">2020</a></span></dt><dt><span class="section"><a href="#id1439">2019</a></span></dt><dt><span class="section"><a href="#id1440">2017</a></span></dt><dt><span class="section"><a href="#id1441">2016</a></span></dt><dt><span class="section"><a href="#id1442">2015</a></span></dt><dt><span class="section"><a href="#id1443">2014</a></span></dt><dt><span class="section"><a href="#id1444">2013</a></span></dt><dt><span class="section"><a href="#id1445">2011</a></span></dt><dt><span class="section"><a href="#id1446">2002-2010</a></span></dt><dt><span class="section"><a href="#id1447">2001</a></span></dt></dl></dd></dl></div>
 
 <div class="address"><p>pb at bieringer dot de</p></div>
 <div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1343"></a>General</h2></div></div></div>
@@ -108,7 +108,7 @@
 <p><a class="ulink" href="mailto:pb@bieringer.de" target="_top">Dr. Peter Bieringer</a> with some minor contribution by others</p>
 </li></ul></div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1362"></a>Where to get sources or binaries</h2></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1363"></a>Where to get sources or binaries</h2></div></div></div>
 
 <div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1347"></a>Latest version of sources</h3></div></div></div>
 
@@ -148,7 +148,7 @@
 <p>Can be searched via <a class="ulink" href="http://www.rpmfind.net/linux/rpm2html/search.php?query=ipv6calc" target="_top">rpmfind / ipv6calc</a>.</p>
 </div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1361"></a>Ready to use packages for several operating systems:</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1362"></a>Ready to use packages for several operating systems:</h3></div></div></div>
 
 <div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1352"></a>Fedora Linux</h4></div></div></div>
 
@@ -197,27 +197,31 @@
 
 <p>Package is maintained, more information can be found at <a class="ulink" href="http://packages.debian.org/ipv6calc" target="_top">http://packages.debian.org/ipv6calc</a></p>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1357"></a>openSUSE</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1357"></a>Void Linux</h4></div></div></div>
+
+<p>See here for more: <a class="ulink" href="https://voidlinux.org/packages/?q=ipv6calc" target="_top">https://voidlinux.org/packages/?q=ipv6calc</a></p>
+</div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1358"></a>openSUSE</h4></div></div></div>
 
 <p>Package is maintained, more information can be found at <a class="ulink" href="http://download.opensuse.org/repositories/home:/uebelhacker/" target="_top">http://download.opensuse.org/repositories/home:/uebelhacker/</a></p>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1358"></a>NetBSD</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1359"></a>NetBSD</h4></div></div></div>
 
 <p>See here for more: <a class="ulink" href="ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/net/ipv6calc/README.html" target="_top">ftp://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/net/ipv6calc/README.html</a></p>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1359"></a>FreeBSD</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1360"></a>FreeBSD</h4></div></div></div>
 
 <p>See here for more: <a class="ulink" href="http://www.freshports.org/net-mgmt/ipv6calc/" target="_top">http://www.freshports.org/net-mgmt/ipv6calc/</a> (<a class="ulink" href="http://www.freebsd.org/cgi/query-pr.cgi?pr=34441" target="_top">http://www.freebsd.org/cgi/query-pr.cgi?pr=34441</a>)</p>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1360"></a>OpenBSD</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1361"></a>OpenBSD</h4></div></div></div>
 
 <p>See here for more: <a class="ulink" href="http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/" target="_top">http://www.openbsd.org/cgi-bin/cvsweb/ports/net/ipv6calc/</a></p>
 </div>
 </div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1366"></a>Configuring &amp; Compiling</h2></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1367"></a>Configuring &amp; Compiling</h2></div></div></div>
 
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1363"></a>Configuring</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1364"></a>Configuring</h3></div></div></div>
 
 <p>Following &#8220;ipc6calc&#8221; related configure options are currently supported (note: disabling the internal databases reduces the size of the resulting binaries/shared library a lot):</p>
 <pre class="programlisting">--disable-dynamic-load  Disable dynamic load of libraries (default: enabled)</pre>
@@ -255,7 +259,7 @@
 <pre class="programlisting">--enable-openssl-evp-md5        Enforce use of OpenSSL EVP MD5 implementation (default: autoselected)</pre>
 <pre class="programlisting">--enable-openssl-md5            Enforce use of OpenSSL legacy MD5 implementation (default: autoselected) </pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1364"></a>Compiling</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1365"></a>Compiling</h3></div></div></div>
 
 <p>As usual, use</p>
 <pre class="programlisting">$ make</pre>
@@ -264,7 +268,7 @@
 <p>or at least (e.g. if external databases are not available)</p>
 <pre class="programlisting">$ make test-minimal</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1365"></a>Configuring &amp; Compiling with Presets</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1366"></a>Configuring &amp; Compiling with Presets</h3></div></div></div>
 
 <p>A shell script is included which can configure and compile with standard presets (also used during regression tests):</p>
 <pre class="programlisting">$ ./autogen.sh -h</pre>
@@ -296,9 +300,9 @@
 <pre class="programlisting">   --relax               : don't stop on compiler warnings</pre>
 </div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1369"></a>Mailing Lists</h2></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1370"></a>Mailing Lists</h2></div></div></div>
 
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1367"></a>ipv6calc-announce</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1368"></a>ipv6calc-announce</h3></div></div></div>
 
 <div class="variablelist"><dl class="variablelist"><dt><span class="term">Reason:</span></dt><dd>
 <p>sending announcements of new versions</p>
@@ -310,7 +314,7 @@
 <p><a class="ulink" href="https://lists.deepspace6.net/postorius/lists/ipv6calc-announce.lists.deepspace6.net/" target="_top">DeepSpace6 / maillist ipv6calc-announce</a></p>
 </dd></dl></div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1368"></a>ipv6calc</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1369"></a>ipv6calc</h3></div></div></div>
 
 <div class="variablelist"><dl class="variablelist"><dt><span class="term">Reason:</span></dt><dd>
 <p>discussions</p>
@@ -323,17 +327,17 @@
 </dd></dl></div>
 </div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1370"></a>Bug Reports</h2></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1371"></a>Bug Reports</h2></div></div></div>
 
 <p>You can send bug reports to the author himself or subscribe to maillist &#8220;ipv6calc&#8221; and send it to the list.</p>
 </div>
-<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1400"></a>Features of ipv6calc</h2></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1401"></a>Features of ipv6calc</h2></div></div></div>
 
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1371"></a>Description</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1372"></a>Description</h3></div></div></div>
 
 <p>The main program named &#8220;ipv6calc&#8221; is able to recognize many (not only) IPv6 address formats and depending on a selectable action (not required) a selectable output format can be specified. Also it has the capability to show detailed information of an IPv4/IPv6 address or anonymize it.</p>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1372"></a>List of built-in features</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1373"></a>List of built-in features</h3></div></div></div>
 
 <p>Option &#8220;-v&#8221; shows built-in features, depending on configuration before compiling:</p>
 <pre class="programlisting">$ ipv6calc -v</pre>
@@ -483,9 +487,9 @@
 <pre class="programlisting">ANON_KEEP-TYPE-GEONAMEID x Anonymization method 'keep-type-geonameid'</pre>
 <p>Note: since version 0.95.0 the internal layer for database usage was abstracted and each database &#8220;plugin&#8221; is initialized reporting then its supporting features in binary representation. This makes implementation of other external databases easier in the future. Partially internal (built-in) databases can be overlayed by generated external databases replacing the need of recompilation for updated built-in databases.</p>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1387"></a>Examples</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1388"></a>Examples</h3></div></div></div>
 
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1373"></a>Conversion</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1374"></a>Conversion</h4></div></div></div>
 
 <p>A simple example is the conversion of an IPv6 address to a DNS PTR query string:</p>
 <pre class="programlisting">$ ipv6calc --out revnibbles.arpa 2001:db8::1</pre>
@@ -504,10 +508,10 @@
 <pre class="programlisting">2002:c0a8:fb61::</pre>
 <p>There are many more features already implemented, if you miss one, send a note.</p>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1384"></a>Information</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1385"></a>Information</h4></div></div></div>
 
 <p>Depending on available databases output can vary.</p>
-<div class="section"><div class="titlepage"><div><div><h5 class="title"><a id="id1374"></a>Information about a simple IPv6 address:</h5></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h5 class="title"><a id="id1375"></a>Information about a simple IPv6 address:</h5></div></div></div>
 
 <pre class="programlisting">$ ipv6calc -q -i 3ffe:ffff::210:a4ff:fe01:2345</pre>
 <pre class="programlisting">Address type: unicast, 6bone, global-unicast, productive</pre>
@@ -519,7 +523,7 @@
 <pre class="programlisting">MAC is an unicast one</pre>
 <pre class="programlisting">OUI is: XIRCOM</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h5 class="title"><a id="id1375"></a>Information about a Teredo IPv6 address:</h5></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h5 class="title"><a id="id1376"></a>Information about a Teredo IPv6 address:</h5></div></div></div>
 
 <pre class="programlisting">$ ipv6calc -q -i 3ffe:831f:ce49:7601:8000:efff:af4a:86BF</pre>
 <pre class="programlisting">Address type: unicast, 6bone, global-unicast, teredo</pre>
@@ -531,7 +535,7 @@
 <pre class="programlisting">Country Code for [80.181.121.64]: IT </pre>
 <pre class="programlisting">...</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h5 class="title"><a id="id1376"></a>Information about a LISP address</h5></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h5 class="title"><a id="id1377"></a>Information about a LISP address</h5></div></div></div>
 
 <pre class="programlisting">$ ipv6calc -q -i 153.16.26.80</pre>
 <pre class="programlisting">IPv4 address: 153.16.26.80</pre>
@@ -540,7 +544,7 @@
 <pre class="programlisting">IPv4 registry: ARIN(LISP#cbc-xtr) </pre>
 <pre class="programlisting">...</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h5 class="title"><a id="id1383"></a>Machine readable output</h5></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h5 class="title"><a id="id1384"></a>Machine readable output</h5></div></div></div>
 
 <p>There exists also a machine readable output (e.g. used by &#8217;ipv6calcweb.cgi&#8217;) - in addition, database related information can be displayed, if databases are located on the system and supported.</p>
 <pre class="programlisting">$ ipv6calc -q -i -m 2a01:238:423d:8800:85b3:9e6b:3019:8909  </pre>
@@ -611,14 +615,14 @@
 <pre class="programlisting">IPV6CALC_SETTINGS_ANON="set=keep-type-asn-cc,mask-ipv6=56,mask-ipv4=24,mask-eui64=40,mask-mac=24,method=keep-type-asn-cc"</pre>
 <pre class="programlisting">IPV6CALC_FEATURES="GeoIP GeoIPv6 IP2Location IP2Location6 IP2Location2 IP2Location2v6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO DB_IPV4_GEONAMEID DB_IPV6_GEONAMEID DB_IPV4_DUMP_CC DB_IPV6_DUMP_CC ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID"</pre>
 <pre class="programlisting">IPV6CALC_CAPABILITIES="GeoIP2(linked/MMDB) IP2Location(linked/BIN) DBIP2(linked/MMDB) IP2Location2(linked/MMDB) ExternalDatabase DB_AS_REG(BuiltIn) DB_CC_REG(BuiltIn) DB_IPV4_REG(BuiltIn) DB_IPV6_REG(BuiltIn) DB_IEEE(BuiltIn)"</pre>
-<h5><a id="id1448"></a>Special machine readable output options (&gt;= 0.99.0)</h5>
-<div class="section"><div class="titlepage"><div><div><h6 class="title"><a id="id1377"></a>Output filter by selecting a token (&gt;= 0.99.0)</h6></div></div></div>
+<h5><a id="id1449"></a>Special machine readable output options (&gt;= 0.99.0)</h5>
+<div class="section"><div class="titlepage"><div><div><h6 class="title"><a id="id1378"></a>Output filter by selecting a token (&gt;= 0.99.0)</h6></div></div></div>
 
 <p>Using option --mrst &lt;TOKEN&gt; (Machine Readable Select Token) can be used to display only a selected token</p>
 <pre class="programlisting">$ ipv6calc -q -i --mrst IPV6_TYPE 2a01:238:423d:8800:85b3:9e6b:3019:8909 </pre>
 <pre class="programlisting">IPV6_TYPE=unicast,global-unicast,productive,iid-random,iid,iid-local</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h6 class="title"><a id="id1378"></a>Output filter by matching token (&gt;= 0.99.0)</h6></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h6 class="title"><a id="id1379"></a>Output filter by matching token (&gt;= 0.99.0)</h6></div></div></div>
 
 <p>Using option --mrmt &lt;TOKEN&gt; (Machine Readable Match Token) can be used to display only matching tokens</p>
 <pre class="programlisting">$ ipv6calc -q -i --mrmt IP2LOCATION 2a01:238:423d:8800:85b3:9e6b:3019:8909 </pre>
@@ -632,25 +636,25 @@
 <pre class="programlisting">IP2LOCATION_TIMEZONE_NAME=+01:00</pre>
 <pre class="programlisting">IP2LOCATION_DATABASE_INFO=IP2L-DB11 IPv6 20181226 Copyright (c) 2018 IP2Location All Rights Reserved</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h6 class="title"><a id="id1379"></a>Output filter by selecting a value of a token token (&gt;= 0.99.0)</h6></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h6 class="title"><a id="id1380"></a>Output filter by selecting a value of a token token (&gt;= 0.99.0)</h6></div></div></div>
 
 <p>Using option --mrtvo &lt;TOKEN&gt; (Machine Readable Token Value Only) can be used to display only thevalue of a selected token</p>
 <pre class="programlisting">$ ipv6calc -q -i --mrtvo IPV6_TYPE 2a01:238:423d:8800:85b3:9e6b:3019:8909 </pre>
 <pre class="programlisting">unicast,global-unicast,productive,iid-random,iid,iid-local</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h6 class="title"><a id="id1380"></a>Output adjustment by unconditional quoting of values (&gt;= 0.99.0)</h6></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h6 class="title"><a id="id1381"></a>Output adjustment by unconditional quoting of values (&gt;= 0.99.0)</h6></div></div></div>
 
 <p>Using option --mrqva (Machine Readable Quote Values Always) can be used to quote values always of a selected token</p>
 <pre class="programlisting">$ ipv6calc -q -i --mrqva --mrtvo IPV6_TYPE 2a01:238:423d:8800:85b3:9e6b:3019:8909 </pre>
 <pre class="programlisting">"unicast,global-unicast,productive,iid-random,iid,iid-local"</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h6 class="title"><a id="id1381"></a>Output adjustment by unconditional disabling quoted values (&gt;= 0.99.0)</h6></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h6 class="title"><a id="id1382"></a>Output adjustment by unconditional disabling quoted values (&gt;= 0.99.0)</h6></div></div></div>
 
 <p>Using option --mrqvn (Machine Readable Quote Values Never) can be used to never quote values of a selected token</p>
 <pre class="programlisting">$ ipv6calc -q -i --mrqvn --mrst IPV6_AS_TEXT 2a01:238:423d:8800:85b3:9e6b:3019:8909 </pre>
 <pre class="programlisting">IPV6_AS_TEXT=AS6724 STRATO AG</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h6 class="title"><a id="id1382"></a>Output adjustment by unconditional print token in case of empty value (&gt;= 0.99.0)</h6></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h6 class="title"><a id="id1383"></a>Output adjustment by unconditional print token in case of empty value (&gt;= 0.99.0)</h6></div></div></div>
 
 <p>Using option --mrstpq (Machine Readable Select Token Print Always) can be used to print always token/value regardless it&#8217;s contained</p>
 <pre class="programlisting">$ ipv6calc -q -i --mrqva --mrstpa IPV4 2a01:238:423d:8800:85b3:9e6b:3019:8909 </pre>
@@ -660,7 +664,7 @@
 </div>
 </div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1385"></a>Filter mode</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1386"></a>Filter mode</h4></div></div></div>
 
 <p>&#8220;ipv6calc&#8221; can run in filter mode to be able to extract from a huge list of IPv4/IPv6 addresses ones which are interesting or ones which are not interesting (see printout of online help below).</p>
 <p>Filter tokens are the ones which are listed on &#8220;TYPE&#8221; lines shown in &#8220;-m -i&#8221; information mode.</p>
@@ -670,13 +674,13 @@
 <p>For more information see below</p>
 <p>Note: since version 0.95.0 &#8217;-A filter&#8217; is optional if option &#8217;-E &lt;filter expression&gt;&#8217; is given (autoselected action).</p>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1386"></a>Test mode</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1387"></a>Test mode</h4></div></div></div>
 
 <p>Since 0.99.2 a test mode (&#8217;-A test&#8217;, autoselected in case &#8217;test_*&#8217; options are given) is implemented for address prefix or range</p>
 <p>For more information see below</p>
 </div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1388"></a>Option style</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1389"></a>Option style</h3></div></div></div>
 
 <p>Since version 0.40 new-style option handling was introduced, using</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
@@ -689,10 +693,10 @@
 <p>and many more conversions were added. A built-in check matrix should prevent misconversions.</p>
 <p>Up to version 0.39, only old-style options (aka &#8220;shortcut&#8221; options). They are one-in-all options, specifying input/action/output in one token. Internally this options will be converted into new-style options.</p>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1399"></a>Online help</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1400"></a>Online help</h3></div></div></div>
 
 <p>Online help always shows the currently implemented features.</p>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1389"></a>Main online help:</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1390"></a>Main online help:</h4></div></div></div>
 
 <p>External database options only appear if compiled with related support.</p>
 <pre class="programlisting">$ ipv6calc -h</pre>
@@ -795,7 +799,7 @@
 <pre class="programlisting">     --ipv4_to_6to4addr (-I ipv4 -O ipv6addr -A conv6to4)</pre>
 <pre class="programlisting">     --addr2cc (-A addr2cc)</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1391"></a>Database options</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1392"></a>Database options</h4></div></div></div>
 
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
 <p>each internal/external database can be disabled by option</p>
@@ -806,7 +810,7 @@
 </li><li class="listitem">
 <p>for geolocation databases specific file can be selected (see --db-&lt;PROVIDER&gt;-only-type &lt;TYPE&gt;)</p>
 </li></ul></div>
-<div class="section"><div class="titlepage"><div><div><h5 class="title"><a id="id1390"></a>IP2Location(BIN)</h5></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h5 class="title"><a id="id1391"></a>IP2Location(BIN)</h5></div></div></div>
 
 <p>IP2location database directory can contain a bunch of files, the best ones are selected automatically (since 0.99.0). &#8220;Best&#8221; can be controlled via two options:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
@@ -855,7 +859,7 @@
 <p>use &#8220;ipv6calc -vv&#8221; or &#8220;ipv6calc -vvv&#8221; for verification, which databases are selected finally.</p>
 </div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1392"></a>Input-type options</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1393"></a>Input-type options</h4></div></div></div>
 
 <pre class="programlisting">$ ipv6calc --in -?</pre>
 <pre class="programlisting">ipv6calc: version 4.2.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO DB_IPV4_GEONAMEID DB_IPV6_GEONAMEID DB_IPV4_DUMP_CC ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID</pre>
@@ -879,7 +883,7 @@
 <pre class="programlisting">  prefix+mac      : IPv6 prefix and a MAC address</pre>
 <pre class="programlisting">  asn             : Autonomous System Number</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1393"></a>Output-type options:</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1394"></a>Output-type options:</h4></div></div></div>
 
 <pre class="programlisting">$ ipv6calc --out -?</pre>
 <pre class="programlisting">ipv6calc: version 4.2.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO DB_IPV4_GEONAMEID DB_IPV6_GEONAMEID DB_IPV4_DUMP_CC ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID</pre>
@@ -909,7 +913,7 @@
 <pre class="programlisting">For examples and available format options use:</pre>
 <pre class="programlisting">    -O|--out &lt;type&gt; --examples</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1394"></a>Action-type options: </h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1395"></a>Action-type options: </h4></div></div></div>
 
 <pre class="programlisting">$ ipv6calc --action -?</pre>
 <pre class="programlisting">ipv6calc: version 4.2.0 GeoIP GeoIPv6 IP2Location IP2Location6 DBIPv4 DBIPv6 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_IPV4_AS DB_IPV6_AS DB_IPV4_CC DB_IPV6_CC DB_IPV4_COUNTRY DB_IPV6_COUNTRY DB_IPV4_CITY DB_IPV6_CITY DB_IPV4_REGION DB_IPV6_REGION DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO DB_IPV4_GEONAMEID DB_IPV6_GEONAMEID DB_IPV4_DUMP_CC ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID</pre>
@@ -942,7 +946,7 @@
 <pre class="programlisting">  addr2cc          : Converts IPv4/IPv6 address into Country Code</pre>
 <pre class="programlisting">  dbdump           : Dump Database</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1395"></a>Special action &#8220;filter&#8221;:</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1396"></a>Special action &#8220;filter&#8221;:</h4></div></div></div>
 
 <p>Special action &#8220;filter&#8221; can be used especially in pipe mode to filter IP addresses related to their type and since 0.99.0 also related to database results (CountryCode, ASN or Registry).</p>
 <pre class="programlisting">$ ipv6calc --action filter -h</pre>
@@ -1000,7 +1004,7 @@
 <pre class="programlisting">...</pre>
 <pre class="programlisting">2002:d950:0:1:2:3:4:5</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1396"></a>Special action &#8220;test&#8221;:</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1397"></a>Special action &#8220;test&#8221;:</h4></div></div></div>
 
 <p>Special action &#8220;test&#8221; (since 0.99.2) can be used in command line or pipe mode (single address only) to test IP addresses related to a given prefix or range .</p>
 <pre class="programlisting">$ ipv6calc -A test -?</pre>
@@ -1034,7 +1038,7 @@
 <pre class="programlisting">1.2.3.4   inside 1.2.3.0/24</pre>
 <pre class="programlisting">1.2.4.4   NOT inside 1.2.3.0/24</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1397"></a>Special action &#8220;conv6to4&#8221;:</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1398"></a>Special action &#8220;conv6to4&#8221;:</h4></div></div></div>
 
 <p>Special action &#8220;conv6to4&#8221; (since at least 0.99.1) can be used in command line or pipe mode to convert 6to4-IPv6 in IPv4 addresses and vice versa.</p>
 <pre class="programlisting">$ ipv6calc: version 3.2.1 DB_AS_REG DB_IPV4_REG DB_IPV6_REG DB_CC_REG DB_IEEE DB_IPV4_INFO DB_IPV6_INFO ANON_ZEROISE ANON_ANONYMIZE</pre>
@@ -1057,7 +1061,7 @@
 <pre class="programlisting">2002:102:300::/40</pre>
 <pre class="programlisting">2002:102:400::/40</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1398"></a>Special action &#8220;dbdump&#8221;:</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1399"></a>Special action &#8220;dbdump&#8221;:</h4></div></div></div>
 
 <p>Since version 3.3.0, action &#8220;dbdump&#8221; is provided</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
@@ -1119,10 +1123,10 @@
 </div>
 </div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1404"></a>Webserver log conversion helper program "ipv6logconv"</h2></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1405"></a>Webserver log conversion helper program "ipv6logconv"</h2></div></div></div>
 
 <p>This program parses address tokens of a given webserver logfile and converts them to special strings, useful for statistics (e.g. created by using "analog").</p>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1401"></a>Supported options</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1402"></a>Supported options</h3></div></div></div>
 
 <pre class="programlisting">$ ipv6logconv -h</pre>
 <pre class="programlisting">ipv6logconv: version 4.3.0 CONV_REG CONV_IEEE</pre>
@@ -1152,11 +1156,11 @@
 <pre class="programlisting">   any            : any type</pre>
 <pre class="programlisting"> Takes data from stdin, proceed it to stdout</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1402"></a>Examples</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1403"></a>Examples</h3></div></div></div>
 
 <p>A demonstration about which kind of statistics are possible to produce is shown at <a class="ulink" href="http://www.ipv6.bieringer.de/" target="_top">http://www.ipv6.bieringer.de/</a> (IPv6 only).</p>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1403"></a>Usage</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1404"></a>Usage</h3></div></div></div>
 
 <p>Example:</p>
 <pre class="programlisting">$ echo "2002:50b5:7940:0000:0000:0000:50b5:7940 - -" | ipv6logconv -q --out any</pre>
@@ -1164,14 +1168,14 @@
 <p>See more examples inside the package.</p>
 </div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1415"></a>Webserver log anonymization helper program "ipv6loganon"</h2></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1416"></a>Webserver log anonymization helper program "ipv6loganon"</h2></div></div></div>
 
 <p>On autoconfiguration, the interface part of an IPv6 address is based on the MAC address of the network interface card (NIC). This address is used for outgoing requests, if privacy option (RFC3041 / RFC4941) is not enabled. This results in many privacy related information on web- or mail-server log files. Administrators, which won&#8217;t (be allowed to) store such information over time, but still do not want to loose information about address type distribution should use &#8217;ipv6loganon&#8217; to anonymize their log files.</p>
 <p>Since version 0.94.0 internally also IID anonymization is possible without loosing any information for &#8220;ipv6logstats&#8221;.</p>
 <p>Since version 0.95.0 internally also prefix anonymization is possible without loosing any information for &#8220;ipv6logstats&#8221;.</p>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1409"></a>Anonymization details</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1410"></a>Anonymization details</h3></div></div></div>
 
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1405"></a>Method &#8220;zeroize&#8221;</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1406"></a>Method &#8220;zeroize&#8221;</h4></div></div></div>
 
 <p>The anonymizer would keep as much information as possible for IPv6 address types.</p>
 <p>Client-side IID would be anonymized by</p>
@@ -1201,7 +1205,7 @@
 <p>IPv4 address would be anonymized by given IPv4 mask</p>
 </li></ul></div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1406"></a>Method &#8220;anonmize&#8221;</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1407"></a>Method &#8220;anonmize&#8221;</h4></div></div></div>
 
 <p>The anonymizer would keep as much information as possible for the IID of an IPv6 address.</p>
 <p>Description from libipv6addr.h:</p>
@@ -1229,7 +1233,7 @@
 <pre class="programlisting"> * SLA/NLA prefix part anonymization is done by replacing with pattern a909a909</pre>
 <pre class="programlisting"> *   p = number of nibbles anonymized</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1407"></a>Method &#8220;keep-type-asn-cc&#8221;</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1408"></a>Method &#8220;keep-type-asn-cc&#8221;</h4></div></div></div>
 
 <p>In addition to &#8220;anonymize&#8221; (of IID) this method anonymizes also the prefix of an IPv6 address or a whole IPv4 address by keeping ASN (Autonomous System Number, Country Code and Type).</p>
 <p>Description from libipv6addr.h:</p>
@@ -1282,7 +1286,7 @@
 <pre class="programlisting"> * Mapping of LISP</pre>
 <pre class="programlisting"> *                                1|r r r|1|1|0 0 0 0 0 0 0 0 0 0 0| </pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1408"></a>Method &#8220;keep-type-geonameid&#8221;</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1409"></a>Method &#8220;keep-type-geonameid&#8221;</h4></div></div></div>
 
 <p>In difference to keep-type-asn-cc this method anonymizes the prefix of an IPv6 address or a whole IPv4 address by keeping the GeonameID and Type.</p>
 <p>Description from libipv6addr.h:</p>
@@ -1341,7 +1345,7 @@
 <pre class="programlisting"> *                 |0 0 0 0 0 0 0 1 r r r 1 1 0 0 0 0 0 0 0 0 0 0 0|</pre>
 </div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1410"></a>Supported log file formats</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1411"></a>Supported log file formats</h3></div></div></div>
 
 <p>Currently native supported log files:</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
@@ -1349,7 +1353,7 @@
 </li></ul></div>
 <p>There are plans to support also mail server log files sometimes in the future, but because of different formats, this would be probably done by a Perl program which parses the log file and a (cached) &#8217;ip6calc&#8217; call with action &#8217;anonymize&#8217;.</p>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1411"></a>Supported options</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1412"></a>Supported options</h3></div></div></div>
 
 <pre class="programlisting">$ ipv6loganon -h</pre>
 <pre class="programlisting">ipv6loganon: version 4.3.0 ANON_ZEROISE ANON_ANONYMIZE ANON_KEEP-TYPE-ASN-CC ANON_KEEP-TYPE-GEONAMEID</pre>
@@ -1437,13 +1441,13 @@
 <pre class="programlisting">  --mask-autoadjust yes|no: autoadjust mask to keep type/vendor information regardless of less given mask</pre>
 <pre class="programlisting"> Takes data from stdin, outputs the processed data to stdout (default)</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1414"></a>Usage</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1415"></a>Usage</h3></div></div></div>
 
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1412"></a>Offline anonymization</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1413"></a>Offline anonymization</h4></div></div></div>
 
 <pre class="programlisting">$ cat /path/to/http_log | ./ipv6loganon &gt;/path/to/http_log_anonymized</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1413"></a>On-the-fly online anonymization for Apache Webserver</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1414"></a>On-the-fly online anonymization for Apache Webserver</h4></div></div></div>
 
 <div class="blockquote"><blockquote class="blockquote">
 <p>Note: since 0.91.1 also a module for Apache Webserver is available (see below) supporting anonymized logging</p>
@@ -1463,10 +1467,10 @@
 </div>
 </div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1420"></a>External database update helper scripts</h2></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1421"></a>External database update helper scripts</h2></div></div></div>
 
 <p>The &#8220;tools&#8221; subdirectory contains helper scripts for updating external databases.</p>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1416"></a>IP2Location</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1417"></a>IP2Location</h3></div></div></div>
 
 <p>Since 4.3.0 script also supports download of MMDB files</p>
 <pre class="programlisting">$ /usr/share/ipv6calc/tools/IP2Location-update.sh -h</pre>
@@ -1506,7 +1510,7 @@
 <pre class="programlisting">  token=IP2LOCATION-TOKEN       found: 2q...</pre>
 <pre class="programlisting"> In addition settings from above can be overwritten by setting related variables</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1417"></a>GeoIP</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1418"></a>GeoIP</h3></div></div></div>
 
 <p>Just note that old database format (version 1) is no longer supported for free download, ipv6calc &gt;= 2.0.0 supports also MaxMindDB format, ipv6calc &gt;= 3.0.0 drops legacy download capability</p>
 <pre class="programlisting">$ /usr/share/ipv6calc/tools/GeoIP-update.sh -h</pre>
@@ -1529,7 +1533,7 @@
 <pre class="programlisting">   (in case a valid license key exists, add key and extend EditionIDs related)</pre>
 <pre class="programlisting">   see also https://dev.maxmind.com/geoip/geoipupdate/</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1418"></a>DB-IP.com</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1419"></a>DB-IP.com</h3></div></div></div>
 
 <p>Since ipv6calc &gt;= 2.0.0 supports also MaxMindDB format, so download of CSV files and converting them into BerkeleyDB format is no longer required. Since ipv6calc &gt;= 4.3.1 support for &#8220;IP to ASN lite&#8221; is available.</p>
 <pre class="programlisting">$ /usr/share/ipv6calc/tools/DBIP-update.sh -h</pre>
@@ -1562,7 +1566,7 @@
 <pre class="programlisting"> in case -U &lt;url&gt; (take URL from subscription e-mail) is provided, it downloads the database</pre>
 <pre class="programlisting">  use -T &lt;type&gt; in case it's not "location-isp"</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1419"></a>External</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1420"></a>External</h3></div></div></div>
 
 <pre class="programlisting">$ /usr/share/ipv6calc/tools/ipv6calc-db-update.sh -h</pre>
 <pre class="programlisting">Usage: ipv6calc-db-update.sh [-s] [-u] [-D &lt;dir&gt;] [-R [-r]]</pre>
@@ -1584,10 +1588,10 @@
 <pre class="programlisting">	"external" database support</pre>
 </div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1422"></a>Perl CGI wrapper program "ipv6calcweb.cgi"</h2></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1423"></a>Perl CGI wrapper program "ipv6calcweb.cgi"</h2></div></div></div>
 
 <p>Because calling C programs directly as CGI isn&#8217;t really recommended (too much security troubles all the time), I wrote a small wrapper utility which calls "ipv6calc" to get information about client and server address for displaying on a web page. </p>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1421"></a>Examples</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1422"></a>Examples</h3></div></div></div>
 
 <p>A demonstration about which kind of output is possible to produce is shown at</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
@@ -1599,11 +1603,11 @@
 </li></ul></div>
 </div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1428"></a>Webserver log statistics helper program "ipv6logstats"</h2></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1429"></a>Webserver log statistics helper program "ipv6logstats"</h2></div></div></div>
 
 <p>This program parses a given webserver logfile and count addresses, useful for time period statistics.</p>
 <p>Since version 0.95.0 it has extended output, adding a date/time line and statistics by Country Code and ASN (if required databases are available).</p>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1423"></a>Supported options</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1424"></a>Supported options</h3></div></div></div>
 
 <pre class="programlisting">$ ipv6logstats -h</pre>
 <pre class="programlisting">ipv6logstats: version 4.3.0 STAT_REG STAT_CC STAT_AS</pre>
@@ -1667,10 +1671,10 @@
 <pre class="programlisting">  [-s|--simple]              : disable extended statistic (CountryCode/ASN)</pre>
 <pre class="programlisting"> (1) unsupported for CountryCode &amp; ASN statistics</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1426"></a>Usage</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1427"></a>Usage</h3></div></div></div>
 
 <p>There are a README and some helper scripts available in the package how to use this program and how to generate a graph using Gnuplot.</p>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1424"></a>Line-by-line output</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1425"></a>Line-by-line output</h4></div></div></div>
 
 <p>The example shows output version 4.0, which </p>
 <pre class="programlisting">$ cat ip.bieringer.de-log.202401 | ipv6logstats</pre>
@@ -1824,7 +1828,7 @@
 <pre class="programlisting">...</pre>
 <pre class="programlisting">*3*AS-proto-num-list/ALL  108525 46483 62042</pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1425"></a>Column output</h4></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h4 class="title"><a id="id1426"></a>Column output</h4></div></div></div>
 
 <p>Column output does not support version 3 extension, only simple statistics with a header line:</p>
 <pre class="programlisting">$ zcat ip.bieringer.de-log.201*.gz | ipv6logstats -q -c </pre>
@@ -1835,12 +1839,12 @@
 <pre class="programlisting">ALL  46233 62292 0 2397 3525 40198 97 16 0 0 129 839 61074 0 0 0 0 0 16 51 0 0 0 0 63 0 90 30 0 0 0 0 0 0 0 0 0 1436 58198 2055 353 0 </pre>
 </div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1427"></a>Examples</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1428"></a>Examples</h3></div></div></div>
 
 <p>A demonstration with real data is available at <a class="ulink" href="http://mirrors.bieringer.de/stats/timeline.html" target="_top">http://mirrors.bieringer.de/stats/timeline.html</a>.</p>
 </div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1433"></a>Apache web server module &#8220;mod_ipv6calc&#8221;</h2></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1434"></a>Apache web server module &#8220;mod_ipv6calc&#8221;</h2></div></div></div>
 
 <p>This Apache web server module (since version 0.99.1, released 2015) interfaces with internal ipv6calc library to support</p>
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
@@ -1870,12 +1874,12 @@
 </li><li class="listitem">
 <p>Configured IP address anonymization method, exported to IPV6CALC_ANON_METHOD</p>
 </li></ul></div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1429"></a>Installation</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1430"></a>Installation</h3></div></div></div>
 
 <p>Install compiled Apache module &#8220;mod_ipv6calc&#8221; to Apache&#8217;s module directory</p>
 <p>Install included default configuration file &#8220;ipv6calc.conf&#8221; to Apache&#8217;s config directory (usually conf.d)</p>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1430"></a>Configuration</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1431"></a>Configuration</h3></div></div></div>
 
 <p>Enable in &#8220;ipv6calc.conf&#8221; loading of module</p>
 <pre class="programlisting">LoadModule ipv6calc_module modules/mod_ipv6calc.so</pre>
@@ -1888,13 +1892,13 @@
 <pre class="programlisting">CustomLog logs/access_anon_log combined_anon</pre>
 <p>Restart Apache web server, check error_log for any issues</p>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1431"></a>Result</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1432"></a>Result</h3></div></div></div>
 
 <p>The new log file contains anonymized requests like</p>
 <pre class="programlisting">252.176.92.172 "CN/23724/APNIC/keep-type-asn-cc" - [25/Jul/2015:13:20:25 +0200] "GET / HTTP/1.1" 200 3569 "-" "Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)"</pre>
 <pre class="programlisting">a909:390a:909a:81d9:a909:4291:c02d:5d1d "CZ/43037/RIPENCC/keep-type-asn-cc" - [25/Jul/2015:12:59:00 +0200] "GET /robots.txt HTTP/1.1" 200 33 "-" "Mozilla/5.0 (compatible; SeznamBot/3.2; +http://fulltext.sblog.cz/)" </pre>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1432"></a>Post-analysis in case of anonymization method &#8220;keep-type-asn-cc&#8221;</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1433"></a>Post-analysis in case of anonymization method &#8220;keep-type-asn-cc&#8221;</h3></div></div></div>
 
 <p>In case &#8220;keep-type-asn-cc&#8221; is configured and also working (required databases are available), related information of anonymized IP addresses can be retrieved using &#8220;ipv6calc&#8221; or &#8220;ipv6logstats&#8221;.</p>
 <pre class="programlisting">$ ipv6calc -q -m -i 252.176.92.172</pre>
@@ -1913,22 +1917,22 @@
 <pre class="programlisting">...</pre>
 </div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1447"></a>History</h2></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a id="id1448"></a>History</h2></div></div></div>
 
 <p>Major extensions/changes are listed here</p>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1434"></a>2025</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1435"></a>2025</h3></div></div></div>
 
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
 <p>add support for MaxMindDB (IP2Location) (&gt;= 4.3.0)</p>
 </li></ul></div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1435"></a>2023</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1436"></a>2023</h3></div></div></div>
 
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
 <p>add support for using MD5 from libmd (&gt;= 4.2.0)</p>
 </li></ul></div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1436"></a>2021</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1437"></a>2021</h3></div></div></div>
 
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
 <p>add support for compressed IPv4 addresses like 10/8 (&gt;= 3.1.0)</p>
@@ -1938,7 +1942,7 @@
 <p>add Database Dump action (&gt;= 3.3.0)</p>
 </li></ul></div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1437"></a>2020</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1438"></a>2020</h3></div></div></div>
 
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
 <p>drop GeoIP(legacy) support (&gt;= 3.0.0)</p>
@@ -1946,7 +1950,7 @@
 <p>drop db-ip.com(BerkeleyDB) support (&gt;= 3.0.0)</p>
 </li></ul></div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1438"></a>2019</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1439"></a>2019</h3></div></div></div>
 
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
 <p>add OUI-28 support (&gt;= 2.2.0)</p>
@@ -1962,7 +1966,7 @@
 <p>drop support of IP2Location libraries &lt; 7.0.1 (&gt;= 2.0.0)</p>
 </li></ul></div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1439"></a>2017</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1440"></a>2017</h3></div></div></div>
 
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
 <p>add support for LISP detection</p>
@@ -1972,13 +1976,13 @@
 <p>finally release 1.0.0 after 16 year of development</p>
 </li></ul></div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1440"></a>2016</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1441"></a>2016</h3></div></div></div>
 
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
 <p>implement action &#8217;test&#8217; and extend action &#8217;filter&#8217; with support of address ranges (&gt;= 0.99.2)</p>
 </li></ul></div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1441"></a>2015</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1442"></a>2015</h3></div></div></div>
 
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
 <p>Introduce mod_ipv6calc for Apache web server (&gt;= 0.99.1)</p>
@@ -1992,13 +1996,13 @@
 <p>Add support for <a class="ulink" href="http://lite.ip2location.com/" target="_top">IP2Location LITE</a> databases (&gt;= 0.99.0), add configurable IP2Location database autoselection support</p>
 </li></ul></div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1442"></a>2014</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1443"></a>2014</h3></div></div></div>
 
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
 <p>Shared library mode supported (reduces size of binaries)</p>
 </li></ul></div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1443"></a>2013</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1444"></a>2013</h3></div></div></div>
 
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
 <p>Prefix and IID anonymization methods</p>
@@ -2008,7 +2012,7 @@
 <p>Specifying dedicated GeoIP and IP2Location database files is now replaced by specifying dedicated database directories to make especially for GeoIP use of more database files.</p>
 </li></ul></div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1444"></a>2011</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1445"></a>2011</h3></div></div></div>
 
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
 <p>ipv6calc/ipv6calcweb.cgi: enable included GeoIP support with IPv6 (usable with GeoIP &gt;= 1.4.5)</p>
@@ -2026,11 +2030,11 @@
 <p>General: add configure options to disable built-in databases (reduce binary size a lot, e.g. for embedded devices)</p>
 </li></ul></div>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1445"></a>2002-2010</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1446"></a>2002-2010</h3></div></div></div>
 
 <p>See <a class="ulink" href="https://raw.githubusercontent.com/pbiering/ipv6calc/master/ChangeLog" target="_top">ChangeLog@GitHub</a> for now</p>
 </div>
-<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1446"></a>2001</h3></div></div></div>
+<div class="section"><div class="titlepage"><div><div><h3 class="title"><a id="id1447"></a>2001</h3></div></div></div>
 
 <div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
 <p>Start of development</p>
