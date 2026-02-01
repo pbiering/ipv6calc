@@ -194,7 +194,7 @@ static void printout(const char *token, const char *value, const uint32_t format
 	if (formatoptions & FORMATOPTION_mr_match_token_suffix) {
 		// skip not matching token (end)
 		if (strlen(token) < strlen(showinfo_machine_readable_filter)) return; // token longer then filter
-		char *c = strstr(token, showinfo_machine_readable_filter); // search for filter in token
+		const char *c = strstr(token, showinfo_machine_readable_filter); // search for filter in token
 		if (c == NULL) return; // filter not found
 		if (strlen(c) != strlen(showinfo_machine_readable_filter)) return; // found but not the suffix
 	};
@@ -264,7 +264,7 @@ static void printout2(const char *token, const char *additional, const char *val
 	if (formatoptions & FORMATOPTION_mr_match_token_suffix) {
 		// skip not matching token (end)
 		if (strlen(token) < strlen(showinfo_machine_readable_filter)) return; // token longer then filter
-		char *c = strstr(token, showinfo_machine_readable_filter); // search for filter in token
+		const char *c = strstr(token, showinfo_machine_readable_filter); // search for filter in token
 		if (c == NULL) return; // filter not found
 		if (strlen(c) != strlen(showinfo_machine_readable_filter)) return; // found but not the suffix
 	};
