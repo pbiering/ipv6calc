@@ -113,8 +113,6 @@ static long unsigned int counter_country[COUNTRYCODE_INDEX_MAX];
 static long unsigned int counter_country_ipv4[COUNTRYCODE_INDEX_MAX];
 static long unsigned int counter_country_ipv6[COUNTRYCODE_INDEX_MAX];
 
-static long unsigned int counter_country_A46, counter_country_IPV4, counter_country_IPV6;
-
 /* stat by ASN (only 16-bit ASN supported, 32-bit ASNs are mapped to 23456 "AS_TRANS" */
 #define ASNUM_MAX     65536
 static long unsigned int counter_asn[ASNUM_MAX];
@@ -346,14 +344,11 @@ static void stat_inc_country_code(uint16_t country_code, const int proto) {
 	DEBUGPRINT_WA(DEBUG_ipv6logstats_general, "Increment CountryCode index: %d (%d)", index, country_code);
 
 	counter_country[index]++;
-	counter_country_A46++;
 
 	if (proto == 4) {
 		counter_country_ipv4[index]++;
-		counter_country_IPV4++;
 	} else if (proto == 6) {
 		counter_country_ipv6[index]++;
-		counter_country_IPV6++;
 	} else {
 		fprintf(stderr, "%s/%s: unexpected unsupported proto: %d\n", __FILE__, __func__, proto);
 		exit(1);
