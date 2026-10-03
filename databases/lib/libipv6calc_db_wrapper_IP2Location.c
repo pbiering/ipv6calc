@@ -570,7 +570,9 @@ int ip2location_db_allow_softlinks = 0;
 
 #define IP2L_PACK_YM(loc) ((loc->database_year + 2000) * 12 + (loc->database_month - 1))
 
+#ifdef SUPPORT_IP2LOCATION_DYN
 static void *dl_IP2Location_handle = NULL;
+#endif
 
 char ***libipv6calc_db_wrapper_IP2LocationDBFileName_ptr = NULL;
 const char **libipv6calc_db_wrapper_IP2LocationDBDescription = NULL;
@@ -2588,7 +2590,9 @@ int libipv6calc_db_wrapper_IP2Location_wrapper_cleanup(void) {
 		};
 	};
 
+#ifdef SUPPORT_IP2LOCATION_DYN
 	dl_IP2Location_handle = NULL; // disable handle
+#endif
 #endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_IP2Location, "Finished");

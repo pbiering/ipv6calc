@@ -65,11 +65,10 @@ static int dl_status_MMDB_strerror = IPV6CALC_DL_STATUS_UNKNOWN;
 typedef const char *(*dl_MMDB_strerror_t)(int error_code);
 static union { dl_MMDB_strerror_t func; void * obj; } dl_MMDB_strerror;
 
+static void *dl_MMDB_handle = NULL;
 #else // SUPPORT_MMDB_DYN
 static const char* wrapper_mmdb_info = "built-in";
 #endif // SUPPORT_MMDB_DYN
-
-static void *dl_MMDB_handle = NULL;
 
 #define CHECK_STORE(MAXLEN, STORE, DESC) \
 	if (entry_data.has_data) { \
@@ -177,7 +176,9 @@ void libipv6calc_db_wrapper_MMDB_wrapper_cleanup(void) {
 	//libipv6calc_db_wrapper_MMDB_cleanup();
 #endif
 
+#ifdef SUPPORT_MMDB_DYN
 	dl_MMDB_handle = NULL; // disable handle
+#endif
 
 	DEBUGPRINT_NA(DEBUG_libipv6calc_db_wrapper_MMDB, "Finished");
 	return;
