@@ -8,7 +8,7 @@
 LIBEXECDIR = @HTTPD_LIBEXECDIR@
 SYSCONFDIR = @HTTPD_SYSCONFDIR@
 
-CC      = @CC@
+CC      = "@CC@"
 APXS	= @APXS@
 
 # Compiler and Linker Options
