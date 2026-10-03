@@ -2,7 +2,7 @@
  * Project       : ipv6calc
  * File          : dbasn_assignment.h
  * Version       : $Id$
- * Generated     : Sun Sep 14 17:09:38 2025
+ * Generated     : Sat Oct  3 09:49:09 2026
  * Data copyright: IANA
  *
  * Information:
@@ -11,7 +11,7 @@
 
 #include "libipv6calc.h"
 
-/*@unused@*/ static const char* dbasn_registry_status __attribute__ ((__unused__)) = "IANA/20250117";
+/*@unused@*/ static const char* dbasn_registry_status __attribute__ ((__unused__)) = "IANA/20260601";
 
 static const s_asn_assignment dbasn_assignment[] = {
 	{          1,       1876, REGISTRY_ARIN       },
@@ -142,6 +142,9 @@ static const s_asn_assignment dbasn_assignment[] = {
 	{     213404,     214427, REGISTRY_RIPENCC    },
 	{     214428,     215451, REGISTRY_RIPENCC    },
 	{     215452,     216475, REGISTRY_RIPENCC    },
+	{     216476,     217499, REGISTRY_RIPENCC    },
+	{     217500,     218523, REGISTRY_RIPENCC    },
+	{     218524,     219547, REGISTRY_RIPENCC    },
 	{     262144,     263167, REGISTRY_LACNIC     },
 	{     263168,     263679, REGISTRY_LACNIC     },
 	{     263680,     264604, REGISTRY_LACNIC     },
@@ -155,8 +158,10 @@ static const s_asn_assignment dbasn_assignment[] = {
 	{     271773,     272796, REGISTRY_LACNIC     },
 	{     272797,     273820, REGISTRY_LACNIC     },
 	{     273821,     274844, REGISTRY_LACNIC     },
+	{     274845,     275868, REGISTRY_LACNIC     },
 	{     327680,     328703, REGISTRY_AFRINIC    },
 	{     328704,     329727, REGISTRY_AFRINIC    },
+	{     329728,     330751, REGISTRY_AFRINIC    },
 	{     393216,     394239, REGISTRY_ARIN       },
 	{     394240,     395164, REGISTRY_ARIN       },
 	{     395165,     396188, REGISTRY_ARIN       },
@@ -166,6 +171,8 @@ static const s_asn_assignment dbasn_assignment[] = {
 	{     399261,     400284, REGISTRY_ARIN       },
 	{     400285,     401308, REGISTRY_ARIN       },
 	{     401309,     402332, REGISTRY_ARIN       },
+	{     402333,     403356, REGISTRY_ARIN       },
+	{     403357,     404380, REGISTRY_ARIN       },
 
 };
 

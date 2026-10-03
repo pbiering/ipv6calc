@@ -2,14 +2,14 @@
  * Project       : ipv6calc
  * File          : dbieee_iab.h
  * Version       : $Id$
- * Generated     : Sun Sep 14 17:05:06 2025
+ * Generated     : Sat Oct  3 09:43:53 2026
  * Data copyright: IEEE
  *
  * Information:
  *  Additional header file for libipv6calc_db_wrapper_BuiltIn.c
  */
 
-/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20250914";
+/*@unused@*/ static const char* libieee_iab_status __attribute__ ((__unused__)) = "IAB/20261003";
 
 
 static const s_ieee_iab libieee_iab[] = {
@@ -377,7 +377,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x16B000, 0x16BFFF, "Masterclock, Inc.", "MASTERCLOCK" },
 	{ 0x0050C2, 0x16C000, 0x16CFFF, "Brijing Embedor Embedded Internet Tech. Co. Ltd.", "BRIJING-EMBEDOR-EMBEDDED-INTERNET-TECH" },
 	{ 0x0050C2, 0x16D000, 0x16DFFF, "Postec Data Systems Ltd.", "POSTEC-DATA" },
-	{ 0x0050C2, 0x16E000, 0x16EFFF, "PMC", "PMC" },
+	{ 0x0050C2, 0x16E000, 0x16EFFF, "Groupe Carrus", "GROUPE-CARRUS" },
 	{ 0x0050C2, 0x16F000, 0x16FFFF, "Dickson Technologies", "DICKSON-TECHNOLOGIES" },
 	{ 0x0050C2, 0x170000, 0x170FFF, "Taishodo Seiko Co., Ltd.", "TAISHODO-SEIKO" },
 	{ 0x0050C2, 0x171000, 0x171FFF, "Quantronix, Inc.", "QUANTRONIX" },
@@ -402,7 +402,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0x184000, 0x184FFF, "H M Computing Limited", "H-M-COMPUTING" },
 	{ 0x0050C2, 0x185000, 0x185FFF, "Optical Wireless Link Inc.", "OPTICAL-WIRELESS-LINK" },
 	{ 0x0050C2, 0x186000, 0x186FFF, "Pantec Engineering AG", "PANTEC-ENGINEERING" },
-	{ 0x0050C2, 0x187000, 0x187FFF, "Cyan Technology Ltd", "CYAN" },
+	{ 0x0050C2, 0x187000, 0x187FFF, "CyanConnode", "CYANCONNODE" },
 	{ 0x0050C2, 0x188000, 0x188FFF, "dresden-elektronik", "DRESDEN-ELEKTRONIK" },
 	{ 0x0050C2, 0x189000, 0x189FFF, "CC Systems AB", "CC-AB" },
 	{ 0x0050C2, 0x18A000, 0x18AFFF, "Basler Electric Company", "BASLER-ELECTRIC-COMPANY" },
@@ -3246,7 +3246,7 @@ static const s_ieee_iab libieee_iab[] = {
 	{ 0x0050C2, 0xCA2000, 0xCA2FFF, "The Logical Company", "THE-LOGICAL-COMPANY" },
 	{ 0x0050C2, 0xCA3000, 0xCA3FFF, "CT Company", "CT-COMPANY" },
 	{ 0x0050C2, 0xCA4000, 0xCA4FFF, "Vox Technologies", "VOX-TECHNOLOGIES" },
-	{ 0x0050C2, 0xCA5000, 0xCA5FFF, "YOKOWO CO.,LTD", "YOKOWO" },
+	{ 0x0050C2, 0xCA5000, 0xCA5FFF, "YOKOWO CO., LTD.", "YOKOWO" },
 	{ 0x0050C2, 0xCA6000, 0xCA6FFF, "Vidisys GmbH", "VIDISYS" },
 	{ 0x0050C2, 0xCA7000, 0xCA7FFF, "Thermo Fisher Scientific", "THERMO-FISHER-SCIENTIFIC" },
 	{ 0x0050C2, 0xCA8000, 0xCA8FFF, "Systems With Intelligence Inc.", "WITH-INTELLIGENCE" },
