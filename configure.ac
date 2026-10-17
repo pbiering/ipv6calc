@@ -1495,6 +1495,20 @@ if test "$ENABLE_MOD_IPV6CALC" = "1"; then
 		fi
 	fi
 
+	# ArchLinux / Gentoo detection
+	if test -f "/etc/os-release"; then
+		ID=`grep '^ID=' /etc/os-release | sed -e 's/.*=//'`
+	fi
+
+	if test "$ID" == "arch" || test "$ID" == "gentoo"; then
+		AC_CHECK_FILE(/usr/bin/lld, [
+			AC_MSG_RESULT([/usr/bin/lld found, required for OS ID=$ID])
+			LDFLAGS_EXTRA_MOD_IPV6CALC="${LDFLAGS_EXTRA_MOD_IPV6CALC:+LDFLAGS_EXTRA_MOD_IPV6CALC }-fuse-ld=lld"
+		],[
+			AC_MSG_ERROR([Missing /usr/bin/lld, required for OS ID=$ID - check for installed 'lld'])
+		])
+	fi
+
 	AC_SUBST(HTTPD_LIBEXECDIR)
 	AC_SUBST(HTTPD_SYSCONFDIR)
 	AC_SUBST(HTTPD_VERSION_MAJOR_MINOR)
@@ -1646,4 +1660,5 @@ if test "$ENABLE_MOD_IPV6CALC" = "1"; then
 	AC_MSG_RESULT([*** HTTPD_VERSION              =$HTTPD_VERSION])
 	AC_MSG_RESULT([*** HTTPD_VERSION_MAJOR_MINOR  =$HTTPD_VERSION_MAJOR_MINOR])
 	AC_MSG_RESULT([*** LDFLAGS_EXTRA_MOD_IPV6CALC =$LDFLAGS_EXTRA_MOD_IPV6CALC])
+	AC_MSG_RESULT([*** ID                         =$ID])
 fi
