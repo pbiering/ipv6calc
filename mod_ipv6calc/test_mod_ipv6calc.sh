@@ -2,7 +2,7 @@
 #
 # Project    : ipv6calc
 # File       : test_mod_ipv6calc.sh
-# Copyright  : 2015-2025 by Peter Bieringer <pb (at) bieringer.de>
+# Copyright  : 2015-2026 by Peter Bieringer <pb (at) bieringer.de>
 #
 # Test patterns for ipv6calc conversions
 
@@ -39,7 +39,7 @@ create_apache_root_and_start() {
 	fi
 	echo "INFO  : temporary base directory created: $dir_base"
 
-	for dir in $dir_base/conf $dir_base/var $dir_base/modules $dir_base/logs $dir_base/conf.d $dir_base/conf.modules.d $dir_base/var/www $dir_base/var/www/cgi-bin $dir_base/var/www/html $dir_base/var/www/ipv6calc $dir_base/var/www/ipv6calc/cgi-bin $dir_base/run; do
+	for dir in $dir_base/conf $dir_base/var $dir_base/modules $dir_base/logs $dir_base/conf.d $dir_base/conf.modules.d $dir_base/conf/extra $dir_base/var/www $dir_base/var/www/cgi-bin $dir_base/var/www/html $dir_base/var/www/ipv6calc $dir_base/var/www/ipv6calc/cgi-bin $dir_base/run; do
 		echo "INFO  : create directory: $dir"
 		mkdir $dir
 		if [ $? -ne 0 ]; then
@@ -109,17 +109,44 @@ END
 
 	perl -pi -e 's/^ServerRoot.*$//g' $dir_base/conf/httpd.conf
 
+	# Fedora/EL
+	echo "INFO  : copy files for Fedora/EL"
 	for file in 00-base.conf 00-mpm.conf 00-systemd.conf 01-cgi.conf; do
-		[ -e /etc/httpd/conf.modules.d/$file ] || continue
-		cp /etc/httpd/conf.modules.d/$file $dir_base/conf.modules.d/
+		if [ -e /etc/httpd/conf.modules.d/$file ]; then
+			echo "INFO  : copy file: $file"
+			cp /etc/httpd/conf.modules.d/$file $dir_base/conf.modules.d/
+		else
+			echo "WARN  : skip copy file: $file (not found)"
+		fi
+	done
+
+	# ArchLinux/Gentoo
+	echo "INFO  : copy files for ArchLinux/Gentoo"
+	for file in httpd-mpm.conf httpd-multilang-errordoc.conf httpd-autoindex.conf httpd-languages.conf httpd-userdir.conf httpd-default.conf; do
+		if [ -e /etc/httpd/conf/extra/$file ]; then
+			echo "INFO  : copy file: $file"
+			cp /etc/httpd/conf/extra/$file $dir_base/conf/extra/
+		else
+			echo "WARN  : skip copy file: $file (not found)"
+		fi
+	done
+	for file in mime.types; do
+		if [ -e /etc/httpd/conf/$file ]; then
+			echo "INFO  : copy file: $file"
+			cp /etc/httpd/conf/$file $dir_base/conf/
+		else
+			echo "WARN  : skip copy file: $file (not found)"
+		fi
 	done
 
 	# disable auth modules
-	perl -pi -e 's/^LoadModule authn.*$//g' $dir_base/conf.modules.d/00-base.conf
-	perl -pi -e 's/^LoadModule auth_digest_module.*$//g' $dir_base/conf.modules.d/00-base.conf
+	if [ -e $dir_base/conf.modules.d/00-base.conf ]; then
+		perl -pi -e 's/^LoadModule authn.*$//g' $dir_base/conf.modules.d/00-base.conf
+		perl -pi -e 's/^LoadModule authn.*$//g' $dir_base/conf.modules.d/00-base.conf
+		perl -pi -e 's/^LoadModule auth_digest_module.*$//g' $dir_base/conf.modules.d/00-base.conf
+	fi
 
 	cp /etc/httpd/modules/* $dir_base/modules/
-
 	# copy mod_ipv6calc
 	cp .libs/mod_ipv6calc.so $dir_base/modules/
 	cp ipv6calc.conf $dir_base/conf.d/
@@ -171,8 +198,12 @@ END
 	[ -n "$source_env_name" ]  && perl -pi -e "s/#(ipv6calcSourceEnvName\s+).*$/\$1 $source_env_name/g"   $dir_base/conf.d/ipv6calc.conf
 	[ -n "$source_env_name" ]  && echo "SetEnvIf $source_env_name ^([0-9a-f:.]+)$ $source_env_name=\$1" >>$dir_base/conf.d/ipv6calc.conf
 
+	# ArchLinux / Gentoo
+	echo "INFO  : adjustments for ArchLinux/Gentoo"
+	perl -pi -e 's#/var/log/httpd#/logs#g' $dir_base/conf/httpd.conf
+	perl -pi -e 's#conf/conf.d/#conf.d/#g' $dir_base/conf/httpd.conf
 
-	echo "INFO  : start httpd with ServerRoot $dir_base"
+	echo "INFO  : start httpd with ServerRoot $dir_base and base config $dir_base/conf/httpd.conf"
 	/usr/sbin/httpd -X -e info -d $dir_base &
 	if [ $? -eq 0 ]; then
 		httpd_pid=$!
