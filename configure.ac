@@ -756,7 +756,7 @@ if test "$require_libdb" = "yes"; then
 		if test "$LDFLAGS" = "-m32"; then
 			AC_MSG_ERROR([Berkeley DB library header files not found for 32-bit - check for db4-devel.i686 or libdb-devel.i686])
 		else
-			AC_MSG_ERROR([Berkeley DB library header files not found - check for db4-devel or libdb-devel])
+			AC_MSG_ERROR([Berkeley DB library header files not found - check for db4-devel/libdb-devel/db])
 		fi
 	])
 
@@ -896,7 +896,7 @@ if test "$MMDB" = "yes"; then
 		if test "$LDFLAGS" = "-m32"; then
 			AC_MSG_ERROR([MaxMindDB library header files not found for 32-bit - check for libmaxminddb-devel.i686])
 		else
-			AC_MSG_ERROR([MaxMindDB library header files not found - check for libmaxminddb-devel])
+			AC_MSG_ERROR([MaxMindDB library header files not found - check for libmaxminddb-devel/libmaxminddb])
 		fi
 	])
 
@@ -1450,7 +1450,7 @@ if test "$ENABLE_MOD_IPV6CALC" = "1"; then
 	fi
 
 	if test -z "$APXS"; then
-		AC_MSG_ERROR([No APXS binary found: cannot create Apache module - check for httpd-devel])
+		AC_MSG_ERROR([No APXS binary found: cannot create Apache module - check for httpd-devel/apache])
 	else
 		AC_MSG_RESULT([APXS binary found: $APXS])
 
