@@ -25,6 +25,10 @@ while [ "$1" != "$LAST" ]; do
 		shift
 		flag_no_make=true
 		;;
+	    '--mod_ipv6calc')
+		shift
+		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-mod_ipv6calc"
+		;;
 	    '--all'|'-a')
 		shift
 		OPTIONS_CONFIGURE="$OPTIONS_CONFIGURE --enable-ip2location --enable-mmdb --enable-external"
@@ -138,6 +142,7 @@ while [ "$1" != "$LAST" ]; do
 		echo "   -i|--ip2location      : enable IP2Location support"
 		echo "   --ip2location-dyn|-I  : switch to dynamic library loading of IP2Location"
 		echo "   -e|--external         : enable external database support"
+	        echo "   --mod_ipv6calc        : enable mod_ipv6calc"
 		echo "   --disable-db-ieee     : disable built-in IEEE database"
 		echo "   --disable-db-ipv4     : disable built-in IPv4 database"
 		echo "   --disable-db-ipv6     : disable built-in IPv6 database"
