@@ -98,12 +98,14 @@ Where to get:
 Mailing lists:
  ipv6calc-announce
   CLOSED 2026-11-14 - watch instead GitHub / ipv6calc
+	https://github.com/pbiering/ipv6calc
   Reason: sending announcements of new versions
   Traffic: very low
   Postings: only moderators are allowed to post, others are rejected automatically
 
  ipv6calc
   CLOSED 2026-11-14 - use instead GitHub / ipv6calc / discussions
+	https://github.com/pbiering/ipv6calc/discussions
   Reason: discussions
   Traffic: medium
   Postings: only subscribers are allowed to post
