@@ -1,5 +1,5 @@
-#LyX 2.4 created this file. For more info see https://www.lyx.org/
-\lyxformat 620
+#LyX 2.5 created this file. For more info see https://www.lyx.org/
+\lyxformat 643
 \begin_document
 \begin_header
 \save_transient_properties true
@@ -54,11 +54,19 @@
 \use_indices false
 \paperorientation portrait
 \suppress_date false
-\justification true
-\use_refstyle 0
+\justification default
+\crossref_package prettyref
 \use_formatted_ref 0
 \use_minted 0
 \use_lineno 0
+\backgroundcolor none
+\fontcolor none
+\notefontcolor lightgray
+\boxbgcolor red
+\table_border_color default
+\table_odd_row_color default
+\table_even_row_color default
+\table_alt_row_colors_start 1
 \index Index
 \shortcut idx
 \color #008000
@@ -84,6 +92,7 @@
 \html_be_strict false
 \docbook_table_output 0
 \docbook_mathml_prefix 1
+\docbook_mathml_version 0
 \end_header
 
 \begin_body
@@ -101,7 +110,6 @@ pb at bieringer dot de
 status open
 
 \begin_layout Plain Layout
-
 <author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author>
 \end_layout
 
@@ -115,7 +123,6 @@ status open
 status open
 
 \begin_layout Plain Layout
-
 <revhistory> 
 \end_layout
 
@@ -129,8 +136,7 @@ status open
 status open
 
 \begin_layout Plain Layout
-
-<revision> <revnumber>12.1.1</revnumber> <date>2025-09-28</date> <authorinitials>PB</authorinitials></revision>
+<revision> <revnumber>13.0</revnumber> <date>2026-11-14</date> <authorinitials>PB</authorinitials></revision>
 \end_layout
 
 \end_inset
@@ -143,7 +149,6 @@ status open
 status open
 
 \begin_layout Plain Layout
-
 </revhistory> 
 \end_layout
 
@@ -195,7 +200,7 @@ Latest version
 \end_layout
 
 \begin_layout Standard
-Latest version since last update of this page is 4.4.0
+Latest version since last update of this page is 4.4.1
 \end_layout
 
 \begin_layout Subsection
@@ -542,7 +547,7 @@ Copyright
 \end_layout
 
 \begin_layout Standard
-(C) 2001 - 2024 by Dr.
+(C) 2001 - 2026 by Dr.
  Peter Bieringer
 \end_layout
 
@@ -1500,6 +1505,19 @@ Mailing Lists
 ipv6calc-announce
 \end_layout
 
+\begin_layout Standard
+CLOSED 2026-11-14 - watch instead 
+\begin_inset CommandInset href
+LatexCommand href
+name "GitHub / ipv6calc"
+target "https://github.com/pbiering/ipv6calc"
+literal "false"
+
+\end_inset
+
+
+\end_layout
+
 \begin_layout Description
 Reason:
  sending announcements of new versions
@@ -1515,22 +1533,21 @@ Postings:
  only moderators are allowed to post
 \end_layout
 
-\begin_layout Description
-Information:
- 
+\begin_layout Subsection
+ipv6calc
+\end_layout
+
+\begin_layout Standard
+CLOSED 2026-11-14 - use instead 
 \begin_inset CommandInset href
 LatexCommand href
-name "DeepSpace6 / maillist ipv6calc-announce"
-target "https://lists.deepspace6.net/postorius/lists/ipv6calc-announce.lists.deepspace6.net/"
+name "GitHub / ipv6calc / discussions"
+target "https://github.com/pbiering/ipv6calc/discussions"
 literal "false"
 
 \end_inset
 
 
-\end_layout
-
-\begin_layout Subsection
-ipv6calc
 \end_layout
 
 \begin_layout Description
@@ -1548,34 +1565,21 @@ Postings:
  subscribers
 \end_layout
 
-\begin_layout Description
-Information:
- 
-\begin_inset CommandInset href
-LatexCommand href
-name "DeepSpace6 / maillist ipv6calc"
-target "https://lists.deepspace6.net/postorius/lists/ipv6calc.lists.deepspace6.net/"
-literal "false"
-
-\end_inset
-
-
-\end_layout
-
 \begin_layout Section
 Bug Reports
 \end_layout
 
 \begin_layout Standard
-You can send bug reports to the author himself or subscribe to maillist 
-\begin_inset Quotes eld
+You can send bug reports to the author himself or file via 
+\begin_inset CommandInset href
+LatexCommand href
+name "GitHub / ipv6calc / issues"
+target "https://github.com/pbiering/ipv6calc/issues"
+literal "false"
+
 \end_inset
 
-ipv6calc
-\begin_inset Quotes erd
-\end_inset
 
- and send it to the list.
 \end_layout
 
 \begin_layout Section

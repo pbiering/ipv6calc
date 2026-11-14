@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- This DocBook file was created by LyX 2.4.4
+<!-- This DocBook file was created by LyX 2.5.3
   See https://www.lyx.org/ for more information -->
 <article xml:lang="en-US" xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:m="http://www.w3.org/1998/Math/MathML" xmlns:xi="http://www.w3.org/2001/XInclude" version="5.2">
 <title>The ipv6calc Homepage</title>
 <address role='right-address'>pb at bieringer dot de</address>
-<info><author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author><revhistory><revision> <revnumber>12.1.1</revnumber> <date>2025-09-28</date> <authorinitials>PB</authorinitials></revision></revhistory></info><section>
+<info><author><firstname>Peter</firstname><surname>Bieringer</surname><affiliation><address>pb at bieringer dot de</address></affiliation></author><revhistory> <revision> <revnumber>13.0</revnumber> <date>2026-11-14</date> <authorinitials>PB</authorinitials></revision></revhistory></info> <section>
 <title>General</title>
 <para>ipv6calc is a small utility written in programming language C to manipulate (not only) IPv6 addresses and is able to do other tricky things. Intentions were convering a given IPv6 address into compressed format, convering a given IPv6 address into the same format like shown in <emphasis>/proc/net/if_inet6 and (because it was not difficulty) migrating the Perl program <emphasis>ip6_int into. Now only one utility is needed to do a lot.</emphasis></emphasis></para>
 <para>This utility was also used in the past to extend features on network-functions-ipv6 library, used by initscripts-ipv6.</para>
 <para>Note: this tool got also its <link xlink:href="http://freecode.com/projects/ipv6calc/">freecode.com (former freshmeat, now also EOL) / ipv6calc</link> page (but this is not maintained by the author)</para>
 <section>
 <title>Latest version</title>
-<para>Latest version since last update of this page is 4.4.0</para>
+<para>Latest version since last update of this page is 4.4.1</para>
 </section>
 <section>
 <title>Included programs</title>
@@ -136,7 +136,7 @@
 </section>
 <section>
 <title>Copyright</title>
-<para>(C) 2001 - 2024 by Dr. Peter Bieringer</para>
+<para>(C) 2001 - 2026 by Dr. Peter Bieringer</para>
 </section>
 <section>
 <title>Author</title>
@@ -364,6 +364,7 @@
 <title>Mailing Lists</title>
 <section>
 <title>ipv6calc-announce</title>
+<para>CLOSED 2026-11-14 - watch instead <link xlink:href="https://github.com/pbiering/ipv6calc">GitHub / ipv6calc</link></para>
 <variablelist>
 <varlistentry>
 <term>Reason:</term>
@@ -383,16 +384,11 @@
 <para>only moderators are allowed to post</para>
 </listitem>
 </varlistentry>
-<varlistentry>
-<term>Information:</term>
-<listitem>
-<para><link xlink:href="https://lists.deepspace6.net/postorius/lists/ipv6calc-announce.lists.deepspace6.net/">DeepSpace6 / maillist ipv6calc-announce</link></para>
-</listitem>
-</varlistentry>
 </variablelist>
 </section>
 <section>
 <title>ipv6calc</title>
+<para>CLOSED 2026-11-14 - use instead <link xlink:href="https://github.com/pbiering/ipv6calc/discussions">GitHub / ipv6calc / discussions</link></para>
 <variablelist>
 <varlistentry>
 <term>Reason:</term>
@@ -412,18 +408,12 @@
 <para>subscribers</para>
 </listitem>
 </varlistentry>
-<varlistentry>
-<term>Information:</term>
-<listitem>
-<para><link xlink:href="https://lists.deepspace6.net/postorius/lists/ipv6calc.lists.deepspace6.net/">DeepSpace6 / maillist ipv6calc</link></para>
-</listitem>
-</varlistentry>
 </variablelist>
 </section>
 </section>
 <section>
 <title>Bug Reports</title>
-<para>You can send bug reports to the author himself or subscribe to maillist &#8220;ipv6calc&#8221; and send it to the list.</para>
+<para>You can send bug reports to the author himself or file via <link xlink:href="https://github.com/pbiering/ipv6calc/issues">GitHub / ipv6calc / issues</link></para>
 </section>
 <section>
 <title>Features of ipv6calc</title>
