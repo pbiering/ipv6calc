@@ -77,7 +77,7 @@ Where to get:
     EL7: build from source package potentially still work but not tested anymore, OS is EOSL
     EL8: package is available via EPEL
     EL9: package is available via EPEL
-    EL910: package is available via EPEL
+    EL10: package is available via EPEL
    Mandrake (EOSL):
     similar to Red Hat, rebuild should work, too
    Debian:
